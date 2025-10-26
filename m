@@ -1,117 +1,190 @@
-Return-Path: <linux-usb+bounces-29665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A43C3C0A64F
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Oct 2025 11:54:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0705EC0A6E5
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Oct 2025 13:22:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7CBD189F688
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Oct 2025 10:54:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BE5C44E2225
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Oct 2025 12:22:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5AA24634F;
-	Sun, 26 Oct 2025 10:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42DDC227B95;
+	Sun, 26 Oct 2025 12:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="dN663kkO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k111yPkR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-74.smtpout.orange.fr [80.12.242.74])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFDF3B7A8;
-	Sun, 26 Oct 2025 10:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B64187346;
+	Sun, 26 Oct 2025 12:22:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761476062; cv=none; b=VhtpGXrpg1SePi0Rxs+7enYtxB+CXDpmL/yxJ8vu1JmirXZBPfJCRASVr+75+jhUq8kEp1n8z/BetArepFePmN3gTE7983NG8ZF+SpdflvpKYIKdPMWPo33ITPDvcse8eeLUu2NPDRBZvh39+TdB5b6pDnRZVz+QMBgRNWj9l+E=
+	t=1761481324; cv=none; b=Mqvexy8BOhcoGAHh8MOrfe8ktigEbwdjcQ9axNTl8g5Y7i4dbfKgIMnWwAbaSmtfKqwdIGHJV1in2+FtgZazAch3DZcdBLZcUiBDQchrE5KEtPPm/l/L0JweJRI0SBq4agVi6KJMv8fI4nq++zdBUs3JLFWhBbbI1UTdFMriO5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761476062; c=relaxed/simple;
-	bh=tK7HS9bj/DEqYFWNQwvGX6kIY9II8FCtL5zQJwqPB64=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H8bhNihl1wRbvdIYWrVMGumcm9xSt+2K04Hc1cTNHmb++jMgFO7aUAh+U0x1UO3UsKEN+ylGrRwSkOZz8C2odjvCOHbyGMQxK1gzGCbSfiC5Gp+1v88c01UGEQhZPN3i5bbsK3paTDvR+4gYvQRzVwHkwRRrvBeMbFACsoekR1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=dN663kkO; arc=none smtp.client-ip=80.12.242.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
-	by smtp.orange.fr with ESMTPA
-	id CyN1vAKxM7TjyCyN1vOFVf; Sun, 26 Oct 2025 11:53:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1761475991;
-	bh=nLTWNBJbJPgxe0pVePlYQcmuPVBtcUlK4ki+WghVXJE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=dN663kkOmoL1Yqtgf9bVfvFh8G1TTPKem18dWi4I2911mqyC5iut+ymVsKal1toGP
-	 GK2J+gdGuZka/JHwzkIIsdZqTBFkb0js8kNl5iB3pR50ziH/u1rNduIQ4sO0mvhz+h
-	 r0haMKkGv2xttG7+CRbFMzhDseidaiRZA0//eHz8jxK7n7Q2LEpT7ZFzk9UhGDS2vQ
-	 hs7S09rfKLv1agePW2zPKkANzCpOxohm204s/HZ6MMIfoxg7+caSI+oC8vej2XXr2W
-	 bFem56uVJRHEESHx87OXSlVcO7/2+dZYhcXcm0zf3u7Wkrklk7P+L1lzkkfi5Myktc
-	 +gIqKDc6ftgpA==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 26 Oct 2025 11:53:11 +0100
-X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Juergen Gross <jgross@suse.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	xen-devel@lists.xenproject.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] xen/usb: Constify struct hc_driver
-Date: Sun, 26 Oct 2025 11:51:04 +0100
-Message-ID: <63241c9e857646d895ce615b998d41ee4829f9e3.1761475831.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1761481324; c=relaxed/simple;
+	bh=GXuFAtgP+oHMIwv1faVRiehyLAz3rr8xYHnrw+m3qak=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kAxb+szLyFgtl5uCnnWhBzYWSPuY8Pms72FpNhkyANoz/Dv7jbpA9LWBOU6gWoDTso9JA8+/tB2OfOyFKsKkzkbHvmbBw4lQtSgUWWO4N5iNNKenejx1Fd808N56n/EHqWVTErjjitV2GSozT7skyrz3XwLKvhweCtQOaUZ5spg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k111yPkR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 17B8EC4CEE7;
+	Sun, 26 Oct 2025 12:22:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761481324;
+	bh=GXuFAtgP+oHMIwv1faVRiehyLAz3rr8xYHnrw+m3qak=;
+	h=From:Date:Subject:To:Cc:From;
+	b=k111yPkR1SAqFi0Qba1jO49IqFj+0ci+6K7rGAXWe2l3L63nptArnw0a7XPQChgHR
+	 L1k9/OBZgmJbPGHphEAWKjiriogr1wqe9tnBb2oT64hx671BPFyeHmXygcFKGDbRSj
+	 BAqI3kmZDK1L4cxknhg41JIRYWlwSGLmN2D5AdNgEoxiLjmTc6UN7rkn+FpN7HmRH3
+	 YjpUUnWkWEkIDL96CdtejGKVdzEKU2yQv7FTdwzxdYth5i2NyYmwNq9o6/nhWSR+2i
+	 hNNc8rKcaochTKbh11fhFEE2gxhguvKvr4vjPw/8FTyrebj1djI0+/Llmeq2G30CPj
+	 qcyoXv7EX1EVg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03F25CCD1A5;
+	Sun, 26 Oct 2025 12:22:03 +0000 (UTC)
+From: Sven Peter <sven@kernel.org>
+Date: Sun, 26 Oct 2025 12:21:36 +0000
+Subject: [PATCH usb-next] usb: dwc3: apple: Only support a single reset
+ controller
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251026-b4-dwc3-apple-reset-array-fix-v1-1-ccdbacd63f78@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAE8S/mgC/x3MwQrCMAyA4VcZORtY6xzoq4iHtIkakFqSTSdj7
+ 77i8fsP/woupuJw6VYw+ajruzSEQwf5SeUhqNwMsY+n0MeIaUD+5iNSrS9BE5cJyYx+eNcFaQy
+ Z4zkxhxHao5q0/P9fYfaERZYJbtu2A+uoLQR5AAAA
+X-Change-ID: 20251022-b4-dwc3-apple-reset-array-fix-a61cd29bdd16
+To: Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Sven Peter <sven@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4079; i=sven@kernel.org;
+ h=from:subject:message-id;
+ bh=GXuFAtgP+oHMIwv1faVRiehyLAz3rr8xYHnrw+m3qak=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQ8Y/oczj+5zfLeI4+Srj5LntiU/C5kyIN8tijz08dwpPo
+ /fJPW97OkpZGMQ4GGTFFFm277c3ffLwjeDSTZfew8xhZQIZwsDFKQATeb+V4Q9X33uZNcet++6y
+ fNy4Xd/3zs3K5ODcbb3i8/jVGU68DOBmZHi73a7h0vMvfZyFhxc+/ZWo/6i06uZ3VQ/XnakbNkl
+ cusEBAA==
+X-Developer-Key: i=sven@kernel.org; a=openpgp;
+ fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
+X-Endpoint-Received: by B4 Relay for sven@kernel.org/default with
+ auth_id=407
 
-'struct hc_driver' is not modified in this driver.
+As pointed out by Philipp, Apple's dwc3 controller only uses a single
+reset line and there's thus no need to use reset controller array
+functions. The only functional change here is replacing
+devm_reset_control_array_get_exclusive with
+devm_reset_control_get_exclusive. The rest are only cosmetic changes
+to replace "resets" with "reset".
 
-Constifying this structure moves some data to a read-only section, so
-increases overall security, especially when the structure holds some
-function pointers.
-
-On a x86_64, with allmodconfig, as an example:
-Before:
-======
-   text	   data	    bss	    dec	    hex	filename
-  52065	  23176	    256	  75497	  126e9	drivers/usb/host/xen-hcd.o
-
-After:
-=====
-   text	   data	    bss	    dec	    hex	filename
-  52897	  22344	    256	  75497	  126e9	drivers/usb/host/xen-hcd.o
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reported-by: Philipp Zabel <p.zabel@pengutronix.de>
+Closes: https://lore.kernel.org/asahi/47112ace39ea096242e68659d67a401e931abf3a.camel@pengutronix.de/
+Fixes: 0ec946d32ef7 ("usb: dwc3: Add Apple Silicon DWC3 glue layer driver")
+Signed-off-by: Sven Peter <sven@kernel.org>
 ---
- drivers/usb/host/xen-hcd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I was planning to submit a v3 with this fixed but didn't find the time
+before v2 was picked up.
+---
+ drivers/usb/dwc3/dwc3-apple.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
-index 1c2a95fe41e5..0a94d302911a 100644
---- a/drivers/usb/host/xen-hcd.c
-+++ b/drivers/usb/host/xen-hcd.c
-@@ -1388,7 +1388,7 @@ static int xenhcd_get_frame(struct usb_hcd *hcd)
- 	return 0;
+diff --git a/drivers/usb/dwc3/dwc3-apple.c b/drivers/usb/dwc3/dwc3-apple.c
+index 6e41bd0e34f461b0c3db9b8a646116458ff816b6..cc47cad232e397ac4498b09165dfdb5bd215ded7 100644
+--- a/drivers/usb/dwc3/dwc3-apple.c
++++ b/drivers/usb/dwc3/dwc3-apple.c
+@@ -81,7 +81,7 @@ enum dwc3_apple_state {
+  * @dev: Pointer to the device structure
+  * @mmio_resource: Resource to be passed to dwc3_core_probe
+  * @apple_regs: Apple-specific DWC3 registers
+- * @resets: Reset control
++ * @reset: Reset control
+  * @role_sw: USB role switch
+  * @lock: Mutex for synchronizing access
+  * @state: Current state of the controller, see documentation for the enum for details
+@@ -93,7 +93,7 @@ struct dwc3_apple {
+ 	struct resource *mmio_resource;
+ 	void __iomem *apple_regs;
+ 
+-	struct reset_control *resets;
++	struct reset_control *reset;
+ 	struct usb_role_switch *role_sw;
+ 
+ 	struct mutex lock;
+@@ -237,9 +237,9 @@ static int dwc3_apple_init(struct dwc3_apple *appledwc, enum dwc3_apple_state st
+ 
+ 	lockdep_assert_held(&appledwc->lock);
+ 
+-	ret = reset_control_deassert(appledwc->resets);
++	ret = reset_control_deassert(appledwc->reset);
+ 	if (ret) {
+-		dev_err(appledwc->dev, "Failed to deassert resets, err=%d\n", ret);
++		dev_err(appledwc->dev, "Failed to deassert reset, err=%d\n", ret);
+ 		return ret;
+ 	}
+ 
+@@ -288,9 +288,9 @@ static int dwc3_apple_init(struct dwc3_apple *appledwc, enum dwc3_apple_state st
+ core_exit:
+ 	dwc3_core_exit(&appledwc->dwc);
+ reset_assert:
+-	ret_reset = reset_control_assert(appledwc->resets);
++	ret_reset = reset_control_assert(appledwc->reset);
+ 	if (ret_reset)
+-		dev_warn(appledwc->dev, "Failed to assert resets, err=%d\n", ret_reset);
++		dev_warn(appledwc->dev, "Failed to assert reset, err=%d\n", ret_reset);
+ 
+ 	return ret;
  }
+@@ -323,9 +323,9 @@ static int dwc3_apple_exit(struct dwc3_apple *appledwc)
+ 	dwc3_core_exit(&appledwc->dwc);
+ 	appledwc->state = DWC3_APPLE_NO_CABLE;
  
--static struct hc_driver xenhcd_usb20_hc_driver = {
-+static const struct hc_driver xenhcd_usb20_hc_driver = {
- 	.description = "xen-hcd",
- 	.product_desc = "Xen USB2.0 Virtual Host Controller",
- 	.hcd_priv_size = sizeof(struct xenhcd_info),
-@@ -1413,7 +1413,7 @@ static struct hc_driver xenhcd_usb20_hc_driver = {
- #endif
- };
+-	ret = reset_control_assert(appledwc->resets);
++	ret = reset_control_assert(appledwc->reset);
+ 	if (ret) {
+-		dev_err(appledwc->dev, "Failed to assert resets, err=%d\n", ret);
++		dev_err(appledwc->dev, "Failed to assert reset, err=%d\n", ret);
+ 		return ret;
+ 	}
  
--static struct hc_driver xenhcd_usb11_hc_driver = {
-+static const struct hc_driver xenhcd_usb11_hc_driver = {
- 	.description = "xen-hcd",
- 	.product_desc = "Xen USB1.1 Virtual Host Controller",
- 	.hcd_priv_size = sizeof(struct xenhcd_info),
+@@ -411,14 +411,14 @@ static int dwc3_apple_probe(struct platform_device *pdev)
+ 	appledwc->dev = &pdev->dev;
+ 	mutex_init(&appledwc->lock);
+ 
+-	appledwc->resets = devm_reset_control_array_get_exclusive(dev);
+-	if (IS_ERR(appledwc->resets))
+-		return dev_err_probe(&pdev->dev, PTR_ERR(appledwc->resets),
+-				     "Failed to get resets\n");
++	appledwc->reset = devm_reset_control_get_exclusive(dev, NULL);
++	if (IS_ERR(appledwc->reset))
++		return dev_err_probe(&pdev->dev, PTR_ERR(appledwc->reset),
++				     "Failed to get reset control\n");
+ 
+-	ret = reset_control_assert(appledwc->resets);
++	ret = reset_control_assert(appledwc->reset);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "Failed to assert resets, err=%d\n", ret);
++		dev_err(&pdev->dev, "Failed to assert reset, err=%d\n", ret);
+ 		return ret;
+ 	}
+ 
+
+---
+base-commit: be83d83664e9f6fa035e96fb9187f9e7898659e4
+change-id: 20251022-b4-dwc3-apple-reset-array-fix-a61cd29bdd16
+
+Best regards,
 -- 
-2.51.0
+Sven Peter <sven@kernel.org>
+
 
 
