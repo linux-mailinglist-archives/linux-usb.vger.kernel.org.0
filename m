@@ -1,122 +1,58 @@
-Return-Path: <linux-usb+bounces-29675-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29676-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08B64C0BA2B
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 02:51:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 862A9C0BBD8
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 04:24:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 084E23B829B
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 01:50:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E71C4E479E
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 03:24:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D6582C11C9;
-	Mon, 27 Oct 2025 01:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416272D540D;
+	Mon, 27 Oct 2025 03:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SFY3HsTq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJtwWuhA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC9418C02E;
-	Mon, 27 Oct 2025 01:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3E8F9C1;
+	Mon, 27 Oct 2025 03:24:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761529826; cv=none; b=kuP22l7rSYTek7b3rcovEYjQNtlD53apUojadl4r4UyC01Gg5dCUMB47Pn6GHwNq3xirgID/EJw+iXuYPFzhit8VzdF5tvgfO4LhsNwfhnSoXd80IIzEwbSH6Fl5Lg5YsrK1PpUV68NkHBTc6WRukPH+wqDEeoAwffuhK3X1BzA=
+	t=1761535476; cv=none; b=JYyP5j6xZpgehfKZoytelJMdp7hqiMY5tVeiOSEo41S28I5HWlcBbf/8n3XCNSqfgd0OnEcgcIU4TUoMUyhkVkOp1nHyJxr2iBX3YKGYShhndvrJRsi1P9iYvXULMLrHcD5EVjiv9pVtpmqWqXZiiEjHi6kdw3OkQRjFIqfNmU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761529826; c=relaxed/simple;
-	bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
+	s=arc-20240116; t=1761535476; c=relaxed/simple;
+	bh=7cM3Cn6JKYuasEzBXvIvxBu+D5+1UWzNLsU5dSsAaVI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LQAtezO5/4R5PaFcURhdb+93yXLU+udan6DUbahneHDgX/tNmJex+Mke+1RBYEhRPCdTQtpFYVYGW3k9xfSjG6MMT3IG2qPcZH8u8Y5hYyWMc4lpOmj2P73Rc39u6BD9t3mIJRCkwzeaPMTfrHZTzOfKeXirCwGEodO4oyF1bIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SFY3HsTq; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761529825; x=1793065825;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
-  b=SFY3HsTqY2Ry2NQd3zO0yKdoJsln+nTLaiUb4zzF60W8D3fRq3fTXODw
-   vIBdycM9zJwvlhYvqOcGxcNv44Wqhmf9fou4m9uCosnAOkm6KckOTJUSi
-   nkN927iyFhYV3TRCynZEFAVQPkqrYSO/6TtlB7mDEjtvQ1U9lSgvnIdzd
-   XwnRRWL2OjwRSPQ87xHjhLVEbaRdYK45rUr66pRQNTdKsHayxukAQ/5wc
-   dIM67bUNf8kclm4K6Kwww5CDKvMH3gHlYXHgnPehlNFFU8HvWh+phtlbm
-   QuCapYO8U12dwTIYM86QRSxqOuwZLqOC3cCInr5Mx/LWbufk48meZkVPf
-   w==;
-X-CSE-ConnectionGUID: 6YWLrCLOQ/Gu/IAQzfBJ+Q==
-X-CSE-MsgGUID: UMt8ChPkQUa81pml1bmMLQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="75050337"
-X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
-   d="scan'208";a="75050337"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 18:50:24 -0700
-X-CSE-ConnectionGUID: RqD3PVgcSpO3hdFc8HdBsw==
-X-CSE-MsgGUID: bAZX7S5kQLGkCNKy4yStdQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
-   d="scan'208";a="188967609"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa003.jf.intel.com with ESMTP; 26 Oct 2025 18:50:09 -0700
-Date: Mon, 27 Oct 2025 09:36:28 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Georgi Djakov <djakov@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <joro@8bytes.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Lee Jones <lee@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gc1gBG3nFa8Rej+t3IZ0G9qtYSKHsRYg/T7kLWHYaWz7Xabiyj4EWZ1QILXyM5BMFPuvHGOmJ5RJM6gyVfE7FIq07XgNDYKETSYfQwe4cSBSWD4uuzOrg5ZDb0I0I2E8pI2gMx46PwSyZZIZynwGbAkr9dpDwqWNTjBpKQYpeUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJtwWuhA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B6CC4CEE7;
+	Mon, 27 Oct 2025 03:24:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761535476;
+	bh=7cM3Cn6JKYuasEzBXvIvxBu+D5+1UWzNLsU5dSsAaVI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WJtwWuhAaQ+p+vO8QK9rkQ7BwmTxLfja33rTGfRntbAgY0tJpkD/ASs6zl15kbDsX
+	 YUjtREUaZnMkq3xM5lvRRAwjFbJ4esctyOTkAMlGF8g+xQYYqSjInMhcVPftZRpAVt
+	 eG5RO9IQwRd1DlSyxg3p6wxpS3NU3b3AdpGoK2xzGnl12yskC8P5+dbGiGncnHeguS
+	 zjdSuULGARY3Q035d1d7/yyZBrxrq5LVHomUGw1gHY/7h2FLSkIcIYMXuctRCiNm02
+	 9lRmYhDzXs2O/z9ZlQ8SSYSqiOZ/ReId2kICBrO8ing8d6C5LgYBuThJ9kr09fecqQ
+	 RfCt91nmQo3/w==
+Date: Mon, 27 Oct 2025 11:24:32 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: Miaoqian Lin <linmq006@gmail.com>
+Cc: Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
-Message-ID: <aP7MnJ8mIlZhT//S@yilunxu-OptiPlex-7050>
-References: <20251023143957.2899600-1-robh@kernel.org>
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: cdns3: Fix double resource release in
+ cdns3_pci_probe
+Message-ID: <aP7l8FG_B1OimEnB@nchen-desktop>
+References: <20251026090859.33107-1-linmq006@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -125,18 +61,58 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
+In-Reply-To: <20251026090859.33107-1-linmq006@gmail.com>
 
-On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
-> Generally at most 1 blank line is the standard style for DT schema
-> files. Remove the few cases with more than 1 so that the yamllint check
-> for this can be enabled.
+On 25-10-26 17:08:59, Miaoqian Lin wrote:
+> The driver uses pcim_enable_device() to enable the PCI device,
+> the device will be automatically disabled on driver detach through
+> the managed device framework. The manual pci_disable_device() calls
+> in the error paths are therefore redundant and should be removed.
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> Found via static anlaysis and this is similar to commit 99ca0b57e49f
+> ("thermal: intel: int340x: processor: Fix warning during module unload").
+> 
+> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-[...]
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
->  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
+Peter
+> ---
+>  drivers/usb/cdns3/cdns3-pci-wrap.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-pci-wrap.c b/drivers/usb/cdns3/cdns3-pci-wrap.c
+> index 3b3b3dc75f35..57f57c24c663 100644
+> --- a/drivers/usb/cdns3/cdns3-pci-wrap.c
+> +++ b/drivers/usb/cdns3/cdns3-pci-wrap.c
+> @@ -98,10 +98,8 @@ static int cdns3_pci_probe(struct pci_dev *pdev,
+>  		wrap = pci_get_drvdata(func);
+>  	} else {
+>  		wrap = kzalloc(sizeof(*wrap), GFP_KERNEL);
+> -		if (!wrap) {
+> -			pci_disable_device(pdev);
+> +		if (!wrap)
+>  			return -ENOMEM;
+> -		}
+>  	}
+>  
+>  	res = wrap->dev_res;
+> @@ -160,7 +158,6 @@ static int cdns3_pci_probe(struct pci_dev *pdev,
+>  		/* register platform device */
+>  		wrap->plat_dev = platform_device_register_full(&plat_info);
+>  		if (IS_ERR(wrap->plat_dev)) {
+> -			pci_disable_device(pdev);
+>  			err = PTR_ERR(wrap->plat_dev);
+>  			kfree(wrap);
+>  			return err;
+> -- 
+> 2.39.5 (Apple Git-154)
+> 
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+-- 
+
+Best regards,
+Peter
 
