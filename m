@@ -1,399 +1,168 @@
-Return-Path: <linux-usb+bounces-29695-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29697-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2BD6C0ECDE
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 16:08:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2225C112A1
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 20:38:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EBE80503149
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 14:58:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31957584492
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 19:33:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C4A296BB6;
-	Mon, 27 Oct 2025 14:58:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15AFB3254A5;
+	Mon, 27 Oct 2025 19:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Xxv9K353"
+	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="Kkm2QTIP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013037.outbound.protection.outlook.com [52.101.83.37])
+Received: from mx13.kaspersky-labs.com (mx13.kaspersky-labs.com [91.103.66.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0F021C9E1;
-	Mon, 27 Oct 2025 14:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761577124; cv=fail; b=FqFuUGVQx/lzR0D8bQ0WqJReNruQuRGxWgG+ULG+BUILQkJCJLYrsecgf/OxoRM80ZLc0P0NlQ/g9L8VUnKqIaYSLgMbQUa5y4rKUgl9lv5aa5r2EB2IXLlAm8/NcoJn2cpqCil9OdvsxlOye+PFuQYYYsf76Jyn+xac35TeD80=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761577124; c=relaxed/simple;
-	bh=I0EJdIN8gIhRzitVX9NieiXlxSPzVC6e/th7iIKnoig=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ZU8BFt694yxl11gaTRU0DSG0EBax4lqQdTPmdL9NNKacUh0tDOxsd+g76uh1DBKjgEA3G/NctuXXYTOAO0wveD78x+DXZH4mR6IrgmANJ+wt7eLdsJOYTp+lF11XtuLYs6guSDRV5VADGuFnkPlDTNHzjcAmsY+89CSfyu+DB68=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Xxv9K353; arc=fail smtp.client-ip=52.101.83.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zCg4IpJUUTDPekhCLsWssImBivhVuWrkJPLK4A2Fh2+xWdUtym5wLE4/lVR6lu0gk6dpftY3furHK74C81iOfObkBgADp5wurDww8TgXqmKJ7cPrJ/n25XMk4ht4Cn/IBh9AbZ/AR157NAKTeMBS0lUPHHMwazxPCwlwDWGYy3/l0rtcQsIgeI6HcExX3rhAfohksO8jJYoXszQsbMlGqRcJWtjM738337TqIHbQFl/z7EBxtNcJpAWdF/xwP8kr4FT0Hn5WjV2Negzh2pFZr2+QSNZ9v30bd784wDm1lw7XDm7sVCCvrk0no2+r8tmZgWfAZp2Xy9/fW2gxCGlJCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rmvoGEBDMzqv/HiRNeMJ65K7Q4Rt+vnBw4Ih2pnUFUI=;
- b=ixWbvNQYAOtca9EREMoiFHhikMD3RFhlKMz5WgBX/gQkcekxM49dLFMs1OkvkKGvYEjrJX/Ff1OulpJ3AfmDg9fLxn24qWmfpDP/YJkTBYp6t41K1ZzHxh5Wmlm6Sj2cfRo9PGYmShv7O4/j3WPVd+jSY9Ie7waEXAYjldSiM2a2mGmkYAxJFpRghgORBQGe16cmYqsAkkwldMo3kEDEV9MR/EJbLdn/FJ4dNOsa4JTZC8mT15yLxHueQHzJmqZxqwwY8LyRzY9QtEe94o1Dy5TpALVwrKS0HK5F6nVoBa+Avmq0i9A0fhWnxxjVCdZ8jHlOxQBjOd6HXY9gc9M4pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rmvoGEBDMzqv/HiRNeMJ65K7Q4Rt+vnBw4Ih2pnUFUI=;
- b=Xxv9K3537zXXMCiAdCFGduk4ScWfFFpjBs8EbrGhY12LR1jfl2CRHctNwYihXn9aBrkTNn5TbNP6lpJj8z6trQvUO9QrnNucklMk6WuI8hKlSyn52Nf/qQXLXqxsWufcXMxaJmkam03tWV33WC/g3fgN5lvS26fPITYAOOfbfI9GvN7GvKL0krv8rmlJVOzHCLuPYf6CaN3YJNKus+dZZW3oDn1ALau9A4s7zjUnx7NtoWdpAf1hvMvh2vnDqJZJZg9v+LEi6PBxDBkyFyui8RX0DHzAKk9hEO7bK6EjoJQh8rf+HS3ZFvXp4iWJ1As0YJukiSAwG6xLL15OihuzEg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS4PR04MB9621.eurprd04.prod.outlook.com (2603:10a6:20b:4ff::22)
- by AMBPR04MB11809.eurprd04.prod.outlook.com (2603:10a6:20b:6ee::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.18; Mon, 27 Oct
- 2025 14:58:33 +0000
-Received: from AS4PR04MB9621.eurprd04.prod.outlook.com
- ([fe80::a84d:82bf:a9ff:171e]) by AS4PR04MB9621.eurprd04.prod.outlook.com
- ([fe80::a84d:82bf:a9ff:171e%4]) with mapi id 15.20.9253.017; Mon, 27 Oct 2025
- 14:58:33 +0000
-Date: Mon, 27 Oct 2025 10:58:22 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Shawn Guo <shawnguo@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	bjorn.andersson@oss.qualcomm.com, imx@lists.linux.dev,
-	Ze Huang <huang.ze@linux.dev>
-Subject: Re: [PATCH v5 4/4] arm64: dts: layerscape: add dma-coherent for usb
- node
-Message-ID: <aP+IjjTf8O0aOV5U@lizhi-Precision-Tower-5810>
-References: <20250929-ls_dma_coherence-v5-0-2ebee578eb7e@nxp.com>
- <20250929-ls_dma_coherence-v5-4-2ebee578eb7e@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250929-ls_dma_coherence-v5-4-2ebee578eb7e@nxp.com>
-X-ClientProxiedBy: BY3PR04CA0018.namprd04.prod.outlook.com
- (2603:10b6:a03:217::23) To AS4PR04MB9621.eurprd04.prod.outlook.com
- (2603:10a6:20b:4ff::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8459E32548D;
+	Mon, 27 Oct 2025 19:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.103.66.164
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761593535; cv=none; b=Ei+rS1wO7ovHscaWba/1shgArd1lCkovzIGDYq1vNDhPOTQZKmYv9pQrb+OIGN2U6Zx5pXACkS9jbUnKOZ5krRJ/yEgPbk+CMy+m2SRybp2VjD7x5av1WecVCMX/Rz/U55P13+MEumFhxhWfZHKLKgeZaNquEZUBlHUbhETuepI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761593535; c=relaxed/simple;
+	bh=2wy2OdMalM6zRMFQ3M0yh4G9RN9YvEwRgDcTo+gcfcc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=M1cVQvSi/KSpLS2aTj01pLKG/5MP4wT4eM9D3upAyBNVmabjAkpW4AAIw85V1OvyJ+LAAi1Q8vD10BOBoH7Rt2g2mbwsWz/hQ08hEiPvUWL5U2TXPZUZT3OGCbjRzopx8HLt790o7Idq+qcJTWd9+lJJODqDH/yJPc56uEH/Xp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=Kkm2QTIP; arc=none smtp.client-ip=91.103.66.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaspersky.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
+	s=mail202505; t=1761593525;
+	bh=ROb6l0esQuEFMG0ONS9trNOcFqKanMbtjSg64V55ITE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+	b=Kkm2QTIP+APmb1lWTFbiC33JTqXdsEvG5B3i/ZuhOW1nQdrko/2ij7dr8dtatYgfy
+	 hqzdR6UpYdSq7hibshNSU4nx2gE6s9EeDVroaRNghUohTqxNfIqbjooJbYXuG0OyTZ
+	 hz93vnvB7bG+6aXqEmjLzyVMNjiG+29JuMQbRqf9g+iDsgshQkNoWxeIog59KMp8Ah
+	 sDX10he711NrqQLUjLQIrlcx/3EWm+ZrHpNHik3kPdrTOjNlkmzj0+szcduuBXmIxG
+	 BZ2HLjJyAwhFY4iLsYGf8aCjnoF8Qzj/mAv54QnFg9ddVfxjOL2WToWL2x/W4btNNc
+	 3Lwalcp2sD2QQ==
+Received: from relay13.kaspersky-labs.com (localhost [127.0.0.1])
+	by relay13.kaspersky-labs.com (Postfix) with ESMTP id 3B5C43E273E;
+	Mon, 27 Oct 2025 22:32:05 +0300 (MSK)
+Received: from mail-hq2.kaspersky.com (unknown [91.103.66.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "mail-hq2.kaspersky.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
+	by mailhub13.kaspersky-labs.com (Postfix) with ESMTPS id 7AAAB3E26EC;
+	Mon, 27 Oct 2025 22:32:04 +0300 (MSK)
+Received: from zhigulin-p.avp.ru (10.16.104.190) by HQMAILSRV2.avp.ru
+ (10.64.57.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Mon, 27 Oct
+ 2025 22:32:03 +0300
+From: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
+To: Chunfeng Yun <chunfeng.yun@mediatek.com>
+CC: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
+Subject: [PATCH] usb: mtu3: fix possible NULL pointer dereference in ep0_rx_state()
+Date: Mon, 27 Oct 2025 22:31:50 +0300
+Message-ID: <20251027193152.3906497-1-Pavel.Zhigulin@kaspersky.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR04MB9621:EE_|AMBPR04MB11809:EE_
-X-MS-Office365-Filtering-Correlation-Id: 23854e8b-a23e-437f-376f-08de15694c8c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|1800799024|52116014|7416014|376014|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?hnOl10SarPj1CyGh2jeW2o/dtdnnw/wlfYZlwWX4w2/YIlnb6Ltmfa3rDC3W?=
- =?us-ascii?Q?348djGWoSz11q06x5edpG2u29HvmGDbfhjIY/aoD3mIMcoc5tzm81XcYRwYl?=
- =?us-ascii?Q?9AAsFOSJF0EBwQkgjnMAM5kg0edqjHM0CNYLbXkOcTSj+BbjzVda91DIB27l?=
- =?us-ascii?Q?zomkWekVgYqkSDVbKvx+i7iMwP0lcNppM6FIivsOddVi4Ry6weOJunXjpmHA?=
- =?us-ascii?Q?lLlVlF4C+lc1Gue9C/tcfGsVTLRwMkn1aZfjM/IRygtEbi1CTPcKW32ELDHC?=
- =?us-ascii?Q?R/Ahm1qqbD/h5dhNBxAdZFWl04FwRd4L5jzTsc0xIPxpt50WGSDXkNlDBZHI?=
- =?us-ascii?Q?Hcyfu/y5IHKijP479YqvAbjQlAYDh8DTkLVxWfTNMGAfd5Gf9Kof+1x71pqg?=
- =?us-ascii?Q?EpLEtnfgxNrABsttaC46r45IVVvqWgbIbj0QtuAyNiAW8nMrL1RRW+/JFUuM?=
- =?us-ascii?Q?u9cTYPPwsn7B1vTM7ky/EMDV8DJpxsvlH9szLRHgpHhX/vsZfxPBR5aZ6LNk?=
- =?us-ascii?Q?ZabX3SK75Xtg/zMGCXxPFMWcLtaDUc49xWehULWX6hRdlyQ6PS9+7/QqGAat?=
- =?us-ascii?Q?AS8MwDMbQtcFQZE6kT28kfKd7zj6/t8YzQVbCwu7nI1ncGOSVW1LeBZLBAP8?=
- =?us-ascii?Q?CBCEJBUdActkVbWigh+aCkfZt122j2BdrY5Kml9mJGt4Uza6w37Vmb4pUoK1?=
- =?us-ascii?Q?2bI/azXBdNniVZhLHeygCD5+G95E93phz3Mrq9bg3G3dcGxmx9XmH5H+NWtL?=
- =?us-ascii?Q?4ccrEtG2A3Phwy4lb2eRsaezruX3ox3J0IOVFe6KAI7BzMVkj5az2xUBNbr0?=
- =?us-ascii?Q?BrSxczsMnvKvsVt0abZMNRjR+LXV7dBz/kjDw+wIi6NdR4gUVKOEh7DBvAoj?=
- =?us-ascii?Q?Vp1nAYj9Qq5AjTqHGME6pS0aWS1wKAvxwAfw87b37rS2d3bZa3ijWTxhSAi4?=
- =?us-ascii?Q?oAoKQYP/JsJL3xwv+bcFEAdcEjewsaPaNSL7iE84bo2ts0z9GXf48YaNbMzj?=
- =?us-ascii?Q?dkcYoDnj5SQ4lITJ6Z498xDJ1N1/5+UpU3p5mglZXbfYyKbRUrJwiNW/tQak?=
- =?us-ascii?Q?W62u/agDIRwu58fc8ji3r8zB06tRd4uTwYvQcy4SOGrYVN+CLM+oBDFFMaVh?=
- =?us-ascii?Q?xm3OdtVMsS/4FIHLs2rDbLOQ5ccDfP8QxxVJdkklAnkmBkgicDH9IQ3foLos?=
- =?us-ascii?Q?xOxZCCtwn0XRgYmpf7vZkcX/vPG47wnl7c8Fcpfgk14kT4iuXMLLBBRYrSlk?=
- =?us-ascii?Q?Z3Tto+1Z2yTh8hVGdlGKINIZWBMTvlpo7xLNGHXoKFBXpi0s3aGBSTN5a9Ix?=
- =?us-ascii?Q?TqOqEqQTXMBflt/aFUOzff4cSK32/TZiBymB+9I71BqF54R/Q1KlWp0fb6X5?=
- =?us-ascii?Q?kunbjN7H7OnX3aBqiHBCBUbAXtkEFyev1pxx4/ZujPJai85YQHpn9vRqpipY?=
- =?us-ascii?Q?+6cDuDgazbjgrc96QXQAjOfcEfFLl7K7bFsN9qWIRf7fosuI94jNCNQxuCdD?=
- =?us-ascii?Q?M/2RG0UA3NSXiQAa+pZRrOqc3N5koxbBoeyu?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9621.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(52116014)(7416014)(376014)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Yad47a1plt6H/AuW3BgufX4o/TpNwr43lnYvPP/GRMUQb3ihKdo1jhRxcUPi?=
- =?us-ascii?Q?x/zZmFsDvjhxkmwDsR5tmjlYNAw94h7w7147JCPgQZx3UUko3e4bhO+SNC6s?=
- =?us-ascii?Q?bNugneErr/+5x1781qrPpB+N4hQobatwXtEs69elwWkO3rx35NUn87d/sUz+?=
- =?us-ascii?Q?jYhgAXBi2Wtmymjw+szbUjwSBJag5Ze99R8Du+9jWbVk9t5V+q+MX8bXeoPV?=
- =?us-ascii?Q?05WEUsnG67BJ/FqD3SnKST8AXUWZ65Td0D9CaUt4xSj5KjZo5o8T7986AKL6?=
- =?us-ascii?Q?0/jsyLWElI0CHTzOsiehKrfSee0d33LsirXtr5vXS3VbXdjez1DrrDuM4H0i?=
- =?us-ascii?Q?aDzx8HNXKYmCh8t+6YkKuHa0cxaA5HlokS+ZLGnOU2scuNXXELyDklN4/u6i?=
- =?us-ascii?Q?ALCoBwhT/tPEiYtEW8PlfNSj+7bFxvRqGpe6pQCwdSo/+c1/Z3uj2mjW9Fvd?=
- =?us-ascii?Q?lm70Gfu8MieMzL6DekYrhuvbl/IuOB2ZSJ7eFWnEWYTeyEEL+3Qr85Fds3ja?=
- =?us-ascii?Q?8NM82QD+sPCbirjqa1mrbCJ1Mi9iKXxJ0jjp97Opp3RNlyijJPjGpHwWaXzt?=
- =?us-ascii?Q?kF9Me1ZJPJFgtqI9vbiuXr68lz+tbsjq6ylZ8wuFHJNibYvkh0nrekLdzm2g?=
- =?us-ascii?Q?mG9HDG22X8/cMQp6h22cifUPdCDR/K9f7GyKDACA0Lco3a9PRzZSKY08zA7h?=
- =?us-ascii?Q?EASdkOtgSmX6gdDnzJLeo/bXxj4l34Vv9cLWD/8UzbmESuI8tYfa/I0kzoqS?=
- =?us-ascii?Q?WXrvgqHck0lz1mlVcL8pq6xLFx9IT2fzsTNxz49JgqEhypA8pbLnpwGdlLSu?=
- =?us-ascii?Q?ttW4NE/cdAPBZiCXT3oQqxDXVjeR6ivP59dyHMVC/NJTlvOtqmwK9l94ELIe?=
- =?us-ascii?Q?OjvMTgBI1vjmMbLuHok7BlYAl8mieht/1JtVCY3KTntPGHc9ypRIp/DwfUB1?=
- =?us-ascii?Q?KLmD8VlIySQh4XfsLvBs3aZ207V+ixc9SLWDwfgtCHNlumfwKdBBlYODMTR4?=
- =?us-ascii?Q?+6QSK4M5n0bfGzTd9RYIm7qA0NtvYZz4CsvEswD+/nEM+rbAVfwSdTH4rPcn?=
- =?us-ascii?Q?jmwwPMFArMEKMsn8pNPe43W4sbqk11sBMgTRGdI4BT00gdKg/bRMEGm+CThQ?=
- =?us-ascii?Q?/pDvoLx0Hic5JTAT8BmF0txtxc8HTwaZGEgwUr19pK87WXq7NGDnY6H/LDog?=
- =?us-ascii?Q?yweXPnnM1XlH2Kj3QW5r9NF8FVtZwVP84KbGRxrvfAr9G4ghTVE/BvS1cUV/?=
- =?us-ascii?Q?QufBLzlizzxH5+4JB8SyDMP+oXHpgxY9/7dIE4kFA7PdcU3cO7EFZA+FWXDc?=
- =?us-ascii?Q?YEMY6FBNNfuVKIE+zYE4OQ4/dSrYBzd9+hggbCZfz/ENhlwCHd+8cf/jjHCU?=
- =?us-ascii?Q?/liuRl8Y57LeUedCdxLr/IvEp8DiBlcBLIJ9XkO4ukod95CYzlx2vI7zEXN0?=
- =?us-ascii?Q?lXomjiOfR6mW7HOOYIkAtcRohxZgOBGC4iBdb64Vw/FnJP/0UdtCFRfG+R2E?=
- =?us-ascii?Q?jtDk8LEpLyMUCGBCl32CwIblCw4SYZLPvWtthQ1zWipGlmEyPj2pP+9B/n03?=
- =?us-ascii?Q?llypaI+cXED9HOn044I=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23854e8b-a23e-437f-376f-08de15694c8c
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9621.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 14:58:33.6277
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zdN0UvdNOICxXChcs1VS9m+uaop6dHKgLF5TeX2GdCSJ/j09Z620x+IMuk7p5GLO7TQ5pUd8t2uwqz8liJZ+Cw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AMBPR04MB11809
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HQMAILSRV2.avp.ru (10.64.57.52) To HQMAILSRV2.avp.ru
+ (10.64.57.52)
+X-KSE-ServerInfo: HQMAILSRV2.avp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 10/27/2025 19:22:10
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 197495 [Oct 27 2025]
+X-KSE-AntiSpam-Info: Version: 6.1.1.11
+X-KSE-AntiSpam-Info: Envelope from: Pavel.Zhigulin@kaspersky.com
+X-KSE-AntiSpam-Info: LuaCore: 72 0.3.72
+ 80ff96170b649fb7ebd1aa4cb544c36c109810bd
+X-KSE-AntiSpam-Info: {Tracking_cluster_exceptions}
+X-KSE-AntiSpam-Info: {Tracking_real_kaspersky_domains}
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: zhigulin-p.avp.ru:7.1.1,5.0.1;kaspersky.com:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: {Tracking_white_helo}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 10/27/2025 19:24:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 10/27/2025 6:00:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-KSMG-AntiPhishing: NotDetected
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2025/10/27 14:30:00 #27802224
+X-KSMG-AntiVirus-Status: NotDetected, skipped
+X-KSMG-LinksScanning: NotDetected
+X-KSMG-Message-Action: skipped
+X-KSMG-Rule-ID: 52
 
-On Mon, Sep 29, 2025 at 10:24:17AM -0400, Frank Li wrote:
-> Add SOC special compatible string, remove fallback snps,dwc3 to let flatten
-> dwc3-layerscape driver to be probed and enable dma-coherence for usb node
-> since commit add layerscape dwc3 support, which set correct gsbustcfg0
-> value.
+The function 'ep0_rx_state()' accessed 'mreq->request' before verifying
+that mreq was valid. If 'next_ep0_request()' returned NULL, this could
+lead to a NULL pointer dereference. The return value of
+'next_ep0_request()' is checked in every other code path except
+here. It appears that the intended 'if (mreq)' check was mistakenly
+written as 'if (req)', since the req pointer cannot be NULL when mreq
+is not NULL.
 
-Shanw Guo:
+Initialize 'mreq' and 'req' to NULL by default, and switch 'req'
+NULL-checking to 'mreq' non-NULL check to prevent invalid memory access.
 
-	Binding and driver already were picked by Greg. Can you please
-pick up dts part?
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Frank Li
+Fixes: df2069acb005 ("usb: Add MediaTek USB3 DRD driver")
+Signed-off-by: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
+---
+ drivers/usb/mtu3/mtu3_gadget_ep0.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
->
-> Add iommus property to run at old uboot, which use fixup add iommus by
-> check compatible string snsp,dwc3 compatible string.
->
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> change in v3 - v4
-> - none
-> ---
->  arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi | 3 ++-
->  arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 8 ++++++--
->  arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi | 9 ++++++---
->  arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi | 9 ++++++---
->  arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 8 ++++++--
->  arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 8 ++++++--
->  6 files changed, 32 insertions(+), 13 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-> index fc3e138077b86cd5e3cf95c3d336cb3c6e1c45ef..ef80bf6a604f475c670e2d626a727e94fcb2a17a 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-> @@ -493,10 +493,11 @@ QORIQ_CLK_PLL_DIV(4)>,
->  		};
->
->  		usb0: usb@2f00000 {
-> -			compatible = "snps,dwc3";
-> +			compatible = "fsl,ls1012a-dwc3", "fsl,ls1028a-dwc3";
->  			reg = <0x0 0x2f00000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
->  			dr_mode = "host";
-> +			dma-coherent;
->  			snps,quirk-frame-length-adjustment = <0x20>;
->  			snps,dis_rxdet_inp3_quirk;
->  			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> index 7d172d7e5737c4b6e42ee88676c5763fa7415260..e7f9c9319319a69d8c70d1e26446b899c3599f95 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> @@ -613,9 +613,11 @@ gpio3: gpio@2320000 {
->  		};
->
->  		usb0: usb@3100000 {
-> -			compatible = "fsl,ls1028a-dwc3", "snps,dwc3";
-> +			compatible = "fsl,ls1028a-dwc3";
->  			reg = <0x0 0x3100000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
-> +			iommus = <&smmu 1>;
-> +			dma-coherent;
->  			snps,dis_rxdet_inp3_quirk;
->  			snps,quirk-frame-length-adjustment = <0x20>;
->  			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> @@ -623,9 +625,11 @@ usb0: usb@3100000 {
->  		};
->
->  		usb1: usb@3110000 {
-> -			compatible = "fsl,ls1028a-dwc3", "snps,dwc3";
-> +			compatible = "fsl,ls1028a-dwc3";
->  			reg = <0x0 0x3110000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-> +			iommus = <&smmu 2>;
-> +			dma-coherent;
->  			snps,dis_rxdet_inp3_quirk;
->  			snps,quirk-frame-length-adjustment = <0x20>;
->  			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-> index 73315c51703943d9ee5e1aa300c388ff6482423f..50d9b03a284a2aa4e13aa3323c25bbc5fe08f3d0 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-> @@ -833,10 +833,11 @@ aux_bus: bus {
->  			dma-ranges = <0x0 0x0 0x0 0x0 0x100 0x00000000>;
->
->  			usb0: usb@2f00000 {
-> -				compatible = "snps,dwc3";
-> +				compatible = "fsl,ls1043a-dwc3", "fsl,ls1028a-dwc3";
->  				reg = <0x0 0x2f00000 0x0 0x10000>;
->  				interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
->  				dr_mode = "host";
-> +				dma-coherent;
->  				snps,quirk-frame-length-adjustment = <0x20>;
->  				snps,dis_rxdet_inp3_quirk;
->  				usb3-lpm-capable;
-> @@ -845,10 +846,11 @@ usb0: usb@2f00000 {
->  			};
->
->  			usb1: usb@3000000 {
-> -				compatible = "snps,dwc3";
-> +				compatible = "fsl,ls1043a-dwc3", "fsl,ls1028a-dwc3";
->  				reg = <0x0 0x3000000 0x0 0x10000>;
->  				interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
->  				dr_mode = "host";
-> +				dma-coherent;
->  				snps,quirk-frame-length-adjustment = <0x20>;
->  				snps,dis_rxdet_inp3_quirk;
->  				usb3-lpm-capable;
-> @@ -857,10 +859,11 @@ usb1: usb@3000000 {
->  			};
->
->  			usb2: usb@3100000 {
-> -				compatible = "snps,dwc3";
-> +				compatible = "fsl,ls1043a-dwc3", "fsl,ls1028a-dwc3";
->  				reg = <0x0 0x3100000 0x0 0x10000>;
->  				interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
->  				dr_mode = "host";
-> +				dma-coherent;
->  				snps,quirk-frame-length-adjustment = <0x20>;
->  				snps,dis_rxdet_inp3_quirk;
->  				usb3-lpm-capable;
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> index 770d91ef0310d971d044a1f55cc5e2cb738acc47..22173d69713d1bd2abca986e76668ad437dd34e4 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> @@ -749,10 +749,11 @@ aux_bus: bus {
->  			dma-ranges = <0x0 0x0 0x0 0x0 0x100 0x00000000>;
->
->  			usb0: usb@2f00000 {
-> -				compatible = "snps,dwc3";
-> +				compatible = "fsl,ls1046a-dwc3", "fsl,ls1028a-dwc3";
->  				reg = <0x0 0x2f00000 0x0 0x10000>;
->  				interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
->  				dr_mode = "host";
-> +				dma-coherent;
->  				snps,quirk-frame-length-adjustment = <0x20>;
->  				snps,dis_rxdet_inp3_quirk;
->  				snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> @@ -760,10 +761,11 @@ usb0: usb@2f00000 {
->  			};
->
->  			usb1: usb@3000000 {
-> -				compatible = "snps,dwc3";
-> +				compatible = "fsl,ls1046a-dwc3", "fsl,ls1028a-dwc3";
->  				reg = <0x0 0x3000000 0x0 0x10000>;
->  				interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
->  				dr_mode = "host";
-> +				dma-coherent;
->  				snps,quirk-frame-length-adjustment = <0x20>;
->  				snps,dis_rxdet_inp3_quirk;
->  				snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> @@ -771,10 +773,11 @@ usb1: usb@3000000 {
->  			};
->
->  			usb2: usb@3100000 {
-> -				compatible = "snps,dwc3";
-> +				compatible = "fsl,ls1046a-dwc3", "fsl,ls1028a-dwc3";
->  				reg = <0x0 0x3100000 0x0 0x10000>;
->  				interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
->  				dr_mode = "host";
-> +				dma-coherent;
->  				snps,quirk-frame-length-adjustment = <0x20>;
->  				snps,dis_rxdet_inp3_quirk;
->  				snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-> index 9d5726378aa015eff10578bf095908a58b9d9eee..b2f6cd237be046123de9342e2167aa32248a8a16 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-> @@ -489,10 +489,12 @@ esdhc: mmc@2140000 {
->  		};
->
->  		usb0: usb@3100000 {
-> -			compatible = "snps,dwc3";
-> +			compatible = "fsl,ls1088a-dwc3", "fsl,ls1028a-dwc3";
->  			reg = <0x0 0x3100000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
->  			dr_mode = "host";
-> +			iommus = <&smmu 1>;
-> +			dma-coherent;
->  			snps,quirk-frame-length-adjustment = <0x20>;
->  			snps,dis_rxdet_inp3_quirk;
->  			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> @@ -500,10 +502,12 @@ usb0: usb@3100000 {
->  		};
->
->  		usb1: usb@3110000 {
-> -			compatible = "snps,dwc3";
-> +			compatible = "fsl,ls1088a-dwc3", "fsl,ls1028a-dwc3";
->  			reg = <0x0 0x3110000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
->  			dr_mode = "host";
-> +			iommus = <&smmu 2>;
-> +			dma-coherent;
->  			snps,quirk-frame-length-adjustment = <0x20>;
->  			snps,dis_rxdet_inp3_quirk;
->  			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-> index c9541403bcd8239a48d4ef79c7c4f9e3b607b556..d899c0355e51dd457a4e7259709cea98a488f557 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-> @@ -1094,24 +1094,28 @@ ftm_alarm0: rtc@2800000 {
->  		};
->
->  		usb0: usb@3100000 {
-> -			compatible = "snps,dwc3";
-> +			compatible = "fsl,lx2160a-dwc3", "fsl,ls1028a-dwc3";
->  			reg = <0x0 0x3100000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
->  			dr_mode = "host";
->  			snps,quirk-frame-length-adjustment = <0x20>;
->  			usb3-lpm-capable;
-> +			iommus = <&smmu 1>;
-> +			dma-coherent;
->  			snps,dis_rxdet_inp3_quirk;
->  			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
->  			status = "disabled";
->  		};
->
->  		usb1: usb@3110000 {
-> -			compatible = "snps,dwc3";
-> +			compatible = "fsl,lx2160a-dwc3", "fsl,ls1028a-dwc3";
->  			reg = <0x0 0x3110000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
->  			dr_mode = "host";
->  			snps,quirk-frame-length-adjustment = <0x20>;
->  			usb3-lpm-capable;
-> +			iommus = <&smmu 2>;
-> +			dma-coherent;
->  			snps,dis_rxdet_inp3_quirk;
->  			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
->  			status = "disabled";
->
-> --
-> 2.34.1
->
+diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+index e4fd1bb14a55..ee7466ca4d99 100644
+--- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
++++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+@@ -508,8 +508,8 @@ static int handle_standard_request(struct mtu3 *mtu,
+ /* receive an data packet (OUT) */
+ static void ep0_rx_state(struct mtu3 *mtu)
+ {
+-	struct mtu3_request *mreq;
+-	struct usb_request *req;
++	struct mtu3_request *mreq = NULL;
++	struct usb_request *req = NULL;
+ 	void __iomem *mbase = mtu->mac_base;
+ 	u32 maxp;
+ 	u32 csr;
+@@ -519,10 +519,11 @@ static void ep0_rx_state(struct mtu3 *mtu)
+
+ 	csr = mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS;
+ 	mreq = next_ep0_request(mtu);
+-	req = &mreq->request;
+
+ 	/* read packet and ack; or stall because of gadget driver bug */
+-	if (req) {
++	if (mreq) {
++		req = &mreq->request;
++
+ 		void *buf = req->buf + req->actual;
+ 		unsigned int len = req->length - req->actual;
+
+--
+2.43.0
+
 
