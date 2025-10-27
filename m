@@ -1,125 +1,143 @@
-Return-Path: <linux-usb+bounces-29692-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29693-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17531C0DFEE
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 14:25:02 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6308C0E1C1
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 14:40:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2980B3A884C
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 13:24:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 472524F717D
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 13:36:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7417296BDC;
-	Mon, 27 Oct 2025 13:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A4D306498;
+	Mon, 27 Oct 2025 13:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jEEp38Gj"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="P8vvbycA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9732528727B;
-	Mon, 27 Oct 2025 13:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9F5305E37
+	for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 13:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761571492; cv=none; b=oVKc1sg6KpijGI4iGKX+3+pmI5tFSE+T+igDtbAMDthPr/eNCdUb38F+pEq2T11+7eU8M5G98yZJb7gx9zqUN1Z2iuvBAhKfQahwlBtPR3/WaSUvsuUD4uG0qjj2EDahaYLT6pmHes04aKoGXjPrKDGykWTK8o/2vovC1QvMSrw=
+	t=1761572143; cv=none; b=gp0IbtfPloJqET43G/PGsxNT65XiPbMLd/Nh9xSoI+sFfWabNNNqqzTCe/KdqUT0X/MqLIRCunWXmScM215TcJp09m7RIdTUE+6/VeBIFsMqyEsTf++De8Vcw3gPWTrHv7QADYsMOBPDAB3P5qc5F0AtT7716GUh9hokAqlsm5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761571492; c=relaxed/simple;
-	bh=W9/MQBoV9l8yb26yTYT5WoQtZ832sVzXBDGoSSTXZOE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kyjqxFTdeDgP3Ybu5Lc2Ch6tItjsknr/soJ6Ml5fBhYTwgysyrxZTGx1LuO3fMfq/OIrxLXNWG7h1jZQS3UW+a/2iGIuOWK0s5GcCN+eRN5J3KKz0KCDUEUlc9ocxtAU8MkkHdPuN2nR3W9DMg0nUSJ6oleIYyPc0KwzlblAoI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jEEp38Gj; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761571491; x=1793107491;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W9/MQBoV9l8yb26yTYT5WoQtZ832sVzXBDGoSSTXZOE=;
-  b=jEEp38Gjxex4CIE6gNZt0BfcZgnwif04cNYcdCbd7jmWmReiUoWqGVrE
-   wzl310O4fkWpm00IdCYtmGMiqnwSaWSu/aw6wTClhZJs/aQcvMABTSc6w
-   AoxhsEvVnrnXYP9+GKCwnFC71kMCsX3BADWrw+wsRUvH/2B45VeXm5fAM
-   aPQAm6j9v9TwTa5YGqJDU/6pmYruUbfQwmytYeT0aGMYbsOGljtOAjSEd
-   0WjaYYE6aH0TsgUavsqDKK6+Cq4ExQ7oBEolVi5yoFmOXrILf5L1a/WuS
-   hCrZNItwuHTrGS40OFQEuPbq0LzC/+bI3NYgO4LzxpyW4oB0mf14Vm3+U
-   w==;
-X-CSE-ConnectionGUID: UII35A/ZTvqDKjskaypyrQ==
-X-CSE-MsgGUID: e+KuxH58Q7GK2AALkE5o1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="67483467"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="67483467"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 06:24:51 -0700
-X-CSE-ConnectionGUID: OzzNk+a6QXSe4LjLGkV3KQ==
-X-CSE-MsgGUID: FO5tyBiIQWiPJ4sDAXL9IA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,258,1754982000"; 
-   d="scan'208";a="222253344"
-Received: from mgerlach-mobl1.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.222.172])
-  by orviesa001.jf.intel.com with SMTP; 27 Oct 2025 06:24:47 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 27 Oct 2025 15:24:45 +0200
-Date: Mon, 27 Oct 2025 15:24:45 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Biju Das <biju.das.jz@bp.renesas.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID
- pin state
-Message-ID: <aP9ynU8tDho5PBAx@kuha.fi.intel.com>
-References: <20251027072741.1050177-1-krishna.kurapati@oss.qualcomm.com>
- <20251027072741.1050177-3-krishna.kurapati@oss.qualcomm.com>
- <aP8_oZlJ4466BEf0@kuha.fi.intel.com>
- <34atfkavrxtv5xdekrlhhkxx4rxs3ueclxrmou5pquym5fsycv@i7mv7ssdlm2v>
+	s=arc-20240116; t=1761572143; c=relaxed/simple;
+	bh=q1xHjAi6E4wi3oQoijyEgXm7p5tzOjAHqmVcqhQq0wg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c1rjQ+WoAFcqFzPSEwg4oap6q7bo+5oUSDvQHU6UHLQYI6cUlf1Pt5hhFwSRdoQGHJPrRWUa2HtuhJ4GSK5lKvF+29G8o25qn3IQ8+3V7N97vqXjC6xH8elwfudXG0s7sIosmwAyMMnPT6G6xBA72yMXFUiS9X7hvyZuH1K/IG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=P8vvbycA; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-475de184058so8572955e9.2
+        for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 06:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1761572139; x=1762176939; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=coMQJHEII5UHdUF+Ekj+pHGgsN6WEYzWi8tdyRdD9tw=;
+        b=P8vvbycAR7YrdLbLsZK9MsF8LIJaG1AUecd4CONxCa9Bm256AZZujM2MjtVUVQwh2L
+         wjQw2Ag/XcnrUCu0xW/eCq7E24V2QsqnyvDwPRGhJds5NXMWizxT7liQy3yEsgbR4Ec/
+         j9eubyUMw46E0Pvqq7iVHqbXUzUJ3dipvKZjSSHHEJ5n6NWZN/8HX5+topoMXgIOf0lx
+         BUO3FgFdVYkKygha3VYXZaoHz2yrqYEBGnzBZeWVKPBxSWfiSp8hoKuvsOmrpctvoXUI
+         MFpPyCPhjYLyJRTaaDxdCeieFvXjKWq2vsMV/wJ4FAMFQfPziPMvHN81/W6NEDdRPwvw
+         lXGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761572139; x=1762176939;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=coMQJHEII5UHdUF+Ekj+pHGgsN6WEYzWi8tdyRdD9tw=;
+        b=ZCjVy4NA+RX6A8yBf8WEYSh6s06GEmSjO5rsHvtdTLEWYRGAdLk5IoUGq/3oLBuTTg
+         NN3z99l+7zGi3VjIA/qvgzm+aNSnxwyAaL0Nfhn2gXhsS1RU8ufT53V4xjssTl0opIYe
+         H7QImjvubrkE2fjT8VlT+n/zD3M3cabaaJA7riYRMnkVD2aXmyu7ghT41kp/Zs3K72js
+         GsdMUHsjfB9d1GMLaElzhKixZo16tZuU4Svog9E1lDT8oOUrJCsy1ZVIbcHEWJAHbluk
+         oWxkDhc9m3+xefB0/ojG6aS/5Pf8YyGSFIpS8DFt/ontSCw7RdSMahA32RHKwN3a7Bo2
+         y+SQ==
+X-Gm-Message-State: AOJu0YyzE8A8kXPczBu2J0vSg9G0sxBC9n4zrP4woa1p2RSEDXeHhYSg
+	PR/SOKp4vzojmTjA77nHqt5hSUXw3ffRI1xMw2a9rljL8MN6gTDEfbPpd1pgGKNyPPw=
+X-Gm-Gg: ASbGncvsS2RueHGnMq7+kFFcSrs4Xi9R3tRyBQ8CQM3gyvXm+BqqS74rYlQSJAEmCLc
+	HBXG6Qve6bjA8JuAm6JuHn20oeVbEv3/LSjLzYHDErHcJcZIDRFAqvf8H1pTgV047OQ/kD6MR+V
+	DXyEzVaJWPRyRBwWxgvGqPZ31Izso2OcLvJPinXRDINmVNswOMzjE+Xqi/v19KreAkwzmWVAKYN
+	mAUm5xdAZEuQZRjgM9vOdbffy41Ki+HUc3SgssQFvoEI/1wyrbDpN30kFzoy0UfUOTJ8uk079Qd
+	Tft3RgYEeOloqn38dxouz5u5+OE0F4PAgUavGK9x65OamaTeCZc9yXXejGTN8M1dYqZqCjLYBo+
+	flWg16jwtQy1ZgOZDOkGE/pFS73E8eV7U9o8uKTgznzp6n8jSOfeT+h38q+RhEOvzuZX0wVwhcr
+	lQoV3cG2uQ6ah+lDVB6FX3Cfd+Accln9pNWLiCtweIfuTMIPQWMJuYY6CT2xauJ7/thQ==
+X-Google-Smtp-Source: AGHT+IHqAIVjFyYDoJjqcp/dMd7ZvxXUjRECSaszUpt0012U8VY/hZ9NeJngEtVEdLXk+JU1qrULHQ==
+X-Received: by 2002:a05:600c:3b82:b0:475:daa7:ec60 with SMTP id 5b1f17b1804b1-475daa7ee4amr74939795e9.21.1761572139493;
+        Mon, 27 Oct 2025 06:35:39 -0700 (PDT)
+Received: from ?IPV6:2a02:3033:263:99eb:3ee8:c1a0:6fbf:4510? ([2a02:3033:263:99eb:3ee8:c1a0:6fbf:4510])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952cbc16sm13967859f8f.15.2025.10.27.06.35.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Oct 2025 06:35:38 -0700 (PDT)
+Message-ID: <8de18ee2-ccdd-4cdd-ae49-48600ad30ed4@suse.com>
+Date: Mon, 27 Oct 2025 14:35:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <34atfkavrxtv5xdekrlhhkxx4rxs3ueclxrmou5pquym5fsycv@i7mv7ssdlm2v>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: uas: fix urb unmapping issue when the uas device
+ is remove during ongoing data transfer
+To: Owen Gu <guhuinan@xiaomi.com>, Oliver Neukum <oneukum@suse.com>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
+ usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+ Yu Chen <chenyu45@xiaomi.com>, Michal Pecio <michal.pecio@gmail.com>
+References: <20251015153157.11870-1-guhuinan@xiaomi.com>
+ <aP8Llz04UH8Sbq5Q@oa-guhuinan-2.localdomain>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <aP8Llz04UH8Sbq5Q@oa-guhuinan-2.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 27, 2025 at 03:19:04PM +0200, Dmitry Baryshkov wrote:
-> On Mon, Oct 27, 2025 at 11:47:13AM +0200, Heikki Krogerus wrote:
-> > Hi Krishna,
-> > 
-> > > +static int hd3ss3220_get_vbus_supply(struct hd3ss3220 *hd3ss3220)
-> > > +{
-> > > +	struct device_node *hd3ss3220_node = hd3ss3220->dev->of_node;
-> > > +	struct device_node *np;
-> > > +
-> > > +	np = of_graph_get_remote_node(hd3ss3220_node, 0, 0);
-> > > +	if (!np) {
-> > > +		dev_err(hd3ss3220->dev, "failed to get device node");
-> > > +		return -ENODEV;
-> > > +	}
-> > 
-> > So I guess that's the connector node. Why can't you just place the
-> > regulator reference to the hd3ss3220 controller node instead of the
-> > connector like the port controllers do?
-> > 
-> > That would allow us to do a simple devm_regulator_get_optional() call
-> > that's not tied to DT only.
+Hi,
+
+I think I was unclear the first time.
+Sorry for that.
+
+On 27.10.25 07:05, Owen Gu wrote:
+> Hi Oliver,
 > 
-> But we have devm_of_regulator_get_optional(), it was mentioned in the
-> previous email if I'm not mistaken. If we need, we should add
-> devm_fwnode_regulator_get(_optional).
-> 
-> vbus supply is described as a part of the usb-c-connector schema, so
-> it is not that logical to describe it as a part of the Type-C
-> controller.
 
-Okay, got it. This is OK by me then.
+>> This patch modifies the error condition check in the uas_submit_urbs()
+>> function. When a UAS device is removed but one or more URBs have already
+>> been successfully submitted to USB, it avoids immediately invoking
+>> scsi_done() and save the cmnd to devinfo->cmnd array. If the successfully
+>> submitted URBs is completed before devinfo->resetting being set, then
+>> the scsi_done() function will be called within uas_try_complete() after
 
-Thanks Dmitry,
+This requires that uas_try_complete() is called.
 
--- 
-heikki
+And I am afraid uas_stat_cmplt() cannot guarantee that in the error case.
+I think the following sequence of events is possible:
+
+CPU A						CPU B
+
+uas_queuecommand_lck() calls uas_submit_urbs()
+COMMAND_INFLIGHT is set and URB submitted
+						URB gets an error
+						status = -EBABBLE (just an example)
+						uas_stat_cmplt is called
+						resetting is not set
+						if (status)
+							goto out;
+
+						uas_try_complete _not_ called
+
+The scsi command runs for indeterminate amount of time.
+It seems to me that if you want to use your approach you also
+need to change error handling in uas_stat_cmplt()
+
+	Regards
+		Oliver
+
+
 
