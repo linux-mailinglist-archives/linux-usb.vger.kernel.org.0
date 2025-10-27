@@ -1,113 +1,91 @@
-Return-Path: <linux-usb+bounces-29677-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29678-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A5C6C0BE01
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 06:55:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 752D5C0BE49
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 07:04:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DD1B18A151A
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 05:55:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E67983B5BCF
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 06:04:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470412D8376;
-	Mon, 27 Oct 2025 05:54:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75AD32D9ED1;
+	Mon, 27 Oct 2025 06:04:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="NDWa+G6M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522452D6619
-	for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 05:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF13239E7E;
+	Mon, 27 Oct 2025 06:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761544475; cv=none; b=Tsaz24gEaCjMshZjak34ntVsCVmyFPl/+W3sTMd0XEfRbWp43LdV1a9uFr5WTdNiuoee9SgM36pbWuu4hAlQMbYjvq4ys+uuMpb3pJVD8s8+FOdpN5i7nyzSWCm9FvpExEkRaf98ZFlQ+94CKSuE8raqGP/jyX8AaLBfPBuGErE=
+	t=1761545059; cv=none; b=icfF3pixKb8Wk8XScBuxa7M6eIQeeZScpe9X3w9nXpH/hC1g0XLIuy9a7JhivRhPA3JXmokMhZbVRamzvuJndmaK6sCNTIV7d7jgLjh9AKxtwUHjbMSTVJ/Wkolax8w3/AOtt2xHf9w8kMWxgCjVX/hzivi/1chbbuN6o+lFKY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761544475; c=relaxed/simple;
-	bh=cmSLGSqzlwkrEz2X2oOZHZFSJCV4L2jalMylM0No7Io=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=tuG61wVVnMIxFkYbDmXvKHpufNioYfEPZo+sWFA/0BTjhT4Cc4TiPsrljYk8IHsESbx1HenNKBXEA4KfF6a50m/2GmNf8d+al3XUeSNhNdcl2oEVqjrNu6wCyOO+k+GqlVcbImauHtqs/xdunP5QRhj9zDDCnSNHW2byDAutlOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-9374627bb7eso631128339f.1
-        for <linux-usb@vger.kernel.org>; Sun, 26 Oct 2025 22:54:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761544473; x=1762149273;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AZp28NjdJKGwBUq3/2ykCbGX8yok1IocFBjHQARFKno=;
-        b=Zp+XMjEPhUk/cI+OhwpHoKBJ8Nn60ck9SaECtQe9d9Fg5fHOr9v3E9O7ZEWG6ElmRk
-         lXzUvfhKfugf+dDYBq+HBOudF2jRwD2fiSM6FRW3FGcygSQANnWRHLGe0si3a3hUBw9a
-         1TQ1J9c5jV7W/twWvUdjoI+1x6Yn0BD9fPu0dTEXaNOneF/tf71kUR0D5vdtLiHHKzAU
-         CykxYYNzja+mGbGvKwdsXbPUeMmT4WAqultF4LKR3L2PX3lbJoALdvv8r8C5JJxiG/oX
-         Jtlpp3PLVWO9qYVjKzz3UocqmdDsG7RUbB0NoUGTJJk5cwEOohTLcW2fEQIztARkUa9x
-         MLMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWagazx9nkkjWgYyDx2GRTh4bys02/X/P86FFeek1QvB5/3p7sSkCyaHR+laVm+XshqK9a/KIqgk54=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQFEZ0T1mjYIRedDOrT7IHZ3WfW3oUjMgGtSGODKeNAczG17xJ
-	wdo4kfE1XRL+LLfR9FKptlzHk2qqF9FOaAsXVbC9PymPUwLSyVQKniIP+uVikYLKSUjlfEz1T9j
-	lsRN9ZV4bUtUCVZtfTpIyTcap0b4dZEVDzfmJSHxZrAsnhZlZAekSn7jMUYc=
-X-Google-Smtp-Source: AGHT+IGY4gsXql+Hprkct6Kf8jFxNCHba3q7qNRC+C6hMn/c5MdAvhYtCoYn45eXrZwwq0oykrvOq8zlye4qhU+EHNKB8NqdcURk
+	s=arc-20240116; t=1761545059; c=relaxed/simple;
+	bh=2SUWSfQ5/JEzuD+Pj/+BAvMxTnNY11/j2gq/d5Arp/Q=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=NevkuLQ/WCyYhaP5Oo4MS/6vaYBNN7hfMGSfSXxFyk2gA6aZE2I/7qLHw3qrJTyGJ9IrsxHss6EXxIuhLi/w565v0R7aVifMznalBleT9F5GsbcF0bAlU8fOWUY+2Y7ynvnVmNFCEaDivrHvV5gGaARB7ouJBx3ln47U2EOh5aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=NDWa+G6M; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1761545050; h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+	bh=vGQNREQK62jW8RTtaFJj64+WJ4MbuJlL8IZDBtzUYss=;
+	b=NDWa+G6M2OJBP2O+epO1OfE0XxMvMSUZS1uj7+OhSI3bnl3v3TKFSLCYlWUjoyqARTkWbPIjj6jByYePNVIVrW/y41eLWzEWU/SrnO6bkQi7L1/57ULufMOWFIkqY679XPtpeFnf9ZFioYQ3J8tS9Br+ZyZW0vz0g42buw5bJFs=
+Received: from 30.221.133.61(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0Wr02qh7_1761545025 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 27 Oct 2025 14:04:09 +0800
+Message-ID: <5e065a78-b371-4ef7-8ce6-a902f80e2b02@linux.alibaba.com>
+Date: Mon, 27 Oct 2025 14:04:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3701:b0:430:b2a8:a9eb with SMTP id
- e9e14a558f8ab-431eb5f2f70mr134632585ab.1.1761544473438; Sun, 26 Oct 2025
- 22:54:33 -0700 (PDT)
-Date: Sun, 26 Oct 2025 22:54:33 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68ff0919.050a0220.3344a1.028b.GAE@google.com>
-Subject: [syzbot] Monthly usb report (Oct 2025)
-From: syzbot <syzbot+list7c0b53ef3161a67fa35a@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, Jakub Kicinski
+ <kuba@kernel.org>, Takashi Iwai <tiwai@suse.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Heyi Guo <guoheyi@linux.alibaba.com>
+Subject: Why hasn't the patch "r8152: Fix a deadlock by doubly PM resume" back
+ ported to stable branches?
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello usb maintainers/developers,
+Hi all,
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+We found that below bug fix patch had not been back ported to stable 
+branches, like linux-5.10.y. Is there any special reason?
 
-During the period, 4 new issues were detected and 2 were fixed.
-In total, 79 issues are still open and 398 have already been fixed.
+commit 776ac63a986d211286230c4fd70f85390eabedcd
+Author:     Takashi Iwai <tiwai@suse.de>
+AuthorDate: Wed Jul 14 19:00:22 2021 +0200
+Commit:     David S. Miller <davem@davemloft.net>
+CommitDate: Wed Jul 14 14:57:55 2021 -0700
 
-Some of the still happening issues:
+     r8152: Fix a deadlock by doubly PM resume
 
-Ref  Crashes Repro Title
-<1>  5985    Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-<2>  3364    Yes   WARNING in usb_free_urb
-                   https://syzkaller.appspot.com/bug?extid=b466336413a1fba398a5
-<3>  2780    Yes   KASAN: use-after-free Read in v4l2_fh_open
-                   https://syzkaller.appspot.com/bug?extid=b2391895514ed9ef4a8e
-<4>  1578    Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<5>  1405    Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
-                   https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
-<6>  998     Yes   WARNING in enable_work
-                   https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
-<7>  807     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
-                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
-<8>  806     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-<9>  541     Yes   WARNING in usb_tx_block/usb_submit_urb
-                   https://syzkaller.appspot.com/bug?extid=355c68b459d1d96c4d06
-<10> 501     No    INFO: task hung in hub_event (3)
-                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
+     r8152 driver sets up the MAC address at reset-resume, while
+     rtl8152_set_mac_address() has the temporary autopm get/put. This may
+     lead to a deadlock as the PM lock has been already taken for the
+     execution of the runtime PM callback.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+     This patch adds the workaround to avoid the superfluous autpm when
+     called from rtl8152_reset_resume().
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+     Link: https://bugzilla.suse.com/show_bug.cgi?id=1186194
+     Signed-off-by: Takashi Iwai <tiwai@suse.de>
+     Signed-off-by: David S. Miller <davem@davemloft.net>
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+Thanks,
 
-You may send multiple commands in a single email message.
+Guo, Heyi
+
 
