@@ -1,124 +1,151 @@
-Return-Path: <linux-usb+bounces-29688-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29689-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94B4EC0CAD1
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 10:35:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F673C0CBE8
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 10:47:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0FDFC34C2A6
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 09:35:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07094189798E
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 09:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F0B2F3611;
-	Mon, 27 Oct 2025 09:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D93F02F39DC;
+	Mon, 27 Oct 2025 09:47:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aQVmtDQs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hjKodgkv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3452F2617
-	for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 09:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9021A21C9EA;
+	Mon, 27 Oct 2025 09:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761557697; cv=none; b=rsKybVfNuf/xLvuV4h12AdT44HHV2rQHnKk935AEC0arG0cZSBNyfnZ8RTMGeAykTL9VRXt7qNWtU9pCj9C/+wZ2IXxRx+pv3AKY12Afka4tObfBt3hJI+a/I3/XuyFh+V0+sXZLGvOC5MZL4xvpWbwDVbxALsw/b3LZw06/F6A=
+	t=1761558440; cv=none; b=J2wotItIyGlmoCbo16Nc+j0SwGtM7mSjszDFYvg0Hv0BZAsfwC/sznJ7FSl/SskKT9ikEhXsWwSWVMEI+E1/3VwD+B9D8y32qDe9/EzELVPeQwGYi6E4rVvzTBrm9YezPslNXufXj/3toP2GFSqMPoffaSw96rEPS3VY25zrCXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761557697; c=relaxed/simple;
-	bh=lrsxeoccJd7IibyXtdvu1wt/7FYcadJ/a8O8xF0P3jk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RITUmli5X7POnDkHMsdTCN53LKtrNunJ9Jp9+xhttLQJtbXd5I3qGvT16a9fll6iuCoY4UIKI//k20+QqFatMCFFC/Kc9J94I7c5zSjiUjkMJoJyA7445rjjzvz7Dl+dxsfbSr+WIlhYz99JMdmx7r7aE4GKwREDXniOetdI1Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aQVmtDQs; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1761558440; c=relaxed/simple;
+	bh=faa2cQcfLf6hpl8zKtuxUCBPMHs3+hOE11+oivyBG6k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M6aAgsASOK//Xgnj7Sazzv9vVc3KHgXt/4s9BKrD/PortUywwYxeGZwQK2suhn6LQjC0TJZt7F7bQAMETMyULyRTsspzbk4XETpvDToGps6I9xc0uyHE/Jgzuqrxfj2lOlO60yZsEJ3l2U4jq4n5ySNXOTqDjoE2GCs+nz2mAi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hjKodgkv; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761557695; x=1793093695;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lrsxeoccJd7IibyXtdvu1wt/7FYcadJ/a8O8xF0P3jk=;
-  b=aQVmtDQsozqGHmeSNL2F57H+pRMcMnF+XEDHlqa+jY8ZrIQS0rdiDAu9
-   lMQ0oNlAMdoxXSXrCLHGDTdzmHgsEjJwf/Xsizua1x9EWO0L9rr4qVcsI
-   Hkm0fhimsbhxFJpdZ15KAi7cHApZyjLtYRHA+tDjbuG9OdG3ILyLmReNk
-   0ek5vyNW57S4P8fltPKNukHR01wusnxieL+cvCKBuYo33mfaKvmHYvjSt
-   utQmX8o7kTMW5P/OzT8OdG5h9yL1II2oXGV9SUZrkzS1m2qMI1m5mBYb9
-   Quopa+tV3ouUYBfvTookkMITls9exWlVVQw51m6NXxaUdAsViq6z38GJF
-   A==;
-X-CSE-ConnectionGUID: X/mEwvugRXm/Ykj7fTxUOA==
-X-CSE-MsgGUID: bPUqf2wfSK6T0ipG0nhpPw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63557734"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="63557734"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 02:34:54 -0700
-X-CSE-ConnectionGUID: GV+gOEIyTM2YKcTBbEx00Q==
-X-CSE-MsgGUID: totoS2xRSbiawDmqMyspwg==
+  t=1761558439; x=1793094439;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=faa2cQcfLf6hpl8zKtuxUCBPMHs3+hOE11+oivyBG6k=;
+  b=hjKodgkvVqFYTQjhyikn0TOBeY4x51kzHbdh7fyJowaIfezZZP09rFX6
+   QIs6Qs0rGIe3EqxAho+5QtE9Fdx4uCl5v/SoVmsU5/iMftTcPMEkJ6TVE
+   DKWTpNYmmC8lklhme4z45Cf+LQE3L0T7WjHNxZ01MLMDgsXjmp/iO6Kli
+   IL2vlmZXCyjLttSe0E0r8eD/2K2YGAOO5Tc7tBSaP2Ere1rUGaoFR7ief
+   8QeONQEKtnRaGTsy1R5frduzEcMVtvzPfCTsyYj5ZdT846w3pvV2+Q+/5
+   9oLkuIfoIyHU0J8TyAv915fnaWPfCszm6/xn0Y8mVPeaCIhY7LmZ2Ld1g
+   w==;
+X-CSE-ConnectionGUID: N0/7vDdgTz+1wdS+oWZ7ug==
+X-CSE-MsgGUID: WRSvJdtCTMi2QN5dRMPKog==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="51209448"
+X-IronPort-AV: E=Sophos;i="6.19,258,1754982000"; 
+   d="scan'208";a="51209448"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 02:47:18 -0700
+X-CSE-ConnectionGUID: AxDkbqphShuXwU+IDePHqA==
+X-CSE-MsgGUID: MiHi4nbWSpuCoUAcpwV1aA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,258,1754982000"; 
-   d="scan'208";a="208616166"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO [10.245.244.18]) ([10.245.244.18])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 02:34:53 -0700
-Message-ID: <65b65e02-e51e-4e7e-ae9e-78d755eb8566@linux.intel.com>
-Date: Mon, 27 Oct 2025 11:34:51 +0200
+   d="scan'208";a="185350911"
+Received: from mgerlach-mobl1.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.222.172])
+  by fmviesa008.fm.intel.com with SMTP; 27 Oct 2025 02:47:14 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 27 Oct 2025 11:47:13 +0200
+Date: Mon, 27 Oct 2025 11:47:13 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID
+ pin state
+Message-ID: <aP8_oZlJ4466BEf0@kuha.fi.intel.com>
+References: <20251027072741.1050177-1-krishna.kurapati@oss.qualcomm.com>
+ <20251027072741.1050177-3-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Fwd: USB DBC hang during earlyprintk initialization
-To: Milan Oravec <migo.oravec@gmail.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-References: <CAAcb1K_MJKWz+BYJmx0FDgrBOzzXm71-M7sgHDUOmBRppXWNzA@mail.gmail.com>
- <CAAcb1K_bezseTM8DrOrzVUi_W+nZoE2N0CO4k3AQWPw7=7pyjw@mail.gmail.com>
- <2025101544-galore-sculpture-b243@gregkh>
- <CAAcb1K85GK6m_bVUeSfX1GP4=mxzwfmHtaRX0EYD_jgGfQRk9Q@mail.gmail.com>
- <4e6d9b62-b9d0-4a05-99a9-143899547664@linux.intel.com>
- <CAAcb1K_a2dkj5wv__1BW-fu_Zg=z00OmQzJmekQ-GH4svYQ-GQ@mail.gmail.com>
- <f0d0f71c-bc47-4348-85a6-d728a67c982a@linux.intel.com>
- <CAAcb1K-o7DY3Kvqdr+=MN8OsgRZr+g43-zC6YSLG0hbNxEQUeg@mail.gmail.com>
- <8fe27842-8155-44db-b262-a148b5ce5436@linux.intel.com>
- <CAAcb1K9MDvqJgVbV29ax8tQhXoepJr5ABuh1NHoNpmFdnGxVHw@mail.gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <CAAcb1K9MDvqJgVbV29ax8tQhXoepJr5ABuh1NHoNpmFdnGxVHw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251027072741.1050177-3-krishna.kurapati@oss.qualcomm.com>
 
-On 10/24/25 21:48, Milan Oravec wrote:
-> Thank you, should try this patch against stable 6.17.5 or 6.18 branch?
-> It fails with 6.17.5
-> 
+Hi Krishna,
 
-It was on top of 6.18-rc1, but should apply fine on 6.17.5
-Tried myself, saved the email as patch.eml and applied with patch:
+> +static int hd3ss3220_get_vbus_supply(struct hd3ss3220 *hd3ss3220)
+> +{
+> +	struct device_node *hd3ss3220_node = hd3ss3220->dev->of_node;
+> +	struct device_node *np;
+> +
+> +	np = of_graph_get_remote_node(hd3ss3220_node, 0, 0);
+> +	if (!np) {
+> +		dev_err(hd3ss3220->dev, "failed to get device node");
+> +		return -ENODEV;
+> +	}
 
-mnyman@mnyman-desk:~/src/linux-stable$ git reset --hard v6.17.5
-HEAD is now at 99efbd4259f3 Linux 6.17.5
+So I guess that's the connector node. Why can't you just place the
+regulator reference to the hd3ss3220 controller node instead of the
+connector like the port controllers do?
 
-mnyman@mnyman-desk:~/src/linux-stable$ patch -p1 < ~/src/usb/patch/early/patch.eml
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file drivers/usb/early/xhci-dbc.c
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file drivers/usb/early/xhci-dbc.h
+That would allow us to do a simple devm_regulator_get_optional() call
+that's not tied to DT only.
 
-git am also works as it should
+> +	hd3ss3220->vbus = of_regulator_get_optional(hd3ss3220->dev, np, "vbus");
+> +	if (IS_ERR(hd3ss3220->vbus))
+> +		hd3ss3220->vbus = NULL;
+> +
+> +	of_node_put(np);
+> +
+> +	return 0;
+> +}
+> +
+>  static int hd3ss3220_probe(struct i2c_client *client)
+>  {
+>  	struct typec_capability typec_cap = { };
 
-mnyman@mnyman-desk:~/src/linux-stable$ git reset --hard v6.17.5
-HEAD is now at 99efbd4259f3 Linux 6.17.5
+<snip>
 
-mnyman@mnyman-desk:~/src/linux-stable$ git am ~/src/usb/patch/early/patch.eml
-Applying: usb: early: xhci-dbc: Try smaller early_ioremap size if original size fails
+> +	ret = hd3ss3220_get_vbus_supply(hd3ss3220);
+> +	if (ret)
+> +		return dev_err_probe(hd3ss3220->dev, ret, "failed to get vbus\n");
 
-mnyman@mnyman-desk:~/src/linux-stable$ git log --oneline
-2ab737012cb8 (HEAD -> linux-6.17.y) usb: early: xhci-dbc: Try smaller early_ioremap size if original size fails
-99efbd4259f3 (tag: v6.17.5, origin/linux-6.17.y) Linux 6.17.5
-...
+I think you have resource leaks here. I'm pretty sure you need to do
+regulator_put() somewhere. You are also leaking the connector fwnode
+that was acquired just before this point..
 
-Maybe you still have some custom dbc hacks on top of 6.17.5 while patching?
+>  	if (IS_ERR(hd3ss3220->role_sw)) {
+>  		ret = PTR_ERR(hd3ss3220->role_sw);
+>  		goto err_put_fwnode;
 
-Thanks
-Mathias
+Get the regulator here after the above condition. Then add a label for
+the regulator_put(). And you already have the handle to the connector
+fwnode so use that one instead of getting it again:
 
+        hd3ss3220->vbus = of_regulator_get_optional(hd3ss3220->dev, to_of_node(connector), "vbus");
+
+But do it like that only if you really can't place the vbus regulator
+reference to the controller node. I would really prefer that we could
+do a simple:
+
+        hd3ss3220->vbus = devm_regulator_get_optional(hd3ss3220->dev, "vbus");
+
+thanks,
+
+-- 
+heikki
 
