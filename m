@@ -1,143 +1,249 @@
-Return-Path: <linux-usb+bounces-29693-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29694-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6308C0E1C1
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 14:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DCC25C0E69F
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 15:28:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 472524F717D
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 13:36:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B7C485054A0
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Oct 2025 14:11:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A4D306498;
-	Mon, 27 Oct 2025 13:35:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCA33309F14;
+	Mon, 27 Oct 2025 14:07:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="P8vvbycA"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="ft+xNKyn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9F5305E37
-	for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 13:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDAA2BE7B4
+	for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 14:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761572143; cv=none; b=gp0IbtfPloJqET43G/PGsxNT65XiPbMLd/Nh9xSoI+sFfWabNNNqqzTCe/KdqUT0X/MqLIRCunWXmScM215TcJp09m7RIdTUE+6/VeBIFsMqyEsTf++De8Vcw3gPWTrHv7QADYsMOBPDAB3P5qc5F0AtT7716GUh9hokAqlsm5o=
+	t=1761574071; cv=none; b=TY7XpqwUlH8nc6cqUEnylcUfo8Z1hs6tWsnt3MwT9hR/eX9n7yzX0pZ42fRKcSBzU1ucSQ7rQI+t2neJ+PpBjW2Ghu588KowmmRfuarrnlcBxiCoyIsO6WjSCurE1r2JW6lKz15VA/1k7YuzQo9ERn/HZydX+RI5g3Dsk/qDh/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761572143; c=relaxed/simple;
-	bh=q1xHjAi6E4wi3oQoijyEgXm7p5tzOjAHqmVcqhQq0wg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c1rjQ+WoAFcqFzPSEwg4oap6q7bo+5oUSDvQHU6UHLQYI6cUlf1Pt5hhFwSRdoQGHJPrRWUa2HtuhJ4GSK5lKvF+29G8o25qn3IQ8+3V7N97vqXjC6xH8elwfudXG0s7sIosmwAyMMnPT6G6xBA72yMXFUiS9X7hvyZuH1K/IG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=P8vvbycA; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-475de184058so8572955e9.2
-        for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 06:35:41 -0700 (PDT)
+	s=arc-20240116; t=1761574071; c=relaxed/simple;
+	bh=wv56AV0Jq/flPSGpBjDi2WM9DEs3bXu/QVoUCBtBmA8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZBYVya+ZxmTOFAtjIRoxguNxdzJJvT9vT374OpYxA2ogqWgtrWQ33Nf0q5JATqaIwsTsN2BcQG8zfXoJ/pNDZ80WE3yj272mHvAjDWniKSW7mD3MraTAW4cHgpw+U8BdXPFfxapWMC8GMO2Rz4JFI7sdoSK0tX0CRYgFAdkRL9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=ft+xNKyn; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-471b80b994bso66620095e9.3
+        for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 07:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1761572139; x=1762176939; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=coMQJHEII5UHdUF+Ekj+pHGgsN6WEYzWi8tdyRdD9tw=;
-        b=P8vvbycAR7YrdLbLsZK9MsF8LIJaG1AUecd4CONxCa9Bm256AZZujM2MjtVUVQwh2L
-         wjQw2Ag/XcnrUCu0xW/eCq7E24V2QsqnyvDwPRGhJds5NXMWizxT7liQy3yEsgbR4Ec/
-         j9eubyUMw46E0Pvqq7iVHqbXUzUJ3dipvKZjSSHHEJ5n6NWZN/8HX5+topoMXgIOf0lx
-         BUO3FgFdVYkKygha3VYXZaoHz2yrqYEBGnzBZeWVKPBxSWfiSp8hoKuvsOmrpctvoXUI
-         MFpPyCPhjYLyJRTaaDxdCeieFvXjKWq2vsMV/wJ4FAMFQfPziPMvHN81/W6NEDdRPwvw
-         lXGg==
+        d=tuxon.dev; s=google; t=1761574066; x=1762178866; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7wFJQSWthyk8WZ0UpuKCyAYtMl2GQqkDptp4e/pHYz0=;
+        b=ft+xNKynT/FIwno4tHD9C8D9eJugH/CpTY8b6eAdYVVVplT52w/bvCM5KtTmOgiq9O
+         z9jqv7Vu2kMMNNl1blCOG6hkv8KikO5zAz887mYJyw2i3bi2ILGE0or0c8UCmagBr4cz
+         1SJZ+mnQ20qnXg5xvT7ZB+s+n3QVWFMAjlJ7btIRBCp3E2Sm314PbeHLznyUSRFLit+h
+         XRQsNKyDvD0e0bbOoXb4HcN0/LFsUSj9Xmudd5HITII1ZrtKPHvurtXw5wIhnV4P069x
+         ETiGScGKJG0E8kcNa/M+jp0LGLScEcyTy2Bcoou8Gd3Qz/GQyYwXyEX4GqD8EU3tQvJE
+         GMLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761572139; x=1762176939;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=coMQJHEII5UHdUF+Ekj+pHGgsN6WEYzWi8tdyRdD9tw=;
-        b=ZCjVy4NA+RX6A8yBf8WEYSh6s06GEmSjO5rsHvtdTLEWYRGAdLk5IoUGq/3oLBuTTg
-         NN3z99l+7zGi3VjIA/qvgzm+aNSnxwyAaL0Nfhn2gXhsS1RU8ufT53V4xjssTl0opIYe
-         H7QImjvubrkE2fjT8VlT+n/zD3M3cabaaJA7riYRMnkVD2aXmyu7ghT41kp/Zs3K72js
-         GsdMUHsjfB9d1GMLaElzhKixZo16tZuU4Svog9E1lDT8oOUrJCsy1ZVIbcHEWJAHbluk
-         oWxkDhc9m3+xefB0/ojG6aS/5Pf8YyGSFIpS8DFt/ontSCw7RdSMahA32RHKwN3a7Bo2
-         y+SQ==
-X-Gm-Message-State: AOJu0YyzE8A8kXPczBu2J0vSg9G0sxBC9n4zrP4woa1p2RSEDXeHhYSg
-	PR/SOKp4vzojmTjA77nHqt5hSUXw3ffRI1xMw2a9rljL8MN6gTDEfbPpd1pgGKNyPPw=
-X-Gm-Gg: ASbGncvsS2RueHGnMq7+kFFcSrs4Xi9R3tRyBQ8CQM3gyvXm+BqqS74rYlQSJAEmCLc
-	HBXG6Qve6bjA8JuAm6JuHn20oeVbEv3/LSjLzYHDErHcJcZIDRFAqvf8H1pTgV047OQ/kD6MR+V
-	DXyEzVaJWPRyRBwWxgvGqPZ31Izso2OcLvJPinXRDINmVNswOMzjE+Xqi/v19KreAkwzmWVAKYN
-	mAUm5xdAZEuQZRjgM9vOdbffy41Ki+HUc3SgssQFvoEI/1wyrbDpN30kFzoy0UfUOTJ8uk079Qd
-	Tft3RgYEeOloqn38dxouz5u5+OE0F4PAgUavGK9x65OamaTeCZc9yXXejGTN8M1dYqZqCjLYBo+
-	flWg16jwtQy1ZgOZDOkGE/pFS73E8eV7U9o8uKTgznzp6n8jSOfeT+h38q+RhEOvzuZX0wVwhcr
-	lQoV3cG2uQ6ah+lDVB6FX3Cfd+Accln9pNWLiCtweIfuTMIPQWMJuYY6CT2xauJ7/thQ==
-X-Google-Smtp-Source: AGHT+IHqAIVjFyYDoJjqcp/dMd7ZvxXUjRECSaszUpt0012U8VY/hZ9NeJngEtVEdLXk+JU1qrULHQ==
-X-Received: by 2002:a05:600c:3b82:b0:475:daa7:ec60 with SMTP id 5b1f17b1804b1-475daa7ee4amr74939795e9.21.1761572139493;
-        Mon, 27 Oct 2025 06:35:39 -0700 (PDT)
-Received: from ?IPV6:2a02:3033:263:99eb:3ee8:c1a0:6fbf:4510? ([2a02:3033:263:99eb:3ee8:c1a0:6fbf:4510])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952cbc16sm13967859f8f.15.2025.10.27.06.35.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Oct 2025 06:35:38 -0700 (PDT)
-Message-ID: <8de18ee2-ccdd-4cdd-ae49-48600ad30ed4@suse.com>
-Date: Mon, 27 Oct 2025 14:35:37 +0100
+        d=1e100.net; s=20230601; t=1761574066; x=1762178866;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7wFJQSWthyk8WZ0UpuKCyAYtMl2GQqkDptp4e/pHYz0=;
+        b=KiqjLY/lQsxQIgpAuuWPRHQDnN9lyjHZ83TLQEbAyj9CuiZMxePUkX1xJ5eHIJTlkJ
+         YV6xISs/z2y9OcMnrO5aGXHVai4LGSjAE3B3o39CxbeQgvX+O1l0Pj6/jYl50ksRn4BT
+         WnzafGn/XL725wkU6lJnmN7V3riziwghLCfRWk7a2znMPI6r1AV30G/TaCwfZSIKVhrT
+         1pgjQh3EGqCqcYLu1IHFfsTuEahjRGJtjJwtSCazy0HckeXHc6LugiMjgnlvJf3qJg+v
+         ZsvBMrdSdr6HBNmODsAuPP/RXCiJL5ekJDk2OkXCktdFVhWBb2FEdpYLTnqU4jQMJgfE
+         nN4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVphRKp9xAgEJGoHru3CzvtXs4AqalVXyGr1+amRLYuciJHeV1NVB/fP+9N2egeGEC2w3mRBq/gYOM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWC2elCj64e3gEuESxnbNu/bCL8Jh2YyVgPQVb9tvORGTGsx+e
+	44Dm6yt9jJFPn5muogdmfoT+ryWA5A4Xp9Cyc1CQs4dAEQQaQMDk25jbIC3pb7XFnFg=
+X-Gm-Gg: ASbGncv8b4GFuIKUsfoQUizaF192BogYiP+FBnfk+lfvWWYbLl+ZBN/bfA00AllMuiU
+	Q68n4rHy5cBwxX6NJ1XIZCtszANjnI2bQPahF5GIVap8Ufqb8GIB1UJ9d/Sl2LW6jVqOLA01c0D
+	rJ9EMTQGK+uAKXNTuJpUlTRzO9rNwP6YDB2NIie3kbacCX0N5W/QsF3f2b2EwR3nwMD4Fka+4rX
+	NG9Kidkjx9QPKGqaOjTq8djHH/4icSLUa7644q9fCLtCgNdn05bLjjcq0iukbQtcj2OHoMlvIZg
+	Bn8UnxVv/kiMjn0hdAn3o21Niw38JAWl/qkZfRwaJ/VsMvn7Vq7Hl9oZ19lF6MKL2HT7kn3PUap
+	O8/G6C72jdgj/8/kF4EFGTi3lSuOOPjOwm0cF6PAKQ/lPls+E0GWoICYeyeW9cJyVZ/WAXPxkN3
+	+63tss7aYNrzHUqXRtKIF5uA01GKdviTjBlwfXs5zsNr9IAF6l8AXrcyVKf6k=
+X-Google-Smtp-Source: AGHT+IHgCtEQDqJY442vEC9H6ASjUR0eM1wPzA5shUtEykOt8otJtXmTCbjUyDHjgtZGP2pIj3KyUg==
+X-Received: by 2002:a05:600c:1f93:b0:46e:761b:e7ff with SMTP id 5b1f17b1804b1-4711791c66fmr327034745e9.28.1761574066376;
+        Mon, 27 Oct 2025 07:07:46 -0700 (PDT)
+Received: from claudiu-TUXEDO-InfinityBook-Pro-AMD-Gen9.. ([2a02:2f04:6302:7900:83af:5b2:a2ec:e92e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475dd4783b8sm139668425e9.15.2025.10.27.07.07.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Oct 2025 07:07:45 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: gregkh@linuxfoundation.org,
+	yoshihiro.shimoda.uh@renesas.com,
+	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	kuninori.morimoto.gx@renesas.com,
+	geert+renesas@glider.be
+Cc: claudiu.beznea@tuxon.dev,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] usb: renesas_usbhs: Fix synchronous external abort on unbind
+Date: Mon, 27 Oct 2025 16:07:41 +0200
+Message-ID: <20251027140741.557198-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: uas: fix urb unmapping issue when the uas device
- is remove during ongoing data transfer
-To: Owen Gu <guhuinan@xiaomi.com>, Oliver Neukum <oneukum@suse.com>,
- Alan Stern <stern@rowland.harvard.edu>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
- usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
- Yu Chen <chenyu45@xiaomi.com>, Michal Pecio <michal.pecio@gmail.com>
-References: <20251015153157.11870-1-guhuinan@xiaomi.com>
- <aP8Llz04UH8Sbq5Q@oa-guhuinan-2.localdomain>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <aP8Llz04UH8Sbq5Q@oa-guhuinan-2.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-I think I was unclear the first time.
-Sorry for that.
+A synchronous external abort occurs on the Renesas RZ/G3S SoC if unbind is
+executed after the configuration sequence described above:
 
-On 27.10.25 07:05, Owen Gu wrote:
-> Hi Oliver,
-> 
+modprobe usb_f_ecm
+modprobe libcomposite
+modprobe configfs
+cd /sys/kernel/config/usb_gadget
+mkdir -p g1
+cd g1
+echo "0x1d6b" > idVendor
+echo "0x0104" > idProduct
+mkdir -p strings/0x409
+echo "0123456789" > strings/0x409/serialnumber
+echo "Renesas." > strings/0x409/manufacturer
+echo "Ethernet Gadget" > strings/0x409/product
+mkdir -p functions/ecm.usb0
+mkdir -p configs/c.1
+mkdir -p configs/c.1/strings/0x409
+echo "ECM" > configs/c.1/strings/0x409/configuration
 
->> This patch modifies the error condition check in the uas_submit_urbs()
->> function. When a UAS device is removed but one or more URBs have already
->> been successfully submitted to USB, it avoids immediately invoking
->> scsi_done() and save the cmnd to devinfo->cmnd array. If the successfully
->> submitted URBs is completed before devinfo->resetting being set, then
->> the scsi_done() function will be called within uas_try_complete() after
+if [ ! -L configs/c.1/ecm.usb0 ]; then
+        ln -s functions/ecm.usb0 configs/c.1
+fi
 
-This requires that uas_try_complete() is called.
+echo 11e20000.usb > UDC
+echo 11e20000.usb > /sys/bus/platform/drivers/renesas_usbhs/unbind
 
-And I am afraid uas_stat_cmplt() cannot guarantee that in the error case.
-I think the following sequence of events is possible:
+The displayed trace is as follows:
 
-CPU A						CPU B
+ Internal error: synchronous external abort: 0000000096000010 [#1] SMP
+ CPU: 0 UID: 0 PID: 188 Comm: sh Tainted: G M 6.17.0-rc7-next-20250922-00010-g41050493b2bd #55 PREEMPT
+ Tainted: [M]=MACHINE_CHECK
+ Hardware name: Renesas SMARC EVK version 2 based on r9a08g045s33 (DT)
+ pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : usbhs_sys_function_pullup+0x10/0x40 [renesas_usbhs]
+ lr : usbhsg_update_pullup+0x3c/0x68 [renesas_usbhs]
+ sp : ffff8000838b3920
+ x29: ffff8000838b3920 x28: ffff00000d585780 x27: 0000000000000000
+ x26: 0000000000000000 x25: 0000000000000000 x24: ffff00000c3e3810
+ x23: ffff00000d5e5c80 x22: ffff00000d5e5d40 x21: 0000000000000000
+ x20: 0000000000000000 x19: ffff00000d5e5c80 x18: 0000000000000020
+ x17: 2e30303230316531 x16: 312d7968703a7968 x15: 3d454d414e5f4344
+ x14: 000000000000002c x13: 0000000000000000 x12: 0000000000000000
+ x11: ffff00000f358f38 x10: ffff00000f358db0 x9 : ffff00000b41f418
+ x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
+ x5 : 8080808000000000 x4 : 000000004b5ccb9d x3 : 0000000000000000
+ x2 : 0000000000000000 x1 : ffff800083790000 x0 : ffff00000d5e5c80
+ Call trace:
+ usbhs_sys_function_pullup+0x10/0x40 [renesas_usbhs] (P)
+ usbhsg_pullup+0x4c/0x7c [renesas_usbhs]
+ usb_gadget_disconnect_locked+0x48/0xd4
+ gadget_unbind_driver+0x44/0x114
+ device_remove+0x4c/0x80
+ device_release_driver_internal+0x1c8/0x224
+ device_release_driver+0x18/0x24
+ bus_remove_device+0xcc/0x10c
+ device_del+0x14c/0x404
+ usb_del_gadget+0x88/0xc0
+ usb_del_gadget_udc+0x18/0x30
+ usbhs_mod_gadget_remove+0x24/0x44 [renesas_usbhs]
+ usbhs_mod_remove+0x20/0x30 [renesas_usbhs]
+ usbhs_remove+0x98/0xdc [renesas_usbhs]
+ platform_remove+0x20/0x30
+ device_remove+0x4c/0x80
+ device_release_driver_internal+0x1c8/0x224
+ device_driver_detach+0x18/0x24
+ unbind_store+0xb4/0xb8
+ drv_attr_store+0x24/0x38
+ sysfs_kf_write+0x7c/0x94
+ kernfs_fop_write_iter+0x128/0x1b8
+ vfs_write+0x2ac/0x350
+ ksys_write+0x68/0xfc
+ __arm64_sys_write+0x1c/0x28
+ invoke_syscall+0x48/0x110
+ el0_svc_common.constprop.0+0xc0/0xe0
+ do_el0_svc+0x1c/0x28
+ el0_svc+0x34/0xf0
+ el0t_64_sync_handler+0xa0/0xe4
+ el0t_64_sync+0x198/0x19c
+ Code: 7100003f 1a9f07e1 531c6c22 f9400001 (79400021)
+ ---[ end trace 0000000000000000 ]---
+ note: sh[188] exited with irqs disabled
+ note: sh[188] exited with preempt_count 1
 
-uas_queuecommand_lck() calls uas_submit_urbs()
-COMMAND_INFLIGHT is set and URB submitted
-						URB gets an error
-						status = -EBABBLE (just an example)
-						uas_stat_cmplt is called
-						resetting is not set
-						if (status)
-							goto out;
+The issue occurs because usbhs_sys_function_pullup(), which accesses the IP
+registers, is executed after the USBHS clocks have been disabled. The
+problem is reproducible on the Renesas RZ/G3S SoC starting with the
+addition of module stop in the clock enable/disable APIs. With module stop
+functionality enabled, a bus error is expected if a master accesses a
+module whose clock has been stopped and module stop activated.
 
-						uas_try_complete _not_ called
+Disable the IP clocks at the end of remove.
 
-The scsi command runs for indeterminate amount of time.
-It seems to me that if you want to use your approach you also
-need to change error handling in uas_stat_cmplt()
+Cc: stable@vger.kernel.org
+Fixes: f1407d5c6624 ("usb: renesas_usbhs: Add Renesas USBHS common code")
+Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+---
 
-	Regards
-		Oliver
+Changes in v2:
+- moved usbhsc_clk_put() before pm_runtime_disable()
 
+Patch was tested with continuous unbind/bind and the configuration
+sequence described above on the boards with the following device trees:
+
+- r8a774a1-hihope-rzg2m-ex.dts
+- r8a774b1-hihope-rzg2n-ex.dts
+- r8a774e1-hihope-rzg2h-ex.dts
+- r9a07g043u11-smarc.dts
+- r9a07g044c2-smarc.dts
+- r9a07g044l2-smarc.dts
+- r9a07g054l2-smarc.dts
+
+ drivers/usb/renesas_usbhs/common.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
+index 8f536f2c500f..dc2fec9168b7 100644
+--- a/drivers/usb/renesas_usbhs/common.c
++++ b/drivers/usb/renesas_usbhs/common.c
+@@ -813,18 +813,18 @@ static void usbhs_remove(struct platform_device *pdev)
+ 
+ 	flush_delayed_work(&priv->notify_hotplug_work);
+ 
+-	/* power off */
+-	if (!usbhs_get_dparam(priv, runtime_pwctrl))
+-		usbhsc_power_ctrl(priv, 0);
+-
+-	pm_runtime_disable(&pdev->dev);
+-
+ 	usbhs_platform_call(priv, hardware_exit, pdev);
+-	usbhsc_clk_put(priv);
+ 	reset_control_assert(priv->rsts);
+ 	usbhs_mod_remove(priv);
+ 	usbhs_fifo_remove(priv);
+ 	usbhs_pipe_remove(priv);
++
++	/* power off */
++	if (!usbhs_get_dparam(priv, runtime_pwctrl))
++		usbhsc_power_ctrl(priv, 0);
++
++	usbhsc_clk_put(priv);
++	pm_runtime_disable(&pdev->dev);
+ }
+ 
+ static int usbhsc_suspend(struct device *dev)
+-- 
+2.43.0
 
 
