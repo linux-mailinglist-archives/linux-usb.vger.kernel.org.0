@@ -1,129 +1,307 @@
-Return-Path: <linux-usb+bounces-29801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29802-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DEF6C15EB8
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 17:46:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 843E0C16005
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 17:58:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93C273B5A9D
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 16:40:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DC9F3AEB5F
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 16:53:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B27A270552;
-	Tue, 28 Oct 2025 16:39:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E71C34AB0D;
+	Tue, 28 Oct 2025 16:52:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GNvCqsB/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SEFM0n+6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20AB22173D
-	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 16:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B75833DEE8;
+	Tue, 28 Oct 2025 16:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761669598; cv=none; b=UWu99H/nwn+wUMPziVLkpk0780Pb9m0tZSIbTV7SG6bxtEprQQi6oROMhmulpUawTpwdn36+YfcFVe6q5tkf806aVGfuTI8VEWBPskrVg/3BISOMlHG+5Gk5++cXak4Kxo1krovINABmCMcQ+SOKPIzAbAYmMdxQCA+phNgSzhc=
+	t=1761670335; cv=none; b=QemkphH/vP37SAo7gcZPG+Avi2Eqxc7kzQuD+mWZIWY3D5Zdp7mJcYA2qYaS/kT+qByUZXcXaJHFOmwfPUEKy6mLwgqvi4Nwv123NL4EZ2Stg9F1xiFBtuWHhQ2wznX/hKJJCwF3vx7gg1Ezb5pGCnle/ER+BsQ9fxTOGIK0vbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761669598; c=relaxed/simple;
-	bh=KDVtgMrR4QbHV8q6n3burehK4NNi/MNvE4NZoYP4CRA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O1x6wdGkVepr83DyQz2n5iDtEOGJX1ZEBf/n/gDEJhv1Z/BCwez4NTTUMlrIQh0WAycsGJts3yZ06EPYWs5me4vh+w2Ar+M4Jf/Svrq9kAY1eNT0Wr71ZEbFMgRCx9iG/f21K3WAKTIVJZJMzzYo3vymf0I9mDJsUbA4Z2l+8n8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GNvCqsB/; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-42421b1514fso4438618f8f.2
-        for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 09:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761669595; x=1762274395; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ayPvp3aUy7A0NXAfeV1Yvb5EM2oZXjw1a3kGQLQFivg=;
-        b=GNvCqsB/TDGm0z3wDS5rD8wiGQbtyEEW9t9nTb7x8uE2jWdiOdH93eBRjNWVy4jo01
-         nuNNCNVGdNbIbgPRI15G/nR03WMACUhc+g9jRP+Pv6Zrdnw28mLsTgqtS8OO0YlX7ogY
-         xiGHgDuuJkgrhEFrspssfixdM6qCyH98fx5QP3l9lMbpdNcDfPMAU0Fdj3F8rfnmFTV6
-         dTRNZ2S20Yd/W1laHQYJxaiTAwt8ssDZTMyLT7Zi1IsqyBqM1pUoUHvVN8ky3TPv5tQT
-         IxQzj1LfczkIX8Wapmws/jbN2NBokuFO5X33jNscDhveydU03bx0+Xp794jmJiVB3hzF
-         mkfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761669595; x=1762274395;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ayPvp3aUy7A0NXAfeV1Yvb5EM2oZXjw1a3kGQLQFivg=;
-        b=GiFYDpmUGtt5JHodpt3s839MtVPbLlgNSomcBh4spbz0herekV4SC0luKnSZXW8vx9
-         Qm5EvC4HLRQ4ikBEsOtQEuZh4yU+TrZIElS/Yv39fFhgNpEPO1WwXHMbmdc29KrSpfwt
-         EuL32BqRVnpCTdJjF1BXatgo4IDhyA3+TvUmKZ8u4m9W+lDSqYLXa7coNMApJc9zdCJx
-         2Ig+Jl9tRfYwTgKBQOZ3gaza4GXP2pptTCtf/+Bin878Qz9CgaJwuj+JF/hGEo1t/Y0D
-         47snjacLfKQ8/E55KcKMb46doFrXJdSvP7gvgpDWEsB4lLsby2qL5eJYNEzdlgq1nQ2q
-         y7QQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU0pZ8Fu1v+0VdtNYHiSmwwRPwn7k98EvD833Yo0KXDUIBG/lgEhMdLsNsWwMQsrV/Ah7SkfeecDFY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOJuFn48rZvg1iUM+b4nCNr6Kk5M9f7QhS9g9y6tq2e7wH1hU/
-	QpAOMJ0W5WxTNIyo2rkkpFYlpS8xzrhytNIKc2ueGu488imohezWJ1u9Qzy/ohLyRa02JDqpacd
-	1hphV
-X-Gm-Gg: ASbGncvbTzjn2RH1mqBdqUvFkG5IAnV6V7Nk4H0ZGS9GUkRM37aIPDA2OoFOL1QGjE3
-	ovappCRydOY4369AWgKA1wIXpqtCt6itwbfUO0FLl+okHHk9c+Xc1UDJTUJZUO2D2OASju+bzi/
-	vVuCHcoRwAL2NPkqc961F5J52rWwjZcSXP2MQF3iSnWOEaYeOpJRfZ81pp/HMq7+nmVjfZ0SGUB
-	B4jmtDT4LM1XUYhSx9EZtLSgNSV9vvZSdX4EnWCKqsJ7JNvBWJbXdcCVdk3DwJmCUHOSasX840v
-	CMcz/hjlMPxa5bAyFDxSvLKdZPnd49dBvrI5FWFTiA3HdeMqaX1hdGwQIY2CuvlvKso3Tq2J9Nc
-	vNT9qe5Yn5LBBBGSemHYObS8YwSFq5eC6ni+tYjkn5DkvoKy9C1zPX8fvg7agimbU3W8+vQ4H
-X-Google-Smtp-Source: AGHT+IEZ87hHsKDJtSMUjmPMjPg22H5KbMPCymadPgJhxFMPAVNlY+zHp3R2l0vulAvPGoVtFB6kTQ==
-X-Received: by 2002:a05:6000:2383:b0:426:d5a0:bac8 with SMTP id ffacd0b85a97d-429a7e8a487mr3398217f8f.56.1761669595108;
-        Tue, 28 Oct 2025 09:39:55 -0700 (PDT)
-Received: from linaro.org ([86.121.7.169])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952cbb2bsm21530050f8f.13.2025.10.28.09.39.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Oct 2025 09:39:54 -0700 (PDT)
-Date: Tue, 28 Oct 2025 18:39:53 +0200
-From: Abel Vesa <abel.vesa@linaro.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Set orientation_aware if UCSI version
- is 2.x and above
-Message-ID: <7jpghdq6so4mxarb22r75gxwxxutcixzkxdshfeyvvfbsazn2l@4mpklf2xw3ww>
-References: <20251028-b4-ucsi-set-orientation-aware-on-version-2-and-above-v1-1-d3425f5679af@linaro.org>
- <23b6e21b-40e1-419f-9314-97eb685b9aef@oss.qualcomm.com>
+	s=arc-20240116; t=1761670335; c=relaxed/simple;
+	bh=SsI3vE4lFVvttLwlWp30jk+SCL5jWqCV/MCGalhV7Ow=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MIQECnif1FMWUEfggf8nzCTY7y0UG4cxEiatfv0hUMlWNEukOjOK27SCmYAEcgDjQYel22vtFDbRx+Ohbrvbki+iuQxckQ/L1cdJwZomSjWQhYZQOV8VMitHVY9BlAbVPawd/0zMCDt4BFtWSW6OJgrf/MuvxKXXSSdAzshdQgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SEFM0n+6; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761670333; x=1793206333;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SsI3vE4lFVvttLwlWp30jk+SCL5jWqCV/MCGalhV7Ow=;
+  b=SEFM0n+64Yu91SrzB0mG34z2b2N0GZQf52Q10DzfSw8W4DJehPzN0CPf
+   X/U5i/PHJsms2ikN+wmY17fOrRDCRG7e5DzBI0HiIz2vjHFkJUs8z411c
+   x2R/5B6/0jfe3bYJhjMcEu7bEb2ChasxImoU0f6ezExlmUST7rVLzh9Cd
+   FQbYEj6mOaXv7ehp9Metzb79IFUsZ0jzrcH7TYKqtcv6YSPaI4rESG6/p
+   myAeurA2LNVazo6MWmW9dwi0OkvoGXUAQJYq03Iq4V5pIvU8aNrAX1crv
+   6Z9+f5BEsB3xmSUPNrmoejfaVGCumkcon9MiKIvi8UM1DwBWNM+tEG5ke
+   A==;
+X-CSE-ConnectionGUID: hcMkMvdiQ8Cn2LDzh1/RZg==
+X-CSE-MsgGUID: csdDkFInQSCGUoX7Ih9Apg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63685309"
+X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
+   d="scan'208";a="63685309"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 09:52:12 -0700
+X-CSE-ConnectionGUID: m/ZpeFbbR0+rEI1wX/pvLw==
+X-CSE-MsgGUID: 2zeChfU2T7mKf8eWGNiqhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
+   d="scan'208";a="189454888"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO mnyman-desk.intel.com) ([10.245.244.148])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 09:52:10 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: uttkarsh.aggarwal@oss.qualcomm.com
+Cc: mathias.nyman@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	mathias.nyman@intel.com,
+	wesley.cheng@oss.qualcomm.com
+Subject: [RFT PATCH v2] xhci: sideband: Fix race condition in sideband unregister
+Date: Tue, 28 Oct 2025 18:51:53 +0200
+Message-ID: <20251028165153.283980-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <db07f48d-27cf-4681-b10e-38d252e24512@linux.intel.com>
+References: <db07f48d-27cf-4681-b10e-38d252e24512@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23b6e21b-40e1-419f-9314-97eb685b9aef@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-On 25-10-28 18:24:21, Dmitry Baryshkov wrote:
-> On 28/10/2025 17:43, Abel Vesa wrote:
-> > For UCSI 2.0 and above, since the orientation is part of the paylad,
-> > set the orientation_aware by default and let the implementation specific
-> > update_connector op override if necessary.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >   drivers/usb/typec/ucsi/ucsi.c | 3 +++
-> >   1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > index ed23edab776354f08452c539d75d27132b8c44dd..84afa9bfc65b6e6ad0a8c1856252299c16562baf 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -1637,6 +1637,9 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
-> >   	cap->driver_data = con;
-> >   	cap->ops = &ucsi_ops;
-> > +	if (ucsi->version >= UCSI_VERSION_2_0)
-> > +		con->typec_cap.orientation_aware = true;
-> 
-> This is not enough. You should also parse the data and call
-> typec_set_orientation().
+Uttkarsh Aggarwal observed a kernel panic during sideband un-register
+and found it was caused by a race condition between sideband unregister,
+and creating sideband interrupters.
+The issue occurrs when thread T1 runs uaudio_disconnect() and released
+sb->xhci via sideband_unregister, while thread T2 simultaneously accessed
+the now-NULL sb->xhci in xhci_sideband_create_interrupter() resulting in
+a crash.
 
-Actually no. That is done by the following patch:
+Ensure new endpoints or interrupter can't be added to a sidenband after
+xhci_sideband_unregister() cleared the existing ones, and unlocked the
+sideband mutex.
+Reorganize code so that mutex is only taken and released once in
+xhci_sideband_unregister(), and clear sb->vdev while mutex is taken.
 
-https://lore.kernel.org/all/20251028-usb-typec-ucsi-orientation-v2-1-9330478bb6c1@linaro.org
+Use mutex guards to reduce human unlock errors in code
 
-Which has been already applied.
+Refuse to add endpoints or interrupter if sb->vdev is not set.
+sb->vdev is set when sideband is created and registered.
 
-And no, we don't need Fixes tag as this is an improvement.
+Reported-by: Uttkarsh Aggarwal <uttkarsh.aggarwal@oss.qualcomm.com>
+Closes: https://lore.kernel.org/linux-usb/20251028080043.27760-1-uttkarsh.aggarwal@oss.qualcomm.com
+Fixes: de66754e9f80 ("xhci: sideband: add initial api to register a secondary interrupter entity")
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+
+v2:
+  use guard() and fix missing mutex_unlock as recommended by greg k-h 
+
+---
+ drivers/usb/host/xhci-sideband.c | 97 +++++++++++++++++---------------
+ 1 file changed, 53 insertions(+), 44 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
+index e771a476fef2..2daa0ba7ad9a 100644
+--- a/drivers/usb/host/xhci-sideband.c
++++ b/drivers/usb/host/xhci-sideband.c
+@@ -86,6 +86,22 @@ __xhci_sideband_remove_endpoint(struct xhci_sideband *sb, struct xhci_virt_ep *e
+ 	sb->eps[ep->ep_index] = NULL;
+ }
+ 
++static void
++__xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
++{
++	struct usb_device *udev;
++
++	if (!sb->ir)
++		return;
++
++	xhci_remove_secondary_interrupter(xhci_to_hcd(sb->xhci), sb->ir);
++	sb->ir = NULL;
++	udev = sb->vdev->udev;
++
++	if (udev->state != USB_STATE_NOTATTACHED)
++		usb_offload_put(udev);
++}
++
+ /* sideband api functions */
+ 
+ /**
+@@ -131,14 +147,17 @@ xhci_sideband_add_endpoint(struct xhci_sideband *sb,
+ 	struct xhci_virt_ep *ep;
+ 	unsigned int ep_index;
+ 
+-	mutex_lock(&sb->mutex);
++	guard(mutex)(&sb->mutex);
++
++	if (!sb->vdev)
++		return -ENODEV;
++
+ 	ep_index = xhci_get_endpoint_index(&host_ep->desc);
+ 	ep = &sb->vdev->eps[ep_index];
+ 
+-	if (ep->ep_state & EP_HAS_STREAMS) {
+-		mutex_unlock(&sb->mutex);
++	if (ep->ep_state & EP_HAS_STREAMS)
+ 		return -EINVAL;
+-	}
++
+ 
+ 	/*
+ 	 * Note, we don't know the DMA mask of the audio DSP device, if its
+@@ -148,14 +167,11 @@ xhci_sideband_add_endpoint(struct xhci_sideband *sb,
+ 	 * and let this function add the endpoint and allocate the ring buffer
+ 	 * with the smallest common DMA mask
+ 	 */
+-	if (sb->eps[ep_index] || ep->sideband) {
+-		mutex_unlock(&sb->mutex);
++	if (sb->eps[ep_index] || ep->sideband)
+ 		return -EBUSY;
+-	}
+ 
+ 	ep->sideband = sb;
+ 	sb->eps[ep_index] = ep;
+-	mutex_unlock(&sb->mutex);
+ 
+ 	return 0;
+ }
+@@ -180,18 +196,16 @@ xhci_sideband_remove_endpoint(struct xhci_sideband *sb,
+ 	struct xhci_virt_ep *ep;
+ 	unsigned int ep_index;
+ 
+-	mutex_lock(&sb->mutex);
++	guard(mutex)(&sb->mutex);
++
+ 	ep_index = xhci_get_endpoint_index(&host_ep->desc);
+ 	ep = sb->eps[ep_index];
+ 
+-	if (!ep || !ep->sideband || ep->sideband != sb) {
+-		mutex_unlock(&sb->mutex);
++	if (!ep || !ep->sideband || ep->sideband != sb)
+ 		return -ENODEV;
+-	}
+ 
+ 	__xhci_sideband_remove_endpoint(sb, ep);
+ 	xhci_initialize_ring_info(ep->ring);
+-	mutex_unlock(&sb->mutex);
+ 
+ 	return 0;
+ }
+@@ -316,28 +330,25 @@ xhci_sideband_create_interrupter(struct xhci_sideband *sb, int num_seg,
+ 	if (!sb || !sb->xhci)
+ 		return -ENODEV;
+ 
+-	mutex_lock(&sb->mutex);
+-	if (sb->ir) {
+-		ret = -EBUSY;
+-		goto out;
+-	}
++	guard(mutex)(&sb->mutex);
++
++	if (!sb->vdev)
++		return -ENODEV;
++
++	if (sb->ir)
++		return -EBUSY;
+ 
+ 	sb->ir = xhci_create_secondary_interrupter(xhci_to_hcd(sb->xhci),
+ 						   num_seg, imod_interval,
+ 						   intr_num);
+-	if (!sb->ir) {
+-		ret = -ENOMEM;
+-		goto out;
+-	}
++	if (!sb->ir)
++		return -ENOMEM;
+ 
+ 	udev = sb->vdev->udev;
+ 	ret = usb_offload_get(udev);
+ 
+ 	sb->ir->ip_autoclear = ip_autoclear;
+ 
+-out:
+-	mutex_unlock(&sb->mutex);
+-
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(xhci_sideband_create_interrupter);
+@@ -352,21 +363,12 @@ EXPORT_SYMBOL_GPL(xhci_sideband_create_interrupter);
+ void
+ xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
+ {
+-	struct usb_device *udev;
+-
+-	if (!sb || !sb->ir)
++	if (!sb)
+ 		return;
+ 
+-	mutex_lock(&sb->mutex);
+-	xhci_remove_secondary_interrupter(xhci_to_hcd(sb->xhci), sb->ir);
+-
+-	sb->ir = NULL;
+-	udev = sb->vdev->udev;
++	guard(mutex)(&sb->mutex);
+ 
+-	if (udev->state != USB_STATE_NOTATTACHED)
+-		usb_offload_put(udev);
+-
+-	mutex_unlock(&sb->mutex);
++	__xhci_sideband_remove_interrupter(sb);
+ }
+ EXPORT_SYMBOL_GPL(xhci_sideband_remove_interrupter);
+ 
+@@ -465,6 +467,7 @@ EXPORT_SYMBOL_GPL(xhci_sideband_register);
+ void
+ xhci_sideband_unregister(struct xhci_sideband *sb)
+ {
++	struct xhci_virt_device *vdev;
+ 	struct xhci_hcd *xhci;
+ 	int i;
+ 
+@@ -473,17 +476,23 @@ xhci_sideband_unregister(struct xhci_sideband *sb)
+ 
+ 	xhci = sb->xhci;
+ 
+-	mutex_lock(&sb->mutex);
+-	for (i = 0; i < EP_CTX_PER_DEV; i++)
+-		if (sb->eps[i])
+-			__xhci_sideband_remove_endpoint(sb, sb->eps[i]);
+-	mutex_unlock(&sb->mutex);
++	scoped_guard(mutex, &sb->mutex) {
++		vdev = sb->vdev;
++		if (!vdev)
++			return;
++
++		for (i = 0; i < EP_CTX_PER_DEV; i++)
++			if (sb->eps[i])
++				__xhci_sideband_remove_endpoint(sb, sb->eps[i]);
+ 
+-	xhci_sideband_remove_interrupter(sb);
++		__xhci_sideband_remove_interrupter(sb);
++
++		sb->vdev = NULL;
++	}
+ 
+ 	spin_lock_irq(&xhci->lock);
+ 	sb->xhci = NULL;
+-	sb->vdev->sideband = NULL;
++	vdev->sideband = NULL;
+ 	spin_unlock_irq(&xhci->lock);
+ 
+ 	kfree(sb);
+-- 
+2.43.0
+
 
