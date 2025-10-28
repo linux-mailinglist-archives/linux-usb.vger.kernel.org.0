@@ -1,157 +1,94 @@
-Return-Path: <linux-usb+bounces-29794-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29795-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A053C15802
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 16:37:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D186C1585F
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 16:40:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 250A2503B12
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 15:31:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0D7C189A4F9
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 15:38:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17358342CB0;
-	Tue, 28 Oct 2025 15:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="h06qaQll"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B174344036;
+	Tue, 28 Oct 2025 15:36:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBD8C133
-	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 15:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E56342CA7;
+	Tue, 28 Oct 2025 15:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761665446; cv=none; b=hb/zcBCv14ycP7U8EMHAdH/O2saxf9eijXTDjkiAtJ4vJkL+LatFBFrh5ci2YQgIFBJLTJRLb7bWmO6fNZ+pnaKHQgkyIn6gV7XiSzPSVOFndAVbIhLvlGPlTHjuQM92+8WMX3RsJLAI5qR0cL5eosJbgemuA7LTvCZ25GPMGGI=
+	t=1761665815; cv=none; b=cyQt0lP4+5D9E8lRlukLdzANsI3rZhPcWoP84qD6+pN9usDDbr6tCf0pv9hZ2KapVpkYgsVMyVu8KB0mHs12i+8/rS8hF9z0CNBx0kJLWtuPZZzZ6xz2jO+Xf8gA2dcF3rEzwPDasAwzyc0SdWLzAwaqiAumJa5SZjQOUDHEPH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761665446; c=relaxed/simple;
-	bh=6UdoDHAGiXRiJ17qlm2HrguwWfFedEm2pbn/57l6ZMI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UENAMuAheqpLxXN/gVsUYlyhG9xEnBox86u2F3xWFvLGOzG1cVI/2u5NjeH36BkAmHpck+7YxaJWVVdWc6EUX+EV4r8LTIQNQDXsWEoBPbWfvqrd5aeYUI+Te2KBZCXsOgjly61X44eyoJ4UfRKJFgE7CmutxkzQWsRXCCQirYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=h06qaQll; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 59SEnZFQ1965622
-	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 15:30:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=pG8GKW3HfZTiiq9kKHjMnUDi
-	5ZdEQ727ySpcizk4eG0=; b=h06qaQllr4bKn546rCuCVciUE5BKlH7U4SHq+A9H
-	uDKhP81sgOm+G7hiMkdB5bvQore9MHc8tH75UZ5ipbXZIaTnSb/UkqV5gjXKccLh
-	qS7oOYiaLAnswuhhFItjDKps7r8uEx1TDdlfiDtfVjndK1C6iRnLVbs3hVSJCf1k
-	7ISiekn/Hqge6ZqWlt8jOI2Hc14QusNYBnDKzJ8Lwqn7bitdFCCjramSye9avwcI
-	yLsRwkspyNYeO8eY08dnwlykWdv3I6tsVGW8xrxmUsUU+pldTH1z3RV9xBqMW51c
-	9+8lhxF9kNkKMejRRqSR1OJbJw+gf3ZO6jgaZk5qn8W31w==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a2w51rpfa-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 15:30:44 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4e8a387d01bso277742491cf.3
-        for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 08:30:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761665443; x=1762270243;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pG8GKW3HfZTiiq9kKHjMnUDi5ZdEQ727ySpcizk4eG0=;
-        b=IrZJLpBJyU69H9qqcXL5TnVIAbHuL5SvqOu2BBXk3qUFcnPImCDkAqmJn6eDOIq+O+
-         XuBslvvek0k4IhuroQif3TcUhuF0mcK8FGQTGCCggeZkbfjHfM84hJp/RIclqJ1gyAWl
-         +vJW8XzRwIYlh+9oGha3r3EDNhHIhHmrvBTO52Pui4TDgpzGeBGAI6T+R7utb7FsHl8N
-         /20WeIi9FyV3jakdkYHdc3zN5Sir0kipyTVPYP05vqcb6c5+Kx6rGvnLoxuftP+IzCMW
-         2QL6rUzvlSj5lNiTiPVRozIg9Nn4BsuhcAAE8f5kqzcZJCBeM8GOx/myNc9uf7oEFVUh
-         4XeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWdj9+M6oSBcj29Q+JCuX4tPPETZ0gzg225rhPQwmDzSXfmEIbTh9DHOJknkPiAPcDqzQ8dgOlCEhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5kLLqvypi0WafBjx8OMoqw9UWlqG/DY7crGsZRBPzfiRJQEBu
-	LDtQaDQB/lohJZYEwgVS5cPy5K9YfDtbYSjjNDORpa3Pzyf0WjesO4rDwRZMgjMJ1Bo3L7kLFGt
-	HskuoofSxXRCLLE5OSWh5aaM2s88e1vDDNapB/7X4F80XxS08Wm0E5EDouHzX1Ow=
-X-Gm-Gg: ASbGncsxJEQtXL+y6XrToBvtsA7iLFJlvNJNxJEUNGZEI6D1rSTSQkJ1vxOqUmO9z9m
-	AtyoL8g7u3/Yn29UK3Ze+F9W+rp3w/tWKeBPzc1In9E3UTMYJZV/JNS0JHh29BHV2hKN/C9s5tM
-	ISuSmbFNCzMa+lgQctmcZUV9s5y7GjP4jvVEMGxhI88JGHhsfdXvBQ6sff9M5OpdhphBn23wHVC
-	Jka7hC5HTeZ5c/m4kKvijJ3LnbA2/VaTdlAoM4Ju7iInlaXXSBHOYi0+5tr4+W7E1cl9ojiP6kC
-	mZHR7lvwJyitUt1LilL/r+rlu25S83tU3FS2m9VK0T61PMsJSlt8BYmBHPCN50juuHxl5xWBtmH
-	XGeBNfa8W788xb+RxasD47AzCyiNxTA6lSKnLp3KgYh7Sn6T1jmfhOERI0u0HzBL2oJVt8B1DvS
-	G2G+l4O883IpQn
-X-Received: by 2002:a05:622a:40a:b0:4eb:779d:e8a6 with SMTP id d75a77b69052e-4ed07675524mr59981441cf.77.1761665443271;
-        Tue, 28 Oct 2025 08:30:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEe3rwV3Bj/ayumOhQ55IcihIE7syNSfSWRZZUZGLZY8iz/NY9dnGezaGOf1Kquhk/VAmsHrA==
-X-Received: by 2002:a05:622a:40a:b0:4eb:779d:e8a6 with SMTP id d75a77b69052e-4ed07675524mr59980681cf.77.1761665442708;
-        Tue, 28 Oct 2025 08:30:42 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59301f68e9fsm3155404e87.71.2025.10.28.08.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Oct 2025 08:30:42 -0700 (PDT)
-Date: Tue, 28 Oct 2025 17:30:37 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Dmitry Baryshkov <lumag@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Skip setting orientation for UCSI
- version 2.0 and above
-Message-ID: <xboq73zw752odclybviqnl75pp2nl2eamdvcdv2idqljck7qvu@zdh6ny7nja3w>
-References: <20251028-ucsi-glink-skip-orientation-for-ucsi-v2-v1-1-93e936ac59b4@linaro.org>
- <a4f3yhhz5sntno6gnfbjnjjsbtyo2e4y3da2aywsg36gvxkaxg@vw2vryukrepl>
+	s=arc-20240116; t=1761665815; c=relaxed/simple;
+	bh=AT1uEgiRUagYgIwDeUfnNzT7JxjLRSnmy9fGyjkeVUc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iBtiJOvTOsui83QVcr5k4DYcRISvXGHZzLWV8pqCMn7FZBRjH8W7ATmx+YLMWLCAT83pkOL7iRory7JCmey7hLm6c+U9D5tYl5mKX3riTgrGe08CeHylTuE9nkg5zMbUFMqUD7YJAHKGMOfbgsVmNsi6eLe9dxQp24IF2mvSKG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay08.hostedemail.com (Postfix) with ESMTP id 3CD0C1404A9;
+	Tue, 28 Oct 2025 15:36:44 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id A321A2002A;
+	Tue, 28 Oct 2025 15:36:39 +0000 (UTC)
+Date: Tue, 28 Oct 2025 11:37:17 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
+ brauner@kernel.org, jack@suse.cz, raven@themaw.net, miklos@szeredi.hu,
+ neil@brown.name, a.hindborg@kernel.org, linux-mm@kvack.org,
+ linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, kees@kernel.org,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, paul@paul-moore.com,
+ casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
+ john.johansen@canonical.com, selinux@vger.kernel.org,
+ borntraeger@linux.ibm.com, bpf@vger.kernel.org
+Subject: Re: [PATCH v2 19/50] convert tracefs
+Message-ID: <20251028113717.2154482d@gandalf.local.home>
+In-Reply-To: <20251028004614.393374-20-viro@zeniv.linux.org.uk>
+References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
+	<20251028004614.393374-20-viro@zeniv.linux.org.uk>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a4f3yhhz5sntno6gnfbjnjjsbtyo2e4y3da2aywsg36gvxkaxg@vw2vryukrepl>
-X-Proofpoint-GUID: UVS330XSjbLnX7FJAd8wMwAYdfikzJ5c
-X-Authority-Analysis: v=2.4 cv=YMiSCBGx c=1 sm=1 tr=0 ts=6900e1a4 cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=KKAkSRfTAAAA:8
- a=ba_8BwYL3biiwLG8ZYsA:9 a=CjuIK1q_8ugA:10 a=a_PwQJl-kcHnX1M80qC6:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: UVS330XSjbLnX7FJAd8wMwAYdfikzJ5c
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDI4MDEzMCBTYWx0ZWRfXy2u5ZqMiGgjj
- Jpgu3wv9wFO7LUHmOQ8Opxk+gMrGQ14XGuDSl+m91ygqGOQoP9pXG7V6cd6R9WIA8ZyAq1b9+DA
- gUKE6RgUW9qhf1JH6BNpxy7RyPJ3BnRw7cZZAJJ2AUYZKilS/ZB0SZYXMjailZlRj+p9PTcE17j
- /JmRTYaSbQD+0rK06jWnFu+7D0ewucORdKmHTGCR+vUr4j36cmITLjxJ/acAxqz148Zf+5Y1eJ6
- P5ZQ2NYlV1klMEStLH3DmHlvt1WN2j+VD1UiEgu9Q0TJcJgLo8QKVm8Es9a83AfCaE1h6nCsiiY
- mRjF/b28pUrg2St2CGsKY5iZqAGNnGw9cbjQJrYE5paX6rQpqzx+2qMEpJf90TxVsapjX0O2muZ
- GPKlanpJe0x7Q2V6mlGKtPtvfgv3kQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-28_05,2025-10-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 suspectscore=0 adultscore=0 clxscore=1015 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 spamscore=0 bulkscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510020000 definitions=main-2510280130
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: f6bmgxhcefm7bwohfbwepa9p8cuixubt
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: A321A2002A
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+s7gR+r9niKNL07T0pO7ukE0upf2CD5vI=
+X-HE-Tag: 1761665799-59606
+X-HE-Meta: U2FsdGVkX19g0bbaz2RZh320ocW7TSQSsOT9nF8qHkd5qWlBifJ/KGtfmWtsv1mzJP9ht/c5mZRt/OtFwhvV0nurLgOmsL+MgJEwJdQoabvLgqWyyWgPOtUtslgD012XhVqixajC5WLifrc/mNIrsi899n45JcxWb92Q20WFBPjq9fbMnMjzm49UpPMD39et9NXHIuTp+8ue8LHJcfY24Tb39Ouk2tY7I25w4L+/k2xiNhHBjQibW0Hpw7CZthMHcDOEtP04RbMR+7OcgsAvcilq3cwXqyvP6wxxoNA77oyga0E0P4NCRNz/Jj7XTabrxjt2M47rWHelMrTtE3Ho2LOneBwKq0YQxYsBKf09n05la3UZdYBsNJsEB3vTPECvtqDSIEN0Vv1VQdzkGQVHiqH5dArBachPtpebDDmuJAfLPjsP32VD10VFGrg/VDlo
 
-On Tue, Oct 28, 2025 at 05:19:58PM +0200, Abel Vesa wrote:
-> On 25-10-28 16:39:19, Abel Vesa wrote:
-> > In case of UCSI version 2.0 and above, if the orientation is set from
-> > glink as well, it will trigger the consumers along the graph (PHYs,
-> > repeaters and so on) to reconfigure a second time. This might break
-> > the consumer drivers which aren't currently implemented to drop the
-> > second request of setting the same orientation.
-> > 
-> > So lets leave the orientation setting to the UCSI generic implementation
-> > for all platform that implement UCSI spec 2.0 and above.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+On Tue, 28 Oct 2025 00:45:38 +0000
+Al Viro <viro@zeniv.linux.org.uk> wrote:
+
+> A mix of persistent and non-persistent dentries in there.  Strictly
+> speaking, no need for kill_litter_super() anyway - it pins an internal
+> mount whenever a persistent dentry is created, so at fs shutdown time
+> there won't be any to deal with.
 > 
-> Ignore this one please, as it is incomplete.
+> However, let's make it explicit - replace d_instantiate() with
+> d_make_persistent() + dput() (the latter in tracefs_end_creating(),
+> where it folds with inode_unlock() into simple_done_creating())
+> for dentries we want persistent and have d_make_discardable() done
+> either by simple_recursive_removal() (used by tracefs_remove())
+> or explicitly in eventfs_remove_events_dir().
 > 
-> We need to also set the orientation_aware in pmic_glink_ucsi_update_connector()
-> if the ucsi version is at least 2.0.
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
-Note, I think it should be set in the core rather than setting it in the
-driver.
+I ran the tracing selftests and some other tests I have against this and
+nothing interesting happened. I didn't run my full test suite, but it looks
+sane to me.
 
-> 
-> Will do and respin.
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
--- 
-With best wishes
-Dmitry
+-- Steve
 
