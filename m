@@ -1,74 +1,82 @@
-Return-Path: <linux-usb+bounces-29767-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29768-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D192C13B40
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 10:08:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0462C13B9B
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 10:10:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC8A21887600
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 09:07:19 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C28F1564489
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 09:07:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6DAC2F618F;
-	Tue, 28 Oct 2025 09:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49DB12F744B;
+	Tue, 28 Oct 2025 09:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PZec/Lez"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0IXextcb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF252D6608;
-	Tue, 28 Oct 2025 09:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA59A2EAB6E;
+	Tue, 28 Oct 2025 09:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761642344; cv=none; b=rbtdF3xbBZMOFUug4s1lVsk+vv3SufHf7sh0rtEp4eT7nxMynbYd+LAH9kWKCKlH3eEjz5yspQIWeWq6WYv7P3OVZIppPXEgjqIgwJa6GVqgKEBh5pk+TnW/9248cY4srkGTpCdT/kZSmiR3SMs6DxBDBE5a6TUMbRmjJK5TXEI=
+	t=1761642353; cv=none; b=r8yoUIiVrF6OZ5Q7Yk1mFwVT1X8+F4PBlzdQXFRl4YCm6nA9Tc984wsDNwDXIUg4emUaQrlpxehImZXPh+cpe50MkalmUFI+vTFdXcpeX1mj2TbZ6NGdNf3QcPIXGIsAqzoSerwLVRDhyA5+2424XiD6sFmSzNJ7vVdttxz4mWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761642344; c=relaxed/simple;
-	bh=K7A5LEXplzJkfbatI7862m7lOmxo9hUn+BBYMb0zq7M=;
+	s=arc-20240116; t=1761642353; c=relaxed/simple;
+	bh=04SqsjIK5kgoLej5ER8nuZHzewkcdOz9UWXMhHAyFpo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JuWjXJcGYzAFUddQlbiGFfAjF/wrNxf7YZkJQ0QJz1al1msfi/OIlqEOB+huNBfAWKv/meUmsxs1LUZFfc43vNeFBbKtmkQ/9s7WvAy3sdw0EqwtVfzVbUaR5W8BLkHuaMFgu7NDsR+cawG51p/dAugAd+FXyoIbqJVRoeux/BA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PZec/Lez; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B71C4CEE7;
-	Tue, 28 Oct 2025 09:05:43 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=r9u9/b85sydZZEEfbiUvtFHpBom/I3hWhAD9vHk/vdvKlJayUTsIYLJF5KJSsUBKkn7EkXYSEnaskZcBZJ/J/I6zNhfKMEaQGNP0MSoETJIL5TSNfVT+wyTDEQ9AM1mCXrpwYnbazNKJ4qDuNqHzD6p4mZU5+Rw9p7EfG+tNz0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0IXextcb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5F29C4CEE7;
+	Tue, 28 Oct 2025 09:05:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761642343;
-	bh=K7A5LEXplzJkfbatI7862m7lOmxo9hUn+BBYMb0zq7M=;
+	s=korg; t=1761642353;
+	bh=04SqsjIK5kgoLej5ER8nuZHzewkcdOz9UWXMhHAyFpo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PZec/LezMN2HA57TVdFf37v+PPHo/3Uoto2mBVGcWze/3hNKVlCb7PYXJVs3YNupN
-	 pyndNNhHD/RoU7+mn0gX0mv53jhremANWz5BQkh4M8PvOOj2/3ifonoe4IqN0K0zi2
-	 DAubPAv4WvADNnAXm09I1n3+c8kTGsA1cpQ7JrOI=
-Date: Tue, 28 Oct 2025 09:47:55 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
-	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
-	miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org,
-	linux-mm@kvack.org, linux-efi@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev, kees@kernel.org, rostedt@goodmis.org,
-	linux-usb@vger.kernel.org, paul@paul-moore.com,
-	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
-	john.johansen@canonical.com, selinux@vger.kernel.org,
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 36/50] functionfs: switch to simple_remove_by_name()
-Message-ID: <2025102848-freewill-atrium-ea47@gregkh>
-References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
- <20251028004614.393374-37-viro@zeniv.linux.org.uk>
+	b=0IXextcbggqHxVeoEEVcanrY8bRkSn5X1ShAJ6yRO3GYqXEtAttQ3DAmROmGmxoAh
+	 lQgY5y3/bD8pTsZR4N13RT+rg7/kai+Z5pVaqSZNlDSc/Ck0i/9Lb8einHjXFdi8u/
+	 bBJ85446zqBLyt+gsfRD678aWA1jJKWgTIh+bXxo=
+Date: Tue, 28 Oct 2025 10:04:24 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+	linux-usb@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] rust: usb: fix formatting
+Message-ID: <2025102814-gosling-bobble-dc2e@gregkh>
+References: <20251016231350.1418501-1-ojeda@kernel.org>
+ <2025101758-mystified-prideful-8016@gregkh>
+ <CANiq72nXw4+HesrgNqJjTy6Ji=pVqUMzx7GDO+6U9VYWezTt6Q@mail.gmail.com>
+ <CANiq72kn9HZy2kYaGHM9yj2nR+SAQ=J=Oh8k2doPFMDCRy1wBA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251028004614.393374-37-viro@zeniv.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72kn9HZy2kYaGHM9yj2nR+SAQ=J=Oh8k2doPFMDCRy1wBA@mail.gmail.com>
 
-On Tue, Oct 28, 2025 at 12:45:55AM +0000, Al Viro wrote:
-> No need to return dentry from ffs_sb_create_file() or keep it around
-> afterwards.
+On Mon, Oct 27, 2025 at 04:03:37PM +0100, Miguel Ojeda wrote:
+> On Sun, Oct 19, 2025 at 8:59 PM Miguel Ojeda
+> <miguel.ojeda.sandonis@gmail.com> wrote:
+> >
+> > They landed in mainline, so Linus' tree is again `rustfmt`-clean.
 > 
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> Pinging about this one so that it is not forgotten. It is the only
+> missing thing so that linux-next is clean again like Linus'.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Just now applied, sorry for the delay.
+
+greg k-h
 
