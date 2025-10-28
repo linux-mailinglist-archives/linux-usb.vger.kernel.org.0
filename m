@@ -1,82 +1,145 @@
-Return-Path: <linux-usb+bounces-29768-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29769-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0462C13B9B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 10:10:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A67D5C13B4C
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 10:08:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C28F1564489
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 09:07:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60A7F3AC804
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 09:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49DB12F744B;
-	Tue, 28 Oct 2025 09:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50D332F60D5;
+	Tue, 28 Oct 2025 09:07:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0IXextcb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EmOliCbj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA59A2EAB6E;
-	Tue, 28 Oct 2025 09:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61AF2F549A;
+	Tue, 28 Oct 2025 09:07:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761642353; cv=none; b=r8yoUIiVrF6OZ5Q7Yk1mFwVT1X8+F4PBlzdQXFRl4YCm6nA9Tc984wsDNwDXIUg4emUaQrlpxehImZXPh+cpe50MkalmUFI+vTFdXcpeX1mj2TbZ6NGdNf3QcPIXGIsAqzoSerwLVRDhyA5+2424XiD6sFmSzNJ7vVdttxz4mWI=
+	t=1761642444; cv=none; b=jtNqbBxJeITXz6DToEhrXynVrBb0jE9Kdg56RBYElQDkTLvbnxitRslrtSXs+ZlOYbBeb9FvxJHWwDgerqUvUSv0v9w8+JVwBF0dgjt1YFFqQdYxuHxSBeTKhGDpr85KWcJ76tUpzL6Dj/novqIdV2oQwEoI54PSDCnLJQql7uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761642353; c=relaxed/simple;
-	bh=04SqsjIK5kgoLej5ER8nuZHzewkcdOz9UWXMhHAyFpo=;
+	s=arc-20240116; t=1761642444; c=relaxed/simple;
+	bh=WxHpl51n4EsbakrBuVvz8JyJIZAFgGu/0ttTPMvNUy0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r9u9/b85sydZZEEfbiUvtFHpBom/I3hWhAD9vHk/vdvKlJayUTsIYLJF5KJSsUBKkn7EkXYSEnaskZcBZJ/J/I6zNhfKMEaQGNP0MSoETJIL5TSNfVT+wyTDEQ9AM1mCXrpwYnbazNKJ4qDuNqHzD6p4mZU5+Rw9p7EfG+tNz0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0IXextcb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5F29C4CEE7;
-	Tue, 28 Oct 2025 09:05:52 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=fsOC0IZm9g5nhNjITksg/SUEbT1C6I2xpOS7gO8vRo4pICdEVR4pXf8ofS2i4cnPfY56EV2SJwotGI4WAbvAZGz+GfuwtA4aWsmJrfrmSK+XIoDZ/VXkFOvdFMEvypCmnHmFMO2ck462kBINTxGzsojYTgyOYcdBEDvpEN5J03g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EmOliCbj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90AA4C4CEE7;
+	Tue, 28 Oct 2025 09:07:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761642353;
-	bh=04SqsjIK5kgoLej5ER8nuZHzewkcdOz9UWXMhHAyFpo=;
+	s=korg; t=1761642444;
+	bh=WxHpl51n4EsbakrBuVvz8JyJIZAFgGu/0ttTPMvNUy0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0IXextcbggqHxVeoEEVcanrY8bRkSn5X1ShAJ6yRO3GYqXEtAttQ3DAmROmGmxoAh
-	 lQgY5y3/bD8pTsZR4N13RT+rg7/kai+Z5pVaqSZNlDSc/Ck0i/9Lb8einHjXFdi8u/
-	 bBJ85446zqBLyt+gsfRD678aWA1jJKWgTIh+bXxo=
-Date: Tue, 28 Oct 2025 10:04:24 +0100
+	b=EmOliCbjaJFIBi3/P+bJGAth59P2tigGVXrNf2RUceOZ/7LeIkWtjbse/HPE1i+pA
+	 eelsPmrxYGTM1UgelXb8fx+Nc4SbsK1UKfNku3/OjHqmXN9Rw27T9ruUu2dotDKRFB
+	 moe3tGqpqvpwIyROnOP1pOCcUsX+HXlmze8SHn9w=
+Date: Tue, 28 Oct 2025 10:07:19 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	linux-usb@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] rust: usb: fix formatting
-Message-ID: <2025102814-gosling-bobble-dc2e@gregkh>
-References: <20251016231350.1418501-1-ojeda@kernel.org>
- <2025101758-mystified-prideful-8016@gregkh>
- <CANiq72nXw4+HesrgNqJjTy6Ji=pVqUMzx7GDO+6U9VYWezTt6Q@mail.gmail.com>
- <CANiq72kn9HZy2kYaGHM9yj2nR+SAQ=J=Oh8k2doPFMDCRy1wBA@mail.gmail.com>
+To: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org
+Subject: Re: [PATCH] usb: mtu3: fix possible NULL pointer dereference in
+ ep0_rx_state()
+Message-ID: <2025102811-helium-caloric-cac5@gregkh>
+References: <20251027193152.3906497-1-Pavel.Zhigulin@kaspersky.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72kn9HZy2kYaGHM9yj2nR+SAQ=J=Oh8k2doPFMDCRy1wBA@mail.gmail.com>
+In-Reply-To: <20251027193152.3906497-1-Pavel.Zhigulin@kaspersky.com>
 
-On Mon, Oct 27, 2025 at 04:03:37PM +0100, Miguel Ojeda wrote:
-> On Sun, Oct 19, 2025 at 8:59 PM Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
-> >
-> > They landed in mainline, so Linus' tree is again `rustfmt`-clean.
+On Mon, Oct 27, 2025 at 10:31:50PM +0300, Pavel Zhigulin wrote:
+> The function 'ep0_rx_state()' accessed 'mreq->request' before verifying
+> that mreq was valid. If 'next_ep0_request()' returned NULL, this could
+> lead to a NULL pointer dereference. The return value of
+> 'next_ep0_request()' is checked in every other code path except
+> here. It appears that the intended 'if (mreq)' check was mistakenly
+> written as 'if (req)', since the req pointer cannot be NULL when mreq
+> is not NULL.
 > 
-> Pinging about this one so that it is not forgotten. It is the only
-> missing thing so that linux-next is clean again like Linus'.
+> Initialize 'mreq' and 'req' to NULL by default, and switch 'req'
+> NULL-checking to 'mreq' non-NULL check to prevent invalid memory access.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: df2069acb005 ("usb: Add MediaTek USB3 DRD driver")
+> Signed-off-by: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
+> ---
+>  drivers/usb/mtu3/mtu3_gadget_ep0.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> index e4fd1bb14a55..ee7466ca4d99 100644
+> --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> @@ -508,8 +508,8 @@ static int handle_standard_request(struct mtu3 *mtu,
+>  /* receive an data packet (OUT) */
+>  static void ep0_rx_state(struct mtu3 *mtu)
+>  {
+> -	struct mtu3_request *mreq;
+> -	struct usb_request *req;
+> +	struct mtu3_request *mreq = NULL;
+> +	struct usb_request *req = NULL;
+>  	void __iomem *mbase = mtu->mac_base;
+>  	u32 maxp;
+>  	u32 csr;
+> @@ -519,10 +519,11 @@ static void ep0_rx_state(struct mtu3 *mtu)
+> 
+>  	csr = mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS;
+>  	mreq = next_ep0_request(mtu);
+> -	req = &mreq->request;
+> 
+>  	/* read packet and ack; or stall because of gadget driver bug */
+> -	if (req) {
+> +	if (mreq) {
+> +		req = &mreq->request;
+> +
+>  		void *buf = req->buf + req->actual;
+>  		unsigned int len = req->length - req->actual;
+> 
+> --
+> 2.43.0
+> 
+> 
 
-Just now applied, sorry for the delay.
+Hi,
 
-greg k-h
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
