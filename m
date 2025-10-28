@@ -1,108 +1,113 @@
-Return-Path: <linux-usb+bounces-29789-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29790-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40522C153AB
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 15:47:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F268C15508
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 16:05:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB570566ADF
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 14:40:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ABE334FEF2D
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 15:00:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD128338F5B;
-	Tue, 28 Oct 2025 14:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67E2C33A01B;
+	Tue, 28 Oct 2025 14:59:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="m768Ko2C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a9XBJqx6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FFA238D54
-	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 14:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886B831815D;
+	Tue, 28 Oct 2025 14:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761662423; cv=none; b=bVXzzXlnhaD7SLe7vb7O+MSHXo9CW9bz127ZBUSUrAV2RQ22xs1d7tv0XaKeH7AUjtH8XSLiBPFC91hIpSt6chUrdOI6ppcGJi2jDVx77GG2lYGWGdT2N6WdMSY9wUf+S2vJLByFiGIklt7bsY5+I3fVWh4mg8YWnX6nkfonayc=
+	t=1761663565; cv=none; b=GPnGe0xoE9IHulL16nO4G6BUXJgJmmZQvnyOLO7K8wRvRsw0RMare7uGeTbTuW2ZUrS8xB0KrDRSV/lFeFuyrrgE9DWOZuKamDLtJD6fqRT/d+72xUboSxd8yE0kfj6A8bvZe69UQe4k+klqqiVz82pmHHjUOTkh0Cn1WCNPHus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761662423; c=relaxed/simple;
-	bh=2uV4AKH5GDeZKlte+oXpJZsFKXS8eNLYYoBK1xILXbY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T5DaLuxmyUdOfZ6F7Zfnb1H+inAxgBMzmBb2lmeiIDCdtIjRILKqxHoGK0FBbLMYbOmEulrcfUQlaPFamxSoC9z1d9f9hIWg94eHe2XJZwYipvrzDL92CrHOcelHzbBztZWU4KnG/QW9jWa2MWUHgv42gz6wIQTzRyWc+48TbkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=m768Ko2C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16800C4CEE7;
-	Tue, 28 Oct 2025 14:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761662423;
-	bh=2uV4AKH5GDeZKlte+oXpJZsFKXS8eNLYYoBK1xILXbY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m768Ko2CoYoLRDgNTN5Cah5I9KAjOsFPqnL3WZ2a8pAwIhL1PytyKBJM2rpnd2+SW
-	 gHBcmTuJ1iSe2aFGa7MNZoDgbjohOJuOroa5PPFBU1Hkb96glIAvroYWhWrPx07ekb
-	 OAm0No3lU0SUCcW/mIN7wF0zEAXhfH86elJuWs2I=
-Date: Tue, 28 Oct 2025 15:40:16 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] uapi: cdc.h: cleanly provide for more interfaces and
- countries
-Message-ID: <2025102857-surfer-atypical-2857@gregkh>
-References: <20251028123254.1888303-1-oneukum@suse.com>
- <2025102858-doorframe-canola-e6c0@gregkh>
- <16a3c8ef-dd3f-48c4-afcd-42ab4b14c429@suse.com>
+	s=arc-20240116; t=1761663565; c=relaxed/simple;
+	bh=POA/L+Wqnaka941pgqSwTeo/9UjtqIvrexRYHF12Lgc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qoumgKfu36Q8VWW+ZhoaxG8oWr3q3vX9HVjBbjzlRKcoDl1myZRhjR29MbwJlUideS0d97ediFDEA6OPNd/6gHeRQPE8rD808+cKTr56Ag6DcJrW/Zz1gsjZ+rRessSDhlnDcRTRmrqx9XhL+sFaE4fu4EHq4mkMOY8q9nqrw14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a9XBJqx6; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761663564; x=1793199564;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=POA/L+Wqnaka941pgqSwTeo/9UjtqIvrexRYHF12Lgc=;
+  b=a9XBJqx62yrRzqD3V6DdsqfccRZQGjHDYrvz7BifteLmzNWCPiItDBbQ
+   uf0yjtybWchLD4ImIL27cGMzGyIHLowKOmZGSlv7U2LjQCgQUVUmglFC4
+   57r5xFgrfHLN20TsZ8HxnwOTyqxRCMuPpBM0YefV9IcVcMYQFtIFvOsPK
+   ffXkVtS2lhncTDxQ0jMa5tj0mKAFLtyFyIRZpORj6JwM9R68DrKxk26/Q
+   WOqVGD+1JIHQ//n0zLy1KC+07sfKuuZibGfXZyTQK+k7vvshGmj7aaFTj
+   VIxId1KIy4PSqhEO/jcXRk2jOInPCw9w99ghAjOBwjv1QUL+1YMtEdSBz
+   w==;
+X-CSE-ConnectionGUID: H/UMtewoRtSBMb1S9Dlz5w==
+X-CSE-MsgGUID: T+GdBZ2dQ+upbA1YQzmgPA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="86393029"
+X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
+   d="scan'208";a="86393029"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 07:59:23 -0700
+X-CSE-ConnectionGUID: mcigzqBHTMaQSbjsjyi/Rw==
+X-CSE-MsgGUID: LcRU3/5gT1qnPA1r6dKsKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
+   d="scan'208";a="189720822"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO [10.245.244.148]) ([10.245.244.148])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 07:59:21 -0700
+Message-ID: <db07f48d-27cf-4681-b10e-38d252e24512@linux.intel.com>
+Date: Tue, 28 Oct 2025 16:59:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <16a3c8ef-dd3f-48c4-afcd-42ab4b14c429@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFT PATCH] xhci: sideband: Fix race condition in sideband
+ unregister
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: uttkarsh.aggarwal@oss.qualcomm.com, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, mathias.nyman@intel.com,
+ wesley.cheng@oss.qualcomm.com
+References: <51ca2248-5699-4c6d-b037-a57c90ed44ac@linux.intel.com>
+ <20251028134452.244096-1-mathias.nyman@linux.intel.com>
+ <2025102808-sublime-substance-74bb@gregkh>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <2025102808-sublime-substance-74bb@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 28, 2025 at 03:34:40PM +0100, Oliver Neukum wrote:
-> Hi,
+On 10/28/25 15:56, Greg KH wrote:
+
+>> @@ -474,16 +494,23 @@ xhci_sideband_unregister(struct xhci_sideband *sb)
+>>   	xhci = sb->xhci;
+>>   
+>>   	mutex_lock(&sb->mutex);
+>> +
+>> +	vdev = sb->vdev;
+>> +	if (!vdev)
+>> +		return;
 > 
-> On 28.10.25 14:32, Greg KH wrote:
-> > On Tue, Oct 28, 2025 at 01:32:22PM +0100, Oliver Neukum wrote:
-> > > The spec requires at least one interface respectively country.
-> > > It allows multiple ones. This needs to be clearly said in the UAPI.
-> > > 
-> > > Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> > > ---
-> > >   include/uapi/linux/usb/cdc.h | 4 ++--
-> > >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/include/uapi/linux/usb/cdc.h b/include/uapi/linux/usb/cdc.h
-> > > index 1924cf665448..5fcbce0be133 100644
-> > > --- a/include/uapi/linux/usb/cdc.h
-> > > +++ b/include/uapi/linux/usb/cdc.h
-> > > @@ -105,7 +105,7 @@ struct usb_cdc_union_desc {
-> > >   	__u8	bMasterInterface0;
-> > >   	__u8	bSlaveInterface0;
-> > > -	/* ... and there could be other slave interfaces */
-> > > +	__u8	bSlaveInterfaces[];
-> > 
-> > Can this be combined with bSlaveInterface0?  Feels odd to have 0 and
-> > then "more".
+> Lock is still held :(
 > 
-> I am afraid the C language does not allow you to specify
-> that an array must have a minimum length other than zero.
-> In this case bSlaveInterface0 must be present.
-> I don't think using only an array would be the right choice.
 
-bSlaveInterface[1] ?
+Oops, missed one
 
-I'll add Gustavo here, he's done lots of work in this area.
+> I think you need to use guard() to make this more sane.
 
-> > Also, what determines how many, the overall length?
+Clearly yes, I'll send a v2
+
 > 
-> bLength - 4 is the number of slave interfaces, which
-> must at least be 1.
-> We cannot use counted_by in UAPI, can we?
+> thanks,
+> 
+> greg k-h
+> 
 
-I don't know, Gustavo?
-
-thanks,
-
-greg k-h
+Thanks
+Mathias
 
