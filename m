@@ -1,77 +1,93 @@
-Return-Path: <linux-usb+bounces-29802-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29803-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 843E0C16005
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 17:58:26 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FC40C15FE7
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 17:57:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DC9F3AEB5F
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 16:53:55 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B55C83560D1
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 16:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E71C34AB0D;
-	Tue, 28 Oct 2025 16:52:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 773CD346E64;
+	Tue, 28 Oct 2025 16:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SEFM0n+6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kxtoXs2t"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B75833DEE8;
-	Tue, 28 Oct 2025 16:52:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA09334379
+	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 16:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761670335; cv=none; b=QemkphH/vP37SAo7gcZPG+Avi2Eqxc7kzQuD+mWZIWY3D5Zdp7mJcYA2qYaS/kT+qByUZXcXaJHFOmwfPUEKy6mLwgqvi4Nwv123NL4EZ2Stg9F1xiFBtuWHhQ2wznX/hKJJCwF3vx7gg1Ezb5pGCnle/ER+BsQ9fxTOGIK0vbw=
+	t=1761670632; cv=none; b=l9EXx5RUFSAQwlSC6mI6k+4RltTWk5lcoNhunt0WnoqdyuWtjbklfDNEYCGX42n9GvV0XD+KBj0ZjmVEkzWQkNAhE8qSPS9NoIHLipgTtfB0xQoRrhtg4Subt1/bms2bS61cLJepLVq+LM89T7ORjjpcvOnYD9jCqTDZfArEniU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761670335; c=relaxed/simple;
-	bh=SsI3vE4lFVvttLwlWp30jk+SCL5jWqCV/MCGalhV7Ow=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MIQECnif1FMWUEfggf8nzCTY7y0UG4cxEiatfv0hUMlWNEukOjOK27SCmYAEcgDjQYel22vtFDbRx+Ohbrvbki+iuQxckQ/L1cdJwZomSjWQhYZQOV8VMitHVY9BlAbVPawd/0zMCDt4BFtWSW6OJgrf/MuvxKXXSSdAzshdQgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SEFM0n+6; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761670333; x=1793206333;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SsI3vE4lFVvttLwlWp30jk+SCL5jWqCV/MCGalhV7Ow=;
-  b=SEFM0n+64Yu91SrzB0mG34z2b2N0GZQf52Q10DzfSw8W4DJehPzN0CPf
-   X/U5i/PHJsms2ikN+wmY17fOrRDCRG7e5DzBI0HiIz2vjHFkJUs8z411c
-   x2R/5B6/0jfe3bYJhjMcEu7bEb2ChasxImoU0f6ezExlmUST7rVLzh9Cd
-   FQbYEj6mOaXv7ehp9Metzb79IFUsZ0jzrcH7TYKqtcv6YSPaI4rESG6/p
-   myAeurA2LNVazo6MWmW9dwi0OkvoGXUAQJYq03Iq4V5pIvU8aNrAX1crv
-   6Z9+f5BEsB3xmSUPNrmoejfaVGCumkcon9MiKIvi8UM1DwBWNM+tEG5ke
-   A==;
-X-CSE-ConnectionGUID: hcMkMvdiQ8Cn2LDzh1/RZg==
-X-CSE-MsgGUID: csdDkFInQSCGUoX7Ih9Apg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63685309"
-X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
-   d="scan'208";a="63685309"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 09:52:12 -0700
-X-CSE-ConnectionGUID: m/ZpeFbbR0+rEI1wX/pvLw==
-X-CSE-MsgGUID: 2zeChfU2T7mKf8eWGNiqhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
-   d="scan'208";a="189454888"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO mnyman-desk.intel.com) ([10.245.244.148])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 09:52:10 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: uttkarsh.aggarwal@oss.qualcomm.com
-Cc: mathias.nyman@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1761670632; c=relaxed/simple;
+	bh=VWbzR5JJcNh9vxeY+++ECnRky78xd0PGd5/1QQmh4bE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VOIsb/8oygvrH++2oegX2QWEHcxV3MAhrVe94SpNx2rp0zHFtSp0oIPEzohJKCOOFZeH0g4juUON7xnarF0lBFQtm4tXfJIgERS+RC24Y2e/JWCxUIk2/C6SeIiKsfbLYCakSXnkISQnqe6jOJHIASbEjlSQm0emaRM/tKBKc7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kxtoXs2t; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7833765433cso7843289b3a.0
+        for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 09:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761670630; x=1762275430; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FZSNxR68yHjL7zAo+Mv3sJfsksYIyvHAgD0mbxvBcYw=;
+        b=kxtoXs2tyYUa/OnUAm9YuC+KkVYe+0j6de840pULz+2oZhsfrvYD8yiM79I0JDuy/c
+         8SgBz4l9M8qRgo4zykYrvK/GqiYdgeGkG5uzx1RoT2fyd5RTgyqnb2oBXpSAlQqEQcc0
+         2xPaFreEStUSZ7ErmrHNFaDrsG4iSNKnkva6FZjCxzqFeMqGc874KUoqTyIPy0cmyMzV
+         oKvou+7Ha5Irg2H/6Dy68piW6Db0r7OzcIPu1+jo6ktS3sJlCTtFT30wLuRROpqHFY2L
+         H4Zl2Lr7mbsTm5d5xENsjsKyJ1q++5akki3pESzFpx7LQjkAT36kz4J4NcIyeVDWxKjq
+         nJ2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761670630; x=1762275430;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FZSNxR68yHjL7zAo+Mv3sJfsksYIyvHAgD0mbxvBcYw=;
+        b=QzCW28b0hexPoG38hCOiAiAxalmhVh7LCrZy3X47p3zpQR4D9b3T9N+vI5QQFayiLs
+         Ss6s7sGeL9ICLMIHO4c/F43QSYfr589K53FF0PatA8JQIb0PuyYB9oKnKKuCwPxYuFTo
+         FRgN2cDyxD95yeABW3X1zjAVFOr7UdgzMc5QZwIPC/KRXOgGjlo00csjhDYcvUi6Ai/y
+         nUOVghsKpzVfBpC3W9Q41+vkKgeeBG3Omsx8VLq5qypSy5FJRDmVO+RjCSy2cZN+YolP
+         m7nCN4APwxb+l+DMGK5kQAnG05wH2F84rfBzgK47PuTafZw2DKHmx8eTDHvuuhtr+Jx+
+         u7Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCV49tLPa06MZmoawiFkcdCta2X7v6wOJKZ7BTqhWbrjliFrL9MQacYqrpkk2umdthJf5KUzSsh4PAw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDCMJ4GH2qKzVblMYKReutXed6qYd1YcXaDiRUMobQAmL13MKQ
+	FxQHqCJWMFuHt0DEj6ooVL1ygUJd8oGnew2x6Yzhh8GFWb/BbyHcCD1o
+X-Gm-Gg: ASbGnctC5OXg2DFan758aisSeaSy5ncQJ/n8MXRx6J5LhbkLw/muGIrX/nnHJTcg8Ih
+	lHClDpUvK0GNmsHQri/6r5ed0s5T3AmqaZAks3UYZwVFeripnYY9SZbeqzAYaZaccLppbYDGxE5
+	hMvmHDG1UxoDuy/EegyEvwmVccBwIu027bUV4DbMhK3Ss6cEWgX0pjYqdEkv6RzpHcVNJAlsHCg
+	xFM6ljJmq297CLuoXWkhMw0jAp8pKRbCoDjy6qNt5ECiraK2OiKAzVHXcAFyU6GkC71ymHVZAE1
+	2zpVW5fcilQMow/T2xAYfdmbm/cYnzSYGUmCDJCzS+cLbZASQv80nh1OFNShAKxKZa+OMiMRONo
+	kzf1DeAqKBifLsIUWGnwiZ1s3rxW5zd2uEx1bZa4ZqTmeqPn7bj1HgFO81RhUpXyOqZg1Gf/Zj2
+	BXuwZ0NXpDVuUvXWbFPbs=
+X-Google-Smtp-Source: AGHT+IHYzX3zBX9m/HOdpIkdCjhBMv9C2sbByBuod4kCB2jxgbvqLV3QWhnzZ0epjRo8NPkrViDs8g==
+X-Received: by 2002:a05:6a00:3d4f:b0:780:7eaa:938 with SMTP id d2e1a72fcca58-7a441bde268mr6351210b3a.12.1761670629662;
+        Tue, 28 Oct 2025 09:57:09 -0700 (PDT)
+Received: from kforge.gk.pfsense.com ([103.70.166.143])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a4140699basm12133857b3a.50.2025.10.28.09.57.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Oct 2025 09:57:09 -0700 (PDT)
+From: Gopi Krishna Menon <krishnagopi487@gmail.com>
+To: andreyknvl@gmail.com,
+	gregkh@linuxfoundation.org
+Cc: Gopi Krishna Menon <krishnagopi487@gmail.com>,
+	snovitoll@gmail.com,
 	linux-usb@vger.kernel.org,
-	mathias.nyman@intel.com,
-	wesley.cheng@oss.qualcomm.com
-Subject: [RFT PATCH v2] xhci: sideband: Fix race condition in sideband unregister
-Date: Tue, 28 Oct 2025 18:51:53 +0200
-Message-ID: <20251028165153.283980-1-mathias.nyman@linux.intel.com>
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com,
+	khalid@kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	syzbot+d8fd35fa6177afa8c92b@syzkaller.appspotmail.com
+Subject: [PATCH] usb: raw-gadget: cap raw_io transfer length to KMALLOC_MAX_SIZE
+Date: Tue, 28 Oct 2025 22:26:57 +0530
+Message-ID: <20251028165659.50962-1-krishnagopi487@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <db07f48d-27cf-4681-b10e-38d252e24512@linux.intel.com>
-References: <db07f48d-27cf-4681-b10e-38d252e24512@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,227 +96,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Uttkarsh Aggarwal observed a kernel panic during sideband un-register
-and found it was caused by a race condition between sideband unregister,
-and creating sideband interrupters.
-The issue occurrs when thread T1 runs uaudio_disconnect() and released
-sb->xhci via sideband_unregister, while thread T2 simultaneously accessed
-the now-NULL sb->xhci in xhci_sideband_create_interrupter() resulting in
-a crash.
+The previous commit removed the PAGE_SIZE limit on transfer length of
+raw_io buffer in order to avoid any problems with emulating USB devices
+whose full configuration descriptor exceeds PAGE_SIZE in length. However
+this also removes the upperbound on user supplied length, allowing very
+large values to be passed to the allocator.
 
-Ensure new endpoints or interrupter can't be added to a sidenband after
-xhci_sideband_unregister() cleared the existing ones, and unlocked the
-sideband mutex.
-Reorganize code so that mutex is only taken and released once in
-xhci_sideband_unregister(), and clear sb->vdev while mutex is taken.
+syzbot on fuzzing the transfer length with very large value (1.81GB)
+results in kmalloc() to fall back to the page allocator, which triggers
+a kernel warning as the page allocator cannot handle allocations more
+than MAX_PAGE_ORDER/KMALLOC_MAX_SIZE.
 
-Use mutex guards to reduce human unlock errors in code
+Since there is no limit imposed on the size of buffer for both control
+and non control transfers, cap the raw_io transfer length to
+KMALLOC_MAX_SIZE and return -EINVAL for larger transfer length to
+prevent any warnings from the page allocator.
 
-Refuse to add endpoints or interrupter if sb->vdev is not set.
-sb->vdev is set when sideband is created and registered.
-
-Reported-by: Uttkarsh Aggarwal <uttkarsh.aggarwal@oss.qualcomm.com>
-Closes: https://lore.kernel.org/linux-usb/20251028080043.27760-1-uttkarsh.aggarwal@oss.qualcomm.com
-Fixes: de66754e9f80 ("xhci: sideband: add initial api to register a secondary interrupter entity")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Fixes: 37b9dd0d114a ("usb: raw-gadget: do not limit transfer length")
+Tested-by: syzbot+d8fd35fa6177afa8c92b@syzkaller.appspotmail.com
+Reported-by: syzbot+d8fd35fa6177afa8c92b@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/68fc07a0.a70a0220.3bf6c6.01ab.GAE@google.com/
+Signed-off-by: Gopi Krishna Menon <krishnagopi487@gmail.com>
 ---
+ drivers/usb/gadget/legacy/raw_gadget.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-v2:
-  use guard() and fix missing mutex_unlock as recommended by greg k-h 
-
----
- drivers/usb/host/xhci-sideband.c | 97 +++++++++++++++++---------------
- 1 file changed, 53 insertions(+), 44 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
-index e771a476fef2..2daa0ba7ad9a 100644
---- a/drivers/usb/host/xhci-sideband.c
-+++ b/drivers/usb/host/xhci-sideband.c
-@@ -86,6 +86,22 @@ __xhci_sideband_remove_endpoint(struct xhci_sideband *sb, struct xhci_virt_ep *e
- 	sb->eps[ep->ep_index] = NULL;
- }
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index b71680c58de6..46f343ba48b3 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -40,6 +40,7 @@ MODULE_LICENSE("GPL");
  
-+static void
-+__xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
-+{
-+	struct usb_device *udev;
-+
-+	if (!sb->ir)
-+		return;
-+
-+	xhci_remove_secondary_interrupter(xhci_to_hcd(sb->xhci), sb->ir);
-+	sb->ir = NULL;
-+	udev = sb->vdev->udev;
-+
-+	if (udev->state != USB_STATE_NOTATTACHED)
-+		usb_offload_put(udev);
-+}
-+
- /* sideband api functions */
+ static DEFINE_IDA(driver_id_numbers);
+ #define DRIVER_DRIVER_NAME_LENGTH_MAX	32
++#define USB_RAW_IO_LENGTH_MAX KMALLOC_MAX_SIZE
  
- /**
-@@ -131,14 +147,17 @@ xhci_sideband_add_endpoint(struct xhci_sideband *sb,
- 	struct xhci_virt_ep *ep;
- 	unsigned int ep_index;
+ #define RAW_EVENT_QUEUE_SIZE	16
  
--	mutex_lock(&sb->mutex);
-+	guard(mutex)(&sb->mutex);
-+
-+	if (!sb->vdev)
-+		return -ENODEV;
-+
- 	ep_index = xhci_get_endpoint_index(&host_ep->desc);
- 	ep = &sb->vdev->eps[ep_index];
- 
--	if (ep->ep_state & EP_HAS_STREAMS) {
--		mutex_unlock(&sb->mutex);
-+	if (ep->ep_state & EP_HAS_STREAMS)
- 		return -EINVAL;
--	}
-+
- 
- 	/*
- 	 * Note, we don't know the DMA mask of the audio DSP device, if its
-@@ -148,14 +167,11 @@ xhci_sideband_add_endpoint(struct xhci_sideband *sb,
- 	 * and let this function add the endpoint and allocate the ring buffer
- 	 * with the smallest common DMA mask
- 	 */
--	if (sb->eps[ep_index] || ep->sideband) {
--		mutex_unlock(&sb->mutex);
-+	if (sb->eps[ep_index] || ep->sideband)
- 		return -EBUSY;
--	}
- 
- 	ep->sideband = sb;
- 	sb->eps[ep_index] = ep;
--	mutex_unlock(&sb->mutex);
- 
- 	return 0;
- }
-@@ -180,18 +196,16 @@ xhci_sideband_remove_endpoint(struct xhci_sideband *sb,
- 	struct xhci_virt_ep *ep;
- 	unsigned int ep_index;
- 
--	mutex_lock(&sb->mutex);
-+	guard(mutex)(&sb->mutex);
-+
- 	ep_index = xhci_get_endpoint_index(&host_ep->desc);
- 	ep = sb->eps[ep_index];
- 
--	if (!ep || !ep->sideband || ep->sideband != sb) {
--		mutex_unlock(&sb->mutex);
-+	if (!ep || !ep->sideband || ep->sideband != sb)
- 		return -ENODEV;
--	}
- 
- 	__xhci_sideband_remove_endpoint(sb, ep);
- 	xhci_initialize_ring_info(ep->ring);
--	mutex_unlock(&sb->mutex);
- 
- 	return 0;
- }
-@@ -316,28 +330,25 @@ xhci_sideband_create_interrupter(struct xhci_sideband *sb, int num_seg,
- 	if (!sb || !sb->xhci)
- 		return -ENODEV;
- 
--	mutex_lock(&sb->mutex);
--	if (sb->ir) {
--		ret = -EBUSY;
--		goto out;
--	}
-+	guard(mutex)(&sb->mutex);
-+
-+	if (!sb->vdev)
-+		return -ENODEV;
-+
-+	if (sb->ir)
-+		return -EBUSY;
- 
- 	sb->ir = xhci_create_secondary_interrupter(xhci_to_hcd(sb->xhci),
- 						   num_seg, imod_interval,
- 						   intr_num);
--	if (!sb->ir) {
--		ret = -ENOMEM;
--		goto out;
--	}
-+	if (!sb->ir)
-+		return -ENOMEM;
- 
- 	udev = sb->vdev->udev;
- 	ret = usb_offload_get(udev);
- 
- 	sb->ir->ip_autoclear = ip_autoclear;
- 
--out:
--	mutex_unlock(&sb->mutex);
--
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(xhci_sideband_create_interrupter);
-@@ -352,21 +363,12 @@ EXPORT_SYMBOL_GPL(xhci_sideband_create_interrupter);
- void
- xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
- {
--	struct usb_device *udev;
--
--	if (!sb || !sb->ir)
-+	if (!sb)
- 		return;
- 
--	mutex_lock(&sb->mutex);
--	xhci_remove_secondary_interrupter(xhci_to_hcd(sb->xhci), sb->ir);
--
--	sb->ir = NULL;
--	udev = sb->vdev->udev;
-+	guard(mutex)(&sb->mutex);
- 
--	if (udev->state != USB_STATE_NOTATTACHED)
--		usb_offload_put(udev);
--
--	mutex_unlock(&sb->mutex);
-+	__xhci_sideband_remove_interrupter(sb);
- }
- EXPORT_SYMBOL_GPL(xhci_sideband_remove_interrupter);
- 
-@@ -465,6 +467,7 @@ EXPORT_SYMBOL_GPL(xhci_sideband_register);
- void
- xhci_sideband_unregister(struct xhci_sideband *sb)
- {
-+	struct xhci_virt_device *vdev;
- 	struct xhci_hcd *xhci;
- 	int i;
- 
-@@ -473,17 +476,23 @@ xhci_sideband_unregister(struct xhci_sideband *sb)
- 
- 	xhci = sb->xhci;
- 
--	mutex_lock(&sb->mutex);
--	for (i = 0; i < EP_CTX_PER_DEV; i++)
--		if (sb->eps[i])
--			__xhci_sideband_remove_endpoint(sb, sb->eps[i]);
--	mutex_unlock(&sb->mutex);
-+	scoped_guard(mutex, &sb->mutex) {
-+		vdev = sb->vdev;
-+		if (!vdev)
-+			return;
-+
-+		for (i = 0; i < EP_CTX_PER_DEV; i++)
-+			if (sb->eps[i])
-+				__xhci_sideband_remove_endpoint(sb, sb->eps[i]);
- 
--	xhci_sideband_remove_interrupter(sb);
-+		__xhci_sideband_remove_interrupter(sb);
-+
-+		sb->vdev = NULL;
-+	}
- 
- 	spin_lock_irq(&xhci->lock);
- 	sb->xhci = NULL;
--	sb->vdev->sideband = NULL;
-+	vdev->sideband = NULL;
- 	spin_unlock_irq(&xhci->lock);
- 
- 	kfree(sb);
+@@ -667,6 +668,8 @@ static void *raw_alloc_io_data(struct usb_raw_ep_io *io, void __user *ptr,
+ 		return ERR_PTR(-EINVAL);
+ 	if (!usb_raw_io_flags_valid(io->flags))
+ 		return ERR_PTR(-EINVAL);
++	if (io->length > USB_RAW_IO_LENGTH_MAX)
++		return ERR_PTR(-EINVAL);
+ 	if (get_from_user)
+ 		data = memdup_user(ptr + sizeof(*io), io->length);
+ 	else {
 -- 
 2.43.0
 
