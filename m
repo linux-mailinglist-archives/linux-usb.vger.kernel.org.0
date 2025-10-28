@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-29770-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29771-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8293C14059
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 11:14:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21362C14917
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 13:15:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 223FF19C70EF
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 10:14:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B468461E89
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 12:15:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43E682C3769;
-	Tue, 28 Oct 2025 10:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944D832B99B;
+	Tue, 28 Oct 2025 12:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HAyWQPZV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QOCD6XDa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF951397
-	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 10:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0D816DC28;
+	Tue, 28 Oct 2025 12:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761646410; cv=none; b=tK2TIrBceayvt96w4t/ZX/Z7Uq5iEKx/sDW/hhNWBVq2sqw4ql3QqnZ9wNz1TuGv1b5EwuWLvLGqvB1FGNarmX+dpJtKEnT/NZE+Bt3CPINqS6BNAeBWQWY8Iwa3oLQ8YWgQIZyh0ITqWClrrgQXfufdjbcUhpUaez42ZgSSD0M=
+	t=1761653736; cv=none; b=FIlecJs36zHwl1273XRPLBQTu7BIVS6x+egdtw44VU26VN3vGPfwLepbEZnWm3kq1reVrsRa7a7E7lrx3UobTjsePTrj/a1KLE4NjcoQB5SLgMJVcQSOraFAUZpsR/YqEA4kwMita8q1n3kBsNlniVTHgagVl8aXr/iTT8wxf/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761646410; c=relaxed/simple;
-	bh=eb7NieRXPw5rfNHtQpicDjiLwHjMcFF4lBFKQTS/C/o=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=RCH/g5VTXi8SZOvQ5QeXQbj2uzy9zygv6CdwGsqiD0Rh5s96oh9INgo69MfIiATPc30IocnIzaC+GU7dYX96TmbRtuy6Uclh94PePT7JdkucdF5xXmxGT+jzU6Jlmw/GhpKqtS9eTlbuL/yMuzwrvCLDJ8gEw6QBHT41oNZVPJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HAyWQPZV; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1761653736; c=relaxed/simple;
+	bh=9O8Dv73cqeiMHr34ohoGC3ZLMBjgNNoJIYPYXf9HsrQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cpIz/u4p3v6fsTAcSxTGLrhKkwvi0gsdS7tueruRAG8eVn7Ot3G9pH6X93LPGc0lh6Ih8OzMnv1suzyuJGjNctJdOMOwfvZ/l5oUbtqOxhj9tJZB+wrvtrD0WY8psEOiNvGpCJwNQIrqBLXpzXoYgYVMQ/mIevqyds5Ja0uhhbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QOCD6XDa; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761646409; x=1793182409;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=eb7NieRXPw5rfNHtQpicDjiLwHjMcFF4lBFKQTS/C/o=;
-  b=HAyWQPZVfHf7IwjrKaqU3RKTjdSh43iXkp+kuq/6kUCWCvOAYUk0FpPJ
-   zPfQ2pD5h7gapjGoORkw/M+T3mPVp15m08dfQAa0/Fk7lAvBNj16NNSnF
-   azBKuMs7sCMxrfyIz47euDqK5Ni7B/GQv9KPH07R4je9jFQI42mXQaI/t
-   MdpvgQiMGE0AI6DXYCYqLasuYMPlMBvztWZ+iqLWQaKRIU45Ngs5rc2MF
-   1QJEEg1Nf+tL1P/74QGrMjSWLRE5stzqPzG/Sov+IF5njp/eIQQCDOa+G
-   48VueAnTXd7bKmo1BMvTL44lplkF9oAD4+pqVPADJnXcpA1MFS1i0l/o+
-   A==;
-X-CSE-ConnectionGUID: iK93yO89T5C3FiipyRa2Pg==
-X-CSE-MsgGUID: ZHa3tPo1QTi9YpZwVYx2Mg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="81372829"
+  t=1761653735; x=1793189735;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9O8Dv73cqeiMHr34ohoGC3ZLMBjgNNoJIYPYXf9HsrQ=;
+  b=QOCD6XDaUYnzrau9fmZ6L3Qm5jk5tBpm9HJYN1kUi0ElHN6zmI+9SOot
+   /4RFjkDdFGEEyyOhLZzl31m5Qp7yAo40JwWwYktOKA89B4QgTV5vypuGz
+   Okk5/tAdHDOWXPs0ocuX3sjLNX58THeCYoxFU6mUOH3I/WEJYahZKzGmT
+   luR71rOXia5hZrJmStF/w9pYfrDAS/8wCLQt1DJVyYmgoOg9Yz/SNtm5s
+   c0jnee6UyHOc6YbvUVzubmqWU7hhPv7Pfaez9llmNC4vwP5tP2kZDGy6f
+   bkoSvvLWHc4S7eEN3aVaPilz94yPtlnRk78hUo5oEPzeurVhCThZKVgnk
+   Q==;
+X-CSE-ConnectionGUID: exNRZD4wRhKFDgHoQ3bLIA==
+X-CSE-MsgGUID: xsvPHLodSAi1Z7918vw2Xw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="86377309"
 X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
-   d="scan'208";a="81372829"
+   d="scan'208";a="86377309"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 03:13:29 -0700
-X-CSE-ConnectionGUID: Cv1b8LSTQsy7zPjujGcV1w==
-X-CSE-MsgGUID: YIQss2McS4q3PEvbHNkLQA==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 05:15:34 -0700
+X-CSE-ConnectionGUID: FL0fjhCXSbSqJuWpZ95QHg==
+X-CSE-MsgGUID: f959LzMNS9e4iVk5oicfFw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
-   d="scan'208";a="189664212"
+   d="scan'208";a="189686396"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO [10.245.244.148]) ([10.245.244.148])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 03:13:28 -0700
-Message-ID: <ba3692e7-6818-41af-8748-71a91cb13db5@linux.intel.com>
-Date: Tue, 28 Oct 2025 12:13:25 +0200
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 05:15:31 -0700
+Message-ID: <51ca2248-5699-4c6d-b037-a57c90ed44ac@linux.intel.com>
+Date: Tue, 28 Oct 2025 14:15:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,132 +67,46 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Fwd: USB DBC hang during earlyprintk initialization
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: Milan Oravec <migo.oravec@gmail.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-References: <CAAcb1K_MJKWz+BYJmx0FDgrBOzzXm71-M7sgHDUOmBRppXWNzA@mail.gmail.com>
- <CAAcb1K_bezseTM8DrOrzVUi_W+nZoE2N0CO4k3AQWPw7=7pyjw@mail.gmail.com>
- <2025101544-galore-sculpture-b243@gregkh>
- <CAAcb1K85GK6m_bVUeSfX1GP4=mxzwfmHtaRX0EYD_jgGfQRk9Q@mail.gmail.com>
- <4e6d9b62-b9d0-4a05-99a9-143899547664@linux.intel.com>
- <CAAcb1K_a2dkj5wv__1BW-fu_Zg=z00OmQzJmekQ-GH4svYQ-GQ@mail.gmail.com>
- <f0d0f71c-bc47-4348-85a6-d728a67c982a@linux.intel.com>
- <CAAcb1K-o7DY3Kvqdr+=MN8OsgRZr+g43-zC6YSLG0hbNxEQUeg@mail.gmail.com>
- <8fe27842-8155-44db-b262-a148b5ce5436@linux.intel.com>
- <CAAcb1K9MDvqJgVbV29ax8tQhXoepJr5ABuh1NHoNpmFdnGxVHw@mail.gmail.com>
- <65b65e02-e51e-4e7e-ae9e-78d755eb8566@linux.intel.com>
+Subject: Re: [PATCH] xhci: sideband: Fix race condition in sideband unregister
+To: Uttkarsh Aggarwal <uttkarsh.aggarwal@oss.qualcomm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ wesley.cheng@oss.qualcomm.com
+References: <20251028080043.27760-1-uttkarsh.aggarwal@oss.qualcomm.com>
 Content-Language: en-US
-In-Reply-To: <65b65e02-e51e-4e7e-ae9e-78d755eb8566@linux.intel.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20251028080043.27760-1-uttkarsh.aggarwal@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/27/25 11:34, Mathias Nyman wrote:
-> On 10/24/25 21:48, Milan Oravec wrote:
->> Thank you, should try this patch against stable 6.17.5 or 6.18 branch?
->> It fails with 6.17.5
->>
+On 10/28/25 10:00, Uttkarsh Aggarwal wrote:
+> A kernel panic was observed due to a race condition between un-registering
+> sideband and creating sideband interrupters. The issue occurrs when thread
+> T1 runs uaudio_disconnect() and released sb->xhci via sideband_unregister,
+> while thread T2 simultaneously accessed the now-NULL sb->xhci in
+> xhci_sideband_create_interrupter() resulting in a crash.
 > 
-> It was on top of 6.18-rc1, but should apply fine on 6.17.5
-> Tried myself, saved the email as patch.eml and applied with patch:
+> By locking the mutex before modifying sb->xhci, any thread calling
+> xhci_sideband_create_interrupter() will either see a valid sb->xhci or wait
+> until xhci_sideband_unregister() completes.
 > 
 
-List was accidentally dropped.
-Milan got patch running, DbC tried ioremapping smaller and smaller size until it was successful.
-DbC capability was within successfully mapped size, but DbC failed to start properly.
+Looks like there is a bigger issue with xhci_sideband_unregister() and the mutex.
+New endpoints and interrupter can be added to the sideband after
+xhci_sideband_unregister() cleared the existing ones, and released the mutex.
 
-Log:
-[    0.000000] Linux version 6.17.5-dirty (migo@migoG17) (gcc (GCC)
-...
-[    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 1
-[    0.000000] ------------[ cut here ]------------
-[    0.000000] WARNING: CPU: 0 PID: 0 at mm/early_ioremap.c:139
-__early_ioremap+0xae/0x190
-[    0.000000] Modules linked in:
-[    0.000000] RIP: __early_ioremap+0xae/0x190
-...
-[    0.000000] xhci_dbc:xdbc_map_pci_mmio: Failed to ioremap xhci-dbc with size 0x100000
-[    0.000000] xhci_dbc:xdbc_map_pci_mmio: Retry xhci-dbc ioremap with reduced size 0x80000
-[    0.000000] ------------[ cut here ]------------
-[    0.000000] WARNING: CPU: 0 PID: 0 at mm/early_ioremap.c:139
-__early_ioremap+0xae/0x190
-[    0.000000] Modules linked in:
-[    0.000000] Tainted: [W]=WARN
-[    0.000000] RIP: __early_ioremap+0xae/0x190
-...
-[    0.000000] xhci_dbc:xdbc_map_pci_mmio: Failed to ioremap xhci-dbc with size 0x80000
-[    0.000000] xhci_dbc:xdbc_map_pci_mmio: Retry xhci-dbc ioremap with reduced size 0x40000
-[    0.000000] xhci_dbc:early_xdbc_parse_parameter: Looking for DbC capability at offset 0x480
-[    0.000000] xhci_dbc:early_xdbc_parse_parameter: Looking for DbC capability at offset 0x490
-[    0.000000] xhci_dbc:early_xdbc_parse_parameter: Looking for DbC capability at offset 0x4a0
-[    0.000000] xhci_dbc:early_xdbc_parse_parameter: Looking for DbC capability at offset 0x4c0
-[    0.000000] xhci_dbc:early_xdbc_parse_parameter: Looking for DbC capability at offset 0x4e0
-[    0.000000] xhci_dbc:early_xdbc_parse_parameter: DbC capability found at offset 0x4e0
-...
-[    5.018291] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+We should avoid taking and releasing the mutex several times in unregister,
+and make sure we set a flag during first time unregister takes the muxtex, and make
+sure no new endpoints and interrupter are added if this flag is set.
+Also avoid creating unnecessary locking dependencies between mutex and xhci spinlock.
 
-Milan, can you add more debugging into early dbc, showing in detail where it fails.
-On top op previous patch:
+the xhci->lock looks correct
 
-diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
-index 9a7f3f12f18f..dc372f028dc3 100644
---- a/drivers/usb/early/xhci-dbc.c
-+++ b/drivers/usb/early/xhci-dbc.c
-@@ -29,11 +29,7 @@
-  static struct xdbc_state xdbc;
-  static bool early_console_keep;
-  
--#ifdef XDBC_TRACE
--#define	xdbc_trace	trace_printk
--#else
--static inline void xdbc_trace(const char *fmt, ...) { }
--#endif /* XDBC_TRACE */
-+#define	xdbc_trace	pr_err
-  
-  static void __iomem * __init xdbc_map_pci_mmio(u32 bus, u32 dev, u32 func)
-  {
-@@ -568,35 +564,42 @@ static int __init xdbc_early_setup(void)
-  	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_ENABLE, 0, 100000, 100);
-  	if (ret)
-  		return ret;
-+	pr_notice("DCE successfully cleared");
-  
-  	/* Allocate the table page: */
-  	xdbc.table_base = xdbc_get_page(&xdbc.table_dma);
-  	if (!xdbc.table_base)
-  		return -ENOMEM;
-+	pr_notice("Successfully got xdbc table_dma page");
-  
-  	/* Get and store the transfer buffer: */
-  	xdbc.out_buf = xdbc_get_page(&xdbc.out_dma);
-  	if (!xdbc.out_buf)
-  		return -ENOMEM;
-+	pr_notice("Successfully got xdbc out_dma page");
-  
-  	/* Allocate the event ring: */
-  	ret = xdbc_alloc_ring(&xdbc.evt_seg, &xdbc.evt_ring);
-  	if (ret < 0)
-  		return ret;
-+	pr_notice("Successfully allocated event ring");
-  
-  	/* Allocate IN/OUT endpoint transfer rings: */
-  	ret = xdbc_alloc_ring(&xdbc.in_seg, &xdbc.in_ring);
-  	if (ret < 0)
-  		return ret;
-+	pr_notice("Successfully allocated in ring");
-  
-  	ret = xdbc_alloc_ring(&xdbc.out_seg, &xdbc.out_ring);
-  	if (ret < 0)
-  		return ret;
-+	pr_notice("Successfully allocated out ring");
-  
-  	xdbc_mem_init();
-  
-  	ret = xdbc_start();
-  	if (ret < 0) {
-+		pr_notice("Failed to start xdbc ret: %d", ret);
-  		writel(0, &xdbc.xdbc_reg->control);
-  		return ret;
-  	}
+Maybe we can use sb->vdev as a flag, I'll look into this.
+
+Thanks
+Mathias
+
 
 
