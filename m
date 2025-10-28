@@ -1,118 +1,99 @@
-Return-Path: <linux-usb+bounces-29757-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29761-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B37ECC12F85
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 06:35:41 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 205D7C13179
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 07:14:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 637C3352FD9
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 05:35:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E53594E5AD1
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 06:14:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C6F2C3244;
-	Tue, 28 Oct 2025 05:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5EA29827E;
+	Tue, 28 Oct 2025 06:14:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Jrlq/TbA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jMTLL0Jw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9565129293D
-	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 05:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113FB3C38
+	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 06:14:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761629646; cv=none; b=EbaD6DhatjIqO65W/2nHxbfOET6Sc9rlxAkLEB2ufMGcqQ4vQFGe9EQlMr8x6GZS38w7MncEgWl1vida+R+Lc6mX6bnVt11eflCb6xZWtXl4ObdlfQ8bLWmkMb1bUIB/WulCCXuLMCNZ1aeWE4VYU+7pZdKVmG7oc8zS4LeKFbo=
+	t=1761632043; cv=none; b=PfrXosWtQMJCCOgx3/q/qc4rbltB2aJr0wh5zEtIjZrl8S1kChfRum0Re2iTHNjDLjGKBFkEd6vc1g9qiyoV60jYxqfKZpc6kFjhKZavop2QiYaYnLFre7QNYeuw0YS1mTGfaFWscbIdSaNgY1eMy74/0PaKOO+yKiuMuhBatEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761629646; c=relaxed/simple;
-	bh=UX3h0Pes41IJIATGA34ZfcGcoxGHwBRZyrCwKR+AqI4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ktPS+6ZMhya1JJKE0qoCk0gQpGEw5ph2sL2JVX5qKpfE2tzDHwsOWOJE6t6eZg9M3w6xFEnejNtlWwBbhg9V27Y5Q4O7csJzVNUHkO1PzSuZ7FYB45uOAruaIzLphFvd6yB9SauBr9npojBoer4VeQBftOarJSF/VaaVczzxLpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Jrlq/TbA; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b6d5b756284so1173308566b.1
-        for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 22:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1761629642; x=1762234442; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kLpGC29sIJuMD8EW6D6+ekLf15xOznYOaep7iLxbnWw=;
-        b=Jrlq/TbAcxUOQXH7JKY2VrMQdRCBUKz+ekMURhnEx2nbc704TyavMsuUcHNNH2Cc5u
-         8HueqF3z2/KRHm5Pq3GkpToz2mHs1rRdxdljMyBrGEgXLSB7qxlfakY+q4O9or322CbM
-         y/3hMeXm9eBufg8l+1GL0chFUHb5ifzWo2sXI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761629642; x=1762234442;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kLpGC29sIJuMD8EW6D6+ekLf15xOznYOaep7iLxbnWw=;
-        b=iYP6I+VIizgLWMDs3nH3RvumlnK2eoxkRr1N0rWRbEeHfGzRTYxbICbRBbms9mR+eP
-         9lWAhPULw+y5xc0OVnIwELpjqVUMGr6DCxvWb7asED1KWQ14dWV3MIh+psgnJsnGUI4y
-         FRHuS43OI8Ywe1pBUBFLLInJcfdNhsN6wuiGGQ5BcmLcMXWnbOZz5giAHqH8Lvv/EqZG
-         Z9jJTX863xbtEn9jDqpCPu70BDey72dCmgBj/LMhSTxsVNG10Gyfp3WBjI3iqOV/bBx2
-         gZ2Hr3hNJ2j/mUOqgDZu4kc1mm/6+6WVPsaMHgF9IJgYNqnDW9KT15Xbcpw3wwIXgygb
-         hBWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXpuCcQ57M66AfywxiOyMutEzlv4T37HVAvBlo4DQ21RKp5G64MSyOBVcuiKo9omHkkDNOAOs+E3kY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLIfxEMfNNfKmQUgn/mkIf03tctxLq+yMGQrWlxaJIEtxtQwSF
-	mVee0ObDAGBkki+cwYS44RaIZhmRB7Y5Fw6hxLfrgCjLTrAUL6tARrsyb0jxrJGoQ5jXVYEuH75
-	hl9HrJ6rNKw==
-X-Gm-Gg: ASbGncu6/UjA7Vnp6aYGqHqbBenv37UAV5VApJrGQ9v7YZ0s4CSISum38RnjRFq7RCi
-	XzRedeL2iO5qEDbghlalokgo5mWmOsilKq3utHDzETo1XX0RzTWuM9S8J3twFOKntT2rSrx8EuQ
-	CCQMU2fMjI0/qip84jii5857Xx/RML4mVihnX/cWuV8mIM/KcTfHCQ5MFPQoI7Rx1gOVXcqhcAK
-	6GzJ7SrjsZMsdSPnh5T+mjptdu9yLd9bkyolZBm+cKNDUOxEChBM/91GvRKUaDK5Ixk9x5Q2e9l
-	Gkcsi6uKC7Dq9FPDD7RCBknnjaWqZtEZoAB+za5WvBvq++FQ4a2M6rLSn2/QMrw8BB37/L++mh4
-	StU7v5448trTwyE2IzRKISzre4ukgCkorMnjKRlfwLUWmzx6LDdTpjEDOPDLAsb3yFmcwGJTGSJ
-	2VG0/JGtQzLHMrXj7vJ1sIJHQqJfEfecY+bM0ALzPSEptll0NyBc1Qrs8KI58B
-X-Google-Smtp-Source: AGHT+IGOMVcF5V3hNmPgEmd93TKoqjL7guouh5ESGuwbRvBzbnqpxKaXrN3+2xZfC748eUDasnvIqA==
-X-Received: by 2002:a17:906:c10f:b0:b3c:896:abdc with SMTP id a640c23a62f3a-b6dba5c0e6cmr200661266b.60.1761629642573;
-        Mon, 27 Oct 2025 22:34:02 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b6d8541fb5bsm972352366b.56.2025.10.27.22.34.02
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Oct 2025 22:34:02 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-63e076e24f2so2483916a12.3
-        for <linux-usb@vger.kernel.org>; Mon, 27 Oct 2025 22:34:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV+la2q9yuij1ktd9qK7F1U1KhVs0GrxGmrpkb+zGmIrsTDmSPDNtBnJ+wQ3bTQvirbBCIh04OLySI=@vger.kernel.org
-X-Received: by 2002:a05:6402:2681:b0:63b:ef0e:dfa7 with SMTP id
- 4fb4d7f45d1cf-63ed848cba3mr2102592a12.6.1761629641674; Mon, 27 Oct 2025
- 22:34:01 -0700 (PDT)
+	s=arc-20240116; t=1761632043; c=relaxed/simple;
+	bh=jhmjYUfmEFh3WQ1HvUzu/nt+M937PJzAGpje4IuXwL4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VN0wsG2jpQV0NOj0rv+D+VJerZfhi4crqz50h7uCkp8y2aLh29mvIr3PR6Oo0GjZ5TU5NDHGkHJriCFKUAhaDTIlRZYf+y6UScEAc4W1m/WspXNU9kubAfcRzrDHnqLkrBlH7cnKwB20CCVhNrMp8DAY6/osTajlETXVlcoFrQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jMTLL0Jw; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761632041; x=1793168041;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jhmjYUfmEFh3WQ1HvUzu/nt+M937PJzAGpje4IuXwL4=;
+  b=jMTLL0JwI4z65WfrGlkIciLR0+U/sUxDQKyjwPCOcI1dtZAI5feAwJ7L
+   B2N+vu2B5WBjeTXijHt50Z0BSrysnFK/PUXKWZYzF9yqdaFTSlgT+fFGh
+   D1Fgh3WxLeXca66V3rmNCdHJZvjbE63NHGHrjDBjAV7sbBx1xBADvC/S2
+   ex9RQRjgzP4br6LSSeLZUQjvmVycTsz7t4a7AbBm5kO9EtraF8uUCZ0E1
+   eN/bvyGvxjJmbr8XciTcGbAWJNit5SA0VS+9FRfaYZz8jWv6Bv+TbRG0Y
+   S802nBJ1WWt8Z8WgCPH5fitNBV7Vo57EfD6XhCLaNqaIT96EiIiyL7WZV
+   Q==;
+X-CSE-ConnectionGUID: NA6DHWspT/uMQn5Pi321kA==
+X-CSE-MsgGUID: zAtCwN1PTmqRajqNmgz8mg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="75067209"
+X-IronPort-AV: E=Sophos;i="6.19,260,1754982000"; 
+   d="scan'208";a="75067209"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 23:13:59 -0700
+X-CSE-ConnectionGUID: BfIx9jlLSvKVhHamwbFesA==
+X-CSE-MsgGUID: JrvCQBcRQoeGTSXvO82QYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,260,1754982000"; 
+   d="scan'208";a="215912442"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa002.jf.intel.com with ESMTP; 27 Oct 2025 23:13:58 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 1714195; Tue, 28 Oct 2025 07:13:57 +0100 (CET)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 0/2] thunderbolt: Bring the firmware upgrade documentation up-to-date
+Date: Tue, 28 Oct 2025 07:13:55 +0100
+Message-ID: <20251028061357.2164810-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
-In-Reply-To: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 27 Oct 2025 22:33:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg_FZnLha9Qr2sMQPXa1go4FPq2p5d7CnMoOnCimS2Wzg@mail.gmail.com>
-X-Gm-Features: AWmQ_bkfyF7pn4e6fUY7bNVBhf2DrgjCvQYqt5ZlzergSjGB0BKOD2LLrniXl7E
-Message-ID: <CAHk-=wg_FZnLha9Qr2sMQPXa1go4FPq2p5d7CnMoOnCimS2Wzg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/50] tree-in-dcache stuff
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz, 
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org, 
-	linux-mm@kvack.org, linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, 
-	kees@kernel.org, rostedt@goodmis.org, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, paul@paul-moore.com, casey@schaufler-ca.com, 
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com, 
-	selinux@vger.kernel.org, borntraeger@linux.ibm.com, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, 27 Oct 2025 at 17:48, Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> Things get simpler if we introduce a new dentry flag (DCACHE_PERSISTENT)
-> marking those "leaked" dentries.  Having it set claims responsibility
-> for +1 in refcount.
->
-> The end result this series is aiming for: [...]
+Hi all,
 
-The series looks sane to me. Nothing made me really react negatively.
-But that's just from reading the patches: I didn't apply them or -
-shudder - test any of them.
+The recommended way to apply Thunderbolt/USB4 firmware upgrades is through
+Linux Vendor Firmware Service (LVFS) and fwupd that are present in most
+distros. These patches update the documentation to mention this too.
 
-            Linus
+Alan Borzeszkowski (2):
+  thunderbolt: Update NVM firmware upgrade documentation
+  thunderbolt: Update deprecated firmware update site in icm.c
+
+ Documentation/admin-guide/thunderbolt.rst | 50 ++++++++++++++++-------
+ drivers/thunderbolt/icm.c                 |  2 +-
+ 2 files changed, 36 insertions(+), 16 deletions(-)
+
+-- 
+2.50.1
+
 
