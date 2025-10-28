@@ -1,343 +1,267 @@
-Return-Path: <linux-usb+bounces-29809-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29810-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE4F7C16DEF
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 22:08:47 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05BE6C16E25
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 22:10:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 379521C60EE6
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 21:09:09 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7D2D035676F
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 21:10:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A410350282;
-	Tue, 28 Oct 2025 21:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75EE82D94BD;
+	Tue, 28 Oct 2025 21:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Ksb5g8Zr"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="d1YOl+J8";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Uk7b6/31"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22512DCF4C;
-	Tue, 28 Oct 2025 21:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2D1274B27
+	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 21:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761685695; cv=none; b=eFvZVMgQW12wdtDKHR3o71VNB7jiLT4I9TzxyDiuHaP73pylx+PUsGuWFIOAIfpxmFC8/PGj6K0p+/iQj4waRnG0PnYdiuwpRsx4i+Jc+WAibFQr6EBfWNH8gIi13Sbh764j1ZSH/P/O4PFlplUH5Akbb2aA3xROJUYPyUwNcTg=
+	t=1761685838; cv=none; b=HExeH4Mg4WGcE0cokjh/SFL9V5ZVCHA2jFqhLmVdAgwGaVI19+cNWwJLWl7Dg6UuPkBaIBH0Nbjged5MjkH6YA/uTVfpo/3wT2e6MtupmIrUIvx4nzzFIhrHGBkjNgGA+kDn3KRemIHu+AsTXGxdgZL1hBsE0IZxSJ1Afw5FRgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761685695; c=relaxed/simple;
-	bh=yUSHQgos7Kh9J6Gv2qFGOCJHSJ6+VHnfECGLT/kKGiY=;
+	s=arc-20240116; t=1761685838; c=relaxed/simple;
+	bh=wWEIQUfpt8AnGuz1LBxRlSzMsYQgoN8G+nu7WqAfPYc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gyJSJ3ZPGbZ7vFev8oBDyU+NLL8US1TGGNgkgqhtAmwOYVRt3OEu//eniriWfFLilO39no3VrQsK3W9CZwKAr+kfygDXVcuQ19a57dK+oIqaRP62yvj39iT9DE9iPkjMuIfuAPVAe3kjMmTBcc9ytt56xWDjVx1Aqxs3HKUtuOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Ksb5g8Zr; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=KlTwB+1F+PugnwlBKmbzqaDoi+J+L/6Td5vFafDz7aQ=; b=Ksb5g8ZrVafnbFuTRxbUrPhDBj
-	VSOMEinbRhfNMqbf8zNwa4y+4w91yeN1ZkolOTq7QHfZv9jbf9wzwIgjoyGXNTLzmtCmiuSlsuFQY
-	I2duEP0tPN70bNXR+5LqqotswpJ2viRu62H7osNC8PUSJSrQulUJeNM/ANyqo1gLANZ82mjExXHlj
-	1F+kesXVgTzno6Sx7Se5kMbenDUUhlD1xSwZGEI1aNvuxQWH0jGuFuiDJKw286315kfeqCsz/8rE+
-	ioRQsGUqL6ZTFGl0vQ2Ve+T2xs0+XXea6lOfg9yJCHsRQXsmQJWUMV9NmpQEVchINZrcmNhueZ2ko
-	8V7lMBVw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vDqvF-0000000FqQ8-4BSQ;
-	Tue, 28 Oct 2025 21:08:06 +0000
-Date: Tue, 28 Oct 2025 21:08:05 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
-	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
-	miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org,
-	linux-mm@kvack.org, linux-efi@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev, kees@kernel.org, rostedt@goodmis.org,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	paul@paul-moore.com, casey@schaufler-ca.com,
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
-	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH v2 22/50] convert efivarfs
-Message-ID: <20251028210805.GP2441659@ZenIV>
-References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
- <20251028004614.393374-23-viro@zeniv.linux.org.uk>
- <66300d81c5e127e3bca8c6c4d997da386b142004.camel@HansenPartnership.com>
- <20251028174540.GN2441659@ZenIV>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CiAVqDTHL0t762qVSEHHp6sW9v3MIgRb8o7ETDE0ZWuPRXHRWvsBcpesPMdxu6OqqphRxoU/8HZCbHja5ZwnzoCIMoM4tql/R7U7TjeBSbNmxUZf4kl1VjHgvzJtuu3gh5Pyy/zMd41ZX1d/o3Ghjgw2jyR+jiEZbsaZaN//jhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=d1YOl+J8; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Uk7b6/31; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 59SJlOlA2539329
+	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 21:10:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Mqr6jI8kEn36wwEAP0spn6W0+YbPiO/jF1iak5N/mWc=; b=d1YOl+J8vzWcYr6h
+	0ZvgeWSN8INT/4QS9WRMOceyOz5L+QrE9RJ73/vXnHn3DPt7mmhImS8D3uNdSzZU
+	iqQw/UgznYLn7Pa0RRYAAjNGZ/52WkyrexkJUkjg4ydw2JEG2YxAbqZBS/N7bSdH
+	xv6rcRXXn7HxZNTTZR6IwVxFuk1AhWAEoJq1DmIfzQHmhgijdh0gzGF8S/If5b5d
+	3vgHLiemWTUDQjZnh1BpbMuW2VEb7s6giEeBcQknO1ZrJQFuDviU69rSRYKh/gof
+	rIIGIjZSRTZWkcQVNgpOKi6Ulm0SpiNfk9BUcn8xFRR/eAZ6/EexyIXBjHOojJH9
+	5Pc08g==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a34a1g661-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 21:10:36 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4eba10ad6e1so62739191cf.3
+        for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 14:10:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1761685835; x=1762290635; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Mqr6jI8kEn36wwEAP0spn6W0+YbPiO/jF1iak5N/mWc=;
+        b=Uk7b6/31tbeDzDz46vZYK1YYLM8hRLb9OqOu/Md4mvj11pFIdFlEnGyRFiPkcwmyRi
+         cNqZf8rj8IORuuSaOfrxwiX2ZEyPTXWM3n+gSmKIcCFhpjaGeqzVgZNmXrsQWOciul4w
+         6j25Fd+KEXXy99yzpiaOe81S1IIr84pShhdhG5RfHjk3b4SM3Hl9gq8kxqjLXXHsPuJM
+         ji0PffCSXsuSw8diPGusSrNu3eehG1bNJVXC53L3WieWpSHt2Ql63bY2Clmv18zUh8NP
+         6cinfAcIku11L9wWshmO7XKl59tEm56xASpMLe8soQ4idbBBohoxrOlFa4ac1t2JoSwn
+         LFEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761685835; x=1762290635;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mqr6jI8kEn36wwEAP0spn6W0+YbPiO/jF1iak5N/mWc=;
+        b=AHcZLcqEvjxqLsAN+AdTaRvICOpEQ2C4+FqrRZ6rwYApT54X1I9yY46ZLDSmk6u7mk
+         5jig6EdiDnR/ZP5q3T1zpWWFrpsqyx9sNfExnoYfG3Ss5YKBa6a4iEYHUU78XZItGPml
+         o/d+0dopSspWxkediLiPckm+9PIf4iE3KgqKECoeGqLJEcCcTz2aIhGLJnpvekrAs2IO
+         iJ1hOwOl3iPKawSRoyMijAHf1taKhA02bdp4m7nveCfZdpbyddvZDAvizJ7IauHLi1nq
+         c4CbEE9g0XkdYnXopojDBNr9ANDBANWzRmWshrbmplzkGGtNin4RKxvxqjPn3kaD/qbJ
+         FskA==
+X-Forwarded-Encrypted: i=1; AJvYcCX/J5gz/V5I7kRJGGMTJ4MDyIKzzWbR6CcqF9KYb96dwd4TpDf4CRSzZgynspBZla7I/4LyVK2jTO0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzfw0R6rlykBGaunVUfw3cK7EIThLf3hBn0oAWMD8GvtehoTpLb
+	gi9GmeNsjIGqQ9+3IOVXSZsgQSXjgCMeWDYFQG7alT++NXLrz6lOFkPq6piFasK5Gty7jf+5T1K
+	Sfl4EKgeU9Dgm3u88VZZOrKNrdATi4OuXT254T+I86l4j1OgpEYTJNUQhFypO03I=
+X-Gm-Gg: ASbGncuoSoUuZ09HmJPVhv/FQc1Ju9r+kod1eFVwde779Hw3OVlGmT3xJCBaUJ7Ot58
+	YHDutc0mtfVf12zd9joj+X0AyaZgJdEk6XLSxK9xwmcnqvuwl83841Zkebzh7zap8J3OcmV/PDL
+	TAoRFhEqIApVT+nEqXp9FR+Gni9ofrk1alH3EQwdyEg43Zdq4Bfqck881uD4Z7ZY+VTcuUa5eBh
+	LG3z0gEwkH1Nvth/fZUSWRqjnumsCcqMqMvc4YUWx/FbURNnLOaRtXlxeatw4XSDG5gqumalZc3
+	DNmRWP1f6Q/2hbvHYmBz5LBxFcwDJAyx86yhmcn/pSOte1osUB8Zc+fyfM6PIo494XnNa8G6s3m
+	LvLeon7HmjcT8laXAy+HuHXAPQA3ZmdxBxIGqXbUpytEDb+dV9bgLmJPV+5Gpk/zfZovcBqchJq
+	QWaBlVCdN05TLw
+X-Received: by 2002:a05:622a:a13:b0:4e5:8352:9db2 with SMTP id d75a77b69052e-4ed15c53a38mr9670901cf.74.1761685835452;
+        Tue, 28 Oct 2025 14:10:35 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF4tjibJm7dG8AJyDHRzmtH6DpuGiCZjw97dxYBt3mz9bXp88WMGifM0FnhLxqp+1uYKy6www==
+X-Received: by 2002:a05:622a:a13:b0:4e5:8352:9db2 with SMTP id d75a77b69052e-4ed15c53a38mr9670501cf.74.1761685834897;
+        Tue, 28 Oct 2025 14:10:34 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59301f5d9fbsm3281999e87.56.2025.10.28.14.10.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Oct 2025 14:10:33 -0700 (PDT)
+Date: Tue, 28 Oct 2025 23:10:31 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+Cc: Abel Vesa <abel.vesa@linaro.org>, krzk+dt@kernel.org, conor+dt@kernel.org,
+        konrad.dybcio@oss.qualcomm.com, kishon@kernel.org, vkoul@kernel.org,
+        gregkh@linuxfoundation.org, robh@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 07/10] phy: qualcomm: qmp-combo: Update QMP PHY with
+ Glymur settings
+Message-ID: <7pc3m2pzp3hzogg5ygorsmv2dy5vw2xiebppcbx7tzp4jnhuom@epgtkjpniyrs>
+References: <20251006222002.2182777-1-wesley.cheng@oss.qualcomm.com>
+ <20251006222002.2182777-8-wesley.cheng@oss.qualcomm.com>
+ <zaotrz6upmpwv2w65633rlflubmykzn5dqiydl66y7rdalld4l@bo4oto5iynor>
+ <9d3dd1cf-4969-3dcb-18dc-59cfb68033f7@oss.qualcomm.com>
+ <39732bf6-dd6f-b808-7c10-b3faa4d46489@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20251028174540.GN2441659@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <39732bf6-dd6f-b808-7c10-b3faa4d46489@oss.qualcomm.com>
+X-Authority-Analysis: v=2.4 cv=Nu/cssdJ c=1 sm=1 tr=0 ts=6901314c cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10
+ a=x6icFKpwvdMA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=EUspDBNiAAAA:8 a=_2V7C_1fM0J6bjkbbwIA:9 a=3ZKOabzyN94A:10 a=wPNLvfGTeEIA:10
+ a=dawVfQjAaf238kedN5IG:22
+X-Proofpoint-GUID: zGeweFV0uEsH8xgJiIkLv3cqUplzHwOX
+X-Proofpoint-ORIG-GUID: zGeweFV0uEsH8xgJiIkLv3cqUplzHwOX
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDI4MDE3OCBTYWx0ZWRfXyj6rbcQaL+yi
+ RueWvjHGm026dsF4oVKT+gZxfrUcjw4q8gdvZDZYrvQnEo+6sxoRcW/4zcl/sDpD3TuI+QeQp0B
+ D5yMnsyPyRpTcn7Qh6IpOMV0xpaABYdZQC/qSlDLzuiCfMNM3YAKQdCJkHIAgSCg7BlaQZ/pP6m
+ lg/jNwbUpaIGCETpOcAmH7tkbe6HPqj3JvB5w6omCJPs9rBqa3cMcbU3B/EQA7EtncNpYYjOq5e
+ /ZlL4oaAsAMqoZY/HBhJ/J3Inh0fv2mKT7QeNKVkoYojskRi9N87d3kMQ3jTwamJj0dNqkfwlKP
+ qKdFnNrpRzQ6MDuXCE4wfeCHnJk6vT5YoTK7mTH+uMW0FA0G37eLyTZVSY11F94bBNMUc39FaRo
+ bxvEV8KTpc7Y58zd3GoBFZn+1awYcA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-28_08,2025-10-22_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 priorityscore=1501 adultscore=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 phishscore=0 impostorscore=0 bulkscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2510280178
 
-On Tue, Oct 28, 2025 at 05:45:40PM +0000, Al Viro wrote:
+On Fri, Oct 24, 2025 at 05:41:18PM -0700, Wesley Cheng wrote:
+> 
+> 
+> On 10/24/2025 5:02 PM, Wesley Cheng wrote:
+> > 
+> > 
+> > On 10/24/2025 3:04 AM, Abel Vesa wrote:
+> > > On 25-10-06 15:19:59, Wesley Cheng wrote:
+> > > > For SuperSpeed USB to work properly, there is a set of HW settings that
+> > > > need to be programmed into the USB blocks within the QMP PHY. 
+> > > > Ensure that
+> > > > these settings follow the latest settings mentioned in the HW
+> > > > programming
+> > > > guide.  The QMP USB PHY on Glymur is a USB43 based PHY that will
+> > > > have some
+> > > > new ways to define certain registers, such as the replacement of TXA/RXA
+> > > > and TXB/RXB register sets.  This was replaced with the LALB
+> > > > register set.
+> > > > 
+> > > > There are also some PHY init updates to modify the PCS MISC
+> > > > register space.
+> > > > Without these, the QMP PHY PLL locking fails.
+> > > > 
+> > > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> > > > Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+> > > > ---
+> > > >   drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 314 ++++++++-
+> > > >   .../phy/qualcomm/phy-qcom-qmp-pcs-aon-v8.h    |  17 +
+> > > >   .../phy/qualcomm/phy-qcom-qmp-pcs-misc-v8.h   |  12 +
+> > > >   .../qualcomm/phy-qcom-qmp-qserdes-lalb-v8.h   | 639 ++++++++++++++++++
+> > > >   .../phy/qualcomm/phy-qcom-qmp-usb43-pcs-v8.h  |  33 +
+> > > >   .../phy-qcom-qmp-usb43-qserdes-com-v8.h       | 224 ++++++
+> > > >   drivers/phy/qualcomm/phy-qcom-qmp.h           |   2 +
+> > > >   7 files changed, 1240 insertions(+), 1 deletion(-)
+> > > >   create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-aon-v8.h
+> > > >   create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-misc-v8.h
+> > > >   create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-lalb-v8.h
+> > > >   create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-usb43-pcs-v8.h
+> > > >   create mode 100644
+> > > > drivers/phy/qualcomm/phy-qcom-qmp-usb43-qserdes-com-v8.h
+> > > > 
+> > > > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> > > > b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> > > > index 1caa1fb6a8c7..8216820e388f 100644
+> > > > --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> > > > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> > > 
+> > > [...]
+> > > 
+> > > > +static const struct qmp_phy_cfg glymur_usb3dpphy_cfg = {
+> > > > +    .offsets        = &qmp_combo_usb43dp_offsets_v8,
+> > > > +
+> > > > +    .serdes_tbl        = glymur_usb43dp_serdes_tbl,
+> > > > +    .serdes_tbl_num        = ARRAY_SIZE(glymur_usb43dp_serdes_tbl),
+> > > > +    .tx_tbl            = glymur_usb43dp_lalb_tbl,
+> > > > +    .tx_tbl_num        = ARRAY_SIZE(glymur_usb43dp_lalb_tbl),
+> > > > +    .pcs_tbl        = glymur_usb43dp_pcs_tbl,
+> > > > +    .pcs_tbl_num        = ARRAY_SIZE(glymur_usb43dp_pcs_tbl),
+> > > > +    .pcs_usb_tbl        = glymur_usb43dp_pcs_usb_tbl,
+> > > > +    .pcs_usb_tbl_num    = ARRAY_SIZE(glymur_usb43dp_pcs_usb_tbl),
+> > > > +    .pcs_misc_tbl        = glymur_usb43dp_pcs_misc_tbl,
+> > > > +    .pcs_misc_tbl_num    = ARRAY_SIZE(glymur_usb43dp_pcs_misc_tbl),
+> > > > +
+> > > > +    .dp_serdes_tbl        = qmp_v6_n4_dp_serdes_tbl,
+> > > > +    .dp_serdes_tbl_num    = ARRAY_SIZE(qmp_v6_n4_dp_serdes_tbl),
+> > > > +    .dp_tx_tbl        = qmp_v6_n4_dp_tx_tbl,
+> > > > +    .dp_tx_tbl_num        = ARRAY_SIZE(qmp_v6_n4_dp_tx_tbl),
+> > > > +
+> > > > +    .serdes_tbl_rbr        = qmp_v6_n4_dp_serdes_tbl_rbr,
+> > > > +    .serdes_tbl_rbr_num    = ARRAY_SIZE(qmp_v6_n4_dp_serdes_tbl_rbr),
+> > > > +    .serdes_tbl_hbr        = qmp_v6_n4_dp_serdes_tbl_hbr,
+> > > > +    .serdes_tbl_hbr_num    = ARRAY_SIZE(qmp_v6_n4_dp_serdes_tbl_hbr),
+> > > > +    .serdes_tbl_hbr2    = qmp_v6_n4_dp_serdes_tbl_hbr2,
+> > > > +    .serdes_tbl_hbr2_num    = ARRAY_SIZE(qmp_v6_n4_dp_serdes_tbl_hbr2),
+> > > > +    .serdes_tbl_hbr3    = qmp_v6_n4_dp_serdes_tbl_hbr3,
+> > > > +    .serdes_tbl_hbr3_num    = ARRAY_SIZE(qmp_v6_n4_dp_serdes_tbl_hbr3),
+> > > > +
+> > > > +    .swing_hbr_rbr        = &qmp_dp_v6_voltage_swing_hbr_rbr,
+> > > > +    .pre_emphasis_hbr_rbr    = &qmp_dp_v6_pre_emphasis_hbr_rbr,
+> > > > +    .swing_hbr3_hbr2    = &qmp_dp_v5_voltage_swing_hbr3_hbr2,
+> > > > +    .pre_emphasis_hbr3_hbr2    = &qmp_dp_v5_pre_emphasis_hbr3_hbr2,
+> > > > +
+> > > > +    .dp_aux_init        = qmp_v4_dp_aux_init,
+> > > > +    .configure_dp_tx    = qmp_v4_configure_dp_tx,
+> > > > +    .configure_dp_phy    = qmp_v4_configure_dp_phy,
+> > > > +    .calibrate_dp_phy    = qmp_v4_calibrate_dp_phy,
+> > > 
+> > > So I see you are adding the DP related config here as well, but it is
+> > > definitely not compatible with v6 N4. I'm assyuming you picked v6 N4
+> > > as a default
+> > > just to allow the USB part work for now, right ?
+> > > 
+> > > I don't suppose we can drop the DP related config from this patch and
+> > > still have the USB part working, right?
+> > > 
+> > > Otherwise, we need to mention the fact that even though the DP part
+> > > is also being added, it is broken.
+> > 
+> > Hi Abel,
+> > 
+> > That is correct.  Without these defined, the USB path won't work, and
+> > we'll need to supplement this if we wanted to add DP support.  Hence,
+> > why I didn't add any mention of DP altmode in the commit text.  I can
+> > clarify that we added DP placeholders if that makes it more clear in the
+> > commit text.
+> > 
+> 
+> Hi Abel,
+> 
+> I take that back...I went back and reviewed the QMP combo driver again, and
+> gave it a try w/o any of the DP init tables.  SS USB is working fine.  I
+> will update the patch to remove the DP entries.  Thanks for catching this.
 
-> FWIW, having a special path for "we are in foofs_fill_super(), fuck
-> the locking - nobody's going to access it anyway" is not a great
-> idea, simply because the helpers tend to get reused on codepaths
-> where we can't cut corners that way.
+Please provide a proper programming for DP part instead. I don't see a
+reason to provide only partial support for the device.
 
-	BTW, looking through efivarfs codebase now... *both* callers
-of efivarfs_create_dentry() end up doing dcache lookups, with variously
-convoluted call chains.  Look: efivarfs_check_missing() has an explicit
-try_lookup_noperm() before the call of efivarfs_create_dentry().
-efivarfs_callback() doesn't, but it's called via
-	efivar_init(efivarfs_callback, sb, true)
-and with the last argument being true efivar_init() will precede the call
-of the callback with efivarfs_variable_is_present().  Guess what does that
-thing (never used anywhere else) do?  Right, the call of try_lookup_noperm().
-
-Why do we bother with that?  What's wrong with having efivarfs_create_dentry()
-returning -EEXIST in case of dentry already being there and turning the
-chunk in efivar_init() into
-			err = func(variable_name, vendor_guid,
-				   variable_name_size, data);
-			if (err == -EEXIST) {
-				if (duplicate_check)
-					dup_variable_bug(variable_name,
-							 &vendor_guid,
-							 variable_name_size);
-				else
-					err = 0;
-			}
-			if (err)
-				status = EFI_NOT_FOUND;
-Note that both possible callbacks become almost identical and I wouldn't
-be surprised if that "almost" is actually "completely"...  <checks> yep.
-
-So I'm not sure we want that callback to be an argument, but that's
-a separate followup.  For now, do you see any problems with the following
-patch?  [Completely untested, on top of the posted series]
-
-diff --git a/fs/efivarfs/internal.h b/fs/efivarfs/internal.h
-index f913b6824289..045d53fd0f3c 100644
---- a/fs/efivarfs/internal.h
-+++ b/fs/efivarfs/internal.h
-@@ -55,8 +55,6 @@ bool efivar_validate(efi_guid_t vendor, efi_char16_t *var_name, u8 *data,
- bool efivar_variable_is_removable(efi_guid_t vendor, const char *name,
- 				  size_t len);
- char *efivar_get_utf8name(const efi_char16_t *name16, efi_guid_t *vendor);
--bool efivarfs_variable_is_present(efi_char16_t *variable_name,
--				  efi_guid_t *vendor, void *data);
- 
- extern const struct file_operations efivarfs_file_operations;
- extern const struct inode_operations efivarfs_dir_inode_operations;
-diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
-index 298ab3c929eb..80ed81bbd4a5 100644
---- a/fs/efivarfs/super.c
-+++ b/fs/efivarfs/super.c
-@@ -189,52 +189,6 @@ static const struct dentry_operations efivarfs_d_ops = {
- 	.d_hash = efivarfs_d_hash,
- };
- 
--static struct dentry *efivarfs_alloc_dentry(struct dentry *parent, char *name)
--{
--	struct dentry *d;
--	struct qstr q;
--	int err;
--
--	q.name = name;
--	q.len = strlen(name);
--
--	err = efivarfs_d_hash(parent, &q);
--	if (err)
--		return ERR_PTR(err);
--
--	d = d_alloc(parent, &q);
--	if (d)
--		return d;
--
--	return ERR_PTR(-ENOMEM);
--}
--
--bool efivarfs_variable_is_present(efi_char16_t *variable_name,
--				  efi_guid_t *vendor, void *data)
--{
--	char *name = efivar_get_utf8name(variable_name, vendor);
--	struct super_block *sb = data;
--	struct dentry *dentry;
--
--	if (!name)
--		/*
--		 * If the allocation failed there'll already be an
--		 * error in the log (and likely a huge and growing
--		 * number of them since they system will be under
--		 * extreme memory pressure), so simply assume
--		 * collision for safety but don't add to the log
--		 * flood.
--		 */
--		return true;
--
--	dentry = try_lookup_noperm(&QSTR(name), sb->s_root);
--	kfree(name);
--	if (!IS_ERR_OR_NULL(dentry))
--		dput(dentry);
--
--	return dentry != NULL;
--}
--
- static int efivarfs_create_dentry(struct super_block *sb, efi_char16_t *name16,
- 				  unsigned long name_size, efi_guid_t vendor,
- 				  char *name)
-@@ -244,7 +198,7 @@ static int efivarfs_create_dentry(struct super_block *sb, efi_char16_t *name16,
- 	struct dentry *dentry, *root = sb->s_root;
- 	unsigned long size = 0;
- 	int len;
--	int err = -ENOMEM;
-+	int err = 0;
- 	bool is_removable = false;
- 
- 	/* length of the variable name itself: remove GUID and separator */
-@@ -253,41 +207,36 @@ static int efivarfs_create_dentry(struct super_block *sb, efi_char16_t *name16,
- 	if (efivar_variable_is_removable(vendor, name, len))
- 		is_removable = true;
- 
-+	dentry = simple_start_creating(root, name);
-+	if (IS_ERR(dentry)) {
-+		err = PTR_ERR(dentry);
-+		goto out_name;
-+	}
-+
- 	inode = efivarfs_get_inode(sb, d_inode(root), S_IFREG | 0644, 0,
- 				   is_removable);
--	if (!inode)
--		goto fail_name;
-+	if (unlikely(!inode)) {
-+		err = -ENOMEM;
-+		goto out_dentry;
-+	}
- 
- 	entry = efivar_entry(inode);
- 
- 	memcpy(entry->var.VariableName, name16, name_size);
- 	memcpy(&(entry->var.VendorGuid), &vendor, sizeof(efi_guid_t));
- 
--	dentry = efivarfs_alloc_dentry(root, name);
--	if (IS_ERR(dentry)) {
--		err = PTR_ERR(dentry);
--		goto fail_inode;
--	}
--
- 	__efivar_entry_get(entry, NULL, &size, NULL);
- 
--	/* copied by the above to local storage in the dentry. */
--	kfree(name);
--
- 	inode_lock(inode);
- 	inode->i_private = entry;
- 	i_size_write(inode, size + sizeof(__u32)); /* attributes + data */
- 	inode_unlock(inode);
- 	d_make_persistent(dentry, inode);
--	dput(dentry);
--
--	return 0;
- 
--fail_inode:
--	iput(inode);
--fail_name:
-+out_dentry:
-+	simple_done_creating(dentry);
-+out_name:
- 	kfree(name);
--
- 	return err;
- }
- 
-@@ -407,42 +356,6 @@ static const struct fs_context_operations efivarfs_context_ops = {
- 	.free		= efivarfs_free,
- };
- 
--static int efivarfs_check_missing(efi_char16_t *name16, efi_guid_t vendor,
--				  unsigned long name_size, void *data)
--{
--	char *name;
--	struct super_block *sb = data;
--	struct dentry *dentry;
--	int err;
--
--	if (guid_equal(&vendor, &LINUX_EFI_RANDOM_SEED_TABLE_GUID))
--		return 0;
--
--	name = efivar_get_utf8name(name16, &vendor);
--	if (!name)
--		return -ENOMEM;
--
--	dentry = try_lookup_noperm(&QSTR(name), sb->s_root);
--	if (IS_ERR(dentry)) {
--		err = PTR_ERR(dentry);
--		goto out;
--	}
--
--	if (!dentry) {
--		/* found missing entry */
--		pr_info("efivarfs: creating variable %s\n", name);
--		return efivarfs_create_dentry(sb, name16, name_size, vendor, name);
--	}
--
--	dput(dentry);
--	err = 0;
--
-- out:
--	kfree(name);
--
--	return err;
--}
--
- static struct file_system_type efivarfs_type;
- 
- static int efivarfs_freeze_fs(struct super_block *sb)
-@@ -493,7 +406,7 @@ static int efivarfs_unfreeze_fs(struct super_block *sb)
- 		}
- 	}
- 
--	efivar_init(efivarfs_check_missing, sb, false);
-+	efivar_init(efivarfs_callback, sb, false);
- 	pr_info("efivarfs: finished resyncing variable state\n");
- 	return 0;
- }
-diff --git a/fs/efivarfs/vars.c b/fs/efivarfs/vars.c
-index 6edc10958ecf..d893e928891a 100644
---- a/fs/efivarfs/vars.c
-+++ b/fs/efivarfs/vars.c
-@@ -407,6 +407,8 @@ int efivar_init(int (*func)(efi_char16_t *, efi_guid_t, unsigned long, void *),
- 		case EFI_SUCCESS:
- 			variable_name_size = var_name_strnsize(variable_name,
- 							       variable_name_size);
-+			err = func(variable_name, vendor_guid,
-+				   variable_name_size, data);
- 
- 			/*
- 			 * Some firmware implementations return the
-@@ -416,18 +418,16 @@ int efivar_init(int (*func)(efi_char16_t *, efi_guid_t, unsigned long, void *),
- 			 * we'll ever see a different variable name,
- 			 * and may end up looping here forever.
- 			 */
--			if (duplicate_check &&
--			    efivarfs_variable_is_present(variable_name,
--							 &vendor_guid, data)) {
--				dup_variable_bug(variable_name, &vendor_guid,
--						 variable_name_size);
--				status = EFI_NOT_FOUND;
--			} else {
--				err = func(variable_name, vendor_guid,
--					   variable_name_size, data);
--				if (err)
--					status = EFI_NOT_FOUND;
-+			if (err == -EEXIST) {
-+				if (duplicate_check)
-+					dup_variable_bug(variable_name,
-+							 &vendor_guid,
-+							 variable_name_size);
-+				else
-+					err = 0;
- 			}
-+			if (err)
-+				status = EFI_NOT_FOUND;
- 			break;
- 		case EFI_UNSUPPORTED:
- 			err = -EOPNOTSUPP;
+-- 
+With best wishes
+Dmitry
 
