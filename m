@@ -1,188 +1,134 @@
-Return-Path: <linux-usb+bounces-29779-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29780-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85B91C14FFC
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 14:56:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4AEFC1520D
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 15:20:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6A22189F214
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 13:57:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45CEC6235EC
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 14:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D6E7257459;
-	Tue, 28 Oct 2025 13:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E55217722;
+	Tue, 28 Oct 2025 14:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="p33tTYtw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f1rQ1rTj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E497F35B130;
-	Tue, 28 Oct 2025 13:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6062FFDC2
+	for <linux-usb@vger.kernel.org>; Tue, 28 Oct 2025 14:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761659809; cv=none; b=FDDCN3Xe1pIBKZGdSYABuqrFbQx52fEWvca/cgaJBu/XD6MJORpO5OjOE7wqEQ/RKWH9V1jr5cpToe/4sWFS2+mV+HYgMi8jcFO8y/CP9PIYT5iBcVQiAHoHXH9aBZbfyTPr3e/RaddWaRe5SJz2YhZiPuWRs/lvDWhLZ74dRQo=
+	t=1761660793; cv=none; b=cbgU216HiULaEtptzSjbwhS/AC+xWGcW0nzgtC4SUeleL/qwxaNFbuO4UOkHd6QG+Ks6kJI6iaNULGL0CIz09/W9MzQoLL+KHL2QwhQ7dCxPplRIEKIo416Qk1L7mOYWy6K9Kj4FuPBvCZwBB9Zdxldhg4O+v4nd0ri00Q4YKIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761659809; c=relaxed/simple;
-	bh=39rRzHYJg6U7sdYDWxlypira1t/bdk+oC8ElN/fpzvc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xr7FAGy2sdqpQBUDx0rbkqOWGIwjF3bvk3gpCZtN7DTd704V/oLVHhtM3xAnnOpaNhWvEs7awIJo+3XNSoJbDcLzyU/3mdMAlgJXThwc1jf3enW6A/3oNmyhNvT9GsAzqt/0j8jON6eknMyNmsihUISPn99I0rnmX1+HyprlY7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=p33tTYtw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEFB0C4CEE7;
-	Tue, 28 Oct 2025 13:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761659808;
-	bh=39rRzHYJg6U7sdYDWxlypira1t/bdk+oC8ElN/fpzvc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p33tTYtwfrjj1qsf/FWa69pDCO8O3C2FevlZXeNHsKI7XSHwVrSr8QZicQ6i6Yn2N
-	 WsJZyERjqFoLF5Hu5rQDI4NrpjRMOTSEe8u/8w1AiLlau6HFmuFPgqcvDg2qhOSb03
-	 /dKY0FSYVEl4iM96dWkHTJJVsBYqLGRs5yc3YIec=
-Date: Tue, 28 Oct 2025 14:56:42 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: uttkarsh.aggarwal@oss.qualcomm.com, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, mathias.nyman@intel.com,
-	wesley.cheng@oss.qualcomm.com
-Subject: Re: [RFT PATCH] xhci: sideband: Fix race condition in sideband
- unregister
-Message-ID: <2025102808-sublime-substance-74bb@gregkh>
-References: <51ca2248-5699-4c6d-b037-a57c90ed44ac@linux.intel.com>
- <20251028134452.244096-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1761660793; c=relaxed/simple;
+	bh=7MsLtoxQ1FhR9qmFmX+OnKheWoH8qZdUgq8GS540FgA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kwx37kot35A2c8lpxJI8pDvSgNUN+Hrz2vrWkEQAT9PkWJl8Z8Gmq8h4rzSRsp9I/VGP8wB1OMHvt0gRaCcB42PqUaFCANIGdSdqh9gIwbZLQGWmKxrz0iQKXi1oHTpOvoll46OqaqH8K+uj3MwRClk1XaE4agZCemhaTsrPmfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f1rQ1rTj; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761660791; x=1793196791;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7MsLtoxQ1FhR9qmFmX+OnKheWoH8qZdUgq8GS540FgA=;
+  b=f1rQ1rTjXi2CaNr3S/ruqy8kMUkOo27cdHI8LwZOgrFNviX/Uai46rAP
+   U8IHglu36PhKd8HMismeGRk1CHsiSdmusarfU+8hatTzgbLntfepAQVOO
+   ASvoWwPrPosV8AGd7FpIIHmPWvmyXT3Eca/AXAlARLxC1YvVuIbGsjhLS
+   cbOoE75XgIOKrIEKtB4BACqtoP13+Jc4C5qqg6FHg1T69QG4tYlllsTVA
+   3BYDi6oIo3uf4cXDgj0JEn3OE7y6UuuF1eDD93/oT7Asc07lJ7opPJjAw
+   vr+VWMWjHjRTmJfByZ+d4D/0B1d30Wsflid/l0SlDWd/TBf8nqJ5EyjPD
+   w==;
+X-CSE-ConnectionGUID: jEPAA34fQy2kmdBeBl1APg==
+X-CSE-MsgGUID: hTDCkp4wRY+vPYhwzhIq5w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="89232167"
+X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
+   d="scan'208";a="89232167"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 07:13:09 -0700
+X-CSE-ConnectionGUID: VpSHvpX+RhKJiMNWxk6AAA==
+X-CSE-MsgGUID: +fwaR57ZT/OgoplOFQPxAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
+   d="scan'208";a="185053609"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa007.fm.intel.com with ESMTP; 28 Oct 2025 07:13:08 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1058)
+	id B736595; Tue, 28 Oct 2025 15:13:07 +0100 (CET)
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
+To: mathias.nyman@linux.intel.com
+Cc: linux-usb@vger.kernel.org,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: [PATCH v3 0/5] usb: xhci: add Port Register struct and tracing
+Date: Tue, 28 Oct 2025 15:12:37 +0100
+Message-ID: <20251028141244.2909808-1-niklas.neronin@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251028134452.244096-1-mathias.nyman@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 28, 2025 at 03:44:51PM +0200, Mathias Nyman wrote:
-> Uttkarsh Aggarwal observed a kernel panic during sideband un-register
-> and found it was caused by a race condition between sideband unregister,
-> and creating sideband interrupters.
-> The issue occurrs when thread T1 runs uaudio_disconnect() and released
-> sb->xhci via sideband_unregister, while thread T2 simultaneously accessed
-> the now-NULL sb->xhci in xhci_sideband_create_interrupter() resulting in
-> a crash.
-> 
-> Ensure new endpoints or interrupter can't be added to a sidenband after
-> xhci_sideband_unregister() cleared the existing ones, and unlocked the
-> sideband mutex.
-> Reorganise code so that mutex is only taken and released once in
-> xhci_sideband_unregister(), and clear sb->vdev while mutex is taken.
-> 
-> Refuse to add endpoints or interrupter if sb->vdev is not set.
-> sb->vdev is set when sideband is created and registered.
-> 
-> Reported-by: Uttkarsh Aggarwal <uttkarsh.aggarwal@oss.qualcomm.com>
-> Closes: https://lore.kernel.org/linux-usb/20251028080043.27760-1-uttkarsh.aggarwal@oss.qualcomm.com
-> Fixes: de66754e9f80 ("xhci: sideband: add initial api to register a secondary interrupter entity")
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
->  drivers/usb/host/xhci-sideband.c | 55 ++++++++++++++++++++++++--------
->  1 file changed, 41 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
-> index e771a476fef2..c308be9a8e9f 100644
-> --- a/drivers/usb/host/xhci-sideband.c
-> +++ b/drivers/usb/host/xhci-sideband.c
-> @@ -86,6 +86,22 @@ __xhci_sideband_remove_endpoint(struct xhci_sideband *sb, struct xhci_virt_ep *e
->  	sb->eps[ep->ep_index] = NULL;
->  }
->  
-> +static void
-> +__xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
-> +{
-> +	struct usb_device *udev;
-> +
-> +	if (!sb->ir)
-> +		return;
-> +
-> +	xhci_remove_secondary_interrupter(xhci_to_hcd(sb->xhci), sb->ir);
-> +	sb->ir = NULL;
-> +	udev = sb->vdev->udev;
-> +
-> +	if (udev->state != USB_STATE_NOTATTACHED)
-> +		usb_offload_put(udev);
-> +}
-> +
->  /* sideband api functions */
->  
->  /**
-> @@ -132,6 +148,12 @@ xhci_sideband_add_endpoint(struct xhci_sideband *sb,
->  	unsigned int ep_index;
->  
->  	mutex_lock(&sb->mutex);
-> +
-> +	if (!sb->vdev) {
-> +		mutex_unlock(&sb->mutex);
-> +		return -ENODEV;
-> +	}
-> +
->  	ep_index = xhci_get_endpoint_index(&host_ep->desc);
->  	ep = &sb->vdev->eps[ep_index];
->  
-> @@ -317,6 +339,12 @@ xhci_sideband_create_interrupter(struct xhci_sideband *sb, int num_seg,
->  		return -ENODEV;
->  
->  	mutex_lock(&sb->mutex);
-> +
-> +	if (!sb->vdev) {
-> +		ret = -ENODEV;
-> +		goto out;
-> +	}
-> +
->  	if (sb->ir) {
->  		ret = -EBUSY;
->  		goto out;
-> @@ -352,20 +380,11 @@ EXPORT_SYMBOL_GPL(xhci_sideband_create_interrupter);
->  void
->  xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
->  {
-> -	struct usb_device *udev;
-> -
-> -	if (!sb || !sb->ir)
-> +	if (!sb)
->  		return;
->  
->  	mutex_lock(&sb->mutex);
-> -	xhci_remove_secondary_interrupter(xhci_to_hcd(sb->xhci), sb->ir);
-> -
-> -	sb->ir = NULL;
-> -	udev = sb->vdev->udev;
-> -
-> -	if (udev->state != USB_STATE_NOTATTACHED)
-> -		usb_offload_put(udev);
-> -
-> +	__xhci_sideband_remove_interrupter(sb);
->  	mutex_unlock(&sb->mutex);
->  }
->  EXPORT_SYMBOL_GPL(xhci_sideband_remove_interrupter);
-> @@ -465,6 +484,7 @@ EXPORT_SYMBOL_GPL(xhci_sideband_register);
->  void
->  xhci_sideband_unregister(struct xhci_sideband *sb)
->  {
-> +	struct xhci_virt_device *vdev;
->  	struct xhci_hcd *xhci;
->  	int i;
->  
-> @@ -474,16 +494,23 @@ xhci_sideband_unregister(struct xhci_sideband *sb)
->  	xhci = sb->xhci;
->  
->  	mutex_lock(&sb->mutex);
-> +
-> +	vdev = sb->vdev;
-> +	if (!vdev)
-> +		return;
+The aim of this patch set is to introduce tracing for PORTSC writes and 
+implement a Port Register Set struct. This is the first part in a larger
+series of changes.
 
-Lock is still held :(
+Introduces a new struct for the Host Controller USB Port Register Set.
+The current implementation accesses these registers through a single
+'__le32' pointer, which, in conjunction with a macro, navigates to the
+specific register using (base address + offset).
 
-I think you need to use guard() to make this more sane.
+ Currently, how its accessed	| Register Name
+--------------------------------------------------------------------------
+ port->addr			| Port Status and Control
+ port->addr + PORTPMSC		| Port Power Management Status and Control
+ port->addr + PORTLI		| Port Link Info
+ port->addr + PORTHLPMC		| Port Hardware LPM Control
 
-thanks,
+ After, how its accessed	| Register Name
+--------------------------------------------------------------------------
+ port->port_reg->portsc		| Port Status and Control
+ port->port_reg->portpmsc	| Port Power Management Status and Control
+ port->port_reg->portli		| Port Link Info
+ port->port_reg->porthlmpc	| Port Hardware LPM Control
 
-greg k-h
+These changes make it easier for future modification and their review.
+
+v3 changes:
+ * Rebased on top of 6.18-rc1.
+ * Further simplified and generalized xhci_decode_portsc().
+ * Changed PORTSC read/write functions names.
+ * Added EXPORT_SYMBOL_GPL() to PORTSC read/write.
+ * Folded rename patch into Port Register struct implementation patch.
+v2 changes:
+ * Fix acronym spelling to PORTSC from PORTCS, in all commit messages.
+ * Add patch introducing xhci_get_portsc().
+
+Niklas Neronin (5):
+  usb: xhci: rework xhci_decode_portsc()
+  usb: xhci: add tracing for PORTSC register writes
+  usb: xhci: add helper to read PORTSC register
+  usb: xhci: add USB Port Register Set struct
+  usb: xhci: implement USB Port Register Set struct
+
+ drivers/usb/host/xhci-debugfs.c |   6 +-
+ drivers/usb/host/xhci-hub.c     | 115 ++++++++++++++++----------------
+ drivers/usb/host/xhci-mem.c     |   3 +-
+ drivers/usb/host/xhci-pci.c     |   4 +-
+ drivers/usb/host/xhci-ring.c    |   2 +-
+ drivers/usb/host/xhci-tegra.c   |  12 ++--
+ drivers/usb/host/xhci-trace.h   |   5 ++
+ drivers/usb/host/xhci.c         |  48 ++++++++-----
+ drivers/usb/host/xhci.h         | 102 +++++++++++++++-------------
+ 9 files changed, 159 insertions(+), 138 deletions(-)
+
+-- 
+2.50.1
+
 
