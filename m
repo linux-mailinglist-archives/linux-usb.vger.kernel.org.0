@@ -1,63 +1,51 @@
-Return-Path: <linux-usb+bounces-29764-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29765-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A454BC13AC8
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 10:03:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDD0EC13B25
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 10:06:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4625D502F2E
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 08:59:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ED323A6270
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Oct 2025 09:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604462DAFCB;
-	Tue, 28 Oct 2025 08:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33DDE2EF660;
+	Tue, 28 Oct 2025 09:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="V+lOghLh"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zlkHqxJ5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC25201278;
-	Tue, 28 Oct 2025 08:59:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB33F2E7BAA;
+	Tue, 28 Oct 2025 09:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761641945; cv=none; b=rZwjm8Wtk4zgufHYoyZRRW0/IM16wDZiYPDcU6ixevCwEUn870olzT5ZSGAiVSSEckJnppdDL1VEXPrqL/TtTUodn7XhaJZ35qHThuN3xgvNB/oyc3LqSpXd3VJaB2xxYFDDUU+orHeN46X4cU5rSNT5nzYyzi/c9GBDMW1vZ3Q=
+	t=1761642334; cv=none; b=r4ILxRJn3ELIts2/6aWX2NxU8wNYyGa8hzaTYya+KVB5ftYCryJzVhWoGtSSuMnidg7PrmDIwNHZguq+NfsYnwkvCx7F83mJ/NRU4CCThFxdPe//1jO4/+DJKrAz1oAlZXdXssZr/uH3nHg9vAWXgYrB/15JHSi1qauussf0WvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761641945; c=relaxed/simple;
-	bh=YBe5bROSGpZ12p06h/UvpBqwWi3bXnQ9j9Vl7E3IFUE=;
+	s=arc-20240116; t=1761642334; c=relaxed/simple;
+	bh=psR1QMfqUdCm4AAMIXHI0ZlmBAB22bLGX7YQBzfzuqM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dCstMK6c6uZl4UZJ5nx0bAdFWu86auXa3VUm1aSPL8NNJILer2tvCbnMeU1+lTaqUbatwiFeDLLOEL6NfKGGNC+HE2bU5P6CFEO8dKQarTk0LzW+Z3iZ8JFHGfaQuoe6oTxlNxI9+iB8EpRyKftqUa8QL5lS8bazM1KnLFmJSiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=V+lOghLh; arc=none smtp.client-ip=220.197.32.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=9bK3jiDst9EuMzVRY6Pg60RWEks+MLAKHwEmu72HbS8=;
-	b=V+lOghLh5Yppr8qc0mSRZOKZ/ACHLi4IuqKbExuzl9Euk3xTKOmGEdldK0M7lu
-	7lLVWkzbx9XPna/o4nWCjlG7aEMKoALvpEO7pqlNUu1Dv+VwnYzr+MTe4E1MtEKV
-	38HN1frJ2LhoMN+jqTx6aTL29+urqAUHP6feEeSUrRGXQ=
-Received: from dragon (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id Ms8vCgB3zxWOhQBpGivTAA--.44629S3;
-	Tue, 28 Oct 2025 16:57:52 +0800 (CST)
-Date: Tue, 28 Oct 2025 16:57:50 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Shawn Guo <shawnguo@kernel.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	bjorn.andersson@oss.qualcomm.com, imx@lists.linux.dev,
-	Ze Huang <huang.ze@linux.dev>
-Subject: Re: [PATCH v5 4/4] arm64: dts: layerscape: add dma-coherent for usb
- node
-Message-ID: <aQCFjuyMCTM9qQcd@dragon>
-References: <20250929-ls_dma_coherence-v5-0-2ebee578eb7e@nxp.com>
- <20250929-ls_dma_coherence-v5-4-2ebee578eb7e@nxp.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jJbdz+HjaILODKWNaCX0w1J7L6L0V12E5mjIrsZHJDnueqoBv4cAjlVSHwSQT5EbcEgzs59SeyiULHQw3gtR+F4jyfyJ1y811DUjVk5Ep9t7rFllB+bS9GvSMbH72i/hNaLlubTizolIOW9OTar33tjgP39pV4+MR0JqgHoAgDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zlkHqxJ5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D061C4CEE7;
+	Tue, 28 Oct 2025 09:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1761642334;
+	bh=psR1QMfqUdCm4AAMIXHI0ZlmBAB22bLGX7YQBzfzuqM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=zlkHqxJ50AccVB5Uw5W9dMM7a1tEHrctq9IhoWbk9TSIQ7IJTq1dg/yKgsxUthHN+
+	 4w0+x/Pk3508KGgkwryyLXDWXZubSVtOwutE2R5HZ/bxQ00I47XMzTeo4JiWRD6QKs
+	 +35wn2xPGni+ZZUfl17xDfjLJNP7SQLVcgl9d5c8=
+Date: Tue, 28 Oct 2025 09:45:39 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Uttkarsh Aggarwal <uttkarsh.aggarwal@oss.qualcomm.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, wesley.cheng@oss.qualcomm.com
+Subject: Re: [PATCH] xhci: sideband: Fix race condition in sideband unregister
+Message-ID: <2025102840-bagpipe-ammonium-eca8@gregkh>
+References: <20251028080043.27760-1-uttkarsh.aggarwal@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,23 +54,42 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250929-ls_dma_coherence-v5-4-2ebee578eb7e@nxp.com>
-X-CM-TRANSID:Ms8vCgB3zxWOhQBpGivTAA--.44629S3
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUwmiiUUUUU
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiNBDfRWkAhZCs7wAA3B
+In-Reply-To: <20251028080043.27760-1-uttkarsh.aggarwal@oss.qualcomm.com>
 
-On Mon, Sep 29, 2025 at 10:24:17AM -0400, Frank Li wrote:
-> Add SOC special compatible string, remove fallback snps,dwc3 to let flatten
-> dwc3-layerscape driver to be probed and enable dma-coherence for usb node
-> since commit add layerscape dwc3 support, which set correct gsbustcfg0
-> value.
+On Tue, Oct 28, 2025 at 01:30:43PM +0530, Uttkarsh Aggarwal wrote:
+> A kernel panic was observed due to a race condition between un-registering
+> sideband and creating sideband interrupters. The issue occurrs when thread
+> T1 runs uaudio_disconnect() and released sb->xhci via sideband_unregister,
+> while thread T2 simultaneously accessed the now-NULL sb->xhci in
+> xhci_sideband_create_interrupter() resulting in a crash.
 > 
-> Add iommus property to run at old uboot, which use fixup add iommus by
-> check compatible string snsp,dwc3 compatible string.
+> By locking the mutex before modifying sb->xhci, any thread calling
+> xhci_sideband_create_interrupter() will either see a valid sb->xhci or wait
+> until xhci_sideband_unregister() completes.
 > 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> Signed-off-by: Uttkarsh Aggarwal <uttkarsh.aggarwal@oss.qualcomm.com>
 
-Applied, thanks!
+What commit id does this fix?  Should it be backported to older kernels?
 
+> ---
+>  drivers/usb/host/xhci-sideband.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
+> index e771a476fef2..74a58f759cee 100644
+> --- a/drivers/usb/host/xhci-sideband.c
+> +++ b/drivers/usb/host/xhci-sideband.c
+> @@ -481,10 +481,12 @@ xhci_sideband_unregister(struct xhci_sideband *sb)
+>  
+>  	xhci_sideband_remove_interrupter(sb);
+>  
+> +	mutex_lock(&sb->mutex);
+>  	spin_lock_irq(&xhci->lock);
+
+A mutex and a spinlock irq?  That just feels wrong for the obvious
+reasons, only one should be needed.
+
+thanks,
+
+greg k-h
 
