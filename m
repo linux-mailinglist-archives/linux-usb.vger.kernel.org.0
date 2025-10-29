@@ -1,212 +1,286 @@
-Return-Path: <linux-usb+bounces-29832-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29821-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24198C18CF1
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 08:57:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25D69C189C6
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 08:15:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C39D1C24FE5
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 07:57:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACBF13BF43E
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 07:15:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311C0253B71;
-	Wed, 29 Oct 2025 07:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 264CB30CDA2;
+	Wed, 29 Oct 2025 07:14:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="XAvM3fa1"
+	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="sTitdwx3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CD3278E5D
-	for <linux-usb@vger.kernel.org>; Wed, 29 Oct 2025 07:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924402E62A4;
+	Wed, 29 Oct 2025 07:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761724598; cv=none; b=DTSdAezMZGLn5TgQltrYFLZufNM1AO8a0JbLyQutyDGZFxFbLSC42QvjtL1pMlO0iG5wOaXmPYEWeltig3ITJdP+IM1eE/kLeyO7KD3xwIiCb+FJ0tkoE370ATdx4clHX/90Q+4AmM0ibL5hSvt9D4sedApXTuwgDY6I6RphKgs=
+	t=1761722094; cv=none; b=CYwiDhPo+4e1DdPxBwxxTRt67QfBb+c0sJg+1sHzdd5Rdi9LbuaAzVz1oz9/GunnyduLwTy/0n73Qc0rdbzIab4FGP2Csq/bSx2pD/FT2E06W++nuUDdT/N8vTuf2ABRrKWjiKnL++lFnU2JFHPrv+1OHPfoKcc28afjzp0GT7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761724598; c=relaxed/simple;
-	bh=TcqAfWFEiFBcSNbPlqwNDfXFwkUKEiArkoH/xUIA7n0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VxWkJ8jbc18mhoU/sJzCNjsjo5fUuB9vMXHbS3hvPvjn1LfOdO2VgU3rdC78R9hXyEn36ryQ/zCgt000iExyKDmwvBlI7djmDXeBYZ2QhplvVs6rLvSgwXkrolutcHMXlMDkDZG7wwGQRy0fxpzmg9qEgDWcIKNJBTgZ7CZIm64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=XAvM3fa1; arc=none smtp.client-ip=35.89.44.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
-Received: from eig-obgw-6006b.ext.cloudfilter.net ([10.0.30.211])
-	by cmsmtp with ESMTPS
-	id Dv99vKXQZZx2iE12kva816; Wed, 29 Oct 2025 07:56:30 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id E12ivwUYse5vdE12ivRm7g; Wed, 29 Oct 2025 07:56:29 +0000
-X-Authority-Analysis: v=2.4 cv=PI0P+eqC c=1 sm=1 tr=0 ts=6901c8ad
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=4oHATN8Nx7vVUZJYxp75bA==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=7T7KSl7uo7wA:10 a=iox4zFpeAAAA:8
- a=CJyRVPjjBR1MBHXF4zwA:9 a=QEXdDO2ut3YA:10 a=WzC6qhA0u3u7Ye7llzcV:22
- a=xYX6OU9JNrHFPr8prv8u:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=5J5C6qYMZNYrU7M3sfVdtvNKg3LL38S/NJb2d99zbh8=; b=XAvM3fa1trYexrpBn4JWU8fxjc
-	Kfvh4mACmELw5YsmSIOXmzAwIR7Z9NSo4nUMm73tDMI8CgGyH03h3dcJzIsH3Z/OpW1+bYqUtXG5k
-	ldTlU4ge+e+8A9UrOWUhWFx/tPT3nbb8or+a+ClMKsP1DcK+XfxFL9S7ZMTwkpfYb17iAzL3Y1C3g
-	/7v++TaFn5tSnbFw5zUplspiZSTO0RVrOlO+ZCWURqKCItSYPa7bspi5mdxv/pnw4r3p6uO3RSf7x
-	r5mo/iHCY9YWGJlVPLCWqsIcHWaQyohX0qP0WjtCAiviU+dNEe1dv4nDZUPSmxIddlwZ4rPGdQY/r
-	gUrGBx4A==;
-Received: from [185.134.146.81] (port=41320 helo=[10.35.193.44])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.98.1)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1vDmnm-00000001MY7-2C5P;
-	Tue, 28 Oct 2025 11:44:07 -0500
-Message-ID: <1564d2d8-7ed5-4599-b9e7-21fb7e887616@embeddedor.com>
-Date: Tue, 28 Oct 2025 16:43:59 +0000
+	s=arc-20240116; t=1761722094; c=relaxed/simple;
+	bh=GYIuLXqZf240u12ydTOg+OVzJwqUwtS9FXkBF5P/lQs=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=G6dk0LbIfk9sI3Zj2GbkMZuYj2ZFXOYtfnXWcWqDSLkpxZoqD6H/JyU2408Fib1XLok3nF9IadLN4JkIIFUsNScd38sw1XAvONPaOO0mDreaM/nuBJ7OpBgzfxJ1G94O4lOLOf/o8XTSG3TLWE52qUXO2LIbaWI37bxwkIQn8WE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=sTitdwx3; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airkyi.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=airkyi.com;
+	s=altu2504; t=1761722086;
+	bh=vUs9PR5MkDE2TnuVElj67uBgDlTWsKMlCHyA7Lz2m9s=;
+	h=From:To:Subject:Date:Message-Id;
+	b=sTitdwx3ApamWfnKuLQZl4+EDCcUZLRO383IoN8uT5ZyCNTIeXkyN0y5ezM5RU2BS
+	 9qSjHP0haAFSy1eUm7g0RV9tMJjEKGaTDm30uI6GSH5XLki1UtU4ImacD0YAu9Aoru
+	 ilh7dedR7kaWfgirchqU85BLpfGWe7zbUicdXMGk=
+X-QQ-mid: zesmtpsz6t1761722083t694185fa
+X-QQ-Originating-IP: 5iuWasjHrqOKTZt0yGG1gdnMzF9J085MTFN9CJrLEEA=
+Received: from DESKTOP-8BT1A2O.localdomain ( [58.22.7.114])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 29 Oct 2025 15:14:40 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 18349792753202563132
+From: Chaoyi Chen <kernel@airkyi.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Sandy Huang <hjc@rock-chips.com>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Yubing Zhang <yubing.zhang@rock-chips.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Amit Sunil Dhamne <amitsd@google.com>,
+	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+	Dragan Simic <dsimic@manjaro.org>,
+	Johan Jonker <jbx6244@gmail.com>,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Peter Robinson <pbrobinson@gmail.com>
+Cc: linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	dri-devel@lists.freedesktop.org
+Subject: [PATCH v8 00/10] Add Type-C DP support for RK3399 EVB IND board
+Date: Wed, 29 Oct 2025 15:14:25 +0800
+Message-Id: <20251029071435.88-1-kernel@airkyi.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:airkyi.com:qybglogicsvrsz:qybglogicsvrsz4a-0
+X-QQ-XMAILINFO: MZ9X7MyfBLblIoi9hIZLojGLP7mu+oTAFV2E3CEfRx6b9tY5UIhil4Vp
+	k73eQYSDOARF8HAwgZ3+b9+Ozq7eZ/8jQrGklXYhJtvRSzgiElivuVYNjfQg7H3Xy2bA6CD
+	vPdOTgXzT6Q6X0kquRbmbHKAEX5MeDpjQ2q7ARJ1pRW6Dqg3aHz5dbUnBniV51bVZBijDou
+	dGoAKdknhIeKfh14lksDv6UW+gDri0jQpT/WI9Iv4otsibH0NS46D65F9Jf1eRAj94lDlHa
+	wW0W/s14ip1Dnzx+qdE6Il4Ban/NcofwKvKJpntp3eP1NLomOtMrA8K1/+hcaOHecYq5k8w
+	Wu+7yuI8XWYu3ugAAbEz401UEtFO+5LPyKyGleDG0ImH0wAyZGasYkIV3B78Dln2/U52dly
+	sMPloEFay4l8oOHCuuZiRB8UjH6c49H4rXEU1LlWuVoU/+oR6x4bA/BPXGTIKqpGzy0iD9G
+	Un+cX3eAhEkL+nU0Ym59zvU9dbriSxGLvdmbDiLMXhV5SfyJ3AjFhjJUCtfN1nxKcrPErfT
+	QM9KVfdsKSCe+X0KRcLFzYiovSSlE67Wf0p+Q57OSNNShPgoOpSo7rdLDVYkI1AUkhFSeoj
+	VYazZzoz2pc6PoqTUWp+H+bBJvg5qG0v4DfOPzKv2HI0el2vJBFn9tP2sCpRxYA6qhiwgZ7
+	0tE+LUFNJOwH3FQtPYzPwvI6vwS3DOsYLngtVZU5dnVum50EBbLDtPSnJQmUXmdWTiElS8E
+	PmIVtSZpp6gnCOxTZxr/x/8YBlBz3r03EMP45HnMqJ544kbX5UJOIEtQaBC2qFawjQXoARd
+	m85rwrrUd+oKo2ZJ1P+PsPIS3FNwS5gNJ6lHtAXTLNg25YtC8hi1mmaavffWm1J0ql42Ad6
+	KHS2fMksfZRikLQbNbNzQOZYXl66BQMhu6x3AHAzcZFoZURQZIZRStkF25RsYzBerIolwyc
+	XypBuQRJesPbSYsKXec0yCbWJgpAA5VpiPmfDAbK0ufLpuWph3TU446bP
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-RECHKSPAM: 0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] uapi: cdc.h: cleanly provide for more interfaces and
- countries
-To: Greg KH <gregkh@linuxfoundation.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org
-References: <20251028123254.1888303-1-oneukum@suse.com>
- <2025102858-doorframe-canola-e6c0@gregkh>
- <16a3c8ef-dd3f-48c4-afcd-42ab4b14c429@suse.com>
- <2025102857-surfer-atypical-2857@gregkh>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <2025102857-surfer-atypical-2857@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 185.134.146.81
-X-Source-L: No
-X-Exim-ID: 1vDmnm-00000001MY7-2C5P
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([10.35.193.44]) [185.134.146.81]:41320
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 0
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfBY0S9ERJdFC/N8CcLzRwdV/i67Pju8DkSTBnhHAtK/4X0ctj84SHuoZBD+UM5vAq/z+O43o6bhUBS5RcbIV0OqCGym1dr8Xzi2XsxhhYknFTARWiEvC
- hYoiditopp83E1e+4d30mL0WT2Frh5/XoZ2s+rBR116JlW/4CawQdxre8zHB8MFz6YYnbtM0q4qnXH8wHQQ+dIyU7o8dd/TNKys=
 
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
 
+This series focuses on adding Type-C DP support for USBDP PHY and DP
+driver. The USBDP PHY and DP will perceive the changes in cable status
+based on the USB PD and Type-C state machines provided by TCPM. Before
+this, the USBDP PHY and DP controller of RK3399 sensed cable state
+changes through extcon, and devices such as the RK3399 Gru-Chromebook
+rely on them. This series should not break them.
 
-On 10/28/25 14:40, Greg KH wrote:
-> On Tue, Oct 28, 2025 at 03:34:40PM +0100, Oliver Neukum wrote:
->> Hi,
->>
->> On 28.10.25 14:32, Greg KH wrote:
->>> On Tue, Oct 28, 2025 at 01:32:22PM +0100, Oliver Neukum wrote:
->>>> The spec requires at least one interface respectively country.
->>>> It allows multiple ones. This needs to be clearly said in the UAPI.
->>>>
->>>> Signed-off-by: Oliver Neukum <oneukum@suse.com>
->>>> ---
->>>>    include/uapi/linux/usb/cdc.h | 4 ++--
->>>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/include/uapi/linux/usb/cdc.h b/include/uapi/linux/usb/cdc.h
->>>> index 1924cf665448..5fcbce0be133 100644
->>>> --- a/include/uapi/linux/usb/cdc.h
->>>> +++ b/include/uapi/linux/usb/cdc.h
->>>> @@ -105,7 +105,7 @@ struct usb_cdc_union_desc {
->>>>    	__u8	bMasterInterface0;
->>>>    	__u8	bSlaveInterface0;
->>>> -	/* ... and there could be other slave interfaces */
->>>> +	__u8	bSlaveInterfaces[];
->>>
->>> Can this be combined with bSlaveInterface0?  Feels odd to have 0 and
->>> then "more".
->>
->> I am afraid the C language does not allow you to specify
->> that an array must have a minimum length other than zero.
->> In this case bSlaveInterface0 must be present.
->> I don't think using only an array would be the right choice.
+====
+1. DisplayPort HPD status notify
 
-You can do something like this:
+Before v7, I implemented a variety of DP HPD status notify. However,
+they all had various problems and it was difficult to become a generic
+solution.
 
-@@ -104,8 +104,10 @@ struct usb_cdc_union_desc {
-         __u8    bDescriptorSubType;
+Under the guidance of Heikki and Dmitry, a decoupled notification
+method between the TypeC and DRM subsystems was introduced in v7.
+First, a notification is sent when TypeC registers a new altmode.
+Then, a generic DP AUX HPD bridge is implemented on the DRM side.
 
-         __u8    bMasterInterface0;
--       __u8    bSlaveInterface0;
--       /* ... and there could be other slave interfaces */
-+       union {
-+               __u8    bSlaveInterface0;
-+               DECLARE_FLEX_ARRAY(__u8, bSlaveInterfaces);
-+       };
-  } __attribute__ ((packed));
+That makes it redundant for each Type-C controller driver to implement
+a similar DP AUX HPD bridge in embedded scenarios.
 
-Just adjust any related code to account for the fact that the
-"other slave interfaces" will start at bSlaveInterfaces[1].
+====
+2. Altmode switching and orientation switching for USBDP PHY
 
-Something like the following is preferable, but this syntax
-for flexible-array members in unions is only supported starting
-with GCC 15:
+For USB Type-C interfaces, an external Type-C controller chip assists
+by detecting cable attachment, determining plug orientation, and
+reporting USB PD message. The USB/DP combo PHY supports software
+configurable pin mapping and DisplayPort lane assignment. Based on
+these message, the combo PHY can perform both altmode switching and
+orientation switching via software.
 
---- a/include/uapi/linux/usb/cdc.h
-+++ b/include/uapi/linux/usb/cdc.h
-@@ -104,8 +104,10 @@ struct usb_cdc_union_desc {
-         __u8    bDescriptorSubType;
+The RK3399 EVB IND board has a Type-C interface DisplayPort. It use
+fusb302 chip as Type-C controller. The connection diagram is shown below:
 
-         __u8    bMasterInterface0;
--       __u8    bSlaveInterface0;
--       /* ... and there could be other slave interfaces */
-+       union {
-+               __u8    bSlaveInterface0;
-+               __u8 bSlaveInterfaces[];
-+       };
-  } __attribute__ ((packed));
+fusb302 chip +---> USB2.0 PHY ----> DWC3 USB controller
+             |
+             +---> USB/DP PHY0 +--> CDN-DP controller
+                               |
+                               +--> DWC3 USB controller
 
-So, we'll have to wait until that becomes the minimum supported
-version before we can use the above code.
+====
+3. Multiple bridge model for RK3399 CDN-DP
 
-> 
-> bSlaveInterface[1] ?
+The RK3399 has two USB/DP combo PHY and one CDN-DP controller. And
+the CDN-DP can be switched to output to one of the PHYs.
 
-No, please. One-element arrays when used as flexible arrays are
-deprecated. It took us years to transform those into flexible-array
-members.
+USB/DP PHY0 ---+
+               | <----> CDN-DP controller
+USB/DP PHY1 ---+
 
-> 
-> I'll add Gustavo here, he's done lots of work in this area.
-> 
->>> Also, what determines how many, the overall length?
->>
->> bLength - 4 is the number of slave interfaces, which
->> must at least be 1.
->> We cannot use counted_by in UAPI, can we?
+In previous versions, if both PHY ports were connected to DP,
+the CDN-DP driver would select the first PHY port for output.
 
-Yes. We _can_ (and do) use __counted_by in UAPI.
+On Dmitry's suggestion, we introduced a multi-bridge model to support
+flexible selection of the output PHY port. For each PHY port, a
+separate encoder and bridge are registered.
 
-The problem is that currently GCC doesn't support expressions
-in __counted_by. So, something like the following is not possible:
+The change is based on the DRM AUX HPD bridge, rather than the
+extcon approach. This requires the DT to correctly describe the
+connections between the first bridge in bridge chain and DP
+controller. And Once the first bridge is obtained, we can get the
+last bridge corresponding to the USB-C connector, and then set the
+DRM connector's fwnode to the corresponding one to enable HPD
+notification.
 
-__counted_by(bLength - 4)
+====
+Patch1 add notifier functions for Type-C core.
+Patch2 export all Type-C device types for identification.
+Patch3 add generic USB Type-C DP HPD bridge.
+Patch4 add new Type-C mode switch for RK3399 USBDP phy binding.
+Patch5 add typec_mux and typec_switch for RK3399 USBDP PHY.
+Patch6 add DRM AUX bridge support for RK3399 USBDP PHY.
+Patch7 drops CDN-DP's extcon dependency when Type-C is present.
+Patch8 add multiple bridges to support PHY port selection.
+Patch9 add missing dp_out port for RK3399 CDN-DP.
+Patch10 add Type-C DP support for RK3399 EVB IND board.
 
--Gustavo
+Changes in v8:
+- Link to V7: https://lore.kernel.org/all/20251023033009.90-1-kernel@airkyi.com/
+- Export all typec device types for identification.
+- Merge generic DP HPD bridge into one module.
+- Fix coding style.
 
-> 
-> I don't know, Gustavo?
-> 
-> thanks,
-> 
-> greg k-h
+Changes in v7:
+- Link to V6: https://lore.kernel.org/all/20251016022741.91-1-kernel@airkyi.com/
+- Add notifier functions for Type-C core.
+- Add generic USB Type-C DP HPD bridge.
+
+Changes in v6:
+- Link to V5: https://lore.kernel.org/all/20251011033233.97-1-kernel@airkyi.com/
+- Fix depend in Kconfig.
+- Check DP svid in tcphy_typec_mux_set().
+- Remove mode setting in tcphy_orien_sw_set().
+- Rename some variable names.
+- Attach the DP bridge to the next bridge.
+
+Changes in v5:
+- Link to V4: https://lore.kernel.org/all/20250922012039.323-1-kernel@airkyi.com/
+- Remove the calls related to `drm_aux_hpd_bridge_notify()`.
+- Place the helper functions in the same compilation unit.
+- Add more comments about parent device.
+- Add DRM AUX bridge support for RK3399 USBDP PHY
+- By parsing the HPD bridge chain, set the connector's of_node to the
+of_node corresponding to the USB-C connector.
+- Return EDID cache when other port is already enabled.
+
+Changes in v4:
+- Link to V3: https://lore.kernel.org/all/20250729090032.97-1-kernel@airkyi.com/
+- Add default HPD device for DisplayPort altmode.
+- Introduce multiple bridges for CDN-DP.
+- ...
+
+Changes in v3:
+- Link to V2: https://lore.kernel.org/all/20250718062619.99-1-kernel@airkyi.com/
+- Add more descriptions to clarify the role of the PHY in switching.
+- Fix wrong vdo value.
+- Fix port node in usb-c-connector.
+
+Changes in v2:
+- Link to V1: https://lore.kernel.org/all/20250715112456.101-1-kernel@airkyi.com/
+- Reuse dp-port/usb3-port in rk3399-typec-phy binding.
+- Fix compile error when CONFIG_TYPEC is not enabled.
+- Notify DP HPD state by USB/DP PHY.
+- Ignore duplicate HPD events.
+- Add endpoint to link DP PHY and DP controller.
+- Fix devicetree coding style.
+
+Chaoyi Chen (10):
+  usb: typec: Add notifier functions
+  usb: typec: Export all typec device types
+  drm/bridge: Implement generic USB Type-C DP HPD bridge
+  dt-bindings: phy: rockchip: rk3399-typec-phy: Support mode-switch
+  phy: rockchip: phy-rockchip-typec: Add typec_mux/typec_switch support
+  phy: rockchip: phy-rockchip-typec: Add DRM AUX bridge
+  drm/rockchip: cdn-dp: Support handle lane info without extcon
+  drm/rockchip: cdn-dp: Add multiple bridges to support PHY port
+    selection
+  arm64: dts: rockchip: Add missing dp_out port for RK3399 CDN-DP
+  arm64: dts: rockchip: rk3399-evb-ind: Add support for DisplayPort
+
+ .../phy/rockchip,rk3399-typec-phy.yaml        |   6 +
+ arch/arm64/boot/dts/rockchip/rk3399-base.dtsi |  10 +-
+ .../boot/dts/rockchip/rk3399-evb-ind.dts      | 146 ++++++
+ drivers/gpu/drm/bridge/Kconfig                |   5 +-
+ drivers/gpu/drm/bridge/Makefile               |   8 +-
+ drivers/gpu/drm/bridge/aux-hpd-bridge.c       |  23 +-
+ drivers/gpu/drm/bridge/aux-hpd-bridge.h       |  13 +
+ .../gpu/drm/bridge/aux-hpd-typec-dp-bridge.c  |  47 ++
+ drivers/gpu/drm/rockchip/cdn-dp-core.c        | 354 ++++++++++++---
+ drivers/gpu/drm/rockchip/cdn-dp-core.h        |  24 +-
+ drivers/phy/rockchip/Kconfig                  |   3 +
+ drivers/phy/rockchip/phy-rockchip-typec.c     | 420 +++++++++++++++++-
+ drivers/usb/typec/Makefile                    |   2 +-
+ drivers/usb/typec/bus.h                       |   2 +
+ drivers/usb/typec/class.c                     |   7 +
+ drivers/usb/typec/class.h                     |  10 -
+ drivers/usb/typec/notify.c                    |  24 +
+ include/linux/usb/typec.h                     |  10 +
+ include/linux/usb/typec_notify.h              |  16 +
+ 19 files changed, 1034 insertions(+), 96 deletions(-)
+ create mode 100644 drivers/gpu/drm/bridge/aux-hpd-bridge.h
+ create mode 100644 drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+ create mode 100644 drivers/usb/typec/notify.c
+ create mode 100644 include/linux/usb/typec_notify.h
+
+-- 
+2.49.0
 
 
