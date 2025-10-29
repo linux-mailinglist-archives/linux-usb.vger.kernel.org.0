@@ -1,88 +1,86 @@
-Return-Path: <linux-usb+bounces-29844-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29845-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA366C1BF9A
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 17:13:25 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A1ECC1B971
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 16:18:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F121766466C
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 14:55:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D6BBD5C84B9
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 15:08:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C3934F491;
-	Wed, 29 Oct 2025 14:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DD3A33508C;
+	Wed, 29 Oct 2025 15:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fQrNdVj+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPXLDd17"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01EC338F20
-	for <linux-usb@vger.kernel.org>; Wed, 29 Oct 2025 14:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80EFD2E2659
+	for <linux-usb@vger.kernel.org>; Wed, 29 Oct 2025 15:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761749388; cv=none; b=GkHtYjMdfcDbmXoL9axF82wpKmT1wSldsUh4lgVBVTCA8hmAnCR0g1bnSe+Y52TnSmP7SK93Sj4s0kQlExyA0CSalwLA6mfU6nBxGmvQZhoHWEKQEBJnTfrniySLaLce5qr+6hqLXNvQ+dRzTxydcSkdBuk78LtwXER3gVyVLnc=
+	t=1761750433; cv=none; b=Baxw+hMFZ/rz7Zml99Dy+SMXMk7GSMIdnkzB7dIKI6obW4ATEMJvFgGRBN9uOh3shZbAXCge43wxfblHvvylZkbe/XGpfUZYXgoxpDmjate96CEkwmpCok1/js9YL7Ap8eXiUT3AHOTIQNicfxubi/1XUn3Wyy3OP2isjvH2o6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761749388; c=relaxed/simple;
-	bh=N/H9Hc3aJwCtzPmRJOck3fIp82+NkA0LZ9tUFRkG0Bw=;
+	s=arc-20240116; t=1761750433; c=relaxed/simple;
+	bh=f8Fhr45tAG7sziLg9U37nK1+JBvIXcz4AelF+jGe5oE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P9VsZ7V2jUmeG4/Wn9O4Mdy7/YcwYhgyZH0gvpyV58SI+7UARN+33xu1kFBwUXZQGicB13etn8BQiBs8pYQMTe7O9qyDBgHrYvbiLFa9qTfcwT3sq/4H/nzXz20Iuf5AyWkyqFOFU9q3ZNAF+vTQSxQMN+HFDgU1M7ag1QbbW+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fQrNdVj+; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-33be037cf73so7725967a91.2
-        for <linux-usb@vger.kernel.org>; Wed, 29 Oct 2025 07:49:46 -0700 (PDT)
+	 To:Cc:Content-Type; b=LsGm7j2CgvIPppU+wqMNSB3FiF3QqN/4r8JgLmRcmJKxpZrPCYuU/mIiuih6VrwVeISn+MhUkWFTRdWTxx7SIMt8JG5Hqj0nMXBZf/A71S4BBZIt3BmUc13cLSck2JEp3bfJAKqtraESkBr5xuhJfVhjoVGjXN1zXVe/ZIAS620=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPXLDd17; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-33d896debe5so40248a91.0
+        for <linux-usb@vger.kernel.org>; Wed, 29 Oct 2025 08:07:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1761749386; x=1762354186; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761750431; x=1762355231; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vsfcHn1joSx3FYcBHFCIU4wVQAcpbVHvkEyCsZn4M7g=;
-        b=fQrNdVj+n9mN+TjKgSWKOurWOx8bbFjjcpGc9rbYoX0l9pVxeVS7dwbebPzO7EyMNY
-         X2a6Ew+yUq3XXoV/wDq9lkypSK+BYom/rU7WeWRWYvwk9ud2ZvZAMsTQBqg7to0voVyE
-         NWPDqGEFI4ycZ4bfSeWBglO8aPeHliM7090p3jHq/UYBn2TX8A3J0QsThKh1Ht7dMrwU
-         sdWywmc9wuO5fUMz26trsoLjWgo5P7gJSrB6Xfqf+DBYqgz8bPGcaEGWivFwD1drHXXf
-         CRZ7/nRNpUUvgNm2zoncIx+LpnHqQOmwhHcuMIuiiS88r9eKzaxFewWxm80ztiA9EXIT
-         k9XA==
+        bh=+IfYIDKxJGGNldyfSmZN9xBlg4Ge86/H8w7OAL6l3zA=;
+        b=jPXLDd173Mmm/1ZA8/62Litwf1jppoXunEBdw455/oB0ucPgz/zgb5S9Ig21/R9A83
+         zDl/M5gysr9P+fkQwOLRn8Nc93ZomVRC0bmPuHLPjeGepoBI06SWq1YE484MytHwSLlb
+         4dwkHgWXlShtqjfBEVZS0uTM5g1kp4llTyzLktE6VRZ+86UnW8Fk08ywhJzo+o670TEd
+         fBtgMsa0FYuUeroCTBX6EiOYZ8iHQnELdjSyCiUzabXF6mX8GH0xfMj1C18t6ZPdfKAf
+         Y7WcPyRl4QKv5WXCIattR6fCUu2UoNrxf2YFU7G6nQc1uSb0v9TebfZWQzUa9NtSTICl
+         hxaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761749386; x=1762354186;
+        d=1e100.net; s=20230601; t=1761750431; x=1762355231;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vsfcHn1joSx3FYcBHFCIU4wVQAcpbVHvkEyCsZn4M7g=;
-        b=RAD9H18b6vxNnkYdytkXXHTH9I01jKAd62OaMFXJxy5faaz+OXn37pJlmAIZiymCyM
-         vdEWmr0gUVf6BZ7S5YKaPiT4uG8mvYTnfcoI2KfBmN/bS/U1yCE2ZY0QpeYFh+Yf4f0m
-         oqmwmHGpoZCJEgd13LPD3nEWMFbTlbwzJposzKpjjryUjvE3ade3wDQaGsV5ddUor7Ac
-         GQ3s4K+VW/OZ+gw7DSo6sifoLRjFGplSNW79jimF/2Kgh3lBVUzDJQoG5QM9nKlTX3bz
-         0UgKKh1Ez0hHwgo4dLvEthNyqFiwgsIdQWYsyUOO6eO835wnw1/AReowCpRIgTXR+rhU
-         e9gQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXRVotONUqH8dUlbGvQiQiCQqN0H4lbEKRvtLJrJ+cZ4W8hwdGO8jeroxievLjQ8MLDmO/bdcWlSWQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi7qk2w4c0Ge0vMlPLnDbk17o0ty/eMmVlehqbf62Cw6YPS+bp
-	IMrbTYn1jLZKhrnXEAId0yNAbq+Oic8LChgSwKTN7HgHLxWoAe+1g4brBbwsTVrsA+ng0L2iXNJ
-	l6kDTHIz7jG3fz8zvyBCiEm4k0D0s4PuSOR0dvnol
-X-Gm-Gg: ASbGncuiMKWA4hZEH33gRunhsAXBkSvmyA+aVCKTILNEepx4ChC/7vK2fYOFooTsHKh
-	K/S9N6CoeixzjkWAimJY4R7tRCKvAnwq496kUzy7jVQzO3vTd7/jS7TNOJUeYhmgqxuMPRMZ6Z7
-	WnQImkl5Gm5p+AUERlBWUp1I/vX8ynux0OZ62JPB2pCkHeOn8303YC4BWIppzl8oRH1f5WvsyLf
-	sHqRh5mEsDiIlxSEUXtO80rNx+BRCNeWjlleQs2V87cRrJVeIxNi6MbSD8y
-X-Google-Smtp-Source: AGHT+IHiN2wVay8qKwNUCQNQedszNEqWD+gbH8QhJy+T+EtTl6Gz4GwA6YgaiehmmoZJBoAentF29nQI5J4sc3vsbuw=
-X-Received: by 2002:a17:90a:d64d:b0:32e:5d87:8abc with SMTP id
- 98e67ed59e1d1-3403a302f52mr3761415a91.36.1761749386246; Wed, 29 Oct 2025
- 07:49:46 -0700 (PDT)
+        bh=+IfYIDKxJGGNldyfSmZN9xBlg4Ge86/H8w7OAL6l3zA=;
+        b=LG7Y5t+B9Y2gbKyroFEcVl3vpL3O9tOJ1TSRCsW1UmNNagOoyzXHASRi33AZns5azp
+         7DugQeW9GJVe1cT5Ff8zfoJyb7Z8yZoIlmfP8yNP/IVqR7pRWW9YORxedJL+R7LrlvNI
+         kyHU56GOwPMVp1/+DCtqYTuW39PTQ4a01xoao5gheN5Am8+reyhB9y950t2bWoow2jol
+         Mkutz2T4k10laS7EwYnzPWDbvX6hb7F/js90r/yN2IBlbgBaeawb7r99ab9FVLuKX5zM
+         QMFww7xFb43OgKb3x8ZMvJjrqd4mws/S1cJjH/QU3Zn+1pCd1PD4gQcaK+yHf7wBIbF4
+         mveQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUmX6eav4HjIfUzfOt/QTpV/xXNes/qe/Nx1aC2aytfAaRhQhjdU3UEoll4pFcBZ1M5aUmZKkZNgsI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp8VXrp8gknolgnzEII5esCiZh4+apGpqvONroJp+nR0BPh2Cb
+	QI1qZMH4iCs9VGUhCmmn0bo1yZM4WVmcNZhw87CivFfDqfZgR5b6kkHT0S/3qjfMVvj8EPA4Z2u
+	uyJoswqMGPTCTEsAXTz3KeDDDYiqTOZk=
+X-Gm-Gg: ASbGnct/NKB9G8LvxlGNdS1PK5bhQT2xDOSFUoRMmh+M9upD84hBIlSCikKn1V70Mrw
+	b/SXv7hHI6pCXkJvCLSXmTlVI8Z7q0/l0ugKEXUKTcC/3K4cS7LEutzAfmYC3gYCHR5STm8r1Dn
+	U+l3EXmT0mEU9MKDi1hhVy25HTzX73IUOnsAgp0pkANhghE33Vdv3RFd0CZ4jZbJ9hldxCeYlYY
+	skUE3LZxZrUGhFFGmWBy0DKXbBC7wQ8twG9Q9r+2NkYhM3ScFV8X9Qqn4BJpVNzjWXQXt8=
+X-Google-Smtp-Source: AGHT+IFVqO8ewpIAf0wvRQFGIOOwuq6fD8Gg5dHkMSFcg7AR9XFXs/odOiaOENp+NesUqtIMC2BHNrgVUxHGzL0/CTY=
+X-Received: by 2002:a17:90b:134b:b0:32d:db5b:7636 with SMTP id
+ 98e67ed59e1d1-3403a28efb0mr3676582a91.27.1761750430698; Wed, 29 Oct 2025
+ 08:07:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
- <20251028004614.393374-36-viro@zeniv.linux.org.uk> <CAHC9VhRQNmPZ3Sz496WPgQp-OkijiF7GgmHuR+=Kn3qBE6nj6Q@mail.gmail.com>
- <20251029032404.GQ2441659@ZenIV>
-In-Reply-To: <20251029032404.GQ2441659@ZenIV>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 29 Oct 2025 10:49:34 -0400
-X-Gm-Features: AWmQ_bkw5gzRbiAC20oxF8nOixccAI_lXABYmuYCSfnezye7FZYc2Gs15NqnG0I
-Message-ID: <CAHC9VhRefx4MBDU78Qob7Pe2pDLK=1HK4b2EuTtENVssntHecQ@mail.gmail.com>
+References: <20251028004614.393374-1-viro@zeniv.linux.org.uk> <20251028004614.393374-36-viro@zeniv.linux.org.uk>
+In-Reply-To: <20251028004614.393374-36-viro@zeniv.linux.org.uk>
+From: Stephen Smalley <stephen.smalley.work@gmail.com>
+Date: Wed, 29 Oct 2025 11:06:58 -0400
+X-Gm-Features: AWmQ_blCWCRSlgnSUoNEZRYW0rUX4EVkF7hJCMWu9E3EunP63rWoSyVWbO7_enY
+Message-ID: <CAEjxPJ53wJEK4bzt0VMbY=G9gkzuZZA_XtrT+acwPys3p0byBA@mail.gmail.com>
 Subject: Re: [PATCH v2 35/50] convert selinuxfs
 To: Al Viro <viro@zeniv.linux.org.uk>
 Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org, 
@@ -90,27 +88,86 @@ Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
 	neil@brown.name, a.hindborg@kernel.org, linux-mm@kvack.org, 
 	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, kees@kernel.org, 
 	rostedt@goodmis.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
+	paul@paul-moore.com, casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
 	john.johansen@canonical.com, selinux@vger.kernel.org, 
 	borntraeger@linux.ibm.com, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 28, 2025 at 11:24=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> =
-wrote:
-> On Tue, Oct 28, 2025 at 08:02:39PM -0400, Paul Moore wrote:
+On Tue, Oct 28, 2025 at 2:00=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
+rote:
 >
-> > I suppose the kill_litter_super()->kill_anon_super() should probably
-> > be pulled out into another patch as it's not really related to the
-> > d_make_persistent() change,
+> Tree has invariant part + two subtrees that get replaced upon each
+> policy load.  Invariant parts stay for the lifetime of filesystem,
+> these two subdirs - from policy load to policy load (serialized
+> on lock_rename(root, ...)).
 >
-> It very much is related - anything persistent left at ->kill_sb() time
-> will be taken out by generic_shutdown_super().  If all pinned objects
-> in there are marked persistent, kill_litter_super() becomes equivalent
-> to kill_anon_super() for that fs.
+> All object creations are via d_alloc_name()+d_add() inside selinuxfs,
+> all removals are via simple_recursive_removal().
+>
+> Turn those d_add() into d_make_persistent()+dput() and that's mostly it.
+>
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
-Gotcha, thanks.
+I took this series for a spin and didn't see any problems with the
+selinux-testsuite.
+Also re-based my WIP selinux namespaces patch series [1] on top, which
+introduces multiple selinuxfs instances (one per selinux namespace),
+and didn't see any problems.
 
---=20
-paul-moore.com
+Reviewed-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+Tested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+
+[1] https://lore.kernel.org/selinux/20250814132637.1659-1-stephen.smalley.w=
+ork@gmail.com/
+
+> ---
+>  security/selinux/selinuxfs.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+> index f088776dbbd3..eae565358db4 100644
+> --- a/security/selinux/selinuxfs.c
+> +++ b/security/selinux/selinuxfs.c
+> @@ -1205,7 +1205,8 @@ static struct dentry *sel_attach(struct dentry *par=
+ent, const char *name,
+>                 iput(inode);
+>                 return ERR_PTR(-ENOMEM);
+>         }
+> -       d_add(dentry, inode);
+> +       d_make_persistent(dentry, inode);
+> +       dput(dentry);
+>         return dentry;
+>  }
+>
+> @@ -1934,10 +1935,11 @@ static struct dentry *sel_make_swapover_dir(struc=
+t super_block *sb,
+>         /* directory inodes start off with i_nlink =3D=3D 2 (for "." entr=
+y) */
+>         inc_nlink(inode);
+>         inode_lock(sb->s_root->d_inode);
+> -       d_add(dentry, inode);
+> +       d_make_persistent(dentry, inode);
+>         inc_nlink(sb->s_root->d_inode);
+>         inode_unlock(sb->s_root->d_inode);
+> -       return dentry;
+> +       dput(dentry);
+> +       return dentry;  // borrowed
+>  }
+>
+>  #define NULL_FILE_NAME "null"
+> @@ -2080,7 +2082,7 @@ static int sel_init_fs_context(struct fs_context *f=
+c)
+>  static void sel_kill_sb(struct super_block *sb)
+>  {
+>         selinux_fs_info_free(sb);
+> -       kill_litter_super(sb);
+> +       kill_anon_super(sb);
+>  }
+>
+>  static struct file_system_type sel_fs_type =3D {
+> --
+> 2.47.3
+>
+>
 
