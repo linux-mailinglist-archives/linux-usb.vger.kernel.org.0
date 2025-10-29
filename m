@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-29821-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29823-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25D69C189C6
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 08:15:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA7D2C189E1
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 08:15:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACBF13BF43E
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 07:15:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 974C33BDFC1
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 07:15:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 264CB30CDA2;
-	Wed, 29 Oct 2025 07:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B92BD2F6187;
+	Wed, 29 Oct 2025 07:15:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="sTitdwx3"
+	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="axDSjnoM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924402E62A4;
-	Wed, 29 Oct 2025 07:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DAD230C635;
+	Wed, 29 Oct 2025 07:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761722094; cv=none; b=CYwiDhPo+4e1DdPxBwxxTRt67QfBb+c0sJg+1sHzdd5Rdi9LbuaAzVz1oz9/GunnyduLwTy/0n73Qc0rdbzIab4FGP2Csq/bSx2pD/FT2E06W++nuUDdT/N8vTuf2ABRrKWjiKnL++lFnU2JFHPrv+1OHPfoKcc28afjzp0GT7Q=
+	t=1761722108; cv=none; b=hcEo+hG0UwwBPH4TgrNMJk53OObT1Z7drOq9bLQaZ2UqqDzcEfhTHc7RUbN7I0+mXvLggZxKNqFAChZR4BA+VdPWSbk6QJyB2lbhoGKV37GIyAi4G1Ax6r9FFHk89dLEa8eODZ/N+Das6/UlCc3Alz0GpmIphXiH3bqoj5P6sg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761722094; c=relaxed/simple;
-	bh=GYIuLXqZf240u12ydTOg+OVzJwqUwtS9FXkBF5P/lQs=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=G6dk0LbIfk9sI3Zj2GbkMZuYj2ZFXOYtfnXWcWqDSLkpxZoqD6H/JyU2408Fib1XLok3nF9IadLN4JkIIFUsNScd38sw1XAvONPaOO0mDreaM/nuBJ7OpBgzfxJ1G94O4lOLOf/o8XTSG3TLWE52qUXO2LIbaWI37bxwkIQn8WE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=sTitdwx3; arc=none smtp.client-ip=54.206.16.166
+	s=arc-20240116; t=1761722108; c=relaxed/simple;
+	bh=0cv2DaVOvSCRKuK43q4uxtIsFfdtbekWcTaoQMKAUa8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=mCKhGxExMc/RFAnOcwzop6nBJ30PjDvrWHcRuLKCo6NznSMbdnnNrJT/AE+/rmXcx0a8JMaFShoy1yECDpw5+zIJtKQlwg7/Qs+1z6csgihmfWPx3biqkDIFt+rkBoCNemtNPi7VJ397ZLjpzdOyM7lyFJ/PXRkW2EeFTrsxk1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=axDSjnoM; arc=none smtp.client-ip=54.207.19.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airkyi.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=airkyi.com;
-	s=altu2504; t=1761722086;
-	bh=vUs9PR5MkDE2TnuVElj67uBgDlTWsKMlCHyA7Lz2m9s=;
+	s=altu2504; t=1761722091;
+	bh=j2j9WA1trqT3vAVw/jd1rQawmJe4KSEvtc97hT+jsmc=;
 	h=From:To:Subject:Date:Message-Id;
-	b=sTitdwx3ApamWfnKuLQZl4+EDCcUZLRO383IoN8uT5ZyCNTIeXkyN0y5ezM5RU2BS
-	 9qSjHP0haAFSy1eUm7g0RV9tMJjEKGaTDm30uI6GSH5XLki1UtU4ImacD0YAu9Aoru
-	 ilh7dedR7kaWfgirchqU85BLpfGWe7zbUicdXMGk=
-X-QQ-mid: zesmtpsz6t1761722083t694185fa
-X-QQ-Originating-IP: 5iuWasjHrqOKTZt0yGG1gdnMzF9J085MTFN9CJrLEEA=
+	b=axDSjnoMzuC5X6IKwC9o8L+YT8jloY/jdQraAGDAwFUMaGnjlNLYOJirtVl6qZZMj
+	 KneCijyldkDE7fIj9+2B5ZIO+YkhaGeOAIMhQqG3eo8f3ddXdiIzVbfcZnKqBQRTEj
+	 9dpvZ6nagLyzIzSQCBE/WfKsv90ZVTNJhy0lwi0g=
+X-QQ-mid: zesmtpsz6t1761722089t7ff69d0c
+X-QQ-Originating-IP: 7bQdVQ9oUX34jRxfdd7Wtzl35M8B8aqczAbGIlIcToY=
 Received: from DESKTOP-8BT1A2O.localdomain ( [58.22.7.114])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 29 Oct 2025 15:14:40 +0800 (CST)
+	id ; Wed, 29 Oct 2025 15:14:45 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 18349792753202563132
+X-BIZMAIL-ID: 376849328953314141
 From: Chaoyi Chen <kernel@airkyi.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -83,28 +83,30 @@ Cc: linux-usb@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	dri-devel@lists.freedesktop.org
-Subject: [PATCH v8 00/10] Add Type-C DP support for RK3399 EVB IND board
-Date: Wed, 29 Oct 2025 15:14:25 +0800
-Message-Id: <20251029071435.88-1-kernel@airkyi.com>
+Subject: [PATCH v8 01/10] usb: typec: Add notifier functions
+Date: Wed, 29 Oct 2025 15:14:26 +0800
+Message-Id: <20251029071435.88-2-kernel@airkyi.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20251029071435.88-1-kernel@airkyi.com>
+References: <20251029071435.88-1-kernel@airkyi.com>
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpsz:airkyi.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: MZ9X7MyfBLblIoi9hIZLojGLP7mu+oTAFV2E3CEfRx6b9tY5UIhil4Vp
-	k73eQYSDOARF8HAwgZ3+b9+Ozq7eZ/8jQrGklXYhJtvRSzgiElivuVYNjfQg7H3Xy2bA6CD
-	vPdOTgXzT6Q6X0kquRbmbHKAEX5MeDpjQ2q7ARJ1pRW6Dqg3aHz5dbUnBniV51bVZBijDou
-	dGoAKdknhIeKfh14lksDv6UW+gDri0jQpT/WI9Iv4otsibH0NS46D65F9Jf1eRAj94lDlHa
-	wW0W/s14ip1Dnzx+qdE6Il4Ban/NcofwKvKJpntp3eP1NLomOtMrA8K1/+hcaOHecYq5k8w
-	Wu+7yuI8XWYu3ugAAbEz401UEtFO+5LPyKyGleDG0ImH0wAyZGasYkIV3B78Dln2/U52dly
-	sMPloEFay4l8oOHCuuZiRB8UjH6c49H4rXEU1LlWuVoU/+oR6x4bA/BPXGTIKqpGzy0iD9G
-	Un+cX3eAhEkL+nU0Ym59zvU9dbriSxGLvdmbDiLMXhV5SfyJ3AjFhjJUCtfN1nxKcrPErfT
-	QM9KVfdsKSCe+X0KRcLFzYiovSSlE67Wf0p+Q57OSNNShPgoOpSo7rdLDVYkI1AUkhFSeoj
-	VYazZzoz2pc6PoqTUWp+H+bBJvg5qG0v4DfOPzKv2HI0el2vJBFn9tP2sCpRxYA6qhiwgZ7
-	0tE+LUFNJOwH3FQtPYzPwvI6vwS3DOsYLngtVZU5dnVum50EBbLDtPSnJQmUXmdWTiElS8E
-	PmIVtSZpp6gnCOxTZxr/x/8YBlBz3r03EMP45HnMqJ544kbX5UJOIEtQaBC2qFawjQXoARd
-	m85rwrrUd+oKo2ZJ1P+PsPIS3FNwS5gNJ6lHtAXTLNg25YtC8hi1mmaavffWm1J0ql42Ad6
-	KHS2fMksfZRikLQbNbNzQOZYXl66BQMhu6x3AHAzcZFoZURQZIZRStkF25RsYzBerIolwyc
-	XypBuQRJesPbSYsKXec0yCbWJgpAA5VpiPmfDAbK0ufLpuWph3TU446bP
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-XMAILINFO: NAeO0+xU6W76d5kq9LLvslz7ZW508fr8c69yiOhYruV3NMGKDn1vocLM
+	J7rn0P2kAfwqrrvGGylmBi4O3zCQmUnSR6y1h/0WXxXIoOmRHcKBwhpf1Xn/B26a8MvXfUr
+	3nkYqynwQBHa3dyH8O5sPhhSVxIkUAZX3QX8TV+m8cI51CdJ8ouUVifMWg6XdH3ENmOHjtx
+	0s4dxDILS2pMLANv2xngwuCmMZ9eqSQck3zFU6BSDZ+xVnvHWF53pDkbA3x6bbWLygs6F9w
+	Jq4KQQKWvWWIyAJc6KHBbGcrkSlMGgPByVRKLWIB+9mCPu2Et1C574ltcInyVEkjzkEhDlE
+	ER+9fWpCGvRvVWggxeauzIMAHRJDKFS7xHdDu6vPSbB/r6zwDuTGZt5UlqxXIrS5DTJtinS
+	1wRHdhf+eZnEy4bZzG+GcLnbDVdfUHn7aFQgxdmpokq577sB2YNS6CtCOrVGKXzBHFm7wZy
+	v8ISz74yEHhA+DBQH6+D1XLDr0qhLxi5Y6ptw8EPln+hE11uRU2ay1BBJUfHYavX6XJKkD1
+	dTpSoLyaf/ME2ari/hOCwNLUH3V15lA1bKhCMJABs37waK7NJhlLJ9pJDhIQkQfrpK/e2ka
+	L8mCaIkWXNMzW2rBggAKveOVHy9iG0zCBnfABlDTPb2KBttzB/h9AmGj4zjiQcvTLfndBhu
+	KMDBUfXDfp6FDIUFNmH9ej8Hyzn9MqzIQDLbBTrFlfBOKoQGwsFq28Ipbi5l9LDNv7+0o6j
+	RU4UaxDVyaB5cZtdzY5WJQjnmud2TvbwiWJ2d5xVbItIMUC4wCTVe4D8RMGtmJiWS3L9F2p
+	5/jYvbjxB1c8b2+FJS6kD+imHkuJNgontYD6QB2qMwsGDMnf/D+iJ0g8P2rEUgfoV/EC/8r
+	NDu0EXtru+szdnXMLRTfKhr30E7vjV0Wt32VETUysFhpW3AgnjFkpuW29/44q5rLYT0Z5S1
+	uijARbBsY70LMOj6O8dObMzMtJZZwSPsFUk8/RhlB2YHr+Xdu/WB9XrcsWcTy2YjCDJA=
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
 X-QQ-RECHKSPAM: 0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -114,172 +116,123 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
 From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
 
-This series focuses on adding Type-C DP support for USBDP PHY and DP
-driver. The USBDP PHY and DP will perceive the changes in cable status
-based on the USB PD and Type-C state machines provided by TCPM. Before
-this, the USBDP PHY and DP controller of RK3399 sensed cable state
-changes through extcon, and devices such as the RK3399 Gru-Chromebook
-rely on them. This series should not break them.
+Some other part of kernel may want to know the event of typec bus.
 
-====
-1. DisplayPort HPD status notify
+This patch add common notifier function to notify these event.
 
-Before v7, I implemented a variety of DP HPD status notify. However,
-they all had various problems and it was difficult to become a generic
-solution.
-
-Under the guidance of Heikki and Dmitry, a decoupled notification
-method between the TypeC and DRM subsystems was introduced in v7.
-First, a notification is sent when TypeC registers a new altmode.
-Then, a generic DP AUX HPD bridge is implemented on the DRM side.
-
-That makes it redundant for each Type-C controller driver to implement
-a similar DP AUX HPD bridge in embedded scenarios.
-
-====
-2. Altmode switching and orientation switching for USBDP PHY
-
-For USB Type-C interfaces, an external Type-C controller chip assists
-by detecting cable attachment, determining plug orientation, and
-reporting USB PD message. The USB/DP combo PHY supports software
-configurable pin mapping and DisplayPort lane assignment. Based on
-these message, the combo PHY can perform both altmode switching and
-orientation switching via software.
-
-The RK3399 EVB IND board has a Type-C interface DisplayPort. It use
-fusb302 chip as Type-C controller. The connection diagram is shown below:
-
-fusb302 chip +---> USB2.0 PHY ----> DWC3 USB controller
-             |
-             +---> USB/DP PHY0 +--> CDN-DP controller
-                               |
-                               +--> DWC3 USB controller
-
-====
-3. Multiple bridge model for RK3399 CDN-DP
-
-The RK3399 has two USB/DP combo PHY and one CDN-DP controller. And
-the CDN-DP can be switched to output to one of the PHYs.
-
-USB/DP PHY0 ---+
-               | <----> CDN-DP controller
-USB/DP PHY1 ---+
-
-In previous versions, if both PHY ports were connected to DP,
-the CDN-DP driver would select the first PHY port for output.
-
-On Dmitry's suggestion, we introduced a multi-bridge model to support
-flexible selection of the output PHY port. For each PHY port, a
-separate encoder and bridge are registered.
-
-The change is based on the DRM AUX HPD bridge, rather than the
-extcon approach. This requires the DT to correctly describe the
-connections between the first bridge in bridge chain and DP
-controller. And Once the first bridge is obtained, we can get the
-last bridge corresponding to the USB-C connector, and then set the
-DRM connector's fwnode to the corresponding one to enable HPD
-notification.
-
-====
-Patch1 add notifier functions for Type-C core.
-Patch2 export all Type-C device types for identification.
-Patch3 add generic USB Type-C DP HPD bridge.
-Patch4 add new Type-C mode switch for RK3399 USBDP phy binding.
-Patch5 add typec_mux and typec_switch for RK3399 USBDP PHY.
-Patch6 add DRM AUX bridge support for RK3399 USBDP PHY.
-Patch7 drops CDN-DP's extcon dependency when Type-C is present.
-Patch8 add multiple bridges to support PHY port selection.
-Patch9 add missing dp_out port for RK3399 CDN-DP.
-Patch10 add Type-C DP support for RK3399 EVB IND board.
+Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+---
 
 Changes in v8:
-- Link to V7: https://lore.kernel.org/all/20251023033009.90-1-kernel@airkyi.com/
-- Export all typec device types for identification.
-- Merge generic DP HPD bridge into one module.
 - Fix coding style.
 
-Changes in v7:
-- Link to V6: https://lore.kernel.org/all/20251016022741.91-1-kernel@airkyi.com/
-- Add notifier functions for Type-C core.
-- Add generic USB Type-C DP HPD bridge.
-
-Changes in v6:
-- Link to V5: https://lore.kernel.org/all/20251011033233.97-1-kernel@airkyi.com/
-- Fix depend in Kconfig.
-- Check DP svid in tcphy_typec_mux_set().
-- Remove mode setting in tcphy_orien_sw_set().
-- Rename some variable names.
-- Attach the DP bridge to the next bridge.
-
-Changes in v5:
-- Link to V4: https://lore.kernel.org/all/20250922012039.323-1-kernel@airkyi.com/
-- Remove the calls related to `drm_aux_hpd_bridge_notify()`.
-- Place the helper functions in the same compilation unit.
-- Add more comments about parent device.
-- Add DRM AUX bridge support for RK3399 USBDP PHY
-- By parsing the HPD bridge chain, set the connector's of_node to the
-of_node corresponding to the USB-C connector.
-- Return EDID cache when other port is already enabled.
-
-Changes in v4:
-- Link to V3: https://lore.kernel.org/all/20250729090032.97-1-kernel@airkyi.com/
-- Add default HPD device for DisplayPort altmode.
-- Introduce multiple bridges for CDN-DP.
-- ...
-
-Changes in v3:
-- Link to V2: https://lore.kernel.org/all/20250718062619.99-1-kernel@airkyi.com/
-- Add more descriptions to clarify the role of the PHY in switching.
-- Fix wrong vdo value.
-- Fix port node in usb-c-connector.
-
-Changes in v2:
-- Link to V1: https://lore.kernel.org/all/20250715112456.101-1-kernel@airkyi.com/
-- Reuse dp-port/usb3-port in rk3399-typec-phy binding.
-- Fix compile error when CONFIG_TYPEC is not enabled.
-- Notify DP HPD state by USB/DP PHY.
-- Ignore duplicate HPD events.
-- Add endpoint to link DP PHY and DP controller.
-- Fix devicetree coding style.
-
-Chaoyi Chen (10):
-  usb: typec: Add notifier functions
-  usb: typec: Export all typec device types
-  drm/bridge: Implement generic USB Type-C DP HPD bridge
-  dt-bindings: phy: rockchip: rk3399-typec-phy: Support mode-switch
-  phy: rockchip: phy-rockchip-typec: Add typec_mux/typec_switch support
-  phy: rockchip: phy-rockchip-typec: Add DRM AUX bridge
-  drm/rockchip: cdn-dp: Support handle lane info without extcon
-  drm/rockchip: cdn-dp: Add multiple bridges to support PHY port
-    selection
-  arm64: dts: rockchip: Add missing dp_out port for RK3399 CDN-DP
-  arm64: dts: rockchip: rk3399-evb-ind: Add support for DisplayPort
-
- .../phy/rockchip,rk3399-typec-phy.yaml        |   6 +
- arch/arm64/boot/dts/rockchip/rk3399-base.dtsi |  10 +-
- .../boot/dts/rockchip/rk3399-evb-ind.dts      | 146 ++++++
- drivers/gpu/drm/bridge/Kconfig                |   5 +-
- drivers/gpu/drm/bridge/Makefile               |   8 +-
- drivers/gpu/drm/bridge/aux-hpd-bridge.c       |  23 +-
- drivers/gpu/drm/bridge/aux-hpd-bridge.h       |  13 +
- .../gpu/drm/bridge/aux-hpd-typec-dp-bridge.c  |  47 ++
- drivers/gpu/drm/rockchip/cdn-dp-core.c        | 354 ++++++++++++---
- drivers/gpu/drm/rockchip/cdn-dp-core.h        |  24 +-
- drivers/phy/rockchip/Kconfig                  |   3 +
- drivers/phy/rockchip/phy-rockchip-typec.c     | 420 +++++++++++++++++-
- drivers/usb/typec/Makefile                    |   2 +-
- drivers/usb/typec/bus.h                       |   2 +
- drivers/usb/typec/class.c                     |   7 +
- drivers/usb/typec/class.h                     |  10 -
- drivers/usb/typec/notify.c                    |  24 +
- include/linux/usb/typec.h                     |  10 +
- include/linux/usb/typec_notify.h              |  16 +
- 19 files changed, 1034 insertions(+), 96 deletions(-)
- create mode 100644 drivers/gpu/drm/bridge/aux-hpd-bridge.h
- create mode 100644 drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+ drivers/usb/typec/Makefile       |  2 +-
+ drivers/usb/typec/bus.h          |  2 ++
+ drivers/usb/typec/class.c        |  3 +++
+ drivers/usb/typec/notify.c       | 24 ++++++++++++++++++++++++
+ include/linux/usb/typec_notify.h | 16 ++++++++++++++++
+ 5 files changed, 46 insertions(+), 1 deletion(-)
  create mode 100644 drivers/usb/typec/notify.c
  create mode 100644 include/linux/usb/typec_notify.h
 
+diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
+index 7a368fea61bc..20d09c5314d7 100644
+--- a/drivers/usb/typec/Makefile
++++ b/drivers/usb/typec/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_TYPEC)		+= typec.o
+-typec-y				:= class.o mux.o bus.o pd.o retimer.o
++typec-y				:= class.o mux.o notify.o bus.o pd.o retimer.o
+ typec-$(CONFIG_ACPI)		+= port-mapper.o
+ obj-$(CONFIG_TYPEC)		+= altmodes/
+ obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
+diff --git a/drivers/usb/typec/bus.h b/drivers/usb/typec/bus.h
+index 643b8c81786d..820b59b6d434 100644
+--- a/drivers/usb/typec/bus.h
++++ b/drivers/usb/typec/bus.h
+@@ -26,6 +26,8 @@ struct altmode {
+ 	struct altmode			*plug[2];
+ };
+ 
++void typec_notify_event(unsigned long event, void *data);
++
+ #define to_altmode(d) container_of(d, struct altmode, adev)
+ 
+ extern const struct bus_type typec_bus;
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 9b2647cb199b..51e971bc68d1 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -13,6 +13,7 @@
+ #include <linux/string_choices.h>
+ #include <linux/usb/pd_vdo.h>
+ #include <linux/usb/typec_mux.h>
++#include <linux/usb/typec_notify.h>
+ #include <linux/usb/typec_retimer.h>
+ #include <linux/usb.h>
+ 
+@@ -600,6 +601,8 @@ typec_register_altmode(struct device *parent,
+ 		return ERR_PTR(ret);
+ 	}
+ 
++	typec_notify_event(TYPEC_ALTMODE_REGISTERED, &alt->adev);
++
+ 	return &alt->adev;
+ }
+ 
+diff --git a/drivers/usb/typec/notify.c b/drivers/usb/typec/notify.c
+new file mode 100644
+index 000000000000..0a14d3ae224e
+--- /dev/null
++++ b/drivers/usb/typec/notify.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/notifier.h>
++#include <linux/usb/typec_notify.h>
++
++#include "bus.h"
++
++static BLOCKING_NOTIFIER_HEAD(typec_notifier_list);
++
++int typec_altmode_register_notify(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_register(&typec_notifier_list, nb);
++}
++EXPORT_SYMBOL_GPL(typec_altmode_register_notify);
++
++int typec_altmode_unregister_notify(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_unregister(&typec_notifier_list, nb);
++}
++EXPORT_SYMBOL_GPL(typec_altmode_unregister_notify);
++
++void typec_notify_event(unsigned long event, void *data)
++{
++	blocking_notifier_call_chain(&typec_notifier_list, event, data);
++}
+diff --git a/include/linux/usb/typec_notify.h b/include/linux/usb/typec_notify.h
+new file mode 100644
+index 000000000000..f3a7b5f5b05b
+--- /dev/null
++++ b/include/linux/usb/typec_notify.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __USB_TYPEC_NOTIFY
++#define __USB_TYPEC_NOTIFY
++
++#include <linux/notifier.h>
++
++enum usb_typec_event {
++	TYPEC_ALTMODE_REGISTERED,
++	TYPEC_ALTMODE_UNREGISTERED,
++};
++
++int typec_altmode_register_notify(struct notifier_block *nb);
++int typec_altmode_unregister_notify(struct notifier_block *nb);
++
++#endif /* __USB_TYPEC_NOTIFY */
 -- 
 2.49.0
 
