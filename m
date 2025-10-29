@@ -1,326 +1,92 @@
-Return-Path: <linux-usb+bounces-29840-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29841-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC5E5C1A699
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 13:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C117C1A8E5
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 14:13:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 20B18565A14
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 12:47:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1E300567B10
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Oct 2025 13:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE93A363374;
-	Wed, 29 Oct 2025 12:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAAA92BEFEB;
+	Wed, 29 Oct 2025 12:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DBtqZ5hW"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HuSrHF1g"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BA4363350;
-	Wed, 29 Oct 2025 12:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0FA2BEC2C;
+	Wed, 29 Oct 2025 12:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761740741; cv=none; b=PDrWZM43ZwHYi1np/xOD/ufaTtg+QDGPqBUnAnrlOsDvAfy09dXA48No9xzKFCdfv6JTdD+ce6azq4oNiF3mag6lb2L1R9hEVFIGtYLibkb3U127uLC6Qh+fiB4eRSr66U6jfBhG60QgMuZUCt6F8/d/my+sQMXRJHw/pekR6gc=
+	t=1761742286; cv=none; b=dFW0b5KXZ+1LzKC96qfAmUx3tfpMKPzVyYvkrjhWnw2+0XZ1r7ieJc37slUkutUJD+zMfr4i/OpehmIZplkw+BceABwHsfkiFcV5SOtOF16vQ9Toc+cWuKHOWO8tB//0h+Sey5vEiMH1BtblohMDzDLw42Q8LnEySwog9CDkqsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761740741; c=relaxed/simple;
-	bh=/k3x/0AN/exk9JVJ8ZYwkOpX/jPOrTmTlUIRyGrUZm0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WiZfUJUTmQE2l36KNK9NBWW0wxDGsylgtx5gtacJssE4NLxH3KgvwzgdgZcGdo3plMBeKaNne+ZYOGkDVGTRVEJ+rOds5xn8hY5b0bwco9UD/fOWOp1ttGVDfNQzMORPfmdzS5e6RNTMtLmf+4kb44kE/N1XETG+oloqIC9LeyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DBtqZ5hW; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761740739; x=1793276739;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/k3x/0AN/exk9JVJ8ZYwkOpX/jPOrTmTlUIRyGrUZm0=;
-  b=DBtqZ5hWDfithI1HT15/ftlTKsoy3ztJMi1ReMi+OuefGPoeECbfoxgF
-   9udaOaSNKeAmDl1w/6U19qr+aeRZGUM6UUfUglcoQjND3nHYs+XYcaep4
-   OWwd/nGhN/KsGCoImTVoeJ+7u1y4pqZ6lH6xK9z3XDuWIKZ5CwZ1QQ/hR
-   KQyJEiHrz4Mo9M4sKo+lRwmounTbYoKpvPH4y1ho2QZlIRRdDRDkatNKR
-   1PzCqj2gen7iClDlL2OowXgFPGOjre/DVyA3uSUhwbPOkFYhIsoeiwQOY
-   zKndviEpPideYKwLyAbbAojZpGorHlUsDUmVjRl/tNb9MiuLW4x8lkQEh
-   g==;
-X-CSE-ConnectionGUID: RaprOX+ATlC0EHkc/7Y7jA==
-X-CSE-MsgGUID: OmUa/K07TgeD4sp1z1upQg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11596"; a="86487947"
-X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
-   d="scan'208";a="86487947"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 05:25:38 -0700
-X-CSE-ConnectionGUID: 93DNKLRPSSm+Ui7lTpwiBw==
-X-CSE-MsgGUID: 8g88Ve9hRYufn0mhnjdLOA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
-   d="scan'208";a="186398815"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO mnyman-desk.intel.com) ([10.245.245.23])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 05:25:36 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: gregkh@linuxfoundation.org,
-	uttkarsh.aggarwal@oss.qualcomm.com
-Cc: mathias.nyman@linux.intel.com,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	mathias.nyman@intel.com,
+	s=arc-20240116; t=1761742286; c=relaxed/simple;
+	bh=IA6/gMGcF2fDDfJ6rUgbwhSBCtmCKF8Pfd0AulLr3Us=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qPLvjyyJ1L+HEedQ19s4xyOV79kbVxZfjsACAQC4zDI4jA3ZvCWTBnBXiGJ8u1d+Q5dDsk62cPJEiYV7euAoOlFbNNMvRtgH9Jby0FECyASicmd41uGitz2Qet6xipRK8c+zDfL6C+GXotU3xPn093Fwz/xSImm5Y9ua0kc6450=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HuSrHF1g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E6B3C4CEFD;
+	Wed, 29 Oct 2025 12:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1761742285;
+	bh=IA6/gMGcF2fDDfJ6rUgbwhSBCtmCKF8Pfd0AulLr3Us=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HuSrHF1gX5xHlhJoXyI/WY4pftAPLZ3a2C8f/v24Nza6ZVNCJUK6/eEGOAWWYWQFc
+	 AjhuK/TnGwS4AZG3U1QvnJ8MBLM3izyqYIScijTTQvAO3Ks6fmnrdNC948qkDi7KKQ
+	 9YSnHDbNVIyZZLK26V2C9VREfS0z1hCt24z3fQM4=
+Date: Wed, 29 Oct 2025 13:51:19 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: uttkarsh.aggarwal@oss.qualcomm.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, mathias.nyman@intel.com,
 	wesley.cheng@oss.qualcomm.com
-Subject: [RFT PATCH v3] xhci: sideband: Fix race condition in sideband unregister
-Date: Wed, 29 Oct 2025 14:24:35 +0200
-Message-ID: <20251029122436.375009-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <2025102948-trickery-creative-417e@gregkh>
+Subject: Re: [RFT PATCH v3] xhci: sideband: Fix race condition in sideband
+ unregister
+Message-ID: <2025102956-daunting-roping-a987@gregkh>
 References: <2025102948-trickery-creative-417e@gregkh>
+ <20251029122436.375009-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251029122436.375009-1-mathias.nyman@linux.intel.com>
 
-Uttkarsh Aggarwal observed a kernel panic during sideband un-register
-and found it was caused by a race condition between sideband unregister,
-and creating sideband interrupters.
-The issue occurrs when thread T1 runs uaudio_disconnect() and released
-sb->xhci via sideband_unregister, while thread T2 simultaneously accessed
-the now-NULL sb->xhci in xhci_sideband_create_interrupter() resulting in
-a crash.
+On Wed, Oct 29, 2025 at 02:24:35PM +0200, Mathias Nyman wrote:
+> Uttkarsh Aggarwal observed a kernel panic during sideband un-register
+> and found it was caused by a race condition between sideband unregister,
+> and creating sideband interrupters.
+> The issue occurrs when thread T1 runs uaudio_disconnect() and released
+> sb->xhci via sideband_unregister, while thread T2 simultaneously accessed
+> the now-NULL sb->xhci in xhci_sideband_create_interrupter() resulting in
+> a crash.
+> 
+> Ensure new endpoints or interrupter can't be added to a sidenband after
+> xhci_sideband_unregister() cleared the existing ones, and unlocked the
+> sideband mutex.
+> Reorganize code so that mutex is only taken and released once in
+> xhci_sideband_unregister(), and clear sb->vdev while mutex is taken.
+> 
+> Use mutex guards to reduce human unlock errors in code
+> 
+> Refuse to add endpoints or interrupter if sb->vdev is not set.
+> sb->vdev is set when sideband is created and registered.
+> 
+> Reported-by: Uttkarsh Aggarwal <uttkarsh.aggarwal@oss.qualcomm.com>
+> Closes: https://lore.kernel.org/linux-usb/20251028080043.27760-1-uttkarsh.aggarwal@oss.qualcomm.com
+> Fixes: de66754e9f80 ("xhci: sideband: add initial api to register a secondary interrupter entity")
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> ---
 
-Ensure new endpoints or interrupter can't be added to a sidenband after
-xhci_sideband_unregister() cleared the existing ones, and unlocked the
-sideband mutex.
-Reorganize code so that mutex is only taken and released once in
-xhci_sideband_unregister(), and clear sb->vdev while mutex is taken.
+Looks good, thanks for respinning this.  I don't know if it fixes the
+issue, but it looks sane :)
 
-Use mutex guards to reduce human unlock errors in code
-
-Refuse to add endpoints or interrupter if sb->vdev is not set.
-sb->vdev is set when sideband is created and registered.
-
-Reported-by: Uttkarsh Aggarwal <uttkarsh.aggarwal@oss.qualcomm.com>
-Closes: https://lore.kernel.org/linux-usb/20251028080043.27760-1-uttkarsh.aggarwal@oss.qualcomm.com
-Fixes: de66754e9f80 ("xhci: sideband: add initial api to register a secondary interrupter entity")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
-
-v3:
-  Remove extra blank line
-  Add lockdep_assert_held() and comment for functions where caller must hold mutex
-
-v2:
-  use guard() and fix missing mutex_unlock as recommended by greg k-h
-
----
- drivers/usb/host/xhci-sideband.c | 102 ++++++++++++++++++-------------
- 1 file changed, 58 insertions(+), 44 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
-index e771a476fef2..a85f62a73313 100644
---- a/drivers/usb/host/xhci-sideband.c
-+++ b/drivers/usb/host/xhci-sideband.c
-@@ -73,9 +73,12 @@ xhci_ring_to_sgtable(struct xhci_sideband *sb, struct xhci_ring *ring)
- 	return NULL;
- }
- 
-+/* Caller must hold sb->mutex */
- static void
- __xhci_sideband_remove_endpoint(struct xhci_sideband *sb, struct xhci_virt_ep *ep)
- {
-+	lockdep_assert_held(&sb->mutex);
-+
- 	/*
- 	 * Issue a stop endpoint command when an endpoint is removed.
- 	 * The stop ep cmd handler will handle the ring cleanup.
-@@ -86,6 +89,25 @@ __xhci_sideband_remove_endpoint(struct xhci_sideband *sb, struct xhci_virt_ep *e
- 	sb->eps[ep->ep_index] = NULL;
- }
- 
-+/* Caller must hold sb->mutex */
-+static void
-+__xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
-+{
-+	struct usb_device *udev;
-+
-+	lockdep_assert_held(&sb->mutex);
-+
-+	if (!sb->ir)
-+		return;
-+
-+	xhci_remove_secondary_interrupter(xhci_to_hcd(sb->xhci), sb->ir);
-+	sb->ir = NULL;
-+	udev = sb->vdev->udev;
-+
-+	if (udev->state != USB_STATE_NOTATTACHED)
-+		usb_offload_put(udev);
-+}
-+
- /* sideband api functions */
- 
- /**
-@@ -131,14 +153,16 @@ xhci_sideband_add_endpoint(struct xhci_sideband *sb,
- 	struct xhci_virt_ep *ep;
- 	unsigned int ep_index;
- 
--	mutex_lock(&sb->mutex);
-+	guard(mutex)(&sb->mutex);
-+
-+	if (!sb->vdev)
-+		return -ENODEV;
-+
- 	ep_index = xhci_get_endpoint_index(&host_ep->desc);
- 	ep = &sb->vdev->eps[ep_index];
- 
--	if (ep->ep_state & EP_HAS_STREAMS) {
--		mutex_unlock(&sb->mutex);
-+	if (ep->ep_state & EP_HAS_STREAMS)
- 		return -EINVAL;
--	}
- 
- 	/*
- 	 * Note, we don't know the DMA mask of the audio DSP device, if its
-@@ -148,14 +172,11 @@ xhci_sideband_add_endpoint(struct xhci_sideband *sb,
- 	 * and let this function add the endpoint and allocate the ring buffer
- 	 * with the smallest common DMA mask
- 	 */
--	if (sb->eps[ep_index] || ep->sideband) {
--		mutex_unlock(&sb->mutex);
-+	if (sb->eps[ep_index] || ep->sideband)
- 		return -EBUSY;
--	}
- 
- 	ep->sideband = sb;
- 	sb->eps[ep_index] = ep;
--	mutex_unlock(&sb->mutex);
- 
- 	return 0;
- }
-@@ -180,18 +201,16 @@ xhci_sideband_remove_endpoint(struct xhci_sideband *sb,
- 	struct xhci_virt_ep *ep;
- 	unsigned int ep_index;
- 
--	mutex_lock(&sb->mutex);
-+	guard(mutex)(&sb->mutex);
-+
- 	ep_index = xhci_get_endpoint_index(&host_ep->desc);
- 	ep = sb->eps[ep_index];
- 
--	if (!ep || !ep->sideband || ep->sideband != sb) {
--		mutex_unlock(&sb->mutex);
-+	if (!ep || !ep->sideband || ep->sideband != sb)
- 		return -ENODEV;
--	}
- 
- 	__xhci_sideband_remove_endpoint(sb, ep);
- 	xhci_initialize_ring_info(ep->ring);
--	mutex_unlock(&sb->mutex);
- 
- 	return 0;
- }
-@@ -316,28 +335,25 @@ xhci_sideband_create_interrupter(struct xhci_sideband *sb, int num_seg,
- 	if (!sb || !sb->xhci)
- 		return -ENODEV;
- 
--	mutex_lock(&sb->mutex);
--	if (sb->ir) {
--		ret = -EBUSY;
--		goto out;
--	}
-+	guard(mutex)(&sb->mutex);
-+
-+	if (!sb->vdev)
-+		return -ENODEV;
-+
-+	if (sb->ir)
-+		return -EBUSY;
- 
- 	sb->ir = xhci_create_secondary_interrupter(xhci_to_hcd(sb->xhci),
- 						   num_seg, imod_interval,
- 						   intr_num);
--	if (!sb->ir) {
--		ret = -ENOMEM;
--		goto out;
--	}
-+	if (!sb->ir)
-+		return -ENOMEM;
- 
- 	udev = sb->vdev->udev;
- 	ret = usb_offload_get(udev);
- 
- 	sb->ir->ip_autoclear = ip_autoclear;
- 
--out:
--	mutex_unlock(&sb->mutex);
--
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(xhci_sideband_create_interrupter);
-@@ -352,21 +368,12 @@ EXPORT_SYMBOL_GPL(xhci_sideband_create_interrupter);
- void
- xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
- {
--	struct usb_device *udev;
--
--	if (!sb || !sb->ir)
-+	if (!sb)
- 		return;
- 
--	mutex_lock(&sb->mutex);
--	xhci_remove_secondary_interrupter(xhci_to_hcd(sb->xhci), sb->ir);
--
--	sb->ir = NULL;
--	udev = sb->vdev->udev;
-+	guard(mutex)(&sb->mutex);
- 
--	if (udev->state != USB_STATE_NOTATTACHED)
--		usb_offload_put(udev);
--
--	mutex_unlock(&sb->mutex);
-+	__xhci_sideband_remove_interrupter(sb);
- }
- EXPORT_SYMBOL_GPL(xhci_sideband_remove_interrupter);
- 
-@@ -465,6 +472,7 @@ EXPORT_SYMBOL_GPL(xhci_sideband_register);
- void
- xhci_sideband_unregister(struct xhci_sideband *sb)
- {
-+	struct xhci_virt_device *vdev;
- 	struct xhci_hcd *xhci;
- 	int i;
- 
-@@ -473,17 +481,23 @@ xhci_sideband_unregister(struct xhci_sideband *sb)
- 
- 	xhci = sb->xhci;
- 
--	mutex_lock(&sb->mutex);
--	for (i = 0; i < EP_CTX_PER_DEV; i++)
--		if (sb->eps[i])
--			__xhci_sideband_remove_endpoint(sb, sb->eps[i]);
--	mutex_unlock(&sb->mutex);
-+	scoped_guard(mutex, &sb->mutex) {
-+		vdev = sb->vdev;
-+		if (!vdev)
-+			return;
-+
-+		for (i = 0; i < EP_CTX_PER_DEV; i++)
-+			if (sb->eps[i])
-+				__xhci_sideband_remove_endpoint(sb, sb->eps[i]);
- 
--	xhci_sideband_remove_interrupter(sb);
-+		__xhci_sideband_remove_interrupter(sb);
-+
-+		sb->vdev = NULL;
-+	}
- 
- 	spin_lock_irq(&xhci->lock);
- 	sb->xhci = NULL;
--	sb->vdev->sideband = NULL;
-+	vdev->sideband = NULL;
- 	spin_unlock_irq(&xhci->lock);
- 
- 	kfree(sb);
--- 
-2.43.0
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
