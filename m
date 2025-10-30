@@ -1,131 +1,163 @@
-Return-Path: <linux-usb+bounces-29883-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29884-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A014FC20134
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 13:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EB4BC20352
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 14:22:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BABB1A21303
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 12:48:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 173FF1890162
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 13:22:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0F66326D43;
-	Thu, 30 Oct 2025 12:47:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A552274643;
+	Thu, 30 Oct 2025 13:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MW4iWMyv"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Op3TeOSU";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Op3TeOSU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAF054918
-	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 12:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AC8B238C1A
+	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 13:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761828451; cv=none; b=uNRDJTGHp6FqJ8e0luaQouI3Jvy+L9pP9hU092nObgxyov8z6FJqaP9hE509GcJzGwakCz8NqzbZcKiPJU2d5bAxpnXz5B5RMJSW6ZsdhqJG4+0Egz5DQNuv/34ZALIcd8+xVVRXgBuULDAKtwXvmVKnribkbIKEPyoLMxCW7xI=
+	t=1761830515; cv=none; b=kjkX6wvkWBFlLQMJS+RU9Ukcd70Zt1rdxXAGKeJ51ZlA19H/lFCVn8L/eZkWtCemUj5TIIPAT0qt/CyXe5qXDBQy1gFXrCqHq/kd3NvUH3PKrMz4LeJvSfGCz5q7QZQAaVV0wHj3gjAriDhIKj+4sYf/28J0Aj+nXMX5Vlnunpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761828451; c=relaxed/simple;
-	bh=ZOBiokM8c5XD8o0G5ylHkCAcR25MLrmutsibBfHjPhc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KZEQHKv+89AhqHndC8S9h9OEMPRNgYwvX7lJBkDZL6YvSLWU04h14gEhIEEVF4/SD5FjyaRGAz2kqwC11lIeDokq1zrOtIyeot13p5gKGdWYyawgPb+DITbCoianxifgsRZTs5dJUrC8C3xfCSqISHvpPNGvoPUKDxuoO2ZsQgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MW4iWMyv; arc=none smtp.client-ip=209.85.166.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-945a5a42f1eso45037839f.0
-        for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 05:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761828449; x=1762433249; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gnwtP05c5M93G2taJ4NMon+tkAFmpaQ7EAFzjgkQfJs=;
-        b=MW4iWMyvPu8yEmYxvxEC6yWaPhXadGpbKXGsDyWyCjMqLnrLl925/hWKsOrcJW1Skx
-         IDXT/n+unvH5F0fDRb2/u5avufu4rxUEJxaDc+j5Pb1ZYs1YVtnWKE6HmPM6mP64QlhN
-         kWzN64XmW4VqwOWP80Y8EpjCypMUJfyROoBqipyl1C38xLqjbctQx9SMgV+IN0cE26UM
-         iESatHuXExuG5RD2CZaICSduAF9MDtuFVZiMcriAmh4Jtcl7rmecMkmYZCcDPJwzriKx
-         NJ1on2UDZFy4bO24G8V+C5qsVKxha+3kJ9AriaHkU7GWUF1cWidbhgJkJLRf4Ps04EA1
-         vlGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761828449; x=1762433249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gnwtP05c5M93G2taJ4NMon+tkAFmpaQ7EAFzjgkQfJs=;
-        b=BXlQ+t/rYvuW1u307lzYFU4fXZacuy/aHz4ik+cm1QDaaIGAAYWnFOQcWeEvXS5gMS
-         HZxwZn8p/saKL+cqOPqADvR9ISuQqcCBXalN9pD+1UewS0rO/zErWN76mzR3dy+kjFrr
-         a3sa8ExHjOCqrdvbRVnpfW/MJ4yMEuTR4LDciouYJNCb9HmXT/j3WXZ9vmvhuYUbSgI3
-         6ty9hoOSbjyzFYN5P93Nw2vki3uTJcz21msxP+wXCSR7KU6Hj/3MjfIIgSTOnQ3QchU2
-         Mu5iCuEIbr119pCQizHLnf0QZha41/2bZhVY23sm6qe6lXTQeyu+rJF4eH2emdpiFTmY
-         +wrg==
-X-Forwarded-Encrypted: i=1; AJvYcCW8/9zjGzXB0mgGhLXh+lAjo77htRYNjyjCIOoA5Qqgb7trRLfo+uE95S4Bokcv9xJ4gM9OhikqiOM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeTBuP1LkCKRvzEdnhhb8CrsbD9MgOxR2YtWBkYMqx4N80jvdd
-	b9k7YC6JiQpMZKfa53AXjKBIupjslS0EwXJndo9CNwEq9+QnI2/c2DigR1nVEsGNjZ55j5TTemG
-	MHB3s7MNqPynqFc72TN/9LVwgeg6RUGE=
-X-Gm-Gg: ASbGncsflcdkt8tqkn3NbnhA6kIWoDhqCTwI8/FrKQviMsiizV/33G8sYesmYN4NPHg
-	fbMKeq7pA0OHEQJvPrLwfZcN6QejRqiMxrxiPndKGt7LJuzkT930pT2yXEOa3Qn7FnZs04QFXsh
-	0TP1dIAP7R7k9QDKJg6bkD2gwDuc2P5CX4RKzPxrZ2c7Sd0/Y9OiT+YaFIuSXCfqF7l8Jz+yG3x
-	fOwt8DF0woQrszWdlqbEaxXlTLAQb+QqDlZK/JRSunaxVceI8Auvrv1l2TlAPUrIlWFRVgt
-X-Google-Smtp-Source: AGHT+IHCxXydKxh9JkZNuVgxEGvL7KyPwxy6Io3OsezmVBVknh0x/Frm0LIboOPYmUq1goG7v4/bpUjgNtbL8zRPZZU=
-X-Received: by 2002:a05:6602:6cc4:b0:940:d996:7837 with SMTP id
- ca18e2360f4ac-945c979c141mr889994039f.10.1761828448756; Thu, 30 Oct 2025
- 05:47:28 -0700 (PDT)
+	s=arc-20240116; t=1761830515; c=relaxed/simple;
+	bh=cUhu7OfRBq5lwLTMgUef2F+WRmc10m08/3mYAxUZ50k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T7cKD6dqRqbRNEn3omZEPzLMeYfdgdam0d+7vdSc92jULLxXNF5AC5K8N+NVjnl38FwucACu4u76mKOn9N7hY7EnnUV5jqWwkF+tRoMwNvNmEk7UXMGdT0JAkVILmsrtw0NI+s2zvovocXGwJ6oWcWISfHla0NPNIccMqwO49bU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Op3TeOSU; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Op3TeOSU; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B2C851F7CA;
+	Thu, 30 Oct 2025 13:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1761830511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=UAoEaA6koO3Fmiw6R0Yi3mg07WfJDv79jirZ2ch6fVg=;
+	b=Op3TeOSUe3XN2/pQXZkm2vxcBpvNcQfYqv7FX3Msuo+E2WHAGQLVqDvuAuGY9Q7CJhdEMX
+	58ZbH6rcoxBg/gYSB/THNc26bgcMMpdWBoCMAONLNilpaUPN7SXxIt5bsSd6YH5ba5sQ/6
+	TsgWRoPk07QS8e2pPQ+0IaSWECEoRkc=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1761830511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=UAoEaA6koO3Fmiw6R0Yi3mg07WfJDv79jirZ2ch6fVg=;
+	b=Op3TeOSUe3XN2/pQXZkm2vxcBpvNcQfYqv7FX3Msuo+E2WHAGQLVqDvuAuGY9Q7CJhdEMX
+	58ZbH6rcoxBg/gYSB/THNc26bgcMMpdWBoCMAONLNilpaUPN7SXxIt5bsSd6YH5ba5sQ/6
+	TsgWRoPk07QS8e2pPQ+0IaSWECEoRkc=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9EA4D1396A;
+	Thu, 30 Oct 2025 13:21:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id AO3hJW9mA2kyXQAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Thu, 30 Oct 2025 13:21:51 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: gregkh@linuxfoundation.org,
+	gustavo@embeddedor.com,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCHv2 1/1] uapi: cdc.h: cleanly provide for more interfaces and countries
+Date: Thu, 30 Oct 2025 14:20:53 +0100
+Message-ID: <20251030132149.2575138-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAFNq8R7q-GvFgwRKewzG=ZwkbxEfhKjEsxHWXQ0q8BsSSDFcnQ@mail.gmail.com>
- <2025103049-suing-renewably-fd67@gregkh>
-In-Reply-To: <2025103049-suing-renewably-fd67@gregkh>
-From: Li Haifeng <omycle@gmail.com>
-Date: Thu, 30 Oct 2025 20:47:17 +0800
-X-Gm-Features: AWmQ_bnMyOTxq2NNLN_DgsUVoIz85Ut1ncE0R_8YULW3dKwQpBu9pcUP79nQs5Y
-Message-ID: <CAFNq8R6uZSS3+nWXkR8XERjMRGTC_4_47UKm_N=P8Um5ySLAtg@mail.gmail.com>
-Subject: Re: Issue with DWC3 Gadget Driver: Stall After Transmitting Only 2KB
- Using Scatter-Gather and TRB Chaining
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Felipe.Balbi@microsoft.com, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:helo];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
+X-Spam-Level: 
 
-Dear Greg,
+The spec requires at least one interface respectively country.
+It allows multiple ones. This needs to be clearly said in the UAPI.
 
-Thank you for your prompt response and advice.
+V2: following Gustavo's suggestion to use an union
 
-I just tested the issue on kernel version 6.1.17, and the problem
-persists. I will proceed to try the latest kernel release 6.17, and
-report back with the results as soon as possible.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/class/cdc-acm.c  |  2 +-
+ include/uapi/linux/usb/cdc.h | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-Appreciate your guidance.
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 73f9476774ae..c272b00b947c 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1475,7 +1475,7 @@ static int acm_probe(struct usb_interface *intf,
+ 		if (!acm->country_codes)
+ 			goto skip_countries;
+ 		acm->country_code_size = cfd->bLength - 4;
+-		memcpy(acm->country_codes, (u8 *)&cfd->wCountyCode0,
++		memcpy(acm->country_codes, (u8 *)&cfd->wCountryCode0,
+ 							cfd->bLength - 4);
+ 		acm->country_rel_date = cfd->iCountryCodeRelDate;
+ 
+diff --git a/include/uapi/linux/usb/cdc.h b/include/uapi/linux/usb/cdc.h
+index 1924cf665448..0208b2f76bf1 100644
+--- a/include/uapi/linux/usb/cdc.h
++++ b/include/uapi/linux/usb/cdc.h
+@@ -104,8 +104,10 @@ struct usb_cdc_union_desc {
+ 	__u8	bDescriptorSubType;
+ 
+ 	__u8	bMasterInterface0;
+-	__u8	bSlaveInterface0;
+-	/* ... and there could be other slave interfaces */
++	union {
++		__u8	bSlaveInterface0;
++		DECLARE_FLEX_ARRAY(__u8, bSlaveInterfaces);
++	};
+ } __attribute__ ((packed));
+ 
+ /* "Country Selection Functional Descriptor" from CDC spec 5.2.3.9 */
+@@ -115,8 +117,10 @@ struct usb_cdc_country_functional_desc {
+ 	__u8	bDescriptorSubType;
+ 
+ 	__u8	iCountryCodeRelDate;
+-	__le16	wCountyCode0;
+-	/* ... and there can be a lot of country codes */
++	union {
++		__le16	wCountryCode0;
++		DECLARE_FLEX_ARRAY(__le16, wCountryCodes);
++	};
+ } __attribute__ ((packed));
+ 
+ /* "Network Channel Terminal Functional Descriptor" from CDC spec 5.2.3.11 */
+-- 
+2.51.1
 
-Best regards,
-Haifeng
-
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2025=E5=B9=B410=E6=9C=8830=E6=
-=97=A5=E5=91=A8=E5=9B=9B 17:39=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Oct 30, 2025 at 04:49:19PM +0800, Li Haifeng wrote:
-> > Hello Linux USB experts,
-> >
-> > I'm encountering an issue with the DWC3 gadget driver on a Rockchip
-> > RK3588 platform running Linux kernel 5.10 (from the
-> > rk3588_linux_release_20230114_v1.0.6 SDK). I'm developing a kernel
->
-> 5.10 is _VERY_ old and obsolete and way behind in new hardware support,
-> especially for the dwc3 driver.  Have you tried the latest kernel
-> release with is many years newer?  How about 6.17?
->
-> If you are stuck with an old release for some reason, please work with
-> the company that gave it to you as you are paying for support from them
-> for it, it is their responsibility, not the community's responsibility
-> to manage that release.
->
-> And pleaase, do not release new devices on this old kernel version, you
-> are about to loose security updates in a year for it, which is not good
-> for the lifetime of your device.
->
-> thanks,
->
-> greg k-h
 
