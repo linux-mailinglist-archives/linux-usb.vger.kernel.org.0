@@ -1,165 +1,259 @@
-Return-Path: <linux-usb+bounces-29868-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29869-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4EEFC1E146
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 03:00:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53F45C1E1D2
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 03:17:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99EAD4057FE
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 02:00:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0279D3A47E3
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 02:17:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E64F12EACEE;
-	Thu, 30 Oct 2025 02:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 127E128AAEE;
+	Thu, 30 Oct 2025 02:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="K1r43AMb"
+	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="hqDb4x3b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D5B2E3387
-	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 01:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9604D17B50A;
+	Thu, 30 Oct 2025 02:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761789602; cv=none; b=ER14HXxlcxlaH7h0wjApkdJ8cT9q8WvlVTURAU49pJqKSPE9JDfsipNPwTXwvYG8fvIjpLV3kcMzS2+J0S2l2R4XxAygIX1WUvat9/wz6iWhL4mpZAut/XL7CcljnCP4kGQayEqWMTLMfstuQBNWvcdhzDacHR7euBODIOwDQKI=
+	t=1761790623; cv=none; b=SuJuerwjXuXRn60Ps/J0dJfeVBCw75Mh7Povq/PJTwebQMlXkprwkJpQaCcYPbWP2r/hwOVaOJVN7ltbZBBbAw7z7q8WQN0oLcBP/ZlOhT6Rib3sbshlQb2Vklm3MnjPiMztDuuJqXziwhkU64HKhMjxcPkHO+TOuOzyYLHib4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761789602; c=relaxed/simple;
-	bh=WCn19iM1Z0MfIjW+rItRIGL8bdfe6BgzVs9U3AbCLZg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mpHU7EUhU2cEUa1bu3VY0h6W+LtfU3iWH7vbM++IktxPyhm1rxVAIuI6yMbehvZKihT/I1HpL03bl2aMlzrn4qhkco7JadPo0U8184aCka25GmRh+vZ6EeRAdP9xP7km5zXWPKty5kpi5QllDcrqgOOTeDZhbv2HgTQs8pPzdAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=K1r43AMb; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4e88cacc5d9so4370631cf.0
-        for <linux-usb@vger.kernel.org>; Wed, 29 Oct 2025 18:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1761789598; x=1762394398; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Z2NHI+JKle61/F1K6gTmohpSB527P/h9U8G3EyLfGXc=;
-        b=K1r43AMby/1As3GK2ps2Xm/J69G2GdXWhudnC9HEO4vbDDsuChofFnnnK42Iw8TfoQ
-         cYdxHf986wyLX5UuPB5u9Zo2THUkoWbNF2F3LX6Xy9zu4L6Rx888L8h5SKRSPwXMWGtQ
-         LNa7t3BVMWCQSydPGsTaQ8kL2ryXyWuBMlHkbWgVKoPawY6D/Rb7F8qfCdVpEurKxM9N
-         hm7ODu8erjm1ePtiH6zDPfQAgkrUxfMpZ/+6UySX6/jJZ+zZUjMfxB2gDfNiDbKnaUH3
-         aVwryOnUnhI8krFad+XBiubyFA+9DgPEb7wDNJ1gUmRBtRR5IdHoE2RkusrwiW7PjKBa
-         fnSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761789598; x=1762394398;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2NHI+JKle61/F1K6gTmohpSB527P/h9U8G3EyLfGXc=;
-        b=KDh2Ta+1jJgFQ+iIlppwj4uuayb5PqaK1gKTXJzFc/jVHPvmRGoGBqSpn0rwonN0TZ
-         tdAoSvpketIfHU6poai5KavopYb1kuI0UpYFKuOWkP2HYxxEk1sJv5Fw7mybjhWZuB6G
-         ZHNkXGmYzjA7Bi22rFIsoneQ+SHCZow7oCwr4ToHn14te3/aAYBOvZvam6a5iYhBIUaz
-         nS/HYEjUHN3yB6cxeEyNIZcvTeCPGwUytL6eRr5TxYmeTt6GhCOHnZbLMjfRU/YJixKn
-         /Cu+A3SLfvfE6HC4+U9wUfm+FJrIuRnk2pt0n4kPqz+CxcGl1LhCpISKU6FHm9RSwmmp
-         39MQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFUzWZmpC0eSXnPj2saBJLNde83repycwapb565AYzmSIaD0qeCFlYxwhjlZdZErIkhrXF6GGAEUE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXS0P955bUyXL28ZBT2s8wCoMd+6xkAQLE1olmT/iRVeAxp1xL
-	DX8stog/vWCjx8spIQhLH5X9Y1Gd45ojHehzUqvsgGE70xbQzR00dpoAgTxAPtTLww==
-X-Gm-Gg: ASbGncsdhuYTLL9Bb1gfUfwNAoGdGbC8R6nfaDOLAQhvwW8wwyz+nYx2EbH2U9U5wBW
-	FzW7t5h9VwxUCS3WEZhutYagkHf7xGFn3OSko92OvGgsfynu6471rT2xjF1oyv256fL+lYrPZbA
-	thgCvupUFJWstWa8cMfeHjljm/QzAuq/8F48pLGlvxAYquNj8Q3bP1H0ZVBqeUNT21GmFVBxK4u
-	SNZaA1loAeIC9MeLLpOykv7gCPO0TeduwnrmtN0dWEuSq2PTe/gu+7uBaTxJKUIN8AKAwxIYZvr
-	rovXId/5wAT1NB3h6oEibvbG4I+uy8gT3BiRhw3ueXplnLKWf73i6LBwmvjolkzbc+QW+Am4Tgr
-	pUCoyMBXGmBNuzOxn8+bdyuLAmJvq8lEOg8w0mB0IIAwDiUgrxYmBmVlcUUF8rDdrU6X8ihXD0j
-	skug==
-X-Google-Smtp-Source: AGHT+IH+TV6RMeAIWWxN5dWDK8nDnwa8KRVgo55fY3RxQYJF0+8j4+ggyy4srfUSmRt7u00GArjcJg==
-X-Received: by 2002:a05:622a:22aa:b0:4ec:fafd:7605 with SMTP id d75a77b69052e-4ed2236368amr17970891cf.60.1761789598508;
-        Wed, 29 Oct 2025 18:59:58 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::db9a])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4eba3858f1esm105935391cf.29.2025.10.29.18.59.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 18:59:57 -0700 (PDT)
-Date: Wed, 29 Oct 2025 21:59:55 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Desnes Nunes <desnesn@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Subject: Re: [PATCH 2/2] usb: storage: rearrange triple nested CSW data phase
- check
-Message-ID: <a8f5302d-ed93-4b2f-a706-e7e2646986a3@rowland.harvard.edu>
-References: <20251029191414.410442-1-desnesn@redhat.com>
- <20251029191414.410442-3-desnesn@redhat.com>
- <27c07b90-f4ef-462b-8b6d-46afd4301912@rowland.harvard.edu>
- <CACaw+eyo4Yc0=Ak=RWsozDVMzGHaZhW6SBHJUWFqRb6gPzWS8Q@mail.gmail.com>
+	s=arc-20240116; t=1761790623; c=relaxed/simple;
+	bh=/mzCdVqHEvL3D3Yi6YRm22qJsNK9CIh6ANT7cZjG5f0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AHtMp7wePP0OfAjZ0KyRTfWTbnS+Vv6Xr9i/fG0HxGhX7OhcgBvDxazlktB3tLTnXm/WTWRaGS4k8mQmEkzc5KaN3hu36Kt2m5lQz/bAimvBhISXYtLBqDIHqiQ7B1AYsT5EAUGMlM9mUiBemZ91HqgXU5i0x1KIcBh7/gUKiIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=hqDb4x3b; arc=none smtp.client-ip=54.254.200.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airkyi.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=airkyi.com;
+	s=altu2504; t=1761790616;
+	bh=dRHxWofqNvre4c7gYW9pSN8OyvpdSlasaGgbf/HjiS0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=hqDb4x3bszkhD0yyEXpcid4LlIz+kWi3sYR1De5R6ckCAJCXUVV9cz3Z0D/ctvfFN
+	 e1Wkb8GXkC+aamS1Zj8apEwEghfmXIL0EFyhoPiyckDUKJgewOIcUkZcUHW9KSTFVh
+	 pPl/YHdSSL5+4z/22Yzf3SpVctE08YK9eMahFoeU=
+X-QQ-mid: esmtpsz21t1761790610t2286961f
+X-QQ-Originating-IP: FCJSyEhyWxQkXT6SGDOtofz4EUe9Cd81eY6Os229Qyg=
+Received: from [172.16.12.149] ( [58.22.7.114])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 30 Oct 2025 10:16:47 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1275723360735953640
+Message-ID: <C6253E8254C80B0F+839b71d0-1bd8-40b7-9515-7ce4a1eb8673@airkyi.com>
+Date: Thu, 30 Oct 2025 10:16:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 10/10] arm64: dts: rockchip: rk3399-evb-ind: Add
+ support for DisplayPort
+To: Peter Chen <hzpeterchen@gmail.com>,
+ Chaoyi Chen <chaoyi.chen@rock-chips.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
+ Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+References: <20251029071435.88-1-kernel@airkyi.com>
+ <20251029071435.88-11-kernel@airkyi.com>
+ <CAL411-o6mF71oBeRsJ-OPZNbLegn4iJ_ELN9xVdppTM3ssUPOw@mail.gmail.com>
+ <cc8b583a-77ec-4a7f-97cc-2d148f7fee9f@rock-chips.com>
+ <e0c5bda3-7428-49e0-9955-fa23f1e4f35d@rock-chips.com>
+ <CAL411-oXfvp-iqN+uRmFHijdmW=1omKwozKOoZ2shxukMHmwPg@mail.gmail.com>
+Content-Language: en-US
+From: Chaoyi Chen <kernel@airkyi.com>
+In-Reply-To: <CAL411-oXfvp-iqN+uRmFHijdmW=1omKwozKOoZ2shxukMHmwPg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACaw+eyo4Yc0=Ak=RWsozDVMzGHaZhW6SBHJUWFqRb6gPzWS8Q@mail.gmail.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:airkyi.com:qybglogicsvrsz:qybglogicsvrsz4a-0
+X-QQ-XMAILINFO: Mzgy3+ovZurwXmt9VpysjQYs7i6RCY+CjEOjVuNDMu+YT3AbFRGFg97W
+	Y+Gd3dTHLF3PSGmuOQhjWsflgqGBi1Xpf9dfmH9C4o9L03njp8/uwKvwB8CTdGZyomoN19e
+	A/9aoDeCVnUGYqqTEO7CDTVYGQELcsKe3PNLemj5slJFwOgYrK34V9WVRTla27VuwEWYGlG
+	ctQudMFauBVMwKdTWBqKmb4Oo/kflYNIaOg0TUE7jgOZQCDzgAFMVfWFQR4HRRfMqBxS/hX
+	/wz5slbRIm9D7FlqoGiDLzTPMLSAaV8Bo43LUl/isEo/NUKm41R1n9O4uDUNuKJyM62AKUD
+	18JVnPlJgFHjM7M51uM3fCdj1FkqL1+VrI65z95aNQpnA5xq6bnMqI5AmOPnWpYfocFG2EG
+	R9WJ3WqOMgakanCqElF/eirLe7MHSTMe9rs5R1FPGz+ra77pwlM0Ci3+YhI0GExPL+sKh6+
+	EtbkgleOQiNvRWJPGbEIOADJ9LhbkODHvf9eW8Nkj+HJG0DKNkjWPYl6FxHlN9KCidah+wC
+	Jx008E/TUah1o9rJZhVMFJwYnMx1MieIDjZLyxrgggWn2JS9+Ei9m2pTnbrBg6qRyBsQ0nt
+	P2Gt4EGeCaB9OQX7vCdDfAUd3ZjVJCeiZGtYOnkhj9Ec8W0gLX7sWysdIdF+gkQurq5IwWZ
+	oa1Wx565e614rNwzm6qG+drDFlPnlUUaGWHHWKKpya28a8z1AV/2PSq15zqKcqouzAnD3Sc
+	IaUnJTHS0GIljbz0zZ73u0buLeb+89Dnc0jf0FlkeaUXSoNHN+Iqy/MaJTHCPwV1Z08W1TF
+	cHeF2La887WIyVT7ad88hgHHCplZXUxMVMGxuv9HDQ7lMF3Z7+KdgKRxZzR2F6GZHPjCt7D
+	RTM9aJ9y7VUPm8yL0c/ionzq2RHSdEQyDP/s3tz+nQBN+DtEV+eNF4VVhIBU5faCCAB5lcz
+	N2OIuA9v7QQQPNDyYm9sE2p+mDm+37dX1yidstQo1Ew8O+cBihdf38LLM/iBXgFHl5ldy2C
+	icb3Xizw==
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+X-QQ-RECHKSPAM: 0
 
-On Wed, Oct 29, 2025 at 09:39:36PM -0300, Desnes Nunes wrote:
-> Hello Alan,
-> 
-> On Wed, Oct 29, 2025 at 6:54 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Wed, Oct 29, 2025 at 04:14:14PM -0300, Desnes Nunes wrote:
-> > > This rearranges the triple nested CSW data phase if clause, in order to
-> > > make usb_stor_Bulk_transport() code more readlable. No functional change.
-> > >
-> > > Signed-off-by: Desnes Nunes <desnesn@redhat.com>
-> > > ---
-> > >  drivers/usb/storage/transport.c | 21 ++++++++++-----------
-> > >  1 file changed, 10 insertions(+), 11 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-> > > index 96b81cf6adc7..3f2e1df5ad1e 100644
-> > > --- a/drivers/usb/storage/transport.c
-> > > +++ b/drivers/usb/storage/transport.c
-> > > @@ -1188,18 +1188,17 @@ int usb_stor_Bulk_transport(struct scsi_cmnd *srb, struct us_data *us)
-> > >                * check whether it really is a CSW.
-> > >                */
-> > >               if (result == USB_STOR_XFER_SHORT &&
-> > > -                             srb->sc_data_direction == DMA_FROM_DEVICE &&
-> > > -                             transfer_length - scsi_get_resid(srb) ==
-> > > -                                     US_BULK_CS_WRAP_LEN) {
-> > > +                 srb->sc_data_direction == DMA_FROM_DEVICE &&
-> > > +                 transfer_length - scsi_get_resid(srb) == US_BULK_CS_WRAP_LEN) {
-> >
-> > This change has nothing to do with the subject of the patch.  Please
-> > leave the code the way it was.
-> >
-> > >                       struct scatterlist *sg = NULL;
-> > > -                     unsigned int offset = 0;
-> > > -
-> > > -                     if (usb_stor_access_xfer_buf((unsigned char *) bcs,
-> > > -                                     US_BULK_CS_WRAP_LEN, srb, &sg,
-> > > -                                     &offset, FROM_XFER_BUF) ==
-> > > -                                             US_BULK_CS_WRAP_LEN &&
-> > > -                                     bcs->Signature ==
-> > > -                                             cpu_to_le32(US_BULK_CS_SIGN)) {
-> > > +                     unsigned int offset = 0, buflen = 0;
-> >
-> > It seems silly to initialize buflen to 0 when the very next statement is
-> > going to overwrite that value.
-> >
-> > Also, "buflen" is not a good name for this variable, because the
-> > variable does not contain the length of a buffer.  Rather, it will
-> > contain the amount of data that got transferred by the
-> > usb_stor_access_xfer_buf() routine.  The following "if" statement then
-> > tests whether that amount is equal to the buffer length.
-> >
-> > Alan Stern
-> 
-> I tried to borrow some code from usb storage protocol, but after these
-> observations I do agree it is not a good name here.
-> Nonetheless, I will drop this patch from v2 as requested.
+Hi Peter,
 
-I didn't mean that the entire patch should be dropped, just the changes 
-to the indentation of the first few lines.
+On 10/30/2025 9:34 AM, Peter Chen wrote:
+> On Wed, Oct 29, 2025 at 6:32 PM Chaoyi Chen <chaoyi.chen@rock-chips.com> wrote:
+>> On 10/29/2025 6:21 PM, Chaoyi Chen wrote:
+>>
+>>> Hi Peter,
+>>>
+>>> On 10/29/2025 5:45 PM, Peter Chen wrote:
+>>>>> +&i2c4 {
+>>>>> +       i2c-scl-rising-time-ns = <475>;
+>>>>> +       i2c-scl-falling-time-ns = <26>;
+>>>>> +       status = "okay";
+>>>>> +
+>>>>> +       usbc0: typec-portc@22 {
+>>>>> +               compatible = "fcs,fusb302";
+>>>>> +               reg = <0x22>;
+>>>>> +               interrupt-parent = <&gpio1>;
+>>>>> +               interrupts = <RK_PA2 IRQ_TYPE_LEVEL_LOW>;
+>>>>> +               pinctrl-names = "default";
+>>>>> +               pinctrl-0 = <&usbc0_int>;
+>>>>> +               vbus-supply = <&vbus_typec>;
+>>>>> +
+>>>>> +               usb_con: connector {
+>>>>> +                       compatible = "usb-c-connector";
+>>>>> +                       label = "USB-C";
+>>>>> +                       data-role = "dual";
+>>>>> +                       power-role = "dual";
+>>>>> +                       try-power-role = "sink";
+>>>>> +                       op-sink-microwatt = <1000000>;
+>>>>> +                       sink-pdos =
+>>>>> +                               <PDO_FIXED(5000, 2500, PDO_FIXED_USB_COMM)>;
+>>>>> +                       source-pdos =
+>>>>> +                               <PDO_FIXED(5000, 1500, PDO_FIXED_USB_COMM)>;
+>>>>> +
+>>>>> +                       altmodes {
+>>>>> +                               displayport {
+>>>>> +                                       svid = /bits/ 16 <0xff01>;
+>>>>> +                                       vdo = <0x00001c46>;
+>>>>> +                               };
+>>>>> +                       };
+>>>>> +
+>>>>> +                       ports {
+>>>>> +                               #address-cells = <1>;
+>>>>> +                               #size-cells = <0>;
+>>>>> +
+>>>>> +                               port@0 {
+>>>>> +                                       reg = <0>;
+>>>>> +
+>>>>> +                                       usbc_hs: endpoint {
+>>>>> + remote-endpoint = <&u2phy0_typec_hs>;
+>>>>> +                                       };
+>>>>> +                               };
+>>>>> +
+>>>> Why USB2 PHY needs to be notified for Type-C connection?
+>>> I think the USB-connector binding require a port@0 for High Speed.  So I filled in USB2 PHY here. And I have looked up boards with the same usage, and some of the results are as follows:
+>>>
+>>> - rk3399-firefly.dts
+>>>
+>>> - rk3399-pinebook-pro.dts
+>>>
+>>> - rk3399-eaidk-610.dts
+>>>
+> Okay.  My question is basic: USB2 PHY supplies DP/DM, and the DP/DM is
+> short for Type-C connector,
+> and no control is needed for Type-C application.
+> Why is there a remote-endpoint connection between USB2 PHY and Type-C connector?
 
-As for the variable name, num_written or something like that would be 
-preferable to buflen.  You can make up something better, or you can drop 
-the entire patch -- your choice.
+ From the perspective of Type-C, this should not be added.  Is the approach in v2 correct [0] ?
 
-Alan Stern
+[0]: https://lore.kernel.org/all/20250715112456.101-6-kernel@airkyi.com/
+
+Or is the following approach correct?
+
+
+port@0 {
+     reg = <0>;
+
+     usbc_hs: endpoint {
+         remote-endpoint = <&tcphy0>;
+     };
+};
+
+port@1 {
+     reg = <1>;
+
+     usbc_ss: endpoint {
+         remote-endpoint = <&tcphy0>;
+     };
+};
+
+port@2 {
+     reg = <2>;
+
+     usbc_dp: endpoint {
+         remote-endpoint = <&tcphy0_typec_dp>;
+     };
+};
+
+
+>
+>>>>> +                               port@1 {
+>>>>> +                                       reg = <1>;
+>>>>> +
+>>>>> +                                       usbc_ss: endpoint {
+>>>>> + remote-endpoint = <&tcphy0_typec_ss>;
+>>>>> +                                       };
+>>>>> +                               };
+>>>>> +
+>>>>> +                               port@2 {
+>>>>> +                                       reg = <2>;
+>>>>> +
+>>>>> +                                       usbc_dp: endpoint {
+>>>>> + remote-endpoint = <&tcphy0_typec_dp>;
+>>>>> +                                       };
+>>>>> +                               };
+>>>>> +                       };
+>>>>> +               };
+>>>>> +       };
+>>>>> +};
+>>>>> +
+>>>> .....
+>>>>>    &u2phy0 {
+>>>>>           status = "okay";
+>>>>> +
+>>>>> +       port {
+>>>>> +               u2phy0_typec_hs: endpoint {
+>>>>> +                       remote-endpoint = <&usbc_hs>;
+>>>>> +               };
+>>>>> +       };
+>>>>>    };
+>>>>>
+>>>> There is no switch and mux, how to co-work with Type-C?
+>>> I checked the phy-rockchip-inno-usb2.c but did not find any switch or mux. Does this mean that we need to implement them? Thank you.
+>> Wait a minute, actually we have multiple hardware interfaces, one of which is Type-C, eventually connected to USBDPPHY, and the other is micro-usb connected to U2PHY.
+> I assume the Micro-USB connector does not use Type-C/PD IC, is it
+> right? Does it relate to this patch?
+>
+> Best regards,
+> Peter
+>
+
 
