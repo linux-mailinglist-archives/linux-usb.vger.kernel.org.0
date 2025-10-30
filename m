@@ -1,82 +1,103 @@
-Return-Path: <linux-usb+bounces-29881-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29882-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62089C1F595
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 10:41:15 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C55BC1F586
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 10:40:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2453B4EAD0F
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 09:40:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8F52D34D851
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 09:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 359EE2BFC85;
-	Thu, 30 Oct 2025 09:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE536342C9A;
+	Thu, 30 Oct 2025 09:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="V4bWSrgF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hjcff35R"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E577342CAF
-	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 09:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7DE341661;
+	Thu, 30 Oct 2025 09:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761817186; cv=none; b=gezwp6OSsTO5WjsnGd+JTo2I0Bzd7OZf9vetHUu9EscC+a5I18m3l9iPrwr2HH2ptU+g5CjPZCHZiBAso8wFYYgZZ9RL/NfOZS+UqVAcQttEFOT68bM56IY06vvM1DqbPD7rJ/K4D7YGtn4nBZin0kvU1trbT5Ph6ljqDrjAi94=
+	t=1761817228; cv=none; b=hD1D78bffxlV7cyXi0beO1zAqYIJT7K/zdXVsA8yukkvvk/qj5CgSlnLVqWnypiNzwR1pKPJQZmT7Dv18AAUzwiIIdmLt2FdFBm+c2TPsQJd4gIfzf8O3y5yI08ox++pklewhG2Ly4+ZJ8NPz/2si38gxLZZdQiaCutv1gVRFXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761817186; c=relaxed/simple;
-	bh=ecCmwU5q6n4Y+uW5kJqayPDanKOQCZC+yACE+kp4Uc0=;
+	s=arc-20240116; t=1761817228; c=relaxed/simple;
+	bh=WrfP/raxXECm6y+BjC6Gos4EkPPABLN2YvzRMU/SBBE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hL2NuxwviXyRfSKgd8fotu79ps+u5jzZsLNNtsR60nEcW2dTFcIKot+dtmc0zXTQ2v1SRFMg6Lg0kB7pjZFad7OnhRc66qLHDIIZkDu45Vf7C/2cO1q6tDZtz74RE5ngLKHmzkfYfoqfOjkzR74B2+GH9FEtKTO86WUeAF3z/1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=V4bWSrgF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5452C4CEF1;
-	Thu, 30 Oct 2025 09:39:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761817186;
-	bh=ecCmwU5q6n4Y+uW5kJqayPDanKOQCZC+yACE+kp4Uc0=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=aW/MH91H3tKQxlJof5/yM+ByVFl2NJH7bOtnsB7DPJy5V8K0T2ItFa/mxZrVYXybDzkCCiNw7chgAhoP/vCKxbpvWEnQZYATv4VhuVYCsQ1NfAybCltaOgQoCtsip5/MNbtG+nX6IFKto7SJR8CFSoU/UKsL7mlTn2unKnU7QRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hjcff35R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF9FC4CEF1;
+	Thu, 30 Oct 2025 09:40:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761817227;
+	bh=WrfP/raxXECm6y+BjC6Gos4EkPPABLN2YvzRMU/SBBE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V4bWSrgF+RLi7PEmkLDw7PCyNONSMZ+OPVJo62m0CVZgwKeXOQZJ3jtATtgtRCdBG
-	 6hdekBuYLBKzdGe5R1sqDHtpQRE3Dg1CesDVtBvl7BYKJWZqzyVNlDpFEQ4u+uiUnl
-	 wnLxZgUwg5q3RHxvzNNPP3cpL/5jaB5IbsPQ37YI=
-Date: Thu, 30 Oct 2025 10:39:43 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Li Haifeng <omycle@gmail.com>
-Cc: Felipe.Balbi@microsoft.com, linux-usb@vger.kernel.org
-Subject: Re: Issue with DWC3 Gadget Driver: Stall After Transmitting Only 2KB
- Using Scatter-Gather and TRB Chaining
-Message-ID: <2025103049-suing-renewably-fd67@gregkh>
-References: <CAFNq8R7q-GvFgwRKewzG=ZwkbxEfhKjEsxHWXQ0q8BsSSDFcnQ@mail.gmail.com>
+	b=Hjcff35RmI/X7nv2sjMFkjeDZnmBvL4gjMlh5dTozmH/gFabhgd+lJXnIOnQMG26E
+	 KxreF0viO0R9Gf4W5KPO0fkdolQ23fCpntkrUjSPr3aYa9c/xX5MVYKA2ayigrggC8
+	 sSmM3D+66Ilnw3x7ZF8bFprGouh8ctVdAsLdtiH0GQNMIdGJLVyEI/C53zF5nfT9uU
+	 cV994T2rOov+nC/TvmXslFuU3hrSLi97qR8K/1Yzdtk11SZ4u0KiRImoe7L54F1XA5
+	 gN1vXsW/+CD6Iy2U6tAEu++qaHwHd254I9vbFvo3Vjn0lrycE08wbxuclgetC3PhMz
+	 DgwCOKezyRMvg==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vEP90-000000004db-3QzY;
+	Thu, 30 Oct 2025 10:40:34 +0100
+Date: Thu, 30 Oct 2025 10:40:34 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Oleksandr Suvorov <cryosay@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ftdi_sio: add device ID for U-Blox EVK-M101
+Message-ID: <aQMykuOFuwi0OTdi@hovoldconsulting.com>
+References: <20250926060235.3442748-1-cryosay@gmail.com>
+ <aO5kBAjE6EMG2aUE@hovoldconsulting.com>
+ <CAGgjyvFATG4PpHrbWV87tqtLeO3zeM_0508wtATrsxw3s06zVw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAFNq8R7q-GvFgwRKewzG=ZwkbxEfhKjEsxHWXQ0q8BsSSDFcnQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGgjyvFATG4PpHrbWV87tqtLeO3zeM_0508wtATrsxw3s06zVw@mail.gmail.com>
 
-On Thu, Oct 30, 2025 at 04:49:19PM +0800, Li Haifeng wrote:
-> Hello Linux USB experts,
+On Thu, Oct 30, 2025 at 09:39:36AM +0200, Oleksandr Suvorov wrote:
+> On Wed, Oct 15 2025 at 16:36 Johan Hovold <johan@kernel.org> wrote:
+
+> > > has a USB Type-C port that presents itself as a USB device
+> > > (1546:0506) [1] with four attached FTDI serial ports, connected to:
+> > > - EVK-M101 current sensors
+> > > - EVK-M101 I2C
+> > > - EVK-M101 UART
+> > > - EVK-M101 port D
+> > >
+> > > This commit registers U-Blox's VID/PID of this device so that FTDI SIO driver
+> > > successfully registers these 4 serial ports.
+> >
+> > Are you sure you should not just register the UART port? Some FTDI chips
+> > support I2C but you'd need a different driver for that.
 > 
-> I'm encountering an issue with the DWC3 gadget driver on a Rockchip
-> RK3588 platform running Linux kernel 5.10 (from the
-> rk3588_linux_release_20230114_v1.0.6 SDK). I'm developing a kernel
+> Thanks for pointing this out, looks like I should add a custom probe()
+> for this device.
+> Preparing v2.
 
-5.10 is _VERY_ old and obsolete and way behind in new hardware support,
-especially for the dwc3 driver.  Have you tried the latest kernel
-release with is many years newer?  How about 6.17?
+Actually, you can just use USB_DEVICE_INTERFACE_NUMBER() in the match
+table, no need for a custom probe function.
 
-If you are stuck with an old release for some reason, please work with
-the company that gave it to you as you are paying for support from them
-for it, it is their responsibility, not the community's responsibility
-to manage that release.
+> > > Datasheet: https://content.u-blox.com/sites/default/files/documents/EVK-M10_UserGuide_UBX-21003949.pdf
+> >
+> > The user guide also says "Do not use this COM port" for all ports but
+> > the UART port.
+> 
+> Yes, you're right, thanks. It's just not that easy hacking the kernel
+> while defending from russian invaders :)
 
-And pleaase, do not release new devices on this old kernel version, you
-are about to loose security updates in a year for it, which is not good
-for the lifetime of your device.
+I can only imagine.
 
-thanks,
-
-greg k-h
+Johan
 
