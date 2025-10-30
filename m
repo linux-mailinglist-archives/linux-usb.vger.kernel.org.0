@@ -1,103 +1,131 @@
-Return-Path: <linux-usb+bounces-29882-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29883-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C55BC1F586
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 10:40:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A014FC20134
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 13:48:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8F52D34D851
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 09:40:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BABB1A21303
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 12:48:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE536342C9A;
-	Thu, 30 Oct 2025 09:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0F66326D43;
+	Thu, 30 Oct 2025 12:47:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hjcff35R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MW4iWMyv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7DE341661;
-	Thu, 30 Oct 2025 09:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAF054918
+	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 12:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761817228; cv=none; b=hD1D78bffxlV7cyXi0beO1zAqYIJT7K/zdXVsA8yukkvvk/qj5CgSlnLVqWnypiNzwR1pKPJQZmT7Dv18AAUzwiIIdmLt2FdFBm+c2TPsQJd4gIfzf8O3y5yI08ox++pklewhG2Ly4+ZJ8NPz/2si38gxLZZdQiaCutv1gVRFXs=
+	t=1761828451; cv=none; b=uNRDJTGHp6FqJ8e0luaQouI3Jvy+L9pP9hU092nObgxyov8z6FJqaP9hE509GcJzGwakCz8NqzbZcKiPJU2d5bAxpnXz5B5RMJSW6ZsdhqJG4+0Egz5DQNuv/34ZALIcd8+xVVRXgBuULDAKtwXvmVKnribkbIKEPyoLMxCW7xI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761817228; c=relaxed/simple;
-	bh=WrfP/raxXECm6y+BjC6Gos4EkPPABLN2YvzRMU/SBBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aW/MH91H3tKQxlJof5/yM+ByVFl2NJH7bOtnsB7DPJy5V8K0T2ItFa/mxZrVYXybDzkCCiNw7chgAhoP/vCKxbpvWEnQZYATv4VhuVYCsQ1NfAybCltaOgQoCtsip5/MNbtG+nX6IFKto7SJR8CFSoU/UKsL7mlTn2unKnU7QRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hjcff35R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF9FC4CEF1;
-	Thu, 30 Oct 2025 09:40:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761817227;
-	bh=WrfP/raxXECm6y+BjC6Gos4EkPPABLN2YvzRMU/SBBE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hjcff35RmI/X7nv2sjMFkjeDZnmBvL4gjMlh5dTozmH/gFabhgd+lJXnIOnQMG26E
-	 KxreF0viO0R9Gf4W5KPO0fkdolQ23fCpntkrUjSPr3aYa9c/xX5MVYKA2ayigrggC8
-	 sSmM3D+66Ilnw3x7ZF8bFprGouh8ctVdAsLdtiH0GQNMIdGJLVyEI/C53zF5nfT9uU
-	 cV994T2rOov+nC/TvmXslFuU3hrSLi97qR8K/1Yzdtk11SZ4u0KiRImoe7L54F1XA5
-	 gN1vXsW/+CD6Iy2U6tAEu++qaHwHd254I9vbFvo3Vjn0lrycE08wbxuclgetC3PhMz
-	 DgwCOKezyRMvg==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vEP90-000000004db-3QzY;
-	Thu, 30 Oct 2025 10:40:34 +0100
-Date: Thu, 30 Oct 2025 10:40:34 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Oleksandr Suvorov <cryosay@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ftdi_sio: add device ID for U-Blox EVK-M101
-Message-ID: <aQMykuOFuwi0OTdi@hovoldconsulting.com>
-References: <20250926060235.3442748-1-cryosay@gmail.com>
- <aO5kBAjE6EMG2aUE@hovoldconsulting.com>
- <CAGgjyvFATG4PpHrbWV87tqtLeO3zeM_0508wtATrsxw3s06zVw@mail.gmail.com>
+	s=arc-20240116; t=1761828451; c=relaxed/simple;
+	bh=ZOBiokM8c5XD8o0G5ylHkCAcR25MLrmutsibBfHjPhc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KZEQHKv+89AhqHndC8S9h9OEMPRNgYwvX7lJBkDZL6YvSLWU04h14gEhIEEVF4/SD5FjyaRGAz2kqwC11lIeDokq1zrOtIyeot13p5gKGdWYyawgPb+DITbCoianxifgsRZTs5dJUrC8C3xfCSqISHvpPNGvoPUKDxuoO2ZsQgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MW4iWMyv; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-945a5a42f1eso45037839f.0
+        for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 05:47:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761828449; x=1762433249; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gnwtP05c5M93G2taJ4NMon+tkAFmpaQ7EAFzjgkQfJs=;
+        b=MW4iWMyvPu8yEmYxvxEC6yWaPhXadGpbKXGsDyWyCjMqLnrLl925/hWKsOrcJW1Skx
+         IDXT/n+unvH5F0fDRb2/u5avufu4rxUEJxaDc+j5Pb1ZYs1YVtnWKE6HmPM6mP64QlhN
+         kWzN64XmW4VqwOWP80Y8EpjCypMUJfyROoBqipyl1C38xLqjbctQx9SMgV+IN0cE26UM
+         iESatHuXExuG5RD2CZaICSduAF9MDtuFVZiMcriAmh4Jtcl7rmecMkmYZCcDPJwzriKx
+         NJ1on2UDZFy4bO24G8V+C5qsVKxha+3kJ9AriaHkU7GWUF1cWidbhgJkJLRf4Ps04EA1
+         vlGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761828449; x=1762433249;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gnwtP05c5M93G2taJ4NMon+tkAFmpaQ7EAFzjgkQfJs=;
+        b=BXlQ+t/rYvuW1u307lzYFU4fXZacuy/aHz4ik+cm1QDaaIGAAYWnFOQcWeEvXS5gMS
+         HZxwZn8p/saKL+cqOPqADvR9ISuQqcCBXalN9pD+1UewS0rO/zErWN76mzR3dy+kjFrr
+         a3sa8ExHjOCqrdvbRVnpfW/MJ4yMEuTR4LDciouYJNCb9HmXT/j3WXZ9vmvhuYUbSgI3
+         6ty9hoOSbjyzFYN5P93Nw2vki3uTJcz21msxP+wXCSR7KU6Hj/3MjfIIgSTOnQ3QchU2
+         Mu5iCuEIbr119pCQizHLnf0QZha41/2bZhVY23sm6qe6lXTQeyu+rJF4eH2emdpiFTmY
+         +wrg==
+X-Forwarded-Encrypted: i=1; AJvYcCW8/9zjGzXB0mgGhLXh+lAjo77htRYNjyjCIOoA5Qqgb7trRLfo+uE95S4Bokcv9xJ4gM9OhikqiOM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeTBuP1LkCKRvzEdnhhb8CrsbD9MgOxR2YtWBkYMqx4N80jvdd
+	b9k7YC6JiQpMZKfa53AXjKBIupjslS0EwXJndo9CNwEq9+QnI2/c2DigR1nVEsGNjZ55j5TTemG
+	MHB3s7MNqPynqFc72TN/9LVwgeg6RUGE=
+X-Gm-Gg: ASbGncsflcdkt8tqkn3NbnhA6kIWoDhqCTwI8/FrKQviMsiizV/33G8sYesmYN4NPHg
+	fbMKeq7pA0OHEQJvPrLwfZcN6QejRqiMxrxiPndKGt7LJuzkT930pT2yXEOa3Qn7FnZs04QFXsh
+	0TP1dIAP7R7k9QDKJg6bkD2gwDuc2P5CX4RKzPxrZ2c7Sd0/Y9OiT+YaFIuSXCfqF7l8Jz+yG3x
+	fOwt8DF0woQrszWdlqbEaxXlTLAQb+QqDlZK/JRSunaxVceI8Auvrv1l2TlAPUrIlWFRVgt
+X-Google-Smtp-Source: AGHT+IHCxXydKxh9JkZNuVgxEGvL7KyPwxy6Io3OsezmVBVknh0x/Frm0LIboOPYmUq1goG7v4/bpUjgNtbL8zRPZZU=
+X-Received: by 2002:a05:6602:6cc4:b0:940:d996:7837 with SMTP id
+ ca18e2360f4ac-945c979c141mr889994039f.10.1761828448756; Thu, 30 Oct 2025
+ 05:47:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGgjyvFATG4PpHrbWV87tqtLeO3zeM_0508wtATrsxw3s06zVw@mail.gmail.com>
+References: <CAFNq8R7q-GvFgwRKewzG=ZwkbxEfhKjEsxHWXQ0q8BsSSDFcnQ@mail.gmail.com>
+ <2025103049-suing-renewably-fd67@gregkh>
+In-Reply-To: <2025103049-suing-renewably-fd67@gregkh>
+From: Li Haifeng <omycle@gmail.com>
+Date: Thu, 30 Oct 2025 20:47:17 +0800
+X-Gm-Features: AWmQ_bnMyOTxq2NNLN_DgsUVoIz85Ut1ncE0R_8YULW3dKwQpBu9pcUP79nQs5Y
+Message-ID: <CAFNq8R6uZSS3+nWXkR8XERjMRGTC_4_47UKm_N=P8Um5ySLAtg@mail.gmail.com>
+Subject: Re: Issue with DWC3 Gadget Driver: Stall After Transmitting Only 2KB
+ Using Scatter-Gather and TRB Chaining
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Felipe.Balbi@microsoft.com, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 30, 2025 at 09:39:36AM +0200, Oleksandr Suvorov wrote:
-> On Wed, Oct 15 2025 at 16:36 Johan Hovold <johan@kernel.org> wrote:
+Dear Greg,
 
-> > > has a USB Type-C port that presents itself as a USB device
-> > > (1546:0506) [1] with four attached FTDI serial ports, connected to:
-> > > - EVK-M101 current sensors
-> > > - EVK-M101 I2C
-> > > - EVK-M101 UART
-> > > - EVK-M101 port D
-> > >
-> > > This commit registers U-Blox's VID/PID of this device so that FTDI SIO driver
-> > > successfully registers these 4 serial ports.
+Thank you for your prompt response and advice.
+
+I just tested the issue on kernel version 6.1.17, and the problem
+persists. I will proceed to try the latest kernel release 6.17, and
+report back with the results as soon as possible.
+
+Appreciate your guidance.
+
+Best regards,
+Haifeng
+
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2025=E5=B9=B410=E6=9C=8830=E6=
+=97=A5=E5=91=A8=E5=9B=9B 17:39=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Thu, Oct 30, 2025 at 04:49:19PM +0800, Li Haifeng wrote:
+> > Hello Linux USB experts,
 > >
-> > Are you sure you should not just register the UART port? Some FTDI chips
-> > support I2C but you'd need a different driver for that.
-> 
-> Thanks for pointing this out, looks like I should add a custom probe()
-> for this device.
-> Preparing v2.
-
-Actually, you can just use USB_DEVICE_INTERFACE_NUMBER() in the match
-table, no need for a custom probe function.
-
-> > > Datasheet: https://content.u-blox.com/sites/default/files/documents/EVK-M10_UserGuide_UBX-21003949.pdf
-> >
-> > The user guide also says "Do not use this COM port" for all ports but
-> > the UART port.
-> 
-> Yes, you're right, thanks. It's just not that easy hacking the kernel
-> while defending from russian invaders :)
-
-I can only imagine.
-
-Johan
+> > I'm encountering an issue with the DWC3 gadget driver on a Rockchip
+> > RK3588 platform running Linux kernel 5.10 (from the
+> > rk3588_linux_release_20230114_v1.0.6 SDK). I'm developing a kernel
+>
+> 5.10 is _VERY_ old and obsolete and way behind in new hardware support,
+> especially for the dwc3 driver.  Have you tried the latest kernel
+> release with is many years newer?  How about 6.17?
+>
+> If you are stuck with an old release for some reason, please work with
+> the company that gave it to you as you are paying for support from them
+> for it, it is their responsibility, not the community's responsibility
+> to manage that release.
+>
+> And pleaase, do not release new devices on this old kernel version, you
+> are about to loose security updates in a year for it, which is not good
+> for the lifetime of your device.
+>
+> thanks,
+>
+> greg k-h
 
