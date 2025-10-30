@@ -1,163 +1,153 @@
-Return-Path: <linux-usb+bounces-29884-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29885-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EB4BC20352
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 14:22:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 570CAC20499
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 14:42:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 173FF1890162
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 13:22:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DEB13B81DD
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 13:36:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A552274643;
-	Thu, 30 Oct 2025 13:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A012E9EAE;
+	Thu, 30 Oct 2025 13:36:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Op3TeOSU";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Op3TeOSU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mo4w8M+z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AC8B238C1A
-	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 13:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184242882B6
+	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 13:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761830515; cv=none; b=kjkX6wvkWBFlLQMJS+RU9Ukcd70Zt1rdxXAGKeJ51ZlA19H/lFCVn8L/eZkWtCemUj5TIIPAT0qt/CyXe5qXDBQy1gFXrCqHq/kd3NvUH3PKrMz4LeJvSfGCz5q7QZQAaVV0wHj3gjAriDhIKj+4sYf/28J0Aj+nXMX5Vlnunpk=
+	t=1761831366; cv=none; b=TSW1bfeVdDNqUfF+2VEVz05njPXl78qMamfQUSLCeh0MTdBbCaGoeH8Q/I84b16XL2JFe7TMI9SpG0Jl0wnzRxXtPG3xN/WHKlnSmwPjAk2eDoe1VwVHOoG1zOnA1s4CDuqvFQ75LM8hP0RM2GTfv4378lCAKCE0xKiClK5emvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761830515; c=relaxed/simple;
-	bh=cUhu7OfRBq5lwLTMgUef2F+WRmc10m08/3mYAxUZ50k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T7cKD6dqRqbRNEn3omZEPzLMeYfdgdam0d+7vdSc92jULLxXNF5AC5K8N+NVjnl38FwucACu4u76mKOn9N7hY7EnnUV5jqWwkF+tRoMwNvNmEk7UXMGdT0JAkVILmsrtw0NI+s2zvovocXGwJ6oWcWISfHla0NPNIccMqwO49bU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Op3TeOSU; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Op3TeOSU; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id B2C851F7CA;
-	Thu, 30 Oct 2025 13:21:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1761830511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=UAoEaA6koO3Fmiw6R0Yi3mg07WfJDv79jirZ2ch6fVg=;
-	b=Op3TeOSUe3XN2/pQXZkm2vxcBpvNcQfYqv7FX3Msuo+E2WHAGQLVqDvuAuGY9Q7CJhdEMX
-	58ZbH6rcoxBg/gYSB/THNc26bgcMMpdWBoCMAONLNilpaUPN7SXxIt5bsSd6YH5ba5sQ/6
-	TsgWRoPk07QS8e2pPQ+0IaSWECEoRkc=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1761830511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=UAoEaA6koO3Fmiw6R0Yi3mg07WfJDv79jirZ2ch6fVg=;
-	b=Op3TeOSUe3XN2/pQXZkm2vxcBpvNcQfYqv7FX3Msuo+E2WHAGQLVqDvuAuGY9Q7CJhdEMX
-	58ZbH6rcoxBg/gYSB/THNc26bgcMMpdWBoCMAONLNilpaUPN7SXxIt5bsSd6YH5ba5sQ/6
-	TsgWRoPk07QS8e2pPQ+0IaSWECEoRkc=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9EA4D1396A;
-	Thu, 30 Oct 2025 13:21:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id AO3hJW9mA2kyXQAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Thu, 30 Oct 2025 13:21:51 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: gregkh@linuxfoundation.org,
-	gustavo@embeddedor.com,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCHv2 1/1] uapi: cdc.h: cleanly provide for more interfaces and countries
-Date: Thu, 30 Oct 2025 14:20:53 +0100
-Message-ID: <20251030132149.2575138-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.51.1
+	s=arc-20240116; t=1761831366; c=relaxed/simple;
+	bh=946tCSyfwkcJEZIYbJYPYmAWxgbWBFpGqs507Chemqs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D+65JC9pwySiYSgLlEyYU8J+ttRdSNBYJWUWCsrimgUDsr8rRe/cGl954HC6GFX8eW6XfgRWI+j3JrNPzEOBZ8euE3nAD7Cyi6K2+QMHBY7qorFr1GBC5HufOkCHrGJCHB4rA9T66DdUcZH9WMVcASUPgyGyIkdSKOl7iV+x94w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mo4w8M+z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A1BC116D0
+	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 13:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761831364;
+	bh=946tCSyfwkcJEZIYbJYPYmAWxgbWBFpGqs507Chemqs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Mo4w8M+zoG7x4VSKBHFBlkcNbJr8yuOPcibcxBBGoKKL/xxYP6SoTzLLo4MNs3B3W
+	 LXBRGiqiBcuymn4pvOVdEzE+RhAUAEeSzEzaMVgkWQfQdcCqM8chFRdyPlB8uyQjhI
+	 Sy04DC7qmGww/ewmG6nPtqVrjY2mNjujRFnNwL7bqfm0FwXXsFy8N/4MjZzNCTEKM6
+	 AH9cxSZFPyaoQjhLwB8gKrOvY8VBqCrViJzhsfAiHRlbe8Pd48ohtXcde5WYc+J+Ks
+	 xtnvYufRNIqRkyzqUNQQ8FGGMaRxPzAYxs8fhTOpNjbPwsbTzNyqAjyH/iSW6qfl8l
+	 9rr9LsibKVXjw==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-378d65d8184so13777561fa.0
+        for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 06:36:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWYNYeqzvhLyIDJYHmGJ0pTDMEwdniFHIgwqcou5EOjlDU7WaR09TNaX0j2QaKFJo/vTsniB+A0NrM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdZb7XUHz4g5BIxsh31QGacsa3kjHByoLeylSHeSDrgAerEf1r
+	0cuDRda/okfTDIeg/t8bOvLePrh/lcalExlz7bSOIs4m2P6PgedqLpuWJulJ1UT+//ErTTvxTCA
+	ZNu3o3hm5pMONW0L6TQc0bqJg/wiJCOA=
+X-Google-Smtp-Source: AGHT+IHPsQ63GACF+WTAXoqOco8sKMg1RRh6aHz0Br4Fnz15qbhOtOELzGrlJEWp65H1oXl/2WnpIpMcc/ndPgk67GM=
+X-Received: by 2002:a2e:9e56:0:b0:376:30c5:66ef with SMTP id
+ 38308e7fff4ca-37a1094a526mr7884761fa.16.1761831362808; Thu, 30 Oct 2025
+ 06:36:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:helo];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
-X-Spam-Level: 
+References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
+ <20251028004614.393374-23-viro@zeniv.linux.org.uk> <66300d81c5e127e3bca8c6c4d997da386b142004.camel@HansenPartnership.com>
+ <20251028174540.GN2441659@ZenIV> <20251028210805.GP2441659@ZenIV>
+ <CAMj1kXF6tvg6+CL_1x7h0HK1PoSGtxDjc0LQ1abGQBd5qrbffg@mail.gmail.com>
+ <9f079d0c8cffb150c0decb673a12bfe1b835efc9.camel@HansenPartnership.com> <20251029193755.GU2441659@ZenIV>
+In-Reply-To: <20251029193755.GU2441659@ZenIV>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 30 Oct 2025 14:35:51 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHnEq97bzt-C=zKJdV3BK3EDJCPz3Pfyk52p2735-4wFA@mail.gmail.com>
+X-Gm-Features: AWmQ_bm2LrdVSSm_iuRDZ6ti_gfIvNqTw5CQZuyqzyGspRRRkaM_-X7LCT9AH9Q
+Message-ID: <CAMj1kXHnEq97bzt-C=zKJdV3BK3EDJCPz3Pfyk52p2735-4wFA@mail.gmail.com>
+Subject: Re: [PATCH v2 22/50] convert efivarfs
+To: Al Viro <viro@zeniv.linux.org.uk>, 
+	James Bottomley <james.bottomley@hansenpartnership.com>, brauner@kernel.org
+Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org, jack@suse.cz, 
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org, 
+	linux-mm@kvack.org, linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, 
+	kees@kernel.org, rostedt@goodmis.org, gregkh@linuxfoundation.org, 
+	linux-usb@vger.kernel.org, paul@paul-moore.com, casey@schaufler-ca.com, 
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com, 
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The spec requires at least one interface respectively country.
-It allows multiple ones. This needs to be clearly said in the UAPI.
+On Wed, 29 Oct 2025 at 20:38, Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Wed, Oct 29, 2025 at 02:57:51PM -0400, James Bottomley wrote:
+>
+> > I think this all looks OK.  The reason for the convolution is that
+> > simple_start/done_creating() didn't exist when I did the conversion ...
+> > although if they had, I'm not sure I'd have thought of reworking
+> > efivarfs_create_dentry to use them.  I tried to update some redundant
+> > bits, but it wasn't the focus of what I was trying to fix.
+> >
+> > So I think the cleanup works and looks nice.
+> >
+> > >
+> > > Relying on the -EEXIST return value to detect duplicates, and
+> > > combining the two callbacks seem like neat optimizations to me, so
+> > >
+> > > Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> > >
+> > > but I have to confess I am slightly out of my depth when it comes to
+> > > VFS stuff.
+> >
+> > Yes, ack too.
+>
+>         Umm...  FWIW, I've got a few more followups on top of that (see
+> #untested.efivarfs, current head at 36051c773015).  Not sure what would
+> be the best way to deal with that stuff - I hope to get the main series
+> stabilized and merged in the coming window.  Right now I'm collecting
+> feedback (acked-by, etc.), and there's a couple of outright bugfixes
+> in front of the series, so I'd expect at least a rebase to -rc4...
+>
 
-V2: following Gustavo's suggestion to use an union
+I pulled your code and tried to test it. It works fine for the
+ordinary case, but only now I realized that commit
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/class/cdc-acm.c  |  2 +-
- include/uapi/linux/usb/cdc.h | 12 ++++++++----
- 2 files changed, 9 insertions(+), 5 deletions(-)
+commit 0e4f9483959b785f65a36120bb0e4cf1407e492c
+Author: Christian Brauner <brauner@kernel.org>
+Date:   Mon Mar 31 14:42:12 2025 +0200
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 73f9476774ae..c272b00b947c 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1475,7 +1475,7 @@ static int acm_probe(struct usb_interface *intf,
- 		if (!acm->country_codes)
- 			goto skip_countries;
- 		acm->country_code_size = cfd->bLength - 4;
--		memcpy(acm->country_codes, (u8 *)&cfd->wCountyCode0,
-+		memcpy(acm->country_codes, (u8 *)&cfd->wCountryCode0,
- 							cfd->bLength - 4);
- 		acm->country_rel_date = cfd->iCountryCodeRelDate;
- 
-diff --git a/include/uapi/linux/usb/cdc.h b/include/uapi/linux/usb/cdc.h
-index 1924cf665448..0208b2f76bf1 100644
---- a/include/uapi/linux/usb/cdc.h
-+++ b/include/uapi/linux/usb/cdc.h
-@@ -104,8 +104,10 @@ struct usb_cdc_union_desc {
- 	__u8	bDescriptorSubType;
- 
- 	__u8	bMasterInterface0;
--	__u8	bSlaveInterface0;
--	/* ... and there could be other slave interfaces */
-+	union {
-+		__u8	bSlaveInterface0;
-+		DECLARE_FLEX_ARRAY(__u8, bSlaveInterfaces);
-+	};
- } __attribute__ ((packed));
- 
- /* "Country Selection Functional Descriptor" from CDC spec 5.2.3.9 */
-@@ -115,8 +117,10 @@ struct usb_cdc_country_functional_desc {
- 	__u8	bDescriptorSubType;
- 
- 	__u8	iCountryCodeRelDate;
--	__le16	wCountyCode0;
--	/* ... and there can be a lot of country codes */
-+	union {
-+		__le16	wCountryCode0;
-+		DECLARE_FLEX_ARRAY(__le16, wCountryCodes);
-+	};
- } __attribute__ ((packed));
- 
- /* "Network Channel Terminal Functional Descriptor" from CDC spec 5.2.3.11 */
--- 
-2.51.1
+    efivarfs: support freeze/thaw
 
+actually broke James's implementation of the post-resume sync with the
+underlying variable store.
+
+So I wonder what the point is of all this complexity if it does not
+work for the use case where it is the most important, i.e., resume
+from hibernation, where the system goes through an ordinary cold boot
+and so the EFI variable store may have gotten out of sync with the
+hibernated kernel's view of it.
+
+If no freeze/thaw support in the suspend/resume path is forthcoming,
+would it be better to just revert that change? That would badly
+conflict with your changes, though, so I'd like to resolve this before
+going further down this path.
+
+
+I did need to apply a fixup to get the revert to compile:
+
+--- a/fs/efivarfs/super.c
++++ b/fs/efivarfs/super.c
+@@ -412,8 +412,7 @@
+ {
+        unsigned long size;
+        struct efivarfs_ctx *ectx = container_of(ctx, struct efivarfs_ctx, ctx);
+-       struct qstr qstr = { .name = name, .len = len };
+-       struct dentry *dentry = d_hash_and_lookup(ectx->sb->s_root, &qstr);
++       struct dentry *dentry = try_lookup_noperm(&QSTR_LEN(name,
+len), ectx->sb->s_root);
+        struct inode *inode;
+        struct efivar_entry *entry;
+        int err;
 
