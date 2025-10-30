@@ -1,130 +1,144 @@
-Return-Path: <linux-usb+bounces-29927-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29928-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F228EC2277B
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 22:49:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2193C227BD
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 22:58:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F11EB18948C3
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 21:49:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 907F03BC07B
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 21:58:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBEF9335563;
-	Thu, 30 Oct 2025 21:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A8Xp2nD+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B141C33557F;
+	Thu, 30 Oct 2025 21:57:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from nyx.bastelmap.de (nyx.bastelmap.de [185.233.106.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8417334363
-	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 21:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2412EC0A0
+	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 21:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.106.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761860937; cv=none; b=N3M3fZNuoripoDOJpwICU+F5qwr1X6Ql80g/z2urFsfpPQirjvrAMEgRDsxZwGl1L4E4yb6XQM0/ZvCDn3jTLf74wh6Cjbv88U/Tnn+OB2SpANPbdYaiT8yshh2p/U8ofmAqB428CifZfV3eXB7EhMD8CIwt+UmBgbRHhlimqpU=
+	t=1761861476; cv=none; b=ELUyEdj985Fu46voh3aPXby6Bg4oIjcKjVWwzQI6NU+6ifCSegMC1B7euYhc+ehQKfmG1r3ie7JQGu9mup65rtyiiScWVCPnHntqbUK0cgSgWfHi33UwzZHha9pWyccL9Y+Q/ehH403froGbaE0p3M1ho0ep+zByMiXre/RZ2hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761860937; c=relaxed/simple;
-	bh=RjxZGrfsfCvc5Bg8rwRRAdtccZ1YoZqKvvDa+D53Uw8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nc+GPHpa26Y6sRqWGRM7KWL30sKiy2we0XAdv5SnMCSH8dSqaqX4KG19bCKhTo1Q1LCfBJTeuh/irlrPt4OTrYbPAkZMXeXOHUyu1IC+ylc8SMo60Gk8ps1plOxS2ZOmIWuTmBaIruNmYjYFAdpxFTpVFLngw+8uzDYM2VIgT48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A8Xp2nD+; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761860934;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9LjL0vS/hX9NBhAzvP1BiBjPYdiWFiLByshADcjU7L0=;
-	b=A8Xp2nD+S2Tze5uLkGp+vX9bTWYNdbZ7daGZ1aTABIO065E+snvSvNIRMLbu5IvBt4XeJg
-	x0NY35JV68YgspFuzSgQvz1fw1bympS7oeUslqjm3XMhPn3xUkLu+lGrT3JMec1zkerTm+
-	hoWSP0v6cGzfwd+PtdNwcoUkRtdy6qE=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-663-44B3hZqLOIedjftmPMMjJw-1; Thu,
- 30 Oct 2025 17:48:51 -0400
-X-MC-Unique: 44B3hZqLOIedjftmPMMjJw-1
-X-Mimecast-MFC-AGG-ID: 44B3hZqLOIedjftmPMMjJw_1761860930
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F3D921955E8F;
-	Thu, 30 Oct 2025 21:48:49 +0000 (UTC)
-Received: from desnesn-thinkpadp16vgen1.rmtbr.csb (unknown [10.96.134.41])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C5E1019560A2;
-	Thu, 30 Oct 2025 21:48:47 +0000 (UTC)
-From: Desnes Nunes <desnesn@redhat.com>
-To: linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1761861476; c=relaxed/simple;
+	bh=0DqVxt4kQbV1/kPrx4fZkFXqhzGebtvZ8x/as3L9smE=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=e0WY2EnuK/47n00Bc6qhIlMiKB2UJ3QIj7okNfuo7TXq6LuO0yY6YxdJwoRXrDqVn68ZiL1BC9UfEBimUB53YqCc8NADXMm7cJPbPSZHru3Im//XtcMJC7hxV/QZ+0Q9HixsPiyvxUoc5BdxhKqueQ5frmQrs/SjQy2yTR1W2xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bastelmap.de; spf=pass smtp.mailfrom=bastelmap.de; arc=none smtp.client-ip=185.233.106.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bastelmap.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bastelmap.de
+Received: from zeus.ad.home.arpa (p4fdbac6c.dip0.t-ipconnect.de [79.219.172.108])
+	by nyx.bastelmap.de (Postfix) with ESMTPSA id 5AF967EE2FA;
+	Thu, 30 Oct 2025 22:49:23 +0100 (CET)
+Date: Thu, 30 Oct 2025 22:49:22 +0100
+From: Andreas Messer <andi@bastelmap.de>
+To: Johan Hovold <johan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu,
-	Desnes Nunes <desnesn@redhat.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] usb: storage: Fix memory leak in USB bulk transport
-Date: Thu, 30 Oct 2025 18:48:33 -0300
-Message-ID: <20251030214833.44904-1-desnesn@redhat.com>
+Subject: [PATCH] Support FlashPro5 serial ports
+Message-ID: <aQPdYic6PaONe9hk@zeus.ad.home.arpa>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="sA4KY+d1bypWexMh"
+Content-Disposition: inline
 
-A kernel memory leak was identified by the 'ioctl_sg01' test from Linux
-Test Project (LTP). The following bytes were mainly observed: 0x53425355.
 
-When USB storage devices incorrectly skip the data phase with status data,
-the code extracts/validates the CSW from the sg buffer, but fails to clear
-it afterwards. This leaves status protocol data in srb's transfer buffer,
-such as the US_BULK_CS_SIGN 'USBS' signature observed here. Thus, this can
-lead to USB protocols leaks to user space through SCSI generic (/dev/sg*)
-interfaces, such as the one seen here when the LTP test requested 512 KiB.
+--sA4KY+d1bypWexMh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fix the leak by zeroing the CSW data in srb's transfer buffer immediately
-after the validation of devices that skip data phase.
+Hello,
 
-Note: Differently from CVE-2018-1000204, which fixed a big leak by zero-
-ing pages at allocation time, this leak occurs after allocation, when USB
-protocol data is written to already-allocated sg pages.
+I'm currently working with a Microchip Polarfire Discovery Kit. It has
+integrated a FTDI USB Converter IC connected to JTAG and 3x UART of the
+SoC in the kit. It identifies itself on USB as "Microsemi Embedded FlashPro=
+5"
 
-v2: Use the same code style found on usb_stor_Bulk_transport()
+Only one of the UART ports is working with the current ftdio_sio driver.=20
+I found a device id entry for Microsemi Arrow SF2+ Board=20
+which has same Vendor & Product ID like my board but enables only one UART.
 
-Fixes: a45b599ad808 ("scsi: sg: allocate with __GFP_ZERO in sg_build_indirect()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Desnes Nunes <desnesn@redhat.com>
+I have added more entries to the device list to make all UART Channels
+working with my board. However it will make these UARTS show up with SF2+
+Board too. I found at least four different device which have the=20
+same Vendor/Product ID, but I assume there are more:
+
+- Trenz SMF2000: FT2232H
+  Channel A -> JTAG, Channel B -> UART
+
+- Microchip Polarfire Discovery Kit: FT4232H
+  Channel A -> JTAG, Channel B/C/D -> UART
+
+- Microsemi/Microchip FlashPro5: FT4232H
+  Channel A -> JTAG
+ =20
+- Arrow SF2+ Development Kit:
+  Channel A -> JTAG, Channel C -> UART
+
+Not sure what would be the proper solution, attached my changes.
+
+Best regards,
+Andreas
+
+
 ---
- drivers/usb/storage/transport.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/usb/serial/ftdi_sio.c     | 4 +++-
+ drivers/usb/serial/ftdi_sio_ids.h | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-index 1aa1bd26c81f..ee6b89f7f9ac 100644
---- a/drivers/usb/storage/transport.c
-+++ b/drivers/usb/storage/transport.c
-@@ -1200,7 +1200,19 @@ int usb_stor_Bulk_transport(struct scsi_cmnd *srb, struct us_data *us)
- 						US_BULK_CS_WRAP_LEN &&
- 					bcs->Signature ==
- 						cpu_to_le32(US_BULK_CS_SIGN)) {
-+				unsigned char buf[US_BULK_CS_WRAP_LEN];
-+
-+				sg = NULL;
-+				offset = 0;
-+				memset(buf, 0, US_BULK_CS_WRAP_LEN);
- 				usb_stor_dbg(us, "Device skipped data phase\n");
-+
-+				if (usb_stor_access_xfer_buf(buf,
-+						US_BULK_CS_WRAP_LEN, srb, &sg,
-+						&offset, TO_XFER_BUF) !=
-+							US_BULK_CS_WRAP_LEN)
-+					usb_stor_dbg(us, "Failed to clear CSW data\n");
-+
- 				scsi_set_resid(srb, transfer_length);
- 				goto skipped_data_phase;
- 			}
--- 
-2.51.0
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index 49666c33b41f..44f35aeb0b04 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -908,7 +908,9 @@ static const struct usb_device_id id_table_combined[] =
+=3D {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(MICROCHIP_VID, MICROCHIP_USB_BOARD_PID,
+ 					USB_CLASS_VENDOR_SPEC,
+ 					USB_SUBCLASS_VENDOR_SPEC, 0x00) },
+-	{ USB_DEVICE_INTERFACE_NUMBER(ACTEL_VID, MICROSEMI_ARROW_SF2PLUS_BOARD_PI=
+D, 2) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ACTEL_VID, MICROSEMI_FLASHPRO5_PID, 1) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ACTEL_VID, MICROSEMI_FLASHPRO5_PID, 2) },
++	{ USB_DEVICE_INTERFACE_NUMBER(ACTEL_VID, MICROSEMI_FLASHPRO5_PID, 3) },
+ 	{ USB_DEVICE(JETI_VID, JETI_SPC1201_PID) },
+ 	{ USB_DEVICE(MARVELL_VID, MARVELL_SHEEVAPLUG_PID),
+ 		.driver_info =3D (kernel_ulong_t)&ftdi_jtag_quirk },
+diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_si=
+o_ids.h
+index 4cc1fae8acb9..7e4eb4c3295b 100644
+--- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -929,7 +929,7 @@
+  * Actel / Microsemi
+  */
+ #define ACTEL_VID				0x1514
+-#define MICROSEMI_ARROW_SF2PLUS_BOARD_PID	0x2008
++#define MICROSEMI_FLASHPRO5_PID	0x2008
+=20
+ /* Olimex */
+ #define OLIMEX_VID			0x15BA
+--=20
+2.47.3
 
+
+
+--sA4KY+d1bypWexMh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABEIAB0WIQQo7oQ45ojZkjZhx1OQs7qqjCuvUQUCaQPdXgAKCRCQs7qqjCuv
+UX2eAKDhitMElXXNzMfyV8l8+KIq1wetRgCfRENt96t0wkhi1qLhKkw+SVEV7Xg=
+=6yso
+-----END PGP SIGNATURE-----
+
+--sA4KY+d1bypWexMh--
 
