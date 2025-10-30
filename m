@@ -1,61 +1,59 @@
-Return-Path: <linux-usb+bounces-29912-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29913-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FA03C21162
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 17:06:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 461F7C21502
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 17:54:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01FA81892D6E
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 16:02:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F3614276E8
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 16:49:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD5BF299937;
-	Thu, 30 Oct 2025 16:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1A092DF154;
+	Thu, 30 Oct 2025 16:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d/mD0GaQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QZDcJ3ej"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253802264A9;
-	Thu, 30 Oct 2025 16:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127E02D2387;
+	Thu, 30 Oct 2025 16:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761840088; cv=none; b=ICBKtGL4w35xY6CUJ16SLihWGn9lm/a8nARGeZaRoOJhhDVL3pIQZmRIkGY5zXotUpz9Ivr5v2QBfJpC0wfZSi8YiKXyE3+ysMIYNyHZdVH9KhoR/aZMEr3adB2OkXxM9WTq2C1JwRMKfcKXNTgqIgenXYCpwbCttWg9+AnXv3g=
+	t=1761842968; cv=none; b=WMWPmjbXUk5hJzeqUc5pbvEOq47OkdyD/pyNxrlD8Sw42xxsXIds+yZbTUTdxvNuYWx80vKhirzZzCCBufbWD5zvxZ5yaMDOx1+xvcN+TXaRcTINpEJwZ9vq6DnRhXhVkkqMzTQiVEh9xHmTzFlgVwVr1kbPx3co0vDKc4VHk/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761840088; c=relaxed/simple;
-	bh=GGejZF2V9kY3VeWWMxex6v4n4SmBXMRxD77JbL1Lup0=;
+	s=arc-20240116; t=1761842968; c=relaxed/simple;
+	bh=AZk0JoIU77cQ/15mdVHz+q7ZBqDyfvSLZkLMz29svdU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GTYZfUI0f1Yhi8bf0uAis4/qWK37AZGNEyi8z5KsL7/M20AHzH9Ve02J8EfpuJS7bC0rawgobDwOOd+3/9WVdoU0IgkJ5jzP8irvMR6NI1wkR4h/HGbVHTyW0BoEcR5dZ7E6PknEk0tjizVT4sse/nS2q2Gg9LcOps6fefCj2OQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d/mD0GaQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1231BC4CEF1;
-	Thu, 30 Oct 2025 16:01:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=qsZVT3FpvQrwOZlLpKn8mZS4+xg1N2Epq+IyqyChmwviqb4wx7pSqJpMTXKVm5IArN8wng37SlOwXE+o5x06BTXT51xvfyzXcQgK8YWuQvaStXsKNtqS6tIyJWwP/TVlSdLLyh/MT5Cw8TY0LKPqAn2nfjlRu3hKu5sEBhvnsMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QZDcJ3ej; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E6C7C4CEF8;
+	Thu, 30 Oct 2025 16:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761840087;
-	bh=GGejZF2V9kY3VeWWMxex6v4n4SmBXMRxD77JbL1Lup0=;
+	s=k20201202; t=1761842967;
+	bh=AZk0JoIU77cQ/15mdVHz+q7ZBqDyfvSLZkLMz29svdU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d/mD0GaQYfS+g00J1sgAMaEzBidrWsI8dsN0WOA9RYsI8kD0SSfn2FysEsV9D8vXq
-	 m1ow4PneLpQusXmLl3L6po1TH1c0yprzBZj/bnM+DWDaCeklkPlVRWqc2gop7M75b1
-	 KxqxcRtkg26Ku5qAsiOdNB2C573pZ3RtCW6OQHztRTkiNhM3eJ+Fy8wKNwWN0N2AHz
-	 SfWLfqMuuI3t1MQkPWs9Qb8OhmsGykF+7YVZIgTDQR3Q1ZqrorY3QZf51ob3Vmt+0N
-	 WUOMn/r91IuRUaoHfou/wc1+2WBpL8I/za1sJmix1To7onIUCmEdHRauTy48dpd4ZG
-	 JoKyGNHI8o3nA==
-Date: Thu, 30 Oct 2025 11:01:25 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: ti,hd3ss3220: Add support for
- VBUS based on ID state
-Message-ID: <176183999397.4111264.15472275625847253456.robh@kernel.org>
-References: <20251027072741.1050177-1-krishna.kurapati@oss.qualcomm.com>
- <20251027072741.1050177-2-krishna.kurapati@oss.qualcomm.com>
+	b=QZDcJ3ejqtO7KgEaZb6DMSvsUVFCbt2QBadmhMOZxPb04084dwTJ0Ym2Uk16cALis
+	 hS2KFMqOYpOq8T7zEZuijozhr3rosM6/TS9IEVdJAJgv8ctnMXPn+KVe1EM4RBcG4P
+	 bOPITXe5dDYq9t3tNNRsCU3i+Jt+4Nhh6itBa7ATYXl62BM91m2DK9Ya7qVXJvZgHs
+	 +7QiRa5hsO94n7EMZPe/djnHmm2bHVIbhXL8nm6dzlEL1Y/EFqK1JD0VkCLsPvPk09
+	 Dg0pXKQjihmt/xr2dHGuZH99NG847602p+QjDkqjLY2QJE2EczAW60zbqAXQAaA35x
+	 2Q7FPiCiTW1lg==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vEVqA-000000005Ma-3Pzg;
+	Thu, 30 Oct 2025 17:49:35 +0100
+Date: Thu, 30 Oct 2025 17:49:34 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Oleksandr Suvorov <cryosay@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3] usb: serial: ftdi_sio: add support for u-blox EVK-M101
+Message-ID: <aQOXHngUEO_KUZs3@hovoldconsulting.com>
+References: <20251030090056.3175217-1-cryosay@gmail.com>
+ <20251030154509.3331963-1-cryosay@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,23 +62,29 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251027072741.1050177-2-krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <20251030154509.3331963-1-cryosay@gmail.com>
 
+On Thu, Oct 30, 2025 at 05:42:54PM +0200, Oleksandr Suvorov wrote:
+> The U-Blox EVK-M101 enumerates as 1546:0506 [1] with four FTDI interfaces:
+> - EVK-M101 current sensors
+> - EVK-M101 I2C
+> - EVK-M101 UART
+> - EVK-M101 port D
+> 
+> Only the third USB interface is a UART. This change lets ftdi_sio probe
+> the VID/PID and registers only interface #3 as a TTY, leaving the rest
+> available for other drivers.
 
-On Mon, 27 Oct 2025 12:57:40 +0530, Krishna Kurapati wrote:
-> Update the bindings to support reading ID state and VBUS, as per the
-> HD3SS3220 data sheet. The ID pin is kept high if VBUS is not at VSafe0V and
-> asserted low once VBUS is at VSafe0V, enforcing the Type-C requirement that
-> VBUS must be at VSafe0V before re-enabling VBUS.
-> 
-> Add id-gpios property to describe the input gpio for USB ID pin.
-> 
-> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
 > ---
->  Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
+> v3:
+>  - Use USB_DEVICE_INTERFACE_NUMBER instead of custom probe()
+> v2:
+>  - Restrict probing to interface #3 only
+>  - Add a device model to commit message
+>  - Fix grammar in commit message
+>  - Add Link: to v1
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Now applied, thanks.
 
+Johan
 
