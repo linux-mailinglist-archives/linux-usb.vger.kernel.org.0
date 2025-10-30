@@ -1,177 +1,170 @@
-Return-Path: <linux-usb+bounces-29906-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29907-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E24A5C20DC8
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 16:16:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C42B0C20E1A
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 16:19:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 049EC4ED54F
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 15:15:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47DA84065C9
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 15:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23EC232E6A9;
-	Thu, 30 Oct 2025 15:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E9B363341;
+	Thu, 30 Oct 2025 15:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tWhBEaKS"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="a2HBtMpA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB4F32D7E6
-	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 15:14:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D3C157A72
+	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 15:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761837286; cv=none; b=Z2r0YFO83svTTPUL3z+gAo86EW/Honnfk+q6mJzIQDtv/zJGk22jiP9KjPdRDH2l/+oEPy+OplpM8lWeSWAiMb+QwYZbOA2wsmkcEhPjfFKVJmtN+cP6kE9GG/AmBhLrEddyGKCDGCaldAXiMBzux4ytFhbzEHlj4uel4l6wxrU=
+	t=1761837568; cv=none; b=AqapdagmsgHW5wUj4c1nCuLk+mk6G+F/Ogdcd+RvsYgepUf8rAGbuexj517S//oR7Twjy6xUMFhhH+2uy5uAawlrk1K5bpAtv9mFojsmTWRG+4nq29Rzj9CKXW3rh3wFKPSYwQmasZ3yiKXV37wVF1msPBJLxHXuoi3wdgjbgQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761837286; c=relaxed/simple;
-	bh=WueqPrt9PcU5UOs3/n/eywvcdgK3zO0SwyWhjHm1VB8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ShJX0zDzclL9Of3kJD1lXKl6dNd6xHVw9gYWU64IKkVRw/w5R5KbZjovqrozWvmbpJsuWDDkYSrcR5p4hyYBZL2qH3gVTI29nFTcjAjtr9/alRIiM2m4OaeC05gkvUfQuvynkSidHGSLYTljIfFXKNjHJN0JqC4yDuVirRSvyl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tWhBEaKS; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-290c9724deeso11336425ad.2
-        for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 08:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761837283; x=1762442083; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lRXCLymhr/IzWTqsnVoHqbEbb803ekNgoGS0KjH34wQ=;
-        b=tWhBEaKS73ObveaESw+PdHDH6y4fPqDXrb2+YBN1VG+yKtE4LtprxObnwLL0C55JT+
-         dSgBT5pVEbR8zF475n8zZHQvitrgO7Cu9/WhZ/pZDOfsXo5U7JmSdzdZJ49AYhi3fZ1O
-         VsFWqVTnFo+Ivi1iN9uu/LPbCq6LHg0ZlDdBuFzQ2SskyfgAjDfeC6MB2zFxmVlZRgI9
-         VaqoapxkJgee5DR96PC5P5Y2q1vXtu0hpFQfeTWXSnOOo/U/pTAXRm4yfRNqD/B1BmQ6
-         7fPtbPZ0LKy5mJ+9JVIv0K8YnnxeEsaZ81hBqVPnf1s3ZouSluzGGmSg8nzCOQrwyYFG
-         bu2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761837283; x=1762442083;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lRXCLymhr/IzWTqsnVoHqbEbb803ekNgoGS0KjH34wQ=;
-        b=EbLGw9KsMLVkDkwpyINFVFzln1eDuYPDtDxk2k2tY3KxqHWU37YCe8q8J/2AJ/j6sX
-         XVP1VDkn+7yuS1l/i9HT/3JZt/yS213xcTbXolXhX4LJVfU5Q7GjfgfHqpVqao6CoF/k
-         PIudUPNTaACM1Iqgoa/fr+Co+yOYt97J6/2MNuoagXO/kkH1/ekvwThnHhXb8OLyAv/Y
-         fvirh8tooOBSvJER1QxWjSNZDDbk7hysuPnxmc0Tt6Lzv9vmI1pgw5IRu5bU8jqejFBb
-         zU5NbTL/3G+wxjzW+9cIusycNbsKjNrd1BmhaLa521F2M8sAx89LtKErdx16uYGt8wUF
-         h0fw==
-X-Gm-Message-State: AOJu0YwOvlyv2W9LwVTcrojbokT4s0psHUXkBKjiD9dxbFaoeHUbOwG8
-	TkN+5FvyGDxXjgL+++s2sp7x0uJYXRhI5eEit7UoEpSIzLKvtmxLJ3+navC0ImFCEmrDQhlHCYd
-	b5BG9bw==
-X-Google-Smtp-Source: AGHT+IEBtKmRUWaO2GNwcap42mmQ1ywV3rSvOmFQAJJPExluSwBKsC0Atoqd3JmNEkv44E2DXEhyBeksJfQ=
-X-Received: from plkg14.prod.google.com ([2002:a17:903:19ce:b0:290:d4c5:90ad])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1103:b0:290:dd1f:3d60
- with SMTP id d9443c01a7336-2951a49de0amr928475ad.51.1761837283473; Thu, 30
- Oct 2025 08:14:43 -0700 (PDT)
-Date: Thu, 30 Oct 2025 23:14:20 +0800
-In-Reply-To: <20251030-auto-cleanup-v1-0-db30584fadfd@google.com>
+	s=arc-20240116; t=1761837568; c=relaxed/simple;
+	bh=/PeuQhBpEVYGqHlCl67mgNxjKDaat1xNxW3GApcjxP0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=AqwMyOn1ppVYmpj7mWvafK6F4ab+VgpoYsd4czdUKKV5L/FoZhaoetbL8ALvsmMpmaokmjsGRLS3O/iCXz7snCOTur4wBxfqmQfKZa4Qr3mXob3V8B1wGiYFxXavcGERirfImkwLnnurtwmfNXEXxVUYRt7zqUBalSlLH/ydf38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=a2HBtMpA; arc=none smtp.client-ip=35.89.44.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+Received: from eig-obgw-6005b.ext.cloudfilter.net ([10.0.30.162])
+	by cmsmtp with ESMTPS
+	id EQtfvAY33VCBNEUQqvKO86; Thu, 30 Oct 2025 15:19:20 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id EUQHvLXHuUBPCEUQIvr5mN; Thu, 30 Oct 2025 15:18:46 +0000
+X-Authority-Analysis: v=2.4 cv=bspMBFai c=1 sm=1 tr=0 ts=690381f8
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=4oHATN8Nx7vVUZJYxp75bA==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=7T7KSl7uo7wA:10 a=iox4zFpeAAAA:8
+ a=jJ5KzP5AIZrX77DnFDkA:9 a=QEXdDO2ut3YA:10 a=WzC6qhA0u3u7Ye7llzcV:22
+ a=xYX6OU9JNrHFPr8prv8u:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=E4tfgHK3NIfdb0rndc8To8x0/MgDHVaU9b7G+gehlT4=; b=a2HBtMpA3myu5krVWVOzdpggtF
+	IVtdgqVEgAIbLv7J3umFNtMcZuAH2Lm1/ib25xPH/lSADi4ouVXkoazyh5FsPVdf7NMxHFWE3hFuG
+	nnI2kWAPVfaFPjxWVQgIFAhy3mbXqwozISWQ8553rXlDhkANz93Kf4zxN8gEf/Hp4MJyn8vvpfPTH
+	4qy6f3KtcN8xrCAN6VqNVWqrdqXgEw2wW9Hxc+lwiZbCm4yODzkBQSnStY4g0vXhoCjfSBC7h08ae
+	q0Uy8Wql9GFFa6vjNrYmuaxw740WLYcTTOTTu6vYWPpYnbUfA5epT4S78/RTtUMGQqHm9VY9HxM4P
+	EDiFBJtA==;
+Received: from [185.134.146.81] (port=38636 helo=[10.115.43.44])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.98.1)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1vEUQH-00000002nrt-1vmc;
+	Thu, 30 Oct 2025 10:18:45 -0500
+Message-ID: <e9d9842b-0fd9-4763-ab96-4d740299f4ba@embeddedor.com>
+Date: Thu, 30 Oct 2025 15:18:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251030-auto-cleanup-v1-0-db30584fadfd@google.com>
-X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1761837277; l=2782;
- i=khtsai@google.com; s=20250916; h=from:subject:message-id;
- bh=WueqPrt9PcU5UOs3/n/eywvcdgK3zO0SwyWhjHm1VB8=; b=6ueaX8sq1lNgoMah3k+GxkT1TUasXnrHj6yuhEYnrosVPWFY9rHWt2WEtsp7xWojuHqzjsk+x
- cyKY86DIf2gA6j0Brz1NNbRKN1eTGaIaENcnoDgBq2Z8wvxGb8/I15C
-X-Mailer: b4 0.14.2
-Message-ID: <20251030-auto-cleanup-v1-2-db30584fadfd@google.com>
-Subject: [PATCH 2/2] usb: gadget: f_loopback: Use auto-cleanup for usb_request
-From: Kuen-Han Tsai <khtsai@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kuen-Han Tsai <khtsai@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv2 1/1] uapi: cdc.h: cleanly provide for more interfaces
+ and countries
+To: Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org
+References: <20251030132149.2575138-1-oneukum@suse.com>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20251030132149.2575138-1-oneukum@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 185.134.146.81
+X-Source-L: No
+X-Exim-ID: 1vEUQH-00000002nrt-1vmc
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([10.115.43.44]) [185.134.146.81]:38636
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 1
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfH/28CKs4rX1188K4mDQ6xwe8T8B8DKmvPwF7lrXNrPaxMKyFYJiwdE3Cwa53DUEIY/GYqvG8QvRigNVf19gKSGvMxH7/AYFHQ2ObmhYdqjlM/Um7KJ/
+ eVE0/M5NnhxjIPHi4dZpY+Eba4UYDJ/oHbnKEOR+WLBGMrT8Fi9okbD8g3dwlW9U9hVNeajG74xgBXZmVIX0J36Qqt2r1Am5Tj4=
 
-Refactor f_loopback.c to use auto-cleanup mechanism for usb_request
-allocations in alloc_requests().
 
-The shared buffer between in_req and out_req is handled by nullifying
-in_req->buf before returning on usb_ep_queue failure, ensuring the
-buffer is only freed once by the out_req cleanup.
 
-Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
----
- drivers/usb/gadget/function/f_loopback.c | 30 +++++++++++++-----------------
- 1 file changed, 13 insertions(+), 17 deletions(-)
+On 10/30/25 13:20, Oliver Neukum wrote:
+> The spec requires at least one interface respectively country.
+> It allows multiple ones. This needs to be clearly said in the UAPI.
+> 
+> V2: following Gustavo's suggestion to use an union
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>   drivers/usb/class/cdc-acm.c  |  2 +-
+>   include/uapi/linux/usb/cdc.h | 12 ++++++++----
+>   2 files changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+> index 73f9476774ae..c272b00b947c 100644
+> --- a/drivers/usb/class/cdc-acm.c
+> +++ b/drivers/usb/class/cdc-acm.c
+> @@ -1475,7 +1475,7 @@ static int acm_probe(struct usb_interface *intf,
+>   		if (!acm->country_codes)
+>   			goto skip_countries;
+>   		acm->country_code_size = cfd->bLength - 4;
+> -		memcpy(acm->country_codes, (u8 *)&cfd->wCountyCode0,
+> +		memcpy(acm->country_codes, (u8 *)&cfd->wCountryCode0,
+>   							cfd->bLength - 4);
 
-diff --git a/drivers/usb/gadget/function/f_loopback.c b/drivers/usb/gadget/function/f_loopback.c
-index 49b009a7d5d79285c2397c7aebb8c8fcd3b7dafb..cdf42d8b3d774e5324e83dc308aa5caa265eac3b 100644
---- a/drivers/usb/gadget/function/f_loopback.c
-+++ b/drivers/usb/gadget/function/f_loopback.c
-@@ -8,6 +8,7 @@
- 
- /* #define VERBOSE_DEBUG */
- 
-+#include <linux/cleanup.h>
- #include <linux/slab.h>
- #include <linux/kernel.h>
- #include <linux/device.h>
-@@ -308,9 +309,8 @@ static inline struct usb_request *lb_alloc_ep_req(struct usb_ep *ep, int len)
- static int alloc_requests(struct usb_composite_dev *cdev,
- 			  struct f_loopback *loop)
- {
--	struct usb_request *in_req, *out_req;
- 	int i;
--	int result = 0;
-+	int result;
- 
- 	/*
- 	 * allocate a bunch of read buffers and queue them all at once.
-@@ -318,16 +318,16 @@ static int alloc_requests(struct usb_composite_dev *cdev,
- 	 * for out transfer and reuse them in IN transfers to implement
- 	 * our loopback functionality
- 	 */
--	for (i = 0; i < loop->qlen && result == 0; i++) {
--		result = -ENOMEM;
--
--		in_req = usb_ep_alloc_request(loop->in_ep, GFP_ATOMIC);
-+	for (i = 0; i < loop->qlen; i++) {
-+		struct usb_request *in_req __free(free_usb_request) =
-+			usb_ep_alloc_request(loop->in_ep, GFP_ATOMIC);
- 		if (!in_req)
--			goto fail;
-+			return -ENOMEM;
- 
--		out_req = lb_alloc_ep_req(loop->out_ep, loop->buflen);
-+		struct usb_request *out_req __free(free_usb_request) =
-+			lb_alloc_ep_req(loop->out_ep, loop->buflen);
- 		if (!out_req)
--			goto fail_in;
-+			return -ENOMEM;
- 
- 		in_req->complete = loopback_complete;
- 		out_req->complete = loopback_complete;
-@@ -339,20 +339,16 @@ static int alloc_requests(struct usb_composite_dev *cdev,
- 
- 		result = usb_ep_queue(loop->out_ep, out_req, GFP_ATOMIC);
- 		if (result) {
-+			in_req->buf = NULL;
- 			ERROR(cdev, "%s queue req --> %d\n",
- 					loop->out_ep->name, result);
--			goto fail_out;
-+			return result;
- 		}
-+		retain_and_null_ptr(in_req);
-+		retain_and_null_ptr(out_req);
- 	}
- 
- 	return 0;
--
--fail_out:
--	free_ep_req(loop->out_ep, out_req);
--fail_in:
--	usb_ep_free_request(loop->in_ep, in_req);
--fail:
--	return result;
- }
- 
- static int enable_endpoint(struct usb_composite_dev *cdev,
+You should read from the flexible-array member, instead. Something like:
 
--- 
-2.51.1.851.g4ebd6896fd-goog
+memcpy(acm->country_codes, (u8 *)&cfd->wCountryCodes, acm->country_code_size);
+
+Otherwise, you may be reading beyond the boundaries of cfd->wCountryCode0.
+
+-Gustavo
+
+>   		acm->country_rel_date = cfd->iCountryCodeRelDate;
+>   
+> diff --git a/include/uapi/linux/usb/cdc.h b/include/uapi/linux/usb/cdc.h
+> index 1924cf665448..0208b2f76bf1 100644
+> --- a/include/uapi/linux/usb/cdc.h
+> +++ b/include/uapi/linux/usb/cdc.h
+> @@ -104,8 +104,10 @@ struct usb_cdc_union_desc {
+>   	__u8	bDescriptorSubType;
+>   
+>   	__u8	bMasterInterface0;
+> -	__u8	bSlaveInterface0;
+> -	/* ... and there could be other slave interfaces */
+> +	union {
+> +		__u8	bSlaveInterface0;
+> +		DECLARE_FLEX_ARRAY(__u8, bSlaveInterfaces);
+> +	};
+>   } __attribute__ ((packed));
+>   
+>   /* "Country Selection Functional Descriptor" from CDC spec 5.2.3.9 */
+> @@ -115,8 +117,10 @@ struct usb_cdc_country_functional_desc {
+>   	__u8	bDescriptorSubType;
+>   
+>   	__u8	iCountryCodeRelDate;
+> -	__le16	wCountyCode0;
+> -	/* ... and there can be a lot of country codes */
+> +	union {
+> +		__le16	wCountryCode0;
+> +		DECLARE_FLEX_ARRAY(__le16, wCountryCodes);
+> +	};
+>   } __attribute__ ((packed));
+>   
+>   /* "Network Channel Terminal Functional Descriptor" from CDC spec 5.2.3.11 */
 
 
