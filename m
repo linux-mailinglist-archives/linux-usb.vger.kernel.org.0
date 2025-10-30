@@ -1,124 +1,123 @@
-Return-Path: <linux-usb+bounces-29903-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29904-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE159C20B30
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 15:49:03 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 876EEC20DBF
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 16:15:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDBD73B4862
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 14:48:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 939154EBD44
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Oct 2025 15:14:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D86526FDAC;
-	Thu, 30 Oct 2025 14:48:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D1632BF3D;
+	Thu, 30 Oct 2025 15:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QdyjTCdF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vlXGt+lr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88CD1277CAB
-	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 14:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076C52222B2
+	for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 15:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761835716; cv=none; b=Y1VKnxm10sXXu40EhmFwx87r3m9GF0a0qGncHw1me+fdujbTmQhSQycSMel91h0t61kF7nEtX/uqf5LzJOS45baDXrUxKP7JPO7nI58iKcrTcZgNnleUBAVReR0XUdFoEXT53O6IHFeSjkfXc7qGt1zYfeji2ECd5LBu6z80BQ4=
+	t=1761837281; cv=none; b=UtDDzDAKC2SSWVnhg6juQSrAxIEdhj+gQxd85xYxEwTl9ijU0rsV07Uy1avG55mVuqO/t3cvW/RjXAv3nvvXfXsrLLpHtll9rEIo0MzjvsF5txv9pNdvcb8447xaVlk1RkkiBabNZjmiWe2f8Ptmx6kjot+seGCFnmApecl+S58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761835716; c=relaxed/simple;
-	bh=9xYU7hFPm/7+6UmJYaMfb0NbXIjJvPYzzzUK7PYju7Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OZlCixkvEG3SXAGdnHqkNQq6/HxnKHKN4rzcr3fFz5N+KHNbX0+7CC8oR3ke3DCXSCr/KeM+CzNF08SK187GwHrOVZ3R8PjtTmXnAS2VGSGo+MeECPPYHjVbH1mAZGfe2rjbWpEUhB9Y+8cU0a8NWRYYSSVo67MBSEo836c7ec8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QdyjTCdF; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761835714; x=1793371714;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9xYU7hFPm/7+6UmJYaMfb0NbXIjJvPYzzzUK7PYju7Y=;
-  b=QdyjTCdFAJJUNOcP4S3vQ835Jkp1s+7ulr4yQ2ymzVgpVw3q5nAGHm6/
-   XqMLm87+whMU2CW94wURi+5pg2pbZ2r07xz567xBP9pgty+dY7BYcfmdc
-   UTgO56RLoKIQoYetK48EzFh97qg9jXT8s+1lVfgS9wTp866eZX4o+C6Tc
-   1B5gQXRHuIAVYG/92aXjqK/Jsi+cov+rqgPpdUJLaZwfuODLBuQiOXieq
-   ATXxTuzJbu4RGOwvwoMgvuGDHwJ7LQb6RYkbrWlP2W+QmnkY5aN1pLpyq
-   4LPkDByQ87FbAIEstMPHaEF9jMOpsWVCkVtp79Q5oryDGWnarpilONt8A
-   A==;
-X-CSE-ConnectionGUID: /ZD3Riz2Shi76pGzpH5/qQ==
-X-CSE-MsgGUID: fzdwbgh2QROLA+1bbeIZHA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="63679261"
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="63679261"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 07:48:34 -0700
-X-CSE-ConnectionGUID: eXYIxj1YQt2HaYvdO7qn7A==
-X-CSE-MsgGUID: 1njqDfB4SNukfMeV1eBeYg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="185631513"
-Received: from clke07vm102.fm.intel.com (HELO clke07vm102.amr.corp.intel.com) ([10.80.128.226])
-  by orviesa009.jf.intel.com with ESMTP; 30 Oct 2025 07:48:34 -0700
-From: Pooja Katiyar <pooja.katiyar@intel.com>
-To: linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Cc: dmitry.baryshkov@oss.qualcomm.com,
-	heikki.krogerus@linux.intel.com,
-	pooja.katiyar@intel.com
-Subject: [PATCH v5 4/4] usb: typec: ucsi: Add support for SET_PDOS command
-Date: Thu, 30 Oct 2025 07:48:58 -0700
-Message-ID: <b4ccc1e75746b04a8b48c8998b42b019afb934f1.1761773881.git.pooja.katiyar@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1761773881.git.pooja.katiyar@intel.com>
-References: <cover.1761773881.git.pooja.katiyar@intel.com>
+	s=arc-20240116; t=1761837281; c=relaxed/simple;
+	bh=q5u917AXBpGP3AAoXyV5DkPdPFiNYJqhzNP2VhsyHCA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=sCarvn/jcZVmcX29Q7d/dPA8wtiRgs8amOV1RKiP4akSYpBzl6weN1KG0GVViQ+KXeznceEQgVHmM+WIGDZu3DVyzyKjUk2j95TIilFl2eTDGimXu9JF5yhvFS2noodZWYG1YfrhIk0p+gXNxtJn+/I+VkVEtzGJPqojftzY0pU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vlXGt+lr; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b5533921eb2so827119a12.0
+        for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 08:14:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761837279; x=1762442079; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2V757dWx8NjtY+beH0DLhW2WldW9jfdjKFDrbQ4CM+Y=;
+        b=vlXGt+lrj4L74AIF76EB38mN/d7UV9fHzsaoJb3epZuBTrICef1BTPEBiFKZvZWAMq
+         dXi5vxRlkwjnONl5uB2smo40pCv93GkywDX9waNHhYfgYEEYvpCLy74zAIX5BC3nQoR5
+         AnWlNTK+Uv8L4yiEGHmVXt+xxLHASjbVJfX0U6C6tuBqe4b2FPPM5MpwQtzQsq4Vo0ys
+         lHZoEeQyCXf2Rtm7P0zxTfx9ET/oC53v94eYNtnwe4as79CtHko80H1wZ0U7UlRubpu8
+         sMZh3AFcPwL5xtnZvdwJR0hZuHMqm5sfwfz/JD2nepZDPGtppYg8Bvz/GopUDvP/RFC9
+         Djhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761837279; x=1762442079;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2V757dWx8NjtY+beH0DLhW2WldW9jfdjKFDrbQ4CM+Y=;
+        b=PXsBBxW85fo7qG1gagaMiN7n6kPgUpmC9cTOQd95LaBYPf68iUiF9IOxa8wgT+QykV
+         z+2nn8GwjnnuA4q/fbxP8lDqD2Pdc+CL7mBq6RIU0yahPRI7gRU6qxDP3tnbpdhnaLgb
+         S7CLIulJ8eXni3iyQsQDolFVDEuMRF+hQc6kCrh6kIR5uA7ReYZRnib1pLMBY6X6EH2l
+         AKlGeZqF/aYYmQcqB/qeMF0sqqyMdSBjcKZvIUfOsPPArkJSPMkpUQz8Da76dJwdHeZZ
+         l4vHzLnYIxmOpUkTOTKSJ1049NiCLs8CZMLxc+10nMuXn7YpvyEIB0I3tLk7DHCemGRv
+         g0Zw==
+X-Gm-Message-State: AOJu0YwIvGBkg1UluGwwmrBto5ek47OjKFzpt897HJrHVsX6txSH1gFk
+	iEkM2S4Bk4/k1UKXxPeyPkdzS8ctT7KGR+Qw9PMc6E88dI/4XBmrr0AIt50Imk3jls65UiBUxjJ
+	f8FjiIQ==
+X-Google-Smtp-Source: AGHT+IF1+9e5Mg+OvNtBdB9L14Y1wMn9IaevQsFm53EFjwgHx+yS9BKMJ5FD/09bXoGZHhVA3Nnxwe8E7ug=
+X-Received: from pjvl22.prod.google.com ([2002:a17:90a:dd96:b0:340:6aca:917f])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:2450:b0:342:968e:87a5
+ with SMTP id adf61e73a8af0-346531476cemr9502887637.7.1761837279309; Thu, 30
+ Oct 2025 08:14:39 -0700 (PDT)
+Date: Thu, 30 Oct 2025 23:14:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAMqAA2kC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDAyNL3cTSknzd5JzUxLzSAt1UAyMTgzSjFPM0o0QloJaCotS0zAqwcdG xtbUAkd6O+F4AAAA=
+X-Change-Id: 20251029-auto-cleanup-e0240f2d7f2a
+X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761837277; l=1372;
+ i=khtsai@google.com; s=20250916; h=from:subject:message-id;
+ bh=q5u917AXBpGP3AAoXyV5DkPdPFiNYJqhzNP2VhsyHCA=; b=Q32HW3SElUSmJ2I/NBWAqR3UAwO92MgUMrmQdUuthU3UqV1Qa+mM2UIVqKCXriWsf9STjE08N
+ 95JGMMEGJ7WAyYbRS13MSb8PKK4MECm+UWGK/g5mplnS1wDPzKXpm4X
+X-Mailer: b4 0.14.2
+Message-ID: <20251030-auto-cleanup-v1-0-db30584fadfd@google.com>
+Subject: [PATCH 0/2] usb: gadget: Auto-cleanup usb_request in f_loopback, f_tcm
+From: Kuen-Han Tsai <khtsai@google.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Kuen-Han Tsai <khtsai@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Add support for UCSI SET_PDOS command as per UCSI specification
-v2.1 and above to debugfs.
+This series refactors f_loopback and f_tcm function drivers to use 
+automatic, scope-based cleanup mechansim for usb_request objects.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
+Specific considerations in each driver:
+
+  - In f_loopback.c, the shared buffer between in_req and out_req is
+    handled by nullifying in_req->buf before returning on usb_ep_queue
+    failure. This ensures the buffer is only freed once by the out_req
+    cleanup.
+
+  - In f_tcm.c, explicit nullification of request pointers in the f_uas
+    structure on error is no longer necessary. The pointers are now only
+    updated after all allocations within the respective functions 
+    (bot_prepare_reqs, uasp_alloc_stream_res, uasp_alloc_cmd) succeed.
+    Existing cleanup functions handle any stale pointers if an error
+    occurs before the structure is updated.
+
+Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 ---
-Changelog v3:
-- No changes.
+Kuen-Han Tsai (2):
+      usb: gadget: f_tcm: Use auto-cleanup for usb_request
+      usb: gadget: f_loopback: Use auto-cleanup for usb_request
 
-Changelog v2:
-- Send message_out data as part of ucsi_send_command.
+ drivers/usb/gadget/function/f_loopback.c |  30 +++----
+ drivers/usb/gadget/function/f_tcm.c      | 141 +++++++++++++++----------------
+ 2 files changed, 80 insertions(+), 91 deletions(-)
+---
+base-commit: dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
+change-id: 20251029-auto-cleanup-e0240f2d7f2a
 
- drivers/usb/typec/ucsi/debugfs.c | 1 +
- drivers/usb/typec/ucsi/ucsi.h    | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
-index 0693acf04c37..63a5fe791a82 100644
---- a/drivers/usb/typec/ucsi/debugfs.c
-+++ b/drivers/usb/typec/ucsi/debugfs.c
-@@ -36,6 +36,7 @@ static int ucsi_cmd(void *data, u64 val)
- 	case UCSI_SET_NEW_CAM:
- 	case UCSI_SET_USB:
- 	case UCSI_READ_POWER_LEVEL:
-+	case UCSI_SET_PDOS:
- 		ucsi->message_in_size = 0;
- 		ret = ucsi_send_command(ucsi, val);
- 		break;
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 8c79e6699020..f538a997155a 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -136,6 +136,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define UCSI_GET_PD_MESSAGE			0x15
- #define UCSI_GET_CAM_CS			0x18
- #define UCSI_SET_SINK_PATH			0x1c
-+#define UCSI_SET_PDOS				0x1d
- #define UCSI_READ_POWER_LEVEL			0x1e
- #define UCSI_SET_USB				0x21
- #define UCSI_GET_LPM_PPM_INFO			0x22
+Best regards,
 -- 
-2.43.0
+Kuen-Han Tsai <khtsai@google.com>
 
 
