@@ -1,156 +1,117 @@
-Return-Path: <linux-usb+bounces-29963-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29964-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D265C25911
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 15:28:05 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66EE3C25C62
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 16:12:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 562FE4F69BA
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 14:25:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BFB364F954C
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 15:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D3134B698;
-	Fri, 31 Oct 2025 14:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E962C234B;
+	Fri, 31 Oct 2025 15:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="EPfpt8ex"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XIBqVAyg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0819632C301
-	for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 14:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8CF2C08C2;
+	Fri, 31 Oct 2025 15:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761920723; cv=none; b=lfmeaFNKlpx8sPd7aDTh3z4WY3j1N73qltnDVPrDY5ONMt/WBJN3YOiA0w6YtET03HT8ljC3im/x8VYaOe4w2CONQT7LqgfFHeVWV5Qg97kM79kdwPyUsxJqy4eMKC1LiBOFhi3icD0UVgOK/ZTQa9jz2NGg8OBeFlugB3kTVOc=
+	t=1761922847; cv=none; b=dvDMex4LDsFKuwnBQ5OGrFImIbjFteoQ1qWNbho6tL11QpiZimsNyhe5jbFbKy/EPMfcoW7Md1yAlHn/vzuEZyE7ANHuzvsqgr9EcVG+0E1XauA/eut0hYPTTLwfsRnL8iQgnYNpQjG9KXwrmb0l1FiVs4MVuoioEmtzprCCjJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761920723; c=relaxed/simple;
-	bh=5L76j+zuXHG1MHBpIZXuVQSIaQJX7GuLY5HJ6kmV/ko=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QfcVVGk6TYgcmpBqVCPE167XHqaOzBZwcHzW11oFoCeFEamP5weQ64TbNeKiNNcbKA6ZNdAp0elZ/16py/0QF9En3wN06RL/NuIt9rYKbhK0f8MRJFgp6Yz92yb2kMZNjSPPQaYqcTkL3jZiK5vVGSFJTwa9MiEfJQSNAcTnO1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=EPfpt8ex; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-87499a3cd37so17057036d6.3
-        for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 07:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1761920720; x=1762525520; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ts+XWgu1bIuF9gioKC8vzQc4NBdSlbXvz8mnrqcOtY8=;
-        b=EPfpt8exaA/Bhwi+BUdvTAlmpUbJNWpxf13J70ussVRTkwzUSuj+1n/zGwt8YGhjmj
-         eNdL3kPy3nlqfaiBoNTm24NYPOBFnvFaSvd79NbEaBx2e0Ax/U5Wi5qX9mjPgOyVGEme
-         jSZR6TGqoE7FbFn9bJZSKg8y/KHK3usCLA9OPk4RXLRlDTdQXAvGH5QZwYOh1rm8s5Wo
-         QAj//C1royiSJqNdmQ5iok5QLakMTPBpw2Vqart/aM+f0rpPFdIxe4EGBdrCzDv+evs5
-         ylAHDydDoJ3bLy9mo3Wg+SR5M+gfv43tBzpRjG2KP5bVWiLshZBOVUtgbF+3fKvLkO9e
-         pHuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761920720; x=1762525520;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ts+XWgu1bIuF9gioKC8vzQc4NBdSlbXvz8mnrqcOtY8=;
-        b=bQV+JwCQVKZzo/U1X73E/ePM+IrixUpy+eM89lUoajWfsIUwCR8pmdbTZwhBIn12i/
-         PY+UuI16708H4TZS1FORAEkg9c3RZFXGJxmlgHZ5x980a5e3puP2ynbbu7w5jt6c7ZzC
-         JGtR+aYkwSgiZvrGImLdHUZte6JWGVkkvkmgqteXN8wbBlfi3V249aYkTIa7AAS42RW2
-         cIjMQa1VDCm+RHHkbtU2zl29Zknkok1MXxJ7hIBCZvsK5R6YAQUsX+JO0w51EFgBDNxK
-         nywCN7qs3SP+YXBd+pJU8F3zItb58JPgyClqNrn9suWnTq9ee2yyhfC9LwhyGGVbFljx
-         B0aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXj6sov/Byu7gm9R/exld7IbfGrf9knOyQsg4MGnwaWp96bGYv8DG/Ar/eMocss/Ci/RDUlamq7ipU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxioR/Qg5YrQzSoZTLSMpKzzpGrn2N9nqwaE4OdV7qsmb2UJD8P
-	5GxprfBKMc9EBdoeFqpxbd6oTteO7E6Mtu/y68GO2ZB6RsVm9Md4gru4tWwEWsh/6A==
-X-Gm-Gg: ASbGncueZmkp6okTpFowpmj0hvV3VuvF68Hfr7+l+j+pI+rAI9RtHx4O9NQgxadk8Vt
-	8KTTb6lloHtXjBdsLffnQ9BsafR+pdRtvhAy7hBvp5aJNpzBqfyQmc87T059eXPFZo0e161ntPj
-	yZ2PvO5SsNQALtBYeG6jzJOiWbrj/EPwZdSMe9VZMnf/Fv/D1f5ykg93SmBQ5shXr6jJ+TYccEv
-	VCX3W8M1gWSwEw8t+LY5uINhvjeUyFmtwh/Wffy6u4qhoKF5XmXix0oLDjrKI5gRel/o5s8fz/Y
-	XghJCufeyf8TAHlkUVTsOzzdOQn+02KhTfpnAu6VhqtppibqsQVWuM26Pbku5m96RgmLGI8WFbW
-	QWGTQSmoiciymizyHH7r0LvQvnbde4qeLqma/9GewE3ZGzsD/rnIgs9NKIiOjxLe9I/84lpSp4E
-	zb9XsFFj7lGA87
-X-Google-Smtp-Source: AGHT+IF6emX81maeXlXvNR7Q+/JX5uqsOM8FgN5qPjqjUpWdjdqPZE4LA+SysAtKbX+FH1pFta/gMw==
-X-Received: by 2002:a05:6214:29c5:b0:87f:9f18:49ba with SMTP id 6a1803df08f44-8802f2746d3mr38802496d6.13.1761920719781;
-        Fri, 31 Oct 2025 07:25:19 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::db9a])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88036070868sm12264306d6.24.2025.10.31.07.25.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Oct 2025 07:25:19 -0700 (PDT)
-Date: Fri, 31 Oct 2025 10:25:16 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Desnes Nunes <desnesn@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: storage: Fix memory leak in USB bulk transport
-Message-ID: <697fe35e-a3c2-47e2-891b-c25861c95dfb@rowland.harvard.edu>
-References: <20251031043436.55929-1-desnesn@redhat.com>
+	s=arc-20240116; t=1761922847; c=relaxed/simple;
+	bh=2992/aGiepAvk4rFlzjAqZ8Bo4XcpdcVK6JMUKNBlaE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TIHc72x1GrNOuh19fc/nuW4SmVHBXBfp88fwf9gx96Usfty3bG8n/2fwyZ1bjQsWAnq0F9Iq+9QbHXBgOc2pm+A8XXYeYXCjKXPNPsa5C8T1wnWak79yQt8Jo7XzIV6CkhR1FCvldZ0MeH4ybYBqBDe2aW7/JX5d+M3TMQvCV70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XIBqVAyg; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761922846; x=1793458846;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2992/aGiepAvk4rFlzjAqZ8Bo4XcpdcVK6JMUKNBlaE=;
+  b=XIBqVAygUI1B6F1GaxkkEG6PAPoqcqVsXgFMHFdYTVuYRk8BBtrZ+klR
+   WN36fmyJsRK1DOFdkmWY666f8kQdVkM3ZBFkfRRUb19QshqsS/eSN7MTi
+   FfuIzmCF5gi2w+6mhYXNhyUDVevhCCHh2BZNVV1rvcUFueNMBIbdlONyx
+   d3PnPefPGO2JNN8SgfdtmVRehBGfFp/R4/eJgTuRK5HWUF1QwIrodX+Uu
+   vj6giLrOkhi/9tE56zAmXxV2EHQjWjKdzr1ecfesdWlppnDTTp5yWmEa5
+   NnYZk1fhrwECB8LV8vJoNve03gVQU4Lu2RhMpoWt++6XdVZ3QFeKlmtuD
+   g==;
+X-CSE-ConnectionGUID: kpgdRF7YTDGCaCiwc+Eo3A==
+X-CSE-MsgGUID: czScV5n1Q3ST+llnrL0+Lg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="63289446"
+X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
+   d="scan'208";a="63289446"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 08:00:45 -0700
+X-CSE-ConnectionGUID: CgDdVfnCTe+n/AziIk2UJA==
+X-CSE-MsgGUID: bRalChfrTwmqPTpZDoioMA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
+   d="scan'208";a="186995712"
+Received: from agladkov-desk.ger.corp.intel.com (HELO [10.245.244.92]) ([10.245.244.92])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 08:00:44 -0700
+Message-ID: <2797d75d-693f-4a99-9465-a340f956cc4f@linux.intel.com>
+Date: Fri, 31 Oct 2025 17:00:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251031043436.55929-1-desnesn@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] usb: xhci: Fix a format bug
+To: Michal Pecio <michal.pecio@gmail.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251016182813.3d10a8a3.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20251016182813.3d10a8a3.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 31, 2025 at 01:34:36AM -0300, Desnes Nunes wrote:
-> A kernel memory leak was identified by the 'ioctl_sg01' test from Linux
-> Test Project (LTP). The following bytes were mainly observed: 0x53425355.
+On 10/16/25 19:28, Michal Pecio wrote:
+> The width of 'addr' depends on kernel configuration and gibberish is
+> printed in traces and dynamic debug on some 32 bit systems like ARM:
 > 
-> When USB storage devices incorrectly skip the data phase with status data,
-> the code extracts/validates the CSW from the sg buffer, but fails to clear
-> it afterwards. This leaves status protocol data in srb's transfer buffer,
-> such as the US_BULK_CS_SIGN 'USBS' signature observed here. Thus, this can
-> lead to USB protocols leaks to user space through SCSI generic (/dev/sg*)
-> interfaces, such as the one seen here when the LTP test requested 512 KiB.
+>    Removing canceled TD starting at 0xf9c96eb0 (dma) in stream 0 URB 54e247b5
+>    Set TR Deq ptr 0x205400000000000, cycle 0
 > 
-> Fix the leak by zeroing the CSW data in srb's transfer buffer immediately
-> after the validation of devices that skip data phase.
+>    Successful Set TR Deq Ptr cmd, deq = @f9c96ef0
 > 
-> Note: Differently from CVE-2018-1000204, which fixed a big leak by zero-
-> ing pages at allocation time, this leak occurs after allocation, when USB
-> protocol data is written to already-allocated sg pages.
+> Fix it by casting to 64 bits. No effect on unaffected systems.
+> Remove the newline which casuses an empty line to appear next.
 > 
-> Fixes: a45b599ad808 ("scsi: sg: allocate with __GFP_ZERO in sg_build_indirect()")
+> Fixes: d1dbfb942c33 ("xhci: introduce a new move_dequeue_past_td() function to replace old code.")
 > Cc: stable@vger.kernel.org
-> Signed-off-by: Desnes Nunes <desnesn@redhat.com>
+> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 > ---
+>   drivers/usb/host/xhci-ring.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index c7f658d446cd..6d799a5a062d 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -776,7 +776,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
+>   	ep->queued_deq_ptr = new_deq;
+>   
+>   	xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
+> -		       "Set TR Deq ptr 0x%llx, cycle %u\n", addr, new_cycle);
+> +		       "Set TR Deq ptr 0x%llx, cycle %u", (u64) addr, new_cycle);
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-> V2->V3: Changed memset to use sizeof(buf) and added a comment about the leak
-> V1->V2: Used the same code style found on usb_stor_Bulk_transport()
-> 
->  drivers/usb/storage/transport.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-> index 1aa1bd26c81f..9a4bf86e7b6a 100644
-> --- a/drivers/usb/storage/transport.c
-> +++ b/drivers/usb/storage/transport.c
-> @@ -1200,7 +1200,23 @@ int usb_stor_Bulk_transport(struct scsi_cmnd *srb, struct us_data *us)
->  						US_BULK_CS_WRAP_LEN &&
->  					bcs->Signature ==
->  						cpu_to_le32(US_BULK_CS_SIGN)) {
-> +				unsigned char buf[US_BULK_CS_WRAP_LEN];
-> +
->  				usb_stor_dbg(us, "Device skipped data phase\n");
-> +
-> +				/*
-> +				 * Devices skipping data phase might leave CSW data in srb's
-> +				 * transfer buffer. Zero it to prevent USB protocol leakage.
-> +				 */
-> +				sg = NULL;
-> +				offset = 0;
-> +				memset(buf, 0, sizeof(buf));
-> +				if (usb_stor_access_xfer_buf(buf,
-> +						US_BULK_CS_WRAP_LEN, srb, &sg,
-> +						&offset, TO_XFER_BUF) !=
-> +							US_BULK_CS_WRAP_LEN)
-> +					usb_stor_dbg(us, "Failed to clear CSW data\n");
-> +
->  				scsi_set_resid(srb, transfer_length);
->  				goto skipped_data_phase;
->  			}
-> -- 
-> 2.51.0
-> 
+Why not %pad and &addr instead?
+
+Thanks
+Mathias
 
