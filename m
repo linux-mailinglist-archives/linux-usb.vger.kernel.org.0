@@ -1,65 +1,78 @@
-Return-Path: <linux-usb+bounces-29964-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29965-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66EE3C25C62
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 16:12:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63FE7C2653C
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 18:24:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BFB364F954C
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 15:03:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6952A3BD1F8
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 17:21:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E962C234B;
-	Fri, 31 Oct 2025 15:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876A6308F1A;
+	Fri, 31 Oct 2025 17:21:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XIBqVAyg"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IoRNMGQx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8CF2C08C2;
-	Fri, 31 Oct 2025 15:00:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1933054D7
+	for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 17:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761922847; cv=none; b=dvDMex4LDsFKuwnBQ5OGrFImIbjFteoQ1qWNbho6tL11QpiZimsNyhe5jbFbKy/EPMfcoW7Md1yAlHn/vzuEZyE7ANHuzvsqgr9EcVG+0E1XauA/eut0hYPTTLwfsRnL8iQgnYNpQjG9KXwrmb0l1FiVs4MVuoioEmtzprCCjJ8=
+	t=1761931297; cv=none; b=a4v6qadjaB7AazqutsYr/Z6gM7gUPSmdyTsTewHfNooyr+tCrB93R0J8tpcvPEJOwMqSgzZHMThquNMKt5y5uNeYOZJJQUbiVn+ZHKLqcx45bODyCMXOYjtS4HuvFpVJZV8827tkG128BT+xBaMlpbKnius7fDfxz6N+C9p7GyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761922847; c=relaxed/simple;
-	bh=2992/aGiepAvk4rFlzjAqZ8Bo4XcpdcVK6JMUKNBlaE=;
+	s=arc-20240116; t=1761931297; c=relaxed/simple;
+	bh=9dIYlCqSuay+P18dQ0M4/XCMXtFDI35HoGfcLtJV++I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TIHc72x1GrNOuh19fc/nuW4SmVHBXBfp88fwf9gx96Usfty3bG8n/2fwyZ1bjQsWAnq0F9Iq+9QbHXBgOc2pm+A8XXYeYXCjKXPNPsa5C8T1wnWak79yQt8Jo7XzIV6CkhR1FCvldZ0MeH4ybYBqBDe2aW7/JX5d+M3TMQvCV70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XIBqVAyg; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761922846; x=1793458846;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2992/aGiepAvk4rFlzjAqZ8Bo4XcpdcVK6JMUKNBlaE=;
-  b=XIBqVAygUI1B6F1GaxkkEG6PAPoqcqVsXgFMHFdYTVuYRk8BBtrZ+klR
-   WN36fmyJsRK1DOFdkmWY666f8kQdVkM3ZBFkfRRUb19QshqsS/eSN7MTi
-   FfuIzmCF5gi2w+6mhYXNhyUDVevhCCHh2BZNVV1rvcUFueNMBIbdlONyx
-   d3PnPefPGO2JNN8SgfdtmVRehBGfFp/R4/eJgTuRK5HWUF1QwIrodX+Uu
-   vj6giLrOkhi/9tE56zAmXxV2EHQjWjKdzr1ecfesdWlppnDTTp5yWmEa5
-   NnYZk1fhrwECB8LV8vJoNve03gVQU4Lu2RhMpoWt++6XdVZ3QFeKlmtuD
-   g==;
-X-CSE-ConnectionGUID: kpgdRF7YTDGCaCiwc+Eo3A==
-X-CSE-MsgGUID: czScV5n1Q3ST+llnrL0+Lg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="63289446"
-X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="63289446"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 08:00:45 -0700
-X-CSE-ConnectionGUID: CgDdVfnCTe+n/AziIk2UJA==
-X-CSE-MsgGUID: bRalChfrTwmqPTpZDoioMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="186995712"
-Received: from agladkov-desk.ger.corp.intel.com (HELO [10.245.244.92]) ([10.245.244.92])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 08:00:44 -0700
-Message-ID: <2797d75d-693f-4a99-9465-a340f956cc4f@linux.intel.com>
-Date: Fri, 31 Oct 2025 17:00:42 +0200
+	 In-Reply-To:Content-Type; b=lrEaQDW2Ko4t8wrlzxnqIfUfcU4bVY/XSSBp1qUwrXYSjtR5RtRNfKguFGmTp6DUTNxWVG/tXTRCUs2YiEdlFEoGCkatkaGWyHMwRsAbxdiRPXbJ+M6Q02qNoxhPvm3BQC58fIFJTMdFt9UYlUk+vUaLb77xcIPj3W9mIo43xgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IoRNMGQx; arc=none smtp.client-ip=209.85.160.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-3d199f29161so1874466fac.0
+        for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 10:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1761931294; x=1762536094; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2arCVoySu4BoT6qvWYZ5TCMKdFyAl6i0QIhKt61vYqE=;
+        b=IoRNMGQxaJE7gCHO6SpA5/PCegsQmApO7UECLD8M3+Y731+VqrxG4PVu5py4rj5chA
+         KVigy7MOCQOGOf3W6bghZB0aYXfYrPwI8X/50Qqzh23070ycIm5D8wu/mtzr0+Wv27zm
+         CeT3OdwVHFx3osRQKoMlIHHh6li3gscz/w344=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761931294; x=1762536094;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2arCVoySu4BoT6qvWYZ5TCMKdFyAl6i0QIhKt61vYqE=;
+        b=tZSOklWumg2UYa4ng8im5SFOgomZyeC6ZohVejio3JS12/i+MsZnC+pmNuuL4RamPS
+         zim1Caa+TAbji35rT6F15d+0L3WvWYtb7jzVGB4dj6l3Jx3i49vJ2H4DNcBdCq19aM5O
+         XOUDz9uoR8EOUjRuBCWbtsLh5O9dupTkjxY8scZ82IQOxgTqPSTU8qRebcPAI2m1ZXkS
+         Pyz4SkP1DEB2TxOlCUz1NOqAAPDO6FixmsZThMO1pqtrtX4nxq8wQTnwS59cVG9yKnBf
+         NGNmzsW0tMhhhstYFnnFPAUXJtiotrb3ECnaBn3q5g3Qq3KBBZgPn93MZD9LSnBT9Ufs
+         E1nA==
+X-Forwarded-Encrypted: i=1; AJvYcCVJRP8DLp2+D2ttccetiI6mobZic4D8N8V5cUp/DF4YlGlyL+N0lL8YXegaiakMKs7VR+EEhWiqQ0s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAq0AMJd5tLTDPOaFyKxdGzSNq2G8KLnwlIYrljz8GBbZVtOIi
+	CWOructuJ1EpoVSLjhvPDxUe7nOXvo36TVCzUMuPAb1YwN3uAE7FjQUTlOiouqU5raA=
+X-Gm-Gg: ASbGnctqbAeVvOn97P9PnjtOslgP1mP+L29D1sTFnyamsZXWa1kT7sIdxLAjLjaSTbU
+	31M5id3/wJbUTSxsRTzK3+TxYDWydfhK+799YbpY3focFxLm3jEGXzEfPf3OUyrKJuQUa91Bryb
+	UgIVIxA5tjH3nRvUDOhfmHcNO7n9gZYDS/TsNHBe+6RvRq/QLQMqxunN5Iew6mV5eDspz/b+sQy
+	qsjadUdGSZHor91FHNh+K5hhoCwzlTsdEvzwTdFdhwyVK++OmYmpcSnzAkZK7URxwKS8nJtE445
+	FtzA68K9XkxvQcX+PD/XoMEKLjRzx8of8Hfn+5iDDeHmk2Ng2ZR6izTxjZrBmisjJD00oM6VCwf
+	b6up0udrYtXQ3m+DxRCEa51uXeKnPNaAyf0ZJQj9+aJI4bIrsBU4wzNT+SO9Di/w6HNk71JRsnM
+	/4RYwCz/Myd0JSd9qLjrKDRwU=
+X-Google-Smtp-Source: AGHT+IFHV5mqBxfVnLGrK24cHPx0N/RAB4xpvKPnhRbNDbS9+AwnDKl1gfiMXkoDBtzu6gX4xQcp0Q==
+X-Received: by 2002:a05:6808:2184:b0:441:8f74:e95 with SMTP id 5614622812f47-44f9601fa1dmr1922372b6e.63.1761931294049;
+        Fri, 31 Oct 2025 10:21:34 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-44f9d9a4cbfsm500332b6e.24.2025.10.31.10.21.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Oct 2025 10:21:33 -0700 (PDT)
+Message-ID: <3a9185ef-c212-41bc-978b-0dea75a86e7b@linuxfoundation.org>
+Date: Fri, 31 Oct 2025 11:21:31 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,51 +80,46 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] usb: xhci: Fix a format bug
-To: Michal Pecio <michal.pecio@gmail.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251016182813.3d10a8a3.michal.pecio@gmail.com>
+Subject: Re: [PATCH] usb: core: prevent double URB enqueue causing list
+ corruption
+To: Alan Stern <stern@rowland.harvard.edu>,
+ Greg KH <gregkh@linuxfoundation.org>
+Cc: vsshingne <vaibhavshingne66@gmail.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20251031134739.222555-1-vaibhavshingne66@gmail.com>
+ <2025103118-smugness-estimator-d5be@gregkh>
+ <6c81d455-a4f2-4173-be72-9d77728378c1@rowland.harvard.edu>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20251016182813.3d10a8a3.michal.pecio@gmail.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <6c81d455-a4f2-4173-be72-9d77728378c1@rowland.harvard.edu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/16/25 19:28, Michal Pecio wrote:
-> The width of 'addr' depends on kernel configuration and gibberish is
-> printed in traces and dynamic debug on some 32 bit systems like ARM:
+On 10/31/25 08:13, Alan Stern wrote:
+> On Fri, Oct 31, 2025 at 02:59:07PM +0100, Greg KH wrote:
+>> On Fri, Oct 31, 2025 at 07:17:39PM +0530, vsshingne wrote:
+>>> Prevents the same URB from being enqueued twice on the same endpoint,
+>>> which could lead to list corruption detected by list_debug.c.
+>>>
+>>> This was observed in syzbot reports where URBs were re-submitted
+>>> before completion, triggering 'list_add double add' errors.
+>>>
+>>> Adding a check to return -EEXIST if the URB is already on a queue
+>>> prevents this corruption.
+>>
+>> This text makes no sense at all, it does not describe what this patch
+>> does in any way.  Please do not use AI to generate patches.
 > 
->    Removing canceled TD starting at 0xf9c96eb0 (dma) in stream 0 URB 54e247b5
->    Set TR Deq ptr 0x205400000000000, cycle 0
+> In fact, the patch doesn't do _anything_ (except maybe change some
+> whitespace).  And it does not apply to any recent kernel source.
 > 
->    Successful Set TR Deq Ptr cmd, deq = @f9c96ef0
-> 
-> Fix it by casting to 64 bits. No effect on unaffected systems.
-> Remove the newline which casuses an empty line to appear next.
-> 
-> Fixes: d1dbfb942c33 ("xhci: introduce a new move_dequeue_past_td() function to replace old code.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-> ---
->   drivers/usb/host/xhci-ring.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index c7f658d446cd..6d799a5a062d 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -776,7 +776,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
->   	ep->queued_deq_ptr = new_deq;
->   
->   	xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
-> -		       "Set TR Deq ptr 0x%llx, cycle %u\n", addr, new_cycle);
-> +		       "Set TR Deq ptr 0x%llx, cycle %u", (u64) addr, new_cycle);
 
+Agree - this patch does nothing. Looks like the patch isn't sent
+to right people either.
 
-Why not %pad and &addr instead?
+This person happens to be in the mentorship program - I will make
+sure they won't send such patches in the future.
 
-Thanks
-Mathias
+thanks,
+-- Shuah
 
