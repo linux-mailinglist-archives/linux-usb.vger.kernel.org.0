@@ -1,76 +1,52 @@
-Return-Path: <linux-usb+bounces-29952-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29953-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1762C25469
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 14:34:16 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E141BC25484
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 14:38:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 181614F3BF8
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 13:32:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D802F4E16C7
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 13:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7517199FB2;
-	Fri, 31 Oct 2025 13:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3992236EB;
+	Fri, 31 Oct 2025 13:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCdRDPks"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0rzNmhfb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06FFEAC7;
-	Fri, 31 Oct 2025 13:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F269221577;
+	Fri, 31 Oct 2025 13:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761917563; cv=none; b=u7MYjuMbsG53MAI6oJeFlomLdABTvsSFFVKH6JLWmnIAnMW8dfyuz9nCUjXFRI0jo25I0FPf1i0KR+ps0n0NxfS5wXCmd2lVmvptpNHf5N6mMsiaKbf9Ptp5SYUizIGfo4p7C7P5K31JiNM/JaJSHuYMDUlg8sBr744w4VXDIzE=
+	t=1761917924; cv=none; b=r7nPYH3AOGKE5WM1Lq8DepF/bzqemJKt2iuGbh1BpKFox73nyzDKsF2sf4c3axt9vaxBqc/MdYST6GGflxzqu8SYPALoH5NLGmtg9pzaGRBdKA1BAlQUYiI8CP7JUr0amP++YicLVQ5uZFwmUR6R47Eqr2VytuL14vaefbAbBqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761917563; c=relaxed/simple;
-	bh=jyztiEsZ+csB4RCtRcDmpzJi7vqq2rVqeKbvXQM1D/Y=;
+	s=arc-20240116; t=1761917924; c=relaxed/simple;
+	bh=5ZpTYHAdSZWN5K+ss9cIl0hFJcGM7waDKRJA1f+oNg4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RuSryNQH93b4ZJecVZGH4aQCBuEFqjIlv0YWrv/qkwHTWt2k2vpYk5Wp/s1H9BfvAnWCRByvJfvDwSfhAd+L8EqKCk82oKoQoHUSwG+pL49Yrra5y/EYBY3DJWPtW9z6T0xNCdYmqGEN8PjxJhg0DiPfjpalloL8Vyr5AHZiZD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCdRDPks; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761917562; x=1793453562;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jyztiEsZ+csB4RCtRcDmpzJi7vqq2rVqeKbvXQM1D/Y=;
-  b=hCdRDPksanh1FW7KwGkMFshobIeRJpPN/brx91Gy7q4x8sQmeXBLailG
-   +e5+4xGc++EFjmVE75QyNxLMbK4RApuiOEh9r5p5NcmepibFSxNwIr+pR
-   gP4t0ou9y9woj0MdKa+I7Y9dBBZ8vuHYHZwOMulhqs61NmYLQUb84u3oa
-   ezx60eKTg8bBnDKQULmbGYbqj0uGV8fIZsq2WCY9F/ow56mXZrIraGsMU
-   OvDfQ8PBXyexBefWVciPVZGjVOKK0YHqYQVDTDoIQHc2JZFB8/TVVSwnn
-   iDyuzff80uilSxcnsltY5jCYE0jugXmZGxd1nhwgq+58EEUykhoot21hK
-   g==;
-X-CSE-ConnectionGUID: C36ai6MYTV69X1cQjDi2EQ==
-X-CSE-MsgGUID: xa+puWiYSKmCkBmglPaPbw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="63773863"
-X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="63773863"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 06:32:42 -0700
-X-CSE-ConnectionGUID: gK3hd0tBQiKP3T3IAA8EnA==
-X-CSE-MsgGUID: /ewMgTYWQ8ieuppHhS4GDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="186691071"
-Received: from jjgreens-desk20.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.81])
-  by fmviesa009.fm.intel.com with SMTP; 31 Oct 2025 06:32:38 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 31 Oct 2025 15:32:37 +0200
-Date: Fri, 31 Oct 2025 15:32:37 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Dmitry Baryshkov <lumag@kernel.org>, linux-usb@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=iAFczLcTHVUIbRzKF8BkBSF2iFenr0Iwl0JFVwZxGSKrpjNWnlsqvPMP+uyWwk+adyOsFAfVvD3bnignKYQZQnVSduln7yLgV5u0EgnpbJXSMcmt6w144lMmcnBNWxS6KjvmLyJafYxgLDWlJjgFxQqeSsYuerao+n0c2u/x1sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0rzNmhfb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99722C4CEE7;
+	Fri, 31 Oct 2025 13:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1761917924;
+	bh=5ZpTYHAdSZWN5K+ss9cIl0hFJcGM7waDKRJA1f+oNg4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=0rzNmhfbslyU9hGtbqAqVEJyVnWxqg4CYYkoqdZ25FVJlPSLuHwEH4WCsTtLTynig
+	 XsCDmL+YiW2NG2zo8kicOEuRJbOFrmwXeLrGksZk5hYKJq94jO+1zyfSHbZ+4HrIzw
+	 5qYC9tk9m/yMs/Q/n3/rD5N+DkISygJpi8fPgpCQ=
+Date: Fri, 31 Oct 2025 14:38:41 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: vsshingne <vaibhavshingne66@gmail.com>
+Cc: skhan@linuxfoundation.org, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Set orientation_aware if UCSI version
- is 2.x and above
-Message-ID: <aQS6dfrSxAihLC2o@kuha.fi.intel.com>
-References: <20251028-b4-ucsi-set-orientation-aware-on-version-2-and-above-v1-1-d3425f5679af@linaro.org>
+Subject: Re: [PATCH] usb: core: prevent double URB enqueue leading to
+ corruption
+Message-ID: <2025103110-earful-taekwondo-081a@gregkh>
+References: <20251031132651.219859-1-vaibhavshingne66@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,39 +55,81 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251028-b4-ucsi-set-orientation-aware-on-version-2-and-above-v1-1-d3425f5679af@linaro.org>
+In-Reply-To: <20251031132651.219859-1-vaibhavshingne66@gmail.com>
 
-Tue, Oct 28, 2025 at 05:43:03PM +0200, Abel Vesa kirjoitti:
-> For UCSI 2.0 and above, since the orientation is part of the paylad,
-> set the orientation_aware by default and let the implementation specific
-> update_connector op override if necessary.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+On Fri, Oct 31, 2025 at 06:56:51PM +0530, vsshingne wrote:
+> Signed-off-by: vsshingne <vaibhavshingne66@gmail.com>
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/usb/core/hcd.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index ed23edab776354f08452c539d75d27132b8c44dd..84afa9bfc65b6e6ad0a8c1856252299c16562baf 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1637,6 +1637,9 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
->  	cap->driver_data = con;
->  	cap->ops = &ucsi_ops;
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 87fcb78c34a8..66861f372daf 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1758,16 +1758,15 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+>  		pr_warn("usb: URB already linked to bh->head, skipping duplicate addition\n");
+>  		return;
+>  	}
+> -	
+>  	list_add_tail(&urb->urb_list, &bh->head);
+>  	running = bh->running;
+>  	spin_unlock(&bh->lock);
 >  
-> +	if (ucsi->version >= UCSI_VERSION_2_0)
-> +		con->typec_cap.orientation_aware = true;
-> +
->  	if (ucsi->ops->update_connector)
->  		ucsi->ops->update_connector(con);
->  
+>  	if (!running) {
+> -        	if (bh->high_prio)
+> -                	queue_work(system_bh_highpri_wq, &bh->bh);
+> -        	else
+> -        	        queue_work(system_bh_wq, &bh->bh);
+> +		if (bh->high_prio)
+> +			queue_work(system_bh_highpri_wq, &bh->bh);
+> +		else
+> +			queue_work(system_bh_wq, &bh->bh);
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(usb_hcd_giveback_urb);
+> -- 
+> 2.48.1
 > 
+> 
+
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file,
+  Documentation/process/submitting-patches.rst for how to do this
+  correctly.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
--- 
-heikki
+greg k-h's patch email bot
 
