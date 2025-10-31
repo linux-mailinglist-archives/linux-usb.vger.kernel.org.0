@@ -1,239 +1,124 @@
-Return-Path: <linux-usb+bounces-29949-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29950-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56455C253A9
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 14:19:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65741C25436
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 14:27:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5B3BE4F3AD8
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 13:16:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6BCC1A22474
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 13:27:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4190819539F;
-	Fri, 31 Oct 2025 13:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3920434B411;
+	Fri, 31 Oct 2025 13:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kHowvhEL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XccuECJ1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0363372614
-	for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 13:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6068E34B181
+	for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 13:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761916560; cv=none; b=FWx4QCgSvuqn7Q24VfUGBiXR3VuuzdzFO/blY+M89O80QX2dye1tX/Aicjet9ofsMA4UqVLTEZFF1lJ3KtX7hO8kwoYcpk6NpDFT+YP42TI2iKvLvCfHdSzF2osqHK8nbev3IoNBrmtkc0nE2Z+oPlh7e94yn0xvTfW5qNtKT24=
+	t=1761917223; cv=none; b=jo7CSzO0Cme6GdIsGTiQPseeIYDkhesiYyZLmzXFQLEiulHxr3LXIK4DmMgXLtB13NWa7MUqTrEXfUIyjWQqXvwB3Oz7dbg5AVsBqEJ6fXl5Y1c+/BrFt0WTBkbg8I6C6l+n8Ga9kQwKfVsea2VCw7wAuNK06DHjp/V6KQNbflE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761916560; c=relaxed/simple;
-	bh=GkPuSGqhn36REhOUqjYoy+b4rtrgr9x4nHEr+AVYj9M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zgf5gQZS4Gi8rR5axzICQM36w+Mfl9XmkuOV8xMjmd5AdvKIVDVXPAapVaGpa1OApfbGxWiOIG197kdZViKxJLWw/+CF4uQrDqUbbvUIcL5Gnvdf3CngdPxGm7jbgO1tJKjCi5viH+nEMCFOVhHyOQz+DoHyUaNhFTICZKLmPfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kHowvhEL; arc=none smtp.client-ip=209.85.218.50
+	s=arc-20240116; t=1761917223; c=relaxed/simple;
+	bh=uhaCwSbT1CmynaTtFkFUfd6VKh41RVQZwtYLimsYg7w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SU6tZ2HIS6RQBsIYTz7xQr7p9bpiuHlrT7bPTMPcGOrPoBxzZscKTdiF3WCzx1nImiDyK0wH27XdT63B5B4KOuCXmgcn4r5UWkBr5mK1U5mflzqyRToWsDeCCPV/+7abd9nqSG2Wz2R4rHf4zoQH/IeNTd0M8NHyY/ggCHN7x+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XccuECJ1; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b6d70df0851so459785066b.1
-        for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 06:15:58 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-33ba5d8f3bfso2083558a91.3
+        for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 06:27:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761916557; x=1762521357; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pFOxiVss0HRKnpAlz3H4jzYjQoU8YpgzNxAJkbQGhsE=;
-        b=kHowvhELGd4hzIWGygeGUfbGEyrf+cqh3VtJ+TAlOyJEq8eBSRHL5dUlhVhv3NknLL
-         Cbl/i8n1FOSA6bRQN7QgG+8jDCMFkbhxYrmyU8NYP8lwlPX3yVG3TvKlJ5Hy7wt4kw3P
-         FyLeLap0NfR17+GHGbPy1+qmihDq+T40S4pabAJRAOJxWwKxMzufxDwEeDDhInKQ/7RT
-         vpjULKwmv9R5qDWfhouAs0EOyFoP4vucJbf/PVFdY13FTeEKpAjMvkiOSw4DkLA/6v3U
-         hK5Is4WwYruNT4Fi4uGmkaD73KEdQwDNgoS3CTWNg0BmbyS8qROI4P3lssp9Xb5n60Ke
-         ZboA==
+        d=gmail.com; s=20230601; t=1761917221; x=1762522021; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WrmdlO7loopDlm2CqslnppoVSdxtVgkxG6FfUB2qsow=;
+        b=XccuECJ1h8F58ezeiX+S7pyhbOOK97N6iub3dkg4qRuM3AjINAZ1HO/QDn+qRPdRtV
+         uWnR5NPk1jCkV8etFYcJtQ0dUpx+WISpOYzq5KpZtYGzJyOWyvc40G7cvM+r1AbWJdPG
+         WagHtNzTfX0muUpZqGH782C/fIYDX/zGkPt7JBOyUOBSGq2jB59SPx9vvOXd6UJc/clb
+         c4ApnE/lBxPAX/x24A4tUPVQquHK89dv9EhmD8Cz6MYHad7h5W0d+td4pP9nc63XW4II
+         Nx3iBEVDLdEQmIc4Beh7g9BvIq0i6HIS0RwArPJTP7/uzejKduHz0O4m0H9JTqC+G8F6
+         zt7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761916557; x=1762521357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pFOxiVss0HRKnpAlz3H4jzYjQoU8YpgzNxAJkbQGhsE=;
-        b=HkEOJ/eg1SUvMPxXf50+4y2jwQaN6R1hn9o8af+FFRB8mm0iIaiD6MvuUUdy0dVqqX
-         WrYpSx/gfKEpEjEsCHcw6sFivcl2l5I1OPgjt1z4zFkB6S0xJRx7be/Nqk8ZD8zR6Una
-         tejLIsco7TeRY6V74bthXuJobE5SkEupL5BSbaBe0E+ohiCCUGTcp8DFT6WizIVXiYVz
-         ApyJR5k5ZkvFCI4/kqfXzzXaYiYdoiwAvmf+j1hD7FFf8quang0DuP3LbUD+9gxvV+P7
-         6szyFLXASGhbyBUNbosNcvUjsSdItVehU/dkn3sDGjG1tr17+aTrL6kts42B+D5NIIVV
-         PwVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVhpG3FBtMK+0KNR/EVvavptrk6l9B/UliZV7O0LyugGBkNk9kahU+bYPptU4Wm7s76dXSs+s7A6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOkkSdLMUI4uO3BuLnwVVOFTJA0DrCXWltDvieNPkizFlXv1aD
-	VVEzClsO29GOWHZPsKk9+Qojq63FTMmpG9BDKeJ+nvrpWe7TRD4K3u5BbqFk9Sbm1BaQQKtNcNG
-	q49HCur1NAPdUfe/5vf87/F2YvcuXsQ==
-X-Gm-Gg: ASbGncvFMmqv0M+78kYR85Wc0T0WDWjl2MFAlM71Tbghe4S1VfjbN4D2GtCBVJCEcdl
-	u6qFhJ2PDon6UDF216cidAxbTT1GPfjV2i2e5i+ScZ/wmKc0YrIJBf1nDS49L+0dmB5wYFTGegn
-	uzpP/1KxXSbshEp3toEA6IIP3zZpvGK+e6MLwE5ONzQVfDNEUBhAchvLlCVwsdYGKtmWOMHacd1
-	U971RTeLJvqV2kZK7dqkgDelJDmHGslFnRDBR46itwc6R70QenjL245VkCO
-X-Google-Smtp-Source: AGHT+IFZfHfYqfEHl+L7rhL+k/guQjQ8ttdlPs8om4oqNdpHZfgfcBSrtjOXGWwoy8eYcc0DqlemA1nls3dFNgeDEiU=
-X-Received: by 2002:a17:907:3f13:b0:b0e:d477:4972 with SMTP id
- a640c23a62f3a-b707019d264mr394593766b.25.1761916556937; Fri, 31 Oct 2025
- 06:15:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761917221; x=1762522021;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WrmdlO7loopDlm2CqslnppoVSdxtVgkxG6FfUB2qsow=;
+        b=t38H2+IcqmFjxJ3dF7JXqgFFQrPhD1r9eDT9uQ1tf2UXeZNHhS1F5WzwsxiTHV7OQh
+         M+Y34qHcB3JbQjlbBi+i+46s+ivFOhJDBlBUqsdDtvdbEnt120hVTE02TwolSkdthdzo
+         jNw3TPRKupbrJ0kzR9TK+8nTThEDTWe87mYTAYcf8+P6x2LxBQVlpp+9JKCznX8cyHcD
+         GQus7TSVW7PRlFSzHcLq5azAiq/ZVHDAtaGa6eOoJg4aKhSWw4k0LOJVeyEi/0hLPaRq
+         0lYtpyvns9xFqKaTihKg0ihp/cmnFZl9Y0UQgPnWXAC+8BbFrnRptFMXqvRjiQBL62G3
+         c50Q==
+X-Gm-Message-State: AOJu0YxevwOBev4vzu6TSSl4nsEHq2MMpZfDVmzAar7oFjqSbyQR80qz
+	+9i3CmJh6iRuVeIm6s1Xn2tXsIc5EB1x5PCWiFJwphPfUDuz76PKucU=
+X-Gm-Gg: ASbGncuU2UwEe85PkiE8WDwlcpnpfmEb4CEqrq8drlpGOjzLuEkst3olVJ+SBDbaUKK
+	xpOnhTHDdipiNLwu65GfMzvh1f1JzI89C9xMvQDtKBAkPTGjMHw+BnMWSECupoc3+kind/b41wV
+	iDwujKfg3jvpjUftk3mDWwlp/hKfOzz5AEW3gq4ZC3loe6iLDv8wBTO7w8QwgdXYfjMm/tzIW46
+	fL0+oTVnoxOJXdEFUKVBbD+lcZhnQKUQVmEoThVuOAtLq22Mv3FJ6evLsfnqSpL/8OwJSGFZGOY
+	RPb92ITfrCSf4EKZTcBX5+yPH6GnqOUrDYrMQ3zqNghX7pv+rmlmp9dPg0F49yUndwRvTwM4xEj
+	GFI3/FFUhYlV/W7O1jeAWUZDh4qPI+cjF5nk7wiruyOyanvoWBwc3vAvi1xFF5ftJeK6yhB818o
+	eg1xXVKxku
+X-Google-Smtp-Source: AGHT+IHzfVYSO8+J0zNhvwv1+BiO2sqnk9KJnssYCkr+vJvVNaYHRPB82I8IkIFPSwlKvjWLwIcZzA==
+X-Received: by 2002:a17:90b:39cc:b0:32e:a54a:be5d with SMTP id 98e67ed59e1d1-34082fc92bemr4683310a91.2.1761917220515;
+        Fri, 31 Oct 2025 06:27:00 -0700 (PDT)
+Received: from VSPRIME.. ([2401:4900:52f2:3b59:ca2f:95c0:7c6b:6e6a])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34092d48252sm2232712a91.15.2025.10.31.06.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 06:27:00 -0700 (PDT)
+From: vsshingne <vaibhavshingne66@gmail.com>
+To: skhan@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	vsshingne <vaibhavshingne66@gmail.com>
+Subject: [PATCH] usb: core: prevent double URB enqueue leading to corruption
+Date: Fri, 31 Oct 2025 18:56:51 +0530
+Message-ID: <20251031132651.219859-1-vaibhavshingne66@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAAcb1K_MJKWz+BYJmx0FDgrBOzzXm71-M7sgHDUOmBRppXWNzA@mail.gmail.com>
- <CAAcb1K_bezseTM8DrOrzVUi_W+nZoE2N0CO4k3AQWPw7=7pyjw@mail.gmail.com>
- <2025101544-galore-sculpture-b243@gregkh> <CAAcb1K85GK6m_bVUeSfX1GP4=mxzwfmHtaRX0EYD_jgGfQRk9Q@mail.gmail.com>
- <4e6d9b62-b9d0-4a05-99a9-143899547664@linux.intel.com> <CAAcb1K_a2dkj5wv__1BW-fu_Zg=z00OmQzJmekQ-GH4svYQ-GQ@mail.gmail.com>
- <f0d0f71c-bc47-4348-85a6-d728a67c982a@linux.intel.com> <CAAcb1K-o7DY3Kvqdr+=MN8OsgRZr+g43-zC6YSLG0hbNxEQUeg@mail.gmail.com>
- <8fe27842-8155-44db-b262-a148b5ce5436@linux.intel.com> <CAAcb1K9MDvqJgVbV29ax8tQhXoepJr5ABuh1NHoNpmFdnGxVHw@mail.gmail.com>
- <65b65e02-e51e-4e7e-ae9e-78d755eb8566@linux.intel.com> <ba3692e7-6818-41af-8748-71a91cb13db5@linux.intel.com>
- <CAAcb1K9X+ZgigmiQ9btvV5vs+1UmxyZC39RCnS0tVZZUuYjToQ@mail.gmail.com>
- <9dc78bbb-b9db-4ab3-8cd9-bac40e0c8653@linux.intel.com> <CAAcb1K_piCRo07Jf3Bzd9tzH9HKxPFisPARGE6OZOhd55-NLyQ@mail.gmail.com>
-In-Reply-To: <CAAcb1K_piCRo07Jf3Bzd9tzH9HKxPFisPARGE6OZOhd55-NLyQ@mail.gmail.com>
-From: Milan Oravec <migo.oravec@gmail.com>
-Date: Fri, 31 Oct 2025 14:15:44 +0100
-X-Gm-Features: AWmQ_bmZVH1t8SCwCb_G-XiPZRpvdOwsbz4pi_v4yNohhD2BOQwt4u8mwrmiBn4
-Message-ID: <CAAcb1K9QEzaDnTKZJ1AiZ18iLL50z91F6BOB=uj47ma2NLwM8g@mail.gmail.com>
-Subject: Re: Fwd: USB DBC hang during earlyprintk initialization
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-I'm sorry but I can't provide better feedback. When the USB cable is
-connected during initramfs loading DbC is connected, but the system
-stops booting with no messages in the DbC host. When I let USB
-connected prior to the boot, DbC is not initialized. What should I try
-else? Any ideas? Thank you!
+Signed-off-by: vsshingne <vaibhavshingne66@gmail.com>
+---
+ drivers/usb/core/hcd.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-On Tue, Oct 28, 2025 at 7:10=E2=80=AFPM Milan Oravec <migo.oravec@gmail.com=
-> wrote:
->
-> Thank you, with earlyprintk=3Dkeep,xdbc2 it establishes connection, but
-> I need to plug in the usb cable after the system starts booting, when
-> I let it plugged in all the time I get timeout like in my previous
-> posts.  Discovered this randomly by forgetting to plug in the usb
-> cable... Is this normal behaviour?
->
-> After establishing a connection system hangs :( it doesn't boot any
-> further. I can only power the system off. :( Here is picture from
-> debugging host:
->
-> Any ideas? Thank you,
->
-> Milan
->
-> On Tue, Oct 28, 2025 at 6:19=E2=80=AFPM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
-> >
-> > On 10/28/25 15:29, Milan Oravec wrote:
-> > > Hello Mathias, here is dmesg output after applying additional patch:
-> > >
-> > > [Ut okt 28 14:07:39 2025] Linux version 6.17.5-dirty (migo@migoG17)
-> > > (gcc (GCC) 15.2.1 20250813, GNU ld (GNU Binutils) 2.45.0) #59 SMP
-> > > PREEMPT_DYNAMIC Tue Oct 28 11:54:08 CET
-> > >   2025
-> > > [Ut okt 28 14:07:39 2025] Command line: BOOT_IMAGE=3D/vmlinuz
-> > > root=3DUUID=3D584262b6-b020-4e4f-95a3-1db754e28b6c earlyprintk=3Dkeep=
-,xdbc1
-> >
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_map_pci_mmio: Failed to
-> > > ioremap xhci-dbc with size 0x100000
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_map_pci_mmio: Retry xhci-dbc
-> > > ioremap with reduced size 0x80000
-> > > [Ut okt 28 14:07:39 2025] ------------[ cut here ]------------
-> > > [Ut okt 28 14:07:39 2025] WARNING: CPU: 0 PID: 0 at
-> > ...> [Ut okt 28 14:07:39 2025] ---[ end trace 0000000000000000 ]---
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_map_pci_mmio: Failed to
-> > > ioremap xhci-dbc with size 0x80000
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_map_pci_mmio: Retry xhci-dbc
-> > > ioremap with reduced size 0x40000
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:early_xdbc_parse_parameter: Lookin=
-g
-> > > for DbC capability at offset 0x480
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:early_xdbc_parse_parameter: Lookin=
-g
-> > > for DbC capability at offset 0x490
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:early_xdbc_parse_parameter: Lookin=
-g
-> > > for DbC capability at offset 0x4a0
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:early_xdbc_parse_parameter: Lookin=
-g
-> > > for DbC capability at offset 0x4c0
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:early_xdbc_parse_parameter: Lookin=
-g
-> > > for DbC capability at offset 0x4e0
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:early_xdbc_parse_parameter: DbC
-> > > capability found at offset 0x4e0
-> > ...> [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_early_setup: DCE successfu=
-lly cleared
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_early_setup: Successfully got
-> > > xdbc table_dma page
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_early_setup: Successfully got
-> > > xdbc out_dma page
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_early_setup: Successfully
-> > > allocated event ring
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_early_setup: Successfully
-> > > allocated in ring
-> > > [Ut okt 28 14:07:39 2025] xhci_dbc:xdbc_early_setup: Successfully
-> > > allocated out ring
-> > > [Ut okt 28 14:07:44 2025] xhci_dbc:xdbc_start: waiting for connection=
- timed out
-> >
-> > This is promising, looks like code successfully interacts with hardware=
-.
-> >
-> > > [Ut okt 28 14:07:44 2025] xhci_dbc:xdbc_early_setup: Failed to start
-> > > xdbc ret: -110
-> > > [Ut okt 28 14:07:44 2025] xhci_dbc:early_xdbc_setup_hardware: failed
-> > > to setup the connection to host
-> > > [Ut okt 28 14:07:44 2025] Zone ranges:
-> > > [Ut okt 28 14:07:44 2025]   DMA      [mem 0x0000000000001000-0x000000=
-0000ffffff]
-> > > [Ut okt 28 14:07:44 2025]   DMA32    [mem 0x0000000001000000-0x000000=
-00ffffffff]
-> > > [Ut okt 28 14:07:44 2025]   Normal   [mem 0x0000000100000000-0x000000=
-085de7ffff]
-> > > [Ut okt 28 14:07:44 2025]   Device   empty
-> > > [Ut okt 28 14:07:44 2025] Movable zone start for each node
-> > > [Ut okt 28 14:07:44 2025] Early memory node ranges
-> > >
-> > > I've tested cable afterwards:
-> > >
-> > > echo enable > /sys/devices/pci0000:00/0000:00:08.1/0000:09:00.4/dbc
-> > >
-> > > [Ut okt 28 14:12:28 2025] xhci_hcd 0000:09:00.4: DbC connected
-> > > [Ut okt 28 14:12:29 2025] xhci_hcd 0000:09:00.4: DbC configured
-> > >
-> > > so cable is not the problem here...
-> > >
-> > > Thank you!
-> >
-> > your lspci listed four xHCI controllers:
-> >
-> > 07:00.0 USB controller: ASMedia Technology Inc. Device 242c (rev 01)
-> >         (prog-if 30 [XHCI])
-> >         Region 0: Memory at fc600000 (64-bit, non-prefetchable) [size=
-=3D32K]
-> >
-> > 09:00.3 USB controller: Advanced Micro Devices, Inc. [AMD]
-> >         Raphael/Granite Ridge USB 3.1 xHCI (prog-if 30 [XHCI])
-> >         Region 0: Memory at fc300000 (64-bit, non-prefetchable) [size=
-=3D1M]
-> >
-> > 09:00.4 USB controller: Advanced Micro Devices, Inc. [AMD]
-> >         Raphael/Granite Ridge USB 3.1 xHCI (prog-if 30 [XHCI])
-> >         Region 0: Memory at fc200000 (64-bit, non-prefetchable) [size=
-=3D1M]
-> >
-> > 0a:00.0 USB controller: Advanced Micro Devices, Inc. [AMD]
-> >          Raphael/Granite Ridge USB 2.0 xHCI (prog-if 30 [XHCI])
-> >          Region 0: Memory at fca00000 (64-bit, non-prefetchable) [size=
-=3D1M]
-> >
-> > Could it be that the cable is connected to xHCI at 09:00.4 while
-> > earlyprintk=3Dkeep,xdbc1 refers to different xHCI? possibly the one at =
-09:00.3?
-> >
-> > Does earlyprintk=3Dkeep,xdbc2 work? or trying a different usb port?
-> >
-> > Thanks
-> > Mathias
-> >
-> >
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 87fcb78c34a8..66861f372daf 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1758,16 +1758,15 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+ 		pr_warn("usb: URB already linked to bh->head, skipping duplicate addition\n");
+ 		return;
+ 	}
+-	
+ 	list_add_tail(&urb->urb_list, &bh->head);
+ 	running = bh->running;
+ 	spin_unlock(&bh->lock);
+ 
+ 	if (!running) {
+-        	if (bh->high_prio)
+-                	queue_work(system_bh_highpri_wq, &bh->bh);
+-        	else
+-        	        queue_work(system_bh_wq, &bh->bh);
++		if (bh->high_prio)
++			queue_work(system_bh_highpri_wq, &bh->bh);
++		else
++			queue_work(system_bh_wq, &bh->bh);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(usb_hcd_giveback_urb);
+-- 
+2.48.1
+
 
