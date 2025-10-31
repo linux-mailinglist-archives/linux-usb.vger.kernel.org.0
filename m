@@ -1,130 +1,135 @@
-Return-Path: <linux-usb+bounces-29955-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29956-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE975C254A5
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 14:40:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C8CDC25568
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 14:48:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 29A494E3ED6
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 13:40:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88B54189D309
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 13:48:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CF3C22D78A;
-	Fri, 31 Oct 2025 13:40:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0737E337B8E;
+	Fri, 31 Oct 2025 13:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMqAI0HW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bTQsfIJ9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E412253EB
-	for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 13:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3392D3A7C
+	for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 13:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761918014; cv=none; b=FvZPEDWAj4Pc/FgUJLz1AbaaoMSFoZgGV97oRMYeotmBFRShq++cZU1ZarnVEC4czibeHDRtC7cx1JoA50R+BTx0gqBe7X0dfn4PrwkVSpvyAdmL88RYcCZbeyfY9yXseRzk8rwjA1SoiZdcFXkyMqnwNfp4aLBKwUhhATqjHqs=
+	t=1761918471; cv=none; b=EIUNW0NiHY3Sxy3Ey3wLO9qTkB3G8d7CjQ2JBHY5VbXLqAKoPCBseVKJaCkF+tXKLRZPBo4ywNR1yvAp7HQY6FO+AkZjctio6CItqSepE0F1ehPWU3w1oAVscL3WyH9KLORNwMdMICQhrCESvpiFLAfm7TT5SnfwbRvdkGxIvZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761918014; c=relaxed/simple;
-	bh=KNpskwFR5G3PDllY6+cnZdqFCqpPSArAkPL9BrRXigY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PCiHvVeg3qol8jdfNON96HglPwVbPhoGgBRdLTDGRJDZRx8Jce9rERDMuc6sRB+A2W2GNilOCurKukxtsduC3JhspirvuZg6hNuQZ7a8Okhp/VE8erFQcrqZJ0hY/xn3Niu9FsaZ6x3JaMXW559yyAQRG8GMRPZgePYo3dfNbd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMqAI0HW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF97DC4CEE7;
-	Fri, 31 Oct 2025 13:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761918014;
-	bh=KNpskwFR5G3PDllY6+cnZdqFCqpPSArAkPL9BrRXigY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YMqAI0HWvOSZYzY8eTtxwyhPOqKoL8y091mZY4VRM6OyiBtGVKl19yObI+RKXS1/m
-	 y2+40Xs+x7AcgsOWPnseWCGcgWmVFAIp9Ola2onImsCg2UdsrvV7c4fCXuY/DBFZfu
-	 wr7rY4okPl02Tlzung+FfAFrCUYzzqgXCQ0YXusj+nyM6kvrKUuNY4gF/U03t0oW2c
-	 gRbjj6Ecd0vIx17462cRY74aVbXpyNaLHJOPQLHzczIRjbszScuGqVtoV79KC5CVEt
-	 I4S0BkTspkRXnmYCUMFmk+8wJP/cwL71B1ZBIzvSdOUOX/Ab+vPwkSjAJFgeAarcFx
-	 elswJvmuD8UMg==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vEpMd-000000007Oc-1sk1;
-	Fri, 31 Oct 2025 14:40:23 +0100
-Date: Fri, 31 Oct 2025 14:40:23 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Andreas Messer <andi@bastelmap.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] Support FlashPro5 serial ports
-Message-ID: <aQS8RwAeqjueoVXb@hovoldconsulting.com>
-References: <aQPdYic6PaONe9hk@zeus.ad.home.arpa>
+	s=arc-20240116; t=1761918471; c=relaxed/simple;
+	bh=lv9Fkug8UarBKmWSdJNWbQ+qkbQQqSj5ooPZo0eIpzo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=akiCFzGH13zIFJ2ZWa22vqsMuSEpqOrrMZqDe7LNgDofdPs5DBcjXxBXZlJysonvfVCvxa/WP9ob4EV/EGTa+UA8uudYE0cDlwXnPyp7n7Zuxzignv3oVIJwOZ4UNQPhRoSbNBHot98/NwHfDlBmU6cECwL9RcDmhFFOPACtsIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bTQsfIJ9; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29470bc80ceso25874365ad.1
+        for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 06:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761918469; x=1762523269; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vTLpp1CXptXP5Avq6h7xCmd4Mk+qUexmMRpLJiy3rE8=;
+        b=bTQsfIJ9+d7GQrGN1IGGHbjXoNXGiAeuaw+1nBBG9baw2t8q8kLHPct07b/KkaFY5D
+         4Y9ivtVJ9Ne9M5PuNaJmS75d9A+jkycVWRwkwDmvEl5kwU42PHUkjYg6oC2fIn+fsGMJ
+         0y3HmROpy4ny7ktIK0dY+n3dvKn8XgBaOdzAEjzLMipgg8ANwIxhx343HEce/lbmHzdK
+         uc0Kyc5OA8sIx4CGMh8wqYax2kHEL5WqsETQDbW3wRWPvAz+oGxJrOuKBfj5WaAvhppF
+         2Pfw4lL470SMittOq6zMInGc/LScVK3lGUs7zBwTL3IdfG1kShfTOaPAocp9UEd6Fw+u
+         fNVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761918469; x=1762523269;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vTLpp1CXptXP5Avq6h7xCmd4Mk+qUexmMRpLJiy3rE8=;
+        b=s8Z0ZXFPY2DKDF1Q/YdDN0xVbs+vTw62lLKBvhcOrLx1a4y5jK4NbGBmQELaguFq7+
+         f7FiRN18G0GVDbdXG2lzfPvUk1XiiFnTKgNFaSDDNBkt+TvKGK3rZaVEaH6hs+6ScKqH
+         32MtuUWCEzKwENNFfwDuz+0KGD5BIbP0F/g+zLzUGyUambUeJMFByVQ91eCAaC7JJA6M
+         u1tWDK09+IvhnUdQPn70GMFeheKRvRfnRE21lPngFjmshaGKH/g0KRB3KVqRoav0hO63
+         /axxDMMCTcxC3C3DMFYjiCU2KU5F/OzBRNxmCf98bLyNrYPUJ8axk3Y9S9GbwQAPGlxp
+         vBzA==
+X-Forwarded-Encrypted: i=1; AJvYcCUc2+i8W5RFx2RMUL6mp7tNE0l6e6OZxIAo+fRibewzPxvXBRdtPCa0IdNDJHLYDl/mcBK6WogqXMU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjWfwlAkuWRzduzhrBy1jI7+r/sf3pN7e0jXjj/alEVnqg8AjS
+	5tnmdFFCP1btK4sBvAPfd0sA3fOc4FGYRZ0a3KW2M2cETd0lC57Qt0w=
+X-Gm-Gg: ASbGncvjZbg+kHbQ2JXICoSCf7B9X2/fa+ZoNwLpNMX47H4B8+q9+ERWhOAa1wRu0QK
+	AmOb7R6faiL2R1/RkhnrsKt/frP4rJ+Juq0nIDS+Xp227MY/EXxnASChWqYeloIrRybQmMopo8e
+	e11E75H1an44nfD/NnQtn6WUlAuIU4+v9+HtY2IHXY4KF1URwLC/5c+zCfn8a4xHg9pdPJUC5+H
+	c6kRrxv1HDIaRhkwYAxLdpO1Ww3oeXxidG5Q6XNU7+CEix0AoR95fX003yBrLmewYZUEOHWvxwh
+	tUjMwWG9qlvBxLCm9Vk+Yo021ViXbCNa4wgurmm1FQUZRshYzxWNR54m4RZ7dms7p+W4sObjUEu
+	WHY2AUhaj+6aL5bWmawPQcpdU2Ym9trFiS8CmlnL5UjfmD+oYYaq3gt73c46jMBv+Z9wx39lw5y
+	NiDNa+OBoT1L6k4AOnpi8=
+X-Google-Smtp-Source: AGHT+IFVleGd6d3qrffkbGaQm6oVAD7m7ue1Q8ELzAj6WTVMPmkx761XB58Q9EV/1aJXIUifd9ioFQ==
+X-Received: by 2002:a17:902:e54c:b0:282:2c52:508e with SMTP id d9443c01a7336-29517c194fcmr54681425ad.8.1761918469347;
+        Fri, 31 Oct 2025 06:47:49 -0700 (PDT)
+Received: from VSPRIME.. ([2401:4900:52f2:3b59:ca2f:95c0:7c6b:6e6a])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2952689e942sm24650595ad.25.2025.10.31.06.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 06:47:48 -0700 (PDT)
+From: vsshingne <vaibhavshingne66@gmail.com>
+To: skhan@linuxfoundation.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	vsshingne <vaibhavshingne66@gmail.com>
+Subject: [PATCH] usb: core: prevent double URB enqueue causing list corruption
+Date: Fri, 31 Oct 2025 19:17:39 +0530
+Message-ID: <20251031134739.222555-1-vaibhavshingne66@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="56lg3oCTWnbQRd/r"
-Content-Disposition: inline
-In-Reply-To: <aQPdYic6PaONe9hk@zeus.ad.home.arpa>
+Content-Transfer-Encoding: 8bit
 
+Prevents the same URB from being enqueued twice on the same endpoint,
+which could lead to list corruption detected by list_debug.c.
 
---56lg3oCTWnbQRd/r
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This was observed in syzbot reports where URBs were re-submitted
+before completion, triggering 'list_add double add' errors.
 
-On Thu, Oct 30, 2025 at 10:49:22PM +0100, Andreas Messer wrote:
+Adding a check to return -EEXIST if the URB is already on a queue
+prevents this corruption.
 
-> I'm currently working with a Microchip Polarfire Discovery Kit. It has
-> integrated a FTDI USB Converter IC connected to JTAG and 3x UART of the
-> SoC in the kit. It identifies itself on USB as "Microsemi Embedded FlashP=
-ro5"
->=20
-> Only one of the UART ports is working with the current ftdio_sio driver.=
-=20
-> I found a device id entry for Microsemi Arrow SF2+ Board=20
-> which has same Vendor & Product ID like my board but enables only one UAR=
-T.
->=20
-> I have added more entries to the device list to make all UART Channels
-> working with my board. However it will make these UARTS show up with SF2+
-> Board too. I found at least four different device which have the=20
-> same Vendor/Product ID, but I assume there are more:
->=20
-> - Trenz SMF2000: FT2232H
->   Channel A -> JTAG, Channel B -> UART
->=20
-> - Microchip Polarfire Discovery Kit: FT4232H
->   Channel A -> JTAG, Channel B/C/D -> UART
+Signed-off-by: vsshingne <vaibhavshingne66@gmail.com>
+---
+ drivers/usb/core/hcd.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Where did you find these two? Do you have access to the devices?
-=20
-> - Microsemi/Microchip FlashPro5: FT4232H
->   Channel A -> JTAG
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 87fcb78c34a8..66861f372daf 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1758,16 +1758,15 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+ 		pr_warn("usb: URB already linked to bh->head, skipping duplicate addition\n");
+ 		return;
+ 	}
+-	
+ 	list_add_tail(&urb->urb_list, &bh->head);
+ 	running = bh->running;
+ 	spin_unlock(&bh->lock);
+ 
+ 	if (!running) {
+-        	if (bh->high_prio)
+-                	queue_work(system_bh_highpri_wq, &bh->bh);
+-        	else
+-        	        queue_work(system_bh_wq, &bh->bh);
++		if (bh->high_prio)
++			queue_work(system_bh_highpri_wq, &bh->bh);
++		else
++			queue_work(system_bh_wq, &bh->bh);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(usb_hcd_giveback_urb);
+-- 
+2.48.1
 
-I guess you forgot "Channel B/C/D -> UART" here?
-
-> - Arrow SF2+ Development Kit:
->   Channel A -> JTAG, Channel C -> UART
->=20
-> Not sure what would be the proper solution, attached my changes.
-
-It would be good to avoid enabling unused ports on devices that only
-have one UART (e.g. to avoid regressing udev rules).
-
-You could use something like ftdi_8u2232c_probe() and only enable the
-other ports (i.e. B and D) after comparing the product name to a
-whitelist.
-
-Johan
-
---56lg3oCTWnbQRd/r
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCaQS8QwAKCRALxc3C7H1l
-CHQtAQC0s0nbQTewOPFeKM5OSQjsl+1B0cKTrf4DiIRL05w6wQD9HB3kXvJ/07Qr
-qFKmVkQkt4axAUIU7MgomcRSCyyNrQw=
-=dA60
------END PGP SIGNATURE-----
-
---56lg3oCTWnbQRd/r--
 
