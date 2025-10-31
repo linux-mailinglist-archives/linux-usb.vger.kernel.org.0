@@ -1,214 +1,214 @@
-Return-Path: <linux-usb+bounces-29932-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29933-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF907C23202
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 04:09:36 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E72D3C2336E
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 04:53:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AE321888E4F
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 03:10:01 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 08D564F1519
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 03:52:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A92442741A0;
-	Fri, 31 Oct 2025 03:09:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04705284883;
+	Fri, 31 Oct 2025 03:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="CG1zqaI9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MwTB+qTV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFB42475C7;
-	Fri, 31 Oct 2025 03:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9739C283C93
+	for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 03:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761880167; cv=none; b=GInNTIRdmQnjYy85QOUuAw///+9pb0Jisrng721m5ZcnTQjD0KxQn3qnWwPlCV7pGD4d2dHxlTc+YyP+4a0s1sT2Fxa2/EO6LwTbou3W1wsR9JYIPUj9W9jW3DOU5Q7Ue2TWs6qTXG4D1Ne6aImy46HZkhVPFEhMGxEiR9sQvc4=
+	t=1761882737; cv=none; b=K0bkBpIiX4QKYcTW59L+kYh5vQaaO+8sO5nMY/4drVHXrrNnYWc9BxViTsiJNmQShXpUGL2aucJw2PpmTPea3kFF06/48cdof3yc7B01mF63gs7QOW1jPjkvEx/4BcSaN8hoVVX/Ps6u4UgPcD4SHpbQ5Zl4Ir9OaIbTc4rzbVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761880167; c=relaxed/simple;
-	bh=5/rFO+lmhQuZBjyqy33qezkQngpGb5CYoWmqtJv5tT4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QsFT7DsYFE1X/fcoV5pNBCyq3jXcJWIGKb5+ijRBjKrvuE3zRps5iIPyeLSCkki8VefFg02ijvjLl3auysUPAnU8N7uVDluypuDrPQi0aDXBS3zmr0kZWIR1frqw/Topiy9g/8K982mdL3Dtl4ELJUXRBkQpNpY9eV4VNgBxaOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=CG1zqaI9; arc=none smtp.client-ip=54.207.22.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airkyi.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=airkyi.com;
-	s=altu2504; t=1761880146;
-	bh=1G8+5WzT60YZleXus4Jt3zOnBZzSs6MoxWhzcmRf0Po=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=CG1zqaI93b2gYqwZoBo6tF84/OiTsrQATnCL57ksSqCkBNFTZ3Ym3ZM49GsR+Rrwr
-	 mDYzTeI5/1NjIwNzWeo8GztmMIEq0EyKRxpIfYx/mP1DBOm5aHEAptQHOIOAHAEc4x
-	 twMHrDIdPLOzZczoqhlKxvHTQj78KCUV+uoW+xCw=
-X-QQ-mid: zesmtpsz3t1761880144tff90455e
-X-QQ-Originating-IP: lwY1pcwxR8OcqDz4GZ7fQefy6NjIwogU9iy5TKjSJ/M=
-Received: from [172.16.12.149] ( [58.22.7.114])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 31 Oct 2025 11:09:01 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 429858561965377722
-Message-ID: <9073605CE6F29EE7+088ed0de-536b-425a-9942-3b5d6c096e3f@airkyi.com>
-Date: Fri, 31 Oct 2025 11:08:59 +0800
+	s=arc-20240116; t=1761882737; c=relaxed/simple;
+	bh=tpBH4WqLZ/UhvLppO8BpS9NvMHSs57XS4kkO0So3Joc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n7ITrv2uCI9Fs9rvC9Ztza5eVkvp03TaGtepc+OiioqTh15mOPMEp9qVcV1pteXyfRARx3zaFa4hTBg24i2gxvV5J6Vtn81LEY8VRDF3Y9PEz7cuumlFLFQgD2rG5ok3GH8aUEgPd1c5kHT2ghnBfvtpgd6gmEx9936lR8WDIbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MwTB+qTV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761882734;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T33GakBQ5UDJA1Jm0FIA4c9NYfmlY9OCvzmbavseX0g=;
+	b=MwTB+qTVyT/uFE9S9aALqemBD6yJEW/JPFKlWtZvLGdF0IUMA2xoWMJMgkBZJpYzn4Zrge
+	5nxXsZnp7exlJi2SwcEZJsQqe1Rfd9UDTtroho8CahAt42CulLBdkmLIbp+IwJ4Sw+Ng7U
+	XYwC5c18mnvWr3t26Azy/5UKpXEAFaA=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-518-cq5Kl0q6OYOtuT-t002VDw-1; Thu, 30 Oct 2025 23:52:13 -0400
+X-MC-Unique: cq5Kl0q6OYOtuT-t002VDw-1
+X-Mimecast-MFC-AGG-ID: cq5Kl0q6OYOtuT-t002VDw_1761882732
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-94109728fadso221358839f.1
+        for <linux-usb@vger.kernel.org>; Thu, 30 Oct 2025 20:52:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761882732; x=1762487532;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T33GakBQ5UDJA1Jm0FIA4c9NYfmlY9OCvzmbavseX0g=;
+        b=ckMmocHPhjL+vGy+u0A7XTth4LT/BgqESxtjNbgrZEg/m/Jrrukff1y4bQ1gX95+AD
+         WNthfnA4xMwqfZRWcpHykCtsqsD0tJ/HJlsIM/v/Q9+QV1PICrMbwXWhIP0o1FBpxGIC
+         B55gO7RBO23lN8A1BugdWsRYW7mwW6pzpFPDGJNcm12iIEHlw5An7K7qn+OzdnNs8Q8+
+         MOOxqE728aJsI75GvNvaTMQrcStQTEU4z76e8U9OcoaisOvEY54O73gJVzh+4dPapExU
+         LIhThUJJvCDif5qOkzI0+Q0JguwpAZuHFjEoMqszkttbTT4+8XX69Yy3WYSOmsr1HbJi
+         EW9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX3JF6NzlVO/sPS89wLQ/Lvs6T9fxxIcR1UhQZnzSEYHWnMdc8zl+kbczMCzqZw7BtAVDW6Vf++T58=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz64grjD+pqO/23GADPq6yEa7CtMqP6xWgS/d9Ab0sb5UKyvXd4
+	pWgKbV8TVnXUJx1z18kF8IuLxdKXOElVVsTN7DWRfxea4QdMY2K6f4ZfasMTy65lL1e/Y66Vjqe
+	JLEUVBZjkH0wj62mPVdyhgQuIUnRkw19uiWtpWiujr3YYo6hINPkReNDHviD6EVcHkyQq9xvHpT
+	K9hws5wgOE30PJNAiN0LsXeRz/qh8KncHN7I+D
+X-Gm-Gg: ASbGncsflfEbIBjYHRJ9pW2zDQn42/83C3uAJPaPD8ylSiMo0XQMUOX4naLB0+Vru+v
+	WFtisMBkmVSpccM8MWMB8LIjgK38C6QsOxg8Q0vVBHJZD+as+aTjxFIi1IxFlrB/0UuDkZKBSw1
+	fImiyLvcJy/9wo7Q/Y31sPfESss+BR3TyqTlHesvCJ2xElIMconliMufr9V/kDZKyr7dwHQ0yg3
+	yY1iDSBajrhT8/o
+X-Received: by 2002:a05:6e02:168d:b0:430:a38c:b767 with SMTP id e9e14a558f8ab-4330d2074e9mr39276755ab.18.1761882732340;
+        Thu, 30 Oct 2025 20:52:12 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGM0mguF4E4vj4qqamw49fFeKIMF7ghlly4N+TPPxD9oj784mjEzmTSyeiNt+w4nDbflu/q+bm0ewx97PFavBU=
+X-Received: by 2002:a05:6e02:168d:b0:430:a38c:b767 with SMTP id
+ e9e14a558f8ab-4330d2074e9mr39276565ab.18.1761882731977; Thu, 30 Oct 2025
+ 20:52:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 10/10] arm64: dts: rockchip: rk3399-evb-ind: Add
- support for DisplayPort
-To: "Peter Chen (CIX)" <peter.chen@kernel.org>,
- Chaoyi Chen <chaoyi.chen@rock-chips.com>
-Cc: Peter Chen <hzpeterchen@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20251029071435.88-11-kernel@airkyi.com>
- <CAL411-o6mF71oBeRsJ-OPZNbLegn4iJ_ELN9xVdppTM3ssUPOw@mail.gmail.com>
- <cc8b583a-77ec-4a7f-97cc-2d148f7fee9f@rock-chips.com>
- <e0c5bda3-7428-49e0-9955-fa23f1e4f35d@rock-chips.com>
- <CAL411-oXfvp-iqN+uRmFHijdmW=1omKwozKOoZ2shxukMHmwPg@mail.gmail.com>
- <C6253E8254C80B0F+839b71d0-1bd8-40b7-9515-7ce4a1eb8673@airkyi.com>
- <CAL411-pULVu4AYybW9oW7kmr4M_kJhdytgBjLPb4y6w_2dj+0w@mail.gmail.com>
- <7853bbf0-34e5-4880-a2f4-2d73f25cd5e6@rock-chips.com>
- <CAL411-rFK0o_cxBO_yJFHWurGFKxZGxw6=kpqxRipMetJskTaQ@mail.gmail.com>
- <e2fcc437-0650-4fdf-bb75-3463a80299fe@rock-chips.com>
- <20251031025712.GA1284354@nchen-desktop>
-Content-Language: en-US
-From: Chaoyi Chen <kernel@airkyi.com>
-In-Reply-To: <20251031025712.GA1284354@nchen-desktop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:airkyi.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-QQ-XMAILINFO: MITS/U+ucPJSHLkflnBGAeBQIzAM+3T1oDR8mgel23cZn8V4dLmYofS1
-	6FBI8J2FoADo85+dT+kiL1WXbWEuhE63ybHtmPgj2pwRkXCjjdTMS8MwCdVdfM0agr/89Ke
-	vKyQJquTBEk88LdVLfAutq+xRs3vUEPcnP8vMlxfKJpDBeId8HTdamRq1hvfQlW3l6pjxm5
-	cSpBtmVCKx8HR6jzohW0n0Zue1NeI5NRPIlnsnXypca1nfDVIq6Y5xsKjpBHgSXi6YOvChl
-	I50TNYPnLxR/YettghOIUsOAf26/GkFsrifNQBPMhxsmiCXta+ebga4h+wi9VkYNL6rdEzQ
-	kmNGmHpRV/BnPHl8X1ltkIrXl2znl3ytJK3vTUILEawaXDmQSEMJWXcdPzARvvLvmH5S/zg
-	9wGBR0O3OG3G33BZFv6oKuOH+PWf4gkgK4kUuLfeuIZDJ7rrXCgJpcXnaLrTOQaM5LYhgN8
-	VPX+MASXE5MCWQEitEreMSA1FtZGrFTRHqkUrwpAUzS4NzEEmkno8kKBzO2q8Juw+83pSoP
-	xN3jRWqvY4AI0UHBBO3QDvxB1lIp5xGVKzWCYBxGZt41IqaMGyGUgKWmx79+nd9v0Ao4QnS
-	ZNs1dZpj+ODZZvJCIfoHA33I2H6j49orkDGq9ST8YdKu+4nwBqeqSwaYeUfH64iFgS70Dpn
-	KvVwZIMAozQjm3wwojIlMOIhXq7yKf4o7XGJb1AD89m4SD8E91bgODtj1IS4P3jqxLvqh51
-	JZpHR8f5Qn3QhV6OjwbVCtrX7JhOYTYnMsrVUNb42cudUb7o46T6B94HktAMZhId02Y6yaX
-	VhqcuUf7EyErk9I0jKDI8HScyCaTOGlQc2ksL2dUJHgNycY4CVhWMYV73htjmN/cJayXhp6
-	/cxkjBgGfQIviU1EMfA5nEfRFw1t7hdtKGZiYgtTxguLS7L4ESVcGcmY0bW3dOc8LEIrKQy
-	X0VJOoAeqCBceS2BXEF7hCjTqaGpykvEYIU587UNC4fkaxOI0Mw+LlaLP
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-QQ-RECHKSPAM: 0
+References: <20251030214833.44904-1-desnesn@redhat.com> <b2ec533d-9f87-4d65-a20f-99488ffe56e9@rowland.harvard.edu>
+In-Reply-To: <b2ec533d-9f87-4d65-a20f-99488ffe56e9@rowland.harvard.edu>
+From: Desnes Nunes <desnesn@redhat.com>
+Date: Fri, 31 Oct 2025 00:52:00 -0300
+X-Gm-Features: AWmQ_bl1Y_eJoHIkPYXYYbP9d2aBucY5Y0A17DvuLdmMVlIYjUWj86ahJqMQHyU
+Message-ID: <CACaw+ex5xpE8H6GMTc6gSQZ2iASkkw1CAe1ATOx9BCzenP39fg@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: storage: Fix memory leak in USB bulk transport
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	gregkh@linuxfoundation.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Peter,
+Hello Alan,
 
-On 10/31/2025 10:57 AM, Peter Chen (CIX) wrote:
-> On 25-10-30 14:50:33, Chaoyi Chen wrote:
->>> Hi Chaoyi,
->>>
->>> There are two questions I have still not seen the answer to:
->>> - Why USB2 PHY is related to your Type-C patch?
->> I was just following other people's approach. Sorry, this should be removed from the dts.
->>
->>
->>> - How does the USB role switch event notify the USB controller driver, eg dwc3?
->> Sorry, I misunderstood what you said before. There is indeed a missing usb-role-switch now. I referred to the approach in rk3588-evb1-v10.dts. Is the following way of writing correct?
->>
->> &usbc_connector {
->>      ports {
->>          #address-cells = <1>;
->>          #size-cells = <0>;
->>
->>          port@0 {
->>              reg = <0>;
->>
->>              usbc_orien_sw: endpoint {
->>                  remote-endpoint = <&tcphy0_typec_orien_sw>;
->>              };
->>          };
->>
->>          port@1 {
->>              reg = <1>;
->>
->>              usbc_role_sw: endpoint {
->>                  remote-endpoint = <&dwc3_0_role_switch>;
->>              };
->>          };
->>
->>
->>          port@2 {
->>              reg = <2>;
->>
->>              usbc_dp: endpoint {
->>                  remote-endpoint = <&tcphy0_typec_dp>;
->>              };
->>          };
->>      };
->> };
->>
->> &usbdrd_dwc3_0 {
->>      status = "okay";
->>      usb-role-switch;
->>
->>      port {
->>          #address-cells = <1>;
->>          #size-cells = <0>;
->>          dwc3_0_role_switch: endpoint@0 {
->>              reg = <0>;
->>              remote-endpoint = <&usbc_role_sw>;
->>          };
->>      };
->> };
->>
->> &tcphy0_usb3 {
->>      orientation-switch;
->>
->>      port {
->>          tcphy0_typec_orien_sw: endpoint {
->>              remote-endpoint = <&usbc_orien_sw>;
->>          };
->>      };
->> };
->>
->> &tcphy0_dp {
->>      mode-switch;
->>
->>      port {
->>          #address-cells = <1>;
->>          #size-cells = <0>;
->>
->>          tcphy0_typec_dp: endpoint@0 {
->>              reg = <0>;
->>              remote-endpoint = <&usbc_dp>;
->>          };
->>      };
->> };
->>
-> The general hierarchy is okay, just need to fix some dts coding
-> style issue.
+On Thu, Oct 30, 2025 at 10:48=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
+>
+> On Thu, Oct 30, 2025 at 06:48:33PM -0300, Desnes Nunes wrote:
+> > A kernel memory leak was identified by the 'ioctl_sg01' test from Linux
+> > Test Project (LTP). The following bytes were mainly observed: 0x5342535=
+5.
+> >
+> > When USB storage devices incorrectly skip the data phase with status da=
+ta,
+> > the code extracts/validates the CSW from the sg buffer, but fails to cl=
+ear
+> > it afterwards. This leaves status protocol data in srb's transfer buffe=
+r,
+> > such as the US_BULK_CS_SIGN 'USBS' signature observed here. Thus, this =
+can
+> > lead to USB protocols leaks to user space through SCSI generic (/dev/sg=
+*)
+> > interfaces, such as the one seen here when the LTP test requested 512 K=
+iB.
+> >
+> > Fix the leak by zeroing the CSW data in srb's transfer buffer immediate=
+ly
+> > after the validation of devices that skip data phase.
+> >
+> > Note: Differently from CVE-2018-1000204, which fixed a big leak by zero=
+-
+> > ing pages at allocation time, this leak occurs after allocation, when U=
+SB
+> > protocol data is written to already-allocated sg pages.
+> >
+> > v2: Use the same code style found on usb_stor_Bulk_transport()
+>
+> Minor nit: The version information is supposed to go below the "---"
+> line.  It's not really part of the patch; when people in the future see
+> this patch in the git history, they won't care how many previous
+> versions it went through or what the changes were.
 
-Thank you for your explanation. I will fix this in v9.
+Noted and thanks for letting me know!
 
+> > Fixes: a45b599ad808 ("scsi: sg: allocate with __GFP_ZERO in sg_build_in=
+direct()")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Desnes Nunes <desnesn@redhat.com>
+> > ---
+> >  drivers/usb/storage/transport.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/tran=
+sport.c
+> > index 1aa1bd26c81f..ee6b89f7f9ac 100644
+> > --- a/drivers/usb/storage/transport.c
+> > +++ b/drivers/usb/storage/transport.c
+> > @@ -1200,7 +1200,19 @@ int usb_stor_Bulk_transport(struct scsi_cmnd *sr=
+b, struct us_data *us)
+> >                                               US_BULK_CS_WRAP_LEN &&
+> >                                       bcs->Signature =3D=3D
+> >                                               cpu_to_le32(US_BULK_CS_SI=
+GN)) {
+> > +                             unsigned char buf[US_BULK_CS_WRAP_LEN];
+> > +
+> > +                             sg =3D NULL;
+> > +                             offset =3D 0;
+> > +                             memset(buf, 0, US_BULK_CS_WRAP_LEN);
+> >                               usb_stor_dbg(us, "Device skipped data pha=
+se\n");
+>
+> Another nit: Logically the comment belongs before the three new lines,
+> because it notes that there was a problem whereas the new lines are part
+> of the scheme to then mitigate the problem.  It might also be worthwhile
+> to add a comment explaining the reason for overwriting the CSW data,
+> namely, to avoid leaking protocol information to userspace.  This point
+> is not immediately obvious.
+
+Agree that it makes more sense to move the dbg comment before the declarati=
+ons.
+Also concur that a comment about the fix of this leak is good to have
+in the code.
+
+> > +
+> > +                             if (usb_stor_access_xfer_buf(buf,
+> > +                                             US_BULK_CS_WRAP_LEN, srb,=
+ &sg,
+> > +                                             &offset, TO_XFER_BUF) !=
+=3D
+> > +                                                     US_BULK_CS_WRAP_L=
+EN)
+>
+> Yet another nit: Don't people recommend using sizeof(buf) instead of
+> US_BULK_CS_WRAP_LEN in places like these?  Particularly in memset()?
+
+I wanted to make clear the size I was zeroing it, but it is literally
+a few lines above. Will change it to sizeof(buf).
 
 >
+> > +                                     usb_stor_dbg(us, "Failed to clear=
+ CSW data\n");
+> > +
+> >                               scsi_set_resid(srb, transfer_length);
+> >                               goto skipped_data_phase;
+> >                       }
+>
+> Regardless of the nits:
+>
+> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+>
+> Alan Stern
+
+v3 under the '---' is a charm!
+
+Thanks for the review Alan.
+
+Desnes Nunes
 
 
