@@ -1,143 +1,130 @@
-Return-Path: <linux-usb+bounces-29954-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29955-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E98A9C2549F
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 14:40:06 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE975C254A5
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 14:40:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E9BE188F605
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 13:40:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 29A494E3ED6
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Oct 2025 13:40:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7A722A4E5;
-	Fri, 31 Oct 2025 13:39:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CF3C22D78A;
+	Fri, 31 Oct 2025 13:40:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c6Ob6ym9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMqAI0HW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C1D221D96;
-	Fri, 31 Oct 2025 13:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E412253EB
+	for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 13:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761917998; cv=none; b=L4bUaGwfZaOD+FwvsPLBwadUK/q2FOxpqX52N8WnrZtdznsfct1nuAGnDOip2O1cdMZw7U8pdm1jxxh83YAnd+10lkJebvMWt8D7JqFyMwxGkrwF3VkerJPm0NRdD12+fXz6+sk2E/GHXVG26x4rO6QLEjl+p2dHLjxNY+lz4a0=
+	t=1761918014; cv=none; b=FvZPEDWAj4Pc/FgUJLz1AbaaoMSFoZgGV97oRMYeotmBFRShq++cZU1ZarnVEC4czibeHDRtC7cx1JoA50R+BTx0gqBe7X0dfn4PrwkVSpvyAdmL88RYcCZbeyfY9yXseRzk8rwjA1SoiZdcFXkyMqnwNfp4aLBKwUhhATqjHqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761917998; c=relaxed/simple;
-	bh=2cVyjKey4dFxUiUnROSgPcOL0J7KqoBoYiJcjCFDf/g=;
+	s=arc-20240116; t=1761918014; c=relaxed/simple;
+	bh=KNpskwFR5G3PDllY6+cnZdqFCqpPSArAkPL9BrRXigY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WxSM9i1Rp2BUMiEy5br8R49DlAuEUG2UH+KcB/3AEXsWH+kFMTYdqrHh0ZrB7aM3ErTVzQHr1C28pQBu5hZxv9z/Mvx0ItiELxHRr13UGU07LZn67oIglTTPPhLC2h49g6I2gWP93JXuniRla7uovrggCjqpp75cf1lYI+IwMb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c6Ob6ym9; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761917997; x=1793453997;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2cVyjKey4dFxUiUnROSgPcOL0J7KqoBoYiJcjCFDf/g=;
-  b=c6Ob6ym9n9gA/m1b3ZXr0SXhcqvC7gnyPvmfAGVzWXQfwsn6V1LB2/4H
-   IL4i1rz7p6w+gDykz9d+RMbTv1g6l23IjyskjzM+oIugPZ1Xt8x3ENaZ5
-   weAxNJwr5wS/4Lse/CA4dylqWAM84RgjLtRrFcqBCoN8VxsnLPfHgReja
-   lDOu8tO5a4hG9UHzXW9Srzo9Wyx1/l2ijjZfgxUKThNQgW5jRWfXIIR3b
-   IONUOolxBHZ6sD6k62Wl9lB1Xu0by/lQbx6IadSoh1ynGNuReivwgbMLK
-   XlKjmD9S4OV+lx5bsGYWrJ0FQEmxsb6XvMZjNbGbptD5btUPueup/Cqsg
-   Q==;
-X-CSE-ConnectionGUID: /pKmpWuiQeyHR4UaiUK6fA==
-X-CSE-MsgGUID: XhL4Tk4RRoigv2YvJIv56Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="75195119"
-X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="75195119"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 06:39:57 -0700
-X-CSE-ConnectionGUID: a3xtnYTPQP+uCyKoQ92d0Q==
-X-CSE-MsgGUID: C/6GFGJvSTi0FjPfK6/uAw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="186115249"
-Received: from jjgreens-desk20.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.81])
-  by fmviesa006.fm.intel.com with SMTP; 31 Oct 2025 06:39:46 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 31 Oct 2025 15:39:45 +0200
-Date: Fri, 31 Oct 2025 15:39:45 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Chaoyi Chen <kernel@airkyi.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PCiHvVeg3qol8jdfNON96HglPwVbPhoGgBRdLTDGRJDZRx8Jce9rERDMuc6sRB+A2W2GNilOCurKukxtsduC3JhspirvuZg6hNuQZ7a8Okhp/VE8erFQcrqZJ0hY/xn3Niu9FsaZ6x3JaMXW559yyAQRG8GMRPZgePYo3dfNbd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMqAI0HW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF97DC4CEE7;
+	Fri, 31 Oct 2025 13:40:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761918014;
+	bh=KNpskwFR5G3PDllY6+cnZdqFCqpPSArAkPL9BrRXigY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YMqAI0HWvOSZYzY8eTtxwyhPOqKoL8y091mZY4VRM6OyiBtGVKl19yObI+RKXS1/m
+	 y2+40Xs+x7AcgsOWPnseWCGcgWmVFAIp9Ola2onImsCg2UdsrvV7c4fCXuY/DBFZfu
+	 wr7rY4okPl02Tlzung+FfAFrCUYzzqgXCQ0YXusj+nyM6kvrKUuNY4gF/U03t0oW2c
+	 gRbjj6Ecd0vIx17462cRY74aVbXpyNaLHJOPQLHzczIRjbszScuGqVtoV79KC5CVEt
+	 I4S0BkTspkRXnmYCUMFmk+8wJP/cwL71B1ZBIzvSdOUOX/Ab+vPwkSjAJFgeAarcFx
+	 elswJvmuD8UMg==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vEpMd-000000007Oc-1sk1;
+	Fri, 31 Oct 2025 14:40:23 +0100
+Date: Fri, 31 Oct 2025 14:40:23 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Andreas Messer <andi@bastelmap.de>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Yubing Zhang <yubing.zhang@rock-chips.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
-	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v8 01/10] usb: typec: Add notifier functions
-Message-ID: <aQS8IatWiAUzBUxd@kuha.fi.intel.com>
-References: <20251029071435.88-1-kernel@airkyi.com>
- <20251029071435.88-2-kernel@airkyi.com>
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] Support FlashPro5 serial ports
+Message-ID: <aQS8RwAeqjueoVXb@hovoldconsulting.com>
+References: <aQPdYic6PaONe9hk@zeus.ad.home.arpa>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="56lg3oCTWnbQRd/r"
+Content-Disposition: inline
+In-Reply-To: <aQPdYic6PaONe9hk@zeus.ad.home.arpa>
+
+
+--56lg3oCTWnbQRd/r
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251029071435.88-2-kernel@airkyi.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Thu, Oct 30, 2025 at 10:49:22PM +0100, Andreas Messer wrote:
 
-> diff --git a/include/linux/usb/typec_notify.h b/include/linux/usb/typec_notify.h
-> new file mode 100644
-> index 000000000000..f3a7b5f5b05b
-> --- /dev/null
-> +++ b/include/linux/usb/typec_notify.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef __USB_TYPEC_NOTIFY
-> +#define __USB_TYPEC_NOTIFY
-> +
-> +#include <linux/notifier.h>
+> I'm currently working with a Microchip Polarfire Discovery Kit. It has
+> integrated a FTDI USB Converter IC connected to JTAG and 3x UART of the
+> SoC in the kit. It identifies itself on USB as "Microsemi Embedded FlashP=
+ro5"
+>=20
+> Only one of the UART ports is working with the current ftdio_sio driver.=
+=20
+> I found a device id entry for Microsemi Arrow SF2+ Board=20
+> which has same Vendor & Product ID like my board but enables only one UAR=
+T.
+>=20
+> I have added more entries to the device list to make all UART Channels
+> working with my board. However it will make these UARTS show up with SF2+
+> Board too. I found at least four different device which have the=20
+> same Vendor/Product ID, but I assume there are more:
+>=20
+> - Trenz SMF2000: FT2232H
+>   Channel A -> JTAG, Channel B -> UART
+>=20
+> - Microchip Polarfire Discovery Kit: FT4232H
+>   Channel A -> JTAG, Channel B/C/D -> UART
 
-Replace that include with a forward declaration:
+Where did you find these two? Do you have access to the devices?
+=20
+> - Microsemi/Microchip FlashPro5: FT4232H
+>   Channel A -> JTAG
 
-struct notifier_block;
+I guess you forgot "Channel B/C/D -> UART" here?
 
-> +enum usb_typec_event {
-> +	TYPEC_ALTMODE_REGISTERED,
-> +	TYPEC_ALTMODE_UNREGISTERED,
-> +};
-> +
-> +int typec_altmode_register_notify(struct notifier_block *nb);
-> +int typec_altmode_unregister_notify(struct notifier_block *nb);
-> +
-> +#endif /* __USB_TYPEC_NOTIFY */
+> - Arrow SF2+ Development Kit:
+>   Channel A -> JTAG, Channel C -> UART
+>=20
+> Not sure what would be the proper solution, attached my changes.
 
-I don't see any need for a separate header file for this. Intoduce
-those in typec_altmode.h.
+It would be good to avoid enabling unused ports on devices that only
+have one UART (e.g. to avoid regressing udev rules).
 
-thanks,
+You could use something like ftdi_8u2232c_probe() and only enable the
+other ports (i.e. B and D) after comparing the product name to a
+whitelist.
 
--- 
-heikki
+Johan
+
+--56lg3oCTWnbQRd/r
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCaQS8QwAKCRALxc3C7H1l
+CHQtAQC0s0nbQTewOPFeKM5OSQjsl+1B0cKTrf4DiIRL05w6wQD9HB3kXvJ/07Qr
+qFKmVkQkt4axAUIU7MgomcRSCyyNrQw=
+=dA60
+-----END PGP SIGNATURE-----
+
+--56lg3oCTWnbQRd/r--
 
