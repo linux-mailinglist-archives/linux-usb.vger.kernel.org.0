@@ -1,130 +1,153 @@
-Return-Path: <linux-usb+bounces-29971-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29972-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A876C275BD
-	for <lists+linux-usb@lfdr.de>; Sat, 01 Nov 2025 03:09:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA107C2778A
+	for <lists+linux-usb@lfdr.de>; Sat, 01 Nov 2025 05:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B67218990A4
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Nov 2025 02:09:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FD1F40719A
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Nov 2025 04:25:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14130220F5C;
-	Sat,  1 Nov 2025 02:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 486D9286417;
+	Sat,  1 Nov 2025 04:24:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wp7NEX0E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AgsLooRp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A801DE4C9
-	for <linux-usb@vger.kernel.org>; Sat,  1 Nov 2025 02:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9A928504D
+	for <linux-usb@vger.kernel.org>; Sat,  1 Nov 2025 04:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761962936; cv=none; b=aD7ybslJ5vGUR5d21I58ZDLMNROVmmUC7D2vlupCipNwA7hAhXNZG7gO2wpdp6pT5ZwUPye6Uh0+WjC7QntU2z8am+aseMbnISUW/r+h/0Ux+g/0UP9RxCbH9MuO9y8i1PeJ0w8BziwTyasdwmA3JLW//gDJdykLld22c10Td+w=
+	t=1761971096; cv=none; b=pBZ3bCvcIGBnbdxNu2yjk9N2oLh4xUkfaCqaBPzP///TlrQZkNNQut4hlyjnfU59K67+elvVkNlkqy56BGUS0IJrqouHifxa9nJJkSToBFc49HS3ZyiMq3YOr6czm14b8YkInrNXqJq/IyLahaaRGgz4Mv3tlg7A4fIV2Jxxb/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761962936; c=relaxed/simple;
-	bh=jA52pItuIvaJfELjNgLcSITUf5nQmyiowysKQqYPiaM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YtgSv1SvGETXq7btTEpb+txbEHHGIFIeD7pNaq2y1gopce7qwE4K5aPiVpEP/i5a4ZPk9+r5N0nn6Iljo9auJV/6v30qo6PSbr0w7PU3k6KctQuv6V+ywsY6QESmcfAT3D2sZ54/T39r+XqIfMT6stYcBcDsH8JaxknCLK27qMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wp7NEX0E; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761962935; x=1793498935;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jA52pItuIvaJfELjNgLcSITUf5nQmyiowysKQqYPiaM=;
-  b=Wp7NEX0EwIZhBDW2EuMv/r9vwOiaPsRoho3kUUocFUVbqCB2Ln2o8L1h
-   QX0U4e3FYRgcYHvYBuWDE3jkLyTnuTwFmsDPcYxj4M0bBLLlFy969h+Pc
-   XkvHDmMpcR6q8xRLxNbqfNwHTgFocN5LiPWTP/8ecZ8dh0k7rigIXMRdb
-   QwhDzxGvVwVLvBi4VWZqWixyIcG2ck1gkRJmQvEqCvfmQspbNnMzcJ3Yl
-   1Bgk4qePkn32d5amQ8WQ/IcBzCZpLoHnMb7qNlDSE0uFFSFb6PFuVONi1
-   SPu1pGZ0tMjAklUd/32orjS47oGTSHQkNHqKlWdzgaw4xtr9/4LKGlDI7
-   A==;
-X-CSE-ConnectionGUID: WBu0IRRjT+qHIdgjibW41A==
-X-CSE-MsgGUID: 4ZLndLDuQse3dldzvrB/WA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="75244881"
-X-IronPort-AV: E=Sophos;i="6.19,270,1754982000"; 
-   d="scan'208";a="75244881"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 19:08:54 -0700
-X-CSE-ConnectionGUID: 1ajnwhhxTKa9y1NaZn+8WA==
-X-CSE-MsgGUID: yaqeY8EQRkm1d1DBM368VQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,270,1754982000"; 
-   d="scan'208";a="217028590"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 31 Oct 2025 19:08:52 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vF12w-000Nom-1J;
-	Sat, 01 Nov 2025 02:08:50 +0000
-Date: Sat, 1 Nov 2025 10:08:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
-	gustavo@embeddedor.com, linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCHv2 1/1] uapi: cdc.h: cleanly provide for more interfaces
- and countries
-Message-ID: <202511010928.O8jbJSc1-lkp@intel.com>
-References: <20251030132149.2575138-1-oneukum@suse.com>
+	s=arc-20240116; t=1761971096; c=relaxed/simple;
+	bh=5WHfnnAEjEl7b65PNjGeo2Ba/xJE8CKHD2SN89cu3Ds=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lR0ynLpj7xQMm7TOx0NQo6Xn02ed4pito/bOtiCFxjUQ6hh463vEZyfZLDsqOzPxtkuVEX8vuezd+D3cPosNlQG1bidIQ6o3A4SpAbHgeQ6q75uics6a47EAM+vRVDYsoOYBaVikdbNtuFT/jUKhh3XMTN/w8tS+EbwkrHTjqY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AgsLooRp; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-77f5d497692so3740827b3a.1
+        for <linux-usb@vger.kernel.org>; Fri, 31 Oct 2025 21:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761971093; x=1762575893; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cpDoufdPjG28A/t0l3uGrRRBG6p6T+fKPiyqq6TZvRs=;
+        b=AgsLooRpDTUkIS7wnKxThtMOGBE9alk1zizSUyt0orMuVHT3evGWwNLvdSulqS/gRP
+         7is1N0BVgLy2agIVUqonQL83X9Jg0hFRZDrlsrTeQsDOA1pIw/3WBGI9DLoY+1+ZszsT
+         QAVpLGrzN32Ec04oA3w5M0ur/k5SJ+/e/PcUKMlU9qPZhPLATzyvFNDGeurh8s3pCRm3
+         9bWNwyBiHeLRK0wxNM+ZrUGBH9bP8+wiFhRlUnvZaFWHMWaJlDtH6tK758bqmXPwEi+Y
+         +/kThZKUMdV67YUNLbDbyALO2GEIkiygoigHcQV82d+QABetEaz+FOeIEMTbTiaIciQA
+         MzGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761971093; x=1762575893;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cpDoufdPjG28A/t0l3uGrRRBG6p6T+fKPiyqq6TZvRs=;
+        b=Ja0Pe2A37ze2SCtZfCDS9brDSWgKYk/t8Iwn738xX8Nap8iAThLLj/tbiwksnGwbJJ
+         +rp5hPNf1mgo7+dLvEHxS1ExkGYWtDfSWXlTsU1Ft/tF/VdAKn0Rcqzza7HGwMJqlBFI
+         XQjw1FS8Di5sTsncN5yKNsR3lOpbleacIwVKxvyddQSc78xNZe+X7VZyyF3EVCWdsEbs
+         RwiAw6OOjJqFdH9mf+Hg5O2jYgi0rEvqQoDchT1yI62Q2VE0E34KzCZWyQqwNB233vK6
+         YCbKSqz6fPQMfMLP7bHrGCodfE7GVBDusJI2nrwEZ9K8fjjOVIdtVTKcc5a42xtrGKtT
+         MZoA==
+X-Gm-Message-State: AOJu0YzBW+IAnctAPxQXf4cmtvnn1l6UshsSOoXrpRSvSebPAKF5veM2
+	qD9pC6g7DSFyvRomohkYWTX6FhqDSIGRTxEKVrEnGOgNtcT6ANslTvkl
+X-Gm-Gg: ASbGncsNZjReAvkKpzBkhEiJhqoS2HUGn4avGw5Xk7xofcrFQlCGk4gHAB7a+dSPb4p
+	FpNjC1M8R4Bl3uwaVY4Od+0GMM7o1E1wqJkefSLunB3uHiBbJjW73XDhUuCbCusOxIxizLY/oVt
+	WjbCh8XgV8JQQgSpxt4lCU5BeWOmDDss5BEUqrBYrvuMaCy2PHUZYxzmUhIQYr0B0zxfk3TJh7V
+	6ljWaReOJ6sIfmBfLTj+RqBIOGDkmX5rf+RgIBqP97vHuSiUgnplicqgyRAIeeaEFQpU7RzEYaf
+	m3OuZ332sxvusDJ6b6F87drJbfxZNVT5p4nHTtCHxYK7i/6Hx4rE1YJ+I2sil8niw3iN4fjp18r
+	Dm8RHgpdzSMASgl0xqLIc7jUEat0KNybX7iqTnTQBoJf2THLiOAgONAoLVOTYjEysQIC0wMX/6j
+	rQAqETPVvoe8kg8TkX/0YPjt6CDcYJhJt9vsnMuWkLmw==
+X-Google-Smtp-Source: AGHT+IFBtoVlonGhlHWnTjQtAUPLEqb/CZBWvidsGzOw9KrDiWj7lh+Ow3/Lpm6it8MHYuXUquZ47Q==
+X-Received: by 2002:a05:6a00:1251:b0:781:2290:e7e7 with SMTP id d2e1a72fcca58-7a7788ff6acmr7585723b3a.18.1761971093225;
+        Fri, 31 Oct 2025 21:24:53 -0700 (PDT)
+Received: from iku.. ([2401:4900:1c06:600d:690:cbc4:d4d9:22c2])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a7db678f67sm3795120b3a.57.2025.10.31.21.24.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 21:24:52 -0700 (PDT)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>
+Cc: linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] dt-bindings: usb: renesas,rzg3e-xhci: Add RZ/V2H(P) and RZ/V2N support
+Date: Sat,  1 Nov 2025 04:24:40 +0000
+Message-ID: <20251101042440.648321-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251030132149.2575138-1-oneukum@suse.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Oliver,
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-kernel test robot noticed the following build errors:
+Add device tree binding support for the USB3.2 Gen2 controller on Renesas
+RZ/V2H(P) and RZ/V2N SoCs. The USB3.2 IP on these SoCs is identical to
+that found on the RZ/G3E SoC.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus staging/staging-testing staging/staging-next staging/staging-linus westeri-thunderbolt/next linus/master v6.18-rc3 next-20251031]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Add new compatible strings "renesas,r9a09g056-xhci" for RZ/V2N and
+"renesas,r9a09g057-xhci" for RZ/V2H(P). Both variants use
+"renesas,r9a09g047-xhci" as a fallback compatible to indicate hardware
+compatibility with the RZ/G3E implementation.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/uapi-cdc-h-cleanly-provide-for-more-interfaces-and-countries/20251030-212514
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20251030132149.2575138-1-oneukum%40suse.com
-patch subject: [PATCHv2 1/1] uapi: cdc.h: cleanly provide for more interfaces and countries
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251101/202511010928.O8jbJSc1-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511010928.O8jbJSc1-lkp@intel.com/reproduce)
+Update the title to be more generic as it now covers multiple SoC
+families beyond just RZ/G3E.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511010928.O8jbJSc1-lkp@intel.com/
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ .../devicetree/bindings/usb/renesas,rzg3e-xhci.yaml  | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:1:
->> ./usr/include/linux/usb/cdc.h:109:3: error: type name requires a specifier or qualifier
-     109 |                 DECLARE_FLEX_ARRAY(__u8, bSlaveInterfaces);
-         |                 ^
->> ./usr/include/linux/usb/cdc.h:109:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     109 |                 DECLARE_FLEX_ARRAY(__u8, bSlaveInterfaces);
-         |                                          ^
-         |                                          int
-   ./usr/include/linux/usb/cdc.h:122:3: error: type name requires a specifier or qualifier
-     122 |                 DECLARE_FLEX_ARRAY(__le16, wCountryCodes);
-         |                 ^
-   ./usr/include/linux/usb/cdc.h:122:30: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     122 |                 DECLARE_FLEX_ARRAY(__le16, wCountryCodes);
-         |                                            ^
-         |                                            int
-   4 errors generated.
-
+diff --git a/Documentation/devicetree/bindings/usb/renesas,rzg3e-xhci.yaml b/Documentation/devicetree/bindings/usb/renesas,rzg3e-xhci.yaml
+index 98260f9fb442..3f4b09e48ce0 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,rzg3e-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,rzg3e-xhci.yaml
+@@ -4,14 +4,22 @@
+ $id: http://devicetree.org/schemas/usb/renesas,rzg3e-xhci.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Renesas RZ/G3E USB 3.2 Gen2 Host controller
++title: Renesas USB 3.2 Gen2 Host controller
+ 
+ maintainers:
+   - Biju Das <biju.das.jz@bp.renesas.com>
+ 
+ properties:
+   compatible:
+-    const: renesas,r9a09g047-xhci
++    oneOf:
++      - items:
++          - enum:
++              - renesas,r9a09g056-xhci # RZ/V2N
++              - renesas,r9a09g057-xhci # RZ/V2H(P)
++          - const: renesas,r9a09g047-xhci
++
++      - items:
++          - const: renesas,r9a09g047-xhci # RZ/G3E
+ 
+   reg:
+     maxItems: 1
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
