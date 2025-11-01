@@ -1,112 +1,85 @@
-Return-Path: <linux-usb+bounces-29976-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29977-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D649C28065
-	for <lists+linux-usb@lfdr.de>; Sat, 01 Nov 2025 14:57:16 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 260F3C282AC
+	for <lists+linux-usb@lfdr.de>; Sat, 01 Nov 2025 17:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7083C188EC39
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Nov 2025 13:57:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2DC3B4ECFF2
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Nov 2025 16:29:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DE6821A457;
-	Sat,  1 Nov 2025 13:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5281C261B77;
+	Sat,  1 Nov 2025 16:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQxafMp2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064D534D3B6;
-	Sat,  1 Nov 2025 13:56:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9671A2571DD;
+	Sat,  1 Nov 2025 16:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762005413; cv=none; b=AHkgrgIFdkdI+F0lh9PweMB7biP5THo6D4LMtMeekuy6CWYcnIpzsyxlYyU/UvuKcTci2p3aTC7MfdUqN1ua2MyW9k7635S/dOsxoFusWcg84hyk6p6nNiPHdfaZdsm40vRHItmCIQJx8htVMVL013uPWFBDOTZcp5ypY/RdXkI=
+	t=1762014552; cv=none; b=FFo6cC6OCu2/WSf1UwkYbMbrfPZWhaj8iix+7F5nqhTspWxeGOouIvyKSLetJaj9zw5in0698kspy2inJrbZ7hgd+GQaNA02n1jhf5NaIJIpODPlZipRNQaZT86h/J75G9UXmEeyBSwqepcr1LcPJq0o9JcFor7kQ86HCNxUfcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762005413; c=relaxed/simple;
-	bh=54YFvUQyKiUBXLsSAVClXBwjoW43bRWANDi9bisFiVU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BeUVeHZ6uNyA0GBdi0tORr9GBjhMRUNt+kxysppBJrdG+qhGimNeCixWZsqtPsCrOyC5TmVY+pnbfLyq8RkpAwKwN+h5wKVzXgEawbKxM/1NDW8UNaJp5UTK9X+5abZRl4k4Hh7eCGkX32+pmvHur5VCSRJugJOcnCTXRyrMO2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
-X-CSE-ConnectionGUID: wpOrwVv0TfGh+FJzZcbPPQ==
-X-CSE-MsgGUID: SFIU6wynT+iEPt/G+F7yQw==
-X-IronPort-AV: E=Sophos;i="6.19,272,1754928000"; 
-   d="scan'208";a="131247206"
-Date: Sat, 1 Nov 2025 21:55:22 +0800
-From: Owen Gu <guhuinan@xiaomi.com>
-To: Oliver Neukum <oneukum@suse.com>
-CC: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<linux-scsi@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
-	<linux-kernel@vger.kernel.org>, Yu Chen <chenyu45@xiaomi.com>, Michal Pecio
-	<michal.pecio@gmail.com>
-Subject: Re: [PATCH v2] usb: uas: fix urb unmapping issue when the uas device
- is remove during ongoing data transfer
-Message-ID: <aQYRIgg2lyFhd7Lf@oa-guhuinan-2.localdomain>
-References: <20251015153157.11870-1-guhuinan@xiaomi.com>
- <aP8Llz04UH8Sbq5Q@oa-guhuinan-2.localdomain>
- <8de18ee2-ccdd-4cdd-ae49-48600ad30ed4@suse.com>
+	s=arc-20240116; t=1762014552; c=relaxed/simple;
+	bh=mOOA+C1R49pgXQracXNdHSHDAKyKnXuVu8Nt5iEqIfs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oOGv5NLbsGNlQts+2Y5GbItXN/oD1btgHfyruwvMkEJGiNrsqRWXoLmC59Z9hvQYdYJhxjGoLntzvmhKofIui6ujeRzzn8mgnN90sjn22Ie7vSwnzcmLO3JVHg4/km/n2G06PXV94mVLPGHsldft+hZfjfELpWDYOKoZw5wFRY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQxafMp2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F9A1C4CEF1;
+	Sat,  1 Nov 2025 16:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762014551;
+	bh=mOOA+C1R49pgXQracXNdHSHDAKyKnXuVu8Nt5iEqIfs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BQxafMp292Sny2DJvfsRfD7LhATGsqCEfaNqeuS3nkX6fiGe9K4VSs3PErA1U+Qwe
+	 bQaJjq8HoT3eYDlg9HlkLZkQGv9wFrZyIfibLEwtMMgaUXcV48dyrh0OvHFxSvx2kH
+	 3GQxMudvC85ucDa7qDMg4fz0qLmSlNvhRmZWBJ9CN7zZ82zIqQxVP3cfvzSlhaDdVs
+	 2775tQVZalnjFTHwZXq+U2k8zgSZ9D6Q6DIDIsZrrtt7zbXa9xTuYSCigvUBi0HgU2
+	 Cgyajanlb/PE/oUxRiGAzE5shY/3J4pwOd4dvL8NIYwUosAhwpGoiTrkH4FgqRygoe
+	 hM6GjFdp4rDVA==
+Date: Sat, 1 Nov 2025 16:28:55 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Conor Dooley <conor@kernel.org>
+Cc: Jack Hsu <jh.hsu@mediatek.com>, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
+ andy@kernel.org, matthias.bgg@gmail.com,
+ angelogioacchino.delregno@collabora.com, srini@kernel.org,
+ ukleinek@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+ daniel.lezcano@linaro.org, tglx@linutronix.de, chunfeng.yun@mediatek.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, sean.wang@mediatek.com,
+ zhiyong.tao@mediatek.com, andrew-ct.chen@mediatek.com,
+ lala.lin@mediatek.com, jitao.shi@mediatek.com, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v6 02/11] dt-bindings: iio: adc: Support MediaTek MT8189
+ evb board auxadc
+Message-ID: <20251101162855.303b3e5e@jic23-huawei>
+In-Reply-To: <20251030-deftly-lent-0588c4e910b1@spud>
+References: <20251030134541.784011-1-jh.hsu@mediatek.com>
+	<20251030134541.784011-3-jh.hsu@mediatek.com>
+	<20251030-deftly-lent-0588c4e910b1@spud>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <8de18ee2-ccdd-4cdd-ae49-48600ad30ed4@suse.com>
-X-ClientProxiedBy: BJ-MBX07.mioffice.cn (10.237.8.127) To BJ-MBX05.mioffice.cn
- (10.237.8.125)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 27, 2025 at 02:35:37PM +0100, Oliver Neukum wrote:
-> Hi,
-> 
-> I think I was unclear the first time.
-> Sorry for that.
-> 
-> On 27.10.25 07:05, Owen Gu wrote:
-> > Hi Oliver,
-> > 
-> 
-> > > This patch modifies the error condition check in the uas_submit_urbs()
-> > > function. When a UAS device is removed but one or more URBs have already
-> > > been successfully submitted to USB, it avoids immediately invoking
-> > > scsi_done() and save the cmnd to devinfo->cmnd array. If the successfully
-> > > submitted URBs is completed before devinfo->resetting being set, then
-> > > the scsi_done() function will be called within uas_try_complete() after
-> 
-> This requires that uas_try_complete() is called.
-> 
-> And I am afraid uas_stat_cmplt() cannot guarantee that in the error case.
-> I think the following sequence of events is possible:
-> 
-> CPU A						CPU B
-> 
-> uas_queuecommand_lck() calls uas_submit_urbs()
-> COMMAND_INFLIGHT is set and URB submitted
-> 						URB gets an error
-> 						status = -EBABBLE (just an example)
-> 						uas_stat_cmplt is called
-> 						resetting is not set
-> 						if (status)
-> 							goto out;
-> 
-> 						uas_try_complete _not_ called
-> 
-> The scsi command runs for indeterminate amount of time.
-> It seems to me that if you want to use your approach you also
-> need to change error handling in uas_stat_cmplt()
-> 
-> 	Regards
-> 		Oliver
-> 
->
-Hi Oliver,
-I think the error handling only takes effect when uas_queuecommand_lck() calls
-uas_submit_urbs() and returns the error value -ENODEV . In this case, the device is
-disconnected, and the flow proceeds to uas_disconnect(), where uas_zap_pending() is
-invoked to call uas_try_complete().
+On Thu, 30 Oct 2025 19:30:39 +0000
+Conor Dooley <conor@kernel.org> wrote:
 
-Regards
-Owen
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> pw-bot: not-applicable
 
+Applied.
 
