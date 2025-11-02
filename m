@@ -1,85 +1,98 @@
-Return-Path: <linux-usb+bounces-29977-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29978-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 260F3C282AC
-	for <lists+linux-usb@lfdr.de>; Sat, 01 Nov 2025 17:29:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 458B4C29088
+	for <lists+linux-usb@lfdr.de>; Sun, 02 Nov 2025 15:48:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2DC3B4ECFF2
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Nov 2025 16:29:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB3ED3A785F
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Nov 2025 14:48:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5281C261B77;
-	Sat,  1 Nov 2025 16:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8971A1EEA54;
+	Sun,  2 Nov 2025 14:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQxafMp2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yll7PIIi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9671A2571DD;
-	Sat,  1 Nov 2025 16:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2D981ACA
+	for <linux-usb@vger.kernel.org>; Sun,  2 Nov 2025 14:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762014552; cv=none; b=FFo6cC6OCu2/WSf1UwkYbMbrfPZWhaj8iix+7F5nqhTspWxeGOouIvyKSLetJaj9zw5in0698kspy2inJrbZ7hgd+GQaNA02n1jhf5NaIJIpODPlZipRNQaZT86h/J75G9UXmEeyBSwqepcr1LcPJq0o9JcFor7kQ86HCNxUfcs=
+	t=1762094927; cv=none; b=DCr++BD6qkSyge44IfSpp4EYo084WPXOIQfT1NN6oYLHw2S6aKTGDxosgrmcAeHg6eqncMZZN6gqFPeYvhuOy92ieSZgEtFdFqD+RuupfN43PAMl5B499MKSAZbtHZS34gZbiVF/mcFPDgpr0irGx1Wiern+AQDZMkQPM95BDmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762014552; c=relaxed/simple;
-	bh=mOOA+C1R49pgXQracXNdHSHDAKyKnXuVu8Nt5iEqIfs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oOGv5NLbsGNlQts+2Y5GbItXN/oD1btgHfyruwvMkEJGiNrsqRWXoLmC59Z9hvQYdYJhxjGoLntzvmhKofIui6ujeRzzn8mgnN90sjn22Ie7vSwnzcmLO3JVHg4/km/n2G06PXV94mVLPGHsldft+hZfjfELpWDYOKoZw5wFRY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQxafMp2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F9A1C4CEF1;
-	Sat,  1 Nov 2025 16:28:59 +0000 (UTC)
+	s=arc-20240116; t=1762094927; c=relaxed/simple;
+	bh=ZPgH+fiI9RdzLo7zxl3v9onj1gZpGssBjv8RAQK8K5k=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=a+cKNe9Lg4V8VMRdu3PATBXLUz0IcLaXpa3GuCgbFWWneflTjcCknYUxtiuXbuhYR466MCBEOOV1TPplM6P8ASCfSY96TC3h4HD2gYxMJm7lsQZ9FH1QwZRyDWQq5H8sFFAo5Dqjk9b1l83jxscZUhQRcfMwSSZZ8AEjUDNmUiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yll7PIIi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 72D96C116B1
+	for <linux-usb@vger.kernel.org>; Sun,  2 Nov 2025 14:48:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762014551;
-	bh=mOOA+C1R49pgXQracXNdHSHDAKyKnXuVu8Nt5iEqIfs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BQxafMp292Sny2DJvfsRfD7LhATGsqCEfaNqeuS3nkX6fiGe9K4VSs3PErA1U+Qwe
-	 bQaJjq8HoT3eYDlg9HlkLZkQGv9wFrZyIfibLEwtMMgaUXcV48dyrh0OvHFxSvx2kH
-	 3GQxMudvC85ucDa7qDMg4fz0qLmSlNvhRmZWBJ9CN7zZ82zIqQxVP3cfvzSlhaDdVs
-	 2775tQVZalnjFTHwZXq+U2k8zgSZ9D6Q6DIDIsZrrtt7zbXa9xTuYSCigvUBi0HgU2
-	 Cgyajanlb/PE/oUxRiGAzE5shY/3J4pwOd4dvL8NIYwUosAhwpGoiTrkH4FgqRygoe
-	 hM6GjFdp4rDVA==
-Date: Sat, 1 Nov 2025 16:28:55 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Jack Hsu <jh.hsu@mediatek.com>, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
- andy@kernel.org, matthias.bgg@gmail.com,
- angelogioacchino.delregno@collabora.com, srini@kernel.org,
- ukleinek@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- daniel.lezcano@linaro.org, tglx@linutronix.de, chunfeng.yun@mediatek.com,
- wim@linux-watchdog.org, linux@roeck-us.net, sean.wang@mediatek.com,
- zhiyong.tao@mediatek.com, andrew-ct.chen@mediatek.com,
- lala.lin@mediatek.com, jitao.shi@mediatek.com, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
- Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v6 02/11] dt-bindings: iio: adc: Support MediaTek MT8189
- evb board auxadc
-Message-ID: <20251101162855.303b3e5e@jic23-huawei>
-In-Reply-To: <20251030-deftly-lent-0588c4e910b1@spud>
-References: <20251030134541.784011-1-jh.hsu@mediatek.com>
-	<20251030134541.784011-3-jh.hsu@mediatek.com>
-	<20251030-deftly-lent-0588c4e910b1@spud>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	s=k20201202; t=1762094926;
+	bh=ZPgH+fiI9RdzLo7zxl3v9onj1gZpGssBjv8RAQK8K5k=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Yll7PIIi8jHHS1LnnYtxTZOs9A4cF5CFmLekZXQEkv7c7ky3tzk6F6YFGxABPw2UK
+	 zOoPJqnOW+jBvRtE7eZsGe46GZkqpufaUscBmLsCufaUIQ3cVH3k2NWg4V/JpFxA5W
+	 DwQgg4Q2SS1Y6hFduRe/FJekU+Gg8BQKmRObmVAoiQeAQ30YjGn1GospznER3GlaeD
+	 H4LK9hHSXafyW3Uh/KWInv06oCIn6EDQWIhyq4zgS21FqnvkBD2UCnv0T61h5KJjY5
+	 dKvupCUggyb7w2vCNoZtmhX9ropDWivlttg1/63yT3yWvs6UDDRN+rJ8A9kwDsuLqP
+	 UlsKH6dKlnkKg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 6644DC41613; Sun,  2 Nov 2025 14:48:46 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220284] USB4 / Thunderbolt not working after boot until
+ thunderbolt module is reloaded
+Date: Sun, 02 Nov 2025 14:48:46 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: hi@alyssa.is
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-220284-208809-8pz0HZKiE7@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220284-208809@https.bugzilla.kernel.org/>
+References: <bug-220284-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Thu, 30 Oct 2025 19:30:39 +0000
-Conor Dooley <conor@kernel.org> wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220284
 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> pw-bot: not-applicable
+Alyssa Ross (hi@alyssa.is) changed:
 
-Applied.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |hi@alyssa.is
+
+--- Comment #4 from Alyssa Ross (hi@alyssa.is) ---
+I believe this was fixed.
+
+#regzbot fix: 58d71d4242ce057955c783a14c82270c71f9e1e8
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
