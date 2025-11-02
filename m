@@ -1,669 +1,194 @@
-Return-Path: <linux-usb+bounces-29979-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29980-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02EC4C29250
-	for <lists+linux-usb@lfdr.de>; Sun, 02 Nov 2025 17:39:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65F71C292C8
+	for <lists+linux-usb@lfdr.de>; Sun, 02 Nov 2025 17:48:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9762F188CF21
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Nov 2025 16:39:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB7D5188A262
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Nov 2025 16:49:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0341C22B584;
-	Sun,  2 Nov 2025 16:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42052C0F66;
+	Sun,  2 Nov 2025 16:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tty42.de header.i=@tty42.de header.b="mGw8Zo36";
-	dkim=permerror (0-bit key) header.d=tty42.de header.i=@tty42.de header.b="qDBPK3ex"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WxTRJY2v";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="IqX+nSxl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.tty42.de (mail.tty42.de [94.130.190.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD589224F3
-	for <linux-usb@vger.kernel.org>; Sun,  2 Nov 2025 16:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.130.190.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762101555; cv=pass; b=tHvj59qgiiwEnT4hDcI3LkQu26eFTNnPfAuJftbckvBKWAep4i3ifpFhmWSEcbxvHWBvRna2BRGIwMd0B0D1y1xOgvn3O1KxfAA/VuCFx//6+uMRT4RgQiaVkUAWfr5vn8Z3rosPvoRIxfjsakEz0H40VnDbSZD4l/ycw5icjvM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762101555; c=relaxed/simple;
-	bh=SPS1R2qMbgEiTGlDqR8evgzjxG5nX47ycasAPgbCYkA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MAUelf1cFQ0GNwGOZhfn8zhSU2teNXn3GhasC0XK7BN8BYBKAQCOzCnx9uLXRTXmdv1Q4JKHIyEa4X56Sb+EiIbA8D86pIiAMO1Y/0haOVG1l/mDtFyHCIVv01WA/mmHrMff2jeYoYyRBn/joSvJhYHwz92f6TuBGNCkLQGMmFM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tty42.de; spf=pass smtp.mailfrom=tty42.de; dkim=pass (2048-bit key) header.d=tty42.de header.i=@tty42.de header.b=mGw8Zo36; dkim=permerror (0-bit key) header.d=tty42.de header.i=@tty42.de header.b=qDBPK3ex; arc=pass smtp.client-ip=94.130.190.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tty42.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tty42.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tty42.de; s=rsa;
-	t=1762097948;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=AQ9RN7oaL72mEqmkR+lMG1kqnrzeAY6MZVNe7fkeW7M=;
-	b=mGw8Zo368o/alD/WImRHmoeKKi19OLUPYPF+a+nVP8aZ/q52DIHpyW4N1WZQ1gzd0666W+
-	J6ooxvJYd2ZMCJTshimx1J3ZXMo7d/dUCoNJ+Qndetp9+jOzwzOpf5GT4KoxzhTiRke/EA
-	eQQ0PXqI0CBM4ebsZrHbaFA+ALMqCKmDDEDKPHyBY5tAN5O2R2QB0TbjiAUErcKucaARIo
-	MVK3vjXQJUJrzzghTXf2WFmakT1SQNryutovcbag+WfTm4xr3AFxy3zepv1sm+8ROmkPvY
-	i69qF381hD+DJKEzNDmhz6E417Deb5nEclNwPo7stJIQQ45kcBN9YRT/9w7tcw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=tty42.de;
-	s=dkim; t=1762097948;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=AQ9RN7oaL72mEqmkR+lMG1kqnrzeAY6MZVNe7fkeW7M=;
-	b=qDBPK3exOuIUwDj1D+T0eFlFZ8IMIefF5ql29rywH9QtgnfbpVMPgOkcyZ/zcnJtMp2uIC
-	M7LN3R/CKCNXStAg==
-ARC-Seal: i=1; s=rsa; d=tty42.de; t=1762097948; a=rsa-sha256; cv=none;
-	b=xDIOv1iEEhM6PP4m2xhiL56scQly7dMLlvuUPONQfWnOMT+dtQzi34E96d82FB2if0soel
-	WbV/Id8futFIvAIAFxy8NpGFsrFkNv1jwlHJjaof1Il56yQibMaUeDbHjqewXgaop99MIZ
-	Nb+R4n89BmE6rrAWMYdn15hMrT2lGMjEYJuN+0Y5opIHxg93FSU42z63Jih20B0UcD4yXp
-	quoxV/xpIIvEGmP58dgArEyEBHTKwkkb/pX4AIBa+yhkT5GWfFxVM6z4KTk5ioEJSEYWRz
-	77211SsaVqKfcn8siygicAGkHW2d2oCdEA9JiMR0UT8m4/WE3EsHFioIq05tqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=tty42.de;
-	s=rsa; t=1762097948;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=AQ9RN7oaL72mEqmkR+lMG1kqnrzeAY6MZVNe7fkeW7M=;
-	b=UiF0xf1SUUvJ2NLrXwnyUEX2bzlYJkxcK5PYJeBvk/x4CXPtDZIJsXiRHNotamZ5DV4DfI
-	MluYOe2fXJkcUYLs8cAlFJWs9M3z8nIrrIv/nHtyZhxnYiz0J1i/O/uYmrQNIUzPH+KAnW
-	mz7JEULh1UIAduaHFYS1Jh7IEqPqOytJHN2e0HfXAcTcKclWrTf6tQImU+vPgMo/il4UYR
-	RUDZWcXxVLu1WmuifwR8MRzwP5yCKXBh/LHDtV49gZM6GoaIgx8p7tWpHIpzLbs/x+W7tv
-	XTo2UNn2L9CpLShpKShdfiox0ZNXM9UAuD6DJjNXkdP14ofyhDy+zy1YOr67uA==
-ARC-Authentication-Results: i=1;
-	mail.tty42.de;
-	auth=pass smtp.auth=frederik@tty42.de smtp.mailfrom=lists@tty42.de
-Received: 
-	by mail.tty42.de (OpenSMTPD) with ESMTPSA id 01d89ba0 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Sun, 2 Nov 2025 15:39:08 +0000 (UTC)
-Date: Sun, 2 Nov 2025 16:39:07 +0100
-From: Frederik Schwan <lists@tty42.de>
-To: linux-usb@vger.kernel.org
-Cc: Andreas Noever <andreas.noever@gmail.com>, 
-	Michael Jamet <michael.jamet@intel.com>, Mika Westerberg <westeri@kernel.org>, 
-	Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: TB 5 Dock DP-Out non-functional
-Message-ID: <q7k73t5utfjrpuf45ynig72eojpixepjqccvsfaqt6rg4wptst@se6ekc2eg3sv>
-Mail-Followup-To: linux-usb@vger.kernel.org, 
-	Andreas Noever <andreas.noever@gmail.com>, Michael Jamet <michael.jamet@intel.com>, 
-	Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1651DF965
+	for <linux-usb@vger.kernel.org>; Sun,  2 Nov 2025 16:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762102111; cv=none; b=ZfBt4kzE0xao1ikl3zdyc5y0u9Tr+3NfAkK2GE27n9kgMs4KePK+J8cRh6lpE7+d1hAI7u2sx4EtG1GwS0RspD3muObNd4YbUJy8TAxMv57Pos8tMzahOwWT+Z16Hq8ktOkBvrqsTOvy/lQMgpPntkzJsnIyPdvsYVUW4EK6K0w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762102111; c=relaxed/simple;
+	bh=PDRCwWAw4zLhj5fO+O4LU/ku0bQSkjJNl9hIm4G6H8E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Vocj5pPzBOlM7S8TBlQttbEkIUb7V9XbE1uSMSiN0OhvW2dRb4vBuqiRBxl9BYdUHGJhsMJiiXf2Tm8JsnER9UPRGTZrvSuyMs/vC6VZRlsUEoTdkYSbQNcsdyf6OnxoDw7YWfH6WVUEJNfrB9mRA1BKe7VsN5HCjaQH+6+2HXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WxTRJY2v; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=IqX+nSxl; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A2GfbRn701769
+	for <linux-usb@vger.kernel.org>; Sun, 2 Nov 2025 16:48:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=udj7T7Cj28h7tfx0aOeVMexss2vLL9UMfeK
+	creEJKNs=; b=WxTRJY2vAVWpri/3LkFTtXycnaq5abUUWyNu4ipt04YzZh/jouW
+	EyUzhLL4X5O+dYQR3vzIIPb082fWVOBNaNu49WyIWlZXsgzYX1ojGN7/7h0KdI5d
+	x4mCS+9u64pCbhVUDbh5OYrHu9RU2qP7OWUYlwf+ThmV2UpAOSSBRLudcP/MBvxJ
+	IqgusGS5HoGSpnmTHRPXNZxdry4dpvM1TvpvZwVpucqc3oio9LcpCeVMYgK5Ue+U
+	ExsvwLJTGuqG3HWBXmWj+U8qF6nzrDYrJDfpuh6lYXq3pjAg7dhVcq8GF0N8im8Z
+	NZw/c5uzbKHHhNqgyY/HdAKyQrZ+Tox1IUQ==
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a5pj3hcx5-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Sun, 02 Nov 2025 16:48:28 +0000 (GMT)
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-b471737e673so6301456a12.1
+        for <linux-usb@vger.kernel.org>; Sun, 02 Nov 2025 08:48:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762102107; x=1762706907; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=udj7T7Cj28h7tfx0aOeVMexss2vLL9UMfeKcreEJKNs=;
+        b=IqX+nSxlyUFHw+elZGISoIhS9Nz4/hIGyA6RR89ZIV56IalMdrflS9IY6ppVlU1y8k
+         4eerEZ5eiopdyX4e6PhhL6mh4UJJxwEUO6YmjczzvDzeb/Z31qhbGbiobOa9SvX9TGSr
+         fhvZBb89n8MMQ4x8gHnukByCFwHO76Zr2eu0AzIPkN9b5jKx792SrN+mR0atihLC9ZaF
+         qaFSjqeH6qP6CFTzkE76mCml/PD7lx0v+Mk/qfisdTPIrplVzfbd38oChg3HQoKTVg9L
+         KqYETvPUF89hsqCAxw6LknGAHGFmU0Io53ptiwGoQn6trEM6wisQAAebXm2dwCgkschB
+         MWVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762102107; x=1762706907;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=udj7T7Cj28h7tfx0aOeVMexss2vLL9UMfeKcreEJKNs=;
+        b=DnLMU5FKuLOwqduLHbbJ4ctOPKnY59gCbBAJpBx6ByMwOSq5XiPgHeh0XVd8IqcNHk
+         dGxpAisUU6R0jPMoZtoMXmUDHmDrffc0j9XE6KJSZwfq/V2FMv6//EEOS0Hv5BDw1f8J
+         wNPtzMwYOsTgT78T11HEpb7O4gW+qKdYndvi+fEi4pYxmwEgWWQX6SRt5Gkgf4dYlDLm
+         PgBMjhQ34quZK0ph9ImiAqKYv/YE5AuijWv8OTz7SvpL3lToICFFlpCpUze88mYQnxh3
+         NiPwY9hJ5uknesR/CKDTggtDRLnq99E+ZfjeaslUquZTpMg6Ed6AJ2+086mdoO8Y0uKv
+         MEOw==
+X-Gm-Message-State: AOJu0Yzq13wUnUQlQtF0mZOmTmFesbJuREBLYpnmwQLI28TBo/wOJHqI
+	0Mu+9sJ7Mzc3GMVqUnqv8C6Q7gfQMIjPGUAAq5kn+uWI4mHjY55rguYFtlcr0P7/nHg0eWtV53W
+	ga+z9BbZ/TKLIfeeQc3IjcFkHJoKPASJUyWjR9/2o7+q4aiF/mm6r+ylSBRgvpQU=
+X-Gm-Gg: ASbGncvnjayoE8iWBfJuoddbND3G8EhhxCEiDy+7IQ9VSeWWIhfnT1XF9yMa1jen1F7
+	w28ke1cUKs6SqOhZ2jdhS1WPdvONBQDuX4YUXpoeIMyGIbajxoJWB2kCuN13rqfZve/NbdbInf1
+	IpJs2pE2NeSJSW1JcskniElw3x0BOYH2CMMYP4R95tkVQNn25mXgc1cEGNZ7bVN8BtPG5HeWyUs
+	Cyh0AYn3Wr1fy0lTY51YhQE2k8sKVtg1MJGmqU6rX/kEGYGtUNAnRxZcbagJ05NxGOD62c8V3SM
+	5ekvmVvCSIlwSSKRLDVxnxO+5xnmVhnF540G/FZziAGRfHDpC0Xz/qI67BQZtJTxGJvMtn4rGck
+	co4M8JWubPIin+ciGKQIsfFXhXnwzUI3rSIIP
+X-Received: by 2002:a05:6a20:258c:b0:33f:df99:11eb with SMTP id adf61e73a8af0-348ca15afa2mr13556428637.7.1762102107520;
+        Sun, 02 Nov 2025 08:48:27 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH87wFetbaiAuC/psagPJvcH2NpFNha2arQJdLWwyoEanSrv8miEf7whLnmWsiRx09Jo3vJDA==
+X-Received: by 2002:a05:6a20:258c:b0:33f:df99:11eb with SMTP id adf61e73a8af0-348ca15afa2mr13556402637.7.1762102107038;
+        Sun, 02 Nov 2025 08:48:27 -0800 (PST)
+Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b93bda55f74sm7708125a12.19.2025.11.02.08.48.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Nov 2025 08:48:26 -0800 (PST)
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Subject: [PATCH v6 0/2] Implement vbus support for HD3SS3220 port controller
+Date: Sun,  2 Nov 2025 22:18:17 +0530
+Message-Id: <20251102164819.2798754-1-krishna.kurapati@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="ktwojdhv27toua2w"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=ItsTsb/g c=1 sm=1 tr=0 ts=69078b5c cx=c_pps
+ a=rz3CxIlbcmazkYymdCej/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=gs8g10pPhjI8XjwtQ3cA:9
+ a=bFCP_H2QrGi7Okbo017w:22
+X-Proofpoint-GUID: 4ppyfVopjYuaSf-Lv1gnPwjplzQ9P_lJ
+X-Proofpoint-ORIG-GUID: 4ppyfVopjYuaSf-Lv1gnPwjplzQ9P_lJ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAyMDE1NiBTYWx0ZWRfX7GOpemmzfeiy
+ vp0qvvmHuMGqSC4EmgEaUkD9rM4f4gDVMy/MEuciyV4/5A3mRLu20a3YiuYlPtRsX4TOzbJuG5R
+ chE164oShKjgeqWK87Fo24K9L5UFI6bg4UOPYNrVGXpoDwhzfn14rONjvUm9J2UmYVCfqKuLRes
+ bTA2BjZeUKo8+tsvFJPl315myuD9L88SVmClLycjPtWkUI51mtp2+5ynenzI4OgJCqNlM35HKvk
+ 1laFKXnfjgQcZ85aioyazO0fTu3aFz+4GK6I2RzYXXIBPVYpfwRq0kKUsY/5Y+YBZyu0WUb9hw6
+ +mjpJnIevtKtd3UzBCqoZ4xvVh3y59rrzYLGbR2aIOryZvMrnmtUsFAot2ppfHWbJeczm7qNt7D
+ u1oLFgfEET/ZoPRdzLowsa2qn1USHg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-02_02,2025-10-29_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 phishscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511020156
 
+As per the data sheet of HD3SS3220:
 
---ktwojdhv27toua2w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+"Upon detecting a UFP device, HD3SS3220 will keep ID pin high if VBUS is
+not at VSafe0V. Once VBUS is at VSafe0V, the HD3SS3220 will assert ID pin
+low. This is done to enforce Type-C requirement that VBUS must be at
+VSafe0V before re-enabling VBUS"
 
-Hello linux-usb,
-Dear Thunderbolt driver maintainers,
+This series implements support to read ID pin state and accordingly enable
+VBUS.
 
-I just tried to swap my TB 4 setup with TB 5 hardware.
-USB devices and power supply works as expected. Displayport does not.
+---
+Changes in v6:
+- Modified logic to get vbus from connector as per comments received on v5.
 
-Setup:
-TB 5 Host (Lenovo P1 Gen8)
-  -> TB 4 Dock (0108:2031 reports as "ThinkPad Thunderbolt 4 Dock")
-    -> USB Devices, two 3840x2160, LAN attached
-  -> TB 5 Dock (0108:234d reports as "ThinkPad Thunderbolt 5 Smart Dock 7500 - 40BA")
-    -> nothing but power supply
+Link to v5:
+https://lore.kernel.org/all/20251027072741.1050177-1-krishna.kurapati@oss.qualcomm.com/
 
-Now I just move one of the dp cables from the TB 4 dock to the TB 5 dock and best thing I can get is a quick flicker
-with a good signal but from then the monitor is black turning on and off continuously (seems to get a signal that collapses instantly).
+Changes in v5:
+- Modified error handling in driver as per comments received on v4.
 
-I attached the dmesg debug log for this scenario.
+Link to v4:
+https://lore.kernel.org/all/20251025122854.1163275-1-krishna.kurapati@oss.qualcomm.com/
 
-This also happens if I use the TB 5 dock alone (with all USB stuff attached) but the behavior is way more inconsistent, with some monitors not coming up
-at all or loosing signal after a few seconds.
+Changes in v4:
+- Modified logic to check for vbus supply. Directly checking first remote
+  endpoint.
+- Used of_regulator_get_optional instead of of_regulator_get
 
-I have no clue if this is the right list to report, I'm happy to report this to the drm subsystem if I'm wrong here :)
+Link to v3:
+https://lore.kernel.org/all/20251024181832.2744502-1-krishna.kurapati@oss.qualcomm.com/
 
-Best regards,
-Frederik
+Changes in v3:
+- Removed vbus supply from hd3ss3220 bindings.
+- Implemented getting vbus from connector node.
 
---ktwojdhv27toua2w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="tb5.log"
+Link to v2:
+https://lore.kernel.org/all/20251008175750.1770454-1-krishna.kurapati@oss.qualcomm.com/
 
-[Nov 2 16:09] thunderbolt 0000:8a:00.0: acking hot unplug event on 3:14
-[  +0,000111] thunderbolt 0000:8a:00.0: 3:14: DP OUT resource unavailable: adapter unplug
-[  +0,000006] thunderbolt 0000:8a:00.0: 0:13 <-> 3:14 (DP): deactivating
-[  +0,000779] thunderbolt 0000:8a:00.0: deactivating Video path from 0:13 to 3:14
-[  +0,000755] thunderbolt 0000:8a:00.0: 3:1: adding -18 NFC credits to 18
-[  +0,000111] thunderbolt 0000:8a:00.0: deactivating AUX TX path from 0:13 to 3:14
-[  +0,000784] thunderbolt 0000:8a:00.0: deactivating AUX RX path from 3:14 to 0:13
-[  +0,001048] thunderbolt 0000:8a:00.0: 0:13: detached from bandwidth group 1
-[  +0,002719] thunderbolt 0000:8a:00.0: 0: released DP resource for port 13
-[  +0,000003] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000378] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000301] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000158] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/36000 Mb/s
-[  +0,000243] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000002] thunderbolt 0000:8a:00.0: bandwidth re-calculation done
-[  +0,000001] thunderbolt 0000:8a:00.0: looking for DP IN <-> DP OUT pairs:
-[  +0,000047] thunderbolt 0000:8a:00.0: 0:13: DP IN available
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:13: no suitable DP OUT adapter available, not tunneling
-[  +0,000145] thunderbolt 0000:8a:00.0: 0:14: DP IN available
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:14: no suitable DP OUT adapter available, not tunneling
-[  +1,730897] thunderbolt 0000:8a:00.0: acking hot plug event on 3:13
-[  +0,000280] thunderbolt 0000:8a:00.0: 3:13: DP OUT resource available after hotplug
-[  +0,000008] thunderbolt 0000:8a:00.0: looking for DP IN <-> DP OUT pairs:
-[  +0,000142] thunderbolt 0000:8a:00.0: 0:13: DP IN available
-[  +0,000185] thunderbolt 0000:8a:00.0: 3:13: DP OUT available
-[  +0,017354] thunderbolt 0000:8a:00.0: 0: allocated DP resource for port 13
-[  +0,000007] thunderbolt 0000:8a:00.0: 0:13: attached to bandwidth group 1
-[  +0,000741] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000639] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000384] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000256] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: available bandwidth for new DP tunnel 34650/34650 Mb/s
-[  +0,000007] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): activating
-[  +0,000820] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): DP IN maximum supported bandwidth 8100 Mb/s x4 = 25920 Mb/s
-[  +0,000003] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): DP OUT maximum supported bandwidth 8100 Mb/s x4 = 25920 Mb/s
-[  +0,000250] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): bandwidth allocation mode supported
-[  +0,000966] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): non-reduced bandwidth 8100 Mb/s x4 = 25920 Mb/s
-[  +0,000256] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): maximum bandwidth through allocation mode 8100 Mb/s x4 = 25920 Mb/s
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): granularity 250 Mb/s
-[  +0,000255] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): estimated bandwidth 34650 Mb/s
-[  +0,001663] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): bandwidth allocation mode enabled
-[  +0,000001] thunderbolt 0000:8a:00.0: activating Video path from 0:13 to 3:13
-[  +0,000002] thunderbolt 0000:8a:00.0: 3:1: adding 18 NFC credits to 0
-[  +0,000253] thunderbolt 0000:8a:00.0: 3:1: Writing hop 1
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:1:  In HopID: 10 => Out port: 13 Out HopID: 9
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:1:   Weight: 1 Priority: 1 Credits: 0 Drop: 0 PM: 0
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:1:    Counter enabled: 0 Counter index: 2047
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:1:   Flow Control (In/Eg): 0/0 Shared Buffer (In/Eg): 0/0
-[  +0,000000] thunderbolt 0000:8a:00.0: 3:1:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000252] thunderbolt 0000:8a:00.0: 0:13: Writing hop 0
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:13:  In HopID: 9 => Out port: 3 Out HopID: 10
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:13:   Weight: 1 Priority: 1 Credits: 0 Drop: 0 PM: 0
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:13:    Counter enabled: 0 Counter index: 2047
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:13:   Flow Control (In/Eg): 0/0 Shared Buffer (In/Eg): 0/0
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:13:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000125] thunderbolt 0000:8a:00.0: Video path activation complete
-[  +0,000000] thunderbolt 0000:8a:00.0: activating AUX TX path from 0:13 to 3:13
-[  +0,000127] thunderbolt 0000:8a:00.0: 3:1: Writing hop 1
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:1:  In HopID: 11 => Out port: 13 Out HopID: 8
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:1:   Weight: 1 Priority: 2 Credits: 1 Drop: 0 PM: 0
-[  +0,000000] thunderbolt 0000:8a:00.0: 3:1:    Counter enabled: 0 Counter index: 2047
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:1:   Flow Control (In/Eg): 1/0 Shared Buffer (In/Eg): 0/0
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:1:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000253] thunderbolt 0000:8a:00.0: 0:13: Writing hop 0
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:13:  In HopID: 8 => Out port: 3 Out HopID: 11
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:13:   Weight: 1 Priority: 2 Credits: 1 Drop: 0 PM: 0
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:13:    Counter enabled: 0 Counter index: 2047
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:13:   Flow Control (In/Eg): 1/1 Shared Buffer (In/Eg): 0/0
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:13:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000125] thunderbolt 0000:8a:00.0: AUX TX path activation complete
-[  +0,000000] thunderbolt 0000:8a:00.0: activating AUX RX path from 3:13 to 0:13
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:3: Writing hop 1
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:3:  In HopID: 10 => Out port: 13 Out HopID: 8
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:3:   Weight: 1 Priority: 2 Credits: 1 Drop: 0 PM: 0
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:3:    Counter enabled: 0 Counter index: 2047
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:3:   Flow Control (In/Eg): 1/0 Shared Buffer (In/Eg): 0/0
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:3:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000254] thunderbolt 0000:8a:00.0: 3:13: Writing hop 0
-[  +0,000000] thunderbolt 0000:8a:00.0: 3:13:  In HopID: 8 => Out port: 1 Out HopID: 10
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:13:   Weight: 1 Priority: 2 Credits: 1 Drop: 0 PM: 0
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:13:    Counter enabled: 0 Counter index: 2047
-[  +0,000000] thunderbolt 0000:8a:00.0: 3:13:   Flow Control (In/Eg): 1/1 Shared Buffer (In/Eg): 0/0
-[  +0,000001] thunderbolt 0000:8a:00.0: 3:13:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000126] thunderbolt 0000:8a:00.0: AUX RX path activation complete
-[  +0,000644] thunderbolt 0000:8a:00.0: 0:14: DP IN available
-[  +0,000123] thunderbolt 0000:8a:00.0: 3:13: DP OUT in use
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:14: no suitable DP OUT adapter available, not tunneling
-[  +0,005509] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): DPRX capabilities read completed
-[  +0,000315] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/17280 Mb/s
-[  +0,000013] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000368] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000512] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/17280 Mb/s
-[  +0,000145] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000494] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/17280 Mb/s
-[  +0,000006] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/18720 Mb/s
-[  +0,001017] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000658] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000006] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000002] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[  +0,000101] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000004] thunderbolt 0000:8a:00.0: bandwidth re-calculation done
-[  +3,085528] i915 0000:00:02.0: [drm] *ERROR* Failed to get ACT after 3000 ms, last status: 00
-[  +0,268467] thunderbolt 0000:8a:00.0: acking DP_BW (0x20) notification on 0
-[  +0,000041] thunderbolt 0000:8a:00.0: 0:13: handling bandwidth allocation request, retry 0
-[  +0,000311] thunderbolt 0000:8a:00.0: 0:13: DPTX enabled bandwidth allocation mode, updating estimated bandwidth
-[  +0,000012] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000006] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[  +0,000876] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000639] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000385] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000126] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000255] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000131] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): re-calculated estimated bandwidth 34650 (+ 0 reserved) = 34650 Mb/s
-[  +0,000406] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000361] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000514] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/17280 Mb/s
-[  +0,000125] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000517] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/17280 Mb/s
-[  +0,000007] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/18720 Mb/s
-[  +0,001006] thunderbolt 0000:8a:00.0: acking DP_BW (0x20) notification on 0
-[  +0,000014] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000632] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000009] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000006] thunderbolt 0000:8a:00.0: bandwidth re-calculation done
-[  +0,000011] thunderbolt 0000:8a:00.0: 0:13: handling bandwidth allocation request, retry 0
-[  +0,000360] thunderbolt 0000:8a:00.0: 0:13: requested bandwidth 8500 Mb/s
-[  +0,000513] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): bandwidth allocated currently 0/17280 Mb/s
-[  +0,000382] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): corrected bandwidth request 0/8500 Mb/s
-[  +0,001797] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): bandwidth allocation changed to 0/8500 Mb/s
-[  +0,000007] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000002] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[  +0,000821] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000725] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000309] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000109] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000273] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): re-calculated estimated bandwidth 34650 (+ 0 reserved) = 34650 Mb/s
-[  +0,000383] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000384] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000896] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/8500 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000896] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/8500 Mb/s
-[  +0,000002] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/27500 Mb/s
-[  +0,001024] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000673] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000006] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000002] thunderbolt 0000:8a:00.0: bandwidth re-calculation done
-[  +3,217408] i915 0000:00:02.0: [drm] *ERROR* Failed to get ACT after 3000 ms, last status: 04
-[  +0,828792] thunderbolt 0000:8a:00.0: acking hot plug event on 1:12
-[  +0,000123] thunderbolt 0000:8a:00.0: 1:12: DP OUT resource available after hotplug
-[  +0,000005] thunderbolt 0000:8a:00.0: looking for DP IN <-> DP OUT pairs:
-[  +0,000119] thunderbolt 0000:8a:00.0: 0:13: DP IN in use
-[  +0,000146] thunderbolt 0000:8a:00.0: 0:14: DP IN available
-[  +0,000127] thunderbolt 0000:8a:00.0: 3:13: DP OUT in use
-[  +0,000128] thunderbolt 0000:8a:00.0: 1:12: DP OUT available
-[  +0,000641] thunderbolt 0000:8a:00.0: 0: allocated DP resource for port 14
-[  +0,000002] thunderbolt 0000:8a:00.0: 0:14: attached to bandwidth group 2
-[  +0,000765] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 220/220, scale 0
-[  +0,000643] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000638] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000384] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000001] thunderbolt 0000:8a:00.0: available bandwidth for new DP tunnel 31500/103500 Mb/s
-[  +0,000005] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): activating
-[  +0,000745] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): DP IN maximum supported bandwidth 8100 Mb/s x4 = 25920 Mb/s
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): DP OUT maximum supported bandwidth 8100 Mb/s x4 = 25920 Mb/s
-[  +0,000256] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): bandwidth allocation mode supported
-[  +0,001023] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): non-reduced bandwidth 8100 Mb/s x4 = 25920 Mb/s
-[  +0,000258] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): maximum bandwidth through allocation mode 20000 Mb/s x4 = 77575 Mb/s
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): granularity 500 Mb/s
-[  +0,000253] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): estimated bandwidth 103500 Mb/s
-[  +0,001665] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): bandwidth allocation mode enabled
-[  +0,000007] thunderbolt 0000:8a:00.0: activating Video path from 0:14 to 1:12
-[  +0,000003] thunderbolt 0000:8a:00.0: 1:1: adding 6 NFC credits to 0
-[  +0,000246] thunderbolt 0000:8a:00.0: 1:1: Writing hop 1
-[  +0,000001] thunderbolt 0000:8a:00.0: 1:1:  In HopID: 10 => Out port: 12 Out HopID: 9
-[  +0,000001] thunderbolt 0000:8a:00.0: 1:1:   Weight: 1 Priority: 1 Credits: 0 Drop: 0 PM: 0
-[  +0,000001] thunderbolt 0000:8a:00.0: 1:1:    Counter enabled: 0 Counter index: 2047
-[  +0,000001] thunderbolt 0000:8a:00.0: 1:1:   Flow Control (In/Eg): 0/0 Shared Buffer (In/Eg): 0/0
-[  +0,000001] thunderbolt 0000:8a:00.0: 1:1:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000251] thunderbolt 0000:8a:00.0: 0:14: Writing hop 0
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:14:  In HopID: 9 => Out port: 1 Out HopID: 10
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14:   Weight: 1 Priority: 1 Credits: 0 Drop: 0 PM: 0
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14:    Counter enabled: 0 Counter index: 2047
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:14:   Flow Control (In/Eg): 0/0 Shared Buffer (In/Eg): 0/0
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000125] thunderbolt 0000:8a:00.0: Video path activation complete
-[  +0,000001] thunderbolt 0000:8a:00.0: activating AUX TX path from 0:14 to 1:12
-[  +0,000126] thunderbolt 0000:8a:00.0: 1:1: Writing hop 1
-[  +0,000001] thunderbolt 0000:8a:00.0: 1:1:  In HopID: 11 => Out port: 12 Out HopID: 8
-[  +0,000000] thunderbolt 0000:8a:00.0: 1:1:   Weight: 1 Priority: 2 Credits: 1 Drop: 0 PM: 0
-[  +0,000001] thunderbolt 0000:8a:00.0: 1:1:    Counter enabled: 0 Counter index: 2047
-[  +0,000001] thunderbolt 0000:8a:00.0: 1:1:   Flow Control (In/Eg): 1/0 Shared Buffer (In/Eg): 0/0
-[  +0,000000] thunderbolt 0000:8a:00.0: 1:1:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000254] thunderbolt 0000:8a:00.0: 0:14: Writing hop 0
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14:  In HopID: 8 => Out port: 1 Out HopID: 11
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14:   Weight: 1 Priority: 2 Credits: 1 Drop: 0 PM: 0
-[  +0,000000] thunderbolt 0000:8a:00.0: 0:14:    Counter enabled: 0 Counter index: 2047
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14:   Flow Control (In/Eg): 1/1 Shared Buffer (In/Eg): 0/0
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000156] thunderbolt 0000:8a:00.0: AUX TX path activation complete
-[  +0,000020] thunderbolt 0000:8a:00.0: activating AUX RX path from 1:12 to 0:14
-[  +0,000826] thunderbolt 0000:8a:00.0: 0:1: Writing hop 1
-[  +0,000004] thunderbolt 0000:8a:00.0: 0:1:  In HopID: 10 => Out port: 14 Out HopID: 8
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:1:   Weight: 1 Priority: 2 Credits: 1 Drop: 0 PM: 0
-[  +0,000002] thunderbolt 0000:8a:00.0: 0:1:    Counter enabled: 0 Counter index: 2047
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:1:   Flow Control (In/Eg): 1/0 Shared Buffer (In/Eg): 0/0
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:1:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000310] thunderbolt 0000:8a:00.0: 1:12: Writing hop 0
-[  +0,000006] thunderbolt 0000:8a:00.0: 1:12:  In HopID: 8 => Out port: 1 Out HopID: 10
-[  +0,000002] thunderbolt 0000:8a:00.0: 1:12:   Weight: 1 Priority: 2 Credits: 1 Drop: 0 PM: 0
-[  +0,000002] thunderbolt 0000:8a:00.0: 1:12:    Counter enabled: 0 Counter index: 2047
-[  +0,000002] thunderbolt 0000:8a:00.0: 1:12:   Flow Control (In/Eg): 1/1 Shared Buffer (In/Eg): 0/0
-[  +0,000003] thunderbolt 0000:8a:00.0: 1:12:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
-[  +0,000035] thunderbolt 0000:8a:00.0: AUX RX path activation complete
-[  +0,004199] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): DPRX capabilities read completed
-[  +0,000302] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/25920 Mb/s
-[  +0,000012] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): reclaiming unused bandwidth
-[  +0,000628] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000354] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000292] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/25920 Mb/s
-[  +0,000367] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000125] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000402] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/25920 Mb/s
-[  +0,000002] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): available bandwidth 70500/44580 Mb/s
-[  +0,001023] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 3599/3599, scale 0
-[  +0,000639] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): increased bandwidth allocation to 14738/14738 Mb/s
-[  +0,000004] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000001] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[  +0,000891] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000651] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000365] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000125] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000263] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000124] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000147] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): re-calculated estimated bandwidth 34650 (+ 0 reserved) = 34650 Mb/s
-[  +0,000365] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000398] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000899] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/8500 Mb/s
-[  +0,000111] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000909] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/8500 Mb/s
-[  +0,000021] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/27500 Mb/s
-[  +0,001012] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000615] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000006] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000004] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 2
-[  +0,000137] thunderbolt 0000:8a:00.0: bandwidth estimation for group 2 done
-[  +0,000005] thunderbolt 0000:8a:00.0: bandwidth re-calculation done
-[  +2,246846] i915 0000:00:02.0: [drm] *ERROR* Failed to get ACT after 3000 ms, last status: 04
-[  +0,003041] thunderbolt 0000:8a:00.0: acking DP_BW (0x20) notification on 0
-[  +0,000031] thunderbolt 0000:8a:00.0: 0:13: handling bandwidth allocation request, retry 0
-[  +0,000330] thunderbolt 0000:8a:00.0: 0:13: requested bandwidth 0 Mb/s
-[  +0,000639] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): bandwidth allocated currently 0/8500 Mb/s
-[  +0,000384] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): corrected bandwidth request 0/0 Mb/s
-[  +0,000010] thunderbolt 0000:8a:00.0: group 1 reserved 8500 total 8500 Mb/s
-[  +0,001816] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): bandwidth allocation changed to 0/0 Mb/s
-[  +0,000008] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000004] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[  +0,000808] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000662] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000362] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000147] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000257] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000109] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000149] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): re-calculated estimated bandwidth 26150 (+ 8500 reserved) = 34650 Mb/s
-[  +0,000382] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000477] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,001078] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000050] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000910] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000008] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/27500 Mb/s
-[  +0,001011] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000962] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000004] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000002] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 2
-[  +0,000157] thunderbolt 0000:8a:00.0: bandwidth estimation for group 2 done
-[  +0,000001] thunderbolt 0000:8a:00.0: bandwidth re-calculation done
-[  +0,019318] thunderbolt 0000:8a:00.0: acking DP_BW (0x20) notification on 0
-[  +0,000022] thunderbolt 0000:8a:00.0: 0:14: handling bandwidth allocation request, retry 0
-[  +0,000332] thunderbolt 0000:8a:00.0: 0:14: DPTX enabled bandwidth allocation mode, updating estimated bandwidth
-[  +0,000002] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000001] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[  +0,000903] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000632] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000382] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000255] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): re-calculated estimated bandwidth 26150 (+ 8500 reserved) = 34650 Mb/s
-[  +0,000409] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000367] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000894] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000891] thunderbolt 0000:8a:00.0: acking DP_BW (0x20) notification on 0
-[  +0,000010] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000007] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/27500 Mb/s
-[  +0,001012] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000648] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000009] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000002] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 2
-[  +0,000878] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 220/220, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000641] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000384] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000130] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000009] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): re-calculated estimated bandwidth 103500 (+ 0 reserved) = 103500 Mb/s
-[  +0,000373] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): reclaiming unused bandwidth
-[  +0,000637] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000383] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/25920 Mb/s
-[  +0,000393] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000121] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000384] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/25920 Mb/s
-[  +0,000005] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): available bandwidth 70500/44580 Mb/s
-[  +0,001019] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 3599/3599, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): increased bandwidth allocation to 14738/14738 Mb/s
-[  +0,000005] thunderbolt 0000:8a:00.0: bandwidth estimation for group 2 done
-[  +0,000002] thunderbolt 0000:8a:00.0: bandwidth re-calculation done
-[  +0,000008] thunderbolt 0000:8a:00.0: 0:14: handling bandwidth allocation request, retry 0
-[  +0,000368] thunderbolt 0000:8a:00.0: 0:14: requested bandwidth 0 Mb/s
-[  +0,000776] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): bandwidth allocated currently 0/25920 Mb/s
-[  +0,000340] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): corrected bandwidth request 0/0 Mb/s
-[  +0,001967] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): bandwidth allocation changed to 0/0 Mb/s
-[  +0,000007] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000002] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[  +0,000819] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000384] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000108] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000259] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000147] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000110] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): re-calculated estimated bandwidth 26150 (+ 8500 reserved) = 34650 Mb/s
-[  +0,000399] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000384] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000894] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,001386] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000007] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/27500 Mb/s
-[  +0,001000] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000660] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000004] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000002] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 2
-[  +0,000886] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 220/220, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000639] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000109] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000161] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000369] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000110] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000166] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000003] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): re-calculated estimated bandwidth 103500 (+ 0 reserved) = 103500 Mb/s
-[  +0,000362] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): reclaiming unused bandwidth
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000778] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000382] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000767] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000003] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): available bandwidth 70500/70500 Mb/s
-[  +0,001023] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 3599/3599, scale 0
-[  +0,000702] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): increased bandwidth allocation to 14738/14738 Mb/s
-[  +0,000023] thunderbolt 0000:8a:00.0: bandwidth estimation for group 2 done
-[  +0,509004] thunderbolt 0000:8a:00.0: acking DP_BW (0x20) notification on 0
-[  +0,000022] thunderbolt 0000:8a:00.0: 0:13: handling bandwidth allocation request, retry 0
-[  +0,000362] thunderbolt 0000:8a:00.0: 0:13: requested bandwidth 12500 Mb/s
-[  +0,000555] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): bandwidth allocated currently 0/0 Mb/s
-[  +0,000385] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): corrected bandwidth request 0/12500 Mb/s
-[  +0,000768] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000383] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000253] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000130] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): bandwidth available for allocation 34650/26150 (+ 8500 reserved) Mb/s
-[  +0,001688] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000361] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,002212] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000146] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000963] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000004] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/15000 Mb/s
-[  +0,001021] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000580] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000003] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): bandwidth allocation changed to 0/12500 Mb/s
-[  +0,000002] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000001] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[  +0,001966] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000656] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000384] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000109] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000256] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000146] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): re-calculated estimated bandwidth 26150 (+ 8500 reserved) = 34650 Mb/s
-[  +0,000383] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000385] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000895] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000897] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000002] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/15000 Mb/s
-[  +0,001021] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000001] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000001] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 2
-[  +0,000894] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 220/220, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000383] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000130] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): re-calculated estimated bandwidth 103500 (+ 0 reserved) = 103500 Mb/s
-[  +0,000384] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): reclaiming unused bandwidth
-[  +0,000638] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000768] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000385] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000769] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/0 Mb/s
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): available bandwidth 70500/70500 Mb/s
-[  +0,001026] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 3599/3599, scale 0
-[  +0,000637] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): increased bandwidth allocation to 14738/14738 Mb/s
-[  +0,000002] thunderbolt 0000:8a:00.0: bandwidth estimation for group 2 done
-[  +0,000001] thunderbolt 0000:8a:00.0: bandwidth re-calculation done                                                                                                                                                                          [  +0,761329] thunderbolt 0000:8a:00.0: acking DP_BW (0x20) notification on 0
-[  +0,000012] thunderbolt 0000:8a:00.0: 0:14: handling bandwidth allocation request, retry 0
-[  +0,000341] thunderbolt 0000:8a:00.0: 0:14: requested bandwidth 12500 Mb/s
-[  +0,000688] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): bandwidth allocated currently 0/0 Mb/s
-[  +0,000337] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): corrected bandwidth request 0/12500 Mb/s
-[  +0,000768] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 220/220, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000385] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000002] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): bandwidth available for allocation 31500/103500 (+ 0 reserved) Mb/s
-[  +0,001699] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): reclaiming unused bandwidth
-[  +0,000604] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000768] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000430] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000141] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000770] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000002] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): available bandwidth 70500/58000 Mb/s
-[  +0,001026] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 3599/3599, scale 0
-[  +0,000637] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): increased bandwidth allocation to 14738/14738 Mb/s
-[  +0,000006] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): bandwidth allocation changed to 0/12500 Mb/s
-[  +0,000003] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000002] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[  +0,000885] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000385] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000113] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000256] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000144] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000112] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): re-calculated estimated bandwidth 26150 (+ 8500 reserved) = 34650 Mb/s
-[  +0,000400] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000383] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000895] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000112] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000912] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000003] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/15000 Mb/s
-[  +0,001022] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000639] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000003] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000001] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 2
-[  +0,000892] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 220/220, scale 0
-[  +0,000626] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000654] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000112] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000143] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000390] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000111] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000142] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000007] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): re-calculated estimated bandwidth 103500 (+ 0 reserved) = 103500 Mb/s
-[  +0,000376] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): reclaiming unused bandwidth
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000114] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000783] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000383] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000113] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000782] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000003] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): available bandwidth 70500/58000 Mb/s
-[  +0,001020] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 3599/3599, scale 0
-[  +0,000641] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): increased bandwidth allocation to 14738/14738 Mb/s
-[  +0,000003] thunderbolt 0000:8a:00.0: bandwidth estimation for group 2 done
-[  +0,000002] thunderbolt 0000:8a:00.0: bandwidth re-calculation done
-[  +9,075811] thunderbolt 0000:8a:00.0: group 1 released total 8500 Mb/s
-[  +0,000005] thunderbolt 0000:8a:00.0: bandwidth consumption changed, re-calculating estimated bandwidth
-[  +0,000001] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 1
-[Nov 2 16:10] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 220/220, scale 0
-[  +0,000577] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000464] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000096] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000282] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000127] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): consumed bandwidth 1350/1350 Mb/s
-[  +0,000037] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): re-calculated estimated bandwidth 34650 (+ 0 reserved) = 34650 Mb/s
-[  +0,000403] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): reclaiming unused bandwidth
-[  +0,000382] thunderbolt 0000:8a:00.0: 0:3: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000896] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 3:1: link maximum bandwidth 36000/36000 Mb/s
-[  +0,000896] thunderbolt 0000:8a:00.0: 0:13 <-> 3:13 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): available bandwidth 36000/23500 Mb/s
-[  +0,001028] thunderbolt 0000:8a:00.0: 0:22: scaled bandwidth 2198/2198, scale 0
-[  +0,000636] thunderbolt 0000:8a:00.0: 0:22 <-> 3:16 (USB3): increased bandwidth allocation to 9000/9000 Mb/s
-[  +0,000001] thunderbolt 0000:8a:00.0: bandwidth estimation for group 1 done
-[  +0,000001] thunderbolt 0000:8a:00.0: re-calculating bandwidth estimation for group 2
-[  +0,000893] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 220/220, scale 0
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): decreased bandwidth allocation to 900/900 Mb/s
-[  +0,000640] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000129] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000383] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 36000/108000 Mb/s
-[  +0,000137] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): consumed bandwidth 3000/3000 Mb/s
-[  +0,000104] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000001] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): re-calculated estimated bandwidth 103500 (+ 0 reserved) = 103500 Mb/s
-[  +0,000406] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): reclaiming unused bandwidth
-[  +0,000633] thunderbolt 0000:8a:00.0: 0:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000128] thunderbolt 0000:8a:00.0: 0:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000768] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000383] thunderbolt 0000:8a:00.0: 1:1: link maximum bandwidth 72000/72000 Mb/s
-[  +0,000138] thunderbolt 0000:8a:00.0: 1:1: reserving 1500/1500 Mb/s for PCIe
-[  +0,000863] thunderbolt 0000:8a:00.0: 0:14 <-> 1:12 (DP): consumed bandwidth 0/12500 Mb/s
-[  +0,000002] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): available bandwidth 70500/58000 Mb/s
-[  +0,001059] thunderbolt 0000:8a:00.0: 0:21: scaled bandwidth 3599/3599, scale 0
-[  +0,000583] thunderbolt 0000:8a:00.0: 0:21 <-> 1:20 (USB3): increased bandwidth allocation to 14738/14738 Mb/s
-[  +0,000002] thunderbolt 0000:8a:00.0: bandwidth estimation for group 2 done
-[  +0,000001] thunderbolt 0000:8a:00.0: bandwidth re-calculation done
+Changes in v2:
+- Fixed inclusion of header files appropriately.
+- Modified commit text for driver patch.
 
---ktwojdhv27toua2w--
+Link to v1:
+https://lore.kernel.org/all/20251002172539.586538-1-krishna.kurapati@oss.qualcomm.com/
+
+Krishna Kurapati (2):
+  dt-bindings: usb: ti,hd3ss3220: Add support for VBUS based on ID state
+  usb: typec: hd3ss3220: Enable VBUS based on ID pin state
+
+ .../devicetree/bindings/usb/ti,hd3ss3220.yaml |  8 +++
+ drivers/usb/typec/hd3ss3220.c                 | 72 +++++++++++++++++++
+ 2 files changed, 80 insertions(+)
+
+-- 
+2.34.1
+
 
