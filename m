@@ -1,168 +1,131 @@
-Return-Path: <linux-usb+bounces-29983-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29984-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87A0FC29980
-	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 00:12:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2D96C29C61
+	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 02:20:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8D7054E798E
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Nov 2025 23:12:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C88353ADF6E
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 01:17:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F3E7247284;
-	Sun,  2 Nov 2025 23:12:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E2CA27144E;
+	Mon,  3 Nov 2025 01:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="H56NZ9kx"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Xf2GCOog"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mail-m1973187.qiye.163.com (mail-m1973187.qiye.163.com [220.197.31.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF14148850;
-	Sun,  2 Nov 2025 23:12:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762125147; cv=pass; b=o446el9PdWtK4ejtE5JRxKeYsQ4yNqrc0CYlxCiX1icz+iX8Nd6IvmjjjRtWKBbzey5eqgJFZPBAL8c1qF6tPxvGYOt0xcLuqnHpFBUMMp95c/Jp74zWWAsRgHdzbpRTXduCLhAMLAGCF+GS5jXur4/VKdI1s67Z6lAaoxDfw+A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762125147; c=relaxed/simple;
-	bh=/I7IzlSpR4PhZPVQQEaWMofel6wmantN5OvKHYzkmvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=biRAER8TIssf71OXqmqilwyaNXSv1C9LJ5wUAVlsoObdAro2u5czOdzqcTW982tEYB9mN7zXNI7nmO3t5rwU8rkuqGJVOFwFo31t8Q/kIlLvC5rVip8CxJMITOexZEksRL+Lp8XYPNgPE+J4LDH+U12xxNr/y1cS+I6zRlwtVtI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=H56NZ9kx; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1762125132; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=ayHSoO8mmqJf6BpyOjVPFOjzRHu1WL3LnRrZaK8Pxss8qw9RqmiwBJUjwAmlIDsMeQnQqsCdodhkM+118cH86lu2c6ugvpYdWhiKVqy7vEj3258SwG8eDdqgt62QeRCVGcsg4wZGR0IkKE7/AeWH/1nZyxRdOaijcNYzCMEvPG0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1762125132; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ZQyV7+HH5+eyEXPG+O2c+IhWlprTdduqC8iGfXHsZNk=; 
-	b=clccRMONHLMHPkLA5tA5Rftdar2TecDMeXdnud831QIBjDB//IlPDNMKnOIgLtz+ntjnRZFEuTtn3lSQqhdHen1ckE0GLxw/ScztgDH55oBuJdzqIZ4o4QrRZLMuzgV/B3KMHaJW9Cb/r2rNCIoFKvh0/+pZkq64vGU1/Kk84Ns=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1762125132;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=ZQyV7+HH5+eyEXPG+O2c+IhWlprTdduqC8iGfXHsZNk=;
-	b=H56NZ9kxWSHWpyt0trC8Z8jveyB6zse0BEvnPj9CQLsSQVd31Yrs1H7bSFSQCI08
-	R772ZTJ0lHvKTF2poe32NVwN88wYaKhxNkNk6HhLiTJ/kItNzS7gd8B78vX0z/+70P1
-	q/mLphXYH1Yw8Rw5WEd+5HUBCdZ2J3abRyClJBvs=
-Received: by mx.zohomail.com with SMTPS id 1762125130375852.2930709562752;
-	Sun, 2 Nov 2025 15:12:10 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id DD16D180CDA; Mon, 03 Nov 2025 00:11:54 +0100 (CET)
-Date: Mon, 3 Nov 2025 00:11:54 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Jameson Thies <jthies@google.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com, bleung@chromium.org, 
-	gregkh@linuxfoundation.org, akuchynski@chromium.org, abhishekpandit@chromium.org, 
-	kenny@panix.com, linux-pm@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: ucsi: psy: Set max current to zero when
- disconnected
-Message-ID: <ew2yygmisdxp5jlefbg64abxzjp5wpxvwnmlhcwedgnzzr2qzs@huem73pm7sr5>
-References: <20251017223053.2415243-1-jthies@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F79086334;
+	Mon,  3 Nov 2025 01:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.87
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762132643; cv=none; b=cC6kJRYFOuuwHTX2JhbMtapu8C10IdWusKRyKI8Lixl23OFbU5pls5viFP7q0y0NKnDRUX2zcpmL50thmFZYyB4wWAjY//buEWPCemcYMLnjZ+3XM4gLYC5s4PtUu487QyfQuv7P1D3iVSZO9BSagb+0Shb3ysWtwDZVkNuNo2k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762132643; c=relaxed/simple;
+	bh=5za/wdwfGmyMjsBpSMunPbfMRKuNjLwmg5jr/Bt+LWM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gMdTfy/jsz6EwjuEW/ee3f71MzPSbXz0S80vmkPDI9Qv2FT7ZL5zLrPDE932ocKPsy9jAYib2Y4PfsqUJnbrGgc9Aon17AYQE87BdDt4F0H3SvN52YuzxPvFFXZei3Von+tg2LQ0mcIfV1OyoDblOSEKR5Gt52i0LfVERC9kGY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=Xf2GCOog; arc=none smtp.client-ip=220.197.31.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.149] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 2818c2243;
+	Mon, 3 Nov 2025 09:11:59 +0800 (GMT+08:00)
+Message-ID: <39c21e9f-4958-4007-bb09-3ef40ff30d2a@rock-chips.com>
+Date: Mon, 3 Nov 2025 09:11:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rdmgxygmaxf4b76y"
-Content-Disposition: inline
-In-Reply-To: <20251017223053.2415243-1-jthies@google.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/262.86.93
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 01/10] usb: typec: Add notifier functions
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Chaoyi Chen <kernel@airkyi.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
+ Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+References: <20251029071435.88-1-kernel@airkyi.com>
+ <20251029071435.88-2-kernel@airkyi.com> <aQS8IatWiAUzBUxd@kuha.fi.intel.com>
+Content-Language: en-US
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+In-Reply-To: <aQS8IatWiAUzBUxd@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Tid: 0a9a47455e0103abkunm8b2c313f943871
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGR5MTVYYQk0YGR1KQ0kfTx1WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
+	xVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=Xf2GCOogE5JU9VFai8bfqqPO4EwB1WJ7U798BYDMShF5yADbVIRdoEeXupnhnUlWCWamERfBB8hOvuY9KC55ljPx2XdO0aSSZ4aN/YVRrfNdwUmKid0Rkhyi8liJDc6hPFcv+WVwWCoRwFPiFILAWI0NSARBI9pcgXmLDxUm+VA=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=kGpL6uycvY2W1UtRJCq/id+/GMXz5vHEcP9JtnFabFA=;
+	h=date:mime-version:subject:message-id:from;
+
+On 10/31/2025 9:39 PM, Heikki Krogerus wrote:
+
+> Hi,
+>
+>> diff --git a/include/linux/usb/typec_notify.h b/include/linux/usb/typec_notify.h
+>> new file mode 100644
+>> index 000000000000..f3a7b5f5b05b
+>> --- /dev/null
+>> +++ b/include/linux/usb/typec_notify.h
+>> @@ -0,0 +1,16 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +
+>> +#ifndef __USB_TYPEC_NOTIFY
+>> +#define __USB_TYPEC_NOTIFY
+>> +
+>> +#include <linux/notifier.h>
+> Replace that include with a forward declaration:
+>
+> struct notifier_block;
+>
+>> +enum usb_typec_event {
+>> +	TYPEC_ALTMODE_REGISTERED,
+>> +	TYPEC_ALTMODE_UNREGISTERED,
+>> +};
+>> +
+>> +int typec_altmode_register_notify(struct notifier_block *nb);
+>> +int typec_altmode_unregister_notify(struct notifier_block *nb);
+>> +
+>> +#endif /* __USB_TYPEC_NOTIFY */
+> I don't see any need for a separate header file for this. Intoduce
+> those in typec_altmode.h.
+
+Will fix these in v9. Thank you.
 
 
---rdmgxygmaxf4b76y
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] usb: typec: ucsi: psy: Set max current to zero when
- disconnected
-MIME-Version: 1.0
+>
+> thanks,
+>
+-- 
+Best,
+Chaoyi
 
-Hi,
-
-On Fri, Oct 17, 2025 at 10:30:53PM +0000, Jameson Thies wrote:
-> The ucsi_psy_get_current_max function defaults to 0.1A when it is not
-> clear how much current the partner device can support. But this does
-> not check the port is connected, and will report 0.1A max current when
-> nothing is connected. Update ucsi_psy_get_current_max to report 0A when
-> there is no connection.
->=20
-> v2 changes:
-> - added cc stable tag to commit message
->=20
-> Fixes: af833e7f7db3 ("usb: typec: ucsi: psy: Set current max to 100mA for=
- BC 1.2 and Default")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jameson Thies <jthies@google.com>
-> Reviewed-by: Benson Leung <bleung@chromium.org>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Tested-by: Kenneth R. Crudup <kenny@panix.com>
-> ---
-
-With the changelog moved under ---:
-
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
-Greetings,
-
--- Sebastian
-
->  drivers/usb/typec/ucsi/psy.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-> index 62a9d68bb66d..8ae900c8c132 100644
-> --- a/drivers/usb/typec/ucsi/psy.c
-> +++ b/drivers/usb/typec/ucsi/psy.c
-> @@ -145,6 +145,11 @@ static int ucsi_psy_get_current_max(struct ucsi_conn=
-ector *con,
->  {
->  	u32 pdo;
-> =20
-> +	if (!UCSI_CONSTAT(con, CONNECTED)) {
-> +		val->intval =3D 0;
-> +		return 0;
-> +	}
-> +
->  	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
->  	case UCSI_CONSTAT_PWR_OPMODE_PD:
->  		if (con->num_pdos > 0) {
->=20
-> base-commit: e40b984b6c4ce3f80814f39f86f87b2a48f2e662
-> --=20
-> 2.51.0.858.gf9c4a03a3a-goog
->=20
->=20
-
---rdmgxygmaxf4b76y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmkH5TMACgkQ2O7X88g7
-+pqi+Q/+Pltm/IIiUpzgPlhsQz6XHkNwE/kGgNAA1AUNm1BibTCQMpPd7D7t4g/e
-b67zrwhpZDeEAZpBHB/fzihFNZhlBLSivKAESxC+zPgvAFXPdZbLJxImRpKj622x
-qbOpyGCljdTsL/Sc8/dK6KE3QSvSwmiijezde6e7QCd2Oxw7gro/ZLBrLEcEDagG
-BgyyP3NbEAHhBPK8tThJZnnxWyqEuw5kCn1ZHuErfis7rBC8zapH6OvRD+pPajlg
-mj7g6MIZl7mr2mun/TDeU0FK3iPj/jrGdH9hHk9/ZVWGhY0B+OgPE1ERnMaPXwUd
-Sut2arlKZZojRiUcW9j+Hk8EsPGyVXxSG+5aezWJvNCNSo5/PVgEnLfb5uWeO64v
-0RIHEad95tG3/qqiJWkm+yE2xX6gMUcKXzLeG2keG0Nm1MOQg/wnM/2ZU9XLlR5q
-lhACnE7PYGUwYmGqCDrqnjrhWIDGTYNit4Vw8wj935r+UFnvdl5bqSG2l6byZhb9
-1I8nhht0gW/sABKJXuQ/kOo99GSWy3b7XIG8yqtN3yLDfcgUVl190jsA/dtHYRlm
-WuijbVSz83exJI769xt/BU3PMOz9rslEKRWDLLhge+7irftCgPpP0S+wZq6pJIcg
-xHT6zH4l7nfVvRISQ4d3y6b+/+P5lAlaeO2vdSDIysJ19phznMk=
-=XP49
------END PGP SIGNATURE-----
-
---rdmgxygmaxf4b76y--
 
