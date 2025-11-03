@@ -1,138 +1,96 @@
-Return-Path: <linux-usb+bounces-30003-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30004-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB246C2B36E
-	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 12:02:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C60D6C2B398
+	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 12:03:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E46D24EE750
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 11:02:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE3E13B7C04
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 11:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A00C30149B;
-	Mon,  3 Nov 2025 11:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A21C32F8BFF;
+	Mon,  3 Nov 2025 11:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m/KfQHIV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RNizKzb4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD14E30103F;
-	Mon,  3 Nov 2025 11:02:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808DF221DB5
+	for <linux-usb@vger.kernel.org>; Mon,  3 Nov 2025 11:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762167734; cv=none; b=MrceagdIL0grQoIBl/VdF1cGR7EPn0eJBMlctCXYyN94NadyJGQohw9m2fqJycZZmCqLSmOB07ljKsEM9TQwEmPMOYdL2yVsbVjlhy2zdlxTHQALOONqhQ7YNPaxm4EN8MUoPVCqEb1ngScxHeO/Thbncdr9a9gCdjbqoQNRtn4=
+	t=1762167755; cv=none; b=VKWSlz/RaB94tcG4akaSvTFQ/nSaSog2+vVMlP7HnDxGPbRqDTJwdmzVn82ESzyVPRmf9pem1SEzpP5WB2Pz4ycnrY4vz3+2KoVpFdZdqmkN2LxfzhGZDDBwiFbGvdoYw2fcQ1Unrt/TqtiogBsaxzAivt/8o8vqIVEKXJPpGaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762167734; c=relaxed/simple;
-	bh=+QUKYiq6QyurEYEfuCj/JyfcmWfTRvEucNWiwhh61Y8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MLcXePkSAagfFy73d6fPEyQbFrggZvNumC04/3FtSkpiwjbfvQIdv1c1ETEUfSCy1waxFm1cnmQLH+lMc//xPQS7d5DoY26N8HImW58DPW1Lt5L8KnRQL6rUYs3wVDct93qOFoXxo9VUZ1KpQcctPPfnpzHGrosvQHBCIfx4ZLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m/KfQHIV; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762167755; c=relaxed/simple;
+	bh=KipBDPAFgqJ5vnqSZqf4aUMjHNZUAa0MtmgC10K6X8E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FilZZAR16j2S8ZourSQH1ohh7LisH2bhRsCEN2j6Jg/gegDUQk3x/m/f4Zh+nIZat3NJZx302tyujE5/DoyycUIq/n+mUomHLK+lmmpTWNNIKmgm8xGJ+A9mfyxZnywGdKI0IwdV0tdIXjwU1iKSn+HvLQYaHxsqrM7SvKpvAJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RNizKzb4; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762167732; x=1793703732;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+QUKYiq6QyurEYEfuCj/JyfcmWfTRvEucNWiwhh61Y8=;
-  b=m/KfQHIVpGzqHRVlc5f8DjaIQMRPKPuFDpXSrRS/fGVBowEuazeRJSiS
-   UMY40RJfHVllUw/g0IIXPTywKexoajnn4vA1Fch9GEdD3unaD1GiIzaQt
-   EClJHih879lUfNGPcEFR/pMq94ocgmwQzoZBelqQepekVnqeYuL/jRxxZ
-   9Dmb7BT3HNSsRWhVVg4bs1yYMmwIZvAeEos/moIB54Xp0LEw19TJhVJ+g
-   x5CoUXi/jkCnFe6L7gCrAp20zljoG4q6U9fyL4QkWklGcQ1+vGlnLt2rM
-   FTKAbAopZ9B/lzsBIJtRuVaxVMA6HJzEROUPxmKDdHMKA+aflkr5h5j4K
+  t=1762167754; x=1793703754;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KipBDPAFgqJ5vnqSZqf4aUMjHNZUAa0MtmgC10K6X8E=;
+  b=RNizKzb49MPP/BlZmdAe53Gmw5nNJ7iciRCZhDoIKSZbA79OyJlLiGpP
+   975yOApZthVDQ5lxzjcbNGkgS0mVgpk7R+syjkQ95Vpc0fVgVG0iqRMiT
+   CUBPCNmo4S1sOdn/gFatyJ5dznB1tohDu03gyyBv0JlE8kAPkipWdkDsn
+   ppEst0Y94UUWcMkiJipG3nNxT0405Cs5SVZ1qd9xaGm3WbunvmokrqA0Z
+   zHby8G+MxRWvZhoksWnsVLT24TmqxDEfkNdeoM3jgMewJ+9qgxUjuiQLc
+   N80cgYWZT+rDIluIPmG9xVWU4AforkJ3slSCKDVnciBxDCQU56g39goQ8
    g==;
-X-CSE-ConnectionGUID: 3erTDP4VSD2vm65sL0zNxg==
-X-CSE-MsgGUID: E/kHXqH4Sm+Ylw9QPiTNZw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="74842739"
+X-CSE-ConnectionGUID: 8G836HjuTiOPXmtGbwEAAA==
+X-CSE-MsgGUID: 4MwGU4GDS6+eldAvRkcCXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="64278450"
 X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="74842739"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 03:02:11 -0800
-X-CSE-ConnectionGUID: jzZIC2rTShau3xRc3doKGw==
-X-CSE-MsgGUID: mIxJirusTs+LpRTi66etVA==
+   d="scan'208";a="64278450"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 03:02:34 -0800
+X-CSE-ConnectionGUID: RCrFNpDgTNG05ww3yQLjfw==
+X-CSE-MsgGUID: WmmJLqz8TrC0nV81/X7Jxg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="191947690"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO [10.245.245.12]) ([10.245.245.12])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 03:02:09 -0800
-Message-ID: <11d7b29d-a45f-48e9-bff5-cb94150d0bdf@intel.com>
-Date: Mon, 3 Nov 2025 13:02:06 +0200
+   d="scan'208";a="186792628"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa007.jf.intel.com with ESMTP; 03 Nov 2025 03:02:32 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id D9F5695; Mon, 03 Nov 2025 12:02:30 +0100 (CET)
+Date: Mon, 3 Nov 2025 12:02:30 +0100
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH 0/2] thunderbolt: Bring the firmware upgrade
+ documentation up-to-date
+Message-ID: <20251103110230.GH2912318@black.igk.intel.com>
+References: <20251028061357.2164810-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: Check kcalloc_node() when allocating
- interrupter array in xhci_mem_init()
-To: Michal Pecio <michal.pecio@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Guangshuo Li <lgs201920130244@gmail.com>,
- Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20250918130838.3551270-1-lgs201920130244@gmail.com>
- <20251103094036.2d1593bc.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@intel.com>
-In-Reply-To: <20251103094036.2d1593bc.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251028061357.2164810-1-mika.westerberg@linux.intel.com>
 
-On 11/3/25 10:40, Michal Pecio wrote:
-> On Thu, 18 Sep 2025 21:08:38 +0800, Guangshuo Li wrote:
->> kcalloc_node() may fail. When the interrupter array allocation returns
->> NULL, subsequent code uses xhci->interrupters (e.g. in xhci_add_interrupter()
->> and in cleanup paths), leading to a potential NULL pointer dereference.
->>
->> Check the allocation and bail out to the existing fail path to avoid
->> the NULL dereference.
->>
->> Fixes: c99b38c412343 ("xhci: add support to allocate several interrupters")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
->> ---
->>   drivers/usb/host/xhci-mem.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
->> index d698095fc88d..da257856e864 100644
->> --- a/drivers/usb/host/xhci-mem.c
->> +++ b/drivers/usb/host/xhci-mem.c
->> @@ -2505,7 +2505,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
->>   		       "Allocating primary event ring");
->>   	xhci->interrupters = kcalloc_node(xhci->max_interrupters, sizeof(*xhci->interrupters),
->>   					  flags, dev_to_node(dev));
->> -
->> +	if (!xhci->interrupters)
->> +		goto fail;
->>   	ir = xhci_alloc_interrupter(xhci, 0, flags);
->>   	if (!ir)
->>   		goto fail;
->> -- 
->> 2.43.0
+On Tue, Oct 28, 2025 at 07:13:55AM +0100, Mika Westerberg wrote:
+> Hi all,
 > 
-> Hi Greg and Mathias,
+> The recommended way to apply Thunderbolt/USB4 firmware upgrades is through
+> Linux Vendor Firmware Service (LVFS) and fwupd that are present in most
+> distros. These patches update the documentation to mention this too.
 > 
-> I noticed that this bug still exists in current 6.6 and 6.12 releases,
-> what would be the sensible course of action to fix it?
-> 
+> Alan Borzeszkowski (2):
+>   thunderbolt: Update NVM firmware upgrade documentation
+>   thunderbolt: Update deprecated firmware update site in icm.c
 
-Not sure this qualifies for stable.
-Is this something that has really happened in real life?
-
-The stable-kernel-rules.rst states it should "fix a real bug that bothers people"
-
-If kcalloc_node() fails to allocate that array of pointers then something
-else is already badly messed up.
-
-That being said, I don't object this being added to stable either
-
-Thanks
-Mathias
-
-
+Both applied to thundergolt.git/next.
 
