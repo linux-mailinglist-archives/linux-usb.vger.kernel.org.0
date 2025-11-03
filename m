@@ -1,247 +1,277 @@
-Return-Path: <linux-usb+bounces-30012-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30013-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F0D1C2C18B
-	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 14:31:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50698C2C3E7
+	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 14:48:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E764C4201E2
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 13:26:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 883691892E7E
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 13:49:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7433126738B;
-	Mon,  3 Nov 2025 13:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B86712749FE;
+	Mon,  3 Nov 2025 13:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="K4Im5Epj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PfKEM+nu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DC8261388
-	for <linux-usb@vger.kernel.org>; Mon,  3 Nov 2025 13:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE7C1B85F8;
+	Mon,  3 Nov 2025 13:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762176361; cv=none; b=e0N+xwsLjy3ZdUgATUu+jcTORnW6ggMK9OWc0fpoPGZp1F++XjiY1VAXGybNQ74YO4MDcWdO7vWeFGcNtNZspqN/OwXA2gp0Hqi5Kc15h7Ltkg7SrJBupLIsXB9fbvHbEtWGaYKS62nteHraaLusMfHdJhFZNiuvhuNRbrB2XPs=
+	t=1762177711; cv=none; b=aAFcvbPjo8c+3uW6SLV1PAAG26NMY2DcQQqlOKzBDsvnwp+847+mMaYOwED5+dkX47WJPqgzdO+31EXI01hVr3WXNw1OGVLPWVZ2jlbYdIbmfpyfQaBWU8jU6+C4zYefr5kgTytND3hJ2tCJEXeArgEVZcs91zSEDWz/0caiEe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762176361; c=relaxed/simple;
-	bh=kgp5Yvte42p4gbCZLk/wI7Qek18+z6EgzMxotV8dtCw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sao9T4jShJ3jAEth3H0zAyTqm8vewFQOEYfwHHFauXM0b+4gxAzou4USORudOuK2K9s4x5P82THygW4XKRbZSRSdYe9/irIEqwmATRKgA7I/qjA8MJUdZNJdyf76FpyhTup0+Lsk2Mryb83IEQ2OPfQdL3fyj8nhiH9g/I/D4Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=K4Im5Epj; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b6d78062424so879438366b.1
-        for <linux-usb@vger.kernel.org>; Mon, 03 Nov 2025 05:25:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762176356; x=1762781156; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kgp5Yvte42p4gbCZLk/wI7Qek18+z6EgzMxotV8dtCw=;
-        b=K4Im5EpjZAwqAdKqBoLyv/lFCgr5JQAtN/uxl+UItDTlZOaaymUIBmmK5euoqcij7+
-         85TCsuBsUR5YuWFPJ7A2WWY3dAIE1tXuiwE9kU8v2L82tjU9FIT+aOmG9W0rNkBz0E83
-         kchm+y/XtiEh583n4zk9gpOtTgl6bAvpVC/I2ZhIaH4DgXJ7LhXHWsDhz93TFhpmkmT+
-         6cngpFVx2bjXB1jD9NqMLh41d7K8Y/OYgAWjcM5+acHDrEcnsAlrFjPFYmsQf0XKSHzh
-         QxMuQXxVmODnI0AIsfDPkbsc8k2xc9T586DZd3E8xQRuexVMFBQcOunQPa6rjp0hpyq7
-         so/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762176356; x=1762781156;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kgp5Yvte42p4gbCZLk/wI7Qek18+z6EgzMxotV8dtCw=;
-        b=f6TqzzQR2ptpocmS2o0DjxSpeVRU2EdcFwApfbCeVph0PYTzYFnUHWEi0gZqMxc+7j
-         6cL180WbEfXIEMuHumjovdRm24BwAgiu5Q3sney42wQ/Oq3jdvPcGK9A/Qg+GTKRfHWO
-         zv4+M23vfWeo9i2qt0EAfMpjvbSKPuLuolDkoa/maR3sAAzKFXxfd/VALLFcvFQTtS7a
-         lChWQ7jxD/Romsen9ZBJmaADR/OJnbkCa2iV0hVvbiZ+vEuo3HU4ovTfGGna0hkzx+ix
-         FAnuBUQB+lVYJuA/lITUkGkXRQdTyZGrlZow3pm5qQUn8fN8YmAjMdZbvFyZb14y+AKv
-         HiHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUKzb7X19o8LSlu7GKpixDHauHhrtdxsaOkqQXS1ea9Tsqfqm2QgXQlAfzCuS9VpH9L+4HB9AdIvWU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoP1f+aGfAo1dbgZ8G4JwEikbwCgOSvD6LNw2IOZBKHux9Q6tG
-	nMwrt3KgBZ7MLK9TLNx7i5gcxc8TiYB0mK6iWpaSqYZr0Jg2aptljKGL8sorxjjWe7TBXbeShH/
-	j3zgPJjk=
-X-Gm-Gg: ASbGncsu1bwL0psAypmPdbhG/nh2xuoOsVyLVirDhXvwRlbSYYlF+f2DjS7k0pP8FUc
-	gaMaOOp9iazGVYm/9GcCwK7d1WhHBV+2oesr7WE6FyquTiLN18b+zpfmEC6B4u1sII5YbySIQHG
-	OQKcXlVrpApJafWPTsnSz3gS4Pc58FIqflKkiKxAsV+5h6rWBv/iRPrUg226d8vKwNOaIqUtjHl
-	fXYc1+UEte9cpOob1rvy6DL6ce80BqGWeI52LGuZMjEKeJWo9dRaCeceqAp7yPEEURm/dGhmOwK
-	weV2FOnv0WqLp5dkAh69keKl3ayIoj3mi5Dux7C0z+7MjrrSxHHfkf3jvdWAVwVThm7F15oipnc
-	ewWT9alC+mOF3wm4QLs4S7Ghj7nLDdJWrpBHWkdG4eWQ+ZBRLAf1b8zHpAKRbAtmz5u92F6Nn8c
-	bwYqIMkiaRUTJ3K+zamFHuF9/bMazVI2jU42LYh5SU7OoEQya/1BDJO1laHT2ZnGuAjRAvMLa3r
-	hzdjCeFruIQbRiboFFJryCBNwyW
-X-Google-Smtp-Source: AGHT+IFAHmrTO8ln01Qomtjqa892AilurAv+0OR4p/HILoaEUB1Hxz++lDSIBJgfYm97zdNyDKQMnw==
-X-Received: by 2002:a17:907:26c9:b0:b71:ea7c:e509 with SMTP id a640c23a62f3a-b71ea8c3121mr13414166b.41.1762176356222;
-        Mon, 03 Nov 2025 05:25:56 -0800 (PST)
-Received: from ?IPV6:2003:e5:870e:1500:7795:3e8a:56c1:ae53? (p200300e5870e150077953e8a56c1ae53.dip0.t-ipconnect.de. [2003:e5:870e:1500:7795:3e8a:56c1:ae53])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b70bd65cc72sm347503766b.19.2025.11.03.05.25.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Nov 2025 05:25:55 -0800 (PST)
-Message-ID: <1d4245fb-c48f-4e0a-8c69-c18f23b0fd5a@suse.com>
-Date: Mon, 3 Nov 2025 14:25:55 +0100
+	s=arc-20240116; t=1762177711; c=relaxed/simple;
+	bh=/eMBTgNJH8/Xgm8LgLzir6GKHePQ75zTAgJlicmNsfQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HO+YHf9yxgBc4CFzuWDNasie7TJcia+89cBdVIUi3yGVPeBWc2ElQGSOIIZVMSrQR4rEaNRlEM2+6XsvCZXFHJmWKWvs1TQ0dLL9SzLuWVSivxwoTQuFG30YSBGhNMezbBOntfORanSRSceqkdVWcfb6XXU0UMoWZliVyd5qwWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PfKEM+nu; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762177710; x=1793713710;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/eMBTgNJH8/Xgm8LgLzir6GKHePQ75zTAgJlicmNsfQ=;
+  b=PfKEM+nu+M8xX0XhsZTDlirRsJ/b98gD+zl4l4Ua2LqOy4FMbStJVhi1
+   hNsfrvBk3Db0FgIdqnwy7/ZiIj/cPwNs+mTfnfOnEPv5Ur1tj5xdO4z1E
+   W+ioF8MPbtYHSUJplv4esVl+6358Pp5s/ZP4IZ3gYY3AQWIRbu2ZbndBZ
+   VbHUGdLjiobwByI25VIvV6n6rLVF6bEVJqsXX9TudQQhXvwa3XL3W2Jb5
+   AUE4o5qptrkE+jhjQ7Vq2Lo9pkJbfq4qX10vmmn4oghnBhKQyDClxNaDx
+   DOsvDoGZZMwJo3BtMNDB89/DB01YhXUF1t8Sqfk3ocTlKs/rzlTx3eXxj
+   Q==;
+X-CSE-ConnectionGUID: Z7PcJOtYSheuPUmLhHKO7A==
+X-CSE-MsgGUID: fA9Dm99cRbSTIqjgaicLEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="75699958"
+X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
+   d="scan'208";a="75699958"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 05:48:29 -0800
+X-CSE-ConnectionGUID: JFm5J5b9STC09kNJqEZ1eA==
+X-CSE-MsgGUID: J32ocSpgR2yn1eLsQx1Tpg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
+   d="scan'208";a="186110382"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.222])
+  by orviesa006.jf.intel.com with SMTP; 03 Nov 2025 05:48:11 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 03 Nov 2025 15:48:09 +0200
+Date: Mon, 3 Nov 2025 15:48:09 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Chaoyi Chen <kernel@airkyi.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Yubing Zhang <yubing.zhang@rock-chips.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Amit Sunil Dhamne <amitsd@google.com>,
+	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v8 03/10] drm/bridge: Implement generic USB Type-C DP HPD
+ bridge
+Message-ID: <aQiymTFVU7UpcJ1p@kuha.fi.intel.com>
+References: <20251029071435.88-1-kernel@airkyi.com>
+ <20251029071435.88-4-kernel@airkyi.com>
+ <rzozpbqmymdczerh3iijxxtz3xnsznoku7w2mquikwv6u5osvo@7h43hwc2fpzm>
+ <eca9d5bd-23bd-4c1d-b2f2-c0c32f14177f@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] xen/usb: Constify struct hc_driver
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org
-References: <63241c9e857646d895ce615b998d41ee4829f9e3.1761475831.git.christophe.jaillet@wanadoo.fr>
-Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <63241c9e857646d895ce615b998d41ee4829f9e3.1761475831.git.christophe.jaillet@wanadoo.fr>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------TEFMu9nrGOax3HN0PtapF02y"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eca9d5bd-23bd-4c1d-b2f2-c0c32f14177f@rock-chips.com>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------TEFMu9nrGOax3HN0PtapF02y
-Content-Type: multipart/mixed; boundary="------------U1zNNy0zDczPsawwTlYAN2iq";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org
-Message-ID: <1d4245fb-c48f-4e0a-8c69-c18f23b0fd5a@suse.com>
-Subject: Re: [PATCH] xen/usb: Constify struct hc_driver
-References: <63241c9e857646d895ce615b998d41ee4829f9e3.1761475831.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <63241c9e857646d895ce615b998d41ee4829f9e3.1761475831.git.christophe.jaillet@wanadoo.fr>
+> > > diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
+> > > index a250afd8d662..17257b223a28 100644
+> > > --- a/drivers/gpu/drm/bridge/Kconfig
+> > > +++ b/drivers/gpu/drm/bridge/Kconfig
+> > > @@ -23,13 +23,16 @@ config DRM_AUX_BRIDGE
+> > >   	  build bridges chain.
+> > >   config DRM_AUX_HPD_BRIDGE
+> > > -	tristate
+> > > +	tristate "AUX HPD bridge support"
+> > Why? No, this is supposed to be selected by other drivers. Users don't
+> > know an wouldn't know what is this.
+> 
+> In v7, I implemented an additional module for selecting this option. But
+> Heikki believes that it would be better to merge the two modules into one.
 
---------------U1zNNy0zDczPsawwTlYAN2iq
-Content-Type: multipart/mixed; boundary="------------igYf0v5aAHmtcgkvWfha5CqD"
+Like I said before, I was merely curious why not just squash the
+support into that AUX_PD_HPD_BRIDGE. If that does not make sense, then
+so be it - make it a "Display Interface Bridge" driver like you
+originally proposed.
 
---------------igYf0v5aAHmtcgkvWfha5CqD
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> > >   	depends on DRM_BRIDGE && OF
+> > >   	select AUXILIARY_BUS
+> > >   	help
+> > >   	  Simple bridge that terminates the bridge chain and provides HPD
+> > >   	  support.
+> > > +	  Specifically, if you want a default Type-C DisplayPort HPD bridge for
+> > > +	  each port of the Type-C controller, say Y here.
+> > > +
+> > >   menu "Display Interface Bridges"
+> > >   	depends on DRM && DRM_BRIDGE
+> > > diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
+> > > index c7dc03182e59..2998937444bc 100644
+> > > --- a/drivers/gpu/drm/bridge/Makefile
+> > > +++ b/drivers/gpu/drm/bridge/Makefile
+> > > @@ -1,6 +1,12 @@
+> > >   # SPDX-License-Identifier: GPL-2.0
+> > >   obj-$(CONFIG_DRM_AUX_BRIDGE) += aux-bridge.o
+> > > -obj-$(CONFIG_DRM_AUX_HPD_BRIDGE) += aux-hpd-bridge.o
+> > > +
+> > > +hpd-bridge-y := aux-hpd-bridge.o
+> > > +ifneq ($(CONFIG_TYPEC),)
+> > > +hpd-bridge-y += aux-hpd-typec-dp-bridge.o
+> > > +endif
+> > > +obj-$(CONFIG_DRM_AUX_HPD_BRIDGE) += hpd-bridge.o
+> > > +
+> > >   obj-$(CONFIG_DRM_CHIPONE_ICN6211) += chipone-icn6211.o
+> > >   obj-$(CONFIG_DRM_CHRONTEL_CH7033) += chrontel-ch7033.o
+> > >   obj-$(CONFIG_DRM_CROS_EC_ANX7688) += cros-ec-anx7688.o
+> > > diff --git a/drivers/gpu/drm/bridge/aux-hpd-bridge.c b/drivers/gpu/drm/bridge/aux-hpd-bridge.c
+> > > index 2e9c702c7087..11ad6dc776c7 100644
+> > > --- a/drivers/gpu/drm/bridge/aux-hpd-bridge.c
+> > > +++ b/drivers/gpu/drm/bridge/aux-hpd-bridge.c
+> > > @@ -12,6 +12,8 @@
+> > >   #include <drm/drm_bridge.h>
+> > >   #include <drm/bridge/aux-bridge.h>
+> > > +#include "aux-hpd-bridge.h"
+> > > +
+> > >   static DEFINE_IDA(drm_aux_hpd_bridge_ida);
+> > >   struct drm_aux_hpd_bridge_data {
+> > > @@ -204,7 +206,26 @@ static struct auxiliary_driver drm_aux_hpd_bridge_drv = {
+> > >   	.id_table = drm_aux_hpd_bridge_table,
+> > >   	.probe = drm_aux_hpd_bridge_probe,
+> > >   };
+> > > -module_auxiliary_driver(drm_aux_hpd_bridge_drv);
+> > > +
+> > > +static int drm_aux_hpd_bridge_mod_init(void)
+> > > +{
+> > > +	int ret;
+> > > +
+> > > +	ret = auxiliary_driver_register(&drm_aux_hpd_bridge_drv);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	return drm_aux_hpd_typec_dp_bridge_init();
+> > > +}
+> > > +
+> > > +static void drm_aux_hpd_bridge_mod_exit(void)
+> > > +{
+> > > +	drm_aux_hpd_typec_dp_bridge_exit();
+> > > +	auxiliary_driver_unregister(&drm_aux_hpd_bridge_drv);
+> > > +}
+> > > +
+> > > +module_init(drm_aux_hpd_bridge_mod_init);
+> > > +module_exit(drm_aux_hpd_bridge_mod_exit);
+> > >   MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
+> > >   MODULE_DESCRIPTION("DRM HPD bridge");
+> > > diff --git a/drivers/gpu/drm/bridge/aux-hpd-bridge.h b/drivers/gpu/drm/bridge/aux-hpd-bridge.h
+> > > new file mode 100644
+> > > index 000000000000..69364731c2f1
+> > > --- /dev/null
+> > > +++ b/drivers/gpu/drm/bridge/aux-hpd-bridge.h
+> > > @@ -0,0 +1,13 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > > +#ifndef AUX_HPD_BRIDGE_H
+> > > +#define AUX_HPD_BRIDGE_H
+> > > +
+> > > +#if IS_REACHABLE(CONFIG_TYPEC)
+> > > +int drm_aux_hpd_typec_dp_bridge_init(void);
+> > > +void drm_aux_hpd_typec_dp_bridge_exit(void);
+> > > +#else
+> > > +static inline int drm_aux_hpd_typec_dp_bridge_init(void) { return 0; }
+> > > +static inline void drm_aux_hpd_typec_dp_bridge_exit(void) { }
+> > > +#endif /* IS_REACHABLE(CONFIG_TYPEC) */
+> > > +
+> > > +#endif /* AUX_HPD_BRIDGE_H */
+> > > diff --git a/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+> > > new file mode 100644
+> > > index 000000000000..6f2a1fca0fc5
+> > > --- /dev/null
+> > > +++ b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+> > > @@ -0,0 +1,47 @@
+> > > +// SPDX-License-Identifier: GPL-2.0+
+> > > +#include <linux/of.h>
+> > > +#include <linux/usb/typec_altmode.h>
+> > > +#include <linux/usb/typec_dp.h>
+> > > +#include <linux/usb/typec_notify.h>
+> > > +
+> > > +#include <drm/bridge/aux-bridge.h>
+> > > +
+> > > +#include "aux-hpd-bridge.h"
+> > > +
+> > > +#if IS_REACHABLE(CONFIG_TYPEC)
+> > > +static int drm_typec_bus_event(struct notifier_block *nb,
+> > > +			       unsigned long action, void *data)
+> > > +{
+> > This feels like this should be a part of the Type-C subsystem rather
+> > than DRM.
+> 
+> In v7, this used to be a part of the Type-C subsystem. I'm not sure what
+> Heikki thinks about this.
 
-T24gMjYuMTAuMjUgMTE6NTEsIENocmlzdG9waGUgSkFJTExFVCB3cm90ZToNCj4gJ3N0cnVj
-dCBoY19kcml2ZXInIGlzIG5vdCBtb2RpZmllZCBpbiB0aGlzIGRyaXZlci4NCj4gDQo+IENv
-bnN0aWZ5aW5nIHRoaXMgc3RydWN0dXJlIG1vdmVzIHNvbWUgZGF0YSB0byBhIHJlYWQtb25s
-eSBzZWN0aW9uLCBzbw0KPiBpbmNyZWFzZXMgb3ZlcmFsbCBzZWN1cml0eSwgZXNwZWNpYWxs
-eSB3aGVuIHRoZSBzdHJ1Y3R1cmUgaG9sZHMgc29tZQ0KPiBmdW5jdGlvbiBwb2ludGVycy4N
-Cj4gDQo+IE9uIGEgeDg2XzY0LCB3aXRoIGFsbG1vZGNvbmZpZywgYXMgYW4gZXhhbXBsZToN
-Cj4gQmVmb3JlOg0KPiA9PT09PT0NCj4gICAgIHRleHQJICAgZGF0YQkgICAgYnNzCSAgICBk
-ZWMJICAgIGhleAlmaWxlbmFtZQ0KPiAgICA1MjA2NQkgIDIzMTc2CSAgICAyNTYJICA3NTQ5
-NwkgIDEyNmU5CWRyaXZlcnMvdXNiL2hvc3QveGVuLWhjZC5vDQo+IA0KPiBBZnRlcjoNCj4g
-PT09PT0NCj4gICAgIHRleHQJICAgZGF0YQkgICAgYnNzCSAgICBkZWMJICAgIGhleAlmaWxl
-bmFtZQ0KPiAgICA1Mjg5NwkgIDIyMzQ0CSAgICAyNTYJICA3NTQ5NwkgIDEyNmU5CWRyaXZl
-cnMvdXNiL2hvc3QveGVuLWhjZC5vDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RvcGhl
-IEpBSUxMRVQgPGNocmlzdG9waGUuamFpbGxldEB3YW5hZG9vLmZyPg0KDQpSZXZpZXdlZC1i
-eTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KDQoNCkp1ZXJnZW4NCg==
---------------igYf0v5aAHmtcgkvWfha5CqD
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Your original proposal of making the entire TYPEC subsystem depend on
+DRM is _not_ going to happen. In general, if I've now understood this
+correctly, this thing probable should be a "display interface bridge
+driver", similar to what you proposed in the previous version.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Note also that you could make it selected automatically, so there is
+no need for user selectable option if that's the preference. Kconfig
+and Makefile gives you options on how to do that. For example, maybe
+this Kconfig works (or does not, but something like it will):
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
+index a250afd8d662..7487024ba2ce 100644
+--- a/drivers/gpu/drm/bridge/Kconfig
++++ b/drivers/gpu/drm/bridge/Kconfig
+@@ -30,6 +30,15 @@ config DRM_AUX_HPD_BRIDGE
+          Simple bridge that terminates the bridge chain and provides HPD
+          support.
+ 
++if DRM_AUX_HPD_BRIDGE
++
++config DRM_AUX_HPD_TYPEC_BRIDGE
++       tristate
++       depends on TYPEC || !TYPEC
++       default TYPEC
++
++endif /* DRM_AUX_HPD_BRIDGE */
++
+ menu "Display Interface Bridges"
+        depends on DRM && DRM_BRIDGE
+ 
 
---------------igYf0v5aAHmtcgkvWfha5CqD--
 
---------------U1zNNy0zDczPsawwTlYAN2iq--
+thanks,
 
---------------TEFMu9nrGOax3HN0PtapF02y
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmkIrWMFAwAAAAAACgkQsN6d1ii/Ey83
-zAf/V8o9him1m5n2Cy1Eu+4EImq5rnOS7huVQzH57w39s2/UjORPn5xR/t6WanpzOnSI0ogQdHHZ
-kYxY+J7ecJCcU2YgK3LUq/w3I3Utf9lZutMteCeeTv0KaP1rJnTquK4tJvTXsfVbjkbrqSSN1ooJ
-X0HdP5wgOqOxs05tluo0lpL4dRrtsZHkCsviMqCYQYrxUHp9UOb37FS+FEQiKwyAxXI1zIUH71lG
-ArUaKU4eJcD1/LxEu6SZEHryOSKtg132w+pEOHXPqRKarOTRmY+mSmd4bulWZOGtqDVsK9s9wnvI
-+oC9Z1WnSCRooLIj+A5NgkAIdYDzUTNPSxanTWhfgA==
-=WwW0
------END PGP SIGNATURE-----
-
---------------TEFMu9nrGOax3HN0PtapF02y--
+-- 
+heikki
 
