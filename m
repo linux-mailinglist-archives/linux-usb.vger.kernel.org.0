@@ -1,120 +1,105 @@
-Return-Path: <linux-usb+bounces-29991-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-29988-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BC83C2A289
-	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 07:21:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32BCDC2A0ED
+	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 06:25:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ADA03ABAC4
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 06:21:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FAE4188B9BD
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 05:25:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7991E28DEE9;
-	Mon,  3 Nov 2025 06:21:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8AFA28DB3;
+	Mon,  3 Nov 2025 05:24:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bt5enmgY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G4VD1FwC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD4534D3A5;
-	Mon,  3 Nov 2025 06:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75BA241695
+	for <linux-usb@vger.kernel.org>; Mon,  3 Nov 2025 05:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762150861; cv=none; b=Bxux966oxN0/su1kni3VUzm1gmC6BXFSPPIXODaVMhaDH2k3xldwh+1bwE4Kgi1kkppWn8LCwGA1/pwm0LCoK0m4nU6kmRUPQvMblzajOGRe4rI/Bim/Ni1XgT8ZncveXTrDIYBh/DSGrtzPJp12Z/Pu6u7if9UPcD5WQyKG7yU=
+	t=1762147496; cv=none; b=lG/vdzf2depujZFHebI1yNxdY8LGiER2yaymtc4kIL5tFCxMERWeYtd9g0awIEG1PSjAqybqGGGAlYoxNgd4HRdpLrusgNWBE9Ap6Yz3HveQG+VDEngs9aWmqq7qXXqpyYg4ZalsrXpTdbs+YHjfLkRlfXjq6qFKMUafULRVtN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762150861; c=relaxed/simple;
-	bh=3oluBvHH0h8kKPf4YzZkXH4AKBNMaJ+LHhxbNQE8Fr0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DBPq7sR11JmpjuM2xYdv7pXqAe1RKDZ3TFXw+aJqeesuOCTwwDj1CblmTNlNw65+6FhogCMgN9Vi3/+8GuJ7XdAyHkbCGE4IIYz57ADBwmIsausDeUp/Vvm2P2lhOlsqe2suDdgYaraUsvHtp6Vc+ONxHYcSqovXfOWsJrU4Ql0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bt5enmgY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D41FC4CEE7;
-	Mon,  3 Nov 2025 06:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1762150859;
-	bh=3oluBvHH0h8kKPf4YzZkXH4AKBNMaJ+LHhxbNQE8Fr0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bt5enmgYXPe/vFyIfEVvdj4yvMjyHwxBuPKg9JJtb986W55o/A9C28nt2bkG/OpBm
-	 oCUTcXPz2bsRC7+FO5SQgrTfTJe+rO5V6UwovtD6+f4JWA9uWe/SnFPMi6Tkw9xuI/
-	 ZmskcrfiVz+qlH9MJpkGauYF36KyH6oOS16knaVM=
-Date: Mon, 3 Nov 2025 11:07:43 +0900
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Haotian Zhang <vulab@iscas.ac.cn>
-Cc: Bin Liu <b-liu@ti.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: musb: ux500: Fix PHY resource leak in error path
-Message-ID: <2025110336-barrack-agent-b418@gregkh>
-References: <20251103020204.796-1-vulab@iscas.ac.cn>
+	s=arc-20240116; t=1762147496; c=relaxed/simple;
+	bh=uilIMW8H9xyz5+Zkt1AKDQxeML2GO3cuH76cUPnpI6k=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NhJ5XWIb/Trzmleyr40e9xJJaIJT3/ciCnBWXTVW9ZhXMfjj0V8sRB25iOdjV3vzx3SxozvofM9nePcTYN6JAkJTHzE0mHxBn26H9ZmwVB4627oOPKLL0HROG2qk1UlaPFrlDn9K9U0Za0lJNMcNCv3P/+XZqCOvsN7Plv8hTi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G4VD1FwC; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-27c62320f16so46619005ad.1
+        for <linux-usb@vger.kernel.org>; Sun, 02 Nov 2025 21:24:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762147494; x=1762752294; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YCP+d3HGNTVLSyaVEuAKYg438nXFEAHL1ebhNeuJAzg=;
+        b=G4VD1FwCEZ4N72jGjY3t89dSUESe3PM0zX/3scLxw1ZTpTN3xwYIiSyvx+DXdbFV0X
+         7nZPlApk26xDPrPHr2LI5nxF2dkFW3sc3Zfo1mzbJdJYpaOP1GH4pMYuei9If9Hgshxz
+         SlOtPJ5zZHK2uIL2xJ+A4yy6AaLuAWaXLKDjO2232JtnWwIWqSHa11qQ+WsCnYdX8HDU
+         k0L+oYHLHI9lJtJt/UQG2LS56Qtn1/6nYrRhoRvrJxpfI+VE7T+iZmegAjUDki1SGrBI
+         GA5M9zXF8DWNLEtsRIEOfxvO5WKb8m9WJbmpdmfWQvih5wTfrNtq5Q3XA8dhDDxT3jgz
+         pO1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762147494; x=1762752294;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YCP+d3HGNTVLSyaVEuAKYg438nXFEAHL1ebhNeuJAzg=;
+        b=lqMf6WsE4kIbsMaYgVuclPQTDUb8RpL/wDxWNYFKsMHEGfT2FmE+YHU3KkFHe4n88V
+         VYo1ioWE+h+Dc2xbEt5M/WcCK9KccfTQPlu1BrCg3SJlR7e30pSPuMmkJmEl1G+KGCU+
+         D+otb2GfRaxGG0AvPXtB9S8QQw2TpnHXq3f+qdRm7n/TfMk8h7ClTKdrD2OycNj57Vew
+         bSJhjdfqTw2bg9M2l8+LeG2XLEEnp/iGV/+XM4EeQ66l7aNv6NybLaVh+csFDuZTA5fQ
+         /ZTRr3g1sLjkAKAh6/DoASGAU3VjBm+7fVVu+KV+J8m/YHyUW76D5fQ4/QZhD9xy39Fz
+         AfPw==
+X-Forwarded-Encrypted: i=1; AJvYcCWqGlrNKw5hFbbNrSuPPxDXudnAv6d7Jr0agcTZugS0BLeca/7NMaWg9yqn6STjsms5xvuOcQMlxfs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCpeh6WSLo4+KUBqHQhbabNGTbqhxM0i4+dMBJo0N38l2LSvS8
+	amOfHsoQrbBvv+uOz1OSphdqsWlHPztBv6qQAhSDX9N8bYsitm6DZSPlefOT55bC5YsukenaEm/
+	z4mDzsg==
+X-Google-Smtp-Source: AGHT+IF7/Pn1hgg2i1g93sjcOH5bk7bVbGcbG0UO5+dnz2j8grS5JSSlFQ2hgGTC6kNaDPYXt9QbE67Lqy8=
+X-Received: from plsl2.prod.google.com ([2002:a17:903:2442:b0:268:c82:4230])
+ (user=badhri job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2348:b0:272:c95c:866
+ with SMTP id d9443c01a7336-2951a3b6b8amr164269915ad.20.1762147494261; Sun, 02
+ Nov 2025 21:24:54 -0800 (PST)
+Date: Mon,  3 Nov 2025 05:24:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251103020204.796-1-vulab@iscas.ac.cn>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.930.gacf6e81ea2-goog
+Message-ID: <20251103052450.1028813-1-badhri@google.com>
+Subject: [PATCH v2 0/1] TCPM logbuffer wraparound
+From: Badhri Jagan Sridharan <badhri@google.com>
+To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
+	badhri@google.com
+Cc: amitsd@google.com, kyletso@google.com, rdbabiera@google.com, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 03, 2025 at 10:02:04AM +0800, Haotian Zhang wrote:
-> The ux500_musb_init() function calls usb_get_phy() to obtain a PHY
-> resource, but fails to release it with usb_put_phy() when
-> usb_register_notifier() fails. This leads to a resource leak as the
-> PHY reference count is not properly decremented.
-> 
-> Add usb_put_phy() call in the error path before returning to ensure
-> the PHY resource is properly released when notifier registration fails.
-> 
-> Fixes: 0135522c4898 ("usb: musb: ux500: add otg notifier support")
-> Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
-> ---
->  drivers/usb/musb/ux500.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/musb/ux500.c b/drivers/usb/musb/ux500.c
-> index 8c2a43d992f5..14c5e986937e 100644
-> --- a/drivers/usb/musb/ux500.c
-> +++ b/drivers/usb/musb/ux500.c
-> @@ -155,6 +155,7 @@ static int ux500_musb_init(struct musb *musb)
->  	status = usb_register_notifier(musb->xceiv, &musb->nb);
->  	if (status < 0) {
->  		dev_dbg(musb->controller, "notification register failed\n");
-> +		usb_put_phy(musb->xceiv);
->  		return status;
->  	}
->  
-> -- 
-> 2.50.1.windows.1
-> 
-> 
+This is a follow up on a previous discussion:
+https://lore.kernel.org/lkml/20230410073134.488762-1-badhri@google.com/.
 
-Hi,
+With this change, TCPM log buffer will now wrap around when full and
+will not self-clear upon being read (dumped). A Kconfig option and a
+corresponding debugfs file node are introduced to allow opt-in back to
+the previous, non-wrapping, self-clearing behavior if required.
+This is an interim step while TCPM logging infrastructure is migrated
+to the standard event trace system. 
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Badhri Jagan Sridharan (1):
+  tcpm: Wraparound tcpm log and dont clear them when read
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+ drivers/usb/typec/tcpm/Kconfig |  8 ++++++
+ drivers/usb/typec/tcpm/tcpm.c  | 51 ++++++++++++++++++++++++++++++++--
+ 2 files changed, 57 insertions(+), 2 deletions(-)
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+base-commit: 18514fd70ea4ca9de137bb3bceeac1bac4bcad75
+-- 
+2.51.1.930.gacf6e81ea2-goog
 
-thanks,
-
-greg k-h's patch email bot
 
