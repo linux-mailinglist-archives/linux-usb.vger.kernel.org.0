@@ -1,146 +1,131 @@
-Return-Path: <linux-usb+bounces-30010-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30011-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9F18C2B984
-	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 13:18:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2FB2C2BC73
+	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 13:46:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7E7DE349398
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 12:18:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 872AF18962AE
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 12:46:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 032C130AD08;
-	Mon,  3 Nov 2025 12:18:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CA5930F801;
+	Mon,  3 Nov 2025 12:43:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h5VYnZri"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="AuX4wjoP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECFA78F2F
-	for <linux-usb@vger.kernel.org>; Mon,  3 Nov 2025 12:18:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1373002CB;
+	Mon,  3 Nov 2025 12:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762172302; cv=none; b=msijqt0S7xzIbK+vPHmo6Xk+vYKSGWq2bYdjsRjy5WJrQftgF67jVpMukVCLN8L4zo9pY6YcSk0dKOEXncCwlq5AzBK1iI5aTy+2765VwowcJMQbIsHuYrAsgo9S/Mta9TpSlIdkwYlX3SdiB00fJX3goyUDMV4CRh1G4/vWNsI=
+	t=1762173816; cv=none; b=G2T1VdLFFk5o5J3RrOtx72HJpftqRdNIDC1V7q6yEZEVZSgUAV1kyVHoUzx3PjSTOo/YzElwPKjMfni42bhRZSroM+Ys3hxXzKv+AjyZN2REtvvMjpJIQGQUU61gmaSlDHH0YH/VzmLxoC/N9DaaOfEE8aU7y5ARNgIFss/On3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762172302; c=relaxed/simple;
-	bh=lCBHxR560VrCvyH/VPyQ9rGtbUvg+uTp3AfswUNaCwU=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=BuUzeeO61ANYAEMvvIUo1Xs2ZIjL6nLaOZvZJNb1cT+mXeNgS50irpP/5PiTpMeBjKJb6JmwE66u7xvnjs5C5AQqV+OnWS117Gd7xQe7dXw4NCPb7TxX2yDiiIrQJQv3NCzoyLno3ZuO4CIm222xu/j+th9cNUXal6i26aI3h0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h5VYnZri; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b9ceccbd7e8so743895a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 03 Nov 2025 04:18:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762172300; x=1762777100; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2LD8GK3pIPbr0iXGHwDU1sX6lg+zmtmtG9m7gSTkkV0=;
-        b=h5VYnZri6xNwSQol3pNsLuHJmX6AwlOu/WL09o/gVftXSrN3SQTrtJxTtAOYXU6piS
-         l2OnNx0a9S9xPlJqT+rmkA0EnKOPaOItrO4p3WjbzG6DZuJyrATHW1cZy+NsmvV8u1U7
-         kRUJwmYxoDbfMPnUO8jZnlc+nJcWid5vIV2vzja425s4LuCbS5XgSq7gmydLiaxkKaW0
-         OFy0Hw6UVnQ8U4ABim7MuIPMFchT0W+QMVsv3Z685Hkock+wcon/WhDv/Q8O3f99mAG5
-         c6uDxy5xlzabw7YIrLJxoC3604gp8KiEGg+jc038OujLWZCa6JO69E+JZQS6rYwELR/N
-         Adeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762172300; x=1762777100;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2LD8GK3pIPbr0iXGHwDU1sX6lg+zmtmtG9m7gSTkkV0=;
-        b=msQf8N/PjlWX9rNV27JCPwvPb17C5JB9NhMygoJ9/afj1YabbSsvwgK1LIOx4TlQXS
-         LxGk6jfADSrTuARFZpbY9hS9jG7WUjo9e6XRmT5HWKwIom8ZuJa7kVtWqHsG5HHFqGOI
-         yC/M9+qlz7itqkU1bOJ+4xKyKe3CYfdnHavCG/5ym0tZotqgVi0t8U9yAgifZZaJqrKC
-         mpAI0Z6xOIOQFbeXla7gFiZrTDheO7ZHErXSHISI6cctCdXveKCLUzkQZet1G1mw2Mpg
-         oR0Y7MizYnzriIFbbKWL0JVO5v1KdI+bBysLtQREo70CIRmKwo0g1SK6c7rmrfjRSYwq
-         9Cqg==
-X-Gm-Message-State: AOJu0YzSBLUfvMibSUOlctYeYuQEc0rN5Qxtk8BnHYKZYmJZCEFY6VJP
-	zIoOz8BFtEGCpsoiWoDCZXkh9kj8l2S3sE/MQgRai8Nr4VXQmVyD7naJSv6f7taCJ7cswPjnyJa
-	v+dNdjw==
-X-Google-Smtp-Source: AGHT+IFYj2bc2+wvjxhjaaBXfWAhANMdDhDx7DCRHrEyTF9mpAjtjHhPdTtptoJl8tKopX/K0DGDgh01h+U=
-X-Received: from plcr17.prod.google.com ([2002:a17:903:151:b0:295:5580:89bd])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:db07:b0:295:5623:e59b
- with SMTP id d9443c01a7336-2955623e7e9mr91846145ad.32.1762172300352; Mon, 03
- Nov 2025 04:18:20 -0800 (PST)
-Date: Mon,  3 Nov 2025 20:17:59 +0800
+	s=arc-20240116; t=1762173816; c=relaxed/simple;
+	bh=/o9tG71EEc/iMjFAM9Wy+qUv/wuc1wyzjhUKJigFhvE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m8pm4tMZF+pn3H25Rk42czrTR8ELtUloX2oCRSyKiAhPDuZjg5AoMiwqy0pqir0QNYVkYMPtgcQWLpS33L6K6Bdy/UgwZlkNTdRMxFxQJMnaZf8QllXFlxfyT/HLHkVAVCPHLB1NMe6x7GCtK4WFyjRlsKaImI3sxPq/dXpweVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=AuX4wjoP; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=2OWb8B7AjPWQbju5DA5+PI3tJfQuIU+SzTXK3EFMlMY=; t=1762173814;
+	x=1762605814; b=AuX4wjoPIpyxH4NwpwwaXY7YU5O9rV0+P83Xf6d5iuyyDHw1Zv2yugIozXLlT
+	lzoY4nc9gBMWiQqsnSTHFN0X6G77Lr0K++a7w/tw49NNhReqXjFU3UERxE3UyQRazBF8ElV5R62tb
+	7qDOBJYb7mjwRc+xmtheqOSBjJWI2Fm1FVBC14J171uqtinEtJ71VPY0gVfpYsoYggqGOqdCnFg2U
+	hknUFW+uTJGGaeXSP2rcafufcqFX+sAd/ftWILAptCsB3rEFjqZBN51CsnKaOXXW1MI3I6HYmuCMt
+	bAfokjVfxUHVTshOXYMDxYeeG/hOnI5Re4eUoszDtiULUI3SeA==;
+Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	id 1vFtuD-00DRj5-0f;
+	Mon, 03 Nov 2025 13:43:29 +0100
+Message-ID: <77c5bfc6-e2e3-4606-8278-c64ab7a50dd7@leemhuis.info>
+Date: Mon, 3 Nov 2025 13:43:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.1.930.gacf6e81ea2-goog
-Message-ID: <20251103121814.1559719-1-khtsai@google.com>
-Subject: [PATCH] usb: gadget: f_eem: Fix memory leak in eem_unwrap
-From: Kuen-Han Tsai <khtsai@google.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kuen-Han Tsai <khtsai@google.com>, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] rust: usb: fix broken call to T::disconnect()
+To: Danilo Krummrich <dakr@kernel.org>, gregkh@linuxfoundation.org,
+ ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+ gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+ a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu
+Cc: linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org
+References: <20251103110115.1925072-1-dakr@kernel.org>
+From: Thorsten Leemhuis <linux@leemhuis.info>
+Content-Language: de-DE, en-US
+Autocrypt: addr=linux@leemhuis.info; keydata=
+ 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 MEK4
+In-Reply-To: <20251103110115.1925072-1-dakr@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1762173814;1170305c;
+X-HE-SMSGID: 1vFtuD-00DRj5-0f
 
-The existing code did not handle the failure case of usb_ep_queue in the
-command path, potentially leading to memory leaks.
+On 11/3/25 12:01, Danilo Krummrich wrote:
+> A refactoring of Device::drvdata_obtain() broke T::disconnect() in the
+> USB abstractions.
+>  [...]
+> This slipped through, since the USB abstractions are globally disabled.
+> However, the USB tree recently enabled them, hence it showed up in
+> linux-next.
+> 
+> Reported-by: Thorsten Leemhuis <linux@leemhuis.info>
+> Closes: https://lore.kernel.org/all/1c8afbc0-e888-4702-9e4e-fa8aef0f97ae@leemhuis.info/
+thx, that fixed things for me:
 
-Improve error handling to free all allocated resources on usb_ep_queue
-failure. This patch continues to use goto logic for error handling, as the
-existing error handling is complex and not easily adaptable to auto-cleanup
-helpers.
+Tested-by: Thorsten Leemhuis <linux@leemhuis.info>
 
-kmemleak results:
-  unreferenced object 0xffffff895a512300 (size 240):
-    backtrace:
-      slab_post_alloc_hook+0xbc/0x3a4
-      kmem_cache_alloc+0x1b4/0x358
-      skb_clone+0x90/0xd8
-      eem_unwrap+0x1cc/0x36c
-  unreferenced object 0xffffff8a157f4000 (size 256):
-    backtrace:
-      slab_post_alloc_hook+0xbc/0x3a4
-      __kmem_cache_alloc_node+0x1b4/0x2dc
-      kmalloc_trace+0x48/0x140
-      dwc3_gadget_ep_alloc_request+0x58/0x11c
-      usb_ep_alloc_request+0x40/0xe4
-      eem_unwrap+0x204/0x36c
-  unreferenced object 0xffffff8aadbaac00 (size 128):
-    backtrace:
-      slab_post_alloc_hook+0xbc/0x3a4
-      __kmem_cache_alloc_node+0x1b4/0x2dc
-      __kmalloc+0x64/0x1a8
-      eem_unwrap+0x218/0x36c
-  unreferenced object 0xffffff89ccef3500 (size 64):
-    backtrace:
-      slab_post_alloc_hook+0xbc/0x3a4
-      __kmem_cache_alloc_node+0x1b4/0x2dc
-      kmalloc_trace+0x48/0x140
-      eem_unwrap+0x238/0x36c
-
-Fixes: 4249d6fbc10f ("usb: gadget: eem: fix echo command packet response issue")
-Cc: stable@kernel.org
-Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
----
- drivers/usb/gadget/function/f_eem.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/f_eem.c b/drivers/usb/gadget/function/f_eem.c
-index 6de81ea17274..edbbadad6138 100644
---- a/drivers/usb/gadget/function/f_eem.c
-+++ b/drivers/usb/gadget/function/f_eem.c
-@@ -477,8 +477,13 @@ static int eem_unwrap(struct gether *port,
- 				req->complete = eem_cmd_complete;
- 				req->zero = 1;
- 				req->context = ctx;
--				if (usb_ep_queue(port->in_ep, req, GFP_ATOMIC))
-+				if (usb_ep_queue(port->in_ep, req, GFP_ATOMIC)) {
- 					DBG(cdev, "echo response queue fail\n");
-+					kfree(ctx);
-+					kfree(req->buf);
-+					usb_ep_free_request(ep, req);
-+					dev_kfree_skb_any(skb2);
-+				}
- 				break;
- 
- 			case 1:  /* echo response */
--- 
-2.51.1.930.gacf6e81ea2-goog
-
+Ciao, Thorsten
 
