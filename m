@@ -1,59 +1,77 @@
-Return-Path: <linux-usb+bounces-29999-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30000-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA0FEC2B042
-	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 11:21:40 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07B5CC2B0A2
+	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 11:27:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CF803B2F4F
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 10:20:46 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 779FC4EE2B9
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 10:26:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8282FD7C3;
-	Mon,  3 Nov 2025 10:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05092FCC10;
+	Mon,  3 Nov 2025 10:26:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DzQHLV6+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eGwKj5nz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2817F2E62A2;
-	Mon,  3 Nov 2025 10:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BDA28E5
+	for <linux-usb@vger.kernel.org>; Mon,  3 Nov 2025 10:26:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762165240; cv=none; b=VK83yjbZHh2cyng0fXHrKQvWCylW6qPueYi9pBrNvCyTRcFEPGjYysKLyhfny2VA28c1OeKiqchOeh5Av/bajtzn2pp6HTaQmfFosLlblo+Zo93zxIUjP8RFNUwHw/kTvKDiqunaQQQczvReFraCXZUGvzt74K4W9gtaQFIK1nk=
+	t=1762165604; cv=none; b=g2CugfZDL0tQDEJILO3+4ObeiueDCmg/Sc9ZifmXxFnkVOGtDbjwC8obcpyklcsTU5SkuJBbd7BKyWotxs++6WoycJZI22F4mhuLK1s0WCLNslwkGHkbXb4EkxpgAxrKEiH8oUBiKaaCIMxc4xaQyuNHzokyXMoE/Vux7DfVs5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762165240; c=relaxed/simple;
-	bh=ObPhYtxLEFCRJdL3TzzK7cHNAWLFBFSOqEVsLoRN/yQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EATVtRPDXHpIYy8a2srG6U8pb6NJyYMHBoPg9cfvfAiRUUOAYki/oegV81cPIbJlwRxBnjLMerdQhNP8l/KkBTWgvjzT6PtwRTqWTc7deNslJIiKIbIxz2FWTJ6p6XGEAR34LivD8VR+J4dC3M/ojFwdRqkflJbt0SaeOVmgdsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DzQHLV6+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 841F1C4CEE7;
-	Mon,  3 Nov 2025 10:20:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762165239;
-	bh=ObPhYtxLEFCRJdL3TzzK7cHNAWLFBFSOqEVsLoRN/yQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DzQHLV6+pLdtIvJtVgh5twpfjs0l51RZpkCWnRdD81586xyoC/RlpdRcoJPqxt53U
-	 a2p6rVg24/uv4zKBpYDx/TuyduvNy6cvZjkoR4dxGONZfjus2ZcCy1dGLxeKnsE/m/
-	 zeciFN9xV0+Snf6QXcanZxq0zrErAkDjHNDsz0F0ATz/HK4gLCkiGJvvzngt6vi9KC
-	 IOcNBeWF4H+dZGxlUu21HqSoHQmqqAjY59boiENnvQT47bTMVweSh5s5fH2iftCui5
-	 ZPn5829ugSE6usM+eYmksJwrlvw+LinXykKsb8Xci7Teh/4/OHC8YwIfKSpBlLCEOi
-	 6m1nrQHt3v7Kg==
-Date: Mon, 3 Nov 2025 11:20:37 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH] dt-bindings: usb: renesas,rzg3e-xhci: Add RZ/V2H(P) and
- RZ/V2N support
-Message-ID: <20251103-thankful-jackal-from-saturn-5deef9@kuoka>
-References: <20251101042440.648321-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	s=arc-20240116; t=1762165604; c=relaxed/simple;
+	bh=CM1AB5cnJ8kFOHVLpsLs1O6oOL85tKdGx933Ifs71L4=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XfLMsZ8M9jxBZAZOkmf2CQeM/V2EJCprVpsb159KZ2CSjjxDh3QdgOuE8EX+NPZ91xeio4o3LsHiQyYdKruxAT+vug+6g809FulD8oPkwljk7F04OtMCpJ7uMtbmy+pb29O9H1J0WkWXXzPcTUwMKpomOU3ScnbUXync0rV/ZXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eGwKj5nz; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762165603; x=1793701603;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=CM1AB5cnJ8kFOHVLpsLs1O6oOL85tKdGx933Ifs71L4=;
+  b=eGwKj5nzHvOVfW7yq785Oj1HOTLatK3YLfkG9atZSYf/4ORz9gbFtw/r
+   mfB+oWbj+p5FGW4/MOnsxgKgJRikPw9OLhbZYhxnrNdJ8Oshcl7ITfNzR
+   nSOkCTGcOaed7RMjkjSiEJ0AwCQkbNc0qFomFfVDXBsL+Hski5MzauwO1
+   17E9SspnLeL83u6au+w9HV5HV7Z+BG237YB3Mog82ZxcTCntlkYhzeDvj
+   OH3OlsC9qm6vb1vjYjpViyEn2KbrsAlRDGr9Ujx40BuFPfmjfue4GGwRi
+   BeFpM27TfRkHbmg7FjwPHcp+mpiD1NaYk8bEJ+7iIsZAN2LsK16+qjwwE
+   w==;
+X-CSE-ConnectionGUID: UL1SewHrSgO/y2JMy0MkkQ==
+X-CSE-MsgGUID: NDSTeipjTq+N2zIeTgF3Eg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="64387975"
+X-IronPort-AV: E=Sophos;i="6.19,275,1754982000"; 
+   d="scan'208";a="64387975"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 02:26:42 -0800
+X-CSE-ConnectionGUID: i058NeS7QISLwauEQcnyWg==
+X-CSE-MsgGUID: FkoE0GMEQCOR7rr81krCgg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,275,1754982000"; 
+   d="scan'208";a="186510790"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa007.fm.intel.com with ESMTP; 03 Nov 2025 02:26:41 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id E1E2995; Mon, 03 Nov 2025 11:26:39 +0100 (CET)
+Date: Mon, 3 Nov 2025 11:26:39 +0100
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Imre Deak <imre.deak@intel.com>
+Subject: Re: TB 5 Dock DP-Out non-functional
+Message-ID: <20251103102639.GE2912318@black.igk.intel.com>
+References: <q7k73t5utfjrpuf45ynig72eojpixepjqccvsfaqt6rg4wptst@se6ekc2eg3sv>
+ <20251103055659.GD2912318@black.igk.intel.com>
+ <rnp5dzfud5feidxi2qx63cxezukyszuzpj7v5f5gyoqtys3uff@e72nlrudjzxb>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,31 +80,57 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251101042440.648321-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <rnp5dzfud5feidxi2qx63cxezukyszuzpj7v5f5gyoqtys3uff@e72nlrudjzxb>
 
-On Sat, Nov 01, 2025 at 04:24:40AM +0000, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Hi,
+
+On Mon, Nov 03, 2025 at 09:54:50AM +0100, Frederik Schwan wrote:
+> Hi Mika,
 > 
-> Add device tree binding support for the USB3.2 Gen2 controller on Renesas
-> RZ/V2H(P) and RZ/V2N SoCs. The USB3.2 IP on these SoCs is identical to
-> that found on the RZ/G3E SoC.
+> On Mon, Nov 03, 2025 at 06:56:59AM +0100, Mika Westerberg wrote:
+> > On Sun, Nov 02, 2025 at 04:39:07PM +0100, Frederik Schwan wrote:
+> >> Setup:
+> >> TB 5 Host (Lenovo P1 Gen8)
+> >>   -> TB 4 Dock (0108:2031 reports as "ThinkPad Thunderbolt 4 Dock")
+> >>     -> USB Devices, two 3840x2160, LAN attached
+> >>   -> TB 5 Dock (0108:234d reports as "ThinkPad Thunderbolt 5 Smart Dock 7500 - 40BA")
+> >>     -> nothing but power supply
+> > 
+> > You are saying that you have two docks connected like this:
+> > 
+> >   Host -> TB 4 -> 2 Monitors
+> >     |
+> >     v
+> >    TB5 (nothing but power)
+> >     
+> > And with this the TB4 dock monitors don't work? But without the TB5 dock
+> > they work fine?
+> > 
+> > It would be good to have simplest possible case where this reproduces then
+> > provide exact steps of that, like
 > 
-> Add new compatible strings "renesas,r9a09g056-xhci" for RZ/V2N and
-> "renesas,r9a09g057-xhci" for RZ/V2H(P). Both variants use
-> "renesas,r9a09g047-xhci" as a fallback compatible to indicate hardware
-> compatibility with the RZ/G3E implementation.
+> Sorry for the bad report. As a Arch Linux bugwrangler I should've known how to report this in
+> a non-confusing way :/
+> 
+> I added the TB4 Dock just to make sure that the only variable is the Dock (to rule out DP cable, monitor etc.).
+> So here comes a minimal setup:
+> 
+> To repro:
+> 1. Boot (Kernel 6.17.7-arch1-1)
+> 2. Connect TB5 Dock with power and 1 DP screen attached
 
-We can read patches. Don't explain that. Explain the hardware, which DT
-maintainers cannot read because we do not have datasheets.
+Okay this is much more clear :)
 
-You almost never need to explain in 50% of commit msg (that's the
-biggest paragraph here) WHAT you are doing in the patch. What you should
-always focus is WHY you are doing and that's the feedback I already gave
-you for sure.
+> Expected behavior: DP screen comes up and shows output
+> Actual outcome: DP screen blinks for 2-3 tries and goes off again
+> 
+> dmesg.log attached as well as the bandwidth script output.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks! Unfortunately the log is still truncated probably due to added
+debug. Can you add log_buf_len=2M or something like that to the kernel
+command line too so we can get the whole log.
 
-Best regards,
-Krzysztof
-
+Regarding the script, that's odd too but it could be that you have more
+than one host router there (it is not clear from the truncated log). You
+need to build the tbtools binaries though.
 
