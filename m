@@ -1,173 +1,89 @@
-Return-Path: <linux-usb+bounces-30017-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30018-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D44A7C2E0D1
-	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 21:39:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 851FCC2E57A
+	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 23:59:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0C523BE981
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 20:38:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76A953A9525
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 22:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 269132C0F67;
-	Mon,  3 Nov 2025 20:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFFA72FD1D6;
+	Mon,  3 Nov 2025 22:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+ZNbBgS"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ueEa7lWd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD2D2BF01D
-	for <linux-usb@vger.kernel.org>; Mon,  3 Nov 2025 20:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35FDD2E6CD7;
+	Mon,  3 Nov 2025 22:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762202303; cv=none; b=LxMuHYweQXEmMS+IJyr9Yl3g98w/VQ+YXNjnHot98h1FXIMKFgpjeNXvS59hhfu9jGy3WxNLvYSt1OVrPctPRlBsjJXQ28N/36DFOY9Wf+nPittce3RCWZRZOSB65HwUKnRaUwchusM4HfNoH4XEm06QmIbgI1f+HWqcDn1okNQ=
+	t=1762210610; cv=none; b=nbEiC8VbRdYcNjB8W3Qo74J2A7Y/stfQyNbLnYP8iKfB8lJz3+PlKd/OK3VlHj37M5oFQ62l6/mTFQ2TiwFIL3Rw/sA2GXz/njSCb8cU5o0Cb/QiZxbLNkGuA6g1PFObMSykdLz3jBlG4Cb4yBcqQhfRmiC5EEdS0kyz+ethIl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762202303; c=relaxed/simple;
-	bh=ixbbKT/7jqNzUp3sJiQZjwNrkqcxk+Z2mOz6dmayOHU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pePZLMIKu7AoKZa29MemXJ4ZU2APqxahTnHsvWoV3muSlkkC3GT5kR7xs397RMbLbKsTno8E2IeZJp9JH/rE2CWnmuRJ5LRB/UN3g7jiaaEI4rijXJ3QhYcmil9fRp0KUGFVoyvlg66wellXDswM13J5HrJ5eIXbdi3KtDU/Y0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+ZNbBgS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F600C16AAE
-	for <linux-usb@vger.kernel.org>; Mon,  3 Nov 2025 20:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762202303;
-	bh=ixbbKT/7jqNzUp3sJiQZjwNrkqcxk+Z2mOz6dmayOHU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=l+ZNbBgSXx5aDZFRoc9b5owIKB7nwcCnLzZpf2Tr5xIStNtAtwSviif+8y8gjxA/q
-	 zGOEYMCDeNemPauW5Y1nBiWw2GGvcvBMYehVNr1cfFVpN5ErhRW1UGBv9JEsepnysG
-	 0lgVLDmZJ3BNUurgnHimUzJpDzZMkeBCp2lEhL9z8Iw2wg0Q7uL0iMK1GJr6YGIEqx
-	 c6sPprFXpr9+4vHUonR34doW7juV3ZZPS/qDDTas0mjl0sqiWXFtAhKJ/7t5vDNCur
-	 7jhPd82BJJiRh68G/t7vsvas09CEtjYPsU1t4ZyGn7yttZKhS8sWggBpXemxz+B9eE
-	 gJXckVQ1iL7Ig==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-6567609a49dso2394021eaf.2
-        for <linux-usb@vger.kernel.org>; Mon, 03 Nov 2025 12:38:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWJDWE3X14pgUawKzZYbuD1r7mcqSLk8vZLEXWLYt38L/xfXbc1eu18JwOxjjdUOf/KzZoqRXljLWU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu3RnuXOwv2G7LCMdyWW/SJ8tarnW5temx79B99ZqUbYEbtNPy
-	CQSdMU3InmJU5/sokRyIfBPYgDVcMXsUMg+2WHFFBh7esVKxHSdcP6luMgL/+bShg8UOXymeGd3
-	U5k4owviD/dqx5AilRIveiCV15b4VWMY=
-X-Google-Smtp-Source: AGHT+IFrdJTnVd9pdPPOBL58HjDw/lTNVI1R1ajOYhQDDMukScMp485ggihIVn1/BiIBlZMX7crGxhCf9XNFtvOYS64=
-X-Received: by 2002:a4a:ee0e:0:b0:651:ce89:27b8 with SMTP id
- 006d021491bc7-6568a00e5d5mr6457806eaf.0.1762202302577; Mon, 03 Nov 2025
- 12:38:22 -0800 (PST)
+	s=arc-20240116; t=1762210610; c=relaxed/simple;
+	bh=kBSQuQaccg5Qh0Xy8cIaqRbglLmVLW1HoYw7SoIodBg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L95fhVxucKvNy/ct6xFZsUhPZnhUCR8NIcHIWWX/AFCLnmD0tlaiSKh7o/HEPFJwgjsTO+e0xrBSlA+34IHfxeUPhjJRi70gQptZ/Qgr69nYP3YtJr0SAEL7DCZFCzTDRio3duCzBRl7NYo+qXyn/muUWdNOo2NHhqXKF3H9vDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ueEa7lWd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B861C4CEE7;
+	Mon,  3 Nov 2025 22:56:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1762210609;
+	bh=kBSQuQaccg5Qh0Xy8cIaqRbglLmVLW1HoYw7SoIodBg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ueEa7lWd0st/Q7g//5sQNqDuaOKDJFGHIG9luktVM4nYLJ0Ry3Am6O93nnMVijCbR
+	 2DpW7HlGp82w3MfgQbr86MviL8SOazG2852uosetj1h8BOs4a7Yt2gptGdziztzJlT
+	 CnrD4GSCvpa/MsIjzh6M5p7Ear/lU6pYRxIDb0B0=
+Date: Tue, 4 Nov 2025 07:56:47 +0900
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
+	linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH] rust: usb: fix broken call to T::disconnect()
+Message-ID: <2025110425-anew-squall-2ac8@gregkh>
+References: <20251103110115.1925072-1-dakr@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251026050905.764203-1-superm1@kernel.org> <20251026050905.764203-5-superm1@kernel.org>
- <CAJZ5v0hXR5wb5chsqT1Vu5i5ucneeGpbRDEU9TPVxZVCAfuiow@mail.gmail.com> <06cd1b43-e765-4597-9f61-5058c8a13425@kernel.org>
-In-Reply-To: <06cd1b43-e765-4597-9f61-5058c8a13425@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 3 Nov 2025 21:38:11 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iH4rvRPB5XVgTKV-9aKimYOM5NkjskCTUX31eyoB0_eQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bkYnk_805y71jbTKIR5ivNrzQaf6fI4vWybP9d6lc31RvZY0gwuRQxXpTY
-Message-ID: <CAJZ5v0iH4rvRPB5XVgTKV-9aKimYOM5NkjskCTUX31eyoB0_eQ@mail.gmail.com>
-Subject: Re: [PATCH v9 4/4] USB: Pass PMSG_POWEROFF event to suspend_common()
-To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>, 
-	Len Brown <lenb@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
-	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, AceLan Kao <acelan.kao@canonical.com>, 
-	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
-	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
-	Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251103110115.1925072-1-dakr@kernel.org>
 
-On Mon, Nov 3, 2025 at 9:10=E2=80=AFPM Mario Limonciello (AMD) (kernel.org)
-<superm1@kernel.org> wrote:
->
->
->
-> On 11/3/2025 2:09 PM, Rafael J. Wysocki wrote:
-> > On Sun, Oct 26, 2025 at 6:09=E2=80=AFAM Mario Limonciello (AMD)
-> > <superm1@kernel.org> wrote:
-> >>
-> >> suspend_common() passes a PM message indicating what type of event
-> >> is occurring.  PMSG_POWEROFF is intended to be used when hibernate
-> >> callbacks were utilized for turning off the system.
-> >>
-> >> Add a new callback hcd_pci_poweroff() which will
-> >> determine if target state is power off and pass PMSG_POWEROFF as the
-> >> message.
-> >>
-> >> suspend_common() doesn't do any special handling with this case at
-> >> the moment, so there are no functional changes in this patch.
-> >>
-> >> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
-> >> ---
-> >> v9:
-> >>   * Reword commit message (Bjorn)
-> >> v8:
-> >>   * Drop SYSTEM_HALT case
-> >> v7:
-> >>   * Reword commit mesasge
-> >> v6:
-> >>   * Fix LKP robot issue without CONFIG_PM_SLEEP
-> >> v5:
-> >>   * New patch
-> >> v4:
-> >>   * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1=
-@kernel.org/
-> >> ---
-> >>   drivers/usb/core/hcd-pci.c | 11 ++++++++++-
-> >>   1 file changed, 10 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-> >> index cd223475917ef..959baccfb07d1 100644
-> >> --- a/drivers/usb/core/hcd-pci.c
-> >> +++ b/drivers/usb/core/hcd-pci.c
-> >> @@ -6,6 +6,7 @@
-> >>   #include <linux/kernel.h>
-> >>   #include <linux/module.h>
-> >>   #include <linux/pci.h>
-> >> +#include <linux/pm.h>
-> >>   #include <linux/usb.h>
-> >>   #include <linux/usb/hcd.h>
-> >>
-> >> @@ -531,6 +532,13 @@ static int hcd_pci_freeze(struct device *dev)
-> >>          return suspend_common(dev, PMSG_FREEZE);
-> >>   }
-> >>
-> >> +static int hcd_pci_poweroff(struct device *dev)
-> >> +{
-> >> +       if (system_state =3D=3D SYSTEM_POWER_OFF)
-> >> +               return suspend_common(dev, PMSG_POWEROFF);
-> >> +       return suspend_common(dev, PMSG_SUSPEND);
-> >> +}
-> >> +
-> >>   static int hcd_pci_suspend_noirq(struct device *dev)
-> >>   {
-> >>          struct pci_dev          *pci_dev =3D to_pci_dev(dev);
-> >> @@ -602,6 +610,7 @@ static int hcd_pci_restore(struct device *dev)
-> >>   #define hcd_pci_suspend                NULL
-> >>   #define hcd_pci_freeze                 NULL
-> >>   #define hcd_pci_suspend_noirq  NULL
-> >> +#define hcd_pci_poweroff       NULL
-> >>   #define hcd_pci_poweroff_late  NULL
-> >>   #define hcd_pci_resume_noirq   NULL
-> >>   #define hcd_pci_resume         NULL
-> >> @@ -639,7 +648,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops =3D {
-> >>          .freeze_noirq   =3D check_root_hub_suspended,
-> >>          .thaw_noirq     =3D NULL,
-> >>          .thaw           =3D hcd_pci_resume,
-> >> -       .poweroff       =3D hcd_pci_suspend,
-> >> +       .poweroff       =3D hcd_pci_poweroff,
-> >>          .poweroff_late  =3D hcd_pci_poweroff_late,
-> >>          .poweroff_noirq =3D hcd_pci_suspend_noirq,
-> >>          .restore_noirq  =3D hcd_pci_resume_noirq,
-> >> --
-> >
-> > I would defer this patch until you know what exactly suspend_common()
-> > will do for PMSG_POWEROFF because it may just be simpler to check
-> > system_state =3D=3D SYSTEM_POWER_OFF in it internally.
->
-> OK - in that case would you just take the first 3 for 6.19?
+On Mon, Nov 03, 2025 at 12:01:03PM +0100, Danilo Krummrich wrote:
+> A refactoring of Device::drvdata_obtain() broke T::disconnect() in the
+> USB abstractions.
+> 
+> """
+> error[E0599]: no method named `data` found for struct `core::pin::Pin<kbox::Box<T, Kmalloc>>` in the current scope
+>   --> rust/kernel/usb.rs:92:34
+>    |
+> 92 |         T::disconnect(intf, data.data());
+>    |                                  ^^^^ method not found in `core::pin::Pin<kbox::Box<T, Kmalloc>>`
+> 
+> error: aborting due to 1 previous error
+> 
+> For more information about this error, try `rustc --explain E0599`.
+> make[2]: *** [rust/Makefile:553: rust/kernel.o] Error 1
+> make[1]: *** [/builddir/build/BUILD/kernel-6.18.0-build/kernel-next-20251103/linux-6.18.0-0.0.next.20251103.436.vanilla.fc44.x86_64/Makefile:1316: prepare] Error 2
+> make: *** [Makefile:256: __sub-make] Error 2
+> """
+> 
+> This slipped through, since the USB abstractions are globally disabled.
+> However, the USB tree recently enabled them, hence it showed up in
+> linux-next.
 
-I still need to go through them once again, but overall that's the plan.
+Sorry about this, should we also enable it in the driver-core-next tree
+as well, to catch these types of things?
+
+greg k-h
 
