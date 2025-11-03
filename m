@@ -1,132 +1,131 @@
-Return-Path: <linux-usb+bounces-30006-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30007-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2D69C2B512
-	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 12:26:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96765C2B552
+	for <lists+linux-usb@lfdr.de>; Mon, 03 Nov 2025 12:27:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B55C33B9878
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 11:24:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59660188C229
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Nov 2025 11:27:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3AD302179;
-	Mon,  3 Nov 2025 11:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 060CB30215B;
+	Mon,  3 Nov 2025 11:26:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ijnyZwNt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BYUlZy6d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64348302166
-	for <linux-usb@vger.kernel.org>; Mon,  3 Nov 2025 11:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A8227E04C
+	for <linux-usb@vger.kernel.org>; Mon,  3 Nov 2025 11:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762169083; cv=none; b=SR6x2M4dFXwUApQYPHdhpvEQNgvMVEKYJsEMEoVPsdM576rDORX1hfz0Kwy8ZJj52teTP9+NI5ljRa4tSDVmeyGwD56xSz4T4p5LmKHVLlbWcb+cu26Y3u36Zw0hgJvA4BVHUZaYsb5nQrZlQ7xwrvmHuhvdeLnuGL2x+34FtHg=
+	t=1762169213; cv=none; b=ns+UJC4u8K6Pjfa8UERZM1Qz4GG3OhYBq01ovSDUoZTJPS3KL1lw/Q4hnOIgweYP4siyQ/tTSXnwsF+ZNue15kK2+Ky2z5Mpy1vmeRWefN+WqlQNz1srUkoSOTA+eBMbno8m78AsYi58hzBA7ycNBdop4MK3T52xkrY4Uuvd9YI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762169083; c=relaxed/simple;
-	bh=ygGB/YN2U+7m2mTyKycwXt7VfQMyJC+JIr2jtvOFeWI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mx6gvepOOrtcph5Jy+i6O+hsMbRomiBxOKWL0/mtinOMhOrlto+f79+FTjwdATxb1bZqrVJE6uSJBhw4N+Q8KcmRgt36Tao8+9Ipno+Ad0T5Un9Q2FI3BTLkFPx1+Jo4isz73ZjZyTTy5EAwGrCGs+A+BZTyz0vncWLczAE6fj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ijnyZwNt; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-426fd62bfeaso1746024f8f.2
-        for <linux-usb@vger.kernel.org>; Mon, 03 Nov 2025 03:24:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762169080; x=1762773880; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1JCDN6Cq9Tp4TkqXv0Efe98IMAIjlCf0jxvF8wS2LXY=;
-        b=ijnyZwNtzBIqKM5Q/1u8nkEft3dm1LU/jlI7KnRBUW7cCq6AzFtwpz9DiZzRyXpHIT
-         c23TsZMUQmwEwMlFgf0h+pEkc9M21Vgxlr7qyX5oFlbK2uW9ThLT97k+YHOTT8yeoSy3
-         i4yowicAmT7pG1z2yVY4ie/cZU31Z2Q95Gr4WCKTMikd84/YRlKGpPdV72tYhH8mH7wX
-         +uhFfv7OaXl8KPL64R/anKl0UCTZeEi16fso9m4eB9y03IXJWdDUzC/e6lyUsPL18b2m
-         mb+UBuFYV5fmRAPuuy4DfQi27HszEKabvyPLREkUXV29m3StfeaQ6owvMMQCObjaAxYa
-         LzjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762169080; x=1762773880;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1JCDN6Cq9Tp4TkqXv0Efe98IMAIjlCf0jxvF8wS2LXY=;
-        b=dWRVMY1Ilx11W0BPwBWQVMWlMw9jokIX+C3Unxtf7KDCLUysbdb42FyaGh1MtmA34f
-         Usl4/YaU+7gMHVOezwjHNIWUmHRs1CPgqDusOwWNg4GrVlaM/tlwuIEgzsKwluHcd8jt
-         j8ZQpC3oUb5JNNVWKsDByUs4eC+knFz+2j58VdNQSy7P8NzXfQyfUhstKzJOiPbKFKPD
-         pTohks3QOvoL06MGSdytUdVL3yNu22gUJPbD7cRvg6bL/DzPOklLgvSxjmGKty9aEvKT
-         vNYZHbX+XaDOdNMNw2/nYYwFpTxnMJi+Q+ETr2NENi2nirrKe9tV0mnHXSBQlZ4aXsee
-         aVJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVieVj2AiAMcFkzsHnMF1ZTY2n2RrfsU0g6xshTzEyF1TRqN9dgS0/pavMupzjuIhv7Kk/MeuLGa4Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXDLEZdHhng+0TTcy1aDrIY5Nkgjuy0h1Ds9H3vV0DHIDono+1
-	MCaclFrd23u3+iOuu2DDcmPIY/yoy3g2H+gv4aZYJCeaRuUK2PZmVEZWHOXh3XLStsDqVKFWQB8
-	UgZjF78bEuArTPzzJSzZqvDe3AkGi4lOZGBfNVcCP
-X-Gm-Gg: ASbGnctexxtJWr7iWN5ClT2IvV5HlE0i5oC0iL3wOsjk4JojvSgPsqV/VTKd3I8Kt6X
-	+KmISqmnO0qN87f0KtBJw+WOOcgF6fsgo5LqIbH+vb0jCWuOWIwv8XlYtnzJouUEYL/jBCzrxK+
-	Dm6Twzz2c4MqtyXJmzuPKsuZG+TVn63G1/6hh3rNxHKP05IQGf7adyQH6pddOeeyb2ymaEsYTaO
-	jEzZR+4qDIcD9GlkkbVpYUgTC6HD7jySEcwl9Wia6PQzW3KvXPvtblyAYzgUgvZvYxynptI+UXJ
-	mtHcwhvfi9QPFOsvpRfHZEtzAw==
-X-Google-Smtp-Source: AGHT+IEKKis+/HH3jWT32CB9QgsHkpjuV5cak8KRGxOaDTY12Fw5xz2D+VE21Hf3ijFUTW2OmLNrEQDGT1Em+RSKdMo=
-X-Received: by 2002:a05:6000:1867:b0:429:cbf8:1765 with SMTP id
- ffacd0b85a97d-429cbf817f7mr5373560f8f.33.1762169079371; Mon, 03 Nov 2025
- 03:24:39 -0800 (PST)
+	s=arc-20240116; t=1762169213; c=relaxed/simple;
+	bh=GyWy1aiXeyUuz9L/UOH1lZMug369toCG2roAABwAVGM=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i/lrp+iH7L6vbLk+uMX8EHmutnIftMEm8Vp3yVOeVikAa2NczYuw5vTl9G8EsXOhOBp+VvLG0BmtqW82w/FEuiwsot3537kiz1PZqMxo8T7UA4ZrJcfCYWEhdVdyAZWvXPbmZ0bfC0DP/+L7fNgewWQZCLJxPygt9La/Nrnro4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BYUlZy6d; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762169211; x=1793705211;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=GyWy1aiXeyUuz9L/UOH1lZMug369toCG2roAABwAVGM=;
+  b=BYUlZy6dfWrdA+e/NVbv8GifUQDCjedFJjfL6uUYbqSMRgtl61sf7s9A
+   IxrVpQ1TLYiefZi9x65avGnX5GOxKa1DQwl90qKc/ZVidozuhpXrbsyS8
+   KgXG1qlsWLuHAePFf4tMPXu+ZFvujBMbE0mjzsg1F6RcdeZMa/esukqNF
+   YFZzN8z1quy1UIDYRz2MGv+Lrr+Qh2m1Avcd1Oa/rTSamtxX7Ib+7EFxb
+   fQ4+xw1oJSgIa71hH2VYzKanw88HlXhS3fbhhE/yPpvLdmr6jJKGwmln7
+   rQ/JarrOVIXSUCx+NnXcUfjk7t88mCi9VYaPAD7NEz3+ZVZFcyS7UQDmq
+   g==;
+X-CSE-ConnectionGUID: RUjMb4C0RpmOK8V3LHA+BA==
+X-CSE-MsgGUID: duxuxlZiRQWeN2omSlkbNw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="66854424"
+X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
+   d="scan'208";a="66854424"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 03:26:51 -0800
+X-CSE-ConnectionGUID: DUz/5SjXTEqw7EgH36ELHA==
+X-CSE-MsgGUID: B5oa/508RTCqUmGMJqEUdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
+   d="scan'208";a="210372522"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa002.fm.intel.com with ESMTP; 03 Nov 2025 03:26:50 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 00DDC95; Mon, 03 Nov 2025 12:26:48 +0100 (CET)
+Date: Mon, 3 Nov 2025 12:26:48 +0100
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Imre Deak <imre.deak@intel.com>
+Subject: Re: TB 5 Dock DP-Out non-functional
+Message-ID: <20251103112648.GI2912318@black.igk.intel.com>
+References: <q7k73t5utfjrpuf45ynig72eojpixepjqccvsfaqt6rg4wptst@se6ekc2eg3sv>
+ <20251103055659.GD2912318@black.igk.intel.com>
+ <rnp5dzfud5feidxi2qx63cxezukyszuzpj7v5f5gyoqtys3uff@e72nlrudjzxb>
+ <20251103102639.GE2912318@black.igk.intel.com>
+ <lerwgbxoidxvfv3ajszi467rupujg465ukh3fcokihxpv2ikjr@rbke2a76anld>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251103110115.1925072-1-dakr@kernel.org>
-In-Reply-To: <20251103110115.1925072-1-dakr@kernel.org>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Mon, 3 Nov 2025 12:24:26 +0100
-X-Gm-Features: AWmQ_bnZiZ5Fse_UVDSHcbk9FlrG8xkBgTuDizGmSR1AoCz8I_gW748IjzTe-h0
-Message-ID: <CAH5fLgidquc4nkYpeSD=OHzxYjNWoX=2Uc6iYWd2J7Lr00Ma6g@mail.gmail.com>
-Subject: Re: [PATCH] rust: usb: fix broken call to T::disconnect()
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: gregkh@linuxfoundation.org, ojeda@kernel.org, alex.gaynor@gmail.com, 
-	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
-	lossin@kernel.org, a.hindborg@kernel.org, tmgross@umich.edu, 
-	linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	Thorsten Leemhuis <linux@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <lerwgbxoidxvfv3ajszi467rupujg465ukh3fcokihxpv2ikjr@rbke2a76anld>
 
-On Mon, Nov 3, 2025 at 12:01=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
-wrote:
->
-> A refactoring of Device::drvdata_obtain() broke T::disconnect() in the
-> USB abstractions.
->
-> """
-> error[E0599]: no method named `data` found for struct `core::pin::Pin<kbo=
-x::Box<T, Kmalloc>>` in the current scope
->   --> rust/kernel/usb.rs:92:34
->    |
-> 92 |         T::disconnect(intf, data.data());
->    |                                  ^^^^ method not found in `core::pin=
-::Pin<kbox::Box<T, Kmalloc>>`
->
-> error: aborting due to 1 previous error
->
-> For more information about this error, try `rustc --explain E0599`.
-> make[2]: *** [rust/Makefile:553: rust/kernel.o] Error 1
-> make[1]: *** [/builddir/build/BUILD/kernel-6.18.0-build/kernel-next-20251=
-103/linux-6.18.0-0.0.next.20251103.436.vanilla.fc44.x86_64/Makefile:1316: p=
-repare] Error 2
-> make: *** [Makefile:256: __sub-make] Error 2
-> """
->
-> This slipped through, since the USB abstractions are globally disabled.
-> However, the USB tree recently enabled them, hence it showed up in
-> linux-next.
->
-> Reported-by: Thorsten Leemhuis <linux@leemhuis.info>
-> Closes: https://lore.kernel.org/all/1c8afbc0-e888-4702-9e4e-fa8aef0f97ae@=
-leemhuis.info/
-> Fixes: 6bbaa93912bf ("rust: device: narrow the generic of drvdata_obtain(=
-)")
-> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+Hi,
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+On Mon, Nov 03, 2025 at 12:01:06PM +0100, Frederik Schwan wrote:
+> Whole log attached.
+
+Great, thanks!
+
+From that log the last BW allocation done by i915 is 12.5G:
+
+[   51.572497] thunderbolt 0000:8a:00.0: 0:13 <-> 1:12 (DP): bandwidth allocation changed to 0/12500 Mb/s
+
+> > Regarding the script, that's odd too but it could be that you have more
+> > than one host router there (it is not clear from the truncated log). You
+> > need to build the tbtools binaries though.
+> 
+> I do package tbtools for Arch so these are available.
+> 
+> tblist gives me:
+> Domain 0 Route 0: 8087:7eb2 Intel Gen14
+> Domain 1 Route 0: 17ef:a583 Lenovo ThinkPad P1 Gen8 / T1g Gen8
+> Domain 1 Route 1: 0108:234d Lenovo ThinkPad Thunderbolt 5 Smart Dock 7500 - 40BA
+
+Okay this has discrete Barlow Ridge TB5 host router.
+
+> tbadapters --domain 1 --route 1:
+>  1: Lane 0 (upstream)             CL0
+>  2: Lane 1                        CL0
+>  3: Lane 0                        CLd
+>  4: Lane 1                        CLd
+>  5: Lane 0                        CLd
+>  6: Lane 1                        CLd
+>  7: Lane 0                        CLd
+>  8: Lane 1                        CLd
+>  9: PCIe Up                       L1
+> 10: PCIe Down                     Disabled
+> 11: DisplayPort OUT               Disabled
+> 12: DisplayPort OUT               Enabled
+
+And this confirms that the DP tunnel is up.
+
+That tb-bandwidth.sh script should work too (or tbtunnels -d1 -vv).
+
+Anyways, from TB perspective this looks okay. Not sure about graphics. Imre
+do you see anything?
 
