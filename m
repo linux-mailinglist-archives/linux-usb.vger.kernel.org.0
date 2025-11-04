@@ -1,35 +1,35 @@
-Return-Path: <linux-usb+bounces-30031-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30032-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7FD8C2F365
-	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 04:53:46 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1FB1C2F56F
+	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 06:09:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25F873ADA46
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 03:52:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C195E4E1A88
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 05:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E862BCF45;
-	Tue,  4 Nov 2025 03:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A14762C027D;
+	Tue,  4 Nov 2025 05:09:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [207.226.244.123])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73DB823EAB6;
-	Tue,  4 Nov 2025 03:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.226.244.123
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACEAF2550DD;
+	Tue,  4 Nov 2025 05:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762228346; cv=none; b=FF4ajbgpPtLl3ArMpkzVBf0i+CdxARfypG9/cGGz5LYZ2iI+OIZsr65+YRmtapxrAvzROPN8KDVRiqxul3n9Y5q4PIILm9ULoVt4jV3QgJIztXpW7dxlIBzET18mtBb3CVkb5hpZHwUexQNHD2DSYhEoV74l5CICZ42jPei/EHc=
+	t=1762232956; cv=none; b=lnrayXAT3es5Jd/q+MMUk08fhKY+CC9xHj3pXICk4j4yqoxx9TEeInKkiiwphuJK3juCd7xMSXP2FA4Bpwnlbc67A9wnT52GhNZXbq3ZNpzw4rlZSTr/IJZMufiSSxq9a2e3l+Yh//UOlk+lJ4vjcMurX/dAEUhlzNIXwoVUtWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762228346; c=relaxed/simple;
+	s=arc-20240116; t=1762232956; c=relaxed/simple;
 	bh=aiXr5mQdW1SRlBtbOlfIFB3idye0bDaqhEcQ0E6Euxk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BqJ9ggnzpyWvcv3mYFyVaPMdtK43pBKs6nRILu416oreoYa4DLRXtWDDH/7rHVL/+2UaVlLAcrmm4B0S52gebcJykTlw3/QeAgcY7prkbgHsInJuJq90xYLk07Y1sAXm3cMSyPKNFhmu+FP5QAvZdDw6WvZsOMbKcmMKKaBcl+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=207.226.244.123
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TB8wa/2VyEgS2r2M85dzoLfFoQuMK7IszPZJRCmWGBbFU6v9JO7+QSfdLEDh0iWAv8Jl4Yy1kteI/+xHp08AKJFK6k9K0ETnZSCniIreo0XcBEgchC7o5mZAkGoCWu6i/AVqKqlTOgFnFZi2VMTK63R61RtL+6cQ8XtMP04hlzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
-X-CSE-ConnectionGUID: AjIFP/HpQ+Kya90ttsvp9g==
-X-CSE-MsgGUID: PCTeVc7/RiKqRvYkgRMFqA==
+X-CSE-ConnectionGUID: ekRX7IviTxGKE11LvZct/w==
+X-CSE-MsgGUID: 4klFz8bcTnOs0ajpBRWaLQ==
 X-IronPort-AV: E=Sophos;i="6.19,278,1754928000"; 
-   d="scan'208";a="157242641"
+   d="scan'208";a="131450290"
 From: guhuinan <guhuinan@xiaomi.com>
 To: <stable@vger.kernel.org>
 CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -40,9 +40,9 @@ CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	<chenyu45@xiaomi.com>, Yudongbin <yudongbin@xiaomi.com>, Mahongwei
 	<mahongwei3@xiaomi.com>, Jiangdayu <jiangdayu@xiaomi.com>, Owen Gu
 	<guhuinan@xiaomi.com>
-Subject: [PATCH 6.12.y] usb: gadget: f_fs: Fix epfile null pointer access after ep enable.
-Date: Tue, 4 Nov 2025 11:49:46 +0800
-Message-ID: <20251104034946.605-1-guhuinan@xiaomi.com>
+Subject: [PATCH 6.6.y] usb: gadget: f_fs: Fix epfile null pointer access after ep enable.
+Date: Tue, 4 Nov 2025 13:08:56 +0800
+Message-ID: <20251104050856.998-1-guhuinan@xiaomi.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BJ-MBX06.mioffice.cn (10.237.8.126) To BJ-MBX05.mioffice.cn
+X-ClientProxiedBy: BJ-MBX03.mioffice.cn (10.237.8.123) To BJ-MBX05.mioffice.cn
  (10.237.8.125)
 
 From: Owen Gu <guhuinan@xiaomi.com>
