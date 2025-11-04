@@ -1,111 +1,107 @@
-Return-Path: <linux-usb+bounces-30049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30050-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FE52C31890
-	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 15:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 776CFC31FEC
+	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 17:15:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30AC318C58A2
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 14:31:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4056F18C3324
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 16:15:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D026E330313;
-	Tue,  4 Nov 2025 14:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RYhNbb2X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7696032C322;
+	Tue,  4 Nov 2025 16:14:50 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC8232ED59;
-	Tue,  4 Nov 2025 14:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3C5320CAA;
+	Tue,  4 Nov 2025 16:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762266624; cv=none; b=a4g3PFCCRfoo8oyKN2jz6g3crLvy9cGl3SWdIVQchdlM0EUHLebrL1+8iK1ZrhDOIrzaLcb2jfIJ/WjHk/K48MyXMgCpZHUretRSY65sJCXkHcu0NLVHHJPTLTrXs5K96HMlGFV6h+NYEGIoFU3JZZw25dpQWJjgEKdxLtD/sZE=
+	t=1762272890; cv=none; b=Pm8OPnvajT0rajFWfs5SeWySR/cL2NIISoewZqpQ6cpLfa6oRahY8i7MgnmKBJ3WC6GNOCUQvTYYBOIuhepy98N8S5A7AQMzQ2CYUcgs1VU4zRnE0RG1qMR3mXG27xmHQDf/tZelg1QCiPUfqVP0tA6QlyLDdg0ELHEtBdM+bFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762266624; c=relaxed/simple;
-	bh=xjMIBr6AMjwygXnX/e3NAeGPHp4K/p0K97biE5sQOhY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zo70HxSFdqFOS8APSzcnNToOhzrxMYwtXTT1x2Nv7afNz1F+xHpbBaRj7lqtU+jMK37sJjJJO6mHS+8QfQ4H7VjpskMm880wzCoLNiupcqjBFw4b52fpWIsMH6zuugIsxK9Eky6Vz0AiRaUVOA+hbqsb9k+e44zgoLHYKJGwS4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RYhNbb2X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F48C4CEF7;
-	Tue,  4 Nov 2025 14:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1762266623;
-	bh=xjMIBr6AMjwygXnX/e3NAeGPHp4K/p0K97biE5sQOhY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RYhNbb2Xcx6i6i/LaW6+2C8lVhP52SbjCr9FpEZZWvICau9hP6b6xmn19rrA/tNhb
-	 iybm6l0CdKD38ERqWLSV2dcucbuJu/wJKKYG70ASiESC79aI7i2scX8E3Y+urIF5zp
-	 wTobQVJ4FYoXe12+DxMZk/1mRLjR6srx/fDxwGT4=
-Date: Tue, 4 Nov 2025 23:30:18 +0900
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Jakub Lecki <lec.jakub@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Valentina Manea <valentina.manea.m@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>
-Subject: Re: [PATCH 3/3] usbip: Limit maximum number of virtual host
- controllers to 31.
-Message-ID: <2025110450-abnormal-goofball-bc68@gregkh>
-References: <20251104113248.223594-1-lec.jakub@gmail.com>
- <20251104113248.223594-4-lec.jakub@gmail.com>
+	s=arc-20240116; t=1762272890; c=relaxed/simple;
+	bh=H/F5pJeHpTrsqI8rcwO4+74rhxt+X9HurnKV2Bk1Faw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ku68NAyWlx+pH4K1YIMxTfPL6u1t+UnDFttHiu4rMNcfWr88aSC32MR3Ddach6WfIGBB8EV0XyZzb7kAe+e2Ja3BqFbv3fbH63+VT0QsdSPradbJzphbCaIXmcJl1QtgX0xjs0xqCThB0C9/PXkuReJOCAQLK3Ayqr9jZX0FwCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; arc=none smtp.client-ip=129.217.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+Received: from simon-Latitude-5450.cni.e-technik.tu-dortmund.de ([129.217.186.118])
+	(authenticated bits=0)
+	by unimail.uni-dortmund.de (8.18.1.10/8.18.1.10) with ESMTPSA id 5A4GEWXW011487
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 4 Nov 2025 17:14:32 +0100 (CET)
+From: Simon Schippers <simon.schippers@tu-dortmund.de>
+To: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, therbert@google.com
+Cc: Simon Schippers <simon.schippers@tu-dortmund.de>
+Subject: [PATCH net-next v1 0/1] usbnet: Add support for Byte Queue Limits (BQL)
+Date: Tue,  4 Nov 2025 17:13:26 +0100
+Message-ID: <20251104161327.41004-1-simon.schippers@tu-dortmund.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251104113248.223594-4-lec.jakub@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 04, 2025 at 12:32:48PM +0100, Jakub Lecki wrote:
-> When loading the vhci-hcd module with number of virtual host controllers
-> configured to max value of 128, the module initialization fails due to
-> insufficient number of available IDs for USB busses.
-> 
-> Each virtual host controller registers two usb hubs (USB2.0 & USB3.0) to
-> the usb core, each with a unique bus number. The number of USB busses is
-> limited by ID allocation range [1 .. USB_MAXBUS - 1] (defined in
-> usb_register_bus()). Therefore, VHCI_MAX_NR_HCS must not be greater than
-> (USB_MAXBUS - 1) / 2 = 31.
-> 
-> In real world scenarios the maximum number of virtual host controllers
-> possible to create may be even lower as other USB host controllers may
-> be registered. In this case, the module initialization failure is
-> correct as the number of virtual host controllers must be adjusted by
-> a user to a given use-case.
-> 
-> Signed-off-by: Jakub Lecki <lec.jakub@gmail.com>
-> ---
->  drivers/usb/usbip/vhci.h | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/usbip/vhci.h b/drivers/usb/usbip/vhci.h
-> index 2772d923a8cb..3b0ea4038e51 100644
-> --- a/drivers/usb/usbip/vhci.h
-> +++ b/drivers/usb/usbip/vhci.h
-> @@ -76,8 +76,17 @@ enum hub_speed {
->  #define VHCI_DEFAULT_HC_PORTS 8
->  #define VHCI_MAX_HC_PORTS USB_SS_MAXPORTS
->  
-> +/*
-> + * Number of supported virtual host controllers. Value has upperbound of
-> + * maximum possible usb busses.
-> + * It is limited by a bus ID allocation in [1 .. USB_MAXBUS - 1] range,
-> + * resulting in maximum of USB_MAXBUS - 1 usb busses allocated.
-> + * Additionally, each virtual host controller registers 2 usb hubs (USB2.0
-> + * & USB3.0), therefore maximum number of virtual host controllers is:
-> + * (USB_MAXBUS - 1) / 2
-> + */
->  #define VHCI_DEFAULT_NR_HCS 1
-> -#define VHCI_MAX_NR_HCS 128
-> +#define VHCI_MAX_NR_HCS 31
+During recent testing, I observed significant latency spikes when using
+Quectel 5G modems under load. Investigation revealed that the issue was
+caused by bufferbloat in the usbnet driver.
 
-Why have any max at all?  Why not just dynamically allocate them when
-asked for?
+In the current implementation, usbnet uses a fixed tx_qlen of:
 
-thanks,
+USB2: 60 * 1518 bytes = 91.08 KB
+USB3: 60 * 5 * 1518 bytes = 454.80 KB
 
-greg k-h
+Such large transmit queues can be problematic, especially for cellular
+modems. For example, with a typical celluar link speed of 10 Mbit/s, a
+fully occupied USB3 transmit queue results in:
+
+454.80 KB / (10 Mbit/s / 8 bit/byte) = 363.84 ms
+
+of additional latency.
+
+To address this issue, this patch introduces support for
+Byte Queue Limits (BQL) [1][2] in the usbnet driver. BQL dynamically
+limits the amount of data queued in the driver, effectively reducing
+latency without impacting throughput.
+This implementation was successfully tested on several devices as
+described in the commit.
+
+
+
+Future work
+
+Due to offloading, TCP often produces SKBs up to 64 KB in size. To
+further decrease buffer bloat, I tried to disable TSO, GSO and LRO but it
+did not have the intended effect in my tests. The only dirty workaround I
+found so far was to call netif_stop_queue() whenever BQL sets
+__QUEUE_STATE_STACK_XOFF. However, a proper solution to this issue would
+be desirable.
+
+I also plan to publish a scientific paper on this topic in the near
+future.
+
+Thanks,
+Simon
+
+[1] https://medium.com/@tom_84912/byte-queue-limits-the-unauthorized-biography-61adc5730b83
+[2] https://lwn.net/Articles/469652/
+
+Simon Schippers (1):
+  usbnet: Add support for Byte Queue Limits (BQL)
+
+ drivers/net/usb/usbnet.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+-- 
+2.43.0
+
 
