@@ -1,78 +1,78 @@
-Return-Path: <linux-usb+bounces-30046-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30045-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4013AC30C0D
-	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 12:34:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EC47C30BF2
+	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 12:33:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61D4542678D
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 11:33:27 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2594034E051
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 11:33:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6D72EC0B7;
-	Tue,  4 Nov 2025 11:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE8682EC095;
+	Tue,  4 Nov 2025 11:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/sNhBN3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Urg5jwmK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC162EACF8
-	for <linux-usb@vger.kernel.org>; Tue,  4 Nov 2025 11:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67BB2EB5AF
+	for <linux-usb@vger.kernel.org>; Tue,  4 Nov 2025 11:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762255982; cv=none; b=mr9y7NrRGNj/KA5stRt1o+KEje4CTxHhoB6n/ihlMLwoM5MHOn0QUnH0ZBZwdmMqRzmFxnmmJBJ5qdnT1eodbR0HGN61bu9f3ikbftP4QP0+SkT6vHnK2zar1+QX8kQ8qi5ixPxYOtVDxaWdQR8LNXNQlAmYwUznXFMdmcEt75k=
+	t=1762255982; cv=none; b=EpoVwtirQARloUSLLZDnOrB8BnYlcBZIGBEog+0UxTAGrjfz66V3pAE4pwSPM3xLEEe9Z3MmNO+xjKBiIVBOy2+0yUkDMgphXEm4zk3ZiR8SRlU4SSze179x/4iM6C1pCbwtvgY/YhW46/RKx8B0m8JK+xTqtgaytJ6E5v4A5Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762255982; c=relaxed/simple;
-	bh=awdUCLb638duOsloxz8F9nYD6abSXejtgV2z/HFImZY=;
+	bh=W1/5a7VsUfRhct0i5NaSbgry/+x9qR6Zhl7syl2QDUM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CJrEr0Kv0akyobDNnJkAjQnwlD7ajgE07DbjeARrzxOAKkpJD33jE6GnjeWUWw22vUNQnSaWxyn23+lHwbDC/rJTbVzhNhEfqXcIUokfjcwSGTKmgyHzA67mfbWJiSR8VMzdkPIRMJ9A0yUOK4Ak76uz2OsjPGOKt+7VVH2CQR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H/sNhBN3; arc=none smtp.client-ip=209.85.208.43
+	 MIME-Version; b=IEKiB/e1WC97SxDmb5aSyhZ7Au1X1hfEkwwx2fGbZ4vJ0y4RwhYwLZbVHnzDX1R0mKRS9HdEUeNmmwLxj+oEBEQP7389tO5oTAy+zESD5Z7QZrx3oG0XwCGtoAXLPzReeP0O+6EvAbxNIzKbfse+GWNf/fMEvb9ukm9Ed+GUK9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Urg5jwmK; arc=none smtp.client-ip=209.85.218.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-640f627d01dso347045a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 04 Nov 2025 03:32:59 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b3e7cc84b82so1077633266b.0
+        for <linux-usb@vger.kernel.org>; Tue, 04 Nov 2025 03:33:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762255977; x=1762860777; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762255979; x=1762860779; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3d+YJijRpL8w9LCQNHN0V7As8Dqz/jO5NzA/qgZx3ko=;
-        b=H/sNhBN3h34oAQdiKJH13bFNujfVrrLS8qHwGdsExgP/WlO+RrJesTIzvC9aL6Dfdl
-         YpDFvsoMGIxiQ6KKw3QD4QgH77refqTaKD6KGh4ov14fHhec0GvOmWLwmL3/d/UGbhZV
-         h1Sgo2P2JxGiKJpxh9dSKV7S4ZgwRv41Z4na8H3clerS7EePZCSyDRLzEaSNMiwUYS6C
-         ipRMNMMDVHYIXnRnXFTsBVe7U78AK6x32kcbH53TzS3eU+/p1j5VODJnGIYv9SmRoNje
-         koCwwNV46hLVXxjt+OpdX+JVb3C0oAJov+uFP4nta+BPVODKcNSVeurp/ExI9K1h3AMi
-         L0vg==
+        bh=9Nxq+Z1fn/xWrOumJFi9/RSQVqz8cFPqXlsH8mXzKoU=;
+        b=Urg5jwmK7UV5U0+Fwq9dAEOWPRIF9FKhSlSClkT0xmqk5dxZIuHkx0xCiD2huYIUDi
+         pw411tgrmQzgxuxxLf0sgMzqP038QZlxuxLG2pXumkPfvqxrdH9QgvWcTDxzVkMnOZDm
+         tgnR5s0UhXFL1jYQI6hOqoU60oeZNKYZcfyYVxSwUl/Gk5i+ccoanc6eH56RAWHye2bW
+         AIV6F5oUCYiWzz4w/w7/io2JlQrzPK8TWONm6nlB64XmT8VsemuZbVT3Izgj1eV4833Y
+         1+mtSbyb3zyNwLkcb1IHnfKNMLpEpqPSIqQo+PGYK5btASsfaoPFe81GoOsfemq04J+w
+         JFuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762255977; x=1762860777;
+        d=1e100.net; s=20230601; t=1762255979; x=1762860779;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3d+YJijRpL8w9LCQNHN0V7As8Dqz/jO5NzA/qgZx3ko=;
-        b=DMwxLwaeBK/72mymR41qmcBrN1DXyU0SAcIh359RZw6qSwmijvHa9g9c0u3qMlZIIh
-         Q1ZsHKKiC3KH6JThy3U5FcrdKcXl2I8SqnqBWMSo7ZQXicA/7YFf1c5LoDqb14tiviyO
-         FmEmHB5if3apLtSv3PYfBKv3UDW6Tmj5a2wv9dMrx8qLeefmH5DKOzhqMWXLgHVUVQyO
-         5hUqF+x4WArr9yeEUzLzH522uzPqOyFgn1Jrq0NoQTOK30k+jRvTSiGxAWsrBgVVYzUF
-         XdYzCsf+v7dUV1Q9b2FJ9FfH3m7ZXbk4DOFOkJY9511KaeG9wzZB98Z+nT++AFbalTle
-         YscA==
-X-Gm-Message-State: AOJu0YypUUeO7F/rXnXHGcelZ6adlAs7YlvSAFIryWAIIcO3aMpODO4V
-	OYTeKyapDTz2grRtZYptv5VzPudRcQJ1SjaAiCRGrwYD6XV7YACLlfK8Muzut9Ne4ns=
-X-Gm-Gg: ASbGncvKv2j32ZZcDkLR3mgV/UJNnxjn2jRNuBg+H5Pj2hLFhV+k9BfV+lOTY/FtG6U
-	E1tHURVysCDch3IUiXlnYNmaxPUueyT0Dev/2VyxiLygxkzEgN/y0D5pvq6YpnXPKXkHa9QBN41
-	ZtN3Be+pwepWyBraJK6MbdRGl2duBCdXx84MAT0gk+yj/7Iwse8pSYgGJfgFKlnwqY3E3VW8+g3
-	52YRhpWygZMEZG8tL5QeWfaX6/DiiJrVN80xVEf8m0D0fMQ6kSRT8YHdM9hgsFxRpz8LipN2CNH
-	goPpVYE7gVrv9q5p4HhO0588DWp0zAcvweV3/czJms4vARZVGQ2sc/OXIgI5tqX7p6qlpxx7wZ2
-	VrgFAunpJ5/MtnWrMisI0JGP1Bsevu4cTf8b2Iev0dBcNVajSwP4sho9wCwD7rNc7X81s6//csp
-	4c0QiBIrRkn3AhUrx3H6Odete/5vgz4R9ns1f+nsnJXb3TC5EMBmVItOrYx8RZUA==
-X-Google-Smtp-Source: AGHT+IHJelObIKzSQ1BbonnrHT1wYm4ffG4m1pg0tzoVEBs/baKPVWM3+Ur8xp6eb6w940PKIGOAWg==
-X-Received: by 2002:a17:906:730a:b0:b41:b0c4:e74c with SMTP id a640c23a62f3a-b70704b27d3mr1745393866b.33.1762255977438;
-        Tue, 04 Nov 2025 03:32:57 -0800 (PST)
+        bh=9Nxq+Z1fn/xWrOumJFi9/RSQVqz8cFPqXlsH8mXzKoU=;
+        b=N6jxFAEecZoEJdh+PJzgUG1W1fF8N2p6rqAHFOLkP3LQvW5YV4rYBOfpRppd3A13sr
+         xarD/XYGTAgt2eZeL2/rLoCo8yn2DVBEbE146ThK2niY1AScTQbgJxY9e1EaG8NP/ztn
+         1dY4B53UrLiHSRuUfmoZkoohekdTPQhQZNoNo8qS1fLO2HoUJl2z96GZ3V04IJANVPgo
+         gVRXJINh7rLU3zKrLIpv81u/CP+DGJAtGw1ZDwoEPrRv7PWm8cWOAG9HT2IJDqTIbgO0
+         deXYUoGyMQTGYN96GZkkj5HnI0a8H6uq9toJO7ArEcoSfQMCQ6bnCubblT53pB8aLkEF
+         UIYw==
+X-Gm-Message-State: AOJu0YwGpDa7sxlzh8K6Epvjpm1iUDKjp4XvtRQAz0jn9Cf0EWXrZAEX
+	q2PehzMus9nVLaOGLODk+cXQhrE/uNudSKSbBwyyWWVQOZYzs1DNv4nMHsQBQIcU8M8=
+X-Gm-Gg: ASbGncstz4veKpdrVHmS3QBcMKtw6vqHt1L9frKx8iSpxenrtpQ6wKmepEZVtslplbG
+	kVOPiYHmtH1pz9QlycAaHbKCbOTGrra4pMy1Yxuh/16OuvxQWt22mvpPnyU2AQPmxrAjcivIGqF
+	xz7DndSoXSpAS88vkpJreO5B9HVy3c0uKRdhd/Vp/Qd2OESSJ+wN6V69jdV2BMvgeLHkdQ2at7E
+	21QyaBW8tJhj7v4jBbbleCbS49Hnp9pMyceKMiDgjvqC+5oD0JkDln+Syz6+72h+SABITKdTDdm
+	0vwPP4Bahy/9DUnIvMkYjgqW6dmW38VQQzAqJOMK1VH4OTx0PnbPLH/SZFfxyOvum/Az7lVI7ni
+	lgb19L4PqM9HWk7jq3vGbAKS46Kgg3nlssfcaruER0un657lJBkb9EKbPsPbVEyolYeVu1/VADq
+	FFiuzLtovRIbire9kXoL+LAUHz0a9jOeA8jkvyI5FZYCMB/qVL/6dXlAX+pSmxfjYmyHe6veBY
+X-Google-Smtp-Source: AGHT+IHEMSASSTohnLG9wMInMyaJfMwowF7cYVsEpX3e0SDI7y3LeNeOnjHYdUJzMywCwp6kp4EraQ==
+X-Received: by 2002:a17:907:9602:b0:b72:588:2976 with SMTP id a640c23a62f3a-b72058829famr341889366b.60.1762255978638;
+        Tue, 04 Nov 2025 03:32:58 -0800 (PST)
 Received: from jale-pg.. ([2a02:2a40:17ee:2900:8627:17a2:2166:4084])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72404470e9sm182469766b.70.2025.11.04.03.32.56
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72404470e9sm182469766b.70.2025.11.04.03.32.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Nov 2025 03:32:56 -0800 (PST)
+        Tue, 04 Nov 2025 03:32:58 -0800 (PST)
 From: Jakub Lecki <lec.jakub@gmail.com>
 To: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -81,9 +81,9 @@ Cc: Valentina Manea <valentina.manea.m@gmail.com>,
 	Hongren Zheng <i@zenithal.me>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jakub Lecki <lec.jakub@gmail.com>
-Subject: [PATCH 2/3] usbip: Convert CONFIG_USBIP_VHCI_HC_PORTS to a module parameter.
-Date: Tue,  4 Nov 2025 12:32:47 +0100
-Message-ID: <20251104113248.223594-3-lec.jakub@gmail.com>
+Subject: [PATCH 3/3] usbip: Limit maximum number of virtual host controllers to 31.
+Date: Tue,  4 Nov 2025 12:32:48 +0100
+Message-ID: <20251104113248.223594-4-lec.jakub@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251104113248.223594-1-lec.jakub@gmail.com>
 References: <20251104113248.223594-1-lec.jakub@gmail.com>
@@ -95,324 +95,50 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In workflows involving a greater number of remote
-USB/IP devices, the default number of available virtual ports may be
-insufficient, forcing user to recompile the module with greater number
-of configured virtual host controllers and/or number of ports.
+When loading the vhci-hcd module with number of virtual host controllers
+configured to max value of 128, the module initialization fails due to
+insufficient number of available IDs for USB busses.
 
-Allow a user to configure the number of ports per USB/IP virtual host
-controller via a new 'hc_ports' module parameter to simplify the usage
-of this module.
+Each virtual host controller registers two usb hubs (USB2.0 & USB3.0) to
+the usb core, each with a unique bus number. The number of USB busses is
+limited by ID allocation range [1 .. USB_MAXBUS - 1] (defined in
+usb_register_bus()). Therefore, VHCI_MAX_NR_HCS must not be greater than
+(USB_MAXBUS - 1) / 2 = 31.
 
-- Remove the USBIP_VHCI_HC_PORTS Kconfig option and replace it with a
-  module parameter.
-- Fix the omitted BUILD_BUG_ON check for the upper limit of
-  'vhci_hc_ports' when switching from USB_MAXCHILDREN to
-  USB_SS_MAXPORTS.
-- Resize related arrays to match VHCI_MAX_HC_PORTS = USB_SS_MAXPORTS to
-  support a dynamically configurable number of ports.
-- Trim the value of the configured 'hc_ports' parameter if it
-  exceeds bounds, and emit a warning.
+In real world scenarios the maximum number of virtual host controllers
+possible to create may be even lower as other USB host controllers may
+be registered. In this case, the module initialization failure is
+correct as the number of virtual host controllers must be adjusted by
+a user to a given use-case.
 
 Signed-off-by: Jakub Lecki <lec.jakub@gmail.com>
 ---
- drivers/usb/usbip/Kconfig      | 10 --------
- drivers/usb/usbip/vhci.h       | 22 ++++++++---------
- drivers/usb/usbip/vhci_hcd.c   | 43 +++++++++++++++++++++++-----------
- drivers/usb/usbip/vhci_sysfs.c | 18 +++++++-------
- 4 files changed, 48 insertions(+), 45 deletions(-)
+ drivers/usb/usbip/vhci.h | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/usbip/Kconfig b/drivers/usb/usbip/Kconfig
-index bdcb6f4fdbec..e178867fb5ef 100644
---- a/drivers/usb/usbip/Kconfig
-+++ b/drivers/usb/usbip/Kconfig
-@@ -28,16 +28,6 @@ config USBIP_VHCI_HCD
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called vhci-hcd.
- 
--config USBIP_VHCI_HC_PORTS
--	int "Number of ports per USB/IP virtual host controller"
--	range 1 15
--	default 8
--	depends on USBIP_VHCI_HCD
--	help
--	  To increase number of ports available for USB/IP virtual
--	  host controller driver, this defines number of ports per
--	  USB/IP virtual host controller.
--
- config USBIP_HOST
- 	tristate "Host driver"
- 	depends on USBIP_CORE && USB
 diff --git a/drivers/usb/usbip/vhci.h b/drivers/usb/usbip/vhci.h
-index 30b8540e0b49..2772d923a8cb 100644
+index 2772d923a8cb..3b0ea4038e51 100644
 --- a/drivers/usb/usbip/vhci.h
 +++ b/drivers/usb/usbip/vhci.h
-@@ -72,15 +72,9 @@ enum hub_speed {
- 	HUB_SPEED_SUPER,
- };
+@@ -76,8 +76,17 @@ enum hub_speed {
+ #define VHCI_DEFAULT_HC_PORTS 8
+ #define VHCI_MAX_HC_PORTS USB_SS_MAXPORTS
  
--/* Number of supported ports. Value has an upperbound of USB_MAXCHILDREN */
--#ifdef CONFIG_USBIP_VHCI_HC_PORTS
--#define VHCI_HC_PORTS CONFIG_USBIP_VHCI_HC_PORTS
--#else
--#define VHCI_HC_PORTS 8
--#endif
--
--/* Each VHCI has 2 hubs (USB2 and USB3), each has VHCI_HC_PORTS ports */
--#define VHCI_PORTS	(VHCI_HC_PORTS*2)
-+/* Number of supported ports. Value has an upperbound of USB_SS_MAXPORTS */
-+#define VHCI_DEFAULT_HC_PORTS 8
-+#define VHCI_MAX_HC_PORTS USB_SS_MAXPORTS
- 
++/*
++ * Number of supported virtual host controllers. Value has upperbound of
++ * maximum possible usb busses.
++ * It is limited by a bus ID allocation in [1 .. USB_MAXBUS - 1] range,
++ * resulting in maximum of USB_MAXBUS - 1 usb busses allocated.
++ * Additionally, each virtual host controller registers 2 usb hubs (USB2.0
++ * & USB3.0), therefore maximum number of virtual host controllers is:
++ * (USB_MAXBUS - 1) / 2
++ */
  #define VHCI_DEFAULT_NR_HCS 1
- #define VHCI_MAX_NR_HCS 128
-@@ -100,7 +94,7 @@ struct vhci {
- struct vhci_hcd {
- 	struct vhci *vhci;
+-#define VHCI_MAX_NR_HCS 128
++#define VHCI_MAX_NR_HCS 31
  
--	u32 port_status[VHCI_HC_PORTS];
-+	u32 port_status[VHCI_MAX_HC_PORTS];
+ #define MAX_STATUS_NAME 16
  
- 	unsigned resuming:1;
- 	unsigned long re_timeout;
-@@ -112,13 +106,17 @@ struct vhci_hcd {
- 	 * wIndex shows the port number and begins from 1.
- 	 * But, the index of this array begins from 0.
- 	 */
--	struct vhci_device vdev[VHCI_HC_PORTS];
-+	struct vhci_device vdev[VHCI_MAX_HC_PORTS];
- };
- 
- extern unsigned int vhci_num_controllers;
-+extern unsigned int vhci_hc_ports;
- extern struct vhci *vhcis;
- extern struct attribute_group vhci_attr_group;
- 
-+/* Each VHCI has 2 hubs (USB2 and USB3), each has vhci_hc_ports ports */
-+#define VHCI_PORTS	(vhci_hc_ports * 2)
-+
- /* vhci_hcd.c */
- void rh_port_connect(struct vhci_device *vdev, enum usb_device_speed speed);
- 
-@@ -135,7 +133,7 @@ int vhci_tx_loop(void *data);
- 
- static inline __u32 port_to_rhport(__u32 port)
- {
--	return port % VHCI_HC_PORTS;
-+	return port % vhci_hc_ports;
- }
- 
- static inline int port_to_pdev_nr(__u32 port)
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 93c3fa3e1c53..1989a6f59107 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -51,6 +51,12 @@ MODULE_PARM_DESC(num_controllers, "Number of USB/IP virtual host controllers (ra
- 		 __MODULE_STRING(VHCI_MAX_NR_HCS) ", default: "
- 		 __MODULE_STRING(VHCI_DEFAULT_NR_HCS) ")");
- 
-+unsigned int vhci_hc_ports = VHCI_DEFAULT_HC_PORTS;
-+module_param_named(hc_ports, vhci_hc_ports, uint, 0444);
-+MODULE_PARM_DESC(hc_ports, "Number of ports per USB/IP virtual host controller (range: 1-"
-+		 __MODULE_STRING(VHCI_MAX_HC_PORTS) ", default: "
-+		 __MODULE_STRING(VHCI_DEFAULT_HC_PORTS) ")");
-+
- struct vhci *vhcis;
- 
- static const char * const bit_desc[] = {
-@@ -236,7 +242,7 @@ static int vhci_hub_status(struct usb_hcd *hcd, char *buf)
- {
- 	struct vhci_hcd	*vhci_hcd = hcd_to_vhci_hcd(hcd);
- 	struct vhci *vhci = vhci_hcd->vhci;
--	int		retval = DIV_ROUND_UP(VHCI_HC_PORTS + 1, 8);
-+	int		retval = DIV_ROUND_UP(vhci_hc_ports + 1, 8);
- 	int		rhport;
- 	int		changed = 0;
- 	unsigned long	flags;
-@@ -250,7 +256,7 @@ static int vhci_hub_status(struct usb_hcd *hcd, char *buf)
- 	}
- 
- 	/* check pseudo status register for each port */
--	for (rhport = 0; rhport < VHCI_HC_PORTS; rhport++) {
-+	for (rhport = 0; rhport < vhci_hc_ports; rhport++) {
- 		if ((vhci_hcd->port_status[rhport] & PORT_C_MASK)) {
- 			/* The status of a port has been changed, */
- 			usbip_dbg_vhci_rh("port %d status changed\n", rhport);
-@@ -297,7 +303,7 @@ ss_hub_descriptor(struct usb_hub_descriptor *desc)
- 	desc->bDescLength = 12;
- 	desc->wHubCharacteristics = cpu_to_le16(
- 		HUB_CHAR_INDV_PORT_LPSM | HUB_CHAR_COMMON_OCPM);
--	desc->bNbrPorts = VHCI_HC_PORTS;
-+	desc->bNbrPorts = vhci_hc_ports;
- 	desc->u.ss.bHubHdrDecLat = 0x04; /* Worst case: 0.4 micro sec*/
- 	desc->u.ss.DeviceRemovable = 0xffff;
- }
-@@ -311,8 +317,7 @@ static inline void hub_descriptor(struct usb_hub_descriptor *desc)
- 	desc->wHubCharacteristics = cpu_to_le16(
- 		HUB_CHAR_INDV_PORT_LPSM | HUB_CHAR_COMMON_OCPM);
- 
--	desc->bNbrPorts = VHCI_HC_PORTS;
--	BUILD_BUG_ON(VHCI_HC_PORTS > USB_MAXCHILDREN);
-+	desc->bNbrPorts = vhci_hc_ports;
- 	width = desc->bNbrPorts / 8 + 1;
- 	desc->bDescLength = USB_DT_HUB_NONVAR_SIZE + 2 * width;
- 	memset(&desc->u.hs.DeviceRemovable[0], 0, width);
-@@ -329,7 +334,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 	unsigned long	flags;
- 	bool invalid_rhport = false;
- 
--	u32 prev_port_status[VHCI_HC_PORTS];
-+	u32 prev_port_status[VHCI_MAX_HC_PORTS];
- 
- 	if (!HCD_HW_ACCESSIBLE(hcd))
- 		return -ETIMEDOUT;
-@@ -344,17 +349,18 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 
- 	/*
- 	 * wIndex can be 0 for some request types (typeReq). rhport is
--	 * in valid range when wIndex >= 1 and < VHCI_HC_PORTS.
-+	 * in valid range when wIndex >= 1 and < vhci_hc_ports.
- 	 *
- 	 * Reference port_status[] only with valid rhport when
- 	 * invalid_rhport is false.
- 	 */
--	if (wIndex < 1 || wIndex > VHCI_HC_PORTS) {
-+	if (wIndex < 1 || wIndex > vhci_hc_ports) {
- 		invalid_rhport = true;
--		if (wIndex > VHCI_HC_PORTS)
-+		if (wIndex > vhci_hc_ports)
- 			pr_err("invalid port number %d\n", wIndex);
--	} else
-+	} else {
- 		rhport = wIndex - 1;
-+	}
- 
- 	vhci_hcd = hcd_to_vhci_hcd(hcd);
- 	vhci = vhci_hcd->vhci;
-@@ -707,7 +713,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 	struct vhci_device *vdev;
- 	unsigned long flags;
- 
--	if (portnum > VHCI_HC_PORTS) {
-+	if (portnum > vhci_hc_ports) {
- 		pr_err("invalid port number %d\n", portnum);
- 		return -ENODEV;
- 	}
-@@ -1188,7 +1194,7 @@ static int vhci_start(struct usb_hcd *hcd)
- 
- 	/* initialize private data of usb_hcd */
- 
--	for (rhport = 0; rhport < VHCI_HC_PORTS; rhport++) {
-+	for (rhport = 0; rhport < vhci_hc_ports; rhport++) {
- 		struct vhci_device *vdev = &vhci_hcd->vdev[rhport];
- 
- 		vhci_device_init(vdev);
-@@ -1244,7 +1250,7 @@ static void vhci_stop(struct usb_hcd *hcd)
- 	}
- 
- 	/* 2. shutdown all the ports of vhci_hcd */
--	for (rhport = 0; rhport < VHCI_HC_PORTS; rhport++) {
-+	for (rhport = 0; rhport < vhci_hc_ports; rhport++) {
- 		struct vhci_device *vdev = &vhci_hcd->vdev[rhport];
- 
- 		usbip_event_add(&vdev->ud, VDEV_EVENT_REMOVED);
-@@ -1441,7 +1447,7 @@ static int vhci_hcd_suspend(struct platform_device *pdev, pm_message_t state)
- 
- 	spin_lock_irqsave(&vhci->lock, flags);
- 
--	for (rhport = 0; rhport < VHCI_HC_PORTS; rhport++) {
-+	for (rhport = 0; rhport < vhci_hc_ports; rhport++) {
- 		if (vhci->vhci_hcd_hs->port_status[rhport] &
- 		    USB_PORT_STAT_CONNECTION)
- 			connected += 1;
-@@ -1525,6 +1531,15 @@ static int __init vhci_hcd_init(void)
- 		vhci_num_controllers = VHCI_MAX_NR_HCS;
- 	}
- 
-+	if (vhci_hc_ports < 1) {
-+		pr_warn("hc_ports less than 1, setting to 1\n");
-+		vhci_hc_ports = 1;
-+	} else if (vhci_hc_ports > VHCI_MAX_HC_PORTS) {
-+		pr_warn("hc_ports too high, limiting to %d\n",
-+			VHCI_MAX_HC_PORTS);
-+		vhci_hc_ports = VHCI_MAX_HC_PORTS;
-+	}
-+
- 	vhcis = kcalloc(vhci_num_controllers, sizeof(struct vhci), GFP_KERNEL);
- 	if (vhcis == NULL)
- 		return -ENOMEM;
-diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-index d5865460e82d..19d67717180e 100644
---- a/drivers/usb/usbip/vhci_sysfs.c
-+++ b/drivers/usb/usbip/vhci_sysfs.c
-@@ -81,7 +81,7 @@ static ssize_t status_show_vhci(int pdev_nr, char *out)
- 
- 	spin_lock_irqsave(&vhci->lock, flags);
- 
--	for (i = 0; i < VHCI_HC_PORTS; i++) {
-+	for (i = 0; i < vhci_hc_ports; i++) {
- 		struct vhci_device *vdev = &vhci->vhci_hcd_hs->vdev[i];
- 
- 		spin_lock(&vdev->ud.lock);
-@@ -90,12 +90,12 @@ static ssize_t status_show_vhci(int pdev_nr, char *out)
- 		spin_unlock(&vdev->ud.lock);
- 	}
- 
--	for (i = 0; i < VHCI_HC_PORTS; i++) {
-+	for (i = 0; i < vhci_hc_ports; i++) {
- 		struct vhci_device *vdev = &vhci->vhci_hcd_ss->vdev[i];
- 
- 		spin_lock(&vdev->ud.lock);
- 		port_show_vhci(&out, HUB_SPEED_SUPER,
--			       pdev_nr * VHCI_PORTS + VHCI_HC_PORTS + i, vdev);
-+			       pdev_nr * VHCI_PORTS + vhci_hc_ports + i, vdev);
- 		spin_unlock(&vdev->ud.lock);
- 	}
- 
-@@ -109,7 +109,7 @@ static ssize_t status_show_not_ready(int pdev_nr, char *out)
- 	char *s = out;
- 	int i = 0;
- 
--	for (i = 0; i < VHCI_HC_PORTS; i++) {
-+	for (i = 0; i < vhci_hc_ports; i++) {
- 		out += sprintf(out, "hs  %04u %03u ",
- 				    (pdev_nr * VHCI_PORTS) + i,
- 				    VDEV_ST_NOTASSIGNED);
-@@ -117,9 +117,9 @@ static ssize_t status_show_not_ready(int pdev_nr, char *out)
- 		out += sprintf(out, "\n");
- 	}
- 
--	for (i = 0; i < VHCI_HC_PORTS; i++) {
-+	for (i = 0; i < vhci_hc_ports; i++) {
- 		out += sprintf(out, "ss  %04u %03u ",
--				    (pdev_nr * VHCI_PORTS) + VHCI_HC_PORTS + i,
-+				    (pdev_nr * VHCI_PORTS) + vhci_hc_ports + i,
- 				    VDEV_ST_NOTASSIGNED);
- 		out += sprintf(out, "000 00000000 0000000000000000 0-0");
- 		out += sprintf(out, "\n");
-@@ -221,11 +221,11 @@ static int valid_port(__u32 *pdev_nr, __u32 *rhport)
- 	}
- 	*pdev_nr = array_index_nospec(*pdev_nr, vhci_num_controllers);
- 
--	if (*rhport >= VHCI_HC_PORTS) {
-+	if (*rhport >= vhci_hc_ports) {
- 		pr_err("rhport %u\n", *rhport);
- 		return 0;
- 	}
--	*rhport = array_index_nospec(*rhport, VHCI_HC_PORTS);
-+	*rhport = array_index_nospec(*rhport, vhci_hc_ports);
- 
- 	return 1;
- }
-@@ -255,7 +255,7 @@ static ssize_t detach_store(struct device *dev, struct device_attribute *attr,
- 
- 	usbip_dbg_vhci_sysfs("rhport %d\n", rhport);
- 
--	if ((port / VHCI_HC_PORTS) % 2)
-+	if ((port / vhci_hc_ports) % 2)
- 		vhci_hcd = hcd_to_vhci_hcd(hcd)->vhci->vhci_hcd_ss;
- 	else
- 		vhci_hcd = hcd_to_vhci_hcd(hcd)->vhci->vhci_hcd_hs;
 -- 
 2.43.0
 
