@@ -1,56 +1,60 @@
-Return-Path: <linux-usb+bounces-30037-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30038-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20D1AC2F849
-	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 07:54:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43946C2F8BC
+	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 08:02:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95E09422CB5
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 06:53:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489BD188C54E
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 07:02:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5172E7F1A;
-	Tue,  4 Nov 2025 06:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE9102FE572;
+	Tue,  4 Nov 2025 07:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nPkc7bnW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from azure-sdnproxy.icoremail.net (l-sdnproxy.icoremail.net [20.188.111.126])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001B428C854;
-	Tue,  4 Nov 2025 06:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=20.188.111.126
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F383285074
+	for <linux-usb@vger.kernel.org>; Tue,  4 Nov 2025 07:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762239179; cv=none; b=Zqwn4AkWJsuWMUYT7kfc8H3Yn9a0SjTrIVioQUmlJE69bQWbwLHEQJjgLUUFkWvqkt9c62hFL7oVa0Xf0EArWJnBL+AEA5v+w7OhvOBdnx7KC7DMszSiNoxNCgfwlu/Na6uKBqgyxSeeLgxEo000AbxX4xTLES5YKWY5ohgftl0=
+	t=1762239742; cv=none; b=T6WkQKO3OfY0x69nK7M63r4BrqcPtsFS26ZV9zRfo5T/YUEe8BOX2ekUmMCfOsB9m73lMLIfJ7PCR56qO8fezjw4XP09CAvtVfZDJ4qO+KEW0pswtK2JLAoH5NMhXz0xY1Yul+Pi/56OW/RIYpVCMX6HnpdfOjX9X/l1fIYaog0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762239179; c=relaxed/simple;
-	bh=hQ/ZtY9OF1joKZSrQToCv+8b9j7Rq8+/+XJFW0yXm9I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HvZe0dsiOs0FhvE3a4+KSyXPH0KVFPOFIx63f2pRhvhXGk+ZV4vqzPqNQsa/naFnySz7xuH8F1XpzY6NCm8FETTJls67ePwa+PYr0ydJggmexnX6uUCmypjw+T6wce4xuagGZx7oAkTL2JSP6W8BbgKrpn0Z7c7D7lWLGrh6Mi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=20.188.111.126
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from E0006493LT.eswin.cn (unknown [10.127.112.153])
-	by app2 (Coremail) with SMTP id TQJkCgAHSq25oglpeo4iAA--.58890S4;
-	Tue, 04 Nov 2025 14:52:43 +0800 (CST)
-From: caohang@eswincomputing.com
-To: gregkh@linuxfoundation.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	Thinh.Nguyen@synopsys.com,
-	p.zabel@pengutronix.de,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org
-Cc: ningyu@eswincomputing.com,
-	linmin@eswincomputing.com,
-	pinkesh.vaghela@einfochips.com,
-	Hang Cao <caohang@eswincomputing.com>,
-	Senchuan Zhang <zhangsenchuan@eswincomputing.com>
-Subject: [PATCH v5 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
-Date: Tue,  4 Nov 2025 14:52:26 +0800
-Message-ID: <20251104065226.1513-1-caohang@eswincomputing.com>
-X-Mailer: git-send-email 2.45.1.windows.1
-In-Reply-To: <20251104065045.1464-1-caohang@eswincomputing.com>
-References: <20251104065045.1464-1-caohang@eswincomputing.com>
+	s=arc-20240116; t=1762239742; c=relaxed/simple;
+	bh=9Ue4L3jzVwUBhP762hGUROlCxh/nps/xSrSeXCR1OXs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V2uhQ3FAWoO/bLdXFz3DzXtHwcZV2VQjq/jRamOOpE4me5M8alPF2enSNJa9GTlFGqotzfL+HU55EoIzhfMBsuH55EzJEndOZttkg8g6tmPI277xvlUPGythYtAh1MsJK+8b1WY5T7lhOWW92+imlJDl1sd3Yv5vMmDbp6n3Y5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nPkc7bnW; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=EXbElhX+ptAAewmxv8geWDgvA/1j/SS0H7xKvmYJw3o=; b=nPkc7bnW2JsPwTSYRoxdN1NLOT
+	Ne8u1E0WlEvC1O4Vw32IKXWkmSKFnyX9g6VA1C/C6PF0y8E0KvEA1AInXQ8iNEVXZH8rYSyp9fnAV
+	++ZSTaq2Sdx3lrTh9Em3X1oUc9QcoTrclxtUWsBhIeoII2Uy27yfIozxgSaCZZTg+VicEnyDqBb7N
+	Jw4oPhFedjo+MRaBZHIseOUDEeYA+kRAzXq4YeiNA3SZD8jhwF4UqNfxS3bI+j7Wl18vI/iOZ7xiw
+	/qFKE/z4pCGWYIs5JtGoeSDvHhTdlPhZmIOQVSr1DypUClrgMmytqC+liuxNzeVLpHIBZglJfl+ut
+	CGqsyVpg==;
+Received: from [50.53.43.113] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vGB3Z-0000000BI8t-0M5H;
+	Tue, 04 Nov 2025 07:02:17 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-usb@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Chunfeng Yun <chunfeng.yun@mediatek.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH] usb: xhci-mtk: correct most kernel-doc problems in xhci-mtk.h
+Date: Mon,  3 Nov 2025 23:02:16 -0800
+Message-ID: <20251104070216.907540-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,114 +62,142 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:TQJkCgAHSq25oglpeo4iAA--.58890S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxAryrZr45Cw15ZF4xKw17ZFb_yoW5AFykpF
-	4vkFyYkrZ5Gr4xKan3t3Z5AF1fKan7GryrtryxG3ZFvw1Dt34DGr18Wa4Fqr95GryfXFy5
-	Jw4kJrWfCF47ZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkF7I0En4kS14v26r1q6r43MxkIecxEwVCm-wCF04
-	k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-	MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
-	1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
-	IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-	A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUHCJQUUUUU=
-X-CM-SenderInfo: xfdrxt1qj6v25zlqu0xpsx3x1qjou0bp/
 
-From: Hang Cao <caohang@eswincomputing.com>
+Correct the kernel-doc notation in xhck-mtk.h to avoid most kernel-doc
+warnings. Summary of changes:
 
-Add the eic7700 usb driver, which is responsible for
-identifying,configuring and connecting usb devices.
+- don't use /** to begin comments that are not in kernel-doc format
+- add missing "struct mu3h_sch_tt" kernel-doc line
+- convert several "struct mu3h_...:" to using " - " to separate the
+  struct name from its short description
+- add a missing @speed: struct member description
 
-Signed-off-by: Senchuan Zhang <zhangsenchuan@eswincomputing.com>
-Signed-off-by: Hang Cao <caohang@eswincomputing.com>
+Warning messages that are fixed:
+
+xhci-mtk.h:25: warning: This comment starts with '/**', but isn't a
+ kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * To simplify scheduler algorithm, set a upper limit for ESIT,
+xhci-mtk.h:25: warning: missing initial short description on line:
+ * To simplify scheduler algorithm, set a upper limit for ESIT,
+
+Warning: drivers/usb/host/xhci-mtk.h:36 Cannot find identifier on line:
+ * @fs_bus_bw_out: save bandwidth used by FS/LS OUT eps in each uframes
+Warning: drivers/usb/host/xhci-mtk.h:37 Cannot find identifier on line:
+ * @fs_bus_bw_in: save bandwidth used by FS/LS IN eps in each uframes
+Warning: drivers/usb/host/xhci-mtk.h:38 Cannot find identifier on line:
+ * @ls_bus_bw: save bandwidth used by LS eps in each uframes
+Warning: drivers/usb/host/xhci-mtk.h:39 Cannot find identifier on line:
+ * @fs_frame_bw: save bandwidth used by FS/LS eps in each FS frames
+Warning: drivers/usb/host/xhci-mtk.h:40 Cannot find identifier on line:
+ * @in_ss_cnt: the count of Start-Split for IN eps
+Warning: drivers/usb/host/xhci-mtk.h:41 Cannot find identifier on line:
+ * @ep_list: Endpoints using this TT
+Warning: drivers/usb/host/xhci-mtk.h:42 Cannot find identifier on line:
+ */
+Warning: drivers/usb/host/xhci-mtk.h:43 Cannot find identifier on line:
+struct mu3h_sch_tt {
+Warning: drivers/usb/host/xhci-mtk.h:44 Cannot find identifier on line:
+        u16 fs_bus_bw_out[XHCI_MTK_MAX_ESIT];
+Warning: drivers/usb/host/xhci-mtk.h:45 Cannot find identifier on line:
+        u16 fs_bus_bw_in[XHCI_MTK_MAX_ESIT];
+Warning: drivers/usb/host/xhci-mtk.h:46 Cannot find identifier on line:
+        u8 ls_bus_bw[XHCI_MTK_MAX_ESIT];
+Warning: drivers/usb/host/xhci-mtk.h:47 Cannot find identifier on line:
+        u16 fs_frame_bw[XHCI_MTK_FRAMES_CNT];
+Warning: drivers/usb/host/xhci-mtk.h:48 Cannot find identifier on line:
+        u8 in_ss_cnt[XHCI_MTK_MAX_ESIT];
+Warning: drivers/usb/host/xhci-mtk.h:49 Cannot find identifier on line:
+        struct list_head ep_list;
+Warning: drivers/usb/host/xhci-mtk.h:50 Cannot find identifier on line:
+};
+Warning: drivers/usb/host/xhci-mtk.h:51 Cannot find identifier on line:
+
+Warning: drivers/usb/host/xhci-mtk.h:52 Cannot find identifier on line:
+/**
+Warning: drivers/usb/host/xhci-mtk.h:121 struct member 'speed' not
+ described in 'mu3h_sch_ep_info'
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 ---
- drivers/usb/dwc3/dwc3-generic-plat.c | 43 ++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
-index 770fedc16bb8..89ad952a4a4c 100644
---- a/drivers/usb/dwc3/dwc3-generic-plat.c
-+++ b/drivers/usb/dwc3/dwc3-generic-plat.c
-@@ -10,8 +10,16 @@
- #include <linux/clk.h>
- #include <linux/platform_device.h>
- #include <linux/reset.h>
-+#include <linux/regmap.h>
-+#include <linux/mfd/syscon.h>
- #include "glue.h"
+This leaves 12 warnings (below) due to not using valid kernel-doc.
+I can fix these as well if you would like for me to do that.
+
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'ip_pw_ctr0' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'ip_pw_ctr1' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'ip_pw_ctr2' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'ip_pw_ctr3' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'ip_pw_sts1' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'ip_pw_sts2' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'reserved0' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'reserved1' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'u3_ctrl_p' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'u2_ctrl_p' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'reserved2' not described in 'mu3c_ippc_regs'
+Warning: drivers/usb/host/xhci-mtk.h:150 struct member 'reserved3' not described in 'mu3c_ippc_regs'
+
+---
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+---
+ drivers/usb/host/xhci-mtk.h |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+--- linux-next-20251103.orig/drivers/usb/host/xhci-mtk.h
++++ linux-next-20251103/drivers/usb/host/xhci-mtk.h
+@@ -21,7 +21,7 @@
+ /* support at most 64 ep, use 32 size hash table */
+ #define SCH_EP_HASH_BITS	5
  
-+#define EIC7700_HSP_BUS_FILTER_EN	BIT(0)
-+#define EIC7700_HSP_BUS_CLKEN_GM	BIT(9)
-+#define EIC7700_HSP_BUS_CLKEN_GS	BIT(16)
-+#define EIC7700_HSP_AXI_LP_XM_CSYSREQ	BIT(0)
-+#define EIC7700_HSP_AXI_LP_XS_CSYSREQ	BIT(16)
-+
- struct dwc3_generic {
- 	struct device		*dev;
- 	struct dwc3		dwc;
-@@ -27,6 +35,34 @@ static void dwc3_generic_reset_control_assert(void *data)
- 	reset_control_assert(data);
- }
+-/**
++/*
+  * To simplify scheduler algorithm, set a upper limit for ESIT,
+  * if a synchromous ep's ESIT is larger than @XHCI_MTK_MAX_ESIT,
+  * round down to the limit value, that means allocating more
+@@ -34,6 +34,7 @@
+ #define XHCI_MTK_FRAMES_CNT	(XHCI_MTK_MAX_ESIT / UFRAMES_PER_FRAME)
  
-+static int dwc3_eic7700_pre_init(struct device *dev)
-+{
-+	struct regmap *regmap;
-+	u32 hsp_usb_axi_lp;
-+	u32 hsp_usb_bus;
-+	u32 args[2];
-+	u32 val;
-+
-+	regmap = syscon_regmap_lookup_by_phandle_args(dev->of_node,
-+						      "eswin,hsp-sp-csr",
-+						      ARRAY_SIZE(args), args);
-+	if (IS_ERR(regmap)) {
-+		dev_err(dev, "No hsp-sp-csr phandle specified\n");
-+		return PTR_ERR(regmap);
-+	}
-+
-+	hsp_usb_bus       = args[0];
-+	hsp_usb_axi_lp    = args[1];
-+
-+	regmap_read(regmap, hsp_usb_bus, &val);
-+	regmap_write(regmap, hsp_usb_bus, val | EIC7700_HSP_BUS_FILTER_EN |
-+		     EIC7700_HSP_BUS_CLKEN_GM | EIC7700_HSP_BUS_CLKEN_GS);
-+
-+	regmap_write(regmap, hsp_usb_axi_lp, EIC7700_HSP_AXI_LP_XM_CSYSREQ |
-+		     EIC7700_HSP_AXI_LP_XS_CSYSREQ);
-+	return 0;
-+}
-+
- static int dwc3_generic_probe(struct platform_device *pdev)
- {
- 	const struct dwc3_properties *properties;
-@@ -83,6 +119,12 @@ static int dwc3_generic_probe(struct platform_device *pdev)
- 	else
- 		probe_data.properties = DWC3_DEFAULT_PROPERTIES;
- 
-+	if (of_device_is_compatible(dev->of_node, "eswin,eic7700-dwc3")) {
-+		ret = dwc3_eic7700_pre_init(dev);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "eic7700 init fail\n");
-+	}
-+
- 	ret = dwc3_core_probe(&probe_data);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to register DWC3 Core\n");
-@@ -160,6 +202,7 @@ static const struct dwc3_properties fsl_ls1028_dwc3 = {
- static const struct of_device_id dwc3_generic_of_match[] = {
- 	{ .compatible = "spacemit,k1-dwc3", },
- 	{ .compatible = "fsl,ls1028a-dwc3", &fsl_ls1028_dwc3},
-+	{ .compatible = "eswin,eic7700-dwc3",},
- 	{ /* sentinel */ }
+ /**
++ * struct mu3h_sch_tt - TT scheduling data
+  * @fs_bus_bw_out: save bandwidth used by FS/LS OUT eps in each uframes
+  * @fs_bus_bw_in: save bandwidth used by FS/LS IN eps in each uframes
+  * @ls_bus_bw: save bandwidth used by LS eps in each uframes
+@@ -51,7 +52,7 @@ struct mu3h_sch_tt {
  };
- MODULE_DEVICE_TABLE(of, dwc3_generic_of_match);
--- 
-2.34.1
-
+ 
+ /**
+- * struct mu3h_sch_bw_info: schedule information for bandwidth domain
++ * struct mu3h_sch_bw_info - schedule information for bandwidth domain
+  *
+  * @bus_bw: array to keep track of bandwidth already used at each uframes
+  *
+@@ -63,7 +64,7 @@ struct mu3h_sch_bw_info {
+ };
+ 
+ /**
+- * struct mu3h_sch_ep_info: schedule information for endpoint
++ * struct mu3h_sch_ep_info - schedule information for endpoint
+  *
+  * @esit: unit is 125us, equal to 2 << Interval field in ep-context
+  * @num_esit: number of @esit in a period
+@@ -77,6 +78,7 @@ struct mu3h_sch_bw_info {
+  * @ep_type: endpoint type
+  * @maxpkt: max packet size of endpoint
+  * @ep: address of usb_host_endpoint struct
++ * @speed: usb device speed
+  * @allocated: the bandwidth is aready allocated from bus_bw
+  * @offset: which uframe of the interval that transfer should be
+  *		scheduled first time within the interval
+@@ -125,7 +127,7 @@ struct mu3h_sch_ep_info {
+ #define MU3C_U2_PORT_MAX 5
+ 
+ /**
+- * struct mu3c_ippc_regs: MTK ssusb ip port control registers
++ * struct mu3c_ippc_regs - MTK ssusb ip port control registers
+  * @ip_pw_ctr0~3: ip power and clock control registers
+  * @ip_pw_sts1~2: ip power and clock status registers
+  * @ip_xhci_cap: ip xHCI capability register
 
