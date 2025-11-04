@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-30048-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30049-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C01FBC3187E
-	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 15:32:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FE52C31890
+	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 15:33:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 814494F86A3
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 14:30:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30AC318C58A2
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 14:31:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC2A32E159;
-	Tue,  4 Nov 2025 14:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D026E330313;
+	Tue,  4 Nov 2025 14:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DymkLmE9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RYhNbb2X"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0163E32D7F4;
-	Tue,  4 Nov 2025 14:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC8232ED59;
+	Tue,  4 Nov 2025 14:30:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762266580; cv=none; b=e2gPBRc94t1BKwfhMUh0oU47zH/CtvKHjn0m4nkM2WIHiV35HiOsUuC+uD9MAMJIreGghfSNyKvnS34MZduLYr1MFfPxX4xS41mVoQxJWznjxdRORVWB7ArG5sCM3ulsq2Kero3mIKWZZG3p7DWYPwdOV79nsPEMZjrkRyuq2Ws=
+	t=1762266624; cv=none; b=a4g3PFCCRfoo8oyKN2jz6g3crLvy9cGl3SWdIVQchdlM0EUHLebrL1+8iK1ZrhDOIrzaLcb2jfIJ/WjHk/K48MyXMgCpZHUretRSY65sJCXkHcu0NLVHHJPTLTrXs5K96HMlGFV6h+NYEGIoFU3JZZw25dpQWJjgEKdxLtD/sZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762266580; c=relaxed/simple;
-	bh=c4RLP+0vDN22bgBLg9lz58qJzb1Ge1h66SNRV9dWN28=;
+	s=arc-20240116; t=1762266624; c=relaxed/simple;
+	bh=xjMIBr6AMjwygXnX/e3NAeGPHp4K/p0K97biE5sQOhY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c6P4l72H6Ma5MUAArx4mLeV1AxkmvjJlfiem2h+4sVud9VisLNTLWNDg/VXyVG3uanjEnsAZg8UhbDFHDoM/WZ5YjDIMme44ejngqhyQp95xZafbp6puTBWCFpFDQPQY7SFLbOoIXiO1PFf7xpAyg7kaX2pROMHbEWmIaNacdfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DymkLmE9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BF99C4CEF7;
-	Tue,  4 Nov 2025 14:29:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zo70HxSFdqFOS8APSzcnNToOhzrxMYwtXTT1x2Nv7afNz1F+xHpbBaRj7lqtU+jMK37sJjJJO6mHS+8QfQ4H7VjpskMm880wzCoLNiupcqjBFw4b52fpWIsMH6zuugIsxK9Eky6Vz0AiRaUVOA+hbqsb9k+e44zgoLHYKJGwS4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RYhNbb2X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F48C4CEF7;
+	Tue,  4 Nov 2025 14:30:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1762266578;
-	bh=c4RLP+0vDN22bgBLg9lz58qJzb1Ge1h66SNRV9dWN28=;
+	s=korg; t=1762266623;
+	bh=xjMIBr6AMjwygXnX/e3NAeGPHp4K/p0K97biE5sQOhY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DymkLmE9+QCgMxOa0/F3c/CZRjbA+jZYpn8aMVzxWJFt+fVGH9GajnxsNiUrFpEWD
-	 G5njtKAG5qkT4+gpTDCGRwvPPzWl5rsfR91YJEr2Q6QRhsqwtGKFX9eCkTBwlyF36J
-	 InzWg7MW4oJGqUbiSm0J6Ysy3Qz9i71DubLIAqcY=
-Date: Tue, 4 Nov 2025 23:29:33 +0900
+	b=RYhNbb2Xcx6i6i/LaW6+2C8lVhP52SbjCr9FpEZZWvICau9hP6b6xmn19rrA/tNhb
+	 iybm6l0CdKD38ERqWLSV2dcucbuJu/wJKKYG70ASiESC79aI7i2scX8E3Y+urIF5zp
+	 wTobQVJ4FYoXe12+DxMZk/1mRLjR6srx/fDxwGT4=
+Date: Tue, 4 Nov 2025 23:30:18 +0900
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Jakub Lecki <lec.jakub@gmail.com>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Valentina Manea <valentina.manea.m@gmail.com>,
 	Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>
-Subject: Re: [PATCH 1/3] usbip: Convert CONFIG_USBIP_VHCI_NR_HCS to a module
- parameter.
-Message-ID: <2025110450-limping-retaliate-1ad9@gregkh>
+Subject: Re: [PATCH 3/3] usbip: Limit maximum number of virtual host
+ controllers to 31.
+Message-ID: <2025110450-abnormal-goofball-bc68@gregkh>
 References: <20251104113248.223594-1-lec.jakub@gmail.com>
- <20251104113248.223594-2-lec.jakub@gmail.com>
+ <20251104113248.223594-4-lec.jakub@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,110 +57,53 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251104113248.223594-2-lec.jakub@gmail.com>
+In-Reply-To: <20251104113248.223594-4-lec.jakub@gmail.com>
 
-On Tue, Nov 04, 2025 at 12:32:46PM +0100, Jakub Lecki wrote:
-> In workflows involving a greater number of remote
-> USB/IP devices, the default number of available virtual ports may be
-> insufficient, forcing user to recompile the module with greater number
-> of configured virtual host controllers and/or number of ports.
+On Tue, Nov 04, 2025 at 12:32:48PM +0100, Jakub Lecki wrote:
+> When loading the vhci-hcd module with number of virtual host controllers
+> configured to max value of 128, the module initialization fails due to
+> insufficient number of available IDs for USB busses.
 > 
-> Allow a user to configure the number of USB/IP virtual host controllers
-> via a new 'num_controllers' module parameter to simplify the usage of
-> this module.
+> Each virtual host controller registers two usb hubs (USB2.0 & USB3.0) to
+> the usb core, each with a unique bus number. The number of USB busses is
+> limited by ID allocation range [1 .. USB_MAXBUS - 1] (defined in
+> usb_register_bus()). Therefore, VHCI_MAX_NR_HCS must not be greater than
+> (USB_MAXBUS - 1) / 2 = 31.
 > 
-> VHCI controller structures are already dynamically allocated during
-> module initialization, so the only change is switch from assigning
-> 'vhci_num_controllers' via Kconfig to using the module parameter
-> framework.
-> 
-> - Remove the USBIP_VHCI_NR_HCS Kconfig option and replace it with a
->   module parameter.
-> - Trim the value of the configured 'num_controllers' parameter if it
->   exceeds bounds, and emit a warning.
+> In real world scenarios the maximum number of virtual host controllers
+> possible to create may be even lower as other USB host controllers may
+> be registered. In this case, the module initialization failure is
+> correct as the number of virtual host controllers must be adjusted by
+> a user to a given use-case.
 > 
 > Signed-off-by: Jakub Lecki <lec.jakub@gmail.com>
 > ---
->  drivers/usb/usbip/Kconfig    | 11 -----------
->  drivers/usb/usbip/vhci.h     |  9 +++------
->  drivers/usb/usbip/vhci_hcd.c | 16 ++++++++++++++--
->  3 files changed, 17 insertions(+), 19 deletions(-)
+>  drivers/usb/usbip/vhci.h | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/usbip/Kconfig b/drivers/usb/usbip/Kconfig
-> index b9f94e2e278d..bdcb6f4fdbec 100644
-> --- a/drivers/usb/usbip/Kconfig
-> +++ b/drivers/usb/usbip/Kconfig
-> @@ -38,17 +38,6 @@ config USBIP_VHCI_HC_PORTS
->  	  host controller driver, this defines number of ports per
->  	  USB/IP virtual host controller.
->  
-> -config USBIP_VHCI_NR_HCS
-> -	int "Number of USB/IP virtual host controllers"
-> -	range 1 128
-> -	default 1
-> -	depends on USBIP_VHCI_HCD
-> -	help
-> -	  To increase number of ports available for USB/IP virtual
-> -	  host controller driver, this defines number of USB/IP
-> -	  virtual host controllers as if adding physical host
-> -	  controllers.
-> -
->  config USBIP_HOST
->  	tristate "Host driver"
->  	depends on USBIP_CORE && USB
 > diff --git a/drivers/usb/usbip/vhci.h b/drivers/usb/usbip/vhci.h
-> index 5659dce1526e..30b8540e0b49 100644
+> index 2772d923a8cb..3b0ea4038e51 100644
 > --- a/drivers/usb/usbip/vhci.h
 > +++ b/drivers/usb/usbip/vhci.h
-> @@ -82,11 +82,8 @@ enum hub_speed {
->  /* Each VHCI has 2 hubs (USB2 and USB3), each has VHCI_HC_PORTS ports */
->  #define VHCI_PORTS	(VHCI_HC_PORTS*2)
+> @@ -76,8 +76,17 @@ enum hub_speed {
+>  #define VHCI_DEFAULT_HC_PORTS 8
+>  #define VHCI_MAX_HC_PORTS USB_SS_MAXPORTS
 >  
-> -#ifdef CONFIG_USBIP_VHCI_NR_HCS
-> -#define VHCI_NR_HCS CONFIG_USBIP_VHCI_NR_HCS
-> -#else
-> -#define VHCI_NR_HCS 1
-> -#endif
-> +#define VHCI_DEFAULT_NR_HCS 1
-> +#define VHCI_MAX_NR_HCS 128
->  
->  #define MAX_STATUS_NAME 16
->  
-> @@ -118,7 +115,7 @@ struct vhci_hcd {
->  	struct vhci_device vdev[VHCI_HC_PORTS];
->  };
->  
-> -extern int vhci_num_controllers;
-> +extern unsigned int vhci_num_controllers;
->  extern struct vhci *vhcis;
->  extern struct attribute_group vhci_attr_group;
->  
-> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> index e70fba9f55d6..93c3fa3e1c53 100644
-> --- a/drivers/usb/usbip/vhci_hcd.c
-> +++ b/drivers/usb/usbip/vhci_hcd.c
-> @@ -10,6 +10,7 @@
->  #include <linux/kthread.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> +#include <linux/printk.h>
->  #include <linux/slab.h>
->  #include <linux/string_choices.h>
->  
-> @@ -44,7 +45,12 @@ static int vhci_get_frame_number(struct usb_hcd *hcd);
->  static const char driver_name[] = "vhci_hcd";
->  static const char driver_desc[] = "USB/IP Virtual Host Controller";
->  
-> -int vhci_num_controllers = VHCI_NR_HCS;
-> +unsigned int vhci_num_controllers = VHCI_DEFAULT_NR_HCS;
-> +module_param_named(num_controllers, vhci_num_controllers, uint, 0444);
-> +MODULE_PARM_DESC(num_controllers, "Number of USB/IP virtual host controllers (range: 0-"
-> +		 __MODULE_STRING(VHCI_MAX_NR_HCS) ", default: "
-> +		 __MODULE_STRING(VHCI_DEFAULT_NR_HCS) ")");
+> +/*
+> + * Number of supported virtual host controllers. Value has upperbound of
+> + * maximum possible usb busses.
+> + * It is limited by a bus ID allocation in [1 .. USB_MAXBUS - 1] range,
+> + * resulting in maximum of USB_MAXBUS - 1 usb busses allocated.
+> + * Additionally, each virtual host controller registers 2 usb hubs (USB2.0
+> + * & USB3.0), therefore maximum number of virtual host controllers is:
+> + * (USB_MAXBUS - 1) / 2
+> + */
+>  #define VHCI_DEFAULT_NR_HCS 1
+> -#define VHCI_MAX_NR_HCS 128
+> +#define VHCI_MAX_NR_HCS 31
 
-I'm all for making this dynamic, but this is not the 1990's, please do
-not add new module parameters.  Use the "proper" api for this, either
-sysfs or configfs, instead.
+Why have any max at all?  Why not just dynamically allocate them when
+asked for?
 
 thanks,
 
