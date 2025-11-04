@@ -1,88 +1,94 @@
-Return-Path: <linux-usb+bounces-30028-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30029-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52D07C2EDB9
-	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 02:44:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06E95C2EE10
+	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 02:50:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3E13334B44E
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 01:43:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA65F3B240F
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 01:50:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB5322D7B0;
-	Tue,  4 Nov 2025 01:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0174237180;
+	Tue,  4 Nov 2025 01:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dY6b2MM6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hhJzu+p/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459162264B1;
-	Tue,  4 Nov 2025 01:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599A472614;
+	Tue,  4 Nov 2025 01:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762220625; cv=none; b=oNvQMNUM3JvAAZu57ruHrWiQcuy5E5YSgHiuTzt7PGpO6uvAnQBhv/0njyN/Tg3tfMcDk0CmyeXV3npuuIfVkoLW5GQVfUKmVm/ZQFgDwaU6M6Uyl4rmfCbnNJnXrrpk6OJFShGcjGhHFkQOiUNEUF6CzBOzE8rAwMx4NMOFrmc=
+	t=1762221031; cv=none; b=KR7qRbt7c8WZKZ0L7nyrAhFlXGsiCtcqzrMLQyyv2PL9pYaRHlFw5LNK/QtzwXfa3oWTcLM57j5thyjgTrWWOu24tci+KhoN5lUxp1gFeCE1Uh8wkQCiVcst5oVg9hIlnykJCnepNtf/QUNKAyxBgSQeGPvWQ/oED7FlRO1byig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762220625; c=relaxed/simple;
-	bh=BX0tUVsyY8ldvnds1/e/y6kgPKJqlyj2E8lWQ44dxfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fwdL9Jp9t0vvYYiGRhOGpm12qex8sQ1gsraYDPHJad2Ys7IUuycMbvYFcUUKPBkydT3UhN9jTcsBvONe/hhRMQAYO2u+T9Ae55/eWiVVpGzkzykTh+2qhkTAkRpSDo3AbMZcuGFtNXff7FfDZtH7XCMvt8WNdDyBTsKlND2q/bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dY6b2MM6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0699BC4CEFD;
-	Tue,  4 Nov 2025 01:43:45 +0000 (UTC)
+	s=arc-20240116; t=1762221031; c=relaxed/simple;
+	bh=xyeWkEmQlljnPJHBF9+EF6BPKwFsQyNjI1lK2r9HxhA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=tIPD/M4Lqut/Tjhzg/vj4xoZeq9r0OQHa/8fakL9ePEeNt5Rd/2Z0abk3idBSYRAntQ5s6sQua41KV+Q2wa8Z6F/oydQKAPAedi7e8zZ7iBpsFOATu7PmPa2MtQ6voj1jkMWxaQHWIUpae8EM1qayaSvoPUCZ2m+f+lno69GvUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hhJzu+p/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E434AC4CEE7;
+	Tue,  4 Nov 2025 01:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762220625;
-	bh=BX0tUVsyY8ldvnds1/e/y6kgPKJqlyj2E8lWQ44dxfo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dY6b2MM6lvQesY8UEelJfXc71chFYKuoyIOZKssRUSMQJxDm9jXPKotxE9/ABbFPu
-	 XdSerDYLKzYzDqDQ6JtxN3d5froEQfTFFz5xPdBJiYV5fi7EtRoBao1e6KRqYwr3AY
-	 4WLnVKWA2sLfmr9+9HcGjMrprpXu64yk6i9qhfJk1xH3AdHuzSaP7REg2SZctZwFBT
-	 ziPcYiFBzusRmwzHTOosUeYKOg4gg5R34YL/8ezSb/+A5pYwNrmsMmzydnbJ1FjVaF
-	 jXaQc0pHgng9HvscIjQuljf8jrhjAvtPL5qfzHDAlZO3QJ8dh49y79v1EdVD6oFICv
-	 aPXmbZutFbm5Q==
-Date: Mon, 3 Nov 2025 17:43:44 -0800
-From: Kees Cook <kees@kernel.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
-	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
-	miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org,
-	linux-mm@kvack.org, linux-efi@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev, rostedt@goodmis.org,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	paul@paul-moore.com, casey@schaufler-ca.com,
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
-	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH v2 18/50] convert pstore
-Message-ID: <202511031743.3F127F8@keescook>
-References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
- <20251028004614.393374-19-viro@zeniv.linux.org.uk>
+	s=k20201202; t=1762221030;
+	bh=xyeWkEmQlljnPJHBF9+EF6BPKwFsQyNjI1lK2r9HxhA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=hhJzu+p/tRpudvXCM5qq4mUt329iyPbzFNwbtysQsOBoDStgsUXA4Zjy5NPvkh4NC
+	 FNOfOSFyjJCYdsUS+V37PbJZFpZ/zEITfUK1wZuX6BiVeflEYiOqVlp7MiBKdEMah1
+	 nJ2gnQbo5G2vHrxFuz1NCUKsce2/Cy8Lyf5JlmVSEWg/KfkxoxMTs5JX4qleVFrDAP
+	 Z9MpHaZDSGqM30BOsbU47uZJGA19ImzvEwrfN4PHdFw3iDJzHRLq85VABDjv6C39sI
+	 Wzu+M5VBHfNnpk3gIWtfffARBWsmSvwZRh1SvdzJW6YXpnua1FGAwHdGSUK4AcNRFb
+	 5IozqDiVcaTeg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D923809A8A;
+	Tue,  4 Nov 2025 01:50:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251028004614.393374-19-viro@zeniv.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: usb: qmi_wwan: initialize MAC header offset in
+ qmimux_rx_fixup
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176222100525.2288210.7982486320595194051.git-patchwork-notify@kernel.org>
+Date: Tue, 04 Nov 2025 01:50:05 +0000
+References: <20251029075744.105113-1-qendrim.maxhuni@garderos.com>
+In-Reply-To: <20251029075744.105113-1-qendrim.maxhuni@garderos.com>
+To: None <qendrim.maxhuni@garderos.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bjorn@mork.no, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
 
-On Tue, Oct 28, 2025 at 12:45:37AM +0000, Al Viro wrote:
-> object creation by d_alloc_name()+d_add() in pstore_mkfile(), removal -
-> via normal VFS codepaths (with ->unlink() using simple_unlink()) or
-> in pstore_put_backend_records() via locked_recursive_removal()
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 29 Oct 2025 08:57:44 +0100 you wrote:
+> From: Qendrim Maxhuni <qendrim.maxhuni@garderos.com>
 > 
-> Replace d_add() with d_make_persistent()+dput() - that's what really
-> happens there.  The reference that goes into record->dentry is valid
-> only until the unlink (and explicitly cleared by pstore_unlink()).
+> Raw IP packets have no MAC header, leaving skb->mac_header uninitialized.
+> This can trigger kernel panics on ARM64 when xfrm or other subsystems
+> access the offset due to strict alignment checks.
 > 
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> Initialize the MAC header to prevent such crashes.
+> 
+> [...]
 
-Thanks for the refactoring!
+Here is the summary with links:
+  - net: usb: qmi_wwan: initialize MAC header offset in qmimux_rx_fixup
+    https://git.kernel.org/netdev/net/c/e120f46768d9
 
-Reviewed-by: Kees Cook <kees@kernel.org>
-
+You are awesome, thank you!
 -- 
-Kees Cook
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
