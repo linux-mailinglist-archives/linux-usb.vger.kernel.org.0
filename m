@@ -1,103 +1,134 @@
-Return-Path: <linux-usb+bounces-30033-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30034-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 620A2C2F5BA
-	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 06:15:54 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5588C2F6DA
+	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 07:19:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7BF11889648
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 05:16:18 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 09FDE34D2D9
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 06:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37CB286885;
-	Tue,  4 Nov 2025 05:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zsKl4KLe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D232D948F;
+	Tue,  4 Nov 2025 06:17:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E98757EA;
-	Tue,  4 Nov 2025 05:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0EA2D0C76;
+	Tue,  4 Nov 2025 06:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762233347; cv=none; b=f4MX7ldDdiN0NcuzqiX2X128SRK9g7PWZsiRT+UGjAW+hMXSn6IHiu5OQgkEETEk5nDXSpOh6438Irel27maGI8JmToHr8cEk04tY7LLIjAxAIsa9qXqHhZYoupMuf01TpJKsyAGIz8ah5JY209/dfLR1UHWpYPAoN20Ol7rbTg=
+	t=1762237029; cv=none; b=uuNmCRCivi7PpyMxGPN4i3H8kIYrLbzwbS2yZsC7oLNJGgxhxZTtGMolrIlF3B1qHIsZjigbNexsRFS+rrwGgCyIJ8tk7wib3nvknJ0GP+bB+KWuZlfYzMG/eqeWKRcIbPdULBp9iF6viIaWPyz1UyFifwRG2rw6DGC3CsgKouk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762233347; c=relaxed/simple;
-	bh=CG/77hDlBA5GAi+YsvTXUU6wq+DW2FoxpA4mz+wRsT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mhU6li0ifd6IKAJBIcsUd41EaY911YIzFQCjnxH58K1Mv+7S+CKj28vYjvQjKJ/kejCXpwr6Zv7lGG5vIE7rWnqRYPf58HybCCxVNk+7AaLXAFdlnArvcgyC1T+GLSIHIJl3gFq3/Gd2XF4lUwnlitXCvmj4tLr+8dluywQfg6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zsKl4KLe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DDFC4CEF8;
-	Tue,  4 Nov 2025 05:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1762233346;
-	bh=CG/77hDlBA5GAi+YsvTXUU6wq+DW2FoxpA4mz+wRsT4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zsKl4KLeRKR6BOr+L/GctUjALH92R4J9iOWiTTpAanB//7lFP/tEVZOBTBWCqBmhN
-	 eajqB9JtkWpp+rli6dLKkByyuJDzBpGdsaIs3nxNoU5Y7pAtqei6jwFnP9+FAtxclX
-	 qSAEIVlLS0t/3ti07tWm7/CUDeFS4LQIjX+NEuho=
-Date: Tue, 4 Nov 2025 14:15:44 +0900
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: guhuinan <guhuinan@xiaomi.com>
-Cc: stable@vger.kernel.org, linux-usb@vger.kernel.org,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Ingo Rohloff <ingo.rohloff@lauterbach.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Chen Ni <nichen@iscas.ac.cn>, Peter Zijlstra <peterz@infradead.org>,
-	Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
-	Akash M <akash.m5@samsung.com>, Chenyu <chenyu45@xiaomi.com>,
-	Yudongbin <yudongbin@xiaomi.com>, Mahongwei <mahongwei3@xiaomi.com>,
-	Jiangdayu <jiangdayu@xiaomi.com>
-Subject: Re: [PATCH 6.12.y] usb: gadget: f_fs: Fix epfile null pointer access
- after ep enable.
-Message-ID: <2025110452-graffiti-blizzard-9cbc@gregkh>
-References: <20251104034946.605-1-guhuinan@xiaomi.com>
+	s=arc-20240116; t=1762237029; c=relaxed/simple;
+	bh=Awe/C4dgeth/gqIck+puaWvhE1Pl7xHE9OomEMpA5Ws=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LFYcHq3t7d54p9ixy1fwlM7lVU5Dkm71DPEcpZITHvZ8vOY+/4GzrNhbietm4kJb7Duy3UomGKhQ8Zgk/Rqkd101h/OM8TpheBTuBYZGd3//PyL8Yb57tcNM+Hldho2E1+OrypEk2/C6/qqss20BafLqYdhyDrHeOb8E2adYDTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: uTZkr/3MQUG+47Bde253qA==
+X-CSE-MsgGUID: ntsweP9lTCCwZ0Kzgx7tzQ==
+X-IronPort-AV: E=Sophos;i="6.19,278,1754928000"; 
+   d="scan'208";a="131456660"
+From: guhuinan <guhuinan@xiaomi.com>
+To: Oliver Neukum <oneukum@suse.com>, Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+	<usb-storage@lists.one-eyed-alien.net>, <linux-kernel@vger.kernel.org>, "Yu
+ Chen" <chenyu45@xiaomi.com>, Owen Gu <guhuinan@xiaomi.com>, Michal Pecio
+	<michal.pecio@gmail.com>
+Subject: [PATCH v3] usb: uas: fix urb unmapping issue when the uas device is remove during ongoing data transfer
+Date: Tue, 4 Nov 2025 14:16:07 +0800
+Message-ID: <20251104061608.1336-1-guhuinan@xiaomi.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251104034946.605-1-guhuinan@xiaomi.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BJ-MBX17.mioffice.cn (10.237.8.137) To BJ-MBX05.mioffice.cn
+ (10.237.8.125)
 
-On Tue, Nov 04, 2025 at 11:49:46AM +0800, guhuinan wrote:
-> From: Owen Gu <guhuinan@xiaomi.com>
-> 
-> [ Upstream commit cfd6f1a7b42f ("usb: gadget: f_fs: Fix epfile null
-> pointer access after ep enable.") ]
-> 
-> A race condition occurs when ffs_func_eps_enable() runs concurrently
-> with ffs_data_reset(). The ffs_data_clear() called in ffs_data_reset()
-> sets ffs->epfiles to NULL before resetting ffs->eps_count to 0, leading
-> to a NULL pointer dereference when accessing epfile->ep in
-> ffs_func_eps_enable() after successful usb_ep_enable().
-> 
-> The ffs->epfiles pointer is set to NULL in both ffs_data_clear() and
-> ffs_data_close() functions, and its modification is protected by the
-> spinlock ffs->eps_lock. And the whole ffs_func_eps_enable() function
-> is also protected by ffs->eps_lock.
-> 
-> Thus, add NULL pointer handling for ffs->epfiles in the
-> ffs_func_eps_enable() function to fix issues
-> 
-> Signed-off-by: Owen Gu <guhuinan@xiaomi.com>
-> Link: https://lore.kernel.org/r/20250915092907.17802-1-guhuinan@xiaomi.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/usb/gadget/function/f_fs.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+From: Owen Gu <guhuinan@xiaomi.com>
 
-What about 6.17.y?  You do not want to upgrade from 6.12 to a newer
-kernel and have a regression.
+When a UAS device is unplugged during data transfer, there is
+a probability of a system panic occurring. The root cause is
+an access to an invalid memory address during URB callback handling.
+Specifically, this happens when the dma_direct_unmap_sg() function
+is called within the usb_hcd_unmap_urb_for_dma() interface, but the
+sg->dma_address field is 0 and the sg data structure has already been
+freed.
 
-And if this fixes a bug, why was it not marked with a Fixes: tag or a
- cc: stable tag?  Did I just miss that before?
+The SCSI driver sends transfer commands by invoking uas_queuecommand_lck()
+in uas.c, using the uas_submit_urbs() function to submit requests to USB.
+Within the uas_submit_urbs() implementation, three URBs (sense_urb,
+data_urb, and cmd_urb) are sequentially submitted. Device removal may
+occur at any point during uas_submit_urbs execution, which may result
+in URB submission failure. However, some URBs might have been successfully
+submitted before the failure, and uas_submit_urbs will return the -ENODEV
+error code in this case. The current error handling directly calls
+scsi_done(). In the SCSI driver, this eventually triggers scsi_complete()
+to invoke scsi_end_request() for releasing the sgtable. The successfully
+submitted URBs, when being unlinked to giveback, call
+usb_hcd_unmap_urb_for_dma() in hcd.c, leading to exceptions during sg
+unmapping operations since the sg data structure has already been freed.
 
-thanks,
+This patch modifies the error condition check in the uas_submit_urbs()
+function. When a UAS device is removed but one or more URBs have already
+been successfully submitted to USB, it avoids immediately invoking
+scsi_done() and save the cmnd to devinfo->cmnd array. If the successfully
+submitted URBs is completed before devinfo->resetting being set, then
+the scsi_done() function will be called within uas_try_complete() after
+all pending URB operations are finalized. Otherwise, the scsi_done()
+function will be called within uas_zap_pending(), which is executed after
+usb_kill_anchored_urbs().
 
-greg k-h
+The error handling only takes effect when uas_queuecommand_lck() calls
+uas_submit_urbs() and returns the error value -ENODEV . In this case,
+the device is disconnected, and the flow proceeds to uas_disconnect(),
+where uas_zap_pending() is invoked to call uas_try_complete().
+
+Signed-off-by: Yu Chen <chenyu45@xiaomi.com>
+Signed-off-by: Owen Gu <guhuinan@xiaomi.com>
+---
+v3: Add some commit message.
+v2: Upon uas_submit_urbs() returning -ENODEV despite successful URB
+submission, the cmnd is added to the devinfo->cmnd array before
+exiting uas_queuecommand_lck().
+https://lore.kernel.org/linux-usb/20251015153157.11870-1-guhuinan@xiaomi.com/
+v1: https://lore.kernel.org/linux-usb/20250930045309.21588-1-guhuinan@xiaomi.com/
+---
+---
+ drivers/usb/storage/uas.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 4ed0dc19afe0..45b01df364f7 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -698,6 +698,10 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
+ 	 * of queueing, no matter how fatal the error
+ 	 */
+ 	if (err == -ENODEV) {
++		if (cmdinfo->state & (COMMAND_INFLIGHT | DATA_IN_URB_INFLIGHT |
++				DATA_OUT_URB_INFLIGHT))
++			goto out;
++
+ 		set_host_byte(cmnd, DID_NO_CONNECT);
+ 		scsi_done(cmnd);
+ 		goto zombie;
+@@ -711,6 +715,7 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
+ 		uas_add_work(cmnd);
+ 	}
+ 
++out:
+ 	devinfo->cmnd[idx] = cmnd;
+ zombie:
+ 	spin_unlock_irqrestore(&devinfo->lock, flags);
+-- 
+2.43.0
+
 
