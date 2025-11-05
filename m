@@ -1,34 +1,34 @@
-Return-Path: <linux-usb+bounces-30117-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30118-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F18DEC37B62
-	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 21:26:33 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A76D0C37C2E
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 21:39:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3F561883C87
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 20:26:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 633FB4E6130
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 20:37:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625A8346760;
-	Wed,  5 Nov 2025 20:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30DCA346794;
+	Wed,  5 Nov 2025 20:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="RVbmeBdN"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="6QEOpxMo"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856C5341677;
-	Wed,  5 Nov 2025 20:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B442FDC42;
+	Wed,  5 Nov 2025 20:37:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762374374; cv=none; b=JQai0wq8TFy2kxkr6O0ynvXtUAKY3dF695+asy30bUJe/n1e6Kjh9vt8ViZ76Cse98UfzlnpQL6rWWNNBUgL1QALkIscYdEdV1gW2JrnlYJcWN0g/RWszU+asKSEVIwwVfUp9bdObgTglYrXpObdMK0d1VO/yrcFeec5c6GPens=
+	t=1762375032; cv=none; b=iwptXQEisDfM1DpFQqosoQTQ7GaQdlE5GWvdUYdjnfH969JxsZrFEXYPwMVse8rZ688l5T/A7Uc+2HWEP8lmXYnwDxkYhxaEzsTCUawc88P6Eh+CWqlPqFKa5wq2MCXoBt9N06SrzXG3nHRZkNd1qGqLTuBR2/sSu8T7d5HYyYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762374374; c=relaxed/simple;
-	bh=+4BOJ3E9eYPLTMYlpaX9guGkVv/Uzqcqy/bSN65IGO4=;
+	s=arc-20240116; t=1762375032; c=relaxed/simple;
+	bh=muwKqzLMJYkC5bScsgl/ewFQY2fXk4L0ZUkJmMtPU4o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WatJUzLDkE0EbSx6p4Ca5kv8JSVqqAUcRlsfjITf/gsNWC+R9UKjpY3pR86FngPq+ZFhUo3R0TVM1YNKibRRNX46OKdOLL1uRNyWYSToD+UbJKPdtG/jiw/nJsHM094hr0VbcPKQr74+m7+NrSln/pF4speXeW69pIFzSg0Db/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=RVbmeBdN; arc=none smtp.client-ip=156.67.10.101
+	 Content-Type:Content-Disposition:In-Reply-To; b=pDdIxl7Px3ind5sA9XJ7mveUawUbywaPrln+2BDjSY5XbpP/JEY2MerjF4yYupqgno74umJNQZrWUHUPw+bd5NYTjNF5E/A69emERMfM91NU3df94eLMgy2z1AtfRm/Z830qdipDotoDeCCryakZjGxh8nMP5oD2nbTuc5tKFfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=6QEOpxMo; arc=none smtp.client-ip=156.67.10.101
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
@@ -36,13 +36,13 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
 	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
 	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=URqAPK4dP20tWDL9nRR+cKAmfbGmOiVkDnvpqKSePEY=; b=RVbmeBdNYgSIjyEqRh8lxMaU83
-	LaQ2Ag3mc6DCnUth4c8WbrhvTR5MzKD6+e1F5ACsXxAQoNlamOLOsAZQWLjh8R8EgFp1qRi4hEMvl
-	L0GAb63Xyw4P2QacM0IRp4nHk6ynOqDcIDY2HUHi43SEkKUz9dZJgqQoFA6GxRNjKSZ8=;
+	bh=W6ehPsM5gg9RaSLqrceyWQW4IW17EYg8KIyTamvdBxM=; b=6QEOpxMooT6+RON7QspUZKx8d2
+	LfN01Rg14ZGSuVA3Txoqnc+Zy/mqok3PNYKobIIdnig/85EqZxUFarigqeoeGCEQAIXqQ5DgEiI1/
+	28w0sjPK38jEFK4EhhTERoZY5sJCGRB++eaxD8liqBw45cyf8or8AfqvfUKBxAe+SdP4=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
 	(envelope-from <andrew@lunn.ch>)
-	id 1vGk4z-00D2Op-E1; Wed, 05 Nov 2025 21:26:05 +0100
-Date: Wed, 5 Nov 2025 21:26:05 +0100
+	id 1vGkFe-00D2Sl-UU; Wed, 05 Nov 2025 21:37:06 +0100
+Date: Wed, 5 Nov 2025 21:37:06 +0100
 From: Andrew Lunn <andrew@lunn.ch>
 To: Dharanitharan R <dharanitharan725@gmail.com>
 Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -51,7 +51,7 @@ Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
 	syzbot+b4d5d8faea6996fd55e3@syzkaller.appspotmail.com
 Subject: Re: [PATCH v3] usb: rtl8150: Initialize buffers to fix KMSAN
  uninit-value in rtl8150_open
-Message-ID: <a5565fd2-358a-4e76-a449-f6fd97e6dc09@lunn.ch>
+Message-ID: <11301ae7-ac18-4a2f-9728-28cf1ba1afdd@lunn.ch>
 References: <20251105195626.4285-1-dharanitharan725@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -63,30 +63,32 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20251105195626.4285-1-dharanitharan725@gmail.com>
 
-On Wed, Nov 05, 2025 at 07:56:26PM +0000, Dharanitharan R wrote:
-> KMSAN reported an uninitialized value use in rtl8150_open().
-> Initialize rx_skb->data and intr_buff before submitting URBs to
-> ensure memory is in a defined state.
+> -	usb_fill_bulk_urb(dev->rx_urb, dev->udev, usb_rcvbulkpipe(dev->udev, 1),
+> -		      dev->rx_skb->data, RTL8150_MTU, read_bulk_callback, dev);
+> -	if ((res = usb_submit_urb(dev->rx_urb, GFP_KERNEL))) {
+> -		if (res == -ENODEV)
+> -			netif_device_detach(dev->netdev);
+> +	usb_fill_bulk_urb(dev->rx_urb, dev->udev,
+> +			  usb_rcvbulkpipe(dev->udev, 1),
+> +			  dev->rx_skb->data, RTL8150_MTU,
+> +			  read_bulk_callback, dev);
 
-> @@ -769,8 +766,7 @@ static int rtl8150_open(struct net_device *netdev)
->  	enable_net_traffic(dev);
->  	set_carrier(netdev);
->  	netif_start_queue(netdev);
-> -
-> -	return res;
-> +	return 0;
->  }
+If im reading this correctly, the usb_fill_bulk_urb() is identical,
+you have just changed the wrapping. So this again has nothing to do
+with the issue you are trying to fix. Changes like this make it harder
+to see the real change which fixes the problem. And at the moment, i
+don't see the actual fix.
 
-While i agree that res is guaranteed to by 0, this change has nothing
-to do with fixing a KMSAN report. Please make it a separate patch in a
-patch series. A patch should do one thing, and the commit message
-should explain the "why?" of the change.
+If you want to make changes like this, please do so in a patch of its
+own which only changes the wrapping, nothing else. That is then easy
+to review.
 
-Please also take a read of:
+Lots of small changes, which hopefully are obviously correct, with
+good commit messages please.
 
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+    Andrew
 
-The Subject line should indicate which tree this is for.
+---
+pw-bot: cr
 
-	Andrew
 
