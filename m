@@ -1,95 +1,110 @@
-Return-Path: <linux-usb+bounces-30067-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30068-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E555C33320
-	for <lists+linux-usb@lfdr.de>; Tue, 04 Nov 2025 23:22:44 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E12F7C33C7B
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 03:33:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C85D18C647A
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Nov 2025 22:20:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BDF424E7C45
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 02:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6042D346FD9;
-	Tue,  4 Nov 2025 22:19:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gysjcgRD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3997221578;
+	Wed,  5 Nov 2025 02:33:46 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADCDE2D12EF;
-	Tue,  4 Nov 2025 22:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [207.226.244.123])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1378B1624D5;
+	Wed,  5 Nov 2025 02:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.226.244.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762294747; cv=none; b=RV1Y/UAxAJTf1rrXTAUFgO/0Fbl8sBxJukwF3wlO08d4paQdSeTwaK5MWBWZFEFuMpWBs2s4xhxa7Za/DS+ORQc/kcQaUH3BQzeGrZDZvE5oSTXrQzN0sHHY5L/pY467Ozlc+3F7+8sQu2An7WQyapVfrUF3ZoXZsj5MYOwb1Mw=
+	t=1762310026; cv=none; b=TIQBWMJe2SzL1uCV/J/SXZIZR/2Vu234CSBBw2BrqdTbriFJmIqdKCYsnmrymefnLnCkpZeijiofV2xViOvQzcsSI5I6qFN7QP9UUQS2Rxjc1AIshUxduf2RuOmTK7/qQMLMCJ0XcJ8zLusy6uA39IVW8EhN/Chtdq5eSjzL2n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762294747; c=relaxed/simple;
-	bh=LS0mMIE5Lb/ESdIDqPOlSb6UNcRJNOOE3UsfcASavbI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sJH9rTd27a3fXj3pTI0Sr6E9W4Ixnea1Vz8QExIrn1fxHXqLCyblkYus/pKLydiQJHC28H7A/sgqHVkJJ97e9xfPvC9PW5UZiw4VwWsRSeakQbYb0B4mDwXhHOnNTlSAxKcFhSM39jD4hoZ3zUwyQkaMWcozmffp19Ve+QVoRiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gysjcgRD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC216C4CEF7;
-	Tue,  4 Nov 2025 22:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1762294746;
-	bh=LS0mMIE5Lb/ESdIDqPOlSb6UNcRJNOOE3UsfcASavbI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gysjcgRDjFXS/4n90ag5CSm1FnVv6Uyu1yhZuGxm6wIM+FoX+SatJGn49386klBwU
-	 SifIEHOGMDeb8ZyKhXHKat9+OcyTc/6W1QoUj8prqVPn1W+m+BU6Ns39vn19FKqAqK
-	 r2+Y66udN2BhjPfiGN95z34bKP8toPlFPy0jBOmc=
-Date: Wed, 5 Nov 2025 07:19:02 +0900
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Dharanitharan R <dharanitharan725@gmail.com>
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	syzbot+b4d5d8faea6996fd55e3@syzkaller.appspotmail.com,
-	syzbot+b4d5d8faea6996fd@syzkaller.appspotmail.com
-Subject: Re: [PATCH] [PATCH] usb: rtl8150: Initialize buffers to fix KMSAN
- uninit-value in rtl8150_open
-Message-ID: <2025110531-replace-grass-3c41@gregkh>
-References: <202508272322.b4d5d8faea6996fd@syzkaller.appspotmail.com>
- <20251104164838.17846-1-dharanitharan725@gmail.com>
+	s=arc-20240116; t=1762310026; c=relaxed/simple;
+	bh=rjrR/8p2+UPQYdZh5dxskS4iYX1WrNMgZSwvL/qYOKo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iGeh+z+k3AvHQ99k8CHJtXZKRIsaC0F05dB68NvNVTg6vXT3xc3F+nsfWZ8RRo9d7Cja2oxN5PLiyivbwXXAaS5c2BeMDORVCtuuJZPo4Nhheg54hTQiIuA2S4qMMM1qJcx5mkypECkb581eeDxjfXGNBqP4lYfEbMFygSrOXOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=207.226.244.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: 96Hye9UyTOaXxfI6BIxJcw==
+X-CSE-MsgGUID: jdkfdahWSWaBEVYy4ZCsIw==
+X-IronPort-AV: E=Sophos;i="6.19,280,1754928000"; 
+   d="scan'208";a="157351177"
+Date: Wed, 5 Nov 2025 10:33:38 +0800
+From: Owen Gu <guhuinan@xiaomi.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: <stable@vger.kernel.org>, <linux-usb@vger.kernel.org>, Al Viro
+	<viro@zeniv.linux.org.uk>, Ingo Rohloff <ingo.rohloff@lauterbach.com>,
+	Christian Brauner <brauner@kernel.org>, Chen Ni <nichen@iscas.ac.cn>, "Peter
+ Zijlstra" <peterz@infradead.org>, Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
+	Akash M <akash.m5@samsung.com>, Chenyu <chenyu45@xiaomi.com>, Yudongbin
+	<yudongbin@xiaomi.com>, Mahongwei <mahongwei3@xiaomi.com>, Jiangdayu
+	<jiangdayu@xiaomi.com>
+Subject: Re: [PATCH 6.12.y] usb: gadget: f_fs: Fix epfile null pointer access
+ after ep enable.
+Message-ID: <aQq3gkC7k9QCEiYl@oa-guhuinan-2.localdomain>
+References: <20251104034946.605-1-guhuinan@xiaomi.com>
+ <2025110452-graffiti-blizzard-9cbc@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20251104164838.17846-1-dharanitharan725@gmail.com>
+In-Reply-To: <2025110452-graffiti-blizzard-9cbc@gregkh>
+X-ClientProxiedBy: bj-mbx11.mioffice.cn (10.237.8.131) To BJ-MBX05.mioffice.cn
+ (10.237.8.125)
 
-On Tue, Nov 04, 2025 at 04:48:37PM +0000, Dharanitharan R wrote:
-> KMSAN reported an uninitialized value use in rtl8150_open().
-> Initialize rx_skb->data and intr_buff before submitting URBs to
-> ensure memory is in a defined state.
+On Tue, Nov 04, 2025 at 02:15:44PM +0900, Greg Kroah-Hartman wrote:
+> On Tue, Nov 04, 2025 at 11:49:46AM +0800, guhuinan wrote:
+> > From: Owen Gu <guhuinan@xiaomi.com>
+> > 
+> > [ Upstream commit cfd6f1a7b42f ("usb: gadget: f_fs: Fix epfile null
+> > pointer access after ep enable.") ]
+> > 
+> > A race condition occurs when ffs_func_eps_enable() runs concurrently
+> > with ffs_data_reset(). The ffs_data_clear() called in ffs_data_reset()
+> > sets ffs->epfiles to NULL before resetting ffs->eps_count to 0, leading
+> > to a NULL pointer dereference when accessing epfile->ep in
+> > ffs_func_eps_enable() after successful usb_ep_enable().
+> > 
+> > The ffs->epfiles pointer is set to NULL in both ffs_data_clear() and
+> > ffs_data_close() functions, and its modification is protected by the
+> > spinlock ffs->eps_lock. And the whole ffs_func_eps_enable() function
+> > is also protected by ffs->eps_lock.
+> > 
+> > Thus, add NULL pointer handling for ffs->epfiles in the
+> > ffs_func_eps_enable() function to fix issues
+> > 
+> > Signed-off-by: Owen Gu <guhuinan@xiaomi.com>
+> > Link: https://lore.kernel.org/r/20250915092907.17802-1-guhuinan@xiaomi.com
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/usb/gadget/function/f_fs.c | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> Reported-by: syzbot+b4d5d8faea6996fd@syzkaller.appspotmail.com
-> Signed-off-by: Dharanitharan R <dharanitharan725@gmail.com>
-> ---
->  drivers/net/usb/rtl8150.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
+> What about 6.17.y?  You do not want to upgrade from 6.12 to a newer
+> kernel and have a regression.
 > 
-> diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-> index 278e6cb6f4d9..f1a868f0032e 100644
-> --- a/drivers/net/usb/rtl8150.c
-> +++ b/drivers/net/usb/rtl8150.c
-> @@ -719,14 +719,15 @@ static netdev_tx_t rtl8150_start_xmit(struct sk_buff *skb,
->  
->  static void set_carrier(struct net_device *netdev)
->  {
-> -	rtl8150_t *dev = netdev_priv(netdev);
-> -	short tmp;
-> +    rtl8150_t *dev = netdev_priv(netdev);
-> +    short tmp;
+> And if this fixes a bug, why was it not marked with a Fixes: tag or a
+>  cc: stable tag?  Did I just miss that before?
+> 
+> thanks,
+> 
+> greg k-h
+Hi Greg KH,
 
-Always run checkpatch on your changes so you don't get grumpy
-maintainers asking why you didn't run checkpatch on your change :)
+I noticed that the patch for version 6.17.y has already been submitted:
+ https://lore.kernel.org/all/20251025160905.3857885-311-sashal@kernel.org/
 
-Please fix and send a v2.
+I apologize for forgetting to include the 'Fixes' tag in the previous
+patch submission. Are there any corrective actions available now?
+The fix reference is:
+Fixes: ebe2b1add1055 ("usb: f_fs: Fix use-after-free for epfile")"
 
-thanks,
-
-greg k-h
+Thanks,
+Owen
 
