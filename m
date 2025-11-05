@@ -1,108 +1,92 @@
-Return-Path: <linux-usb+bounces-30116-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30117-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7BDFC37AB4
-	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 21:17:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F18DEC37B62
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 21:26:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64B333A3725
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 20:16:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3F561883C87
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 20:26:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809BC346798;
-	Wed,  5 Nov 2025 20:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625A8346760;
+	Wed,  5 Nov 2025 20:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZwZB1DT"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="RVbmeBdN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C496E1E32D3
-	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 20:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856C5341677;
+	Wed,  5 Nov 2025 20:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762373815; cv=none; b=V/42so3P9XM+8hPuOd751OKxyriuWRdIOgzCc5/wvd32BOicpjZewKiv4T89lVOboXZkapwBWMO0oguqYXwh6MGVV4laS46aY9EwIchcOD0bdfydrcQ0Wj3vONQviesUWujy0rWL4gJDGHKgGw0RFKe3jPh2cZu6wYv8s1jv+T4=
+	t=1762374374; cv=none; b=JQai0wq8TFy2kxkr6O0ynvXtUAKY3dF695+asy30bUJe/n1e6Kjh9vt8ViZ76Cse98UfzlnpQL6rWWNNBUgL1QALkIscYdEdV1gW2JrnlYJcWN0g/RWszU+asKSEVIwwVfUp9bdObgTglYrXpObdMK0d1VO/yrcFeec5c6GPens=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762373815; c=relaxed/simple;
-	bh=GH6a6bz+dzVuiCyuQQDGGa55hsVGdy0pm8h6/IIKXh0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SCfmzk3/DZ8L/Pozz6WDRUSdYthYdDMDi2biOb+8TQgMxfrrAawr6jjQsRHTxt8e9IAHVo8XnqFl5V48j3brPSBFg+3QPSYOx1eMufGxCJErPyrKJQ5BpmANQ7I5RAjebeG+1vlEsdKOR56RvddwQYP/QdYYGe1Tt9nJSJ/1iyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZwZB1DT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 532AEC19423
-	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 20:16:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762373815;
-	bh=GH6a6bz+dzVuiCyuQQDGGa55hsVGdy0pm8h6/IIKXh0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=lZwZB1DTLAyL6f5UstOVssvFcgNqkCPjHreGzRMIUudbZlKvCSJWPJbGv0lu3SM+6
-	 3AUVrQ3tpSPrBqE1Pt0P7i/hsiYCMED2f/MpFrHT3q+UnHXj8KfcVZJg0D+2abr/7X
-	 mzPeQWgQqT5sRJYTIYdGpZtgSBEczoe17zbDUDZiZQDqzq+3fG+1hJTELFfV+M1xcF
-	 ODFkwxk4L6XfCb61CsbK/MYTaqmPUK/xffeNxbiKy/tglwEsABM8ogdQ8c0kKbBUtf
-	 b97+MyQNW5LhIr2eQJktzXw1wxl101a0m5OhSotapZs5P3MpqHhWP0aHu1TfFIAN4O
-	 9VvVyVIbMKcDg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4D76FC433E1; Wed,  5 Nov 2025 20:16:55 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame and
- always assumes URB_ISO_ASAP is set
-Date: Wed, 05 Nov 2025 20:16:54 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220748-208809-vlEuxTaNp4@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220748-208809@https.bugzilla.kernel.org/>
-References: <bug-220748-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1762374374; c=relaxed/simple;
+	bh=+4BOJ3E9eYPLTMYlpaX9guGkVv/Uzqcqy/bSN65IGO4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WatJUzLDkE0EbSx6p4Ca5kv8JSVqqAUcRlsfjITf/gsNWC+R9UKjpY3pR86FngPq+ZFhUo3R0TVM1YNKibRRNX46OKdOLL1uRNyWYSToD+UbJKPdtG/jiw/nJsHM094hr0VbcPKQr74+m7+NrSln/pF4speXeW69pIFzSg0Db/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=RVbmeBdN; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=URqAPK4dP20tWDL9nRR+cKAmfbGmOiVkDnvpqKSePEY=; b=RVbmeBdNYgSIjyEqRh8lxMaU83
+	LaQ2Ag3mc6DCnUth4c8WbrhvTR5MzKD6+e1F5ACsXxAQoNlamOLOsAZQWLjh8R8EgFp1qRi4hEMvl
+	L0GAb63Xyw4P2QacM0IRp4nHk6ynOqDcIDY2HUHi43SEkKUz9dZJgqQoFA6GxRNjKSZ8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vGk4z-00D2Op-E1; Wed, 05 Nov 2025 21:26:05 +0100
+Date: Wed, 5 Nov 2025 21:26:05 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Dharanitharan R <dharanitharan725@gmail.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	syzbot+b4d5d8faea6996fd55e3@syzkaller.appspotmail.com
+Subject: Re: [PATCH v3] usb: rtl8150: Initialize buffers to fix KMSAN
+ uninit-value in rtl8150_open
+Message-ID: <a5565fd2-358a-4e76-a449-f6fd97e6dc09@lunn.ch>
+References: <20251105195626.4285-1-dharanitharan725@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251105195626.4285-1-dharanitharan725@gmail.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220748
+On Wed, Nov 05, 2025 at 07:56:26PM +0000, Dharanitharan R wrote:
+> KMSAN reported an uninitialized value use in rtl8150_open().
+> Initialize rx_skb->data and intr_buff before submitting URBs to
+> ensure memory is in a defined state.
 
---- Comment #8 from Alan Stern (stern@rowland.harvard.edu) ---
-Sorry, yes, urb->interval and urb->start_frame do get modified during
-submission.  Drivers are allowed to read those fields before the URB comple=
-tes.
+> @@ -769,8 +766,7 @@ static int rtl8150_open(struct net_device *netdev)
+>  	enable_net_traffic(dev);
+>  	set_carrier(netdev);
+>  	netif_start_queue(netdev);
+> -
+> -	return res;
+> +	return 0;
+>  }
 
-The documentation from Intel is irrelevant.  It discusses the xHCI hardware,
-but we're talking about the Linux software interface.
+While i agree that res is guaranteed to by 0, this change has nothing
+to do with fixing a KMSAN report. Please make it a separate patch in a
+patch series. A patch should do one thing, and the commit message
+should explain the "why?" of the change.
 
-As for the considerations at the start of this bug report...  xhci-hcd is
-indeed supposed to ignore urb->start_frame during submission and overwrite =
-it
-with the actual starting (micro)frame number.  And most of the time, xhci-h=
-cd
-is supposed to ignore URB_ISO_ASAP.  But it's not supposed to ignore
-URB_ISO_ASAP in cases where the URB was submitted too late.  By "too late",=
- I
-mean that at the time the URB was submitted, the (micro)frame that it should
-have been scheduled for -- one period after the last frame of the preceding=
- URB
--- had already elapsed.
+Please also take a read of:
 
---=20
-You may reply to this email to add a comment.
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+The Subject line should indicate which tree this is for.
+
+	Andrew
 
