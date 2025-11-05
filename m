@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-30074-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30075-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62F7DC34832
-	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 09:40:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECAB7C34938
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 09:51:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8064F465A11
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 08:40:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C2DA192014E
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 08:50:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEACC2D0602;
-	Wed,  5 Nov 2025 08:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2890D2ECEBB;
+	Wed,  5 Nov 2025 08:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sDwlARi0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ER1B8Vwt"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDB7288510
-	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 08:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9828B2DEA83
+	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 08:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762332010; cv=none; b=mnDF4+TyVG57u+Ye09hI8qrTCero1GVtHN4VXbXcV1gCoa03/z8tkrnirvcun36Ufbq02bfFAUtMu5aYwooeI9+DbwAmdJ355yJtCSPqB3UX7i4EF9x5JGXqmtW5RwjkXiAlP1OdUWiOY7OkgJ3jUgQry9MS/htR4TMdvw1TYqo=
+	t=1762332503; cv=none; b=B+33fkA4S5yrt9iD8SDdttH9ttRp9qaD68DC+YJ17sD9qbsJkQLQGxvN2ZBZ/sHMoiq7PNcEm0f8wwl5BdjUHJEbZJs12KeYRILbTuu+OxdoIhZWNQehl87frnncUjwP/J5qvxYXBd8AJBjXQUOab6Exx7qcwbKy4/6KqCO/rpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762332010; c=relaxed/simple;
-	bh=Yc7l39U8VPA9CxOeTrmXsGQvRl35jenNC0+996YlJJE=;
+	s=arc-20240116; t=1762332503; c=relaxed/simple;
+	bh=EZligCjiMuGp+tPa0LkB08lQJZ7PYZh7EcSFvva+h0k=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uaMakRGO0YMjyH7W0/qT2VTXYq1j5xP9GoUQS0Mt8Mt9ajKLECokGZeEmTuSRffsiNQqcxEGxkZsfWsmLii4XCmTLu0x3t17x+vY0q5TuogydpX3m7Fnk8ULeZgVo6MRAkY0Xa2guDPJw/VgPSr4c4HyZBmJqnjEE/+MNTR58vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sDwlARi0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 19BA7C19424
-	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 08:40:10 +0000 (UTC)
+	 Content-Type:MIME-Version; b=m222tr4mTrlQyRtb/fRm11tVc9WS9/6Qhf2s2Xv2E4A0pQ4fbusT/+CSiaYU41AYx/DY43PNkI+Zg9x6FSZJbqN/xUjD0TkPlXyUPWGbdF/qiZ5RP3++VfoSZyJ5I4eMYmrYqU5iLs6GQekJnpvd+/pE+LDxR4m1D0WpOd640CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ER1B8Vwt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 18588C19423
+	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 08:48:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762332010;
-	bh=Yc7l39U8VPA9CxOeTrmXsGQvRl35jenNC0+996YlJJE=;
+	s=k20201202; t=1762332503;
+	bh=EZligCjiMuGp+tPa0LkB08lQJZ7PYZh7EcSFvva+h0k=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=sDwlARi0uHirli0FFYRuQFWyyAY4IQSfPLMH/MQLNgfDfseMt7I2qXDzgyf0dQ8cx
-	 Rg6OOs1/HnxBWODzrdRGxbACy7uXpCpg0j1dbRr+Avg2gCec9HAk0P3j/kPXbL1pah
-	 myord13jCYyPL96LxlZOkKVGpnxWtuE27jNV1sA3q/0eRQXasWr4kjXhtkJjiH6Laj
-	 QfjihY1y08801DxZBv4W7ufErqguyoLsZ9zef71fS6R/ttRpsN4T2U0lBnzBubNlQ4
-	 g/P2xJUAjSPlQ6EdJ99ZNCvvtCbTEyvepdc4Ox6p02n+9CZXQuAi3zMYBannwRtgNA
-	 gVC1GAGn0+Lfg==
+	b=ER1B8VwtTIH6diRAr3NDRXPbln1FXCctHD3GjU6TwxpgzKNueJjVq+jdlS7RQTcV/
+	 ZaFZVwTGQwTAcqSEuTAVV7EnymaD6WlJRhH38wFTg1myiQUHB7HE3pWsQef9E+vhKb
+	 p1WPF66AL1PM5Sp22HFEJyVMdIR3JTtFbxAR7iVn52SwzquR4ooxAcNccVWT3K+zWx
+	 ipArVhYnGOj5+G1kDP2Xg7k8qvhB4e4ACUp/ggUDz9SNXe9OIZlfPGmgmr5A4lL/6G
+	 Bl6tMX13o91MSeQ38o8kGu/f58by48K77qibsSYFz94kckCGss+R3LXsjp8zJSV5AI
+	 lZ1kE47utkAhQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 15FEDC53BC5; Wed,  5 Nov 2025 08:40:10 +0000 (UTC)
+	id 13359C53BC5; Wed,  5 Nov 2025 08:48:23 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame and
  always assumes URB_ISO_ASAP is set
-Date: Wed, 05 Nov 2025 08:40:09 +0000
+Date: Wed, 05 Nov 2025 08:48:22 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -56,14 +56,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Who: nick83ola@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220748-208809-tlGlo9sbcq@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220748-208809-e1hOFSJ2CP@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220748-208809@https.bugzilla.kernel.org/>
 References: <bug-220748-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,62 +79,18 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220748
 
-Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
+--- Comment #2 from Nicola Lunghi (nick83ola@gmail.com) ---
+I haven't tried any changes as I'm not familiar with usb devices and wanted
+some feedback first
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |michal.pecio@gmail.com
 
---- Comment #1 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-Looks like you are right. I guess it means that synchronizing multiple
-soundcards or playback/capture streams isn't working either? (If class driv=
-ers
-implement that in the first place.)
+> Did you try the obvious?
 
-I wonder if this could be the reason for some weird snd-usb-audio behavior
-reported in the past (repeatedly unlinking and retrying URBs for unclear re=
-ason
-when running full-duplex with very low latency). But it's just a wild guess.
+> +       if (!(urb->transfer_flags & URB_ISO_ASAP))
+> +               goto skip_start_over;
+>         /* Calculate the start frame and put it in urb->start_frame. */
 
-Did you try the obvious?
-
-+       if (!(urb->transfer_flags & URB_ISO_ASAP))
-+               goto skip_start_over;
-        /* Calculate the start frame and put it in urb->start_frame. */
-
-> instead for example in drivers/usb/host/xhci-ring.c, function
-> xhci_queue_isoc_tx_prepare() the URB_ISO_ASAP flag is correctly used
-
-Actually, this function looks OK but it isn't called correctly because this
-shouldn't be limited to CFC *if* we are scheduling the first TD in a new "d=
-ata
-flow" (xHCI 4.11.2.5). But on modern HW it seems to be correct, and if you =
-skip
-the earlier urb->start_frame overwrite, chances are things may work for you.
-
-> This causes issues with devices that require a specific frame interval (l=
-ike
-> professional audio interfaces, for example the Motu AVB line)
-
-Does it mean there is hardware which breaks when polled at the rate specifi=
-ed
-in its own endpoint descriptor? Would it still break if you insert zero-len=
-gth
-frames in the "forbidden" periods?
-
-Using start_frame like that seems complicated and it's not feasible on Gen-1
-controllers (no CFC). Per Documentation/driver-api/usb/URB drivers may spec=
-ify
-any service interval on per-URB basis, but this of course can't work with x=
-HCI
-and results in a warning. However, as suggested in check_interval() comment=
-s,
-there could be a way of setting different polling interval at endpoint
-creation. I see no reason for xHCI HW not to accept that, even Gen-1.
-
-> https://linuxmusicians.com/viewtopic.php?p=3D179979#p179979
-
-Hmm, using the sideband API to bypass kernel bugs seems even more extreme :)
+I can try this and see if it works yes. my problem is how to see/debug this?
 
 --=20
 You may reply to this email to add a comment.
