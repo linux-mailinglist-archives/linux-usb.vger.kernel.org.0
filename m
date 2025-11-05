@@ -1,176 +1,108 @@
-Return-Path: <linux-usb+bounces-30115-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30116-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3A44C3795D
-	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 20:57:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7BDFC37AB4
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 21:17:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 22DF04E9209
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 19:57:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64B333A3725
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 20:16:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FAA03446A8;
-	Wed,  5 Nov 2025 19:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809BC346798;
+	Wed,  5 Nov 2025 20:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IFA7022b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZwZB1DT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9411F34404A
-	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 19:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C496E1E32D3
+	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 20:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762372617; cv=none; b=JYv+JkelLPnscItFzOfY8p7turuzMSv4+83zeOzmOHk5a5vgx6gcO/pSTOrxIoQx7WClBhyl1shzZiVNNnRUtUS9LA2GmJtq2iPUxN256UqceILD7uybHGJ2A3+qiaJkB5sqNL5SvbEFLNTsKimJ5eO2o/wVblJrI1uzdsum/eY=
+	t=1762373815; cv=none; b=V/42so3P9XM+8hPuOd751OKxyriuWRdIOgzCc5/wvd32BOicpjZewKiv4T89lVOboXZkapwBWMO0oguqYXwh6MGVV4laS46aY9EwIchcOD0bdfydrcQ0Wj3vONQviesUWujy0rWL4gJDGHKgGw0RFKe3jPh2cZu6wYv8s1jv+T4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762372617; c=relaxed/simple;
-	bh=D9tEbvqucCvXOROJVgc7K0nfkr5nvxlh9U/6ef0alic=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fxwG6KJEhFiFB5piBhWJZcKNaqPS7ZUmIF3FdeW+UPbk67F9GnS3g9FElQQWqqWQ8jwgLmaGGddF7PWGHoPjeWn+wnCyUH4ASMup00Wgz3IhXyjp5j6cUImwlIw/4AfVu3Cm7oN2d068gwUmZr3a5cavLKq5LQPjDVCcOBNAKt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IFA7022b; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2953ad5517dso2454965ad.0
-        for <linux-usb@vger.kernel.org>; Wed, 05 Nov 2025 11:56:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762372615; x=1762977415; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WbWTgusNc6BWzyopKKK9VOQsz0h9knpbKQuEH/YbUN8=;
-        b=IFA7022bbricJSlq+ek89uPvdT6JrF3oNnk4bl0ODeSuA/atD2KpKiNoxVTP9ajya8
-         hB4gB+gRopyZBdUmtgZPHDsVRfiEamYLO9zDZ+2opZVtI8b6qE8aMEmZcr33y33no/JI
-         +okD2f/9Nb2jfLNLlOmwJ05Qb3utrod0WiDCgVvUACIQdsQ1YdUSb0pDB6HClwqfvFgF
-         a5L0+hU22lZL0C0p+dB+WUnKuf7AEKKqRQKRNZ9EDssYzpQaaMN7UYQv6TEEc+QTvdAQ
-         rOIFmQqmol3sRvVS9u9ikLJJSNeqZemPkbXGHvxAlmfbZz1F/D4p+qr0Nr6n2cA0J/6l
-         p+1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762372615; x=1762977415;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WbWTgusNc6BWzyopKKK9VOQsz0h9knpbKQuEH/YbUN8=;
-        b=lWX3Z2TWGTwcWD2XGBGnkcGiJDHo+euud4+J8v4h3DQkHQyNC5VbC9+Dx4z96P0zSf
-         /aji9pwKtWPaLNYulUlmpMv+co0MTYEDs4hB9M1eKchz8JllOCL63aV6bs7OjGJyyW4i
-         hhBB+GT9ssWstbIM3lkqdvevlkkAVE4SRYjpAe8A5fw7Nce8VF0dF725A/utR5ktexZL
-         eKrbEqK/kAvtf4EAqf+cppru4sCIpAYQEcCsKmP/qRslQGnrTzTM9MGz59M4D4q0di3j
-         iK+IYHTwpLvPvotvyCxFKFjFaUrNRgax+/wSsFq/TvRLBdCGb+sSBvccV6EUUOsIissh
-         WksQ==
-X-Gm-Message-State: AOJu0YyW58X7S5gahaxTg4zA86MKx5OomTd39qOW2PO4jm3wwv39tCUv
-	GckhDkMJPtS+MkdTJgbnUrJ4R98M7f3LuJXGdVAo5ERiwCBQ1cSTo7dg
-X-Gm-Gg: ASbGnctixq43mmMMuL2egKWUn/zQJl2V5AeeeHRE3nwjy6U3nakEHRAGvTj4GKMggg2
-	ycD1CysfP7IAWr/J0SYLEAZxOzbKhXrX10SE7bW3VFLxwdJ5ok6hE/OK+XNw0RcEd3rm0Up4kDP
-	HH4XSFdtIAmbi2/Z0gVh3khtmv28cyMNPdEjeJSchbh3aK7Tk0Ya8utS8V9JZbEiL7wxJzsr2WJ
-	63V4iUQvuVqNAe2U55C346puOZnj2jLdtmSCfFgynygEy1GCHPuxnCfb8E2iUqDxXnBOCbKv7g6
-	EZCUlwATPGOx/aimNA8E0GcNSIE5p4Dcb4rTXLrkGFrffDZHC+/LmBNJQWsyx/k9kSMAquzrDTJ
-	kDLUIeautX6L97dhDD0Jh52XM/FaMhR+AAcn/EDDQaXSGf5ftLK437v4CVxRqYAT2CCLhH7MvGb
-	mefMXBfEYKWDxmA46FxLV7hkBAyc2WE/XMcA==
-X-Google-Smtp-Source: AGHT+IHy57e0NBAg1bsbOb2A5Etvn+xczr00qIWP9YriyOvktiXQZ2baK8RnEWfoUhGi2UtRTc3uUQ==
-X-Received: by 2002:a17:902:e805:b0:27c:56af:88ea with SMTP id d9443c01a7336-2962ae93ffbmr52193145ad.60.1762372614774;
-        Wed, 05 Nov 2025 11:56:54 -0800 (PST)
-Received: from localhost.localdomain ([157.50.7.195])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29651ca1c86sm3464525ad.91.2025.11.05.11.56.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 11:56:54 -0800 (PST)
-From: Dharanitharan R <dharanitharan725@gmail.com>
-To: netdev@vger.kernel.org
-Cc: linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	syzbot+b4d5d8faea6996fd55e3@syzkaller.appspotmail.com,
-	Dharanitharan R <dharanitharan725@gmail.com>
-Subject: [PATCH v3] usb: rtl8150: Initialize buffers to fix KMSAN uninit-value in rtl8150_open
-Date: Wed,  5 Nov 2025 19:56:26 +0000
-Message-ID: <20251105195626.4285-1-dharanitharan725@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1762373815; c=relaxed/simple;
+	bh=GH6a6bz+dzVuiCyuQQDGGa55hsVGdy0pm8h6/IIKXh0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SCfmzk3/DZ8L/Pozz6WDRUSdYthYdDMDi2biOb+8TQgMxfrrAawr6jjQsRHTxt8e9IAHVo8XnqFl5V48j3brPSBFg+3QPSYOx1eMufGxCJErPyrKJQ5BpmANQ7I5RAjebeG+1vlEsdKOR56RvddwQYP/QdYYGe1Tt9nJSJ/1iyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZwZB1DT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 532AEC19423
+	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 20:16:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762373815;
+	bh=GH6a6bz+dzVuiCyuQQDGGa55hsVGdy0pm8h6/IIKXh0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=lZwZB1DTLAyL6f5UstOVssvFcgNqkCPjHreGzRMIUudbZlKvCSJWPJbGv0lu3SM+6
+	 3AUVrQ3tpSPrBqE1Pt0P7i/hsiYCMED2f/MpFrHT3q+UnHXj8KfcVZJg0D+2abr/7X
+	 mzPeQWgQqT5sRJYTIYdGpZtgSBEczoe17zbDUDZiZQDqzq+3fG+1hJTELFfV+M1xcF
+	 ODFkwxk4L6XfCb61CsbK/MYTaqmPUK/xffeNxbiKy/tglwEsABM8ogdQ8c0kKbBUtf
+	 b97+MyQNW5LhIr2eQJktzXw1wxl101a0m5OhSotapZs5P3MpqHhWP0aHu1TfFIAN4O
+	 9VvVyVIbMKcDg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 4D76FC433E1; Wed,  5 Nov 2025 20:16:55 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame and
+ always assumes URB_ISO_ASAP is set
+Date: Wed, 05 Nov 2025 20:16:54 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220748-208809-vlEuxTaNp4@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220748-208809@https.bugzilla.kernel.org/>
+References: <bug-220748-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-KMSAN reported an uninitialized value use in rtl8150_open().
-Initialize rx_skb->data and intr_buff before submitting URBs to
-ensure memory is in a defined state.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220748
 
-Changes in v3:
- - Fixed whitespace and indentation (checkpatch clean)
- - Corrected syzbot tag
- - Corrected syzbot hash and tag
+--- Comment #8 from Alan Stern (stern@rowland.harvard.edu) ---
+Sorry, yes, urb->interval and urb->start_frame do get modified during
+submission.  Drivers are allowed to read those fields before the URB comple=
+tes.
 
-Reported-by: syzbot+b4d5d8faea6996fd55e3@syzkaller.appspotmail.com
-Signed-off-by: Dharanitharan R <dharanitharan725@gmail.com>
----
- drivers/net/usb/rtl8150.c | 34 +++++++++++++++-------------------
- 1 file changed, 15 insertions(+), 19 deletions(-)
+The documentation from Intel is irrelevant.  It discusses the xHCI hardware,
+but we're talking about the Linux software interface.
 
-diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-index f1a868f0032e..a7116d03c3d3 100644
---- a/drivers/net/usb/rtl8150.c
-+++ b/drivers/net/usb/rtl8150.c
-@@ -735,33 +735,30 @@ static int rtl8150_open(struct net_device *netdev)
- 	rtl8150_t *dev = netdev_priv(netdev);
- 	int res;
- 
--	if (dev->rx_skb == NULL)
--		dev->rx_skb = pull_skb(dev);
--	if (!dev->rx_skb)
--		return -ENOMEM;
--
- 	set_registers(dev, IDR, 6, netdev->dev_addr);
- 
- 	/* Fix: initialize memory before using it (KMSAN uninit-value) */
- 	memset(dev->rx_skb->data, 0, RTL8150_MTU);
- 	memset(dev->intr_buff, 0, INTBUFSIZE);
- 
--	usb_fill_bulk_urb(dev->rx_urb, dev->udev, usb_rcvbulkpipe(dev->udev, 1),
--		      dev->rx_skb->data, RTL8150_MTU, read_bulk_callback, dev);
--	if ((res = usb_submit_urb(dev->rx_urb, GFP_KERNEL))) {
--		if (res == -ENODEV)
--			netif_device_detach(dev->netdev);
-+	usb_fill_bulk_urb(dev->rx_urb, dev->udev,
-+			  usb_rcvbulkpipe(dev->udev, 1),
-+			  dev->rx_skb->data, RTL8150_MTU,
-+			  read_bulk_callback, dev);
-+
-+	res = usb_submit_urb(dev->rx_urb, GFP_KERNEL);
-+	if (res) {
- 		dev_warn(&netdev->dev, "rx_urb submit failed: %d\n", res);
- 		return res;
- 	}
- 
--	usb_fill_int_urb(dev->intr_urb, dev->udev, usb_rcvintpipe(dev->udev, 3),
--		     dev->intr_buff, INTBUFSIZE, intr_callback,
--		     dev, dev->intr_interval);
--	if ((res = usb_submit_urb(dev->intr_urb, GFP_KERNEL))) {
--		if (res == -ENODEV)
--			netif_device_detach(dev->netdev);
--		dev_warn(&netdev->dev, "intr_urb submit failed: %d\n", res);
-+	usb_fill_int_urb(dev->intr_urb, dev->udev,
-+			 usb_rcvintpipe(dev->udev, 3),
-+			 dev->intr_buff, INTBUFSIZE,
-+			 intr_callback, dev, dev->intr_interval);
-+
-+	res = usb_submit_urb(dev->intr_urb, GFP_KERNEL);
-+	if (res) {
- 		usb_kill_urb(dev->rx_urb);
- 		return res;
- 	}
-@@ -769,8 +766,7 @@ static int rtl8150_open(struct net_device *netdev)
- 	enable_net_traffic(dev);
- 	set_carrier(netdev);
- 	netif_start_queue(netdev);
--
--	return res;
-+	return 0;
- }
- 
- static int rtl8150_close(struct net_device *netdev)
--- 
-2.43.0
+As for the considerations at the start of this bug report...  xhci-hcd is
+indeed supposed to ignore urb->start_frame during submission and overwrite =
+it
+with the actual starting (micro)frame number.  And most of the time, xhci-h=
+cd
+is supposed to ignore URB_ISO_ASAP.  But it's not supposed to ignore
+URB_ISO_ASAP in cases where the URB was submitted too late.  By "too late",=
+ I
+mean that at the time the URB was submitted, the (micro)frame that it should
+have been scheduled for -- one period after the last frame of the preceding=
+ URB
+-- had already elapsed.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
