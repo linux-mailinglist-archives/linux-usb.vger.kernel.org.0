@@ -1,139 +1,103 @@
-Return-Path: <linux-usb+bounces-30106-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30107-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14E07C36F30
-	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 18:09:23 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDA78C37011
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 18:16:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9182E64602A
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 16:27:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9C7D7500C9E
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 17:04:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6789531C595;
-	Wed,  5 Nov 2025 16:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089533446B8;
+	Wed,  5 Nov 2025 16:59:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="LO5u0mXX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQGTUh2j"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E022430E0D8
-	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 16:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5792D337115;
+	Wed,  5 Nov 2025 16:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762360068; cv=none; b=T8FnXmdaV8YP9lqK0sxPCtaCxM2cLRUAoOurzg2gcaeq8ywNlBE8wy90FI7zgr1JmYnX87rejyFgvc8Gwj4TDu5843F2YiEL8QMXnFfS1xlVMpqSCICV+8TuIUvQg+9CozRoSlFev/9Fq65R2hE0eoOCEDgeBUkdVRzY59+qx1U=
+	t=1762361944; cv=none; b=VpTj8ewDoPOelevY+VvIfm8yMRlmN5e6J/mYpRwzwE/+qy39/p2nzO6DNcYUjScD6SuAKGjpPCdqwjXXSS1+LYNSoWPDew2ZjApQPwjdDWPNcDc9eyfpX+x6jmcbelo+fw3TN83vttHgnX7UEKzRqw5hwNsaHGDRejDcj4rSOTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762360068; c=relaxed/simple;
-	bh=ScYFsi+CQ2znfz+Ybc9cX2mvEmOBus4QcA5+jXyJO4E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qepq9P5m6KPXdL58XoFsJ5PLJbQL6xxtm23PFhWDMJI1rtxFlXpdLXKtCT2HKrpInGtaCjy5PMoMaRtRfdLctHlE8p58ZD34DJ7AkJVF3DKLiaiLNefgTEAQ6wcfjAhOF4j+AoDXZZLweaprTqPf8l8kqUzt/uqK3tJTiSZPqt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=LO5u0mXX; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-477549b3082so18784795e9.0
-        for <linux-usb@vger.kernel.org>; Wed, 05 Nov 2025 08:27:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762360065; x=1762964865; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TPja7sf7hTqS15KwtFLZrtw6wHJoXtgzrlY7dcNk5wY=;
-        b=LO5u0mXXPgpGzWJ/ZlQanQb41npsPnM7rqiJgdHrjx+d0J5slOTJIHPJGXcQkESwP0
-         HvA24CiFH2l0Jd/+JC1NF31kuOKaYM32VFXp8hB6gyNvZjey+7JEEprTlNEDbi12OROz
-         y5CTQjUHdcOC5iXQCC0LEIxS2pafd/huBU2i8muo2mc81pvrQU0CuFWKe5m/KvY7MkJ6
-         anbEYFhdUdWNjooSSXjsUvEVjEKT+1Lxr7FBoVHfpLL1cp6Gmst30D+8Vq2p//Edvfnr
-         G5Fx6EpAvWgRHfLkBzPDDDtfwC0z94OL9kH5eZLD2l729mNM6wSW1tz84deNJ8sZTsoG
-         qe0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762360065; x=1762964865;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TPja7sf7hTqS15KwtFLZrtw6wHJoXtgzrlY7dcNk5wY=;
-        b=F+PRaZGzerhoDtXPLs2h7FHQvq/uKyLTFA1WUPftp/adZaGHirpFgW6ZiSZ1BkoT1f
-         Hec/NntU1jSMJBlDrH7PZXc8gZ8PiVbYgjdJqtn/DzqzrX1vJje8pWjnBS9y1A0Qsvsz
-         DhX3UPRw1Y8GdTz5kAhND6ighVNULC61sQcclJ9914uJLfxScx0s3Mc8CRKrLUc24Cax
-         f4HMUBZ8/kNFbGpDVz+gMM+PJM0zHNEe0fnRdy4NrATFM6h/F3+zyz/CT9jY9c6008Jl
-         HcwezINSablSZJ0XB3SSZo/6TxILqvlgdJvAX0vReU+9x/9cOLN6TO1tps8DLvgPtFCO
-         EoKA==
-X-Forwarded-Encrypted: i=1; AJvYcCXFZtho0sLfDLzFBRypxYGj+i8BISUJWNOnrpQi7EF5wahEjP5qt/pvJEwB/oWzTL4vW5D1S0pZxPw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAVtVpuXwpDfyEegvFwV8NQeix8ZTEaG7jG/iM4/UMITmIFcCh
-	ZluhOEYvFzVX/LfEVDI+qlvQteVm4La2NgkjXfhQjo7sRNBCTcJQrlbKccZEpACtMO73QrWl6WA
-	sQik3
-X-Gm-Gg: ASbGnct92D/Xr/dMK1/xtUpNMbtIRTotOWmBUsbIjP6UpsfkM2HAMhNwqoI7noRPTYp
-	gUSpnRl5HHH4DEEQHQMct0Krwe334YSoPOyDETgGU9JXylRM53gsR7K2DJ4tb5cKxEFp4jRaOV+
-	rguhSmKbQVz2nYprpYTUbxE7EDqyfT2iB83vIAHFSP04IoJImXYDeHRdiYWTGuqJ2OJBmpUex9l
-	8AT6xomIn14xHQYWA5RokuvoYyY4a2olgo7Gc/qxatow2FRoLodTBtQeud3iBzdCErYw2K34I0M
-	b4SquMxh9bPpZsQycTLTnNC7XpA2l28A3pyXD/LSj5UytcEnjYojr7BrVuUmBxR/r8hVNpQ0ksw
-	nZrl2De71dTVl5EvA9rEgGZcVX9F7q09hBeJcRkDfanoiRpB037aMtrCLTdehQtltgU+MwaVEX+
-	N7cPqIjX2yi1JhEy9+DbR82xU=
-X-Google-Smtp-Source: AGHT+IEfCYki37HXIu7pIIWRGgwPvbyC4maoBsPjyr/idkvFdo2OcoNGGQjYZ+hklJH1J0DTrM799g==
-X-Received: by 2002:a05:600c:4e48:b0:477:58af:a91d with SMTP id 5b1f17b1804b1-4775cdacf79mr29064435e9.5.1762360065114;
-        Wed, 05 Nov 2025 08:27:45 -0800 (PST)
-Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4775cdee965sm57114305e9.17.2025.11.05.08.27.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 08:27:44 -0800 (PST)
-From: Marco Crivellari <marco.crivellari@suse.com>
-To: linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: [PATCH] thunderbolt: replace use of system_wq with system_percpu_wq
-Date: Wed,  5 Nov 2025 17:27:36 +0100
-Message-ID: <20251105162736.320591-1-marco.crivellari@suse.com>
-X-Mailer: git-send-email 2.51.1
+	s=arc-20240116; t=1762361944; c=relaxed/simple;
+	bh=1J87xzk9VW3lpoQ+hkZnGeccC3K0L5gdz2AKUwHegLo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=FlxeGOvSqkVrmM83fAZtZ9NQUPi8yLgJSXMPLjAG66EDfkcw8nloXg8E/iskdtggsKnzJJBBLNzQ50wyNBtwMBPqwWH5EOVb4IGv7/BtjK9QNoFYSkGpYqIud6R/NYI0Pl8FRVp/Std55uW/KK891qeSedx/gUNgaVNa7y6Iqxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQGTUh2j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCDCC4CEF8;
+	Wed,  5 Nov 2025 16:58:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762361943;
+	bh=1J87xzk9VW3lpoQ+hkZnGeccC3K0L5gdz2AKUwHegLo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=CQGTUh2juHjQ0qGUIJYSwANSA+HsCyK5E2ANQOb6XSJwLMqQtKobX/k4eSLUgrnrv
+	 cRqV/j6qaJEaBvihDxBZ9DTHbT4Xx6CIkG2i13JVfNiatzPdQu94ogqOT2c24kiwMF
+	 S7os2yloZfSuw+1CiKojJ722oHNUK+W2jpyliDw4xDcPBkjXcJ5QH5DAdU0XEPb9HL
+	 9cuSV/NzXN0RGN+z+sClJ9QkwHj6Ga0JcvLzGCoxXY752HSwBN1Du17A09MOoP8u86
+	 b0zZOGlB7UESmENdd2M67Z16PulHQrTGoNQjYqi49I1fR8g8CiOQJkN3J1AJM4yKPa
+	 Vk9T2qwFrJ+tQ==
+From: Srinivas Kandagatla <srini@kernel.org>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+ jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com, 
+ andy@kernel.org, matthias.bgg@gmail.com, 
+ angelogioacchino.delregno@collabora.com, ukleinek@kernel.org, 
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, daniel.lezcano@linaro.org, 
+ tglx@linutronix.de, chunfeng.yun@mediatek.com, wim@linux-watchdog.org, 
+ linux@roeck-us.net, sean.wang@mediatek.com, zhiyong.tao@mediatek.com, 
+ andrew-ct.chen@mediatek.com, lala.lin@mediatek.com, jitao.shi@mediatek.com, 
+ Jack Hsu <jh.hsu@mediatek.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-pwm@vger.kernel.org, 
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-watchdog@vger.kernel.org, 
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+In-Reply-To: <20251030134541.784011-1-jh.hsu@mediatek.com>
+References: <20251030134541.784011-1-jh.hsu@mediatek.com>
+Subject: Re: (subset) [PATCH v6 00/11] Add mt8189 dts evaluation board and
+ Makefile
+Message-Id: <176236193629.37589.12615931533548308117.b4-ty@kernel.org>
+Date: Wed, 05 Nov 2025 16:58:56 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3
 
-Currently if a user enqueues a work item using schedule_delayed_work() the
-used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
-WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
-schedule_work() that is using system_wq and queue_work(), that makes use
-again of WORK_CPU_UNBOUND.
 
-This lack of consistency cannot be addressed without refactoring the API.
+On Thu, 30 Oct 2025 21:44:32 +0800, Jack Hsu wrote:
+> In this patch series,
+> we add Mediatek MT8189 evaluation board dts, dtsi and Makefile,
+> and also related dt-binding documents.
+> 
+> based on tag: next-20251029
+> 
+> Note:
+> This patch series depends on following dt-binding headers and yamls
+> 1.dt-binding headers
+>   1. mt8189-pinfunc.h
+>        https://patchwork.kernel.org/project/linux-mediatek/patch/20250919020525.7904-1-ot_cathy.xu@mediatek.com/
+>   2. mt8189_gce.h
+>        https://patchwork.kernel.org/project/linux-mediatek/patch/20250820093831.23437-3-xiandong.wang@mediatek.com/
+> 
+> [...]
 
-This patch continues the effort to refactor worqueue APIs, which has begun
-with the change introducing new workqueues and a new alloc_workqueue flag:
+Applied, thanks!
 
-commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
-commit 930c2ea566af ("workqueue: Add new WQ_PERCPU flag")
+[03/11] dt-bindings: nvmem: Support MediaTek MT8189 evb board efuse
+        commit: 2150cd7ffd14a39fb56c2b3cbfcc6dbf629b7643
 
-Replace system_wq with system_percpu_wq, keeping the old behavior.
-The old wq (system_wq) will be kept for a few release cycles.
-
-Suggested-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
----
- drivers/thunderbolt/tb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 4a94cb406bdf..7a3f76a852de 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -2636,7 +2636,7 @@ static int tb_alloc_dp_bandwidth(struct tb_tunnel *tunnel, int *requested_up,
- 				 * the 10s already expired and we should
- 				 * give the reserved back to others).
- 				 */
--				mod_delayed_work(system_wq, &group->release_work,
-+				mod_delayed_work(system_percpu_wq, &group->release_work,
- 					msecs_to_jiffies(TB_RELEASE_BW_TIMEOUT));
- 			}
- 		}
+Best regards,
 -- 
-2.51.1
+Srinivas Kandagatla <srini@kernel.org>
 
 
