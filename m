@@ -1,170 +1,144 @@
-Return-Path: <linux-usb+bounces-30073-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30074-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08E88C346EA
-	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 09:19:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62F7DC34832
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 09:40:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A03504E5E45
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 08:19:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8064F465A11
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 08:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC4F27FB28;
-	Wed,  5 Nov 2025 08:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEACC2D0602;
+	Wed,  5 Nov 2025 08:40:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JNySGCvw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sDwlARi0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524A22135D7;
-	Wed,  5 Nov 2025 08:19:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDB7288510
+	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 08:40:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762330785; cv=none; b=qAkzHTc6vNNA+mJOprP6wF5AuXhi/6VuLDj1uLnmzsCYCakI7X3MXjpIPWcnAVbAn1zkEqLSQSjsCAIiFVy8aMwJZctRdnxCiyr2+/7Fp9BOrDB+XCEJukEEM/27H7p05U6mc6LYGWeBOFHl1OQgzcTPjlK88xISGFqwA1hZQpo=
+	t=1762332010; cv=none; b=mnDF4+TyVG57u+Ye09hI8qrTCero1GVtHN4VXbXcV1gCoa03/z8tkrnirvcun36Ufbq02bfFAUtMu5aYwooeI9+DbwAmdJ355yJtCSPqB3UX7i4EF9x5JGXqmtW5RwjkXiAlP1OdUWiOY7OkgJ3jUgQry9MS/htR4TMdvw1TYqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762330785; c=relaxed/simple;
-	bh=9dErL4q16sN8S0y6Frq09VMabnJQCAfgk5EISiOS/4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cDejVibmM+ogpcQQGGAvZsgyIJQWxpPW+6ntAvB2GyLsiMsKDSgz7hhdI6Q3J8SvPU6wmpUPibU6U63zInqb8/AOETFgXAkRlQfaCqiWDV0ZkIL5WOsJgMgPSg3BF78rN6vZOEohhNzdQ5VBtUjXBXVzWBcNi586f8XYggGqUXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JNySGCvw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F82C4CEF8;
-	Wed,  5 Nov 2025 08:19:44 +0000 (UTC)
+	s=arc-20240116; t=1762332010; c=relaxed/simple;
+	bh=Yc7l39U8VPA9CxOeTrmXsGQvRl35jenNC0+996YlJJE=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uaMakRGO0YMjyH7W0/qT2VTXYq1j5xP9GoUQS0Mt8Mt9ajKLECokGZeEmTuSRffsiNQqcxEGxkZsfWsmLii4XCmTLu0x3t17x+vY0q5TuogydpX3m7Fnk8ULeZgVo6MRAkY0Xa2guDPJw/VgPSr4c4HyZBmJqnjEE/+MNTR58vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sDwlARi0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 19BA7C19424
+	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 08:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762330784;
-	bh=9dErL4q16sN8S0y6Frq09VMabnJQCAfgk5EISiOS/4w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JNySGCvwSueGVgCwVThm39anicSvPAx0TGqkexnMozGJnMd/XxMt0yjdr9SloQg42
-	 zZTxGF6i2FYvZgFE0iACPRFdq1vISK4JQjCt4YI1rFG83bd+rTgYN6NzmXuEOWr4lr
-	 pu5X7Jm+LJeCK1kWHbtRTPsRwsj4oquFK2omQkI0EhyI2o+k78FBVARdUshDExyjat
-	 mPuJlroDG0U3jEREYBJkyiQvCdk1sI/VVpuUgBvB7vDuSS9EegDu96yehoT0MNjwUX
-	 OJszUSRiFdIoAOKXtQMN/XYdQeGSQO1cTGYcldkpdOSVjaJrW1EU2WONrZ/JQv2yqB
-	 wa0/bw3/HqeKQ==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vGYk6-0000000058W-08tX;
-	Wed, 05 Nov 2025 09:19:46 +0100
-Date: Wed, 5 Nov 2025 09:19:46 +0100
-From: Johan Hovold <johan@kernel.org>
-To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Telit FN920C04 RNDIS
- compositions
-Message-ID: <aQsIov60LnWcKaz6@hovoldconsulting.com>
-References: <20251105034833.4152008-1-Qing-wu.Li@leica-geosystems.com.cn>
+	s=k20201202; t=1762332010;
+	bh=Yc7l39U8VPA9CxOeTrmXsGQvRl35jenNC0+996YlJJE=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=sDwlARi0uHirli0FFYRuQFWyyAY4IQSfPLMH/MQLNgfDfseMt7I2qXDzgyf0dQ8cx
+	 Rg6OOs1/HnxBWODzrdRGxbACy7uXpCpg0j1dbRr+Avg2gCec9HAk0P3j/kPXbL1pah
+	 myord13jCYyPL96LxlZOkKVGpnxWtuE27jNV1sA3q/0eRQXasWr4kjXhtkJjiH6Laj
+	 QfjihY1y08801DxZBv4W7ufErqguyoLsZ9zef71fS6R/ttRpsN4T2U0lBnzBubNlQ4
+	 g/P2xJUAjSPlQ6EdJ99ZNCvvtCbTEyvepdc4Ox6p02n+9CZXQuAi3zMYBannwRtgNA
+	 gVC1GAGn0+Lfg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 15FEDC53BC5; Wed,  5 Nov 2025 08:40:10 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220748] usb: xhci_queue_isoc_tx_prepare ignore start_frame and
+ always assumes URB_ISO_ASAP is set
+Date: Wed, 05 Nov 2025 08:40:09 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-220748-208809-tlGlo9sbcq@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220748-208809@https.bugzilla.kernel.org/>
+References: <bug-220748-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251105034833.4152008-1-Qing-wu.Li@leica-geosystems.com.cn>
 
-On Wed, Nov 05, 2025 at 03:48:33AM +0000, LI Qingwu wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220748
 
-Please also mention which port is used for what (e.g. as you did for
-FN920C04).
+Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
 
-> T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  4 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1bc7 ProdID=10a1 Rev= 5.15
-> S:  Manufacturer=Telit Cinterion
-> S:  Product=FN920
-> S:  SerialNumber=76e7cb38
-> C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=option
-> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |michal.pecio@gmail.com
 
-The driver should not be binding to this port, and there's no need to
-reserve it since you're matching on the interface class below.
+--- Comment #1 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+Looks like you are right. I guess it means that synchronizing multiple
+soundcards or playback/capture streams isn't working either? (If class driv=
+ers
+implement that in the first place.)
 
-The lsusb output must have been generated with an earlier version of the
-patch.
+I wonder if this could be the reason for some weird snd-usb-audio behavior
+reported in the past (repeatedly unlinking and retrying URBs for unclear re=
+ason
+when running full-duplex with very low latency). But it's just a wild guess.
 
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Did you try the obvious?
 
-Is this interface that needs NCTRL perhaps (i.e. 4 rather than 3)?
++       if (!(urb->transfer_flags & URB_ISO_ASAP))
++               goto skip_start_over;
+        /* Calculate the start frame and put it in urb->start_frame. */
 
-> T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  5 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1bc7 ProdID=10a6 Rev= 5.15
-> S:  Manufacturer=Telit Cinterion
-> S:  Product=FN920
-> S:  SerialNumber=76e7cb38
-> C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=(none)
-> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> instead for example in drivers/usb/host/xhci-ring.c, function
+> xhci_queue_isoc_tx_prepare() the URB_ISO_ASAP flag is correctly used
 
-No need to reserve interface 0 below here either.
+Actually, this function looks OK but it isn't called correctly because this
+shouldn't be limited to CFC *if* we are scheduling the first TD in a new "d=
+ata
+flow" (xHCI 4.11.2.5). But on modern HW it seems to be correct, and if you =
+skip
+the earlier urb->start_frame overwrite, chances are things may work for you.
 
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=(none)
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=(none)
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=(none)
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> This causes issues with devices that require a specific frame interval (l=
+ike
+> professional audio interfaces, for example the Motu AVB line)
 
-Similar here.
+Does it mean there is hardware which breaks when polled at the rate specifi=
+ed
+in its own endpoint descriptor? Would it still break if you insert zero-len=
+gth
+frames in the "forbidden" periods?
 
-> Upstream-Status: Submitted [https://lkml.org/lkml/2025/10/23/130]
+Using start_frame like that seems complicated and it's not feasible on Gen-1
+controllers (no CFC). Per Documentation/driver-api/usb/URB drivers may spec=
+ify
+any service interval on per-URB basis, but this of course can't work with x=
+HCI
+and results in a warning. However, as suggested in check_interval() comment=
+s,
+there could be a way of setting different polling interval at endpoint
+creation. I see no reason for xHCI HW not to accept that, even Gen-1.
 
-Why are you referencing an older patch for a different device here?
+> https://linuxmusicians.com/viewtopic.php?p=3D179979#p179979
 
-Please drop.
+Hmm, using the sideband API to bypass kernel bugs seems even more extreme :)
 
-> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-> ---
->  drivers/usb/serial/option.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 5de856f65f0d..f8bb94f20143 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1401,12 +1401,16 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = NCTRL(0) | RSVD(1) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a0, 0xff),	/* Telit FN20C04 (rmnet) */
->  	  .driver_info = RSVD(0) | NCTRL(3) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a1, 0xff),	/* Telit FN20C04 (RNDIS) */
-> +	  .driver_info = RSVD(0) | NCTRL(3) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a2, 0xff),	/* Telit FN920C04 (MBIM) */
->  	  .driver_info = NCTRL(4) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a3, 0xff),	/* Telit FN920C04 (ECM) */
->  	  .driver_info = NCTRL(4) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a4, 0xff),	/* Telit FN20C04 (rmnet) */
->  	  .driver_info = RSVD(0) | NCTRL(3) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a6, 0xff),	/* Telit FN20C04 (RNDIS) */
-> +	  .driver_info = RSVD(0) | NCTRL(3) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a7, 0xff),	/* Telit FN920C04 (MBIM) */
->  	  .driver_info = NCTRL(4) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a8, 0xff),	/* Telit FN920C04 (ECM) */
+--=20
+You may reply to this email to add a comment.
 
-Johan
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
