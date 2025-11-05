@@ -1,87 +1,261 @@
-Return-Path: <linux-usb+bounces-30086-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30087-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09601C35A55
-	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 13:28:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 566CDC35ACA
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 13:36:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A94EE34E11E
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 12:28:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70274566937
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 12:34:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90AF2314B74;
-	Wed,  5 Nov 2025 12:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA5631576C;
+	Wed,  5 Nov 2025 12:34:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w9nVHhqa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sgoci-sdnproxy-4.icoremail.net (sgoci-sdnproxy-4.icoremail.net [129.150.39.64])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3234311973;
-	Wed,  5 Nov 2025 12:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.150.39.64
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1B7314B94
+	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 12:34:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762345697; cv=none; b=IQ1eoGeYJIG6DHGgIRIU2ufak8TDnAGdrVYMyX1qvx/O4UcXu+ETCW+HaSJMX9/XNK562v1yHIJJYwOYfdqM2Ju5kCVO9mabo7P9zRUi6o6YQHjMtK0RQHCJBl102ekXK/7GaqXlocyHeKBifcPruJryBE6rCwoVUivy7OBO5QQ=
+	t=1762346088; cv=none; b=Z1Ueffa1eSTlShOhdWy8uRxXfP1PZ0z7dvU8GuXeS6wXYl5iu8GKMS8hORg/lrpIfXcLIXp7mD8x3ZHOnE/P7dB9BkZJKrCiz/32OpqSPu8VERyhTFIwPBAbsZJjZhk+wd3SHyxt/UWorzjVehUabVaU05AQSWhnbKYToaEgpF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762345697; c=relaxed/simple;
-	bh=Qf5CgmG7ZPRyVEAKwk6zM9m0tOrb33Q0+BoB1g2wOb4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=o5Mg4FNPwSK/DsRG9tHdjSiXGIcHshJMS6hjdZJEs29Vgd3ztb9hCTczuzYW7YX4spqkkeRMO976Ig/H7e8MsCtZKliEHzxf77mfEv+MZezbozV5Dm7yJzv7pwSYvcyLxgoRaInO/oihcY9Majv088nn+Y73DcCAgXiyykF8bxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=129.150.39.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from caohang$eswincomputing.com ( [10.127.112.153] ) by
- ajax-webmail-app1 (Coremail) ; Wed, 5 Nov 2025 20:27:50 +0800 (GMT+08:00)
-Date: Wed, 5 Nov 2025 20:27:50 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Hang Cao" <caohang@eswincomputing.com>
-To: "Krzysztof Kozlowski" <krzk@kernel.org>, Thinh.Nguyen@synopsys.com
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, p.zabel@pengutronix.de,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, ningyu@eswincomputing.com,
-	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
-	"Senchuan Zhang" <zhangsenchuan@eswincomputing.com>
-Subject: Re: Re: [PATCH v5 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
- 20241203(6b039d88) Copyright (c) 2002-2025 www.mailtech.cn
- mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
-In-Reply-To: <76ec3e26-a38c-4643-aaab-7806cc39bd89@kernel.org>
-References: <20251104065045.1464-1-caohang@eswincomputing.com>
- <20251104065226.1513-1-caohang@eswincomputing.com>
- <76ec3e26-a38c-4643-aaab-7806cc39bd89@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1762346088; c=relaxed/simple;
+	bh=ukLRHQQRIWoOv0L/E3ENG938LQkdQEQaAefiarvMgAg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n8K6JXAVPjAYn6Nrigtob846oamm4NNyF22fHlLAULW14Q2CvQH0dvUZtzqgR8QXBrBNEjVEUBE+/QMjGs6T+Rg3Ye4sIhNIMpuI1luAYH0+/NgFqnUk/FkwgbSWX93/BCaTPovT+tUeU+pIlAaedJismyq9gv0PSaiHE5l/ygE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=w9nVHhqa; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4ed0d6d3144so60512191cf.0
+        for <linux-usb@vger.kernel.org>; Wed, 05 Nov 2025 04:34:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762346086; x=1762950886; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FHLxXwXyQCBPyxASXnbqOnm6xbYap3TbmDoe7FxIDLM=;
+        b=w9nVHhqaia9kUPvCITAX9lLrVf8FdGSprGsKbPkl8A0sp9cTJACqjfYXL8d8kwYAfS
+         f/2rL31GVOGz73rK6Y2YM4Qvd1uJlpcCI3waLajUqWC6zFJ1uN8O3cLRJn2BpUogdLD0
+         6EuMmgeqqui0ZB+//EBGK/fbL5IN1iRq8PpQdoEPr/zstU6KnFmXb5gis1y+N03McUgm
+         hbSTx5MC7QoqWFH5euPgdFZOtwG5Hcz68EKWK8qM2+PkifocgxjL2zQox9ucV4T/rO8/
+         4Ra3lKwW0HDYB25mh9og34QadtSxmlmmUNfujMwGu8P/7dFm8b3CuW9kBsEnhvidTbjH
+         As9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762346086; x=1762950886;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FHLxXwXyQCBPyxASXnbqOnm6xbYap3TbmDoe7FxIDLM=;
+        b=LNiGm/ncBmhIesgAZGS6xnk02tFiBusJeJ8y7GpTfQ8/PDgly1UhxXEhTPj7GIKpLl
+         D+ojW2RjE5JBlSKGidcK/hzyAkalcNYZ5eZTT5TD3dfFruKBtZt6cHpevYPqtZN3+5oo
+         WyKF20XYWKnYG8TSy9ZWnik879yrxEZNQPw/y1ENhKSJybL+jq4Chs2dZxHdOBQz5juo
+         /u/MNIICXFVgkqtaO1vZr7StNbWZS5x8hWbx3dfY2Qu7SWoLDRuzUtSHSd6el1rPAQwr
+         8aZrkm2nEZBhUdLbb4BaRz8bA2wI4OHSSbdqBOMpwxZWnDAwKSw6sl+BudlwZq62efsA
+         v69g==
+X-Forwarded-Encrypted: i=1; AJvYcCWvfz6e3TsAWwni6xRmVcfvWWVbBhajUTR1aBJG3wuP68ZUUWqYOhNNKPee2Z609pWELZI9/fwaUDo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkLBGInrAjRBiYSDWPeKfPxA4H6h6jplN3H5KejdFAZsbkAuAn
+	4jyYnhRExJuqN9Tyb0Ahjqv2jSuAzx/6vPuZ8hlMZdqmfSAkt7e+uWbqXt+IJk5werynbo62YG5
+	LVtujnnh01CVwSnQhi4t6USwT0+Jhb9tYNWLvzqbr
+X-Gm-Gg: ASbGncsF7NtX1yHybEH4IJycv6bADE2sVCzEYr+5DEWxvzAgukt/eXvzo6TX7oGibCB
+	UXgBktoZrVNfZuBXi3UuDuwmpZB82KtCEo+j3BreG/VI70DKIhnSNTiFFMA8Hivo/gx951d9e+X
+	pLed9klKYbXsf+yIfl3JCaWmwpfc6oNMfQb/hukZ33Xuvb3ViWQHy/9RKTVpVERl+/RX71hxLLT
+	r2u74Br53bb3rptn7dp1qBJwtLlIm6K/EPysA4Nx9fdN5p0biyjzaJAaq+l7z1b7XZX/F4=
+X-Google-Smtp-Source: AGHT+IEGNt3/3jE4CE71hk9vBz4UdlXWDMqPMr2SNeoo4XgqYkb/7WnfFYx3WDMPX6Dl4NzQFVyMMg8tqWSrB1FcbUM=
+X-Received: by 2002:ac8:6f14:0:b0:4ed:43fe:f51e with SMTP id
+ d75a77b69052e-4ed725f9008mr47083051cf.39.1762346085407; Wed, 05 Nov 2025
+ 04:34:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <9e50dfa.f63.19a53fcd7ec.Coremail.caohang@eswincomputing.com>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:TAJkCgAXH2zHQgtpDpAuAA--.1301W
-X-CM-SenderInfo: xfdrxt1qj6v25zlqu0xpsx3x1qjou0bp/1tbiAQEREGkKKoAeZAAA
-	sy
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+References: <20251104161327.41004-1-simon.schippers@tu-dortmund.de>
+ <20251104161327.41004-2-simon.schippers@tu-dortmund.de> <CANn89iL6MjvOc8qEQpeQJPLX0Y3X0HmqNcmgHL4RzfcijPim5w@mail.gmail.com>
+ <66d22955-bb20-44cf-8ad3-743ae272fec7@tu-dortmund.de> <CANn89i+oGnt=Gpo1hZh+8uaEoK3mKLQY-gszzHWC+A2enXa7Tw@mail.gmail.com>
+ <be77736d-6fde-4f48-b774-f7067a826656@tu-dortmund.de>
+In-Reply-To: <be77736d-6fde-4f48-b774-f7067a826656@tu-dortmund.de>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 5 Nov 2025 04:34:34 -0800
+X-Gm-Features: AWmQ_bkAPV_mgbuwvSEPdKMChse07tTVcgz1goXhN5UwgrFZNzJX0WAQgAW3COs
+Message-ID: <CANn89iJVW-_qLbUehhJNJO70PRuw1SZVQX0towgZ4K-JvsPKkw@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] usbnet: Add support for Byte Queue Limits (BQL)
+To: Simon Schippers <simon.schippers@tu-dortmund.de>
+Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGksIEtyenlzenRvZiBhbmQgVGhpbmg6Cj4gCj4gPiArCj4gPiAgc3RhdGljIGludCBkd2MzX2dl
-bmVyaWNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiA+ICB7Cj4gPiAgCWNv
-bnN0IHN0cnVjdCBkd2MzX3Byb3BlcnRpZXMgKnByb3BlcnRpZXM7Cj4gPiBAQCAtODMsNiArMTE5
-LDEyIEBAIHN0YXRpYyBpbnQgZHdjM19nZW5lcmljX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZp
-Y2UgKnBkZXYpCj4gPiAgCWVsc2UKPiA+ICAJCXByb2JlX2RhdGEucHJvcGVydGllcyA9IERXQzNf
-REVGQVVMVF9QUk9QRVJUSUVTOwo+ID4gIAo+ID4gKwlpZiAob2ZfZGV2aWNlX2lzX2NvbXBhdGli
-bGUoZGV2LT5vZl9ub2RlLCAiZXN3aW4sZWljNzcwMC1kd2MzIikpIHsKPiAKPiBObywgeW91IGhh
-dmUgZHJpdmVyIG1hdGNoIGRhdGEgZm9yIHRoYXQuCj4gCldlIGltcGxlbWVudGVkIGl0IHdpdGgg
-ZHJpdmVyIG1hdGNoIGRhdGEgaW4gdjQgcGF0Y2guCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2Fs
-bC8yMDI1MTAxNjIyMjcxMy5kMnN1dGM3dHlmMmlkYmt2QHN5bm9wc3lzLmNvbS8KCkhvd2V2ZXIs
-IFRoaW5oIHN1Z2dlc3RlZCB1c2luZyBkaXJlY3QgZnVuY3Rpb24gY2FsbHMgaW5zdGVhZCwgbm90
-aW5nwqAKdGhhdCB0aGlzIGlzIGEgZnVuY3Rpb24gY2FsbCByYXRoZXIgdGhhbiBkYXRhLsKgCldl
-IGFyZSBub3Qgc3VyZSBpZiB3ZeKAmXZlIGZ1bGx5IHVuZGVyc3Rvb2QgaGlzIGZlZWRiYWNrIGNv
-cnJlY3RseS4KCk91ciBkcml2ZXIgcmVxdWlyZXMgc3BlY2lhbCBoYW5kbGluZyBmb3IgVVNCIGJ1
-cyBpbml0aWFsaXphdGlvbiwgd2hpY2ggZG9lcyAKaW52b2x2ZSBmdW5jdGlvbiBjYWxscy4KClNv
-IHdl4oCZZCByZWFsbHkgYXBwcmVjaWF0ZSBpdCBpZiB5b3UgYW5kIFRoaW5oIGNvdWxkIHNoYXJl
-IGZ1cnRoZXIgdGhvdWdodHPCoApvbiB3aGljaCBhcHByb2FjaCB3b3VsZCBiZSBtb3JlIHN1aXRh
-YmxlIGZvciBvdXIgZHJpdmVy4oCZcyBuZWVkcy4KCgpCZXN0IHJlZ2FyZHMsCkhhbmcgQ2FvCg==
+On Wed, Nov 5, 2025 at 4:20=E2=80=AFAM Simon Schippers
+<simon.schippers@tu-dortmund.de> wrote:
+>
+> On 11/5/25 12:28, Eric Dumazet wrote:
+> > On Wed, Nov 5, 2025 at 2:35=E2=80=AFAM Simon Schippers
+> > <simon.schippers@tu-dortmund.de> wrote:
+> >>
+> >> On 11/4/25 18:00, Eric Dumazet wrote:
+> >>> On Tue, Nov 4, 2025 at 8:14=E2=80=AFAM Simon Schippers
+> >>> <simon.schippers@tu-dortmund.de> wrote:
+> >>>>
+> >>>> The usbnet driver currently relies on fixed transmit queue lengths, =
+which
+> >>>> can lead to bufferbloat and large latency spikes under load -
+> >>>> particularly with cellular modems.
+> >>>> This patch adds support for Byte Queue Limits (BQL) to dynamically m=
+anage
+> >>>> the transmit queue size and reduce latency without sacrificing
+> >>>> throughput.
+> >>>>
+> >>>> Testing was performed on various devices using the usbnet driver for
+> >>>> packet transmission:
+> >>>>
+> >>>> - DELOCK 66045: USB3 to 2.5 GbE adapter (ax88179_178a)
+> >>>> - DELOCK 61969: USB2 to 1 GbE adapter (asix)
+> >>>> - Quectel RM520: 5G modem (qmi_wwan)
+> >>>> - USB2 Android tethering (cdc_ncm)
+> >>>>
+> >>>> No performance degradation was observed for iperf3 TCP or UDP traffi=
+c,
+> >>>> while latency for a prioritized ping application was significantly
+> >>>> reduced. For example, using the USB3 to 2.5 GbE adapter, which was f=
+ully
+> >>>> utilized by iperf3 UDP traffic, the prioritized ping was improved fr=
+om
+> >>>> 1.6 ms to 0.6 ms. With the same setup but with a 100 Mbit/s Ethernet
+> >>>> connection, the prioritized ping was improved from 35 ms to 5 ms.
+> >>>>
+> >>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
+> >>>> ---
+> >>>>  drivers/net/usb/usbnet.c | 8 ++++++++
+> >>>>  1 file changed, 8 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> >>>> index 62a85dbad31a..1994f03a78ad 100644
+> >>>> --- a/drivers/net/usb/usbnet.c
+> >>>> +++ b/drivers/net/usb/usbnet.c
+> >>>> @@ -831,6 +831,7 @@ int usbnet_stop(struct net_device *net)
+> >>>>
+> >>>>         clear_bit(EVENT_DEV_OPEN, &dev->flags);
+> >>>>         netif_stop_queue (net);
+> >>>> +       netdev_reset_queue(net);
+> >>>>
+> >>>>         netif_info(dev, ifdown, dev->net,
+> >>>>                    "stop stats: rx/tx %lu/%lu, errs %lu/%lu\n",
+> >>>> @@ -939,6 +940,7 @@ int usbnet_open(struct net_device *net)
+> >>>>         }
+> >>>>
+> >>>>         set_bit(EVENT_DEV_OPEN, &dev->flags);
+> >>>> +       netdev_reset_queue(net);
+> >>>>         netif_start_queue (net);
+> >>>>         netif_info(dev, ifup, dev->net,
+> >>>>                    "open: enable queueing (rx %d, tx %d) mtu %d %s f=
+raming\n",
+> >>>> @@ -1500,6 +1502,7 @@ netdev_tx_t usbnet_start_xmit(struct sk_buff *=
+skb, struct net_device *net)
+> >>>>         case 0:
+> >>>>                 netif_trans_update(net);
+> >>>>                 __usbnet_queue_skb(&dev->txq, skb, tx_start);
+> >>>> +               netdev_sent_queue(net, skb->len);
+> >>>>                 if (dev->txq.qlen >=3D TX_QLEN (dev))
+> >>>>                         netif_stop_queue (net);
+> >>>>         }
+> >>>> @@ -1563,6 +1566,7 @@ static inline void usb_free_skb(struct sk_buff=
+ *skb)
+> >>>>  static void usbnet_bh(struct timer_list *t)
+> >>>>  {
+> >>>>         struct usbnet           *dev =3D timer_container_of(dev, t, =
+delay);
+> >>>> +       unsigned int bytes_compl =3D 0, pkts_compl =3D 0;
+> >>>>         struct sk_buff          *skb;
+> >>>>         struct skb_data         *entry;
+> >>>>
+> >>>> @@ -1574,6 +1578,8 @@ static void usbnet_bh(struct timer_list *t)
+> >>>>                                 usb_free_skb(skb);
+> >>>>                         continue;
+> >>>>                 case tx_done:
+> >>>> +                       bytes_compl +=3D skb->len;
+> >>>> +                       pkts_compl++;
+> >>>>                         kfree(entry->urb->sg);
+> >>>>                         fallthrough;
+> >>>>                 case rx_cleanup:
+> >>>> @@ -1584,6 +1590,8 @@ static void usbnet_bh(struct timer_list *t)
+> >>>>                 }
+> >>>>         }
+> >>>>
+> >>>> +       netdev_completed_queue(dev->net, pkts_compl, bytes_compl);
+> >>>> +
+> >>>>         /* restart RX again after disabling due to high error rate *=
+/
+> >>>>         clear_bit(EVENT_RX_KILL, &dev->flags);
+> >>>>
+> >>>
+> >>> I think this is racy. usbnet_bh() can run from two different contexts=
+,
+> >>> at the same time (from two cpus)
+> >>>
+> >>> 1) From process context :
+> >>> usbnet_bh_work()
+> >>>
+> >>> 2) From a timer. (dev->delay)
+> >>>
+> >>>
+> >>> To use BQL, you will need to add mutual exclusion.
+> >>
+> >> Yeah, I missed that.
+> >>
+> >> I guess synchronizing with the lock of the sk_buff_head dev->done make=
+s
+> >> sense? The same locking is also done right before in skb_dequeue.
+> >
+> > Or only protect the netdev_completed_queue(dev->net, pkts_compl,
+> > bytes_compl) call,
+> > adding a specific/dedicated spinlock for this purpose.
+> >
+> > spin_lock_bh(&dev->bql_spinlock);
+> > netdev_completed_queue(dev->net, pkts_compl, bytes_compl);
+> > spin_unlock_bh(&dev->bql_spinlock);
+> >
+> > I am assuming no usbnet driver is setting dev->lltx =3D true (or plan t=
+o
+> > in the future)
+> > so usbnet_start_xmit() is protected by HARD_TX_LOCK() already.
+>
+> Yes, I also want to only protect the netdev_completed_queue(dev->net,
+> pkts_compl, bytes_compl) call. However, I am wondering what you mean with
+>
+> spin_lock_bh(&dev->bql_spinlock)
+> ...
+>
+>
+> Do we want to protect against usbnet_start_xmit()? Maybe I am missing
+> something, but other BQL implementations also do not seem to protect
+> against their respective ndo_start_xmit.
 
+BQL has been designed so that producer/consumer can run in //
+
+However, all producers need exclusion (typically done with HARD_TX_LOCK)
+All consumers need exclusion (typically done because of NAPI sched bit)
+
+>
+>
+> My approach would just protect against usbnet_bh calls from another
+> context with the same locking as skb_dequeue():
+>
+> spin_lock_irqsave(&list->lock, flags);
+> netdev_completed_queue(dev->net, pkts_compl, bytes_compl);
+> spin_unlock_irqrestore(&list->lock, flags);
+
+I tend to prefer not masking hard irq unless really necessary.
+
+Also, reusing  a lock for different purposes makes things confusing
+in terms of code maintenance.
+
+usbnet is hardly performance critical, I would keep list->lock only to
+protect the list of skbs :)
 
