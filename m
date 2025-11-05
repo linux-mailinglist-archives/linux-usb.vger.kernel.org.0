@@ -1,168 +1,174 @@
-Return-Path: <linux-usb+bounces-30097-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30098-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2372C36152
-	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 15:35:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0356AC363E8
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 16:11:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 807681A21D7C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 14:35:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 627C656737E
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 14:58:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC6132D7C7;
-	Wed,  5 Nov 2025 14:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1033F32D7C7;
+	Wed,  5 Nov 2025 14:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jNEo0LLq"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="b5G1bz+n";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Mv3Vby8J"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBC0323414
-	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 14:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C4832D0C5
+	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 14:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762353282; cv=none; b=hl1AkC0o+SEor8A96GfcMf5wxHji6P2ObUjmyDjXtgxQ8mOkpyublid74K6+h2zPI/s6C7I3H4i8cMLMI5CyJthSfE3fRmD1iIVnPem2X1FpF6RjdGxlbl+qrtvBsm72YKGWSha9Xj3qMImIGTQQjo8JtOyvrSZToI+xBczb7QE=
+	t=1762354696; cv=none; b=RptxPbubWhuTWkMT8nbqrf6ySSnlcjT0HIg0+7j2EwvY1YfJZBJEA05k6PpCA6SJPbmfT+Umz4+KDye6OFXnphy6zVHzgPyVRfA6729Bn/gq3cVInwn/2sflDpziC6FmDAQkvketERsUwUwxJj9O0ZxI8kZTod8VgOoHjxSvnTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762353282; c=relaxed/simple;
-	bh=Lws3O9Q9eWUWHaR1D9jjGEWwx/Fg3c+pD6vwOq6VklQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gnexFXwsDFy0narDb1Scn8gdHk5MUIbMLMG/91zvWsAYpC7fk2yZ3nYBYctLf5VSXd6p66o0Y+RFUrJFlvqrfQ652ecmos7Bh+l+Kyyh/CTuYB1qJQv+5RX/m4sKuofGEyNB1hD8A+yzmezXPzvlvNoUHqu1bOuaKSbkFO/xg7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jNEo0LLq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31927C2BC86
-	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 14:34:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762353282;
-	bh=Lws3O9Q9eWUWHaR1D9jjGEWwx/Fg3c+pD6vwOq6VklQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jNEo0LLq3y7G0kgVUMrbEpXmYb3ehE4+PvMmj5C8I1S9nenWUyQVL+d1Zs+aGQfEw
-	 XIQeXrimqWy1UPXQeLY1PvoF4XjNvkwkPHuDptEQ7vmHAw7UCmMjBUyfjru+yvduXW
-	 xuuuiiuemuUeWFe1ahqhXjZB1jqcGhwXV93SaCLxMsc94grTx/qEzh50qMUCkZsOg7
-	 2Ar20hTsrPaQ9PWpUVZOY7Q8GNWB6zuJwkG6tkbFpM2s0cVeufBt3PL+NfSkeDx4S6
-	 FjjAstVpVHXB/xMFVgow1jOqOOXKiDRm5KE6VxwZcjwWwD0iGk73NhlIhY4KbIdVwH
-	 ywZ7cEdR1gxMQ==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-378ccb8f84aso70765971fa.3
-        for <linux-usb@vger.kernel.org>; Wed, 05 Nov 2025 06:34:42 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUijgpIMJZ7Aq6JpScH+3RZYbw6w+xJoXEoe9QiZ7vvKelZGqIbzi4XwcNts7oPi5SJtzKRCJ/tdFg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhAt6S2f6kL6CpM0k7tjqvW4ZWS6hZOxkBZu+gweohxt6g8nVq
-	Z2zSRIyCdvZQDJ7HZy0yDfBMmQpmpHXKOT/WajGQRDC9AMr7qwGFsbG48R0qB5T4Na2ONu76LzK
-	CW9fyzpIP4QOOL/WNtnZU+Jpd2CMu8Jc=
-X-Google-Smtp-Source: AGHT+IEx5VuhTUzWGT5C3xk1ZCwXIz0HqLNQc4gHIQEVN/RV4yl9TQkUcvj3QI9yqUVwVZWCqZOKOmWyJ6CMatr8gc0=
-X-Received: by 2002:a05:651c:1504:b0:372:904d:add4 with SMTP id
- 38308e7fff4ca-37a51417cf6mr11398531fa.28.1762353280238; Wed, 05 Nov 2025
- 06:34:40 -0800 (PST)
+	s=arc-20240116; t=1762354696; c=relaxed/simple;
+	bh=XMoXUW7zzd5Z7UEbf39vy8nXx/nklNb3eCayzNF5D3I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dnH+yweJfEClOFwA+cmF8FYLpEbKoXPyNMMhKk00eujchwbMKG2yvM5QOPH0BrSWdzR2rjsxPyV67FtzUM5ET29s/IjcfU2HtB7ScKZIaFnxa39ubBXjPn2s4u/bcRdQc0NJhjdVjBumYShFYfZ4kf3G+7o8PFUr5aFoy+RSgEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=b5G1bz+n; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Mv3Vby8J; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A599iBb356680
+	for <linux-usb@vger.kernel.org>; Wed, 5 Nov 2025 14:58:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=aukiftqrMwSvLnxP7hNxU4zZyCqOc+G3XCw
+	54ES4fTI=; b=b5G1bz+nqwnHKAOlRRw8y864cuFVh+FGCYxpJFP1byDlTQ1rog8
+	tHf8yzbIrQ/Q4O6DOlQjwmNe2GVY6Mcxem5/cGTx8yTs2TMjs2Jw9jRg0EWGv//c
+	XZoeK7TDI0ohpt+27r1g2h3JGNkS0st7knfzWV9cSr7mqnTXvQmWrnY/GVBnJcmx
+	hp+p2uz4QFXJSDInWX1UQgkqABksaASnvmd5B/zhkLYZrBYqNjvvys7fjBPqvCXh
+	C6wlQQyViVwvTnddHrL1XSYSIY9NEifLxmfYEjnq8odInuKXXZW73iF+IXmU2Khu
+	FBxbwRFtsmn4YUE6zv4AjiYWnmU/FRyIuVA==
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a83q5gwg6-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 05 Nov 2025 14:58:14 +0000 (GMT)
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-b6ceeea4addso6830004a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 05 Nov 2025 06:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762354693; x=1762959493; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aukiftqrMwSvLnxP7hNxU4zZyCqOc+G3XCw54ES4fTI=;
+        b=Mv3Vby8J3Aat8BDQDxwoTBOo2M+B/YaY85UVuRjdJiFZi2PUQ0Dy47Zu+gENgVm9Up
+         rzx7XiwtVL6beXGzNsvH/UGEZlQmgKSmeePunqls2Hhk6rGTF/rMnlyC1jBKndDJhrRP
+         0xmPuk/PC1nxSkaPDzQXmUB1WlTH1ipoZ2HvrBx6Y6/xrlTsucvPp/PUPvPWbnP2YEmI
+         IHieMpMmXGAqhDnOD7fvrX1J94KI6EcnbgNn5CXYvhTy44oHilOFCCTYCTxlu0FhaVfR
+         gZ7v3mbO9YsLUe6ouuV5izzzyXvIenC3Y1QEI6CwavawLGwaJNTThNMZmsU8GP5XjxkE
+         kQQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762354693; x=1762959493;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aukiftqrMwSvLnxP7hNxU4zZyCqOc+G3XCw54ES4fTI=;
+        b=ksCnrKJ5sGhKQ0YC3FcbBgqdePWYO9LGI11ptcNmAlFp9frzY//bc5iT8wjQV1fONI
+         kfbReerVRAK0szdbDOduySY9l0bS51SfQXOt1pVoGDj5eho3AgVXdfmomFetDOuF+6sp
+         eQaX9394pzD41OikSVVfU0fkaBW+JWTAIbZuU1TWADJwEa4ikdZK8vuMaPRnqHVrkaIw
+         HwiSXjfRH34JBkDar8SaQpKDrJfnyysLq6rg8kHILhYYzdEHUwusWTKW+F0vFH1VZe1B
+         j/oyY+z4+EgRGtfGJEZyoY5332qmNCP3kJ6dwvFAKSqls2zYN0E0mSe2m2JqpTShklrH
+         ShbA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGF7aKP36t5tpkKDJ+uFfQs67dTwOTMtGR0tUCv9gE7fVOSo36U9hdhQK5Z6tpD6ERwUtQ+h4egFs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRjnBGfmreB42+0WH0WgXNUYm1A/bsLEygoD3dTrv9zFBXuodq
+	Mu7I46E9w550tpaaDMNFoKsefBQ6soGYQTRGKrvuS5wrRaDxmK19AJT95N2tsGwqUrtO13+eOIm
+	Q38/e/NWpqs/nkw0zN2aR/6SktJ9w5hLOugQyniafSDNAdQrOGosWfm6owxWWWVU=
+X-Gm-Gg: ASbGnctdxC0xrstlzO9ee8TvJnpCB7fad8ym76hLmNNeEKOLJHH5nJOYRTF9ntww0ml
+	zk95wgP6WEWTNvTVnwDOoNyT/4F3HQi5GucnOsBQcuXct3YJWKY5DpSHKEmNWjKwFGuw9X/GnIa
+	EaOq1hv5riHoujYLVieIvskOv7PUMTWcrFa5qWvcgv0K6p3T5mDCTXVe18TpY4epcegcFVs/V3Q
+	kvOLDOSa7zBFkD2KF+jz3ILyzfCJIos1YCZNI7Dx/NsJsjE9wvd9EYWwjnFViU9qd3uh5uaWcGm
+	xLlRY81sxXCZ13Vh5g6SS3Ih8uI6RUrq2h4DSip332KnYBOTGQchTBaC3WZTEvotCq8HaodpJ0O
+	fe/bnIM5nBeJ+QcbvPqe5Hi5/mq2GgQ2R4rPXbHsnqzCtQpNNM6Ev
+X-Received: by 2002:a17:902:f68b:b0:250:1c22:e78 with SMTP id d9443c01a7336-2962acf9e0bmr55375965ad.1.1762354693502;
+        Wed, 05 Nov 2025 06:58:13 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IErtl9BhRd5yJMT1l/GDDCgenYNFc8+diIC0fk7i14lP3JL4ksDWV66JK/xo5QFTCfoRlinaw==
+X-Received: by 2002:a17:902:f68b:b0:250:1c22:e78 with SMTP id d9443c01a7336-2962acf9e0bmr55375335ad.1.1762354692840;
+        Wed, 05 Nov 2025 06:58:12 -0800 (PST)
+Received: from hu-punita-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29601a60761sm63467705ad.90.2025.11.05.06.58.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Nov 2025 06:58:12 -0800 (PST)
+From: Punit Agrawal <punit.agrawal@oss.qualcomm.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
+Cc: fabioaiuto83@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jamie Iles <jamie.iles@oss.qualcomm.com>,
+        Punit Agrawal <punit.agrawal@oss.qualcomm.com>
+Subject: [PATCH] drivers/usb/dwc3: fix PCI parent check
+Date: Wed,  5 Nov 2025 14:58:01 +0000
+Message-Id: <20251105145801.485371-1-punit.agrawal@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
- <20251028004614.393374-23-viro@zeniv.linux.org.uk> <66300d81c5e127e3bca8c6c4d997da386b142004.camel@HansenPartnership.com>
- <20251028174540.GN2441659@ZenIV> <20251028210805.GP2441659@ZenIV>
- <CAMj1kXF6tvg6+CL_1x7h0HK1PoSGtxDjc0LQ1abGQBd5qrbffg@mail.gmail.com>
- <9f079d0c8cffb150c0decb673a12bfe1b835efc9.camel@HansenPartnership.com>
- <20251029193755.GU2441659@ZenIV> <CAMj1kXHnEq97bzt-C=zKJdV3BK3EDJCPz3Pfyk52p2735-4wFA@mail.gmail.com>
- <20251105-aufheben-ausmusterung-4588dab8c585@brauner>
-In-Reply-To: <20251105-aufheben-ausmusterung-4588dab8c585@brauner>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 5 Nov 2025 15:34:28 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEt1i=4iGaum9MoQWMJT55LYxUd6=f+x=NKGCgz5vL4TQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bnxYKD_q_DEqIXXuAAuvtynWG7mNNaOqPYQs_wBysPbMIk9Lu8V4S9c-i8
-Message-ID: <CAMj1kXEt1i=4iGaum9MoQWMJT55LYxUd6=f+x=NKGCgz5vL4TQ@mail.gmail.com>
-Subject: Re: [PATCH v2 22/50] convert efivarfs
-To: Christian Brauner <brauner@kernel.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, 
-	James Bottomley <james.bottomley@hansenpartnership.com>, linux-fsdevel@vger.kernel.org, 
-	torvalds@linux-foundation.org, jack@suse.cz, raven@themaw.net, 
-	miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org, linux-mm@kvack.org, 
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, kees@kernel.org, 
-	rostedt@goodmis.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	paul@paul-moore.com, casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
-	john.johansen@canonical.com, selinux@vger.kernel.org, 
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: pJbI03oM95JlXEXhx0cdRJE1GyV6X-nT
+X-Proofpoint-GUID: pJbI03oM95JlXEXhx0cdRJE1GyV6X-nT
+X-Authority-Analysis: v=2.4 cv=YZKwJgRf c=1 sm=1 tr=0 ts=690b6606 cx=c_pps
+ a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=EUspDBNiAAAA:8 a=jM0-4Wpw8WwY0CpfOG8A:9 a=3WC7DwWrALyhR5TkjVHa:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA1MDExMyBTYWx0ZWRfX93KTyJu5HD8I
+ eK50kh8jseYx9BtW9FUElvqHU86hEhh6fwphcB+8POh/3REEh4vG2RG878QgHByGsPNRabyftx2
+ FU3r1lqQ/HBAbaxGL8cQIyQP+muM5hJ1KChXEAXzCkIVY5S8xPazYqEhFelrPw7EeaVi4Lg67X+
+ 0DZakIcyi+WFNen9Z3Rw8Y6UrEFbbl3CXDSKSMEzUI6+jkY4TfKgTHxV/rZ27g/+4JJPHrT973p
+ iXTZyyZAfMteANmya/0aBztWxecjjfNui9eJGcVpqr/ijcYdtrbOkmqeV/vP8BnNLcHXzo/CylZ
+ d3cmUzL6w7UfARxUP+IjLM/egXTzbh4VuwqcILSPMfXbbPJKZ6OzHC5h1YfvnzUbfFW7imv3agC
+ 90zdCKpc/jS8M2DhPo8dBZt/qDTayg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-05_05,2025-11-03_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
+ priorityscore=1501 clxscore=1011 malwarescore=0 bulkscore=0 suspectscore=0
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
+ definitions=main-2511050113
 
-On Wed, 5 Nov 2025 at 12:48, Christian Brauner <brauner@kernel.org> wrote:
->
-> On Thu, Oct 30, 2025 at 02:35:51PM +0100, Ard Biesheuvel wrote:
-> > On Wed, 29 Oct 2025 at 20:38, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > >
-> > > On Wed, Oct 29, 2025 at 02:57:51PM -0400, James Bottomley wrote:
-> > >
-> > > > I think this all looks OK.  The reason for the convolution is that
-> > > > simple_start/done_creating() didn't exist when I did the conversion ...
-> > > > although if they had, I'm not sure I'd have thought of reworking
-> > > > efivarfs_create_dentry to use them.  I tried to update some redundant
-> > > > bits, but it wasn't the focus of what I was trying to fix.
-> > > >
-> > > > So I think the cleanup works and looks nice.
-> > > >
-> > > > >
-> > > > > Relying on the -EEXIST return value to detect duplicates, and
-> > > > > combining the two callbacks seem like neat optimizations to me, so
-> > > > >
-> > > > > Acked-by: Ard Biesheuvel <ardb@kernel.org>
-> > > > >
-> > > > > but I have to confess I am slightly out of my depth when it comes to
-> > > > > VFS stuff.
-> > > >
-> > > > Yes, ack too.
-> > >
-> > >         Umm...  FWIW, I've got a few more followups on top of that (see
-> > > #untested.efivarfs, current head at 36051c773015).  Not sure what would
-> > > be the best way to deal with that stuff - I hope to get the main series
-> > > stabilized and merged in the coming window.  Right now I'm collecting
-> > > feedback (acked-by, etc.), and there's a couple of outright bugfixes
-> > > in front of the series, so I'd expect at least a rebase to -rc4...
-> > >
-> >
-> > I pulled your code and tried to test it. It works fine for the
-> > ordinary case, but only now I realized that commit
-> >
-> > commit 0e4f9483959b785f65a36120bb0e4cf1407e492c
-> > Author: Christian Brauner <brauner@kernel.org>
-> > Date:   Mon Mar 31 14:42:12 2025 +0200
-> >
-> >     efivarfs: support freeze/thaw
-> >
-> > actually broke James's implementation of the post-resume sync with the
-> > underlying variable store.
-> >
-> > So I wonder what the point is of all this complexity if it does not
-> > work for the use case where it is the most important, i.e., resume
-> > from hibernation, where the system goes through an ordinary cold boot
-> > and so the EFI variable store may have gotten out of sync with the
-> > hibernated kernel's view of it.
-> >
-> > If no freeze/thaw support in the suspend/resume path is forthcoming,
-> > would it be better to just revert that change? That would badly
-> > conflict with your changes, though, so I'd like to resolve this before
-> > going further down this path.
->
-> So first of all, this works. I've tested it extensively. If it doesn't
-> work there's a regression.
->
-> And suspend/resume works just fine with freeze/thaw. See commit
-> eacfbf74196f ("power: freeze filesystems during suspend/resume") which
-> implements exactly that.
->
-> The reason this didn't work for you is very likely:
->
-> cat /sys/power/freeze_filesystems
-> 0
->
-> which you must set to 1.
->
+From: Jamie Iles <jamie.iles@oss.qualcomm.com>
 
-Yes, that does the trick, thanks.
+The sysdev_is_parent check was being used to infer PCI devices that have
+the DMA mask set from the PCI capabilities, but sysdev_is_parent is also
+used for non-PCI ACPI devices in which case the DMA mask would be the
+bus default or as set by the _DMA method.
 
-But as James argued as well, this should not be an opt-in, at least
-not for resume from hibernate: from the EFI firmware's PoV, it is just
-a cold boot, and even the tiniest change in hardware state during boot
-(docked vs undocked, USB drive plugged in, etc) could potentially
-affect the state of the variable store. In practice, we are mostly
-interested in some of the non-volatile variables to set the boot order
-etc, so bad things rarely happen, but doing the sync unconditionally
-is the safest choice here.
+Without this fix the DMA mask would default to 32-bits and so allocation
+would fail if there was no DRAM below 4GB.
+
+Fixes: 47ce45906ca9 ("usb: dwc3: leave default DMA for PCI devices")
+Signed-off-by: Jamie Iles <jamie.iles@oss.qualcomm.com>
+Signed-off-by: Punit Agrawal <punit.agrawal@oss.qualcomm.com>
+---
+ drivers/usb/dwc3/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index ae140c356295..c2ce2f5e60a1 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -25,6 +25,7 @@
+ #include <linux/of.h>
+ #include <linux/of_graph.h>
+ #include <linux/acpi.h>
++#include <linux/pci.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/devinfo.h>
+ #include <linux/reset.h>
+@@ -2241,7 +2242,7 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
+ 	dev_set_drvdata(dev, dwc);
+ 	dwc3_cache_hwparams(dwc);
+ 
+-	if (!dwc->sysdev_is_parent &&
++	if (!dev_is_pci(dwc->sysdev) &&
+ 	    DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0) == 64) {
+ 		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
+ 		if (ret)
+-- 
+2.34.1
+
 
