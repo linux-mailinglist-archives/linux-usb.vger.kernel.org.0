@@ -1,295 +1,154 @@
-Return-Path: <linux-usb+bounces-30089-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30090-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF8F1C35C3F
-	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 14:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B8A0DC35C72
+	for <lists+linux-usb@lfdr.de>; Wed, 05 Nov 2025 14:11:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BF88D4FDCDE
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 13:05:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A079C4F8D74
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Nov 2025 13:09:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC423317712;
-	Wed,  5 Nov 2025 13:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907E7317707;
+	Wed,  5 Nov 2025 13:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RDq33sq9"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="Z4zM0B5S"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A493168FD
-	for <linux-usb@vger.kernel.org>; Wed,  5 Nov 2025 13:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B93F3164D2;
+	Wed,  5 Nov 2025 13:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762347916; cv=none; b=Q5Tq+BiIuqGnCXUYcB7lNorL6bAIYZJ9QNaUMR+Coyoc8vIl1OIYsPvQVH0yWgYJVfNcobBaEgkgHNnGg+VRrBNoYnlBYsFkUVJrVRBEByo6jJgYi1jRLsrdPDVINKUxqR5I0buVci2qMHBFgkv6B+smuRvGpopgy+PDPoLRJ3c=
+	t=1762348148; cv=none; b=kAZYFUnh18XJw8SATNqfwAQGu7qv825Vjs1UCyGIyhzePbvu3yu2FUEcclddfEXfoDVnaOeX8TYoVgEE47ckmpQiwx3+dCPbsZKQLKGDH4TgvrvkYYjQ8BtENLbFZhrv9lbUrUcM7kQuytB7gj1eEgmvD3RqK3K8lL+BWMhElc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762347916; c=relaxed/simple;
-	bh=agSHEtZvPJYRIhsGzNZVezqkVYPi3pBx4ZEoqYs0PkI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m4fUjAtMejaRknYGd9vfIge1Te6ydleukuBaoUmEcVJ7RKF3nkIDqlN8sizHMUoc4eLa92Gyhq/kbO25iFEMYOX4T+WTRdgFogb9X2RJso+if7tGoyUxcCUPjMoUgtXQb7so1E7gnzM1N70vALcwpAZY0uF8QG17jsKHrjl1fww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RDq33sq9; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4ed7a7ddc27so3142881cf.2
-        for <linux-usb@vger.kernel.org>; Wed, 05 Nov 2025 05:05:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762347913; x=1762952713; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t7x+B9bPBixdtyVtYVHkU2x+LhEirUQEYUDWiZN/fOQ=;
-        b=RDq33sq9KXEiVHpcQpNfPlXv3UL8+tFVIRa2pW9YySRry32oAT+j4R8gIfk+CuBpGV
-         CmT140c/S9tjeB4s2ayQJmAUzHPjfgdPITmEXe2VFysxJsWWu4f7CVIvoWUh7uAMVGyV
-         pWMoFWV2VTmxXC/s1hifhdQEXKDtxtS6iu0TFRMiFOwfrj5z9IrCQkcRrkwl3Hri98g+
-         bIc9G/zXTAEADW9uN2wuQEA85LrAaaNq88iVdxW8LTNStWiMMaxkO3pCAtNiWkiu+AZE
-         eo/AfX8KUm5YxkyRl7KQsr2lKoG5Jre8IndnK9/x0AOQiHmCob4OrPtcHvcTk6X8+UCg
-         DTWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762347913; x=1762952713;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t7x+B9bPBixdtyVtYVHkU2x+LhEirUQEYUDWiZN/fOQ=;
-        b=gnJArlSOXVaV4cgXhNKlS/ZGMIscafKAgYbJgj1WuthX1FEPNSCozVI0X7X15KN7cq
-         c65s+CyOGImAu9e5/y5UvoHYy11qd0IRc42d9FonUG5L3leq4C85Wd6S8RAiISn/bBXK
-         z+O0ySoE4hb7pYgrY8TlX3i1G6arKYvt+8D4l9ic46yWauShcPVT8bDUDl6mZv86DBxW
-         zp7HAB4Wded4GXFQUchme2UT0ot5B2WVUXDy5U75ptdUfBKuEUFaC/pvATKNIP5fJjxz
-         JRq/sBKnameTbY7PGhDqzzWCF3TqwvHJTuOEqRH2yflaVIX6ouo0nu1tWSwOt9uqYjGq
-         WsrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXPIDcWqu0NM5yKYrr8JE9M0eQe6JZl6nRh6aMjCxABbkvhoSqeyid4ZnDgCQ9lGO6CR5pr12GBDx8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylChmc2a7aUb3vPlOBiwkHYZ9jHwIBHydAqQxnFMA67faIQPJf
-	DHSmCK5P0+RgkWwXvf37TEA4jN/arXNOzUTKfo3f1r5oOHnTJz2CuicRr7zCyIFNy/RlhO1w0kK
-	Tgt3/565eXspS7Ix7YExgMrzsdi203XLLrNi2WV7i
-X-Gm-Gg: ASbGncuFSZsrH+dcOP/pHlAjEv30sQ5f0TtEayu7taQk4uV3lQZ28bcMvD/wVVbQ7v+
-	AOkgxZ4pHZAjbBDpFCPesZ22Yb+TjQpJvw8BT12uIllQqND0TtJZxDHndMBIEQL0AMCHUttvmHF
-	vJ9WMFtTWFOtF0Nxdnid+hgibnkdLaBmPmf2t5349l6aiUcnOjRvZ7kBL/FpwLuci/Cx3efc8qw
-	her4kzpwcDeAobIWow+tbX4Gc5xSAKDwI495edJCAnPzR3HsVmiQMoZVwUA
-X-Google-Smtp-Source: AGHT+IEY+GzhSiC4kXGw1rdG3sCGpAGWlOwwjtVH4BSSwgpEY7LedrZO7sBJfomJsnspnYboqF1KcHs1fP6gBb6TJDU=
-X-Received: by 2002:a05:622a:260e:b0:4ec:f86f:9244 with SMTP id
- d75a77b69052e-4ed7236b82emr45476671cf.34.1762347912869; Wed, 05 Nov 2025
- 05:05:12 -0800 (PST)
+	s=arc-20240116; t=1762348148; c=relaxed/simple;
+	bh=ire8fBSaH5X2X8Fk/L25UVs6ngqVbi8pXJIwOAxBt3c=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Tlued1f6fEGc+X5loLfjMtJKV5taMIjjDK3gTDAs2+CEE59nhjX6kusTtKzUq/JcSp4/MgjFWL95qoWNFfMrHuQeshiSAA4z9t5MsYZRewanpb4UyrIDU7Hx3IdqbftA6pPdahL7po3ElZmsu1QE9cMxoWXg97iRRnvpI+vkhOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=Z4zM0B5S; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1762348145;
+	bh=ire8fBSaH5X2X8Fk/L25UVs6ngqVbi8pXJIwOAxBt3c=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=Z4zM0B5SZHl/4X6OjhuOwgkvTtAUSjY8A0QRetHs+gA4Y/czokXcoPgmEvi85cpqa
+	 gQz+iOyX3jHXlp6fEAUmajL5aSTN02gKCJ+jESykWqDMtBeI0/Zszpl1Y7gqYiuQfJ
+	 +Dazp3G+OMDH05O+udpMC2ZN/dmhb3sbpzwDLbuY=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 8FA881C003D;
+	Wed, 05 Nov 2025 08:09:04 -0500 (EST)
+Message-ID: <423f5cc5352c54fc21e0570daeeddc4a58e74974.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 22/50] convert efivarfs
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Christian Brauner <brauner@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org, 
+ torvalds@linux-foundation.org, jack@suse.cz, raven@themaw.net,
+ miklos@szeredi.hu,  neil@brown.name, a.hindborg@kernel.org,
+ linux-mm@kvack.org,  linux-efi@vger.kernel.org,
+ ocfs2-devel@lists.linux.dev, kees@kernel.org,  rostedt@goodmis.org,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+ paul@paul-moore.com, casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
+  john.johansen@canonical.com, selinux@vger.kernel.org,
+ borntraeger@linux.ibm.com,  bpf@vger.kernel.org
+Date: Wed, 05 Nov 2025 08:09:03 -0500
+In-Reply-To: <20251105-aufheben-ausmusterung-4588dab8c585@brauner>
+References: <20251028004614.393374-1-viro@zeniv.linux.org.uk>
+	 <20251028004614.393374-23-viro@zeniv.linux.org.uk>
+	 <66300d81c5e127e3bca8c6c4d997da386b142004.camel@HansenPartnership.com>
+	 <20251028174540.GN2441659@ZenIV> <20251028210805.GP2441659@ZenIV>
+	 <CAMj1kXF6tvg6+CL_1x7h0HK1PoSGtxDjc0LQ1abGQBd5qrbffg@mail.gmail.com>
+	 <9f079d0c8cffb150c0decb673a12bfe1b835efc9.camel@HansenPartnership.com>
+	 <20251029193755.GU2441659@ZenIV>
+	 <CAMj1kXHnEq97bzt-C=zKJdV3BK3EDJCPz3Pfyk52p2735-4wFA@mail.gmail.com>
+	 <20251105-aufheben-ausmusterung-4588dab8c585@brauner>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251104161327.41004-1-simon.schippers@tu-dortmund.de>
- <20251104161327.41004-2-simon.schippers@tu-dortmund.de> <CANn89iL6MjvOc8qEQpeQJPLX0Y3X0HmqNcmgHL4RzfcijPim5w@mail.gmail.com>
- <66d22955-bb20-44cf-8ad3-743ae272fec7@tu-dortmund.de> <CANn89i+oGnt=Gpo1hZh+8uaEoK3mKLQY-gszzHWC+A2enXa7Tw@mail.gmail.com>
- <be77736d-6fde-4f48-b774-f7067a826656@tu-dortmund.de> <CANn89iJVW-_qLbUehhJNJO70PRuw1SZVQX0towgZ4K-JvsPKkw@mail.gmail.com>
- <c01c12a8-c19c-4b9f-94d1-2a106e65a074@tu-dortmund.de>
-In-Reply-To: <c01c12a8-c19c-4b9f-94d1-2a106e65a074@tu-dortmund.de>
-From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 5 Nov 2025 05:05:01 -0800
-X-Gm-Features: AWmQ_bmczxTD_xiVfmpYzU_nFYc93glUn-Npyv14kOLlWnq67dCdCSeUuf657bM
-Message-ID: <CANn89iJpXwmvg0MOvLo8+hVAhaMTL_1_62Afk_6dG1ZEL3tORQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 1/1] usbnet: Add support for Byte Queue Limits (BQL)
-To: Simon Schippers <simon.schippers@tu-dortmund.de>
-Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 5, 2025 at 4:58=E2=80=AFAM Simon Schippers
-<simon.schippers@tu-dortmund.de> wrote:
->
-> On 11/5/25 13:34, Eric Dumazet wrote:
-> > On Wed, Nov 5, 2025 at 4:20=E2=80=AFAM Simon Schippers
-> > <simon.schippers@tu-dortmund.de> wrote:
-> >>
-> >> On 11/5/25 12:28, Eric Dumazet wrote:
-> >>> On Wed, Nov 5, 2025 at 2:35=E2=80=AFAM Simon Schippers
-> >>> <simon.schippers@tu-dortmund.de> wrote:
-> >>>>
-> >>>> On 11/4/25 18:00, Eric Dumazet wrote:
-> >>>>> On Tue, Nov 4, 2025 at 8:14=E2=80=AFAM Simon Schippers
-> >>>>> <simon.schippers@tu-dortmund.de> wrote:
-> >>>>>>
-> >>>>>> The usbnet driver currently relies on fixed transmit queue lengths=
-, which
-> >>>>>> can lead to bufferbloat and large latency spikes under load -
-> >>>>>> particularly with cellular modems.
-> >>>>>> This patch adds support for Byte Queue Limits (BQL) to dynamically=
- manage
-> >>>>>> the transmit queue size and reduce latency without sacrificing
-> >>>>>> throughput.
-> >>>>>>
-> >>>>>> Testing was performed on various devices using the usbnet driver f=
-or
-> >>>>>> packet transmission:
-> >>>>>>
-> >>>>>> - DELOCK 66045: USB3 to 2.5 GbE adapter (ax88179_178a)
-> >>>>>> - DELOCK 61969: USB2 to 1 GbE adapter (asix)
-> >>>>>> - Quectel RM520: 5G modem (qmi_wwan)
-> >>>>>> - USB2 Android tethering (cdc_ncm)
-> >>>>>>
-> >>>>>> No performance degradation was observed for iperf3 TCP or UDP traf=
-fic,
-> >>>>>> while latency for a prioritized ping application was significantly
-> >>>>>> reduced. For example, using the USB3 to 2.5 GbE adapter, which was=
- fully
-> >>>>>> utilized by iperf3 UDP traffic, the prioritized ping was improved =
-from
-> >>>>>> 1.6 ms to 0.6 ms. With the same setup but with a 100 Mbit/s Ethern=
-et
-> >>>>>> connection, the prioritized ping was improved from 35 ms to 5 ms.
-> >>>>>>
-> >>>>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
-> >>>>>> ---
-> >>>>>>  drivers/net/usb/usbnet.c | 8 ++++++++
-> >>>>>>  1 file changed, 8 insertions(+)
-> >>>>>>
-> >>>>>> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> >>>>>> index 62a85dbad31a..1994f03a78ad 100644
-> >>>>>> --- a/drivers/net/usb/usbnet.c
-> >>>>>> +++ b/drivers/net/usb/usbnet.c
-> >>>>>> @@ -831,6 +831,7 @@ int usbnet_stop(struct net_device *net)
-> >>>>>>
-> >>>>>>         clear_bit(EVENT_DEV_OPEN, &dev->flags);
-> >>>>>>         netif_stop_queue (net);
-> >>>>>> +       netdev_reset_queue(net);
-> >>>>>>
-> >>>>>>         netif_info(dev, ifdown, dev->net,
-> >>>>>>                    "stop stats: rx/tx %lu/%lu, errs %lu/%lu\n",
-> >>>>>> @@ -939,6 +940,7 @@ int usbnet_open(struct net_device *net)
-> >>>>>>         }
-> >>>>>>
-> >>>>>>         set_bit(EVENT_DEV_OPEN, &dev->flags);
-> >>>>>> +       netdev_reset_queue(net);
-> >>>>>>         netif_start_queue (net);
-> >>>>>>         netif_info(dev, ifup, dev->net,
-> >>>>>>                    "open: enable queueing (rx %d, tx %d) mtu %d %s=
- framing\n",
-> >>>>>> @@ -1500,6 +1502,7 @@ netdev_tx_t usbnet_start_xmit(struct sk_buff=
- *skb, struct net_device *net)
-> >>>>>>         case 0:
-> >>>>>>                 netif_trans_update(net);
-> >>>>>>                 __usbnet_queue_skb(&dev->txq, skb, tx_start);
-> >>>>>> +               netdev_sent_queue(net, skb->len);
-> >>>>>>                 if (dev->txq.qlen >=3D TX_QLEN (dev))
-> >>>>>>                         netif_stop_queue (net);
-> >>>>>>         }
-> >>>>>> @@ -1563,6 +1566,7 @@ static inline void usb_free_skb(struct sk_bu=
-ff *skb)
-> >>>>>>  static void usbnet_bh(struct timer_list *t)
-> >>>>>>  {
-> >>>>>>         struct usbnet           *dev =3D timer_container_of(dev, t=
-, delay);
-> >>>>>> +       unsigned int bytes_compl =3D 0, pkts_compl =3D 0;
-> >>>>>>         struct sk_buff          *skb;
-> >>>>>>         struct skb_data         *entry;
-> >>>>>>
-> >>>>>> @@ -1574,6 +1578,8 @@ static void usbnet_bh(struct timer_list *t)
-> >>>>>>                                 usb_free_skb(skb);
-> >>>>>>                         continue;
-> >>>>>>                 case tx_done:
-> >>>>>> +                       bytes_compl +=3D skb->len;
-> >>>>>> +                       pkts_compl++;
-> >>>>>>                         kfree(entry->urb->sg);
-> >>>>>>                         fallthrough;
-> >>>>>>                 case rx_cleanup:
-> >>>>>> @@ -1584,6 +1590,8 @@ static void usbnet_bh(struct timer_list *t)
-> >>>>>>                 }
-> >>>>>>         }
-> >>>>>>
-> >>>>>> +       netdev_completed_queue(dev->net, pkts_compl, bytes_compl);
-> >>>>>> +
-> >>>>>>         /* restart RX again after disabling due to high error rate=
- */
-> >>>>>>         clear_bit(EVENT_RX_KILL, &dev->flags);
-> >>>>>>
-> >>>>>
-> >>>>> I think this is racy. usbnet_bh() can run from two different contex=
-ts,
-> >>>>> at the same time (from two cpus)
-> >>>>>
-> >>>>> 1) From process context :
-> >>>>> usbnet_bh_work()
-> >>>>>
-> >>>>> 2) From a timer. (dev->delay)
-> >>>>>
-> >>>>>
-> >>>>> To use BQL, you will need to add mutual exclusion.
-> >>>>
-> >>>> Yeah, I missed that.
-> >>>>
-> >>>> I guess synchronizing with the lock of the sk_buff_head dev->done ma=
-kes
-> >>>> sense? The same locking is also done right before in skb_dequeue.
-> >>>
-> >>> Or only protect the netdev_completed_queue(dev->net, pkts_compl,
-> >>> bytes_compl) call,
-> >>> adding a specific/dedicated spinlock for this purpose.
-> >>>
-> >>> spin_lock_bh(&dev->bql_spinlock);
-> >>> netdev_completed_queue(dev->net, pkts_compl, bytes_compl);
-> >>> spin_unlock_bh(&dev->bql_spinlock);
-> >>>
-> >>> I am assuming no usbnet driver is setting dev->lltx =3D true (or plan=
- to
-> >>> in the future)
-> >>> so usbnet_start_xmit() is protected by HARD_TX_LOCK() already.
-> >>
-> >> Yes, I also want to only protect the netdev_completed_queue(dev->net,
-> >> pkts_compl, bytes_compl) call. However, I am wondering what you mean w=
-ith
-> >>
-> >> spin_lock_bh(&dev->bql_spinlock)
-> >> ...
-> >>
-> >>
-> >> Do we want to protect against usbnet_start_xmit()? Maybe I am missing
-> >> something, but other BQL implementations also do not seem to protect
-> >> against their respective ndo_start_xmit.
-> >
-> > BQL has been designed so that producer/consumer can run in //
-> >
-> > However, all producers need exclusion (typically done with HARD_TX_LOCK=
-)
-> > All consumers need exclusion (typically done because of NAPI sched bit)
-> >
-> >>
-> >>
-> >> My approach would just protect against usbnet_bh calls from another
-> >> context with the same locking as skb_dequeue():
-> >>
-> >> spin_lock_irqsave(&list->lock, flags);
-> >> netdev_completed_queue(dev->net, pkts_compl, bytes_compl);
-> >> spin_unlock_irqrestore(&list->lock, flags);
-> >
-> > I tend to prefer not masking hard irq unless really necessary.
-> >
-> > Also, reusing  a lock for different purposes makes things confusing
-> > in terms of code maintenance.
-> >
-> > usbnet is hardly performance critical, I would keep list->lock only to
-> > protect the list of skbs :)
->
-> Thanks for the clarification!
->
->
-> So in usbnet.h I will just
->
-> #include <linux/spinlock.h>
->
-> and then save the new field
->
-> spinlock_t bql_spinlock;
->
-> in struct usbnet and will then call
->
-> spin_lock_bh(&dev->bql_spinlock);
-> netdev_completed_queue(dev->net, pkts_compl, bytes_compl);
-> spin_unlock_bh(&dev->bql_spinlock);
->
-> in usbnet_bh. Am I right?
+On Wed, 2025-11-05 at 12:47 +0100, Christian Brauner wrote:
+> On Thu, Oct 30, 2025 at 02:35:51PM +0100, Ard Biesheuvel wrote:
+[...]
+> > commit 0e4f9483959b785f65a36120bb0e4cf1407e492c
+> > Author: Christian Brauner <brauner@kernel.org>
+> > Date:=C2=A0=C2=A0 Mon Mar 31 14:42:12 2025 +0200
+> >=20
+> > =C2=A0=C2=A0=C2=A0 efivarfs: support freeze/thaw
+> >=20
+> > actually broke James's implementation of the post-resume sync with
+> > the underlying variable store.
+> >=20
+> > So I wonder what the point is of all this complexity if it does not
+> > work for the use case where it is the most important, i.e., resume
+> > from hibernation, where the system goes through an ordinary cold
+> > boot and so the EFI variable store may have gotten out of sync with
+> > the hibernated kernel's view of it.
+> >=20
+> > If no freeze/thaw support in the suspend/resume path is
+> > forthcoming, would it be better to just revert that change? That
+> > would badly conflict with your changes, though, so I'd like to
+> > resolve this before=20
+> > going further down this path.
+>=20
+> So first of all, this works. I've tested it extensively. If it
+> doesn't work there's a regression.
 
-You also need to spin_lock_init() this new lock in setup phase (usbnet_prob=
-e)
+I haven't yet got around to finding the test image I used for this, but
+I'll try to do that and get a test running this week.
 
-Test/Run your code after enabling LOCKDEP in your .config
-(CONFIG_PROVE_LOCKING=3Dy)
+> And suspend/resume works just fine with freeze/thaw. See commit
+> eacfbf74196f ("power: freeze filesystems during suspend/resume")
+> which implements exactly that.
+>=20
+> The reason this didn't work for you is very likely:
+>=20
+> cat /sys/power/freeze_filesystems
+> 0
+>=20
+> which you must set to 1.
+
+Actually, no, that's not correct.  The efivarfs freeze/thaw logic must
+run unconditionally regardless of this setting to fix the systemd bug,
+so all the variable resyncing is done in the thaw call, which isn't
+conditioned on the above (or at least it shouldn't be).
+
+> Second, that "complexity" replaces your way more complex blocking
+> notifier implementation for this thing which simply deadlocked the
+> system as I reported and showed earlier this year.
+>=20
+> That blocking notifier thing had to use vfs_kern_mount() which had to
+> come up with it's own internal private vfs mount to pin efivarfs
+> because it's called out-of-band and then walk the list of variables
+> and resync. Problem is that leads to completely untenable locking
+> problems. So if you want to go back to that be my guest.
+
+Let's figure out if we have a problem first (and if so, where) before
+we get into possible solutions.
+
+Regards,
+
+James
+
 
