@@ -1,220 +1,109 @@
-Return-Path: <linux-usb+bounces-30143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ABEEC3A674
-	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 11:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B1A6C3A7A7
+	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 12:12:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D810B4F7D40
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 10:51:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2C8854FE972
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 11:07:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5493D2EC080;
-	Thu,  6 Nov 2025 10:51:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D3930BF72;
+	Thu,  6 Nov 2025 11:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rV5Pn6gn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from azure-sdnproxy.icoremail.net (l-sdnproxy.icoremail.net [20.188.111.126])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DD212E8DF3;
-	Thu,  6 Nov 2025 10:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=20.188.111.126
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7B22E6CCE
+	for <linux-usb@vger.kernel.org>; Thu,  6 Nov 2025 11:07:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762426309; cv=none; b=uCX6CmpMzOrvKdozqmkXnskcMwPqMWzorQSTl+gIjB3/kFmIcWLB96sqnes8jh31gMqOW2L+lGWIZQv1Y4EllZQJbhGS/OmNgSNgy3zejrKUtRpVxBEEiF+IaSYwvuOycEP898fNo822FdJGd6aXi5gSJ4gFXLi7iEtYB/fUlx4=
+	t=1762427244; cv=none; b=lFNW/QXOjTaiuCmqcg78uG4n2hpbYkwQloBA8/rRLTv554hHbiqY0uq0kN5xbYnmHU3i5sFv5C1NSjfvjHExCpsMcGX367qX8q4ty5x1C4UYwLBVL5eeib5XtEqOrTgcdOApaeMAbMHiKlv3D0lCoHj2zOmrRGffVFjZ2xYU6Co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762426309; c=relaxed/simple;
-	bh=K7Clr5V/4kj7Q7wTWaZ3uDZSO6125m5V8hpEY4EdSY0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Be37VzAhE7Y3VQMEeNLP4l7Wu8KsGIf9SnD6gr8tWIy0iqciKKAvLFW0dcNl6wIQpu9Zu4OUzp1mAUKk3961aUBaSBy1J1a6vPG7GlHmSrfNUMKO/kSMbNdFxw/zuTP4lxvo3GXcuBpJpa+t9mrWX9xbWWXISTbvSbQSqhPgp3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=20.188.111.126
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from E0006493LT.eswin.cn (unknown [10.127.112.153])
-	by app2 (Coremail) with SMTP id TQJkCgAHSq21fQxpvSk7AA--.63801S4;
-	Thu, 06 Nov 2025 18:51:34 +0800 (CST)
-From: caohang@eswincomputing.com
-To: gregkh@linuxfoundation.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	Thinh.Nguyen@synopsys.com,
-	p.zabel@pengutronix.de,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org
-Cc: ningyu@eswincomputing.com,
-	linmin@eswincomputing.com,
-	pinkesh.vaghela@einfochips.com,
-	Hang Cao <caohang@eswincomputing.com>,
-	Senchuan Zhang <zhangsenchuan@eswincomputing.com>
-Subject: [PATCH v6 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
-Date: Thu,  6 Nov 2025 18:51:14 +0800
-Message-ID: <20251106105114.1417-1-caohang@eswincomputing.com>
-X-Mailer: git-send-email 2.45.1.windows.1
-In-Reply-To: <20251106104938.1386-1-caohang@eswincomputing.com>
-References: <20251106104938.1386-1-caohang@eswincomputing.com>
+	s=arc-20240116; t=1762427244; c=relaxed/simple;
+	bh=H0ZdH+nx0rZ/pZHZK3BneUY8rwzBPM85uI4MwicRmNo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=doPwROdwT2VtkER5Qysqx+QEZvhoD6SA+nXkUpaG0tcbE4bw1a8QaPBnoQoGJEK9XRK5WT8D61lpPpN8JIUxH7RTwI7BhvxWZK2n6PBH66kSWEE7qOgxV8FMd/hJ9Tey9m90e/CS08rCpyoRVIugcFKCCHC/5jMktzEt2qFtPGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rV5Pn6gn; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4e88cacc5d9so6944381cf.0
+        for <linux-usb@vger.kernel.org>; Thu, 06 Nov 2025 03:07:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762427242; x=1763032042; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H0ZdH+nx0rZ/pZHZK3BneUY8rwzBPM85uI4MwicRmNo=;
+        b=rV5Pn6gnT4Q7LcRnxkiij/NfBeYHxoIeJFZvjPdYZUl/9A/r/UheF6pJy3tAPg/Lcq
+         33KUW+jTduemo+byS1u9gzcFcE47vluC7J4wpHj9xJN0Jf0rztnsXdUhdN0OPQMorYBv
+         dHFB6elLRqCx9DdXigCdSnwlgLlK3O/qYfZW5ajj/OC3YIsUvQ2/Zz8apKIlKcQR7x9L
+         uoNc8Kst/W1h4u9GUsXR3LPM61K5fY/U3JrxvbcFEGgTD/9ZHdaYY+LWGpVHLZb/vIem
+         VGAyqQe2QDKqZ6zwcnZpz5lRCJIq8TQ10NbpjgRyyZa6oMgloCB6sIKiy6qmUGMmgPa1
+         Lo8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762427242; x=1763032042;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H0ZdH+nx0rZ/pZHZK3BneUY8rwzBPM85uI4MwicRmNo=;
+        b=SHyDXEV64i8qc9+x+sTXi/CQcFcWepikpuQe6yo/CaF6/2AQNXMAm6bFQ9J/s9Sbmh
+         aOOZNEEfH2VJkeVoBvumj+1wdZu7o7fnVEYStSnGAV752C237HbZuousgkGm0qx4VNdT
+         NZWBMTapRvZAdWeq+bmbKU1XB/RsnDmKNj9cBuJt4uorP2wNvLzTga+IvJI5JbSIKYS5
+         mfY5Jvl+zHMSlaq+dNUdfarzMlm0ciO7kBys5mSSHOUoJkdBGibLBZ6741ndHCcHuSp0
+         Krv2dtyo2sTdJbf8C9QDCBiABiHfYRMXtHN0K94plyx50HLpLnLNJXXj4WjnLzTIa38j
+         OVcA==
+X-Forwarded-Encrypted: i=1; AJvYcCV6o7lznt7BNGTqLN4YVPDGeeXWxtTnpiOYyovAlgXpDSbbQO4IQHafqvs0jxDB1+xQfdwEi4JVpc0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywf7E9EX7/O6cS/IQnQQTuHn+YUCRi2YZF7J4E7+x+k4VfNxXwn
+	Z7Ya/UwyK0HzhuSa2G4GuQJ52TVHqllKuWP1DQQMeQchpFoJ32VyCjS1c4wOYb71pY/Y1tk10Hl
+	VgRapxDrrfIDHHlWxyJpIZgMaGkTosuE+KEnz0OEa
+X-Gm-Gg: ASbGncu1Cdf6ssahSN0h+AwDgeAXXbzhodtSzqQddmvPuBCFMI7MV64r9vap/fBF026
+	5Y6sFdb/yJRsJf9KCkmPcGuYX63D4aFHEYh8bliRLonF4HsBh28tarJrD6VEV2wgxcSbSLM2htH
+	Mu3AYzSfZE0kCQ9/Bh6NIcg4eYOF58fdoFIpMF7CaJrj8JSPBXBveLEgGFZK2N6+s3FB02+EzqG
+	L0X/OKu4+eLkBLsHUSEcVaftyZ1+uct/UsrsIjKyCTyz1D18ht7iZruh03y5xd80NFM0Jo=
+X-Google-Smtp-Source: AGHT+IFsyvu6ZTz0rAtb4IsdFmSi8tGXLk/9EUNnH5UQ3mMWlgq52v7rMBO/1u5TYQrjkJOaQBFPj5cYnlhEX0kYgZ4=
+X-Received: by 2002:ac8:7d8b:0:b0:4ec:f940:4e65 with SMTP id
+ d75a77b69052e-4ed725e7ba3mr63858621cf.51.1762427241397; Thu, 06 Nov 2025
+ 03:07:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:TQJkCgAHSq21fQxpvSk7AA--.63801S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxCFy8Xw1UXFW5XFWrtr15XFb_yoWrtr1fpa
-	1DuFyYkrZ5KFs3Ka9ay3WkAF1fK39rCry5tryIkan29r1Dt34UGFyvg3WFqF95GrWxXa45
-	Gw4kKFW8uF47X3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkF7I0En4kS14v26r1q6r43MxkIecxEwVCm-wCF04
-	k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-	MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
-	1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
-	IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-	A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUHCJQUUUUU=
-X-CM-SenderInfo: xfdrxt1qj6v25zlqu0xpsx3x1qjou0bp/
+References: <20251104161327.41004-1-simon.schippers@tu-dortmund.de>
+ <20251104161327.41004-2-simon.schippers@tu-dortmund.de> <CANn89iL6MjvOc8qEQpeQJPLX0Y3X0HmqNcmgHL4RzfcijPim5w@mail.gmail.com>
+ <66d22955-bb20-44cf-8ad3-743ae272fec7@tu-dortmund.de> <CANn89i+oGnt=Gpo1hZh+8uaEoK3mKLQY-gszzHWC+A2enXa7Tw@mail.gmail.com>
+ <be77736d-6fde-4f48-b774-f7067a826656@tu-dortmund.de> <CANn89iJVW-_qLbUehhJNJO70PRuw1SZVQX0towgZ4K-JvsPKkw@mail.gmail.com>
+ <c01c12a8-c19c-4b9f-94d1-2a106e65a074@tu-dortmund.de> <CANn89iJpXwmvg0MOvLo8+hVAhaMTL_1_62Afk_6dG1ZEL3tORQ@mail.gmail.com>
+ <9ebd72d0-5ae9-4844-b0be-5629c52e6df8@tu-dortmund.de> <64a963ed-400e-4bd2-a4e3-6357f3480367@tu-dortmund.de>
+ <CANn89iKt+OYAfQoZxkqO+gECRx_oAecCRTVcf1Kumtpc9u+n0w@mail.gmail.com>
+In-Reply-To: <CANn89iKt+OYAfQoZxkqO+gECRx_oAecCRTVcf1Kumtpc9u+n0w@mail.gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 6 Nov 2025 03:07:09 -0800
+X-Gm-Features: AWmQ_bm5Kc1656Fqyva8wNAL1lgqqHH7XdmS84y-uVKeorIZqI78IoRwP5JyG48
+Message-ID: <CANn89iKpsVStgFLNzx8Nv3C-qRZdY9R7_Rh1mWWxf4MN-oTAYg@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] usbnet: Add support for Byte Queue Limits (BQL)
+To: Simon Schippers <simon.schippers@tu-dortmund.de>
+Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Hang Cao <caohang@eswincomputing.com>
+On Thu, Nov 6, 2025 at 2:40=E2=80=AFAM Eric Dumazet <edumazet@google.com> w=
+rote:
+>
+> >
+> > I compiled it with CONFIG_PROVE_LOCKING and ran iperf3 TCP tests on my
+> > USB2 to Gbit Ethernet adapter I had at hand. dmesg shows no lockdep
+> > warnings. What else should I test?
+>
+> That should be fine, please send a V2
 
-The EIC7700 instantiates two USB 3.0 DWC3 IPs, each of which is backward
-compatible with USB interfaces. It supports Super-speed (5Gb/s), DRD mode,
-and compatible with xHCI 1.1, etc. Each of instances supports 16 endpoints
-in device's mode and max 64 devices in host's mode.
-
-This module needs to interact with the NOC via the AXI master bus, thus
-requiring some HSP configuration operations to achieve this. Ops include
-bus filter, pm signal or status to usb bus and so on.
-
-Signed-off-by: Senchuan Zhang <zhangsenchuan@eswincomputing.com>
-Signed-off-by: Hang Cao <caohang@eswincomputing.com>
----
- drivers/usb/dwc3/dwc3-generic-plat.c | 70 +++++++++++++++++++++++++---
- 1 file changed, 63 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
-index e869c7de7bc8..4e56124e83ce 100644
---- a/drivers/usb/dwc3/dwc3-generic-plat.c
-+++ b/drivers/usb/dwc3/dwc3-generic-plat.c
-@@ -10,8 +10,16 @@
- #include <linux/clk.h>
- #include <linux/platform_device.h>
- #include <linux/reset.h>
-+#include <linux/regmap.h>
-+#include <linux/mfd/syscon.h>
- #include "glue.h"
-
-+#define EIC7700_HSP_BUS_FILTER_EN	BIT(0)
-+#define EIC7700_HSP_BUS_CLKEN_GM	BIT(9)
-+#define EIC7700_HSP_BUS_CLKEN_GS	BIT(16)
-+#define EIC7700_HSP_AXI_LP_XM_CSYSREQ	BIT(0)
-+#define EIC7700_HSP_AXI_LP_XS_CSYSREQ	BIT(16)
-+
- struct dwc3_generic {
- 	struct device		*dev;
- 	struct dwc3		dwc;
-@@ -20,6 +28,11 @@ struct dwc3_generic {
- 	struct reset_control	*resets;
- };
-
-+struct dwc3_plat_config {
-+	int (*init)(struct dwc3_generic *dwc3g);
-+	struct dwc3_properties properties;
-+};
-+
- #define to_dwc3_generic(d) container_of((d), struct dwc3_generic, dwc)
-
- static void dwc3_generic_reset_control_assert(void *data)
-@@ -27,9 +40,38 @@ static void dwc3_generic_reset_control_assert(void *data)
- 	reset_control_assert(data);
- }
-
-+static int dwc3_eic7700_init(struct dwc3_generic *dwc3g)
-+{
-+	struct device *dev = dwc3g->dev;
-+	struct regmap *regmap;
-+	u32 hsp_usb_axi_lp;
-+	u32 hsp_usb_bus;
-+	u32 args[2];
-+	u32 val;
-+
-+	regmap = syscon_regmap_lookup_by_phandle_args(dev->of_node,
-+						      "eswin,hsp-sp-csr",
-+						      ARRAY_SIZE(args), args);
-+	if (IS_ERR(regmap)) {
-+		dev_err(dev, "No hsp-sp-csr phandle specified\n");
-+		return PTR_ERR(regmap);
-+	}
-+
-+	hsp_usb_bus       = args[0];
-+	hsp_usb_axi_lp    = args[1];
-+
-+	regmap_read(regmap, hsp_usb_bus, &val);
-+	regmap_write(regmap, hsp_usb_bus, val | EIC7700_HSP_BUS_FILTER_EN |
-+		     EIC7700_HSP_BUS_CLKEN_GM | EIC7700_HSP_BUS_CLKEN_GS);
-+
-+	regmap_write(regmap, hsp_usb_axi_lp, EIC7700_HSP_AXI_LP_XM_CSYSREQ |
-+		     EIC7700_HSP_AXI_LP_XS_CSYSREQ);
-+	return 0;
-+}
-+
- static int dwc3_generic_probe(struct platform_device *pdev)
- {
--	const struct dwc3_properties *properties;
-+	const struct dwc3_plat_config *plat_config;
- 	struct dwc3_probe_data probe_data = {};
- 	struct device *dev = &pdev->dev;
- 	struct dwc3_generic *dwc3g;
-@@ -77,12 +119,20 @@ static int dwc3_generic_probe(struct platform_device *pdev)
- 	probe_data.res = res;
- 	probe_data.ignore_clocks_and_resets = true;
-
--	properties = of_device_get_match_data(dev);
--	if (properties)
--		probe_data.properties = *properties;
--	else
-+	plat_config = of_device_get_match_data(dev);
-+	if (!plat_config) {
- 		probe_data.properties = DWC3_DEFAULT_PROPERTIES;
-+		goto core_probe;
-+	}
-
-+	probe_data.properties = plat_config->properties;
-+	if (plat_config->init) {
-+		ret = plat_config->init(dwc3g);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "platform init fail\n");
-+	}
-+
-+core_probe:
- 	ret = dwc3_core_probe(&probe_data);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to register DWC3 Core\n");
-@@ -150,13 +200,19 @@ static const struct dev_pm_ops dwc3_generic_dev_pm_ops = {
- 		       dwc3_generic_runtime_idle)
- };
-
--static const struct dwc3_properties fsl_ls1028_dwc3 = {
--	.gsbuscfg0_reqinfo = 0x2222,
-+static const struct dwc3_plat_config fsl_ls1028_dwc3 = {
-+	.properties.gsbuscfg0_reqinfo = 0x2222,
-+};
-+
-+static const struct dwc3_plat_config eic7700_dwc3 =  {
-+	.init = dwc3_eic7700_init,
-+	.properties = DWC3_DEFAULT_PROPERTIES,
- };
-
- static const struct of_device_id dwc3_generic_of_match[] = {
- 	{ .compatible = "spacemit,k1-dwc3", },
- 	{ .compatible = "fsl,ls1028a-dwc3", &fsl_ls1028_dwc3},
-+	{ .compatible = "eswin,eic7700-dwc3", &eic7700_dwc3},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, dwc3_generic_of_match);
---
-2.34.1
-
+BW, no need for a cover letter when sending a single patch.
 
