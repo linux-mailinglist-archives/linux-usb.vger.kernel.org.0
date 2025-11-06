@@ -1,143 +1,179 @@
-Return-Path: <linux-usb+bounces-30158-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30159-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEFE1C3BE9E
-	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 15:58:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA3F8C3BEBD
+	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 16:00:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7EA284FDEE8
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 14:54:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94EC81B27420
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 14:55:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA863431EC;
-	Thu,  6 Nov 2025 14:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8607346760;
+	Thu,  6 Nov 2025 14:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="efnvtBPj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B6133C52A
-	for <linux-usb@vger.kernel.org>; Thu,  6 Nov 2025 14:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD642BE7BA
+	for <linux-usb@vger.kernel.org>; Thu,  6 Nov 2025 14:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762440858; cv=none; b=pc75q7rLCXdPKyRVEmD23rM74m6B/Ugd3hHyjOWWibP7fetkzPkTpvvoOfyh3N+i8spaFbltZvKD8xEaud7GtiavQ6oOXKqCJol1opJ86ylbh5VHLeI34wWZMS/RdcBzvLiEJYEFJhodS9Wcpzq4N/BmyKGKnJWI2adm6Iq+5CU=
+	t=1762440879; cv=none; b=VNCazUqKXKZWlquOmCAXoQtC3gOy8shELvOwNXGCJ086ySFl5rXx6cHpb7/QHzoHSySGRYo7JdX/+PIjMMOLg5NkxwBF8vaAmZ7I3AslSFb/cI75czsbm3tVxlMzWq+s+AQoPTGtUo71bAah0I6odvNlANR7iTUfsglFoemDofk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762440858; c=relaxed/simple;
-	bh=r79Q+HCPKXd52mcnj87kTRiQrunxhy1UKBzOf00q5GY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i8gWBeNFiA7JK4g8P6VcjJQufLg5T2Wn0XoRjXSVZ79bg2sVgWiIu6rHX+77bURIKRxmtvYFjIBPY2c2Me8yM1ybpn4fOyoO16j6kvbXBeWMnHwY15m80UvvtGqnDav64khe2C6uUUAbzXsp77WcWPA785QDN78wqaMlm/8lhlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-5d758dba570so473236137.2
-        for <linux-usb@vger.kernel.org>; Thu, 06 Nov 2025 06:54:16 -0800 (PST)
+	s=arc-20240116; t=1762440879; c=relaxed/simple;
+	bh=yqPyRRy9rOzhon+Sl71PVmdBT+h+QTdgvgit+6Cq+38=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h6mQoofoBb0H8fRAbIP78sp6StOeYmrgG+PN+/pvuiWgR84DurZ9zeMKzMydKI7B24DY0afTr7h1pVnRNco08ZMH9RnN6CWp74ngcds2aqtnyqf0RNqtNwZBRKvY2jHRl4vlDl9nbhLLmSyNAxGwbHoGw1PBnwQluvTl619FvKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=efnvtBPj; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4774f41628bso11222795e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 06 Nov 2025 06:54:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1762440875; x=1763045675; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n/iJ8+grc2Rl2/IHfufh9TPIQreS9jjFa0ImljQu6yc=;
+        b=efnvtBPjexY0aa7PbbJtZrYSZGrZ6vuz4I78aNp85IWNohP2iDl3zBx4g+ALamECcU
+         GOAlcsL4Y8YElR/AnseZqSMS0wFmxPWmBdNKU8bXkZXQnciGv2LGJb5h8QrpDCx90SLZ
+         gkQvTu6rmDZBxQaI2BTc7fYvtem8bAEnc0n7qIL8MZMkx9gbYYLBcbX3XRd32sF7kblF
+         3ckR3eLdlhz+k+XO6NVHzap3wEN/70nHbpztWZleDpdOcQfcLG2MmyVKu+4rWSHTJ7mK
+         ZCGnoiGx5WutBgbxTQc6EdX5aX30yWnztFQ6OGtvHHClyUq+Wcum5qx3r410nZuxF12Q
+         gs1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762440855; x=1763045655;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1762440875; x=1763045675;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yFPkOy62CsvEABPT5ZNROGLn2vMQp9hQ8wMPm7mPqLo=;
-        b=Gi8uZubE93+up4sJ6VDSMCW4GmDylUSsFZ/8K5OS5mHaaFbCTcA7NwFXYmnMkpgRTC
-         wb/biOvpt2iSSs8Rxrx0hfyl0ZroHb8RkpkOlfR6qXaafc6hOxjJIe8BKrEY5ifDSHLm
-         YfezaniDyGekh8q3+gtdMiPNjysIdz/qTCmHcw1vPTTMt/24IOB0+/6I8/ReQAiwbZUw
-         2lv7Vh5Hus5lgizG/7EKY3S5IPnJ4CCH6w7HlUilGdyCMQGEAXbQUxA4xPZmxefZ9uou
-         gIJa18tXEVGbOxjLcPNlkZmRyKUEH7ub5YZ6Ox7RVNJ1jKpnOUHKRI7QXwboAfcze4qy
-         hiyw==
-X-Forwarded-Encrypted: i=1; AJvYcCXhe0cdtdAFYLuPaR0a+HekHEcCQbg2/0JduU3bVxSiA7Rc0ai1exsEVwiLjxOMeA1AhbHOLc1x84I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7PrTuYzueMqPvsNVyz3j19y80ErZyTiWQi0S4lQVT6TEjr8/2
-	F8rJFeOkK/ZPFlSVpim166/zgaTTN22LWA6nhuVum0k7b1TvBcSqLPI+Zj4NuLR5TCY=
-X-Gm-Gg: ASbGncsbpsepOWUl9SHgho3h3dgZTtF9PEbmYxi4gPELmJ8oyAwybVWtGGAJx0LiWFS
-	mk3q+g1mXoK/fSdalF5ffwHnacLiyuX1TSC1FLuAmjeclMGO2anMYo5LGWRAlYPgPmNXhR7Q8SW
-	HCx0CoSEZHLnbFhKo10wAKGjoL4ttVbA1MY+Id2OUTk5/XhoaG+RJAa2piGj5bfukWH53Jt65UH
-	+qamSHS5A9myAlRIWZmb6MoitqhGHeD14nchuR2E5hbPl8v3E1u+4Jq1EiFNsK5vE3iW95zam9h
-	X81iEKJH3QhyqCcr3cKyjTr47qpv9HtUGtGQtaBodwUF7r5g5S/Hex81xcVV7GWi+cNkqDO7AzJ
-	hkWz6u5iOUBj5qntoa+Tr3qvQF67TR0hyXs18/HumCiFnkRq971QkAD7CidHjSdw4r8kyVNZ+a5
-	21f7coDOMK65w/r2yr+tUyzp0LULxm1YeBuF4sDjDBdagI2+MN
-X-Google-Smtp-Source: AGHT+IGUsunkvl4yh4r1zhiTqPz+zl/dyJPXFeI69Ham2ji+S08BivREn9N8CCuCBikMJ4rchZJnRQ==
-X-Received: by 2002:a05:6102:3911:b0:5db:e3ae:3e57 with SMTP id ada2fe7eead31-5dd892b99b7mr2229580137.45.1762440855166;
-        Thu, 06 Nov 2025 06:54:15 -0800 (PST)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-937087f5716sm1149605241.3.2025.11.06.06.54.13
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Nov 2025 06:54:14 -0800 (PST)
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-89019079fbeso320037241.2
-        for <linux-usb@vger.kernel.org>; Thu, 06 Nov 2025 06:54:13 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV/KQR8NMti91xmo6LQszMhFz4FrF/xtPA9X03ehXvidjMYPfjRF3wen1qxDgkLPMn5t4ODdqmh6B0=@vger.kernel.org
-X-Received: by 2002:a05:6102:b02:b0:535:2f14:ea5e with SMTP id
- ada2fe7eead31-5dd88ef0717mr2314262137.8.1762440853361; Thu, 06 Nov 2025
- 06:54:13 -0800 (PST)
+        bh=n/iJ8+grc2Rl2/IHfufh9TPIQreS9jjFa0ImljQu6yc=;
+        b=WlRQZvCZc0O2Zue+qDuD9xJahGASenMTcwLpI1B1lBaoWi0Ley3GxtbehFWkC3Pw24
+         NEAzSJZBjdqmLJDQ4B1c8Xpuq2GNiC4LI9wo5/CAnL9rqvsei4Vjz6bUjrad1uPAHF2Z
+         i4sh+zjJcxuVhpOocWJN4FRgD0AfguRECJd/o9HwE557gJ+wlGcXdNR6XL8D5X96cjsr
+         sqLjs64FEsB9THcDhGWReb5aGYBewEwImgMIpn5WGXo4XSa067MCcoJi2kHQKQG+g3Z5
+         QMUwCZQCprhM4gGLJtaSAPl0tz0Ij57/d6+5SBrzcAD39xgZDlhStTNAcxC7xiA52S/P
+         2mGw==
+X-Forwarded-Encrypted: i=1; AJvYcCWCVJOq4DYsc7SN4oUwb0deVrbGMoUt5iIZBmK0/h70SVAYYEcK0RodLZsCK9aE9C48N5PtYB9bVUg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW+wLK3Z46NpCfwqIcLRjyGrApRyHfz/JQfWf/+dCdRsjurVwI
+	r2dcdnCAlfH2wv5I2TVS0gMJUQ60g5jLQ4pbBgz/TOpHvIPdq3r0Uq75Xe+IC47nAYdmJ0oGNPJ
+	tuxf2
+X-Gm-Gg: ASbGncvrGt9RK8Ix56c2dvsIV6HA8IrzFsrm6YwLjfgWyE7Jkw90vnqhNsmhoR5pt/5
+	5OJXV7DcvVQ4spZwvLj+yNXw5NshsuxR4sPbgeJQPANisrbk7FMtSZRXN6StnR8FUq0wQJb/sqo
+	9i8APzjkooOijH7kNWdKSKgh7rdh4dx8aoyj5kLgYhz9qjjkLDgkn2jLbRqj2YMcJAmjf/UK8wp
+	CE76nZg+kWh6lBd2wgQnCroGde0zcfhAEczWf5dYnZZhqF1EyznDGo9CWEwgOwaasXu4Rt0/OO7
+	SXNDxPSOUcuWgzEGduj5KQItM9vpXntulUtJwLpTrbw1O4p8zoOfTXlGwYAO23dawgU8pEMW7x3
+	WSjkQiJtKPE4Fe/oAJXaIsmMRZJkOonJsYOY823n8VxMKWYJMhKsq1M5OME/THPFVqPcTO+QNP3
+	3o9FKIvNUIovKDDYF/sbyTZkE/vQHjKPh9mQ==
+X-Google-Smtp-Source: AGHT+IE3rCRx8PbAKMPkM4/+bTHmQJ+mzXIyyeZ009J6re9yllhWkKvYevjnVHoRfNl7KwpcN4nWTg==
+X-Received: by 2002:a05:600c:a39a:b0:475:d9de:952e with SMTP id 5b1f17b1804b1-4776728d457mr16306635e9.1.1762440875526;
+        Thu, 06 Nov 2025 06:54:35 -0800 (PST)
+Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4775ce20ff3sm108037155e9.10.2025.11.06.06.54.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Nov 2025 06:54:35 -0800 (PST)
+From: Marco Crivellari <marco.crivellari@suse.com>
+To: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Tejun Heo <tj@kernel.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: xhci: replace use of system_wq with system_percpu_wq
+Date: Thu,  6 Nov 2025 15:54:28 +0100
+Message-ID: <20251106145428.250251-1-marco.crivellari@suse.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251106143625.3050119-1-claudiu.beznea.uj@bp.renesas.com> <20251106143625.3050119-4-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20251106143625.3050119-4-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 6 Nov 2025 15:54:02 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWrYRqLf20z7wR7KfL870j4HigCU6BQ5_Of7-sEszfrMQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bnu0EVBs5ig8TaeiRn2O9F3MIOheFSe3K7OvivAK8VjmRCtCrf57Jo2kRQ
-Message-ID: <CAMuHMdWrYRqLf20z7wR7KfL870j4HigCU6BQ5_Of7-sEszfrMQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] usb: host: ohci-platform: Call reset assert/deassert
- on suspend/resume
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: stern@rowland.harvard.edu, gregkh@linuxfoundation.org, 
-	p.zabel@pengutronix.de, yoshihiro.shimoda.uh@renesas.com, 
-	prabhakar.mahadev-lad.rj@bp.renesas.com, kuninori.morimoto.gx@renesas.com, 
-	geert+renesas@glider.be, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Claudiu,
+Currently if a user enqueues a work item using schedule_delayed_work() the
+used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
+WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
+schedule_work() that is using system_wq and queue_work(), that makes use
+again of WORK_CPU_UNBOUND.
 
-On Thu, 6 Nov 2025 at 15:36, Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> The Renesas RZ/G3S SoC supports a power-saving mode in which power to most
-> of the SoC components is turned off, including the USB blocks. On the
-> resume path, the reset signal must be de-asserted before applying any
-> settings to the USB registers. To handle this properly, call
-> reset_control_assert() and reset_control_deassert() during suspend and
-> resume, respectively.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+This lack of consistency cannot be addressed without refactoring the API.
 
-Thanks for your patch!
+This continues the effort to refactor workqueue APIs, which began with
+the introduction of new workqueues and a new alloc_workqueue flag in:
 
-> --- a/drivers/usb/host/ohci-platform.c
-> +++ b/drivers/usb/host/ohci-platform.c
-> @@ -280,6 +281,14 @@ static int ohci_platform_suspend(struct device *dev)
->         if (pdata->power_suspend)
->                 pdata->power_suspend(pdev);
->
-> +       ret = reset_control_assert(priv->resets);
-> +       if (ret) {
-> +               if (pdata->power_on)
-> +                       pdata->power_on(pdev);
-> +
-> +               ohci_resume(hcd, false);
+commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
+commit 930c2ea566af ("workqueue: Add new WQ_PERCPU flag")
 
-Same comment as previous patch: if the reset_control_assert() failed,
-what are the chances that the device will actually work after trying
-to bring it up again?
+Switch to using system_percpu_wq because system_wq is going away as part of
+a workqueue restructuring.
 
-> +       }
-> +
->         return ret;
->  }
->
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+---
+ drivers/usb/host/xhci-dbgcap.c | 8 ++++----
+ drivers/usb/host/xhci-ring.c   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
+index ecda964e018a..9da4f3b452cb 100644
+--- a/drivers/usb/host/xhci-dbgcap.c
++++ b/drivers/usb/host/xhci-dbgcap.c
+@@ -374,7 +374,7 @@ int dbc_ep_queue(struct dbc_request *req)
+ 		ret = dbc_ep_do_queue(req);
+ 	spin_unlock_irqrestore(&dbc->lock, flags);
+ 
+-	mod_delayed_work(system_wq, &dbc->event_work, 0);
++	mod_delayed_work(system_percpu_wq, &dbc->event_work, 0);
+ 
+ 	trace_xhci_dbc_queue_request(req);
+ 
+@@ -677,7 +677,7 @@ static int xhci_dbc_start(struct xhci_dbc *dbc)
+ 		return ret;
+ 	}
+ 
+-	return mod_delayed_work(system_wq, &dbc->event_work,
++	return mod_delayed_work(system_percpu_wq, &dbc->event_work,
+ 				msecs_to_jiffies(dbc->poll_interval));
+ }
+ 
+@@ -1023,7 +1023,7 @@ static void xhci_dbc_handle_events(struct work_struct *work)
+ 		return;
+ 	}
+ 
+-	mod_delayed_work(system_wq, &dbc->event_work,
++	mod_delayed_work(system_percpu_wq, &dbc->event_work,
+ 			 msecs_to_jiffies(poll_interval));
+ }
+ 
+@@ -1274,7 +1274,7 @@ static ssize_t dbc_poll_interval_ms_store(struct device *dev,
+ 
+ 	dbc->poll_interval = value;
+ 
+-	mod_delayed_work(system_wq, &dbc->event_work, 0);
++	mod_delayed_work(system_percpu_wq, &dbc->event_work, 0);
+ 
+ 	return size;
+ }
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 8e209aa33ea7..3d05734c8377 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -434,7 +434,7 @@ void xhci_ring_cmd_db(struct xhci_hcd *xhci)
+ 
+ static bool xhci_mod_cmd_timer(struct xhci_hcd *xhci)
+ {
+-	return mod_delayed_work(system_wq, &xhci->cmd_timer,
++	return mod_delayed_work(system_percpu_wq, &xhci->cmd_timer,
+ 			msecs_to_jiffies(xhci->current_cmd->timeout_ms));
+ }
+ 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.51.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
