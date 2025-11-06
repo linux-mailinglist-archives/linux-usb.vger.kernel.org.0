@@ -1,196 +1,188 @@
-Return-Path: <linux-usb+bounces-30169-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30170-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63F5CC3CFAB
-	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 18:58:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DEB3C3D0BD
+	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 19:17:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B66F3AE2CE
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 17:56:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D3833B977A
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 18:17:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 763AA34EF04;
-	Thu,  6 Nov 2025 17:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0000F22A4DB;
+	Thu,  6 Nov 2025 18:17:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="mPAVZlkL"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="K1GSH3TH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C529E34A3BC;
-	Thu,  6 Nov 2025 17:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F2D2DC328
+	for <linux-usb@vger.kernel.org>; Thu,  6 Nov 2025 18:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762451800; cv=none; b=jOU8nT5QIs4hYOb7NMXnr4cbqthPPDVGgMlGl9DQ+cE/qAVNh6rVmrsSAu0ekn0Dc9aUnY1rPLSJ77zu6+EgItKuaYgSNWLRJ00ra/5Kr53/77SyTUvRIhdHcrF7VhzcvBBjvE4LFaEfQ/0c0OdzFygMJQzRHex0mKPVGwYBcBs=
+	t=1762453056; cv=none; b=Ck3BWYI5Ab7Nx+yJLkJd26k1kFWWdeJFLRf3CJChiEkR5QsiOF3/qWE2wj6PXT1up1L4lEIRD6ujqXJWJLieg5hCmdhMum9V6W7wJclnudDBqO7unC48JZ/ed+wMHqfpvAnnc1ERXwBYFiGcWjUWBaRbBKvhUAbV3ZjT9RH3Uw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762451800; c=relaxed/simple;
-	bh=nQ57i8dH7Nm/uXtna/JxiKIX3iH6HAa/JKy4WzkSbYA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O9/U7QSY5g3C+5lmCvbFvx5rlRLFwrYYzayaXUPkMnyG649E408zBG04jnxM8AGP9vXFP7IKgGvCi3o5ptJjnqxVHiLc8hpA/KYxNi1ZRTSUjmyeU7nNwBpTMMXE+8HRuu98/TjJDD4L4OEPvyiTVE3stUl3r5gsUTjWIL9d5cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=mPAVZlkL; arc=none smtp.client-ip=129.217.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
-Received: from simon-Latitude-5450.. (tmo-072-112.customers.d1-online.com [80.187.72.112])
-	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.18.1.10/8.18.1.10) with ESMTPSA id 5A6HuOKm024412
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 6 Nov 2025 18:56:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-dortmund.de;
-	s=unimail; t=1762451789;
-	bh=nQ57i8dH7Nm/uXtna/JxiKIX3iH6HAa/JKy4WzkSbYA=;
-	h=From:To:Cc:Subject:Date;
-	b=mPAVZlkLy9neHrsgaiPqcP4KJnzvbNPBMW7/zCUaY4cPa7nOl/4TrnykF4Yyjwl5/
-	 Xn3rLcL5zNJ9YlFkxpaE2iFxnLnXzXXYN9trzFedLByoj3cV8Ct7U6QDWN1j7L73aG
-	 ygGuWk/+/aA6+tQCQKzXVeegBz/K+P+Ry+tMpCuY=
-From: Simon Schippers <simon.schippers@tu-dortmund.de>
-To: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        dnlplm@gmail.com, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: Simon Schippers <simon.schippers@tu-dortmund.de>
-Subject: [PATCH net-next v2] usbnet: Add support for Byte Queue Limits (BQL)
-Date: Thu,  6 Nov 2025 18:56:15 +0100
-Message-ID: <20251106175615.26948-1-simon.schippers@tu-dortmund.de>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1762453056; c=relaxed/simple;
+	bh=+EDHG6jC3dR9djMGzxaDhYnGnavUlqsN9UCm8KOuNUs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aFtbeXNtYWqO5V3cvaFSUcDxJ8ju8iNwL1AKflKGTO+ebCynrmBHoRz/Rvn0EjsYKm7oNh+yZe6dmSMGXrd5h6qjc9UahOxDXJ7nxpvxctR1xaoawG0qatUETzxI70CFY9CBLNaP8vAYpr6aNBz+vDYGtIayl3LmUR0S0QiJBWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=K1GSH3TH; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-340bb1cb9ddso1153047a91.2
+        for <linux-usb@vger.kernel.org>; Thu, 06 Nov 2025 10:17:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1762453054; x=1763057854; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q5F+Z9IhhsywZTDYjJqeTgWl/deiC3wHlce6TFxmwAk=;
+        b=K1GSH3THNzeYJuf3xxh6d0UBHaNHIu3WwWWJGAFxQQLFkOfnZnfCCeBOIdka3njaU/
+         pbO8Vv5/NgeyRUeF6280hgKQG/c8fbhzhgvbHSQZTv25b2e7Z4HhUeb1EHRSFCw4nbny
+         kbHIFXT77S7wSIyY7PLRrT4LFNEXG0W2vfe1s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762453054; x=1763057854;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=q5F+Z9IhhsywZTDYjJqeTgWl/deiC3wHlce6TFxmwAk=;
+        b=Y4uFrPCCKQytf9J5TgV9r3iFnwjDPB66F9Ee1/4IFb/APmbo1ENuFtjSggB7S8NiBb
+         /BaNPanajt18ZhSt29xAMSs+aj4+oIXRv1to+Awdoh4ecL22YRge/qeVlJoWchVwsXms
+         N99saeGj9FQkpm6d9sxCn8mukt7Gjqzs1xRSy+I4dn1MDciydWevEqeHkXtjThyCpZAT
+         vyAUoVMY02DqnvlhOFO3F17/gt9kcA6yQGOlijAP4Lns8NOsZAqtq81DFnsp2wZw8kSN
+         d4Nl7LxqGqJzJYjyiW4JBzO0p7mg4tR73KyonGDnhWwwvGwk7n+CfUjdhN6P/5CAE7Db
+         aPxw==
+X-Forwarded-Encrypted: i=1; AJvYcCWVMfc8AXnOwP8Rs3dZ7PRONiHAvdL7zDxgEKhl+wRlRnHVKJFT7CDl4Wga2FQQx3Naj25DszjxNBs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeSAUiQMVKiOIOApVU3Vcgg5/Qxs86X9tl648n1FRBc+P3hZfR
+	azqZZkIVg4TRVHrbK0O84EPwsb6P+cnIpwRx1/wEZ335gCmb9QP4bI4MuaHs370QgKaKYXAiMOo
+	ADW+3LroXg0wUSmQtSBnTvt4Go8GPATKZ9xu5RpxHwCBgaL4tDbI=
+X-Gm-Gg: ASbGncu+FVLBDm8+6nR0BDokxFIBKtZmSXCdEPlKaF6l1sUpRdGGgigTZCckqo0ro0n
+	mwE/AXcxDnXpYsSfp5ZsmCVYsx+s8jUOOXti5jRIrUCDXsT6+TAYiAhBp3PllCTZy+naid/tKpa
+	IGJ07LaEhnUOiIpaolwlq+DL2UpbXdh2Lv3knbjlacDfvYfqEsmw3+lDuu03Nn4bbRoNwU/hbbQ
+	UMQuZwvtjrfodFat2XFJczT/Sq8yglXq62iibidRPZHKslNlBlyNseQ/+iIgU346zJd
+X-Google-Smtp-Source: AGHT+IFn6PXjJHldODS9KPqz+43IEKzySmCOy8+pWSyHAUSQQolRbTp/qwgRR6qDsxBJoBB7XlBLo11zLmP3uDqvHJ4=
+X-Received: by 2002:a17:90b:2e07:b0:340:48f2:5e2d with SMTP id
+ 98e67ed59e1d1-3434c4eaf75mr131609a91.9.1762453054072; Thu, 06 Nov 2025
+ 10:17:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251013203331.398517-1-jthies@google.com> <20251013203331.398517-3-jthies@google.com>
+In-Reply-To: <20251013203331.398517-3-jthies@google.com>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Thu, 6 Nov 2025 10:17:22 -0800
+X-Gm-Features: AWmQ_blB4FOIIKSVgccXNEhWQ1KfEoxR1FTLnGkjSWTXpx8IGMHNb4ruYVitNo4
+Message-ID: <CANFp7mUq7=8Sw2VHabjiESMTNLqR0DRQUWkQN3OTfTTMfWOx6A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] usb: typec: cros_ec_ucsi: Load driver from OF and
+ ACPI definitions
+To: Jameson Thies <jthies@google.com>
+Cc: dmitry.baryshkov@oss.qualcomm.com, akuchynski@chromium.org, 
+	krzk+dt@kernel.org, robh@kernel.org, bleung@chromium.org, 
+	heikki.krogerus@linux.intel.com, ukaszb@chromium.org, tzungbi@kernel.org, 
+	devicetree@vger.kernel.org, chrome-platform@lists.linux.dev, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In the current implementation, usbnet uses a fixed tx_qlen of:
+On Mon, Oct 13, 2025 at 1:34=E2=80=AFPM Jameson Thies <jthies@google.com> w=
+rote:
+>
+> Add support for cros_ec_ucsi to load based on "google,cros-ec-ucsi"
+> compatible devices and "GOOG0021" ACPI nodes.
+>
+> Signed-off-by: Jameson Thies <jthies@google.com>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Reviewed-by: Benson Leung <bleung@chromium.org>
+> ---
+>  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/uc=
+si/cros_ec_ucsi.c
+> index eed2a7d0ebc6..0c19ba84d11c 100644
+> --- a/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> @@ -5,11 +5,13 @@
+>   * Copyright 2024 Google LLC.
+>   */
+>
+> +#include <linux/acpi.h>
+>  #include <linux/container_of.h>
+>  #include <linux/dev_printk.h>
+>  #include <linux/jiffies.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_usbpd_notify.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> @@ -235,7 +237,6 @@ static void cros_ucsi_destroy(struct cros_ucsi_data *=
+udata)
+>  static int cros_ucsi_probe(struct platform_device *pdev)
+>  {
+>         struct device *dev =3D &pdev->dev;
+> -       struct cros_ec_dev *ec_data =3D dev_get_drvdata(dev->parent);
+>         struct cros_ucsi_data *udata;
+>         int ret;
+>
+> @@ -243,9 +244,16 @@ static int cros_ucsi_probe(struct platform_device *p=
+dev)
+>         if (!udata)
+>                 return -ENOMEM;
+>
+> +       /* ACPI and OF FW nodes for cros_ec_ucsi are children of the Chro=
+meOS EC. If the
+> +        * cros_ec_ucsi device has an ACPI or OF FW node, its parent is t=
+he ChromeOS EC device.
+> +        * Platforms without a FW node for cros_ec_ucsi may add it as a s=
+ubdevice of cros_ec_dev.
+> +        */
+>         udata->dev =3D dev;
+> +       if (is_acpi_device_node(dev->fwnode) || is_of_node(dev->fwnode))
+> +               udata->ec =3D dev_get_drvdata(dev->parent);
+> +       else
+> +               udata->ec =3D ((struct cros_ec_dev *)dev_get_drvdata(dev-=
+>parent))->ec_dev;
+>
+> -       udata->ec =3D ec_data->ec_dev;
+>         if (!udata->ec)
+>                 return dev_err_probe(dev, -ENODEV, "couldn't find parent =
+EC device\n");
+>
+> @@ -326,10 +334,24 @@ static const struct platform_device_id cros_ucsi_id=
+[] =3D {
+>  };
+>  MODULE_DEVICE_TABLE(platform, cros_ucsi_id);
+>
+> +static const struct acpi_device_id cros_ec_ucsi_acpi_device_ids[] =3D {
+> +       { "GOOG0021", 0 },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, cros_ec_ucsi_acpi_device_ids);
+> +
+> +static const struct of_device_id cros_ucsi_of_match[] =3D {
+> +       { .compatible =3D "google,cros-ec-ucsi", },
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(of, cros_ucsi_of_match);
+> +
+>  static struct platform_driver cros_ucsi_driver =3D {
+>         .driver =3D {
+>                 .name =3D KBUILD_MODNAME,
+>                 .pm =3D &cros_ucsi_pm_ops,
+> +               .acpi_match_table =3D cros_ec_ucsi_acpi_device_ids,
+> +               .of_match_table =3D cros_ucsi_of_match,
+>         },
+>         .id_table =3D cros_ucsi_id,
+>         .probe =3D cros_ucsi_probe,
+> --
+> 2.51.0.858.gf9c4a03a3a-goog
+>
 
-USB2: 60 * 1518 bytes = 91.08 KB
-USB3: 60 * 5 * 1518 bytes = 454.80 KB
-
-Such large transmit queues can be problematic, especially for cellular
-modems. For example, with a typical celluar link speed of 10 Mbit/s, a
-fully occupied USB3 transmit queue results in:
-
-454.80 KB / (10 Mbit/s / 8 bit/byte) = 363.84 ms
-
-of additional latency.
-
-This patch adds support for Byte Queue Limits (BQL) [1] to dynamically
-manage the transmit queue size and reduce latency without sacrificing
-throughput.
-
-Testing was performed on various devices using the usbnet driver for
-packet transmission:
-
-- DELOCK 66045: USB3 to 2.5 GbE adapter (ax88179_178a)
-- DELOCK 61969: USB2 to 1 GbE adapter (asix)
-- Quectel RM520: 5G modem (qmi_wwan)
-- USB2 Android tethering (cdc_ncm)
-
-No performance degradation was observed for iperf3 TCP or UDP traffic,
-while latency for a prioritized ping application was significantly
-reduced. For example, using the USB3 to 2.5 GbE adapter, which was fully
-utilized by iperf3 UDP traffic, the prioritized ping was improved from
-1.6 ms to 0.6 ms. With the same setup but with a 100 Mbit/s Ethernet
-connection, the prioritized ping was improved from 35 ms to 5 ms.
-
-[1] https://lwn.net/Articles/469652/
-
-Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
----
-v1 -> v2:
-Add a new spinlock to ensure netdev_completed_queue() is not executed
-concurrently by process context usbnet_bh_work() and the timer
-dev->delay.
-- https://lore.kernel.org/netdev/20251104161327.41004-1-simon.schippers@tu-dortmund.de/
-
- drivers/net/usb/usbnet.c   | 11 +++++++++++
- include/linux/usb/usbnet.h |  2 ++
- 2 files changed, 13 insertions(+)
-
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index f3087fb62f4f..3d10cf791c51 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -831,6 +831,7 @@ int usbnet_stop(struct net_device *net)
- 
- 	clear_bit(EVENT_DEV_OPEN, &dev->flags);
- 	netif_stop_queue (net);
-+	netdev_reset_queue(net);
- 
- 	netif_info(dev, ifdown, dev->net,
- 		   "stop stats: rx/tx %lu/%lu, errs %lu/%lu\n",
-@@ -939,6 +940,7 @@ int usbnet_open(struct net_device *net)
- 	}
- 
- 	set_bit(EVENT_DEV_OPEN, &dev->flags);
-+	netdev_reset_queue(net);
- 	netif_start_queue (net);
- 	netif_info(dev, ifup, dev->net,
- 		   "open: enable queueing (rx %d, tx %d) mtu %d %s framing\n",
-@@ -1500,6 +1502,7 @@ netdev_tx_t usbnet_start_xmit(struct sk_buff *skb, struct net_device *net)
- 	case 0:
- 		netif_trans_update(net);
- 		__usbnet_queue_skb(&dev->txq, skb, tx_start);
-+		netdev_sent_queue(net, skb->len);
- 		if (dev->txq.qlen >= TX_QLEN (dev))
- 			netif_stop_queue (net);
- 	}
-@@ -1563,6 +1566,7 @@ static inline void usb_free_skb(struct sk_buff *skb)
- static void usbnet_bh(struct timer_list *t)
- {
- 	struct usbnet		*dev = timer_container_of(dev, t, delay);
-+	unsigned int bytes_compl = 0, pkts_compl = 0;
- 	struct sk_buff		*skb;
- 	struct skb_data		*entry;
- 
-@@ -1574,6 +1578,8 @@ static void usbnet_bh(struct timer_list *t)
- 				usb_free_skb(skb);
- 			continue;
- 		case tx_done:
-+			bytes_compl += skb->len;
-+			pkts_compl++;
- 			kfree(entry->urb->sg);
- 			fallthrough;
- 		case rx_cleanup:
-@@ -1584,6 +1590,10 @@ static void usbnet_bh(struct timer_list *t)
- 		}
- 	}
- 
-+	spin_lock_bh(&dev->bql_spinlock);
-+	netdev_completed_queue(dev->net, pkts_compl, bytes_compl);
-+	spin_unlock_bh(&dev->bql_spinlock);
-+
- 	/* restart RX again after disabling due to high error rate */
- 	clear_bit(EVENT_RX_KILL, &dev->flags);
- 
-@@ -1755,6 +1765,7 @@ usbnet_probe(struct usb_interface *udev, const struct usb_device_id *prod)
- 	skb_queue_head_init (&dev->txq);
- 	skb_queue_head_init (&dev->done);
- 	skb_queue_head_init(&dev->rxq_pause);
-+	spin_lock_init(&dev->bql_spinlock);
- 	INIT_WORK(&dev->bh_work, usbnet_bh_work);
- 	INIT_WORK (&dev->kevent, usbnet_deferred_kevent);
- 	init_usb_anchor(&dev->deferred);
-diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
-index a2d54122823d..2945923a8a95 100644
---- a/include/linux/usb/usbnet.h
-+++ b/include/linux/usb/usbnet.h
-@@ -14,6 +14,7 @@
- #include <linux/skbuff.h>
- #include <linux/types.h>
- #include <linux/usb.h>
-+#include <linux/spinlock.h>
- 
- /* interface from usbnet core to each USB networking link we handle */
- struct usbnet {
-@@ -59,6 +60,7 @@ struct usbnet {
- 	struct mutex		interrupt_mutex;
- 	struct usb_anchor	deferred;
- 	struct work_struct	bh_work;
-+	spinlock_t		bql_spinlock;
- 
- 	struct work_struct	kevent;
- 	unsigned long		flags;
--- 
-2.43.0
-
+Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
