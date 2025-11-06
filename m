@@ -1,170 +1,138 @@
-Return-Path: <linux-usb+bounces-30163-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30164-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C467C3C0D0
-	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 16:30:11 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE360C3C0A0
+	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 16:28:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FAA33BBF69
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 15:24:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C6E9C4E35B2
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 15:28:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC5027FD74;
-	Thu,  6 Nov 2025 15:23:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F6E2299952;
+	Thu,  6 Nov 2025 15:27:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LFpsDnqX";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="WzAKjhsg"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EA68087N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE4C27F4E7
-	for <linux-usb@vger.kernel.org>; Thu,  6 Nov 2025 15:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E36295DAC
+	for <linux-usb@vger.kernel.org>; Thu,  6 Nov 2025 15:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762442635; cv=none; b=gr3tP4a+Brakhb8aRxj0Fb2PO24CC+2qvkgCu4Xu167I69JvjaCRmTOwUyQmITqiJEqiYbBHrh/nxnDhaarDUfT7KCrk7dpCiBBUYkS4IMP1soXT9wz5CqybsFmI4YQ1zPNk8xo6Xa3Zua3YqonTtD9+kWEO5vLHvd0LFA695tI=
+	t=1762442854; cv=none; b=XbqLpPoLjhvY8RIAQ+BsVgywlG8MQ/G1/QuSKOTTuUdex2zF7DeAgKqbw9adckr6ejzuhF7uFmp4Xf5oTjsLr5Vv7d+FHTkahHQVCDZY6j3JEdFqmgFcqilcSyQAljQRsZ2rGImLKVnMlHBa3UFp7VHY9ZxsZrwC32kbyN+LlCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762442635; c=relaxed/simple;
-	bh=HCaYR4YVOukbLj7jhdYFa5FxgeZeqJDhW58mi5gV+F4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rHHmwLcRL4p93METSWWnU9drLdHlC8K4W+UwnSD9wWrrlY36MIRgQWjeIVfY2+xtijvqRaPXAUd5rA7R0QkA3SC8p/b+g+ZtoMjVmO3RsLaHhxSiDbi8OcJBGcL3dUmkRcDoFPCE4j69EC47c4lx2stlMxVWdS9aKj9z20/MUhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LFpsDnqX; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=WzAKjhsg; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A66rEoJ3362006
-	for <linux-usb@vger.kernel.org>; Thu, 6 Nov 2025 15:23:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	AM2sfMtEfOa7KhDU3VgLqOS5fRlov02lYAgiXrnPdFE=; b=LFpsDnqXbN5J8HSQ
-	p5kjOSYW7NDB+pDWWE86gHRIbIOit/osKG0RvSt1cF06nYypOIayGHXkO6hKf0XH
-	zzbZ2iKK5vvj0g1NC87dQtIXYKN7xyd8DkE8wIHb97KvSLbBYOnHjCrwr1s6oc6T
-	BudvlhVhTXK519NdZoVa3FRJ5JH8/nsn7NRRAjADGVQNX2v42Sv50atDxK0u7WuG
-	e7lyl4iIi6T5213YsmUOfuqSVuAWNJU1kzKlK/hYV5RxKIChxNdLl5u4Bta80RDo
-	NR6H+h5gfeRcNaKpmVYxKxY5uOBgHeajzXCefNxW24cYeQkiHvrIRVLqJbnH35QJ
-	MVDcYw==
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a8pt59ea5-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 06 Nov 2025 15:23:52 +0000 (GMT)
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-7b0a870d3ebso100343b3a.3
-        for <linux-usb@vger.kernel.org>; Thu, 06 Nov 2025 07:23:52 -0800 (PST)
+	s=arc-20240116; t=1762442854; c=relaxed/simple;
+	bh=uOY29gfQ9pYvhsdHgOJqKN4kwupJHd/9xjGIv3Qc89I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fJsW8Gt+beT3pqCHv228VZdn8BK8ri09Y6cLBdtQaz4U4DComig0IQ9kF1VzJ/KNi3WVF7toygojfOv3Wt0g21gxTFUT5Ev+Rn3TNDP947BuH3MuGM7syA469W2hFk5Pnq/+gDdRw0ko4PlFEJQxaGJjzpyrFYeYJVTKspEG3uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EA68087N; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47117f92e32so9145955e9.1
+        for <linux-usb@vger.kernel.org>; Thu, 06 Nov 2025 07:27:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762442632; x=1763047432; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AM2sfMtEfOa7KhDU3VgLqOS5fRlov02lYAgiXrnPdFE=;
-        b=WzAKjhsgwV4QJ+wjd1POxOX40IHgmBnAy5HIZutRzZKRlICHjSytmp4u7oveVkHzgn
-         V75oMiRGYmhby6l+k8sUPFcacTgWIbZWBQYYhHWyJ3MuvoDcuJ1EIuq2oWylvMnnTaIj
-         86DY9mYaT7FMU752ZZaLH0qZdEf+/4QwUG1GL0wyuhQ3blcE5nnS1yj124R1wRQoRGv0
-         KFVMvmf+ngnn5IHXrtPrO2isS8kLUCCjaSztavY31TSe18H5yChjtYujV2rIpK7/DDXA
-         Bqe2XXI/zVGwcz0CZxZNin2IoSQDoNOoDcyIk46K13iMGUubfjhtuQm3HYL6xRxLSjCG
-         MVHA==
+        d=suse.com; s=google; t=1762442850; x=1763047650; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OQVBmc/h6wETq5SdNeJOCY5mDPOnuTaKFlnCCqogTDE=;
+        b=EA68087NrMPv15v5nYyQaVpb8poiLgFUHhrtVxE5zvyBh+PhgMMcZjBp8cGkAL30Mb
+         FgqeuHqsonwT0cgCo2CQYAvKFuuvY5aONXaQ7EmM8suKmQa/v+yL3UZvUuLZ+sANHYny
+         /HulVEbX1lCJp6EQbrHinDEa/1mFWwev3+C3GglfGHfJyISgFv4iDz/5V+yzJ7qSN3YR
+         x8kyzeSXroMbQapi6ckOT0JivlEmfLyRQgk0vgQo0iSGId2nlovEJfBlesBYryyHebDv
+         j9DCNtzNLS3Ac4mVAYqmnXgdj9tTU2JGyvYvX5TRzd5pQk0qnhow2r1qBgGQnddx9gVO
+         5jIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762442632; x=1763047432;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AM2sfMtEfOa7KhDU3VgLqOS5fRlov02lYAgiXrnPdFE=;
-        b=XMg4zobmxfkJx0rok9jqrZ/0Au+xg+sxtDoVvKOjnpBULWOhRmarIYE+zqFxJt2lIl
-         oRWGpcTi4sDLuachXx9UL+hOMBY8S+5jlGzoelOWGbG6CbVit5NXAdIHN0K0QqQVJNMd
-         b/JRyhqjjvvOeV63fWJwSMGj/T09hxrE8N/jmTiYifjWQSJSI905FpfL9gxYXwaLr7+R
-         TtmVn6xBov22HnuF4kPG2kXgu5ORNE2ZA8oxayYwp/Qq/pt0GTtyjtjceWmGevVbZ2Zi
-         IQsitsaCMvbDm0DAEYPBRVWWpepRZIYYv30B53XKcVMXvvgdbyZamAvTlUK6X6gcQ/94
-         /OYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXGMO/392DvRS3fj3lvHU3RB/si1bNV+I9tv6tNkFeqlrbRDkt5JQdt4ceV5Q/l2cFGZfD9Am9gSmA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpWAu1ptfYxeQFZPZbZ9rE2Pv8fP3op1wo5I/KZ0t5nOtTuz7s
-	omgMZDrWZtkD24ogOvh4GfwT95P4gfMqQZIUr8AmBuoHNi9UV6sR7GXtD4QHb9JBWEiGlWKkgQp
-	ZXHiH27OFWJ2bO44OcNhXYKYuON6TPvVABKpcRsbPF+uFLnE5OCi8qU/egW6kPPs=
-X-Gm-Gg: ASbGnctbSTMkJgU7SetlHbC+z793ciVJbwfWIPlfpO1AV7w66xeerBK+VXek8qS9w1f
-	VlOq5hlwO8CUN6JDJnrbqcsSErk8f9/oQp2uc3X/n+m8+QV0cPQWZG0E4RFTBcPwTw0WH5yulYt
-	0efNSzJzqzc1LlMrXiRB7VcmxhOm7cmNKraKPE75uZ1HRV35IDCVlgyyg4Q0gt8yBRNYFBrIxjp
-	oMnvdnlo/FvlfKAxp5wV4f2UJqWlIshVpRwB39oD79BHJDRXANFcOFOsvpGmcmt/hrLi0NQlu13
-	L/C+WyLAvAv7l16R1IZqhbKPP2b+8GxSHaCHPYua03B+iaoExGO+kdFGPT/mGQnvYHbwTU2eznd
-	7ToA3PWhgjx+jPGGFanJWUyR47Ni137eMow==
-X-Received: by 2002:a05:6a20:7294:b0:344:97a7:8c5c with SMTP id adf61e73a8af0-34f868ec5acmr9474790637.48.1762442631927;
-        Thu, 06 Nov 2025 07:23:51 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF97e0GXoOncAGOrjI2ScllFLDrtpqS3SjsIAfKcVzSGuS3VIsb+Ftj9YpLE5DE7gJppyEwPQ==
-X-Received: by 2002:a05:6a20:7294:b0:344:97a7:8c5c with SMTP id adf61e73a8af0-34f868ec5acmr9474750637.48.1762442631390;
-        Thu, 06 Nov 2025 07:23:51 -0800 (PST)
-Received: from [192.168.1.3] ([182.65.157.163])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-341a69b698asm6878934a91.21.2025.11.06.07.23.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Nov 2025 07:23:51 -0800 (PST)
-Message-ID: <65a910ff-61ae-41a8-b5aa-9a7a119fb13d@oss.qualcomm.com>
-Date: Thu, 6 Nov 2025 20:53:44 +0530
+        d=1e100.net; s=20230601; t=1762442850; x=1763047650;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OQVBmc/h6wETq5SdNeJOCY5mDPOnuTaKFlnCCqogTDE=;
+        b=ubl7JZrXR06cTiw9Q4mxaScVxIQu3+ZDbI4lD6lXj+FaqH/VzWzpf9HNXmMif3FYky
+         df4xkj+srKdSLF34mwJB+k3RzXw4mITpEvG5wyqplhmE+eICPxzmZCG3JE8E5CuB35gu
+         eUl/GAelnK1rJcR4ajwCiT/+LeRAb6OET70yRq97eQe+w/Gmt5feIXLqldLyr0DuwC61
+         dqEwfkIJBUemz00MFiOiDwUG58g5kAzb1NuEEL6lb+r0e2B7yiK++dsE2rxmZtMDKXwo
+         PblJzfax3YUcMakI9/PaQawRVOuhrnjkqD4Tdo9olw8W3rgRiQTKypEEhn25E4CeRCc0
+         0vtw==
+X-Forwarded-Encrypted: i=1; AJvYcCULHt4pIYJ0nAFZh2nqd/EUkCj34N9gb5zqdNXfarVyyJIn6fah73hpuVBJrgU5jL5QRpYD4AVeW0c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaaSmsCYfGE6eS5ByWfDbFmMQivBa2r/PugZNBzToux/2hhZe7
+	Wok7+T+dB92oL0q19kO0EN4pn+wIUD0xZAXWoYbo8UBgDc9V755Vg3Qz93c4vYnjqaGjPi6QQhv
+	IiFss
+X-Gm-Gg: ASbGncvtimPY65W702Kc92a+61qQ+Mn7u+nIRckPZ889cK6U8YukBpRPbUladUyPn4o
+	Nw/CMLkvtRTzgrZCcdiICidByxsJIg042+kKiEiDKZE+zDmA6t+X9OiICYekFNXsVwrRxXX0HRU
+	e0x29EofRN+K3921/KVKEgVOF90yXSMa9qkbIWIyF0pbI+LXMZRrxURs22lH/tY/pgP/h48KpZL
+	igBrdpiaB0gXFRMugWZq8fzurW5ALU6m3Um6v/d8+6mtF1ZzHLjKCzh//TyZYB5H7B+y/UoGJ7V
+	LQ5ZtG2ZRMg1Tpweka9jIl4pklnN+YWXzMx+Qt+g9WjzV74krn+CnfHL5A4FUWP2rS55Lep9IT7
+	riW0Yx4pk3jjM/2XMMKLnN2rHRRnXuHJmd9057CZt2CqbNSrSQvORHzDuTKLfFuwMy0uLAk7oie
+	0x8gLljnPHFxOMMgOn2hpIcYw=
+X-Google-Smtp-Source: AGHT+IGOOl9Y37iFUVKIyQvTyVMO2oHC1gnlssxt4NpSnOygjrgvibLrD6QaP23vvHm6Chd4zm+I7A==
+X-Received: by 2002:a05:600c:468d:b0:46e:33b2:c8da with SMTP id 5b1f17b1804b1-4775ce15bbamr92196725e9.32.1762442850469;
+        Thu, 06 Nov 2025 07:27:30 -0800 (PST)
+Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429eb403849sm6020368f8f.1.2025.11.06.07.27.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Nov 2025 07:27:30 -0800 (PST)
+From: Marco Crivellari <marco.crivellari@suse.com>
+To: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Tejun Heo <tj@kernel.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: dwc3: replace use of system_wq with system_percpu_wq
+Date: Thu,  6 Nov 2025 16:27:12 +0100
+Message-ID: <20251106152712.279042-1-marco.crivellari@suse.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin
- state
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20251102164819.2798754-1-krishna.kurapati@oss.qualcomm.com>
- <20251102164819.2798754-3-krishna.kurapati@oss.qualcomm.com>
- <aQxyfjYosVd_kPKC@kuha.fi.intel.com> <aQx1WVif-vgN0_T-@kuha.fi.intel.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <krishna.kurapati@oss.qualcomm.com>
-In-Reply-To: <aQx1WVif-vgN0_T-@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: AbgDcYD9zjCYzE-WjoNW520DOos7EA5e
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA2MDEyMiBTYWx0ZWRfX2Zr3dnKr6kiI
- L0SHqnksSHKBrtOciAzkcM3JqQd2XHdpoPw1YpLda7uFB12rESamw6tf0lorpKGpMhXQrS+JxO2
- h4Ih9hHsaAN6ljX5k/KrBd3tUP1F4TB5QBS1dWJ4wzrdy3Cbi1oJxVCIf/O61KUqEDBH1pBXfhp
- D0xIu4ptWGzb164TpBz19Llj4RhNj0LgdnWCrBLkoXuUJKmkTnBfIPJQRtaLgH/Wn+PgWQR1KyR
- EkpAmd9w1BIXQXrFgei5r24HuB0DKWdz74MTpGQvX1Tq5HyMMa6yYdSEkAXf5mzW+T8Upmol/Mi
- uW+Vwo6XB4VHf+IdZbmzr0zNeT5qEnNNkqr4wofUP2qy9nK0z19w0C6czk6/KlLNJmgouSdWxxz
- zjytmpAIo2ZHYzIHHl7ww4cTehD+Xw==
-X-Authority-Analysis: v=2.4 cv=XNI9iAhE c=1 sm=1 tr=0 ts=690cbd88 cx=c_pps
- a=m5Vt/hrsBiPMCU0y4gIsQw==:117 a=fO48qRZoIuIFQjWVjTpNpw==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=RlX0HteZJ6yL10uBmSMA:9 a=QEXdDO2ut3YA:10
- a=QYH75iMubAgA:10 a=IoOABgeZipijB_acs4fv:22
-X-Proofpoint-ORIG-GUID: AbgDcYD9zjCYzE-WjoNW520DOos7EA5e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-06_03,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 suspectscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
- impostorscore=0 bulkscore=0 phishscore=0 priorityscore=1501 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511060122
+Content-Transfer-Encoding: 8bit
 
+Currently if a user enqueues a work item using schedule_delayed_work() the
+used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
+WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
+schedule_work() that is using system_wq and queue_work(), that makes use
+again of WORK_CPU_UNBOUND.
 
+This lack of consistency cannot be addressed without refactoring the API.
 
-On 11/6/2025 3:46 PM, Heikki Krogerus wrote:
->>          struct regulator *vbus;
->>
->>          vbus = devm_of_regulator_get_optional(...
->>          if (IS_ERR(vbus) && vbus != ERR_PTR(-ENODEV))
->>                  return PTR_ERR(vbus);
->>
->>          hd3ss3220->vbus = vbus;
-> 
-> Sorry, that has to be:
-> 
->          hd3ss3220->vbus = vbus == ERR_PTR(-ENODEV) ? NULL : vbus;
-> 
-> 
+This continues the effort to refactor workqueue APIs, which began with
+the introduction of new workqueues and a new alloc_workqueue flag in:
 
-Thanks for the review Heikki.
-Will update the suggestions in next revision.
+commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
+commit 930c2ea566af ("workqueue: Add new WQ_PERCPU flag")
 
-Regards,
-Krishna,
+Switch to using system_percpu_wq because system_wq is going away as part of
+a workqueue restructuring.
+
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+---
+ drivers/usb/dwc3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 6f18b4840a25..81307a7b383b 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3872,7 +3872,7 @@ static void dwc3_gadget_endpoint_stream_event(struct dwc3_ep *dep,
+ 	case DEPEVT_STREAM_NOSTREAM:
+ 		dep->flags &= ~DWC3_EP_STREAM_PRIMED;
+ 		if (dep->flags & DWC3_EP_FORCE_RESTART_STREAM)
+-			queue_delayed_work(system_wq, &dep->nostream_work,
++			queue_delayed_work(system_percpu_wq, &dep->nostream_work,
+ 					   msecs_to_jiffies(100));
+ 		break;
+ 	}
+-- 
+2.51.1
+
 
