@@ -1,235 +1,95 @@
-Return-Path: <linux-usb+bounces-30166-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30167-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C916C3C97F
-	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 17:54:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66138C3C997
+	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 17:55:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A89E423770
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 16:42:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA82F566B4F
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 16:49:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3595C322DD1;
-	Thu,  6 Nov 2025 16:41:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8D832AADA;
+	Thu,  6 Nov 2025 16:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NWFQNtTB";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Hk+XRX9v";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NWFQNtTB";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Hk+XRX9v"
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="R1yNUuOZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD17318143
-	for <linux-usb@vger.kernel.org>; Thu,  6 Nov 2025 16:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531102D0C64
+	for <linux-usb@vger.kernel.org>; Thu,  6 Nov 2025 16:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762447272; cv=none; b=kS/NFuS7BnCtcTTTdwxyE5T1w7sdfx6QeXhIqgVkD3vsnnZxwG7f0TttWQuB9CO7EKmMyHffVyo3SyLjK8Q+X5f217Pfn3ymSN69RAtnfd3GFOY4DyWZHaib7WNNU9eLNovrq7AMvie8laPcnhBZaiSzN6Dk4q/GliHLkaC0nlA=
+	t=1762447762; cv=none; b=kZGF2TY+IFX9oCx6Jj502+paJYxYhTX+9+qf+2iAJQXnGrmH8ROX9W1nFCVaxPVTyI1H5eMBGwr7noCx3NX1stfwHrJUPTJ3/DY116UOv6oiClNgmNvp01z4C2uq1rsbGzhar82xc8l3PFQziGmaIBladP4TO5SI7FWbcACgueY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762447272; c=relaxed/simple;
-	bh=bShgRUXmwIigTJi4rYrvdghECfsg69LUPFjEV76bnpg=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QS412mqE6mjn/sbPb3vf6cr4lsouB9v8HhoyuQsVFv+wpoYXkz4dvn84t584YqxuHGsBtYF7g0INWQ0UHX4d0bzTR5a/3JXPIslJK3WEpiRwKk3mzmmIiqJ5xoiQwjSySguxc73yEwiKx9j/4fd0VEAXRiD2P3JoE/wl4S+SgFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NWFQNtTB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Hk+XRX9v; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NWFQNtTB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Hk+XRX9v; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8F53C2118C;
-	Thu,  6 Nov 2025 16:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1762447268; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ezyDHeZJvXEFUvSAJRuRbcS5CcZfuhP+O5ZMX2epjE0=;
-	b=NWFQNtTB5ZTr+rlMV3LGfORGmHDL9FpXPsi+AjE7NER/O/B/J4WYeKQ5cK4N6Kw1+N6elB
-	v7pYiP8HqYZFt6/P7wy01f2dIudL1gO2zqTiM+1i2nOUVO4hX+THnZAChNFPPtERAIS/3f
-	LBLmq8MEdB4DJ95qUCuiM9jEXgyIosM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1762447268;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ezyDHeZJvXEFUvSAJRuRbcS5CcZfuhP+O5ZMX2epjE0=;
-	b=Hk+XRX9vm2Xrmv9ErrVak0XjuWcgYd62AkaRAFuKBYL7O6HyuJwc7JM+JPxpGsDa2A2j/f
-	54jk5HXMk6U9n9Bw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1762447268; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ezyDHeZJvXEFUvSAJRuRbcS5CcZfuhP+O5ZMX2epjE0=;
-	b=NWFQNtTB5ZTr+rlMV3LGfORGmHDL9FpXPsi+AjE7NER/O/B/J4WYeKQ5cK4N6Kw1+N6elB
-	v7pYiP8HqYZFt6/P7wy01f2dIudL1gO2zqTiM+1i2nOUVO4hX+THnZAChNFPPtERAIS/3f
-	LBLmq8MEdB4DJ95qUCuiM9jEXgyIosM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1762447268;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ezyDHeZJvXEFUvSAJRuRbcS5CcZfuhP+O5ZMX2epjE0=;
-	b=Hk+XRX9vm2Xrmv9ErrVak0XjuWcgYd62AkaRAFuKBYL7O6HyuJwc7JM+JPxpGsDa2A2j/f
-	54jk5HXMk6U9n9Bw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 458F813A31;
-	Thu,  6 Nov 2025 16:41:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id hN+0D6TPDGnPSQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 06 Nov 2025 16:41:08 +0000
-Date: Thu, 06 Nov 2025 17:41:07 +0100
-Message-ID: <87h5v7ru58.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Lizhi Xu <lizhi.xu@windriver.com>
-Cc: <tiwai@suse.de>,
-	<linux-kernel@vger.kernel.org>,
-	<linux-sound@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>,
-	<perex@perex.cz>,
-	<syzbot+bfd77469c8966de076f7@syzkaller.appspotmail.com>,
-	<syzkaller-bugs@googlegroups.com>,
-	<tiwai@suse.com>
-Subject: Re: [PATCH] ALSA: usb-audio: Prevent urb from writing out of bounds
-In-Reply-To: <20251106143506.720545-1-lizhi.xu@windriver.com>
-References: <87v7jnfkio.wl-tiwai@suse.de>
-	<20251106143506.720545-1-lizhi.xu@windriver.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1762447762; c=relaxed/simple;
+	bh=yi0fxMXpQZRWPXrznY8gn/2p2+4llOSnxeMYK6PSvZU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=KyeP1cM0QLcy5bI6MBCK063iGHL/8MIjigJ1eZGaFonReB1l8wPwjeI/JQWbErWG3R7mPQFza3RV0E97z6gpcT7OXXv3KRwiwIU1Vl4HONCbU+0YbnrDdQVfYd+ouMgk5/W2Uwxfaot9m15MyJOVwN8vR+Ezj2rQCV4GfpqMJKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=R1yNUuOZ; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
+Authentication-Results: purelymail.com; auth=pass
+DKIM-Signature: a=rsa-sha256; b=R1yNUuOZ5a+tjQkh2Z++IdKeDvgsvocMwnqI2nQ2R2RHaetSb3SNcv94UyW3CdU7v2MoC8XDfZyibMlxxLJJYc6SPcgIu/k2DmD9q/CROFLQ3uxnnGgxzA01OK5N7Bi/MM0q3FJZ50t9RMdElsenEt92bZInvpGaUSH/LyKH1uoG5SDDN6A+1mMVmoOrXpQyfZsPtroNcNYwrklTTXyA1ariGKSjEa9o7RUgV31A3VVLjoTvd61wut2uZBTxaGZdx0e3msKebGrd64rLskAbMBw49UYorpPKvflRzFQ38RYje5CtqWwc4fz8myeFI0ZHCcSxkyFUtrrn24Gvcj0BhQ==; s=purelymail2; d=purelymail.com; v=1; bh=yi0fxMXpQZRWPXrznY8gn/2p2+4llOSnxeMYK6PSvZU=; h=Feedback-ID:Received:Received:From:To:Subject:Date;
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: linux-usb@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -12591747;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Thu, 06 Nov 2025 16:48:59 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+	(envelope-from <peko@dell.be.48ers.dk>)
+	id 1vH3AP-0079Cp-2I;
+	Thu, 06 Nov 2025 17:48:57 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: javier.carrasco@wolfvision.net,
+	heikki.krogerus@linux.intel.com,
+	neal@gompa.dev,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: Peter Korsgaard <peter@korsgaard.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: tipd: drop double register read in tps6598x_interrupt
+Date: Thu,  6 Nov 2025 17:48:49 +0100
+Message-Id: <20251106164850.1703648-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spamd-Result: default: False [-1.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[bfd77469c8966de076f7];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -1.80
-X-Spam-Level: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Content-Type: text/plain; charset=UTF-8
 
-On Thu, 06 Nov 2025 15:35:06 +0100,
-Lizhi Xu wrote:
-> 
-> On Thu, 06 Nov 2025 12:49:51 +0100, Takashi Iwai wrote:
-> > > > > The calculation rule for the actual data length written to the URB's
-> > > > > transfer buffer differs from that used to allocate the URB's transfer
-> > > > > buffer, and in this problem, the value used during allocation is smaller.
-> > > > >
-> > > > > This ultimately leads to write out-of-bounds errors when writing data to
-> > > > > the transfer buffer.
-> > > > >
-> > > > > To prevent out-of-bounds writes to the transfer buffer, a check between
-> > > > > the size of the bytes to be written and the size of the allocated bytes
-> > > > > should be added before performing the write operation.
-> > > > >
-> > > > > When the written bytes are too large, -EPIPE is returned instead of
-> > > > > -EAGAIN, because returning -EAGAIN might result in push back to ready
-> > > > > list again.
-> > > > >
-> > > > > Based on the context of calculating the bytes to be written here, both
-> > > > > copy_to_urb() and copy_to_urb_quirk() require a check for the size of
-> > > > > the bytes to be written before execution.
-> > > > >
-> > > > > syzbot reported:
-> > > > > BUG: KASAN: slab-out-of-bounds in copy_to_urb+0x261/0x460 sound/usb/pcm.c:1487
-> > > > > Write of size 264 at addr ffff88801107b400 by task syz.0.17/5461
-> > > > >
-> > > > > Call Trace:
-> > > > >  copy_to_urb+0x261/0x460 sound/usb/pcm.c:1487
-> > > > >  prepare_playback_urb+0x953/0x13d0 sound/usb/pcm.c:1611
-> > > > >
-> > > > > Reported-by: syzbot+bfd77469c8966de076f7@syzkaller.appspotmail.com
-> > > > > Closes: https://syzkaller.appspot.com/bug?extid=bfd77469c8966de076f7
-> > > > > Tested-by: syzbot+bfd77469c8966de076f7@syzkaller.appspotmail.com
-> > > > > Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
-> > > >
-> > > > I'm afraid that this doesn't address the root cause at all.
-> > > > The description above sounds plausible, but not pointing to "why".
-> > > >
-> > > > The bytes is frames * stride, so the question is why a too large
-> > > > frames is calculated.  I couldn't have time to check the details, but
-> > > > there should be rather some weird condition / parameters to trigger
-> > > > this, and we should check that at first.
-> > > During debugging, I discovered that the value of ep->packsize[0] is 22,
-> > > which causes the counts calculated by
-> > > counts = snd_usb_endpoint_next_packet_size(ep, ctx, i, avail);
-> > > to be 22, resulting in a frames value of 22 * 6 = 132;
-> > > Meanwhile, the stride value is 2, which ultimately results in
-> > > bytes = frames * stride = 132 * 2 = 264;
-> > > @@ -1241,6 +1252,10 @@ static int data_ep_set_params(struct snd_usb_endpoint *ep)
-> > > 	u->buffer_size = maxsize * u->packets;
-> > > 	...
-> > > 	u->urb->transfer_buffer =
-> > >                 usb_alloc_coherent(chip->dev, u->buffer_size,
-> > >                                    GFP_KERNEL, &u->urb->transfer_dma);
-> > >
-> > > Here, when calculating u->buffer_size = maxsize * u->packets;
-> > > maxsize = 9, packets = 6, which results in only 54 bytes allocated to
-> > > transfer_buffer;
-> > 
-> > Hm, so the problem is rather the calculation of the buffer size.
-> > The size sounds extremely small.  Which parameters (rates, formats,
-> > etc) are used for achieving this?
-> rates: 22050
-> format: 2
-> channels: 1
-> /////////////////////////////
-> stride: 2
-> packets: 6
-> data interval: 0
-> frame_bits: 16
-> > 
-> > The calculation of u->buffer_size is a bit complex, as maxsize is
-> > adjusted in many different ways.  Is it limited due to wMaxPacketSize
-> > setup?
-> Yes, it's because the value of ep->maxpacksize is 9 that the maxsize
-> value is 9.
+Commit 409c1cfb5a80 ("usb: typec: tipd: fix event checking for tps6598x")
+added (by accident?) a double read of the TPS_REG_INT_EVENT1 register.  Dro=
+p
+that.
 
-OK, then a fix like below would work?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ drivers/usb/typec/tipd/core.c | 2 --
+ 1 file changed, 2 deletions(-)
 
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 2b1049c9a6f3..2d4fcf62c200 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -994,8 +994,6 @@ static irqreturn_t tps6598x_interrupt(int irq, void *da=
+ta)
+ =09    TPS_VERSION_HW_VERSION(version) =3D=3D TPS_VERSION_HW_65987_8_DK)
+ =09=09intev_len =3D TPS_65987_8_INTEVENT_LEN;
+=20
+-=09ret =3D tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event1, intev_len)=
+;
+-
+ =09ret =3D tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event1, intev_len)=
+;
+ =09if (ret) {
+ =09=09dev_err(tps->dev, "%s: failed to read event1\n", __func__);
+--=20
+2.39.5
 
-thanks,
-
-Takashi
-
---- a/sound/usb/endpoint.c
-+++ b/sound/usb/endpoint.c
-@@ -1362,6 +1362,11 @@ int snd_usb_endpoint_set_params(struct snd_usb_audio *chip,
- 	ep->sample_rem = ep->cur_rate % ep->pps;
- 	ep->packsize[0] = ep->cur_rate / ep->pps;
- 	ep->packsize[1] = (ep->cur_rate + (ep->pps - 1)) / ep->pps;
-+	if (ep->packsize[1] > ep->maxpacksize) {
-+		usb_audio_dbg(chip, "Too small maxpacksize %u for rate %u / pps %u\n",
-+			      ep->maxpacksize, ep->cur_rate, ep->pps);
-+		return -EINVAL;
-+	}
- 
- 	/* calculate the frequency in 16.16 format */
- 	ep->freqm = ep->freqn;
 
