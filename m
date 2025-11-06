@@ -1,213 +1,258 @@
-Return-Path: <linux-usb+bounces-30137-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30138-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7EC8C3A1CD
-	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 11:11:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33B9DC3A321
+	for <lists+linux-usb@lfdr.de>; Thu, 06 Nov 2025 11:22:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 29CA1502B8E
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 10:04:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10F7E1A4635A
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Nov 2025 10:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A4B311589;
-	Thu,  6 Nov 2025 10:02:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B88130F80F;
+	Thu,  6 Nov 2025 10:05:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="2WoqG/Ps";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="r1ZJn/Ke";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="G5PSDi1/";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="VDj28k4H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IrnOchfJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3041830F7EF
-	for <linux-usb@vger.kernel.org>; Thu,  6 Nov 2025 10:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A2D30E848;
+	Thu,  6 Nov 2025 10:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762423345; cv=none; b=ABhUdgMNGwiIFe/BzgvclJug1IUwx10tBu5SmSY2GhDPX1nSWrPqKiUazAKYjpmt7im+EQHz+876a1CBv/R5BDnsv09bTZTw8lPeWBb035T/PLXjXuUYZDnNdPMZipy7SWvUSdq0nDof/vaaDrsJvVIvAF97Rof+IeBtS2n1HNo=
+	t=1762423519; cv=none; b=VwUriHR074Lb01Rithzsm6XEwujiUAwPPbFhOi0J1w4tTM4CCfwyGuVOdJC59iq5FnU6nOKlBjuwMpPYlaGeyp+uOljDjMVpMJvYqhGVHoAUe1HDi3KBYmOwJTWvBmfJWqho6NzYkkks9EWKZ8n5lNFq3/Sfbhldb6HeIxrg6wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762423345; c=relaxed/simple;
-	bh=9ZQn3Mz4Bsl3vtRlfOjP7aq3hwjqIkhB3KLkp3lT3Mw=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WPqre4D31oGAjENio6Uq7u370MV9CxvmZGy0AsrBzve6H2DJJqGEevL/U48Ob1NtuGY9NQFqT6W714ipI9yTr77ZMMJlbqmSr0CnZiWPFeFYS8RKrxnA7XacPzLa9waepFxAOMOcsqs8JDqCZPQ+rRHCX/vqo1oFhE99zSHYFCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=2WoqG/Ps; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=r1ZJn/Ke; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=G5PSDi1/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=VDj28k4H; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 6E0721F393;
-	Thu,  6 Nov 2025 10:02:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1762423334; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VM/DHgU+8v7UtiujNpPprWigWOD/5K0rxkxM+oWHKL4=;
-	b=2WoqG/PsYCk865209nFd+hKy51PC+wQsT6gImARcj0qVYxX6Lx1YRHNZM8jcer6bdh/uoq
-	smcm8F6FSCxhjXwbgpi6NIO+/sBldw2ugFjDZJR2diecCEHkXlX59rqYQLZtuP48hkmvO5
-	mGU3c8cZNyMgrrnoi9LFhPzPZ5FAt+U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1762423334;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VM/DHgU+8v7UtiujNpPprWigWOD/5K0rxkxM+oWHKL4=;
-	b=r1ZJn/KeWdvrIyfwd4piQcVKCREkU2XwKUhErWlPzWfNYX2Z74FeaMMl+Kebr9UXB4WLPr
-	LsIMTRSAq5/qHhCg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="G5PSDi1/";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=VDj28k4H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1762423329; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VM/DHgU+8v7UtiujNpPprWigWOD/5K0rxkxM+oWHKL4=;
-	b=G5PSDi1/Z6f9Czj5XhFbXN0IZuwA+t1BSNULzV7p1bOT/L/DNRqu4i5xjWZ5yVBqLNlyxs
-	i6vrczMUp0/2p0oSct53zyckF86xHcWjGtNEeS0YuVrXn5v7oFJC8M3ngzYNQtGmDyHjxV
-	8HV2z6KGCahtl6y1LArENGsNPLI/cC8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1762423329;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VM/DHgU+8v7UtiujNpPprWigWOD/5K0rxkxM+oWHKL4=;
-	b=VDj28k4HeexNGzUQfWZzecA3YYgqikHX2pGR56wHlbvddd28DWQNXXKNnMkrVgAaOVnDwH
-	BA0IMeN8dYO86hAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 329D913A31;
-	Thu,  6 Nov 2025 10:02:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id +V3hCiFyDGl2NwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 06 Nov 2025 10:02:09 +0000
-Date: Thu, 06 Nov 2025 11:02:08 +0100
-Message-ID: <87a50zh42n.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Lizhi Xu <lizhi.xu@windriver.com>
-Cc: <syzbot+bfd77469c8966de076f7@syzkaller.appspotmail.com>,
-	<linux-kernel@vger.kernel.org>,
-	<linux-sound@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>,
-	<perex@perex.cz>,
-	<syzkaller-bugs@googlegroups.com>,
-	<tiwai@suse.com>
-Subject: Re: [PATCH] ALSA: usb-audio: Prevent urb from writing out of bounds
-In-Reply-To: <20251106083300.2947700-1-lizhi.xu@windriver.com>
-References: <690b6b46.050a0220.3d0d33.0054.GAE@google.com>
-	<20251106083300.2947700-1-lizhi.xu@windriver.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1762423519; c=relaxed/simple;
+	bh=YWfPD6ERS7CRZ4S7egpNwL4TQ7anww/3U8sL9Mazjg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qWulj9bjvnLjY48ZkGoj7lpafW1apHh+1qxhOuMkZcVqb8MFB4ifGo6bS84HbCJRPSnlI2vn2I/sC044ct1UCAYw3y0m9YwoUtViYZYfOOnuuNAGC6FJc8qchWxcA2YppxNyIK2GqnqVL02yS/Jvh4J2ZbZ5i1FdqX10tZJ+sP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IrnOchfJ; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762423518; x=1793959518;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YWfPD6ERS7CRZ4S7egpNwL4TQ7anww/3U8sL9Mazjg8=;
+  b=IrnOchfJsuEBdiJI+3Qp8Z/fuW6T4i1EZKq99ORFsC4xHQbEQzdNvrwo
+   F+ffjufiGcmoA5tDCB4WM283hJ4U80C6sGdNCb6DI4MrRJtotglk5QJ7L
+   AxXsuCzYdJLRAVIvd9tACWTsql+3bTFR/4yqYFQqQGqSOg1Nsu/GhuwG5
+   uyck8BhP299738oS6sOh1ndM4g+r6nCDIJg36rJqWv1WiGtzSHnrdxP7b
+   NRzSo6s9GR2a20M/2RIDD1potNWMhAuyE6sHPq7papQqc0o3UQHPwhc1L
+   mrNMX276/5D3+oMvfckjkYqcmBe5CagGp75q7IqJy6XyUgnFwxRzwCycS
+   Q==;
+X-CSE-ConnectionGUID: CM0SWtTlTJW2kvSH9Tf83g==
+X-CSE-MsgGUID: jelJfvwkTo+CFxJ6hD4zIA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="67168873"
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="67168873"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 02:05:17 -0800
+X-CSE-ConnectionGUID: YX33hdY5TbmcTJAfU86JYA==
+X-CSE-MsgGUID: A/A8oXilRGq1wZ0TAEdPLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="187383441"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.221.236])
+  by fmviesa007.fm.intel.com with SMTP; 06 Nov 2025 02:05:13 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 06 Nov 2025 12:05:12 +0200
+Date: Thu, 6 Nov 2025 12:05:12 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID
+ pin state
+Message-ID: <aQxyfjYosVd_kPKC@kuha.fi.intel.com>
+References: <20251102164819.2798754-1-krishna.kurapati@oss.qualcomm.com>
+ <20251102164819.2798754-3-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 6E0721F393
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-2.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TAGGED_RCPT(0.00)[bfd77469c8966de076f7];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,syzkaller.appspot.com:url,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Score: -2.01
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251102164819.2798754-3-krishna.kurapati@oss.qualcomm.com>
 
-On Thu, 06 Nov 2025 09:33:00 +0100,
-Lizhi Xu wrote:
-> 
-> The calculation rule for the actual data length written to the URB's
-> transfer buffer differs from that used to allocate the URB's transfer
-> buffer, and in this problem, the value used during allocation is smaller.
-> 
-> This ultimately leads to write out-of-bounds errors when writing data to
-> the transfer buffer.
-> 
-> To prevent out-of-bounds writes to the transfer buffer, a check between
-> the size of the bytes to be written and the size of the allocated bytes
-> should be added before performing the write operation.
-> 
-> When the written bytes are too large, -EPIPE is returned instead of
-> -EAGAIN, because returning -EAGAIN might result in push back to ready
-> list again.
-> 
-> Based on the context of calculating the bytes to be written here, both
-> copy_to_urb() and copy_to_urb_quirk() require a check for the size of
-> the bytes to be written before execution.
-> 
-> syzbot reported:
-> BUG: KASAN: slab-out-of-bounds in copy_to_urb+0x261/0x460 sound/usb/pcm.c:1487
-> Write of size 264 at addr ffff88801107b400 by task syz.0.17/5461
-> 
-> Call Trace:
->  copy_to_urb+0x261/0x460 sound/usb/pcm.c:1487
->  prepare_playback_urb+0x953/0x13d0 sound/usb/pcm.c:1611
-> 
-> Reported-by: syzbot+bfd77469c8966de076f7@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=bfd77469c8966de076f7
-> Tested-by: syzbot+bfd77469c8966de076f7@syzkaller.appspotmail.com
-> Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+Hi Krishna,
 
-I'm afraid that this doesn't address the root cause at all.
-The description above sounds plausible, but not pointing to "why".
+Sun, Nov 02, 2025 at 10:18:19PM +0530, Krishna Kurapati kirjoitti:
+> There is a ID pin present on HD3SS3220 controller that can be routed
+> to SoC. As per the datasheet:
+> 
+> "Upon detecting a UFP device, HD3SS3220 will keep ID pin high if VBUS is
+> not at VSafe0V. Once VBUS is at VSafe0V, the HD3SS3220 will assert ID pin
+> low. This is done to enforce Type-C requirement that VBUS must be at
+> VSafe0V before re-enabling VBUS"
+> 
+> Add support to read the ID pin state and enable VBUS accordingly.
+> 
+> Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+> ---
+>  drivers/usb/typec/hd3ss3220.c | 72 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+> index 3ecc688dda82..75fbda42eaf4 100644
+> --- a/drivers/usb/typec/hd3ss3220.c
+> +++ b/drivers/usb/typec/hd3ss3220.c
+> @@ -15,6 +15,9 @@
+>  #include <linux/usb/typec.h>
+>  #include <linux/delay.h>
+>  #include <linux/workqueue.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/of_graph.h>
+>  
+>  #define HD3SS3220_REG_CN_STAT		0x08
+>  #define HD3SS3220_REG_CN_STAT_CTRL	0x09
+> @@ -54,6 +57,11 @@ struct hd3ss3220 {
+>  	struct delayed_work output_poll_work;
+>  	enum usb_role role_state;
+>  	bool poll;
+> +
+> +	struct gpio_desc *id_gpiod;
+> +	int id_irq;
+> +
+> +	struct regulator *vbus;
+>  };
+>  
+>  static int hd3ss3220_set_power_opmode(struct hd3ss3220 *hd3ss3220, int power_opmode)
+> @@ -319,6 +327,44 @@ static const struct regmap_config config = {
+>  	.max_register = 0x0A,
+>  };
+>  
+> +static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id)
+> +{
+> +	struct hd3ss3220 *hd3ss3220 = dev_id;
+> +	int ret;
+> +	int id;
+> +
+> +	if (!hd3ss3220->vbus)
+> +		return IRQ_HANDLED;
 
-The bytes is frames * stride, so the question is why a too large
-frames is calculated.  I couldn't have time to check the details, but
-there should be rather some weird condition / parameters to trigger
-this, and we should check that at first.
+If you don't need this routine unless there is a vbus regulator, then
+don't register it at all if there is no vbus regulator.
 
+> +	id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
+
+You still don't need to check for hd3ss3220->id_gpiod - this function
+will not get called unless it's there.
+
+        if (gpiod_get_value_cansleep(hd3ss3220->id_gpiod))
+                ret = regulator_disable(hd3ss3220->vbus);
+        else
+                ret = regulator_enable(hd3ss3220->vbus);
+
+Note:
+
+If you are concerned that the reference to the id_gpiod may be
+released before this routine is unregistered, then that condition will
+not help. The hd3ss3220->id_gpiod member is _not_ NULL after the
+reference is released.
+
+If you need a specific order in which the references are released,
+then you can't use the resource management (devm_*) to automate things
+for you.
+
+> +	if (!id) {
+> +		ret = regulator_enable(hd3ss3220->vbus);
+> +		if (ret)
+> +			dev_err(hd3ss3220->dev, "enable vbus regulator failed\n");
+> +	} else {
+> +		regulator_disable(hd3ss3220->vbus);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int hd3ss3220_get_vbus_supply(struct hd3ss3220 *hd3ss3220,
+> +				     struct fwnode_handle *connector)
+> +{
+> +	int ret  = 0;
+> +
+> +	hd3ss3220->vbus = devm_of_regulator_get_optional(hd3ss3220->dev,
+> +							 to_of_node(connector),
+> +							 "vbus");
+> +	if (PTR_ERR(hd3ss3220->vbus) == -ENODEV)
+> +		hd3ss3220->vbus = NULL;
+> +	else if (IS_ERR(hd3ss3220->vbus))
+> +		ret = PTR_ERR(hd3ss3220->vbus);
+
+So the regulator API's optional functions return -ENODEV instead of NULL :(
+In any case, don't double assign the member. Use local variable.
+
+        struct regulator *vbus;
+
+        vbus = devm_of_regulator_get_optional(...
+        if (IS_ERR(vbus) && vbus != ERR_PTR(-ENODEV))
+                return PTR_ERR(vbus);
+
+        hd3ss3220->vbus = vbus;
+        return 0;
+
+I don't think you need this function - just do that in the probe function.
+
+> +	return ret;
+> +}
+> +
+>  static int hd3ss3220_probe(struct i2c_client *client)
+>  {
+>  	struct typec_capability typec_cap = { };
+> @@ -354,11 +400,37 @@ static int hd3ss3220_probe(struct i2c_client *client)
+>  		hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
+>  	}
+>  
+> +	hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
+> +	if (IS_ERR(hd3ss3220->id_gpiod))
+> +		return PTR_ERR(hd3ss3220->id_gpiod);
+> +
+> +	if (hd3ss3220->id_gpiod) {
+> +		hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
+> +		if (hd3ss3220->id_irq < 0)
+> +			return dev_err_probe(hd3ss3220->dev, hd3ss3220->id_irq,
+> +					     "failed to get ID gpio\n");
+> +
+> +		ret = devm_request_threaded_irq(hd3ss3220->dev,
+> +						hd3ss3220->id_irq, NULL,
+> +						hd3ss3220_id_isr,
+> +						IRQF_TRIGGER_RISING |
+> +						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+> +						dev_name(hd3ss3220->dev), hd3ss3220);
+> +		if (ret < 0)
+> +			return dev_err_probe(hd3ss3220->dev, ret, "failed to get ID irq\n");
+> +	}
+> +
+>  	if (IS_ERR(hd3ss3220->role_sw)) {
+>  		ret = PTR_ERR(hd3ss3220->role_sw);
+>  		goto err_put_fwnode;
+>  	}
+>  
+> +	ret = hd3ss3220_get_vbus_supply(hd3ss3220, connector);
+> +	if (ret) {
+> +		dev_err(hd3ss3220->dev, "failed to get vbus: %d\n", ret);
+> +		goto err_put_fwnode;
+> +	}
+> +
+>  	typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
+>  	typec_cap.driver_data = hd3ss3220;
+>  	typec_cap.type = TYPEC_PORT_DRP;
+> -- 
+> 2.34.1
 
 thanks,
 
-Takashi
-
-
-> ---
->  sound/usb/pcm.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
-> index 54d01dfd820f..a4c0ea685b8a 100644
-> --- a/sound/usb/pcm.c
-> +++ b/sound/usb/pcm.c
-> @@ -1606,6 +1606,9 @@ static int prepare_playback_urb(struct snd_usb_substream *subs,
->  				    subs->cur_audiofmt->dsd_bitrev)) {
->  			fill_playback_urb_dsd_bitrev(subs, urb, bytes);
->  		} else {
-> +			if (bytes > ctx->buffer_size)
-> +				return -EPIPE;
-> +
->  			/* usual PCM */
->  			if (!subs->tx_length_quirk)
->  				copy_to_urb(subs, urb, 0, stride, bytes);
-> -- 
-> 2.43.0
-> 
+-- 
+heikki
 
