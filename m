@@ -1,241 +1,110 @@
-Return-Path: <linux-usb+bounces-30189-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30190-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB9B2C3F1A5
-	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 10:13:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04012C3F3C5
+	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 10:47:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 413564EDD19
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 09:12:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 978223B235A
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 09:45:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D221B3191D1;
-	Fri,  7 Nov 2025 09:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A13A3019D9;
+	Fri,  7 Nov 2025 09:44:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WmHJDP2l"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VpICSZeF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A81317715
-	for <linux-usb@vger.kernel.org>; Fri,  7 Nov 2025 09:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C265E21578F;
+	Fri,  7 Nov 2025 09:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762506736; cv=none; b=UcVjBjpLWmH3F0BNFs1kZQsAlMrSz6wjNV0ySDrriWKtq93jVGXsbkR+ekmT1zAveq2IPoo9jsVD+15DealzJu8/lqYC7Ti5uQrzfJ+hPTQexeZoCsUjp5mfBlLcCb4oez9R2hAqxBMZuVwBWlkgklusJ01WEhD1ZMOrEvjfAHc=
+	t=1762508654; cv=none; b=av4JjkhKqy0cdaMPbqvTBQKvTzOKYOyfF6Kfs3rNksV2D/hFgulEepxtcq2c+hVfdHSPUilpSGOAIQx2ibqvOa7FzaaCXOZ856KJ3CxRv/dyqYJo/35RXePnXrOisjYtOTMEvrfIlFu5kGHzcPmkIi6tNFZuKx3/9jkc401y5Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762506736; c=relaxed/simple;
-	bh=TNmjgWT8K07xW+rkVyxtkNOCHhbFvM5lquafFX2QXz4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F7/FCYAvL2rK05dngvMw8sNr/Ym84inisdfP/9pbhy3UUFdacm1P1P/MtqxWG0nstykobmTkPU9ZPQJitTKjhrKwKzPLkwCmGXVQQBfdkbdIm23b7EqKUu8MoAXKr5aHczBlJTqwTgh35ce2W9OCqkqVd13VZDJvipnFaTr1sqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WmHJDP2l; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7aa9be9f03aso501760b3a.2
-        for <linux-usb@vger.kernel.org>; Fri, 07 Nov 2025 01:12:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762506732; x=1763111532; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5b+M3zzopCvof55wzjaKXg+MrS7xrBcOB8Vyij7yJyg=;
-        b=WmHJDP2lxMEULUIBA7G4RBKU/wYPQFGUqdSAMj7+toe51jplE3kfh7bpsWr8QxTuDT
-         j4pXp4xQ3h7A5pQlI4zwdPdGHSGL18esO6wGGI4G7R9rxfBf51E2yy/uYd20m1idk/1f
-         2kFGGgtT379aefDdSPW8LMpQwCOXPOQx4DgqBLKwjPYABv2RBOdu3oY56AyqIRE1ZCcT
-         56UG5cT6ehCFLWFYTcS12bBCNgaCe+gt2kO79thuoI8z3pEnd5g1sMfKmyxrZwQNc+yX
-         nR/YWB+XK0fpYy+D3lgRIr7zvKWnZqQeqeR6m6TGBFY8TWiELxvvozdYu1lTkmEY3nQO
-         uv0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762506732; x=1763111532;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5b+M3zzopCvof55wzjaKXg+MrS7xrBcOB8Vyij7yJyg=;
-        b=u2uIQrYzQKMT8zTWnW4i00YEMNMN/lPsHhFJ/foiE6aKGTfspDQ1UNu2h62jmNkUci
-         1FKuBvqmxcPA7Zs2/7b486LLtF3dYVAd/0I5EPUhpl4tf/Z0BqSNVSB5l0HRECNPOjbY
-         M9Fd9miZ2jky0YYE9e0D1V9vN5PU9jKNnmGIOC2w5TCfdQVewY6ir99FXSATnCy7X4vq
-         Up/LiREye/0auqxGFh307qw+Bl5MTBtCLHFXR6Tl9VDTf1vrXWekZZWcL0WDACsW3qTX
-         +nWTgXpnZTwQDlJlOBl5mVo0pN1zDeDY1x2O7H/5HXXYrEpReEzWY4bc9VgyR4Bqn3mD
-         mS6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWX2JYClf6rwcfpcqg6zftm4CbHjK7W6hsgS+VwpzpfiF2JMJty0v37x4EB1S97sAaftLXPlj7Ze1Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxH6YoPT7DnxottrjNl7bLqQsA6nIUhLBiXnxRF/QAgUcP9ov+A
-	w2Ts8d4JbiHDjPmVxmNAzwYp7Zwk0T8wYlxMLjVdWFgkRjxKvsZG9PAhB0HYMEtooygONtsXcFF
-	LEFNnzEJy7pjsyGc9vqpCwVhl63WdDmuhylpq9RTDMxtT+ZKy7Eom1xV4lxs=
-X-Gm-Gg: ASbGnctVqJOg5ufKuUeaxv24h8LHJeQH+UxnUyW/EHKmwusOodJ9nE8Fx004Sh/JzF2
-	64+F2TQeez0IYbBxM0zIeVqyREvLdQ2GnGOYCOPWwLFnJhGvW6xJTT4lVrXD8scjN7aHH8kA48S
-	fTI5jGq7YwhLa0p37bb9pSdU3Fhub5kKRfVbyTLXpbnCRKh3kmem7by/RsDzG0ZkflWq46tSOT5
-	o9ZkgxuhCoBu21BzYuhPatGJIvqCh2nMmT+qRzyAkqtrCEPa1H+ndegoC1zIPx5HQmFEhA=
-X-Google-Smtp-Source: AGHT+IHWENirlvcfA41rvumMc/AZyRmx9tfkjQkwROpRjDKeutH5HgnBVz2Cj4Uw9rrJPEek8xG2BFZODl9IVdlK3Gc=
-X-Received: by 2002:a17:903:388b:b0:28e:ccd7:dd61 with SMTP id
- d9443c01a7336-297c04a11e6mr33698895ad.57.1762506731353; Fri, 07 Nov 2025
- 01:12:11 -0800 (PST)
+	s=arc-20240116; t=1762508654; c=relaxed/simple;
+	bh=pERkB0DkK+0Q8Vy6afgxQ22OOtk1gMRQeGB1CqGFCEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=snkGDKPjcghtRCnGrl7naUVZgfiX8ITN8+VRNezyJzwpP2B7A/u7hROJ97GC4pOH8DwmDbTaHo+yGxNMEsDmMH40MIXFyihCaEXN71JMin9kIHf3nnt/2vVcWAlWUD599qFcTQY28yUZcU+RS9/DwLaDzrYhT9h0m6Gkvfua37Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VpICSZeF; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762508653; x=1794044653;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pERkB0DkK+0Q8Vy6afgxQ22OOtk1gMRQeGB1CqGFCEk=;
+  b=VpICSZeFxc4givDQODrsds+VaYk34D6blRdbs4fdhHvBiZKo9Bk0weIx
+   yki/aYc+R2A8p27K0o2ZOyxAz9ZFXPis86FIC89PfdU/69ReaZTJLNLpw
+   NOEd76R4e6PpYkVYtG2aMkgFFtlwZ5DLVcoDDc4F9uxiV4y7CQ7WinS35
+   L08NosAhKLqpz69lgFKXIzV5AVlJ4bOTMYvCV0v5NNJjt6AnzF9Suipzz
+   DP4FPpgK4WUzY6xgvwRI5H2nNHBRTdDRYQcE4VfZ/JHKIeKhK0+1q3P39
+   B9yf12u3ar1Frp4yEWdfnP42P1jhhy2KnEdRr3REdiCrOerbFDOOp/n0w
+   Q==;
+X-CSE-ConnectionGUID: DWqPH3HoTDatavmqIL81Rg==
+X-CSE-MsgGUID: jt+Jd/B8R4WTm0Lqt9GqDg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="63668111"
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="63668111"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 01:44:12 -0800
+X-CSE-ConnectionGUID: 9524hwPvSvG65SYGBcBRnQ==
+X-CSE-MsgGUID: qC07X42mRdyk5I+PvX63Hw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="187841587"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa006.fm.intel.com with ESMTP; 07 Nov 2025 01:44:10 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 0FD9D95; Fri, 07 Nov 2025 10:44:09 +0100 (CET)
+Date: Fri, 7 Nov 2025 10:44:09 +0100
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Marco Crivellari <marco.crivellari@suse.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Michal Hocko <mhocko@suse.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: [PATCH] thunderbolt: replace use of system_wq with
+ system_percpu_wq
+Message-ID: <20251107094409.GT2912318@black.igk.intel.com>
+References: <20251105162736.320591-1-marco.crivellari@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251017233459.2409975-1-royluo@google.com> <20251017233459.2409975-3-royluo@google.com>
- <20251030011659.bmgdry3wwf4kgjwv@synopsys.com> <CA+zupgxPYXCqew1548uwGx7=9u0b5oCwaXfP7F=FmqMR7a5bDw@mail.gmail.com>
- <20251104020713.orax7rk6qhko5p4m@synopsys.com> <CA+zupgy4qO9X=R7KqEru5kr7tYhgdw=9Z70sLNKj5DTS_J7KZw@mail.gmail.com>
- <20251106003830.v22dnomurtqmqc2y@synopsys.com> <CA+zupgzNRG3vAukQe89bTJ_EaC2A=o+_pY6QoVOdRfXu8BJOAg@mail.gmail.com>
- <20251106234839.kezpk2okjhkajqp3@synopsys.com>
-In-Reply-To: <20251106234839.kezpk2okjhkajqp3@synopsys.com>
-From: Roy Luo <royluo@google.com>
-Date: Fri, 7 Nov 2025 17:11:34 +0800
-X-Gm-Features: AWmQ_blqfpqntmKv9_TI2d4T2dFjIvyvpvXv_YU9eXLSRtz2Ua5X5nKU0YFMoFo
-Message-ID: <CA+zupgzxjEXJaVJLj=O1MirV6Y-o5uSWPQyQ26kjXO=gfv+W0g@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Peter Griffin <peter.griffin@linaro.org>, 
-	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Joy Chakraborty <joychakr@google.com>, 
-	Naveen Kumar <mnkumar@google.com>, Badhri Jagan Sridharan <badhri@google.com>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251105162736.320591-1-marco.crivellari@suse.com>
 
-On Fri, Nov 7, 2025 at 7:48=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys.=
-com> wrote:
->
-> On Thu, Nov 06, 2025, Roy Luo wrote:
-> > On Thu, Nov 6, 2025 at 8:38=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synop=
-sys.com> wrote:
-> > >
-> > > On Tue, Nov 04, 2025, Roy Luo wrote:
-> > > > On Tue, Nov 4, 2025 at 10:07=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@=
-synopsys.com> wrote:
-> > > > >
-> > > > > On Fri, Oct 31, 2025, Roy Luo wrote:
-> > > > > > On Wed, Oct 29, 2025 at 6:35=E2=80=AFPM Thinh Nguyen <Thinh.Ngu=
-yen@synopsys.com> wrote:
-> > > > >
-> > > > > In dwc3_google_suspend(), looks like is_hibernation is set after =
-you
-> > > > > enable pme irq, probably very unlikely, but can the interrupt be
-> > > > > asserted then? If so, will there be another interrupt asserted?
-> > > > > Otherwise the current logic may think it was spurious interrupt a=
- miss
-> > > > > an event.
-> > > >
-> > > > The pme interrupt can only be asserted after controller is in
-> > > > hibernation, that is, after the usb psw dom is turned off and
-> > > > the dwc3_google_usb_psw_pd_notifier() callback is
-> > > > completed. So no, the interrupt won't fire before is_hibernation
-> > > > is set.
-> > >
-> > > Thanks for the confirmation.
-> > >
-> > >
-> > > <snip>
-> > >
-> > >
-> > > > > > >
-> > > > > > > I'm still trying to wrap my head around how usb_top_pd, usb_p=
-sw_pd, and
-> > > > > > > the google->dev are working together in the glue here, partic=
-ularly why
-> > > > > > > usb_top_pd is needed. It seems usb_top_pd shouldn't be handle=
-d by this
-> > > > > > > glued? Do you do anything except setting wakeup-capable?
-> > > > > > >
-> > > > > > > BR,
-> > > > > > > Thinh
-> > > > > >
-> > > > > > To provide more context, the underlying usb power domain has 3 =
-power
-> > > > > > states: Full Power, Power Gated, Off. The usb_top_pd and usb_ps=
-w_pd
-> > > > > > are the logical power domains to represent the 3 power states.
-> > > > > > - Full Power:     usb_psw_pd ON,   usb_top_p ON.
-> > > > > > - Power Gated: usb_psw_pd OFF, usb_top_p ON.
-> > > > > > - Off:                 usb_psw_pd OFF, usb_top_p OFF.
-> > > > > >
-> > > > > > To enter hibernation, the usb power domain must enter Power Gat=
-ed
-> > > > > > state. To achieve this, this glue driver holds a handle to usb_=
-top_pd
-> > > > > > and would cast a vote to keep it ON when attempting to enter
-> > > > > > hibernation. In addition, the usb_psw_pd runtime PM is directly=
- tied
-> > > > > > to google->dev so that usb_psw_pd would be OFF when google->dev
-> > > > > > suspends. Together, the usb power domain would reach Power Gate=
-d
-> > > > > > state when device suspends.
-> > > > > >
-> > > > > > I hope this information helps.
-> > > > > >
-> > > > >
-> > > > > Yes. This is very helpful.
-> > > > >
-> > > > > So, while the glue driver is bound, usb_top_pd is always ON? Even=
- when
-> > > > > xhci driver is not bound or when in device mode?
-> > > >
-> > > > Since usb_top_pd is the parent power domain of usb_psw_pd, and
-> > > > usb_psw_pd RPM is directly tied to glue device, usb_top_pd would
-> > > > be ON when glue device is active (because usb_psw_pd is ON)
-> > > > and would be OFF when glue device suspends in non-hibernation
-> > > > scenarios (because usb_psw_pd is OFF). In hibernation scenario,
-> > > > a vote is casted for usb_top_pd to keep it on even when the
-> > > > glue device is suspended and usb_psw_pd is OFF.
-> > > >
-> > > > To your question, usb_top_pd is not always ON because it would be
-> > > > turned off when the glue device suspends in non-hibernation scenari=
-o.
-> > > > When in device mode and provided dwc3 dev is active, usb_top_pd
-> > > > would be ON because its child usb_psw_pd is ON.
-> > > >
-> > >
-> > > Thanks for the clarification and bearing with my questions.
-> > >
-> > > If there's no device connected, do you role-switch back to default mo=
-de?
-> > > Often I see that the role-switch is defaulted to peripheral and switc=
-h
-> > > to default mode if there's no connection.
-> >
-> > Yes, the default mode would be peripheral and it would switch
-> > to peripheral mode if there's no connection.
-> >
-> > >
-> > > I want to check the case where the device may wakeup by connection bu=
-t
-> > > cannot because it is not in host mode. Do you have a separate
-> > > TCPC/connector that can wakeup the system on attachment?
-> >
-> > Yes, there's a separate TCPC/connector to trigger a role
-> > switch when there's an incoming connection.
-> >
->
-> This addressed my concerns. My other comments are minor nits.
->
-> You can include this on your next submission:
->
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->
-> Thanks,
-> Thinh
+On Wed, Nov 05, 2025 at 05:27:36PM +0100, Marco Crivellari wrote:
+> Currently if a user enqueues a work item using schedule_delayed_work() the
+> used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
+> WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
+> schedule_work() that is using system_wq and queue_work(), that makes use
+> again of WORK_CPU_UNBOUND.
+> 
+> This lack of consistency cannot be addressed without refactoring the API.
+> 
+> This patch continues the effort to refactor worqueue APIs, which has begun
+> with the change introducing new workqueues and a new alloc_workqueue flag:
+> 
+> commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
+> commit 930c2ea566af ("workqueue: Add new WQ_PERCPU flag")
+> 
+> Replace system_wq with system_percpu_wq, keeping the old behavior.
+> The old wq (system_wq) will be kept for a few release cycles.
+> 
+> Suggested-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
 
-Thinh,
-
-Thanks for the review, appreciate it!
-I'd like to give you a heads up on a change I'm going to make
-in the next version. Per Krzysztof's suggestion in [1], I'm making
-a register region that's shared between the controller and the
-PHY a syscon node. The impact to this patch is that mmio
-space "host_cfg" and "usbint_cfg" would be accessed through
-syscon API instead, but there won't be any functional change.
-
-[1] https://lore.kernel.org/linux-phy/89733ddf-8af3-42d0-b6e5-20b7a4ef588c@=
-kernel.org/
-
-Regards,
-Roy Luo
+Applied to thunderbolt.git/next, thanks!
 
