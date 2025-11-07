@@ -1,98 +1,286 @@
-Return-Path: <linux-usb+bounces-30198-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30199-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FDA1C400D9
-	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 14:11:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19A90C402E9
+	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 14:47:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1529E4EF4E7
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 13:11:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6721C189BB63
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 13:48:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064452D321D;
-	Fri,  7 Nov 2025 13:11:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9F3D319857;
+	Fri,  7 Nov 2025 13:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XTfQN3ra"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FT9miOed"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB222C3258;
-	Fri,  7 Nov 2025 13:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7054B30AACF
+	for <linux-usb@vger.kernel.org>; Fri,  7 Nov 2025 13:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762521089; cv=none; b=HSZnRvgsqMZP1Ef6GvJCIvt9SybKUBEVFxSj6WCvXRHnWm5xtvfSLCI0OdYarXZwnmfJyN+cxIUvB5JEgB0orniPN0fBrgeRBK9PjMHHry4aYETTm7zGdA4ATU8HKdiUayDPPcQ4He+n6XA+xUZThIZeFsGH8g7RJxlyKyJa6rc=
+	t=1762523259; cv=none; b=eb+/v+NVJGglJIGO1mMWhmee1TrXjQMoZ2XBUMQrVSUqCHSRl/ITedccM6PJglSTxc7P9H626MD6j8vC7lS1ApwE0ZA6gkNXWkPqPmtFXNU/1BH2+hdNzbqELdj2eExH+0xSlspYuIVMu2sP5WXbVmwZcJRX/yNhgJKm4E/KbtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762521089; c=relaxed/simple;
-	bh=bESDk50hB8xBxbUglcsOY17iOBjiS3C5kAiDoqg9JDI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=TC8zWZMrtJ0h5yFv/39A3bsPiGmTifIqvLd2tgT+ZaW8k6VP5OLNXC87b6ozueKcAixqp6wJot0fvEodQl1VPLl/7sQ/erk/oBjsHasMEBKM6zl5/Dn416seXHsK9IJh663IVAYSBakL7UgL1/paUZfHqLbpwSxs9e5qCJxOBzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XTfQN3ra; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762521088; x=1794057088;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=bESDk50hB8xBxbUglcsOY17iOBjiS3C5kAiDoqg9JDI=;
-  b=XTfQN3ra+6Hag3olngYxv+h6IpevGagCojXD5Y9fBadq5mUTRAlVKEvI
-   tzv9vuT2bITio3CGLLn4e5tteUPBb+u0J9vJM/L8sjgI2HsjFd57n8B0b
-   S7LhP7KE8HGJG9kSUwvxnWcrF83M1Bshs4FFWEGNqkiwiGESSQIobBKRC
-   hkltzzUcSui87MpdIxJd72JqmtcGnoKwT9s8kGkw+eq3Nt0BaDgP8LxuM
-   SesvO2KaQti4xVFHalEUvZtYafjCcEzLEndqCEzFxYBZNosbB2ipSRKuQ
-   +Atw7zM2ZL2Byip4SJNK2OOV/1dt1pdPueaPQn4UIMFmUvB3epg559Kel
-   g==;
-X-CSE-ConnectionGUID: kgWIMU+JR/K6JDqH4p15vg==
-X-CSE-MsgGUID: Ak3SwRErTFmgVVDTSFKP5w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="90139730"
-X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
-   d="scan'208";a="90139730"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 05:11:27 -0800
-X-CSE-ConnectionGUID: fIZ8RIs1TZauhlhzFuq9AA==
-X-CSE-MsgGUID: T+4aFa6nREOJjyV1qNYJPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
-   d="scan'208";a="192128043"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO [10.245.245.61]) ([10.245.245.61])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 05:11:26 -0800
-Message-ID: <057b5fcb-1393-481c-9bac-a9c299c61f8b@linux.intel.com>
-Date: Fri, 7 Nov 2025 15:11:23 +0200
+	s=arc-20240116; t=1762523259; c=relaxed/simple;
+	bh=zCtUB0kJgbflfpJTzS83w9kNi++5EDfPqOkRqqFOjvo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EhzkPUFH6z0O+6XSdeqoMX+lyznPBGCPBxyE1b0VCCmpOUq6Q/fmzH0QRO933UgeUPGi7R367R4tQCZK4Z4QDIFsUuuNd1KZY+btVXK1w2pCIG2AzGUg4jkK2Phyu3TZekUEHg4u1JjUZasIO4Lavd7ak4b3cwBvqv1c4BNzE20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FT9miOed; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-429c4c65485so592663f8f.0
+        for <linux-usb@vger.kernel.org>; Fri, 07 Nov 2025 05:47:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762523256; x=1763128056; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zWSPaSWS2zth6+PcTM9lvcWZNPGKHMYvx8IpRuSIilo=;
+        b=FT9miOed/9myQdRUSCzD9jNy9IKNE9XPMMDHKqb9E7ZuK7654TUJcoDBWrtY9Cu5u4
+         AwH9tsxcWDc8ac8ktlAjvtmPkwGX4Z5c4rvEZcmFzw02Pu2QzdpyG7O/S9YKGO824ZXu
+         PJEdOAMbD5c4tTIcDBrcC0URP0pUK9Uvdxxfe1GcURmrYXMGsZdFOuh5H+cmYY9xF8KP
+         usPhiyQVUDSSoCemy8Tjk0aNyiLnQ70+GXGB89Cxy/WDcKWihUWjoBgCFlSgACXN4/Mq
+         qSJAYoiqh/jQONnpbtZ8xiTIDwblZjV8oZlabcbNbR9BuBOcZY3XvNZ1kcdUCXULkDYS
+         b7cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762523256; x=1763128056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zWSPaSWS2zth6+PcTM9lvcWZNPGKHMYvx8IpRuSIilo=;
+        b=St5pYy2n0yBaCF3wCnS6Fkqqbeksz5bslWnLlQ2ajqfGybcQNBR/6/Ww/v5CO39PlF
+         cpSwHbOGEj2kWYmWdn+hiEKCBN9tcraobTpz9P+17toEMgBLVmHE4UR6ixga/TtpKfvN
+         r8tmUNbLdd7q4z3kJhEZjPO1/nPdDhIQVlKQHEupBQEcwiyhkxRZ6uDlqxBTuZHejMPD
+         NC8WZIqksKYc1as+pI5qlsILqLCeDr1fTbWumMKJk+Df6Cb/63yuns4yF/AJNtgUfYti
+         u+0vTvpmyW2lb/yo7wHyGnnK1oA3dSiBsGJyOor3AstmZOt2mfrI907CRX3HZ0Df1Pva
+         rt4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVkdyMlODiRlhLuReWkxbrqKf4wkbCGQgLidjYsv9zWAIFuk9G4LNId2tcODgPorK6KkZMSrCMcvxA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIQS1sA+Ad6s76jWnlv6Kfm9A2WcyaxPzbfgWbf48D51Xd1HG1
+	xrjLTfVwrL4DoE3VHhrt3p9xtlb4hfIqMKn+E1cO4IVt3UjtaRk/RLsi7nlVR4/GWk/DfKl/MVU
+	HNQJ5Qsq/hmH66anoIjkn653BExa5ehPfdCAq
+X-Gm-Gg: ASbGnctxZN9qEYAsww9C7ieMhh1UX4K8msLFFJ5vq3ozmzVe2ffdYGgf2PT3Ke2xzGz
+	+ByQSDMRW9SDGWE9H8OttZZ0Wdku1PU+ljwXMZkY/TNkGFOdm4vaIL4V9b3L5zCAUNHMzZBKNdD
+	OwNYjAn2CLSaPVL4BRjWg7R8Mp9vKDpCmiyvWLAK4rfauDxbU+OseiDHWcZ0iV2I2Sfw8IqYhq0
+	iT15c1riUoxoAsEOy/oBgQYkBwfWr4Ws/x4JbC/V5fDaIEx7KjNzV/KrEZa87pDujfa
+X-Google-Smtp-Source: AGHT+IHoCbebjRQ/F0AyxfxqE5yFe7njZFryj4eYWvUfMZslexGJ65ZIOsJmR2KnVpMSLW4HS91VwaPplAc9t+kmEeE=
+X-Received: by 2002:a5d:64c8:0:b0:429:cdde:be1e with SMTP id
+ ffacd0b85a97d-42ae5afbd09mr2814924f8f.39.1762523255527; Fri, 07 Nov 2025
+ 05:47:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] usb: host: xhci: Release spinlock before
- xhci_handshake in command ring abort
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: Uttkarsh Aggarwal <uttkarsh.aggarwal@oss.qualcomm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- wesley.cheng@oss.qualcomm.com
-References: <20251022100029.14189-1-uttkarsh.aggarwal@oss.qualcomm.com>
- <8750e1e4-41fb-4fe7-b97e-9d2a26db45c6@linux.intel.com>
- <93a08563-a8f2-4004-bf91-884611b7cc7d@oss.qualcomm.com>
- <5e55d9ba-6b4f-4d92-bb47-04b4a68328d2@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <5e55d9ba-6b4f-4d92-bb47-04b4a68328d2@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20251104161327.41004-1-simon.schippers@tu-dortmund.de>
+ <CANn89iLLwWvbnCKKRrV2c7eo+4UduLVgZUWR=ZoZ+SPHRGf=wg@mail.gmail.com>
+ <f2a363d3-40d7-4a5f-a884-ec147a167ef5@tu-dortmund.de> <CAGRyCJERd93kE3BsoXCVRuRAVuvubt5udcyNMuEZBTcq2r+hcw@mail.gmail.com>
+ <c29f8763-6e0e-4601-90be-e88769d23d2a@tu-dortmund.de> <CAGRyCJE1_xQQDfu1Tk3miZX-5T-+6rarzgPGo3=K-1zsFKpr+g@mail.gmail.com>
+ <676869a2-2e0d-4527-8494-db910b3a0018@tu-dortmund.de>
+In-Reply-To: <676869a2-2e0d-4527-8494-db910b3a0018@tu-dortmund.de>
+From: Daniele Palmas <dnlplm@gmail.com>
+Date: Fri, 7 Nov 2025 14:34:15 +0100
+X-Gm-Features: AWmQ_blkAQLtJ2tBRDYo_MNiveSgo6AZthE4z-ntNx8CP03ei1Xpu37X5c1GoDw
+Message-ID: <CAGRyCJGRqJuh=d8AomhYx08bGuf4dcOJ8o0JrsqqUeVyK8SAcw@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 0/1] usbnet: Add support for Byte Queue Limits (BQL)
+To: Simon Schippers <simon.schippers@tu-dortmund.de>
+Cc: Eric Dumazet <edumazet@google.com>, oneukum@suse.com, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, 
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Simon,
 
-> 
-> A suspended host could also return 0xffffffff on register read, which in turn would cause
-> xhci_handshake(reg, CMD_RING_RUNNING, 0, 5sec) to run for full five seconds unsuccessfully
-> waiting for the  "command ring running" bit to clear.
-> 
+Il giorno gio 6 nov 2025 alle ore 11:00 Simon Schippers
+<simon.schippers@tu-dortmund.de> ha scritto:
+>
+> On 11/6/25 09:38, Daniele Palmas wrote:
+> > Hi Simon,
+> >
+> > Il giorno mer 5 nov 2025 alle ore 12:05 Simon Schippers
+> > <simon.schippers@tu-dortmund.de> ha scritto:
+> >>
+> >> On 11/5/25 11:35, Daniele Palmas wrote:
+> >>> Hello Simon,
+> >>>
+> >>> Il giorno mer 5 nov 2025 alle ore 11:40 Simon Schippers
+> >>> <simon.schippers@tu-dortmund.de> ha scritto:
+> >>>>
+> >>>> On 11/4/25 18:02, Eric Dumazet wrote:
+> >>>>> On Tue, Nov 4, 2025 at 8:14=E2=80=AFAM Simon Schippers
+> >>>>> <simon.schippers@tu-dortmund.de> wrote:
+> >>>>>>
+> >>>>>> During recent testing, I observed significant latency spikes when =
+using
+> >>>>>> Quectel 5G modems under load. Investigation revealed that the issu=
+e was
+> >>>>>> caused by bufferbloat in the usbnet driver.
+> >>>>>>
+> >>>>>> In the current implementation, usbnet uses a fixed tx_qlen of:
+> >>>>>>
+> >>>>>> USB2: 60 * 1518 bytes =3D 91.08 KB
+> >>>>>> USB3: 60 * 5 * 1518 bytes =3D 454.80 KB
+> >>>>>>
+> >>>>>> Such large transmit queues can be problematic, especially for cell=
+ular
+> >>>>>> modems. For example, with a typical celluar link speed of 10 Mbit/=
+s, a
+> >>>>>> fully occupied USB3 transmit queue results in:
+> >>>>>>
+> >>>>>> 454.80 KB / (10 Mbit/s / 8 bit/byte) =3D 363.84 ms
+> >>>>>>
+> >>>>>> of additional latency.
+> >>>>>
+> >>>>> Doesn't 5G need to push more packets to the driver to get good aggr=
+egation ?
+> >>>>>
+> >>>>
+> >>>> Yes, but not 455 KB for low speeds. 5G requires a queue of a few ms =
+to
+> >>>> aggregate enough packets for a frame but not of several hundred ms a=
+s
+> >>>> calculated in my example. And yes, there are situations where 5G,
+> >>>> especially FR2 mmWave, reaches Gbit/s speeds where a big queue is
+> >>>> required. But the dynamic queue limit approach of BQL should be well
+> >>>> suited for these varying speeds.
+> >>>>
+> >>>
+> >>> out of curiosity, related to the test with 5G Quectel, did you test
+> >>> enabling aggregation through QMAP (kernel module rmnet) or simply
+> >>> qmi_wwan raw_ip ?
+> >>>
+> >>> Regards,
+> >>> Daniele
+> >>>
+> >>
+> >> Hi Daniele,
+> >>
+> >> I simply used qmi_wwan. I actually never touched rmnet before.
+> >> Is the aggregation through QMAP what you and Eric mean with aggregatio=
+n?
+> >> Because then I misunderstood it, because I was thinking about aggregat=
+ing
+> >> enough (and not too many) packets in the usbnet queue.
+> >>
+> >
+> > I can't speak for Eric, but, yes, that is what I meant for
+> > aggregation, this is the common way those high-cat modems are used:
+>
+> Hi Daniele,
+>
+> I think I *really* have to take a look at rmnet and aggregation through
+> QMAP for future projects :)
+>
+> > it's not clear to me if the change you are proposing could have any
+> > impact when rmnet is used, that's why I was asking the test
+> > conditions.
+> >
+> > Thanks,
+> > Daniele
+> >
+>
+> This patch has an impact on the underlying USB physical transport of
+> rmnet. From my understanding, the call stack is as follows:
+>
+> rmnet_map_tx_aggregate or rmnet_send_skb
+>
+> |
+> | Calling dev_queue_xmit(skb)
+> V
+>
+> qmi_wwan used for USB modem
+>
+> |
+> |  ndo_start_xmit(skb, net) is called
+> V
+>
+> usbnet_start_xmit is executed where the size of the internal queue is
+> dynamically changed using the Byte Queue Limits algorithm by this patch.
+>
+> Correct me if I am wrong, but I think in the end usbnet is used.
+>
 
-Forgot that xhci_handshake() does check for 0xffffffff, and will return -ENODEV,
-so this is not part of the issue
+Exactly, I was just wondering if this patch had any effect on the
+overall throughput performance once the aggregation is enabled.
 
--Mathias
+Hopefully I'll be able to perform some tests once the patch is merged.
 
+Thanks,
+Daniele
+
+> Thanks,
+> Simon
+>
+> >> Thanks
+> >>
+> >>>>>>
+> >>>>>> To address this issue, this patch introduces support for
+> >>>>>> Byte Queue Limits (BQL) [1][2] in the usbnet driver. BQL dynamical=
+ly
+> >>>>>> limits the amount of data queued in the driver, effectively reduci=
+ng
+> >>>>>> latency without impacting throughput.
+> >>>>>> This implementation was successfully tested on several devices as
+> >>>>>> described in the commit.
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>> Future work
+> >>>>>>
+> >>>>>> Due to offloading, TCP often produces SKBs up to 64 KB in size.
+> >>>>>
+> >>>>> Only for rates > 500 Mbit. After BQL, we had many more improvements=
+ in
+> >>>>> the stack.
+> >>>>> https://lwn.net/Articles/564978/
+> >>>>>
+> >>>>>
+> >>>>
+> >>>> I also saw these large SKBs, for example, for my USB2 Android tether=
+ing,
+> >>>> which advertises a network speed of < 500 Mbit/s.
+> >>>> I saw these large SKBs by looking at the file:
+> >>>>
+> >>>> cat /sys/class/net/INTERFACE/queues/tx-0/byte_queue_limits/inflight
+> >>>>
+> >>>> For UDP-only traffic, inflight always maxed out at MTU size.
+> >>>>
+> >>>> Thank you for your replies!
+> >>>>
+> >>>>>> To
+> >>>>>> further decrease buffer bloat, I tried to disable TSO, GSO and LRO=
+ but it
+> >>>>>> did not have the intended effect in my tests. The only dirty worka=
+round I
+> >>>>>> found so far was to call netif_stop_queue() whenever BQL sets
+> >>>>>> __QUEUE_STATE_STACK_XOFF. However, a proper solution to this issue=
+ would
+> >>>>>> be desirable.
+> >>>>>>
+> >>>>>> I also plan to publish a scientific paper on this topic in the nea=
+r
+> >>>>>> future.
+> >>>>>>
+> >>>>>> Thanks,
+> >>>>>> Simon
+> >>>>>>
+> >>>>>> [1] https://medium.com/@tom_84912/byte-queue-limits-the-unauthoriz=
+ed-biography-61adc5730b83
+> >>>>>> [2] https://lwn.net/Articles/469652/
+> >>>>>>
+> >>>>>> Simon Schippers (1):
+> >>>>>>   usbnet: Add support for Byte Queue Limits (BQL)
+> >>>>>>
+> >>>>>>  drivers/net/usb/usbnet.c | 8 ++++++++
+> >>>>>>  1 file changed, 8 insertions(+)
+> >>>>>>
+> >>>>>> --
+> >>>>>> 2.43.0
+> >>>>>>
+> >>>>
 
