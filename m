@@ -1,133 +1,121 @@
-Return-Path: <linux-usb+bounces-30200-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30201-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0620EC4042D
-	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 15:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82949C40832
+	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 16:04:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D9B318889D0
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 14:11:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F22E1A40759
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 15:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE38328B44;
-	Fri,  7 Nov 2025 14:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3748F31B806;
+	Fri,  7 Nov 2025 15:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Jd05a5Y0"
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="V4y/l3GR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681E42765C5
-	for <linux-usb@vger.kernel.org>; Fri,  7 Nov 2025 14:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6817A2D97A1
+	for <linux-usb@vger.kernel.org>; Fri,  7 Nov 2025 15:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762524637; cv=none; b=u5UL864XioyW7/EJJz2k9QN86bc57y+EKhuFJ4/JrJWgZmBXdPFZjg5qpMpFjF9gZENvXC1Y6gaAWrE9HnWMHPfyfalo4W298XwLZSZvIOFFn0r5vI6V+Dx2xe9oHuAoeR9uawo/UvFb9pxp9hk7eimsi9ZYAdeqD0roGpm8aGc=
+	t=1762527853; cv=none; b=M3en9ods3uRh+7koWaxx++MArIC2Tv1HFgRzncy9ySPKDHajC+8P75XvDOHb1XFSFCbNt0B6WxFTVHbFDtocv2TASmSVhC4WMX4WE7DdXkhKQdMlynefaIwhTXEcZk3itCQGZF2hh7qRLRJa9gibJ9Xai9cC264RS5udWq8YryE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762524637; c=relaxed/simple;
-	bh=+cZzo8xco90BPe5zTjWVIqWQKXNXcQ8nK2fbETbWVGA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a6aZdpcgmpV1KX7mtbShlzQDftbN6oGJzd+N+MtxD+pBp2HU1IQhSQGgAsBWMz/6aBjWap9F0GPKnhWDO5vwi44OTaXJhcC0LX83FZytqx8GGaeXlmHv9zIrVBF+1FrVQ5ZcSaeigJpAHMatjTqmJQ53d71LArJ47srrsEQ2G10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Jd05a5Y0; arc=none smtp.client-ip=74.125.224.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-640c9c85255so660710d50.3
-        for <linux-usb@vger.kernel.org>; Fri, 07 Nov 2025 06:10:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762524633; x=1763129433; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+cZzo8xco90BPe5zTjWVIqWQKXNXcQ8nK2fbETbWVGA=;
-        b=Jd05a5Y0VSWEg6+WhsNNNP8SP5sWGXlREIoQ7QL1YSRh5n+xYDYKhN3VVUF5PMauNv
-         k1oFQ4XdybJJ816WPMB9wp7ZUPFavSRX9FvwVWWlnnjzf8spk9fKGrSbfOpG51a7JYKF
-         JMpQOLl2JhJsh1qCk18sPyzOQBYZ3r135FGyQ8UNNCm2WGWYNy0sLx/uSC7sF3TMmpaJ
-         kdDNfQClpuTYwY2H8E+M3n9CfevAXenBf6j91ng0IYu8050N2PJuSKiSSAkjhtZ0pNs+
-         4FLdX11mJsMvMSMlOG/nOE9MYyShq60mBDf4ArZr1eLwyOWJw5UexKAaLmIXZWMCF56m
-         k+oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762524633; x=1763129433;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+cZzo8xco90BPe5zTjWVIqWQKXNXcQ8nK2fbETbWVGA=;
-        b=eKjhu3aYT325NzuGBgY0XpFN8cZzk1Sz8o2uM3hEIMxf/yiy4lBNrM7gwYfvZTuVpS
-         j/WekE5Hx0H45AWU94kOlfsgdir7xhePPsIswcoY3tBW2V+NS7qZAndSZrTcspPMhjQv
-         mBWo3r7BK+bxrQSktCMWvu5CwvdAoLXuvQLoqnobgFQvofmR5uFowvOu+EAX47GQUtGg
-         WtJYKRY42lIGs2ICg/qYmB813mtQG93GeTlp6kruWAjzRicE3hkIGFlekpOxTUDRjBON
-         yI9Ie/c82981PBOK5AG93e9503lm3BaiMv+pT1adHD8aZkU1YfStQxBpD5t5mTmn/X+p
-         J5/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVzUyraWR5JKEQeHLsMekz+bNrx4jTFzdPyKw/F5ZeFWkAFIXftgW10d48+Y7gp8+uKMV7DRfq4Y3g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgUXAdLorr9w+ammi4xESuN46itzl2tnNYCG/ma9Qj980djO98
-	Jou2GeLrrkp0XQEm4HZ9UCZWrOEzEiwBi/q40uyYUMbMiNZ1pHtNcLLcUP6hyxyU+zZZdpTbC9c
-	qV6c68gjBDGPWH5prZ5K37F49Rf3RWuRxBmwIk+hu
-X-Gm-Gg: ASbGncvmAEZ+Ohi41D1myQhB8fWGvDAdX3PuCpEEzVP7peA+bBluMjza58xaw0vYB3+
-	X5AlELAc9ajwIRo+swMG8AdzTsd9bdcfWWvfWatO1Ik8iZEDGD62AzriqNmKpQeH6Q1JYydl+XF
-	TznEsZ3sw+i2q1D71dtV6xhRyT75Kz8R5pXzQo2/eFASryu2EyBgZk5kYbD+/+sWag9IxDEp2CA
-	gIH5m4S8yUm2hLMWoRpxWTnVzwv4UWnR78GEPmUoGs/qjypLy/x9NM91mGIrnMYCcnkGns=
-X-Google-Smtp-Source: AGHT+IF4MNPjtjkI0HykYzQ/N+DjSl09Uwih8EXv3NQX/RBzR++OlV/O2BGN0tPhSnQ92UawBVQW3Cb0VrPm4WrY5A8=
-X-Received: by 2002:a05:690e:2557:b0:63f:a48d:b7ce with SMTP id
- 956f58d0204a3-640c41c6a29mr2059410d50.27.1762524633098; Fri, 07 Nov 2025
- 06:10:33 -0800 (PST)
+	s=arc-20240116; t=1762527853; c=relaxed/simple;
+	bh=oSBv0A71CU85/YPsMg4XLU+W0wcrWdsr9t6iVZ2w9cw=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=Y38jV2pdrER79f4x9KaUAhq4ZHvzuA66AW6BP66BfgEOFuficQZ3FrVvgtf1dEfr5+4pPLX/afXX1draNREGdcqn05f1HCA/dMInKwUBNzMU8gR78BcLUYp8riH1HRnEaIiG56i2S+DqZmAJMxqwf6sT23E+Zhw4dT8xyqDMGOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=V4y/l3GR; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
+DKIM-Signature: a=rsa-sha256; b=V4y/l3GRUld2BHT2f4Yw4ZugWu/+XCTD8oZKJTDrj+Ut1yi3E9v0Fft9xurY/ffxSNaL4VKqcVNCei966CKY40RZucEXaLYqD6MQfUVP0W0Lr/VI/vQZLbSBPJORBTbuSx+8lqQ1N6CJTEvyt2NKLNp0CtdOpFPvcx9Qs67qup+qb3ec7fOKonoIishmjYH3tq/lAhMhBqnnfUEFIimUUxPuYQX4hkv3yHjRY7Z9Wo5H1434Isnx9XdYAeHxpb1bDJwsqGjtdFjqze9fSlvt9BYDN3EUye3VaSFWKQWClqr556xvX/8t1KbbIea4Thsl9CR8GSG3SmSjOfmK/yt1jg==; s=purelymail2; d=purelymail.com; v=1; bh=oSBv0A71CU85/YPsMg4XLU+W0wcrWdsr9t6iVZ2w9cw=; h=Feedback-ID:Received:Received:From:To:Subject:Date;
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: linux-usb@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1430717498;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Fri, 07 Nov 2025 15:03:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+	(envelope-from <peter@korsgaard.com>)
+	id 1vHO00-008jXJ-2N;
+	Fri, 07 Nov 2025 16:03:36 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: javier.carrasco@wolfvision.net,  heikki.krogerus@linux.intel.com,
+  neal@gompa.dev,  linux-usb@vger.kernel.org,  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tipd: drop double register read in
+ tps6598x_interrupt
+References: <20251106164850.1703648-1-peter@korsgaard.com>
+	<2025110750-diminish-film-f952@gregkh>
+Date: Fri, 07 Nov 2025 16:03:36 +0100
+In-Reply-To: <2025110750-diminish-film-f952@gregkh> (Greg KH's message of
+	"Fri, 7 Nov 2025 17:36:10 +0900")
+Message-ID: <87bjld51h3.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251106175615.26948-1-simon.schippers@tu-dortmund.de>
-In-Reply-To: <20251106175615.26948-1-simon.schippers@tu-dortmund.de>
-From: Eric Dumazet <edumazet@google.com>
-Date: Fri, 7 Nov 2025 06:10:21 -0800
-X-Gm-Features: AWmQ_blZgftDNHs4-HzNXdI8nrjDZ7hGHov3wbswer-i55xUXiO1FMu9wnhdIiA
-Message-ID: <CANn89i+Cc=y_Powx5aWC9fkASsMpuDZsL5TxDxEQiHmSjj4khw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] usbnet: Add support for Byte Queue Limits (BQL)
-To: Simon Schippers <simon.schippers@tu-dortmund.de>
-Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	kuba@kernel.org, pabeni@redhat.com, dnlplm@gmail.com, netdev@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, Nov 6, 2025 at 9:56=E2=80=AFAM Simon Schippers
-<simon.schippers@tu-dortmund.de> wrote:
->
-> In the current implementation, usbnet uses a fixed tx_qlen of:
->
-> USB2: 60 * 1518 bytes =3D 91.08 KB
-> USB3: 60 * 5 * 1518 bytes =3D 454.80 KB
->
-> Such large transmit queues can be problematic, especially for cellular
-> modems. For example, with a typical celluar link speed of 10 Mbit/s, a
-> fully occupied USB3 transmit queue results in:
->
-> 454.80 KB / (10 Mbit/s / 8 bit/byte) =3D 363.84 ms
->
-> of additional latency.
->
-> This patch adds support for Byte Queue Limits (BQL) [1] to dynamically
-> manage the transmit queue size and reduce latency without sacrificing
-> throughput.
->
-> Testing was performed on various devices using the usbnet driver for
-> packet transmission:
->
-> - DELOCK 66045: USB3 to 2.5 GbE adapter (ax88179_178a)
-> - DELOCK 61969: USB2 to 1 GbE adapter (asix)
-> - Quectel RM520: 5G modem (qmi_wwan)
-> - USB2 Android tethering (cdc_ncm)
->
-> No performance degradation was observed for iperf3 TCP or UDP traffic,
-> while latency for a prioritized ping application was significantly
-> reduced. For example, using the USB3 to 2.5 GbE adapter, which was fully
-> utilized by iperf3 UDP traffic, the prioritized ping was improved from
-> 1.6 ms to 0.6 ms. With the same setup but with a 100 Mbit/s Ethernet
-> connection, the prioritized ping was improved from 35 ms to 5 ms.
->
-> [1] https://lwn.net/Articles/469652/
->
-> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
-> ---
+>>>>> "Greg" == Greg KH <gregkh@linuxfoundation.org> writes:
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+ > On Thu, Nov 06, 2025 at 05:48:49PM +0100, Peter Korsgaard wrote:
+ >> Commit 409c1cfb5a80 ("usb: typec: tipd: fix event checking for tps6598x")
+ >> added (by accident?) a double read of the TPS_REG_INT_EVENT1 register.  Drop
+ >> that.
+
+ > Are you sure?  Sometimes 2 reads are required.  How was this tested?
+
+Hard to be 100% sure, but the code did not have a double read before the
+above commit and sticking a printk in the driver like this:
+
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 01db27cbf1d1..6687d192dbd4 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -536,8 +536,9 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
+                intev_len = TPS_65987_8_INTEVENT_LEN;
+
+        ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event1, intev_len);
+-
++       printk(KERN_ERR "1st: %llx %llx\n", event1[0], event1[1]);
+        ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event1, intev_len);
++       printk(KERN_ERR "2nd: %llx %llx\n", event1[0], event1[1]);
+        if (ret) {
+                dev_err(tps->dev, "%s: failed to read event1\n", __func__);
+                goto err_unlock;
+
+
+and (un)plugging the USB cable I see:
+
+[ 3267.257341] 1st: 3000008 0
+[ 3267.262097] 2nd: 3000008 0
+
+[ 3267.345179] 1st: 1000000 0
+[ 3267.350512] 2nd: 1000000 0
+
+[ 3267.388947] 1st: 1000000 0
+[ 3267.393707] 2nd: 1000000 0
+
+[ 3267.912112] 1st: 1000000 0
+[ 3267.916872] 2nd: 1000000 0
+
+[ 3268.049505] 1st: 1000000 0
+[ 3268.054773] 2nd: 1000000 0
+
+[ 3269.105173] 1st: 1000000 0
+[ 3269.109970] 2nd: 1000000 0
+
+[ 3280.049111] 1st: 3000008 0
+[ 3280.053865] 2nd: 3000008 0
+
+So I am fairly sure it is not needed.
+
+-- 
+Bye, Peter Korsgaard
 
