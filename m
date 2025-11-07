@@ -1,111 +1,230 @@
-Return-Path: <linux-usb+bounces-30195-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30196-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBE42C3F91D
-	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 11:49:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A11C3FDE2
+	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 13:16:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 987E334DDD3
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 10:49:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 446EC4EBF98
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 12:15:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B08831A077;
-	Fri,  7 Nov 2025 10:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A162750FA;
+	Fri,  7 Nov 2025 12:15:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BiLLG45/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R6+CQUZ8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F36209F5A
-	for <linux-usb@vger.kernel.org>; Fri,  7 Nov 2025 10:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9259F9D9
+	for <linux-usb@vger.kernel.org>; Fri,  7 Nov 2025 12:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762512577; cv=none; b=IqxfXtWm1MtjsF9NQU9QoLXsNJRKMhOqFS6FhD9uQKukP1ISsv67C5hwiOhrasIA2k4pF737JLuB/My0FvQsFxLJTJErbJcQzTq1GaRM/eLrOH8xzbx/fzfXxEWbfFaW/EFw3+g74FRr3Bu9pwKtcwprF98xjgCNYLwHZg0wJVI=
+	t=1762517753; cv=none; b=rmlPt/ErwzgZgg7M8qisJDns5+dFW/r1HrAegexVh4tp4f7okNlSL0xFfocEQPvdSJ7c4TnHQaAR/Fyd+ccirnVQAlo0nFY8Xvx40lrVUiYGL7AaVq5QmtvH9TfmsrFWOWyNi3gh8StpkGOZvghmNj2iC8r7IK+I+/yCM7s6v58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762512577; c=relaxed/simple;
-	bh=dAsaPC5IxnFMSg7+nhWX4vcS0ecUTFueEx5fAC/E58Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uCfPbdGS5pFnI4GbhDVNEoOH1MaC5SevU/12Uw7fYAXW5kx0Sx5Yt6p3pLR3zXBq+ITJoYw66bWIFoDKW+EXc8QBmS33IorXPWni5EJGSF6XWFjCPbmz+3zS4CAz+MXX0ONMY59YxNE3goJZaftG3zGYRi56b2sNVYHoho/jTNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BiLLG45/; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-591ec7af7a1so526394e87.3
-        for <linux-usb@vger.kernel.org>; Fri, 07 Nov 2025 02:49:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762512573; x=1763117373; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dAsaPC5IxnFMSg7+nhWX4vcS0ecUTFueEx5fAC/E58Y=;
-        b=BiLLG45/lmsEEq2c/OW/B7QpJ7Ge9UE5lAh/xwpwNwBjUBTCM7vnjHum8l/R1lpyc9
-         LjC4Rw4xtDrP+0BpdF5QMA704kvapop2vJ7V1pf/fap0J444gc01S5h2WDvrWLzXDqhM
-         1/oK6ntuX/qb7CetJgJdE7K12jClWRRnUGrzE+rl3hNPS4EfEUlqcTb93riLREU5+hE/
-         hyBbH2ib+HQ7rTnZKTcy24q59+DlJKXZlXQQLFY1oI/e5RchtGCuTDNvMNFu3uV73sVq
-         fT6d52+bYg1U5iaRjHbQqZqoBW/cPVND322ZRkx/LBkUNz9QkoxFR4HfbszYm8yz49K6
-         ivKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762512573; x=1763117373;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dAsaPC5IxnFMSg7+nhWX4vcS0ecUTFueEx5fAC/E58Y=;
-        b=HdJcJg/Y4po+hteqAltrUopol6Cb/GTCjST99hp0kwW9ysrn8Yw7zLLkGLH0XJd4G2
-         421o/OH4Weoz4fNl2KdborwfcAWpmMJVcoBvECSoyaHecZwY/NCv0zHPYY7r2L2C9Wwr
-         R4T78U6Zpv0mUvSV9xmEGIaBJ++ji6loZs9K/RBDQuyWMabTF1UwHD0iSqXAEZ4f+aQM
-         4zaEDbydtke804odDSPgKn8up7WyjnnzikhOxahOhGJbcLAnLZbbK8AC77zAnRVYHlVC
-         hsmVaGgr2zQ5sxIQA1nJJ3mQgvt8L4G5TPe7WXROIKc0iqBGvSsxrv0EUZgQ4EIfqPXl
-         aS2w==
-X-Forwarded-Encrypted: i=1; AJvYcCWJfVGeemM2Xfr1ZpnVxE8iXQlgAM+/q5F/eSZ2AJBOCqxtw/hIR3J9WOcEemHcnVapRD3crgojPpg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxE9iVAcpBrdrbE7zoCOMptrdOKqhq1Qtb7GVgySnEp/o4/SdLe
-	nH64o9+Q1MTXoS+GEr/KqBX+eECKLLG/gOA0Q7oFQ9JHl3wOKbuiqZZy2g773QqUKEI7drBpAGz
-	5EMl0VEKzak00/g7tlq6A/sCCJGVTQTjtYOpUkCRaXQ==
-X-Gm-Gg: ASbGncueSLg3lFKMRUi+kRddW/VPfP8VAThhC1DhVW0/27xN7/wsXEhcnC07FZ4jUy5
-	SeotKQxbvOUFngPIifGvy1dWKdN5VOptN4d/TUSk0nLPfgWvkOH3sz9jjrMIm115/+/XgWq8D0H
-	xV4H/cYGMjaE0zXfgeBWe0y56b5T4dnyYYyWGdut+0N7+rIW/dOivaM/BdrzcR8PFs55KrU3Pmu
-	G4R7s9Wk10WIyndSzs6VKX/fSqeAJK2Nl7b3LdIkiCSCWHn/IfBn+nzCHZaipBFMsMRCKAO9YTP
-	NVik2sZtUgulPJOz4A==
-X-Google-Smtp-Source: AGHT+IGyEFUxynmzX8HDeXWwOCoTXSc4ibMJkbVABQGK/fWroXf4ieJEv1u4hQVriSfBmzUO7Wua/SSJAXLQ8DN0YF0=
-X-Received: by 2002:a05:6512:234a:b0:594:55ab:5800 with SMTP id
- 2adb3069b0e04-59456b7f36amr848641e87.30.1762512573203; Fri, 07 Nov 2025
- 02:49:33 -0800 (PST)
+	s=arc-20240116; t=1762517753; c=relaxed/simple;
+	bh=18r87jOLp1tDeuBYgovjbiUKgcxa7r/Qz3IMUYWM8HM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sF/rY7a5OKJ2Twg+xTT6JSbc0Gp+lgbZrmHPIJL5wo7i/O3HdkgV93KY1/hlouoqNWP9Nzh+5qn9lPTeG1CvKwPL2LWo3oiwqpts/gTgV1MQ6qsng1zNs8Wxi8Cx+mASVbsk4zuSdC6NY3/JRu/Yunv0rYoFBS9ubqDuysgpzBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R6+CQUZ8; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762517751; x=1794053751;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=18r87jOLp1tDeuBYgovjbiUKgcxa7r/Qz3IMUYWM8HM=;
+  b=R6+CQUZ8yt4ARm9mFCFe7kzJB2Mw51yTUEx8cNWIy3TrtngZ9nMATUhE
+   PAPUI1Id2ZvUxsePs2U8d6plox5+5CaG4Bf1SsEfLCd2UFUjLYjHgsiPg
+   pFVsSTQ7jkKNB3x3lu1zunpEi1QxNQAyTUGb7xsZaOvaaVzXO0cN1zvOs
+   s4BV2KIdP/t0jwc3Z3SIJHek1xQ3T5b1pKU3ARxwvuoiw3unVsEEXUfOL
+   1WDngh0A0X40WDaJtosSTauoD0VqOaRoQstumCriFjjWhIKgRKJmzSWjK
+   uLZP6afCXFNAb0urXxZxil/6IwEFiOPkmQpI2T6NzOONXsbpV9kadoqe9
+   g==;
+X-CSE-ConnectionGUID: JBBRdlafQtCJaafv42MqiQ==
+X-CSE-MsgGUID: DUsUIJHHQ06a/XB7eWC8dw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="75276310"
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="75276310"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 04:15:50 -0800
+X-CSE-ConnectionGUID: HiWKJ/88R8u20bkTNdamiA==
+X-CSE-MsgGUID: QkN4RcH5Q4e/3DnkBpJl+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="187680034"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa007.fm.intel.com with ESMTP; 07 Nov 2025 04:15:49 -0800
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc3: pci: Sort out the Intel device IDs
+Date: Fri,  7 Nov 2025 13:15:47 +0100
+Message-ID: <20251107121548.2702900-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <aQ2q4seXxTnDnBIc@kuha.fi.intel.com>
+References: <aQ2q4seXxTnDnBIc@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251105162736.320591-1-marco.crivellari@suse.com> <20251107094409.GT2912318@black.igk.intel.com>
-In-Reply-To: <20251107094409.GT2912318@black.igk.intel.com>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Fri, 7 Nov 2025 11:49:21 +0100
-X-Gm-Features: AWmQ_bnDF2CGrMS0S-84Rgvg9q2bOcjihp3igpPRiWrvE0fyOuQiBP0KAZ789xs
-Message-ID: <CAAofZF6ohh+5GvXiruLJTNoveydSLDacwyG1ovnuTcVv-+kUOg@mail.gmail.com>
-Subject: Re: [PATCH] thunderbolt: replace use of system_wq with system_percpu_wq
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Michal Hocko <mhocko@suse.com>, Andreas Noever <andreas.noever@gmail.com>, 
-	Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 7, 2025 at 10:44=E2=80=AFAM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->[...]
-> > Suggested-by: Tejun Heo <tj@kernel.org>
-> > Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
->
-> Applied to thunderbolt.git/next, thanks!
+The PCI device IDs were organised based on the Intel
+architecture generation in most cases, but not with every
+ID. That left the device ID table with no real order.
+Sorting the table based on the device ID.
 
-Many thanks!
+Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+Hi,
 
+I'm sending this as a followup to the Nova Lake ID patch, so that ID
+is also sorted below. Let me know if you prefer that we do this the
+other way around - first sort, then add the new device ID.
 
---=20
+thanks,
+---
+ drivers/usb/dwc3/dwc3-pci.c | 82 ++++++++++++++++++-------------------
+ 1 file changed, 41 insertions(+), 41 deletions(-)
 
-Marco Crivellari
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index c2bab6d4d507..8f5faf632a8b 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -21,41 +21,41 @@
+ #include <linux/acpi.h>
+ #include <linux/delay.h>
+ 
++#define PCI_DEVICE_ID_INTEL_CMLLP		0x02ee
++#define PCI_DEVICE_ID_INTEL_CMLH		0x06ee
++#define PCI_DEVICE_ID_INTEL_BXT			0x0aaa
+ #define PCI_DEVICE_ID_INTEL_BYT			0x0f37
+ #define PCI_DEVICE_ID_INTEL_MRFLD		0x119e
+-#define PCI_DEVICE_ID_INTEL_BSW			0x22b7
+-#define PCI_DEVICE_ID_INTEL_SPTLP		0x9d30
+-#define PCI_DEVICE_ID_INTEL_SPTH		0xa130
+-#define PCI_DEVICE_ID_INTEL_BXT			0x0aaa
+ #define PCI_DEVICE_ID_INTEL_BXT_M		0x1aaa
+-#define PCI_DEVICE_ID_INTEL_APL			0x5aaa
+-#define PCI_DEVICE_ID_INTEL_KBP			0xa2b0
+-#define PCI_DEVICE_ID_INTEL_CMLLP		0x02ee
+-#define PCI_DEVICE_ID_INTEL_CMLH		0x06ee
++#define PCI_DEVICE_ID_INTEL_BSW			0x22b7
+ #define PCI_DEVICE_ID_INTEL_GLK			0x31aa
+-#define PCI_DEVICE_ID_INTEL_CNPLP		0x9dee
+-#define PCI_DEVICE_ID_INTEL_CNPH		0xa36e
+-#define PCI_DEVICE_ID_INTEL_CNPV		0xa3b0
+ #define PCI_DEVICE_ID_INTEL_ICLLP		0x34ee
+-#define PCI_DEVICE_ID_INTEL_EHL			0x4b7e
+-#define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
+ #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
+-#define PCI_DEVICE_ID_INTEL_JSP			0x4dee
+-#define PCI_DEVICE_ID_INTEL_WCL			0x4d7e
+ #define PCI_DEVICE_ID_INTEL_ADL			0x460e
+-#define PCI_DEVICE_ID_INTEL_ADL_PCH		0x51ee
+ #define PCI_DEVICE_ID_INTEL_ADLN		0x465e
++#define PCI_DEVICE_ID_INTEL_EHL			0x4b7e
++#define PCI_DEVICE_ID_INTEL_WCL			0x4d7e
++#define PCI_DEVICE_ID_INTEL_JSP			0x4dee
++#define PCI_DEVICE_ID_INTEL_ADL_PCH		0x51ee
+ #define PCI_DEVICE_ID_INTEL_ADLN_PCH		0x54ee
+-#define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
+-#define PCI_DEVICE_ID_INTEL_RPL			0xa70e
++#define PCI_DEVICE_ID_INTEL_APL			0x5aaa
++#define PCI_DEVICE_ID_INTEL_NVLS_PCH		0x6e6f
++#define PCI_DEVICE_ID_INTEL_ARLH_PCH		0x777e
+ #define PCI_DEVICE_ID_INTEL_RPLS		0x7a61
++#define PCI_DEVICE_ID_INTEL_MTL			0x7e7e
++#define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
+ #define PCI_DEVICE_ID_INTEL_MTLM		0x7eb1
+ #define PCI_DEVICE_ID_INTEL_MTLP		0x7ec1
+ #define PCI_DEVICE_ID_INTEL_MTLS		0x7f6f
+-#define PCI_DEVICE_ID_INTEL_MTL			0x7e7e
+-#define PCI_DEVICE_ID_INTEL_NVLS_PCH		0x6e6f
+-#define PCI_DEVICE_ID_INTEL_ARLH_PCH		0x777e
+ #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
++#define PCI_DEVICE_ID_INTEL_SPTLP		0x9d30
++#define PCI_DEVICE_ID_INTEL_CNPLP		0x9dee
++#define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
++#define PCI_DEVICE_ID_INTEL_SPTH		0xa130
++#define PCI_DEVICE_ID_INTEL_KBP			0xa2b0
++#define PCI_DEVICE_ID_INTEL_CNPH		0xa36e
++#define PCI_DEVICE_ID_INTEL_CNPV		0xa3b0
++#define PCI_DEVICE_ID_INTEL_RPL			0xa70e
+ #define PCI_DEVICE_ID_INTEL_PTLH		0xe332
+ #define PCI_DEVICE_ID_INTEL_PTLH_PCH		0xe37e
+ #define PCI_DEVICE_ID_INTEL_PTLU		0xe432
+@@ -413,41 +413,41 @@ static void dwc3_pci_remove(struct pci_dev *pci)
+ }
+ 
+ static const struct pci_device_id dwc3_pci_id_table[] = {
+-	{ PCI_DEVICE_DATA(INTEL, BSW, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, BYT, &dwc3_pci_intel_byt_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, MRFLD, &dwc3_pci_intel_mrfld_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, CMLLP, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, CMLH, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, SPTLP, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, SPTH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, BXT, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, BYT, &dwc3_pci_intel_byt_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, MRFLD, &dwc3_pci_intel_mrfld_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, BXT_M, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, APL, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, KBP, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, BSW, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, GLK, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, CNPLP, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, CNPH, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, CNPV, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, ICLLP, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, EHL, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, TGPLP, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, TGPH, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, JSP, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, WCL, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, ADL, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, ADL_PCH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, ADLN, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, EHL, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, WCL, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, JSP, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, ADL_PCH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, ADLN_PCH, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, ADLS, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, RPL, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, APL, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, NVLS_PCH, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, ARLH_PCH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, RPLS, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, MTL, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, ADLS, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, MTLM, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, MTLP, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, MTL, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, NVLS_PCH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, MTLS, &dwc3_pci_intel_swnode) },
+-	{ PCI_DEVICE_DATA(INTEL, ARLH_PCH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, TGL, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, SPTLP, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, CNPLP, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, TGPLP, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, SPTH, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, KBP, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, CNPH, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, CNPV, &dwc3_pci_intel_swnode) },
++	{ PCI_DEVICE_DATA(INTEL, RPL, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, PTLH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, PTLH_PCH, &dwc3_pci_intel_swnode) },
+ 	{ PCI_DEVICE_DATA(INTEL, PTLU, &dwc3_pci_intel_swnode) },
+-- 
+2.50.1
 
-L3 Support Engineer, Technology & Product
 
