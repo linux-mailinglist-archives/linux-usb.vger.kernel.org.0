@@ -1,175 +1,183 @@
-Return-Path: <linux-usb+bounces-30193-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30194-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9719BC3F6A7
-	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 11:26:26 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA593C3F8E7
+	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 11:45:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B0373B106E
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 10:26:21 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5069A34E408
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 10:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7BC30505E;
-	Fri,  7 Nov 2025 10:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5DC01FE47B;
+	Fri,  7 Nov 2025 10:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="HlL5YhZL"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ipfe5PL6";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ihM4IUXQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6FE3043D6
-	for <linux-usb@vger.kernel.org>; Fri,  7 Nov 2025 10:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5F6757EA
+	for <linux-usb@vger.kernel.org>; Fri,  7 Nov 2025 10:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762511177; cv=none; b=bNP3Zgrh6dyxAlg+VTGy6Pj3CQzEZ8ivKUjXoAfmYdckKSfQHznniIL9PwQMS0PuAga7T04SuuNqwUk+lscUL0b28aPlybTsjCIENKFPY3gtXK5oAdlCNohBBY3Y2GMPBGlEk+IIPsLNP5HmpQ/K4kE1Zrkls37+Sk4lNRp5HfI=
+	t=1762512311; cv=none; b=W7O4sWwKBGtzlaIk4DQ1rAQR+ExSv9ryl6ovdE9GY3RzNNbsDatYCDNr9NPFOuyzxLYxoV5VqWIf1OWlgqRO1P/y0A9AePp+di2dNv2kGQO/OL/Gs53R3tahp2E3uti1SgPpG8YFKeshGaFhlP1lSm6QKCEi1PVJgLJsyV20Tts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762511177; c=relaxed/simple;
-	bh=LGcFhKwNxbTo6FEBaMFoRmwm1H19/gfgfV3Fd7+7fAw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cN36vZBcsXmTD+NlJ6chPv+Smw29PPuFLKisL8Uldd0F9NIQGzhr02OfK3xnNNH4v/bjk/lv1vB2anIQgKx0ORaGNY1B5cbOpKD4oSju9Tl6ldLNLeffNcHz916T9DxHOA6JiuaU466fq6DTKP4y8btXEFSbSIz9+75QJbnJcOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=HlL5YhZL; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-47721743fd0so2478785e9.2
-        for <linux-usb@vger.kernel.org>; Fri, 07 Nov 2025 02:26:14 -0800 (PST)
+	s=arc-20240116; t=1762512311; c=relaxed/simple;
+	bh=cldVxJpRNKgcFoYyGi5TZxiwhzfN4EJKPJL34klWTCM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dkMWbyMMvGfKAyaKq9IAG2i0qhH6xt1MhQv7/gmpvUxMzIcgzsDJQFlY1n+mrVH+APzEqCgxDQAt+tsFb2GziwRR3d9Kx1AfgLAV2eVAD5QFr4wShaOj5tunkIdVQxZuHmj0WwKpue8z6tBOLna/NBmYWGFptAZzNURkUTirQu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ipfe5PL6; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ihM4IUXQ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A77gd9V3748374
+	for <linux-usb@vger.kernel.org>; Fri, 7 Nov 2025 10:45:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=jzF0z6hZFHuEWKL0+LuBE3RXthAv/UoQBwr
+	q4S+rbnQ=; b=ipfe5PL6a6URkUKf47E+fnN8OJTeFFpPmO/56E5fGfl/Z/LIWPA
+	lw6qMCHtDTx6QUB24WoH2ZAC0mU4pKVutO9ZpHmUai+t99OUP2h6BUozLojhz0Hj
+	/e63Ysz3kAGX76R5XwMdfgnUZ5X7iXcRivTEQv9IBSU4y9kHHjhvmLAF6z7lImDh
+	VXEMBOiicE7urIDLTc6EYoYxCuPikzQqZso73+7PhJGHq29J/x+Lz1bda7GjFrrL
+	DA0e2HlSMA9mbxjqcTgjZnIJ6WNd3d3IyHSwO51xRapsyZipFmm0ZLto97E9Cr6E
+	Ib9dfW+7yNmAtwywZrSZ4TQJzd1gq/xTjtQ==
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a8sy6kyac-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Fri, 07 Nov 2025 10:45:08 +0000 (GMT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b98e6ff908aso1412884a12.2
+        for <linux-usb@vger.kernel.org>; Fri, 07 Nov 2025 02:45:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1762511173; x=1763115973; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0JLfAqpF7xziLmCEc9gxa6Bh242jm+dSUlXZ1fREtBI=;
-        b=HlL5YhZLhR6S0j6f+B3iFOwo5UAYB8ANg/1/ypHnc1o/H52+J6WN8XPRSnx9I/ixtQ
-         lsUPPB/548X+yasj+GWHh+S4KuHdziw+G0q+s51iL15qZyikiPZbWa4HKQEhkL5Iy99o
-         MaPkUoC9J6OKnGfvIERTGYuwYT1hNi0JMqqJTP+C7w8sdIlazfZ0cBFokhzQt11L/6rZ
-         YzVDr9XgN25D7zl20gYhGW0+7L1a1ZpF7PQkttjbd2QCvK2yhH3Z7fw66Zw4fg3phJc8
-         +kw6TTZaJp9mqH/AVIA0h8Rbssz+hShfCiB9JH8aqzS4ZKyQVk2aAaSKtoiBn+kQBC1H
-         qiVg==
+        d=oss.qualcomm.com; s=google; t=1762512307; x=1763117107; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jzF0z6hZFHuEWKL0+LuBE3RXthAv/UoQBwrq4S+rbnQ=;
+        b=ihM4IUXQLx0fBQ7xi76wwlAtq0sa9LsEAn5mpQeYoVFr7w7jdtQkwc2qyadcGSKKuM
+         vRtmteFEcUh3tPyar6QIK8PNO/4Nriwa7xq9JZJrh85YKrrSZ7vOMuWGQ3/827sI6Gr8
+         eyVjamA8HGoGp8YvkyID6QpBirhOVnxWYBeso83E1rSN6WNYLVZCdVCvtmS0hT1yNk+9
+         Eae68zlOnpkOKf9Zam12Rd/ptlGi3W2ZGqpREZesChJXJXFkBIlVaY9NS10rG6wSnTMb
+         /JNy8nQQPMKLDdwexV+zqTn2Ks8xjVehxE1MjDHgdds6hy4bZ76h7xB/5eTx05Uh9YYZ
+         7gHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762511173; x=1763115973;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0JLfAqpF7xziLmCEc9gxa6Bh242jm+dSUlXZ1fREtBI=;
-        b=N++rxTzDsNvZ0L6HolbZuLZve6kXO9Fk/jbrKYZl7cjcG+ZtlHVRTKDA9dekA/WxZi
-         bcUkecW2xBkm2ujaf95I0/Rkvm6YnGWL/cd9+WlkF04jBzxR686rzfSA1VEtOpu5lpG6
-         12p/kvlcdvWaRFA/jd5yo8YF2D9fzr6XXyBYb1CDYq1O0Ggtd+O72vHEaW36FL8i5fi3
-         dvYMqRZciL7aepOfZwy3E2kwZLUlP7eyZ1bX55sBN2XcfpEu5zxWIdLIaNaKc+FFsUKq
-         82DsZDf7VKf8Jw/USQpT7L/11YNr925/gUdtyRNlw8m73kD5BAXGotwhf+pMzaAe62mi
-         umOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWK9hYXTOhLzr/liUw1S6sKRnzLNN9MmcZH9S8Tmw3Z6xmSlklJ1//RWiTUpmoafzOsVcizIwNWmQc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9oxZSa1v9raeYN29jrgzDM5h7tnX25FFWZoYxSSg5HSAVjRLz
-	lerC3ubsAVuKTamxnfQMRsHXHu9IBnQ3bH5eNizvqrE4QE9blvU+8cDuh5LspDWeSTM=
-X-Gm-Gg: ASbGncufXmrcJVnnvNl2geXdlBOLO7N1DdLuozAmdwH7BfWd7MOminC2I+NuB5/auiK
-	yCuW1kWRcV/dYRbhaPxpTMDMxM4DPs5pXvaaIqVTg5ujx9iBUf9N/2pXgR1OLHaH16+1Gt/jzq9
-	9H9yNxFqGDcvZ5eDBJ//jWOAQOSWYUyY6bghe//L4a0pNGWbOfuVoZ9pEFRCN2JQDOZPlljjbaI
-	4r3UrSDuYpmKkLGERJIr2r14o0o16jGCMhxVPhLtzxVzn6GgWXUAdM2UT6X3wchovPtKnQY6zvW
-	x1HHwWw076wk/pDWbHb7OsxSeFXlwV8CRjdPkYGtIBnQH5nw2PsB2KwWvoFIVfzRo3ijNAXEsgn
-	yd1gxjzkbRQ6ugs6NmQAI7sPZqwMBy/XWrvfhGz5LqWKBQz/1Lkbzo1gZjAhNoE16TenlSBIKw2
-	A2RE3Tv7Pd
-X-Google-Smtp-Source: AGHT+IGbfRm1ylVwr41G5PrCFDvGfnyzEnXmg06azPDzpF/FJaIwBpkNvlqPk8vcllppOjFCA6uh9Q==
-X-Received: by 2002:a05:600c:1c9a:b0:45f:2922:2aef with SMTP id 5b1f17b1804b1-4776bcbf80emr28311595e9.28.1762511172761;
-        Fri, 07 Nov 2025 02:26:12 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.134])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47763e86fc9sm39128915e9.2.2025.11.07.02.26.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Nov 2025 02:26:12 -0800 (PST)
-Message-ID: <5edec052-5e65-4d00-a182-6675ce579be1@tuxon.dev>
-Date: Fri, 7 Nov 2025 12:26:11 +0200
+        d=1e100.net; s=20230601; t=1762512307; x=1763117107;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jzF0z6hZFHuEWKL0+LuBE3RXthAv/UoQBwrq4S+rbnQ=;
+        b=vr5xNiwElbPTwsRkKgTrix31/FsQvWvpuApN1YIevPUW8UQjNJBy9Hydkc7D9O+EVg
+         17MVgueXjDERo1g8VMQ6d2/vd3l8H9jc2EiSz/ohZGZYw8jgU1x1lefk3kDJUfsP2MF5
+         RTRkOkZ/NdLaq5ja01PJgkYLTHuFE0bdAyQkeAMp3ZLcPbCRMm+LLKYzMe7V3acpEI5+
+         4aKzW2q1/KlaymVLT9BRvMq5/7PXZ2SUM08m3rNS/7X04SX8iJhvnKq0Ea6/G2XwT/8t
+         WElJODZ7j5Esm8SwrRSKIMOS99Ak5emlYsWBby8RIikv1mhs6rGCfr10KoYVm5pxVcy0
+         +W7A==
+X-Forwarded-Encrypted: i=1; AJvYcCWRqhF5YOJjtNsD5eABLVTddvnyTIuvKtFCkqQTV5i6PlkIjROjUg2s1YxZG4qJWEXSB8k6F+5jMww=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7efi9LpQEaZEyUKn8WcdMi/YcbswH4yiKZG9FGtzt7TMnGZ/D
+	xddvRntvRa40YUmEfzjxok12mll3/I2Gb1FtBz7/euC3gHuShpoeI0Xp/C9r6O23Ytpo2web57e
+	wqsoQ15NXQfLz2zC7KXi6fLAxSveAhm9ZSOe6Ok2QQsuIX9tQu4NrwQfe8g8lkJs=
+X-Gm-Gg: ASbGncv3yZ7favTHwJzS9h3s+pgvRPKxN7hzxoOO3qnvMI0gFffXcjPXtZl15hI1KR7
+	3O76HsYsoGYvIe0Kg8WUTGzOSkuh+HLhsCT9tISanJoQntrhuk/EBpkEl5LEPhnMr2fCctQYksO
+	jaVckPX1SqHGb8QZ3ihAvaD7WkUJwxwIjQeQaYvwcZWgil3+Qtr8h6qli+rgT9YUFJOM1A/1FYC
+	ibJaqq0b9ec1/y3PCtp0I/xmNVUHfmOWsV1fpaWJRvAcMM16QZZljYiyLDqNSFi3KJaJSwTG99y
+	o5Xcg+m8WKOgGmogkOoHGW1yHzIAL0LjIeprw0Q6ob3GKEqvZRh8ayAwlLeN3IkgktkEDx87olJ
+	iFriJstFXgClOvqkEmka7Mbg9U6sbIkXWHVcPPTgk3t9X4n/gkaB0
+X-Received: by 2002:a17:90b:2b43:b0:340:d1a1:af6d with SMTP id 98e67ed59e1d1-3434c59666cmr3200923a91.36.1762512307540;
+        Fri, 07 Nov 2025 02:45:07 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFLIPMfoRBFdSkLK6MSwRI0bu0MIuKCQtHo+cC8zhSDBXAl4TEpY+PzJ0TgjkcmFqBio+utwA==
+X-Received: by 2002:a17:90b:2b43:b0:340:d1a1:af6d with SMTP id 98e67ed59e1d1-3434c59666cmr3200902a91.36.1762512307083;
+        Fri, 07 Nov 2025 02:45:07 -0800 (PST)
+Received: from hu-punita-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-341d08b69e5sm2137711a91.0.2025.11.07.02.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 02:45:06 -0800 (PST)
+From: Punit Agrawal <punit.agrawal@oss.qualcomm.com>
+To: gregkh@linuxfoundation.org
+Cc: Jamie Iles <jamie.iles@oss.qualcomm.com>, Thinh.Nguyen@synopsys.com,
+        fabioaiuto83@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Punit Agrawal <punit.agrawal@oss.qualcomm.com>
+Subject: [PATCH v2] drivers/usb/dwc3: fix PCI parent check
+Date: Fri,  7 Nov 2025 10:44:37 +0000
+Message-Id: <20251107104437.1602509-1-punit.agrawal@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] usb: host: ehci-platform: Call reset assert/deassert
- on suspend/resume
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
- p.zabel@pengutronix.de, yoshihiro.shimoda.uh@renesas.com,
- prabhakar.mahadev-lad.rj@bp.renesas.com, kuninori.morimoto.gx@renesas.com,
- geert+renesas@glider.be, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20251106143625.3050119-1-claudiu.beznea.uj@bp.renesas.com>
- <20251106143625.3050119-3-claudiu.beznea.uj@bp.renesas.com>
- <CAMuHMdWDGpqdhCsA0MJqoL1JAiyVR-TA2YqDe+-S9Xf6c5O-gA@mail.gmail.com>
- <64c74f86-7438-49da-b164-a8a113e47c32@tuxon.dev>
- <CAMuHMdXG8w9jR9gr4av15VT69XNouqys5z4Rxx-nidnvnbN3dA@mail.gmail.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <CAMuHMdXG8w9jR9gr4av15VT69XNouqys5z4Rxx-nidnvnbN3dA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=AYu83nXG c=1 sm=1 tr=0 ts=690dcdb4 cx=c_pps
+ a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=jIQo8A4GAAAA:8 a=jM0-4Wpw8WwY0CpfOG8A:9
+ a=x9snwWr2DeNwDh03kgHS:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA3MDA4NiBTYWx0ZWRfX1DqH8Oo6oLRj
+ mjAqFYRco0vDoLMp9IOQqsI8EtC0zGOO/yvxA/V1yEcrJbDOZak69LQlzB0r8OD6eQNuNjISq6e
+ ZwGVG141I7cH0oDGQUt2gI9CupWSHmHAJUIKQO0lEOxk1Y0mdhf69q5GTrMC5ALOidmzcZDFne+
+ eH8c0+CEphOeYhPP2rx48MBBJbt2ISZwBjnYIRKrpCWvVi5j0IfOTgo4XqYts72k+cswcDipeB5
+ Yp8axQqeAEklyQwTb9BFjo2iUSuEqG2jua+v6GLi4/zpTzds1ctxNsR05bHNPblWOmyW3E87gIA
+ NgboBYAIW6xsaHBELcwl7tkBFfyjJtItqQ1L2FNC3dbxDT7BUMBrKaEPsuxKu/BF5G/REG6bFNv
+ S+WRibaPZi8hm8Dlht2YkjYrfoS3ig==
+X-Proofpoint-ORIG-GUID: ZngHDOKN7xYWnlR1Fk6f_hDqtuES2QpL
+X-Proofpoint-GUID: ZngHDOKN7xYWnlR1Fk6f_hDqtuES2QpL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-07_02,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511070086
 
-Hi, Geert,
+From: Jamie Iles <jamie.iles@oss.qualcomm.com>
 
-On 11/7/25 10:01, Geert Uytterhoeven wrote:
-> Hi Claudiu,
-> 
-> On Thu, 6 Nov 2025 at 19:56, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
->> On 11/6/25 16:52, Geert Uytterhoeven wrote:
->>> On Thu, 6 Nov 2025 at 15:36, Claudiu <claudiu.beznea@tuxon.dev> wrote:
->>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>
->>>> The Renesas RZ/G3S SoC supports a power-saving mode in which power to most
->>>> of the SoC components is turned off, including the USB blocks. On the
->>>> resume path, the reset signal must be de-asserted before applying any
->>>> settings to the USB registers. To handle this properly, call
->>>> reset_control_assert() and reset_control_deassert() during suspend and
->>>> resume, respectively.
->>>>
->>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>
->>>> --- a/drivers/usb/host/ehci-platform.c
->>>> +++ b/drivers/usb/host/ehci-platform.c
->>>> @@ -454,6 +454,17 @@ static int __maybe_unused ehci_platform_suspend(struct device *dev)
->>>>         if (pdata->power_suspend)
->>>>                 pdata->power_suspend(pdev);
->>>>
->>>> +       ret = reset_control_assert(priv->rsts);
->>>> +       if (ret) {
->>>> +               if (pdata->power_on)
->>>> +                       pdata->power_on(pdev);
->>>> +
->>>> +               ehci_resume(hcd, false);
->>>> +
->>>> +               if (priv->quirk_poll)
->>>> +                       quirk_poll_init(priv);
->>>
->>> I have my doubts about the effectiveness of this "reverse error
->>> handling".  If the reset_control_assert() failed, what are the chances
->>> that the device will actually work after trying to bring it up again?
->>>
->>> Same comment for next patch.
->>
->> I wasn't sure if I should do this revert or not. In my mind, if the reset
->> assert fails, the reset signal is still de-asserted.
-> 
-> Possibly.  Most reset implementations either cannot fail, or can
-> fail due to a timeout.  What state the device is in in case of the latter is
-> hard to guess...
+The sysdev_is_parent check was being used to infer PCI devices that have
+the DMA mask set from the PCI capabilities, but sysdev_is_parent is also
+used for non-PCI ACPI devices in which case the DMA mask would be the
+bus default or as set by the _DMA method.
 
-In theory there are also failures returned by the subsystem code (e.g. if
-reset is shared and its reference counts don't have the proper values, if
-not shared and ops->assert is missing).
+Without this fix the DMA mask would default to 32-bits and so allocation
+would fail if there was no DRAM below 4GB.
 
-In case of this particular driver and the ochi-platform one, as the resets
-request is done with devm_reset_control_array_get_optional_shared() the
-priv->resets is an array and the assert/de-assert is done through
-reset_control_array_assert()/reset_control_array_deassert() which, in case
-of failures, reverts the assert/de-assert operations. It is true that the
-effectiveness of the revert operation is unknown and depends on the HW, but
-the subsystem ensures it reverts the previous state in case of failure.
+Fixes: 47ce45906ca9 ("usb: dwc3: leave default DMA for PCI devices")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jamie Iles <jamie.iles@oss.qualcomm.com>
+Signed-off-by: Punit Agrawal <punit.agrawal@oss.qualcomm.com>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+v1[0] -> v2:
+* Added tags
+* Cc stable
 
-For the case resets is not an array, it is true, it depends on the reset
-driver implementation and hardware.
+[0] https://lore.kernel.org/all/20251105145801.485371-1-punit.agrawal@oss.qualcomm.com/
 
-Could you please let me know how would you suggest going forward with the
-implementation for the patches in this series?
+ drivers/usb/dwc3/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thank you,
-Claudiu
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index ae140c356295..c2ce2f5e60a1 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -25,6 +25,7 @@
+ #include <linux/of.h>
+ #include <linux/of_graph.h>
+ #include <linux/acpi.h>
++#include <linux/pci.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/devinfo.h>
+ #include <linux/reset.h>
+@@ -2241,7 +2242,7 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
+ 	dev_set_drvdata(dev, dwc);
+ 	dwc3_cache_hwparams(dwc);
+ 
+-	if (!dwc->sysdev_is_parent &&
++	if (!dev_is_pci(dwc->sysdev) &&
+ 	    DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0) == 64) {
+ 		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
+ 		if (ret)
+-- 
+2.34.1
+
 
