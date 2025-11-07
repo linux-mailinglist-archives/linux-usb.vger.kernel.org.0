@@ -1,93 +1,133 @@
-Return-Path: <linux-usb+bounces-30186-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30187-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00821C3EDD9
-	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 09:04:02 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30879C3EECD
+	for <lists+linux-usb@lfdr.de>; Fri, 07 Nov 2025 09:18:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A43FF34AD2E
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 08:04:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1A1224EE1D5
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Nov 2025 08:17:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3D930F814;
-	Fri,  7 Nov 2025 08:03:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAE2830F537;
+	Fri,  7 Nov 2025 08:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5gUzf3v"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iFwNbtrU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B228526F29F;
-	Fri,  7 Nov 2025 08:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5CD274B2A
+	for <linux-usb@vger.kernel.org>; Fri,  7 Nov 2025 08:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762502636; cv=none; b=IPgpcOysVisOiLptE4oAC39tI14irTdh/UXif+GplD9ugUnX+BRfmYK8SZmCI4qzFF1ija/IZRfyYQYdefEt7ID11sQlCaO7RurQEeaqIbA6HLGOOgJkQ6dK42JBBkLIVYuMx2xJsMbxxU97UZ0WPQsBCg+LeEMUntjgJaIWdno=
+	t=1762503439; cv=none; b=vA7XzC9w89nAaM2PozJk28jWZB7kYndPhxVc0tP2ysfPmA7QGeCBF2eSP0LGP1BLhXnjVOR0BFQ5ExCgHT8oJdWNlZ98Jd8iAYrF/q4UtUfec0e3OKFOzp96+3qw/GW897cQsk8mMyiHfL8TSUFxLXDSU6UOezg6LcZQsU/hec8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762502636; c=relaxed/simple;
-	bh=bGskAMY+uWAftqyTkJL9tBJ1uC8eJ0A3f7tgghA9lj8=;
+	s=arc-20240116; t=1762503439; c=relaxed/simple;
+	bh=yHCLLs5tB+dgOtQyIcCZazTksJTYOVDmw9DxGRqQDnE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SjZr7CnqzN0y/5zwtUTtRxLO89B/zU6ZrOchCZFg4YDxe8wGNsWJlD+brtculrQ4cv3hL2Dnk6jx/Z/Q6HIemfmLZ1CZhtyTsqmd370mnlD8yv2Z+LwknFf0fvbUDEzMAZcp8q2GDVAI1zKzuH1aMaj941KBBq5Yk7aiEyIVCIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5gUzf3v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCFF3C4CEF8;
-	Fri,  7 Nov 2025 08:03:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762502636;
-	bh=bGskAMY+uWAftqyTkJL9tBJ1uC8eJ0A3f7tgghA9lj8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a5gUzf3vLPucsJpiEye0JWTMa+WJISsiJ8JCKTWcgUmngBopdTPmbc+Mx3AQaRCV/
-	 Bo1VyLn0R9MutXwwZd9GbLwe6ibHFe096Ao9iFH9vcZSDJo1TZFe4Y6ZoAiYNA/ZVn
-	 gT5NGyv1UnbVrcFMUlB/TAyHKlCcc6JWa0Uay0rZlWG+i8uq8htNtqYcsCj/AxOvyc
-	 yAUolSP+EErGKkxuGaoa34pW8lxIu3REi2ioR6ArKfzyPVgypqYI3M0CnKseKoZNb6
-	 Z0iogIoFH6xsJnG4CcqAfNFDVhTFn/AQPbLRmrY1PY5fE7tPJXL7+K066I4t/+y91R
-	 5b2vKDDAjFdSQ==
-Date: Fri, 7 Nov 2025 09:03:54 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, davidm@egauge.net, ~lkcamp/patches@lists.sr.ht, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: usb: maxim,max3421: convert to DT schema
-Message-ID: <20251107-agile-alligator-of-philosophy-03d923@kuoka>
-References: <20251107001812.10180-1-rodrigo.gobbi.7@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NWTY5osPfa/fkdIeGDjHVuNb42rwF5VFxlO3hTAoqlyHdzNos9S21uDbu/aLD5ESYcFvu8VOHnMRRzLARvUqRRiN68jj4Bivl/6lNifYpMg17iwmB2Z5yZyBw02ExSKCfk+b3j4F7yniXUlBv4sHTkI+xDI7Nqi3uoqH66JgksQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iFwNbtrU; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762503431; x=1794039431;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yHCLLs5tB+dgOtQyIcCZazTksJTYOVDmw9DxGRqQDnE=;
+  b=iFwNbtrUD2DHE2hLILQZ4tlrqV4zVqcvKDL31vZCmvIcbn3o5ZT3vyef
+   y+UhsHqu6oO7xJJz601luK/WZQaviGh2JE3GXk89thEvdnxqkIutXVOA3
+   nDSa4ShnIDaxcvwmC8G6v+6V+h8jazYUeEnPxNZ19JKqWuDOLy1EZQ8+7
+   QYTIp0rZJ3LMN4VIoVJ1mnt9Ht/mhnajOmeBzGT6UpiBo5ni8fR/PZFrC
+   JEy/7JEi3oio0jTemWM/mFljkWSQ8enUWisgNAodE4nsx+P4woPanUT9c
+   ZMrvjHAliU02L2sa8WsQviW+PxuEk6WyVpaove6bK/jADNrwwXo8h0wDA
+   g==;
+X-CSE-ConnectionGUID: 0HKiVXb8R1W6vhjpCdBcgQ==
+X-CSE-MsgGUID: S5Gg+Q+qQoWKuBlZOnypTQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="64805090"
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="64805090"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 00:17:08 -0800
+X-CSE-ConnectionGUID: SMcDCencTsyGPMg7a5QPEg==
+X-CSE-MsgGUID: r9PQJzSxRYG/uza/qRyY7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="193151034"
+Received: from mjruhl-desk.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.222.72])
+  by orviesa005.jf.intel.com with SMTP; 07 Nov 2025 00:17:05 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 07 Nov 2025 10:17:04 +0200
+Date: Fri, 7 Nov 2025 10:17:04 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc3: pci: add support for the Intel Nova Lake -S
+Message-ID: <aQ2q4seXxTnDnBIc@kuha.fi.intel.com>
+References: <20251106115926.2317877-1-heikki.krogerus@linux.intel.com>
+ <20251107001752.pr5mntqbrztgzkm5@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251107001812.10180-1-rodrigo.gobbi.7@gmail.com>
+In-Reply-To: <20251107001752.pr5mntqbrztgzkm5@synopsys.com>
 
-On Thu, Nov 06, 2025 at 09:06:22PM -0300, Rodrigo Gobbi wrote:
-> Convert legacy maxim,max3421.txt to proper format.
+Fri, Nov 07, 2025 at 12:18:05AM +0000, Thinh Nguyen kirjoitti:
+> On Thu, Nov 06, 2025, Heikki Krogerus wrote:
+> > This patch adds the necessary PCI ID for Intel Nova Lake -S
+> > devices.
+> > 
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> >  drivers/usb/dwc3/dwc3-pci.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+> > index 39c72cb52ce7..c2bab6d4d507 100644
+> > --- a/drivers/usb/dwc3/dwc3-pci.c
+> > +++ b/drivers/usb/dwc3/dwc3-pci.c
+> > @@ -53,6 +53,7 @@
+> >  #define PCI_DEVICE_ID_INTEL_MTLP		0x7ec1
+> >  #define PCI_DEVICE_ID_INTEL_MTLS		0x7f6f
+> >  #define PCI_DEVICE_ID_INTEL_MTL			0x7e7e
+> > +#define PCI_DEVICE_ID_INTEL_NVLS_PCH		0x6e6f
 > 
-> Signed-off-by: Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>
-> ---
-> Hi, all
+> The list here doesn't follow any order. Is the placement arbitrary?
 > 
-> At this v2, I`m reverting my previous idea about documenting new properties
-> because this is just a conversion from txt file. At v1, a question
-> was raised about that:
+> >  #define PCI_DEVICE_ID_INTEL_ARLH_PCH		0x777e
+> >  #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
+> >  #define PCI_DEVICE_ID_INTEL_PTLH		0xe332
+> > @@ -443,6 +444,7 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+> >  	{ PCI_DEVICE_DATA(INTEL, MTLM, &dwc3_pci_intel_swnode) },
+> >  	{ PCI_DEVICE_DATA(INTEL, MTLP, &dwc3_pci_intel_swnode) },
+> >  	{ PCI_DEVICE_DATA(INTEL, MTL, &dwc3_pci_intel_swnode) },
+> > +	{ PCI_DEVICE_DATA(INTEL, NVLS_PCH, &dwc3_pci_intel_swnode) },
+> >  	{ PCI_DEVICE_DATA(INTEL, MTLS, &dwc3_pci_intel_swnode) },
+> >  	{ PCI_DEVICE_DATA(INTEL, ARLH_PCH, &dwc3_pci_intel_swnode) },
+> >  	{ PCI_DEVICE_DATA(INTEL, TGL, &dwc3_pci_intel_swnode) },
 > 
-> On 10/9/25 22:34, Krzysztof Kozlowski wrote:
-> > maxim,vbus-en-pin, maxim,gpx-pin, reset pin and supplies. Also add a
-> > Why new properties? You must explain not only the difference but WHY you
-> > are doing this.
-> In this case, I`ve kept the maxim,vbus-en-pin prop because it was already
-> described in the legacy file and the driver expects that property according
-> to [1] and [2].
+> It bugs me a little how this list doesn't match the order of the product
+> IDs above either.
 
-This is not a commit msg. Apply this patch from the lists and look
-whether the information is there.
+You are correct. I'll prepeare a separate patch where I'll sort them
+properly.
 
-So again:
+> > -- 
+> > 2.50.1
+> > 
+> 
+> Regardless,
+> 
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-You commit msg explain any unusual changes - like modifying binding
-while ONLY converting it - and WHY you are doing the unusual changes.
+thanks,
 
-Best regards,
-Krzysztof
-
+-- 
+heikki
 
