@@ -1,77 +1,78 @@
-Return-Path: <linux-usb+bounces-30228-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30229-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F9D7C438A2
-	for <lists+linux-usb@lfdr.de>; Sun, 09 Nov 2025 05:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B049C438B2
+	for <lists+linux-usb@lfdr.de>; Sun, 09 Nov 2025 06:05:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5F1E188B678
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Nov 2025 04:54:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F09EC188C7C9
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Nov 2025 05:06:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD5B51EA7CB;
-	Sun,  9 Nov 2025 04:53:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735A020C48A;
+	Sun,  9 Nov 2025 05:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T37iSCDK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CjKFxYr8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F8C42AA9;
-	Sun,  9 Nov 2025 04:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0B919CD1D;
+	Sun,  9 Nov 2025 05:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762664024; cv=none; b=RHRIzoWVao48r2NUP7hmFTo+dCrPebNdTqCXOGzG22+sR+KA/tr9vEBZtorG1O8ijEvCSdB1zM1W06XR9bck7unBQOH0GvPd/QQtyrk0IBK433s1H/7feTFM9my3OpYWR/TO+496nHUhPAsFdYOtYz0j122u7iAePFNCFFcGQns=
+	t=1762664744; cv=none; b=prvo6TlpPr4W6v6yPVBji6E6HoAsjqhf0VeSpN8YccAOZmZzWCvEaH61IaXd6n4pWhDXIzBhIyem/zKuOPb4ureTsE5hqfzJI6+9g8G6Y302/qphszDkpQ8AhRNQd9dXhcJ+0kW7GmftxyH+U9pJzOSJOLoPEWPA4AYnEcR/b+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762664024; c=relaxed/simple;
-	bh=T6L7mDfV+M7uBHz72EwdgW2d+D+/M0d9PPUT1B0HJKw=;
+	s=arc-20240116; t=1762664744; c=relaxed/simple;
+	bh=ZV9BoH74mReBv49JBFNCwYi5BkQK+mmMZsBxMTs1p+g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OHGAT0TJhiLqIaYEDFMDGCMcDmQv8RW0tOK1PGO9d0m8ogdVyL0qdVK0C2QwSnD0ckF4ylGOpWdFVJMMZSZ8f7TUf3ZZuv87k1+qahkG+Rz/Fh8XMKBPXcvwZMyLwTI5gD2mucTfz7KncpDUCIItkOgit9C5pA+BzTs/c6x5wLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T37iSCDK; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=aNWVcY0zyHtL+rPZF2bb8rj3tT3h2bP9O4iuRLB3yNOOP5PNQkBAsk9IrjCC7L44Y6J7lAEr7y2l7DZkO6uWX2WXhzH1EQc6I+ZqNNMlbOeCFuRhKZJStIwwdHkK2ePpssL7LB9docDusSxI/YW/w8UxTc0kHT/006x5z9qGlP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CjKFxYr8; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762664021; x=1794200021;
+  t=1762664742; x=1794200742;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=T6L7mDfV+M7uBHz72EwdgW2d+D+/M0d9PPUT1B0HJKw=;
-  b=T37iSCDKxaN7u6RwNW4+RqlOqau+WLdG/UPuTtEpMw/3bjV3O4b4FMo2
-   agQCzKed1+JAD2s4PUE80lNSkD+wKYcSKLEQGgEcD1DUk47lBgHqECWUZ
-   Qp3pCOCA6dI9fwLZ1nMsTHBknzP54QJlsROTfcagpEF0czFN+Q9ouRD7v
-   zRBd1f+rnluuMWwO4wJ68sXzCiJDj/XTX2x8l7Hfz8pcGcacCE2Ldx4Q8
-   IP157yFdgjj/fWpDO8vJnn0I8EYN5QV+Vi854k3ibrSX1HGSysyekmlf0
-   XxULTFblMMNYkhC+Lk/GQ5mDJCIhTN2IyRMiSBjAMARx+xPsBWkVC2aNM
-   g==;
-X-CSE-ConnectionGUID: jLVN1ziBTFesC8c5qxS49Q==
-X-CSE-MsgGUID: 1FGlVVz0Sp2WQirCgaXzvw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11607"; a="64847204"
+  bh=ZV9BoH74mReBv49JBFNCwYi5BkQK+mmMZsBxMTs1p+g=;
+  b=CjKFxYr8CB9g7/qr/4FmWGeLYJf3CSRgpkSkViytriuIBEM6iJpkc3Fh
+   6TnXZMMMzpdwnIH6YDHm9wgY1iN234jJbXNGD3R+KgYS9l0tEL+0zx7UV
+   TwiyLRJ0tnYGCL6sfg49Ugt0Re03julelS2np7I9+PHCsrvPwv3cnzLb+
+   3T0fTVSn2/5VCueVH/DB/geKNdYtFl0MehEEdlhHXgy49HimRW/HAejwn
+   8Kw0h9/qSMRV/r6NGH0VgspImyleklvXNwkeEh2lDvKfu67mg0Cftw2U1
+   kbvTPSbB5WULQm0NZM4KEoe1S0xMSzzo9umqbh4dzs9RsJ5wBu/gSNowx
+   w==;
+X-CSE-ConnectionGUID: gjR34JmwSDmLfCNiWITxig==
+X-CSE-MsgGUID: K7+2hzOKRTambZFZYnmT1g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11607"; a="75050062"
 X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
-   d="scan'208";a="64847204"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2025 20:53:41 -0800
-X-CSE-ConnectionGUID: h5x42WdvTqu1BX/UaJUSBw==
-X-CSE-MsgGUID: Tj0BVNGOSm68/3cRdyBYDA==
+   d="scan'208";a="75050062"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2025 21:05:42 -0800
+X-CSE-ConnectionGUID: tfmRiFbtTsmEFp5uVbgV2Q==
+X-CSE-MsgGUID: 5e89+h57RXiGDU9wxyxXYQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
-   d="scan'208";a="188227193"
+   d="scan'208";a="193572600"
 Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 08 Nov 2025 20:53:38 -0800
+  by orviesa005.jf.intel.com with ESMTP; 08 Nov 2025 21:05:40 -0800
 Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vHxQm-0001mV-1n;
-	Sun, 09 Nov 2025 04:53:36 +0000
-Date: Sun, 9 Nov 2025 12:53:32 +0800
+	id 1vHxcP-0001mp-1I;
+	Sun, 09 Nov 2025 05:05:37 +0000
+Date: Sun, 9 Nov 2025 13:05:25 +0800
 From: kernel test robot <lkp@intel.com>
 To: ccc194101@163.com, stern@rowland.harvard.edu,
 	gregkh@linuxfoundation.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org,
 	Chen Changcheng <chenchangcheng@kylinos.cn>
 Subject: Re: [PATCH] usb: usb-storage: No additional quirks need to be added
  to the ECD819-SU3 optical drive.
-Message-ID: <202511091243.dnLsy9w5-lkp@intel.com>
+Message-ID: <202511091255.ohMJwQcj-lkp@intel.com>
 References: <20251107061046.32339-1-ccc194101@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -85,54 +86,51 @@ In-Reply-To: <20251107061046.32339-1-ccc194101@163.com>
 
 Hi,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 284922f4c563aa3a8558a00f2a05722133237fe8]
+[auto build test ERROR on 284922f4c563aa3a8558a00f2a05722133237fe8]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/ccc194101-163-com/usb-usb-storage-No-additional-quirks-need-to-be-added-to-the-ECD819-SU3-optical-drive/20251107-141330
 base:   284922f4c563aa3a8558a00f2a05722133237fe8
 patch link:    https://lore.kernel.org/r/20251107061046.32339-1-ccc194101%40163.com
 patch subject: [PATCH] usb: usb-storage: No additional quirks need to be added to the ECD819-SU3 optical drive.
-config: nios2-randconfig-001-20251109 (https://download.01.org/0day-ci/archive/20251109/202511091243.dnLsy9w5-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251109/202511091243.dnLsy9w5-lkp@intel.com/reproduce)
+config: loongarch-randconfig-001-20251109 (https://download.01.org/0day-ci/archive/20251109/202511091255.ohMJwQcj-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b9ea93cd5c37fb6d606502fd01208dd48330549d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251109/202511091255.ohMJwQcj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511091243.dnLsy9w5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511091255.ohMJwQcj-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/usb/storage/uas.c:928:24: warning: initialization of 'long unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-     928 |         .driver_info = (flags) }
-         |                        ^
-   drivers/usb/storage/unusual_uas.h:100:1: note: in expansion of macro 'UNUSUAL_DEV'
+   In file included from drivers/usb/storage/uas.c:931:
+>> drivers/usb/storage/unusual_uas.h:100:1: error: incompatible pointer to integer conversion initializing 'kernel_ulong_t' (aka 'unsigned long') with an expression of type 'void *' [-Wint-conversion]
      100 | UNUSUAL_DEV(0x13fd, 0x3940, 0x0310, 0x0310,
-         | ^~~~~~~~~~~
-   drivers/usb/storage/uas.c:928:24: note: (near initialization for 'uas_usb_ids[9].driver_info')
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     101 |                 "Initio Corporation",
+         |                 ~~~~~~~~~~~~~~~~~~~~~
+     102 |                 "external DVD burner ECD819-SU3",
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     103 |                 USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     104 |                 NULL),
+         |                 ~~~~~
+   drivers/usb/storage/uas.c:928:17: note: expanded from macro 'UNUSUAL_DEV'
      928 |         .driver_info = (flags) }
-         |                        ^
-   drivers/usb/storage/unusual_uas.h:100:1: note: in expansion of macro 'UNUSUAL_DEV'
-     100 | UNUSUAL_DEV(0x13fd, 0x3940, 0x0310, 0x0310,
-         | ^~~~~~~~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for LEDS_EXPRESSWIRE
-   Depends on [n]: GPIOLIB [=n] || NEW_LEDS [=y] && GPIOLIB [=n]
-   Selected by [m]:
-   - BACKLIGHT_KTD2801 [=m] && HAS_IOMEM [=y] && BACKLIGHT_CLASS_DEVICE [=y]
+         |                        ^~~~~~~
+   1 error generated.
 
 
-vim +928 drivers/usb/storage/uas.c
+vim +100 drivers/usb/storage/unusual_uas.h
 
-115bb1ffa54c39 Matthew Wilcox 2010-10-07  923  
-79b4c06112f12c Hans de Goede  2013-10-25  924  #define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
-79b4c06112f12c Hans de Goede  2013-10-25  925  		    vendorName, productName, useProtocol, useTransport, \
-79b4c06112f12c Hans de Goede  2013-10-25  926  		    initFunction, flags) \
-79b4c06112f12c Hans de Goede  2013-10-25  927  { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
-79b4c06112f12c Hans de Goede  2013-10-25 @928  	.driver_info = (flags) }
-79b4c06112f12c Hans de Goede  2013-10-25  929  
+ > 100	UNUSUAL_DEV(0x13fd, 0x3940, 0x0310, 0x0310,
+   101			"Initio Corporation",
+   102			"external DVD burner ECD819-SU3",
+   103			USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+   104			NULL),
+   105	
 
 -- 
 0-DAY CI Kernel Test Service
