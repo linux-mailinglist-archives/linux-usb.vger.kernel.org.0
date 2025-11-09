@@ -1,92 +1,78 @@
-Return-Path: <linux-usb+bounces-30227-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30228-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C65DEC437E1
-	for <lists+linux-usb@lfdr.de>; Sun, 09 Nov 2025 04:22:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F9D7C438A2
+	for <lists+linux-usb@lfdr.de>; Sun, 09 Nov 2025 05:53:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECE4B3B2C24
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Nov 2025 03:22:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5F1E188B678
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Nov 2025 04:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BBA420013A;
-	Sun,  9 Nov 2025 03:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD5B51EA7CB;
+	Sun,  9 Nov 2025 04:53:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Qtsnr0Fg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T37iSCDK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC88199939
-	for <linux-usb@vger.kernel.org>; Sun,  9 Nov 2025 03:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F8C42AA9;
+	Sun,  9 Nov 2025 04:53:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762658552; cv=none; b=NIrrLzNisekdBxAZ0sWsn3DlyedVrxe+JPUc89Us8tXSprxV7ydqNssvW2VpeoCsMwG49YTWM63HrB5MD72eDaNd9ZlCmYOhaPvS7V5q64L9AtlEeM6sgT4m7s1R6em7qjbYiWLvPIMtlsGQYLegdHc0PzX8Unn34a3tsvM9SFA=
+	t=1762664024; cv=none; b=RHRIzoWVao48r2NUP7hmFTo+dCrPebNdTqCXOGzG22+sR+KA/tr9vEBZtorG1O8ijEvCSdB1zM1W06XR9bck7unBQOH0GvPd/QQtyrk0IBK433s1H/7feTFM9my3OpYWR/TO+496nHUhPAsFdYOtYz0j122u7iAePFNCFFcGQns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762658552; c=relaxed/simple;
-	bh=3EmPAJIBkghi884jANYlC0hB0hcjLSSglw3VMgChI3M=;
+	s=arc-20240116; t=1762664024; c=relaxed/simple;
+	bh=T6L7mDfV+M7uBHz72EwdgW2d+D+/M0d9PPUT1B0HJKw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OBYBDZs74l1odwKy/m66MMp7HWDZahjXdEjQrMWyhACpt8Ilg8UCAQu4uVyaHkXODjaHEzN32zMkg1UQGzRYkpN6fevwQosF6QwpCG4+jaTVSl1uCSGvEMQPEtDBkfu57eKwVxZv9YffzFi9vmnhJib7KMrZnVIbMtEXIDQh0Lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Qtsnr0Fg; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8b1b8264c86so200152585a.1
-        for <linux-usb@vger.kernel.org>; Sat, 08 Nov 2025 19:22:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1762658549; x=1763263349; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8cLuHhaL3JL1JYJOqeWR2ULSMS5K0VBLMyJHCPLGsTk=;
-        b=Qtsnr0Fg7pauw61be2foa5s+/Ae9hA6vJ7dXpnnnLRani8n3SAoRR4eiLLSLO98iPk
-         s/P07nxUZo/PRY9Hj5iylVhlsaZC6SBweomx+3aiwcu8X0SJce2rAI6pPWMXAmNHOxEh
-         oUOnuAdM+5jfuDc14DkDKVcLgbttUxnEXyx/7Iey9ka8lov/zZLKvqkuLrLjLHcowlyG
-         eZbfqPuZFG8ssZZC9kJau27MAfOh0KVc8r9jebG+l3D2KGFd8cSPzZWCAQwf4UeAnZMh
-         XaNsaaJ4fH2zT0GsJzkMPny1sUk9YT4nvoWOw4M1W6SK7iwvxgds0WUjnm4CbFruW4xe
-         uIUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762658549; x=1763263349;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8cLuHhaL3JL1JYJOqeWR2ULSMS5K0VBLMyJHCPLGsTk=;
-        b=b81AybpGZ8oRif86bm6LhCiYTEn4K39HsYRLvaIdO6JJ0dwVL8Qd99p6GOCBw5hRt8
-         ZAMIIZD/6ZyLsaISeT1ATLorkX8szD4Nz+nAIUdD4qM0mH9GtMPSapHlBUUcLbcEUxtu
-         ROGF2L5XCwtWQuT4BNR85/Co9Rxh1NW62zg/xuvP8HN8vqrhoPq1L919I60dMF+CVykr
-         aa8Y+cPIObHHbrZSOWvrdHZ0aDjf3nmYPsoxEbbHpEuo5AIMlB8D+dNMte//3bodx5il
-         DExWZOh+AnTEPgI9BOlaKb1PwS+zwa4f574lnQdi8hGSGiVbpUhySauSu+q+jN/oH+tq
-         SuOA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9wAvs5oiWUbTJZ6pEtWECmcGYzqOBOurZWt4FHitxuiB4owNGg9C7zgSLt5Ic4QUnNXhIN/1iXsA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/73/bafZ5vybGmH1GHNgtWOeR/kds1p1tuhILhmh6Y/JmWqsE
-	5sUPX/IofMIRc+CLQXWA2uSkBSEAbgXcT0asj+YeN/u9E+zvOSvZBmjhT2tAbsx9Xg==
-X-Gm-Gg: ASbGncuXt8jtFv5sny+cX6jlSjsDtV/WzCp4ifp8aY8blUYZ3AmD0ztuZgd1iz13E1H
-	arPT/OoEjdnFtjJe4lcsgd7bXS5o/ZewjKwApMrV7fTTHQWrX63mbK9f1otO08chfNP6myAr5wB
-	UsAJfoa81hH8bRAwVeTNeKNWgWZt848BG8PRsC1TaQnqJvSJgpH4yCGCjPz2qf86GovGyCL0Lkv
-	v/AjG4kLRqnRjEgA4V8Q/7f0ZWmAhI/JXaXTJCNGyn+JqKrqFBcNPqDsH/0DllPjg+YXJ3Vczzs
-	4Yw0fADGXuEQJrRvGCkYP1IDltENSTi3SuCVFk8mTr5UuIzrCqAJ2hznZQ0RoHdfc321l1lDeSY
-	4vzapTwTM/Oq6Dq0G2xJDsY3osGU7K+ijq4Svz1dkAqDWtZXAvdAn6CPlP1hRYR4vVoLWc70T4O
-	hwmA==
-X-Google-Smtp-Source: AGHT+IESs62WjYcVuQErurtuWMXrzAAH5ZJ5bpp8mg4PvP8T39E7vELINu/vugLftIyiCFp5DvXkTA==
-X-Received: by 2002:a05:620a:4404:b0:8a4:107a:6770 with SMTP id af79cd13be357-8b257f6a9dfmr513959585a.69.1762658549357;
-        Sat, 08 Nov 2025 19:22:29 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::db9a])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b23561a6d3sm741109585a.26.2025.11.08.19.22.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Nov 2025 19:22:28 -0800 (PST)
-Date: Sat, 8 Nov 2025 22:22:24 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: The-Luga <lugathe2@gmail.com>
-Cc: Terry Junge <linuxsound@cosmicgizmosystems.com>,
-	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org
-Subject: Re: [BUG] Edifier QR30 (2d99:a101, Jieli Technology) reboots itself
- when RGB brightness button is used under Linux
-Message-ID: <c5c863f0-1c68-4d49-ba9b-b55c0f71d30c@rowland.harvard.edu>
-References: <CALvgqEAq8ZWgG4Dyg_oL7_+nUDy+LUoTXi+-6aceO-AKtBS3Mg@mail.gmail.com>
- <3eb2564d-5008-434e-9698-99b0cbe4d1cc@cosmicgizmosystems.com>
- <CALvgqECkMdntW2He8C7EcvOtCL-PpiXM9xNXWHzGtgimDxezHA@mail.gmail.com>
- <d7e888a6-6a65-40c1-84af-058b97ca0178@rowland.harvard.edu>
- <CALvgqED=rBkNYGkFdOXjUi1g_vbLac5Z38Z9xCRfpF-Vmy4Mww@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OHGAT0TJhiLqIaYEDFMDGCMcDmQv8RW0tOK1PGO9d0m8ogdVyL0qdVK0C2QwSnD0ckF4ylGOpWdFVJMMZSZ8f7TUf3ZZuv87k1+qahkG+Rz/Fh8XMKBPXcvwZMyLwTI5gD2mucTfz7KncpDUCIItkOgit9C5pA+BzTs/c6x5wLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T37iSCDK; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762664021; x=1794200021;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T6L7mDfV+M7uBHz72EwdgW2d+D+/M0d9PPUT1B0HJKw=;
+  b=T37iSCDKxaN7u6RwNW4+RqlOqau+WLdG/UPuTtEpMw/3bjV3O4b4FMo2
+   agQCzKed1+JAD2s4PUE80lNSkD+wKYcSKLEQGgEcD1DUk47lBgHqECWUZ
+   Qp3pCOCA6dI9fwLZ1nMsTHBknzP54QJlsROTfcagpEF0czFN+Q9ouRD7v
+   zRBd1f+rnluuMWwO4wJ68sXzCiJDj/XTX2x8l7Hfz8pcGcacCE2Ldx4Q8
+   IP157yFdgjj/fWpDO8vJnn0I8EYN5QV+Vi854k3ibrSX1HGSysyekmlf0
+   XxULTFblMMNYkhC+Lk/GQ5mDJCIhTN2IyRMiSBjAMARx+xPsBWkVC2aNM
+   g==;
+X-CSE-ConnectionGUID: jLVN1ziBTFesC8c5qxS49Q==
+X-CSE-MsgGUID: 1FGlVVz0Sp2WQirCgaXzvw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11607"; a="64847204"
+X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
+   d="scan'208";a="64847204"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2025 20:53:41 -0800
+X-CSE-ConnectionGUID: h5x42WdvTqu1BX/UaJUSBw==
+X-CSE-MsgGUID: Tj0BVNGOSm68/3cRdyBYDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
+   d="scan'208";a="188227193"
+Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 08 Nov 2025 20:53:38 -0800
+Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vHxQm-0001mV-1n;
+	Sun, 09 Nov 2025 04:53:36 +0000
+Date: Sun, 9 Nov 2025 12:53:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: ccc194101@163.com, stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+	Chen Changcheng <chenchangcheng@kylinos.cn>
+Subject: Re: [PATCH] usb: usb-storage: No additional quirks need to be added
+ to the ECD819-SU3 optical drive.
+Message-ID: <202511091243.dnLsy9w5-lkp@intel.com>
+References: <20251107061046.32339-1-ccc194101@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -95,69 +81,60 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALvgqED=rBkNYGkFdOXjUi1g_vbLac5Z38Z9xCRfpF-Vmy4Mww@mail.gmail.com>
+In-Reply-To: <20251107061046.32339-1-ccc194101@163.com>
 
-On Sat, Nov 08, 2025 at 09:15:07PM -0300, The-Luga wrote:
-> Here are the steps I followed to gather this data:
-> 
-> 1. I ran my VM, with the speaker on the host.
-> 2. I ran USBPcap on the guest.
-> 3. I ran usbmon on the host.
-> 4. I passed the speaker through to the guest.
-> 5. I increased the brightness by 3 levels.
-> 6. I decreased the brightness by 3 levels.
-> 7. The speaker did not reboot.
-> 8. I stopped the USBPcap and usbmon logs.
-> 
-> Next, with the QR30 already connected to the guest, I ran USBPcap
-> again and adjusted the brightness up 3 times and down 3 times.
+Hi,
 
-While I see a bunch of interrupt transfers sending HID data from the 
-speaker to the computer, I don't see anything in any of the three 
-capture files indicating that the computer is telling the speaker to 
-change its brightness.
+kernel test robot noticed the following build warnings:
 
-> I hope this helps.
+[auto build test WARNING on 284922f4c563aa3a8558a00f2a05722133237fe8]
 
-I'm not sure that it does.  What would really help would be to have logs 
-containing absolutely nothing but the computer telling the speaker to 
-change its brightness (and the resulting disconnection and reconnection 
-of the speaker, if they occur).
+url:    https://github.com/intel-lab-lkp/linux/commits/ccc194101-163-com/usb-usb-storage-No-additional-quirks-need-to-be-added-to-the-ECD819-SU3-optical-drive/20251107-141330
+base:   284922f4c563aa3a8558a00f2a05722133237fe8
+patch link:    https://lore.kernel.org/r/20251107061046.32339-1-ccc194101%40163.com
+patch subject: [PATCH] usb: usb-storage: No additional quirks need to be added to the ECD819-SU3 optical drive.
+config: nios2-randconfig-001-20251109 (https://download.01.org/0day-ci/archive/20251109/202511091243.dnLsy9w5-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251109/202511091243.dnLsy9w5-lkp@intel.com/reproduce)
 
-For example, to see what happens when you try to change the brightness
-under Linux, do this:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511091243.dnLsy9w5-lkp@intel.com/
 
-	Plug the speaker into the computer.
+All warnings (new ones prefixed by >>):
 
-	Try to make sure, as far as you can, that no program
-	is sending audio output to the speaker.
+>> drivers/usb/storage/uas.c:928:24: warning: initialization of 'long unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+     928 |         .driver_info = (flags) }
+         |                        ^
+   drivers/usb/storage/unusual_uas.h:100:1: note: in expansion of macro 'UNUSUAL_DEV'
+     100 | UNUSUAL_DEV(0x13fd, 0x3940, 0x0310, 0x0310,
+         | ^~~~~~~~~~~
+   drivers/usb/storage/uas.c:928:24: note: (near initialization for 'uas_usb_ids[9].driver_info')
+     928 |         .driver_info = (flags) }
+         |                        ^
+   drivers/usb/storage/unusual_uas.h:100:1: note: in expansion of macro 'UNUSUAL_DEV'
+     100 | UNUSUAL_DEV(0x13fd, 0x3940, 0x0310, 0x0310,
+         | ^~~~~~~~~~~
 
-	Start usbmon.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for LEDS_EXPRESSWIRE
+   Depends on [n]: GPIOLIB [=n] || NEW_LEDS [=y] && GPIOLIB [=n]
+   Selected by [m]:
+   - BACKLIGHT_KTD2801 [=m] && HAS_IOMEM [=y] && BACKLIGHT_CLASS_DEVICE [=y]
 
-	Change the brightness, just one level, and wait for the
-	speaker to disconnect & reconnect.  (If this requires running
-	a program to control the speaker, start it up _before_ starting
-	usbmon.)
 
-	Stop usbmon.
+vim +928 drivers/usb/storage/uas.c
 
-For a similar experiment using the Windows driver, do this:
+115bb1ffa54c39 Matthew Wilcox 2010-10-07  923  
+79b4c06112f12c Hans de Goede  2013-10-25  924  #define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
+79b4c06112f12c Hans de Goede  2013-10-25  925  		    vendorName, productName, useProtocol, useTransport, \
+79b4c06112f12c Hans de Goede  2013-10-25  926  		    initFunction, flags) \
+79b4c06112f12c Hans de Goede  2013-10-25  927  { USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
+79b4c06112f12c Hans de Goede  2013-10-25 @928  	.driver_info = (flags) }
+79b4c06112f12c Hans de Goede  2013-10-25  929  
 
-	Plug the speaker into the computer.
-
-	Start up the guest OS and pass the speaker through to it.
-
-	Try to make sure, as far as you can, that no program on either
-	the host or the guest is sending audio output to the speaker.
-
-	Start USBPcap on the guest (and usbmon on the host, if you 
-	want).
-
-	Change the brightness, just one level.  (Again, if this requires
-	a program to control the speaker, start the program before 
-	starting the packet capture.)
-
-	Stop USBPcap (and usbmon).
-
-Alan Stern
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
