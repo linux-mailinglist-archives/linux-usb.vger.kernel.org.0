@@ -1,98 +1,75 @@
-Return-Path: <linux-usb+bounces-30235-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30236-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1503AC446CC
-	for <lists+linux-usb@lfdr.de>; Sun, 09 Nov 2025 21:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0937C446E7
+	for <lists+linux-usb@lfdr.de>; Sun, 09 Nov 2025 21:40:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C182A3AE07E
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Nov 2025 20:30:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A97333B05C1
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Nov 2025 20:40:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD4019C556;
-	Sun,  9 Nov 2025 20:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E889D26B0B7;
+	Sun,  9 Nov 2025 20:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="j5rEQe4G"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="wUuaVauM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563F71BCA1C
-	for <linux-usb@vger.kernel.org>; Sun,  9 Nov 2025 20:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4691A0BD6;
+	Sun,  9 Nov 2025 20:40:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762720252; cv=none; b=llP8SvouL97m41b2Of6GpdonGn02a3bNO67eJqTiYw8V3wJgdcjIsmGg+/uO2r5hyBicAnZ48QR20Yc0PNz6c5RlImOWO/HwRFm/vPGN/1J2SJKi6asNnD2bGrhHBhxDJ/jhQRLHo1voRpJtNPCGDmY6shjK/4plc+hmBsLP1fU=
+	t=1762720829; cv=none; b=ldxVnJWP42q4cCeRkxeF55wYw5RikAc96abFI/iip8NAfw5AzSdO38arU//FxzixTArhMYfkF9paQl2HitnFD3q37P4Le91n6Ug2NnKxtWAJranV/tJFyxjnl/MhSUS0/LDqN5kNn+q60aunP/djSc/sXiVSR33KubhSwksIrDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762720252; c=relaxed/simple;
-	bh=Fon7bVBHqCWs7RZgnZ1+1vai0j+ZDPjfvC0UsNzMFyw=;
+	s=arc-20240116; t=1762720829; c=relaxed/simple;
+	bh=IMyNr6qrkO6d2PRolblpwhjRIVpF93t8I4D1MPZrVk4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FsZpjHqbVYIZQ0srv/a1nrVUnhkV9zkd8ym/xH8yIxMzw9wWtt74xxm6JWHG0ZUtwNXv2c2evcGAKbDHe1ruKayJpVGpbW7EK1UBzMSbbxNIZWyRmYcDfH5AJIYMqbVZk9Dj/6etBIu3uMygpiBPFKwmIXGvo2AV+jq2ud8QV+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=j5rEQe4G; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8824ce98111so4879536d6.0
-        for <linux-usb@vger.kernel.org>; Sun, 09 Nov 2025 12:30:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1762720250; x=1763325050; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T+zoPi7ReVo4yKaMu58q1KOxz/re+Q4m5E7lC8bmcxI=;
-        b=j5rEQe4GcgXHW2Z+Ys9MM3TW3sOCHRDF+7byq+HVppjYW3WKJoGL8yFDvhO8N1d8KE
-         eI0tzspCNFt5NXJOH/dqQwqi5ZYu+SUPgoaMUmXc+YvSga/mrV8x3nw/vqJs+Zibt+XG
-         WXF9aJf7MSLPAn46IaYHxERA0Z5JvfLXaJoDSJtzIyDg521cJaqqr+FjaYBzhrWKRDJG
-         vly81TlwvRmxsrCRtCXJSGAlhYHQOP+KqkcdFxsGnnOrjby/TdHTxxSeYtG0Um9VJLOX
-         xtZpbKqvGgOZ42IB2LIZIYxw0jf6rWHom/+zXxv7Nl5Mp7/fmPmSKqu5e7rmtHsex7hW
-         nWRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762720250; x=1763325050;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T+zoPi7ReVo4yKaMu58q1KOxz/re+Q4m5E7lC8bmcxI=;
-        b=DcLHcm835IFhfYpc4CU18MWmbarzkdeP+T1bwQU+OATuxkC/urXm2ISNS8V1ygfpPW
-         dYwFMU+Bx01sFdbtQG3r9eTDIokFnul1L1lalyRa37PUw8rg/YK0MAWW1/xA9HIw5/Lo
-         W737+sUVxnOpLJUKjJz9HiyHRrHixspeeFj094zPXOinJwdwveI0wYSFWNZsR7Ly6aYX
-         9ob9ObBB58tXWEki9Nv01xFftS5uFb47fOcrLC1v4IzgFz7wSg1/MsgJV4ccjATHYtWw
-         j3o1XSgP7CghJPtkKhXvW9mrOJ4yIT2zhMmmvVDcIHc2uLoLKKPyHo+sZJdJq3n/s3UE
-         RC2w==
-X-Forwarded-Encrypted: i=1; AJvYcCWuGRh0X/mGSnFxjCCrU6QGzZOHJtPXZyLS1BMBm8JanQkCS5bdsrSH3Z6jA1DraYnkltv37fXRf4M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxz60fMWhWz+1MlnHX4DiK7gbQw1TdooQJk442/Rbr1z3lR/Vkn
-	OFlxB7U5llEMiUjsB6ucYmFAs4J+Rx04fX1+cq8HHEsWu1oUHuiOOwDmqel95MU63A==
-X-Gm-Gg: ASbGncvqXaUxxFxfIdWXF0HqXrMKvPIG88yJlRJmS+Errwkq81ATX4ioGrLQ9Il8xJ8
-	SDY5ESFJYBAWOLjT8mS3YqGFbb5Nt695rIy/UgAwqFCUYqOGW7jWDpfoMFhJk27bwGyn7K/likt
-	WvlYFx2uGmkbNB6mH/GBIpA0I02afnv8pKgS6roxcqDS6eYztE0QOggE/UUW4WiQeoppDmj+jx0
-	imdwk2ULnl6koImY0DSYwFIHat1P113n8LZ3M+UIq2cNX2dZ832dvVANvB0OFDkuPXndPW0E9vm
-	ZVE1lfrDJeD+WFKAa3vsRuLDrkn5AtBMJgpFA2+PaGE1sfXcfYkus0DOtF2WUSoLWBMa7j41iib
-	3iG2jCS9E6niAmuBQ0RvZaeiAz7T6eooQbX0YFSL67xzQQ060y8TRS635HN+mMvc/cPuERjP13D
-	NGjQ==
-X-Google-Smtp-Source: AGHT+IHHifTVv9Ze79r9HQWDPss+Dk+gNK4gj+p2SjnA94jCI+5ReaBS6mbIyqbtvcOiDvcGREn9xw==
-X-Received: by 2002:ad4:5761:0:b0:880:46a7:b1c3 with SMTP id 6a1803df08f44-88238622d96mr90879136d6.28.1762720250249;
-        Sun, 09 Nov 2025 12:30:50 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::db9a])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8823892b84bsm38367086d6.10.2025.11.09.12.30.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Nov 2025 12:30:49 -0800 (PST)
-Date: Sun, 9 Nov 2025 15:30:46 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: The-Luga <lugathe2@gmail.com>
-Cc: Michal Pecio <michal.pecio@gmail.com>,
-	Terry Junge <linuxsound@cosmicgizmosystems.com>,
-	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org
-Subject: Re: [BUG] Edifier QR30 (2d99:a101, Jieli Technology) reboots itself
- when RGB brightness button is used under Linux
-Message-ID: <6999b5b2-a242-432e-8100-5d8ee58bcae8@rowland.harvard.edu>
-References: <3eb2564d-5008-434e-9698-99b0cbe4d1cc@cosmicgizmosystems.com>
- <CALvgqECkMdntW2He8C7EcvOtCL-PpiXM9xNXWHzGtgimDxezHA@mail.gmail.com>
- <d7e888a6-6a65-40c1-84af-058b97ca0178@rowland.harvard.edu>
- <CALvgqED=rBkNYGkFdOXjUi1g_vbLac5Z38Z9xCRfpF-Vmy4Mww@mail.gmail.com>
- <c5c863f0-1c68-4d49-ba9b-b55c0f71d30c@rowland.harvard.edu>
- <CALvgqEAo8-MhE3ievoDkq4AOxRZ2E52kcko+GxYyf+WZE2H0=g@mail.gmail.com>
- <20251109092450.693bcbe5.michal.pecio@gmail.com>
- <CALvgqEC1EpJy58LhppgLYkCyaZL+qv34b8PmvTvJV8DYfp=gzA@mail.gmail.com>
- <25f2419a-ee91-41eb-9446-87d238b4c7c4@rowland.harvard.edu>
- <CALvgqEBu_RzQYRSJnbu58XZt5wHX6PRD8i-J7Tovh7+KuhOyag@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cXGIxULIPs91Dx2FjONJ7rE6suhFjZbyXRIVWI1nWC2ZjHs0yu1HM2Hv04GxwXVxa+UuctRjiYNT//fPslO0JeO7df5p/6YDx/oteSC8ozuxUj8TaXbzfyobL2NeRnE6PrLUdetMPKJ3Nr22sX955s7Ul3Ka/EIf9nuQ246MIh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=wUuaVauM; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=BfmRhkxrsEs9tOM8wGbk7dXcVXNceBqTXcIhtt2SrKs=; b=wUuaVauMMR7ErCaLipgahv02uK
+	f8zmYZUSkXrkSeIWVD+p2We+E7S0R1h/RkWnDRzYS23UkSGwmELAbRJJxSREYjeqifZdYxQ0MI7Y8
+	whP1b+2iLCrarO1lAoXJmD7YCetyf1ykJN7sVe3HCohmhOOvBIYllaLsgF2qgYoPuJ6bpGVgIgYwX
+	WVTBkowQ1Lmcdjvk4p6fM2kbY7LuhZft2NVC8ulf4OPzi+fEUEktbxyTH2D3vg2+jh6CBx75Obxt7
+	6/7552MEzeebUdxzenriy13HTG10/jzbqdfcj+Rdt/3+FhTjfYrzTwilZk/MP+73IUGSCKVk2vREG
+	7z5iDtNA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vICCw-00000007AxF-0Wo7;
+	Sun, 09 Nov 2025 20:40:18 +0000
+Date: Sun, 9 Nov 2025 20:40:18 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Christian Brauner <brauner@kernel.org>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Ard Biesheuvel <ardb@kernel.org>, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, jack@suse.cz, raven@themaw.net,
+	miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org,
+	linux-mm@kvack.org, linux-efi@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev, kees@kernel.org, rostedt@goodmis.org,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v2 22/50] convert efivarfs
+Message-ID: <20251109204018.GH2441659@ZenIV>
+References: <20251028174540.GN2441659@ZenIV>
+ <20251028210805.GP2441659@ZenIV>
+ <CAMj1kXF6tvg6+CL_1x7h0HK1PoSGtxDjc0LQ1abGQBd5qrbffg@mail.gmail.com>
+ <9f079d0c8cffb150c0decb673a12bfe1b835efc9.camel@HansenPartnership.com>
+ <20251029193755.GU2441659@ZenIV>
+ <CAMj1kXHnEq97bzt-C=zKJdV3BK3EDJCPz3Pfyk52p2735-4wFA@mail.gmail.com>
+ <20251105-aufheben-ausmusterung-4588dab8c585@brauner>
+ <423f5cc5352c54fc21e0570daeeddc4a58e74974.camel@HansenPartnership.com>
+ <20251105-sohlen-fenster-e7c5af1204c4@brauner>
+ <20251105-vorbild-zutreffen-fe00d1dd98db@brauner>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -101,78 +78,21 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALvgqEBu_RzQYRSJnbu58XZt5wHX6PRD8i-J7Tovh7+KuhOyag@mail.gmail.com>
+In-Reply-To: <20251105-vorbild-zutreffen-fe00d1dd98db@brauner>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Sun, Nov 09, 2025 at 01:44:31PM -0300, The-Luga wrote:
-> Sure!
+On Wed, Nov 05, 2025 at 02:43:34PM +0100, Christian Brauner wrote:
 
-> >echo 0 | sudo tee /sys/bus/usb/devices/3-2/bConfigurationValue
-> 0
-> ```
-> Here the device is disconnected (unconfigured but still physically on
-> the usb port).
-> 
-> >cat /sys/bus/usb/devices/3-2/bConfigurationValue
-> 
-> has no output.
+> -static void filesystems_freeze_callback(struct super_block *sb, void *unused)
+> +static void filesystems_freeze_callback(struct super_block *sb, void *bool_freeze_all)
+>  {
+> +	bool freeze_all = *(bool *)bool_freeze_all;
+> +
+>  	if (!sb->s_op->freeze_fs && !sb->s_op->freeze_super)
+>  		return;
+>  
+> +	if (!freeze_all) {
 
-As it should.
-
-> ```
-> >sudo lsusb -v -d 2d99:a101
-...
-> >     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        3
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass         3 Human Interface Device
->       bInterfaceSubClass      0 [unknown]
->       bInterfaceProtocol      0
->       iInterface              0
->         HID Device Descriptor:
->           bLength                 9
->           bDescriptorType        33
->           bcdHID               2.01
->           bCountryCode            0 Not supported
->           bNumDescriptors         1
->           bDescriptorType        34 Report
->           wDescriptorLength      66
->           Report Descriptors:
->             ** UNAVAILABLE **
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x84  EP 4 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               1
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x04  EP 4 OUT
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               1
-> Device Status:     0x0000
->   (Bus Powered)
-> ```
-> It seems that the output of lsusb has not changed.
-
-My mistake.  Unconfiguring the device prevents lsusb from accessing the 
-report descriptor.  What you really need to do is unbind the interface 
-first.
-
-But never mind that.  Try using the usbhid-dump program instead of 
-lsusb.  usbhid-dump does not require you to unbind anything or change 
-bConfigurationValue, so it's easier to use anyway.
-
-Alan Stern
+Minor nitpick: do we even need a dereference here?  Just check
+whether the argument is NULL and adjust the caller...
 
