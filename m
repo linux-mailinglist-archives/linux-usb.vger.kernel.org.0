@@ -1,228 +1,140 @@
-Return-Path: <linux-usb+bounces-30299-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30300-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61FCFC486AB
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 18:48:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB888C49286
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 20:59:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33BC9189030C
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 17:49:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69F0A3A2F2C
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 19:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA4652DE1E6;
-	Mon, 10 Nov 2025 17:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bPmV3FTS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DECC633F373;
+	Mon, 10 Nov 2025 19:57:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cosmicgizmosystems.com (beyond-windows.com [63.249.102.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDAA2E427C;
-	Mon, 10 Nov 2025 17:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3941D221F03;
+	Mon, 10 Nov 2025 19:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.249.102.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762796903; cv=none; b=DZvOAYgVJrpSV8TMGFgfRTxF/Q3aEyJBqQI0767gWz7dsk/Re7yit6cffDIC6GqqmuFvi8okkpdNhMFmy4vvJ82Z07HPgUG4h4QYvK5ztxstcJTcgY9PKW2nRlXhTu/0atoo+CW89gj3NcXoWmRh7QSge+45ESBZcynijhOlYiU=
+	t=1762804642; cv=none; b=b2N7DKDy0AnqH/Tt+KMNCqweT2O/8VBYp7k2DnzT03tMl5YiEsr+ADiBHwtHBuUoFimdAkkmHAqfaUTOk8Ap2HTE5z6wl2JsoKbPKMk/BywNv3LzLDxbF5Re8zUMFkPTSPvj8LuyyY+aVXa5UZM70qRrM35DpRxMgodZv6HxjAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762796903; c=relaxed/simple;
-	bh=bys+Rr/XBUQgHXVigHrpttbPULpUxjaJM+HyZMnG/gQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ua6PTEPFZFvmqh1LOkEoYrCptovhcMB3MsAUzf1aYpMy0tWmrXNJP5TgOhNV3jOoBve/UNS2PsmhUJdnVme2ijFCQ8RkIiLZhs5s31Jip2jknNC6yO/YTqt92tGuqpoavWLbPgtDHDU+3tzZVFmHUHxeTe1RTvkHnY2UnV7hj/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bPmV3FTS; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762796902; x=1794332902;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bys+Rr/XBUQgHXVigHrpttbPULpUxjaJM+HyZMnG/gQ=;
-  b=bPmV3FTSEW0CoJqjMMvuTXSKQDBaiuikDHcdzXAr5WehJuwP020Qc31a
-   W6E8nXUkF4AHDYq5KcmdXkWPtTZuRjZdqCgBmQC5RNfEUTsUh3J6al7sd
-   o7dTNi7BqnQiU3LXJ4i2LT3WJUHe8kCSPQW/gJLTr//VRpD1+ObJugX8A
-   vkDy2HwgqaMwFgEC0VQiAcCu0ZKmjhybeg2t+NmKSGbgBvxDYwqeNZSAe
-   pbmZNRHvMSvh6xRp4fS+g64ukaCq4uCxjZkc4/JGLTWc5F01GXLb73jbz
-   wk90fGxmAtg1kkAs4aIKd4MlHl4ytIIKGMPq5nCNjSz/pSleLsi7WDJkl
-   A==;
-X-CSE-ConnectionGUID: W1IupyCCSKmFaCKIJ8y6TQ==
-X-CSE-MsgGUID: ZGvAecDEQAKNSiGHu0SIIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="75538378"
-X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208";a="75538378"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 09:48:21 -0800
-X-CSE-ConnectionGUID: /O8GlZwMSK2BgJzo7Rdmrw==
-X-CSE-MsgGUID: xzvJOyPpTGC3nzaB+FSESw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208";a="225990433"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 10 Nov 2025 09:48:17 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vIVzz-0000mb-0T;
-	Mon, 10 Nov 2025 17:48:15 +0000
-Date: Tue, 11 Nov 2025 01:47:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: caohang@eswincomputing.com, gregkh@linuxfoundation.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, Thinh.Nguyen@synopsys.com,
-	p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, ningyu@eswincomputing.com,
-	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
-	Hang Cao <caohang@eswincomputing.com>,
-	Senchuan Zhang <zhangsenchuan@eswincomputing.com>
-Subject: Re: [PATCH v7 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
-Message-ID: <202511110121.BwTv4Fex-lkp@intel.com>
-References: <20251110024500.104-1-caohang@eswincomputing.com>
+	s=arc-20240116; t=1762804642; c=relaxed/simple;
+	bh=ki61gAvPmT3qzQg8Zlod4meWkinJwzolM8TgHrw11qQ=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=XkcJvws08NbyqnkyzBCEfhrmr1wfLPrwyBd/YKvrYb40VPykJlJzOYZC9JQrBt6aGeJ6etar1dBRobsdVd56N8zmoUeM0sx/Cc7VWegzYXq2yHz1hTvFxmgpfo645ifw63Cspqhz+DFdcECzrg/2h6DdVXXfYocnNy1ivKeHQHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com; spf=pass smtp.mailfrom=cosmicgizmosystems.com; arc=none smtp.client-ip=63.249.102.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cosmicgizmosystems.com
+Received: from [10.0.0.100] (c-71-193-224-155.hsd1.wa.comcast.net [71.193.224.155])
+	by host11.cruzio.com (Postfix) with ESMTPSA id 2D78924AB7A9;
+	Mon, 10 Nov 2025 11:57:14 -0800 (PST)
+Message-ID: <52fc4350-2930-44d3-b844-03f00806f142@cosmicgizmosystems.com>
+Date: Mon, 10 Nov 2025 11:57:10 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251110024500.104-1-caohang@eswincomputing.com>
-
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next next-20251110]
-[cannot apply to usb/usb-linus robh/for-next pza/reset/next pza/imx-drm/next linus/master v6.18-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/caohang-eswincomputing-com/dt-bindings-usb-Add-ESWIN-EIC7700-USB-controller/20251110-104957
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20251110024500.104-1-caohang%40eswincomputing.com
-patch subject: [PATCH v7 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
-config: xtensa-randconfig-r073-20251110 (https://download.01.org/0day-ci/archive/20251111/202511110121.BwTv4Fex-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 13.4.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511110121.BwTv4Fex-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511110121.BwTv4Fex-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/usb/dwc3/dwc3-generic-plat.c: In function 'dwc3_generic_probe':
->> drivers/usb/dwc3/dwc3-generic-plat.c:132:56: warning: missing terminating " character
-     132 |                         return dev_err_probe(dev, ret, "failed to init
-         |                                                        ^
->> drivers/usb/dwc3/dwc3-generic-plat.c:132:56: error: missing terminating " character
-     132 |                         return dev_err_probe(dev, ret, "failed to init
-         |                                                        ^~~~~~~~~~~~~~~
->> drivers/usb/dwc3/dwc3-generic-plat.c:133:54: error: stray '\' in program
-     133 |                                              platform\n");
-         |                                                      ^
->> drivers/usb/dwc3/dwc3-generic-plat.c:133:46: error: 'platform' undeclared (first use in this function)
-     133 |                                              platform\n");
-         |                                              ^~~~~~~~
-   drivers/usb/dwc3/dwc3-generic-plat.c:133:46: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/usb/dwc3/dwc3-generic-plat.c:133:54: error: expected ')' before 'n'
-     133 |                                              platform\n");
-         |                                                      ^~
-         |                                                      )
-   drivers/usb/dwc3/dwc3-generic-plat.c:132:45: note: to match this '('
-     132 |                         return dev_err_probe(dev, ret, "failed to init
-         |                                             ^
-   drivers/usb/dwc3/dwc3-generic-plat.c:133:56: warning: missing terminating " character
-     133 |                                              platform\n");
-         |                                                        ^
-   drivers/usb/dwc3/dwc3-generic-plat.c:133:56: error: missing terminating " character
-     133 |                                              platform\n");
-         |                                                        ^~~
->> drivers/usb/dwc3/dwc3-generic-plat.c:133:56: error: expected ';' before '}' token
-     133 |                                              platform\n");
-         |                                                        ^
-         |                                                        ;
-     134 |         }
-         |         ~                                               
+User-Agent: Mozilla Thunderbird
+From: Terry Junge <linuxhid@cosmicgizmosystems.com>
+Subject: Re: [BUG] Edifier QR30 (2d99:a101, Jieli Technology) reboots itself
+ when RGB brightness button is used under Linux
+To: The-Luga <lugathe2@gmail.com>, Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ Michal Pecio <michal.pecio@gmail.com>,
+ Terry Junge <linuxsound@cosmicgizmosystems.com>,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+ Benjamin Tissoires <bentiss@kernel.org>
+References: <c5c863f0-1c68-4d49-ba9b-b55c0f71d30c@rowland.harvard.edu>
+ <CALvgqEAo8-MhE3ievoDkq4AOxRZ2E52kcko+GxYyf+WZE2H0=g@mail.gmail.com>
+ <20251109092450.693bcbe5.michal.pecio@gmail.com>
+ <CALvgqEC1EpJy58LhppgLYkCyaZL+qv34b8PmvTvJV8DYfp=gzA@mail.gmail.com>
+ <25f2419a-ee91-41eb-9446-87d238b4c7c4@rowland.harvard.edu>
+ <CALvgqEBu_RzQYRSJnbu58XZt5wHX6PRD8i-J7Tovh7+KuhOyag@mail.gmail.com>
+ <6999b5b2-a242-432e-8100-5d8ee58bcae8@rowland.harvard.edu>
+ <CALvgqEBD05PwMpm00cAbFkpSWpCFP9jaBU0r-8+op+RGPtkktg@mail.gmail.com>
+ <7adc816d-169d-4213-bb67-9d070af3c4a7@cosmicgizmosystems.com>
+ <30528153-95f1-4ec7-a6bf-5da396441f86@rowland.harvard.edu>
+ <xrfmda5rohporc3bjax35fc7xjziai6cmdt5svjak5rps6y6jz@k6h4zlt3jgg2>
+ <CALvgqEDZ=g+uvdSYqbD22sL_VP+n6Pda2xXuFAJyKkh3bjm6HQ@mail.gmail.com>
+ <CALvgqEC6UW96NEYOCM5v0m4x8Si0A7AwPuMpwXt3PMqkO3eqww@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CALvgqEC6UW96NEYOCM5v0m4x8Si0A7AwPuMpwXt3PMqkO3eqww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-vim +132 drivers/usb/dwc3/dwc3-generic-plat.c
 
-    71	
-    72	static int dwc3_generic_probe(struct platform_device *pdev)
-    73	{
-    74		const struct dwc3_generic_config *plat_config;
-    75		struct dwc3_probe_data probe_data = {};
-    76		struct device *dev = &pdev->dev;
-    77		struct dwc3_generic *dwc3g;
-    78		struct resource *res;
-    79		int ret;
-    80	
-    81		dwc3g = devm_kzalloc(dev, sizeof(*dwc3g), GFP_KERNEL);
-    82		if (!dwc3g)
-    83			return -ENOMEM;
-    84	
-    85		dwc3g->dev = dev;
-    86	
-    87		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-    88		if (!res) {
-    89			dev_err(&pdev->dev, "missing memory resource\n");
-    90			return -ENODEV;
-    91		}
-    92	
-    93		dwc3g->resets = devm_reset_control_array_get_optional_exclusive(dev);
-    94		if (IS_ERR(dwc3g->resets))
-    95			return dev_err_probe(dev, PTR_ERR(dwc3g->resets), "failed to get resets\n");
-    96	
-    97		ret = reset_control_assert(dwc3g->resets);
-    98		if (ret)
-    99			return dev_err_probe(dev, ret, "failed to assert resets\n");
-   100	
-   101		/* Not strict timing, just for safety */
-   102		udelay(2);
-   103	
-   104		ret = reset_control_deassert(dwc3g->resets);
-   105		if (ret)
-   106			return dev_err_probe(dev, ret, "failed to deassert resets\n");
-   107	
-   108		ret = devm_add_action_or_reset(dev, dwc3_generic_reset_control_assert, dwc3g->resets);
-   109		if (ret)
-   110			return ret;
-   111	
-   112		ret = devm_clk_bulk_get_all_enabled(dwc3g->dev, &dwc3g->clks);
-   113		if (ret < 0)
-   114			return dev_err_probe(dev, ret, "failed to get clocks\n");
-   115	
-   116		dwc3g->num_clocks = ret;
-   117		dwc3g->dwc.dev = dev;
-   118		probe_data.dwc = &dwc3g->dwc;
-   119		probe_data.res = res;
-   120		probe_data.ignore_clocks_and_resets = true;
-   121	
-   122		plat_config = of_device_get_match_data(dev);
-   123		if (!plat_config) {
-   124			probe_data.properties = DWC3_DEFAULT_PROPERTIES;
-   125			goto core_probe;
-   126		}
-   127	
-   128		probe_data.properties = plat_config->properties;
-   129		if (plat_config->init) {
-   130			ret = plat_config->init(dwc3g);
-   131			if (ret)
- > 132				return dev_err_probe(dev, ret, "failed to init
- > 133						     platform\n");
-   134		}
-   135	
-   136	core_probe:
-   137		ret = dwc3_core_probe(&probe_data);
-   138		if (ret)
-   139			return dev_err_probe(dev, ret, "failed to register DWC3 Core\n");
-   140	
-   141		return 0;
-   142	}
-   143	
+On 11/9/2025 10:54 PM, The-Luga wrote:
+> PROBLEM IDENTIFIED AND SOLVED (almost)
+> 
+> Reading this: https://docs.kernel.org/hid/hidintro.html
+> and https://github.com/torvalds/linux/blob/master/drivers/hid/hid-quirks.c
+> 
+> I decided to try the HID_QUIRK_NO_IGNORE:
+> 
+> I added to my kernel cmdline:
+> 
+> usbhid.quirks=0x2d99:0xa101:0x400
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Are you sure?
+
+HID_QUIRK_ALWAYS_POLL = 0x400
+would stop suspending the device.
+
+HID_QUIRK_NO_IGNORE = 0x40000000
+would stop ignoring a device that is in the ignore list already.
+
+> 
+> And everything works as it should.
+> 
+> The usb bus is finally not silent and the speaker is not rebooting.
+> 
+> I guess, this device just need to be included on the quirk list to
+> close this bug?
+> 
+> ```
+>> sudo cat /sys/kernel/debug/usb/usbmon/3u
+> ffff8903020c1800 42570546 C Ii:3:002:4 0:1 64 = 2fbbec66 00021002
+> 21000000 00000000 00000000 00000000 00000000 00000000
+> ffff8903020c1800 42570552 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 44428557 C Ii:3:002:4 0:1 64 = 2fbbec66 00021001
+> 20000000 00000000 00000000 00000000 00000000 00000000
+> ffff8903020c1800 44428560 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 47318560 C Ii:3:002:4 0:1 64 = 2fbbece3 00280201
+> 0d020102 00001403 02000000 14ff0302 000014ff 04e200ff
+> ffff8903020c1800 47318565 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 47319560 C Ii:3:002:4 0:1 64 = 2fbbece3 00280202
+> 0d020700 000014ff 08ff2f15 14ff09ff ffff14ff 0a32ff82
+> ffff8903020c1800 47319563 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 47671570 C Ii:3:002:4 0:1 64 = 2fbbece3 00280201
+> 0d020102 00001e03 02000000 1eff0302 00001eff 04e200ff
+> ffff8903020c1800 47671581 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 47672558 C Ii:3:002:4 0:1 64 = 2fbbece3 00280202
+> 0d020700 00001eff 08ff2f15 1eff09ff ffff1eff 0a32ff82
+> ffff8903020c1800 47672563 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 52600567 C Ii:3:002:4 0:1 64 = 2fbbece3 00280201
+> 0d0b0102 00001e03 02000000 1eff0302 00001eff 04e200ff
+> ffff8903020c1800 52600577 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 52601562 C Ii:3:002:4 0:1 64 = 2fbbece3 00280202
+> 0d0b0700 00001eff 08ff2f15 1eff09ff ffff1eff 0a32ff82
+> ffff8903020c1800 52601569 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 54112562 C Ii:3:002:4 0:1 64 = 2fbbece3 00280201
+> 0d0b0102 00002803 02000000 28ff0302 000028ff 04e200ff
+> ffff8903020c1800 54112569 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 54113557 C Ii:3:002:4 0:1 64 = 2fbbece3 00280202
+> 0d0b0700 000028ff 08ff2f15 28ff09ff ffff28ff 0a32ff82
+> ffff8903020c1800 54113562 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 54316567 C Ii:3:002:4 0:1 64 = 2fbbece3 00280201
+> 0d0b0102 00003203 02000000 32ff0302 000032ff 04e200ff
+> ffff8903020c1800 54316576 S Ii:3:002:4 -115:1 64 <
+> ffff8903020c1800 54317559 C Ii:3:002:4 0:1 64 = 2fbbece3 00280202
+> 0d0b0700 000032ff 08ff2f15 32ff09ff ffff32ff 0a32ff82
+> ```
 
