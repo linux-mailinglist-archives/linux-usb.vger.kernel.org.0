@@ -1,255 +1,179 @@
-Return-Path: <linux-usb+bounces-30283-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30284-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9389C46FDE
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 14:45:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D55E3C47537
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 15:48:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA8DA3BDC9D
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 13:39:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B430E3A1B56
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 14:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85D9C3128B5;
-	Mon, 10 Nov 2025 13:37:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA51313E0D;
+	Mon, 10 Nov 2025 14:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="OcCweNw3"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="E29/fQu+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx13.kaspersky-labs.com (mx13.kaspersky-labs.com [91.103.66.164])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9806C30E823;
-	Mon, 10 Nov 2025 13:36:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.103.66.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0702431329C
+	for <linux-usb@vger.kernel.org>; Mon, 10 Nov 2025 14:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762781819; cv=none; b=OoNqOPRPnIXI9L6vY+iIO5rg2J9neafWzenuJq78Mswf0r2UKF8gGjdQyhJlOTSw09QEd0xI+IyipF+VkDTBsFerD9HGIDpIf4eT/75Hutak16z2RPdfNGwHWgwXDB2sDdUB0Tt+j4+XOgMEYCAAiKtouq51wzvMGVaYBUEI0vc=
+	t=1762786019; cv=none; b=J1SsMQ/uNpXFLAVO9XklGDZdYUDCThu5LMJoL8WFu2SiK0h6wdCPxMkKjsa8YHROzJPODk3bvbMzw77UMfcdqC+1IPoH0j265cUmPAUS/XObFXd2xEfHKbrPaDIcPfE4nsNvJDpqcJ+B78ApEAguYLGpneYHRjrk82bD5xNQF+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762781819; c=relaxed/simple;
-	bh=TTVRf7PvrZHkwz5xS/sAIoR5ffgGm4Qc1T4+hdwRy6U=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ADK4SBpXUzbZ0AI55DDQ30DUaZNLvfNerZG6Yysegnc0gx5cuME7j+FYFv1kFIK84aZmxZuSU0I8OQV2/BE9bwCe0e++TYemvNkcZYbRxEHtJWiT52caqUsglMJnN8AisfwrIQKhdVRavCzGa+nYbIB2VEhs68EDud4Ut1srsWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=OcCweNw3; arc=none smtp.client-ip=91.103.66.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaspersky.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
-	s=mail202505; t=1762781809;
-	bh=Z24k+LQZs05VjiiN2ltNPT89oDxAmQ/6P/qF1hm3qv4=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=OcCweNw3vb9jy2lz7l6GQ8gmv0I+gcRQhVDkwPCpSDwr08Q3rHXVnJ7RBtgUnxbCQ
-	 O6i98Wt5XZdzXHgPmhdKwsyETn8WoruSckkFRovH7HbL1pucmgeFe6E9GTNLKf4d7c
-	 7Ls+iLFAVufN+zfDhUfdFEf5m5dNn7sFRqFSL6g3cprwx2FGOAQ4pm+vyx2D1Xrlo6
-	 ppfDT5lv7papwnVmUdLnQ8Z/MG8y9RRY/GMnX9sPOm5/pZnDhmgS1BcY6gAM4R/fTh
-	 wCIFliiGwCT2AFpzjys9p4h8/JMgZdGr10TmsJ5frMHSy41AFZ2Aibt8udJtlGleSS
-	 MfgjQJ6TaZRRg==
-Received: from relay13.kaspersky-labs.com (localhost [127.0.0.1])
-	by relay13.kaspersky-labs.com (Postfix) with ESMTP id 8C2263E24E5;
-	Mon, 10 Nov 2025 16:36:49 +0300 (MSK)
-Received: from mail-hq2.kaspersky.com (unknown [91.103.66.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail-hq2.kaspersky.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
-	by mailhub13.kaspersky-labs.com (Postfix) with ESMTPS id 86E023E21DC;
-	Mon, 10 Nov 2025 16:36:48 +0300 (MSK)
-Received: from zhigulin-p.avp.ru (10.16.104.190) by HQMAILSRV2.avp.ru
- (10.64.57.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Mon, 10 Nov
- 2025 16:36:29 +0300
-From: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
-To: " Chunfeng Yun  " <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>
-CC: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
-Subject: [PATCH] usb: gadget: pxa27x_udc: add proper errors hanling
-Date: Mon, 10 Nov 2025 16:36:09 +0300
-Message-ID: <20251110133612.159057-1-Pavel.Zhigulin@kaspersky.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1762786019; c=relaxed/simple;
+	bh=Zgbgz6Xx/nSV21RSqp5s3ioY3dD/63laARY8w4Ccz+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HwF1PL3sko3YqquGkRSrFEajZANE+mxYkRQlmAqsDP6oOXW2dP5WhodUsD4hJkzN3KVseqORTGmAXnR8lqcJ82+olCA/JfJD50Sg4c6/g5TJu1y2+6f3jAe72xZwlhTjnql4InqUe2wc9pHyjLMWxvwyJFpQVfkcHq8PDSLiiBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=E29/fQu+; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ed66b5abf7so34789181cf.1
+        for <linux-usb@vger.kernel.org>; Mon, 10 Nov 2025 06:46:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1762786017; x=1763390817; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FZfgovMoQxmHp2PRQokeGmF8rpreis0QhadSzO4SeuQ=;
+        b=E29/fQu+OECf16//0Gw2F96hzOEzofYIE+WA973ykgeZPYGpaRQtyw817e+mnvW+va
+         2u/358IbW0Y0CAeiq+B0fAuPI4OMsatH0/64lwjunbpt++0YtQAAH2zm+VxwBf84kUOG
+         ShoSikFHE0X5ujvmFqOcdW1rOvvuHctm5hEqsxp0OZXLeqj2yNr3vrchgwJFrke1wDJi
+         Hg4t+NUP82YASWCyzzyf6+cVG5qMFh/kOY0zerHYwJyEi2/i3jNtU/tii2r3P5g80WV2
+         74K7zyS3+N6cqgI8VeF3AL84MAQlDGeLCngoxVA04DtdejWGnOcMfeaFRe7E3zSwM1//
+         SJkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762786017; x=1763390817;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FZfgovMoQxmHp2PRQokeGmF8rpreis0QhadSzO4SeuQ=;
+        b=qB6eciaYzl3ZW7zAPz28dMTAsqse/mLCmDZFSM7xuXpLlGUw/qPbELrxQfZi4bn3xW
+         xu0m5RO7iXbEV5MmTOV3Em3ZCeGhqSbO0urvG2Ylc5xG3KFhVAcTdVAgDpj3RbEIJVlt
+         WjkpEDMTfFIAbgriiSMZ1PS39W/v5yrWKgWV6NuUoeFVXXBs4vt3kImtUZcAVGmWNS+x
+         xgYpvjRkCbtNthgZGzYJfUccZTdMt6wWff6SUUyIKvwu5xOtwTzASnTU270YX4gqg06I
+         G4FHmkHPsRza0mpYtuegd+fPpAiYAq5c3kPcoAuSUYEXp88qsMFJ/XiAn+rruQg7SQ4c
+         PwKA==
+X-Forwarded-Encrypted: i=1; AJvYcCWtzNtissXk8182WIUgr4hoDf/HRp7flsPmdJkryjBxjIS2VXQRHsFuryqaStoxyj/ZxTTLiy6clgc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkEEOVrP9v/RH+hrw69VX0ysgRZYHRyw9v5CDaAb/CjYuYmGjW
+	pjrvobjv+/fOLEqJ0SmP9aaYheNGRe5zVQX8P00y0XSCnkpIh36pbD4Ko8lJNpXiDQ==
+X-Gm-Gg: ASbGncvhz/XFgBC5+JHX5OpUAIf2d1jA5Pv5O3MVGy6l7kg8MjhfEYFsDzuWyUTc0ss
+	za7CQdG+1OYXHr6+hZw3v+gPaai+N8JK73P3HlyFNESM6dWS9ohe3yRDUmTd8hN18rsFeWcjLk3
+	lhmEraVKBqTTF+iCHCA3CeHpuA0QsnvkS4tnSAGoYIf0opjCLfnlwEjVnnPQAeA8mjE7XdDa22S
+	nycfAtZ44OgXdyfDZ7wcJvVSyAV8B8xiKbxLXZ4FwwaECOuET+/2Vc2k32VMzeBf6zY4/Xn7OIR
+	5BGksbPSbxfoC7votSe/QjFyMBK3PB3b0fyfbJsVbewdh/gpTXGLMS8p2QT5YGFF4Y1pLhbwMki
+	KiAPGFuzpQuxA6QoTRguhJGB5GnE+8foqhzS67vAULsZsPDrAB+w9IMHuNpX8MJsTugBqVdfpBM
+	MI1bUdJnn6751l4maQpBE=
+X-Google-Smtp-Source: AGHT+IHrvbbLLIzADaEDwAYPzqYzdSj271EqD3XikN5r8c8oqm2X595zkIdy1ah5lygJoU9kCZZiNg==
+X-Received: by 2002:a05:622a:1cc3:b0:4ed:b134:58e5 with SMTP id d75a77b69052e-4edb1345e86mr63104731cf.12.1762786016296;
+        Mon, 10 Nov 2025 06:46:56 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4eda56132c0sm48284811cf.7.2025.11.10.06.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Nov 2025 06:46:55 -0800 (PST)
+Date: Mon, 10 Nov 2025 09:46:53 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>, gregkh@linuxfoundation.org,
+	p.zabel@pengutronix.de, yoshihiro.shimoda.uh@renesas.com,
+	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	kuninori.morimoto.gx@renesas.com, geert+renesas@glider.be,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH 2/4] usb: host: ehci-platform: Call reset assert/deassert
+ on suspend/resume
+Message-ID: <74790e58-f1d1-4d7c-9b75-4176af44e1ff@rowland.harvard.edu>
+References: <20251106143625.3050119-1-claudiu.beznea.uj@bp.renesas.com>
+ <20251106143625.3050119-3-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdWDGpqdhCsA0MJqoL1JAiyVR-TA2YqDe+-S9Xf6c5O-gA@mail.gmail.com>
+ <64c74f86-7438-49da-b164-a8a113e47c32@tuxon.dev>
+ <CAMuHMdXG8w9jR9gr4av15VT69XNouqys5z4Rxx-nidnvnbN3dA@mail.gmail.com>
+ <5edec052-5e65-4d00-a182-6675ce579be1@tuxon.dev>
+ <CAMuHMdVqaQ=E43Wrg7GtDD_MGS5ibF9o1DfpDCAq-=F=Exph_Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: HQMAILSRV3.avp.ru (10.64.57.53) To HQMAILSRV2.avp.ru
- (10.64.57.52)
-X-KSE-ServerInfo: HQMAILSRV2.avp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 11/10/2025 13:26:37
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 197932 [Nov 10 2025]
-X-KSE-AntiSpam-Info: Version: 6.1.1.11
-X-KSE-AntiSpam-Info: Envelope from: Pavel.Zhigulin@kaspersky.com
-X-KSE-AntiSpam-Info: LuaCore: 75 0.3.75
- aab2175a55dcbd410b25b8694e49bbee3c09cdde
-X-KSE-AntiSpam-Info: {Tracking_cluster_exceptions}
-X-KSE-AntiSpam-Info: {Tracking_real_kaspersky_domains}
-X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: zhigulin-p.avp.ru:5.0.1,7.1.1;kaspersky.com:5.0.1,7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: {Tracking_white_helo}
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 11/10/2025 13:28:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 11/10/2025 12:24:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2025/11/10 10:58:00 #27905202
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 52
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVqaQ=E43Wrg7GtDD_MGS5ibF9o1DfpDCAq-=F=Exph_Q@mail.gmail.com>
 
-The udc_enable() function previously returned void and ignored
-potential errors from clk_enable(). This patch changes it to return
-int and propagates clock enable errors back to the caller.
+On Mon, Nov 10, 2025 at 10:29:22AM +0100, Geert Uytterhoeven wrote:
+> Hi Claudiu,
+> 
+> On Fri, 7 Nov 2025 at 19:42, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+> > On 11/7/25 10:01, Geert Uytterhoeven wrote:
+> > > On Thu, 6 Nov 2025 at 19:56, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+> > >> On 11/6/25 16:52, Geert Uytterhoeven wrote:
+> > >>> On Thu, 6 Nov 2025 at 15:36, Claudiu <claudiu.beznea@tuxon.dev> wrote:
+> > >>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> > >>>>
+> > >>>> The Renesas RZ/G3S SoC supports a power-saving mode in which power to most
+> > >>>> of the SoC components is turned off, including the USB blocks. On the
+> > >>>> resume path, the reset signal must be de-asserted before applying any
+> > >>>> settings to the USB registers. To handle this properly, call
+> > >>>> reset_control_assert() and reset_control_deassert() during suspend and
+> > >>>> resume, respectively.
+> > >>>>
+> > >>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> > >>>
+> > >>>> --- a/drivers/usb/host/ehci-platform.c
+> > >>>> +++ b/drivers/usb/host/ehci-platform.c
+> > >>>> @@ -454,6 +454,17 @@ static int __maybe_unused ehci_platform_suspend(struct device *dev)
+> > >>>>         if (pdata->power_suspend)
+> > >>>>                 pdata->power_suspend(pdev);
+> > >>>>
+> > >>>> +       ret = reset_control_assert(priv->rsts);
+> > >>>> +       if (ret) {
+> > >>>> +               if (pdata->power_on)
+> > >>>> +                       pdata->power_on(pdev);
+> > >>>> +
+> > >>>> +               ehci_resume(hcd, false);
+> > >>>> +
+> > >>>> +               if (priv->quirk_poll)
+> > >>>> +                       quirk_poll_init(priv);
+> > >>>
+> > >>> I have my doubts about the effectiveness of this "reverse error
+> > >>> handling".  If the reset_control_assert() failed, what are the chances
+> > >>> that the device will actually work after trying to bring it up again?
+> > >>>
+> > >>> Same comment for next patch.
+> > >>
+> > >> I wasn't sure if I should do this revert or not. In my mind, if the reset
+> > >> assert fails, the reset signal is still de-asserted.
+> > >
+> > > Possibly.  Most reset implementations either cannot fail, or can
+> > > fail due to a timeout.  What state the device is in in case of the latter is
+> > > hard to guess...
+> >
+> > In theory there are also failures returned by the subsystem code (e.g. if
+> > reset is shared and its reference counts don't have the proper values, if
+> > not shared and ops->assert is missing).
+> >
+> > In case of this particular driver and the ochi-platform one, as the resets
+> > request is done with devm_reset_control_array_get_optional_shared() the
+> > priv->resets is an array and the assert/de-assert is done through
+> > reset_control_array_assert()/reset_control_array_deassert() which, in case
+> > of failures, reverts the assert/de-assert operations. It is true that the
+> > effectiveness of the revert operation is unknown and depends on the HW, but
+> > the subsystem ensures it reverts the previous state in case of failure.
+> >
+> > For the case resets is not an array, it is true, it depends on the reset
+> > driver implementation and hardware.
+> >
+> > Could you please let me know how would you suggest going forward with the
+> > implementation for the patches in this series?
+> 
+> Up to the USB maintainer...
 
-pxa_udc_pullup() now handles these return values correctly.
+If you don't have any objections, the patches to ehci-platform.c and 
+ohci-platform.c are okay with me.
 
-Also, both pxa27x_change_configuration() and pxa27x_change_interface()
-now check and log negative return codes from the gadget driver’s .setup()
-callback to aid debugging of failed reconfiguration events.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-No functional behavior change expected under normal conditions.
-
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: eb50702539f9 ("USB: pxa27x_udc: factor pullup code to prepare otg transceiver")
-Fixes: f4fd094cdfd1 ("usb: gadget: pxa27x_udc: fix clock prepare and enable")
-Fixes: d75379a53870 ("usb: pxa27x_udc driver")
-Signed-off-by: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
----
- drivers/usb/gadget/udc/pxa27x_udc.c | 42 ++++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/pxa27x_udc.c b/drivers/usb/gadget/udc/pxa27x_udc.c
-index 897f53601b5b..58b7f85667bd 100644
---- a/drivers/usb/gadget/udc/pxa27x_udc.c
-+++ b/drivers/usb/gadget/udc/pxa27x_udc.c
-@@ -1462,7 +1462,7 @@ static int pxa_udc_wakeup(struct usb_gadget *_gadget)
- 	return 0;
- }
-
--static void udc_enable(struct pxa_udc *udc);
-+static int udc_enable(struct pxa_udc *udc);
- static void udc_disable(struct pxa_udc *udc);
-
- /**
-@@ -1519,17 +1519,21 @@ static int should_disable_udc(struct pxa_udc *udc)
- static int pxa_udc_pullup(struct usb_gadget *_gadget, int is_active)
- {
- 	struct pxa_udc *udc = to_gadget_udc(_gadget);
-+	int ret = 0;
-
--	if (!udc->gpiod && !udc->udc_command)
--		return -EOPNOTSUPP;
-+	if (!udc->gpiod && !udc->udc_command) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-
- 	dplus_pullup(udc, is_active);
-
- 	if (should_enable_udc(udc))
--		udc_enable(udc);
-+		ret = udc_enable(udc);
- 	if (should_disable_udc(udc))
- 		udc_disable(udc);
--	return 0;
-+out:
-+	return ret;
- }
-
- /**
-@@ -1691,12 +1695,18 @@ static void udc_init_data(struct pxa_udc *dev)
-  * Enables the udc device : enables clocks, udc interrupts, control endpoint
-  * interrupts, sets usb as UDC client and setups endpoints.
-  */
--static void udc_enable(struct pxa_udc *udc)
-+static int udc_enable(struct pxa_udc *udc)
- {
-+	int ret = 0;
-+
- 	if (udc->enabled)
--		return;
-+		goto out;
-
--	clk_enable(udc->clk);
-+	ret = clk_enable(udc->clk);
-+	if (ret < 0) {
-+		dev_err(udc->dev, "failed to enable clock=%d\n", ret);
-+		goto out;
-+	}
- 	udc_writel(udc, UDCICR0, 0);
- 	udc_writel(udc, UDCICR1, 0);
- 	udc_clear_mask_UDCCR(udc, UDCCR_UDE);
-@@ -1726,6 +1736,8 @@ static void udc_enable(struct pxa_udc *udc)
- 	pio_irq_enable(&udc->pxa_ep[0]);
-
- 	udc->enabled = 1;
-+out:
-+	return ret;
- }
-
- /**
-@@ -2078,6 +2090,7 @@ static void handle_ep(struct pxa_ep *ep)
- static void pxa27x_change_configuration(struct pxa_udc *udc, int config)
- {
- 	struct usb_ctrlrequest req ;
-+	int setup_result;
-
- 	dev_dbg(udc->dev, "config=%d\n", config);
-
-@@ -2092,7 +2105,11 @@ static void pxa27x_change_configuration(struct pxa_udc *udc, int config)
- 	req.wLength = 0;
-
- 	set_ep0state(udc, WAIT_ACK_SET_CONF_INTERF);
--	udc->driver->setup(&udc->gadget, &req);
-+
-+	setup_result = udc->driver->setup(&udc->gadget, &req);
-+	if (setup_result < 0)
-+		dev_dbg(udc->dev, "driver setup failed=%d\n", setup_result);
-+
- 	ep_write_UDCCSR(&udc->pxa_ep[0], UDCCSR0_AREN);
- }
-
-@@ -2108,6 +2125,7 @@ static void pxa27x_change_configuration(struct pxa_udc *udc, int config)
- static void pxa27x_change_interface(struct pxa_udc *udc, int iface, int alt)
- {
- 	struct usb_ctrlrequest  req;
-+	int setup_result;
-
- 	dev_dbg(udc->dev, "interface=%d, alternate setting=%d\n", iface, alt);
-
-@@ -2121,7 +2139,11 @@ static void pxa27x_change_interface(struct pxa_udc *udc, int iface, int alt)
- 	req.wLength = 0;
-
- 	set_ep0state(udc, WAIT_ACK_SET_CONF_INTERF);
--	udc->driver->setup(&udc->gadget, &req);
-+
-+	setup_result = udc->driver->setup(&udc->gadget, &req);
-+	if (setup_result < 0)
-+		dev_dbg(udc->dev, "driver setup failed=%d\n", setup_result);
-+
- 	ep_write_UDCCSR(&udc->pxa_ep[0], UDCCSR0_AREN);
- }
-
---
-2.43.0
-
+Alan Stern
 
