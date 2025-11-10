@@ -1,147 +1,208 @@
-Return-Path: <linux-usb+bounces-30245-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30246-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91D25C44E25
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 05:01:11 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08A39C44E77
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 05:31:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 62AC64E7C2F
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 04:00:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C897C4E5D19
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 04:31:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A0091E8342;
-	Mon, 10 Nov 2025 04:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC35728CF41;
+	Mon, 10 Nov 2025 04:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="hKGvFpC/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cosmicgizmosystems.com (cosgizsys.com [63.249.102.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F310C1E50E;
-	Mon, 10 Nov 2025 04:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.249.102.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E711E9B3A;
+	Mon, 10 Nov 2025 04:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762747251; cv=none; b=JJQ8svltEuoHMkIQ1AG5MPMz2QhAElguIxUvrplU8uyRc0qP5rwsTrrntthZbfFztYzcVZSiKyPtqNkoBZH1Dz5kJYhWesEi/o6q+LHVmPP59+EodOlvucgIlaD4sdM0hkMtj2yqbIiTh93j4ji4dqJ7hqhqsFuJiPi6xpHqJ1E=
+	t=1762749080; cv=none; b=ZseB3EpIhjyn0g2PiY/8bgn2y+XtaBx2tHXi8KqwmUHy2bJODzb8ZdPW2GnrB2ICgY/I7nCrJCmD6G0l9pLGUA+abD5ukEpcREmUOo2raMiexYTbqJRThUdRPtbK5GEcgoRiYKvqEqwe0TAvbBH3UUnewVaCCDwbdlj8DbDEI10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762747251; c=relaxed/simple;
-	bh=atMFvgtY65VQuY/EkXVgEnl/vnO2b9+d5D/lbVsgpfM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s5oiJaFOL4RFU+N7SE9ZhNt7sAJg95iVNQQjK/mto+YTv//mkkUKRoafD4oQkKCAjKYz0gZv7koq1bxGf/D2M0ob3+qlINmYSH5trcOA1d+/jrHJoK6Hue6I28hw6Y0T6e26km5FzNLblrrn/AJ2flpUxkLXPPNCDidX2P5iDoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com; spf=pass smtp.mailfrom=cosmicgizmosystems.com; arc=none smtp.client-ip=63.249.102.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cosmicgizmosystems.com
-Received: from [10.0.0.100] (c-71-193-224-155.hsd1.wa.comcast.net [71.193.224.155])
-	by host11.cruzio.com (Postfix) with ESMTPSA id A556421C8272;
-	Sun,  9 Nov 2025 20:00:48 -0800 (PST)
-Message-ID: <70076b5d-aa2a-4057-834d-881fa25d797e@cosmicgizmosystems.com>
-Date: Sun, 9 Nov 2025 20:00:47 -0800
+	s=arc-20240116; t=1762749080; c=relaxed/simple;
+	bh=LCAm0UvZlUUKFUUv5Yr8pWyndZnTuYx3ZgJv//Fb2WQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jLQ1zrEipItSU9p8t+WAg46ioWYfY+pw0O3NHmKd9tBD1G8Sp5oA9jMktv0CvkTDNxtv5llvyvz/KgVIS01cwxlxFPlPZ6/s1kpNw6GSZl3AiynV36tqM4L+ceCKxcYEiuMDJt8QquLxybop45ns+UIHRcyK/rQhvs4+2nVrn/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=hKGvFpC/; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=jw
+	i5NjaG+BZxYwnYkTFis237SkItp4NthhMjihbLSLQ=; b=hKGvFpC/iuSL6PJ8Tt
+	yr3ZKU4uxaG485Nks0SU8LzqW1NLTURbrvPf0YhN8VNgjx0U8Xhq3HD5oAXpF0a0
+	Yn4sLJqiv6GW74RfqGx0RHInwY++E3pBlIcdKkbA3Q26/pwnJUndUGllV+12c2qX
+	4Vyc+fZXjAVXZ8bRF6c68UD3g=
+Received: from smtp.163.com (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wBXDa0WaBFpd_l9Cw--.39686S4;
+	Mon, 10 Nov 2025 12:20:39 +0800 (CST)
+From: Vanillan Wang <vanillanwang@163.com>
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Vanillan Wang <vanillanwang@163.com>
+Subject: [PATCH v3] USB: serial: option: add support for the Rolling RW101R-GL modules.
+Date: Mon, 10 Nov 2025 12:20:41 +0800
+Message-ID: <20251110042041.13873-1-vanillanwang@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] Edifier QR30 (2d99:a101, Jieli Technology) reboots itself
- when RGB brightness button is used under Linux
-To: The-Luga <lugathe2@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- Michal Pecio <michal.pecio@gmail.com>,
- Terry Junge <linuxsound@cosmicgizmosystems.com>,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-input@vger.kernel.org
-References: <3eb2564d-5008-434e-9698-99b0cbe4d1cc@cosmicgizmosystems.com>
- <CALvgqECkMdntW2He8C7EcvOtCL-PpiXM9xNXWHzGtgimDxezHA@mail.gmail.com>
- <d7e888a6-6a65-40c1-84af-058b97ca0178@rowland.harvard.edu>
- <CALvgqED=rBkNYGkFdOXjUi1g_vbLac5Z38Z9xCRfpF-Vmy4Mww@mail.gmail.com>
- <c5c863f0-1c68-4d49-ba9b-b55c0f71d30c@rowland.harvard.edu>
- <CALvgqEAo8-MhE3ievoDkq4AOxRZ2E52kcko+GxYyf+WZE2H0=g@mail.gmail.com>
- <20251109092450.693bcbe5.michal.pecio@gmail.com>
- <CALvgqEC1EpJy58LhppgLYkCyaZL+qv34b8PmvTvJV8DYfp=gzA@mail.gmail.com>
- <25f2419a-ee91-41eb-9446-87d238b4c7c4@rowland.harvard.edu>
- <CALvgqEBu_RzQYRSJnbu58XZt5wHX6PRD8i-J7Tovh7+KuhOyag@mail.gmail.com>
- <6999b5b2-a242-432e-8100-5d8ee58bcae8@rowland.harvard.edu>
- <CALvgqEBD05PwMpm00cAbFkpSWpCFP9jaBU0r-8+op+RGPtkktg@mail.gmail.com>
- <7adc816d-169d-4213-bb67-9d070af3c4a7@cosmicgizmosystems.com>
- <CALvgqECd=EavhXAhhAGang+6+-_yWgBVSaiafMAozVgmZ5VsvA@mail.gmail.com>
-Content-Language: en-US
-From: Terry Junge <linuxhid@cosmicgizmosystems.com>
-In-Reply-To: <CALvgqECd=EavhXAhhAGang+6+-_yWgBVSaiafMAozVgmZ5VsvA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBXDa0WaBFpd_l9Cw--.39686S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3XF1UWF47JF1xJFyftF1fZwb_yoWxCrWDpF
+	48Aa1aqFWrXFyYqFnxCr1fZFWFgas7ur17CayDZr4SqFWSyws7Gr1jyrZ2gF1qkr4Syr4q
+	q3yDG3y8Ka97JFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEX_-QUUUUU=
+X-CM-SenderInfo: pydqxz5odq4tlqj6il2tof0z/xtbBdRECUmkRZUtHbwAAsK
 
+- VID:PID 33f8:0301, RW101R-GL for laptop debug M.2 cards(with MBIM
+interface for /Linux/Chrome OS)
+0x0301: mbim, pipe
+Here are the outputs of usb-devices:
+T:  Bus=04 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=33f8 ProdID=0301 Rev=05.04
+S:  Manufacturer=Rolling Wireless S.a.r.l.
+S:  Product=Rolling RW101R-GL Module
+S:  SerialNumber=3ec4efdf
+C:  #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
+- VID:PID 33f8:01a8, RW101R-GL for laptop debug M.2 cards(with MBIM
+interface for /Linux/Chrome OS)
+0x01a8: mbim, diag, AT, ADB, pipe1, pipe2
+Here are the outputs of usb-devices:
+T:  Bus=04 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=33f8 ProdID=01a8 Rev=05.04
+S:  Manufacturer=Rolling Wireless S.a.r.l.
+S:  Product=Rolling RW101R-GL Module
+S:  SerialNumber=3ec4efdf
+C:  #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=88(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=89(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-On 11/9/25 4:56 PM, The-Luga wrote:
->> I wonder if suspend/resume would be a problem. Maybe the device crashes
->> when it attempts to resume?
->> Windows will not suspend this device because it has a Consumer Control
->> application collection.
->>
->> Is there a USB quirk to stop the kernel from suspending the device?
-> 
-> I tried two parameters independently:
-> 
-> usbcore.quirks=2d99:a101k
-> where k = USB_QUIRK_NO_LPM (device can't handle Link Power Management);
-> 
-> usbcore.autosuspend=-1
-> 
-> In both cases, a reboot occurred.
-> 
->> Two collections, both vendor unique.
->> Basically HID 'pipes' to transport vendor unique data.
->> We have only seen traces with input report ID 2F so far.
->> If we could get traces of output report ID 2E from Windows running the
->> vendor's software (TempoHub) it might help.
-> 
-> I don't understand what I should do to capture this data. This is the
-> data I captured:
-> 
-> 1. Wireshark on guest with usbpcap. I selected to capture from newly
-> attached drives (this should filter out the mouse, etc.).
-> 2. I opened TempoHub.
-> 3. I started logging on host with `sudo cat
-> /sys/kernel/debug/usb/usbmon/3u > qr30_passthrough_wireshark.log`
-> 4. I passed the device through.
-> 
+- VID:PID 33f8:0302, RW101R-GL for laptop debug M.2 cards(with MBIM
+interface for /Linux/Chrome OS)
+0x0302: mbim, pipe
+Here are the outputs of usb-devices:
+T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=33f8 ProdID=0302 Rev=05.04
+S:  Manufacturer=Rolling Wireless S.a.r.l.
+S:  Product=Rolling RW101R-GL Module
+S:  SerialNumber=3ec4efdf
+C:  #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-OK, The attached trace captured the input and output reports between the
-host software and the device. I'll try and find a pattern to the vendor's protocol.
-The vendor software only supports Windows and Mac, no claim for Linux support.
+- VID:PID 33f8:01a9, RW101R-GL for laptop debug M.2 cards(with MBIM
+interface for /Linux/Chrome OS)
+0x01a9: mbim, diag, AT, ADB, pipe1, pipe2
+Here are the outputs of usb-devices:
+T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=33f8 ProdID=01a9 Rev=05.04
+S:  Manufacturer=Rolling Wireless S.a.r.l.
+S:  Product=Rolling RW101R-GL Module
+S:  SerialNumber=3ec4efdf
+C:  #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-If all else fails we might by able to block the behavior by having the kernel ignore 
-the second HID interface.
+Signed-off-by: Vanillan Wang <vanillanwang@163.com>
+---
+Changelog:
+v3:
+- Modify the commit summary.
+- Keep the entries sorted by VID/PID.
+---
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> Every increase/decrease of values are step by step.
-> 
-> [TempoHub Actions]
-> 5. I increased the volume 0 (muted) to 16 (max) with TempoHub.
->  >I will press the physical play/pause button after each action, as it
-> may be easier to analyze when seeing this marker(?)
-> 6. Decreased the volume from 16 to 0.
->    >play/pause
-> 7. Decreased the brightness to 0 from TempoHub and increased it to 100%.
->    >play/pause
-> 8. Decreased the brightness from 100 to 0.
->    >play/pause
-> 9. Changed my light profile to static color.
->    >play/pause
-> 10. Changed back to glittering colors.
->    >play/pause
-> 
-> [Hardware Actions]
-> 11. Increased volume with the knob to 16.
->    >play/pause
-> 12. Decreased volume with the knob to 0 (muted).
->    >play/pause
-> 13. Increased brightness with the knob until 100 and decreased
-> brightness with the knob until 0.
->    >play/pause
-> 14. Pressed the RGB profile switcher 2 times.
-> 
-> I stopped the capture.
-> 
-> The software has no button. It's a slider for volume and brightness, I
-> may have missed some step on the full range because of this.
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index fc869b7f803f..8e575716136b 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2417,6 +2417,12 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(5) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0802, 0xff),			/* Rolling RW350-GL (laptop MBIM) */
+ 	  .driver_info = RSVD(5) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0301, 0xff) },			/* Rolling RW101R-GL (laptop MBIM) */
++	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a8, 0xff),			/* Rolling RW101R-GL (laptop MBIM) */
++	  .driver_info = RSVD(4) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x0302, 0xff) },			/* Rolling RW101R-GL (laptop MBIM) */
++	{ USB_DEVICE_INTERFACE_CLASS(0x33f8, 0x01a9, 0xff),			/* Rolling RW101R-GL (laptop MBIM) */
++	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x3731, 0x0100, 0xff, 0xff, 0x30) },	/* NetPrisma LCUK54-WWD for Global */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x3731, 0x0100, 0xff, 0x00, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x3731, 0x0100, 0xff, 0xff, 0x40) },
+-- 
+2.43.0
 
 
