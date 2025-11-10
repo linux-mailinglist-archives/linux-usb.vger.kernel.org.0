@@ -1,104 +1,228 @@
-Return-Path: <linux-usb+bounces-30297-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30299-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD514C47873
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 16:27:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61FCFC486AB
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 18:48:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A8963A3EB9
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 15:17:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33BC9189030C
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 17:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 810E726B96A;
-	Mon, 10 Nov 2025 15:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA4652DE1E6;
+	Mon, 10 Nov 2025 17:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QHx+ceiH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bPmV3FTS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92666246BC5
-	for <linux-usb@vger.kernel.org>; Mon, 10 Nov 2025 15:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDAA2E427C;
+	Mon, 10 Nov 2025 17:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762787725; cv=none; b=Akdx61zstlprf3gROrljHY4xFO8VMmq8DQuA/M4AZ2FNN9F5+Q3zzknNcC6tbaDVTskWz6f+F/OO4yhT5cUJNrO13NzOHcNt0X3pV+9o3n38NkG58ydCGHHtRBvCfILcKMRDtDW8t1QQyshW6T8sSxkomRfjxWIxjNBjzPBTBWw=
+	t=1762796903; cv=none; b=DZvOAYgVJrpSV8TMGFgfRTxF/Q3aEyJBqQI0767gWz7dsk/Re7yit6cffDIC6GqqmuFvi8okkpdNhMFmy4vvJ82Z07HPgUG4h4QYvK5ztxstcJTcgY9PKW2nRlXhTu/0atoo+CW89gj3NcXoWmRh7QSge+45ESBZcynijhOlYiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762787725; c=relaxed/simple;
-	bh=WQCY93oVfivecS1o5iYr9Aiigl200opDbw3B4rrSBFE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B1uNB4tAofbLbllWVq5WaZN9/aRMll8qCed5KSuClfVTqXxdw6pWiFIwl9iLpBhQWp37KbQiU/EI1NYrgu1RFIME+R9JS0ICHRCHNOcT1G94S3IjJ/8ichbs1e3FX3v82qyc80XoTsdIqKqrwD0jlQ/7kj7vbnEKmX39KheqK5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QHx+ceiH; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1762796903; c=relaxed/simple;
+	bh=bys+Rr/XBUQgHXVigHrpttbPULpUxjaJM+HyZMnG/gQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ua6PTEPFZFvmqh1LOkEoYrCptovhcMB3MsAUzf1aYpMy0tWmrXNJP5TgOhNV3jOoBve/UNS2PsmhUJdnVme2ijFCQ8RkIiLZhs5s31Jip2jknNC6yO/YTqt92tGuqpoavWLbPgtDHDU+3tzZVFmHUHxeTe1RTvkHnY2UnV7hj/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bPmV3FTS; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762787723; x=1794323723;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WQCY93oVfivecS1o5iYr9Aiigl200opDbw3B4rrSBFE=;
-  b=QHx+ceiHmp9XwyGUuhV0JR6Ta6X4eZkX7FrEGu7om42mjzKNGLEVjfZd
-   psZvoEUp5PWbc0KISB0x0YBGhYcYHpdUWgI03tXe7H/k6hFo/Ff/3SpG0
-   GlmMHcMk2P6ZzxAc3zASGDcvn97NvJM+n61Yc/0+ZCr+G4DdNq5o87xQP
-   ysnGbcnxim+z2TCKJCdl8U2FlRIxGX2mQ9TMK92S87xQxWHDXVt3bygsf
-   91vmHDWjUH8t7X/1cWTkDQQOcJKaphPTP611ccteA+BJLC00QTCFoS6HO
-   TpByYGX80SAz5tj/NeWGhqbRGedTmsNE+iHD65pwhVu8HHi9MHaMgW5lA
+  t=1762796902; x=1794332902;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bys+Rr/XBUQgHXVigHrpttbPULpUxjaJM+HyZMnG/gQ=;
+  b=bPmV3FTSEW0CoJqjMMvuTXSKQDBaiuikDHcdzXAr5WehJuwP020Qc31a
+   W6E8nXUkF4AHDYq5KcmdXkWPtTZuRjZdqCgBmQC5RNfEUTsUh3J6al7sd
+   o7dTNi7BqnQiU3LXJ4i2LT3WJUHe8kCSPQW/gJLTr//VRpD1+ObJugX8A
+   vkDy2HwgqaMwFgEC0VQiAcCu0ZKmjhybeg2t+NmKSGbgBvxDYwqeNZSAe
+   pbmZNRHvMSvh6xRp4fS+g64ukaCq4uCxjZkc4/JGLTWc5F01GXLb73jbz
+   wk90fGxmAtg1kkAs4aIKd4MlHl4ytIIKGMPq5nCNjSz/pSleLsi7WDJkl
    A==;
-X-CSE-ConnectionGUID: me0/j58VQIG/0gVsW5dgWw==
-X-CSE-MsgGUID: Cl390T8hRdyL0fmY/9i6lg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64767794"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="64767794"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 07:15:23 -0800
-X-CSE-ConnectionGUID: cCSFB/EgSkyVVDT7sqotsw==
-X-CSE-MsgGUID: QIPQLQR3RJyuWoJ7l8fF7Q==
+X-CSE-ConnectionGUID: W1IupyCCSKmFaCKIJ8y6TQ==
+X-CSE-MsgGUID: ZGvAecDEQAKNSiGHu0SIIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="75538378"
+X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
+   d="scan'208";a="75538378"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 09:48:21 -0800
+X-CSE-ConnectionGUID: /O8GlZwMSK2BgJzo7Rdmrw==
+X-CSE-MsgGUID: xzvJOyPpTGC3nzaB+FSESw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="219353923"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa002.jf.intel.com with ESMTP; 10 Nov 2025 07:15:23 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id 1E26495; Mon, 10 Nov 2025 16:15:22 +0100 (CET)
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
-To: mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 13/13] usb: xhci: use 64-bit Addressing Capability macro
-Date: Mon, 10 Nov 2025 16:14:50 +0100
-Message-ID: <20251110151450.635410-14-niklas.neronin@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251110151450.635410-1-niklas.neronin@linux.intel.com>
-References: <20251110151450.635410-1-niklas.neronin@linux.intel.com>
+X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
+   d="scan'208";a="225990433"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 10 Nov 2025 09:48:17 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vIVzz-0000mb-0T;
+	Mon, 10 Nov 2025 17:48:15 +0000
+Date: Tue, 11 Nov 2025 01:47:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: caohang@eswincomputing.com, gregkh@linuxfoundation.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, Thinh.Nguyen@synopsys.com,
+	p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, ningyu@eswincomputing.com,
+	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
+	Hang Cao <caohang@eswincomputing.com>,
+	Senchuan Zhang <zhangsenchuan@eswincomputing.com>
+Subject: Re: [PATCH v7 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
+Message-ID: <202511110121.BwTv4Fex-lkp@intel.com>
+References: <20251110024500.104-1-caohang@eswincomputing.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251110024500.104-1-caohang@eswincomputing.com>
 
-Simplify by replace BIT(0) call with its relevant macro.
+Hi,
 
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
----
- drivers/usb/host/xhci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 79e707686c1a..294cc9226328 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -5480,7 +5480,7 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
- 	 * DMA_BIT_MASK(32)) in this xhci_gen_setup().
- 	 */
- 	if (xhci->quirks & XHCI_NO_64BIT_SUPPORT)
--		xhci->hcc_params &= ~BIT(0);
-+		xhci->hcc_params &= ~HCC_64BIT_ADDR;
- 
- 	/* Set dma_mask and coherent_dma_mask to 64-bits,
- 	 * if xHC supports 64-bit addressing */
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next next-20251110]
+[cannot apply to usb/usb-linus robh/for-next pza/reset/next pza/imx-drm/next linus/master v6.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/caohang-eswincomputing-com/dt-bindings-usb-Add-ESWIN-EIC7700-USB-controller/20251110-104957
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20251110024500.104-1-caohang%40eswincomputing.com
+patch subject: [PATCH v7 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
+config: xtensa-randconfig-r073-20251110 (https://download.01.org/0day-ci/archive/20251111/202511110121.BwTv4Fex-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 13.4.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511110121.BwTv4Fex-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511110121.BwTv4Fex-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/usb/dwc3/dwc3-generic-plat.c: In function 'dwc3_generic_probe':
+>> drivers/usb/dwc3/dwc3-generic-plat.c:132:56: warning: missing terminating " character
+     132 |                         return dev_err_probe(dev, ret, "failed to init
+         |                                                        ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:132:56: error: missing terminating " character
+     132 |                         return dev_err_probe(dev, ret, "failed to init
+         |                                                        ^~~~~~~~~~~~~~~
+>> drivers/usb/dwc3/dwc3-generic-plat.c:133:54: error: stray '\' in program
+     133 |                                              platform\n");
+         |                                                      ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:133:46: error: 'platform' undeclared (first use in this function)
+     133 |                                              platform\n");
+         |                                              ^~~~~~~~
+   drivers/usb/dwc3/dwc3-generic-plat.c:133:46: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/usb/dwc3/dwc3-generic-plat.c:133:54: error: expected ')' before 'n'
+     133 |                                              platform\n");
+         |                                                      ^~
+         |                                                      )
+   drivers/usb/dwc3/dwc3-generic-plat.c:132:45: note: to match this '('
+     132 |                         return dev_err_probe(dev, ret, "failed to init
+         |                                             ^
+   drivers/usb/dwc3/dwc3-generic-plat.c:133:56: warning: missing terminating " character
+     133 |                                              platform\n");
+         |                                                        ^
+   drivers/usb/dwc3/dwc3-generic-plat.c:133:56: error: missing terminating " character
+     133 |                                              platform\n");
+         |                                                        ^~~
+>> drivers/usb/dwc3/dwc3-generic-plat.c:133:56: error: expected ';' before '}' token
+     133 |                                              platform\n");
+         |                                                        ^
+         |                                                        ;
+     134 |         }
+         |         ~                                               
+
+
+vim +132 drivers/usb/dwc3/dwc3-generic-plat.c
+
+    71	
+    72	static int dwc3_generic_probe(struct platform_device *pdev)
+    73	{
+    74		const struct dwc3_generic_config *plat_config;
+    75		struct dwc3_probe_data probe_data = {};
+    76		struct device *dev = &pdev->dev;
+    77		struct dwc3_generic *dwc3g;
+    78		struct resource *res;
+    79		int ret;
+    80	
+    81		dwc3g = devm_kzalloc(dev, sizeof(*dwc3g), GFP_KERNEL);
+    82		if (!dwc3g)
+    83			return -ENOMEM;
+    84	
+    85		dwc3g->dev = dev;
+    86	
+    87		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    88		if (!res) {
+    89			dev_err(&pdev->dev, "missing memory resource\n");
+    90			return -ENODEV;
+    91		}
+    92	
+    93		dwc3g->resets = devm_reset_control_array_get_optional_exclusive(dev);
+    94		if (IS_ERR(dwc3g->resets))
+    95			return dev_err_probe(dev, PTR_ERR(dwc3g->resets), "failed to get resets\n");
+    96	
+    97		ret = reset_control_assert(dwc3g->resets);
+    98		if (ret)
+    99			return dev_err_probe(dev, ret, "failed to assert resets\n");
+   100	
+   101		/* Not strict timing, just for safety */
+   102		udelay(2);
+   103	
+   104		ret = reset_control_deassert(dwc3g->resets);
+   105		if (ret)
+   106			return dev_err_probe(dev, ret, "failed to deassert resets\n");
+   107	
+   108		ret = devm_add_action_or_reset(dev, dwc3_generic_reset_control_assert, dwc3g->resets);
+   109		if (ret)
+   110			return ret;
+   111	
+   112		ret = devm_clk_bulk_get_all_enabled(dwc3g->dev, &dwc3g->clks);
+   113		if (ret < 0)
+   114			return dev_err_probe(dev, ret, "failed to get clocks\n");
+   115	
+   116		dwc3g->num_clocks = ret;
+   117		dwc3g->dwc.dev = dev;
+   118		probe_data.dwc = &dwc3g->dwc;
+   119		probe_data.res = res;
+   120		probe_data.ignore_clocks_and_resets = true;
+   121	
+   122		plat_config = of_device_get_match_data(dev);
+   123		if (!plat_config) {
+   124			probe_data.properties = DWC3_DEFAULT_PROPERTIES;
+   125			goto core_probe;
+   126		}
+   127	
+   128		probe_data.properties = plat_config->properties;
+   129		if (plat_config->init) {
+   130			ret = plat_config->init(dwc3g);
+   131			if (ret)
+ > 132				return dev_err_probe(dev, ret, "failed to init
+ > 133						     platform\n");
+   134		}
+   135	
+   136	core_probe:
+   137		ret = dwc3_core_probe(&probe_data);
+   138		if (ret)
+   139			return dev_err_probe(dev, ret, "failed to register DWC3 Core\n");
+   140	
+   141		return 0;
+   142	}
+   143	
+
 -- 
-2.50.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
