@@ -1,166 +1,166 @@
-Return-Path: <linux-usb+bounces-30424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30425-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 806B4C4E258
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 14:38:49 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E6E3C4E39A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 14:46:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3DBE44E8656
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 13:38:22 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B257C34B1C6
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 13:46:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E1F33ADBC;
-	Tue, 11 Nov 2025 13:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F8E71EB5CE;
+	Tue, 11 Nov 2025 13:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="LmC8xt6A"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="fT62qpnd";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="fT62qpnd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 247F5331229
-	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 13:38:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68CC17B50A
+	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 13:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762868299; cv=none; b=uemlmfBgDdp6a1+jaU4347XgEt2odpcseaycdHbGIWHCE63KNBHNrxA4sgbkV18qsWUGFm6qnzetgc8R6A4nTqJ3g41OcM7tIMTrhOYowMOeO27PRvS0hOm0wcunRhns5Yclz+6Jo+oC3YuxFnbRicsnYf54Z9X2i8zPNSd7YHk=
+	t=1762868807; cv=none; b=bzv07j2E/x0F7jU3V77PEJV5028ka1UmGU8cW2qIDOj+JH5Cu0yKw1/ykeqAyuU1pcgQnseDA4hcnp4jOSoZHuLr+cYjWs3zzPeAK4VIzA1ogc3ErFHalgn8gixCFpnMjXy/QqmAg6oWAC1rSb+B66zoU/luzFQkYZseMjvfslM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762868299; c=relaxed/simple;
-	bh=UbV5GgpqMZVtxRiSozJeUwSKdIsNrm55FmFRqAkDoFw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=XsVd4XU00njB0dMdwDrxd+ywSZOQPWh+RMZy31NXHUzkwX8a+M4m4wtt5jwtM4WWcSGlhN62aHrYihFtD9bNbjYWxSBLh4sG58PMPPzxSTpEgWZgOn/qmpa6mVklje1eaMxboNC03m98oFOwf5js5WANLksnDjS25qIwK9CZfCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=LmC8xt6A; arc=none smtp.client-ip=44.202.169.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
-Received: from eig-obgw-5003b.ext.cloudfilter.net ([10.0.29.155])
-	by cmsmtp with ESMTPS
-	id ImBfvPK2lKXDJIoZdvW2kP; Tue, 11 Nov 2025 13:38:17 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id IoZcvuCRouWNOIoZdv6lQs; Tue, 11 Nov 2025 13:38:17 +0000
-X-Authority-Analysis: v=2.4 cv=N+gpF39B c=1 sm=1 tr=0 ts=69133c49
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=F0GicbU7tRTSLTLZ85HXVw==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=7T7KSl7uo7wA:10 a=iox4zFpeAAAA:8
- a=JiBNKyHRPkDJVqF4oxEA:9 a=QEXdDO2ut3YA:10 a=WzC6qhA0u3u7Ye7llzcV:22
- a=xYX6OU9JNrHFPr8prv8u:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=pFq8pmJjW6kNRLtBVTbAYS2Q+XWVZ6FYBfTZebwqu5g=; b=LmC8xt6ADv/9EzrfLZVPt2B3vq
-	uhqb8eddFwsN/BQ44W5XnXlja0Uaw1vsJga98cc6m5i2RPoUroRwzIo2TvjVmv+yCOvSA/cplWppn
-	kSSsjsYV1Jo5EaEx7BAlLlj1ZM9TOQVmOkvJGxbu8XghUXWrnp3PLD9NHIFrsU2X/ileWYN1e6Yb1
-	iiRHXwZBvljbhHzNlTitBQdNTQJ5Kn1+XfyHL7ELrD9DKmrEVMmib2NAIWddHQw7nTE1IIIv7j9gJ
-	/xwVZw5cSux7cYOaDiS/K2LSsuqR1t9ukSvdv5TNhnHOaWDyQnBZKoAvuohmOt4tPlVwrbKKVamas
-	E/7lD4Ng==;
-Received: from m106072098064.v4.enabler.ne.jp ([106.72.98.64]:12345 helo=[10.221.86.44])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.98.1)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1vIoZc-00000000o96-1KrX;
-	Tue, 11 Nov 2025 07:38:16 -0600
-Message-ID: <bde0cd94-10bf-4ff5-a450-5160b67c9d2e@embeddedor.com>
-Date: Tue, 11 Nov 2025 22:38:13 +0900
+	s=arc-20240116; t=1762868807; c=relaxed/simple;
+	bh=ZkCLykW6NtW7beqh15uItRw4P9VkrTNaZzL7IYNeS64=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DIxQN8MNr1vS0q0IHdsN3xBtwpVgk9dSXyTb34TI+KEehnDUmWORQIqoaR7LUrQJCTViAR8HbfOOzbaDomMXkgTI8Ed+oSERenspnb44uYUfSy96otLQT/WS/spGhSrjO+EkioEJeu1z3PIOPd/AQgoABJwqWO1NCew6kL0SBb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=fT62qpnd; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=fT62qpnd; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id E29A31F7E9;
+	Tue, 11 Nov 2025 13:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1762868803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=9JCoetx+5XKdJupUW7sjWUgfhNkLwiBMdMYRdqO9nXs=;
+	b=fT62qpnd3L5Lposm7M0PmQDeQh/CLMxJh2Qb4/0/2qZUf9FYdlczk9jAAMAIPwSRnWk2nZ
+	HedfOmD/4/Co+u6Su1EpEiOBGacPpl1lcOzPCvgxusOHKn7GuFTA/dh4E0LCJvGHYagEa7
+	SeEb5vrp1VQf0xnsAClbY3hQbiV3Hp8=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1762868803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=9JCoetx+5XKdJupUW7sjWUgfhNkLwiBMdMYRdqO9nXs=;
+	b=fT62qpnd3L5Lposm7M0PmQDeQh/CLMxJh2Qb4/0/2qZUf9FYdlczk9jAAMAIPwSRnWk2nZ
+	HedfOmD/4/Co+u6Su1EpEiOBGacPpl1lcOzPCvgxusOHKn7GuFTA/dh4E0LCJvGHYagEa7
+	SeEb5vrp1VQf0xnsAClbY3hQbiV3Hp8=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 95000149AE;
+	Tue, 11 Nov 2025 13:46:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id VA0jIkM+E2nscgAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Tue, 11 Nov 2025 13:46:43 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: gregkh@linuxfoundation.org,
+	gustavo@embeddedor.com,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCHv4 1/1] uapi: cdc.h: cleanly provide for more interfaces and countries
+Date: Tue, 11 Nov 2025 14:46:10 +0100
+Message-ID: <20251111134641.4118827-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv3 1/1] uapi: cdc.h: cleanly provide for more interfaces
- and countries
-To: Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org
-References: <20251111133228.4114536-1-oneukum@suse.com>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20251111133228.4114536-1-oneukum@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 106.72.98.64
-X-Source-L: No
-X-Exim-ID: 1vIoZc-00000000o96-1KrX
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: m106072098064.v4.enabler.ne.jp ([10.221.86.44]) [106.72.98.64]:12345
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 7
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfFS8W2nkQ+MoBqwQkxx+XNmAHXDIkCdu2SmU4RmTgxGOuqUwpxRQaJy+33uJssdqmKP9DEOroS3Bn1EAClXUHyNK72YF4QXxQToKsqnPRnxeElneiG2d
- 3iN9v1vTLsQGz/4Zh3tgUKI2vdSucj8AbqMXNfHQp6OniNvkJYG56FAObe3XywdDF4dbKr4yEV+duOMTNkxPcMmg8Rnl/S1+beQ=
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email,suse.com:mid];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
 
+The spec requires at least one interface respectively country.
+It allows multiple ones. This needs to be clearly said in the UAPI.
+This is subject to sanity checking in cdc_parse_cdc_header(), thus
+we can trust the length.
 
+V2: following Gustavo's suggestion to use an union
+V3: following Gustavo's suggestion on safe copying 
+V4: use __DEFINE_FLEX_ARRAY
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/class/cdc-acm.c  |  2 +-
+ include/uapi/linux/usb/cdc.h | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-On 11/11/25 22:31, Oliver Neukum wrote:
-> The spec requires at least one interface respectively country.
-> It allows multiple ones. This needs to be clearly said in the UAPI.
-> This is subject to sanity checking in cdc_parse_cdc_header(), thus
-> we can trust the length.
-> 
-> V2: following Gustavo's suggestion to use an union
-> V3: following Gustavo's suggestion on safe copying
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->   drivers/usb/class/cdc-acm.c  |  2 +-
->   include/uapi/linux/usb/cdc.h | 12 ++++++++----
->   2 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index 73f9476774ae..54be4aa1dcb2 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -1475,7 +1475,7 @@ static int acm_probe(struct usb_interface *intf,
->   		if (!acm->country_codes)
->   			goto skip_countries;
->   		acm->country_code_size = cfd->bLength - 4;
-> -		memcpy(acm->country_codes, (u8 *)&cfd->wCountyCode0,
-> +		memcpy(acm->country_codes, cfd->wCountryCodes,
->   							cfd->bLength - 4);
->   		acm->country_rel_date = cfd->iCountryCodeRelDate;
->   
-> diff --git a/include/uapi/linux/usb/cdc.h b/include/uapi/linux/usb/cdc.h
-> index 1924cf665448..0208b2f76bf1 100644
-> --- a/include/uapi/linux/usb/cdc.h
-> +++ b/include/uapi/linux/usb/cdc.h
-> @@ -104,8 +104,10 @@ struct usb_cdc_union_desc {
->   	__u8	bDescriptorSubType;
->   
->   	__u8	bMasterInterface0;
-> -	__u8	bSlaveInterface0;
-> -	/* ... and there could be other slave interfaces */
-> +	union {
-> +		__u8	bSlaveInterface0;
-> +		DECLARE_FLEX_ARRAY(__u8, bSlaveInterfaces);
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 73f9476774ae..54be4aa1dcb2 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1475,7 +1475,7 @@ static int acm_probe(struct usb_interface *intf,
+ 		if (!acm->country_codes)
+ 			goto skip_countries;
+ 		acm->country_code_size = cfd->bLength - 4;
+-		memcpy(acm->country_codes, (u8 *)&cfd->wCountyCode0,
++		memcpy(acm->country_codes, cfd->wCountryCodes,
+ 							cfd->bLength - 4);
+ 		acm->country_rel_date = cfd->iCountryCodeRelDate;
+ 
+diff --git a/include/uapi/linux/usb/cdc.h b/include/uapi/linux/usb/cdc.h
+index 1924cf665448..7bd5d12d8b26 100644
+--- a/include/uapi/linux/usb/cdc.h
++++ b/include/uapi/linux/usb/cdc.h
+@@ -104,8 +104,10 @@ struct usb_cdc_union_desc {
+ 	__u8	bDescriptorSubType;
+ 
+ 	__u8	bMasterInterface0;
+-	__u8	bSlaveInterface0;
+-	/* ... and there could be other slave interfaces */
++	union {
++		__u8	bSlaveInterface0;
++		__DECLARE_FLEX_ARRAY(__u8, bSlaveInterfaces);
++	};
+ } __attribute__ ((packed));
+ 
+ /* "Country Selection Functional Descriptor" from CDC spec 5.2.3.9 */
+@@ -115,8 +117,10 @@ struct usb_cdc_country_functional_desc {
+ 	__u8	bDescriptorSubType;
+ 
+ 	__u8	iCountryCodeRelDate;
+-	__le16	wCountyCode0;
+-	/* ... and there can be a lot of country codes */
++	union {
++		__le16	wCountryCode0;
++		__DECLARE_FLEX_ARRAY(__le16, wCountryCodes);
++	};
+ } __attribute__ ((packed));
+ 
+ /* "Network Channel Terminal Functional Descriptor" from CDC spec 5.2.3.11 */
+-- 
+2.51.1
 
-For UAPI code, __DECLARE_FLEX_ARRAY() should be used.
-
-> +	};
->   } __attribute__ ((packed));
->   
->   /* "Country Selection Functional Descriptor" from CDC spec 5.2.3.9 */
-> @@ -115,8 +117,10 @@ struct usb_cdc_country_functional_desc {
->   	__u8	bDescriptorSubType;
->   
->   	__u8	iCountryCodeRelDate;
-> -	__le16	wCountyCode0;
-> -	/* ... and there can be a lot of country codes */
-> +	union {
-> +		__le16	wCountryCode0;
-> +		DECLARE_FLEX_ARRAY(__le16, wCountryCodes);
-
-Ditto.
-
-Thanks
--Gustavo
 
