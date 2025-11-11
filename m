@@ -1,138 +1,116 @@
-Return-Path: <linux-usb+bounces-30433-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30434-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F335C4F5F0
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 19:04:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EBA4C4F9CE
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 20:34:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D0ED189A0A2
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 18:04:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 562793ABDFE
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 19:34:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B2003730F6;
-	Tue, 11 Nov 2025 18:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024223271E4;
+	Tue, 11 Nov 2025 19:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UoxZ2qIT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RAjKBgPp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7FBD2798F8;
-	Tue, 11 Nov 2025 18:03:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E2C2D7DEC
+	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 19:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762884232; cv=none; b=X2h1omWYUQsJt8X+MInld4L6Co7W7xU5uLq8LDpKMZ1ZEz0OsvHO7d/OXv7gRbhtjibccO9QdXskIG2PdwU0db8A12Nm4aM5LgghNfSwCIWgYQQtkTKpCTVLa5cj1BPlkmX1jeqv5woWu7npms1ET42suYvxh43VziTEsFK30OQ=
+	t=1762889637; cv=none; b=jkxy/dBosGN7VB+sus7fZAvlHzfxj0fyFzQt2IaP5Giozuu1fdjvI9a4avHq8pPdbpuurV+XuK3xO8/DF9XsF4Kp4BZIzwxwrf8VSEssdRp5WFppIRuiL+F41yBAa+NvvfyNMZNQiwMuAfsVHhU3titcAVQmA6oMUaEMo30LipI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762884232; c=relaxed/simple;
-	bh=mirE0FVC1aFCsQq2eMehFBIBONouR+WUmeEdSPLLXaU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F4pbBvf6LnY9krM64BcUDBtxo/7m7TkG1kiVB0J4q8Nb5UTXwC5Kqd0t8fipX4KH8rARN6Xk3qno/CABi4mnsrT3i4cLgzfyc3OAbj6ZDvsGbiuwPbagfMyCbEX9b/NCdXTKFkdhhChuLtrZzcVC/1D3nlFYulHwLaeq7ZTL2cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UoxZ2qIT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B8BC4CEF5;
-	Tue, 11 Nov 2025 18:03:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762884232;
-	bh=mirE0FVC1aFCsQq2eMehFBIBONouR+WUmeEdSPLLXaU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UoxZ2qITmDCIv3Aw71Gtor6BXmxZ1wnoHiUP/IBntzbdAFxQ9XxovK8QSj2aDPfZf
-	 8IqPCAlCuq0F29Cbyszl60cwbOySqlX8Rj5fwBoLkDonymsRi7FtTTer6S+8EI4kqM
-	 /ut0BcYpYH4KdK4sZNYt0ARyTafsLbJsT2J1vKYwJE48dIlDpf49nt492SCsRajbeb
-	 N7w7bHAXlZp2gWqVuLabvi9TMqJAmHGuMrDDhb1WkFwSw2R9+XPQRX4y7EiAn/1Y0P
-	 pkrI36WZ83pDlW7P7nW0wY6+KaIUsVMglj8ztkQuZyvx7fRB8f45cARtGA3HLG7lmq
-	 XpVhTSucBjALg==
-Date: Tue, 11 Nov 2025 18:03:43 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Jack Hsu <jh.hsu@mediatek.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
-	andy@kernel.org, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, srini@kernel.org,
-	ukleinek@kernel.org, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, daniel.lezcano@linaro.org, tglx@linutronix.de,
-	chunfeng.yun@mediatek.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, sean.wang@mediatek.com,
-	zhiyong.tao@mediatek.com, andrew-ct.chen@mediatek.com,
-	lala.lin@mediatek.com, jitao.shi@mediatek.com,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-pwm@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v7 8/9] arm64: dts: mediatek: update rtc properties for
- MT6359
-Message-ID: <20251111-heroism-greasily-fb01345ae609@spud>
-References: <20251111070031.305281-1-jh.hsu@mediatek.com>
- <20251111070031.305281-9-jh.hsu@mediatek.com>
+	s=arc-20240116; t=1762889637; c=relaxed/simple;
+	bh=iKW1tRsCgR0KVMBKgf6dS62cbBiXnxf4QwQ3NO3vz3U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TXY/wkqtOI/dBrdc+PocMza/AF3vrUjYykgSqDoWb8i36OxF31JQrtvBcVtESL0jZpVCgjGVkgJTEiTVGo6AgYwBcb3/lCeGBxgBAmowgNV62n4WgSDrtl2oUC5cAaab5VM3RPJF1lpg6BpB8MTiC79RLkR4DGUIIBpKy0dYo0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RAjKBgPp; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b729a941e35so15671366b.3
+        for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 11:33:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762889634; x=1763494434; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iKW1tRsCgR0KVMBKgf6dS62cbBiXnxf4QwQ3NO3vz3U=;
+        b=RAjKBgPpRbyd5u34Ww4SKPkv3x9dCYSuyRAg3/JVhHzBMJot9xOKFkA57o9OQiJvgP
+         vJGQkBhFMHCiwxuBKoQxyQZkM+KScpg7SBC7oz3Y3BeZ2PcqsAwwmXbPgA4Gft1hazfM
+         3NrQ8t78oBkvXV/jLsAfmiHLycDe6F0Kz/QomLfqyqI+EQsLtXIA1n+/ESV6lqoM6Sea
+         4Wu6d2Dnw5luT8TGKOvTHeVrJVue6Wii0s3gQLmn9dEiurtAd+eTbnUW/GKLsT6DhSCY
+         XeQV0PJfzRnb9V9U28202GuAGMsqwL6u3zSiH4VJI7d9kn+fLGfXI0zxml5p+MZ5UBid
+         9d6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762889634; x=1763494434;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iKW1tRsCgR0KVMBKgf6dS62cbBiXnxf4QwQ3NO3vz3U=;
+        b=ppcyIBzWbjHz8orMIVIPVvgwcvLbHdPr+P0t8BQSR1gKP88zjtbwJiYTXVaoS5/1th
+         9IPIdQMeAv4u2Tih1qE2GGXRJypbyPLhyg8LEQUXuRWuTgVL/JUpD3PNNEYNkLKsa567
+         oAcmJLyMf6dfZpoDZCOUpI93DmevEEZ3ZlZ0Bex8RL1FrHDRMAkEDyhSCQDXhpdgjJpn
+         dFVpuh0PJvT1sBAKNKUph7v/URfdTdYK4g39OGjzNxRL86XSyPxrmzaY15x098Ar76Wf
+         kjXxw4NQeExix4T58J3HjSppNZvUt9PjNB4NE7N487NFoRexq/NsJRV33Si5E/WEIRS5
+         7wTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXdpD2qQN1FQtrz9ySsdEu3CX2x2wO2M0Bu+qEvQKuX7R4jUG9tK6U0OQO2gUjZerDyYvzEWKV5NS4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWBanuNFnjotsMp8/jqCFX1uCOjf9t89hEuWgowWtcKgoaKDnO
+	PSR5g774FDcVAim3D40wqdEw6fxzGeJgisS1b2kYZBg0DuPRfjtupBZ7ZahW0Q==
+X-Gm-Gg: ASbGncsWL5W8kbuSzDtsWsXICQDqGw9FpCyLBkVL1NSjjo61qxgYxpezBubTbk4uiQZ
+	DERtVWy//ywZzmGucBS0Y6+PYIzJ7QQByW3twN22pOr7dmBLvxUoreAm/N3dDIic/3vRKA+xb5q
+	8mTCqZJw3lXSk+1ROnu0KWIPHrVDQ8XNrVkeGaAa59xp6gZrInTgS24E914O9Fo6e4Rr126Ky6r
+	NcTKXxgyWUpsrjRIuigC9C+2RTW9fnM71DcL1pSYhi7eCx/JrKkM6XoqMMGBkcpZRZYAXn66OfK
+	Sbd/pVgTbVaf7TbntBr9UCeAbPnl7JzOLV9QTv6rJmFfEoTZl/0o5ttCn9KHto7henme8dZEoBJ
+	rYXryCmXz4zpdz6rqYvCuQxBnBRv1UE8bDMwGJA+TLQAwgK0imu/SdBiKN1JqtocMitqu0TJnZH
+	esScaDuuqjMA==
+X-Google-Smtp-Source: AGHT+IHDUjKUNAsSr1F3fZIpUNhiYNKUcUmB/BPrX2k8vNUcQxHLIIesAmw2W01qUzcV5/eYxTxFhQ==
+X-Received: by 2002:a17:906:fe44:b0:b6d:608c:838b with SMTP id a640c23a62f3a-b7331ace065mr28182666b.45.1762889634237;
+        Tue, 11 Nov 2025 11:33:54 -0800 (PST)
+Received: from foxbook (bfd52.neoplus.adsl.tpnet.pl. [83.28.41.52])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bf312240sm1428843266b.18.2025.11.11.11.33.52
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 11 Nov 2025 11:33:53 -0800 (PST)
+Date: Tue, 11 Nov 2025 20:33:50 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Rodrigo Lugathe da =?UTF-8?B?Q29uY2Vpw6fDo28=?= Alves
+ <lugathe2@gmail.com>
+Cc: linuxhid@cosmicgizmosystems.com, bentiss@kernel.org,
+ dmitry.torokhov@gmail.com, jikos@kernel.org, linux-input@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linuxsound@cosmicgizmosystems.com, stern@rowland.harvard.edu
+Subject: Re: [PATCH] The Edifier QR30 USB speaker, identified as: Jieli
+ Technology EDIFIER Hal0 2.0 SE 2d99:a101, reports a HID interface that
+ needs HID_QUIRK_ALWAYS_POLL to ensure it does not crash when changing the
+ RGB brightness with the physical knob.
+Message-ID: <20251111203350.3c9a669e.michal.pecio@gmail.com>
+In-Reply-To: <20251111074205.1533558-1-lugathe2@gmail.com>
+References: <c6d506f7-f13b-4d57-a522-a2ccd09e7a1f@cosmicgizmosystems.com>
+	<20251111074205.1533558-1-lugathe2@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wFCZWHo1MJf80ONG"
-Content-Disposition: inline
-In-Reply-To: <20251111070031.305281-9-jh.hsu@mediatek.com>
-
-
---wFCZWHo1MJf80ONG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 11, 2025 at 02:59:22PM +0800, Jack Hsu wrote:
-> Update properties of rtc for mt6359 PMIC
+On Tue, 11 Nov 2025 04:42:05 -0300, Rodrigo Lugathe da Concei=C3=A7=C3=A3o =
+Alves
+wrote:
+> Add a new vendor and product ID entry in hid-ids.h and register
+> the corresponding device in hid-quirks.c with the required quirk.
 >=20
-> Signed-off-by: Jack Hsu <jh.hsu@mediatek.com>
->=20
-> ---
-> Changs in v7:
->  - remove mt635x-auadc.h
->  - remove fg nodes
->=20
-> ---
->  arch/arm64/boot/dts/mediatek/mt6359.dtsi | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/d=
-ts/mediatek/mt6359.dtsi
-> index 467d8a4c2aa7..fe737254c091 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-> @@ -302,6 +302,9 @@ mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub=
- {
-> =20
->  		mt6359rtc: rtc {
->  			compatible =3D "mediatek,mt6358-rtc";
-> +			#address-cells =3D <1>;
-> +			#size-cells =3D <1>;
-> +			status =3D "disabled";
+> Signed-off-by: Rodrigo Lugathe da Concei=C3=A7=C3=A3o Alves <lugathe2@gma=
+il.com>
 
-Okay, this looks a lot better now. Still missing an explanation of why
-it has been moved to disabled though, especially since you just go and
-re-enable it (without adding child devices that use the address/size
-cells).
-pw-bot: changes-requested
+Usually one would use a shorter title like "Apply quirk X to device Y"
+and put explanation/justification in the longer commit message (above).
 
->  		};
->  	};
->  };
-> --=20
-> 2.45.2
->=20
-
---wFCZWHo1MJf80ONG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRN6fwAKCRB4tDGHoIJi
-0uoFAQDNm4ule8p2MhE3JjSHzEvgFm4U+PmD7w7D5a6po+6lFQD+MjosiBlNJq1z
-mhXOc0fMS+qD6LGsDwugFT6pPQ4lzwA=
-=+aBt
------END PGP SIGNATURE-----
-
---wFCZWHo1MJf80ONG--
+Regards,
+Michal
 
