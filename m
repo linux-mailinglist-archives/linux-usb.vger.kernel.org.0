@@ -1,154 +1,216 @@
-Return-Path: <linux-usb+bounces-30430-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30431-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B310C4EFF6
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 17:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A0A41C4F269
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 17:58:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 354DE3B94F3
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 16:19:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 778023A6074
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 16:55:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5465336C5A1;
-	Tue, 11 Nov 2025 16:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23F88377EB1;
+	Tue, 11 Nov 2025 16:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KMsA7uHA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kCIRjXUS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6E736A033;
-	Tue, 11 Nov 2025 16:19:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14003043B5;
+	Tue, 11 Nov 2025 16:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762877984; cv=none; b=eo5+yp24aYz8ymehaKSNFyhVvQOY3TQeL34U093qysUlIRb1GuSo5XbrN70o1FWdNaGbuugXGRaqkwP6WobjjDt7bXwSkeE+XD/DuomupJXtM8NafjIbyk4wMGw2s5plCfrwhTl5z56ihlXeod3RxbJC3uFHy0GtpZ6MoPP2r6o=
+	t=1762880103; cv=none; b=OLUj8awfIQuEb0MqGzEeckIvc4e88Xa3Q1m1MBT9r6XsUkrqpSMmeXFY37qrap3WLKwPQIEClBcpxkfw6tgSYI0JMsY91GHvg6T+ThdscZPclzlHPcoDEdFvKf0SmAtsNI88UTCjGWQI5zvvCPsSTZuhReP2vyeg/X/IJYCkM2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762877984; c=relaxed/simple;
-	bh=MRIv/WwWQnNcHl/Kgg27XOhKNmjLF/zVaonpwv61t9c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b2vz2s+wbI05AyofTycWOQdr8QRy6gx2r3fJIxIVY0XXz8ZUrpdtRj5JCBkyUxMmCpiAweEweESh4F1SeZZ9/xll09d/+ZrM6bryl07PvOPVUgacLVtrH0yxGoefaQQA1Obat+PQRTqTM1CtlR6TQ1o0cd4UfZPq9O7kkb3Kq/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KMsA7uHA; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1762880103; c=relaxed/simple;
+	bh=prdjIqfhZ5Q0oGHb9kMj2RXqTMX3Z4oj+cyb9XYhN0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qtpuwUobVyZDbd+SMHaRHfEgvlkeOVOwvmZS5yaitF8jGOSU1thq7bW604bdM7Z7qSVK7hX4L+lvizbf/tGtHvx/sq3MYy7PvYDeQzXYGpHoD1blvbrcooS24VQqaUpUb4xZze7M2n7KU9Bt0aqIJM0mhfiiXt8TxN9L/1Du4e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kCIRjXUS; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762877983; x=1794413983;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MRIv/WwWQnNcHl/Kgg27XOhKNmjLF/zVaonpwv61t9c=;
-  b=KMsA7uHATFFhW3O0tF85uxy8UUiCqQkenws3n91noLWy3Os73c2ssdLx
-   8NHRduD1ABrp7LAMIddEJiFxdHYzAfsyTyKrh21P6EhGp2j0nfL69Dq/g
-   ZmP2JCkuke4DwhVt1VyweMVKIizPCSjFILwTLqx/wABXttNs4mnxODjP5
-   vTAqQFP3h1rEJetQFGD/4Wn9IQwAmknZt2Fkjfu4T3SoMmhp6+OnwID67
-   A/r0+Buz/CSkK7OLUdudLGOzOn1P1IedjdXCN4Lc5o0qXbDnWoAeLmEoK
-   t4FJzONaS8DNlIEFq7jJAQfyYmtNGxj/NEStg8KZXZO9f7sHvLTVRwyBJ
-   w==;
-X-CSE-ConnectionGUID: 4B1LItW8TJKND9+z4M6i7A==
-X-CSE-MsgGUID: R3/Ya+FOSDKm4K1ih5SNJw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="65098139"
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="65098139"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 08:19:43 -0800
-X-CSE-ConnectionGUID: ya/rlQVGT12nmby3p5vFMw==
-X-CSE-MsgGUID: lMpFr96bTRadqOMq6LoGyg==
+  t=1762880102; x=1794416102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=prdjIqfhZ5Q0oGHb9kMj2RXqTMX3Z4oj+cyb9XYhN0c=;
+  b=kCIRjXUSie5mtzwzJA8zfmRA3b/fDhVbGqqK9M3SERqSBTifiZ+wsWdG
+   qvxCA+Oz7LPVZegQYEtOprKI/CywsFHkCKoKYfduIhCL18W0pWs+GG1r3
+   T3TEM4MEa9LeXNdhaVvK63IOkHyRXZx5EBr/T7Tnaz7Qgq0xVeEWG7Rx+
+   Gy4YUEFGRHY/DY7pAPpe6cixUbcmvdeXdYwOmHg7DQxR0os0nO3aJ3ag+
+   IP7q1rBAYiaC55amLkwdlF3upSukyNryETcTw0d0RZ7XD8ttTHrlLQ+oY
+   heaYve2zV1ycJ4rh1LlmlUjHheG/+WESJPjjEmULNtOWxoXIXPdvbwxpq
+   Q==;
+X-CSE-ConnectionGUID: JR8YbLO8QFqBbjOF7O73Uw==
+X-CSE-MsgGUID: VM7/uyCgREOxf02xbljwTg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="64150237"
+X-IronPort-AV: E=Sophos;i="6.19,297,1754982000"; 
+   d="scan'208";a="64150237"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 08:55:01 -0800
+X-CSE-ConnectionGUID: qj9ZEu2IS3q/G3o69uv9+w==
+X-CSE-MsgGUID: LiZ1YefBQLm1L/1gKRqSZw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="193247151"
-Received: from cpetruta-mobl1.ger.corp.intel.com (HELO [10.245.244.118]) ([10.245.244.118])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 08:19:41 -0800
-Message-ID: <f1259e37-5671-43ca-85f5-a37b68d5507a@linux.intel.com>
-Date: Tue, 11 Nov 2025 18:19:38 +0200
+X-IronPort-AV: E=Sophos;i="6.19,297,1754982000"; 
+   d="scan'208";a="212405116"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 11 Nov 2025 08:54:58 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vIrdv-0003Oh-3C;
+	Tue, 11 Nov 2025 16:54:55 +0000
+Date: Wed, 12 Nov 2025 00:54:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Fedor Pchelkin <boddah8794@gmail.com>,
+	Andrei Kuchynski <akuchynski@chromium.org>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	Myrrh Periwinkle <myrrhperiwinkle@qtmlabs.xyz>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 2/3] usb: typec: ucsi: Add duplicate detection to
+ nvidia registration path
+Message-ID: <202511120044.i2blPN85-lkp@intel.com>
+References: <20251111010541.145421-2-acelan.kao@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: Don't unchain link TRBs on quirky HCs
-To: Michal Pecio <michal.pecio@gmail.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251107110837.7b7d686b.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20251107110837.7b7d686b.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251111010541.145421-2-acelan.kao@canonical.com>
 
-On 11/7/25 12:08, Michal Pecio wrote:
-> Some old HCs ignore transfer ring link TRBs whose chain bit is unset.
-> This breaks endpoint operation and sometimes makes it execute other
-> ring's TDs, which may corrupt their buffers or cause unwanted device
-> action. We avoid this by chaining all link TRBs on affected rings.
-> 
-> Fix an omission which allows them to be unchained by cancelling TDs.
-> 
-> The patch was tested by reproducing this condition on an isochronous
-> endpoint (non-power-of-two TDs are sometimes split not to cross 64K)
-> and printing link TRBs in trb_to_noop() on good and buggy HCs.
-> 
-> Actual hardware malfunction is rare since it requires Missed Service
-> Error shortly before the unchained link TRB, at least on NEC and AMD.
-> I have never seen it after commit bb0ba4cb1065 ("usb: xhci: Apply the
-> link chain quirk on NEC isoc endpoints"), but it's Russian roulette
-> and I can't test all affected hosts and workloads. Fairly often MSEs
-> happen after cancellation because the endpoint was stopped.
-> 
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Hi Chia-Lin,
 
-Makes sense, thanks for fixing this
+kernel test robot noticed the following build errors:
 
-> ---
->   drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++-----------
->   1 file changed, 16 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index a9e468ea19c5..fc0043ca85a4 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -128,11 +128,11 @@ static void inc_td_cnt(struct urb *urb)
->   	urb_priv->num_tds_done++;
->   }
->   
-> -static void trb_to_noop(union xhci_trb *trb, u32 noop_type)
-> +static void trb_to_noop(union xhci_trb *trb, u32 noop_type, bool unchain_links)
->   {
->   	if (trb_is_link(trb)) {
-> -		/* unchain chained link TRBs */
-> -		trb->link.control &= cpu_to_le32(~TRB_CHAIN);
-> +		if (unchain_links)
-> +			trb->link.control &= cpu_to_le32(~TRB_CHAIN);
->   	} else {
->   		trb->generic.field[0] = 0;
->   		trb->generic.field[1] = 0;
-> @@ -465,7 +465,7 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
->   		xhci_dbg(xhci, "Turn aborted command %p to no-op\n",
->   			 i_cmd->command_trb);
->   
-> -		trb_to_noop(i_cmd->command_trb, TRB_CMD_NOOP);
-> +		trb_to_noop(i_cmd->command_trb, TRB_CMD_NOOP, false);
->   
->   		/*
->   		 * caller waiting for completion is called when command
-> @@ -797,13 +797,18 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
->    * (The last TRB actually points to the ring enqueue pointer, which is not part
->    * of this TD.)  This is used to remove partially enqueued isoc TDs from a ring.
->    */
-> -static void td_to_noop(struct xhci_td *td, bool flip_cycle)
-> +static void td_to_noop(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
-> +			struct xhci_td *td, bool flip_cycle)
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.18-rc5 next-20251111]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-we could avoid passing xhci pointer to td_to_noop() and just grab it from
-the xhci_virt_ep structure instead. i.e. ep->xhci
+url:    https://github.com/intel-lab-lkp/linux/commits/Chia-Lin-Kao-AceLan/usb-typec-ucsi-Add-duplicate-detection-to-nvidia-registration-path/20251111-092153
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20251111010541.145421-2-acelan.kao%40canonical.com
+patch subject: [PATCH v2 2/3] usb: typec: ucsi: Add duplicate detection to nvidia registration path
+config: x86_64-randconfig-072-20251111 (https://download.01.org/0day-ci/archive/20251112/202511120044.i2blPN85-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511120044.i2blPN85-lkp@intel.com/reproduce)
 
-Otherwise this looks good to me
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511120044.i2blPN85-lkp@intel.com/
 
-Thanks
-Mathias
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/typec/ucsi/ucsi.c:547:7: error: call to undeclared function 'ucsi_altmode_is_duplicate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     547 |                 if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
+         |                     ^
+   drivers/usb/typec/ucsi/ucsi.c:570:13: error: static declaration of 'ucsi_altmode_is_duplicate' follows non-static declaration
+     570 | static bool ucsi_altmode_is_duplicate(struct ucsi_connector *con, u8 recipient,
+         |             ^
+   drivers/usb/typec/ucsi/ucsi.c:547:7: note: previous implicit declaration is here
+     547 |                 if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
+         |                     ^
+   2 errors generated.
 
 
+vim +/ucsi_altmode_is_duplicate +547 drivers/usb/typec/ucsi/ucsi.c
+
+   483	
+   484	static int
+   485	ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
+   486	{
+   487		int max_altmodes = UCSI_MAX_ALTMODES;
+   488		struct typec_altmode_desc desc;
+   489		struct ucsi_altmode alt;
+   490		struct ucsi_altmode orig[UCSI_MAX_ALTMODES];
+   491		struct ucsi_altmode updated[UCSI_MAX_ALTMODES];
+   492		struct ucsi *ucsi = con->ucsi;
+   493		bool multi_dp = false;
+   494		u64 command;
+   495		int ret;
+   496		int len;
+   497		int i;
+   498		int k = 0;
+   499	
+   500		if (recipient == UCSI_RECIPIENT_CON)
+   501			max_altmodes = con->ucsi->cap.num_alt_modes;
+   502	
+   503		memset(orig, 0, sizeof(orig));
+   504		memset(updated, 0, sizeof(updated));
+   505	
+   506		/* First get all the alternate modes */
+   507		for (i = 0; i < max_altmodes; i++) {
+   508			memset(&alt, 0, sizeof(alt));
+   509			command = UCSI_GET_ALTERNATE_MODES;
+   510			command |= UCSI_GET_ALTMODE_RECIPIENT(recipient);
+   511			command |= UCSI_GET_ALTMODE_CONNECTOR_NUMBER(con->num);
+   512			command |= UCSI_GET_ALTMODE_OFFSET(i);
+   513			len = ucsi_send_command(con->ucsi, command, &alt, sizeof(alt));
+   514			/*
+   515			 * We are collecting all altmodes first and then registering.
+   516			 * Some type-C device will return zero length data beyond last
+   517			 * alternate modes. We should not return if length is zero.
+   518			 */
+   519			if (len < 0)
+   520				return len;
+   521	
+   522			/* We got all altmodes, now break out and register them */
+   523			if (!len || !alt.svid)
+   524				break;
+   525	
+   526			orig[k].mid = alt.mid;
+   527			orig[k].svid = alt.svid;
+   528			k++;
+   529		}
+   530		/*
+   531		 * Update the original altmode table as some ppms may report
+   532		 * multiple DP altmodes.
+   533		 */
+   534		multi_dp = ucsi->ops->update_altmodes(ucsi, recipient, orig, updated);
+   535	
+   536		/* now register altmodes */
+   537		for (i = 0; i < max_altmodes; i++) {
+   538			struct ucsi_altmode *altmode_array = multi_dp ? updated : orig;
+   539	
+   540			if (!altmode_array[i].svid)
+   541				return 0;
+   542	
+   543			/*
+   544			 * Check for duplicates in current array and already
+   545			 * registered altmodes. Skip if duplicate found.
+   546			 */
+ > 547			if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
+   548						      altmode_array[i].svid,
+   549						      altmode_array[i].mid, i))
+   550				continue;
+   551	
+   552			memset(&desc, 0, sizeof(desc));
+   553			desc.svid = altmode_array[i].svid;
+   554			desc.vdo = altmode_array[i].mid;
+   555			desc.roles = TYPEC_PORT_DRD;
+   556	
+   557			ret = ucsi_register_altmode(con, &desc, recipient);
+   558			if (ret)
+   559				return ret;
+   560		}
+   561	
+   562		return 0;
+   563	}
+   564	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
