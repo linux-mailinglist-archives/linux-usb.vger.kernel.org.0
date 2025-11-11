@@ -1,172 +1,236 @@
-Return-Path: <linux-usb+bounces-30426-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30427-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C478C4E513
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 15:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 72EEBC4E7E7
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 15:33:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B604188681A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 14:11:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86B9218871A8
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 14:27:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2716332911;
-	Tue, 11 Nov 2025 14:10:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F84D2FB0AE;
+	Tue, 11 Nov 2025 14:27:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="M0BU84RW"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="EsHN3WED"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx12.kaspersky-labs.com (mx12.kaspersky-labs.com [91.103.66.155])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9652B2F7ADC;
-	Tue, 11 Nov 2025 14:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.103.66.155
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762870245; cv=none; b=RtYvyGFpi3paFG3VTchbIpbkxLM4I3a5dRYgaO/D1QIT7+pAVja3PpnoqBkOIW6TfZiVcDvhO8ml30HP6dYyVyJ25HKHym0mT5T07udcLKHGhskiv1TnM05I0l7XXbOwoEm4U3bZnsvmBGZFDtt2xrrwSHshx8fJ/AVdQRGlObY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762870245; c=relaxed/simple;
-	bh=qjFsNwbmRxO4Hp5vuknqfvOSCdjPaO3iwBWAF9Nevcs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Eqhj67Sxh0in+nnnnlpMaY6sHP5EpwPZyJzLis8LiZIeDHDG5VC1F3mJT6c744blvMrEKEM2yrX0cI0dwo/t7dRo1/bD59NqknbZHg30Gu6FRCc43LfauMcGM99tWEZINjiCD0DCxch5fxcOnPWbBm/c0f0FJA6UOJtNZlfGzLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=M0BU84RW; arc=none smtp.client-ip=91.103.66.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaspersky.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
-	s=mail202505; t=1762870234;
-	bh=I77upVn73xtl2hhKLa4OtVaXf553s+NjSyLwVjwUjJw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=M0BU84RWOCpgmJ590tapWIk5F9Bod6FsxhQlFSC0tnOCBTmji4/iL0LtUZN2fZ3aS
-	 h/SmCjYz+uNXmuI3xABp55QEgmPP2BEV2lX2bD29mvlvHcaRSzYiFuKzSur2yFgv1P
-	 lhjjyTDop2XHWvwmA+7v0VRc0YSior4k6Ph5Cptf8HOg1AfFiXYXk7AYFIGlPgaVeD
-	 aDsE6lH20rJJQ0rq/Y6hT6lHyJhsF94cfMIMs1l0puQm07mY+PJ5cG0Bc2vI5fCsFb
-	 OfZVGlFE3PlP4hoVXWT9WSuoUjMSvQhHHdOsnqyHdlHun4jZg5JYsMhIbHjz8yxISZ
-	 GGcvuD3ctD/Pw==
-Received: from relay12.kaspersky-labs.com (localhost [127.0.0.1])
-	by relay12.kaspersky-labs.com (Postfix) with ESMTP id 7FEA75A4A7A;
-	Tue, 11 Nov 2025 17:10:34 +0300 (MSK)
-Received: from mail-hq2.kaspersky.com (unknown [91.103.66.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail-hq2.kaspersky.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
-	by mailhub12.kaspersky-labs.com (Postfix) with ESMTPS id 4EA0D5A15AB;
-	Tue, 11 Nov 2025 17:10:33 +0300 (MSK)
-Received: from zhigulin-p.avp.ru (10.16.104.190) by HQMAILSRV2.avp.ru
- (10.64.57.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Tue, 11 Nov
- 2025 17:09:58 +0300
-From: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>, Chunfeng Yun
-	<chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>,
-	<stable@vger.kernel.org>
-Subject: [PATCH v2] usb: mtu3: fix possible NULL pointer dereference in ep0_rx_state()
-Date: Tue, 11 Nov 2025 17:09:53 +0300
-Message-ID: <20251111140956.3285945-1-Pavel.Zhigulin@kaspersky.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C506A55;
+	Tue, 11 Nov 2025 14:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.153.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762871220; cv=fail; b=uamFVW27s+ZJKD0oJiziXadKdJp8YKVa9o4Ii1Y8Yomog44oiM27sDNvF6Abtxa2WNqR/jZFXXcG9Sks/MpyZW4Mg4fRbE1pxUwaTj1iO+yxeSNS2h88tC3cd3wbkDsQ/icJ8okMr25K4g8IZZDlsw8fldsHNP0vXO1ljA294Yo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762871220; c=relaxed/simple;
+	bh=HVsSv0IOXVzJitdha9rqe6pkZF6jmIOXECF2q+9JhPY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=CeC8iC3T18AKkgg4DcsmeqoVrgkmlOvAm0MeMebcvbaoiXzB0Cao886wDVOiJtry6bpsjvn9dsYDn2QcMI2lvQiIFrjK3ihbCk0fHLQgirgT9p1OeZGPopti7GKwbWzwAbsXmCDxchqSTOlGdHSdlBIU6+q0T1BjjneC3HWR6d0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=EsHN3WED; arc=fail smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5ABA1jem1733035;
+	Tue, 11 Nov 2025 06:26:02 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
+	 bh=boOrOMDu57I4+kY1ClrRWSh8CW35791TYbCJNKdR1p0=; b=EsHN3WEDxJfA
+	ILSuKBqsNKlOdxzJb8t4ZlCPr2uAwnSM19IIyAk87i0Tdn259UUd8DflBi43ezgq
+	3yR8E9jZQbPe5w/zkBE07MsPjKUXvWJGtolkP1fxfZv0sZq9edWzYk2hxqiQc6/N
+	CeILhujks+5DPFjVFCoFH/bm0i8yR9pZP4ZWAG/hfsTFT80hhvU511sUwADm+LgZ
+	Q/TksNt+VjEfVV3ipfVMJPYXm/U9ng25xc/8aFIGPbhjdZYCCOK2iJhDz2WzOROE
+	MXy/BUSbnXX10wGTrDo5B7mMtqCFHpRUvBoxBJUpZ/4T+tZzI4tHOoU/EIwY1e1W
+	/wgFQJHLQQ==
+Received: from ph0pr06cu001.outbound.protection.outlook.com (mail-westus3azon11011019.outbound.protection.outlook.com [40.107.208.19])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4ac31c1gdq-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 11 Nov 2025 06:26:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=odfNO7aSLtUu/Kle1pUV10wE1KA60VuSn0uzLd1ZPhbxYYHkj0CiChdWaNKumNQoZqbTsi41S1Lr7seVQcQPpLWGTXHqO/T+OHc0VasNEfzsaHrvXWIIAGt3nZqDaMicBNvXlfHgQtiU4mYwygbM6y6sebr0Fyls+XPZzJZwmwCaaU1/BQ9JZwva/GMvdRNrV7YOVy/ugbVgMdMfqh6zKrbalAx2jam+KHQ4kxDqOoUX/Jo5w4Lt0abvlQ2y+343G8VU27aJ7CN2u+dx70Frvqm3A2iGJ+pctuI4GwhK4VNZHw1UVVYEoYY39EKTuQudCF73uQj14WLk6t76nqEMUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=boOrOMDu57I4+kY1ClrRWSh8CW35791TYbCJNKdR1p0=;
+ b=Wf32on9mxinYoMsw8VEsETCA2mVTMXHdsEOz4KSjV7BsBj2gT1Jb3lKBeJKZmWhLH3ngl7j+Mfkw3BYIDLTW4toPUz6hzV6TC0vJI7Hh++8p/nB+UIZX+k2XctlOnnRthfGXIrrKGseTMDLF6QDQka2pGFyOUWcSbF+hj3fWM4/MkdADwzjOthwM+CF6aiF1TJrVbH77oIoY1OhT1QW0LImQpiLlya0U/rhF/1ALSkkftuDNF+3N2k+v16J1k4Kpw+kiIN2fUBdJ3DrHLZXX4Kt16ti7uuN6xGhfE5ei1YeqiTI5NW/4jI3JMeIFupUBfZT3b8QDOCeNpncjluP5yg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from LV3PR15MB6455.namprd15.prod.outlook.com (2603:10b6:408:1ad::10)
+ by MW3PR15MB3851.namprd15.prod.outlook.com (2603:10b6:303:4f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Tue, 11 Nov
+ 2025 14:25:58 +0000
+Received: from LV3PR15MB6455.namprd15.prod.outlook.com
+ ([fe80::8102:bfca:2805:316e]) by LV3PR15MB6455.namprd15.prod.outlook.com
+ ([fe80::8102:bfca:2805:316e%5]) with mapi id 15.20.9298.007; Tue, 11 Nov 2025
+ 14:25:57 +0000
+Message-ID: <e8e46c2c-b207-4074-9186-b1d395fe2438@meta.com>
+Date: Tue, 11 Nov 2025 09:25:48 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 36/50] functionfs: switch to simple_remove_by_name()
+To: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>
+Cc: bot+bpf-ci@kernel.org, linux-fsdevel@vger.kernel.org,
+        torvalds@linux-foundation.org, jack@suse.cz, raven@themaw.net,
+        miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org,
+        linux-mm@kvack.org, linux-efi@vger.kernel.org,
+        ocfs2-devel@lists.linux.dev, kees@kernel.org, rostedt@goodmis.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        paul@paul-moore.com, casey@schaufler-ca.com,
+        linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+        selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+        bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
+        yonghong.song@linux.dev, ihor.solodrai@linux.dev
+References: <20251111065520.2847791-37-viro@zeniv.linux.org.uk>
+ <20754dba9be498daeda5fe856e7276c9c91c271999320ae32331adb25a47cd4f@mail.kernel.org>
+ <20251111092244.GS2441659@ZenIV>
+ <20251111-verelendung-unpolitisch-1bdcd153611e@brauner>
+ <20251111100115.GU2441659@ZenIV>
+From: Chris Mason <clm@meta.com>
+Content-Language: en-US
+In-Reply-To: <20251111100115.GU2441659@ZenIV>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BLAPR03CA0084.namprd03.prod.outlook.com
+ (2603:10b6:208:329::29) To LV3PR15MB6455.namprd15.prod.outlook.com
+ (2603:10b6:408:1ad::10)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HQMAILSRV2.avp.ru (10.64.57.52) To HQMAILSRV2.avp.ru
- (10.64.57.52)
-X-KSE-ServerInfo: HQMAILSRV2.avp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 11/11/2025 13:58:40
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 197969 [Nov 11 2025]
-X-KSE-AntiSpam-Info: Version: 6.1.1.11
-X-KSE-AntiSpam-Info: Envelope from: Pavel.Zhigulin@kaspersky.com
-X-KSE-AntiSpam-Info: LuaCore: 75 0.3.75
- aab2175a55dcbd410b25b8694e49bbee3c09cdde
-X-KSE-AntiSpam-Info: {Tracking_cluster_exceptions}
-X-KSE-AntiSpam-Info: {Tracking_real_kaspersky_domains}
-X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: zhigulin-p.avp.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;kaspersky.com:7.1.1,5.0.1;lore.kernel.org:7.1.1
-X-KSE-AntiSpam-Info: {Tracking_white_helo}
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 11/11/2025 14:00:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 11/11/2025 1:40:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSMG-AntiPhishing: NotDetected, bases: 2025/11/11 13:30:00
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2025/11/11 12:29:00 #27910883
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected, bases: 2025/11/11 13:29:00
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 52
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV3PR15MB6455:EE_|MW3PR15MB3851:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2b8086c4-238c-4783-bb67-08de212e3b0e
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|10070799003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dmhmVkptcjdPckpxRlJFRlhLamFMMDJYcG5XVXlsVGorVkVZelBldGVnRmhD?=
+ =?utf-8?B?RjlYOTlWVzU0N3RmUWJMemhZV3F1WkhRaU9YeWNVanRvZjNvMWF3WFViaHlh?=
+ =?utf-8?B?OEs2OS80MzFORTRYVmdVTTI2dFV4NjNtRllJSXY4Y0ZyMU5WbUZZbEI0aTVn?=
+ =?utf-8?B?dVFHZEdHSFZlUDJKRnF0YTZhcDZKbWkzOWdHRW1makNkMkJDN09IS0xiLzdI?=
+ =?utf-8?B?OVRuc3FMaWJCZ1ErUGJTVEVFejVDdG1oV1doS1BrR1NMRi9YaEprOXZXQkpB?=
+ =?utf-8?B?dUJuSCs0UzkremhTeFFCQlY0TzBWZ084eU5uV1A1WnVNVEI2TGRXUTZSOE9P?=
+ =?utf-8?B?K3JRMEdPc3RCS3ZwRkpOOUE3SmVCNHNmNGRoNmZlbjJlQkdTVzdKOGRJUTZ6?=
+ =?utf-8?B?RlE1S2JOazd0akMzMFY3VklGR3EzeDlnUnhvN1FJNENLUCtnUlBkR0t4Ty9G?=
+ =?utf-8?B?bFNheWpsU0J1SUJzczdkdFRRRWNudzRkVWRxZ1BQamZLVzgwNWlBUmtDMG43?=
+ =?utf-8?B?dEJONmdhSWVld3ZmV0hOZlhLbEhSTEJYYXhWejR1MytJRERrL2VPOXlHZ3BB?=
+ =?utf-8?B?dXJscUxOUnAzcmpmNnBvWEdpMjJlMVN3VE5ZQ3BxZkVkaGcvbDY3STUwa0lT?=
+ =?utf-8?B?bURvZVgzZTlDNm9LWTRaVXVzZ0hkbUY1b1d4d3RNRkZHSExFQlhuQkF1a1VM?=
+ =?utf-8?B?SjVsOWNKV0hwNDArVTFhKzdpVHNTcUIrdURZL0pYRWoycWZWemtVZGY5WDEz?=
+ =?utf-8?B?WWFGQ2V0QkZvR0VSKzJoTWF4SGdGbWJubG53SmxkSmVqZVpyTjdlUTVzcm4w?=
+ =?utf-8?B?dDFRRlU5b3QyUmh4NDR2RnJtQXlDdTBTR3VmMjdNcU9Nc0M0MW8wcnFUZUJZ?=
+ =?utf-8?B?YzVwK3kyWU1mOGFhZmVNVDF5UjJqY3FKUjFkN25oRDRQMzkybjdyODlWZDU1?=
+ =?utf-8?B?UW9zVE1rcUV3d3UvV1JTQWNQK2tTcExHNnkwVlVDaUQxQXpZMmFRL0JncXpE?=
+ =?utf-8?B?YzIwSFo4dlUwWU5tcGt4SGZEWGt3c21YYlN2Y3VlbFcrZGZzVVAyYWRzSHly?=
+ =?utf-8?B?WFRUV2d3M0sza0lDNjZIV1VGY3VKbFZJZjRycFpoQ3N2RUN1dnlhUFdDSHN6?=
+ =?utf-8?B?TGppUDRHdXZuNGVPdEtmaGk1YWkwdjZUOWpkSFN3MHgzNEpmOSsrcXFhWDl1?=
+ =?utf-8?B?Z2FGNWpqaGRFVVNyOGQ1cXBPb3Z6S280VXMydGx1RHJJaEI3MjhWcFdsS1dK?=
+ =?utf-8?B?Z3p3K3FjYUhsd2NxQm82WG1KVXcrMzFmaFZBcWdTVk9kQkt0em5OOGlDTmdr?=
+ =?utf-8?B?T1ZPMklVUElRN2FWcDZZQzVpR3FIUDg5dm9Ed05Ha3NSVVM4M1RudTN2V2NX?=
+ =?utf-8?B?RDlPYTlRRzFJME8rSlZFd0NWc3NQT291eHE1b011SUc2V25heElnV2lvQkQw?=
+ =?utf-8?B?Y2x0bzNJVjYvZkRVakJmQXFhc2RRWXNUSFRwSFQxRTA0SGs0eXlaemlpUXYv?=
+ =?utf-8?B?YnFXQlBza21oL0RNVGJiUlBLRCtpQm9oNjV3c3VxclpZM25xM05nMUlVQUtH?=
+ =?utf-8?B?MnR6TXJhWXhZNGMwWnRCc0ZYeWFFMlljQkhUWUZOY09DL0RpYzhEREM2UExF?=
+ =?utf-8?B?czk3WmZUUDJmV0s4UXlsTWpOUElpZ3NVRmR6Rmk3VXBwNXNBTmtmUW9VN0Uy?=
+ =?utf-8?B?ZXBmWEhEK2Zuc3JTbW1TcGd4c1UvTWhiSi8rd2I1bGlqWnIyRFF1M3RaeEl0?=
+ =?utf-8?B?d1ZqeG9wMTh0bDREV2pMam1ScHFkK00zbitQbStETElJd2h0RDJoWTVFdXVD?=
+ =?utf-8?B?VDlVS25walh5MHBUakRqd05SamxSbVowMHlyaG1Ja2lNQjNvMVV2aUZlWEtU?=
+ =?utf-8?B?QVZ5dW9XWlI3dDNueFBsSkkzNnI2bWdhR1l4ZUxzWkdDTERjWEtxTkhBSGFB?=
+ =?utf-8?Q?qe/Hh3fPdic+YTrkpbwK8XoyrtP513f6?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR15MB6455.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(10070799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eDM3NGNHNDNlMjhVNEhSWlhzM0huM0Y5dzNFSXpkR09qSW1aV0JkRWcweVJN?=
+ =?utf-8?B?dVVyQmpxbWlUSkFEWWhXeFg5WHltRUx1YzZoZkk4R0ltcCtia0JGK1VNcDM2?=
+ =?utf-8?B?bHE4UEhpKzNnQThobS9Oa3R0Q2x3ZWZsNzhPZ1Ird2FVY1lUVnQ1QnJlRFov?=
+ =?utf-8?B?N0RneWlxdVJUU2I3WEV5ekRXTFd3UUZlSzBHV1lnL3UwTHE5QVNOZDM1ajMv?=
+ =?utf-8?B?RVc1eGRRUWlTK01IMnFLOHpOb1NQcGJVM2xHQktsbVZPYmJCNlZ2OUwzdlYr?=
+ =?utf-8?B?cmZJM1htNjVNNnRXVHVucUhvVE11c2tpeGFCWlBVd0huNXdITWt5c3N4MmZm?=
+ =?utf-8?B?ZFhNUVptNnpmZzZTdGovR0NUc0ttOWZsQmpKb0NJK2p3YzgxUUVVZjhZTTdv?=
+ =?utf-8?B?WlFKZFBNRGpsMFh3ZHlsenRiNVFtcXlrWk1RdGFDSkVTdGRYeDFKQjZOeWVu?=
+ =?utf-8?B?TXJSOWJKZUcvNmlCVGxZWTJkaUxzL0M1TDUwZ2xZMG9UM1FFaG55UHRtb2d2?=
+ =?utf-8?B?OGZwMi9JNXMxTWZndDgyL1JwVEF5elc5d2M0N1dZTk5GZGJDOUVUR0o4Q0dD?=
+ =?utf-8?B?T3l6SkJ4SVIxc0FkNjNDZS94NVh2elFObFpkRVBTUFNHNXJjVUpOQkwxdm00?=
+ =?utf-8?B?R3hMcFJyZTZnc3NjUVZlOGl0c0dRMXBYV1VtMlJ6R1VaaWhPNEJkU1g0ejJh?=
+ =?utf-8?B?M3JyL2VDUzVaVWxHZGJWOFNubk95b3VqOVR2NGhRbE5sZmkzNXZHNmk2SG1X?=
+ =?utf-8?B?a2hPTm1Ja0RCZ2lVaTAxVHloaklSaDZoMVpMZjdacDdkYWxiNkxZb1BmZ3dn?=
+ =?utf-8?B?NHNmL240Q2tFZUxJbmY4UDF0SWh2TEdqNHp5OElhL3N4akVMVE1kU2FFdzlL?=
+ =?utf-8?B?NVNIQnVYNWk5TnRrZm1rTVpRcWtKM2JNU3p4UkI4OHVOcTlaMmxibE9ZTXhm?=
+ =?utf-8?B?MHI5b3RpVHlWSW42d005VzJ0dW1vZW5UcFlZdDFFUUY3TDgvVDQvb3lYcnl5?=
+ =?utf-8?B?SnVtYWp0MGMzUnNTL1pHRUlvVkhkTzhjSWF5QmVnTE5XR0R2TytZWmlKdy9L?=
+ =?utf-8?B?QkJKUWJPamYyYkNaYlZyai9LcTNqMnEweVRhbEF5bmVBRFZselZMeVUvK1N6?=
+ =?utf-8?B?RU8wc3dOWnkwVmlGT1llbFVwbmNDeHdjTisrWEF4U3NPbDdwckpYRE5OdGZl?=
+ =?utf-8?B?bmh5RjJYWGFpK0wzYStaY1IzQTNyRmdIUkZYSGd5Z0p5VDFmOGYyd3dhZWZR?=
+ =?utf-8?B?a24veDFUTEN2NWJtKzRIbUgwVllqSHZBTk9wQ0ExWEx6UHA3bk56SnNjQXZC?=
+ =?utf-8?B?RjhuWXZDYnBXSTRDUGVyaWtZOWlMcWQ2Mm9VSjFYYW9Ja2ducktZeWg3TjBs?=
+ =?utf-8?B?YklieEMxNDZNZUkwTHlZVDBkZDh6ZUwzR293QUdSUzlLdU1Hc1BFZjAyUUJO?=
+ =?utf-8?B?S01OQVE5TUFnOFBIeWxZQy9XSDhwWnBJZi9lSlIwN2R1YS8zaTdvZDhVYU5j?=
+ =?utf-8?B?QU1ZV1Ntcm0vb3R3eVJEQVJpT014bm9yOGpzVTFaOXExZVc5NHNvOHRCdFVX?=
+ =?utf-8?B?M2Q4cG8zVGpqaWFkRDZBQ1JqSHA3cno3NmFBbkN4Y2loOFBkbTJTWjlTRzdt?=
+ =?utf-8?B?L0NqNE5nS0x1Qi9UTTBtOHRPL0JHU2lyeHZzNjVTQXlUQnd5YzdIdmcrYXM3?=
+ =?utf-8?B?KzMrRC9qNGVLYW1STXlHYjdiSmpsbEhWQ1phTjF2QXRKY2E0WUdkeDhKL2VD?=
+ =?utf-8?B?cTVtc3A4Z3FRTnhnazUyK0g0ckFRUVN5Zzc4eDNQWG5YdFJHY3J5OEVpRXBF?=
+ =?utf-8?B?V0QwMUJha2x4dE5wblhud0ZTZHp4WDQ5V2ZJZEpCQkdZYUlUalV4a3B2cWN1?=
+ =?utf-8?B?K0ZtWCtoNENrZkl1SHhHSmpwVzN4VW5HdGRKWUR2c2Z4cGtsNUtJNjY5ZkQw?=
+ =?utf-8?B?MGRGQUFpR0t5Z0JXcTF1Q3hqWG1EeGlUZkJPTWF1NVpxbnlscjE0OHRyZDdS?=
+ =?utf-8?B?M1ByVlFwMC9JVEg2NEl4ZEs4NFl4emF2alcxaWJXemVXK3Z5MWtrUGVZOTRu?=
+ =?utf-8?B?eFYrUXBpRHdWTnFpanVLbm43Unl2aXJHSGhqU1pxVkNEb2pLNW1ZS29qTXQr?=
+ =?utf-8?B?cDF1YUdHRWp3WjllaERsSjI0UHBqZnlTNVZqTXh3WFlzdWM2UlE4eDJHU1hT?=
+ =?utf-8?B?UlE9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b8086c4-238c-4783-bb67-08de212e3b0e
+X-MS-Exchange-CrossTenant-AuthSource: LV3PR15MB6455.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2025 14:25:57.7975
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ur6nK8SJJI9DgFWkAi5RfG6J0dd9tdJ5tfJK7Uw5v40rVWYskbTWlQj/Xq3oQBr8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR15MB3851
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTExMDExNiBTYWx0ZWRfXx6R1u7j431OF
+ +i/EeviSpCSz/JneGVdBccl1w/bOlXhdn5bbfwr9VLXhTxuD4zXy6n0gIbGL91Stb8l8uQ/Z50d
+ nCBf6YLJU3r3qv6di4Dhor+dE+rsTf9jJKeSjmR4JjSVqoCh9v6+nSCV/npg0fE3zN4KGvNP2u3
+ UUDyVsMoOJYI5XKgXbT1VOmP/hOr5OgtxvwjZJmuFTcLe8X5760yX6eyiE5NXHDC6406s4OS2Ci
+ 6oQ8gL/XTGPs0104XyD7sZU0uUWmrPFljy0bKY4whqaL3g3LHdkR4uQFJu4P8x3xGljNa5B8yvn
+ Li6FIDqxQzpgIFyVFRQp+Fxovo67KWMsBV6sfTedpDt+omC7CvcTwImAzDGbdha+Z9cGB7OjxZi
+ wNiAnnVrpE7MDO2piVMfWVYydhJNkA==
+X-Proofpoint-ORIG-GUID: Mum_HfmTDKPMH7kI7VvEW91TsKLxbQ6N
+X-Authority-Analysis: v=2.4 cv=frLRpV4f c=1 sm=1 tr=0 ts=6913477a cx=c_pps
+ a=eOcJweQzB5mT18+DdV5GwQ==:117 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=DHR8f4Ps571lumA2_d0A:9 a=QEXdDO2ut3YA:10
+ a=DXsff8QfwkrTrK3sU8N1:22 a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=bWyr8ysk75zN3GCy5bjg:22
+X-Proofpoint-GUID: Mum_HfmTDKPMH7kI7VvEW91TsKLxbQ6N
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-11_02,2025-11-11_02,2025-10-01_01
 
-The function 'ep0_rx_state()' accessed 'mreq->request' before verifying
-that mreq was valid. If 'next_ep0_request()' returned NULL, this could
-lead to a NULL pointer dereference. The return value of
-'next_ep0_request()' is checked in every other code path except
-here. It appears that the intended 'if (mreq)' check was mistakenly
-written as 'if (req)', since the req pointer cannot be NULL when mreq
-is not NULL.
+On 11/11/25 5:01 AM, Al Viro wrote:
+> On Tue, Nov 11, 2025 at 10:30:22AM +0100, Christian Brauner wrote:
+> 
+>>> Incorrect.  The loop in question is
+>>
+>> Are you aware that you're replying to a bot-generated email?
+> 
+> I am.  I couldn't care less about the bot, but there are intelligent
+> readers and the loop _is_ unidiomatic enough to trigger a WTF
+> reaction in those as well.  Sure, they can figure it out on their
+> own, but...
 
-Initialize 'mreq' and 'req' to NULL by default, and switch 'req'
-NULL-checking to 'mreq' non-NULL check to prevent invalid memory access.
+Also, I try to fix every false positive, and explanations like this
+always make it easier.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: df2069acb005 ("usb: Add MediaTek USB3 DRD driver")
-Signed-off-by: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
----
-v2: Add <stable@vger.kernel.org> to CC list
-v1: https://lore.kernel.org/all/20251027193152.3906497-1-Pavel.Zhigulin@kaspersky.com
-
- drivers/usb/mtu3/mtu3_gadget_ep0.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-index e4fd1bb14a55..ee7466ca4d99 100644
---- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
-+++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-@@ -508,8 +508,8 @@ static int handle_standard_request(struct mtu3 *mtu,
- /* receive an data packet (OUT) */
- static void ep0_rx_state(struct mtu3 *mtu)
- {
--	struct mtu3_request *mreq;
--	struct usb_request *req;
-+	struct mtu3_request *mreq = NULL;
-+	struct usb_request *req = NULL;
- 	void __iomem *mbase = mtu->mac_base;
- 	u32 maxp;
- 	u32 csr;
-@@ -519,10 +519,11 @@ static void ep0_rx_state(struct mtu3 *mtu)
-
- 	csr = mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS;
- 	mreq = next_ep0_request(mtu);
--	req = &mreq->request;
-
- 	/* read packet and ack; or stall because of gadget driver bug */
--	if (req) {
-+	if (mreq) {
-+		req = &mreq->request;
-+
- 		void *buf = req->buf + req->actual;
- 		unsigned int len = req->length - req->actual;
-
---
-2.43.0
+-chrisA
 
 
