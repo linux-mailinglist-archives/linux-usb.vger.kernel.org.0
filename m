@@ -1,94 +1,153 @@
-Return-Path: <linux-usb+bounces-30417-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30418-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EF69C4D507
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 12:09:13 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3804FC4D5BC
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 12:17:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADFF23ADB6E
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 11:01:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8D77D4FD8BD
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 11:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3702C350A32;
-	Tue, 11 Nov 2025 10:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E254350A3D;
+	Tue, 11 Nov 2025 11:09:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YKJFap5K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o0N9Q+rV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C4F351FBA;
-	Tue, 11 Nov 2025 10:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AED2FE050;
+	Tue, 11 Nov 2025 11:09:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762858594; cv=none; b=AYImdjLGghh9qZSglhDm0l1PirtP+oXN6HVyfAHs0djNHtpwIvL0GQCthCj3DHTcfHu77R3VslXq40TZLZY2gC3gE3rDvZMTSUKYyPwvMbaPw9DqRHt0sGWO7mdUqT7mhfRxwn1I3CMeaTNbzGlLkg7/zzzR1A/ISjj/+ZiDnB8=
+	t=1762859356; cv=none; b=lRduakE5NRZbfmt0GvtYjmC2SGHZ4oy7r+syI31PHqRda31a/3vita9MquRwhnsMXeJYCYZQdASLwfo1a4AqE3M3f+TuSC1AuJS3nTGTUn7bbc+9fvXYoesSLbw6j4h4XE5nbnfid2nxkSCYq5CLJLISZfu1DHPzzeAT3EjBFLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762858594; c=relaxed/simple;
-	bh=LLE8UQmsCCogkZVKSd1TLbVt9gs72Jh93jqozm60ebU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iec2gDv1rUEBirXI4Jne/94u4LELAMHEsqW8KHQ3BjfAuWxX27xztHAxznbpErv6teiicOkO6nCcp1K2d4E+GDy+wAnAaHKIdGwwxzM/C89fd9heItDFtTNMdFd+ZGqaf9llcw2m+ac/BDHHPyGsFSIVY5LOBQyloQggOoreKZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YKJFap5K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 313A8C4CEF7;
-	Tue, 11 Nov 2025 10:56:29 +0000 (UTC)
+	s=arc-20240116; t=1762859356; c=relaxed/simple;
+	bh=TR/fkQ0p2p14fGBt9Nac2pxvzRzI97bXfo2/pH+IohY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Woh/WfA9ZP0I1OfLVl6KFQMEA5FVGLNPnHsCUzom8OhtnTGFEyl2bXLlSGSXpLjOQtYhgaiXDf74Wzu6/QrzZTJL4t3Zzkqx5Yq9x0zIW6YQmXWJDjfpkxjAUUA6qpEl3NP1WMjZ9DKBE8s+la7/2zf+7gNOhCHwUWP4mB2anv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o0N9Q+rV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B371EC4CEFB;
+	Tue, 11 Nov 2025 11:09:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762858594;
-	bh=LLE8UQmsCCogkZVKSd1TLbVt9gs72Jh93jqozm60ebU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YKJFap5K6aImcv2glJeiNMSpxrwhX6LrxJE9jB2o/nF/WyKkn1WH6018FXJoi/UCP
-	 kwILmx0XpLJxYnaUhsyl42/On0deramtMNIHMDakZ3XBWX3DBuNSISALizcXkP5J1g
-	 As9tysDbaFlf4n4MhlGm4iCSknWQmP/uRA7y3UcgxHHrHNeSX1vdVQgCeGvYZzT/xd
-	 4kN6IgSEXZHZeuWLm2Bdu2rfQ3za3HSpRsHwoEVGtapRsGF7Y0ZMbazAjnKP+Hw6s1
-	 1ehJojThYLaGzj/AfbW9ZcFiZLxCIHI4qKUiP0ztlFxRlVs0DdQDmb3wCyvyfh4liI
-	 CUKpd3rfxq+1w==
-Date: Tue, 11 Nov 2025 11:56:27 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org, 
-	jack@suse.cz, raven@themaw.net, miklos@szeredi.hu, neil@brown.name, 
-	a.hindborg@kernel.org, linux-mm@kvack.org, linux-efi@vger.kernel.org, 
-	ocfs2-devel@lists.linux.dev, kees@kernel.org, rostedt@goodmis.org, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, paul@paul-moore.com, casey@schaufler-ca.com, 
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com, selinux@vger.kernel.org, 
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 22/50] convert efivarfs
-Message-ID: <20251111-tolerant-profan-0aff1cc76691@brauner>
-References: <20251028210805.GP2441659@ZenIV>
- <CAMj1kXF6tvg6+CL_1x7h0HK1PoSGtxDjc0LQ1abGQBd5qrbffg@mail.gmail.com>
- <9f079d0c8cffb150c0decb673a12bfe1b835efc9.camel@HansenPartnership.com>
- <20251029193755.GU2441659@ZenIV>
- <CAMj1kXHnEq97bzt-C=zKJdV3BK3EDJCPz3Pfyk52p2735-4wFA@mail.gmail.com>
- <20251105-aufheben-ausmusterung-4588dab8c585@brauner>
- <423f5cc5352c54fc21e0570daeeddc4a58e74974.camel@HansenPartnership.com>
- <20251105-sohlen-fenster-e7c5af1204c4@brauner>
- <20251105-vorbild-zutreffen-fe00d1dd98db@brauner>
- <20251109204018.GH2441659@ZenIV>
+	s=k20201202; t=1762859355;
+	bh=TR/fkQ0p2p14fGBt9Nac2pxvzRzI97bXfo2/pH+IohY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=o0N9Q+rVN2t77ZW6ERu4GlKcgvjMcrJX+GcEe+CPr5SFZJQaP2XXH8u6e070tfLzy
+	 XCxN8Dmi+dhC19GYYH8RZpw/LtrgxdnkQBgTMdVhmsR08jgIE24XBD/rZwGEecUyHt
+	 Rqwb7wkgyC3dmpa90E+VLxE3MJcsRmgd+t7z4MjgGBfRZDUkcot3LX9Tik7R1uTYxU
+	 kwucZbiS9uYsSxahqbcmE1TxON/rn2M/i6J2ERQvgszuIxTZpo7MAJNuGLcXU2wpVm
+	 f0EHUOM5/CrmDXPRHNp/qUglMAvK0coSbkALs1jsOsQWqKVmnb7NIJKlQcXyk64yHa
+	 +xykadXOEfMIw==
+Message-ID: <868f09fd-8fe8-4c01-952f-6317604c43a3@kernel.org>
+Date: Tue, 11 Nov 2025 12:09:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251109204018.GH2441659@ZenIV>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 04/10] dt-bindings: phy: rockchip: rk3399-typec-phy:
+ Support mode-switch
+To: Chaoyi Chen <kernel@airkyi.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Peter Chen <hzpeterchen@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>,
+ Chaoyi Chen <chaoyi.chen@rock-chips.com>, Dragan Simic <dsimic@manjaro.org>,
+ Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ dri-devel@lists.freedesktop.org
+References: <20251111105040.94-1-kernel@airkyi.com>
+ <20251111105040.94-5-kernel@airkyi.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251111105040.94-5-kernel@airkyi.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Nov 09, 2025 at 08:40:18PM +0000, Al Viro wrote:
-> On Wed, Nov 05, 2025 at 02:43:34PM +0100, Christian Brauner wrote:
+On 11/11/2025 11:50, Chaoyi Chen wrote:
+> While an external Type-C controller is still required to detect cable
+> attachment and report USB PD events, the actual mode and orientation
+> switching is performed internally by the PHY through software
+> configuration. This allows the PHY to act as a Type-C multiplexer for
+> both data role and DP altmode configuration.
 > 
-> > -static void filesystems_freeze_callback(struct super_block *sb, void *unused)
-> > +static void filesystems_freeze_callback(struct super_block *sb, void *bool_freeze_all)
-> >  {
-> > +	bool freeze_all = *(bool *)bool_freeze_all;
-> > +
-> >  	if (!sb->s_op->freeze_fs && !sb->s_op->freeze_super)
-> >  		return;
-> >  
-> > +	if (!freeze_all) {
+> To reflect this hardware design, this patch introduces a new
+> "mode-switch" property for the dp-port node in the device tree bindings.
+> This property indicates that the connected PHY is capable of handling
+> Type-C mode switching itself.
 > 
-> Minor nitpick: do we even need a dereference here?  Just check
-> whether the argument is NULL and adjust the caller...
+> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yup, sounds good.
+There are never blank lines between tags.
+
+Best regards,
+Krzysztof
 
