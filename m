@@ -1,261 +1,374 @@
-Return-Path: <linux-usb+bounces-30321-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30344-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67870C4BAA3
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:24:03 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52659C4BDDD
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:01:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F28174F4E80
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 06:22:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C6A9E34ED77
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:01:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF6B2D97BE;
-	Tue, 11 Nov 2025 06:21:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B9535504F;
+	Tue, 11 Nov 2025 06:55:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="DKx0IIxt"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="g/CU5/uH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013038.outbound.protection.outlook.com [40.107.201.38])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CF92D878C;
-	Tue, 11 Nov 2025 06:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.38
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762842080; cv=fail; b=d1k1fTrJ8/+W8xsPQ+LY4LeKnDSTlRbYpcPMtGYwBqkOjX182QUR5sKOS3VV6UzopftnVz6dpoujzaWnHgbXKj2yX06C0CztKy5hQeoVgwFtAh7ijK5+0KnnZHUFpeQuuRclivveqlNBLpXBn8FGXN5aH2TZkPWAQUZ2QEsUDQw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762842080; c=relaxed/simple;
-	bh=k/TjjbL5jem4FUbUlHLlTVyeB5QpN+wochC1vtP1de8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=R0Ur6/Ch8OQ68CA+W9P8R+oOUXHfiRdK5K9ot2IHUwO9SKg7OpKiacPWt0wImb1sQOdQM3uFFJ6R5vBkvDtcEwAEB90cJfOaxQbytFRKBck/Q3C9HMZ8sFbbotrO6z8PvdtW4bTMKyuyMnCT6Gj9bGVP3IjzPJx3SVbVLQmUWl4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=DKx0IIxt; arc=fail smtp.client-ip=40.107.201.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LZY62dlieHxzwrbrZJcKnvmFObI2l5oUccj9jj7SVPubNEC+YiPmsc5wVT+fzRDFK/yRm7KMUqU3/YGSXO7aUATotzIpKF5N1hP5efRw7Zft3RXEtbOXGfsDTX5nP3wvOwibht73XBrnQN78r5JqhLamv7lcnopWqt5djuIU6+9ZpO6BNmGNOA+ytGiBqd7y8INt+19beMaZAvXOM04BnET7b17P9UbXy8dQ1t27ZfHysRsZTRteriojWqGfIZHC8mXuOBjP56i3RPY1FyYGtqZPOqDfZH1J+mwnabAvxYygzf8o8xk3A9KoFveaySEwkmmEDNxQ4eoSsZ7udDvZoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7KNzzFC0TvRcz8JLcx5BtRh2tStRWwyn2lSvklpovrw=;
- b=vmGDjD9GgHD40qAFDchRHYVEh9H+9tqsA1F5scDJX5nj6g4/n9Pmz/5Gtcmh9ka+6GV8fSGN5L9VJ69pgMqZNvn4c+G8COJRYXi0giVCnX6PYLe3ShSt0+6waLmWjJMJ5u2JBtHe1g0nGwZ6lVi1uRrgtkVD7RC3li/DD0PKKQUllVvexFh/PDjlmecBlIZ15qZXU3erPRB9zWgktioAqBZuT34lqLhQJFv81DktHZJ8pi29ddpeRO21SZrf4AL5/yxcew5e0Lr+Fyb2cgAeHuQ/x7A2+QtBUFVOEGPWva/kYEsKag7JpvvTEkhag2s6PGLV+pV81VvLSOa15rwxZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
- dkim=pass header.d=altera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7KNzzFC0TvRcz8JLcx5BtRh2tStRWwyn2lSvklpovrw=;
- b=DKx0IIxtVA9zAfWzn+B23cb3ozO4oxoeqdh8SgwV/lngi9jV3hV7b77i3UBHvYMW/dwBRKX0uV8kVoDt3G0RbopCQ6L/FE7tRGyGZ2do/c4xGkCQJeo3QnkelAcmxOgGTPB2MOiSqOuIlGwXayAmi3NmSXSjMcnE1IT9Oo4o0bN9MyNnrFfKXqM+OVd8wVX2uHMIbNifyPhAt0uJxkxblDXQ4/jasSzWuWp+K02QzCncGpxb5R85hLowFSRyUwjcfXTA9msyefGiWlIa/9TJCFx7iF24o3WtdvLz9JWyXNERtHZ7PGZGUwU4q+xaT3X1wImsohZx55iFtP6bvc2WCA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=altera.com;
-Received: from DM8PR03MB6230.namprd03.prod.outlook.com (2603:10b6:8:3c::13) by
- DM6PR03MB5049.namprd03.prod.outlook.com (2603:10b6:5:1ee::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9298.16; Tue, 11 Nov 2025 06:21:17 +0000
-Received: from DM8PR03MB6230.namprd03.prod.outlook.com
- ([fe80::abad:9d80:7a13:9542]) by DM8PR03MB6230.namprd03.prod.outlook.com
- ([fe80::abad:9d80:7a13:9542%3]) with mapi id 15.20.9298.015; Tue, 11 Nov 2025
- 06:21:17 +0000
-From: adrianhoyin.ng@altera.com
-To: gregkh@linuxfoundation.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	dinguyen@kernel.org,
-	Thinh.Nguyen@synopsys.com,
-	devicetree@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9564347BA7;
+	Tue, 11 Nov 2025 06:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762844133; cv=none; b=Bf8naPhV57omuzm0TH7iJtXkL84z7aVvdqS3yqFkMtjs/Q9EOw28l5nSNMxeJopw+vW8PrWzvWCyArUgrn82yghY6R8Wrd/zu05yrvLtgpptVyubx1ta3tEMLpZmccBU7tmmn1913VbIFJeOSlLnnuP1otN8wo+YezgD6RqA4U4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762844133; c=relaxed/simple;
+	bh=76utv+v6hAue0oAKoeyxG4KBaw0uyktirE097PvBq7M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jk9VqzltsBj58QT98jSxbBicQLiDIvvPtrDnGFnevFJFlxiNIvsSIEZJqrottVW5IChDRlAEgmM17K9KydhL1BY1lK2HUkwDgdjRAnYXWqHvWfQX34w1cz0a7Kr6Zu9oFDey5b6PPn+hxkJZxu4ltzF43aJOCsHXbnHyCc2lJNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=g/CU5/uH; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=leW8GA4y7Pxp64vNo8XjzZTbPYZFOmxFXD/3OiiHgBc=; b=g/CU5/uH4HMjhxdKjr30ByWuse
+	rR0MjDbFLTtzuzJzfLZ6mL3bQtXs39KLmW5eMtB8fy2iJ+Ek/cufD5MhxJm9nmL6JE35GYmhCA0zJ
+	MGohTr1R34wWNYPCSJynjsoDjcufcWoEdaxIZ3UR5jUz2YHCTlD/7fJk+wJjbGrMzS/nf2oSco7rb
+	nXsNbo1V1rcCz/TKMwiqhPOeGfzkyF9yi5zQ8niVbVkYrZRsjK122F/JpFHx9/AVSZgDLA1/deZ+f
+	QYljuYONnRgAnVNuv67jjtz+ZF7RHbe/g8d4Ku2qpM3uvXthA0cXcCWtgxeXvvfintzgotKgCvsIJ
+	SEVTFaKw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vIiHg-0000000BwrA-3Mp4;
+	Tue, 11 Nov 2025 06:55:21 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	raven@themaw.net,
+	miklos@szeredi.hu,
+	neil@brown.name,
+	a.hindborg@kernel.org,
+	linux-mm@kvack.org,
+	linux-efi@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev,
+	kees@kernel.org,
+	rostedt@goodmis.org,
+	gregkh@linuxfoundation.org,
 	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: adrianhoyin.ng@altera.com
-Subject: [PATCH 4/4] usb: dwc3: add support for configurable DMA addressable bits
-Date: Tue, 11 Nov 2025 14:18:48 +0800
-Message-ID: <c69076470c19fc03d92fc04cdb10960873bc2bc0.1762839776.git.adrianhoyin.ng@altera.com>
-X-Mailer: git-send-email 2.49.GIT
-In-Reply-To: <cover.1762839776.git.adrianhoyin.ng@altera.com>
-References: <cover.1762839776.git.adrianhoyin.ng@altera.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: KUZPR01CA0024.apcprd01.prod.exchangelabs.com
- (2603:1096:d10:26::14) To DM8PR03MB6230.namprd03.prod.outlook.com
- (2603:10b6:8:3c::13)
+	paul@paul-moore.com,
+	casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org,
+	john.johansen@canonical.com,
+	selinux@vger.kernel.org,
+	borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org
+Subject: [PATCH v3 00/50] tree-in-dcache stuff
+Date: Tue, 11 Nov 2025 06:54:29 +0000
+Message-ID: <20251111065520.2847791-1-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR03MB6230:EE_|DM6PR03MB5049:EE_
-X-MS-Office365-Filtering-Correlation-Id: bbdbb286-5a62-4754-90dc-08de20ea85b0
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?RjZlOEl5UVVkRXAydEhFQ2pReDdrREhlNmdvZ2Qxb3ZlM1JaMEhuSFB5TWor?=
- =?utf-8?B?eXNwTmUvUCt3ZGlYOGV5aSt6SE42K1hScW1JRmlQb0NEZkQyQkxCbW5WWHJi?=
- =?utf-8?B?bWFrNkVVSnFHYm1jczYrSVdiSkNoK21jeWNRNkQwcktVU3FVL09uT1NrR0NO?=
- =?utf-8?B?QVVXcnRlNWZwcmhhbTlLM1FTSVVDM0p0bXFHclNYaEpVbzBlODliWnRYMC9Q?=
- =?utf-8?B?V2ZyWVYvU3BsYm8zSnZmWmJIVmVodW14U2h6dXA4UFhLVmx6T2NGbCt1bkxU?=
- =?utf-8?B?UVA3ckRWYVQ1VW5YU3lzaG1PUXFXNDVoMUdYSk1Sa0d5NHZteG9neFlIZktS?=
- =?utf-8?B?SWIzQ2gxM1JwcXFOOFZDSFNKTXRUdE5pNHFYKzE5dkF4UnJPbHNrZ2NzMEN4?=
- =?utf-8?B?aGRZV3Q2akVuZXhEdTN6amtocDhZTHowM3V6MlFNZkRxQ2xSSGQvaFdGbWlx?=
- =?utf-8?B?L3h3dlJjUWRmbThlTmhTV1FYdGFoMnYyVTNhVGZSTlN6WkVrSTVrcnQ5SUs2?=
- =?utf-8?B?My93UDdzQUVQd3cxcS96YUh0aUVYdlhyR0c4RlRDQ2l4NUtKUlVaRkFEdndu?=
- =?utf-8?B?SzBramRHVTd4RDgyQlR4TFVYLzYvUS8vcjg5UzZCMTdSNGg1dmxnQ1crVlRz?=
- =?utf-8?B?ZVVSYUttNzVaTlVsM1o2dXBLVy9vd1NUbW1iekFYZURrVy94MXRxTnA4a0Z4?=
- =?utf-8?B?TjZyTGI1b25hU1lTSE5Pb1YxOEZaKzUxWUczY1lMbVZCWHEwa09WQStvQnJJ?=
- =?utf-8?B?NDdyS3gwMXZoQ3hkd3dGMFI1a1YzWVZNK2tGUmdhMFlkakp0c1BwMHUvaTBu?=
- =?utf-8?B?M1lqck9mRFNKY1lPeStSc0JXbkFNbzYza2FpUVprdlltdGN1OWEwdHlJek1w?=
- =?utf-8?B?R1dlTmR6ZnFnMFZ6L1F1WWJ4YWRGMlI2L2p0YjRCblJJOVVDQm9nYjNacXA5?=
- =?utf-8?B?WVcyWnNvYTBhL09DeDlRaVNLVVM2bCtqN2ZWTGJKV0Y4MEFNNGhoMGIvVjN1?=
- =?utf-8?B?MDNCRVZlZkN6R285VVl2SHFlNC8ydTVjWWJ1S1A2NC9hZE15SjdBNTZ6dEIr?=
- =?utf-8?B?ZURmVGJFNTRHeGt4TkRDY3RwT3ZaTGZIOHVkcUk0TDI2Q040dHdsaHhUTXdh?=
- =?utf-8?B?bHByakdiMkRSd01ENkV2YlkrdDAvM2RlVHI1ZlNtZFIzQUlEVldFbjA0UzNU?=
- =?utf-8?B?VUZlVngwT3FFazZwellvVXBuNlQ5RFpGdStWZlZTMXB4MnlhOGtqTUZyM1lm?=
- =?utf-8?B?cGdSNTdGNmtJQTlSL3dQRWYzWEx6QlZ0QjJpS1B2SmMwUFFTcyt5dXlnaDR1?=
- =?utf-8?B?dG1UbnZMRXFhQWdxNnBSYUNSSk1YMXhON0hHK0dzRHQ3OGlpRXBUdWkydE5t?=
- =?utf-8?B?UVFYSGdCSEpBL1p5OEJlazBsUGY4T2hNQzZ2M3dJekIrbDVkeUxiSHdUODcw?=
- =?utf-8?B?T1pITUxraEtHZFpJbGw0TUlWRnhVRHo3dFNTam9CRjI2RS9kb2JRS3dvS0JT?=
- =?utf-8?B?MnQ3d2ZaYUJoS0JiaTY5Y3pkbFA2bUdTcUtLUmVtYUoyYmxzVzljTWx2M3BL?=
- =?utf-8?B?eEY5VW1DMHZrOGtzVk9SVnJYdXQ2WTFOYldUTjR4dEllRENNTlExaEpEYUVh?=
- =?utf-8?B?S3FGVmpSOXc5KzJIdDhFakIybGpTbWZOTEg4ZEZIUmpNZjBzWHl1UFBIOEdn?=
- =?utf-8?B?U1gyVmI2b2hJbXRSQVoyK052WGdZbmpPb3JIR0UwTlZGRGsvdFY3ZGczaWNJ?=
- =?utf-8?B?d1JzR2JQV2VBdFNoelBITTlPT05iaVpuemlwZVpnRVh2NUFGUGhULzZsSkpL?=
- =?utf-8?B?eXM3NVFHYXR3ODVXdzM5UkFYZlo4bVJFT0Z1L1RWQ05tN3RFdTViSERqZm9I?=
- =?utf-8?B?VmswRmtFUjEzenJ6OGwwZVNpbFZZWUpuL1RzN3UrU0w3a3Fmd0pmQjVrdWlB?=
- =?utf-8?Q?Sk2Yf15GyMFACu8Dc3a2ek9dEmBL6ap7?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR03MB6230.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TitKWUdGT0JxNkN1bEJIT0pLT045VmtFUmVUWkFackdsQndrRU9yY3hVQ1dk?=
- =?utf-8?B?VXBVZ1ZHbmtoZGthYzA4ZG1ZdW9yalduRkxTZWxOblRkTFdjVnZFZGtMVzZC?=
- =?utf-8?B?T3lpM3FuM0p5Zm1XNTErNitrOGVOcmNSSGhzVFhGYXJnK0Y4OUs3R21BOExI?=
- =?utf-8?B?VE9Nb054NFVORHJyZFJOMWUxTzRQRDdoV3hMSU9qL3Q1TW9zMkZyeW81c1Zi?=
- =?utf-8?B?MEtnVXNySmNlSWFuRE00bTh4dHM4Yi9wT0ZXRWNVYThtSGMrUFIva2pxL0Ft?=
- =?utf-8?B?RzczU0M5b0RtUy94cTZnSFE2N040THkwZ2hUZForY2lpS3N4SnViaWFyL3U5?=
- =?utf-8?B?cFNBSTRZK0I4RjdZSVVFTXB0bUVPc2FNWEEvdXdpenplWWp6OXR6M0M3eWU5?=
- =?utf-8?B?RGNISWVKancwd1FXTnNPRUhyNU1OTmp2eDJtdE1pbWR4NFFSUzBQbTQxVWxO?=
- =?utf-8?B?bmU5dTkrUkVFRWgwa1N1bS8xcjY1b1ZFSnNCb3NTamdJWW10WEk0RzBUYjVP?=
- =?utf-8?B?eHRqeTVUeDF4b2lkSGZEL0hQbnBXYmYrbFE4UnZPWEVMdEJaYUFGaG1jUjdU?=
- =?utf-8?B?VSsrUFBqNS9aaklGaTZ3N3hYR0MyS2pNb0luRitHeWZrWXJXZ3NjaWsyKzhK?=
- =?utf-8?B?aUgvaEtHLzNyN1BvRmhtbmNqWHdxWDdNclpwY0pzcTBwRnlzU2VlbDE5RTBi?=
- =?utf-8?B?QkdoZEZnSVdqcSs0dzg2YXI1V1AyNDJhQUJpWGZicnJRUmNTVDROSFFsZDFr?=
- =?utf-8?B?d0hqN0Z0MzBFS0pwWFE0T3NiU1Q4NTg2WVZraFlEMGZJT1hYTTEvM28vSGhl?=
- =?utf-8?B?c0xlSDdacXFDUGVzSnNLcjlPS3h5a0I4elpwZUxidDlyOTVXSGkyc2JGWHZa?=
- =?utf-8?B?SnNaMnBmMXNpU1d5YzhWWkNoLzJzTUNHQkpxZUdsRmZpUHVWSFFNQ0wxbVR1?=
- =?utf-8?B?UDhMeWd0eWxhMXNmOVdQUkNiWEdTUzQ2ODBlNzk2d1JzK205UmVUL1ZnRTlD?=
- =?utf-8?B?NFhuNGs3My9BV0Z2RHdpMnI1eTR6TW1lUEJ2VUZaS003WUgvRnR6QWtuMkZv?=
- =?utf-8?B?dFdzbkxiK0RSSkx6S05JSVdvdWVuZ20zRStwZ0NacmFnZnFsQk0xTTFFWWcr?=
- =?utf-8?B?am9wenVQVkhxbnA0ZlU0bmRpMmdZUWdjclNnUzMrUENYT3ZhRU1oaDlHVmk2?=
- =?utf-8?B?N1ladUgzOU84ZUdPaURsZmltVmhYdENwZUc0ckh4ZWYwRENVUnJQUkVtRGlP?=
- =?utf-8?B?eUZYd0RXdVRqaE1Gc2c4OGRNRVN3c2VHdFhKTDZNSGJXMFRLajFwb2RISEc4?=
- =?utf-8?B?TUtyNVFaYVY4TEJoa3ZVT2sxcXRmL1MvTWdDZVRiNkNCSUFwUFhxZjlVNHVt?=
- =?utf-8?B?U25pek5kcFVRQUpONE1SYUU3ckZYVElNRjJ1bWRSQUlUNGRMZEU0OUd1SkRt?=
- =?utf-8?B?TWNlZTJMSklxa1ZtR29zZzJnbWpnbjlSM1JobnN3WWF2R2twbmRsQ0JBbFpU?=
- =?utf-8?B?R2taVUpELzRjYVRlRnZuZTZ5Q1UzZSt4b2tySDNlbkdjbkl3ZFFvR1ZwaXZj?=
- =?utf-8?B?UjRKNEtCMDBTZzlwTFcrelZnUGFIVC9sd0ZLS1dXdVdJY0FDLzFzQ09vd29w?=
- =?utf-8?B?VmFuT2FLWEdLM3liNkNxQ0svNzMrK2t5aHFpSTM4WE1OMEtDeUVFeENjKy8z?=
- =?utf-8?B?ZzMvSFFUZ1NSeTFycDhRRGMxTUx2QWVjb3pwYUo4SkJxRnEvYk5pMnNpZjk5?=
- =?utf-8?B?YnRpRUpxRTJxSnZ4UU1CTnFjaE1UaEV5VUpTUUtGZ0I4UXZYaHlpc2tUbWVu?=
- =?utf-8?B?MWo5THFjUzUrMnpHU1ZITjBQN3dCclVTaUYrMklwRkJ6SDVGT296NjRhNVhT?=
- =?utf-8?B?VkpzS3ovdVR2RUJ1R0lLQ0Mxd0MwZ2dKbkI0K0ZZZnQ4VmxvUDBaaGJMUWFS?=
- =?utf-8?B?d090K2x5QXlqWHVQeUlsTWRxWlVEK0dMMjdjSmNGUVU5YVVTb1lhRVJQd3ZY?=
- =?utf-8?B?bUVrWExqYTJvUVRPV0oramh6Sk4rRlV0L25PWE9xeVA2U3B5Q3M5SCsvNzhh?=
- =?utf-8?B?RzhPN0g0NlByVDljUjhBUWdVTU5HS2NKMkwzMlVhdUNnaVlwaGZiL2hUejI1?=
- =?utf-8?B?bzRtSTQvMUwvV3Z6VTR1RDljNnhxa3RBaENBc0cxYzg5U1ozeWFkMkMvOGNE?=
- =?utf-8?B?WFE9PQ==?=
-X-OriginatorOrg: altera.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbdbb286-5a62-4754-90dc-08de20ea85b0
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR03MB6230.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2025 06:21:17.1309
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w2BoAYLZkqw9WxxktW0btxj0/fg5iZV6ovAIqpdOxJk6UGUAeCb+WT7nZiwOfcidhZAbo+zNWcIV6mt7QVOYyGVZVOsGza10i7Pa+JH7xKg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB5049
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-From: Adrian Ng Ho Yin <adrianhoyin.ng@altera.com>
+Some filesystems use a kinda-sorta controlled dentry refcount leak to pin
+dentries of created objects in dcache (and undo it when removing those).
+Reference is grabbed and not released, but it's not actually _stored_
+anywhere.  That works, but it's hard to follow and verify; among other
+things, we have no way to tell _which_ of the increments is intended
+to be an unpaired one.  Worse, on removal we need to decide whether
+the reference had already been dropped, which can be non-trivial if
+that removal is on umount and we need to figure out if this dentry is
+pinned due to e.g. unlink() not done.  Usually that is handled by using
+kill_litter_super() as ->kill_sb(), but there are open-coded special
+cases of the same (consider e.g. /proc/self).
 
-Add support for configuring the DMA addressable bit width in the
-Synopsys DesignWare USB3 (DWC3) core driver.
+Things get simpler if we introduce a new dentry flag (DCACHE_PERSISTENT)
+marking those "leaked" dentries.  Having it set claims responsibility
+for +1 in refcount.
 
-Altera Agilex5 supports only 40-bit DMA addressing. Setting an incorrect
-DMA mask (such as the default 64-bit) can lead to address truncation or
-translation faults when the SMMU is enabled.
+The end result this series is aiming for:
 
-This commit introduces a new field, dma_addressable_bits, in the dwc3
-structure to track the platform’s supported DMA width. The default value
-is set to 64 bits, but for Agilex5 platforms (altr,agilex5-dwc3), the
-value is overridden to 40 bits. This field is then used when setting the
-DMA mask to ensure compatibility with the system’s actual address bus
-capabilities.
+* get these unbalanced dget() and dput() replaced with new primitives that
+  would, in addition to adjusting refcount, set and clear persistency flag.
+* instead of having kill_litter_super() mess with removing the remaining
+  "leaked" references (e.g. for all tmpfs files that hadn't been removed
+  prior to umount), have the regular shrink_dcache_for_umount() strip
+  DCACHE_PERSISTENT of all dentries, dropping the corresponding
+  reference if it had been set.  After that kill_litter_super() becomes
+  an equivalent of kill_anon_super().
 
-Signed-off-by: Adrian Ng Ho Yin <adrianhoyin.ng@altera.com>
----
- drivers/usb/dwc3/core.c | 9 ++++++++-
- drivers/usb/dwc3/core.h | 3 +++
- 2 files changed, 11 insertions(+), 1 deletion(-)
+Doing that in a single step is not feasible - it would affect too many places
+in too many filesystems.  It has to be split into a series.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index ae140c356295..20e655364135 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2179,6 +2179,9 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
- 	dwc->xhci_resources[0].flags = res->flags;
- 	dwc->xhci_resources[0].name = res->name;
- 
-+	/* Initialize dma addressable bit to 64 bits as default */
-+	dwc->dma_addressable_bits = 64;
-+
- 	/*
- 	 * Request memory region but exclude xHCI regs,
- 	 * since it will be requested by the xhci-plat driver.
-@@ -2194,6 +2197,9 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
- 			dwc_res.start += DWC3_RTK_RTD_GLOBALS_REGS_START;
- 		}
- 
-+		if (of_device_is_compatible(parent, "altr,agilex5-dwc3"))
-+			dwc->dma_addressable_bits = 40;
-+
- 		of_node_put(parent);
- 	}
- 
-@@ -2243,7 +2249,8 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
- 
- 	if (!dwc->sysdev_is_parent &&
- 	    DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0) == 64) {
--		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
-+		ret = dma_set_mask_and_coherent(dwc->sysdev,
-+						DMA_BIT_MASK(dwc->dma_addressable_bits));
- 		if (ret)
- 			goto err_disable_clks;
- 	}
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index a5fc92c4ffa3..ddc42c88da93 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1180,6 +1180,8 @@ struct dwc3_glue_ops {
-  * @wakeup_pending_funcs: Indicates whether any interface has requested for
-  *			 function wakeup in bitmap format where bit position
-  *			 represents interface_id.
-+ * @dma_addressable_bits: set if we need to configure a different
-+ *			dma-bit-mask other than 64 bits.
-  */
- struct dwc3 {
- 	struct work_struct	drd_work;
-@@ -1414,6 +1416,7 @@ struct dwc3 {
- 	struct dentry		*debug_root;
- 	u32			gsbuscfg0_reqinfo;
- 	u32			wakeup_pending_funcs;
-+	u32			dma_addressable_bits;
- };
- 
- #define INCRX_BURST_MODE 0
--- 
-2.49.GIT
+This work has really started early in 2024; quite a few preliminary pieces
+have already gone into mainline.  This chunk is finally getting to the
+meat of that stuff - infrastructure and most of the conversions to it.
 
+Some pieces are still sitting in the local branches, but the bulk of
+that stuff is here.
+
+Compared to v2:
+	* 23/50: fixed a braino in spufs conversion
+	* 6/50: added a placeholder comment in d_make_discardable() at
+the point where it's introduced, promising a WARN_ON() in its place
+in the final, along with explanations of the reasons for delay.
+Comment goes away in 50/50, once WARN_ON() gets there.
+
+The branch is -rc5-based; it lives in
+git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.persistency
+individual patches in followups.
+
+Please, help with review and testing.  If nobody objects, in a few days it
+goes into #for-next.
+
+Shortlog:
+      fuse_ctl_add_conn(): fix nlink breakage in case of early failure
+      tracefs: fix a leak in eventfs_create_events_dir()
+      new helper: simple_remove_by_name()
+      new helper: simple_done_creating()
+      introduce a flag for explicitly marking persistently pinned dentries
+      primitives for maintaining persisitency
+      convert simple_{link,unlink,rmdir,rename,fill_super}() to new primitives
+      convert ramfs and tmpfs
+      procfs: make /self and /thread_self dentries persistent
+      configfs, securityfs: kill_litter_super() not needed
+      convert xenfs
+      convert smackfs
+      convert hugetlbfs
+      convert mqueue
+      convert bpf
+      convert dlmfs
+      convert fuse_ctl
+      convert pstore
+      convert tracefs
+      convert debugfs
+      debugfs: remove duplicate checks in callers of start_creating()
+      convert efivarfs
+      convert spufs
+      convert ibmasmfs
+      ibmasmfs: get rid of ibmasmfs_dir_ops
+      convert devpts
+      binderfs: use simple_start_creating()
+      binderfs_binder_ctl_create(): kill a bogus check
+      convert binderfs
+      autofs_{rmdir,unlink}: dentry->d_fsdata->dentry == dentry there
+      convert autofs
+      convert binfmt_misc
+      selinuxfs: don't stash the dentry of /policy_capabilities
+      selinuxfs: new helper for attaching files to tree
+      convert selinuxfs
+      functionfs: switch to simple_remove_by_name()
+      convert functionfs
+      gadgetfs: switch to simple_remove_by_name()
+      convert gadgetfs
+      hypfs: don't pin dentries twice
+      hypfs: switch hypfs_create_str() to returning int
+      hypfs: swich hypfs_create_u64() to returning int
+      convert hypfs
+      convert rpc_pipefs
+      convert nfsctl
+      convert rust_binderfs
+      get rid of kill_litter_super()
+      convert securityfs
+      kill securityfs_recursive_remove()
+      d_make_discardable(): warn if given a non-persistent dentry
+
+Diffstat:
+ Documentation/filesystems/porting.rst     |   7 ++
+ arch/powerpc/platforms/cell/spufs/inode.c |  17 ++-
+ arch/s390/hypfs/hypfs.h                   |   6 +-
+ arch/s390/hypfs/hypfs_diag_fs.c           |  60 ++++------
+ arch/s390/hypfs/hypfs_vm_fs.c             |  21 ++--
+ arch/s390/hypfs/inode.c                   |  82 +++++--------
+ drivers/android/binder/rust_binderfs.c    | 121 ++++++-------------
+ drivers/android/binderfs.c                |  82 +++----------
+ drivers/base/devtmpfs.c                   |   2 +-
+ drivers/misc/ibmasm/ibmasmfs.c            |  24 ++--
+ drivers/usb/gadget/function/f_fs.c        |  54 ++++-----
+ drivers/usb/gadget/legacy/inode.c         |  49 ++++----
+ drivers/xen/xenfs/super.c                 |   2 +-
+ fs/autofs/inode.c                         |   2 +-
+ fs/autofs/root.c                          |  11 +-
+ fs/binfmt_misc.c                          |  69 ++++++-----
+ fs/configfs/dir.c                         |  10 +-
+ fs/configfs/inode.c                       |   3 +-
+ fs/configfs/mount.c                       |   2 +-
+ fs/dcache.c                               | 111 +++++++++++-------
+ fs/debugfs/inode.c                        |  32 ++----
+ fs/devpts/inode.c                         |  57 ++++-----
+ fs/efivarfs/inode.c                       |   7 +-
+ fs/efivarfs/super.c                       |   5 +-
+ fs/fuse/control.c                         |  38 +++---
+ fs/hugetlbfs/inode.c                      |  12 +-
+ fs/internal.h                             |   1 -
+ fs/libfs.c                                |  52 +++++++--
+ fs/nfsd/nfsctl.c                          |  18 +--
+ fs/ocfs2/dlmfs/dlmfs.c                    |   8 +-
+ fs/proc/base.c                            |   6 +-
+ fs/proc/internal.h                        |   1 +
+ fs/proc/root.c                            |  14 +--
+ fs/proc/self.c                            |  10 +-
+ fs/proc/thread_self.c                     |  11 +-
+ fs/pstore/inode.c                         |   7 +-
+ fs/ramfs/inode.c                          |   8 +-
+ fs/super.c                                |   8 --
+ fs/tracefs/event_inode.c                  |   7 +-
+ fs/tracefs/inode.c                        |  13 +--
+ include/linux/dcache.h                    |   4 +-
+ include/linux/fs.h                        |   6 +-
+ include/linux/proc_fs.h                   |   2 -
+ include/linux/security.h                  |   2 -
+ init/do_mounts.c                          |   2 +-
+ ipc/mqueue.c                              |  12 +-
+ kernel/bpf/inode.c                        |  15 +--
+ mm/shmem.c                                |  38 ++----
+ net/sunrpc/rpc_pipe.c                     |  27 ++---
+ security/apparmor/apparmorfs.c            |  13 ++-
+ security/inode.c                          |  35 +++---
+ security/selinux/selinuxfs.c              | 185 +++++++++++++-----------------
+ security/smack/smackfs.c                  |   2 +-
+ 53 files changed, 586 insertions(+), 807 deletions(-)
+
+	Overview:
+
+First two commits are bugfixes (fusectl and tracefs resp.)
+
+[1/50] fuse_ctl_add_conn(): fix nlink breakage in case of early failure
+[2/50] tracefs: fix a leak in eventfs_create_events_dir()
+
+Next, two commits adding a couple of useful helpers, the next three adding
+the infrastructure and the rest consists of per-filesystem conversions.
+
+[3/50] new helper: simple_remove_by_name()
+[4/50] new helper: simple_done_creating()
+	end_creating_path() analogue for internal object creation; unlike
+end_creating_path() no mount is passed to it (or guaranteed to exist, for
+that matter - it might be used during the filesystem setup, before the
+superblock gets attached to any mounts).
+
+Infrastructure:
+[5/50] introduce a flag for explicitly marking persistently pinned dentries
+	* introduce the new flag
+	* teach shrink_dcache_for_umount() to handle it (i.e. remove
+and drop refcount on anything that survives to umount with that flag
+still set)
+	* teach kill_litter_super() that anything with that flag does
+*not* need to be unpinned.
+[6/50] primitives for maintaining persisitency
+	* d_make_persistent(dentry, inode) - bump refcount, mark persistent
+and make hashed positive.  Return value is a borrowed reference to dentry;
+it can be used until something removes persistency (at the very least,
+until the parent gets unlocked, but some filesystems may have stronger
+exclusion).
+	* d_make_discardable() - remove persistency mark and drop reference.
+
+NOTE: at that stage d_make_discardable() does not reject dentries not
+marked persistent - it acts as if the mark been set.
+
+Rationale: less noise in series splitup that way.  We want (and on the
+next commit will get) simple_unlink() to do the right thing - remove
+persistency, if it's there.  However, it's used by many filesystems.
+We would have either to convert them all at once or split simple_unlink()
+into "want persistent" and "don't want persistent" versions, the latter
+being the old one.  In the course of the series almost all callers
+would migrate to the replacement, leaving only two pathological cases
+with the old one.  The same goes for simple_rmdir() (two callers left in
+the end), simple_recursive_removal() (all callers gone in the end), etc.
+That's a lot of noise and it's easier to start with d_make_discardable()
+quietly accepting non-persistent dentries, then, in the end, add private
+copies of simple_unlink() and simple_rmdir() for two weird users (configfs
+and apparmorfs) and have those use dput() instead of d_make_discardable().
+At that point we'd be left with all callers of d_make_discardable()
+always passing persistent dentries, allowing to add a warning in it.
+
+[7/50] convert simple_{link,unlink,rmdir,rename,fill_super}() to new primitives
+	See above re quietly accepting non-peristent dentries in
+simple_unlink(), simple_rmdir(), etc.
+
+	Converting filesystems:
+[8/50] convert ramfs and tmpfs
+[9/50] procfs: make /self and /thread_self dentries persistent
+[10/50] configfs, securityfs: kill_litter_super() not needed
+[11/50] convert xenfs
+[12/50] convert smackfs
+[13/50] convert hugetlbfs
+[14/50] convert mqueue
+[15/50] convert bpf
+[16/50] convert dlmfs
+[17/50] convert fuse_ctl
+[18/50] convert pstore
+[19/50] convert tracefs
+[20/50] convert debugfs
+[21/50] debugfs: remove duplicate checks in callers of start_creating()
+[22/50] convert efivarfs
+[23/50] convert spufs
+[24/50] convert ibmasmfs
+[25/50] ibmasmfs: get rid of ibmasmfs_dir_ops
+[26/50] convert devpts
+[27/50] binderfs: use simple_start_creating()
+[28/50] binderfs_binder_ctl_create(): kill a bogus check
+[29/50] convert binderfs
+[30/50] autofs_{rmdir,unlink}: dentry->d_fsdata->dentry == dentry there
+[31/50] convert autofs
+[32/50] convert binfmt_misc
+[33/50] selinuxfs: don't stash the dentry of /policy_capabilities
+[34/50] selinuxfs: new helper for attaching files to tree
+[35/50] convert selinuxfs
+[36/50] functionfs: switch to simple_remove_by_name()
+[37/50] convert functionfs
+[38/50] gadgetfs: switch to simple_remove_by_name()
+[39/50] convert gadgetfs
+[40/50] hypfs: don't pin dentries twice
+[41/50] hypfs: switch hypfs_create_str() to returning int
+[42/50] hypfs: swich hypfs_create_u64() to returning int
+[43/50] convert hypfs
+[44/50] convert rpc_pipefs
+[45/50] convert nfsctl
+[46/50] convert rust_binderfs
+
+	... and no kill_litter_super() callers remain, so we
+can take it out:
+[47/50] get rid of kill_litter_super()
+	
+	Followups:
+[48/50] convert securityfs
+	That was the last remaining user of simple_recursive_removal()
+that did *not* mark things persistent.  Now the only places where
+d_make_discardable() is still called for dentries that are not marked
+persistent are the calls of simple_{unlink,rmdir}() in configfs and
+apparmorfs.
+
+[49/50] kill securityfs_recursive_remove()
+	Unused macro...
+
+[50/50] d_make_discardable(): warn if given a non-persistent dentry
+
+At this point there are very few call chains that might lead to
+d_make_discardable() on a dentry that hadn't been made persistent:
+calls of simple_unlink() and simple_rmdir() in configfs and
+apparmorfs.
+
+Both filesystems do pin (part of) their contents in dcache, but
+they are currently playing very unusual games with that.  Converting
+them to more usual patterns might be possible, but it's definitely
+going to be a long series of changes in both cases.
+
+For now the easiest solution is to have both stop using simple_unlink()
+and simple_rmdir() - that allows to make d_make_discardable() warn
+when given a non-persistent dentry.
+
+Rather than giving them full-blown private copies (with calls of
+d_make_discardable() replaced with dput()), let's pull the parts of
+simple_unlink() and simple_rmdir() that deal with timestamps and link
+counts into separate helpers (__simple_unlink() and __simple_rmdir()
+resp.) and have those used by configfs and apparmorfs.
 
