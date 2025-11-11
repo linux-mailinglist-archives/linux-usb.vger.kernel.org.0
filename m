@@ -1,78 +1,85 @@
-Return-Path: <linux-usb+bounces-30372-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30373-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04AA7C4BF27
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84A2AC4BFDB
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:11:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 46AA24F82B1
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:05:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C5F94F4DED
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 524DF359716;
-	Tue, 11 Nov 2025 06:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17AC34DB6D;
+	Tue, 11 Nov 2025 07:02:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="mCtTlOKV"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="dUUyDblY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8317A351FB7;
-	Tue, 11 Nov 2025 06:55:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4911C31CA50;
+	Tue, 11 Nov 2025 07:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762844139; cv=none; b=S1AXxtYJ/KBsHW+X8FRMn5HY+l/Bwr5AnWATjhVLZE6LG8C2CN7suBck1h1pQDhpAZ70+aFMoSnHRjNt75d/bN9/keIigKm52jH5XQ/pmsiL6/Qh9D4Na1IbavJBRvOXcMKXHxejtKN1+XWnsYkBdHSBpVT5/P9KLz5f7u+A0EA=
+	t=1762844559; cv=none; b=t8jcnW64yLirbdcImltO1juaW1JP3gf07bMd203HNwReeNNVevfD4ItG9Sf/ohxEQ/93gLivaBuUUrIiI6hglQZY+cuNsM2p9+/qhiuvBjUNLZwPOE5af3ro1t3MV16G17rt9IxarL8/7hBY0aXAHuilSAOahFZGiV29fQQYSoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762844139; c=relaxed/simple;
-	bh=EPwXfKzUq6WB4Lo0fSXpMaiMt3x+BzpT0g03SMuKZHY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VWxKyjDc73XODEkbPmArXNuXF6cDJ2F0aF6Kl7E48+ts/RA3IT20mth1Sbl4BGxdCo/uEW9Xg61wZWL6GCX81tAIdXh0rc3aqcRaf/m9Jc8Eq1HIt67v4Bc1o4kgBkA5esAVxZkGhKjKLRyfX0COlL8NhQ+vYEgib5Ho7glXVpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=mCtTlOKV; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=q+YJfK1JQC1qMGUqrxdt1F1Oxcx2pv8iNDDBzggBjk0=; b=mCtTlOKVOGtAV3Fd6s6t1TxgRe
-	XpkebMhkQJ23JdJ50DloJJh1lPBIgODF0uHNkVHCF0nN4mFnY8p5mCYD7GufmCSBVONhWbAxx5OQU
-	i8tS+ba8dzGs9SHCOePSmdZiJoXKqSw2KQLgDlbl/2pNRodja8ORO2lDdpp6DxKXw0ame4bvrW/Kj
-	PbJ/KBuJFManx7Sho2+mSf+ksoI7PV9UBotmKpRDaa+CtwveOgvlbJ8rDNI2gp8ZQhlbqmfZebR7x
-	9VdzGf0QSTCffumZdqTIi1ODwjGBvi5zgelxMVKWQAFaz9BD/7ZTYuvHi+9t/kaeW9T+tiLc0y3fU
-	BcyH9PFg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vIiHu-0000000BxRd-0qMW;
-	Tue, 11 Nov 2025 06:55:34 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-fsdevel@vger.kernel.org
-Cc: torvalds@linux-foundation.org,
-	brauner@kernel.org,
-	jack@suse.cz,
-	raven@themaw.net,
-	miklos@szeredi.hu,
-	neil@brown.name,
-	a.hindborg@kernel.org,
-	linux-mm@kvack.org,
-	linux-efi@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev,
-	kees@kernel.org,
-	rostedt@goodmis.org,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	paul@paul-moore.com,
-	casey@schaufler-ca.com,
-	linuxppc-dev@lists.ozlabs.org,
-	john.johansen@canonical.com,
-	selinux@vger.kernel.org,
-	borntraeger@linux.ibm.com,
-	bpf@vger.kernel.org
-Subject: [PATCH v3 50/50] d_make_discardable(): warn if given a non-persistent dentry
-Date: Tue, 11 Nov 2025 06:55:19 +0000
-Message-ID: <20251111065520.2847791-51-viro@zeniv.linux.org.uk>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20251111065520.2847791-1-viro@zeniv.linux.org.uk>
-References: <20251111065520.2847791-1-viro@zeniv.linux.org.uk>
+	s=arc-20240116; t=1762844559; c=relaxed/simple;
+	bh=pJHq1+CpvYSVLItoTfdznn4/1n9AgIuK6uAkB9mBhLU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dTbHFjkh/LgVwkLNweOpaUATL91sj7chaB1St9NNcoJsUb+ewMz7Isa73qda/OOPW5evaYJhNf8BNlcuZWqkaoELDoBV8O9CD/49YgiCAPqupSgu6zDJMMM1dDd1qkir4Kw7HbW+c+H0ZA19ubxtZcPkHc6O0iXuqa/8G66LcE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=dUUyDblY; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 5fe74a46becc11f0b33aeb1e7f16c2b6-20251111
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=VVvqmxw4oeR9ramVcYJAAvK0TIuwI3k4LpZawcl2Au4=;
+	b=dUUyDblYxSfvpiQ09vUoBj+tQotisU1m2tcq6ZVcpuV6HM2wl2BoXRfAC3akjyyHIpSIHndhZMHn5zyKIx9fER8Bks1S2YnVCoRO2xE31mfv7Sz0NeUs+cF/5pqi75ziDd3enM7nOBQLeLYVMqPXbpYoaxJQdOuIGshhwo6uLGI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:d5a53038-1a8e-4b40-9708-af58f88314e8,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:a8e08382-b6af-4b29-9981-6bf838f9504d,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|888|898,TC:-5,Content:0|15|5
+	0,EDM:-3,IP:nil,URL:99|1,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
+	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 5fe74a46becc11f0b33aeb1e7f16c2b6-20251111
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+	(envelope-from <jh.hsu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 618227753; Tue, 11 Nov 2025 15:02:24 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Tue, 11 Nov 2025 15:02:22 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1748.26 via Frontend Transport; Tue, 11 Nov 2025 15:02:22 +0800
+From: Jack Hsu <jh.hsu@mediatek.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<jic23@kernel.org>, <dlechner@baylibre.com>, <nuno.sa@analog.com>,
+	<andy@kernel.org>, <matthias.bgg@gmail.com>,
+	<angelogioacchino.delregno@collabora.com>, <srini@kernel.org>,
+	<ukleinek@kernel.org>, <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+	<daniel.lezcano@linaro.org>, <tglx@linutronix.de>,
+	<chunfeng.yun@mediatek.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+	<sean.wang@mediatek.com>, <zhiyong.tao@mediatek.com>,
+	<andrew-ct.chen@mediatek.com>, <lala.lin@mediatek.com>,
+	<jitao.shi@mediatek.com>
+CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-iio@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-pwm@vger.kernel.org>,
+	<linux-serial@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+	<linux-watchdog@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Jack Hsu
+	<jh.hsu@mediatek.com>
+Subject: [PATCH v7 0/9] Add mt8189 dts evaluation board and Makefile
+Date: Tue, 11 Nov 2025 14:59:14 +0800
+Message-ID: <20251111070031.305281-1-jh.hsu@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -80,176 +87,106 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: text/plain
+X-MTK: N
 
-At this point there are very few call chains that might lead to
-d_make_discardable() on a dentry that hadn't been made persistent:
-calls of simple_unlink() and simple_rmdir() in configfs and
-apparmorfs.
 
-Both filesystems do pin (part of) their contents in dcache, but
-they are currently playing very unusual games with that.  Converting
-them to more usual patterns might be possible, but it's definitely
-going to be a long series of changes in both cases.
+In this patch series, 
+we add Mediatek MT8189 evaluation board dts, dtsi and Makefile,
+add/update related PMIC MT6319/MT6359 dtsi, 
+and also related dt-binding documents.
 
-For now the easiest solution is to have both stop using simple_unlink()
-and simple_rmdir() - that allows to make d_make_discardable() warn
-when given a non-persistent dentry.
+based on tag: next-20251111
 
-Rather than giving them full-blown private copies (with calls of
-d_make_discardable() replaced with dput()), let's pull the parts of
-simple_unlink() and simple_rmdir() that deal with timestamps and link
-counts into separate helpers (__simple_unlink() and __simple_rmdir()
-resp.) and have those used by configfs and apparmorfs.
+Note:
+This patch series depends on following dt-binding headers and yamls
+1.dt-binding headers
+  1. mt8189-pinfunc.h
+       https://patchwork.kernel.org/project/linux-mediatek/patch/20250919020525.7904-1-ot_cathy.xu@mediatek.com/
+  2. mt8189_gce.h 
+       https://patchwork.kernel.org/project/linux-mediatek/patch/20250820093831.23437-3-xiandong.wang@mediatek.com/ 
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/configfs/dir.c              | 10 ++++++++--
- fs/configfs/inode.c            |  3 ++-
- fs/dcache.c                    |  9 +--------
- fs/libfs.c                     | 21 +++++++++++++++++----
- include/linux/fs.h             |  2 ++
- security/apparmor/apparmorfs.c | 13 +++++++++----
- 6 files changed, 39 insertions(+), 19 deletions(-)
+Changs in v7:
+ - update explanation in cover letter
+ - remove Applied mediatek,mt2701-auxadc.yaml
+   (refer to: https://lore.kernel.org/linux-mediatek/20251101162855.303b3e5e@jic23-huawei/)
+ - remove Applied mediatek,efuse.yaml
+   (refer to: https://lore.kernel.org/linux-mediatek/176236193629.37589.12615931533548308117.b4-ty@kernel.org/)
+ - update dt-bindings commit msg
+   (use "mt8189" instead of "mt8189 evb board")
+ - update xhci.yaml
+   (drop "reset-names" property)
+ - update mt6319 dtsi
+   (change pmic node name as pmic@ )
+ - update mt6359 dtsi node
+   (remove mt635x-auadc.h, remove fg nodes)
+ - update mt8189 dtsi node
+   - update mt8189 clk node
+     (refer to: https://lore.kernel.org/linux-mediatek/20251106124330.1145600-1-irving-ch.lin@mediatek.com/)
+   - xhci node drop "reset-names" property
+   - update mt8189 thermal node
+     (refer to: https://lore.kernel.org/linux-mediatek/20251110094113.3965182-1-hanchien.lin@mediatek.com/)
 
-diff --git a/fs/configfs/dir.c b/fs/configfs/dir.c
-index 81f4f06bc87e..e8f2f44012e9 100644
---- a/fs/configfs/dir.c
-+++ b/fs/configfs/dir.c
-@@ -400,8 +400,14 @@ static void remove_dir(struct dentry * d)
- 
- 	configfs_remove_dirent(d);
- 
--	if (d_really_is_positive(d))
--		simple_rmdir(d_inode(parent),d);
-+	if (d_really_is_positive(d)) {
-+		if (likely(simple_empty(d))) {
-+			__simple_rmdir(d_inode(parent),d);
-+			dput(d);
-+		} else {
-+			pr_warn("remove_dir (%pd): attributes remain", d);
-+		}
-+	}
- 
- 	pr_debug(" o %pd removing done (%d)\n", d, d_count(d));
- 
-diff --git a/fs/configfs/inode.c b/fs/configfs/inode.c
-index 1d2e3a5738d1..bcda3372e141 100644
---- a/fs/configfs/inode.c
-+++ b/fs/configfs/inode.c
-@@ -211,7 +211,8 @@ void configfs_drop_dentry(struct configfs_dirent * sd, struct dentry * parent)
- 			dget_dlock(dentry);
- 			__d_drop(dentry);
- 			spin_unlock(&dentry->d_lock);
--			simple_unlink(d_inode(parent), dentry);
-+			__simple_unlink(d_inode(parent), dentry);
-+			dput(dentry);
- 		} else
- 			spin_unlock(&dentry->d_lock);
- 	}
-diff --git a/fs/dcache.c b/fs/dcache.c
-index 5ee2e78a91b3..824d620bb563 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -931,14 +931,7 @@ EXPORT_SYMBOL(dput);
- void d_make_discardable(struct dentry *dentry)
- {
- 	spin_lock(&dentry->d_lock);
--	/*
--	 * By the end of the series we'll add
--	 * WARN_ON(!(dentry->d_flags & DCACHE_PERSISTENT);
--	 * here, but while object removal is done by a few common helpers,
--	 * object creation tends to be open-coded (if nothing else, new inode
--	 * needs to be set up), so adding a warning from the very beginning
--	 * would make for much messier patch series.
--	 */
-+	WARN_ON(!(dentry->d_flags & DCACHE_PERSISTENT));
- 	dentry->d_flags &= ~DCACHE_PERSISTENT;
- 	dentry->d_lockref.count--;
- 	rcu_read_lock();
-diff --git a/fs/libfs.c b/fs/libfs.c
-index 80f288a771e3..0aa630e7eb00 100644
---- a/fs/libfs.c
-+++ b/fs/libfs.c
-@@ -790,13 +790,27 @@ int simple_empty(struct dentry *dentry)
- }
- EXPORT_SYMBOL(simple_empty);
- 
--int simple_unlink(struct inode *dir, struct dentry *dentry)
-+void __simple_unlink(struct inode *dir, struct dentry *dentry)
- {
- 	struct inode *inode = d_inode(dentry);
- 
- 	inode_set_mtime_to_ts(dir,
- 			      inode_set_ctime_to_ts(dir, inode_set_ctime_current(inode)));
- 	drop_nlink(inode);
-+}
-+EXPORT_SYMBOL(__simple_unlink);
-+
-+void __simple_rmdir(struct inode *dir, struct dentry *dentry)
-+{
-+	drop_nlink(d_inode(dentry));
-+	__simple_unlink(dir, dentry);
-+	drop_nlink(dir);
-+}
-+EXPORT_SYMBOL(__simple_rmdir);
-+
-+int simple_unlink(struct inode *dir, struct dentry *dentry)
-+{
-+	__simple_unlink(dir, dentry);
- 	d_make_discardable(dentry);
- 	return 0;
- }
-@@ -807,9 +821,8 @@ int simple_rmdir(struct inode *dir, struct dentry *dentry)
- 	if (!simple_empty(dentry))
- 		return -ENOTEMPTY;
- 
--	drop_nlink(d_inode(dentry));
--	simple_unlink(dir, dentry);
--	drop_nlink(dir);
-+	__simple_rmdir(dir, dentry);
-+	d_make_discardable(dentry);
- 	return 0;
- }
- EXPORT_SYMBOL(simple_rmdir);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 95933ceaae51..ef842adbd418 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -3621,6 +3621,8 @@ extern int simple_open(struct inode *inode, struct file *file);
- extern int simple_link(struct dentry *, struct inode *, struct dentry *);
- extern int simple_unlink(struct inode *, struct dentry *);
- extern int simple_rmdir(struct inode *, struct dentry *);
-+extern void __simple_unlink(struct inode *, struct dentry *);
-+extern void __simple_rmdir(struct inode *, struct dentry *);
- void simple_rename_timestamp(struct inode *old_dir, struct dentry *old_dentry,
- 			     struct inode *new_dir, struct dentry *new_dentry);
- extern int simple_rename_exchange(struct inode *old_dir, struct dentry *old_dentry,
-diff --git a/security/apparmor/apparmorfs.c b/security/apparmor/apparmorfs.c
-index 391a586d0557..9b9090d38ea2 100644
---- a/security/apparmor/apparmorfs.c
-+++ b/security/apparmor/apparmorfs.c
-@@ -358,10 +358,15 @@ static void aafs_remove(struct dentry *dentry)
- 	dir = d_inode(dentry->d_parent);
- 	inode_lock(dir);
- 	if (simple_positive(dentry)) {
--		if (d_is_dir(dentry))
--			simple_rmdir(dir, dentry);
--		else
--			simple_unlink(dir, dentry);
-+		if (d_is_dir(dentry)) {
-+			if (!WARN_ON(!simple_empty(dentry))) {
-+				__simple_rmdir(dir, dentry);
-+				dput(dentry);
-+			}
-+		} else {
-+			__simple_unlink(dir, dentry);
-+			dput(dentry);
-+		}
- 		d_delete(dentry);
- 		dput(dentry);
- 	}
+ - Link to v6: https://lore.kernel.org/linux-mediatek/20251030134541.784011-1-jh.hsu@mediatek.com/
+
+Changs in v6:
+ - add/fix dt-bindings for mt8189 dts node
+ - add pmic mt63xx dtsi for mt8189 evb board
+ - add complete device node of mt8189 evb board
+ - Fix previous version review comments
+ - Link to v5: https://patchwork.kernel.org/project/linux-mediatek/cover/20250718075630.644870-1-sirius.wang@mediatek.com/
+
+Changs in v5:
+ - remove unused cpu-dile-state definition.
+ - change memory size in "reg" property which if filled in by bootloader.
+
+Changs in v4:
+ - Correct cpu-idle-states.
+ - Change the "reg" property name of the "memory" node in the
+   device tree source (DTS) to lowercase.
+
+Changs in v3:
+ - Move ulposc and ulposc3 before cpu nodes.
+ - Refactor cpu-map to a single cluster0.
+ - Change cpu nodes name from medium core to big core.
+ - Move psci before timer nodes.
+
+Changs in v2:
+ - Fix warning issues for make CHECK_DTBS=y.
+ - Add mediatek,uart.yaml document.
+
+---
+
+
+Jack Hsu (9):
+  dt-bindings: arm: Add compatible for MediaTek MT8189
+  dt-bindings: pwm: Support MediaTek MT8189 disp-pwm
+  dt-bindings: serial: Support MediaTek MT8189 uart
+  dt-bindings: timer: Support MediaTek MT8189 timer
+  dt-bindings: usb: Support MediaTek MT8189 xhci
+  dt-bindings: watchdog: Support MediaTek MT8189 wdt
+  arm64: dts: mediatek: Add MT6319 PMIC Support
+  arm64: dts: mediatek: update rtc properties for MT6359
+  arm64: dts: mediatek: Add mt8189 evaluation board dts
+
+ .../devicetree/bindings/arm/mediatek.yaml     |    4 +
+ .../bindings/pwm/mediatek,pwm-disp.yaml       |    1 +
+ .../bindings/serial/mediatek,uart.yaml        |    1 +
+ .../bindings/timer/mediatek,timer.yaml        |    1 +
+ .../bindings/usb/mediatek,mtk-xhci.yaml       |    4 +-
+ .../bindings/watchdog/mediatek,mtk-wdt.yaml   |    1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |    1 +
+ arch/arm64/boot/dts/mediatek/mt6319.dtsi      |   66 +
+ arch/arm64/boot/dts/mediatek/mt6359.dtsi      |    3 +
+ arch/arm64/boot/dts/mediatek/mt8189-evb.dts   | 1082 ++++++
+ arch/arm64/boot/dts/mediatek/mt8189.dtsi      | 3310 +++++++++++++++++
+ 11 files changed, 4473 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt6319.dtsi
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8189-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8189.dtsi
+
 -- 
-2.47.3
+2.45.2
 
 
