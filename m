@@ -1,155 +1,131 @@
-Return-Path: <linux-usb+bounces-30313-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30314-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43C89C4B551
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 04:33:46 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3849AC4B5AF
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 04:43:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BBC0434B6E9
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 03:33:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E22C94EE4F8
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 03:43:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35783313526;
-	Tue, 11 Nov 2025 03:33:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6B34314B8E;
+	Tue, 11 Nov 2025 03:43:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MtmrOsUD"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="k+bnOdjc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC2C261B77
-	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 03:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE121346FB9
+	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 03:42:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762832019; cv=none; b=uKL47vFyTCYIyuR685Q4Co5xGBKE40ORWi0wG01KkOQUfQONOl+vaXzD+Xn8oSAOggUPVOVmk8y4m/ZboV9/XEiQTJhbQkqNU0F7SWp+JguYtzr8A1aLdpCvsbZBCRtqwsE/RPSkcRP3Z3ZdG5aSuVBMASlmTOvId1bJzx5T8DU=
+	t=1762832580; cv=none; b=h7XhSI7Oczil5PGTOmlwDm0v4g+EOnKeqB7zCIRa7+FlGDM9mUc7ottM4fsxyjoVgR/TewcAUMalK8ep5pGnV+ZpQV0mqYusjVnr2235VGxPaiPRiJH06ma1ZXuxlMG/a+/8xlN0cc4ezX4RY4n7SUSj3J+/1KFUQOoT3AiYRYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762832019; c=relaxed/simple;
-	bh=zaW/QrsDOq0fRxtidOXSO9UKDKbJI3oyV1LDnNCValE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=HDQU1Rft8neAmlXssn+xhJEuRHlDYAsj8zKi33pwkrIUQVJtd277aop2OVH+swU+8lDRPkjM2xqtdkzh+UvrdQoBRNk83MnyCpvCTIRpESB0VYmlJNimJC93SJWvLbIjUCKmkuYJOQ7t2P23KwKyeAgrbb74Es0vnCoIORQ23CY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MtmrOsUD; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762832018; x=1794368018;
-  h=date:from:to:cc:subject:message-id;
-  bh=zaW/QrsDOq0fRxtidOXSO9UKDKbJI3oyV1LDnNCValE=;
-  b=MtmrOsUDMa9cUAYbcWpQWK36KpH79L+v/kTXuQ1fg1IU98EEsUVPfNjt
-   4quXrcvZabsJbcNMSsig/2GkBWkjDMrj1aFsEG6fG10SnXuNIcbE24CU9
-   1+FDBy57K3t+Ld4/mhFbtDI/YAp4X4iQuGth58aFwdD3XzhIhZjXw4t+U
-   mmrCPjRKDvRiE8KW2ar5DhkT/HqYraxQ6HY/h/z/ZJOzuby9onuJQAm83
-   AufEu49N5E5us3LyqcOsxmnUdPLG7FqKQ0CAVvABhVWq6TW8HsiR5NiHH
-   qJ43ubJMeQ5Bd/pKxz7sPPh23qZUMGNm59he+57/Jp7u6Gl4ed4mh/oKq
-   w==;
-X-CSE-ConnectionGUID: +4zsFo4IQ6+z5SNzveg4PA==
-X-CSE-MsgGUID: L3eLDACkR5yzX+0rhIs8Ig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="68740577"
-X-IronPort-AV: E=Sophos;i="6.19,295,1754982000"; 
-   d="scan'208";a="68740577"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 19:33:37 -0800
-X-CSE-ConnectionGUID: 5W9jSyqtTFmW1xYUZCwd8w==
-X-CSE-MsgGUID: ivypW4coQy2hoKs+5izLrg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,295,1754982000"; 
-   d="scan'208";a="194037434"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 10 Nov 2025 19:33:36 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vIf8P-0002jN-2q;
-	Tue, 11 Nov 2025 03:33:33 +0000
-Date: Tue, 11 Nov 2025 11:33:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 23379a17334fc24c4a9cbd9967d33dcd9323cc7c
-Message-ID: <202511111157.y9zYMVbp-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1762832580; c=relaxed/simple;
+	bh=g6jGAcvwVh/icnz8bdIbPAM/IeCRuZBYyx7sd28ajFY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a1sYFx36ae+MD0+WkNTxJzeNqgoJF+cgQROPTEftSDKfK7teNoeNRO/G7fbCtGV5jzWQ7PnTds3pHHTd0As7ml5dutYv3e2S3/pfnxup1f3I+0AdzglQrG5Yl9KC5LCEDgv9KoYQR4gFcBxrn4Shz/bYb7upafan9J3XpLJaUEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=k+bnOdjc; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8b2655e0bb6so239104685a.3
+        for <linux-usb@vger.kernel.org>; Mon, 10 Nov 2025 19:42:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1762832578; x=1763437378; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k6/LD0uDQCSe+chbTWf3H4rmcFTKbJ4PUWI7IjCyqUo=;
+        b=k+bnOdjc3h3fN0DBJEjWccRsZENJafZK8a46Jr7Oz61VgisSscX5Fux+Ds1UEocPgB
+         gRuhd6Uf7C6Qo9/EKpKXbPiB/BJmo1avHlI96pNifmPGm8IFjp6p3FT3DeWBZtpA1BtM
+         e+4vmt+/pJ+69rTzsXm8xi2isbDlHToGefxuwSifW95Mb4C8emAL711j09jVru44ugye
+         6cdMwahbScmpiJZauCpoM5i8MO2xr3Ehk5lXBCtv6d0mj/aFADzR0g8YCq0zl/Lgu0Uo
+         Wuvn6V6QrqHHlb7Mpp9Yj1I20+H13idjJi9E7B1ojB5ZOdJRUDK2oNL+BaVAYrXQiiRt
+         clvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762832578; x=1763437378;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k6/LD0uDQCSe+chbTWf3H4rmcFTKbJ4PUWI7IjCyqUo=;
+        b=PgE6bG8OE9WJ0VlZREWF5JfjdbEHVW2vjHMPgNMS9adHagJCMo+jvsMYJXPKQF9rLv
+         DrL8wUIeT535Z7w8e6OTj93UvKUN5qWP1AmT5SmgRlcZGcJTyxuBRI2u0VNa34THVTi0
+         l+e0H7iE7EXpam4jbbCE6+T0faAnBFFfk7lrKYIYQ4QXTaGqoBLnuOpvgCcCwUnUJgnC
+         VCovB5abmxee2ahZ4cEQ6JdJ68awDYL+76V5lfayDB1/+a/LVEryNM7+1yeVaGJQoVTd
+         Bc3bv0nQ7IykF+TkN9YSv3QFDdEiSn4PPiQiMzjEFlaLybA5ouN5mE+MKADJ3avQJmes
+         ZFDw==
+X-Forwarded-Encrypted: i=1; AJvYcCWlQ5AZXKYLrgnW4Ru43pmxgwcRF1s6QBcHpvot3qCCICrubzsUBf03aUQUH1nv3nOxBmDqDrN+6Bs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/aNyESjoN7EqZ4/gr/JjjExZssSyBK0bV6LQjGCx7R9E4zM8P
+	d1UmlbwbaWtVvy/ngvkqMVgyh89MR+Rik5gkfo+CJSH4ML909UHLxWoH434MQprAbA==
+X-Gm-Gg: ASbGnctMPpDsd9fyTO5DQCmDqGsnTkbbz4aSSaaBzSB1bazlj1Yt0+YYrXvGcJXgoq/
+	YWo6he9yZvelQ6mrD7Bb4UcWbdi2t4b/rEdAhepjBqyTCIv+cWB/fvI2BWLVEqXQDKTtnOrmeIQ
+	kq2JrLcQYAzAnyA6cOAGoo7h4SY3sNCfZ+zslKMbAp/GaE035e2iWIwDS1nXyz6n8ceRRlqHWGg
+	Vh8Xu8lpvbIH/a6kTCuWnC/4nld6Bqy6RwxSu0kDGuj12teJrrclVu0ZDf4uz4gh61zTboEnkFl
+	wH5OaFhCDPgFDPNhM8hqn5MxQjbpabXd2q8GAs8EwapLgVok3nYQlo2gDimmy/m+Qq6UjyBZThY
+	825blLf4R0z2ZXBpYwDD0xdYKx+ItsTqlTVBJ1y+byc1NnwUtJGMyTfUAeUoRPLGm2i0N/puD6I
+	bB7JMeiQNpbqHO
+X-Google-Smtp-Source: AGHT+IHYC3JVh4zkjwBpZ+raijFxCEzh4VWT1zLA6Gt658oaINkv6SV2JCD2CK20MPRQgCSoIXoI5w==
+X-Received: by 2002:a05:620a:2a06:b0:8b2:77aa:73f2 with SMTP id af79cd13be357-8b277aa7784mr860421685a.12.1762832577612;
+        Mon, 10 Nov 2025 19:42:57 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::ba76])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b2355e615bsm1135123385a.19.2025.11.10.19.42.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Nov 2025 19:42:57 -0800 (PST)
+Date: Mon, 10 Nov 2025 22:42:53 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: The-Luga <lugathe2@gmail.com>
+Cc: Terry Junge <linuxhid@cosmicgizmosystems.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Michal Pecio <michal.pecio@gmail.com>,
+	Terry Junge <linuxsound@cosmicgizmosystems.com>,
+	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [BUG] Edifier QR30 (2d99:a101, Jieli Technology) reboots itself
+ when RGB brightness button is used under Linux
+Message-ID: <46ecf459-85f8-473b-83da-99fc0ae78463@rowland.harvard.edu>
+References: <6999b5b2-a242-432e-8100-5d8ee58bcae8@rowland.harvard.edu>
+ <CALvgqEBD05PwMpm00cAbFkpSWpCFP9jaBU0r-8+op+RGPtkktg@mail.gmail.com>
+ <7adc816d-169d-4213-bb67-9d070af3c4a7@cosmicgizmosystems.com>
+ <30528153-95f1-4ec7-a6bf-5da396441f86@rowland.harvard.edu>
+ <xrfmda5rohporc3bjax35fc7xjziai6cmdt5svjak5rps6y6jz@k6h4zlt3jgg2>
+ <CALvgqEDZ=g+uvdSYqbD22sL_VP+n6Pda2xXuFAJyKkh3bjm6HQ@mail.gmail.com>
+ <CALvgqEC6UW96NEYOCM5v0m4x8Si0A7AwPuMpwXt3PMqkO3eqww@mail.gmail.com>
+ <52fc4350-2930-44d3-b844-03f00806f142@cosmicgizmosystems.com>
+ <1ac9d1dd-822a-487a-bd42-45c163dfbfe7@rowland.harvard.edu>
+ <CALvgqED5NCNjrtv_YSfg9rzerK-xWAE5TaJjZtMBMcY=8MSk3g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvgqED5NCNjrtv_YSfg9rzerK-xWAE5TaJjZtMBMcY=8MSk3g@mail.gmail.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 23379a17334fc24c4a9cbd9967d33dcd9323cc7c  usb: typec: ucsi: psy: Set max current to zero when disconnected
+On Mon, Nov 10, 2025 at 08:48:57PM -0300, The-Luga wrote:
+> From: https://github.com/torvalds/linux/blob/master/include/linux/hid.h
+> 
+> #define HID_QUIRK_ALWAYS_POLL          BIT(10)    ->  2^10=1024=#400
+> #define HID_QUIRK_NO_IGNORE            BIT(30)    ->  2^30=1073741824=#40000000
+> 
+> Sorry about that. I'm still learning and the documentation was not
+> very clear on this.
+> 
+> Trying the 0x40000000: `usbhid.quirks=0x2d99:0xa101:0x40000000`  the
+> usbmon stays silent when changing volume/button and reboots when
+> changing brightness.
+> 
+> With HID_QUIRK_ALWAYS_POLL: `usbhid.quirks=0x2d99:0xa101:0x400`
+> (reboot does not happen).
+> 
+> Is there a different quirk to try?
 
-elapsed time: 2934m
+Why would you want to try another one?  You've already found the quirk 
+that fixes your problem.
 
-configs tested: 62
-configs skipped: 1
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                   allnoconfig    gcc-15.1.0
-alpha                  allyesconfig    gcc-15.1.0
-arc                     allnoconfig    gcc-15.1.0
-arc         randconfig-001-20251110    gcc-11.5.0
-arc         randconfig-002-20251110    gcc-9.5.0
-arm                     allnoconfig    clang-22
-arm         randconfig-001-20251110    clang-22
-arm         randconfig-002-20251110    clang-22
-arm         randconfig-003-20251110    clang-16
-arm         randconfig-004-20251110    clang-22
-arm64                   allnoconfig    gcc-15.1.0
-csky                    allnoconfig    gcc-15.1.0
-hexagon                allmodconfig    clang-17
-hexagon                 allnoconfig    clang-22
-hexagon                allyesconfig    clang-22
-i386                    allnoconfig    gcc-14
-loongarch              allmodconfig    clang-19
-loongarch               allnoconfig    clang-22
-m68k                   allmodconfig    gcc-15.1.0
-m68k                    allnoconfig    gcc-15.1.0
-m68k                   allyesconfig    gcc-15.1.0
-microblaze             allmodconfig    gcc-15.1.0
-microblaze              allnoconfig    gcc-15.1.0
-microblaze             allyesconfig    gcc-15.1.0
-mips                    allnoconfig    gcc-15.1.0
-nios2                   allnoconfig    gcc-11.5.0
-openrisc                allnoconfig    gcc-15.1.0
-parisc                  allnoconfig    gcc-15.1.0
-parisc      randconfig-001-20251109    gcc-9.5.0
-parisc      randconfig-002-20251109    gcc-13.4.0
-powerpc                 allnoconfig    gcc-15.1.0
-powerpc     randconfig-001-20251109    clang-22
-powerpc     randconfig-002-20251109    clang-22
-powerpc64   randconfig-001-20251109    gcc-8.5.0
-powerpc64   randconfig-002-20251109    gcc-8.5.0
-riscv                   allnoconfig    gcc-15.1.0
-riscv       randconfig-001-20251109    gcc-9.5.0
-riscv       randconfig-002-20251109    gcc-8.5.0
-s390                    allnoconfig    clang-22
-s390        randconfig-001-20251109    gcc-14.3.0
-s390        randconfig-002-20251109    gcc-8.5.0
-sh                      allnoconfig    gcc-15.1.0
-sh                        defconfig    gcc-15.1.0
-sh          randconfig-001-20251109    gcc-11.5.0
-sh          randconfig-002-20251109    gcc-15.1.0
-sparc                   allnoconfig    gcc-15.1.0
-sparc       randconfig-001-20251110    gcc-8.5.0
-sparc       randconfig-002-20251110    gcc-13.4.0
-sparc64                   defconfig    clang-20
-sparc64     randconfig-001-20251110    gcc-14.3.0
-sparc64     randconfig-002-20251110    gcc-13.4.0
-um                     allmodconfig    clang-19
-um                      allnoconfig    clang-22
-um                     allyesconfig    gcc-14
-um                        defconfig    clang-22
-um                   i386_defconfig    gcc-14
-um          randconfig-001-20251110    gcc-14
-um                 x86_64_defconfig    clang-22
-x86_64                  allnoconfig    clang-20
-x86_64                    defconfig    gcc-14
-xtensa                  allnoconfig    gcc-15.1.0
-xtensa      randconfig-001-20251110    gcc-9.5.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alan Stern
 
