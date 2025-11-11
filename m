@@ -1,142 +1,134 @@
-Return-Path: <linux-usb+bounces-30386-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30387-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4762C4C279
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 656E8C4C323
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:56:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 93ED44ED281
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:43:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2D1594F0F61
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:53:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50993332ECC;
-	Tue, 11 Nov 2025 07:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A24E2D5930;
+	Tue, 11 Nov 2025 07:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C8o45t4R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GT1YKP0D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C448313E15
-	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 07:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09FA34D39F;
+	Tue, 11 Nov 2025 07:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762847025; cv=none; b=anMuI7roGVBwn1WeG79wfvOCFdXG1juPeoENhERNOQJo0Hpkz315e6WPs5vYxe0FWq+l1hz1STAIYSEBbIijyhnRc2m7rD3zbxVg1cHwXkywGph/fHX/SI9ce1vaIrg1ZauJBlungRG3hpGVPFBFeuwxsVED6XE0YV6vZITAPtg=
+	t=1762847597; cv=none; b=QIEY2pLn1YWx4/YY2udHLE4jwFO8w1CGxOoaBpBdlAXj9F4r9OgqlTobXehWAJwo0AWNmn31tU96dLcSCGzS0o8+Xa+8HpMTcafLBkJ811LlTEW4E+H4S9kbpeWnVn6R1wYSTQj4uLd9zXWYO8HeYorZE+ylbWISPL0CwZCNnNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762847025; c=relaxed/simple;
-	bh=hGu+GzN+iPOCwdycByBZkRXiL6hZVXSrjCx1H7RoOJM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Efh+1mPmCiY5F1uhqPkWBZ1pSV7J40aeEpLItRW7bhvvCJ+1W9G/s2ukKqsxL2GuDZfUsjdBF3EYuCa9m9bRw17M1Q6Xo/4MtQ5QB/4r2zcZTwYMLPDH3SeXp8TvgydiKBDULMYqmPfnCHblSl1TwSDPu/zexr38lIAu6YJVtsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C8o45t4R; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7b22ffa2a88so1888961b3a.1
-        for <linux-usb@vger.kernel.org>; Mon, 10 Nov 2025 23:43:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762847024; x=1763451824; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wCLsaMhIhuFhIpbv/6Ugxb6YPVSoVgU518WhOc0TN0M=;
-        b=C8o45t4R8X/j3JVDvFIsTsCerU3/X997xy1pjZXWPfu+qhbjyoi+uYFGbY5J2BMDMi
-         ydanYgqPchkwRp1O9b6Oc5Q95NlgIImmZ567NsxU7Rgd1EmkFAmmeFCsqSjWwhufL1nn
-         d7XGKhyQKljcU5eOF2fF5Tyai8GdlAntFDX3pGXuoNK5OcRYY7dzHAO8AcERH+GX9Gfq
-         1tD9gt7kZgFwNlEak+sI8dEllto5hVBCrU5r7opAwJl3y2Uh4N5zQxRSWZNbumNFQwRn
-         UyAltlOn5LSrzwJbFh9totjIJSZkWhnogK4dkMeROSt0EMc8cSA3dvSZImz0KgFhfyBA
-         QRiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762847024; x=1763451824;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wCLsaMhIhuFhIpbv/6Ugxb6YPVSoVgU518WhOc0TN0M=;
-        b=Fs9KIcWABq/uhKTpqpgfP+V5odiNLa48IuE4QD4T3GN9W3YAx1E1fprr4EWxi/yEmk
-         TEzpp3Hd2qGljbhM3YEZq5kcQialn5RBFDHj/FeVkcOnO46qhLkgzUlWwACGW4duLSzz
-         9wVj8poj2bF2yItzIbq1SRZYQyhpF8UwKdjnFRmsR1NTiSSj4ufhy5AK0brU+vOdA/KV
-         D6/cjElcXjs5n2bfJj/5i4Yb3kk2bO9WBR8qr1QNA4ItYmiQROrqNm4tpQNAVC3r86sU
-         KX/YE6oxneoechsy0dHo44G8QOM+I1Vn9ZmSzx7qHdzEgHBH5UJeujKUZ4sWhkXZib8k
-         3Frg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZDZasvmgQWGF6VjpksVK1XHy3zZ+j5NIedcY59m39SwmoqWNBwPnAxRXfStCuOIt4ZmhX7HBuChs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZeNHN/aeq1xfvCwQ3MGgYSUKNkIRPHtlbb6MYH62x+xQ5ObUB
-	FC4bwJPLGU0IdlEqhLC8PeR2X1nyzOIJghoGLFMoeCgZlaGx4kjkabLg
-X-Gm-Gg: ASbGncspgWTi7GznxUWV6tSPephkO7kSrqllyE9PU++h+gTut7rn9EnIfGHBdAW3zwu
-	UIA0kyKqwodeAhYSDNFtcVvJdGPu3rGiTMhwhGYCGg+kYjHNn562U+KwkQUAgfQwkpDSFD/t7yJ
-	3E3nK0l7ZJ6DfcC7uYAKMlHnXcw0HrtxIRM2h8+Dp/xNCMS2ssqNAzo4h0XrxViKswQtsumTYsM
-	xhcB8cN73XfDMFGrduH9DZfaga7Oiega6nSvV+vokvv7sXNOAs/PeBHwFr7gd2w7tG+CD4t5Rz5
-	4aH+8GNRskvDPStjcjGXZkxFqpYhQr08T0Ksu15p/9b2EKLit5LAk+ttIXf99CYDhm3p6J/4fXm
-	4eRYuZMo9u4Op3dFJtK4Kt9xfnAgDwQnam3ngpW2o8oWzbajaN/v0GYXq67l83BZfAJyWlEV52m
-	WhspS+THyiispMKJldYNeklIxnZxcc8JeHazrFMG/L0ZY=
-X-Google-Smtp-Source: AGHT+IHnUqWbN87MfdnfCGZe3Siga0PrKlesE1NEYJJvVLUvhC1pGxgwxVLeIsjtogtg1QbMwZPCCg==
-X-Received: by 2002:a17:90b:2709:b0:340:be4d:8980 with SMTP id 98e67ed59e1d1-3436cb89ab8mr12431413a91.14.1762847023674;
-        Mon, 10 Nov 2025 23:43:43 -0800 (PST)
-Received: from lugathe ([2804:13c:46ac:1000:f491:d00a:e2fb:e67c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3434c31d86esm13779436a91.8.2025.11.10.23.43.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 23:43:43 -0800 (PST)
-From: =?UTF-8?q?Rodrigo=20Lugathe=20da=20Concei=C3=A7=C3=A3o=20Alves?= <lugathe2@gmail.com>
-To: linuxhid@cosmicgizmosystems.com
-Cc: bentiss@kernel.org,
-	dmitry.torokhov@gmail.com,
-	jikos@kernel.org,
-	linux-input@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linuxsound@cosmicgizmosystems.com,
-	lugathe2@gmail.com,
-	michal.pecio@gmail.com,
-	stern@rowland.harvard.edu
-Subject: [PATCH] The Edifier QR30 USB speaker, identified as: Jieli Technology EDIFIER Hal0 2.0 SE 2d99:a101, reports a HID interface that needs HID_QUIRK_ALWAYS_POLL to ensure it does not crash when changing the RGB brightness with the physical knob.
-Date: Tue, 11 Nov 2025 04:42:05 -0300
-Message-ID: <20251111074205.1533558-1-lugathe2@gmail.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <c6d506f7-f13b-4d57-a522-a2ccd09e7a1f@cosmicgizmosystems.com>
-References: <c6d506f7-f13b-4d57-a522-a2ccd09e7a1f@cosmicgizmosystems.com>
+	s=arc-20240116; t=1762847597; c=relaxed/simple;
+	bh=6vLdCVtUOmwT2xBG2CthgZi9Ig8JOsV5A1e4sciMj58=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=olwwzqheRfvc4e9iUwdXTH5+JhjJP1JBC97xzxJ1xefQX7YegycUQqgR8J5soQDVcGoLsYROpBYjv6onSucpOkjt36PAMjg2Oxm2IWoLxATZEg3xXabYuMkBOEM0ipystBH36v11SimcXa5SwHIURGnuF7auSkb3fFzzvTuz8Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GT1YKP0D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5EFAC116D0;
+	Tue, 11 Nov 2025 07:53:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762847597;
+	bh=6vLdCVtUOmwT2xBG2CthgZi9Ig8JOsV5A1e4sciMj58=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=GT1YKP0Dqo8Ysx1f1jn1aJnzunt/m+vgmkHza86dvdju2EoOZI6rbkPd7I+ZcBeM+
+	 sMRoB0c30MgD2v1Yb5EZikViuPNT9qU6D1zpwh1o3OD7j4ZzdXpPAIauOb57UMw4bv
+	 I60wtyPt3IyQJygJ4dixY3dw68KJmjTTO1siXWRgIfdzeLxoIP8G2HrfqFcRWayLag
+	 434bWzG4C5dIXX3cv0RlRRd1dhjWeDIx9KMPU1TowHWPucntp2dQsJT9/iu1QfqbYc
+	 Y/H5S/PxMIu45+cpnJF56ZFcZiXa6QAttdqqbIZMPl+jb91U6hNFBKXExqdER7dwwx
+	 ib+6wzq9EnUzA==
+Content-Type: multipart/mixed; boundary="===============1014260008914052501=="
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <20754dba9be498daeda5fe856e7276c9c91c271999320ae32331adb25a47cd4f@mail.kernel.org>
+In-Reply-To: <20251111065520.2847791-37-viro@zeniv.linux.org.uk>
+References: <20251111065520.2847791-37-viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v3 36/50] functionfs: switch to simple_remove_by_name()
+From: bot+bpf-ci@kernel.org
+To: viro@zeniv.linux.org.uk,linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,brauner@kernel.org,jack@suse.cz,raven@themaw.net,miklos@szeredi.hu,neil@brown.name,a.hindborg@kernel.org,linux-mm@kvack.org,linux-efi@vger.kernel.org,ocfs2-devel@lists.linux.dev,kees@kernel.org,rostedt@goodmis.org,gregkh@linuxfoundation.org,linux-usb@vger.kernel.org,paul@paul-moore.com,casey@schaufler-ca.com,linuxppc-dev@lists.ozlabs.org,john.johansen@canonical.com,selinux@vger.kernel.org,borntraeger@linux.ibm.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 11 Nov 2025 07:53:16 +0000 (UTC)
 
-Add a new vendor and product ID entry in hid-ids.h and register
-the corresponding device in hid-quirks.c with the required quirk.
+--===============1014260008914052501==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Rodrigo Lugathe da Conceição Alves <lugathe2@gmail.com>
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 47cfbe41f..43dcd39b7 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+
+[ ... ]
+
+> @@ -2323,6 +2316,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+>  {
+>  	struct ffs_epfile *epfile, *epfiles;
+>  	unsigned i, count;
+> +	int err;
+>
+>  	count = ffs->eps_count;
+>  	epfiles = kcalloc(count, sizeof(*epfiles), GFP_KERNEL);
+> @@ -2339,12 +2333,11 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+>  			sprintf(epfile->name, "ep%02x", ffs->eps_addrmap[i]);
+>  		else
+>  			sprintf(epfile->name, "ep%u", i);
+> -		epfile->dentry = ffs_sb_create_file(ffs->sb, epfile->name,
+> -						 epfile,
+> -						 &ffs_epfile_operations);
+> -		if (!epfile->dentry) {
+> +		err = ffs_sb_create_file(ffs->sb, epfile->name,
+> +					 epfile, &ffs_epfile_operations);
+> +		if (err) {
+>  			ffs_epfiles_destroy(epfiles, i - 1);
+> -			return -ENOMEM;
+> +			return err;
+>  		}
+>  	}
+>
+> @@ -2355,13 +2348,11 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+>  static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
+>  {
+>  	struct ffs_epfile *epfile = epfiles;
+> +	struct dentry *root = epfile->ffs->sb->s_root;
+
+Can this dereference uninitialized memory in ffs_epfiles_destroy()?
+
+When ffs_epfiles_create() calls ffs_epfiles_destroy(epfiles, i - 1) after
+the first ffs_sb_create_file() call fails (when i=1), it passes count=0.
+The initialization loop starts at i=1, so epfiles[0].ffs is never
+initialized. The kcalloc() zeros the memory, making epfiles[0].ffs NULL.
+
+The new code unconditionally dereferences epfile->ffs->sb->s_root before
+the loop, causing a NULL pointer dereference when count=0. The old code
+was safe because the dereference only happened inside the loop.
+
+>
+>  	for (; count; --count, ++epfile) {
+>  		BUG_ON(mutex_is_locked(&epfile->mutex));
+> -		if (epfile->dentry) {
+> -			simple_recursive_removal(epfile->dentry, NULL);
+> -			epfile->dentry = NULL;
+> -		}
+> +		simple_remove_by_name(root, epfile->name, NULL);
+>  	}
+>
+>  	kfree(epfiles);
+
+
 ---
- drivers/hid/hid-ids.h    | 3 +++
- drivers/hid/hid-quirks.c | 1 +
- 2 files changed, 4 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 0723b4b1c9ec..ece1bea0faa5 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -734,6 +734,9 @@
- #define USB_VENDOR_ID_JESS2		0x0f30
- #define USB_DEVICE_ID_JESS2_COLOR_RUMBLE_PAD 0x0111
- 
-+#define USB_VENDOR_ID_JIELI_TECHNOLOGY		0x2d99
-+#define USB_DEVICE_ID_EDIFIER_QR30	0xa101	/* EDIFIER Hal0 2.0 SE */
-+
- #define USB_VENDOR_ID_KBGEAR		0x084e
- #define USB_DEVICE_ID_KBGEAR_JAMSTUDIO	0x1001
- 
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index bcd4bccf1a7c..d104f4829d93 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -110,6 +110,7 @@ static const struct hid_device_id hid_quirks[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_HP, USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_1f4a), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_IDEACOM, USB_DEVICE_ID_IDEACOM_IDC6680), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_INNOMEDIA, USB_DEVICE_ID_INNEX_GENESIS_ATARI), HID_QUIRK_MULTI_INPUT },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_JIELI_TECHNOLOGY, USB_DEVICE_ID_EDIFIER_QR30), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_PIXART_USB_OPTICAL_MOUSE_ID2), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_KYE_EASYPEN_M406), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_KYE_EASYPEN_M506), HID_QUIRK_MULTI_INPUT },
--- 
-2.51.2
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19257803162
 
+--===============1014260008914052501==--
 
