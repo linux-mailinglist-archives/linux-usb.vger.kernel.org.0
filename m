@@ -1,56 +1,50 @@
-Return-Path: <linux-usb+bounces-30309-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30310-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4387C4AF4C
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 02:50:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07468C4B021
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 02:53:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7450F3B3F0D
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 01:43:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6072C1896FD3
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 01:48:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D60234D38E;
-	Tue, 11 Nov 2025 01:38:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 115313451A8;
+	Tue, 11 Nov 2025 01:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Y8HyvojN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQWLLTlL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AC82F656B;
-	Tue, 11 Nov 2025 01:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BF03446D2;
+	Tue, 11 Nov 2025 01:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762825097; cv=none; b=RB/d4RIQjscJXszFbzcK/2r2qJIiLWPpW8LIZk/Iv9K3/WS34ahWk0GNAhJwHMi6ff6oYD2X3yFepm47ePnTF5oDIWi/wKAJZ2veYRyGFOcS+nyARQV7Ncx5etVOUKaENYSWxaV+PZndxnrddUM35Vvjcbl+U2YLsN4dh1Ui/zE=
+	t=1762825260; cv=none; b=X4qOb9rIKh0ZsQR6vgLsPCLCwD+Br7SSr3c3icNvodQgsAAGG18/p5gxbTuwGmtdpN5178fU7pnrj+vsY9nl0WnYtYVro3PoEV6s4ej4BDXa4l6gVLRLyGEyfsFyaoClrl944GVl4+paVTDfWrC7DSV/0DO/FJEhHOxX591DJkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762825097; c=relaxed/simple;
-	bh=Enplq6FoC/aSX02Ph3h9IHJ410hCGHU+sJFbXCZOcXo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SC+JgZjrpkk2n8WkVy4GmJIgLcinmWcPDLomLZLPQkD6hR7Cts9SxiNFnNTUHsQG7G4HaE9dsLROAC+KRUxmUFCkwlQ/mqJe7gISGS4bPgX+6K1CUXiA3lrPr2MfmPexGHI2SeRmRwk/ldy+edAX43EQ3UlEZNKIQisWg7kHIBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Y8HyvojN; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=aN
-	BX9NEEMgRbUzZGrmxI1h1qShk0I+ZbWYOrtv746pU=; b=Y8HyvojN3l2zcvA92I
-	eoLe2Ar669/ACFcE6UrssWyKLdvMM5qJTDQnMQauTD4qvr3zV44JDYeRD/Wmu+eg
-	CPdClW+IDPT42Af8tgOvWctIKeSprduIJ5Z0XxxjEXC2fv/fOahPRb1qq1S6QpJO
-	A2PU7hjvP7sLdEqSrvcDq9pV8=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wA38ZsLkRJp47bnCQ--.61S2;
-	Tue, 11 Nov 2025 09:27:42 +0800 (CST)
-From: ccc194101@163.com
-To: stern@rowland.harvard.edu,
-	benjamin.tissoires@redhat.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org,
-	Chen Changcheng <chenchangcheng@kylinos.cn>
-Subject: [PATCH v2] usb: usb-storage: No additional quirks need to be added to the ECD819-SU3 optical drive.
-Date: Tue, 11 Nov 2025 09:27:37 +0800
-Message-Id: <20251111012737.13662-1-ccc194101@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1762825260; c=relaxed/simple;
+	bh=DkX0CODJQnzN4JaB8zv3BoIFl4HfjumbRFHQ527ffm8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=MnDTgZ1k4rizODHAqEr0FGxHVpqcYApCf1Ox7vaGoQkelE/VkPNpjXwPE3Tmnzl+EpYiSqHgn3jsC2YT02LMrspcmx8zt754S3wlTNi4ZlRMI4EC9oiidhRlURorA3sE7hNVWtOkIJaoq2mfg8EQk911+Q5KcLY+Tk1881MVFbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQWLLTlL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62FB1C4CEF5;
+	Tue, 11 Nov 2025 01:41:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762825260;
+	bh=DkX0CODJQnzN4JaB8zv3BoIFl4HfjumbRFHQ527ffm8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=BQWLLTlL95MnztfuN6hC7ncdyTSHY+ewV2K5h9IMUdM1XRRh3u8Dvhvjyxt/HJhLN
+	 8xua7uuHEL4tIlM3+LABx40HcvKWAtYf73z2URAsvYArQGAegzExfzyiY1QTbZZWau
+	 SwTWNzRYwxOj24DKj1WZrjDFAKtqhcSlz1iXtf9yADYtathJv5JCty3JXRGM2YTe+5
+	 wC9Un3QQreefz6tYAhF304jNezgHzYbhray0ZJktkaSoi3RN7Dc84CGOTkwNLvFEKA
+	 GsX1hZiN+hSpNkKte9oodXd0f1+6g/qowp3vApSNxwhWpz9mgIlmsHf/hMbCbYSkn5
+	 isWgtl3DlmjwA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33E86380CFD7;
+	Tue, 11 Nov 2025 01:40:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,62 +52,45 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wA38ZsLkRJp47bnCQ--.61S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zw1UurW8Xr4fZF47GF48Zwb_yoW8Kw15pr
-	WUJ3yDCrZ5GF1Sgwn7tFWUuFyft3WDAF48CayUGw45Xrn0y3WktryDAa48J3srCw43ZF12
-	gayqyry8KFy8GaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j2eHDUUUUU=
-X-CM-SenderInfo: 5fffimiurqiqqrwthudrp/xtbC0A5GJWkSkQ5eLAAA3r
+Subject: Re: [PATCH net-next v2] usbnet: Add support for Byte Queue Limits
+ (BQL)
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176282523075.2843765.15554475065878163.git-patchwork-notify@kernel.org>
+Date: Tue, 11 Nov 2025 01:40:30 +0000
+References: <20251106175615.26948-1-simon.schippers@tu-dortmund.de>
+In-Reply-To: <20251106175615.26948-1-simon.schippers@tu-dortmund.de>
+To: Simon Schippers <simon.schippers@tu-dortmund.de>
+Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, dnlplm@gmail.com,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-From: Chen Changcheng <chenchangcheng@kylinos.cn>
+Hello:
 
-The optical drive of ECD819-SU3 has the same vid and pid as INIC-3069,
-as follows:
-T:  Bus=02 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=13fd ProdID=3940 Rev= 3.10
-S:  Manufacturer=HL-DT-ST
-S:  Product= DVD+-RW GT80N
-S:  SerialNumber=423349524E4E38303338323439202020
-C:* #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=144mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=02 Prot=50 Driver=usb-storage
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0a(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-This will result in the optical drive device also adding
-the quirks of US_FL_NO_ATA_1X. When performing an erase operation,
-it will fail, and the reason for the failure is as follows:
-[  388.967742] sr 5:0:0:0: [sr0] tag#0 Send: scmd 0x00000000d20c33a7
-[  388.967742] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
-[  388.967773] sr 5:0:0:0: [sr0] tag#0 Done: SUCCESS Result: hostbyte=DID_TARGET_FAILURE driverbyte=DRIVER_OK cmd_age=0s
-[  388.967773] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
-[  388.967803] sr 5:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]
-[  388.967803] sr 5:0:0:0: [sr0] tag#0 Add. Sense: Invalid field in cdb
-[  388.967803] sr 5:0:0:0: [sr0] tag#0 scsi host busy 1 failed 0
-[  388.967803] sr 5:0:0:0: Notifying upper driver of completion (result 8100002)
-[  388.967834] sr 5:0:0:0: [sr0] tag#0 0 sectors total, 0 bytes done.
+On Thu,  6 Nov 2025 18:56:15 +0100 you wrote:
+> In the current implementation, usbnet uses a fixed tx_qlen of:
+> 
+> USB2: 60 * 1518 bytes = 91.08 KB
+> USB3: 60 * 5 * 1518 bytes = 454.80 KB
+> 
+> Such large transmit queues can be problematic, especially for cellular
+> modems. For example, with a typical celluar link speed of 10 Mbit/s, a
+> fully occupied USB3 transmit queue results in:
+> 
+> [...]
 
-Signed-off-by: Chen Changcheng <chenchangcheng@kylinos.cn>
----
- drivers/usb/storage/unusual_uas.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Here is the summary with links:
+  - [net-next,v2] usbnet: Add support for Byte Queue Limits (BQL)
+    https://git.kernel.org/netdev/net-next/c/7ff14c52049e
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 1477e31d7763..352e9d7324a4 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -98,7 +98,7 @@ UNUSUAL_DEV(0x125f, 0xa94a, 0x0160, 0x0160,
- 		US_FL_NO_ATA_1X),
- 
- /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
--UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
-+UNUSUAL_DEV(0x13fd, 0x3940, 0x0209, 0x0209,
- 		"Initio Corporation",
- 		"INIC-3069",
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-
-base-commit: e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
