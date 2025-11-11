@@ -1,49 +1,49 @@
-Return-Path: <linux-usb+bounces-30362-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30354-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0E5BC4BE6D
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:04:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9ADBAC4BF30
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:08:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 46F8E34EFF8
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:04:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B1B6189BACC
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:02:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA558358D35;
-	Tue, 11 Nov 2025 06:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A05B3559FC;
+	Tue, 11 Nov 2025 06:55:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="RQCOMeHD"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="R4NIhkG0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2F434B66F;
-	Tue, 11 Nov 2025 06:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6ECA346FB9;
+	Tue, 11 Nov 2025 06:55:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762844136; cv=none; b=UXbfuCfJgwdW/kGkK+e1S9AWcdsfqZGVtYJHQvVKQUweuZKu5+xHxHUvc7yuwDXjhvHc39rvlPxfPBN4wEvUIe8OFHlKfOiQQnloh59Z3xriA4sXYFGmENvC2EESgf0WGUsEkYAuq2rvF88s+Pv4PCPo5sjHeowiKM9cSCIr5GY=
+	t=1762844134; cv=none; b=QMGCwFh54ZrsMQt7zIiOxYX31AA4cpup8ef1SiWtE2ZepVSOn6Hccym7FxAJwpeF4iETa+9U+lf2IuykiiShfB9k8aD1CqHu0d3kxEJgfLD295zoIfoN8Lzdf/i0uNcIQrf27vsQR4A9A6vQn/R0U+N7J6Nhv3jp9qa8BuxQht0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762844136; c=relaxed/simple;
-	bh=Jw8zwnPuRNXAUEy6/iRRNrO3Vb7wl9+VqF98zG0jrso=;
+	s=arc-20240116; t=1762844134; c=relaxed/simple;
+	bh=bf3+g4U+6wGli2vhuPciTlWsbHOZefsVTzvJDSs1kWA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SQ9fPZ2SNwh7XpYc2DHKU+bvGSQREQki0hsuWU5nMeE28Ne6lk2YPqBn9qHCOXxwP4n4P7Ir1lE5SLmamtHD0+svhMshhn5ni4/Z8yGG8q6nkO/ZkInSXNx+t5QpSvs1IvNg5u2nnf1PofJ2NFdu8axaDMz0dxZ9MaCUw/5sdWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=RQCOMeHD; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=X1BMLCo1gf5sIqPm5JTXYWDZFMtBny+/ShqmV3XUupzY6R6J/ZobB+AJOu+L8a1mW4utLyQkKqa24x9TuUKlzzyI4Qh25wK0Q67iCFpmFY0NbN+XhyDwnDn474vusbH+bdZ5IQJ6HsVTaBRWp5K2feh/Mb+Ov/yyrwxs3tkIIRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=R4NIhkG0; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=cNupE5WP11QDcgvbWMAmFaE1TAZeWcI3mGTR58jAFHY=; b=RQCOMeHDTMsMilhxlrv0z4v2K7
-	Uax1Ub263Rf604bstsm5tixvcaZtT4WVJ1iaUIE8BEHoZknV4vdRUMVILyZhiqThaCURM15QSbzNU
-	XDbRDWKE5nnVHmhBAZ/LMjfgS6zWKcBwQCsbXTRyEt2lUStEdf8a+zEKSkMDyoCkNrQXHNR53Qqgz
-	lgkQoE2tU3nqJHkM94bqdzPnp3ljtAC0tMDWbxR+uPLfN01RjB5NqhEIVcgrTJJ3/Q3fsnp83xhzE
-	2sih+Jp16DJAkGsHt8obPqINFFoiq0zPSf4+w9PbSTfWDnw4tal2yXVwLn6Sys3f9Azg4i7IoS43+
-	uF5YJCng==;
+	bh=OHt/Ew+g7B0pNZwOTBE8VBfCIPUfQxC19aVy8itf040=; b=R4NIhkG0/V2mLVIyhcwusQ9nft
+	8PZeZikDf6DfjU8btWRu2gDdgdWAWufZgJAle4MZacBlTpu2VZUM/bXqtHmYL2zuE8JBljJcITK5A
+	ugGpjTf5V8wyuS4R3+1VZc7ZTTmixykTU3IcImNAEiuz6ATWp7kqFS1iITWbp8J6MWXKVKfkbf40O
+	UgnGSBuhf3W3cUjZllApd4FxBfdfgJhXFyUxxC21kqutXFs51ZBuYxbsOaTS+L7EJy5FRp6bVMD3n
+	0k/LUFpYm857/BMdvbI7VmNwc4MB+zYeIIM04sRhDT2NxMSMLKzbaSSQ5BeV4XHeiUn2/fcWdnrkX
+	a3YFAoGg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vIiHq-0000000BxEp-1TZh;
-	Tue, 11 Nov 2025 06:55:30 +0000
+	id 1vIiHk-0000000Bwyp-1RVQ;
+	Tue, 11 Nov 2025 06:55:24 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -67,9 +67,9 @@ Cc: torvalds@linux-foundation.org,
 	selinux@vger.kernel.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org
-Subject: [PATCH v3 42/50] hypfs: swich hypfs_create_u64() to returning int
-Date: Tue, 11 Nov 2025 06:55:11 +0000
-Message-ID: <20251111065520.2847791-43-viro@zeniv.linux.org.uk>
+Subject: [PATCH v3 20/50] convert debugfs
+Date: Tue, 11 Nov 2025 06:54:49 +0000
+Message-ID: <20251111065520.2847791-21-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251111065520.2847791-1-viro@zeniv.linux.org.uk>
 References: <20251111065520.2847791-1-viro@zeniv.linux.org.uk>
@@ -82,162 +82,84 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-same story as for hypfs_create_str()
+similar to tracefs - simulation of normal codepath for creation,
+simple_recursive_removal() for removal.
 
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/s390/hypfs/hypfs.h         |  3 +--
- arch/s390/hypfs/hypfs_diag_fs.c | 20 ++++++++++----------
- arch/s390/hypfs/hypfs_vm_fs.c   | 15 ++++++---------
- arch/s390/hypfs/inode.c         |  9 ++++-----
- 4 files changed, 21 insertions(+), 26 deletions(-)
+ fs/debugfs/inode.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/arch/s390/hypfs/hypfs.h b/arch/s390/hypfs/hypfs.h
-index 0d109d956015..2bb7104124ca 100644
---- a/arch/s390/hypfs/hypfs.h
-+++ b/arch/s390/hypfs/hypfs.h
-@@ -22,8 +22,7 @@
+diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
+index 661a99a7dfbe..682120fdbb17 100644
+--- a/fs/debugfs/inode.c
++++ b/fs/debugfs/inode.c
+@@ -329,7 +329,7 @@ static struct file_system_type debug_fs_type = {
+ 	.name =		"debugfs",
+ 	.init_fs_context = debugfs_init_fs_context,
+ 	.parameters =	debugfs_param_specs,
+-	.kill_sb =	kill_litter_super,
++	.kill_sb =	kill_anon_super,
+ };
+ MODULE_ALIAS_FS("debugfs");
  
- extern struct dentry *hypfs_mkdir(struct dentry *parent, const char *name);
+@@ -405,16 +405,15 @@ static struct dentry *debugfs_start_creating(const char *name,
  
--extern struct dentry *hypfs_create_u64(struct dentry *dir, const char *name,
--				       __u64 value);
-+extern int hypfs_create_u64(struct dentry *dir, const char *name, __u64 value);
- 
- extern int hypfs_create_str(struct dentry *dir, const char *name, char *string);
- 
-diff --git a/arch/s390/hypfs/hypfs_diag_fs.c b/arch/s390/hypfs/hypfs_diag_fs.c
-index 2178e6060a5d..83c9426df08e 100644
---- a/arch/s390/hypfs/hypfs_diag_fs.c
-+++ b/arch/s390/hypfs/hypfs_diag_fs.c
-@@ -204,7 +204,7 @@ static int hypfs_create_cpu_files(struct dentry *cpus_dir, void *cpu_info)
+ static struct dentry *failed_creating(struct dentry *dentry)
  {
- 	struct dentry *cpu_dir;
- 	char buffer[TMP_SIZE];
--	void *rc;
-+	int rc;
- 
- 	snprintf(buffer, TMP_SIZE, "%d", cpu_info__cpu_addr(diag204_get_info_type(),
- 							    cpu_info));
-@@ -214,18 +214,18 @@ static int hypfs_create_cpu_files(struct dentry *cpus_dir, void *cpu_info)
- 	rc = hypfs_create_u64(cpu_dir, "mgmtime",
- 			      cpu_info__acc_time(diag204_get_info_type(), cpu_info) -
- 			      cpu_info__lp_time(diag204_get_info_type(), cpu_info));
--	if (IS_ERR(rc))
--		return PTR_ERR(rc);
-+	if (rc)
-+		return rc;
- 	rc = hypfs_create_u64(cpu_dir, "cputime",
- 			      cpu_info__lp_time(diag204_get_info_type(), cpu_info));
--	if (IS_ERR(rc))
--		return PTR_ERR(rc);
-+	if (rc)
-+		return rc;
- 	if (diag204_get_info_type() == DIAG204_INFO_EXT) {
- 		rc = hypfs_create_u64(cpu_dir, "onlinetime",
- 				      cpu_info__online_time(diag204_get_info_type(),
- 							    cpu_info));
--		if (IS_ERR(rc))
--			return PTR_ERR(rc);
-+		if (rc)
-+			return rc;
- 	}
- 	diag224_idx2name(cpu_info__ctidx(diag204_get_info_type(), cpu_info), buffer);
- 	return hypfs_create_str(cpu_dir, "type", buffer);
-@@ -263,7 +263,7 @@ static int hypfs_create_phys_cpu_files(struct dentry *cpus_dir, void *cpu_info)
- {
- 	struct dentry *cpu_dir;
- 	char buffer[TMP_SIZE];
--	void *rc;
-+	int rc;
- 
- 	snprintf(buffer, TMP_SIZE, "%i", phys_cpu__cpu_addr(diag204_get_info_type(),
- 							    cpu_info));
-@@ -272,8 +272,8 @@ static int hypfs_create_phys_cpu_files(struct dentry *cpus_dir, void *cpu_info)
- 		return PTR_ERR(cpu_dir);
- 	rc = hypfs_create_u64(cpu_dir, "mgmtime",
- 			      phys_cpu__mgm_time(diag204_get_info_type(), cpu_info));
--	if (IS_ERR(rc))
--		return PTR_ERR(rc);
-+	if (rc)
-+		return rc;
- 	diag224_idx2name(phys_cpu__ctidx(diag204_get_info_type(), cpu_info), buffer);
- 	return hypfs_create_str(cpu_dir, "type", buffer);
- }
-diff --git a/arch/s390/hypfs/hypfs_vm_fs.c b/arch/s390/hypfs/hypfs_vm_fs.c
-index e8a32d66062b..a149a9f92e40 100644
---- a/arch/s390/hypfs/hypfs_vm_fs.c
-+++ b/arch/s390/hypfs/hypfs_vm_fs.c
-@@ -19,10 +19,9 @@
- 
- #define ATTRIBUTE(dir, name, member) \
- do { \
--	void *rc; \
--	rc = hypfs_create_u64(dir, name, member); \
--	if (IS_ERR(rc)) \
--		return PTR_ERR(rc); \
-+	int rc = hypfs_create_u64(dir, name, member); \
-+	if (rc) \
-+		return rc; \
- } while (0)
- 
- static int hypfs_vm_create_guest(struct dentry *systems_dir,
-@@ -85,7 +84,7 @@ static int hypfs_vm_create_guest(struct dentry *systems_dir,
- 
- int hypfs_vm_create_files(struct dentry *root)
- {
--	struct dentry *dir, *file;
-+	struct dentry *dir;
- 	struct diag2fc_data *data;
- 	unsigned int count = 0;
- 	int rc, i;
-@@ -110,11 +109,9 @@ int hypfs_vm_create_files(struct dentry *root)
- 		rc = PTR_ERR(dir);
- 		goto failed;
- 	}
--	file = hypfs_create_u64(dir, "count", data->lcpus);
--	if (IS_ERR(file)) {
--		rc = PTR_ERR(file);
-+	rc = hypfs_create_u64(dir, "count", data->lcpus);
-+	if (rc)
- 		goto failed;
--	}
- 
- 	/* guests */
- 	dir = hypfs_mkdir(root, "systems");
-diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
-index c5e2d8932b88..6a80ab2692be 100644
---- a/arch/s390/hypfs/inode.c
-+++ b/arch/s390/hypfs/inode.c
-@@ -377,8 +377,7 @@ static struct dentry *hypfs_create_update_file(struct dentry *dir)
- 	return dentry;
+-	inode_unlock(d_inode(dentry->d_parent));
+-	dput(dentry);
++	simple_done_creating(dentry);
+ 	simple_release_fs(&debugfs_mount, &debugfs_mount_count);
+ 	return ERR_PTR(-ENOMEM);
  }
  
--struct dentry *hypfs_create_u64(struct dentry *dir,
--				const char *name, __u64 value)
-+int hypfs_create_u64(struct dentry *dir, const char *name, __u64 value)
+ static struct dentry *end_creating(struct dentry *dentry)
  {
- 	char *buffer;
- 	char tmp[TMP_SIZE];
-@@ -387,15 +386,15 @@ struct dentry *hypfs_create_u64(struct dentry *dir,
- 	snprintf(tmp, TMP_SIZE, "%llu\n", (unsigned long long int)value);
- 	buffer = kstrdup(tmp, GFP_KERNEL);
- 	if (!buffer)
--		return ERR_PTR(-ENOMEM);
-+		return -ENOMEM;
- 	dentry =
- 	    hypfs_create_file(dir, name, buffer, S_IFREG | REG_FILE_MODE);
- 	if (IS_ERR(dentry)) {
- 		kfree(buffer);
--		return ERR_PTR(-ENOMEM);
-+		return -ENOMEM;
- 	}
- 	hypfs_add_dentry(dentry);
+-	inode_unlock(d_inode(dentry->d_parent));
 -	return dentry;
-+	return 0;
++	simple_done_creating(dentry);
++	return dentry; // borrowed
  }
  
- int hypfs_create_str(struct dentry *dir, const char *name, char *string)
+ static struct dentry *__debugfs_create_file(const char *name, umode_t mode,
+@@ -456,7 +455,7 @@ static struct dentry *__debugfs_create_file(const char *name, umode_t mode,
+ 	DEBUGFS_I(inode)->raw = real_fops;
+ 	DEBUGFS_I(inode)->aux = (void *)aux;
+ 
+-	d_instantiate(dentry, inode);
++	d_make_persistent(dentry, inode);
+ 	fsnotify_create(d_inode(dentry->d_parent), dentry);
+ 	return end_creating(dentry);
+ }
+@@ -602,7 +601,7 @@ struct dentry *debugfs_create_dir(const char *name, struct dentry *parent)
+ 
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
+-	d_instantiate(dentry, inode);
++	d_make_persistent(dentry, inode);
+ 	inc_nlink(d_inode(dentry->d_parent));
+ 	fsnotify_mkdir(d_inode(dentry->d_parent), dentry);
+ 	return end_creating(dentry);
+@@ -649,7 +648,7 @@ struct dentry *debugfs_create_automount(const char *name,
+ 	DEBUGFS_I(inode)->automount = f;
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
+-	d_instantiate(dentry, inode);
++	d_make_persistent(dentry, inode);
+ 	inc_nlink(d_inode(dentry->d_parent));
+ 	fsnotify_mkdir(d_inode(dentry->d_parent), dentry);
+ 	return end_creating(dentry);
+@@ -704,7 +703,7 @@ struct dentry *debugfs_create_symlink(const char *name, struct dentry *parent,
+ 	inode->i_mode = S_IFLNK | S_IRWXUGO;
+ 	inode->i_op = &debugfs_symlink_inode_operations;
+ 	inode->i_link = link;
+-	d_instantiate(dentry, inode);
++	d_make_persistent(dentry, inode);
+ 	return end_creating(dentry);
+ }
+ EXPORT_SYMBOL_GPL(debugfs_create_symlink);
 -- 
 2.47.3
 
