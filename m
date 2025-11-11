@@ -1,118 +1,157 @@
-Return-Path: <linux-usb+bounces-30419-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30420-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD4DFC4D9D3
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 13:15:20 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B9C1C4E06F
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 14:09:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23E743A4D4F
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 12:13:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 63DB84E7F82
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 13:06:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BD8E35770D;
-	Tue, 11 Nov 2025 12:13:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E85633246F5;
+	Tue, 11 Nov 2025 13:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aXccaW8t"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2vioiRNQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CD034FF74;
-	Tue, 11 Nov 2025 12:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BAB328267
+	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 13:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762863191; cv=none; b=uUfsa6FvJnkrU4Snif6vacvc5lGz4HLPnc2AmSjcGlJtyTa6ARa8BkvejzUs72pa7UpA7b2szX+86i+4K2q9+lEW1i7UNEC7FPFOZHI0vJUHNTWnc4ufQQ66Uhh3sGsHhBGN1x1hvEiPW9wbBzy1Dv7em0WRVj/KhrTVb/i7gsU=
+	t=1762866399; cv=none; b=U+AxLC1oSDIYj4y3fVECXsDnok/61quTUhMhYXWxMmNdClVmnHy84C3iUC05iD19IrrqAEgFhGxdFTLx/9pTbcQKOvBS6CECNh93bzIiNE4B6I8Dfv+5Qdr/xC3t7VXGdR5LY8iGemivGrqtD8PYGuA7i6+ThMmWre8gzx7MmQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762863191; c=relaxed/simple;
-	bh=tGF7vUOkTWYNU40VJoQwsrqiEL5d22L+o/k1hoqbYn4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PY4WQkNdbI6VtDBT2Ju0E2ehtZAbXOaRKE/x/b+e2tXlGd1WF2yTErhHI+VTmlXZPmLsyRyHCqQOf7KHwJaz1Vawv8CBQlev9Eklh7MbZWY8/UR93vTzbgSXMU3T8R1VZ6XiLWuJwmhI9dBEYGqNopsBog4LWHwzuAoZ266o9eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aXccaW8t; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762863189; x=1794399189;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tGF7vUOkTWYNU40VJoQwsrqiEL5d22L+o/k1hoqbYn4=;
-  b=aXccaW8tOVJfsQblyYfq+iy9bMMv3t7AhKLLeXgqRPmKOTjepR+0AeQo
-   wKCiTbxfq8gGvdCedd5mUVSsGnq+z/ypEO8g/s2ZB/iZViZNAbhRPmjWe
-   Xh197OKB/QhnAYPwI3UzYMSNOFAP2OwAvr/5wB9mY1VgmuKSO4MDoZ3rH
-   6H11LuykHsNr+GpQD7G+C2qYgSYOf6wcFyxrrglAGCX/76E7TtqHE7A43
-   H/8FpTWAHefwzxolq5ot5OyeOcoionHz7Gunk1BkN8WkG9dlWKvvmBBmf
-   1ymxObBzpqe3nQWORLGg7lssIYoLrMIciQ1+t6V4a+qeidczUcD8QDWzF
-   Q==;
-X-CSE-ConnectionGUID: PkmqALrWQuyMXRBcRtS6Hw==
-X-CSE-MsgGUID: UyGFitdNQNOXpMDVSqgfqQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="68783791"
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="68783791"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 04:13:08 -0800
-X-CSE-ConnectionGUID: fUPflf0RSh6C28tl8Fgskg==
-X-CSE-MsgGUID: 5QFVSmn2S2a+I4ccr39yXA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="188913613"
-Received: from cpetruta-mobl1.ger.corp.intel.com (HELO [10.245.244.118]) ([10.245.244.118])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 04:13:07 -0800
-Message-ID: <a5119a19-8660-4f0c-bedd-0a9a0301ef85@linux.intel.com>
-Date: Tue, 11 Nov 2025 14:13:05 +0200
+	s=arc-20240116; t=1762866399; c=relaxed/simple;
+	bh=CThgWWPtEqJWZJez06Yg+7QIG9rxsQTAq9Wa52dMb1U=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=htWYa8BLEUw+9/gD8gu9bf/8WBCBtYoDQkNopQBXepf6LdFpJE449s/nHOyp8+E3omwol62z4CVnqCnKXkf35vNhsyHQvIX8cLOuhvqWi2lA3Ffvol2Lm/+akXyqFvBQjlZQAcIVFccT1ajF8Lu6gpIWek+ktEOrkr3qK9Kj1iQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2vioiRNQ; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-295fbc7d4abso40514855ad.1
+        for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 05:06:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762866396; x=1763471196; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HLA1a9NwMSaye0i3Nk+UwWtVJYN2Zgn27uLzKW7b1TM=;
+        b=2vioiRNQEvxQ7SWD7+KQOM6KjLEdP51J3M6K6s5Cx/ayU6hLDgQfP504QuOd0ddENr
+         XvWINyZpaUeIvVrW3ZWYCrQAssTnT/TXmLaBM4PhYZaZuua8Wv0cjLPS0c28IerYMDnc
+         OSuiI6mUZ+4hKqpXT/ULhnj/UaTuTsfH+JMXu9vUvJY/qkv/cDk9oQk5RQ7n295IJxdF
+         EB8XaSBk1ssLCI2zAXaMKZmRGWDMch8howANpaYcF4wOQPX/KAgaTCowYuYQ9ltQIbLd
+         KmCx8BXsXpAizTcL1tubLTsWVmMbN21DAImqu6B5IEKaQ4jtqxvT4PXqFCjO/EWccU+1
+         NzNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762866396; x=1763471196;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HLA1a9NwMSaye0i3Nk+UwWtVJYN2Zgn27uLzKW7b1TM=;
+        b=l08iE2ts8fLD3M0GOIr5Hd7PrcV/eqoY0e8azec1UqgLvEcxJKzfUCQdwWITfHRN+l
+         sUigwd+xTDA/8FMj9mwIM0HChCxdfd9PextZqwc4vM9WPV6zoOEa0J3Yrb7Wp7b/OVcu
+         MdNH5AI8n4923yHQZbftiKZ/oG3A6Q/EFm268lUiYeasYjZ36cD/BJ8vCmgFlb1Cx38o
+         tZVbm8BGc5lZ+hdRbOdbksO7JJfZTDmQIFqKzjoNaB7crvjJFt5NfFtK8qlkpeP9UufO
+         8C4QQ8EL4+Dc0r0J/3PKv52BwmKi4smZ3bvDRJUJ6iftlJsvNf2B0yMa4TAMp5Cfh9zx
+         jqRA==
+X-Forwarded-Encrypted: i=1; AJvYcCWwMZSL7xHJLb8HElk2ASMIkwXlFJv3sKGPlxxYNh2QJ4vpSYOQzRuqJuAnhdl8IfKsPUdVz2hMRqE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yypw4EMI1wvqv8DRorWIu4RGVvk8HdcUcxSUPHX6kEktpUMk31L
+	l+XgXbTutL8NzO7H0iOUtNhqEAsGj661P/7ir9Ngf9N5N0p4mvkLasGkFTk5wr4paZy+uTnDNGC
+	OBVg3kw==
+X-Google-Smtp-Source: AGHT+IElmoSTCWhrtDQMxFiiHT8qX+5BcFGeEfnNbpvXgiMm/IRBQUBpX9auVk9JMiKJ6y0sU7Gv4vGyA/A=
+X-Received: from dlii28.prod.google.com ([2002:a05:7022:419c:b0:119:b185:ea6e])
+ (user=royluo job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:283:b0:295:32ea:4cf6
+ with SMTP id d9443c01a7336-297e540709cmr156079625ad.5.1762866395690; Tue, 11
+ Nov 2025 05:06:35 -0800 (PST)
+Date: Tue, 11 Nov 2025 13:06:22 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: Assume that endpoints halt as specified
-To: Michal Pecio <michal.pecio@gmail.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251107111317.69be45a5.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20251107111317.69be45a5.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.2.1041.gc1ab5b90ca-goog
+Message-ID: <20251111130624.3069704-1-royluo@google.com>
+Subject: [PATCH v5 0/2] Add Google Tensor SoC USB controller support
+From: Roy Luo <royluo@google.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Peter Griffin <peter.griffin@linaro.org>, 
+	"=?UTF-8?q?Andr=C3=A9=20Draszik?=" <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>, Roy Luo <royluo@google.com>, 
+	Badhri Jagan Sridharan <badhri@google.com>, Doug Anderson <dianders@google.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 11/7/25 12:13, Michal Pecio wrote:
-> xHCI 4.8.3 recommends that software should simply assume endpoints to
-> halt after certain events, without looking at the Endpoint Context for
-> confirmation, because HCs may be slow to update that.
-> 
-> While no cases of such "slowness" appear to be known, different problem
-> exists on AMD Promontory chipsets: they may halt and generate a transfer
-> event, but fail to ever update the Endpoint Context at all, at least not
-> until some command is queued and fails with Context State Error. This is
-> easily triggered by disconnecting D- of a full speed serial device.
-> 
-> Possibly similar bug in non-AMD hardware has been reported to linux-usb.
-> 
-> In such case, failed TD is given back without erasing from the ring and
-> endpoint isn't reset. If some URB is unlinked later, Stop Endpoint fails
-> and its handler resets the endpoint. On next submission it will restart
-> on the stale TD. Outcome is UAF on success, or another halt on error and
-> then Dequeue doesn't move and URBs are stuck. Unlinking and resubmitting
-> the URBs causes unlimited ring expansion if the situation repeats.
-> 
-> This can be solved by ignoring Endpoint Context State and trusting that
-> endpoints halt when required, except one known case in ancient hardware.
-> The check for "Already resolving halted ep" becomes redundant, because
-> for these completion codes we now jump to xhci_handle_halted_endpoint()
-> which deals with pending EP_HALTED internally.
-> 
-> Link: https://lore.kernel.org/linux-usb/20250311234139.0e73e138@foxbook/
-> Link: https://lore.kernel.org/linux-usb/20250918055527.4157212-1-zhangjinpeng@kylinos.cn/
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+This series introduces USB controller support for the Google Tensor G5
+SoC (codename: Laguna), a new generation of Google silicon first
+launched with Pixel 10 devices.
 
-Makes sense, I guess we can only trust hardware to update the state in
-the endpoint context on specific command completions, not transfer events.
+The Tensor G5 represents a significant architectural overhaul compared
+to previous Tensor generations (e.g., gs101), which were based on Samsung
+Exynos IP. Although the G5 still utilizes Synopsys IP for the USB
+components, the custom top-level integration introduces a completely new
+design for clock, reset scheme, register interfaces and programming
+sequence, necessitating new drivers and device tree bindings.
 
-Added to queue, thanks
-Mathias
+The USB subsystem on Tensor G5 integrates a Synopsys DWC3 USB 3.1
+DRD-Single Port controller with hibernation support, and a custom PHY
+block comprising Synopsys eUSB2 and USB 3.2/DP combo PHYs. The PHY
+support is sent as a separate patch series.
+
+Co-developed-by: Joy Chakraborty <joychakr@google.com>
+Signed-off-by: Joy Chakraborty <joychakr@google.com>
+Co-developed-by: Naveen Kumar <mnkumar@google.com>
+Signed-off-by: Naveen Kumar <mnkumar@google.com>
+Signed-off-by: Roy Luo <royluo@google.com>
+---
+Changes in v5:
+- Use syscon to access host_cfg and usbint_cfg MMIO space per
+  discussion in https://lore.kernel.org/linux-phy/89733ddf-8af3-42d0-b6e5-20b7a4ef588c@kernel.org
+- Make warn logs in dwc3_google_resume_irq() dev_dbg.
+Link to v4: https://lore.kernel.org/linux-usb/20251017233459.2409975-1-royluo@google.com
+
+Changes in v4:
+- Separate controller and phy changes into two distinct patch series.
+- Rename dwc3 core interrupt as "core".
+- Remove u2phy_apb clk/reset (moved to PHY)
+- Configure usb2only mode when usb3 phy is not present.
+- Adopt pm_ptr PM macros to fix build warnings.
+Link to v3: https://lore.kernel.org/linux-usb/20251010201607.1190967-1-royluo@google.com
+
+Changes in v3:
+- Align binding file name with the compatible string
+- Simplify the compatible property in binding to a single const value.
+- Add descriptive comments and use item list in binding.
+- Rename binding entries for clarity and brevity.
+Link to v2: https://lore.kernel.org/linux-usb/20251008060000.3136021-1-royluo@google.com
+
+Changes in v2:
+- Reorder patches to present bindings first.
+- Update dt binding compatible strings to be SoC-specific (google,gs5-*).
+- Better describe the hardware in dt binding commit messages and
+  descriptions.
+- Adjust PHY driver commit subjects to use correct prefixes ("phy:").
+- Move PHY driver from a subdirectory to drivers/phy/.
+Link to v1: https://lore.kernel.org/linux-usb/20251006232125.1833979-1-royluo@google.com/
+---
+Roy Luo (2):
+  dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
+  usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+
+ .../bindings/usb/google,gs5-dwc3.yaml         | 140 ++++
+ drivers/usb/dwc3/Kconfig                      |  10 +
+ drivers/usb/dwc3/Makefile                     |   1 +
+ drivers/usb/dwc3/dwc3-google.c                | 628 ++++++++++++++++++
+ 4 files changed, 779 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml
+ create mode 100644 drivers/usb/dwc3/dwc3-google.c
+
+
+base-commit: e5f0a698b34ed76002dc5cff3804a61c80233a7a
+-- 
+2.51.2.1041.gc1ab5b90ca-goog
 
 
