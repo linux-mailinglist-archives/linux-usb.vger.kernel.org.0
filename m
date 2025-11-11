@@ -1,49 +1,49 @@
-Return-Path: <linux-usb+bounces-30364-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30347-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70B85C4BEFD
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:06:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 813E3C4BF03
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:07:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 019A94F6013
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:04:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81AC11883619
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:02:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B1B7358D2A;
-	Tue, 11 Nov 2025 06:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C2CC355046;
+	Tue, 11 Nov 2025 06:55:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="DzriejRZ"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="m9R6mf51"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0136317555;
-	Tue, 11 Nov 2025 06:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909BC34AB04;
+	Tue, 11 Nov 2025 06:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762844136; cv=none; b=mpk8Hz+VL4tXveykRBSlRJS/ecWbTwffWAeOkEoW0BnCWUyq622HZIM7dZ0XF6Gn5UL67eCK9+QbWRIX0sHhb14pdfAQjiS114kSj3rB/rochAA0I7vObHIzeSgKcx9vbe12XFnU2QY6iWmoPB5eXR0u30QXXPbFiYhCeorK0hY=
+	t=1762844134; cv=none; b=efBaJAMuCRoUrgwzAzD+JeATa51ciwVh7UBPXzJtnhbQP7zIqZ2dCPYLlRJY5ySE70CfSi2+qfwmtWDZtcnfpNJeFByFgYHrkPRAKGseMdL1h+Hvkg5KlVGGl2Y4lwiBGOgXJeURfHixai+v+J7y+P6msAO+Ex9dJ3cuO6btvTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762844136; c=relaxed/simple;
-	bh=il8mOVf2818vHOFW/JAhYdqvQSi0sBbx783nwZmQsx4=;
+	s=arc-20240116; t=1762844134; c=relaxed/simple;
+	bh=cYeL+5cA9x0NwfB4diEl1DuF4hqIkdO6EuC/cakMsiI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mjar8XE5DgsDZApau/H3ZoVURm0snHy0z/Vo0TWLNDuIhsDFJGzxEuHe8oIxxjuQK9CBT+Lq6kGwuorYWElxTM75km8mclOer0miA5WuHX9wEawZo3rPfVUW+4QPBHxZwNSdRQv569VI1qa+lwns/azCzGtjho5qyC+Qz6pmQVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=DzriejRZ; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=koFcnIuRB1xiTLJXzv3GMDoI+kfDEHg5Ne0Y9CssLX1Lwr8VivekauvKxViCgq9Ev85Bivah3TvEA/A00RsH9P3wguaWRXNzhDVIewN8MrUWLSUxZmS648TQLM5slbyCN1reJQmolDE7DO8QEeWqPrhLK5/1XkT5zzp8avMzmfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=m9R6mf51; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=FZUuqKrs+nqWkpfLt5q4RrHggbnk1CWWQm+NX1Cw0DM=; b=DzriejRZZQpruszS7u6QC+IdRW
-	m8VOUhOtMXPLPfg1uzbUoRaGSvI80iQTbB3p+zXHNIuxZTwBCQVvFgGCz9BSCgvSFvRHYvqidcdDD
-	O7PzWdxvMjtiWFwEvZnkF1dhlqSlBrZIWXop+WsyNUkSms1zy+RxzvMLuWaBLkaKJDNrpJxThD3Jd
-	68X03LVc81pymNdyvH/wtvo3A6N71LJ6iC9TVhNEWZBfDhCjaQEH8e54sTvmm7XBJcnxG7zOCh2xa
-	E7e3c0h19awSVEQDA5mldox9o/Su4zTtUURoXRL+ztaC9dVF/a508XCBHJnnMVFyL66bJV8zCGElE
-	RVN/gSyw==;
+	bh=jitbeNxbeSwoLaO1GW63OWcQzV6dbGiBbZYgEsubm2E=; b=m9R6mf51Go0SgMCw1YQi0QXZgW
+	EyEDA3mrdd+Xjdc8EP55fxHY3ZVHvcC31RtBHNSQgCsfzeNqTK9w+olpHpy/tnKKOSCqeAmKuScoa
+	pUKqXnr7u4y83LLprUDaV/ArG4DF68auUhiUB4wwLmO2QrN5KiiHTdH9fQqTA1suUH2Rif7WKh3eW
+	PTW4fB/8QQOLO7z3HjLqgHRpHJv1XOVsG3tWfys3RiZBnG8IDExyWgpw1jBjmd793ymisdgf4ev0H
+	NHdpI95KjyuLQ84zGf8WP4io9nLiO0zNh8dHhtL5teHCf/5MSvrN/1a2rmWvfeTCk0AkwnKIHf6hu
+	iv0AyxUg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vIiHn-0000000Bx4o-2hjO;
-	Tue, 11 Nov 2025 06:55:27 +0000
+	id 1vIiHo-0000000Bx6h-0ucI;
+	Tue, 11 Nov 2025 06:55:28 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -67,9 +67,9 @@ Cc: torvalds@linux-foundation.org,
 	selinux@vger.kernel.org,
 	borntraeger@linux.ibm.com,
 	bpf@vger.kernel.org
-Subject: [PATCH v3 35/50] convert selinuxfs
-Date: Tue, 11 Nov 2025 06:55:04 +0000
-Message-ID: <20251111065520.2847791-36-viro@zeniv.linux.org.uk>
+Subject: [PATCH v3 37/50] convert functionfs
+Date: Tue, 11 Nov 2025 06:55:06 +0000
+Message-ID: <20251111065520.2847791-38-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251111065520.2847791-1-viro@zeniv.linux.org.uk>
 References: <20251111065520.2847791-1-viro@zeniv.linux.org.uk>
@@ -82,61 +82,61 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Tree has invariant part + two subtrees that get replaced upon each
-policy load.  Invariant parts stay for the lifetime of filesystem,
-these two subdirs - from policy load to policy load (serialized
-on lock_rename(root, ...)).
+All files are regular; ep0 is there all along, other ep* may appear
+and go away during the filesystem lifetime; all of those are guaranteed
+to be gone by the time we umount it.
 
-All object creations are via d_alloc_name()+d_add() inside selinuxfs,
-all removals are via simple_recursive_removal().
+Object creation is in ffs_sb_create_file(), removals - at ->kill_sb()
+time (for ep0) or by simple_remove_by_name() from ffs_epfiles_destroy()
+(for the rest of them).
 
-Turn those d_add() into d_make_persistent()+dput() and that's mostly it.
+Switch ffs_sb_create_file() to simple_start_creating()/d_make_persistent()/
+simple_done_creating() and that's it.
 
-Acked-by: Paul Moore <paul@paul-moore.com>
-Reviewed-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-Tested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- security/selinux/selinuxfs.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/usb/gadget/function/f_fs.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index f088776dbbd3..eae565358db4 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -1205,7 +1205,8 @@ static struct dentry *sel_attach(struct dentry *parent, const char *name,
- 		iput(inode);
- 		return ERR_PTR(-ENOMEM);
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 43dcd39b76c5..8b27414a424e 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1870,17 +1870,18 @@ static int ffs_sb_create_file(struct super_block *sb, const char *name,
+ 	struct dentry	*dentry;
+ 	struct inode	*inode;
+ 
+-	dentry = d_alloc_name(sb->s_root, name);
+-	if (!dentry)
+-		return -ENOMEM;
+-
+ 	inode = ffs_sb_make_inode(sb, data, fops, NULL, &ffs->file_perms);
+-	if (!inode) {
+-		dput(dentry);
++	if (!inode)
+ 		return -ENOMEM;
++	dentry = simple_start_creating(sb->s_root, name);
++	if (IS_ERR(dentry)) {
++		iput(inode);
++		return PTR_ERR(dentry);
  	}
+ 
 -	d_add(dentry, inode);
 +	d_make_persistent(dentry, inode);
-+	dput(dentry);
- 	return dentry;
++
++	simple_done_creating(dentry);
+ 	return 0;
  }
  
-@@ -1934,10 +1935,11 @@ static struct dentry *sel_make_swapover_dir(struct super_block *sb,
- 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
- 	inc_nlink(inode);
- 	inode_lock(sb->s_root->d_inode);
--	d_add(dentry, inode);
-+	d_make_persistent(dentry, inode);
- 	inc_nlink(sb->s_root->d_inode);
- 	inode_unlock(sb->s_root->d_inode);
--	return dentry;
-+	dput(dentry);
-+	return dentry;	// borrowed
- }
- 
- #define NULL_FILE_NAME "null"
-@@ -2080,7 +2082,7 @@ static int sel_init_fs_context(struct fs_context *fc)
- static void sel_kill_sb(struct super_block *sb)
+@@ -2067,7 +2068,7 @@ static int ffs_fs_init_fs_context(struct fs_context *fc)
+ static void
+ ffs_fs_kill_sb(struct super_block *sb)
  {
- 	selinux_fs_info_free(sb);
 -	kill_litter_super(sb);
 +	kill_anon_super(sb);
+ 	if (sb->s_fs_info)
+ 		ffs_data_closed(sb->s_fs_info);
  }
- 
- static struct file_system_type sel_fs_type = {
 -- 
 2.47.3
 
