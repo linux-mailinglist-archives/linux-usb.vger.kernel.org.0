@@ -1,387 +1,135 @@
-Return-Path: <linux-usb+bounces-30394-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30395-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD033C4C774
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 09:51:56 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66A18C4C9B5
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 10:21:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 169DD349A97
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:51:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 986DE4F7D78
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 09:16:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B072EBDD0;
-	Tue, 11 Nov 2025 08:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D160F27FD5A;
+	Tue, 11 Nov 2025 09:16:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TfuwJvHY"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DBvI1/9C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59872E8B71
-	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 08:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753E82C028D
+	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 09:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762851109; cv=none; b=iwryQmC3KspuwRU1VBHGoC/rotKR7Qd7Yrohuadur/CTr9qHM+4dPG4xI5xfPseNgwI7ULtWNmqMs5Ky3u+l+0s8Gl/uXLjmibqmcQiEZCjIcnFsOYLfo3duqgTYESF9Ut+oK85AeYrUoairjmbzVDLPfEa6CliLAlpIAs8VZNM=
+	t=1762852575; cv=none; b=cAG9yjefqdiDVuk0GvewfklTdnKun46ldUPmdc5VM/M7hZXdKhosJeE53ElsMI5xD75zqf8qxHAHiGEAD/saxUxBTvu88FUZ4CFpX6loHw6GF0Qx08dDHlcPxLwwndO3Di4S/BnKYliZYdyn4iqfABy48BlJZ4rXIf0m29tFeo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762851109; c=relaxed/simple;
-	bh=NfTfeVgO7RNVi0uDjzkTRErgQuK0XLi+KcG+O3YxbTA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oK4D+3IJN1xWxfYDdjA6f4uSLpkJzKlRClua/i5yKJjIzkHvJ5KUlw2OKH3ce8Fg/0K5JCKMR4XPp6AjFrmwwqJokeqscCnr3IIkxVm2ZiIbEBvVJyMvevSPFz7DLsb+aYQmAlbfU1KrxiP5gdNJV7xeFTYkS32h5Jn4BveLPi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TfuwJvHY; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762851107; x=1794387107;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NfTfeVgO7RNVi0uDjzkTRErgQuK0XLi+KcG+O3YxbTA=;
-  b=TfuwJvHYs+dAh8Rnh5QvA1luqqSRtAM9LtFmw/88549iQP/BsPU2z5Vi
-   2690hmlK+X7e1WKXnsg/CPXdv8QnGZT4Zv7K4dVDpwZIUHZgEIspvARLK
-   FhFXRAC3rQJcU0nxbDA0hrjKUPBG92E+fbnx3N4MnrRf4fbcW73LhHfUu
-   eNcVmiwIuE8dEbmTf4jz8+uJHyxhDVEB7i0flE3sMTgvJlkD4aROc09Ek
-   G3w/GSYo4gqGqUA9wSzs4ajin0rGqjpu0CRoHDapt3LlO6bEslMn16mnd
-   9rmQI3dPvUyKbCKw81mszQawW26y80RO4yvXne9OfNlVyHtI067KmRmzE
-   Q==;
-X-CSE-ConnectionGUID: kyU1dpgsS7On1ZUO0NYgVQ==
-X-CSE-MsgGUID: JyS7Qp8lRX2/3QU3YN8WIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="76364336"
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="76364336"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 00:51:47 -0800
-X-CSE-ConnectionGUID: bVgfAfldQL+uBQNR2Ek5KQ==
-X-CSE-MsgGUID: yYiFh2xRRpaKRogxcqsToQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="212300163"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.96])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 00:51:44 -0800
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 0597F11F983;
-	Tue, 11 Nov 2025 10:51:42 +0200 (EET)
-Date: Tue, 11 Nov 2025 10:51:41 +0200
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org,
-	"Rai, Amardeep" <amardeep.rai@intel.com>
-Subject: Re: [PATCH 11/13] usb: xhci: standardize single bit-field macros
-Message-ID: <aRL5HQw2-a94FPpA@kekkonen.localdomain>
-References: <20251110151450.635410-1-niklas.neronin@linux.intel.com>
- <20251110151450.635410-12-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1762852575; c=relaxed/simple;
+	bh=hnP6MvOjehHku2Mba8SR807PCuY5/tHtJ5RDALFOZKo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=froI1KZCQ/AFOLa8pnr+kDbXikO7RaIV3ruImER4C4n5f2CiI6y48qZ/OZ0gvVHwzDBO7BwLh5AdoqGX/UOvAog8MU4LVrB6z2+5NRbZzMD2C+2jYDlTk0ySj9hNXqp5abTodR1St3RYnNp9MCx4FDvIiqaAGAiE+ta+n4OMeis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DBvI1/9C; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-640a3317b89so5894609a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 01:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1762852572; x=1763457372; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QWPP6QWzDSQG2koCI4Uqgz32StVhYVJIJ4zaGLtn5t8=;
+        b=DBvI1/9Cy/Xuo1tGlbGlyjwRNz4devwwNzyXWJciRnnEbqbrLe5vcTd21Xy1XdI8Bu
+         RHDcT7W01ks4xNszoI0cv70IqdezTFruyOxzgoEIZyFF9GarzzSjoS6K9DUOYwwkfIbp
+         6k3ycOs+p2NH80Irorxuvk7WIGgz8TU+H/tL4ZKfG52GgEMb7aOQ/CKVT1bFPkxAmump
+         RPv1zqxxCBefUdx27KqeN7qCv8v23oncF6jqlJvb6fhRMdE0MqgCGDWL06RFn8+mRG3U
+         EkOIEAb8eE0SDX0B0SD4BzPZHFivRjaEjo84o3LZn1kXQFavcFwHpBOxFSbnWjRcasaE
+         nbgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762852572; x=1763457372;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QWPP6QWzDSQG2koCI4Uqgz32StVhYVJIJ4zaGLtn5t8=;
+        b=uL546BM6/cETYwFB7XF1+AxfcMF2lN9PUCt2/DsMNIwqDaQCQN3OB6vRJulO7rhlMb
+         CXVynE5Q2rVbVcQ56S6PYfXjhhTi4ks/VP6ImpJTYb2b7QsRyD8SH12jnRcAISpOnXsE
+         cKYImAOT5u4nsIdxraUkl9wU/sxdFyDIZSCkm3DWrVq20HlEzYF+UUam+finLLl9sGL4
+         tWjXIbCiz5Z7ZxXwI3daS4V49bbCeRImx8l0Anh4rWw9B4cFseXGFgOkKdz2YsKa64ti
+         EFY6cmFDHtajF5bdH0y17roQ+Le42ZkNPkQeZC43CBaDXDOM8lMoaEaQWBVNQeYSnxc/
+         1Ijw==
+X-Forwarded-Encrypted: i=1; AJvYcCUm/Uk4c3T5K7p8fDMnyZ3wASM1x8mz7tgkVbSamgTG44v/mmk1r8r70fMOJN3/5NhNxOhtXv/yrJo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9IXQjkqRHPp28imF52kXl722vEET4GZ0em+CoVBTyFSISvA7V
+	tBMF/rXfXhXegjuG3aKoHQJQ5FUPAghjOBJTRfmY1/EV+ON2yS4zzhlOV9R4hqxhcoE=
+X-Gm-Gg: ASbGncv+eb+2hACtEGCvdP+AR/r+Nw7673eNJWn/5MvdOrESjG2D6Q8jASGKlJyg2xG
+	MC5fWZm7RE9UOmTYe7LLcjdVhVUlKeFVHboYpSlGDE4kIra21mINiBLJzkOvjOitL6+lwiO8VEv
+	aRWAEfkOPBEt+Rvq8dEwW0WH9tjlsT33DHFXNWWBJOls57SST/rXhK1oNuKz55SN/zcEPIG4e72
+	Sz1VLcMpVvy8kAGjvPA8GEll2I9yJZRBSmWyz6CbeMNKykzNxkIkm61XvmLPSYCz/q886GHM4K0
+	F9EnxDUaKHStB/O6qe5IcisvwQPW9Lvj7Rf34Y8s4hOWmtFD0Xn22DfEdVTzzBBaRgd5pH0MTTG
+	eFq80fBsojey2tmIw4z0r6RTlH369ma5EQXioiHSCMeOzAHW4iDOPVx5dqEC3/Sb/eYYzyw5oHo
+	GQWw3E2pMyJCJKLLevPDCzKfGOlTT1RSukHIZ42A==
+X-Google-Smtp-Source: AGHT+IH930mFApbAim+hsItNZIanFSAxgWzf+l4tHBB1/03gGvYojtijguoMFNaE7u/zdx8GkYVgoQ==
+X-Received: by 2002:a17:907:7ea4:b0:b6d:7859:61eb with SMTP id a640c23a62f3a-b72e0328ebemr1045116366b.29.1762852571028;
+        Tue, 11 Nov 2025 01:16:11 -0800 (PST)
+Received: from ?IPV6:2001:a61:1328:3001:f150:c1:f1a3:b448? ([2001:a61:1328:3001:f150:c1:f1a3:b448])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bf31286esm1299966766b.21.2025.11.11.01.16.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Nov 2025 01:16:10 -0800 (PST)
+Message-ID: <2a6b4d25-e963-4019-857e-28eaba53a69a@suse.com>
+Date: Tue, 11 Nov 2025 10:16:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251110151450.635410-12-niklas.neronin@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BUG] Edifier QR30 (2d99:a101, Jieli Technology) reboots itself
+ when RGB brightness button is used under Linux
+To: Terry Junge <linuxhid@cosmicgizmosystems.com>,
+ The-Luga <lugathe2@gmail.com>, Alan Stern <stern@rowland.harvard.edu>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Michal Pecio <michal.pecio@gmail.com>,
+ Terry Junge <linuxsound@cosmicgizmosystems.com>,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+ Benjamin Tissoires <bentiss@kernel.org>
+References: <25f2419a-ee91-41eb-9446-87d238b4c7c4@rowland.harvard.edu>
+ <CALvgqEBu_RzQYRSJnbu58XZt5wHX6PRD8i-J7Tovh7+KuhOyag@mail.gmail.com>
+ <6999b5b2-a242-432e-8100-5d8ee58bcae8@rowland.harvard.edu>
+ <CALvgqEBD05PwMpm00cAbFkpSWpCFP9jaBU0r-8+op+RGPtkktg@mail.gmail.com>
+ <7adc816d-169d-4213-bb67-9d070af3c4a7@cosmicgizmosystems.com>
+ <30528153-95f1-4ec7-a6bf-5da396441f86@rowland.harvard.edu>
+ <xrfmda5rohporc3bjax35fc7xjziai6cmdt5svjak5rps6y6jz@k6h4zlt3jgg2>
+ <CALvgqEDZ=g+uvdSYqbD22sL_VP+n6Pda2xXuFAJyKkh3bjm6HQ@mail.gmail.com>
+ <CALvgqEC6UW96NEYOCM5v0m4x8Si0A7AwPuMpwXt3PMqkO3eqww@mail.gmail.com>
+ <52fc4350-2930-44d3-b844-03f00806f142@cosmicgizmosystems.com>
+ <1ac9d1dd-822a-487a-bd42-45c163dfbfe7@rowland.harvard.edu>
+ <CALvgqED5NCNjrtv_YSfg9rzerK-xWAE5TaJjZtMBMcY=8MSk3g@mail.gmail.com>
+ <c6d506f7-f13b-4d57-a522-a2ccd09e7a1f@cosmicgizmosystems.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <c6d506f7-f13b-4d57-a522-a2ccd09e7a1f@cosmicgizmosystems.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Niklas,
+On 11.11.25 06:11, Terry Junge wrote:
 
-Thanks for this!
+> Polling for input reports is handled by the hardware at the interval
+> requested by the device during enumeration. There is no intervention by
+> the kernel to poll for an input report. The only way the kernel can stop
+> polling a device for input reports is to suspend it.
+> 
+> So ALWAYS_POLL means never suspend.
 
-On Mon, Nov 10, 2025 at 04:14:48PM +0100, Niklas Neronin wrote:
-> Convert single bit-field macros to simple masks. The change makes the
-> masks more universal. Multi bit-field macros are changed in the next
-> commit. After both changes, all masks in xhci-caps.h will follow the
-> same format. I plan to introduce this change to all xhci macros.
-> 
-> Bit shift operations on a 32-bit signed can be problematic on some
-> architectures. Instead use BIT() macro, which returns a 64-bit unsigned
-> value. This ensures that the shift operation is performed on an unsigned
-> type, which is safer and more portable across different architectures.
-> Using unsigned integers for bit shifts avoids issues related to sign bits
-> and ensures consistent behavior.
-> 
-> Switch from 32-bit to 64-bit?
-> As far as I am aware, this does not cause any issues.
-> Performing bitwise operations between 32 and 64 bit values, the smaller
-> operand is promoted to match the size of the larger one, resulting in a
-> 64-bit operation. This promotion extends the 32-bit value to 64 bits,
-> by zero-padding (for unsigned).
-> 
-> Will the change to 64-bit slow down the xhci driver?
-> On a 64-bit architecture - No. On a 32-bit architecture, yes? but in my
-> opinion the performance decrease does not outweigh the readability and
-> other benefits of using BIT() macro.
-> 
-> Why not use FIELD_GET() and FIELD_PREP()?
-> While they can be used for single bit macros, I prefer to use simple
-> bitwise operation directly. Because, it takes less space, is less overhead
-> and is as clear as if using FIELD_GET() and FIELD_PREP().
-> 
-> Why not use test_bit() macro?
-> Same reason as with FIELD_GET() and FIELD_PREP().
-> 
-> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+Hi,
 
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+that is not exactly correct. ALWAYS_POLL, means that
 
-> ---
->  drivers/usb/host/xhci-caps.h    | 50 +++++++++++++++++----------------
->  drivers/usb/host/xhci-debugfs.c |  2 +-
->  drivers/usb/host/xhci-hub.c     |  6 ++--
->  drivers/usb/host/xhci-mem.c     |  7 ++---
->  drivers/usb/host/xhci-ring.c    |  8 +++---
->  drivers/usb/host/xhci-trace.h   |  2 +-
->  drivers/usb/host/xhci.c         |  2 +-
->  7 files changed, 39 insertions(+), 38 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
-> index 99557df89f88..89dd46767885 100644
-> --- a/drivers/usb/host/xhci-caps.h
-> +++ b/drivers/usb/host/xhci-caps.h
-> @@ -4,6 +4,8 @@
->   * xHCI Specification Section 5.3, Revision 1.2.
->   */
->  
-> +#include <linux/bits.h>
-> +
->  /* hc_capbase - bitmasks */
->  /* bits 7:0 - Capability Registers Length */
->  #define HC_LENGTH(p)		((p) & 0xff)
-> @@ -32,7 +34,7 @@
->   * xHCI specification section 5.3.4.
->   */
->  #define HCS_IST_VALUE(p)	((p) & 0x7)
-> -#define HCS_IST_UNIT(p)		((p) & (1 << 3))
-> +#define HCS_IST_UNIT		BIT(3)
->  /* bits 7:4 - Event Ring Segment Table Max, 2^(n) */
->  #define HCS_ERST_MAX(p)		(((p) >> 4) & 0xf)
->  /* bits 20:8 - Rsvd */
-> @@ -52,30 +54,30 @@
->  
->  /* HCCPARAMS1 - hcc_params - bitmasks */
->  /* bit 0 - 64-bit Addressing Capability */
-> -#define HCC_64BIT_ADDR(p)	((p) & (1 << 0))
-> +#define HCC_64BIT_ADDR		BIT(0)
->  /* bit 1 - BW Negotiation Capability */
-> -#define HCC_BANDWIDTH_NEG(p)	((p) & (1 << 1))
-> +#define HCC_BANDWIDTH_NEG	BIT(1)
->  /* bit 2 - Context Size */
-> -#define HCC_64BYTE_CONTEXT(p)	((p) & (1 << 2))
-> -#define CTX_SIZE(_hcc)		(HCC_64BYTE_CONTEXT(_hcc) ? 64 : 32)
-> +#define HCC_64BYTE_CONTEXT	BIT(2)
-> +#define CTX_SIZE(_hcc)		(_hcc & HCC_64BYTE_CONTEXT ? 64 : 32)
->  /* bit 3 - Port Power Control */
-> -#define HCC_PPC(p)		((p) & (1 << 3))
-> +#define HCC_PPC			BIT(3)
->  /* bit 4 - Port Indicators */
-> -#define HCS_INDICATOR(p)	((p) & (1 << 4))
-> +#define HCS_INDICATOR		BIT(4)
->  /* bit 5 - Light HC Reset Capability */
-> -#define HCC_LIGHT_RESET(p)	((p) & (1 << 5))
-> +#define HCC_LIGHT_RESET		BIT(5)
->  /* bit 6 - Latency Tolerance Messaging Capability */
-> -#define HCC_LTC(p)		((p) & (1 << 6))
-> +#define HCC_LTC			BIT(6)
->  /* bit 7 - No Secondary Stream ID Support */
-> -#define HCC_NSS(p)		((p) & (1 << 7))
-> +#define HCC_NSS			BIT(7)
->  /* bit 8 - Parse All Event Data */
->  /* bit 9 - Short Packet Capability */
-> -#define HCC_SPC(p)		((p) & (1 << 9))
-> +#define HCC_SPC			BIT(9)
->  /* bit 10 - Stopped EDTLA Capability */
->  /* bit 11 - Contiguous Frame ID Capability */
-> -#define HCC_CFC(p)		((p) & (1 << 11))
-> +#define HCC_CFC			BIT(11)
->  /* bits 15:12 - Max size for Primary Stream Arrays, 2^(n+1) */
-> -#define HCC_MAX_PSA(p)		(1 << ((((p) >> 12) & 0xf) + 1))
-> +#define HCC_MAX_PSA(p)		BIT(((((p) >> 12) & 0xf) + 1))
->  /* bits 31:16 - xHCI Extended Capabilities Pointer, from PCI base: 2^(n) */
->  #define HCC_EXT_CAPS(p)		(((p) >> 16) & 0xffff)
->  
-> @@ -91,26 +93,26 @@
->  
->  /* HCCPARAMS2 - hcc_params2 - bitmasks */
->  /* bit 0 - U3 Entry Capability */
-> -#define	HCC2_U3C(p)		((p) & (1 << 0))
-> +#define	HCC2_U3C		BIT(0)
->  /* bit 1 - Configure Endpoint Command Max Exit Latency Too Large Capability */
-> -#define	HCC2_CMC(p)		((p) & (1 << 1))
-> +#define	HCC2_CMC		BIT(1)
->  /* bit 2 - Force Save Context Capabilitu */
-> -#define	HCC2_FSC(p)		((p) & (1 << 2))
-> +#define	HCC2_FSC		BIT(2)
->  /* bit 3 - Compliance Transition Capability, false: compliance is enabled by default */
-> -#define	HCC2_CTC(p)		((p) & (1 << 3))
-> +#define	HCC2_CTC		BIT(3)
->  /* bit 4 - Large ESIT Payload Capability, true: HC support ESIT payload > 48k */
-> -#define	HCC2_LEC(p)		((p) & (1 << 4))
-> +#define	HCC2_LEC		BIT(4)
->  /* bit 5 - Configuration Information Capability */
-> -#define	HCC2_CIC(p)		((p) & (1 << 5))
-> +#define	HCC2_CIC		BIT(5)
->  /* bit 6 - Extended TBC Capability, true: Isoc burst count > 65535 */
-> -#define	HCC2_ETC(p)		((p) & (1 << 6))
-> +#define	HCC2_ETC		BIT(6)
->  /* bit 7 - Extended TBC TRB Status Capability */
-> -#define HCC2_ETC_TSC(p)         ((p) & (1 << 7))
-> +#define HCC2_ETC_TSC		BIT(7)
->  /* bit 8 - Get/Set Extended Property Capability */
-> -#define HCC2_GSC(p)             ((p) & (1 << 8))
-> +#define HCC2_GSC		BIT(8)
->  /* bit 9 - Virtualization Based Trusted I/O Capability */
-> -#define HCC2_VTC(p)             ((p) & (1 << 9))
-> +#define HCC2_VTC		BIT(9)
->  /* bit 10 - Rsvd */
->  /* bit 11 - HC support Double BW on a eUSB2 HS ISOC EP */
-> -#define HCC2_EUSB2_DIC(p)       ((p) & (1 << 11))
-> +#define HCC2_EUSB2_DIC		BIT(11)
->  /* bits 31:12 - Rsvd */
-> diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-> index f0475cf8eef8..e45545fa3c66 100644
-> --- a/drivers/usb/host/xhci-debugfs.c
-> +++ b/drivers/usb/host/xhci-debugfs.c
-> @@ -355,7 +355,7 @@ static ssize_t xhci_port_write(struct file *file,  const char __user *ubuf,
->  
->  	if (!strncmp(buf, "compliance", 10)) {
->  		/* If CTC is clear, compliance is enabled by default */
-> -		if (!HCC2_CTC(xhci->hcc_params2))
-> +		if (!(xhci->hcc_params2 & HCC2_CTC))
->  			return count;
->  		spin_lock_irqsave(&xhci->lock, flags);
->  		/* compliance mode can only be enabled on ports in RxDetect */
-> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> index e7c1952cffc5..422028ebce49 100644
-> --- a/drivers/usb/host/xhci-hub.c
-> +++ b/drivers/usb/host/xhci-hub.c
-> @@ -110,7 +110,7 @@ static int xhci_create_usb3x_bos_desc(struct xhci_hcd *xhci, char *buf,
->  	ss_cap->bU2DevExitLat = 0; /* set later */
->  
->  	reg = readl(&xhci->cap_regs->hcc_params);
-> -	if (HCC_LTC(reg))
-> +	if (reg & HCC_LTC)
->  		ss_cap->bmAttributes |= USB_LTM_SUPPORT;
->  
->  	if ((xhci->quirks & XHCI_LPM_SUPPORT)) {
-> @@ -263,7 +263,7 @@ static void xhci_common_hub_descriptor(struct xhci_hcd *xhci,
->  	desc->bNbrPorts = ports;
->  	temp = 0;
->  	/* Bits 1:0 - support per-port power switching, or power always on */
-> -	if (HCC_PPC(xhci->hcc_params))
-> +	if (xhci->hcc_params & HCC_PPC)
->  		temp |= HUB_CHAR_INDV_PORT_LPSM;
->  	else
->  		temp |= HUB_CHAR_NO_LPSM;
-> @@ -1400,7 +1400,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
->  			 * automatically entered as on 1.0 and prior.
->  			 */
->  			if (link_state == USB_SS_PORT_LS_COMP_MOD) {
-> -				if (!HCC2_CTC(xhci->hcc_params2)) {
-> +				if (!(xhci->hcc_params2 & HCC2_CTC)) {
->  					xhci_dbg(xhci, "CTC flag is 0, port already supports entering compliance mode\n");
->  					break;
->  				}
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index 98abf86e0910..06ff712c9cbe 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -463,7 +463,7 @@ struct xhci_container_ctx *xhci_alloc_container_ctx(struct xhci_hcd *xhci,
->  		return NULL;
->  
->  	ctx->type = type;
-> -	ctx->size = HCC_64BYTE_CONTEXT(xhci->hcc_params) ? 2048 : 1024;
-> +	ctx->size = xhci->hcc_params & HCC_64BYTE_CONTEXT ? 2048 : 1024;
->  	if (type == XHCI_CTX_TYPE_INPUT)
->  		ctx->size += CTX_SIZE(xhci->hcc_params);
->  
-> @@ -1344,7 +1344,7 @@ static u32 xhci_get_endpoint_mult(struct xhci_hcd *xhci,
->  	bool lec;
->  
->  	/* xHCI 1.1 with LEC set does not use mult field, except intel eUSB2 */
-> -	lec = xhci->hci_version > 0x100 && HCC2_LEC(xhci->hcc_params2);
-> +	lec = xhci->hci_version > 0x100 && (xhci->hcc_params2 & HCC2_LEC);
->  
->  	/* eUSB2 double isoc bw devices are the only USB2 devices using mult */
->  	if (usb_endpoint_is_hs_isoc_double(udev, ep) &&
-> @@ -1433,8 +1433,7 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
->  	ring_type = usb_endpoint_type(&ep->desc);
->  
->  	/* Ensure host supports double isoc bandwidth for eUSB2 devices */
-> -	if (usb_endpoint_is_hs_isoc_double(udev, ep) &&
-> -	    !HCC2_EUSB2_DIC(xhci->hcc_params2))	{
-> +	if (usb_endpoint_is_hs_isoc_double(udev, ep) && !(xhci->hcc_params2 & HCC2_EUSB2_DIC))	{
->  		dev_dbg(&udev->dev, "Double Isoc Bandwidth not supported by xhci\n");
->  		return -EINVAL;
->  	}
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 7b7c61d79d0a..8d69f82a997c 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -3988,7 +3988,7 @@ static int xhci_ist_in_microseconds(u32 hcs_params2)
->  {
->  	int ist = HCS_IST_VALUE(hcs_params2);
->  
-> -	if (HCS_IST_UNIT(hcs_params2))
-> +	if (hcs_params2 & HCS_IST_UNIT)
->  		ist *= 8;
->  	return ist;
->  }
-> @@ -4157,7 +4157,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
->  		/* use SIA as default, if frame id is used overwrite it */
->  		sia_frame_id = TRB_SIA;
->  		if (!(urb->transfer_flags & URB_ISO_ASAP) &&
-> -		    HCC_CFC(xhci->hcc_params)) {
-> +		    (xhci->hcc_params & HCC_CFC)) {
->  			frame_id = xhci_get_isoc_frame_id(xhci, urb, i);
->  			if (frame_id >= 0)
->  				sia_frame_id = TRB_FRAME_ID(frame_id);
-> @@ -4241,7 +4241,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
->  	}
->  
->  	/* store the next frame id */
-> -	if (HCC_CFC(xhci->hcc_params))
-> +	if (xhci->hcc_params & HCC_CFC)
->  		xep->next_frame_id = urb->start_frame + num_tds * urb->interval;
->  
->  	if (xhci_to_hcd(xhci)->self.bandwidth_isoc_reqs == 0) {
-> @@ -4320,7 +4320,7 @@ int xhci_queue_isoc_tx_prepare(struct xhci_hcd *xhci, gfp_t mem_flags,
->  	check_interval(urb, ep_ctx);
->  
->  	/* Calculate the start frame and put it in urb->start_frame. */
-> -	if (HCC_CFC(xhci->hcc_params) && !list_empty(&ep_ring->td_list)) {
-> +	if ((xhci->hcc_params & HCC_CFC) && !list_empty(&ep_ring->td_list)) {
->  		if (GET_EP_CTX_STATE(ep_ctx) ==	EP_STATE_RUNNING) {
->  			urb->start_frame = xep->next_frame_id;
->  			goto skip_start_over;
-> diff --git a/drivers/usb/host/xhci-trace.h b/drivers/usb/host/xhci-trace.h
-> index bf13da417f8e..c6baf82912de 100644
-> --- a/drivers/usb/host/xhci-trace.h
-> +++ b/drivers/usb/host/xhci-trace.h
-> @@ -81,7 +81,7 @@ DECLARE_EVENT_CLASS(xhci_log_ctx,
->  	),
->  	TP_fast_assign(
->  
-> -		__entry->ctx_64 = HCC_64BYTE_CONTEXT(xhci->hcc_params);
-> +		__entry->ctx_64 = xhci->hcc_params & HCC_64BYTE_CONTEXT;
->  		__entry->ctx_type = ctx->type;
->  		__entry->ctx_dma = ctx->dma;
->  		__entry->ctx_va = ctx->bytes;
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 2015d37f863e..c7a377b34661 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -5483,7 +5483,7 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
->  
->  	/* Set dma_mask and coherent_dma_mask to 64-bits,
->  	 * if xHC supports 64-bit addressing */
-> -	if (HCC_64BIT_ADDR(xhci->hcc_params) &&
-> +	if ((xhci->hcc_params & HCC_64BIT_ADDR) &&
->  			!dma_set_mask(dev, DMA_BIT_MASK(64))) {
->  		xhci_dbg(xhci, "Enabling 64-bit DMA addresses.\n");
->  		dma_set_coherent_mask(dev, DMA_BIT_MASK(64));
-> -- 
-> 2.50.1
-> 
+a) the device is always polled _while_ it is active
+b) if the device is suspended remote wakeup is always requested
 
--- 
-Sakari Ailus
+	Regards
+		Oliver
+
 
