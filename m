@@ -1,170 +1,213 @@
-Return-Path: <linux-usb+bounces-30316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D734C4B9D9
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:11:00 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B631C4BA7F
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:22:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2AF91895B30
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 06:11:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3D44E4ED63C
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 06:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0608329BD82;
-	Tue, 11 Nov 2025 06:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272672D2390;
+	Tue, 11 Nov 2025 06:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dj3iK51U"
+	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="JMA8no41"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011000.outbound.protection.outlook.com [52.101.62.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32D529B228
-	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 06:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762841454; cv=none; b=WZUkVa135eSZ5nj5grUocPjf9Eb8ozsU35CX0i+XG9/qTMWHwdiNSFeCfC5EqTrHM+sGNv+9DfcB6onhC/c9EY9V+i1xBw3eKqpiNk2mMDQV1gs6k+94BZ+supoSK0knJLIY6TmGGoMcsFtWbJcLutSqqJ+OYUaQC8ZuKJSlnIg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762841454; c=relaxed/simple;
-	bh=tWdO3Bd9f43yfta2nQOfgV9zen03nu4zs0+wVkAJ7QA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oKSxU29dPqaaArXqwfDPbJymblWKyYHXZBzsVPf21OjnokDhjZJ+X/V/N7pU82CDXsF1FmoukgRPkYdlMoXB7z2YNPfN2tgSsK2Txc9FOqgFRh8dAhl5b7P/OGFnUxTgKAFPu/Er6XIz/bvU/WfDNPaQDWaV4n/2tU2XXPrLPcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dj3iK51U; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762841453; x=1794377453;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tWdO3Bd9f43yfta2nQOfgV9zen03nu4zs0+wVkAJ7QA=;
-  b=Dj3iK51U1uKX6h1OQZUuGxsrrFI80RKd4VBSKATcnb7wWymVszl27BX3
-   60g1d01sh/xewlMzi/tlkjEb2SePM5XMg2RWbVh3mTpDF/ZRNOqefFoOy
-   1NDIYs4EgfUMgf5ZXx2BbsZCCORi7t5lSOeXRoeyDsT2/9Cv42NXFMZCs
-   2gLcNiDCl9BF9Anio8rw5B/TtFQZ7l7lw10PgSE5olH051RqrEPyCg0vJ
-   6DptP8AV6r23bcYjPFHqHOeuyDVk5V4xQMjW9fwl4BYBZkiTN7hLG4IxA
-   uTlYDJiFeel+B2RFRch/qsnt7mF0QpZGGHJjnbvLIITjHcHvshqXOk8pS
-   Q==;
-X-CSE-ConnectionGUID: 4B4NlBo9SXO4tcpqu04rfQ==
-X-CSE-MsgGUID: 9YmvMSdlRYSMNm8MYqaiuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="63902409"
-X-IronPort-AV: E=Sophos;i="6.19,295,1754982000"; 
-   d="scan'208";a="63902409"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 22:10:52 -0800
-X-CSE-ConnectionGUID: 6U2fAP2nTsOj/F5g6mz8LQ==
-X-CSE-MsgGUID: E+u9HCxlR7aTXrxgRWlNgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,295,1754982000"; 
-   d="scan'208";a="219529430"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 10 Nov 2025 22:10:51 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vIhaa-0002p9-12;
-	Tue, 11 Nov 2025 06:10:48 +0000
-Date: Tue, 11 Nov 2025 14:10:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Niklas Neronin <niklas.neronin@linux.intel.com>,
-	mathias.nyman@linux.intel.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: Re: [PATCH 12/13] usb: xhci: standardize multi bit-field macros
-Message-ID: <202511111300.UAbLCfdg-lkp@intel.com>
-References: <20251110151450.635410-13-niklas.neronin@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1097D2D063C;
+	Tue, 11 Nov 2025 06:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.0
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762842071; cv=fail; b=ncFWk/444Q4ZNVbjezdEaZsNLsDe0KijK5wAxGaUzHpit1QkX/105Zuhq+ZDpAq7m1LWuNwqiUCOCn0OIQxO/JtczBAYeGEkKxyBfbmyyYO/CvAq42K0eOPRmMPgPm/k8DYQ1hXHWBcR0N1oqLNvysCwKBOqdY0mSMZboLfIvHU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762842071; c=relaxed/simple;
+	bh=CRmTqP4tn8LCfGJXK+stLPDHpraUWnGgvlhjwWdh4/U=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=aDqfIxGuoqUq2UXgK+54XysXN0aCwYnsCJXqB+zgfNqr/x80T4FR1hu0i4UifqFNnnu403tuGquoXX8FJfsvszHgjeObztYW8RHpz5Bi1FE3Up52VnHqRWUgFe7xaxUjqpXWw0KA4b92wWO/7UL2PneaMp6vUV2YRmBDakB/F78=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=JMA8no41; arc=fail smtp.client-ip=52.101.62.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TzhkUPDXk9RwSrusrHg/JlWt64FpiG5FwY/xoGFvZDN5XOAJbU73mdKvB8HJYwdmz0XegYYIe4Js529AwyVWRVO5YWMjLh67oWXyotHpeEbjN2ATkZcLQUf1Wteb/YOQzvvXbzvhZmy6BfU0J2izQh3JSku37yXJlc3AMh0JTw4Su4P8Zn3tVMCtMxkf3xriomsl35nIYlJN0fwTQ0byndpEEhZWGnfKn9PWRKv4Sw2poj5b5ktHLHP+q22RdFW7+d1jtR1/Mnyv4TEqd9y+w3q17tV3/NaSrU3eOEU2gSfTXnuIlAAERdS+CXYPFvuJkKTcGQ5BGtCVG8qhtZdCRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sLCC98WSirU+VLuCwCfyq/EDTnTJ1Vor5rx5ljpuh9o=;
+ b=vEqqpeVkeSWX9OgUUBHVkBxJZ0WX97fQF9LKNkcgqnjlpznRLsmcb/l1K5L3xhhft1DmOq+cegG244q6UBHEq1ifG4QJrPs9aKVN1d/T0ZdWttbkUIqpUueU0valYms8G4sc7fGXRIBfZufrTOgiCk4I76pSIAq6XaxWA69ad+yvK/PEVRJaucPzegC5IFAdSAshqQGzkM2JZU8M7424SVaTTljULpTKTIsM1FfOKjH+7R0f614Yg7gDubGsz6t1ZM7ADzzDKfc2NdQCVfpaCMokkGZixYIK+mQCun/G7hORkKHsgn5DfG9YH5D6UdIlDDZaKVdjKJk6iTngt3BHcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
+ dkim=pass header.d=altera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sLCC98WSirU+VLuCwCfyq/EDTnTJ1Vor5rx5ljpuh9o=;
+ b=JMA8no41MmuzV4ynj7Mhrroj0J4yZ2zjjdo7lgSYlYi/t9pxA2UF5eutT4yjmfRM4zmYsh0qgOAWTSBwhx3azO+gxOlbGfZC3Of+NWhnKQxXdxDXLLS57iN0iPABHVEWUbBUvCwhhOVWWrSbymDLkPsOWr84tD+CQ7gao4Aax2Jqkr14tSVa6snGj6X2+cfCtsorNagc4sx0yww61HW6MdDlUb2ipoICWETl+cubP/5Wz7fLroh4f0+Q48fAXDS/EymiOCN75uvJjebio2pnaN2/NJT6OlX3J2iF2h/fggu1oJLnEvy3ZlQScJBIgjCBE5XpaFWdnsNDFIF8VWUoLw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=altera.com;
+Received: from DM8PR03MB6230.namprd03.prod.outlook.com (2603:10b6:8:3c::13) by
+ DM6PR03MB5049.namprd03.prod.outlook.com (2603:10b6:5:1ee::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9298.16; Tue, 11 Nov 2025 06:21:05 +0000
+Received: from DM8PR03MB6230.namprd03.prod.outlook.com
+ ([fe80::abad:9d80:7a13:9542]) by DM8PR03MB6230.namprd03.prod.outlook.com
+ ([fe80::abad:9d80:7a13:9542%3]) with mapi id 15.20.9298.015; Tue, 11 Nov 2025
+ 06:21:05 +0000
+From: adrianhoyin.ng@altera.com
+To: gregkh@linuxfoundation.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	dinguyen@kernel.org,
+	Thinh.Nguyen@synopsys.com,
+	devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: adrianhoyin.ng@altera.com
+Subject: [PATCH 0/4] Add Altera Agilex5 DWC3 support
+Date: Tue, 11 Nov 2025 14:18:44 +0800
+Message-ID: <cover.1762839776.git.adrianhoyin.ng@altera.com>
+X-Mailer: git-send-email 2.49.GIT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: KUZPR01CA0024.apcprd01.prod.exchangelabs.com
+ (2603:1096:d10:26::14) To DM8PR03MB6230.namprd03.prod.outlook.com
+ (2603:10b6:8:3c::13)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251110151450.635410-13-niklas.neronin@linux.intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM8PR03MB6230:EE_|DM6PR03MB5049:EE_
+X-MS-Office365-Filtering-Correlation-Id: 16c89ab0-9aa8-4c7b-6481-08de20ea7e87
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OGJyNzlhWFR6dFlkdFdwenNwdzFUQ1JOaDlLdzJHQ0VUeDFlOXhiMVNOQTN6?=
+ =?utf-8?B?eks5c3N0ZHgrUS9HbStYWnlOYzlhNFc3L01DZm5EL0ozdlFqWUdFM1g0cXR2?=
+ =?utf-8?B?cTU2a2Z6dlBESnVjNGpKa1hyVmMyQXlCSnU0QUNhUXBzTWYyTnNLQ3ZqeERC?=
+ =?utf-8?B?UmJYTVVPM3JjdGlaSVlVaytmTkRKd2JPTVI5b3FlSUpJbG5KVjRVVm50VWRT?=
+ =?utf-8?B?NHBjR2E0WTdFRDZEMk1iVUM3NTRZLy8yMnJpQ2RlYXM4VS9tb3dtMGREWVV2?=
+ =?utf-8?B?WVUrdTJzOHh0TGpoMUgxVkZQWEtudDBqcFlGRVlFanBHcTZhVVhndXJxQzFj?=
+ =?utf-8?B?WnREU0FmUUM5b2pxTk9nd2Q3VHBXSFd3RUFqaHVoaGppVHN5YlViQ2tMMXIz?=
+ =?utf-8?B?SHBQZTFYbFJORnA4QXZSZWRGdUQzVXZ2Q2VWazJWc0x1TzBKY3k4RE5uVU0v?=
+ =?utf-8?B?MjZ6TERUL1ovZC81amFUNjVscmYxVmRkUC8ybFJtSmlLSGVIUGtGN2NYbkha?=
+ =?utf-8?B?V0p4UmJKamptTGUyYXNlRUNSVVpyYjJqeWJ6YnhjVnJtOFFEbVpQYWZHOHhw?=
+ =?utf-8?B?Q1J2Y1NQZnlSWlN3cVBpRkdFak5mOVo1TDdMZkJJd3ArK3RLNnAzdGVCdlNJ?=
+ =?utf-8?B?NmtrV3JoL1A3eSttOHBESGkvemJQcGtwVUY5aHB4N1ZlR1F0TlcrMTNkQW9Z?=
+ =?utf-8?B?NjJ3M2I0QlZibytaTXpvbjI1SlJrTVBLSEtUcVdGOGxWMHRSYURSY2p6K2lZ?=
+ =?utf-8?B?UUxmUkdEZnBSMnlVNWdudVRMWW9Zb1hDYTRaSUFRNm9ScUhRNTh3emY1c3BM?=
+ =?utf-8?B?b0dEU2JrWGM3MlRQbDhWZXU2M2FmT1JxbisyUjdiYko1L3B6MCszOGQrWVNM?=
+ =?utf-8?B?QlFzdUhyc1NNRVdEL1VhZG9lMnE0VzkzODM5REx4S0tNZmxMUXdlSTdNWWtI?=
+ =?utf-8?B?Zm0rR2pRdzBrT3Z5SXd2MGNib3h2dXREdWZHaDA5eUtqTFdkaU9QM2s1MTJs?=
+ =?utf-8?B?VFJCUXRobE1uRzVXV3EzVlhnMk5FcXYrUVorVENnRW5aZmRrWVJERHpNMVQv?=
+ =?utf-8?B?QURneTkvUkFXZy92K2IyMDU4NmlzMjdYSFN6VmVXRnIzSDNtTisrUUVaTDA5?=
+ =?utf-8?B?dWRrWjQydXJvQkhSWmx6NTJGSGhKSTNOU2hHUmlLb2xTS0FIQmhPRmM4ZDRM?=
+ =?utf-8?B?WkRYTWN2bGZkRkd5dFZqb1RZUHd4QkVyTGcrTFA4VzVpQkxnelgzcVh5YURY?=
+ =?utf-8?B?L3dlQ1lCZlBpTFhSSFlrQkM4VEowR1lsb0VtNmNzMGVyTnphSmlCT0JwTkFB?=
+ =?utf-8?B?K25oTDRtWkNYYWp0blJZaEFDVzJpQ3h6RDNrWEpadnQ5MEM3ZnQvTm9GR21J?=
+ =?utf-8?B?K04ycndUcmJ1ZlZObkZyRis0eUxSd0w5UUlBTmx5TjNIOFgvbmhKakdEWFln?=
+ =?utf-8?B?cnFzNElWRmxqUjQ4dWdydmVlQjlwaUJ3OVRVMzAvbU1laVBhc0l6UEc5cm0w?=
+ =?utf-8?B?Mmx6WGY3TWJSWXg1L2l1L0YvcXpKSGZrcE9OelBsSFEraHpRZ21vSER0Sysy?=
+ =?utf-8?B?RTFTa0dRMWZYR3NtTS93S0NvcmtSUjltbFhLcHNMMUp1bDlCSVR3c29lZ2FR?=
+ =?utf-8?B?S3FIRkw2VnZrWi9ydWRTZlZCcFFGTlViMjN6WEJMSEQ4OTZGUUVNeS9jU0Fv?=
+ =?utf-8?B?UmUzRTVQT1gwOGZWR01rR1JlMG01V0Fwc3VrTE84NFZCTk5qcUkray85NDdX?=
+ =?utf-8?B?NU1iczhJNTNrSVlHV1hrSVhCMGRuZFZETWp1QlpONi9YMzlabzdpOW1zQytB?=
+ =?utf-8?B?OVMvQjVNV3RzSk9sOXhadFQ4clgzZDIyTjNESUw5KzlPdmVGR2RIa2tQMmdt?=
+ =?utf-8?B?ck8vbUtRN2E3VFV6ME1tT0NTK2tWSGp1RWtDU2dNNDlnN2pycGZ4bUpXZjBY?=
+ =?utf-8?Q?nQ8LTIrnZzrhmf6BfaoRtVsE2xSpzza+?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR03MB6230.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?QUE1REZ5Z0FkbFdyRjNieTQwRGR0NFd1d1N5M3ZaLy9Xa0FQQjFPR1haalZW?=
+ =?utf-8?B?SWwxWXBJOWtpY1UyZHZNekEvckVSbXc2bHkyUnJNd1dSSXVKMWxERG5jS3Jv?=
+ =?utf-8?B?dUZET3VWYWFrSjAzeUR6UzdEOU1NV0xiSUVLa2ozKzEzM0VueTU5ZmZMNW1N?=
+ =?utf-8?B?NFJneEVmWDhmT1ZKRzVkWXdyWGEwQzRLWU1XRXhMQkVRc0dXTlhkc1owQVIy?=
+ =?utf-8?B?YzhYQlpKVzE1cWFGLzMyU2pmdXh1MjFmYnNFaFRKTGV6OHdDOHh6SGU1QVV0?=
+ =?utf-8?B?TUk3dkw4eDZnVHpWZFFYaXRSYUU3U3MwbjZTS2Q5YjlTV1lPdXBDNEVTaFBK?=
+ =?utf-8?B?Q1JjY1YwTjNoSDlSdWllSFZxSUFlcEFEMXV6bjRwaitFN2dJd0psNE9QWndX?=
+ =?utf-8?B?NlY1SE9QUEY5ZCtJTG1ZUVNJRGZHbk5ZWFRrNm05OU4yR1B1eDdvRDFzQnlM?=
+ =?utf-8?B?ekJMUGZ5L0dNbDJncHZpU093RU9PZ1hoc0dMSFBMem1aVmxPamdGcE9Xa3Bs?=
+ =?utf-8?B?VDNhWkYreFpwL0pQR05zMkZWMWNhWEVEYnl6MDFRM091Y21RN01CUmYxRVh4?=
+ =?utf-8?B?ZlpPQmhCK2pxRGtJMWFJYkpPS0UyMDdVME9jb0hrQXRLMmVZZFRCalVYMDhI?=
+ =?utf-8?B?dUg4VTNxbjVhOGFFQ2JyeWdJdytzV0MvWGRiTkFWSmNlK3NsaldranlXRmlT?=
+ =?utf-8?B?TzRDZktNcDI4ZCt6MWt0RFVPU095NWdsRDdaaldicXgxVDhqbHVUZlhuUm9q?=
+ =?utf-8?B?ZjRzbVMxZTRBRXBRWWxtc2w0SDVDSk9BcTVwQ0dQTExrYkc2UWczZVFWblIv?=
+ =?utf-8?B?Q0dZcUh4bHp0aW1FSEVHZ0RqYytZS2hMN2lFeTdZU05peWNTOVRmS0JxNERI?=
+ =?utf-8?B?UHhOMXJ2ZER2NUgwdnh4NnhCQnZWOWZCWWc5eG8zYTd6TThzVENzTTE4UDBL?=
+ =?utf-8?B?VWRmN3JTbFB2RDk3bWNvbURrSUF4a0NBcDNTY2FDVW81MG44ZmtSaXM3OGR3?=
+ =?utf-8?B?cldpS1N6aUpZazJJZmJ6UmR4dEpkM1ZCUWlnWGh3aWtiKzF2bERzVDRTVVhL?=
+ =?utf-8?B?RG8xcDAwUyszUXkxeTVqTEFUOXpIczBaM20raGN5V1hRZjh4Z0dMcXdQVVpB?=
+ =?utf-8?B?K1pHL2g1aVdnQVF0cUZXMHJnb1dtbjdQYURpSTVMYk5hbmhyWkUxY1ZVam02?=
+ =?utf-8?B?cmp2L2JlYmpBdHF4ZjNqSll2V3ROeEVNYllrWEQzVkZqZVpJY0t3ZndwTndJ?=
+ =?utf-8?B?aUZRRGtwWC9RNGtsM094UmpLalppc2ZtRS84N2k1VHJ6RjdaQVdLS2JqM0xz?=
+ =?utf-8?B?OFQ4OVJ3bGhzRTFNd0JNYkRZZEFpUk5CRzhPYUFFZ0FOd2w3UXQ4V3NFaVdo?=
+ =?utf-8?B?R1JLcHNxbk1OVkxXTGFwWkVIVTVHcCtYZ1BxRzlyZXZycUNmelhzamRWMGpk?=
+ =?utf-8?B?Q2U3dHVaTUJTa2dFWVZSQllZUFZBd0EzL3MzTjdFYzN1OERkV1p3VUZwY1lB?=
+ =?utf-8?B?VkF3WE5DUzBCSVpJYkh2NlhzVjlGL1Nhc2RRa3NXaVZGM3M3MmhFM1QvV2hG?=
+ =?utf-8?B?MnJ4VUcwVkc2bGhjZUc1aTQzTE96Mjk2NUhveExRbUxuL2R5Z0I5N081SG1H?=
+ =?utf-8?B?Y090bXAzRG9GWEVQRmZTZHdMdDdOUFlibzNKN1RRQlVqd09qL290RHFIdWsw?=
+ =?utf-8?B?dmJQNmZSdUcra0UvbkhyZTh6SmdwTmx6R0lwRUZJZGlsazY4aEVDTVRmbVNI?=
+ =?utf-8?B?Y2Rud3BDY1BTMXQxNmhKRUl2Uks1V28xSmdEWFhEa0pmR00zdVFENjQ1bDNl?=
+ =?utf-8?B?dHRKdUNxMndFcHd6UlZVV2ZYbzdJNFhnZ29yZVVwTkdQN0FrbFdKY3djRzdj?=
+ =?utf-8?B?Vi9zc3JKVHhUUW5PYnVSYjZ3SVdZNmdHYlRaaWlHOWw2SWN3S3M4aURMejAw?=
+ =?utf-8?B?RFEyM1dPaDRzRS91eWxBMzFnTW1OQ1M4MlIraHdxZnRCR0FsTzFkYjFRcnJ2?=
+ =?utf-8?B?SVJUTTcyMU9YV29qQkNpNWtjdUZKV1c4Zk5ZS2N5QjhTWUltVldVd2N4d3lK?=
+ =?utf-8?B?VzY4TmpNRlVvMEEvYUFWejJwZ3ZpRjh1aDlQZFRUU3VCVzBNUVM4ZjZlblJJ?=
+ =?utf-8?B?RW5LT1BCQkNqSW9iZVFvc0JWQUdOenlRbmdmV1dPVk5vNWd3eFZpMVF2L2tS?=
+ =?utf-8?B?Unc9PQ==?=
+X-OriginatorOrg: altera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16c89ab0-9aa8-4c7b-6481-08de20ea7e87
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR03MB6230.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2025 06:21:05.1963
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vQFRzmZxAN2gXIJ6fVFF0qI1JDPCtkAjqT17Og6YkMjRVvoKsgkoyAAAgEfStyA/3P2e87uO0pXnCVK42vQq+/KpQ8WY/RRZmIrzRq6thVY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB5049
 
-Hi Niklas,
+From: Adrian Ng Ho Yin <adrianhoyin.ng@altera.com>
 
-kernel test robot noticed the following build errors:
+This patch series adds USB3.1 support for the Altera Agilex5 SoCFPGA
+platform. The integration is based on the Synopsys DesignWare USB3
+(DWC3) controller, wrapped by an Altera-specific layer that manages
+clocks, resets, and other SoC-level interfaces.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus tegra/for-next westeri-thunderbolt/next linus/master v6.18-rc5 next-20251110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The series introduces a new device tree binding for the Altera DWC3
+wrapper, adds the corresponding device tree nodes for Agilex5 and its
+SoCDK board, enables support for the new compatible in the dwc3-of-simple
+driver, and extends the DWC3 core to handle configurable DMA addressable
+bits. This allows Agilex5, which uses a 40-bit DMA address space, to
+function correctly with SMMU-enabled systems.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Niklas-Neronin/usb-xhci-remove-deprecated-TODO-comment/20251110-233045
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20251110151450.635410-13-niklas.neronin%40linux.intel.com
-patch subject: [PATCH 12/13] usb: xhci: standardize multi bit-field macros
-config: loongarch-randconfig-002-20251111 (https://download.01.org/0day-ci/archive/20251111/202511111300.UAbLCfdg-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511111300.UAbLCfdg-lkp@intel.com/reproduce)
+This series also disables the DWC2 USB controller node, as the daughter
+card does not support simultaneous operation of both USB controllers.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511111300.UAbLCfdg-lkp@intel.com/
+Adrian Ng Ho Yin (4):
+  dt-bindings: usb: dwc3-altera: Add binding for Altera DWC3 wrapper
+  arm64: dts: intel: agilex5: Add USB3.1 support for Agilex5 SoCDK
+  usb: dwc3: of-simple: Add support for Agilex5 SoCFPGA
+  usb: dwc3: add support for configurable DMA addressable bits
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/ratelimit_types.h:5,
-                    from include/linux/printk.h:9,
-                    from include/asm-generic/bug.h:22,
-                    from arch/loongarch/include/asm/bug.h:61,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/loongarch/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:79,
-                    from include/linux/spinlock.h:56,
-                    from include/linux/irq.h:14,
-                    from drivers/usb/dwc3/host.c:10:
-   drivers/usb/dwc3/host.c: In function 'dwc3_power_off_all_roothub_ports':
->> include/linux/bits.h:47:9: error: called object is not a function or function pointer
-      47 |         ((t)(GENMASK_INPUT_CHECK(h, l) +                        \
-         |         ^
-   include/linux/bits.h:51:33: note: in expansion of macro 'GENMASK_TYPE'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^~~~~~~~~~~~
-   drivers/usb/dwc3/../host/xhci-caps.h:12:33: note: in expansion of macro 'GENMASK'
-      12 | #define HC_LENGTH               GENMASK(7, 0)
-         |                                 ^~~~~~~
-   drivers/usb/dwc3/host.c:49:32: note: in expansion of macro 'HC_LENGTH'
-      49 |                 op_regs_base = HC_LENGTH(readl(xhci_regs));
-         |                                ^~~~~~~~~
->> include/linux/bits.h:47:9: error: called object is not a function or function pointer
-      47 |         ((t)(GENMASK_INPUT_CHECK(h, l) +                        \
-         |         ^
-   include/linux/bits.h:51:33: note: in expansion of macro 'GENMASK_TYPE'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^~~~~~~~~~~~
-   drivers/usb/dwc3/../host/xhci-caps.h:24:33: note: in expansion of macro 'GENMASK'
-      24 | #define HCS_MAX_PORTS           GENMASK(31, 24)
-         |                                 ^~~~~~~
-   drivers/usb/dwc3/host.c:51:28: note: in expansion of macro 'HCS_MAX_PORTS'
-      51 |                 port_num = HCS_MAX_PORTS(reg);
-         |                            ^~~~~~~~~~~~~
-
-
-vim +47 include/linux/bits.h
-
-31299a5e021124 Vincent Mailhol 2025-03-26  35  
-19408200c09485 Vincent Mailhol 2025-03-26  36  /*
-19408200c09485 Vincent Mailhol 2025-03-26  37   * Generate a mask for the specified type @t. Additional checks are made to
-19408200c09485 Vincent Mailhol 2025-03-26  38   * guarantee the value returned fits in that type, relying on
-19408200c09485 Vincent Mailhol 2025-03-26  39   * -Wshift-count-overflow compiler check to detect incompatible arguments.
-19408200c09485 Vincent Mailhol 2025-03-26  40   * For example, all these create build errors or warnings:
-19408200c09485 Vincent Mailhol 2025-03-26  41   *
-19408200c09485 Vincent Mailhol 2025-03-26  42   * - GENMASK(15, 20): wrong argument order
-19408200c09485 Vincent Mailhol 2025-03-26  43   * - GENMASK(72, 15): doesn't fit unsigned long
-19408200c09485 Vincent Mailhol 2025-03-26  44   * - GENMASK_U32(33, 15): doesn't fit in a u32
-19408200c09485 Vincent Mailhol 2025-03-26  45   */
-19408200c09485 Vincent Mailhol 2025-03-26  46  #define GENMASK_TYPE(t, h, l)					\
-19408200c09485 Vincent Mailhol 2025-03-26 @47  	((t)(GENMASK_INPUT_CHECK(h, l) +			\
-19408200c09485 Vincent Mailhol 2025-03-26  48  	     (type_max(t) << (l) &				\
-19408200c09485 Vincent Mailhol 2025-03-26  49  	      type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
-19408200c09485 Vincent Mailhol 2025-03-26  50  
+ .../devicetree/bindings/usb/dwc3-altera.yaml  | 78 +++++++++++++++++++
+ .../arm64/boot/dts/intel/socfpga_agilex5.dtsi | 24 ++++++
+ .../boot/dts/intel/socfpga_agilex5_socdk.dts  |  9 ++-
+ drivers/usb/dwc3/core.c                       |  9 ++-
+ drivers/usb/dwc3/core.h                       |  3 +
+ drivers/usb/dwc3/dwc3-of-simple.c             |  1 +
+ 6 files changed, 122 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/dwc3-altera.yaml
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.49.GIT
+
 
