@@ -1,144 +1,108 @@
-Return-Path: <linux-usb+bounces-30388-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30389-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7777BC4C309
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:53:37 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAD2DC4C4C7
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 09:13:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19ECD18833E2
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 07:54:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2D49E4F8E5F
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:08:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 981AA2EBBB9;
-	Tue, 11 Nov 2025 07:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A53D2DC76C;
+	Tue, 11 Nov 2025 08:08:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o8p0McGb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9lzz7Wb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068A134D39F;
-	Tue, 11 Nov 2025 07:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D092BE658
+	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 08:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762847599; cv=none; b=UVfWh+hID1oMXG6ITJpTzxW4bu7HBwe+90T+LQzQYm9Ht8XJwVzMsQvHCclUu2ot7kv1hAGgZQRfSydFEeTZvHdDMq7PL7Ra0BGDpyvb+zqP/5B3/ildMjEk35JbAsNgP9Y3GN0NEDzG/tgWiD5VCfT6dKPjSxfSglgDp0NUK48=
+	t=1762848512; cv=none; b=Qy+MyAhmjHlrMS+ihrTjvvaq205s+/DySRkl+wsn89HDBmjojiTo1S3J5Ds3zW+1ZQ193zrgNhs7zCE1Sp0jzeuHVNM3Q9umiwBcSzXviowh5I2FkbJ8tDw0ZONgyXhHRrWc4ERoqc3ur252tyM9Zsv5YWjPuliKAVaIwYEXcs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762847599; c=relaxed/simple;
-	bh=7qxex0fb9sux6H6YiFyflQQ1fF27LToi81rAOC7nyJw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=lTpg3aMoVowBQmm3doycj0FMjvpH+imPj/F5/lm/8Qj/ZevTLScD7gB6kRXtEytNxXGGJjyKHQh0nqN5qKixXvF0QwAIgA2DFoDGJjUtHFwafH6gxNV0TT8zsKzNAVea5HC8icCstY+ZzKpMmIa0YUnRbu78p0IM25/7OAlkPRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o8p0McGb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73270C116B1;
-	Tue, 11 Nov 2025 07:53:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762847598;
-	bh=7qxex0fb9sux6H6YiFyflQQ1fF27LToi81rAOC7nyJw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=o8p0McGbUBg/mt4W0NwniQY9deSF651afKOoP439t4jTJeKv5LTx9vea9SGEQP8si
-	 Q+5a+sIU7/rr5zqsP+ur8SebApGAvWVYTCiHpEoBxnRS/ATLz92ZlOpzA+IPHvqxX7
-	 dy4GVB4pVeP8wFW2h7PYHaYeO0gbrMbOZYKJPHlrur9uUuvNsp9xny9Zx+MXTS3GYV
-	 cqyVrLtwlM6rSDu0Fgu90qu055/duQnw869B0CGPbEtwgor0ofWM7MG2wjg4jSiR0W
-	 0z4Ylk8vrW16xqRUmM/x1Dj8l4LfK4kIc0/1RsgkaikoHSoF9wMUFwvk/QGdaVgMjc
-	 CIoMYVMhdAYTw==
-Content-Type: multipart/mixed; boundary="===============1170773288298516893=="
+	s=arc-20240116; t=1762848512; c=relaxed/simple;
+	bh=/EzhxUbgXu8TwphJDNg/nG6YdPSxeoOM709DbPBznw0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BXoSR5Ze3Lr2qI9/xoChtYCgWPsFjdOS92p4tKfBP/GFAAOYVhHgcmFT3m//X2TFHAYSS8QZ4L8MhiNacdVML1kSXAv05zLQLjZICRDt/CA3X4YH61Qx4HRUv1Kb1/Sa7dL9cmLf2IOrAOGFgBT0jcZlHwIQzvxUlSKsKAjZWmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9lzz7Wb; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-42b3ad51fecso1507070f8f.1
+        for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 00:08:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762848509; x=1763453309; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/EzhxUbgXu8TwphJDNg/nG6YdPSxeoOM709DbPBznw0=;
+        b=W9lzz7WbCkEDK12RoaXsBUeDy1V47hSyLmtCQQS9t/5FTlZI7fKa92tyUFW7RLVRd4
+         BJkV/0kkRjvYMVXrYaFRXt+MVZv5q/pweieSwwZ7VU+JIELWqFgD0bheJHpOQYR63ON4
+         GTlNcMM000B0O/VTp1AAANjlih+YgQP181Vby4hatmS/9ZM6ZdG4eDHAt90qsJ7Pvmsf
+         rBYtQLt5E/kTSFk+zt/CJGMii6X5v2c2chUmNe/IZJSkVeo1/fODkyLCNA4L+VVIXtK6
+         hcD/4jZALJgZQpoyn3OS+kfFoqQj/X63HXSTn3xnSV2k8QtVb+HRuMmGFS8jRmd9/5v1
+         SvHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762848509; x=1763453309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/EzhxUbgXu8TwphJDNg/nG6YdPSxeoOM709DbPBznw0=;
+        b=oshchq8UoGqb12tD5DEeY58FX/L4sIi+6U9T+Y02WhvAZchq5UeszOEQjDbi+SB2Mz
+         k13wL9Dxaj70oM6fbQ3U0E+biGpEyVJk4KaNDmlXRFPj2N6X3kz/aPT4C+0bMzKc9umQ
+         A5HmqiaEEmmf4A87dlHIPG4p0e+3RU/k+LYlVP1LeThxyVZ1EicLejXN9JSuvU+T+Ub4
+         Ltau9/fJom3ta1ka0ygYcjJd0LAH/vCz/Ew1P7Kcm4jY7c1wzUH2CNOUQJ2l0T27svZx
+         iugREKvN01xOOfTwAbB3GSRtVdB1KjYWZAb7XPorIEBcbhU+NCkSSv847JW0yfVNNwaf
+         /1lA==
+X-Forwarded-Encrypted: i=1; AJvYcCXcQBWcAJ4iDpAcrpHMQX2vSaAAJhf7Xl5bLemreY8yY1ictRQAAmXUnprEassMr4D3DZnBy0SBF5M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzwb9FWVkwyLCbtEd9SsoTVo3ndhnJ9tz9bmRVvseswOrBvwmJ9
+	N67AEIgokAWeLso/7DpWf004KLxCO1nBALHGSEOCUg/Vk6x5T7vlDz/NCdk1AczkMwu89VcaMJi
+	KYO6diwnvW4vCYgFMZxaKhmQ6/FqWFKw=
+X-Gm-Gg: ASbGncujUF38gvI/LQvOOda7qxJsau/WugA00L3EYQY76Xgikx5KJWzIcr08WqqNEv5
+	uNqhwFtM+Yn4IFeRnVWEIS0guLW1cqR1/5RpCaWyGqyFx1W7E0MFeN0LmnCOD+RHDRSP818vFpy
+	CqZsU4P+weNcNmlcG2uND1uak7eWmRXssPLTeF3Ca7Hptg2Js66x4wcvwAqo18h93WIjpP79dOa
+	ttcvBr0hhRpICaZX66JB5fcQY+CW6gPn/+MFGJh0eos6cNNpAoGTkVpXtIapKay5LkUf2CSip55
+	EsbkUMMwA91o7NuFJ0N9qvdNX6HO3HY8CI1WnoOie6b7cTLq0s6xI30AnzpB/BT3
+X-Google-Smtp-Source: AGHT+IFvSfTIU4Z4qFzOo2YJfLilhL94JX4cA1j/1rEFPdljVva6t9U+b00rwrHwvs9/nnWZ5H+ImqldCjksQoIqQAs=
+X-Received: by 2002:a05:6000:40cd:b0:429:b958:218a with SMTP id
+ ffacd0b85a97d-42b2dc4967amr8587827f8f.28.1762848508970; Tue, 11 Nov 2025
+ 00:08:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <70d825699c6e0a7e6cb978fdefba5935d5a515702e22e732d5c2ad919cfe010b@mail.kernel.org>
-In-Reply-To: <20251111065520.2847791-35-viro@zeniv.linux.org.uk>
-References: <20251111065520.2847791-35-viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v3 34/50] selinuxfs: new helper for attaching files to tree
-From: bot+bpf-ci@kernel.org
-To: viro@zeniv.linux.org.uk,linux-fsdevel@vger.kernel.org
-Cc: torvalds@linux-foundation.org,brauner@kernel.org,jack@suse.cz,raven@themaw.net,miklos@szeredi.hu,neil@brown.name,a.hindborg@kernel.org,linux-mm@kvack.org,linux-efi@vger.kernel.org,ocfs2-devel@lists.linux.dev,kees@kernel.org,rostedt@goodmis.org,gregkh@linuxfoundation.org,linux-usb@vger.kernel.org,paul@paul-moore.com,casey@schaufler-ca.com,linuxppc-dev@lists.ozlabs.org,john.johansen@canonical.com,selinux@vger.kernel.org,borntraeger@linux.ibm.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 11 Nov 2025 07:53:18 +0000 (UTC)
+References: <c6d506f7-f13b-4d57-a522-a2ccd09e7a1f@cosmicgizmosystems.com> <20251111074205.1533558-1-lugathe2@gmail.com>
+In-Reply-To: <20251111074205.1533558-1-lugathe2@gmail.com>
+From: The-Luga <lugathe2@gmail.com>
+Date: Tue, 11 Nov 2025 05:08:16 -0300
+X-Gm-Features: AWmQ_bmDNcXrvdWFtWzr7GXasgYB3WfrnIRIsSzhNeM-NRsY4FCwIBHXAWepbOU
+Message-ID: <CALvgqEBS3NJxdJ1LF2j5g3q0DTyU=ZSFyeygDP1eitgRwSjvmQ@mail.gmail.com>
+Subject: Re: [PATCH] The Edifier QR30 USB speaker, identified as: Jieli
+ Technology EDIFIER Hal0 2.0 SE 2d99:a101, reports a HID interface that needs
+ HID_QUIRK_ALWAYS_POLL to ensure it does not crash when changing the RGB
+ brightness with the physical knob.
+To: linuxhid@cosmicgizmosystems.com
+Cc: bentiss@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org, 
+	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linuxsound@cosmicgizmosystems.com, 
+	michal.pecio@gmail.com, stern@rowland.harvard.edu
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============1170773288298516893==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you all! This was my first time contributing.
 
-> diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-> index b39e919c2..f088776db 100644
-> --- a/security/selinux/selinuxfs.c
-> +++ b/security/selinux/selinuxfs.c
+>ALSA and the rest are triggered to bump the volume up or down with the
+>Consumer Control Volume Up and Volume Down events. Those HID usages are
+>declared in the other HID interface but never fired as your testing shows.
 
-[ ... ]
-
-> @@ -1197,6 +1197,25 @@ static struct inode *sel_make_inode(struct super_block *sb, umode_t mode)
->  	return ret;
->  }
->
-> +static struct dentry *sel_attach(struct dentry *parent, const char *name,
-> +				 struct inode *inode)
-> +{
-> +	struct dentry *dentry = d_alloc_name(parent, name);
-> +	if (unlikely(!dentry)) {
-> +		iput(inode);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +	d_add(dentry, inode);
-> +	return dentry;
-> +}
-> +
-> +static int sel_attach_file(struct dentry *parent, const char *name,
-> +			   struct inode *inode)
-> +{
-> +	struct dentry *dentry = sel_attach(parent, name, inode);
-> +	return PTR_ERR_OR_ZERO(dentry);
-> +}
-
-[ ... ]
-
-> @@ -1887,31 +1887,23 @@ static struct dentry *sel_make_dir(struct dentry *dir, const char *name,
->  			unsigned long *ino)
->  {
-> -	struct dentry *dentry = d_alloc_name(dir, name);
->  	struct inode *inode;
->
-> -	if (!dentry)
-> -		return ERR_PTR(-ENOMEM);
-> -
->  	inode = sel_make_inode(dir->d_sb, S_IFDIR | S_IRUGO | S_IXUGO);
-> -	if (!inode) {
-> -		dput(dentry);
-> +	if (!inode)
->  		return ERR_PTR(-ENOMEM);
-> -	}
->
->  	inode->i_op = &simple_dir_inode_operations;
->  	inode->i_fop = &simple_dir_operations;
->  	inode->i_ino = ++(*ino);
->  	/* directory inodes start off with i_nlink == 2 (for "." entry) */
->  	inc_nlink(inode);
-> -	d_add(dentry, inode);
->  	/* bump link count on parent directory, too */
->  	inc_nlink(d_inode(dir));
-> +
-> +	return sel_attach(dir, name, inode);
->  }
-
-Can this leak the parent directory's reference count? The parent inode's
-link count is incremented with inc_nlink(d_inode(dir)) before calling
-sel_attach(). When sel_attach()->d_alloc_name() fails and returns NULL,
-sel_attach() correctly cleans up the child inode with iput() and returns
-ERR_PTR(-ENOMEM). However, the parent directory's link count has already
-been incremented and is never decremented on this error path.
-
-In the original code, the parent link count increment happened after
-d_add() succeeded, ensuring it only occurred when the full operation
-completed successfully.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19257803162
-
---===============1170773288298516893==--
+Thank you for the suggestion! I might try something like that in the
+future. For now, I=E2=80=99m happy mapping the codes of the speaker. Revers=
+e
+engineering is so much fun! I hope this patch helps others avoid the
+frustration I experienced with this bug haha.
 
