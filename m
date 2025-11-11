@@ -1,355 +1,154 @@
-Return-Path: <linux-usb+bounces-30429-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30430-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38588C4EC25
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 16:23:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B310C4EFF6
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 17:20:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 63D3C4F188F
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 15:15:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 354DE3B94F3
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 16:19:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C32E8361DBF;
-	Tue, 11 Nov 2025 15:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5465336C5A1;
+	Tue, 11 Nov 2025 16:19:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dKOrlzau"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KMsA7uHA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6946835F8D8
-	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 15:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6E736A033;
+	Tue, 11 Nov 2025 16:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762874071; cv=none; b=Dwrr7ZJJNg3tcZ8Q3QafYUxyzQk/xwSY4CKc5oEfi7AlvxWAHO5VP4bLCIyW2rE8uDuJHZS48CiTW2mCuD3kxd3//PQDNhN/JM8Y1l7iR4qCrLqg917l3CEXQnvqRQoAekLMTF7vaJ4qGU6OE6H1MEepfzF4iJC2LDAOmba7+Zk=
+	t=1762877984; cv=none; b=eo5+yp24aYz8ymehaKSNFyhVvQOY3TQeL34U093qysUlIRb1GuSo5XbrN70o1FWdNaGbuugXGRaqkwP6WobjjDt7bXwSkeE+XD/DuomupJXtM8NafjIbyk4wMGw2s5plCfrwhTl5z56ihlXeod3RxbJC3uFHy0GtpZ6MoPP2r6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762874071; c=relaxed/simple;
-	bh=H3MMpqivZZRwD2aYJhGyjecG0nGwMZpDn+02x79tScY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=WPEKRxqgTr6yrUXbgeh0CpwOw1w3HZwodd6ph1qrtf5GDnmartW3l/Da//fmLtRr0twHN3RfcqkuTLVUc50sc2lTBDGVydHNqeIKWq4XtJ9wkZzukUaSaNG1LTM1Xp6J6nsbvAW1SL9A3A0bd9ZHypv96D2gpcp07CL5geSZDgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dKOrlzau; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 00994C0F54B;
-	Tue, 11 Nov 2025 15:14:05 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6E0F9606FB;
-	Tue, 11 Nov 2025 15:14:26 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 92F4F102F24BC;
-	Tue, 11 Nov 2025 16:14:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1762874064; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=7R5SuVHot9CpoTkFcfHq9Yksdnr2wM0VbRyDn5Qi10s=;
-	b=dKOrlzauhoCSJVUKuaP9oTCZn7a/MbZ2YlAMNvicAOTuUkcvvFhCxjLV+bx9T1URMFX9KD
-	Xv0onrlrf4j+WXvPuJI65WpdzhDi9F7tNHHVCXx0I93YgctmEO807WWW6869g4FZ+Ptvtw
-	KPo8GugnqzYO6yONmOELShTim5/a0xN+uAVWe82MhZ185fsCPlzyX3yaECJWYx+O5v1WJe
-	zBiYw+Ry4+/Um2fMV7bWNqIO4F9pMfjJkICfM1An54gPdE9T6KJNLMtgiJJa+RPW1F5ZDo
-	llG8ee1T2LOVJ9ZudBWCv3C/RK73b1m+u+qdGUOusNITg3cZ1M7nnnM6LYvWRg==
+	s=arc-20240116; t=1762877984; c=relaxed/simple;
+	bh=MRIv/WwWQnNcHl/Kgg27XOhKNmjLF/zVaonpwv61t9c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b2vz2s+wbI05AyofTycWOQdr8QRy6gx2r3fJIxIVY0XXz8ZUrpdtRj5JCBkyUxMmCpiAweEweESh4F1SeZZ9/xll09d/+ZrM6bryl07PvOPVUgacLVtrH0yxGoefaQQA1Obat+PQRTqTM1CtlR6TQ1o0cd4UfZPq9O7kkb3Kq/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KMsA7uHA; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762877983; x=1794413983;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MRIv/WwWQnNcHl/Kgg27XOhKNmjLF/zVaonpwv61t9c=;
+  b=KMsA7uHATFFhW3O0tF85uxy8UUiCqQkenws3n91noLWy3Os73c2ssdLx
+   8NHRduD1ABrp7LAMIddEJiFxdHYzAfsyTyKrh21P6EhGp2j0nfL69Dq/g
+   ZmP2JCkuke4DwhVt1VyweMVKIizPCSjFILwTLqx/wABXttNs4mnxODjP5
+   vTAqQFP3h1rEJetQFGD/4Wn9IQwAmknZt2Fkjfu4T3SoMmhp6+OnwID67
+   A/r0+Buz/CSkK7OLUdudLGOzOn1P1IedjdXCN4Lc5o0qXbDnWoAeLmEoK
+   t4FJzONaS8DNlIEFq7jJAQfyYmtNGxj/NEStg8KZXZO9f7sHvLTVRwyBJ
+   w==;
+X-CSE-ConnectionGUID: 4B1LItW8TJKND9+z4M6i7A==
+X-CSE-MsgGUID: R3/Ya+FOSDKm4K1ih5SNJw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="65098139"
+X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
+   d="scan'208";a="65098139"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 08:19:43 -0800
+X-CSE-ConnectionGUID: ya/rlQVGT12nmby3p5vFMw==
+X-CSE-MsgGUID: lMpFr96bTRadqOMq6LoGyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
+   d="scan'208";a="193247151"
+Received: from cpetruta-mobl1.ger.corp.intel.com (HELO [10.245.244.118]) ([10.245.244.118])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 08:19:41 -0800
+Message-ID: <f1259e37-5671-43ca-85f5-a37b68d5507a@linux.intel.com>
+Date: Tue, 11 Nov 2025 18:19:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 11 Nov 2025 16:14:11 +0100
-Message-Id: <DE5YP3AVGOG3.OHP68Z0F6KBU@bootlin.com>
-Subject: Re: [PATCH v9 08/10] drm/rockchip: cdn-dp: Add multiple bridges to
- support PHY port selection
-Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
- <linux-arm-kernel@lists.infradead.org>,
- <linux-rockchip@lists.infradead.org>, <dri-devel@lists.freedesktop.org>
-To: "Chaoyi Chen" <kernel@airkyi.com>, "Heikki Krogerus"
- <heikki.krogerus@linux.intel.com>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Dmitry Baryshkov"
- <dmitry.baryshkov@oss.qualcomm.com>, "Peter Chen" <hzpeterchen@gmail.com>,
- "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul"
- <vkoul@kernel.org>, "Kishon Vijay Abraham I" <kishon@kernel.org>, "Heiko
- Stuebner" <heiko@sntech.de>, "Sandy Huang" <hjc@rock-chips.com>, "Andy Yan"
- <andy.yan@rock-chips.com>, "Yubing Zhang" <yubing.zhang@rock-chips.com>,
- "Frank Wang" <frank.wang@rock-chips.com>, "Andrzej Hajda"
- <andrzej.hajda@intel.com>, "Neil Armstrong" <neil.armstrong@linaro.org>,
- "Robert Foss" <rfoss@kernel.org>, "Laurent Pinchart"
- <Laurent.pinchart@ideasonboard.com>, "Jonas Karlman" <jonas@kwiboo.se>,
- "Jernej Skrabec" <jernej.skrabec@gmail.com>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>,
- "Thomas Zimmermann" <tzimmermann@suse.de>, "David Airlie"
- <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Amit Sunil Dhamne"
- <amitsd@google.com>, "Chaoyi Chen" <chaoyi.chen@rock-chips.com>, "Dragan
- Simic" <dsimic@manjaro.org>, "Johan Jonker" <jbx6244@gmail.com>, "Diederik
- de Haas" <didi.debian@cknow.org>, "Peter Robinson" <pbrobinson@gmail.com>
-From: "Luca Ceresoli" <luca.ceresoli@bootlin.com>
-X-Mailer: aerc 0.20.1
-References: <20251111105040.94-1-kernel@airkyi.com>
- <20251111105040.94-9-kernel@airkyi.com>
-In-Reply-To: <20251111105040.94-9-kernel@airkyi.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: xhci: Don't unchain link TRBs on quirky HCs
+To: Michal Pecio <michal.pecio@gmail.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251107110837.7b7d686b.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20251107110837.7b7d686b.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello Chaoyi,
+On 11/7/25 12:08, Michal Pecio wrote:
+> Some old HCs ignore transfer ring link TRBs whose chain bit is unset.
+> This breaks endpoint operation and sometimes makes it execute other
+> ring's TDs, which may corrupt their buffers or cause unwanted device
+> action. We avoid this by chaining all link TRBs on affected rings.
+> 
+> Fix an omission which allows them to be unchained by cancelling TDs.
+> 
+> The patch was tested by reproducing this condition on an isochronous
+> endpoint (non-power-of-two TDs are sometimes split not to cross 64K)
+> and printing link TRBs in trb_to_noop() on good and buggy HCs.
+> 
+> Actual hardware malfunction is rare since it requires Missed Service
+> Error shortly before the unchained link TRB, at least on NEC and AMD.
+> I have never seen it after commit bb0ba4cb1065 ("usb: xhci: Apply the
+> link chain quirk on NEC isoc endpoints"), but it's Russian roulette
+> and I can't test all affected hosts and workloads. Fairly often MSEs
+> happen after cancellation because the endpoint was stopped.
+> 
+> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 
-On Tue Nov 11, 2025 at 11:50 AM CET, Chaoyi Chen wrote:
-> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->
-> The RK3399 has two USB/DP combo PHY and one CDN-DP controller. And
-> the CDN-DP can be switched to output to one of the PHYs. If both ports
-> are plugged into DP, DP will select the first port for output.
->
-> This patch adds support for multiple bridges, enabling users to flexibly
-> select the output port. For each PHY port, a separate encoder and bridge
-> are registered.
->
-> The change is based on the DRM AUX HPD bridge, rather than the
-> extcon approach. This requires the DT to correctly describe the
-> connections between the first bridge in bridge chain and DP
-> controller. For example, the bridge chain may be like this:
->
-> PHY aux birdge -> fsa4480 analog audio switch bridge ->
-> onnn,nb7vpq904m USB reminder bridge -> USB-C controller AUX HPD bridge
->
-> In this case, the connection relationships among the PHY aux bridge
-> and the DP contorller need to be described in DT.
->
-> In addition, the cdn_dp_parse_next_bridge_dt() will parses it and
-> determines whether to register one or two bridges.
->
-> Since there is only one DP controller, only one of the PHY ports can
-> output at a time. The key is how to switch between different PHYs,
-> which is handled by cdn_dp_switch_port() and cdn_dp_enable().
->
-> There are two cases:
->
-> 1. Neither bridge is enabled. In this case, both bridges can
-> independently read the EDID, and the PHY port may switch before
-> reading the EDID.
->
-> 2. One bridge is already enabled. In this case, other bridges are not
-> allowed to read the EDID. So we will try to return the cached EDID.
->
-> Since the scenario of two ports plug in at the same time is rare,
-> I don't have a board which support two TypeC connector to test this.
-> Therefore, I tested forced switching on a single PHY port, as well as
-> output using a fake PHY port alongside a real PHY port.
->
-> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+Makes sense, thanks for fixing this
 
-[...]
+> ---
+>   drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++-----------
+>   1 file changed, 16 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index a9e468ea19c5..fc0043ca85a4 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -128,11 +128,11 @@ static void inc_td_cnt(struct urb *urb)
+>   	urb_priv->num_tds_done++;
+>   }
+>   
+> -static void trb_to_noop(union xhci_trb *trb, u32 noop_type)
+> +static void trb_to_noop(union xhci_trb *trb, u32 noop_type, bool unchain_links)
+>   {
+>   	if (trb_is_link(trb)) {
+> -		/* unchain chained link TRBs */
+> -		trb->link.control &= cpu_to_le32(~TRB_CHAIN);
+> +		if (unchain_links)
+> +			trb->link.control &= cpu_to_le32(~TRB_CHAIN);
+>   	} else {
+>   		trb->generic.field[0] = 0;
+>   		trb->generic.field[1] = 0;
+> @@ -465,7 +465,7 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
+>   		xhci_dbg(xhci, "Turn aborted command %p to no-op\n",
+>   			 i_cmd->command_trb);
+>   
+> -		trb_to_noop(i_cmd->command_trb, TRB_CMD_NOOP);
+> +		trb_to_noop(i_cmd->command_trb, TRB_CMD_NOOP, false);
+>   
+>   		/*
+>   		 * caller waiting for completion is called when command
+> @@ -797,13 +797,18 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
+>    * (The last TRB actually points to the ring enqueue pointer, which is not part
+>    * of this TD.)  This is used to remove partially enqueued isoc TDs from a ring.
+>    */
+> -static void td_to_noop(struct xhci_td *td, bool flip_cycle)
+> +static void td_to_noop(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+> +			struct xhci_td *td, bool flip_cycle)
 
-> @@ -966,28 +1084,16 @@ static int cdn_dp_pd_event(struct notifier_block *=
-nb,
->  	return NOTIFY_DONE;
->  }
->
-> -static int cdn_dp_bind(struct device *dev, struct device *master, void *=
-data)
-> +static int cdn_bridge_add(struct device *dev,
-> +			  struct drm_bridge *bridge,
-> +			  struct drm_bridge *next_bridge,
-> +			  struct drm_encoder *encoder)
->  {
->  	struct cdn_dp_device *dp =3D dev_get_drvdata(dev);
-> -	struct drm_encoder *encoder;
-> +	struct drm_device *drm_dev =3D dp->drm_dev;
-> +	struct drm_bridge *last_bridge =3D NULL;
->  	struct drm_connector *connector;
-> -	struct cdn_dp_port *port;
-> -	struct drm_device *drm_dev =3D data;
-> -	int ret, i;
+we could avoid passing xhci pointer to td_to_noop() and just grab it from
+the xhci_virt_ep structure instead. i.e. ep->xhci
 
-[...]
+Otherwise this looks good to me
 
-> +	if (next_bridge) {
-> +		ret =3D drm_bridge_attach(encoder, next_bridge, bridge,
-> +					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-> +		if (ret)
-> +			return ret;
-> +
-> +		last_bridge =3D next_bridge;
-> +		while (drm_bridge_get_next_bridge(last_bridge))
-> +			last_bridge =3D drm_bridge_get_next_bridge(last_bridge);
+Thanks
+Mathias
 
-DRM bridges are now refcounted, and you are not calling drm_bridge_get()
-and drm_bridge_put() here. But here you can use
-drm_bridge_chain_get_last_bridge() which will simplify your job.
 
-Don't forget to call drm_bridge_put() on the returned bridge when the
-bridge is not referenced anymore. This should be as easy as adding a
-cleanup action on the variable declaration above:
-
--	struct drm_bridge *last_bridge =3D NULL;
-+	struct drm_bridge *last_bridge __free(drm_bridge_put) =3D NULL;
-
-> @@ -1029,8 +1147,102 @@ static int cdn_dp_bind(struct device *dev, struct=
- device *master, void *data)
->  		return ret;
->  	}
->
-> +	if (last_bridge)
-> +		connector->fwnode =3D fwnode_handle_get(of_fwnode_handle(last_bridge->=
-of_node));
-> +
->  	drm_connector_attach_encoder(connector, encoder);
->
-> +	return 0;
-> +}
-> +
-> +static int cdn_dp_parse_next_bridge_dt(struct cdn_dp_device *dp)
-> +{
-> +	struct device_node *np =3D dp->dev->of_node;
-> +	struct device_node *port __free(device_node) =3D of_graph_get_port_by_i=
-d(np, 1);
-> +	struct drm_bridge *bridge;
-> +	int count =3D 0;
-> +	int ret =3D 0;
-> +	int i;
-> +
-> +	/* If device use extcon, do not use hpd bridge */
-> +	for (i =3D 0; i < dp->ports; i++) {
-> +		if (dp->port[i]->extcon) {
-> +			dp->bridge_count =3D 1;
-> +			return 0;
-> +		}
-> +	}
-> +
-> +
-> +	/* One endpoint may correspond to one next bridge. */
-> +	for_each_of_graph_port_endpoint(port, dp_ep) {
-> +		struct device_node *next_bridge_node __free(device_node) =3D
-> +			of_graph_get_remote_port_parent(dp_ep);
-> +
-> +		bridge =3D of_drm_find_bridge(next_bridge_node);
-> +		if (!bridge) {
-> +			ret =3D -EPROBE_DEFER;
-> +			goto out;
-> +		}
-> +
-> +		dp->next_bridge_valid =3D true;
-> +		dp->next_bridge_list[count].bridge =3D bridge;
-
-You are storing a reference to a drm_bridge, so have to increment the
-refcount:
-
-		dp->next_bridge_list[count].bridge =3D drm_bridge_get(bridge);
-		                                     ^^^^^^^^^^^^^^
-
-FYI there is a plan to replace of_drm_find_bridge() with a function that
-increases the bridge refcount before returning the bridge, but it's not
-there yet. When that will happen, the explicit drm_bridge_get() won't be
-needed anymore and this code can be updated accordingly.
-
-Also you have to call drm_bridge_put() to release that reference when the
-pointer goes away. I guess that should happen in cdn_dp_unbind().
-
-> +static int cdn_dp_bind(struct device *dev, struct device *master, void *=
-data)
-> +{
-
-In this function you do:
-...(see below)...
-
-> +	struct cdn_dp_device *dp =3D dev_get_drvdata(dev);
-> +	struct drm_bridge *bridge, *next_bridge;
-> +	struct drm_encoder *encoder;
-> +	struct cdn_dp_port *port;
-> +	struct drm_device *drm_dev =3D data;
-> +	struct cdn_dp_bridge *dp_bridge;
-> +	int ret, i;
-> +
-> +	ret =3D cdn_dp_parse_dt(dp);
-> +	if (ret < 0)
-.> +		return ret;
-> +
-> +	ret =3D cdn_dp_parse_next_bridge_dt(dp);
-
-1. compute the next bridges and store them in dp->next_bridge_list[]
-...
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	dp->drm_dev =3D drm_dev;
-> +	dp->connected =3D false;
-> +	dp->active =3D false;
-> +	dp->active_port =3D -1;
-> +	dp->fw_loaded =3D false;
-> +
-> +	for (i =3D 0; i < dp->bridge_count; i++) {
-> +		dp_bridge =3D devm_drm_bridge_alloc(dev, struct cdn_dp_bridge, bridge,
-> +						    &cdn_dp_bridge_funcs);
-> +		if (IS_ERR(dp_bridge))
-> +			return PTR_ERR(dp_bridge);
-> +		dp_bridge->id =3D i;
-> +		dp_bridge->parent =3D dp;
-> +		if (!dp->next_bridge_valid)
-> +			dp_bridge->connected =3D true;
-> +		dp->bridge_list[i] =3D dp_bridge;
-> +	}
-> +
-> +	for (i =3D 0; i < dp->bridge_count; i++) {
-> +		encoder =3D &dp->bridge_list[i]->encoder.encoder;
-> +		bridge =3D &dp->bridge_list[i]->bridge;
-> +		next_bridge =3D dp->next_bridge_list[i].bridge;
-> +		ret =3D cdn_bridge_add(dev, bridge, next_bridge, encoder);
-
-...
-2. pass the dp->next_bridge_list[i].bridge to cdn_bridge_add
-3. not use  dp->next_bridge_list[i] elsewhere
-
-So you may want to change this function to parse into a local array, with
-function scope. If you do this, the drm_bridge_get/put() I mentioned above
-should still exist, but would be localized to this function, thus even
-easier to handle.
-
-Even better, you can parse the DT one bridge at a time inside the for loop,
-so you don't need to store any next_bridge pointer array. This will need a
-bit of rework of cdn_dp_parse_next_bridge_dt() though, and I haven't
-checked in detail so it might be not worth.
-
-[...]
-
-> +struct cdn_dp_bridge {
-> +	struct cdn_dp_device *parent;
-> +	struct drm_bridge bridge;
-> +	struct rockchip_encoder encoder;
-> +	bool connected;
-> +	bool enabled;
-> +	int id;
-> +};
-> +
-> +struct cdn_dp_next_bridge {
-> +	struct cdn_dp_device *parent;
-> +	struct drm_bridge *bridge;
-> +	int id;
-
-The @parent and @id fields are unused if I'm not mistaken.
-
-If it is the case then you can... (see below)
-
->  struct cdn_dp_device {
->  	struct device *dev;
->  	struct drm_device *drm_dev;
-> -	struct drm_bridge bridge;
-> -	struct rockchip_encoder encoder;
-> +	int bridge_count;
-> +	struct cdn_dp_bridge *bridge_list[MAX_PHY];
-> +	struct cdn_dp_next_bridge next_bridge_list[MAX_PHY];
-
-...replace this line with:
-	struct drm_bridge *next_bridge[MAX_PHY];
-
-Unless of course you just don't store the next_bridge at all, as I
-suggested above, and which looks way easier and more efficient.
-
-Best regards,
-Luca
-
---
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
