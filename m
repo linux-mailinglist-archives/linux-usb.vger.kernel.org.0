@@ -1,229 +1,249 @@
-Return-Path: <linux-usb+bounces-30303-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30304-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21544C49D07
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 00:49:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42CBDC49DAA
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 01:22:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFDDD188D0A3
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Nov 2025 23:49:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC251188E9CF
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 00:22:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216E0257AD1;
-	Mon, 10 Nov 2025 23:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D07D2189B84;
+	Tue, 11 Nov 2025 00:22:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nDZw5qIv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KIbvlIYK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EA6194A73
-	for <linux-usb@vger.kernel.org>; Mon, 10 Nov 2025 23:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762818552; cv=none; b=g3Mm+pyE52CejqZnRMC4wpCejB2rOLS+UVNWJquk391b81evtHV87Pa2HjsSZAoQq69R6g99n9xqN7qkdyAdwz/Ero4l673aeGqzeqxFwTKUWmJNKPk7OJ9CbdBad5brqtFnY1QzdHoxO3aiRjvZwL6vmLZgi96xXtKl0E4amSY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762818552; c=relaxed/simple;
-	bh=Cpx1MBTp2b+ApnHx7tQ9af9hUs61tCdIGkVmUMS1ivg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EDprcrA1cIpeKD1Z/aeVmPT1k2vU7kl3j6dvQXMLLF2noot3YPSyBQX8vuw0+LGAakSadOLO7r29Oz3SIStHcRI1co1c2yVrlIe+abz47zpReryMcGFAHqQkjqzRjJoUmcfITerxQDoKzZoI6GqnPqIKNxhIZNWS56OKthiiO3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nDZw5qIv; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-42b3c965cc4so123258f8f.0
-        for <linux-usb@vger.kernel.org>; Mon, 10 Nov 2025 15:49:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762818549; x=1763423349; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bld/cS3EZkCvsE25mUIinwj/m0d1kI6qCYYge0fjmts=;
-        b=nDZw5qIvonLEa43CUfx3X1sQWQKb2c29UaB5JtGYol+3Oi65ap9oR5CbEjB1LstRkt
-         TIGhxc3sScUn40YZm7FmMdr4+mB7P50lXBf8mzXNejhKAM81dMrEnKRiRT6pTo0SII91
-         A44N6hDwaXPeASvWM1J755ajg2+cM2FddaA/Es5uG70AyJru1X9JLQ1j12dFXCpPS9wA
-         woA85Evv4tpCOYdKFWlbt0NfBosop1huj4vdcHIOEeEd3Ev4Pk/rM2rM+hspg2tVrTH0
-         C3BYZF5NL8VrwHi7Khbv2oF6OmMVSlk0QzWLDIhBhOdmBojg6B8/XjsB33glTyNNXMhk
-         8/Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762818549; x=1763423349;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bld/cS3EZkCvsE25mUIinwj/m0d1kI6qCYYge0fjmts=;
-        b=PFtxiZsAk7iGBkH085BGWiu6Kfho8ZCZFh8pigCvV1O12X0NbAqml3sYiV3p9mW9mj
-         UyjD1XV+pmZxLYmUxgz9sQsZV6aF1jS3HAssjpm/UKnpVHD8D//rnHj0B/40dqdtlvhM
-         /I1wVO/loyEHy5Ii+qEycuyiWJsY2qsTochLKo7IcYsaCnhM6adn3VGK6r4aBJLmwwOH
-         fU9n9HlvntQPFZP703/xwpEWY94aybc7p057AzVzRUkjXPQTzfEyELdZigg0ITdAgfVR
-         T3mI5rOcjX3ojlMUsL/3LWJaZtZ5dMxlbmsJ5K0c83zHiwkPeYF/OiLLXgnn4g1nvAx5
-         S/oQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU0G8I4aLlmmALuHuSrJk1J8c1DZ91mBA5smWoi2iypGiIlFEA2r9M9e7V0OU1K8YNP1rQXdWUkwEc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKlTDe3e3uGOYPCBcwgTK7IH/C0BnJsKFze/pt8UhvnHyY0nqZ
-	CWjcFCho+M5lJRVBavXjbk6JLjCiLvuwS3TQVuAFDpnWuPXO4f2+AyoKpZfGZ5Ktooq0L1G6mG+
-	KRh7nr10tXMpBismHhghEzy8XHjpS2Jo=
-X-Gm-Gg: ASbGncvN7TUElXRn8V4BJGlOZkB5opPsvOsK+QoKf6iiZkDg+BZwbQ7Y0lzHlUy+ZRn
-	WCfs5lzumO8XlA8NX4eLOYFSa1jsefs0li0EqnRY/swbTmWbacefcPEwc2GeO0zTBRDU2PBVNev
-	PN0qo1BhYmg9Hk8KHfKGT+QqemEZbvWdc9ZI2egTyYzbBPjQrxSKF2NPlN5e2vQD6BhkxCDdSBj
-	7/k7SoCxWhirWEYDpeTTMFmROnVV8EiNgJhW6wQtaPB6S2XDlGiWciRUTo9m5Gf5s8HbfvK4CqS
-	6o3a2CY+TdhWXqcyfBbgiMQptSXTqnif0mY1HLVOKANari2lPKwPR9LwVvAsfwzhVYCGKjSRgfU
-	=
-X-Google-Smtp-Source: AGHT+IEzBThrWGXENmMgnfJGSVkl96z0rB9jXWVpmuygiJqcdjoP9Vl7SCqN4zOwOzBFWDxE5eHzR3awFsu6f2AkRUU=
-X-Received: by 2002:a05:6000:2084:b0:42b:3dbe:3a37 with SMTP id
- ffacd0b85a97d-42b432b821dmr1129506f8f.10.1762818548948; Mon, 10 Nov 2025
- 15:49:08 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CAE1624C0
+	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 00:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762820527; cv=fail; b=n9Yx5uadxc8CeiY1F7vclvEmmAAW6ooQWyxir+M0F3I3G6gcPXJAG/wqpOuStoxZ7Xu9ImufKjAQTeagfI4QP9wDMFldtjaCZLXxV7+i8Tlmw6u6Axpk7VU8/HQgnPu4jSBvltcxh2olLpPanefP6L2WGcVWDOkVfNM1yFayl7k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762820527; c=relaxed/simple;
+	bh=rwxajYDEPs0RSKqaTuvr1ohXqLcyb6K2ONVPLzuKkn8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=oTCEcIvCoWan0Ijfr5lODayZbO9xWljVYmfQBUgtXsAvje+SEc5CpPk/YJhIbw9iNwmRUzBc9v+vM8T1Oxr+sNrscKuX9APV8JAYmKHajd69llmCEtGqYUbB53uX6ZRCO+hsoewp3a58jU7XMtdzYtWku+iu8OCLXM9mEAdOZxE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KIbvlIYK; arc=fail smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762820525; x=1794356525;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=rwxajYDEPs0RSKqaTuvr1ohXqLcyb6K2ONVPLzuKkn8=;
+  b=KIbvlIYK6QkSyfzul12m8rQxVYfrD8fw9ToLtiCv157l4V9TaTLGNNVZ
+   uDhoqjVD81bANdIhI8QXqS1qoFczyCrPggJgZqNxhTJasqRX708tgJWJX
+   incud8gd/jVm1+B5NeQxeQsDsayfAfJBqwyEj8DK29j9XroWufESfJ/B3
+   7dpuw/TSe3mK9HPqKih+XALZoXjg2pcVD8eGJ068NgaMR2rpCjQOOp9pN
+   MkCjrJtRNkC/O7cCHaGchBHH7WeNTdxUlXK1tZWEAis+lWUCfPAoC4+FF
+   ElrRejikEX04weAsuchmqbNotxhnypWsIKk2fDic3P5T85IlCHkIXtmGK
+   A==;
+X-CSE-ConnectionGUID: SeSWdhTYQ9OQBuyRB8ebbw==
+X-CSE-MsgGUID: 5nYYUrYmSnK1VwZ5dKPbIQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="75563319"
+X-IronPort-AV: E=Sophos;i="6.19,295,1754982000"; 
+   d="scan'208";a="75563319"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 16:22:02 -0800
+X-CSE-ConnectionGUID: gcpI60+3SMWaEiqoZIms6Q==
+X-CSE-MsgGUID: fjFz95KzTk2xlDdOTVyC/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,295,1754982000"; 
+   d="scan'208";a="193067629"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 16:22:02 -0800
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Mon, 10 Nov 2025 16:22:01 -0800
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27 via Frontend Transport; Mon, 10 Nov 2025 16:22:01 -0800
+Received: from BL0PR03CU003.outbound.protection.outlook.com (52.101.53.44) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Mon, 10 Nov 2025 16:22:01 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ov2Y9juCE0ltoclyUQ4W56Eb56tmst+L5OzhwcDmpSKxDWO+cLRnqlX2Or00Uc//74nKoD2A8k0CI3XObMs7QooBA/t3o2vKeGTzY6X896/h40tpdsxBYiCrO0uOX0mZtGvjmglzet5rTEjAWS/1oOUEMPoacdpO8ESelQh4w1J3LeAGRHcVnkze4kufEE+8wQ1HmvJXBqFqXVZb8V/DoJim0zmsIvYQTcbgsromSFh8vqzMGpPHR23NZ62rjsKyiWobFrQmcsvWAOwxBo6KhLFAhKf51do1Z/ChauuS4hRx3a+q8zKqXoe4wT1SuJI53Hhf/usN6vKNgC3g6nuL4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TO5ZcVnLbzC5aCPMyU4xKY4hImGoozllSPfqRYStn54=;
+ b=l2manwhGL6nNUjsWo4UvTOeI/4wRGnwKwDk9j6WY2aF/1kfHfIDGrHqiveId7EuP3dUMTZAQdTgfNFjakqDOpv661UHcW7KBcehP3mz3/ZzREndz22cOfBUUWutrGt127AwymFJQ+jnYZeQ/AW3Y1hhooSxVbrwr39AyGMZnxNunMxqxXv+g/3PUbvkrzPgH45DrAXLFIAy632YuRleNdQC+LmhX+xXbBnHIlnrjzIzit6OZmDpQLiupoJfaSU+mYc9meWbcW0ePM9RL4Yv63UMK3Yy9stQ8/fiscMlPr1VJXA3bvFg9TdBsEvAlylCCiUKFcXIR5XSIJonuNhjCCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MN0PR11MB5985.namprd11.prod.outlook.com (2603:10b6:208:370::8)
+ by SA3PR11MB7534.namprd11.prod.outlook.com (2603:10b6:806:305::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Tue, 11 Nov
+ 2025 00:21:59 +0000
+Received: from MN0PR11MB5985.namprd11.prod.outlook.com
+ ([fe80::8719:7f03:49ed:939a]) by MN0PR11MB5985.namprd11.prod.outlook.com
+ ([fe80::8719:7f03:49ed:939a%5]) with mapi id 15.20.9298.015; Tue, 11 Nov 2025
+ 00:21:58 +0000
+From: "Pathak, Asutosh" <asutosh.pathak@intel.com>
+To: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"dmitry.baryshkov@oss.qualcomm.com" <dmitry.baryshkov@oss.qualcomm.com>,
+	"heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+	"Katiyar, Pooja" <pooja.katiyar@intel.com>
+Subject: RE: [PATCH v5 0/4] usb: typec: ucsi: Add support for SET_PDOS command
+Thread-Topic: [PATCH v5 0/4] usb: typec: ucsi: Add support for SET_PDOS
+ command
+Thread-Index: AQHcSa0ASJciFAKHykKLN2VMTojETrTsT8WggABevRA=
+Date: Tue, 11 Nov 2025 00:21:58 +0000
+Message-ID: <MN0PR11MB5985A404B77A3A2CB3E96D2E81CFA@MN0PR11MB5985.namprd11.prod.outlook.com>
+References: <cover.1761773881.git.pooja.katiyar@intel.com>
+ <MN0PR11MB5985412F8014513916F7F4FD81CEA@MN0PR11MB5985.namprd11.prod.outlook.com>
+In-Reply-To: <MN0PR11MB5985412F8014513916F7F4FD81CEA@MN0PR11MB5985.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR11MB5985:EE_|SA3PR11MB7534:EE_
+x-ms-office365-filtering-correlation-id: 6d77270f-1791-458e-2c1a-08de20b853e0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|7053199007|38070700021;
+x-microsoft-antispam-message-info: =?us-ascii?Q?2BH86i+e6NHWmbLzyGBSNzsgW+I47/S8Htng5Qp3Kj0Tp2KMm6ueBSdDPf5l?=
+ =?us-ascii?Q?dwveMQcoTa4m5+4tvZg6VGJVb27Dp9AmFdMoIQNRpAlgDnb2EZ33jjkIU5kW?=
+ =?us-ascii?Q?nb9M5xWsRa42CAIG5wy5ybcOv13TvAsr6x/tAnAuzrNzPvWfA0kCfx455Gt0?=
+ =?us-ascii?Q?iu8irPTX2XHjRDhVTwpeFakhEqhAeAYwx4IuLfg/YEomPAqo+UqJ95LfKf2r?=
+ =?us-ascii?Q?x615vdkmvzLeJiyj+tnNQfHVg1BUj/uoNPIVjpSdO9wCp62TLareu+tYd7It?=
+ =?us-ascii?Q?H2oia8NLOsJWj2F3JoUdrQlL8CB8T7rmf7i+eknZ+3TcMw7zyHy04AJsLjqH?=
+ =?us-ascii?Q?o+h6mrjFhbJ4v3lAhgPAcrCA007feunYOL/97kVJbcAXDQEC+aedhra/fw5+?=
+ =?us-ascii?Q?SzcdTQAJrCW8NaWwoeHACo53n++S5osYw5NNV42K0NNl3/vDBK6mrSwVNuZ3?=
+ =?us-ascii?Q?Z65xbe1U4O54LftL58CFQ8YVDlLzA0sAQWtmy1ZamxAg0nkTAh4BVMbVRCEW?=
+ =?us-ascii?Q?G4ccLW9V5Qk67RSijiy/elB2LH+wbGaYyMduUy8zTvvd2R06/ZxaORo0RTaE?=
+ =?us-ascii?Q?mdbq4ukSTv+LhkfgKGZZtXwkZScYSmE/eJu5VzQ9aac2HSUs4r4ozOOeSt7N?=
+ =?us-ascii?Q?qS89UEWQ05P7h7Dl8/UxbWav7ocZTAbyUhYK1AUW0eaAf1G6xY1K976gtqzM?=
+ =?us-ascii?Q?pWbzd+KNjckfabfUwSSRsbeujKQoQypLTdTo6t/vTodlTEg8RmckKuRmKHGD?=
+ =?us-ascii?Q?JJPMyEgjJ+Vu0PZNOsw/WnDTkV77BYAGmWqIa4FUsAgacJ7pAqfqT07J2yJK?=
+ =?us-ascii?Q?fFoQ4h5gqYLEDDao6KQ48DTY2fHB1xlctS21Yz8/VNm6MqsntMGxjFFLKKwl?=
+ =?us-ascii?Q?CvHEkYYYZsVCH6EUUo83u+H6Plax9ylcPO3WvC9kPNASUFxWhjcRymXcur88?=
+ =?us-ascii?Q?fsDpBiwi46juloMfQI1pyqDSR66po3OI4lMmzN5FhVcfaZcqlDgZ37cMYpi/?=
+ =?us-ascii?Q?kumkREkwLZ0iroEsLjRKBhoBSPpRLRu9qFZCQzuDUkV9DO7rDL59K9ZKnw6m?=
+ =?us-ascii?Q?51NcsGkWPPQd4efA/J3BCs4SIdkJATbDTRgCtbWpDMszcpyxSMUAU96xhjup?=
+ =?us-ascii?Q?hrIQ8TnV4hJDgTwJ3enWqScwxOLWPOqVO3Nv5Yw8MNQnXOZ9jECW6jZ5UCZv?=
+ =?us-ascii?Q?CE/dfsNLXuoQjskFstbQMBkfK7HDoOhxxwonwCi5w6u2DLG1Cuq2iQcFiX88?=
+ =?us-ascii?Q?re1E3MF7vDUFPcub2sO7aZ1X76AU/FaWyN0iV5tbjdYX4FSR+DsikIWksJzY?=
+ =?us-ascii?Q?wYJSoevQLwaGouKdWazjRuXJRmpyUSjyHsPW6IulxY3pCbFHvZja0hG5mFLk?=
+ =?us-ascii?Q?3Mh+z+j0/XilHHfItxZzaR02Ekuxxth1jfW1iq+ZWsfgelIaoGnDMMrs6Hj9?=
+ =?us-ascii?Q?GtInR5lQOdFVQRYr0/nviOCUUO1UMb+R2IFzgTJF9Q1cfZy61Pzid9voSvFf?=
+ =?us-ascii?Q?uBePCJ+BoXTAEsfIw0LSo+TpBAOpLxYVKgoc?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5985.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7053199007)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XpBRSOz2aTD0FagDW4zOI62xYn9IZN/4xuScqdI9FFf0bIYiARKXbYZovTTg?=
+ =?us-ascii?Q?PcndvZX9TWPZs0vu6U+n36m1a4SzsGGJTpecsAGA1vJ9zcqE1PRH6nZNYf25?=
+ =?us-ascii?Q?Ub/HLqjbOIY1AmU93wN6KxEcOpXn++tQlFDkeKmmmEHai1Fvc+3V7yIKf/jq?=
+ =?us-ascii?Q?I6w05f+MjRlb7dvNRYU07a97zLjll6BsO3nygwU+uvAU6HxdU9wsBhzp/lh7?=
+ =?us-ascii?Q?zRIzh3hKbwwlx+ej4DV2KT1zIwz+JGw0+KukM+EIJY9sjNMEeJkmmm96hy2I?=
+ =?us-ascii?Q?GW7TeH/al12ybgw4dp+fA2xH3Ov4NZs34Rv9qPAPob6TguEep/p2avJDiToO?=
+ =?us-ascii?Q?yJ2qZu26C2HgQdGUjR+JwhQsbiouqGxNGxyqz+NPD80yDFpFfgv/N6ia++K1?=
+ =?us-ascii?Q?gL5nmX2Kl9euaHmZFOvrJ+15mxAdcFqXncfftkBQuzWzM1V44YqpUEEEO6Zx?=
+ =?us-ascii?Q?Z2aFHvv6k57qAGtwKsVLVqc+m4oaVWOm4gcRTp3eVtXBGPMdgn8uShSSa7HB?=
+ =?us-ascii?Q?rhBjdPyZaBDD1f0dFUU+JfLbEBzVAZmoM3oHulL/d8ZTjR7tbiScCu966iui?=
+ =?us-ascii?Q?5NUXRDDo8e/Xm/8kPljBRP9Uy2M3RYprHtvYnTpUZKP+HpbGZLAma0Ebue6O?=
+ =?us-ascii?Q?GdAm8WJpBWr32eq1pakGEvwIHtbxHwf3J/jrCW+q0gpqTZFH03Ju5PrTJPXM?=
+ =?us-ascii?Q?n+PFmHNz35NnN45IttVD6uwV2x+a2DDce0IuPDxda7cuVpFjVoXEeF+TMwOW?=
+ =?us-ascii?Q?loP6p4oQBYiu4iq5/p12l9SFydLcHfHOldAmnVqynTLfvOXxWj/SN0t5f3a0?=
+ =?us-ascii?Q?7f0Bm5vpI/o+sSud00z/qm7fN+1T5so1giC9Qj+Q9Cz3seBj2NWvbYG9ALp2?=
+ =?us-ascii?Q?wK7AESiiMSc3/Jh9/drKfUkBoXSwV89HkDUizgrEEsfwxhQuqRXNw6azYGRm?=
+ =?us-ascii?Q?eYIXRNRRvMyF9Z69HRVqxtao2zKokdR+n5fkGTyWoM3FG1AOc3WdDZr8cBCg?=
+ =?us-ascii?Q?+ZYQqd7M4ztc7vaupp4xAxBZ4kKmqOcuyLbS8u9s5POLymp/4UnsjzzrC7Sa?=
+ =?us-ascii?Q?xgDzG8odd3rNsflFc6bA3YOpG5kUMTUzA3GbTpFI7q8H4ZFyzwon7ZNt7gEm?=
+ =?us-ascii?Q?8RDNZ3xOewgofhpC3fZWue16l5mCfzhof1pfqEJs57gTdLSfxrVmaZcXKv8L?=
+ =?us-ascii?Q?pny3pjjnvQAYvOwZY9nX9ewcn/bokOR9UcNTpo8J+/tOkmUGDxl+wvVgkAqQ?=
+ =?us-ascii?Q?/rWE2Zsz0vBRiddl/rjBMGSF2mgXZO3oK/rSoeBbXMU16ATqk+odfDNhCSl4?=
+ =?us-ascii?Q?avuQpY2zl7JJEbJS8/vuy/ZC1wozQ9j+vE1y7DOL/7a/KbLymkH3q+WU7mcl?=
+ =?us-ascii?Q?oLEKKSJbrXIvt/EXptAltBXhoqj3ol9n7cJ2xFlYYirYyzosH9r6gn8yrZ+c?=
+ =?us-ascii?Q?WUdcCnC0ktIIU9TqLNrmjF6KGSzlDJYsUrTwm8vygdGhLTYQgQf/eUnRVZsL?=
+ =?us-ascii?Q?Irmbz9BjUGO9ZLIajBYbOy7xA+GEO5PFHY4mWWfiyo+QIroZHGzMbY1fheoI?=
+ =?us-ascii?Q?9TGRR8QZco3NqFMAEZorHy9OLxmDwYAMyMgc6ta/?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <25f2419a-ee91-41eb-9446-87d238b4c7c4@rowland.harvard.edu>
- <CALvgqEBu_RzQYRSJnbu58XZt5wHX6PRD8i-J7Tovh7+KuhOyag@mail.gmail.com>
- <6999b5b2-a242-432e-8100-5d8ee58bcae8@rowland.harvard.edu>
- <CALvgqEBD05PwMpm00cAbFkpSWpCFP9jaBU0r-8+op+RGPtkktg@mail.gmail.com>
- <7adc816d-169d-4213-bb67-9d070af3c4a7@cosmicgizmosystems.com>
- <30528153-95f1-4ec7-a6bf-5da396441f86@rowland.harvard.edu>
- <xrfmda5rohporc3bjax35fc7xjziai6cmdt5svjak5rps6y6jz@k6h4zlt3jgg2>
- <CALvgqEDZ=g+uvdSYqbD22sL_VP+n6Pda2xXuFAJyKkh3bjm6HQ@mail.gmail.com>
- <CALvgqEC6UW96NEYOCM5v0m4x8Si0A7AwPuMpwXt3PMqkO3eqww@mail.gmail.com>
- <52fc4350-2930-44d3-b844-03f00806f142@cosmicgizmosystems.com> <1ac9d1dd-822a-487a-bd42-45c163dfbfe7@rowland.harvard.edu>
-In-Reply-To: <1ac9d1dd-822a-487a-bd42-45c163dfbfe7@rowland.harvard.edu>
-From: The-Luga <lugathe2@gmail.com>
-Date: Mon, 10 Nov 2025 20:48:57 -0300
-X-Gm-Features: AWmQ_bnKj3OL9zFTHpNVhhmhojXeNUNSUjyqiacX0laSHqhRJXHE76Au8FS8WWs
-Message-ID: <CALvgqED5NCNjrtv_YSfg9rzerK-xWAE5TaJjZtMBMcY=8MSk3g@mail.gmail.com>
-Subject: Re: [BUG] Edifier QR30 (2d99:a101, Jieli Technology) reboots itself
- when RGB brightness button is used under Linux
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Terry Junge <linuxhid@cosmicgizmosystems.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Michal Pecio <michal.pecio@gmail.com>, 
-	Terry Junge <linuxsound@cosmicgizmosystems.com>, linux-sound@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-input@vger.kernel.org, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5985.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d77270f-1791-458e-2c1a-08de20b853e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2025 00:21:58.5887
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iPWxW5AgdkDuvkjHtnoLaw1sx7aswlV/RruivrxKsabJnQ5tek0ASSgGw6/ehZVgInDo7QOjaSXhFgn0IiNlr5nsIPpch3mVGnw2YRyxlqU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7534
+X-OriginatorOrg: intel.com
 
-> > Are you sure?
-> >
-> > HID_QUIRK_ALWAYS_POLL = 0x400
-> > would stop suspending the device.
->
-> Actually, it forces the kernel to poll the device's IN endpoints even
-> when no program is holding the device file open (see where
-> usbhid_start() calls hid_start_in() if the ALWAYS_POLL quirk is set).
-> This is exactly what the speaker seems to need.
->
-> As a side effect, it prevents the device from being suspended.  But that
-> doesn't seem to be the important thing here.
+Hi Greg,
 
-From: https://github.com/torvalds/linux/blob/master/include/linux/hid.h
+Could you please take these series of patches into your next upcoming relea=
+se?
+These patches are rebased on v6.18-rc3
 
-#define HID_QUIRK_ALWAYS_POLL          BIT(10)    ->  2^10=1024=#400
-#define HID_QUIRK_NO_IGNORE            BIT(30)    ->  2^30=1073741824=#40000000
+https://patchwork.kernel.org/project/linux-usb/list/?series=3D1017784
 
-Sorry about that. I'm still learning and the documentation was not
-very clear on this.
+-
+Thank you!
+Asutosh
 
-Trying the 0x40000000: `usbhid.quirks=0x2d99:0xa101:0x40000000`  the
-usbmon stays silent when changing volume/button and reboots when
-changing brightness.
+-----Original Message-----
+From: Pooja Katiyar <pooja.katiyar@intel.com>=20
+Sent: Thursday, October 30, 2025 7:49 AM
+To: linux-usb@vger.kernel.org; gregkh@linuxfoundation.org
+Cc: dmitry.baryshkov@oss.qualcomm.com; heikki.krogerus@linux.intel.com; Kat=
+iyar, Pooja <pooja.katiyar@intel.com>
+Subject: [PATCH v5 0/4] usb: typec: ucsi: Add support for SET_PDOS command
 
-With HID_QUIRK_ALWAYS_POLL: `usbhid.quirks=0x2d99:0xa101:0x400`
-(reboot does not happen).
+This series implements support for UCSI SET_PDOS command. It provides inter=
+face to send message out data structure and update source or sink capabilit=
+ies PDOs on a connector over debugfs interface.
 
-Is there a different quirk to try?
+It also updates UCSI structure to have message in and message out fields in=
+stead of handling them as separate parameters.
 
-Off-topic:
-I was trying to decode this protocol... and did it with volume control.
+Changelog v5:
+- Rebased patches to v6.18-rc3.
 
-I can control my speaker directly with:
+Changelog v4:
+- Fixed build errors reported by kernel test robot.
+- Added changelogs.
 
-Full volume:
-`echo \
- "2eaaec670001100e000000000000000000000000000000000000000000000000" \
-| xxd -r -p | dd bs=64 count=1 conv=sync | sudo tee /dev/hidraw1`
+Pooja Katiyar (4):
+  usb: typec: ucsi: Update UCSI structure to have message in and message
+    out fields
+  usb: typec: ucsi: Add support for message out data structure
+  usb: typec: ucsi: Enable debugfs for message_out data structure
+  usb: typec: ucsi: Add support for SET_PDOS command
 
-muted:
-`echo \
-"2eaaec67000100fe0000000000000000000000000000000000000000000000000" \
-| xxd -r -p | dd bs=64 count=1 conv=sync | sudo tee /dev/hidraw1`
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c   |   5 +-
+ drivers/usb/typec/ucsi/debugfs.c        |  36 +++++++-
+ drivers/usb/typec/ucsi/displayport.c    |  11 ++-
+ drivers/usb/typec/ucsi/ucsi.c           | 118 ++++++++++++++++--------
+ drivers/usb/typec/ucsi/ucsi.h           |  22 +++--
+ drivers/usb/typec/ucsi/ucsi_acpi.c      |  25 ++++-
+ drivers/usb/typec/ucsi/ucsi_ccg.c       |  11 +--
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c |  15 ++-
+ 8 files changed, 172 insertions(+), 71 deletions(-)
 
-I renamed the steps to be similar to the audio stack where 0 is very
-low but not muted.
-
-ad it stays consistent on this full range. (tested)
-
-volume muted
-2eaaec670001 00fe 00000000000000000000000000000000000000000000000000
-volume 0
-2eaaec670001 01ff 00000000000000000000000000000000000000000000000000
-volume 1
-2eaaec670001 0200 00000000000000000000000000000000000000000000000000
-volume 2
-2eaaec670001 0301 00000000000000000000000000000000000000000000000000
-volume 3
-2eaaec670001 0402 00000000000000000000000000000000000000000000000000
-volume 4
-2eaaec670001 0503 00000000000000000000000000000000000000000000000000
-volume 5
-2eaaec670001 0604 00000000000000000000000000000000000000000000000000
-volume 6
-...
-volume 14
-2eaaec670001 0f0d 00000000000000000000000000000000000000000000000000
-Volume 15 (max)
-2eaaec670001 100e 00000000000000000000000000000000000000000000000000
+--
+2.43.0
 
 
-
-And I also decoded the speaker volume it outputs by rotating the knob:
-
-volume muted
-2fbbec660002 1000 1f00 00000000000000000000000000000000000000000000
-volume 0
-2fbbec660002 1001 2000 00000000000000000000000000000000000000000000
-volume 1
-2fbbec660002 1002 2100 00000000000000000000000000000000000000000000
-volume 2
-2fbbec660002 1003 2200 00000000000000000000000000000000000000000000
-volume 3
-2fbbec660002 1004 2300 00000000000000000000000000000000000000000000
-...
-volume 14
-2fbbec660002 100f 2e00 00000000000000000000000000000000000000000000
-Volume 15 (max)
-2fbbec660002 1010 2f00 00000000000000000000000000000000000000000000
-
-When sending the volume change command to hidraw. The device outputs
-the volume it was set to go like the knob on that value:
-
-ffff8d49f36b3680 206654552 S Io:3:002:4 -115:1 64 = 2eaaec67 0001100e
-00000000 00000000 00000000 00000000 00000000 00000000
-ffff8d49f36b3680 206654840 C Io:3:002:4 0:1 64 >
-ffff8d494c8ee0c0 206655831 C Ii:3:002:4 0:1 64 = 2fbbec66 00021010
-2f000000 00000000 00000000 00000000 00000000 00000000
-ffff8d494c8ee0c0 206655832 S Ii:3:002:4 -115:1 64 <
-ffff8d494c8ee0c0 206656830 C Ii:3:002:4 0:1 64 = 2fbbec67 00010110
-00000000 00000000 00000000 00000000 00000000 00000000
-ffff8d494c8ee0c0 206656831 S Ii:3:002:4 -115:1 64 <
-
-If, I mean it's a very big IF. I wanted to have this device with
-hardware volume control working with alsa/pipewire/wireplumber/etc.
-What would be needed?
-
-Maybe this vendor uses the same method of communication for other devices?
-
-Maybe related: https://mailman.alsa-project.org/hyperkitty/list/alsa-devel@alsa-project.org/thread/CYSG6A62JJID5N2V5YUDW43CELEZDF36/
-
-The decibel range is bogus:
-
-lugathe wireplumber[1231]: spa.alsa: The decibel volume range for
-element 'PCM' (-2837 dB - -94 dB) has negative maximum. Disabling the
-decibel range.
-
-The RGB/Equalizer/profiles/etc. I don't think it's really important in
-the kernel context except with the reboot apparently solved with
-always poll quirk.
-
-Before this I really *knew nothing* and I am having a really good time
-and happy with this challenge. Thank you all for the wonderful work
-and knowledge you are sharing.
 
