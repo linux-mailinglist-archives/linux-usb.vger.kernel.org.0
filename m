@@ -1,162 +1,155 @@
-Return-Path: <linux-usb+bounces-30312-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30313-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98CF8C4B426
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 03:56:23 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43C89C4B551
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 04:33:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AA2D3B1A17
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 02:56:20 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BBC0434B6E9
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 03:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F43634A789;
-	Tue, 11 Nov 2025 02:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35783313526;
+	Tue, 11 Nov 2025 03:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="hR7NSD1U"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MtmrOsUD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CB634A767
-	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 02:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC2C261B77
+	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 03:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762829776; cv=none; b=bxRQ9j+sUXOfavVwPW/DZ6gzzL40+URcLAt1FzBhlb3h6Ym7FTvQnqKMbxNx4f70k1Fh4a0KN9VRQMeLePKjebjGPwIp72x44fhWB4H+hcZk3NIO/Hjel792o7jItN5Er+u8fxh0rUjV4VaZe2/IkiXLijQDfeMGoqEA11hLDVE=
+	t=1762832019; cv=none; b=uKL47vFyTCYIyuR685Q4Co5xGBKE40ORWi0wG01KkOQUfQONOl+vaXzD+Xn8oSAOggUPVOVmk8y4m/ZboV9/XEiQTJhbQkqNU0F7SWp+JguYtzr8A1aLdpCvsbZBCRtqwsE/RPSkcRP3Z3ZdG5aSuVBMASlmTOvId1bJzx5T8DU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762829776; c=relaxed/simple;
-	bh=fa+jvPPey51O3Idw/pKSiJ24tekTBIwnDg80v2iIydc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JJ+NofebXgcfIpuMLuj/5A5bMmKPCWzEMR4bdnw02w8c3BVFeMtGbfYRRmdhUAlFrHhQpexk4ogsyQAd+o0F2/wHR53SB3w68eXBr7F2EXxWvOzDCQO6i3batiAZYf/I0/RRzh01ly2yDlR1pmLObL1qVheMNp3ocGhT//FtWDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=hR7NSD1U; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8b25e273a8dso282548785a.3
-        for <linux-usb@vger.kernel.org>; Mon, 10 Nov 2025 18:56:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1762829772; x=1763434572; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B0Mv6RGbUEpA365vvsW0RrdXBUD+tvy3Sz5bzo1J/PQ=;
-        b=hR7NSD1UYBtIzGOygHUdl/7yCA0FhAnuFF/5uNxGoWrkbSqMZk8pbI5Z2Li5EywEW+
-         XRupfci7mKqT/x/guuIukpazWX5JO6twKTwM+4AhjRPQ+lXKXyB/l1V1fKzrWTQMnAcH
-         zqBkz3/+d2noC6UnQuhj+nIHlahVlASu6alJ1cAUuVWiUhn1pwF6Z4oFt70h1Ey8LKrx
-         gOsfqyRrdB+46tz9UeKxQ7WZnTD7a2PDxHuuPjy96CrUd6aK+4kBtoRA6copb2pcPEKM
-         yUj/EO3/cpUa5AgVUzgozNcMsbHhAHj9g2sqm6U/jW1dnJhKWVs1IqqoMW5WlURPCFYa
-         yvTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762829772; x=1763434572;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B0Mv6RGbUEpA365vvsW0RrdXBUD+tvy3Sz5bzo1J/PQ=;
-        b=ULICWZ19A1GbDSEEpkATQs33gg/pc+0dBM6NDOZTvoyrrsw7oUsfSMJCd6cgLfBMSN
-         SMWikT67uiG9iX/eIrQrlbttpNahKTShRO+d0Qv6SGZOx4WsCeIB3wlHM9pCiuVg01h8
-         w0SSq+v+3s4g5qWxG3faNZmJTrO1HS9fAhv0iyi16zlluRuCOtctBjl/Uatg+HJdYjnM
-         DbXtLNkujSgWiVoTYAzag5XkLPpI6Nm447s13iRLUbYbYPXeS7JyJb0qIsombjmTw5Qd
-         oBTTHLX1MD1jgVSc9lmsORS3eI353txFdVzkVBRcbnflecZA+uT5mxYILymNA5mQBR3p
-         UuwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjTc1QU7hiClNlpy+lhXk3RM+tFJ4A+TQ9KikFezcyH94jtnvFPp2noE2CWnzfcFek2Mcl1Y8TulA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDCpglIs91t+69giCCzy6D5UT8kaWmH4IiXRt1WFDw7iOX2NBN
-	IlIo4oCZswVPfpWrYAi5iP6pUi7hgPaRnsVRyqkSET3cBk0Gu4sO6oAdDNt29y1gdA==
-X-Gm-Gg: ASbGncsstkWulXO3pfOyZkW1pGNCjMco7neA8H7Gt0AvTr7gfd/JWlzeGtr3lny2EG/
-	A8SLJMimvJlqenXcib3RK1+k4iTHu1ewiRGcBTZPNR86RqIzorFIRdvqZiQYiyMbutkPfoGG5ws
-	qt/PJF0y4AQs4VUoV5jZiwFTj+fv8I2JjQ2hPtnXubRbqpn7BzCiXZm6o5nidNo3cjqP4uU0oOR
-	MMTlHZPw39+UHIvAjkyMT/TD4jYe/yLNNLO0dr4utPw2Iyt73nVHA1xv2QmvkKDqpefO/yxr+r3
-	trxjgKRjMNJyMeor4BHdoX4Xzhu5Y4FQh8hGDf7NRVKdDI0KGpNCogOnEQDkeZk2ZLLoduo7r9m
-	VH5iJDhAt+TNh+0ZPGB4eXF+XJEoU/4icalRT9H+MzTJQtUU++yhjeGOGgshSoFjaABggaiDG+H
-	iW0mB4LdpKfgKAaTiBsGAKm5U=
-X-Google-Smtp-Source: AGHT+IE/rMh/OADA7qnVKS0msIcdxyIvvi8cRxBf0f6eX5Qe3v4BCpdfpo1D+HiI4+SYhoxmBsxt1w==
-X-Received: by 2002:a05:620a:4416:b0:8b1:f2cd:76ba with SMTP id af79cd13be357-8b257eddfbfmr1354362085a.1.1762829772221;
-        Mon, 10 Nov 2025 18:56:12 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::ba76])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b235826d4fsm1125896085a.50.2025.11.10.18.56.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 18:56:11 -0800 (PST)
-Date: Mon, 10 Nov 2025 21:56:08 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: ccc194101@163.com
-Cc: benjamin.tissoires@redhat.com, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org,
-	Chen Changcheng <chenchangcheng@kylinos.cn>
-Subject: Re: [usb-storage] [PATCH v2] usb: usb-storage: No additional quirks
- need to be added to the ECD819-SU3 optical drive.
-Message-ID: <7cfc5d3f-6e08-4557-855f-605c079d27ca@rowland.harvard.edu>
-References: <20251111012737.13662-1-ccc194101@163.com>
+	s=arc-20240116; t=1762832019; c=relaxed/simple;
+	bh=zaW/QrsDOq0fRxtidOXSO9UKDKbJI3oyV1LDnNCValE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=HDQU1Rft8neAmlXssn+xhJEuRHlDYAsj8zKi33pwkrIUQVJtd277aop2OVH+swU+8lDRPkjM2xqtdkzh+UvrdQoBRNk83MnyCpvCTIRpESB0VYmlJNimJC93SJWvLbIjUCKmkuYJOQ7t2P23KwKyeAgrbb74Es0vnCoIORQ23CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MtmrOsUD; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762832018; x=1794368018;
+  h=date:from:to:cc:subject:message-id;
+  bh=zaW/QrsDOq0fRxtidOXSO9UKDKbJI3oyV1LDnNCValE=;
+  b=MtmrOsUDMa9cUAYbcWpQWK36KpH79L+v/kTXuQ1fg1IU98EEsUVPfNjt
+   4quXrcvZabsJbcNMSsig/2GkBWkjDMrj1aFsEG6fG10SnXuNIcbE24CU9
+   1+FDBy57K3t+Ld4/mhFbtDI/YAp4X4iQuGth58aFwdD3XzhIhZjXw4t+U
+   mmrCPjRKDvRiE8KW2ar5DhkT/HqYraxQ6HY/h/z/ZJOzuby9onuJQAm83
+   AufEu49N5E5us3LyqcOsxmnUdPLG7FqKQ0CAVvABhVWq6TW8HsiR5NiHH
+   qJ43ubJMeQ5Bd/pKxz7sPPh23qZUMGNm59he+57/Jp7u6Gl4ed4mh/oKq
+   w==;
+X-CSE-ConnectionGUID: +4zsFo4IQ6+z5SNzveg4PA==
+X-CSE-MsgGUID: L3eLDACkR5yzX+0rhIs8Ig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="68740577"
+X-IronPort-AV: E=Sophos;i="6.19,295,1754982000"; 
+   d="scan'208";a="68740577"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 19:33:37 -0800
+X-CSE-ConnectionGUID: 5W9jSyqtTFmW1xYUZCwd8w==
+X-CSE-MsgGUID: ivypW4coQy2hoKs+5izLrg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,295,1754982000"; 
+   d="scan'208";a="194037434"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 10 Nov 2025 19:33:36 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vIf8P-0002jN-2q;
+	Tue, 11 Nov 2025 03:33:33 +0000
+Date: Tue, 11 Nov 2025 11:33:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 23379a17334fc24c4a9cbd9967d33dcd9323cc7c
+Message-ID: <202511111157.y9zYMVbp-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251111012737.13662-1-ccc194101@163.com>
 
-On Tue, Nov 11, 2025 at 09:27:37AM +0800, ccc194101@163.com wrote:
-> From: Chen Changcheng <chenchangcheng@kylinos.cn>
-> 
-> The optical drive of ECD819-SU3 has the same vid and pid as INIC-3069,
-> as follows:
-> T:  Bus=02 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-> D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=13fd ProdID=3940 Rev= 3.10
-> S:  Manufacturer=HL-DT-ST
-> S:  Product= DVD+-RW GT80N
-> S:  SerialNumber=423349524E4E38303338323439202020
-> C:* #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=144mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=02 Prot=50 Driver=usb-storage
-> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=0a(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> 
-> This will result in the optical drive device also adding
-> the quirks of US_FL_NO_ATA_1X. When performing an erase operation,
-> it will fail, and the reason for the failure is as follows:
-> [  388.967742] sr 5:0:0:0: [sr0] tag#0 Send: scmd 0x00000000d20c33a7
-> [  388.967742] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
-> [  388.967773] sr 5:0:0:0: [sr0] tag#0 Done: SUCCESS Result: hostbyte=DID_TARGET_FAILURE driverbyte=DRIVER_OK cmd_age=0s
-> [  388.967773] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
-> [  388.967803] sr 5:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]
-> [  388.967803] sr 5:0:0:0: [sr0] tag#0 Add. Sense: Invalid field in cdb
-> [  388.967803] sr 5:0:0:0: [sr0] tag#0 scsi host busy 1 failed 0
-> [  388.967803] sr 5:0:0:0: Notifying upper driver of completion (result 8100002)
-> [  388.967834] sr 5:0:0:0: [sr0] tag#0 0 sectors total, 0 bytes done.
-> 
-> Signed-off-by: Chen Changcheng <chenchangcheng@kylinos.cn>
-> ---
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 23379a17334fc24c4a9cbd9967d33dcd9323cc7c  usb: typec: ucsi: psy: Set max current to zero when disconnected
 
-Your patch description should mention the fact that the bcdDevice range 
-for the existing unusual_uas.h entry is too broad, and so the patch 
-restricts it to cover just the value of the ECD819-SU3 that was reported 
-originally.  Otherwise readers won't understand where the 0x0209 values 
-came from.
+elapsed time: 2934m
 
-Alan Stern
+configs tested: 62
+configs skipped: 1
 
->  drivers/usb/storage/unusual_uas.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index 1477e31d7763..352e9d7324a4 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -98,7 +98,7 @@ UNUSUAL_DEV(0x125f, 0xa94a, 0x0160, 0x0160,
->  		US_FL_NO_ATA_1X),
->  
->  /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
-> -UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
-> +UNUSUAL_DEV(0x13fd, 0x3940, 0x0209, 0x0209,
->  		"Initio Corporation",
->  		"INIC-3069",
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> 
-> base-commit: e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
-> -- 
-> 2.25.1
-> 
-> -- 
-> You received this message because you are subscribed to the Google Groups "USB Mass Storage on Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to usb-storage+unsubscribe@lists.one-eyed-alien.net.
-> To view this discussion visit https://groups.google.com/a/lists.one-eyed-alien.net/d/msgid/usb-storage/20251111012737.13662-1-ccc194101%40163.com.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                   allnoconfig    gcc-15.1.0
+alpha                  allyesconfig    gcc-15.1.0
+arc                     allnoconfig    gcc-15.1.0
+arc         randconfig-001-20251110    gcc-11.5.0
+arc         randconfig-002-20251110    gcc-9.5.0
+arm                     allnoconfig    clang-22
+arm         randconfig-001-20251110    clang-22
+arm         randconfig-002-20251110    clang-22
+arm         randconfig-003-20251110    clang-16
+arm         randconfig-004-20251110    clang-22
+arm64                   allnoconfig    gcc-15.1.0
+csky                    allnoconfig    gcc-15.1.0
+hexagon                allmodconfig    clang-17
+hexagon                 allnoconfig    clang-22
+hexagon                allyesconfig    clang-22
+i386                    allnoconfig    gcc-14
+loongarch              allmodconfig    clang-19
+loongarch               allnoconfig    clang-22
+m68k                   allmodconfig    gcc-15.1.0
+m68k                    allnoconfig    gcc-15.1.0
+m68k                   allyesconfig    gcc-15.1.0
+microblaze             allmodconfig    gcc-15.1.0
+microblaze              allnoconfig    gcc-15.1.0
+microblaze             allyesconfig    gcc-15.1.0
+mips                    allnoconfig    gcc-15.1.0
+nios2                   allnoconfig    gcc-11.5.0
+openrisc                allnoconfig    gcc-15.1.0
+parisc                  allnoconfig    gcc-15.1.0
+parisc      randconfig-001-20251109    gcc-9.5.0
+parisc      randconfig-002-20251109    gcc-13.4.0
+powerpc                 allnoconfig    gcc-15.1.0
+powerpc     randconfig-001-20251109    clang-22
+powerpc     randconfig-002-20251109    clang-22
+powerpc64   randconfig-001-20251109    gcc-8.5.0
+powerpc64   randconfig-002-20251109    gcc-8.5.0
+riscv                   allnoconfig    gcc-15.1.0
+riscv       randconfig-001-20251109    gcc-9.5.0
+riscv       randconfig-002-20251109    gcc-8.5.0
+s390                    allnoconfig    clang-22
+s390        randconfig-001-20251109    gcc-14.3.0
+s390        randconfig-002-20251109    gcc-8.5.0
+sh                      allnoconfig    gcc-15.1.0
+sh                        defconfig    gcc-15.1.0
+sh          randconfig-001-20251109    gcc-11.5.0
+sh          randconfig-002-20251109    gcc-15.1.0
+sparc                   allnoconfig    gcc-15.1.0
+sparc       randconfig-001-20251110    gcc-8.5.0
+sparc       randconfig-002-20251110    gcc-13.4.0
+sparc64                   defconfig    clang-20
+sparc64     randconfig-001-20251110    gcc-14.3.0
+sparc64     randconfig-002-20251110    gcc-13.4.0
+um                     allmodconfig    clang-19
+um                      allnoconfig    clang-22
+um                     allyesconfig    gcc-14
+um                        defconfig    clang-22
+um                   i386_defconfig    gcc-14
+um          randconfig-001-20251110    gcc-14
+um                 x86_64_defconfig    clang-22
+x86_64                  allnoconfig    clang-20
+x86_64                    defconfig    gcc-14
+xtensa                  allnoconfig    gcc-15.1.0
+xtensa      randconfig-001-20251110    gcc-9.5.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
