@@ -1,135 +1,226 @@
-Return-Path: <linux-usb+bounces-30395-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30405-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66A18C4C9B5
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 10:21:24 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0070C4D371
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 11:56:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 986DE4F7D78
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 09:16:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0744D4EE917
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 10:49:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D160F27FD5A;
-	Tue, 11 Nov 2025 09:16:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7937C350A2E;
+	Tue, 11 Nov 2025 10:49:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DBvI1/9C"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=improbability.net header.i=@improbability.net header.b="henWl7qQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out12-53.antispamcloud.com (out12-53.antispamcloud.com [185.201.16.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753E82C028D
-	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 09:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30380347FF8;
+	Tue, 11 Nov 2025 10:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.201.16.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762852575; cv=none; b=cAG9yjefqdiDVuk0GvewfklTdnKun46ldUPmdc5VM/M7hZXdKhosJeE53ElsMI5xD75zqf8qxHAHiGEAD/saxUxBTvu88FUZ4CFpX6loHw6GF0Qx08dDHlcPxLwwndO3Di4S/BnKYliZYdyn4iqfABy48BlJZ4rXIf0m29tFeo4=
+	t=1762858164; cv=none; b=F3+OBbd3u3x368Ys59cjAKjnUyIHXnEu3RsLLMNztzAt7hmVACncLbmbdWM1pcl8u6hhBhNVX7LePdzY3GMFQfId8F0PI/UOouiJNcBq8/e58ijPY0Pnb7/QGif9bouw2UQZiZhkH0jju40zTc3pfBtMYNSiTdjCcqIo7t1hZx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762852575; c=relaxed/simple;
-	bh=hnP6MvOjehHku2Mba8SR807PCuY5/tHtJ5RDALFOZKo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=froI1KZCQ/AFOLa8pnr+kDbXikO7RaIV3ruImER4C4n5f2CiI6y48qZ/OZ0gvVHwzDBO7BwLh5AdoqGX/UOvAog8MU4LVrB6z2+5NRbZzMD2C+2jYDlTk0ySj9hNXqp5abTodR1St3RYnNp9MCx4FDvIiqaAGAiE+ta+n4OMeis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DBvI1/9C; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-640a3317b89so5894609a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 01:16:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762852572; x=1763457372; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QWPP6QWzDSQG2koCI4Uqgz32StVhYVJIJ4zaGLtn5t8=;
-        b=DBvI1/9Cy/Xuo1tGlbGlyjwRNz4devwwNzyXWJciRnnEbqbrLe5vcTd21Xy1XdI8Bu
-         RHDcT7W01ks4xNszoI0cv70IqdezTFruyOxzgoEIZyFF9GarzzSjoS6K9DUOYwwkfIbp
-         6k3ycOs+p2NH80Irorxuvk7WIGgz8TU+H/tL4ZKfG52GgEMb7aOQ/CKVT1bFPkxAmump
-         RPv1zqxxCBefUdx27KqeN7qCv8v23oncF6jqlJvb6fhRMdE0MqgCGDWL06RFn8+mRG3U
-         EkOIEAb8eE0SDX0B0SD4BzPZHFivRjaEjo84o3LZn1kXQFavcFwHpBOxFSbnWjRcasaE
-         nbgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762852572; x=1763457372;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QWPP6QWzDSQG2koCI4Uqgz32StVhYVJIJ4zaGLtn5t8=;
-        b=uL546BM6/cETYwFB7XF1+AxfcMF2lN9PUCt2/DsMNIwqDaQCQN3OB6vRJulO7rhlMb
-         CXVynE5Q2rVbVcQ56S6PYfXjhhTi4ks/VP6ImpJTYb2b7QsRyD8SH12jnRcAISpOnXsE
-         cKYImAOT5u4nsIdxraUkl9wU/sxdFyDIZSCkm3DWrVq20HlEzYF+UUam+finLLl9sGL4
-         tWjXIbCiz5Z7ZxXwI3daS4V49bbCeRImx8l0Anh4rWw9B4cFseXGFgOkKdz2YsKa64ti
-         EFY6cmFDHtajF5bdH0y17roQ+Le42ZkNPkQeZC43CBaDXDOM8lMoaEaQWBVNQeYSnxc/
-         1Ijw==
-X-Forwarded-Encrypted: i=1; AJvYcCUm/Uk4c3T5K7p8fDMnyZ3wASM1x8mz7tgkVbSamgTG44v/mmk1r8r70fMOJN3/5NhNxOhtXv/yrJo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9IXQjkqRHPp28imF52kXl722vEET4GZ0em+CoVBTyFSISvA7V
-	tBMF/rXfXhXegjuG3aKoHQJQ5FUPAghjOBJTRfmY1/EV+ON2yS4zzhlOV9R4hqxhcoE=
-X-Gm-Gg: ASbGncv+eb+2hACtEGCvdP+AR/r+Nw7673eNJWn/5MvdOrESjG2D6Q8jASGKlJyg2xG
-	MC5fWZm7RE9UOmTYe7LLcjdVhVUlKeFVHboYpSlGDE4kIra21mINiBLJzkOvjOitL6+lwiO8VEv
-	aRWAEfkOPBEt+Rvq8dEwW0WH9tjlsT33DHFXNWWBJOls57SST/rXhK1oNuKz55SN/zcEPIG4e72
-	Sz1VLcMpVvy8kAGjvPA8GEll2I9yJZRBSmWyz6CbeMNKykzNxkIkm61XvmLPSYCz/q886GHM4K0
-	F9EnxDUaKHStB/O6qe5IcisvwQPW9Lvj7Rf34Y8s4hOWmtFD0Xn22DfEdVTzzBBaRgd5pH0MTTG
-	eFq80fBsojey2tmIw4z0r6RTlH369ma5EQXioiHSCMeOzAHW4iDOPVx5dqEC3/Sb/eYYzyw5oHo
-	GQWw3E2pMyJCJKLLevPDCzKfGOlTT1RSukHIZ42A==
-X-Google-Smtp-Source: AGHT+IH930mFApbAim+hsItNZIanFSAxgWzf+l4tHBB1/03gGvYojtijguoMFNaE7u/zdx8GkYVgoQ==
-X-Received: by 2002:a17:907:7ea4:b0:b6d:7859:61eb with SMTP id a640c23a62f3a-b72e0328ebemr1045116366b.29.1762852571028;
-        Tue, 11 Nov 2025 01:16:11 -0800 (PST)
-Received: from ?IPV6:2001:a61:1328:3001:f150:c1:f1a3:b448? ([2001:a61:1328:3001:f150:c1:f1a3:b448])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bf31286esm1299966766b.21.2025.11.11.01.16.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Nov 2025 01:16:10 -0800 (PST)
-Message-ID: <2a6b4d25-e963-4019-857e-28eaba53a69a@suse.com>
-Date: Tue, 11 Nov 2025 10:16:09 +0100
+	s=arc-20240116; t=1762858164; c=relaxed/simple;
+	bh=1dSGNHsW/A6Q/Lg6on2gRsPF3sTD2Xo6JnPp5HiOY5w=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=q65U1j2taVQvcDEsR0ihq11VSL7U1tnMAJEG2VCsMJjfIRHSNWIiHnPpyoTL/S9jS1+cXhQvKdjLtWN+e0HwEWrqKrUVAoUxAgj1hVkpVIYy49zg0wqqt4ImigxiGQ/DjJOeP39eTlu7fiZdayKxSWrTwaSdgQb+zv1vA07xjuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=improbability.net; spf=pass smtp.mailfrom=improbability.net; dkim=pass (2048-bit key) header.d=improbability.net header.i=@improbability.net header.b=henWl7qQ; arc=none smtp.client-ip=185.201.16.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=improbability.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=improbability.net
+Received: from s1234.lon1.mysecurecloudhost.com ([192.250.239.241])
+	by mx323.antispamcloud.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <reiver@improbability.net>)
+	id 1vIkUo-00HChG-Bb; Tue, 11 Nov 2025 10:17:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=improbability.net; s=default; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=qxfEH7hPGa+On03jIM0VIes3D4OUHi4QJqrLF/L7BCg=; b=henWl7qQJgq5tRARztcWqKON7a
+	EhWW3Uz1l5mLIXIZTZdsg3DbqQLlmeXc75sdSSU27KlgujypxlSum5FRwpca8fMVLHcfKfgCPQilr
+	iJUezTueQhCFA7jQ820ht9hIkkeTimDrguk2lilsIRguqi0wm7+T7EhdcA3v6mIgwToDxQ4PGmwa3
+	9ESPylS0k+7GbXfNTjlG4xhJmPfRZJs/GKHndEZi99Fe9WySgK1ojUzB5X04Y/eOyiaeGM381/ht8
+	m4HA1xM2j4uLhCyYjYc6XmKQvTsG/75xKNiYtIr3dxnjPcTMdigKOc0eRgqc+HyE3ei6syJy3H9P3
+	UP9YcQUQ==;
+Received: from slartibartfast.improbability.net ([51.155.134.81]:37600)
+	by s1234.lon1.mysecurecloudhost.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <reiver@improbability.net>)
+	id 1vIkUl-00000003uN9-2zvy;
+	Tue, 11 Nov 2025 09:16:59 +0000
+Received: from trillian.improbability.net (trillian.improbability.net [192.168.1.20])
+	by slartibartfast.improbability.net (Postfix) with ESMTPSA id CC0553FC98;
+	Tue, 11 Nov 2025 09:16:53 +0000 (GMT)
+Message-ID: <4afce7468aef7b19b32e61d392775d3656097dd1.camel@improbability.net>
+Subject: Re: [PATCH] usb: usb-storage: No additional quirks need to be added
+ to the ECD819-SU3 optical drive.
+From: Alan Swanson <reiver@improbability.net>
+To: Alan Stern <stern@rowland.harvard.edu>, ccc194101@163.com, Benjamin
+ Tissoires <benjamin.tissoires@redhat.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org, Chen
+ Changcheng <chenchangcheng@kylinos.cn>
+Date: Tue, 11 Nov 2025 09:16:53 +0000
+In-Reply-To: <c7bf59b5-8078-4b47-b56a-7b5568272d07@rowland.harvard.edu>
+References: <20251107061046.32339-1-ccc194101@163.com>
+	 <c7bf59b5-8078-4b47-b56a-7b5568272d07@rowland.harvard.edu>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] Edifier QR30 (2d99:a101, Jieli Technology) reboots itself
- when RGB brightness button is used under Linux
-To: Terry Junge <linuxhid@cosmicgizmosystems.com>,
- The-Luga <lugathe2@gmail.com>, Alan Stern <stern@rowland.harvard.edu>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Michal Pecio <michal.pecio@gmail.com>,
- Terry Junge <linuxsound@cosmicgizmosystems.com>,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>
-References: <25f2419a-ee91-41eb-9446-87d238b4c7c4@rowland.harvard.edu>
- <CALvgqEBu_RzQYRSJnbu58XZt5wHX6PRD8i-J7Tovh7+KuhOyag@mail.gmail.com>
- <6999b5b2-a242-432e-8100-5d8ee58bcae8@rowland.harvard.edu>
- <CALvgqEBD05PwMpm00cAbFkpSWpCFP9jaBU0r-8+op+RGPtkktg@mail.gmail.com>
- <7adc816d-169d-4213-bb67-9d070af3c4a7@cosmicgizmosystems.com>
- <30528153-95f1-4ec7-a6bf-5da396441f86@rowland.harvard.edu>
- <xrfmda5rohporc3bjax35fc7xjziai6cmdt5svjak5rps6y6jz@k6h4zlt3jgg2>
- <CALvgqEDZ=g+uvdSYqbD22sL_VP+n6Pda2xXuFAJyKkh3bjm6HQ@mail.gmail.com>
- <CALvgqEC6UW96NEYOCM5v0m4x8Si0A7AwPuMpwXt3PMqkO3eqww@mail.gmail.com>
- <52fc4350-2930-44d3-b844-03f00806f142@cosmicgizmosystems.com>
- <1ac9d1dd-822a-487a-bd42-45c163dfbfe7@rowland.harvard.edu>
- <CALvgqED5NCNjrtv_YSfg9rzerK-xWAE5TaJjZtMBMcY=8MSk3g@mail.gmail.com>
- <c6d506f7-f13b-4d57-a522-a2ccd09e7a1f@cosmicgizmosystems.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <c6d506f7-f13b-4d57-a522-a2ccd09e7a1f@cosmicgizmosystems.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Get-Message-Sender-Via: s1234.lon1.mysecurecloudhost.com: authenticated_id: alan@improbability.net
+X-Authenticated-Sender: s1234.lon1.mysecurecloudhost.com: alan@improbability.net
+X-Spampanel-Domain: d1229.lon1.mysecurecloudhost.com
+X-Spampanel-Username: 192.250.239.241
+Authentication-Results: antispamcloud.com; auth=pass smtp.auth=192.250.239.241@d1229.lon1.mysecurecloudhost.com
+X-Spampanel-Outgoing-Class: ham
+X-Spampanel-Outgoing-Evidence: SB/global_tokens (0.0043894851864)
+X-Recommended-Action: accept
+X-Filter-ID: 9kzQTOBWQUFZTohSKvQbgI7ZDo5ubYELi59AwcWUnuXRV6fYilBGTKRNAUznEwVQcxeJ+5QOHW6w
+ NV4edBVjSyu2SmbhJN1U9FKs8X3+Nt0WZhm/A7favMlTtMMNvR2DuY5FeE90WzUxH4RDkM+uBZQA
+ 0TzuaUrBEDY9PSHFDNHoJI9x5PQ7cU2ndxUXEY3wm4o6+OOHG41bxJ7WNm9w/bHsMNslPCFjpAg9
+ IRecn+1fMBVPwy1qm9vOskMrq5tbzctJcUtGEDQswhEiplZLEBOSzdZ/GF80GNJkFDc0xgMS8I2u
+ 7zgBBfqRIErs6sICR9790Oz0HjaDUI8Ir9yITSU9n537p1CW2dbfl1gcOLg7QmvsjddsYxwxv6Tt
+ 0f7Wb1HgElnnwmI9eQkYzxF3C+ZJoOHj69i0BZRo2CU9catLzXqe6ITS3mkbowtcZzOh0PqfkbqP
+ DiZE3Gi3tUzyT/r/3z+Aap+PdRtmkEyNuQfsvRSY3ewS3dqRFaymMKMbzr/2zoXweWNnQgshW94P
+ r02TKo2fbQFpqpjXNjYEe5Na4e5q10uVyb78T7glhczlviqwgZJlE30bq/X+Udm0PJ2gglS3uuBv
+ bZoNes8GF+I3rgvAsgpTkXEF17wLF36Xb7LLybmhhoq3RkO+UvnR4l/d4HFfSWYNXfSMr4zlS/FI
+ Yh0e5hsgm8GdmZRPyMgjb+69oCpor83wcA/rpZmc23ws3TRjaC42FtNJuTWwh7xqbm+zqSM4k6j2
+ TH8Swu6fU2Itm39BdCc4FEP6OrUewqJCAQmMLvXikQefbUCVd9DQiNZCUwNFpc2zkFrJyOuvhvGO
+ VVI7WeTDH6ZxDPNtY4AQTRo0m20kQNWfj5m+TAtWBb39uS1TjWG2Inx+Ts2QUryYcSJLFEwVd01V
+ IyXuC+YO51DVvXHoNVOhxxzoCYVrBZS7JNrGjow/xYyiAN4ild/VYLya6BPOMxZOhLJWyfAMJ1F+
+ oCfzoCHVyrP2w1N1yZlV0dwirMfQf4goSwVww6JipksfZg5yrj/4ywfbQiw7dvPAeqUgS+pDASno
+ Z/jBGcf2xdasH+nZ6a3Qbn6ZFLSxclWLSn7JdSiBd2PodQO/mb799gO9+KX54Xn6wMUb2ruP8y0I
+ syrU/DceoY/L69w3tjz3Rn5otHepytbONY230kB5fZStFNF4ZmgcKaHbSwzSiNUCLdf/Kh3nIOf4
+ ZuM7jUXIESohoO51xWmU8V8m3NS9QcOAFgORbyI3tCu0lcKpjvuRc7Yjvlf6cycyen7/FcoXV8lk
+ ZNqm4EHQ8gCIIbwZRfIXI+uKLs8bUmLnH5akOJT+IdTS9Ldz2aggvjDKmWdAh+liXkZcVqv3Yon5
+ y/vcIKE4+MoDT8NV3zfqvwCQoJhkm/lvZPPSF2dUfeyr3wt4oYbErMkhUCDIzNEeKoFWMa2RVHHx
+ qlYbVXCPMxBzegUA6g0aqoYzNpP/MS+4ayUpOtEhdxekWDmK9g==
+X-Report-Abuse-To: spam@quarantine14.antispamcloud.com
+X-Complaints-To: abuse@master.antispamcloud.com
 
-On 11.11.25 06:11, Terry Junge wrote:
+On Fri, 2025-11-07 at 10:49 -0500, Alan Stern wrote:
+> On Fri, Nov 07, 2025 at 02:10:46PM +0800, ccc194101@163.com=A0wrote:
+> > From: Chen Changcheng <chenchangcheng@kylinos.cn>
+> >=20
+> > The optical drive of ECD819-SU3 has the same vid and pid as INIC-
+> > 3069,
+> > as follows:
+> > T:=A0 Bus=3D02 Lev=3D02 Prnt=3D02 Port=3D01 Cnt=3D01 Dev#=3D=A0 3 Spd=
+=3D5000 MxCh=3D 0
+> > D:=A0 Ver=3D 3.00 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D 9 #Cfgs=3D=
+=A0 1
+> > P:=A0 Vendor=3D13fd ProdID=3D3940 Rev=3D 3.10
+> > S:=A0 Manufacturer=3DHL-DT-ST
+> > S:=A0 Product=3D DVD+-RW GT80N
+> > S:=A0 SerialNumber=3D423349524E4E38303338323439202020
+> > C:* #Ifs=3D 1 Cfg#=3D 1 Atr=3D80 MxPwr=3D144mA
+> > I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3D08(stor.) Sub=3D02 Prot=3D50 Driv=
+er=3Dusb-
+> > storage
+> > E:=A0 Ad=3D83(I) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
+> > E:=A0 Ad=3D0a(O) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
+> >=20
+> > This will result in the optical drive device also adding
+> > the quirks of US_FL_NO_ATA_1X. When performing an erase operation,
+> > it will fail, and the reason for the failure is as follows:
+> > [=A0 388.967742] sr 5:0:0:0: [sr0] tag#0 Send: scmd
+> > 0x00000000d20c33a7
+> > [=A0 388.967742] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass
+> > through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
+> > [=A0 388.967773] sr 5:0:0:0: [sr0] tag#0 Done: SUCCESS Result:
+> > hostbyte=3DDID_TARGET_FAILURE driverbyte=3DDRIVER_OK cmd_age=3D0s
+> > [=A0 388.967773] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass
+> > through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
+> > [=A0 388.967803] sr 5:0:0:0: [sr0] tag#0 Sense Key : Illegal Request
+> > [current]
+> > [=A0 388.967803] sr 5:0:0:0: [sr0] tag#0 Add. Sense: Invalid field in
+> > cdb
+> > [=A0 388.967803] sr 5:0:0:0: [sr0] tag#0 scsi host busy 1 failed 0
+> > [=A0 388.967803] sr 5:0:0:0: Notifying upper driver of completion
+> > (result 8100002)
+> > [=A0 388.967834] sr 5:0:0:0: [sr0] tag#0 0 sectors total, 0 bytes
+> > done.
+> >=20
+> > Signed-off-by: Chen Changcheng <chenchangcheng@kylinos.cn>
+> > ---
+> > =A0drivers/usb/storage/unusual_uas.h | 6 ++++++
+> > =A01 file changed, 6 insertions(+)
+> >=20
+> > diff --git a/drivers/usb/storage/unusual_uas.h
+> > b/drivers/usb/storage/unusual_uas.h
+> > index 1477e31d7763..6d32b787bff8 100644
+> > --- a/drivers/usb/storage/unusual_uas.h
+> > +++ b/drivers/usb/storage/unusual_uas.h
+> > @@ -97,6 +97,12 @@ UNUSUAL_DEV(0x125f, 0xa94a, 0x0160, 0x0160,
+> > =A0		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> > =A0		US_FL_NO_ATA_1X),
+> > =A0
+> > +UNUSUAL_DEV(0x13fd, 0x3940, 0x0310, 0x0310,
+> > +		"Initio Corporation",
+> > +		"external DVD burner ECD819-SU3",
+> > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> > +		NULL),
+> > +
+> > =A0/* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > */
+> > =A0UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
+> > =A0		"Initio Corporation",
+>=20
+> It's unprecedented to have two quirks with the same VID and PID,
+> where=20
+> the second augments the first by virtue of its wider range of
+> bcdDevice=20
+> values.
+>=20
+> As explained in commit 89f23d51defc ("uas: Add US_FL_IGNORE_RESIDUE
+> for=20
+> Initio Corporation INIC-3069"), the original Initio Corporation=20
+> quirk in unusual_uas.h was added as a copy of the corresponding quirk
+> in=20
+> unusual_devs.h, which applies only to bcdDevice =3D 0x0209.=A0 Should we=
+=20
+> simply limit the existing unusual_uas.h quirk in the same way?
+>=20
+> Benjamin and Alan, you two appear to be the people who originally
+> reported the need for this uas quirk.=A0 Do you have any objection to=20
+> changing the bcdDevice range from 0x0000 - 0x9999 to 0x0209 -
+> 0x0209?=A0=20
+> Or can you suggest a range that does not include 0x0310?
 
-> Polling for input reports is handled by the hardware at the interval
-> requested by the device during enumeration. There is no intervention by
-> the kernel to poll for an input report. The only way the kernel can stop
-> polling a device for input reports is to suspend it.
-> 
-> So ALWAYS_POLL means never suspend.
+Can only provide lsusb details for my device. Still need the residue
+flag for use with MakeMKV.
 
-Hi,
+Bus 002 Device 002: ID 13fd:3940 Initio Corporation external DVD burner
+ECD819-SU3
+Negotiated speed: SuperSpeed (5Gbps)
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            0 [unknown]
+  bDeviceSubClass         0 [unknown]
+  bDeviceProtocol         0
+  bMaxPacketSize0         9
+  idVendor           0x13fd Initio Corporation
+  idProduct          0x3940 external DVD burner ECD819-SU3
+  bcdDevice            3.09
+  iManufacturer           1 Optiarc
+  iProduct                2 BD ROM BC-5500H
+  iSerial                 3 20202020202020202020202020202020
+  bNumConfigurations      1
 
-that is not exactly correct. ALWAYS_POLL, means that
-
-a) the device is always polled _while_ it is active
-b) if the device is suspended remote wakeup is always requested
-
-	Regards
-		Oliver
-
+--=20
+Alan.
 
