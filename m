@@ -1,108 +1,215 @@
-Return-Path: <linux-usb+bounces-30389-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30390-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAD2DC4C4C7
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 09:13:17 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2C42C4C533
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 09:16:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2D49E4F8E5F
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:08:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 97CFF4F4CD6
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Nov 2025 08:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A53D2DC76C;
-	Tue, 11 Nov 2025 08:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C50892EBBB9;
+	Tue, 11 Nov 2025 08:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9lzz7Wb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DjS5ATKY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D092BE658
-	for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 08:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414C1231A30;
+	Tue, 11 Nov 2025 08:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762848512; cv=none; b=Qy+MyAhmjHlrMS+ihrTjvvaq205s+/DySRkl+wsn89HDBmjojiTo1S3J5Ds3zW+1ZQ193zrgNhs7zCE1Sp0jzeuHVNM3Q9umiwBcSzXviowh5I2FkbJ8tDw0ZONgyXhHRrWc4ERoqc3ur252tyM9Zsv5YWjPuliKAVaIwYEXcs8=
+	t=1762848724; cv=none; b=hk/ScuaI67Gv7TP/zwFx+GwqAcddjHe50ak2tVDQFsSHXh4lnDEqnlksffyOLMR9QNa57d/8SyQMuUFgZE33mpCyQbZC3hTAK6C/q6FX/ScewL1HoO2/+sqkur/KeYCv99KT0i/u/x9tvWPhxjQmzG6ITVC5F1SuChzmIGrI08g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762848512; c=relaxed/simple;
-	bh=/EzhxUbgXu8TwphJDNg/nG6YdPSxeoOM709DbPBznw0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BXoSR5Ze3Lr2qI9/xoChtYCgWPsFjdOS92p4tKfBP/GFAAOYVhHgcmFT3m//X2TFHAYSS8QZ4L8MhiNacdVML1kSXAv05zLQLjZICRDt/CA3X4YH61Qx4HRUv1Kb1/Sa7dL9cmLf2IOrAOGFgBT0jcZlHwIQzvxUlSKsKAjZWmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9lzz7Wb; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-42b3ad51fecso1507070f8f.1
-        for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 00:08:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762848509; x=1763453309; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/EzhxUbgXu8TwphJDNg/nG6YdPSxeoOM709DbPBznw0=;
-        b=W9lzz7WbCkEDK12RoaXsBUeDy1V47hSyLmtCQQS9t/5FTlZI7fKa92tyUFW7RLVRd4
-         BJkV/0kkRjvYMVXrYaFRXt+MVZv5q/pweieSwwZ7VU+JIELWqFgD0bheJHpOQYR63ON4
-         GTlNcMM000B0O/VTp1AAANjlih+YgQP181Vby4hatmS/9ZM6ZdG4eDHAt90qsJ7Pvmsf
-         rBYtQLt5E/kTSFk+zt/CJGMii6X5v2c2chUmNe/IZJSkVeo1/fODkyLCNA4L+VVIXtK6
-         hcD/4jZALJgZQpoyn3OS+kfFoqQj/X63HXSTn3xnSV2k8QtVb+HRuMmGFS8jRmd9/5v1
-         SvHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762848509; x=1763453309;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/EzhxUbgXu8TwphJDNg/nG6YdPSxeoOM709DbPBznw0=;
-        b=oshchq8UoGqb12tD5DEeY58FX/L4sIi+6U9T+Y02WhvAZchq5UeszOEQjDbi+SB2Mz
-         k13wL9Dxaj70oM6fbQ3U0E+biGpEyVJk4KaNDmlXRFPj2N6X3kz/aPT4C+0bMzKc9umQ
-         A5HmqiaEEmmf4A87dlHIPG4p0e+3RU/k+LYlVP1LeThxyVZ1EicLejXN9JSuvU+T+Ub4
-         Ltau9/fJom3ta1ka0ygYcjJd0LAH/vCz/Ew1P7Kcm4jY7c1wzUH2CNOUQJ2l0T27svZx
-         iugREKvN01xOOfTwAbB3GSRtVdB1KjYWZAb7XPorIEBcbhU+NCkSSv847JW0yfVNNwaf
-         /1lA==
-X-Forwarded-Encrypted: i=1; AJvYcCXcQBWcAJ4iDpAcrpHMQX2vSaAAJhf7Xl5bLemreY8yY1ictRQAAmXUnprEassMr4D3DZnBy0SBF5M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzwb9FWVkwyLCbtEd9SsoTVo3ndhnJ9tz9bmRVvseswOrBvwmJ9
-	N67AEIgokAWeLso/7DpWf004KLxCO1nBALHGSEOCUg/Vk6x5T7vlDz/NCdk1AczkMwu89VcaMJi
-	KYO6diwnvW4vCYgFMZxaKhmQ6/FqWFKw=
-X-Gm-Gg: ASbGncujUF38gvI/LQvOOda7qxJsau/WugA00L3EYQY76Xgikx5KJWzIcr08WqqNEv5
-	uNqhwFtM+Yn4IFeRnVWEIS0guLW1cqR1/5RpCaWyGqyFx1W7E0MFeN0LmnCOD+RHDRSP818vFpy
-	CqZsU4P+weNcNmlcG2uND1uak7eWmRXssPLTeF3Ca7Hptg2Js66x4wcvwAqo18h93WIjpP79dOa
-	ttcvBr0hhRpICaZX66JB5fcQY+CW6gPn/+MFGJh0eos6cNNpAoGTkVpXtIapKay5LkUf2CSip55
-	EsbkUMMwA91o7NuFJ0N9qvdNX6HO3HY8CI1WnoOie6b7cTLq0s6xI30AnzpB/BT3
-X-Google-Smtp-Source: AGHT+IFvSfTIU4Z4qFzOo2YJfLilhL94JX4cA1j/1rEFPdljVva6t9U+b00rwrHwvs9/nnWZ5H+ImqldCjksQoIqQAs=
-X-Received: by 2002:a05:6000:40cd:b0:429:b958:218a with SMTP id
- ffacd0b85a97d-42b2dc4967amr8587827f8f.28.1762848508970; Tue, 11 Nov 2025
- 00:08:28 -0800 (PST)
+	s=arc-20240116; t=1762848724; c=relaxed/simple;
+	bh=4ZXwNEdFPGw7GT9HjFLGQbQOpg79yaQP7NEbItrxbUY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P0sIse7GFwtJ5p/3ybW/0UglNdfICOyBlj2CnVVctsCgYe1386xf4SPCyBQmjG0tInOBO4jkZSsn1xUnhRUTpbb1NouuPD23tbunRaZ/3XFv2nJdi8+Am92KRQpNQOaUaBL7jh9nV2SweY1/M/cnSmpGeyBLkNPPNvOHwb0lluA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DjS5ATKY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71204C116B1;
+	Tue, 11 Nov 2025 08:12:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762848722;
+	bh=4ZXwNEdFPGw7GT9HjFLGQbQOpg79yaQP7NEbItrxbUY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DjS5ATKYv15086zaWRU1IJZZxMePDSv63QCvJdbsIHKKXg0ZnyOX3yWze54eD+VtX
+	 Hg6EABbTS107eOnk6okFHIO8PGT2fEDUu+8bZCc0JIueK+mvvzCKCTdCFGTzl+zUef
+	 ixEXkRxPw3HKdmx6oFWyODYRPmg6Kf4YTbWVXqbH+4m7Djw4IUcG5IvYnNWbleoDHr
+	 I2npKp7xROwO89PYmgO4fAJvErqheFqF2wOeAoaMJJgbNO8sxV7+V4qt/A6yJoks0t
+	 ORJzBdwgmaylVoB+euWbf8xKKIFZyCYjZO6z8811fmR3mQWt/+LkoPrnLCrw2JaJT/
+	 nptYUCl7C94xg==
+Date: Tue, 11 Nov 2025 09:12:00 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: adrianhoyin.ng@altera.com
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, dinguyen@kernel.org, Thinh.Nguyen@synopsys.com, 
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: usb: dwc3-altera: Add binding for
+ Altera DWC3 wrapper
+Message-ID: <20251111-amiable-chicken-of-music-efe7dd@kuoka>
+References: <cover.1762839776.git.adrianhoyin.ng@altera.com>
+ <607dec2fdb41cba0220b7b9947e04651f51ff56e.1762839776.git.adrianhoyin.ng@altera.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c6d506f7-f13b-4d57-a522-a2ccd09e7a1f@cosmicgizmosystems.com> <20251111074205.1533558-1-lugathe2@gmail.com>
-In-Reply-To: <20251111074205.1533558-1-lugathe2@gmail.com>
-From: The-Luga <lugathe2@gmail.com>
-Date: Tue, 11 Nov 2025 05:08:16 -0300
-X-Gm-Features: AWmQ_bmDNcXrvdWFtWzr7GXasgYB3WfrnIRIsSzhNeM-NRsY4FCwIBHXAWepbOU
-Message-ID: <CALvgqEBS3NJxdJ1LF2j5g3q0DTyU=ZSFyeygDP1eitgRwSjvmQ@mail.gmail.com>
-Subject: Re: [PATCH] The Edifier QR30 USB speaker, identified as: Jieli
- Technology EDIFIER Hal0 2.0 SE 2d99:a101, reports a HID interface that needs
- HID_QUIRK_ALWAYS_POLL to ensure it does not crash when changing the RGB
- brightness with the physical knob.
-To: linuxhid@cosmicgizmosystems.com
-Cc: bentiss@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org, 
-	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linuxsound@cosmicgizmosystems.com, 
-	michal.pecio@gmail.com, stern@rowland.harvard.edu
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <607dec2fdb41cba0220b7b9947e04651f51ff56e.1762839776.git.adrianhoyin.ng@altera.com>
 
-Thank you all! This was my first time contributing.
+On Tue, Nov 11, 2025 at 02:18:45PM +0800, adrianhoyin.ng@altera.com wrote:
+> From: Adrian Ng Ho Yin <adrianhoyin.ng@altera.com>
+>=20
+> Add a device tree binding document for the Altera wrapper around the
+> Synopsys DesignWare USB3 (DWC3) controller. The wrapper manages
+> SoC-specific integration such as clock and reset control for the USB
+> subsystem.
+>=20
+> A parent=E2=80=93child node structure is used to comply with the generic =
+DWC3
 
->ALSA and the rest are triggered to bump the volume up or down with the
->Consumer Control Volume Up and Volume Down events. Those HID usages are
->declared in the other HID interface but never fired as your testing shows.
+No, that's long time legacy. Use single node.
 
-Thank you for the suggestion! I might try something like that in the
-future. For now, I=E2=80=99m happy mapping the codes of the speaker. Revers=
-e
-engineering is so much fun! I hope this patch helps others avoid the
-frustration I experienced with this bug haha.
+> binding, which restricts the core node to a single clock and reset.
+> The wrapper node provides the additional clocks, resets, and address
+> translation required for the Agilex5 integration.
+>=20
+> Signed-off-by: Adrian Ng Ho Yin <adrianhoyin.ng@altera.com>
+> ---
+>  .../devicetree/bindings/usb/dwc3-altera.yaml  | 78 +++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/dwc3-altera.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/dwc3-altera.yaml b/Doc=
+umentation/devicetree/bindings/usb/dwc3-altera.yaml
+> new file mode 100644
+> index 000000000000..c998d587723d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/dwc3-altera.yaml
+
+Filename matching compatible.
+
+> @@ -0,0 +1,78 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/dwc3-altera.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Altera DWC3 USB Controller Wrapper
+> +
+> +maintainers:
+> +  - Adrian Ng <adrianhoyin.ng@altera.com>
+> +
+> +description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+> +  The Altera SoCFPGA wrapper around the Synopsys DesignWare USB3 (DWC3) =
+core.
+> +  The wrapper provides SoC-specific integration such as reset and clock =
+control.
+> +
+> +properties:
+> +  compatible:
+> +    const: altr,agilex5-dwc3
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+
+No, this cannot be flexible. Please do not write bindings completely
+different than everything else.
+
+List the items, fix size/length of the array.
+
+> +
+> +  resets:
+> +    minItems: 1
+> +    maxItems: 2
+
+Same problem,
+
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+
+No. Use single node.
+
+> +
+> +  ranges: true
+
+Drop
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - ranges
+> +  - clocks
+> +  - resets
+> +
+> +patternProperties:
+> +  "^usb(@[0-9a-f]+)?$":
+> +    type: object
+> +    $ref: /schemas/usb/snps,dwc3.yaml#
+
+Drop
+
+> +
+> +unevaluatedProperties: false
+
+That's wrong in this context. Please read example-schema or writing
+schema.
+
+> +
+> +examples:
+> +  - |
+> +    usb@11000000 {
+> +        compatible =3D "altr,agilex5-dwc3";
+> +        reg =3D <0x11000000 0x100000>;
+> +        ranges =3D <0x0 0x11000000 0x100000>;
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <1>;
+> +        clocks =3D <&clkmgr 54>, <&clkmgr 55>;
+> +        resets =3D <&rst 36>, <&rst 44>;
+> +
+> +        dwc3: usb@0 {
+> +            compatible =3D "snps,dwc3";
+> +            reg =3D <0x0 0x100000>;
+> +            interrupts =3D <0 94 4>;
+
+We don't use such code... Look at any decent DTS.
+
+> +            iommus =3D <&smmu 7>;
+> +            phys =3D <&usbphy0>, <&usbphy0>;
+> +            phy-names =3D "usb2-phy", "usb3-phy";
+> +            dr_mode =3D "host";
+> +            maximum-speed =3D "super-speed";
+> +            snps,dis_u2_susphy_quirk;
+> +            snps,dis_u3_susphy_quirk;
+> +            status =3D "okay";
+
+Drop
+
+This is a pretty poor binding. You just repeat basic mistakes, fixed in
+other NEW bindings. Last time few-line patch, with obvious issues, had
+two reviewed-by from Altera. This one - bigger patch - no one cared to
+review?
+
+Best regards,
+Krzysztof
+
 
