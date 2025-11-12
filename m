@@ -1,169 +1,104 @@
-Return-Path: <linux-usb+bounces-30460-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30461-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43283C54125
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 20:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F295C54B9F
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 23:40:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D64FC3B2530
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 19:08:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F28393A5E2A
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 22:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4DF434DCE0;
-	Wed, 12 Nov 2025 19:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD6B2EBDE0;
+	Wed, 12 Nov 2025 22:40:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WEVCNybn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQw2t12o"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3129334C808;
-	Wed, 12 Nov 2025 19:07:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC352E0418;
+	Wed, 12 Nov 2025 22:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762974476; cv=none; b=Eh46hqqfn5ZeudR2rmNCLsKmTk17iMHNk5O0HW5cLJxUhI1ug8Y6nrXAsiSbRR5mfhcZsHD0oiySQj+RGWoKxqRulwznzIRoJPQFX+mDsiXTlLtbeM6+3n3eyELZGmro/JDL4RlvXKm9YfyE3XtM08wgzfkyVgjg3HSkBFXLXs8=
+	t=1762987229; cv=none; b=HD07nSevCZgR3YDyBhTJG/PE70vG4nMezSbIE4B1OW+SazcM1Fdkg8XxHF7X6RBVZdwvHeojXxnIocbweIyb5af9Ju6V8jE4Ia/ZvsD8H3BEHn8/jfc6KEm1nOOzdE+x2Dzet0QtJYIWlmvMZMfKBBh5okwuE24/khaH+xWx+lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762974476; c=relaxed/simple;
-	bh=4X5km6tMQI+rmQ+2RA+kgRbD/MaASgUWl21z9NvFxCc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q7xozPHM0m3fa4ooLrdt48ub8B2a/qTuXvKLmDpw37yTBlMHowsJc39Ehuw4uq4jj2i9keN5dPqkGiKFh1/Rb6vkovb4usAetXamff7SeZRXPIkH0ymnO85Q5kSDSxjXKdiY5Z/jGHK3pvyJ+CgqGF3bikaCR/Z6rO41oc43ahQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WEVCNybn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580F6C4CEF8;
-	Wed, 12 Nov 2025 19:07:53 +0000 (UTC)
+	s=arc-20240116; t=1762987229; c=relaxed/simple;
+	bh=s7rgWamhDP9TNGTpjEAdR/v/XV8sc372kYVkF6gK0Ps=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e/CTH7oWt24jPidTe473S4/wrzEamJTclx+DHCMBtQlhBcVhsqzlt9u8fJi0gWQco4BcSlu9roO9bIgI2lD9kz2h7/MHYKGvZjDPLDyypXR/b9yHdu6KZiJ/ZMVoEQJyAtTY3lzYTA65dvk4zkpoRrQc+zEZFNGI2PWb5ZTvg3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQw2t12o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA2EC4CEF1;
+	Wed, 12 Nov 2025 22:40:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762974475;
-	bh=4X5km6tMQI+rmQ+2RA+kgRbD/MaASgUWl21z9NvFxCc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WEVCNybnc6t6289XVBYkcWqOoxpXqCnrLBLYLoiHlIbKyjkbGJommYxYZ4GvUKdzk
-	 RvCaaYP4cH5e7LLxqfEh/U5J3NbcNb9zsGx7irU6L2ggZu686KokOvrxociihCrdz5
-	 dJwld8Pz0SSqtx5kTdGzsQdfnbx8hipENl9Wi6lNZNvCXnCb9b5gngZtmYSqEKO6wj
-	 5nkefY3+3deZoLjCDjmW1duP1O9r17D6AOg4pER2uFLTODAnUbspPTpahmODQvVy32
-	 cdL9DSF+KFzEqfM/EGASoFTjqu4im0ljDP7j6qlpVZV6ov6xCd8GSzIZLOvBJkNhd/
-	 +2SZ5Fb6iN0MQ==
-Date: Wed, 12 Nov 2025 19:07:51 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, michal.simek@amd.com,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	git@amd.com
-Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset
- constraint for the versal platform
-Message-ID: <20251112-bagging-diameter-4ebab1f9ed45@spud>
-References: <20251112155430.1326426-1-radhey.shyam.pandey@amd.com>
+	s=k20201202; t=1762987229;
+	bh=s7rgWamhDP9TNGTpjEAdR/v/XV8sc372kYVkF6gK0Ps=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kQw2t12oYrBDLw7iE54TLNdRzWDCrmFPRJ0DgE3H/GS9Pmq6V9RKd8dfq/HYr6SCm
+	 /UWgKPcaTLn5bCzukmqZA1KskMS7cU/hg6ALfczKwB50TUfufpn9fEXFCypI8zKDBn
+	 E1N5kjoYe5ELKOHqWqKQKu19ZN3bzxUdGAmS5pUl2pDoEsrWkzPhNRZ2RCZSRitPiS
+	 VrsZHYx5tsSi58CKnfaFuN9D6fl7FMnKmw5MoY6rK61tXtPyA9d2EpJ19YVyxBulRL
+	 zXbtQg1aVPVlYiIPA4NHt//NmEONqwil5JXxCD0DLn/x0EqqlNY7ezMaFQN+usBr0I
+	 NbzJOKwlDZXJQ==
+From: "Mario Limonciello (AMD)" <superm1@kernel.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Cc: Pavel Machek <pavel@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
+	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
+	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
+	AceLan Kao <acelan.kao@canonical.com>,
+	Kai-Heng Feng <kaihengf@nvidia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	=?UTF-8?q?Merthan=20Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+	Eric Naim <dnaim@cachyos.org>,
+	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+	"Mario Limonciello (AMD)" <superm1@kernel.org>
+Subject: [PATCH v10 0/3] Introduce and plumb PMSG_POWEROFF
+Date: Wed, 12 Nov 2025 16:40:22 -0600
+Message-ID: <20251112224025.2051702-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="92AFPMtx3g8andt7"
-Content-Disposition: inline
-In-Reply-To: <20251112155430.1326426-1-radhey.shyam.pandey@amd.com>
+Content-Transfer-Encoding: 8bit
 
+I've been working on a series that uses the hibernate flows (S4)
+during shutdown (S5) [1], but it's a bit risky because it has changes
+all around the kernel.  To mitigate risk Rafael suggested [2] to split
+the series into at least 3 parts across different kernel cycles.
 
---92AFPMtx3g8andt7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Here is the first part, which just introduces a PMSG_POWEROFF event
+and uses it in any driver that manipulates PM events.
 
-On Wed, Nov 12, 2025 at 09:24:30PM +0530, Radhey Shyam Pandey wrote:
-> AMD Versal platform USB 2.0 IP controller receives one reset input from
-> the SoC controlled by the CRL.RST_USB [RESET] register so accordingly
-> describe reset constraints.
->=20
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> ---
->  .../devicetree/bindings/usb/dwc3-xilinx.yaml  | 43 +++++++++++++++----
->  1 file changed, 34 insertions(+), 9 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Doc=
-umentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> index 36f5c644d959..cd0cc9da242f 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> @@ -50,17 +50,22 @@ properties:
->      description:
->        A list of phandles for resets listed in reset-names.
-> =20
-> -    items:
-> -      - description: USB core reset
-> -      - description: USB hibernation reset
-> -      - description: USB APB reset
-> +    oneOf:
-> +      - items:
-> +          - description: USB controller reset
-> +      - items:
-> +          - description: USB core reset
-> +          - description: USB hibernation reset
-> +          - description: USB APB reset
-> =20
->    reset-names:
-> -    items:
-> -      - const: usb_crst
-> -      - const: usb_hibrst
-> -      - const: usb_apbrst
-> -
-> +    oneOf:
-> +      - items:
-> +          - const: usb_crst
+There are no functional changes for these changes and this series is
+intended for 6.19.
 
-Why do we need all this oneOf stuff if both have the same first reset?
-Can't you just set minItems: 1?
+v10:
+ * Drop resume_event changes
+ * Drop patch 4 (will come in later phase)
 
-> +      - items:
-> +          - const: usb_crst
-> +          - const: usb_hibrst
-> +          - const: usb_apbrst
->    phys:
->      minItems: 1
->      maxItems: 2
-> @@ -95,6 +100,26 @@ required:
->    - resets
->    - reset-names
-> =20
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - xlnx,versal-dwc3
-> +    then:
-> +      properties:
-> +        resets:
-> +          maxItems: 1
-> +        reset-names:
-> +          maxItems: 1
-> +    else:
-> +      properties:
-> +        resets:
-> +          minItems: 3
-> +        reset-names:
-> +          minItems: 3
-> +
->  additionalProperties: false
-> =20
->  examples:
->=20
-> base-commit: b179ce312bafcb8c68dc718e015aee79b7939ff0
-> --=20
-> 2.34.1
->=20
+Mario Limonciello (AMD) (3):
+  PM: Introduce new PMSG_POWEROFF event
+  scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+  usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
 
---92AFPMtx3g8andt7
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/base/power/main.c    | 5 +++++
+ drivers/scsi/mesh.c          | 1 +
+ drivers/scsi/stex.c          | 1 +
+ drivers/usb/host/sl811-hcd.c | 1 +
+ include/linux/pm.h           | 3 +++
+ include/trace/events/power.h | 3 ++-
+ 6 files changed, 13 insertions(+), 1 deletion(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.43.0
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRTbBwAKCRB4tDGHoIJi
-0jX7AQCAHa54UizRxsLeHp9VJzAq+vFdLs6YxvkaigFx6sowxAEA+An2kZel0I/A
-Ftl+wdLtzBFFGVzZh6cSv2qGpvIuVAU=
-=Er4U
------END PGP SIGNATURE-----
-
---92AFPMtx3g8andt7--
 
