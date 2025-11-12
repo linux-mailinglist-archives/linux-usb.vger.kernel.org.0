@@ -1,220 +1,194 @@
-Return-Path: <linux-usb+bounces-30457-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30458-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D884EC53642
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 17:29:45 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92E26C536E7
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 17:35:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 78E21540139
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 15:57:31 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 43C4E35247D
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 16:17:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41EEF33BBB1;
-	Wed, 12 Nov 2025 15:54:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFB3348879;
+	Wed, 12 Nov 2025 16:11:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xjNFa3k3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lV/C9Esh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010004.outbound.protection.outlook.com [52.101.201.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175F032C92A;
-	Wed, 12 Nov 2025 15:54:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.4
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762962881; cv=fail; b=mjHJt3T7pWWIYxgm4FrWxy5KuNZH0/yjlpMENNNRelthl+seoZj9FL6PqLeBnSdGlVkdPuadabbrym2rrDD54zdbF37R9xldJ/TnKaj7auIqEHyeQJmQfHftDmFrHOO29mtbq51nL2D7UkStUCYLpaHXZweeuJNS9+PAJW7VNAM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762962881; c=relaxed/simple;
-	bh=2j4//WPwhUX9t3Knp5ZGzbQZhNr8jJ8u3Wlwtale1yc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VQoj/WEgqd0BtFnYOR3CT4/ktLzpmfS/Bkl2wm6e0qoZiJgAOmHCIfwEaZx4vVocTp7K1E0mfMpfdW5e4c0WKbeBpX5hhir3tXhSTIV/flMXvmNVwd+9Yp9NgRexJG3npBnr5Vcyn8GG7uYzjAv4AGNIL162N/Pk4mSUyXx3R4k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=xjNFa3k3; arc=fail smtp.client-ip=52.101.201.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jFhiBDAha3o4vAeL4DXbeqNP2IwZqh/wCyxsAUEfE6YaU1VAdB2vQ/NexAc+AYIlqi7GKut+nRZ/kJ84wZrVCnkKK/kBTUKQlU3uoNF3i3AsVc+DYijPD46udbn26FGxtz+f1adY3rFhOH5VVlhcIZgJw+xLazX4IXw8XJZdNDYVHPCvL6ZVBXDy+TXUYgrgP9J1isUFZ4sjogoqAn7oDYqH6JJhO0PyZnQkf5LcEwOd1Ol7rkP3JWHKh1sjixfDWsI714Mtj0OOhzPUrCebn6xHpa6BEOcKdDGlW3M0VYBwIAfwElQ7g5fQtlubfMNJw8EQyyIZ5klkcR3yBR3fMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N6VrpTc1O+P0RJB06V2xQYPFqtLUV/TkuSkmjXF6DkE=;
- b=a9U9v0l2WsQZmQug/JZ1GGGx5Z6Nz4x1i2UpZ9UkkFGVj53HfvnXpXCdu627U39y6MK6woTfdjJQDGNnMtxCRxiXO20Mxi/c0Tsz0e3jfa+vtnBCYSnnMnj6ox2Bzu87PvmNmVbPuyon/4DHx4j/x+y0sg00hvodwkhoCt0+sKjU/wAvoSX2A6VC01Oyl9Ko5Nf+5YGSY85Oi0VV7tlYLoNd/XIqvTGeMZ/PaRMj5bPht1pUAFjRIMgHS0Od00cN98RsD/jfTJ/cH0u7fJCD4LHEFrIJXPPYoGI8AJU0nsZ2CpcalPs3MOO9tCtFeH6HWhT3+cpMy41tcE33jmztiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N6VrpTc1O+P0RJB06V2xQYPFqtLUV/TkuSkmjXF6DkE=;
- b=xjNFa3k37Vzbty4Cb0q/KkOh8lEBbhplf6WewsJ6rq0ZSvnCGG8JDrGQljFTOrvCzt2gyOAGvOoihbpgD+9rm3bYc6x3zaPwrplViXGScT3XJ5M3i04InCr9JOswSeAGKTMlvcXG30hwUoA5CKErkSBt3PJve+UUQpsvEK1uwBI=
-Received: from SN7PR18CA0025.namprd18.prod.outlook.com (2603:10b6:806:f3::29)
- by BN3PR12MB9570.namprd12.prod.outlook.com (2603:10b6:408:2ca::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Wed, 12 Nov
- 2025 15:54:37 +0000
-Received: from SA2PEPF00003F61.namprd04.prod.outlook.com
- (2603:10b6:806:f3:cafe::b) by SN7PR18CA0025.outlook.office365.com
- (2603:10b6:806:f3::29) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.16 via Frontend Transport; Wed,
- 12 Nov 2025 15:54:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- SA2PEPF00003F61.mail.protection.outlook.com (10.167.248.36) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Wed, 12 Nov 2025 15:54:36 +0000
-Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 12 Nov
- 2025 07:54:35 -0800
-Received: from xhdradheys41.xilinx.com (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Wed, 12 Nov 2025 07:54:32 -0800
-From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <michal.simek@amd.com>
-CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset constraint for the versal platform
-Date: Wed, 12 Nov 2025 21:24:30 +0530
-Message-ID: <20251112155430.1326426-1-radhey.shyam.pandey@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2177A33F8B9
+	for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 16:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762963919; cv=none; b=hbtZFi5qRqEiJIFvWrW+2hMnydinArnWGVJV6N0uQR/8ff0/hkDVYRF2nlWReZdINwYzncUAhWvNYRRN5LZ59oBfZioMNejI4M0jP+6aloT5255Z7Rs81LkwSaDfQmLUPlOX6aVaVAtYUv8p5GpUE93lhdv7JjJEpQBHMbCCHNM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762963919; c=relaxed/simple;
+	bh=6m1+Y1QMmitnq3wdyRnyWgB5iky55Benq343RZOXmFM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Zi12NKj8Qb4qdpJM3XRkBBu8b2CNCff1Sl3vNeEanU20W04HY0XrxFo1+/aVuMXSVWnZFnV6VX+7lI0SSOoSir9kE+LRdmXSCbW2JlvZbvN98iAVM9eQN7DSCfvX+/qkZ8ge9MGsiF4Iu1B6yDPRCt4lIqjHdXrxwgC0erdyb4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lV/C9Esh; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b727f330dd2so166631866b.2
+        for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 08:11:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762963915; x=1763568715; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=md4cQcopfc2YIkdpqGWrKBYrabECu39ggSCNB0xdwig=;
+        b=lV/C9EshXhIanzw10JsHxS858xYQsTIclOWLljRZmVnXz2BjFvnqKQ9d7avEwk3+me
+         zJ8TqeBhy/e8fPkGt6H1dMmTJq9IwoE5CsOopQ+KZQ9d+EzL5YhjBpaLF2X2Z+9SGKB7
+         SdUtsYeCGJv4aoyl9lAK5VS2k8lMILeln7ysY17oM3mIwm5ITPt2gmn7FG4FtQNX4Ku7
+         YXzH5OCu9RKeR9DqeYFh2S3nazqfL6i1GGyWagQN1lad4pi0xBBxCe6j9UP4c9xq4ZLV
+         mmOVwIDtEgd4Vv8gEEt/d7edP4JKlfgvIRXDnHUi4WkYd6YydvYpIKnyl+wuqlMCrbOF
+         bgWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762963915; x=1763568715;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=md4cQcopfc2YIkdpqGWrKBYrabECu39ggSCNB0xdwig=;
+        b=a57RP+Qpnva/fvCuS6GYhg3VrzrFZAoLcJNq2YoABTNURI6R4iDSFt/Wi1u0zILFtG
+         N3Vmem3MDsu+9um/eUn6jj05+EQdo0ivfBfkEEpMHbAMmaE9IaAD5MOz7QduVDQiIBIv
+         44TafnxaQOdf9eswnCTA95uBeMLoXEWJIs0kOXAxJMWQQgFrg7FOUbyoGFi/PZ7dqmUV
+         UVzq+3sQRBFhnSiZJX5X69kIYFm96leEoqSfC77BNUfE5/cuojPwj+lWW8o6O2aq4N10
+         y4fTSu5Npd91+7Ds7OIDMwVfKJCxeS7OrTDXcJ2Uq/7QRAZkUoEh07NruhHvPbOTKXXi
+         GPEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUi1yRAb1sp2LJyDPATMm5V4i+xHEqjQdFUL9zCW1LBGOIbbdGBzA4uugENQvnqZywwJpTlf6Kg4MQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZHElOrQmFPWWRtVojcXMpLFGCzqN1BjqRCHUPeg3eTq7UuLw/
+	2bu8L7TGesD878a7o8c8RAF2IdTVkdaswOo+jC/mSMoROayCL/MhOH0LauIW+w==
+X-Gm-Gg: ASbGncujYTw5xg+h6yCi7TdsxTyfTg16sileCW1THcKXcGM/NWhE6MnX5rdfmBf+W1b
+	L/sWM1xCfxVrTppp0cetF4U1Ro+Uj/0sY81KHEA8gCpRD9VGtbPPgPXhErRe0uY05n7k5A+qlRq
+	olk2TT4uO6YidjEdhTZ9gOJc0D4EUkAFDdOoPunlcc31qZvLszkPBatc0HPxycTaIgO+GizfIdI
+	8PjWE5gyGs4DGtr8ko54hRxhHjcgbD5wMHCWHufUFPv+PFx/yZ5LT1IgRsao3OFk30pfHC6QwY+
+	7zB9Iy7s5A6oyQz9W+yCMxwX/oHlVBKKX4S1FIVBAPCn48UauyZsqUuscA8YmzGGt224QQcPgam
+	5+nKtSEG3RlweWEUp+23ofZccfeQyBOgCYcs94a6qwVDwWnmmulA2aaU4YQhJVgxTpqMSYXkwgW
+	BPAhXAkGq5SSKvImiLYfMW
+X-Google-Smtp-Source: AGHT+IGPAo4vcgq9T8HPnY89X1Wiq0qQEsqsfJiusIJLtZt+YOM7MA7+c1poePh8SeT7l9I7ZTh00w==
+X-Received: by 2002:a17:907:9722:b0:b73:21a9:d435 with SMTP id a640c23a62f3a-b7331971a24mr410639666b.3.1762963915273;
+        Wed, 12 Nov 2025 08:11:55 -0800 (PST)
+Received: from foxbook (bfd52.neoplus.adsl.tpnet.pl. [83.28.41.52])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bfa11333sm1623343566b.69.2025.11.12.08.11.53
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 12 Nov 2025 08:11:55 -0800 (PST)
+Date: Wed, 12 Nov 2025 17:11:40 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Niklas Neronin <niklas.neronin@linux.intel.com>
+Cc: mathias.nyman@linux.intel.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 08/13] usb: xhci: simplify Isochronous Scheduling
+ Threshold handling
+Message-ID: <20251112171140.108056f6.michal.pecio@gmail.com>
+In-Reply-To: <20251110151450.635410-9-niklas.neronin@linux.intel.com>
+References: <20251110151450.635410-1-niklas.neronin@linux.intel.com>
+	<20251110151450.635410-9-niklas.neronin@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003F61:EE_|BN3PR12MB9570:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8bb4847c-162b-49a8-1130-08de2203c7e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?bYlIh8iZTIAW8sEQg62pqsd4BR8d7r/JpYPglO5Z8a6CjZPFjvnnTSrMiEN5?=
- =?us-ascii?Q?MVgXj3255SJdghA3bGvU0C8RiTDuPiZJ/cOXAF1lNHlGa6Qe+W50IL8H9VhU?=
- =?us-ascii?Q?TftcAUytQqzigBVbHs0mQIEpHnyJLYCFAk7WDfacbAjc++1zpUGdiXWLoOJX?=
- =?us-ascii?Q?Lf9/pR6qVsFOVCwAS2aBoMOZlQeIXPj/A8NJU54rgT0LunX/I4dj4pfv7ll9?=
- =?us-ascii?Q?7+1PIkFaO5q+XL4fCIDgHfk+RKIAHWqRopZ/3VIoS1kFluDfylUNg0MuIRX9?=
- =?us-ascii?Q?NoAt3EsiW1LlD9fCcDjmEshuUL2mMyD7XLKqHMWy0rocKVRWFxnVUQqpFNWs?=
- =?us-ascii?Q?OkzXKhZ8WJr3NNJUEy1PULQS6pWUe3Z0pvauce0A7el5u7DGe3+K1zMfdmZx?=
- =?us-ascii?Q?VBtJx5s6NwJC1jWUm95q/r2s8htV1tt8DEqeHUs+HFRWdMAI9rtcv0mQ8IlO?=
- =?us-ascii?Q?uBStIKpVvFq61Kc/9z4ISJCKhd6p3NSB8qfqd50oNlPIPMcwvg/7K2pWPfp+?=
- =?us-ascii?Q?3ACv13KxMe6clA7d9oBSt2RucSBx58b+u5DalZgmeLCFQLOLxtq4DdPklGxT?=
- =?us-ascii?Q?6/nnP0ToNzBOqLnn2VamKkA2ZpjRqVQWhF5kWKtYTx7Rx2ELLkXRTCb0/f6p?=
- =?us-ascii?Q?okAtrG1xvUULJcENK08PAJMtipqIu3cM/2yt9HtzD9thot4Oeu7N1L9fiDs0?=
- =?us-ascii?Q?zswtPYk7Fs6IyL1yLaiwiXa7G3jNnK2fUfnxnAu/0kmL5SGCwQ4QVCCepXBK?=
- =?us-ascii?Q?T2qwsutLZo9xpJmG7b6Y2nJg5hqa/0K69yCpW/E2RVJMvfkUElYlxQNAfVGN?=
- =?us-ascii?Q?VKRquuDD4dGTSNTxIrclx10qm0Q4wsVPCQ47GCOe/XlmEhtBvjDhYtL4lY1r?=
- =?us-ascii?Q?gfxw8QiwWzpXBT90EOsGEzNh6jYtb4spNSf6alEO7LNUH5jCwwNKrD2NqJvi?=
- =?us-ascii?Q?2K90/M73LPqwi6ZqqWDu4NfsOH2mzJ38geAQ1IcqxcKSnsZ+LPL1YOilkaKD?=
- =?us-ascii?Q?jP0TdGFzyVltSL3E8TjXxY5Q4hQUpfSXfMR11rRbwGiLcsV20pEEerEMeDhy?=
- =?us-ascii?Q?mARgj9rq5dcXq5s8UmRwk7LWlU1/f8biapZTxsRM9Sf5gOPQLlINq/v8r/hf?=
- =?us-ascii?Q?fque5owLPXKk3ZrOgeMXNzFMOc/VqVsiGq1J8dcAQ3oB+MDZwll96jpUPPfR?=
- =?us-ascii?Q?fN5KAmTmgToLxqwt6R5kLWTTvChY6x7s874WA3nfPhrYuk26lkuwsiF00XpH?=
- =?us-ascii?Q?b5w3+BCyFLcUIgBvJw6fVnz2SoSORKHxkk5S6tb8hAQQxa6eKl0gpy1gQtYe?=
- =?us-ascii?Q?RswvtnQgO0J1GJUbU18uRlsN1ineAI4pyzXb1ZaPb4R7K7vjrcvQTkcSQMd7?=
- =?us-ascii?Q?o+DeNdzyj9MdZZWeNrZKvMrxm0Epfw7jfsDTe+OSM9gPWgNFnw9c6To5GGNf?=
- =?us-ascii?Q?eT53DK5uTuStY/HHHVhZWmhtLMfcjbk4C2bH78X20ys/zC5/gtQeEd109j2g?=
- =?us-ascii?Q?szMBpLOjcjcY6SO1GNpzEJfGr+zct46srkY1CorBPDOyG0nzveZeKLPSaDgn?=
- =?us-ascii?Q?yrHCCgUB21MpHj89M3Y=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2025 15:54:36.6434
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb4847c-162b-49a8-1130-08de2203c7e4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003F61.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN3PR12MB9570
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-AMD Versal platform USB 2.0 IP controller receives one reset input from
-the SoC controlled by the CRL.RST_USB [RESET] register so accordingly
-describe reset constraints.
+On Mon, 10 Nov 2025 16:14:45 +0100, Niklas Neronin wrote:
+> The IST is represented by bits 2:0, with bit 3 indicating the unit of
+> measurement, Frames or Microframes. Introduce
+> xhci_ist_in_microseconds(), which returns the IST value in
+> Microframes, simplifying the code and reducing duplication.
+> 
+> Improve documentation in xhci-caps.h to clarify the IST register
+> specifics, including the unit conversion details. These change
+> removes the need to explain it each time the IST values is retrieved.
+>
+> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+> ---
+>  drivers/usb/host/xhci-caps.h |  9 ++++++++-
+>  drivers/usb/host/xhci-ring.c | 26 ++++++++++++--------------
+>  2 files changed, 20 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
+> index 8a435786f950..e772d5f30d36 100644
+> --- a/drivers/usb/host/xhci-caps.h
+> +++ b/drivers/usb/host/xhci-caps.h
+> @@ -24,8 +24,15 @@
+>  /*
+>   * bits 3:0 - Isochronous Scheduling Threshold, frames or uframes that SW
+>   * needs to queue transactions ahead of the HW to meet periodic deadlines.
+> + * - Bits 2:0: Threshold value
+> + * - Bit 3: Unit indicator
+> + *   - '1': Threshold in Frames
+> + *   - '0': Threshold in Microframes (uframes)
+> + * Note: 1 Frame = 8 Microframes
+> + * xHCI specification section 5.3.4.
+>   */
+> -#define HCS_IST(p)		(((p) >> 0) & 0xf)
+> +#define HCS_IST_VALUE(p)	((p) & 0x7)
+> +#define HCS_IST_UNIT(p)		((p) & (1 << 3))
+>  /* bits 7:4 - Event Ring Segment Table Max, 2^(n) */
+>  #define HCS_ERST_MAX(p)		(((p) >> 4) & 0xf)
+>  /* bits 20:8 - Rsvd */
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 5f46661c8e6b..7b7c61d79d0a 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -3983,6 +3983,16 @@ static unsigned int xhci_get_last_burst_packet_count(struct xhci_hcd *xhci,
+>  	return total_packet_count - 1;
+>  }
+>  
+> +/* Returns the Isochronous Scheduling Threshold in Microframes. 1 Frame is 8 Microframes. */
+> +static int xhci_ist_in_microseconds(u32 hcs_params2)
 
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
----
- .../devicetree/bindings/usb/dwc3-xilinx.yaml  | 43 +++++++++++++++----
- 1 file changed, 34 insertions(+), 9 deletions(-)
+Not a great name, too long and "seconds" surely doesn't belong here :)
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-index 36f5c644d959..cd0cc9da242f 100644
---- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-@@ -50,17 +50,22 @@ properties:
-     description:
-       A list of phandles for resets listed in reset-names.
- 
--    items:
--      - description: USB core reset
--      - description: USB hibernation reset
--      - description: USB APB reset
-+    oneOf:
-+      - items:
-+          - description: USB controller reset
-+      - items:
-+          - description: USB core reset
-+          - description: USB hibernation reset
-+          - description: USB APB reset
- 
-   reset-names:
--    items:
--      - const: usb_crst
--      - const: usb_hibrst
--      - const: usb_apbrst
--
-+    oneOf:
-+      - items:
-+          - const: usb_crst
-+      - items:
-+          - const: usb_crst
-+          - const: usb_hibrst
-+          - const: usb_apbrst
-   phys:
-     minItems: 1
-     maxItems: 2
-@@ -95,6 +100,26 @@ required:
-   - resets
-   - reset-names
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - xlnx,versal-dwc3
-+    then:
-+      properties:
-+        resets:
-+          maxItems: 1
-+        reset-names:
-+          maxItems: 1
-+    else:
-+      properties:
-+        resets:
-+          minItems: 3
-+        reset-names:
-+          minItems: 3
-+
- additionalProperties: false
- 
- examples:
+xhci_ist_microframes() seems better.
 
-base-commit: b179ce312bafcb8c68dc718e015aee79b7939ff0
--- 
-2.34.1
+The argument could be 'xhci' to simplify callers and deduplicate more.
 
+> +{
+> +	int ist = HCS_IST_VALUE(hcs_params2);
+> +
+> +	if (HCS_IST_UNIT(hcs_params2))
+> +		ist *= 8;
+> +	return ist;
+> +}
+> +
+>  /*
+>   * Calculates Frame ID field of the isochronous TRB identifies the
+>   * target frame that the Interval associated with this Isochronous
+> @@ -4002,17 +4012,7 @@ static int xhci_get_isoc_frame_id(struct xhci_hcd *xhci,
+>  	else
+>  		start_frame = (urb->start_frame + index * urb->interval) >> 3;
+>  
+> -	/* Isochronous Scheduling Threshold (IST, bits 0~3 in HCSPARAMS2):
+> -	 *
+> -	 * If bit [3] of IST is cleared to '0', software can add a TRB no
+> -	 * later than IST[2:0] Microframes before that TRB is scheduled to
+> -	 * be executed.
+> -	 * If bit [3] of IST is set to '1', software can add a TRB no later
+> -	 * than IST[2:0] Frames before that TRB is scheduled to be executed.
+> -	 */
+> -	ist = HCS_IST(xhci->hcs_params2) & 0x7;
+> -	if (HCS_IST(xhci->hcs_params2) & (1 << 3))
+> -		ist <<= 3;
+> +	ist = xhci_ist_in_microseconds(xhci->hcs_params2);
+>  
+>  	/* Software shall not schedule an Isoch TD with a Frame ID value that
+>  	 * is less than the Start Frame ID or greater than the End Frame ID,
+> @@ -4333,9 +4333,7 @@ int xhci_queue_isoc_tx_prepare(struct xhci_hcd *xhci, gfp_t mem_flags,
+>  	 * Round up to the next frame and consider the time before trb really
+>  	 * gets scheduled by hardare.
+>  	 */
+> -	ist = HCS_IST(xhci->hcs_params2) & 0x7;
+> -	if (HCS_IST(xhci->hcs_params2) & (1 << 3))
+> -		ist <<= 3;
+> +	ist = xhci_ist_in_microseconds(xhci->hcs_params2);
+>  	start_frame += ist + XHCI_CFC_DELAY;
+>  	start_frame = roundup(start_frame, 8);
+>  
+> -- 
+> 2.50.1
+> 
 
