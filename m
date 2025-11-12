@@ -1,93 +1,126 @@
-Return-Path: <linux-usb+bounces-30445-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30446-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E256C511BB
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 09:29:38 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1D0EC51233
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 09:35:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 45E684E8F5D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 08:28:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 68CD34F14FF
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 08:32:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D908E2F261F;
-	Wed, 12 Nov 2025 08:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D8612F6176;
+	Wed, 12 Nov 2025 08:32:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aDomxgu2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q0FshDGY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590202D8387;
-	Wed, 12 Nov 2025 08:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C292D1F4E;
+	Wed, 12 Nov 2025 08:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762936083; cv=none; b=dGK3NTDiw0TZdt15ookFPMLv2smL4fGZxzTo1jKlcV7VonHtJzBVjHwd05U4pIQHXj13Swfm+OaveKOnvDnpPUc7Cj2UzG2UYIlQFEkop2JOp0TxRAzL68spVddSh9KAAU6/yBUu8J608yQWg6DjMhMIZX9TOv3oEyPNPyzmr0o=
+	t=1762936356; cv=none; b=N2sDXgiY1e0k4a/FNFjHwLQsxJ+J4AxHFJXU/uHg0Sln1e20O3D6qfXQu/mlMXMUgvgYzawGIxONT+iWNXSLIxMJW2rNTghfbPCUKNJnWScFWIMLQFq08ZmcGmX4O45WSmjdTkNqZDPdI9xUEC7A2520DPj3nO9DbkmT5GRw0OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762936083; c=relaxed/simple;
-	bh=p4w+vM6/iOPDhOCp8mVBRwAOSAeG6yreM0uhSXh/QFU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KUbO/MAuPXNZ6VUAZRmnVgs98l8rYlr3eOS81I9d1EF5bq/hC7D4f5U7FojpgLPu93EEnYAC8FX+zwIzaFYEIxR1O/5a6wi3Jcl7isQxaCC7qiHdOqpcsQjOBl7DZS4innzqJ+WOZ/MiCziaGQKqhuvdVo4RtEbKpiH0cEPvftU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aDomxgu2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B166C19424;
-	Wed, 12 Nov 2025 08:28:03 +0000 (UTC)
+	s=arc-20240116; t=1762936356; c=relaxed/simple;
+	bh=HLgjcXexC7pF9CiIspXb6LGzy7iOI12i9DXTENjQK1w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=add50/d6d3Sc3V5+xj0s6pW+uPxY+6lY/uSdQXeht5mlsgHFKyAOYTgcPgFzkoaRnCD8HXjmgWVopPv/RU5QsnlDJMn5+NDt67NUvpNbjEo+dhh2h4gEeICmd9tF7lK2ezSTbi5JTOCXmyFw1zngZ4AtuuJ95GazXCA7pMVQEVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q0FshDGY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99523C4CEF8;
+	Wed, 12 Nov 2025 08:32:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762936083;
-	bh=p4w+vM6/iOPDhOCp8mVBRwAOSAeG6yreM0uhSXh/QFU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=aDomxgu21p164qU7p2lqduN55NOjoFfKFYBW2Z0lv9jqX95WQgonDBMVdHK2Vi1Dj
-	 lkmGr5fyFM2+AtGuh81pYQfP9gyLQ9YY5tMJbjJvaATos4qX1aD5fjGliajOMgv1j+
-	 95ND5DAAF2YRQzhgBxQVfAq+R1JA8TwAaaG8j6GN1iJgkDMVKvyRasz3TACaAEU1id
-	 1HA84zGHVbnD3PRU7GJSMtZkW6hp+gbzsHyJmRxdFMxkStaL4akYbpbpXS+1W4fbKN
-	 Z99mS34UzUWHeyGC/FwxN/FnTPW7YK9oR7O7cFx4017iqAP4npoCm7WhnJZT2oxnAs
-	 JYVtW5XiR3cPg==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vJ6Cw-000000005pI-0b9j;
-	Wed, 12 Nov 2025 09:28:02 +0100
-Date: Wed, 12 Nov 2025 09:28:02 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB serial device ids for 6.18-rc6
-Message-ID: <aRRFEgF2SJGb9uhe@hovoldconsulting.com>
+	s=k20201202; t=1762936356;
+	bh=HLgjcXexC7pF9CiIspXb6LGzy7iOI12i9DXTENjQK1w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q0FshDGYRzjn07iHUHbVMBW8fPmDhBKmWCPzT00v75yPduJYGW2UmC2/VKp9vxj+7
+	 MnCplljpJw87Koy57fVoNRxcUGDoxMdUrXq2eIPT3n3Xqf/R9PBn5JQ0OM85yZBo8i
+	 9/EXi274/+HFzeskwFpZGIsDTbCg0iZWrNb+Gzzo8rTeuBMI/PGPn0+7QDMolXxGiy
+	 5dq0Mg/RA9jpB+No8NXN3jgCRg44e8sS/qBeu6E/+NjYI5QD+8DaI4gbLYCsXpl56z
+	 cHRpZRRNhIIIMv7kebKpg6Z6IxLEm7HJu2hy3xXrhThe6GwyTK2uAMh/+m1Q004QjA
+	 1g58dONx5oGKg==
+Date: Wed, 12 Nov 2025 09:32:33 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Roy Luo <royluo@google.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Peter Griffin <peter.griffin@linaro.org>, 
+	=?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>, 
+	Badhri Jagan Sridharan <badhri@google.com>, Doug Anderson <dianders@google.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
+Message-ID: <20251112-logical-grebe-of-modernism-dcf83b@kuoka>
+References: <20251111130624.3069704-1-royluo@google.com>
+ <20251111130624.3069704-2-royluo@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <20251111130624.3069704-2-royluo@google.com>
 
-The following changes since commit dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa:
+On Tue, Nov 11, 2025 at 01:06:23PM +0000, Roy Luo wrote:
+> Document the device tree bindings for the DWC3 USB controller found in
+> Google Tensor SoCs, starting with the G5 generation.
+> 
+> The Tensor G5 silicon represents a complete architectural departure from
+> previous generations (like gs101), including entirely new clock/reset
+> schemes, top-level wrapper and register interface. Consequently,
+> existing Samsung/Exynos DWC3 USB bindings are incompatible, necessitating
+> this new device tree binding.
+> 
+> The USB controller on Tensor G5 is based on Synopsys DWC3 IP and features
+> Dual-Role Device single port with hibernation support.
+> 
+> Signed-off-by: Roy Luo <royluo@google.com>
+> ---
+>  .../bindings/usb/google,gs5-dwc3.yaml         | 140 ++++++++++++++++++
+>  1 file changed, 140 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml b/Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml
+> new file mode 100644
+> index 000000000000..bfaf6cbdfec3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/google,gs5-dwc3.yaml
+> @@ -0,0 +1,140 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (c) 2025, Google LLC
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/google,gs5-dwc3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Google Tensor Series (G5+) DWC3 USB SoC Controller
+> +
+> +maintainers:
+> +  - Roy Luo <royluo@google.com>
+> +
+> +description:
+> +  Describes the DWC3 USB controller block implemented on Google Tensor SoCs,
+> +  starting with the G5 generation. Based on Synopsys DWC3 IP, the controller
+> +  features Dual-Role Device single port with hibernation add-on.
+> +
+> +properties:
+> +  compatible:
+> +    const: google,gs5-dwc3
 
-  Linux 6.18-rc3 (2025-10-26 15:59:49 -0700)
+Doug just said SoC is lga, not gs5, so you need both to align on that.
+Actually not only you both, but whoever else is upstreaming from Google.
 
-are available in the Git repository at:
+It is not the community who should synchronize and organize way how
+Google works on their own stuff. Google should organize how Google works
+on your Google's stuff.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.18-rc6
+Best regards,
+Krzysztof
 
-for you to fetch changes up to 523bf0a59e674b52e4b5607a2aba655fbfa20ff2:
-
-  USB: serial: option: add support for Rolling RW101R-GL (2025-11-10 12:33:36 +0100)
-
-----------------------------------------------------------------
-USB serial devices ids for 6.18-rc6
-
-Here are some more modem and ftdi device ids.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Oleksandr Suvorov (1):
-      USB: serial: ftdi_sio: add support for u-blox EVK-M101
-
-Vanillan Wang (1):
-      USB: serial: option: add support for Rolling RW101R-GL
-
- drivers/usb/serial/ftdi_sio.c     |  1 +
- drivers/usb/serial/ftdi_sio_ids.h |  1 +
- drivers/usb/serial/option.c       | 10 ++++++++--
- 3 files changed, 10 insertions(+), 2 deletions(-)
 
