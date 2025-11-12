@@ -1,77 +1,87 @@
-Return-Path: <linux-usb+bounces-30456-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30457-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19DCBC52AF3
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 15:23:41 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D884EC53642
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 17:29:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13F124265D9
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 13:56:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 78E21540139
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 15:57:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0293396F4;
-	Wed, 12 Nov 2025 13:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41EEF33BBB1;
+	Wed, 12 Nov 2025 15:54:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Ed6OQYwe";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Ed6OQYwe"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xjNFa3k3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010004.outbound.protection.outlook.com [52.101.201.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944412DC348
-	for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 13:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762955750; cv=none; b=EoMf03Is5n6YBv/YC6icP/xao3KOFv6xVPxKbUCDNepVYmdU370fhz53vHJQ7a/aE2ExNmXh/8wq+xkJrVURT9Xj7X9KsHjXGJMhYjfJhoYbeeVCXuMHk3/dkn8I68L5IEytvUa7VcabvVF33dU1hBhua3PsjbmR3MMko+cK18c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762955750; c=relaxed/simple;
-	bh=0eB7pmOJMe7VGWVFSJPqmDTKcFtmDnkDDuh1yHhgjiU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kZhouGN3lL8yeFI2mkb652gBnNMcbkdipkCPajIR+CNUOKPFx+VbQi3sIBoeD/NRa4bsQ/wQsG6b8xwtwnwsr1f6abauTYNvbCOxF58FOkKM6oJ/TLCzH823Y9BmBnqaDc9us06UT3eeJTRnfPu18XUEjiLi13FIWyTbdG/MTQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Ed6OQYwe; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Ed6OQYwe; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 95C231F45B;
-	Wed, 12 Nov 2025 13:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1762955746; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=t+/6TSLsLtujwAVeEQqt07wjSAGfmYOlOjMB66gMB8w=;
-	b=Ed6OQYwetQi+zmh9/6nAKXexCsJIClltnEGdiu6infMnHwTscGXStDsfBTDbHtPSrkE+2B
-	/sIyC+/qohR0JoX2IKtzw9Zsww7n3T2Cke+iI0Hj5nqTGgQHLBus1CEmBrqYs+EIBL7cU+
-	Gt6zompcrlLt2KydQgoqpJFqrOhCZRU=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=Ed6OQYwe
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1762955746; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=t+/6TSLsLtujwAVeEQqt07wjSAGfmYOlOjMB66gMB8w=;
-	b=Ed6OQYwetQi+zmh9/6nAKXexCsJIClltnEGdiu6infMnHwTscGXStDsfBTDbHtPSrkE+2B
-	/sIyC+/qohR0JoX2IKtzw9Zsww7n3T2Cke+iI0Hj5nqTGgQHLBus1CEmBrqYs+EIBL7cU+
-	Gt6zompcrlLt2KydQgoqpJFqrOhCZRU=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 692B13EA61;
-	Wed, 12 Nov 2025 13:55:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id yNGQGOKRFGmmDwAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Wed, 12 Nov 2025 13:55:46 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCHv1 1/1] usb: uas: reduce time under spinlock
-Date: Wed, 12 Nov 2025 14:55:05 +0100
-Message-ID: <20251112135543.31081-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.51.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175F032C92A;
+	Wed, 12 Nov 2025 15:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.4
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762962881; cv=fail; b=mjHJt3T7pWWIYxgm4FrWxy5KuNZH0/yjlpMENNNRelthl+seoZj9FL6PqLeBnSdGlVkdPuadabbrym2rrDD54zdbF37R9xldJ/TnKaj7auIqEHyeQJmQfHftDmFrHOO29mtbq51nL2D7UkStUCYLpaHXZweeuJNS9+PAJW7VNAM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762962881; c=relaxed/simple;
+	bh=2j4//WPwhUX9t3Knp5ZGzbQZhNr8jJ8u3Wlwtale1yc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VQoj/WEgqd0BtFnYOR3CT4/ktLzpmfS/Bkl2wm6e0qoZiJgAOmHCIfwEaZx4vVocTp7K1E0mfMpfdW5e4c0WKbeBpX5hhir3tXhSTIV/flMXvmNVwd+9Yp9NgRexJG3npBnr5Vcyn8GG7uYzjAv4AGNIL162N/Pk4mSUyXx3R4k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=xjNFa3k3; arc=fail smtp.client-ip=52.101.201.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jFhiBDAha3o4vAeL4DXbeqNP2IwZqh/wCyxsAUEfE6YaU1VAdB2vQ/NexAc+AYIlqi7GKut+nRZ/kJ84wZrVCnkKK/kBTUKQlU3uoNF3i3AsVc+DYijPD46udbn26FGxtz+f1adY3rFhOH5VVlhcIZgJw+xLazX4IXw8XJZdNDYVHPCvL6ZVBXDy+TXUYgrgP9J1isUFZ4sjogoqAn7oDYqH6JJhO0PyZnQkf5LcEwOd1Ol7rkP3JWHKh1sjixfDWsI714Mtj0OOhzPUrCebn6xHpa6BEOcKdDGlW3M0VYBwIAfwElQ7g5fQtlubfMNJw8EQyyIZ5klkcR3yBR3fMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=N6VrpTc1O+P0RJB06V2xQYPFqtLUV/TkuSkmjXF6DkE=;
+ b=a9U9v0l2WsQZmQug/JZ1GGGx5Z6Nz4x1i2UpZ9UkkFGVj53HfvnXpXCdu627U39y6MK6woTfdjJQDGNnMtxCRxiXO20Mxi/c0Tsz0e3jfa+vtnBCYSnnMnj6ox2Bzu87PvmNmVbPuyon/4DHx4j/x+y0sg00hvodwkhoCt0+sKjU/wAvoSX2A6VC01Oyl9Ko5Nf+5YGSY85Oi0VV7tlYLoNd/XIqvTGeMZ/PaRMj5bPht1pUAFjRIMgHS0Od00cN98RsD/jfTJ/cH0u7fJCD4LHEFrIJXPPYoGI8AJU0nsZ2CpcalPs3MOO9tCtFeH6HWhT3+cpMy41tcE33jmztiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N6VrpTc1O+P0RJB06V2xQYPFqtLUV/TkuSkmjXF6DkE=;
+ b=xjNFa3k37Vzbty4Cb0q/KkOh8lEBbhplf6WewsJ6rq0ZSvnCGG8JDrGQljFTOrvCzt2gyOAGvOoihbpgD+9rm3bYc6x3zaPwrplViXGScT3XJ5M3i04InCr9JOswSeAGKTMlvcXG30hwUoA5CKErkSBt3PJve+UUQpsvEK1uwBI=
+Received: from SN7PR18CA0025.namprd18.prod.outlook.com (2603:10b6:806:f3::29)
+ by BN3PR12MB9570.namprd12.prod.outlook.com (2603:10b6:408:2ca::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Wed, 12 Nov
+ 2025 15:54:37 +0000
+Received: from SA2PEPF00003F61.namprd04.prod.outlook.com
+ (2603:10b6:806:f3:cafe::b) by SN7PR18CA0025.outlook.office365.com
+ (2603:10b6:806:f3::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.16 via Frontend Transport; Wed,
+ 12 Nov 2025 15:54:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
+Received: from satlexmb08.amd.com (165.204.84.17) by
+ SA2PEPF00003F61.mail.protection.outlook.com (10.167.248.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9320.13 via Frontend Transport; Wed, 12 Nov 2025 15:54:36 +0000
+Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 12 Nov
+ 2025 07:54:35 -0800
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Wed, 12 Nov 2025 07:54:32 -0800
+From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <michal.simek@amd.com>
+CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset constraint for the versal platform
+Date: Wed, 12 Nov 2025 21:24:30 +0530
+Message-ID: <20251112155430.1326426-1-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,110 +89,132 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 95C231F45B
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:dkim,suse.com:mid,suse.com:email];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	DKIM_TRACE(0.00)[suse.com:+]
-X-Spam-Score: -3.01
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003F61:EE_|BN3PR12MB9570:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8bb4847c-162b-49a8-1130-08de2203c7e4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?bYlIh8iZTIAW8sEQg62pqsd4BR8d7r/JpYPglO5Z8a6CjZPFjvnnTSrMiEN5?=
+ =?us-ascii?Q?MVgXj3255SJdghA3bGvU0C8RiTDuPiZJ/cOXAF1lNHlGa6Qe+W50IL8H9VhU?=
+ =?us-ascii?Q?TftcAUytQqzigBVbHs0mQIEpHnyJLYCFAk7WDfacbAjc++1zpUGdiXWLoOJX?=
+ =?us-ascii?Q?Lf9/pR6qVsFOVCwAS2aBoMOZlQeIXPj/A8NJU54rgT0LunX/I4dj4pfv7ll9?=
+ =?us-ascii?Q?7+1PIkFaO5q+XL4fCIDgHfk+RKIAHWqRopZ/3VIoS1kFluDfylUNg0MuIRX9?=
+ =?us-ascii?Q?NoAt3EsiW1LlD9fCcDjmEshuUL2mMyD7XLKqHMWy0rocKVRWFxnVUQqpFNWs?=
+ =?us-ascii?Q?OkzXKhZ8WJr3NNJUEy1PULQS6pWUe3Z0pvauce0A7el5u7DGe3+K1zMfdmZx?=
+ =?us-ascii?Q?VBtJx5s6NwJC1jWUm95q/r2s8htV1tt8DEqeHUs+HFRWdMAI9rtcv0mQ8IlO?=
+ =?us-ascii?Q?uBStIKpVvFq61Kc/9z4ISJCKhd6p3NSB8qfqd50oNlPIPMcwvg/7K2pWPfp+?=
+ =?us-ascii?Q?3ACv13KxMe6clA7d9oBSt2RucSBx58b+u5DalZgmeLCFQLOLxtq4DdPklGxT?=
+ =?us-ascii?Q?6/nnP0ToNzBOqLnn2VamKkA2ZpjRqVQWhF5kWKtYTx7Rx2ELLkXRTCb0/f6p?=
+ =?us-ascii?Q?okAtrG1xvUULJcENK08PAJMtipqIu3cM/2yt9HtzD9thot4Oeu7N1L9fiDs0?=
+ =?us-ascii?Q?zswtPYk7Fs6IyL1yLaiwiXa7G3jNnK2fUfnxnAu/0kmL5SGCwQ4QVCCepXBK?=
+ =?us-ascii?Q?T2qwsutLZo9xpJmG7b6Y2nJg5hqa/0K69yCpW/E2RVJMvfkUElYlxQNAfVGN?=
+ =?us-ascii?Q?VKRquuDD4dGTSNTxIrclx10qm0Q4wsVPCQ47GCOe/XlmEhtBvjDhYtL4lY1r?=
+ =?us-ascii?Q?gfxw8QiwWzpXBT90EOsGEzNh6jYtb4spNSf6alEO7LNUH5jCwwNKrD2NqJvi?=
+ =?us-ascii?Q?2K90/M73LPqwi6ZqqWDu4NfsOH2mzJ38geAQ1IcqxcKSnsZ+LPL1YOilkaKD?=
+ =?us-ascii?Q?jP0TdGFzyVltSL3E8TjXxY5Q4hQUpfSXfMR11rRbwGiLcsV20pEEerEMeDhy?=
+ =?us-ascii?Q?mARgj9rq5dcXq5s8UmRwk7LWlU1/f8biapZTxsRM9Sf5gOPQLlINq/v8r/hf?=
+ =?us-ascii?Q?fque5owLPXKk3ZrOgeMXNzFMOc/VqVsiGq1J8dcAQ3oB+MDZwll96jpUPPfR?=
+ =?us-ascii?Q?fN5KAmTmgToLxqwt6R5kLWTTvChY6x7s874WA3nfPhrYuk26lkuwsiF00XpH?=
+ =?us-ascii?Q?b5w3+BCyFLcUIgBvJw6fVnz2SoSORKHxkk5S6tb8hAQQxa6eKl0gpy1gQtYe?=
+ =?us-ascii?Q?RswvtnQgO0J1GJUbU18uRlsN1ineAI4pyzXb1ZaPb4R7K7vjrcvQTkcSQMd7?=
+ =?us-ascii?Q?o+DeNdzyj9MdZZWeNrZKvMrxm0Epfw7jfsDTe+OSM9gPWgNFnw9c6To5GGNf?=
+ =?us-ascii?Q?eT53DK5uTuStY/HHHVhZWmhtLMfcjbk4C2bH78X20ys/zC5/gtQeEd109j2g?=
+ =?us-ascii?Q?szMBpLOjcjcY6SO1GNpzEJfGr+zct46srkY1CorBPDOyG0nzveZeKLPSaDgn?=
+ =?us-ascii?Q?yrHCCgUB21MpHj89M3Y=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2025 15:54:36.6434
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb4847c-162b-49a8-1130-08de2203c7e4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003F61.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN3PR12MB9570
 
-Drop the lock before freeing memory.
+AMD Versal platform USB 2.0 IP controller receives one reset input from
+the SoC controlled by the CRL.RST_USB [RESET] register so accordingly
+describe reset constraints.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 ---
- drivers/usb/storage/uas.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ .../devicetree/bindings/usb/dwc3-xilinx.yaml  | 43 +++++++++++++++----
+ 1 file changed, 34 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 4ed0dc19afe0..b6a345db3293 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -309,18 +309,18 @@ static void uas_stat_cmplt(struct urb *urb)
- 	int status = urb->status;
- 	bool success;
+diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+index 36f5c644d959..cd0cc9da242f 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
++++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+@@ -50,17 +50,22 @@ properties:
+     description:
+       A list of phandles for resets listed in reset-names.
  
--	spin_lock_irqsave(&devinfo->lock, flags);
+-    items:
+-      - description: USB core reset
+-      - description: USB hibernation reset
+-      - description: USB APB reset
++    oneOf:
++      - items:
++          - description: USB controller reset
++      - items:
++          - description: USB core reset
++          - description: USB hibernation reset
++          - description: USB APB reset
+ 
+   reset-names:
+-    items:
+-      - const: usb_crst
+-      - const: usb_hibrst
+-      - const: usb_apbrst
 -
--	if (devinfo->resetting)
--		goto out;
--
- 	if (status) {
- 		if (status != -ENOENT && status != -ECONNRESET && status != -ESHUTDOWN)
- 			dev_err(&urb->dev->dev, "stat urb: status %d\n", status);
--		goto out;
-+		goto bail;
- 	}
++    oneOf:
++      - items:
++          - const: usb_crst
++      - items:
++          - const: usb_crst
++          - const: usb_hibrst
++          - const: usb_apbrst
+   phys:
+     minItems: 1
+     maxItems: 2
+@@ -95,6 +100,26 @@ required:
+   - resets
+   - reset-names
  
- 	idx = be16_to_cpup(&iu->tag) - 1;
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - xlnx,versal-dwc3
++    then:
++      properties:
++        resets:
++          maxItems: 1
++        reset-names:
++          maxItems: 1
++    else:
++      properties:
++        resets:
++          minItems: 3
++        reset-names:
++          minItems: 3
 +
-+	spin_lock_irqsave(&devinfo->lock, flags);
-+
-+	if (devinfo->resetting)
-+		goto out;
- 	if (idx >= MAX_CMNDS || !devinfo->cmnd[idx]) {
- 		dev_err(&urb->dev->dev,
- 			"stat urb: no pending cmd for uas-tag %d\n", idx + 1);
-@@ -375,9 +375,8 @@ static void uas_stat_cmplt(struct urb *urb)
- 	default:
- 		uas_log_cmd_state(cmnd, "bogus IU", iu->iu_id);
- 	}
--out:
--	usb_free_urb(urb);
- 	spin_unlock_irqrestore(&devinfo->lock, flags);
-+	usb_free_urb(urb);
+ additionalProperties: false
  
- 	/* Unlinking of data urbs must be done without holding the lock */
- 	if (data_in_urb) {
-@@ -388,6 +387,12 @@ static void uas_stat_cmplt(struct urb *urb)
- 		usb_unlink_urb(data_out_urb);
- 		usb_put_urb(data_out_urb);
- 	}
-+	return;
-+
-+out:
-+	spin_unlock_irqrestore(&devinfo->lock, flags);
-+bail:
-+	usb_free_urb(urb);
- }
- 
- static void uas_data_cmplt(struct urb *urb)
-@@ -429,8 +434,8 @@ static void uas_data_cmplt(struct urb *urb)
- 	}
- 	uas_try_complete(cmnd, __func__);
- out:
--	usb_free_urb(urb);
- 	spin_unlock_irqrestore(&devinfo->lock, flags);
-+	usb_free_urb(urb);
- }
- 
- static void uas_cmd_cmplt(struct urb *urb)
+ examples:
+
+base-commit: b179ce312bafcb8c68dc718e015aee79b7939ff0
 -- 
-2.51.1
+2.34.1
 
 
