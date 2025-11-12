@@ -1,150 +1,118 @@
-Return-Path: <linux-usb+bounces-30436-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30438-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7313C50404
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 02:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E82C5C505F7
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 03:56:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB01C189B527
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 01:54:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92605189716C
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 02:56:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A17289E13;
-	Wed, 12 Nov 2025 01:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2562C3268;
+	Wed, 12 Nov 2025 02:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rct3LXnn"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="BfnanaLs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m1973191.qiye.163.com (mail-m1973191.qiye.163.com [220.197.31.91])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47D728A1D5
-	for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 01:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D0C2F56;
+	Wed, 12 Nov 2025 02:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762912463; cv=none; b=Fj/oYRsp6dHhTLB8+2phKzLbHVymOPbf3aNPzjLySMjGmknSNheLdZ0TkzIAmHvW6tKOYCJjbMcBIcwVJtfOiNoESRKBfwZp7r49OsUgSg5G3Zu1SU4khsFv/7o1ksr0oAgze5xOqAr5wYzBAxOLZ5ybC+QTonEIOKZTKNcRIGo=
+	t=1762916182; cv=none; b=UfskPmjD0yuNMkZRT2Skc0Iko5MBfepSMgbPlUK5jm8n0jerqRvHnN8D/943l6en4Qp9cXeSV0mDLp92JIVav86H1aJWtSvAf6csGSBLwkcrEb8T2Mn97Tiz4HDWL+L7BjL+OLYa5DFXjagpI/nbVy4Ny0pZNMi3ZpvSzonwvoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762912463; c=relaxed/simple;
-	bh=V+NLqMYPtbXGUxK8gaZ/4ZH91OoRNhD7Ixnn+V2Fgf0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q4SN5NZqFbyk+re6xGOZ+ApzRzCAC5NOmIRZiHOiGTNksrhWCv/NQkdr1ZAxPEnGUIcdmM6aMpoRL/oZG+ga2jhVftD9MUSiE/FOHZnNJmang+nga3gr+cXHkLjSuZo41WSP4Nxn1FoNuuSLxa4jXMtmcDnMOw+ReVX3dC26D8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rct3LXnn; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-29845b06dd2so2816555ad.2
-        for <linux-usb@vger.kernel.org>; Tue, 11 Nov 2025 17:54:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762912461; x=1763517261; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rAa0jaAUx7OJIZvkSAwlza4QkLZm6Uf91ra/ugzjRqY=;
-        b=Rct3LXnnY0+be+blUrxiVerK8hJQWRuRzsIY98LmSKSHBPzOSQQDl9cdym54PGoe4H
-         HwvzdUf5O0n0JQjxgZUPb6xIs3A0MSki0ceiZ3eIRa5yzslMSY3wDbDaVgyUBsdKKveQ
-         wcMoAsISvn2ABmTAg32DE4UINqv5qnY4XvEZ2i5DFBzAjWAatlm5Jxi5OHY6w/EwI6G8
-         PT25g+9+l0ameZp2qChUgD76bIzwKB06dZP+ACLta+GEFsjjtMBEGBpbCuIkPdQKMgdA
-         VPOe/bUZJtMVfc5G1ZUn4e/HszyeNW8PFhJsthMeHgvQLbLEQJdutu+gKCVozL+A0YX8
-         IMqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762912461; x=1763517261;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=rAa0jaAUx7OJIZvkSAwlza4QkLZm6Uf91ra/ugzjRqY=;
-        b=oqaCB/JLaOV09MDAqtmrVAuApeRE8aiq53HSVKzreys7cRBYSNI5VTcYpPivCrYJB1
-         45vfIW9L9M9RA5uoqtmAUi2vErfUJoEPAZvcB55yPsgbdnYSMLZQFKUQagVINcfXdmBi
-         CjMJ+u95tGdFoVCqq80aKJcmyaI8WzzVt8G8/KXRfTHwiHwbInFdjuQ8jPLOJggb3UPb
-         XGUseCWTT/ybFHzcViHFalkda2+6fF4+mhs+d7zixlkxC2KRUBI2dpO75lh88LK0PMyn
-         pSTjELPpGZ6etngMJMt5pUSqj8vGxCA8+X/wVO5NuLLFd7tZjmZd0vUCW9ANOjhEQ0eW
-         ZzPA==
-X-Forwarded-Encrypted: i=1; AJvYcCXbRlo4b4FYjHMm9mOqUtQB9IzsTf2f1H6woZ6chj4JQ4xRPKoGi6mFNo9IQnlqQC0AcGqvQ7Fgjvg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzr+U8obtZMbIN70qL2TmNla3FKvYgbcDxg55nf4CNkRsBUW0Yb
-	UCXb+t9UCp9SH+GAp0Krw+LHLvqZPYGWUM+EL1en/5hSdFhGZBudBGj0
-X-Gm-Gg: ASbGnctnVKqsdbey/QT7dcPqsCSkffgcPyImACIduiMHSmy4QeyGPUmwRAjoLaeZvZ8
-	JQ61Bqh/XWlbmI4H+kthKi8WPAswCluEqMA9yL9JG7NFLse06KxnK2uBBOFj9T0Hll9xFNeuYc7
-	RP++3D1nVRInBwfL3/fhdqTuhObouPEINIpAuT9/GqsY9yIUK1pwsgWTuzkzq8pbCwTJVA/iRYP
-	xquDM0SBWsd2fQwpTQ+LJTrigFg4nJac7alBL+F5K8cw4+AK1DNYWlOAzV0qQffz81KLqYElOKP
-	p3cSN/EOTt/mmKsUaJ4lfKc5IR8v5/aTfiRC1fZS7QEcl5Y0LkB+SYXVrOyS7qvlEwJVhfFmgCT
-	hmfcyu/lSkWoDL0ZQ/QPTWCcnjVr4ROgxg9PwkhHnCgWBv6ZdfukFU9RKSOQKo+KhrFgBlrlb1I
-	yTjN9NDW6BAIZjS7MODtil8XUUzFH4QeW3T6SlJWgqRGc=
-X-Google-Smtp-Source: AGHT+IFZt9kcYAzpd3HLic3Y5F+9yHyu+euFnDG9WwszKanIAdJLYfUAuWLotX0l9/nM4ymC5UH6MQ==
-X-Received: by 2002:a17:902:e546:b0:295:1277:7920 with SMTP id d9443c01a7336-2984edac559mr16453895ad.28.1762912460905;
-        Tue, 11 Nov 2025 17:54:20 -0800 (PST)
-Received: from lugathe ([2804:13c:46ac:1000:f491:d00a:e2fb:e67c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2984dc9f8f1sm10886435ad.54.2025.11.11.17.54.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 17:54:20 -0800 (PST)
-From: =?UTF-8?q?Rodrigo=20Lugathe=20da=20Concei=C3=A7=C3=A3o=20Alves?= <lugathe2@gmail.com>
-To: michal.pecio@gmail.com
-Cc: bentiss@kernel.org,
-	dmitry.torokhov@gmail.com,
-	jikos@kernel.org,
-	linux-input@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linuxhid@cosmicgizmosystems.com,
-	linuxsound@cosmicgizmosystems.com,
-	lugathe2@gmail.com,
-	stern@rowland.harvard.edu
-Subject: [PATCH v2] Apply the quirk HID_QUIRK_ALWAYS_POLL to the Edifier QR30 (2d99:a101).
-Date: Tue, 11 Nov 2025 22:53:56 -0300
-Message-ID: <20251112015356.1919586-1-lugathe2@gmail.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251111203350.3c9a669e.michal.pecio@gmail.com>
-References: <20251111203350.3c9a669e.michal.pecio@gmail.com>
+	s=arc-20240116; t=1762916182; c=relaxed/simple;
+	bh=yY3OdD0Wf3KLSwr77WwJGHM//jDxDpOVbvQPM76WUZ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XvUaShchqaseOctJ2wqojp6ztPbHF9O+3UN4/w7JAoJcbJKi5dUAAp6hskbmflscERsudWDPxROLD3NUc2rg8aQ4KoXYkz8yO32gvESOlp3PpqTEpFDFCemTiK14/0JmpKaKVuCgBpVpxrs53Vo4chp4o/CJUtXAAL53ok6i/10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=BfnanaLs; arc=none smtp.client-ip=220.197.31.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.149] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 2943c7c46;
+	Wed, 12 Nov 2025 10:50:59 +0800 (GMT+08:00)
+Message-ID: <d4861ef9-a25c-491c-9a00-d65fe75d2677@rock-chips.com>
+Date: Wed, 12 Nov 2025 10:50:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 04/10] dt-bindings: phy: rockchip: rk3399-typec-phy:
+ Support mode-switch
+To: Krzysztof Kozlowski <krzk@kernel.org>, Chaoyi Chen <kernel@airkyi.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Peter Chen <hzpeterchen@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
+ Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ dri-devel@lists.freedesktop.org
+References: <20251111105040.94-1-kernel@airkyi.com>
+ <20251111105040.94-5-kernel@airkyi.com>
+ <868f09fd-8fe8-4c01-952f-6317604c43a3@kernel.org>
+Content-Language: en-US
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+In-Reply-To: <868f09fd-8fe8-4c01-952f-6317604c43a3@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Tid: 0a9a75f93d9b03abkunm3992e66e1852d51
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGh5NTFZMQkMZSRpJGUJJHkpWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
+	xVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=BfnanaLsNym3HyzqwH3OnGP1xmT0wPf4OoG6mLeXNzKNon4hMOY5ybAPzIG5A2swqv9GW1Dk0xahQPlEdSUzGVGO030Q+pdtfdO7Vn8vOx3D4j7Jqoib9PCmnjI9PllpUI2CFlrsM/l5X+lLXGTAlfSSW9PssoQIt4PnwxpBKbs=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=7NS+b33zjPCJC+YQ9D+VMMD2zKMV2hZ3cis1B+LtXgQ=;
+	h=date:mime-version:subject:message-id:from;
 
-The USB speaker has a bug that causes it to reboot when changing the
-brightness using the physical knob.
+On 11/11/2025 7:09 PM, Krzysztof Kozlowski wrote:
 
-Add a new vendor and product ID entry in hid-ids.h, and register
-the corresponding device in hid-quirks.c with the required quirk.
+> On 11/11/2025 11:50, Chaoyi Chen wrote:
+>> While an external Type-C controller is still required to detect cable
+>> attachment and report USB PD events, the actual mode and orientation
+>> switching is performed internally by the PHY through software
+>> configuration. This allows the PHY to act as a Type-C multiplexer for
+>> both data role and DP altmode configuration.
+>>
+>> To reflect this hardware design, this patch introduces a new
+>> "mode-switch" property for the dp-port node in the device tree bindings.
+>> This property indicates that the connected PHY is capable of handling
+>> Type-C mode switching itself.
+>>
+>> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+>>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> There are never blank lines between tags.
+>
+Sorry for that. I will pay attention to this in future submissions.
 
----
-v2:
- - Fixed title
- - Simplified commit message
-
-Signed-off-by: Rodrigo Lugathe da Conceição Alves <lugathe2@gmail.com>
----
- drivers/hid/hid-ids.h    | 3 +++
- drivers/hid/hid-quirks.c | 1 +
- 2 files changed, 4 insertions(+)
-
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 0723b4b1c9ec..ece1bea0faa5 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -734,6 +734,9 @@
- #define USB_VENDOR_ID_JESS2		0x0f30
- #define USB_DEVICE_ID_JESS2_COLOR_RUMBLE_PAD 0x0111
- 
-+#define USB_VENDOR_ID_JIELI_TECHNOLOGY		0x2d99
-+#define USB_DEVICE_ID_EDIFIER_QR30	0xa101	/* EDIFIER Hal0 2.0 SE */
-+
- #define USB_VENDOR_ID_KBGEAR		0x084e
- #define USB_DEVICE_ID_KBGEAR_JAMSTUDIO	0x1001
- 
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index bcd4bccf1a7c..d104f4829d93 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -110,6 +110,7 @@ static const struct hid_device_id hid_quirks[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_HP, USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_1f4a), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_IDEACOM, USB_DEVICE_ID_IDEACOM_IDC6680), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_INNOMEDIA, USB_DEVICE_ID_INNEX_GENESIS_ATARI), HID_QUIRK_MULTI_INPUT },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_JIELI_TECHNOLOGY, USB_DEVICE_ID_EDIFIER_QR30), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_PIXART_USB_OPTICAL_MOUSE_ID2), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_KYE_EASYPEN_M406), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_KYE_EASYPEN_M506), HID_QUIRK_MULTI_INPUT },
 -- 
-2.51.2
+Best,
+Chaoyi
 
 
