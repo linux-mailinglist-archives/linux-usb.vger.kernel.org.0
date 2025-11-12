@@ -1,110 +1,110 @@
-Return-Path: <linux-usb+bounces-30450-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30451-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F25FC52345
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 13:13:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D62FFC52309
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 13:10:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FBB242330B
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 12:02:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 868491883F55
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 12:04:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63753191DF;
-	Wed, 12 Nov 2025 12:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82AA3314B91;
+	Wed, 12 Nov 2025 12:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ewoG+OBj"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eN0yZ/Gd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93A7318157;
-	Wed, 12 Nov 2025 12:00:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F692749C7
+	for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 12:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762948818; cv=none; b=gAp/uPsl+oTZ9SbLo0x2eKzuLNqNE29ofFgVZYgMF4WY8JXAhS6A/FLQxCYW9aE7S4HY0dFY8Exj878KXRNsSOkdYv8i03Nur8NK3kwLz8axCrPxKIU7bdwVaNQiNEXK/9SGyg7DpPOljcBIABMn3Kn1UKQ86kJDApnpBwjYEUE=
+	t=1762949046; cv=none; b=J703ZuTWM06aIHw9AhMzgrbzRKnxx6ShH2l4uDjoAelw14JKX/frdykRDLuqo+4dN82/1BT+EQfnvqTu2JVgwCAUFO7F1CrvilY/M17YB/5nNuoC33ljIpDFXvW1AaPXQilt9sHWydBz8LtuEmEkT74YClnYmC+XyYyS1Gs8g/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762948818; c=relaxed/simple;
-	bh=yNMzDkiBvRPGvfsdeVuCxKro3faGtAIvfp93k/ztiy0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r6u/mqdzHEH0e0oefpm7Tq1BGS+vySu4rd3Y1UzvfTmU/pJgfDZVF1Fjr9nh1t74RHoG7f+z2Qpc6TqAMNUr8Ye6OCDRe51mExmcw2ZhNvFx7/rG2T/CsTppD4QMr0O5gC6kANuIx8yIK4wxVoCJjFBoroR0alcQr+cU9NBBH6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ewoG+OBj; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762948817; x=1794484817;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yNMzDkiBvRPGvfsdeVuCxKro3faGtAIvfp93k/ztiy0=;
-  b=ewoG+OBjk0eO0Nqm8xuiO5oWOSIUdOX/ph9TaQDq9DSB0m8gIT4lkFGW
-   U5H134DAMEXXs4X80G4tKCkF4Q1gVs95ROoS5L0BMipNXj0fb1MzezMud
-   Hh3eNowmFCklTlCL7mQZ6vH1kSRXpAhuXlvMCw4aCJJOXmas/V/cM1CgL
-   SQkCxxNxmFlCHuXy0TwG7i8DzWqUj91UjTvvGlv1H7XA8W3wwV1FJcJU0
-   ujB08pTJwVRjPs4x1vggwqfTBSTelWBp/W7Z/s46cpKryBZluM88GHGND
-   4H/ztbrbOQUdMjQwTk/XFFx/S2O49Mu3jCP9Gek/SttrKmAba3xQrGCft
-   w==;
-X-CSE-ConnectionGUID: oiM2oaz6QCmtUKwpyQekEA==
-X-CSE-MsgGUID: 8T4qb9sjQ9WjbRar1S9/uw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="64018070"
-X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
-   d="scan'208";a="64018070"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 04:00:16 -0800
-X-CSE-ConnectionGUID: peze6xEmQFK/sBOoGFFjyQ==
-X-CSE-MsgGUID: y8V6RQXLQf6HQwx21HrjfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
-   d="scan'208";a="226470407"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO [10.245.244.225]) ([10.245.244.225])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 04:00:13 -0800
-Message-ID: <2a80955c-2e89-4175-9688-6ca29538dd33@linux.intel.com>
-Date: Wed, 12 Nov 2025 14:00:10 +0200
+	s=arc-20240116; t=1762949046; c=relaxed/simple;
+	bh=nNr0DUZQ/8VLp4TzCwfgS18j02/ugDLQvov96VmfdRA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fZ282ksQOKtnP+fbgSWv3swe4xJeGcZYQ24QFnOmijQz9/0GcQ5qCClYVnW5LmobPWAQviVJPF3PZY60PiWMw+lOC9UmKndp6h5OA89zIy8S/SeqBG5Z91bv3aUBwqJ3Wo/YIYqn7nwNuXa13cg+b84mA6GdE6d/GHyt3dNMLQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eN0yZ/Gd; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-37a2dcc52aeso7001991fa.0
+        for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 04:04:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1762949042; x=1763553842; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nNr0DUZQ/8VLp4TzCwfgS18j02/ugDLQvov96VmfdRA=;
+        b=eN0yZ/GdlrTRdl7LcIBbsRDvAaIKeCF425nc881BBSymEqQ5e4AWH4e77NH9S17JnR
+         IzeTBtaQX+2WtINAWwkinEnVdHXOGo3/pHN+xO35wf05a7Ck4QI5mW8gRbLpRGfyhqrK
+         LMwVpIkDSOhmNRuoLDrORmC9MCRXP7TPyQfo4cdNNemCpIU/aRxr1yGfsjrEdfF4TLPz
+         gqOhDeyzxZEl8XmCiUh8j0v9z4p/j1/saN8J6F3wU0mTXkCp7K9h0PDbtXCeTj4e7HrN
+         MeYfPPi2bDXhFUdOQ6KfyvAxtvhBy6gY0m6BsmTq3DyP3+A7FigKj5Fww5P5USdOqQAF
+         aUnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762949042; x=1763553842;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nNr0DUZQ/8VLp4TzCwfgS18j02/ugDLQvov96VmfdRA=;
+        b=NN3W0F5m+SZktVU3j7AI3642/feSXKnKX0i8uI4dBfupfhNb+GuIpVPZWyOnAO1HQp
+         81h5hgzYmFYtNpRF6J9LqLaqVBs3aemuBiFkrVeTPlsEUnibQ4nYRoPyOFpkJbrX7Ow+
+         GPOhKDGjwQG8MJ2MF2XjpwEQgOpe/GRQm3py9bJdYmkBYPMhiPoxYFjm2PymMEGjX7Od
+         WSPe3f28PO98iVxgTlFWIkPFv6XLEnKMuoojAyMFR9JpHTS/NjkLIsZMEiMIoUbFbK5s
+         utNuCoJGP1WVBJWKvkB7wJIi+cbS85Xtu3jsliTyOakSdOE8S+Hm39P5pHCUk5zSkCcE
+         Ug8g==
+X-Forwarded-Encrypted: i=1; AJvYcCVbR8CElXXW0L4WukxnMK7LfRCd+poHM8Jo+b4/Irku4H9wwdoGhXktl5rYFcYV6tiv/tt0UlVTUU8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTRMQVw5gq8kCZurX+W3WU38Uqlk0UgU7VS97E+gkFUnVd+fMJ
+	sNRv2xg0bXlLYtPLlNG7wA54LgAIaF0CogXuIZDOhUplykXwZJUnR2bLBJATOKEcCxTOUqWzX5n
+	Wmbg2tjvX8MWW0uwtXZb3cwYcE/o3AjZsm6j0AJQD7Q==
+X-Gm-Gg: ASbGncskbifz+gDWDjm1B+dKSyxBd9vL7Cn7sufzcsJI+QYEfjODjHEOpBQMKZzMGVw
+	PCHp7eo+ahd6eIbf2s4deiuqRP2rTky+y+TOFvvOrH4zBcB7g1azIjp4M08icbrk/IQ95tN0O+O
+	zNzSqMeX9wg8uy/V6AkjBKkaF/hoU9NY5zJwSxJ1TphjAl4ahXuJShEhDFuHoqLYBJ4GDz+9ptQ
+	KrlFBWnjdieQfL+bFs3EMdHy6As0YiA9NehI4oxk4y+O2xFPtxGUElqHZW40C/3JC3M5BVSyP7J
+	uESDNbk/Cy87Y1q9Iw==
+X-Google-Smtp-Source: AGHT+IHusJDgxIuJ9r1OqE37V5j5KU56vMgrl6TNg3PHf11vdft9QhpgI4ltWiLi8t8k/6FGhCPY8ensI+CYekuVwB8=
+X-Received: by 2002:a05:651c:3259:b0:372:921b:4b8a with SMTP id
+ 38308e7fff4ca-37b8c2f1e68mr7766041fa.4.1762949042292; Wed, 12 Nov 2025
+ 04:04:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <20251106145428.250251-1-marco.crivellari@suse.com> <2a80955c-2e89-4175-9688-6ca29538dd33@linux.intel.com>
+In-Reply-To: <2a80955c-2e89-4175-9688-6ca29538dd33@linux.intel.com>
+From: Marco Crivellari <marco.crivellari@suse.com>
+Date: Wed, 12 Nov 2025 13:03:51 +0100
+X-Gm-Features: AWmQ_bmzHlWeAuqugaGH_0u_xyxLnOXBHZMHqXUsR0DXraRJSBiumvY2GCO5Gww
+Message-ID: <CAAofZF4BfthVOy6auxuxOyX3wDtrZ6tx6n6726Mf0xDXrwyimw@mail.gmail.com>
 Subject: Re: [PATCH] usb: xhci: replace use of system_wq with system_percpu_wq
-To: Marco Crivellari <marco.crivellari@suse.com>,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Frederic Weisbecker <frederic@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Michal Hocko <mhocko@suse.com>, Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20251106145428.250251-1-marco.crivellari@suse.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20251106145428.250251-1-marco.crivellari@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	Michal Hocko <mhocko@suse.com>, Mathias Nyman <mathias.nyman@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/6/25 16:54, Marco Crivellari wrote:
-> Currently if a user enqueues a work item using schedule_delayed_work() the
-> used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
-> WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
-> schedule_work() that is using system_wq and queue_work(), that makes use
-> again of WORK_CPU_UNBOUND.
-> 
-> This lack of consistency cannot be addressed without refactoring the API.
-> 
-> This continues the effort to refactor workqueue APIs, which began with
-> the introduction of new workqueues and a new alloc_workqueue flag in:
-> 
-> commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
-> commit 930c2ea566af ("workqueue: Add new WQ_PERCPU flag")
-> 
-> Switch to using system_percpu_wq because system_wq is going away as part of
-> a workqueue restructuring.
-> 
-> Suggested-by: Tejun Heo <tj@kernel.org>
-> Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
-> ---
+On Wed, Nov 12, 2025 at 1:00=E2=80=AFPM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+> [...]
+> Thanks, added to queue
+> -Mathias
+>
 
-Thanks, added to queue
--Mathias   
+Many thanks!
 
+
+--=20
+
+Marco Crivellari
+
+L3 Support Engineer, Technology & Product
 
