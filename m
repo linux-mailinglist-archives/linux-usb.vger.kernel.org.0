@@ -1,95 +1,202 @@
-Return-Path: <linux-usb+bounces-30498-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30499-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF68DC59470
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 18:54:15 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC804C59B57
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 20:19:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0B7274F32C2
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 17:45:25 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 71BCB357A10
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 19:16:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC64357A3B;
-	Thu, 13 Nov 2025 17:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796C331AF31;
+	Thu, 13 Nov 2025 19:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jAWm3OCd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cosmicgizmosystems.com (beyond-windows.com [63.249.102.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1DB6350A04;
-	Thu, 13 Nov 2025 17:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.249.102.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E727031A810;
+	Thu, 13 Nov 2025 19:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763055919; cv=none; b=EKyWEcqukRZ1k4v6B8tWOuJYRhzxhswRAIoZIfOWid+IvUh1z6hG7vJH9MRMNxTR2Gnp51bCoWRcD+895gl3vce4Efrzqma1xqzdVIdkLy/cDEAfBrAphr8Pn0aKUWLqJCdXmH2xy0oQ1AlihPEFdMopIgbm5roaaDL3o8AfmRQ=
+	t=1763061383; cv=none; b=JVl3SY6n8601ne40rHfjV1PlWI6M5I6gSystZiiSud/hniXNF7dGYHc8E2cKFvJZZnS7VS0nHpJMuX4C/QNDD+24JZyUvutNxojBHKSGvKQTcXtLCRS1htfD/lXXwbgIZtR3nxBDZLyGGVn2f0VXaO3WyHfrQ3Lmg9EOMkPT8fQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763055919; c=relaxed/simple;
-	bh=+1WwX0s7K2vuXYrIdfOrJCiJLFxASeJtUL1P7cKEVRI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KCpkBrwO1AGti97r911qDU59YCzTCp/yPXYZ8zqGB6JE9g+qFfKZ2hC3jJzAH5IiLofKOa923NQtLK/Evl3LvrQD1QEK4GN3CbVr8eA8WgIZXQpE3pb81cGiq21OkM8dss7C9iUobPL7ySpaAWk02MjV2i1WsWxwuKAuT/0UD1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com; spf=pass smtp.mailfrom=cosmicgizmosystems.com; arc=none smtp.client-ip=63.249.102.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cosmicgizmosystems.com
-Received: from [10.0.0.100] (c-71-193-224-155.hsd1.wa.comcast.net [71.193.224.155])
-	by host11.cruzio.com (Postfix) with ESMTPSA id 8967724DB66F;
-	Thu, 13 Nov 2025 09:45:09 -0800 (PST)
-Message-ID: <cfbc29ee-5da4-4ff0-840a-e6e5722eb544@cosmicgizmosystems.com>
-Date: Thu, 13 Nov 2025 09:45:08 -0800
+	s=arc-20240116; t=1763061383; c=relaxed/simple;
+	bh=IblUqGpTbIRtiXEqbdz5S15EKx867g0thOANjT9zzo0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tqXoN29cJz50toETGMuTyXeEIKDHkpHuKz27Quf3GPAT0nf4E1PNdnODQS6Rx7Hy0GWS72T03z2ZO93Ii42gACQC4lTG7H9P0NswBLeUCkn/CDr+QSRbtQlAHx/ac3FdAb0VkLqH/B3Ti4ECzcLDy6ZdRNgBqemB1opCGpkzX3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jAWm3OCd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE21C113D0;
+	Thu, 13 Nov 2025 19:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763061382;
+	bh=IblUqGpTbIRtiXEqbdz5S15EKx867g0thOANjT9zzo0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jAWm3OCdZCohQVKp5xXcn4czTWQ2MTmmYQBUnepiL/xkhVs6FGcaMfyOJocxIz7Bp
+	 5V1tpOfeN/K8T7KYy8X/7mAkx2OyFLh336Et0Q8Xr4N6XyTYOUBc/j6rhxx/P90J1r
+	 w2YIuNuxfi2VH0RJo2wSezaWCaZ7uUnHVrpbxdVG3LWs5GMsAJMv5QaW2quFEtKicP
+	 K12bENP+L8JMTxNVY1si2rwXPADgiezPGKXDCtVWufNcSKOD6PqjHfQRr5D1OIiw5u
+	 u9JNu2wVtrmHHuBzWHK2yOj/8BefmBT2ArjGapig3s8vDGX4KDuSvXVKvpHQcuEJr9
+	 T+6Q/gD9Wrpig==
+Date: Thu, 13 Nov 2025 19:16:18 +0000
+From: Conor Dooley <conor@kernel.org>
+To: "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"Simek, Michal" <michal.simek@amd.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"git (AMD-Xilinx)" <git@amd.com>
+Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset
+ constraint for the versal platform
+Message-ID: <20251113-risk-doorstop-4ec156b58d0a@spud>
+References: <20251112155430.1326426-1-radhey.shyam.pandey@amd.com>
+ <20251112-bagging-diameter-4ebab1f9ed45@spud>
+ <MN0PR12MB59537C0F520B40977620BFCDB7CDA@MN0PR12MB5953.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Terry Junge <linuxhid@cosmicgizmosystems.com>
-Subject: Re: [PATCH v2] Apply the quirk HID_QUIRK_ALWAYS_POLL to the Edifier
- QR30 (2d99:a101).
-To: The-Luga <lugathe2@gmail.com>, Alan Stern <stern@rowland.harvard.edu>
-Cc: michal.pecio@gmail.com, bentiss@kernel.org, dmitry.torokhov@gmail.com,
- jikos@kernel.org, linux-input@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-usb@vger.kernel.org, linuxsound@cosmicgizmosystems.com
-References: <20251111203350.3c9a669e.michal.pecio@gmail.com>
- <20251112015356.1919586-1-lugathe2@gmail.com>
- <ab81f525-b4ea-4ac7-94a8-9d8eabca957a@cosmicgizmosystems.com>
- <58edd03a-a7a7-40af-8228-18004dc6e737@rowland.harvard.edu>
- <CALvgqEBVQsoQ3wewP+37u5Ms398O5gC8YaELm0UJdZSDBHzPPw@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CALvgqEBVQsoQ3wewP+37u5Ms398O5gC8YaELm0UJdZSDBHzPPw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="R/LfrMLgE6sszEZI"
+Content-Disposition: inline
+In-Reply-To: <MN0PR12MB59537C0F520B40977620BFCDB7CDA@MN0PR12MB5953.namprd12.prod.outlook.com>
 
-On 11/13/2025 7:45 AM, The-Luga wrote:
 
->> Vendor ID 0x2d99 belongs to Edifier International Limited not Jieli
->> Can you change to USB_VENDOR_ID_EDIFIER instead and move to the
->> alphabetically correct location?
-> 
-> Could you kindly tell me where this info is?
-> Searching the internet I only found this website with this info:
-> https://the-sz.com/products/usbid/index.php?v=0x2D99
+--R/LfrMLgE6sszEZI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The official list of valid USB Vendor IDs can be found here:
+On Thu, Nov 13, 2025 at 12:15:02PM +0000, Pandey, Radhey Shyam wrote:
+> [Public]
+>=20
+> > -----Original Message-----
+> > From: Conor Dooley <conor@kernel.org>
+> > Sent: Thursday, November 13, 2025 12:38 AM
+> > To: Pandey, Radhey Shyam <radhey.shyam.pandey@amd.com>
+> > Cc: gregkh@linuxfoundation.org; robh@kernel.org; krzk+dt@kernel.org;
+> > conor+dt@kernel.org; Simek, Michal <michal.simek@amd.com>; linux-
+> > usb@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git (AMD-Xili=
+nx)
+> > <git@amd.com>
+> > Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset =
+constraint for
+> > the versal platform
+> >
+> > On Wed, Nov 12, 2025 at 09:24:30PM +0530, Radhey Shyam Pandey wrote:
+> > > AMD Versal platform USB 2.0 IP controller receives one reset input
+> > > from the SoC controlled by the CRL.RST_USB [RESET] register so
+> > > accordingly describe reset constraints.
+> > >
+> > > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> > > ---
+> > >  .../devicetree/bindings/usb/dwc3-xilinx.yaml  | 43
+> > > +++++++++++++++----
+> > >  1 file changed, 34 insertions(+), 9 deletions(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > > b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > > index 36f5c644d959..cd0cc9da242f 100644
+> > > --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > > +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > > @@ -50,17 +50,22 @@ properties:
+> > >      description:
+> > >        A list of phandles for resets listed in reset-names.
+> > >
+> > > -    items:
+> > > -      - description: USB core reset
+> > > -      - description: USB hibernation reset
+> > > -      - description: USB APB reset
+> > > +    oneOf:
+> > > +      - items:
+> > > +          - description: USB controller reset
+> > > +      - items:
+> > > +          - description: USB core reset
+> > > +          - description: USB hibernation reset
+> > > +          - description: USB APB reset
+> > >
+> > >    reset-names:
+> > > -    items:
+> > > -      - const: usb_crst
+> > > -      - const: usb_hibrst
+> > > -      - const: usb_apbrst
+> > > -
+> > > +    oneOf:
+> > > +      - items:
+> > > +          - const: usb_crst
+> >
+> > Why do we need all this oneOf stuff if both have the same first reset?
+> > Can't you just set minItems: 1?
+>=20
+> Thanks. I have now set minItems:1 and defined compatible based
+> reset min/max constraints. Doing some more validation and
+> will send out the v2.
+>=20
+> Example:
+> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> @@ -47,6 +47,7 @@ properties:
+>        - const: ref_clk
+>=20
+>    resets:
+> +    minItems: 1
+>      description:
+>        A list of phandles for resets listed in reset-names.
+>=20
+> @@ -56,6 +57,7 @@ properties:
+>        - description: USB APB reset
+>=20
+>    reset-names:
+> +    minItems: 1
+>      items:
+>        - const: usb_crst
+>        - const: usb_hibrst
+> @@ -95,6 +97,28 @@ required:
+>    - resets
+>    - reset-names
+>=20
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - xlnx,versal-dwc3
+> +    then:
+> +      properties:
+> +        resets:
+> +          maxItems: 1
+> +        reset-names:
+> +          maxItems: 1
+> +    else:
+> +      properties:
+> +        resets:
+> +          minItems: 3
+> +          maxItems: 3
 
-https://www.usb.org/developers
+FWIW, this maxItems is not needed as it matches the number in the list.
 
-currently:
+--R/LfrMLgE6sszEZI
+Content-Type: application/pgp-signature; name="signature.asc"
 
-https://www.usb.org/sites/default/files/vendor_ids10282025b_1.pdf
+-----BEGIN PGP SIGNATURE-----
 
-> 
-> I just checked the vendor from `lsusb`, and I was hesitant whether to
-> write Jieli or Edifier.
-> I also decided to write QR30 instead of Hal0. Should I add a comment
-> mentioning Jieli as I did with the device?
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRYuggAKCRB4tDGHoIJi
+0gT9AQCko4kdzAGADmzJ9rqSW1og+tEAc0KZ4IN9qoyyNQ7pigEA50Ga3HW83D8L
+WvF3aHpMsTZijeLjVl33kuBr+RPqgAY=
+=GL2A
+-----END PGP SIGNATURE-----
 
-The product was made using the Jieli SDK which supports Jieli chips. The 
-manufacturers string "Jieli Technology" is the default value in the SDK 
-and should have been changed by Edifier.
-
-No need to mention Jieli at all. The bottom line is that the product is 
-not 100% USB compliant and does not support suspend mode reliably so 
-requires the HID_QUIRK_ALWAYS_POLL quirk.
-
-Regards,
-Terry
+--R/LfrMLgE6sszEZI--
 
