@@ -1,192 +1,96 @@
-Return-Path: <linux-usb+bounces-30469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00026C54CA5
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 00:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5982BC552C8
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 02:03:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 511064E222E
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Nov 2025 23:17:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 09B9D4EA0F9
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 00:58:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F5B2F3625;
-	Wed, 12 Nov 2025 23:16:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="acDtyXxo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D350921ABC9;
+	Thu, 13 Nov 2025 00:45:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3977C2F068E
-	for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 23:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34F21DE2D7
+	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 00:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762989402; cv=none; b=eJ24DLEGsNHQ8HAA/oAZedbZ1AOB8xC9YUccbhGgj+/Tcm/cBMzPCl2rf4PHT0KVrqNpYTYWMbZXTCBtS0v79kCHNSSGdGCpQeFx+UmH4lRACyoRMFzQdli/cdEm2x53oCseLzb1U+ajyjjY+zLTq2wiEpSrS3VmcpEsB4qIFSw=
+	t=1762994705; cv=none; b=eDg65Wn/V+l1j1GBx/Vh5zr950LSHS2gK2Vy+Po6KQq5EZkP/Xg0xvuBW9WKrKpuRPH0QUHeW01dBDZRQmqh6C/M6SauR2aU1Xjf6yR20raNpaJqM9pNPy3rPiyY2EbChItWBVtICsHFszuvUsFReHGcC72cW/W5DklCk2wHHNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762989402; c=relaxed/simple;
-	bh=r5BgyiZyo9pNOp+g4gGg5Qja9Jzv0nWZMbtmmJUvAJg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Wbv9C4C/5SBcL1EDuxYJv/IBrMrxOrHHdcZqigEK4X8pm38uzDEffN42gX+u+gLlwTij5ampEZKb3Ax2Ub3ZALppR+eP/RbCZd+hGpYVRe9Q+hdmET463XavEU9Or1xVWRfybCDjrowUBHGVC/zGFbPW9hjt1DFXipWAVHSAWcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=acDtyXxo; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6417313bddaso313032a12.3
-        for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 15:16:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1762989398; x=1763594198; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bWkAzrKle4cDDa9nZjJaeOWHJqEPY6PjZ/35wHxjriY=;
-        b=acDtyXxoFs+7Rci71FEQeXN9ID5gWcrC/CF5j1DrGAbMql99OkY3AkCraC+YnLXt+i
-         FUi5EnpK7g5ulAlmhI6Mr7YqAfvSI0JCs7iITZJz07PNq7/uRt5NNJfCFFB3tvKWuCh/
-         lAr9Pp71lAOCArDSACZCXAuSXDNv5IlISHpFk=
+	s=arc-20240116; t=1762994705; c=relaxed/simple;
+	bh=akpD68FRXSgJ3UWTHxS/xTnoHxMdY2EKCElVcN8Lbrg=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=azvxUpzRxa5npGpEcJTMY7b76CwhcbBoopvCx5vzwxsPNF1OAuXVQfoypKU4+Xz83K7MX0ED9O5XNmBP8xWSIKLVEdohzRcRqZ8VM1mNSEzx+INdfIA74jI5ULvg6pEwcznPAB+vynmFp5HINUm/SVglXN7Z84VX7mg6rFhnD2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-9489bcc5a2dso39424739f.3
+        for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 16:45:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762989398; x=1763594198;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bWkAzrKle4cDDa9nZjJaeOWHJqEPY6PjZ/35wHxjriY=;
-        b=D1wGJZB70HOiljRcC/ubDwSpXwJxVdtS0aBYAqD3+90r7grAXvTtUjPHpyRgjOeA2r
-         CFxwUMnV9PfJvqBEAXCjnTG8lK/wZ8mZKbulzREIGpYBVwImmuc/O2QOz0Tn1qPfaCPe
-         uZ7blZxS6C5O13aQG40T0elDqfAvRmkHGDfMKxXy8Bg3lMXdIuRAMmaVNgzFSkn0KhQI
-         jMORVICoosKTD0GNHDBc1JjCVRS3Q7RgYqGRlCBCfDo6ZpBqV1Gvy/1sJoVLMsLBSy8E
-         5z6O1e6B1JfXtCoQaeyrJ6wV8X6z//Sc6PbO9HOFGSvPjh7kshbjtcEQC563cO8XBa37
-         Yy6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVbJQR6BJWxo+Q0SL+89xtjG37/oZEcpwuVpUQZRk+5oRP3VSAxPpFBa1IQidd/FCtylhAfoDAP6qQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwouCdDULeJjib9oibxzDJ9jdbOK/+P7Lk07XsWv7q2/XSJEs7L
-	rXsix3xwOBnoolXUOLiq195C2miYGMcXMyhffcIAJXuA2Rn0IWkOdd2oLZ3vvvFRy/a49faDSMF
-	XxwF9dbs=
-X-Gm-Gg: ASbGncuin9ZHSR7AQ0dCCGO76ZDVbOGTVdsAho9+Lw5HAra32yZKScn+IL7aTFxpr7+
-	V10w7x9CU3AVYzkKhItoOENkWxLYi+jNf+gv5ITof07oLPtVqgV1h9Ma5eA1oA78d8F4tWpiZF0
-	/wZfdFQkWRca/H/LKiEEUm20753JaLUeUsOpDo2njAH1ssPdwp+zO/ytZaBeuaf8E3Gh/MPUlL1
-	vms1oRQ0m6+4eZ1pHdpGjA7HXI02mt9BgYtz0B9WFp8+2KOznM+A3TwibXrhRyWYrX8/pmN8J5h
-	fuDT8P78MWwFoq1YEzofpoc7kZcNRXbboh3hEc3NEdf+wuYMZq3sIMZa0m8S5QhqxYMbrLwJGVM
-	dVNqkhmdA34GR+WzJUMZV0sb3bLNAjhrPJlOmGP8m/onIEIl6zNR5qjqMLafUhev8F+AHoHen5N
-	ddYq97mAvKty22q/kWxG6d963IDB+BJfjqq5OCrp18hflIeaDnd8i2
-X-Google-Smtp-Source: AGHT+IFt40ZaGPulqHfABY5KpJlWdF+qUcp5rjh7O1RswkIHSYuf+u+28bd91Be7Pmyz+zpn1cJ0nA==
-X-Received: by 2002:a05:6402:1e94:b0:63c:4537:75c0 with SMTP id 4fb4d7f45d1cf-6431a57e1c1mr4635728a12.38.1762989398518;
-        Wed, 12 Nov 2025 15:16:38 -0800 (PST)
-Received: from januszek.c.googlers.com.com (5.214.32.34.bc.googleusercontent.com. [34.32.214.5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6433a4b2155sm124516a12.29.2025.11.12.15.16.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 15:16:37 -0800 (PST)
-From: "=?UTF-8?q?=C5=81ukasz=20Bartosik?=" <ukaszb@chromium.org>
-X-Google-Original-From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@google.com>
-To: Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	linux-usb@vger.kernel.org,
-	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
-Subject: [PATCH v3 4/4] xhci: dbc: allow to set manufacturer name through sysfs
-Date: Wed, 12 Nov 2025 23:15:57 +0000
-Message-ID: <20251112231557.164797-5-ukaszb@google.com>
-X-Mailer: git-send-email 2.51.2.1041.gc1ab5b90ca-goog
-In-Reply-To: <20251112231557.164797-1-ukaszb@google.com>
-References: <20251112231557.164797-1-ukaszb@google.com>
+        d=1e100.net; s=20230601; t=1762994703; x=1763599503;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ItT12y+7wRZewvqvz8JD8QRcThWHmeWOgUeD7MW9ZBE=;
+        b=FjNbahkNT0ngP1NCZYLQ/gTM+DVoEca/o0NbE9rD9P81N140EiXEi1ELk5qLZH8Jpn
+         PR+Rq0dQfOLOV9MuYEsIQi48MXUh78BtmJj4ms6JHIz6sLxfP9ltZXMA9yiAs9eNLlux
+         K3DWG/LAHazlP2UWfdxZjnrDvBF6jZq4xDxsMj8F7QGULFzmfMrK0oTyfvUQEoO7Yl5H
+         2DajBuzb2yeJeE+Yg9s2ltedkRhPHsaW9IKIO0ggFaNe/V+OMy59vfyN1Aqr+gGH8BD+
+         2Io8MxaM/VV2A63z1qIm+9tJhzi9Ld5HBUCbgtJEdYitM2O4U1/KZmmNItTmNRZ1NVOW
+         01Hw==
+X-Forwarded-Encrypted: i=1; AJvYcCXSKZgWJK5Nr4bpHLp0v0GxDi1f6kGotZRH94NlNe4qgmKnLFeYxA4En7d/78l0gNCsMsHHcuqnu+E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRPs06mgMYkntK4QaWIfjygUar6Dug/T+S9IiaB0mujawhjGNR
+	GXdujXlfpKJrUgfWLzk9zjaLCatcc+NTW1rSLcKnxZXk6d7eaXrPtUNu5WTi8ZSJVJpn8aEjHdT
+	M8zsBV/tCY25tiHBCr63aP8bw1MnqJ4odu36/nr06dvsvzn9rgqg7ePSJj4E=
+X-Google-Smtp-Source: AGHT+IGN8F2oZ/myun0ZFiJtclNF/dwsR+aCXcHsOpDqPUh5c+bO9sOqP7+avnEYzEIhUZd1GBkc7xXp0tpc8n7mkAJgoufSiItk
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:2148:b0:433:7abd:96d0 with SMTP id
+ e9e14a558f8ab-43473cff5fbmr71591685ab.3.1762994703007; Wed, 12 Nov 2025
+ 16:45:03 -0800 (PST)
+Date: Wed, 12 Nov 2025 16:45:02 -0800
+In-Reply-To: <67da6f4b.050a0220.3657bb.013b.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69152a0e.a70a0220.3124cb.000f.GAE@google.com>
+Subject: Re: [syzbot] [usb?] [media?] WARNING in media_create_pad_link (2)
+From: syzbot <syzbot+701fc9cc0cb44e2b0fe9@syzkaller.appspotmail.com>
+To: cascardo@igalia.com, gshahrouzi@gmail.com, hansg@kernel.org, 
+	hdegoede@redhat.com, hverkuil+cisco@kernel.org, 
+	kernelmentees@lists.linuxfoundation.org, laurent.pinchart@ideasonboard.com, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mchehab@kernel.org, ribalda@chromium.org, 
+	sakari.ailus@linux.intel.com, skhan@linuxfoundation.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-From: Łukasz Bartosik <ukaszb@chromium.org>
+syzbot suspects this issue was fixed by commit:
 
-Add code which allows to set manufacturer name of a DbC
-device through sysfs.
+commit 0e2ee70291e64a30fe36960c85294726d34a103e
+Author: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+Date:   Wed Aug 20 16:08:16 2025 +0000
 
-Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
----
- .../testing/sysfs-bus-pci-drivers-xhci_hcd    | 12 +++++++
- drivers/usb/host/xhci-dbgcap.c                | 36 +++++++++++++++++++
- 2 files changed, 48 insertions(+)
+    media: uvcvideo: Mark invalid entities with id UVC_INVALID_ENTITY_ID
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
-index 57ba37606f79..26ca6a870e44 100644
---- a/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
-+++ b/Documentation/ABI/testing/sysfs-bus-pci-drivers-xhci_hcd
-@@ -109,3 +109,15 @@ Description:
-                connected to a USB host.
-                The default value is "Linux USB Debug Target".
-                The field length can be from 1 to 63 characters.
-+
-+What:          /sys/bus/pci/drivers/xhci_hcd/.../dbc_Manufacturer
-+Date:          October 2025
-+Contact:       Łukasz Bartosik <ukaszb@chromium.org>
-+Description:
-+               The dbc_iManufacturer attribute allows to change the iManufacturer
-+               field presented in the USB device descriptor by xhci debug device.
-+               Value can only be changed while debug capability (DbC) is in
-+               disabled state to prevent USB device descriptor change while
-+               connected to a USB host.
-+               The default value is "Linux Foundation".
-+               The field length can be from 1 to 63 characters.
-diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
-index d2f64a9a389b..384c5ab400e4 100644
---- a/drivers/usb/host/xhci-dbgcap.c
-+++ b/drivers/usb/host/xhci-dbgcap.c
-@@ -1206,6 +1206,40 @@ static ssize_t dbc_bcdDevice_store(struct device *dev,
- 	return size;
- }
- 
-+static ssize_t dbc_manufacturer_show(struct device *dev,
-+				      struct device_attribute *attr,
-+				      char *buf)
-+{
-+	struct xhci_hcd	*xhci = hcd_to_xhci(dev_get_drvdata(dev));
-+	struct xhci_dbc	*dbc = xhci->dbc;
-+
-+	return sysfs_emit(buf, "%s\n", dbc->str.manufacturer);
-+}
-+
-+static ssize_t dbc_manufacturer_store(struct device *dev,
-+				       struct device_attribute *attr,
-+				       const char *buf, size_t size)
-+{
-+	struct xhci_hcd	*xhci = hcd_to_xhci(dev_get_drvdata(dev));
-+	struct xhci_dbc	*dbc = xhci->dbc;
-+	size_t len;
-+
-+	if (dbc->state != DS_DISABLED)
-+		return -EBUSY;
-+
-+	len = strcspn(buf, "\n");
-+	if (!len)
-+		return -EINVAL;
-+
-+	if (len > USB_MAX_STRING_LEN)
-+		return -E2BIG;
-+
-+	memcpy(dbc->str.manufacturer, buf, len);
-+	dbc->str.manufacturer[len] = '\0';
-+
-+	return size;
-+}
-+
- static ssize_t dbc_product_show(struct device *dev,
- 				 struct device_attribute *attr,
- 				 char *buf)
-@@ -1363,6 +1397,7 @@ static DEVICE_ATTR_RW(dbc_idProduct);
- static DEVICE_ATTR_RW(dbc_bcdDevice);
- static DEVICE_ATTR_RW(dbc_serial);
- static DEVICE_ATTR_RW(dbc_product);
-+static DEVICE_ATTR_RW(dbc_manufacturer);
- static DEVICE_ATTR_RW(dbc_bInterfaceProtocol);
- static DEVICE_ATTR_RW(dbc_poll_interval_ms);
- 
-@@ -1373,6 +1408,7 @@ static struct attribute *dbc_dev_attrs[] = {
- 	&dev_attr_dbc_bcdDevice.attr,
- 	&dev_attr_dbc_serial.attr,
- 	&dev_attr_dbc_product.attr,
-+	&dev_attr_dbc_manufacturer.attr,
- 	&dev_attr_dbc_bInterfaceProtocol.attr,
- 	&dev_attr_dbc_poll_interval_ms.attr,
- 	NULL
--- 
-2.51.2.1041.gc1ab5b90ca-goog
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13f0f0b4580000
+start commit:   07e27ad16399 Linux 6.17-rc7
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4d8792ecb6308d0f
+dashboard link: https://syzkaller.appspot.com/bug?extid=701fc9cc0cb44e2b0fe9
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e38142580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12da427c580000
 
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: media: uvcvideo: Mark invalid entities with id UVC_INVALID_ENTITY_ID
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
