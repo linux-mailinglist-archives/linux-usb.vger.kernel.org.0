@@ -1,140 +1,168 @@
-Return-Path: <linux-usb+bounces-30495-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30496-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC3C9C581B1
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 16:01:19 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9C37C588E6
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 17:03:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6AD7B3546D1
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 14:59:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E38264F4292
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 15:50:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 831D726AEC;
-	Thu, 13 Nov 2025 14:59:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D971307ADD;
+	Thu, 13 Nov 2025 15:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="Blrvp02f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lPnrSVa9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5533135CBD3;
-	Thu, 13 Nov 2025 14:59:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4DF3090CD
+	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 15:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763045963; cv=none; b=RdPwdTp+ud3nBzxZUSSb5Facq/D5Ka/l3YQf0LhGDaHERHZQk/A08Z8R+ENgI/fpQTjeKPAt6vBOoIr/M14XfTlRtYN7SdQBj7/hwHr5g8+J388mxIpxOs7vlb2TrYyyV8diQftqc5BAEAyzHWyJ41DTyZotb5Q7eXUwhx3uQXg=
+	t=1763048737; cv=none; b=ndShzX69Lgfprpo/By9TPZ3us9eUMzqRDn6xIwGTEO+WIS1xqy7PWj2M+UOU32U+4V5B5YL5IkYAM5LL3pwiOKAOig3Xszk6Ua8+dt+aXM7HAlmV0SEbwLujShbJ5lhj7Yi/vgTmAk+VKZtvQ/TPe+RBpCN3E6u5scECNO4D0xQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763045963; c=relaxed/simple;
-	bh=Db9hu2HdD//jk91631tPIDTC2WqeaooR8SDMjqObAYQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LjpSEHqggDc9NCKZSpnntDWOAAMNe+6iGARqXwnuCedsNIVnKAliISgssEi/TCcPXbOLAeAQQbtWg8a3f4wBBk2Hl46Eho5zxnKil9qN9YZSBOg9U11M6ySdcgzPOLBTYy9ZglC5+RCOF2jI0Rj4VBaGF3QDc2uGohmMbqgcKXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=Blrvp02f; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id E73346003C0C;
-	Thu, 13 Nov 2025 14:59:16 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with UTF8LMTP id 4hFpyF9LhRyf; Thu, 13 Nov 2025 14:59:14 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 33CF66003400;
-	Thu, 13 Nov 2025 14:59:13 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1763045954;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=chc/NlipiB+N/nq7OLHWxVwlHw0T2tebinCs9Z7oCSs=;
-	b=Blrvp02fgKdi0gybUy5/jQu6fFHa3/odEf9jRtYaWzg7dfTMIVAOF4EN5j5p0mI+lfunUa
-	CLTSsv6WAywZgrNJ9i5ibGU+QUh8v19ZVq+aUgFfSys6+a+ml+JINeFsh0XajytK3aoQIM
-	yLsQtqCAf8BOOqsd0XO6o6OjTO3iCr2ZPy83PQBvsRqlqDq8Jwl5XrgJrSXnFSP0CMAz0v
-	B8N1Tv5lolol3WbvTVgXEktRQNVm2uWU/L0RSTr9yMFnhaBl1GWwKsiL5Lnl+RN+kW+rKK
-	Rv8/cE7OJ+2+uIBZRSkKKRV3UOclJBXU+xgyIg9V8vO8D+vGidWyjBB1AiYe9g==
-Received: from [10.39.153.220] (unknown [87.58.94.198])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 0A4F136007B;
-	Thu, 13 Nov 2025 14:59:11 +0000 (WET)
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-Date: Thu, 13 Nov 2025 14:59:06 +0000
-Subject: [PATCH] usb: phy: Initialize struct usb_phy list_head
+	s=arc-20240116; t=1763048737; c=relaxed/simple;
+	bh=GwhYoApelHVVE9jUOsAHYc5x6ZTXahYrF0D92jPjL7w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U5ZCcOVwcBzO9cdTnXIaI2c3z46qfsVX/ZeMXQ7sdpqaMIZrW3GxS+Rh74P6HLmhv2aeyPN0/VQiD7qu4igd0gc8xx/In/rGmtX43O/G6u/bpT57jvflKralVxg9f2K3906l8+HEnMxpbGCclc5JZSQIh964PJrKwzVun7wJb7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lPnrSVa9; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-429c8632fcbso740380f8f.1
+        for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 07:45:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763048734; x=1763653534; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UjKqZ210vJmo1ohOFjhR6RquaivlDQYg0+nEWmGJGgo=;
+        b=lPnrSVa9l6IshACe91D+8Rh+qgYYoMTdAZMn3lVRcwmUowAaSgj+ktFjgcHOPmJ6V7
+         csIGp8E+5xViwbd9LWdODJEllbGF9nkfNCg+ZzIHu+UE+/5slaO6xy+PCliYtgS4d0LI
+         n4M7i4iwu8dLw2S1znJuwkfUUsib0dLWmUn/qUhjU28OkVyW29f8EFP1BW4anxe3jYtE
+         PNcreO/j2jxxHb88r+TMb/PVy++GG4x3/emR8upIh0SeDdFMQ1C4hCzWYIvWNkoYGug8
+         XoSsoa2Huj8gv7xoBr8n/I4kwM4OtNdP7Xx2Le0EFcPVocv00/HY0nNewvy7wSuKmqoz
+         0PjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763048734; x=1763653534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UjKqZ210vJmo1ohOFjhR6RquaivlDQYg0+nEWmGJGgo=;
+        b=RErgWtQXOImfuDq+cNEYlEvLdzY5CEEUY3jwafXx+m3ZgADSOqC6z2bMb28IYVZjFJ
+         c3ywfPDSZfIJGSfqGcXKtZnAue8jFBn0g1VclixxdSWXUo9ofU+U9GRaZ1OK12oS0BkR
+         otLwduIN6wqyH6y9jYazm68eckY8SHQjzFUbd6aY0YsAGi68EwNv0sTlG57+rRIV2q4+
+         2gmmj7UnE/hKc9kHokBUgPVOg6YwPuWSVgD+KNtF+m4VKb91g2bZqq1JPd/L/RwFR6UT
+         LvIDxpCVxn4cJTnw0X4UVjRa+yhlT7fSoPEKxIPm/7Ovbl7fzkJR/LjYQLSgF4iqpi9Q
+         wX/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVFNQIa8vz1+9XY+XzGVkRu33NhfwPzEwOW9hD4EkWEThXSMvtEFgV/6Lk6X+lbLXucUGWAWytR8VA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1mweNkY9pu2HSM5+/byWPwoKUK4CakooOdET/sXLF+Ji9j+0U
+	V3DbK4J3vQNM8zECXdvv9wzH424uUGtX6n7yk8ih6j3h1Y+JSB82E2n+ws9zR9dRaB8H3h0oyED
+	PSlNDBFJIPgYsGwTAPF1YI6DkVWP7E6M=
+X-Gm-Gg: ASbGncs7yuABHRimrXpHvMJG05SDHhtsPKiv1WeD7q6CK/SLbrQEJUDFc13wap9FO9d
+	Hm69zYvRKb7OOb4fW3LtnRHz9nfbMIboU8971ohDoU9KE+tocXqtnIgqTmr31L+Lpc4OwnxB0U4
+	YTh9gBJn/H88NO2RU06Aa6IeaohBSxUMUq4q6zVghvN/wS4TmrnsB+85+gpB08sgsfRTAPunNLs
+	vPXPI6CoI81UVdH1ZusjnEaK9sI3wTNaqRfroIGuces5xpep4yTXbCqupRzW1SXI1793gVTjOuI
+	DBwvXpShT9zmpgl2oZ363Tjzo8mKwaXnokPOIAoWUUbz1LVkkq71pYjeVmQUPr0DTx7NcNnMZ+U
+	=
+X-Google-Smtp-Source: AGHT+IFyI6x5RJm95yRlsUC+iSGTHktfcGN76wSiyQxdFS2fnEAIOWwjv4+oZtv8N0EO0DATlsveTOJR8O4h83YjDyY=
+X-Received: by 2002:a05:6000:40cd:b0:429:d0b8:3850 with SMTP id
+ ffacd0b85a97d-42b4bdb4884mr5867291f8f.48.1763048734320; Thu, 13 Nov 2025
+ 07:45:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251113-diogo-smaug_typec-v1-1-f1aa3b48620d@tecnico.ulisboa.pt>
-X-B4-Tracking: v=1; b=H4sIADnyFWkC/x3MQQ5AMBBA0avIrE2ilQquIiIto2ZBpUVI4+4ay
- 7f4P0IgzxSgzSJ4ujiw2xJEnsG46M0S8pQMspBKCFHixM46DKs+7XA8O42oKiML1Zi6kQZSt3u
- a+f6fXf++HxXsxWVjAAAA
-X-Change-ID: 20251113-diogo-smaug_typec-56b2059b892b
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Felipe Balbi <felipe.balbi@linux.intel.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763045951; l=1571;
- i=diogo.ivo@tecnico.ulisboa.pt; s=20240529; h=from:subject:message-id;
- bh=Db9hu2HdD//jk91631tPIDTC2WqeaooR8SDMjqObAYQ=;
- b=KCLSRK3WOMqOzloTkWHQbkZQGg07lhBfJXX+nF3hkqXupGm9rr5HcRbbZMlp/SQBJU5dMMxZ3
- Y2avkf0OvFQB/hDjHpye+rlpQvGJ9F4RxWptdINWjEi5UvMVF3q4JTe
-X-Developer-Key: i=diogo.ivo@tecnico.ulisboa.pt; a=ed25519;
- pk=BRGXhMh1q5KDlZ9y2B8SodFFY8FGupal+NMtJPwRpUQ=
+References: <20251111203350.3c9a669e.michal.pecio@gmail.com>
+ <20251112015356.1919586-1-lugathe2@gmail.com> <ab81f525-b4ea-4ac7-94a8-9d8eabca957a@cosmicgizmosystems.com>
+ <58edd03a-a7a7-40af-8228-18004dc6e737@rowland.harvard.edu>
+In-Reply-To: <58edd03a-a7a7-40af-8228-18004dc6e737@rowland.harvard.edu>
+From: The-Luga <lugathe2@gmail.com>
+Date: Thu, 13 Nov 2025 12:45:22 -0300
+X-Gm-Features: AWmQ_blIL-znisBibURF-59XWVCNK3O7x4L-ZqBPMnE2bLlz0feBpIaVurcSNiU
+Message-ID: <CALvgqEBVQsoQ3wewP+37u5Ms398O5gC8YaELm0UJdZSDBHzPPw@mail.gmail.com>
+Subject: Re: [PATCH v2] Apply the quirk HID_QUIRK_ALWAYS_POLL to the Edifier
+ QR30 (2d99:a101).
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Terry Junge <linuxhid@cosmicgizmosystems.com>, michal.pecio@gmail.com, 
+	bentiss@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org, 
+	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linuxsound@cosmicgizmosystems.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When executing usb_add_phy() and usb_add_phy_dev() it is possible that
-usb_add_extcon() fails (for example with -EPROBE_DEFER), in which case
-the usb_phy does not get added to phy_list via
-list_add_tail(&x->head, phy_list).
+> You might want to wait a couple of days before sending a v3 so other
+> reviewers can get a chance to make comments.
 
-Then, when the driver that tried to add the phy receives the error
-propagated from usb_add_extcon() and calls into usb_remove_phy() to
-undo the partial registration there will be an unconditional call to
-list_del(&x->head) which is notinitialized and leads to a NULL pointer
-dereference.
+Yes, I shall wait. I was just *too eager*.
 
-Fix this by initializing x->head before usb_add_extcon() has a chance to
-fail.
+> You should include the HID: tag in the subject--
+> ...] HID: Apply...
+>
+> The patch should be sent
+>
+> To:  the HID subsystem maintainers
+> bentiss@kernel.org
+> jikos@kernel.org
+>
+> Cc:  at a minimum
+> linux-input@vger.kernel.org
+> linux-kernel@vger.kernel.org
+>
+> plus any of the others already part of this thread.
 
-Fixes: 7d21114dc6a2d53 ("usb: phy: Introduce one extcon device into usb phy")
-Cc: stable@vger.kernel.org
-Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
----
- drivers/usb/phy/phy.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This is very helpful. Thank you!
 
-diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
-index e1435bc59662..5a9b9353f343 100644
---- a/drivers/usb/phy/phy.c
-+++ b/drivers/usb/phy/phy.c
-@@ -646,6 +646,8 @@ int usb_add_phy(struct usb_phy *x, enum usb_phy_type type)
- 		return -EINVAL;
- 	}
- 
-+	INIT_LIST_HEAD(&x->head);
-+
- 	usb_charger_init(x);
- 	ret = usb_add_extcon(x);
- 	if (ret)
-@@ -696,6 +698,8 @@ int usb_add_phy_dev(struct usb_phy *x)
- 		return -EINVAL;
- 	}
- 
-+	INIT_LIST_HEAD(&x->head);
-+
- 	usb_charger_init(x);
- 	ret = usb_add_extcon(x);
- 	if (ret)
+I read the documentation, but I was really waiting for comments before
+finally sending it, as I didn=E2=80=99t want to create noise with all the
+iterations of the patch. I didn=E2=80=99t realize I should wait before maki=
+ng
+a bigger final change.
 
----
-base-commit: 35d084745b3ea4af571ed421844f2bb1a99ad6e2
-change-id: 20251113-diogo-smaug_typec-56b2059b892b
+> Vendor ID 0x2d99 belongs to Edifier International Limited not Jieli
+> Can you change to USB_VENDOR_ID_EDIFIER instead and move to the
+> alphabetically correct location?
 
-Best regards,
--- 
-Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+Could you kindly tell me where this info is?
+Searching the internet I only found this website with this info:
+https://the-sz.com/products/usbid/index.php?v=3D0x2D99
 
+I just checked the vendor from `lsusb`, and I was hesitant whether to
+write Jieli or Edifier.
+I also decided to write QR30 instead of Hal0. Should I add a comment
+mentioning Jieli as I did with the device?
+
+> One more thing about patch style: The Signed-off-by: line should go
+> above the --- line, whereas the revision information goes below it (as
+> it is here).  The second --- line isn't needed (but it doesn't hurt).
+>
+> Look at other patch submissions in the email archives to see more
+> examples of the style.
+>
+> Alan Stern
+
+This is also very helpful. I should have done it in the first place. Thank =
+you!
+
+> Thanks for the patch!
+> Regards,
+> Terry Junge
+
+It's me who is *super thankful*. I learned how to do packet capture,
+hexcode/table analysis, and even wrote a script to time out the RGB
+lights when idle, show a simple brightness animation (increasing and
+decreasing steps before coming back to the default) when changing
+volume, and synchronize it with my keyboard. I have more functionality
+here than with the vendor software on those supported OS's. All thanks
+to everyone who helped me debug and showed me the tools needed to do
+this.
+
+And even invited me to write my first patch. I believe this process
+should be repetitive, with new people coming and going. I=E2=80=99m gratefu=
+l
+for the support and patience.
 
