@@ -1,212 +1,142 @@
-Return-Path: <linux-usb+bounces-30476-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30477-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85524C56E62
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 11:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 76DC9C57405
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 12:44:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8873E4E3BFB
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 10:36:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 65E284E2F1D
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 11:44:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AB72332EBE;
-	Thu, 13 Nov 2025 10:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ky57wUyc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9AA933F8A4;
+	Thu, 13 Nov 2025 11:44:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDB9330306
-	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 10:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7F63112BB;
+	Thu, 13 Nov 2025 11:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763030176; cv=none; b=JjoW/vDsOlAlXHGiWyDDofA/hbWlzl9PIFJbG+wtQJqFmpAYLF6AZ5gWS1j6O8NpAR47fS10/C/Tyr58l/hB16/o+D8crJIn1NyjWJx2+NsRczFmF7AG4BAvGMg6yO2GevZKAfY2u1DIvOhp3Uk6tTNEw/OgYuus0P6nQuclA3o=
+	t=1763034289; cv=none; b=MNQRQfTsPzJJn9CgeapXPBOsXTYmQq3W8yBBRdJlUei5tjm6XAThW/3x4c47TUO175DSn00TXmqyO4uNwhrZYdEADm7VJ8y8g857/VDkK9kNh3YaBQdjVHTL0M/Zy2fQHY4SjC82tIKv9ywH6S5vEdDRaZXlYCcoKc0lUyPbs0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763030176; c=relaxed/simple;
-	bh=ViFEpBqG4JuLJw7FtRNYniIlz2/9DpG6DSyfosyNKQ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qy0O9j0NR/g4Um8FpMxkBW0zKC8aUMerCRSj6lzqcHxsC3BsLjSAWwRF00AdcpFqrweqK8JgN2f7FitstjxO0dbXq9H1IIBGhKEuh4jbpCB1Td1bSzZ4IYr70tFcCieKSnKlCph2HmLMR0FwYii0zFZZpMNdxpZh/SGNndB27gY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ky57wUyc; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763030174; x=1794566174;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ViFEpBqG4JuLJw7FtRNYniIlz2/9DpG6DSyfosyNKQ8=;
-  b=ky57wUycOhYQ0Jwmm6P+Ef0fba9T7Q+kUEvNkmtAPgB4akpivd0adMjR
-   K8E0nXxo6uuvbUJaI7MH4n5i4LgciVGugzKbtN++GVv7+MRPg9Vqo+ELZ
-   5LRwFcjEzCO7dq2maJl8R4lyBGQQPCHDIykeV8LgdsB+Ny45s+JyaJ2oq
-   3GkAzkxVuxJrJNYkzfDgnbiISd9P2hsEGwOAqcc9fvBnjTQAc9Z6KoXAt
-   tgj6Vi2IOuTiK1r/6JedqXkJEKrMHPXzhTdQh/xnn9CsVFU4K25g0vw+K
-   MRSmim5EpURfb1xjbpml7TKLcqWHcZaody4jFieaXzSy0V+9ANoU6jP7p
-   Q==;
-X-CSE-ConnectionGUID: Gx9GMbw4RxycavkPkgpceA==
-X-CSE-MsgGUID: BCRtGSTTRA+RIMlFT0W0YQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11611"; a="64813928"
-X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
-   d="scan'208";a="64813928"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 02:36:11 -0800
-X-CSE-ConnectionGUID: 7WtUIiahTPWTdyap7+7JQg==
-X-CSE-MsgGUID: T4YQ4tRLQyy5EjPHhd82AA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
-   d="scan'208";a="193722400"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO [10.245.245.137]) ([10.245.245.137])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 02:34:54 -0800
-Message-ID: <85314aeb-605e-4887-99d3-dc505b2a2e1a@linux.intel.com>
-Date: Thu, 13 Nov 2025 12:34:53 +0200
+	s=arc-20240116; t=1763034289; c=relaxed/simple;
+	bh=lw0MB7fHN14/Scf/r5EFiO8UsNLFs9eczD1Ynio7oNQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=homHKnIM1EwmObD0LQXAKMKuda3dEGfSHEqLHVxIn8TX5eCAmeCD3I1kIHpOJSXSH6/gfpnF6fycz6BO1ga4visyeZEK7Tg7w6Qpu+trL05afJ6GLGF/+U4USRplrJMeWDpRlOV0tiKtpBlV6Pvk5Lrl3Ekqsf/KkYi02GrlAZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 1fe1b8b2c08611f0a38c85956e01ac42-20251113
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:cffce43e-6dbf-4adc-8364-1eac317a70ba,IP:0,UR
+	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:25
+X-CID-META: VersionHash:a9d874c,CLOUDID:485a7b3a36c75995599e6a1fa1c3be58,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850,TC:nil,Content:0|15|50,EDM:5,IP:
+	nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,L
+	ES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 1fe1b8b2c08611f0a38c85956e01ac42-20251113
+X-User: dengjie03@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <dengjie03@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1132045790; Thu, 13 Nov 2025 19:44:34 +0800
+From: Jie Deng <dengjie03@kylinos.cn>
+To: gregkh@linuxfoundation.org
+Cc: mathias.nyman@linux.intel.com,
+	sakari.ailus@linux.intel.com,
+	stern@rowland.harvard.edu,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jie Deng <dengjie03@kylinos.cn>
+Subject: [PATCH] usb: core: fix NULL dereference in usb_ifnum_to_if() during device removal
+Date: Thu, 13 Nov 2025 19:44:11 +0800
+Message-Id: <20251113114411.1410343-1-dengjie03@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/13] usb: xhci: standardize single bit-field macros
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
- Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, "Rai, Amardeep" <amardeep.rai@intel.com>
-References: <20251110151450.635410-1-niklas.neronin@linux.intel.com>
- <20251110151450.635410-12-niklas.neronin@linux.intel.com>
- <aRL5HQw2-a94FPpA@kekkonen.localdomain>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <aRL5HQw2-a94FPpA@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/11/25 10:51, Sakari Ailus wrote:
-> Hi Niklas,
-> 
-> Thanks for this!
-> 
-> On Mon, Nov 10, 2025 at 04:14:48PM +0100, Niklas Neronin wrote:
->> Convert single bit-field macros to simple masks. The change makes the
->> masks more universal. Multi bit-field macros are changed in the next
->> commit. After both changes, all masks in xhci-caps.h will follow the
->> same format. I plan to introduce this change to all xhci macros.
->>
->> Bit shift operations on a 32-bit signed can be problematic on some
->> architectures. Instead use BIT() macro, which returns a 64-bit unsigned
->> value. This ensures that the shift operation is performed on an unsigned
->> type, which is safer and more portable across different architectures.
->> Using unsigned integers for bit shifts avoids issues related to sign bits
->> and ensures consistent behavior.
->>
->> Switch from 32-bit to 64-bit?
->> As far as I am aware, this does not cause any issues.
->> Performing bitwise operations between 32 and 64 bit values, the smaller
->> operand is promoted to match the size of the larger one, resulting in a
->> 64-bit operation. This promotion extends the 32-bit value to 64 bits,
->> by zero-padding (for unsigned).
->>
->> Will the change to 64-bit slow down the xhci driver?
->> On a 64-bit architecture - No. On a 32-bit architecture, yes? but in my
->> opinion the performance decrease does not outweigh the readability and
->> other benefits of using BIT() macro.
->>
->> Why not use FIELD_GET() and FIELD_PREP()?
->> While they can be used for single bit macros, I prefer to use simple
->> bitwise operation directly. Because, it takes less space, is less overhead
->> and is as clear as if using FIELD_GET() and FIELD_PREP().
->>
->> Why not use test_bit() macro?
->> Same reason as with FIELD_GET() and FIELD_PREP().
->>
->> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
-> 
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
->> ---
->>   drivers/usb/host/xhci-caps.h    | 50 +++++++++++++++++----------------
->>   drivers/usb/host/xhci-debugfs.c |  2 +-
->>   drivers/usb/host/xhci-hub.c     |  6 ++--
->>   drivers/usb/host/xhci-mem.c     |  7 ++---
->>   drivers/usb/host/xhci-ring.c    |  8 +++---
->>   drivers/usb/host/xhci-trace.h   |  2 +-
->>   drivers/usb/host/xhci.c         |  2 +-
->>   7 files changed, 39 insertions(+), 38 deletions(-)
->>
->> diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
->> index 99557df89f88..89dd46767885 100644
->> --- a/drivers/usb/host/xhci-caps.h
->> +++ b/drivers/usb/host/xhci-caps.h
->> @@ -4,6 +4,8 @@
->>    * xHCI Specification Section 5.3, Revision 1.2.
->>    */
->>   
->> +#include <linux/bits.h>
->> +
->>   /* hc_capbase - bitmasks */
->>   /* bits 7:0 - Capability Registers Length */
->>   #define HC_LENGTH(p)		((p) & 0xff)
->> @@ -32,7 +34,7 @@
->>    * xHCI specification section 5.3.4.
->>    */
->>   #define HCS_IST_VALUE(p)	((p) & 0x7)
->> -#define HCS_IST_UNIT(p)		((p) & (1 << 3))
->> +#define HCS_IST_UNIT		BIT(3)
->>   /* bits 7:4 - Event Ring Segment Table Max, 2^(n) */
->>   #define HCS_ERST_MAX(p)		(((p) >> 4) & 0xf)
->>   /* bits 20:8 - Rsvd */
->> @@ -52,30 +54,30 @@
->>   
->>   /* HCCPARAMS1 - hcc_params - bitmasks */
->>   /* bit 0 - 64-bit Addressing Capability */
->> -#define HCC_64BIT_ADDR(p)	((p) & (1 << 0))
->> +#define HCC_64BIT_ADDR		BIT(0)
->>   /* bit 1 - BW Negotiation Capability */
->> -#define HCC_BANDWIDTH_NEG(p)	((p) & (1 << 1))
->> +#define HCC_BANDWIDTH_NEG	BIT(1)
->>   /* bit 2 - Context Size */
->> -#define HCC_64BYTE_CONTEXT(p)	((p) & (1 << 2))
->> -#define CTX_SIZE(_hcc)		(HCC_64BYTE_CONTEXT(_hcc) ? 64 : 32)
->> +#define HCC_64BYTE_CONTEXT	BIT(2)
->> +#define CTX_SIZE(_hcc)		(_hcc & HCC_64BYTE_CONTEXT ? 64 : 32)
->>   /* bit 3 - Port Power Control */
->> -#define HCC_PPC(p)		((p) & (1 << 3))
->> +#define HCC_PPC			BIT(3)
->>   /* bit 4 - Port Indicators */
->> -#define HCS_INDICATOR(p)	((p) & (1 << 4))
->> +#define HCS_INDICATOR		BIT(4)
->>   /* bit 5 - Light HC Reset Capability */
->> -#define HCC_LIGHT_RESET(p)	((p) & (1 << 5))
->> +#define HCC_LIGHT_RESET		BIT(5)
->>   /* bit 6 - Latency Tolerance Messaging Capability */
->> -#define HCC_LTC(p)		((p) & (1 << 6))
->> +#define HCC_LTC			BIT(6)
->>   /* bit 7 - No Secondary Stream ID Support */
->> -#define HCC_NSS(p)		((p) & (1 << 7))
->> +#define HCC_NSS			BIT(7)
->>   /* bit 8 - Parse All Event Data */
->>   /* bit 9 - Short Packet Capability */
->> -#define HCC_SPC(p)		((p) & (1 << 9))
->> +#define HCC_SPC			BIT(9)
->>   /* bit 10 - Stopped EDTLA Capability */
->>   /* bit 11 - Contiguous Frame ID Capability */
->> -#define HCC_CFC(p)		((p) & (1 << 11))
->> +#define HCC_CFC			BIT(11)
->>   /* bits 15:12 - Max size for Primary Stream Arrays, 2^(n+1) */
->> -#define HCC_MAX_PSA(p)		(1 << ((((p) >> 12) & 0xf) + 1))
->> +#define HCC_MAX_PSA(p)		BIT(((((p) >> 12) & 0xf) + 1))
+During USB device hot-unplug, in the time window between when
+usb_disconnect() calls usb_disable_device() to set
+dev->actconfig->interface[i] to NULL but before dev->actconfig
+is set to NULL.At this point, outside the kernel, usb_ifnum_to_if()
+is called through usb_set_interface(), and usb_ifnum_to_if() continues
+to access interface[i]->altsetting[i], triggering a null pointer.
 
-The HCC_MAX_PSA(p) is a bit different, the bitshift here is a power of 2
-calculation.
+kernel log:
+[ 9518.779148][ 1] [ T4650] pc : usb_ifnum_to_if+0x34/0x50
+[ 9518.784360][ 1] [ T4650] lr : usb_hcd_alloc_bandwidth+0x260/0x348
+[ 9518.790439][ 1] [ T4650] sp : ffffffa25a6c79d0
+[ 9518.794868][ 1] [ T4650] x29: ffffffa25a6c79d0 x28: 0000000040045613
+[ 9518.801294][ 1] [ T4650] x27: 0000000000000000 x26: 0000000000000000
+[ 9518.807720][ 1] [ T4650] x25: ffffffa2e1597408 x24: ffffffa2e1597408
+[ 9518.814146][ 1] [ T4650] x23: ffffffa2e15974f8 x22: 0000000000000000
+[ 9518.820572][ 1] [ T4650] x21: ffffffa2e9acc000 x20: ffffffa2e6712000
+[ 9518.826998][ 1] [ T4650] x19: ffffffa2e6a8a800 x18: 0000000000000000
+[ 9518.833423][ 1] [ T4650] x17: 0000007fbb91b4b0 x16: ffffffc01016a170
+[ 9518.839849][ 1] [ T4650] x15: 0000000000000000 x14: 0845c02202702800
+[ 9518.846275][ 1] [ T4650] x13: 0000000000000001 x12: 0000000000000000
+[ 9518.852700][ 1] [ T4650] x11: 0000000000000400 x10: ffffffff89e5d720
+[ 9518.859126][ 1] [ T4650] x9 : 0000000000000000 x8 : 0000000000000000
+[ 9518.865551][ 1] [ T4650] x7 : ffffffa2fff1e440 x6 : ffffffa28175c900
+[ 9518.871977][ 1] [ T4650] x5 : 0000000000000060 x4 : ffffffa2e9bc54b0
+[ 9518.878403][ 1] [ T4650] x3 : ffffffa2e9bc54a0 x2 : ffffffa2e9bc54a0
+[ 9518.884828][ 1] [ T4650] x1 : 0000000000000001 x0 : 0000000000000000
+[ 9518.891254][ 1] [ T4650] Call trace:
+[ 9518.894817][ 1] [ T4650]  usb_ifnum_to_if+0x34/0x50
+[ 9518.899681][ 1] [ T4650]  usb_set_interface+0x108/0x3c8
+[ 9518.904898][ 1] [ T4650]  uvc_video_stop_streaming+0x3c/0x90 [uvcvideo]
+[ 9518.911500][ 1] [ T4650]  uvc_stop_streaming+0x24/0x90 [uvcvideo]
+[ 9518.917583][ 1] [ T4650]  __vb2_queue_cancel+0x44/0x458 [videobuf2_common]
+[ 9518.924444][ 1] [ T4650]  vb2_core_streamoff+0x20/0xb8 [videobuf2_common]
+[ 9518.931221][ 1] [ T4650]  vb2_streamoff+0x18/0x60 [videobuf2_v4l2]
+[ 9518.937390][ 1] [ T4650]  uvc_queue_streamoff+0x30/0x50 [uvcvideo]
+[ 9518.943557][ 1] [ T4650]  uvc_ioctl_streamoff+0x40/0x68 [uvcvideo]
+[ 9518.949724][ 1] [ T4650]  v4l_streamoff+0x20/0x28
+[ 9518.954415][ 1] [ T4650]  __video_do_ioctl+0x17c/0x3e0
+[ 9518.959540][ 1] [ T4650]  video_usercopy+0x1d8/0x558
+[ 9518.964490][ 1] [ T4650]  video_ioctl2+0x14/0x1c
+[ 9518.969094][ 1] [ T4650]  v4l2_ioctl+0x3c/0x58
+[ 9518.973526][ 1] [ T4650]  do_vfs_ioctl+0x374/0x7b0
+[ 9518.978304][ 1] [ T4650]  ksys_ioctl+0x78/0xa8
+[ 9518.982734][ 1] [ T4650]  sys_ioctl+0xc/0x18
+[ 9518.986991][ 1] [ T4650]  __sys_trace_return+0x0/0x4
+[ 9518.991943][ 1] [ T4650] Code: eb04005f 54000100 f9400040 91002042 (f9400003)
+[ 9518.999153][ 1] [ T4650] ---[ end trace f7c7d3236806d9a4 ]---
 
-Primary stream array size is 2^(MaxPSASize + 1) where MaxPSASize is from
-HCCPARAMS1 register bits 15:12
+To resolve this issue, a null pointer check for config->interface[i]
+can be added in the usb_ifnum_to_if() function.
 
-It's not pretty to begin with, and I don't think the BIT() macro makes it
-any clearer.
+Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
+---
+ drivers/usb/core/usb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Maybe leave it of from this series, possibly clean it up later
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index e740f7852bcd..85dcda06a838 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -355,7 +355,7 @@ struct usb_interface *usb_ifnum_to_if(const struct usb_device *dev,
+ 	if (!config)
+ 		return NULL;
+ 	for (i = 0; i < config->desc.bNumInterfaces; i++)
+-		if (config->interface[i]->altsetting[0]
++		if (config->interface[i] && config->interface[i]->altsetting[0]
+ 				.desc.bInterfaceNumber == ifnum)
+ 			return config->interface[i];
+ 
+-- 
+2.25.1
 
-Thanks
-Mathias
 
