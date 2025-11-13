@@ -1,52 +1,88 @@
-Return-Path: <linux-usb+bounces-30493-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30494-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 830CBC57A9A
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 14:30:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23CE5C5819E
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 15:59:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6114D355A64
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 13:29:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E14433A899A
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 14:50:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D85352929;
-	Thu, 13 Nov 2025 13:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC9E2C11CA;
+	Thu, 13 Nov 2025 14:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pqBNYNH8"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="HztQvODp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575A733F8D2;
-	Thu, 13 Nov 2025 13:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD0B284689
+	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 14:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763040533; cv=none; b=KLb2sonratekC4uVNurCXabN3OYj4vFgGx2VuxTf8XvefQPi3R3pLLo6vm9yHWNpj4V3PgBNdmpQS53lEfUc5UQfJI10VhdoXbw14070PMGLVsQ4st2gQh5T1Tvb1TG4aQ2PeOoY4avXH+vwp1PyApRm9wA+gd1+E3PjN6aiwlU=
+	t=1763045447; cv=none; b=Yr5IwbAQQf9tbDh59D5dpL8v2g/zfIJ7vVVFjoO2FZVZZtO7unhG559DzEWDRXcFCU6gFk9+nY8SKkMKkZ6TJKGnwhDyoTqdN3wP6oE1wRrKdtyvtlKBOroapEjnbEFoABwfBXxuZvZodLNArFzSoQVCbQyV0wHWfmJ4AuR8ujM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763040533; c=relaxed/simple;
-	bh=d1S6EXhuajmdeR7g4lfZh2Y4Mab0D3MUxG1o04pb/Rs=;
+	s=arc-20240116; t=1763045447; c=relaxed/simple;
+	bh=V3NRUkCwpyXAHKZhigjr+8gsAPXHs140yNAQg5Rd8BE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c3hb1r0UmFaR+Np6H06xwg0XvzgKgi0kY6K90sYjTdptT/06YLVkOcCwXbsWUGhI7D0u1BVY581TS1ETpBf1xT80HFlyPW8jxJ7XdOvWJteOQ67rq+ILv/kLuXKtCOaVXGrTO8Mh+Pr2tcPjJakoIr7lavBKNklNE4QiWClFnGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pqBNYNH8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC0FC4CEF5;
-	Thu, 13 Nov 2025 13:28:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1763040532;
-	bh=d1S6EXhuajmdeR7g4lfZh2Y4Mab0D3MUxG1o04pb/Rs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pqBNYNH8/BIfoX/TrzoEjwLZDxdxVbfbQ+cHttzzxvvz0Kkz+Fv4p0ifL5XAQ9hG3
-	 plIcQgkNonNx3etrLAl7wnYbgu24yeTNdEAZ3wo6hpjASn23oneq/KlhkNK4ZbJwLl
-	 TZf3WjvciP6u9O/D/cHIyR8UXfdK6LmePt6vFAVo=
-Date: Thu, 13 Nov 2025 08:28:50 -0500
-From: Greg KH <gregkh@linuxfoundation.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KYu9lY2JfRLl/V3VVO94MnpqOjXgWLZvyMMNpq3LDREyRahk6ETlU1IcwE67JeDxkKit7IpwL+0FlXcOiP8ml2msWdXTADUPB7gWQG9F1/mwX7u65wtD1GhuE+Pabs3pp5p6kFArD51qtgSmabadPzAgggT5U+SX/6YmqnBKsp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=HztQvODp; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4ede4a30a84so5327331cf.1
+        for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 06:50:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1763045445; x=1763650245; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ET0d96Jr74GPyOWniH5D9NAeGfbNYsnJ+p2BnWJ+Iz4=;
+        b=HztQvODp/VXWNtXvR4iPJvBmULDFA35mrzuKpKOBrBl/UZBV2G/XgJfErZ2rFwOcj1
+         oQa69/nCzDaVlEocv8lKOOUkX+AybjPM8w1Fl3fY6a3Cgjdc8Cf/MjgO81/YEV3rEhQ4
+         aigUFOne7/KkUjcr980QKYNcLtAuk9pN3kcoTCtBRApwGuE6jF9X6QVlOOWEg/75831k
+         rxDrCF6R/aeKTrw4svlcciICxa8yuAJ0uE83zOnzWWH/5kcjptVArDC4hM5tlk1wf91m
+         YOCoDo7rroNRSnp6BZBaZA4xXnNhv2feGvj/OWb7oI/dI4gA4kMpmLkYG0dIqseXQ5hb
+         F6RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763045445; x=1763650245;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ET0d96Jr74GPyOWniH5D9NAeGfbNYsnJ+p2BnWJ+Iz4=;
+        b=DDaUYtUmwW4cRMS2PCRta0qC5qRIOdrgsxRmjjQMTYL9gDJIlBtszJWjnk4pBOmZPv
+         AjolA1LQTxVINAdvtm/ZYiTiB5uj7XqPDGHRovzee++8c6OhoPC/JkP246unY+NKWB1y
+         4e5JgiB2OC/ZRL/djSRul8MYdnM9+fq2jnS8u4YnS4Qh9rvXa/n3SY3UG/ZySNpaiaeG
+         V62rypKETPR7mY0Bo9Ydcsf0tPUDQHs1ySkkCvLhFTLMowCKj4/0LAxPw4MfqomuX4vi
+         mwHzhGvGe2AdeyNdHlvFZNNvjXDdTpOZbxOyWwCwUdEkPeLe92V+Nsv0tN/vFNMwTDk5
+         Kqgg==
+X-Forwarded-Encrypted: i=1; AJvYcCVy+R7/HFN+eNRor2ewe+p8w78ci3k7S6wkR7K8HTM/NbG0nseTQcNdhMNgP1tZtdgZhNORV1QABXw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3lppPyDNOvv5XZlfIjkJV+srOAwcYqwwanQtm2wbG/0U3KFoz
+	Ey6AzoM0Jl0c3DOwsUn6dHnAaRREjEsi2KdNEXZEsE3zFQTvKptvp07iTqDwj4zSaQ==
+X-Gm-Gg: ASbGnctk4ksdeX3PJXYHUN28sdaUdN3Jh90lZMgIGvnVuaPYqID8zHowElqRlc6CZne
+	xrWjV5fCr9RmKByZk9Ya0Z7vqkVriucNR6u1rVTy5xCyGf7Lteugq4t1FP5CVyVjO814B+sHPba
+	J21yYY8HSV7itsq+B5n8cvD2DAOxV+a6mMfjY1NRcdjAcoRt6F0TuVY+pFnnEZTGE5FKXlqeeql
+	mb6GDg54FE9JmeErqOEMhNJi5JOO60Lrh+mgeDusv1VPdHekF7HMcskFGe0s02dxKDtbPHoTmvz
+	ptQi0J2G7E87c0fLgqWlhGqZDQmXmLzmPC2ws5tgUE4Gi0OS3gArCrVpywrpaUOyI0Y9loq4q/h
+	n7Xm151hZ/QP8At2oWJkseXzdJHUmPuIK+rUYQBZWkzD4GO8Q4gQtzIH+OyxEoQzvFBqd11mhQC
+	0TcpWfTXkyx+LQG8TurEjRSolDMhW/7B9ojngJn5BSweousMGebBwBmlHqHQk9XLH9pKLRftqJ9
+	O2SdGou
+X-Google-Smtp-Source: AGHT+IFrl7GvASaCXPeEF/Bz7u5HyCncPixtKgI1OSsTM6i3nwJfB1/d9QLc4rH6Y+Pb82nfD8qYZg==
+X-Received: by 2002:a05:622a:252:b0:4ed:20bc:dc0b with SMTP id d75a77b69052e-4eddbd6ce7cmr91437691cf.35.1763045445025;
+        Thu, 13 Nov 2025 06:50:45 -0800 (PST)
+Received: from rowland.harvard.edu (nat-65-112-8-29.harvard-secure.wrls.harvard.edu. [65.112.8.29])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ede86b3820sm13156341cf.4.2025.11.13.06.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Nov 2025 06:50:44 -0800 (PST)
+Date: Thu, 13 Nov 2025 09:50:42 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
 To: Jie Deng <dengjie03@kylinos.cn>
-Cc: mathias.nyman@linux.intel.com, sakari.ailus@linux.intel.com,
-	stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+Cc: gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+	sakari.ailus@linux.intel.com, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] usb: core: fix NULL dereference in usb_ifnum_to_if()
  during device removal
-Message-ID: <2025111342-chummy-preppy-e3e6@gregkh>
+Message-ID: <0bec2aa5-cb3e-49c2-ab40-39a9ebceb2ad@rowland.harvard.edu>
 References: <20251113114411.1410343-1-dengjie03@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -66,30 +102,6 @@ On Thu, Nov 13, 2025 at 07:44:11PM +0800, Jie Deng wrote:
 > is called through usb_set_interface(), and usb_ifnum_to_if() continues
 > to access interface[i]->altsetting[i], triggering a null pointer.
 
-I do not understand, sorry.  What do you mean by "outside the kernel"?
-
-> kernel log:
-> [ 9518.779148][ 1] [ T4650] pc : usb_ifnum_to_if+0x34/0x50
-> [ 9518.784360][ 1] [ T4650] lr : usb_hcd_alloc_bandwidth+0x260/0x348
-
-What is the [TXXX] stuff?
-
-> [ 9518.790439][ 1] [ T4650] sp : ffffffa25a6c79d0
-> [ 9518.794868][ 1] [ T4650] x29: ffffffa25a6c79d0 x28: 0000000040045613
-> [ 9518.801294][ 1] [ T4650] x27: 0000000000000000 x26: 0000000000000000
-> [ 9518.807720][ 1] [ T4650] x25: ffffffa2e1597408 x24: ffffffa2e1597408
-> [ 9518.814146][ 1] [ T4650] x23: ffffffa2e15974f8 x22: 0000000000000000
-> [ 9518.820572][ 1] [ T4650] x21: ffffffa2e9acc000 x20: ffffffa2e6712000
-> [ 9518.826998][ 1] [ T4650] x19: ffffffa2e6a8a800 x18: 0000000000000000
-> [ 9518.833423][ 1] [ T4650] x17: 0000007fbb91b4b0 x16: ffffffc01016a170
-> [ 9518.839849][ 1] [ T4650] x15: 0000000000000000 x14: 0845c02202702800
-> [ 9518.846275][ 1] [ T4650] x13: 0000000000000001 x12: 0000000000000000
-> [ 9518.852700][ 1] [ T4650] x11: 0000000000000400 x10: ffffffff89e5d720
-> [ 9518.859126][ 1] [ T4650] x9 : 0000000000000000 x8 : 0000000000000000
-> [ 9518.865551][ 1] [ T4650] x7 : ffffffa2fff1e440 x6 : ffffffa28175c900
-> [ 9518.871977][ 1] [ T4650] x5 : 0000000000000060 x4 : ffffffa2e9bc54b0
-> [ 9518.878403][ 1] [ T4650] x3 : ffffffa2e9bc54a0 x2 : ffffffa2e9bc54a0
-> [ 9518.884828][ 1] [ T4650] x1 : 0000000000000001 x0 : 0000000000000000
 > [ 9518.891254][ 1] [ T4650] Call trace:
 > [ 9518.894817][ 1] [ T4650]  usb_ifnum_to_if+0x34/0x50
 > [ 9518.899681][ 1] [ T4650]  usb_set_interface+0x108/0x3c8
@@ -111,33 +123,16 @@ What is the [TXXX] stuff?
 > [ 9518.986991][ 1] [ T4650]  __sys_trace_return+0x0/0x4
 > [ 9518.991943][ 1] [ T4650] Code: eb04005f 54000100 f9400040 91002042 (f9400003)
 > [ 9518.999153][ 1] [ T4650] ---[ end trace f7c7d3236806d9a4 ]---
-> 
+
+This looks like a bug in the uvc driver.  usb_disable_device() unbinds 
+ther interface's driver before it sets dev->actconfig->interface[i] to 
+NULL, and the uvc driver shouldn't call usb_set_interface() after it has 
+been unbound.
+
 > To resolve this issue, a null pointer check for config->interface[i]
 > can be added in the usb_ifnum_to_if() function.
-> 
-> Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
-> ---
->  drivers/usb/core/usb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-> index e740f7852bcd..85dcda06a838 100644
-> --- a/drivers/usb/core/usb.c
-> +++ b/drivers/usb/core/usb.c
-> @@ -355,7 +355,7 @@ struct usb_interface *usb_ifnum_to_if(const struct usb_device *dev,
->  	if (!config)
->  		return NULL;
->  	for (i = 0; i < config->desc.bNumInterfaces; i++)
-> -		if (config->interface[i]->altsetting[0]
-> +		if (config->interface[i] && config->interface[i]->altsetting[0]
 
-Are you sure this is not just papering over a race?  What prevents this
-from changing right after you check it?
+That won't fix the real bug.  You need to change the uvc driver.
 
-And what is causing this to happen now?  What commit broke this to
-require this change?
-
-thanks,
-
-greg k-h
+Alan Stern
 
