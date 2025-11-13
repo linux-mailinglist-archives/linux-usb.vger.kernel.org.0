@@ -1,202 +1,228 @@
-Return-Path: <linux-usb+bounces-30499-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30500-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC804C59B57
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 20:19:25 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89375C5A158
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 22:21:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 71BCB357A10
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 19:16:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 30A5F4E7450
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 21:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796C331AF31;
-	Thu, 13 Nov 2025 19:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B88FC322A38;
+	Thu, 13 Nov 2025 21:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jAWm3OCd"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="S6rUH8FB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E727031A810;
-	Thu, 13 Nov 2025 19:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01974261B6D;
+	Thu, 13 Nov 2025 21:20:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763061383; cv=none; b=JVl3SY6n8601ne40rHfjV1PlWI6M5I6gSystZiiSud/hniXNF7dGYHc8E2cKFvJZZnS7VS0nHpJMuX4C/QNDD+24JZyUvutNxojBHKSGvKQTcXtLCRS1htfD/lXXwbgIZtR3nxBDZLyGGVn2f0VXaO3WyHfrQ3Lmg9EOMkPT8fQ=
+	t=1763068810; cv=none; b=bBPI+T4Ot/+EfAELaILSBXTG2z71TFTVS1Nnh2BERdcK+SRwQAGCdNG6XgKhsOt+hI5iWGJhYabQCUllwzT8h2/QlxPKgRQdugcMlgfbIiSDA+a+RxNImcpPcJYG9GajzvWAE0Ml3VZ151tBo4+Qex2dNn6IPkteOzkiXCFhYHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763061383; c=relaxed/simple;
-	bh=IblUqGpTbIRtiXEqbdz5S15EKx867g0thOANjT9zzo0=;
+	s=arc-20240116; t=1763068810; c=relaxed/simple;
+	bh=9y9a2c/jVOu6lhfw2KQmK7c70gHOg4s3VbgeD47eFJc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tqXoN29cJz50toETGMuTyXeEIKDHkpHuKz27Quf3GPAT0nf4E1PNdnODQS6Rx7Hy0GWS72T03z2ZO93Ii42gACQC4lTG7H9P0NswBLeUCkn/CDr+QSRbtQlAHx/ac3FdAb0VkLqH/B3Ti4ECzcLDy6ZdRNgBqemB1opCGpkzX3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jAWm3OCd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE21C113D0;
-	Thu, 13 Nov 2025 19:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763061382;
-	bh=IblUqGpTbIRtiXEqbdz5S15EKx867g0thOANjT9zzo0=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=gNuAzWsoblvxysl4MQ6sbrHLRNYKKox5Eo/Gw7+hVtWe17M8V/fSBIpVZm4avNvVZgbRCgrf9NOZuZSF4GJGMJGc2rzraUh4NQWR1TSSPAtIdapMkRX/tq+WsbAkyXBajTYZ7qiumTLCVzbyEuJQ61UZpGmh+1X0yKXtDFFvNN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=S6rUH8FB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C0AC4CEF5;
+	Thu, 13 Nov 2025 21:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1763068809;
+	bh=9y9a2c/jVOu6lhfw2KQmK7c70gHOg4s3VbgeD47eFJc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jAWm3OCdZCohQVKp5xXcn4czTWQ2MTmmYQBUnepiL/xkhVs6FGcaMfyOJocxIz7Bp
-	 5V1tpOfeN/K8T7KYy8X/7mAkx2OyFLh336Et0Q8Xr4N6XyTYOUBc/j6rhxx/P90J1r
-	 w2YIuNuxfi2VH0RJo2wSezaWCaZ7uUnHVrpbxdVG3LWs5GMsAJMv5QaW2quFEtKicP
-	 K12bENP+L8JMTxNVY1si2rwXPADgiezPGKXDCtVWufNcSKOD6PqjHfQRr5D1OIiw5u
-	 u9JNu2wVtrmHHuBzWHK2yOj/8BefmBT2ArjGapig3s8vDGX4KDuSvXVKvpHQcuEJr9
-	 T+6Q/gD9Wrpig==
-Date: Thu, 13 Nov 2025 19:16:18 +0000
-From: Conor Dooley <conor@kernel.org>
-To: "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"Simek, Michal" <michal.simek@amd.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"git (AMD-Xilinx)" <git@amd.com>
-Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset
- constraint for the versal platform
-Message-ID: <20251113-risk-doorstop-4ec156b58d0a@spud>
-References: <20251112155430.1326426-1-radhey.shyam.pandey@amd.com>
- <20251112-bagging-diameter-4ebab1f9ed45@spud>
- <MN0PR12MB59537C0F520B40977620BFCDB7CDA@MN0PR12MB5953.namprd12.prod.outlook.com>
+	b=S6rUH8FB57R/UUe04bwBSoaGOYGmurKvFQGiKjaRp+69RaYMny8aJztzOQraBcrQq
+	 2lwrKakpi4mw3npKSHEcLjHJYPumZM6bSLsdqs+5vrFZt/jlpgeaTIxOM5qITJXPz9
+	 vcfnIkmnsJ7qWYDomwahLU7DQW/0LJ2QhI+mOxNo=
+Date: Thu, 13 Nov 2025 16:20:08 -0500
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: bot+bpf-ci@kernel.org, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
+	yonghong.song@linux.dev, ihor.solodrai@linux.dev,
+	Chris Mason <clm@meta.com>
+Subject: Re: [functionfs] mainline UAF (was Re: [PATCH v3 36/50] functionfs:
+ switch to simple_remove_by_name())
+Message-ID: <2025111316-cornfield-sphinx-ba89@gregkh>
+References: <20251111065520.2847791-37-viro@zeniv.linux.org.uk>
+ <20754dba9be498daeda5fe856e7276c9c91c271999320ae32331adb25a47cd4f@mail.kernel.org>
+ <20251111092244.GS2441659@ZenIV>
+ <e6b90909-fdd7-4c4d-b96e-df27ea9f39c4@meta.com>
+ <20251113092636.GX2441659@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="R/LfrMLgE6sszEZI"
-Content-Disposition: inline
-In-Reply-To: <MN0PR12MB59537C0F520B40977620BFCDB7CDA@MN0PR12MB5953.namprd12.prod.outlook.com>
-
-
---R/LfrMLgE6sszEZI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20251113092636.GX2441659@ZenIV>
 
-On Thu, Nov 13, 2025 at 12:15:02PM +0000, Pandey, Radhey Shyam wrote:
-> [Public]
->=20
-> > -----Original Message-----
-> > From: Conor Dooley <conor@kernel.org>
-> > Sent: Thursday, November 13, 2025 12:38 AM
-> > To: Pandey, Radhey Shyam <radhey.shyam.pandey@amd.com>
-> > Cc: gregkh@linuxfoundation.org; robh@kernel.org; krzk+dt@kernel.org;
-> > conor+dt@kernel.org; Simek, Michal <michal.simek@amd.com>; linux-
-> > usb@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git (AMD-Xili=
-nx)
-> > <git@amd.com>
-> > Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset =
-constraint for
-> > the versal platform
-> >
-> > On Wed, Nov 12, 2025 at 09:24:30PM +0530, Radhey Shyam Pandey wrote:
-> > > AMD Versal platform USB 2.0 IP controller receives one reset input
-> > > from the SoC controlled by the CRL.RST_USB [RESET] register so
-> > > accordingly describe reset constraints.
-> > >
-> > > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> > > ---
-> > >  .../devicetree/bindings/usb/dwc3-xilinx.yaml  | 43
-> > > +++++++++++++++----
-> > >  1 file changed, 34 insertions(+), 9 deletions(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> > > b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> > > index 36f5c644d959..cd0cc9da242f 100644
-> > > --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> > > @@ -50,17 +50,22 @@ properties:
-> > >      description:
-> > >        A list of phandles for resets listed in reset-names.
-> > >
-> > > -    items:
-> > > -      - description: USB core reset
-> > > -      - description: USB hibernation reset
-> > > -      - description: USB APB reset
-> > > +    oneOf:
-> > > +      - items:
-> > > +          - description: USB controller reset
-> > > +      - items:
-> > > +          - description: USB core reset
-> > > +          - description: USB hibernation reset
-> > > +          - description: USB APB reset
-> > >
-> > >    reset-names:
-> > > -    items:
-> > > -      - const: usb_crst
-> > > -      - const: usb_hibrst
-> > > -      - const: usb_apbrst
-> > > -
-> > > +    oneOf:
-> > > +      - items:
-> > > +          - const: usb_crst
-> >
-> > Why do we need all this oneOf stuff if both have the same first reset?
-> > Can't you just set minItems: 1?
->=20
-> Thanks. I have now set minItems:1 and defined compatible based
-> reset min/max constraints. Doing some more validation and
-> will send out the v2.
->=20
-> Example:
-> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> @@ -47,6 +47,7 @@ properties:
->        - const: ref_clk
->=20
->    resets:
-> +    minItems: 1
->      description:
->        A list of phandles for resets listed in reset-names.
->=20
-> @@ -56,6 +57,7 @@ properties:
->        - description: USB APB reset
->=20
->    reset-names:
-> +    minItems: 1
->      items:
->        - const: usb_crst
->        - const: usb_hibrst
-> @@ -95,6 +97,28 @@ required:
->    - resets
->    - reset-names
->=20
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - xlnx,versal-dwc3
-> +    then:
-> +      properties:
-> +        resets:
-> +          maxItems: 1
-> +        reset-names:
-> +          maxItems: 1
-> +    else:
-> +      properties:
-> +        resets:
-> +          minItems: 3
-> +          maxItems: 3
+On Thu, Nov 13, 2025 at 09:26:36AM +0000, Al Viro wrote:
+> On Tue, Nov 11, 2025 at 10:44:26PM -0500, Chris Mason wrote:
+> 
+> > We're wandering into fuzzing territory here, and I honestly have no idea
+> > if this is a valid use of any of this code, but AI managed to make a
+> > repro that crashes only after your patch.  So, I'll let you decide.
+> > 
+> > The new review:
+> > 
+> > Can this dereference ZERO_SIZE_PTR when eps_count is 0?
+> > 
+> > When ffs->eps_count is 0, ffs_epfiles_create() calls kcalloc(0, ...) which
+> > returns ZERO_SIZE_PTR (0x10). The loop never executes so epfiles[0].ffs is
+> > never initialized. Later, cleanup paths (ffs_data_closed and ffs_data_clear)
+> > check if (epfiles) which is true for ZERO_SIZE_PTR, and call
+> > ffs_epfiles_destroy(epfiles, 0).
+> > 
+> > In the old code, the for loop condition prevented any dereferences when
+> > count=0. In the new code, "root = epfile->ffs->sb->s_root" dereferences
+> > epfile before checking count, which would fault on ZERO_SIZE_PTR.
+> 
+> Lovely.  OK, this is a bug.  It is trivial to work around (all callers
+> have ffs avaible, so just passing it as an explicit argument solves
+> the problem), but there is a real UAF in functionfs since all the way
+> back to original merge.  Take a look at
+> 
+> static int
+> ffs_epfile_open(struct inode *inode, struct file *file)
+> {
+> 	struct ffs_epfile *epfile = inode->i_private;
+> 
+> 	if (WARN_ON(epfile->ffs->state != FFS_ACTIVE))
+> 		return -ENODEV;
+> 
+> 	file->private_data = epfile;
+> 	ffs_data_opened(epfile->ffs);
+> 
+> 	return stream_open(inode, file);
+> }
+> 
+> and think what happens if that (->open() of dynamic files in there)
+> races with file removal.  Specifically, if we get called with ffs->opened
+> equal to 1 due to opened ep0 and get preempted away just before the
+> call ffs_data_opened().  Another thread closes ep0, hitting
+> ffs_data_closed(), dropping ffs->opened to 0 and getting
+> 			ffs->state = FFS_CLOSING;
+> 			ffs_data_reset(ffs);
+> which calls ffs_data_clear(), where we hit
+> 		ffs_epfiles_destroy(epfiles, ffs->eps_count);
+> All files except ep0 are removed and epfiles gets freed, leaving the
+> first thread (in ffs_epfile_open()) with file->private_data pointing
+> into a freed array.
+> 
+> open() succeeds, with any subsequent IO on the resulting file leading
+> to calls of
+> static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+> {
+> 	struct ffs_epfile *epfile = file->private_data;
+> 
+> and a bunch of accesses to *epfile later in that function, all of them
+> UAF.
+> 
+> As far as I can tell, the damn thing intends to prevent removals between
+> ffs_data_opened() and ffs_data_closed(), so other methods would be safe
+> if ->open() had been done right.  I'm not happy with the way that FSM
+> is done (the real state is a mix of ffs->state, ffs->opened and ffs->mutex,
+> and rules bloody awful; I'm still not entirely convinced that ffs itself
+> can't be freed with ffs->reset_work scheduled for execution), but that's
+> a separate story.  
+> 
+> Another variant of that scenario is with ffs->no_disconnect set;
+> in a sense, it's even nastier.  In that case ffs_data_closed() won't
+> remove anything - it will set ffs->state to FFS_DEACTIVATED, leaving
+> the removals for ffs_data_open().  If we have *two* threads in open(),
+> the first one to call ffs_data_open() will do removal; on another CPU
+> the second will just get past its increment of ->opened (from 1 to 2)
+> and move on, without waiting for anything.
+> 
+> IMO we should just take ffs->mutex in there, getting to ffs via
+> inode->i_sb->s_fs_info.  And yes, compare ffs->state with FFS_ACTIVE -
+> under ->mutex, without WARN_ON() and after having bumped ->opened
+> so that racing ffs_data_closed() would do nothing.  Not FFS_ACTIVE -
+> call ffs_data_closed() ourselves on failure exit.
+> 
+> As in
+> 
+> static int
+> ffs_epfile_open(struct inode *inode, struct file *file)
+> {
+> 	strict ffs_data *ffs = inode->i_sb->s_fs_info;
+> 	int ret;
+> 
+>         /* Acquire mutex */
+> 	ret = ffs_mutex_lock(&ffs->mutex, file->f_flags & O_NONBLOCK);
+> 	if (ret < 0)
+> 		return ret;
+> 
+> 	ffs_data_opened(ffs);
+> 	/*
+> 	 * not FFS_ACTIVE - there might be a pending removal;
+> 	 * FFS_ACITVE alone is not enough, though - we might have
+> 	 * been through FFS_CLOSING and back to FFS_ACTIVE,
+> 	 * with our file already removed.
+> 	 */
+> 	if (unlikely(ffs->state != FFS_ACTIVE ||
+> 		     !simple_positive(file->f_path.dentry))) {
+> 		ffs_data_closed(ffs);
+> 		mutex_unlock(&ffs->mutex);
+> 		return -ENODEV;
+> 	}
+> 	mutex_unlock(&ffs->mutex);
+> 
+> 	file->private_data = inode->i_private;
+> 	return stream_open(inode, file);
+> }
+> 
+> and
+> 
+> static int ffs_ep0_open(struct inode *inode, struct file *file)
+> {
+>         struct ffs_data *ffs = inode->i_private;
+> 	int ret;
+> 
+>         /* Acquire mutex */
+> 	ret = ffs_mutex_lock(&ffs->mutex, file->f_flags & O_NONBLOCK);
+> 	if (ret < 0)
+> 		return ret;
+> 
+> 	ffs_data_opened(ffs);
+> 	if (ffs->state == FFS_CLOSING) {
+> 		ffs_data_closed(ffs);
+> 		mutex_unlock(&ffs->mutex);
+> 		return -EBUSY;
+> 	}
+> 	mutex_unlock(&ffs->mutex);
+> 
+> 	file->private_data = ffs;
+> 	return stream_open(inode, file);
+> }
+> 
+> Said that, I'm _NOT_ familiar with that code; this is just from a couple
+> of days digging through the driver, so I would like to hear comments from
+> the maintainer...  Greg?
+> 
 
-FWIW, this maxItems is not needed as it matches the number in the list.
+Sorry for the delay.  Yes, we should be grabing the mutex in there, good
+catch.  There's been more issues pointed out with the gadget code in the
+past year or so as more people are starting to actually use it and
+stress it more.  So if you have a patch for this, I'll gladly take it :)
 
---R/LfrMLgE6sszEZI
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRYuggAKCRB4tDGHoIJi
-0gT9AQCko4kdzAGADmzJ9rqSW1og+tEAc0KZ4IN9qoyyNQ7pigEA50Ga3HW83D8L
-WvF3aHpMsTZijeLjVl33kuBr+RPqgAY=
-=GL2A
------END PGP SIGNATURE-----
-
---R/LfrMLgE6sszEZI--
+greg k-h
 
