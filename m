@@ -1,142 +1,323 @@
-Return-Path: <linux-usb+bounces-30477-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30478-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76DC9C57405
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 12:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CF3DC5759D
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 13:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 65E284E2F1D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 11:44:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 209A14E368A
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 12:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9AA933F8A4;
-	Thu, 13 Nov 2025 11:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6FA334DB72;
+	Thu, 13 Nov 2025 12:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="f2kky85F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012033.outbound.protection.outlook.com [40.93.195.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7F63112BB;
-	Thu, 13 Nov 2025 11:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763034289; cv=none; b=MNQRQfTsPzJJn9CgeapXPBOsXTYmQq3W8yBBRdJlUei5tjm6XAThW/3x4c47TUO175DSn00TXmqyO4uNwhrZYdEADm7VJ8y8g857/VDkK9kNh3YaBQdjVHTL0M/Zy2fQHY4SjC82tIKv9ywH6S5vEdDRaZXlYCcoKc0lUyPbs0w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763034289; c=relaxed/simple;
-	bh=lw0MB7fHN14/Scf/r5EFiO8UsNLFs9eczD1Ynio7oNQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=homHKnIM1EwmObD0LQXAKMKuda3dEGfSHEqLHVxIn8TX5eCAmeCD3I1kIHpOJSXSH6/gfpnF6fycz6BO1ga4visyeZEK7Tg7w6Qpu+trL05afJ6GLGF/+U4USRplrJMeWDpRlOV0tiKtpBlV6Pvk5Lrl3Ekqsf/KkYi02GrlAZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 1fe1b8b2c08611f0a38c85956e01ac42-20251113
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:cffce43e-6dbf-4adc-8364-1eac317a70ba,IP:0,UR
-	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:25
-X-CID-META: VersionHash:a9d874c,CLOUDID:485a7b3a36c75995599e6a1fa1c3be58,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850,TC:nil,Content:0|15|50,EDM:5,IP:
-	nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,L
-	ES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 1fe1b8b2c08611f0a38c85956e01ac42-20251113
-X-User: dengjie03@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1132045790; Thu, 13 Nov 2025 19:44:34 +0800
-From: Jie Deng <dengjie03@kylinos.cn>
-To: gregkh@linuxfoundation.org
-Cc: mathias.nyman@linux.intel.com,
-	sakari.ailus@linux.intel.com,
-	stern@rowland.harvard.edu,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jie Deng <dengjie03@kylinos.cn>
-Subject: [PATCH] usb: core: fix NULL dereference in usb_ifnum_to_if() during device removal
-Date: Thu, 13 Nov 2025 19:44:11 +0800
-Message-Id: <20251113114411.1410343-1-dengjie03@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455AA2EA470;
+	Thu, 13 Nov 2025 12:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763036109; cv=fail; b=Vco0T4F68pIETFc5thw9Fq6H1M9wW5uJbVLtXlidFSPlUKj6WjGIrTSnv3u8bY5YRpPxfhCLK72Pv9HNAmYA9SlFutlQ7wLVS/Jq87pdbEfNL1v/YnF2fcErdSDBRNZ52U/tpLKWKeBockkAQwpisdis9zLKroPhTrvXxzWXrn4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763036109; c=relaxed/simple;
+	bh=/+jZlzx/QfmNjnSGbO+grUfslORX52XMktO1fosd77s=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Gyfa6RDgBVvmgU653HEpkICEi8wbbs358xRQ+VqQdv2tMjAWrximR1zAWisUbVCDeNMk+VFyCOgLLYNAJiESi1IO/IQhlyIJa5dvnbE1utoR/8dWHoXWKW/RAHxRXHxdKZ7oGrRoyro4gSJOTY/SS5Q3fr2rLeopZy4zUIuPSSU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=f2kky85F; arc=fail smtp.client-ip=40.93.195.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ervb7l2Hse0FTKr0qgBGa2wBHqWtYPPBlqtcJh0bMX9JW9fex9J4DQauXKTIja8v0bEhh0XiVpkBGNQc5yovHiBkjO+ezsRnIrtFlHfQMqGUHYfzqz0TLz8g/917f4KXOUnMsTJbfaXTvI8sFdOwP2MvSESddQLqUosbITZlrcmrg1RLAx7b4AxhS9Zwc8Ay6zPsZg/7MxaJj9Y7ZrcrkPR0YY6dadOK+ywdJkXlSu3BipNJav3irkBz85RR4fl/eXngjpVghdZOYfn8apP2uenkisJHWT8dFXYHm5OqAJpO2Te5Gl1lDL7rYS75zuFTxWuaRtP3U/EnFZh51gH8mw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kni+uprTvh4HbnOvPSWuU/+R6LdqI9scCjXvyN/5gVI=;
+ b=A96uMaSTVYcXfCOYqdTr6RsJlrMkPd+gd41X54OQuxqiiQD10aTv4lgyFo5UFtah91Xek0DCNqZ1g+dqGaBlcaMhXW/PL/yqLRAUoLxA91qIJvRuwqeanUEqyyjHwUx5RiNDAhtvovkyOksBjehzD+cCjFvPHX3+XidxqAPoeaCyaLIJ2qqkF6mVuAzOE29QMrs8NSQoG4xN6N3/m0pzhbBG4iJKi0O6OAa8HNBj5KVqni/AfkRMrXG7CKFmiR8Zq/xqFaIqhAXTULj9St9529iJuUZWkze4HOspJDP1Vm6Gdx5ewM1p4yyi7hjLOsRDoKAz6Xuwx/U/z4xzxarDOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kni+uprTvh4HbnOvPSWuU/+R6LdqI9scCjXvyN/5gVI=;
+ b=f2kky85FlUpUxepTpICTD3kLWOTBoCXpWKHL/5FrSNqLmzLP6TCaZMOuYTXsiJ4kzzrOUSLHBo1hi4HE2ZySfjMpKlNkV3VULGs/St9R75Of9Vt2iXDkpKIcceNrPxObjlXoV3keyIjCEH4af71oqy3pM5JPghMDZqcA4W7P3RY=
+Received: from MN0PR12MB5953.namprd12.prod.outlook.com (2603:10b6:208:37c::15)
+ by IA1PR12MB7712.namprd12.prod.outlook.com (2603:10b6:208:420::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Thu, 13 Nov
+ 2025 12:15:02 +0000
+Received: from MN0PR12MB5953.namprd12.prod.outlook.com
+ ([fe80::6798:13c6:d7ba:e01c]) by MN0PR12MB5953.namprd12.prod.outlook.com
+ ([fe80::6798:13c6:d7ba:e01c%5]) with mapi id 15.20.9320.013; Thu, 13 Nov 2025
+ 12:15:02 +0000
+From: "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
+To: Conor Dooley <conor@kernel.org>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, "Simek,
+ Michal" <michal.simek@amd.com>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "git (AMD-Xilinx)" <git@amd.com>
+Subject: RE: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset
+ constraint for the versal platform
+Thread-Topic: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset
+ constraint for the versal platform
+Thread-Index: AQHcU+zDcCWaPQULXkSxJV7QRsA8c7TvZ26AgAEcEiA=
+Date: Thu, 13 Nov 2025 12:15:02 +0000
+Message-ID:
+ <MN0PR12MB59537C0F520B40977620BFCDB7CDA@MN0PR12MB5953.namprd12.prod.outlook.com>
+References: <20251112155430.1326426-1-radhey.shyam.pandey@amd.com>
+ <20251112-bagging-diameter-4ebab1f9ed45@spud>
+In-Reply-To: <20251112-bagging-diameter-4ebab1f9ed45@spud>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_Enabled=True;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_SetDate=2025-11-13T12:04:44.0000000Z;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_Name=Open
+ Source;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_ContentBits=3;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_Method=Privileged
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB5953:EE_|IA1PR12MB7712:EE_
+x-ms-office365-filtering-correlation-id: 3a260c1b-9a15-4e10-dcba-08de22ae45e6
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?I+CBIQV+uDa92p9qUvMITFbQ6gM1EgjBUgwVS0aBZ9ecqSBqJAfBNQfDZYbn?=
+ =?us-ascii?Q?z4mHX/XppjMRg6SZ5FU5rVuxu6/OtqrnRBhsPxYmFTyTwf8DCeHg3c1MrFqO?=
+ =?us-ascii?Q?ZxTZvzVzZMzTza3Kkfkr7i4ZpxBgaCwjlQKcBjBieFPG5uJpCs9wgIlkuWEF?=
+ =?us-ascii?Q?X0ELznjsuXj/NGjAIox2A73reCsOLwQgglBkmo5jlPeg1xSULNB0OnMxw0np?=
+ =?us-ascii?Q?ldsmxh6ZNko6pXeNfT2sLQ/kNi2irJCTOoobLNc44DGlv8KNKDIr2F1XhnoU?=
+ =?us-ascii?Q?Xz7Tyyba9QS3n9VRkP47T/l379bP2xBqYKTrftH84n6UsvcBLgtgQ1uDQzPN?=
+ =?us-ascii?Q?BG35qutbtXoQd4Sv++6wcZKMsk4vH9tfDYcezPoGwhQpDieOYWY6fz5IV1IF?=
+ =?us-ascii?Q?dTXmK3m38LTYbVHJdctjaatdX8JskdnLzFWiM56aWfsn4MxQQMDSIx+XaS/v?=
+ =?us-ascii?Q?uPtIh0NAzvPKV4hDEMcQKDq/GeJB0dBRvpXGRSsqnYeCUK0ewzPPjtZwl56u?=
+ =?us-ascii?Q?6jvvOcFF8CZos1sSfkYb+xU7s3Xln1AfwqfV5+8jYexnYOWPcUy9OUnHHUB/?=
+ =?us-ascii?Q?nPm87YAJnaSMGCsqXY9nnOpNrneYNZlXA5WXtmAYdyfH5yh7mdLuD54cJYbw?=
+ =?us-ascii?Q?eu5n3DihHwN0hxxBDR0s0xzsGTBor0usItTI+fUDwUkOOTuUIZXLxc08unv6?=
+ =?us-ascii?Q?Q5olQtVQedCYXXRgg9e6uFhPyhEXG1Dik9f0aIY7KXkAZ8gTvNei/yItntum?=
+ =?us-ascii?Q?Gnav7JmjhbQcmuphFWIoRdCKwnmltaRU9UGPl55eCzVMUrFmUJHpAz0XxI40?=
+ =?us-ascii?Q?Q5H4RS97pbsL2O84y2ajspNh3SiQV+bMFAQGJJzaHtzjEICnymw20J8imoYD?=
+ =?us-ascii?Q?ud4gSKSTzWXrabvaKBreeW5heZusbcLbym7F69DVP35XpBUpjDZDr7T/D7NR?=
+ =?us-ascii?Q?BmUDRMACI8MTi2n+6G/2SDtSxlqKjtcxL0xQNPW4izBET7CcyfJVkKyyLnsq?=
+ =?us-ascii?Q?T5exUNQeLf4U1Ji7FjlYXwhwtWSTKU/1n8jBccf5AvERSOl0GeDSg8MV1GXF?=
+ =?us-ascii?Q?TFPYytcEZ4pLk788vOUREa1r3MrFl3L5avUWNYYp7MKUci5dzz5+gA8I8x8O?=
+ =?us-ascii?Q?+THCBRCKVe/4fZCrXHpCRyU5zIS1eL0DXo+f8y26LXO0nBS1niXMlsMQL7Fu?=
+ =?us-ascii?Q?FpZ0VHdLdgeM++wqy1YcWr4h7qAdBkZ4w+HPAeTm9hnvs5aaxOoN50bVDUcw?=
+ =?us-ascii?Q?A87rl138z1csmd2GnLg48MIQMwZ9JgJ8F1ijFKa9V9EYiJcNNT3epSW+F38W?=
+ =?us-ascii?Q?uBgCabvmmq/21BPqm+DSsj49A/4xat5pScYevE6JQdGPA+nMRj7T0nvaG9Ds?=
+ =?us-ascii?Q?SckIYsZ1qP96sQtIMRN1kNRAEiDVq50ElG1Ek6Tg+mK4dYUMbdTT7XD4GDEO?=
+ =?us-ascii?Q?eiEy+dOahwJfzRTXmGv8ngtfacJT0wYLklZzT/8wXugi1KXJnpVsF7wYMwiG?=
+ =?us-ascii?Q?DnjJKtQIYC0BFZWs4nJge+xtDiXR9mshAlZQ?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5953.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?s9KPBxiWl6k1rf13Ywxj5OEKyw3U8SMs70a/mqc9fy7TdrmMxAstBmLT0i5O?=
+ =?us-ascii?Q?3wnc489f/N1ueeuxqvDP0SQWxLq/cQNAXNn4fn37Nk8HMHqljbINHECidUiJ?=
+ =?us-ascii?Q?lbOng+Dq/VUWn3BkXdGwKMh8frozzIODd/RypyNd5mVIrC2yi3m3qBu9QuD8?=
+ =?us-ascii?Q?qBFhFCOrMt6ObU5rd8iKqNWHuR8opzziUnzHN/FM+z/9Lbz5sjIwki3nOEi9?=
+ =?us-ascii?Q?+HeL5ZhL/pwATQLreU9GJPKcJq/ltryUXEvSJ1XvHXuBeEQQCuzvXi/6eRc+?=
+ =?us-ascii?Q?pKkYF3iU52Lj7RPhNIQOeOJzoNbEL1nh077rPA9fHjUm0oh/jFXImS1L1kLx?=
+ =?us-ascii?Q?6O7hFKQDDhs1bPt9/+kO6YXzRkQkv6oxLIJlyXSQjw3mLaakPEgr6mUovQop?=
+ =?us-ascii?Q?74dfwOInON0FykIRPvAyJhuuolbyTnhz26+q6C/PucvgjrXh1Eky+aozFuGU?=
+ =?us-ascii?Q?sFI4g7mYdhQKC9SHR6gyocRr1Jyo7qWlyZSvOq1EuCcsIWlU5aTYfr6kKD7Q?=
+ =?us-ascii?Q?fJq/m1BWPfCzLlO+Rqgm9/n1Ttfh3voGA141TC2YdoNMn0QafLcxdmP8t2Cg?=
+ =?us-ascii?Q?8aWtrKNuw/8GnNrB/qywpbADHxHI8C4kO1D3w8H5mCef6fOxP9iEE8wi5Nk9?=
+ =?us-ascii?Q?vVkaUoccEJaqSt5Vl/9GZV/Dg7i9cqMrOVqgLhwRLYA7nTuX0bAyEszkSazu?=
+ =?us-ascii?Q?meqP6gdoBMpi6Ec3DPRZPjvBqMNSLAuO85wbw5Y+1wDFLTMEFDlAzvOhnSLE?=
+ =?us-ascii?Q?sf2h1b/1j8lQqhcjTK82YQNcxPg9sb9XBIhWZteFQDVvrTiklfu0QhGc+AIQ?=
+ =?us-ascii?Q?WadPlngsNKy26ZU6YjLcEnXX3+u7tk44cYYi6fiUOHEyvIO7ZV+a7pmh74qI?=
+ =?us-ascii?Q?tTG/caZn0xpVvIfyA+RX9Xz+Us2AUqIOwWlBWET1wm7z4BFlGqn12BCsYDcm?=
+ =?us-ascii?Q?uk8Omd0Dwa8iV+4hcatto45jHkyM2eN7oyI+RpW93f1Q1ZU+vlv9gc+p7DxS?=
+ =?us-ascii?Q?5MvZYyWyABiwiCMs0qB0tUi8zF0lHiB6qXNyIlj5BFU0jQ9hmnQaFy91sb0R?=
+ =?us-ascii?Q?yuCq/2gBZrmW3XnUIm7w4pPYL2lgqnMj8XBgZ7pzMIqeRsAtc0Vpoxgtqzu1?=
+ =?us-ascii?Q?GAdAmRfMIC9dW8yUz5uOkJ7uh6+V5n1Fcxoi4pPrcj4R7r7yfOXewnldyicX?=
+ =?us-ascii?Q?5bAeybgpSBPc2Ztxs98ugy7OAQ35WzI9Vvk214/QuTAGyBYMJtXxslHv6DVw?=
+ =?us-ascii?Q?aeP0Q3tAZ7JRTl7kBYDU0lMYrKoNzqI1yT9tDkuzMxXlxx1KqM6g3ZlXcBf7?=
+ =?us-ascii?Q?z2rA2/ylk/0+/I0pDw1uaNQVa4PjIAqwdPAb+QDkcFy4RX5Myoka+S0xmRyO?=
+ =?us-ascii?Q?zv75bTkXrZeYlnQWx2b9y4nzTUcslbDBxXFaVYtLvUglP9dx7rsH5OLPJ4uf?=
+ =?us-ascii?Q?yeNn9TXyx0JB+hG+QzVEEqmt9x80Bcx4x2C6+OnpS6R/EVOyY9oAdXACik4N?=
+ =?us-ascii?Q?cUPjYXFQV3+JxD74KuSJaTXBZX64NfbX1nw+FdLQc2gyx+aa5ljYDPnvVDNx?=
+ =?us-ascii?Q?7/e/1ZfAgRyVkG/FNkE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5953.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a260c1b-9a15-4e10-dcba-08de22ae45e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2025 12:15:02.5214
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JEoPRS20qn9U2Zs4fx7cri9jIkU/4+3epyHg0lPUL1kECL28cN9mbgZLvtsQI/XN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7712
 
-During USB device hot-unplug, in the time window between when
-usb_disconnect() calls usb_disable_device() to set
-dev->actconfig->interface[i] to NULL but before dev->actconfig
-is set to NULL.At this point, outside the kernel, usb_ifnum_to_if()
-is called through usb_set_interface(), and usb_ifnum_to_if() continues
-to access interface[i]->altsetting[i], triggering a null pointer.
+[Public]
 
-kernel log:
-[ 9518.779148][ 1] [ T4650] pc : usb_ifnum_to_if+0x34/0x50
-[ 9518.784360][ 1] [ T4650] lr : usb_hcd_alloc_bandwidth+0x260/0x348
-[ 9518.790439][ 1] [ T4650] sp : ffffffa25a6c79d0
-[ 9518.794868][ 1] [ T4650] x29: ffffffa25a6c79d0 x28: 0000000040045613
-[ 9518.801294][ 1] [ T4650] x27: 0000000000000000 x26: 0000000000000000
-[ 9518.807720][ 1] [ T4650] x25: ffffffa2e1597408 x24: ffffffa2e1597408
-[ 9518.814146][ 1] [ T4650] x23: ffffffa2e15974f8 x22: 0000000000000000
-[ 9518.820572][ 1] [ T4650] x21: ffffffa2e9acc000 x20: ffffffa2e6712000
-[ 9518.826998][ 1] [ T4650] x19: ffffffa2e6a8a800 x18: 0000000000000000
-[ 9518.833423][ 1] [ T4650] x17: 0000007fbb91b4b0 x16: ffffffc01016a170
-[ 9518.839849][ 1] [ T4650] x15: 0000000000000000 x14: 0845c02202702800
-[ 9518.846275][ 1] [ T4650] x13: 0000000000000001 x12: 0000000000000000
-[ 9518.852700][ 1] [ T4650] x11: 0000000000000400 x10: ffffffff89e5d720
-[ 9518.859126][ 1] [ T4650] x9 : 0000000000000000 x8 : 0000000000000000
-[ 9518.865551][ 1] [ T4650] x7 : ffffffa2fff1e440 x6 : ffffffa28175c900
-[ 9518.871977][ 1] [ T4650] x5 : 0000000000000060 x4 : ffffffa2e9bc54b0
-[ 9518.878403][ 1] [ T4650] x3 : ffffffa2e9bc54a0 x2 : ffffffa2e9bc54a0
-[ 9518.884828][ 1] [ T4650] x1 : 0000000000000001 x0 : 0000000000000000
-[ 9518.891254][ 1] [ T4650] Call trace:
-[ 9518.894817][ 1] [ T4650]  usb_ifnum_to_if+0x34/0x50
-[ 9518.899681][ 1] [ T4650]  usb_set_interface+0x108/0x3c8
-[ 9518.904898][ 1] [ T4650]  uvc_video_stop_streaming+0x3c/0x90 [uvcvideo]
-[ 9518.911500][ 1] [ T4650]  uvc_stop_streaming+0x24/0x90 [uvcvideo]
-[ 9518.917583][ 1] [ T4650]  __vb2_queue_cancel+0x44/0x458 [videobuf2_common]
-[ 9518.924444][ 1] [ T4650]  vb2_core_streamoff+0x20/0xb8 [videobuf2_common]
-[ 9518.931221][ 1] [ T4650]  vb2_streamoff+0x18/0x60 [videobuf2_v4l2]
-[ 9518.937390][ 1] [ T4650]  uvc_queue_streamoff+0x30/0x50 [uvcvideo]
-[ 9518.943557][ 1] [ T4650]  uvc_ioctl_streamoff+0x40/0x68 [uvcvideo]
-[ 9518.949724][ 1] [ T4650]  v4l_streamoff+0x20/0x28
-[ 9518.954415][ 1] [ T4650]  __video_do_ioctl+0x17c/0x3e0
-[ 9518.959540][ 1] [ T4650]  video_usercopy+0x1d8/0x558
-[ 9518.964490][ 1] [ T4650]  video_ioctl2+0x14/0x1c
-[ 9518.969094][ 1] [ T4650]  v4l2_ioctl+0x3c/0x58
-[ 9518.973526][ 1] [ T4650]  do_vfs_ioctl+0x374/0x7b0
-[ 9518.978304][ 1] [ T4650]  ksys_ioctl+0x78/0xa8
-[ 9518.982734][ 1] [ T4650]  sys_ioctl+0xc/0x18
-[ 9518.986991][ 1] [ T4650]  __sys_trace_return+0x0/0x4
-[ 9518.991943][ 1] [ T4650] Code: eb04005f 54000100 f9400040 91002042 (f9400003)
-[ 9518.999153][ 1] [ T4650] ---[ end trace f7c7d3236806d9a4 ]---
+> -----Original Message-----
+> From: Conor Dooley <conor@kernel.org>
+> Sent: Thursday, November 13, 2025 12:38 AM
+> To: Pandey, Radhey Shyam <radhey.shyam.pandey@amd.com>
+> Cc: gregkh@linuxfoundation.org; robh@kernel.org; krzk+dt@kernel.org;
+> conor+dt@kernel.org; Simek, Michal <michal.simek@amd.com>; linux-
+> usb@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git (AMD-Xilinx=
+)
+> <git@amd.com>
+> Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: Describe the reset co=
+nstraint for
+> the versal platform
+>
+> On Wed, Nov 12, 2025 at 09:24:30PM +0530, Radhey Shyam Pandey wrote:
+> > AMD Versal platform USB 2.0 IP controller receives one reset input
+> > from the SoC controlled by the CRL.RST_USB [RESET] register so
+> > accordingly describe reset constraints.
+> >
+> > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> > ---
+> >  .../devicetree/bindings/usb/dwc3-xilinx.yaml  | 43
+> > +++++++++++++++----
+> >  1 file changed, 34 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > index 36f5c644d959..cd0cc9da242f 100644
+> > --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> > @@ -50,17 +50,22 @@ properties:
+> >      description:
+> >        A list of phandles for resets listed in reset-names.
+> >
+> > -    items:
+> > -      - description: USB core reset
+> > -      - description: USB hibernation reset
+> > -      - description: USB APB reset
+> > +    oneOf:
+> > +      - items:
+> > +          - description: USB controller reset
+> > +      - items:
+> > +          - description: USB core reset
+> > +          - description: USB hibernation reset
+> > +          - description: USB APB reset
+> >
+> >    reset-names:
+> > -    items:
+> > -      - const: usb_crst
+> > -      - const: usb_hibrst
+> > -      - const: usb_apbrst
+> > -
+> > +    oneOf:
+> > +      - items:
+> > +          - const: usb_crst
+>
+> Why do we need all this oneOf stuff if both have the same first reset?
+> Can't you just set minItems: 1?
 
-To resolve this issue, a null pointer check for config->interface[i]
-can be added in the usb_ifnum_to_if() function.
+Thanks. I have now set minItems:1 and defined compatible based
+reset min/max constraints. Doing some more validation and
+will send out the v2.
 
-Signed-off-by: Jie Deng <dengjie03@kylinos.cn>
----
- drivers/usb/core/usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Example:
+--- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
++++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+@@ -47,6 +47,7 @@ properties:
+       - const: ref_clk
 
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index e740f7852bcd..85dcda06a838 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -355,7 +355,7 @@ struct usb_interface *usb_ifnum_to_if(const struct usb_device *dev,
- 	if (!config)
- 		return NULL;
- 	for (i = 0; i < config->desc.bNumInterfaces; i++)
--		if (config->interface[i]->altsetting[0]
-+		if (config->interface[i] && config->interface[i]->altsetting[0]
- 				.desc.bInterfaceNumber == ifnum)
- 			return config->interface[i];
- 
--- 
-2.25.1
+   resets:
++    minItems: 1
+     description:
+       A list of phandles for resets listed in reset-names.
 
+@@ -56,6 +57,7 @@ properties:
+       - description: USB APB reset
+
+   reset-names:
++    minItems: 1
+     items:
+       - const: usb_crst
+       - const: usb_hibrst
+@@ -95,6 +97,28 @@ required:
+   - resets
+   - reset-names
+
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - xlnx,versal-dwc3
++    then:
++      properties:
++        resets:
++          maxItems: 1
++        reset-names:
++          maxItems: 1
++    else:
++      properties:
++        resets:
++          minItems: 3
++          maxItems: 3
++        reset-names:
++          minItems: 3
++          maxItems: 3
++
+
+>
+> > +      - items:
+> > +          - const: usb_crst
+> > +          - const: usb_hibrst
+> > +          - const: usb_apbrst
+> >    phys:
+> >      minItems: 1
+> >      maxItems: 2
+> > @@ -95,6 +100,26 @@ required:
+> >    - resets
+> >    - reset-names
+> >
+> > +allOf:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - xlnx,versal-dwc3
+> > +    then:
+> > +      properties:
+> > +        resets:
+> > +          maxItems: 1
+> > +        reset-names:
+> > +          maxItems: 1
+> > +    else:
+> > +      properties:
+> > +        resets:
+> > +          minItems: 3
+> > +        reset-names:
+> > +          minItems: 3
+> > +
+> >  additionalProperties: false
+> >
+> >  examples:
+> >
+> > base-commit: b179ce312bafcb8c68dc718e015aee79b7939ff0
+> > --
+> > 2.34.1
+> >
 
