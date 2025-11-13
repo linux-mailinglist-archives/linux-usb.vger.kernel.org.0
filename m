@@ -1,170 +1,95 @@
-Return-Path: <linux-usb+bounces-30497-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30498-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A894C58EAD
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 17:57:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF68DC59470
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 18:54:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A1C3421B43
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 16:48:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0B7274F32C2
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 17:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D54635A95D;
-	Thu, 13 Nov 2025 16:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+3gerQl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC64357A3B;
+	Thu, 13 Nov 2025 17:45:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from cosmicgizmosystems.com (beyond-windows.com [63.249.102.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A72334689
-	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 16:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1DB6350A04;
+	Thu, 13 Nov 2025 17:45:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.249.102.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763051953; cv=none; b=dhk5ZT3F4gYCm219gLkpn72GlmqHaRQlTuI2uDHm2ztALNQw+wrsVZyuSbGFjXBIKKVQA099cQvP3PEE/lwGoybCv+0mKA9JZ+6gWFiaP//mYYPVqQXRQIGQZzkr+0xmIgmj/+0ix8W+e/syaHDlHvuLILhj7zK1AlY2MQTKqd0=
+	t=1763055919; cv=none; b=EKyWEcqukRZ1k4v6B8tWOuJYRhzxhswRAIoZIfOWid+IvUh1z6hG7vJH9MRMNxTR2Gnp51bCoWRcD+895gl3vce4Efrzqma1xqzdVIdkLy/cDEAfBrAphr8Pn0aKUWLqJCdXmH2xy0oQ1AlihPEFdMopIgbm5roaaDL3o8AfmRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763051953; c=relaxed/simple;
-	bh=jMiV4RbMNeOesGqKgORN1iKerZRElW5XEIqKQrbUT2I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IpQgCQpXQtFZheJgA+Hxkb2YTEzgaKiWET9z7ez2f1P8kcbdLqS2dNkH1l1jjxWSOjq6RVfpb3oFB8xDRV/Rk6Ot8LK6hLburVc5VetyJYZCVg/5jewEZx/byVcAi0CuSl8qZunOSDtPmzizkAjYGBLQQ6IbtBUGyESkfV1u7og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+3gerQl; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-29806bd47b5so7016595ad.3
-        for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 08:39:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763051951; x=1763656751; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=S/ucMNEdTPs4tdBdIab98EcaF+7fPlknQB7RoGYRpzI=;
-        b=G+3gerQlIFcYM4wJuPzSobt5Qkzq6fvAmv5Sr1xJ5rs759VDfzk07c1fm93sC8Wxl7
-         jfcpnmRNhjPQgs0bRPRckHBc7ZD8pikP9FUWkJbmRBNSOXPaVSN4+pVouphjOov7QzsU
-         Fw0h79PmIy1OeD8NmGyKYQuFlNgl8u485Xxt6Rwi5jBvddnr/Sd3XfdeVEQepPuYctDR
-         O2ui0b7yAMuKnWq2kl8s3PyoXeZ5TbdWQPgZXoIODDfmN/+FGvkflhzQEPT/Q05jGTuw
-         dpaZavWkLPgbWI4R1JfdpkdxjO/nHlUjx08PoBUpWZskMfNB6/Dr6hRiwQfxNLgwK/cM
-         NARg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763051951; x=1763656751;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S/ucMNEdTPs4tdBdIab98EcaF+7fPlknQB7RoGYRpzI=;
-        b=Xe8zRd3i3A+eozBKooRA0zGDQP5C6y02qU26O5hVI9QDPOFVdR6Lch2NaqegWfdmYe
-         QKL3cjYiDdJYJmYL+bjV9I7sbtp00alJiT49vj9mc0zLo3DKzjoEIETHT1UAmOpVHaxN
-         5wDYC/Fz635pGCBRfk4Btb1j6gzjNQIP2UwOzZOQaEGBeBZ6RvDj/QR9tSaESD2eyLaW
-         vYIGTfPilRkpphevpuRGDNtIRt5fIK5vlWPyRIaK0ujNzIwKeqrBtdmvWEKHyfL9i5FW
-         U5OUGbeozqwuG4ansU8hnzDHAZZ3Km+p0rSAjSvAFOmJAQDKwVZ3nrnMI8J36ceawM5U
-         azOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUsgERP3k10WnyOhC2uRsx59RSYwPmaM7xKyk/aq41sqCxFW+xLq3wgPLtoAT0WKMUsiNSoticS4pQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8hzRowxP8G5i5B2UrHqz43jG8To2bMk5edCVGnx9/nzEqUw2j
-	/y3JCa+pBEzKLeF/qDkYriwBOtFjNVRBdXNEeX/B+/DME+UoCUFC979Q
-X-Gm-Gg: ASbGncto+p7PwkQIEen36jrCzDB6u/LPoZI5lgx5Ea0n9cDispvKRuy8vTMzqW4RQgg
-	7ieikT5LCbsbC3oWQcwUR2kum5M5rebBM5zoytZynyjl+uuVTw6tVBPXEYCh1mGujiyKevA2U5L
-	jnz+pyNLhY/EZQq2UGfYcITP/2TW+RHjPkMei5Al2jQHSGh8MbFccu7L/9Z7m5WvPPUyzG++qTB
-	w3BokoiRagvxTnWqAnj9Vk3CouSJmqEX0EQIClt2N00XJCG7UU9CKvMw7V+xn/U9vD+wOthYCcW
-	VWMNna5OHw2EyF7xIHoxNQP7TsufLcUuY5v8NTnvfk+JNLmYrD2NNPjilT7rX0286Sc5Mi62eha
-	o5ZahY/Z/csJ+24vceScFpx/sLLTl06HIU29kR7iQbzT+5dbxO2mEizKhrg1Ks7otxvySrAyyaq
-	g96Wg=
-X-Google-Smtp-Source: AGHT+IEs0sHw9yn/h78U4VzfNtAGyDH+Vb8Xjj0sh1kFUc43l7I1lswC+8d2RPaL8vbpculyPwUdyg==
-X-Received: by 2002:a17:903:1a28:b0:298:485d:557d with SMTP id d9443c01a7336-2984edcaaaamr90085595ad.45.1763051950935;
-        Thu, 13 Nov 2025 08:39:10 -0800 (PST)
-Received: from localhost ([103.70.166.143])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2cce59sm30165515ad.105.2025.11.13.08.39.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Nov 2025 08:39:10 -0800 (PST)
-Date: Thu, 13 Nov 2025 22:09:08 +0530
-From: Gopi Krishna Menon <krishnagopi487@gmail.com>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: gregkh@linuxfoundation.org, snovitoll@gmail.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
-	david.hunter.linux@gmail.com, khalid@kernel.org, linux-kernel-mentees@lists.linux.dev, 
-	syzbot+d8fd35fa6177afa8c92b@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usb: raw-gadget: cap raw_io transfer length to
- KMALLOC_MAX_SIZE
-Message-ID: <u3okc42qhpzi2uorrdei3jigq5wwgdqb66u3u5khtuzxhwbamx@f3dh3fivx3uo>
-References: <20251028165659.50962-1-krishnagopi487@gmail.com>
- <CA+fCnZeZ+c15X8BXg59ppbEmEUvp64aMaTPjXARyO_0x6KL+eQ@mail.gmail.com>
+	s=arc-20240116; t=1763055919; c=relaxed/simple;
+	bh=+1WwX0s7K2vuXYrIdfOrJCiJLFxASeJtUL1P7cKEVRI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=KCpkBrwO1AGti97r911qDU59YCzTCp/yPXYZ8zqGB6JE9g+qFfKZ2hC3jJzAH5IiLofKOa923NQtLK/Evl3LvrQD1QEK4GN3CbVr8eA8WgIZXQpE3pb81cGiq21OkM8dss7C9iUobPL7ySpaAWk02MjV2i1WsWxwuKAuT/0UD1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com; spf=pass smtp.mailfrom=cosmicgizmosystems.com; arc=none smtp.client-ip=63.249.102.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cosmicgizmosystems.com
+Received: from [10.0.0.100] (c-71-193-224-155.hsd1.wa.comcast.net [71.193.224.155])
+	by host11.cruzio.com (Postfix) with ESMTPSA id 8967724DB66F;
+	Thu, 13 Nov 2025 09:45:09 -0800 (PST)
+Message-ID: <cfbc29ee-5da4-4ff0-840a-e6e5722eb544@cosmicgizmosystems.com>
+Date: Thu, 13 Nov 2025 09:45:08 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+fCnZeZ+c15X8BXg59ppbEmEUvp64aMaTPjXARyO_0x6KL+eQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+From: Terry Junge <linuxhid@cosmicgizmosystems.com>
+Subject: Re: [PATCH v2] Apply the quirk HID_QUIRK_ALWAYS_POLL to the Edifier
+ QR30 (2d99:a101).
+To: The-Luga <lugathe2@gmail.com>, Alan Stern <stern@rowland.harvard.edu>
+Cc: michal.pecio@gmail.com, bentiss@kernel.org, dmitry.torokhov@gmail.com,
+ jikos@kernel.org, linux-input@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-usb@vger.kernel.org, linuxsound@cosmicgizmosystems.com
+References: <20251111203350.3c9a669e.michal.pecio@gmail.com>
+ <20251112015356.1919586-1-lugathe2@gmail.com>
+ <ab81f525-b4ea-4ac7-94a8-9d8eabca957a@cosmicgizmosystems.com>
+ <58edd03a-a7a7-40af-8228-18004dc6e737@rowland.harvard.edu>
+ <CALvgqEBVQsoQ3wewP+37u5Ms398O5gC8YaELm0UJdZSDBHzPPw@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CALvgqEBVQsoQ3wewP+37u5Ms398O5gC8YaELm0UJdZSDBHzPPw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 28, 2025 at 09:15:47PM +0100, Andrey Konovalov wrote:
+On 11/13/2025 7:45 AM, The-Luga wrote:
 
-> On Tue, Oct 28, 2025 at 5:57 PM Gopi Krishna Menon
-> <krishnagopi487@gmail.com> wrote:
-> >
-> > The previous commit removed the PAGE_SIZE limit on transfer length of
-> > raw_io buffer in order to avoid any problems with emulating USB devices
-> > whose full configuration descriptor exceeds PAGE_SIZE in length. However
-> > this also removes the upperbound on user supplied length, allowing very
-> > large values to be passed to the allocator.
-> >
-> > syzbot on fuzzing the transfer length with very large value (1.81GB)
-> > results in kmalloc() to fall back to the page allocator, which triggers
-> > a kernel warning as the page allocator cannot handle allocations more
-> > than MAX_PAGE_ORDER/KMALLOC_MAX_SIZE.
+>> Vendor ID 0x2d99 belongs to Edifier International Limited not Jieli
+>> Can you change to USB_VENDOR_ID_EDIFIER instead and move to the
+>> alphabetically correct location?
 > 
-> Ah, right.
-> 
-> >
-> > Since there is no limit imposed on the size of buffer for both control
-> > and non control transfers, cap the raw_io transfer length to
-> > KMALLOC_MAX_SIZE and return -EINVAL for larger transfer length to
-> > prevent any warnings from the page allocator.
-> >
-> > Fixes: 37b9dd0d114a ("usb: raw-gadget: do not limit transfer length")
-> > Tested-by: syzbot+d8fd35fa6177afa8c92b@syzkaller.appspotmail.com
-> > Reported-by: syzbot+d8fd35fa6177afa8c92b@syzkaller.appspotmail.com
-> > Closes: https://lore.kernel.org/all/68fc07a0.a70a0220.3bf6c6.01ab.GAE@google.com/
-> > Signed-off-by: Gopi Krishna Menon <krishnagopi487@gmail.com>
-> > ---
-> >  drivers/usb/gadget/legacy/raw_gadget.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-> > index b71680c58de6..46f343ba48b3 100644
-> > --- a/drivers/usb/gadget/legacy/raw_gadget.c
-> > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> > @@ -40,6 +40,7 @@ MODULE_LICENSE("GPL");
-> >
-> >  static DEFINE_IDA(driver_id_numbers);
-> >  #define DRIVER_DRIVER_NAME_LENGTH_MAX  32
-> > +#define USB_RAW_IO_LENGTH_MAX KMALLOC_MAX_SIZE
-> >
-> >  #define RAW_EVENT_QUEUE_SIZE   16
-> >
-> > @@ -667,6 +668,8 @@ static void *raw_alloc_io_data(struct usb_raw_ep_io *io, void __user *ptr,
-> >                 return ERR_PTR(-EINVAL);
-> >         if (!usb_raw_io_flags_valid(io->flags))
-> >                 return ERR_PTR(-EINVAL);
-> > +       if (io->length > USB_RAW_IO_LENGTH_MAX)
-> > +               return ERR_PTR(-EINVAL);
-> >         if (get_from_user)
-> >                 data = memdup_user(ptr + sizeof(*io), io->length);
-> >         else {
-> > --
-> > 2.43.0
-> >
-> 
-> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-> 
-> Thank you!
+> Could you kindly tell me where this info is?
+> Searching the internet I only found this website with this info:
+> https://the-sz.com/products/usbid/index.php?v=0x2D99
 
-Hi,
+The official list of valid USB Vendor IDs can be found here:
 
-Just following up on this patch to check its status.
-Thanks again to Andrey Konovalov for the earlier review. Please let me
-know if any further changes are required from my side.
+https://www.usb.org/developers
 
-Thanks,
-Gopi Krishna Menon
+currently:
+
+https://www.usb.org/sites/default/files/vendor_ids10282025b_1.pdf
+
+> 
+> I just checked the vendor from `lsusb`, and I was hesitant whether to
+> write Jieli or Edifier.
+> I also decided to write QR30 instead of Hal0. Should I add a comment
+> mentioning Jieli as I did with the device?
+
+The product was made using the Jieli SDK which supports Jieli chips. The 
+manufacturers string "Jieli Technology" is the default value in the SDK 
+and should have been changed by Edifier.
+
+No need to mention Jieli at all. The bottom line is that the product is 
+not 100% USB compliant and does not support suspend mode reliably so 
+requires the HID_QUIRK_ALWAYS_POLL quirk.
+
+Regards,
+Terry
 
