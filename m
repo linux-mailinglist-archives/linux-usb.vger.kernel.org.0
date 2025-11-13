@@ -1,96 +1,219 @@
-Return-Path: <linux-usb+bounces-30470-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30471-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5982BC552C8
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 02:03:05 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CFC2C55A95
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 05:38:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 09B9D4EA0F9
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 00:58:31 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8439234CB70
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 04:38:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D350921ABC9;
-	Thu, 13 Nov 2025 00:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF2232FF67F;
+	Thu, 13 Nov 2025 04:38:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34F21DE2D7
-	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 00:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D895F2FF648
+	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 04:38:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762994705; cv=none; b=eDg65Wn/V+l1j1GBx/Vh5zr950LSHS2gK2Vy+Po6KQq5EZkP/Xg0xvuBW9WKrKpuRPH0QUHeW01dBDZRQmqh6C/M6SauR2aU1Xjf6yR20raNpaJqM9pNPy3rPiyY2EbChItWBVtICsHFszuvUsFReHGcC72cW/W5DklCk2wHHNg=
+	t=1763008710; cv=none; b=B5JlICF/veFmlXzDLTtVNbyjy612H1EEb0EggerEpH2/DJ5EZ09dshzMdary1X+k+evuIlFPjLg7KvAV54D001DsS6Y8JlJ0xxHBh5Xd7iS2QZgoSO+mTBmdR/kLP22BH6iEg5N6B+ngUYOyd7Y75cWyb7B3gbF+3DO/KE0D3x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762994705; c=relaxed/simple;
-	bh=akpD68FRXSgJ3UWTHxS/xTnoHxMdY2EKCElVcN8Lbrg=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=azvxUpzRxa5npGpEcJTMY7b76CwhcbBoopvCx5vzwxsPNF1OAuXVQfoypKU4+Xz83K7MX0ED9O5XNmBP8xWSIKLVEdohzRcRqZ8VM1mNSEzx+INdfIA74jI5ULvg6pEwcznPAB+vynmFp5HINUm/SVglXN7Z84VX7mg6rFhnD2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+	s=arc-20240116; t=1763008710; c=relaxed/simple;
+	bh=u4u+sSazYqabZAc7hbMiiOjWUH71MWq0EYF7rKOkCn4=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=cRsP3kdmixcG/4u7qkhE8W/rgah85fJqwAxKgIGGy1aw8LnDDTHjAZSNBowaPlAIRz2zyhWH3tvSoNmKeP/KaXTex6A7D9QEU55mrvB4fcxmkj4shcQkP7JzKxlG2oA93YuyfL1LW71gk5F9E4gGatHSg/LllmN/NWV8qCGxRSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-9489bcc5a2dso39424739f.3
-        for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 16:45:03 -0800 (PST)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-433795a17c1so21261445ab.2
+        for <linux-usb@vger.kernel.org>; Wed, 12 Nov 2025 20:38:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762994703; x=1763599503;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ItT12y+7wRZewvqvz8JD8QRcThWHmeWOgUeD7MW9ZBE=;
-        b=FjNbahkNT0ngP1NCZYLQ/gTM+DVoEca/o0NbE9rD9P81N140EiXEi1ELk5qLZH8Jpn
-         PR+Rq0dQfOLOV9MuYEsIQi48MXUh78BtmJj4ms6JHIz6sLxfP9ltZXMA9yiAs9eNLlux
-         K3DWG/LAHazlP2UWfdxZjnrDvBF6jZq4xDxsMj8F7QGULFzmfMrK0oTyfvUQEoO7Yl5H
-         2DajBuzb2yeJeE+Yg9s2ltedkRhPHsaW9IKIO0ggFaNe/V+OMy59vfyN1Aqr+gGH8BD+
-         2Io8MxaM/VV2A63z1qIm+9tJhzi9Ld5HBUCbgtJEdYitM2O4U1/KZmmNItTmNRZ1NVOW
-         01Hw==
-X-Forwarded-Encrypted: i=1; AJvYcCXSKZgWJK5Nr4bpHLp0v0GxDi1f6kGotZRH94NlNe4qgmKnLFeYxA4En7d/78l0gNCsMsHHcuqnu+E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRPs06mgMYkntK4QaWIfjygUar6Dug/T+S9IiaB0mujawhjGNR
-	GXdujXlfpKJrUgfWLzk9zjaLCatcc+NTW1rSLcKnxZXk6d7eaXrPtUNu5WTi8ZSJVJpn8aEjHdT
-	M8zsBV/tCY25tiHBCr63aP8bw1MnqJ4odu36/nr06dvsvzn9rgqg7ePSJj4E=
-X-Google-Smtp-Source: AGHT+IGN8F2oZ/myun0ZFiJtclNF/dwsR+aCXcHsOpDqPUh5c+bO9sOqP7+avnEYzEIhUZd1GBkc7xXp0tpc8n7mkAJgoufSiItk
+        d=1e100.net; s=20230601; t=1763008708; x=1763613508;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uqEdPYImH11oIYQwbpCJG1OiZMqycbT4DrjcTtnisxQ=;
+        b=MX3E0AWGnHhccS4TJkFII2pAYh1uR99x5Ez6ATArUVOyEdvI5lpeRQHWPceGSt3+i2
+         ZriAkt5+JWNQ4UTqA0E2O1e83gyuWyDAjC9Lu9l8rR+TfM5lJkurJS4dXhNwUiYA1/Tk
+         mOq+3fBEgD35zQ0n3dMGf7WjkC4qcDDdWSGL7qfTpKBYZ4EmW7EyN2AtttSBmqwTJNND
+         ZcWVKQhpvTiEOrTcclwjDbHSK1coVhmWrlWUjH84U0R8+VMab3jSRkwLDuN4r9bXuJMv
+         AtR3CcnSpAN7TKDH14aVRHoqIaN8TinXzlkX4QAtA+nn7oLDtA80rEd/NmutA0Dxf86a
+         ZzvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX3q6D6iQXvnVUylCF5GLSq1r8QHFUMtBl0xNGYMOY8NPHwK56K4zdfB847WpJRGQgi7XiVlcmoH54=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8k9f5GldNkeZPSXaRPl2Pc/8K4LEaQuHved8TZuqUKT3sf510
+	fvmRmkhTRVLHXyo/mvsr4y53l8EhWZCNww5Ucx0VvUILGW1+I697uUwOZr4essRU6qmsK/jTbSu
+	QUJvT5mPZbqjoxQTX8BXWg0JypEMYs2CXR77TcKdi8j3hIo8cZlomQUmT5Uo=
+X-Google-Smtp-Source: AGHT+IFPUUaBMBYWYmEpm1xGnfuQrzXbwLufkiiyezvFTZNvYIsKGLRFMHVEBvqQGgN+x8CLdPzU4H84GrkAqbcGEMTIrmbpdPMQ
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2148:b0:433:7abd:96d0 with SMTP id
- e9e14a558f8ab-43473cff5fbmr71591685ab.3.1762994703007; Wed, 12 Nov 2025
- 16:45:03 -0800 (PST)
-Date: Wed, 12 Nov 2025 16:45:02 -0800
-In-Reply-To: <67da6f4b.050a0220.3657bb.013b.GAE@google.com>
+X-Received: by 2002:a05:6e02:349b:b0:434:6f6a:fb99 with SMTP id
+ e9e14a558f8ab-43473d71af5mr74866775ab.21.1763008708115; Wed, 12 Nov 2025
+ 20:38:28 -0800 (PST)
+Date: Wed, 12 Nov 2025 20:38:28 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69152a0e.a70a0220.3124cb.000f.GAE@google.com>
-Subject: Re: [syzbot] [usb?] [media?] WARNING in media_create_pad_link (2)
-From: syzbot <syzbot+701fc9cc0cb44e2b0fe9@syzkaller.appspotmail.com>
-To: cascardo@igalia.com, gshahrouzi@gmail.com, hansg@kernel.org, 
-	hdegoede@redhat.com, hverkuil+cisco@kernel.org, 
-	kernelmentees@lists.linuxfoundation.org, laurent.pinchart@ideasonboard.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, ribalda@chromium.org, 
-	sakari.ailus@linux.intel.com, skhan@linuxfoundation.org, 
+Message-ID: <691560c4.a70a0220.3124cb.0019.GAE@google.com>
+Subject: [syzbot] [input?] [usb?] memory leak in dualshock4_get_calibration_data
+From: syzbot <syzbot+4f5f81e1456a1f645bf8@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
 	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 
-syzbot suspects this issue was fixed by commit:
+Hello,
 
-commit 0e2ee70291e64a30fe36960c85294726d34a103e
-Author: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-Date:   Wed Aug 20 16:08:16 2025 +0000
+syzbot found the following issue on:
 
-    media: uvcvideo: Mark invalid entities with id UVC_INVALID_ENTITY_ID
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13f0f0b4580000
-start commit:   07e27ad16399 Linux 6.17-rc7
+HEAD commit:    24172e0d7990 Merge tag 'arm64-fixes' of git://git.kernel.o..
 git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4d8792ecb6308d0f
-dashboard link: https://syzkaller.appspot.com/bug?extid=701fc9cc0cb44e2b0fe9
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e38142580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12da427c580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a44692580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cb128cd5cb439809
+dashboard link: https://syzkaller.appspot.com/bug?extid=4f5f81e1456a1f645bf8
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1508c658580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1051897c580000
 
-If the result looks correct, please mark the issue as fixed by replying with:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ded911fa4408/disk-24172e0d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a1f3e61cb784/vmlinux-24172e0d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b92fd0e25cb7/bzImage-24172e0d.xz
 
-#syz fix: media: uvcvideo: Mark invalid entities with id UVC_INVALID_ENTITY_ID
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4f5f81e1456a1f645bf8@syzkaller.appspotmail.com
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+BUG: memory leak
+unreferenced object 0xffff8881192f9a40 (size 64):
+  comm "kworker/1:0", pid 23, jiffies 4294944710
+  hex dump (first 32 bytes):
+    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace (crc c51b5d6b):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4983 [inline]
+    slab_alloc_node mm/slub.c:5288 [inline]
+    __kmalloc_cache_noprof+0x3a6/0x5b0 mm/slub.c:5766
+    kmalloc_noprof include/linux/slab.h:957 [inline]
+    kzalloc_noprof include/linux/slab.h:1094 [inline]
+    dualshock4_get_calibration_data+0x437/0x500 drivers/hid/hid-playstation.c:1919
+    dualshock4_create drivers/hid/hid-playstation.c:2747 [inline]
+    ps_probe drivers/hid/hid-playstation.c:2845 [inline]
+    ps_probe+0x747/0x17d0 drivers/hid/hid-playstation.c:2821
+    __hid_device_probe drivers/hid/hid-core.c:2775 [inline]
+    hid_device_probe+0x298/0x3b0 drivers/hid/hid-core.c:2812
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+    __driver_probe_device+0xc3/0x1a0 drivers/base/dd.c:801
+    driver_probe_device+0x2a/0x120 drivers/base/dd.c:831
+    __device_attach_driver+0x10f/0x170 drivers/base/dd.c:959
+    bus_for_each_drv+0xcf/0x120 drivers/base/bus.c:462
+    __device_attach+0xf9/0x290 drivers/base/dd.c:1031
+    bus_probe_device+0xcd/0xe0 drivers/base/bus.c:537
+    device_add+0x983/0xc80 drivers/base/core.c:3689
+    hid_add_device+0x140/0x250 drivers/hid/hid-core.c:2951
+    usbhid_probe+0x5ed/0x950 drivers/hid/usbhid/hid-core.c:1435
+    usb_probe_interface+0x173/0x3f0 drivers/usb/core/driver.c:396
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+
+BUG: memory leak
+unreferenced object 0xffff8881192e7740 (size 64):
+  comm "kworker/1:0", pid 23, jiffies 4294944884
+  hex dump (first 32 bytes):
+    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace (crc c51b5d6b):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4983 [inline]
+    slab_alloc_node mm/slub.c:5288 [inline]
+    __kmalloc_cache_noprof+0x3a6/0x5b0 mm/slub.c:5766
+    kmalloc_noprof include/linux/slab.h:957 [inline]
+    kzalloc_noprof include/linux/slab.h:1094 [inline]
+    dualshock4_get_calibration_data+0x437/0x500 drivers/hid/hid-playstation.c:1919
+    dualshock4_create drivers/hid/hid-playstation.c:2747 [inline]
+    ps_probe drivers/hid/hid-playstation.c:2845 [inline]
+    ps_probe+0x747/0x17d0 drivers/hid/hid-playstation.c:2821
+    __hid_device_probe drivers/hid/hid-core.c:2775 [inline]
+    hid_device_probe+0x298/0x3b0 drivers/hid/hid-core.c:2812
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+    __driver_probe_device+0xc3/0x1a0 drivers/base/dd.c:801
+    driver_probe_device+0x2a/0x120 drivers/base/dd.c:831
+    __device_attach_driver+0x10f/0x170 drivers/base/dd.c:959
+    bus_for_each_drv+0xcf/0x120 drivers/base/bus.c:462
+    __device_attach+0xf9/0x290 drivers/base/dd.c:1031
+    bus_probe_device+0xcd/0xe0 drivers/base/bus.c:537
+    device_add+0x983/0xc80 drivers/base/core.c:3689
+    hid_add_device+0x140/0x250 drivers/hid/hid-core.c:2951
+    usbhid_probe+0x5ed/0x950 drivers/hid/usbhid/hid-core.c:1435
+    usb_probe_interface+0x173/0x3f0 drivers/usb/core/driver.c:396
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+
+BUG: memory leak
+unreferenced object 0xffff88812484e5c0 (size 64):
+  comm "kworker/0:0", pid 9, jiffies 4294945059
+  hex dump (first 32 bytes):
+    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace (crc c51b5d6b):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4983 [inline]
+    slab_alloc_node mm/slub.c:5288 [inline]
+    __kmalloc_cache_noprof+0x3a6/0x5b0 mm/slub.c:5766
+    kmalloc_noprof include/linux/slab.h:957 [inline]
+    kzalloc_noprof include/linux/slab.h:1094 [inline]
+    dualshock4_get_calibration_data+0x437/0x500 drivers/hid/hid-playstation.c:1919
+    dualshock4_create drivers/hid/hid-playstation.c:2747 [inline]
+    ps_probe drivers/hid/hid-playstation.c:2845 [inline]
+    ps_probe+0x747/0x17d0 drivers/hid/hid-playstation.c:2821
+    __hid_device_probe drivers/hid/hid-core.c:2775 [inline]
+    hid_device_probe+0x298/0x3b0 drivers/hid/hid-core.c:2812
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+    __driver_probe_device+0xc3/0x1a0 drivers/base/dd.c:801
+    driver_probe_device+0x2a/0x120 drivers/base/dd.c:831
+    __device_attach_driver+0x10f/0x170 drivers/base/dd.c:959
+    bus_for_each_drv+0xcf/0x120 drivers/base/bus.c:462
+    __device_attach+0xf9/0x290 drivers/base/dd.c:1031
+    bus_probe_device+0xcd/0xe0 drivers/base/bus.c:537
+    device_add+0x983/0xc80 drivers/base/core.c:3689
+    hid_add_device+0x140/0x250 drivers/hid/hid-core.c:2951
+    usbhid_probe+0x5ed/0x950 drivers/hid/usbhid/hid-core.c:1435
+    usb_probe_interface+0x173/0x3f0 drivers/usb/core/driver.c:396
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+
+connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
