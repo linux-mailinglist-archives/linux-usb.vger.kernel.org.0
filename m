@@ -1,138 +1,140 @@
-Return-Path: <linux-usb+bounces-30494-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30495-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23CE5C5819E
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 15:59:21 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC3C9C581B1
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 16:01:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E14433A899A
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 14:50:53 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6AD7B3546D1
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 14:59:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC9E2C11CA;
-	Thu, 13 Nov 2025 14:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 831D726AEC;
+	Thu, 13 Nov 2025 14:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="HztQvODp"
+	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="Blrvp02f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD0B284689
-	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 14:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5533135CBD3;
+	Thu, 13 Nov 2025 14:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763045447; cv=none; b=Yr5IwbAQQf9tbDh59D5dpL8v2g/zfIJ7vVVFjoO2FZVZZtO7unhG559DzEWDRXcFCU6gFk9+nY8SKkMKkZ6TJKGnwhDyoTqdN3wP6oE1wRrKdtyvtlKBOroapEjnbEFoABwfBXxuZvZodLNArFzSoQVCbQyV0wHWfmJ4AuR8ujM=
+	t=1763045963; cv=none; b=RdPwdTp+ud3nBzxZUSSb5Facq/D5Ka/l3YQf0LhGDaHERHZQk/A08Z8R+ENgI/fpQTjeKPAt6vBOoIr/M14XfTlRtYN7SdQBj7/hwHr5g8+J388mxIpxOs7vlb2TrYyyV8diQftqc5BAEAyzHWyJ41DTyZotb5Q7eXUwhx3uQXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763045447; c=relaxed/simple;
-	bh=V3NRUkCwpyXAHKZhigjr+8gsAPXHs140yNAQg5Rd8BE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KYu9lY2JfRLl/V3VVO94MnpqOjXgWLZvyMMNpq3LDREyRahk6ETlU1IcwE67JeDxkKit7IpwL+0FlXcOiP8ml2msWdXTADUPB7gWQG9F1/mwX7u65wtD1GhuE+Pabs3pp5p6kFArD51qtgSmabadPzAgggT5U+SX/6YmqnBKsp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=HztQvODp; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4ede4a30a84so5327331cf.1
-        for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 06:50:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1763045445; x=1763650245; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ET0d96Jr74GPyOWniH5D9NAeGfbNYsnJ+p2BnWJ+Iz4=;
-        b=HztQvODp/VXWNtXvR4iPJvBmULDFA35mrzuKpKOBrBl/UZBV2G/XgJfErZ2rFwOcj1
-         oQa69/nCzDaVlEocv8lKOOUkX+AybjPM8w1Fl3fY6a3Cgjdc8Cf/MjgO81/YEV3rEhQ4
-         aigUFOne7/KkUjcr980QKYNcLtAuk9pN3kcoTCtBRApwGuE6jF9X6QVlOOWEg/75831k
-         rxDrCF6R/aeKTrw4svlcciICxa8yuAJ0uE83zOnzWWH/5kcjptVArDC4hM5tlk1wf91m
-         YOCoDo7rroNRSnp6BZBaZA4xXnNhv2feGvj/OWb7oI/dI4gA4kMpmLkYG0dIqseXQ5hb
-         F6RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763045445; x=1763650245;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ET0d96Jr74GPyOWniH5D9NAeGfbNYsnJ+p2BnWJ+Iz4=;
-        b=DDaUYtUmwW4cRMS2PCRta0qC5qRIOdrgsxRmjjQMTYL9gDJIlBtszJWjnk4pBOmZPv
-         AjolA1LQTxVINAdvtm/ZYiTiB5uj7XqPDGHRovzee++8c6OhoPC/JkP246unY+NKWB1y
-         4e5JgiB2OC/ZRL/djSRul8MYdnM9+fq2jnS8u4YnS4Qh9rvXa/n3SY3UG/ZySNpaiaeG
-         V62rypKETPR7mY0Bo9Ydcsf0tPUDQHs1ySkkCvLhFTLMowCKj4/0LAxPw4MfqomuX4vi
-         mwHzhGvGe2AdeyNdHlvFZNNvjXDdTpOZbxOyWwCwUdEkPeLe92V+Nsv0tN/vFNMwTDk5
-         Kqgg==
-X-Forwarded-Encrypted: i=1; AJvYcCVy+R7/HFN+eNRor2ewe+p8w78ci3k7S6wkR7K8HTM/NbG0nseTQcNdhMNgP1tZtdgZhNORV1QABXw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3lppPyDNOvv5XZlfIjkJV+srOAwcYqwwanQtm2wbG/0U3KFoz
-	Ey6AzoM0Jl0c3DOwsUn6dHnAaRREjEsi2KdNEXZEsE3zFQTvKptvp07iTqDwj4zSaQ==
-X-Gm-Gg: ASbGnctk4ksdeX3PJXYHUN28sdaUdN3Jh90lZMgIGvnVuaPYqID8zHowElqRlc6CZne
-	xrWjV5fCr9RmKByZk9Ya0Z7vqkVriucNR6u1rVTy5xCyGf7Lteugq4t1FP5CVyVjO814B+sHPba
-	J21yYY8HSV7itsq+B5n8cvD2DAOxV+a6mMfjY1NRcdjAcoRt6F0TuVY+pFnnEZTGE5FKXlqeeql
-	mb6GDg54FE9JmeErqOEMhNJi5JOO60Lrh+mgeDusv1VPdHekF7HMcskFGe0s02dxKDtbPHoTmvz
-	ptQi0J2G7E87c0fLgqWlhGqZDQmXmLzmPC2ws5tgUE4Gi0OS3gArCrVpywrpaUOyI0Y9loq4q/h
-	n7Xm151hZ/QP8At2oWJkseXzdJHUmPuIK+rUYQBZWkzD4GO8Q4gQtzIH+OyxEoQzvFBqd11mhQC
-	0TcpWfTXkyx+LQG8TurEjRSolDMhW/7B9ojngJn5BSweousMGebBwBmlHqHQk9XLH9pKLRftqJ9
-	O2SdGou
-X-Google-Smtp-Source: AGHT+IFrl7GvASaCXPeEF/Bz7u5HyCncPixtKgI1OSsTM6i3nwJfB1/d9QLc4rH6Y+Pb82nfD8qYZg==
-X-Received: by 2002:a05:622a:252:b0:4ed:20bc:dc0b with SMTP id d75a77b69052e-4eddbd6ce7cmr91437691cf.35.1763045445025;
-        Thu, 13 Nov 2025 06:50:45 -0800 (PST)
-Received: from rowland.harvard.edu (nat-65-112-8-29.harvard-secure.wrls.harvard.edu. [65.112.8.29])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ede86b3820sm13156341cf.4.2025.11.13.06.50.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Nov 2025 06:50:44 -0800 (PST)
-Date: Thu, 13 Nov 2025 09:50:42 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Jie Deng <dengjie03@kylinos.cn>
-Cc: gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
-	sakari.ailus@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: core: fix NULL dereference in usb_ifnum_to_if()
- during device removal
-Message-ID: <0bec2aa5-cb3e-49c2-ab40-39a9ebceb2ad@rowland.harvard.edu>
-References: <20251113114411.1410343-1-dengjie03@kylinos.cn>
+	s=arc-20240116; t=1763045963; c=relaxed/simple;
+	bh=Db9hu2HdD//jk91631tPIDTC2WqeaooR8SDMjqObAYQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LjpSEHqggDc9NCKZSpnntDWOAAMNe+6iGARqXwnuCedsNIVnKAliISgssEi/TCcPXbOLAeAQQbtWg8a3f4wBBk2Hl46Eho5zxnKil9qN9YZSBOg9U11M6ySdcgzPOLBTYy9ZglC5+RCOF2jI0Rj4VBaGF3QDc2uGohmMbqgcKXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=Blrvp02f; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id E73346003C0C;
+	Thu, 13 Nov 2025 14:59:16 +0000 (WET)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with UTF8LMTP id 4hFpyF9LhRyf; Thu, 13 Nov 2025 14:59:14 +0000 (WET)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 33CF66003400;
+	Thu, 13 Nov 2025 14:59:13 +0000 (WET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail2; t=1763045954;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=chc/NlipiB+N/nq7OLHWxVwlHw0T2tebinCs9Z7oCSs=;
+	b=Blrvp02fgKdi0gybUy5/jQu6fFHa3/odEf9jRtYaWzg7dfTMIVAOF4EN5j5p0mI+lfunUa
+	CLTSsv6WAywZgrNJ9i5ibGU+QUh8v19ZVq+aUgFfSys6+a+ml+JINeFsh0XajytK3aoQIM
+	yLsQtqCAf8BOOqsd0XO6o6OjTO3iCr2ZPy83PQBvsRqlqDq8Jwl5XrgJrSXnFSP0CMAz0v
+	B8N1Tv5lolol3WbvTVgXEktRQNVm2uWU/L0RSTr9yMFnhaBl1GWwKsiL5Lnl+RN+kW+rKK
+	Rv8/cE7OJ+2+uIBZRSkKKRV3UOclJBXU+xgyIg9V8vO8D+vGidWyjBB1AiYe9g==
+Received: from [10.39.153.220] (unknown [87.58.94.198])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 0A4F136007B;
+	Thu, 13 Nov 2025 14:59:11 +0000 (WET)
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+Date: Thu, 13 Nov 2025 14:59:06 +0000
+Subject: [PATCH] usb: phy: Initialize struct usb_phy list_head
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251113114411.1410343-1-dengjie03@kylinos.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251113-diogo-smaug_typec-v1-1-f1aa3b48620d@tecnico.ulisboa.pt>
+X-B4-Tracking: v=1; b=H4sIADnyFWkC/x3MQQ5AMBBA0avIrE2ilQquIiIto2ZBpUVI4+4ay
+ 7f4P0IgzxSgzSJ4ujiw2xJEnsG46M0S8pQMspBKCFHixM46DKs+7XA8O42oKiML1Zi6kQZSt3u
+ a+f6fXf++HxXsxWVjAAAA
+X-Change-ID: 20251113-diogo-smaug_typec-56b2059b892b
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Felipe Balbi <felipe.balbi@linux.intel.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763045951; l=1571;
+ i=diogo.ivo@tecnico.ulisboa.pt; s=20240529; h=from:subject:message-id;
+ bh=Db9hu2HdD//jk91631tPIDTC2WqeaooR8SDMjqObAYQ=;
+ b=KCLSRK3WOMqOzloTkWHQbkZQGg07lhBfJXX+nF3hkqXupGm9rr5HcRbbZMlp/SQBJU5dMMxZ3
+ Y2avkf0OvFQB/hDjHpye+rlpQvGJ9F4RxWptdINWjEi5UvMVF3q4JTe
+X-Developer-Key: i=diogo.ivo@tecnico.ulisboa.pt; a=ed25519;
+ pk=BRGXhMh1q5KDlZ9y2B8SodFFY8FGupal+NMtJPwRpUQ=
 
-On Thu, Nov 13, 2025 at 07:44:11PM +0800, Jie Deng wrote:
-> During USB device hot-unplug, in the time window between when
-> usb_disconnect() calls usb_disable_device() to set
-> dev->actconfig->interface[i] to NULL but before dev->actconfig
-> is set to NULL.At this point, outside the kernel, usb_ifnum_to_if()
-> is called through usb_set_interface(), and usb_ifnum_to_if() continues
-> to access interface[i]->altsetting[i], triggering a null pointer.
+When executing usb_add_phy() and usb_add_phy_dev() it is possible that
+usb_add_extcon() fails (for example with -EPROBE_DEFER), in which case
+the usb_phy does not get added to phy_list via
+list_add_tail(&x->head, phy_list).
 
-> [ 9518.891254][ 1] [ T4650] Call trace:
-> [ 9518.894817][ 1] [ T4650]  usb_ifnum_to_if+0x34/0x50
-> [ 9518.899681][ 1] [ T4650]  usb_set_interface+0x108/0x3c8
-> [ 9518.904898][ 1] [ T4650]  uvc_video_stop_streaming+0x3c/0x90 [uvcvideo]
-> [ 9518.911500][ 1] [ T4650]  uvc_stop_streaming+0x24/0x90 [uvcvideo]
-> [ 9518.917583][ 1] [ T4650]  __vb2_queue_cancel+0x44/0x458 [videobuf2_common]
-> [ 9518.924444][ 1] [ T4650]  vb2_core_streamoff+0x20/0xb8 [videobuf2_common]
-> [ 9518.931221][ 1] [ T4650]  vb2_streamoff+0x18/0x60 [videobuf2_v4l2]
-> [ 9518.937390][ 1] [ T4650]  uvc_queue_streamoff+0x30/0x50 [uvcvideo]
-> [ 9518.943557][ 1] [ T4650]  uvc_ioctl_streamoff+0x40/0x68 [uvcvideo]
-> [ 9518.949724][ 1] [ T4650]  v4l_streamoff+0x20/0x28
-> [ 9518.954415][ 1] [ T4650]  __video_do_ioctl+0x17c/0x3e0
-> [ 9518.959540][ 1] [ T4650]  video_usercopy+0x1d8/0x558
-> [ 9518.964490][ 1] [ T4650]  video_ioctl2+0x14/0x1c
-> [ 9518.969094][ 1] [ T4650]  v4l2_ioctl+0x3c/0x58
-> [ 9518.973526][ 1] [ T4650]  do_vfs_ioctl+0x374/0x7b0
-> [ 9518.978304][ 1] [ T4650]  ksys_ioctl+0x78/0xa8
-> [ 9518.982734][ 1] [ T4650]  sys_ioctl+0xc/0x18
-> [ 9518.986991][ 1] [ T4650]  __sys_trace_return+0x0/0x4
-> [ 9518.991943][ 1] [ T4650] Code: eb04005f 54000100 f9400040 91002042 (f9400003)
-> [ 9518.999153][ 1] [ T4650] ---[ end trace f7c7d3236806d9a4 ]---
+Then, when the driver that tried to add the phy receives the error
+propagated from usb_add_extcon() and calls into usb_remove_phy() to
+undo the partial registration there will be an unconditional call to
+list_del(&x->head) which is notinitialized and leads to a NULL pointer
+dereference.
 
-This looks like a bug in the uvc driver.  usb_disable_device() unbinds 
-ther interface's driver before it sets dev->actconfig->interface[i] to 
-NULL, and the uvc driver shouldn't call usb_set_interface() after it has 
-been unbound.
+Fix this by initializing x->head before usb_add_extcon() has a chance to
+fail.
 
-> To resolve this issue, a null pointer check for config->interface[i]
-> can be added in the usb_ifnum_to_if() function.
+Fixes: 7d21114dc6a2d53 ("usb: phy: Introduce one extcon device into usb phy")
+Cc: stable@vger.kernel.org
+Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+---
+ drivers/usb/phy/phy.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-That won't fix the real bug.  You need to change the uvc driver.
+diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+index e1435bc59662..5a9b9353f343 100644
+--- a/drivers/usb/phy/phy.c
++++ b/drivers/usb/phy/phy.c
+@@ -646,6 +646,8 @@ int usb_add_phy(struct usb_phy *x, enum usb_phy_type type)
+ 		return -EINVAL;
+ 	}
+ 
++	INIT_LIST_HEAD(&x->head);
++
+ 	usb_charger_init(x);
+ 	ret = usb_add_extcon(x);
+ 	if (ret)
+@@ -696,6 +698,8 @@ int usb_add_phy_dev(struct usb_phy *x)
+ 		return -EINVAL;
+ 	}
+ 
++	INIT_LIST_HEAD(&x->head);
++
+ 	usb_charger_init(x);
+ 	ret = usb_add_extcon(x);
+ 	if (ret)
 
-Alan Stern
+---
+base-commit: 35d084745b3ea4af571ed421844f2bb1a99ad6e2
+change-id: 20251113-diogo-smaug_typec-56b2059b892b
+
+Best regards,
+-- 
+Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+
 
