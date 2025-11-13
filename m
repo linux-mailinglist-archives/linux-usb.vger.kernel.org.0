@@ -1,168 +1,170 @@
-Return-Path: <linux-usb+bounces-30496-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30497-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9C37C588E6
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 17:03:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A894C58EAD
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 17:57:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E38264F4292
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 15:50:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A1C3421B43
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Nov 2025 16:48:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D971307ADD;
-	Thu, 13 Nov 2025 15:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D54635A95D;
+	Thu, 13 Nov 2025 16:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lPnrSVa9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+3gerQl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4DF3090CD
-	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 15:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A72334689
+	for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 16:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763048737; cv=none; b=ndShzX69Lgfprpo/By9TPZ3us9eUMzqRDn6xIwGTEO+WIS1xqy7PWj2M+UOU32U+4V5B5YL5IkYAM5LL3pwiOKAOig3Xszk6Ua8+dt+aXM7HAlmV0SEbwLujShbJ5lhj7Yi/vgTmAk+VKZtvQ/TPe+RBpCN3E6u5scECNO4D0xQ=
+	t=1763051953; cv=none; b=dhk5ZT3F4gYCm219gLkpn72GlmqHaRQlTuI2uDHm2ztALNQw+wrsVZyuSbGFjXBIKKVQA099cQvP3PEE/lwGoybCv+0mKA9JZ+6gWFiaP//mYYPVqQXRQIGQZzkr+0xmIgmj/+0ix8W+e/syaHDlHvuLILhj7zK1AlY2MQTKqd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763048737; c=relaxed/simple;
-	bh=GwhYoApelHVVE9jUOsAHYc5x6ZTXahYrF0D92jPjL7w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U5ZCcOVwcBzO9cdTnXIaI2c3z46qfsVX/ZeMXQ7sdpqaMIZrW3GxS+Rh74P6HLmhv2aeyPN0/VQiD7qu4igd0gc8xx/In/rGmtX43O/G6u/bpT57jvflKralVxg9f2K3906l8+HEnMxpbGCclc5JZSQIh964PJrKwzVun7wJb7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lPnrSVa9; arc=none smtp.client-ip=209.85.221.49
+	s=arc-20240116; t=1763051953; c=relaxed/simple;
+	bh=jMiV4RbMNeOesGqKgORN1iKerZRElW5XEIqKQrbUT2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IpQgCQpXQtFZheJgA+Hxkb2YTEzgaKiWET9z7ez2f1P8kcbdLqS2dNkH1l1jjxWSOjq6RVfpb3oFB8xDRV/Rk6Ot8LK6hLburVc5VetyJYZCVg/5jewEZx/byVcAi0CuSl8qZunOSDtPmzizkAjYGBLQQ6IbtBUGyESkfV1u7og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+3gerQl; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-429c8632fcbso740380f8f.1
-        for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 07:45:35 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-29806bd47b5so7016595ad.3
+        for <linux-usb@vger.kernel.org>; Thu, 13 Nov 2025 08:39:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763048734; x=1763653534; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UjKqZ210vJmo1ohOFjhR6RquaivlDQYg0+nEWmGJGgo=;
-        b=lPnrSVa9l6IshACe91D+8Rh+qgYYoMTdAZMn3lVRcwmUowAaSgj+ktFjgcHOPmJ6V7
-         csIGp8E+5xViwbd9LWdODJEllbGF9nkfNCg+ZzIHu+UE+/5slaO6xy+PCliYtgS4d0LI
-         n4M7i4iwu8dLw2S1znJuwkfUUsib0dLWmUn/qUhjU28OkVyW29f8EFP1BW4anxe3jYtE
-         PNcreO/j2jxxHb88r+TMb/PVy++GG4x3/emR8upIh0SeDdFMQ1C4hCzWYIvWNkoYGug8
-         XoSsoa2Huj8gv7xoBr8n/I4kwM4OtNdP7Xx2Le0EFcPVocv00/HY0nNewvy7wSuKmqoz
-         0PjA==
+        d=gmail.com; s=20230601; t=1763051951; x=1763656751; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=S/ucMNEdTPs4tdBdIab98EcaF+7fPlknQB7RoGYRpzI=;
+        b=G+3gerQlIFcYM4wJuPzSobt5Qkzq6fvAmv5Sr1xJ5rs759VDfzk07c1fm93sC8Wxl7
+         jfcpnmRNhjPQgs0bRPRckHBc7ZD8pikP9FUWkJbmRBNSOXPaVSN4+pVouphjOov7QzsU
+         Fw0h79PmIy1OeD8NmGyKYQuFlNgl8u485Xxt6Rwi5jBvddnr/Sd3XfdeVEQepPuYctDR
+         O2ui0b7yAMuKnWq2kl8s3PyoXeZ5TbdWQPgZXoIODDfmN/+FGvkflhzQEPT/Q05jGTuw
+         dpaZavWkLPgbWI4R1JfdpkdxjO/nHlUjx08PoBUpWZskMfNB6/Dr6hRiwQfxNLgwK/cM
+         NARg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763048734; x=1763653534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UjKqZ210vJmo1ohOFjhR6RquaivlDQYg0+nEWmGJGgo=;
-        b=RErgWtQXOImfuDq+cNEYlEvLdzY5CEEUY3jwafXx+m3ZgADSOqC6z2bMb28IYVZjFJ
-         c3ywfPDSZfIJGSfqGcXKtZnAue8jFBn0g1VclixxdSWXUo9ofU+U9GRaZ1OK12oS0BkR
-         otLwduIN6wqyH6y9jYazm68eckY8SHQjzFUbd6aY0YsAGi68EwNv0sTlG57+rRIV2q4+
-         2gmmj7UnE/hKc9kHokBUgPVOg6YwPuWSVgD+KNtF+m4VKb91g2bZqq1JPd/L/RwFR6UT
-         LvIDxpCVxn4cJTnw0X4UVjRa+yhlT7fSoPEKxIPm/7Ovbl7fzkJR/LjYQLSgF4iqpi9Q
-         wX/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVFNQIa8vz1+9XY+XzGVkRu33NhfwPzEwOW9hD4EkWEThXSMvtEFgV/6Lk6X+lbLXucUGWAWytR8VA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1mweNkY9pu2HSM5+/byWPwoKUK4CakooOdET/sXLF+Ji9j+0U
-	V3DbK4J3vQNM8zECXdvv9wzH424uUGtX6n7yk8ih6j3h1Y+JSB82E2n+ws9zR9dRaB8H3h0oyED
-	PSlNDBFJIPgYsGwTAPF1YI6DkVWP7E6M=
-X-Gm-Gg: ASbGncs7yuABHRimrXpHvMJG05SDHhtsPKiv1WeD7q6CK/SLbrQEJUDFc13wap9FO9d
-	Hm69zYvRKb7OOb4fW3LtnRHz9nfbMIboU8971ohDoU9KE+tocXqtnIgqTmr31L+Lpc4OwnxB0U4
-	YTh9gBJn/H88NO2RU06Aa6IeaohBSxUMUq4q6zVghvN/wS4TmrnsB+85+gpB08sgsfRTAPunNLs
-	vPXPI6CoI81UVdH1ZusjnEaK9sI3wTNaqRfroIGuces5xpep4yTXbCqupRzW1SXI1793gVTjOuI
-	DBwvXpShT9zmpgl2oZ363Tjzo8mKwaXnokPOIAoWUUbz1LVkkq71pYjeVmQUPr0DTx7NcNnMZ+U
-	=
-X-Google-Smtp-Source: AGHT+IFyI6x5RJm95yRlsUC+iSGTHktfcGN76wSiyQxdFS2fnEAIOWwjv4+oZtv8N0EO0DATlsveTOJR8O4h83YjDyY=
-X-Received: by 2002:a05:6000:40cd:b0:429:d0b8:3850 with SMTP id
- ffacd0b85a97d-42b4bdb4884mr5867291f8f.48.1763048734320; Thu, 13 Nov 2025
- 07:45:34 -0800 (PST)
+        d=1e100.net; s=20230601; t=1763051951; x=1763656751;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S/ucMNEdTPs4tdBdIab98EcaF+7fPlknQB7RoGYRpzI=;
+        b=Xe8zRd3i3A+eozBKooRA0zGDQP5C6y02qU26O5hVI9QDPOFVdR6Lch2NaqegWfdmYe
+         QKL3cjYiDdJYJmYL+bjV9I7sbtp00alJiT49vj9mc0zLo3DKzjoEIETHT1UAmOpVHaxN
+         5wDYC/Fz635pGCBRfk4Btb1j6gzjNQIP2UwOzZOQaEGBeBZ6RvDj/QR9tSaESD2eyLaW
+         vYIGTfPilRkpphevpuRGDNtIRt5fIK5vlWPyRIaK0ujNzIwKeqrBtdmvWEKHyfL9i5FW
+         U5OUGbeozqwuG4ansU8hnzDHAZZ3Km+p0rSAjSvAFOmJAQDKwVZ3nrnMI8J36ceawM5U
+         azOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsgERP3k10WnyOhC2uRsx59RSYwPmaM7xKyk/aq41sqCxFW+xLq3wgPLtoAT0WKMUsiNSoticS4pQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8hzRowxP8G5i5B2UrHqz43jG8To2bMk5edCVGnx9/nzEqUw2j
+	/y3JCa+pBEzKLeF/qDkYriwBOtFjNVRBdXNEeX/B+/DME+UoCUFC979Q
+X-Gm-Gg: ASbGncto+p7PwkQIEen36jrCzDB6u/LPoZI5lgx5Ea0n9cDispvKRuy8vTMzqW4RQgg
+	7ieikT5LCbsbC3oWQcwUR2kum5M5rebBM5zoytZynyjl+uuVTw6tVBPXEYCh1mGujiyKevA2U5L
+	jnz+pyNLhY/EZQq2UGfYcITP/2TW+RHjPkMei5Al2jQHSGh8MbFccu7L/9Z7m5WvPPUyzG++qTB
+	w3BokoiRagvxTnWqAnj9Vk3CouSJmqEX0EQIClt2N00XJCG7UU9CKvMw7V+xn/U9vD+wOthYCcW
+	VWMNna5OHw2EyF7xIHoxNQP7TsufLcUuY5v8NTnvfk+JNLmYrD2NNPjilT7rX0286Sc5Mi62eha
+	o5ZahY/Z/csJ+24vceScFpx/sLLTl06HIU29kR7iQbzT+5dbxO2mEizKhrg1Ks7otxvySrAyyaq
+	g96Wg=
+X-Google-Smtp-Source: AGHT+IEs0sHw9yn/h78U4VzfNtAGyDH+Vb8Xjj0sh1kFUc43l7I1lswC+8d2RPaL8vbpculyPwUdyg==
+X-Received: by 2002:a17:903:1a28:b0:298:485d:557d with SMTP id d9443c01a7336-2984edcaaaamr90085595ad.45.1763051950935;
+        Thu, 13 Nov 2025 08:39:10 -0800 (PST)
+Received: from localhost ([103.70.166.143])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2cce59sm30165515ad.105.2025.11.13.08.39.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Nov 2025 08:39:10 -0800 (PST)
+Date: Thu, 13 Nov 2025 22:09:08 +0530
+From: Gopi Krishna Menon <krishnagopi487@gmail.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: gregkh@linuxfoundation.org, snovitoll@gmail.com, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+	david.hunter.linux@gmail.com, khalid@kernel.org, linux-kernel-mentees@lists.linux.dev, 
+	syzbot+d8fd35fa6177afa8c92b@syzkaller.appspotmail.com
+Subject: Re: [PATCH] usb: raw-gadget: cap raw_io transfer length to
+ KMALLOC_MAX_SIZE
+Message-ID: <u3okc42qhpzi2uorrdei3jigq5wwgdqb66u3u5khtuzxhwbamx@f3dh3fivx3uo>
+References: <20251028165659.50962-1-krishnagopi487@gmail.com>
+ <CA+fCnZeZ+c15X8BXg59ppbEmEUvp64aMaTPjXARyO_0x6KL+eQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251111203350.3c9a669e.michal.pecio@gmail.com>
- <20251112015356.1919586-1-lugathe2@gmail.com> <ab81f525-b4ea-4ac7-94a8-9d8eabca957a@cosmicgizmosystems.com>
- <58edd03a-a7a7-40af-8228-18004dc6e737@rowland.harvard.edu>
-In-Reply-To: <58edd03a-a7a7-40af-8228-18004dc6e737@rowland.harvard.edu>
-From: The-Luga <lugathe2@gmail.com>
-Date: Thu, 13 Nov 2025 12:45:22 -0300
-X-Gm-Features: AWmQ_blIL-znisBibURF-59XWVCNK3O7x4L-ZqBPMnE2bLlz0feBpIaVurcSNiU
-Message-ID: <CALvgqEBVQsoQ3wewP+37u5Ms398O5gC8YaELm0UJdZSDBHzPPw@mail.gmail.com>
-Subject: Re: [PATCH v2] Apply the quirk HID_QUIRK_ALWAYS_POLL to the Edifier
- QR30 (2d99:a101).
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Terry Junge <linuxhid@cosmicgizmosystems.com>, michal.pecio@gmail.com, 
-	bentiss@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org, 
-	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linuxsound@cosmicgizmosystems.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+fCnZeZ+c15X8BXg59ppbEmEUvp64aMaTPjXARyO_0x6KL+eQ@mail.gmail.com>
 
-> You might want to wait a couple of days before sending a v3 so other
-> reviewers can get a chance to make comments.
+On Tue, Oct 28, 2025 at 09:15:47PM +0100, Andrey Konovalov wrote:
 
-Yes, I shall wait. I was just *too eager*.
+> On Tue, Oct 28, 2025 at 5:57 PM Gopi Krishna Menon
+> <krishnagopi487@gmail.com> wrote:
+> >
+> > The previous commit removed the PAGE_SIZE limit on transfer length of
+> > raw_io buffer in order to avoid any problems with emulating USB devices
+> > whose full configuration descriptor exceeds PAGE_SIZE in length. However
+> > this also removes the upperbound on user supplied length, allowing very
+> > large values to be passed to the allocator.
+> >
+> > syzbot on fuzzing the transfer length with very large value (1.81GB)
+> > results in kmalloc() to fall back to the page allocator, which triggers
+> > a kernel warning as the page allocator cannot handle allocations more
+> > than MAX_PAGE_ORDER/KMALLOC_MAX_SIZE.
+> 
+> Ah, right.
+> 
+> >
+> > Since there is no limit imposed on the size of buffer for both control
+> > and non control transfers, cap the raw_io transfer length to
+> > KMALLOC_MAX_SIZE and return -EINVAL for larger transfer length to
+> > prevent any warnings from the page allocator.
+> >
+> > Fixes: 37b9dd0d114a ("usb: raw-gadget: do not limit transfer length")
+> > Tested-by: syzbot+d8fd35fa6177afa8c92b@syzkaller.appspotmail.com
+> > Reported-by: syzbot+d8fd35fa6177afa8c92b@syzkaller.appspotmail.com
+> > Closes: https://lore.kernel.org/all/68fc07a0.a70a0220.3bf6c6.01ab.GAE@google.com/
+> > Signed-off-by: Gopi Krishna Menon <krishnagopi487@gmail.com>
+> > ---
+> >  drivers/usb/gadget/legacy/raw_gadget.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> > index b71680c58de6..46f343ba48b3 100644
+> > --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> > @@ -40,6 +40,7 @@ MODULE_LICENSE("GPL");
+> >
+> >  static DEFINE_IDA(driver_id_numbers);
+> >  #define DRIVER_DRIVER_NAME_LENGTH_MAX  32
+> > +#define USB_RAW_IO_LENGTH_MAX KMALLOC_MAX_SIZE
+> >
+> >  #define RAW_EVENT_QUEUE_SIZE   16
+> >
+> > @@ -667,6 +668,8 @@ static void *raw_alloc_io_data(struct usb_raw_ep_io *io, void __user *ptr,
+> >                 return ERR_PTR(-EINVAL);
+> >         if (!usb_raw_io_flags_valid(io->flags))
+> >                 return ERR_PTR(-EINVAL);
+> > +       if (io->length > USB_RAW_IO_LENGTH_MAX)
+> > +               return ERR_PTR(-EINVAL);
+> >         if (get_from_user)
+> >                 data = memdup_user(ptr + sizeof(*io), io->length);
+> >         else {
+> > --
+> > 2.43.0
+> >
+> 
+> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+> 
+> Thank you!
 
-> You should include the HID: tag in the subject--
-> ...] HID: Apply...
->
-> The patch should be sent
->
-> To:  the HID subsystem maintainers
-> bentiss@kernel.org
-> jikos@kernel.org
->
-> Cc:  at a minimum
-> linux-input@vger.kernel.org
-> linux-kernel@vger.kernel.org
->
-> plus any of the others already part of this thread.
+Hi,
 
-This is very helpful. Thank you!
+Just following up on this patch to check its status.
+Thanks again to Andrey Konovalov for the earlier review. Please let me
+know if any further changes are required from my side.
 
-I read the documentation, but I was really waiting for comments before
-finally sending it, as I didn=E2=80=99t want to create noise with all the
-iterations of the patch. I didn=E2=80=99t realize I should wait before maki=
-ng
-a bigger final change.
-
-> Vendor ID 0x2d99 belongs to Edifier International Limited not Jieli
-> Can you change to USB_VENDOR_ID_EDIFIER instead and move to the
-> alphabetically correct location?
-
-Could you kindly tell me where this info is?
-Searching the internet I only found this website with this info:
-https://the-sz.com/products/usbid/index.php?v=3D0x2D99
-
-I just checked the vendor from `lsusb`, and I was hesitant whether to
-write Jieli or Edifier.
-I also decided to write QR30 instead of Hal0. Should I add a comment
-mentioning Jieli as I did with the device?
-
-> One more thing about patch style: The Signed-off-by: line should go
-> above the --- line, whereas the revision information goes below it (as
-> it is here).  The second --- line isn't needed (but it doesn't hurt).
->
-> Look at other patch submissions in the email archives to see more
-> examples of the style.
->
-> Alan Stern
-
-This is also very helpful. I should have done it in the first place. Thank =
-you!
-
-> Thanks for the patch!
-> Regards,
-> Terry Junge
-
-It's me who is *super thankful*. I learned how to do packet capture,
-hexcode/table analysis, and even wrote a script to time out the RGB
-lights when idle, show a simple brightness animation (increasing and
-decreasing steps before coming back to the default) when changing
-volume, and synchronize it with my keyboard. I have more functionality
-here than with the vendor software on those supported OS's. All thanks
-to everyone who helped me debug and showed me the tools needed to do
-this.
-
-And even invited me to write my first patch. I believe this process
-should be repetitive, with new people coming and going. I=E2=80=99m gratefu=
-l
-for the support and patience.
+Thanks,
+Gopi Krishna Menon
 
