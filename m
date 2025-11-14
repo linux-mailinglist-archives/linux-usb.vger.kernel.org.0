@@ -1,110 +1,124 @@
-Return-Path: <linux-usb+bounces-30514-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30515-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10F91C5C120
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 09:46:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 006A3C5CE0C
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 12:33:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9596035A971
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 08:44:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5DA33BA495
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 11:32:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E404E3002A5;
-	Fri, 14 Nov 2025 08:44:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4A3313E0E;
+	Fri, 14 Nov 2025 11:32:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KhwnSAEf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UG/B5ipj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F962FF664;
-	Fri, 14 Nov 2025 08:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F88A3112BB
+	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 11:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763109880; cv=none; b=fEUIADN1LmJp08Fw10agc26/JXMl2zd+QR4xR/U9e2mwBpdV+J1wtchLWgeb/hjV8Wsd3b4LkvctyV45vQkT0KXoHqU/ZHU8pmdCfAN29pdnZXHG+kIdgleVHds3e9V0X93kbCGfYvT/dK+MCUg+w6M1jR1WlkvxMMpgQsJAkpM=
+	t=1763119958; cv=none; b=EFXKG9SMKvrAasIGD+hKVaq8hArxMooTC6JPBpALD4vDLoFD+Rm0lnFSRu7xw5NhsGHIlt4CIKXneu9NRaMLtmXPEowBI+tWg9R2nYcFzAS3cGm+l7delvjHOLiq6r/iBw0wzluj4CsKbog4DIZYTeC/cP+q7gOa0PJpw0MHk7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763109880; c=relaxed/simple;
-	bh=5hOs8hrq1T2N0jXZHV40N3n1KIHED4J0AbIKED+BapQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JdoysxzJm6oSR5vtkrWugvYCTn6ZpFCMIK+QwDAMXkDrsQ7GNl8MomQreTmgoWZXKeb6QtE/ZZ7Ds1r9j0REONPTBkKJH2FcVHeWewQspET/0xu4/B/69pM9vJ8jL2ZHREAEzKjQa9NWAjBLuKHAxqx/BmpZgXcvXNsDDw8tF2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KhwnSAEf; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=wK
-	ltRgeV5f8ijxMXtGur4wvTlRKdhRq8sGGWEwDL3nI=; b=KhwnSAEfe+tTdTnqNs
-	O9cDVDBnKPIhm4E8eR/w/GYUQ0hW8nkPTJt46TxhQpoVQxZu1CefwLF1Z6EOJqGL
-	wO2p9I7+ovKKIR33cnCxgm92Dtdgcl4le7VUgcqV+4QOx7hhVvkWPIK6uTh1Y+kB
-	pagWrIfHCcT1E37TK6XOMi0gY=
-Received: from hello.company.local (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgBXQ9qT6xZpDvUzEA--.28676S2;
-	Fri, 14 Nov 2025 16:43:00 +0800 (CST)
-From: Liang Jie <buaajxlj@163.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Chen Ni <nichen@iscas.ac.cn>,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	Akash M <akash.m5@samsung.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Owen Gu <guhuinan@xiaomi.com>,
-	Ingo Rohloff <ingo.rohloff@lauterbach.com>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-	linux-kernel@vger.kernel.org (open list)
-Cc: liangjie@lixiang.com,
-	fanggeng@lixiang.com,
-	yangchen11@lixiang.com
-Subject: [PATCH] usb: gadget: functionfs: use dma_buf_unmap_attachment_unlocked() helper
-Date: Fri, 14 Nov 2025 16:42:44 +0800
-Message-Id: <20251114084246.2064845-1-buaajxlj@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1763119958; c=relaxed/simple;
+	bh=tw80XQS7gcuhFgq2e+0cR4mYBq9i/GPA8MIbGKKIyFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PnM7s4gyq8zcQQIlKxP6EgRdhSm1vU9jLUgvYGvVIqCT3sy//pz9xpSw+VWq0pAK098AZaPVAF+ZHf84zq5IpdBkr1tEWupgFk6HjzIJQvhw2+x1rxHE5SEekZavyh9xyCqC5oIgGSKEKWV16tSuIMuLpqpuhi8xMCA/RxTLchQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UG/B5ipj; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b7346565d7cso252268866b.1
+        for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 03:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763119955; x=1763724755; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nwZ9IwziRvv511z74P1bPB0EzRXrY1p+mRsnhsQMPA0=;
+        b=UG/B5ipjGtsz59MpTmyZ1H6SGVAiMwpgp4+QvcMr7G5M9RDdxiQWhFsvloC0B5gmex
+         iFAFzMFZPPd+MZpf+tn1cnFPHE8P+pj8jaNRlCCiMs21Cn47uaxQFzpyNVn1C0v8H2MO
+         unF15FdZV3i+VzLe3RCziSwQih3hPV8h1y7Vl+iE1+y7mGctT5D6ttWO51fAIL7qM83J
+         7qbIR9EamtatGGMi/QxQDS6zvX/KrjWYLY7Ztk8n/l6tgyK+pEkp+WCYHAFDWvou60OE
+         7YXdtRgJLmo8tV0cC1ZX3erk6cWUjvUUCJcpQ34jIyjefygAl4KpwHBfWWZJfb1C7vGb
+         K5mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763119955; x=1763724755;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nwZ9IwziRvv511z74P1bPB0EzRXrY1p+mRsnhsQMPA0=;
+        b=i4moo+ZqI4rEIdBp227bOkJHBL7yGzWy6KkK330X3q3Z1vJYuL0RI0vPi5w8iHGVaE
+         8FPtYHFG4yt0hocI3VEB3Tyo8Ukc2ldzY1Og08/WAKmoQN3oO3XghkczZBkx2wx5n1Qw
+         yC8Dti1g+X83iD4o3XEzoQqwQEO1xkGejr9VZPnqSp6TLGCWJ13Dsqr0bzVoWl50saQo
+         X2jrNd0A5OgUaXtBa9YepmJl26HAj3w9SqU2M/MBN/V7Zr3mR7W7b4HQCLsCO7mJPf+I
+         hwXtooLTlNu64yb7AHAMoMDaFz3LZDcdYf7MTAn5jjHyOY/gCPqgUpZvVUlirdwQ6Ru3
+         J5Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCWHwtHvmICuhBodJ/GeUfanQpHNyGcYqfU5hGDT8rQv+hE5blimDkqJJMhJrje+BmyE10vw4ynxIPM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAw9SaaeJ9W9tjynZ5YqviVNQkQb1GAWXIbnFUjLjhPP5BVKia
+	0dyXUQ0soZ3q66Jr4M0sWYPSJZ+q5CzlEdtZFS5WBv7VUyvIxAZddq01
+X-Gm-Gg: ASbGnctTi4cnpB1cdPD+O35rZnMOYClOw2i5Km82O/BGtyg9gaJukasVj4SQtXrGehj
+	Tva4Mpj5Wyn2iuT2v8Zen/C+umoc+T7bixH9IoRpMa+IE9RmzMT0Z+meGLESoJ6xu++AKXWl7uY
+	lu4fBemyVf1Lt3dDFao2mnEJKG8JiaQ/862D2MrIF7ce0FHApjdUWIvP8fOhZQQMtW6hsACP6i0
+	vJ9rligZvG9eN7dndDl+J7zDPiFzBVnmQurVggswtVFCZP7GXtZUYBq5RIFrn4mPa/UMBygY9GO
+	jePgsr7XpWWDm+jwcSmq4nnpW9uimcrWFMf4hFj3UwdUOIGRVRj+2Gn9LU5KMgB/cmjoctljGbi
+	xQY4aJM//3a7vEuk8abHC/MQc4rLWFEPdoUK92RwBYXUi0nVg1te0wfzKigSgby3NW6/1r17YWK
+	MjJ3MuHp6JXiLRsz+DldSy
+X-Google-Smtp-Source: AGHT+IHebChlUiARMNvR6+Q9RxaISSKBoJQh35WzGk3JES1+Xu8Hf9v0oU0TQYODRELhd+YOSDmbRg==
+X-Received: by 2002:a17:906:c153:b0:b73:5c12:3f8a with SMTP id a640c23a62f3a-b73678d2c5fmr307412666b.18.1763119955406;
+        Fri, 14 Nov 2025 03:32:35 -0800 (PST)
+Received: from foxbook (bfd52.neoplus.adsl.tpnet.pl. [83.28.41.52])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734fad41e5sm365888866b.19.2025.11.14.03.32.34
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 14 Nov 2025 03:32:35 -0800 (PST)
+Date: Fri, 14 Nov 2025 12:32:32 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: Don't unchain link TRBs on quirky HCs
+Message-ID: <20251114123232.0b96bfa5.michal.pecio@gmail.com>
+In-Reply-To: <f1259e37-5671-43ca-85f5-a37b68d5507a@linux.intel.com>
+References: <20251107110837.7b7d686b.michal.pecio@gmail.com>
+	<f1259e37-5671-43ca-85f5-a37b68d5507a@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgBXQ9qT6xZpDvUzEA--.28676S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tw15Gw47Jr4UuryrJr1DJrb_yoW8JFWrpr
-	43WrWUCr15trWqva48AwnYvFWrAwsxWFW8AFZrX398ZFn8Wr92vr18tw1S9w13Gry8AanY
-	v3Wj9r1FvFy7CFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07URCJQUUUUU=
-X-CM-SenderInfo: pexdtyx0omqiywtou0bp/1tbiNgQGIGkW5dV7SAABsp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Liang Jie <liangjie@lixiang.com>
+On Tue, 11 Nov 2025 18:19:38 +0200, Mathias Nyman wrote:
+> On 11/7/25 12:08, Michal Pecio wrote:
+> > +static void td_to_noop(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+> > +			struct xhci_td *td, bool flip_cycle)  
+> 
+> we could avoid passing xhci pointer to td_to_noop() and just grab it from
+> the xhci_virt_ep structure instead. i.e. ep->xhci
 
-Replace the open-coded dma_resv_lock()/dma_resv_unlock() around
-dma_buf_unmap_attachment() in ffs_dmabuf_release() with the
-dma_buf_unmap_attachment_unlocked() helper.
+I can do a v2 if you want.
 
-This aligns FunctionFS DMABUF unmap handling with the standard
-DMA-BUF API, avoids duplicating locking logic and eases future
-maintenance. No functional change.
+But OTOH, I didn't expect such pointer to exist (though I'm sure I must
+have seen it many times) because it doesn't seem strictly necessary.
 
-Reviewed-by: fanggeng <fanggeng@lixiang.com>
-Signed-off-by: Liang Jie <liangjie@lixiang.com>
----
- drivers/usb/gadget/function/f_fs.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Maybe do the reverse and get rid of ep->xhci, or stop adding new users
+and clean up existing ones along the way?
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 47cfbe41fdff..7f8e566b1c57 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1306,9 +1306,7 @@ static void ffs_dmabuf_release(struct kref *ref)
- 	struct dma_buf *dmabuf = attach->dmabuf;
- 
- 	pr_vdebug("FFS DMABUF release\n");
--	dma_resv_lock(dmabuf->resv, NULL);
--	dma_buf_unmap_attachment(attach, priv->sgt, priv->dir);
--	dma_resv_unlock(dmabuf->resv);
-+	dma_buf_unmap_attachment_unlocked(attach, priv->sgt, priv->dir);
- 
- 	dma_buf_detach(attach->dmabuf, attach);
- 	dma_buf_put(dmabuf);
--- 
-2.25.1
+Main users are invalidate_cancelled_tds()/giveback_invalidated_tds(),
+their callers all have xhci and could easily supply it to them. And we
+even discussed removing the latter completely, but I got sidetracked by
+issues with URB_ZERO_PACKET.
 
+Another user is xhci_handle_cmd_set_deq() which already has xhci.
+I have a compile-tested patch which removes it completely right now,
+it took five minutes and zero mental effort to prepare.
+
+Regards,
+Michal
 
