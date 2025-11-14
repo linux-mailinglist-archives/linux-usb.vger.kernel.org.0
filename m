@@ -1,131 +1,110 @@
-Return-Path: <linux-usb+bounces-30513-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0241C5BE45
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 09:09:35 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10F91C5C120
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 09:46:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 405394E79AE
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 08:08:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9596035A971
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 08:44:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 731FB2F6939;
-	Fri, 14 Nov 2025 08:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E404E3002A5;
+	Fri, 14 Nov 2025 08:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="38tbI3kA"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KhwnSAEf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87763275AE4
-	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 08:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F962FF664;
+	Fri, 14 Nov 2025 08:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763107730; cv=none; b=dUgZ4g291U4PzTfVOdkFwavSVtl6vxLXirvJchAEHFnd5cLnWDNhAsxntzsgnMjZhG+jhO43V94vmALsXsFgDTr4a68TxC7WqqaJroF2enNeQL6wDIN5sGJiNDURA6PvD+YOoL11feTD6ALraAG6PyU7SgbUFEvuR70q1+Uabik=
+	t=1763109880; cv=none; b=fEUIADN1LmJp08Fw10agc26/JXMl2zd+QR4xR/U9e2mwBpdV+J1wtchLWgeb/hjV8Wsd3b4LkvctyV45vQkT0KXoHqU/ZHU8pmdCfAN29pdnZXHG+kIdgleVHds3e9V0X93kbCGfYvT/dK+MCUg+w6M1jR1WlkvxMMpgQsJAkpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763107730; c=relaxed/simple;
-	bh=smboXSPnSyuQg0Jfbixci8TkTxPDq3bDlst3LL2pjfY=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=TAlWfjGq27gOIc/F+WLO0Eb6vlUjevuu22uSipaPYHao2i3XrVDYQXKpi1KwljIQSX2RqcJknrjKdetuXz02NPR094jS2Kf2ARboVtp2S5LrPHOAwHF+qAwenjJczUdzGi/3N/Ax1i/95u1mIwccpMNq7Ed7RS6EIXMeP2HNpck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=38tbI3kA; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b62da7602a0so1440020a12.2
-        for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 00:08:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763107727; x=1763712527; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FaZd0pLqMSksiOjb+Jw+W1+Jt+Bqll3R9KqbqD770D8=;
-        b=38tbI3kA+GFn315/pcL4Da/SxJofDfmrHmv93PvIiQWAZA0vrx5+rjvAU+ckdl81GD
-         kJ/qkOwChAIJBx98T3wPSNzK9lGnFM0lCK3xsU/aFOA7M6LpecTGbFInfSHNR5eFzp5i
-         DZyZXxmruP8xuNlf1mFJPTCDoWUS0Eb4zUhvyLoP3IlP2iBX7nyDq3zB24ZK5gdpgHCG
-         AnSU3owiGRVh/Hw+xWjMe6ZlRLHGM5XbVhld4Y+fQk8F7dgh17/g6zSI+uIgfaqGzgXO
-         zjb/F6sLpuTFYXjN3JOMWGHnyVFPtlGgurB44Zi+7cVn2f2B4eLMANhfoNQzBdJ9wQdr
-         Lv5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763107727; x=1763712527;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FaZd0pLqMSksiOjb+Jw+W1+Jt+Bqll3R9KqbqD770D8=;
-        b=OyEVujF66QSmsaRrKZVtJcjnK92goIzqsWD/zfXbL/AEeMIE0I7D117rgD1l5CKtlF
-         jlXRusiUfrWfFvJ1ToILAl6RGtIbLiJrb53Vd3lISsyZn/k3mDc6m5Y0F552LV69xPwP
-         42BJwgmcr7JodK8yugsavgO/V2J8VBqecUYBYogvXcYmvAyv/+xlJvKSBy1SdivaXT/1
-         N/ZirRJLO0Xa9qXXaXpAW9XUgj2qmFdbXh5QFIwpg9NIP7CdCkDFodtdRwK5s7liTHUk
-         TPiwQSzTFLfY572M55WXjcP7qgzdSDX9vvmN2vx10KLXwazwuK4JR9F2Czxp1dvl5y8e
-         8lhg==
-X-Forwarded-Encrypted: i=1; AJvYcCWyKtUfKNT7X3kQJhjD3s0AVXOCsvIBxt0QAFitrMlnPI5LLa65Uuqi9bdx7Dc76aTwIvVrb9931ZQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5yj6VZ0i3ARSgLKMYOIIneyh4rhLQpAcZUHVW8glfEAu850MS
-	exs+Dv3eHptVftJ5dUnruksijn5azWxE4TOByDnspk0ZAzikOS85Gh39Fl0+h9+PXURI3fg9KLC
-	OZEeUJw==
-X-Google-Smtp-Source: AGHT+IFyahqRDgCTzEk2G6XerYnaF/ixiNmgFZ8qFZ/mRyHI/Z+svgCP6tH+CS9dbmYU0Ls78Ln6iVi1Ifc=
-X-Received: from pgnr18.prod.google.com ([2002:a63:8f52:0:b0:bc4:233b:be04])
- (user=hhhuuu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:3ca7:b0:350:55e0:5522
- with SMTP id adf61e73a8af0-35ba22a61d6mr3388572637.37.1763107726552; Fri, 14
- Nov 2025 00:08:46 -0800 (PST)
-Date: Fri, 14 Nov 2025 16:08:41 +0800
+	s=arc-20240116; t=1763109880; c=relaxed/simple;
+	bh=5hOs8hrq1T2N0jXZHV40N3n1KIHED4J0AbIKED+BapQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JdoysxzJm6oSR5vtkrWugvYCTn6ZpFCMIK+QwDAMXkDrsQ7GNl8MomQreTmgoWZXKeb6QtE/ZZ7Ds1r9j0REONPTBkKJH2FcVHeWewQspET/0xu4/B/69pM9vJ8jL2ZHREAEzKjQa9NWAjBLuKHAxqx/BmpZgXcvXNsDDw8tF2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KhwnSAEf; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=wK
+	ltRgeV5f8ijxMXtGur4wvTlRKdhRq8sGGWEwDL3nI=; b=KhwnSAEfe+tTdTnqNs
+	O9cDVDBnKPIhm4E8eR/w/GYUQ0hW8nkPTJt46TxhQpoVQxZu1CefwLF1Z6EOJqGL
+	wO2p9I7+ovKKIR33cnCxgm92Dtdgcl4le7VUgcqV+4QOx7hhVvkWPIK6uTh1Y+kB
+	pagWrIfHCcT1E37TK6XOMi0gY=
+Received: from hello.company.local (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgBXQ9qT6xZpDvUzEA--.28676S2;
+	Fri, 14 Nov 2025 16:43:00 +0800 (CST)
+From: Liang Jie <buaajxlj@163.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Chen Ni <nichen@iscas.ac.cn>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Akash M <akash.m5@samsung.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Owen Gu <guhuinan@xiaomi.com>,
+	Ingo Rohloff <ingo.rohloff@lauterbach.com>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list)
+Cc: liangjie@lixiang.com,
+	fanggeng@lixiang.com,
+	yangchen11@lixiang.com
+Subject: [PATCH] usb: gadget: functionfs: use dma_buf_unmap_attachment_unlocked() helper
+Date: Fri, 14 Nov 2025 16:42:44 +0800
+Message-Id: <20251114084246.2064845-1-buaajxlj@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251114080841.829128-1-hhhuuu@google.com>
-Subject: [PATCH] usb: gadget: udc: Fix permanent block caused by 'deactivated' flag
-From: Jimmy Hu <hhhuuu@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Cc: Jimmy Hu <hhhuuu@google.com>, Kuen-Han Tsai <khtsai@google.com>, 
-	Alan Stern <stern@rowland.harvard.edu>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Roy Luo <royluo@google.com>, Robert Baldyga <r.baldyga@samsung.com>, Felipe Balbi <balbi@ti.com>, 
-	linux-kernel@vger.kernel.org, badhri@google.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PSgvCgBXQ9qT6xZpDvUzEA--.28676S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tw15Gw47Jr4UuryrJr1DJrb_yoW8JFWrpr
+	43WrWUCr15trWqva48AwnYvFWrAwsxWFW8AFZrX398ZFn8Wr92vr18tw1S9w13Gry8AanY
+	v3Wj9r1FvFy7CFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07URCJQUUUUU=
+X-CM-SenderInfo: pexdtyx0omqiywtou0bp/1tbiNgQGIGkW5dV7SAABsp
 
-When setting a new USB configuration, some functions (e.g., UVC) can
-call usb_function_deactivate() to set the `gadget->deactivated` flag
-to `true`, intentionally blocking enumeration until a userspace
-daemon (e.g., UVC service) is ready.
+From: Liang Jie <liangjie@lixiang.com>
 
-This `deactivated=true` state becomes a permanent block if this flag
-is not cleared by usb_function_activate() (e.g., UVC service failure
-or config set while unplugged). This blocked state persists even if
-the cable is plugged/unplugged, as the vbus_event_work() handler is
-still blocked by the `gadget->deactivated` flag, preventing pullup()
-from being called.
+Replace the open-coded dma_resv_lock()/dma_resv_unlock() around
+dma_buf_unmap_attachment() in ffs_dmabuf_release() with the
+dma_buf_unmap_attachment_unlocked() helper.
 
-This patch fixes this by modifying vbus_event_work() to clear the
-`gadget->deactivated` flag *before* usb_udc_connect_control_locked().
-This breaks the permanent block, so pullup() can now be called.
+This aligns FunctionFS DMABUF unmap handling with the standard
+DMA-BUF API, avoids duplicating locking logic and eases future
+maintenance. No functional change.
 
-Fixes: ccdf138fe3e2 ("usb: gadget: add usb_gadget_activate/deactivate functions")
-Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+Reviewed-by: fanggeng <fanggeng@lixiang.com>
+Signed-off-by: Liang Jie <liangjie@lixiang.com>
 ---
- drivers/usb/gadget/udc/core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/usb/gadget/function/f_fs.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 8dbe79bdc0f9..0195540d511a 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1151,8 +1151,17 @@ static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc-
- static void vbus_event_work(struct work_struct *work)
- {
- 	struct usb_udc *udc = container_of(work, struct usb_udc, vbus_work);
-+	struct usb_gadget *gadget = udc->gadget;
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 47cfbe41fdff..7f8e566b1c57 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1306,9 +1306,7 @@ static void ffs_dmabuf_release(struct kref *ref)
+ 	struct dma_buf *dmabuf = attach->dmabuf;
  
- 	mutex_lock(&udc->connect_lock);
-+
-+	/*
-+	 * Clear the 'deactivated' flag on a VBUS event
-+	 * to break the blocked state.
-+	 */
-+	if (gadget->deactivated)
-+		gadget->deactivated = false;
-+
- 	usb_udc_connect_control_locked(udc);
- 	mutex_unlock(&udc->connect_lock);
- }
+ 	pr_vdebug("FFS DMABUF release\n");
+-	dma_resv_lock(dmabuf->resv, NULL);
+-	dma_buf_unmap_attachment(attach, priv->sgt, priv->dir);
+-	dma_resv_unlock(dmabuf->resv);
++	dma_buf_unmap_attachment_unlocked(attach, priv->sgt, priv->dir);
+ 
+ 	dma_buf_detach(attach->dmabuf, attach);
+ 	dma_buf_put(dmabuf);
 -- 
-2.52.0.rc1.455.g30608eb744-goog
+2.25.1
 
 
