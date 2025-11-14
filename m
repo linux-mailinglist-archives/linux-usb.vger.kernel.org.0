@@ -1,79 +1,74 @@
-Return-Path: <linux-usb+bounces-30509-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30510-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4608C5BA68
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 07:59:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AD7EC5BD54
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 08:46:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 042D235578D
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 06:59:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49DF13B9CAE
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 07:46:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74B52F49F0;
-	Fri, 14 Nov 2025 06:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5BDF2F6932;
+	Fri, 14 Nov 2025 07:46:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FgIHQRAF"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="RmwmpcQV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622362C21C5;
-	Fri, 14 Nov 2025 06:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287C915E8B;
+	Fri, 14 Nov 2025 07:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763103547; cv=none; b=gUCVA0TZ7JoqjMEmSqw51QfySYSKzH1fpToGiRA4kpkv8oA1QKnd1b5g5BwSXJv/OYlsryrXK4z+J70SCbCgMF9cEQCwO8o+B1m1vn+BteAmBMZgOBq2IovXfZc8jBEswDpzxRtcqNhnAtnP8UvquE+haTFpg74TZbBNmkZHMxQ=
+	t=1763106384; cv=none; b=q8iW3Y/gkbTdNfLc6/x48nMs+0vWNuZfIAnaklwd0yv9z72uiJgCQ97hJiMHQ94rxBn5zlrOoNIbJMjbllISeWzFF1itBLDXwv9FvDzc6/hL+mXRSZwCGXBS1i1Bo9feOjBLt/D3wTtm8tTfWc2Zwm9MFQ+n1PXqY/YEb57IDiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763103547; c=relaxed/simple;
-	bh=xFTZB7nmkE+KO4dvaal04ySKsjenV1oFXSJbgDFkRCs=;
+	s=arc-20240116; t=1763106384; c=relaxed/simple;
+	bh=DOt8m4QkM9hQecTG/tA7QUOrlG38OhFmoW+w88nXRAk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F4d1N37fCqQ8RH5UNU1aVp8owqjwFQpfS/ORi7GQgu4p49UZRMD+j8Qve66guDiOtRcqBi21OMdvsyX7Hd6urS/PFFlERJezlqjjxLeDArMWaaSmiei2OpEUX5ke1/+azNn2jqXwEnoFf2Voq3gwBMLjloMDazharlpEvcEQRyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FgIHQRAF; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763103545; x=1794639545;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xFTZB7nmkE+KO4dvaal04ySKsjenV1oFXSJbgDFkRCs=;
-  b=FgIHQRAFfiOqpyNhQBp4iFndQDW+l2DYqtH7xOe2zIBlIbH1cX2ihtt1
-   7rykBaUHKN6ifMfq64unq1Egp/9gQnVy4z1e2T6gkOXrpiFo/QEEh24lL
-   ecH8psJpuazh8V/8DMelFQLlw0JqRTxyJM+k61XFpty4mrfnfO2XioMqP
-   JXYEhUchE241dyvoWghK21FpDOoF8hb3sQ4DKaegtkR2agk03n4jrCoz/
-   mxlM0o2dNcbYaj8zGWZUvlbHuLwpznku4f9BpTFHgobxB16Uamrx5T6/V
-   VGE2fZ24O4snbA1aDIr/V28Nqp8jhTS9o7Wy7I3dZP33snkZDcW1DrcCn
-   g==;
-X-CSE-ConnectionGUID: EwXAjjPlS1OJ3o+9hbdUTg==
-X-CSE-MsgGUID: is9JycfMSUuN0bG3t8VRhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11612"; a="82830177"
-X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
-   d="scan'208";a="82830177"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 22:59:04 -0800
-X-CSE-ConnectionGUID: sHgC19cwQRqmP32YdA4xww==
-X-CSE-MsgGUID: QB8Mq28wStu+JhA4kq9W5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
-   d="scan'208";a="190127701"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 13 Nov 2025 22:59:01 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vJnlq-0006H5-2o;
-	Fri, 14 Nov 2025 06:58:58 +0000
-Date: Fri, 14 Nov 2025 14:58:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: adrianhoyin.ng@altera.com, gregkh@linuxfoundation.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, dinguyen@kernel.org,
-	Thinh.Nguyen@synopsys.com, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	adrianhoyin.ng@altera.com
-Subject: Re: [PATCH 2/4] arm64: dts: intel: agilex5: Add USB3.1 support for
- Agilex5 SoCDK
-Message-ID: <202511141429.Ae8oNWSX-lkp@intel.com>
-References: <7ec6e1787a677f6614f7f991a31a9ac58b539780.1762839776.git.adrianhoyin.ng@altera.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=i2wHVEACjtQ1JzJXJPVN2kX+PsARg0nAyeYR0ZgsH2UlMZvoLIvUSRIATlNObTTDraznI1WSvPbr9qOJqsoCh9NMXgoBklqL5BsVSS7h9shGD2hDkCiXAoH7i1JL1TjjhfIltNd0kVJrpw5ymfXxest0UldNEBCL1U3m5hOjNF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=RmwmpcQV; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=h+GY3DA2a89Ro6bK+Ny9JBXd1oGc4240hj01Ocp0k3I=; b=RmwmpcQVdyxseRwak/qof99plg
+	19GIkQZH7ChhzOiG3uz8dg2HkAA5N+5/V1UIxXkDLDUEZCoKXkHmJU2jU1s+Q0xxu/tK+e7sPtX1g
+	p9WnhHDcBBVa4n8KLpZIKcLWl1vD6DcEr3NuPGBC/3lFrFbZqBzzS93Vmonf4mXY1YBnwXFMeqSOq
+	0VjFZh3Nht/9wWMlfASZ7/M0BXd2QaeBC84W+1f0gTGtGlmpUd/NgvFb/SFB2rT88CqI0WGcOH1cX
+	adF7Nl5bHG2kHMKYO15y03X/mRHcKujBsb/+YppfEkDblFYHA+Zfb/PsC9CidjgprrT4VBcTnotMR
+	Z1lBwfCw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vJoVa-00000009Pew-1WxF;
+	Fri, 14 Nov 2025 07:46:14 +0000
+Date: Fri, 14 Nov 2025 07:46:14 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: bot+bpf-ci@kernel.org, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
+	yonghong.song@linux.dev, ihor.solodrai@linux.dev,
+	Chris Mason <clm@meta.com>
+Subject: Re: [functionfs] mainline UAF (was Re: [PATCH v3 36/50] functionfs:
+ switch to simple_remove_by_name())
+Message-ID: <20251114074614.GY2441659@ZenIV>
+References: <20251111065520.2847791-37-viro@zeniv.linux.org.uk>
+ <20754dba9be498daeda5fe856e7276c9c91c271999320ae32331adb25a47cd4f@mail.kernel.org>
+ <20251111092244.GS2441659@ZenIV>
+ <e6b90909-fdd7-4c4d-b96e-df27ea9f39c4@meta.com>
+ <20251113092636.GX2441659@ZenIV>
+ <2025111316-cornfield-sphinx-ba89@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,39 +77,222 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7ec6e1787a677f6614f7f991a31a9ac58b539780.1762839776.git.adrianhoyin.ng@altera.com>
+In-Reply-To: <2025111316-cornfield-sphinx-ba89@gregkh>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hi,
+On Thu, Nov 13, 2025 at 04:20:08PM -0500, Greg Kroah-Hartman wrote:
 
-kernel test robot noticed the following build errors:
+> Sorry for the delay.  Yes, we should be grabing the mutex in there, good
+> catch.  There's been more issues pointed out with the gadget code in the
+> past year or so as more people are starting to actually use it and
+> stress it more.  So if you have a patch for this, I'll gladly take it :)
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus robh/for-next westeri-thunderbolt/next linus/master v6.18-rc5 next-20251113]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+How about the following?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/adrianhoyin-ng-altera-com/dt-bindings-usb-dwc3-altera-Add-binding-for-Altera-DWC3-wrapper/20251111-142609
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/7ec6e1787a677f6614f7f991a31a9ac58b539780.1762839776.git.adrianhoyin.ng%40altera.com
-patch subject: [PATCH 2/4] arm64: dts: intel: agilex5: Add USB3.1 support for Agilex5 SoCDK
-config: arm64-randconfig-002-20251113 (https://download.01.org/0day-ci/archive/20251114/202511141429.Ae8oNWSX-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141429.Ae8oNWSX-lkp@intel.com/reproduce)
+commit 330837c8101578438f64cfaec3fb85521d668e56
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Fri Nov 14 02:18:22 2025 -0500
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511141429.Ae8oNWSX-lkp@intel.com/
+    functionfs: fix the open/removal races
+    
+    ffs_epfile_open() can race with removal, ending up with file->private_data
+    pointing to freed object.
+    
+    There is a total count of opened files on functionfs (both ep0 and
+    dynamic ones) and when it hits zero, dynamic files get removed.
+    Unfortunately, that removal can happen while another thread is
+    in ffs_epfile_open(), but has not incremented the count yet.
+    In that case open will succeed, leaving us with UAF on any subsequent
+    read() or write().
+    
+    The root cause is that ffs->opened is misused; atomic_dec_and_test() vs.
+    atomic_add_return() is not a good idea, when object remains visible all
+    along.
+    
+    To untangle that
+            * serialize openers on ffs->mutex (both for ep0 and for dynamic files)
+            * have dynamic ones use atomic_inc_not_zero() and fail if we had
+    zero ->opened; in that case the file we are opening is doomed.
+            * have the inodes of dynamic files marked on removal (from the
+    callback of simple_recursive_removal()) - clear ->i_private there.
+            * have open of dynamic ones verify they hadn't been already removed,
+    along with checking that state is FFS_ACTIVE.
+    
+    Fix another abuse of ->opened, while we are at it - it starts equal to 0,
+    is incremented on opens and decremented on ->release()... *and* decremented
+    (always from 0 to -1) in ->kill_sb().  Handling that case has no business
+    in ffs_data_closed() (or to ->opened); just have ffs_kill_sb() do what
+    ffs_data_closed() would in case of decrement to negative rather than
+    calling ffs_data_closed() there.
+    
+    And don't bother with bumping ffs->ref when opening a file - superblock
+    already holds the reference and it won't go away while there are any opened
+    files on the filesystem.
+    
+    Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
-All errors (new ones prefixed by >>):
-
-   also defined at arch/arm64/boot/dts/intel/socfpga_agilex5_socdk.dts:111.7-113.3
->> ERROR: Input tree has errors, aborting (use -f to force output)
---
->> ERROR: Input tree has errors, aborting (use -f to force output)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 47cfbe41fdff..ed7fa869ea77 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -640,13 +640,22 @@ static ssize_t ffs_ep0_read(struct file *file, char __user *buf,
+ 
+ static int ffs_ep0_open(struct inode *inode, struct file *file)
+ {
+-	struct ffs_data *ffs = inode->i_private;
++	struct ffs_data *ffs = inode->i_sb->s_fs_info;
++	int ret;
+ 
+-	if (ffs->state == FFS_CLOSING)
+-		return -EBUSY;
++	/* Acquire mutex */
++	ret = ffs_mutex_lock(&ffs->mutex, file->f_flags & O_NONBLOCK);
++	if (ret < 0)
++		return ret;
+ 
+-	file->private_data = ffs;
+ 	ffs_data_opened(ffs);
++	if (ffs->state == FFS_CLOSING) {
++		ffs_data_closed(ffs);
++		mutex_unlock(&ffs->mutex);
++		return -EBUSY;
++	}
++	mutex_unlock(&ffs->mutex);
++	file->private_data = ffs;
+ 
+ 	return stream_open(inode, file);
+ }
+@@ -1193,14 +1202,33 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+ static int
+ ffs_epfile_open(struct inode *inode, struct file *file)
+ {
+-	struct ffs_epfile *epfile = inode->i_private;
++	struct ffs_data *ffs = inode->i_sb->s_fs_info;
++	struct ffs_epfile *epfile;
++	int ret;
+ 
+-	if (WARN_ON(epfile->ffs->state != FFS_ACTIVE))
++	/* Acquire mutex */
++	ret = ffs_mutex_lock(&ffs->mutex, file->f_flags & O_NONBLOCK);
++	if (ret < 0)
++		return ret;
++
++	if (!atomic_inc_not_zero(&ffs->opened)) {
++		mutex_unlock(&ffs->mutex);
+ 		return -ENODEV;
++	}
++	/*
++	 * we want the state to be FFS_ACTIVE; FFS_ACTIVE alone is
++	 * not enough, though - we might have been through FFS_CLOSING
++	 * and back to FFS_ACTIVE, with our file already removed.
++	 */
++	epfile = smp_load_acquire(&inode->i_private);
++	if (unlikely(ffs->state != FFS_ACTIVE || !epfile)) {
++		mutex_unlock(&ffs->mutex);
++		ffs_data_closed(ffs);
++		return -ENODEV;
++	}
++	mutex_unlock(&ffs->mutex);
+ 
+ 	file->private_data = epfile;
+-	ffs_data_opened(epfile->ffs);
+-
+ 	return stream_open(inode, file);
+ }
+ 
+@@ -1332,7 +1360,7 @@ static void ffs_dmabuf_put(struct dma_buf_attachment *attach)
+ static int
+ ffs_epfile_release(struct inode *inode, struct file *file)
+ {
+-	struct ffs_epfile *epfile = inode->i_private;
++	struct ffs_epfile *epfile = file->private_data;
+ 	struct ffs_dmabuf_priv *priv, *tmp;
+ 	struct ffs_data *ffs = epfile->ffs;
+ 
+@@ -2071,12 +2099,18 @@ static int ffs_fs_init_fs_context(struct fs_context *fc)
+ 	return 0;
+ }
+ 
++static void ffs_data_reset(struct ffs_data *ffs);
++
+ static void
+ ffs_fs_kill_sb(struct super_block *sb)
+ {
+ 	kill_litter_super(sb);
+-	if (sb->s_fs_info)
+-		ffs_data_closed(sb->s_fs_info);
++	if (sb->s_fs_info) {
++		struct ffs_data *ffs = sb->s_fs_info;
++		ffs->state = FFS_CLOSING;
++		ffs_data_reset(ffs);
++		ffs_data_put(ffs);
++	}
+ }
+ 
+ static struct file_system_type ffs_fs_type = {
+@@ -2114,7 +2148,6 @@ static void functionfs_cleanup(void)
+ /* ffs_data and ffs_function construction and destruction code **************/
+ 
+ static void ffs_data_clear(struct ffs_data *ffs);
+-static void ffs_data_reset(struct ffs_data *ffs);
+ 
+ static void ffs_data_get(struct ffs_data *ffs)
+ {
+@@ -2123,7 +2156,6 @@ static void ffs_data_get(struct ffs_data *ffs)
+ 
+ static void ffs_data_opened(struct ffs_data *ffs)
+ {
+-	refcount_inc(&ffs->ref);
+ 	if (atomic_add_return(1, &ffs->opened) == 1 &&
+ 			ffs->state == FFS_DEACTIVATED) {
+ 		ffs->state = FFS_CLOSING;
+@@ -2148,11 +2180,11 @@ static void ffs_data_put(struct ffs_data *ffs)
+ 
+ static void ffs_data_closed(struct ffs_data *ffs)
+ {
+-	struct ffs_epfile *epfiles;
+-	unsigned long flags;
+-
+ 	if (atomic_dec_and_test(&ffs->opened)) {
+ 		if (ffs->no_disconnect) {
++			struct ffs_epfile *epfiles;
++			unsigned long flags;
++
+ 			ffs->state = FFS_DEACTIVATED;
+ 			spin_lock_irqsave(&ffs->eps_lock, flags);
+ 			epfiles = ffs->epfiles;
+@@ -2171,12 +2203,6 @@ static void ffs_data_closed(struct ffs_data *ffs)
+ 			ffs_data_reset(ffs);
+ 		}
+ 	}
+-	if (atomic_read(&ffs->opened) < 0) {
+-		ffs->state = FFS_CLOSING;
+-		ffs_data_reset(ffs);
+-	}
+-
+-	ffs_data_put(ffs);
+ }
+ 
+ static struct ffs_data *ffs_data_new(const char *dev_name)
+@@ -2352,6 +2378,11 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+ 	return 0;
+ }
+ 
++static void clear_one(struct dentry *dentry)
++{
++	smp_store_release(&dentry->d_inode->i_private, NULL);
++}
++
+ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
+ {
+ 	struct ffs_epfile *epfile = epfiles;
+@@ -2359,7 +2390,7 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
+ 	for (; count; --count, ++epfile) {
+ 		BUG_ON(mutex_is_locked(&epfile->mutex));
+ 		if (epfile->dentry) {
+-			simple_recursive_removal(epfile->dentry, NULL);
++			simple_recursive_removal(epfile->dentry, clear_one);
+ 			epfile->dentry = NULL;
+ 		}
+ 	}
 
