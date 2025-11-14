@@ -1,133 +1,115 @@
-Return-Path: <linux-usb+bounces-30522-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30523-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A50CC5E1D5
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 17:10:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ACBEC5E2EF
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 17:23:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 733F84ECF95
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 15:46:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FF55427A79
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 16:17:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E306340A67;
-	Fri, 14 Nov 2025 15:33:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B850525228C;
+	Fri, 14 Nov 2025 16:12:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="h9DFs4jn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gcdgLKE7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D5333F8CC
-	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 15:33:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390ED261B98
+	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 16:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763134429; cv=none; b=H0hOWB5CMB34w015nDFIgdqKtrhDsT+13AzejhIlcam2j8km3Sr2Bock8CRjFL4O5VQidvmjlPOwLLVkDx/k0cOwvvhMVWB/uIZ6dINA8yqXPNfbQCW7mI20GVCMvgz8ZCVhwN9WZof2uP6BX3ITlKIopmzcP01SIg2Bd9HjoYc=
+	t=1763136764; cv=none; b=DqPJGGGlKVUdms5q5ZmFEcDzoff5vzdFVEaeSAxfiDMJH2+1A8s+UKopctsF5Ij8s5tA0482GkdGdCTF/Z5IxcprXO+nyq0TYZzz2IbKhmzJuxDAVvybsSvDI5BOIkSL7FhVwcH7lqqKdCbVTxeo7eXUVzdhAvuinmNAslDm1ZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763134429; c=relaxed/simple;
-	bh=ilhlp9rFrxZhGXHKshrWIfcqQf/ksy4FmU0Hte7e14c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EV0r5xePRtPETBRHTDovNL40CfGZC1nCHi/grUYQLejiIRUQES0CIENbavUVzQMCiIiTuss45HjGocW0LZlo7nwdQZphyr/cku5V9Jui3lkC+LChmTGvrFF3M19aiq/gB/uALZPGdTmZjQVJdu7SpM45iiUWn4HhrSmSc/29XFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=h9DFs4jn; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4edb029249aso17667431cf.2
-        for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 07:33:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1763134427; x=1763739227; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cltf9foH7wOTNjVjNTJlhY7XR2KMjkOrmjly/G7r4W8=;
-        b=h9DFs4jnmiEtRaz+6f4WnzafAE3ezujnpumMMGFzGzJT0RyBa3UgcHsB5d31ivBz5o
-         pi3jeQy1fqe8XXPlwKRojxgMR/uurpnbsxwaVVYgsJEb309uGAjcrUlq4ioogVN27jlY
-         V1L3qnhHOlnTk163K843Lk16XdsCiIx82awbZBRWr6Gk/reCfXYPoU7aZre9RfAGal2y
-         tl5ms+s+wPkqcX8HGbUO+Xt9c1h7KERAI5VgenCpBjH5Nq5G2pi02tkpJOrxNjpuW9mD
-         ZXJ8lAH37Z+tfN4dP+xwE5LtW41UimQcP7c7KP4g0qVrgRaI7SYvsm2OdiLOw8AOh8gK
-         HCww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763134427; x=1763739227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cltf9foH7wOTNjVjNTJlhY7XR2KMjkOrmjly/G7r4W8=;
-        b=P4f622rO8km8MohTU5YRz86OvBR5i/0uPrM0G8ubhP80b50fhkA+hkEFStrojHTs2c
-         8MUA0Hah3/9GT5p8A6n9/j4QCRdlSBWqyS/swpoOqhGq5UkLvnytlFs4davyQinlghd0
-         gO322uSu97l0yo4YOLzeQefOlGsUb6WImpMvp/lxfOv9V0P8VOObTwKTxMTZRXjuJE/t
-         1l1ePf1IwMAztxTsKwniJBso2LQuoySNZSHcdghxcph3gHUPJgXFqVehiciK7q199VBL
-         xdyJ8h237yfKd7SdcybssMR2IJz7vYItTwTOUZKIUJFerDK76ZX1GO1twnYK+8E5exnM
-         Oy2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXEKHloMbCqAcw7IJRM+x8jVb32bdpj26XvtMvUO0z4mHzIM/UWTqF2ridxqD0q/aW9MOYh3wfbBv4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzlxt7zvp3aHx+HQVzPwPL+hAhxcLod9P940p4N325B7UmojnNv
-	t45JaR61U83Uecm/rKPZBfqwBWvX5fOQmvsxfBSdXjkzC6qz1j6QuuOj0x9NvtKisQ==
-X-Gm-Gg: ASbGnctbt448oixT3KxZoxSd6mudfq+NfK0+GE1bEB2sekBU2F3SHbs76DiqRCHNH0S
-	U3n+nUOSPN62Bw8TtPHiz1x0O5NBw/fBcjgkFvIow6xnYj3ABKyCiC6Cn60IPsYHldl2dI9+WCV
-	S/ZymB6guSwTt3HVSg4fVV/nfT8uaTrmz2SuTDqbX0hmIHC22E8dwqfQN/FXZgcK2zMiVTA7gj5
-	3O97trLBudI6lte44/5Xlw9EVC0Bzq/GmT4tkmNs1/GrdvbH7yqgQRFrsVeWP1Y/YNjCDb1B702
-	LwH1SuQIiBdL1slGOJQCZi+K0KbTKlv3L4rXu04MMlaefT3iQ7Kn1K7BotsAxCGe9VzabSR/AYI
-	jXOwTlA4U0l3MaLr0w+aCiKTSJ5WbyNF5TI8SdpCyxv8NesfJAJrfQDCjtoRQs6vVtdBVO8cY3P
-	LCfQ==
-X-Google-Smtp-Source: AGHT+IET+BblS9+VAQ5xrANcwslgNyvra5gdLrulD4qtuZZ3MgiyTbSF9eYid5FOR/RDUPJA4Lf2wg==
-X-Received: by 2002:ac8:7d94:0:b0:4ed:e337:2e52 with SMTP id d75a77b69052e-4edf20569bfmr65044771cf.30.1763134427102;
-        Fri, 14 Nov 2025 07:33:47 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::ba76])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88286558347sm32688446d6.40.2025.11.14.07.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 07:33:46 -0800 (PST)
-Date: Fri, 14 Nov 2025 10:33:42 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Jimmy Hu <hhhuuu@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, Kuen-Han Tsai <khtsai@google.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Roy Luo <royluo@google.com>, Robert Baldyga <r.baldyga@samsung.com>,
-	Felipe Balbi <balbi@ti.com>, linux-kernel@vger.kernel.org,
-	badhri@google.com
-Subject: Re: [PATCH] usb: gadget: udc: Fix permanent block caused by
- 'deactivated' flag
-Message-ID: <88731999-35e0-4717-b5d0-9ebed9baf814@rowland.harvard.edu>
-References: <20251114080841.829128-1-hhhuuu@google.com>
+	s=arc-20240116; t=1763136764; c=relaxed/simple;
+	bh=bs2i0H0jlQ8HsZ+KnPKsgYngEWs21g4qYocSJoUifgA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V9c3WGNjbQQjwdzUF9nLPZQ0+cPN9DslcY4yeMVyCDFQvcbHWPb8IbQewQb9IT+BCBiOkOtzOfY+knPizuKx8w0Zc2p049SK3TlUBOoDRIUihrh6czwuUkvhVLvYZB8g7Y0lP+v6yL7SU4XkScVUK0eqUojC73cZ/dkA5kGns9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gcdgLKE7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D30C19422
+	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 16:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763136763;
+	bh=bs2i0H0jlQ8HsZ+KnPKsgYngEWs21g4qYocSJoUifgA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gcdgLKE7lEaIaFEb+rmrx9CGkbzColvzRmwy9I/t+fRKTKCq04IFa9kiUI31SjNlz
+	 Mr+e1rJ222bDqpOxWKOBXj4EisN1IZXEj8xkHqYL3ljbOBueb5az8mSELKJqWT9CTp
+	 GHeFs47leEaxQYMOlkDmHDnNce4cWltI1kSfQi55nbLYPUAAd5tPj0kmmS40SzIyyw
+	 hnDZbtThKaVOGEwnIDRrY3UwF+FA9VYbetAETXs6nvviMsMVoPvOPp6Dglmvudn4Il
+	 cVr6kr2xxOmU9yF3CbzVksAUl25oXYbvTb50UBQ5asGZk1+aXatQjVYl2QpW3VILHq
+	 uWN2B9jIN0JSQ==
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7c2846c961fso1519703a34.2
+        for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 08:12:43 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUDE6OesgZgiFeAUc5Gy3O6oIlwcfSaie9R2gZs46zITcOTG8lFlQOjE6/q9gWyUIhjxbIgjWi5IC4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIHdVV4+x5txZ3sGSaETV7Ok0sGxekeX/e0uydWTk5bBNqrMwF
+	LOZIlWm/9PqvNfHIeQBIEqZozI9VDfmgSNYXL6xkuB7QBLMv+8G5mSqRvS8ezkVkI9TCOrkdr9J
+	Ng1crG29n+aUnjrC1MRvAy+NMOrxAWfE=
+X-Google-Smtp-Source: AGHT+IEgmPDZF6MbpSeY+SWnu4uKD6OSs6x6OPLIYCl/Q/zRfCT5orZNrCRl2BOirXPI/vN/QwqjEs+I2p6W5zFGVuA=
+X-Received: by 2002:a05:6808:5283:b0:450:3823:b5ef with SMTP id
+ 5614622812f47-4509757eb23mr1966391b6e.34.1763136763085; Fri, 14 Nov 2025
+ 08:12:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251114080841.829128-1-hhhuuu@google.com>
+References: <20251112224025.2051702-1-superm1@kernel.org>
+In-Reply-To: <20251112224025.2051702-1-superm1@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 14 Nov 2025 17:12:31 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0i8RR_o-DmLrBUg_xLZxoNpUqLhudvPphgv7fmW=qZ9kw@mail.gmail.com>
+X-Gm-Features: AWmQ_blCfef8qy6eK5xND1HxM5r1qHEqftrJk62QA5sKUfq8A3gWPEwT79AHjN8
+Message-ID: <CAJZ5v0i8RR_o-DmLrBUg_xLZxoNpUqLhudvPphgv7fmW=qZ9kw@mail.gmail.com>
+Subject: Re: [PATCH v10 0/3] Introduce and plumb PMSG_POWEROFF
+To: "Mario Limonciello (AMD)" <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>, 
+	Len Brown <lenb@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
+	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, AceLan Kao <acelan.kao@canonical.com>, 
+	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
+	Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 14, 2025 at 04:08:41PM +0800, Jimmy Hu wrote:
-> When setting a new USB configuration, some functions (e.g., UVC) can
-> call usb_function_deactivate() to set the `gadget->deactivated` flag
-> to `true`, intentionally blocking enumeration until a userspace
-> daemon (e.g., UVC service) is ready.
-> 
-> This `deactivated=true` state becomes a permanent block if this flag
-> is not cleared by usb_function_activate() (e.g., UVC service failure
-> or config set while unplugged). This blocked state persists even if
-> the cable is plugged/unplugged, as the vbus_event_work() handler is
-> still blocked by the `gadget->deactivated` flag, preventing pullup()
-> from being called.
-> 
-> This patch fixes this by modifying vbus_event_work() to clear the
-> `gadget->deactivated` flag *before* usb_udc_connect_control_locked().
-> This breaks the permanent block, so pullup() can now be called.
+On Wed, Nov 12, 2025 at 11:40=E2=80=AFPM Mario Limonciello (AMD)
+<superm1@kernel.org> wrote:
+>
+> I've been working on a series that uses the hibernate flows (S4)
+> during shutdown (S5) [1], but it's a bit risky because it has changes
+> all around the kernel.  To mitigate risk Rafael suggested [2] to split
+> the series into at least 3 parts across different kernel cycles.
+>
+> Here is the first part, which just introduces a PMSG_POWEROFF event
+> and uses it in any driver that manipulates PM events.
+>
+> There are no functional changes for these changes and this series is
+> intended for 6.19.
+>
+> v10:
+>  * Drop resume_event changes
+>  * Drop patch 4 (will come in later phase)
+>
+> Mario Limonciello (AMD) (3):
+>   PM: Introduce new PMSG_POWEROFF event
+>   scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+>   usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+>
+>  drivers/base/power/main.c    | 5 +++++
+>  drivers/scsi/mesh.c          | 1 +
+>  drivers/scsi/stex.c          | 1 +
+>  drivers/usb/host/sl811-hcd.c | 1 +
+>  include/linux/pm.h           | 3 +++
+>  include/trace/events/power.h | 3 ++-
+>  6 files changed, 13 insertions(+), 1 deletion(-)
+>
+> --
 
-I do not believe this is the right approach.  It will fail in situations 
-where the cable is plugged in and then unplugged before the function 
-driver is ready -- the deactivated flag will be cleared while the driver 
-still is not ready.
-
-The proper fix is to make sure that the situation never arises.  In 
-other words, if the ucv driver calls usb_function_deactivate() then it 
-must guarantee that it will call usb_function_activate() at an 
-appropriate time later.
-
-Another approach would be for the composite driver to keep track of 
-which function drivers have called usb_function_deactivate(), and have 
-it automatically clear the deactivated flag once those drivers are all 
-unbound.  But this wouldn't be necessary if the function drivers all 
-behaved properly.
-
-Alan Stern
+All 3 patches applied as 6.19 material, thanks!
 
