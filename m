@@ -1,134 +1,131 @@
-Return-Path: <linux-usb+bounces-30512-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30513-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 564F3C5BE39
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 09:05:50 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0241C5BE45
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 09:09:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44EC43AA9F6
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 08:04:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 405394E79AE
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 08:08:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 488BD2F4A1B;
-	Fri, 14 Nov 2025 08:04:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 731FB2F6939;
+	Fri, 14 Nov 2025 08:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=neukum.org header.i=@neukum.org header.b="emu3T+mH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="38tbI3kA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from nx35.node01.secure-mailgate.com (nx35.node01.secure-mailgate.com [89.22.108.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09221279DC0;
-	Fri, 14 Nov 2025 08:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.22.108.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87763275AE4
+	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 08:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763107441; cv=none; b=Zqd5sdbmNyQdTUscAIOOYoamNljI0LwgGbSbqm9A8DRDGxzLblS9wOpWE6xjqFu5Um56wYbAyKAgIYjODy8r5BPTLmG7UpgigTpxgN0BVq9k1HMMNSN8MMGKz8avne5syY6odVOBxbF5XEAuEbTmeDRbwnfk+bsUIFg2Ed1WJ3A=
+	t=1763107730; cv=none; b=dUgZ4g291U4PzTfVOdkFwavSVtl6vxLXirvJchAEHFnd5cLnWDNhAsxntzsgnMjZhG+jhO43V94vmALsXsFgDTr4a68TxC7WqqaJroF2enNeQL6wDIN5sGJiNDURA6PvD+YOoL11feTD6ALraAG6PyU7SgbUFEvuR70q1+Uabik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763107441; c=relaxed/simple;
-	bh=/nvdXeCztr5x7wU02Syex4AbjYAAvVqMMlzKgulCUSY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=E25w7rP4L82DkXba1ylU/cUekwhWMX6xuDYeQ9iQeprESFAd7ukBgMwyqxoWyR58HK6MSEZcVawwHZw/tGHXFWeYoqF9v2js6TYCqjrRd5Y7M7xMfxbJUMe/FK/qUajEOgLQ0b9IOswuWy6FnwxZQchYhj0a9YecQEQnuUV6/nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=neukum.org; spf=pass smtp.mailfrom=neukum.org; dkim=pass (1024-bit key) header.d=neukum.org header.i=@neukum.org header.b=emu3T+mH; arc=none smtp.client-ip=89.22.108.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=neukum.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=neukum.org
-Received: from web268.dogado.net ([31.47.255.48])
-	by node01.secure-mailgate.com with esmtps  (TLS1.2) tls TLS_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.94.2)
-	(envelope-from <oliver@neukum.org>)
-	id 1vJomZ-00CmoB-S1; Fri, 14 Nov 2025 09:03:51 +0100
-X-SecureMailgate-Identity: neukum_org;web268.dogado.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=neukum.org;
-	s=cloudpit; t=1763107426;
-	bh=js5De72dNejc963vL2O1fflV3+QBWHSFP9enSUqAojE=;
-	h=Date:To:Cc:From:Subject:From;
-	b=emu3T+mHkAbxsHb8771NFxWKK791qe59KfEEWoE642RKhbt96UMTDXUV5VxYJw375
-	 sZOQcLPBbHNhPyl1PX/Dsk7wT2nA3F0H1JjCD+tVIE9+0R44dEWnWEVYKwb1FTuJeu
-	 C0db2M+1xKlBnAjIj1GeVSGuugmBLnsBpT+tE60Y=
-Received: from mailproxy6.dogado.net (mailproxy6.dogado.net [31.47.255.222])
-	(Authenticated sender: neukum_org)
-	by web268.dogado.net (Postfix) with ESMTPSA id 0ECEC28171E;
-	Fri, 14 Nov 2025 09:03:46 +0100 (CET)
-X-SecureMailgate-Identity: neukum_org;web268.dogado.net
-Message-ID: <aee37797-a280-47ea-91ac-487ddc124ac7@neukum.org>
-Date: Fri, 14 Nov 2025 09:03:45 +0100
+	s=arc-20240116; t=1763107730; c=relaxed/simple;
+	bh=smboXSPnSyuQg0Jfbixci8TkTxPDq3bDlst3LL2pjfY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=TAlWfjGq27gOIc/F+WLO0Eb6vlUjevuu22uSipaPYHao2i3XrVDYQXKpi1KwljIQSX2RqcJknrjKdetuXz02NPR094jS2Kf2ARboVtp2S5LrPHOAwHF+qAwenjJczUdzGi/3N/Ax1i/95u1mIwccpMNq7Ed7RS6EIXMeP2HNpck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=38tbI3kA; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hhhuuu.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b62da7602a0so1440020a12.2
+        for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 00:08:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763107727; x=1763712527; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FaZd0pLqMSksiOjb+Jw+W1+Jt+Bqll3R9KqbqD770D8=;
+        b=38tbI3kA+GFn315/pcL4Da/SxJofDfmrHmv93PvIiQWAZA0vrx5+rjvAU+ckdl81GD
+         kJ/qkOwChAIJBx98T3wPSNzK9lGnFM0lCK3xsU/aFOA7M6LpecTGbFInfSHNR5eFzp5i
+         DZyZXxmruP8xuNlf1mFJPTCDoWUS0Eb4zUhvyLoP3IlP2iBX7nyDq3zB24ZK5gdpgHCG
+         AnSU3owiGRVh/Hw+xWjMe6ZlRLHGM5XbVhld4Y+fQk8F7dgh17/g6zSI+uIgfaqGzgXO
+         zjb/F6sLpuTFYXjN3JOMWGHnyVFPtlGgurB44Zi+7cVn2f2B4eLMANhfoNQzBdJ9wQdr
+         Lv5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763107727; x=1763712527;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FaZd0pLqMSksiOjb+Jw+W1+Jt+Bqll3R9KqbqD770D8=;
+        b=OyEVujF66QSmsaRrKZVtJcjnK92goIzqsWD/zfXbL/AEeMIE0I7D117rgD1l5CKtlF
+         jlXRusiUfrWfFvJ1ToILAl6RGtIbLiJrb53Vd3lISsyZn/k3mDc6m5Y0F552LV69xPwP
+         42BJwgmcr7JodK8yugsavgO/V2J8VBqecUYBYogvXcYmvAyv/+xlJvKSBy1SdivaXT/1
+         N/ZirRJLO0Xa9qXXaXpAW9XUgj2qmFdbXh5QFIwpg9NIP7CdCkDFodtdRwK5s7liTHUk
+         TPiwQSzTFLfY572M55WXjcP7qgzdSDX9vvmN2vx10KLXwazwuK4JR9F2Czxp1dvl5y8e
+         8lhg==
+X-Forwarded-Encrypted: i=1; AJvYcCWyKtUfKNT7X3kQJhjD3s0AVXOCsvIBxt0QAFitrMlnPI5LLa65Uuqi9bdx7Dc76aTwIvVrb9931ZQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5yj6VZ0i3ARSgLKMYOIIneyh4rhLQpAcZUHVW8glfEAu850MS
+	exs+Dv3eHptVftJ5dUnruksijn5azWxE4TOByDnspk0ZAzikOS85Gh39Fl0+h9+PXURI3fg9KLC
+	OZEeUJw==
+X-Google-Smtp-Source: AGHT+IFyahqRDgCTzEk2G6XerYnaF/ixiNmgFZ8qFZ/mRyHI/Z+svgCP6tH+CS9dbmYU0Ls78Ln6iVi1Ifc=
+X-Received: from pgnr18.prod.google.com ([2002:a63:8f52:0:b0:bc4:233b:be04])
+ (user=hhhuuu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:3ca7:b0:350:55e0:5522
+ with SMTP id adf61e73a8af0-35ba22a61d6mr3388572637.37.1763107726552; Fri, 14
+ Nov 2025 00:08:46 -0800 (PST)
+Date: Fri, 14 Nov 2025 16:08:41 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Raphael Pinsonneault-Thibeault <rpthibeault@gmail.com>
-Cc: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
- Marcel Holtmann <marcel@holtmann.org>, linux-bluetooth@vger.kernel.org,
- Sachin Kamat <sachin.kamat@linaro.org>,
- Alan Stern <stern@rowland.harvard.edu>, USB list <linux-usb@vger.kernel.org>
-From: Oliver Neukum <oliver@neukum.org>
-Subject: issue with devm_ methods in disconnect and freeing memory in btusb
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SecureMailgate-Domain: web268.dogado.net
-X-SecureMailgate-Username: 31.47.255.48
-Authentication-Results: secure-mailgate.com; auth=pass smtp.auth=31.47.255.48@web268.dogado.net
-X-SecureMailgate-Outgoing-Class: ham
-X-SecureMailgate-Outgoing-Evidence: Combined (0.25)
-X-Recommended-Action: accept
-X-Filter-ID: 9kzQTOBWQUFZTohSKvQbgI7ZDo5ubYELi59AwcWUnuXjNdqzJDxDWLO/UpkdjCiXtcAWE8cl15hb
- OiPsRgpQYCu2SmbhJN1U9FKs8X3+Nt2xp4kjpLhmBfm/1jJBevzt8RFB30Ars0yTQ/BrMn+JnVYm
- 9cpWrOMZ7tQFwCmJ4YNwGYjbvhzWX8Co+5c+eruaCtmoQhY2xrBb8C+tWUvqrqBKsSdhvd/J5sX5
- daZjkYvhIO3OPuApEENzBIwyefYO48PjF2L3GVxHSajlUCf0ZlwxsU2jMuBNCauY+qeVRqcM2HNV
- 91gBZQ/1Pbs8eo64MUJTS2Jsxpkx+IHIsDarm2U3gyy0nlbakKK22WPBaizjKzb+JrnOTbl8FYp7
- CIWjverajYy2yB71RZy29b9HL7yliuqXZvH3i216cQum166kf/ld9xdbddNOGSuUXWv94PtbjLq6
- i876g4nLFuIm206wm4jyRZgLX3JeO1DimxffguuWRCT69XJD0VIf1Sv/utspepH656ibybPLqHoc
- HvpVQ/LHxirsNla37u2pHVFz3YiTLViM/bE4mY1qNrjcLCp1LDNBgpe9gGVcAseQ2CVZSXmdZ20d
- kJlKTM6tEuf8vTtpnDhFVFAXN/ieSgx2ezpFj0BqG/t3fGWq+iiriGm2Olw7NFWD50jbuEX0mdKm
- jhaG/t7hemlhJ+woX3OFSK+6iFsnJVr4u5Itb4fUJJQp+axrkf/Hwt0r5Ay1T6TlgTl6fJxyntEf
- hZCKje4ZOPJmqKySiclosAYjq5HhmyPxWFVH+H26km3T4pig7/wWquhQPjfO5uXT7j9W7u8qTfD6
- cxsdFKDXY5IAQfIM9f4GlAB0wMVfGTDZkKNlJZ7r2RGFJqPDOmAQctmh3zCCQYCC8/tQPot8U0pa
- WNjxsqHbbYrnOB/f8gHK828cLRfg7f7w8jy1FzdiCx53QuIcgpyfZlw7Bq0We+9rBz5aplVUjpsk
- cK4Q8fRu49B7wJHz9p/e5RuxqdsdqZOMXNAdnRq2H0n9jhG+7muBS1X+VskYoN/g2a11WysdYadd
- IKZKTPmNuL7Typo2qFGjUhbtexo0PPTHzQ/IcgTHsStfGbawPRuRtimbueg1dle5Gb6mB1YkM4cW
- R2XQFa6Gjq7FOcH0BPQeQFSwUcz39j/B+9lut0mbmApkjKY46fp6K4xHLjrNjqR2xLJfNZLtGdAq
- lVubB2rCMF6RoS5UV9u3bLZbcIJ0GR+Pe2PV4kBmHm8qxX2+VcRHEBh0q9VNLRGJDNhzVfdYAWUP
- 9T27PHqOuBMcaL/3sdQ+aU4L1Br+MEtb1ej7FoCtQ+x7KqtJIKKlUnGMDHzvLQLaIP9xF4j6wA==
-X-Report-Abuse-To: spam@node04.secure-mailgate.com
-X-Complaints-To: abuse@node01.secure-mailgate.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
+Message-ID: <20251114080841.829128-1-hhhuuu@google.com>
+Subject: [PATCH] usb: gadget: udc: Fix permanent block caused by 'deactivated' flag
+From: Jimmy Hu <hhhuuu@google.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Cc: Jimmy Hu <hhhuuu@google.com>, Kuen-Han Tsai <khtsai@google.com>, 
+	Alan Stern <stern@rowland.harvard.edu>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Roy Luo <royluo@google.com>, Robert Baldyga <r.baldyga@samsung.com>, Felipe Balbi <balbi@ti.com>, 
+	linux-kernel@vger.kernel.org, badhri@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+When setting a new USB configuration, some functions (e.g., UVC) can
+call usb_function_deactivate() to set the `gadget->deactivated` flag
+to `true`, intentionally blocking enumeration until a userspace
+daemon (e.g., UVC service) is ready.
 
-looking at the change to btusb_disconnect() in 23d22f2f7176
-and the discussion leading to it I have doubts. Let me quote the change log:
+This `deactivated=true` state becomes a permanent block if this flag
+is not cleared by usb_function_activate() (e.g., UVC service failure
+or config set while unplugged). This blocked state persists even if
+the cable is plugged/unplugged, as the vbus_event_work() handler is
+still blocked by the `gadget->deactivated` flag, preventing pullup()
+from being called.
 
--- quote --
+This patch fixes this by modifying vbus_event_work() to clear the
+`gadget->deactivated` flag *before* usb_udc_connect_control_locked().
+This breaks the permanent block, so pullup() can now be called.
 
-Syzbot opens a usb device with out of order interface descriptors:
-Interface 3 (ISOC) in position 0, Interface 2 (DIAG) in position 1,
-Interface 1 (INTF) in position 2.
-So, ISOC is the first interface to get disconnected by usb_disconnect()
--> usb_disable_device() -> ... -> btusb_disconnect().
+Fixes: ccdf138fe3e2 ("usb: gadget: add usb_gadget_activate/deactivate functions")
+Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+---
+ drivers/usb/gadget/udc/core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-I don't think this is a problem on hardware, where the bInterfaceNumber
-matches the position in the dev->actconfig->interface list; and in
-btusb_disconnect() it would only ever go into the first if
-statement: "if (intf == data->intf)" and not into any of the others.
-
--- quote --
-
-Now, we cannot do this. The order disconnect() is called is arbitrary
-
-1. The order syzbot used is valid according to spec, albeit unusual
-2. disconnect() can be triggered from user space via sysfs
-
-We must always be ready to handle any arbitrary order.
-The code in the second branch of the if statement used to be perfectly correct.
-The actual breaking commit was 98921dbd00c4e by introducing devm_kzalloc()
-for memory allocation. That ties the lifetime of memory to the binding
-of a driver to an interface. In hindsight in a driver that binds
-to multiple interfaces, this is problematic. Hence I would propose
-to just revert 98921dbd00c4e. It seems to me that we have discovered
-a design limitation in the devm_ methods. What do you think?
-
-	Regards
-		Oliver
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 8dbe79bdc0f9..0195540d511a 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1151,8 +1151,17 @@ static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc-
+ static void vbus_event_work(struct work_struct *work)
+ {
+ 	struct usb_udc *udc = container_of(work, struct usb_udc, vbus_work);
++	struct usb_gadget *gadget = udc->gadget;
+ 
+ 	mutex_lock(&udc->connect_lock);
++
++	/*
++	 * Clear the 'deactivated' flag on a VBUS event
++	 * to break the blocked state.
++	 */
++	if (gadget->deactivated)
++		gadget->deactivated = false;
++
+ 	usb_udc_connect_control_locked(udc);
+ 	mutex_unlock(&udc->connect_lock);
+ }
+-- 
+2.52.0.rc1.455.g30608eb744-goog
 
 
