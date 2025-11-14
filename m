@@ -1,114 +1,128 @@
-Return-Path: <linux-usb+bounces-30517-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30518-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 093DAC5D0BE
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 13:15:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBA20C5D200
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 13:33:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A94E3357310
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 12:15:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5AD33B9AF6
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 12:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF0B4136358;
-	Fri, 14 Nov 2025 12:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F4C21B87EB;
+	Fri, 14 Nov 2025 12:32:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ay29SyVT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eqw/Z2RG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36795BA3D;
-	Fri, 14 Nov 2025 12:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADBD153BED
+	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 12:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763122531; cv=none; b=oR9yvv7fuV18LBLFY73DY1OnS9sLdm6I1uY9oKK/Sw3d8zYGqedWXuImsI/CDkAHJPOmECk8dIHwW1b/214OuqYwRjrE4X9fYJ7dMLf/BffRCUJ5JhJ2F//WIn+X891rVZEo3XEzr59kaC3Db9qFR8yZEKcrOTb3bVDP9yra8/A=
+	t=1763123558; cv=none; b=nrGfahPmaMcH+vjsmf94UpSvGLILYToBfGKyafGniIJps/e+01zNxRc4ktE3B2XtV7eGKMGT7LSzZxUXuz0a6BQBB1qMJiO0P9hJQzOR5cfnUJZarkUC4EUZQuVBcyKsUs3tcFk/IrkkNkIrj3UwmE1Oeg9oUArX8uYHdyI2Eec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763122531; c=relaxed/simple;
-	bh=hxGopahQLPiiJ+FE6ytRpcYJk1p24GgpEwrPDK1BrLI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZEQY/qS4m/s/h1HVJ6LrUWxC3wMZrdmwlopVKm/YN7ABGtZqCrZ5nMQYiRagXrERlyTAkL9uJrLXpkaH3EMVDfiEXylRq1EhMMO8Aq39gnVbgBPgmTkn5S2Hl8C1dOT8CoRDVbj6LPK29FxzUiBxp/x5jWsaRMFh9MCALL4ndao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ay29SyVT; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763122529; x=1794658529;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hxGopahQLPiiJ+FE6ytRpcYJk1p24GgpEwrPDK1BrLI=;
-  b=Ay29SyVTtVPB9qeFqTDpNQVhCbfXQERCeTUCJh7RqAACQQwyo8ElpwRn
-   UCR7k1q1BptW5s4iRTLHMB/fWihnrRDENkQibygvLZqd83g1lBguXDH2g
-   z+5D+u9pgqsd2x4G5A4sv9XHP3V4w4mp+k9aTmskHJL8jFM1YdJSl+e2V
-   7jM0UfF2ukneglR2XVzT359J3s8cQmfg0JmUmXPd5k/opl8dKxb/2ZT0i
-   Oc+81gCbJqgNVGowVOft/yYMrRCRCaXrVP9Hp9+DSrIKgn9faXS/87DgB
-   P84Sbqxq+spnpeyAYH48e4QzTsLpnVb2brE+Xq51k6gVJmXtrQX9kerc0
-   A==;
-X-CSE-ConnectionGUID: UX89BkK+QkGfVkr3UJYkmw==
-X-CSE-MsgGUID: e+ZBysjPQr6QrRqWGZqT/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="65147016"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="65147016"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 04:15:29 -0800
-X-CSE-ConnectionGUID: ETA3P/WkQvC03tyk07tgVA==
-X-CSE-MsgGUID: ff9lDAHdSx+aWBZBzp/E/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
-   d="scan'208";a="190009115"
-Received: from rvuia-mobl.ger.corp.intel.com (HELO [10.245.244.8]) ([10.245.244.8])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 04:15:27 -0800
-Message-ID: <ce9f5ad9-bbcc-4dd0-a7bc-8398bb7cdb67@linux.intel.com>
-Date: Fri, 14 Nov 2025 14:15:24 +0200
+	s=arc-20240116; t=1763123558; c=relaxed/simple;
+	bh=DIJjYjFtI2spgDs2sVP6KIq23gVo71gRQCz0nIFteQE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EgTZuW4qbMSg8mhJWmSET0QoDGfFQmVvJTFcLRxmoG/9eVvdBZVkyo6Jz2NIpF+EPQH0GqcRvanNtS+3CKPlQNrqKyIgzneRK6mLPsZtl2DQ/3jip6uScOQWbwBOGXWiemgvvFFq/8kaBQV0ifu7EMhlPz+xj0jXZqCDskCPyyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eqw/Z2RG; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b71397df721so248637966b.1
+        for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 04:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763123555; x=1763728355; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QeHeMacQ98VS8jGbNZN3tzdZLAogm9JqSfkYxWWrnr8=;
+        b=eqw/Z2RGVfZjKvYnY2MpWn2I/Up6uU1aa9KgKB49H/aVwDSHH1laa/yfvNGBSfZcMm
+         X/LIhSQxpZzUhN/oudPw+qTFpTo9mmNBNKpWGAM+f5OKALtaOTuz6MEfG6BZIzoU7BlW
+         AEfmbIw8rPuP4+sWpSCJ6rISPlQofq/fYMwc0BXEYctYTMyqfrqd7AJpQbgmOZBIz4fj
+         Lfg/jrXM+r2Ndt+DQirjU0CPPXEHlhKy4H1JZRVz62khqdWMKFKL8otN7W69wTVLimES
+         N1NZlTzK2lGcdR9thfJH6hglw6VGVmEqYKies8p755OZTfzmKb9PJWPASSMKHuYpuEg8
+         Yxxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763123555; x=1763728355;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QeHeMacQ98VS8jGbNZN3tzdZLAogm9JqSfkYxWWrnr8=;
+        b=wPyFkn3HCWtVw7ncp28z5KxrO40VQ7IRn7TKpFt47ZPetC0eR2nbzfg/KjoK7SVV87
+         oTTedbM9beVSpix9qOz7xRCVlGL1ZDH31MYIUUjJ9ATjOl2ln8WV8l3zP6lNDpnuxl6J
+         2qCQF1mS77ViR7Jckk6rzRpukSM06Ka6eb7kEui5VSxraNOtin2BuYo0nhCSQhG207RV
+         kb7iJSwpOVxouvV99vB4naRtiGAFsa6Jxl8J9bT/rZwTpqItmujDbVKYcjuwjb/d/p87
+         CDaQpOZ1VeCSbOFWSGr+ESAWhGkTLeVS5Jlwzu64c7IYDcOY1jhOrjFzH4vHfk5Jd4XM
+         x8LA==
+X-Forwarded-Encrypted: i=1; AJvYcCXP3K4FAPEoE3rT9svoJF8izhv12px0eD8FFDE4jLdDf3Pn76vd83toNPefwOba1Wd5cQR9dCqByKM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+ZUBbfJhtOwonFIymrkeXxLjAn2qzhljaCbvlWcDAnibozNZv
+	6qzVLJfgRCz18k3kW9oTwsoWhkLMxnuvMi/j+lqEnTcyZwhVCmuElkWv6X8Czw==
+X-Gm-Gg: ASbGncsQo0LoJjMXspcPf1lZ2Vq3ua99XPrDkgu+eLizgkYkpEDTqzhHf47JlDMrUX6
+	Auh3MqhQnv3kQqNpvQIpfCrr71boQ1WPV17L0yWCPxleg+ET0Zu7/6zY4rixfPPwPs7lnG/oWJ2
+	mrzAErx/ziFPKN7Qb+YrXxxwAX+bo1W//fNzksYERw273ob7LfongkesGW+Rwk8G2RIy6Reoe2E
+	ihOM9Z6dZP5wjSkOBKI68jxL6Z65qIsdibwTxDzxO0CKVgyuy4/3cakQ7M4qUXv4jw4b0G/RExj
+	tzmK4ZOTIj2pR2GCbW6Khbiqyy13BCzqCgpyjOKZFOYGNUF/nELqJEj+QnBvpOd0zSm+VLLaZi0
+	kZDVrMt2B++vbHI9ncptc1U4ZPWn7xqNZ8otecVvM/QrAM4NJuvdP3oxPNwEzsZ33c0cydCMxnr
+	vXsJSbDPDv8w==
+X-Google-Smtp-Source: AGHT+IHCOXnWh0xyAvkPtNe79UUfkP7BpqznH6RoChqC1GNR7ult8e2DIaStzBV+HDUl/Ydg/BSxWA==
+X-Received: by 2002:a17:906:f59c:b0:b73:6534:5984 with SMTP id a640c23a62f3a-b736780bcc3mr269364766b.16.1763123555293;
+        Fri, 14 Nov 2025 04:32:35 -0800 (PST)
+Received: from foxbook (bfd52.neoplus.adsl.tpnet.pl. [83.28.41.52])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734fad3edasm376754766b.17.2025.11.14.04.32.34
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Fri, 14 Nov 2025 04:32:35 -0800 (PST)
+Date: Fri, 14 Nov 2025 13:32:31 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: Assume that endpoints halt as specified
+Message-ID: <20251114133231.3f187b94.michal.pecio@gmail.com>
+In-Reply-To: <a5119a19-8660-4f0c-bedd-0a9a0301ef85@linux.intel.com>
+References: <20251107111317.69be45a5.michal.pecio@gmail.com>
+	<a5119a19-8660-4f0c-bedd-0a9a0301ef85@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: Don't unchain link TRBs on quirky HCs
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251107110837.7b7d686b.michal.pecio@gmail.com>
- <f1259e37-5671-43ca-85f5-a37b68d5507a@linux.intel.com>
- <20251114123232.0b96bfa5.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20251114123232.0b96bfa5.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 11/14/25 13:32, Michal Pecio wrote:
-> On Tue, 11 Nov 2025 18:19:38 +0200, Mathias Nyman wrote:
->> On 11/7/25 12:08, Michal Pecio wrote:
->>> +static void td_to_noop(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
->>> +			struct xhci_td *td, bool flip_cycle)
->>
->> we could avoid passing xhci pointer to td_to_noop() and just grab it from
->> the xhci_virt_ep structure instead. i.e. ep->xhci
-> 
-> I can do a v2 if you want.
-> 
-> But OTOH, I didn't expect such pointer to exist (though I'm sure I must
-> have seen it many times) because it doesn't seem strictly necessary.
-> 
-> Maybe do the reverse and get rid of ep->xhci, or stop adding new users
-> and clean up existing ones along the way?
-> 
-> Main users are invalidate_cancelled_tds()/giveback_invalidated_tds(),
-> their callers all have xhci and could easily supply it to them. And we
-> even discussed removing the latter completely, but I got sidetracked by
-> issues with URB_ZERO_PACKET.
+On Tue, 11 Nov 2025 14:13:05 +0200, Mathias Nyman wrote:
+> Makes sense, I guess we can only trust hardware to update the state in
+> the endpoint context on specific command completions, not transfer events.
 
-Ok, I'll take this v1 now as it is.
-It prevents a potential issue, and it's tested by you.
+Technically, 4.8.3 requires HW to update to Running before writing any
+transfer event to the event ring. It says nothing about Halted, though
+4.10.2.1 appears to imply similar ordering in case of Stall Error.
 
-We can then later figure out how we want to clean up and refactor things.
+But then 4.8.3 explicitly says
 
-Thanks
-Mathias
+  The update of EP State may also be delayed relative to a Doorbell
+  ring or error condition (e.g. TRB Error, STALL, or USB Transaction
+  Error) that causes an EP State change not generated by a command. 
 
+so the spec is a self-contradictory mess as usual. My hope with this
+patch is that maybe other SW vendors follow 4.8.3 recommendation and
+HW gets tested to work under such conditions.
+
+The Promontory problem is not even a delay, it's a complete failure.
+I added a loop which waits for GET_EP_CTX_STATE(READ_ONCE(ep_ctx)) to
+become HALTED and it was still RUNNING after 1.5 second.
+
+I guess it's some stinking internal race condition again, maybe it
+halts too quickly after restart and then a delayed update to Running
+overwrites the Halted state update. Or something that only happens
+if we restart too quickly after previous error. IIRC, it was never
+happening the first time the endpoint halts after loss of connection,
+only randomly later after some resets.
+
+Regards,
+Michal
 
