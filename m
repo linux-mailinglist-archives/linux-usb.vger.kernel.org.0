@@ -1,171 +1,213 @@
-Return-Path: <linux-usb+bounces-30524-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30525-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B3D7C5ED2A
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 19:21:49 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45FE5C5EE91
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 19:46:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6C65635D811
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 18:11:22 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B14184E250A
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 18:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD13D2D7DFB;
-	Fri, 14 Nov 2025 18:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6A5B2DC338;
+	Fri, 14 Nov 2025 18:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Du3z/o8u"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="Av+w+qI7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877BF2D9780
-	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 18:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742512DBF5E
+	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 18:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763143875; cv=none; b=qWM+5oPTiuvtlPr7fU96+2mPWzTb9jj5EL83m0r8EC1NAc2wtaBYt32tQUZlWUpBKl9RcySYz/sRV24VbNpad4LdSEOqV9Yxhcb7pndW4Kz+5R7XWt5S/yAL4Sc+09jfTaM0qGJlrOGVMQOsnnIfH4W7j/yvv6C/FteexnVWYbk=
+	t=1763145489; cv=none; b=gxIhH3iZ8BFEGekZdsabbSMjpBZEJiYVNA38V9wIiy0UYjycBUGNVizQuZS5QCWDNEQNdVka7eOHA4xNglpOVfQKqn/qayjee06hL+vqfuFI3qi9xUOustQQULLIMKybxpqDZrUswmZEY10N7XSJEJW4eDmEQq7fK5lC67FFjGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763143875; c=relaxed/simple;
-	bh=I6uxdokBRZqnPdGd9S7cHGda8JgKJBbwYuhyaVd0qoY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C2UA4KSuAyCl42ufgvHpwCwPZjBEJu/Wb24WtcuLI1UbQG8OSdejsMNOoVxq3h1HjnoCoZIkaR2N0VaBIXoxz1fHnfnA1W2NiMIjf50IFo3D2Wvj97zRxMDLZGWKm+EAi6mLSJVPwoXrkU7bjQgTVHtQqNYe43Fs1/1mUJ85Eo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Du3z/o8u; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-88244d1559eso29541186d6.0
-        for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 10:11:13 -0800 (PST)
+	s=arc-20240116; t=1763145489; c=relaxed/simple;
+	bh=KN1iUY3pMbpi96LU6FxJ+gNz1p0HdFSZucMgccIckK0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=TpkLMCOrrSltvgzipEibjzlvfSjNVKmG7uXr9XVa+niEb95KgrVup/fLQSv2sMnfsf7g2F4Ytp9iKAKHTS3wbqY1u1YW3jNjyroeNPzl9Nt/lUfx2rmVz8rDuPpb2U+ndNNmw34Zl8ZkzhFLl/OmwavA4QXLOWBBVfBAoZCpi7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=Av+w+qI7; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-477632d45c9so17796795e9.2
+        for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 10:38:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763143872; x=1763748672; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3VtcXesZLIerHs3waFi+zXYT/H/QCATlIs75FvgnJ2s=;
-        b=Du3z/o8uswBu5w5dvUTD2+m3IFVVlS6Z+GxbOH2jO8zLCSeSKDuiDdfyzcv97YAwZL
-         baC0HVdNMUSgcKsJhwx9bmC/GsP+DV2BLPUYCso1hKEt3AXirr+sX6CmWkNGtIVGZ+ut
-         QAKjYP2QXEkCOuaj3RJX5Y3EBW++c5zP9AFbUfk+lMud6fi0TromaSDquX2lusJ7DAMX
-         L1dBtqx7he+QmK0FvKA/UkeM9seByi4jO+Y4dkHUIBhpYaXYYbWT/dREB9/bHV2StYbl
-         ML1SW7vvwCSH7MkPXJA/bfbMaDV+NtCMMCffRIvlHOPFyCKs+6cWo2Tu7b0i5WmHh2Mb
-         Fp0g==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763145485; x=1763750285; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wdQW0c/GxIV3qmXtgKGGNXagb1YyKxNf2gm2aS/eVQo=;
+        b=Av+w+qI7/4zbijbc/ThPP1AW9icILtxUHmGfan0xzOFMfWkzJkozqBB6j5Tf2/3c21
+         yQC0uv5iUCH1N7fV7Vg18y1TdRVDVRw8fS6lZ9qwPRam6wQOESZ4yfvysBRSIntDgG3J
+         f4UtRXgz9C7RQxgTzivGBPrN29A0gtmaZjB4VcecJP5UeJXKB5r9RSpcvmHvtx8Eguoi
+         +tWqKuIT6DpSNp81pbEaTUnYBjhdVWxlonFLbUAn7VMhQF1entxPnUId0qpqQ8acfpZr
+         SJEtsfJ0lHJV6u7Bv47v8Pl54EPL+tqu9X1ZSJvhAWvIvXqu6unu+gdfzu2WluMu643W
+         WbaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763143872; x=1763748672;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3VtcXesZLIerHs3waFi+zXYT/H/QCATlIs75FvgnJ2s=;
-        b=szuxt1YcFOAGKty8TItEDpa1aY7My9Wyml8DZtXNjgECJIuOKVoo2iOhobVf0ccvxt
-         MF5AzKHIDVfoJKbcGKJBqvP43NRKav+/yVhLhFXMm0WJA0XOuGHQ57Rj9YkzdXNRury7
-         gsdrW/0Kn5hoy8HW7z4EHS+ZwciWOzxM5jlQ+ZikS/6zq/H/llcN1Gl/FlpZcQeUDqVT
-         D2dpzfItQkGKrpKJgScXCBs5jmkMOhhBD6GLRtucUh7QszhwSAondUFPy+O5bCHw5lTH
-         DKGy/0ZeAJlMs3izDTiXPzxeqxAOLAg5Uj6wOuLNyfL1MwWTPBHuo/2cWyfdfY+OdD1N
-         Mz4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVTg3ykoTEjWDavKQUl4QyTmt0OT2SgGeI67bjEU5YQ9DIAWkKbiX6R4bK5p4qk8o9mJHPHMuOnDMM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgigD9INW0K4EPl2Hch425T3f5g3eBo70SHpUjDlepCVflOz4Z
-	DCzEpxW91iDaCwE9OUTQw9utOmOsv0MCtBerby9HyY69jN+2/H8tDlfq
-X-Gm-Gg: ASbGncvkwROREiHHAx/WuwWeB1ac9GzFbU3rrv0PsAX7hyCbVSL10l1c2A/yWF9Qn8v
-	h0N6ocoslMYEjOfJZJpNdUx7Euy4wBejEByLV3Y8m28xs4k0E9iPIAZScnGguMYsuQYE6D+3DhJ
-	UZYly+INDrZ70zUiIOna3WcfQ6Mrb7V0MgBbYXdNTAaHO1saUB+I2FkT+a/EK1VVFMyas+louqM
-	olf1+KH21Wb6vsELWuP7eAWsShVk0g8+KGNLrkn79LIQbkcGCgT1ib0F5lY7ABRXNzI0g3Utb7/
-	ZemJmbHuynET7lvsR4S6xRMu67EZj79jSqcFHheSN4A3c/yVGEZEdfokfTw3cTuvNg3PohumJFr
-	bNCr6MiWvR5oBDiwdGbF8FZm14p9hKYU7k8LP/aqeg8s7wsyCrZ7dinfwbGVL6jYZ17aNB0NnTM
-	Fc3WNOvScQRj0HhbB87Q==
-X-Google-Smtp-Source: AGHT+IE86ItAnX1GO77Gd7Z1zaNg0qBIgEZl8jVRGlUImq9KAVIezvoDT3ilB2coFhcaqIZi1tjszw==
-X-Received: by 2002:a05:6214:1256:b0:882:4488:497 with SMTP id 6a1803df08f44-88281967ebcmr100093496d6.34.1763143871784;
-        Fri, 14 Nov 2025 10:11:11 -0800 (PST)
-Received: from rpthibeault-XPS-13-9305 ([23.233.177.113])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8828613962esm35670476d6.0.2025.11.14.10.11.10
+        d=1e100.net; s=20230601; t=1763145485; x=1763750285;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wdQW0c/GxIV3qmXtgKGGNXagb1YyKxNf2gm2aS/eVQo=;
+        b=anTlT0takBwsqvhb3/Rvb1dOsQ2we601SOm6sPkAPGiZhc6ei4L5Ypgpm6QcSR4m+H
+         UG20PH9hUbm6+jIo0PcJ6KgSI+bEYfeEmvSsh7EcS8dcapQOwQyD6Y8KURV4sdV4gQv1
+         v4MSxssJlXROTTUMxzR8jFvk2aPzU0Lj7Y1cQ5P8oblUrCNgdX/QpDQsuDyaicwltCZn
+         O+Tm6H6wvxnIWseO/AguJOgap05ziBS2wlcok0xRY/9UgSFu1fvefZjh6UyDUqaNLPHi
+         HAW0PqAXgmP9P4FuBboAsYbFs82YA0/hzNQmGYd1l8HMUjE7HCJaL8heMmASLp/z4Bpq
+         h3hw==
+X-Forwarded-Encrypted: i=1; AJvYcCVYi3eQxI6IGJ0HUpkOxzg40vb4+yU+x8myORq7L+XNcJqR+kXka5Kfjp2nYYL2jyytSchzY2yI640=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywd7XGuA2gMAMsbk2RVaAw5m6sdwuDkgdy7fIoijS6RJu6qYpvR
+	qHoDfjCLwq/u6LmS+xXDUSEWG3zOCZuxWWv4w5C15xB75dKhO8xIKYcijAlon0Pko+grKYmAldA
+	AF3UorjvYzg==
+X-Gm-Gg: ASbGncva5GzZ94Br11UWhEujz+oCs2O6tGUivFxjPI1ZR/mKh6yCVlqf27LI5z5C1Cd
+	Sfqjv/HX7xWH6b6C/hxUQe2iZeXgdEAtXmRC5iqt5qfMsskXRIp7Xp0C06sUbG7R91CmRvTDHCX
+	H2TnZbcqMYlAcLAlXq4NklDS/NRnhLo8OPfols3W5ppxKaGCW0ScXWFcpbztP++sUvVK4V+UKrh
+	kUt2/X+LP9JKJSRO7Yd8rc5BnmraAe7talLjIm3h7uGYrn3nVW+/5myMH2+LSvCn1CIfjNwsC6X
+	tCqGJMAu9P7aOfuK2Yq2Jvk/4F6Kzyh9Ik6gg1Tu2DHJF2vs/sG1O441OWhmYU3TCG7Dz6kmDkm
+	OCqG+F/YB9LXbv1uow6hDSgswoLfFq9iv5r8uOAsWgYMYOCWrBwlL2J//jr1v7HyXtouywOTUcu
+	JnHRToog==
+X-Google-Smtp-Source: AGHT+IFkbJsEQRTFKF+Dc2WMQ8aon51S9SwbwvC464IC1v6W8sViuH5i3J0Rf/dkNCtQsQogWnhqeQ==
+X-Received: by 2002:a05:600c:1f87:b0:471:1435:b0ea with SMTP id 5b1f17b1804b1-4778fe795b0mr38730085e9.24.1763145484789;
+        Fri, 14 Nov 2025 10:38:04 -0800 (PST)
+Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:326d:9344:48bd:e2fd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477969b3c12sm3968975e9.13.2025.11.14.10.38.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 10:11:11 -0800 (PST)
-Date: Fri, 14 Nov 2025 13:11:09 -0500
-From: Raphael Pinsonneault-Thibeault <rpthibeault@gmail.com>
-To: Oliver Neukum <oliver@neukum.org>
-Cc: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	linux-bluetooth@vger.kernel.org,
-	Sachin Kamat <sachin.kamat@linaro.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	USB list <linux-usb@vger.kernel.org>
-Subject: Re: issue with devm_ methods in disconnect and freeing memory in
- btusb
-Message-ID: <aRdwvZdbCEap6vuP@rpthibeault-XPS-13-9305>
-References: <aee37797-a280-47ea-91ac-487ddc124ac7@neukum.org>
+        Fri, 14 Nov 2025 10:38:04 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Fri, 14 Nov 2025 19:37:55 +0100
+Subject: [PATCH] usb: ohci-da8xx: remove unused platform data
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aee37797-a280-47ea-91ac-487ddc124ac7@neukum.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251114-davinci-usb-v1-1-737380353a74@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAAJ3F2kC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDQ0MT3ZTEssy85Ezd0uIk3UQzsySjJEtzS4u0ZCWgjoKi1LTMCrBp0bG
+ 1tQCeoKAjXQAAAA==
+X-Change-ID: 20251114-davinci-usb-a66b2b9798fc
+To: Alan Stern <stern@rowland.harvard.edu>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3089;
+ i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
+ bh=ZnhmZKz1F4Gj8HQooc0oTKmhGP7//dBQbhluvebYA2w=;
+ b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpF3cIZvfFPE4lo6tX82drxHzM0+PE15T5phswt
+ naMuHGSJKqJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCaRd3CAAKCRAFnS7L/zaE
+ wzmkEACwEhsN2gU1twPprcHx0hX9Vz5ovE2E384ww+AqPgAQKpOdHBFFZxzApigpqJ1ArO7MOE8
+ YvtkSE3dNHvNN1wPHmbKMsuaf96e2MxTasCgXairD4gZCHXIr07kZj3Xb9mGrQ+52/hb9xhJZB+
+ XIz3/1kKW7Vh8yOTmL4kUTgwVFpTw+YXjYuSz4pRTswCm+dhbNjFmFrZKBh0zkg3U1f+rGygyJ1
+ MM3ZNfSsknZ9ZRv8drCKsYVV6j5zwVzhFX6XhRDHHPF8COCF1FOQykqdW/6SWDJv72kQxv5x4Ma
+ SP0xqOpvBCXDYuZCSu26+VLhQFz1Cb53C1l4kmYk2UcMUvjnKhH0rJExi1A8uvL/xanNwajhZWt
+ zJyWPlPZBirJRhHncgoN7LcuLWTLjGQPBAM/EIKf5JiMugwROg4qJKaCYGfLhP6nrunAJX1yz3U
+ HwCKONyFZif/UFIgj74Gnk1dou5n7GzCnh4iTF1q+DIPY8obtaLq63CKCW+26wXfVECQtHaqwZv
+ of0BreiBcCYZ/8xuq88Ptkhg0WNTIxxh7deoUDAssIx4ODDf9kNZFXi5RH5pCGn2WYFVeztS30T
+ Lul9KfwjjT8NQq1wWIgQrc2atzQ5hQ1II0mwCK6PQ2S1KxK7nlBKm38f6iBixWRyAA6h92FxvKi
+ Sts5+fXy7tCX7Ow==
+X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-On Fri, Nov 14, 2025 at 09:03:45AM +0100, Oliver Neukum wrote:
-> Hi,
-> 
-> looking at the change to btusb_disconnect() in 23d22f2f7176
-> and the discussion leading to it I have doubts. Let me quote the change log:
-> 
-> -- quote --
-> 
-> Syzbot opens a usb device with out of order interface descriptors:
-> Interface 3 (ISOC) in position 0, Interface 2 (DIAG) in position 1,
-> Interface 1 (INTF) in position 2.
-> So, ISOC is the first interface to get disconnected by usb_disconnect()
-> -> usb_disable_device() -> ... -> btusb_disconnect().
-> 
-> I don't think this is a problem on hardware, where the bInterfaceNumber
-> matches the position in the dev->actconfig->interface list; and in
-> btusb_disconnect() it would only ever go into the first if
-> statement: "if (intf == data->intf)" and not into any of the others.
-> 
-> -- quote --
-> 
-> Now, we cannot do this. The order disconnect() is called is arbitrary
-> 
-> 1. The order syzbot used is valid according to spec, albeit unusual
-> 2. disconnect() can be triggered from user space via sysfs
-> 
-> We must always be ready to handle any arbitrary order.
-> The code in the second branch of the if statement used to be perfectly correct.
-> The actual breaking commit was 98921dbd00c4e by introducing devm_kzalloc()
-> for memory allocation. That ties the lifetime of memory to the binding
-> of a driver to an interface. In hindsight in a driver that binds
-> to multiple interfaces, this is problematic. Hence I would propose
-> to just revert 98921dbd00c4e. It seems to me that we have discovered
-> a design limitation in the devm_ methods. What do you think?
-> 
-> 	Regards
-> 		Oliver
-> 
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Hi Oliver,
+We no longer support any board files for DaVinci in mainline and so
+struct da8xx_ohci_root_hub is no longer used. Remove it together with
+all the code it's used for.
 
-I was under the impression that tying the memory lifetime to the INTF
-interface was intentional since 98921dbd00c4e was from 2012, hence my
-commit message in 23d22f2f7176:
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ drivers/usb/host/ohci-da8xx.c             | 17 -----------------
+ include/linux/platform_data/usb-davinci.h | 22 ----------------------
+ 2 files changed, 39 deletions(-)
 
--- quote --
+diff --git a/drivers/usb/host/ohci-da8xx.c b/drivers/usb/host/ohci-da8xx.c
+index 3c5ca2d7c92ed786af41d98ed124926ae06d4025..0938c0e7a8b6d54cf1981298119d51a3bfe49148 100644
+--- a/drivers/usb/host/ohci-da8xx.c
++++ b/drivers/usb/host/ohci-da8xx.c
+@@ -18,7 +18,6 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/phy/phy.h>
+-#include <linux/platform_data/usb-davinci.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/usb.h>
+ #include <linux/usb/hcd.h>
+@@ -166,17 +165,6 @@ static int ohci_da8xx_has_oci(struct usb_hcd *hcd)
+ 	return 0;
+ }
+ 
+-static int ohci_da8xx_has_potpgt(struct usb_hcd *hcd)
+-{
+-	struct device *dev		= hcd->self.controller;
+-	struct da8xx_ohci_root_hub *hub	= dev_get_platdata(dev);
+-
+-	if (hub && hub->potpgt)
+-		return 1;
+-
+-	return 0;
+-}
+-
+ static int ohci_da8xx_regulator_event(struct notifier_block *nb,
+ 				unsigned long event, void *data)
+ {
+@@ -228,7 +216,6 @@ static int ohci_da8xx_register_notify(struct usb_hcd *hcd)
+ static int ohci_da8xx_reset(struct usb_hcd *hcd)
+ {
+ 	struct device *dev		= hcd->self.controller;
+-	struct da8xx_ohci_root_hub *hub	= dev_get_platdata(dev);
+ 	struct ohci_hcd	*ohci		= hcd_to_ohci(hcd);
+ 	int result;
+ 	u32 rh_a;
+@@ -266,10 +253,6 @@ static int ohci_da8xx_reset(struct usb_hcd *hcd)
+ 		rh_a &= ~RH_A_NOCP;
+ 		rh_a |=  RH_A_OCPM;
+ 	}
+-	if (ohci_da8xx_has_potpgt(hcd)) {
+-		rh_a &= ~RH_A_POTPGT;
+-		rh_a |= hub->potpgt << 24;
+-	}
+ 	ohci_writel(ohci, rh_a, &ohci->regs->roothub.a);
+ 
+ 	return result;
+diff --git a/include/linux/platform_data/usb-davinci.h b/include/linux/platform_data/usb-davinci.h
+deleted file mode 100644
+index 879f5c78b91a30fb05681668797a5f07c6bf43b9..0000000000000000000000000000000000000000
+--- a/include/linux/platform_data/usb-davinci.h
++++ /dev/null
+@@ -1,22 +0,0 @@
+-/*
+- * USB related definitions
+- *
+- * Copyright (C) 2009 MontaVista Software, Inc. <source@mvista.com>
+- *
+- * This file is licensed under the terms of the GNU General Public License
+- * version 2. This program is licensed "as is" without any warranty of any
+- * kind, whether express or implied.
+- */
+-
+-#ifndef __ASM_ARCH_USB_H
+-#define __ASM_ARCH_USB_H
+-
+-/* Passed as the platform data to the OHCI driver */
+-struct	da8xx_ohci_root_hub {
+-	/* Time from power on to power good (in 2 ms units) */
+-	u8	potpgt;
+-};
+-
+-void davinci_setup_usb(unsigned mA, unsigned potpgt_ms);
+-
+-#endif	/* ifndef __ASM_ARCH_USB_H */
 
-There is a KASAN: slab-use-after-free read in btusb_disconnect().
-Calling "usb_driver_release_interface(&btusb_driver, data->intf)" will
-free the btusb data associated with the interface. The same data is
-then used later in the function, hence the UAF.
+---
+base-commit: 0f2995693867bfb26197b117cd55624ddc57582f
+change-id: 20251114-davinci-usb-a66b2b9798fc
 
-Fix by moving the accesses to btusb data to before the data is free'd.
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
--- quote --
-
-However, it seems that support for other interfaces was added
-later, e.g. by 9d08f50401ac7, and out-of-band wakeup support even later
-by fd913ef7ce619.
-
-So, maybe it just wasn't considered?
-
-The actual code changes in the patch itself shouldn't cause issues
-unless calling device_init_wakeup() and gpiod_put() must actually be
-done after releasing the interfaces. Which isn't immediately obvious
-especially if tying the memory lifetime to INTF is intentional, where
-calling them after leads to the UAF.
-
-I've tested reverting 98921dbd00c4e locally, and it seems fine. I'll
-send a new patch if the maintainers agree.
-
-Raphael
 
