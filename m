@@ -1,198 +1,126 @@
-Return-Path: <linux-usb+bounces-30526-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30527-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6CE7C5F343
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 21:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 054E1C6016B
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Nov 2025 09:03:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4BBD635F5C8
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Nov 2025 20:14:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5CD8235AA5D
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Nov 2025 08:03:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2AD0347BB9;
-	Fri, 14 Nov 2025 20:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6FB22173F;
+	Sat, 15 Nov 2025 08:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Ui1Q9dZL"
+	dkim=pass (1024-bit key) header.d=ya.ru header.i=@ya.ru header.b="vkza4/By"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from forward204d.mail.yandex.net (forward204d.mail.yandex.net [178.154.239.217])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A062DAFBB
-	for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 20:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B973C1F;
+	Sat, 15 Nov 2025 08:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763151253; cv=none; b=azT1VzRlFbeQELaw73W6nUmxh1WtDoFprQrYbdQQoCzp6D9RdZdg5FRKflHVdbvJDclTjCU/MJExaPU4IIP7ca1pPvR9vduAPITBG6QY7kYq4599uKyy/ZAf1ZnukzXI+yimzSYgoFHB+dAki6YS7GFY/XEQFWqdVJKYGDMcFUE=
+	t=1763193781; cv=none; b=ePA/2FkEVVFyJ/kAKhdNRMc1F7VahDy9YryYN5Tl7tyGWep3jYcGx5gm8E4z47jCY9NMt59v0YlX8H3sf2QIsI1TMAzy+Irif7PVCNsENg5tgqJecyzVpfmqGQSoc2hJBykjvAigULZzykACZiWj+W4XFZG0CYqIwGuUgRP1Dgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763151253; c=relaxed/simple;
-	bh=N9Nn1Kf+jPSjwAPzNrpju3gWBFvTHHSbfMS1/aU/jVs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OVpYo/0o+uFuC8r7aUuonImIiBmzBpNWXym0aIEjxwr6b6MZ0wmD+s64zghrH8RDEIL4XW9avnAuQhR2J1eo6zxunwlNaPNmA4J1oSq2G07W8SaWmJ0hBoEci1KBk/MNZkFeNpn4YOKwVDMh4vysgY63yp9KcvLa4VH3F/8mSjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Ui1Q9dZL; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8b2627269d5so288287785a.2
-        for <linux-usb@vger.kernel.org>; Fri, 14 Nov 2025 12:14:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1763151248; x=1763756048; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PPH299lzaBz+THxQ1kEgK73wlgA7iHLtfrwrMcyrnTc=;
-        b=Ui1Q9dZLWd1P+UR1dJpbxrN+k70b61Au1TJbw3+MbkNxKl1OGKkI2wJ4n1AsdEE0uB
-         koE4nX05ErMXx31e4SJRyLxYPRrXokVJl2uBhV+tlm9pOKLdgEwAg6YA4UNQOCFVlPuw
-         MFGfD3VXOrH9w1H+E0kWZghupgYF6MCsd/eiirp/qNTb9MyEb4QY9WEUClejCK7BBdgZ
-         5R1wADdyhSC72vEXDlnI5jlOL0HM7FGrs3wKjVF9c4eEJ5Lg73cnXmtHNNitnucnszvH
-         G+3SjRJboRAivFnZhw/IBQO8EEF+VVmafeKeo2FMUuzxTVq3H9jd8Mp+KVoYEPdgi8IQ
-         u2rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763151248; x=1763756048;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PPH299lzaBz+THxQ1kEgK73wlgA7iHLtfrwrMcyrnTc=;
-        b=qjjA9Rj8RLziqlRXq/7g6gtkjAJOvuCKZt/3qi5L3kffTO1iQO63iAvJd4Zg/gaDfk
-         ql2D02V2cCxF7HDjhtaU1ntw080z0OfTm7paQeEEcHzGdl/ll/oaAvKk5USXH0Isp2X3
-         gojUdEAXmarJRH0mighTono9SdtfiF4cW6Tq9iYz1SztSRkEK3Dz5i+W0hxtHS1jpNOS
-         jStyUJ9VQ3wLmPTFzM70gHSkS224qS03b+Mlj4zDAWVBeOHRa2DsDD7yXdDujpnGeyLm
-         x6uzQ1qGH3llngyoX/dkFqs5X/imDzhtxoExzrbOKOBsqGo2G0aERw66NH2qeKbF3eYl
-         G13g==
-X-Forwarded-Encrypted: i=1; AJvYcCX+LxY8A1f9Cr37C2g1Vhlv+dYMIgXOYbcV0jZF20N22kVaR58DgcskIi1HMdFwvvpoVvZmM/MBXBc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyozvd+hlfRk0x3KcLMXIAJvzoUsXfnziTyGt8ItTLXXmOGFv5o
-	TQmPfYkHSiGhXpBLR984EsWHVRNbrL6303JqZ9RMUe6U0fE1wgqvA288rZtmu0ywErdvt80bcv8
-	6jETNfQ==
-X-Gm-Gg: ASbGncsYrbi3kNJb78abXYyM7UPP2Xu3a/NJLniQds4uQlwwwkVmDTc9QidDKYJ1b66
-	r5FD2UjnGWoRFgqyb7goAZHx4PKfGF5JrgOTavZgpXtpvrtXUsegbvNGcnWGQ9LM7uV4Lk58tPK
-	OtI93PwTRJhij8PdGnBSiNPVHrZ7cQ4TvUgVO1UzetM5QThOOfMaIXkPA/QwCen1x9KuL/38G7v
-	OzUIw3eC+9jIlvOBm5sXJHXs0gv3kfvLxfVVlRu0pRBL+W2PqGfOFmiJDDERdTemcQdDOrlrUf7
-	Pz2g1hk6GWxdaiokltftlh1kuYEgVbnNrNLZbm2czuIO0NIASpFc/jKvRf1NrSGA22hyTag/nWR
-	uPyNnsiJg986iHfTThXI8BLJBx3noiZYFjE6v/Fpk3RlBboFMe2HWaOU7KYvJulcsOELJaPZTHr
-	4hSHVhcFgILFqT
-X-Google-Smtp-Source: AGHT+IFuN7C49uR9Zqj3Kbi++21slLnoSRjYdZ0ft5dUCy/bxuSuSXRxT/6IJbD7IlKwFARUS3YoPQ==
-X-Received: by 2002:a05:620a:4105:b0:893:b99:711a with SMTP id af79cd13be357-8b2c315efe8mr557386385a.19.1763151248013;
-        Fri, 14 Nov 2025 12:14:08 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::ba76])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b2aef3318asm399511285a.33.2025.11.14.12.14.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 12:14:07 -0800 (PST)
-Date: Fri, 14 Nov 2025 15:14:05 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH] usb: ohci-da8xx: remove unused platform data
-Message-ID: <44d226ef-0d7f-491b-aa9b-aa2593bdf2d0@rowland.harvard.edu>
-References: <20251114-davinci-usb-v1-1-737380353a74@linaro.org>
+	s=arc-20240116; t=1763193781; c=relaxed/simple;
+	bh=ZYxCC1MLhxgo/w97YqVwens9+hm78HiCTOEwZbynlz4=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=OwbLoSKR7ttBjtU5nw3WRBKrJMY6L5ztA1W/VlqcI3ipw8h+Pk5CGGd7efsbhc9WDPKjL5EsAfG9BBTTh/Yis0VVui97oXwwKTMLAFCYaW9gPcwhmF7UJm9n3X4HuYNXTVMjmYtC0fce5rCz/hFHT+bZcwRxDGUtQg4OKL52/90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ya.ru; spf=pass smtp.mailfrom=ya.ru; dkim=pass (1024-bit key) header.d=ya.ru header.i=@ya.ru header.b=vkza4/By; arc=none smtp.client-ip=178.154.239.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ya.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ya.ru
+Received: from forward103d.mail.yandex.net (forward103d.mail.yandex.net [IPv6:2a02:6b8:c41:1300:1:45:d181:d103])
+	by forward204d.mail.yandex.net (Yandex) with ESMTPS id BA64385570;
+	Sat, 15 Nov 2025 10:56:03 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-78.klg.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-78.klg.yp-c.yandex.net [IPv6:2a02:6b8:c42:86a2:0:640:3ad2:0])
+	by forward103d.mail.yandex.net (Yandex) with ESMTPS id 434FBC005D;
+	Sat, 15 Nov 2025 10:55:54 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-78.klg.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id ptMswmTMqa60-dHpwjREg;
+	Sat, 15 Nov 2025 10:55:53 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail;
+	t=1763193353; bh=ZYxCC1MLhxgo/w97YqVwens9+hm78HiCTOEwZbynlz4=;
+	h=Subject:From:To:Date:Message-ID;
+	b=vkza4/ByT8JDCSbBeCx3yFpdVeZIkmUYz513Txtg9OMiXGHV02oVIQLE2L90h6nw6
+	 E0I9Zvxk6krTRE7pQWNd8bLGqTn2bjH65upGo7bIpqBqWu95C+Uzke3agl1jIRvhdk
+	 GwmFClPHWqs5a9q4h0+Bv+vY5rYtJdNKfS1CEY8A=
+Authentication-Results: mail-nwsmtp-smtp-production-main-78.klg.yp-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <834f63b7-2016-4036-b880-1f3a01dafaaa@ya.ru>
+Date: Sat, 15 Nov 2025 10:55:51 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251114-davinci-usb-v1-1-737380353a74@linaro.org>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ freddy@asix.com.tw, jtornosm@redhat.com
+From: WGH <da-wgh@ya.ru>
+Subject: ax88179_178a spams "Link status is: 0" and doesn't work
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 14, 2025 at 07:37:55PM +0100, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> We no longer support any board files for DaVinci in mainline and so
-> struct da8xx_ohci_root_hub is no longer used. Remove it together with
-> all the code it's used for.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
+Hello.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+I'm running Linux 6.17.7, and recently obtained a UGREEN 6 in 1 hub containing an AX88179B chip.
 
->  drivers/usb/host/ohci-da8xx.c             | 17 -----------------
->  include/linux/platform_data/usb-davinci.h | 22 ----------------------
->  2 files changed, 39 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-da8xx.c b/drivers/usb/host/ohci-da8xx.c
-> index 3c5ca2d7c92ed786af41d98ed124926ae06d4025..0938c0e7a8b6d54cf1981298119d51a3bfe49148 100644
-> --- a/drivers/usb/host/ohci-da8xx.c
-> +++ b/drivers/usb/host/ohci-da8xx.c
-> @@ -18,7 +18,6 @@
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/phy/phy.h>
-> -#include <linux/platform_data/usb-davinci.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/usb.h>
->  #include <linux/usb/hcd.h>
-> @@ -166,17 +165,6 @@ static int ohci_da8xx_has_oci(struct usb_hcd *hcd)
->  	return 0;
->  }
->  
-> -static int ohci_da8xx_has_potpgt(struct usb_hcd *hcd)
-> -{
-> -	struct device *dev		= hcd->self.controller;
-> -	struct da8xx_ohci_root_hub *hub	= dev_get_platdata(dev);
-> -
-> -	if (hub && hub->potpgt)
-> -		return 1;
-> -
-> -	return 0;
-> -}
-> -
->  static int ohci_da8xx_regulator_event(struct notifier_block *nb,
->  				unsigned long event, void *data)
->  {
-> @@ -228,7 +216,6 @@ static int ohci_da8xx_register_notify(struct usb_hcd *hcd)
->  static int ohci_da8xx_reset(struct usb_hcd *hcd)
->  {
->  	struct device *dev		= hcd->self.controller;
-> -	struct da8xx_ohci_root_hub *hub	= dev_get_platdata(dev);
->  	struct ohci_hcd	*ohci		= hcd_to_ohci(hcd);
->  	int result;
->  	u32 rh_a;
-> @@ -266,10 +253,6 @@ static int ohci_da8xx_reset(struct usb_hcd *hcd)
->  		rh_a &= ~RH_A_NOCP;
->  		rh_a |=  RH_A_OCPM;
->  	}
-> -	if (ohci_da8xx_has_potpgt(hcd)) {
-> -		rh_a &= ~RH_A_POTPGT;
-> -		rh_a |= hub->potpgt << 24;
-> -	}
->  	ohci_writel(ohci, rh_a, &ohci->regs->roothub.a);
->  
->  	return result;
-> diff --git a/include/linux/platform_data/usb-davinci.h b/include/linux/platform_data/usb-davinci.h
-> deleted file mode 100644
-> index 879f5c78b91a30fb05681668797a5f07c6bf43b9..0000000000000000000000000000000000000000
-> --- a/include/linux/platform_data/usb-davinci.h
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -/*
-> - * USB related definitions
-> - *
-> - * Copyright (C) 2009 MontaVista Software, Inc. <source@mvista.com>
-> - *
-> - * This file is licensed under the terms of the GNU General Public License
-> - * version 2. This program is licensed "as is" without any warranty of any
-> - * kind, whether express or implied.
-> - */
-> -
-> -#ifndef __ASM_ARCH_USB_H
-> -#define __ASM_ARCH_USB_H
-> -
-> -/* Passed as the platform data to the OHCI driver */
-> -struct	da8xx_ohci_root_hub {
-> -	/* Time from power on to power good (in 2 ms units) */
-> -	u8	potpgt;
-> -};
-> -
-> -void davinci_setup_usb(unsigned mA, unsigned potpgt_ms);
-> -
-> -#endif	/* ifndef __ASM_ARCH_USB_H */
-> 
-> ---
-> base-commit: 0f2995693867bfb26197b117cd55624ddc57582f
-> change-id: 20251114-davinci-usb-a66b2b9798fc
-> 
-> Best regards,
-> -- 
-> Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
+By default, it uses cdc_ncm driver, which mostly works, but has other issues (that would be another report).
+
+I can switch the device to another mode with a udev rule so it would use the device-specific ax88179_178a driver:
+
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0b95", ATTR{idProduct}=="1790", ATTR{bConfigurationValue}!="1", ATTR{bConfigurationValue}="1"
+
+However, it doesn't work in this mode. The link never becomes up, and dmesg spams the following messages ad infinum:
+
+Nov 13 22:15:49 sixty-four kernel: usb 4-1: new high-speed USB device number 7 using xhci_hcd
+Nov 13 22:15:49 sixty-four kernel: usb 4-1: New USB device found, idVendor=05e3, idProduct=0610, bcdDevice=64.00
+Nov 13 22:15:49 sixty-four kernel: usb 4-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+Nov 13 22:15:49 sixty-four kernel: usb 4-1: Product: USB2.1 Hub
+Nov 13 22:15:49 sixty-four kernel: usb 4-1: Manufacturer: GenesysLogic
+Nov 13 22:15:49 sixty-four kernel: hub 4-1:1.0: USB hub found
+Nov 13 22:15:49 sixty-four kernel: hub 4-1:1.0: 4 ports detected
+Nov 13 22:15:49 sixty-four kernel: usb 5-1: new SuperSpeed USB device number 8 using xhci_hcd
+Nov 13 22:15:50 sixty-four kernel: usb 5-1: New USB device found, idVendor=05e3, idProduct=0625, bcdDevice=64.00
+Nov 13 22:15:50 sixty-four kernel: usb 5-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+Nov 13 22:15:50 sixty-four kernel: usb 5-1: Product: USB3.2 Hub
+Nov 13 22:15:50 sixty-four kernel: usb 5-1: Manufacturer: GenesysLogic
+Nov 13 22:15:50 sixty-four kernel: hub 5-1:1.0: USB hub found
+Nov 13 22:15:50 sixty-four kernel: hub 5-1:1.0: 4 ports detected
+Nov 13 22:15:51 sixty-four kernel: usb 5-1.2: new SuperSpeed USB device number 9 using xhci_hcd
+Nov 13 22:15:51 sixty-four kernel: usb 5-1.2: New USB device found, idVendor=0b95, idProduct=1790, bcdDevice= 2.00
+Nov 13 22:15:51 sixty-four kernel: usb 5-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+Nov 13 22:15:51 sixty-four kernel: usb 5-1.2: Product: AX88179B
+Nov 13 22:15:51 sixty-four kernel: usb 5-1.2: Manufacturer: ASIX
+Nov 13 22:15:51 sixty-four kernel: usb 5-1.2: SerialNumber: 0000000000BE7F
+Nov 13 22:15:51 sixty-four kernel: cdc_ncm 5-1.2:2.0: MAC-Address: XX:XX:XX:XX:XX:XX
+Nov 13 22:15:51 sixty-four kernel: cdc_ncm 5-1.2:2.0: setting rx_max = 16384
+Nov 13 22:15:51 sixty-four kernel: cdc_ncm 5-1.2:2.0: setting tx_max = 16384
+Nov 13 22:15:51 sixty-four kernel: cdc_ncm 5-1.2:2.0 eth0: register 'cdc_ncm' at usb-0000:06:00.4-1.2, CDC NCM (NO ZLP), XX:XX:XX:XX:XX:XX
+Nov 13 22:15:51 sixty-four kernel: cdc_ncm 5-1.2:2.0 eth0: unregister 'cdc_ncm' usb-0000:06:00.4-1.2, CDC NCM (NO ZLP)
+Nov 13 22:15:52 sixty-four kernel: ax88179_178a 5-1.2:1.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0040: -32
+Nov 13 22:15:52 sixty-four kernel: ax88179_178a 5-1.2:1.0 eth0: register 'ax88179_178a' at usb-0000:06:00.4-1.2, ASIX AX88179 USB 3.0 Gigabit Ethernet, XX:XX:XX:XX:XX:XX
+Nov 13 22:15:53 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: renamed from eth0
+Nov 13 22:15:53 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: Failed to read reg index 0x0040: -32
+Nov 13 22:15:56 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:57 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:57 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:57 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:57 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:57 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:57 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:57 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:57 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:58 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+Nov 13 22:15:58 sixty-four kernel: ax88179_178a 5-1.2:1.0 enp6s0f4u1u2: ax88179 - Link status is: 0
+
+Curiously, ethtool reports that the link is up, gives correct speed indication, some details about link partner, etc. ip link still says NO-CARRIER. ip link set dev down + up doesn't help.
+
+There're some suggestions on the internet to either load cdc_mbim first, or add cdc_ncm prefer_mbim=Y option, but that doesn't help either.
+
 
