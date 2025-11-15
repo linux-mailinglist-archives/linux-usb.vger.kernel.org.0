@@ -1,135 +1,136 @@
-Return-Path: <linux-usb+bounces-30529-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30530-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BA0BC60518
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Nov 2025 13:34:03 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05646C605E2
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Nov 2025 14:24:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EEB43BA9D8
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Nov 2025 12:34:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 79DD3360BAF
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Nov 2025 13:23:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D4A283FF0;
-	Sat, 15 Nov 2025 12:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2023A2BE65B;
+	Sat, 15 Nov 2025 13:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Aw9az22K"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AuInizII"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7041388
-	for <linux-usb@vger.kernel.org>; Sat, 15 Nov 2025 12:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F23129ACDB;
+	Sat, 15 Nov 2025 13:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763210040; cv=none; b=U55Y04WbQSZznPKsqwM0t0lbF/uaSizhij2dD6zYVcFqrtayvZhlbcBka/ITdID/xFTx39Ov/ul9SXRpJ9dlCy0nkMBNgi4znBUGYuE9yR+Kq8kqMEK+BmF6h63g1vOGBL7NSa1Qg62K1yNn6LSBFl18wKDGIB2dU8D780coyQk=
+	t=1763212898; cv=none; b=Bz4HKE7BFs1FJ/GFAMOcKNGxbDn23wRQCXuQqOCOsh8eTY8sd3O99w7Pem9r2a9yeJXqKQnzLmDOD2BZrgqxe4SM/6yHCT7chL1wKS86+ZnvGfcvN3+YzqtSFw1C1XldAzjR5mBdM7ZClBi06xeRKGStDJTLWDR1UNUPNq1wvPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763210040; c=relaxed/simple;
-	bh=ZRDa7X2qOhicNkRilum7iyXjYeDr0de0UFoOarn43C4=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:References:
-	 From:In-Reply-To; b=NtxqVgRmzaXV4RnPXqUg0H+3pNLFC/ZwA5Mvu+tZOfXcJuOtB96CIAP/nPqzJxkVnx8d3h1xkVFxfH/RLzbl1bcpVKq/OypcIxJvGDAuVVg4FToy1h6gTKhqZj2tQqc1GU3H9GQwPPQOoztxWffxTCVpDShfpJqm49R6L2Sl5Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Aw9az22K; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-42b38693c4dso1302338f8f.3
-        for <linux-usb@vger.kernel.org>; Sat, 15 Nov 2025 04:33:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763210036; x=1763814836; darn=vger.kernel.org;
-        h=in-reply-to:from:content-language:references:to:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dtqnf19rAxKhCMnKuxFk3VQ746Xnyg0osYpHgquPOsc=;
-        b=Aw9az22KkHe7C9tQxGS4SOET8ahdp9wxEWBgTx0JdXC1ZmJP+MCWkC10NdqxyJkYaT
-         o1F1d4cqCpP6q0LEgBBb6kuhzpB1t4QwlhvVRAnB+qAkBDeWPwm7Iruu1a0rn33OJUNN
-         LxzbTvrfX8ulm76Vdyi3/RQH1fCmZxaHiAS/y7U7ukCLe4AX7iirW44FUfC8MMJ1/jOI
-         qGPaAm8/VjXzaM3Nx4Nf1nzm7Essl/1DU6OLT6T6osbvbqxvV421rExJ5Jax/HRonruh
-         BRVw4OWxmzvBov3WjSvk+EA+BIulxyMa2+9zoIxY3g7niZBeu91dohhCO8GVAt0Au53f
-         Wx9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763210036; x=1763814836;
-        h=in-reply-to:from:content-language:references:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dtqnf19rAxKhCMnKuxFk3VQ746Xnyg0osYpHgquPOsc=;
-        b=JwYTGd3I+g8aiWXhhcsTzyiYCZ2QqR1XqpKwfNFOhVFXm296GrYN3Vl5l8uI/xsHpf
-         /lckd2AOw/kitdm3ognKTQxr7Uu8iB2fFca7TJS3yY/6cuQSztJPCYnNq7ba8bNoapdC
-         y0l7Bpyz8bn5vghMGfZUz6gTjtDC6anEWqnRtgDI2Zx7Pe8jDOvILnxlvjpoms9bwIWN
-         piZmYB7bCazJcjmLlviJ+2QtvhyRY50pSIo2Uo+ngxOmqGy5lwpDUTaHSJgLlOr4fMzs
-         2qijUjtfqZE+f4QdRmBmsldAhgl0uloR69/Pq9oXmEMuxzcS2dKZYD+562nQRak08mvw
-         xMIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWuzC0rxigJZ2I6PRaY6CUXpGVUQhiK8F7lL9c+uRmmcEA0NeH0l101TCJ2O9ZenXPH5psa+ujlMkw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5O+EpQqwoYPB/JB5q0qcXMyXn6WMMJGUXDNfTxs3ssSEZtiCD
-	ttzf3vnInd9DGXKR+hRYVtE5zzvzyiny3bztXg4pSOw+PhugPTNy58+/1Afs6pekTRM=
-X-Gm-Gg: ASbGncvPmeD5ggsFKpkjqm92YiRPIB+6eDnP5rpojUSoBt8R8kt8Cqd5IiFtTnVjJAP
-	FLQ+nQUCH1W4f+oxT0emEHrN03YDuU5sKDTG+Lt18icbXlZyHNJyPoMn+y0l/hExZ+deC0+vRZV
-	FsicWP8NnHv0UA5NJk0n+6KG2LugcPB1rV8ENTbu4UKLiNnB6i5X7tt4O/Eb8x1WmYQhFinH0XF
-	lhURLr9xI6PR4ycixSsEWMnpVLLQ9pAlLbMxt8U438IBfiRNWRYB5c2lvN2+wUlTJNpsDMWpYCG
-	GobfJ9zH0r5F7i26ZP/9QFBRICoORrlyrlDc6crOtnzy2fyvVpP0WyPW3ZeFKMcRJEVD9uy9mTb
-	S8lW/ctHnHGqT2r5vgqNtv2SyAPdwj5LpVLphNg6AVnFqPTSKte+zGkYxgVcChpZPJlbS/3Ur2P
-	UfvyA6ialmGA6mNEDwocFyyytiPQg00/wg2k3aM/9TGz2v7FQj/JK5iw==
-X-Google-Smtp-Source: AGHT+IH68hNngwZhYpd9vquoCIPlgcJ1vPhNd3/4WnrvDBsF+8EDaoeM+ZvmKTzsA5mzG3phFO2Aaw==
-X-Received: by 2002:a5d:64e3:0:b0:42b:3878:beb7 with SMTP id ffacd0b85a97d-42b5939896amr6087952f8f.43.1763210036197;
-        Sat, 15 Nov 2025 04:33:56 -0800 (PST)
-Received: from ?IPV6:2001:a61:134c:8401:9dee:c6d3:2820:beac? ([2001:a61:134c:8401:9dee:c6d3:2820:beac])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53e85e6fsm16011805f8f.18.2025.11.15.04.33.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Nov 2025 04:33:55 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------nHX7CPgwLi0J9jNmBXoWSU3W"
-Message-ID: <701e5678-a992-45be-9be3-df68dfe14705@suse.com>
-Date: Sat, 15 Nov 2025 13:33:48 +0100
+	s=arc-20240116; t=1763212898; c=relaxed/simple;
+	bh=Pl9jmC5EL7AGwr+SmsgthHF9drWTTfIqBaIssfzsdWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FA/6l7KHt9pWcHq0Oqs/BdMWur3vC9xj/k09Z9IhTh3rpKFcCHron3BEg1uhIqm+mmZaMqnNNvOA+/Sk9+76uNFUG221vH3xZefxizDjxBZXqEdNiCBSGxJcHv7UicDCoZBquymHtqrJeSSIYrlrY6PtbhNMqAxmEQ2YJipnCK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AuInizII; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C00C16AAE;
+	Sat, 15 Nov 2025 13:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1763212898;
+	bh=Pl9jmC5EL7AGwr+SmsgthHF9drWTTfIqBaIssfzsdWY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AuInizIINMwBXTMJu1dR3seLB3VmALsUQ3+5Ndj4MXto6uH9ENTPXUU90Dt/8DjPq
+	 gmWQkfEhamMufZT+G9MKX9xDtzSNmpoxmmi+AH6rv/rpdY47vOYkLaC2Ol/C4V7Kfc
+	 vAlEaytoOD6Xr7/mBkMwSJH6iZ7zuxrbmPJUjTZw=
+Date: Sat, 15 Nov 2025 08:21:34 -0500
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: bot+bpf-ci@kernel.org, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
+	yonghong.song@linux.dev, ihor.solodrai@linux.dev,
+	Chris Mason <clm@meta.com>
+Subject: Re: [functionfs] mainline UAF (was Re: [PATCH v3 36/50] functionfs:
+ switch to simple_remove_by_name())
+Message-ID: <2025111555-spoon-backslid-8d1f@gregkh>
+References: <20251111065520.2847791-37-viro@zeniv.linux.org.uk>
+ <20754dba9be498daeda5fe856e7276c9c91c271999320ae32331adb25a47cd4f@mail.kernel.org>
+ <20251111092244.GS2441659@ZenIV>
+ <e6b90909-fdd7-4c4d-b96e-df27ea9f39c4@meta.com>
+ <20251113092636.GX2441659@ZenIV>
+ <2025111316-cornfield-sphinx-ba89@gregkh>
+ <20251114074614.GY2441659@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: cdc_ncm doesn't detect link unless ethtool is run (ASIX AX88179B)
-To: WGH <da-wgh@ya.ru>, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <1c3f0582-4c92-41b3-a3db-5158661d4e1a@ya.ru>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <1c3f0582-4c92-41b3-a3db-5158661d4e1a@ya.ru>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251114074614.GY2441659@ZenIV>
 
-This is a multi-part message in MIME format.
---------------nHX7CPgwLi0J9jNmBXoWSU3W
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 15.11.25 09:58, WGH wrote:
-> Hello.
+On Fri, Nov 14, 2025 at 07:46:14AM +0000, Al Viro wrote:
+> On Thu, Nov 13, 2025 at 04:20:08PM -0500, Greg Kroah-Hartman wrote:
 > 
-> I'm running Linux 6.17.7, and recently obtained a UGREEN 6 in 1 hub containing an AX88179B chip.
+> > Sorry for the delay.  Yes, we should be grabing the mutex in there, good
+> > catch.  There's been more issues pointed out with the gadget code in the
+> > past year or so as more people are starting to actually use it and
+> > stress it more.  So if you have a patch for this, I'll gladly take it :)
 > 
-> By default, it uses the generic cdc_ncm driver, and it works mostly okay.
+> How about the following?
 > 
-> The annoying problem I have is that most of the time the kernel doesn't notice that the link is up. ip link reports NO-CARRIER, network management daemon doesn't configure the interface, and so on.
+> commit 330837c8101578438f64cfaec3fb85521d668e56
+> Author: Al Viro <viro@zeniv.linux.org.uk>
+> Date:   Fri Nov 14 02:18:22 2025 -0500
+> 
+>     functionfs: fix the open/removal races
+>     
+>     ffs_epfile_open() can race with removal, ending up with file->private_data
+>     pointing to freed object.
+>     
+>     There is a total count of opened files on functionfs (both ep0 and
+>     dynamic ones) and when it hits zero, dynamic files get removed.
+>     Unfortunately, that removal can happen while another thread is
+>     in ffs_epfile_open(), but has not incremented the count yet.
+>     In that case open will succeed, leaving us with UAF on any subsequent
+>     read() or write().
+>     
+>     The root cause is that ffs->opened is misused; atomic_dec_and_test() vs.
+>     atomic_add_return() is not a good idea, when object remains visible all
+>     along.
+>     
+>     To untangle that
+>             * serialize openers on ffs->mutex (both for ep0 and for dynamic files)
+>             * have dynamic ones use atomic_inc_not_zero() and fail if we had
+>     zero ->opened; in that case the file we are opening is doomed.
+>             * have the inodes of dynamic files marked on removal (from the
+>     callback of simple_recursive_removal()) - clear ->i_private there.
+>             * have open of dynamic ones verify they hadn't been already removed,
+>     along with checking that state is FFS_ACTIVE.
+>     
+>     Fix another abuse of ->opened, while we are at it - it starts equal to 0,
+>     is incremented on opens and decremented on ->release()... *and* decremented
+>     (always from 0 to -1) in ->kill_sb().  Handling that case has no business
+>     in ffs_data_closed() (or to ->opened); just have ffs_kill_sb() do what
+>     ffs_data_closed() would in case of decrement to negative rather than
+>     calling ffs_data_closed() there.
+>     
+>     And don't bother with bumping ffs->ref when opening a file - superblock
+>     already holds the reference and it won't go away while there are any opened
+>     files on the filesystem.
+>     
+>     Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
-Hi,
+Ugh, messy.  But yes, this does look better, thanks for that.  Want me
+to take it through the USB tree, or will you take it through one of
+yours? (I don't remember what started this thread...)
 
-that strongly points to a race condition.
-Could you try the attached diagnostic patch?
+thanks,
 
-	Regards
-		Oliver
-
---------------nHX7CPgwLi0J9jNmBXoWSU3W
-Content-Type: text/x-patch; charset=UTF-8; name="ncm_bind_uncond.patch"
-Content-Disposition: attachment; filename="ncm_bind_uncond.patch"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3VzYi91c2JuZXQuYyBiL2RyaXZlcnMvbmV0L3Vz
-Yi91c2JuZXQuYwppbmRleCAxZDlmYWE3MGJhM2IuLmQwNDJiYTU3NDIxNyAxMDA2NDQKLS0t
-IGEvZHJpdmVycy9uZXQvdXNiL3VzYm5ldC5jCisrKyBiL2RyaXZlcnMvbmV0L3VzYi91c2Ju
-ZXQuYwpAQCAtMTg5Miw3ICsxODkyLDcgQEAgdXNibmV0X3Byb2JlKHN0cnVjdCB1c2JfaW50
-ZXJmYWNlICp1ZGV2LCBjb25zdCBzdHJ1Y3QgdXNiX2RldmljZV9pZCAqcHJvZCkKIAogCW5l
-dGlmX2RldmljZV9hdHRhY2gobmV0KTsKIAotCWlmIChkZXYtPmRyaXZlcl9pbmZvLT5mbGFn
-cyAmIEZMQUdfTElOS19JTlRSKQorCS8vaWYgKGRldi0+ZHJpdmVyX2luZm8tPmZsYWdzICYg
-RkxBR19MSU5LX0lOVFIpCiAJCXVzYm5ldF9saW5rX2NoYW5nZShkZXYsIDAsIDApOwogCiAJ
-cmV0dXJuIDA7Cg==
-
---------------nHX7CPgwLi0J9jNmBXoWSU3W--
+greg k-h
 
