@@ -1,141 +1,146 @@
-Return-Path: <linux-usb+bounces-30538-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30539-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7186DC61570
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 14:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 55F66C615B3
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 14:28:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17F4D3B57F4
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 13:15:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 305FE3AC0A7
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 13:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A4D2D73A2;
-	Sun, 16 Nov 2025 13:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BAB2F83DE;
+	Sun, 16 Nov 2025 13:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tencent.com header.i=@tencent.com header.b="naIwc4h/"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wLc+3s6c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5B323E35E
-	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 13:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10472E2F1F
+	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 13:28:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763298924; cv=none; b=D5qdqG7rq1upfs5s1oFiWsal2xlkoK6Zean8pTz4yIYzqiyDRgiFIaMZ4E1l5qM/e/788ow93Unewx5Xg//0eAevP7ZPFlOIXQCSXSdhr2X1T7+/WqAgp+HgRUEnaV7O77bsQovQ7ydzUYodf1G42plcGFZmSA6RmiLVPrwtVrM=
+	t=1763299690; cv=none; b=HG3fkgCXv0S05UMYAF+z/qp0cxaMhFBvLEjimXPwcbe0UGGxlQL9Nx9FB384iIloNuWQGH2uWX1WjFNclJK0wnxZR/hc23UP2P5KhMWGRTiX2yeY0H2IE7uAiN8AeKo+CnMXbb+7woJZuxmS+lytJVg8Ik1r+GIESlM+M2ZpRUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763298924; c=relaxed/simple;
-	bh=jV4OUUxWWC5takbTj//NZbModdzpU85jB5tuNJ6/5YQ=;
-	h=Date:From:To:Cc:Subject:References:Mime-Version:Message-ID:
-	 Content-Type; b=PLtXTI1Oo1GcQnxuJxpViGHWIEkMS+uEE9Yq/dxD/MSu4zlsYMJOiwtWts/61vTcMVfvC/z7MXZn/Pah2QjsbnIwM4dGPZqcT4f3uX9ueqy0p1iW4/tD4jBh/l/h4bu/sEiHzwi5MOtNZBsPXWxApsm6PcvE1sqYBPB/CS3+/9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tencent.com; spf=pass smtp.mailfrom=tencent.com; dkim=pass (1024-bit key) header.d=tencent.com header.i=@tencent.com header.b=naIwc4h/; arc=none smtp.client-ip=15.184.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tencent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tencent.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tencent.com;
-	s=s201512; t=1763298907;
-	bh=jV4OUUxWWC5takbTj//NZbModdzpU85jB5tuNJ6/5YQ=;
-	h=Date:From:To:Subject:Mime-Version:Message-ID;
-	b=naIwc4h/s75RTrod1C1JeYEhtpTM9Xcr5Yg/E+eqwViGgPBau6yeBQ7lue+MC7xEU
-	 BXhlkt/frNP0lfpRxvdxMA65p8WtJzWSPAWrjQA0AzY5QhKHx/F5PS363PIwFI8F6j
-	 aP+AXE+0ujWFbBO6aWBlS1SCYU+0j7nhRfz3PpkI=
-X-QQ-mid: zesmtpsz9t1763298905t7e7a45ca
-X-QQ-Originating-IP: wJMnQu6bRp/h0G+hNCoXWIR2yI2rEwoOAlTPN5Slte4=
-Received: from FLYNNNCHEN-PC1 ( [11.176.19.11])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sun, 16 Nov 2025 21:15:04 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 18267915891469540549
-Date: Sun, 16 Nov 2025 21:15:05 +0800
-From: "=?gb18030?B?Zmx5bm5uY2hlbiizwszss/4p?=" <flynnnchen@tencent.com>
-To: gregkh <gregkh@linuxfoundation.org>
+	s=arc-20240116; t=1763299690; c=relaxed/simple;
+	bh=ZQoKp1pMo4cAGytSctoAgqd4T0pcIg5MnXY+mHXsTfs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pm3KcBPzosm4m9s1RwLkuoh8giLjBr6bZEFZQlmgG14Ig1aWb13AS8GTa/InfTU0Ce8jJ1i5ix3ZbdC2gzdhrrcWrUklplDj2KK2/RW3HHc5BdQE9QssfXdZY93e763I6mchhWGjkWlLfKoYwuckUmGJp4VfBkUqHeVp4AJ4998=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wLc+3s6c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9971EC116B1;
+	Sun, 16 Nov 2025 13:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1763299687;
+	bh=ZQoKp1pMo4cAGytSctoAgqd4T0pcIg5MnXY+mHXsTfs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wLc+3s6cyLrg/GUTnG4hvKwVlabsHVzXLqWzM3u6dQFRMKDo53WFhRSGNUbwu+AMn
+	 sIVyCiuzYrnhNyYJukrPJI7PbJoGE3Eh+2GIs7YOR+ZMkqHeeVKnSZM534SQZHu4OH
+	 IweOwp+7LLPPcZhOftbMbHvwTUjfFUODvxgL/pDQ=
+Date: Sun, 16 Nov 2025 08:28:04 -0500
+From: gregkh <gregkh@linuxfoundation.org>
+To: =?utf-8?B?Zmx5bm5uY2hlbijpmYjlpKnmpZop?= <flynnnchen@tencent.com>
 Cc: linux-usb <linux-usb@vger.kernel.org>
 Subject: Re: Re: [PATCH] usb: storage: sddr55: Reject out-of-bound new_pba
-References: <B2DC73A3EE1E3A1D+202511161322001664687@tencent.com>, 
-	<2025111605-stardust-unvocal-222f@gregkh>
-X-Priority: 3
-X-GUID: DA4C1EB1-D428-4B2C-9F99-565C7C0FBF42
-X-Has-Attach: no
-X-Mailer: Foxmail 7.2.25.492[en]
+Message-ID: <2025111615-counting-unsteady-7469@gregkh>
+References: <B2DC73A3EE1E3A1D+202511161322001664687@tencent.com>
+ <2025111605-stardust-unvocal-222f@gregkh>
+ <EBC31800E75832ED+202511162115037260372@tencent.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <EBC31800E75832ED+202511162115037260372@tencent.com>
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:tencent.com:qybglogicsvrgz:qybglogicsvrgz5b-1
-X-QQ-XMAILINFO: NzOHSugmTg7XSpTO73sP6bl+w3ndXfKcViA8j6aeR4aROw0Y5ltBr8AX
-	qTkEGt8+EtE4MoGg1iChnxRhBOr0yDcsr5tvWT6bX72fq0jA5+jOZ11HxUgMv3+qaNZFbL/
-	s3eS4nYsuoiwqv5ZtkJ8Iu/9b1z1wZFv2+kwKw00xwgW0Rreb5tE1F4YMs6yqNLioglgfCu
-	G6QbdE5tKcKLTtcQkcPBLaQiwmwe69QyvdylI154oh0l2VftmXeFE9wyXgqNRnW27px8SzV
-	FvsoDiwNuOHToHA0YHT7UfK/O9u3jmZk40b97ZpW7Q+Uz+6+3qDkOY1G6N7PnKzyKSzcgCC
-	SzuJF4IlC6LtpJrVhYL+ymw+G+DH19wi+ORpVhMXg+1hotjKDBpelmgBnMFyz8PcBxktsGn
-	CjQ8UjtVdsoylnx58+J4Ehs8nUMOaTajNUxVM/FcsPuG3MtJz3nO9kdc0a8cTEzj2l6mW4C
-	2wo+USreImYD/97rgYUBk5gEy/x4C41Qwp9By3oKXS65Hyl+LxR9RfHdnBclTL0zLYMCSJN
-	50FfXb0YK/e3tN9ufEUoa5O2MrTtzt9SVss+Qp0/WOpzGRXUbETKxLNbcNguhHoLMDgabFD
-	s+l+/N4ydZU6ihVJmMEZIDA7o+zhViud1g+MNivwRLVWHsB9y3/cPA4Qa505JlfzYCMdmvL
-	zfnqpNtd9F9FkPAswxFZX7rFQcOLIOZ8HtdWCoirGJP22+0SYh7ucKk3nbGfUYCRQG+u2YZ
-	PuRVkXhILwPDHXL2V25cYfQ1mbgNWC5sXGPbjRFHI03yE3JArSbQccPto/3m41ahgg4I4kH
-	uwgTKn2MJsFqkD8HPmGzr/EdWXA/7jDpX8+DzpBZWnszX7lsNPxuE6tJSuDxC+at+ae4u7p
-	XlfPlAEz23vpowRU4CmnLT0gyFkguAwCXisBH7XK+qjBwicCBsW4Bbt2LN50QiXSDBBfVC3
-	CGGs7Vm9eFzQt9CeZWi6rgdfF1t6yM8WqJAZScOO0H+U4rw==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-X-QQ-RECHKSPAM: 0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <EBC31800E75832ED+202511162115037260372@tencent.com>
 
-T24gU3VuLCBOb3YgMTYsIDIwMjUgYXQgMDc6MDc6NTdBTSAtMDUwMCwgZ3JlZ2toIHdyb3RlOgoK
-Pk9uIFN1biwgTm92IDE2LCAyMDI1IGF0IDAxOjIyOjAxUE0gKzA4MDAsIGZseW5ubmNoZW4o6ZmI
-5aSp5qWaKSB3cm90ZToKPj4gRGlzY292ZXJlZCBieSBBdHVpbiAtIEF1dG9tYXRlZCBWdWxuZXJh
-YmlsaXR5IERpc2NvdmVyeSBFbmdpbmUuCj4+IAo+PiBuZXdfcGJhIGNvbWVzIGZyb20gdGhlIHN0
-YXR1cyBwYWNrZXQgcmV0dXJuZWQgYWZ0ZXIgZWFjaCB3cml0ZS4KPj4gQSBib2d1cyBkZXZpY2Ug
-Y291bGQgcmVwb3J0IHZhbHVlcyBiZXlvbmQgdGhlIGJsb2NrIGNvdW50IGRlcml2ZWQKPj4gZnJv
-bSBpbmZvLT5jYXBhY2l0eSwgbGV0dGluZyB0aGUgZHJpdmVyIHdhbGsgb2ZmIHRoZSBlbmQgb2YK
-Pj4gcGJhX3RvX2xiYVtdIGFuZCBjb3JydXB0IGhlYXAgbWVtb3J5Lgo+PiAKPj4gUmVqZWN0IFBC
-QXMgdGhhdCBleGNlZWQgdGhlIGNvbXB1dGVkIGJsb2NrIGNvdW50IGFuZCBmYWlsIHRoZQo+PiB0
-cmFuc2ZlciBzbyB3ZSBhdm9pZCB0b3VjaGluZyBvdXQtb2YtcmFuZ2UgbWFwcGluZyBlbnRyaWVz
-Lgo+PiAKPj4gU2lnbmVkLW9mZi1ieTogVGlhbmNodSBDaGVuIDxmbHlubm5jaGVuQHRlbmNlbnQu
-Y29tPgo+PiAtLS0KPj4gIGRyaXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMgfCA2ICsrKysrKwo+
-PiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQo+PiAKPj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMgYi9kcml2ZXJzL3VzYi9zdG9yYWdlL3NkZHI1NS5j
-Cj4+IGluZGV4IGIzMjNmMGEzNi4uOWQ4MTM3MjdlIDEwMDY0NAo+PiAtLS0gYS9kcml2ZXJzL3Vz
-Yi9zdG9yYWdlL3NkZHI1NS5jCj4+ICsrKyBiL2RyaXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMK
-Pj4gQEAgLTQ2OSw2ICs0NjksMTIgQEAgc3RhdGljIGludCBzZGRyNTVfd3JpdGVfZGF0YShzdHJ1
-Y3QgdXNfZGF0YSAqdXMsCj4+ICAJCW5ld19wYmEgPSAoc3RhdHVzWzNdICsgKHN0YXR1c1s0XSA8
-PCA4KSArIChzdGF0dXNbNV0gPDwgMTYpKQo+PiAgCQkJCQkJICA+PiBpbmZvLT5ibG9ja3NoaWZ0
-Owo+PiAgCj4+ICsJCS8qIGNoZWNrIGlmIGRldmljZS1yZXBvcnRlZCBuZXdfcGJhIGlzIG91dCBv
-ZiByYW5nZSAqLwo+PiArCQlpZiAobmV3X3BiYSA+PSAoaW5mby0+Y2FwYWNpdHkgPj4gKGluZm8t
-PmJsb2Nrc2hpZnQgKyBpbmZvLT5wYWdlc2hpZnQpKSkgewo+PiArCQkJcmVzdWx0ID0gVVNCX1NU
-T1JfVFJBTlNQT1JUX0ZBSUxFRDsKPj4gKwkJCWdvdG8gbGVhdmU7Cj4+ICsJCX0KPgo+QW55IGNo
-YW5jZSB5b3UgdGVzdGVkIHRoaXMgd2l0aCByZWFsIGhhcmR3YXJlPwo+Cj50aGFua3MsCj4KPmdy
-ZWcgay1oCgoKVW5mb3J0dW5hdGVseSwgSSBkbyBub3Qgb3duIHRoZSByZWFsIGhhcmR3YXJlLCBh
-bmQgaGF2ZSBub3QgdGVzdGVkIGl0IG9uIGEKYSByZWFsIGRldmljZS4KClNvbWUgb2YgbXkgdGhv
-dWdodHMgb24gdGhpcyBwYXRjaCwgZnJvbSBzdGF0aWMgYW5hbHlzaXM6CgpROiBXaGF0IGlmIHRo
-aXMgY29kZSBpcyBjYWxsZWQsIGJlZm9yZSBpbmZvLT5jYXBhY2l0eSBpcyBzZXQ/CkE6IElmIHNk
-ZHI1NV93cml0ZV9kYXRhIGlzIGNhbGxlZCBiZWZvcmUgc2RkcjU1X2dldF9jYXBhY2l0eSwKaW5m
-by0+Y2FwYWNpdHkgYW5kIHBiYV90b19sYmEgc2hvdWxkIGJvdGggYmUgMCwgaW4gdGhlIHBhdGNo
-ZWQgY29kZSBpdCB3aWxsCmFsd2F5cyBmYWlsLCB3aGlsZSBpbiB0aGUgb3JpZ2luYWwgY29kZSBp
-dCB3aWxsIGNhdXNlIE5VTEwtZGVyZWYuCgpROiBJcyBjaGVja2luZyBuZXdfcGJhIGhlcmUgZXNz
-ZW50aWFsIGluIGFsbCBjYXNlcz8KQTogWWVzLCBpbiBhbGwgdGhlIGNvZGUgcGF0aCBiZW5lYXRo
-IGl0LCBuZXdfcGJhIGlzIGFsd2F5cyB1c2VkIHRvIGluZGV4CnRoZSBhcnJheSwgd2l0aCBubyBl
-eGNlcHRpb24uCgpROiBXaGF0IGlmIGRldmljZSByZXBvcnRzIHdyaXRlIHN1Y2Nlc3MsIGFuZCBn
-aXZlcyBiYWNrIGFuIE9PQiBuZXdfcGJhPwpBOiBGb3IgdGhlIHBhdGNoZWQgY29kZSwgaXQgd2ls
-bCBmYWlsIHRoZSB3cml0ZSB0cmFuc2Zlci4gSW4gdGhlIG9yaWdpbmFsCm9uZSwgaXQgaXMgdmVy
-eSBsaWtlbHkgdG8gZmFpbCBhcyB3ZWxsLCBiZWNhdXNlOgoKCQkvKiBjaGVjayB0aGF0IG5ld19w
-YmEgd2Fzbid0IGFscmVhZHkgYmVpbmcgdXNlZCAqLwoJCWlmIChpbmZvLT5wYmFfdG9fbGJhW25l
-d19wYmFdICE9IFVOVVNFRF9CTE9DSykgeyAgPC0tLSBWZXJ5IGxpa2VseSB0byBmYWlsIGhlcmUK
-CQkJcHJpbnRrKEtFUk5fRVJSICJzZGRyNTUgZXJyb3I6IG5ldyBQQkEgJTA0WCBhbHJlYWR5IGlu
-IHVzZSBmb3IgTEJBICUwNFhcbiIsCgkJCQluZXdfcGJhLCBpbmZvLT5wYmFfdG9fbGJhW25ld19w
-YmFdKTsKCQkJaW5mby0+ZmF0YWxfZXJyb3IgPSAxOwoJCQlzZXRfc2Vuc2VfaW5mbyAoMywgMHgz
-MSwgMCk7CgkJCXJlc3VsdCA9IFVTQl9TVE9SX1RSQU5TUE9SVF9GQUlMRUQ7CgkJCWdvdG8gbGVh
-dmU7CgkJfQoKVGhlIG9yaWdpbmFsIGNvZGUgT09CLXJlYWRzIGluZm8tPnBiYV90b19sYmFbbmV3
-X3BiYV0sIHdoaWNoIGlzIHZlcnkKdW5saWtlbHkgdG8gZXF1YWwgdG8gVU5VU0VEX0JMT0NLIChp
-MzIgMHgzZmYpIGJ5IGNoYW5jZSwgdGh1cyB0aGUgb3JpZ2luYWwKY29kZSB3aWxsIGFsc28gZmFp
-bCB0aGUgdHJhbnNmZXIgaW4gbW9zdCBjYXNlcy4KCkZyb20gbXkgdW5kZXJzdGFuZGluZywgdGhl
-IHBhdGNoZWQgY29kZSBzb2x2ZXMgdGhlIE9PQiBpc3N1ZSwgd2hpbGUgYmVpbmcKYWxpZ25lZCB3
-aXRoIHRoZSBvcmlnaW5hbCBiZWhhdmlvciBpbiBtb3N0IGNhc2VzIEkgaGF2ZSBpbWFnaW5lZC4K
+On Sun, Nov 16, 2025 at 09:15:05PM +0800, flynnnchen(陈天楚) wrote:
+> On Sun, Nov 16, 2025 at 07:07:57AM -0500, gregkh wrote:
+> 
+> >On Sun, Nov 16, 2025 at 01:22:01PM +0800, flynnnchen(陈天楚) wrote:
+> >> Discovered by Atuin - Automated Vulnerability Discovery Engine.
+> >> 
+> >> new_pba comes from the status packet returned after each write.
+> >> A bogus device could report values beyond the block count derived
+> >> from info->capacity, letting the driver walk off the end of
+> >> pba_to_lba[] and corrupt heap memory.
+> >> 
+> >> Reject PBAs that exceed the computed block count and fail the
+> >> transfer so we avoid touching out-of-range mapping entries.
+> >> 
+> >> Signed-off-by: Tianchu Chen <flynnnchen@tencent.com>
+> >> ---
+> >>  drivers/usb/storage/sddr55.c | 6 ++++++
+> >>  1 file changed, 6 insertions(+)
+> >> 
+> >> diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
+> >> index b323f0a36..9d813727e 100644
+> >> --- a/drivers/usb/storage/sddr55.c
+> >> +++ b/drivers/usb/storage/sddr55.c
+> >> @@ -469,6 +469,12 @@ static int sddr55_write_data(struct us_data *us,
+> >>  		new_pba = (status[3] + (status[4] << 8) + (status[5] << 16))
+> >>  						  >> info->blockshift;
+> >>  
+> >> +		/* check if device-reported new_pba is out of range */
+> >> +		if (new_pba >= (info->capacity >> (info->blockshift + info->pageshift))) {
+> >> +			result = USB_STOR_TRANSPORT_FAILED;
+> >> +			goto leave;
+> >> +		}
+> >
+> >Any chance you tested this with real hardware?
+> >
+> >thanks,
+> >
+> >greg k-h
+> 
+> 
+> Unfortunately, I do not own the real hardware, and have not tested it on a
+> a real device.
+> 
+> Some of my thoughts on this patch, from static analysis:
+> 
+> Q: What if this code is called, before info->capacity is set?
+> A: If sddr55_write_data is called before sddr55_get_capacity,
+> info->capacity and pba_to_lba should both be 0, in the patched code it will
+> always fail, while in the original code it will cause NULL-deref.
 
+But how can that out-of-order calling happen?
+
+> Q: Is checking new_pba here essential in all cases?
+> A: Yes, in all the code path beneath it, new_pba is always used to index
+> the array, with no exception.
+
+Fair enough :)
+
+> Q: What if device reports write success, and gives back an OOB new_pba?
+> A: For the patched code, it will fail the write transfer. In the original
+> one, it is very likely to fail as well, because:
+> 
+> 		/* check that new_pba wasn't already being used */
+> 		if (info->pba_to_lba[new_pba] != UNUSED_BLOCK) {  <--- Very likely to fail here
+> 			printk(KERN_ERR "sddr55 error: new PBA %04X already in use for LBA %04X\n",
+> 				new_pba, info->pba_to_lba[new_pba]);
+> 			info->fatal_error = 1;
+> 			set_sense_info (3, 0x31, 0);
+> 			result = USB_STOR_TRANSPORT_FAILED;
+> 			goto leave;
+> 		}
+> 
+> The original code OOB-reads info->pba_to_lba[new_pba], which is very
+> unlikely to equal to UNUSED_BLOCK (i32 0x3ff) by chance, thus the original
+> code will also fail the transfer in most cases.
+> 
+> From my understanding, the patched code solves the OOB issue, while being
+> aligned with the original behavior in most cases I have imagined.
+
+Ok, seems sane, I'll be glad to take this, just wanted to be sure.  I
+kind of doubt anyone has this hardware anymore anyway :)
+
+thanks,
+
+greg k-h
 
