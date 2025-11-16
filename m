@@ -1,152 +1,114 @@
-Return-Path: <linux-usb+bounces-30533-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30534-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 026AAC60EE8
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 03:03:03 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 977B9C6106E
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 06:23:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 891544E2594
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 02:02:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5E97F34AC03
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 05:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE10221DB6;
-	Sun, 16 Nov 2025 02:02:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024D222A1E1;
+	Sun, 16 Nov 2025 05:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="dVR64hPW"
+	dkim=pass (1024-bit key) header.d=tencent.com header.i=@tencent.com header.b="E3bvfTCf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4581E4AB
-	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 02:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A12C3B1B3
+	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 05:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763258568; cv=none; b=rRo+jTPv6w46eREfHnwqywY/ty6Wp+M8iNb3QD4JKy8PsDvYwZZUcvv3cquhBAVU/7UvEdltZeXs/eb8Q7arFC0HwKHoWWlgWKBHjVdxUBWGpwlbV5SeF0aMfOFT1FWx+QtjZ55u83NyV3My1ZEPK10/VLZZmH4onZLr4QqSsQk=
+	t=1763270538; cv=none; b=aNLa12VJPn6vNg3j6CRi9Lg5o/KzFfO7a0TN3EvHI9Y+s0Sb7+DQwT09pPvGOo0WlXR3Y2UJzPSqNeDQzUbTsSC5CicEcACj7L9q8IjgAy/xBKKQyEBgJXEfeALVDOnC7KnpQHoYYgG5lVjFQSPjqbGBjOZ/rwSwNzS8hdGCQq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763258568; c=relaxed/simple;
-	bh=ix3L74YT5V67SxQcvcSjcHCLWXPN7DwdUDzu7JUwpac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H54b5DFuKNCCZOBNH2RoY3XJwLbCG/iiDizH7isqPsy1LgEi5HhLx2Xq/HzbmRSM3kmHUh0e3N2+TMb+uvt3D9bpM7qoMXIqvsUqSTv87cxPoWnkODSTFpXY0NNfvtK394YkCretrd2q3qjHjv8X7Qw+0LBWq8OEZw/4rDZVqCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=dVR64hPW; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8b21fa7b91bso307514285a.1
-        for <linux-usb@vger.kernel.org>; Sat, 15 Nov 2025 18:02:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1763258565; x=1763863365; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pkXB0RiOx00wRtlBivyr40k1pXaqD5wN/4yTU+LCQbk=;
-        b=dVR64hPWX38dH/Hbc+t3ataLS/k+ldyJ+MI9ha15l6pP3qxcVgApW4nfx7tKqUMKZ+
-         g7xEkQO+yyZzc/nNISsG948Iy2oWBSaniDnDO+T1j6s0FBQwP88r/xAAR1Bf0AR3YzUw
-         WCOGMBkJUd7BakVQItkRFx2cSTZb+FqkcfqEEI1clsgCAeZYK/3YcO+t0Y96mFxtUCo+
-         yh0ePFBLnehTKv6EbKfL82PuLXNIaeV5ps5zY+OLQbXIvg9UT7hLcSl9nSfpzAE0W6l9
-         fsbu2mRBLwJO75W1w1a48fGTTALubjV5iZ4aa9xcJWYs2mP0+7mbCOuWTCBaoKqxvKV5
-         ZznA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763258565; x=1763863365;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pkXB0RiOx00wRtlBivyr40k1pXaqD5wN/4yTU+LCQbk=;
-        b=L2LowbUq6eAyb6aXaK5H2d1MMSdJZ6hoQk1o7fGvJM5ho4EOfOFz5ZcxixOrKAh5jA
-         IFHCX+XUBGdxDIA6Gz01StdVV8NxOlCT6Eg3NPaIzmXHPRwveXvuRMn4/bfbjjB8Lmf8
-         AxHRSTbhLhYJE7xgHS3mex02I04Pm5D13Qcrb4EVJaEOvMFZZ03Cjt8mNsLrkZI2tjFi
-         QWakMCDM9RXX+v+x1Q0mym9Hnls0pQj/iampjbBJc3bhjqGGA5+Gd8/Yb4i32nz76Hdn
-         q0Mh9TuxPfTHXgkIlNQS+7ZlKipCWXqFdyNYzr8MrtWX+E8KREhODILXufvnWG6u4Dr2
-         ZX7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVu0gQz0M0mCjPLtyDxCvTUeoCwmfBfSq2EnVltOYPRVoEEg6cfkBN2mAoDZYD7gSjnaw8gCZXIZjc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzfe3zfIDijSi92btbAwXoPZ0rRNKJe7aKf2ea77kTtq5IU2ThY
-	rEXZKYgFVGj4qb9Mi65jGZleeY9neEI7cMze8hUx5gqsDMtnQ5JH15VTa5fuig8DFg==
-X-Gm-Gg: ASbGncsyDsdIfq6H/tHFtEk763hvEPzLZ1Gy9EAe7Xcjei2yZKluZG4j/r6WnYTWtIE
-	20Dw/vwrTp+YpprKzr7k6CKMGUndzgDToRDTGrRkhxYtx5ku4rVfa5qWLl8NgDuLq44HcIO4gtf
-	WodKHuLSOka4pEUGXh4zHr3/dJZhI3/JzAQjj+aL0vk1xQ8FjlTOWvLxzaeVFfBfNYHzajoHv+t
-	AqXXo3EcEfoNCv+bBhcyeTqZvchRJUK6p4QPFCxs0m8RVvSb7BS7Yqhk1fb760kZEdHHmpkeEpA
-	HONdYv8vmbH3Grx/UMc6OJRLGPIVBz1LAuwe67/LFT6AQMk0K1Pg0X3fC3JFVxNk1DIxAtoIfxQ
-	WiHtNYB89CTZg1nQK0oOFGgm40EfD3UMeOi/ZHyV2L5eAwIDi+Z2M4BLglegNU8cxGRw7OgRisw
-	Ddgg==
-X-Google-Smtp-Source: AGHT+IGadHCqqKWDl62JvuYVsXnkpYDC3mZv4xvz6u4dz1J6qc7Ey4fFE9duNHKyg1jQsybJWUGC9Q==
-X-Received: by 2002:a05:620a:1aa5:b0:8b2:5649:25ef with SMTP id af79cd13be357-8b2c31585a3mr1026069885a.21.1763258564892;
-        Sat, 15 Nov 2025 18:02:44 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::db9a])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b2aeeb4afbsm659488785a.14.2025.11.15.18.02.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 18:02:44 -0800 (PST)
-Date: Sat, 15 Nov 2025 21:02:40 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Ma Ke <make24@iscas.ac.cn>
-Cc: vz@mleia.com, piotr.wojtaszczyk@timesys.com, gregkh@linuxfoundation.org,
-	stigge@antcom.de, arnd@arndb.de, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org, stable@vger.kernel.org
-Subject: Re: [PATCH] USB: ohci-nxp: Fix error handling in ohci-hcd-nxp driver
-Message-ID: <69b9818e-7db3-4c2b-80f2-29b8170a95eb@rowland.harvard.edu>
-References: <20251116010613.7966-1-make24@iscas.ac.cn>
+	s=arc-20240116; t=1763270538; c=relaxed/simple;
+	bh=OnmepDQ/EpNiPWJ3D41+M1RhVQH52WVuGRwXjeNXJTA=;
+	h=Date:From:To:Cc:Subject:Mime-Version:Message-ID:Content-Type; b=cqkSttFGJhofgDIj9adxDpOyCZ/5D3jPVJpMJBKm+VUrahnYaK+gNyqMN5c1DfOgYP5sAiopHXtIx1gPER8lZFGqVT0L3X72rVc0ft5bs3bx9cR/auBrdC8eFuF5r6A4K0LMPQEFjR7oDsGIllhCDzo8Mum4k/nMjh6PY2UEqx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tencent.com; spf=pass smtp.mailfrom=tencent.com; dkim=pass (1024-bit key) header.d=tencent.com header.i=@tencent.com header.b=E3bvfTCf; arc=none smtp.client-ip=54.207.22.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tencent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tencent.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tencent.com;
+	s=s201512; t=1763270523;
+	bh=OnmepDQ/EpNiPWJ3D41+M1RhVQH52WVuGRwXjeNXJTA=;
+	h=Date:From:To:Subject:Mime-Version:Message-ID;
+	b=E3bvfTCf0mzh380l0hDXY6T2PRr8bz2Xp3xow4SRIiJuHAeNBZfxyjVxiD4cZJC4Q
+	 o4xin6fWFXWpMN4dYZAEEElMQdl3IbnPnFwbVBKKu1ze8T7I8s5aCwMwOl62oFVn4q
+	 CX2IrlouS/HepH3xBuAQmydcL/0Z1ij5oWilyP2c=
+X-QQ-mid: esmtpgz15t1763270521t6108f294
+X-QQ-Originating-IP: HnaTnzl3Ip9KhKuo+uifoqcjiMzdy5BntstOsV0jMkE=
+Received: from FLYNNNCHEN-PC1 ( [11.176.19.11])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Sun, 16 Nov 2025 13:22:00 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 775369688226635650
+Date: Sun, 16 Nov 2025 13:22:01 +0800
+From: "=?gb18030?B?Zmx5bm5uY2hlbiizwszss/4p?=" <flynnnchen@tencent.com>
+To: linux-usb <linux-usb@vger.kernel.org>
+Cc: gregkh <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: storage: sddr55: Reject out-of-bound new_pba
+X-Priority: 3
+X-GUID: A0D10F1D-E958-44AC-9EEC-CCD5BDA5D41F
+X-Has-Attach: no
+X-Mailer: Foxmail 7.2.25.492[en]
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251116010613.7966-1-make24@iscas.ac.cn>
+Mime-Version: 1.0
+Message-ID: <B2DC73A3EE1E3A1D+202511161322001664687@tencent.com>
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:tencent.com:qybglogicsvrgz:qybglogicsvrgz5b-1
+X-QQ-XMAILINFO: OX/+6nY/vs4TUIhJ0sHhn1IlF0AJtixG1Cn0wXUWbyfUUnSKQvqwBmVK
+	ef2MkIRgSyJwUx7egi8y0PjoHinHAp662fx6z7u5Pb98d1TdYYMhQ5jKBIf1/aB5uKqgpxS
+	bhc7mI1e/tx/tWtWphK9VW60Fu+qi0SwKkey9gS2oW1yyQdjKpIpYfL3bv4i4LS4umIFRRl
+	uaveufyGHFiUrNGVTbCQ5nqAi8KF2X89ubsZnQwzKp2kbjtncLYy2Vy5mSG6zOiz/oT6vfo
+	I6CVG+tGzCA6Be58Jnsdahr+8fB2hrTCBkTCYAfqZdJpB0bycFHGdGNcbEt5I1L07wWAlTZ
+	gX9MLgfL9VLo5TYehFoYZOPm7b4H3gC9P9TaNJ32NYsdj1hA8f9v6tDSlCW+EUOHBWZ+KVM
+	BPGJ9k62/LZdUvlLmjW/7DSLHTRjtvaBAEvTV9g/BjIsSxHghW5AsvPZNVnIMJ6QGloqL7r
+	gvFtvBHFknAS5o/fSv2BmWXJKEMQz+fgBw3RXtsrJH9rutiZ7SOZZ3R5Z5eFn8ohL9FkBgZ
+	anrH3mG4nlHKipeY2ZrGXGHc01y5Pf781C9cXPDzV9E1cmIcakFMZJVz1NNH2W62T8/ebpe
+	TJkfX2cjUhMYiOuIPayWXrRBE0QD0lCDGEgm0f/kHgqCYErPU13cCUuvrSA7JZsHIRg4m52
+	i0MtMqGY0jzOcE64C84YprTnSQL5CLHdudK96ZElLPkdwr75RX7YNpwMI4h1yHV7CuYpXhQ
+	n/KYkJLumRizeUSAhebxlgunvc0Nx8+pTKqLorxoVPJxzaO1RG6f0O1XqnzqGLhINR3Jqxz
+	xlmLLD74mtBnZDEPotf7o/Y5Xt75xGb/VyRr/XZRO8ii5fNiOmTfcfBCx2KUWiEphPhdGku
+	+HlrkRsCyBqNcsXE+LRpDUztkdI/+ztppVLPj1TpBqqQeNHnQ8m0X1aptMGvbV1Lu4pjUaU
+	IHOSRFNpYXuQbew==
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+X-QQ-RECHKSPAM: 0
 
-On Sun, Nov 16, 2025 at 09:06:13AM +0800, Ma Ke wrote:
-> When obtaining the ISP1301 I2C client through the device tree, the
+RnJvbSBjNjNkYzgxNGI1ZTUxNzEzMjIyNDYyZTZiZjI3ZDc5NTZhOTMzODM0IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBUaWFuY2h1IENoZW4gPGZseW5ubmNoZW5AdGVuY2VudC5jb20+
+CkRhdGU6IFN1biwgMTYgTm92IDIwMjUgMTI6NDY6MTggKzA4MDAKU3ViamVjdDogW1BBVENIXSB1
+c2I6IHN0b3JhZ2U6IHNkZHI1NTogUmVqZWN0IG91dC1vZi1ib3VuZCBuZXdfcGJhCgpEaXNjb3Zl
+cmVkIGJ5IEF0dWluIC0gQXV0b21hdGVkIFZ1bG5lcmFiaWxpdHkgRGlzY292ZXJ5IEVuZ2luZS4K
+Cm5ld19wYmEgY29tZXMgZnJvbSB0aGUgc3RhdHVzIHBhY2tldCByZXR1cm5lZCBhZnRlciBlYWNo
+IHdyaXRlLgpBIGJvZ3VzIGRldmljZSBjb3VsZCByZXBvcnQgdmFsdWVzIGJleW9uZCB0aGUgYmxv
+Y2sgY291bnQgZGVyaXZlZApmcm9tIGluZm8tPmNhcGFjaXR5LCBsZXR0aW5nIHRoZSBkcml2ZXIg
+d2FsayBvZmYgdGhlIGVuZCBvZgpwYmFfdG9fbGJhW10gYW5kIGNvcnJ1cHQgaGVhcCBtZW1vcnku
+CgpSZWplY3QgUEJBcyB0aGF0IGV4Y2VlZCB0aGUgY29tcHV0ZWQgYmxvY2sgY291bnQgYW5kIGZh
+aWwgdGhlCnRyYW5zZmVyIHNvIHdlIGF2b2lkIHRvdWNoaW5nIG91dC1vZi1yYW5nZSBtYXBwaW5n
+IGVudHJpZXMuCgpTaWduZWQtb2ZmLWJ5OiBUaWFuY2h1IENoZW4gPGZseW5ubmNoZW5AdGVuY2Vu
+dC5jb20+Ci0tLQogZHJpdmVycy91c2Ivc3RvcmFnZS9zZGRyNTUuYyB8IDYgKysrKysrCiAxIGZp
+bGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2Ivc3Rv
+cmFnZS9zZGRyNTUuYyBiL2RyaXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMKaW5kZXggYjMyM2Yw
+YTM2Li45ZDgxMzcyN2UgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMK
+KysrIGIvZHJpdmVycy91c2Ivc3RvcmFnZS9zZGRyNTUuYwpAQCAtNDY5LDYgKzQ2OSwxMiBAQCBz
+dGF0aWMgaW50IHNkZHI1NV93cml0ZV9kYXRhKHN0cnVjdCB1c19kYXRhICp1cywKIAkJbmV3X3Bi
+YSA9IChzdGF0dXNbM10gKyAoc3RhdHVzWzRdIDw8IDgpICsgKHN0YXR1c1s1XSA8PCAxNikpCiAJ
+CQkJCQkgID4+IGluZm8tPmJsb2Nrc2hpZnQ7CiAKKwkJLyogY2hlY2sgaWYgZGV2aWNlLXJlcG9y
+dGVkIG5ld19wYmEgaXMgb3V0IG9mIHJhbmdlICovCisJCWlmIChuZXdfcGJhID49IChpbmZvLT5j
+YXBhY2l0eSA+PiAoaW5mby0+YmxvY2tzaGlmdCArIGluZm8tPnBhZ2VzaGlmdCkpKSB7CisJCQly
+ZXN1bHQgPSBVU0JfU1RPUl9UUkFOU1BPUlRfRkFJTEVEOworCQkJZ290byBsZWF2ZTsKKwkJfQor
+CiAJCS8qIGNoZWNrIHN0YXR1cyBmb3IgZXJyb3IgKi8KIAkJaWYgKHN0YXR1c1swXSA9PSAweGZm
+ICYmIHN0YXR1c1sxXSA9PSAweDQpIHsKIAkJCWluZm8tPnBiYV90b19sYmFbbmV3X3BiYV0gPSBC
+QURfQkxPQ0s7Ci0tIAoyLjM5LjUKCg==
 
-What if the client is obtained not through the device tree but through 
-normal I2C probing?  See the isp1301_get_client() routine in 
-drivers/usb/phy/phy-isp1301.c.
-
-> driver does not release the device reference in the probe failure path
-> or in the remove function. This could cause a reference count leak,
-> which may prevent the device from being properly unbound or freed,
-> leading to resource leakage. Add put_device() to release the reference
-> in the probe failure path and in the remove function.
-> 
-> Found by code review.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
-> ---
->  drivers/usb/host/ohci-nxp.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-> index 24d5a1dc5056..f79558ef0b45 100644
-> --- a/drivers/usb/host/ohci-nxp.c
-> +++ b/drivers/usb/host/ohci-nxp.c
-> @@ -223,6 +223,8 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
->  fail_resource:
->  	usb_put_hcd(hcd);
->  fail_disable:
-> +	if (isp1301_i2c_client)
-
-This test is not needed; there is no way to get here if 
-isp1301_i2c_client is NULL.
-
-> +		put_device(&isp1301_i2c_client->dev);
->  	isp1301_i2c_client = NULL;
->  	return ret;
->  }
-> @@ -234,6 +236,8 @@ static void ohci_hcd_nxp_remove(struct platform_device *pdev)
->  	usb_remove_hcd(hcd);
->  	ohci_nxp_stop_hc();
->  	usb_put_hcd(hcd);
-> +	if (isp1301_i2c_client)
-
-The same is true for this test.
-
-Alan Stern
-
-> +		put_device(&isp1301_i2c_client->dev);
->  	isp1301_i2c_client = NULL;
->  }
->  
-> -- 
-> 2.17.1
-> 
 
