@@ -1,136 +1,116 @@
-Return-Path: <linux-usb+bounces-30530-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30531-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05646C605E2
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Nov 2025 14:24:48 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A20FC60E33
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 02:08:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 79DD3360BAF
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Nov 2025 13:23:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B68394E784D
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 01:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2023A2BE65B;
-	Sat, 15 Nov 2025 13:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AuInizII"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FDCE1EA7F4;
+	Sun, 16 Nov 2025 01:06:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F23129ACDB;
-	Sat, 15 Nov 2025 13:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0D635CBC5;
+	Sun, 16 Nov 2025 01:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763212898; cv=none; b=Bz4HKE7BFs1FJ/GFAMOcKNGxbDn23wRQCXuQqOCOsh8eTY8sd3O99w7Pem9r2a9yeJXqKQnzLmDOD2BZrgqxe4SM/6yHCT7chL1wKS86+ZnvGfcvN3+YzqtSFw1C1XldAzjR5mBdM7ZClBi06xeRKGStDJTLWDR1UNUPNq1wvPk=
+	t=1763255218; cv=none; b=dJ+E0BHXOJ9vim315BwyLSIiBz3NZt3QKFKefFlI32CgXIHyILVkaiDTVCfFDzIb4aVmGpPcDGoqtx5AjGN1/ACopRMgHLJYwUixwkGGRh+1Yb/UPwHDYHImvvkyYffm6gNmczVhZGQL6lO/k1bsYEqPfsm2me1XC6h+q3T1s78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763212898; c=relaxed/simple;
-	bh=Pl9jmC5EL7AGwr+SmsgthHF9drWTTfIqBaIssfzsdWY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FA/6l7KHt9pWcHq0Oqs/BdMWur3vC9xj/k09Z9IhTh3rpKFcCHron3BEg1uhIqm+mmZaMqnNNvOA+/Sk9+76uNFUG221vH3xZefxizDjxBZXqEdNiCBSGxJcHv7UicDCoZBquymHtqrJeSSIYrlrY6PtbhNMqAxmEQ2YJipnCK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AuInizII; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C00C16AAE;
-	Sat, 15 Nov 2025 13:21:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1763212898;
-	bh=Pl9jmC5EL7AGwr+SmsgthHF9drWTTfIqBaIssfzsdWY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AuInizIINMwBXTMJu1dR3seLB3VmALsUQ3+5Ndj4MXto6uH9ENTPXUU90Dt/8DjPq
-	 gmWQkfEhamMufZT+G9MKX9xDtzSNmpoxmmi+AH6rv/rpdY47vOYkLaC2Ol/C4V7Kfc
-	 vAlEaytoOD6Xr7/mBkMwSJH6iZ7zuxrbmPJUjTZw=
-Date: Sat, 15 Nov 2025 08:21:34 -0500
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: bot+bpf-ci@kernel.org, linux-fsdevel@vger.kernel.org,
-	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
-	a.hindborg@kernel.org, linux-mm@kvack.org,
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
-	paul@paul-moore.com, casey@schaufler-ca.com,
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
-	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
-	bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
-	yonghong.song@linux.dev, ihor.solodrai@linux.dev,
-	Chris Mason <clm@meta.com>
-Subject: Re: [functionfs] mainline UAF (was Re: [PATCH v3 36/50] functionfs:
- switch to simple_remove_by_name())
-Message-ID: <2025111555-spoon-backslid-8d1f@gregkh>
-References: <20251111065520.2847791-37-viro@zeniv.linux.org.uk>
- <20754dba9be498daeda5fe856e7276c9c91c271999320ae32331adb25a47cd4f@mail.kernel.org>
- <20251111092244.GS2441659@ZenIV>
- <e6b90909-fdd7-4c4d-b96e-df27ea9f39c4@meta.com>
- <20251113092636.GX2441659@ZenIV>
- <2025111316-cornfield-sphinx-ba89@gregkh>
- <20251114074614.GY2441659@ZenIV>
+	s=arc-20240116; t=1763255218; c=relaxed/simple;
+	bh=pMBoikwlcqXhtgGzOZuJ7pt3ACAMyLeq9gNXtcVyVyM=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=tbTgV1KHYgJpDPopBs/X8Vt1Mjhi8h1WFUvPcZ54fCftEyXEVo0cTQ5EGvb3Jg5nsK1zJZIcxju0hmOO4KafzLvMvmgJUxwsu7l5PyahKzSmeZzuufFopEJxVb9BLJsnuCd+0UdyPlCKhOYdAzyGyahpL2j50KJrw3lmqBnVq8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [202.112.113.212])
+	by APP-03 (Coremail) with SMTP id rQCowAAXqNqMIxlpksTpAA--.20173S2;
+	Sun, 16 Nov 2025 09:06:23 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: stern@rowland.harvard.edu,
+	vz@mleia.com,
+	piotr.wojtaszczyk@timesys.com,
+	gregkh@linuxfoundation.org,
+	stigge@antcom.de,
+	arnd@arndb.de
+Cc: linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	Ma Ke <make24@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH] USB: ohci-nxp: Fix error handling in ohci-hcd-nxp driver
+Date: Sun, 16 Nov 2025 09:06:13 +0800
+Message-Id: <20251116010613.7966-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:rQCowAAXqNqMIxlpksTpAA--.20173S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrW7urW5KF1UKrWUGF1ftFb_yoW8GrykpF
+	47XFyjkFyUGw4293y3CF13Xa40kw42v34rKw17Gw17Wan0v34qvFyvyF1FvF43XFWkGrWF
+	ga1Dt34jyr4UAaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBa14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+	1j6F4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+	x2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20x
+	vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+	3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+	AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAI
+	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+	IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251114074614.GY2441659@ZenIV>
 
-On Fri, Nov 14, 2025 at 07:46:14AM +0000, Al Viro wrote:
-> On Thu, Nov 13, 2025 at 04:20:08PM -0500, Greg Kroah-Hartman wrote:
-> 
-> > Sorry for the delay.  Yes, we should be grabing the mutex in there, good
-> > catch.  There's been more issues pointed out with the gadget code in the
-> > past year or so as more people are starting to actually use it and
-> > stress it more.  So if you have a patch for this, I'll gladly take it :)
-> 
-> How about the following?
-> 
-> commit 330837c8101578438f64cfaec3fb85521d668e56
-> Author: Al Viro <viro@zeniv.linux.org.uk>
-> Date:   Fri Nov 14 02:18:22 2025 -0500
-> 
->     functionfs: fix the open/removal races
->     
->     ffs_epfile_open() can race with removal, ending up with file->private_data
->     pointing to freed object.
->     
->     There is a total count of opened files on functionfs (both ep0 and
->     dynamic ones) and when it hits zero, dynamic files get removed.
->     Unfortunately, that removal can happen while another thread is
->     in ffs_epfile_open(), but has not incremented the count yet.
->     In that case open will succeed, leaving us with UAF on any subsequent
->     read() or write().
->     
->     The root cause is that ffs->opened is misused; atomic_dec_and_test() vs.
->     atomic_add_return() is not a good idea, when object remains visible all
->     along.
->     
->     To untangle that
->             * serialize openers on ffs->mutex (both for ep0 and for dynamic files)
->             * have dynamic ones use atomic_inc_not_zero() and fail if we had
->     zero ->opened; in that case the file we are opening is doomed.
->             * have the inodes of dynamic files marked on removal (from the
->     callback of simple_recursive_removal()) - clear ->i_private there.
->             * have open of dynamic ones verify they hadn't been already removed,
->     along with checking that state is FFS_ACTIVE.
->     
->     Fix another abuse of ->opened, while we are at it - it starts equal to 0,
->     is incremented on opens and decremented on ->release()... *and* decremented
->     (always from 0 to -1) in ->kill_sb().  Handling that case has no business
->     in ffs_data_closed() (or to ->opened); just have ffs_kill_sb() do what
->     ffs_data_closed() would in case of decrement to negative rather than
->     calling ffs_data_closed() there.
->     
->     And don't bother with bumping ffs->ref when opening a file - superblock
->     already holds the reference and it won't go away while there are any opened
->     files on the filesystem.
->     
->     Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+When obtaining the ISP1301 I2C client through the device tree, the
+driver does not release the device reference in the probe failure path
+or in the remove function. This could cause a reference count leak,
+which may prevent the device from being properly unbound or freed,
+leading to resource leakage. Add put_device() to release the reference
+in the probe failure path and in the remove function.
 
-Ugh, messy.  But yes, this does look better, thanks for that.  Want me
-to take it through the USB tree, or will you take it through one of
-yours? (I don't remember what started this thread...)
+Found by code review.
 
-thanks,
+Cc: stable@vger.kernel.org
+Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+---
+ drivers/usb/host/ohci-nxp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-greg k-h
+diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
+index 24d5a1dc5056..f79558ef0b45 100644
+--- a/drivers/usb/host/ohci-nxp.c
++++ b/drivers/usb/host/ohci-nxp.c
+@@ -223,6 +223,8 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+ fail_resource:
+ 	usb_put_hcd(hcd);
+ fail_disable:
++	if (isp1301_i2c_client)
++		put_device(&isp1301_i2c_client->dev);
+ 	isp1301_i2c_client = NULL;
+ 	return ret;
+ }
+@@ -234,6 +236,8 @@ static void ohci_hcd_nxp_remove(struct platform_device *pdev)
+ 	usb_remove_hcd(hcd);
+ 	ohci_nxp_stop_hc();
+ 	usb_put_hcd(hcd);
++	if (isp1301_i2c_client)
++		put_device(&isp1301_i2c_client->dev);
+ 	isp1301_i2c_client = NULL;
+ }
+ 
+-- 
+2.17.1
+
 
