@@ -1,158 +1,141 @@
-Return-Path: <linux-usb+bounces-30537-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30538-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FED1C614B2
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 13:30:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7186DC61570
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 14:15:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 342A928A50
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 12:30:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17F4D3B57F4
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 13:15:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE5C2D836A;
-	Sun, 16 Nov 2025 12:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A4D2D73A2;
+	Sun, 16 Nov 2025 13:15:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="d7Mdswn4";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="T3Kfhe+i"
+	dkim=pass (1024-bit key) header.d=tencent.com header.i=@tencent.com header.b="naIwc4h/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308FA2D7DC5
-	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 12:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5B323E35E
+	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 13:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763296246; cv=none; b=kAdgM1beD9tN71dW0/OfTLOlSVPMpG0M6/H9eiN7wtwQGoYgkBOP7B6rNqAQGE2t9DOJ9kdf96ZaLUmWPl+xw9bF6yHjCXiKE9AEewl+p+U8hk/MMEUqB7axynVZp2OOXfrtOi3ZGuHPsg7/z9wX6XuxC2Ctzw96WOf5sD/oSAA=
+	t=1763298924; cv=none; b=D5qdqG7rq1upfs5s1oFiWsal2xlkoK6Zean8pTz4yIYzqiyDRgiFIaMZ4E1l5qM/e/788ow93Unewx5Xg//0eAevP7ZPFlOIXQCSXSdhr2X1T7+/WqAgp+HgRUEnaV7O77bsQovQ7ydzUYodf1G42plcGFZmSA6RmiLVPrwtVrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763296246; c=relaxed/simple;
-	bh=qn6qHcN7jQ0D0SzHEIE3ogFDkIRjoEoM4ge0AYRLkoA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JJcZy+ZOmqEZvnbqN6koBo+4Fx8Prrh53Q1lKB6cwv9X+SUFnl0XFC9h6/DvgdVrjI4mXsF1gVefo3J3Ck9uV2ls/gEpbgoB6lBwXUwiORLVvn+0FTa5ycivtpUTK26pJHWcMWcl0ytoWCI6BBV5Ke2dnalekmDaTN1yCNwFNbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=d7Mdswn4; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=T3Kfhe+i; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AGBx7YY1287096
-	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 12:30:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=DonaG/M7Ub+U0gHvabNuDi868ril51s1gpV
-	ZHcQMUjY=; b=d7Mdswn4HjaIy5BPgHqyYQ5Tgdy24CQqxV2YFFJLod4EJ/vC0Rw
-	RzJDIdZkZqn4D5yxR8iMrzTbf8wUEMPWrO8I4o7nQVC+kjSqy3TvK1Bl9ykhJGHg
-	bwTFuI3tuR1QlTJmXRN9FvRwrJkeeo27aDRKaVTDo1vqfYTYal8W8Jpa/abnjp4R
-	RxZduGb1Hg5PeHEdL8W4uidh+87wfKYnRrNC+bKaq40eiUjpXhFNgcjeVYUW2YBz
-	b1HL1BhohOdVIe3TNIsONzp/eppTU+0f915W2zzkIGvWOWqIrt0ItVz3UWDrgr9V
-	2Cc6SN4sZtmNqw6pdM3gmOXt/nJtz6nmcPA==
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4aejm5a3j8-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 12:30:43 +0000 (GMT)
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b993eb2701bso3451594a12.0
-        for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 04:30:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1763296243; x=1763901043; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DonaG/M7Ub+U0gHvabNuDi868ril51s1gpVZHcQMUjY=;
-        b=T3Kfhe+iimhaFQ/d/qfI8wsG2sZzuLf2O9hxIKxrLBCsIvBcmu72snEx8ez41HGMdW
-         EN6vh9Y3LtAajC5pK2kVAqBngngl4jmMqaeBxZbW+F/1JSwyFFltwfO/zqnihBciWPxB
-         AlzTdO6SOMQxw9wDi0TXpGVSz01Hp+pcC6voLKsKIKJZp9cDcXoKXxPuOle7Pbcqwk1M
-         Rz75zAJZoEUkpMiaQWarumiQNUPeKP+RXCO9g/Yk/PCi2vEQbbQF76NbGil0sublAUaJ
-         9Nyy5CeNSxuVoAqy8sd1TvV1v352WrhZqK69vcOmZlsQwhbUEZbGnurlIW1uYKAwUytW
-         OCXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763296243; x=1763901043;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DonaG/M7Ub+U0gHvabNuDi868ril51s1gpVZHcQMUjY=;
-        b=qSJBHXJavlPPRwbqOrUnMZAaSCOB87TAv63T1n4exlEfxvGorNxsRBsUjwAUJ8AVwO
-         0AYBFifKDWk66xuE2T9+Rwsusym2BbJeZIGaclmzM08JSQSYsKsx1qagfENaQjxi5BHY
-         pviEUgFcae5LJRYlDWsVNznHL85riKpyYzAAIZVLVH9dNFXooTUSQXFyjdV3gA8isA6w
-         j0z3IFSBFpcFkYzPP/0JO8SSzxN6CycS6P1hLI4I1+m3nAGaBV0jhIVtb7yd8ycYPmeX
-         OapMIqvcazRHILGQe2r2sETEGrqujwq327KNHGlTwY0t2csUGob0Gn/kAjcxcdNofp3/
-         vzHg==
-X-Gm-Message-State: AOJu0YxveSfQpvK5DANwD+J/QC9Pzc4I6Jw8JPK0Anprl0sHe+/A8gYA
-	ZhfsS4T3AFeo4/IUcJEDUTxgvPXHV7GqsKzuxAOWFA2c7B+2WzWSzgsFSaQex3GvOGjOa8wt9CF
-	eoLppkk0dFe3ohJpRFeLF0X5I/EdAiXus6kEza1XULSDazySGORv5GjUOjKpwDa66SCnVSZY=
-X-Gm-Gg: ASbGnctZXu3TsuIrgw7h9tMEfXX5VNjC8sfuAFf6N3Klpo/OYOKITjhVMSwI1OLXfYs
-	+bI0mS/mUyfau8TOa3YHktc10C9tJi/jSI7n5GtQqFenBWBawHSyZZGeIoH6PLhodHWAUZNvL+l
-	+1DT+Yfw/b2J20KeTkJ5avUmCdWPB0TwLE5BhTqeqoOMgMZpfJN9xs5dOCWM8DVvmc1cZnLN/8M
-	wh975ZoPObEgD+JklxWwVe3ePZiyt4i1jfBgdRmjbTdDsgRucrwH76PuKIsLZy/lWXWKPLI4ZBi
-	ZAtD3J15JwOigmZZYquJcdGJu6tsLP7QMg9/PKK2wZa6pNl5LBNhk5LUyf+rJLFT9I3wS2H1Tvr
-	Mfb/iG2r3B6Yr0vMjqP0KS3VF7K4C0BMR6ZcG
-X-Received: by 2002:a05:6a21:6d86:b0:342:d58b:561c with SMTP id adf61e73a8af0-35ba09882a1mr10702059637.27.1763296242874;
-        Sun, 16 Nov 2025 04:30:42 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEnk+Dzr5tddr08o0JywQg+/YLVF42KvB0fxKmpC8GZweLSIk+nhW+ZKUbgOUjWXlza4vMnAg==
-X-Received: by 2002:a05:6a21:6d86:b0:342:d58b:561c with SMTP id adf61e73a8af0-35ba09882a1mr10702030637.27.1763296242344;
-        Sun, 16 Nov 2025 04:30:42 -0800 (PST)
-Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ba611682cfsm7284735b3a.26.2025.11.16.04.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Nov 2025 04:30:41 -0800 (PST)
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: [PATCH] usb: dwc3: core: Remove redundant comment in core init
-Date: Sun, 16 Nov 2025 18:00:33 +0530
-Message-Id: <20251116123033.131004-1-krishna.kurapati@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1763298924; c=relaxed/simple;
+	bh=jV4OUUxWWC5takbTj//NZbModdzpU85jB5tuNJ6/5YQ=;
+	h=Date:From:To:Cc:Subject:References:Mime-Version:Message-ID:
+	 Content-Type; b=PLtXTI1Oo1GcQnxuJxpViGHWIEkMS+uEE9Yq/dxD/MSu4zlsYMJOiwtWts/61vTcMVfvC/z7MXZn/Pah2QjsbnIwM4dGPZqcT4f3uX9ueqy0p1iW4/tD4jBh/l/h4bu/sEiHzwi5MOtNZBsPXWxApsm6PcvE1sqYBPB/CS3+/9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tencent.com; spf=pass smtp.mailfrom=tencent.com; dkim=pass (1024-bit key) header.d=tencent.com header.i=@tencent.com header.b=naIwc4h/; arc=none smtp.client-ip=15.184.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tencent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tencent.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tencent.com;
+	s=s201512; t=1763298907;
+	bh=jV4OUUxWWC5takbTj//NZbModdzpU85jB5tuNJ6/5YQ=;
+	h=Date:From:To:Subject:Mime-Version:Message-ID;
+	b=naIwc4h/s75RTrod1C1JeYEhtpTM9Xcr5Yg/E+eqwViGgPBau6yeBQ7lue+MC7xEU
+	 BXhlkt/frNP0lfpRxvdxMA65p8WtJzWSPAWrjQA0AzY5QhKHx/F5PS363PIwFI8F6j
+	 aP+AXE+0ujWFbBO6aWBlS1SCYU+0j7nhRfz3PpkI=
+X-QQ-mid: zesmtpsz9t1763298905t7e7a45ca
+X-QQ-Originating-IP: wJMnQu6bRp/h0G+hNCoXWIR2yI2rEwoOAlTPN5Slte4=
+Received: from FLYNNNCHEN-PC1 ( [11.176.19.11])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Sun, 16 Nov 2025 21:15:04 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 18267915891469540549
+Date: Sun, 16 Nov 2025 21:15:05 +0800
+From: "=?gb18030?B?Zmx5bm5uY2hlbiizwszss/4p?=" <flynnnchen@tencent.com>
+To: gregkh <gregkh@linuxfoundation.org>
+Cc: linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: Re: [PATCH] usb: storage: sddr55: Reject out-of-bound new_pba
+References: <B2DC73A3EE1E3A1D+202511161322001664687@tencent.com>, 
+	<2025111605-stardust-unvocal-222f@gregkh>
+X-Priority: 3
+X-GUID: DA4C1EB1-D428-4B2C-9F99-565C7C0FBF42
+X-Has-Attach: no
+X-Mailer: Foxmail 7.2.25.492[en]
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE2MDEwNCBTYWx0ZWRfX76uK4D7MbEwv
- zxXBCb4d8/aai7S4kY8gg6mGpEl5LC2vex2gPKRy7qQ/smrKFNmo39R54NdLZUiCuKPGBViguIs
- ox8wN59+z0O4mfDjawLsUYbRAuoZ2pPVLlmsEARAMcOvvuGjE4XgVEb/OjIGqNfejSSEEtzELEW
- 8lwJpWjOsIO7bfFzESlYLojOub/q0I0D8sxWClrGFRhqzOqy4u12xcS85PnPddjNntZB6VwPTmM
- 9ciUWN62BzWEtznQBtVSMMQL48cGCDoCy2SVOz51IilN/CnqX1oJCYhm5k+k/xNCw/IJ7x64EEz
- Ei3Gg4HU1+t0aFIh2obclntgCpIlej7NNm62Kol5pXFLEG+tC+Lpna3A/DIv9QjWeri9kyb7hFY
- 6x4hy9ysMEtye5TrC6Q3ou86hKIGVQ==
-X-Proofpoint-GUID: GMZXiNQ1uKckczU33eEf98fvjpG39EhN
-X-Proofpoint-ORIG-GUID: GMZXiNQ1uKckczU33eEf98fvjpG39EhN
-X-Authority-Analysis: v=2.4 cv=Pb7yRyhd c=1 sm=1 tr=0 ts=6919c3f4 cx=c_pps
- a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=iLQ7FBvWljknKMV_mTQA:9 a=x9snwWr2DeNwDh03kgHS:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-16_05,2025-11-13_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 suspectscore=0 bulkscore=0 impostorscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511160104
+Mime-Version: 1.0
+Message-ID: <EBC31800E75832ED+202511162115037260372@tencent.com>
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:tencent.com:qybglogicsvrgz:qybglogicsvrgz5b-1
+X-QQ-XMAILINFO: NzOHSugmTg7XSpTO73sP6bl+w3ndXfKcViA8j6aeR4aROw0Y5ltBr8AX
+	qTkEGt8+EtE4MoGg1iChnxRhBOr0yDcsr5tvWT6bX72fq0jA5+jOZ11HxUgMv3+qaNZFbL/
+	s3eS4nYsuoiwqv5ZtkJ8Iu/9b1z1wZFv2+kwKw00xwgW0Rreb5tE1F4YMs6yqNLioglgfCu
+	G6QbdE5tKcKLTtcQkcPBLaQiwmwe69QyvdylI154oh0l2VftmXeFE9wyXgqNRnW27px8SzV
+	FvsoDiwNuOHToHA0YHT7UfK/O9u3jmZk40b97ZpW7Q+Uz+6+3qDkOY1G6N7PnKzyKSzcgCC
+	SzuJF4IlC6LtpJrVhYL+ymw+G+DH19wi+ORpVhMXg+1hotjKDBpelmgBnMFyz8PcBxktsGn
+	CjQ8UjtVdsoylnx58+J4Ehs8nUMOaTajNUxVM/FcsPuG3MtJz3nO9kdc0a8cTEzj2l6mW4C
+	2wo+USreImYD/97rgYUBk5gEy/x4C41Qwp9By3oKXS65Hyl+LxR9RfHdnBclTL0zLYMCSJN
+	50FfXb0YK/e3tN9ufEUoa5O2MrTtzt9SVss+Qp0/WOpzGRXUbETKxLNbcNguhHoLMDgabFD
+	s+l+/N4ydZU6ihVJmMEZIDA7o+zhViud1g+MNivwRLVWHsB9y3/cPA4Qa505JlfzYCMdmvL
+	zfnqpNtd9F9FkPAswxFZX7rFQcOLIOZ8HtdWCoirGJP22+0SYh7ucKk3nbGfUYCRQG+u2YZ
+	PuRVkXhILwPDHXL2V25cYfQ1mbgNWC5sXGPbjRFHI03yE3JArSbQccPto/3m41ahgg4I4kH
+	uwgTKn2MJsFqkD8HPmGzr/EdWXA/7jDpX8+DzpBZWnszX7lsNPxuE6tJSuDxC+at+ae4u7p
+	XlfPlAEz23vpowRU4CmnLT0gyFkguAwCXisBH7XK+qjBwicCBsW4Bbt2LN50QiXSDBBfVC3
+	CGGs7Vm9eFzQt9CeZWi6rgdfF1t6yM8WqJAZScOO0H+U4rw==
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+X-QQ-RECHKSPAM: 0
 
-Remove redundant comment which was put in to address LLUCTL register
-modifications for all applicable ports of multiport controller. Although
-the support was added, the todo comment wasn't removed then.
-
-Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
----
- drivers/usb/dwc3/core.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 96f85eada047..fbedf46d7468 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1484,10 +1484,6 @@ int dwc3_core_init(struct dwc3 *dwc)
- 
- 	dwc3_config_threshold(dwc);
- 
--	/*
--	 * Modify this for all supported Super Speed ports when
--	 * multiport support is added.
--	 */
- 	if (hw_mode != DWC3_GHWPARAMS0_MODE_GADGET &&
- 	    (DWC3_IP_IS(DWC31)) &&
- 	    dwc->maximum_speed == USB_SPEED_SUPER) {
--- 
-2.34.1
+T24gU3VuLCBOb3YgMTYsIDIwMjUgYXQgMDc6MDc6NTdBTSAtMDUwMCwgZ3JlZ2toIHdyb3RlOgoK
+Pk9uIFN1biwgTm92IDE2LCAyMDI1IGF0IDAxOjIyOjAxUE0gKzA4MDAsIGZseW5ubmNoZW4o6ZmI
+5aSp5qWaKSB3cm90ZToKPj4gRGlzY292ZXJlZCBieSBBdHVpbiAtIEF1dG9tYXRlZCBWdWxuZXJh
+YmlsaXR5IERpc2NvdmVyeSBFbmdpbmUuCj4+IAo+PiBuZXdfcGJhIGNvbWVzIGZyb20gdGhlIHN0
+YXR1cyBwYWNrZXQgcmV0dXJuZWQgYWZ0ZXIgZWFjaCB3cml0ZS4KPj4gQSBib2d1cyBkZXZpY2Ug
+Y291bGQgcmVwb3J0IHZhbHVlcyBiZXlvbmQgdGhlIGJsb2NrIGNvdW50IGRlcml2ZWQKPj4gZnJv
+bSBpbmZvLT5jYXBhY2l0eSwgbGV0dGluZyB0aGUgZHJpdmVyIHdhbGsgb2ZmIHRoZSBlbmQgb2YK
+Pj4gcGJhX3RvX2xiYVtdIGFuZCBjb3JydXB0IGhlYXAgbWVtb3J5Lgo+PiAKPj4gUmVqZWN0IFBC
+QXMgdGhhdCBleGNlZWQgdGhlIGNvbXB1dGVkIGJsb2NrIGNvdW50IGFuZCBmYWlsIHRoZQo+PiB0
+cmFuc2ZlciBzbyB3ZSBhdm9pZCB0b3VjaGluZyBvdXQtb2YtcmFuZ2UgbWFwcGluZyBlbnRyaWVz
+Lgo+PiAKPj4gU2lnbmVkLW9mZi1ieTogVGlhbmNodSBDaGVuIDxmbHlubm5jaGVuQHRlbmNlbnQu
+Y29tPgo+PiAtLS0KPj4gIGRyaXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMgfCA2ICsrKysrKwo+
+PiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQo+PiAKPj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMgYi9kcml2ZXJzL3VzYi9zdG9yYWdlL3NkZHI1NS5j
+Cj4+IGluZGV4IGIzMjNmMGEzNi4uOWQ4MTM3MjdlIDEwMDY0NAo+PiAtLS0gYS9kcml2ZXJzL3Vz
+Yi9zdG9yYWdlL3NkZHI1NS5jCj4+ICsrKyBiL2RyaXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMK
+Pj4gQEAgLTQ2OSw2ICs0NjksMTIgQEAgc3RhdGljIGludCBzZGRyNTVfd3JpdGVfZGF0YShzdHJ1
+Y3QgdXNfZGF0YSAqdXMsCj4+ICAJCW5ld19wYmEgPSAoc3RhdHVzWzNdICsgKHN0YXR1c1s0XSA8
+PCA4KSArIChzdGF0dXNbNV0gPDwgMTYpKQo+PiAgCQkJCQkJICA+PiBpbmZvLT5ibG9ja3NoaWZ0
+Owo+PiAgCj4+ICsJCS8qIGNoZWNrIGlmIGRldmljZS1yZXBvcnRlZCBuZXdfcGJhIGlzIG91dCBv
+ZiByYW5nZSAqLwo+PiArCQlpZiAobmV3X3BiYSA+PSAoaW5mby0+Y2FwYWNpdHkgPj4gKGluZm8t
+PmJsb2Nrc2hpZnQgKyBpbmZvLT5wYWdlc2hpZnQpKSkgewo+PiArCQkJcmVzdWx0ID0gVVNCX1NU
+T1JfVFJBTlNQT1JUX0ZBSUxFRDsKPj4gKwkJCWdvdG8gbGVhdmU7Cj4+ICsJCX0KPgo+QW55IGNo
+YW5jZSB5b3UgdGVzdGVkIHRoaXMgd2l0aCByZWFsIGhhcmR3YXJlPwo+Cj50aGFua3MsCj4KPmdy
+ZWcgay1oCgoKVW5mb3J0dW5hdGVseSwgSSBkbyBub3Qgb3duIHRoZSByZWFsIGhhcmR3YXJlLCBh
+bmQgaGF2ZSBub3QgdGVzdGVkIGl0IG9uIGEKYSByZWFsIGRldmljZS4KClNvbWUgb2YgbXkgdGhv
+dWdodHMgb24gdGhpcyBwYXRjaCwgZnJvbSBzdGF0aWMgYW5hbHlzaXM6CgpROiBXaGF0IGlmIHRo
+aXMgY29kZSBpcyBjYWxsZWQsIGJlZm9yZSBpbmZvLT5jYXBhY2l0eSBpcyBzZXQ/CkE6IElmIHNk
+ZHI1NV93cml0ZV9kYXRhIGlzIGNhbGxlZCBiZWZvcmUgc2RkcjU1X2dldF9jYXBhY2l0eSwKaW5m
+by0+Y2FwYWNpdHkgYW5kIHBiYV90b19sYmEgc2hvdWxkIGJvdGggYmUgMCwgaW4gdGhlIHBhdGNo
+ZWQgY29kZSBpdCB3aWxsCmFsd2F5cyBmYWlsLCB3aGlsZSBpbiB0aGUgb3JpZ2luYWwgY29kZSBp
+dCB3aWxsIGNhdXNlIE5VTEwtZGVyZWYuCgpROiBJcyBjaGVja2luZyBuZXdfcGJhIGhlcmUgZXNz
+ZW50aWFsIGluIGFsbCBjYXNlcz8KQTogWWVzLCBpbiBhbGwgdGhlIGNvZGUgcGF0aCBiZW5lYXRo
+IGl0LCBuZXdfcGJhIGlzIGFsd2F5cyB1c2VkIHRvIGluZGV4CnRoZSBhcnJheSwgd2l0aCBubyBl
+eGNlcHRpb24uCgpROiBXaGF0IGlmIGRldmljZSByZXBvcnRzIHdyaXRlIHN1Y2Nlc3MsIGFuZCBn
+aXZlcyBiYWNrIGFuIE9PQiBuZXdfcGJhPwpBOiBGb3IgdGhlIHBhdGNoZWQgY29kZSwgaXQgd2ls
+bCBmYWlsIHRoZSB3cml0ZSB0cmFuc2Zlci4gSW4gdGhlIG9yaWdpbmFsCm9uZSwgaXQgaXMgdmVy
+eSBsaWtlbHkgdG8gZmFpbCBhcyB3ZWxsLCBiZWNhdXNlOgoKCQkvKiBjaGVjayB0aGF0IG5ld19w
+YmEgd2Fzbid0IGFscmVhZHkgYmVpbmcgdXNlZCAqLwoJCWlmIChpbmZvLT5wYmFfdG9fbGJhW25l
+d19wYmFdICE9IFVOVVNFRF9CTE9DSykgeyAgPC0tLSBWZXJ5IGxpa2VseSB0byBmYWlsIGhlcmUK
+CQkJcHJpbnRrKEtFUk5fRVJSICJzZGRyNTUgZXJyb3I6IG5ldyBQQkEgJTA0WCBhbHJlYWR5IGlu
+IHVzZSBmb3IgTEJBICUwNFhcbiIsCgkJCQluZXdfcGJhLCBpbmZvLT5wYmFfdG9fbGJhW25ld19w
+YmFdKTsKCQkJaW5mby0+ZmF0YWxfZXJyb3IgPSAxOwoJCQlzZXRfc2Vuc2VfaW5mbyAoMywgMHgz
+MSwgMCk7CgkJCXJlc3VsdCA9IFVTQl9TVE9SX1RSQU5TUE9SVF9GQUlMRUQ7CgkJCWdvdG8gbGVh
+dmU7CgkJfQoKVGhlIG9yaWdpbmFsIGNvZGUgT09CLXJlYWRzIGluZm8tPnBiYV90b19sYmFbbmV3
+X3BiYV0sIHdoaWNoIGlzIHZlcnkKdW5saWtlbHkgdG8gZXF1YWwgdG8gVU5VU0VEX0JMT0NLIChp
+MzIgMHgzZmYpIGJ5IGNoYW5jZSwgdGh1cyB0aGUgb3JpZ2luYWwKY29kZSB3aWxsIGFsc28gZmFp
+bCB0aGUgdHJhbnNmZXIgaW4gbW9zdCBjYXNlcy4KCkZyb20gbXkgdW5kZXJzdGFuZGluZywgdGhl
+IHBhdGNoZWQgY29kZSBzb2x2ZXMgdGhlIE9PQiBpc3N1ZSwgd2hpbGUgYmVpbmcKYWxpZ25lZCB3
+aXRoIHRoZSBvcmlnaW5hbCBiZWhhdmlvciBpbiBtb3N0IGNhc2VzIEkgaGF2ZSBpbWFnaW5lZC4K
 
 
