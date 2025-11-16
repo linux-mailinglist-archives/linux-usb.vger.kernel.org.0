@@ -1,114 +1,250 @@
-Return-Path: <linux-usb+bounces-30534-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30535-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 977B9C6106E
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 06:23:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AD67C610B9
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 07:31:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5E97F34AC03
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 05:22:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 992453B9716
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 06:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024D222A1E1;
-	Sun, 16 Nov 2025 05:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E33E23ABB0;
+	Sun, 16 Nov 2025 06:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tencent.com header.i=@tencent.com header.b="E3bvfTCf"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="v87ep+8s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A12C3B1B3
-	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 05:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230E21465B4;
+	Sun, 16 Nov 2025 06:30:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763270538; cv=none; b=aNLa12VJPn6vNg3j6CRi9Lg5o/KzFfO7a0TN3EvHI9Y+s0Sb7+DQwT09pPvGOo0WlXR3Y2UJzPSqNeDQzUbTsSC5CicEcACj7L9q8IjgAy/xBKKQyEBgJXEfeALVDOnC7KnpQHoYYgG5lVjFQSPjqbGBjOZ/rwSwNzS8hdGCQq4=
+	t=1763274663; cv=none; b=Cg6D7IwYGX8JsBi6ZeZS6FU4/21APdNs9XT3XDyAz4W6cUrE/lFsXmjDgZ7EYJJ0w6d6+Swr3dMpCcVDSrZSqWkxTWW/VbnYdkKsXgED4Y1dH6QBDTj0E0LvWBO7ns2JIT46XFohuGUshJfu5hqMjESm7gHV1mh6a9gt25KcG2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763270538; c=relaxed/simple;
-	bh=OnmepDQ/EpNiPWJ3D41+M1RhVQH52WVuGRwXjeNXJTA=;
-	h=Date:From:To:Cc:Subject:Mime-Version:Message-ID:Content-Type; b=cqkSttFGJhofgDIj9adxDpOyCZ/5D3jPVJpMJBKm+VUrahnYaK+gNyqMN5c1DfOgYP5sAiopHXtIx1gPER8lZFGqVT0L3X72rVc0ft5bs3bx9cR/auBrdC8eFuF5r6A4K0LMPQEFjR7oDsGIllhCDzo8Mum4k/nMjh6PY2UEqx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tencent.com; spf=pass smtp.mailfrom=tencent.com; dkim=pass (1024-bit key) header.d=tencent.com header.i=@tencent.com header.b=E3bvfTCf; arc=none smtp.client-ip=54.207.22.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tencent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tencent.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tencent.com;
-	s=s201512; t=1763270523;
-	bh=OnmepDQ/EpNiPWJ3D41+M1RhVQH52WVuGRwXjeNXJTA=;
-	h=Date:From:To:Subject:Mime-Version:Message-ID;
-	b=E3bvfTCf0mzh380l0hDXY6T2PRr8bz2Xp3xow4SRIiJuHAeNBZfxyjVxiD4cZJC4Q
-	 o4xin6fWFXWpMN4dYZAEEElMQdl3IbnPnFwbVBKKu1ze8T7I8s5aCwMwOl62oFVn4q
-	 CX2IrlouS/HepH3xBuAQmydcL/0Z1ij5oWilyP2c=
-X-QQ-mid: esmtpgz15t1763270521t6108f294
-X-QQ-Originating-IP: HnaTnzl3Ip9KhKuo+uifoqcjiMzdy5BntstOsV0jMkE=
-Received: from FLYNNNCHEN-PC1 ( [11.176.19.11])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sun, 16 Nov 2025 13:22:00 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 775369688226635650
-Date: Sun, 16 Nov 2025 13:22:01 +0800
-From: "=?gb18030?B?Zmx5bm5uY2hlbiizwszss/4p?=" <flynnnchen@tencent.com>
-To: linux-usb <linux-usb@vger.kernel.org>
-Cc: gregkh <gregkh@linuxfoundation.org>
-Subject: [PATCH] usb: storage: sddr55: Reject out-of-bound new_pba
-X-Priority: 3
-X-GUID: A0D10F1D-E958-44AC-9EEC-CCD5BDA5D41F
-X-Has-Attach: no
-X-Mailer: Foxmail 7.2.25.492[en]
+	s=arc-20240116; t=1763274663; c=relaxed/simple;
+	bh=dLIBx9wnRf4ju6UVlPQmOJFWndyfpiiKv2OWpaEs5rw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k10FFZqhYIMrGhit8AR2qarqyMQNHvZSZTVvKQoVKYv1tzAlRgOF2vD9V6TkmjRD7W6bARQQhfEO31X8N8ZsDU44aNcpld1ouLNY3U0MYc4tHHsinnTIbhEQxPF/mZL/+6zn6qQPuXG5U7A+J3NvYyuhJoPp3KdjtoYV8xYpPmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=v87ep+8s; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=CSaTv+g6iTeyfNwAPb2UZSBv3rc0hQYoL1YvQs/TGcA=; b=v87ep+8sGAj47MEf8Vt4uadQZk
+	43mSG/U79MDARH/6bYNHWYEijJCkGJlTApHxDreiHLLZkq2qjparHOIa8lh4alzW34fB6LARDpvoq
+	a0tzMldguNQi01Y3KE+ZamiC2CGY+r1XBlYwAhZvQT42pRdi83POrqpQ/KgmCrP2H9U6V/h9J+URe
+	7TZKT/6AEJtzbW1csZg/Nf9SbWs9D/NPnstDd2Jkzk2xyIjQO+HzNXWvKJIhrZhTAqyNMImpj9WXS
+	2UDAdfdak31c1xzZAJF2F3bpuo5eTczIsPAO7ceypi0uEUZb4ZieasuxVGFqwzwJDx4l0egDgHhP7
+	bvKKdfyQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vKWHj-0000000Ccfr-1WoW;
+	Sun, 16 Nov 2025 06:30:51 +0000
+Date: Sun, 16 Nov 2025 06:30:51 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: bot+bpf-ci@kernel.org, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
+	yonghong.song@linux.dev, ihor.solodrai@linux.dev,
+	Chris Mason <clm@meta.com>
+Subject: Re: [functionfs] mainline UAF (was Re: [PATCH v3 36/50] functionfs:
+ switch to simple_remove_by_name())
+Message-ID: <20251116063051.GA2441659@ZenIV>
+References: <20251111065520.2847791-37-viro@zeniv.linux.org.uk>
+ <20754dba9be498daeda5fe856e7276c9c91c271999320ae32331adb25a47cd4f@mail.kernel.org>
+ <20251111092244.GS2441659@ZenIV>
+ <e6b90909-fdd7-4c4d-b96e-df27ea9f39c4@meta.com>
+ <20251113092636.GX2441659@ZenIV>
+ <2025111316-cornfield-sphinx-ba89@gregkh>
+ <20251114074614.GY2441659@ZenIV>
+ <2025111555-spoon-backslid-8d1f@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <B2DC73A3EE1E3A1D+202511161322001664687@tencent.com>
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:tencent.com:qybglogicsvrgz:qybglogicsvrgz5b-1
-X-QQ-XMAILINFO: OX/+6nY/vs4TUIhJ0sHhn1IlF0AJtixG1Cn0wXUWbyfUUnSKQvqwBmVK
-	ef2MkIRgSyJwUx7egi8y0PjoHinHAp662fx6z7u5Pb98d1TdYYMhQ5jKBIf1/aB5uKqgpxS
-	bhc7mI1e/tx/tWtWphK9VW60Fu+qi0SwKkey9gS2oW1yyQdjKpIpYfL3bv4i4LS4umIFRRl
-	uaveufyGHFiUrNGVTbCQ5nqAi8KF2X89ubsZnQwzKp2kbjtncLYy2Vy5mSG6zOiz/oT6vfo
-	I6CVG+tGzCA6Be58Jnsdahr+8fB2hrTCBkTCYAfqZdJpB0bycFHGdGNcbEt5I1L07wWAlTZ
-	gX9MLgfL9VLo5TYehFoYZOPm7b4H3gC9P9TaNJ32NYsdj1hA8f9v6tDSlCW+EUOHBWZ+KVM
-	BPGJ9k62/LZdUvlLmjW/7DSLHTRjtvaBAEvTV9g/BjIsSxHghW5AsvPZNVnIMJ6QGloqL7r
-	gvFtvBHFknAS5o/fSv2BmWXJKEMQz+fgBw3RXtsrJH9rutiZ7SOZZ3R5Z5eFn8ohL9FkBgZ
-	anrH3mG4nlHKipeY2ZrGXGHc01y5Pf781C9cXPDzV9E1cmIcakFMZJVz1NNH2W62T8/ebpe
-	TJkfX2cjUhMYiOuIPayWXrRBE0QD0lCDGEgm0f/kHgqCYErPU13cCUuvrSA7JZsHIRg4m52
-	i0MtMqGY0jzOcE64C84YprTnSQL5CLHdudK96ZElLPkdwr75RX7YNpwMI4h1yHV7CuYpXhQ
-	n/KYkJLumRizeUSAhebxlgunvc0Nx8+pTKqLorxoVPJxzaO1RG6f0O1XqnzqGLhINR3Jqxz
-	xlmLLD74mtBnZDEPotf7o/Y5Xt75xGb/VyRr/XZRO8ii5fNiOmTfcfBCx2KUWiEphPhdGku
-	+HlrkRsCyBqNcsXE+LRpDUztkdI/+ztppVLPj1TpBqqQeNHnQ8m0X1aptMGvbV1Lu4pjUaU
-	IHOSRFNpYXuQbew==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-X-QQ-RECHKSPAM: 0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2025111555-spoon-backslid-8d1f@gregkh>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-RnJvbSBjNjNkYzgxNGI1ZTUxNzEzMjIyNDYyZTZiZjI3ZDc5NTZhOTMzODM0IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBUaWFuY2h1IENoZW4gPGZseW5ubmNoZW5AdGVuY2VudC5jb20+
-CkRhdGU6IFN1biwgMTYgTm92IDIwMjUgMTI6NDY6MTggKzA4MDAKU3ViamVjdDogW1BBVENIXSB1
-c2I6IHN0b3JhZ2U6IHNkZHI1NTogUmVqZWN0IG91dC1vZi1ib3VuZCBuZXdfcGJhCgpEaXNjb3Zl
-cmVkIGJ5IEF0dWluIC0gQXV0b21hdGVkIFZ1bG5lcmFiaWxpdHkgRGlzY292ZXJ5IEVuZ2luZS4K
-Cm5ld19wYmEgY29tZXMgZnJvbSB0aGUgc3RhdHVzIHBhY2tldCByZXR1cm5lZCBhZnRlciBlYWNo
-IHdyaXRlLgpBIGJvZ3VzIGRldmljZSBjb3VsZCByZXBvcnQgdmFsdWVzIGJleW9uZCB0aGUgYmxv
-Y2sgY291bnQgZGVyaXZlZApmcm9tIGluZm8tPmNhcGFjaXR5LCBsZXR0aW5nIHRoZSBkcml2ZXIg
-d2FsayBvZmYgdGhlIGVuZCBvZgpwYmFfdG9fbGJhW10gYW5kIGNvcnJ1cHQgaGVhcCBtZW1vcnku
-CgpSZWplY3QgUEJBcyB0aGF0IGV4Y2VlZCB0aGUgY29tcHV0ZWQgYmxvY2sgY291bnQgYW5kIGZh
-aWwgdGhlCnRyYW5zZmVyIHNvIHdlIGF2b2lkIHRvdWNoaW5nIG91dC1vZi1yYW5nZSBtYXBwaW5n
-IGVudHJpZXMuCgpTaWduZWQtb2ZmLWJ5OiBUaWFuY2h1IENoZW4gPGZseW5ubmNoZW5AdGVuY2Vu
-dC5jb20+Ci0tLQogZHJpdmVycy91c2Ivc3RvcmFnZS9zZGRyNTUuYyB8IDYgKysrKysrCiAxIGZp
-bGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2Ivc3Rv
-cmFnZS9zZGRyNTUuYyBiL2RyaXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMKaW5kZXggYjMyM2Yw
-YTM2Li45ZDgxMzcyN2UgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL3N0b3JhZ2Uvc2RkcjU1LmMK
-KysrIGIvZHJpdmVycy91c2Ivc3RvcmFnZS9zZGRyNTUuYwpAQCAtNDY5LDYgKzQ2OSwxMiBAQCBz
-dGF0aWMgaW50IHNkZHI1NV93cml0ZV9kYXRhKHN0cnVjdCB1c19kYXRhICp1cywKIAkJbmV3X3Bi
-YSA9IChzdGF0dXNbM10gKyAoc3RhdHVzWzRdIDw8IDgpICsgKHN0YXR1c1s1XSA8PCAxNikpCiAJ
-CQkJCQkgID4+IGluZm8tPmJsb2Nrc2hpZnQ7CiAKKwkJLyogY2hlY2sgaWYgZGV2aWNlLXJlcG9y
-dGVkIG5ld19wYmEgaXMgb3V0IG9mIHJhbmdlICovCisJCWlmIChuZXdfcGJhID49IChpbmZvLT5j
-YXBhY2l0eSA+PiAoaW5mby0+YmxvY2tzaGlmdCArIGluZm8tPnBhZ2VzaGlmdCkpKSB7CisJCQly
-ZXN1bHQgPSBVU0JfU1RPUl9UUkFOU1BPUlRfRkFJTEVEOworCQkJZ290byBsZWF2ZTsKKwkJfQor
-CiAJCS8qIGNoZWNrIHN0YXR1cyBmb3IgZXJyb3IgKi8KIAkJaWYgKHN0YXR1c1swXSA9PSAweGZm
-ICYmIHN0YXR1c1sxXSA9PSAweDQpIHsKIAkJCWluZm8tPnBiYV90b19sYmFbbmV3X3BiYV0gPSBC
-QURfQkxPQ0s7Ci0tIAoyLjM5LjUKCg==
+On Sat, Nov 15, 2025 at 08:21:34AM -0500, Greg Kroah-Hartman wrote:
 
+> Ugh, messy.  But yes, this does look better, thanks for that.  Want me
+> to take it through the USB tree, or will you take it through one of
+> yours? (I don't remember what started this thread...)
+
+I'll carve it up in several chunks and push to #work.functionfs; will post
+tomorrow morning.  Minimal fix for ffs_epfiles_destroy() bug folded into #36
+in #work.persistency - replacement for that commit below; are you OK with
+that one?  It's orthogonal to the rest of the mess in there.
+
+commit b9c24b7499916a1dbee50a4429fc04ebf7e21f03
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Wed Sep 17 22:55:33 2025 -0400
+
+    functionfs: switch to simple_remove_by_name()
+    
+    No need to return dentry from ffs_sb_create_file() or keep it around
+    afterwards.
+    
+    To avoid subtle issues with getting to ffs from epfiles in
+    ffs_epfiles_destroy(), pass the superblock as explicit argument.
+    Callers have it anyway.
+    
+    Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 47cfbe41fdff..6e6933a9fe45 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -160,8 +160,6 @@ struct ffs_epfile {
+ 	struct ffs_data			*ffs;
+ 	struct ffs_ep			*ep;	/* P: ffs->eps_lock */
+ 
+-	struct dentry			*dentry;
+-
+ 	/*
+ 	 * Buffer for holding data from partial reads which may happen since
+ 	 * we’re rounding user read requests to a multiple of a max packet size.
+@@ -271,11 +269,11 @@ struct ffs_desc_helper {
+ };
+ 
+ static int  __must_check ffs_epfiles_create(struct ffs_data *ffs);
+-static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count);
++static void ffs_epfiles_destroy(struct super_block *sb,
++				struct ffs_epfile *epfiles, unsigned count);
+ 
+-static struct dentry *
+-ffs_sb_create_file(struct super_block *sb, const char *name, void *data,
+-		   const struct file_operations *fops);
++static int ffs_sb_create_file(struct super_block *sb, const char *name,
++			      void *data, const struct file_operations *fops);
+ 
+ /* Devices management *******************************************************/
+ 
+@@ -1866,9 +1864,8 @@ ffs_sb_make_inode(struct super_block *sb, void *data,
+ }
+ 
+ /* Create "regular" file */
+-static struct dentry *ffs_sb_create_file(struct super_block *sb,
+-					const char *name, void *data,
+-					const struct file_operations *fops)
++static int ffs_sb_create_file(struct super_block *sb, const char *name,
++			      void *data, const struct file_operations *fops)
+ {
+ 	struct ffs_data	*ffs = sb->s_fs_info;
+ 	struct dentry	*dentry;
+@@ -1876,16 +1873,16 @@ static struct dentry *ffs_sb_create_file(struct super_block *sb,
+ 
+ 	dentry = d_alloc_name(sb->s_root, name);
+ 	if (!dentry)
+-		return NULL;
++		return -ENOMEM;
+ 
+ 	inode = ffs_sb_make_inode(sb, data, fops, NULL, &ffs->file_perms);
+ 	if (!inode) {
+ 		dput(dentry);
+-		return NULL;
++		return -ENOMEM;
+ 	}
+ 
+ 	d_add(dentry, inode);
+-	return dentry;
++	return 0;
+ }
+ 
+ /* Super block */
+@@ -1928,10 +1925,7 @@ static int ffs_sb_fill(struct super_block *sb, struct fs_context *fc)
+ 		return -ENOMEM;
+ 
+ 	/* EP0 file */
+-	if (!ffs_sb_create_file(sb, "ep0", ffs, &ffs_ep0_operations))
+-		return -ENOMEM;
+-
+-	return 0;
++	return ffs_sb_create_file(sb, "ep0", ffs, &ffs_ep0_operations);
+ }
+ 
+ enum {
+@@ -2161,7 +2155,7 @@ static void ffs_data_closed(struct ffs_data *ffs)
+ 							flags);
+ 
+ 			if (epfiles)
+-				ffs_epfiles_destroy(epfiles,
++				ffs_epfiles_destroy(ffs->sb, epfiles,
+ 						 ffs->eps_count);
+ 
+ 			if (ffs->setup_state == FFS_SETUP_PENDING)
+@@ -2226,7 +2220,7 @@ static void ffs_data_clear(struct ffs_data *ffs)
+ 	 * copy of epfile will save us from use-after-free.
+ 	 */
+ 	if (epfiles) {
+-		ffs_epfiles_destroy(epfiles, ffs->eps_count);
++		ffs_epfiles_destroy(ffs->sb, epfiles, ffs->eps_count);
+ 		ffs->epfiles = NULL;
+ 	}
+ 
+@@ -2323,6 +2317,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+ {
+ 	struct ffs_epfile *epfile, *epfiles;
+ 	unsigned i, count;
++	int err;
+ 
+ 	count = ffs->eps_count;
+ 	epfiles = kcalloc(count, sizeof(*epfiles), GFP_KERNEL);
+@@ -2339,12 +2334,11 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+ 			sprintf(epfile->name, "ep%02x", ffs->eps_addrmap[i]);
+ 		else
+ 			sprintf(epfile->name, "ep%u", i);
+-		epfile->dentry = ffs_sb_create_file(ffs->sb, epfile->name,
+-						 epfile,
+-						 &ffs_epfile_operations);
+-		if (!epfile->dentry) {
+-			ffs_epfiles_destroy(epfiles, i - 1);
+-			return -ENOMEM;
++		err = ffs_sb_create_file(ffs->sb, epfile->name,
++					 epfile, &ffs_epfile_operations);
++		if (err) {
++			ffs_epfiles_destroy(ffs->sb, epfiles, i - 1);
++			return err;
+ 		}
+ 	}
+ 
+@@ -2352,16 +2346,15 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+ 	return 0;
+ }
+ 
+-static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
++static void ffs_epfiles_destroy(struct super_block *sb,
++				struct ffs_epfile *epfiles, unsigned count)
+ {
+ 	struct ffs_epfile *epfile = epfiles;
++	struct dentry *root = sb->s_root;
+ 
+ 	for (; count; --count, ++epfile) {
+ 		BUG_ON(mutex_is_locked(&epfile->mutex));
+-		if (epfile->dentry) {
+-			simple_recursive_removal(epfile->dentry, NULL);
+-			epfile->dentry = NULL;
+-		}
++		simple_remove_by_name(root, epfile->name, NULL);
+ 	}
+ 
+ 	kfree(epfiles);
 
