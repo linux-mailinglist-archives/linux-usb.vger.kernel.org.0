@@ -1,153 +1,89 @@
-Return-Path: <linux-usb+bounces-30567-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30569-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB6B7C63E7F
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 12:47:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0756C64428
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 14:05:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BDEEB4EDC6A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 11:44:01 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 631EC38388F
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 12:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDCBE32B9B6;
-	Mon, 17 Nov 2025 11:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A57B132E756;
+	Mon, 17 Nov 2025 12:50:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e7u0Wa66"
+	dkim=pass (1024-bit key) header.d=ya.ru header.i=@ya.ru header.b="odLFDO+E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from forward500d.mail.yandex.net (forward500d.mail.yandex.net [178.154.239.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D805A32B984
-	for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 11:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53691367;
+	Mon, 17 Nov 2025 12:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763379825; cv=none; b=m2TaTkbw2xgwRLfVHN/QLIL7w1k1hCQ3E0O8dhUDH6HfoDtwvnqhveRX3sZG/G8IUF9R9GbJ9xcbtdo+3DAPPNsm1yUiSQHj9z+BTGGAchXv3IMfGtTreqEaToyEtfInejwo7tMK+qyf81bL38dNh6I3Sloevvowf3VbEPfzzts=
+	t=1763383859; cv=none; b=fExCR11RhQa3k9JcRmmRcausWEZ3pgBEtMAwO+7q59EdYgQLg4yQdzbcqAcPBPFPcCBSCl0WwUmGCzG53bp9khbY1/WTbG1fWRf+0j3LZkoFy0kmL+7CZDVE0H8GYia6wtmp3yeZPr8RGIzJ3snlGJtRu1x2iZXw5va3yPjfGB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763379825; c=relaxed/simple;
-	bh=Rbvc5BbDiJixM4UBS/J7eEAGkLVB9qe2XDrxnYBA90U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O5voLdty3ZmMGUx7kMsjz0RiwZCu/X57TgwIP1EfrWkgbFfehd9QwGSCGzeeBKmyGF+gx2p6bUQqlvtvMTZNZnp1B5fnZeIy4Ve8KOCWcGAeuAg7QEY6AtaEV3+W4Vc2bBHEMgRiBHXZxofU3peBrsqJgWxZJGrR++hGjgjeSQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e7u0Wa66; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763379823; x=1794915823;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Rbvc5BbDiJixM4UBS/J7eEAGkLVB9qe2XDrxnYBA90U=;
-  b=e7u0Wa66ISOJwkYJbWNxqL0HeZRaGeSSh3FaKC0XghzEYpCXltL2c+lq
-   3fT03krnHPLfd9mzzdXdrs8LWmgsczkuKNnqy22FYGyp15/BRcGMKdmza
-   ajGTLLY+eZnuwAth2OZ1c5XyssYGLi0PU8tppaCZxg6Mh2BlL6bGxDuam
-   oEJ4XVn2X0V0LN80a5z37ATwm7KTyhn+NC8w1lhPWfJX3EnmSG/lSEPKJ
-   3JHpRc4Ic2XuZr6X7bzH8i/Sddt8oaxEh15MxeTYyOFYZl2/Zst3a8/RU
-   ZiC0Yema4HyPkSo/0YtkODwrdCzVPT9PiKpT5O4GmU3SWok8vwYVuFsQY
-   w==;
-X-CSE-ConnectionGUID: dYlzvZkWRRKvHE7708Syrg==
-X-CSE-MsgGUID: dPO4WlFoQMOOANdwXtOqgw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="82763834"
-X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="82763834"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 03:43:43 -0800
-X-CSE-ConnectionGUID: ru5veAipRBGqL8k2A8MHDg==
-X-CSE-MsgGUID: ta+sVymtRfGbNvYroenEZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="191218376"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa010.fm.intel.com with ESMTP; 17 Nov 2025 03:43:41 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id D229898; Mon, 17 Nov 2025 12:43:40 +0100 (CET)
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
-To: mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 9/9] usb: xhci: remove duplicate '0x' prefix from DMA addresses
-Date: Mon, 17 Nov 2025 12:42:41 +0100
-Message-ID: <20251117114242.3507856-10-niklas.neronin@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251117114242.3507856-1-niklas.neronin@linux.intel.com>
-References: <20251117114242.3507856-1-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1763383859; c=relaxed/simple;
+	bh=HVE2+1GS1j9WF6hoQ0fkIetyp7tgoJZGuLeD1CUsztI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=OKssCdwEA5y9hgWhuPfO4PvCi5cnnlmiPNfKp03t4yJVcDLfmwNgNEvV1OyXJM7eKdb+KydUz1TvPr+qLCSSMvVnVqG85PEUlnZKJBsniKDj3ftqoAT6Fp/CxQg9th0+yU2iWqPCepPbbjD9abwPyHO2ro5GxUv5HkPb7LcEN0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ya.ru; spf=pass smtp.mailfrom=ya.ru; dkim=pass (1024-bit key) header.d=ya.ru header.i=@ya.ru header.b=odLFDO+E; arc=none smtp.client-ip=178.154.239.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ya.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ya.ru
+Received: from mail-nwsmtp-smtp-production-main-76.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-76.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:bcae:0:640:cb8d:0])
+	by forward500d.mail.yandex.net (Yandex) with ESMTPS id 6A6AE80BAA;
+	Mon, 17 Nov 2025 15:44:55 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-76.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id qiT0cq9L5eA0-CBVAMfSB;
+	Mon, 17 Nov 2025 15:44:54 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail;
+	t=1763383494; bh=HVE2+1GS1j9WF6hoQ0fkIetyp7tgoJZGuLeD1CUsztI=;
+	h=In-Reply-To:From:Date:References:To:Subject:Message-ID;
+	b=odLFDO+ELaTmuQ0z8QbjrsPHcXRAhyfXoQogvS+UhRf7jbaLiYnrxvdhKnkDigRa/
+	 fMuIZUbmMCpLIR2PU0AV5AyPcoHGyf4BJoCUAVRmGRfn8qEmNozQXZvFEqPStL+uoN
+	 x9toPB5Sw3j4SIPQQ+M156IbSgRlPVj1j6v9SiOo=
+Authentication-Results: mail-nwsmtp-smtp-production-main-76.iva.yp-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <45655b89-14db-4cae-b92f-118b7cbd8586@ya.ru>
+Date: Mon, 17 Nov 2025 15:44:52 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: cdc_ncm doesn't detect link unless ethtool is run (ASIX AX88179B)
+To: Oliver Neukum <oneukum@suse.com>, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1c3f0582-4c92-41b3-a3db-5158661d4e1a@ya.ru>
+ <701e5678-a992-45be-9be3-df68dfe14705@suse.com>
+Content-Language: en-US
+From: WGH <da-wgh@ya.ru>
+In-Reply-To: <701e5678-a992-45be-9be3-df68dfe14705@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Prefix "0x" is automatically added by '%pad'.
+On 11/15/25 15:33, Oliver Neukum wrote:
+> On 15.11.25 09:58, WGH wrote:
+>> Hello.
+>>
+>> I'm running Linux 6.17.7, and recently obtained a UGREEN 6 in 1 hub containing an AX88179B chip.
+>>
+>> By default, it uses the generic cdc_ncm driver, and it works mostly okay.
+>>
+>> The annoying problem I have is that most of the time the kernel doesn't notice that the link is up. ip link reports NO-CARRIER, network management daemon doesn't configure the interface, and so on.
+>
+> Hi,
+>
+> that strongly points to a race condition.
+> Could you try the attached diagnostic patch?
+>
+>     Regards
+>         Oliver
 
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
----
- drivers/usb/host/xhci-mem.c  | 8 ++++----
- drivers/usb/host/xhci-ring.c | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 0e7d1a174f83..3eb0ff27fc16 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -988,14 +988,14 @@ int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id,
- 	if (!dev->out_ctx)
- 		goto fail;
- 
--	xhci_dbg(xhci, "Slot %d output ctx = 0x%pad (dma)\n", slot_id, &dev->out_ctx->dma);
-+	xhci_dbg(xhci, "Slot %d output ctx = %pad (dma)\n", slot_id, &dev->out_ctx->dma);
- 
- 	/* Allocate the (input) device context for address device command */
- 	dev->in_ctx = xhci_alloc_container_ctx(xhci, XHCI_CTX_TYPE_INPUT, flags);
- 	if (!dev->in_ctx)
- 		goto fail;
- 
--	xhci_dbg(xhci, "Slot %d input ctx = 0x%pad (dma)\n", slot_id, &dev->in_ctx->dma);
-+	xhci_dbg(xhci, "Slot %d input ctx = %pad (dma)\n", slot_id, &dev->in_ctx->dma);
- 
- 	/* Initialize the cancellation and bandwidth list for each ep */
- 	for (i = 0; i < 31; i++) {
-@@ -2410,7 +2410,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 
- 	xhci->dcbaa->dma = dma;
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--		       "Device context base array address = 0x%pad (DMA), %p (virt)",
-+		       "Device context base array address = %pad (DMA), %p (virt)",
- 		       &xhci->dcbaa->dma, xhci->dcbaa);
- 
- 	/*
-@@ -2471,7 +2471,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 		goto fail;
- 
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocated command ring at %p", xhci->cmd_ring);
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "First segment DMA is 0x%pad",
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "First segment DMA is %pad",
- 		       &xhci->cmd_ring->first_seg->dma);
- 
- 	/*
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index a49043a39a4d..b04390f04347 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -746,7 +746,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	}
- 
- 	if ((ep->ep_state & SET_DEQ_PENDING)) {
--		xhci_warn(xhci, "Set TR Deq already pending, don't submit for 0x%pad\n",
-+		xhci_warn(xhci, "Set TR Deq already pending, don't submit for %pad\n",
- 			  &addr);
- 		return -EBUSY;
- 	}
-@@ -754,7 +754,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	/* This function gets called from contexts where it cannot sleep */
- 	cmd = xhci_alloc_command(xhci, false, GFP_ATOMIC);
- 	if (!cmd) {
--		xhci_warn(xhci, "Can't alloc Set TR Deq cmd 0x%pad\n", &addr);
-+		xhci_warn(xhci, "Can't alloc Set TR Deq cmd %pad\n", &addr);
- 		return -ENOMEM;
- 	}
- 
--- 
-2.50.1
+Nope, this patch doesn't help.
 
 
