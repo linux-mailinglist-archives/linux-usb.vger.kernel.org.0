@@ -1,73 +1,73 @@
-Return-Path: <linux-usb+bounces-30561-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30562-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32E86C63E76
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 12:47:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63041C63E25
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 12:43:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D0D4E4EACFA
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 11:43:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 0465C2450D
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 11:43:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE8232A3D7;
-	Mon, 17 Nov 2025 11:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578F7329E7B;
+	Mon, 17 Nov 2025 11:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YsnsIy9K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NPT6vnRz"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6144830F947
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F381C326D5F
 	for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 11:43:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763379820; cv=none; b=igVXfgc6EZMWyJFUGezTc15jG16mgaqijgxdQrFtIhXmYBluOU2gHxA/xBxWT/O75JZ9cE0P8xZp6Hzbtb3LGyMnJ3zrLgbS4BQd8tAuCsqePJj0ejwvtafEDyz9KIgwfUCXzAk9cLrfEx6Pb2Mx2RUDFuVcBJpMjn7f2AYxWG0=
+	t=1763379820; cv=none; b=ci2Dap6uzhmGm1nJfdpQdINfH5yAEpuUWdPVxl0c4C97IPLUrR19op+BnzvDnkq1fY7m/NFlvf3iA/B+U6cqrwK+VyHcJCK5iIVhYLb7B0OrtHQzyo6rkyF84eBD2Up+A+q6Mp+/D9eOZs9IuNh7nJ0BuKNuOt3f5nSL7mmq6Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763379820; c=relaxed/simple;
-	bh=tCJHQsz2XZp4fo+/dJIJsL5ZFLpPV+D8I34ik+LD2Tc=;
+	bh=5j628EGBQZaiq/m4BbrgwNNN3QRfxhrMARMyeBQNGvM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M9OzK1NV4PadYHzrRFll+qlHcqRaCxLuG6edserTwx2WuokC+oixZb05QoM4fT0GnxL81mJwT01EfxEchrjbV21kriUMU1R9NMalXrNODOM4r66QrSZsHGIck3eNKY3tolep0+mIGxHRl4v/q9x8XaLXIt3mxIX2q1Gr7igr+wE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YsnsIy9K; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=U+YFDfAtKukY4lP/VRkUAqJBjALxQdlPQ8zyfTjvWAqlYGHjobAyxIYKqBfEqE+6EkGjIK0SdciJOnwle7LBcdXezpaoEJTmLpc+nlemIPM3VzqsQoivTFiGtb0xJfTOSQTh846xrSLqvH/A1zNoxB8ppOyUhSwjpjEpDqiKEEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NPT6vnRz; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763379818; x=1794915818;
+  t=1763379819; x=1794915819;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tCJHQsz2XZp4fo+/dJIJsL5ZFLpPV+D8I34ik+LD2Tc=;
-  b=YsnsIy9KFA78JG1o8y2v4/j/qGdl0P3Xo0Bl69+N53rZLrrHDdRH/JYL
-   lrk+KdUpYqQdpndvr7DNdBW9/A/iL2pgCAeCYbIzlYb/V/FZPTHWuTPJ4
-   TK4ZmHDG/fre5aq1Qn/eEBJ5EUnYoV0g2tqaidzRoEE5888IDD9hNfJB1
-   97s9OmKLPbQnUR6feAttRNAFkZblyAnZXePNNVsVAkgS1dgSAktTR1ASK
-   zn4EBQLFKH6G/0+nCCYIIh67TE1LCXUPh6evctPflXtsscbFGDeH03Uu5
-   venfdG38QXUW0POmbQtgg3r1XQvY4gFgZ+kYFvHz1KACk2m3UO3siW3ms
-   g==;
-X-CSE-ConnectionGUID: fhE8V/EQTXOnLhS58FIB7g==
-X-CSE-MsgGUID: enncnOwQSRuKGiZXIZhLbA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="76726922"
+  bh=5j628EGBQZaiq/m4BbrgwNNN3QRfxhrMARMyeBQNGvM=;
+  b=NPT6vnRzbLvcYbYLdgpHR4CklIF+dQLvRqYlE537igiG5mB5fPLK06LC
+   hJs/ED1e+7XZLozuIwRMvYe/fG/TqvBVh3v5FxugfMDMs6sm3MsNc1mNj
+   JT/4/4GHqzspA35nppTyMNwPpcCpiDI6UD3sQ8gruGxmWqzdop7+7gWuP
+   REMnamxrs6VV3Vv5miStt2pQuIRma//lpov0J3QcCdRrHYtF4IrDHb1KH
+   yqdn5ZX6mC2ct3k7JXKICVZu4g3P59t5Iw2+qZi8jp0sMdpn/AfeQi462
+   NhVbzuhT5AeM5pCG0jlrPIlhqiG84NejAzi+va7ZzW6llhs2Abzp6Kjd6
+   w==;
+X-CSE-ConnectionGUID: tSAUQALZRjqEolUgt23PoA==
+X-CSE-MsgGUID: /GMj202oS+iCXV98FH22sg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="76726923"
 X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="76726922"
+   d="scan'208";a="76726923"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 03:43:38 -0800
-X-CSE-ConnectionGUID: Gpc/AFEHT4utTCHFcU/IvA==
-X-CSE-MsgGUID: E+kFBwk3QCq145eMk2Pjow==
+X-CSE-ConnectionGUID: daChGJMHS0m+a087TOIdMg==
+X-CSE-MsgGUID: cJ5/4KheRsqnwEeoc5bZMQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="189729277"
+   d="scan'208";a="189729280"
 Received: from black.igk.intel.com ([10.91.253.5])
   by orviesa010.jf.intel.com with ESMTP; 17 Nov 2025 03:43:37 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id B5A2496; Mon, 17 Nov 2025 12:43:35 +0100 (CET)
+	id 7A03E98; Mon, 17 Nov 2025 12:43:36 +0100 (CET)
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 To: mathias.nyman@linux.intel.com
 Cc: linux-usb@vger.kernel.org,
 	Niklas Neronin <niklas.neronin@linux.intel.com>,
 	Andy Shevchenko <andriy.shevchenko@intel.com>
-Subject: [PATCH 2/9] usb: xhci: clarify duplicate CMRT deletion on suspend/resume
-Date: Mon, 17 Nov 2025 12:42:34 +0100
-Message-ID: <20251117114242.3507856-3-niklas.neronin@linux.intel.com>
+Subject: [PATCH 3/9] usb: xhci: simplify CMRT initialization logic
+Date: Mon, 17 Nov 2025 12:42:35 +0100
+Message-ID: <20251117114242.3507856-4-niklas.neronin@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20251117114242.3507856-1-niklas.neronin@linux.intel.com>
 References: <20251117114242.3507856-1-niklas.neronin@linux.intel.com>
@@ -79,36 +79,67 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Compliance Mode Recovery Timer (CMRT) is deleted both during suspend
-and again during resume, which may appear redundant. Add a comment to
-explain why this is intentional.
+The function compliance_mode_recovery_timer_init() is called from
+xhci_init() because the Compliance Mode Recovery Timer (CMRT) must be set
+up before xhci_run() when the xhci driver is re-initialized.
 
-At the end of xhci_suspend(), the CMRT is removed from the timer queue.
-However, if the host controller lost power (e.g. during hibernation),
-the timer state is restored from a saved state when the system resumes.
-As a result, xhci_resume() must delete it before initializing a new one.
+To handle this case, the boolean flag 'comp_timer_running' was introduced
+to track whether xhci_run() had already been called, ensuring that
+xhci_resume() would not invoke compliance_mode_recovery_timer_init()
+a second time.
+
+This can be simplified by moving the 'done' label in xhci_resume() to
+after the compliance_mode_recovery_timer_init() call. With this change,
+the timer initialization runs only when the xhci driver has not been
+re-initialized, making the 'comp_timer_running' flag unnecessary and
+allowing it to be removed.
 
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 ---
- drivers/usb/host/xhci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/host/xhci.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 0cb45b95e4f5..2f64268cee5e 100644
+index 2f64268cee5e..281b17760416 100644
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -1147,6 +1147,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
- 	}
+@@ -1077,7 +1077,6 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+ 	u32			command, temp = 0;
+ 	struct usb_hcd		*hcd = xhci_to_hcd(xhci);
+ 	int			retval = 0;
+-	bool			comp_timer_running = false;
+ 	bool			pending_portevent = false;
+ 	bool			suspended_usb3_devs = false;
  
- 	if (power_lost) {
-+		/*
-+		 * Compliance Mode Recovery Timer is removed during xhci_suspend().
-+		 * However, hibernate saves CMRT prior to its deletion.
-+		 */
- 		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
- 				!(xhci_all_ports_seen_u0(xhci))) {
- 			timer_delete_sync(&xhci->comp_mode_recovery_timer);
+@@ -1193,7 +1192,6 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+ 		retval = xhci_init(hcd);
+ 		if (retval)
+ 			return retval;
+-		comp_timer_running = true;
+ 
+ 		xhci_dbg(xhci, "Start the primary HCD\n");
+ 		retval = xhci_run(hcd);
+@@ -1262,16 +1260,16 @@ int xhci_resume(struct xhci_hcd *xhci, bool power_lost, bool is_auto_resume)
+ 			usb_hcd_resume_root_hub(hcd);
+ 		}
+ 	}
+-done:
++
+ 	/*
+ 	 * If system is subject to the Quirk, Compliance Mode Timer needs to
+ 	 * be re-initialized Always after a system resume. Ports are subject
+ 	 * to suffer the Compliance Mode issue again. It doesn't matter if
+ 	 * ports have entered previously to U0 before system's suspension.
+ 	 */
+-	if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) && !comp_timer_running)
++	if (xhci->quirks & XHCI_COMP_MODE_QUIRK)
+ 		compliance_mode_recovery_timer_init(xhci);
+-
++done:
+ 	if (xhci->quirks & XHCI_ASMEDIA_MODIFY_FLOWCONTROL)
+ 		usb_asmedia_modifyflowcontrol(to_pci_dev(hcd->self.controller));
+ 
 -- 
 2.50.1
 
