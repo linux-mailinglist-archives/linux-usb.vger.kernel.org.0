@@ -1,238 +1,145 @@
-Return-Path: <linux-usb+bounces-30556-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30557-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF346C6304A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 10:00:58 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67537C6333A
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 10:38:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A1F63A987A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 09:00:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 682F4346C1D
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 09:32:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E11A3246E6;
-	Mon, 17 Nov 2025 09:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AACA328601;
+	Mon, 17 Nov 2025 09:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jB8SC/zV"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GW5Iv8+e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1B9322A00;
-	Mon, 17 Nov 2025 09:00:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A973327783
+	for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 09:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763370039; cv=none; b=RBQBXVzTDjFE7qm7a40UNLmv4tIvpyTpQLfwTJdrYpYRSjleAGfy5hYsph1ZB8ncGXk0Wv4fGSzJvRw8F4Qcc5nGGVM/Pi0Uwzc3lJxU8IHzYW4ktczUTzNX4ph0Wa3G4cEjUSTR6B5uJiiN9vMvSoZlIjf3sUYDAHdczwRV4ys=
+	t=1763371908; cv=none; b=pDjjRcOp0qlPh6dHdY/IcgAfUuTU6+siM+7pUtbMJ0N0rqdGyO+PRRs74MVKtTw2YlpWdQrr/V0Ld72HkQmcLFADSZM3o3BT6kLzFSlIasiuxD1yg04nFgjQ42oSrmjQBaIczh01QflT4Sul21trtUNNEUkSLBJfvluJRilqDKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763370039; c=relaxed/simple;
-	bh=CnZlH0vV28MtgAwWBkUyO60uq2qIefAgnKLr+qSpUNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kdl+2D+YIUJ3QsZkny7J4DO1Ud3oDLSMTKHmW5Sq2lZyQiYUhiFX55GucSk29ZpZ1hRT7CTyM86+dcfjf4wlQDMImC8cI2eqfntld9+1k9FklULu5MZnJtS61cNLF62BGC/p7lznKgsI0B9T23lHbfV6IVTJ6JpuLDvtWL0wzU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jB8SC/zV; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763370036; x=1794906036;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CnZlH0vV28MtgAwWBkUyO60uq2qIefAgnKLr+qSpUNg=;
-  b=jB8SC/zVhRP+ZDFektHFcb/xBd5o0iVcJgkJ4A9fQtA7CzJStKYrGK36
-   HPQdOVlgNcTC++PusoiMNFv4tEumPk8qn4Daa4G9Fu1b+9rBp/Ht0l+6p
-   +1eMFZRgZjWqzbhQyvOdbkz4cDBJm6MOvof+W4VDSRspgYwk8oA7Nskae
-   UJxbHvjLt5qIy14a0oxiuQjThsSMJs0zMOwC8erZ/p33uv+2K+OH0f9Ro
-   LuG2hs0+tlPGPVrTN4wzoZbo7cwTDljAG8E8GRVlQjXG+HIITcStRrNo7
-   nYarn4FzDlfXsml399To1JOM25rgSMGY6063NccSZTAPuR5TZGDIIcRY1
-   Q==;
-X-CSE-ConnectionGUID: /2zGxayCQei+V+FlHdcS+A==
-X-CSE-MsgGUID: hMPEe0QsSqC+dtxgKYY80Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="68984513"
-X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="68984513"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 01:00:35 -0800
-X-CSE-ConnectionGUID: JJkVzHRaS9qjo3ZDRsWQgA==
-X-CSE-MsgGUID: 4USdg9xTQgGWZrFWZjzC8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="190837199"
-Received: from mgoodin-mobl3.amr.corp.intel.com (HELO kuha.fi.intel.com) ([10.124.220.176])
-  by fmviesa009.fm.intel.com with SMTP; 17 Nov 2025 01:00:32 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 Nov 2025 11:00:29 +0200
-Date: Mon, 17 Nov 2025 11:00:29 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Fedor Pchelkin <boddah8794@gmail.com>,
-	Andrei Kuchynski <akuchynski@chromium.org>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	Myrrh Periwinkle <myrrhperiwinkle@qtmlabs.xyz>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] usb: typec: ucsi: Detect and skip duplicate
- altmodes from buggy firmware
-Message-ID: <aRrkLczHJzONnxtT@kuha.fi.intel.com>
-References: <20251111010541.145421-1-acelan.kao@canonical.com>
+	s=arc-20240116; t=1763371908; c=relaxed/simple;
+	bh=dXjhXxcv2DSmkvcEUVEFNc/Z7eefdDwfLTQ2w3IBppA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Yy6gn9cRmoJyH5C9oOoR/MgOq2hJmsglwKXqZN383LUYqpMsG5bOIyRhO5FzV3RtzD3Gt/9JetTppVwujZH3Sx4OMfKCQQiwA2Bn191Z0eMvDrb1Kn4W37IU8MhUkdjnIK6XcTHqiJKdyAYru9O5UGayXLb4BiXjqcwvanbAgo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GW5Iv8+e; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7b9387df58cso5622588b3a.3
+        for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 01:31:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1763371906; x=1763976706; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PmN9wGkOssBXv1ykVPZxf1HrUIUqtqrMhWFWgBL1Lrw=;
+        b=GW5Iv8+eaPSy+z+B9cAkGA5+s+RRblWm8jfMy98rsTX8casdzKxfug47n13miwi4vk
+         s8SoZ0D6zBjaHGsfttEZojb85aORnlfIVrcqgpf8Rb6AcvOLteOieAoTWNZg7qDMwmVr
+         rKopBIxDYGNAa/NxnriTFfBPE+naEKP87ekWc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763371906; x=1763976706;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PmN9wGkOssBXv1ykVPZxf1HrUIUqtqrMhWFWgBL1Lrw=;
+        b=E7FrSlRZ0c1kgLLu6Hmjw5o5+vLpAHjZt5uUveh3Aq5sxJ9j/9M2h9kVoaCglpKfO3
+         pFyc15Mg7DqNsmlSQpccUMSJYlRvjnSHuN2FBJpf5rlvKncYy+Ah+DpyMwDs6UG9b3+x
+         D8oFohYuTTEfldEJGHWIj/uVWpfO3ZUzch9gnxI1fl0W2AZHBpwAAS0inhFv4EmeMD5k
+         UCOcxSA4T/zkVVqBm+j709fo375QzawCC0IeMEju7uVnxgz0x3MKC1nU4x8NL37jEpZw
+         FRM7P/z5xlIPX63Ce5EgPIgc0JK5LvjfoYx4x+tFB0z+oPLpfJ93iv4JKaG+kAc2RBbh
+         /0iQ==
+X-Gm-Message-State: AOJu0YyBoiAjGI8a7gZubnv04G99nuJzuFMY2Ct6xM69t1OmnNF9whPy
+	+oB+eZA30PXM8BUegXKiZ4uQgQzE8SB6A9liM/gfpk6XyaJJNXqxxSs1NNxtQo1iZw==
+X-Gm-Gg: ASbGncsx02p1+Ur4O0G6QtNUl31rYHzYca8fd9tPH5Nb1fyeti6rORtjvug5AUEDGIB
+	zjNSMd23DYYiNpP0T0JNJuYiduYHcCtQ74FL768TcgeDnuctkM33w9AvLpy3WBfV//Fk40Yp39K
+	wwLfY961yhxc3OBCCnaSMFKAaLRM3h9x42kn/HyWsvXkgg6c8BNZT5eLXk7khQqM/5jG2s5Hfsd
+	uufJNY+iNg4FdCCYBjYMhHNJqZnYv6uvqOr8+1fFMGlNIghlEbF+RaqOTRRn8bB9z8qrODwB55Q
+	MSsqoJBpDTp/BfZd37EPH6ghWTHpbYSjTv862igxiSfJkFn2MVsp+x2bv/vdChSvZrkV9b126mW
+	bS7mL5YEegp0vdXHkOnKYDLCzZV/3Bx/+hpaO2ercdUbzLVl5/3sKnQguC0tHZtHJqXiCLq4yUl
+	r5B6c07PcFZZJRgMUJuz+MU/uLE+7ve1MORJ33e+TlRCU++TSxgK+Ltw5QQkJbjlkZgzUsFIND9
+	Slq/DHUubGzbqxoBMil3iJQ
+X-Google-Smtp-Source: AGHT+IETxgyi9b03me3vPqS7pPWEHDlziAJ7UGXQh1YuS8eYyyreuanLOo8tykqNPIeqBIhxsho52A==
+X-Received: by 2002:a05:6a00:c93:b0:7ab:653a:ca0e with SMTP id d2e1a72fcca58-7ba3b7a9fb0mr11046343b3a.23.1763371906545;
+        Mon, 17 Nov 2025 01:31:46 -0800 (PST)
+Received: from yuanhsinte-p620-1.tpe.corp.google.com ([2a00:79e0:201d:8:baac:e815:f422:b47b])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b927151380sm12530794b3a.38.2025.11.17.01.31.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Nov 2025 01:31:46 -0800 (PST)
+From: Hsin-Te Yuan <yuanhsinte@chromium.org>
+Date: Mon, 17 Nov 2025 17:31:43 +0800
+Subject: [PATCH] usb: typec: ucsi: Monitor connector change before getting
+ connector status
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251111010541.145421-1-acelan.kao@canonical.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251117-ucsi-v1-1-1dcbc5ea642b@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAH7rGmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDQ0Nz3dLk4kzdZKOUtFSLZAMDsxRzJaDSgqLUtMwKsDHRsbW1AEOw0Bl
+ WAAAA
+X-Change-ID: 20251117-ucsi-c2dfe8c006d7
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Hsin-Te Yuan <yuanhsinte@chromium.org>
+X-Mailer: b4 0.14.2
 
-Hi,
+Originally, the notification for connector change will be enabled after
+the first read of the connector status. Therefore, if the event happens
+during this window, it will be missing and make the status unsynced.
 
-Tue, Nov 11, 2025 at 09:05:39AM +0800, Chia-Lin Kao (AceLan) kirjoitti:
-> Some firmware implementations incorrectly return the same altmode
-> multiple times at different offsets when queried via UCSI_GET_ALTERNATE_MODES.
-> This causes sysfs duplicate filename errors and kernel call traces when
-> the driver attempts to register the same altmode twice:
-> 
->   sysfs: cannot create duplicate filename '/devices/.../typec/port0/port0.0/partner'
->   typec-thunderbolt port0-partner.1: failed to create symlinks
->   typec-thunderbolt port0-partner.1: probe with driver typec-thunderbolt failed with error -17
-> 
-> Detect duplicate altmodes by comparing SVID and VDO before registration.
-> If a duplicate is detected, skip it and print a single clean warning
-> message instead of generating a kernel call trace:
-> 
->   ucsi_acpi USBC000:00: con2: Firmware bug: duplicate partner altmode SVID 0x8087 (VDO 0x8087a043 vs 0x00000001) at offset 1, ignoring. Please update your system firmware.
-> 
-> This makes the error handling more user-friendly while still alerting
-> users to the firmware bug.
-> 
-> The duplicate detection logic is implemented in a reusable helper
-> function ucsi_altmode_is_duplicate() and used in ucsi_register_altmodes().
-> The fix applies to all three recipient types: partner (SOP), port (CON),
-> and plug (SOP_P) altmodes.
-> 
-> Fixes: a79f16efcd00 ("usb: typec: ucsi: Add support for the partner USB Modes")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 77 +++++++++++++++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 3f568f790f39..7b79e7491094 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -556,6 +556,74 @@ ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
->  	return 0;
->  }
->  
-> +/*
-> + * Check if an altmode is a duplicate. Some firmware implementations
-> + * incorrectly return the same altmode multiple times, causing sysfs errors.
-> + * Returns true if the altmode should be skipped.
-> + */
-> +static bool ucsi_altmode_is_duplicate(struct ucsi_connector *con, u8 recipient,
-> +				      const struct ucsi_altmode *alt_batch, int batch_idx,
-> +				      u16 svid, u32 vdo, int offset)
-> +{
-> +	int k;
-> +
-> +	/* Check for duplicates within the current batch first */
-> +	for (k = 0; k < batch_idx; k++) {
-> +		if (alt_batch[k].svid == svid && alt_batch[k].mid == vdo) {
-> +			dev_warn_once(con->ucsi->dev,
-> +				      "con%d: Firmware bug: duplicate altmode SVID 0x%04x in same response at offset %d, ignoring. Please update your system firmware.\n",
-> +				      con->num, svid, offset);
-> +			return true;
-> +		}
-> +	}
-> +
-> +	/* Check for duplicates in already registered altmodes */
-> +	if (recipient == UCSI_RECIPIENT_SOP) {
-> +		for (k = 0; k < UCSI_MAX_ALTMODES; k++) {
-> +			if (!con->partner_altmode[k])
-> +				break;
-> +			/*
-> +			 * Some buggy firmware returns the same SVID multiple times
-> +			 * with different VDOs. This causes duplicate device registration
-> +			 * and sysfs errors. Check SVID only for partner altmodes.
-> +			 */
-> +			if (con->partner_altmode[k]->svid == svid) {
+Enable the notification for connector change before getting the
+connector status to ensure the status is synced.
 
-I'm not sure this works. Some vendor specific modes always come in
-pairs. Check Apple for example. I think you always need to check the
-VID on top of the SVID.
+Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-> +				dev_warn(con->ucsi->dev,
-> +					 "con%d: Firmware bug: duplicate partner altmode SVID 0x%04x (VDO 0x%08x vs 0x%08x) at offset %d, ignoring. Please update your system firmware.\n",
-> +					 con->num, svid, con->partner_altmode[k]->vdo,
-> +					 vdo, offset);
-> +				return true;
-> +			}
-> +		}
-> +	} else if (recipient == UCSI_RECIPIENT_CON) {
-> +		for (k = 0; k < UCSI_MAX_ALTMODES; k++) {
-> +			if (!con->port_altmode[k])
-> +				break;
-> +			if (con->port_altmode[k]->svid == svid &&
-> +			    con->port_altmode[k]->vdo == vdo) {
-> +				dev_warn_once(con->ucsi->dev,
-> +					      "con%d: Firmware bug: duplicate port altmode SVID 0x%04x at offset %d, ignoring. Please update your system firmware.\n",
-> +					      con->num, svid, offset);
-> +				return true;
-> +			}
-> +		}
-> +	} else if (recipient == UCSI_RECIPIENT_SOP_P) {
-> +		for (k = 0; k < UCSI_MAX_ALTMODES; k++) {
-> +			if (!con->plug_altmode[k])
-> +				break;
-> +			if (con->plug_altmode[k]->svid == svid &&
-> +			    con->plug_altmode[k]->vdo == vdo) {
-> +				dev_warn_once(con->ucsi->dev,
-> +					      "con%d: Firmware bug: duplicate plug altmode SVID 0x%04x at offset %d, ignoring. Please update your system firmware.\n",
-> +					      con->num, svid, offset);
-> +				return true;
-> +			}
-> +		}
-> +	}
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 3f568f790f39b0271667e80816270274b8dd3008..07290cd85b618b22cb989151079707dbe9f578a7 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1565,7 +1565,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+ 	struct typec_capability *cap = &con->typec_cap;
+ 	enum typec_accessory *accessory = cap->accessory;
+ 	enum usb_role u_role = USB_ROLE_NONE;
+-	u64 command;
++	u64 command, ntfy;
+ 	char *name;
+ 	int ret;
+ 
+@@ -1659,6 +1659,15 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+ 		goto out;
+ 	}
+ 
++	/* Enable the notification for connector change before getting the connector status */
++	ntfy = UCSI_ENABLE_NTFY_CMD_COMPLETE | UCSI_ENABLE_NTFY_ERROR | UCSI_ENABLE_NTFY_CONNECTOR_CHANGE;
++	command = UCSI_SET_NOTIFICATION_ENABLE | ntfy;
++	ret = ucsi_send_command(ucsi, command, NULL, 0);
++	if (ret < 0) {
++		dev_warn(ucsi->dev, "con%d: failed to enable the notification for connector change\n",
++			 con->num);
++	}
++
+ 	/* Get the status */
+ 	ret = ucsi_get_connector_status(con, false);
+ 	if (ret) {
 
-        struct typec_altmode *altmodes;
+---
+base-commit: 6a23ae0a96a600d1d12557add110e0bb6e32730c
+change-id: 20251117-ucsi-c2dfe8c006d7
 
-        switch (recipient) {
-        case UCSI_RECIPIENT_CON:
-                altmodes = con->port->altmode;
-                break;
-        case UCSI_RECIPIENT_SOP_P:
-                altmodes = con->plug_altmode;
-                break;
-        ...
-
-> +
-> +	return false;
-> +}
-> +
->  static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
->  {
->  	int max_altmodes = UCSI_MAX_ALTMODES;
-> @@ -605,6 +673,15 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
->  			if (!alt[j].svid)
->  				return 0;
->  
-> +			/*
-> +			 * Check for duplicates in current batch and already
-> +			 * registered altmodes. Skip if duplicate found.
-> +			 */
-> +			if (ucsi_altmode_is_duplicate(con, recipient, alt, j,
-> +						      alt[j].svid, alt[j].mid,
-> +						      i - num + j))
-> +				continue;
-> +
->  			memset(&desc, 0, sizeof(desc));
->  			desc.vdo = alt[j].mid;
->  			desc.svid = alt[j].svid;
-> -- 
-> 2.43.0
-
-thanks,
-
+Best regards,
 -- 
-heikki
+Hsin-Te Yuan <yuanhsinte@chromium.org>
+
 
