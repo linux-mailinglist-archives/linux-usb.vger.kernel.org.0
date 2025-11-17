@@ -1,145 +1,160 @@
-Return-Path: <linux-usb+bounces-30557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30558-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67537C6333A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 10:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43D0BC63D89
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 12:37:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 682F4346C1D
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 09:32:32 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AE5AB35509A
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 11:31:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AACA328601;
-	Mon, 17 Nov 2025 09:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7006C30F939;
+	Mon, 17 Nov 2025 11:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GW5Iv8+e"
+	dkim=pass (1024-bit key) header.d=neukum.org header.i=@neukum.org header.b="fA79ULLv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from nx200.node01.secure-mailgate.com (nx200.node01.secure-mailgate.com [89.22.108.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A973327783
-	for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 09:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9605D266581;
+	Mon, 17 Nov 2025 11:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.22.108.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763371908; cv=none; b=pDjjRcOp0qlPh6dHdY/IcgAfUuTU6+siM+7pUtbMJ0N0rqdGyO+PRRs74MVKtTw2YlpWdQrr/V0Ld72HkQmcLFADSZM3o3BT6kLzFSlIasiuxD1yg04nFgjQ42oSrmjQBaIczh01QflT4Sul21trtUNNEUkSLBJfvluJRilqDKg=
+	t=1763379070; cv=none; b=ldHabMc36K1t9m/lHlsqxb/mM9Ztra9F0/KxwZvaLJNxlNiQefO2ytlA+kp+76oFhzi/xZNzsmB8WWE0ZKMRzEOLCgvcVszEZEj2VYLixhlHJKrQhwOWyzdhhYzEqmr/ZXUdTABv6fjmVFdsAl/ub5ltCmMm0S5bybtE1fGIY9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763371908; c=relaxed/simple;
-	bh=dXjhXxcv2DSmkvcEUVEFNc/Z7eefdDwfLTQ2w3IBppA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Yy6gn9cRmoJyH5C9oOoR/MgOq2hJmsglwKXqZN383LUYqpMsG5bOIyRhO5FzV3RtzD3Gt/9JetTppVwujZH3Sx4OMfKCQQiwA2Bn191Z0eMvDrb1Kn4W37IU8MhUkdjnIK6XcTHqiJKdyAYru9O5UGayXLb4BiXjqcwvanbAgo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GW5Iv8+e; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7b9387df58cso5622588b3a.3
-        for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 01:31:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1763371906; x=1763976706; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PmN9wGkOssBXv1ykVPZxf1HrUIUqtqrMhWFWgBL1Lrw=;
-        b=GW5Iv8+eaPSy+z+B9cAkGA5+s+RRblWm8jfMy98rsTX8casdzKxfug47n13miwi4vk
-         s8SoZ0D6zBjaHGsfttEZojb85aORnlfIVrcqgpf8Rb6AcvOLteOieAoTWNZg7qDMwmVr
-         rKopBIxDYGNAa/NxnriTFfBPE+naEKP87ekWc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763371906; x=1763976706;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PmN9wGkOssBXv1ykVPZxf1HrUIUqtqrMhWFWgBL1Lrw=;
-        b=E7FrSlRZ0c1kgLLu6Hmjw5o5+vLpAHjZt5uUveh3Aq5sxJ9j/9M2h9kVoaCglpKfO3
-         pFyc15Mg7DqNsmlSQpccUMSJYlRvjnSHuN2FBJpf5rlvKncYy+Ah+DpyMwDs6UG9b3+x
-         D8oFohYuTTEfldEJGHWIj/uVWpfO3ZUzch9gnxI1fl0W2AZHBpwAAS0inhFv4EmeMD5k
-         UCOcxSA4T/zkVVqBm+j709fo375QzawCC0IeMEju7uVnxgz0x3MKC1nU4x8NL37jEpZw
-         FRM7P/z5xlIPX63Ce5EgPIgc0JK5LvjfoYx4x+tFB0z+oPLpfJ93iv4JKaG+kAc2RBbh
-         /0iQ==
-X-Gm-Message-State: AOJu0YyBoiAjGI8a7gZubnv04G99nuJzuFMY2Ct6xM69t1OmnNF9whPy
-	+oB+eZA30PXM8BUegXKiZ4uQgQzE8SB6A9liM/gfpk6XyaJJNXqxxSs1NNxtQo1iZw==
-X-Gm-Gg: ASbGncsx02p1+Ur4O0G6QtNUl31rYHzYca8fd9tPH5Nb1fyeti6rORtjvug5AUEDGIB
-	zjNSMd23DYYiNpP0T0JNJuYiduYHcCtQ74FL768TcgeDnuctkM33w9AvLpy3WBfV//Fk40Yp39K
-	wwLfY961yhxc3OBCCnaSMFKAaLRM3h9x42kn/HyWsvXkgg6c8BNZT5eLXk7khQqM/5jG2s5Hfsd
-	uufJNY+iNg4FdCCYBjYMhHNJqZnYv6uvqOr8+1fFMGlNIghlEbF+RaqOTRRn8bB9z8qrODwB55Q
-	MSsqoJBpDTp/BfZd37EPH6ghWTHpbYSjTv862igxiSfJkFn2MVsp+x2bv/vdChSvZrkV9b126mW
-	bS7mL5YEegp0vdXHkOnKYDLCzZV/3Bx/+hpaO2ercdUbzLVl5/3sKnQguC0tHZtHJqXiCLq4yUl
-	r5B6c07PcFZZJRgMUJuz+MU/uLE+7ve1MORJ33e+TlRCU++TSxgK+Ltw5QQkJbjlkZgzUsFIND9
-	Slq/DHUubGzbqxoBMil3iJQ
-X-Google-Smtp-Source: AGHT+IETxgyi9b03me3vPqS7pPWEHDlziAJ7UGXQh1YuS8eYyyreuanLOo8tykqNPIeqBIhxsho52A==
-X-Received: by 2002:a05:6a00:c93:b0:7ab:653a:ca0e with SMTP id d2e1a72fcca58-7ba3b7a9fb0mr11046343b3a.23.1763371906545;
-        Mon, 17 Nov 2025 01:31:46 -0800 (PST)
-Received: from yuanhsinte-p620-1.tpe.corp.google.com ([2a00:79e0:201d:8:baac:e815:f422:b47b])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b927151380sm12530794b3a.38.2025.11.17.01.31.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 01:31:46 -0800 (PST)
-From: Hsin-Te Yuan <yuanhsinte@chromium.org>
-Date: Mon, 17 Nov 2025 17:31:43 +0800
-Subject: [PATCH] usb: typec: ucsi: Monitor connector change before getting
- connector status
+	s=arc-20240116; t=1763379070; c=relaxed/simple;
+	bh=dMPLPEo7NeoT5P5gpZhhrtUcLPahyTrxmVKRhKpw/NA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U70SkY3gIUoCvRO5FOy1HXsq/ibVeGUyraLPrV/cr2M653Pl2S2S8IMdhNfCHU0ARuf2He1RGZgmeKDbXqwEWLwJkJklxtLK9fdhAc3Tbk4p+PYBanoV+Ag/nq1oLxGXzp+vuYXzjs19u19WVHTnOHXi/9eWv+zYn5IcRTUbTWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=neukum.org; spf=pass smtp.mailfrom=neukum.org; dkim=pass (1024-bit key) header.d=neukum.org header.i=@neukum.org header.b=fA79ULLv; arc=none smtp.client-ip=89.22.108.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=neukum.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=neukum.org
+Received: from web268.dogado.net ([31.47.255.48])
+	by node01.secure-mailgate.com with esmtps  (TLS1.2) tls TLS_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.94.2)
+	(envelope-from <oliver@neukum.org>)
+	id 1vKxRb-003uMv-I9; Mon, 17 Nov 2025 12:30:57 +0100
+X-SecureMailgate-Identity: neukum_org;web268.dogado.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=neukum.org;
+	s=cloudpit; t=1763379050;
+	bh=JI+QvdjGVyITEA0RfWzECN2xWvs6UXPR+6ZncK26C4w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fA79ULLvj1hcQd9DG2SL6JDwFLGuHdDCE9VhxR+dIvPKRDUBAEwrcEPl8czwSi78s
+	 25uiA2G/+b9wcFGAvW3xdcu/3HfpRqq/cL7TV5kw1p6EpdiUlNMabZQ7DN3YF86FM2
+	 v9TpHC4RURnyPcsyCVDZg2x68DLKq3R6FWk89Jio=
+Received: from mailproxy6.dogado.net (mailproxy6.dogado.net [31.47.255.222])
+	(Authenticated sender: neukum_org)
+	by web268.dogado.net (Postfix) with ESMTPSA id 752EB28170E;
+	Mon, 17 Nov 2025 12:30:49 +0100 (CET)
+X-SecureMailgate-Identity: neukum_org;web268.dogado.net
+Message-ID: <dd8f4ffb-23b7-4dd7-909f-923ffcceddec@neukum.org>
+Date: Mon, 17 Nov 2025 12:30:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: issue with devm_ methods in disconnect and freeing memory in
+ btusb
+To: Raphael Pinsonneault-Thibeault <rpthibeault@gmail.com>
+Cc: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+ Marcel Holtmann <marcel@holtmann.org>, linux-bluetooth@vger.kernel.org,
+ Sachin Kamat <sachin.kamat@linaro.org>,
+ Alan Stern <stern@rowland.harvard.edu>, USB list <linux-usb@vger.kernel.org>
+References: <aee37797-a280-47ea-91ac-487ddc124ac7@neukum.org>
+ <aRdwvZdbCEap6vuP@rpthibeault-XPS-13-9305>
+Content-Language: en-US
+From: Oliver Neukum <oliver@neukum.org>
+In-Reply-To: <aRdwvZdbCEap6vuP@rpthibeault-XPS-13-9305>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251117-ucsi-v1-1-1dcbc5ea642b@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAH7rGmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDQ0Nz3dLk4kzdZKOUtFSLZAMDsxRzJaDSgqLUtMwKsDHRsbW1AEOw0Bl
- WAAAA
-X-Change-ID: 20251117-ucsi-c2dfe8c006d7
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Hsin-Te Yuan <yuanhsinte@chromium.org>
-X-Mailer: b4 0.14.2
+X-SecureMailgate-Domain: web268.dogado.net
+X-SecureMailgate-Username: 31.47.255.48
+Authentication-Results: secure-mailgate.com; auth=pass smtp.auth=31.47.255.48@web268.dogado.net
+X-SecureMailgate-Outgoing-Class: ham
+X-SecureMailgate-Outgoing-Evidence: Combined (0.21)
+X-Recommended-Action: accept
+X-Filter-ID: 9kzQTOBWQUFZTohSKvQbgI7ZDo5ubYELi59AwcWUnuW1MC2l0615hdYB4XqNvq6PSnwhGbMFMlwY
+ UjyOy0WUYCu2SmbhJN1U9FKs8X3+Nt2xp4kjpLhmBfm/1jJBevzt8RFB30Ars0yTQ/BrMn+JnS9N
+ dw2t5iMEflZxRNqEOiZizSh2f1rWsE3ZhyRR3OEyCtmoQhY2xrBb8C+tWUvqrqBKsSdhvd/J5sX5
+ daZjkYvhIO3OPuApEENzBIwyefYO48PjF2L3GVxHSajlUCf0ZlwxsU2jMuBNCauY+qeVRqcM2HNV
+ 91gBZQ/1Pbs8eo64MUJTS2Jsxpkx+IHIsDarm2U3gyy0nlbakKK22WPBaizjKzb+JrnOTbl8FYp7
+ CIWjverajYy2yB71RZy29b9HL7yliuqXZvH3i216cQum166kf/ld9xdbddNOGSuUXWv94PtbjLq6
+ i876g4nLFuIm206wm4jyRZgLX3JeO1DimxffguuWRCT69XJD0VIf1Sv/utspepH656ibybPLqHoc
+ HvpVQ/LHxirsNla37u2pHVFz3YiTLViM/bE4mY1qNrjcLCp1LDNBgpe9gGVcAseQ2CVZSXmdZ20d
+ kJlKTM6tEuf8vTtpnDhFVFAXN/ieSgx2ezpFj0BqG/t3fGWq+iiriGm2Olw7NFWD50jbuEX0mdKm
+ jhaG/t7hemlhJ+woX3OFSK+6iFsnJVr4u5Itb4fUJJQp+axrkf/Hwt0r5Ay1T6TlgTl6fJxyntEf
+ hZCKje4ZOPJmqKySiclosAYjq5HhmyPxWFVH+H26km3T4pig7/wWquhQPjfO5uXT7j9W7u8qTfD6
+ cxsdFKDXY5IAQfIM9f4GlAB0wMVfGTDZkKNlJZ7r2RGFJqPDOmAQctmh3zCCQYCC8/tQPot8U0pa
+ WNjxskVSyyHYFz3ke8hj2G27QEzg7f7w8jy1FzdiCx53QuIcgpyfZlw7Bq0We+9rBz5aplVUjpsk
+ cK4Q8fRu49B7wJHz9p/e5RuxqdsdqZOMXNAdnRq2H0n9jhG+7muBS1X+VskYoN/g2a11WysdYadd
+ IKZKTPmNuL7Typo2qFGjUhbtexo0PPTHzQ/IcgTHsStfGQmWU3DLBa/Iqb9nb/10bMgJueOkx1xF
+ stQZshD/AdZEOcH0BPQeQFSwUcz39j/B+9lut0mbmApkjKY46fp6K4xHLjrNjqR2xLJfNZLtGdAq
+ lVubB2rCMF6RoS5UV9u3bLZbcIJ0GR+Pe2PV4kBmHm8qxX2+VcRHEBh0q9VNLRGJDNhzVfdYAWUP
+ 9T27PHqOuBMcaL/3sdQ+aU4L1Br+MEtb1ej7FoCtQ+x7KqtJIKKlUnGMDHzvLQLaIP9xF4j6wA==
+X-Report-Abuse-To: spam@node04.secure-mailgate.com
+X-Complaints-To: abuse@node01.secure-mailgate.com
 
-Originally, the notification for connector change will be enabled after
-the first read of the connector status. Therefore, if the event happens
-during this window, it will be missing and make the status unsynced.
+On 14.11.25 19:11, Raphael Pinsonneault-Thibeault wrote:
+> On Fri, Nov 14, 2025 at 09:03:45AM +0100, Oliver Neukum wrote:
 
-Enable the notification for connector change before getting the
-connector status to ensure the status is synced.
 
-Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
----
- drivers/usb/typec/ucsi/ucsi.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+>> We must always be ready to handle any arbitrary order.
+>> The code in the second branch of the if statement used to be perfectly correct.
+>> The actual breaking commit was 98921dbd00c4e by introducing devm_kzalloc()
+>> for memory allocation. That ties the lifetime of memory to the binding
+>> of a driver to an interface. In hindsight in a driver that binds
+>> to multiple interfaces, this is problematic. Hence I would propose
+>> to just revert 98921dbd00c4e. It seems to me that we have discovered
+>> a design limitation in the devm_ methods. What do you think?
+>>
+>> 	Regards
+>> 		Oliver
+>>
+> 
+> Hi Oliver,
+> 
+> I was under the impression that tying the memory lifetime to the INTF
+> interface was intentional since 98921dbd00c4e was from 2012, hence my
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 3f568f790f39b0271667e80816270274b8dd3008..07290cd85b618b22cb989151079707dbe9f578a7 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1565,7 +1565,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 	struct typec_capability *cap = &con->typec_cap;
- 	enum typec_accessory *accessory = cap->accessory;
- 	enum usb_role u_role = USB_ROLE_NONE;
--	u64 command;
-+	u64 command, ntfy;
- 	char *name;
- 	int ret;
- 
-@@ -1659,6 +1659,15 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 		goto out;
- 	}
- 
-+	/* Enable the notification for connector change before getting the connector status */
-+	ntfy = UCSI_ENABLE_NTFY_CMD_COMPLETE | UCSI_ENABLE_NTFY_ERROR | UCSI_ENABLE_NTFY_CONNECTOR_CHANGE;
-+	command = UCSI_SET_NOTIFICATION_ENABLE | ntfy;
-+	ret = ucsi_send_command(ucsi, command, NULL, 0);
-+	if (ret < 0) {
-+		dev_warn(ucsi->dev, "con%d: failed to enable the notification for connector change\n",
-+			 con->num);
-+	}
-+
- 	/* Get the status */
- 	ret = ucsi_get_connector_status(con, false);
- 	if (ret) {
+No, it was not. And it would be kind of defeating the purpose
+of a devm-method. You use them to not have to free memory manually.
+In the disconnect() method of btusb we do free memory manually,
+only that we do so implicitly. And that is dangerous.
 
----
-base-commit: 6a23ae0a96a600d1d12557add110e0bb6e32730c
-change-id: 20251117-ucsi-c2dfe8c006d7
+> commit message in 23d22f2f7176:
+> 
+> -- quote --
+> 
+> There is a KASAN: slab-use-after-free read in btusb_disconnect().
+> Calling "usb_driver_release_interface(&btusb_driver, data->intf)" will
 
-Best regards,
--- 
-Hsin-Te Yuan <yuanhsinte@chromium.org>
+Was that obvious to you?
+
+> free the btusb data associated with the interface. The same data is
+> then used later in the function, hence the UAF.
+> 
+> Fix by moving the accesses to btusb data to before the data is free'd.
+> 
+> -- quote --
+> 
+> However, it seems that support for other interfaces was added
+> later, e.g. by 9d08f50401ac7, and out-of-band wakeup support even later
+> by fd913ef7ce619.
+
+ISO support is very old. It is necessary because you cannot
+change the altsetting of an interface that is in use. It is
+a design flaw of USB.
+> So, maybe it just wasn't considered?
+Indeed and hence I would just revert it.
+This is an accident waiting to happen.
+
+	Regards
+		Oliver
+
 
 
