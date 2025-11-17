@@ -1,161 +1,170 @@
-Return-Path: <linux-usb+bounces-30575-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30576-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F1E5C65043
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 17:01:35 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78C7FC65A61
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 19:03:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5DE764E81D6
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 16:01:11 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 891C8349E49
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 17:55:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF052BEFE7;
-	Mon, 17 Nov 2025 16:01:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B613B301026;
+	Mon, 17 Nov 2025 17:55:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="VpB8Qkkl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nIBbLzrD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F28125486D
-	for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 16:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2012C08BC
+	for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 17:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763395264; cv=none; b=o+9Nh5DngtYkzX0Cq5dX9OqyWBDLsh1BgMgdN0ljT4hq9KQQqeDL4QXIpL8uoW1HTq+Fu0I/Qtevr4C4dXYuRXeVzSRyIodjSOhxce2srB0ix38dEscytVCx+5foOLtrTSsQ5f2pRWFuj/Hd/4ajOC+ZuGzQQCVWdMuANb59IoU=
+	t=1763402136; cv=none; b=Hga06Ga83tQBQFkuVKcQrgjW9LeBV1wIbB2ANu3WiYH6XhDGgUOirYJzZZ9xPN+V1ivEI9o1nP7ySebSujZITReh1FGRH3uvk0TgPi2oCgJHc6wh1yybsekKt5+BwtmYQVGPmYEK1TvInt/aId1RJoWrr1DC0e2xtwTl/aWFObQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763395264; c=relaxed/simple;
-	bh=9RSsR5U4W7BTG6LYCPzyJndp7H3oEE0mKDMWjHJa7qM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=FAVsSnWg0TgiPXEhRCfk0vw23jwiGRU8/6OktPEL9LdydjtJ0P1/bdAt850+G2OS1kLcKBq+gvH4nTS31Kqg26dQXYO/kFzXf0CwYOpNfLOUV/zjJ8nLMR0XsgyNo2GiXV/IuVz9mrc0PQ3OfPi/4t859/L3hYpsD792xhR130A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=VpB8Qkkl; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20251117160059epoutp034e8f04b53c80811a97b490024e8b40a8~41qU6Z9qO1693516935epoutp03x
-	for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 16:00:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20251117160059epoutp034e8f04b53c80811a97b490024e8b40a8~41qU6Z9qO1693516935epoutp03x
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1763395259;
-	bh=I67VOD55Qfnuqg41UpFlurJxMf6XJBCy6vb0p2590/c=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=VpB8Qkklg7Y5B2IP/Eg3coJvDNgEdKAI7mtdUnWOV6ceQ0jDZ7w8YLxmTEPusAvK1
-	 oXkrXZ12mPKDqJBUxNTLhOdmOFUUPMYJN8QoLsoiJtiM0tg32BPCihphDDe4FU/Zu5
-	 FU1PwQDkLUQrG4m37wqQRT6+XZJRwRAXKT7uM9G0=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20251117160058epcas5p4719f72c4469d4e16f94ca8356b35d72a~41qUZD3Sp2883528835epcas5p4j;
-	Mon, 17 Nov 2025 16:00:58 +0000 (GMT)
-Received: from epcas5p4.samsung.com (unknown [182.195.38.94]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4d9CCF51Ndz6B9m6; Mon, 17 Nov
-	2025 16:00:57 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20251117160057epcas5p324eddf1866146216495186a50bcd3c01~41qS3iGLm2061120611epcas5p3J;
-	Mon, 17 Nov 2025 16:00:57 +0000 (GMT)
-Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20251117160055epsmtip1f7d3368895afa49a595ca513148de7b8~41qRBUXrh0499104991epsmtip1K;
-	Mon, 17 Nov 2025 16:00:54 +0000 (GMT)
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
-	akash.m5@samsung.com, h10.kim@samsung.com, eomji.oh@samsung.com,
-	alim.akhtar@samsung.com, thiagu.r@samsung.com, Selvarasu Ganesan
-	<selvarasu.g@samsung.com>, stable@vger.kernel.org
-Subject: [PATCH v2] usb: dwc3: gadget: Prevent EPs resource conflict during
- StartTransfer
-Date: Mon, 17 Nov 2025 21:29:13 +0530
-Message-ID: <20251117155920.643-1-selvarasu.g@samsung.com>
-X-Mailer: git-send-email 2.46.0.windows.1
+	s=arc-20240116; t=1763402136; c=relaxed/simple;
+	bh=N6lqB0C506xceuwh3bKRtocuDh0/5uJR4cQpVxCZT64=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Mu44l1BjxU7RCjyd5tsueM+rlScq3Zvlme+qwtlmBziWTD35+JIVelJR6kmfSnKtbY91f0cCDq8Vr0E6vm+iNC0eV3zJbBGmjuAoNZdn2Fwhvl0CdKFKA3idtUGhYUZEAjTGNQCp4wafXH1trZj5u/ymRdgdbx6aTX/G3koOIJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nIBbLzrD; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763402134; x=1794938134;
+  h=date:from:to:cc:subject:message-id;
+  bh=N6lqB0C506xceuwh3bKRtocuDh0/5uJR4cQpVxCZT64=;
+  b=nIBbLzrDOv2qnZdvCVbn4tRauVvqg6SpwcfwoNyjkr0klUKDXhBWM+9e
+   3116g/ozCmeQ52j+3v7xVsOCnFEYnofX3xNJCnAtk1ZqCZZJO5bWJWxVo
+   5QWX5taUeb+il7Y5LBOjPlRLuBvGFdTRdXJQuHF2B1GAX+aAb/qxAp9S/
+   0PKcGI4wnh5gPFnzvPVlLrfSs5jY74Uhtil8lZIhs6YaLG69i8xafOMDK
+   KfGriBLL103jH2M96vKiDA/Sr0G7Hr0jIEMF7N8hIsojnt/LnZp9o609d
+   pm9o0VQR3MwLfPXlPPAhWeZPc+ms4R/xXkrvVW8J70Nx+IkwqpvwF3ciO
+   w==;
+X-CSE-ConnectionGUID: H8CYj8H3RASob4k2O2Sw7Q==
+X-CSE-MsgGUID: erdkVzMnTlqyng2RwlitxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="90886659"
+X-IronPort-AV: E=Sophos;i="6.19,312,1754982000"; 
+   d="scan'208";a="90886659"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 09:55:33 -0800
+X-CSE-ConnectionGUID: FO1oemFmSlmT99t6hk2rWA==
+X-CSE-MsgGUID: fZ9HnHDOQk6dhul6PBJzaQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,312,1754982000"; 
+   d="scan'208";a="221174189"
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 17 Nov 2025 09:55:32 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vL3Rq-0000uJ-18;
+	Mon, 17 Nov 2025 17:55:30 +0000
+Date: Tue, 18 Nov 2025 01:55:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 2e558d86e0975fdfb048bd600e253993edc068fe
+Message-ID: <202511180100.s9uG6rBt-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20251117160057epcas5p324eddf1866146216495186a50bcd3c01
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20251117160057epcas5p324eddf1866146216495186a50bcd3c01
-References: <CGME20251117160057epcas5p324eddf1866146216495186a50bcd3c01@epcas5p3.samsung.com>
 
-The below “No resource for ep” warning appears when a StartTransfer
-command is issued for bulk or interrupt endpoints in
-`dwc3_gadget_ep_enable` while a previous StartTransfer on the same
-endpoint is still in progress. The gadget functions drivers can invoke
-`usb_ep_enable` (which triggers a new StartTransfer command) before the
-earlier transfer has completed. Because the previous StartTransfer is
-still active, `dwc3_gadget_ep_disable` can skip the required
-`EndTransfer` due to `DWC3_EP_DELAY_STOP`, leading to  the endpoint
-resources are busy for previous StartTransfer and warning ("No resource
-for ep") from dwc3 driver.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 2e558d86e0975fdfb048bd600e253993edc068fe  Merge tag 'usb-serial-6.18-rc6' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
 
-To resolve this, a check is added to `dwc3_gadget_ep_enable` that
-checks the `DWC3_EP_TRANSFER_STARTED` flag before issuing a new
-StartTransfer. By preventing a second StartTransfer on an already busy
-endpoint, the resource conflict is eliminated, the warning disappears,
-and potential kernel panics caused by `panic_on_warn` are avoided.
+elapsed time: 7503m
 
-------------[ cut here ]------------
-dwc3 13200000.dwc3: No resource for ep1out
-WARNING: CPU: 0 PID: 700 at drivers/usb/dwc3/gadget.c:398 dwc3_send_gadget_ep_cmd+0x2f8/0x76c
-Call trace:
- dwc3_send_gadget_ep_cmd+0x2f8/0x76c
- __dwc3_gadget_ep_enable+0x490/0x7c0
- dwc3_gadget_ep_enable+0x6c/0xe4
- usb_ep_enable+0x5c/0x15c
- mp_eth_stop+0xd4/0x11c
- __dev_close_many+0x160/0x1c8
- __dev_change_flags+0xfc/0x220
- dev_change_flags+0x24/0x70
- devinet_ioctl+0x434/0x524
- inet_ioctl+0xa8/0x224
- sock_do_ioctl+0x74/0x128
- sock_ioctl+0x3bc/0x468
- __arm64_sys_ioctl+0xa8/0xe4
- invoke_syscall+0x58/0x10c
- el0_svc_common+0xa8/0xdc
- do_el0_svc+0x1c/0x28
- el0_svc+0x38/0x88
- el0t_64_sync_handler+0x70/0xbc
- el0t_64_sync+0x1a8/0x1ac
+configs tested: 77
+configs skipped: 1
 
-Fixes: a97ea994605e ("usb: dwc3: gadget: offset Start Transfer latency for bulk EPs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
----
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Changes in v2:
-- Removed change-id.
-- Updated commit message.
-Link to v1: https://lore.kernel.org/linux-usb/20251117152812.622-1-selvarasu.g@samsung.com/
----
- drivers/usb/dwc3/gadget.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+tested configs:
+alpha                   allnoconfig    gcc-15.1.0
+alpha                  allyesconfig    gcc-15.1.0
+arc                    allmodconfig    gcc-15.1.0
+arc                     allnoconfig    gcc-15.1.0
+arc                    allyesconfig    gcc-15.1.0
+arc         randconfig-001-20251113    gcc-8.5.0
+arc         randconfig-002-20251113    gcc-8.5.0
+arm                     allnoconfig    clang-22
+arm         randconfig-001-20251113    gcc-10.5.0
+arm         randconfig-002-20251113    clang-22
+arm         randconfig-003-20251113    clang-22
+arm         randconfig-004-20251113    clang-22
+arm64                   allnoconfig    gcc-15.1.0
+csky                   allmodconfig    gcc-15.1.0
+csky                    allnoconfig    gcc-15.1.0
+csky                   allyesconfig    gcc-15.1.0
+hexagon                allmodconfig    clang-17
+hexagon                 allnoconfig    clang-22
+hexagon                allyesconfig    clang-22
+hexagon     randconfig-001-20251113    clang-22
+hexagon     randconfig-002-20251113    clang-22
+i386                    allnoconfig    gcc-14
+loongarch               allnoconfig    clang-22
+loongarch              allyesconfig    clang-22
+loongarch   randconfig-001-20251113    gcc-15.1.0
+loongarch   randconfig-002-20251113    clang-22
+m68k                   allmodconfig    gcc-15.1.0
+m68k                    allnoconfig    gcc-15.1.0
+m68k                   allyesconfig    gcc-15.1.0
+microblaze              allnoconfig    gcc-15.1.0
+mips                    allnoconfig    gcc-15.1.0
+mips                   allyesconfig    gcc-15.1.0
+nios2                  allmodconfig    gcc-11.5.0
+nios2                   allnoconfig    gcc-11.5.0
+nios2                  allyesconfig    gcc-11.5.0
+nios2       randconfig-001-20251113    gcc-8.5.0
+nios2       randconfig-002-20251113    gcc-11.5.0
+openrisc               allmodconfig    gcc-15.1.0
+openrisc                allnoconfig    gcc-15.1.0
+openrisc               allyesconfig    gcc-15.1.0
+parisc                 allmodconfig    gcc-15.1.0
+parisc                  allnoconfig    gcc-15.1.0
+parisc                 allyesconfig    gcc-15.1.0
+parisc      randconfig-001-20251113    gcc-8.5.0
+parisc      randconfig-002-20251113    gcc-14.3.0
+powerpc                 allnoconfig    gcc-15.1.0
+powerpc     randconfig-001-20251113    clang-22
+powerpc     randconfig-002-20251113    clang-22
+powerpc64   randconfig-001-20251113    clang-22
+powerpc64   randconfig-002-20251113    clang-22
+riscv                  allmodconfig    clang-22
+riscv                   allnoconfig    gcc-15.1.0
+riscv                  allyesconfig    clang-16
+s390                   allmodconfig    clang-18
+s390                    allnoconfig    clang-22
+s390                   allyesconfig    gcc-15.1.0
+sh                     allmodconfig    gcc-15.1.0
+sh                      allnoconfig    gcc-15.1.0
+sh                     allyesconfig    gcc-15.1.0
+sparc                  allmodconfig    gcc-15.1.0
+sparc                   allnoconfig    gcc-15.1.0
+sparc                  allyesconfig    gcc-15.1.0
+sparc64                allmodconfig    clang-22
+sparc64                allyesconfig    gcc-15.1.0
+um                     allmodconfig    clang-19
+um                      allnoconfig    clang-22
+um                     allyesconfig    gcc-14
+x86_64                  allnoconfig    clang-20
+x86_64                        kexec    clang-20
+x86_64                     rhel-9.4    clang-20
+x86_64                 rhel-9.4-bpf    gcc-14
+x86_64                rhel-9.4-func    clang-20
+x86_64          rhel-9.4-kselftests    clang-20
+x86_64               rhel-9.4-kunit    gcc-14
+x86_64                 rhel-9.4-ltp    gcc-14
+xtensa                  allnoconfig    gcc-15.1.0
+xtensa                 allyesconfig    gcc-15.1.0
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 1f67fb6aead5..8d3caa71ea12 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -963,8 +963,9 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
- 	 * Issue StartTransfer here with no-op TRB so we can always rely on No
- 	 * Response Update Transfer command.
- 	 */
--	if (usb_endpoint_xfer_bulk(desc) ||
--			usb_endpoint_xfer_int(desc)) {
-+	if ((usb_endpoint_xfer_bulk(desc) ||
-+			usb_endpoint_xfer_int(desc)) &&
-+			!(dep->flags & DWC3_EP_TRANSFER_STARTED)) {
- 		struct dwc3_gadget_ep_cmd_params params;
- 		struct dwc3_trb	*trb;
- 		dma_addr_t trb_dma;
--- 
-2.34.1
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
