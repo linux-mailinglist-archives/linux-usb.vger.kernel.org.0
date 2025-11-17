@@ -1,227 +1,150 @@
-Return-Path: <linux-usb+bounces-30570-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30571-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF230C64A2B
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 15:25:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F242AC64BBF
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 15:56:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E9367356BC3
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 14:24:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id ABEF528BAD
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 14:56:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 487D3333432;
-	Mon, 17 Nov 2025 14:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9125335BC6;
+	Mon, 17 Nov 2025 14:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="mO2AZ5vd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4334E1EEA55
-	for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 14:24:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E5832826E
+	for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 14:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763389473; cv=none; b=Z/IyX95pZFAs6TPh6F18zDDsG9y//EBQJSDQFAAvwU8uQWDItkNsGqpJi0ux5B7v2iDS0MxTeb4gEb/GPtn68RRQsEK4TG8kHIHgk4qOjGK7kYcdZj/6tj4jTFOO+W2cdg8NR4ti4Aif1aVGvjb79k48R9DrJPJ9Gqe61zLEIvg=
+	t=1763391384; cv=none; b=Oxd00DtZLbInViIFKtuoXfTA4hwTmhyWztAHm6/kFrd9La4i+rCoF7xqM4LfnpPFjDMiwUjyn+VOrSKDDrI9c72Zv65V/lWj63mKb2AIw4ZYT92oSr7XVBZv4eQ8LwT62Km4+4SH+abwh3iW4DhODnuOmyy38MAccuGK0b2yJ80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763389473; c=relaxed/simple;
-	bh=+WnHARyZtydI4Bj4wx3QFcE2kybwmprPbxnEnrPT52Q=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Gm42IUJ9zBtIAh0D8dHQJoOPKzDexrT8OF+Ze442j6t8fZWI2JZCHTcQ2Ji4SIi8HuExVZQi7zygqKw3mTJgZP8eN68blalfVDmanfQ4Y9HBcwMbxYt9qrFOhYw0ANcJY557+0OW6Zfg1t8Q9aBMmsn2sLj4XvaMD+dZAEjuGjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-432fb58f876so124382715ab.1
-        for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 06:24:31 -0800 (PST)
+	s=arc-20240116; t=1763391384; c=relaxed/simple;
+	bh=FUW7FF8r1W3YYL9VmYQ8ZQgxK2I4bKD568Bof2i6gC4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RJo7iNXRaB8D9WfbikX7yhAPLlEL0aYQKk/JLRwoSfiNDJJCWTU4y+NdbEO6q3Y3oBXS4GDIe9wkChEhmDU7P02zUbVhmi5QBBg4JnBNSdOYzLbpf8wpu6pLSNFir3wKTrQqx1r8jq1YXSf9Mpd0a+RzXPReHYojlVFNIhHBUp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=mO2AZ5vd; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8b272a4ca78so597241285a.1
+        for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 06:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1763391381; x=1763996181; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bDTMAjFTHZZURat4atsXS5dyJJHx/gXD6vpgW9NtTRs=;
+        b=mO2AZ5vdktTvwcCvqqpT8Vbtd0rYhceDoYeaOPGl2USzdCHvn/Gh7qetG7VRvfeQG8
+         SsTmsU2M92Oal7RLC5m/0cuhF2ffeTQqzisFEeFFw67Uy3ir2Qv74Cv93ebhA2X84i4f
+         uJ+Fqx7e7zaTHUEoT3sJXaiOA2lbql/9MpWsFLjre8CJx1Ob/1uc4hX5ARbfr6VCIDUr
+         MTx5TPHfcVXnjl6Oz7bDx6rIu0KeX5ic2ta0o4t00wSpsZXMo2PQBr5xjwDZ6PB5/e83
+         O91oSIhon2bSdcxTtJKHllEP3AtWSNLmPB/giJHIu+n5gYFNBkP0j4IPY1D1x/83RG1z
+         rj6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763389470; x=1763994270;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TroKSSOOY32YSuyTmBNMMILgpi/Ky4EqsVpoXNyy8L4=;
-        b=UKtG6j3wK8Kz3NtqxmoFIrq/7V7NM39mI3nlqdXz2REHG7jGybSiQS0HXDcD2Xc70A
-         4KhUhEIoxMpxmo3pgRCbxSM0pwnaztBsJNl0D2u3h1OzuGUZxFha6nNvwbWRiKAhmJTT
-         YVh2dC5yw4/2zs91rmmOkWeOiY4YEwmk63AM0C3bH/O2Z0f4gMTb7lh3Ax+TqNkPCoBf
-         r8Af6ioVoZ1CpAnPhMMOACQZNWHZ6ORliC6jjgo0atQdKdqJIYp9BxQYSVItZw2vaF6Q
-         ySoyKXWudF7/CHkzdwse87bLt7xPMgbfRwEkp1N8njSGuxC+PnL7z6/EU4C4iQr7Pr+4
-         kN+g==
-X-Forwarded-Encrypted: i=1; AJvYcCVvYui6oSg+v9eXf6m0Sa11bpkQOsIGkcXhIfDbIXEdnkkNV/rr+5PsvBF7+O2dg7peLVIZZ2srVUg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUEaYhHEOpm+PZvH4wFAmXkierofmmZXxV91d56N/N5nrQrFbE
-	/l/P8AKRIJvzmEN4eYhezExAAdYXlqGxiaeswgRn8MBb8PH2BFs+pOqbqTDU8bHuD7Q9C0ufRWE
-	riAZeWqW75NpkS6u2nN5CM2KYrqYCw9YAOzRLkHaSvlJjh7YB7ddy/yvY5Zg=
-X-Google-Smtp-Source: AGHT+IEQkT1KcZ/RnyNM7F0CuS3t9HPv2teDm+oZFDsOR2tvuvSHefwFo7D0TP62D+CKHT1/OwGORuLrSVYAuTuaxqpNR+yoBtT8
+        d=1e100.net; s=20230601; t=1763391381; x=1763996181;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bDTMAjFTHZZURat4atsXS5dyJJHx/gXD6vpgW9NtTRs=;
+        b=hMPvtndrvWHly+e/0EBkYUtle+iUMwZlli1Yk0qDBsLasTp2jIv3Vu9gaSWVFyTP7Y
+         OfQVwecoBprA3GX2GS/K/6Bv6s5JlzBEwt97XPjZixaKuYb+JBpgL781Sjpa407P+9zf
+         JfkxxRdhVcx7SwPoCjLDdZcig66WKzwqFccuz5AAyWRG7dPB20N29KrutTTq4LYD3ZQM
+         4hL/PdMOQqZtRK6KObUBBxTXksXILFwg8+c9eObVHJyT131hRVmXFp3u0gtdY2UoJfF3
+         A8uX5kHXp4KadSZa3zW0CaRKW6qqYSPp1a+kBL5AtRqL5i1h+Ush+rz7aND85KgB1/7P
+         4siQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW5yyxa5nDbIDnDKm6mH1BomYs2rV2jHgpO9SnivrnTBzMKJ8JS2P3SmCSN9igOfrsvjDchm0bBr3A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBdtODoMuw9axVeUZWkVKauy75E75vh//9jtfGoilSpnN2tMNi
+	q0crauK8EtBTRbvGZ3Rsp52XuZ9x3U1NYclKWWuSrETcqzzu0paJSMC+KsDlCANZ8A==
+X-Gm-Gg: ASbGncvynMreCPdfa3/QYveaap5F+OEbYoq24Glx82jI3U12KtMdSEsK+fLjKULwfiV
+	SoksQucY7tWObwBKJyGkn/LLeV/yt2SF3sCV9ifHYxnmzyECU2/yxgVpppBqiqVaMwj3ltpAehA
+	a+KetC8sNn40Eno/R4VwWXV1pCbj9j7ky3etZgHVk9S9uckz+d3VkYk7GWIQROAdLHMIVxGJJRN
+	TJila6ipy9LL1CODrgfuR6Tv0crXEWhTZSTuGahfv7TcQ3pGU/It2rWWLyq2bl9ioseVmsWp0V7
+	xjPkFsEGZ64EaexaowZB/V7fvCQ1WsmmPgZ8OzLXSjcv+84ZDSNARJkxwg1pV2hnCBkTzGouKsR
+	7Fy0/di4cButCYsMKboUmCXfO54nSBqB8qBxEdRysIjdtLXggcv3FWuixYg17HIwcAWqZy8199N
+	zrXGcDWbe4ZB4qOGEogw7Hx+Wm1XDdyw==
+X-Google-Smtp-Source: AGHT+IEA4s9TEMA/DC/kZYt/NdkfOC8lgCBVVGJx2NH4cSc3zU3y7yNtT3OeFcpvLBqvdCfUiBKB3w==
+X-Received: by 2002:ac8:5805:0:b0:4ee:1e82:e3f4 with SMTP id d75a77b69052e-4ee1e82e6a9mr56880141cf.64.1763391381300;
+        Mon, 17 Nov 2025 06:56:21 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ede88799bbsm84283071cf.34.2025.11.17.06.56.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Nov 2025 06:56:20 -0800 (PST)
+Date: Mon, 17 Nov 2025 09:56:18 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Ma Ke <make24@iscas.ac.cn>, Vladimir Zapolskiy <vz@mleia.com>,
+	piotr.wojtaszczyk@timesys.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stigge@antcom.de,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] USB: ohci-nxp: Fix error handling in ohci-hcd-nxp
+ driver
+Message-ID: <9834be77-29e0-4a65-93f6-b61bf724f922@rowland.harvard.edu>
+References: <20251117013428.21840-1-make24@iscas.ac.cn>
+ <4fe5b63e-072c-419c-a1b9-bc21aec7e083@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3389:b0:433:74ba:8bf5 with SMTP id
- e9e14a558f8ab-4348c9496e4mr153121245ab.23.1763389470497; Mon, 17 Nov 2025
- 06:24:30 -0800 (PST)
-Date: Mon, 17 Nov 2025 06:24:30 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <691b301e.a70a0220.f6df1.0011.GAE@google.com>
-Subject: [syzbot] [bluetooth?] [usb?] memory leak in __hci_cmd_sync_sk
-From: syzbot <syzbot+f098d64cc684b8dbaf65@syzkaller.appspotmail.com>
-To: johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, luiz.dentz@gmail.com, 
-	marcel@holtmann.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4fe5b63e-072c-419c-a1b9-bc21aec7e083@app.fastmail.com>
 
-Hello,
+On Mon, Nov 17, 2025 at 09:53:21AM +0100, Arnd Bergmann wrote:
+> On Mon, Nov 17, 2025, at 02:34, Ma Ke wrote:
+> > When obtaining the ISP1301 I2C client through the device tree, the
+> > driver does not release the device reference in the probe failure path
+> > or in the remove function. This could cause a reference count leak,
+> > which may prevent the device from being properly unbound or freed,
+> > leading to resource leakage.
+> >
+> > Fix this by storing whether the client was obtained via device tree
+> > and only releasing the reference in that case.
+> >
+> > Found by code review.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
+> > Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+> 
+> The patch looks fine in principle, however I don't see any way
+> this driver would be probed without devicetree, and I think
+> it would be better to remove all the traces of the pre-DT
+> logic in it.
+> 
+> The lpc32xx platform was converted to DT back in 2012, so
+> any reference to the old variant is dead code. Something like
+> the patch below should work here.
+> 
+> Other thoughts on this driver, though I I'm not sure anyone
+> is going to have the energy to implement these:
+> 
+>  - the reference to isp1301_i2c_client should be kept in
+>    the hcd private data, after allocating a structure, by
+>    setting driver->hcd_priv_size.
+>  - instead of looking for the i2c device, I would suppose
+>    it should look for a usb_phy instead, as there is no
+>    guarantee on the initialization being ordered at the
+>    moment.
+>  - instead of a usb_phy, the driver should probably use
+>    a generic phy (a much larger rework).
 
-syzbot found the following issue on:
+Considering what the comments at the start of the file say:
 
-HEAD commit:    e927c520e1ba Merge tag 'loongarch-fixes-6.18-1' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10158d32580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cb128cd5cb439809
-dashboard link: https://syzkaller.appspot.com/bug?extid=f098d64cc684b8dbaf65
-compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1782c914580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10a5f0b4580000
+ * Currently supported OHCI host devices:
+ * - NXP LPC32xx
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b755c257d71b/disk-e927c520.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b906cb4856d7/vmlinux-e927c520.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/bb3525aba146/bzImage-e927c520.xz
+ * NOTE: This driver does not have suspend/resume functionality
+ * This driver is intended for engineering development purposes only
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f098d64cc684b8dbaf65@syzkaller.appspotmail.com
+I wonder whether any existing systems actually use this driver.
 
-BUG: memory leak
-unreferenced object 0xffff888112c22900 (size 240):
-  comm "kworker/u9:1", pid 5133, jiffies 4294947154
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace (crc 6c5ee80a):
-    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
-    slab_post_alloc_hook mm/slub.c:4983 [inline]
-    slab_alloc_node mm/slub.c:5288 [inline]
-    kmem_cache_alloc_node_noprof+0x36f/0x5e0 mm/slub.c:5340
-    __alloc_skb+0x203/0x240 net/core/skbuff.c:660
-    alloc_skb include/linux/skbuff.h:1383 [inline]
-    bt_skb_alloc include/net/bluetooth/bluetooth.h:510 [inline]
-    hci_cmd_sync_alloc+0x30/0x140 net/bluetooth/hci_sync.c:58
-    hci_cmd_sync_add net/bluetooth/hci_sync.c:99 [inline]
-    __hci_cmd_sync_sk+0x84/0x290 net/bluetooth/hci_sync.c:168
-    __hci_cmd_sync_ev+0x3e/0x50 net/bluetooth/hci_sync.c:250
-    send_hci_cmd_sync+0x5e/0xf0 net/bluetooth/mgmt.c:2615
-    hci_cmd_sync_work+0xd5/0x160 net/bluetooth/hci_sync.c:332
-    process_one_work+0x26b/0x620 kernel/workqueue.c:3263
-    process_scheduled_works kernel/workqueue.c:3346 [inline]
-    worker_thread+0x2c4/0x4f0 kernel/workqueue.c:3427
-    kthread+0x15b/0x310 kernel/kthread.c:463
-    ret_from_fork+0x210/0x240 arch/x86/kernel/process.c:158
-    ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-BUG: memory leak
-unreferenced object 0xffff88810b0ee3c0 (size 704):
-  comm "kworker/u9:1", pid 5133, jiffies 4294947154
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace (crc 4e765d9f):
-    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
-    slab_post_alloc_hook mm/slub.c:4983 [inline]
-    slab_alloc_node mm/slub.c:5288 [inline]
-    kmem_cache_alloc_node_noprof+0x36f/0x5e0 mm/slub.c:5340
-    kmalloc_reserve+0xe6/0x180 net/core/skbuff.c:579
-    __alloc_skb+0xd4/0x240 net/core/skbuff.c:670
-    alloc_skb include/linux/skbuff.h:1383 [inline]
-    bt_skb_alloc include/net/bluetooth/bluetooth.h:510 [inline]
-    hci_cmd_sync_alloc+0x30/0x140 net/bluetooth/hci_sync.c:58
-    hci_cmd_sync_add net/bluetooth/hci_sync.c:99 [inline]
-    __hci_cmd_sync_sk+0x84/0x290 net/bluetooth/hci_sync.c:168
-    __hci_cmd_sync_ev+0x3e/0x50 net/bluetooth/hci_sync.c:250
-    send_hci_cmd_sync+0x5e/0xf0 net/bluetooth/mgmt.c:2615
-    hci_cmd_sync_work+0xd5/0x160 net/bluetooth/hci_sync.c:332
-    process_one_work+0x26b/0x620 kernel/workqueue.c:3263
-    process_scheduled_works kernel/workqueue.c:3346 [inline]
-    worker_thread+0x2c4/0x4f0 kernel/workqueue.c:3427
-    kthread+0x15b/0x310 kernel/kthread.c:463
-    ret_from_fork+0x210/0x240 arch/x86/kernel/process.c:158
-    ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-BUG: memory leak
-unreferenced object 0xffff888112c22b00 (size 240):
-  comm "kworker/u9:1", pid 5133, jiffies 4294947360
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace (crc a204b710):
-    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
-    slab_post_alloc_hook mm/slub.c:4983 [inline]
-    slab_alloc_node mm/slub.c:5288 [inline]
-    kmem_cache_alloc_node_noprof+0x36f/0x5e0 mm/slub.c:5340
-    __alloc_skb+0x203/0x240 net/core/skbuff.c:660
-    alloc_skb include/linux/skbuff.h:1383 [inline]
-    bt_skb_alloc include/net/bluetooth/bluetooth.h:510 [inline]
-    hci_cmd_sync_alloc+0x30/0x140 net/bluetooth/hci_sync.c:58
-    hci_cmd_sync_add net/bluetooth/hci_sync.c:99 [inline]
-    __hci_cmd_sync_sk+0x84/0x290 net/bluetooth/hci_sync.c:168
-    __hci_cmd_sync_ev+0x3e/0x50 net/bluetooth/hci_sync.c:250
-    send_hci_cmd_sync+0x5e/0xf0 net/bluetooth/mgmt.c:2615
-    hci_cmd_sync_work+0xd5/0x160 net/bluetooth/hci_sync.c:332
-    process_one_work+0x26b/0x620 kernel/workqueue.c:3263
-    process_scheduled_works kernel/workqueue.c:3346 [inline]
-    worker_thread+0x2c4/0x4f0 kernel/workqueue.c:3427
-    kthread+0x15b/0x310 kernel/kthread.c:463
-    ret_from_fork+0x210/0x240 arch/x86/kernel/process.c:158
-    ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-BUG: memory leak
-unreferenced object 0xffff88810b0edb80 (size 704):
-  comm "kworker/u9:1", pid 5133, jiffies 4294947360
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace (crc 4e765d9f):
-    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
-    slab_post_alloc_hook mm/slub.c:4983 [inline]
-    slab_alloc_node mm/slub.c:5288 [inline]
-    kmem_cache_alloc_node_noprof+0x36f/0x5e0 mm/slub.c:5340
-    kmalloc_reserve+0xe6/0x180 net/core/skbuff.c:579
-    __alloc_skb+0xd4/0x240 net/core/skbuff.c:670
-    alloc_skb include/linux/skbuff.h:1383 [inline]
-    bt_skb_alloc include/net/bluetooth/bluetooth.h:510 [inline]
-    hci_cmd_sync_alloc+0x30/0x140 net/bluetooth/hci_sync.c:58
-    hci_cmd_sync_add net/bluetooth/hci_sync.c:99 [inline]
-    __hci_cmd_sync_sk+0x84/0x290 net/bluetooth/hci_sync.c:168
-    __hci_cmd_sync_ev+0x3e/0x50 net/bluetooth/hci_sync.c:250
-    send_hci_cmd_sync+0x5e/0xf0 net/bluetooth/mgmt.c:2615
-    hci_cmd_sync_work+0xd5/0x160 net/bluetooth/hci_sync.c:332
-    process_one_work+0x26b/0x620 kernel/workqueue.c:3263
-    process_scheduled_works kernel/workqueue.c:3346 [inline]
-    worker_thread+0x2c4/0x4f0 kernel/workqueue.c:3427
-    kthread+0x15b/0x310 kernel/kthread.c:463
-    ret_from_fork+0x210/0x240 arch/x86/kernel/process.c:158
-    ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Alan Stern
 
