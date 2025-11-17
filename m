@@ -1,146 +1,259 @@
-Return-Path: <linux-usb+bounces-30539-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30541-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55F66C615B3
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 14:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E8A32C62036
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 02:39:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 305FE3AC0A7
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Nov 2025 13:28:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAB043AF65D
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Nov 2025 01:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BAB2F83DE;
-	Sun, 16 Nov 2025 13:28:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA5023D7E0;
+	Mon, 17 Nov 2025 01:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wLc+3s6c"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="M0Whx/IN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m1973174.qiye.163.com (mail-m1973174.qiye.163.com [220.197.31.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10472E2F1F
-	for <linux-usb@vger.kernel.org>; Sun, 16 Nov 2025 13:28:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620801E4AB;
+	Mon, 17 Nov 2025 01:39:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763299690; cv=none; b=HG3fkgCXv0S05UMYAF+z/qp0cxaMhFBvLEjimXPwcbe0UGGxlQL9Nx9FB384iIloNuWQGH2uWX1WjFNclJK0wnxZR/hc23UP2P5KhMWGRTiX2yeY0H2IE7uAiN8AeKo+CnMXbb+7woJZuxmS+lytJVg8Ik1r+GIESlM+M2ZpRUM=
+	t=1763343562; cv=none; b=UhSRX51lTEI6O2V/K81ydd3/RKRnz9uUrysHgkrs6jhm1fr9OOxgJr8QGaqYQyXkJe25cSXu3wx9l7ich9Y92YFT+fpeAUufFUbHv78PKA+YlfrHef0dN2/QfOb9E7WCavn553alFvlFaHgRzQBAFyBfQbmw74qaZxFEHf/d3mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763299690; c=relaxed/simple;
-	bh=ZQoKp1pMo4cAGytSctoAgqd4T0pcIg5MnXY+mHXsTfs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pm3KcBPzosm4m9s1RwLkuoh8giLjBr6bZEFZQlmgG14Ig1aWb13AS8GTa/InfTU0Ce8jJ1i5ix3ZbdC2gzdhrrcWrUklplDj2KK2/RW3HHc5BdQE9QssfXdZY93e763I6mchhWGjkWlLfKoYwuckUmGJp4VfBkUqHeVp4AJ4998=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wLc+3s6c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9971EC116B1;
-	Sun, 16 Nov 2025 13:28:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1763299687;
-	bh=ZQoKp1pMo4cAGytSctoAgqd4T0pcIg5MnXY+mHXsTfs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=wLc+3s6cyLrg/GUTnG4hvKwVlabsHVzXLqWzM3u6dQFRMKDo53WFhRSGNUbwu+AMn
-	 sIVyCiuzYrnhNyYJukrPJI7PbJoGE3Eh+2GIs7YOR+ZMkqHeeVKnSZM534SQZHu4OH
-	 IweOwp+7LLPPcZhOftbMbHvwTUjfFUODvxgL/pDQ=
-Date: Sun, 16 Nov 2025 08:28:04 -0500
-From: gregkh <gregkh@linuxfoundation.org>
-To: =?utf-8?B?Zmx5bm5uY2hlbijpmYjlpKnmpZop?= <flynnnchen@tencent.com>
-Cc: linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: Re: [PATCH] usb: storage: sddr55: Reject out-of-bound new_pba
-Message-ID: <2025111615-counting-unsteady-7469@gregkh>
-References: <B2DC73A3EE1E3A1D+202511161322001664687@tencent.com>
- <2025111605-stardust-unvocal-222f@gregkh>
- <EBC31800E75832ED+202511162115037260372@tencent.com>
+	s=arc-20240116; t=1763343562; c=relaxed/simple;
+	bh=zM0A38nTuhzZLgRcTavee+tBcGhwLywXAPDLdT9sMh4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n801OWo8nXP1vo0kBFPFN7hJCgU7ge7sEa7edlFGgnKTO5ROgTMubnTKWaqfCZNrvF0V8UWJWh7iSuHU/59dnARx9zk8ibQTHVa4eAFqjs1CZJTPtXwejkSs+bucHrgcahymIS7vRFNh3dwfYTPstYS/QWXyBHpc74JeMY+Dk/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=M0Whx/IN; arc=none smtp.client-ip=220.197.31.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.51] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 29c3ce0df;
+	Mon, 17 Nov 2025 09:33:59 +0800 (GMT+08:00)
+Message-ID: <2ebace6f-d3c4-4516-b6cb-4951de06b6c8@rock-chips.com>
+Date: Mon, 17 Nov 2025 09:33:55 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 08/10] drm/rockchip: cdn-dp: Add multiple bridges to
+ support PHY port selection
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>, Chaoyi Chen
+ <kernel@airkyi.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Peter Chen <hzpeterchen@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Yubing Zhang <yubing.zhang@rock-chips.com>,
+ Frank Wang <frank.wang@rock-chips.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
+ Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
+ Peter Robinson <pbrobinson@gmail.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ dri-devel@lists.freedesktop.org
+References: <20251111105040.94-1-kernel@airkyi.com>
+ <20251111105040.94-9-kernel@airkyi.com>
+ <DE5YP3AVGOG3.OHP68Z0F6KBU@bootlin.com>
+ <b1a339e7-a011-4b4b-8988-2e3768753c85@rock-chips.com>
+Content-Language: en-US
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+In-Reply-To: <b1a339e7-a011-4b4b-8988-2e3768753c85@rock-chips.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <EBC31800E75832ED+202511162115037260372@tencent.com>
+X-HM-Tid: 0a9a8f728a9203abkunm7f35530083703a
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGktOGlYYQ04fHUlKSkhNGEhWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
+	xVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=M0Whx/IN7vzwWpGNPYw1m+tNCPRjv3SM+gdWc+WtuhKETcY7rThZlrCaxI2fAlhI3391csTS8ehibRh6ex51cQ/r+4YXK3tXX6w3wypz7DSxUZKNiakt6+eBek5O66Hvb28jfRZ1ZP/4biJPialEUbDiHj1QrwZ1mtTGsdG5MX8=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=OCoPxWh+b3eSvtYMRsNlQyefUpu6kD2yKDCWJQ7xR74=;
+	h=date:mime-version:subject:message-id:from;
 
-On Sun, Nov 16, 2025 at 09:15:05PM +0800, flynnnchen(陈天楚) wrote:
-> On Sun, Nov 16, 2025 at 07:07:57AM -0500, gregkh wrote:
-> 
-> >On Sun, Nov 16, 2025 at 01:22:01PM +0800, flynnnchen(陈天楚) wrote:
-> >> Discovered by Atuin - Automated Vulnerability Discovery Engine.
-> >> 
-> >> new_pba comes from the status packet returned after each write.
-> >> A bogus device could report values beyond the block count derived
-> >> from info->capacity, letting the driver walk off the end of
-> >> pba_to_lba[] and corrupt heap memory.
-> >> 
-> >> Reject PBAs that exceed the computed block count and fail the
-> >> transfer so we avoid touching out-of-range mapping entries.
-> >> 
-> >> Signed-off-by: Tianchu Chen <flynnnchen@tencent.com>
-> >> ---
-> >>  drivers/usb/storage/sddr55.c | 6 ++++++
-> >>  1 file changed, 6 insertions(+)
-> >> 
-> >> diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
-> >> index b323f0a36..9d813727e 100644
-> >> --- a/drivers/usb/storage/sddr55.c
-> >> +++ b/drivers/usb/storage/sddr55.c
-> >> @@ -469,6 +469,12 @@ static int sddr55_write_data(struct us_data *us,
-> >>  		new_pba = (status[3] + (status[4] << 8) + (status[5] << 16))
-> >>  						  >> info->blockshift;
-> >>  
-> >> +		/* check if device-reported new_pba is out of range */
-> >> +		if (new_pba >= (info->capacity >> (info->blockshift + info->pageshift))) {
-> >> +			result = USB_STOR_TRANSPORT_FAILED;
-> >> +			goto leave;
-> >> +		}
-> >
-> >Any chance you tested this with real hardware?
-> >
-> >thanks,
-> >
-> >greg k-h
-> 
-> 
-> Unfortunately, I do not own the real hardware, and have not tested it on a
-> a real device.
-> 
-> Some of my thoughts on this patch, from static analysis:
-> 
-> Q: What if this code is called, before info->capacity is set?
-> A: If sddr55_write_data is called before sddr55_get_capacity,
-> info->capacity and pba_to_lba should both be 0, in the patched code it will
-> always fail, while in the original code it will cause NULL-deref.
+Hi Luca,
 
-But how can that out-of-order calling happen?
+On 11/12/2025 9:37 AM, Chaoyi Chen wrote:
+> Hello Luca,
+>
+> On 11/11/2025 11:14 PM, Luca Ceresoli wrote:
+>> Hello Chaoyi,
+>>
+>> On Tue Nov 11, 2025 at 11:50 AM CET, Chaoyi Chen wrote:
+>>> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+>>>
+>>> The RK3399 has two USB/DP combo PHY and one CDN-DP controller. And
+>>> the CDN-DP can be switched to output to one of the PHYs. If both ports
+>>> are plugged into DP, DP will select the first port for output.
+>>>
+>>> This patch adds support for multiple bridges, enabling users to flexibly
+>>> select the output port. For each PHY port, a separate encoder and bridge
+>>> are registered.
+>>>
+>>> The change is based on the DRM AUX HPD bridge, rather than the
+>>> extcon approach. This requires the DT to correctly describe the
+>>> connections between the first bridge in bridge chain and DP
+>>> controller. For example, the bridge chain may be like this:
+>>>
+>>> PHY aux birdge -> fsa4480 analog audio switch bridge ->
+>>> onnn,nb7vpq904m USB reminder bridge -> USB-C controller AUX HPD bridge
+>>>
+>>> In this case, the connection relationships among the PHY aux bridge
+>>> and the DP contorller need to be described in DT.
+>>>
+>>> In addition, the cdn_dp_parse_next_bridge_dt() will parses it and
+>>> determines whether to register one or two bridges.
+>>>
+>>> Since there is only one DP controller, only one of the PHY ports can
+>>> output at a time. The key is how to switch between different PHYs,
+>>> which is handled by cdn_dp_switch_port() and cdn_dp_enable().
+>>>
+>>> There are two cases:
+>>>
+>>> 1. Neither bridge is enabled. In this case, both bridges can
+>>> independently read the EDID, and the PHY port may switch before
+>>> reading the EDID.
+>>>
+>>> 2. One bridge is already enabled. In this case, other bridges are not
+>>> allowed to read the EDID. So we will try to return the cached EDID.
+>>>
+>>> Since the scenario of two ports plug in at the same time is rare,
+>>> I don't have a board which support two TypeC connector to test this.
+>>> Therefore, I tested forced switching on a single PHY port, as well as
+>>> output using a fake PHY port alongside a real PHY port.
+>>>
+>>> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+>> [...]
+>>
+>>> @@ -966,28 +1084,16 @@ static int cdn_dp_pd_event(struct notifier_block *nb,
+>>>       return NOTIFY_DONE;
+>>>   }
+>>>
+>>> -static int cdn_dp_bind(struct device *dev, struct device *master, void *data)
+>>> +static int cdn_bridge_add(struct device *dev,
+>>> +              struct drm_bridge *bridge,
+>>> +              struct drm_bridge *next_bridge,
+>>> +              struct drm_encoder *encoder)
+>>>   {
+>>>       struct cdn_dp_device *dp = dev_get_drvdata(dev);
+>>> -    struct drm_encoder *encoder;
+>>> +    struct drm_device *drm_dev = dp->drm_dev;
+>>> +    struct drm_bridge *last_bridge = NULL;
+>>>       struct drm_connector *connector;
+>>> -    struct cdn_dp_port *port;
+>>> -    struct drm_device *drm_dev = data;
+>>> -    int ret, i;
+>> [...]
+>>
+>>> +    if (next_bridge) {
+>>> +        ret = drm_bridge_attach(encoder, next_bridge, bridge,
+>>> +                    DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+>>> +        if (ret)
+>>> +            return ret;
+>>> +
+>>> +        last_bridge = next_bridge;
+>>> +        while (drm_bridge_get_next_bridge(last_bridge))
+>>> +            last_bridge = drm_bridge_get_next_bridge(last_bridge);
+>> DRM bridges are now refcounted, and you are not calling drm_bridge_get()
+>> and drm_bridge_put() here. But here you can use
+>> drm_bridge_chain_get_last_bridge() which will simplify your job.
+>>
+>> Don't forget to call drm_bridge_put() on the returned bridge when the
+>> bridge is not referenced anymore. This should be as easy as adding a
+>> cleanup action on the variable declaration above:
+>>
+>> -    struct drm_bridge *last_bridge = NULL;
+>> +    struct drm_bridge *last_bridge __free(drm_bridge_put) = NULL;
+>
+> Ah, I have seen your patch about this. Thank you for the reminder, I will fix this in v10.
+>
+>>
+>>> @@ -1029,8 +1147,102 @@ static int cdn_dp_bind(struct device *dev, struct device *master, void *data)
+>>>           return ret;
+>>>       }
+>>>
+>>> +    if (last_bridge)
+>>> +        connector->fwnode = fwnode_handle_get(of_fwnode_handle(last_bridge->of_node));
+>>> +
+>>>       drm_connector_attach_encoder(connector, encoder);
+>>>
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int cdn_dp_parse_next_bridge_dt(struct cdn_dp_device *dp)
+>>> +{
+>>> +    struct device_node *np = dp->dev->of_node;
+>>> +    struct device_node *port __free(device_node) = of_graph_get_port_by_id(np, 1);
+>>> +    struct drm_bridge *bridge;
+>>> +    int count = 0;
+>>> +    int ret = 0;
+>>> +    int i;
+>>> +
+>>> +    /* If device use extcon, do not use hpd bridge */
+>>> +    for (i = 0; i < dp->ports; i++) {
+>>> +        if (dp->port[i]->extcon) {
+>>> +            dp->bridge_count = 1;
+>>> +            return 0;
+>>> +        }
+>>> +    }
+>>> +
+>>> +
+>>> +    /* One endpoint may correspond to one next bridge. */
+>>> +    for_each_of_graph_port_endpoint(port, dp_ep) {
+>>> +        struct device_node *next_bridge_node __free(device_node) =
+>>> +            of_graph_get_remote_port_parent(dp_ep);
+>>> +
+>>> +        bridge = of_drm_find_bridge(next_bridge_node);
+>>> +        if (!bridge) {
+>>> +            ret = -EPROBE_DEFER;
+>>> +            goto out;
+>>> +        }
+>>> +
+>>> +        dp->next_bridge_valid = true;
+>>> +        dp->next_bridge_list[count].bridge = bridge;
+>> You are storing a reference to a drm_bridge, so have to increment the
+>> refcount:
+>>
+>>         dp->next_bridge_list[count].bridge = drm_bridge_get(bridge);
+>>                                              ^^^^^^^^^^^^^^
+>>
+>> FYI there is a plan to replace of_drm_find_bridge() with a function that
+>> increases the bridge refcount before returning the bridge, but it's not
+>> there yet. When that will happen, the explicit drm_bridge_get() won't be
+>> needed anymore and this code can be updated accordingly.
 
-> Q: Is checking new_pba here essential in all cases?
-> A: Yes, in all the code path beneath it, new_pba is always used to index
-> the array, with no exception.
+Out of curiosity, I checked the callers of of_drm_find_bridge(), and it seems that the vast majority of them do not pay attention to the increase or decrease of reference counts. Does this mean that even if we add reference counting in of_drm_find_bridge(), we still need to modify the corresponding functions of their callers and decrease the reference count at the appropriate time? Thank you.
 
-Fair enough :)
 
-> Q: What if device reports write success, and gives back an OOB new_pba?
-> A: For the patched code, it will fail the write transfer. In the original
-> one, it is very likely to fail as well, because:
-> 
-> 		/* check that new_pba wasn't already being used */
-> 		if (info->pba_to_lba[new_pba] != UNUSED_BLOCK) {  <--- Very likely to fail here
-> 			printk(KERN_ERR "sddr55 error: new PBA %04X already in use for LBA %04X\n",
-> 				new_pba, info->pba_to_lba[new_pba]);
-> 			info->fatal_error = 1;
-> 			set_sense_info (3, 0x31, 0);
-> 			result = USB_STOR_TRANSPORT_FAILED;
-> 			goto leave;
-> 		}
-> 
-> The original code OOB-reads info->pba_to_lba[new_pba], which is very
-> unlikely to equal to UNUSED_BLOCK (i32 0x3ff) by chance, thus the original
-> code will also fail the transfer in most cases.
-> 
-> From my understanding, the patched code solves the OOB issue, while being
-> aligned with the original behavior in most cases I have imagined.
+>>
+>> Also you have to call drm_bridge_put() to release that reference when the
+>> pointer goes away. I guess that should happen in cdn_dp_unbind().
+>
+> You're right, this is indeed a pitfall. I will fix it in v10.
+>
+>
+-- 
+Best,
+Chaoyi
 
-Ok, seems sane, I'll be glad to take this, just wanted to be sure.  I
-kind of doubt anyone has this hardware anymore anyway :)
-
-thanks,
-
-greg k-h
 
