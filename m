@@ -1,116 +1,136 @@
-Return-Path: <linux-usb+bounces-30666-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30667-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92424C6A803
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 17:07:50 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A7A0C6AE1E
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 18:17:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2EED54F21F4
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 16:01:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTPS id 9F22028F17
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 17:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B602836A025;
-	Tue, 18 Nov 2025 16:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 111D23A1D18;
+	Tue, 18 Nov 2025 17:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nKCA50iD"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="uZlfDsTz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574D4368294
-	for <linux-usb@vger.kernel.org>; Tue, 18 Nov 2025 16:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B8E29ACC0;
+	Tue, 18 Nov 2025 17:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763481675; cv=none; b=Q2Vmv03TIoqEoIJh03CtV8C09EzII75zY5twxDMwafduTnI0TFdrMJGv/zMqrjFS80H1fur8FbSQiYAnJPdpd48isoDhS4JnrYLAyfcoYjS+s5VrOogqtmVIXwg/hxDTe4cLjB+RoIFiEE0f67TzKAnSbfWhcdJhjcD00rpYyzQ=
+	t=1763485951; cv=none; b=XNTXV/wxVLfCZe2OBTJc7/03dlrF6WfgdtL2DW80Q6X+dNqL9C0n1F8f9cX+Gyje5cINN/Hq3AeVuI6BMAqgNsYyjJN5J+5HW90BivTaAegJRwfLVHWLC/PGf0lOy+T6oWO5wYIU/Zotjo1uRo/2ThmtzILWZH71+jV9NNrez/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763481675; c=relaxed/simple;
-	bh=f+f4NmvH/hRU6pwG216QqgKdKI9se928TAAuNSFnC+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FoMpnMHxeM7NuYtvrfBOYWjvuHL7RVii7oUU/x1C/gPZhwnuAXnwL28YasYTxgsfN4akb4pWXPr8uiKTsdEUMWXEueMQbn6/pvYbukxUaTVKMiEbKMyNx+7jVfCjdeX8Hu5x3xg9c/FnZVB1Y4rgSxtK+rMbAM8wOefYbS1wYLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nKCA50iD; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6419e6dab7fso8462579a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 18 Nov 2025 08:01:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763481670; x=1764086470; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f+f4NmvH/hRU6pwG216QqgKdKI9se928TAAuNSFnC+c=;
-        b=nKCA50iD7wtgBBdu5Y0tWcwu8rhrDvnr8jmB11uIwHOVz2+QkQKiUI9tZWFV/nuNII
-         q/HqEzDqymh4XHKzPZFUTEIRTf5/nr83q2vFsQqFvhEEo6Ph8hnhOdGJeeza3JMRsOQo
-         0umzYi37yRUIOhxD1CyCMMFnG4Lhk2bCu5Ekt2dIrslyojxKZsYR072NqrzOEPalEMdo
-         YdDIZ00Cn+Zmnb55HU0q0QdqoarsppTh9LFTMmYb1I0pX75qhVptFfYRNAluhi51Wjym
-         N4zFL92/hfQ9eMflxbQc5bNUjSbUgOK/5qpStLpPJHfaTfSUfcldgISQM1H7rgfOKN+2
-         3rSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763481670; x=1764086470;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=f+f4NmvH/hRU6pwG216QqgKdKI9se928TAAuNSFnC+c=;
-        b=ZCBW91R+1KEZb41Op7C3KZJlN/i/B9duCiE01Yoddl1qy9tWXJxkp8g3xOi7TKps8C
-         dKbgj724idpKDSZzreS5Vt3POmVpp76EEhG76bXIgsOLeFhK+Zf6hvlsS+wciyhbvXkx
-         i/kxBc4VEIxTx8tKRzd5h1bTvEEla8STODAhcXeFDhczlZCfrLabC6oLquS6mdJTHEwD
-         8BpkzX2Op3+4ZZczsNMHJzmwaRSfXKywm0v0Q7ApXgLWUc+9U5I5EH3nLoa86YDNxv55
-         nZyWh+vIf/CKncQTolEF6uoOPPSh1uIk5AOkF91x4EBg9H/HlLA30/PvRfwuP7LniNcA
-         f2Iw==
-X-Forwarded-Encrypted: i=1; AJvYcCXMJdx93dLz59amdQhllVHbb/LRWsC/7PRurmEE+VNgThs6W04892fo3L11dToV/1qUZGiYJtvoQLk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyclxNOyc3a5alkGv1ImkvWrVU0CRs/3Xn5S23UvpL1hn74QPQ
-	yaot82Ziqukw1u0EArJ6PTfkx2MVydcEajMLQ4DbXf6aZ1IDFLlQXwWC
-X-Gm-Gg: ASbGncsCCTi/iQilFjpONA0wz/GaYYY62l4O6VXODcNZsStrJiniRiJaZGvQ2mI68Gu
-	6nxrLwEGgeIcPeaYC+dLs4QPAhSVivuN/boRPKmhjPWpUb3GNoXB2xOxqlOFmW5Ibq+zywMNTpY
-	46cZB7B4m4NpUKDzDAHA7TOiPm4rPuo00iw3rxIAPcNJPaex3BpvjkLus70QzwDEEIZw64V7zkv
-	WNmA6Mq3x1TPH4mnPqBj8eqhMsjh3UyOxMyKxzN5HjNf2N0dtiURcXW7o4Cqo7gsawi2eejffGe
-	/NuHEGqe5rfxi9o9bFkT811rzLBeK2JglaW3GfGbWdP9VpdikfF6eqa7I0VQGyZMhEStZN0dxEd
-	ZTchmiTtOSyzbgcLU+5XhUDqH6eBMyCgVTK6+KeW8DgRBlMS3JFRvN0rWTA9oupVAdPUapmfuMn
-	VhInE2qzGJ0tHaJ0POxRFiOxY=
-X-Google-Smtp-Source: AGHT+IEI9gRZBd5rw55mfRNgp0K59II8BMuYUwmil2KCu3C+5VPmVjBNjw5eAJ15yG/f8AfTotGMPw==
-X-Received: by 2002:a17:907:94d5:b0:b3f:f207:b748 with SMTP id a640c23a62f3a-b7367828a3amr1839833266b.10.1763481670026;
-        Tue, 18 Nov 2025 08:01:10 -0800 (PST)
-Received: from foxbook (bhd138.neoplus.adsl.tpnet.pl. [83.28.93.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734fedb2eesm1375643166b.68.2025.11.18.08.01.07
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 18 Nov 2025 08:01:09 -0800 (PST)
-Date: Tue, 18 Nov 2025 17:01:04 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: Ricardo Ribalda <ribalda@chromium.org>, Laurent Pinchart
- <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 4/4] media: uvcvideo: Introduce allow_privacy_override
-Message-ID: <20251118170104.01dba6bf.michal.pecio@gmail.com>
-In-Reply-To: <x2xheosw24fecqjjv4fmj2t3i53k2ypyvmkkkvmv6xtdwsherd@e5klkm3ou4g7>
-References: <20251117-uvcdynctrl-v1-0-aed70eadf3d8@chromium.org>
-	<20251117-uvcdynctrl-v1-4-aed70eadf3d8@chromium.org>
-	<2025111817-wages-anyone-e39a@gregkh>
-	<x2xheosw24fecqjjv4fmj2t3i53k2ypyvmkkkvmv6xtdwsherd@e5klkm3ou4g7>
+	s=arc-20240116; t=1763485951; c=relaxed/simple;
+	bh=Givkw6potYODlMESZS+LtF7ohwR9V3bUu4LAoFvzjx0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N8Vw0pTRvTlIL7JRyiWFnBCPt5tYh6rYOI97769abgQn47FR59gYCXsG3vpqYyDP8KDLKWgDc1mT3a3OPw+8l4vHZoj/GYdcki1hq/4kpJwl9MmiGkQnnwO0NBEB1/EtJccPRF3jbV8xFkiGszFKjTaPUMddx9G2eSb2Qiz5cfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=uZlfDsTz; arc=none smtp.client-ip=166.84.1.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
+	(No client certificate requested)
+	by l2mail1.panix.com (Postfix) with ESMTPS id 4d9rM60XcbzDRB;
+	Tue, 18 Nov 2025 11:54:58 -0500 (EST)
+Received: from [10.50.4.39] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4d9rLy3zR4z129J;
+	Tue, 18 Nov 2025 11:54:50 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1763484891; bh=Givkw6potYODlMESZS+LtF7ohwR9V3bUu4LAoFvzjx0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=uZlfDsTzz5iYF7oJ44rkwnoNYMprwJzNx2sbjv7dXETAov/dmCkG3koPo8+LmQdau
+	 4OR0x5QUpwA8D7JYJm/7t1ErSLE8dcm8MchQJNPfHojcqBkeRK6lE1zyruhjlZjF2Y
+	 Eu0e/8eyPVPQFewlQhTUtRfIfgNsMuY0twtmCW70=
+Message-ID: <d2fb89c1-a4cb-4d59-93ef-3c462ae0964f@panix.com>
+Date: Tue, 18 Nov 2025 08:54:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: typec: ucsi: Monitor connector change before getting
+ connector status
+To: Hsin-Te Yuan <yuanhsinte@chromium.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Kenneth C <kenny@panix.com>, "Mario Limonciello (AMD)" <superm1@kernel.org>
+References: <20251117-ucsi-v1-1-1dcbc5ea642b@chromium.org>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <20251117-ucsi-v1-1-1dcbc5ea642b@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Tue, 18 Nov 2025 15:09:16 +0100, Mauro Carvalho Chehab wrote:
-> On other words, if someone has secure boot enabled, he can be more
-> confident that a distro-vendor signed Kernel will honour the privacy
-> LED, and not even the root can tamper with - as BIOS access to
-> disable secure boot would be needed to change it - plus, booting a
-> non-signed kernel.
 
-IMHO users are better off trusting duct tape than any chain of trust,
-and those with tinfoil hats already do.
+This patch seems to fix an issue I've had for a while now on my Dell 
+XPS-9320 where if I suspend with one Thunderbolt Dock connected and 
+resume with another, the machine thinks the previous dock is still 
+connected (which means mostly that the new monitor configuration isn't set).
 
-Rational people with any clue will simply assume their computer broke
-and put duct tape over the LED, carefully not to cover the lens ;)
+I'm still testing it to see if it does indeed fix my issue, but to at 
+least confirm it does what it says on the tin:
 
-Regards,
-Michal
+Tested-By: Kenneth R. Crudup <kenny@panix.com>
+
+On 11/17/25 01:31, Hsin-Te Yuan wrote:
+> Originally, the notification for connector change will be enabled after
+> the first read of the connector status. Therefore, if the event happens
+> during this window, it will be missing and make the status unsynced.
+> 
+> Enable the notification for connector change before getting the
+> connector status to ensure the status is synced.
+> 
+> Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
+> ---
+>   drivers/usb/typec/ucsi/ucsi.c | 11 ++++++++++-
+>   1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 3f568f790f39b0271667e80816270274b8dd3008..07290cd85b618b22cb989151079707dbe9f578a7 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1565,7 +1565,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>   	struct typec_capability *cap = &con->typec_cap;
+>   	enum typec_accessory *accessory = cap->accessory;
+>   	enum usb_role u_role = USB_ROLE_NONE;
+> -	u64 command;
+> +	u64 command, ntfy;
+>   	char *name;
+>   	int ret;
+>   
+> @@ -1659,6 +1659,15 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
+>   		goto out;
+>   	}
+>   
+> +	/* Enable the notification for connector change before getting the connector status */
+> +	ntfy = UCSI_ENABLE_NTFY_CMD_COMPLETE | UCSI_ENABLE_NTFY_ERROR | UCSI_ENABLE_NTFY_CONNECTOR_CHANGE;
+> +	command = UCSI_SET_NOTIFICATION_ENABLE | ntfy;
+> +	ret = ucsi_send_command(ucsi, command, NULL, 0);
+> +	if (ret < 0) {
+> +		dev_warn(ucsi->dev, "con%d: failed to enable the notification for connector change\n",
+> +			 con->num);
+> +	}
+> +
+>   	/* Get the status */
+>   	ret = ucsi_get_connector_status(con, false);
+>   	if (ret) {
+> 
+> ---
+> base-commit: 6a23ae0a96a600d1d12557add110e0bb6e32730c
+> change-id: 20251117-ucsi-c2dfe8c006d7
+> 
+> Best regards,
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
+
 
