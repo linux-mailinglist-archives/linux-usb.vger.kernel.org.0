@@ -1,172 +1,389 @@
-Return-Path: <linux-usb+bounces-30594-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30613-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0CF8C673C4
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 05:20:34 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5AF6C6776E
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 06:22:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 604B44E0348
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 04:20:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 0F0EB2AB11
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 05:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D2CB22DFA5;
-	Tue, 18 Nov 2025 04:20:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25EE2F0C7D;
+	Tue, 18 Nov 2025 05:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="syNXDSwh"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="L2YBNssu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2E3223710
-	for <linux-usb@vger.kernel.org>; Tue, 18 Nov 2025 04:20:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4E72522B6;
+	Tue, 18 Nov 2025 05:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763439624; cv=none; b=ZdLZQy2mlpACbup00Rk2+mtJ7Izqbaj2wsXmt9ZDkHzFuFCWmrwa3YG1p+USd5COWZBrajLDh2EzDeqa9JeHPWaFhEsqYTiBGl7rt/mznhKGJUWOaEWBQoOlyUK1rbltl5rXIBTEWZtsnzgVSGmE4+rrN8ackmliLA/+0bfeU9w=
+	t=1763442978; cv=none; b=KPjKjnzkL7AgQvRCMeYv4PcTriLrSlP3gWak+KR84T4ESQAkjtecnKZSHv/wDbZwUkFGdLnFZ3r9OIsM02WEQtX1lJumuFR66+oj9J85HStBwbdKi6u5a9OWPdA7DqmUj+7hWFIjXbv50vX0ogAquNPnEKmDHxvZeKIYRHZyLMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763439624; c=relaxed/simple;
-	bh=KqxIZBnrqFJni2oFg4oyAwbD+g+j+G4Q8WYHGqkvUp8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AYttUIFYtTQb+qx/uAXlgZzrewGirOqNAw/83HBMKzDHbLo4VJybMFxnEH//Z31eQ6GGPXtlThzxrsBiQ+Jfqz0ZgMf1bOH2V5pPr1JcFR1Y5ouC1oA/S6nQiOET+x4Z9/1RhLXBIKoP6KxnsSQAd2jcECU+yZiUqzHhF5q+XTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=syNXDSwh; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-8845498be17so3659426d6.3
-        for <linux-usb@vger.kernel.org>; Mon, 17 Nov 2025 20:20:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1763439622; x=1764044422; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G8wr2eViKfeD+vLkliXz6LETzkNnS8mTahP7nstQOmc=;
-        b=syNXDSwhAr72va5rjwA37eovo/K7bHfYQVaHJgBrU8MqQzlfrN8dW40pVnX5nmjpjw
-         JpHy7+/saKUFaoYOG8de/1iNjtX0PhKykM3tDrWYcC5IbzQFne0Br6twwK+DmpUaBCcI
-         9gv/M9UIMHBP0mWMaOCj2KPyondfe/7G46nrTwu78BTHKwuQ69aEdwNDcRUkCTjS0feQ
-         Ncb6r8HqTT5X0aJIyo/aBPZk+TzrvYwW0EFCWc5CgL8YcYVO7w4P3ogEaTQS8zU6nP9f
-         E1ltJsnc5iP8BR1svyB5Nq1nanwRHrdOKesfLDpwvOuEU/a2+wq/by9x4xMBUUdP9aBt
-         EgUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763439622; x=1764044422;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G8wr2eViKfeD+vLkliXz6LETzkNnS8mTahP7nstQOmc=;
-        b=QUhvJIAalAnAPH2UmaB5ZghDkC0ETodeLyEXPGpYrCDmNNFtjBRznNJm0zxtaX4wU0
-         eSGySv0M662mA+HNGowj6gJKSpyekcqGUaRxYmKP/yZIV7SI1TXlMaU/Pgo/4f2un0+u
-         MnNtDOIInI+5HaMDQvs7qpejyuwbj3ICP3FCqEMqaN1pUlG+JNreavM+V13p2Dni8a0r
-         LERJXjPS7DDsXpANoJHMa6mVZ2nX0nHlSRLergbILUztYThUmmggpIxnOrHbbdzpkmzZ
-         A0YgsHOuOt4rzI/6U7b5nYdp2phzdYhp2zlkl5O0xjbsVZnN1sjYo56e+ggAbQbPssi6
-         45ug==
-X-Forwarded-Encrypted: i=1; AJvYcCUUSA69pw/9887FoWuwIIm/FuZGS9vjENAxPEN34ZL1PY+4TpcawbPaK7NzigjUKdVXEBRmGKZl4Co=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVsanEI8u/KRSv8vnk8eQ3KRngLZ0ml9IY4qtn9U37LlBz5aWw
-	3hWcojJQ/5Nr5TgG+vfEYeGU1fbHL/Jwa/IoRgFRXYCR6E4pGz9bcJOmX/29qKhyTQ==
-X-Gm-Gg: ASbGncv13qTirffIrYb+P3IK8ywheWmvSdEROVAoG7v32YXBqhcj/ZU1ASd3Q00GmUt
-	6i0cnq/jkcfka9fDxUD37+qWYmmdfkYtgusKGFYk6rz6ZE36UilUJeL/mZh+4YlG65Rb+JFWVvY
-	5I+q1qLyPjXGI2sKMfkhwDv8FInqamvrVFUBUyb39cAVuJnr/D85ypr1XuW56RIuRqhDpYPAjSJ
-	sqFKR6CeuGqrnPxbMoGutTtZxX0bsMVFdh67CLU5D+nlbun8GQ0BsAqjTu/I4eepm0TfAroCR/7
-	JDDV7U7B/fdTbj389cKKrRgCEh1/lrTGKSiGaOza2Zdo9EFSGCX45RHmUKY/uApXAIG8LcS6Qfl
-	TsS99A0YLoMjtpo5/iVElsKBt63mWAU6P40fglwSAUD1JLg+nqmnyUOEvnMK0tiJysIO+JHbH4v
-	AJ5TnlnLSNRKI=
-X-Google-Smtp-Source: AGHT+IGgyRHdLzIvhu3+KtSQVM+AoQX0mTXvbl+hNPzyx6Fzdqz66Pk9HyPua70YPmQ+r8otk8dlXw==
-X-Received: by 2002:a05:6214:20ca:b0:882:401c:e37d with SMTP id 6a1803df08f44-882926d4dbamr203188756d6.63.1763439621946;
-        Mon, 17 Nov 2025 20:20:21 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::5fd])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-882865342c4sm105804156d6.28.2025.11.17.20.20.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 20:20:21 -0800 (PST)
-Date: Mon, 17 Nov 2025 23:20:18 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Selvarasu Ganesan <selvarasu.g@samsung.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>,
-	"dh10.jung@samsung.com" <dh10.jung@samsung.com>,
-	"naushad@samsung.com" <naushad@samsung.com>,
-	"akash.m5@samsung.com" <akash.m5@samsung.com>,
-	"h10.kim@samsung.com" <h10.kim@samsung.com>,
-	"eomji.oh@samsung.com" <eomji.oh@samsung.com>,
-	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-	"thiagu.r@samsung.com" <thiagu.r@samsung.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Prevent EPs resource conflict
- during StartTransfer
-Message-ID: <f4d27a4c-df75-42b8-9a1c-3fe2a14666ed@rowland.harvard.edu>
-References: <CGME20251117160057epcas5p324eddf1866146216495186a50bcd3c01@epcas5p3.samsung.com>
- <20251117155920.643-1-selvarasu.g@samsung.com>
- <20251118022116.spdwqjdc7fyls2ht@synopsys.com>
+	s=arc-20240116; t=1763442978; c=relaxed/simple;
+	bh=Fna6KaG3eiiCvByV9iOlrjxJWveUcPYAe/yIgBGRTzQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=grsJ1pq3W2e64epAz9AvFu32Sp+1AYUP8AEub2puUy2kICOLu2uD4qR2BhiI+JnEmyRjAu45HLe5Al5YlIJ2pc/+WncgnTIlDZlns+EGbGdTmQQos0uFYE+m94sqoovQ7y7d1HM68I15GkiUqowgsmt/CXlSORPbJVp9lClGy0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=L2YBNssu; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=Wk0cJUyWrg1Q2BlOVZqE6LE8f2oIgwbaaPLwX7j5Zz0=; b=L2YBNssuhAbD/coTE+zppD6pgG
+	4SHEnV/kIGVlfWZ/qJcm+mD7nBTcUj5u3PTUqaT11eNiFSt/eQjg53/kO2xAH3TAX1K+ir2dHsN/W
+	+V2PSQeCGsk5NCmFRrEceu48UcS3G7dNw05gFfDQD/LGLbv3GTZ8U6VquIrxRziO0egZlUY5wvf+7
+	rSHx7tdBjJILDSiZ9Nq7Zbb8qz3qlP5vEyyl8YxzfhzblHJlTb9Xjll2P9yAVRvIGhrorVG7e2mAe
+	gwzXte4nPeA0zgOAP42jxne/BSzms8NV7fAnYjOgsWD9EXBqwRr1k3J2CvzlJ3gfHFtZK2D4YIPpB
+	GKZnts7A==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vLE4S-0000000GEPJ-3281;
+	Tue, 18 Nov 2025 05:16:04 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	raven@themaw.net,
+	miklos@szeredi.hu,
+	neil@brown.name,
+	a.hindborg@kernel.org,
+	linux-mm@kvack.org,
+	linux-efi@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev,
+	kees@kernel.org,
+	rostedt@goodmis.org,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	paul@paul-moore.com,
+	casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org,
+	john.johansen@canonical.com,
+	selinux@vger.kernel.org,
+	borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org,
+	clm@meta.com
+Subject: [PATCH v4 00/54] tree-in-dcache stuff
+Date: Tue, 18 Nov 2025 05:15:09 +0000
+Message-ID: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251118022116.spdwqjdc7fyls2ht@synopsys.com>
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Tue, Nov 18, 2025 at 02:21:17AM +0000, Thinh Nguyen wrote:
-> Thanks for the catch. The problem is that the "ep_disable" process
-> should be completed after usb_ep_disable is completed. But currently it
-> may be an async call.
-> 
-> This brings up some conflicting wording of the gadget API regarding
-> usb_ep_disable. Here's the doc regarding usb_ep_disable:
-> 
-> 	/**
-> 	 * usb_ep_disable - endpoint is no longer usable
-> 	 * @ep:the endpoint being unconfigured.  may not be the endpoint named "ep0".
-> 	 *
-> 	 * no other task may be using this endpoint when this is called.
-> 	 * any pending and uncompleted requests will complete with status
-> 	 * indicating disconnect (-ESHUTDOWN) before this call returns.
-> 	 * gadget drivers must call usb_ep_enable() again before queueing
-> 	 * requests to the endpoint.
-> 	 *
-> 	 * This routine may be called in an atomic (interrupt) context.
-> 	 *
-> 	 * returns zero, or a negative error code.
-> 	 */
-> 
-> It expects all requests to be completed and given back on completion. It
-> also notes that this can also be called in interrupt context. Currently,
-> there's a scenario where dwc3 may not want to give back the requests
-> right away (ie. DWC3_EP_DELAY_STOP). To fix that in dwc3, it would need
-> to "wait" for the right condition. But waiting does not make sense in
-> interrupt context. (We could busy-poll to satisfy the interrupt context,
-> but that doesn't sound right either)
-> 
-> This was updated from process context only to may be called in interrupt
-> context:
-> 
-> b0d5d2a71641 ("usb: gadget: udc: core: Revise comments for USB ep enable/disable")
-> 
-> 
-> Hi Alan,
-> 
-> Can you help give your opinion on this?
+Some filesystems use a kinda-sorta controlled dentry refcount leak to pin
+dentries of created objects in dcache (and undo it when removing those).
+Reference is grabbed and not released, but it's not actually _stored_
+anywhere.  That works, but it's hard to follow and verify; among other
+things, we have no way to tell _which_ of the increments is intended
+to be an unpaired one.  Worse, on removal we need to decide whether
+the reference had already been dropped, which can be non-trivial if
+that removal is on umount and we need to figure out if this dentry is
+pinned due to e.g. unlink() not done.  Usually that is handled by using
+kill_litter_super() as ->kill_sb(), but there are open-coded special
+cases of the same (consider e.g. /proc/self).
 
-Well, I think the change to the API was made because drivers _were_ 
-calling these routines in interrupt context.  That's what the commit's 
-description says, anyway.
+Things get simpler if we introduce a new dentry flag (DCACHE_PERSISTENT)
+marking those "leaked" dentries.  Having it set claims responsibility
+for +1 in refcount.
 
-One way out of the problem would be to change the kerneldoc for 
-usb_ep_disable().  Instead of saying that pending requests will complete 
-before the all returns, say that the the requests will be marked for 
-cancellation (with -ESHUTDOWN) before the call returns, but the actual 
-completions might happen asynchronously later on.
+The end result this series is aiming for:
 
-The difficulty comes when a gadget driver has to handle a Set-Interface 
-request, or Set-Config for the same configuration.  The endpoints for 
-the old altsetting/config have to be disabled and then the endpoints for 
-the new altsetting/config have to be enabled, all while managing any 
-pending requests.  I don't know how various function drivers handle 
-this, just that f_mass_storage is very careful about taking care of 
-everything in a separate kernel thread that explicitly dequeues the 
-pending requests and flushes the endpoints.  In fact, this scenario was 
-the whole reason for inventing the DELAYED_STATUS mechanism, because it 
-was impossible to do all the necessary work within the callback routine 
-for a control-request interrupt handler.
+* get these unbalanced dget() and dput() replaced with new primitives that
+  would, in addition to adjusting refcount, set and clear persistency flag.
+* instead of having kill_litter_super() mess with removing the remaining
+  "leaked" references (e.g. for all tmpfs files that hadn't been removed
+  prior to umount), have the regular shrink_dcache_for_umount() strip
+  DCACHE_PERSISTENT of all dentries, dropping the corresponding
+  reference if it had been set.  After that kill_litter_super() becomes
+  an equivalent of kill_anon_super().
 
-Alan Stern
+Doing that in a single step is not feasible - it would affect too many places
+in too many filesystems.  It has to be split into a series.
+
+This work has really started early in 2024; quite a few preliminary pieces
+have already gone into mainline.  This chunk is finally getting to the
+meat of that stuff - infrastructure and most of the conversions to it.
+
+Some pieces are still sitting in the local branches, but the bulk of
+that stuff is here.
+
+Compared to v3:
+	* fixed a functionfs braino around ffs_epfiles_destroy() (in #40/54,
+used to be #36/50).
+	* added fixes for a couple of UAF in functionfs (##36--39); that
+does *NOT* include any fixes for dmabuf bugs Chris posted last week, though.
+
+The branch is -rc5-based; it lives in
+git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.persistency
+individual patches in followups.
+
+Please, help with review and testing.  If nobody objects, in a few days it
+goes into #for-next.
+
+Shortlog:
+      fuse_ctl_add_conn(): fix nlink breakage in case of early failure
+      tracefs: fix a leak in eventfs_create_events_dir()
+      new helper: simple_remove_by_name()
+      new helper: simple_done_creating()
+      introduce a flag for explicitly marking persistently pinned dentries
+      primitives for maintaining persisitency
+      convert simple_{link,unlink,rmdir,rename,fill_super}() to new primitives
+      convert ramfs and tmpfs
+      procfs: make /self and /thread_self dentries persistent
+      configfs, securityfs: kill_litter_super() not needed
+      convert xenfs
+      convert smackfs
+      convert hugetlbfs
+      convert mqueue
+      convert bpf
+      convert dlmfs
+      convert fuse_ctl
+      convert pstore
+      convert tracefs
+      convert debugfs
+      debugfs: remove duplicate checks in callers of start_creating()
+      convert efivarfs
+      convert spufs
+      convert ibmasmfs
+      ibmasmfs: get rid of ibmasmfs_dir_ops
+      convert devpts
+      binderfs: use simple_start_creating()
+      binderfs_binder_ctl_create(): kill a bogus check
+      convert binderfs
+      autofs_{rmdir,unlink}: dentry->d_fsdata->dentry == dentry there
+      convert autofs
+      convert binfmt_misc
+      selinuxfs: don't stash the dentry of /policy_capabilities
+      selinuxfs: new helper for attaching files to tree
+      convert selinuxfs
+      functionfs: don't abuse ffs_data_closed() on fs shutdown
+      functionfs: don't bother with ffs->ref in ffs_data_{opened,closed}()
+      functionfs: need to cancel ->reset_work in ->kill_sb()
+      functionfs: fix the open/removal races
+      functionfs: switch to simple_remove_by_name()
+      convert functionfs
+      gadgetfs: switch to simple_remove_by_name()
+      convert gadgetfs
+      hypfs: don't pin dentries twice
+      hypfs: switch hypfs_create_str() to returning int
+      hypfs: swich hypfs_create_u64() to returning int
+      convert hypfs
+      convert rpc_pipefs
+      convert nfsctl
+      convert rust_binderfs
+      get rid of kill_litter_super()
+      convert securityfs
+      kill securityfs_recursive_remove()
+      d_make_discardable(): warn if given a non-persistent dentry
+
+Diffstat:
+ Documentation/filesystems/porting.rst     |   7 ++
+ arch/powerpc/platforms/cell/spufs/inode.c |  17 ++-
+ arch/s390/hypfs/hypfs.h                   |   6 +-
+ arch/s390/hypfs/hypfs_diag_fs.c           |  60 ++++------
+ arch/s390/hypfs/hypfs_vm_fs.c             |  21 ++--
+ arch/s390/hypfs/inode.c                   |  82 +++++--------
+ drivers/android/binder/rust_binderfs.c    | 121 ++++++-------------
+ drivers/android/binderfs.c                |  82 +++----------
+ drivers/base/devtmpfs.c                   |   2 +-
+ drivers/misc/ibmasm/ibmasmfs.c            |  24 ++--
+ drivers/usb/gadget/function/f_fs.c        | 144 +++++++++++++----------
+ drivers/usb/gadget/legacy/inode.c         |  49 ++++----
+ drivers/xen/xenfs/super.c                 |   2 +-
+ fs/autofs/inode.c                         |   2 +-
+ fs/autofs/root.c                          |  11 +-
+ fs/binfmt_misc.c                          |  69 ++++++-----
+ fs/configfs/dir.c                         |  10 +-
+ fs/configfs/inode.c                       |   3 +-
+ fs/configfs/mount.c                       |   2 +-
+ fs/dcache.c                               | 111 +++++++++++-------
+ fs/debugfs/inode.c                        |  32 ++----
+ fs/devpts/inode.c                         |  57 ++++-----
+ fs/efivarfs/inode.c                       |   7 +-
+ fs/efivarfs/super.c                       |   5 +-
+ fs/fuse/control.c                         |  38 +++---
+ fs/hugetlbfs/inode.c                      |  12 +-
+ fs/internal.h                             |   1 -
+ fs/libfs.c                                |  52 +++++++--
+ fs/nfsd/nfsctl.c                          |  18 +--
+ fs/ocfs2/dlmfs/dlmfs.c                    |   8 +-
+ fs/proc/base.c                            |   6 +-
+ fs/proc/internal.h                        |   1 +
+ fs/proc/root.c                            |  14 +--
+ fs/proc/self.c                            |  10 +-
+ fs/proc/thread_self.c                     |  11 +-
+ fs/pstore/inode.c                         |   7 +-
+ fs/ramfs/inode.c                          |   8 +-
+ fs/super.c                                |   8 --
+ fs/tracefs/event_inode.c                  |   7 +-
+ fs/tracefs/inode.c                        |  13 +--
+ include/linux/dcache.h                    |   4 +-
+ include/linux/fs.h                        |   6 +-
+ include/linux/proc_fs.h                   |   2 -
+ include/linux/security.h                  |   2 -
+ init/do_mounts.c                          |   2 +-
+ ipc/mqueue.c                              |  12 +-
+ kernel/bpf/inode.c                        |  15 +--
+ mm/shmem.c                                |  38 ++----
+ net/sunrpc/rpc_pipe.c                     |  27 ++---
+ security/apparmor/apparmorfs.c            |  13 ++-
+ security/inode.c                          |  35 +++---
+ security/selinux/selinuxfs.c              | 185 +++++++++++++-----------------
+ security/smack/smackfs.c                  |   2 +-
+ 53 files changed, 649 insertions(+), 834 deletions(-)
+
+	Overview:
+
+First two commits are bugfixes (fusectl and tracefs resp.)
+
+[1/54] fuse_ctl_add_conn(): fix nlink breakage in case of early failure
+[2/54] tracefs: fix a leak in eventfs_create_events_dir()
+
+Next, two commits adding a couple of useful helpers, the next three adding
+the infrastructure and the rest consists of per-filesystem conversions.
+
+[3/54] new helper: simple_remove_by_name()
+[4/54] new helper: simple_done_creating()
+	end_creating_path() analogue for internal object creation; unlike
+end_creating_path() no mount is passed to it (or guaranteed to exist, for
+that matter - it might be used during the filesystem setup, before the
+superblock gets attached to any mounts).
+
+Infrastructure:
+[5/54] introduce a flag for explicitly marking persistently pinned dentries
+	* introduce the new flag
+	* teach shrink_dcache_for_umount() to handle it (i.e. remove
+and drop refcount on anything that survives to umount with that flag
+still set)
+	* teach kill_litter_super() that anything with that flag does
+*not* need to be unpinned.
+[6/54] primitives for maintaining persisitency
+	* d_make_persistent(dentry, inode) - bump refcount, mark persistent
+and make hashed positive.  Return value is a borrowed reference to dentry;
+it can be used until something removes persistency (at the very least,
+until the parent gets unlocked, but some filesystems may have stronger
+exclusion).
+	* d_make_discardable() - remove persistency mark and drop reference.
+
+NOTE: at that stage d_make_discardable() does not reject dentries not
+marked persistent - it acts as if the mark been set.
+
+Rationale: less noise in series splitup that way.  We want (and on the
+next commit will get) simple_unlink() to do the right thing - remove
+persistency, if it's there.  However, it's used by many filesystems.
+We would have either to convert them all at once or split simple_unlink()
+into "want persistent" and "don't want persistent" versions, the latter
+being the old one.  In the course of the series almost all callers
+would migrate to the replacement, leaving only two pathological cases
+with the old one.  The same goes for simple_rmdir() (two callers left in
+the end), simple_recursive_removal() (all callers gone in the end), etc.
+That's a lot of noise and it's easier to start with d_make_discardable()
+quietly accepting non-persistent dentries, then, in the end, add private
+copies of simple_unlink() and simple_rmdir() for two weird users (configfs
+and apparmorfs) and have those use dput() instead of d_make_discardable().
+At that point we'd be left with all callers of d_make_discardable()
+always passing persistent dentries, allowing to add a warning in it.
+
+[7/54] convert simple_{link,unlink,rmdir,rename,fill_super}() to new primitives
+	See above re quietly accepting non-peristent dentries in
+simple_unlink(), simple_rmdir(), etc.
+
+	Converting filesystems:
+[8/54] convert ramfs and tmpfs
+[9/54] procfs: make /self and /thread_self dentries persistent
+[10/54] configfs, securityfs: kill_litter_super() not needed
+[11/54] convert xenfs
+[12/54] convert smackfs
+[13/54] convert hugetlbfs
+[14/54] convert mqueue
+[15/54] convert bpf
+[16/54] convert dlmfs
+[17/54] convert fuse_ctl
+[18/54] convert pstore
+[19/54] convert tracefs
+[20/54] convert debugfs
+[21/54] debugfs: remove duplicate checks in callers of start_creating()
+[22/54] convert efivarfs
+[23/54] convert spufs
+[24/54] convert ibmasmfs
+[25/54] ibmasmfs: get rid of ibmasmfs_dir_ops
+[26/54] convert devpts
+[27/54] binderfs: use simple_start_creating()
+[28/54] binderfs_binder_ctl_create(): kill a bogus check
+[29/54] convert binderfs
+[30/54] autofs_{rmdir,unlink}: dentry->d_fsdata->dentry == dentry there
+[31/54] convert autofs
+[32/54] convert binfmt_misc
+[33/54] selinuxfs: don't stash the dentry of /policy_capabilities
+[34/54] selinuxfs: new helper for attaching files to tree
+[35/54] convert selinuxfs
+
+	Several functionfs fixes, before converting it, to make life
+simpler for backporting:
+[36/54] functionfs: don't abuse ffs_data_closed() on fs shutdown
+[37/54] functionfs: don't bother with ffs->ref in ffs_data_{opened,closed}()
+[38/54] functionfs: need to cancel ->reset_work in ->kill_sb()
+[39/54] functionfs: fix the open/removal races
+
+	... and back to filesystems conversions:
+
+[40/54] functionfs: switch to simple_remove_by_name()
+[41/54] convert functionfs
+[42/54] gadgetfs: switch to simple_remove_by_name()
+[43/54] convert gadgetfs
+[44/54] hypfs: don't pin dentries twice
+[45/54] hypfs: switch hypfs_create_str() to returning int
+[46/54] hypfs: swich hypfs_create_u64() to returning int
+[47/54] convert hypfs
+[48/54] convert rpc_pipefs
+[49/54] convert nfsctl
+[50/54] convert rust_binderfs
+
+	... and no kill_litter_super() callers remain, so we
+can take it out:
+[51/54] get rid of kill_litter_super()
+	
+	Followups:
+[52/54] convert securityfs
+	That was the last remaining user of simple_recursive_removal()
+that did *not* mark things persistent.  Now the only places where
+d_make_discardable() is still called for dentries that are not marked
+persistent are the calls of simple_{unlink,rmdir}() in configfs and
+apparmorfs.
+
+[53/54] kill securityfs_recursive_remove()
+	Unused macro...
+
+[54/54] d_make_discardable(): warn if given a non-persistent dentry
+
+At this point there are very few call chains that might lead to
+d_make_discardable() on a dentry that hadn't been made persistent:
+calls of simple_unlink() and simple_rmdir() in configfs and
+apparmorfs.
+
+Both filesystems do pin (part of) their contents in dcache, but
+they are currently playing very unusual games with that.  Converting
+them to more usual patterns might be possible, but it's definitely
+going to be a long series of changes in both cases.
+
+For now the easiest solution is to have both stop using simple_unlink()
+and simple_rmdir() - that allows to make d_make_discardable() warn
+when given a non-persistent dentry.
+
+Rather than giving them full-blown private copies (with calls of
+d_make_discardable() replaced with dput()), let's pull the parts of
+simple_unlink() and simple_rmdir() that deal with timestamps and link
+counts into separate helpers (__simple_unlink() and __simple_rmdir()
+resp.) and have those used by configfs and apparmorfs.
+
 
