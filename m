@@ -1,213 +1,133 @@
-Return-Path: <linux-usb+bounces-30657-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30658-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27849C68943
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 10:38:03 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC5C6C68AC5
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 11:00:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 073512A788
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 09:38:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 43F4C3510D9
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Nov 2025 09:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AC03164B4;
-	Tue, 18 Nov 2025 09:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACB47329E79;
+	Tue, 18 Nov 2025 09:59:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="IX/NU+qL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BAIaurUS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m3299.qiye.163.com (mail-m3299.qiye.163.com [220.197.32.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355241F5437;
-	Tue, 18 Nov 2025 09:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D255329381
+	for <linux-usb@vger.kernel.org>; Tue, 18 Nov 2025 09:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763458672; cv=none; b=TRlYL0De3NDN9LaGX8meStASpPfyeGl9K0K43p7vJ/CJWUNjWW7LseTabgyBVLn8QtTK8rdb5UeM2qQ/XIF/WFTRMcJl1O4Ipe8iltTE8TfPeD9rnP+/RVVW55HgvERWTWAeQC8KW7oZPQfA8w9Yfi9XMkl/8v3Pfr2igeKOBmU=
+	t=1763459991; cv=none; b=Zovtm6QLyA8tc9sSWCsVO0LdvuCl/3A9WWlmp/L6PXvqzthxxDdGvy6KzBlCirzp/nVV0Y2wzd0Mk7NSChJ7ubdWsvktmvQe5tFgQzcS3nbRqj0GELVPgGVV3IuXVDsmhWNSFniFD8oGGEbhTcGzwNDVFaC/2pywnwcv8A9fBYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763458672; c=relaxed/simple;
-	bh=fXgYAJWIGY4pQtZGKh9V8hXCasI48G2CNBqy9tjlIO4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TTSS/p/zk5UZlL/1GXFPzDAi5NletgtriNLHam/vQmQOUtJm8n4/3rIQzT7XOhQZ8rh1v612R5g/UdjpEe1on234N5bL0PJb/r5gXSgfGLd+HNKwQw9VR2nGoayjX/EpdVcLJmaczG+DdZhpi83O8PT8PMyfIxSvey+nUhfFCU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=IX/NU+qL; arc=none smtp.client-ip=220.197.32.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.51] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 29fbbda7b;
-	Tue, 18 Nov 2025 17:37:40 +0800 (GMT+08:00)
-Message-ID: <525040d5-84db-4de1-aed0-3b4b5a672f8b@rock-chips.com>
-Date: Tue, 18 Nov 2025 17:37:39 +0800
+	s=arc-20240116; t=1763459991; c=relaxed/simple;
+	bh=3OTjsyF8jzv5/5B8GX+VKvfXggixdgyd2+Q102JeQ8o=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aBNDSDdNsxF2EbhugiRPH0qOi89Epq3ix4N1B2dzA+cVuQ+lRzliDGATVLghxGZyrmRomCm7xZrYDEU9CKI8Umfi2kftksVo4TO2P+xJS3UImbuDCidbh0IYOeT76IrhMqRsldQvqB8Nhf9j5ZvhDMd06FijmFMLJPdoiUo/vcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BAIaurUS; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b739ef3f739so318125366b.1
+        for <linux-usb@vger.kernel.org>; Tue, 18 Nov 2025 01:59:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763459988; x=1764064788; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ZYnCm/sXxbVHIqtj0TWym4GM93F9lRgfmerGHcbL1Y=;
+        b=BAIaurUSc77IzR2iGUXpJibrYp522tHd+Cs3BqdfM9uJRgQQd/ZKuTdY4Qhbuv62MZ
+         OWMCKQ3itgVQhlF90ahSihe6FTbPUADpUfPjvwZNuQ9wlWTQe54j9waXsqY9ATnu9zcG
+         W4Oiaqjt3NIMCX+WsMIVu+VxetzpoCpwPyGicEPVbUAkw76rxsxwzCEETvOvbFyvWVgr
+         L7Rgnv7VpOI0+onF2nw+vvTVbSWMt/VpNI94tqWeq/t0yT1R4qjLNrS5iJ+KWyZb4WrT
+         JHXhtstUIre9WY/a/vuMtNCR2vzGMinMn99Y5+uAZcvZ/J2f8kv8Z0JlYctAEkG0XDP6
+         xD3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763459988; x=1764064788;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5ZYnCm/sXxbVHIqtj0TWym4GM93F9lRgfmerGHcbL1Y=;
+        b=qscdBWT/jfg/EImDVtl+cCgLPvFqozEm8dqeWBq+ngLjMSnVk8sK7xvmSFeqVHDhCU
+         +DKH6Yse4u9PBrHBAiZ3DVR4Mn24loNx7ycKxucgG55X5CzavalzUlMRiJFibfzyHx0M
+         DIGusYSYMiSe8q+AwJLQez8j2dsYKIVRnArBifEeAaRUckIsfvTuKeESGj1TMUPdCIgT
+         KkLugDNIVZdEwCKxgx+o1eQj4wDHJzQcGgefQhQqM9icUOs5CY4efNTRoIXJvKrD5pdn
+         sHOFQxtsgrl/6TOrvTnL3d857z88vDw50aNKypo85PusIZcwZkLqyMrvQB9yOOnk7bh+
+         uODQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV3DaDd9InjHa/ds8PIMMd7+v9zyrxXZJEXKFQvCflvUbrVqQj2PpK/0Ee5HGnSPWVbtO0Tkg7ZYmY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSdh3P4vsl8FzgYXZDj3HAwxkRboPixPm/E20/kv3IC5yeVLFG
+	nN6gSnVm+RwJ8HAbKMGTG9YJO4TM2HLlOhx0eRWCxncD6+Wc4SM88FW+/WLejA==
+X-Gm-Gg: ASbGnct/zlP14VwJR7RR4h4piFGpgJKRrJur+ncuPFzRaahhpvLXOAALfJGh1IfKBqX
+	5U/jFZKCMw49sLlcgChGqZH1NfEA5x8W4g7bF5tt1sCvgXv5wE6IFHOSYAo2EkJs2eM3KuU2fNW
+	HdDvpWiT1/dlD3+qBycLUl6WOuchdrl2JHoDeRof72vLiBYy/24ai5Lf0RxC2FX2MGSCa43FQgc
+	j1qo0C2swrjy54Ih9r/6kzjEAsrLM8CFrBMrG2PKTMOpEexZfq70fZqk3ffUFergTJZ6+hvkShZ
+	zp4L6SZ4zJ/I+CWPKF4b+RpCwQrkoe+9CxIQ7LzuTD+CSPTDxh1wxSCeCNdW+GRRm3ejRFGFUel
+	OQneSm+vaBglgtCIigKtglo+0Ph8OvITnkvyiuvbdYorvvbhy3RkxTy3GIZVJxMP8QJhMmgWrrl
+	Uea6E7Bsa06RHNOnx1zogaENY=
+X-Google-Smtp-Source: AGHT+IH27uoFNutlapD0gNjviVN2jZZutdx/ofuInMm4gjmLoJom6smGVoJQwrQi+8LFI4RuRsaYlA==
+X-Received: by 2002:a17:907:94ca:b0:b73:709e:a20a with SMTP id a640c23a62f3a-b73709ea300mr1368869066b.47.1763459987333;
+        Tue, 18 Nov 2025 01:59:47 -0800 (PST)
+Received: from foxbook (bhd138.neoplus.adsl.tpnet.pl. [83.28.93.138])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734fd80a06sm1299820966b.38.2025.11.18.01.59.46
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 18 Nov 2025 01:59:46 -0800 (PST)
+Date: Tue, 18 Nov 2025 10:59:29 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Forest <forestix@gaga.casa>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Alan Stern <stern@rowland.harvard.edu>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Stefan Eichenberger
+ <stefan.eichenberger@toradex.com>, Pawel Laszczak <pawell@cadence.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ regressions@lists.linux.dev
+Subject: Re: [REGRESSION][BISECTED] usb: hub: total system freeze after
+ running adb
+Message-ID: <20251118105929.330f0042.michal.pecio@gmail.com>
+In-Reply-To: <qc0nhk9c6l0a08bkfeplrm3qjssgrjkvkp@sonic.net>
+References: <qc0nhk9c6l0a08bkfeplrm3qjssgrjkvkp@sonic.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 06/10] phy: rockchip: phy-rockchip-typec: Add DRM AUX
- bridge
-To: Neil Armstrong <neil.armstrong@linaro.org>,
- Chaoyi Chen <kernel@airkyi.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Chen <hzpeterchen@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- dri-devel@lists.freedesktop.org
-References: <20251111105040.94-1-kernel@airkyi.com>
- <20251111105040.94-7-kernel@airkyi.com>
- <7ca46d0d-d235-421e-95cb-901efb856b0c@linaro.org>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <7ca46d0d-d235-421e-95cb-901efb856b0c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9a9653b96903abkunmdd5bac12ac7c5b
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkkaTlYfHUoaThlMGkNMSk1WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE
-	9VSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=IX/NU+qLfjpc6jNOUokdq+mlntEXb77qHZKkJ9s4nb711L7OON8h5dqK7p3ob8lQuodsMJH5PP/UEAjPxp2FGszqJCz5PIUkZPtYDoAMdBI3gqfWs9lxcFir/AqFnDfu3ECbZBWBOW0/7v/CHt0D1o3TWssNEa9VVNiVVtzULiQ=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=Ju+gAVn51Xi01WO06/xEtoW6S8aMqC2W8WHS0vrOthQ=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Neil,
+On Mon, 17 Nov 2025 12:18:54 -0800, Forest wrote:
+> #regzbot introduced 8f5b7e2bec1c
+> 
+> Running adb (android debug bridge) commands causes the entire system to
+> freeze some time later.
+> 
+> The freeze usually occurs within two hours of running adb, but not always.
+> Stopping adb's persistent background process with `adb kill-server` seems to
+> avoid the freeze. (However, this is not always possible, since the system
+> sometimes freezes just a few seconds after adb is launched.)
+> 
+> It occurs even when no android devices are connected to the system.
 
-On 11/18/2025 5:08 PM, Neil Armstrong wrote:
-> On 11/11/25 11:50, Chaoyi Chen wrote:
->> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>
->> Using the DRM_AUX_BRIDGE helper to create the transparent DRM bridge
->> device.
->>
->> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->> ---
->>
->> (no changes since v7)
->>
->> Changes in v6:
->> - Fix depend in Kconfig.
->>
->>   drivers/phy/rockchip/Kconfig              |  2 +
->>   drivers/phy/rockchip/phy-rockchip-typec.c | 52 +++++++++++++++++++++++
->>   2 files changed, 54 insertions(+)
->>
->> diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
->> index db4adc7c53da..bcb5476222fc 100644
->> --- a/drivers/phy/rockchip/Kconfig
->> +++ b/drivers/phy/rockchip/Kconfig
->> @@ -120,6 +120,8 @@ config PHY_ROCKCHIP_TYPEC
->>       tristate "Rockchip TYPEC PHY Driver"
->>       depends on OF && (ARCH_ROCKCHIP || COMPILE_TEST)
->>       depends on TYPEC || TYPEC=n
->> +    depends on DRM || DRM=n
->> +    select DRM_AUX_BRIDGE if DRM_BRIDGE
->>       select EXTCON
->>       select GENERIC_PHY
->>       select RESET_CONTROLLER
->> diff --git a/drivers/phy/rockchip/phy-rockchip-typec.c b/drivers/phy/rockchip/phy-rockchip-typec.c
->> index 1f5b4142cbe4..748a6eb8ad95 100644
->> --- a/drivers/phy/rockchip/phy-rockchip-typec.c
->> +++ b/drivers/phy/rockchip/phy-rockchip-typec.c
->> @@ -36,6 +36,7 @@
->>    * orientation, false is normal orientation.
->>    */
->>   +#include <linux/auxiliary_bus.h>
->>   #include <linux/clk.h>
->>   #include <linux/clk-provider.h>
->>   #include <linux/delay.h>
->> @@ -56,6 +57,7 @@
->>   #include <linux/phy/phy.h>
->>   #include <linux/usb/typec_dp.h>
->>   #include <linux/usb/typec_mux.h>
->> +#include <drm/bridge/aux-bridge.h>
->>     #define CMN_SSM_BANDGAP            (0x21 << 2)
->>   #define CMN_SSM_BIAS            (0x22 << 2)
->> @@ -415,6 +417,7 @@ struct rockchip_usb3phy_port_cfg {
->>     struct rockchip_typec_phy {
->>       struct device *dev;
->> +    struct auxiliary_device dp_port_dev;
->>       void __iomem *base;
->>       struct extcon_dev *extcon;
->>       struct typec_mux_dev *mux;
->> @@ -1299,6 +1302,51 @@ static void tcphy_typec_mux_unregister(void *data)
->>       typec_mux_unregister(tcphy->mux);
->>   }
->>   +static void tcphy_dp_port_dev_release(struct device *dev)
->> +{
->> +    struct auxiliary_device *adev = to_auxiliary_dev(dev);
->> +
->> +    of_node_put(adev->dev.of_node);
->> +}
->> +
->> +static void tcphy_dp_port_unregister_adev(void *_adev)
->> +{
->> +    struct auxiliary_device *adev = _adev;
->> +
->> +    auxiliary_device_delete(adev);
->> +    auxiliary_device_uninit(adev);
->> +}
->> +
->> +static int tcphy_aux_bridge_register(struct rockchip_typec_phy *tcphy, struct device_node *np)
->> +{
->> +    struct auxiliary_device *adev = &tcphy->dp_port_dev;
->> +    int ret;
->> +
->> +    adev->name = "dp_port";
->> +    adev->dev.parent = tcphy->dev;
->> +    adev->dev.of_node = of_node_get(np);
->> +    adev->dev.release = tcphy_dp_port_dev_release;
->> +
->> +    ret = auxiliary_device_init(adev);
->> +
->
-> Drop this empty line.
+Hi,
 
->
->> +    if (ret) {
->> +        of_node_put(adev->dev.of_node);
->> +        return ret;
->> +    }
->> +
->> +    ret = auxiliary_device_add(adev);
->> +    if (ret) {
->> +        auxiliary_device_uninit(adev);
->> +        return ret;
->> +    }
->> +
->> +    devm_add_action_or_reset(tcphy->dev, tcphy_dp_port_unregister_adev, adev);
->> +
->> +    ret = drm_aux_bridge_register(&adev->dev);
->
-> Adding an aux device to an aux device looks quite overengineered to me !
->
-> If it's a matter of using the proper of_node, you may instead create a separate
-> drm_aux_bridge_register() like drm_aux_bridge_register_from_node() instead.
+If this is caused by running some demon without much hardware connected
+(besides hubs, I guess), I wonder if it might be useful to run strace on
+that thing to see what it is even doing to trigger this crash.
 
-Yes, as you said, the aux device here is only to let the drm_aux_bridge get the correct of_node. I will add the API you mentioned in v10. Thank you.
+> - No messages are written to dmesg or syslog.
+> - Virtual console switching no longer works.
+> - SysRq key commands no longer work, as far as I can tell.
+> - Whatever was on the display remains intact.
+> - Any already-playing audio enters a short loop, as though the
+>   motherboard's sound device is playing from a ring buffer that
+>   no longer gets updated.
 
+How can you know nothing is logged if the machine becomes unresponsive?
+For such occasions I keep a PCIe card with a serial port to get logs.
+Maybe xHCI debug capability could work too (?), but I've never tried.
 
--- 
-Best,
-Chaoyi
-
+Regards,
+Michal
 
