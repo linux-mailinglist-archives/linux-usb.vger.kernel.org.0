@@ -1,78 +1,78 @@
-Return-Path: <linux-usb+bounces-30693-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30694-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF9E1C6EDA1
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 14:24:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A39D7C6ED53
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 14:22:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 523894FD1EE
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 13:13:40 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A4C19365C67
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 13:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AD68364051;
-	Wed, 19 Nov 2025 13:09:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E3503659E8;
+	Wed, 19 Nov 2025 13:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JhoQX9ej"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SsmAVFv9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B99364031
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 13:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46F7364E96
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 13:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763557741; cv=none; b=oy4cr1LCLlnRe//Jkg8vlHAOOBfBv6Yjr1IJvaR+27xeZN5YA4N+nWY9RMkMxWxymtJkMrNt7IQ9HmFkZZWNQg/M+ChvuUReV52N6v1DL1sxnL1tgR1u0jpxxo8hKKnBY6JTgivz/mCI+s6xFaVWsQLbApyJlhPPdm5h67UXGjA=
+	t=1763557745; cv=none; b=PkWvLJYzF28OMnFpqeF0hQrYYQhcxd72ll6dypWSx17/4spKZyRKy9MeM1WHOVxJqzSV1KOjUDegcnG/+d61UHCEZ8dxsjE9eGjFW6hIgb6Ry8KkZMdsOwuHUPulhH5EYQeHApdt4UBTESgYiVe1YRkDGrfzGcMYOyAurnYw9P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763557741; c=relaxed/simple;
-	bh=HTFla0RytuoS9NHA5emWBBtLMkkNBBwOu1BiSS4pxwg=;
+	s=arc-20240116; t=1763557745; c=relaxed/simple;
+	bh=Ov1DO0gEROAmZbORgQvXasiNjE3BiOD+UMuymUYTkjM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZPV/TZa3kX+m9wqZE7GVzJyJB56ZJ26FUmF17eVxkcxOuRoCStXpvt2LqTdVH8uK80FslhK08KX+wKJI5PiH9YbSOk9JCtoy2c7eWkCC/BLhD9fidLCOfBi3pmWgYyLN/HoFoXV0YRFrPLdJ46FJbVggE/jcHycQSDOjVwyQADo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JhoQX9ej; arc=none smtp.client-ip=209.85.210.170
+	 MIME-Version; b=CHNdDfRRK+j06FIY3lT8POEqjjAJ6JH6YrRJRA+aZrYx+BQvJeBjqpuon8EigPhudCKmgHsmRb88ZRUuBHqpZ0BqHu8RkWT71vrbjpbyOmMsiC40HidPlcXSoQXKY06ZbvKP3ztWCN+yuMY6Z+VudUCBSMV9O6IMQRgCqEOoR7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SsmAVFv9; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7b9a98b751eso5096882b3a.1
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 05:08:59 -0800 (PST)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7bc0cd6a13aso785488b3a.0
+        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 05:09:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763557739; x=1764162539; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763557743; x=1764162543; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ub7Iycd50pT3ykKqItSRTUhlcBrC3jU3CKZCM97yyEA=;
-        b=JhoQX9ejzGr0vnLnLORDi/163r9JrNaGeRLsX8jbm+NDSRJQyxhW1mrDD89eO1bZsr
-         QCRlsOKXQYCX2k9W4yUv8u0SWJ5SLmIc4nDM4K4pgm+eRyXQgnOC2J5FwfzCBJ6IiFTx
-         D9ZHfqGgbO+n6hgHphgiOBVb6aIAxLBgNTomYHqaMnQYNC4rvYg3sMT+OkPe00+EG7xC
-         THbPFLY0kMdUTNJ5T/DGQbcrNMyVSduTDCKmpjuEMhMshKqZin0ur2dg7DIXoJDgUqZj
-         fUiZnxiqAIrETf17ZefhRdlFy4zra+HUsZpiQBVOP8ZVxtJBepaSeSsp5/gRKccgXiZ/
-         BVuQ==
+        bh=/PhfpThnBPbWYm99SayqqOmvAer1zIz//ZVr6sgUx8g=;
+        b=SsmAVFv9zoxWpPLwDyPrzS/gM0PWX84g7u6DD+8HLNFwrkGs5pMypr3/c5wCZ72u7X
+         ONMIRvLCe1w17Z7G9isLv9BtaqTaglV+R6ivqz5HBTYr5nkgvhIPyKOSXuXJSzAw6w64
+         B3aQElMtdXOkjASWnBgQC6dXyp2SZQEU4E07s5+5IDldiv2RgNWAHa6wS/xqCxCcizRb
+         O8QUs4QNm+opevEFyZuDXQ7AsysWTVmY7LxHaApficcZJOt+q/PsiVjBNp6NptFG2M7X
+         8O4n0DsYCPr2V7TH2ZOMqHykVFkcdRgbVgiSJf781cp+HKUwBEPx4NsUaQOddgfwSgJb
+         o49g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763557739; x=1764162539;
+        d=1e100.net; s=20230601; t=1763557743; x=1764162543;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Ub7Iycd50pT3ykKqItSRTUhlcBrC3jU3CKZCM97yyEA=;
-        b=e3E/42mq4Eym4HUtONxf4SMplCTDGVe+ro3zUGbf2dFBdboN1aaIEogLy4vgnV0zRX
-         NcGjNt9V4FnR/kkwHXt1j9pns3J42RfY4FwjrinccjenPQx918Lctp1JYXGm/8cd78fc
-         HrjiUV5d7XNgu44qnBreJOrA5cPimIu41p87R6MXPxV7MsvFprCQyggpiCEFpT/03/we
-         QkZv613gKrXnBRTLOJTHCkWtre/YVdg9kmVwqnaF4WOrG5o7NP5huCp3QkbBxB58enSn
-         ANxWGZt8wCvQmU2F1EfVslFSoLTRW9nGQnGPqWk7TvQO2Y1O/kfvb7kS2Z7dDs1/Dgxt
-         gBcA==
-X-Gm-Message-State: AOJu0YyIrfXOaHue/E/YtUwv3kshyR9zlFM22G3acWObCzFq/YxsMfTg
-	zGG+QToTaKsY5oSBerD+CEVT6d3ctqw5+AGaUu6QrzVPosl6cy1d4ENl
-X-Gm-Gg: ASbGncvw6CbWhRyF69yaCl6KB8pzjMAOIVCdOfJyk5SktgvODa7O5zLLuyAmppSYNVx
-	6IGoWMuQj/buNJTOKV1yn8IHbjgqJ16PbUJV5Kj+eK5hxUXcuqFBgf3k8hBpEpYxW0cyV9lGTbS
-	1P4laPh3pZQvV34aKYrSsb3Tb08Gb2ROhXvdA7eTmUk14RotUzla0WOkDWucX9A6TFg8Cbt5kyq
-	vbEjuTcgOtN6U5KF+NRQD2yXpWLsE6+0gqUH09bj45hcM4i7G2/gdAh8GQEiLB5Q9EiUK4R8viu
-	Mqmuj944/fofVyYZL8ytET0+Q8YiNMT8dXwKsCk2O+AfmHBu8U7hv4axpDJfDLcr34ty91O1Qln
-	BghXORzhqK8lOXVyXceppQ0KDd5TbIDxa3Kfgsgd/TV/CCeBF3+SoLKZjTOYYHIoCjwlxYCKvOO
-	sckniRjlTaVhCm6GwGA6j0WCbx6T8NWIqQuWFyZ8T5ag6nFQ==
-X-Google-Smtp-Source: AGHT+IFBSzymvZRKa7zVQvJ0Kbgj1A87hkoMlG2vAmcdFtJqayGd4VFPcDBdtVH9byZ5m9A16dz2ow==
-X-Received: by 2002:a05:6a00:148a:b0:77e:8130:fda with SMTP id d2e1a72fcca58-7ba3a6c7879mr22659126b3a.13.1763557738780;
-        Wed, 19 Nov 2025 05:08:58 -0800 (PST)
+        bh=/PhfpThnBPbWYm99SayqqOmvAer1zIz//ZVr6sgUx8g=;
+        b=kBBrdD1PyCkYlOcXMVKoEarI2iGzYJuE4k35f89ZZ/WjQA39j9TyOxXOIRSaljkTdy
+         ML7KIMX3QxG2GVQ8PeufwihdhPDpT1eOnVVOMGYyItitBlH8+NS8OqX/ego8/xmYNPMM
+         kNGXC+HcKy61dAjX7iEFXHJEvZNo4FAVqg01/ATSNI8xjd/4XWnt6xPDTmjgHJXajdm6
+         1tPKIQRu8n0rMievHMgqHy2c04du7UCMDAKxR7aE005L1ycZ8Ho1NNX1ACW8CQiad4Lb
+         /5+qqm/neW3TIFC8yeQwshinkrDakCH3v6gJ4BpcWZ52/t0G6eSDAc8jjz38jcSFcf+S
+         V/2Q==
+X-Gm-Message-State: AOJu0Yzh3geC+2YtmD5bkpEvOxkh90ED88m7TKuDKwZy5UJpikmrn/Nl
+	7eUS550rfSkijKlLkUV2eMRwzc09iwIyiGldsfXOrTxhQyNBphO48k22
+X-Gm-Gg: ASbGncsAmVvAOkATJn0t7pOOggmHo71VG+74xu8XLE41yninMcp4ZXFOGmvE6otE5xM
+	WO8u6/Yam6hSOm8yhn5DsPFw92zw+ethenYZj1wObsD4bZxCjFvGzYdF+rH5bgtSCoQsgKeZ5xI
+	zQfhO7oHU66O60OgSOFMVynhEYxDS8JHUQIdSMOvnjbXp/eBJVgOcHLzXrOliJlTBk+7xK4d3zj
+	Mg0glPjnbZ3FnNuHFwAz4CDh+LxjuRlEGuIY3jfkB/bccfIghQ+obsj7R0tbGvTyhbrx+XZZ3q4
+	7dANdC3Yx+Z7Lu9CTDNcvMq7rmbjUnqnNJl5CsD04gueXiUs72yPnm+O4VwXm6MztcV20JlWJYx
+	lf0cbn2yVBqNLF9qBEzGMOoAPYQ7Ng4OfYWiqTmJPDCxk+pTSP6OP1JGgR3VoWXzPRoTnDNidRN
+	+kYxgqqtpUZrKT45RqG4R3jOcMR2eByd4DZVUDl4bBdXKgpg==
+X-Google-Smtp-Source: AGHT+IH2icsuZup0t28zq1+gCeYw7a1CehWBpfDeeE9rZAiWffx4jMLQwXpNwKhhHe3WGMo/AhuUMQ==
+X-Received: by 2002:a05:6a00:4601:b0:7a9:7887:f0fa with SMTP id d2e1a72fcca58-7c2c0f5719amr2777639b3a.1.1763557742964;
+        Wed, 19 Nov 2025 05:09:02 -0800 (PST)
 Received: from clint-ThinkPad-L14-Gen-2.. ([110.226.183.150])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b9250cd969sm19692422b3a.23.2025.11.19.05.08.55
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b9250cd969sm19692422b3a.23.2025.11.19.05.08.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 05:08:58 -0800 (PST)
+        Wed, 19 Nov 2025 05:09:02 -0800 (PST)
 From: Clint George <clintbgeorge@gmail.com>
 To: stern@rowland.harvard.edu,
 	gregkh@linuxfoundation.org
@@ -83,9 +83,9 @@ Cc: linux-usb@vger.kernel.org,
 	skhan@linuxfoundation.org,
 	khalid@kernel.org,
 	Clint George <clintbgeorge@gmail.com>
-Subject: [PATCH 2/8] usb: gadget: dummy_hcd: replace symbolic permissions (S_IRUGO) with octal (0444)
-Date: Wed, 19 Nov 2025 18:38:34 +0530
-Message-ID: <20251119130840.14309-3-clintbgeorge@gmail.com>
+Subject: [PATCH 3/8] usb: gadget: dummy_hcd: use 'unsigned int' instead of bare 'unsigned'
+Date: Wed, 19 Nov 2025 18:38:35 +0530
+Message-ID: <20251119130840.14309-4-clintbgeorge@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251119130840.14309-1-clintbgeorge@gmail.com>
 References: <20251119130840.14309-1-clintbgeorge@gmail.com>
@@ -97,34 +97,56 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace existing symbolic permissions S_IRUGO (Read-only) with octal
-permission 0444. This makes it much easier to read and and is consistent
-with the kernel coding style.
+Use 'unsigned int' instead of 'unsigned' wherever possible to maintain
+consistency with the kernel coding style.
 
 Signed-off-by: Clint George <clintbgeorge@gmail.com>
 ---
- drivers/usb/gadget/udc/dummy_hcd.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/gadget/udc/dummy_hcd.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-index 41b7b6907..1369b9613 100644
+index 1369b9613..6ad366640 100644
 --- a/drivers/usb/gadget/udc/dummy_hcd.c
 +++ b/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -73,11 +73,11 @@ static struct dummy_hcd_module_parameters mod_data = {
- 	.is_high_speed = true,
- 	.num = 1,
- };
--module_param_named(is_super_speed, mod_data.is_super_speed, bool, S_IRUGO);
-+module_param_named(is_super_speed, mod_data.is_super_speed, bool, 0444);
- MODULE_PARM_DESC(is_super_speed, "true to simulate SuperSpeed connection");
--module_param_named(is_high_speed, mod_data.is_high_speed, bool, S_IRUGO);
-+module_param_named(is_high_speed, mod_data.is_high_speed, bool, 0444);
- MODULE_PARM_DESC(is_high_speed, "true to simulate HighSpeed connection");
--module_param_named(num, mod_data.num, uint, S_IRUGO);
-+module_param_named(num, mod_data.num, uint, 0444);
- MODULE_PARM_DESC(num, "number of emulated controllers");
- /*-------------------------------------------------------------------------*/
+@@ -506,7 +506,7 @@ static int dummy_enable(struct usb_ep *_ep,
+ 	struct dummy		*dum;
+ 	struct dummy_hcd	*dum_hcd;
+ 	struct dummy_ep		*ep;
+-	unsigned		max;
++	unsigned int		max;
+ 	int			retval;
  
+ 	ep = usb_ep_to_dummy_ep(_ep);
+@@ -1414,7 +1414,7 @@ static int transfer(struct dummy_hcd *dum_hcd, struct urb *urb,
+ top:
+ 	/* if there's no request queued, the device is NAKing; return */
+ 	list_for_each_entry(req, &ep->queue, queue) {
+-		unsigned	host_len, dev_len, len;
++		unsigned int	host_len, dev_len, len;
+ 		int		is_short, to_host;
+ 		int		rescan = 0;
+ 
+@@ -1443,7 +1443,7 @@ static int transfer(struct dummy_hcd *dum_hcd, struct urb *urb,
+ 			/* not enough bandwidth left? */
+ 			if (limit < ep->ep.maxpacket && limit < len)
+ 				break;
+-			len = min_t(unsigned, len, limit);
++			len = min_t(unsigned int, len, limit);
+ 			if (len == 0)
+ 				break;
+ 
+@@ -1624,8 +1624,8 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
+ 	struct dummy_ep		*ep2;
+ 	struct dummy		*dum = dum_hcd->dum;
+ 	int			ret_val = 1;
+-	unsigned	w_index;
+-	unsigned	w_value;
++	unsigned int	w_index;
++	unsigned int	w_value;
+ 
+ 	w_index = le16_to_cpu(setup->wIndex);
+ 	w_value = le16_to_cpu(setup->wValue);
 -- 
 2.43.0
 
