@@ -1,73 +1,71 @@
-Return-Path: <linux-usb+bounces-30707-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30708-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE3EDC6F53F
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 15:37:37 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14A7DC6F47E
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 15:27:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 31EE93466E3
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 14:27:20 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id A6FDB2E413
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 14:27:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB09368273;
-	Wed, 19 Nov 2025 14:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A657369224;
+	Wed, 19 Nov 2025 14:24:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gHJXMULS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="neflvCIY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D3136920E
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 14:24:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DDF364021
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 14:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763562287; cv=none; b=gnlec5xZRxHEsAVj9sjiuyjjOecaCVQQ/cXcV38qUah6jN3DbzBRBv1kB9v6Ms8Vjddo9NIfh/2oe/Wo7jCQtPWYRkZfVsFeWCsn6X+KV64kiEHU3l9QcA+z0gic9IufIkF+pWm1nyf/0XItCQmohE/eH6CfN/0RQLyXBZQqioo=
+	t=1763562288; cv=none; b=ICxoJNaKXs5+LegwmWfWsvVhPE6Sqx04JjVmfrfK5Ky8UDbLvwWkgokusklsfpcTJhIl+n+DPI18uQxCufQqmLclMdm64JEwVJDARp8fPIQRTgFyeHqB3eV8jOqHtpzda7uyj2kyNMWQBWJI3kt+636epa3giz92EzP4ZFD4mWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763562287; c=relaxed/simple;
-	bh=V/ImZ2sFDVd4YAmHVfSed6gb/GEWDQXq5CcwkQwx148=;
+	s=arc-20240116; t=1763562288; c=relaxed/simple;
+	bh=jdD3i0GWM15QYAHxSSAAsDOf0wD9EqWb1lhD6eClfUA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qwtresoT9YJJyi+ubk7ocHZ4465dH3aO0u1f+F/8u4mdbdZcPA1j67PtsS2UsdVpHPGlUplBoPKp6rhEv22OgMASzf/TI+igrhqabs6eK+HrMS1tW69RPVcr6sJJIR35HTBZswEAK6bQumNYXjC/BzJRRUmmj3sD+f7IKKFpGkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gHJXMULS; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version; b=jyRpf+tp91oyguT9fHxM/of5R/a0IZohov9tOuycBvqQNpWiNKkRtpHcDxLwrOa8w4HZE1/NAGmQq7ndEM5Uv7d33gf8ToGlTts4V7bJF3zaZ+DgSZXyQwzWVcNzAhQ8BKCTWF+GEfcQ8T0ElV3R52n2tRgddufi22YaeSYrxDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=neflvCIY; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763562286; x=1795098286;
+  t=1763562287; x=1795098287;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=V/ImZ2sFDVd4YAmHVfSed6gb/GEWDQXq5CcwkQwx148=;
-  b=gHJXMULSYTYwwWK6VtN1fokVMS/mQe2xtDFicUv2DWyiLO4X1wRGdbgb
-   knq81TASkU751EAp04+jRsDXGUxBo/sYS2b+9Ptk718pcS84iIfPDl/+F
-   kOEKjgjYjss7pZEVm5dkqv1Wld99/zvRi8wCx8jhIOXJsxBkOJhglQuSl
-   Jr05pqjm+IqzStHxGiUNDbXh6svEXdS3+298kCCNEwxOLxMlWAQgEYjkQ
-   MR+hXCOjHarSaDu+5SKQkXo95c334kE3CwwDVGBjU+anWYBC0ZO1qiBzm
-   GvsUoOnVATHszz1q1851WrpZmV6W4Xa9YxZyPkOw0yqrsMNAkGFVuNBtH
-   Q==;
-X-CSE-ConnectionGUID: VjQWr5AdRTSaVtk6hS6OaQ==
-X-CSE-MsgGUID: bN5u/G4TSrCgIr1pFn1lmQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="65645516"
+  bh=jdD3i0GWM15QYAHxSSAAsDOf0wD9EqWb1lhD6eClfUA=;
+  b=neflvCIYnwJu2zRzLGmysdpg6gvEnhRqKQzGRm6bMZQspeWzYXhu9cov
+   qh+iUM/JFsBRMgXd7DTvArCWS40Q0mnjnpwCNGPGyLFg80jqy4bO/aJvM
+   XfEqLxtN7wpPOFD4Ne1YUV3URE8fTjKfQLsFVlZgw0xJq2Kmf2Tik1CZa
+   eMA2H8izSroD/71n26H/pE348eXgFZHiGFph4FJpLW5550TJDIrICK1wX
+   l/W6w8aBIr7gTOeO04nrqrRlevc8JjPPNE94gypzhAmn01DEzSnzBePci
+   mC5+/QgANOuu/MOLliJrY0fJ28g1EtBpyrUMI3hroAtFMZuU4Dcl6ggwf
+   w==;
+X-CSE-ConnectionGUID: Z72pHCfBTLWFAY8W5KMJ0g==
+X-CSE-MsgGUID: VG3GYXdXR3iH9MNv+4bpog==
+X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="65645521"
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="65645516"
+   d="scan'208";a="65645521"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:45 -0800
-X-CSE-ConnectionGUID: NBnzzciOSnutX2DL/8PEnQ==
-X-CSE-MsgGUID: IYJAoCxpTuSu4o+xxIlPzw==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:47 -0800
+X-CSE-ConnectionGUID: YbKmMGhPRuy4paW12ddGfQ==
+X-CSE-MsgGUID: U9UCZd0jRASAs4Zg+FNNIg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="221992014"
+   d="scan'208";a="221992026"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO mnyman-desk.home) ([10.245.244.20])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:43 -0800
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:45 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
 	Niklas Neronin <niklas.neronin@linux.intel.com>,
-	Peter Chen <peter.chen@kernel.org>,
-	Peter Chen <peter.chen@kerne.org>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 06/23] usb: xhci: add helper to read PORTSC register
-Date: Wed, 19 Nov 2025 16:24:00 +0200
-Message-ID: <20251119142417.2820519-7-mathias.nyman@linux.intel.com>
+Subject: [PATCH 07/23] usb: xhci: add USB Port Register Set struct
+Date: Wed, 19 Nov 2025 16:24:01 +0200
+Message-ID: <20251119142417.2820519-8-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251119142417.2820519-1-mathias.nyman@linux.intel.com>
 References: <20251119142417.2820519-1-mathias.nyman@linux.intel.com>
@@ -77,498 +75,123 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-Add a dedicated helper function to read the USB Port Status and Control
-(PORTSC) register. This complements xhci_portsc_writel() and improves code
-clarity by providing a clear counterpart for reading the register.
+Introduce a new struct for the Host Controller USB Port Register Set to
+enhance readability and maintainability.
 
-Suggested-by: Peter Chen <peter.chen@kernel.org>
-Reviewed-by: Peter Chen <peter.chen@kerne.org>
+The Host Controller Operational Registers (struct 'xhci_op_regs') span from
+offset 0x0 to 0x3FF and consist of fixed fields. Following these fixed
+fields are the Host Controller USB Port Register Sets, which are dynamic
+and repeat from 1 to MaxPorts, as defined by HCSPARAMS1.
+
+Currently, the struct 'xhci_op_regs' includes:
+ __le32 port_status_base;		The first PORTSC
+ __le32 port_power_base;		The first PORTPMSC
+ __le32 port_link_base;			The first PORTLI
+ __le32 reserved5;			The first PORTHLPMC, not reserved
+ __le32 reserved6[NUM_PORT_REGS*254];	Port registers 2 to MaxPorts
+
+Replace this with the simpler:
+ struct xhci_port_regs port_regs[];	Port registers 1 to MaxPorts
+
+Host Controller USB Port Register Set:
+| Offset	| Mnemonic	| Register Name
+--------------------------------------------------------------------------
+| 0x0		| PORTSC	| Port Status and Control
+| 0x4		| PORTPMSC	| Port Power Management Status and Control
+| 0x8		| PORTLI	| Port Link Info
+| 0xC		| PORTHLPMC	| Port Hardware LPM Control
+
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-debugfs.c |  4 +-
- drivers/usb/host/xhci-hub.c     | 68 ++++++++++++++++-----------------
- drivers/usb/host/xhci-pci.c     |  2 +-
- drivers/usb/host/xhci-ring.c    |  2 +-
- drivers/usb/host/xhci-tegra.c   | 12 +++---
- drivers/usb/host/xhci.c         | 14 +++++--
- drivers/usb/host/xhci.h         |  1 +
- 7 files changed, 55 insertions(+), 48 deletions(-)
+ drivers/usb/host/xhci-mem.c |  3 +--
+ drivers/usb/host/xhci.h     | 36 ++++++++++++++++--------------------
+ 2 files changed, 17 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-index df99fffc6120..d32ac8f84691 100644
---- a/drivers/usb/host/xhci-debugfs.c
-+++ b/drivers/usb/host/xhci-debugfs.c
-@@ -329,7 +329,7 @@ static int xhci_portsc_show(struct seq_file *s, void *unused)
- 	u32			portsc;
- 	char			str[XHCI_MSG_MAX];
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 6e5b6057de79..ea3cfc229cd0 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -2201,8 +2201,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+ 		return -ENOMEM;
  
--	portsc = readl(port->addr);
-+	portsc = xhci_portsc_readl(port);
- 	seq_printf(s, "%s\n", xhci_decode_portsc(str, portsc));
+ 	for (i = 0; i < num_ports; i++) {
+-		xhci->hw_ports[i].addr = &xhci->op_regs->port_status_base +
+-			NUM_PORT_REGS * i;
++		xhci->hw_ports[i].addr = &xhci->op_regs->port_regs[i].portsc;
+ 		xhci->hw_ports[i].hw_portnum = i;
  
- 	return 0;
-@@ -359,7 +359,7 @@ static ssize_t xhci_port_write(struct file *file,  const char __user *ubuf,
- 			return count;
- 		spin_lock_irqsave(&xhci->lock, flags);
- 		/* compliance mode can only be enabled on ports in RxDetect */
--		portsc = readl(port->addr);
-+		portsc = xhci_portsc_readl(port);
- 		if ((portsc & PORT_PLS_MASK) != XDEV_RXDETECT) {
- 			spin_unlock_irqrestore(&xhci->lock, flags);
- 			return -EPERM;
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index d0300c097803..2927b8a80327 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -299,7 +299,7 @@ static void xhci_usb2_hub_descriptor(struct usb_hcd *hcd, struct xhci_hcd *xhci,
- 	 */
- 	memset(port_removable, 0, sizeof(port_removable));
- 	for (i = 0; i < ports; i++) {
--		portsc = readl(rhub->ports[i]->addr);
-+		portsc = xhci_portsc_readl(rhub->ports[i]);
- 		/* If a device is removable, PORTSC reports a 0, same as in the
- 		 * hub descriptor DeviceRemovable bits.
- 		 */
-@@ -356,7 +356,7 @@ static void xhci_usb3_hub_descriptor(struct usb_hcd *hcd, struct xhci_hcd *xhci,
- 	port_removable = 0;
- 	/* bit 0 is reserved, bit 1 is for port 1, etc. */
- 	for (i = 0; i < ports; i++) {
--		portsc = readl(rhub->ports[i]->addr);
-+		portsc = xhci_portsc_readl(rhub->ports[i]);
- 		if (portsc & PORT_DEV_REMOVE)
- 			port_removable |= 1 << (i + 1);
- 	}
-@@ -566,13 +566,13 @@ static void xhci_disable_port(struct xhci_hcd *xhci, struct xhci_port *port)
- 		return;
- 	}
- 
--	portsc = readl(port->addr);
-+	portsc = xhci_portsc_readl(port);
- 	portsc = xhci_port_state_to_neutral(portsc);
- 
- 	/* Write 1 to disable the port */
- 	xhci_portsc_writel(port, portsc | PORT_PE);
- 
--	portsc = readl(port->addr);
-+	portsc = xhci_portsc_readl(port);
- 	xhci_dbg(xhci, "disable port %d-%d, portsc: 0x%x\n",
- 		 hcd->self.busnum, port->hcd_portnum + 1, portsc);
- }
-@@ -622,7 +622,7 @@ static void xhci_clear_port_change_bit(struct xhci_hcd *xhci, u16 wValue,
- 	}
- 	/* Change bits are all write 1 to clear */
- 	xhci_portsc_writel(port, port_status | status);
--	port_status = readl(port->addr);
-+	port_status = xhci_portsc_readl(port);
- 
- 	xhci_dbg(xhci, "clear port%d %s change, portsc: 0x%x\n",
- 		 wIndex + 1, port_change_bit, port_status);
-@@ -650,7 +650,7 @@ static void xhci_set_port_power(struct xhci_hcd *xhci, struct xhci_port *port,
- 	u32 temp;
- 
- 	hcd = port->rhub->hcd;
--	temp = readl(port->addr);
-+	temp = xhci_portsc_readl(port);
- 
- 	xhci_dbg(xhci, "set port power %d-%d %s, portsc: 0x%x\n",
- 		 hcd->self.busnum, port->hcd_portnum + 1, on ? "ON" : "OFF", temp);
-@@ -660,7 +660,7 @@ static void xhci_set_port_power(struct xhci_hcd *xhci, struct xhci_port *port,
- 	if (on) {
- 		/* Power on */
- 		xhci_portsc_writel(port, temp | PORT_POWER);
--		readl(port->addr);
-+		xhci_portsc_readl(port);
- 	} else {
- 		/* Power off */
- 		xhci_portsc_writel(port, temp & ~PORT_POWER);
-@@ -801,7 +801,7 @@ void xhci_set_link_state(struct xhci_hcd *xhci, struct xhci_port *port,
- 	u32 temp;
- 	u32 portsc;
- 
--	portsc = readl(port->addr);
-+	portsc = xhci_portsc_readl(port);
- 	temp = xhci_port_state_to_neutral(portsc);
- 	temp &= ~PORT_PLS_MASK;
- 	temp |= PORT_LINK_STROBE | link_state;
-@@ -817,7 +817,7 @@ static void xhci_set_remote_wake_mask(struct xhci_hcd *xhci,
- {
- 	u32 temp;
- 
--	temp = readl(port->addr);
-+	temp = xhci_portsc_readl(port);
- 	temp = xhci_port_state_to_neutral(temp);
- 
- 	if (wake_mask & USB_PORT_FEAT_REMOTE_WAKE_CONNECT)
-@@ -844,7 +844,7 @@ void xhci_test_and_clear_bit(struct xhci_hcd *xhci, struct xhci_port *port,
- {
- 	u32 temp;
- 
--	temp = readl(port->addr);
-+	temp = xhci_portsc_readl(port);
- 	if (temp & port_bit) {
- 		temp = xhci_port_state_to_neutral(temp);
- 		temp |= port_bit;
-@@ -1002,7 +1002,7 @@ static int xhci_handle_usb2_port_link_resume(struct xhci_port *port,
- 			}
- 			xhci_ring_device(xhci, port->slot_id);
- 		} else {
--			int port_status = readl(port->addr);
-+			int port_status = xhci_portsc_readl(port);
- 
- 			xhci_warn(xhci, "Port resume timed out, port %d-%d: 0x%x\n",
- 				  hcd->self.busnum, wIndex + 1, port_status);
-@@ -1263,7 +1263,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 
- 		wIndex--;
- 		port = ports[portnum1 - 1];
--		temp = readl(port->addr);
-+		temp = xhci_portsc_readl(port);
- 		if (temp == ~(u32)0) {
- 			xhci_hc_died(xhci);
- 			retval = -ENODEV;
-@@ -1309,7 +1309,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 
- 		port = ports[portnum1 - 1];
- 		wIndex--;
--		temp = readl(port->addr);
-+		temp = xhci_portsc_readl(port);
- 		if (temp == ~(u32)0) {
- 			xhci_hc_died(xhci);
- 			retval = -ENODEV;
-@@ -1319,7 +1319,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		/* FIXME: What new port features do we need to support? */
- 		switch (wValue) {
- 		case USB_PORT_FEAT_SUSPEND:
--			temp = readl(port->addr);
-+			temp = xhci_portsc_readl(port);
- 			if ((temp & PORT_PLS_MASK) != XDEV_U0) {
- 				/* Resume the port to U0 first */
- 				xhci_set_link_state(xhci, port, XDEV_U0);
-@@ -1331,7 +1331,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			 * a port unless the port reports that it is in the
- 			 * enabled (PED = ‘1’,PLS < ‘3’) state.
- 			 */
--			temp = readl(port->addr);
-+			temp = xhci_portsc_readl(port);
- 			if ((temp & PORT_PE) == 0 || (temp & PORT_RESET)
- 				|| (temp & PORT_PLS_MASK) >= XDEV_U3) {
- 				xhci_warn(xhci, "USB core suspending port %d-%d not in U0/U1/U2\n",
-@@ -1354,11 +1354,11 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			msleep(10); /* wait device to enter */
- 			spin_lock_irqsave(&xhci->lock, flags);
- 
--			temp = readl(port->addr);
-+			temp = xhci_portsc_readl(port);
- 			bus_state->suspended_ports |= 1 << wIndex;
- 			break;
- 		case USB_PORT_FEAT_LINK_STATE:
--			temp = readl(port->addr);
-+			temp = xhci_portsc_readl(port);
- 			/* Disable port */
- 			if (link_state == USB_SS_PORT_LS_SS_DISABLED) {
- 				xhci_dbg(xhci, "Disable port %d-%d\n",
-@@ -1372,7 +1372,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 					PORT_OCC | PORT_RC | PORT_PLC |
- 					PORT_CEC;
- 				xhci_portsc_writel(port, temp | PORT_PE);
--				temp = readl(port->addr);
-+				temp = xhci_portsc_readl(port);
- 				break;
- 			}
- 
-@@ -1381,7 +1381,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 				xhci_dbg(xhci, "Enable port %d-%d\n",
- 					 hcd->self.busnum, portnum1);
- 				xhci_set_link_state(xhci, port,	link_state);
--				temp = readl(port->addr);
-+				temp = xhci_portsc_readl(port);
- 				break;
- 			}
- 
-@@ -1414,7 +1414,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 					 hcd->self.busnum, portnum1);
- 				xhci_set_link_state(xhci, port, link_state);
- 
--				temp = readl(port->addr);
-+				temp = xhci_portsc_readl(port);
- 				break;
- 			}
- 			/* Port must be enabled */
-@@ -1462,7 +1462,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 					xhci_dbg(xhci, "missing U0 port change event for port %d-%d\n",
- 						 hcd->self.busnum, portnum1);
- 				spin_lock_irqsave(&xhci->lock, flags);
--				temp = readl(port->addr);
-+				temp = xhci_portsc_readl(port);
- 				break;
- 			}
- 
-@@ -1480,12 +1480,12 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 				spin_unlock_irqrestore(&xhci->lock, flags);
- 				while (retries--) {
- 					usleep_range(4000, 8000);
--					temp = readl(port->addr);
-+					temp = xhci_portsc_readl(port);
- 					if ((temp & PORT_PLS_MASK) == XDEV_U3)
- 						break;
- 				}
- 				spin_lock_irqsave(&xhci->lock, flags);
--				temp = readl(port->addr);
-+				temp = xhci_portsc_readl(port);
- 				bus_state->suspended_ports |= 1 << wIndex;
- 			}
- 			break;
-@@ -1502,20 +1502,20 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			temp = (temp | PORT_RESET);
- 			xhci_portsc_writel(port, temp);
- 
--			temp = readl(port->addr);
-+			temp = xhci_portsc_readl(port);
- 			xhci_dbg(xhci, "set port reset, actual port %d-%d status  = 0x%x\n",
- 				 hcd->self.busnum, portnum1, temp);
- 			break;
- 		case USB_PORT_FEAT_REMOTE_WAKE_MASK:
- 			xhci_set_remote_wake_mask(xhci, port, wake_mask);
--			temp = readl(port->addr);
-+			temp = xhci_portsc_readl(port);
- 			xhci_dbg(xhci, "set port remote wake mask, actual port %d-%d status  = 0x%x\n",
- 				 hcd->self.busnum, portnum1, temp);
- 			break;
- 		case USB_PORT_FEAT_BH_PORT_RESET:
- 			temp |= PORT_WR;
- 			xhci_portsc_writel(port, temp);
--			temp = readl(port->addr);
-+			temp = xhci_portsc_readl(port);
- 			break;
- 		case USB_PORT_FEAT_U1_TIMEOUT:
- 			if (hcd->speed < HCD_USB3)
-@@ -1547,7 +1547,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			goto error;
- 		}
- 		/* unblock any posted writes */
--		temp = readl(port->addr);
-+		temp = xhci_portsc_readl(port);
- 		break;
- 	case ClearPortFeature:
- 		if (!portnum1 || portnum1 > max_ports)
-@@ -1556,7 +1556,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		port = ports[portnum1 - 1];
- 
- 		wIndex--;
--		temp = readl(port->addr);
-+		temp = xhci_portsc_readl(port);
- 		if (temp == ~(u32)0) {
- 			xhci_hc_died(xhci);
- 			retval = -ENODEV;
-@@ -1566,7 +1566,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		temp = xhci_port_state_to_neutral(temp);
- 		switch (wValue) {
- 		case USB_PORT_FEAT_SUSPEND:
--			temp = readl(port->addr);
-+			temp = xhci_portsc_readl(port);
- 			xhci_dbg(xhci, "clear USB_PORT_FEAT_SUSPEND\n");
- 			xhci_dbg(xhci, "PORTSC %04x\n", temp);
- 			if (temp & PORT_RESET)
-@@ -1681,7 +1681,7 @@ int xhci_hub_status_data(struct usb_hcd *hcd, char *buf)
- 
- 	/* For each port, did anything change?  If so, set that bit in buf. */
- 	for (i = 0; i < max_ports; i++) {
--		temp = readl(ports[i]->addr);
-+		temp = xhci_portsc_readl(ports[i]);
- 		if (temp == ~(u32)0) {
- 			xhci_hc_died(xhci);
- 			retval = -ENODEV;
-@@ -1750,7 +1750,7 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
- 		u32 t1, t2;
- 		int retries = 10;
- retry:
--		t1 = readl(ports[port_index]->addr);
-+		t1 = xhci_portsc_readl(ports[port_index]);
- 		t2 = xhci_port_state_to_neutral(t1);
- 		portsc_buf[port_index] = 0;
- 
-@@ -1849,7 +1849,7 @@ static bool xhci_port_missing_cas_quirk(struct xhci_port *port)
- {
- 	u32 portsc;
- 
--	portsc = readl(port->addr);
-+	portsc = xhci_portsc_readl(port);
- 
- 	/* if any of these are set we are not stuck */
- 	if (portsc & (PORT_CONNECT | PORT_CAS))
-@@ -1864,7 +1864,7 @@ static bool xhci_port_missing_cas_quirk(struct xhci_port *port)
- 	portsc |= PORT_WR;
- 	xhci_portsc_writel(port, portsc);
- 	/* flush write */
--	readl(port->addr);
-+	xhci_portsc_readl(port);
- 	return true;
- }
- 
-@@ -1911,7 +1911,7 @@ int xhci_bus_resume(struct usb_hcd *hcd)
- 	}
- 	port_index = max_ports;
- 	while (port_index--) {
--		portsc = readl(ports[port_index]->addr);
-+		portsc = xhci_portsc_readl(ports[port_index]);
- 
- 		/* warm reset CAS limited ports stuck in polling/compliance */
- 		if ((xhci->quirks & XHCI_MISSING_CAS) &&
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index b1192648aee7..2ba0261a29c1 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -898,7 +898,7 @@ static int xhci_pci_poweroff_late(struct usb_hcd *hcd, bool do_wakeup)
- 
- 	for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
- 		port = &xhci->hw_ports[i];
--		portsc = readl(port->addr);
-+		portsc = xhci_portsc_readl(port);
- 
- 		if ((portsc & PORT_PLS_MASK) != XDEV_U3)
- 			continue;
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index aa7fc4d6f97c..88022d221c70 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2027,7 +2027,7 @@ static void handle_port_status(struct xhci_hcd *xhci, union xhci_trb *event)
- 	hcd = port->rhub->hcd;
- 	bus_state = &port->rhub->bus_state;
- 	hcd_portnum = port->hcd_portnum;
--	portsc = readl(port->addr);
-+	portsc = xhci_portsc_readl(port);
- 
- 	xhci_dbg(xhci, "Port change event, %d-%d, id %d, portsc: 0x%x\n",
- 		 hcd->self.busnum, hcd_portnum + 1, port_id, portsc);
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 5255b1002893..1e23f198a005 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -2036,7 +2036,7 @@ static bool xhci_hub_ports_suspended(struct xhci_hub *hub)
- 	u32 value;
- 
- 	for (i = 0; i < hub->num_ports; i++) {
--		value = readl(hub->ports[i]->addr);
-+		value = xhci_portsc_readl(hub->ports[i]);
- 		if ((value & PORT_PE) == 0)
- 			continue;
- 
-@@ -2162,7 +2162,7 @@ static void tegra_xhci_enable_phy_sleepwalk_wake(struct tegra_xusb *tegra)
- 			if (!is_host_mode_phy(tegra, i, j))
- 				continue;
- 
--			portsc = readl(rhub->ports[index]->addr);
-+			portsc = xhci_portsc_readl(rhub->ports[index]);
- 			speed = tegra_xhci_portsc_to_speed(tegra, portsc);
- 			tegra_xusb_padctl_enable_phy_sleepwalk(padctl, phy, speed);
- 			tegra_xusb_padctl_enable_phy_wake(padctl, phy);
-@@ -2257,7 +2257,7 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool is_auto_resume)
- 	for (i = 0; i < xhci->usb2_rhub.num_ports; i++) {
- 		if (!xhci->usb2_rhub.ports[i])
- 			continue;
--		portsc = readl(xhci->usb2_rhub.ports[i]->addr);
-+		portsc = xhci_portsc_readl(xhci->usb2_rhub.ports[i]);
- 		tegra->lp0_utmi_pad_mask &= ~BIT(i);
- 		if (((portsc & PORT_PLS_MASK) == XDEV_U3) || ((portsc & DEV_SPEED_MASK) == XDEV_FS))
- 			tegra->lp0_utmi_pad_mask |= BIT(i);
-@@ -2790,7 +2790,7 @@ static int tegra_xhci_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value,
- 		while (i--) {
- 			if (!test_bit(i, &bus_state->resuming_ports))
- 				continue;
--			portsc = readl(ports[i]->addr);
-+			portsc = xhci_portsc_readl(ports[i]);
- 			if ((portsc & PORT_PLS_MASK) == XDEV_RESUME)
- 				tegra_phy_xusb_utmi_pad_power_on(
- 					tegra_xusb_get_phy(tegra, "usb2", (int) i));
-@@ -2808,7 +2808,7 @@ static int tegra_xhci_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value,
- 			if (!index || index > rhub->num_ports)
- 				return -EPIPE;
- 			ports = rhub->ports;
--			portsc = readl(ports[port]->addr);
-+			portsc = xhci_portsc_readl(ports[port]);
- 			if (portsc & PORT_CONNECT)
- 				tegra_phy_xusb_utmi_pad_power_on(phy);
- 		}
-@@ -2827,7 +2827,7 @@ static int tegra_xhci_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value,
- 
- 		if ((type_req == ClearPortFeature) && (value == USB_PORT_FEAT_C_CONNECTION)) {
- 			ports = rhub->ports;
--			portsc = readl(ports[port]->addr);
-+			portsc = xhci_portsc_readl(ports[port]);
- 			if (!(portsc & PORT_CONNECT)) {
- 				/* We don't suspend the PAD while HNP role swap happens on the OTG
- 				 * port
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 84e109dbabe8..6b47b218cb24 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -48,6 +48,12 @@ void xhci_portsc_writel(struct xhci_port *port, u32 val)
- }
- EXPORT_SYMBOL_GPL(xhci_portsc_writel);
- 
-+u32 xhci_portsc_readl(struct xhci_port *port)
-+{
-+	return readl(port->addr);
-+}
-+EXPORT_SYMBOL_GPL(xhci_portsc_readl);
-+
- static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
- {
- 	struct xhci_segment *seg;
-@@ -380,7 +386,7 @@ static void compliance_mode_recovery(struct timer_list *t)
- 		return;
- 
- 	for (i = 0; i < rhub->num_ports; i++) {
--		temp = readl(rhub->ports[i]->addr);
-+		temp = xhci_portsc_readl(rhub->ports[i]);
- 		if ((temp & PORT_PLS_MASK) == USB_SS_PORT_LS_COMP_MOD) {
- 			/*
- 			 * Compliance Mode Detected. Letting USB Core
-@@ -903,7 +909,7 @@ static void xhci_disable_hub_port_wake(struct xhci_hcd *xhci,
- 	spin_lock_irqsave(&xhci->lock, flags);
- 
- 	for (i = 0; i < rhub->num_ports; i++) {
--		portsc = readl(rhub->ports[i]->addr);
-+		portsc = xhci_portsc_readl(rhub->ports[i]);
- 		t1 = xhci_port_state_to_neutral(portsc);
- 		t2 = t1;
- 
-@@ -943,7 +949,7 @@ static bool xhci_pending_portevent(struct xhci_hcd *xhci)
- 	port_index = xhci->usb2_rhub.num_ports;
- 	ports = xhci->usb2_rhub.ports;
- 	while (port_index--) {
--		portsc = readl(ports[port_index]->addr);
-+		portsc = xhci_portsc_readl(ports[port_index]);
- 		if (portsc & PORT_CHANGE_MASK ||
- 		    (portsc & PORT_PLS_MASK) == XDEV_RESUME)
- 			return true;
-@@ -951,7 +957,7 @@ static bool xhci_pending_portevent(struct xhci_hcd *xhci)
- 	port_index = xhci->usb3_rhub.num_ports;
- 	ports = xhci->usb3_rhub.ports;
- 	while (port_index--) {
--		portsc = readl(ports[port_index]->addr);
-+		portsc = xhci_portsc_readl(ports[port_index]);
- 		if (portsc & (PORT_CHANGE_MASK | PORT_CAS) ||
- 		    (portsc & PORT_PLS_MASK) == XDEV_RESUME)
- 			return true;
+ 		init_completion(&xhci->hw_ports[i].rexit_done);
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 3b6b2d0d4c60..bddf9c15d813 100644
+index bddf9c15d813..d3ba50462589 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
-@@ -1962,6 +1962,7 @@ void xhci_add_interrupter(struct xhci_hcd *xhci, unsigned int intr_num);
- int xhci_usb_endpoint_maxp(struct usb_device *udev,
- 			   struct usb_host_endpoint *host_ep);
- void xhci_portsc_writel(struct xhci_port *port, u32 val);
-+u32 xhci_portsc_readl(struct xhci_port *port);
+@@ -66,14 +66,25 @@ struct xhci_cap_regs {
+ 	/* Reserved up to (CAPLENGTH - 0x1C) */
+ };
  
- /* xHCI roothub code */
- void xhci_set_link_state(struct xhci_hcd *xhci, struct xhci_port *port,
+-/* Number of registers per port */
+-#define	NUM_PORT_REGS	4
+-
+ #define PORTSC		0
+ #define PORTPMSC	1
+ #define PORTLI		2
+ #define PORTHLPMC	3
+ 
++/*
++ * struct xhci_port_regs - Host Controller USB Port Register Set. xHCI spec 5.4.8
++ * @portsc:	Port Status and Control
++ * @portpmsc:	Port Power Management Status and Control
++ * @portli:	Port Link Info
++ * @porthlmpc:	Port Hardware LPM Control
++ */
++struct xhci_port_regs {
++	__le32	portsc;
++	__le32	portpmsc;
++	__le32	portli;
++	__le32	porthlmpc;
++};
++
+ /**
+  * struct xhci_op_regs - xHCI Host Controller Operational Registers.
+  * @command:		USBCMD - xHC command register
+@@ -85,16 +96,7 @@ struct xhci_cap_regs {
+  * @cmd_ring:		CRP - 64-bit Command Ring Pointer
+  * @dcbaa_ptr:		DCBAAP - 64-bit Device Context Base Address Array Pointer
+  * @config_reg:		CONFIG - Configure Register
+- * @port_status_base:	PORTSCn - base address for Port Status and Control
+- * 			Each port has a Port Status and Control register,
+- * 			followed by a Port Power Management Status and Control
+- * 			register, a Port Link Info register, and a reserved
+- * 			register.
+- * @port_power_base:	PORTPMSCn - base address for
+- * 			Port Power Management Status and Control
+- * @port_link_base:	PORTLIn - base address for Port Link Info (current
+- * 			Link PM state and control) for USB 2.1 and USB 3.0
+- * 			devices.
++ * @port_regs:		Port Register Sets, from 1 to MaxPorts (defined by HCSPARAMS1).
+  */
+ struct xhci_op_regs {
+ 	__le32	command;
+@@ -110,13 +112,7 @@ struct xhci_op_regs {
+ 	__le32	config_reg;
+ 	/* rsvd: offset 0x3C-3FF */
+ 	__le32	reserved4[241];
+-	/* port 1 registers, which serve as a base address for other ports */
+-	__le32	port_status_base;
+-	__le32	port_power_base;
+-	__le32	port_link_base;
+-	__le32	reserved5;
+-	/* registers for ports 2-255 */
+-	__le32	reserved6[NUM_PORT_REGS*254];
++	struct xhci_port_regs port_regs[];
+ };
+ 
+ /* USBCMD - USB command - command bitmasks */
 -- 
 2.43.0
 
