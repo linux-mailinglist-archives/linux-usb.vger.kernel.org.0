@@ -1,133 +1,132 @@
-Return-Path: <linux-usb+bounces-30747-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30748-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1D2FC7125D
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 22:29:36 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34317C712A8
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 22:37:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E956E4E1A08
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 21:29:32 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 29CCD348723
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 21:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07BB72FC899;
-	Wed, 19 Nov 2025 21:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JbFnhdDA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DFED301483;
+	Wed, 19 Nov 2025 21:34:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from irl.hu (irl.hu [95.85.9.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C04372AAA
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 21:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8415C25C6EE;
+	Wed, 19 Nov 2025 21:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.85.9.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763587765; cv=none; b=QoiIc4PnowIhI0JgVBi/VPXe+POaYk+FlPmRBVEfNlxZtJMbhoYbf6yHcn+BPsdKznJEMdWPmiQ3/T08FkZmaEV46AUj3odNMXncO6njoPaygncYzOMvOJYJGS3Qm8Jzf5H6gxTg+CZ/675Qz4aR9x1zgqoVTIvYl3M6ySXwTJ8=
+	t=1763588065; cv=none; b=dxRX5aYMUyMOUW//jxf6dRcxwQGnWpm2ezO8jVZp7FThyfRh0NtZCfFXiVgDFhmTLEgvCvgeixRuJX0i5yjGksde62rjKwlgNMewSiLjI0NQrNdkqwKH073IHBN71Tx2Ho7u/SfeyzlJw+ouBq6j7Yr5yDGsI/D2DMJNeynNkUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763587765; c=relaxed/simple;
-	bh=qZlWcf6iSVdCWX0jqzcFQAhJv1kY7V5LUAOq/ARDBHI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SiLRKEQyfHsO62oqA1mAtdJVMaKgA5rHyr0l2EIYBGkzqQVH53zo5Hmzu2cH2IVYNiEmWe44PP4BfrFnDTb6KpTbaj/DLRs5p7PX2QT03VgmVGST0wt9LleuSNgURuP3uqU8p8/xJ9H7ZNoyhlNRfRuia8zRYKNtUlMQhmYz9O8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=JbFnhdDA; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-64166a57f3bso229372a12.1
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 13:29:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1763587762; x=1764192562; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wsPUaZW+lWt4EDGBIFcaMFiCWPFFRuP/pCkDPZ3cF10=;
-        b=JbFnhdDArRpGmF3ijJRjqh8jv66s4pg88Jk1oFRyZHXk3gxQSosUP/mtYH57Xqksd0
-         PLi+LsfY5nttt4kA2EMHNZtKhXoILjqzZjEfK4/n9z4tUgfJ7D8cUWvPloVEMcxQPN1L
-         3TCUOC6JIuVetJ75wN657kg99+ixStE9NidJM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763587762; x=1764192562;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wsPUaZW+lWt4EDGBIFcaMFiCWPFFRuP/pCkDPZ3cF10=;
-        b=WZCI/h8pfZlFAqybdroR5T4zNHy3xXr+XX70A2aSaLH6EtTn5eIb5fRx6uTWQmuLtL
-         0tDKpSwa6B6hwDEYCNZgG+q+CZB61xiwUeM88E3oDAdCCB+RIItuY0pv/lfG4gpHG6LY
-         Qkj+9EruuRy+mi1tyTUQP4lJ5z8k3lqbSgvXSAUeJuNmGe8DIRbYiORhnOXZl4HysZr0
-         QjUCuoP86b3tSYoAwJoBj1kkIPovRHjzMGKA0NwI5BQlLRtty9p4Zngu/V1gxQkaWy3d
-         REOGfi2ArmsaCCV1Nwtjg1cvNeHb4BStjz0Sy7H1F3ftvfhPLp5TOrtCaz4yru83Pbsy
-         Ra4w==
-X-Gm-Message-State: AOJu0YzxNMQg7mjlAsU3u7AjfWe1XPuP4ghcEq3ZzjHeiv8R9jPzrAV0
-	rpeF1OEnO1qrT8uu0hhCMc0WD93hUiR+GBzorPE2YpjIZkz5MNmi1dLfhmfsyYAN
-X-Gm-Gg: ASbGncukxEksMFgho9UDMaVFcP9RcgOhHijAylLvN0ujEf3H6PduN8SZSF9jKA+RSNb
-	OKnsYbSDcKYedDraIi4QDAl4plpqKHAunqK5ia4uN5I0GnlWm6QfkLHhPwqHn6Lkxa3j2pX48rm
-	oU2CoVs5nGabmFx1cc9p62Y0CyKvrNVa5ZqXlnIyfZN729J+iWrw+JK9pehHY5YwwBcch6Ivzro
-	Y55ftSwdRdv9k5OmBbxDggPEs0VW6hpq3ItqSIGxpSjsnG0I040fr7+M3usfRD8oTRqgSLfPGWd
-	2X6e423myV86LYrdGT2XT7aQlXNMk/Kv2bB0Ji4fGy7tE/DmF3iwQVIVv8msEr7CpCFZ7FrOFRI
-	UcNnE4ewE+CFkxDDHK5SuEPNIbS+hyqkJSPxxJlBsP5V18i8G5lXbz5QzveMOO3AOqCVHF0ASdT
-	yoimZ/YxHFg4UjFGOq+gnIxDQ6tePKEcuSZUluyFbWNuM3Z8zEsNxeC1sZy5iJVwk=
-X-Google-Smtp-Source: AGHT+IHbYGDmo+BdHdOCRgxP7WIVUSQS17wnJF3168P0UlZ9kD5pE+va199gFRzl/hENjd56EOiCug==
-X-Received: by 2002:a17:906:7949:b0:b73:99f7:8134 with SMTP id a640c23a62f3a-b7654fbe7ccmr51298766b.45.1763587762277;
-        Wed, 19 Nov 2025 13:29:22 -0800 (PST)
-Received: from januszek.c.googlers.com.com (5.214.32.34.bc.googleusercontent.com. [34.32.214.5])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7654d7cb3bsm38816966b.27.2025.11.19.13.29.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 13:29:21 -0800 (PST)
-From: "=?UTF-8?q?=C5=81ukasz=20Bartosik?=" <ukaszb@chromium.org>
-X-Google-Original-From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@google.com>
-To: Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] xhci: dbgtty: fix device unregister
-Date: Wed, 19 Nov 2025 21:29:09 +0000
-Message-ID: <20251119212910.1245694-1-ukaszb@google.com>
-X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
+	s=arc-20240116; t=1763588065; c=relaxed/simple;
+	bh=tzyI353zPw0oTHCwBIoGwoz9g1Q6uRnGS/4E3QVGeZ4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=L2S+EnBhQT2lUSRf0n8Djc25K87xxFpjYl9Mn12LBYjjnh47sTRzNDjLZdgS31tGiR9MhbJxNtys0/iql+mUvc25jKazcM5JlnDVxlHwxK0eeG5kDahzcfNpwoiAXHQDYokxEXD91vZHdayF10qgWyNsfdrbaDZNJr4oPsaMmSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=irl.hu; spf=pass smtp.mailfrom=irl.hu; arc=none smtp.client-ip=95.85.9.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=irl.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=irl.hu
+Received: from [192.168.2.4] (51b69b63.dsl.pool.telekom.hu [::ffff:81.182.155.99])
+  (AUTH: CRAM-MD5 soyer@irl.hu, )
+  by irl.hu with ESMTPSA
+  id 000000000008323A.00000000691E37D6.00331C1C; Wed, 19 Nov 2025 22:34:14 +0100
+Message-ID: <1759ba1149a599cda0672228d92834b307937368.camel@irl.hu>
+Subject: Re: [PATCH 4/4] media: uvcvideo: Introduce allow_privacy_override
+From: Gergo Koteles <soyer@irl.hu>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Hans de Goede <hansg@kernel.org>,
+  Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+  Mauro Carvalho Chehab <mchehab@kernel.org>,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+  linux-usb@vger.kernel.org
+Date: Wed, 19 Nov 2025 22:34:13 +0100
+In-Reply-To: <CANiDSCtZw48bHc7m7aVPX8jFubkPYc-NKXtcWg1_rdiCMVXLnw@mail.gmail.com>
+References: <20251117-uvcdynctrl-v1-0-aed70eadf3d8@chromium.org>
+	 <20251117-uvcdynctrl-v1-4-aed70eadf3d8@chromium.org>
+	 <f922a8271624a6ae765abbf9894867007a29c8e7.camel@irl.hu>
+	 <CANiDSCs7mdMmCxho+u=DC53kCaUTq05htzpV2=_NEkvq0U0pOw@mail.gmail.com>
+	 <fd65b83abc22587e592a565dd2b326e8eb63f34c.camel@irl.hu>
+	 <CANiDSCudzTj0QZMWNnE0gUPFh5heQWRC8z8NOmDHnVXCdqi96A@mail.gmail.com>
+	 <b55a513fb25c47411ab7289f3812187e3f67da43.camel@irl.hu>
+	 <381cf376-72b0-4a5f-a99e-524f6d83a2d0@kernel.org>
+	 <374afd7b45297979278d02f6b06abaed35c12eae.camel@irl.hu>
+	 <CANiDSCtZw48bHc7m7aVPX8jFubkPYc-NKXtcWg1_rdiCMVXLnw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-From: Łukasz Bartosik <ukaszb@chromium.org>
+Hi Ricardo,
 
-When DbC is disconnected then xhci_dbc_tty_unregister_device()
-is called. However if there is any user space process blocked
-on write to DbC terminal device then it will never be signalled
-and thus stay blocked indifinitely.
+On Tue, 2025-11-18 at 19:30 +0100, Ricardo Ribalda wrote:
 
-This fix adds a tty_vhangup() call in xhci_dbc_tty_unregister_device().
-The tty_vhangup() wakes up any blocked writers and causes subsequent
-write attempts to DbC terminal device to fail.
 
-Cc: stable@vger.kernel.org
-Fixes: dfba2174dc42 ("usb: xhci: Add DbC support in xHCI driver")
-Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
----
-Changes in v2:
-- Replaced tty_hangup() with tty_vhangup()
+...
 
----
- drivers/usb/host/xhci-dbgtty.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> >=20
+> > >=20
+> > > For the new MIPI cameras on laptops we have deliberately made it
+> > > impossible to disable the privacy LED while streaming even though
+> > > it is often controlled by a separate GPIO because of privacy reasons.
+> > >=20
+> > > For the same privacy reasons I fully agree with Ricardo that this sho=
+uld
+> > > be behind a module option. Which replaces step 1. with creating
+> > > a /etc/modprobe.d/uvc.conf file, so just about as much work.
+> > >=20
+> >=20
+> > I agree that this will be useful. The module parameter is also simpler
+> > than per-V4L2 control permission management. And the latter is not
+> > needed in other cases, I think.
+> >=20
+> > However, if allow_privacy_override is enabled, would it be worth
+> > mapping these controls by the kernel?
+> > So uvcdynctrl or cameractrls would not be needed for this control.
+>=20
+> If allow_privacy_override is enabled and there is a standard control
+> in include/uapi/linux/v4l2-controls.h that supports such control: I
+> have no issue adding the mapping for it.
+>=20
 
-diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-index d894081d8d15..ad86f315c26d 100644
---- a/drivers/usb/host/xhci-dbgtty.c
-+++ b/drivers/usb/host/xhci-dbgtty.c
-@@ -535,6 +535,12 @@ static void xhci_dbc_tty_unregister_device(struct xhci_dbc *dbc)
- 
- 	if (!port->registered)
- 		return;
-+	/*
-+	 * Hang up the TTY. This wakes up any blocked
-+	 * writers and causes subsequent writes to fail.
-+	 */
-+	tty_vhangup(port->port.tty);
-+
- 	tty_unregister_device(dbc_tty_driver, port->minor);
- 	xhci_dbc_tty_exit_port(port);
- 	port->registered = false;
--- 
-2.52.0.rc1.455.g30608eb744-goog
+I was misled by V4L2_CID_LED1_MODE in uvcdynctrl's logitech.xml.
+That is not in v4l-controls.h.
 
+> Right now we only have V4L2_CID_PRIVACY which is a boolean and has
+> usually been used to tell if the privacy shutter is on or off, not to
+> configure the LED.
+>=20
+> In any case, the default value of allow_privacy_override should be
+> false. I would even argue that the best approach is to block all the
+> known LED config controls after a deprecation period.
+> Check: https://lore.kernel.org/linux-media/CANiDSCuv8UG6TMx6pK348okK+NYzA=
+orPEgPYzoRCEZiBDgPP=3DA@mail.gmail.com/
+>=20
+
+I use these controls now and would use them in 1-2-3 years, so I don't
+think removing them completely is a good idea :)
+
+Almost no one compiles their own kernel anymore, so the usefulness of
+putting them behind a kernel configuration is questionable.
+
+I also saw these being used in the users of motion project. If someone
+is using it as a surveillance camera, there is no need for it to light
+up.
+
+The c920 has LEDs like this, that are not easy to cover up with tape
+and definitely not aesthetic.
+https://www.nikktech.com/main/images/pics/reviews/logitech/c920_webcam/logi=
+tech_c920_015.JPG
+
+
+Regards,
+Gergo
 
