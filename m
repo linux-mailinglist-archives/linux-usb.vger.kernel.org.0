@@ -1,136 +1,118 @@
-Return-Path: <linux-usb+bounces-30730-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30731-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68F88C6FBBC
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 16:46:12 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D0D7C6FFDF
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 17:15:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D7956351F93
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 15:37:57 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8F7853C18EC
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 16:07:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB122E7BD2;
-	Wed, 19 Nov 2025 15:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E6A2EB859;
+	Wed, 19 Nov 2025 16:05:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="majxEx3H"
+	dkim=pass (2048-bit key) header.d=remarkable.no header.i=@remarkable.no header.b="irA5eiIX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7702D7817
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 15:36:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45AD23D291
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 16:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763566586; cv=none; b=Qa62+HhS4T4pi/If/oSFtKn0mP1xcumwooU4yTsr+R1rlWM3lk3ld28z/KuU3GPBdnUlud6fpfSlaiuvDsJGQDagdPyQoqhJS6MMv4W5otzM2zSDhyflACAhBuOKNzl2IrhQja/526e8Q5U3SCklNA+EBCJ2pE1AEFDap1Kxai4=
+	t=1763568351; cv=none; b=AAXSMPUVCsoh6PT3FmGSNDYh93eUdSKjH6zJld3peem9tVfLhUF8eTVQQAtEsAKdrFTgOtnVf3YtII94/DeSFp9gciXf+qyu4u62CBC8E9o9Hl14rxMJn9HeWXm6+pZDPBvAMiUkDNWImY9L8qsiuCX/5ssvZF5FkNOqIru3vDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763566586; c=relaxed/simple;
-	bh=Bktrwsq5+7yCJFVDpveZivsZ+fXgrngE1TVR89p5UGc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BhmYY97uBIEX/+XxAF+6PXR40fzdX3ipdxl1wp5iMIcHdcBdHgb6FCBEOWnNNQxWlEFW3A9043SeEMM1rp1JOj4bop6ptSpkOoslDNLW/muxwBU+yUUd/N37q+odHmKYHc/sSo99ptb3XuNSP6sJzf8s4+TQJHiMqkCNNFMxqUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=majxEx3H; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ee14ba3d9cso38282941cf.1
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 07:36:23 -0800 (PST)
+	s=arc-20240116; t=1763568351; c=relaxed/simple;
+	bh=wenwhN98ZXpNaz6rZCAL5i5QRQaS4vWxfU6e5mIcYMY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jIQwOpbSXleiORLTj02fSATaTj1pSphf5kjq62yESH5uu3gcXAJHdRet6iWWu3MTX8vR1aynz1COZxgiRDAxGOyFDeDOx6TkimiFAha7i2zjQgJaWnuVQ9UpPShlJ3ZQ1hohSl2s7seebf+2HVYhhtkegWyjXsvG5wHot7cSfdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=remarkable.no; spf=pass smtp.mailfrom=remarkable.no; dkim=pass (2048-bit key) header.d=remarkable.no header.i=@remarkable.no header.b=irA5eiIX; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=remarkable.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=remarkable.no
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5957d7e0bf3so1071352e87.0
+        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 08:05:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1763566583; x=1764171383; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IZX/aEko5V4LfrBu8HxDRWLbIYPckCIiKwT1n1JYaFI=;
-        b=majxEx3HWUYYrs1Ck4jUFd8N95eEuGx1waYZb/PS8PtdPzPdsm8uHzsWGf2PEuzysh
-         q6XVnxS+WvlsPz2+AHsA+m6Vcx7A5oKu90B3XXF0IhhYbPDIewAvdZ3BntNyOXggTgwX
-         tzrGKZGAAH9uijuwxWSgcJl2v7CMkzq6eamvF8rJDLmS71ojzytRy/InvZi1jqp+218W
-         MEJGd2WivKyo3oXSFiyv1CGJAUb7H+YNVaSuCd8Urin6pd5CezOZHMhQzdCx/C7IJh0+
-         ZydffdWWrGf0MYej0/++h4ECo/CsXLWMYFY8LMrn39vkgTQuIaXh6v6CyD7XQsiO8ztg
-         mUAg==
+        d=remarkable.no; s=google; t=1763568348; x=1764173148; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qMO8lUnOLXTM0N/Z+SV1Orex6S9edEOv9ppJaLbbsNM=;
+        b=irA5eiIXxd8RIu9jdvCQI/fG6NMMmQknL6V4pbu3lhSM8k1/gOrxnYRG1iraSgb034
+         mtyqsNoaUzekOohg3/L+27Hzv9UDRTc1xPJczsDw2NxgUD31TgvE/1gv6/0SNxEg0wo8
+         jx1OO76/lfGOUPlBs+RveG6VeK8pTjDnig70/03gioV+jFfTm+nDH7I2Lq3i/h+tdZ3z
+         1E8Ec2aFtk5UcRQfSa+a1Rf07lVmNHxgySaAsOFtQRjYlh2ib+LDyrFvUNP1kfQzZwKH
+         gsI7ESHX0wOMED+13s2pxxWJ2wuBpGRurHDZqVX8HJEHy/vkXPA+JywflYnB9qthTtps
+         1iTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763566583; x=1764171383;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IZX/aEko5V4LfrBu8HxDRWLbIYPckCIiKwT1n1JYaFI=;
-        b=Iw/GequJOzr5WNk7tF/D55W9vOl75hBCV1q1b1sajI7osGXn47tn1sqiOTlijRA5D7
-         eZs1f6C0At/nSeHmRq8aba6liyJfW90Cl/q8S1R5ngRkRqTifObvimg/SymD0GZlgUU5
-         tq5jzFGu2g9OPCLA+ZS8fILQGAJihcN4m3VTQerwmZ3BDCYKJtqcHU9brtORBPnQNbRR
-         Vu/I/x7s6YhUsG+MBio5SVHWrumTbXq6rCEubSMedzZ1qwYWD9yaHAntb4dhKcV+TUvp
-         kVDkReBZqFjgUfwTADU02vVaS5LfmzN41ABfGaeWbnnCTwLnUPObAIH3drfciwC1T9Bg
-         mDwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX88Cun3O88CEemRvrqHP5h4nayj1xgfXp/JYSdlTr6YftiGAmm1sj70/szbfEUkMDWIpHQf6WaUxo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzC2M4r4HS35fXg8bWK6vIg3zn5DgCtH/eQRFumvLHBeiNVsuJs
-	X/SaF9K11Dn9Zp1JMqNJRtBcQmunikA8UhQobxMF1nPBrLN3N135yRoj3+aKcA7nbA==
-X-Gm-Gg: ASbGncsz2a6+JuoK8mVjnCD/Us5hYA0j3K3VNAdl7ynAvCaLpm55xKEpj6PdejzcbBQ
-	N30Q5Wy9lSbJMxW55WOqKzjM/QVQBihMlgwFTGS+gYo9b0Tnz0sa7hYwqT9l2DmkaODxD0hwp5E
-	H7O6brjOzpOs1xRAdt65rQmqwyfukncx2WFgOyvjFvk4eQxgq6XJUHcPNU3aiu0mT43q+410VpI
-	5/+6IpeU3BMWI1e/a8Dav51aZgb88N5ndkZ0J310efZPsQlu8s6bs8yn/IMufcPtL/lWbGSRYU5
-	C7g8wksCXMCdTv6Buw0dTb1M7r4dJjHXsu9TgkAaf4S+JgZWlP3OuXmVTkKYcMQlBEGz95QvaJc
-	jcj5NXlQD9mEsEbU/ZFF1dmlYTV4lOkhsAnQhj5hoFmBbK1FcP1oDxEf73JLG4c/4kQtpkk1DkM
-	ljkNf2iGwuWFJDfTzkjlrfMmNHnVyvXw==
-X-Google-Smtp-Source: AGHT+IHVhVSU1qBDJkojbnSozu1+lqfGiIw0rFX+kgWlXx9u3BF4Debl3tEJRFOjOf55dzdBtqHWOQ==
-X-Received: by 2002:ac8:584b:0:b0:4e8:92ff:753 with SMTP id d75a77b69052e-4edf2066cb2mr239692421cf.24.1763566582824;
-        Wed, 19 Nov 2025 07:36:22 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ee0f0d51bdsm84521401cf.15.2025.11.19.07.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 07:36:22 -0800 (PST)
-Date: Wed, 19 Nov 2025 10:36:20 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Clint George <clintbgeorge@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, david.hunter.linux@gmail.com,
-	linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
-	khalid@kernel.org
-Subject: Re: [PATCH 4/8] usb: gadget: dummy_hcd: fix block comments, blank
- lines and function braces
-Message-ID: <08e6f306-f105-45db-9846-a50ae7e3219f@rowland.harvard.edu>
-References: <20251119130840.14309-1-clintbgeorge@gmail.com>
- <20251119130840.14309-5-clintbgeorge@gmail.com>
- <2025111922-improper-sensually-13b0@gregkh>
+        d=1e100.net; s=20230601; t=1763568348; x=1764173148;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qMO8lUnOLXTM0N/Z+SV1Orex6S9edEOv9ppJaLbbsNM=;
+        b=qTOlS0nNoZgSTeusKCKbFr2WILyfFjBGox9TlLUfMX9zaywt+EMCrXPQxOjq3l0lSC
+         EpJC/2fSYJmezixr0hehOmFNPF2I8owpbAlb5cHHIqviE/QKMAdpDRKEXAmgv23Qw8re
+         T0oRl5wX1ZQ7RHx2grEiZ74BI84jG218L6X2HOxvRr3yuoNXqyOgEQ78rtmbJ9SNFyzU
+         k3jNf9VhSI8WljLwZtIbh+kyHNYl/v1i8Hg26a+ggiJg8agckhmIKJD6KYZmR5ZYR7G2
+         lZEyuwyBScHCiLiY2LDFZCuLwi34/KExLoh23K0xMWjIJI7YP3qj6Lv3oMTeg0BFk0S/
+         bG1A==
+X-Gm-Message-State: AOJu0Yy+US0/AYBghmY0wjZdzNWjiDOgkmY/uS/cXRg1OMZAIOfCUCfc
+	VIoNviFFr6G46sMN3YuS7f4Rm6spZQpdn3S/Lfm4Ye7y79DSDF3+VsO4gcR5PseSXg==
+X-Gm-Gg: ASbGncvB2n8FuBVv7qmLmHVyJR5Mul+fX+VInT0JqhKaY36DporpgLVTavXGvmE8g2b
+	QD66kDzcf5pFU4CKBk9MpUokHOHgH0TcbixJOSo5QWZPEosW5QEdeNaU5TLWlbCRMhoeu3vSOhv
+	2gVvyL32Fv7mbvUviMgilGg1QTr1Rz95DxDOdeYg8GJyxyZm4vP6LHHbSqZsXpQATHsMj4M1iss
+	v2sVmxppG4W0maOt4gX7/I0OMDLrR9Vk0ZtkL6BoC+L0gWD8waVXY0p7TkxRcA7YKoppD5FHgQ1
+	pyNhNjzwp7zOHKxHW5NcFrCKog+ncS/voR4SGQ5XlAqf67ppd+zhBH1yAvpaFSf5l5RsGfFsO3S
+	0DmBNtyB5fTaZ8G4fNnC43jJRCLxM7Mie8aNE0RjEofGL9DPClOuKM5Q4unQGUgtq1GFI5u5b+U
+	p1IzRUiTM71rfHuBzrkhgeh9J7WHz8WNapweOENDoJ1KIn41niGStMriefKg1Gx8B1Nv1H1ZcKg
+	k594Pn97TdNZuq/UQ==
+X-Google-Smtp-Source: AGHT+IGO8bvTQwuSXGK6B7Q7mBqlT8wVti+JeBrsLen44khDLYbnl0mikYadatXpqL/AAFnyLyYKeQ==
+X-Received: by 2002:a05:6512:3b0a:b0:594:35d7:731f with SMTP id 2adb3069b0e04-5964b37f939mr1042746e87.7.1763568347992;
+        Wed, 19 Nov 2025 08:05:47 -0800 (PST)
+Received: from ?IPV6:2001:4643:2b9c:0:ed48:e2f2:7382:e121? ([2001:4643:2b9c:0:ed48:e2f2:7382:e121])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5958040038esm4854096e87.52.2025.11.19.08.05.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Nov 2025 08:05:47 -0800 (PST)
+Message-ID: <6c6575dc-4522-4b10-ba74-ed6858ff95a3@remarkable.no>
+Date: Wed, 19 Nov 2025 17:05:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025111922-improper-sensually-13b0@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: chipidea: udc: Link otg and gadget
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Xu Yang <xu.yang_2@nxp.com>,
+ Peter Chen <peter.chen@kernel.org>
+References: <20251119152641.49872-1-johan.korsnes@remarkable.no>
+ <2025111923-equate-crabbing-39c3@gregkh>
+Content-Language: en-US
+From: Johan Korsnes <johan.korsnes@remarkable.no>
+In-Reply-To: <2025111923-equate-crabbing-39c3@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 19, 2025 at 04:29:13PM +0100, Greg KH wrote:
-> On Wed, Nov 19, 2025 at 06:38:36PM +0530, Clint George wrote:
-> > This patch updates dummy_hcd.c to follow the Linux kernel coding style:
-> > - Align block comment asterisks properly.
-> > - Add blank lines after variable declarations where needed.
-> > - Remove unnecessary spaces before semicolons.
-> > - Move opening braces of function definitions to the next line.
-> > 
-> > These changes improve readability, maintain consistency, and make the code
-> > easier to maintain.
+On 19/11/2025 16:32, Greg Kroah-Hartman wrote:
+> On Wed, Nov 19, 2025 at 04:26:41PM +0100, Johan Korsnes wrote:
+>> Link OTG with gadget, same as other UDC drivers.
 > 
-> And are hard to review :(
+> I do not understand this changelog, sorry.  Can you please expand on it?
 > 
-> Again, please break things up into "one logical change per patch", and
-> that does not mean "fix all coding style issues" is a "logical change".
+> thanks,
 > 
-> Also:
-> 
-> >  /*
-> > -	EP_INFO("ep3in-iso",
-> > -		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_IN)),
-> > -	EP_INFO("ep4out-iso",
-> > -		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_OUT)),
-> > -*/
-> > + *	EP_INFO("ep3in-iso",
-> > + *		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_IN)),
-> > + *	EP_INFO("ep4out-iso",
-> > + *		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_OUT)),
-> > + */
-> 
-> Why not just delete commented out code?
+> greg k-h
 
-Or in this case, replace the code with a comment saying that if 
-dummy-hcd supported isochronous transfers then endpoints 3 and 4 would 
-be dedicated to isochronous IN and OUT (respectively).
+I'll submit a v2 with a proper description. It might also be that this
+link between otg and gadget is not appropriate for the ChipIdea driver.
 
-Alan Stern
+I've (ab)used this link to obtain the gadget state via the usb_phy in
+a different driver. Since some of the other UDC drivers set up the link
+I just assumed it had been forgotten for the CI one. I'll double check!
+
+Kind regards,
+Johan
 
