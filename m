@@ -1,145 +1,133 @@
-Return-Path: <linux-usb+bounces-30690-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30691-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 468C9C6E852
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 13:40:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44757C6EBFD
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 14:12:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id ECB752A93D
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 12:40:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id E9D412E188
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 13:12:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 439003612E9;
-	Wed, 19 Nov 2025 12:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4E18361DD0;
+	Wed, 19 Nov 2025 13:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eMnGbp+0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lEjhKnib"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CAC3612DE;
-	Wed, 19 Nov 2025 12:35:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3653612F9
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 13:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763555742; cv=none; b=eVI+3IsMPaCrJxaaizFHtxUqGtQxlgGIYdnCK7yrudKTqmV4R6N/7ad0vjD4TTIVnegdO4a+VDZyDpJc0IlYRv86LMvkTvEcPa4Kw3GdEPdYi4t24Wr6WRJODvVeRtggRhzTpltizvKK8tfUugKob7YrRDI1aB004UmeZC7YWeo=
+	t=1763557733; cv=none; b=MxDiKby7I0wrznHJwJcQrQ5nT/JXbT45+xH0fQDIXA5jHn/g32sX+cQvhNpkAAsXb1wTaxSRjvEA/XXWyJf29bR+swzgZPGWInV1F1ms7tvzeDphIj2D+UubLi277zYua2qtOK+/y6Q3wPWQG9ZaLp06MTpKGDz+R+j/u3g48rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763555742; c=relaxed/simple;
-	bh=OO6AxvN/FnQ0EtjKoW559lZqJGV4mjpBdHmjYqETTbQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iklyjbglfxf69SRWNxQVDq7eE7sE4is5rrKPntU3GN6MG7opl+sP2R2qnKuaIsZGObkcu+41GDaZI4gTAdp/eZ3U78K6prFn4pn9r78X4t5FEd33LTHXgj6ccbZ89p7cQTdeQPF2gZBKaBOOmng5Kaafk1nPNq154CUqEVejdYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eMnGbp+0; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763555742; x=1795091742;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OO6AxvN/FnQ0EtjKoW559lZqJGV4mjpBdHmjYqETTbQ=;
-  b=eMnGbp+0Fwaf22s48EfcEC/GkelipBrg+jpD+ZDeeBi+0+SXN6hHwrAp
-   xAYdbHz7eRqxZqdFpVz8GFtNeQNWZfmSro182xu5hUknaqQMVk5iu9gSW
-   vz54Ku6M96rupL6jXecZv2vLrUz4LcemcBhUVq4c2/cTwtDM5emVqHS/F
-   S6+zwiYqImAWUH11BNcpLVQMXmEnn8ipuqAoOlSbEeoqkWa++jWzfflZo
-   R6kFzNwROLEJvJxoeiEs/unY837xM6yyvmdgHrWmf31RamegN/D72Rcvb
-   tVetJotYEsJSy91Op1zIsnee5Tr6PSX7+ZTzi/E5j6BHmkZWskusH7Y/O
-   A==;
-X-CSE-ConnectionGUID: MruyQGJnTmSTfni2ZKsZzA==
-X-CSE-MsgGUID: DaAUY8NBS6CyQWxCUD5NYw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="82983208"
-X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="82983208"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 04:35:41 -0800
-X-CSE-ConnectionGUID: +0Q7TLTZSSeU7OgwGEHR+w==
-X-CSE-MsgGUID: h8ZPIZVkTqeeMRu1aPQhPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="221963846"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO [10.245.244.20]) ([10.245.244.20])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 04:35:39 -0800
-Message-ID: <88841c24-ee36-421d-bbbe-74d07b0fd594@intel.com>
-Date: Wed, 19 Nov 2025 14:35:37 +0200
+	s=arc-20240116; t=1763557733; c=relaxed/simple;
+	bh=YsL0AYnXumUBQnc+9fO+VM0kAJ6xf20Eqs0DtXKmmK8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MZgUc4yu3iEc78/DFQvk4tdrY0Uh00YpqF7CsKHHiQW1I0PSvBBk8W2Ea8kuAOb0vgKo9zVOHe7fX0YWCKQKfASKplzgQVsjRiQnMqikuJtnApoY2M7oeYTPw2pcoziB1KPFG0mXHsq9dIMJKgfNFXoKhUOaLAp3f+oblk/iTYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lEjhKnib; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7b8eff36e3bso3651684b3a.2
+        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 05:08:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763557730; x=1764162530; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+pka5H9kFUv1dmO5g3fWy4qDHiQHPo4xC/Gd1txKK28=;
+        b=lEjhKnibs1+X6Rv7Rb0vP65Ci2kjmDupfTWJQIlSu/ukY5zHEH+odxUtRDnX0a5B5W
+         XXZD6fR6XP48e8JozId62Q9d9CMZpP8TFoGgdHRBynPSpp9jc9vbJfAB0OHY5X6xq//G
+         13PIcoQIodjOaXKB0AAUEPxISxUDDaecopfw6LXJgPN6npWCKd5Vz/4bOMUSUU90U/dO
+         86yVqz1zNasRn1/LSr8Jpu/xQrojQIfvzbJTCpA85UeQQ8H78kJI4Blide5DJmJ2/tQJ
+         EJd+Hyn6qT7LzSYZ7GJuvP9+5rNtcMQopYyPh4E8+bhRdPTg9BMg5vQExctrYkJSdhp5
+         BGxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763557730; x=1764162530;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+pka5H9kFUv1dmO5g3fWy4qDHiQHPo4xC/Gd1txKK28=;
+        b=ZC5oqOhloyES3s08sA0JNKRJAEgVxGtpmG3KaaihtST3uWzDQNISwEbvLlRAFTZe8E
+         iW9mazc4JWwlYipg2RJBSOOkU/Lcq8WrusUAJgMpf1PYsqTQ6Xz3gBtSa1Rjgpcx2MnE
+         xTxItoZSE25YqTCA0WpAd22LH3xFRg4/+xOno/2CRbW1lvGJqac0Ty/NWzgxK8DUWofG
+         lFbZkkZHJVP+kXubjlg8UN4A30lXz4DCk0ytACpJ4lchgutnlEFU1/dGAT8V3XsJpQza
+         qhrN7R6lo0l1Q5ZTILc5Q+DlqEsMd6vzOtkjXitA65z3TIlBJIVNQC0yIliONtpw6WGa
+         XVqg==
+X-Gm-Message-State: AOJu0YylaSiYeyYxsJto+xmBLP6P30dAH7t9Nm+yM7LrVUDOlxKiWd5/
+	mCeIFKhY4k7qQKjYkYVStUg7CPiTKAmp7+wg4UMWOZ/4vb32dvR7WMZx
+X-Gm-Gg: ASbGncv532ypZDmdXtelFGiDLz0GesyPHeFxgnoExdDSWYqzpkeFpoCF8ZUBqODMM+f
+	lXFvJMNS3wzsvLS+QUQGyIbTiRtylEj+C43WqEtLNquBc7z4ihgTiN+huaAjCt3jfweF2LCBBl7
+	1AabawuuNtvqKUWWLbM/tynMtQJrkDCNV96cTu7WRXoLmRuq8kGYpfFNla8r9d24h9YZKtJTYyF
+	9STsDMpQQ/5/8cTYNSZsqGS1hZKPXP2PNBBFgSTARPrR5Kwj1RHC2wdgErX7kH121FnEI0Ldla1
+	iGoGQjdIKN3zj65+KHPSxxpPdAeDPfNV2l8+Jp4N7hiplxmgFRRpbb7NUxuFH12d2TDw/+7eiiR
+	358td4Rl4m37hPV69LWh1U6TKyWUE/sed/Hf2yhGnYrf0Zg9znemerHU2gAKZHBpezcARPhHKkO
+	r64ffQfK5G9HhioftFdmG7jH+AKPCZ0wzKmrM=
+X-Google-Smtp-Source: AGHT+IFeiPPsgMwUrz+NVNeZBdU0F9V3EQoZEFmmpjgoxxwzD29n/Cn3DjmHZDOpsNrUlI+ZWWVVtw==
+X-Received: by 2002:a05:6a21:7e08:b0:35f:84c7:4031 with SMTP id adf61e73a8af0-35f84c74952mr12399522637.55.1763557730359;
+        Wed, 19 Nov 2025 05:08:50 -0800 (PST)
+Received: from clint-ThinkPad-L14-Gen-2.. ([110.226.183.150])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b9250cd969sm19692422b3a.23.2025.11.19.05.08.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Nov 2025 05:08:50 -0800 (PST)
+From: Clint George <clintbgeorge@gmail.com>
+To: stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	david.hunter.linux@gmail.com,
+	linux-kernel-mentees@lists.linux.dev,
+	skhan@linuxfoundation.org,
+	khalid@kernel.org,
+	Clint George <clintbgeorge@gmail.com>
+Subject: [PATCH 0/8] usb: gadget: dummy_hcd: coding style improvements and error handling change
+Date: Wed, 19 Nov 2025 18:38:32 +0530
+Message-ID: <20251119130840.14309-1-clintbgeorge@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] xHCI: Decouple updating Dequeue from giveback
-To: Michal Pecio <michal.pecio@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251119120208.6a025eb0.michal.pecio@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@intel.com>
-In-Reply-To: <20251119120208.6a025eb0.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/19/25 13:02, Michal Pecio wrote:
-> Hi,
-> 
-> This introduces unified mechanism for handling all short transfers
-> and errors mid TD plus their later events, accurately and in-spec.
-> I have been working on this code on and off for the last few months,
-> it's dead simple conceptually and tested a lot on various hardware.
-> 
-> When a TD completes early, store its end_trb on ep_ring and give it
-> back. Use end_trb to recognize future events for the TD. Remove the
-> SPURIOUS_SUCCESS quirk and unreliable comp code guesswork.
-> 
-> Isochronous TDs with errors are given back instantly, which reduces
-> latency and eliminates the need for error_mid_td flag and some hacks
-> like handling Missed Service only to give back error_mid_td.
-> 
-> Dequeue will be moved in accordance with received events, never to
-> the next TD right away. Previous code would do that on Short Packet,
-> allowing overwriting of remaining TRBs if it happens across segment
-> boundary. Rare enough that no one complained, but obviously wrong.
-> 
-> We will need a trb_in_range(), and I used this as an opportunity to
-> smuggle some long-discussed changes and improve trb_in_td() usage.
-> After converting from dma_addr_t to trb* once in handle_tx_event(),
-> pass ep_trb instead ep_trb_dma to trb_in_td().
-> 
-> This requires a rewrite of trb_in_td(). New version is easier and
-> shorter. While I'm aware it could be shorter still by using segment
-> numbers, it has two advantages which I thought are neat:
-> 
-> * It can detect when "suspect" TRB is on a different ring than TD.
->    This means it has a loop, but common cases never enter it.
-> 
->    (And yes, I've seen this warning once, but I suspect corruption -
->     DMA UAF was involved. Things improved with pdev->untrusted = 1).
-> 
-> * Needs only one segment pointer (suspect). Call sites are tidier
->    and I don't need to store last TD's end_seg together with end_trb.
-> 
-> Alternatively, segment numbers can also be used, but I really wanted
-> to see if the code could be less noisy.
+This patch series focuses on addressing various coding style issues in
+the dummy_hcd USB gadget driver. The changes include simplifying error
+handling by preventing kernel-space crashes, improving readability, and
+ensuring consistency with kernel coding conventions.
 
+Clint George (8):
+  usb: gadget: dummy_hcd: replace BUG() with WARN_ON_ONCE()
+  usb: gadget: dummy_hcd: replace symbolic permissions (S_IRUGO) with
+    octal (0444)
+  usb: gadget: dummy_hcd: use 'unsigned int' instead of bare 'unsigned'
+  usb: gadget: dummy_hcd: fix block comments, blank lines and function
+    braces
+  usb: gadget: dummy_hcd: merge multi-line quoted strings into one line
+  usb: gadget: dummy_hcd: use sizeof(*ptr) instead of sizeof *ptr
+  usb: gadget: dummy_hcd: remove unnecessary 'else' after return
+  usb: gadget: dummy_hcd: fix miscellaneous coding style warnings
 
-Looks like we both picked this up again.
+ drivers/usb/gadget/udc/dummy_hcd.c | 139 ++++++++++++++---------------
+ 1 file changed, 67 insertions(+), 72 deletions(-)
 
-I have queued up a couple patches that does basically the same trb_in_range()
-changes as your patches 2/5 and 3/5, but uses segment indexes.
+-- 
 
-I'm sending all for-usb-next patches forward today for 6.19, including those
-two patches. Just need to do one small test.
+Testing:
+-  Verified dummy_hcd module loading and behavior by checking dmesg logs
+for expected output.
+- Ran compiler testing with no new warnings detected.
+- Ensured the module builds and inserts cleanly without issues.
+- Used Static Analysis tools to confirm no new issues were introduced.
 
-I'll take a closer look at the rest of the series (patches 1/5, 4/5, and 5/5)
-They all seam like a good idea, but will need to be rebased on current
-for-usb-next
+Please review the changes and let me know if any modifications
+or further testing of the module is required. 
 
-Links to the two patches I mentioned:
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-next&id=7cca2b801bae19bfda2e54d7187f78e8af3f3700
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-next&id=b78fafee824b964c1db718662ef9854f9d7154dc
+Thanks,
+Clint
 
-Link to my for-usb-next branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=for-usb-next
+2.43.0
 
-Thanks
-Mathias
 
