@@ -1,222 +1,188 @@
-Return-Path: <linux-usb+bounces-30744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30745-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2804C70DF7
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 20:44:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA0D3C70E5E
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 20:52:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AD7FC4E5F14
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 19:38:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A28C24E153C
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 19:50:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0486377E90;
-	Wed, 19 Nov 2025 19:37:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E256C3730F0;
+	Wed, 19 Nov 2025 19:50:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YJGq39dQ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JXf09Dz3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FB7371DCA
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 19:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26194348860;
+	Wed, 19 Nov 2025 19:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763581046; cv=none; b=jyRc9BJFUnAsjtN6znFAi4ZAtYGZ4YT8bP+OD0yKr/h6/akCR7WqbVc/S5dDqIWeyfJzypVWSAjNIOKe+eHU24riIewfQP3h47wT0yKb/nMBC4xw23sHXB4MqN9jZl+9GkOvR1qta3C475SAAP96TWM8HxeN1HwhGNbhuHUrgrM=
+	t=1763581801; cv=none; b=JoicUQaR9NrY1NIpFcHHtyHeDZput2xgtneOe3Bdy1yaHX3I0lTV+VRdDqMM09hovRHHovDcAtR55AQIqLWpXv1eljKNRxwD3wHm1uGIwtTOmYJm63jJaCtRzosCXuaQJNdeVIClNYZP9JBeQBkPwgF2rE3opFiToyYFBNBGcYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763581046; c=relaxed/simple;
-	bh=XDj9ocTyx9oryYDrbjArgB3LC+yDZJXak7E+MwK0LjY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RhNlUnzboIkKf+ZXoiz1/Vly2dBcMLJiGwiTqdbKSao5rXFpjjgRbGT1zJ8lIZX+rSDBSQRwJBLF2g+mDCGc86Hl8oc9pkGMMJ+TKaCf/LHJrWrHAQFvjWBdIXgmZD5ymIP7qtVinBpAEJJe7cIipMvW8vkK7mpckm2z9A5GDB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YJGq39dQ; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5958232f806so50673e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 11:37:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1763581037; x=1764185837; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i5eTj0Zl9H6KKr2E/V9bLoQx3up36sHhHmEcBFbvIkE=;
-        b=YJGq39dQv06n1uhvZK0GT7nUQuX1cyNATq3oqw436i21CDPryjgXqYcfaOw5GJ6SFO
-         3KmQw2xPYGFrxajojSEebU64Qwv0OCptr/GKKj+js8UzPA2z5H47zRFYOCzWrEyw4GQ+
-         12s/H8z8eaE85+urKEB6c0VDiyPZel2FBIawA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763581037; x=1764185837;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=i5eTj0Zl9H6KKr2E/V9bLoQx3up36sHhHmEcBFbvIkE=;
-        b=mrJ1DDOvoqE/Klv0vTSE7gGGgAwMPhzklk2bOTDgMScgxYLUeyyA+IAj8yTlXJq542
-         SGWJwKSpfoxa84E9wSe8vCM8x7goCQetVhgoZjS+w03mozjNGTTIVuj0OJIVwH0CuONg
-         pt+9ZJnzUAA3JWP9sDD5hcqVW2WvGTmczkZ/4ao43TzXhpWVnd621CXJMWepOnob6SEj
-         8VFfrXCMkT0yypilO43ZZgXSHVmyu+0qf2mNhwmMTE2WWKZQsll4FJmJc69T6j5D1Bty
-         wC9r/KMSBNz+jUZJGAv6XPpYetyq+49SNH95BbVRASToSpey6SBdk8i8grOF6IGyYIJP
-         HrGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVGFJRc1GbiIcW3wp9xtwE4CzONEyxC5MLg/4/6w7hm1k4PMekQq3Qz5xuU95xDpjvzb6V9eHM5BMg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmMKqSOWV58+zfHnv1ZYLeX/K7+DRE9cOOi4YFzM4nobrbHKrA
-	A0W76h3abBXatVYev6ftKHkZuBlrDTkQ4Feu27RT/Y2XeY4EyU1mhShqpXVOV5E5yQ==
-X-Gm-Gg: ASbGncsCdsiMBFbb8WVwtIZjaN/zWZdOzQTaslApAnWTx7kC304QwQtVtjDqDe127TA
-	DoV7a8DPWgF6lWuTnACvp0CDiVRxnMl+SrfOh0tTH60WJf5DDPv6JPT492qFO4yPKSBD3dmrs2l
-	UqtvYx2wgez043Btq90fHs2L6aY1W2g35T8x4NjfIS6cyeAn7Etqg6/P9u0YjQsbtDO5CdvedFI
-	QOsATIj+pDnTMgXAux6smICvbQiszH4PKa9afx1Qyaqb66NUR1hggGf0aM7PyjsfRY5yqgSOSwo
-	OrAugeSrOoLDVPh42Tb/Vm/TXVUXga2E4Hyp5A5jfpkOiKpVQlsYQLaQVytvWptULIiIwu2P7t1
-	jBTDXm+PkD0vTEm5dOEWIbWmj1qhot1PBuTYZ3fZM4XUfNWk3Le5g0a+oRCUi4dW46fY8BwHIOA
-	55Ig2zbbdN9/aO3ngj/KpXfTGIw+s1aEeOCbr184+R6vW5RKIKRldmYR6U1X8KdFAGbhlM3mCPr
-	eVPzDfepY4=
-X-Google-Smtp-Source: AGHT+IERHHkbtKXSw+15NY4svW/rWIoMgO85bCSSYZTk1S6xodaPy31Swm4Ot1JpvrPQxRHT3dqImQ==
-X-Received: by 2002:a05:6512:3d91:b0:594:25c9:2c6e with SMTP id 2adb3069b0e04-5969e2f6338mr25386e87.25.1763581037401;
-        Wed, 19 Nov 2025 11:37:17 -0800 (PST)
-Received: from ribalda.c.googlers.com (80.38.88.34.bc.googleusercontent.com. [34.88.38.80])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969dbd15a1sm65790e87.98.2025.11.19.11.37.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 11:37:16 -0800 (PST)
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Wed, 19 Nov 2025 19:37:15 +0000
-Subject: [PATCH v2 6/6] media: uvcvideo: RFC: Convert
- allow_privacy_override into Kconfig
+	s=arc-20240116; t=1763581801; c=relaxed/simple;
+	bh=e+EiGdFsf3VbyevUL5TU1jG+j1FMAfrqATyo4KcYRJc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=JxBgLWu7hdJLK9IhaVF7E+oCwubIwXn5Rn87eCKGecqPXCp3pB1pB07zoEwIcbbXXae/RKZbSN81SJKu9rscToFxr9vmG/rODUqBq9GmHGhSBu9PfGithI3wEf+0aJDYjITTei5BAnT1TGOrcnlJmBFx/uuT90oJsDrUv2/v90E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JXf09Dz3; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 3127A4E417A9;
+	Wed, 19 Nov 2025 19:49:56 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D932060699;
+	Wed, 19 Nov 2025 19:49:55 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9639A102F2165;
+	Wed, 19 Nov 2025 20:49:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1763581794; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=idyisNLwX/81MGmvTcXblC/vtIFhEqtsf+2ziThKUl0=;
+	b=JXf09Dz37KSxb84fPt0xCNsN6GavF6zxGYaDnAtetqDs1Km7Qg7tyl3ucVCrlP7/wI3vAH
+	Brt1JLyQr6Z57RRLIel57nTLTRpZp/sci2HRmjHC9IN8P66AnuvhSLwoAleU1e/B5bLIs9
+	iaCY9MyqzKGWVk2uTAulwuStyUlVPQz3dHD/IHrZ0mSJPM4G72sjQoDupWx8MFVv4jORI6
+	skNrYrosDF7JY6jIe6vF8gCgT7WtJ7AMpQezOWiZJq6UpmsLH1LyIMmlFoUNpI6slEiwTZ
+	GOY43hLWnRXakTMPShCKL/gGL2evdNlbs5ZmEWzSbKZqvB85NowHOsfPoUyZLA==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251119-uvcdynctrl-v2-6-0359ffb98c9e@chromium.org>
-References: <20251119-uvcdynctrl-v2-0-0359ffb98c9e@chromium.org>
-In-Reply-To: <20251119-uvcdynctrl-v2-0-0359ffb98c9e@chromium.org>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Hans de Goede <hansg@kernel.org>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-usb@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.14.2
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 19 Nov 2025 20:49:42 +0100
+Message-Id: <DECXKE9A67HG.35AR5UZKKQ8A1@bootlin.com>
+To: "Chaoyi Chen" <chaoyi.chen@rock-chips.com>, "Chaoyi Chen"
+ <kernel@airkyi.com>, "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Dmitry Baryshkov"
+ <dmitry.baryshkov@oss.qualcomm.com>, "Peter Chen" <hzpeterchen@gmail.com>,
+ "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul"
+ <vkoul@kernel.org>, "Kishon Vijay Abraham I" <kishon@kernel.org>, "Heiko
+ Stuebner" <heiko@sntech.de>, "Sandy Huang" <hjc@rock-chips.com>, "Andy Yan"
+ <andy.yan@rock-chips.com>, "Yubing Zhang" <yubing.zhang@rock-chips.com>,
+ "Frank Wang" <frank.wang@rock-chips.com>, "Andrzej Hajda"
+ <andrzej.hajda@intel.com>, "Neil Armstrong" <neil.armstrong@linaro.org>,
+ "Robert Foss" <rfoss@kernel.org>, "Laurent Pinchart"
+ <Laurent.pinchart@ideasonboard.com>, "Jonas Karlman" <jonas@kwiboo.se>,
+ "Jernej Skrabec" <jernej.skrabec@gmail.com>, "Maarten Lankhorst"
+ <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>,
+ "Thomas Zimmermann" <tzimmermann@suse.de>, "David Airlie"
+ <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Amit Sunil Dhamne"
+ <amitsd@google.com>, "Dragan Simic" <dsimic@manjaro.org>, "Johan Jonker"
+ <jbx6244@gmail.com>, "Diederik de Haas" <didi.debian@cknow.org>, "Peter
+ Robinson" <pbrobinson@gmail.com>
+From: "Luca Ceresoli" <luca.ceresoli@bootlin.com>
+Subject: Re: [PATCH v9 08/10] drm/rockchip: cdn-dp: Add multiple bridges to
+ support PHY port selection
+Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+ <linux-arm-kernel@lists.infradead.org>,
+ <linux-rockchip@lists.infradead.org>, <dri-devel@lists.freedesktop.org>
+X-Mailer: aerc 0.20.1
+References: <20251111105040.94-1-kernel@airkyi.com>
+ <20251111105040.94-9-kernel@airkyi.com>
+ <DE5YP3AVGOG3.OHP68Z0F6KBU@bootlin.com>
+ <b1a339e7-a011-4b4b-8988-2e3768753c85@rock-chips.com>
+ <2ebace6f-d3c4-4516-b6cb-4951de06b6c8@rock-chips.com>
+In-Reply-To: <2ebace6f-d3c4-4516-b6cb-4951de06b6c8@rock-chips.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-This patch is just shared for discussion purposes! Do not land.
+Hello Chaoyi,
 
-In a perfect world, after a deprecation process, we will be able to
-remove allow_privacy_override and block all privacy related controls.
+On Mon Nov 17, 2025 at 2:33 AM CET, Chaoyi Chen wrote:
+...
+>>>> +=C2=A0=C2=A0=C2=A0 /* One endpoint may correspond to one next bridge.=
+ */
+>>>> +=C2=A0=C2=A0=C2=A0 for_each_of_graph_port_endpoint(port, dp_ep) {
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct device_node *next_b=
+ridge_node __free(device_node) =3D
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of=
+_graph_get_remote_port_parent(dp_ep);
+>>>> +
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bridge =3D of_drm_find_bri=
+dge(next_bridge_node);
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!bridge) {
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 re=
+t =3D -EPROBE_DEFER;
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 go=
+to out;
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>> +
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dp->next_bridge_valid =3D =
+true;
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dp->next_bridge_list[count=
+].bridge =3D bridge;
+>>> You are storing a reference to a drm_bridge, so have to increment the
+>>> refcount:
+>>>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dp->next_bridge_list[count].=
+bridge =3D drm_bridge_get(bridge);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^^^^^^^^^^^^^^
+>>>
+>>> FYI there is a plan to replace of_drm_find_bridge() with a function tha=
+t
+>>> increases the bridge refcount before returning the bridge, but it's not
+>>> there yet. When that will happen, the explicit drm_bridge_get() won't b=
+e
+>>> needed anymore and this code can be updated accordingly.
+>
+> Out of curiosity, I checked the callers of of_drm_find_bridge(), and it
+> seems that the vast majority of them do not pay attention to the increase
+> or decrease of reference counts.
 
-If there is any usecase out in the field that resists, we shall move it
-into a Kconfig.
+They do not call drm_bridge_put() to decrease the refcount, and that's
+"correct" because of_drm_find_bridge() does not increase it. This was
+totally correct in the past because DRM bridge refcounting did not exist.
 
-This patch shows how the transition to Kconfig can look.
+Refcounting has been added to support hot-pluggable bridges. If you want
+more info, this presentation I gave at ELCE 2025 is a good summary, with
+links to relevant patches:
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/Kconfig      | 11 +++++++++++
- drivers/media/usb/uvc/uvc_ctrl.c   |  4 ++--
- drivers/media/usb/uvc/uvc_driver.c | 20 --------------------
- drivers/media/usb/uvc/uvc_v4l2.c   |  4 ++--
- drivers/media/usb/uvc/uvcvideo.h   |  1 -
- 5 files changed, 15 insertions(+), 25 deletions(-)
+ * Video (start at 19:30): https://www.youtube.com/watch?v=3DmsmBQBSyZZ4
+ * Slides (start at slide 27):
+   https://bootlin.com/pub/conferences/2025/elce/ceresoli-hotplug-status.pd=
+f
 
-diff --git a/drivers/media/usb/uvc/Kconfig b/drivers/media/usb/uvc/Kconfig
-index 579532272fd6d7a8ef65c1a3a892b723f40e584e..7c0f2260d1357cc4f27fa63d90c42f61afd92da9 100644
---- a/drivers/media/usb/uvc/Kconfig
-+++ b/drivers/media/usb/uvc/Kconfig
-@@ -20,3 +20,14 @@ config USB_VIDEO_CLASS_INPUT_EVDEV
- 	  to report button events.
- 
- 	  If you are in doubt, say Y.
-+
-+config USB_VIDEO_CLASS_ALLOW_PRIVACY_OVERRIDE
-+	bool "Allow overriding the privacy controls"
-+	default n
-+	depends on USB_VIDEO_CLASS && BROKEN
-+	help
-+	  If this option is enabled, the privacy related controls, such as
-+	  the ones controlling the privacy LED will be accessible from
-+	  userspace.
-+
-+	  If you are in doubt, say N.
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index d9cbb942f798dc7138608982a5d3e3ef9f8141f6..c41724a342e57f64f3c10af9752bd45209f80e36 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -3025,9 +3025,9 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
- 	}
- 
- 	if (uvc_ctrl_is_privacy_control(entity->guid, xqry->selector) &&
--	    !uvc_allow_privacy_override_param) {
-+	    !IS_ENABLED(CONFIG_USB_VIDEO_CLASS_ALLOW_PRIVACY_OVERRIDE)) {
- 		dev_warn_once(&chain->dev->intf->dev,
--			      "Privacy related controls can only be accessed if param allow_privacy_override is true\n");
-+			      "Privacy related controls can only be accessed if CONFIG_USB_VIDEO_CLASS_ALLOW_PRIVACY_OVERRIDE is true\n");
- 		uvc_dbg(chain->dev, CONTROL, "Blocking access to privacy related Control %pUl/%u\n",
- 			entity->guid, xqry->selector);
- 		return -EACCES;
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index c292bf8b6f57e9fdacee726285f5b46e638fd317..71563d8f4bcf581694ccd4b665ff52b629caa0b6 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -35,7 +35,6 @@ unsigned int uvc_hw_timestamps_param;
- static unsigned int uvc_quirks_param = -1;
- unsigned int uvc_dbg_param;
- unsigned int uvc_timeout_param = UVC_CTRL_STREAMING_TIMEOUT;
--bool uvc_allow_privacy_override_param;
- 
- static struct usb_driver uvc_driver;
- 
-@@ -2475,25 +2474,6 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
- module_param_named(timeout, uvc_timeout_param, uint, 0644);
- MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
- 
--static int param_set_privacy(const char *val, const struct kernel_param *kp)
--{
--	pr_warn_once("uvcvideo: " DEPRECATED
--		     "allow_privacy_override parameter will be eventually removed.\n");
--	return param_set_bool(val, kp);
--}
--
--static const struct kernel_param_ops param_ops_privacy = {
--	.set = param_set_privacy,
--	.get = param_get_bool,
--};
--
--param_check_bool(allow_privacy_override, &uvc_allow_privacy_override_param);
--module_param_cb(allow_privacy_override, &param_ops_privacy,
--		&uvc_allow_privacy_override_param, 0644);
--__MODULE_PARM_TYPE(allow_privacy_override, "bool");
--MODULE_PARM_DESC(allow_privacy_override,
--		 "Allow access to privacy related controls");
--
- /* ------------------------------------------------------------------------
-  * Driver initialization and cleanup
-  */
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 510cf47c86a62ba7fe3c7fa51be82c996cf37f9f..d52497d68b910553f385b1b41ec5c4eecb915743 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -134,9 +134,9 @@ static int uvc_ioctl_xu_ctrl_map(struct uvc_video_chain *chain,
- 	}
- 
- 	if (uvc_ctrl_is_privacy_control(xmap->entity, xmap->selector) &&
--	    !uvc_allow_privacy_override_param) {
-+	    !IS_ENABLED(CONFIG_USB_VIDEO_CLASS_ALLOW_PRIVACY_OVERRIDE)) {
- 		dev_warn_once(&chain->dev->intf->dev,
--			      "Privacy related controls can only be mapped if param allow_privacy_override is true\n");
-+			      "Privacy related controls can only be mapped if CONFIG_USB_VIDEO_CLASS_ALLOW_PRIVACY_OVERRIDE is true\n");
- 		return -EACCES;
- 	}
- 
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 4b1a70e3100bbf2180411a865a89952a81d0f0a4..5da219e1c6ac89e89a1658f1126bfa292876d55f 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -662,7 +662,6 @@ extern unsigned int uvc_clock_param;
- extern unsigned int uvc_dbg_param;
- extern unsigned int uvc_timeout_param;
- extern unsigned int uvc_hw_timestamps_param;
--extern bool uvc_allow_privacy_override_param;
- 
- #define uvc_dbg(_dev, flag, fmt, ...)					\
- do {									\
+> Does this mean that even if we add reference counting in
+> of_drm_find_bridge(), we still need to modify the corresponding functions
+> of their callers and decrease the reference count at the appropriate
+> time?
 
--- 
-2.52.0.rc1.455.g30608eb744-goog
+Exactly. I have explored that approach but it turned out being not
+reasonably doable due to the large number of (direct + indirect) callers of
+of_drm_find_bridge() as well as the trickiness of those involvingthe
+panel_bridge. So Maxime proposed a different approach [0]: deprecate
+of_drm_find_bridge() and replace it with a function that increments the
+refcount, then let the various callers move to the new function over time.
 
+Earlier today I sent a series doing that, and converting lots of users
+[1]. If/when that approach will be accepted, you can update your driver to
+use the new drm_of_fund_bridge() and take care of putting the reference
+when appropriate. But you don't need to do anything until then.
+
+[0] https://lore.kernel.org/dri-devel/20250319-stylish-lime-mongoose-0a18ad=
+@houat/
+[1] https://lore.kernel.org/lkml/20251119-drm-bridge-alloc-getput-drm_of_fi=
+nd_bridge-v1-0-0db98a7fe474@bootlin.com/
+
+> Thank you.
+
+You're welcome. I hope it was a clear explanation.
+
+Luca
+
+--
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
