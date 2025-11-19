@@ -1,55 +1,55 @@
-Return-Path: <linux-usb+bounces-30727-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30728-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF2A7C6FAC6
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 16:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B0B7C6FAE1
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 16:36:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 26DD74E9D50
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 15:27:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A888B4F28E2
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 15:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BBCB365A12;
-	Wed, 19 Nov 2025 15:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FACA2D2497;
+	Wed, 19 Nov 2025 15:29:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WbB0qgwJ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HJXMptlP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C771364049;
-	Wed, 19 Nov 2025 15:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BB234FF4A;
+	Wed, 19 Nov 2025 15:29:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763566054; cv=none; b=D9Ps6itUj+AEvi1LX585+4ipA/iM98/IaBU7m2EILVkFBikcXL2iJwKpyhiJHfs/L+0uYyuzEKrFiLYWPN8hHXwM1VP6o+s6Eyt1q9ZJqOj6rUfc5nfqGCZC3daqjA3DDDPtlG5LPswnrwqO8SqI4Gscm4rCoKEnaalnocohP4s=
+	t=1763566159; cv=none; b=dBSfTeZUvYBh54nDaM+jO2HH/l7o1zLzIAMzkfm9++XFFzKA1/hp9VJPi8wLvBXcn9/mSVI9zess32yl1qm6O4F1zipZJmlOkb0I33LLUTg7peF4CAFiLhGlRAUf8PxPmDmP1Utr6TOJYoKUBf9Z2P/s0Wrgotodhm+1m1uqGi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763566054; c=relaxed/simple;
-	bh=Kyim5J6U2rc7hXTioiiHbXG5j73GOLkTP0Y2x8v9tQM=;
+	s=arc-20240116; t=1763566159; c=relaxed/simple;
+	bh=DCS0NQrEEF4gTVK3b/lLex/v6fWWuVAy9oQ2NCBPVnE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fp1G39Bx7PDBWS7/zbg1JGF+BeujUNOP1C2VSa33gfO4jJzcd/rcClRGDSSbJL6bsMdDB/nezFu5ykxWAh+sftF2f5VziOp+Vaph32ywqDxISjEflRb9n7BzF9YKvnnHn4mMgOTi6rLfl1oPQPJ9bH57EQ2iLFLpdYu85TEpbVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WbB0qgwJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130B2C2BCB0;
-	Wed, 19 Nov 2025 15:27:32 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=AxBr2md7+AO5skpHODwMtKBSOsDzpGOjsd8/ejLmDDsKmk/OTwepll4seS4F3esbHpDlHDSyhaMrQSxIZqM8DCg0kPoGrGVe5WtJdT/GA05qMqVnh43jcfLACPXhGqBva1DArJNZyiI9Nx0B0KKjv6mU6sjF9SxVdRLzZGQK7sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HJXMptlP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B142C19424;
+	Wed, 19 Nov 2025 15:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1763566053;
-	bh=Kyim5J6U2rc7hXTioiiHbXG5j73GOLkTP0Y2x8v9tQM=;
+	s=korg; t=1763566157;
+	bh=DCS0NQrEEF4gTVK3b/lLex/v6fWWuVAy9oQ2NCBPVnE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WbB0qgwJehwZpTVUlvsr450/EFxb0xxAVJnKf62UMEUt1Zm1V9Gwua9+ydZFRxVil
-	 aXMRnkKZ4aQJPFRXE0XJGUX87fBwfr62wsu2kH9H6E9eKUBk6/B351cLWFYhxnKPEP
-	 7mQBfnTrscwjkbMF8NV2L4LloWPLCru/FRebPwcU=
-Date: Wed, 19 Nov 2025 16:27:29 +0100
+	b=HJXMptlPJ/LMCTmxF1AA9PgRSX+ufJx6nJLQb7OTMOW1YabMCjzUSn2LkhrHm2vxy
+	 2pSpmdk9N+4pFG7tdaRTCG9kaaKHDE5AjcZDYs5TE3m0WkJkXkPM6KUNl0/WnGSTkn
+	 /tKdVsUdDzryG1pzdJypFH+3e6zqgHmqkipWKXWM=
+Date: Wed, 19 Nov 2025 16:29:13 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Clint George <clintbgeorge@gmail.com>
 Cc: stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org, david.hunter.linux@gmail.com,
 	linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
 	khalid@kernel.org
-Subject: Re: [PATCH 1/8] usb: gadget: dummy_hcd: replace BUG() with
- WARN_ON_ONCE()
-Message-ID: <2025111950-early-grumbly-b1e4@gregkh>
+Subject: Re: [PATCH 4/8] usb: gadget: dummy_hcd: fix block comments, blank
+ lines and function braces
+Message-ID: <2025111922-improper-sensually-13b0@gregkh>
 References: <20251119130840.14309-1-clintbgeorge@gmail.com>
- <20251119130840.14309-2-clintbgeorge@gmail.com>
+ <20251119130840.14309-5-clintbgeorge@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,51 +58,38 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251119130840.14309-2-clintbgeorge@gmail.com>
+In-Reply-To: <20251119130840.14309-5-clintbgeorge@gmail.com>
 
-On Wed, Nov 19, 2025 at 06:38:33PM +0530, Clint George wrote:
-> Replace BUG() with WARN_ON_ONCE() in dummy_validate_stream()
-> when stream_id exceeds max_streams. This allows the kernel to
-> continue running with a warning instead of crashing.
-
-Nope, you still crashed given that BILLIONS of devices out there have
-panic-on-warn enabled :(
-
+On Wed, Nov 19, 2025 at 06:38:36PM +0530, Clint George wrote:
+> This patch updates dummy_hcd.c to follow the Linux kernel coding style:
+> - Align block comment asterisks properly.
+> - Add blank lines after variable declarations where needed.
+> - Remove unnecessary spaces before semicolons.
+> - Move opening braces of function definitions to the next line.
 > 
-> Signed-off-by: Clint George <clintbgeorge@gmail.com>
-> ---
-> 
-> Testing:
-> - The function dummy_validate_stream() was tested using a test module
->   that i created where i sent value of urb->stream_id greater than
->   max_streams. When using BUG(), the kernel-space used to crash but
->   after using WARN_ON_ONCE() the kernel-space does not crash and the
->   module terminates gracefully
-> - Ensured that the module builds properly
-> 
->  drivers/usb/gadget/udc/dummy_hcd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-> index 1cefca660..41b7b6907 100644
-> --- a/drivers/usb/gadget/udc/dummy_hcd.c
-> +++ b/drivers/usb/gadget/udc/dummy_hcd.c
-> @@ -1254,7 +1254,7 @@ static int dummy_validate_stream(struct dummy_hcd *dum_hcd, struct urb *urb)
->  	if (urb->stream_id > max_streams) {
->  		dev_err(dummy_dev(dum_hcd), "Stream id %d is out of range.\n",
->  				urb->stream_id);
-> -		BUG();
-> +		WARN_ON_ONCE(1);
+> These changes improve readability, maintain consistency, and make the code
+> easier to maintain.
 
-If this can actually be hit, PROPERLY HANDLE THE ISSUE!
+And are hard to review :(
 
-Don't paper over bugs in the code, handle them correctly.  This change
-does not do any of that as obviously the author thought that if the
-code path got here, the system was so broken it needed to be halted.
-Your change could cause it to continue on, in a very vulnerable state
-(i.e. broken.)
+Again, please break things up into "one logical change per patch", and
+that does not mean "fix all coding style issues" is a "logical change".
 
-So I can't take this, sorry.  Nor should you want me to take it :)
+Also:
+
+>  /*
+> -	EP_INFO("ep3in-iso",
+> -		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_IN)),
+> -	EP_INFO("ep4out-iso",
+> -		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_OUT)),
+> -*/
+> + *	EP_INFO("ep3in-iso",
+> + *		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_IN)),
+> + *	EP_INFO("ep4out-iso",
+> + *		USB_EP_CAPS(USB_EP_CAPS_TYPE_ISO, USB_EP_CAPS_DIR_OUT)),
+> + */
+
+Why not just delete commented out code?
 
 thanks,
 
