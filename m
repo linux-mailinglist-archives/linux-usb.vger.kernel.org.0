@@ -1,70 +1,70 @@
-Return-Path: <linux-usb+bounces-30702-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30704-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1EC7C6F548
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 15:38:07 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74326C6F617
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 15:45:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3AFD93883FA
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 14:26:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 60E5B4FFA86
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 14:27:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA2A368283;
-	Wed, 19 Nov 2025 14:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 276E836829C;
+	Wed, 19 Nov 2025 14:24:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OWw9dvMn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XceDNDlO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B2336826C
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 14:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAC836827E
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 14:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763562280; cv=none; b=ni7xJcNqM5b5AMamXscnJzIPiRqsC7HGyfxfvip/vJDfUiq4Ws6bKjzhVnnopNGpDLzsKRA7O1SSeraY2vQ1Z75/R/G+81rFI+tOQssDNPSPIh/SVBW7w4GnGS/1zt/e4ef8C2H2bpqVBy8q9WYt4QrOxs7R18fp5+UANARm4O8=
+	t=1763562282; cv=none; b=OHlrPrCHfVX5kfQ7UEndPbtJR7ns/8YfUoC4BYMt00qllHaCCR5TZ3at5Mp+BK0/4Ii+kCXNUW0Bw736/eTYrVBNXTLcXfcdJ16SPDALW/VwkXLDnGeiz4cIrB3RoCNLXEJHUBR8E6Bm9P3LlXTbRmb14qtNTMljD+PAH/Ah3wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763562280; c=relaxed/simple;
-	bh=5GdZLIbIAyzzeYoWQBskBDjccyJg5sqPYoXNSeBlT3M=;
+	s=arc-20240116; t=1763562282; c=relaxed/simple;
+	bh=oobHCuddKSlzsZDkpjRpoRvXOG59fZjo+g4S5UugxzQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z4Jp+Ml1Xa6KIZAO8WwEI7X7XuvM+GCJ7k3a3pNKT3EOLStPXWgctAkU1VMQXQ0v8WpSokYLwyMcjsQ3eQCvbU6LpJaNOVOV6tnvgj6YSv7yrXDZKza2Di732IPuBarrr+U3HLIjmUMMSkLXQIfRtvWDK1E9HU5MB00hDSGlcyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OWw9dvMn; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version; b=p0w4MkZkcSEW6U57cXgfHVap7cwjk3DyGDMVeNqVThfWCjsVuXT7t1u8Klw9/qqhBHo4W8Xtc4lzIjsIY6Y2VIYZ9kFRgPGvqQ6UiePNoR2Fq+to55oG0QyYI6YjcwyytwWjT70tDUEPl6Qtfv67DUwOWN08zyVfDPfWrAUJ3+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XceDNDlO; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763562279; x=1795098279;
+  t=1763562281; x=1795098281;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5GdZLIbIAyzzeYoWQBskBDjccyJg5sqPYoXNSeBlT3M=;
-  b=OWw9dvMnk293z2Lue2HogMxf9AEBbPSJUUzg3ePV2Mpmhy6DnI8UHS5V
-   aLJ2f2VTKpS9BZVpnR8RQ+rKlA4wcsGIs5HZkHKQXIKMGeU1oAE5XHJUK
-   adxzawIRfOgVPKMZXLZKyuynXL3J2XSmjbEktfvjDDkuGw44mZsmtTacM
-   W/AQtIybvhznjQlBtzpzaZ/9+IAvhcQDGQeRWUHmFspxDPQ1j3TtYg1MO
-   HR+NVYmN5YbSo3y+VVK9sx0L3DSeFm4NycJUogTK4W1wwcxScnCY8f1vo
-   hwDIPd8fiyvIXoNCBRIIkwjNT+4m/0/Q9ghGDfmOR13SsAhhz6h+MP2EJ
+  bh=oobHCuddKSlzsZDkpjRpoRvXOG59fZjo+g4S5UugxzQ=;
+  b=XceDNDlOp86iJ8SUoLvrNJsYn1Tj7RxEp40nlTLSz+R2b8Tj4skUj3Ds
+   vhgaMc1K7Eif/QXuHZz6e2h27qyt4aPKFSoRuty6h52bCt3aNX10RNzJp
+   MPwv8tU7rUznRCkQTdzUPlzYa1Sh7WRpr0IKQYgGa/qYpX4plGHvG7j+3
+   SHyOg63cn8JI0hkXKcLUUfJv+Ulf42OzwV0CQwAbzHC3WhNFQrXHCIbAt
+   PJkJRtMWv8rdBMbzbHLtE8bZEGWdEBKXF1U9sdV6OAdiThIU2vfiwMi/F
+   GS8qM/sliG3ll9Lp4/IUKOIQOtJ6n+b1tcnCcJLPSsKEnghlQ+yeaAywC
    g==;
-X-CSE-ConnectionGUID: +43h+JUrQbu0+hFEYOCiYQ==
-X-CSE-MsgGUID: Ti62OicoRUurXOxc7R3l8A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="65645496"
+X-CSE-ConnectionGUID: /sI2LIeHShanyWuafn8TEg==
+X-CSE-MsgGUID: BQrnzVBrSi6iq024jYn+Mg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="65645500"
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="65645496"
+   d="scan'208";a="65645500"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:39 -0800
-X-CSE-ConnectionGUID: KRaHA/pKQL+96suNbN5Ctg==
-X-CSE-MsgGUID: qi5U0t45Qv+0rSAdTJ3hkA==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:40 -0800
+X-CSE-ConnectionGUID: cjj5aVJ4Q2+ZFuA1pcwgEA==
+X-CSE-MsgGUID: XDoACKmWTI2toZvOnNGtRg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="221991976"
+   d="scan'208";a="221991986"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO mnyman-desk.home) ([10.245.244.20])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:37 -0800
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:39 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 02/23] xhci: Add helper to find trb from its dma address
-Date: Wed, 19 Nov 2025 16:23:56 +0200
-Message-ID: <20251119142417.2820519-3-mathias.nyman@linux.intel.com>
+Subject: [PATCH 03/23] xhci: simplify and rework trb_in_td()
+Date: Wed, 19 Nov 2025 16:23:57 +0200
+Message-ID: <20251119142417.2820519-4-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251119142417.2820519-1-mathias.nyman@linux.intel.com>
 References: <20251119142417.2820519-1-mathias.nyman@linux.intel.com>
@@ -76,90 +76,115 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a xhci_dma_to_trb() helper, and use it to find the transfer TRB
-early in handle_tx_event() based on the dma address found in the
-event TRB.
+The trb_in_td() checking is quite complex, especially when checking for
+TRBs in ranges that can span several segments.
 
-With this helper we can avoid using 'ep_seg' transfer TRB segment
-variable as both a a boolean to indicate if the transfer TRB is part
-of the next queued TD, and to actually find the transfer TRB based
-on ep_seg and ep_trb_dma.
-
-This is a first step in reworking and cleaning up trb_in_td() and
-handle_tx_event()
+Simplify the search by creating a position index for each TRB on the
+ring, and just compare the position indexes.
+Add a more generic dma_in_range() helper that checks if a trb dma
+address is in the range between a start and end trb and call it from
+trb_in_td()
 
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-ring.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ drivers/usb/host/xhci-ring.c | 72 ++++++++++++++----------------------
+ 1 file changed, 28 insertions(+), 44 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 8e209aa33ea7..7fccca7e1c62 100644
+index 7fccca7e1c62..aa7fc4d6f97c 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -82,6 +82,23 @@ dma_addr_t xhci_trb_virt_to_dma(struct xhci_segment *seg,
- 	return seg->dma + (segment_offset * sizeof(*trb));
+@@ -160,6 +160,11 @@ static void trb_to_noop(union xhci_trb *trb, u32 noop_type)
+ 	}
  }
  
-+static union xhci_trb *xhci_dma_to_trb(struct xhci_segment *start_seg,
-+				       dma_addr_t dma,
-+				       struct xhci_segment **match_seg)
++static unsigned int trb_to_pos(struct xhci_segment *seg, union xhci_trb *trb)
 +{
-+	struct xhci_segment *seg;
-+
-+	xhci_for_each_ring_seg(start_seg, seg) {
-+		if (in_range(dma, seg->dma, TRB_SEGMENT_SIZE)) {
-+			if (match_seg)
-+				*match_seg = seg;
-+			return &seg->trbs[(dma - seg->dma) / sizeof(union xhci_trb)];
-+		}
-+	}
-+
-+	return NULL;
++	return seg->num * TRBS_PER_SEGMENT + (trb - seg->trbs);
 +}
 +
- static bool trb_is_noop(union xhci_trb *trb)
+ /* Updates trb to point to the next TRB in the ring, and updates seg if the next
+  * TRB is in a new segment.  This does not skip over link TRBs, and it does not
+  * effect the ring dequeue or enqueue pointers.
+@@ -299,55 +304,34 @@ static void inc_enq(struct xhci_hcd *xhci, struct xhci_ring *ring,
+ 		inc_enq_past_link(xhci, ring, chain);
+ }
+ 
+-/*
+- * If the suspect DMA address is a TRB in this TD, this function returns that
+- * TRB's segment. Otherwise it returns 0.
+- */
+-static struct xhci_segment *trb_in_td(struct xhci_td *td, dma_addr_t suspect_dma)
++static bool dma_in_range(dma_addr_t dma,
++			 struct xhci_segment *start_seg, union xhci_trb *start_trb,
++			 struct xhci_segment *end_seg, union xhci_trb *end_trb)
  {
- 	return TRB_TYPE_NOOP_LE32(trb->generic.field[3]);
-@@ -2658,7 +2675,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	int ep_index;
- 	struct xhci_td *td = NULL;
- 	dma_addr_t ep_trb_dma;
--	struct xhci_segment *ep_seg;
- 	union xhci_trb *ep_trb;
- 	int status = -EINPROGRESS;
- 	struct xhci_ep_ctx *ep_ctx;
-@@ -2689,6 +2705,9 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	if (!ep_ring)
- 		return handle_transferless_tx_event(xhci, ep, trb_comp_code);
+-	dma_addr_t start_dma;
+-	dma_addr_t end_seg_dma;
+-	dma_addr_t end_trb_dma;
+-	struct xhci_segment *cur_seg;
++	unsigned int pos, start, end;
++	struct xhci_segment *pos_seg;
++	union xhci_trb *pos_trb = xhci_dma_to_trb(start_seg, dma, &pos_seg);
  
-+	/* find the transfer trb this events points to */
-+	ep_trb = xhci_dma_to_trb(ep_ring->deq_seg, ep_trb_dma, NULL);
-+
- 	/* Look for common error cases */
- 	switch (trb_comp_code) {
- 	/* Skip codes that require special handling depending on
-@@ -2862,10 +2881,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 		td = list_first_entry(&ep_ring->td_list, struct xhci_td,
- 				      td_list);
+-	start_dma = xhci_trb_virt_to_dma(td->start_seg, td->start_trb);
+-	cur_seg = td->start_seg;
++	/* Is the trb dma address even part of the whole ring? */
++	if (!pos_trb)
++		return false;
  
--		/* Is this a TRB in the currently executing TD? */
--		ep_seg = trb_in_td(td, ep_trb_dma);
+-	do {
+-		if (start_dma == 0)
+-			return NULL;
+-		/* We may get an event for a Link TRB in the middle of a TD */
+-		end_seg_dma = xhci_trb_virt_to_dma(cur_seg,
+-				&cur_seg->trbs[TRBS_PER_SEGMENT - 1]);
+-		/* If the end TRB isn't in this segment, this is set to 0 */
+-		end_trb_dma = xhci_trb_virt_to_dma(cur_seg, td->end_trb);
 -
--		if (!ep_seg) {
-+		/* Is this TRB not part of the currently executing TD? */
-+		if (!trb_in_td(td, ep_trb_dma)) {
+-		if (end_trb_dma > 0) {
+-			/* The end TRB is in this segment, so suspect should be here */
+-			if (start_dma <= end_trb_dma) {
+-				if (suspect_dma >= start_dma && suspect_dma <= end_trb_dma)
+-					return cur_seg;
+-			} else {
+-				/* Case for one segment with
+-				 * a TD wrapped around to the top
+-				 */
+-				if ((suspect_dma >= start_dma &&
+-							suspect_dma <= end_seg_dma) ||
+-						(suspect_dma >= cur_seg->dma &&
+-						 suspect_dma <= end_trb_dma))
+-					return cur_seg;
+-			}
+-			return NULL;
+-		}
+-		/* Might still be somewhere in this segment */
+-		if (suspect_dma >= start_dma && suspect_dma <= end_seg_dma)
+-			return cur_seg;
++	pos = trb_to_pos(pos_seg, pos_trb);
++	start = trb_to_pos(start_seg, start_trb);
++	end = trb_to_pos(end_seg, end_trb);
  
- 			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
- 				/* this event is unlikely to match any TD, don't skip them all */
-@@ -2948,7 +2965,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	if (ring_xrun_event)
- 		return 0;
+-		cur_seg = cur_seg->next;
+-		start_dma = xhci_trb_virt_to_dma(cur_seg, &cur_seg->trbs[0]);
+-	} while (cur_seg != td->start_seg);
++	/* end position is smaller than start, search range wraps around */
++	if (end < start)
++		return !(pos > end && pos < start);
  
--	ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma) / sizeof(*ep_trb)];
- 	trace_xhci_handle_transfer(ep_ring, (struct xhci_generic_trb *) ep_trb, ep_trb_dma);
+-	return NULL;
++	return (pos >= start && pos <= end);
++}
++
++/* If the suspect DMA address is a TRB in this TD, this function returns true */
++static bool trb_in_td(struct xhci_td *td, dma_addr_t suspect_dma)
++{
++	return dma_in_range(suspect_dma, td->start_seg, td->start_trb,
++			    td->end_seg, td->end_trb);
+ }
  
- 	/*
+ /*
 -- 
 2.43.0
 
