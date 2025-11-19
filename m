@@ -1,85 +1,86 @@
-Return-Path: <linux-usb+bounces-30687-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30688-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03681C6E283
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 12:10:57 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 016C4C6E2B9
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 12:14:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 993AA355004
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 11:05:13 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 57E5734A99E
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 11:06:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1903C350D5D;
-	Wed, 19 Nov 2025 11:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86477355057;
+	Wed, 19 Nov 2025 11:05:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dDbesPcu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lv+oDTbg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D521A350A31
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 11:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0F5352F96
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 11:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763550276; cv=none; b=LbNBRGAtZ9+lzr9FCas2fyMvGkdIM+DnnFbQoWWCQG4tJzNMItPGwzuTTwa8aTR07roo+o+HBxg2Lx7r/m2fh2X6MrLoXkSNK+pICLQSR4eFmLCNR/gqRVdP5kbKTxeISUs7FrCkjxyRI/2lUBpkKka+WnBDbydIcyF5xN+DFtU=
+	t=1763550331; cv=none; b=QgpQX4d8U7YbtOQ3TtRMG/RgP6B6PEYe0qsfaiOj/L2HWd8WVW13QWHMrTdTdNO26sNgZWoK21NspJaMThUvCoKtlQZkyXLwqCpVUENEToYPFYIAa1x/5HLTbm/AvKXeKug9OaIXhqqSPtwT40E8fyBKrFiglQXlvOizKMgJPUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763550276; c=relaxed/simple;
-	bh=G7JunY/3iWsoDP1AL4Uu9VZnCup1j693fiMcSMDqWug=;
+	s=arc-20240116; t=1763550331; c=relaxed/simple;
+	bh=ZZlMYEL4UcoCzWKCh7+jEM7X2xcMYZBm/2G+suCYUWA=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HZUpMSsnRMGjEbxISHyzP2RvPDYo/+kkyv8IYKqnD/MMYLinYusajMFeTzLOeQP7BXk4qq7M1CQkc0O6idP0aOLKa1L8s696VbMc5boo0PHK6kQiBnGZDH1MKrStXPAOl6574vjMhgoGk+qQBZ9oSv05qALZSyDTDyu7N1Jpwqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dDbesPcu; arc=none smtp.client-ip=209.85.208.47
+	 MIME-Version:Content-Type; b=cnYifAMCzRU+jc5ydxkI/MtqOPBV3fuIChiUvFi2u8IL4dTi62TJFKJIQj5h4T+A5wm0R9A//jFws78+vs2T7/bwrzJwxEQmZtxex4gWY4X7DkIwgVsdqBOsWTsqVUen4qtkyIELagPjsimBgxUWSnmgIdQgBgmTtlktntMhES4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lv+oDTbg; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6417313bddaso10490250a12.3
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 03:04:34 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b7291af7190so954292166b.3
+        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 03:05:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763550273; x=1764155073; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763550324; x=1764155124; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jECqb7FpaGoNZmYZTTPNeoOaaYauInUDkmHh57LIczM=;
-        b=dDbesPcuvxue7WMUgbtZcB7fENPmcsJYO5oP7rnq3aXOnGzg0jiDc151ubwRYbxbqR
-         L6yE2KbZ+9KUfL89pBwWTb7fyZZL1n9vc+w6FxKsDHd3uUWKfQ9WOJsg7CFl3MWQ9Zlf
-         g24QvPs5GtNKfoGkqw5e+zK+4H/6FELJI7HWXgQRs2xsWT54sdc/GrwoWh/Fa3p9iiXK
-         i/I3Hmvxwod81m/OU0uQ3FomPh5wpM0lzrp/yE9LyHGV1BTop4IDepY0NF7bBzpjosYX
-         /gMuAY2DcayDJTEcqD6HTYpYUgW9reDMF4lazuhOH00uoi+Pe/t80GflfLpbReOXkIDc
-         cbyw==
+        bh=a2r3ybB/cy39+Bu51zs1AfwKD0YYeIolsm0blPv0hSA=;
+        b=lv+oDTbgFdwuK37WwCmQ8t+i87fMV97ZseEEsSWR6d3i+BKB6cK1WtUoh8n7g9YZXc
+         ko0YSNYxVUg/DCwRIOonVMPwPJv3nbqJqT0W2DicQGMtpyWBg2JTtcdXMXenptC7v8MR
+         cBf/5JSRUEMDcBensGmeP78l77TFRDC6lJX2553rcZFID5lgSu5kNVki6AIkoo7Yyerp
+         Mhk11na11IubK1a1XQQbN82CxFZpD/iSG8NnBxbiayDZUgapd5LXDzsh/bCmok7GLDA3
+         oI3my9TQ8zptlU04+OOwwSVEJybp1LkRLEe8UhV1v5aCbbJBquP0fuViSXmnYetiq3L/
+         UkYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763550273; x=1764155073;
+        d=1e100.net; s=20230601; t=1763550324; x=1764155124;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jECqb7FpaGoNZmYZTTPNeoOaaYauInUDkmHh57LIczM=;
-        b=p1qao+RBHD0IBMxFaWIiO9LvvIYUT8xhnbxwE9ialsUU6WrcXUFZjJAzA7plDC+j0E
-         hBuUBOgr3d++bS0ZEWfxYBArVefIhQv+3/jhjGVGghoNHHSJcFIwjFFybev9H5gL79Y4
-         Asui4m4av/Oz2kNxbRXkZn75W2d59SxLwKkesNlyQTfaiiTmiXmYybnGFUPvPJUnyBrg
-         JvguWix1oc08wPyu1hBnbsjaW55We9FdBgnfa7KCoYRKnum2Zp6JYJ6Luix9f6Pmmbjw
-         MY/g+fQw7dxWan4ESKZLNqFXBA0nEUVtf0WVi2OpKXGN6VfEFu6Pp+MFJ5uwxi88VRTE
-         TXgw==
-X-Gm-Message-State: AOJu0YzMWq/riuyi6fhoJN5oWM9z1nkilPPqLh5n5pvyWCXX+QDWx+8t
-	Yyv6tfYXEs22DFtSvbZtiZrXr+aNswgP6P7FVRy4QsjsOk7UAkyraCpE
-X-Gm-Gg: ASbGncs0dWWYFidR9o7Verv6L0kaSSk15qd38ZbsdqZ6BSIwxxwCEGraUqh5HmLrkn9
-	G3AxK/p8KVuEUdl86pG52eD7b7T7JqbOehFZq0yE0bt24FBVIbv4GmgIsVuA1+a3nk3xOHGkzKf
-	g0O+pbz5AKTQy2wZyKrsNQ+dO709krcqQUgWDYiMOU59Aj+fEjYRlculV3+jMz52A8Gf/06PxAW
-	/BUz8BbOnzmmy7jylvTIuFaZ9yqF7F2depyEMeazzYIQ7AaThdCH5gfBJwYecpwhkMfNQH3F6rD
-	JgHcESvAURBh7/VwGhhZcLBTOgfiOY5YDuXmJVD8uPv7NtLu4nGEaXEFA3Tkp6IgwF2XX4UjHmd
-	R/0wYMrbPDI+TYAuS6MNQsTIFoj3ElSoI3WkxMUnhM+oTtr7m0COOrWdZmIDVvDW22+G3bGHAMF
-	66WdhN3ea4teFwmrTojr5g7RU=
-X-Google-Smtp-Source: AGHT+IGAn8aA94Gjc6rB7edvmJijL47gT2Orqoh2HUXTMCcoqOAgk+7GqJFDZKDrLhN1hgbOGdfvkQ==
-X-Received: by 2002:a05:6402:3506:b0:640:9b62:a8bb with SMTP id 4fb4d7f45d1cf-64350e89ad2mr17322636a12.22.1763550273047;
-        Wed, 19 Nov 2025 03:04:33 -0800 (PST)
+        bh=a2r3ybB/cy39+Bu51zs1AfwKD0YYeIolsm0blPv0hSA=;
+        b=Wly514St8700SV1Vp7Qbxzgl75KDifcgYwslzc1mjBYzqJcHwtIiJ2C+5Ca655gOjw
+         mJyPj4TAf5/XST1JbSnpS3yZSR9+J9wqzFFdZqQTfVD89nqIjrNnCu/kXy4mLz9JewWn
+         +TE64X8ALy/et0gUrGxR82wGj+Ee3P8qZY3axF2PQX7SqSD+cWwk0NlxrWXokw2+KR+P
+         dXDKQUT/5dJ6MFnk4lmLd+YeDp6JPVVyyC0dwRMBQ34Vnu1TEPM4zpst1cJ6K9sM6FYl
+         U5JWMJQkcXle607g6YmQyY5+A0WfFUZDpSFJQDyryiVavmAQu+xGc3ctJIVgM5asGWHm
+         fPvQ==
+X-Gm-Message-State: AOJu0Ywde0k5npZP06Sl1o0+5xZivaZK1xfdjR6ZChgRvEzkWaZlsiMI
+	gTtVj6yGDcXfgsZWPEgi918f5H5eJbKc1zP08/neWwJALx5sQLgK85zZ
+X-Gm-Gg: ASbGncvikuJfKPkqjrL5+hYjbZjKOkeNTLzwTgXkS/KnbkhIu8Ir0dRh4yGeiqENn2Z
+	IyoorH0GwXITovoJ6S94/9cXoiccQ30NjQKBv41wC+tQPXQnpD54cSWavn3JFlP+lhyBasNDdZ+
+	QHYgf+E10lZFU3yl3ceb84OJgJYQq/+ciZvJXJHYCc95CTBDbRKErs6Zuuw4zkrtJgdQrsogVbM
+	TsDDUg+lHbHGlq4DuN/Dm8MH/Jw6bgu0SpI8AQbqKUVtSyYzdoEibf7w9Ptc0+Q+xMCKiphdIEV
+	q2PTKhvQa5tny4X1qQoUah5IfmK+J97OYoJmXe9AWjWP4kezpibT7cWIgXtu94HrcfkzIsJ7Br0
+	8wuG8KrtG9qa3WCeLBo57SRzH6tAktidHvzy8dAw7l3y6VBOOh3Koe12nGC4Tz+oCjlKL2QUzXw
+	OS2/9WQnf17huo4zQGk3Q4WV8=
+X-Google-Smtp-Source: AGHT+IEw5t/eIx5bVX1xsnAa+zaDwgtTnfVs0G0iRtj0eD3+nJI5zrqG9M+9zwSEwsT23oCUk2bCQw==
+X-Received: by 2002:a17:907:7fa5:b0:b73:75ea:febf with SMTP id a640c23a62f3a-b7637a128afmr200845966b.55.1763550323812;
+        Wed, 19 Nov 2025 03:05:23 -0800 (PST)
 Received: from foxbook (bhd138.neoplus.adsl.tpnet.pl. [83.28.93.138])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-644f13ff4d4sm5588048a12.12.2025.11.19.03.04.32
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734fad45afsm1599924766b.24.2025.11.19.03.05.23
         (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 19 Nov 2025 03:04:32 -0800 (PST)
-Date: Wed, 19 Nov 2025 12:04:30 +0100
+        Wed, 19 Nov 2025 03:05:23 -0800 (PST)
+Date: Wed, 19 Nov 2025 12:05:20 +0100
 From: Michal Pecio <michal.pecio@gmail.com>
 To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
  <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] usb: xhci: Refactor and generalize trb_in_td()
-Message-ID: <20251119120430.5e41bf74.michal.pecio@gmail.com>
+Subject: [PATCH 4/5] usb: xhci: Reduce error mid TD latency with a new "done
+ TD" mechanism
+Message-ID: <20251119120520.7827bfa7.michal.pecio@gmail.com>
 In-Reply-To: <20251119120208.6a025eb0.michal.pecio@gmail.com>
 References: <20251119120208.6a025eb0.michal.pecio@gmail.com>
 Precedence: bulk
@@ -91,177 +92,278 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Replace the internal logic of trb_in_td() with a new one which works
-on (virtual) TRB pointers instead of DMA addresses. Since driver data
-structures use virtual pointers, the function and some of its callers
-will be simplified. Optimize for common case of trb == end_trb.
+No data transfer will occur after an error mid TD, so the TD can be
+given back to class driver without waiting for the final completion
+event. This reduces latency, particularly on buggy HCs from vendors
+like NEC or ASMedia which ignore the IOC flag after errors, making
+the TD wait until next ESIT to be given back.
 
-Extract the implementation into a lower level trb_in_range() function
-which works with arbitrary TRB ranges.
+Since we can no longer expect the 'xhci_td' to stay around after it
+is given back, copy minimum metadata to 'ep_ring' which will enable
+recognition of subsequent events for the done TD. Existing solution
+with trb_in_td() proved very effective, so use a similar mechanism.
 
-Create a new trb_in_td() as the obvious wrapper around trb_in_range().
-Create a new dma_in_td() using xhci_dma_to_trb() and trb_in_td().
+Also take over handling out-of-spec Etron events, because we can do
+it more accurately than the previous implementation.
 
-Update former trb_in_td() callers to use new functions appropriately.
+We no longer need to handle Missed Service Errors with NULL 'ep_trb'
+for the sake of TDs stuck in error mid TD state, so drop that.
 
 Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 ---
- drivers/usb/host/xhci-ring.c | 101 +++++++++++++++++++----------------
- 1 file changed, 55 insertions(+), 46 deletions(-)
+ drivers/usb/host/xhci-ring.c | 116 +++++++++++++++++++----------------
+ drivers/usb/host/xhci.h      |   2 +-
+ 2 files changed, 64 insertions(+), 54 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 531e2f207b17..a2257e1dc396 100644
+index a2257e1dc396..2b889caff0f5 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -113,6 +113,11 @@ static bool trb_is_link(union xhci_trb *trb)
- 	return TRB_TYPE_LINK_LE32(trb->link.control);
- }
+@@ -1542,6 +1542,8 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
+ 			 */
+ 			ep_ring->deq_seg = ep->queued_deq_seg;
+ 			ep_ring->dequeue = ep->queued_deq_ptr;
++			/* If we were waiting for a done TD, we aren't anymore */
++			ep_ring->done_end_trb = NULL;
+ 		} else {
+ 			xhci_warn(xhci, "Mismatch between completed Set TR Deq Ptr command & xHCI internal state.\n");
+ 			xhci_warn(xhci, "ep deq seg = %p, deq ptr = %p\n",
+@@ -2260,7 +2262,7 @@ int xhci_is_vendor_info_code(struct xhci_hcd *xhci, unsigned int trb_comp_code)
  
-+static bool trb_on_seg(struct xhci_segment *seg, union xhci_trb *trb)
-+{
-+	return in_range((uintptr_t) trb, (uintptr_t) seg->trbs, TRB_SEGMENT_SIZE);
-+}
-+
- static bool last_trb_on_seg(struct xhci_segment *seg, union xhci_trb *trb)
+ static void finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		      struct xhci_ring *ep_ring, struct xhci_td *td, u32 trb_comp_code,
+-		      struct xhci_segment *ep_seg, union xhci_trb *ep_trb)
++		      struct xhci_segment *ep_seg, union xhci_trb *ep_trb, bool more_events)
  {
- 	return trb == &seg->trbs[TRBS_PER_SEGMENT - 1];
-@@ -304,54 +309,58 @@ static void inc_enq(struct xhci_hcd *xhci, struct xhci_ring *ring,
+ 	struct xhci_ep_ctx *ep_ctx;
+ 
+@@ -2300,6 +2302,9 @@ static void finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 	/* update ring dequeue state */
+ 	ep_ring->deq_seg = ep_seg;
+ 	ep_ring->dequeue = ep_trb;
++	/* td is done and going away, but it may still get more events */
++	if (more_events)
++		ep_ring->done_end_trb = td->end_trb;
+ 
+ 	xhci_td_cleanup(xhci, td, ep_ring, td->status);
+ }
+@@ -2408,7 +2413,7 @@ static void process_ctrl_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		td->urb->actual_length = requested;
+ 
+ finish_td:
+-	finish_td(xhci, ep, ep_ring, td, trb_comp_code, ep_seg, ep_trb);
++	finish_td(xhci, ep, ep_ring, td, trb_comp_code, ep_seg, ep_trb, false);
  }
  
  /*
-- * If the suspect DMA address is a TRB in this TD, this function returns that
-- * TRB's segment. Otherwise it returns 0.
-+ * Check if seg:trb is a TRB in the range between start_trb and end_trb, inclusive.
-+ * If start_trb == end_trb, the range is one TRB, not the full ring. The range may
-+ * cycle back and end in an earlier segment or on earlier TRB in start_trb segment.
-  */
--static struct xhci_segment *trb_in_td(struct xhci_td *td, dma_addr_t suspect_dma)
-+static bool trb_in_range(struct xhci_hcd *xhci, union xhci_trb *start_trb, union xhci_trb *end_trb,
-+			 struct xhci_segment *seg, union xhci_trb *trb)
- {
--	dma_addr_t start_dma;
--	dma_addr_t end_seg_dma;
--	dma_addr_t end_trb_dma;
--	struct xhci_segment *cur_seg;
-+	struct xhci_segment *seg_other;
+@@ -2426,6 +2431,11 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 	bool sum_trbs_for_length = false;
+ 	u32 remaining, requested, ep_trb_len;
+ 	int short_framestatus;
++	/* Expect more events for this TD after certain events before the last TRB */
++	bool more_events = false;
++	/* On Etron SuperSpeed endpoints some errors on any TRB trigger more events */
++	bool etron_ss_bug = xhci->quirks & XHCI_ETRON_HOST &&
++				td->urb->dev->speed == USB_SPEED_SUPER;
  
--	start_dma = xhci_trb_virt_to_dma(td->start_seg, td->start_trb);
--	cur_seg = td->start_seg;
-+	if (!trb || !seg)
-+		return false;
+ 	trb_comp_code = GET_COMP_CODE(le32_to_cpu(event->transfer_len));
+ 	urb_priv = td->urb->hcpriv;
+@@ -2440,9 +2450,6 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 	/* handle completion code */
+ 	switch (trb_comp_code) {
+ 	case COMP_SUCCESS:
+-		/* Don't overwrite status if TD had an error, see xHCI 4.9.1 */
+-		if (td->error_mid_td)
+-			break;
+ 		if (remaining) {
+ 			frame->status = short_framestatus;
+ 			sum_trbs_for_length = true;
+@@ -2462,14 +2469,12 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		fallthrough;
+ 	case COMP_ISOCH_BUFFER_OVERRUN:
+ 		frame->status = -EOVERFLOW;
+-		if (ep_trb != td->end_trb)
+-			td->error_mid_td = true;
++		more_events = ep_trb != td->end_trb || etron_ss_bug;	/* xHCI 4.9.1 */
+ 		break;
+ 	case COMP_MISSED_SERVICE_ERROR:
+ 		frame->status = -EXDEV;
+ 		sum_trbs_for_length = true;
+-		if (ep_trb != td->end_trb)
+-			td->error_mid_td = true;
++		more_events = ep_trb != td->end_trb;	/* xHCI 4.11.2.5.2, no Etron bug */
+ 		break;
+ 	case COMP_INCOMPATIBLE_DEVICE_ERROR:
+ 	case COMP_STALL_ERROR:
+@@ -2478,8 +2483,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 	case COMP_USB_TRANSACTION_ERROR:
+ 		frame->status = -EPROTO;
+ 		sum_trbs_for_length = true;
+-		if (ep_trb != td->end_trb)
+-			td->error_mid_td = true;
++		more_events = ep_trb != td->end_trb || etron_ss_bug;	/* xHCI 4.9.1 */
+ 		break;
+ 	case COMP_STOPPED:
+ 		sum_trbs_for_length = true;
+@@ -2501,9 +2505,6 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		break;
+ 	}
  
--	do {
--		if (start_dma == 0)
--			return NULL;
--		/* We may get an event for a Link TRB in the middle of a TD */
--		end_seg_dma = xhci_trb_virt_to_dma(cur_seg,
--				&cur_seg->trbs[TRBS_PER_SEGMENT - 1]);
--		/* If the end TRB isn't in this segment, this is set to 0 */
--		end_trb_dma = xhci_trb_virt_to_dma(cur_seg, td->end_trb);
+-	if (td->urb_length_set)
+-		goto finish_td;
 -
--		if (end_trb_dma > 0) {
--			/* The end TRB is in this segment, so suspect should be here */
--			if (start_dma <= end_trb_dma) {
--				if (suspect_dma >= start_dma && suspect_dma <= end_trb_dma)
--					return cur_seg;
--			} else {
--				/* Case for one segment with
--				 * a TD wrapped around to the top
--				 */
--				if ((suspect_dma >= start_dma &&
--							suspect_dma <= end_seg_dma) ||
--						(suspect_dma >= cur_seg->dma &&
--						 suspect_dma <= end_trb_dma))
--					return cur_seg;
--			}
--			return NULL;
--		}
--		/* Might still be somewhere in this segment */
--		if (suspect_dma >= start_dma && suspect_dma <= end_seg_dma)
--			return cur_seg;
-+	/* Typically end_trb is near trb in the same segment */
-+	if (trb_on_seg(seg, end_trb))
-+		return trb <= end_trb
-+			/* must not start between trb and end_trb */
-+			? !(trb < start_trb && start_trb <= end_trb)
-+			/* must start between end_trb and trb */
-+			: end_trb < start_trb && start_trb <= trb;
+ 	if (sum_trbs_for_length)
+ 		frame->actual_length = sum_trb_lengths(td, ep_trb) +
+ 			ep_trb_len - remaining;
+@@ -2512,14 +2513,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
  
--		cur_seg = cur_seg->next;
--		start_dma = xhci_trb_virt_to_dma(cur_seg, &cur_seg->trbs[0]);
--	} while (cur_seg != td->start_seg);
-+	/* The range ends in other segment, easy if it starts here */
-+	if (trb_on_seg(seg, start_trb))
-+		return start_trb <= trb;
+ 	td->urb->actual_length += frame->actual_length;
  
--	return NULL;
-+	/* Walk segments and see if end_trb is reached before start_trb */
-+	for (seg_other = seg->next; seg_other != seg; seg_other = seg_other->next) {
-+		bool found_start = trb_on_seg(seg_other, start_trb);
-+		bool found_end = trb_on_seg(seg_other, end_trb);
+-finish_td:
+-	/* Don't give back TD yet if we encountered an error mid TD */
+-	if (td->error_mid_td && ep_trb != td->end_trb) {
+-		xhci_dbg(xhci, "Error mid isoc TD, wait for final completion event\n");
+-		td->urb_length_set = true;
+-		return;
+-	}
+-	finish_td(xhci, ep, ep_ring, td, trb_comp_code, ep_seg, ep_trb);
++	finish_td(xhci, ep, ep_ring, td, trb_comp_code, ep_seg, ep_trb, more_events);
+ }
+ 
+ static void skip_isoc_td(struct xhci_hcd *xhci, struct xhci_td *td,
+@@ -2610,7 +2604,34 @@ static void process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		td->urb->actual_length = 0;
+ 	}
+ 
+-	finish_td(xhci, ep, ep_ring, td, trb_comp_code, ep_seg, ep_trb);
++	finish_td(xhci, ep, ep_ring, td, trb_comp_code, ep_seg, ep_trb, false);
++}
 +
-+		if (found_end)
-+			return found_start ? end_trb < start_trb : true;
-+
-+		if (found_start)
-+			return false;
++/*
++ * Process events for an already finished TD. See xHCI 4.9.1.
++ */
++static void process_done_td(struct xhci_hcd *xhci, struct xhci_ring *ep_ring,
++				 struct xhci_segment *ep_seg, union xhci_trb *ep_trb,
++				 u32 trb_comp_code)
++{
++	switch (trb_comp_code) {
++	case COMP_STOPPED:
++	case COMP_STOPPED_LENGTH_INVALID:
++	case COMP_STOPPED_SHORT_PACKET:
++		/* stopped events don't terminate the TD */
++		break;
++	default:
++		/* clear done TD if this is the final event */
++		if (ep_trb == ep_ring->done_end_trb)
++			ep_ring->done_end_trb = NULL;
++		else	/* unexpected */
++			xhci_dbg(xhci, "Done TD '%s' before end_trb\n",
++					xhci_trb_comp_code_string(trb_comp_code));
 +	}
 +
-+	xhci_err(xhci, "TRB range boundaries not on ring\n");
-+	return false;
-+}
-+
-+static bool trb_in_td(struct xhci_hcd *xhci, struct xhci_td *td,
-+			struct xhci_segment *seg, union xhci_trb *trb)
-+{
-+	return trb_in_range(xhci, td->start_trb, td->end_trb, seg, trb);
-+}
-+
-+static bool dma_in_td(struct xhci_hcd *xhci, struct xhci_td *td, dma_addr_t dma)
-+{
-+	struct xhci_segment *seg;
-+	union xhci_trb *trb = xhci_dma_to_trb(td->start_seg, dma, &seg);
-+
-+	return trb_in_td(xhci, td, seg, trb);
++	/* release TRBs completed by the xHC */
++	ep_ring->deq_seg = ep_seg;
++	ep_ring->dequeue = ep_trb;
  }
  
- /*
-@@ -1094,7 +1103,7 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 					 td->urb->stream_id);
- 		hw_deq &= TR_DEQ_PTR_MASK;
- 
--		if (td->cancel_status == TD_HALTED || trb_in_td(td, hw_deq)) {
-+		if (td->cancel_status == TD_HALTED || dma_in_td(xhci, td, hw_deq)) {
- 			switch (td->cancel_status) {
- 			case TD_CLEARED: /* TD is already no-op */
- 			case TD_CLEARING_CACHE: /* set TR deq command already queued */
-@@ -1184,7 +1193,7 @@ static struct xhci_td *find_halted_td(struct xhci_virt_ep *ep)
- 		hw_deq = xhci_get_hw_deq(ep->xhci, ep->vdev, ep->ep_index, 0);
- 		hw_deq &= TR_DEQ_PTR_MASK;
- 		td = list_first_entry(&ep->ring->td_list, struct xhci_td, td_list);
--		if (trb_in_td(td, hw_deq))
-+		if (dma_in_td(ep->xhci, td, hw_deq))
- 			return td;
+ /* Transfer events which don't point to a transfer TRB, see xhci 4.17.4 */
+@@ -2646,11 +2667,6 @@ static bool xhci_spurious_success_tx_event(struct xhci_hcd *xhci,
+ 	switch (ring->old_trb_comp_code) {
+ 	case COMP_SHORT_PACKET:
+ 		return xhci->quirks & XHCI_SPURIOUS_SUCCESS;
+-	case COMP_USB_TRANSACTION_ERROR:
+-	case COMP_BABBLE_DETECTED_ERROR:
+-	case COMP_ISOCH_BUFFER_OVERRUN:
+-		return xhci->quirks & XHCI_ETRON_HOST &&
+-			ring->type == TYPE_ISOC;
+ 	default:
+ 		return false;
  	}
- 	return NULL;
-@@ -2843,7 +2852,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+@@ -2800,15 +2816,17 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		break;
+ 	case COMP_MISSED_SERVICE_ERROR:
+ 		/*
+-		 * When encounter missed service error, one or more isoc tds
+-		 * may be missed by xHC.
+-		 * Set skip flag of the ep_ring; Complete the missed tds as
+-		 * short transfer when process the ep_ring next time.
++		 * One or more isoc TDs were missed by the xHC and ep_trb points to the
++		 * last missed TD, or it may be NULL. Flag the endpoint and run skipping
++		 * now if we know the missed TDs or leave them to be skipped later.
++		 * See xHCI 4.10.3.2, note differences between spec rev 1.0 and later.
+ 		 */
+ 		ep->skip = true;
+ 		xhci_dbg(xhci,
+ 			 "Miss service interval error for slot %u ep %u, set skip flag%s\n",
+-			 slot_id, ep_index, ep_trb_dma ? ", skip now" : "");
++			 slot_id, ep_index, ep_trb ? ", skip now" : "");
++		if (!ep_trb)
++			return 0;
+ 		break;
+ 	case COMP_NO_PING_RESPONSE_ERROR:
+ 		ep->skip = true;
+@@ -2838,29 +2856,21 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	}
+ 
+ 	/*
+-	 * xhci 4.10.2 states isoc endpoints should continue
+-	 * processing the next TD if there was an error mid TD.
+-	 * So host like NEC don't generate an event for the last
+-	 * isoc TRB even if the IOC flag is set.
+-	 * xhci 4.9.1 states that if there are errors in mult-TRB
+-	 * TDs xHC should generate an error for that TRB, and if xHC
+-	 * proceeds to the next TD it should genete an event for
+-	 * any TRB with IOC flag on the way. Other host follow this.
+-	 *
+-	 * We wait for the final IOC event, but if we get an event
+-	 * anywhere outside this TD, just give it back already.
++	 * Check if we are expecting more events for a "done" TD, which has been given back before
++	 * the xHC finished traversing all its TRBs, because it completed with an error.
  	 */
- 	td = list_first_entry_or_null(&ep_ring->td_list, struct xhci_td, td_list);
- 
--	if (td && td->error_mid_td && !trb_in_td(td, ep_trb_dma)) {
-+	if (td && td->error_mid_td && !trb_in_td(xhci, td, ep_seg, ep_trb)) {
- 		xhci_dbg(xhci, "Missing TD completion event after mid TD error\n");
- 		xhci_dequeue_td(xhci, td, ep_ring, td->status);
+-	td = list_first_entry_or_null(&ep_ring->td_list, struct xhci_td, td_list);
+-
+-	if (td && td->error_mid_td && !trb_in_td(xhci, td, ep_seg, ep_trb)) {
+-		xhci_dbg(xhci, "Missing TD completion event after mid TD error\n");
+-		xhci_dequeue_td(xhci, td, ep_ring, td->status);
++	if (ep_ring->done_end_trb) {
++		if (trb_in_range(xhci, ep_ring->dequeue, ep_ring->done_end_trb, ep_seg, ep_trb)) {
++			process_done_td(xhci, ep_ring, ep_seg, ep_trb, trb_comp_code);
++			return 0;
++		}
++		/*
++		 * Some HCs don't generate these events and silently move forward. We get an event
++		 * for the next TD, or maybe Missed Service or Ring Underrun. Handle it normally.
++		 */
++		ep_ring->done_end_trb = NULL;
  	}
-@@ -2876,7 +2885,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 				      td_list);
  
- 		/* Is this a TRB in the currently executing TD? */
--		if (!trb_in_td(td, ep_trb_dma)) {
-+		if (!trb_in_td(xhci, td, ep_seg, ep_trb)) {
+-	/* If the TRB pointer is NULL, missed TDs will be skipped on the next event */
+-	if (trb_comp_code == COMP_MISSED_SERVICE_ERROR && !ep_trb_dma)
+-		return 0;
+-
+ 	if (list_empty(&ep_ring->td_list)) {
+ 		/*
+ 		 * Don't print wanings if ring is empty due to a stopped endpoint generating an
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 485ea7fc0433..a1dd9ce5f8aa 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1314,7 +1314,6 @@ struct xhci_td {
+ 	struct xhci_segment	*bounce_seg;
+ 	/* actual_length of the URB has already been set */
+ 	bool			urb_length_set;
+-	bool			error_mid_td;
+ };
  
- 			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
- 				/* this event is unlikely to match any TD, don't skip them all */
+ /*
+@@ -1380,6 +1379,7 @@ struct xhci_ring {
+ 	unsigned int		num_trbs_free; /* used only by xhci DbC */
+ 	unsigned int		bounce_buf_len;
+ 	enum xhci_ring_type	type;
++	union xhci_trb		*done_end_trb;
+ 	u32			old_trb_comp_code;
+ 	struct radix_tree_root	*trb_address_map;
+ };
 -- 
 2.48.1
 
