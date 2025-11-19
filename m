@@ -1,118 +1,209 @@
-Return-Path: <linux-usb+bounces-30731-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30732-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D0D7C6FFDF
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 17:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EF48C705B5
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 18:13:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8F7853C18EC
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 16:07:00 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E59D735EB31
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 17:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E6A2EB859;
-	Wed, 19 Nov 2025 16:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7DB630101B;
+	Wed, 19 Nov 2025 17:04:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=remarkable.no header.i=@remarkable.no header.b="irA5eiIX"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dNy/tFNO";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="PwufumZk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45AD23D291
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 16:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7BB3019D6
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 17:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763568351; cv=none; b=AAXSMPUVCsoh6PT3FmGSNDYh93eUdSKjH6zJld3peem9tVfLhUF8eTVQQAtEsAKdrFTgOtnVf3YtII94/DeSFp9gciXf+qyu4u62CBC8E9o9Hl14rxMJn9HeWXm6+pZDPBvAMiUkDNWImY9L8qsiuCX/5ssvZF5FkNOqIru3vDQ=
+	t=1763571868; cv=none; b=BC6bT6SnWUwPZzT7v/TlBXPDer00Ww1KA96SVmXIbWJNVWqhJaFOZ9Nv5xNYzs9FcojhH4P/F0opS5kDR9scWgYQzEyuD86JZnMmifMODjw76OipD0Gx7ksaRGvd6YsqaDJ6oNCtZLcCVaEdW8tNp04lt4+W/VlD56N1QxO3+MM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763568351; c=relaxed/simple;
-	bh=wenwhN98ZXpNaz6rZCAL5i5QRQaS4vWxfU6e5mIcYMY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jIQwOpbSXleiORLTj02fSATaTj1pSphf5kjq62yESH5uu3gcXAJHdRet6iWWu3MTX8vR1aynz1COZxgiRDAxGOyFDeDOx6TkimiFAha7i2zjQgJaWnuVQ9UpPShlJ3ZQ1hohSl2s7seebf+2HVYhhtkegWyjXsvG5wHot7cSfdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=remarkable.no; spf=pass smtp.mailfrom=remarkable.no; dkim=pass (2048-bit key) header.d=remarkable.no header.i=@remarkable.no header.b=irA5eiIX; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=remarkable.no
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=remarkable.no
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5957d7e0bf3so1071352e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 08:05:49 -0800 (PST)
+	s=arc-20240116; t=1763571868; c=relaxed/simple;
+	bh=jKLAPgso9BGvGTL3YApZbRgRvjdCvMQGfgrTi4KRkyo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Th1yZwk5ZhH0Zi68KD5EmIqqiyNMmoxmHTPBZZtc8z+n8VNqWXk66kBaTSk+3GDJzQCue9bcKUZ7x1UerKd/jOQG0i/ntCKPXE/vgvE8vv92DzdDsc+gP0VBhpSBT5R/u6aqkdkaYJeas37yK6s1f3ioxRTzJYZhQVDiB10VHvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dNy/tFNO; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=PwufumZk; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AJFkPWL2583637
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 17:04:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Nct4hnlW4cqd3dOh6scV/QDDf8z9K2+zW7B+EbDc9FQ=; b=dNy/tFNOh3c7kZJ9
+	oaKt9SlC6/29E72oYsV+Dz2/kTH3HGgfLwvIfgD22U2ybvC/5j80BSQc2Z7S7eUL
+	aaoCkz0ZPemFnSFEiXZGaCUCdWq0WW5Bl+ITfNm5fkcGKegheTaH9ceUV5I2+rPj
+	BxDiF6F5WdXNAlyeXXXydiMLZTB4Ek0ZhU0AegfQuPZkciFwTjwtE5v8q6bGNnMY
+	Fwz+HiTkV1pXhMJJIrO/911gtZqi44gHSlQS6d2EjYdU1RZKRyE9rk+v/x99tY/I
+	m4QRdNXjrTMo80IzOkqIylUIFesjXZqvbzAaWXk9/ANDbWVox+hbkuaI6cteJDfH
+	Qd79pA==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ahcqnh1eu-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 17:04:25 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4ee27e24711so70627831cf.1
+        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 09:04:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=remarkable.no; s=google; t=1763568348; x=1764173148; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qMO8lUnOLXTM0N/Z+SV1Orex6S9edEOv9ppJaLbbsNM=;
-        b=irA5eiIXxd8RIu9jdvCQI/fG6NMMmQknL6V4pbu3lhSM8k1/gOrxnYRG1iraSgb034
-         mtyqsNoaUzekOohg3/L+27Hzv9UDRTc1xPJczsDw2NxgUD31TgvE/1gv6/0SNxEg0wo8
-         jx1OO76/lfGOUPlBs+RveG6VeK8pTjDnig70/03gioV+jFfTm+nDH7I2Lq3i/h+tdZ3z
-         1E8Ec2aFtk5UcRQfSa+a1Rf07lVmNHxgySaAsOFtQRjYlh2ib+LDyrFvUNP1kfQzZwKH
-         gsI7ESHX0wOMED+13s2pxxWJ2wuBpGRurHDZqVX8HJEHy/vkXPA+JywflYnB9qthTtps
-         1iTQ==
+        d=oss.qualcomm.com; s=google; t=1763571864; x=1764176664; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nct4hnlW4cqd3dOh6scV/QDDf8z9K2+zW7B+EbDc9FQ=;
+        b=PwufumZk1O+Gizf0QkW0fveXxwQKIXmnowwXbufUf/i65NrUru/rAqjL4ItwrtvUk/
+         Ik+RuTBXwgf8YD+aeRhYixGd3dDtfnAW2u5dsHi8UdUJ03Zj1GAbSvGRgbjVBGwpKina
+         GiB+Pvq3ibpF4pduoWaVM3yOztvzSwjVLNzR+/QpEYB+Ji8siVOkYhPz+neckWkERcEh
+         Nf3friTAYQMS0s9WPZubSNC9VlM/0BfWOemADhkr+Cj4/DCUs1b4idjSVJrw4zPKtquZ
+         3AIFvlxbtTZhUMj8WMVdFUQMhTlqiCd+VeSPeLlt/n1eNbqOcQKPk2q35ee25gakrpvk
+         q3RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763568348; x=1764173148;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qMO8lUnOLXTM0N/Z+SV1Orex6S9edEOv9ppJaLbbsNM=;
-        b=qTOlS0nNoZgSTeusKCKbFr2WILyfFjBGox9TlLUfMX9zaywt+EMCrXPQxOjq3l0lSC
-         EpJC/2fSYJmezixr0hehOmFNPF2I8owpbAlb5cHHIqviE/QKMAdpDRKEXAmgv23Qw8re
-         T0oRl5wX1ZQ7RHx2grEiZ74BI84jG218L6X2HOxvRr3yuoNXqyOgEQ78rtmbJ9SNFyzU
-         k3jNf9VhSI8WljLwZtIbh+kyHNYl/v1i8Hg26a+ggiJg8agckhmIKJD6KYZmR5ZYR7G2
-         lZEyuwyBScHCiLiY2LDFZCuLwi34/KExLoh23K0xMWjIJI7YP3qj6Lv3oMTeg0BFk0S/
-         bG1A==
-X-Gm-Message-State: AOJu0Yy+US0/AYBghmY0wjZdzNWjiDOgkmY/uS/cXRg1OMZAIOfCUCfc
-	VIoNviFFr6G46sMN3YuS7f4Rm6spZQpdn3S/Lfm4Ye7y79DSDF3+VsO4gcR5PseSXg==
-X-Gm-Gg: ASbGncvB2n8FuBVv7qmLmHVyJR5Mul+fX+VInT0JqhKaY36DporpgLVTavXGvmE8g2b
-	QD66kDzcf5pFU4CKBk9MpUokHOHgH0TcbixJOSo5QWZPEosW5QEdeNaU5TLWlbCRMhoeu3vSOhv
-	2gVvyL32Fv7mbvUviMgilGg1QTr1Rz95DxDOdeYg8GJyxyZm4vP6LHHbSqZsXpQATHsMj4M1iss
-	v2sVmxppG4W0maOt4gX7/I0OMDLrR9Vk0ZtkL6BoC+L0gWD8waVXY0p7TkxRcA7YKoppD5FHgQ1
-	pyNhNjzwp7zOHKxHW5NcFrCKog+ncS/voR4SGQ5XlAqf67ppd+zhBH1yAvpaFSf5l5RsGfFsO3S
-	0DmBNtyB5fTaZ8G4fNnC43jJRCLxM7Mie8aNE0RjEofGL9DPClOuKM5Q4unQGUgtq1GFI5u5b+U
-	p1IzRUiTM71rfHuBzrkhgeh9J7WHz8WNapweOENDoJ1KIn41niGStMriefKg1Gx8B1Nv1H1ZcKg
-	k594Pn97TdNZuq/UQ==
-X-Google-Smtp-Source: AGHT+IGO8bvTQwuSXGK6B7Q7mBqlT8wVti+JeBrsLen44khDLYbnl0mikYadatXpqL/AAFnyLyYKeQ==
-X-Received: by 2002:a05:6512:3b0a:b0:594:35d7:731f with SMTP id 2adb3069b0e04-5964b37f939mr1042746e87.7.1763568347992;
-        Wed, 19 Nov 2025 08:05:47 -0800 (PST)
-Received: from ?IPV6:2001:4643:2b9c:0:ed48:e2f2:7382:e121? ([2001:4643:2b9c:0:ed48:e2f2:7382:e121])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5958040038esm4854096e87.52.2025.11.19.08.05.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Nov 2025 08:05:47 -0800 (PST)
-Message-ID: <6c6575dc-4522-4b10-ba74-ed6858ff95a3@remarkable.no>
-Date: Wed, 19 Nov 2025 17:05:46 +0100
+        d=1e100.net; s=20230601; t=1763571864; x=1764176664;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Nct4hnlW4cqd3dOh6scV/QDDf8z9K2+zW7B+EbDc9FQ=;
+        b=nCyRp2AL/38WGTzP3px/t3hg+mzS3QPpEnaxYA3x+bJcQMEdpqFAuZVt6leU6Clhn6
+         3pGzrKMDbf1voWfB5WZ/4aP4NuNyF6KdVOxHnaiPHVpMmaQYG87MtWGcKs2vhPPxUkrC
+         Lh1kshESCv2G0vtAiGtM6xs/R0YtXxwgGSSGVnFMesfg67xSqBTqny9TQ70i08ii6IeO
+         MW36XAkhlFtUkUl5jiOC6VqPDinOg9nzB9m4US4RuJmzUcdTKwHUFcjzzbQ80pYhUVAk
+         uSgRePMYXIiKAvxa4M1YD4YY54RIU2zmosr1RjYR7ii1Xcs8zmF69Etp3I+Fi4W/aGCf
+         Q57A==
+X-Forwarded-Encrypted: i=1; AJvYcCUAVyIb5xNUgVWHHCgpfqUk/FQnwfXmkIWpft1wnHksgD0fcEk3mVIfV1eI6qJx7n0QAP7bBFQgbZc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI3ZqF3FtEdh4G/hGfqmXLWJgidmWIrwcufrXrVylFxxuH8EQ6
+	wSr1Z3DSnYd6fH/Gqvg1zn4qFWVcdAUdFeGdfJQiLLfNAXkiSGhGZgMjCKY8qtl7MPyp0FkjCWD
+	FG8z9Zjrbv/mb1t0J7fbKq1vG4ga5sAh7ou2Zu68XxQ+AKv5kC2GWsestLcsSQhIY/8rUyd8jbG
+	sw4s0hYnuUNt8QsaPxCltKd4Ug9y7P1590Au8Frw==
+X-Gm-Gg: ASbGncvrwwpQLu8J8IYBPWGIn+gBY25f2ULj6Ak1szROLkGrNzfJSyfSueRaAmfCW69
+	liQ++871zYWValcCPqwr8aF7eaMwXyXYJ1e5Ccs7oE5RavPvEt9+nfRNNViWStp9liWZKTxgznk
+	8Mhmup4XOk6SO422WEWImbVn3N78qMcriEV/G4s02BXgf/5DZ5GKAHrlG7apbAlx8oRuJ+tDB1d
+	c6+c469F2fmNtmSiqfEBF63yfQ=
+X-Received: by 2002:ac8:7d11:0:b0:4ed:d2e:3279 with SMTP id d75a77b69052e-4edf2196c74mr273783921cf.84.1763571864019;
+        Wed, 19 Nov 2025 09:04:24 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGzCDwAoANZQO3b2SF2NKiMyJ15g6051kITe5kpiEnVi9WeaXR6EObIhZlbGp40soGV123jUPOYf18nyHCFky8=
+X-Received: by 2002:ac8:7d11:0:b0:4ed:d2e:3279 with SMTP id
+ d75a77b69052e-4edf2196c74mr273782271cf.84.1763571862801; Wed, 19 Nov 2025
+ 09:04:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: chipidea: udc: Link otg and gadget
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, Xu Yang <xu.yang_2@nxp.com>,
- Peter Chen <peter.chen@kernel.org>
-References: <20251119152641.49872-1-johan.korsnes@remarkable.no>
- <2025111923-equate-crabbing-39c3@gregkh>
-Content-Language: en-US
-From: Johan Korsnes <johan.korsnes@remarkable.no>
-In-Reply-To: <2025111923-equate-crabbing-39c3@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251028080553.618304-1-manish.nagar@oss.qualcomm.com>
+ <20251029234724.pg2icfi3a63ojsxn@synopsys.com> <CADGrZwXmnKn68v_cR3o+MiLPAyo+ujtgbx50sK=+4rOfgcoyBA@mail.gmail.com>
+ <20251114002946.427ab4xdq7qhbi2k@synopsys.com>
+In-Reply-To: <20251114002946.427ab4xdq7qhbi2k@synopsys.com>
+From: Manish Nagar <manish.nagar@oss.qualcomm.com>
+Date: Wed, 19 Nov 2025 22:34:11 +0530
+X-Gm-Features: AWmQ_bmjpcG9jrrD_893ZL30WaUb4-KCEes4dN8VLvlSXHi-5XZNLsEhPK00naI
+Message-ID: <CADGrZwUnwv5m5r-Vv8CxwiHSxOw3HDfBQJRWezPQRJ_c6V8rXg@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: Fix race condition between concurrent
+ dwc3_remove_requests() call paths
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE5MDEzNSBTYWx0ZWRfX/QD4KE4Xjh8d
+ lGqctyNNvU9UhNLkwTFOVmvcPNzAD4MzO+VJQG1YMqNqtlPDt+X+5XfHtb1GEVLpNcTNKr4Dlpb
+ DGaj9LbAv+p8zBzhYZSk75YiPfTaxgJYjKUS3KjLYp7VwqyVTL+HL9DWJN8vyK1xIoSS0Q6ESEP
+ anuV9Qf27I/u8tgtfyDZV+ZVwP83VqVR1nnr9fjh1hpeJgmFLEgf1s8DgBarvukzfdM3YpE/tP5
+ Y52HZbXwy+FmHfnJ2hMDDJOs9p1MNGSfP7feW1hlu/E8dDRJ+1GnQNZIzotxXU9yULNQbzr4lQg
+ G9vkS0CWj2x813UHx88cSlSxDW5CNLzpyMK0vDg1AUyb3GnaupHD4x7pZjoCo/Yt5i6hUv3/BA/
+ IW77ZpYmloNUmnJl3y1iG9u7B3t6Gg==
+X-Authority-Analysis: v=2.4 cv=ApfjHe9P c=1 sm=1 tr=0 ts=691df899 cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=KxlKA3TKRzVUev0L-AcA:9
+ a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22
+X-Proofpoint-GUID: guHKUo0XzmzGrR2bVpERu5EiGV_owSlC
+X-Proofpoint-ORIG-GUID: guHKUo0XzmzGrR2bVpERu5EiGV_owSlC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-19_05,2025-11-18_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 lowpriorityscore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 impostorscore=0 phishscore=0 adultscore=0 malwarescore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
+ definitions=main-2511190135
 
-On 19/11/2025 16:32, Greg Kroah-Hartman wrote:
-> On Wed, Nov 19, 2025 at 04:26:41PM +0100, Johan Korsnes wrote:
->> Link OTG with gadget, same as other UDC drivers.
-> 
-> I do not understand this changelog, sorry.  Can you please expand on it?
-> 
-> thanks,
-> 
-> greg k-h
+Hi Greg,
 
-I'll submit a v2 with a proper description. It might also be that this
-link between otg and gadget is not appropriate for the ChipIdea driver.
+I can=E2=80=99t identify a specific commit ID that I=E2=80=99m confident wa=
+s the patch
+introducing the bug.But I found the race condition and suggested this
+patch to fix it.
 
-I've (ab)used this link to obtain the gadget state via the usb_phy in
-a different driver. Since some of the other UDC drivers set up the link
-I just assumed it had been forgotten for the CI one. I'll double check!
+Regards,
 
-Kind regards,
-Johan
+Manish
+
+
+On 11/14/2025 5:59 AM, Thinh Nguyen wrote:
+> On Thu, Nov 13, 2025, Manish Nagar wrote:
+>> Hi ,
+>>
+>> Thanks for the suggestion ,
+>>
+>> On above your suggestion, I added a check for  dep->number as
+>>
+>> if ((req->status =3D=3D DWC3_REQUEST_STATUS_COMPLETED) && (dep->number >=
+ 1))
+>> return;
+>>
+>> I included this condition to prevent enumeration failures. During the se=
+quence
+>> dwc3_gadget_giveback =E2=86=92 dwc3_ep0_interrupt =E2=86=92 dwc3_thread_=
+interrupt, the giveback
+>> for ep0 does not complete, so this check ensures proper handling.
+>>
+>> Please share your feedback, and I will proceed with v2 accordingly.
+>>
+> No, add checks for ep0 too.
+>
+> Try this:
+>
+> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+> index b4229aa13f37..e0bad5708664 100644
+> --- a/drivers/usb/dwc3/ep0.c
+> +++ b/drivers/usb/dwc3/ep0.c
+> @@ -94,6 +94,7 @@ static int __dwc3_gadget_ep0_queue(struct dwc3_ep *dep,
+>       req->request.actual     =3D 0;
+>       req->request.status     =3D -EINPROGRESS;
+>       req->epnum              =3D dep->number;
+> +     req->status             =3D DWC3_REQUEST_STATUS_QUEUED;
+>
+>       list_add_tail(&req->list, &dep->pending_list);
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 1f67fb6aead5..a1d2ff9254b4 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -228,6 +228,13 @@ void dwc3_gadget_giveback(struct dwc3_ep *dep, struc=
+t dwc3_request *req,
+>   {
+>       struct dwc3                     *dwc =3D dep->dwc;
+>
+> +     /*
+> +      * The request might have been processed and completed while the
+> +      * spinlock was released. Skip processing if already completed.
+> +      */
+> +     if (req->status =3D=3D DWC3_REQUEST_STATUS_COMPLETED)
+> +             return;
+> +
+>       dwc3_gadget_del_and_unmap_request(dep, req, status);
+>       req->status =3D DWC3_REQUEST_STATUS_COMPLETED;
+>
+> ---
+>
+> BR,
+> Thinh
 
