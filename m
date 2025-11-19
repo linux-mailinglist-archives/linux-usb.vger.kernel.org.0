@@ -1,265 +1,336 @@
-Return-Path: <linux-usb+bounces-30750-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30752-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2E47C71391
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 23:10:10 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1187FC7160F
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 23:53:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 5D3FD2976E
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 22:10:09 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2F821357194
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 22:51:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8597D30B53F;
-	Wed, 19 Nov 2025 22:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A09F3570BF;
+	Wed, 19 Nov 2025 22:43:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Uk9k8Cik"
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="PsN5RGYw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F9D4CB5B
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 22:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D915BE5E;
+	Wed, 19 Nov 2025 22:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763590205; cv=none; b=mSV5cRjeqOBglU945zhYsT2oivfgB0zO+YcWvJzeeBhCV00M+Ys6aSMVB2uI6gXeeJStqPnbJlgvauron372YTbgKSmlLaTytKl2BY6Fg58fOcebSTz24EEQzSI2WAlzmdofRZ+elAYeklIN6t3ooqb/9fc3vS8Z5KyyuYA3L0E=
+	t=1763592194; cv=none; b=MOl6pN743l6jfbyMkZ0izdN9yLYrMIib2bdv63e1sLauv3UHeJc3sO0BT7v9MSVo6nvGvdyyeFMyqPq7lesZ1DqKM++KBQ3YACnK3317bdu1adrkFwFr3SptOh6FY0DzOXJgKsbKaO4xeGAEwyo8S3az3DVd3Pz1F+Tu1ENTz6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763590205; c=relaxed/simple;
-	bh=mcFfVE057zIZBUkpMJV51i3s++9WCB2V3lpwWA8SDOY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ORTBQirCQmtQo9++PphzQRpv1vPgeEkoO2ZGl/G92uluf83mSUkqnRT52V7Axo4ptsV6tJoHTpjCJW5GdkKiEuZnQzauEIq7bWM4FEniiil7cPSvzeeyNZ3TBXnx6w9Dj6PgZV9TBUHBWpWMZooFZOPNF7SKOUTqwJr15WAWBck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Uk9k8Cik; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-59447ca49afso225848e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 14:10:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1763590201; x=1764195001; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=L8urkfLCwfQfy0bbN91cMP+HPc/CQewamX66N3nMm0c=;
-        b=Uk9k8CikXj0xop0MdrzKZPdV41YhUn+Mxsxm/YId14BLBrs2+PbScu6QAviB98Bt2u
-         v/ZCbk1mO/Xd2eKl7HOj95dnQWPRxl8I1jgwPmkXwtiOIngX/y43q01BOUEy0tWNT8jB
-         Jn+Xyj0s6WsFtd9wF1sRP5AhfrvzN1pmZ3d0g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763590201; x=1764195001;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L8urkfLCwfQfy0bbN91cMP+HPc/CQewamX66N3nMm0c=;
-        b=jsFU1J4xJxHIGM7X+Bx+TRdqRTJPPOn16TreW38FKz4MeviXU4leA2zosNRbjuflSP
-         tEB4mMXNJKMQnk5VPsELEy2N9AqmNgEbSyN1XAhd7ymH2lspwrHjsiO9gbuE2TJfDqnt
-         DnhQK3iyRvMmUvm58MU2GL810umguQlNqP9oABn03tU4ErHjJP2z2k/18cLJZ/NPKWF7
-         rXcMkKUcm0S+ha3HUM14LnBJf74XhSsR7YP1pcShyhP3RfpHyosJFj5R0JQUTRxvgByf
-         qMTKGKZHfb6uX+/aRFHIA4fJ9OnmG/qVyT5wyYC14TyjYlxAnOc3ekXaUNJu/K32N76B
-         8sDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWcpSQQIAEZ3FebVLlAbauEQyKW4It88R8jCyW0h5mg4o0h8tcYS698klJQlXMkD2YDUNC56joONIU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwYNsf8ScrcBI58WXA4SZUbT8KRagqjUfKt8B8a7sum4Oca24G
-	66HpnMwj/tDgKYIMiPm73X4TU2TINMb9PB+Ef9cjeUEXNOif3AhrL6r8/tOnHJRBa/oDb3ZNNv9
-	6B7QneA==
-X-Gm-Gg: ASbGncuG5PEwUhwWljfSGRfycyLdAVhVyYYgBRxEl5gtGEBdvUjbWRgZwciSd7H0hmM
-	dy9WnUVPbPeDiS2M92amWDGSfWMoc/Jb/ajhxrB7ILTFoTva0mOb2jOQ8Cka0ITwxoKJG7hbLdi
-	Zs9SdqUInmfWTKOu5eyg2zUnBiuy93bH5lq0dYaltE3E8q28RVkhaFbjA0q+tu5SVQvB/ZGSyD2
-	r3OPOmhg5KRKwxAzMRKEhBDI7FzpgAzdO/dAkdyFoKmRqWYbFJz8Q17gJSmsra1rlLdASqnDNqN
-	pxAGSSokkEM1c3wfbWJnpPlbaVGebGz5aKVXVLN7MIPdUk30zX212e+2duw+9Kat8ITsQkA4usI
-	ypKOBHlOqr6XJ0R6y4AFmjtg51t9qT5bcFk6SLLcn++426l4Nom4MqgNOKBsd2UXnuvi2XBGQhE
-	oSayyCo3GXAv1kbIr+G/wLDey4jiTOiQSX1adCpNqSWH603AAg
-X-Google-Smtp-Source: AGHT+IF8vy1FtTTbrt3yRtYRAgR0zLyimUexMj8290rAt0HJg6IIQiiuOkObC1Z5qEHudmoKSQNEIA==
-X-Received: by 2002:a05:6512:3192:b0:594:4ebf:e6df with SMTP id 2adb3069b0e04-5969e2da864mr158461e87.15.1763590200870;
-        Wed, 19 Nov 2025 14:10:00 -0800 (PST)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969dbc5970sm146808e87.76.2025.11.19.14.10.00
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Nov 2025 14:10:00 -0800 (PST)
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-59447ca49afso225823e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 14:10:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWTzmEJRuYdh5QbvIW11VAEXY1/3yvQZGeONaVfsuXPyNCbarnR2IisCTaZC2Vf7GS10Fv/1aazR/g=@vger.kernel.org
-X-Received: by 2002:a05:6512:33cc:b0:595:9dbc:2ed7 with SMTP id
- 2adb3069b0e04-5969e320d2emr161355e87.43.1763590199881; Wed, 19 Nov 2025
- 14:09:59 -0800 (PST)
+	s=arc-20240116; t=1763592194; c=relaxed/simple;
+	bh=SB6KrqYz2LaY0bnmGLgzebEVm2460Yuuig9I59sAzLQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qmfU/YO31BpDk0UvupRPFKIkbMyB9lEnUNM6GKukcLrSPVcU+bGr5UCSKMQlz/ZpehbqYEeyHCXfWzp7RaGvrIk74Hrb+GvFL6S+DZbGe5BQ8WyfyXrqtYEXPfrIk9eTNG2M9HiTBzxnDbVt+afOLcqysZzQ1lsHUfLCg4gX4SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=PsN5RGYw; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <david.laight.linux_spam@runbox.com>)
+	id 1vLqsC-006yiG-CY; Wed, 19 Nov 2025 23:42:00 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+	Subject:Cc:To:From; bh=vH8FIvcSxGANwVWko1oGmXX5GS5gNWUC/JCXBzpAFv8=; b=PsN5RG
+	Yw4adVp36kJvtQBzaOeT30b6SW8wtA5jYGrJdbMMMsYsvDj4CzgnWokM1Sou28r+uOGKmcLsCEfjF
+	x7vRqk4x0ZUk5Q3m4pLyHeUUi+2iNW4NTnKESfxwnZdG/Am3FVwILrLSmsIUe5z7hIsRaqS00FKIb
+	wpBgN3ajl01apzJtdlTrMHmSUaRE77jg78EefkqX+M/OVhBFzrdgCcdKMETn1d8vUsGL8F9h+RdA+
+	wbd/Fhu7XqijCSkRTMRCMNALzN5ANR/Nkxu1LF1FZnjDAvEZUMlegQ7pY4fPBR4It4haMp7qd5v5s
+	K6zPsakFUTM6CKZVixkuDzeoxeCg==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <david.laight.linux_spam@runbox.com>)
+	id 1vLqs5-0007yi-PP; Wed, 19 Nov 2025 23:41:53 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vLqs1-00Fos6-6h; Wed, 19 Nov 2025 23:41:49 +0100
+From: david.laight.linux@gmail.com
+To: linux-kernel@vger.kernel.org
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Andreas Dilger <adilger.kernel@dilger.ca>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Christian Brauner <brauner@kernel.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Christoph Hellwig <hch@lst.de>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	David Ahern <dsahern@kernel.org>,
+	David Hildenbrand <david@redhat.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dennis Zhou <dennis@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	John Allen <john.allen@amd.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Juergen Gross <jgross@suse.com>,
+	Kees Cook <kees@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Mika Westerberg <westeri@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	nic_swsd@realtek.com,
+	OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+	Olivia Mackall <olivia@selenic.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tejun Heo <tj@kernel.org>,
+	"Theodore Ts'o" <tytso@mit.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	x86@kernel.org,
+	Yury Norov <yury.norov@gmail.com>,
+	amd-gfx@lists.freedesktop.org,
+	bpf@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	io-uring@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-ext4@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-nvme@lists.infradead.org,
+	linux-pci@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	netdev@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	David Laight <david.laight.linux@gmail.com>
+Subject: [PATCH 00/44] Change a lot of min_t() that might mask high bits
+Date: Wed, 19 Nov 2025 22:40:56 +0000
+Message-Id: <20251119224140.8616-1-david.laight.linux@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251119-uvcdynctrl-v2-0-0359ffb98c9e@chromium.org>
- <20251119-uvcdynctrl-v2-5-0359ffb98c9e@chromium.org> <c42795b2ea0ddd9af13380acff8212841f81d48f.camel@irl.hu>
-In-Reply-To: <c42795b2ea0ddd9af13380acff8212841f81d48f.camel@irl.hu>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Wed, 19 Nov 2025 23:09:46 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtyMvbSMod3afjwR0aP+ZaG2tLugLTiC5q8tQyHL1k9pw@mail.gmail.com>
-X-Gm-Features: AWmQ_bk8ViQMOGSoa7xeoiHzcTix9I9pB6xN4wR2eEfHaZKAUuE1XNfLGS6AUL8
-Message-ID: <CANiDSCtyMvbSMod3afjwR0aP+ZaG2tLugLTiC5q8tQyHL1k9pw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] media: uvcvideo: Introduce allow_privacy_override param
-To: Gergo Koteles <soyer@irl.hu>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans de Goede <hansg@kernel.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Gergo
+From: David Laight <david.laight.linux@gmail.com>
 
-Thanks for the review (and the discussion :) )
+It in not uncommon for code to use min_t(uint, a, b) when one of a or b
+is 64bit and can have a value that is larger than 2^32;
+This is particularly prevelant with:
+	uint_var = min_t(uint, uint_var, uint64_expression);
 
-On Wed, 19 Nov 2025 at 22:54, Gergo Koteles <soyer@irl.hu> wrote:
->
-> Hi Ricardo,
->
-> On Wed, 2025-11-19 at 19:37 +0000, Ricardo Ribalda wrote:
-> > Some camera modules have XU controls that can configure the behaviour of
-> > the privacy LED.
-> >
-> > Block mapping of those controls, unless the module is configured with
-> > a new parameter: allow_privacy_override.
-> >
-> > This is just an interim solution. Based on the users feedback, we will
-> > either put the privacy controls behind a CONFIG option, or completely
-> > block them.
-> >
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  drivers/media/usb/uvc/uvc_ctrl.c   | 38 ++++++++++++++++++++++++++++++++++++++
-> >  drivers/media/usb/uvc/uvc_driver.c | 20 ++++++++++++++++++++
-> >  drivers/media/usb/uvc/uvc_v4l2.c   |  7 +++++++
-> >  drivers/media/usb/uvc/uvcvideo.h   |  2 ++
-> >  include/linux/usb/uvc.h            |  4 ++++
-> >  5 files changed, 71 insertions(+)
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> > index 57ce486f22bbc404a1f127539eb2d12373431631..d9cbb942f798dc7138608982a5d3e3ef9f8141f6 100644
-> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> > @@ -2951,6 +2951,35 @@ static int uvc_ctrl_init_xu_ctrl(struct uvc_device *dev,
-> >       return ret;
-> >  }
-> >
-> > +bool uvc_ctrl_is_privacy_control(u8 entity[16], u8 selector)
-> > +{
-> > +     /*
-> > +      * This list is not exhaustive, it is a best effort to block access to
-> > +      * non documented controls that can affect user's privacy.
-> > +      */
-> > +     struct privacy_control {
-> > +             u8 entity[16];
-> > +             u8 selector;
-> > +     } privacy_control[] = {
-> > +             {
-> > +                     .entity = UVC_GUID_LOGITECH_USER_HW_CONTROL_V1,
-> > +                     .selector = 1,
-> > +             },
-> > +             {
-> > +                     .entity = UVC_GUID_LOGITECH_PERIPHERAL,
-> > +                     .selector = 9,
-> > +             },
-> > +     };
-> > +     int i;
-> > +
-> > +     for (i = 0; i < ARRAY_SIZE(privacy_control); i++)
-> > +             if (!memcmp(entity, privacy_control[i].entity, 16) &&
-> > +                 selector == privacy_control[i].selector)
-> > +                     return true;
-> > +
-> > +     return false;
-> > +}
-> > +
-> >  int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
-> >       struct uvc_xu_control_query *xqry)
-> >  {
-> > @@ -2995,6 +3024,15 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
-> >               return -ENOENT;
-> >       }
-> >
-> > +     if (uvc_ctrl_is_privacy_control(entity->guid, xqry->selector) &&
-> > +         !uvc_allow_privacy_override_param) {
-> > +             dev_warn_once(&chain->dev->intf->dev,
-> > +                           "Privacy related controls can only be accessed if param allow_privacy_override is true\n");
-> > +             uvc_dbg(chain->dev, CONTROL, "Blocking access to privacy related Control %pUl/%u\n",
-> > +                     entity->guid, xqry->selector);
-> > +             return -EACCES;
-> > +     }
-> > +
->
-> What if this only applied to UVC_SET_CUR?
->
-> >       if (mutex_lock_interruptible(&chain->ctrl_mutex))
-> >               return -ERESTARTSYS;
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > index 71563d8f4bcf581694ccd4b665ff52b629caa0b6..c292bf8b6f57e9fdacee726285f5b46e638fd317 100644
-> > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -35,6 +35,7 @@ unsigned int uvc_hw_timestamps_param;
-> >  static unsigned int uvc_quirks_param = -1;
-> >  unsigned int uvc_dbg_param;
-> >  unsigned int uvc_timeout_param = UVC_CTRL_STREAMING_TIMEOUT;
-> > +bool uvc_allow_privacy_override_param;
-> >
-> >  static struct usb_driver uvc_driver;
-> >
-> > @@ -2474,6 +2475,25 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
-> >  module_param_named(timeout, uvc_timeout_param, uint, 0644);
-> >  MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
-> >
-> > +static int param_set_privacy(const char *val, const struct kernel_param *kp)
-> > +{
-> > +     pr_warn_once("uvcvideo: " DEPRECATED
-> > +                  "allow_privacy_override parameter will be eventually removed.\n");
-> > +     return param_set_bool(val, kp);
-> > +}
-> > +
-> > +static const struct kernel_param_ops param_ops_privacy = {
-> > +     .set = param_set_privacy,
-> > +     .get = param_get_bool,
-> > +};
-> > +
-> > +param_check_bool(allow_privacy_override, &uvc_allow_privacy_override_param);
-> > +module_param_cb(allow_privacy_override, &param_ops_privacy,
-> > +             &uvc_allow_privacy_override_param, 0644);
-> > +__MODULE_PARM_TYPE(allow_privacy_override, "bool");
-> > +MODULE_PARM_DESC(allow_privacy_override,
-> > +              "Allow access to privacy related controls");
-> > +
-> >  /* ------------------------------------------------------------------------
-> >   * Driver initialization and cleanup
-> >   */
-> > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> > index 03c64b5698bf4331fed8437fa6e9c726a07450bd..510cf47c86a62ba7fe3c7fa51be82c996cf37f9f 100644
-> > --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> > @@ -133,6 +133,13 @@ static int uvc_ioctl_xu_ctrl_map(struct uvc_video_chain *chain,
-> >               return -EINVAL;
-> >       }
-> >
-> > +     if (uvc_ctrl_is_privacy_control(xmap->entity, xmap->selector) &&
-> > +         !uvc_allow_privacy_override_param) {
-> > +             dev_warn_once(&chain->dev->intf->dev,
-> > +                           "Privacy related controls can only be mapped if param allow_privacy_override is true\n");
-> > +             return -EACCES;
-> > +     }
-> > +
->
-> Would a better solution be to be able to map and query, but not set?
+Casts to u8 and u16 are very likely to discard significant bits.
 
-IMO it is less confusing if the controls are fully disabled.
+These can be detected at compile time by changing min_t(), for example:
+#define CHECK_SIZE(fn, type, val) \
+	BUILD_BUG_ON_MSG(sizeof (val) > sizeof (type) && \
+		!statically_true(((val) >> 8 * (sizeof (type) - 1)) < 256), \
+		fn "() significant bits of '" #val "' may be discarded")
 
-Maybe it is worth it to land the patches that we do not have any
-disagreement with (1-4) . And then make a new patchset thread with 5
-and have a proper discussion there about usecases, mechanism to bypass
-block and future plans.
+#define min_t(type, x, y) ({ \
+	CHECK_SIZE("min_t", type, x); \
+	CHECK_SIZE("min_t", type, y); \
+	__cmp_once(min, type, x, y); })
 
+(and similar changes to max_t() and clamp_t().)
 
-Best regards
+This shows up some real bugs, some unlikely bugs and some false positives.
+In most cases both arguments are unsigned type (just different ones)
+and min_t() can just be replaced by min().
 
->
->
-> Regards,
-> Gergo
+The patches are all independant and are most of the ones needed to
+get the x86-64 kernel I build to compile.
+I've not tried building an allyesconfig or allmodconfig kernel.
+I've also not included the patch to minmax.h itself.
 
+I've tried to put the patches that actually fix things first.
+The last one is 0009.
 
+I gave up on fixing sched/fair.c - it is too broken for a single patch!
+The patch for net/ipv4/tcp.c is also absent because do_tcp_getsockopt()
+needs multiple/larger changes to make it 'sane'.
+
+I've had to trim the 124 maintainers/lists that get_maintainer.pl finds
+from 124 to under 100 to be able to send the cover letter.
+The individual patches only go to the addresses found for the associated files.
+That reduces the number of emails to a less unsane number.
+
+David Laight (44):
+  x86/asm/bitops: Change the return type of variable__ffs() to unsigned
+    int
+  ext4: Fix saturation of 64bit inode times for old filesystems
+  perf: Fix branch stack callchain limit
+  io_uring/net: Change some dubious min_t()
+  ipc/msg: Fix saturation of percpu counts in msgctl_info()
+  bpf: Verifier, remove some unusual uses of min_t() and max_t()
+  net/core/flow_dissector: Fix cap of __skb_flow_dissect() return value.
+  net: ethtool: Use min3() instead of nested min_t(u16,...)
+  ipv6: __ip6_append_data() don't abuse max_t() casts
+  x86/crypto: ctr_crypt() use min() instead of min_t()
+  arch/x96/kvm: use min() instead of min_t()
+  block: use min() instead of min_t()
+  drivers/acpi: use min() instead of min_t()
+  drivers/char/hw_random: use min3() instead of nested min_t()
+  drivers/char/tpm: use min() instead of min_t()
+  drivers/crypto/ccp: use min() instead of min_t()
+  drivers/cxl: use min() instead of min_t()
+  drivers/gpio: use min() instead of min_t()
+  drivers/gpu/drm/amd: use min() instead of min_t()
+  drivers/i2c/busses: use min() instead of min_t()
+  drivers/net/ethernet/realtek: use min() instead of min_t()
+  drivers/nvme: use min() instead of min_t()
+  arch/x86/mm: use min() instead of min_t()
+  drivers/nvmem: use min() instead of min_t()
+  drivers/pci: use min() instead of min_t()
+  drivers/scsi: use min() instead of min_t()
+  drivers/tty/vt: use umin() instead of min_t(u16, ...) for row/col
+    limits
+  drivers/usb/storage: use min() instead of min_t()
+  drivers/xen: use min() instead of min_t()
+  fs: use min() or umin() instead of min_t()
+  block: bvec.h: use min() instead of min_t()
+  nodemask: use min() instead of min_t()
+  ipc: use min() instead of min_t()
+  bpf: use min() instead of min_t()
+  bpf_trace: use min() instead of min_t()
+  lib/bucket_locks: use min() instead of min_t()
+  lib/crypto/mpi: use min() instead of min_t()
+  lib/dynamic_queue_limits: use max() instead of max_t()
+  mm: use min() instead of min_t()
+  net: Don't pass bitfields to max_t()
+  net/core: Change loop conditions so min() can be used
+  net: use min() instead of min_t()
+  net/netlink: Use umin() to avoid min_t(int, ...) discarding high bits
+  net/mptcp: Change some dubious min_t(int, ...) to min()
+
+ arch/x86/crypto/aesni-intel_glue.c            |  3 +-
+ arch/x86/include/asm/bitops.h                 | 18 +++++-------
+ arch/x86/kvm/emulate.c                        |  3 +-
+ arch/x86/kvm/lapic.c                          |  2 +-
+ arch/x86/kvm/mmu/mmu.c                        |  2 +-
+ arch/x86/mm/pat/set_memory.c                  | 12 ++++----
+ block/blk-iocost.c                            |  6 ++--
+ block/blk-settings.c                          |  2 +-
+ block/partitions/efi.c                        |  3 +-
+ drivers/acpi/property.c                       |  2 +-
+ drivers/char/hw_random/core.c                 |  2 +-
+ drivers/char/tpm/tpm1-cmd.c                   |  2 +-
+ drivers/char/tpm/tpm_tis_core.c               |  4 +--
+ drivers/crypto/ccp/ccp-dev.c                  |  2 +-
+ drivers/cxl/core/mbox.c                       |  2 +-
+ drivers/gpio/gpiolib-acpi-core.c              |  2 +-
+ .../gpu/drm/amd/amdgpu/amdgpu_doorbell_mgr.c  |  4 +--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c        |  2 +-
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  2 +-
+ drivers/i2c/busses/i2c-designware-master.c    |  2 +-
+ drivers/net/ethernet/realtek/r8169_main.c     |  3 +-
+ drivers/nvme/host/pci.c                       |  3 +-
+ drivers/nvme/host/zns.c                       |  3 +-
+ drivers/nvmem/core.c                          |  2 +-
+ drivers/pci/probe.c                           |  3 +-
+ drivers/scsi/hosts.c                          |  2 +-
+ drivers/tty/vt/selection.c                    |  9 +++---
+ drivers/usb/storage/protocol.c                |  3 +-
+ drivers/xen/grant-table.c                     |  2 +-
+ fs/buffer.c                                   |  2 +-
+ fs/exec.c                                     |  2 +-
+ fs/ext4/ext4.h                                |  2 +-
+ fs/ext4/mballoc.c                             |  3 +-
+ fs/ext4/resize.c                              |  2 +-
+ fs/ext4/super.c                               |  2 +-
+ fs/fat/dir.c                                  |  4 +--
+ fs/fat/file.c                                 |  3 +-
+ fs/fuse/dev.c                                 |  2 +-
+ fs/fuse/file.c                                |  8 ++---
+ fs/splice.c                                   |  2 +-
+ include/linux/bvec.h                          |  3 +-
+ include/linux/nodemask.h                      |  9 +++---
+ include/linux/perf_event.h                    |  2 +-
+ include/net/tcp_ecn.h                         |  5 ++--
+ io_uring/net.c                                |  6 ++--
+ ipc/mqueue.c                                  |  4 +--
+ ipc/msg.c                                     |  6 ++--
+ kernel/bpf/core.c                             |  4 +--
+ kernel/bpf/log.c                              |  2 +-
+ kernel/bpf/verifier.c                         | 29 +++++++------------
+ kernel/trace/bpf_trace.c                      |  2 +-
+ lib/bucket_locks.c                            |  2 +-
+ lib/crypto/mpi/mpicoder.c                     |  2 +-
+ lib/dynamic_queue_limits.c                    |  2 +-
+ mm/gup.c                                      |  4 +--
+ mm/memblock.c                                 |  2 +-
+ mm/memory.c                                   |  2 +-
+ mm/percpu.c                                   |  2 +-
+ mm/truncate.c                                 |  3 +-
+ mm/vmscan.c                                   |  2 +-
+ net/core/datagram.c                           |  6 ++--
+ net/core/flow_dissector.c                     |  7 ++---
+ net/core/net-sysfs.c                          |  3 +-
+ net/core/skmsg.c                              |  4 +--
+ net/ethtool/cmis_cdb.c                        |  7 ++---
+ net/ipv4/fib_trie.c                           |  2 +-
+ net/ipv4/tcp_input.c                          |  4 +--
+ net/ipv4/tcp_output.c                         |  5 ++--
+ net/ipv4/tcp_timer.c                          |  4 +--
+ net/ipv6/addrconf.c                           |  8 ++---
+ net/ipv6/ip6_output.c                         |  7 +++--
+ net/ipv6/ndisc.c                              |  5 ++--
+ net/mptcp/protocol.c                          |  8 ++---
+ net/netlink/genetlink.c                       |  9 +++---
+ net/packet/af_packet.c                        |  2 +-
+ net/unix/af_unix.c                            |  4 +--
+ 76 files changed, 141 insertions(+), 176 deletions(-)
 
 -- 
-Ricardo Ribalda
+2.39.5
+
 
