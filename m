@@ -1,71 +1,71 @@
-Return-Path: <linux-usb+bounces-30709-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30710-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 869D0C6F64D
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 15:46:29 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E535C6F56F
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 15:39:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 351564FA890
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 14:27:40 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0CB8335AA54
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 14:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE0936923F;
-	Wed, 19 Nov 2025 14:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C2036997A;
+	Wed, 19 Nov 2025 14:24:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nazQ1gOp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ISAz1Mu6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670CE36920B
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 14:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFE136922A
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 14:24:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763562290; cv=none; b=VoGPaQDwqsM3JfSa5BpwZxLNQApVLC3niwkBpUG+Ac0v6cSacyn5LhoBNCk+VSE53WI++sDlY9BpalNG24pqxt/8NxKJ2hf58yjeHXO50ov3ydQS4tPIALXl3xYo8SOrLQwUszd8bJz0qRQ2E9egbiK3HShemQTZY0CHFYF5YRg=
+	t=1763562291; cv=none; b=VIgKOWFqutNoWtkp1fSgLOSVEirlMiAQfOToGTl8f3knnPMO2LAmeOd7AVPdQY9epSug19Is36syTPtdBaLTxvmzbdZUN8ksMUGQculfLzoHgArnRVZZxy4OAwduetLmg4f82V1KDfWr0oxqge5laM3ryTiLAXDNJRizulN8Lrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763562290; c=relaxed/simple;
-	bh=rfmky41ZTaNwEORcsmpb5hPNTw5+3hYuu4Ye5H/9LEY=;
+	s=arc-20240116; t=1763562291; c=relaxed/simple;
+	bh=Al8AZPThi3ZBHU/J150jaGNt8xZuyn67gfedbZ9mZv4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hZeHyf4f89Y3QndgrdDuJyQPI/Oomi+qxhEupCOM2JpdA1fVEW+pMV3pbeDPmslMz9IaT8QXL7r7ZJw+jL7xNNOTLtOYkNUqpS8A1zcdR4W7HW3YRm4NYSaY4E/Pg8ukrJ/+Cp2IbQyhYnCFBzAmhydaJGhivgrKOH9dDy+0CFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nazQ1gOp; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version; b=V2nYgWdNulbuWddiCsZNbDrJGvV8kLzVX6zh+RUEpYsqB4WbEDTgkZBdTkkWZTy45ezXWdm1f1lkZdPLIUlDuL77QK+dgHjgOBVMEEvAkW+TfRPEdym4Ll+ICJsnyctFX0QBK8B/5ByiU7+2SKaAO/wE/0U2Mo+auBnPQ0nuK2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ISAz1Mu6; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763562289; x=1795098289;
+  t=1763562290; x=1795098290;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rfmky41ZTaNwEORcsmpb5hPNTw5+3hYuu4Ye5H/9LEY=;
-  b=nazQ1gOp+Ejzrm1r/Cifjr6Xl6QSahCo24m4A9UPt+gMRYR2grkHnl61
-   o5l9VrYrSNuz+tVp/0gDKGJFS0w6qhBxqRzcYiUaPSleCuvEtQPY3XwMo
-   UfgZoTPoRVMCP7QFuyuiWwrBZ9WEbKX+VVQ/+kceX9ziXhyZ68220PvjW
-   BMUe1FOR5TxUkAjG/X0U4bY4w30KOSi7UbSAoDV6eVJ4+2VxK1I6rpzqY
-   n/Asw7KlcM6yuxw5fADpivQAiVSCWqqEfeo6pGgzEZ8gWdp6M8GehL6SG
-   7NzyJAVd4mwIYCg4VHqUwSVKhUOmeFi/qd9yUg3NO5wd9xRvvaZflXQO3
-   A==;
-X-CSE-ConnectionGUID: qWg2wrFDRQ2DgNVnSLk1xg==
-X-CSE-MsgGUID: y8VJtGbbTyKsyYCEXERbRA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="65645525"
+  bh=Al8AZPThi3ZBHU/J150jaGNt8xZuyn67gfedbZ9mZv4=;
+  b=ISAz1Mu6bHeQokRCFBCnwlZW/qH/hesCVbthxm5Fo9VsEvLeDxyIeOas
+   qwrhN/2pIB0F7RAeaSz0nhPu5Iq68+rpSyobdsMF4hwwScAQAvLc/Z2FC
+   I1f4N/eS5InhHMuyCud1dG8oqp8vi4+34Ugnj5dl+cAcK30Fv+Gd1KROQ
+   L7Vjwge6+ZlBNld6kD4ZDn+NccCEsnKl02oTsf5i2pLUGJPTGTPQEwI61
+   IiJlTl9l5MqIbjS3vl6ZM9ijmZfS/XjXaz+FzM/cI0LJGCmKFM5S1eq8h
+   UfGQ610TW2bvTi5Up8B9ghBj6aGROIeNkdR22AsRd+CTJoVTWP23SaGFr
+   Q==;
+X-CSE-ConnectionGUID: G3xhsxdKQ8Ww3GfxFE1dpw==
+X-CSE-MsgGUID: c7f2GSDOR0SBvlmdJJPWxg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="65645532"
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="65645525"
+   d="scan'208";a="65645532"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:48 -0800
-X-CSE-ConnectionGUID: VELbfYdsRaaa2tdIzBH1Fg==
-X-CSE-MsgGUID: ZepSCh7aS0+OtZrK7Dz3+Q==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:50 -0800
+X-CSE-ConnectionGUID: 8So0ajmyT/mqqf7yHMnDEA==
+X-CSE-MsgGUID: TGtxBtjtREG7sgBxb1regA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="221992034"
+   d="scan'208";a="221992045"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO mnyman-desk.home) ([10.245.244.20])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:47 -0800
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 06:24:48 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
-	Niklas Neronin <niklas.neronin@linux.intel.com>,
+	Michal Pecio <michal.pecio@gmail.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 08/23] usb: xhci: implement USB Port Register Set struct
-Date: Wed, 19 Nov 2025 16:24:02 +0200
-Message-ID: <20251119142417.2820519-9-mathias.nyman@linux.intel.com>
+Subject: [PATCH 09/23] usb: xhci: Assume that endpoints halt as specified
+Date: Wed, 19 Nov 2025 16:24:03 +0200
+Message-ID: <20251119142417.2820519-10-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251119142417.2820519-1-mathias.nyman@linux.intel.com>
 References: <20251119142417.2820519-1-mathias.nyman@linux.intel.com>
@@ -77,217 +77,166 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
+From: Michal Pecio <michal.pecio@gmail.com>
 
-Previously, each port's 'addr' field pointed to the base of the Host
-Controller USB Port Register Set, and specific registers were accessed
-using macros such as (port->addr + PORTPMSC).
+xHCI 4.8.3 recommends that software should simply assume endpoints to
+halt after certain events, without looking at the Endpoint Context for
+confirmation, because HCs may be slow to update that.
 
-This patch replaces the raw '__le32 __iomem *addr' pointer with a typed
-'struct xhci_port_regs __iomem *port_reg' pointer. With this change,
-individual registers can be accessed directly through the structure
-fields:
+While no cases of such "slowness" appear to be known, different problem
+exists on AMD Promontory chipsets: they may halt and generate a transfer
+event, but fail to ever update the Endpoint Context at all, at least not
+until some command is queued and fails with Context State Error. This is
+easily triggered by disconnecting D- of a full speed serial device.
 
-Before:
-  port->addr
-  port->addr + PORTPMSC
-  port->addr + PORTLI
-  port->addr + PORTHLPMC
+Possibly similar bug in non-AMD hardware has been reported to linux-usb.
 
-After:
-  port->port_reg->portsc
-  port->port_reg->portpmsc
-  port->port_reg->portli
-  port->port_reg->porthlpmc
+In such case, failed TD is given back without erasing from the ring and
+endpoint isn't reset. If some URB is unlinked later, Stop Endpoint fails
+and its handler resets the endpoint. On next submission it will restart
+on the stale TD. Outcome is UAF on success, or another halt on error and
+then Dequeue doesn't move and URBs are stuck. Unlinking and resubmitting
+the URBs causes unlimited ring expansion if the situation repeats.
 
-This improves code readability and makes register access more intuitive
-by using named struct members instead of pointer arithmetic and macros.
+This can be solved by ignoring Endpoint Context State and trusting that
+endpoints halt when required, except one known case in ancient hardware.
+The check for "Already resolving halted ep" becomes redundant, because
+for these completion codes we now jump to xhci_handle_halted_endpoint()
+which deals with pending EP_HALTED internally.
 
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+Link: https://lore.kernel.org/linux-usb/20250311234139.0e73e138@foxbook/
+Link: https://lore.kernel.org/linux-usb/20250918055527.4157212-1-zhangjinpeng@kylinos.cn/
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-hub.c | 16 ++++++++--------
- drivers/usb/host/xhci-mem.c |  2 +-
- drivers/usb/host/xhci.c     | 29 ++++++++++++++---------------
- drivers/usb/host/xhci.h     |  7 +------
- 4 files changed, 24 insertions(+), 30 deletions(-)
+ drivers/usb/host/xhci-ring.c | 73 ++++++++++++------------------------
+ 1 file changed, 23 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 2927b8a80327..c4c85312b04c 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -683,9 +683,9 @@ static void xhci_port_set_test_mode(struct xhci_hcd *xhci,
- 
- 	/* xhci only supports test mode for usb2 ports */
- 	port = xhci->usb2_rhub.ports[wIndex];
--	temp = readl(port->addr + PORTPMSC);
-+	temp = readl(&port->port_reg->portpmsc);
- 	temp |= test_mode << PORT_TEST_MODE_SHIFT;
--	writel(temp, port->addr + PORTPMSC);
-+	writel(temp, &port->port_reg->portpmsc);
- 	xhci->test_mode = test_mode;
- 	if (test_mode == USB_TEST_FORCE_ENABLE)
- 		xhci_start(xhci);
-@@ -1288,7 +1288,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 				retval = -EINVAL;
- 				break;
- 			}
--			port_li = readl(port->addr + PORTLI);
-+			port_li = readl(&port->port_reg->portli);
- 			status = xhci_get_ext_port_status(temp, port_li);
- 			put_unaligned_le32(status, &buf[4]);
- 		}
-@@ -1520,18 +1520,18 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		case USB_PORT_FEAT_U1_TIMEOUT:
- 			if (hcd->speed < HCD_USB3)
- 				goto error;
--			temp = readl(port->addr + PORTPMSC);
-+			temp = readl(&port->port_reg->portpmsc);
- 			temp &= ~PORT_U1_TIMEOUT_MASK;
- 			temp |= PORT_U1_TIMEOUT(timeout);
--			writel(temp, port->addr + PORTPMSC);
-+			writel(temp, &port->port_reg->portpmsc);
- 			break;
- 		case USB_PORT_FEAT_U2_TIMEOUT:
- 			if (hcd->speed < HCD_USB3)
- 				goto error;
--			temp = readl(port->addr + PORTPMSC);
-+			temp = readl(&port->port_reg->portpmsc);
- 			temp &= ~PORT_U2_TIMEOUT_MASK;
- 			temp |= PORT_U2_TIMEOUT(timeout);
--			writel(temp, port->addr + PORTPMSC);
-+			writel(temp, &port->port_reg->portpmsc);
- 			break;
- 		case USB_PORT_FEAT_TEST:
- 			/* 4.19.6 Port Test Modes (USB2 Test Mode) */
-@@ -1962,7 +1962,7 @@ int xhci_bus_resume(struct usb_hcd *hcd)
- 
- 	/* poll for U0 link state complete, both USB2 and USB3 */
- 	for_each_set_bit(port_index, &bus_state->bus_suspended, BITS_PER_LONG) {
--		sret = xhci_handshake(ports[port_index]->addr, PORT_PLC,
-+		sret = xhci_handshake(&ports[port_index]->port_reg->portsc, PORT_PLC,
- 				      PORT_PLC, 10 * 1000);
- 		if (sret) {
- 			xhci_warn(xhci, "port %d-%d resume PLC timeout\n",
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index ea3cfc229cd0..9a6a8d9f3770 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2201,7 +2201,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
- 		return -ENOMEM;
- 
- 	for (i = 0; i < num_ports; i++) {
--		xhci->hw_ports[i].addr = &xhci->op_regs->port_regs[i].portsc;
-+		xhci->hw_ports[i].port_reg = &xhci->op_regs->port_regs[i];
- 		xhci->hw_ports[i].hw_portnum = i;
- 
- 		init_completion(&xhci->hw_ports[i].rexit_done);
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 6b47b218cb24..593b9d3aa9b6 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -44,13 +44,13 @@ MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
- void xhci_portsc_writel(struct xhci_port *port, u32 val)
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 88022d221c70..95005f9a3504 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2180,24 +2180,31 @@ static void xhci_clear_hub_tt_buffer(struct xhci_hcd *xhci, struct xhci_td *td,
+  * External device side is also halted in functional stall cases. Class driver
+  * will clear the device halt with a CLEAR_FEATURE(ENDPOINT_HALT) request later.
+  */
+-static bool xhci_halted_host_endpoint(struct xhci_ep_ctx *ep_ctx, unsigned int comp_code)
++static bool xhci_halted_host_endpoint(struct xhci_hcd *xhci, struct xhci_ep_ctx *ep_ctx,
++				      unsigned int comp_code)
  {
- 	trace_xhci_portsc_writel(port, val);
--	writel(val, port->addr);
-+	writel(val, &port->port_reg->portsc);
+-	/* Stall halts both internal and device side endpoint */
+-	if (comp_code == COMP_STALL_ERROR)
+-		return true;
++	int ep_type = CTX_TO_EP_TYPE(le32_to_cpu(ep_ctx->ep_info2));
+ 
+-	/* TRB completion codes that may require internal halt cleanup */
+-	if (comp_code == COMP_USB_TRANSACTION_ERROR ||
+-	    comp_code == COMP_BABBLE_DETECTED_ERROR ||
+-	    comp_code == COMP_SPLIT_TRANSACTION_ERROR)
++	switch (comp_code) {
++	case COMP_STALL_ERROR:
++		/* on xHCI this always halts, including protocol stall */
++		return true;
++	case COMP_BABBLE_DETECTED_ERROR:
+ 		/*
+ 		 * The 0.95 spec says a babbling control endpoint is not halted.
+ 		 * The 0.96 spec says it is. Some HW claims to be 0.95
+ 		 * compliant, but it halts the control endpoint anyway.
+ 		 * Check endpoint context if endpoint is halted.
+ 		 */
+-		if (GET_EP_CTX_STATE(ep_ctx) == EP_STATE_HALTED)
+-			return true;
++		if (xhci->hci_version <= 0x95 && ep_type == CTRL_EP)
++			return GET_EP_CTX_STATE(ep_ctx) == EP_STATE_HALTED;
++
++		fallthrough;
++	case COMP_USB_TRANSACTION_ERROR:
++	case COMP_SPLIT_TRANSACTION_ERROR:
++		/* these errors halt all non-isochronous endpoints */
++		return ep_type != ISOC_IN_EP && ep_type != ISOC_OUT_EP;
++	}
+ 
+ 	return false;
  }
- EXPORT_SYMBOL_GPL(xhci_portsc_writel);
+@@ -2234,41 +2241,9 @@ static void finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		 * the ring dequeue pointer or take this TD off any lists yet.
+ 		 */
+ 		return;
+-	case COMP_USB_TRANSACTION_ERROR:
+-	case COMP_BABBLE_DETECTED_ERROR:
+-	case COMP_SPLIT_TRANSACTION_ERROR:
+-		/*
+-		 * If endpoint context state is not halted we might be
+-		 * racing with a reset endpoint command issued by a unsuccessful
+-		 * stop endpoint completion (context error). In that case the
+-		 * td should be on the cancelled list, and EP_HALTED flag set.
+-		 *
+-		 * Or then it's not halted due to the 0.95 spec stating that a
+-		 * babbling control endpoint should not halt. The 0.96 spec
+-		 * again says it should.  Some HW claims to be 0.95 compliant,
+-		 * but it halts the control endpoint anyway.
+-		 */
+-		if (GET_EP_CTX_STATE(ep_ctx) != EP_STATE_HALTED) {
+-			/*
+-			 * If EP_HALTED is set and TD is on the cancelled list
+-			 * the TD and dequeue pointer will be handled by reset
+-			 * ep command completion
+-			 */
+-			if ((ep->ep_state & EP_HALTED) &&
+-			    !list_empty(&td->cancelled_td_list)) {
+-				xhci_dbg(xhci, "Already resolving halted ep for 0x%llx\n",
+-					 (unsigned long long)xhci_trb_virt_to_dma(
+-						 td->start_seg, td->start_trb));
+-				return;
+-			}
+-			/* endpoint not halted, don't reset it */
+-			break;
+-		}
+-		/* Almost same procedure as for STALL_ERROR below */
+-		xhci_clear_hub_tt_buffer(xhci, td, ep);
+-		xhci_handle_halted_endpoint(xhci, ep, td, EP_HARD_RESET);
+-		return;
+-	case COMP_STALL_ERROR:
++	}
++
++	if (xhci_halted_host_endpoint(xhci, ep_ctx, trb_comp_code)) {
+ 		/*
+ 		 * xhci internal endpoint state will go to a "halt" state for
+ 		 * any stall, including default control pipe protocol stall.
+@@ -2279,14 +2254,12 @@ static void finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		 * stall later. Hub TT buffer should only be cleared for FS/LS
+ 		 * devices behind HS hubs for functional stalls.
+ 		 */
+-		if (ep->ep_index != 0)
++		if (!(ep->ep_index == 0 && trb_comp_code == COMP_STALL_ERROR))
+ 			xhci_clear_hub_tt_buffer(xhci, td, ep);
  
- u32 xhci_portsc_readl(struct xhci_port *port)
- {
--	return readl(port->addr);
-+	return readl(&port->port_reg->portsc);
- }
- EXPORT_SYMBOL_GPL(xhci_portsc_readl);
+ 		xhci_handle_halted_endpoint(xhci, ep, td, EP_HARD_RESET);
  
-@@ -4649,7 +4649,7 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
- {
- 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
- 	struct xhci_port **ports;
--	__le32 __iomem	*pm_addr, *hlpm_addr;
-+	struct xhci_port_regs __iomem *port_reg;
- 	u32		pm_val, hlpm_val, field;
- 	unsigned int	port_num;
- 	unsigned long	flags;
-@@ -4674,9 +4674,8 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
+ 		return; /* xhci_handle_halted_endpoint marked td cancelled */
+-	default:
+-		break;
+ 	}
  
- 	ports = xhci->usb2_rhub.ports;
- 	port_num = udev->portnum - 1;
--	pm_addr = ports[port_num]->addr + PORTPMSC;
--	pm_val = readl(pm_addr);
--	hlpm_addr = ports[port_num]->addr + PORTHLPMC;
-+	port_reg = ports[port_num]->port_reg;
-+	pm_val = readl(&port_reg->portpmsc);
+ 	xhci_dequeue_td(xhci, td, ep_ring, td->status);
+@@ -2363,7 +2336,7 @@ static void process_ctrl_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 	case COMP_STOPPED_LENGTH_INVALID:
+ 		goto finish_td;
+ 	default:
+-		if (!xhci_halted_host_endpoint(ep_ctx, trb_comp_code))
++		if (!xhci_halted_host_endpoint(xhci, ep_ctx, trb_comp_code))
+ 			break;
+ 		xhci_dbg(xhci, "TRB error %u, halted endpoint index = %u\n",
+ 			 trb_comp_code, ep->ep_index);
+@@ -2973,7 +2946,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	return 0;
  
- 	xhci_dbg(xhci, "%s port %d USB2 hardware LPM\n",
- 		 str_enable_disable(enable), port_num + 1);
-@@ -4705,30 +4704,30 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
- 			spin_lock_irqsave(&xhci->lock, flags);
+ check_endpoint_halted:
+-	if (xhci_halted_host_endpoint(ep_ctx, trb_comp_code))
++	if (xhci_halted_host_endpoint(xhci, ep_ctx, trb_comp_code))
+ 		xhci_handle_halted_endpoint(xhci, ep, td, EP_HARD_RESET);
  
- 			hlpm_val = xhci_calculate_usb2_hw_lpm_params(udev);
--			writel(hlpm_val, hlpm_addr);
-+			writel(hlpm_val, &port_reg->porthlmpc);
- 			/* flush write */
--			readl(hlpm_addr);
-+			readl(&port_reg->porthlmpc);
- 		} else {
- 			hird = xhci_calculate_hird_besl(xhci, udev);
- 		}
- 
- 		pm_val &= ~PORT_HIRD_MASK;
- 		pm_val |= PORT_HIRD(hird) | PORT_RWE | PORT_L1DS(udev->slot_id);
--		writel(pm_val, pm_addr);
--		pm_val = readl(pm_addr);
-+		writel(pm_val, &port_reg->portpmsc);
-+		pm_val = readl(&port_reg->portpmsc);
- 		pm_val |= PORT_HLE;
--		writel(pm_val, pm_addr);
-+		writel(pm_val, &port_reg->portpmsc);
- 		/* flush write */
--		readl(pm_addr);
-+		readl(&port_reg->portpmsc);
- 	} else {
- 		pm_val &= ~(PORT_HLE | PORT_RWE | PORT_HIRD_MASK | PORT_L1DS_MASK);
--		writel(pm_val, pm_addr);
-+		writel(pm_val, &port_reg->portpmsc);
- 		/* flush write */
--		readl(pm_addr);
-+		readl(&port_reg->portpmsc);
- 		if (udev->usb2_hw_lpm_besl_capable) {
- 			spin_unlock_irqrestore(&xhci->lock, flags);
- 			xhci_change_max_exit_latency(xhci, udev, 0);
--			readl_poll_timeout(ports[port_num]->addr, pm_val,
-+			readl_poll_timeout(&ports[port_num]->port_reg->portsc, pm_val,
- 					   (pm_val & PORT_PLS_MASK) == XDEV_U0,
- 					   100, 10000);
- 			return 0;
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index d3ba50462589..adabe26b413b 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -66,11 +66,6 @@ struct xhci_cap_regs {
- 	/* Reserved up to (CAPLENGTH - 0x1C) */
- };
- 
--#define PORTSC		0
--#define PORTPMSC	1
--#define PORTLI		2
--#define PORTHLPMC	3
--
- /*
-  * struct xhci_port_regs - Host Controller USB Port Register Set. xHCI spec 5.4.8
-  * @portsc:	Port Status and Control
-@@ -1470,7 +1465,7 @@ struct xhci_port_cap {
- };
- 
- struct xhci_port {
--	__le32 __iomem		*addr;
-+	struct xhci_port_regs __iomem	*port_reg;
- 	int			hw_portnum;
- 	int			hcd_portnum;
- 	struct xhci_hub		*rhub;
+ 	return 0;
 -- 
 2.43.0
 
