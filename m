@@ -1,81 +1,78 @@
-Return-Path: <linux-usb+bounces-30736-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30737-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3351FC70D22
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 20:32:18 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D27C70D4F
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 20:35:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 69662347A2C
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 19:31:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8971D4E3F5C
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 19:32:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ECA236CE1B;
-	Wed, 19 Nov 2025 19:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0495C371DEE;
+	Wed, 19 Nov 2025 19:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="bmXbIdnr"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ryFIayJR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013048.outbound.protection.outlook.com [40.93.196.48])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010045.outbound.protection.outlook.com [52.101.85.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5175228469C;
-	Wed, 19 Nov 2025 19:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215B8320A0C;
+	Wed, 19 Nov 2025 19:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763580682; cv=fail; b=PTwbdcUsvGH2jji0c1lANoD715rDe/5etZzRotsftjxBVefbw1XvllmXbLgQMFspKaGxz8wUZ7BE2fcdNOGEJBNS8GbDqJ3wWgJxI8WpV17qLMmx7XVdaBBZB/rToeZQC83rD7JNWVTLLa6EdUi1OuUcdl/mpuXm1oj8J6QSsWw=
+	t=1763580689; cv=fail; b=IBlCPI1Wl9XU91iiEgLjjqQieAXF0gkwj7OhJcn+NTzojqIFGexCbzFOw9dK+no5y4ss/wqvdLPgCdMp5nItla9n7FbMldHnqoz9W31WgyUlbY1XsZvC4tcKCBffeYdnf72U8adXflksymVUOyPufEYSypVePJvimRMgv1fq9Tc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763580682; c=relaxed/simple;
-	bh=RFifCJc4Sq4tf/+LDPKYhDaDolWwlQmZHnoa66NuaFc=;
+	s=arc-20240116; t=1763580689; c=relaxed/simple;
+	bh=c/CcEBuWR48+sitbsaFIpz1YprSQr9CXqUoVn14W+os=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=V9NksbovL3cJL1y6AUYK9DseqjDCsIeFgHinn/A1hwe1uPa8F7vBvzXTibUxb6oLYrobFu1H1YL0F9vmQpvcqZTPqPICXCHBF4ZhrLNC6/AmkUVnTzwLhq/xvQ+swvZjIhXJqdcZhl8cSGxhYTzXcW12+545DlzEVptCNvfOHlo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=bmXbIdnr; arc=fail smtp.client-ip=40.93.196.48
+	 MIME-Version:Content-Type; b=MYutZZAMAsRjZ/h5q2githhfE6N2PYlZKgUXFDRDhJwXwWYsPkjgF4yfsEXFDfIqQhlZxyK2iz2o02f++NrL/QBXf7NMxjDS/93Stn4dKvxNgwCPjfpEP+C6zTHR/2/AE9r7QldLwRU3QrCtvBlKXdiyZQUn3VxT8H2rnWVIfaA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ryFIayJR; arc=fail smtp.client-ip=52.101.85.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SFJJg9k4mUxK4NV9hn35jABSQfEInNBvuTuLchRtMSUQlu6hsihljIOfKzABdB5JZfkVNOampL53OJdCV6qEmaEXmX9LuTQ5hyAQkLhzkZNGQ9YhuyO+xTD7qC7XZwi3RJ20xuQLAbAuZDqKu+QJEREssrI35XOd624NFHNTq2peh8dYJKsupBW+LvJfachtFPNlXxuLGmyvXmtzT0DKr66s2G0n/bs9i3CvCyT5sqoKDeKiQdwJ85DMaHZJMvaJ8kjRMRT70zkHbxAnifZxqcX0bD9uY06JSgR5HPx28avGAZWcwIkkN1aYuzGI9GmAPGcYfoLzRBU5b9JuffsrMA==
+ b=toul89NR8bufZbZiVROdAZWAkrYEGBn/Ycy3jiuLt7Bukp0FECRCIZoqxJn0YByknu6dP4Yf7xfRyUHxxj2YcQKYm4G+FCD9KdfXrNcVFvQheC+HfAwFwkALpwHBgUIivQLFifp4UoZE/RfOohlRRDYHVPJyzHrAG7Cm0Vd24tBhz9KFSlhMGNo3qtf2lZ5zRdJDXMOX1tBSNiSxyE3k5fLdrYqa0RQ+YiE0aXmaU+uwxZ0QLPsewLiTwke5h/Y4BzOTRh2CwN7CNq/LchkqdCuVLxHF4ywSiLmhY7DSsTvoFj8gBjLM/y6VkzWrdzzmnpwCY6DgimEavItR5kyC6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YGM/e18qquKnfNQJw7VHkW6TOT7coZQaep8htBIGk4g=;
- b=DkfSJeUCh98QyLyj5X6G1i8jENNc1wHZ9jImRmrFY6ctCAG9vCFXd/mRByiWkzxnOBmSO1nKCC6hro+3f2gpv80GectKuogw8wn130/FI8UCeZuy7k8udQzzz6R7Xuq1VVFye+xsQ5zgbTK4pMNd5kmd5uC6UOi2+F8lpp+76W+tLmhUMw+9Sp0lB1+jHoxHY7V0YxXGN6WX52XNO3a8v+zL6YjhH70ooBZZFlndfNiUiE/6R1EmEDP8zFV2fyxvdvxVMllB59fI7qg9nk/OYW1VV9hlz5+fBcK3QTycLh+ZppKQQEtIdww3AjcwhRfO9gbPbNsObd34m0rsUvphsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
- is 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=amd.com; dmarc=temperror action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
+ bh=tK4vOSHT1taizrVyi6fOyJ9omOZO/BrywkL2GZIm+Aw=;
+ b=NMJwpNEzmeI6Vj6fpfcvZ/mUi+50llFK0nDrv1+GUXufpTkbwFAjsprcjbVKiRgylxhxG4Hs+D6T0OZfjIsjCICVJcGdg5SRArvdHHyjUCRU0ZCllqkC/Ep58LqXuT4Cp39DYlGspeeSrfRNvqrMcwrllj+lhkE6SMQpN0/RIpWfYJiYEIHhQ3p6W5Br8VfeAIm86kfhK+LsQgpEwZbdO6T6myG5iAU4lxsJuyFAVxK/bUieqVfkfkfqJQx2ZU1QARv84lcKyAkLGwQ1B92C+sHJl08yYa4yO0Fou64kW3Bzh52K7spV9xRUO/h0RQLwH14FnfdYIKAwn3SCDGAnjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YGM/e18qquKnfNQJw7VHkW6TOT7coZQaep8htBIGk4g=;
- b=bmXbIdnrySWyWa9jWFo3H+UgOG6NHxVAgs2DcJrAv42OTZMtxjQRvH+kCd3nvHOCkgm2sVxvTRsJt302RfodHdFR5D7kutrzhjKvEWRwTNIl08US/fBxf5x1xh2cDB6aa4cEeagQNuTnq0nchHXRcT8H4DU4lwFi5KNvckTnW2o=
-Received: from SJ0PR03CA0179.namprd03.prod.outlook.com (2603:10b6:a03:338::34)
- by LV9PR12MB9831.namprd12.prod.outlook.com (2603:10b6:408:2e7::8) with
+ bh=tK4vOSHT1taizrVyi6fOyJ9omOZO/BrywkL2GZIm+Aw=;
+ b=ryFIayJR8Du6eyHbh26bbCZVZI9DWeOyBcCGTUdzf7QROufE7bCAd/DOX48bwKg8yvi01QLJ84kWf+Kzy71/bfWVh0fBXWBmFVUt1G0XUr0hmaVw4j/KH1KubpbX0Y+x9c7Maa+WnEj7KhPaOHHXQxC6G1o0VgzFP4D9HhDaOmo=
+Received: from SJ0PR03CA0159.namprd03.prod.outlook.com (2603:10b6:a03:338::14)
+ by SJ5PPF75EAF8F39.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::999) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Wed, 19 Nov
- 2025 19:31:09 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.21; Wed, 19 Nov
+ 2025 19:31:12 +0000
 Received: from SJ1PEPF000023CB.namprd02.prod.outlook.com
- (2603:10b6:a03:338:cafe::4f) by SJ0PR03CA0179.outlook.office365.com
- (2603:10b6:a03:338::34) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10b6:a03:338::4) by SJ0PR03CA0159.outlook.office365.com
+ (2603:10b6:a03:338::14) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.10 via Frontend Transport; Wed,
- 19 Nov 2025 19:31:08 +0000
-X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
- 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=temperror action=none header.from=amd.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of amd.com: DNS Timeout)
+ 19 Nov 2025 19:31:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
  SJ1PEPF000023CB.mail.protection.outlook.com (10.167.244.5) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9343.9 via Frontend Transport; Wed, 19 Nov 2025 19:31:06 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by satlexmb07.amd.com
+ 15.20.9343.9 via Frontend Transport; Wed, 19 Nov 2025 19:31:11 +0000
+Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Wed, 19 Nov
- 2025 11:30:53 -0800
-Received: from satlexmb07.amd.com (10.181.42.216) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 19 Nov
- 2025 13:30:52 -0600
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 19 Nov
+ 2025 11:30:55 -0800
 Received: from xhdradheys41.xilinx.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Wed, 19 Nov 2025 11:30:49 -0800
+ Transport; Wed, 19 Nov 2025 11:30:52 -0800
 From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
 	<conor+dt@kernel.org>, <michal.simek@amd.com>, <Thinh.Nguyen@synopsys.com>,
@@ -83,9 +80,9 @@ To: <gregkh@linuxfoundation.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
 CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
 	<git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH 2/3] usb: dwc3: xilinx: Add Versal2 MMI USB 3.2 controller support
-Date: Thu, 20 Nov 2025 01:00:35 +0530
-Message-ID: <20251119193036.2666877-3-radhey.shyam.pandey@amd.com>
+Subject: [PATCH 3/3] usb: dwc3: xilinx: Add support to program MMI USB TX deemphasis
+Date: Thu, 20 Nov 2025 01:00:36 +0530
+Message-ID: <20251119193036.2666877-4-radhey.shyam.pandey@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251119193036.2666877-1-radhey.shyam.pandey@amd.com>
 References: <20251119193036.2666877-1-radhey.shyam.pandey@amd.com>
@@ -99,201 +96,189 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CB:EE_|LV9PR12MB9831:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4f1c558-ef7b-4977-12e4-08de27a22f9d
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CB:EE_|SJ5PPF75EAF8F39:EE_
+X-MS-Office365-Filtering-Correlation-Id: 959ca540-4572-425e-3022-08de27a2329f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|7416014|1800799024|82310400026;
+	BCL:0;ARA:13230040|82310400026|7416014|376014|36860700013|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?BA3CeUsup89IFAJ5LtHNgWquL8FfuUEeJFCeZfTbOAR5HpyaBEvoovZwkT9w?=
- =?us-ascii?Q?ujra8vt/YETykN6jC2aNnsINsDC+E8/QwN8XdLK8Q9iIF0OUP0ztgIszsHi3?=
- =?us-ascii?Q?hEBigFPnuBAU3FTAVDgXc/Am+hlOM7CGOICUameyAT/NWXNn1FsFZ1wwWC7t?=
- =?us-ascii?Q?v4Pg5leDm5bqHPH3SIgq/zLXJEMGRriCjDcGZglC/KyfVdtlOM0LcZ6oqVqD?=
- =?us-ascii?Q?yf5QnDmYaJAD04PDhNZYDx+jIKBhcdyN0Xo2EGuj4VyEoGsLUwNv37CBw1+2?=
- =?us-ascii?Q?jowRDbzkOfqvW1YCqxxfjgrw/ulA+J9VMBmkvc4J8q51I6Bbd19UMgSovbGC?=
- =?us-ascii?Q?VLWs+d6UHelIIZWwWnJP/PVadv41ZvFUmh3tFcXU4jNYM6NqznqS43BEf9P8?=
- =?us-ascii?Q?9bFEGZ0xo74lgOH1VYQiftMMROTOaLMwEVlK6j9Bv2JUayYsBQ6efFiENvCx?=
- =?us-ascii?Q?7cTHbakSwVDxY5+8pOXEMYWeLTqp2vvQKI5ymdGVs2mGu22xic1rpbCPUwb3?=
- =?us-ascii?Q?Mrepu6lv8lUoZvxTyc4ZaMiVtlwhBfMFvtCxmHwXoPVks70BPfgySH0Lzn5t?=
- =?us-ascii?Q?CiPc7n/rQcaGn+VcmJwbxWUwN8RHSLRUHqK4hsLKWy60I/mwaJ205YH1sPcP?=
- =?us-ascii?Q?1P4nG0MpdyfLKaag0+XIbpwjCiP7qq22d6HLTMMsUZDSFo/IGXHZpEQ5ifTr?=
- =?us-ascii?Q?s+yp0bQfRiaWeT5NFdFrzuhwH0AsE5sBS9eDBQlAb32MnuSosOma+YocnO5G?=
- =?us-ascii?Q?rzjVZ2ZF27zWIq2ml9Xw9euci7FiSkA01vf0dRhCBNnESzeqRFaTndgDKU4S?=
- =?us-ascii?Q?tMTWbXlhNFzvezQu33L7Qhcqf2qNe5ZXJ1tSBJtWqJBXddDjxnx1J4/AJsUv?=
- =?us-ascii?Q?uX/UFmAU87RsIW3mU3moTMohJ3/7QODx2M1r6q46Mmb4/61PmZxoO5XnoI2E?=
- =?us-ascii?Q?OFearZeQkqqJsh0QyFf2ooAfGuyEOAwmNstlfzACstqtCJ7W0ylPB1zLLN7I?=
- =?us-ascii?Q?gdfI6iWSl1RsCiN1ZcMzcZNm5Rjo8IUgQxrBm7pfvd4x+rvy/mImIpyNQfcL?=
- =?us-ascii?Q?lHnuax/pGYw1rj0lHYYn6LXzUUqXAMEDQV15IUlWWe6nh7nJdmdZbQzUdcGK?=
- =?us-ascii?Q?Gj5xzQwFVg+JEBpXRYH+tVDefDnCMdVfX3KbzV9KRWkXtWFAODDGIcSb3GzN?=
- =?us-ascii?Q?egWbFz87HIHwy58a9Z8ynK1Mluj92o1Nyacra064wH6f85t0U41ohEA/970k?=
- =?us-ascii?Q?8zSPilJomFpiKMhptH8M6nl4K9WaFfh+KbqgTQlnQpyXhtJ1joRTCNhuTxxz?=
- =?us-ascii?Q?FKr7MDFXJfkAn8bBhS4Cdg5YO2ii8kd+E+LJfYyH84tHfc/D/VsgrUD+aXwn?=
- =?us-ascii?Q?CjKBOr07RQ6d/7WVFRJMClHMn2x47WN19k9kmOvtusUteJV/mmd3Jg8PZp7U?=
- =?us-ascii?Q?4tMHLmIjH3gAiwbIIw2DqZNysN8MsEswl7GhZ6QnIDlwBVnO1wJ1+h9LhW8+?=
- =?us-ascii?Q?iBPpfzgHtfzLxeWqdLKfcZqokJxWEY/RbKs/yudN8w+QGW9RqBxHgRK098Gf?=
- =?us-ascii?Q?kE7UtFm34SRq66BhjEE=3D?=
+	=?us-ascii?Q?iI5eXOdXU4iiZow3gnNjD+r8zGtZh7NtzYKsXZmdWT7xMITOn4DQ8u5lJwfk?=
+ =?us-ascii?Q?Nv3hS+Mhvzi0auj7Ey0gH0+EzdoMlvIJ1YNTcYgXeDw687Ua1QrhznT8C37U?=
+ =?us-ascii?Q?fCpodPBtiDqpEbWiQznnPijJlZH02qhFOApt7Npwd6yptCGpS94WMWLhAin1?=
+ =?us-ascii?Q?OXyM25Zs9jwryyZJRN++wfJqTQc9ZOm3M9IY6S2J8L4uFc0HBAu2UrnFqzv8?=
+ =?us-ascii?Q?kiP4MKuIPEHVgOU9nvR459BPzfhkBwArnUU4QNnk0wbAi0EScJfxbmzVruJJ?=
+ =?us-ascii?Q?522WOYBbZ+WWrkqirI+WNKAPd4FWJ2cEo7xOtGEFk0aI7BM9AgmIk5PpbU4P?=
+ =?us-ascii?Q?8eQZWsfFeAUdo7Or4PFaSuaWzTCfDM4o/orvCYJzRhe24d6gNwYoJv4+SC2U?=
+ =?us-ascii?Q?cVbV85yBbCibwYZfTpMeavje/ffP2Pkkx09WqcA2rM2FOI5FfgOIEVSGOlML?=
+ =?us-ascii?Q?hRnjHZ4BALG6AxS3Sxv6mO6QQEzm4Jww032FU8i5IdnOeYja6khv1Cvz6K+P?=
+ =?us-ascii?Q?afgBAlaynGHQ4owhQvn2U370/GGaNDkzINEdXGSAocuWeW0QuJrZf7wtLRjF?=
+ =?us-ascii?Q?GF7JGyt59aZACnFgMfWiUPn7iTCcTwWqa9n3wj5DDfSliqIhnfCpmb283qY+?=
+ =?us-ascii?Q?J9G1gmv9XP6v4D0kZCNqC30FCGiP9Xs/pRw9iIslVD8KRAIz95g+u8Ii0C5q?=
+ =?us-ascii?Q?MS9GY1eJPtIR65CWe/KnNhGE6CAqD99U/66FUvTzZlefl0bVAuxe5r+gS9b1?=
+ =?us-ascii?Q?Z6fenWmQwazTnetdmaOp4f1BYuniC9G1wHAP6azp8ExySWqowOaLxnkDQAPz?=
+ =?us-ascii?Q?ysgQgVWEULrU8qc994CrUbVG2rST0olrJFA+2Fy45oYf27gyI9CppUvc23Im?=
+ =?us-ascii?Q?i33m+ofjke2egsuMksZvYUqYxdalhmJNx1LNJcAvR8MdIr5jQIFnE/IbGbDl?=
+ =?us-ascii?Q?zyspWXmv0U+ngxdse1pBEE6GonPUfudsLMlBVBbHIDBKg9ylIRr+IaunWuNR?=
+ =?us-ascii?Q?x4hg1tvm/YTZWWwv7/MNcNo//PtTlC2VSLT/th2PLJv81y1rzPuOM6lduH9U?=
+ =?us-ascii?Q?c26TsN/TY+DcKBHFthUXg1R/9GgjMqHfQOQQa2XKXrUXAD6xvmmdI1UntOMD?=
+ =?us-ascii?Q?3Qdr9h2XPh+hE4xBIEMK/1d8IM57HdlR9BjtSqbWOEk+DVPPsaLNIifrDO6c?=
+ =?us-ascii?Q?QCnhosNT7PCKCdQnVFaaMm04deDTnQIud52I5bHnFb53B3D3rOI/s5RAyBlq?=
+ =?us-ascii?Q?P/DLPWjJ9XkwTRAvFwB1ExxRyckqeOLYtJsK3yA1qTnR5AJEIrQBNiEhzmbL?=
+ =?us-ascii?Q?73NF2XTS1oXobXJ6MtBd25c75ggUeOSP8CVemgrvfEIgaZPSbhfrsJvE8arU?=
+ =?us-ascii?Q?XbdXYmVzTGhHXq5JvWvsYeCYXy7enfAHb+2yxv6thG7vIcSYwF8m5ti6TAjW?=
+ =?us-ascii?Q?OakF3707j9wH35pdLSD/M5goUdQAyph91ctLcm0Tks2j+djE9ThuB2jWEmQg?=
+ =?us-ascii?Q?rqAr3RMfGNgD0z7c6Xlu92ZCunBMSEyJHLytuRDBIJkohRptP4hgTqGwB2pM?=
+ =?us-ascii?Q?KzzCaFCpTUcgaSeUQ+o=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 19:31:06.8864
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 19:31:11.9334
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4f1c558-ef7b-4977-12e4-08de27a22f9d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 959ca540-4572-425e-3022-08de27a2329f
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SJ1PEPF000023CB.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV9PR12MB9831
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF75EAF8F39
 
-Multi-media integrated (MMI) USB3.2 DRD IP is usb3.1 gen2 controller
-which support following speed SSP (10-Gbps), SuperSpeed(5-Gbps),
-high-speed(480-Mbps), full-speed(12-Mbps), and low-speed(1.5-Mbps)
-operation modes.
+Introduces support for programming the 18-bit TX Deemphasis value that
+drives the pipe_TxDeemph signal, as defined in the PIPE4 specification.
 
-USB2 and USB3 PHY support Physical connectivity via the Type-C
-connectivity. DWC3 wrapper IP IO space is in SLCR so reg is made
-optional.
-
-The driver is required for the clock, reset and platform specific
-initialization. In this initial version typec reversibility is not
-implemented and it is assumed that USB3 PHY TCA mux programming is
-done by MMI configuration data object (CDOs) and TI PD controller
-is configured using external tiva programmer on VEK385 evaluation
-board.
-
-Tested host mode with mass storage device.
-
-Bus 002 Device 002: ID 0951:177f
-Bus 001 Device 001: ID 1d6b:0002
-Bus 002 Device 001: ID 1d6b:0003
+The configured value is recommended by Synopsys and is intended for
+standard (non-compliance) operation. These Gen2 equalization settings
+have been validated through both internal and external compliance
+testing. By applying this setting, the stability of USB 3.2 enumeration
+is improved and now SuperSpeedPlus devices are consistently recognized as
+USB 3.2 Gen 2 by the MMI USB Host controller.
 
 Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 ---
- drivers/usb/dwc3/dwc3-xilinx.c | 70 +++++++++++++++++++++++++++++-----
- 1 file changed, 60 insertions(+), 10 deletions(-)
+ drivers/usb/dwc3/core.c        | 17 +++++++++++++++++
+ drivers/usb/dwc3/core.h        |  7 +++++++
+ drivers/usb/dwc3/dwc3-xilinx.c |  7 ++++++-
+ 3 files changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-index 1e28d6f50ed0..32f87a238d0e 100644
---- a/drivers/usb/dwc3/dwc3-xilinx.c
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -46,10 +46,15 @@ struct dwc3_xlnx {
- 	struct clk_bulk_data		*clks;
- 	struct device			*dev;
- 	void __iomem			*regs;
--	int				(*pltfm_init)(struct dwc3_xlnx *data);
-+	const struct dwc3_xlnx_config	*dwc3_config;
- 	struct phy			*usb3_phy;
- };
- 
-+struct dwc3_xlnx_config {
-+	int				(*pltfm_init)(struct dwc3_xlnx *data);
-+	bool				map_resource;
-+};
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 7b84512b13a2..cb737aee316e 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -647,6 +647,15 @@ static void dwc3_config_soc_bus(struct dwc3 *dwc)
+ 		reg |= DWC3_GSBUSCFG0_REQINFO(dwc->gsbuscfg0_reqinfo);
+ 		dwc3_writel(dwc->regs, DWC3_GSBUSCFG0, reg);
+ 	}
 +
- static void dwc3_xlnx_mask_phy_rst(struct dwc3_xlnx *priv_data, bool mask)
++	if (dwc->csr_tx_deemph_field_1 != DWC3_LCSR_TX_DEEMPH_UNSPECIFIED) {
++		u32 reg;
++
++		reg = dwc3_readl(dwc->regs, DWC3_LCSR_TX_DEEMPH);
++		reg &= ~DWC3_LCSR_TX_DEEMPH_MASK(~0);
++		reg |= DWC3_LCSR_TX_DEEMPH_MASK(dwc->csr_tx_deemph_field_1);
++		dwc3_writel(dwc->regs, DWC3_LCSR_TX_DEEMPH, reg);
++	}
+ }
+ 
+ static int dwc3_core_ulpi_init(struct dwc3 *dwc)
+@@ -1674,11 +1683,13 @@ static void dwc3_core_exit_mode(struct dwc3 *dwc)
+ static void dwc3_get_software_properties(struct dwc3 *dwc,
+ 					 const struct dwc3_properties *properties)
  {
- 	u32 reg;
-@@ -86,6 +91,29 @@ static void dwc3_xlnx_set_coherency(struct dwc3_xlnx *priv_data, u32 coherency_o
++	u32 csr_tx_deemph_field_1;
+ 	struct device *tmpdev;
+ 	u16 gsbuscfg0_reqinfo;
+ 	int ret;
+ 
+ 	dwc->gsbuscfg0_reqinfo = DWC3_GSBUSCFG0_REQINFO_UNSPECIFIED;
++	dwc->csr_tx_deemph_field_1 = DWC3_LCSR_TX_DEEMPH_UNSPECIFIED;
+ 
+ 	if (properties->gsbuscfg0_reqinfo !=
+ 	    DWC3_GSBUSCFG0_REQINFO_UNSPECIFIED) {
+@@ -1696,6 +1707,12 @@ static void dwc3_get_software_properties(struct dwc3 *dwc,
+ 					       &gsbuscfg0_reqinfo);
+ 		if (!ret)
+ 			dwc->gsbuscfg0_reqinfo = gsbuscfg0_reqinfo;
++
++		ret = device_property_read_u32(tmpdev,
++					       "snps,lcsr_tx_deemph",
++					       &csr_tx_deemph_field_1);
++		if (!ret)
++			dwc->csr_tx_deemph_field_1 = csr_tx_deemph_field_1;
  	}
  }
  
-+static int dwc3_xlnx_init_versal2(struct dwc3_xlnx *priv_data)
-+{
-+	struct device		*dev = priv_data->dev;
-+	struct reset_control	*crst;
-+	int			ret;
-+
-+	crst = devm_reset_control_get_optional_exclusive(dev, NULL);
-+	if (IS_ERR(crst))
-+		return dev_err_probe(dev, PTR_ERR(crst),
-+				     "failed to get reset signal\n");
-+
-+	/* Assert and De-assert reset */
-+	ret = reset_control_assert(crst);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to assert Reset\n");
-+
-+	ret = reset_control_deassert(crst);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to De-assert Reset\n");
-+
-+	return 0;
-+}
-+
- static int dwc3_xlnx_init_versal(struct dwc3_xlnx *priv_data)
- {
- 	struct device		*dev = priv_data->dev;
-@@ -244,14 +272,32 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
- 	return ret;
- }
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index a5fc92c4ffa3..32205f435b5b 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -181,6 +181,7 @@
  
-+static const struct dwc3_xlnx_config zynqmp_config = {
-+	.pltfm_init = dwc3_xlnx_init_zynqmp,
-+	.map_resource = true,
-+};
+ #define DWC3_LLUCTL(n)		(0xd024 + ((n) * 0x80))
+ 
++#define DWC3_LCSR_TX_DEEMPH	0xd060
+ /* Bit fields */
+ 
+ /* Global SoC Bus Configuration INCRx Register 0 */
+@@ -198,6 +199,10 @@
+ #define DWC3_GSBUSCFG0_REQINFO(n)	(((n) & 0xffff) << 16)
+ #define DWC3_GSBUSCFG0_REQINFO_UNSPECIFIED	0xffffffff
+ 
++/* LCSR_TX_DEEMPH Register:  setting TX deemphasis used in normal operation in gen2 */
++#define DWC3_LCSR_TX_DEEMPH_MASK(n)		((n) & 0x3ffff)
++#define DWC3_LCSR_TX_DEEMPH_UNSPECIFIED		0xffffffff
 +
-+static const struct dwc3_xlnx_config versal_config = {
-+	.pltfm_init = dwc3_xlnx_init_versal,
-+	.map_resource = true,
-+};
-+
-+static const struct dwc3_xlnx_config versal2_config = {
-+	.pltfm_init = dwc3_xlnx_init_versal2,
-+};
-+
- static const struct of_device_id dwc3_xlnx_of_match[] = {
- 	{
- 		.compatible = "xlnx,zynqmp-dwc3",
--		.data = &dwc3_xlnx_init_zynqmp,
-+		.data = &zynqmp_config,
- 	},
- 	{
- 		.compatible = "xlnx,versal-dwc3",
--		.data = &dwc3_xlnx_init_versal,
-+		.data = &versal_config,
-+	},
-+	{
-+		.compatible = "xlnx,versal2-mmi-dwc3",
-+		.data = &versal2_config,
- 	},
- 	{ /* Sentinel */ }
+ /* Global Debug LSP MUX Select */
+ #define DWC3_GDBGLSPMUX_ENDBC		BIT(15)	/* Host only */
+ #define DWC3_GDBGLSPMUX_HOSTSELECT(n)	((n) & 0x3fff)
+@@ -1180,6 +1185,7 @@ struct dwc3_glue_ops {
+  * @wakeup_pending_funcs: Indicates whether any interface has requested for
+  *			 function wakeup in bitmap format where bit position
+  *			 represents interface_id.
++ * @csr_tx_deemph_field_1: stores TX deemphasis used in Gen2 operation.
+  */
+ struct dwc3 {
+ 	struct work_struct	drd_work;
+@@ -1414,6 +1420,7 @@ struct dwc3 {
+ 	struct dentry		*debug_root;
+ 	u32			gsbuscfg0_reqinfo;
+ 	u32			wakeup_pending_funcs;
++	u32			csr_tx_deemph_field_1;
  };
-@@ -295,14 +341,18 @@ static int dwc3_xlnx_probe(struct platform_device *pdev)
- 	if (!priv_data)
- 		return -ENOMEM;
  
--	regs = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(regs))
--		return dev_err_probe(dev, PTR_ERR(regs), "failed to map registers\n");
--
- 	match = of_match_node(dwc3_xlnx_of_match, pdev->dev.of_node);
+ #define INCRX_BURST_MODE 0
+diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
+index 32f87a238d0e..85bc4ab461fd 100644
+--- a/drivers/usb/dwc3/dwc3-xilinx.c
++++ b/drivers/usb/dwc3/dwc3-xilinx.c
+@@ -40,6 +40,7 @@
+ #define PIPE_CLK_SELECT				0
+ #define XLNX_USB_FPD_POWER_PRSNT		0x80
+ #define FPD_POWER_PRSNT_OPTION			BIT(0)
++#define XLNX_MMI_USB_TX_DEEMPH_DEF		0x8c45
  
--	priv_data->pltfm_init = match->data;
--	priv_data->regs = regs;
-+	priv_data->dwc3_config = match->data;
+ struct dwc3_xlnx {
+ 	int				num_clocks;
+@@ -306,7 +307,7 @@ MODULE_DEVICE_TABLE(of, dwc3_xlnx_of_match);
+ static int dwc3_set_swnode(struct device *dev)
+ {
+ 	struct device_node *np = dev->of_node, *dwc3_np;
+-	struct property_entry props[2];
++	struct property_entry props[3];
+ 	int prop_idx = 0, ret = 0;
+ 
+ 	dwc3_np = of_get_compatible_child(np, "snps,dwc3");
+@@ -320,6 +321,10 @@ static int dwc3_set_swnode(struct device *dev)
+ 	if (of_dma_is_coherent(dwc3_np))
+ 		props[prop_idx++] = PROPERTY_ENTRY_U16("snps,gsbuscfg0-reqinfo",
+ 						       0xffff);
++	if (of_device_is_compatible(np, "xlnx,versal2-mmi-dwc3"))
++		props[prop_idx++] = PROPERTY_ENTRY_U32("snps,lcsr_tx_deemph",
++						       XLNX_MMI_USB_TX_DEEMPH_DEF);
 +
-+	if (priv_data->dwc3_config->map_resource) {
-+		regs = devm_platform_ioremap_resource(pdev, 0);
-+		if (IS_ERR(regs))
-+			return dev_err_probe(dev, PTR_ERR(regs),
-+					     "failed to map registers\n");
-+		priv_data->regs = regs;
-+	}
-+
- 	priv_data->dev = dev;
+ 	of_node_put(dwc3_np);
  
- 	platform_set_drvdata(pdev, priv_data);
-@@ -317,7 +367,7 @@ static int dwc3_xlnx_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	ret = priv_data->pltfm_init(priv_data);
-+	ret = priv_data->dwc3_config->pltfm_init(priv_data);
- 	if (ret)
- 		goto err_clk_put;
- 
+ 	if (prop_idx)
 -- 
 2.34.1
 
