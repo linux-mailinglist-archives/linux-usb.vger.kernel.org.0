@@ -1,86 +1,85 @@
-Return-Path: <linux-usb+bounces-30685-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30686-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56E3DC6E205
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 12:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7180CC6E223
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 12:07:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3F3B24E2999
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 11:03:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8E3334E6D7B
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Nov 2025 11:04:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F102F34DCFE;
-	Wed, 19 Nov 2025 11:02:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E593502B0;
+	Wed, 19 Nov 2025 11:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hzRWnHon"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pz3s5KyD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780A234BA59
-	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 11:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755F634F47E
+	for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 11:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763550179; cv=none; b=YjMCMAdccak5gFV8IHLw/AH4qQqJ1uPIyQ0jgiLfp4OE8PvDJtx+dPnica2JV/sEafKdP/4sr9/T+i6qbCkX+sOCS29kIrhweHNO348/owThLvo1XguZVVPu+Vb25slxumKKiBYrmHDHOWexNjA/hmN6q3nb1y5hFd6u+S18WvQ=
+	t=1763550236; cv=none; b=FeRtJe4kcXUagI4OCck9KkevX+1BGQNK2JVg8C3od/Zh0KBqr1T8CoEJczNqCAesn5bfxa+OjfMlvk8ufbDS12lL/DpeYQJKcpUrGmh2QM3iyPALmt3BzcQaYdLCliWh25yhP0c8g8iK5s/y1I/CzNRIIiqLVS1W2ILmOgnCv4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763550179; c=relaxed/simple;
-	bh=V0DYnRKMnrb8+bWaJoEpsdLkMGo2LxBu9YTMLIkbsPk=;
+	s=arc-20240116; t=1763550236; c=relaxed/simple;
+	bh=4mSerw4vYazyDfgyl8j1CLDy2pYsgGbR8tF9bgVF6JA=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=P2yveGDE4Oa+giXJ2q7AvMav0XYVbX/i1QcbilJ2ZjeHOWa+HhRFYPRuXuHLUFZU2S1GQRHGNNl+2q/iYlpwJGf3iZRWlh6DK9PdA27gYiuYxe87Q8VNYfeD1wVI2jXY3NK8s3tvdfjcgliBvT+xKN2xtKg5WkTHuLWBFaySX6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hzRWnHon; arc=none smtp.client-ip=209.85.208.42
+	 MIME-Version:Content-Type; b=PPxOXqqbtAj/1Y7RJyeG69hhizcdMTXITvvpZrSZKYLd+6Ad+MIRI7HwAMEPbLCJwhVqtqnrAx5PAFni/uO5lpCNwWS1/T8Apaw9PoI8lPPFpifBMH6LtMMH0HwSq1r8ft7H2GM4fyQi/yaf+DJvSzvMy4AtxwwG9GZXsNtQ/jY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pz3s5KyD; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-640aa1445c3so10262805a12.1
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 03:02:57 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b73669bdcd2so917425166b.2
+        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 03:03:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763550176; x=1764154976; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763550230; x=1764155030; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zxMv2kZg4qEx22u+xZ5qZqSeqxeWZf4xoX9x5+oSd88=;
-        b=hzRWnHonYHccly/JadVVHf6Hab3MhVxLKybONX/30nvywd8TpwEX6dbQ4+tfEa71bK
-         njzAnKUGFXoQI94TKshZz4eX0QN8jZ+O6p+lnXh9z5me676JB6a3SFVP0F5GnGfhB0uz
-         RsCao5uRFoARLl1LwJws/2tg44d+TxIrLLuXgGzrA52gYvwguodh97WzVOktydmbzQ5q
-         bYkVE0PbDmOQ1RVr13PGhAlsThUOx01JQw4FkqesAvnmHlCWTZ0RkGizyMQZpoxzxuQi
-         EzLctDbHXt4pxfY9o5zCmHbSJwu3OIayKEoDvsTV1mqNOS8VESHJta/+imCN4j47uJeq
-         qsrg==
+        bh=EdPiRm4LzogiWqW/lnu08ToTWmpvxJj4XqcowJynZMA=;
+        b=Pz3s5KyDCiqAc6CmRV1sN6+hWcfnmA6cIwXzPUD+BKO83rwiZs1t/92Q1i1q3XBI8K
+         ZvGT6kRHEW8p4Zmzg9IXIPczj51PMZqiRa5ums3FzJSmQe+SOHMvdZxMoyNoOrP7njFX
+         V4PTlPiQqEpU5S26P0izNsPEhLanqfmuCvu0cn0zxHQIJYX8O+lygKZZeO3jUhwLIlHS
+         ddhz8GXprusbXnLVUn8sNTI/E8qAPt/ZYxBwAXkuyRwQ0YYRBdibTOts6Mzf8xUYEwoA
+         vn7RC7536ClWCBUCG6kqbBOkHRcfBLsCQP6JNB5ileUk6XyYL1zIN4spx1O1C7B9L5e0
+         v63g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763550176; x=1764154976;
+        d=1e100.net; s=20230601; t=1763550230; x=1764155030;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=zxMv2kZg4qEx22u+xZ5qZqSeqxeWZf4xoX9x5+oSd88=;
-        b=V/cfsRs0RtNhjlvJoxz7wu+GzqY/zoXXsmWSRTbZyu7zbU2hP+6lCB3R+bT39Dimj8
-         B6ujWL260IpyIN+U+CSw4d05y3vr/J4asY0YvGR9F7MPySLgQZ3FJQUmqTP5/7Ms075r
-         o2y+q8PbpovQbMm99zcurDCm32hxYQIk+1cBCIqOg1yVdYO7BiRdIVbpzMbxcvr0E+Fd
-         NMvv0Xq5L84lKsdpUdp60itMcCdb0dlsjOyssul91uLlkoWVhaTR+LKPOdTM/XPIGs/O
-         E9M+Cv8v6lUnfLHs2VZfd34nsNPaveTC5BSvKZi1mPGeNzumfUSXMwVELoedK6XQ0y2X
-         kIHA==
-X-Gm-Message-State: AOJu0YyCe9c431sFXIr43XZe+0bZY18AorWWrnDRwX8CaYDj0FRoXvTg
-	0eQQUqTwI8f4A0Rm26ere0zLTqtjZaiESIuY0ZQRIfUkDnL7Vt5tQitY
-X-Gm-Gg: ASbGncv1BVVKa6UIT9SJr1vKYx90Qwc4y5JsW29RHLd2Q/hFQdXTdqXCwv+l/MVGI/M
-	eraO+0PEly9YmhhvjDHZ1NAJwvwyo5X6zy5XzHZhAZHxpMJ34g9Aw8duF7kKGdG6FSBqt3Jp4Dn
-	kicLR5TAhU3PyvCfuEf/BHT3pkmVRfjyhj/RVA2VehXxRczVK8ukbcIYF7HyNUNngt34wr9gbpR
-	AeaAwfwYX+hAEKgL8wvv6gaWAKAjvD/3JlzwggantowHUrjCHc6FDlfx5KFtTrPBw60hPf96Sar
-	jsuOruLc1VktI4hhlpqrhRHNbSFdIKb1zRnOeMVkEZLVZm9sUSPhNxaZbumeELF8AyXI/k2EJ9/
-	7KiLnud33J0fwarFDU25k932R7gBaBEGW4KbxmLsOgjul+Qo1y4QBXbpMvN0+umzW/b4TI4C6uX
-	3KzqCTC3Mi69XdsBK5QOVurcqX/W7GceiZ5t6AIAniK0WY
-X-Google-Smtp-Source: AGHT+IFc/TKsZa7xUbm2Wx9G077Nk+OerGKYYxWpHLbgIy+HjaQWP5BenLaKeSngCdU5CygLpBIVcg==
-X-Received: by 2002:a17:906:6a06:b0:b73:8639:cd93 with SMTP id a640c23a62f3a-b738639d0ecmr1556659266b.14.1763550175592;
-        Wed, 19 Nov 2025 03:02:55 -0800 (PST)
+        bh=EdPiRm4LzogiWqW/lnu08ToTWmpvxJj4XqcowJynZMA=;
+        b=szD5sxFiUvqbZpaw7OuRjUMIsjuM5Kgr5VVtPpeC6Rxa+1iHuYUJ9ZTHWBLdk+k2N6
+         N2I2SPZO5gCJfvd8BW4WhvYMhCtr3XsmFf+/guIDd9EYm6tBrDlTXoM64ae6EzA9/yAt
+         SYKzWeBvcJwZgatxlnjKpBLrwuWhPwx18w+SYOcYQLAehzeoewtJz7NIoVcaBmW6VT7y
+         xVUiPycSZc1kaAdzG7gOJo82imfK87BqIlpafohkPqXZeeYbYwiBvjM9VkFb46VtEwh+
+         MV+e0FmRlstFZ86yTeqwZm9tBgZUnanMwZvMxsP7DQs09OEuDTJdnwlCc5ya4DKvOOGG
+         Faag==
+X-Gm-Message-State: AOJu0YwWGJdYKj4gwcjPP0+n2nIHPiFld00AIE/l66KB4EojvJeMZy1P
+	XtPZoxnvLAm20Axn32ZTnki7uFXpit1h5IHtYZDuDOA57QPrv74VKvqg
+X-Gm-Gg: ASbGncsmyZB2h2u2Ev8nlnRJMI9iSCOGh2KjQqsmu3XzWH8ENeyWFTM1usFMBYwZ+wq
+	5Fr08EY8VMJoovnt0w4YZB6sDHgWL5pvW66cXP9/LmqYz9kkuEkd26WXrEv1Ux9a4p6ar/aNSWb
+	zbDn6TRWGdlcFQwmNo9pq6XObGR1068VVlxBd2s7cbaIUSAcgUlNRN5Lpc3RtSKZqH+yvmQ/lBM
+	kQyVHqh4e4MiS5quJoqgWQxHGhatwn+raeJvMHg9g+UH/aS3lEfKVWOcZ2NeFfQswBNuHRjqfWF
+	2EiVKSvkCC8cTUU7+jSg7oaxfu00404p5ZW2FEn56EUtwPZd8GBCRe2KOhk9oFu1fXKVW6PjUpD
+	gx7A+lTz6+FR0c1bVrsqHpvA4q5tlNZ7IzXN/fgRl4Q3vwN8g9g+xT5pHkcm+eRayXFhhzDQHqh
+	uPMAbvCD/0Rz3IzDuQmizg6bw=
+X-Google-Smtp-Source: AGHT+IFgyVTFepwmJ2y3kGahtWZuiVh3MxIYfoCeuZo+rnD6QUmtcBuWMQiB2ayc/7YdDXfEDMrrbg==
+X-Received: by 2002:a17:906:b205:b0:b73:7a44:b4d5 with SMTP id a640c23a62f3a-b737a44b692mr1432516766b.41.1763550230496;
+        Wed, 19 Nov 2025 03:03:50 -0800 (PST)
 Received: from foxbook (bhd138.neoplus.adsl.tpnet.pl. [83.28.93.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7359bfb238sm1517689666b.14.2025.11.19.03.02.54
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734fa81296sm1617324866b.6.2025.11.19.03.03.49
         (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 19 Nov 2025 03:02:55 -0800 (PST)
-Date: Wed, 19 Nov 2025 12:02:52 +0100
+        Wed, 19 Nov 2025 03:03:50 -0800 (PST)
+Date: Wed, 19 Nov 2025 12:03:47 +0100
 From: Michal Pecio <michal.pecio@gmail.com>
 To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
  <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] usb: xhci: Track transfer ring dequeue progress
- properly
-Message-ID: <20251119120252.74379adb.michal.pecio@gmail.com>
+Subject: [PATCH 2/5] usb: xhci: Find transfer TRB early in handle_tx_event()
+Message-ID: <20251119120347.70a02fde.michal.pecio@gmail.com>
 In-Reply-To: <20251119120208.6a025eb0.michal.pecio@gmail.com>
 References: <20251119120208.6a025eb0.michal.pecio@gmail.com>
 Precedence: bulk
@@ -92,155 +91,94 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-xHCI 4.9.2 has clear requirements regarding transfer ring management:
+As soon as we find the transfer ring to which an event belongs, we can
+proceed to locate the exact TRB referenced by the event. This enables
+better event handling and diagnostics, even if no TD matches the event.
 
-  Software uses the Dequeue Pointer to determine when a Transfer Ring
-  is full. As it processes Transfer Events, it updates its copy of
-  the Dequeue Pointer with the value of the Transfer Event TRB Pointer
-  field. If advancing the Enqueue Pointer would make it equal to the
-  Dequeue Pointer then the Transfer Ring is full and software shall
-  wait for Transfer Events that will advance the Dequeue Pointer.
+Also set 'ep_seg' and remove its secondary use as a temporary boolean.
 
-This and the first two rows of Table 4-2 in 4.6.9 imply that the xHC
-is not required to atomically advance Dequeue to the next TRB after
-completing one. The TRB referenced by latest event is still owned by
-the xHC and not supposed to be reused for new transfers yet.
+Bail out if event TRB pointer is not NULL and not a transfer TRB on the
+endpoint's ring. This indicates that either the HC executes TRBs from a
+wrong ring (bad Set TR Dequeue command, Link TRB damaged or ignored by
+the HC) or its internal state is corrupted and the event is bogus.
 
-The driver allows such reuse and then worse. When a TD completes with
-Short Packet, Dequeue is moved past remaining TRBs without waiting
-for their completion. This opens them for reuse if it happens across
-segment boundary and complicates handling events for those TRBs.
+No such event is going to match any TD on td_list and trying to handle
+it would generally do nothing. On an isochronous endpoint we might skip
+all pending TDs and create more chaos. Just log this error and get out.
 
-This is due to sloppy historic assumptions that Dequeue points to the
-next TD to execute. Those assumptions stopped working when unlinking
-was implemented and have been fully cleaned up last year. Dequeue is
-now only used for free space tracking and in move_dequeue_past_td().
-
-So let's fix this. When TD is given back, set Dequeue to the current
-TRB pointer rather than past the TD. Future patch will also update
-Dequeue when (and if) events are received for the remaining TRBs.
-
-Note: updating Dequeue before giveback would break sum_trb_lengths().
-
-Skipping moves Dequeue past the TD because it is triggered by events
-outside the TD, so we know that the xHC has left it completely. That
-being said, replace inc_deq() with next_trb() to ensure that Dequeue
-doesn't get ahead of the xHC (and/or Enqueue) on Link TRBs.
-
+Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 ---
- drivers/usb/host/xhci-ring.c | 33 ++++++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 13 deletions(-)
+ drivers/usb/host/xhci-ring.c | 35 +++++++++++++++++++++++++++++++----
+ 1 file changed, 31 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index bf077cd13ffa..3d5124912a09 100644
+index 3d5124912a09..531e2f207b17 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -927,7 +927,7 @@ static void xhci_dequeue_td(struct xhci_hcd *xhci, struct xhci_td *td, struct xh
- {
- 	ring->dequeue = td->end_trb;
- 	ring->deq_seg = td->end_seg;
--	inc_deq(xhci, ring);
-+	next_trb(&ring->deq_seg, &ring->dequeue);
- 
- 	xhci_td_cleanup(xhci, td, ring, status);
- }
-@@ -2229,8 +2229,8 @@ int xhci_is_vendor_info_code(struct xhci_hcd *xhci, unsigned int trb_comp_code)
+@@ -82,6 +82,27 @@ dma_addr_t xhci_trb_virt_to_dma(struct xhci_segment *seg,
+ 	return seg->dma + (segment_offset * sizeof(*trb));
  }
  
- static void finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
--		      struct xhci_ring *ep_ring, struct xhci_td *td,
--		      u32 trb_comp_code)
-+		      struct xhci_ring *ep_ring, struct xhci_td *td, u32 trb_comp_code,
-+		      struct xhci_segment *ep_seg, union xhci_trb *ep_trb)
- {
- 	struct xhci_ep_ctx *ep_ctx;
- 
-@@ -2267,7 +2267,11 @@ static void finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		return; /* xhci_handle_halted_endpoint marked td cancelled */
- 	}
- 
--	xhci_dequeue_td(xhci, td, ep_ring, td->status);
-+	/* update ring dequeue state */
-+	ep_ring->deq_seg = ep_seg;
-+	ep_ring->dequeue = ep_trb;
++/*
++ * Look up a TRB by its DMA address, return NULL if not found on the ring.
++ * Search from start_seg to let callers optimize starting point selection.
++ * Write actual segment containing returned TRB to seg_out, if provided.
++ */
++static union xhci_trb *xhci_dma_to_trb(struct xhci_segment *start_seg, dma_addr_t dma,
++					struct xhci_segment **seg_out)
++{
++	struct xhci_segment *seg;
 +
-+	xhci_td_cleanup(xhci, td, ep_ring, td->status);
- }
- 
- /* sum trb lengths from the first trb up to stop_trb, _excluding_ stop_trb */
-@@ -2289,7 +2293,8 @@ static u32 sum_trb_lengths(struct xhci_td *td, union xhci_trb *stop_trb)
-  */
- static void process_ctrl_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 			    struct xhci_ring *ep_ring,  struct xhci_td *td,
--			    union xhci_trb *ep_trb, struct xhci_transfer_event *event)
-+			    struct xhci_segment *ep_seg, union xhci_trb *ep_trb,
-+			    struct xhci_transfer_event *event)
++	xhci_for_each_ring_seg(start_seg, seg) {
++		if (in_range(dma, seg->dma, TRB_SEGMENT_SIZE)) {
++			if (seg_out)
++				*seg_out = seg;
++			return seg->trbs + (dma - seg->dma) / sizeof(seg->trbs[0]);
++		}
++	}
++
++	return NULL;
++}
++
+ static bool trb_is_noop(union xhci_trb *trb)
  {
- 	struct xhci_ep_ctx *ep_ctx;
- 	u32 trb_comp_code;
-@@ -2373,7 +2378,7 @@ static void process_ctrl_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		td->urb->actual_length = requested;
+ 	return TRB_TYPE_NOOP_LE32(trb->generic.field[3]);
+@@ -2672,6 +2693,15 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	if (!ep_ring)
+ 		return handle_transferless_tx_event(xhci, ep, trb_comp_code);
  
- finish_td:
--	finish_td(xhci, ep, ep_ring, td, trb_comp_code);
-+	finish_td(xhci, ep, ep_ring, td, trb_comp_code, ep_seg, ep_trb);
- }
++	/* get the corresponding transfer TRB pointer */
++	ep_trb = xhci_dma_to_trb(ep_ring->deq_seg, ep_trb_dma, &ep_seg);
++	if (!ep_trb && ep_trb_dma) {
++		xhci_warn(xhci, "Ignoring '%s' event out of ring on slot %d ep %d\n",
++				xhci_trb_comp_code_string(trb_comp_code), slot_id, ep_index);
++		/* XXX: other ring's TDs may be executing on this EP, should we kill it? */
++		return 0;
++	}
++
+ 	/* Look for common error cases */
+ 	switch (trb_comp_code) {
+ 	/* Skip codes that require special handling depending on
+@@ -2846,9 +2876,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 				      td_list);
  
- /*
-@@ -2381,7 +2386,8 @@ static void process_ctrl_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
-  */
- static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 			    struct xhci_ring *ep_ring, struct xhci_td *td,
--			    union xhci_trb *ep_trb, struct xhci_transfer_event *event)
-+			    struct xhci_segment *ep_seg, union xhci_trb *ep_trb,
-+			    struct xhci_transfer_event *event)
- {
- 	struct urb_priv *urb_priv;
- 	int idx;
-@@ -2483,7 +2489,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		td->urb_length_set = true;
- 		return;
- 	}
--	finish_td(xhci, ep, ep_ring, td, trb_comp_code);
-+	finish_td(xhci, ep, ep_ring, td, trb_comp_code, ep_seg, ep_trb);
- }
+ 		/* Is this a TRB in the currently executing TD? */
+-		ep_seg = trb_in_td(td, ep_trb_dma);
+-
+-		if (!ep_seg) {
++		if (!trb_in_td(td, ep_trb_dma)) {
  
- static void skip_isoc_td(struct xhci_hcd *xhci, struct xhci_td *td,
-@@ -2511,7 +2517,8 @@ static void skip_isoc_td(struct xhci_hcd *xhci, struct xhci_td *td,
-  */
- static void process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 				 struct xhci_ring *ep_ring, struct xhci_td *td,
--				 union xhci_trb *ep_trb, struct xhci_transfer_event *event)
-+				 struct xhci_segment *ep_seg, union xhci_trb *ep_trb,
-+				 struct xhci_transfer_event *event)
- {
- 	struct xhci_slot_ctx *slot_ctx;
- 	u32 trb_comp_code;
-@@ -2573,7 +2580,7 @@ static void process_bulk_intr_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		td->urb->actual_length = 0;
- 	}
+ 			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
+ 				/* this event is unlikely to match any TD, don't skip them all */
+@@ -2931,7 +2959,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	if (ring_xrun_event)
+ 		return 0;
  
--	finish_td(xhci, ep, ep_ring, td, trb_comp_code);
-+	finish_td(xhci, ep, ep_ring, td, trb_comp_code, ep_seg, ep_trb);
- }
+-	ep_trb = &ep_seg->trbs[(ep_trb_dma - ep_seg->dma) / sizeof(*ep_trb)];
+ 	trace_xhci_handle_transfer(ep_ring, (struct xhci_generic_trb *) ep_trb, ep_trb_dma);
  
- /* Transfer events which don't point to a transfer TRB, see xhci 4.17.4 */
-@@ -2941,11 +2948,11 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 
- 	/* update the urb's actual_length and give back to the core */
- 	if (usb_endpoint_xfer_control(&td->urb->ep->desc))
--		process_ctrl_td(xhci, ep, ep_ring, td, ep_trb, event);
-+		process_ctrl_td(xhci, ep, ep_ring, td, ep_seg, ep_trb, event);
- 	else if (usb_endpoint_xfer_isoc(&td->urb->ep->desc))
--		process_isoc_td(xhci, ep, ep_ring, td, ep_trb, event);
-+		process_isoc_td(xhci, ep, ep_ring, td, ep_seg, ep_trb, event);
- 	else
--		process_bulk_intr_td(xhci, ep, ep_ring, td, ep_trb, event);
-+		process_bulk_intr_td(xhci, ep, ep_ring, td, ep_seg, ep_trb, event);
- 	return 0;
- 
- check_endpoint_halted:
+ 	/*
 -- 
 2.48.1
 
