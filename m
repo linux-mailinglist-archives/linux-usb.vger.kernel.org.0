@@ -1,364 +1,142 @@
-Return-Path: <linux-usb+bounces-30766-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30768-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90F2AC71D84
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 03:28:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37F0DC71E8F
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 03:59:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CBD29351974
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 02:27:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 4A53229A1A
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 02:59:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71C522DE717;
-	Thu, 20 Nov 2025 02:25:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AF062F7446;
+	Thu, 20 Nov 2025 02:59:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="F47Tlp0T"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Jh0WprxP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF562DCF47;
-	Thu, 20 Nov 2025 02:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493CC2D8DC3
+	for <linux-usb@vger.kernel.org>; Thu, 20 Nov 2025 02:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763605526; cv=none; b=BwfqKYbKjjnxcFQJhOILZOa9oYr9//B+4TDvU/d2x97qDWLopTKS7btmfkm47efSD5189JbNLQeLPcilDPU2HQ4ZqTUN6BrgedDCGKwEZzWbBcOmdpwnQSnbXRTxew6lnQi84gvqpasGMOW2F+UkaaqSify5cOlYTXJPezO+sgE=
+	t=1763607589; cv=none; b=K+fawpJeKnWeo6nS5MwVuG+5eus/4l1NjjRMudAysTB5RuCiNz5StFEJ/eSxLS+V27kB+o3wdOzVOSqIkMYaM37JYspVs6WM9u3bTExVO2OaO0L0bamDNEypx8LKLPi29KnfP7y9wBVcB9V2N13SI+Mhg0dUiHXJXSEGROjj3X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763605526; c=relaxed/simple;
-	bh=CogOCq7Dgo3J6O+ahfKV8yupDN4OJqUtveUj18KHbi4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=fIaX9HXygb6/Mn2OS4WQeX/eL6mHBVV8z16VXE7sGSsbBheKslL8HjSU50J0uOlcQRhVB5mTO16UjcFMau4tPm2sXX6YbDpOV+LufYT84k170ioqFzf2khI00wgBi71aiEI4I5XuNv2V1DXzbqe6QUrNgvCKApunBqLu9jwOvxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=F47Tlp0T; arc=none smtp.client-ip=54.254.200.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airkyi.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=airkyi.com;
-	s=altu2504; t=1763605517;
-	bh=Xn5Sqf6jlBXaETnSdjcUsZQPPZf1EW7Rcj8pIik+fGE=;
-	h=From:To:Subject:Date:Message-Id;
-	b=F47Tlp0TlguIuuN8WvpVyhM0CNjx3WhTRwGKpluRiKavlYRObCqMG+HHUwHE48xeJ
-	 L4N2FB3ZWhLOm+6ElAG4L7qMmDJBnyfYyZSqt1cmKTxUchntLjAXQdkALVUP7Asjeo
-	 1K5QDLJ156ZJ/kkeiL2/Oqmkv3Cis9/yremDpMB8=
-X-QQ-mid: zesmtpsz5t1763605479t4f566fe8
-X-QQ-Originating-IP: u55IejQC99cX06tuNwkUEpyW35B2cmYSlSGFqlYKtDg=
-Received: from DESKTOP-8BT1A2O.localdomain ( [58.22.7.114])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 20 Nov 2025 10:24:36 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 534471061521823290
-From: Chaoyi Chen <kernel@airkyi.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Peter Chen <hzpeterchen@gmail.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Yubing Zhang <yubing.zhang@rock-chips.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Johan Jonker <jbx6244@gmail.com>,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Peter Robinson <pbrobinson@gmail.com>
-Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	dri-devel@lists.freedesktop.org
-Subject: [PATCH v10 11/11] arm64: dts: rockchip: rk3399-evb-ind: Add support for DisplayPort
-Date: Thu, 20 Nov 2025 10:23:43 +0800
-Message-Id: <20251120022343.250-12-kernel@airkyi.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20251120022343.250-1-kernel@airkyi.com>
-References: <20251120022343.250-1-kernel@airkyi.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:airkyi.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: NtksVjXir1Sb6sQ5D/1nQfdIoldl/JaU00sxOQbjTG4AL2yif0yU2QQW
-	EAZ8EdeOE2uq27vFq/Pat57+n5fGXxK4u4jpr1PuJ9STkQRfypt3Rp1PFXGaQip6wFJ7bk5
-	1Dbdi+0lDDB+hRp4T/52z/ytoEwzN/2Q1xhCeggnAwbbF8xoJKLFnzoeSp1Y8D2fW0IaYkC
-	ZMgKH0k9i/yog315t8ziJvn43C54FFLDzS0Y+eSdBToWxaiz53a91ABGsyBHCXpp9Qz/sKn
-	xhzzD8RwU/HknuzK0+ZyQiw67BzTiIQvZ12XSt29k1gtuPGHFzH0W0xoOEQH8ScGJboO52z
-	lVrFVnVIyu5otIwELUNbGJ/8148xDH/GpRqgVxSTc0GpNnj3HIPOReaTUCbvs4Sfo7hs3IJ
-	gRFFjlzyBtb9InkAnXiuGICeM5ecmCVIncv6lDC7duf+XsRRmbj3FyaJDx68c4cQbNn1w8Y
-	UgE4LXB9w3nIsjd/7aCoO2jOPQw24an+WDbpajHnou/UzjBpXf1TY7ro5nG9fscIQeoHTIK
-	MbY4WcEnH2Xh/8Db7Y34kwNdbvSfFJNIY706G0q+090fNjyeOqIzQJBfjJdmxbzhAVu5YbJ
-	1/vss1ixpXhHlH5Ri/Ey7AckWNxIiU5PexlWp4Chv6kBcL3LVdI4RaQasWNHvbJBSyjnHe3
-	OJEoaLeG9+h729S/OaDwBr8r6WHX2i9L/8EwBW/pUWrvnTZG/1VC5CI9465/DzFbvsup2+P
-	z1ZLaygpwp7Jd38YNnqcY31AOYaN5dRrpH7vsQHuXn8p8STPTa0Eh3VdDuGwLgRjhFLkwm5
-	ZNIbTeZKc3wQeC3bSek7TNlpEZfe6RU3c8MphHdSbatPC43BKoRbqVLwMJBknXfA4FJ9+2q
-	/JFkSQp9+gHYwdttMS7iA0+INcrxzEKbd9WWKj4X/rTG8xhTGB8bjiNVwBp64k5Se46BcmW
-	liSGoQ7woHFE6Qjy2FFqrTMtRAHR2nJflR373o8k6SIpH/wUo4Gy6D8gCni1XcQSqSxsiec
-	4gCvNBxmnlzxBgoLAeuD4AxG5uJ3NdfOG/2JNZXg==
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-X-QQ-RECHKSPAM: 0
+	s=arc-20240116; t=1763607589; c=relaxed/simple;
+	bh=mJ6rSLRJjyPFehPPpN0MOSV2xZt4Vj1w9DGc50/dr4o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sEbQDBMOGAiAdJjvyr4z81/jrrRQshkrgs+SONiR1jYjDhBXuKZxgxTk5T1V3oBguotM9dArtQIyspbYa2IVGpGkhpQXiBmY8wuyQBVzX4SxiuoKj9RQE5HokljUpGkWxiuoH8k/N/e0QKJac6Ese+H41kmNKdgk4FNa9GYSfmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Jh0WprxP; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4ee1a3ef624so2820471cf.0
+        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 18:59:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1763607587; x=1764212387; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hg5aoV0EVn/WBTa/GLeR89EBuuTKQBaW9rd0EBCvO1c=;
+        b=Jh0WprxPSZY/M7TMX2Zd0l4dUSwKubKad2BrGmAdn/YqS2v5HDlzqdDKtTYiB+s3Ux
+         Li8TtvpkNDfFVLSWm92Zlqor92K3AJjYRk5UBF3EcisRMEG/VaPEJs4ojMI2QqWNJ2Pc
+         tEI2WA1qkxwJhoqJg2pfz/HWVsG7gypU7ypcPAVlyEeQ0u8XZ3s1dZo20jR9MwM/lqV3
+         WcpYiAtrboKfnc+Z4Wv4H0P6c5gYdsyOr/1/4wF15CAiGqFFUlTdbqVrcMRyBu91VITT
+         YvTiKXwHNKwO2mpPms2oboGO5EhUM5aV6nMt1tlgeyyXtiqHS/nk1xrQjEuMiJI67wBN
+         bh/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763607587; x=1764212387;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hg5aoV0EVn/WBTa/GLeR89EBuuTKQBaW9rd0EBCvO1c=;
+        b=LDvto+H3RZeHroLnGC/9ZG2SBfdHy7kZdOzyvwAevuMMjcxoaR7ZJBAowHxrvGvx7W
+         K5+GtT1b3mFV3QL1qndoxVs/VV8sLpx5YJNYhLOvGYIIr2CU2gmffhjAsY3++M7DWZe7
+         H1LSuDRDuJwqhr3TMQ1L+9Myq4A6balpwrk4ZvjmV2+guMGpdVAUUEuLMRqA2K/LxBBm
+         +JC5XHgeKhnIBQW1jawRI091Tt9H4+IWE2ksGG0O4L+q4Tee4wax44a/5+eVyXzkklm/
+         WNOKFuDXZsg6fh3PZHGPT4kv7+M/5o5L1AG0D9eZ0TXAkW+Cz/VpKO/aPm3wMNMOQH0R
+         NPxA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwkDbDa6TpIvyllzvWqMVkazozg4Obowz81m7ZMa9dqGx68RemtUYnWnt10gwC08VEWLGmxcQksjc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZxDAStgqeViu6mIK3/wovXio9mY2T9HygaT7BWvlS/lEnFZUf
+	ViCzFUARb2xvBrZhSI3ENxmsKFJxOUm6C7KklN0tFppw37Q4HkrCXhT4w0cFoZBYQw==
+X-Gm-Gg: ASbGncupk2/yGRdRwI1K53RYQZvHLQN3JFahe/iF0jpXyfpwAu2Y2bkr9h0Z1Mz1JI2
+	6eYLaF6wq2eJ9QcZXf291OTP2OF0MKqdApyhFuqT3JZ35oPUozM6IKKg6z4i9Br0ryih47mMyQm
+	3BPh/2NnH0YAvtsv29U7O+sjbk858hM8gMkn40b8kumiUBtfB0yeVOUjEI0CZSxW2ARqVcGDR7F
+	IYq4r+Kt8vK/q2/ua/3+ZuZ2WOzqNypwnuM9UA8SIFT9JvwYIxF6RmeUdsu1r+nLqgRzY3w0Haq
+	4vCBtCTZwBKJcTL9lcecFnx3KxuSz4nSaJMEav1H8ckZ4NUwWlrWb8zWjTCqyasf7hcqms416mD
+	FLn3B8kLOMv64GW9dK3BlRmq6hDXbvWXRBUIPsQ7W7sg60VfdN7MGn8r2L1Z4jtVpkTkmFnp+hP
+	p1y1gpdv6j5eA8
+X-Google-Smtp-Source: AGHT+IGA+dwSSxsq02AcHqmBlz3CVN3Av8o92KGu6tfzv0Cno0N6MuymXHzWKF5QrlQn2ae2vPgchg==
+X-Received: by 2002:ac8:7d53:0:b0:4ee:4512:4a24 with SMTP id d75a77b69052e-4ee4970ab4bmr25490311cf.72.1763607587087;
+        Wed, 19 Nov 2025 18:59:47 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::7632])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8846e599ac9sm8674486d6.49.2025.11.19.18.59.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Nov 2025 18:59:46 -0800 (PST)
+Date: Wed, 19 Nov 2025 21:59:42 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: david.laight.linux@gmail.com
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 28/44] drivers/usb/storage: use min() instead of min_t()
+Message-ID: <4208129f-a768-44e2-843f-309c50ea362f@rowland.harvard.edu>
+References: <20251119224140.8616-1-david.laight.linux@gmail.com>
+ <20251119224140.8616-29-david.laight.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251119224140.8616-29-david.laight.linux@gmail.com>
 
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+On Wed, Nov 19, 2025 at 10:41:24PM +0000, david.laight.linux@gmail.com wrote:
+> From: David Laight <david.laight.linux@gmail.com>
+> 
+> min_t(unsigned int, a, b) casts an 'unsigned long' to 'unsigned int'.
+> Use min(a, b) instead as it promotes any 'unsigned int' to 'unsigned long'
+> and so cannot discard significant bits.
+> 
+> In this case the 'unsigned long' value is small enough that the result
+> is ok.
+> 
+> Detected by an extra check added to min_t().
 
-The RK3399 EVB IND board has a Type-C interface DisplayPort.
-It use fusb302 chip as Type-C controller.
+In fact, min_t(T, a, b) cannot go wrong as long as all the types are 
+unsigned and at least one of a, b has type T or smaller.  Of course, in 
+this situation there's no reason not to simply use min().  (And if both 
+a and b have types larger than T, why would someone use min_t() like 
+this in the first place?)
 
-fusb302 chip ---> USB/DP PHY0 <----> CDN-DP controller
+Regardless, the patch is fine with me.
 
-Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
----
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-(no changes since v10)
+Alan Stern
 
-Changes in v9:
-- Add usb role switch for Type-C.
-- Remove USB2 PHY in Type-C connection.
-
-(no changes since v4)
-
-Changes in v3:
-- Fix wrong vdo value.
-- Fix port node in usb-c-connector.
-
-Changes in v2:
-- Add endpoint to link DP PHY and DP controller.
-- Fix devicetree coding style.
-
- .../boot/dts/rockchip/rk3399-evb-ind.dts      | 147 ++++++++++++++++++
- 1 file changed, 147 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts b/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts
-index 70aee1ab904c..be1e90f7a453 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts
-@@ -4,6 +4,7 @@
-  */
- 
- /dts-v1/;
-+#include <dt-bindings/usb/pd.h>
- #include "rk3399.dtsi"
- 
- / {
-@@ -19,6 +20,21 @@ chosen {
- 		stdout-path = "serial2:1500000n8";
- 	};
- 
-+	sound: sound {
-+		compatible = "rockchip,rk3399-gru-sound";
-+		rockchip,cpu = <&i2s0 &spdif>;
-+	};
-+
-+	vbus_typec: regulator-vbus-typec {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio1 RK_PC2 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc5v0_typec0_en>;
-+		regulator-name = "vbus_typec";
-+		vin-supply = <&vcc5v0_sys>;
-+	};
-+
- 	vcc5v0_sys: regulator-vcc5v0-sys {
- 		compatible = "regulator-fixed";
- 		enable-active-high;
-@@ -31,6 +47,11 @@ vcc5v0_sys: regulator-vcc5v0-sys {
- 	};
- };
- 
-+&cdn_dp {
-+	phys = <&tcphy0_dp>;
-+	status = "okay";
-+};
-+
- &cpu_b0 {
- 	cpu-supply = <&vdd_cpu_b>;
- };
-@@ -55,6 +76,12 @@ &cpu_l3 {
- 	cpu-supply = <&vdd_cpu_l>;
- };
- 
-+&dp_out {
-+	dp_controller_output: endpoint {
-+		remote-endpoint = <&dp_phy_in>;
-+	};
-+};
-+
- &emmc_phy {
- 	status = "okay";
- };
-@@ -341,6 +368,71 @@ regulator-state-mem {
- 	};
- };
- 
-+&i2c4 {
-+	i2c-scl-rising-time-ns = <475>;
-+	i2c-scl-falling-time-ns = <26>;
-+	status = "okay";
-+
-+	usbc0: typec-portc@22 {
-+		compatible = "fcs,fusb302";
-+		reg = <0x22>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <RK_PA2 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&usbc0_int>;
-+		vbus-supply = <&vbus_typec>;
-+
-+		usb_con: connector {
-+			compatible = "usb-c-connector";
-+			label = "USB-C";
-+			data-role = "dual";
-+			power-role = "dual";
-+			try-power-role = "sink";
-+			op-sink-microwatt = <1000000>;
-+			sink-pdos =
-+				<PDO_FIXED(5000, 2500, PDO_FIXED_USB_COMM)>;
-+			source-pdos =
-+				<PDO_FIXED(5000, 1500, PDO_FIXED_USB_COMM)>;
-+
-+			altmodes {
-+				displayport {
-+					svid = /bits/ 16 <0xff01>;
-+					vdo = <0x00001c46>;
-+				};
-+			};
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					usbc0_orien_sw: endpoint {
-+						remote-endpoint = <&tcphy0_orientation_switch>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					usbc0_role_sw: endpoint {
-+						remote-endpoint = <&dwc3_0_role_switch>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					dp_altmode_mux: endpoint {
-+						remote-endpoint = <&tcphy0_typec_dp>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &i2s2 {
- 	status = "okay";
- };
-@@ -354,6 +446,16 @@ &io_domains {
- };
- 
- &pinctrl {
-+	usb-typec {
-+		usbc0_int: usbc0-int {
-+			rockchip,pins = <1 RK_PA2 RK_FUNC_GPIO &pcfg_pull_up>;
-+		};
-+
-+		vcc5v0_typec0_en: vcc5v0-typec0-en {
-+			rockchip,pins = <1 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	pmic {
- 		pmic_int_l: pmic-int-l {
- 			rockchip,pins = <1 RK_PC5 RK_FUNC_GPIO &pcfg_pull_up>;
-@@ -400,10 +502,48 @@ &sdmmc {
- 	status = "okay";
- };
- 
-+&sound {
-+	rockchip,codec = <&cdn_dp>;
-+	status = "okay";
-+};
-+
-+&spdif {
-+	status = "okay";
-+};
-+
- &tcphy0 {
- 	status = "okay";
- };
- 
-+&tcphy0_dp {
-+	mode-switch;
-+
-+	port {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		tcphy0_typec_dp: endpoint@0 {
-+			reg = <0>;
-+			remote-endpoint = <&dp_altmode_mux>;
-+		};
-+
-+		dp_phy_in: endpoint@1 {
-+			reg = <1>;
-+			remote-endpoint = <&dp_controller_output>;
-+		};
-+	};
-+};
-+
-+&tcphy0_usb3 {
-+	orientation-switch;
-+
-+	port {
-+		tcphy0_orientation_switch: endpoint {
-+			remote-endpoint = <&usbc0_orien_sw>;
-+		};
-+	};
-+};
-+
- &tcphy1 {
- 	status = "okay";
- };
-@@ -461,7 +601,14 @@ &usb_host1_ohci {
- };
- 
- &usbdrd_dwc3_0 {
-+	usb-role-switch;
- 	status = "okay";
-+
-+	port {
-+		dwc3_0_role_switch: endpoint {
-+			remote-endpoint = <&usbc0_role_sw>;
-+		};
-+	};
- };
- 
- &usbdrd3_0 {
--- 
-2.51.1
-
+> Signed-off-by: David Laight <david.laight.linux@gmail.com>
+> ---
+>  drivers/usb/storage/protocol.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/storage/protocol.c b/drivers/usb/storage/protocol.c
+> index 9033e505db7f..0cff54ad90fa 100644
+> --- a/drivers/usb/storage/protocol.c
+> +++ b/drivers/usb/storage/protocol.c
+> @@ -139,8 +139,7 @@ unsigned int usb_stor_access_xfer_buf(unsigned char *buffer,
+>  		return cnt;
+>  
+>  	while (sg_miter_next(&miter) && cnt < buflen) {
+> -		unsigned int len = min_t(unsigned int, miter.length,
+> -				buflen - cnt);
+> +		unsigned int len = min(miter.length, buflen - cnt);
+>  
+>  		if (dir == FROM_XFER_BUF)
+>  			memcpy(buffer + cnt, miter.addr, len);
+> -- 
+> 2.39.5
+> 
 
