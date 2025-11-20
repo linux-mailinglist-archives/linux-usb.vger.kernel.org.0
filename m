@@ -1,184 +1,117 @@
-Return-Path: <linux-usb+bounces-30769-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30770-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3F97C71FF7
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 04:33:59 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73E75C7253C
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 07:23:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 97F702B397
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 03:33:57 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7600334C3B8
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 06:21:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D1F2E7F00;
-	Thu, 20 Nov 2025 03:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6020F28D8DF;
+	Thu, 20 Nov 2025 06:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="olHkaj1F"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LuFl3nux"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259E52DCF71
-	for <linux-usb@vger.kernel.org>; Thu, 20 Nov 2025 03:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884D7283151
+	for <linux-usb@vger.kernel.org>; Thu, 20 Nov 2025 06:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763609628; cv=none; b=jTBFrchjun7UXnmrDM+CCeVoIMkzK1xRBDao/iLeX73PaY4tSAsk0Xdt99nyqZyWkhM202rCbmsFMKM531k+QL2reODaknrRom5SB2XI0Mz9g9auI0N77dfLYHyDYALgeiJ7fX+qc5uzWgC4O39pph0UE2Cz53iNc+yq9i4OGJA=
+	t=1763619704; cv=none; b=ajKVziABs0l/as7gvcgHx+QyvViys7THM2IVjpA/R05vD6+4amtjybJi4B/jsLfXVhMUEbyMqmPKpuGqdTT1W3kS9FsZaR44EFuzV96fYwhypeaPJfTBBFksZsXtG+Pw26tItHmeGDEL/urQWeBrxODQnUZ99yj9w+kQ4S9y2+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763609628; c=relaxed/simple;
-	bh=c4qb+fotShdtlLxPqtxXLntQf20vEAp5tknmYAoo0Dk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ssNAjmRmVomSr5Qf/6hf8QpI6dnN8qrJkDzpsaw6j01c2acmVT/SUYSct3S1XL50X8msi3WgoA7bcar76RTbCniQWS1e5jThWuyWHvDGcT+LU0aNbznDMNuoIX2UusN4orLIbgmL0e0kit9kvnNALrvA/v6Ft+Fnl9/gp2YfPGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=olHkaj1F; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8b28f983333so40918785a.3
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 19:33:46 -0800 (PST)
+	s=arc-20240116; t=1763619704; c=relaxed/simple;
+	bh=rCFICJxIc54ngCiIlBR6RAyfMbPDx0nv3IodpOq/+lY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Y/9MU24chQLJOV+o3QRUfaCMCW47O4f2aXh72BwEBpkjVhbwYX/UdVdWM+c9EbHI8R/fHARL1yJJ0tETtTMQ5x9SWSGncnjiy44haCP2tx7ocxHdx4QpdvRmksi7N67PkTmiFkRxnABKdBiZ+qOVDNcMRZmUXermTjU/J37Thf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LuFl3nux; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-343ee44d89aso718830a91.2
+        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 22:21:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1763609626; x=1764214426; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Po3nWzBR7b5wfTW9kvRDG15juDb9jkcpoW9chiUBsA=;
-        b=olHkaj1FrwOyqwJntdWJ56zNFbN07LSqVCz/Vg8FZw2LknCC5kvIe+3zQKt+K9P60u
-         35MUmVC383vzoVpWIPI9yg7tYlD2YCtaot0U8uUvAF1Kxpaw0QnprqNpzDNgNx5OihVy
-         JK9uTdUf/YNUG3ubPpVQgkNdU/pQgbleEZUShMdbyGIwa0Jr0LqosD50BdrCZjdXEyWz
-         67O+owNhpZW7ee5gW0T5llJ2rBbjvnzqysTyz15jBjpkD9Y1Q+c4A0fAH/PAf4E2xzKn
-         /eEadEiecMzu15kcsIoA/W/ZMko5jG8Ayj48tuJ/JEl9JJet0QY/WWLdvser/QOgA5OV
-         tZaA==
+        d=gmail.com; s=20230601; t=1763619702; x=1764224502; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=B1u+S26kKhgouAEsV6adZ9b+HeJMglqKEoK8fF795p4=;
+        b=LuFl3nuxfwqAEhvZ3ZUqnlZBLW+RRTAxEU/HAmLuLWEj5wHWw4IhQXcL40YMvlJnor
+         DFgO3Oq/59dUmwnupJFu9H+bv5xREt8kZ/rC5ensrEPkhtZcPjjYE4NrZKerBHen9LsV
+         gEnI4Pcf/VjffV0Z34G1cSsU5POlZP4hXD3GVKvJ6nJYZZriPJ6lb9fo7/F53XWepbbX
+         sCYWr8ECsD9yfsemdxaATUz4B//832xl1OP+nC88pOqKcGA+JfSSqJl0KKIyAn0jtght
+         3Vnmndhf7nLwx9FdcVdbzBc40XupxwJ87qMULrIBBsO7SiEeVKlXRtYDSsXZB3HKcgMm
+         Pxmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763609626; x=1764214426;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3Po3nWzBR7b5wfTW9kvRDG15juDb9jkcpoW9chiUBsA=;
-        b=Y2n9LKms5c4dk3JyTUP/gFApolK8UhQLrejBLxhgcQ+8/YO0TXVp4C4VRue25j7VKK
-         RJh2jmnu8pgv2TOunJZZU4+zAXAi/Vvh9maisGQqVfsoIGMUlib+CGIHwUOijVeUiYZp
-         z23f5TD91pyKD2Muznvw1Y5qdtnpz8bPI8Zih7AZpoNsewpn1IBYhA9MnA41afZuER9o
-         lT4GPWh8Y08bBv93VusiOTd9m0brXfe1pmLZIpJMcFKPftq2702oxgWd3wNxOZ5ifu6E
-         DTbFJ/BUWvIUUIFH/HHE0sqzXFBc/SVvGJfXTPrhjwdd05gXSRcFlyNrpK45+Rzn3i/9
-         epEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWarIjmGEiMW92y0HjIEEab+YQlPwLWyX51MJUbViozYXvhcU4ORWRLQrf7ehHfizV5FUvX1uw23uw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfuU5e06K7o2CXFgFdTww6aEmw5ceXs4pUDK3K5XPM06LbRUHF
-	aTMF84prllWbIxhWnWV0HQi0/lPb8PoOgNnfd8uIzTuVD35QlqXjMr5VJZnvH6K6Ig==
-X-Gm-Gg: ASbGncub/ws8bUIs54VPPxeyTFdMBQDEeJ51UlEwpUgkrFjmQwYfFeRvDVCaT5CApBK
-	e+zlxVCXCTzG/aMKoexwMu9ApSYHWMij6BVvM/isiRE9ARLOOvxwPLe0m6I50YPHyH8xrtJ/qvX
-	CsXjhoGihOG2VNjclw178CGBZq1rLqqbVl0PYw2MAxX0lPgj+rYJSIR4fioFo3C76h2Bq3LrQEs
-	81LkMSE0+s3Z10aTrOK8QC7AgAjJ+rG+v67rtrBjVkJwcx4UBBx0O5xRPS4ooz79RKZUi4ozsF+
-	s3VEPOydUoWqq9135nljV243zJVh4Dgjp6AUMQ9EnTrrgUZTimC9/emzuy7paJ80QWDqq8OBWUJ
-	ouzxC4SfXUWiupINZ76n5NuNSnPK0723Pp6SBhqwDrtzNXTcf4Yx7gNABGb32gT0HjXmmPZDobZ
-	rA07IajFxvkA+5
-X-Google-Smtp-Source: AGHT+IHerc4oDiWRogp2WdCDE8/RYtX/ivFYZddOHU/efmu8diRGdlG759+ncTBWZ25cA9/xfK8/3A==
-X-Received: by 2002:a05:620a:1a23:b0:89f:66a7:338a with SMTP id af79cd13be357-8b327311986mr241888985a.22.1763609625832;
-        Wed, 19 Nov 2025 19:33:45 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::7632])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b32932ba76sm78537285a.4.2025.11.19.19.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 19:33:45 -0800 (PST)
-Date: Wed, 19 Nov 2025 22:33:42 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Selvarasu Ganesan <selvarasu.g@samsung.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>,
-	"dh10.jung@samsung.com" <dh10.jung@samsung.com>,
-	"naushad@samsung.com" <naushad@samsung.com>,
-	"akash.m5@samsung.com" <akash.m5@samsung.com>,
-	"h10.kim@samsung.com" <h10.kim@samsung.com>,
-	"eomji.oh@samsung.com" <eomji.oh@samsung.com>,
-	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-	"thiagu.r@samsung.com" <thiagu.r@samsung.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Prevent EPs resource conflict
- during StartTransfer
-Message-ID: <2b944e45-c39a-4c34-b159-ba91dd627fe4@rowland.harvard.edu>
-References: <CGME20251117160057epcas5p324eddf1866146216495186a50bcd3c01@epcas5p3.samsung.com>
- <20251117155920.643-1-selvarasu.g@samsung.com>
- <20251118022116.spdwqjdc7fyls2ht@synopsys.com>
- <f4d27a4c-df75-42b8-9a1c-3fe2a14666ed@rowland.harvard.edu>
- <20251119014858.5phpkofkveb2q2at@synopsys.com>
- <d53a1765-f316-46ff-974e-f42b22b31b25@rowland.harvard.edu>
- <20251120020729.k6etudqwotodnnwp@synopsys.com>
+        d=1e100.net; s=20230601; t=1763619702; x=1764224502;
+        h=to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B1u+S26kKhgouAEsV6adZ9b+HeJMglqKEoK8fF795p4=;
+        b=oXsIEFcPVturrkh/cNslhxg04wWAl73mZaXakaXjsfnFARDfrz+cMiy8QG32LzEz7L
+         LybVxtsP1bX6zp95lILpRJO8qgyB0NKcudzda+VmGHNUcn81SfNN8edC/SaELeUYfmHz
+         VIIk5Ezewr2c0DDLu/aIIjfoKkyftNf5N3RaKNrXvXrXZq20f4uz23rpU2HZvHUHUcsP
+         VF0qgB5dr2lbdB1mtIIhp5Tv/pzT2WRNGa6TL6LCnduAvh22+RxFpIVIM6SLi0zCxQEz
+         y+ASTdIiQ4C5ABALnqYFyDGB3PeRJenm5j7d4NtFSH0GIkVqBc1NvT9PQgNLzkjvDEwk
+         6vwQ==
+X-Gm-Message-State: AOJu0Yy7XdW9XcVtbpfXhBt/92rVpoqd+1z7SXSpdbBqS6Qf4n4z9HUu
+	rtB/Dg9qE24OU8NgcN+C/epXRsoSzdEQ0x3oYWlgu8tT+ryz3Z7D5wS5NERnCrkXBx6zYj3EUVp
+	KoVlGAom/LcCJ28kAax92+3XZ7b+VtdDJNLli
+X-Gm-Gg: ASbGncvRPqnHSL6tzZCnwdRJEsuMTEnvV1SAVmBEzc59dDeWAehS/r0EvRmX9axnX06
+	rgGnz708drCeNsNCW6kaBXTzNsvFv6vygNHFsBAlQg6e/R0RR2kbuihv8dZvSoFsOYn2JXgar0E
+	Itn/UFhRA9+3p+b+6ftr3qBr7G+Dc+knpUwwW5WGMBfcjORfmuSLCQAewFXLMN8Lqo31uyLc2og
+	XU8hVESGVYipzaqFBJxjhu2JCkwBI4C2dgvGHy/cPtDR+2K3Of8UR5ELGSjMQL2teovO0M=
+X-Google-Smtp-Source: AGHT+IEQpLXGOEcWRN1mfyJ0bwmJL7iPXXnxKUCpvGydz8B8nCp11QAC+J2TrqVRDCyWchQ6s13gdKlkCGwimXiMVvE=
+X-Received: by 2002:a17:90b:5546:b0:330:a228:d2c with SMTP id
+ 98e67ed59e1d1-347283a2250mr2074719a91.15.1763619702367; Wed, 19 Nov 2025
+ 22:21:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251120020729.k6etudqwotodnnwp@synopsys.com>
+From: stealth <oleg.smirnov.1988@gmail.com>
+Date: Thu, 20 Nov 2025 08:21:05 +0200
+X-Gm-Features: AWmQ_bkRAqHZzHydZxHHvdfPxoMYizXzpzv2oR6WHQw7sr8xo0IKOTlOwdQsvGU
+Message-ID: <CAKxjRRxhC0s19iEWoN=pEMqXJ_z8w_moC0GCXSqSKCcOddnWjQ@mail.gmail.com>
+Subject: 
+To: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 20, 2025 at 02:07:33AM +0000, Thinh Nguyen wrote:
-> > Function drivers would have to go to great lengths to guarantee that 
-> > requests had completed before the endpoint is re-enabled.  Right now 
-> > their ->set_alt() callback routines are designed to run in interrupt 
-> > context; they can't afford to wait for requests to complete.
-> 
-> Why is ->set_alt() designed for interrupt context? We can't expect
-> requests to be completed before usb_ep_disable() completes _and_ also
-> expect usb_ep_disable() be able to be called in interrupt context.
-
-->set_alt() is called by the composite core when a Set-Interface or 
-Set-Config control request arrives from the host.  It happens within the 
-composite_setup() handler, which is called by the UDC driver when a 
-control request arrives, which means it happens in the context of the 
-UDC driver's interrupt handler.  Therefore ->set_alt() callbacks must 
-not sleep.
-
-> > The easiest way out is for usb_ep_disable() to do what the kerneldoc 
-> > says: ensure that pending requests do complete before it returns.  Can 
-> > dwc3 do this?  (And what if at some time in the future we want to start 
-> 
-> The dwc3 can do that, but we need to note that usb_ep_disable() must be
-> executed in process context and might sleep. I suspect we may run into
-> some issues from some function drivers that expected usb_ep_disable() to
-> be executable in interrupt context.
-
-Well, that's part of what I meant to ask.  Is it possible to wait for 
-all pending requests to be given back while in interrupt context?
-
-> > using an asynchronous bottom half for request completions, like usbcore 
-> > does for URBs?)
-> 
-> Which one are you referring to? From what I see, even the host side
-> expected ->endpoint_disable to be executed in process context.
-
-I was referring to the way usb_hcd_giveback_urb() uses system_bh_wq or 
-system_bh_highpri_wq to do its work.  This makes it impossible for an 
-interrupt handler to wait for a giveback to complete.
-
-If the gadget core also switches over to using a work queue for request 
-completions, it will then likewise become impossible for an interrupt 
-handler to wait for a request to complete.
-
-> Perhaps we can introduce endpoint_flush() on gadget side for
-> synchronization if we want to keep usb_ep_disable() to be asynchronous?
-> 
-> > 
-> > Let's face it; the situation is a mess.
-> > 
-> 
-> Glad you're here to help with the mess :)
-
-To do this right, I can't think of any approach other than to make the 
-composite core use a work queue or other kernel thread for handling 
-Set-Interface and Set-Config calls.  
-
-It would be nice if there was a way to invoke the ->set_alt() callback 
-that would just disable the interface's endpoints without re-enabling 
-anything.  Then the composite core could disable the existing 
-altsetting, flush the old endpoints, and call ->set_alt() a second time 
-to install the new altsetting and enable the new endpoints.  But 
-implementing this would require us to update every function driver's 
-->set_alt() callback routine.
-
-Without that ability, we will have to audit every function driver to 
-make sure the ->set_alt() callbacks do ensure that endpoints are flushed 
-before they are re-enabled.
-
-There does not seem to be any way to fix the problem just by changing 
-the gadget core.
-
-Alan Stern
+[3266355.209532] usb 1-3: new high-speed USB device number 10 using xhci_hcd
+[3266355.333031] usb 1-3: New USB device found, idVendor=0603,
+idProduct=8611, bcdDevice= 1.00
+[3266355.333040] usb 1-3: New USB device strings: Mfr=1, Product=2,
+SerialNumber=3
+[3266355.333043] usb 1-3: Product: YICARCAM
+[3266355.333045] usb 1-3: Manufacturer: XIAO-YI
+[3266355.333047] usb 1-3: SerialNumber: 966110000000100
+[3266355.338621] usb-storage 1-3:1.0: USB Mass Storage device detected
+[3266355.338817] usb-storage 1-3:1.0: Quirks match for vid 0603 pid 8611: 4000
+[3266355.338821] usb-storage 1-3:1.0: This device (0603,8611,0100 S 06
+P 50) has unneeded SubClass and Protocol entries in unusual_devs.h
+(kernel 6.16.10-arch1-1)
+                    Please send a copy of this message to
+<linux-usb@vger.kernel.org> and <usb-storage@lists.one-eyed-alien.net>
+[3266355.339525] scsi host6: usb-storage 1-3:1.0
+[3266356.351895] scsi 6:0:0:0: Direct-Access     XIAO-YI  YICarCam
+         PQ: 0 ANSI: 5
+[3266356.364249] sd 6:0:0:0: [sdd] 61071360 512-byte logical blocks:
+(31.3 GB/29.1 GiB)
+[3266356.364423] sd 6:0:0:0: [sdd] Write Protect is off
+[3266356.364427] sd 6:0:0:0: [sdd] Mode Sense: 2b 00 00 08
+[3266356.366194] sd 6:0:0:0: [sdd] Write cache: disabled, read cache:
+disabled, doesn't support DPO or FUA
+[3266356.388784]  sdd: sdd1
+[3266356.388962] sd 6:0:0:0: [sdd] Attached SCSI removable disk
+[3266357.036652] usb 1-3: USB disconnect, device number 10
+[3266357.036891] sd 6:0:0:0: [sdd] tag#0 FAILED Result:
+hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+[3266357.036899] sd 6:0:0:0: [sdd] tag#0 CDB: Read(10) 28 00 03 a3 df
+fa 00 00 01 00
+[3266357.036902] I/O error, dev sdd, sector 61071354 op 0x0:(READ)
+flags 0x80700 phys_seg 1 prio class 2
+[3266357.042515] Buffer I/O error on dev sdd, logical block 7633919,
+async page read
 
