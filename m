@@ -1,225 +1,124 @@
-Return-Path: <linux-usb+bounces-30771-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30772-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9620FC72A52
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 08:46:23 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC1FAC72C0F
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 09:18:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E59DF4E7FD2
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 07:44:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 0D4BB2937E
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Nov 2025 08:18:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26738307AF7;
-	Thu, 20 Nov 2025 07:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55782EB87C;
+	Thu, 20 Nov 2025 08:17:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DuQ3m5I9";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Weq89nje"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kpW7Ue26"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076663081A1
-	for <linux-usb@vger.kernel.org>; Thu, 20 Nov 2025 07:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192CD23D7EA;
+	Thu, 20 Nov 2025 08:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763624684; cv=none; b=FyO8xAyvaVBZO1JV5ARRUhc+rdxzOdgolYHgxb6GP5dBoxNFkiyRx/ZgS8x6dA2KFWgvgE9haJoBCGi+F+m2T/8SJcbwThWLQ8aDjWUJmYSlsxfeqMLUrQ/6+QMknUOJTErbboKcnvj35oEno6apkwOODHTc6vaDV1iORnwCE+o=
+	t=1763626673; cv=none; b=sVCoP6FdYn9D44kHj8mzEx3JhUO+IIThj/Qh1+n+gvQnbhug+ySjfwpqGsnAc5LmwYoz2m6S+VSWZZ/vNyZoGfECR3+p6MjNHyw9kE4QU8+tuthLaSu3kembDGxlIBmEP3+DRSgme3txRZD0iM0fBXCqA7magF9jWnq8gD0emfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763624684; c=relaxed/simple;
-	bh=ha1erIMdzZdv5qvcs4mgGl9s5O9EkMelYJ+RUiGUGwk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tRskUYWIaKaghRUR1m9MNFP+1D4zdJM8mwqzXWZWpPRrNFSvSWWs85Z+XZFXiB5RgcoKB00wdU24Qchq4gW8CVU61s3ycWMkCaMfrSOntVWyxU5EkXRUDBVQE9XR2LqxyA71stICOB1bwCLlb2UgpRknLplR1Zafdcc+/k/ODd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DuQ3m5I9; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Weq89nje; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AK4plgh4032029
-	for <linux-usb@vger.kernel.org>; Thu, 20 Nov 2025 07:44:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=R8oPQ2tIzfsyrcfU58tcXlwJCxNHgkaZsEO
-	zWR4XC+k=; b=DuQ3m5I93fCJryCzzlJ29LN7IJWhLGTn6eOvjut8mlCHd8E3iQJ
-	Voc6bPA5vTmoUhCKWJbs07POyEjhX1Yn1FrEpU5i+GntQwFctdF4GFLYNuA1M+Ja
-	eQysV5gqpH+/YE8tB8WnyK93DFKctf2Q84bUHluQjRHWDba4fGwiRvu5B4A0nHCz
-	QU2n1x4j6mEelEBLV6xkWaJAncG0LMDn8x6RVnkbm+oxfDfraOYb0DWLCNNh6AQ2
-	L0nfsZ4FGnU2igudxt8hKCUPYDpgnmXA7uYTXU4K/AGmLhwOOzgG1vo0hN5y604u
-	yjza5ju7x1rpXmEAe0M15CJ7VPqRs/uadpg==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ah6fgch71-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 20 Nov 2025 07:44:41 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-340c0604e3dso677596a91.2
-        for <linux-usb@vger.kernel.org>; Wed, 19 Nov 2025 23:44:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1763624681; x=1764229481; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8oPQ2tIzfsyrcfU58tcXlwJCxNHgkaZsEOzWR4XC+k=;
-        b=Weq89njes46T6WjrZgUN/f8KfO+7si0yX92uarU3Kdxwf2NCuTplUB1cOv7Hw0vqiS
-         CblTfWrnMX1ULChmjb3tctmOdt0a/tgO/AGK/Q2hq/0oQB3uMYCVg30mRdde9dbLD9z+
-         vGcu59eu4YZB3urPapBVKgq06ZgtVtAkLRUQUbYz2u1cv0adf5FIWURGsH4XSxKBHHsL
-         tqKhtLYy9ywVnS+r484RxgyB+4OpP2E7/L4e2knqz32V6HTVktN97tKgQkLD7Jz6vqNA
-         smKTEzWk7OMX7o3pPmwWlUmaRv7Yhknt2CCvwDYr6DYKQsR26eBDguK+CMs29CZqsv7n
-         W/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763624681; x=1764229481;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R8oPQ2tIzfsyrcfU58tcXlwJCxNHgkaZsEOzWR4XC+k=;
-        b=RicDDPkMd0sCrE3ITgm8R/0x8L87QNYu01RXI5SG8K2v4Ts0P4POHLZTogiVCPRgD4
-         vdWvIwsQg2bFZso5l/XKwcQ5lx1httMTfb8JUihVL81qXAnc+29Ai6awW41MFN45irWj
-         TwUpiLFJjTZ80mmuSWA5PeqCUlDIzCKqAYt444Wi1zOTsgSBJs4S+PVL4toOkw84uqeH
-         KV0873bj37mSNROqS1GGqn7t0FPnLiKpSwyxhtCn9bohaM28rYbHtxw8j1vvQxnMGK3i
-         yFDeM4/5cVaUz4nn+/XqadQ5oknDuuqJKG2pMClgoIuxDsrDaWJCKfRORmmKwbLhCmK3
-         rEIQ==
-X-Gm-Message-State: AOJu0YwNk3bUmKHRgNpsM8bWFWSwWo/uwxeXZDXgqMQ+qyQnfFsoanrI
-	5Q/EmiRgxpvlCltZPIqoeDWaysPgyrR6ud6Cyvvym1+sgdvPhTD5TA4YPBV+86pW2Wpd/acgnBJ
-	lxvyKKU82NMVbvVRp3xhpsfx2KlrG9Sizyxu+GVsz8kNz0JdBsEUdcoDzJ7XV5dM=
-X-Gm-Gg: ASbGncsdMAUgnn5qqUBl5GV0Ho8IIVqz6+n8CMqzwpO6n968+pQtPS3JP+tN2NcNSo4
-	nTdEjCklBXmBygRidyJOJxpyJG1XqXeC3otO09cqhkoFw8dotHdV0BHfLy6h7FaF2F0Ebiss+zm
-	+T3yMLu5pUUy5a00laHVqqnCnLbb3bd0PgouYkivXG96WwJ5UpumPfzaXhognGg4etLQ1yx0YRi
-	q3r0O265nPBNZxZXB4/AvyeMpgoWvwsmI/sU3Nx1IV1zPFjjA+hxSdK+CLhUH3ijxZCkHunnjbV
-	LlauoMvlGZIryiCJ+dQ9eT7Ij8Vyf1OCuxfSyI7Ds35SrdXOorNXknqFCZ7KInqEubYrvUgrtsG
-	qQajyxX5VpFP9q3LWYud+pkoFH7gkibydcGr6J9LNH1d8UAq3mh8Qkn3TP7KtUrPkABgXyjE=
-X-Received: by 2002:a17:90b:4a47:b0:340:d578:f2a2 with SMTP id 98e67ed59e1d1-34727bca163mr2514964a91.6.1763624680756;
-        Wed, 19 Nov 2025 23:44:40 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IElExYVG2exYQ0DILRMUl6ASzBzwHJ3cf6tAOs+E2g7W3itb6uI8bJAZEOi8X3h87htoUbTFA==
-X-Received: by 2002:a17:90b:4a47:b0:340:d578:f2a2 with SMTP id 98e67ed59e1d1-34727bca163mr2514949a91.6.1763624680240;
-        Wed, 19 Nov 2025 23:44:40 -0800 (PST)
-Received: from hu-mnagar-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34727c4b663sm1475067a91.9.2025.11.19.23.44.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 23:44:39 -0800 (PST)
-From: Manish Nagar <manish.nagar@oss.qualcomm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v3] usb: dwc3: Fix race condition between concurrent dwc3_remove_requests() call paths
-Date: Thu, 20 Nov 2025 13:14:35 +0530
-Message-Id: <20251120074435.1983091-1-manish.nagar@oss.qualcomm.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1763626673; c=relaxed/simple;
+	bh=vCh0Nf9ol/SJ8LORneyZFWOq+kGqweHI+LiY7Sod7EY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dyH8vpWaiGO+ifCDKpI7wRk3w5vnuXtFddHSF+FOmLjR/Wi+ZftIWMpYlv1p3X+MMJHk7RWlyT11Q84rXpHfvOpbngPfydtNMZIsoofk9K3FcB0HdJ3vmkqB81edEURVUVLh2CnJlKqNdZGpR+G9NhkuPqJxfbsCVqQ+onEClYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kpW7Ue26; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1C1C4CEF1;
+	Thu, 20 Nov 2025 08:17:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763626671;
+	bh=vCh0Nf9ol/SJ8LORneyZFWOq+kGqweHI+LiY7Sod7EY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kpW7Ue26N0TujXycX/gjDfNHp8Uup9OzwpT01gMm2Ae9M94LKOK393piRsqZVieED
+	 Ai2yZe2evN3jXQG4g5R9DD3dFp3Tk95SdGBB8zpau3tLuvsZF86ieQwxfWrpCvuHnl
+	 Hy/vvTpE6d7VLJ5oyQ0AEieg148Qb69/T2/T3GfnF9yK+Mam8qEADjAxHQHuALTUw+
+	 AYA8os2aXRWfVaQZJ/Obg45FEndp+3bgiyaty3W91Hm2xAKE/QklRqoM9YYeLtdwqi
+	 bRWF8O1X3V39DLllsfceQ5sdmHTI16jae3zzF+1VRnLOFU40krHrTT7kgSWLB7vi0l
+	 sK4WQOi/kxAmw==
+Date: Thu, 20 Nov 2025 09:17:49 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, michal.simek@amd.com, Thinh.Nguyen@synopsys.com, 
+	p.zabel@pengutronix.de, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, git@amd.com
+Subject: Re: [PATCH 1/3] dt-bindings: usb: dwc3-xilinx: Add MMI USB support
+ on Versal Gen2 platform
+Message-ID: <20251120-affable-markhor-of-authority-a9e63c@kuoka>
+References: <20251119193036.2666877-1-radhey.shyam.pandey@amd.com>
+ <20251119193036.2666877-2-radhey.shyam.pandey@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 6xQD8L35zc1NGHKq918E8Xndd9OebfSe
-X-Authority-Analysis: v=2.4 cv=ZKHaWH7b c=1 sm=1 tr=0 ts=691ec6e9 cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=jIQo8A4GAAAA:8 a=ohm9b1kf839YKAti0RMA:9
- a=iS9zxrgQBfv6-_F4QbHw:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTIwMDA0NCBTYWx0ZWRfX9m+TYQNWDCpg
- Ir7NU9gnMQoM8OpFqgi/j66xEv+OT3CXGM48YoUuM4aWOpMDTU2gvEFMYTxfcvRyGrw135tgaMv
- iAUyXXaWs6xEuCVcMdfBFn2sqBHIa6XqV4gROVn05JVxZKYCAFJZUvUVss9bHOEQdhuy3FqkO+A
- ZMYdBmkAVVpHppZdLWxXPnJ5LZWDU/QnuYVtUmJtFrXoRFY3sl0w67NZslRCuOjCQ03epDJRHFP
- /K90gwsDbMA7dHqQ7kn7KL4qCTG6I9QfajjDsMYX65Z5iOnvfDfGNmGwFUUdrRTMhC+3xwUOWSy
- IYWR8gDLDNr2UQJkLBsYz5S3x1LozhKcgWCUxwUm56v86O635doLcFumx9S8mh/mWmtHAMfaCnY
- v4I9j+QxPxMOrnstmhU8Dd9QsuQmBQ==
-X-Proofpoint-ORIG-GUID: 6xQD8L35zc1NGHKq918E8Xndd9OebfSe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-20_02,2025-11-18_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 clxscore=1015 priorityscore=1501 impostorscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511200044
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251119193036.2666877-2-radhey.shyam.pandey@amd.com>
 
-This patch addresses a race condition caused by unsynchronized
-execution of multiple call paths invoking `dwc3_remove_requests()`,
-leading to premature freeing of USB requests and subsequent crashes.
+On Thu, Nov 20, 2025 at 01:00:34AM +0530, Radhey Shyam Pandey wrote:
+> Versal Gen2 platform multimedia integrated (MMI) module has a USB3.2 Gen
+> 2x1 Dual Role Device IP. Introduce a new compatibility string to support
+> it and make reg optional as the register space for USB wrapper IP is moved
+> to MMI System-Level Control registers.
+> 
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> ---
+>  .../devicetree/bindings/usb/dwc3-xilinx.yaml  | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> index d6823ef5f9a7..502294649a6b 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> @@ -15,6 +15,7 @@ properties:
+>        - enum:
+>            - xlnx,zynqmp-dwc3
+>            - xlnx,versal-dwc3
+> +          - xlnx,versal2-mmi-dwc3
 
-Three distinct execution paths interact with `dwc3_remove_requests()`:
-Path 1:
-Triggered via `dwc3_gadget_reset_interrupt()` during USB reset
-handling. The call stack includes:
-- `dwc3_ep0_reset_state()`
-- `dwc3_ep0_stall_and_restart()`
-- `dwc3_ep0_out_start()`
-- `dwc3_remove_requests()`
-- `dwc3_gadget_del_and_unmap_request()`
+All other cases were calling your SoC "versal2", not "versal2-mmi".
 
-Path 2:
-Also initiated from `dwc3_gadget_reset_interrupt()`, but through
-`dwc3_stop_active_transfers()`. The call stack includes:
-- `dwc3_stop_active_transfers()`
-- `dwc3_remove_requests()`
-- `dwc3_gadget_del_and_unmap_request()`
+Add here missing blank line.
 
-Path 3:
-Occurs independently during `adb root` execution, which triggers
-USB function unbind and bind operations. The sequence includes:
-- `gserial_disconnect()`
-- `usb_ep_disable()`
-- `dwc3_gadget_ep_disable()`
-- `dwc3_remove_requests()` with `-ESHUTDOWN` status
+>    reg:
+>      maxItems: 1
+>  
+> @@ -37,8 +38,9 @@ properties:
+>        A list of phandle and clock-specifier pairs for the clocks
+>        listed in clock-names.
+>      items:
+> -      - description: Master/Core clock, has to be >= 125 MHz
+> -          for SS operation and >= 60MHz for HS operation.
+> +      - description: Master/Core clock, has to be >= 156.25MHz in SSP
+> +          mode, >= 125 MHz for SS operation and >= 60MHz for HS
+> +          operation.
+>        - description: Clock source to core during PHY power down.
+>  
+>    clock-names:
+> @@ -87,7 +89,6 @@ patternProperties:
+>  
+>  required:
+>    - compatible
+> -  - reg
 
-Path 3 operates asynchronously and lacks synchronization with Paths
-1 and 2. When Path 3 completes, it disables endpoints and frees 'out'
-requests. If Paths 1 or 2 are still processing these requests,
-accessing freed memory leads to a crash due to use-after-free conditions.
+Hm? No. Block without address space makes little sense and is completely
+different device.
 
-To fix this added check for request completion and skip processing
-if already completed and added the request status for ep0 while queue.
+Look at this binding - there is no way this device can be programmed
+anywhow, because mentionned MMI sys registers are not there.
 
-Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
-Cc: stable@vger.kernel.org
-Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Manish Nagar <manish.nagar@oss.qualcomm.com>
----
-Changes in v3:
-- Add the fixes tag , cc stable and acked-by tag.
+This is a messy, incomplete and confusing change. We ask always to post
+complete bindings, for complete hardware, so put attention to this.
 
-Changes in v2: 
-- Add a check for request completion, in v1 I am avoiding this
-  by wait for completion for ep0 then process the other eps.
-
-Link to v2:
-Link: https://lore.kernel.org/all/20251119171926.1622603-1-manish.nagar@oss.qualcomm.com/
-
-Link to v1:
-Link: https://lore.kernel.org/all/20251028080553.618304-1-manish.nagar@oss.qualcomm.com/
-
- drivers/usb/dwc3/ep0.c    | 1 +
- drivers/usb/dwc3/gadget.c | 7 +++++++
- 2 files changed, 8 insertions(+)
-
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index b4229aa13f37..e0bad5708664 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -94,6 +94,7 @@ static int __dwc3_gadget_ep0_queue(struct dwc3_ep *dep,
- 	req->request.actual	= 0;
- 	req->request.status	= -EINPROGRESS;
- 	req->epnum		= dep->number;
-+	req->status		= DWC3_REQUEST_STATUS_QUEUED;
- 
- 	list_add_tail(&req->list, &dep->pending_list);
- 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 6f18b4840a25..5e4997f974dd 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -228,6 +228,13 @@ void dwc3_gadget_giveback(struct dwc3_ep *dep, struct dwc3_request *req,
- {
- 	struct dwc3			*dwc = dep->dwc;
- 
-+	/*
-+	 * The request might have been processed and completed while the
-+	 * spinlock was released. Skip processing if already completed.
-+	 */
-+	if (req->status == DWC3_REQUEST_STATUS_COMPLETED)
-+		return;
-+
- 	dwc3_gadget_del_and_unmap_request(dep, req, status);
- 	req->status = DWC3_REQUEST_STATUS_COMPLETED;
- 
--- 
-2.25.1
+Best regards,
+Krzysztof
 
 
