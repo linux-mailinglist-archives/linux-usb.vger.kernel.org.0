@@ -1,155 +1,162 @@
-Return-Path: <linux-usb+bounces-30787-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30789-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD541C771E4
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 04:08:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F0A0C77659
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 06:40:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6A929341C16
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 03:08:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E5454E4A92
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 05:40:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 378212E62D1;
-	Fri, 21 Nov 2025 03:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BE82F2612;
+	Fri, 21 Nov 2025 05:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="red2nn+N"
+	dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b="CRDDZLe3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011016.outbound.protection.outlook.com [52.101.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1B32144D7
-	for <linux-usb@vger.kernel.org>; Fri, 21 Nov 2025 03:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763694495; cv=none; b=nQ8/HtO2adC8mKCThZG6LIXYDPpJzyO0RbULtOgxnHgVkA4cm9PIJ7e9T2/DtCnjGqBVuNtuvvny7sQcURoeLPNEzL7mEcgSGgHIvr24OiwnBSP2V0Kpr0yh2/7nAyz/Lwp8UTfmZnhc81hTjUB9BAE/vRVaVHDa6jZlny2TcA0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763694495; c=relaxed/simple;
-	bh=cSH1QWncDiXNZK3xMQSSMOWvViAn4G2EA7i4fxqwNtU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l0HLI/g7xylSWJVGJxdnYUd0vYK/PvB+pkBzf4aOZL1WoquoVZ2w53OQPIh8PjPSq4/uwQgLE85fX2NftDJpB6NyeR/OXbWFnc5KQijLXgFC1iPjeAAh41yuHc5AIgnnjnAAZWZ1qlCZaPYv8i2xw5we7OredMj1EzoeW8jyRiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=red2nn+N; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4ee328b8e38so13429671cf.0
-        for <linux-usb@vger.kernel.org>; Thu, 20 Nov 2025 19:08:12 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31CB92737E8;
+	Fri, 21 Nov 2025 05:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763703607; cv=fail; b=Y0Rnyw1ZDi1cOi/1yOuweeHEi2zH6sw/dgIg3tPOsq42yBBGEJ5beZwtyrRIGB6pMkHpQTCzdorHpLoFd1ReeAvJ7XKWWlajWPINzT2oDBef2PbZp/qavAu8S0lZZae4JKbAZGG4Vy0/p8rmm9u8d2SV76IHgYFr9lL1t5YY2uE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763703607; c=relaxed/simple;
+	bh=GILg7ennlDwM6K8WkXhCGIzT2UpCEG4o0pgELkxRnzE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=A0av99GAmcU+zwSaYqqylXobVqqDuuAI+uR9bvwxCtolvRZUrmWPvlFiSdzVp2KjQ05pZQvePEN/Dt9SVs22zGvR57U75qdECbOqgTzc8NbqDQ//DwLKwtMpjurTgIO1PY8/qMok6JAAhnqxjUKEuW+L6l9/mloKdZXxD7t5xiM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn; spf=fail smtp.mailfrom=leica-geosystems.com.cn; dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b=CRDDZLe3; arc=fail smtp.client-ip=52.101.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=leica-geosystems.com.cn
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=odRG66NSfrhQVbyRu6foJAkUMr+FTbyJKQAa8xHQbPTFJP+D4Ln/XX6rxTEvVdE2RNtFzEvhgmwdR35lW1GYSpyVWqCjzmIXfC8mIQSeBEBb+EcDa+VLZii4ZNQVsdG5txNoxwx6q2hrt+zbleyJyD1/D+oO65DfXjcmHf5sw0zn1xvW0uelZM7hTAjj5zH9ufINuIQCbygPLIAn/2YbRZnbkgbxbERD8hsXYudVRF1NbeR0WgtiozRi4QfccMRRJJ2MKRlwd7S7XFcQ1tyGS7Ked0T2Pbuxl7fCWsNGRPQjkXzoeJDmxDmoTASTuKzB0UbU+m+Glx6vQuimn/A9kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lm89rQ3teX6jXGFFh2lVZWDqR8oBzWHiBTemls1ICNU=;
+ b=nUHPVUcH+44NOrSPE7rUOx4N+TOeQnGvUuKVlg6iZLyVRJ0UDbEY80aINLOvPFVumXcJcFMUtyyvQSykK29ehy7SB4bO5d8EunzLPApI+PZ7LqL+jzf24kzfoF/QVu0rYAjM97qsrlnR9KG+hys7lkLK3MqH6Dao82+3vCBdejNJ9PU/l0iRhss5aiuZQ/pOBsC3R0lOqUEV55Pu4LFZMHfOtUx/bz1UvbXMog2tKVT0qbzt6enTmc5TWMjOf+F2n5v9g0pJyg1rmy+PHKHn2pJrgsG5aulZUrk7IMpA8kd1Pwbwzp80BuollWIuE8PAK+tMevRV+gTPq7uGJndt7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 193.8.40.99) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=reject sp=reject
+ pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
+ not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1763694491; x=1764299291; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ltHyviV8JTeFA+c+5T5yue4HtjqZqVrYQl54fl+c60=;
-        b=red2nn+N5hgdB9aJamVKbOhSTo19UuB6+BxJ1fRbK8EWqguNGjlpEvwmJPRA3nhQQu
-         OJau5Fhd2T0WDF8H0rsHPsbG31Eo+/W8bvmcS0uX2TMbsDcc1M+fsQ0EJSX9SCBQ5mph
-         MU3drCmdSch582TYzNFXailtlshmCD4jjv+HMPxNDwxA+G6DxiO0XeLdvc7je77U6MCh
-         oFCdQoS25bfcvC2dK/GooPjnd59ye8lWwWJHUPSgCHOa1CTk4wdtXrXpGGkUlt/SBRPO
-         ayqMRudrG4AISkqQ06IxNt8OGwCx2K33DZRbE8ZFsRmePQ7D7Rx0KkmEe2/iMXB9LAgn
-         CGyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763694491; x=1764299291;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6ltHyviV8JTeFA+c+5T5yue4HtjqZqVrYQl54fl+c60=;
-        b=qW6irDMsrgDKfCvfXgBoGbnSQKeza2WllKrDyBbxvatBgqiZilZh6ojZEwB4jfeKon
-         GWNDnlt0WxDC8esspRHec2et47dgYOjvYBJAg44Eq3niVXQrWJdgbHc1Kg112Yg6jtFr
-         8O867syYxt9pdd+xPeK6Oa5rlQgq/RN6fT67UbuLC/WW6ZjWZdfX6uzCn8QOu9pDE8sx
-         9zrl0ZO1W/HXYEY4PPnx+KDmY2QGrwxY5b6yE88sPRolVoLM5BH1zb+PPOqDQLTUCJDw
-         BXczyU43L/cOl09jPXYxaQ98hkjYKcSymtyV5nCO2ZL2Pj6foi+hXj/PQJu3/aevsxzs
-         NEDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFzI8CFaeBW/vZJEQ3nnTP0WdtFWkoQn5TJYib0KNxQOmT/sRHVqkmdgNGPLBEu3VbUBfn/tNQiUo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7O3tFCYRZo+snHiFzFCua+l+EQTy8iXmKT8nHtx6p6OV8P8P8
-	57dLMrRPQDuugQt9U0/KnapehPT3Reflz7w8p+UDLAE6t9ctI0rp4BvRUBBsMpo4uw==
-X-Gm-Gg: ASbGncvvdlO6Z7zBwNVydvN98OpiYzFuCvSY/LOyqIgJ5jZRHLhzs5c5s7/g+kJbS8y
-	NLd/Ply4ZzPXF/c4Vq617Yqxkbtzp1by8sHVB+HezzbaEefNzQ3h/oX7aBKDMgL6ISGwYu0xfl7
-	Ee6rRse6SzDvpxujT4p8Ly9clZb6Xt6xt3ZCE8m9kSPK15Jziyuw1Fw8CBCyt9Cv40pOreMRvv/
-	cGhf8uj371YwL+QgsMb3N/Cez82u0DOlSs6CrDncUZ9A58icbzacEX8GNwyX6L+tVNlDD+/Hb9q
-	sbuyNSmeK/8X6zcx4/JhPNN1CjruBV9DWlBrcoC5Rg52tnivPvpdk5YUW4xHR4vplCgR0lgVQcJ
-	FBasFopzaZTRb4iA0EO6rKu1pbSavQgdM1Efpfqa2r77LSdsLu9RwzMtZjS19/XsN9PP6j81Tt3
-	1+3L26bcXtyG+a
-X-Google-Smtp-Source: AGHT+IEdmoIhBKjORCd09bA3xSbWYZnAdlLWlZlKGK08kQtnR3MCElNKnHLa/KGdHaa6wMD+5YAgBw==
-X-Received: by 2002:ac8:5790:0:b0:4ee:26bd:13e6 with SMTP id d75a77b69052e-4ee58821d79mr13629971cf.25.1763694491554;
-        Thu, 20 Nov 2025 19:08:11 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::7632])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8846e5ae0f0sm30899606d6.55.2025.11.20.19.08.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 19:08:11 -0800 (PST)
-Date: Thu, 20 Nov 2025 22:08:08 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Selvarasu Ganesan <selvarasu.g@samsung.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>,
-	"dh10.jung@samsung.com" <dh10.jung@samsung.com>,
-	"naushad@samsung.com" <naushad@samsung.com>,
-	"akash.m5@samsung.com" <akash.m5@samsung.com>,
-	"h10.kim@samsung.com" <h10.kim@samsung.com>,
-	"eomji.oh@samsung.com" <eomji.oh@samsung.com>,
-	"alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-	"thiagu.r@samsung.com" <thiagu.r@samsung.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Prevent EPs resource conflict
- during StartTransfer
-Message-ID: <f6bba9d1-2221-4bad-a7d7-564a5a311de1@rowland.harvard.edu>
-References: <CGME20251117160057epcas5p324eddf1866146216495186a50bcd3c01@epcas5p3.samsung.com>
- <20251117155920.643-1-selvarasu.g@samsung.com>
- <20251118022116.spdwqjdc7fyls2ht@synopsys.com>
- <f4d27a4c-df75-42b8-9a1c-3fe2a14666ed@rowland.harvard.edu>
- <20251119014858.5phpkofkveb2q2at@synopsys.com>
- <d53a1765-f316-46ff-974e-f42b22b31b25@rowland.harvard.edu>
- <20251120020729.k6etudqwotodnnwp@synopsys.com>
- <2b944e45-c39a-4c34-b159-ba91dd627fe4@rowland.harvard.edu>
- <20251121022156.vbnheb6r2ytov7bt@synopsys.com>
+ d=leica-geosystems.com.cn; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lm89rQ3teX6jXGFFh2lVZWDqR8oBzWHiBTemls1ICNU=;
+ b=CRDDZLe38ax5D4TYCFHlvkXQQAkcSf6WWCITyTRU4d3O30cfDh8EhnNS2gwdDkJbaNVtZvtRM2VlxfqbWSM4uHawNomvYq9uH/B6ySf3FVCv6Ho6IvL6cWxSoMYG/o9CuBnNeF46RjqKMwHMrULWFZzA4avm9VsPlw1oql/o++s=
+Received: from DU2PR04CA0222.eurprd04.prod.outlook.com (2603:10a6:10:2b1::17)
+ by AM8PR06MB7763.eurprd06.prod.outlook.com (2603:10a6:20b:369::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.11; Fri, 21 Nov
+ 2025 05:39:59 +0000
+Received: from DB1PEPF000509F2.eurprd02.prod.outlook.com
+ (2603:10a6:10:2b1:cafe::8b) by DU2PR04CA0222.outlook.office365.com
+ (2603:10a6:10:2b1::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.11 via Frontend Transport; Fri,
+ 21 Nov 2025 05:39:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.99)
+ smtp.mailfrom=leica-geosystems.com.cn; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=leica-geosystems.com.cn;
+Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
+ designates 193.8.40.99 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.8.40.99; helo=hexagon.com; pr=C
+Received: from hexagon.com (193.8.40.99) by
+ DB1PEPF000509F2.mail.protection.outlook.com (10.167.242.148) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9343.9 via Frontend Transport; Fri, 21 Nov 2025 05:39:58 +0000
+Received: from aherlnxbspsrv01.lgs-net.com ([10.61.228.61]) by hexagon.com with Microsoft SMTPSVC(10.0.17763.1697);
+	 Fri, 21 Nov 2025 06:39:58 +0100
+From: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qing-wu.Li@leica-geosystems.com.cn
+Cc: bsp-development.geo@leica-geosystems.com
+Subject: [PATCH V3 0/1] USB: serial: option: add Telit FN920C04 RNDIS compositions 
+Date: Fri, 21 Nov 2025 05:39:55 +0000
+Message-ID: <20251121053956.263364-1-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251121022156.vbnheb6r2ytov7bt@synopsys.com>
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 21 Nov 2025 05:39:58.0208 (UTC) FILETIME=[45D8C800:01DC5AA9]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509F2:EE_|AM8PR06MB7763:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 15c380da-9198-4370-335a-08de28c0689c
+X-SET-LOWER-SCL-SCANNER: YES
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700013|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?g1qWK8iJ++Fe8qyguSiSdPORK29hlTZhBKs5rq+xyXZV1WM8UgvsmDDB1wwW?=
+ =?us-ascii?Q?qRBpa3Vw8xAtQWK0jSR72WBjr+G3Q9wJUKCLwKPzn2zAXkkdxVIKOYEp3DNG?=
+ =?us-ascii?Q?QEhWCJvE4iWVdFwnxtkFNFyIVNomygI9hOOko4m58KuJKdbU+twmRTOW3hBW?=
+ =?us-ascii?Q?AsijKPyVfR/jETziiGlhJ5jOwe7N9PlCEwcIsYM+K3ZadFcx1lg+y8BEajCD?=
+ =?us-ascii?Q?y2I4cWRr2F8XsxeFeIWwPLWM9njmKyK9flPk/vF4PaeAC0OR9VqCMFUoc2oo?=
+ =?us-ascii?Q?zKG9r4T2pvfcfy2iickgovPZfG0RzVZzN+N3ZK3KFA4BFqM8KzJpKJrb2Hfw?=
+ =?us-ascii?Q?8WjNjcBThKsOtcbOeBD0oSwnWyEkNHzMO/YSMAmpNaaa3T78NMyGYAmPJ0ta?=
+ =?us-ascii?Q?Dio347PqJm176G2apVTaeVbGWhOio55Bf0w/a3smBMD+lZA7JFQELsxolZmB?=
+ =?us-ascii?Q?7DbpW3SWzocm7R8XzSukGIwRrSqau1q3w1jCzcsA6PhhehrqhFnikjs3z3fz?=
+ =?us-ascii?Q?J5i6VoNSi2BY2JIooBx4xMwDz+N34sDiX1GwBohbXGgF791hBUj6MXJFoGjX?=
+ =?us-ascii?Q?c6T+iQj8+F4bJ9mTDskZmuXPH4bRpz1m/IM1LrHUSfKvJzNXIS7gxea4Bz7n?=
+ =?us-ascii?Q?AsMWXF3K97O90IbDeUdMszcRcsoUUouft26jMySg6+dEJObjgQ/PNQBHAlnM?=
+ =?us-ascii?Q?LkbCkYyl28l/CTbinMgGC4tJoH/tqnrbAf0h+h1f/tKPC0k2LEUmwKNnyOVT?=
+ =?us-ascii?Q?0HUsppiTlbt3Jb7qS5+ccQP7OxcOwElQURmzdI9bl8PuZ0I7a7BAoyeZNLoU?=
+ =?us-ascii?Q?pOyyGk+VmF1CnaoZ0OJ57DoW51vtDqujAdB4svbW5h5BSwi93TrZ3a6rKF59?=
+ =?us-ascii?Q?V/DVbVFWfs1VN4MkHB3OGPAiaVlz7BqEVljORpcKtvFJ6pwgiFUqABZhK0JP?=
+ =?us-ascii?Q?LIIlgM0L7/Ctvl5Iu2pMxCoF9UPamHZJPRrXxjJbcPfPYWuu3QtEIkgYQRjk?=
+ =?us-ascii?Q?hbGkNsSqLC06I1gnuhrbjzM0KQDdZOesWIB/enc1oY9hat2jgxlSKTbNqkGz?=
+ =?us-ascii?Q?uQ/EaEOaJ363ZhOfI0yVEGMNlGsJUC9VGK+xY/tk+bg34TfwV+DP7vEBjUAh?=
+ =?us-ascii?Q?fzYbH1OIMv6OOVwJ1u4aVtP0+F2kTtq3iRLfj5dM8PFEvedhCWUNVd54/yOV?=
+ =?us-ascii?Q?VCBAc2g5xv1p3DJFSNDmx1crT26X4ehJaiIxoCYu0m7Lkrl24+n5kWg1yVO9?=
+ =?us-ascii?Q?s5VQfV/5UXhkyXzlr3eVtQWdJTUIl3yNwURucZJIWyaioU6ABz7sbfCh7nBE?=
+ =?us-ascii?Q?KxPdwj1N9zpGSWwfd1wknzTgBKQlrbSgpblwO/NgBhB0/Tw/FIT4vZZex5By?=
+ =?us-ascii?Q?MsE4g6FhE1v7Gi/E4ulXDA+XrS15Wopvhz914OlzD8J4ESdpJj3Z2V1dq/it?=
+ =?us-ascii?Q?80Z9FiOK26jQV6ANydP/s/j4E9FNP/EGK+13lPkMJZUORwWsdDB7yLhHXV1T?=
+ =?us-ascii?Q?mYh0XLjO5r7Ah3b5MrZuwmoSS0jtZ3YX7cUw9TiJvq1bUv/+PUfyNJYN0Y+Z?=
+ =?us-ascii?Q?nsu/+5I17n+JDAlu2Ac=3D?=
+X-Forefront-Antispam-Report:
+	CIP:193.8.40.99;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:hexagon.com;PTR:ahersrvdom51.leica-geosystems.com;CAT:NONE;SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: leica-geosystems.com.cn
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2025 05:39:58.4885
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15c380da-9198-4370-335a-08de28c0689c
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.99];Helo=[hexagon.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509F2.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR06MB7763
 
-On Fri, Nov 21, 2025 at 02:22:02AM +0000, Thinh Nguyen wrote:
-> On Wed, Nov 19, 2025, Alan Stern wrote:
-> > ->set_alt() is called by the composite core when a Set-Interface or 
-> > Set-Config control request arrives from the host.  It happens within the 
-> > composite_setup() handler, which is called by the UDC driver when a 
-> > control request arrives, which means it happens in the context of the 
-> > UDC driver's interrupt handler.  Therefore ->set_alt() callbacks must 
-> > not sleep.
-> 
-> This should be changed. I don't think we can expect set_alt() to
-> be in interrupt context only.
+This patch adds support for new Telit FN920C04 RNDIS compositions to the
+option driver, ensuring serial interfaces are properly recognized.
 
-Agreed.
+Change in V3:
+  Fixed the compilation error.
 
-> > To do this right, I can't think of any approach other than to make the 
-> > composite core use a work queue or other kernel thread for handling 
-> > Set-Interface and Set-Config calls.  
-> 
-> Sounds like it should've been like this initially.
+Change in V2:
+  Removed the unnecessary reservation for non-0xff class interfaces.
 
-I guess the nobody thought through the issues very carefully at the time 
-the composite framework was designed.  Maybe the UDCs that existed back 
-did not require a lot of time to flush endpoints; I can't remember.
 
-> > Without that ability, we will have to audit every function driver to 
-> > make sure the ->set_alt() callbacks do ensure that endpoints are flushed 
-> > before they are re-enabled.
-> > 
-> > There does not seem to be any way to fix the problem just by changing 
-> > the gadget core.
-> > 
-> 
-> We can have a workaround in dwc3 that can temporarily "work" with what
-> we have. However, eventually, we will need to properly rework this and
-> audit the gadget drivers.
+LI Qingwu (1):
+  USB: serial: option: add Telit FN920C04 RNDIS compositions
 
-Clearly, the first step is to change the composite core.  That can be 
-done without messing up anything else.  But yes, eventually the gadget 
-drivers will have to be audited.
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Alan Stern
+-- 
+2.43.0
+
 
