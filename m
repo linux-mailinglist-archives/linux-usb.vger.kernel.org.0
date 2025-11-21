@@ -1,54 +1,64 @@
-Return-Path: <linux-usb+bounces-30798-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30799-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3C6BC7A32D
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 15:36:56 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B047C7A33C
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 15:37:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4A6333841C8
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 14:29:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 999004EF44A
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 14:29:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9209034DCEB;
-	Fri, 21 Nov 2025 14:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F56A350D7E;
+	Fri, 21 Nov 2025 14:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WkolxRgs"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YhMTPHHb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B54D31A553;
-	Fri, 21 Nov 2025 14:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5C3350D4C;
+	Fri, 21 Nov 2025 14:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763735164; cv=none; b=emdAacD4lpOVe68YQNTS0YcbinLGgFBaMjWgNGCadjrfH5vmlPTd/6qECyuSvKQMTarnA7NdGc7MVpEoj85ATJjz/0GLDp6JrFiaLHcuflofBETPEqjXalW1GWgesRt4/bqcE18C8A2IqELkTSJ7x5F8JZLEwr9v8X0mvZf2tPQ=
+	t=1763735167; cv=none; b=JL2/2sZoIVt8b5LkJ6j0p/mltokNPLDtsbnBePvNrfrk71FUJLG4FDtqYg06hCjgalbzlrfriwcvo3YKljrxJQOI2DPcHzGt72vKs2Jf8pl8E5Iy2fFZqev/5+nNW8IahN+Mab0rtjA88avQc2lFbTzS8qnMtOKXpz5cMhqpIg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763735164; c=relaxed/simple;
-	bh=EfNgh1eMYbot4wypvinALGz/1QAaFx7WiLHvTYXxY5I=;
+	s=arc-20240116; t=1763735167; c=relaxed/simple;
+	bh=YbrPtkB06/Jg3xfKlxAAt1KSm17776sC1HO/GQZ1S88=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jFKMLg+jaIXJSIvZ5K/O6sfjv23IJIzKe5MMRdmLVMZnxohK5vip15nBLiwW1cPfBV0zgqd60dtIJZwCyyCLPru/YXOnCYdtV+dlczPt00YbBKyqAbdJ03pMgBWQYTjhvWPSE14NSOoCR8y8lkKAElDO/AVczFSERchbatu4SfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WkolxRgs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36427C4CEF1;
-	Fri, 21 Nov 2025 14:26:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ps6mOmuuRBKKMWAQacJrmSrffmvZ7M8rM/joZ1MnldhnIQMiPD5ZX5nvZe3v+Qkz7JPVU+cxbO+sz9QqxTAg9Mpo678WFdRjgEXOPfbc454YJXJhLKiH6xhDT9xAdjlaftdKJ4+wPVP4uv/ojq8iO8emDFpP6FAPkmGgJXnW9pI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YhMTPHHb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F5AC4CEF1;
+	Fri, 21 Nov 2025 14:26:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1763735163;
-	bh=EfNgh1eMYbot4wypvinALGz/1QAaFx7WiLHvTYXxY5I=;
+	s=korg; t=1763735166;
+	bh=YbrPtkB06/Jg3xfKlxAAt1KSm17776sC1HO/GQZ1S88=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WkolxRgs9Gg80SOhs+pRUK7okzYko3cZv95bTb5hmHv3FMqcYsMk4ze9sbgm23oIR
-	 aPa9MXgeCE/s5nl3ojy8PHVbfXa7Xt+lEZC1LmVOYmrDDVe/NuzLlyc8Elgo9V6vr/
-	 CG/wOsiR3b3D+RwKFyqaU+dlXCCEtOfllM5fF/yo=
-Date: Fri, 21 Nov 2025 15:18:46 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Ma Ke <make24@iscas.ac.cn>
-Cc: stern@rowland.harvard.edu, vz@mleia.com, piotr.wojtaszczyk@timesys.com,
-	arnd@arndb.de, stigge@antcom.de, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] USB: ohci-nxp: Fix error handling in ohci-hcd-nxp
- driver
-Message-ID: <2025112116-shimmer-overtime-718f@gregkh>
-References: <20251117013428.21840-1-make24@iscas.ac.cn>
+	b=YhMTPHHbVjfqaYVVAyXmbfZ6m+WxBdDRDNMYB/aFueMvGaIimyUb3L6orZbC3BrCi
+	 x4FPHuL/zwELdgYWE/x9SUl5ZFMdEVqWkCGId/cjsX+wyC8Io1ld2f/OKrOvDtb8NX
+	 CF4w3J6HAfPSji1auxCoxp8e44KYJ0c+FrDMPGVA=
+Date: Fri, 21 Nov 2025 15:21:49 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Roy Luo <royluo@google.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Joy Chakraborty <joychakr@google.com>,
+	Naveen Kumar <mnkumar@google.com>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Doug Anderson <dianders@google.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+Message-ID: <2025112144-claw-recolor-49c3@gregkh>
+References: <20251119093749.292926-1-royluo@google.com>
+ <20251119093749.292926-3-royluo@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,44 +67,74 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251117013428.21840-1-make24@iscas.ac.cn>
+In-Reply-To: <20251119093749.292926-3-royluo@google.com>
 
-On Mon, Nov 17, 2025 at 09:34:28AM +0800, Ma Ke wrote:
-> When obtaining the ISP1301 I2C client through the device tree, the
-> driver does not release the device reference in the probe failure path
-> or in the remove function. This could cause a reference count leak,
-> which may prevent the device from being properly unbound or freed,
-> leading to resource leakage.
+On Wed, Nov 19, 2025 at 09:37:48AM +0000, Roy Luo wrote:
+> Add support for the DWC3 USB controller found on Google Tensor G5
+> (codename: laguna). The controller features dual-role functionality
+> and hibernation.
 > 
-> Fix this by storing whether the client was obtained via device tree
-> and only releasing the reference in that case.
+> The primary focus is implementing hibernation support in host mode,
+> enabling the controller to enter a low-power state (D3). This is
+> particularly relevant during system power state transition and
+> runtime power management for power efficiency.
+> Highlights:
+> - Align suspend callback with dwc3_suspend_common() for deciding
+>   between a full teardown and hibernation in host mode.
+> - Integration with `psw` (power switchable) and `top` power domains,
+>   managing their states and device links to support hibernation.
+> - A notifier callback dwc3_google_usb_psw_pd_notifier() for
+>   `psw` power domain events to manage controller state
+>   transitions to/from D3.
+> - Coordination of the `non_sticky` reset during power state
+>   transitions, asserting it on D3 entry and deasserting on D0 entry
+>   in hibernation scenario.
+> - Handling of high-speed and super-speed PME interrupts
+>   that are generated by remote wakeup during hibernation.
 > 
-> Found by code review.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> Co-developed-by: Joy Chakraborty <joychakr@google.com>
+> Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> Co-developed-by: Naveen Kumar <mnkumar@google.com>
+> Signed-off-by: Naveen Kumar <mnkumar@google.com>
+> Signed-off-by: Roy Luo <royluo@google.com>
 > ---
-> Changes in v2:
-> - only released the device reference when the ISP1301 client was obtained through device tree, not in the non-DT case where the global variable is used;
-> - removed unnecessary NULL checks as suggested by reviewer.
-> ---
->  drivers/usb/host/ohci-nxp.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/usb/dwc3/Kconfig       |  10 +
+>  drivers/usb/dwc3/Makefile      |   1 +
+>  drivers/usb/dwc3/dwc3-google.c | 628 +++++++++++++++++++++++++++++++++
+>  3 files changed, 639 insertions(+)
+>  create mode 100644 drivers/usb/dwc3/dwc3-google.c
 > 
-> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-> index 24d5a1dc5056..081b8c7f21a0 100644
-> --- a/drivers/usb/host/ohci-nxp.c
-> +++ b/drivers/usb/host/ohci-nxp.c
-> @@ -50,6 +50,7 @@ static const char hcd_name[] = "ohci-nxp";
->  static struct hc_driver __read_mostly ohci_nxp_hc_driver;
+> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> index 4925d15084f8..bb0e4dc97da3 100644
+> --- a/drivers/usb/dwc3/Kconfig
+> +++ b/drivers/usb/dwc3/Kconfig
+> @@ -200,4 +200,14 @@ config USB_DWC3_GENERIC_PLAT
+>  	  the dwc3 child node in the device tree.
+>  	  Say 'Y' or 'M' here if your platform integrates DWC3 in a similar way.
 >  
->  static struct i2c_client *isp1301_i2c_client;
-> +static bool isp1301_using_dt;
+> +config USB_DWC3_GOOGLE
+> +	tristate "Google Platform"
+> +	depends on OF && COMMON_CLK && RESET_CONTROLLER
 
-This will not work for multiple devices in the system :(
+No build testing?
 
-Please add this to the device-specific structure instead.
+> +	default n
+
+This is always the default, no need to list it here.
+
+> +	help
+> +	  Support the DesignWare Core USB3 IP found on Google Tensor
+> +	  SoCs, starting with the G5 generation. This driver includes
+> +	  support for hibernation in host mode.
+> +	  Say 'Y' or 'M' if you have one such device.
+
+You forgot the module name :(
+
+> +#define to_dwc3_google(d) container_of((d), struct dwc3_google, dwc)
+
+container_of_const() please.
+
 
 thanks,
 
