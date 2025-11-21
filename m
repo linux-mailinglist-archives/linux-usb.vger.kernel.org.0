@@ -1,83 +1,64 @@
-Return-Path: <linux-usb+bounces-30801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30802-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C28C7A61A
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 16:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 57B92C7A62C
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 16:05:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B76B74F1684
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 14:56:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6CF884F1D25
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 14:57:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C40029CB4D;
-	Fri, 21 Nov 2025 14:54:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84AE32C0281;
+	Fri, 21 Nov 2025 14:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m+sFirhw"
+	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="VVgw1hB5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8221F2E041D
-	for <linux-usb@vger.kernel.org>; Fri, 21 Nov 2025 14:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13702BEFE0;
+	Fri, 21 Nov 2025 14:55:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763736880; cv=none; b=kwuwnYlGg3G7YN21E20FfuXX35bhTPElj3GOZiyFuORrJD0Ob0Ed8xPDPYuKI17qgLsNw8q2dZsfk6nMZRTcah4qXgis3LuabEIojSBQpDueTilnj/DscGnh/h+DFVtDCvEYBV0kqR4U0GWqzkERv4YtqyRSkSaWErhQQK1F+YQ=
+	t=1763736953; cv=none; b=DP+XuMcjRiKBhJ/6VFpQ+6jcB5WrBcukNpEk5mpCPBZBU685bC5u+NNpIvWOsR0keZODE80SOrA5Rb/Vqx2QV+Qqrv+TLWLzCf72wpVJ03ZJaJbNAUaTqvK1FPgqRYpo+wlNtLna/wkNomNTB5ZIVqCg8u6E7qh6GZcE/xb7gBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763736880; c=relaxed/simple;
-	bh=PdbhQmSWzie/InhU2C8HiWf3tc3T32exhMRvoSTXWYc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=WLFIbhSMsqVZT5fWqZh51fhlLOkRNSP67DxyvKNuHjvf+7vhafqH7QbKsVGP8hs0HWF22lX5Tbnoff8oartY+J8HjGVsOiKFBqQSVe1PxNMcS+xMdTnroT/icVuO1BWN5CZhpvVBNsw6rCZPBO0mrJ0xksQ0FqY//QzU6I8ejTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m+sFirhw; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-47795f6f5c0so14197945e9.1
-        for <linux-usb@vger.kernel.org>; Fri, 21 Nov 2025 06:54:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763736876; x=1764341676; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h3T53g7xBgvHEx7HfC5HSakwZWPWLNi811KzyB5b8Cc=;
-        b=m+sFirhwuqK3sfmBmGNeavKsLhVRL1vJFQP50D/dyAzR4fPQn9p2UD2GZ5rUX2kZsd
-         mFvrjj3Cb6yyFT7EmspeHNunzTqlGsm5hYwkSG/9fjs5dvz/Ij+hSHwgp5/vfiIg8mNJ
-         /ThVFNZN8+bO3Z5jfoMe/0p9/Qblvgxjz9Df5ABWWdj8clQJmG9U0Joe2TA+r2QwuzEK
-         d2lzGYp2IFz0vy6lWv2NiX8sk/rN7auzcp2Mu1RtfymuOiP3olczirU2hPQX4Coblg24
-         91uDLwiZISQMJaxl0glaoDGDRsnMhcfIWIalLW4EuySFcAA0PADwe7NWKg3wtvdtrx/u
-         /vEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763736876; x=1764341676;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h3T53g7xBgvHEx7HfC5HSakwZWPWLNi811KzyB5b8Cc=;
-        b=Grx4VsIfMgFwDucXAePGUE/8sFT/RHvpIciAP4BPiluN76aMjLO3dls0QXNPy0D6lU
-         DceJXme3doAGMY7goQHmXJ9bcYZwkEKn3S6Pi5iJd4pw6kAuXgpwP4aLz935mrqkcZpo
-         t5mkqJFWCENVi9MVACMMCUjBMDCQtMeW/0ICUqoPva8uHpGFysOTRJW0BIJZMfmfFQGt
-         gwjwVnXoqc1hG4a1xBCS2woYy/tKzVHeh4JHIZc4IzlPMXXwEkOka2pPvqymbcSvlvyy
-         P8jYIo53WGdIRcpBm3T/mgBzgdvbBU8P3yqFP4LXvwADtOIjLEm9nu2xppTlBowvFM10
-         sAvA==
-X-Gm-Message-State: AOJu0YywrkLjd4/irtH36NI4vuyVkZH7SPjDEhHAIewt4dxipqQJ1SBE
-	QrS2CGtGJR9iJhCQXvqGpZfsoGdXw/QI5NuZLjJGNtsf5W6oUvQeOOgGvpEA0hu8CdM=
-X-Gm-Gg: ASbGncsdphYinoeU7wBaJPbYY0pzTRWRF14maBloBpAgGIQgQw/DfkxIzzJDC3SnVji
-	m8hioAmUtjILPJOdv9Y0vTiVgtoMp2hBVmSJX2LHVGkhAwgf14bGvychOJjfVw22sCeXgSYf10q
-	Rhu+pfb2UWVkp0+4OvfSYlIhGuizCv+lZiHCL0f310e/AtLz3MROo4VdkdsfD4JRPBONItgymvJ
-	q6eIHrKcXuLzA4kbapPI3Yng/ZP+n35xcxXLFwvlxBWsAaKz9rW+8uT3FAg76VdjuHFCMwGxNI5
-	Zwiu5ki0gRAzE2zye6QIQ5J7JtnVAinYRwwd3epuk8cX4Y0UXfWdrgSAb+t+gDLCfw0s2kuDRPa
-	puPf1OTdwyBWGJfHdH22Y7R6KxOb79bIEgvVgT5YmmjkHNIHoZac3aRbCWC9w22E7GWGo30ND8o
-	x+rrq8Ra/+/Lrr33jgNVSLndDjrIi7toW1K8dFDbmih8jSHbYrlY6XpwA1rk+88p5sQsSmQ2JVz
-	Q==
-X-Google-Smtp-Source: AGHT+IEzj6mKlAXc/f2f5s+FD/b07AX4yw2dXdDsDHdfncbSE2QSufZD0iTF+t3WaYL5TpdOFlDOEA==
-X-Received: by 2002:a05:600c:1f8f:b0:477:a0dd:b2af with SMTP id 5b1f17b1804b1-477c01ea502mr22713205e9.33.1763736876159;
-        Fri, 21 Nov 2025 06:54:36 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:3d9:2080:159f:1839:bb92:1eca? ([2a01:e0a:3d9:2080:159f:1839:bb92:1eca])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cc231dc6esm3409457f8f.7.2025.11.21.06.54.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Nov 2025 06:54:35 -0800 (PST)
-Message-ID: <326cd208-fcce-49d1-94ee-4913f85bffbf@linaro.org>
-Date: Fri, 21 Nov 2025 15:54:34 +0100
+	s=arc-20240116; t=1763736953; c=relaxed/simple;
+	bh=fJ0M1sLkQanyUpPHH+BQxk4e8Voa0eW8d6MqSI77FQI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Hefu1nnJzzJWk4iqrHhMYppijzn04Wnv6Q97DizwXud38CUPWLvCoDxKJxXTUbFkVzgLAWG7Tyx8VCjA4omOEAjB0KVxZY9xZeYIYfntopelawcSdhXr9m6d5f/vQLFRZK2i3f/FDZ4IAEuKCw2GPA8Qm2NhKQ0hazn9xersXJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=VVgw1hB5; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 8F3E06000222;
+	Fri, 21 Nov 2025 14:55:39 +0000 (WET)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with LMTP id PgXd2eaKOUDn; Fri, 21 Nov 2025 14:55:37 +0000 (WET)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 04A22600301C;
+	Fri, 21 Nov 2025 14:55:37 +0000 (WET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail2; t=1763736937;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7zXjtXolyhsCsLWOHGRVWxpHyUifiSB46XqP9OtK47I=;
+	b=VVgw1hB5TUn2jCTkFy/rUv5OhkzZQs/kyHsz2xd6BuU+ZUZFRvxJaGOL3F/J6j25NCebfh
+	OadZbeGZoW2JTVIn9fZA1srhT4m9gSNQDhsK0HmWFF+291VG6rfA9BlcyiDXMy5PRZVOTD
+	8bpbCfQzhdxKe/e9N9JAYR7t+1aRIsQWWVYMLIgEk4BhEG5PRyQAuKJMdeuH1hJsLswVEl
+	0PEV/vsheFdHJzj14ZQdjV784RHyzTSdOgVO52bGejPMgzIdCGdAS02Y3k9Xyj65ALJLMU
+	io9xZLU3IVIZF88WO4b+LKLpYIbjOLPa8Utp6Vi4iogXT4PSiI2M5CNXHbjwew==
+Received: from [IPV6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde] (unknown [IPv6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 397A636009A;
+	Fri, 21 Nov 2025 14:55:36 +0000 (WET)
+Message-ID: <8837bf19-dd98-40f9-b2ff-192a511c357c@tecnico.ulisboa.pt>
+Date: Fri, 21 Nov 2025 14:55:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,127 +66,81 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v10 07/11] phy: rockchip: phy-rockchip-typec: Add DRM AUX
- bridge
-To: Chaoyi Chen <kernel@airkyi.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Chen <hzpeterchen@gmail.com>, Luca Ceresoli
- <luca.ceresoli@bootlin.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>,
- Chaoyi Chen <chaoyi.chen@rock-chips.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- dri-devel@lists.freedesktop.org
-References: <20251120022343.250-1-kernel@airkyi.com>
- <20251120022343.250-8-kernel@airkyi.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20251120022343.250-8-kernel@airkyi.com>
+Subject: Re: [PATCH] usb: phy: Initialize struct usb_phy list_head
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Felipe Balbi <felipe.balbi@linux.intel.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20251113-diogo-smaug_typec-v1-1-f1aa3b48620d@tecnico.ulisboa.pt>
+ <2025112139-resale-upward-3366@gregkh>
+Content-Language: en-US
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+In-Reply-To: <2025112139-resale-upward-3366@gregkh>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/20/25 03:23, Chaoyi Chen wrote:
-> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-> 
-> Using the DRM_AUX_BRIDGE helper to create the transparent DRM bridge
-> device.
-> 
-> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-> ---
-> 
-> Changes in v10:
-> - Use drm_aux_bridge_register_from_node() instead.
-> 
-> (no changes since v7)
-> 
-> Changes in v6:
-> - Fix depend in Kconfig.
-> 
->   drivers/phy/rockchip/Kconfig              | 2 ++
->   drivers/phy/rockchip/phy-rockchip-typec.c | 5 +++++
->   2 files changed, 7 insertions(+)
-> 
-> diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
-> index db4adc7c53da..bcb5476222fc 100644
-> --- a/drivers/phy/rockchip/Kconfig
-> +++ b/drivers/phy/rockchip/Kconfig
-> @@ -120,6 +120,8 @@ config PHY_ROCKCHIP_TYPEC
->   	tristate "Rockchip TYPEC PHY Driver"
->   	depends on OF && (ARCH_ROCKCHIP || COMPILE_TEST)
->   	depends on TYPEC || TYPEC=n
-> +	depends on DRM || DRM=n
-> +	select DRM_AUX_BRIDGE if DRM_BRIDGE
->   	select EXTCON
->   	select GENERIC_PHY
->   	select RESET_CONTROLLER
-> diff --git a/drivers/phy/rockchip/phy-rockchip-typec.c b/drivers/phy/rockchip/phy-rockchip-typec.c
-> index 1f5b4142cbe4..e31b778c3537 100644
-> --- a/drivers/phy/rockchip/phy-rockchip-typec.c
-> +++ b/drivers/phy/rockchip/phy-rockchip-typec.c
-> @@ -56,6 +56,7 @@
->   #include <linux/phy/phy.h>
->   #include <linux/usb/typec_dp.h>
->   #include <linux/usb/typec_mux.h>
-> +#include <drm/bridge/aux-bridge.h>
->   
->   #define CMN_SSM_BANDGAP			(0x21 << 2)
->   #define CMN_SSM_BIAS			(0x22 << 2)
-> @@ -1312,6 +1313,10 @@ static int tcphy_setup_typec_mux(struct rockchip_typec_phy *tcphy)
->   	if (!of_property_read_bool(np, "mode-switch"))
->   		goto put_np;
->   
-> +	ret = drm_aux_bridge_register_from_node(tcphy->dev, np);
-> +	if (ret)
-> +		goto put_np;
-> +
->   	mux_desc.drvdata = tcphy;
->   	mux_desc.fwnode = device_get_named_child_node(tcphy->dev, "dp-port");
->   	mux_desc.set = tcphy_typec_mux_set;
 
-Much better now !
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+On 11/21/25 14:09, Greg Kroah-Hartman wrote:
+> On Thu, Nov 13, 2025 at 02:59:06PM +0000, Diogo Ivo wrote:
+>> When executing usb_add_phy() and usb_add_phy_dev() it is possible that
+>> usb_add_extcon() fails (for example with -EPROBE_DEFER), in which case
+>> the usb_phy does not get added to phy_list via
+>> list_add_tail(&x->head, phy_list).
+>>
+>> Then, when the driver that tried to add the phy receives the error
+>> propagated from usb_add_extcon() and calls into usb_remove_phy() to
+>> undo the partial registration there will be an unconditional call to
+>> list_del(&x->head) which is notinitialized and leads to a NULL pointer
+>> dereference.
+>>
+>> Fix this by initializing x->head before usb_add_extcon() has a chance to
+>> fail.
+>>
+>> Fixes: 7d21114dc6a2d53 ("usb: phy: Introduce one extcon device into usb phy")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+>> ---
+>>   drivers/usb/phy/phy.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+>> index e1435bc59662..5a9b9353f343 100644
+>> --- a/drivers/usb/phy/phy.c
+>> +++ b/drivers/usb/phy/phy.c
+>> @@ -646,6 +646,8 @@ int usb_add_phy(struct usb_phy *x, enum usb_phy_type type)
+>>   		return -EINVAL;
+>>   	}
+>>   
+>> +	INIT_LIST_HEAD(&x->head);
+>> +
+>>   	usb_charger_init(x);
+>>   	ret = usb_add_extcon(x);
+>>   	if (ret)
+>> @@ -696,6 +698,8 @@ int usb_add_phy_dev(struct usb_phy *x)
+>>   		return -EINVAL;
+>>   	}
+>>   
+>> +	INIT_LIST_HEAD(&x->head);
+>> +
+>>   	usb_charger_init(x);
+>>   	ret = usb_add_extcon(x);
+>>   	if (ret)
+>>
+> 
+> Shouldn't you be also removing an existing call to INIT_LIST_HEAD()
+> somewhere?  This is not "moving" the code, it is adding it.
+
+ From my understanding that's exactly the problem, currently there is no
+call to INIT_LIST_HEAD() anywhere on these code paths, meaning that if
+we do not reach the point of calling list_add_tail() at the end of
+usb_add_phy() and usb_phy_add_dev() then x->head will remain uninitialized
+and fault when running usb_remove_phy().
+
+Best regards,
+Diogo
+
+> thanks,
+> 
+> greg k-h
 
