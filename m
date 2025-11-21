@@ -1,64 +1,86 @@
-Return-Path: <linux-usb+bounces-30790-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30791-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF31C7797C
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 07:40:48 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BD33C77CE9
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 09:11:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DF72435B41C
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 06:40:46 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 29B544E9DFC
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 08:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64914330B0D;
-	Fri, 21 Nov 2025 06:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D610931A07F;
+	Fri, 21 Nov 2025 08:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=huaqin-corp-partner-google-com.20230601.gappssmtp.com header.i=@huaqin-corp-partner-google-com.20230601.gappssmtp.com header.b="XyWqYNIZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469172F5487;
-	Fri, 21 Nov 2025 06:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B015A2FF173
+	for <linux-usb@vger.kernel.org>; Fri, 21 Nov 2025 08:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763707239; cv=none; b=ho3HAcLsyQt+z+amF+6Oj6PYAbIH07dcATaTP1BVsdccfllRaGdclU9YhSVIBfK2W/TCRTxiHWVwScNIgFroeOCnopfy8Qzaw6BDfQMrtFS7fBYshOK2vGB9S8RWhl2ZkisR+KIbCKDCmZXbyUCsHQeM4yjwQsc70UYD7DqA9kU=
+	t=1763712554; cv=none; b=USp3+9BWUqgR+zY0qqrkwmIPNit6oabQofkSYTnJWB8JbdVaopr2fQXHqbw3Yyqu8iGZ8KFRxuUtJlrT3/iebCa9Gx/+uaJKQUTCrFJ73RaEUvqWnCHN9BMQ9wWJVt/blhlxbgDgIwZ9pDIsYtHWeo06pl9a2wMDAy1Ex1c7KEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763707239; c=relaxed/simple;
-	bh=YtMAm2U9yGQgMzLzS5uQn7tnDjqOIz3wV8rBknSTNUY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WoSBtpdrUxpkzPmApYtqnj76Fx+SoBcQPdpQvggZzalMClUCEtxFJ2bBt2fq5bAr32d/0xSh4i/u4GdEkcG5Im/D7IfMatOUYMCqPBDBP+oJuKOhiDvo0DeIpcpnksjv+6Y7D/fvqY+SLJWKYX5351yliuUsLxPBsF95TetzHms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: f55625c2c6a411f0a38c85956e01ac42-20251121
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:e1985838-e218-4480-b173-2d0f3a9cf716,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:0f7920cd46c596ad0083dd4e52695bdb,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|898,TC:nil,Content:0|15|50,EDM:-
-	3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,A
-	V:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: f55625c2c6a411f0a38c85956e01ac42-20251121
-X-User: chenchangcheng@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <chenchangcheng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1478271380; Fri, 21 Nov 2025 14:40:24 +0800
-From: Chen Changcheng <chenchangcheng@kylinos.cn>
-To: stern@rowland.harvard.edu,
-	benjamin.tissoires@redhat.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
+	s=arc-20240116; t=1763712554; c=relaxed/simple;
+	bh=6cna0rS4IfPxRB4BilAAAYmQnpk/pBqq8XIl1z/UP8o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CgVT5rdYgnfPMkewyuq93qTIBeTHABo6Ka6zG3jCnNE8q6lX8FCgyU24G7yc7+utCweM8/UFL4DhTjlf3LBjxz/7SUROXHnXNlujWNiyyY01zqAaYxcSiDGe+logClTlZglyZv4qF8mLtsjceQumcMwzoyxzmUhnbTnFELajIi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=huaqin.corp-partner.google.com; spf=pass smtp.mailfrom=huaqin.corp-partner.google.com; dkim=pass (2048-bit key) header.d=huaqin-corp-partner-google-com.20230601.gappssmtp.com header.i=@huaqin-corp-partner-google-com.20230601.gappssmtp.com header.b=XyWqYNIZ; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=huaqin.corp-partner.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaqin.corp-partner.google.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-299e43c1adbso2225505ad.3
+        for <linux-usb@vger.kernel.org>; Fri, 21 Nov 2025 00:09:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=huaqin-corp-partner-google-com.20230601.gappssmtp.com; s=20230601; t=1763712552; x=1764317352; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DrKLC6redEZpXj8qIVeKcbQHX3id2C2vU9NNtfE0BOE=;
+        b=XyWqYNIZK/tUqjRf5SlzcDKrnbU8CGisnrXiAuH3dMOAIE2J1hj7eH3yC1ugvnfw8F
+         AcNOx1esGvZjOheVJOfDi3NHAMKnrSVnQ1FDklJv2aA98PJ6I3CiQmSzYP4bnCDx3477
+         rzhur/Lx5AsA6kexCenjKYsfewIrVIp4CGX/7Pcf9T0qjqLanHbk6h/LNPueOkcaGUPo
+         DnXTTF6EAcmMUX+UqRwE8AeQ76Cp4/22YInpt8rvMKVvVwGDVu71T7E3/g6hZqkdXKmZ
+         6HeJ+4rem8zfOUWdKs7/RSo+Vj01MSCjW8xhdVkhAAxHTZTbm33K+Xh241o1j//zOLGj
+         E+zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763712552; x=1764317352;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DrKLC6redEZpXj8qIVeKcbQHX3id2C2vU9NNtfE0BOE=;
+        b=NecbTkdBm/0eCtwIwYV7HWSt4ZuAE9aOx5Di1RujKtn3frLDqabwHGUKr1UEFV4oX0
+         /eUgAZILigQ2plnsXXLmr6i2GaWr3ReZAsjuW5Y4MJRqlw5NZpkpbz+ndZJW0NbIdgB3
+         vZCOi7gDsP5lhOH9UmDdFnKaPE6v/7oN5tIy17pDPV68YV3pcqKiyj894JCqf11L4U24
+         B3Upn9i158mbzN1duwVIIs033gCHbadhP0+3Ycrh/QHjFgyiUo7DnzNC6+V3v9bnZKgl
+         /Ibc/ovPiqhNxifhKPGkCX+DzMe+wJJqvJLgVPYUe8a+ZRev7cbYXbqc99RQXAtwaFci
+         bX8w==
+X-Gm-Message-State: AOJu0Yys1OCmuOzgkyDrbfbLSS9V39szy7esEMRcF6JSkGSWTUv/83qR
+	ZEB1KmXERw4riMMJ74JCJFeV58c/qeBXdQ/5DNc5Z5fV2H+rUQWyXsYMTx8MSnTHIf0GWJfHmhS
+	2ZsSf6Ko=
+X-Gm-Gg: ASbGncsL3H7xKSVe6tHLle6/WaEf+RZR67z1S6aVmfSezgT7eWxAegQIFTmkEGzi934
+	PQXRfP6zCgSRzcWNmbsrMvkC1Sxeh3fqTbWxPAbB+N+RNy1qDo5qqNqfbtPPrv1dm60xn+hGZhv
+	Xy3dDkuqlo/a11T4junCphClKC4Br82n8MmjEWCLTIqoHmmHCVTaOmUOo9dpD6EoBX9Mt1tfbai
+	bT428PK97/dG/tf4CsLNLMci9m0O2kfMQxSBP89vHkr4NY2DX5KoAcZM7+DTuo/xEbvY1VJaWjf
+	RlNvYYmLLj3PEhqgIzI9wRDQB5hxBQGgdALIN1jOsZ0uXjDYqKCsKN2xA10AIb6jcFY+N2q1Wwn
+	lVRTZdCZ9tAHQHv4kWRDqtSsQgVhiMBwPrquODBZaNgfPaJmngHf4FZI/RFWWENXI+JE4+Kvb00
+	7fxa9OiYxBUy497qLI7JIzmatdUCE4FfCUWL69mKH5u+WfShsg2wBaR+F8
+X-Google-Smtp-Source: AGHT+IFG+J86hr9mHNL2OUXjacId2x1O1j1Mm9e3eA7FfOPUViRAz86RoQfxPiHy4w467ljg+fr3Ig==
+X-Received: by 2002:a17:903:f90:b0:258:a3a1:9aa5 with SMTP id d9443c01a7336-29b6bd50e1dmr12254935ad.0.1763712551994;
+        Fri, 21 Nov 2025 00:09:11 -0800 (PST)
+Received: from xzq.huaqin.com ([103.117.77.121])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b2a7ad6sm48088635ad.87.2025.11.21.00.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Nov 2025 00:09:11 -0800 (PST)
+From: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Chen Changcheng <chenchangcheng@kylinos.cn>
-Subject: [PATCH v3] usb: usb-storage: No additional quirks need to be added to the EL-R12 optical drive.
-Date: Fri, 21 Nov 2025 14:40:20 +0800
-Message-Id: <20251121064020.29332-1-chenchangcheng@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
+Subject: [PATCH] USB: of: filter disabled device node
+Date: Fri, 21 Nov 2025 16:09:05 +0800
+Message-Id: <20251121080905.2237648-1-xiazhengqiao@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,58 +89,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The optical drive of EL-R12 has the same vid and pid as INIC-3069,
-as follows:
-T:  Bus=02 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=13fd ProdID=3940 Rev= 3.10
-S:  Manufacturer=HL-DT-ST
-S:  Product= DVD+-RW GT80N
-S:  SerialNumber=423349524E4E38303338323439202020
-C:* #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=144mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=02 Prot=50 Driver=usb-storage
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0a(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+We should not point the of_node of a USB device to a disabled devicetree
+node. Otherwise, the interface under this USB device will not be able
+to register.
 
-This will result in the optical drive device also adding
-the quirks of US_FL_NO_ATA_1X. When performing an erase operation,
-it will fail, and the reason for the failure is as follows:
-[  388.967742] sr 5:0:0:0: [sr0] tag#0 Send: scmd 0x00000000d20c33a7
-[  388.967742] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
-[  388.967773] sr 5:0:0:0: [sr0] tag#0 Done: SUCCESS Result: hostbyte=DID_TARGET_FAILURE driverbyte=DRIVER_OK cmd_age=0s
-[  388.967773] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
-[  388.967803] sr 5:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]
-[  388.967803] sr 5:0:0:0: [sr0] tag#0 Add. Sense: Invalid field in cdb
-[  388.967803] sr 5:0:0:0: [sr0] tag#0 scsi host busy 1 failed 0
-[  388.967803] sr 5:0:0:0: Notifying upper driver of completion (result 8100002)
-[  388.967834] sr 5:0:0:0: [sr0] tag#0 0 sectors total, 0 bytes done.
-
-For the EL-R12 standard optical drive, all operational commands
-and usage scenarios were tested without adding the IGNORE_RESIDUE quirks,
-and no issues were encountered. It can be reasonably concluded
-that removing the IGNORE_RESIDUE quirks has no impact.
-
-Signed-off-by: Chen Changcheng <chenchangcheng@kylinos.cn>
+Signed-off-by: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
 ---
- drivers/usb/storage/unusual_uas.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/of.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 1477e31d7763..b695f5ba9a40 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -98,7 +98,7 @@ UNUSUAL_DEV(0x125f, 0xa94a, 0x0160, 0x0160,
- 		US_FL_NO_ATA_1X),
+diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
+index 763e4122ed5b3..6bb577e711811 100644
+--- a/drivers/usb/core/of.c
++++ b/drivers/usb/core/of.c
+@@ -31,6 +31,9 @@ struct device_node *usb_of_get_device_node(struct usb_device *hub, int port1)
+ 		if (of_property_read_u32(node, "reg", &reg))
+ 			continue;
  
- /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
--UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
-+UNUSUAL_DEV(0x13fd, 0x3940, 0x0309, 0x0309,
- 		"Initio Corporation",
- 		"INIC-3069",
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-
-base-commit: e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
++		if (!of_device_is_available(node))
++			continue;
++
+ 		if (reg == port1)
+ 			return node;
+ 	}
 -- 
-2.25.1
+2.34.1
 
 
