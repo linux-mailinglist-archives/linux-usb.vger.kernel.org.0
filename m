@@ -1,138 +1,187 @@
-Return-Path: <linux-usb+bounces-30811-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30815-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B32CCC7BC03
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 22:30:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46B44C7CBB5
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 10:34:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D72F33561D9
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Nov 2025 21:29:45 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B18B934562D
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 09:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E052FD7C7;
-	Fri, 21 Nov 2025 21:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC25286422;
+	Sat, 22 Nov 2025 09:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Bonzpj9K"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VfEq4Bsy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0538533D6
-	for <linux-usb@vger.kernel.org>; Fri, 21 Nov 2025 21:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC2E2F6170
+	for <linux-usb@vger.kernel.org>; Sat, 22 Nov 2025 09:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763760580; cv=none; b=jpdS4DIwkWov/AG0i3R6dFQNy3okDd5r++1O7yXsUj8bNvflC/xG1d8f00uucIYCfkFFw4OSFm1iL+U21KJ17rXyqGNQl86fxAzqlZ80s8rwJ7Jpe2Z2ZpebEBCy8WnJ7E9VJRryaJOrrNNgpKra8fJ0K2vebkTADu2ek3KNooU=
+	t=1763803956; cv=none; b=b7hg3MGQoUOGt/m+xZjf9JLyq1lQpOrKEByX547CKSIV0/y9tZsL9gd3gI2YLg3ntxtkPeMY5QOUeapZB+OtkBsMKr1KrWIxsFBj+FtrS1CU4k3Rr0h7eLHIWo/xKudQv2XWEnk6X/1VMjtFkJsVgWEORL2hTfCSRKSsQ4cdMp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763760580; c=relaxed/simple;
-	bh=gh9b9mfI7Ux75s0Kp1lq5NuNfLjBxT0Qt/cJT/MYMS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PU5ujKSJ5N6RrEc8bhHYL6K6Qw6hx/ZpGXm5lkGjgzhwCE0sZOlOD8rJpLGzVGd6EXl/UIiJgzAoOIryfF5xdDJ1YXkABvEOAq8IhkGCXmGwniX2FY/zthn2pO3i/kU0K1xC/Pl6rE8F20Jd7RaDsh/V7j/3mKjNgdrTB7ifwIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Bonzpj9K; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-882379c0b14so18040766d6.1
-        for <linux-usb@vger.kernel.org>; Fri, 21 Nov 2025 13:29:38 -0800 (PST)
+	s=arc-20240116; t=1763803956; c=relaxed/simple;
+	bh=Q5HPNMlb7k8H4bR8V/awshYeVlGPISIIO6iiMymH7Ps=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LrXjYHFHfVzbdsvosiItKPQC++lSUwUOc7TwipndEnZlEWQNpo5AuLslkjfCqI3sQviKbjEIoZ0hHTXqfQk6fHmhdKBohcNt2QrW9ZOrnWUPtMJ4KolL7baWkyX25uzsWWz/U5xnp90uQFjKR6GgVY+YecGxySWy67WOBInaMCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VfEq4Bsy; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b98a619f020so2184640a12.2
+        for <linux-usb@vger.kernel.org>; Sat, 22 Nov 2025 01:32:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1763760578; x=1764365378; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ObNMRgWraNV2+kVy9Ahs5486O+aHiHMvo/bApSprMSw=;
-        b=Bonzpj9KasCUu6qViGw+SI9eCiNXa/En2sftrI98OyfAlhrUrAdNHs5xlCHJgbqP+1
-         INr21ixbFgRBDxHkLBCBivtuFU+2cvpBFAeqe0WzLFox6rhfBs0ADMKrokbe/vHwQnrq
-         yZT3fyjw3imfnB/tEJ8Rk+8klDmV627AOYnphNsiJ3FKIRgzTOp7gqDB4yXciEfamysj
-         dwYh6GBcQaCIxBgL+tQw2lWhl47qHtoUkOw+2/r50xpWHnE9r4HMNhCYC7QyWBjPUx/W
-         YrhR9nCmV/7z0Wpx97wzeUzavuxftG9nrjXzQIPtTdlwMiOm7xNketOl+uV7G5sG3yA9
-         ko1w==
+        d=google.com; s=20230601; t=1763803954; x=1764408754; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PwfSbVA0IF+INvF3WYKe7TTnKMqGNeoc7QfEa9rVX5E=;
+        b=VfEq4BsyS9P8xXKArM18nG0gmmHEBz2W36s5LX/OJ3y4A4Li7fB4wy8SNZu6zgRjDv
+         DvVtaTYXR0Td0PdmS7DN7Ti9HJgl/mMhBdA8O0Vb3UCvpVv2PYV1YLnOxm7Cbn9pXVli
+         3IZDa7b+HdpEA/IZL+QggOr3evSLQUK+YU3YMIjT8LzrzwWDo2V3IDElWDGbx8E+05fh
+         iiXqwaYioVQgx2NDP4ATStTzssAxN8Nnc/EB33HQwq1xs+cEHtX+78NKoDqvC37eHXRo
+         p0Wx1ARwbHpRd7eE8+uS/fOdSwxQVqgqPtVkJWkeB4L9aZzyF8H2TGEwBgJSmAa6P5uR
+         QCSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763760578; x=1764365378;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ObNMRgWraNV2+kVy9Ahs5486O+aHiHMvo/bApSprMSw=;
-        b=Z77SvWWm4r+rK+761YUMFbnxM8w51aTjKGA5B7XRrqXdrn6AB31MV1293dVjJ/NKlW
-         zHDc6t7f+jFbB6zxJUikzzKmpvcIVg7omZb0WlokwnDisbJMmOp3EaJJE4o8pfs9zE16
-         0qLbcwiqwiYuyfRbcnooDDm+LYhX+i5ZlAMr21BBtDfyZKTLc1kjduOB2GWvNNHus2zH
-         IPJIxdCyoB65Wv0O4j4l3FHiNay1IX2xo1gA1RB1bmUHwz6vIoaha1KtzTL2OK+OE7wV
-         Dsv4+qJ6dUQBjISwdmtcr4YyWnTR8pFRUxd0pIj5X6BzF1g/fiw4P9Guyd6d3dgrOBQ/
-         c3Cw==
-X-Forwarded-Encrypted: i=1; AJvYcCUeh0Hglf1vhZk2ZMAKGEqM80ulVEKbW5uc0Gw9rUdThHL2ZA824wjPPaUkH8MdT+nmE7FV9QOpdfA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjyYWW2NEkMnAnDIPxWAahbD5midq+sqbeLuy+Ms8eozWrJl3R
-	c80mKF18SZedkhcjNrThDOU1vwKmz5uKEdLguucWx7fErupSE/4OSkI77nkWZKPoKA==
-X-Gm-Gg: ASbGnctINZtw1uWXAYnHfGPVyuzOc/xtt0clyKpDGc4m3jaZCwbQ8NIADHTrUgtPt+d
-	Gy6V+fiPy5Hg7Tnj+vp3R14IaT31HzxZwSh9EudHYdEshvcnmvPqNH/oI3MwkRffCtZzBS0HPXA
-	VAKRH9OgUxWI9Fs4/COj//HD4M/R08UkvbrWAMUPZmVY6QAH1es4aESIwi6IFYwn2tdRxuJ07cs
-	Hcs8I3UcegY1zAlXbNzyy/BLTda3otOLsy05kcTY1DrA+zuLhhLzKGr4FHlv+b2k3LTRV4zMBdZ
-	uIE751HSfjp6cauP5jWijEbr4eAi+eSeex740wDs7sGuHEFthGXjI8RdGb6364/7Xt3VRUZctXR
-	32vBKZk7iFIYDrYYcCBTPAHhmRPClgBMHy1vUTMkth14Xc1Exk8ouzqq0G/0KggBUilO/o3XZNu
-	+Zwe9gK2pMiFAf
-X-Google-Smtp-Source: AGHT+IEK26Hkx2hOJI0om8UGqqN/oFpb5KfTvcLLbHE603yAz1bLrAR4owS1IlGR/C4OM5dR0dxGYQ==
-X-Received: by 2002:a05:6214:3286:b0:87c:268d:bbda with SMTP id 6a1803df08f44-8847c57d13bmr51179466d6.60.1763760577655;
-        Fri, 21 Nov 2025 13:29:37 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::7632])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8846e446458sm45606886d6.12.2025.11.21.13.29.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Nov 2025 13:29:37 -0800 (PST)
-Date: Fri, 21 Nov 2025 16:29:34 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <greg@kroah.com>, stealth <oleg.smirnov.1988@gmail.com>
-Cc: Mael GUERIN <mael.guerin@murena.io>, linux-usb@vger.kernel.org,
-	USB Storage list <usb-storage@lists.one-eyed-alien.net>
-Subject: [PATCH] USB: storage: Remove subclass and protocol overrides from
- Novatek quirk
-Message-ID: <b440f177-f0b8-4d5a-8f7b-10855d4424ee@rowland.harvard.edu>
-References: <CAKxjRRxhC0s19iEWoN=pEMqXJ_z8w_moC0GCXSqSKCcOddnWjQ@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1763803954; x=1764408754;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PwfSbVA0IF+INvF3WYKe7TTnKMqGNeoc7QfEa9rVX5E=;
+        b=SuYYxS3HbsdT8i6cfuHPomduBUjtPQaKmBGWngNR1cZwKn6V1gmU+z1NsidUIy8Con
+         Pk2epxl+QDWPdY29+vA4K/zCzf34ifVIU6d6IprPb7yZOOKE348JVPzDGLO/snfW2aEt
+         W6ps/2IP4YSPYwwS5wWxMXCS3exvj9p9RvpW9o/BBuvSOExLBksPl7wp/fjnXbQP/7w/
+         3aEYN92Z9kXRZ9hpaNBObI2+GLVkXXt1td1ufdr6ycR/cgKq0ET24L36aKNGSINuDkZX
+         44pyeyGqe0p0l32RvAjkyC+HglfiaizlQ0MxzymMIjNBpi0CdbxZgYiMeUu8vsY57iGu
+         f4aw==
+X-Forwarded-Encrypted: i=1; AJvYcCWUV1hFGlGiZ9KNmo7mPUh4aLbat5FoQdNvFgg5p3ULzBYl0uPKFTwamRjnX2SO8Td+/DFtVggVEA4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRO68niPlRCTR1aPobi5rwAyLKKpucd+hmQcUI4FgZNzdS9nPL
+	qi4/NYEuem08l/HykyFc+m/AYO83KvgaBimzioFRnbuVdDJO/cc0FkqZYDRdXsZZIbOetvw5BF1
+	LhYTIMOsz9XwILOaRyNyq/qtUXbHX5LwcWYwhJDJ1
+X-Gm-Gg: ASbGncugs070W2qYM3KwKa4Uarv9/IbNbmwNOVtZbQtSHxFEITagV3o8Lh+xW0LJM5z
+	hoHfC6S5H0YR0AV0OHOl9EEu55TQyEiXPzjX5iPbdknjMc+M7m95+3UFLTFQ0LST3AplWxZo9x+
+	mQVQt/RrUcEDIqs6l/tfcBBHrKBap2hPLIfxZyqQtlVNyq+xwLfQFW52PNJ5EsVRy1XZ6qKeZzt
+	EpH71fdBnF2H3/U7p4jKj0UipIn3ELkUCHJvwf1E59rNvUuxIH8PUB0XjCn/CJgMJ+ZRrc=
+X-Google-Smtp-Source: AGHT+IEtl9+0xCjdQa9+R+GC+GJziEZM6X7VYbuzp+qoVNZuwKZ3umLayWIhnoniyzbglxAh3nD2e8iWh7BCQ7kfWaI=
+X-Received: by 2002:a05:7022:6727:b0:119:e56c:18a7 with SMTP id
+ a92af1059eb24-11c9d712aebmr2102850c88.15.1763803953323; Sat, 22 Nov 2025
+ 01:32:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKxjRRxhC0s19iEWoN=pEMqXJ_z8w_moC0GCXSqSKCcOddnWjQ@mail.gmail.com>
+References: <20251119093749.292926-1-royluo@google.com> <20251119093749.292926-3-royluo@google.com>
+ <2025112144-claw-recolor-49c3@gregkh>
+In-Reply-To: <2025112144-claw-recolor-49c3@gregkh>
+From: Roy Luo <royluo@google.com>
+Date: Sat, 22 Nov 2025 17:31:56 +0800
+X-Gm-Features: AWmQ_blaOp8wg2UyednGm_iXI4eOxC8hbQ1lsk34Jq7M1OwHCTll441SPBByo04
+Message-ID: <CA+zupgyEP+_q0uO1SpvR_wpk0ZP2EWf_E6FGQpOCLW63dKp5Fw@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Peter Griffin <peter.griffin@linaro.org>, 
+	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Joy Chakraborty <joychakr@google.com>, 
+	Naveen Kumar <mnkumar@google.com>, Badhri Jagan Sridharan <badhri@google.com>, 
+	Doug Anderson <dianders@google.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A report from Oleg Smirnov indicates that the unusual_devs quirks
-entry for the Novatek camera does not need to override the subclass
-and protocol parameters:
+On Fri, Nov 21, 2025 at 10:26=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Nov 19, 2025 at 09:37:48AM +0000, Roy Luo wrote:
+> > Add support for the DWC3 USB controller found on Google Tensor G5
+> > (codename: laguna). The controller features dual-role functionality
+> > and hibernation.
+> >
+> > The primary focus is implementing hibernation support in host mode,
+> > enabling the controller to enter a low-power state (D3). This is
+> > particularly relevant during system power state transition and
+> > runtime power management for power efficiency.
+> > Highlights:
+> > - Align suspend callback with dwc3_suspend_common() for deciding
+> >   between a full teardown and hibernation in host mode.
+> > - Integration with `psw` (power switchable) and `top` power domains,
+> >   managing their states and device links to support hibernation.
+> > - A notifier callback dwc3_google_usb_psw_pd_notifier() for
+> >   `psw` power domain events to manage controller state
+> >   transitions to/from D3.
+> > - Coordination of the `non_sticky` reset during power state
+> >   transitions, asserting it on D3 entry and deasserting on D0 entry
+> >   in hibernation scenario.
+> > - Handling of high-speed and super-speed PME interrupts
+> >   that are generated by remote wakeup during hibernation.
+> >
+> > Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > Co-developed-by: Joy Chakraborty <joychakr@google.com>
+> > Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> > Co-developed-by: Naveen Kumar <mnkumar@google.com>
+> > Signed-off-by: Naveen Kumar <mnkumar@google.com>
+> > Signed-off-by: Roy Luo <royluo@google.com>
+> > ---
+> >  drivers/usb/dwc3/Kconfig       |  10 +
+> >  drivers/usb/dwc3/Makefile      |   1 +
+> >  drivers/usb/dwc3/dwc3-google.c | 628 +++++++++++++++++++++++++++++++++
+> >  3 files changed, 639 insertions(+)
+> >  create mode 100644 drivers/usb/dwc3/dwc3-google.c
+> >
+> > diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> > index 4925d15084f8..bb0e4dc97da3 100644
+> > --- a/drivers/usb/dwc3/Kconfig
+> > +++ b/drivers/usb/dwc3/Kconfig
+> > @@ -200,4 +200,14 @@ config USB_DWC3_GENERIC_PLAT
+> >         the dwc3 child node in the device tree.
+> >         Say 'Y' or 'M' here if your platform integrates DWC3 in a simil=
+ar way.
+> >
+> > +config USB_DWC3_GOOGLE
+> > +     tristate "Google Platform"
+> > +     depends on OF && COMMON_CLK && RESET_CONTROLLER
+>
+> No build testing?
 
-[3266355.209532] usb 1-3: new high-speed USB device number 10 using xhci_hcd
-[3266355.333031] usb 1-3: New USB device found, idVendor=0603, idProduct=8611, bcdDevice= 1.00
-[3266355.333040] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[3266355.333043] usb 1-3: Product: YICARCAM
-[3266355.333045] usb 1-3: Manufacturer: XIAO-YI
-[3266355.333047] usb 1-3: SerialNumber: 966110000000100
-[3266355.338621] usb-storage 1-3:1.0: USB Mass Storage device detected
-[3266355.338817] usb-storage 1-3:1.0: Quirks match for vid 0603 pid 8611: 4000
-[3266355.338821] usb-storage 1-3:1.0: This device (0603,8611,0100 S 06 P 50) has unneeded SubClass and Protocol entries in unusual_devs.h (kernel 6.16.10-arch1-1)
-                    Please send a copy of this message to
-<linux-usb@vger.kernel.org> and <usb-storage@lists.one-eyed-alien.net>
+Will add depends on COMPILE_TEST.
 
-The overrides are harmless but they do provoke the driver into logging
-this annoying message.  Update the entry to remove the unneeded entries.
+>
+> > +     default n
+>
+> This is always the default, no need to list it here.
 
-Reported-by: stealth <oleg.smirnov.1988@gmail.com>
-Closes: https://lore.kernel.org/CAKxjRRxhC0s19iEWoN=pEMqXJ_z8w_moC0GCXSqSKCcOddnWjQ@mail.gmail.com/
-Fixes: 6ca8af3c8fb5 ("USB: storage: Add unusual-devs entry for Novatek NTK96550-based camera")
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-CC: <stable@vger.kernel.org>
+Will drop it.
 
----
+>
+> > +     help
+> > +       Support the DesignWare Core USB3 IP found on Google Tensor
+> > +       SoCs, starting with the G5 generation. This driver includes
+> > +       support for hibernation in host mode.
+> > +       Say 'Y' or 'M' if you have one such device.
+>
+> You forgot the module name :(
+>
+> > +#define to_dwc3_google(d) container_of((d), struct dwc3_google, dwc)
+>
+> container_of_const() please.
 
- drivers/usb/storage/unusual_devs.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ack, will fix it in the next version.
 
-Index: usb-devel/drivers/usb/storage/unusual_devs.h
-===================================================================
---- usb-devel.orig/drivers/usb/storage/unusual_devs.h
-+++ usb-devel/drivers/usb/storage/unusual_devs.h
-@@ -938,7 +938,7 @@ UNUSUAL_DEV(  0x05e3, 0x0723, 0x9451, 0x
- UNUSUAL_DEV(  0x0603, 0x8611, 0x0000, 0xffff,
- 		"Novatek",
- 		"NTK96550-based camera",
--		USB_SC_SCSI, USB_PR_BULK, NULL,
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_BULK_IGNORE_TAG ),
- 
- /*
+>
+>
+> thanks,
+>
+> greg k-h
+
+Thanks for the review.
+
+Regards,
+Roy Luo
 
