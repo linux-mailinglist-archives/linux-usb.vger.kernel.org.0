@@ -1,125 +1,227 @@
-Return-Path: <linux-usb+bounces-30830-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30831-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 598E5C7D133
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 14:01:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63417C7D15A
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 14:16:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 277E84E41E9
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 13:01:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3C88934E56B
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 13:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65CE412E1E9;
-	Sat, 22 Nov 2025 13:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64C71946C8;
+	Sat, 22 Nov 2025 13:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iyMTnnYY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KbeL8Irx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF4529405
-	for <linux-usb@vger.kernel.org>; Sat, 22 Nov 2025 13:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B925F219E8
+	for <linux-usb@vger.kernel.org>; Sat, 22 Nov 2025 13:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763816506; cv=none; b=UsdEX8OjsYtz3EyVJ/6eIK+MIzn4hSmstDtfNyVlhn/7dSy6DlioRsQNFoTmUDYj/kJBG3kjV+cpwCAJ9X4N0fwCLndg2aDGpNwc8nVgDkNd9FT2edpBFnDeBN2OzXpwRpMxyyMDtm0ECGPiTuGZXhKl+6dKz8qUdVP0GY5LFFM=
+	t=1763817343; cv=none; b=lV7cIvReXeGNt3Ihx5DkYkGDaGneoBQaAdwSu1BCt0OGL7Mrf15aAE5f9vUfz9Ds9s2EPoiOf21eSUrwy4e/WyoyPFclkiPsCjRtBMwG/TPcn//owxpdPVI8XpkAwaNIc8ltK5M48P7RmHS2DYhGoLvNCoKHhmOJOybikx0Ho+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763816506; c=relaxed/simple;
-	bh=ObC1dJfPKkAFnKM6hZxmICVKEdAwq8wUrGiT3eMOyUM=;
-	h=Subject:To:From:Date:Message-ID:MIME-Version:Content-Type; b=Ola72vwdIud85JwEUvCwKLQ5QehVDyfeVq7fY5wBkLjlYRqaN/BFHCdKs/kqRzdHSolKOQEFNCQZel2iFiq682b22cPqj01oOYqZkapEthj60DV9XneHAPawvnOmaxfpBiLXxCrEydUrn61GcuW5GIE+W/wH2pPvt/TelrYXITg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iyMTnnYY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25229C116C6;
-	Sat, 22 Nov 2025 13:01:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1763816505;
-	bh=ObC1dJfPKkAFnKM6hZxmICVKEdAwq8wUrGiT3eMOyUM=;
-	h=Subject:To:From:Date:From;
-	b=iyMTnnYYcypy16EZIjVLdZPQoPFZLV5zX5miYJX6pZQDXwqCuwsROIfH4+JHP4pDu
-	 4vZGm1Gu063JG9/dkCJPzh3Y167nd7cbqNuqw/+9DSniKBSYcno+9kxrBQ+GuEAGfc
-	 1XNABhDCt2U98juRsQqZrKGCiuFW1evM1A9/5bKA=
-Subject: patch "USB: storage: Remove subclass and protocol overrides from Novatek" added to usb-linus
-To: stern@rowland.harvard.edu,gregkh@linuxfoundation.org,linux-usb@vger.kernel.org,oleg.smirnov.1988@gmail.com,stable@kernel.org,usb-storage@lists.one-eyed-alien.net
-From: <gregkh@linuxfoundation.org>
-Date: Sat, 22 Nov 2025 14:01:43 +0100
-Message-ID: <2025112243-constable-mummy-d77d@gregkh>
+	s=arc-20240116; t=1763817343; c=relaxed/simple;
+	bh=B6Y4/fZAZEYsJ2YKx0oiLuBkkeFVSiEZtPSOPesLf6Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q6IS+aKC2hOPQTgxksewOi/zqIb1yPkxGm5ed/sS9qwAc7HBSqmZ7/h70CXwOfKvvi+vMQ07OvddDiNkUwG18CB2nbmKG5lY8/oGEolW0/UeaeKQpRMM+oleqhbKBRYyNeR4kPlRVtALUIOBhulYHDpvGu6is5EIvhaeDH0lcvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KbeL8Irx; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-786a822e73aso29872187b3.3
+        for <linux-usb@vger.kernel.org>; Sat, 22 Nov 2025 05:15:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763817341; x=1764422141; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1S+ja0RTWHQtphatY/G22uG586DuFYrpoM5yUgJ1qos=;
+        b=KbeL8Irx6EzczWSCwmgJjcPRs+DKlA/0K+8mnm62RSHr7n1emgPM6GNSQVZ8uZuYR2
+         lChZ1IsjOFVJlOuaJUdWJWTA6M4RSr7NV4Z2YhK55JLTKmUqp/qU3O1QbhvmPcXfQ1Is
+         mV5QOK+uFot4l8LpxUH/YrHmjQOqeJVWS1ObUI+FppLsYH2zbYcom8HFx8pt7Dy1M+Nb
+         arBLm2lbVdyh0HVRnos/zAko4P8xDExdlHtk418wpy73N38A6CWpVce+Fp4nnoLRn9mC
+         hKH0DBt3BefBNPCI45L19qBir1ndbihlOf4Nsd8pVhxV5H/oKSE4vXe58Y8mz4HU3LJK
+         VUtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763817341; x=1764422141;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1S+ja0RTWHQtphatY/G22uG586DuFYrpoM5yUgJ1qos=;
+        b=ewki2JieSdWgWUtjSfWc4JPLbkCZG+32DHdWNto3X8ZcG9lrreIB1gk9Rt1S1g4tZl
+         /U+QGgWzwBdVpMJDX4ohkJcMb09WmhRvEycZnCWF1HCJKUPlOKUE+xIFu/eNK5rhr6JW
+         h7Wlt7mAvaONQmBETS7xd2zM2qKMwAxm+aFdep3Z+FIVm4BUTIFYZI/3HvY1/5MeOF0h
+         WgPoSArMpFThaeccXnr5IrKodLgWdmoUGdtFDtgDbWkff2Rs99zE9kZQgZKxyAdnMUMH
+         OPlKKD2u/0fd8fWvb0XpIxvzOvECfNCOIXs+VPkp5vr1YbjSdTrZE83PPH6nFb6MtLv3
+         007A==
+X-Gm-Message-State: AOJu0Yyd3Xq/X2k0fVY98BEie4lTZoxO1AqMzhIOafUlbpUO3E30KA0Y
+	kikiVXVHhL8aGqd4mqX7+3H4UEHy4VBKVGhdOS/9vRexryuOHfnFOIuvEHVoUFKiX48xWwTqmM0
+	ey9bXdEVxcYcZRZvHEKxLWU/iPxTuGkcgqerNxuO2+g==
+X-Gm-Gg: ASbGnctDgl1bAJYxmrIHI8uzTeu+I30ibJljXrCJkjn2mRN+gxTrHjg2IHfcydiO0Jq
+	did1x3+T/aqLr2qG1wvOsn5VHbHnEYYwQ2gzL2Lk2zcdh1Np92GNHhn/BgQW/qwI6poCKwvNCES
+	WhGfB54/b87wrZZSl0vBvUYU0/Jt7nZ3De7Q+MveTf/jE0gVVG/HYNhyjblnMDxk0tDGYce8AWJ
+	lJEerxhNJv8nHk9iTs1gSpwg4XolC0qUU7V5UD6dkAuAqhoO0LkfZK4Iz8utYBDIlU8Kbt2
+X-Google-Smtp-Source: AGHT+IFKev2zbyQhanLLzlttHKwpq1D5mPVafgzZ7/eV7vybnWT8I/hGS93CBHlsOfllCbzlbT/l9wILSaKnJ8wLzwQ=
+X-Received: by 2002:a05:690c:38d:b0:786:5fdc:1d41 with SMTP id
+ 00721157ae682-78a8b54c454mr49820137b3.54.1763817340616; Sat, 22 Nov 2025
+ 05:15:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
+References: <20251122112539.4130712-1-jerry.xzq@gmail.com> <CAD48c-UjbPK4GewGpVVdEY30fhnhdAGQqrXQ3r0RgHc6suMo7Q@mail.gmail.com>
+ <2025112237-brush-unseemly-7a95@gregkh>
+In-Reply-To: <2025112237-brush-unseemly-7a95@gregkh>
+From: jerry xzq <jerry.xzq@gmail.com>
+Date: Sat, 22 Nov 2025 21:15:29 +0800
+X-Gm-Features: AWmQ_bn1t_tLkq7raS2XMOoK4nlrHRdP-HSz8yOoJWPoWnFIM79nJnpg-69MQcQ
+Message-ID: <CAD48c-UgjXdPuKswm9_KgPT2xkWR4Aie1fG5p9AGRgukFs-gOw@mail.gmail.com>
+Subject: Re: [PATCH] USB: of: filter disabled device node
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, Nov 22, 2025 at 8:34=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Sat, Nov 22, 2025 at 07:31:47PM +0800, jerry xzq wrote:
+> > On Sat, Nov 22, 2025 at 7:26=E2=80=AFPM Zhengqiao Xia <jerry.xzq@gmail.=
+com> wrote:
+> >
+> > > We should not point the of_node of a USB device to a disabled devicet=
+ree
+> > > node. Otherwise, the interface under this USB device will not be able
+> > > to register.
+> > >
+> > > Signed-off-by: Zhengqiao Xia <jerry.xzq@gmail.com>
+> > > ---
+> > >  drivers/usb/core/of.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
+> > > index 763e4122ed5b3..6bb577e711811 100644
+> > > --- a/drivers/usb/core/of.c
+> > > +++ b/drivers/usb/core/of.c
+> > > @@ -31,6 +31,9 @@ struct device_node *usb_of_get_device_node(struct
+> > > usb_device *hub, int port1)
+> > >                 if (of_property_read_u32(node, "reg", &reg))
+> > >                         continue;
+> > >
+> > > +               if (!of_device_is_available(node))
+> > > +                       continue;
+> > > +
+> > >                 if (reg =3D=3D port1)
+> > >                         return node;
+> > >         }
+> > > --
+> > > 2.34.1
+> > >
+> > >  Supplementing questions from the previous email:
+> >
+> > > What changed to require this?  What commit id does this fix?
+> > > And what devices have a disabled devicetree node?
+> >
+> > fixes: 01fdf179f4b064d4c9d30(usb: core: skip interfaces disabled in
+> > devicetree )
+> >
+> > Connect a USB device directly to the USB port, for me, LTE RW101.
+>
+> Why?  Why not just us the normal USB device topology?  Why is this in DT
+> at all?
+This is why I need to disable this USB hub node.  I didn't want this
+node to work properly, so I disabled it.
 
-This is a note to let you know that I've just added the patch titled
+>
+> > However, a disabled node is attached to the DTS node of this port.
+>
+> Why?
+please see:
+https://github.com/torvalds/linux/blob/master/drivers/usb/core/usb.c#L731
+https://github.com/torvalds/linux/blob/master/drivers/usb/core/of.c#L25
 
-    USB: storage: Remove subclass and protocol overrides from Novatek
+>
+> > &xhci3 {
+> >         status =3D "okay";
+> >
+> >         /* 2.x hub on port 1 */
+> >         usb_hub_2_x: hub@1 {
+> >                 compatible =3D "usbbda,5411";
+> >                 reg =3D <1>;
+> >                 vdd-supply =3D <&pp3300_s3>;
+> >                 peer-hub =3D <&usb_hub_3_x>;
+> >                 status =3D "disabled";
+> >
+> >                 ports {
+> >                         #address-cells =3D <1>;
+> >                         #size-cells =3D <0>;
+> >                         port@1 {
+> >                                 reg =3D <1>;
+> >                                 usb_hub_dsp1_hs: endpoint { };
+> >                         };
+> >                         port@2 {
+> >                                 reg =3D <2>;
+> >                                 usb_hub_dsp2_hs: endpoint { };
+> >                         };
+> >                         port@3 {
+> >                                 reg =3D <3>;
+> >                                 usb_hub_dsp3_hs: endpoint { };
+> >                         };
+> >                         port@4 {
+> >                                 reg =3D <4>;
+> >
+> >                                 /* On-board WWAN card */
+> >                                 usb_hub_dsp4_hs: endpoint { };
+>
+> That's the thing I don't want to see, why is that WWAN card described
+> here?  Why can't the normal USB device discovery find it and use it
+> properly?
 
-to my usb git tree which can be found at
-    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-in the usb-linus branch.
+I want to disable the whole hub.
 
-The patch will show up in the next release of the linux-next tree
-(usually sometime within the next 24 hours during the week.)
+>
+> >                         };
+> >                 };
+> >         };
+> >
+> > Based on the current code, the of_node of this directly connected LTE
+> > device is hub.
+>
+> But why is that needed?
+this is the behavior of code:
+please see:
+https://github.com/torvalds/linux/blob/master/drivers/usb/core/usb.c#L731
+https://github.com/torvalds/linux/blob/master/drivers/usb/core/of.c#L25
 
-The patch will hopefully also be merged in Linus's tree for the
-next -rc kernel release.
-
-If you have any questions about this process, please let me know.
-
-
-From df5fde297e617041449f603ed5f646861c80000b Mon Sep 17 00:00:00 2001
-From: Alan Stern <stern@rowland.harvard.edu>
-Date: Fri, 21 Nov 2025 16:29:34 -0500
-Subject: USB: storage: Remove subclass and protocol overrides from Novatek
- quirk
-
-A report from Oleg Smirnov indicates that the unusual_devs quirks
-entry for the Novatek camera does not need to override the subclass
-and protocol parameters:
-
-[3266355.209532] usb 1-3: new high-speed USB device number 10 using xhci_hcd
-[3266355.333031] usb 1-3: New USB device found, idVendor=0603, idProduct=8611, bcdDevice= 1.00
-[3266355.333040] usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[3266355.333043] usb 1-3: Product: YICARCAM
-[3266355.333045] usb 1-3: Manufacturer: XIAO-YI
-[3266355.333047] usb 1-3: SerialNumber: 966110000000100
-[3266355.338621] usb-storage 1-3:1.0: USB Mass Storage device detected
-[3266355.338817] usb-storage 1-3:1.0: Quirks match for vid 0603 pid 8611: 4000
-[3266355.338821] usb-storage 1-3:1.0: This device (0603,8611,0100 S 06 P 50) has unneeded SubClass and Protocol entries in unusual_devs.h (kernel 6.16.10-arch1-1)
-                    Please send a copy of this message to
-<linux-usb@vger.kernel.org> and <usb-storage@lists.one-eyed-alien.net>
-
-The overrides are harmless but they do provoke the driver into logging
-this annoying message.  Update the entry to remove the unneeded entries.
-
-Reported-by: stealth <oleg.smirnov.1988@gmail.com>
-Closes: https://lore.kernel.org/CAKxjRRxhC0s19iEWoN=pEMqXJ_z8w_moC0GCXSqSKCcOddnWjQ@mail.gmail.com/
-Fixes: 6ca8af3c8fb5 ("USB: storage: Add unusual-devs entry for Novatek NTK96550-based camera")
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable <stable@kernel.org>
-Link: https://patch.msgid.link/b440f177-f0b8-4d5a-8f7b-10855d4424ee@rowland.harvard.edu
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/storage/unusual_devs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index dfa5276a5a43..47f50d7a385c 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -938,7 +938,7 @@ UNUSUAL_DEV(  0x05e3, 0x0723, 0x9451, 0x9451,
- UNUSUAL_DEV(  0x0603, 0x8611, 0x0000, 0xffff,
- 		"Novatek",
- 		"NTK96550-based camera",
--		USB_SC_SCSI, USB_PR_BULK, NULL,
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_BULK_IGNORE_TAG ),
- 
- /*
--- 
-2.52.0
-
-
+>
+> > If there is only one LTE interface, then the of_node of this interface
+> > is also the hub.
+>
+> Again, why?
+please see: https://github.com/torvalds/linux/blob/master/drivers/usb/core/=
+of.c#L57
+>
+> > With the following code, the interface will be unable to create a devic=
+e.
+> >
+> > if (intf->dev.of_node &&
+> > !of_device_is_available(intf->dev.of_node)) {
+> > dev_info(&dev->dev, "skipping disabled interface %d\n",
+> > intf->cur_altsetting->desc.bInterfaceNumber);
+> > continue;
+> > }
+> > Then this LTE will be unable to create a device.
+> > this is not the result I wanted.
+>
+> Then try removing it from dt entirely, it should not be necessary to
+> describe USB devices in dt.
+>
+> thanks,
+>
+> greg k-h
 
