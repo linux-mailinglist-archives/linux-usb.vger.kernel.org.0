@@ -1,110 +1,117 @@
-Return-Path: <linux-usb+bounces-30816-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30817-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DF09C7CDD0
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 12:07:37 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB284C7CE3A
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 12:26:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 243B14EA3B2
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 11:04:54 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3758934246B
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 11:26:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A3D82FD679;
-	Sat, 22 Nov 2025 11:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4802FD7D2;
+	Sat, 22 Nov 2025 11:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eKLMUqlk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fmRlyp5v"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1CD2FCBF0
-	for <linux-usb@vger.kernel.org>; Sat, 22 Nov 2025 11:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971F22FD7AE
+	for <linux-usb@vger.kernel.org>; Sat, 22 Nov 2025 11:26:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763809466; cv=none; b=jk8JW8lgR4I3C6hjd0q8F0uT5eWj2HpeV0T/9Pca3rDZtJ4d9E9nyD6oYTJ3cJu7WCTOrtf5pf+544JVYUDfyCTHUOIyo8m5aJFUhcrqdmvBsu4CxI/Qi8ZI2MOM71xSMs7Ge6ydVs2QJTCg+kuAlNEJrsmg6vS+B6Xp9oa3csE=
+	t=1763810766; cv=none; b=X2g988c/pq0wYQUgSmAhQvI+uDZW6gVfsARkPz1M7hbEZ3QElJXnDhV3zDja8aMBaUlUpCtA8KCApZgNQNakC9dMBbxfy0THCTqP8iO0cgHMvFkBzZZz6y+IY4x6q3mNaFw8Lsy2F4fxS4ei9a3SeLlYLZgrw1RhAFRyiX+FGuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763809466; c=relaxed/simple;
-	bh=tsJxznhhsdWk/IcHQzDu5o2LqVbhJTIdpbjmLLnlHxY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=DjQnh7Mp6tx40Y6x7IihxMmOAm3TW27+2j+Mn868VYdrRfaFBV+RMS3HXKILe2es+IxhqnooT3GMvOAV64k2FP16WeWz8HK5BXdnrICAxlF3KYbjza/OrsP8g5wKpFt0BuRN/3x5Vkz4yBoTBxlGNXTKLperDoqJF24GX0xB9sE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=huaqin.corp-partner.google.com; spf=pass smtp.mailfrom=huaqin.corp-partner.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eKLMUqlk; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=huaqin.corp-partner.google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaqin.corp-partner.google.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b7355774747so52603666b.2
-        for <linux-usb@vger.kernel.org>; Sat, 22 Nov 2025 03:04:24 -0800 (PST)
+	s=arc-20240116; t=1763810766; c=relaxed/simple;
+	bh=an9kJ35GCpI6QudU4rlIDJI0BmkwJKKK9GCgX4Ns2S8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CpU2XJ92wYP2AvyDF56S3b1K5j8lbqsiTQxOtwbAQZHOK74DmGPjwlZpewpO18B8nBIS15SfJIWNY4BQ0wmNPLFCPIbVcTvPZUKpF1nby5xFIj79v4NFyec8ZbCIr2YJYcTW/CObJMZkKDQioQRZuLv4UbvyJg+KRkNmLAenEaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fmRlyp5v; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7b9387df58cso4573897b3a.3
+        for <linux-usb@vger.kernel.org>; Sat, 22 Nov 2025 03:26:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763809463; x=1764414263; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HIscJlrRu/kRjOauS2L78QjFG0eah53kWGol52SXo6M=;
-        b=eKLMUqlkF5/ChYZV55RAuYsn1EKD9TtpVLegMLNyzaone4N+6WfDZxcW42Bxm67UTD
-         EUx1tMsmowX4hbOSIWUttEN4x/JrTM79DCMHGmC82zXtfgBHlFyXMHFHpmPUQxAKuPGB
-         MkHlaAk8MI1RyJpQLpvJqcFKsDyVOQqnS+o1ciBSvYkr4fA3Qf/S4ZDEbGN0lvwIFchS
-         FBWM4A04eupCNsrOhlESiIjYVbn6YLOVH/aSVrPu0R7+TlsHGnYdQdH2XrtkMxDjZS/b
-         q/0DCaO6KFAONI8E5o3bV7i5Rs+KBxloYDiLIFfleYC7HWcCRnJWatiX66KUXhQxQPXF
-         UWeA==
+        d=gmail.com; s=20230601; t=1763810762; x=1764415562; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7zSPPPnIHfd6KTKHtFLn3pGgWQS0TyX/HkQmeGrAs0U=;
+        b=fmRlyp5vO1j+Y7AbgB/wQin6PU3SKD7YeHO7+jkNhbXRu2xuZUOE6ECGeHndxR0Kyo
+         olmkdV/9uZkWSUVvEiE8juCKdwqt3XELtO/snKQnXqVowJqnUFUh8eyqugZGP8G5Z3RK
+         /avTjQpIFj6jJ/mAhkh3f8PvY6q85Paurq5RD3mHcmF2dOm96HI07fFFsSOpIsZhCSJI
+         wR8qcL2V7uteYtgUs9l0PFEdHzJFGaIs6/3DjWxdBupY+z8rI1v3HUQAFpkncU2NKfd0
+         9eqUNBD315e8m5LrwXFIzCZLxvKL8Dc5YFgn4QjsUcTqocGRlMEuaC9yVFvo5i0LTOq9
+         CSyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763809463; x=1764414263;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HIscJlrRu/kRjOauS2L78QjFG0eah53kWGol52SXo6M=;
-        b=P1GhM/gnNcYqHZ/xxZkZqFMgf3e5moaJrmJrChSlRvU1Onhrs6xEZ5Ih4p6zjhQ1Ej
-         yLPDbKA9hO+bWp9fMkvmtsYlqdKeHj52dRN0ryO0w/eUMX3SK/zUUvNxrlJnYwGYJRxJ
-         lgOkcoAkHvj+VxhXw/CWrlCVikTZNsbxZez1uPVzduhpboBnzkzowYoWo28XbGQ5qVfi
-         9pwlTibQvhbmtuh3Zh3gFheUdvRGCO4iUGjUi5XryQX7LoyjwiOosdJ8YD+XYCZHYlx+
-         EQVKf82+iEaIythniH8i/c33MkiDAiidN+9MWEllRr6OqedT2WlTPA8G7SRZDQ/f7xCU
-         6+Rg==
-X-Forwarded-Encrypted: i=1; AJvYcCVklskPCZXFH68BYPdpTkNORLM/gKU6Z3W5t0ryA9rUu2t8a50V/G7tsiSYdYhox1JYTfIBcLqHM3I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoPf64QcfXAWdzuHwOHa59y+9RIfyLVr5Hw6nm7ec4ru4gHUx/
-	wcSWOkrjf1Xegoc77OLq6wgFTHw3jM8uwRB0ujWqohMYDKu6/1k5/+/2VzRgQv8/0pUnysP+Ajh
-	8/Reja3hItZCNeEeyrnmV1qP/aacYBh0CGwTdPVFY7Q==
-X-Gm-Gg: ASbGnct216fNs/ywPBn5Ev4WKLWQhfB1+zE4XttAYk0y+5Sj2FQA1OKbw7E0kwcBVdN
-	wQdub5/whk19IvYyCTK5Vegm7PNotRaF19tcIiLh5tX89WOfFHcx8xl+q+f+KDe1UqFGWbUHbvN
-	RbUx4m1JjnDJEeriTPUR4o5foV2pcWMitvb7t3UhVa0DaryUkVq+IROBrAYTu8MZWl30Tf5wQL4
-	nl5JPDG5oQUC2RqotLgc6hSasAmJkNXHR2xRdY72tMlxTG10b6LIKzFmBuIgh0H7gKszuXR
-X-Google-Smtp-Source: AGHT+IFwj0wIUS3W02n50SAzmbsXBONNGDPAJuVkICQXGzzp3m7faHtxTsrZQ2QDhMaOqE3Pbb4nQ2w7li+HcQCw9Ys=
-X-Received: by 2002:a17:907:7247:b0:b45:a84e:8b69 with SMTP id
- a640c23a62f3a-b767185d1a7mr313034466b.5.1763809463031; Sat, 22 Nov 2025
- 03:04:23 -0800 (PST)
+        d=1e100.net; s=20230601; t=1763810762; x=1764415562;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7zSPPPnIHfd6KTKHtFLn3pGgWQS0TyX/HkQmeGrAs0U=;
+        b=wNqHmL/xDfD3zVKsDJicO7l5Wt0Qgh6m4YUyzxkJLIKrKDNCWO5nauk0KC/DEpCRc7
+         aUEQbOuTd0WRTvpGu4M0weUEYL3sEte9A1yONIuVvwcuvlq0CszzOmyaSBimzamiJNUN
+         6ZK3+IZrIpiD5C9lHQgj2qVVoNnuWRrDE+Jx54KWobefJksRPANMhPEjWfLOX49mCm6d
+         2QYehhvblaPlgLsJUXU3DIZ5yrkqBm2XZxzLqBSt8GQAPUwt+eEtUKjacCtNvAFM69uL
+         dWn2X9JTIKhKwtoa90T0cab4pI1CXQvLQDuISdmpXyOKJyOIXaIzTedYofAhylZIIKEb
+         VPeQ==
+X-Gm-Message-State: AOJu0Yxu/4kSAXsfh01aQn1Lh1lVaCZY6MgoX/NrWIyh6F76RTayhlEt
+	axH4v981U8Oq5nc07qqSV0JXb5WU9qy9M5mjlTDJPzs8yGjcAuG5jBM1NhADrqaSfc0=
+X-Gm-Gg: ASbGncv5fi35gzCoDi+9H2yT3YWT91t5o2bqBNiBZWFhYhBcxNRGxdwa5vFz3y0tiuA
+	ZjfWdtcsgyFuvH0EidsNJ22UgmYSTcabNCVf3bL4KMPP4utBkJQhSPWIod8ZGgaI+zNo/pGZC2Z
+	ZCcJdq4j1dWcX8bYqbQNOc4e/0lP2C4gsELBh3mRhewgSHZYdAc6kyb4mBo399id8vdV05JlNHO
+	gDbY8dgGt7GkjtjsCZe9iMOgEyoUrw8hT1YFFxgwQQ5QeaT6pfVr+PkdOseL7SXzdKA79DehgBd
+	DlidIyaO02iuHYgLcvJh2H4Cm5UgH4NFb73l3TO+Lu8AerxF6RSFQLCQQXKzZbxkYYVtX3mOVJv
+	insF2zFmN6Xe2MmFpj8GOd6rR5/bgHN1DdWst1S658Ws92vAubIDFP2/+JAZeo1JxISGBmtTWu9
+	HL60kCpZr/UQ4VdQ==
+X-Google-Smtp-Source: AGHT+IGAwSdzUIv8E7gpk7OnJTk9Qi3ec6e3Gjur4KU73hfslAvGuyMS/GPq75TyECJjafbwzvzb9w==
+X-Received: by 2002:a05:6a20:3d8a:b0:35d:53dc:cb56 with SMTP id adf61e73a8af0-3614edd9bd8mr6372448637.36.1763810762455;
+        Sat, 22 Nov 2025 03:26:02 -0800 (PST)
+Received: from xzq.huaqin.com ([103.117.77.121])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7c3ecf80f4csm8815704b3a.8.2025.11.22.03.26.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Nov 2025 03:26:02 -0800 (PST)
+From: Zhengqiao Xia <jerry.xzq@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhengqiao Xia <jerry.xzq@gmail.com>
+Subject: [PATCH] USB: of: filter disabled device node
+Date: Sat, 22 Nov 2025 19:25:39 +0800
+Message-Id: <20251122112539.4130712-1-jerry.xzq@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251121080905.2237648-1-xiazhengqiao@huaqin.corp-partner.google.com>
- <2025112159-sermon-grooving-7eb3@gregkh> <CADYyEwQqghzWedZYmZtwk1+R5DxMYg0aMJhVAutrW1w+CTB-7w@mail.gmail.com>
- <2025112126-leverage-wrongful-85c4@gregkh>
-In-Reply-To: <2025112126-leverage-wrongful-85c4@gregkh>
-From: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-Date: Sat, 22 Nov 2025 19:04:11 +0800
-X-Gm-Features: AWmQ_bn4YzHtbFlEZGdhJvUsd172OUkxJmMyGUd9LA4Hg12qa0leAZEr44r3bUc
-Message-ID: <CADYyEwT8XmBFwWx6KQD9Ax2-=wgKXH2njuMJMWU0_SBuyd8dXg@mail.gmail.com>
-Subject: Re: [PATCH] USB: of: filter disabled device node
-To: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2025=E5=B9=B411=E6=9C=8821=E6=
-=97=A5=E5=91=A8=E4=BA=94 20:35=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri, Nov 21, 2025 at 08:24:02PM +0800, Zhengqiao Xia wrote:
->
-> <snip>
->
-> For some reason you sent this only to me, which is a bit rude to
-> everyone else on the mailing list.  I'll be glad to respond if you
-> resend it to everyone.
+We should not point the of_node of a USB device to a disabled devicetree
+node. Otherwise, the interface under this USB device will not be able
+to register.
 
-I am so sorry, I didn't notice this at the time.
+Signed-off-by: Zhengqiao Xia <jerry.xzq@gmail.com>
+---
+ drivers/usb/core/of.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I will send it again with my company email
->
-> thanks,
->
-> greg k-h
+diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
+index 763e4122ed5b3..6bb577e711811 100644
+--- a/drivers/usb/core/of.c
++++ b/drivers/usb/core/of.c
+@@ -31,6 +31,9 @@ struct device_node *usb_of_get_device_node(struct usb_device *hub, int port1)
+ 		if (of_property_read_u32(node, "reg", &reg))
+ 			continue;
+ 
++		if (!of_device_is_available(node))
++			continue;
++
+ 		if (reg == port1)
+ 			return node;
+ 	}
+-- 
+2.34.1
+
 
