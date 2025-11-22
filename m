@@ -1,172 +1,182 @@
-Return-Path: <linux-usb+bounces-30824-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30825-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B504C7CFB4
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 13:34:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BAE7C7CFC0
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 13:35:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2B8014E4C67
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 12:34:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E953E3A8D49
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Nov 2025 12:35:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D0952AD35;
-	Sat, 22 Nov 2025 12:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7132AD35;
+	Sat, 22 Nov 2025 12:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="r9Q9yC01"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zEVBksh0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D35DDAB;
-	Sat, 22 Nov 2025 12:34:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6771D6193;
+	Sat, 22 Nov 2025 12:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763814865; cv=none; b=SagI5bzayzEkGi9VNtnvxYDpoNfNo38Pfisuxd6fYDHGLhldXqsCUpwzR6YDGAk9mOwt1lNGyjQr4viOrRKgVWvL3wDzQLIGdWqogRZZy0YCnSWQxWoq3M+vb+wPVabSW3/IsLRVAMcd3rcSuRrhqYhfxGRyMcHzvx1LDqqTOUc=
+	t=1763814918; cv=none; b=bn1UDZcdCiJJoXfrmMfDPbAtNillCG9VtpRevYBsBtMP7IkeP+7wm37IDu0qHfaPX9tZ8MBvAeX83qn8pcSjkXnmDIBQ2KxLgzoOhd2R5kHXWQEH6rHoaV5cOFe5K0ni6YH9CWNFNieWDw04FQrV+plSKsGIOv9v+j2IbS771D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763814865; c=relaxed/simple;
-	bh=HwWmfcAXgfmoqy8jG01OJU0LrGsdJJ6O1rbCE59VHI0=;
+	s=arc-20240116; t=1763814918; c=relaxed/simple;
+	bh=mXHHgeiUlhJ4Ko8Q0J+WX5MHnWYEekXcVNTmh/1dM7E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LdDsE51Pxl6qb4hYdU21iFdwXylkxq1JAJyP09XrUtMpN6hXtLwCcK5jhBpmBhUfMfsFM+OdZ7BFa+ZTQ8pVn+YggtdPIUC1Yu/DJV0IN/rNs5rvNaMP0QFSgyD+19BZlkNt+m4ekOYQH5gD3KQczVoRsQEEClr1iIOnCsYkEGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=r9Q9yC01; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21905C4CEF5;
-	Sat, 22 Nov 2025 12:34:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=cVmN1/nvUCOrCmyWawJ1AjmOz/vnMbNE9Jm311J6nZ1PmxTV0qbWhDgKewVErgLXFuM2e19F7YEkayqsKbeKufNiVrOMIznwCbCv9zNLbGeQBNb0I5Dn3u3+EDR4jali1U5Xe8BFov0wY79zMyqZ30PBxnyncGsWV3ez3Tm/Etg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zEVBksh0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCC3C4CEF5;
+	Sat, 22 Nov 2025 12:35:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1763814864;
-	bh=HwWmfcAXgfmoqy8jG01OJU0LrGsdJJ6O1rbCE59VHI0=;
+	s=korg; t=1763814917;
+	bh=mXHHgeiUlhJ4Ko8Q0J+WX5MHnWYEekXcVNTmh/1dM7E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r9Q9yC01K/cWB61C/bT9Os48DYRnxvRAEizA+MIiEdwdyNADEVpbu/t18qcOBNpDH
-	 r6hwdFLw+24pYw745ZaZOwNeUDdtAj0t9zlovsKN8/txVVd/S1KW1kpHOqR8/e8soc
-	 4//8D6OyLSbxb5ONGCX6l0BSwcgdJIF8SBGkoDUE=
-Date: Sat, 22 Nov 2025 13:34:21 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: jerry xzq <jerry.xzq@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: of: filter disabled device node
-Message-ID: <2025112237-brush-unseemly-7a95@gregkh>
-References: <20251122112539.4130712-1-jerry.xzq@gmail.com>
- <CAD48c-UjbPK4GewGpVVdEY30fhnhdAGQqrXQ3r0RgHc6suMo7Q@mail.gmail.com>
+	b=zEVBksh0CtxT5twtiv2E47j8wpEZsf20ttbGryy8TC6LriXJ9I4+iNc20NBh2jsWi
+	 kLKwg9as3qiLVaY2fwiuoUQMmpjDqPQXMH3zrL0TP/fQVX9N2aw+YfBeML2LOihTlY
+	 6Z4qeBMAhnujl8NAav9ilIRS1KANyj6H3UXQD0/g=
+Date: Sat, 22 Nov 2025 13:35:15 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Peter Griffin <peter.griffin@linaro.org>
+Cc: Roy Luo <royluo@google.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Doug Anderson <dianders@google.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	Joy Chakraborty <joychakr@google.com>,
+	Naveen Kumar <mnkumar@google.com>
+Subject: Re: [PATCH v8 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+Message-ID: <2025112248-spoon-waffle-a508@gregkh>
+References: <20251122-controller-v8-0-e7562e0df658@google.com>
+ <20251122-controller-v8-2-e7562e0df658@google.com>
+ <CADrjBPqPsPBBSbhx8ZFreFWX2tRxaATT=azS-b1H2b=TJoVAAw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD48c-UjbPK4GewGpVVdEY30fhnhdAGQqrXQ3r0RgHc6suMo7Q@mail.gmail.com>
+In-Reply-To: <CADrjBPqPsPBBSbhx8ZFreFWX2tRxaATT=azS-b1H2b=TJoVAAw@mail.gmail.com>
 
-On Sat, Nov 22, 2025 at 07:31:47PM +0800, jerry xzq wrote:
-> On Sat, Nov 22, 2025 at 7:26 PM Zhengqiao Xia <jerry.xzq@gmail.com> wrote:
+On Sat, Nov 22, 2025 at 11:58:39AM +0000, Peter Griffin wrote:
+> Hi Roy,
 > 
-> > We should not point the of_node of a USB device to a disabled devicetree
-> > node. Otherwise, the interface under this USB device will not be able
-> > to register.
+> Thanks for your patch. It's great to see Laguna support being added upstream.
+> 
+> On Sat, 22 Nov 2025 at 09:32, Roy Luo <royluo@google.com> wrote:
 > >
-> > Signed-off-by: Zhengqiao Xia <jerry.xzq@gmail.com>
+> > Add support for the DWC3 USB controller found on Google Tensor G5
+> > (codename: laguna). The controller features dual-role functionality
+> > and hibernation.
+> >
+> > The primary focus is implementing hibernation support in host mode,
+> > enabling the controller to enter a low-power state (D3). This is
+> > particularly relevant during system power state transition and
+> > runtime power management for power efficiency.
+> > Highlights:
+> > - Align suspend callback with dwc3_suspend_common() for deciding
+> >   between a full teardown and hibernation in host mode.
+> > - Integration with `psw` (power switchable) and `top` power domains,
+> >   managing their states and device links to support hibernation.
+> > - A notifier callback dwc3_google_usb_psw_pd_notifier() for
+> >   `psw` power domain events to manage controller state
+> >   transitions to/from D3.
+> > - Coordination of the `non_sticky` reset during power state
+> >   transitions, asserting it on D3 entry and deasserting on D0 entry
+> >   in hibernation scenario.
+> > - Handling of high-speed and super-speed PME interrupts
+> >   that are generated by remote wakeup during hibernation.
+> >
+> > Co-developed-by: Joy Chakraborty <joychakr@google.com>
+> > Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> > Co-developed-by: Naveen Kumar <mnkumar@google.com>
+> > Signed-off-by: Naveen Kumar <mnkumar@google.com>
+> > Signed-off-by: Roy Luo <royluo@google.com>
 > > ---
-> >  drivers/usb/core/of.c | 3 +++
-> >  1 file changed, 3 insertions(+)
+> >  drivers/usb/dwc3/Kconfig       |  13 +
+> >  drivers/usb/dwc3/Makefile      |   1 +
+> >  drivers/usb/dwc3/dwc3-google.c | 628 +++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 642 insertions(+)
 > >
-> > diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
-> > index 763e4122ed5b3..6bb577e711811 100644
-> > --- a/drivers/usb/core/of.c
-> > +++ b/drivers/usb/core/of.c
-> > @@ -31,6 +31,9 @@ struct device_node *usb_of_get_device_node(struct
-> > usb_device *hub, int port1)
-> >                 if (of_property_read_u32(node, "reg", &reg))
-> >                         continue;
+> > diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> > index 4925d15084f816d3ff92059b476ebcc799b56b51..f58c70dabf108878cbefe0abea88572d9ae81e26 100644
+> > --- a/drivers/usb/dwc3/Kconfig
+> > +++ b/drivers/usb/dwc3/Kconfig
+> > @@ -200,4 +200,17 @@ config USB_DWC3_GENERIC_PLAT
+> >           the dwc3 child node in the device tree.
+> >           Say 'Y' or 'M' here if your platform integrates DWC3 in a similar way.
 > >
-> > +               if (!of_device_is_available(node))
-> > +                       continue;
+> > +config USB_DWC3_GOOGLE
+> > +       tristate "Google Platform"
+> > +       depends on COMPILE_TEST
+> > +       depends on OF && COMMON_CLK && RESET_CONTROLLER
+> > +       help
+> > +         Support the DesignWare Core USB3 IP found on Google Tensor
+> > +         SoCs, starting with the G5 generation. This driver includes
+> 
+> consider adding: (Laguna)
+
+What is "laguna" and why should it be listed here?
+
+> > +         support for hibernation in host mode.
+> > +         Say 'Y' or 'M' if you have one such device.
 > > +
-> >                 if (reg == port1)
-> >                         return node;
-> >         }
-> > --
-> > 2.34.1
-> >
-> >  Supplementing questions from the previous email:
+> > +         To compile this driver as a module, choose M here: the
+> > +         module will be called dwc3-google.ko.
+> > +
+> >  endif
+> > diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
+> > index 96469e48ff9d189cc8d0b65e65424eae2158bcfe..cf1cd408d938b3ac26d58b9be7fcc5af3ee82660 100644
+> > --- a/drivers/usb/dwc3/Makefile
+> > +++ b/drivers/usb/dwc3/Makefile
+> > @@ -58,3 +58,4 @@ obj-$(CONFIG_USB_DWC3_XILINX)         += dwc3-xilinx.o
+> >  obj-$(CONFIG_USB_DWC3_OCTEON)          += dwc3-octeon.o
+> >  obj-$(CONFIG_USB_DWC3_RTK)             += dwc3-rtk.o
+> >  obj-$(CONFIG_USB_DWC3_GENERIC_PLAT)    += dwc3-generic-plat.o
+> > +obj-$(CONFIG_USB_DWC3_GOOGLE)          += dwc3-google.o
+> > diff --git a/drivers/usb/dwc3/dwc3-google.c b/drivers/usb/dwc3/dwc3-google.c
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..53e04a5409d8a11eb025b0f5cd351cb1b33281ab
+> > --- /dev/null
+> > +++ b/drivers/usb/dwc3/dwc3-google.c
+> > @@ -0,0 +1,628 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * dwc3-google.c - Google DWC3 Specific Glue Layer
+> > + *
+> > + * Copyright (c) 2025, Google LLC
+> > + * Author: Roy Luo <royluo@google.com>
+> > + */
+> > +
+> > +#include <linux/of.h>
+> > +#include <linux/bitfield.h>
+> > +#include <linux/irq.h>
+> > +#include <linux/clk.h>
+> > +#include <linux/module.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/reset.h>
+> > +#include <linux/pm_domain.h>
+> > +#include <linux/iopoll.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/mfd/syscon.h>
 > 
-> > What changed to require this?  What commit id does this fix?
-> > And what devices have a disabled devicetree node?
-> 
-> fixes: 01fdf179f4b064d4c9d30(usb: core: skip interfaces disabled in
-> devicetree )
-> 
-> Connect a USB device directly to the USB port, for me, LTE RW101.
+> Please sort the headers alphabetically. It helps avoid duplicates and
+> is easier when adding new headers.
 
-Why?  Why not just us the normal USB device topology?  Why is this in DT
-at all?
-
-> However, a disabled node is attached to the DTS node of this port.
-
-Why?
-
-> &xhci3 {
->         status = "okay";
-> 
->         /* 2.x hub on port 1 */
->         usb_hub_2_x: hub@1 {
->                 compatible = "usbbda,5411";
->                 reg = <1>;
->                 vdd-supply = <&pp3300_s3>;
->                 peer-hub = <&usb_hub_3_x>;
->                 status = "disabled";
-> 
->                 ports {
->                         #address-cells = <1>;
->                         #size-cells = <0>;
->                         port@1 {
->                                 reg = <1>;
->                                 usb_hub_dsp1_hs: endpoint { };
->                         };
->                         port@2 {
->                                 reg = <2>;
->                                 usb_hub_dsp2_hs: endpoint { };
->                         };
->                         port@3 {
->                                 reg = <3>;
->                                 usb_hub_dsp3_hs: endpoint { };
->                         };
->                         port@4 {
->                                 reg = <4>;
-> 
->                                 /* On-board WWAN card */
->                                 usb_hub_dsp4_hs: endpoint { };
-
-That's the thing I don't want to see, why is that WWAN card described
-here?  Why can't the normal USB device discovery find it and use it
-properly?
-
->                         };
->                 };
->         };
-> 
-> Based on the current code, the of_node of this directly connected LTE
-> device is hub.
-
-But why is that needed?
-
-> If there is only one LTE interface, then the of_node of this interface
-> is also the hub.
-
-Again, why?
-
-> With the following code, the interface will be unable to create a device.
-> 
-> if (intf->dev.of_node &&
-> !of_device_is_available(intf->dev.of_node)) {
-> dev_info(&dev->dev, "skipping disabled interface %d\n",
-> intf->cur_altsetting->desc.bInterfaceNumber);
-> continue;
-> }
-> Then this LTE will be unable to create a device.
-> this is not the result I wanted.
-
-Then try removing it from dt entirely, it should not be necessary to
-describe USB devices in dt.
+There is no such requirement for USB drivers.
 
 thanks,
 
