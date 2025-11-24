@@ -1,203 +1,158 @@
-Return-Path: <linux-usb+bounces-30873-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30874-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BA42C819A8
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 17:36:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EE65C819EA
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 17:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5EDF5346B55
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 16:35:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A39293AB210
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 16:36:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59F4629ACCD;
-	Mon, 24 Nov 2025 16:35:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669CA111A8;
+	Mon, 24 Nov 2025 16:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lokYA2Yz"
+	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="LRsbvnJd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02DB2989B0;
-	Mon, 24 Nov 2025 16:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D7B29A33E;
+	Mon, 24 Nov 2025 16:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764002143; cv=none; b=sSQGFBovgVe77piwaaMZcMTNujSnQtG22p2OTsudrH1uRiXoMpq1WqopKY+Vd/SBmgyssiezdTfg4T0/Zuk5v0GxNhhFZPGic2BR/QsSAgnVlkLVXxUWaSZDO6ew8v8BMcBcNjoiYNo2THcd/3WBSe0wsVsgaSlvuSIpYocNtIo=
+	t=1764002190; cv=none; b=QMtbngtbmjC9iwkWQiRVDKmkaznAN7rZWDfAwa4ggyQC7Uf1NOIL87n92eDZ6+iVejV7O7gRPScaYvYHuytFc1pffzqvxRiYWehM4eQ9BJY2d+bMQrnS275ka3AgYTG8XzCD/r5z+wxW4zoDvlLWYInrv7aMItP70pa6SVDIJlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764002143; c=relaxed/simple;
-	bh=I7MSo9WOwr4lJLhtKFoOw88/1oTcYTTYXnWaDAe+DNw=;
+	s=arc-20240116; t=1764002190; c=relaxed/simple;
+	bh=+7ParxFtsF5puHMJlyLWKbjEP+7kYtIXal+BmKqvcdA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S5wKAiO3rM8z5dgpct/9v8DKGy4OTkhU34J7CCnqCVoKSOkmewRG9AiBDx1kGNHQdXz+0np+eAj9q5cO2/vnVJUUI9H1bitx9J/AdExHDthSWBz8G75Mq1x0O74D6PDv4DGWsBtAnPaIJT7xwJ+KkDch6eVi9sqzlF8xeUtqZSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lokYA2Yz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F025C116C6;
-	Mon, 24 Nov 2025 16:35:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764002143;
-	bh=I7MSo9WOwr4lJLhtKFoOw88/1oTcYTTYXnWaDAe+DNw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lokYA2YzZUaupKH1NK/Vw6ZbU1l2rM3XI7B7LMARzorFoe2gx0ZK/owK2ADCrZdo+
-	 hEGpiL2U88GI4ieX0ItFkN3aJB4o2QSuRsCaPO7Soxva8mx0owRc/GHdFaAramDc81
-	 juwSrIQ738W/0I1bQgCguRARz8NqwFeRwjsiI2X0d1FppYxPErhXnkH2qRsj3+p95f
-	 7HcRLAXa/rsf/XrvbMmHd1AgNApROAws6uJh9iNNfxGBnJI+FjLKkdPMIGTIExkITi
-	 F/RShvrO65ndY+i1fOEP3Hdyc1KR+rvlkQNX5G6HvOykIF/Poh1C2r50ZWZFnyw98y
-	 RsQ6EW5GSD/ew==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vNZXT-000000004q3-1VeT;
-	Mon, 24 Nov 2025 17:35:43 +0100
-Date: Mon, 24 Nov 2025 17:35:43 +0100
-From: Johan Hovold <johan@kernel.org>
-To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bsp-development.geo@leica-geosystems.com
-Subject: Re: [PATCH V3 1/1] USB: serial: option: add Telit FN920C04 RNDIS
- compositions
-Message-ID: <aSSJX8bP4v8oCrA3@hovoldconsulting.com>
-References: <20251121053956.263364-1-Qing-wu.Li@leica-geosystems.com.cn>
- <20251121053956.263364-2-Qing-wu.Li@leica-geosystems.com.cn>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PH6yU/gCQeZ3tOQv9fX/dvpOECQBafY2GpCU7PR4ISFp2QpRf94nW2pJuG1nbK6aZQypQwtbE1i4mF3HrhYKKYVgqf+MsV/3USbhhQ0D1D68ODMilvL4OdoKjsoqVgZXPGfJdRQf8kk5olASiJTMvCp4Farqo9jQvDxYQs6hwU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=LRsbvnJd; arc=none smtp.client-ip=46.255.230.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+	id 6C0291C01C1; Mon, 24 Nov 2025 17:36:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+	t=1764002184;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J8kY9lhOsQ27MxiOXKnEX2XoUCKNv53EmHjpO8lJFEU=;
+	b=LRsbvnJdjXfgzh0WTmQDL6NNz4O7KYET//7q7SUcM/aU2MNfF7Tb718IttgU1nBTYrr8bX
+	O91eglplln0Uakeb9nZE55F9oBzVc0GP5vne4la6PrZlMzGVV9lczfVDr5do/7Qa0Ogs9M
+	4ZJcDsLsTOU674Me6zBgF+hdhsVlKJ0=
+Date: Mon, 24 Nov 2025 17:36:23 +0100
+From: Pavel Machek <pavel@ucw.cz>
+To: =?iso-8859-1?Q?Na=FCm?= Jumpertz <n.jumpertz@protonmail.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Subject: Re: Oppo/Oneplus phones and usb3.0 incompatibility
+Message-ID: <aSSJh+jbqZ+E1LP6@duo.ucw.cz>
+References: <YhXrCm5ig-YWPY2OVkmdPl48N1Td6K8qJJ5cW7OtIMQt9ENXrexATCgeXCmuG5Mq1wIDxyhaLZhZeuW15lgKhKEKKLfU3GwjMMhKP1Awyj4=@protonmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="BC39Pg9dC/Jkiurq"
+Content-Disposition: inline
+In-Reply-To: <YhXrCm5ig-YWPY2OVkmdPl48N1Td6K8qJJ5cW7OtIMQt9ENXrexATCgeXCmuG5Mq1wIDxyhaLZhZeuW15lgKhKEKKLfU3GwjMMhKP1Awyj4=@protonmail.com>
+
+
+--BC39Pg9dC/Jkiurq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251121053956.263364-2-Qing-wu.Li@leica-geosystems.com.cn>
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 21, 2025 at 05:39:56AM +0000, LI Qingwu wrote:
+Hi!
 
-Including an introductory phrase here (e.g. from you cover letter) would
-be nice.
+> Because of wrong device descriptor, certain oppo/oneplus phones,=20
+> like my oppo find x5, can't connect to linux computers using usb3 cables,
+> the issue is also on other oppo/oneplus phones such as oneplus 9 pro,=20
+> starting from OxygenOs 13 in december 2022=20
+> link: https://xdaforums.com/t/connection-problems-to-a-computer-with-linu=
+x.4642402/
+> The issue is present in kernel 6.17 but also in older versions.
+> The connection correctly works using an usb2 cable.
+>=20
+> The phone is detected as a USB SuperSpeed device but the device descripto=
+r flag given is USB 2.0,
+> so, according to dmesg, the kernel warm reset the phone and don't manage =
+to establishes the connection, which is annoying:
+>=20
+> [ 3537.701845] usb 2-2: new SuperSpeed USB device number 4 using xhci_hcd
+> [ 3537.722594] usb 2-2: got a wrong device descriptor, warm reset device
+> [ 3538.105960] usb 2-2: new SuperSpeed USB device number 5 using xhci_hcd
+> [ 3538.126933] usb 2-2: got a wrong device descriptor, warm reset device
+> [ 3538.313826] usb usb2-port2: attempt power cycle
+> [ 3539.241985] usb 2-2: new SuperSpeed USB device number 6 using xhci_hcd
+> [ 3539.262410] usb 2-2: got a wrong device descriptor, warm reset device
+> [ 3539.646017] usb 2-2: new SuperSpeed USB device number 7 using xhci_hcd
+> [ 3539.666993] usb 2-2: got a wrong device descriptor, warm reset device
+> [ 3539.853713] usb usb2-port2: unable to enumerate USB device
+>=20
+> The issue is due to oppo phones not being conformant to usb standard.
+> Maybe the kernel should still establish the connection if warm resets fai=
+l, by counting fails or something,
+> otherwise oppo phones will never manage to connect through usb3.0 cables,=
+ until oppo fixes it.
+>=20
+> I'm not a dev, so my solution was just to disable the feature:
 
-> 0x10a1: RNDIS + tty (NMEA) + tty (AT) [+ tty (DIAG)]
-> T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1bc7 ProdID=10a1 Rev= 5.15
-> S:  Manufacturer=Telit Cinterion
-> S:  Product=FN920
-> S:  SerialNumber=76e7cb38
-> C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=(none)
-> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=(none)
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I'm afraid patch will not be acceptable like this, but you could be
+able to put this behind some kind of blacklist.
 
-Have you tried binding the RNDIS driver and made sure it works here?
+Best regards,
+								Pavel
 
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> 0x10a6: RNDIS + tty (AT) + tty (AT) [+ tty (DIAG)]
-> T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  5 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1bc7 ProdID=10a6 Rev= 5.15
-> S:  Manufacturer=Telit Cinterion
-> S:  Product=FN920
-> S:  SerialNumber=76e7cb38
-> C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=(none)
-> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=(none)
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>  drivers/usb/core/hub.c | 14 --------------
+>  1 file changed, 14 deletions(-)
+>=20
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 256fe8c86828..be28296b39de 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -5186,20 +5186,6 @@ hub_port_init(struct usb_hub *hub, struct usb_devi=
+ce *udev, int port1,
+>  		*dev_descr =3D *descr;
+>  	kfree(descr);
+> =20
+> -	/*
+> -	 * Some superspeed devices have finished the link training process
+> -	 * and attached to a superspeed hub port, but the device descriptor
+> -	 * got from those devices show they aren't superspeed devices. Warm
+> -	 * reset the port attached by the devices can fix them.
+> -	 */
+> -	if ((udev->speed >=3D USB_SPEED_SUPER) &&
+> -			(le16_to_cpu(udev->descriptor.bcdUSB) < 0x0300)) {
+> -		dev_err(&udev->dev, "got a wrong device descriptor, warm reset device\=
+n");
+> -		hub_port_reset(hub, port1, udev, HUB_BH_RESET_TIME, true);
+> -		retval =3D -EINVAL;
+> -		goto fail;
+> -	}
+> -
+>  	usb_detect_quirks(udev);
+> =20
+>  	if (le16_to_cpu(udev->descriptor.bcdUSB) >=3D 0x0201) {
 
-Nit: last endpoint fell out when you resent.
+--=20
+I don't work for Nazis and criminals, and neither should you.
+Boycott Putin, Trump, Netanyahu and Musk!
 
-> 0x10aa: MBIM + tty (AT) + tty (diag) + DPL + ADB
+--BC39Pg9dC/Jkiurq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I guess you meant "RNDIS" here too?
+-----BEGIN PGP SIGNATURE-----
 
-> T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  5 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1bc7 ProdID=10ab Rev= 5.15
-> S:  Manufacturer=Telit Cinterion
-> S:  Product=FN920
-> S:  SerialNumber=76e7cb38
-> C:* #Ifs= 6 Cfg#= 1 Atr=e0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=ef(misc ) Sub=04 Prot=01
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=(none)
-> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=(none)
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-> ---
->  drivers/usb/serial/option.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 5de856f65f0d..b521d47cda53 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1401,12 +1401,16 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = NCTRL(0) | RSVD(1) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a0, 0xff),	/* Telit FN20C04 (rmnet) */
->  	  .driver_info = RSVD(0) | NCTRL(3) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a1, 0xff),	/* Telit FN20C04 (RNDIS) */
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCaSSJhwAKCRAw5/Bqldv6
+8rx8AJ4mZvnBbEE+eNsfgsXFIhqvYKlZKgCfcwbBIoXDQKE12QDMo1yu/cvWNac=
+=4UVO
+-----END PGP SIGNATURE-----
 
-The comment should say "FN920C04 (RNDIS)", right?
-
-> +	  .driver_info = NCTRL(4) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a2, 0xff),	/* Telit FN920C04 (MBIM) */
->  	  .driver_info = NCTRL(4) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a3, 0xff),	/* Telit FN920C04 (ECM) */
->  	  .driver_info = NCTRL(4) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a4, 0xff),	/* Telit FN20C04 (rmnet) */
->  	  .driver_info = RSVD(0) | NCTRL(3) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a6, 0xff),	/* Telit FN20C04 (RNDIS) */
-
-Here too.
-
-> +	  .driver_info = NCTRL(4) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a7, 0xff),	/* Telit FN920C04 (MBIM) */
->  	  .driver_info = NCTRL(4) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10a8, 0xff),	/* Telit FN920C04 (ECM) */
-> @@ -1415,6 +1419,8 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(0) | NCTRL(2) | RSVD(3) | RSVD(4) },
->  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10aa, 0xff),	/* Telit FN920C04 (MBIM) */
->  	  .driver_info = NCTRL(3) | RSVD(4) | RSVD(5) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10ab, 0xff),	/* Telit FN920C04 (RNDIS) */
-> +	  .driver_info = NCTRL(3) | RSVD(4) | RSVD(5) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10b0, 0xff, 0xff, 0x30),	/* Telit FE990B (rmnet) */
->  	  .driver_info = NCTRL(5) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10b0, 0xff, 0xff, 0x40) },
-
-Johan
+--BC39Pg9dC/Jkiurq--
 
