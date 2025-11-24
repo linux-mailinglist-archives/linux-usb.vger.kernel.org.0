@@ -1,116 +1,205 @@
-Return-Path: <linux-usb+bounces-30868-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30869-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0E8FC80FCC
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 15:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 459B3C816E1
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 16:51:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1A058345CF0
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 14:25:18 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2CE4C345635
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 15:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D780930F7F1;
-	Mon, 24 Nov 2025 14:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29E05314A8A;
+	Mon, 24 Nov 2025 15:51:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iRdOdP48"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MrSWF12P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600223043BD
-	for <linux-usb@vger.kernel.org>; Mon, 24 Nov 2025 14:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD8D264614;
+	Mon, 24 Nov 2025 15:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763994310; cv=none; b=WJKzsQVGBRLxSNfKtfjDIET9cFDBtE6hfYF3Bok8xRJLCoHbyQuLPGwMQdYhkord2ML39+Rc10QXhAtfrHMwxdVmB7dAZyUPsbxAr0dOTpZoVmeXLAzu03o45dVVA0r6Kw2vuOfYrjkfsm4dLmSRwO+Q8B4erjws9m+KOPXYbeQ=
+	t=1763999484; cv=none; b=RVIF5ThHLFki3LBZ4aiDmXLlcKUUpZ6bOuLRJzlChtHADaw+fwfzwwDW21MX9EXuTP1zWMLgj8AF7DDrRvNvtF7TUlc4GiLVeD2jy1qXVc62hIbZBgj8ssbxxijQRnMsB8emM9Pdjvsp8muP4iMDZ+I7uKtu4/bN6WUEhWgCuCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763994310; c=relaxed/simple;
-	bh=eO07VQEwgqSfynp1qqdufNtqE/l1gHcgbWWeB+OT45I=;
+	s=arc-20240116; t=1763999484; c=relaxed/simple;
+	bh=frXpG5kwMr8SBQJYBeyf+rZVJnQYRL42cJ2+Bu3jzWo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VUcUVOamUp/8mpPz537htC0HFLqC9lcsc1KPwPNTy1nxP76FhmtgcBKeBMoNcI84PbHGfHfQCmSJJho0HVH2vhkEBHJD67eRnDVRu4pyWXnLydLs3zh5uGEmQF/RvpIooPkdgsRoIG6h5JCGjnWPiASXknGnvLuYc6c6Qh/GClo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iRdOdP48; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42b31c610fcso3766977f8f.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Nov 2025 06:25:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763994306; x=1764599106; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ae8T0Z9s4xBOOpN+XeFPZD9BWqfqP1d4jFrRORxUC1o=;
-        b=iRdOdP48VZ6q8bRopKZH9axVkbCAUd+NjNeMfbxbWozNpUefAgQ9K7/axboE/FYOAi
-         vW2s4E4FyTLdYBaqn7j4QiiuPo7rwAaiFl+418f8tiB0fPlaLho8CnEDzMVxl+oI7n5Y
-         nPB9M6Wcjatn5zXmOgOPBk6vrgDSSP6IKbbJ+qBI2vZ/n3nQIJyyEO0ya7nIGHVUkia3
-         tNuXlFnZotFqdeF56kq5wBXEfBGig6DCToieHJKirINv+JTnHyZffjPDK1QRyiSp4E8N
-         4XPdZ9pLPn6UIJmFOxHsinb8botCsE8yUNi45fonyyHWnW+m9e9vjZylfLKQrfOIMOEj
-         PTCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763994306; x=1764599106;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ae8T0Z9s4xBOOpN+XeFPZD9BWqfqP1d4jFrRORxUC1o=;
-        b=bpWxKAmktHuGZ/5WPu857Tua4RJpIfA6ZZ0gCD3UZf1Nl+mqafBD6F1UhkUqULg02y
-         H0N3O0CvX97C4PoKHCYVwWV21jpv/dkGrbAFX440rf5hNbtHu/HTUqX5AVYuvEkMlkhh
-         Ah1KpNgvLHvaJfRUjtJnd1yjWcVbMjpnTPg+174z62jzaJkeeOvmcgs8gnsRT5Xd9ks1
-         3ZgQ6xzK74wo/5bhiWazxBfcopYIRKmOPKdvmWnGrpRGThWrWJGPMrLnaYe+PYKS3WuN
-         SZqklYJwfvWetcKKVgt7dDpQxdIkRYmbmsP6jo8rVka0yINXixWw1pPVlA5WhwpwLhkl
-         NSmA==
-X-Forwarded-Encrypted: i=1; AJvYcCUSjXawv0Htqrn0VoMAeWFfF56mk3IkdYdFcPT/L2dN5t1exxrffLvRnRN2ka/3wlT3fo2S7KFeX7k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjMa8vqPeGkDiUwk/OX69aOVrWAGBqeGLhxzoQSfCccUpO3Im5
-	7lW8i/9LtbX5DV++CAdZ5mQPh8ueaiRYRZq1Pqa2gXAcg7RTudJbWtP7ajnV4N0wlWo=
-X-Gm-Gg: ASbGncsUp1AXG+yggd2Qnc1dLgQd6HYFHS42/pCdshNYsZNzJsdU4Khv8ew0WC+0VeO
-	5IzNtK9xsJe5EJeuXK6NmU54Ute/9CsC0WCZFqW6GyH9wBSUWb02PuFOZnycWARRo5FxcuyY5Nk
-	gJRDt895dlvptbeZZxZ0/Iil7IL1L4Bk8WL2Qd7wlUdrFOD0NB2CJoIkUgxfeugHV5xWcels1L7
-	5bkDaLU6gyBIjySiVVHuW3R5Dg4BoJN3uU/PpIPvIPgWHUrH3we47779eLnWK+OAALq0o8EtBPh
-	nu0EpmvbUHr/Y2k0d92sQepI2gPkieInUrCc+Cq2ObKzSM4Xm58lFifC7beBIxjsaUWspk3f43o
-	p6Uhanx1q6itjBeTDs0CgJS/gRh7AFvbVgmvGrjlFKrFQobTn+jdmBr1qNXQifGylVdvJogkTdL
-	hqobdsEXE=
-X-Google-Smtp-Source: AGHT+IECxhv9+1ZGZEYdbHolWeNHq8FMXodd47D6FbZd+PU/x7ZCehXLWBv/uH8jYsOdYwVYwArfyw==
-X-Received: by 2002:a5d:5e01:0:b0:425:742e:7823 with SMTP id ffacd0b85a97d-42cc1ac9401mr13013463f8f.12.1763994305318;
-        Mon, 24 Nov 2025 06:25:05 -0800 (PST)
-Received: from linaro.org ([86.121.7.169])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7fa35c2sm27493166f8f.25.2025.11.24.06.25.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Nov 2025 06:25:04 -0800 (PST)
-Date: Mon, 24 Nov 2025 16:25:02 +0200
-From: Abel Vesa <abel.vesa@linaro.org>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
-	Jameson Thies <jthies@google.com>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, Guenter Roeck <groeck@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	"Christian A. Ehrhardt" <lk@c--e.de>, Pooja Katiyar <pooja.katiyar@intel.com>, 
-	Venkat Jayaraman <venkat.jayaraman@intel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/4] usb: typec: Expose alternate mode priority via
- sysfs
-Message-ID: <h2e7a3xkss5zkjuk4jtuadx7uudt3rl6xssbmz7tgagw7idbhm@jnv2idvv3hbf>
-References: <20251124124639.1101335-1-akuchynski@chromium.org>
- <20251124124639.1101335-5-akuchynski@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aBvuVd8dZ3wbQGRoMbLVCXwXX+F5U3HjoGMQarTvS+WiyL5yY1NfRM4HpdNunWjmCQM4GUSNT1xD6lUhfJcX2Y4E6cppGO7aI6O5CWQEsOZU6k7EZn15hd6KuBBYS1mtXnZ7SsoknhfFA8n+ycjIgj0YGJt9bHbUvk4JtfMRRj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MrSWF12P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1E2C4CEF1;
+	Mon, 24 Nov 2025 15:51:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1763999484;
+	bh=frXpG5kwMr8SBQJYBeyf+rZVJnQYRL42cJ2+Bu3jzWo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MrSWF12PcZmh9+nuOfzAhO3OjCgyHQL5jx/4J4ok+JL+xPvvDUDZfYM8mr5Qf7zGH
+	 627zsq3YaAkiKCHTM92PmhIzTMM+EckADaiVl7kXjo/X36ErPhn1LRqCYAko4PMxN7
+	 ZX/xqWpLsauRzFd/MXKaktxlplyciJcxhn7HHpDw=
+Date: Mon, 24 Nov 2025 16:51:21 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Pin-yen Lin <treapking@chromium.org>
+Cc: jerry xzq <jerry.xzq@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: of: filter disabled device node
+Message-ID: <2025112426-seventeen-duvet-d9c4@gregkh>
+References: <20251122112539.4130712-1-jerry.xzq@gmail.com>
+ <CAD48c-UjbPK4GewGpVVdEY30fhnhdAGQqrXQ3r0RgHc6suMo7Q@mail.gmail.com>
+ <2025112237-brush-unseemly-7a95@gregkh>
+ <CAEXTbpeKUMJKz-PV-ft5WCg5TYo22knBaMX2WwCWn=ix4OgX+g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251124124639.1101335-5-akuchynski@chromium.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXTbpeKUMJKz-PV-ft5WCg5TYo22knBaMX2WwCWn=ix4OgX+g@mail.gmail.com>
 
-On 25-11-24 12:46:39, Andrei Kuchynski wrote:
-> This patch introduces a priority sysfs attribute to the USB Type-C
-
-Please read submitting patches doc. No "This patch ..." stuff.
-
-The rest of the patch looks OK.
-
-> alternate mode port interface. This new attribute allows user-space to
-> configure the numeric priority of alternate modes managing their preferred
-> order of operation. If a new priority value conflicts with an existing
-> mode's priority, the priorities of the conflicting mode and all subsequent
-> modes are automatically incremented to ensure uniqueness.
+On Mon, Nov 24, 2025 at 10:22:18PM +0800, Pin-yen Lin wrote:
+> Hi Greg,
 > 
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> On Mon, Nov 24, 2025 at 10:01 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sat, Nov 22, 2025 at 07:31:47PM +0800, jerry xzq wrote:
+> > > On Sat, Nov 22, 2025 at 7:26 PM Zhengqiao Xia <jerry.xzq@gmail.com> wrote:
+> > >
+> > > > We should not point the of_node of a USB device to a disabled devicetree
+> > > > node. Otherwise, the interface under this USB device will not be able
+> > > > to register.
+> > > >
+> > > > Signed-off-by: Zhengqiao Xia <jerry.xzq@gmail.com>
+> > > > ---
+> > > >  drivers/usb/core/of.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
+> > > > index 763e4122ed5b3..6bb577e711811 100644
+> > > > --- a/drivers/usb/core/of.c
+> > > > +++ b/drivers/usb/core/of.c
+> > > > @@ -31,6 +31,9 @@ struct device_node *usb_of_get_device_node(struct
+> > > > usb_device *hub, int port1)
+> > > >                 if (of_property_read_u32(node, "reg", &reg))
+> > > >                         continue;
+> > > >
+> > > > +               if (!of_device_is_available(node))
+> > > > +                       continue;
+> > > > +
+> > > >                 if (reg == port1)
+> > > >                         return node;
+> > > >         }
+> > > > --
+> > > > 2.34.1
+> > > >
+> > > >  Supplementing questions from the previous email:
+> > >
+> > > > What changed to require this?  What commit id does this fix?
+> > > > And what devices have a disabled devicetree node?
+> > >
+> > > fixes: 01fdf179f4b064d4c9d30(usb: core: skip interfaces disabled in
+> > > devicetree )
+> > >
+> > > Connect a USB device directly to the USB port, for me, LTE RW101.
+> >
+> > Why?  Why not just us the normal USB device topology?  Why is this in DT
+> > at all?
+> 
+> In our use case, the USB hub and the USB devices (e.g., modem card,
+> USB camera) are fixed on the board, and describing them allows us to:
+> (1) Describe the extra resources for the USB devices, like the usages
+> in drivers/misc/onboard_usb_dev.c. They are mostly USB hubs that
+> require extra power or reset pin, but there are also USB device
+> usages.
 
+The USB devices should NOT be in DT at all, only for hub controls that
+you need the extra pin controls please.
+
+> (2) Let the userspace know which devices are fixed on the board, which
+> makes it trustable.
+
+There is different ways to do this, NOT in dt.
+
+> > > However, a disabled node is attached to the DTS node of this port.
+> >
+> > Why?
+> 
+> This is the usage from a downstream DTS that hasn't been upstreamed.
+
+There's nothing we can do about that.  Please work to get it upstream.
+
+> The USB hub and devices are defined in a DTSI file, and another DTS
+> inherits it but wants to disable those USB devices. We expected that
+> disabling them should be the same as removing them.
+
+No, just disable them from userspace properly.
+
+> > > &xhci3 {
+> > >         status = "okay";
+> > >
+> > >         /* 2.x hub on port 1 */
+> > >         usb_hub_2_x: hub@1 {
+> > >                 compatible = "usbbda,5411";
+> > >                 reg = <1>;
+> > >                 vdd-supply = <&pp3300_s3>;
+> > >                 peer-hub = <&usb_hub_3_x>;
+> > >                 status = "disabled";
+> > >
+> > >                 ports {
+> > >                         #address-cells = <1>;
+> > >                         #size-cells = <0>;
+> > >                         port@1 {
+> > >                                 reg = <1>;
+> > >                                 usb_hub_dsp1_hs: endpoint { };
+> > >                         };
+> > >                         port@2 {
+> > >                                 reg = <2>;
+> > >                                 usb_hub_dsp2_hs: endpoint { };
+> > >                         };
+> > >                         port@3 {
+> > >                                 reg = <3>;
+> > >                                 usb_hub_dsp3_hs: endpoint { };
+> > >                         };
+> > >                         port@4 {
+> > >                                 reg = <4>;
+> > >
+> > >                                 /* On-board WWAN card */
+> > >                                 usb_hub_dsp4_hs: endpoint { };
+> >
+> > That's the thing I don't want to see, why is that WWAN card described
+> > here?  Why can't the normal USB device discovery find it and use it
+> > properly?
+> >
+> > >                         };
+> > >                 };
+> > >         };
+> > >
+> > > Based on the current code, the of_node of this directly connected LTE
+> > > device is hub.
+> >
+> > But why is that needed?
+> >
+> > > If there is only one LTE interface, then the of_node of this interface
+> > > is also the hub.
+> >
+> > Again, why?
+> 
+> We haven't had a driver for the LTE card on the linux mainline.
+
+Why is it not merged upstream?  That should be a very simple thing to
+get accepted.
+
+> But,
+> it is using M.2 USB interface and requires reset and enable pins, so I
+> believe we want to describe it as a USB device in DT, and implement
+> the resource control in onboard_usb_dev.c.
+
+No, that is not how USB devices work, they should control themselves.
+
+thanks,
+
+greg k-h
 
