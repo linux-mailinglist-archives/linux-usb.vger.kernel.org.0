@@ -1,163 +1,309 @@
-Return-Path: <linux-usb+bounces-30855-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30856-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42F4DC7F7D0
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 10:11:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAB8AC7FC12
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 10:56:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9CD40347F7A
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 09:11:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6FFC04E47E5
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 09:56:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8EF2F5308;
-	Mon, 24 Nov 2025 09:11:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1953A2FBE17;
+	Mon, 24 Nov 2025 09:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LVkteaxM"
+	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="P87gnIuA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2A923184A;
-	Mon, 24 Nov 2025 09:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C901424B28;
+	Mon, 24 Nov 2025 09:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763975467; cv=none; b=K3iqrTEgVOp82+NqSrQLQTzlEZYK13eiDpDXGkmzQM1ky0gqvE9O8r8Szusv5+bBi4d0Hf+VxyivnSE2CDnl7Be9E7TovbyP30NeGzAqpbep6HIkEIziJkM78O96i4MNSvS5Z/bbfPCfbtHW//F3y60L6C/uTJbQvasS9lPYAi0=
+	t=1763978079; cv=none; b=OrhBTwl6BMqS8pYcfarqR9HGAhSeI26vREWeXj7sBtD3362M7aMbqTWKdvA+MacwqTfvv60xSfYJrLX5R7ZY13HB4AG4msj+1X0S9R+Z/MP740gcweSDj6N1kvAhRDqqwqzdmvUcPjbfzOSF6WcoccepgvIZ1DE8k4B1kYcckKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763975467; c=relaxed/simple;
-	bh=h3g4JxPmkSuzn4A+hRY+XWm3wVyIpSZX3Sy+tuWzeq8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gS6iT77BlJ/KtOTcXxFP7Unx8ucoSUxmLOX6aaygSXwWTnKGgCm58rGEY/FO3R2EjNuK3EWyIbMeFtSNczhW2cfeNunIfonhsJQ+e4EskGG92mTDm+h8piwk3GL/ax24fUAQ5nSbd1bR3w2XkgqT7lCWAFBI4j66XsRPwlZKo1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LVkteaxM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1531FC4CEF1;
-	Mon, 24 Nov 2025 09:11:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763975467;
-	bh=h3g4JxPmkSuzn4A+hRY+XWm3wVyIpSZX3Sy+tuWzeq8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LVkteaxMddX1M3aC0bEsLu2/1lTKkED0KlkuA1s2zE6iuTreTG8vZt0FBYp0N2k/V
-	 5Vj54xI6VQFpZ9u9voQPuctK9Ao+GrKD/+4O+c0ObWLrGZ0NhirnhOGqHujK4i8VOT
-	 aRtG7cGdzl4bCnl0kDA65ePANeMZJt4gL2VhpCjvtFsEOMRMv3/7lfzi7ZKB8FJHFh
-	 NFFCMPxr+amRLOchiWuNBT1Ykl1gZ/h8t7u22XR47X/mGudytA68lN0HEfEgp1+L+2
-	 y6m5A/Oq2RmtPK9iZdrd+w+F7SdOtMeLV4zVTNwnlYQLmZXckTJV8t7e1WsbBlTkX3
-	 CGSNnxT+iVuDA==
-Message-ID: <e7ebc1da-1a94-4465-bc79-de9ad8ba1cb6@kernel.org>
-Date: Mon, 24 Nov 2025 10:11:04 +0100
+	s=arc-20240116; t=1763978079; c=relaxed/simple;
+	bh=zgUegguLz9fnh3Kc5FyiFvVdDbDa4+bOp5Www3PDcuc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ctY5ec1pVMPgAQziivIuyNMUNBBzBLjHqXG57D/iuzXjRNcJdrcJjU9kdacC12pvOLum/X7GMW/2XgVUnWfvsJJolpF2qFqE3iXEuv3DrL1T+h/W/fWPLtntbF/kEBoAZhmjDER1oIdcu/C7H+zIkeFDv76zc8PF6r9/vuR0yyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=P87gnIuA; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
+	from:content-type:reply-to; bh=B05uJapQfRMGohKkgF1xNVyERBHmagh8Bd3xg1q2NeI=; 
+	b=P87gnIuANW/TJp73uiT1mmsGlTWnBuH0H7vh23lNqSWq4OBDSGmsQEtkmAFMHotC7U4wL6z8BsM
+	xZhrA2DnJ6Byz1eNq9hCgsl0YlQqjChTspvActJHQABJusXSSyN3NViM7BAWMow9uYLi6/azgr/1S
+	bPNPkqeI4K++8lXngyxVPKygWdoefLDaHUV8R9vP4h+Voyby/LgDfyG/U2ZiZD9XFH7HpGmBTtoYh
+	gxxkqEEHWY1my7y2fTHFr9TydDJrVMgiVb3KBgJmEGPf57jfBn092eZeVh0rkWj5FfVDm/r5gwJdx
+	bl004005PGTqWH4a9OI+Nq6nG2BqQ4oMU7WA==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1vNTCh-005XNj-0w;
+	Mon, 24 Nov 2025 17:49:52 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 24 Nov 2025 17:49:51 +0800
+Date: Mon, 24 Nov 2025 17:49:51 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: david.laight.linux@gmail.com
+Cc: linux-kernel@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Andreas Dilger <adilger.kernel@dilger.ca>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, Borislav Petkov <bp@alien8.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Christoph Hellwig <hch@lst.de>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, David Ahern <dsahern@kernel.org>,
+	David Hildenbrand <david@redhat.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dennis Zhou <dennis@kernel.org>, Eric Dumazet <edumazet@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Jens Axboe <axboe@kernel.dk>, Jiri Slaby <jirislaby@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	John Allen <john.allen@amd.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Juergen Gross <jgross@suse.com>, Kees Cook <kees@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Mika Westerberg <westeri@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>, nic_swsd@realtek.com,
+	OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+	Olivia Mackall <olivia@selenic.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>, Tejun Heo <tj@kernel.org>,
+	Theodore Ts'o <tytso@mit.edu>, Thomas Gleixner <tglx@linutronix.de>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, x86@kernel.org,
+	Yury Norov <yury.norov@gmail.com>, amd-gfx@lists.freedesktop.org,
+	bpf@vger.kernel.org, cgroups@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, io-uring@vger.kernel.org,
+	kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-cxl@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-mm@kvack.org,
+	linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, mptcp@lists.linux.dev,
+	netdev@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH 00/44] Change a lot of min_t() that might mask high bits
+Message-ID: <aSQqP6nlqGYOGqcJ@gondor.apana.org.au>
+References: <20251119224140.8616-1-david.laight.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] xhci: dbgtty: fix device unregister
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
- =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, stable@vger.kernel.org
-References: <20251119212910.1245694-1-ukaszb@google.com>
- <2f05eedd-f152-4a4a-bf6c-09ca1ab7da40@kernel.org>
- <6171754f-1b84-47e0-a4da-0d045ea7546e@linux.intel.com>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <6171754f-1b84-47e0-a4da-0d045ea7546e@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251119224140.8616-1-david.laight.linux@gmail.com>
 
-On 24. 11. 25, 8:48, Mathias Nyman wrote:
-> On 11/24/25 08:42, Jiri Slaby wrote:
->> Hmm, CCing TTY MAINTAINERS entry would not hurt.
->>
->> On 19. 11. 25, 22:29, Łukasz Bartosik wrote:
->>> From: Łukasz Bartosik <ukaszb@chromium.org>
->>>
->>> When DbC is disconnected then xhci_dbc_tty_unregister_device()
->>> is called. However if there is any user space process blocked
->>> on write to DbC terminal device then it will never be signalled
->>> and thus stay blocked indifinitely.
->>
->> indefinitely
->>
->>> This fix adds a tty_vhangup() call in xhci_dbc_tty_unregister_device().
->>> The tty_vhangup() wakes up any blocked writers and causes subsequent
->>> write attempts to DbC terminal device to fail.
->>>
->>> Cc: stable@vger.kernel.org
->>> Fixes: dfba2174dc42 ("usb: xhci: Add DbC support in xHCI driver")
->>> Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
->>> ---
->>> Changes in v2:
->>> - Replaced tty_hangup() with tty_vhangup()
->>
->> Why exactly?
+On Wed, Nov 19, 2025 at 10:40:56PM +0000, david.laight.linux@gmail.com wrote:
+> From: David Laight <david.laight.linux@gmail.com>
 > 
-> I recommended using tty_vhangup(), well actually tty_port_tty_vhangup() 
-> to solve
-> issue '2' you pointed out.
-> To me it looks like tty_vhangup() is synchronous so it won't schedule 
-> hangup work
-> and should be safe to call right before we destroy the port.
-
-Oops, right, my cscope DB was old and lead me to tty_hangup() instead 
-(that schedules).
-
->> 2) you schedule a tty hangup work and destroy the port right after:
->>>       tty_unregister_device(dbc_tty_driver, port->minor);
->>>       xhci_dbc_tty_exit_port(port);
->>>       port->registered = false;
->> You should to elaborate how this is supposed to work?
+> It in not uncommon for code to use min_t(uint, a, b) when one of a or b
+> is 64bit and can have a value that is larger than 2^32;
+> This is particularly prevelant with:
+> 	uint_var = min_t(uint, uint_var, uint64_expression);
 > 
-> Does tty_port_tty_vhangup() work here? it
-> 1. checks if tty is NULL
-> 2. is synchronous and should be safe to call before tty_unregister_device()
+> Casts to u8 and u16 are very likely to discard significant bits.
+> 
+> These can be detected at compile time by changing min_t(), for example:
+> #define CHECK_SIZE(fn, type, val) \
+> 	BUILD_BUG_ON_MSG(sizeof (val) > sizeof (type) && \
+> 		!statically_true(((val) >> 8 * (sizeof (type) - 1)) < 256), \
+> 		fn "() significant bits of '" #val "' may be discarded")
+> 
+> #define min_t(type, x, y) ({ \
+> 	CHECK_SIZE("min_t", type, x); \
+> 	CHECK_SIZE("min_t", type, y); \
+> 	__cmp_once(min, type, x, y); })
+> 
+> (and similar changes to max_t() and clamp_t().)
+> 
+> This shows up some real bugs, some unlikely bugs and some false positives.
+> In most cases both arguments are unsigned type (just different ones)
+> and min_t() can just be replaced by min().
+> 
+> The patches are all independant and are most of the ones needed to
+> get the x86-64 kernel I build to compile.
+> I've not tried building an allyesconfig or allmodconfig kernel.
+> I've also not included the patch to minmax.h itself.
+> 
+> I've tried to put the patches that actually fix things first.
+> The last one is 0009.
+> 
+> I gave up on fixing sched/fair.c - it is too broken for a single patch!
+> The patch for net/ipv4/tcp.c is also absent because do_tcp_getsockopt()
+> needs multiple/larger changes to make it 'sane'.
+> 
+> I've had to trim the 124 maintainers/lists that get_maintainer.pl finds
+> from 124 to under 100 to be able to send the cover letter.
+> The individual patches only go to the addresses found for the associated files.
+> That reduces the number of emails to a less unsane number.
+> 
+> David Laight (44):
+>   x86/asm/bitops: Change the return type of variable__ffs() to unsigned
+>     int
+>   ext4: Fix saturation of 64bit inode times for old filesystems
+>   perf: Fix branch stack callchain limit
+>   io_uring/net: Change some dubious min_t()
+>   ipc/msg: Fix saturation of percpu counts in msgctl_info()
+>   bpf: Verifier, remove some unusual uses of min_t() and max_t()
+>   net/core/flow_dissector: Fix cap of __skb_flow_dissect() return value.
+>   net: ethtool: Use min3() instead of nested min_t(u16,...)
+>   ipv6: __ip6_append_data() don't abuse max_t() casts
+>   x86/crypto: ctr_crypt() use min() instead of min_t()
+>   arch/x96/kvm: use min() instead of min_t()
+>   block: use min() instead of min_t()
+>   drivers/acpi: use min() instead of min_t()
+>   drivers/char/hw_random: use min3() instead of nested min_t()
+>   drivers/char/tpm: use min() instead of min_t()
+>   drivers/crypto/ccp: use min() instead of min_t()
+>   drivers/cxl: use min() instead of min_t()
+>   drivers/gpio: use min() instead of min_t()
+>   drivers/gpu/drm/amd: use min() instead of min_t()
+>   drivers/i2c/busses: use min() instead of min_t()
+>   drivers/net/ethernet/realtek: use min() instead of min_t()
+>   drivers/nvme: use min() instead of min_t()
+>   arch/x86/mm: use min() instead of min_t()
+>   drivers/nvmem: use min() instead of min_t()
+>   drivers/pci: use min() instead of min_t()
+>   drivers/scsi: use min() instead of min_t()
+>   drivers/tty/vt: use umin() instead of min_t(u16, ...) for row/col
+>     limits
+>   drivers/usb/storage: use min() instead of min_t()
+>   drivers/xen: use min() instead of min_t()
+>   fs: use min() or umin() instead of min_t()
+>   block: bvec.h: use min() instead of min_t()
+>   nodemask: use min() instead of min_t()
+>   ipc: use min() instead of min_t()
+>   bpf: use min() instead of min_t()
+>   bpf_trace: use min() instead of min_t()
+>   lib/bucket_locks: use min() instead of min_t()
+>   lib/crypto/mpi: use min() instead of min_t()
+>   lib/dynamic_queue_limits: use max() instead of max_t()
+>   mm: use min() instead of min_t()
+>   net: Don't pass bitfields to max_t()
+>   net/core: Change loop conditions so min() can be used
+>   net: use min() instead of min_t()
+>   net/netlink: Use umin() to avoid min_t(int, ...) discarding high bits
+>   net/mptcp: Change some dubious min_t(int, ...) to min()
+> 
+>  arch/x86/crypto/aesni-intel_glue.c            |  3 +-
+>  arch/x86/include/asm/bitops.h                 | 18 +++++-------
+>  arch/x86/kvm/emulate.c                        |  3 +-
+>  arch/x86/kvm/lapic.c                          |  2 +-
+>  arch/x86/kvm/mmu/mmu.c                        |  2 +-
+>  arch/x86/mm/pat/set_memory.c                  | 12 ++++----
+>  block/blk-iocost.c                            |  6 ++--
+>  block/blk-settings.c                          |  2 +-
+>  block/partitions/efi.c                        |  3 +-
+>  drivers/acpi/property.c                       |  2 +-
+>  drivers/char/hw_random/core.c                 |  2 +-
+>  drivers/char/tpm/tpm1-cmd.c                   |  2 +-
+>  drivers/char/tpm/tpm_tis_core.c               |  4 +--
+>  drivers/crypto/ccp/ccp-dev.c                  |  2 +-
+>  drivers/cxl/core/mbox.c                       |  2 +-
+>  drivers/gpio/gpiolib-acpi-core.c              |  2 +-
+>  .../gpu/drm/amd/amdgpu/amdgpu_doorbell_mgr.c  |  4 +--
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c        |  2 +-
+>  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  2 +-
+>  drivers/i2c/busses/i2c-designware-master.c    |  2 +-
+>  drivers/net/ethernet/realtek/r8169_main.c     |  3 +-
+>  drivers/nvme/host/pci.c                       |  3 +-
+>  drivers/nvme/host/zns.c                       |  3 +-
+>  drivers/nvmem/core.c                          |  2 +-
+>  drivers/pci/probe.c                           |  3 +-
+>  drivers/scsi/hosts.c                          |  2 +-
+>  drivers/tty/vt/selection.c                    |  9 +++---
+>  drivers/usb/storage/protocol.c                |  3 +-
+>  drivers/xen/grant-table.c                     |  2 +-
+>  fs/buffer.c                                   |  2 +-
+>  fs/exec.c                                     |  2 +-
+>  fs/ext4/ext4.h                                |  2 +-
+>  fs/ext4/mballoc.c                             |  3 +-
+>  fs/ext4/resize.c                              |  2 +-
+>  fs/ext4/super.c                               |  2 +-
+>  fs/fat/dir.c                                  |  4 +--
+>  fs/fat/file.c                                 |  3 +-
+>  fs/fuse/dev.c                                 |  2 +-
+>  fs/fuse/file.c                                |  8 ++---
+>  fs/splice.c                                   |  2 +-
+>  include/linux/bvec.h                          |  3 +-
+>  include/linux/nodemask.h                      |  9 +++---
+>  include/linux/perf_event.h                    |  2 +-
+>  include/net/tcp_ecn.h                         |  5 ++--
+>  io_uring/net.c                                |  6 ++--
+>  ipc/mqueue.c                                  |  4 +--
+>  ipc/msg.c                                     |  6 ++--
+>  kernel/bpf/core.c                             |  4 +--
+>  kernel/bpf/log.c                              |  2 +-
+>  kernel/bpf/verifier.c                         | 29 +++++++------------
+>  kernel/trace/bpf_trace.c                      |  2 +-
+>  lib/bucket_locks.c                            |  2 +-
+>  lib/crypto/mpi/mpicoder.c                     |  2 +-
+>  lib/dynamic_queue_limits.c                    |  2 +-
+>  mm/gup.c                                      |  4 +--
+>  mm/memblock.c                                 |  2 +-
+>  mm/memory.c                                   |  2 +-
+>  mm/percpu.c                                   |  2 +-
+>  mm/truncate.c                                 |  3 +-
+>  mm/vmscan.c                                   |  2 +-
+>  net/core/datagram.c                           |  6 ++--
+>  net/core/flow_dissector.c                     |  7 ++---
+>  net/core/net-sysfs.c                          |  3 +-
+>  net/core/skmsg.c                              |  4 +--
+>  net/ethtool/cmis_cdb.c                        |  7 ++---
+>  net/ipv4/fib_trie.c                           |  2 +-
+>  net/ipv4/tcp_input.c                          |  4 +--
+>  net/ipv4/tcp_output.c                         |  5 ++--
+>  net/ipv4/tcp_timer.c                          |  4 +--
+>  net/ipv6/addrconf.c                           |  8 ++---
+>  net/ipv6/ip6_output.c                         |  7 +++--
+>  net/ipv6/ndisc.c                              |  5 ++--
+>  net/mptcp/protocol.c                          |  8 ++---
+>  net/netlink/genetlink.c                       |  9 +++---
+>  net/packet/af_packet.c                        |  2 +-
+>  net/unix/af_unix.c                            |  4 +--
+>  76 files changed, 141 insertions(+), 176 deletions(-)
 
-Yes, this works for me.
-
-thanks,
+Patches 10,14,16,37 applied.  Thanks.
 -- 
-js
-suse labs
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
