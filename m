@@ -1,118 +1,102 @@
-Return-Path: <linux-usb+bounces-30842-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30843-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 300E3C7EC4B
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 02:46:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37498C7ED13
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 03:24:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AF06A34498F
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 01:46:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EE793A5125
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Nov 2025 02:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019DD239E9A;
-	Mon, 24 Nov 2025 01:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="jFaRCEOC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E45280A3B;
+	Mon, 24 Nov 2025 02:24:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m15574.qiye.163.com (mail-m15574.qiye.163.com [101.71.155.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05465F9C0;
-	Mon, 24 Nov 2025 01:46:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1B923BD1B;
+	Mon, 24 Nov 2025 02:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763948769; cv=none; b=pSV1FiY4CDmxB5Q8OuLWKigfc33dAjLUkixZedgxhemWel1C9OmtR+N8RUdXGWQchsFBZRVYY7KnA5Zma2fQgRfvT9aH0sz5zJ+DG+Qfm8bCdwEp+AWstlGpc8X8KpLkXMKrW2ltKe4z/Z+VDn1POkTN+fHyJOIW9Fv8k4Hq080=
+	t=1763951084; cv=none; b=uK2qi2sjJJVIILBHgAMeyQ5IzM39qCY/88ZB7HtaujrP+ekYOM/7kZuGu2FKCzLORYwcRljmvK4vpxf3F/N5pmodjFr4L2YG3XrvaR7R9iwBmKVR7hCfxDqL2agsEeVMgzlOhlONd2KdshhZhh1YTt0Wmwe3eIeLBybD9kqLcds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763948769; c=relaxed/simple;
-	bh=2DEAk7Izt0BE4gyGpCbJhLzZfJG2/PYwdwUcKxMGBqU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=InK225KqsjyKoPNBFsPhK/0a3IU8IvxWznoyvi9y5U5Zli4cct59VXvS7A7i+EbKli8IN3aJGQWHTga5k4Ixz1SpGeITde0XhOSoTbOPJ0EN0q7wRD4roMt0VPcNvzW1KrHRrPVUSWuT9j4V0Mer8GPTMCyLDkjYRHrq8Ogy4RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=jFaRCEOC; arc=none smtp.client-ip=101.71.155.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.51] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 2a99bc279;
-	Mon, 24 Nov 2025 09:45:59 +0800 (GMT+08:00)
-Message-ID: <c73306de-f3a0-42ac-bfed-ef6b52cf4759@rock-chips.com>
-Date: Mon, 24 Nov 2025 09:45:57 +0800
+	s=arc-20240116; t=1763951084; c=relaxed/simple;
+	bh=9rkGtgQQzaCuqGZb2BOXJAEhO0UUKDkvn+6qsQpTYs8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gtkw9+DRE70pRR1ZGg1qFrmTERM7NzsqKOpB7VxrDj5IPtd8TvzTpkOJNjRhkfeiAKU0DrRNLr6FO8RMaJi3WPjPO0uHaSuNGIEgcPenAv9j8W8dRIF4dlYvTbbaqqIQG20MxmqDQoMstHdKqk/Pop0JqCJpZ6R3c2lB87VRYoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from DESKTOP-L0HPE2S (unknown [124.16.141.245])
+	by APP-05 (Coremail) with SMTP id zQCowAAX4HDgwSNpxE3SAQ--.13602S2;
+	Mon, 24 Nov 2025 10:24:33 +0800 (CST)
+From: Haotian Zhang <vulab@iscas.ac.cn>
+To: herve.codina@bootlin.com,
+	gregkh@linuxfoundation.org
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Haotian Zhang <vulab@iscas.ac.cn>
+Subject: [PATCH] usb: gadget: renesas_usbf: Handle devm_pm_runtime_enable() errors
+Date: Mon, 24 Nov 2025 10:22:15 +0800
+Message-ID: <20251124022215.1619-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 02/11] usb: typec: Export all typec device types
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Chaoyi Chen <kernel@airkyi.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Chen <hzpeterchen@gmail.com>, Luca Ceresoli
- <luca.ceresoli@bootlin.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20251120022343.250-1-kernel@airkyi.com>
- <20251120022343.250-3-kernel@airkyi.com>
- <2025112109-glacial-outmatch-add7@gregkh>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <2025112109-glacial-outmatch-add7@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9ab38a087603abkunm5871a99e38da02
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0hCHlZDGUIeTExJS0ofGE1WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
-	xVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=jFaRCEOC5tnsMOQoZGeJ0Zdgx6p5zsQj8cNYZi/RkN84pJ52JSRZufKH1THClfPoo8DtwqnoQ0GVvgMekScnFuWH9BR5DRj80PaRKV0KeKuZpBEK7cGkPcgAngzJsImZ/9i2H2DZEy0eBEvv86asQkLn4UStVNdivkE8Tjti02Q=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=iFeIe++8q8EPpaof9jHYzhJp6EO127xLsuYKalp+96M=;
-	h=date:mime-version:subject:message-id:from;
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowAAX4HDgwSNpxE3SAQ--.13602S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF45Cr4fKw4kAFy8JF43Jrb_yoWkWFbEkr
+	45urWxXry0qr4DK3W7Ja4avryI9F1kXr47ZFnagw4fAFWUKrsrZryjyF98Awsru347Crn0
+	krnFkF47CF93ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbsAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+	6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
+	JF0_Jw1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+	67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+	x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+	UI43ZEXa7VUbT5l5UUUUU==
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBgsQA2kjuw0bvwAAsG
 
-Hi Greg,
+devm_pm_runtime_enable() can fail due to memory allocation.
+The current code ignores its return value, potentially causing
+pm_runtime_resume_and_get() to operate on uninitialized runtime
+PM state.
 
-On 11/21/2025 10:07 PM, Greg Kroah-Hartman wrote:
-> On Thu, Nov 20, 2025 at 10:23:34AM +0800, Chaoyi Chen wrote:
->> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>
->> Export all typec device types for identification.
-> I do not understand what this means.  Who is going to use these symbols,
-> and for what exactly?
->
-> Be specific please.
+Check the return value of devm_pm_runtime_enable() and return on failure.
 
-In patch3, we need to distinguish whether the notifiers in patch1 are triggered by the typec port device or the typec partner device. Therefore, we export the various device types of typec here.
+Fixes: 3e6e14ffdea4 ("usb: gadget: udc: add Renesas RZ/N1 USBF controller support")
+Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
+---
+ drivers/usb/gadget/udc/renesas_usbf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Sorry for the confusion. I will add more information later.
-
->
-> thanks,
->
-> greg k-h
->
->
+diff --git a/drivers/usb/gadget/udc/renesas_usbf.c b/drivers/usb/gadget/udc/renesas_usbf.c
+index 14f4b2cf05a4..4c201574a0af 100644
+--- a/drivers/usb/gadget/udc/renesas_usbf.c
++++ b/drivers/usb/gadget/udc/renesas_usbf.c
+@@ -3262,7 +3262,9 @@ static int usbf_probe(struct platform_device *pdev)
+ 	if (IS_ERR(udc->regs))
+ 		return PTR_ERR(udc->regs);
+ 
+-	devm_pm_runtime_enable(&pdev->dev);
++	ret = devm_pm_runtime_enable(&pdev->dev);
++	if (ret)
++		return ret;
+ 	ret = pm_runtime_resume_and_get(&pdev->dev);
+ 	if (ret < 0)
+ 		return ret;
 -- 
-Best,
-Chaoyi
+2.50.1.windows.1
 
 
