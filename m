@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-30918-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30919-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 055D8C85C5B
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 16:28:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78474C85CDC
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 16:39:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF37A3B1799
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 15:28:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3B4D64E1B7B
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 15:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 374B3328611;
-	Tue, 25 Nov 2025 15:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B00328B66;
+	Tue, 25 Nov 2025 15:39:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="K/Fp02xZ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MCc+hhdC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80939328270
-	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 15:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695852C0F68;
+	Tue, 25 Nov 2025 15:39:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764084499; cv=none; b=oplzm/P4H8SuowLmOLArk3XjtWqVAU9gDVNWzTQTSq21VyGoc7CzNzBo8IkA+31vYP2AvmScHSZTFyF34NUiOCe/ptnoCuNnQ1Em7Xe6SuqEUkPSEkI6Ch2eT7YUr6AdN4Hq75WARiqZR5acOg9Wik/I0Lba4fcb+z69q/Pr7Is=
+	t=1764085151; cv=none; b=hO9tb57daU1W11lu4rduCWKUuWKyv9uwqPnH3DK+V167TfWzwPfl59HstOg+t2YtBlvfYy2MYgjIkws54+1X/uSQrsfgDxlVIS+5pB2jyUUAaunqtT4+7rJrod5ivnjtTvlOQdL6tO4p4GCRsFzGybgKPmrjrpE3ZhI4vcx1EVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764084499; c=relaxed/simple;
-	bh=8fYEhqwjtL0SpYOBHBwg8VU9hDJ6wtd6dNewyrP9amA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=rwbIdzxE6UMO28FCvgmfMwAdV+awae39dydXV9lyBtvG6wtFKxklMrwizkrUj1dAdZFC4xlDmkn/QpI6s+3LMyQtQbUE7jhlNgaBSVBD710gIiYzGo5bbom/kQu9ERjMS0dtkB973XvB12tzwKcenfItRp/naRHY0R7iGOjKKJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=K/Fp02xZ; arc=none smtp.client-ip=185.246.84.56
+	s=arc-20240116; t=1764085151; c=relaxed/simple;
+	bh=bL6F9BP19l720jazLGjPDESOU5kH/67G9R7w1MrskIc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=Av0cOTdzKPx2NGxBYvkEFfT3ydbn40axuGH2YfADWEBGbsLoQ3nFfT0EMjO/FrD/JCqV8n2Ml0k0tmaJ6v0ylJy0MtzkjrzGLp4j0LNyJ/lpX0LrLqequfgIUEWbK5Fcs/IDHv6x99aBysiNnYu9P45djfJUktnXuARD+nMo3I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MCc+hhdC; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 865891A1D45;
-	Tue, 25 Nov 2025 15:28:10 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id D9129C15D58;
+	Tue, 25 Nov 2025 15:38:43 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 59A4C606A1;
-	Tue, 25 Nov 2025 15:28:10 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D30E1102F07FE;
-	Tue, 25 Nov 2025 16:28:04 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6C868606A1;
+	Tue, 25 Nov 2025 15:39:06 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8395D102F0882;
+	Tue, 25 Nov 2025 16:39:01 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764084489; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1764085145; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=HgxEQ0f8MNjzesLOK80vetYWR3YMKzv8RvyUGva3XLk=;
-	b=K/Fp02xZ1WhDXcE/vwFa8uDqUxs4cBpya3Uwrcrop9bEq7pfenZOXIQyIXmx2DHkO7Vgru
-	QqSq4h0+JFNQ4AA67Sn0cYZHfB1XsjSR1ooUUoj8w1JL9dwGdr5FK/bNugHt3wAJe41uYr
-	uAX2fsP/UxHVQy6Cp+qpfCDuelKkDjEso0lEUbKRDvXz3BX5Oo6QQjoSWTQ/RBxJyF4tNg
-	aiVyQt7GC6EQJPS67xcwL2bBmQY3GHV8dd9afsLEylbbo+dcisEEf93H8jk/AzarBLOuX9
-	3d+Hht7rhKBAo9weo3A/zJ1cvtKmN9Mkk5o3USEarkGCBY+ykGchBqPb5EvKaw==
+	bh=OfcHT/mK9zrCHFG5SR4twzWED90UElK1Zz1lJ4jB21M=;
+	b=MCc+hhdCUummg+ORkxsbfOLCaUWnZ+IKmgYF9CVQXRhM47JunkywIVzvC+WmPHBzjp0fiF
+	Va+jLUlOrqKX8D/nKEg2U1V/6BRHfwWsSzb/YlQyIvpEavZPcjE2EWhIKa5OTwv0ZI9agE
+	k0ezSJ+sH8TkXVzCHwI9rE1yTqsyYejtKNicD29M7xTTf4JXgNQRrpM+23HRHldMlbwiuS
+	qOeVOSbg4dLRLEh2PTMgEX33jDMzeJdivV34C/G1G5094VHkI/Njg3ExDi15yO88W+7U1n
+	WSzZQqJiWiOttT4RzeCu5naeGTm7Nt77uOrxMwqcLN2RrH5jZjCFEFoWZzg7rQ==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,10 +56,11 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 25 Nov 2025 16:28:04 +0100
-Message-Id: <DEHVRC8CY12S.3LSC6UVSMU0C1@bootlin.com>
-Subject: Re: [PATCH 1/2] phy: rockchip: inno-usb2: fix disconnection in
- gadget mode
+Date: Tue, 25 Nov 2025 16:39:01 +0100
+Message-Id: <DEHVZPZVWVTR.314J3P86OLG6X@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 2/2] phy: rockchip: inno-usb2: fix communication
+ disruption in gadget mode
 Cc: "Kever Yang" <kever.yang@rock-chips.com>, "Minas Harutyunyan"
  <Minas.Harutyunyan@synopsys.com>, "Alan Stern" <stern@rowland.harvard.edu>,
  "Louis Chauvet" <louis.chauvet@bootlin.com>, =?utf-8?q?Herv=C3=A9_Codina?=
@@ -70,36 +71,26 @@ Cc: "Kever Yang" <kever.yang@rock-chips.com>, "Minas Harutyunyan"
 To: "Luca Ceresoli" <luca.ceresoli@bootlin.com>, "Vinod Koul"
  <vkoul@kernel.org>, "Kishon Vijay Abraham I" <kishon@kernel.org>, "Heiko
  Stuebner" <heiko@sntech.de>, "William Wu" <wulf@rock-chips.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-0-239872f05f17@bootlin.com> <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-1-239872f05f17@bootlin.com>
-In-Reply-To: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-1-239872f05f17@bootlin.com>
+References: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-0-239872f05f17@bootlin.com> <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-2-239872f05f17@bootlin.com>
+In-Reply-To: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-2-239872f05f17@bootlin.com>
 X-Last-TLS-Session-Version: TLSv1.3
 
 Hello Luca,
 
 On Tue Jul 22, 2025 at 10:43 AM CEST, Luca Ceresoli wrote:
-> From: Louis Chauvet <louis.chauvet@bootlin.com>
->
 > When the OTG USB port is used to power to SoC, configured as peripheral a=
 nd
-
-typo: is used to power *the* SoC
-
-> used in gadget mode, there is a disconnection about 6 seconds after the
-> gadget is configured and enumerated.
+> used in gadget mode, communication stops without notice about 6 seconds
+> after the gadget is configured and enumerated.
 >
 > The problem was observed on a Radxa Rock Pi S board, which can only be
 > powered by the only USB-C connector. That connector is the only one usabl=
 e
-
-"which can only be powered by the only USB-C connector"
-double "only" makes it a super exclusive connector!
-
 > in gadget mode. This implies the USB cable is connected from before boot
 > and never disconnects while the kernel runs.
 >
-> The problem happens because of the PHY driver code flow, summarized as:
+> The related code flow in the PHY driver code can be summarized as:
 >
 >  * UDC start code (triggered via configfs at any time after boot)
 >    -> phy_init
@@ -109,7 +100,14 @@ double "only" makes it a super exclusive connector!
 >        -> rockchip_usb2phy_power_on
 >            -> enable clock
 >            -> rockchip_usb2phy_reset
->
+
+The above code flow summary was important for [PATCH 1/2] but it feels
+like not as important for [PATCH 2/2], could you drop or summarise it?
+The key point is that the below DCD sequence has invalid assumptions
+and does side effects that don't fit if VBUS is already present. I feel
+like it distracted me from the main point that is chg_det.opmode
+writes.
+
 >  * Now the gadget interface is up and running.
 >
 >  * 6 seconds later otg_sm_work starts [A]
@@ -120,46 +118,37 @@ double "only" makes it a super exclusive connector!
 >  * immediately the chg_detect_work starts [B]
 >    -> rockchip_chg_detect_work():
 >        if chg_state is UNDEFINED:
->            if (!rport->suspended):
->                rockchip_usb2phy_power_off() <--- [X]
+>             property_enable(base, &rphy->phy_cfg->chg_det.opmode, false);=
+ [Y]
 >
-> At [X], the PHY is powered off, causing a disconnection. This quickly
-> triggers a new connection and following re-enumeration, but any connectio=
-n
-> that had been established during the 6 seconds is broken.
+>  * rockchip_chg_detect_work() changes state and re-triggers itself a few
+>    times until it reached the DETECTED state:
+>    -> rockchip_chg_detect_work():
+>        if chg_state is DETECTED:
+>             property_enable(base, &rphy->phy_cfg->chg_det.opmode, true); =
+[Z]
 >
-> The code already checks for !rport->suspended, so add a guard for VBUS as
-> well to avoid a disconnection when a cable is connected.
+> At [Y] there is no disconnection and the USB device appears still present
+> to userspace, but all existing communications stop. E.g. using a CDC seri=
+al
+> gadget, the /dev/tty* devices are still present on both host and device,
+> but no data is transferred anymore. The later call with a 'true' argument
+> at [Z] does not restore it.
 
-Your commit message was clear but I was missing one key point: what
-rport->suspended means. It isn't what I first thought. Instead it means
-phy is powered off. Naming is bad but unrelated to your series. Maybe
-add a comment to your commit message like the following?
+You mention "there is no disconnection" but that sounds irrelevant to
+this precise commit. The issue at hand is a communication halt.
 
-  The code already checks for !rport->suspended (PHY is powered on), ...
+> Due to the lack of documentation, what chg_det.opmode does exactly is not
+> clear, however by code inspection it seems reasonable that is disables
+> something needed to keep the communication working, and testing proves th=
+at
+> disabling these lines lefs gadget mode keep working. So prevent changes t=
+o
+> chg_det.opmode when there is a cable connected (VBUS present).
 
-> Fixes: 98898f3bc83c ("phy: rockchip-inno-usb2: support otg-port for rk339=
-9")
-> Closes: https://lore.kernel.org/lkml/20250414185458.7767aabc@booty/
-> Co-developed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+"lefs" -> "let's", I think
 
-I believe there is an issue with your SoB ordering. It is meant to
-signal the path's route from author into the kernel tree. In that
-sense, it should start with author followed by you as submitter. Then
-the maintainer will append its own.
-
-Documentation/process/submitting-patches.rst is semi-explicitly writing
-that out:
-> Any further SoBs [...] following the author's SoB [...]
-https://elixir.bootlin.com/linux/v6.17.9/source/Documentation/process/submi=
-tting-patches.rst#L449-L453
-
-One good way to check is that all maintainers always append their SoB
-rather than prepend.
-
-With that,
+With those nits
 
 Reviewed-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
