@@ -1,106 +1,101 @@
-Return-Path: <linux-usb+bounces-30920-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30921-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B497FC85F85
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 17:26:04 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88BBEC861F6
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 18:06:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6D4434E688B
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 16:26:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 439C0352BC2
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 17:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB2662673B0;
-	Tue, 25 Nov 2025 16:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA60032E74A;
+	Tue, 25 Nov 2025 17:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ciH82Bhm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TG3BksSS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D04C238176;
-	Tue, 25 Nov 2025 16:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C414432D439
+	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 17:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764087959; cv=none; b=DKw6lwjvlUrcRVVcgRVd5GpjGWESq+ftfyPabFED3odfI4qFvnBGT5br5g6SFy5Wz16s3aY7ON1x680Je6d3i1wtHsnVTfmGwD3Rs5vtpYUooCxthkuyv5Wqo1JjIbC0rtksjHCVY8CuG+BIRwWGx63Bv7r5qXcj1WUI81/8qsc=
+	t=1764090073; cv=none; b=Sq3LKH2frO/f3M3p4PT6O2Epmdw7ayLwJquonDfFZPGIjglQzGx/fI88i7EfRhihBSt0oersB+4knlN8M5Rv9ZKZD/qvFwpoEomDkthf3DiEb2sy12Un48FnVq7t89ywUhbOEiBBGMmFUWHgmMKpiQCbQGg78TkW0NySlcbgjBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764087959; c=relaxed/simple;
-	bh=uMec6g1JFYeX09IAIUXFgg9sclzlNEbw6PBIPA7cTuo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rXh9kER3jitxwc+DI4arRV6xHVRiRUxsUnY9QA18IK3Mr+QziP4QiTOQw+g1dJugGRISoutv09FGb2J1xhja6Zzi6PITwcNg8sx4oy80Y8Np7qM/O2lHmXvY4j9f2XS2f9RUC9BMNuYuyUvbCf09eka9kXZ/JlgU62dvvfiaIdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ciH82Bhm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F35C4CEF1;
-	Tue, 25 Nov 2025 16:25:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764087957;
-	bh=uMec6g1JFYeX09IAIUXFgg9sclzlNEbw6PBIPA7cTuo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ciH82Bhmw65HQ27oGQcKleAsRya4o2CHUwALkhIg8ITpL9z3cdXfEfqwKXVduwZUL
-	 fiEnGA/xzRAkf/JFidRD86QKLChzMcabNQISllIHjwx5xl/fuvfYkY1ivT6Dcr2S8W
-	 s+awbE3lDipZ4s15yZy8ctdDz+pM/zookQN0Wz3eO6l9DOVw8aNqGQFTsbAd4GvvWj
-	 54AFxboUQ4uCXYCYoRnubuOabtYpN/chn/CtjVSXN/tKoVE78JoTcyb7+1YncmF3tl
-	 NnMGx0aHwUiA18EaSVBHeFS1x8usbQzCzIV3z/aGYwfG9Q90AYhGRJfLsm5yQJR4Jo
-	 ThX9fEzR+Kbtw==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vNvra-000000003s2-2cxa;
-	Tue, 25 Nov 2025 17:25:58 +0100
-Date: Tue, 25 Nov 2025 17:25:58 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] USB: serial: option: add Telit Cinterion FE910C04
- new compositions
-Message-ID: <aSXYlqai4Q7CQCT5@hovoldconsulting.com>
-References: <cover.1764084304.git.fabio.porcedda@gmail.com>
- <3ef9bdaa5f76595d0a39b8fc1b1cebe29f69709c.1764084304.git.fabio.porcedda@gmail.com>
+	s=arc-20240116; t=1764090073; c=relaxed/simple;
+	bh=ZWAMKKmgrsxx4JGoTZ2zC6oWhLCNBA5peXg9n/HVN+8=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=GCIiSRStiq8joAqF4kWdMJB5J7Nn5lFyCeR+LbXJMJcQg8Ld/TfKizj7Vo9qhx1HL5/8F8JBoLMGLQhjCsDKxWpsn8lsbpLZdy+lrLJDUxXEjnYY/BWQcN+0idCvdVxMRN73HfJ9PGOC78FVkM03IzKkMrff1nNj7Gmpq7OJKXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TG3BksSS; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-29555b384acso71987255ad.1
+        for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 09:01:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764090070; x=1764694870; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZWAMKKmgrsxx4JGoTZ2zC6oWhLCNBA5peXg9n/HVN+8=;
+        b=TG3BksSSEzGga1EO35clHkbCT3KnZaoijugl4g1FbEJLGJL1unSVHDmGUsfQyMjq8m
+         2XbZqf9fMp0X6kuaVVECryhbfyN3updSrAqkUnKXYKw1Itf2faMwM6u5U/iDzkGg7qIc
+         cZ79i167Uq1+X98Rj/y3kaUvALnmhWpiH4oJ4cfDgmTeUAgSEeNiNHOQapp971+Zcz6K
+         ME8TaLTaw9CvL9WXA1A+7cixa9V3N+jfMSUCiMsHPbrOYmZPfnIAaT1T+pS2BSiVSaEM
+         N31GD/YGezj2977VwWZmvqaShalIXZZxjgeNqEHXdMGCBntTbnCi5aBbzVMNccq5mysB
+         cLrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764090070; x=1764694870;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZWAMKKmgrsxx4JGoTZ2zC6oWhLCNBA5peXg9n/HVN+8=;
+        b=wEj0UaHK08XRycwQgtIJsS3OAshAdrA/IR1pe4oO9NKfoUh+jootNdznjVOf/OE9/E
+         575Gm0zt9z+p1aoI9NAJfkFBLnlwXjc+lTSzpnHHmjN3GIxIsD2IIuv0hs8rZOAhhMfy
+         0fwy9bIxi22Q2AU+KehFpHyEFk14GrEu1itzWt5J39yAZ0rMdJpm/8F6BMxKf4kBkV3e
+         t+MnzD81nFXa+DGYCUNKaRJL3bUl4+auXgC36A5RDFOmJlNbNENrOcfkGR3d8v/HiKgW
+         Pd+LvcAsCPp/nxmjiUcPB0WHuNMdS3NIpr0ShmsEcEuckSz/fD6TWjxHFEWQAcvcChHZ
+         eVsw==
+X-Forwarded-Encrypted: i=1; AJvYcCUyD8FAdNRn5OpxNsWo5r32xNXL8Y06AP8aR9UcWYTiqSJ4K7pBaJVVTH9rvqCKbPybGN41b4yxToM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJngiKt1pnV7kDLWdeV9HwDuLgJfPIfdRdYFvFiijoR1CHW/Fx
+	xy1HebHWNbIegxMxzWVBMlPC1BzLNPeCC+5rh5rz4J8AIZw0sJUlXnkz
+X-Gm-Gg: ASbGncvwWztFCSGYN+TcEE/M1kUaeyDFuEdqcvda5v04Or6mT+R5jOWbGKPnbXzd2B4
+	IkIkaL4hd7HWpSJwI3OXvMtdT918DJlOLcC2IPu1rSXfwxGJw5hlDiyFMp+3YHbjSRIxezgsv4b
+	2jwKm76r9nPloFGnyO4Rm3IG347tTuVKAlX7WnbKMat8hIu+LeQ405LPvJwjREm0vr0X+pz+MqM
+	JDu4CU1H3xIvn+ixrxJ86tKjQ1JKylL8fNweZCmVG5Yd5Rf0XIy5gavF08ug0eF/MQC7LBvhxVK
+	graUvGaxHfpGj6H75C0Lb0J7bc4H6uv0HBW/h2OUw/LGl1cGhz0mmzCZ12OSqb7dh6h3g4CgQdo
+	2M++k6Cf6CJMuHUB/VVmXzgvNvyd2RUI77UTeFU6MXpPorDqc3K/MHV/dmw80BJR2jZdllaLmG7
+	f2uhk8ziixWL6IdNilhnSpCAo7xw42EQ7V+eFy66FBVkb2bLEay+zp+Ks=
+X-Google-Smtp-Source: AGHT+IEhFYICnUs+QCI6cv+QJhHWyIoiKr3TM17aLru8XDaUs+llQV7KkXJ+bKFQqjMPMHOux2Ry/w==
+X-Received: by 2002:a17:903:3d0b:b0:290:91d2:9304 with SMTP id d9443c01a7336-29b6c3c2864mr177104845ad.4.1764090068323;
+        Tue, 25 Nov 2025 09:01:08 -0800 (PST)
+Received: from ?IPV6:2405:201:31:d869:c163:7f74:bed9:a2d1? ([2405:201:31:d869:c163:7f74:bed9:a2d1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b26fff4sm174669705ad.68.2025.11.25.09.01.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Nov 2025 09:01:07 -0800 (PST)
+Message-ID: <c0152541-a1ff-4eb4-afdd-5335150f29ba@gmail.com>
+Date: Tue, 25 Nov 2025 22:31:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3ef9bdaa5f76595d0a39b8fc1b1cebe29f69709c.1764084304.git.fabio.porcedda@gmail.com>
+User-Agent: Mozilla Thunderbird
+To: syzbot+a41b73dce23962a74c72@syzkaller.appspotmail.com
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <692560ec.a70a0220.2ea503.0087.GAE@google.com>
+Subject: Re: [syzbot] [media?] [usb?] memory leak in
+ v4l2_ctrl_handler_init_class (2)
+Content-Language: en-US
+From: shaurya <ssranevjti@gmail.com>
+In-Reply-To: <692560ec.a70a0220.2ea503.0087.GAE@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 25, 2025 at 04:27:33PM +0100, Fabio Porcedda wrote:
-> Add the following Telit Cinterion new compositions:
- 
-> 0x10cb: RNDIS + tty (AT) + tty (diag) + DPL (Data Packet Logging) + adb
-> T:  Bus=01 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=480 MxCh=16
-> D:  Ver= 2.00 Cls=09(hub  ) Sub=00 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=1d6b ProdID=0002 Rev=06.18
-> S:  Manufacturer=Linux 6.18.0-rc3-usb+ xhci-hcd
-> S:  Product=xHCI Host Controller
-> S:  SerialNumber=0000:00:14.0
-> C:  #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=0mA
-> I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
-> E:  Ad=81(I) Atr=03(Int.) MxPS=   4 Ivl=256ms
-> 
-> T:  Bus=01 Lev=01 Prnt=01 Port=11 Cnt=01 Dev#=  7 Spd=1.5 MxCh= 0
-> D:  Ver= 1.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 8 #Cfgs=  1
-> P:  Vendor=413c ProdID=2003 Rev=03.01
-> S:  Manufacturer=Dell
-> S:  Product=Dell USB Keyboard
-> C:  #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=70mA
-> I:  If#= 0 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=01 Prot=01 Driver=usbhid
-> E:  Ad=81(I) Atr=03(Int.) MxPS=   8 Ivl=24ms
-> 
-> T:  Bus=02 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=10000 MxCh=10
-> D:  Ver= 3.10 Cls=09(hub  ) Sub=00 Prot=03 MxPS= 9 #Cfgs=  1
-> P:  Vendor=1d6b ProdID=0003 Rev=06.18
-> S:  Manufacturer=Linux 6.18.0-rc3-usb+ xhci-hcd
-> S:  Product=xHCI Host Controller
-> S:  SerialNumber=0000:00:14.0
-> C:  #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=0mA
-> I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
-> E:  Ad=81(I) Atr=03(Int.) MxPS=   4 Ivl=256ms
+#syz test:
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
-Looks like something went wrong when you generated the usb-devices
-output for the above composition.
-
-Johan
 
