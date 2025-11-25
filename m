@@ -1,187 +1,205 @@
-Return-Path: <linux-usb+bounces-30908-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30909-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DC52C84DC3
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 13:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7AC9C8514A
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 14:05:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2713F3B03EF
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 12:03:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EABB3B2233
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 13:02:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 761AC315D32;
-	Tue, 25 Nov 2025 12:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF084322DD4;
+	Tue, 25 Nov 2025 13:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zRAjMXYA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.205.26])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 194FE13AD26;
-	Tue, 25 Nov 2025 12:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.205.26
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241A631A81F;
+	Tue, 25 Nov 2025 13:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764072175; cv=none; b=oPDNM8WVf1+YiJAnFEqav2boK8H7oBTa5UaKNpdnrDktMgJN/O41LANj+UUHzlVCUQxTnw0+vSBFvsvHD0+STZmu6mKzgDh8jbY3EhnATrofwUHAmMTX4A1V+vJiXgEoq5OwDuoLH7Oa3XPr4F2x0oFvHaUrzdpoCI4/n0W2C6Y=
+	t=1764075750; cv=none; b=jB7TSmvpBxtQGe2gUsL68L+NpwI+9RzQtaJ7Dg8CxJvoOM25cM3WQ8s9oioquSt3hc0WjPpuauan9AEMFJ5xGYc7q9xadCr3CrQjf32VaHJ5YUjFA3RQBXgW5PxjNkl+nMBFeGi7ZJgsl817+odI7Ag4C13kPnzw12Bz3uB912k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764072175; c=relaxed/simple;
-	bh=kCHxE3SVrEtB6TMP5lObaA6lYaHfjj5rWBEQ/4tYd+E=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=B3qPLpXwE6cVq48tZIKugU+xjIKQPkIE+9FE4EcvBeCsvgVIupP77fET51AuRmf/aT3/p/YLWgDFyoJbqt0LPF9f7myc3YeM+jTjm0VahNFd89RtW908fCcGEIvkAE2IxRhdPtxO8kn/dS3PoBnqGMe8KWjYM71cJsDuM2Ay4IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=52.229.205.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [218.12.18.214])
-	by mtasvr (Coremail) with SMTP id _____wBn5pXimiVpXdAxAA--.9925S3;
-	Tue, 25 Nov 2025 20:02:43 +0800 (CST)
-Received: from duoming$zju.edu.cn ( [218.12.18.214] ) by
- ajax-webmail-mail-app1 (Coremail) ; Tue, 25 Nov 2025 20:02:40 +0800
- (GMT+08:00)
-Date: Tue, 25 Nov 2025 20:02:40 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: duoming@zju.edu.cn
-To: "Greg KH" <gregkh@linuxfoundation.org>
+	s=arc-20240116; t=1764075750; c=relaxed/simple;
+	bh=i1uRlGASr84LrYT53TbtK3t31fxg7BFux2SIjo5Babk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e8FgP6FKI44KNxXD1O4l7d3PmrpKMj2CufejGy4GDWeWGqZd2s9ttIZQCBu1QDWvPwabIQ2Ux0x2VY/0ewF0mS1B6A7NbTHgeBjvrbQHCf3jHBAUNgfNmqqVefO7p1exTyuvyRp3RHfjPs/ZjadAlz6y5y/jQ9eJkzJsmVf71Ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zRAjMXYA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D90C4CEF1;
+	Tue, 25 Nov 2025 13:02:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1764075749;
+	bh=i1uRlGASr84LrYT53TbtK3t31fxg7BFux2SIjo5Babk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=zRAjMXYApHc9nsPjaiNfRojCav8ZbfA3Sb4vsEX/0aeouFtUgaHOlKPuVswFs0AzZ
+	 GoyaD7/hbiB9L00MYytDW0PZoKmvyzdtPWyAqBu/TpUJn6QQzS10MuqsRMnmujLY9H
+	 +TofonQtCrwHF0SjVFb3GmRgmJNropzVAIWAQEns=
+Date: Tue, 25 Nov 2025 14:02:25 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: duoming@zju.edu.cn
 Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
 	mitltlatltl@gmail.com, linux-kernel@vger.kernel.org,
 	sergei.shtylyov@gmail.com, stable@vger.kernel.org
 Subject: Re: [PATCH v2 2/2] usb: typec: ucsi: fix use-after-free caused by
  uec->work
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
- 20250620(94335109) Copyright (c) 2002-2025 www.mailtech.cn zju.edu.cn
-In-Reply-To: <2025112555-widow-ravage-ddb8@gregkh>
+Message-ID: <2025112500-deuce-jasmine-cf8c@gregkh>
 References: <cover.1764065838.git.duoming@zju.edu.cn>
  <cc31e12ef9ffbf86676585b02233165fd33f0d8e.1764065838.git.duoming@zju.edu.cn>
  <2025112555-widow-ravage-ddb8@gregkh>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+ <13afcc92.325cd.19abae4fdec.Coremail.duoming@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <13afcc92.325cd.19abae4fdec.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:yy_KCgAHo93hmiVpwiRFBA--.2986W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAwcBAWkktQEMpAAFsQ
-X-CM-DELIVERINFO: =?B?7g2d8AXKKxbFmtjJiESix3B1w3uoVhYI+vyen2ZzBEkOnu5chDpkB+ZdGnv/zQ0PbP
-	CR1z+B/Lu5rwjGSWc5TXIqN1JzJVZET5BPG1SlVWOGMv4baWlIzOVE3Wv8vHJkPE7KuUE2
-	1kxkmGDHJtcXir1DtsHAo1Xo7VXTaN3uLPEwbrG4J4kIXqqf77zUcS8FAbxd+A==
-X-Coremail-Antispam: 1Uk129KBj93XoWxKFWfuw1xuFW3AFWkXF1UurX_yoW7tr1fpF
-	9I9FWxCrW8Jry7Ww47Jr45JF15t3yUAa4jgr40kry7uF48Jw1YqFy8trW3WryDGr48AFy7
-	AF9xtrWUtr1DKwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUmmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4xvF2IEb7IF0Fy264kE64k0F24lFcxC0VAYjxAxZF0Ex2IqxwAK
-	zVCY07xG64k0F24l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
-	6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-	kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJwCE64xvF2IEb7IF0Fy7YxBIda
-	VFxhVjvjDU0xZFpf9x07j8GYJUUUUU=
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <13afcc92.325cd.19abae4fdec.Coremail.duoming@zju.edu.cn>
 
-T24gVHVlLCAyNSBOb3YgMjAyNSAxMjo0NDowMiArMDEwMCwgR3JlZyBLSCB3cm90ZToKPiA+IFRo
-ZSBkZWxheWVkIHdvcmsgdWVjLT53b3JrIGlzIHNjaGVkdWxlZCBpbiBnYW9rdW5fdWNzaV9wcm9i
-ZSgpCj4gPiBidXQgbmV2ZXIgcHJvcGVybHkgY2FuY2VsZWQgaW4gZ2Fva3VuX3Vjc2lfcmVtb3Zl
-KCkuIFRoaXMgY3JlYXRlcwo+ID4gdXNlLWFmdGVyLWZyZWUgc2NlbmFyaW9zIHdoZXJlIHRoZSB1
-Y3NpIGFuZCBnYW9rdW5fdWNzaSBzdHJ1Y3R1cmUKPiA+IGFyZSBmcmVlZCBhZnRlciB1Y3NpX2Rl
-c3Ryb3koKSBjb21wbGV0ZXMgZXhlY3V0aW9uLCB3aGlsZSB0aGUKPiA+IGdhb2t1bl91Y3NpX3Jl
-Z2lzdGVyX3dvcmtlcigpIG1pZ2h0IGJlIGVpdGhlciBjdXJyZW50bHkgZXhlY3V0aW5nCj4gPiBv
-ciBzdGlsbCBwZW5kaW5nIGluIHRoZSB3b3JrIHF1ZXVlLiBUaGUgYWxyZWFkeS1mcmVlZCBnYW9r
-dW5fdWNzaQo+ID4gb3IgdWNzaSBzdHJ1Y3R1cmUgbWF5IHRoZW4gYmUgYWNjZXNzZWQuCj4gPiAK
-PiA+IEZ1cnRoZXJtb3JlLCB0aGUgcmFjZSB3aW5kb3cgaXMgMyBzZWNvbmRzLCB3aGljaCBpcyBz
-dWZmaWNpZW50bHkKPiA+IGxvbmcgdG8gbWFrZSB0aGlzIGJ1ZyBlYXNpbHkgcmVwcm9kdWNpYmxl
-LiBUaGUgZm9sbG93aW5nIGlzIHRoZQo+ID4gdHJhY2UgY2FwdHVyZWQgYnkgS0FTQU46Cj4gPiAK
-PiA+ID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PQo+ID4gQlVHOiBLQVNBTjogc2xhYi11c2UtYWZ0ZXItZnJlZSBpbiBfX3J1
-bl90aW1lcnMrMHg1ZWMvMHg2MzAKPiA+IFdyaXRlIG9mIHNpemUgOCBhdCBhZGRyIGZmZmYwMDAw
-MGVjMjhjYzggYnkgdGFzayBzd2FwcGVyLzAvMAo+ID4gLi4uCj4gPiBDYWxsIHRyYWNlOgo+ID4g
-IHNob3dfc3RhY2srMHgxOC8weDI0IChDKQo+ID4gIGR1bXBfc3RhY2tfbHZsKzB4NzgvMHg5MAo+
-ID4gIHByaW50X3JlcG9ydCsweDExNC8weDU4MAo+ID4gIGthc2FuX3JlcG9ydCsweGE0LzB4ZjAK
-PiA+ICBfX2FzYW5fcmVwb3J0X3N0b3JlOF9ub2Fib3J0KzB4MjAvMHgyYwo+ID4gIF9fcnVuX3Rp
-bWVycysweDVlYy8weDYzMAo+ID4gIHJ1bl90aW1lcl9zb2Z0aXJxKzB4ZTgvMHgxY2MKPiA+ICBo
-YW5kbGVfc29mdGlycXMrMHgyOTQvMHg3MjAKPiA+ICBfX2RvX3NvZnRpcnErMHgxNC8weDIwCj4g
-PiAgX19fX2RvX3NvZnRpcnErMHgxMC8weDFjCj4gPiAgY2FsbF9vbl9pcnFfc3RhY2srMHgzMC8w
-eDQ4Cj4gPiAgZG9fc29mdGlycV9vd25fc3RhY2srMHgxYy8weDI4Cj4gPiAgX19pcnFfZXhpdF9y
-Y3UrMHgyN2MvMHgzNjQKPiA+ICBpcnFfZXhpdF9yY3UrMHgxMC8weDFjCj4gPiAgZWwxX2ludGVy
-cnVwdCsweDQwLzB4NjAKPiA+ICBlbDFoXzY0X2lycV9oYW5kbGVyKzB4MTgvMHgyNAo+ID4gIGVs
-MWhfNjRfaXJxKzB4NmMvMHg3MAo+ID4gIGFyY2hfbG9jYWxfaXJxX2VuYWJsZSsweDQvMHg4IChQ
-KQo+ID4gIGRvX2lkbGUrMHgzMzQvMHg0NTgKPiA+ICBjcHVfc3RhcnR1cF9lbnRyeSsweDYwLzB4
-NzAKPiA+ICByZXN0X2luaXQrMHgxNTgvMHgxNzQKPiA+ICBzdGFydF9rZXJuZWwrMHgyZjgvMHgz
-OTQKPiA+ICBfX3ByaW1hcnlfc3dpdGNoZWQrMHg4Yy8weDk0Cj4gPiAKPiA+IEFsbG9jYXRlZCBi
-eSB0YXNrIDcyIG9uIGNwdSAwIGF0IDI3LjUxMDM0MXM6Cj4gPiAga2FzYW5fc2F2ZV9zdGFjaysw
-eDJjLzB4NTQKPiA+ICBrYXNhbl9zYXZlX3RyYWNrKzB4MjQvMHg1Ywo+ID4gIGthc2FuX3NhdmVf
-YWxsb2NfaW5mbysweDQwLzB4NTQKPiA+ICBfX2thc2FuX2ttYWxsb2MrMHhhMC8weGI4Cj4gPiAg
-X19rbWFsbG9jX25vZGVfdHJhY2tfY2FsbGVyX25vcHJvZisweDFjMC8weDU4OAo+ID4gIGRldm1f
-a21hbGxvYysweDdjLzB4MWM4Cj4gPiAgZ2Fva3VuX3Vjc2lfcHJvYmUrMHhhMC8weDg0MCAgYXV4
-aWxpYXJ5X2J1c19wcm9iZSsweDk0LzB4ZjgKPiA+ICByZWFsbHlfcHJvYmUrMHgxN2MvMHg1YjgK
-PiA+ICBfX2RyaXZlcl9wcm9iZV9kZXZpY2UrMHgxNTgvMHgyYzQKPiA+ICBkcml2ZXJfcHJvYmVf
-ZGV2aWNlKzB4MTBjLzB4MjY0Cj4gPiAgX19kZXZpY2VfYXR0YWNoX2RyaXZlcisweDE2OC8weDJk
-MAo+ID4gIGJ1c19mb3JfZWFjaF9kcnYrMHgxMDAvMHgxODgKPiA+ICBfX2RldmljZV9hdHRhY2gr
-MHgxNzQvMHgzNjgKPiA+ICBkZXZpY2VfaW5pdGlhbF9wcm9iZSsweDE0LzB4MjAKPiA+ICBidXNf
-cHJvYmVfZGV2aWNlKzB4MTIwLzB4MTUwCj4gPiAgZGV2aWNlX2FkZCsweGIzYy8weDEwZmMKPiA+
-ICBfX2F1eGlsaWFyeV9kZXZpY2VfYWRkKzB4ODgvMHgxMzAKPiA+IC4uLgo+ID4gCj4gPiBGcmVl
-ZCBieSB0YXNrIDczIG9uIGNwdSAxIGF0IDI4LjkxMDYyN3M6Cj4gPiAga2FzYW5fc2F2ZV9zdGFj
-aysweDJjLzB4NTQKPiA+ICBrYXNhbl9zYXZlX3RyYWNrKzB4MjQvMHg1Ywo+ID4gIF9fa2FzYW5f
-c2F2ZV9mcmVlX2luZm8rMHg0Yy8weDc0Cj4gPiAgX19rYXNhbl9zbGFiX2ZyZWUrMHg2MC8weDhj
-Cj4gPiAga2ZyZWUrMHhkNC8weDQxMAo+ID4gIGRldnJlc19yZWxlYXNlX2FsbCsweDE0MC8weDFm
-MAo+ID4gIGRldmljZV91bmJpbmRfY2xlYW51cCsweDIwLzB4MTkwCj4gPiAgZGV2aWNlX3JlbGVh
-c2VfZHJpdmVyX2ludGVybmFsKzB4MzQ0LzB4NDYwCj4gPiAgZGV2aWNlX3JlbGVhc2VfZHJpdmVy
-KzB4MTgvMHgyNAo+ID4gIGJ1c19yZW1vdmVfZGV2aWNlKzB4MTk4LzB4Mjc0Cj4gPiAgZGV2aWNl
-X2RlbCsweDMxMC8weGE4NAo+ID4gLi4uCj4gPiAKPiA+IFRoZSBidWdneSBhZGRyZXNzIGJlbG9u
-Z3MgdG8gdGhlIG9iamVjdCBhdCBmZmZmMDAwMDBlYzI4YzAwCj4gPiAgd2hpY2ggYmVsb25ncyB0
-byB0aGUgY2FjaGUga21hbGxvYy01MTIgb2Ygc2l6ZSA1MTIKPiA+IFRoZSBidWdneSBhZGRyZXNz
-IGlzIGxvY2F0ZWQgMjAwIGJ5dGVzIGluc2lkZSBvZgo+ID4gIGZyZWVkIDUxMi1ieXRlIHJlZ2lv
-bgo+ID4gVGhlIGJ1Z2d5IGFkZHJlc3MgYmVsb25ncyB0byB0aGUgcGh5c2ljYWwgcGFnZToKPiA+
-IHBhZ2U6IHJlZmNvdW50OjAgbWFwY291bnQ6MCBtYXBwaW5nOjAwMDAwMDAwMDAwMDAwMDAgaW5k
-ZXg6MHgwIHBmbjoweDRlYzI4Cj4gPiBoZWFkOiBvcmRlcjoyIG1hcGNvdW50OjAgZW50aXJlX21h
-cGNvdW50OjAgbnJfcGFnZXNfbWFwcGVkOjAgcGluY291bnQ6MAo+ID4gZmxhZ3M6IDB4M2ZmZmUw
-MDAwMDAwMDQwKGhlYWR8bm9kZT0wfHpvbmU9MHxsYXN0Y3B1cGlkPTB4MWZmZmYpCj4gPiBwYWdl
-X3R5cGU6IGY1KHNsYWIpCj4gPiByYXc6IDAzZmZmZTAwMDAwMDAwNDAgZmZmZjAwMDAwODgwMWM4
-MCBkZWFkMDAwMDAwMDAwMTIyIDAwMDAwMDAwMDAwMDAwMDAKPiA+IHJhdzogMDAwMDAwMDAwMDAw
-MDAwMCAwMDAwMDAwMDgwMTAwMDEwIDAwMDAwMDAwZjUwMDAwMDAgMDAwMDAwMDAwMDAwMDAwMAo+
-ID4gaGVhZDogMDNmZmZlMDAwMDAwMDA0MCBmZmZmMDAwMDA4ODAxYzgwIGRlYWQwMDAwMDAwMDAx
-MjIgMDAwMDAwMDAwMDAwMDAwMAo+ID4gaGVhZDogMDAwMDAwMDAwMDAwMDAwMCAwMDAwMDAwMDgw
-MTAwMDEwIDAwMDAwMDAwZjUwMDAwMDAgMDAwMDAwMDAwMDAwMDAwMAo+ID4gaGVhZDogMDNmZmZl
-MDAwMDAwMDAwMiBmZmZmZmRmZmMwM2IwYTAxIDAwMDAwMDAwZmZmZmZmZmYgMDAwMDAwMDBmZmZm
-ZmZmZgo+ID4gaGVhZDogZmZmZmZmZmZmZmZmZmZmZiAwMDAwMDAwMDAwMDAwMDAwIDAwMDAwMDAw
-ZmZmZmZmZmYgMDAwMDAwMDAwMDAwMDAwNAo+ID4gcGFnZSBkdW1wZWQgYmVjYXVzZToga2FzYW46
-IGJhZCBhY2Nlc3MgZGV0ZWN0ZWQKPiA+IAo+ID4gTWVtb3J5IHN0YXRlIGFyb3VuZCB0aGUgYnVn
-Z3kgYWRkcmVzczoKPiA+ICBmZmZmMDAwMDBlYzI4YjgwOiBmYyBmYyBmYyBmYyBmYyBmYyBmYyBm
-YyBmYyBmYyBmYyBmYyBmYyBmYyBmYyBmYwo+ID4gIGZmZmYwMDAwMGVjMjhjMDA6IGZhIGZiIGZi
-IGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiIGZiCj4gPiA+ZmZmZjAwMDAwZWMy
-OGM4MDogZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIKPiA+
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4gPiAgZmZm
-ZjAwMDAwZWMyOGQwMDogZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIgZmIg
-ZmIgZmIKPiA+ICBmZmZmMDAwMDBlYzI4ZDgwOiBmYiBmYiBmYiBmYiBmYiBmYiBmYiBmYiBmYiBm
-YiBmYiBmYiBmYiBmYiBmYiBmYgo+ID4gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Cj4gPiAKPiA+IEFkZCBkaXNhYmxlX2Rl
-bGF5ZWRfd29ya19zeW5jKCkgaW4gZ2Fva3VuX3Vjc2lfcmVtb3ZlKCkgdG8gZW5zdXJlCj4gPiB0
-aGF0IHVlYy0+d29yayBpcyBwcm9wZXJseSBjYW5jZWxlZCBhbmQgcHJldmVudGVkIGZyb20gZXhl
-Y3V0aW5nCj4gPiBhZnRlciB0aGUgdWNzaSBhbmQgZ2Fva3VuX3Vjc2kgc3RydWN0dXJlIGhhdmUg
-YmVlbiBkZWFsbG9jYXRlZC4KPiA+IAo+ID4gRml4ZXM6IDAwMzI3ZDdmMmM4YyAoInVzYjogdHlw
-ZWM6IHVjc2k6IGFkZCBIdWF3ZWkgTWF0ZWJvb2sgRSBHbyB1Y3NpIGRyaXZlciIpCj4gPiBDYzog
-c3RhYmxlQHZnZXIua2VybmVsLm9yZwo+ID4gU2lnbmVkLW9mZi1ieTogRHVvbWluZyBaaG91IDxk
-dW9taW5nQHpqdS5lZHUuY24+Cj4gPiAtLS0KPiA+ICBkcml2ZXJzL3VzYi90eXBlYy91Y3NpL3Vj
-c2lfaHVhd2VpX2dhb2t1bi5jIHwgMSArCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9u
-KCspCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi90eXBlYy91Y3NpL3Vjc2lfaHVh
-d2VpX2dhb2t1bi5jIGIvZHJpdmVycy91c2IvdHlwZWMvdWNzaS91Y3NpX2h1YXdlaV9nYW9rdW4u
-Ywo+ID4gaW5kZXggODQwMWFiNDE0YmQuLmM1OTY1NjU2YmFiIDEwMDY0NAo+ID4gLS0tIGEvZHJp
-dmVycy91c2IvdHlwZWMvdWNzaS91Y3NpX2h1YXdlaV9nYW9rdW4uYwo+ID4gKysrIGIvZHJpdmVy
-cy91c2IvdHlwZWMvdWNzaS91Y3NpX2h1YXdlaV9nYW9rdW4uYwo+ID4gQEAgLTUwMyw2ICs1MDMs
-NyBAQCBzdGF0aWMgdm9pZCBnYW9rdW5fdWNzaV9yZW1vdmUoc3RydWN0IGF1eGlsaWFyeV9kZXZp
-Y2UgKmFkZXYpCj4gPiAgewo+ID4gIAlzdHJ1Y3QgZ2Fva3VuX3Vjc2kgKnVlYyA9IGF1eGlsaWFy
-eV9nZXRfZHJ2ZGF0YShhZGV2KTsKPiA+ICAKPiA+ICsJZGlzYWJsZV9kZWxheWVkX3dvcmtfc3lu
-YygmdWVjLT53b3JrKTsKPiA+ICAJZ2Fva3VuX2VjX3VucmVnaXN0ZXJfbm90aWZ5KHVlYy0+ZWMs
-ICZ1ZWMtPm5iKTsKPiA+ICAJdWNzaV91bnJlZ2lzdGVyKHVlYy0+dWNzaSk7Cj4gPiAgCXVjc2lf
-ZGVzdHJveSh1ZWMtPnVjc2kpOwo+ID4gLS0gCj4gPiAyLjM0LjEKPiA+IAo+ID4gCj4gCj4gV2hh
-dCBjaGFuZ2VkIGZyb20gdjE/CgpUaGUgb3JpZ2luYWwgcGF0Y2hbMV0gb25seSBmaXhlcyB0aGUg
-cHJvYmUgZmFpbHVyZSBpbsKgCmdhb2t1bl91Y3NpX3Byb2JlKCkuIFRoaXMgbmV3IHZlcnNpb24g
-aXMgYSBwYXRjaCBzZXJpZXMgCnRoYXQgYWxzbyBhZGRyZXNzZXMgdGhlIHVzZS1hZnRlci1mcmVl
-IGlzc3VlLgoKWzFdIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAyNTExMjUwODI1MDUu
-NTIyNDktMS1kdW9taW5nQHpqdS5lZHUuY24vCg==
+On Tue, Nov 25, 2025 at 08:02:40PM +0800, duoming@zju.edu.cn wrote:
+> On Tue, 25 Nov 2025 12:44:02 +0100, Greg KH wrote:
+> > > The delayed work uec->work is scheduled in gaokun_ucsi_probe()
+> > > but never properly canceled in gaokun_ucsi_remove(). This creates
+> > > use-after-free scenarios where the ucsi and gaokun_ucsi structure
+> > > are freed after ucsi_destroy() completes execution, while the
+> > > gaokun_ucsi_register_worker() might be either currently executing
+> > > or still pending in the work queue. The already-freed gaokun_ucsi
+> > > or ucsi structure may then be accessed.
+> > > 
+> > > Furthermore, the race window is 3 seconds, which is sufficiently
+> > > long to make this bug easily reproducible. The following is the
+> > > trace captured by KASAN:
+> > > 
+> > > ==================================================================
+> > > BUG: KASAN: slab-use-after-free in __run_timers+0x5ec/0x630
+> > > Write of size 8 at addr ffff00000ec28cc8 by task swapper/0/0
+> > > ...
+> > > Call trace:
+> > >  show_stack+0x18/0x24 (C)
+> > >  dump_stack_lvl+0x78/0x90
+> > >  print_report+0x114/0x580
+> > >  kasan_report+0xa4/0xf0
+> > >  __asan_report_store8_noabort+0x20/0x2c
+> > >  __run_timers+0x5ec/0x630
+> > >  run_timer_softirq+0xe8/0x1cc
+> > >  handle_softirqs+0x294/0x720
+> > >  __do_softirq+0x14/0x20
+> > >  ____do_softirq+0x10/0x1c
+> > >  call_on_irq_stack+0x30/0x48
+> > >  do_softirq_own_stack+0x1c/0x28
+> > >  __irq_exit_rcu+0x27c/0x364
+> > >  irq_exit_rcu+0x10/0x1c
+> > >  el1_interrupt+0x40/0x60
+> > >  el1h_64_irq_handler+0x18/0x24
+> > >  el1h_64_irq+0x6c/0x70
+> > >  arch_local_irq_enable+0x4/0x8 (P)
+> > >  do_idle+0x334/0x458
+> > >  cpu_startup_entry+0x60/0x70
+> > >  rest_init+0x158/0x174
+> > >  start_kernel+0x2f8/0x394
+> > >  __primary_switched+0x8c/0x94
+> > > 
+> > > Allocated by task 72 on cpu 0 at 27.510341s:
+> > >  kasan_save_stack+0x2c/0x54
+> > >  kasan_save_track+0x24/0x5c
+> > >  kasan_save_alloc_info+0x40/0x54
+> > >  __kasan_kmalloc+0xa0/0xb8
+> > >  __kmalloc_node_track_caller_noprof+0x1c0/0x588
+> > >  devm_kmalloc+0x7c/0x1c8
+> > >  gaokun_ucsi_probe+0xa0/0x840  auxiliary_bus_probe+0x94/0xf8
+> > >  really_probe+0x17c/0x5b8
+> > >  __driver_probe_device+0x158/0x2c4
+> > >  driver_probe_device+0x10c/0x264
+> > >  __device_attach_driver+0x168/0x2d0
+> > >  bus_for_each_drv+0x100/0x188
+> > >  __device_attach+0x174/0x368
+> > >  device_initial_probe+0x14/0x20
+> > >  bus_probe_device+0x120/0x150
+> > >  device_add+0xb3c/0x10fc
+> > >  __auxiliary_device_add+0x88/0x130
+> > > ...
+> > > 
+> > > Freed by task 73 on cpu 1 at 28.910627s:
+> > >  kasan_save_stack+0x2c/0x54
+> > >  kasan_save_track+0x24/0x5c
+> > >  __kasan_save_free_info+0x4c/0x74
+> > >  __kasan_slab_free+0x60/0x8c
+> > >  kfree+0xd4/0x410
+> > >  devres_release_all+0x140/0x1f0
+> > >  device_unbind_cleanup+0x20/0x190
+> > >  device_release_driver_internal+0x344/0x460
+> > >  device_release_driver+0x18/0x24
+> > >  bus_remove_device+0x198/0x274
+> > >  device_del+0x310/0xa84
+> > > ...
+> > > 
+> > > The buggy address belongs to the object at ffff00000ec28c00
+> > >  which belongs to the cache kmalloc-512 of size 512
+> > > The buggy address is located 200 bytes inside of
+> > >  freed 512-byte region
+> > > The buggy address belongs to the physical page:
+> > > page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x4ec28
+> > > head: order:2 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+> > > flags: 0x3fffe0000000040(head|node=0|zone=0|lastcpupid=0x1ffff)
+> > > page_type: f5(slab)
+> > > raw: 03fffe0000000040 ffff000008801c80 dead000000000122 0000000000000000
+> > > raw: 0000000000000000 0000000080100010 00000000f5000000 0000000000000000
+> > > head: 03fffe0000000040 ffff000008801c80 dead000000000122 0000000000000000
+> > > head: 0000000000000000 0000000080100010 00000000f5000000 0000000000000000
+> > > head: 03fffe0000000002 fffffdffc03b0a01 00000000ffffffff 00000000ffffffff
+> > > head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000004
+> > > page dumped because: kasan: bad access detected
+> > > 
+> > > Memory state around the buggy address:
+> > >  ffff00000ec28b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> > >  ffff00000ec28c00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > > >ffff00000ec28c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > >                                               ^
+> > >  ffff00000ec28d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > >  ffff00000ec28d80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > > ==================================================================
+> > > 
+> > > Add disable_delayed_work_sync() in gaokun_ucsi_remove() to ensure
+> > > that uec->work is properly canceled and prevented from executing
+> > > after the ucsi and gaokun_ucsi structure have been deallocated.
+> > > 
+> > > Fixes: 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> > > ---
+> > >  drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+> > > index 8401ab414bd..c5965656bab 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+> > > @@ -503,6 +503,7 @@ static void gaokun_ucsi_remove(struct auxiliary_device *adev)
+> > >  {
+> > >  	struct gaokun_ucsi *uec = auxiliary_get_drvdata(adev);
+> > >  
+> > > +	disable_delayed_work_sync(&uec->work);
+> > >  	gaokun_ec_unregister_notify(uec->ec, &uec->nb);
+> > >  	ucsi_unregister(uec->ucsi);
+> > >  	ucsi_destroy(uec->ucsi);
+> > > -- 
+> > > 2.34.1
+> > > 
+> > > 
+> > 
+> > What changed from v1?
+> 
+> The original patch[1] only fixes the probe failure in 
+> gaokun_ucsi_probe(). This new version is a patch series 
+> that also addresses the use-after-free issue.
+> 
+> [1] https://lore.kernel.org/lkml/20251125082505.52249-1-duoming@zju.edu.cn/
 
+Always document this in the future please.
 
