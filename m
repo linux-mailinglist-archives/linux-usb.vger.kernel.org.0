@@ -1,164 +1,267 @@
-Return-Path: <linux-usb+bounces-30885-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30886-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 366BAC83D0F
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 08:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 587BBC83D39
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 08:57:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5901F3B07E2
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 07:54:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4633D3AFA91
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 07:55:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B5282DE6FE;
-	Tue, 25 Nov 2025 07:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DjICRCdF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E437B2FB965;
+	Tue, 25 Nov 2025 07:55:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9B52DC32A
-	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 07:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF112E091E
+	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 07:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764057212; cv=none; b=VBERAmKMkys/gqPNufKOKsdfRu3b7iJyW7PStqa/vRYTA5bmge4I59vgZSAsiI2VJYdFZGYbak5BCv3Wc4xrfmXiBPPdJqnsOEI516kACHZC8raDi9IBtyXDuBqbLt04ZSSFkHBVXWYhUphSovtmN7BXkeqh3bl6cyfks8o5+zE=
+	t=1764057327; cv=none; b=kYH94FV7PALhOeOtmsbjMdNXV4K06kPpVhVw5F1dWSPiULYMTIlRnrMUoHSFpcSPiHyeS66zWwW13iouLIvX720mLx80glhMU/wOsvUxGiPfQwfdUKy3OboetUz9fLmfgSPboKDe6v6dtt/sYxFmjolNYmdtf1ufSTtwceht0wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764057212; c=relaxed/simple;
-	bh=QALkO2l63ElPL+SM8EnCE5RvNLGszpSTCE8PUQlaRbY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EjmRpB2J/Rg1xWNTXANpCbkNWnnP0wDMMqFJPU5bgO3JeDmCm0U7YAQOf4WkE4mM7JRwsdNLETleQIQmlNZyVL+L0ZUAz1dQ1Drf2tLlpRVuiLJCRfdE1z36hqnAXpCD+dD6yNp//SDqb6l/oATusUw1/4FjMd01N4QYPC5TRdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DjICRCdF; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-594516d941cso5892592e87.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Nov 2025 23:53:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1764057209; x=1764662009; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VW9fk+eRBqur6OCFMItr5F2cEB0RbZrpC7YKLRabMpw=;
-        b=DjICRCdFmQ2GXQivrzEIDEf+EiAVYtD8PSnFuV17YCQ6F2krCQWR8sQT2hVT1n2H5c
-         5qPEPaYM5WRtL8iorylT3sNZmF1xj7Qo+J6WLT3hr/oEW2/HNbE9rbg4MSim3yHpEgVN
-         G5TY3zyYGe4bgLDIsXI/to6bibGgxp2rPSED8=
+	s=arc-20240116; t=1764057327; c=relaxed/simple;
+	bh=SkTKwJPDhfNQC/SbiPP4A8ccrC4zZ7g+Qla+sApZ7YQ=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=EBi8oME7CwM5mCrn2LX6+zYwVKBBBERZgQD8H6QQRJ5SmW16i1uxbCf4D3iqa3Py7oB4c0RyRf6mOeM9g5GKpIyMsgM2iYK6Je++t30rrwSh98JQm/K1ryuDr/Q1X/oMaal0V5IgJHKkpbeuvSrQzwiP6lO0Jsm4iD0QVJg7PGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-9490b354644so406287939f.1
+        for <linux-usb@vger.kernel.org>; Mon, 24 Nov 2025 23:55:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764057209; x=1764662009;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VW9fk+eRBqur6OCFMItr5F2cEB0RbZrpC7YKLRabMpw=;
-        b=Bx6X9ZTkNFm0ZEhpqNsnJn7KYRwZ1sYhZfTjrCE2DpDPQAgaMsvIiLjqzDn0IArW69
-         OoePvljd7n1WiOPWz20ToSDs7NxyxgTKYZp/+jsA9RtVXv0KbufnCBGU++Yj8FeL8HJu
-         hw9urAsMW1fZjw6K2qS24snryNOnk85KFHtdPt4yZVnwTFcFuRKxBMaY3ZSPHGbJm8BR
-         lO2C5OTbqRMsmO0hkXtxwF3FQb8qew6t/r1Ph/JlKHz0jialU0T4IZfakAKuA6SVFDCL
-         rtppQU9XokPxxJQKGOaYrCt4ozF0eTJElE5D27s7nG87Olewg0H/sjbRmhggGI0gEcgm
-         oIYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUHk6XFWKGkyW+UxJ9/jj5Mq97egIuL7lZm7Yr50Wp87bFfNqLeGm5Rv+CJYse+fKdzj41F7VK4LSk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6oEHQEQyHPPg+ClwHCrn+UjBNJRVX2XYBxl+/4UeNzYWR+EZG
-	W1iA/Np/uyUJWwfZbSKTIi3SXF2C6TQ2C+2gGW2lH6iFg4kepywMo51KxrAi6nDQd7a3UECRzvq
-	V0RqgPY8GDrscPrEcI9LMbI2dcXD2atQ+yApUxus=
-X-Gm-Gg: ASbGncuSSxN4vyuxH9NIZ/IGCjQTJGue/Wq1aWIaD8hmNtwm2oow4ecLVff4BY3VWWU
-	fIFg3anefXXVCntH1rSS9EbMcNGJRvbKgp5zac4iwAwSkkDJ6sqNspJAXejMu4x0Jb4nmMJMn2v
-	IlBLvmtJ1UZG1/cvoRP9CmbXDbCBP0SK79lMLRmphKryWQZMaVDV+af2XqBsWo1yvBQUCSC5Wx+
-	6/RQNVssSI8J36WpJzc31GRxFqskiYWY6GFZ5zr7TzPchGcbKwZp0HWFzRHrmxrLlraTtikQVjN
-	pg==
-X-Google-Smtp-Source: AGHT+IEifOJmyiCsFOT5OGXNBDuJrumS8e1OEbDl+tOphrhwx2KdXAfOkAoydLQJLpGr9qVTDLsmhvdTzuXB8683cTM=
-X-Received: by 2002:a05:6512:398c:b0:592:f9dd:8f28 with SMTP id
- 2adb3069b0e04-596a3ed25cemr4985472e87.35.1764057208763; Mon, 24 Nov 2025
- 23:53:28 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764057324; x=1764662124;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LRrPOhGOYvrChnAvN0Az4hHNQ1NsIv6eWYvj6lpNFxo=;
+        b=aXoUqnyXAQSwdVwLXnvUmdRCAXSbEHhSWwpEeCC70I0OnH1cOpQOcPPLA8uieUftQE
+         ge0Y+4j4BCkiQDWw6LHl9/IQW65kzPS9NK2O2FnKOljrqXfLY2N/f0+UbZsYzIeiXwNB
+         5Yx16wknQRVhdSwphoJZ8QbdxEBP9ke3zzOZjL8VnsAZ63SH9CFVLn1MaM/naGcuMSPr
+         JR6GhjUmBTLKW+1yVnJmmZItO25fMpHT+b+quBhLcHX2AEfpQbSyzAvqlJOvyN/fOzNG
+         Exykmghz82iltphkqGrAf1jjxJUdGebxm/qoVI7M/By+hgow4RRnxmi+x3Cs03nX28T9
+         uCvg==
+X-Forwarded-Encrypted: i=1; AJvYcCVqAwmUQPk5QJWavoefALGxzJxgruP81vyHjoQB2KX8GLvxKexn2WL7WSua1xzKnAGt7S30NP2lJDE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVGgLHwOPqMTBjyrJ5qQQrDhiptMqYOYoHo07J+CA7A6Xi9XIc
+	WbA2k1TnhxTFfnDccrRgWclsxrF/yLI10gMdqzANH42l6uWm6WX2rnQqQ3pEgoH/d3mRlZhIpKn
+	MtndAeaUT0e4iQR894LwY5kJou3Wkd5JuvhqQqtgJLnOtqMPB2tDZ89bRq6k=
+X-Google-Smtp-Source: AGHT+IHwUsGasx89mDyrzh3QDxLXX5jzW9dbUxZvqfKEqbuWQDOClqNZGoONAsDCwTb3zyGxasbXVKExyMmrYlXUqk5UJhOJUprU
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251119212910.1245694-1-ukaszb@google.com> <2f05eedd-f152-4a4a-bf6c-09ca1ab7da40@kernel.org>
- <6171754f-1b84-47e0-a4da-0d045ea7546e@linux.intel.com> <e7ebc1da-1a94-4465-bc79-de9ad8ba1cb6@kernel.org>
-In-Reply-To: <e7ebc1da-1a94-4465-bc79-de9ad8ba1cb6@kernel.org>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Tue, 25 Nov 2025 08:53:17 +0100
-X-Gm-Features: AWmQ_bk4hTtCGqfI6AKAS5toTSvyk-WSSSR6OjN0qv3zrxaYyCIn6l2upPhGeBg
-Message-ID: <CALwA+NakWZSY-NOebF9E+gGPf2p0Y5FLOZcpLfSbt5zkNm_qxQ@mail.gmail.com>
-Subject: Re: [PATCH v2] xhci: dbgtty: fix device unregister
-To: Jiri Slaby <jirislaby@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, Mathias Nyman <mathias.nyman@intel.com>, 
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
+X-Received: by 2002:a92:c242:0:b0:434:96ea:ff6a with SMTP id
+ e9e14a558f8ab-435dd1252e3mr12372115ab.35.1764057324603; Mon, 24 Nov 2025
+ 23:55:24 -0800 (PST)
+Date: Mon, 24 Nov 2025 23:55:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <692560ec.a70a0220.2ea503.0087.GAE@google.com>
+Subject: [syzbot] [media?] [usb?] memory leak in v4l2_ctrl_handler_init_class (2)
+From: syzbot <syzbot+a41b73dce23962a74c72@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mchehab@kernel.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 24, 2025 at 10:11=E2=80=AFAM Jiri Slaby <jirislaby@kernel.org> =
-wrote:
->
-> On 24. 11. 25, 8:48, Mathias Nyman wrote:
-> > On 11/24/25 08:42, Jiri Slaby wrote:
-> >> Hmm, CCing TTY MAINTAINERS entry would not hurt.
-> >>
+Hello,
 
-Fair point. I will keep it in mind in the future.
+syzbot found the following issue on:
 
-> >> On 19. 11. 25, 22:29, =C5=81ukasz Bartosik wrote:
-> >>> From: =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> >>>
-> >>> When DbC is disconnected then xhci_dbc_tty_unregister_device()
-> >>> is called. However if there is any user space process blocked
-> >>> on write to DbC terminal device then it will never be signalled
-> >>> and thus stay blocked indifinitely.
-> >>
-> >> indefinitely
-> >>
+HEAD commit:    fd95357fd8c6 Merge tag 'sched_ext-for-6.18-rc6-fixes-2' of..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14a39742580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f30cc590c4f6da44
+dashboard link: https://syzkaller.appspot.com/bug?extid=a41b73dce23962a74c72
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16b05a12580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10f8aa12580000
 
-Thanks for spotting this.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/23b612a7fe35/disk-fd95357f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2da12b65fa76/vmlinux-fd95357f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/97ebacdc6971/bzImage-fd95357f.xz
 
-> >>> This fix adds a tty_vhangup() call in xhci_dbc_tty_unregister_device(=
-).
-> >>> The tty_vhangup() wakes up any blocked writers and causes subsequent
-> >>> write attempts to DbC terminal device to fail.
-> >>>
-> >>> Cc: stable@vger.kernel.org
-> >>> Fixes: dfba2174dc42 ("usb: xhci: Add DbC support in xHCI driver")
-> >>> Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> >>> ---
-> >>> Changes in v2:
-> >>> - Replaced tty_hangup() with tty_vhangup()
-> >>
-> >> Why exactly?
-> >
-> > I recommended using tty_vhangup(), well actually tty_port_tty_vhangup()
-> > to solve
-> > issue '2' you pointed out.
-> > To me it looks like tty_vhangup() is synchronous so it won't schedule
-> > hangup work
-> > and should be safe to call right before we destroy the port.
->
-> Oops, right, my cscope DB was old and lead me to tty_hangup() instead
-> (that schedules).
->
-> >> 2) you schedule a tty hangup work and destroy the port right after:
-> >>>       tty_unregister_device(dbc_tty_driver, port->minor);
-> >>>       xhci_dbc_tty_exit_port(port);
-> >>>       port->registered =3D false;
-> >> You should to elaborate how this is supposed to work?
-> >
-> > Does tty_port_tty_vhangup() work here? it
-> > 1. checks if tty is NULL
-> > 2. is synchronous and should be safe to call before tty_unregister_devi=
-ce()
->
-> Yes, this works for me.
->
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a41b73dce23962a74c72@syzkaller.appspotmail.com
 
-Greg should I send v3 with typo fix  indifinitely -> indefinitely and
-elaborate on
-the tty_hangup() -> tty_vhangup() replacement in changes ?
+BUG: memory leak
+unreferenced object 0xffff88812a347a58 (size 8):
+  comm "kworker/0:6", pid 6036, jiffies 4294942408
+  hex dump (first 8 bytes):
+    80 38 6e 25 81 88 ff ff                          .8n%....
+  backtrace (crc f78d2928):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4983 [inline]
+    slab_alloc_node mm/slub.c:5288 [inline]
+    __do_kmalloc_node mm/slub.c:5649 [inline]
+    __kvmalloc_node_noprof+0x51c/0x820 mm/slub.c:7112
+    kvmalloc_array_node_noprof include/linux/slab.h:1122 [inline]
+    v4l2_ctrl_handler_init_class+0x67/0x90 drivers/media/v4l2-core/v4l2-ctrls-core.c:1625
+    usb_keene_probe+0xc4/0x450 drivers/media/radio/radio-keene.c:326
+    usb_probe_interface+0x173/0x3f0 drivers/usb/core/driver.c:396
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+    __driver_probe_device+0xc3/0x1a0 drivers/base/dd.c:801
+    driver_probe_device+0x2a/0x120 drivers/base/dd.c:831
+    __device_attach_driver+0x10f/0x170 drivers/base/dd.c:959
+    bus_for_each_drv+0xcf/0x120 drivers/base/bus.c:462
+    __device_attach+0xf9/0x290 drivers/base/dd.c:1031
+    bus_probe_device+0xcd/0xe0 drivers/base/bus.c:537
+    device_add+0x983/0xc80 drivers/base/core.c:3689
+    usb_set_configuration+0x961/0xc70 drivers/usb/core/message.c:2210
+    usb_generic_driver_probe+0x83/0xd0 drivers/usb/core/generic.c:250
+    usb_probe_device+0x7c/0x1d0 drivers/usb/core/driver.c:291
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
 
-Thank you,
-=C5=81ukasz
+BUG: memory leak
+unreferenced object 0xffff888126df0200 (size 256):
+  comm "kworker/0:6", pid 6036, jiffies 4294942408
+  hex dump (first 32 bytes):
+    00 0b df 26 81 88 ff ff 00 09 df 26 81 88 ff ff  ...&.......&....
+    10 02 df 26 81 88 ff ff 10 02 df 26 81 88 ff ff  ...&.......&....
+  backtrace (crc 602da918):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4983 [inline]
+    slab_alloc_node mm/slub.c:5288 [inline]
+    __do_kmalloc_node mm/slub.c:5649 [inline]
+    __kvmalloc_node_noprof+0x51c/0x820 mm/slub.c:7112
+    v4l2_ctrl_new+0x2bf/0x1340 drivers/media/v4l2-core/v4l2-ctrls-core.c:2031
+    v4l2_ctrl_new_std+0x122/0x180 drivers/media/v4l2-core/v4l2-ctrls-core.c:2185
+    usb_keene_probe+0xe8/0x450 drivers/media/radio/radio-keene.c:327
+    usb_probe_interface+0x173/0x3f0 drivers/usb/core/driver.c:396
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+    __driver_probe_device+0xc3/0x1a0 drivers/base/dd.c:801
+    driver_probe_device+0x2a/0x120 drivers/base/dd.c:831
+    __device_attach_driver+0x10f/0x170 drivers/base/dd.c:959
+    bus_for_each_drv+0xcf/0x120 drivers/base/bus.c:462
+    __device_attach+0xf9/0x290 drivers/base/dd.c:1031
+    bus_probe_device+0xcd/0xe0 drivers/base/bus.c:537
+    device_add+0x983/0xc80 drivers/base/core.c:3689
+    usb_set_configuration+0x961/0xc70 drivers/usb/core/message.c:2210
+    usb_generic_driver_probe+0x83/0xd0 drivers/usb/core/generic.c:250
+    usb_probe_device+0x7c/0x1d0 drivers/usb/core/driver.c:291
+
+BUG: memory leak
+unreferenced object 0xffff888126df0900 (size 256):
+  comm "kworker/0:6", pid 6036, jiffies 4294942408
+  hex dump (first 32 bytes):
+    00 02 df 26 81 88 ff ff 30 f5 8f 24 81 88 ff ff  ...&....0..$....
+    10 09 df 26 81 88 ff ff 10 09 df 26 81 88 ff ff  ...&.......&....
+  backtrace (crc 84e60c55):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4983 [inline]
+    slab_alloc_node mm/slub.c:5288 [inline]
+    __do_kmalloc_node mm/slub.c:5649 [inline]
+    __kvmalloc_node_noprof+0x51c/0x820 mm/slub.c:7112
+    v4l2_ctrl_new+0x2bf/0x1340 drivers/media/v4l2-core/v4l2-ctrls-core.c:2031
+    v4l2_ctrl_new_std+0x122/0x180 drivers/media/v4l2-core/v4l2-ctrls-core.c:2185
+    handler_new_ref+0x352/0x450 drivers/media/v4l2-core/v4l2-ctrls-core.c:1772
+    v4l2_ctrl_new+0x67d/0x1340 drivers/media/v4l2-core/v4l2-ctrls-core.c:2114
+    v4l2_ctrl_new_std+0x122/0x180 drivers/media/v4l2-core/v4l2-ctrls-core.c:2185
+    usb_keene_probe+0xe8/0x450 drivers/media/radio/radio-keene.c:327
+    usb_probe_interface+0x173/0x3f0 drivers/usb/core/driver.c:396
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+    __driver_probe_device+0xc3/0x1a0 drivers/base/dd.c:801
+    driver_probe_device+0x2a/0x120 drivers/base/dd.c:831
+    __device_attach_driver+0x10f/0x170 drivers/base/dd.c:959
+    bus_for_each_drv+0xcf/0x120 drivers/base/bus.c:462
+    __device_attach+0xf9/0x290 drivers/base/dd.c:1031
+    bus_probe_device+0xcd/0xe0 drivers/base/bus.c:537
+    device_add+0x983/0xc80 drivers/base/core.c:3689
+
+BUG: memory leak
+unreferenced object 0xffff8881256e3400 (size 64):
+  comm "kworker/0:6", pid 6036, jiffies 4294942408
+  hex dump (first 32 bytes):
+    40 33 6e 25 81 88 ff ff 40 f5 8f 24 81 88 ff ff  @3n%....@..$....
+    00 00 00 00 00 00 00 00 00 09 df 26 81 88 ff ff  ...........&....
+  backtrace (crc a7c4a093):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4983 [inline]
+    slab_alloc_node mm/slub.c:5288 [inline]
+    __do_kmalloc_node mm/slub.c:5649 [inline]
+    __kmalloc_noprof+0x3e3/0x6b0 mm/slub.c:5662
+    kmalloc_noprof include/linux/slab.h:961 [inline]
+    kzalloc_noprof include/linux/slab.h:1094 [inline]
+    handler_new_ref+0xd7/0x450 drivers/media/v4l2-core/v4l2-ctrls-core.c:1780
+    v4l2_ctrl_new+0x67d/0x1340 drivers/media/v4l2-core/v4l2-ctrls-core.c:2114
+    v4l2_ctrl_new_std+0x122/0x180 drivers/media/v4l2-core/v4l2-ctrls-core.c:2185
+    handler_new_ref+0x352/0x450 drivers/media/v4l2-core/v4l2-ctrls-core.c:1772
+    v4l2_ctrl_new+0x67d/0x1340 drivers/media/v4l2-core/v4l2-ctrls-core.c:2114
+    v4l2_ctrl_new_std+0x122/0x180 drivers/media/v4l2-core/v4l2-ctrls-core.c:2185
+    usb_keene_probe+0xe8/0x450 drivers/media/radio/radio-keene.c:327
+    usb_probe_interface+0x173/0x3f0 drivers/usb/core/driver.c:396
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+    __driver_probe_device+0xc3/0x1a0 drivers/base/dd.c:801
+    driver_probe_device+0x2a/0x120 drivers/base/dd.c:831
+    __device_attach_driver+0x10f/0x170 drivers/base/dd.c:959
+    bus_for_each_drv+0xcf/0x120 drivers/base/bus.c:462
+    __device_attach+0xf9/0x290 drivers/base/dd.c:1031
+    bus_probe_device+0xcd/0xe0 drivers/base/bus.c:537
+
+BUG: memory leak
+unreferenced object 0xffff8881256e3340 (size 64):
+  comm "kworker/0:6", pid 6036, jiffies 4294942408
+  hex dump (first 32 bytes):
+    80 32 6e 25 81 88 ff ff 00 34 6e 25 81 88 ff ff  .2n%.....4n%....
+    00 34 6e 25 81 88 ff ff 00 02 df 26 81 88 ff ff  .4n%.......&....
+  backtrace (crc be938ee5):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4983 [inline]
+    slab_alloc_node mm/slub.c:5288 [inline]
+    __do_kmalloc_node mm/slub.c:5649 [inline]
+    __kmalloc_noprof+0x3e3/0x6b0 mm/slub.c:5662
+    kmalloc_noprof include/linux/slab.h:961 [inline]
+    kzalloc_noprof include/linux/slab.h:1094 [inline]
+    handler_new_ref+0xd7/0x450 drivers/media/v4l2-core/v4l2-ctrls-core.c:1780
+    v4l2_ctrl_new+0x67d/0x1340 drivers/media/v4l2-core/v4l2-ctrls-core.c:2114
+    v4l2_ctrl_new_std+0x122/0x180 drivers/media/v4l2-core/v4l2-ctrls-core.c:2185
+    usb_keene_probe+0xe8/0x450 drivers/media/radio/radio-keene.c:327
+    usb_probe_interface+0x173/0x3f0 drivers/usb/core/driver.c:396
+    call_driver_probe drivers/base/dd.c:581 [inline]
+    really_probe+0x12f/0x430 drivers/base/dd.c:659
+    __driver_probe_device+0xc3/0x1a0 drivers/base/dd.c:801
+    driver_probe_device+0x2a/0x120 drivers/base/dd.c:831
+    __device_attach_driver+0x10f/0x170 drivers/base/dd.c:959
+    bus_for_each_drv+0xcf/0x120 drivers/base/bus.c:462
+    __device_attach+0xf9/0x290 drivers/base/dd.c:1031
+    bus_probe_device+0xcd/0xe0 drivers/base/bus.c:537
+    device_add+0x983/0xc80 drivers/base/core.c:3689
+    usb_set_configuration+0x961/0xc70 drivers/usb/core/message.c:2210
+    usb_generic_driver_probe+0x83/0xd0 drivers/usb/core/generic.c:250
+
+connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> thanks,
-> --
-> js
-> suse labs
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
