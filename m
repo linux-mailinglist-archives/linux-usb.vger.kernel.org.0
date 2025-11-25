@@ -1,82 +1,83 @@
-Return-Path: <linux-usb+bounces-30922-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30923-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C057C86244
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 18:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 558B9C86F99
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 21:15:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 063984EF13E
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 17:05:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A76514EB70C
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 20:13:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F4533120F;
-	Tue, 25 Nov 2025 17:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A189C33B969;
+	Tue, 25 Nov 2025 20:13:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KoRyGeiL"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VxKW3oOW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DBF32AADA
-	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 17:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B1B2D3EDF
+	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 20:13:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764090216; cv=none; b=M59qHygqd+lb0A6HStjvqmBoSa0Poz4MjNCWuBqK27oUptyhT3oHROqtXJp515S7YAXsD/Ih0kiCtAjwg/IF1EB6yOsh2FNl+hq2srz3YEYpiqybCQvsTECiiTOc8W2/hIzJajZ8YDmMXoE5ofoLk/2KqynL4uv1ubo649zSSIM=
+	t=1764101617; cv=none; b=K7+bKk2t6KYJfstzs215IsVBilZBLxRU8wXywco6E4d/WFthEGTIiOCWqZNo0VN7Ve343AB1bgFNfBLI2I3SH3CgyRGPMMGZVmejbR6elMMzcZdi0CKSJmFh+bnU1+iSVktt4wIM4l846HsNJWkfrJ21keJbPnitYW3ZZwpyUyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764090216; c=relaxed/simple;
-	bh=Fhf2ZYznp9H3fMUTBKs/+6rcz9vbeI4dOUYWmUa4h+E=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To; b=ETBg4rM+TfQ7CuYWXh+U3/8UM642qrcMyeQiu9EJtJUGlY4pA4udiXIjJZwx+emqweWIygS9THpRmHg/w89plQIW7uk71C/8xbqb5n4GqdXW0ndDUBvFKuPko1hHnBQF8ENe/gDjKxG/R23HKVVm4q4r6KwzKNXFDaDgFc1rgp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KoRyGeiL; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3436cbb723fso4715967a91.2
-        for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 09:03:34 -0800 (PST)
+	s=arc-20240116; t=1764101617; c=relaxed/simple;
+	bh=89CYleDV3lSw4EhOz1KbzHaBTT/MlUH9EZ2vYE5n4hQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pvQZuT0tuJFwnhSttiVVpfOXFO1bTSMdffZM3sMJjdQmOetEZ6iVLAWA1jkcwvbZPRIUu/wm7DOr7QaIZqVVW7cWHn7pwbVp2ZaczRpvO9toOoaqcxx0UD6ac61X1iPKGg26DHZDvLXE6DOWLqVyPrW/JN8Yk5pnP0gIapdJCzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VxKW3oOW; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-29853ec5b8cso72463985ad.3
+        for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 12:13:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764090214; x=1764695014; darn=vger.kernel.org;
-        h=in-reply-to:from:content-language:subject:references:cc:to
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fhf2ZYznp9H3fMUTBKs/+6rcz9vbeI4dOUYWmUa4h+E=;
-        b=KoRyGeiLmIYZAtkb2rSS1ZHmTamr2qKC2/G0ZgDwZo7fcpzzirGxH2UqfHvo5g8Eb3
-         FI3uJeHhhfJoef9iiAv0rZm4GUDaLjulJbGTN6fnn7EyG4vVtXIgawvsAKd/BJRHBb80
-         P5ToX7siBtsrILCCJ3LtJiMHNuh6K2SbCdEVJQi5qgWt6BqTgeQitHgkYYDZIIilnzDd
-         jB3XdAwnTV/KPaDzUy/EkvMBt9IeZWjPyKzSZ76R7/yaOSgTiRD1nhmkJ0Nk6qeo3Cus
-         ph5JWEtga7ykC3fJfXXXkZvUwSsykD7e6AsDKEK8AS5fDZDGY1SxshfIC+a2LVQBuz4h
-         3Clw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764090214; x=1764695014;
-        h=in-reply-to:from:content-language:subject:references:cc:to
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+        d=google.com; s=20230601; t=1764101615; x=1764706415; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Fhf2ZYznp9H3fMUTBKs/+6rcz9vbeI4dOUYWmUa4h+E=;
-        b=b5VXxa1KcL3pvfsnJ7dM4CeB/re5GVV6pIq8vGCzFxviBlV6IeDg3//C54Z2A4Sxgo
-         Q4IanSBcKGDbM9vfm6pUEXMc3beiUwXMHJtAtWplxqpGLF9/1Gn5ZiDxBsMAEZFaxuKN
-         0PpKrmv5MkAkBq0DKrM8EWbp4V88Qk+XAFLLAWA4LBOEKdkFvrt4g897iHGXgoOSVl83
-         kuVzAurEtg4UxbSUjMdrRW+EoiOdpGjBgALtEj1WhUOmy3bD3WZZZ8k8qdMfIsg5xl9J
-         FyFB/MIYNtv1kBUaEmj4CINjao2J/7STIJp41jsrulYrNWZatkrCDX3r5AfSkm+MLax4
-         T0PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWurhIyaIkJm/dGqB1PuRt1HF6Q1TUwlUgel0QsBeSIIwrZlugkhxNREKltkyU3RmKQraJmUHuxdEA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxh22zNBYVQeiTvgL6kwvXcROlhXiVaWwnboHi2kvxs6tyTOUap
-	slvPWrgWNp4sqSIi/UIK3QBsg69fqsQ+y2lz6f2rbj4wVsJZx6J0hiRQ
-X-Gm-Gg: ASbGncuQTuO1wP90FhOXoyBNV3axAMTr0KHtWAFoITF1eCsqJ0Y9FP3e6vJVb60B+rx
-	xWwOlZpnl+xlNj6wtd9c+6dA1as/KfP9asFlCRfxBLx4B8X7Gdkc7FbYWOYnMNNl93txEMDJfHn
-	izV/NhoCNkBOF0gbQUhlRaG1X5U0YCSu1XJw3AzFyrwIgEmhNwqnC0mYpxFwd6nPhbkS6hNbszD
-	aQckNRyDUWdWQSUeQv6kYSgjkwXX7UpdittjfQ/qrYPKr7+xvjrNTt9ENYv0QndA4jfGnFqJeZp
-	k4wkbzm4q2POAiTkydstzNCyQ6aHNK/k+K8XJZdA7u+QPsnvWSLgE6hdmNFAapkZuaOSPK1eQuo
-	xiFRsWfFZmDpQeQ1fzseUbyKbFtwNrW/2472GwqJUoQjTDpSeKgs3ce+J/UPlnWnyUm3txIFjPM
-	xzdDuiUqGfwbCTChh7JfzZuEds9SM+MDNJfgOIMav9RnebsLzuvpcXNGk=
-X-Google-Smtp-Source: AGHT+IF1tf/td6rrizI0MUWEf8zEm4InSrjdNW0xyU/miELauh4p8/pOKyLcL8ETYeSD2ICQFFUBNw==
-X-Received: by 2002:a17:90b:2547:b0:341:88c9:ca62 with SMTP id 98e67ed59e1d1-3475ed6a904mr3762436a91.31.1764090213570;
-        Tue, 25 Nov 2025 09:03:33 -0800 (PST)
-Received: from ?IPV6:2405:201:31:d869:c163:7f74:bed9:a2d1? ([2405:201:31:d869:c163:7f74:bed9:a2d1])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7c3ed789f19sm18616052b3a.28.2025.11.25.09.03.31
+        bh=RfK2UtCRp3qKogO3H5nzh+puMsdKQP2QnVSL7A2UN44=;
+        b=VxKW3oOWAtVSdaZiFCUPsvxPV7erJbX7v+fhDsUrRrkFeUlUUUqALw8IjCrvuoiFw2
+         NZ+bBuUFYdMmzOkd8r/pWCX1vYRtn9fMxUXdP66SO1VgUPfHLRaT71ns2IdVyieXKOj5
+         hziaOPm8Unjb1ROGgGAfOaBz56eEgJH9qzlSckTi40gPgwP7VN6b/I1p//rc5OTzQWda
+         Aos6CIaFox/B2wtHLzctvY6LMXwFt9OSTybQvkHbyte1c1s7ExKqYWNRlwc0hPSRWCsZ
+         duPsh4RWMZePK1ENh5P7vGItv5xO6IcVkAPfTI/8QztARVKiUyvyED/s66Wjy40xbcz7
+         lXXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764101615; x=1764706415;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RfK2UtCRp3qKogO3H5nzh+puMsdKQP2QnVSL7A2UN44=;
+        b=BTziZilW9Q92JkW5P34FMStfFDjfje6X8Coj5cgutQOnHmfe6Wenle8b/KWi6dqYvx
+         M5OsqC5pijCLWs8pobh09HdiTY+aSFG1/QZMAB8tV7PmSnPLqriexSmU9lSUbM0Vp7Vd
+         MT26Tc5VdqUOrJanYfz4sYsuExKA2k1OSTLp38EdDEIprCJZI0okTbd9q+a/9C81QcCK
+         aqRmP81N5Kc8MBe2QyeviLe0fVmPT263RaIsSTL8ILLuOtLmxy0hcOiQlv4ZTGv7w0W0
+         UJI5Yw8qnqpjsAiGMBGT5poPP5D/TDjCaA09B4SE0YM9FUSeHyPwopcKmAvASEsTgVzv
+         Fflg==
+X-Forwarded-Encrypted: i=1; AJvYcCWQumwV6/AHXeZV+DEYmKN9I2Y+WCiGbir1LZAcBvS6xaR8I2jf2YZYI7v4TJ/cNO3+KE9J4mPUH0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoqOZQDlWehLnnkiWUxaHloww8pwcAGA9O0dPXJL1ue13r1j3G
+	43mKx/BWcIyvc9hzKK2fY+zhh0TEW8H5r/RveILeJB44IvgCUlKcoJgNHnwapvEQZQ==
+X-Gm-Gg: ASbGnctxyVJcxbVWM447Epzj34GTrHxQN4KuYsUSNH656cx/w70sr6skY6TCXIPMNl0
+	r40wEWAyTCxv1b1392/zJbGqAbXMS3vIo397f6FCb3mSI6Ll6oJJAEaJ6ikstTvsPL7qM/pS0fQ
+	yjbj3egCml0feE58ZiGDVkEvzbMtmyQDkZelGPQYnFHqlcubwStgDkaIK4Cq091fpbEZEuXvFBO
+	uIlTeabw1dI8qPPpzRYSEER2LE7AQ/ksHXGaOkxQ4u6G8N/Jl3JVHjCLIRNvXnSGkDRf/eYheWI
+	BNT+Vu/Z/HoHRcKfKvVfhPUIsoSpPv3XL2HcjmyC+zU0COC92nfKN2WvMoxEf3of9fL6pWQgyEm
+	Q3OyGA3LK/6ENFnjIlJtv5Jkj/1IXer8sRnBVBJwWZMEdE1zK5tBeNVCTBPjdbm15IQhDwAzWrR
+	4MrJUv0pG4zYCAT2FZiX9hMgL9KGd/17/61RwD/qcbVmW8k7zK24d2VxDMDd0aDIEdY8hiiwWKq
+	3wfqKRPy9vTbw==
+X-Google-Smtp-Source: AGHT+IG9kG01ZIUmMJzmeQwMlH61r7mcmKmX15F17Yg0ycZqophUcVw0eG5SWVAXcyDMCqwBRpETuA==
+X-Received: by 2002:a17:902:e545:b0:295:8c80:fb94 with SMTP id d9443c01a7336-29b6c6f1516mr170593005ad.59.1764101615123;
+        Tue, 25 Nov 2025 12:13:35 -0800 (PST)
+Received: from ?IPV6:2a00:79e0:2e7c:8:744c:4262:57e5:31a7? ([2a00:79e0:2e7c:8:744c:4262:57e5:31a7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b1075c6sm175965955ad.17.2025.11.25.12.13.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Nov 2025 09:03:33 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------3cVH0SUPDWbfa9aZvMGoREZI"
-Message-ID: <ca9d89ca-4da9-4f2b-bd92-3791cae54911@gmail.com>
-Date: Tue, 25 Nov 2025 22:33:29 +0530
+        Tue, 25 Nov 2025 12:13:34 -0800 (PST)
+Message-ID: <adc2d6ec-e666-4dd0-aaad-7ef014efafb6@google.com>
+Date: Tue, 25 Nov 2025 12:13:32 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -84,61 +85,60 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: syzbot+a41b73dce23962a74c72@syzkaller.appspotmail.com
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <692560ec.a70a0220.2ea503.0087.GAE@google.com>
-Subject: Re: [syzbot] [media?] [usb?] memory leak in
- v4l2_ctrl_handler_init_class (2)
+Subject: Re: [PATCH 3/6] dt-bindings: usb: maxim,max33359: Add supply property
+ for VBUS in OTG mode
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
+ Kyle Tso <kyletso@google.com>
+References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
+ <20251123-max77759-charger-v1-3-6b2e4b8f7f54@google.com>
+ <20251124-rook-of-exotic-innovation-fedcc5@kuoka>
 Content-Language: en-US
-From: shaurya <ssranevjti@gmail.com>
-In-Reply-To: <692560ec.a70a0220.2ea503.0087.GAE@google.com>
-
-This is a multi-part message in MIME format.
---------------3cVH0SUPDWbfa9aZvMGoREZI
+From: Amit Sunil Dhamne <amitsd@google.com>
+In-Reply-To: <20251124-rook-of-exotic-innovation-fedcc5@kuoka>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-#syz test:
-git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+Hi Krzysztof,
 
---------------3cVH0SUPDWbfa9aZvMGoREZI
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-media-radio-keene-fix-memory-leak-in-probe.patch"
-Content-Disposition: attachment;
- filename="0001-media-radio-keene-fix-memory-leak-in-probe.patch"
-Content-Transfer-Encoding: base64
+On 11/23/25 11:53 PM, Krzysztof Kozlowski wrote:
+> On Sun, Nov 23, 2025 at 08:35:50AM +0000, Amit Sunil Dhamne wrote:
+>> Add a regulator supply property for VBUS when usb is in OTG mode.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+>> ---
+>>   Documentation/devicetree/bindings/usb/maxim,max33359.yaml | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+>> index 3de4dc40b791..a529f18c4918 100644
+>> --- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+>> @@ -32,6 +32,9 @@ properties:
+>>       description:
+>>         Properties for usb c connector.
+>>   
+>> +  otg-vbus-supply:
+> How is the pin or supply called in the datasheet?
 
-RnJvbSA5M2U2YTJmMGIzOWUyNzZkYjIxODExNjdmNzk3ZTIzNGZhODAxNGEyIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBTaGF1cnlhIFJhbmUgPHNzcmFuZV9iMjNAZWUudmp0
-aS5hYy5pbj4KRGF0ZTogVHVlLCAyNSBOb3YgMjAyNSAyMjoyNDoyOSArMDUzMApTdWJqZWN0
-OiBbUEFUQ0hdIG1lZGlhOiByYWRpby1rZWVuZTogZml4IG1lbW9yeSBsZWFrIGluIHByb2Jl
-CgpUaGUgdXNiX2tlZW5lX3Byb2JlKCkgZnVuY3Rpb24gYWxsb2NhdGVzIG1lbW9yeSBmb3Ig
-dGhlIHY0bDIgY29udHJvbApoYW5kbGVyIHVzaW5nIHY0bDJfY3RybF9oYW5kbGVyX2luaXQo
-KS4gSG93ZXZlciwgaWYgdGhlIHByb2JlIGZhaWxzCmxhdGVyIChlLmcuIGluIHY0bDJfZGV2
-aWNlX3JlZ2lzdGVyKCkgb3IgdmlkZW9fcmVnaXN0ZXJfZGV2aWNlKCkpLAp0aGlzIG1lbW9y
-eSBpcyBuZXZlciBmcmVlZCwgbGVhZGluZyB0byBhIGxlYWsuCgpGaXggdGhpcyBieSBhZGRp
-bmcgdjRsMl9jdHJsX2hhbmRsZXJfZnJlZSgpIHRvIHRoZSBlcnJvciBwYXRoLgoKUmVwb3J0
-ZWQtYnk6IHN5emJvdCthNDFiNzNkY2UyMzk2MmE3NGM3MkBzeXprYWxsZXIuYXBwc3BvdG1h
-aWwuY29tCkNsb3NlczogaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20vYnVnP2V4dGlk
-PWE0MWI3M2RjZTIzOTYyYTc0YzcyCkZpeGVzOiAxYmYyMGMzYTBjNjEgKCJbbWVkaWFdIHJh
-ZGlvLWtlZW5lOiBhZGQgYSBkcml2ZXIgZm9yIHRoZSBLZWVuZSBGTSBUcmFuc21pdHRlciIp
-ClNpZ25lZC1vZmYtYnk6IFNoYXVyeWEgUmFuZSA8c3NyYW5lX2IyM0BlZS52anRpLmFjLmlu
-PgotLS0KIGRyaXZlcnMvbWVkaWEvcmFkaW8vcmFkaW8ta2VlbmUuYyB8IDIgKy0KIDEgZmls
-ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvbWVkaWEvcmFkaW8vcmFkaW8ta2VlbmUuYyBiL2RyaXZlcnMvbWVkaWEvcmFk
-aW8vcmFkaW8ta2VlbmUuYwppbmRleCBmM2I1N2YwY2IxZWMuLmMxMzMzMDVmZDAxOSAxMDA2
-NDQKLS0tIGEvZHJpdmVycy9tZWRpYS9yYWRpby9yYWRpby1rZWVuZS5jCisrKyBiL2RyaXZl
-cnMvbWVkaWEvcmFkaW8vcmFkaW8ta2VlbmUuYwpAQCAtMzM4LDcgKzMzOCw2IEBAIHN0YXRp
-YyBpbnQgdXNiX2tlZW5lX3Byb2JlKHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRmLAogCWlm
-IChoZGwtPmVycm9yKSB7CiAJCXJldHZhbCA9IGhkbC0+ZXJyb3I7CiAKLQkJdjRsMl9jdHJs
-X2hhbmRsZXJfZnJlZShoZGwpOwogCQlnb3RvIGVycl92NGwyOwogCX0KIAlyZXR2YWwgPSB2
-NGwyX2RldmljZV9yZWdpc3RlcigmaW50Zi0+ZGV2LCAmcmFkaW8tPnY0bDJfZGV2KTsKQEAg
-LTM4NCw2ICszODMsNyBAQCBzdGF0aWMgaW50IHVzYl9rZWVuZV9wcm9iZShzdHJ1Y3QgdXNi
-X2ludGVyZmFjZSAqaW50ZiwKIGVycl92ZGV2OgogCXY0bDJfZGV2aWNlX3VucmVnaXN0ZXIo
-JnJhZGlvLT52NGwyX2Rldik7CiBlcnJfdjRsMjoKKwl2NGwyX2N0cmxfaGFuZGxlcl9mcmVl
-KCZyYWRpby0+aGRsKTsKIAlrZnJlZShyYWRpby0+YnVmZmVyKTsKIAlrZnJlZShyYWRpbyk7
-CiBlcnI6Ci0tIAoyLjM0LjEKCg==
+The pin that supplies the VBUS power in OTG is referred to as Vchgin in 
+the datasheet.
 
---------------3cVH0SUPDWbfa9aZvMGoREZI--
+>
+> Best regards,
+> Krzysztof
+>
 
