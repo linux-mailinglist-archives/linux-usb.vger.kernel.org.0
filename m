@@ -1,326 +1,124 @@
-Return-Path: <linux-usb+bounces-30879-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30880-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71F7BC82EB8
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 01:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE45FC8309D
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 02:44:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A8B5134A59C
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 00:20:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2904034AB0C
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 01:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61A6518EFD1;
-	Tue, 25 Nov 2025 00:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="twk07kCD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B56274659;
+	Tue, 25 Nov 2025 01:44:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB091531C1
-	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 00:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA9C1EB195;
+	Tue, 25 Nov 2025 01:44:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764030030; cv=none; b=AIWmiQXdCNGVPJxBrkIroEhz7ZaSOS6UfH4V0ICTfBiHfLdmfZ1J+w98XkQhC85kZ1qa0v+tBrWIOdgkO5OJB4SNLUfXTe74tungeJZVBgFNrGhGI4m57stHpXVTKRmlKYp1w0dB5ZJMK0u5xtNVRzAokvnC6WImRIavZYHCIOk=
+	t=1764035076; cv=none; b=PXqARTdAt1T3I1Aood24Lek+m9K1tzVIPBomNG4SbJrErmtO87k8i6psJFiUi1U+0anrlaSovtI6ayFw+UQxAP9clO/ZKCzgT7PJ+fYkIXFk/QqLQdtf0ja/PUwgXhlc1vDk4OEapSiqKoSuOgDJhmevC1lMyZivuhWW5S4E478=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764030030; c=relaxed/simple;
-	bh=t4r7jmeIwiXR7uP9kXz0A+chP9tNeXQGYI8lqGYMM30=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VDj+hIu4Gbr7xLikg1DEBY746rZYAbEfHZ2xhX54BRu/8Vd7/iKEed8Aw7ENyK4qRPK0DpFuJJ1F2Raw/Z37/ALMNkOHqju1iuhm2Fn4CUbPp9jbaI32z1LvTehqFAQT3uO/fTx4CJ+jkXMrRaZp6veRpsAaYDxy2qaRLcDBwSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=twk07kCD; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-29853ec5b8cso59825395ad.3
-        for <linux-usb@vger.kernel.org>; Mon, 24 Nov 2025 16:20:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764030029; x=1764634829; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wKiIQNBIFj3XpDlrxQGdfdvj6eMXs/LlHefgD1OOL0U=;
-        b=twk07kCDlhOp33PBtLaVSkLGV6FAmpBjrxaUE7cmux/lShdqHmxcjPLapL1NoC//Xy
-         rnbX/Y1e0C56ilG9VgutGFPzBJ3yd4MwsQWHfJPCJo9Erwu0fQNGyNYRqqaMOHwi7uyO
-         c3maYpXTXgfSDYlKVa7qpAWE4x3Wcl3eTsnYn/zRQ01wEoP//bVqF54vtwSHD43F9n5b
-         hyTa6LrY0IsvKocbIzjciRPaKfXTy95FtSS+FvFMe38701vFshlO8ZdBEYpiT0JcaFV3
-         7/i+Ixx5TqMG6Z84TF6/PJmC1PPW+rNrXhaROrdEn7tu5giC3kxgPhlIV1cxolM5XkQc
-         arFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764030029; x=1764634829;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wKiIQNBIFj3XpDlrxQGdfdvj6eMXs/LlHefgD1OOL0U=;
-        b=Clt/YD2dXp/4xNx/kodhCvC9NVJQGv36JyVUxeq5N2g0HkK1yNTTMfc8eXx3yYbfDz
-         07VC/PwdfmBfqyVQhRLKehyCy+8Xl08OYArAUj+eFKS7dx/w2nkbqwQr3KakkSt61h7d
-         TUpS+tG4e2FC4y1UuhwPGYrgQw2HuWVX5VNFsQVEKrSqnrshJ1neUpm3nEXzy9VOn4R3
-         pY5JAFVyfR4Be2GujcN3ytHMvJqldUIIJqXER6zNVNbeuLbg3DvzX0d98CFpu+1he0qZ
-         /AMizgSfG7bKN94x0L94M9/3xC/zPL/tu10wlqpFYFE09ggeAzTiq041RixYMIz+x1R6
-         x7yw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCu1A51AWJSfdB8QvdxxUv4YOFpLmoJ5q/IsNysWcs3+A3f3D6b77vvwp9Z5VcxTv+OTwLhmZujWs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUrB83pIg7DZ88jk3ZTq63P3qdMCmUeANp4GDqeoE9tUYDpyxH
-	VZSLN6TKalMVSwEl178Vm8q5YgpsYa/aDpu45LIf00AlrCfaVYmjDqpNOWtbvGRACU6bhiQeCZU
-	Tc1g7+A==
-X-Gm-Gg: ASbGncuZnt3Xwta3mqLRdGioc76OcPldY6wiCpLLJWsu9oDnVh0E1FtuLotqLW0fIbm
-	jMLxUtBaE1ILadpSGTUsrZjqxfkYv/Zli1WXpIkob+3578vPUEho4pmjxc3om0Fr6wT/Jf0ee8d
-	5gQ5xldhohzcgbvBFeUuz7uJMCbc6Qat5f8Pspmn7Y1PVUg6zd3JaXmmSPolDXrJMpNOBGJ7IUj
-	Rb6OdSf1OqBHoheBE/aXwNTWADcRJy4KlN14JAVj5byxK0fAaGppAggNKaCcp+yq+KUuNojaiIM
-	/EfS/mUti6ykLJAkL7yQBVPuZyudMW4NiA7w6/AnzpweWtRW4+ncB+vnismhhIzGal2+gnDUunX
-	0lf8Yhjwa5xD2mdRmL6skm7n/iv2uLOfwHS6rv3UV9XW6Hr2CJtVOghuR58URGInxuvxI39Lbmq
-	41lw/2qQIRFrjjZECE5Ch6Hm5IMVkPQAZNYWGJrdhVU/iWfa+nuGMQAxQ=
-X-Google-Smtp-Source: AGHT+IGDYsNsGZwIu4ltamYCleJnMoAmy+tNHW0XfaQO+7UUVPvCkzBT5sV+yAlt4K8NKohqKMNe8Q==
-X-Received: by 2002:a17:902:f706:b0:295:7f1d:b02d with SMTP id d9443c01a7336-29b6c50eaa9mr142998705ad.22.1764030028255;
-        Mon, 24 Nov 2025 16:20:28 -0800 (PST)
-Received: from google.com (232.92.83.34.bc.googleusercontent.com. [34.83.92.232])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34727a36bbfsm14706794a91.0.2025.11.24.16.20.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Nov 2025 16:20:26 -0800 (PST)
-Date: Tue, 25 Nov 2025 00:20:23 +0000
-From: Benson Leung <bleung@google.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/4] usb: typec: Expose alternate mode priority via
- sysfs
-Message-ID: <aST2RyOIjHiTv6J3@google.com>
-References: <20251124124639.1101335-1-akuchynski@chromium.org>
- <20251124124639.1101335-5-akuchynski@chromium.org>
+	s=arc-20240116; t=1764035076; c=relaxed/simple;
+	bh=qw8/uYRMptxs0uwQ83diseB8FzQ4VdZ+FopeAmroTv0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NdA7T+9rXKfZUZPE+B5IPvbeMuBcGJjAPmirsJe2iQTXNW0U3z/5/5Tqnj3wTZR93GTWe8GSC/9sRxnd7l21ou74FqJ3iRRuYgSe6g2w81RFoaNKnaqvcAQ/pyjueUJN+LJ5Canr7+wBs96pasomVv6cIzN8c+49KvnO8T3N0bQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 4670a1aac9a011f0a38c85956e01ac42-20251125
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:67c66d7e-412e-4a53-b9c6-df7e943d76b6,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:16152b78a9394bacbdfe02a23d67e84a,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|898,TC:nil,Content:0|15|50,EDM:-
+	3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,A
+	V:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 4670a1aac9a011f0a38c85956e01ac42-20251125
+X-User: chenchangcheng@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <chenchangcheng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 73763576; Tue, 25 Nov 2025 09:44:26 +0800
+From: Chen Changcheng <chenchangcheng@kylinos.cn>
+To: stern@rowland.harvard.edu,
+	benjamin.tissoires@redhat.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org,
+	Chen Changcheng <chenchangcheng@kylinos.cn>
+Subject: [PATCH v3] usb: usb-storage: No additional quirks need to be added to the EL-R12 optical drive.
+Date: Tue, 25 Nov 2025 09:44:22 +0800
+Message-Id: <20251125014422.12721-1-chenchangcheng@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PRHLhYo6a0QDr1AR"
-Content-Disposition: inline
-In-Reply-To: <20251124124639.1101335-5-akuchynski@chromium.org>
+Content-Transfer-Encoding: 8bit
 
+The optical drive of EL-R12 has the same vid and pid as INIC-3069,
+as follows:
+T:  Bus=02 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=13fd ProdID=3940 Rev= 3.10
+S:  Manufacturer=HL-DT-ST
+S:  Product= DVD+-RW GT80N
+S:  SerialNumber=423349524E4E38303338323439202020
+C:* #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=144mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=02 Prot=50 Driver=usb-storage
+E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=0a(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 
---PRHLhYo6a0QDr1AR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This will result in the optical drive device also adding
+the quirks of US_FL_NO_ATA_1X. When performing an erase operation,
+it will fail, and the reason for the failure is as follows:
+[  388.967742] sr 5:0:0:0: [sr0] tag#0 Send: scmd 0x00000000d20c33a7
+[  388.967742] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
+[  388.967773] sr 5:0:0:0: [sr0] tag#0 Done: SUCCESS Result: hostbyte=DID_TARGET_FAILURE driverbyte=DRIVER_OK cmd_age=0s
+[  388.967773] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
+[  388.967803] sr 5:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]
+[  388.967803] sr 5:0:0:0: [sr0] tag#0 Add. Sense: Invalid field in cdb
+[  388.967803] sr 5:0:0:0: [sr0] tag#0 scsi host busy 1 failed 0
+[  388.967803] sr 5:0:0:0: Notifying upper driver of completion (result 8100002)
+[  388.967834] sr 5:0:0:0: [sr0] tag#0 0 sectors total, 0 bytes done.
 
-On Mon, Nov 24, 2025 at 12:46:39PM +0000, Andrei Kuchynski wrote:
-> This patch introduces a priority sysfs attribute to the USB Type-C
-> alternate mode port interface. This new attribute allows user-space to
-> configure the numeric priority of alternate modes managing their preferred
-> order of operation. If a new priority value conflicts with an existing
-> mode's priority, the priorities of the conflicting mode and all subsequent
-> modes are automatically incremented to ensure uniqueness.
->=20
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+For the EL-R12 standard optical drive, all operational commands
+and usage scenarios were tested without adding the IGNORE_RESIDUE quirks,
+and no issues were encountered. It can be reasonably concluded
+that removing the IGNORE_RESIDUE quirks has no impact.
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+Signed-off-by: Chen Changcheng <chenchangcheng@kylinos.cn>
+---
+ drivers/usb/storage/unusual_uas.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  Documentation/ABI/testing/sysfs-class-typec | 11 +++
->  drivers/usb/typec/class.c                   | 90 ++++++++++++++++++++-
->  include/linux/usb/typec_altmode.h           |  1 +
->  3 files changed, 101 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/=
-ABI/testing/sysfs-class-typec
-> index 38e101c17a00..737b76828b50 100644
-> --- a/Documentation/ABI/testing/sysfs-class-typec
-> +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -162,6 +162,17 @@ Description:	Lists the supported USB Modes. The defa=
-ult USB mode that is used
->  		- usb3 (USB 3.2)
->  		- usb4 (USB4)
-> =20
-> +What:		/sys/class/typec/<port>/<alt-mode>/priority
-> +Date:		July 2025
-> +Contact:	Andrei Kuchynski <akuchynski@chromium.org>
-> +Description:
-> +		Displays and allows setting the priority for a specific alternate mode.
-> +		The priority is an integer in the range 0-255. A lower numerical value
-> +		indicates a higher priority (0 is the highest).
-> +		If the new value is already in use by another mode, the priority of the
-> +		conflicting mode and any subsequent modes will be incremented until th=
-ey
-> +		are all unique.
-> +
->  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
-> =20
->  What:		/sys/class/typec/<port>-partner/accessory_mode
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index a5327e444265..049d1829be98 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -445,11 +445,88 @@ svid_show(struct device *dev, struct device_attribu=
-te *attr, char *buf)
->  }
->  static DEVICE_ATTR_RO(svid);
-> =20
-> +static int increment_duplicated_priority(struct device *dev, void *data)
-> +{
-> +	if (is_typec_altmode(dev)) {
-> +		struct typec_altmode **alt_target =3D (struct typec_altmode **)data;
-> +		struct typec_altmode *alt =3D to_typec_altmode(dev);
-> +
-> +		if (alt !=3D *alt_target && alt->priority =3D=3D (*alt_target)->priori=
-ty) {
-> +			alt->priority++;
-> +			*alt_target =3D alt;
-> +			return 1;
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int find_duplicated_priority(struct device *dev, void *data)
-> +{
-> +	if (is_typec_altmode(dev)) {
-> +		struct typec_altmode **alt_target =3D (struct typec_altmode **)data;
-> +		struct typec_altmode *alt =3D to_typec_altmode(dev);
-> +
-> +		if (alt !=3D *alt_target && alt->priority =3D=3D (*alt_target)->priori=
-ty)
-> +			return 1;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int typec_mode_set_priority(struct typec_altmode *alt, const u8 p=
-riority)
-> +{
-> +	struct typec_port *port =3D to_typec_port(alt->dev.parent);
-> +	const u8 old_priority =3D alt->priority;
-> +	int res =3D 1;
-> +
-> +	alt->priority =3D priority;
-> +	while (res) {
-> +		res =3D device_for_each_child(&port->dev, &alt, find_duplicated_priori=
-ty);
-> +		if (res) {
-> +			alt->priority++;
-> +			if (alt->priority =3D=3D 0) {
-> +				alt->priority =3D old_priority;
-> +				return -EOVERFLOW;
-> +			}
-> +		}
-> +	}
-> +
-> +	res =3D 1;
-> +	alt->priority =3D priority;
-> +	while (res)
-> +		res =3D device_for_each_child(&port->dev, &alt,
-> +				increment_duplicated_priority);
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t priority_store(struct device *dev,
-> +			       struct device_attribute *attr,
-> +			       const char *buf, size_t size)
-> +{
-> +	u8 val;
-> +	int err =3D kstrtou8(buf, 10, &val);
-> +
-> +	if (!err)
-> +		err =3D typec_mode_set_priority(to_typec_altmode(dev), val);
-> +
-> +	if (!err)
-> +		return size;
-> +	return err;
-> +}
-> +
-> +static ssize_t priority_show(struct device *dev,
-> +			      struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%u\n", to_typec_altmode(dev)->priority);
-> +}
-> +static DEVICE_ATTR_RW(priority);
-> +
->  static struct attribute *typec_altmode_attrs[] =3D {
->  	&dev_attr_active.attr,
->  	&dev_attr_mode.attr,
->  	&dev_attr_svid.attr,
->  	&dev_attr_vdo.attr,
-> +	&dev_attr_priority.attr,
->  	NULL
->  };
-> =20
-> @@ -459,11 +536,15 @@ static umode_t typec_altmode_attr_is_visible(struct=
- kobject *kobj,
->  	struct typec_altmode *adev =3D to_typec_altmode(kobj_to_dev(kobj));
->  	struct typec_port *port =3D typec_altmode2port(adev);
-> =20
-> -	if (attr =3D=3D &dev_attr_active.attr)
-> +	if (attr =3D=3D &dev_attr_active.attr) {
->  		if (!is_typec_port(adev->dev.parent)) {
->  			if (!port->mode_control || !adev->ops || !adev->ops->activate)
->  				return 0444;
->  		}
-> +	} else if (attr =3D=3D &dev_attr_priority.attr) {
-> +		if (!is_typec_port(adev->dev.parent) || !port->mode_control)
-> +			return 0;
-> +	}
-> =20
->  	return attr->mode;
->  }
-> @@ -2484,6 +2565,7 @@ typec_port_register_altmode(struct typec_port *port,
->  	struct typec_altmode *adev;
->  	struct typec_mux *mux;
->  	struct typec_retimer *retimer;
-> +	int ret;
-> =20
->  	mux =3D typec_mux_get(&port->dev);
->  	if (IS_ERR(mux))
-> @@ -2502,6 +2584,12 @@ typec_port_register_altmode(struct typec_port *por=
-t,
->  	} else {
->  		to_altmode(adev)->mux =3D mux;
->  		to_altmode(adev)->retimer =3D retimer;
-> +
-> +		ret =3D typec_mode_set_priority(adev, 0);
-> +		if (ret) {
-> +			typec_unregister_altmode(adev);
-> +			return ERR_PTR(ret);
-> +		}
->  	}
-> =20
->  	return adev;
-> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_=
-altmode.h
-> index f7db3bd4c90e..2c3b6bec2eca 100644
-> --- a/include/linux/usb/typec_altmode.h
-> +++ b/include/linux/usb/typec_altmode.h
-> @@ -28,6 +28,7 @@ struct typec_altmode {
->  	int				mode;
->  	u32				vdo;
->  	unsigned int			active:1;
-> +	u8				priority;
-> =20
->  	char				*desc;
->  	const struct typec_altmode_ops	*ops;
-> --=20
-> 2.52.0.rc2.455.g230fcf2819-goog
->=20
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index 1477e31d7763..939a98c2d3f7 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -98,7 +98,7 @@ UNUSUAL_DEV(0x125f, 0xa94a, 0x0160, 0x0160,
+ 		US_FL_NO_ATA_1X),
+ 
+ /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
+-UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
++UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x0309,
+ 		"Initio Corporation",
+ 		"INIC-3069",
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
 
---PRHLhYo6a0QDr1AR
-Content-Type: application/pgp-signature; name="signature.asc"
+base-commit: e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCaST2RwAKCRBzbaomhzOw
-wnRnAQCjwa0q7CdVmOeRFQA1UGaN+cYQsOaeJZpLNsTtC46T2AD/QQ9UC3NwUqp8
-tCwLd6MXxidHtGCxVcDu+BxYqOjwkgc=
-=1A1B
------END PGP SIGNATURE-----
-
---PRHLhYo6a0QDr1AR--
 
