@@ -1,205 +1,110 @@
-Return-Path: <linux-usb+bounces-30909-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30910-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7AC9C8514A
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 14:05:32 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5C02C85690
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 15:26:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EABB3B2233
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 13:02:34 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 096DA351869
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 14:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF084322DD4;
-	Tue, 25 Nov 2025 13:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2780325700;
+	Tue, 25 Nov 2025 14:25:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zRAjMXYA"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mBTkLSKR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241A631A81F;
-	Tue, 25 Nov 2025 13:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39813246F0
+	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 14:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764075750; cv=none; b=jB7TSmvpBxtQGe2gUsL68L+NpwI+9RzQtaJ7Dg8CxJvoOM25cM3WQ8s9oioquSt3hc0WjPpuauan9AEMFJ5xGYc7q9xadCr3CrQjf32VaHJ5YUjFA3RQBXgW5PxjNkl+nMBFeGi7ZJgsl817+odI7Ag4C13kPnzw12Bz3uB912k=
+	t=1764080749; cv=none; b=ubu5qzJONUASCcGsgl7suyNhXlqClkytx5CY+KpVQLsVuPt/PvJ9ytQCzZCxNPIY1Yb0coctxCjHaR+55tpsnli8pvZ/zMJQF7iabjz9xfGteUqlis32QHTE0OktSSCD3S4gdKdn3343gE3gFXV4VWEdpXMZkFn4dVlCn1KR5kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764075750; c=relaxed/simple;
-	bh=i1uRlGASr84LrYT53TbtK3t31fxg7BFux2SIjo5Babk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e8FgP6FKI44KNxXD1O4l7d3PmrpKMj2CufejGy4GDWeWGqZd2s9ttIZQCBu1QDWvPwabIQ2Ux0x2VY/0ewF0mS1B6A7NbTHgeBjvrbQHCf3jHBAUNgfNmqqVefO7p1exTyuvyRp3RHfjPs/ZjadAlz6y5y/jQ9eJkzJsmVf71Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zRAjMXYA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D90C4CEF1;
-	Tue, 25 Nov 2025 13:02:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1764075749;
-	bh=i1uRlGASr84LrYT53TbtK3t31fxg7BFux2SIjo5Babk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zRAjMXYApHc9nsPjaiNfRojCav8ZbfA3Sb4vsEX/0aeouFtUgaHOlKPuVswFs0AzZ
-	 GoyaD7/hbiB9L00MYytDW0PZoKmvyzdtPWyAqBu/TpUJn6QQzS10MuqsRMnmujLY9H
-	 +TofonQtCrwHF0SjVFb3GmRgmJNropzVAIWAQEns=
-Date: Tue, 25 Nov 2025 14:02:25 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: duoming@zju.edu.cn
-Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
-	mitltlatltl@gmail.com, linux-kernel@vger.kernel.org,
-	sergei.shtylyov@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usb: typec: ucsi: fix use-after-free caused by
- uec->work
-Message-ID: <2025112500-deuce-jasmine-cf8c@gregkh>
-References: <cover.1764065838.git.duoming@zju.edu.cn>
- <cc31e12ef9ffbf86676585b02233165fd33f0d8e.1764065838.git.duoming@zju.edu.cn>
- <2025112555-widow-ravage-ddb8@gregkh>
- <13afcc92.325cd.19abae4fdec.Coremail.duoming@zju.edu.cn>
+	s=arc-20240116; t=1764080749; c=relaxed/simple;
+	bh=saJM5fRCWG3+NOi7j7I4uYx+KvEM/StRjmywDdED/DU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HRzVbx6xMH5SIBlgmtI4sI81b2CA+S/rK3NQ7vxpsVXVPxi0/SWa4BFSr6mkZDefDJKqhEmrDCsQC1ikbOuqNVENKY/N/hDTJv8sCg05FPBLscxfnFQtl6NCDuiqvVxC6gUlfTY9NLGLdmCjz5y7tKm9WFr8R/mx0z2JnFob2tA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mBTkLSKR; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-64074f01a6eso9859616a12.2
+        for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 06:25:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1764080745; x=1764685545; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=saJM5fRCWG3+NOi7j7I4uYx+KvEM/StRjmywDdED/DU=;
+        b=mBTkLSKRVRy9fISfOmAIOce2I2BZ/6dZbADlFmx1Y/9AEGwHas7TXdPPeHjEP/cTWz
+         yMsWfGyzlDi1R6kzDYVvRQOCs4xQwZ6mP0F88t1026+8ynb0pMD7yvdyMMpvoLHVImRT
+         XmPhN8YYUdFG7oKsVOBB7an/plVTRlSVF4WQ4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764080745; x=1764685545;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=saJM5fRCWG3+NOi7j7I4uYx+KvEM/StRjmywDdED/DU=;
+        b=nrD9ty9YFPbQfn8NzrRBStEOXVBB/SPHBAeREdZr1A/DZ2RkmXRco4xV+PnAbFqsiL
+         YrwmOYRmjOL0e2t2P9auH8PwGlVcsolqTvREkpu5y4+EO3fhdiYyl4dfK7by7GlwaS34
+         cP3/hYtVykgQwsUYxUx0ikPhN86Xnh3mqdBaNKdpLp74w0kHz9JJ0yUnBnDTDLXIB9+p
+         8L4tTDu/5T49BnJUxIrimKgeTZawpJcAlGMSrygNOduKQOkv5c3ivgeOS7JV8uRBYReX
+         yQhRyGLJTEKAqq4lKmAjbMTx1q8zGc28ULVekiD8TyGxg0QCw/AHYBJJpbZ6ntqAsMnF
+         soow==
+X-Gm-Message-State: AOJu0Yyih2ZnxWV1Je3EXkcuW9nNQMgW7fckCxhAmEhM4ZzyNu1sKBPb
+	BxnkMH6K8uVR26adC5voZ8LDrtQzapdbrs5is93udrG60YU66LhpcRU+kbKzy0Crks8NEVlP0jr
+	m17GS
+X-Gm-Gg: ASbGncvVPyzI74wrIR6kQ/5P4NgLM21WN1fKGjpoibVmz9Sjf5sFO17AbwK8holV4As
+	wTANYwib3qIPD1NNWWAvsFaishiK5mzmaViSAlDPqM3jlAq0kddxySnsUcV4F8mSo7cmFLtbvcq
+	SMP1B3OzHY+/maQJl68MiwHe9jDt9PjKG/iXSAbdUYrsq3p8qyyTXeptYMBjPdGQWfOG8EPFlJe
+	nHgBB9EG7vhlxH+wEv9x8I72GqgHINv1/fp/QbkAlPlxPeD7uuS30fp2kouInOGEy2RPCxUQGdX
+	gY+lhqYTTi00m1YNoZCmHQGMS9uiahwmbBsjvEs6H1FUKgj6yDoNmBEU9yZ9GW/CCqwBK76mIXE
+	FBWzVh+fO1uqWySkFldctpL8+PKE7gX4XJesZaMl6P5ubccX7tvT/OUqGd6Y+0Wa9fhD4LVobib
+	vm0YlaxD6T2MzV1MqREUZrVYc+k8CF32rI5dzi8CW8aJukchHyekE13vmcdILXTNE=
+X-Google-Smtp-Source: AGHT+IF2jbJIsj6BPc2ZnsSzGCybzZ6PKL9280i2xSLtJ0hgvln0Vzn6dfnnSytVKaTUzFrENGvS1A==
+X-Received: by 2002:a05:6402:2354:b0:640:9eb3:3673 with SMTP id 4fb4d7f45d1cf-64555b87582mr14790746a12.4.1764080744904;
+        Tue, 25 Nov 2025 06:25:44 -0800 (PST)
+Received: from januszek.c.googlers.com.com (5.214.32.34.bc.googleusercontent.com. [34.32.214.5])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64536442993sm15859924a12.27.2025.11.25.06.25.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Nov 2025 06:25:44 -0800 (PST)
+From: "=?UTF-8?q?=C5=81ukasz=20Bartosik?=" <ukaszb@chromium.org>
+X-Google-Original-From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@google.com>
+To: Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
+Subject: [PATCH] xhci: dbgtty: fix device unregister: fixup typo
+Date: Tue, 25 Nov 2025 14:25:31 +0000
+Message-ID: <20251125142532.2550612-1-ukaszb@google.com>
+X-Mailer: git-send-email 2.52.0.460.gd25c4c69ec-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <13afcc92.325cd.19abae4fdec.Coremail.duoming@zju.edu.cn>
 
-On Tue, Nov 25, 2025 at 08:02:40PM +0800, duoming@zju.edu.cn wrote:
-> On Tue, 25 Nov 2025 12:44:02 +0100, Greg KH wrote:
-> > > The delayed work uec->work is scheduled in gaokun_ucsi_probe()
-> > > but never properly canceled in gaokun_ucsi_remove(). This creates
-> > > use-after-free scenarios where the ucsi and gaokun_ucsi structure
-> > > are freed after ucsi_destroy() completes execution, while the
-> > > gaokun_ucsi_register_worker() might be either currently executing
-> > > or still pending in the work queue. The already-freed gaokun_ucsi
-> > > or ucsi structure may then be accessed.
-> > > 
-> > > Furthermore, the race window is 3 seconds, which is sufficiently
-> > > long to make this bug easily reproducible. The following is the
-> > > trace captured by KASAN:
-> > > 
-> > > ==================================================================
-> > > BUG: KASAN: slab-use-after-free in __run_timers+0x5ec/0x630
-> > > Write of size 8 at addr ffff00000ec28cc8 by task swapper/0/0
-> > > ...
-> > > Call trace:
-> > >  show_stack+0x18/0x24 (C)
-> > >  dump_stack_lvl+0x78/0x90
-> > >  print_report+0x114/0x580
-> > >  kasan_report+0xa4/0xf0
-> > >  __asan_report_store8_noabort+0x20/0x2c
-> > >  __run_timers+0x5ec/0x630
-> > >  run_timer_softirq+0xe8/0x1cc
-> > >  handle_softirqs+0x294/0x720
-> > >  __do_softirq+0x14/0x20
-> > >  ____do_softirq+0x10/0x1c
-> > >  call_on_irq_stack+0x30/0x48
-> > >  do_softirq_own_stack+0x1c/0x28
-> > >  __irq_exit_rcu+0x27c/0x364
-> > >  irq_exit_rcu+0x10/0x1c
-> > >  el1_interrupt+0x40/0x60
-> > >  el1h_64_irq_handler+0x18/0x24
-> > >  el1h_64_irq+0x6c/0x70
-> > >  arch_local_irq_enable+0x4/0x8 (P)
-> > >  do_idle+0x334/0x458
-> > >  cpu_startup_entry+0x60/0x70
-> > >  rest_init+0x158/0x174
-> > >  start_kernel+0x2f8/0x394
-> > >  __primary_switched+0x8c/0x94
-> > > 
-> > > Allocated by task 72 on cpu 0 at 27.510341s:
-> > >  kasan_save_stack+0x2c/0x54
-> > >  kasan_save_track+0x24/0x5c
-> > >  kasan_save_alloc_info+0x40/0x54
-> > >  __kasan_kmalloc+0xa0/0xb8
-> > >  __kmalloc_node_track_caller_noprof+0x1c0/0x588
-> > >  devm_kmalloc+0x7c/0x1c8
-> > >  gaokun_ucsi_probe+0xa0/0x840  auxiliary_bus_probe+0x94/0xf8
-> > >  really_probe+0x17c/0x5b8
-> > >  __driver_probe_device+0x158/0x2c4
-> > >  driver_probe_device+0x10c/0x264
-> > >  __device_attach_driver+0x168/0x2d0
-> > >  bus_for_each_drv+0x100/0x188
-> > >  __device_attach+0x174/0x368
-> > >  device_initial_probe+0x14/0x20
-> > >  bus_probe_device+0x120/0x150
-> > >  device_add+0xb3c/0x10fc
-> > >  __auxiliary_device_add+0x88/0x130
-> > > ...
-> > > 
-> > > Freed by task 73 on cpu 1 at 28.910627s:
-> > >  kasan_save_stack+0x2c/0x54
-> > >  kasan_save_track+0x24/0x5c
-> > >  __kasan_save_free_info+0x4c/0x74
-> > >  __kasan_slab_free+0x60/0x8c
-> > >  kfree+0xd4/0x410
-> > >  devres_release_all+0x140/0x1f0
-> > >  device_unbind_cleanup+0x20/0x190
-> > >  device_release_driver_internal+0x344/0x460
-> > >  device_release_driver+0x18/0x24
-> > >  bus_remove_device+0x198/0x274
-> > >  device_del+0x310/0xa84
-> > > ...
-> > > 
-> > > The buggy address belongs to the object at ffff00000ec28c00
-> > >  which belongs to the cache kmalloc-512 of size 512
-> > > The buggy address is located 200 bytes inside of
-> > >  freed 512-byte region
-> > > The buggy address belongs to the physical page:
-> > > page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x4ec28
-> > > head: order:2 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-> > > flags: 0x3fffe0000000040(head|node=0|zone=0|lastcpupid=0x1ffff)
-> > > page_type: f5(slab)
-> > > raw: 03fffe0000000040 ffff000008801c80 dead000000000122 0000000000000000
-> > > raw: 0000000000000000 0000000080100010 00000000f5000000 0000000000000000
-> > > head: 03fffe0000000040 ffff000008801c80 dead000000000122 0000000000000000
-> > > head: 0000000000000000 0000000080100010 00000000f5000000 0000000000000000
-> > > head: 03fffe0000000002 fffffdffc03b0a01 00000000ffffffff 00000000ffffffff
-> > > head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000004
-> > > page dumped because: kasan: bad access detected
-> > > 
-> > > Memory state around the buggy address:
-> > >  ffff00000ec28b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > >  ffff00000ec28c00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > > >ffff00000ec28c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > >                                               ^
-> > >  ffff00000ec28d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > >  ffff00000ec28d80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > > ==================================================================
-> > > 
-> > > Add disable_delayed_work_sync() in gaokun_ucsi_remove() to ensure
-> > > that uec->work is properly canceled and prevented from executing
-> > > after the ucsi and gaokun_ucsi structure have been deallocated.
-> > > 
-> > > Fixes: 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> > > ---
-> > >  drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> > > index 8401ab414bd..c5965656bab 100644
-> > > --- a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> > > +++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> > > @@ -503,6 +503,7 @@ static void gaokun_ucsi_remove(struct auxiliary_device *adev)
-> > >  {
-> > >  	struct gaokun_ucsi *uec = auxiliary_get_drvdata(adev);
-> > >  
-> > > +	disable_delayed_work_sync(&uec->work);
-> > >  	gaokun_ec_unregister_notify(uec->ec, &uec->nb);
-> > >  	ucsi_unregister(uec->ucsi);
-> > >  	ucsi_destroy(uec->ucsi);
-> > > -- 
-> > > 2.34.1
-> > > 
-> > > 
-> > 
-> > What changed from v1?
-> 
-> The original patch[1] only fixes the probe failure in�
-> gaokun_ucsi_probe(). This new version is a patch series 
-> that also addresses the use-after-free issue.
-> 
-> [1] https://lore.kernel.org/lkml/20251125082505.52249-1-duoming@zju.edu.cn/
+From: Łukasz Bartosik <ukaszb@chromium.org>
 
-Always document this in the future please.
+When DbC is disconnected then xhci_dbc_tty_unregister_device()
+is called. However if there is any user space process blocked
+on write to DbC terminal device then it will never be signalled
+and thus stay blocked indefinitely.
+
+This fix adds a tty_vhangup() call in xhci_dbc_tty_unregister_device().
+The tty_vhangup() wakes up any blocked writers and causes subsequent
+write attempts to DbC terminal device to fail.
+
+Fixes: dfba2174dc42 ("usb: xhci: Add DbC support in xHCI driver")
+Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+Link: https://patch.msgid.link/20251119212910.1245694-1-ukaszb@google.com
+
+Fix typo indifinitely->indefinitely
+
+--
+2.52.0.460.gd25c4c69ec-goog
 
