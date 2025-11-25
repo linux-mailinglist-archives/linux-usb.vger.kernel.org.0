@@ -1,133 +1,173 @@
-Return-Path: <linux-usb+bounces-30917-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30918-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id F094CC85C52
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 16:27:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 055D8C85C5B
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 16:28:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DDFE04E269B
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 15:27:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF37A3B1799
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Nov 2025 15:28:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96DDD328603;
-	Tue, 25 Nov 2025 15:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 374B3328611;
+	Tue, 25 Nov 2025 15:28:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bRlbfvnB"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="K/Fp02xZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC17239E7F
-	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 15:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80939328270
+	for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 15:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764084468; cv=none; b=IYEEN39AMwKUoTuZ4mhQ0kJIgF7OEhEX1owuqOF6f2pi0htsM9L1LjJYqjcMGDsgdxg04dU8chWyYg1LSMKo5ApeY00LQcxwGmZdmWD/SmhTqDC054UHB/wN8UbAzYYtbVN7+yVi9Clis3j8hGaJeNd1YDQVgnS6v4hVn/oqfgQ=
+	t=1764084499; cv=none; b=oplzm/P4H8SuowLmOLArk3XjtWqVAU9gDVNWzTQTSq21VyGoc7CzNzBo8IkA+31vYP2AvmScHSZTFyF34NUiOCe/ptnoCuNnQ1Em7Xe6SuqEUkPSEkI6Ch2eT7YUr6AdN4Hq75WARiqZR5acOg9Wik/I0Lba4fcb+z69q/Pr7Is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764084468; c=relaxed/simple;
-	bh=cZKCDok2bvgHpy/QIdyMpaY5kiMPfYKS7NyBSXZn3R0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bu2gzX3quV4RLw5RUtWaw2grjZwtmDFFBz/Ss1Sfhxd2PpFtcGE2R+Bw5Hh8fB0mOwq0X1YzBfyL29CxGGVg9wk75Xx8AiKv3aowNq8OTLJWMebqa2QfRY0r6Lk0GAraZqg9bXCA2o265XnhG49gENssqwHaiDIe3h2WctIsViQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bRlbfvnB; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47755de027eso30321005e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 07:27:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764084465; x=1764689265; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9kq9qSywkO4PP1gvaQ5TihW+kIalcwEhayZAl0fTMBI=;
-        b=bRlbfvnBSLBCUtxu2jfWfUvJbfGRMDn/UhwGDUATzWfYlRojJQ8EQUHq8veJTQFtmH
-         7W0FKJtvPo1A2IllpHRxWUb0LUPgIFvfuOZ2JW+XRdy/foR33dWv/7M+GReXgT6QiWTn
-         EA8AenFUxSW1TObJibvdQVLPdRYfTJiY/wOHFyOADAhYipxWsDLBHD/vUNPPSfp8zydj
-         3lKSuTBjbDZJ6P9vPfieuxns3oiC9Fs4xFDVhwGNAsPa68o7ctDcpVKGdioA+kKXrt8O
-         Bx+RlbeldoR63JgfFmRiXrUnGHEApHDF83tDkyI7Q6G2xdTiXXCMc4x//Zcx/35RrMkd
-         Vb/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764084465; x=1764689265;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9kq9qSywkO4PP1gvaQ5TihW+kIalcwEhayZAl0fTMBI=;
-        b=lScI/s+MunJWz3HOpxRR7tiVo3UUStnZUPk1f3aPctYCX4iEzltZeaiW8GQke9Z/wh
-         465RkVcPMoTheimJEGfRc5pLILUwOhFxNfAcUuusx1E/xK61WaNxzTlmfvNTRpptP6+P
-         VdpuEibgDp7PU7es7Lx3g29dds+Z70GfRqS9ubDQ4x2g96zthP5PY7H85gL3H1e3Mc/w
-         uY6oav3O0fejudCCSYwFkxNREH8RJhzsKxuEAW5pF1UkL+5iznE6rbzrbu8CV3aseIs0
-         W4DMtOBdPUuYAIipN91GctsxazSvtgQNXT6CuXCEXye0c7T6wPGjSJo9Cdn0lnrsTLuJ
-         PxBg==
-X-Forwarded-Encrypted: i=1; AJvYcCWgrqRPx7MZ2iFzQzZttkU2MWi+2jndG1hmwLNwssUHKV8NOwSpwNPj+eeD06UWMHIk+5ve3o6Oxw8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGWtRju2vshAsc09lT1eADiH2Z5sXNU2QAu5dT7ZEmsfq8F1/1
-	AsJgqj6XwJMyS0r/D9VW3b5pWXvbs0Q4PAagDHHY35aAN/UJZpdCoO7/
-X-Gm-Gg: ASbGncsiZDsGpfrO9KyXkNWaaLszSr5eEzkA2h5gRacHzjxLgZsdKVHcyYbAJYnsU82
-	9/88Et6AoNTEzpfV6LT/lAe31Wk1/YrSm3C3l0FQ5O21I0X9I9MSQgIWvwh2aZoUNeGIAeCwfT1
-	0Cszjq30/QEoIzppUijS+J+NL/KKliYc10q6lDsoypq+rzu1SMlv9jDajjVl5I4RWwcRU56+0ty
-	qsTK0rDiamIPgrHk7KSXIGzpb4+e5hqTFP9lZ0vPHbugmI57iRyWUD39I+nZADrWzPv4LWUggyz
-	RIqBB4wsGQFEA+GWhPMfV45bzbUD5SlsYKyDp8GvzZ2TIhE2soXuBm71xXHhNtQSW43D3G54EXA
-	q+ryQkfZtcorcA2mpCiOyLWy6RCxQs2vWgWL2DxTfk8lM3aXorSYWbuX4rtFWd7n8K2J2BQDD7v
-	s9RUvb/D2YKbzToemqv5iSbnAc9e6aTWHK6MeRkps2w9MSy6j+m1omQCh92ZfaW5R9xZ3B/u/Bg
-	tgY4nXA50c5aAPuUFNkk2Eaf8RO0jM=
-X-Google-Smtp-Source: AGHT+IHFfmBxIORYcbu6BbMr8OVYOSZuWC5mNvnXDGuW9f9pbFUhSNkcfZGsnaCD8iZPXTL7pqL0pg==
-X-Received: by 2002:a05:600c:1c87:b0:477:98f7:2aec with SMTP id 5b1f17b1804b1-47904acef12mr37194885e9.3.1764084464392;
-        Tue, 25 Nov 2025 07:27:44 -0800 (PST)
-Received: from labdl-itc-sw06.tmt.telital.com ([2a01:7d0:4800:a:8eec:4bff:febd:98b9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477bf3602d1sm265128575e9.5.2025.11.25.07.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 07:27:43 -0800 (PST)
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	Daniele Palmas <dnlplm@gmail.com>,
-	Fabio Porcedda <fabio.porcedda@gmail.com>
-Subject: [PATCH v2 2/2] USB: serial: option: move Telit 0x10c7 composition in the right place
-Date: Tue, 25 Nov 2025 16:27:34 +0100
-Message-ID: <88bc1bd65455a35db6e92dba86cd5805ab3821ae.1764084304.git.fabio.porcedda@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1764084304.git.fabio.porcedda@gmail.com>
-References: <cover.1764084304.git.fabio.porcedda@gmail.com>
+	s=arc-20240116; t=1764084499; c=relaxed/simple;
+	bh=8fYEhqwjtL0SpYOBHBwg8VU9hDJ6wtd6dNewyrP9amA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=rwbIdzxE6UMO28FCvgmfMwAdV+awae39dydXV9lyBtvG6wtFKxklMrwizkrUj1dAdZFC4xlDmkn/QpI6s+3LMyQtQbUE7jhlNgaBSVBD710gIiYzGo5bbom/kQu9ERjMS0dtkB973XvB12tzwKcenfItRp/naRHY0R7iGOjKKJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=K/Fp02xZ; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 865891A1D45;
+	Tue, 25 Nov 2025 15:28:10 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 59A4C606A1;
+	Tue, 25 Nov 2025 15:28:10 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D30E1102F07FE;
+	Tue, 25 Nov 2025 16:28:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1764084489; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=HgxEQ0f8MNjzesLOK80vetYWR3YMKzv8RvyUGva3XLk=;
+	b=K/Fp02xZ1WhDXcE/vwFa8uDqUxs4cBpya3Uwrcrop9bEq7pfenZOXIQyIXmx2DHkO7Vgru
+	QqSq4h0+JFNQ4AA67Sn0cYZHfB1XsjSR1ooUUoj8w1JL9dwGdr5FK/bNugHt3wAJe41uYr
+	uAX2fsP/UxHVQy6Cp+qpfCDuelKkDjEso0lEUbKRDvXz3BX5Oo6QQjoSWTQ/RBxJyF4tNg
+	aiVyQt7GC6EQJPS67xcwL2bBmQY3GHV8dd9afsLEylbbo+dcisEEf93H8jk/AzarBLOuX9
+	3d+Hht7rhKBAo9weo3A/zJ1cvtKmN9Mkk5o3USEarkGCBY+ykGchBqPb5EvKaw==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 25 Nov 2025 16:28:04 +0100
+Message-Id: <DEHVRC8CY12S.3LSC6UVSMU0C1@bootlin.com>
+Subject: Re: [PATCH 1/2] phy: rockchip: inno-usb2: fix disconnection in
+ gadget mode
+Cc: "Kever Yang" <kever.yang@rock-chips.com>, "Minas Harutyunyan"
+ <Minas.Harutyunyan@synopsys.com>, "Alan Stern" <stern@rowland.harvard.edu>,
+ "Louis Chauvet" <louis.chauvet@bootlin.com>, =?utf-8?q?Herv=C3=A9_Codina?=
+ <herve.codina@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <linux-phy@lists.infradead.org>,
+ <linux-rockchip@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+To: "Luca Ceresoli" <luca.ceresoli@bootlin.com>, "Vinod Koul"
+ <vkoul@kernel.org>, "Kishon Vijay Abraham I" <kishon@kernel.org>, "Heiko
+ Stuebner" <heiko@sntech.de>, "William Wu" <wulf@rock-chips.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-0-239872f05f17@bootlin.com> <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-1-239872f05f17@bootlin.com>
+In-Reply-To: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-1-239872f05f17@bootlin.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Move Telit 0x10c7 composition right after 0x10c6 composition and
-before 0x10c8 composition.
+Hello Luca,
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- drivers/usb/serial/option.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Tue Jul 22, 2025 at 10:43 AM CEST, Luca Ceresoli wrote:
+> From: Louis Chauvet <louis.chauvet@bootlin.com>
+>
+> When the OTG USB port is used to power to SoC, configured as peripheral a=
+nd
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index b9983e6f5eff..2610bb860682 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1445,6 +1445,9 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10c6, 0xff),	/* Telit FE910C04 (MBIM) */
- 	  .driver_info = NCTRL(4) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10c7, 0xff, 0xff, 0x30),	/* Telit FE910C04 (ECM) */
-+	  .driver_info = NCTRL(4) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10c7, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10c8, 0xff),	/* Telit FE910C04 (rmnet) */
- 	  .driver_info = RSVD(0) | NCTRL(2) | RSVD(3) | RSVD(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10c9, 0xff),	/* Telit FE910C04 (MBIM) */
-@@ -1455,9 +1458,6 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(5) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d0, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d0, 0xff, 0xff, 0x60) },
--	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10c7, 0xff, 0xff, 0x30),	/* Telit FE910C04 (ECM) */
--	  .driver_info = NCTRL(4) },
--	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10c7, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d1, 0xff, 0xff, 0x30),	/* Telit FN990B (MBIM) */
- 	  .driver_info = NCTRL(6) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d1, 0xff, 0xff, 0x40) },
--- 
-2.52.0
+typo: is used to power *the* SoC
+
+> used in gadget mode, there is a disconnection about 6 seconds after the
+> gadget is configured and enumerated.
+>
+> The problem was observed on a Radxa Rock Pi S board, which can only be
+> powered by the only USB-C connector. That connector is the only one usabl=
+e
+
+"which can only be powered by the only USB-C connector"
+double "only" makes it a super exclusive connector!
+
+> in gadget mode. This implies the USB cable is connected from before boot
+> and never disconnects while the kernel runs.
+>
+> The problem happens because of the PHY driver code flow, summarized as:
+>
+>  * UDC start code (triggered via configfs at any time after boot)
+>    -> phy_init
+>        -> rockchip_usb2phy_init
+>            -> schedule_delayed_work(otg_sm_work [A], 6 sec)
+>    -> phy_power_on
+>        -> rockchip_usb2phy_power_on
+>            -> enable clock
+>            -> rockchip_usb2phy_reset
+>
+>  * Now the gadget interface is up and running.
+>
+>  * 6 seconds later otg_sm_work starts [A]
+>    -> rockchip_usb2phy_otg_sm_work():
+>        if (B_IDLE state && VBUS present && ...):
+>            schedule_delayed_work(&rport->chg_work [B], 0);
+>
+>  * immediately the chg_detect_work starts [B]
+>    -> rockchip_chg_detect_work():
+>        if chg_state is UNDEFINED:
+>            if (!rport->suspended):
+>                rockchip_usb2phy_power_off() <--- [X]
+>
+> At [X], the PHY is powered off, causing a disconnection. This quickly
+> triggers a new connection and following re-enumeration, but any connectio=
+n
+> that had been established during the 6 seconds is broken.
+>
+> The code already checks for !rport->suspended, so add a guard for VBUS as
+> well to avoid a disconnection when a cable is connected.
+
+Your commit message was clear but I was missing one key point: what
+rport->suspended means. It isn't what I first thought. Instead it means
+phy is powered off. Naming is bad but unrelated to your series. Maybe
+add a comment to your commit message like the following?
+
+  The code already checks for !rport->suspended (PHY is powered on), ...
+
+> Fixes: 98898f3bc83c ("phy: rockchip-inno-usb2: support otg-port for rk339=
+9")
+> Closes: https://lore.kernel.org/lkml/20250414185458.7767aabc@booty/
+> Co-developed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+
+I believe there is an issue with your SoB ordering. It is meant to
+signal the path's route from author into the kernel tree. In that
+sense, it should start with author followed by you as submitter. Then
+the maintainer will append its own.
+
+Documentation/process/submitting-patches.rst is semi-explicitly writing
+that out:
+> Any further SoBs [...] following the author's SoB [...]
+https://elixir.bootlin.com/linux/v6.17.9/source/Documentation/process/submi=
+tting-patches.rst#L449-L453
+
+One good way to check is that all maintainers always append their SoB
+rather than prepend.
+
+With that,
+
+Reviewed-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
