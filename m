@@ -1,183 +1,129 @@
-Return-Path: <linux-usb+bounces-30945-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30946-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12725C88A10
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 09:27:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2641C88D25
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 10:03:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 054E24EBDF1
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 08:27:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4099C352BCB
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 09:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA6F31961D;
-	Wed, 26 Nov 2025 08:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 134D930E0D6;
+	Wed, 26 Nov 2025 09:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cu4X4RRE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7209C3191B5;
-	Wed, 26 Nov 2025 08:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8E43019C5
+	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 09:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764145607; cv=none; b=Xty+yJ7lo6YUyF/RkkfwIJna5y/8Kxg6x3ewQNxSxyivLu1TicG8tzBaj0c6tamkiwXmvc6zE5zLbZ0tAvHo5anrgJw3Poz1ieOlly78x8hMIQh6BU3l0d2GSvobEXCvTIQz/vbjc5hs5iK1BN2OQmn/02tP/5brGJvU2PebThc=
+	t=1764147796; cv=none; b=fpZIjS4wd0UMYOdeP+SJhvF69HIHVwyd1ZXG3qyVNjyGkbnAgLv3NcrGdZgKvjTKFo9DaIR87W1PwL7RAjyWQrpKKn76Mmq6tJxo4tHTAZp0bBM3pJpywO8CUIbMmd52kvKMgjOi7+u4VBZJ7hVcH8n90Km9vKeJVRj+M/45iWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764145607; c=relaxed/simple;
-	bh=XJdF9MCn8Pm6rI4iV4Bh37iuRCq4FiLatSLLzYg37h8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Jj3ajGWKGz+sFp2P7E/PfwR63C8V1KNQ2zDZeD42Lc1EfDmJd5yLGvCh1BvSvRetMLZmUkPK7neoy80StoY/5EZedaQTFALvPX3uL0fbN9+/1kxdx0aQlPF7tca/Mu4IIUlA5fsHtkgseHPkTEyn6haSS24uQOGqDdZSyWFShrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Wed, 26 Nov
- 2025 16:26:30 +0800
-Received: from [127.0.1.1] (192.168.10.13) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
- Transport; Wed, 26 Nov 2025 16:26:30 +0800
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-Date: Wed, 26 Nov 2025 16:26:31 +0800
-Subject: [PATCH 2/2] usb: gadget: aspeed-vhub: Add ast2700 support
+	s=arc-20240116; t=1764147796; c=relaxed/simple;
+	bh=dVPy5XLBhOgZbZCzLapdCt0HVAjoYHpzjXjWKaS7PB0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=frtY2vyEw1vmHAffdIPIjY07styVzm40LfLj5pjjUN5piXUY/KBLVgYya9H901m2pug2Pgrxdpd30uPnuCWj1oRzvH/dSW+sG++vrTXZs9fhewPkBWidQYtSbTwDlw1rv2ui5DoZgu+MeUWlUt10KY2rz5h7VgxFM/fdl/roFMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cu4X4RRE; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b7633027cb2so1150162466b.1
+        for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 01:03:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1764147793; x=1764752593; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k4M00dH8JQgl9t4fxjB3zrnN5riQ3RKDpVhq4yoqpsk=;
+        b=cu4X4RREi2tPPfOHy0sPj2H6ZetDxYBlN1a9k9yPI3vq/A5L+QZItATknpaOMY5Ijz
+         LI2gnbbDlfDhm09jnRGYN+e42oChdegn433FAl4crpKkG3QWS4WAyjQC8o61veARNq1r
+         xS5X/HG0h7oMHG267DI01vSUwqMHVoF6dHcNg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764147793; x=1764752593;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=k4M00dH8JQgl9t4fxjB3zrnN5riQ3RKDpVhq4yoqpsk=;
+        b=gQRh5L7Yx+ESKlVvVsDYxAtPKNczPoTjT5SfwSNxY8nMXtmKH9hbmOygdUgWIvIS1R
+         OsHHNvI0tBnHCl9TrdAISuQRlGIdIqdiWPw9nF2RF2tE+MAymTgA152CcMrg0pA7/SJ/
+         Xql3CkuVrESXdhDaVuaKUZ/X69U9f6bCIc3z4Q/u3PO7RrGGEvLgzjCRIuZVCHDyDDpQ
+         aHMKHSgkjBTwjRHgkuQ+09O9NznnV5GqvEQmgrpQWVYsdgyvQ27xbx3URcvuqvIxs/LS
+         dmhhQj41tFc6Yd3LhR3ZlTr7YpFrn62JlfcwkWDwv6/aj4lBm2i/MAbDNIgnbVYX9E5Y
+         Q2+A==
+X-Forwarded-Encrypted: i=1; AJvYcCV8Jnl9PBClfWUIW+njs3ofSCgjQzNPXm+PVYDOpqjp68KFnau/fsMA+74T9Su91eyq8nVtk3152a0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaQcf1fYmQuiHukfcLEGzehNVPMyE8rPV6dd30C0angQ3zRUC2
+	OAA8CMg2Tt9C0q83Gtu9DUsgU/dGG+jzp6aFDKTSReH2MoSG2RpcEErXQp9JcPVIldLOLyL3KcZ
+	UJgU=
+X-Gm-Gg: ASbGncuXaIeYJ+iE78fOfwtFQ9Wov4XA/cP3qfb2IVh1mbIz7WBcL2c4qg0oCA+PiOv
+	7gykkYBGM/BEq0jhvlz7OoR0K1+0PfdJGyvqotaQjdwJmEZ3KRzUmBKLesWsjuEuqqdnKfMq5w7
+	R3Mb5C+LONvrxpFK+QKzlns9AXv6SU5QprGlfDXZxDKJ2tfimywhP8tNC2l3+9I+Mr+Q9tgv3H6
+	6AC58P9NAv8nQOMKOy9sYt0RWkm6NGuru0Jy05uQOXGOoNpJ8bjPBQ31Z9Td9CRNaQcIC1LDSGS
+	FhLKBa16OgFsG4kl3ubaX6SkohZ3YTKiny/KhS1bXcymHeGq9Tjpo32+KRZt8i1WFnpVPF+srpv
+	F1PRBfP0mAHk1ALradOfRKbF2V68Gtv00gT0zBOHiHZISwsjEmH7y1XWmqsk/UxAddpwfXy1eh2
+	V3YMsBRcbpEsS3B7TGC//lMxwyUAKJSwyej70T321j0ErXMO3cz0tR9HFcZ0Y1dxA=
+X-Google-Smtp-Source: AGHT+IHdhVJ60xf1WeWpFZU/0wPJRCpkc/KcK9Wa9/m2Ob62cawu5qlwq8+Rg5LPDyXG5I4GcjHKgw==
+X-Received: by 2002:a17:906:d550:b0:b76:630d:fd27 with SMTP id a640c23a62f3a-b767153a62bmr2003961866b.5.1764147792841;
+        Wed, 26 Nov 2025 01:03:12 -0800 (PST)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76e11458a6sm107004166b.6.2025.11.26.01.03.11
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Nov 2025 01:03:11 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-643165976dcso6697a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 01:03:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX2o+RPQQxhMq4kCHuD16vII8Xo5JFCK1Xy+peBUInvHpxAYLi8JZnOthWjONYp2QUPwb3Psy/U3fo=@vger.kernel.org
+X-Received: by 2002:a05:6402:110c:b0:63e:447d:6aee with SMTP id
+ 4fb4d7f45d1cf-645fef40259mr22275a12.0.1764147791018; Wed, 26 Nov 2025
+ 01:03:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20251126-upstream_vhub-v1-2-910709937ee0@aspeedtech.com>
-References: <20251126-upstream_vhub-v1-0-910709937ee0@aspeedtech.com>
-In-Reply-To: <20251126-upstream_vhub-v1-0-910709937ee0@aspeedtech.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery
-	<andrew@codeconstruct.com.au>, Benjamin Herrenschmidt
-	<benh@kernel.crashing.org>, Philipp Zabel <p.zabel@pengutronix.de>
-CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
-	<linux-kernel@vger.kernel.org>, Ryan Chen <ryan_chen@aspeedtech.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1764145590; l=3392;
- i=ryan_chen@aspeedtech.com; s=20251126; h=from:subject:message-id;
- bh=XJdF9MCn8Pm6rI4iV4Bh37iuRCq4FiLatSLLzYg37h8=;
- b=k2Ze75FXE2h0eA718POum8cFam+q5CvdRbLXHXrZ3VFlrEZqA1dLFcckFGktL/yhO3sXIbFYu
- Lal8osCN+tjBimjMMpnDxxjN9PZx4aAkXNr62u+2hzruinIdUVSm0/V
-X-Developer-Key: i=ryan_chen@aspeedtech.com; a=ed25519;
- pk=Xe73xY6tcnkuRjjbVAB/oU30KdB3FvG4nuJuILj7ZVc=
+References: <20251125-ucsi-v4-1-8c94568ddaa5@chromium.org> <2025112513-charting-napkin-120d@gregkh>
+In-Reply-To: <2025112513-charting-napkin-120d@gregkh>
+From: Hsin-Te Yuan <yuanhsinte@chromium.org>
+Date: Wed, 26 Nov 2025 17:02:34 +0800
+X-Gmail-Original-Message-ID: <CAHc4DNLvwkWOdzu7apPgKyx_+VRAHByi6AwCmzp7bd8ZHBmiKQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bmrPjmlMC5Bcol_Og7qIwFqt3i3iR9M83NwbRJAkzfKouK0nvBmKzsISU0
+Message-ID: <CAHc4DNLvwkWOdzu7apPgKyx_+VRAHByi6AwCmzp7bd8ZHBmiKQ@mail.gmail.com>
+Subject: Re: [PATCH v4] usb: typec: ucsi: Get connector status after enable notifications
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Hsin-Te Yuan <yuanhsinte@chromium.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add support for the AST2700 SOC in the vhub gadget driver. AST2700
-uses a 64-bit DMA addressing capability, so select 64-bit DMA mask
-for compatible. AST2700 vhub also requires an reset line, so hook
-up the optional reset control and assert/deassert it during probe
-and remove.
+On Tue, Nov 25, 2025 at 7:46=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Nov 25, 2025 at 05:31:24PM +0800, Hsin-Te Yuan wrote:
+> > Originally, the notification for connector change will be enabled after
+> > the first read of the connector status. Therefore, if the event happens
+> > during this window, it will be missing and make the status unsynced.
+> >
+> > Get the connector status only after enabling the notification for
+> > connector change to ensure the status is synced.
+> >
+> > Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
+> > ---
+>
+> What commit id does this fix?  Does it need to go to older kernels?
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
----
- drivers/usb/gadget/udc/aspeed-vhub/core.c | 30 ++++++++++++++++++++++++++++++
- drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  1 +
- 2 files changed, 31 insertions(+)
+This logic appears to have been here since the very beginning. The
+commit id is c1b0bc2dabfa ("usb: typec: Add support for UCSI
+interface"). I will add the Fixes tag in the next version.
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-index f2685f89b3e5..19c1849ae665 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-@@ -23,6 +23,7 @@
- #include <linux/of.h>
- #include <linux/regmap.h>
- #include <linux/dma-mapping.h>
-+#include <linux/reset.h>
- 
- #include "vhub.h"
- 
-@@ -280,6 +281,8 @@ static void ast_vhub_remove(struct platform_device *pdev)
- 	if (vhub->clk)
- 		clk_disable_unprepare(vhub->clk);
- 
-+	reset_control_assert(vhub->rst);
-+
- 	spin_unlock_irqrestore(&vhub->lock, flags);
- 
- 	if (vhub->ep0_bufs)
-@@ -294,6 +297,7 @@ static void ast_vhub_remove(struct platform_device *pdev)
- static int ast_vhub_probe(struct platform_device *pdev)
- {
- 	enum usb_device_speed max_speed;
-+	const u64 *dma_mask_ptr;
- 	struct ast_vhub *vhub;
- 	struct resource *res;
- 	int i, rc = 0;
-@@ -348,6 +352,16 @@ static int ast_vhub_probe(struct platform_device *pdev)
- 		goto err;
- 	}
- 
-+	vhub->rst = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
-+	if (IS_ERR(vhub->rst)) {
-+		rc = PTR_ERR(vhub->rst);
-+		goto err;
-+	}
-+
-+	rc = reset_control_deassert(vhub->rst);
-+	if (rc)
-+		goto err;
-+
- 	/* Check if we need to limit the HW to USB1 */
- 	max_speed = usb_get_maximum_speed(&pdev->dev);
- 	if (max_speed != USB_SPEED_UNKNOWN && max_speed < USB_SPEED_HIGH)
-@@ -370,6 +384,12 @@ static int ast_vhub_probe(struct platform_device *pdev)
- 		goto err;
- 	}
- 
-+	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
-+	if (dma_mask_ptr) {
-+		rc = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
-+		if (rc)
-+			goto err;
-+	}
- 	/*
- 	 * Allocate DMA buffers for all EP0s in one chunk,
- 	 * one per port and one for the vHub itself
-@@ -412,15 +432,25 @@ static int ast_vhub_probe(struct platform_device *pdev)
- 	return rc;
- }
- 
-+static const u64 dma_mask_32 =	DMA_BIT_MASK(32);
-+static const u64 dma_mask_64 =	DMA_BIT_MASK(64);
-+
- static const struct of_device_id ast_vhub_dt_ids[] = {
- 	{
- 		.compatible = "aspeed,ast2400-usb-vhub",
-+		.data = &dma_mask_32,
- 	},
- 	{
- 		.compatible = "aspeed,ast2500-usb-vhub",
-+		.data = &dma_mask_32,
- 	},
- 	{
- 		.compatible = "aspeed,ast2600-usb-vhub",
-+		.data = &dma_mask_32,
-+	},
-+	{
-+		.compatible = "aspeed,ast2700-usb-vhub",
-+		.data = &dma_mask_64,
- 	},
- 	{ }
- };
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-index 6b9dfa6e10eb..aca2050e2db0 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-@@ -388,6 +388,7 @@ struct ast_vhub {
- 	spinlock_t			lock;
- 	struct work_struct		wake_work;
- 	struct clk			*clk;
-+	struct reset_control		*rst;
- 
- 	/* EP0 DMA buffers allocated in one chunk */
- 	void				*ep0_bufs;
-
--- 
-2.34.1
-
+Regards,
+Hsin-Te
 
