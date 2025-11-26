@@ -1,180 +1,245 @@
-Return-Path: <linux-usb+bounces-30936-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30937-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99AC9C882D6
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 06:42:41 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 057EDC884F1
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 07:44:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 186633538FA
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 05:42:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E0CB34E26E6
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 06:44:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA0631281F;
-	Wed, 26 Nov 2025 05:42:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FB8A30CDA4;
+	Wed, 26 Nov 2025 06:44:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nZbjw/3h";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="euxKxTDf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sEkxo4FN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1ABE2236F2
-	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 05:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37E3318120
+	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 06:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764135753; cv=none; b=b3hOtxCKWT5nA2yXUjRLUyXknY5ObeA7v8YYQ3/9X3sedWy6bNLl73kap8l+LcFZwFTdqnLEcQf6AOY+ZB/z6irRs2gP7BO2A8G/5G5YaLgBZKi57RqDnp7k+aavHIU87yr9qzTOwfWOj+/V9PTF7wf9wzWy9u0b1kB2bJdQR/E=
+	t=1764139459; cv=none; b=LR4feA5TfAZGpsK0D7zmk8VP/rzImU3wqCscbyXOYYUoeHHC5DnaykDQthvDQrBlrHRBiTbV9GNutPffZQbyJcaFAiOxZx1qpqEhB/BqkEvWPFkvJPcM3DMsbhukqdb9nx3JTX3im276thg68rNhZI2h43T1iMjaThNPLkkCB/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764135753; c=relaxed/simple;
-	bh=ZSGldPpQdBPeyeRPvxMinYAqNZms8SedzpBSMlb71HE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PI3cDBwzZxNR3G64OBKVP9uYD9ZNK3pJCDDdvlzhQa5aXn525uDoU5eBxqvusQzS2zgXF3zqrjSvLy8iXnTzsRJ5UxqZggcttdUzFt2DXFLAT9sBKY2JcjeakPhlqD45L0jCjHD+nn/wSHXPNUPMqeej99f0D3vRZaxt673EYwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nZbjw/3h; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=euxKxTDf; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5APIkX8x2659967
-	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 05:42:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=c5wgl6eITJ72vHqJebcqGjx0u//2f1FOVM5
-	I9mWULoU=; b=nZbjw/3hvz+mOK0vKXZI4E1sC73al+Bf4UxEh8Pv3QOPpQqP3nc
-	I4Eccng1gU1XN4K0DlY4WeGPH4MnKflF0H+Yw16mMrahQ4nAWJ80GbM2rSg8b1o0
-	cIdKxFIytCp0KxbU/zIysqr4wXCc4mXey81wK9qCyBoLFHCyiH/9ckfNDzqPJfmn
-	Xr0IbDqbqIGSt2UvV0q3SsaElef7YTLHEfoXs4WHBMD00XiFLKtdtg0B0voT5O5c
-	qj4QfyvUs/TakcbTT91fIvAtwRNw67niYwmLYDPZttHzKDglWVvqlmsAt9vAgjRa
-	gw/EdVsnBWZX/pjtd7htb6KlMXxlm7ts4Qg==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ana9xaw3u-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 05:42:31 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-297f3710070so149902015ad.2
-        for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 21:42:31 -0800 (PST)
+	s=arc-20240116; t=1764139459; c=relaxed/simple;
+	bh=Etr+Ix0Iw21+0ZkT9TJ1m440KHu3t5b0AqRdb6wd3oE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Bw/kzKgOnjSCTtmvvYB9KR0gi86guvmshegW3laRwi+uGAVQxVCQfbUsXgZ059mtZEr0OBN2KJS11NOfRUDJ7cC3SxU8kZl8mbyxqUr1EafHpCBdGnFwr1RfhqtHsTe+LzhzpB7nFUgENp5uCjj07pIm4nGHz7vUIQXZ/Ptx7F0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sEkxo4FN; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-477770019e4so52694675e9.3
+        for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 22:44:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764135750; x=1764740550; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=c5wgl6eITJ72vHqJebcqGjx0u//2f1FOVM5I9mWULoU=;
-        b=euxKxTDfXta63r9zWU97m5I+BPzaWZL8RnMYsRNKndF2FjVfL5QRxDsfwWE6jqsKA7
-         i5HL9Df7gvNSiJkH06KZ+3T4DXtNs1u+vdee19Gzb6KMrPGnllhGJCsUmNw7a537V8Ji
-         976ipR3Qn/PCtqGu5VcMIhTyFaj6HV2kKF/82SnHmCoeW29ITuXN2nVdwEl19J6uO/ko
-         HZKax896s2li+XBXIV3rmXPLxrSLlBi9gahueAmqZIJ/zZeP5ZGwhWMBGgClr45mS0pZ
-         pHXEyX4LfdvalYQiu5TtqM6RA/CyXef2wjCdOL4UVTJWF2RTnoo73P3aYFHjoPowbbnw
-         lOFQ==
+        d=linaro.org; s=google; t=1764139456; x=1764744256; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iagMIGIeHxyM0iFPX2ThJoiCFK8Ow6UALIrOqYnhTgg=;
+        b=sEkxo4FNAaggmEKWzQPa5gxZBF43mgLKyvRcMpAC7TsCaKcScDt7nN6skKpDJ3H7m8
+         Ene9A1fxI/8NvnuNGkbpTxWZ0rMZr7d9BpmxNTxz1BQgGT23xbTAvlT4LmX4aJV78sea
+         ZPsvECfQloLv4KJb6ojxpaLJym5P6NYMx62E2k6kKg7MzSlc9/+eIhlTD76PMfuMQw5J
+         1F/fLBVE1Sb/60y4KBNlaOg/sIrrwQ6pV2I+XrM9p+rlAqz+CELueA+TPNo9Mbdpzciz
+         MvStquhWftveiivwtI9aaw2ZQ7W28t2z97z2iiAKyRUacVfDQN6YuYTogNNpecR1SVXz
+         2/ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764135750; x=1764740550;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c5wgl6eITJ72vHqJebcqGjx0u//2f1FOVM5I9mWULoU=;
-        b=JsYVmmRPS/TL96chGzkgyuo6GRVNjz3q2strNlpOziJfPwbSTcvFrJ+z6m6RdOunrE
-         cUFv28u5oNcEt/hAch7AaEPw8vZ+YvGhlt0oCqy680resOcdVvN5MaeoRFu07yhlLcs4
-         NdiHeSTv6ESsbywjD+x4v+yelqjPGM6u5YaTKgFzJQIjAb5ICEDJ+LKElUdwCPM61JPV
-         6mp2o3OKFw5VKNuM/ZhdYHzJFucHnICoCz3+pI/BKha+zoLHdCFfkMgjlVeOzuBUY9wt
-         R5oTE5Si6Ob8lQZSwgLNzrit2BazJLf11So5+Ul1ev6otaWxqpCmWNWcLHg+c04tHANK
-         ZUpg==
-X-Gm-Message-State: AOJu0Yzc/CArFb7c+d4Rc886Mpiya+dZ3+g8qWcPb5cW2W0noZ9y9AKt
-	iSTW7ITqN7Sbw7s8J2jhHESQEHqmepTx1Dh//laMWJRVbspOABa9eqhZ6OdmwsGo47ZYyTof1QC
-	WGpXSDhckpm29Za5GzPdPJYEOKn7+KIz1+jY/gY+ZBeZpQgxHiqmfHsnpjnUdBNU=
-X-Gm-Gg: ASbGncsqpFi9/TPikuXg6Poa9Ibt402StSKRD9vizy2JiULGa3G8OH3Mf/JeUbPRe8F
-	2ZdZfOR686QgF0HUAotdPpANxMQDZ4RsdXfFlLzz7I4AghahRuoi3bh8++DKLdYj9wKybMdUtNv
-	tNb+QCb4kprj4Od0X3QhDGK/uLdx1KNVypn30B0rXAtSe5iRO55eA2EGzKqJbLHGg5yqePdydul
-	zIvjFm8v+bNnN3K/aQzsOniVHSRk4hj90ji4mhOyRlwCZyOHM5pX6hMewM8YpyxAXeIKp0fIZy0
-	ONSPYyavI2SJlGmv041WiFdS0u0qu0B+yPWlZ+9Og/48Mg8rMwIGvu4zKVn8B7L95mEnUwhQElj
-	pDKSmbrmhoxIYw4VcJBIs0tm1vj7SYHEw+1KIvtcAJqwB
-X-Received: by 2002:a17:902:e545:b0:295:8c80:fb94 with SMTP id d9443c01a7336-29b6c6f1516mr186031295ad.59.1764135750476;
-        Tue, 25 Nov 2025 21:42:30 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHJJhXiScgCSr/ZzsfIwxpspEZaHpOeDfSLmXRjvd77UkstRH1vhvctykC6KseW7LJ4BjfKjw==
-X-Received: by 2002:a17:902:e545:b0:295:8c80:fb94 with SMTP id d9443c01a7336-29b6c6f1516mr186031065ad.59.1764135750046;
-        Tue, 25 Nov 2025 21:42:30 -0800 (PST)
-Received: from hu-ugoswami-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b26fed2sm187048575ad.69.2025.11.25.21.42.28
+        d=1e100.net; s=20230601; t=1764139456; x=1764744256;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iagMIGIeHxyM0iFPX2ThJoiCFK8Ow6UALIrOqYnhTgg=;
+        b=d06T+d7po+vgI1thUU/oH1E/BVLZeES8UPvp5/rzIRVlqFhUtpbk4+g3wPtoyo90v+
+         Xuf+Mr7Y7gLryHcFGzRUGjwHXLXlq55VcqqnGPRCrgJbCrOUzaSoVQuoa3jJ+sSKyII7
+         iRYBeN0Jy6Km5Vrz76fG/eFxQdylKruYAZ77n4w8PnUMABtcJV5NYbys0W2UcR4odbGs
+         PDp4uf7TihqwgTTF0Y4NmGmPq3RDzaj63XdwsYfaO8DwEVVYht9otF45Y2zulnjdZGvg
+         dol9n4hp//df+IPh6Zk7D3s/FggYAVIdxu91T+nOYTy8iTCn2CGDEPLDHiR1Xj1wLsu3
+         fxhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOS1SU+auu1fCvmQYhGkGnzijPQfhttGJcVGUca1VyBKwKQStjp22jM3WpWl/lUX3cFUtHHSUtqf4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqElz7WqmvHptXn4s6tya3WasliBYTNAyBsA2v88bECWXbSwQ4
+	WIvN6VlcEpoDRcgsEXWULND082Zy6r+c6rMyvdsHr3ZfQ+8Fa0Z0AOAl8PbhBzfqxKo=
+X-Gm-Gg: ASbGnctBla+eWcDQuNU2HXl+ol+uaT6IQVJWzb5ph2h2G6Ek8q1AXpNNpLnZybkhnct
+	n/YnQFj6ZPgoELgin9BokapcRyZdOySSFT4KYqq5bElzK1pFMK9eDH9+oFSufDR/6Zoeg1H3jdC
+	OqRyOg1IhS/WowdY1y5v2b3sG+0Zntpuqe756kBYkju1K1gU61VIZJ+sUYCyyfmeZJgma1Pq1ZM
+	p7VBq3O7naacJDZFXoq1uwcxSWvvlWM4CqayEPg5XFEav28iT/d4T4/73FXnihz9ebJU7Ruu1HZ
+	10zMhzzv72D+1VauJWV8Csi1/Vx3utAzC4fd19hH+KIErY/1Lt6ILD3uWDUaNgbxnseFwSzgk1J
+	6N8Wzo/7KV/Vuo9quI4XLjQuJuIjx1fSrSoqwkOFMskQGVbNqgsXmyIySWNKaNCMjbAnKkoQS/K
+	aBD4SOcQbp7/4BaSFG
+X-Google-Smtp-Source: AGHT+IGY6wpQR5oGHT//GHTCibu+r9RkZemJQTbELxXxGfU09J5aQ0TWFaLsehta2pjsoi8ZOGTqhA==
+X-Received: by 2002:a05:6000:2891:b0:429:9323:2bec with SMTP id ffacd0b85a97d-42e0f356945mr5897156f8f.40.1764139456149;
+        Tue, 25 Nov 2025 22:44:16 -0800 (PST)
+Received: from draszik.lan ([212.129.87.89])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7f2e454sm38406428f8f.2.2025.11.25.22.44.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 21:42:29 -0800 (PST)
-From: Udipto Goswami <udipto.goswami@oss.qualcomm.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Udipto Goswami <udipto.goswami@oss.qualcomm.com>
-Subject: [PATCH] usb: dwc3: keep susphy enabled during exit to avoid controller faults
-Date: Wed, 26 Nov 2025 11:12:21 +0530
-Message-Id: <20251126054221.120638-1-udipto.goswami@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Nov 2025 22:44:15 -0800 (PST)
+Message-ID: <e25ff0e5ff103433942fc7744eea4a3c61ce1daf.camel@linaro.org>
+Subject: Re: [PATCH 4/6] mfd: max77759: modify irq configs
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Amit Sunil Dhamne <amitsd@google.com>, Sebastian Reichel
+ <sre@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Lee Jones
+ <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Badhri
+ Jagan Sridharan	 <badhri@google.com>, Heikki Krogerus
+ <heikki.krogerus@linux.intel.com>,  Peter Griffin
+ <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Alim
+ Akhtar	 <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
+ Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Date: Wed, 26 Nov 2025 06:44:30 +0000
+In-Reply-To: <aa7bdeb1-c8a9-4353-af56-869f16a083c2@google.com>
+References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
+	 <20251123-max77759-charger-v1-4-6b2e4b8f7f54@google.com>
+	 <5c901a6c831775a04924880cc9f783814f75b6aa.camel@linaro.org>
+	 <aa7bdeb1-c8a9-4353-af56-869f16a083c2@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2+build3 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: ZOu0oAonoqVAkvtnih44FPN8KXTEOY1s
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI2MDA0NCBTYWx0ZWRfX0msWB0iN3XPA
- c5D2cyCcbc6HKN9XAvsvHkWhA1PI3QsmFH5JYKRutXEmhBS0lquoBequFKJ/O/TGNG1NgBoGp5Z
- fn9gLYNfTMDzx4QVH8ZIbTIEOr6KJvoAilo2wwejixXZlO76X6SebMK9XyTqWNs45g3pS1WUh7Q
- I23hxbZXU2wMUdq78lxUustwVy4kXPXUOqoQ2jeffKRMiT8bZ3ZJTxbbW7prKh6WHCmOM3Lpbfx
- dkev9UUYXAfxh0V0IJWIA5+O0U7nMvQsGpz8fWj4ADRUBOauPWs3j4FoIMyYZ5sqOEmLi90HQ4m
- pWNjbfGj2AFmInWwo7/7PXoaAhD3RGL+G+qY0a8+nd41YzEAKJRT/1TeuyML8sSU6m3CdlQ6F3f
- F7HqQ+GHKCp7+riHUiL10JqVv/y8rQ==
-X-Authority-Analysis: v=2.4 cv=Sfj6t/Ru c=1 sm=1 tr=0 ts=69269347 cx=c_pps
- a=JL+w9abYAAE89/QcEU+0QA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=jIQo8A4GAAAA:8 a=EUspDBNiAAAA:8 a=Ge-yWl1-5HWGKH8EmegA:9
- a=324X-CrmTo6CU4MGRt3R:22
-X-Proofpoint-ORIG-GUID: ZOu0oAonoqVAkvtnih44FPN8KXTEOY1s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-25_02,2025-11-25_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0 clxscore=1011
- spamscore=0 impostorscore=0 phishscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2511260044
 
-On some platforms, switching USB roles from host to device can trigger
-controller faults due to premature PHY power-down. This occurs when the
-PHY is disabled too early during teardown, causing synchronization
-issues between the PHY and controller.
+Hi Amit,
 
-Keep susphy enabled during dwc3_host_exit() and dwc3_gadget_exit()
-ensures the PHY remains in a low-power state capable of handling
-required commands during role switch.
+On Tue, 2025-11-25 at 17:10 -0800, Amit Sunil Dhamne wrote:
+> Hi Andr=C3=A9,
+>=20
+> On 11/23/25 10:21 PM, Andr=C3=A9 Draszik wrote:
+> > Hi Amit,
+> >=20
+> > Thanks for your patches to enable the charger!
+>=20
+> Ack!
+>=20
+>=20
+> > > From: Amit Sunil Dhamne <amitsd@google.com>
+> > >=20
+> > > Define specific bit-level masks for charger's registers and modify th=
+e
+> > > irq mask for charger irq_chip. Also, configure the max77759 interrupt
+> > > lines as active low to all interrupt registrations to ensure the
+> > > interrupt controllers are configured with the correct trigger type.
+> > >=20
+> > > Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> > > ---
+> > > =C2=A0=C2=A0drivers/mfd/max77759.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 | 24 +++++++++++++++++-------
+> > > =C2=A0=C2=A0include/linux/mfd/max77759.h |=C2=A0 9 +++++++++
+> > > =C2=A0=C2=A02 files changed, 26 insertions(+), 7 deletions(-)
+> > >=20
+> > > diff --git a/drivers/mfd/max77759.c b/drivers/mfd/max77759.c
+> > > index 6cf6306c4a3b..5fe22884f362 100644
+> > > --- a/drivers/mfd/max77759.c
+> > > +++ b/drivers/mfd/max77759.c
+> > > @@ -256,8 +256,17 @@ static const struct regmap_irq max77759_topsys_i=
+rqs[] =3D {
+> > > =C2=A0=C2=A0};
+> > > =C2=A0=20
+> > > =C2=A0=C2=A0static const struct regmap_irq max77759_chgr_irqs[] =3D {
+> > > -	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_1, 0, GENMASK(7, 0)),
+> > > -	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_2, 1, GENMASK(7, 0)),
+> > > +	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_1, 0,
+> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 MAX77759_CHGR_REG_CHG_INT_AIC=
+L |
+> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 MAX77759_CHGR_REG_CHG_INT_CHG=
+IN |
+> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 MAX77759_CHGR_REG_CHG_INT_CHG=
+ |
+> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 MAX77759_CHGR_REG_CHG_INT_INL=
+IM),
+> > > +	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_2, 1,
+> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 MAX77759_CHGR_REG_CHG_INT2_BA=
+T_OILO |
+> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 MAX77759_CHGR_REG_CHG_INT2_CH=
+G_STA_CC |
+> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 MAX77759_CHGR_REG_CHG_INT2_CH=
+G_STA_CV |
+> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 MAX77759_CHGR_REG_CHG_INT2_CH=
+G_STA_TO |
+> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 MAX77759_CHGR_REG_CHG_INT2_CH=
+G_STA_DONE),
+> > > =C2=A0=C2=A0};
 
-Cc: stable@vger.kernel.org
-Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
-Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Udipto Goswami <udipto.goswami@oss.qualcomm.com>
----
- drivers/usb/dwc3/gadget.c | 2 +-
- drivers/usb/dwc3/host.c   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+You should also add the remaining bits in each register here, so that the
+regulator-irq can mask them when no user exists. It will only touch the
+bits it knows about, so the state of the mask register is non-
+deterministic with this change as-is (depends on how the bootloader
+configured it).
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 321361288935..34c5a4de612e 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4804,7 +4804,7 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
- 	if (!dwc->gadget)
- 		return;
- 
--	dwc3_enable_susphy(dwc, false);
-+	dwc3_enable_susphy(dwc, true);
- 	usb_del_gadget(dwc->gadget);
- 	dwc3_gadget_free_endpoints(dwc);
- 	usb_put_gadget(dwc->gadget);
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index 1c513bf8002e..0c171118bd55 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -223,7 +223,7 @@ void dwc3_host_exit(struct dwc3 *dwc)
- 	if (dwc->sys_wakeup)
- 		device_init_wakeup(&dwc->xhci->dev, false);
- 
--	dwc3_enable_susphy(dwc, false);
-+	dwc3_enable_susphy(dwc, true);
- 	platform_device_unregister(dwc->xhci);
- 	dwc->xhci = NULL;
- }
--- 
-2.34.1
+[...]
 
+> >=20
+> >=20
+> > > diff --git a/include/linux/mfd/max77759.h b/include/linux/mfd/max7775=
+9.h
+> > > index c6face34e385..0ef29a48deec 100644
+> > > --- a/include/linux/mfd/max77759.h
+> > > +++ b/include/linux/mfd/max77759.h
+> > > @@ -62,7 +62,16 @@
+> > > =C2=A0=C2=A0#define MAX77759_CHGR_REG_CHG_INT=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0xb0
+> > > =C2=A0=C2=A0#define MAX77759_CHGR_REG_CHG_INT2=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0xb1
+> > > =C2=A0=C2=A0#define MAX77759_CHGR_REG_CHG_INT_MASK=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0xb2
+> > > +#define MAX77759_CHGR_REG_CHG_INT_AICL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 BIT(7)
+> > > +#define MAX77759_CHGR_REG_CHG_INT_CHGIN=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 BIT(6)
+> > > +#define MAX77759_CHGR_REG_CHG_INT_CHG=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT(4)
+> > > +#define MAX77759_CHGR_REG_CHG_INT_INLIM=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 BIT(2)
+> > > =C2=A0=C2=A0#define MAX77759_CHGR_REG_CHG_INT2_MASK=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0xb3
+> > > +#define MAX77759_CHGR_REG_CHG_INT2_BAT_OILO=C2=A0=C2=A0=C2=A0=C2=A0 =
+BIT(4)
+> > > +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CC=C2=A0=C2=A0 BIT(3)
+> > > +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CV=C2=A0=C2=A0 BIT(2)
+> > > +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_TO=C2=A0=C2=A0 BIT(1)
+> > > +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_DONE BIT(0)
+> > Even if wireless out of scope, it'd still be nice to add macros for
+> > the remaining bits to make this complete and avoid having to update
+> > these again in case wireless support gets added in the future.
+>=20
+> I would prefer to only define the macros I am currently using to keep=20
+> the review focused, unless you consider this a strict requirement.
+
+It makes sense to add them now, as per above.
+
+
+
+> > Also, would be nice to keep existing style and indent the bits from
+> > the registers (see existing bit definitions in this file a few lines
+> > further up).
+> > Finally, can you add the bits below the respective register (0xb0 / 0xb=
+1)
+> > please, to keep suffix meaningful, and to follow existing style for cas=
+es
+> > like this (see MAX77759_MAXQ_REG_UIC_INT1).
+>=20
+> I will fix the indentation and ordering in the next revision.
+>=20
+> Regarding bit definitions: In [PATCH 5/6], the max77759_charger.c driver=
+=20
+> defines bits for the register addresses defined in this file. Currently,=
+=20
+> those macros are only used locally by the max77759 charger driver. Would=
+=20
+> you prefer I move those definitions to this header file as well?
+
+Yes, would be nice to have them all in one place (in this file). That said,
+CHG_INT, CHG_INT_MASK, and CHG_INT_OK all have the same layout and share
+the same bits, so I personally would probably reuse the ones you added for
+INT for all three of them - MASK (as you did already), and also for the OK
+register. But up to you.
+
+Cheers,
+Andre'
 
