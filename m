@@ -1,83 +1,83 @@
-Return-Path: <linux-usb+bounces-30929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30930-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4811C878B3
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 01:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D41CAC87A5A
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 02:10:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B6010354FE3
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 00:03:04 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3AD4034EAEB
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 01:10:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64F142C190;
-	Wed, 26 Nov 2025 00:02:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FFC2F616F;
+	Wed, 26 Nov 2025 01:10:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FKaxL67t"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rnt+13fF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794AD625
-	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 00:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE8425A62E
+	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 01:10:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764115375; cv=none; b=bk8e5R9Y2mDStFg+hLfLcHIOuNgmAcRVCxeZIgOsfV5Ocodyz5vnplF4f5++B56SQ9WoVMI8g7n1VZvtPyvhKkZAmYt12t5+vKUCdD9nIuiueP2TplqFcLTOcsBNoDJRVn6pJmsz/skM327i8Vvfp3u9f0jM8SLbB1cmspYdQAo=
+	t=1764119406; cv=none; b=Q3mSX0Eg5GlxzN9IAaH/TdBALd+dE5audr3CZlWAgA1tlKUrjVV5MUrPP7E35W1YH4XnlN9cxW4fZU/lZsB0ixNMw6AIq4wSEH1JMXPkMQpuxykIN2j+PNtUVJ/66KEzeE8rsExDRufPqZkjTCriyelpFal+sNVkqgDF7Tej2x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764115375; c=relaxed/simple;
-	bh=NqlXoSZZihO70FxCdncHZZzKas0CMSSbGdpFS9BtrlU=;
+	s=arc-20240116; t=1764119406; c=relaxed/simple;
+	bh=7JSwRjVY7+7OLgODPV18aJxzmBQ1LQ3WuDOx/jYCwjY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rTcArtAwuafeq/M75FA3JScT90RUZil+dZub3RS5WpbqKkbuuNHhG30gcnqomb/LDyd3SwRmMu+m9X+tCOh8ya6yCw46O0Ua7plbtqOEPlFfA3izDPKVygTZR6ojjVewGRB/HJgpI9tSnznSBOUwbNT+7XdCv2tUx1ktjEwRQCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FKaxL67t; arc=none smtp.client-ip=209.85.216.43
+	 In-Reply-To:Content-Type; b=Dj7pPpYIGe37PNPXABA6J0Nw78JD6wfqOZ964FSaQjVaruApNRQG4FkDTXyI1c4I7u1kf+VNevSQdQZc3M8bGHwG4m0V+kEns0ueJkGsZfFdG7/9nptLGV/58OTQBAYQ5hmf0sth11lvj3DbN+xggKudAtgYHiZ0OtTNU8rz16Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Rnt+13fF; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-343806688c5so5148636a91.0
-        for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 16:02:54 -0800 (PST)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-bc29d64b39dso3800396a12.3
+        for <linux-usb@vger.kernel.org>; Tue, 25 Nov 2025 17:10:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764115374; x=1764720174; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1764119404; x=1764724204; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8ozYgqGZxyZiXYU0b8aZzmoqKbBY3lnwpPB9f4ygIxc=;
-        b=FKaxL67t1NTEdfJ2QXhzagkftN3w55W73P0RWMXR18iGN0OvqYbdyQen/60bSfbSmn
-         53bi/Gw4U3Xn/gpM1dDQGi/hBnpqNADtCsJsG0eUB51JJlaN8uhlHQYxGBwn9CT/tKYb
-         svrhj3atsWksruKrH7hTZPMmzrP1t8dCBQR/BSEg0cATDtr+uG+peiAS4mVrXlDKbZGw
-         IliQB7ZeFC9XkGS2kYmG4cFzPIMCVGateypt11lz7K6QGSDJ4lI2eKJmaGsVzwf/VeOL
-         zet/tII+th+uGuXvGr8SM5l8mAMkV9c6O+mLv2h/zUAFC10+oCpKhXEi7480YBe4XAgO
-         HimQ==
+        bh=4uKMid7mHBul9Q0TO4PibzdXQbMZDvFms1DpBKwMu7E=;
+        b=Rnt+13fFsiKLzZKnKTL/CDDH9IlQ6Bj4Y8PTu//eYViO1Yk/zM+D5jczKbeImv9gjf
+         y+/SnAc+ujtVM3ml0911k/dLeTMNQ5uALS4+QysceMpOGEVRaDBub813FDrIpkp82DTT
+         sR17sH9FnlMKkKFDSDKVXFKWu5mhhVBwcE6tl5Lnj43g5nVX225MRSkqiAW3jjw6tb0b
+         cWmJW4xamFANzQPNYMN/l1g86EMhBHlkl7KRDxuUTIm9SID3LDbWudSFUNMN7n26M8Bn
+         dWa7Dgi+JJwYz1kCnBqgj5Crp+ar9qqWkcD210bcrQSLzSQHDADfnbmUj+Kj1dNhaEDM
+         T77A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764115374; x=1764720174;
+        d=1e100.net; s=20230601; t=1764119404; x=1764724204;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8ozYgqGZxyZiXYU0b8aZzmoqKbBY3lnwpPB9f4ygIxc=;
-        b=BHEPXamhwn7JqR9BfiQAu67LOHPcv021txrnnON6uzNj2rnFefbpP7pLXavquTL9sz
-         ycMsOBiuYuMfSGN6NynP7i1Hi97EdwbAXHPYWeINJoq3qgFfG1ppDQAk3v1gov3UVw0n
-         B6KQdiw272lbiiKI90mE6SeOX01zT6TvkUs1dxgvTcKAz58UhDaktCP5c0Km8znraQr/
-         LJay1JV3y5RiYSKKVTpnwLgEwAJBIr9LRCcNVjY3zQ/jT01FrKwxDo0kb9+g4SduEOq8
-         u2nFyoOYl1RnNzem+b+TsPyw6YoUZ6yNuU/wB6EBz3sVb/j9QBTwBlKkzS/RF5/Nn2WP
-         g2ng==
-X-Forwarded-Encrypted: i=1; AJvYcCVslsxCKieCMR5Md0yltxOVjxIIiTcE/RuWw3g2mflgjJPX4bg1jK5QljfmFq8Nn8Lf472n18Lun9c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWTSXgWpBS2m4+y/tfCnMfpqhj9FYQOeV8MutBEIs1QrmixZ2y
-	h7WheOqvaOugRfRv2dwJmGp1xFBZOFgd2mbkieir3sw60FLcjVt4+8lN1RL4VRlZYA==
-X-Gm-Gg: ASbGncsgIrj4W/9Xpt1whwnyHMBr/qSfWORoVcuA3poZOBISmoW2NkJHmIMAu4y7/Rs
-	AVxbW0N5vtgw8QaMAHLqh0j7wAvS8w4eCWkJekDwS0gqxVsPKICwSvd+RoDckwSUn3+Ny/i/NNP
-	2sAQZrA7CuLP94BkwXA2LWXfdOjyJnEZYZuv5AsTUc/i2ylKjVz7oY2/5u7VQTTRnCBVy/d5/2B
-	gUf1Ss94jiR5MwRJajFVdX0iwfvpC2sn827m45925SY3ZWEi8aTSv2NULiVmFfwnc4UMmQS4k0m
-	qpQQZbv5NyNHmpqOspxjItImGhnCix5gd+UD/9VIH8PUm7oNf/PPQEFakBZ8h8ir1Ri27kx5Dm0
-	GDxGfqKdu0jmvS4FDA346YDyUkiVn07tje0Je1lkA/Vsul8IUon8cO5qnI7eHJzlV25hG6eyqzh
-	0Tj+ggakR5zuWUd9IQbS2Tw/LXqVxcYyGjWqef1lMLkt0pFrVqf90AZvd1j6wprLQm3edLjX2o+
-	v9fWObqIm7bbA==
-X-Google-Smtp-Source: AGHT+IGHFeP0ZRaD8eMJaVnA9S33kn4uRxwfNfGJ0BWnjB5I6ToaBVqHt4IPtOo9tOmXe7tjjGRiww==
-X-Received: by 2002:a17:90b:180f:b0:340:66f9:381 with SMTP id 98e67ed59e1d1-3475ebf9b16mr4130129a91.10.1764115373195;
-        Tue, 25 Nov 2025 16:02:53 -0800 (PST)
+        bh=4uKMid7mHBul9Q0TO4PibzdXQbMZDvFms1DpBKwMu7E=;
+        b=dXRKcQ6f5KCxmlUR3rOuYUaL1IogswRxlWwcKprQXMJuf8OqapbubYNEWzK49QHJE5
+         XkVt4mq0ecYCp2GkofEMstDj2j9amX6x7jmpU04Mn99U1Vo9J7onHEzIe/pHuTAfywla
+         /ipRCnYMoGr9A7FuPIfxgWZRuDi2QbccC5pX51YGWDtuBw6EGhfN0qILHMFPS+cagOeW
+         rO2ZuzQyW1opvX1h9kTeHlSdSVtnW9m18t1aVNFPa/sm2pygvhrbguyb7gHX6jzQhl3g
+         uPuFP7zPRgZ2gov2jVsYgi005GXwDA9pAzr//KDJ+GXWku8N8uZ/8OE4UBgnwOXbI+ng
+         XOjw==
+X-Forwarded-Encrypted: i=1; AJvYcCXq6Tzpy1JkR9+dcOdvW86N3StiZdAVPKGY/Rp1P/VlLFD4mMk35YYMVp4UBQAMx0V4dsuV96N2vRk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5IF2MmaSkt0wzV9AvxsqIwYsNErP7nFCAHFvhb6fZ+w4Gmwnx
+	zJjLPdOTxaMwFryL9hwlqo1TTjJpSwog0nSe6dSbVRkDOsLe1RFWYYTTKL0lom5EwQ==
+X-Gm-Gg: ASbGncu8lgWjJOz1Osc5h8ogZh5WCQavNYAS5W9aXcf6Vcn1/o2BtxbaDw30L3eSJ0l
+	koAD9IlmX9tKfGq0Ak2ohfJgWi/XoOzGpHubbe5gODBxH0SMTdaEbsbPd0FR8ITZEZMFFi3sOZW
+	KuntxMSTEjMs89avBZmAjZ6+K6clKdIIdvv5oSQS8k7pX3ALN94rDrGuSzM4XwwV694zEQtWc2P
+	vvs6J2XV9P/8Ktoo51Svnz77h5hCR+5VqKU0+DSjKNO2zRNQtjdnkpq+QBxcQW3f96vRC0ideMp
+	v/I23YySmAq6IbirqwH2WGeLudtM7LhsT5QwjnL5b8EzyRDkgi3KJZA58Brw12oJ00VDwtBlqKa
+	orPzGj7j1vtJdu5otOqP5hfK86xxxIIy1U9RK+a3UjDjPgUlIV2OnMVllsui6Ut7conw8oPSqPc
+	qfxbpYLdXFRmG7b9+OaGvy2U4LgxMKgngTvCS66YR0cA3T4RissbVkf6ZA/jJjOXKncyyGAmBG2
+	UFSXJezDB7UHQ==
+X-Google-Smtp-Source: AGHT+IFsz/ljJrcpzA2pBF+IG/pUKgJQ17kleGBABcAzWrEfAKNQP91IPN/fvXc4LjZFpbtSbbWOBg==
+X-Received: by 2002:a05:7022:ec16:b0:119:e56b:91da with SMTP id a92af1059eb24-11c9d811990mr11140572c88.11.1764119402831;
+        Tue, 25 Nov 2025 17:10:02 -0800 (PST)
 Received: from ?IPV6:2a00:79e0:2e7c:8:c98d:9e96:d0be:bc30? ([2a00:79e0:2e7c:8:c98d:9e96:d0be:bc30])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3476a7a6105sm514375a91.10.2025.11.25.16.02.51
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11cc631c236sm17216416c88.7.2025.11.25.17.10.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Nov 2025 16:02:52 -0800 (PST)
-Message-ID: <4cb88319-6514-4145-8309-01051547b851@google.com>
-Date: Tue, 25 Nov 2025 16:02:50 -0800
+        Tue, 25 Nov 2025 17:10:02 -0800 (PST)
+Message-ID: <aa7bdeb1-c8a9-4353-af56-869f16a083c2@google.com>
+Date: Tue, 25 Nov 2025 17:10:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,13 +85,11 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/6] dt-bindings: mfd: maxim,max77759: add charger child
- node
-To: Krzysztof Kozlowski <krzk@kernel.org>, Sebastian Reichel
- <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+Subject: Re: [PATCH 4/6] mfd: max77759: modify irq configs
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Badhri Jagan Sridharan <badhri@google.com>,
  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -103,74 +101,167 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
 References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
- <20251123-max77759-charger-v1-2-6b2e4b8f7f54@google.com>
- <699d4476-aaaa-4cec-9e2c-240348950e4c@kernel.org>
+ <20251123-max77759-charger-v1-4-6b2e4b8f7f54@google.com>
+ <5c901a6c831775a04924880cc9f783814f75b6aa.camel@linaro.org>
 Content-Language: en-US
 From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <699d4476-aaaa-4cec-9e2c-240348950e4c@kernel.org>
+In-Reply-To: <5c901a6c831775a04924880cc9f783814f75b6aa.camel@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+
+Hi André,
+
+On 11/23/25 10:21 PM, André Draszik wrote:
+> Hi Amit,
+>
+> Thanks for your patches to enable the charger!
+
+Ack!
 
 
-On 11/23/25 1:30 AM, Krzysztof Kozlowski wrote:
-> On 23/11/2025 09:35, Amit Sunil Dhamne via B4 Relay wrote:
 >> From: Amit Sunil Dhamne <amitsd@google.com>
 >>
->> The Maxim MAX77759 MFD includes a charger function, hence add its
->> binding as a property. Also, update the example to include charger.
+>> Define specific bit-level masks for charger's registers and modify the
+>> irq mask for charger irq_chip. Also, configure the max77759 interrupt
+>> lines as active low to all interrupt registrations to ensure the
+>> interrupt controllers are configured with the correct trigger type.
 >>
 >> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
 >> ---
->>   Documentation/devicetree/bindings/mfd/maxim,max77759.yaml | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
+>>   drivers/mfd/max77759.c       | 24 +++++++++++++++++-------
+>>   include/linux/mfd/max77759.h |  9 +++++++++
+>>   2 files changed, 26 insertions(+), 7 deletions(-)
 >>
->> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->> index 525de9ab3c2b..29132f73f2c8 100644
->> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->> @@ -37,6 +37,9 @@ properties:
->>     nvmem-0:
->>       $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
+>> diff --git a/drivers/mfd/max77759.c b/drivers/mfd/max77759.c
+>> index 6cf6306c4a3b..5fe22884f362 100644
+>> --- a/drivers/mfd/max77759.c
+>> +++ b/drivers/mfd/max77759.c
+>> @@ -256,8 +256,17 @@ static const struct regmap_irq max77759_topsys_irqs[] = {
+>>   };
 >>   
->> +  charger:
->> +    $ref: /schemas/power/supply/maxim,max77759-charger.yaml
-> You need to explain dependencies/merging in the cover letter. This patch
-> now cannot be merged alone through MFD.
+>>   static const struct regmap_irq max77759_chgr_irqs[] = {
+>> -	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_1, 0, GENMASK(7, 0)),
+>> -	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_2, 1, GENMASK(7, 0)),
+>> +	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_1, 0,
+>> +		       MAX77759_CHGR_REG_CHG_INT_AICL |
+>> +		       MAX77759_CHGR_REG_CHG_INT_CHGIN |
+>> +		       MAX77759_CHGR_REG_CHG_INT_CHG |
+>> +		       MAX77759_CHGR_REG_CHG_INT_INLIM),
+>> +	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_2, 1,
+>> +		       MAX77759_CHGR_REG_CHG_INT2_BAT_OILO |
+>> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CC |
+>> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CV |
+>> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_TO |
+>> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_DONE),
+>>   };
+>>   
+>>   static const struct regmap_irq_chip max77759_pmic_irq_chip = {
+>> @@ -486,8 +495,8 @@ static int max77759_add_chained_irq_chip(struct device *dev,
+>>   				     "failed to get parent vIRQ(%d) for chip %s\n",
+>>   				     pirq, chip->name);
+>>   
+>> -	ret = devm_regmap_add_irq_chip(dev, regmap, irq,
+>> -				       IRQF_ONESHOT | IRQF_SHARED, 0, chip,
+>> +	ret = devm_regmap_add_irq_chip(dev, regmap, irq, IRQF_ONESHOT |
+>> +				       IRQF_SHARED | IRQF_TRIGGER_LOW, 0, chip,
+>>   				       data);
+> Please correct me if I'm wrong, but I don't think this makes sense for a
+> chained IRQ in this case. What problem does this change fix?
+
+While this patch was meant only for modifying the interrupt mask, I 
+added this for consistency because the main SoC -> PMIC line is active 
+low. However, I agree it is not strictly necessary here. I will drop it 
+in the next revision.
+
+
 >
-> Or just decouple the dependency and list here only compatible, assuming
-> this child node even stays.
+>>   	if (ret)
+>>   		return dev_err_probe(dev, ret, "failed to add %s IRQ chip\n",
+>> @@ -519,8 +528,9 @@ static int max77759_add_chained_maxq(struct i2c_client *client,
+>>   
+>>   	ret = devm_request_threaded_irq(&client->dev, apcmdres_irq,
+>>   					NULL, apcmdres_irq_handler,
+>> -					IRQF_ONESHOT | IRQF_SHARED,
+>> -					dev_name(&client->dev), max77759);
+>> +					IRQF_ONESHOT | IRQF_SHARED |
+>> +					IRQF_TRIGGER_LOW, dev_name(&client->dev),
+>> +					max77759);
+> dito.
 
-Would it be okay if I drop this patch from this series and re-send it 
-while mentioning the dependency?
+Agreed, will drop.
 
 
->> +
->>   required:
->>     - compatible
->>     - interrupts
->> @@ -95,5 +98,14 @@ examples:
->>                       };
->>                   };
->>               };
->> +
->> +            charger {
->> +                compatible = "maxim,max77759-charger";
->> +                power-supplies = <&maxtcpc>;
-> Feels like you miss here battery.
+>
+>>   	if (ret)
+>>   		return dev_err_probe(&client->dev, ret,
+>>   				     "MAX77759_MAXQ_INT_APCMDRESI failed\n");
+>> @@ -633,7 +643,7 @@ static int max77759_probe(struct i2c_client *client)
+>>   		return dev_err_probe(&client->dev, -EINVAL,
+>>   				     "invalid IRQ: %d\n", client->irq);
+>>   
+>> -	irq_flags = IRQF_ONESHOT | IRQF_SHARED;
+>> +	irq_flags = IRQF_ONESHOT | IRQF_SHARED | IRQF_TRIGGER_LOW;
+> I don't believe IRQF_TRIGGER_LOW should be added here, as this is board-specific.
+> The polarity is meant to be set via DT (and the only current user of this driver
+> does so).
 
-I have added the example in [1]. We can discuss there in case there are 
-further concerns.
+You are correct. Since I am already retrieving the trigger type from DT 
+via irqd_get_trigger_type() below, I will drop this change.
 
-[1] 
-https://lore.kernel.org/all/7ad91325-e881-461d-b39e-6ff15d98b3c5@google.com/T/#u
 
+>>   	irq_flags |= irqd_get_trigger_type(irq_data);
+> That's what gets us the config from DT.
+>
+>>   
+>>   	ret = devm_regmap_add_irq_chip(&client->dev, max77759->regmap_top,
+>> diff --git a/include/linux/mfd/max77759.h b/include/linux/mfd/max77759.h
+>> index c6face34e385..0ef29a48deec 100644
+>> --- a/include/linux/mfd/max77759.h
+>> +++ b/include/linux/mfd/max77759.h
+>> @@ -62,7 +62,16 @@
+>>   #define MAX77759_CHGR_REG_CHG_INT               0xb0
+>>   #define MAX77759_CHGR_REG_CHG_INT2              0xb1
+>>   #define MAX77759_CHGR_REG_CHG_INT_MASK          0xb2
+>> +#define MAX77759_CHGR_REG_CHG_INT_AICL          BIT(7)
+>> +#define MAX77759_CHGR_REG_CHG_INT_CHGIN         BIT(6)
+>> +#define MAX77759_CHGR_REG_CHG_INT_CHG           BIT(4)
+>> +#define MAX77759_CHGR_REG_CHG_INT_INLIM         BIT(2)
+>>   #define MAX77759_CHGR_REG_CHG_INT2_MASK         0xb3
+>> +#define MAX77759_CHGR_REG_CHG_INT2_BAT_OILO     BIT(4)
+>> +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CC   BIT(3)
+>> +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CV   BIT(2)
+>> +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_TO   BIT(1)
+>> +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_DONE BIT(0)
+> Even if wireless out of scope, it'd still be nice to add macros for
+> the remaining bits to make this complete and avoid having to update
+> these again in case wireless support gets added in the future.
+
+I would prefer to only define the macros I am currently using to keep 
+the review focused, unless you consider this a strict requirement.
+
+
+>
+> Also, would be nice to keep existing style and indent the bits from
+> the registers (see existing bit definitions in this file a few lines
+> further up).
+> Finally, can you add the bits below the respective register (0xb0 / 0xb1)
+> please, to keep suffix meaningful, and to follow existing style for cases
+> like this (see MAX77759_MAXQ_REG_UIC_INT1).
+
+I will fix the indentation and ordering in the next revision.
+
+Regarding bit definitions: In [PATCH 5/6], the max77759_charger.c driver 
+defines bits for the register addresses defined in this file. Currently, 
+those macros are only used locally by the max77759 charger driver. Would 
+you prefer I move those definitions to this header file as well?
 
 BR,
 
 Amit
 
+
 >
 >
-> Best regards,
-> Krzysztof
+> Cheers,
+> Andre'
 
