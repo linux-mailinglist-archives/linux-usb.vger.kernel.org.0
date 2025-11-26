@@ -1,114 +1,132 @@
-Return-Path: <linux-usb+bounces-30957-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30958-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6F48C89232
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 10:56:43 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D504C8923B
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 10:57:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7475234CAF3
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 09:54:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E6F8D4E47AE
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 09:57:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D78230103A;
-	Wed, 26 Nov 2025 09:53:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AC5287506;
+	Wed, 26 Nov 2025 09:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="i+l523V/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LUUsRG56"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9792E2FF668
-	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 09:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A95526ED29
+	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 09:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764150836; cv=none; b=WtSPG2Rqy16D3L/yXZBnAaiwv4Uw3sN42HSo+AD2/wuSz2zbUlvcmoTmJ+G4HQNaQNOcM5ElAfKGx+g291PfSErGIUQEK3+O3XDtxI5RXs4S4FI9l19P4PT58CjPjEypy/1LU9vJe1K05CwRvHQZY/BM58x5EGO6nmVjfrF9Imk=
+	t=1764151018; cv=none; b=FaP1TnNDl3a2pneiNJLy56jXG6R0QI/tSXfYyev4GjgJ6bYMUzek0tnIk2YtS3erFbEca+zye/fYVdyc5pB4oX1Q9OX52Rwys8PF1JKSChEWU/0B4EHfmAmaLQA358NtuPT6F58iP4G3q7np+dMnbrCb24ZwPqQAbW8dxPwC1Sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764150836; c=relaxed/simple;
-	bh=YbTM+VXgZFSN5n3XGK101BeawO3hUMbaETtn+zpI8/Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GQov75t5xiNFM0vF8toA/qaetuiRnby6c2FoEOn/xZ/nFpjhbZLLWC77WJVx0dgIrklbc0v74n+AJ7dZXPhjHAzIfvj1WfYdIykONegm4RKkjMuMotZoEqyLcSkt7GvgnE05EwQlSZxV6WslX/hoTaC5goFGt0C8ZJbkFXjaONg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=i+l523V/; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-595910c9178so4320990e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 01:53:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1764150833; x=1764755633; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YbTM+VXgZFSN5n3XGK101BeawO3hUMbaETtn+zpI8/Q=;
-        b=i+l523V/IPBA6edmdAx4AwZa6T5nsPlYU1gOfmP4yZC0o1nxLq+5liLjKTzUdboY54
-         cww5xNQgi3qiRh8tQAo7QTMMnsZGKDkMy718NYlg6pv/1rW1Os20DKRMKZb1dwoE309z
-         MGEct2k2LN2WFJ/Fl5ZljFVTrBJNEZY154ThE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764150833; x=1764755633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YbTM+VXgZFSN5n3XGK101BeawO3hUMbaETtn+zpI8/Q=;
-        b=XUIPU6Wi25DvyJYq37UVqrBp8X8gt3RazaxyqVB4shuPdKE6unabIh0IXw89gBmiyS
-         N35eMzE61UaWSCfnCdywIwHz+mew54aYdDgtC6KRqZvUvMHSDtebuzSAPJ1n/fmwpV2t
-         98rhBALYiMIei0QOWGDOGYFC+wjf7N+rA72qQxtVSzUUI1Dr1VuStmycaA4Jn6YMQ5gy
-         nk08mfJm/g1bf1FFkMSD505c4Z8kWvnsb5BcQvU51WYlru7qY55TIMkDc2xE8GGUbsmY
-         h/jmvK269zqpYiSIsd7RxzYdNUREABR6E8TcTgqSk8GJ+RFl/2ce78+IWqpzrRjNsLAa
-         36cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXSSS/lqD1V2dLwWMPfNY+QDBMMZG9FR35PGG+hvHjtO4Agl7QFwrVIcB0+qTIwKg3I0sQLElRlQC0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUyz4UuP3LGik3MLkP7h3lPwdPMPX7IDaUfOpNDHHjwQIQUM2B
-	YoC8Bv713gfFOsNpxh4jN4azbvqm1ny3Kh/byen6lpq1RbaJq82BkrdA8jfu+F7auMKAxjmVy2E
-	riYItJ2Dk3rV7Gm3d0k1A7w3HTD3MxL4RoQ9ECV0=
-X-Gm-Gg: ASbGncspYcwhkLhwb7ZlJuvSM0PSxWfLGNBsxeknP4gGj50UIPqboHrhoTqIAMYCnHg
-	NcBljU9ajK5+zYVxo70wWkIzD1O+5aUCQnzr+5pSHjIFr+Vcep/cgXPSaJNMRPxrX5R0gDz5QGj
-	7ngf39rtieHr41OOrEApbA64/2LFFLors6IL9vgJjUPXs7qcKKquO9iAGXuREdr8gTkIVRIAaL5
-	Cmol+p6EiPffJnXfp9aUJoRlGdO3ZOaC6oF3vIMDMc4DvJ/OhdDegKQic/4MdBIeY+ivnLBxzlK
-	MttDTw8HJSNgsZE41lnqS1w=
-X-Google-Smtp-Source: AGHT+IG/4tv/7SQSPGY5crXATgGdwFZg7KgwVg2LnufX3+fBL0hnMCEYrNSvWqCLbaeswGJxoPPO3NB9XJT4wN7dL/I=
-X-Received: by 2002:a05:6512:3d25:b0:595:8258:ccdf with SMTP id
- 2adb3069b0e04-596a3edc8eamr6515297e87.42.1764150832742; Wed, 26 Nov 2025
- 01:53:52 -0800 (PST)
+	s=arc-20240116; t=1764151018; c=relaxed/simple;
+	bh=VS+T8VIABnL9louR6Sn97u9v87xaMw/b6qAk1Jpz1iY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iT8N7YEp+l0qV++hYihv3VHi1nGG1KZhHNzoZDwV9JBiERTgp3u0IsjkEyU6mOjpUzItSmE5D9EusbO0aEDrVwh4En42oW6DSh2OBnqTD1P7cnY/h0T0Pp60U9VKGs3zOtVz43vflEnzHP7johK70xZdhbulLYPp8bG3xswDm+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LUUsRG56; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 153A1C116D0;
+	Wed, 26 Nov 2025 09:56:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764151018;
+	bh=VS+T8VIABnL9louR6Sn97u9v87xaMw/b6qAk1Jpz1iY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LUUsRG56cx1mqSQMstUfCU5OiV+/YHYPylj5av7FARw8DiaahSE3XN6QTf0mk1cY1
+	 6wVZQax4swTD96ObxOvMgPqNRPcxlRNG0te03soedn//QyLfkS4WKx0URimXEKheXz
+	 fANZ/8pwhTwfsfyTHs8fwl/RN1FFsGdo0ea5IdtPIHOKNqdwNP2tt2351K6iasaYRV
+	 FrPeXZUpjUg9oGgdeZQZW3wAnorpq3LUcGFAzQtWNUDyR8WWnM6xf5Q/SDZsQ0eRHD
+	 8oo0FW3tIy1xwnkuZsweMZYiCJaYEuOXKjdZF55FAa3QSj5kOzY7JIV4XktS1c2AE2
+	 PbNdo3brt5+uQ==
+Message-ID: <fb7dc13b-d572-4537-89dd-427bbf43567b@kernel.org>
+Date: Wed, 26 Nov 2025 10:56:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251119212910.1245694-1-ukaszb@google.com> <2f05eedd-f152-4a4a-bf6c-09ca1ab7da40@kernel.org>
- <6171754f-1b84-47e0-a4da-0d045ea7546e@linux.intel.com> <e7ebc1da-1a94-4465-bc79-de9ad8ba1cb6@kernel.org>
- <CALwA+NakWZSY-NOebF9E+gGPf2p0Y5FLOZcpLfSbt5zkNm_qxQ@mail.gmail.com>
- <2025112537-purgatory-delegator-41fb@gregkh> <CALwA+NaT97vDjuPDQsjR=iNrV79A4k4AC2awVPeRCyubBezBhw@mail.gmail.com>
- <2b072886-7ee5-4cb6-82c6-e13819a9f7de@kernel.org>
-In-Reply-To: <2b072886-7ee5-4cb6-82c6-e13819a9f7de@kernel.org>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Wed, 26 Nov 2025 10:53:41 +0100
-X-Gm-Features: AWmQ_bmuqJqMHtTvAZ7UDSINggKn3KHvTN3rfBP2mSvyELL5zI9f5a9pchntMQE
-Message-ID: <CALwA+NYbyEB+KrtS9MreVgY7zb1dQ55OL-tVRc3_mg-zQsz+CQ@mail.gmail.com>
-Subject: Re: [PATCH v2] xhci: dbgtty: fix device unregister
-To: Jiri Slaby <jirislaby@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Mathias Nyman <mathias.nyman@linux.intel.com>, Mathias Nyman <mathias.nyman@intel.com>, 
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] xhci: dbgtty: fix device unregister: fixup typo
+To: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>,
+ Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+References: <20251125142532.2550612-1-ukaszb@google.com>
+ <2025112616-gestate-disperser-c055@gregkh>
+ <CALwA+NYBSH01FVcggf9nNbW83sRp0GH-4jKL0ByYNTM7vz-pHg@mail.gmail.com>
+ <e7e984f4-4aa7-4428-8da4-b48d55f32098@linux.intel.com>
+ <CALwA+NaXYDn1k-tVmM+-UQNJZQEZGiB4QmBfv1E6OeWyMicUig@mail.gmail.com>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ xsFNBE6S54YBEACzzjLwDUbU5elY4GTg/NdotjA0jyyJtYI86wdKraekbNE0bC4zV+ryvH4j
+ rrcDwGs6tFVrAHvdHeIdI07s1iIx5R/ndcHwt4fvI8CL5PzPmn5J+h0WERR5rFprRh6axhOk
+ rSD5CwQl19fm4AJCS6A9GJtOoiLpWn2/IbogPc71jQVrupZYYx51rAaHZ0D2KYK/uhfc6neJ
+ i0WqPlbtIlIrpvWxckucNu6ZwXjFY0f3qIRg3Vqh5QxPkojGsq9tXVFVLEkSVz6FoqCHrUTx
+ wr+aw6qqQVgvT/McQtsI0S66uIkQjzPUrgAEtWUv76rM4ekqL9stHyvTGw0Fjsualwb0Gwdx
+ ReTZzMgheAyoy/umIOKrSEpWouVoBt5FFSZUyjuDdlPPYyPav+hpI6ggmCTld3u2hyiHji2H
+ cDpcLM2LMhlHBipu80s9anNeZhCANDhbC5E+NZmuwgzHBcan8WC7xsPXPaiZSIm7TKaVoOcL
+ 9tE5aN3jQmIlrT7ZUX52Ff/hSdx/JKDP3YMNtt4B0cH6ejIjtqTd+Ge8sSttsnNM0CQUkXps
+ w98jwz+Lxw/bKMr3NSnnFpUZaxwji3BC9vYyxKMAwNelBCHEgS/OAa3EJoTfuYOK6wT6nadm
+ YqYjwYbZE5V/SwzMbpWu7Jwlvuwyfo5mh7w5iMfnZE+vHFwp/wARAQABzSFKaXJpIFNsYWJ5
+ IDxqaXJpc2xhYnlAa2VybmVsLm9yZz7CwXcEEwEIACEFAlW3RUwCGwMFCwkIBwIGFQgJCgsC
+ BBYCAwECHgECF4AACgkQvSWxBAa0cEnVTg//TQpdIAr8Tn0VAeUjdVIH9XCFw+cPSU+zMSCH
+ eCZoA/N6gitEcnvHoFVVM7b3hK2HgoFUNbmYC0RdcSc80pOF5gCnACSP9XWHGWzeKCARRcQR
+ 4s5YD8I4VV5hqXcKo2DFAtIOVbHDW+0okOzcecdasCakUTr7s2fXz97uuoc2gIBB7bmHUGAH
+ XQXHvdnCLjDjR+eJN+zrtbqZKYSfj89s/ZHn5Slug6w8qOPT1sVNGG+eWPlc5s7XYhT9z66E
+ l5C0rG35JE4PhC+tl7BaE5IwjJlBMHf/cMJxNHAYoQ1hWQCKOfMDQ6bsEr++kGUCbHkrEFwD
+ UVA72iLnnnlZCMevwE4hc0zVhseWhPc/KMYObU1sDGqaCesRLkE3tiE7X2cikmj/qH0CoMWe
+ gjnwnQ2qVJcaPSzJ4QITvchEQ+tbuVAyvn9H+9MkdT7b7b2OaqYsUP8rn/2k1Td5zknUz7iF
+ oJ0Z9wPTl6tDfF8phaMIPISYrhceVOIoL+rWfaikhBulZTIT5ihieY9nQOw6vhOfWkYvv0Dl
+ o4GRnb2ybPQpfEs7WtetOsUgiUbfljTgILFw3CsPW8JESOGQc0Pv8ieznIighqPPFz9g+zSu
+ Ss/rpcsqag5n9rQp/H3WW5zKUpeYcKGaPDp/vSUovMcjp8USIhzBBrmI7UWAtuedG9prjqfO
+ wU0ETpLnhgEQAM+cDWLL+Wvc9cLhA2OXZ/gMmu7NbYKjfth1UyOuBd5emIO+d4RfFM02XFTI
+ t4MxwhAryhsKQQcA4iQNldkbyeviYrPKWjLTjRXT5cD2lpWzr+Jx7mX7InV5JOz1Qq+P+nJW
+ YIBjUKhI03ux89p58CYil24Zpyn2F5cX7U+inY8lJIBwLPBnc9Z0An/DVnUOD+0wIcYVnZAK
+ DiIXODkGqTg3fhZwbbi+KAhtHPFM2fGw2VTUf62IHzV+eBSnamzPOBc1XsJYKRo3FHNeLuS8
+ f4wUe7bWb9O66PPFK/RkeqNX6akkFBf9VfrZ1rTEKAyJ2uqf1EI1olYnENk4+00IBa+BavGQ
+ 8UW9dGW3nbPrfuOV5UUvbnsSQwj67pSdrBQqilr5N/5H9z7VCDQ0dhuJNtvDSlTf2iUFBqgk
+ 3smln31PUYiVPrMP0V4ja0i9qtO/TB01rTfTyXTRtqz53qO5dGsYiliJO5aUmh8swVpotgK4
+ /57h3zGsaXO9PGgnnAdqeKVITaFTLY1ISg+Ptb4KoliiOjrBMmQUSJVtkUXMrCMCeuPDGHo7
+ 39Xc75lcHlGuM3yEB//htKjyprbLeLf1y4xPyTeeF5zg/0ztRZNKZicgEmxyUNBHHnBKHQxz
+ 1j+mzH0HjZZtXjGu2KLJ18G07q0fpz2ZPk2D53Ww39VNI/J9ABEBAAHCwV8EGAECAAkFAk6S
+ 54YCGwwACgkQvSWxBAa0cEk3tRAAgO+DFpbyIa4RlnfpcW17AfnpZi9VR5+zr496n2jH/1ld
+ wRO/S+QNSA8qdABqMb9WI4BNaoANgcg0AS429Mq0taaWKkAjkkGAT7mD1Q5PiLr06Y/+Kzdr
+ 90eUVneqM2TUQQbK+Kh7JwmGVrRGNqQrDk+gRNvKnGwFNeTkTKtJ0P8jYd7P1gZb9Fwj9YLx
+ jhn/sVIhNmEBLBoI7PL+9fbILqJPHgAwW35rpnq4f/EYTykbk1sa13Tav6btJ+4QOgbcezWI
+ wZ5w/JVfEJW9JXp3BFAVzRQ5nVrrLDAJZ8Y5ioWcm99JtSIIxXxt9FJaGc1Bgsi5K/+dyTKL
+ wLMJgiBzbVx8G+fCJJ9YtlNOPWhbKPlrQ8+AY52Aagi9WNhe6XfJdh5g6ptiOILm330mkR4g
+ W6nEgZVyIyTq3ekOuruftWL99qpP5zi+eNrMmLRQx9iecDNgFr342R9bTDlb1TLuRb+/tJ98
+ f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
+ DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
+ S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
+In-Reply-To: <CALwA+NaXYDn1k-tVmM+-UQNJZQEZGiB4QmBfv1E6OeWyMicUig@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 26, 2025 at 6:39=E2=80=AFAM Jiri Slaby <jirislaby@kernel.org> w=
-rote:
->
-> On 25. 11. 25, 15:39, =C5=81ukasz Bartosik wrote:
-> > I sent a fixup.
->
-> I don't see it on the stable or usb lists, nor in my inbox. Where did
-> you send it to?
->
+On 26. 11. 25, 10:50, Łukasz Bartosik wrote:
+>> I still think we need a fixup patch for the missing null check
+>>
+>> -       tty_vhangup(port->port.tty);
+>> +       if (port->port.tty)
+>> +               tty_vhangup(port->port.tty);
+>>
+>> or just use tty_port_tty_vhangup()
+>>
+> 
+> IMHO it looks good because tty_vhangup calls two functions inside:
+> 1) tty_debug_hangup - which handles the case when tty is null
+> 2) __tty_hangup - which also checks tty for null
 
-I sent it here https://lore.kernel.org/linux-usb/CALwA+NaXYDn1k-tVmM+-UQNJZ=
-QEZGiB4QmBfv1E6OeWyMicUig@mail.gmail.com/T/.
+Is it still good when someone closes the TTY right after the "if (!tty)" 
+checks?
 
-Thanks,
-=C5=81ukasz
-
-> thanks,
-> --
-> js
-> suse labs
+thanks,
+-- 
+js
+suse labs
 
