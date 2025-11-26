@@ -1,107 +1,75 @@
-Return-Path: <linux-usb+bounces-30953-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30954-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F187C890E2
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 10:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07244C891D5
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 10:52:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BE0A33576E9
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 09:46:17 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 043AF35312A
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 09:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496D4321F5F;
-	Wed, 26 Nov 2025 09:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFDBA31B838;
+	Wed, 26 Nov 2025 09:49:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WoXWk7AW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j3MY46xl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727BF32142B;
-	Wed, 26 Nov 2025 09:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAC73090D9;
+	Wed, 26 Nov 2025 09:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764150198; cv=none; b=Nwug6MAt5P7ThDVXqvEnT/KSzeLgwWGlfCTiR8LqMHPDFIFOddg2JL4XqMNzmXJ8YuHM7qBriWJf0msAri6+UGX7gpYnanp0jJZI7cPGpm1GY2v2/3LtZ3zCiJdZelsE+SV9ucB5Cubr/Igz1h9lw/i63sb/YFLHr+8bR1UWvx0=
+	t=1764150584; cv=none; b=S5wLKG4HoehZWApXGKLoS+pntTzR9w2uDZmyLMN0OTwZLMUq9PgOHUx4M2+JL1KI8H06FgtfIa1gAiankldhHqBqvAN0DIxdf+ZvRUBMvnS0goipefxgkuTrTINjz/PB8XuzRrs4zCJ/AlMa/GMeB8guZbNJbGrPzeFxGeaC3hM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764150198; c=relaxed/simple;
-	bh=CCg+lZSEq+WcXEQmJQne7xQ4oE1yxypysTDuDghy64Q=;
+	s=arc-20240116; t=1764150584; c=relaxed/simple;
+	bh=0ifNC8xNQ6yLHtRer6D84TB0CLUiMoHaJGqG2OTVrpw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U7Dfc55aFpvp0DfJ0Zh6bjLMkICoR7AaNh1j3uWwreqChcuULvo6i7MDC48VK0PpRiMsv7rnQ0WtJ4Jo5Lm38vqL6jBqeJ4W/RWw9N3zRQrU+Hdtf/RMh2QtGKGJ6gntHkdWfBTCXgQ/BWiOdXDDW1ALAE5w8hWeOSbx8laMcNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WoXWk7AW; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=tc3UfMZhgT+zfk+nctnlR8u5CUQAc6TgECclqyFB3ZIvCuSlyhT8b7LZjVBnHBTDgFLMMVJVkkJA7/hbbrLAfUDzF6LMaWCEUBTFOmx9UFdINtJ3SbNym5Lbzt1l5mWHHNEoBJMIpM95fSk/OLrfE1WMgbKv58RDzYiOmtq9z9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j3MY46xl; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764150197; x=1795686197;
+  t=1764150582; x=1795686582;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CCg+lZSEq+WcXEQmJQne7xQ4oE1yxypysTDuDghy64Q=;
-  b=WoXWk7AWy9cksdbhge4h9b1xR7phsEkvAvaJLcfw6JLNGpAthe8mgVfY
-   5Kk30lzPdLRrbT1GDsTRHOZAUm6tAeuo34Thev2jme/iD2P533sKk0Ink
-   yqFCHW10V8wLitUfrlrhUX5gJB23Ph8PgW/EzWfOGMTAACLxnehmxiNPU
-   EGpWoeyXp3e/TIl13N/zDmq72Nu5DKznGAkpGeuB94qXxKB+ZrEixSoCK
-   hCilJX93uhi9XNCBPQftkjrVOBis9/eD2byjIOK3R/gb3dlCVZOxXUkTy
-   H3sB9jpX2TxvFO5PzMd1N8POruaUKBKbNmCjd4Rg/yNabLPJq6dvl0ZFk
-   w==;
-X-CSE-ConnectionGUID: aW8A2IbyTOW9rjSpGGbZcw==
-X-CSE-MsgGUID: ZY42antbTpeOMRMZMOlLXA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="65371587"
+  bh=0ifNC8xNQ6yLHtRer6D84TB0CLUiMoHaJGqG2OTVrpw=;
+  b=j3MY46xlMQnSLhuI8GYlxlyaA/0hixJyc7dPalhn5Uh3112AitsUGO4E
+   Lo9PJ1zn/54InBmgSBBNZFVzjHrvsMO8NyjeV7zOnsDjefsoRasYy+Tw5
+   sMmM+wRwcpDFl1isAUnCR+DqHZ70Bgg9xOiv4QxT/QeKahDq6lY/ctu9q
+   /7td+1vFrMBY5K3BCk9OjlNAjCQTOi6STPlQ6u6hourfYaQDBYgOwbYiA
+   y4Z1KnV16lMZ6r1pWxA4QSn4xiEIkAaNgKZkSBOYUoeQYZf1z9jYkMDq+
+   wSZ1DbFOW+5z0AxNyH5mbSkqDiJgAmEwsnjuLuLYoXh4cjt8FKa6256OB
+   g==;
+X-CSE-ConnectionGUID: 3J44+Dw4QzuMIcxa1/wFDQ==
+X-CSE-MsgGUID: vxnx4BfVSy2mYN2/FDwZ0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="83793698"
 X-IronPort-AV: E=Sophos;i="6.20,228,1758610800"; 
-   d="scan'208";a="65371587"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 01:43:14 -0800
-X-CSE-ConnectionGUID: B+T8YiSeRD+/P6Odm3S47w==
-X-CSE-MsgGUID: B/YD/UVbQWaORjBCGIUAVA==
+   d="scan'208";a="83793698"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 01:49:41 -0800
+X-CSE-ConnectionGUID: tjTmCj+/SfW+N77qTXOIAg==
+X-CSE-MsgGUID: ERj465YUS2CSaSLSuGUI9Q==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,228,1758610800"; 
+   d="scan'208";a="198006216"
 Received: from iherna2-mobl4.amr.corp.intel.com (HELO kuha) ([10.124.223.25])
-  by fmviesa003.fm.intel.com with SMTP; 26 Nov 2025 01:42:55 -0800
-Received: by kuha (sSMTP sendmail emulation); Wed, 26 Nov 2025 11:42:43 +0200
-Date: Wed, 26 Nov 2025 11:42:43 +0200
+  by orviesa005.jf.intel.com with SMTP; 26 Nov 2025 01:49:38 -0800
+Received: by kuha (sSMTP sendmail emulation); Wed, 26 Nov 2025 11:49:32 +0200
+Date: Wed, 26 Nov 2025 11:49:32 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Chaoyi Chen <kernel@airkyi.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Peter Chen <hzpeterchen@gmail.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Yubing Zhang <yubing.zhang@rock-chips.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v10 01/11] usb: typec: Add notifier functions
-Message-ID: <aSbLkwPG0dUzZvql@kuha>
-References: <20251120022343.250-2-kernel@airkyi.com>
- <2025112102-laurel-mulch-58e4@gregkh>
- <462ad1bd-7eec-4f26-b383-96b049e14559@rock-chips.com>
- <2025112402-unopposed-polio-e6e9@gregkh>
- <a80483de-518d-45d5-b46a-9b70cca5b236@rock-chips.com>
- <2025112448-brush-porcupine-c851@gregkh>
- <c9cb7b79-37c8-4fef-97a6-7d6b8898f9c4@rock-chips.com>
- <aSV_lQYJPxN7oBM-@kuha>
- <2025112554-uncaring-curator-642a@gregkh>
- <cbb38c08-6937-4b7d-a0b0-d5ca6c17f466@rock-chips.com>
+To: Duoming Zhou <duoming@zju.edu.cn>
+Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+	mitltlatltl@gmail.com, linux-kernel@vger.kernel.org,
+	sergei.shtylyov@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usb: typec: ucsi: fix probe failure in
+ gaokun_ucsi_probe()
+Message-ID: <aSbNLLiqg0kgALTv@kuha>
+References: <cover.1764065838.git.duoming@zju.edu.cn>
+ <4d077d6439d728be68646bb8c8678436a3a0885e.1764065838.git.duoming@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -110,44 +78,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cbb38c08-6937-4b7d-a0b0-d5ca6c17f466@rock-chips.com>
+In-Reply-To: <4d077d6439d728be68646bb8c8678436a3a0885e.1764065838.git.duoming@zju.edu.cn>
 
-Wed, Nov 26, 2025 at 09:46:19AM +0800, Chaoyi Chen kirjoitti:
-> On 11/25/2025 7:49 PM, Greg Kroah-Hartman wrote:
-> >> +static umode_t typec_is_visible(struct kobject *kobj, struct attribute *attr, int n)
-> >> +{
-> >> +	if (is_typec_port(kobj_to_dev(kobj)->parent))
-> > 
-> > Why look at the parent?  Doesn't the device have a type that should show
-> > this?
-> > 
-> > Otherwise, looks good to me.
+Tue, Nov 25, 2025 at 06:36:26PM +0800, Duoming Zhou kirjoitti:
+> The gaokun_ucsi_probe() uses ucsi_create() to allocate a UCSI instance.
+> The ucsi_create() validates whether ops->poll_cci is defined, and if not,
+> it directly returns -EINVAL. However, the gaokun_ucsi_ops structure does
+> not define the poll_cci, causing ucsi_create() always fail with -EINVAL.
+> This issue can be observed in the kernel log with the following error:
 > 
-> They have same deivce type "typec_altmode_dev_type".
-> The parent device has a different device type to distinguish between
-> port device and partner device.
+> ucsi_huawei_gaokun.ucsi huawei_gaokun_ec.ucsi.0: probe with driver
+> ucsi_huawei_gaokun.ucsi failed with error -22
+> 
+> Fix the issue by adding the missing poll_cci callback to gaokun_ucsi_ops.
+> 
+> Fixes: 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 
-I was already wondering would it make sense to provide separate device
-types for the port, and also plug, alternate modes, but I'm not sure
-if that's the right thing to do.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-There is a plan to register an "altmode" also for the USB4 mode,
-which of course is not an alternate mode. So USB4 will definitely need a
-separate device type.
-
-So if we supply separate device types for the port, plug and partner
-alternate modes, we need to supply separate device types for port, plug
-and partner USB4 mode as well.
-
-We certainly can still do that, but I'm just not sure if it makes
-sense?
-
-I'll prepare a new version for this and include a separate patch where
-instead of defining separate device types for the port and plug
-alternate modes I'll just supply helpers is_port_alternate_mode() and
-is_plug_alternate_mode().
-
-thanks,
+> ---
+> Changes in v2:
+>   - Add cc: stable.
+>   - Correct spelling mistake.
+> 
+>  drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+> index 7b5222081bb..8401ab414bd 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+> @@ -196,6 +196,7 @@ static void gaokun_ucsi_connector_status(struct ucsi_connector *con)
+>  const struct ucsi_operations gaokun_ucsi_ops = {
+>  	.read_version = gaokun_ucsi_read_version,
+>  	.read_cci = gaokun_ucsi_read_cci,
+> +	.poll_cci = gaokun_ucsi_read_cci,
+>  	.read_message_in = gaokun_ucsi_read_message_in,
+>  	.sync_control = ucsi_sync_control_common,
+>  	.async_control = gaokun_ucsi_async_control,
+> -- 
+> 2.34.1
 
 -- 
 heikki
