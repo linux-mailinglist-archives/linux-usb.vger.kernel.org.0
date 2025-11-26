@@ -1,30 +1,31 @@
-Return-Path: <linux-usb+bounces-30943-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30944-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AA10C889F5
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 09:26:49 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 615E5C88A04
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 09:26:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC9E73B36A8
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 08:26:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A6DDE34CD36
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 08:26:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066FA3161B1;
-	Wed, 26 Nov 2025 08:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D4193191BC;
+	Wed, 26 Nov 2025 08:26:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026923101A6;
-	Wed, 26 Nov 2025 08:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E635D315D5D;
+	Wed, 26 Nov 2025 08:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764145602; cv=none; b=j7Lil6QAV3LlkNw7MixOf5z6RCOCYo+nKvDaz41US/iZtxSqXS+UwUWmC9yAhsoTEe4NPpbagdSmEpoHqSd37IEdNXDBaIYQV0jcwM+PQmGklHwIOZ8Se2AXIfMeKWkBP3n6LsJRxgb53u1Vsln5/L/H3W1MlFnLW5wwW1S75XA=
+	t=1764145605; cv=none; b=n61TMuYS7ysz+/wCoSb13JbVr6rGlLQF9kRRn63cWtAHq4kuvYGP6CULbHe9HP6ROenXmLVWB4oeAoBGfVDArIjlAIHXEuW5q86bMzd1oHrSdjg65ya84AWJaPePKGVyeGUbPcahmm3eRKjAdZt7A5VnaXGpv12VhSADNlphooM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764145602; c=relaxed/simple;
-	bh=7cC5jeCkWsYO33bINv8Y064Z31IpWkHiFJYzubZI4AA=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=RuXRtQJHv5OL7HKpnFXOGcxOon5VdrHYl4e1XIhndTIQEAreqv/PzxJCXptM8LEQ4Fa7wM8QGQoFHHiXYs87eBCoGudTSw24RqB2M6ZpTcKJYxuurYwjfxvigd/hVMDoY+Jf6Kq83OmwPhJ0eiqh1+Ly0Etg5DpPokSitU0fvFw=
+	s=arc-20240116; t=1764145605; c=relaxed/simple;
+	bh=HEzWWYIHW1xKDw5/cUq64msPdNcRWYQ7CNoSj8s7Tc0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=LFWWPcStrL5NIqLNpqn9/l2NlscUWDK/sdd8Ofh+XuY6S1BwmJzb8ptuBStPuSvzVBm6Ai2x6er9mmK7Wv6yOuGMY6O6FJnl25CkOdjdI9pvsHIIhsDI5pSELqn/HaGf7U6IN85v7p22uvVXg0vgpaQkJrM34ur5VKghSQjcLuo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
@@ -36,9 +37,8 @@ Received: from [127.0.1.1] (192.168.10.13) by TWMBX01.aspeed.com
  (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
  Transport; Wed, 26 Nov 2025 16:26:30 +0800
 From: Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: [PATCH 0/2] Add AST2700 support for Aspeed vhub
-Date: Wed, 26 Nov 2025 16:26:29 +0800
-Message-ID: <20251126-upstream_vhub-v1-0-910709937ee0@aspeedtech.com>
+Date: Wed, 26 Nov 2025 16:26:30 +0800
+Subject: [PATCH 1/2] dt-bindings: usb: aspeed,usb-vhub: Add ast2700 support
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -47,10 +47,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALW5JmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDQyNT3dKC4pKi1MTc+LKM0iRd41QjAxML40QTU9NUJaCegqLUtMwKsHn
- RsbW1AJvgbwNfAAAA
-X-Change-ID: 20251125-upstream_vhub-3e20483a455e
+Message-ID: <20251126-upstream_vhub-v1-1-910709937ee0@aspeedtech.com>
+References: <20251126-upstream_vhub-v1-0-910709937ee0@aspeedtech.com>
+In-Reply-To: <20251126-upstream_vhub-v1-0-910709937ee0@aspeedtech.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
 	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
 	<conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery
@@ -60,35 +59,64 @@ CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
 	<linux-kernel@vger.kernel.org>, Ryan Chen <ryan_chen@aspeedtech.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1764145590; l=793;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1764145590; l=1317;
  i=ryan_chen@aspeedtech.com; s=20251126; h=from:subject:message-id;
- bh=7cC5jeCkWsYO33bINv8Y064Z31IpWkHiFJYzubZI4AA=;
- b=vEIO1LfVfQsPoR4eEKhpTG48ZIF//W0qo8MEjrlqB1chhzuwEI/NdKsBkFpT4MhOn0WevIT6E
- yUvLUm5ZfSiAy8uqh+Uh6cFFrNf8ODVkst3oLi1RJDHX9pHr0D+kZPu
+ bh=HEzWWYIHW1xKDw5/cUq64msPdNcRWYQ7CNoSj8s7Tc0=;
+ b=/akVg1W5dYhU+EFX3V4YbmlsHawqShE/aW/7otTU9xNBzwfv2BAVdGtZjeZCZLSeEanHdxVzb
+ hGiaFh5PeyOAdlM0Qi8k8o2S393xmdPTdzTBUGRyQozqnU+4MNQoe0D
 X-Developer-Key: i=ryan_chen@aspeedtech.com; a=ed25519;
  pk=Xe73xY6tcnkuRjjbVAB/oU30KdB3FvG4nuJuILj7ZVc=
 
-This series add Aspeed vhub support for AST2700.
-The AST2700 vhub requires a reset and uses 64-bit DMA.
-This series updates the binding and driver to support these two
-requirements.
+Add the "aspeed,ast2700-usb-vhub" compatible. The ast2700 vhub
+controller requires an reset, so make the "resets" property
+mandatory for this compatible to reflect the hardware requirement.
 
 Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
 ---
-Ryan Chen (2):
-      dt-bindings: usb: aspeed,usb-vhub: Add ast2700 support
-      usb: gadget: aspeed-vhub: Add ast2700 support
+ Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
- .../devicetree/bindings/usb/aspeed,usb-vhub.yaml   | 14 ++++++++++
- drivers/usb/gadget/udc/aspeed-vhub/core.c          | 30 ++++++++++++++++++++++
- drivers/usb/gadget/udc/aspeed-vhub/vhub.h          |  1 +
- 3 files changed, 45 insertions(+)
----
-base-commit: ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d
-change-id: 20251125-upstream_vhub-3e20483a455e
+diff --git a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+index 7f22f9c031b2..c9ebb6e004d1 100644
+--- a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
++++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+@@ -26,6 +26,7 @@ properties:
+       - aspeed,ast2400-usb-vhub
+       - aspeed,ast2500-usb-vhub
+       - aspeed,ast2600-usb-vhub
++      - aspeed,ast2700-usb-vhub
+ 
+   reg:
+     maxItems: 1
+@@ -33,6 +34,9 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  resets:
++    maxItems: 1
++
+   interrupts:
+     maxItems: 1
+ 
+@@ -107,6 +111,16 @@ required:
+   - aspeed,vhub-downstream-ports
+   - aspeed,vhub-generic-endpoints
+ 
++if:
++  properties:
++    compatible:
++      contains:
++        const: aspeed,ast2700-usb-vhub
++
++then:
++  required:
++    - resets
++
+ additionalProperties: false
+ 
+ examples:
 
-Best regards,
 -- 
-Ryan Chen <ryan_chen@aspeedtech.com>
+2.34.1
 
 
