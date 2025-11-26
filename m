@@ -1,142 +1,85 @@
-Return-Path: <linux-usb+bounces-30974-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30975-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5E19C8A568
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 15:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC928C8AE5C
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 17:16:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E13C3A9F33
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 14:30:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45D7E3A72C8
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 16:14:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1172E7F25;
-	Wed, 26 Nov 2025 14:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E81333B969;
+	Wed, 26 Nov 2025 16:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g7i3MhBg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Da/OKTTP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74713019A6
-	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 14:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1513093CF
+	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 16:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764167409; cv=none; b=mPSChvz/3rHHJ4LdDrVUVHPcJxxxwdOgUYAfsTZYndB2IF4J2vuwD19YNcczVtDtblbV7M1Wot/8w/M1dLGpwzd+b++HBXRA5z955dXhSHWRcqpVq9BH5cUavvGqeLYlONHkaZ+eTq3VeXBwwUChiXc31/AGBt1kaEzq6QSa7EI=
+	t=1764173641; cv=none; b=iKTBq90/XymndyUZRdYY+ScjAdboqMckSegp6eHKdca7bRK6yoH3opmnAXuVU13sqy3Sj9QsRxulElqI41N69xHxYu7O9kd6jpf7a/cib5pwMC2yiMjgP1i5Bdo5Gf7RvoGv+s1SBE0oFu8rjPO+cb82FLHJlG4pqWcp3xqvg3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764167409; c=relaxed/simple;
-	bh=2pJ8SnmV70c+TMFli5Ai5Or6jf+BdtWDQjxtNl+Bhik=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mas1kQyyZPPEiz8+05nn5iNW9y16yEhPS/ITHaKq+ePh/rvajJi+P5MHO6EeLROTRyLtqrDbIMBqLKaIBHpofwJtMMJsf12Cf8d+xoSFZb19h4QE6lzu0XE4+Z0N2kbw9c409YDRoqaA/LDceV58pFO+AA1hR7tPHPBR4O7WY8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g7i3MhBg; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-433261f2045so29062405ab.3
-        for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 06:30:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764167407; x=1764772207; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=seO8yROLj7+TZ5tQvNyKxgoZe2H0UiNB/Mluvl0b8gg=;
-        b=g7i3MhBg2psGfy9kveSSJjSwAcmPCaQS2+0faaif/frBkylT4xcSCeJ0mUl/tMHUAI
-         MVnsU1gjwNUmWPUnfr5KxlXPS/cSEE5fUDLb+WIYXTI9CcTldOkATKulWKxhODjMFikL
-         3oxDlmP4sh3I9g5Bsi6GuDTXT9LulpI32D0TTD3/nPRXVwU1D5EP7rUb6kigEXlXYVws
-         3abvOxhFX9lKMaj/b+G8XArKrWSTsoZRmWz/BlNlwR5Wv7m0OBxfLxJGIYh48DigYfxw
-         2XvCqLzR/8YUIqt+oXUI81eyvWavCdKTNcLtw1fXXKoyy8xf0RMqkDBtChntPIPd7sYq
-         4qyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764167407; x=1764772207;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=seO8yROLj7+TZ5tQvNyKxgoZe2H0UiNB/Mluvl0b8gg=;
-        b=bjXQuyEmdMI7eT21OwXXpUrW4LcmQOpLCFeZSmgcHDaDb8cORJjdYG3C2i2OTCnF/P
-         XMMzsgp8zJMOsDgcMc+meEMrshK/1qw3LL3pgrhpPDx6vGObx7hn+uyyY/oIbXtshroG
-         HJlMCgQHTwmb+MjGmGiyNNOAIe/gOm8u45bnAb5KYbQMI9m6PC3ylVn7RAsahLP7nfGW
-         33DHAKN9OyCRK9KI171C7hT30dRk+bw4qxfMqtRTPgPY+vQ3UeUjhJqSEgR9KWhzS5Qz
-         btl4rjTp3QX55DnY0YaTKV4sMXj3voQpqv9cMweCArITKMIpgaVxDqvvFoap2QF0UH3F
-         Z2HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUS70QfjNLX0n7flRBcvu8UGaF0vEPvNZKxLh7q+A25XyzGF3K11rIRfcd39QC9G/ghksz+mQWz4vo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIPgEGbEKTJRP19d+6IedxArWCRb0CFrAdrWkn7k0bNLNUEOqY
-	xnIhkUXO2dgWP6NOmBDHeIuTA7wOlo2PeweC4fyNIizvm0dQjuYuce7irZNSV4BZLLtlBcUadTT
-	lXyLItG3CyTE1XCpn9KboRKNowNKh0Vw=
-X-Gm-Gg: ASbGncsvzSMFL1xdIF4YiOXF49LqBoeHJeT3agCQSoRdeDNdZqsrSY5s631lScReJNx
-	pgYKrsE+xrBFbRaOEEXry+0v2x6h1IPHHXBSTpQmi/tpfYeAsGVU8pIfQRNsG2ENEgAIOhubqGs
-	oOiuZc90MVhRaHTgYaMc5oiAmwLsJa7Yxzd3bEcjfVC3z7V3011YGuWQHR9JWvJWnmyGOvGpFrk
-	pJgSzyyoO1nbDybkAFzeCyNcFYtQBVAGqiB4VOBTRvFPERf9wPESuFEd6YqZlY+Fllv0nLmzwxZ
-	3HIPjCIZB7RpogzlPKsbL7LX7vdaS4oyUirdQDoQU/Q6oeL9AiRUGoRtyqLEx+GQHiunxpMirkE
-	EYVYWaB2N2A==
-X-Google-Smtp-Source: AGHT+IHI+ciJMg8aOEmbinYOstECuLA/3e/GbhhxuQDC0jNUfW/cZYRBveEzZd49KPLKgKjlVCV1OzfTn5p9FH9IaHE=
-X-Received: by 2002:a05:6e02:339d:b0:434:96ea:ff63 with SMTP id
- e9e14a558f8ab-435b8e8d1a5mr135813675ab.36.1764167406387; Wed, 26 Nov 2025
- 06:30:06 -0800 (PST)
+	s=arc-20240116; t=1764173641; c=relaxed/simple;
+	bh=UQY0Ehk6jP0rvkpMv+TilhxNopdeQzpEh1t0bOL+s0Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mq6L7vWXpaNM+d8d44BCTr9iAITsKZljvJZTh2cQU19wIJ8miQPTosnM6oD5h+sfkJDOktcsIu85v5OpugnRb9LUw5cclh16z37lDXEY3Yt6UnnxUBQCWGXaKeWRMzRlzCa5ystt5zsdu01UEMd4IFpGP4PJzJQ6GgPWWh8SbLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Da/OKTTP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7391CC4CEF7;
+	Wed, 26 Nov 2025 16:13:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764173639;
+	bh=UQY0Ehk6jP0rvkpMv+TilhxNopdeQzpEh1t0bOL+s0Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Da/OKTTPzjxapR/xaK76SSpMs1hZ04xXy4cjfbweIKYkh5Br4PfObcqt1gjurd7H3
+	 LmxRlTbA98EGZypLaRG+miWmQArM/YfADbqeJzpMilusunnWlLzVVdkisv5sxBPobP
+	 V9slA8Fw3ZUUa/M2jhwrq0w29DPVhjfyM3nVop8uze2SS+Qiu3/SMr2WWC4G/ZTl6j
+	 4REmy8rWcUKeDCzYgTFA8szCzd9UXfm63y/Gg34zi1HGPr6MMp/1eAVrOhvY1OOtDG
+	 x+eEX7EvXfos+m7xnV9Xf2LFXkhNmJM4BChFM2IayeQam9wSpeLx/nxlIMf6Jgny1X
+	 PU/cuX53Cn+tQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vOI9Y-00000000348-3L3n;
+	Wed, 26 Nov 2025 17:14:00 +0100
+Date: Wed, 26 Nov 2025 17:14:00 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>
+Subject: Re: [PATCH v3 0/2] Add Telit Cinterion FE910C04 new compositions
+Message-ID: <aScnSKzm-LuT3zBJ@hovoldconsulting.com>
+References: <cover.1764167099.git.fabio.porcedda@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1764084304.git.fabio.porcedda@gmail.com>
- <3ef9bdaa5f76595d0a39b8fc1b1cebe29f69709c.1764084304.git.fabio.porcedda@gmail.com>
- <aSXYlqai4Q7CQCT5@hovoldconsulting.com>
-In-Reply-To: <aSXYlqai4Q7CQCT5@hovoldconsulting.com>
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 26 Nov 2025 15:29:29 +0100
-X-Gm-Features: AWmQ_blNhKP_6sO0bZW5lfxCRF6g4woCI0YryHrKyhNpFuDdmIMbwQ5pq7XOigs
-Message-ID: <CAHkwnC-Hurh1gp2_apb2yMGMQopBPsPt_-Pc+0eKS3QeXGWQMw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] USB: serial: option: add Telit Cinterion FE910C04
- new compositions
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	Daniele Palmas <dnlplm@gmail.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1764167099.git.fabio.porcedda@gmail.com>
 
-Il giorno mar 25 nov 2025 alle ore 17:25 Johan Hovold
-<johan@kernel.org> ha scritto:
->
-> On Tue, Nov 25, 2025 at 04:27:33PM +0100, Fabio Porcedda wrote:
-> > Add the following Telit Cinterion new compositions:
->
-> > 0x10cb: RNDIS + tty (AT) + tty (diag) + DPL (Data Packet Logging) + adb
-> > T:  Bus=01 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=480 MxCh=16
-> > D:  Ver= 2.00 Cls=09(hub  ) Sub=00 Prot=01 MxPS=64 #Cfgs=  1
-> > P:  Vendor=1d6b ProdID=0002 Rev=06.18
-> > S:  Manufacturer=Linux 6.18.0-rc3-usb+ xhci-hcd
-> > S:  Product=xHCI Host Controller
-> > S:  SerialNumber=0000:00:14.0
-> > C:  #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=0mA
-> > I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
-> > E:  Ad=81(I) Atr=03(Int.) MxPS=   4 Ivl=256ms
-> >
-> > T:  Bus=01 Lev=01 Prnt=01 Port=11 Cnt=01 Dev#=  7 Spd=1.5 MxCh= 0
-> > D:  Ver= 1.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 8 #Cfgs=  1
-> > P:  Vendor=413c ProdID=2003 Rev=03.01
-> > S:  Manufacturer=Dell
-> > S:  Product=Dell USB Keyboard
-> > C:  #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=70mA
-> > I:  If#= 0 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=01 Prot=01 Driver=usbhid
-> > E:  Ad=81(I) Atr=03(Int.) MxPS=   8 Ivl=24ms
-> >
-> > T:  Bus=02 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=10000 MxCh=10
-> > D:  Ver= 3.10 Cls=09(hub  ) Sub=00 Prot=03 MxPS= 9 #Cfgs=  1
-> > P:  Vendor=1d6b ProdID=0003 Rev=06.18
-> > S:  Manufacturer=Linux 6.18.0-rc3-usb+ xhci-hcd
-> > S:  Product=xHCI Host Controller
-> > S:  SerialNumber=0000:00:14.0
-> > C:  #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=0mA
-> > I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
-> > E:  Ad=81(I) Atr=03(Int.) MxPS=   4 Ivl=256ms
->
-> Looks like something went wrong when you generated the usb-devices
-> output for the above composition.
+On Wed, Nov 26, 2025 at 03:26:38PM +0100, Fabio Porcedda wrote:
+> Add Telit Cinterion FE910C04 new compositions.
+> Also puts Telit Cinterion 0x10c7 composition in the correct order
+> inside the source file.
+> 
+> v3:
+> - Fix commit message of the first patch
+> 
+> v2:
+> - Fix author's email of the first patch
+> 
+> 
+> Fabio Porcedda (2):
+>   USB: serial: option: add Telit Cinterion FE910C04 new compositions
+>   USB: serial: option: move Telit 0x10c7 composition in the right place
 
-I've sent an updated one.
+Applied, thanks.
 
-Thanks
-
-> Johan
-
-Best regards
--- 
-Fabio Porcedda
+Johan
 
