@@ -1,370 +1,130 @@
-Return-Path: <linux-usb+bounces-30967-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30966-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A909FC89C07
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 13:27:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91FC0C89C01
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 13:27:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 65D044E388D
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 12:27:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E2073AB3C0
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 12:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20033271FD;
-	Wed, 26 Nov 2025 12:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7C5322C7F;
+	Wed, 26 Nov 2025 12:27:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="buEU3YdI"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="etRBYotV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239431E570D;
-	Wed, 26 Nov 2025 12:27:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F175B1E570D
+	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 12:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764160031; cv=none; b=BdipsSU1Heo6+AynlvgacsKdKCTMQjYkgKemisE93xbgv7jrrQNpx1IWlx6rw1xWL0M2q2Gx0co7G3oxIgNr0cJsiO37y7YU9HgDHNXcprCbIElexXX77ZvFf8tWFAE8DM5z+TMnwr8y0UxGJWVXzxDkgQ2RINcJXXnVu1e5hJo=
+	t=1764160027; cv=none; b=aKAQc9s0skHca9SiFSo/CKA7bXGHZsAYBUs48UMYu+ggAX08Xiu9x7jwbhH2dBDkjsDTk1yyX40T2JCVhP3zKw58N90EUInx1MM/aOZoxMW2ZzbGLjgKyZJJFDG/LSSEHiWv/nYpd+pWK5OqkHrgm9jRoJODwDNJ9B0i16LHr4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764160031; c=relaxed/simple;
-	bh=FGV3mO1dmDC36Y5ZwJqqYtuXmf3eRjhooAAD+j9O3po=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RSlRCFadbUB3Cbp4j5/KnUjc1RVEze8ZLaXZSxCWZfqhcyl+taviupCX4mzQrz4cHNoSzw/pKeRnqhAFxkJCi1Y/bfLBKG9vVjEtsrEXgwH3FSZmeq/s/xsWv9H67UEscZZkDuz4g0USyntjTbmrWmxwU1Tiq/6oH2tiK00tjbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=buEU3YdI; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764160029; x=1795696029;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FGV3mO1dmDC36Y5ZwJqqYtuXmf3eRjhooAAD+j9O3po=;
-  b=buEU3YdIu2+gmT/W1CIpGRWnNkSr30GShq5nRiAE36m1aPK6eIo7270y
-   DhaeYxWCNfIFJPkH73FYZdJjAEFXwNiq3lqNVWTvtvIeVKYl3sjZNb8HJ
-   PZGuHhZMNFXIy1TVcZEmfIQWkj6/Vn3UaC3ncB9/Jsin4b1ex3hxZB+Os
-   NoOjqGFpfUhCnfiNus5jkMxmUnHyIBro3IWPnO7ZfJ2aN2iHj635Dn27u
-   tpS7VT4xVGP7WMmG6gDu8eDoBVDssK9zbui34epyVdsq5JkTKtRfRKqj2
-   MvGYbkkYmh0kNsng0BzDD8bQoadfbzg1ta4YTt0AuTmcyzpi0261YnbvC
-   g==;
-X-CSE-ConnectionGUID: Hv8CRmilRvKy6YbWWSPWFA==
-X-CSE-MsgGUID: Q3jXeQ3wScOos0kFU8Uq8Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="70060112"
-X-IronPort-AV: E=Sophos;i="6.20,228,1758610800"; 
-   d="scan'208,223";a="70060112"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 04:27:07 -0800
-X-CSE-ConnectionGUID: GtkyTZb0R9CO0SOLOOs9hw==
-X-CSE-MsgGUID: X2b1Mji4QRK81e4yBy06JQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,228,1758610800"; 
-   d="scan'208,223";a="192068877"
-Received: from iherna2-mobl4.amr.corp.intel.com (HELO kuha) ([10.124.223.27])
-  by orviesa006.jf.intel.com with SMTP; 26 Nov 2025 04:26:56 -0800
-Received: by kuha (sSMTP sendmail emulation); Wed, 26 Nov 2025 14:26:49 +0200
-Date: Wed, 26 Nov 2025 14:26:49 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Chaoyi Chen <kernel@airkyi.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Peter Chen <hzpeterchen@gmail.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Yubing Zhang <yubing.zhang@rock-chips.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v10 01/11] usb: typec: Add notifier functions
-Message-ID: <aSbyCR-vFo3mvZ3u@kuha>
-References: <2025112402-unopposed-polio-e6e9@gregkh>
- <a80483de-518d-45d5-b46a-9b70cca5b236@rock-chips.com>
- <2025112448-brush-porcupine-c851@gregkh>
- <c9cb7b79-37c8-4fef-97a6-7d6b8898f9c4@rock-chips.com>
- <aSV_lQYJPxN7oBM-@kuha>
- <2025112554-uncaring-curator-642a@gregkh>
- <cbb38c08-6937-4b7d-a0b0-d5ca6c17f466@rock-chips.com>
- <aSbLkwPG0dUzZvql@kuha>
- <2025112656-dreamland-retreat-2a65@gregkh>
- <e48e1918-8ee0-4ffe-93d5-e096af241f77@rock-chips.com>
+	s=arc-20240116; t=1764160027; c=relaxed/simple;
+	bh=MxRPH4OI+jq7u3FFsPykkcwYxWzFT5nC1r6Xn44eH2U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nPGgjlX3TkxGSlc7/3bH+wz/KC/9jzinIjADHowIV2OzpQNNVI0jdx27sXf5Bae6Tvji6zAQnDlcrpArME34cN7BG0ZHOFqqzJDXZIf6V8Gxm/dapcTM6SdASkGR6gb5ig2JKNdT7KVTO5UZykAsrqHNpRvD3xymbEVtBITtMLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=etRBYotV; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-594330147efso6793778e87.2
+        for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 04:27:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1764160023; x=1764764823; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M39NueHohmNMWq87JqLJZZG3KM6+f0KMO0Y5dIBS1n8=;
+        b=etRBYotVzrEqOirdpXoxzrTVO3guHUpBGXAro/pfXJWoXMMUoQKObh/VeZYeof4hZo
+         Ovcgf0sCbWa9zu8cwocJIhwS6pN0E1xONwyhxGwfjpKNswkDf+2tMX4BmuZEKUOmk+NP
+         /keaepshSLPvoeK6g6VzbquSvBuxd09VdF0QY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764160023; x=1764764823;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=M39NueHohmNMWq87JqLJZZG3KM6+f0KMO0Y5dIBS1n8=;
+        b=qcfRgiGEkimo64kqOSdSJYSmbMWu/dc+kNw2kQ1FKAOOiznuRIuIp6OK3J/QcwpR1P
+         MP+axfYxRMw3ZqOiXakpFc2wNkRJcKO4i3ktLkzKYoqv0Hdxm+EDCPKeUsnoP/41+A0M
+         n3t8mPZPtJa/LpaookfBH770O0Cw52x2TBCqYeQiiQNS7UqKOnJG95ET39borOmnB9ut
+         wiNpfckFeBqPFBIX+w9/WDWT6HnZaaD2uF1DeZPEgWO9wjiCs/jSRrDosyz1hP720LJC
+         xsi0VAjpk9o4woODWcdfP6NE1TEY/4jIwO2YF3pas5UjG8uqnB/mswtlSMiWCQxWrauW
+         tdeg==
+X-Forwarded-Encrypted: i=1; AJvYcCXsvIbuiI1/kxf310LBRC4Jue8SYvVkBRN2AM5EDB5EGbxvEZ1/fK8TACCeHOWu+HyRr1hE0fyJbvM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoZKCrJNBPIDhUwee692XuEpjouhrFMQMsfmcyu/ZW5TgDUuc2
+	B72QcqBBh1xpiHxdsDAbLG90m3UlQhJ+9SvphcpeuOb4AMLNygM9uXIqTiRGTAGGmarEKDai8VC
+	0kfIGw7i8Fc8C/I3O9iWHFxGerDrt7F6HC33BDhQ=
+X-Gm-Gg: ASbGncsPcu+upGqORAYDWIXzw3o9v/bRrv2uoj93YXz4oxeZ+3eQ3VmP/e/EDXiAaOL
+	WngW8WOJB61TpulWOZ5r2cxYBCkcuS859z0c4H9Yuea4NV5A6GD9+q0Eq9zldRxTg10PUi+3LVp
+	AfHka37B4H0c3eIVvpOAgKYOC6D54ILRCOcR4QirEmppzhz7YmZYw8UqyvwKWoooU1qQrHyoyEP
+	mg1YZcH4aCPWhIQ3IQb2PPvw/3lVOYZcBW3s3tKtTBjGkEJhTF0e4KvPwcRNqYbLRzJMKMUvttL
+	4brQ2orqxwW6Nu8mfIh2olk=
+X-Google-Smtp-Source: AGHT+IEHMBlhPNnyD80Uk8xE4aqtfm+js6M42t2KkRhBdLMKSuUtMH7IJAY0gFAQG3kVr8/hFSGOIRUePsiwaz2uDdg=
+X-Received: by 2002:a05:6512:15a6:b0:591:eab5:d8dc with SMTP id
+ 2adb3069b0e04-596a3ee2f7dmr6978035e87.35.1764160022991; Wed, 26 Nov 2025
+ 04:27:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="G9XrtC05Z7lpB1j2"
-Content-Disposition: inline
-In-Reply-To: <e48e1918-8ee0-4ffe-93d5-e096af241f77@rock-chips.com>
+References: <20251125142532.2550612-1-ukaszb@google.com> <2025112616-gestate-disperser-c055@gregkh>
+ <CALwA+NYBSH01FVcggf9nNbW83sRp0GH-4jKL0ByYNTM7vz-pHg@mail.gmail.com>
+ <e7e984f4-4aa7-4428-8da4-b48d55f32098@linux.intel.com> <CALwA+NaXYDn1k-tVmM+-UQNJZQEZGiB4QmBfv1E6OeWyMicUig@mail.gmail.com>
+ <fb7dc13b-d572-4537-89dd-427bbf43567b@kernel.org>
+In-Reply-To: <fb7dc13b-d572-4537-89dd-427bbf43567b@kernel.org>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Date: Wed, 26 Nov 2025 13:26:50 +0100
+X-Gm-Features: AWmQ_bngQtj8MJY-S7_hQRN_iyByb3k8FNgECmpEzvAee_C_OZBITg-rFxuI6N8
+Message-ID: <CALwA+NY5o9yBetMYN78KK=mujuDY3_jtkc6rwDHohO6OO=t2og@mail.gmail.com>
+Subject: Re: [PATCH] xhci: dbgtty: fix device unregister: fixup typo
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Mathias Nyman <mathias.nyman@intel.com>, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
---G9XrtC05Z7lpB1j2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Wed, Nov 26, 2025 at 07:51:33PM +0800, Chaoyi Chen kirjoitti:
-> On 11/26/2025 7:44 PM, Greg Kroah-Hartman wrote:
-> > On Wed, Nov 26, 2025 at 11:42:43AM +0200, Heikki Krogerus wrote:
-> >> Wed, Nov 26, 2025 at 09:46:19AM +0800, Chaoyi Chen kirjoitti:
-> >>> On 11/25/2025 7:49 PM, Greg Kroah-Hartman wrote:
-> >>>>> +static umode_t typec_is_visible(struct kobject *kobj, struct attribute *attr, int n)
-> >>>>> +{
-> >>>>> +	if (is_typec_port(kobj_to_dev(kobj)->parent))
-> >>>>
-> >>>> Why look at the parent?  Doesn't the device have a type that should show
-> >>>> this?
-> >>>>
-> >>>> Otherwise, looks good to me.
-> >>>
-> >>> They have same deivce type "typec_altmode_dev_type".
-> >>> The parent device has a different device type to distinguish between
-> >>> port device and partner device.
+On Wed, Nov 26, 2025 at 10:56=E2=80=AFAM Jiri Slaby <jirislaby@kernel.org> =
+wrote:
+>
+> On 26. 11. 25, 10:50, =C5=81ukasz Bartosik wrote:
+> >> I still think we need a fixup patch for the missing null check
 > >>
-> >> I was already wondering would it make sense to provide separate device
-> >> types for the port, and also plug, alternate modes, but I'm not sure
-> >> if that's the right thing to do.
+> >> -       tty_vhangup(port->port.tty);
+> >> +       if (port->port.tty)
+> >> +               tty_vhangup(port->port.tty);
 > >>
-> >> There is a plan to register an "altmode" also for the USB4 mode,
-> >> which of course is not an alternate mode. So USB4 will definitely need a
-> >> separate device type.
+> >> or just use tty_port_tty_vhangup()
 > >>
-> >> So if we supply separate device types for the port, plug and partner
-> >> alternate modes, we need to supply separate device types for port, plug
-> >> and partner USB4 mode as well.
-> >>
-> >> We certainly can still do that, but I'm just not sure if it makes
-> >> sense?
-> >>
-> >> I'll prepare a new version for this and include a separate patch where
-> >> instead of defining separate device types for the port and plug
-> >> alternate modes I'll just supply helpers is_port_alternate_mode() and
-> >> is_plug_alternate_mode().
-> > 
-> > That feels like it would be better in the long run as it would be
-> > easier to "match" on the device type.
 > >
-> 
-> It make sense. But now can we first use the current "match" device type
-> operation and then modify them later?
+> > IMHO it looks good because tty_vhangup calls two functions inside:
+> > 1) tty_debug_hangup - which handles the case when tty is null
+> > 2) __tty_hangup - which also checks tty for null
+>
+> Is it still good when someone closes the TTY right after the "if (!tty)"
+> checks?
+>
 
-Let's do this right from the beginning. Here's a version with the
-dedicated device types.
+Hi Jiri,
 
--- 
-heikki
+Will putting tty_vhangup around get and put reference as follows suffice:
+tty =3D tty_port_tty_get(port);
+if (tty) {
+    tty_vhangup(tty);
+    tty_kref_put(tty);
+}
 
---G9XrtC05Z7lpB1j2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename=0001-usb-typec-Set-the-bus-also-for-the-port-and-plug-alt.patch
+Thanks,
+=C5=81ukasz
 
-From c0b2afa035cff0788c68869bf454c43eab2b201f Mon Sep 17 00:00:00 2001
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date: Tue, 25 Nov 2025 10:38:04 +0100
-Subject: [PATCH v2] usb: typec: Set the bus also for the port and plug altmodes
-
-The port and plug altmodes can't be bound to the altmode
-drivers because the altmode drivers are meant for partner
-communication using the VDM (vendor defined messages), but
-they can still be part of the bus. The bus will make sure
-that the normal bus notifications are available also with
-the port altmodes.
-
-The previously used common device type for all alternate
-modes is replaced with separate dedicated device types for
-port, plug, and partner alternate modes.
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-
-v2: Added the dedicated device types.
-
----
- drivers/usb/typec/bus.c   | 24 +++++++++++++++++++++++-
- drivers/usb/typec/bus.h   |  8 ++++++--
- drivers/usb/typec/class.c | 33 ++++++++++++++++++++++-----------
- 3 files changed, 51 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
-index a884cec9ab7e..048c0edf6ca4 100644
---- a/drivers/usb/typec/bus.c
-+++ b/drivers/usb/typec/bus.c
-@@ -445,7 +445,23 @@ static struct attribute *typec_attrs[] = {
- 	&dev_attr_description.attr,
- 	NULL
- };
--ATTRIBUTE_GROUPS(typec);
-+
-+static umode_t typec_is_visible(struct kobject *kobj, struct attribute *attr, int n)
-+{
-+	if (is_typec_partner_altmode(kobj_to_dev(kobj)))
-+		return attr->mode;
-+	return 0;
-+}
-+
-+static const struct attribute_group typec_group = {
-+	.is_visible = typec_is_visible,
-+	.attrs = typec_attrs,
-+};
-+
-+static const struct attribute_group *typec_groups[] = {
-+	&typec_group,
-+	NULL
-+};
- 
- static int typec_match(struct device *dev, const struct device_driver *driver)
- {
-@@ -453,6 +469,9 @@ static int typec_match(struct device *dev, const struct device_driver *driver)
- 	struct typec_altmode *altmode = to_typec_altmode(dev);
- 	const struct typec_device_id *id;
- 
-+	if (!is_typec_partner_altmode(dev))
-+		return 0;
-+
- 	for (id = drv->id_table; id->svid; id++)
- 		if (id->svid == altmode->svid)
- 			return 1;
-@@ -469,6 +488,9 @@ static int typec_uevent(const struct device *dev, struct kobj_uevent_env *env)
- 	if (add_uevent_var(env, "MODE=%u", altmode->mode))
- 		return -ENOMEM;
- 
-+	if (!is_typec_partner_altmode(dev))
-+		return 0;
-+
- 	return add_uevent_var(env, "MODALIAS=typec:id%04X", altmode->svid);
- }
- 
-diff --git a/drivers/usb/typec/bus.h b/drivers/usb/typec/bus.h
-index 643b8c81786d..b58e131450d1 100644
---- a/drivers/usb/typec/bus.h
-+++ b/drivers/usb/typec/bus.h
-@@ -29,8 +29,12 @@ struct altmode {
- #define to_altmode(d) container_of(d, struct altmode, adev)
- 
- extern const struct bus_type typec_bus;
--extern const struct device_type typec_altmode_dev_type;
-+extern const struct device_type typec_port_altmode_dev_type;
-+extern const struct device_type typec_plug_altmode_dev_type;
-+extern const struct device_type typec_partner_altmode_dev_type;
- 
--#define is_typec_altmode(_dev_) (_dev_->type == &typec_altmode_dev_type)
-+#define is_typec_port_altmode(dev) ((dev)->type == &typec_port_altmode_dev_type)
-+#define is_typec_plug_altmode(dev) ((dev)->type == &typec_plug_altmode_dev_type)
-+#define is_typec_partner_altmode(dev) ((dev)->type == &typec_partner_altmode_dev_type)
- 
- #endif /* __USB_TYPEC_ALTMODE_H__ */
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 9b2647cb199b..d6b88317f8a4 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -235,7 +235,7 @@ static int altmode_match(struct device *dev, const void *data)
- 	struct typec_altmode *adev = to_typec_altmode(dev);
- 	const struct typec_device_id *id = data;
- 
--	if (!is_typec_altmode(dev))
-+	if (!is_typec_port_altmode(dev))
- 		return 0;
- 
- 	return (adev->svid == id->svid);
-@@ -532,15 +532,28 @@ static void typec_altmode_release(struct device *dev)
- 	kfree(alt);
- }
- 
--const struct device_type typec_altmode_dev_type = {
--	.name = "typec_alternate_mode",
-+const struct device_type typec_port_altmode_dev_type = {
-+	.name = "typec_port_alternate_mode",
-+	.groups = typec_altmode_groups,
-+	.release = typec_altmode_release,
-+};
-+
-+const struct device_type typec_plug_altmode_dev_type = {
-+	.name = "typec_plug_alternate_mode",
-+	.groups = typec_altmode_groups,
-+	.release = typec_altmode_release,
-+};
-+
-+const struct device_type typec_partner_altmode_dev_type = {
-+	.name = "typec_partner_alternate_mode",
- 	.groups = typec_altmode_groups,
- 	.release = typec_altmode_release,
- };
- 
- static struct typec_altmode *
- typec_register_altmode(struct device *parent,
--		       const struct typec_altmode_desc *desc)
-+		       const struct typec_altmode_desc *desc,
-+		       const struct device_type *type)
- {
- 	unsigned int id = altmode_id_get(parent);
- 	bool is_port = is_typec_port(parent);
-@@ -575,7 +588,7 @@ typec_register_altmode(struct device *parent,
- 
- 	alt->adev.dev.parent = parent;
- 	alt->adev.dev.groups = alt->groups;
--	alt->adev.dev.type = &typec_altmode_dev_type;
-+	alt->adev.dev.type = type;
- 	dev_set_name(&alt->adev.dev, "%s.%u", dev_name(parent), id);
- 
- 	get_device(alt->adev.dev.parent);
-@@ -584,9 +597,7 @@ typec_register_altmode(struct device *parent,
- 	if (!is_port)
- 		typec_altmode_set_partner(alt);
- 
--	/* The partners are bind to drivers */
--	if (is_typec_partner(parent))
--		alt->adev.dev.bus = &typec_bus;
-+	alt->adev.dev.bus = &typec_bus;
- 
- 	/* Plug alt modes need a class to generate udev events. */
- 	if (is_typec_plug(parent))
-@@ -963,7 +974,7 @@ struct typec_altmode *
- typec_partner_register_altmode(struct typec_partner *partner,
- 			       const struct typec_altmode_desc *desc)
- {
--	return typec_register_altmode(&partner->dev, desc);
-+	return typec_register_altmode(&partner->dev, desc, &typec_partner_altmode_dev_type);
- }
- EXPORT_SYMBOL_GPL(typec_partner_register_altmode);
- 
-@@ -1193,7 +1204,7 @@ struct typec_altmode *
- typec_plug_register_altmode(struct typec_plug *plug,
- 			    const struct typec_altmode_desc *desc)
- {
--	return typec_register_altmode(&plug->dev, desc);
-+	return typec_register_altmode(&plug->dev, desc, &typec_plug_altmode_dev_type);
- }
- EXPORT_SYMBOL_GPL(typec_plug_register_altmode);
- 
-@@ -2493,7 +2504,7 @@ typec_port_register_altmode(struct typec_port *port,
- 		return ERR_CAST(retimer);
- 	}
- 
--	adev = typec_register_altmode(&port->dev, desc);
-+	adev = typec_register_altmode(&port->dev, desc, &typec_port_altmode_dev_type);
- 	if (IS_ERR(adev)) {
- 		typec_retimer_put(retimer);
- 		typec_mux_put(mux);
--- 
-2.50.1
-
-
---G9XrtC05Z7lpB1j2--
+> thanks,
+> --
+> js
+> suse labs
 
