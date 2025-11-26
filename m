@@ -1,133 +1,142 @@
-Return-Path: <linux-usb+bounces-30973-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30974-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07756C8A527
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 15:27:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5E19C8A568
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 15:30:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC59A3A2439
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 14:26:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E13C3A9F33
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 14:30:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E081B3002C2;
-	Wed, 26 Nov 2025 14:26:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1172E7F25;
+	Wed, 26 Nov 2025 14:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S6czExAQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g7i3MhBg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA332FF154
-	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 14:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74713019A6
+	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 14:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764167211; cv=none; b=e4eWJIVDpLS8R6Tj/+4nvWgZV+bLzQte2ESV5PHs1mvXUlqUoyt92gw5yGsoYzWbfYr0PGA8FDLEZg8F/qTDgN5yu21Ssvvcp3OzMxVA5IOj9zk5ZTqVlvETvk7WTH0EvCevw6Ok5tOLSUVtDOzAX4wKnY1T5kS6BEFMSDpqoJc=
+	t=1764167409; cv=none; b=mPSChvz/3rHHJ4LdDrVUVHPcJxxxwdOgUYAfsTZYndB2IF4J2vuwD19YNcczVtDtblbV7M1Wot/8w/M1dLGpwzd+b++HBXRA5z955dXhSHWRcqpVq9BH5cUavvGqeLYlONHkaZ+eTq3VeXBwwUChiXc31/AGBt1kaEzq6QSa7EI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764167211; c=relaxed/simple;
-	bh=cZKCDok2bvgHpy/QIdyMpaY5kiMPfYKS7NyBSXZn3R0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uZn6culZhwnV+iNmqA8IWWGRFAUOQ6yZBD6SBtu2FU34ajci7jw3fI/TAW3DXbfcnRbjyVIWYQVXtmTBqTtN3illKOKrUgJ/oVrRaHTAOd+xXaknTdOlsiUQufBiUKK7caZg8Wg+Wu49LWUAkgH1SLnL+J4psZd+Ck1CmmU1bpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S6czExAQ; arc=none smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1764167409; c=relaxed/simple;
+	bh=2pJ8SnmV70c+TMFli5Ai5Or6jf+BdtWDQjxtNl+Bhik=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mas1kQyyZPPEiz8+05nn5iNW9y16yEhPS/ITHaKq+ePh/rvajJi+P5MHO6EeLROTRyLtqrDbIMBqLKaIBHpofwJtMMJsf12Cf8d+xoSFZb19h4QE6lzu0XE4+Z0N2kbw9c409YDRoqaA/LDceV58pFO+AA1hR7tPHPBR4O7WY8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g7i3MhBg; arc=none smtp.client-ip=209.85.166.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-42b31507ed8so5705883f8f.1
-        for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 06:26:49 -0800 (PST)
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-433261f2045so29062405ab.3
+        for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 06:30:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764167208; x=1764772008; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9kq9qSywkO4PP1gvaQ5TihW+kIalcwEhayZAl0fTMBI=;
-        b=S6czExAQeUJz63p57SwkuRWnzdxg5QoBL6G/GJjinrD+4xbWwYFkcLULecF+gJcXh4
-         Y28UdyMEMKTN6uVwyxwi4LfAok7ak/3nK3RiERJkjl2mkLd3JmCPJH5U0aOii4+QuOpS
-         cBgO3Ctv8zCksytygw3XyFL/5gz72x05pNo1Fy50NWgraUHJiWu4lWLuCjLihSYDU8Q+
-         49cit5BHu005X9HMcybwFVFJRgquoLS3W8rN061kWXnAoOiM8U8pRlvNAt9s8JPkQjk0
-         EtyW7Y1enJC4XaUUqyZ2Mwu8QClTuVbR9wJYfdeDBeFTNshFUQr+OmBWHcD4z40vUG5C
-         WKAg==
+        d=gmail.com; s=20230601; t=1764167407; x=1764772207; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=seO8yROLj7+TZ5tQvNyKxgoZe2H0UiNB/Mluvl0b8gg=;
+        b=g7i3MhBg2psGfy9kveSSJjSwAcmPCaQS2+0faaif/frBkylT4xcSCeJ0mUl/tMHUAI
+         MVnsU1gjwNUmWPUnfr5KxlXPS/cSEE5fUDLb+WIYXTI9CcTldOkATKulWKxhODjMFikL
+         3oxDlmP4sh3I9g5Bsi6GuDTXT9LulpI32D0TTD3/nPRXVwU1D5EP7rUb6kigEXlXYVws
+         3abvOxhFX9lKMaj/b+G8XArKrWSTsoZRmWz/BlNlwR5Wv7m0OBxfLxJGIYh48DigYfxw
+         2XvCqLzR/8YUIqt+oXUI81eyvWavCdKTNcLtw1fXXKoyy8xf0RMqkDBtChntPIPd7sYq
+         4qyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764167208; x=1764772008;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9kq9qSywkO4PP1gvaQ5TihW+kIalcwEhayZAl0fTMBI=;
-        b=fJcDe4MIQJLPHCtnmizxgJGPBIfpMWSXKdWXr6OClUD38nRsgQXsPumSddHM9P/giX
-         NixZJfG7awUwIrjF3mNQ12ufc96y9gp4PLoDT6QoLTCCBXKJW6ubQGnf4P+lF8X8OmFs
-         fFWKL64s9gXa+/4B4ejDBYemZeRZfgqQfjHxq1ID4GtVK/hV/6qXBQ8X3RvVMqt4xtAB
-         R8DtDZqXmc90cdEKNjZRibqh4Io7G43cPLesfPscPmoRWyBF+C+GCWKJSAZL8HH7ht3X
-         52g1Ngw/Cuf6hISufrzmcsxidX4pOE51CPJ1Y1ytQgbGAyAsWLQX3mgH05YMaH93Jfoy
-         Zpvw==
-X-Forwarded-Encrypted: i=1; AJvYcCUHHrxpjlbAXgv2+NZbsqmTjWdKUx0HFb2h1eHmeh1ozFXXUkIGGUlBAfRMtL9QMlgyzksnCw0Jwos=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6iOSDNzUNXAHUVmP2hl68SQ4DfN1Uzvkt4hPgle6EnBI+peSh
-	/9DlkZYZFgzi34jNaAkjDe977lnmtmTO8feX5M4v7/er8lGn9pwUTpyX
-X-Gm-Gg: ASbGncsOqEtf8Ok+x2CpKR/LlpMbHGH5Bw6XVJUsUwNcmS4q4plUwVY5xYjky2c0JSE
-	i0nvGuQLZ2dhDX3dTitPnzWmieOD+scRrZ4kwKEmaMP3DO7VXHL6uA1BLaIA0pRmaQrxtRGZ5rY
-	3UeKaCCfdgqhi91ytEvenmRH50RNoUivHsoSn4u7KqFD6mnsulk64xt1NuTj4UfDjxewuvzWZnu
-	6QQvMywoTakuTgOz/dNNOLUvx5jONpUfa94D6srxIChfrklI/arcqhIRGWfqYcjnzhqyF+3+Biy
-	F5iBANHR4/4uYezRT8wGS1ZqjLi2FYgd3pfgmevAcwzwiRRCWBXGhvacsbw2XWNk3EhxG3d5l7Z
-	TM9kX6mBBkWyXP4BYsFl1t+LUH7wzIzkyoIKxgbrYNXZJdy1Zxjdvs9DUSNvLVC5QBVd30gJESL
-	IV73SpbHwCe2RwmfMHIWZ5sD3B8hlWF2vy8EwBbkpdiCog8wwxdDRbIEfp5CO1GK+2eNmVqEVC1
-	gPb9j8uXl5sDt1scfgpxp6DpFl9XeE=
-X-Google-Smtp-Source: AGHT+IETtaFHS+x0ramNhJgrmk5gzy/7x5161YsafXqoP3q79y+8pGoxvYRTtycML8sbNx6zlDz0hg==
-X-Received: by 2002:a05:6000:1446:b0:42b:40df:2338 with SMTP id ffacd0b85a97d-42e0f3623camr7347370f8f.52.1764167207732;
-        Wed, 26 Nov 2025 06:26:47 -0800 (PST)
-Received: from labdl-itc-sw06.tmt.telital.com ([2a01:7d0:4800:a:8eec:4bff:febd:98b9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7fd8e54sm42112330f8f.40.2025.11.26.06.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 06:26:46 -0800 (PST)
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	Daniele Palmas <dnlplm@gmail.com>,
-	Fabio Porcedda <fabio.porcedda@gmail.com>
-Subject: [PATCH v3 2/2] USB: serial: option: move Telit 0x10c7 composition in the right place
-Date: Wed, 26 Nov 2025 15:26:40 +0100
-Message-ID: <bfe3ba64ee82c03af0bb6bf7802098932f254759.1764167099.git.fabio.porcedda@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1764167099.git.fabio.porcedda@gmail.com>
-References: <cover.1764167099.git.fabio.porcedda@gmail.com>
+        d=1e100.net; s=20230601; t=1764167407; x=1764772207;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=seO8yROLj7+TZ5tQvNyKxgoZe2H0UiNB/Mluvl0b8gg=;
+        b=bjXQuyEmdMI7eT21OwXXpUrW4LcmQOpLCFeZSmgcHDaDb8cORJjdYG3C2i2OTCnF/P
+         XMMzsgp8zJMOsDgcMc+meEMrshK/1qw3LL3pgrhpPDx6vGObx7hn+uyyY/oIbXtshroG
+         HJlMCgQHTwmb+MjGmGiyNNOAIe/gOm8u45bnAb5KYbQMI9m6PC3ylVn7RAsahLP7nfGW
+         33DHAKN9OyCRK9KI171C7hT30dRk+bw4qxfMqtRTPgPY+vQ3UeUjhJqSEgR9KWhzS5Qz
+         btl4rjTp3QX55DnY0YaTKV4sMXj3voQpqv9cMweCArITKMIpgaVxDqvvFoap2QF0UH3F
+         Z2HQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUS70QfjNLX0n7flRBcvu8UGaF0vEPvNZKxLh7q+A25XyzGF3K11rIRfcd39QC9G/ghksz+mQWz4vo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIPgEGbEKTJRP19d+6IedxArWCRb0CFrAdrWkn7k0bNLNUEOqY
+	xnIhkUXO2dgWP6NOmBDHeIuTA7wOlo2PeweC4fyNIizvm0dQjuYuce7irZNSV4BZLLtlBcUadTT
+	lXyLItG3CyTE1XCpn9KboRKNowNKh0Vw=
+X-Gm-Gg: ASbGncsvzSMFL1xdIF4YiOXF49LqBoeHJeT3agCQSoRdeDNdZqsrSY5s631lScReJNx
+	pgYKrsE+xrBFbRaOEEXry+0v2x6h1IPHHXBSTpQmi/tpfYeAsGVU8pIfQRNsG2ENEgAIOhubqGs
+	oOiuZc90MVhRaHTgYaMc5oiAmwLsJa7Yxzd3bEcjfVC3z7V3011YGuWQHR9JWvJWnmyGOvGpFrk
+	pJgSzyyoO1nbDybkAFzeCyNcFYtQBVAGqiB4VOBTRvFPERf9wPESuFEd6YqZlY+Fllv0nLmzwxZ
+	3HIPjCIZB7RpogzlPKsbL7LX7vdaS4oyUirdQDoQU/Q6oeL9AiRUGoRtyqLEx+GQHiunxpMirkE
+	EYVYWaB2N2A==
+X-Google-Smtp-Source: AGHT+IHI+ciJMg8aOEmbinYOstECuLA/3e/GbhhxuQDC0jNUfW/cZYRBveEzZd49KPLKgKjlVCV1OzfTn5p9FH9IaHE=
+X-Received: by 2002:a05:6e02:339d:b0:434:96ea:ff63 with SMTP id
+ e9e14a558f8ab-435b8e8d1a5mr135813675ab.36.1764167406387; Wed, 26 Nov 2025
+ 06:30:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1764084304.git.fabio.porcedda@gmail.com>
+ <3ef9bdaa5f76595d0a39b8fc1b1cebe29f69709c.1764084304.git.fabio.porcedda@gmail.com>
+ <aSXYlqai4Q7CQCT5@hovoldconsulting.com>
+In-Reply-To: <aSXYlqai4Q7CQCT5@hovoldconsulting.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 26 Nov 2025 15:29:29 +0100
+X-Gm-Features: AWmQ_blNhKP_6sO0bZW5lfxCRF6g4woCI0YryHrKyhNpFuDdmIMbwQ5pq7XOigs
+Message-ID: <CAHkwnC-Hurh1gp2_apb2yMGMQopBPsPt_-Pc+0eKS3QeXGWQMw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] USB: serial: option: add Telit Cinterion FE910C04
+ new compositions
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	Daniele Palmas <dnlplm@gmail.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Move Telit 0x10c7 composition right after 0x10c6 composition and
-before 0x10c8 composition.
+Il giorno mar 25 nov 2025 alle ore 17:25 Johan Hovold
+<johan@kernel.org> ha scritto:
+>
+> On Tue, Nov 25, 2025 at 04:27:33PM +0100, Fabio Porcedda wrote:
+> > Add the following Telit Cinterion new compositions:
+>
+> > 0x10cb: RNDIS + tty (AT) + tty (diag) + DPL (Data Packet Logging) + adb
+> > T:  Bus=01 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=480 MxCh=16
+> > D:  Ver= 2.00 Cls=09(hub  ) Sub=00 Prot=01 MxPS=64 #Cfgs=  1
+> > P:  Vendor=1d6b ProdID=0002 Rev=06.18
+> > S:  Manufacturer=Linux 6.18.0-rc3-usb+ xhci-hcd
+> > S:  Product=xHCI Host Controller
+> > S:  SerialNumber=0000:00:14.0
+> > C:  #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=0mA
+> > I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
+> > E:  Ad=81(I) Atr=03(Int.) MxPS=   4 Ivl=256ms
+> >
+> > T:  Bus=01 Lev=01 Prnt=01 Port=11 Cnt=01 Dev#=  7 Spd=1.5 MxCh= 0
+> > D:  Ver= 1.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 8 #Cfgs=  1
+> > P:  Vendor=413c ProdID=2003 Rev=03.01
+> > S:  Manufacturer=Dell
+> > S:  Product=Dell USB Keyboard
+> > C:  #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=70mA
+> > I:  If#= 0 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=01 Prot=01 Driver=usbhid
+> > E:  Ad=81(I) Atr=03(Int.) MxPS=   8 Ivl=24ms
+> >
+> > T:  Bus=02 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=10000 MxCh=10
+> > D:  Ver= 3.10 Cls=09(hub  ) Sub=00 Prot=03 MxPS= 9 #Cfgs=  1
+> > P:  Vendor=1d6b ProdID=0003 Rev=06.18
+> > S:  Manufacturer=Linux 6.18.0-rc3-usb+ xhci-hcd
+> > S:  Product=xHCI Host Controller
+> > S:  SerialNumber=0000:00:14.0
+> > C:  #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=0mA
+> > I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
+> > E:  Ad=81(I) Atr=03(Int.) MxPS=   4 Ivl=256ms
+>
+> Looks like something went wrong when you generated the usb-devices
+> output for the above composition.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- drivers/usb/serial/option.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I've sent an updated one.
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index b9983e6f5eff..2610bb860682 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1445,6 +1445,9 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10c6, 0xff),	/* Telit FE910C04 (MBIM) */
- 	  .driver_info = NCTRL(4) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10c7, 0xff, 0xff, 0x30),	/* Telit FE910C04 (ECM) */
-+	  .driver_info = NCTRL(4) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10c7, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10c8, 0xff),	/* Telit FE910C04 (rmnet) */
- 	  .driver_info = RSVD(0) | NCTRL(2) | RSVD(3) | RSVD(4) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x10c9, 0xff),	/* Telit FE910C04 (MBIM) */
-@@ -1455,9 +1458,6 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(5) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d0, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d0, 0xff, 0xff, 0x60) },
--	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10c7, 0xff, 0xff, 0x30),	/* Telit FE910C04 (ECM) */
--	  .driver_info = NCTRL(4) },
--	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10c7, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d1, 0xff, 0xff, 0x30),	/* Telit FN990B (MBIM) */
- 	  .driver_info = NCTRL(6) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x10d1, 0xff, 0xff, 0x40) },
+Thanks
+
+> Johan
+
+Best regards
 -- 
-2.52.0
-
+Fabio Porcedda
 
