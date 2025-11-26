@@ -1,151 +1,126 @@
-Return-Path: <linux-usb+bounces-30964-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30965-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92A70C8998F
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 12:51:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36FA3C89A16
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 13:00:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B7C573563CB
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 11:51:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0D903B577D
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 12:00:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C553254B5;
-	Wed, 26 Nov 2025 11:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4638E326931;
+	Wed, 26 Nov 2025 12:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="jBANWdfC"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YnYgleI8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m15597.qiye.163.com (mail-m15597.qiye.163.com [101.71.155.97])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DC1325482;
-	Wed, 26 Nov 2025 11:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97C6325729;
+	Wed, 26 Nov 2025 12:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764157910; cv=none; b=c/GT3mpNI1pEcH6pWtTJ/3wQWF6A6xz+9SQ6Wpvz1G4bYYP9Tn9EuVnQunbINslO8u2Cq7Q+T4A4IswcADYEuFiFNpNxo8FTUKgFzK4PHaDyiSfaIdeAOoCal0KiwY6NucJKpmEgE+7IuMsb9wRAubHe/Tdg7jstoF12HL1T9vc=
+	t=1764158414; cv=none; b=nWIJPk8b6LDjq2+qQjf7op+UieehzureEMZGOLsQpiPwSq0lAqiOMlAbf8a2sY62B7/EofTpuYJg0EBiyoIcj9+9mj9JHtJXLK7RnV/sDXRAhT7lHlu7BAaYfR773oi0h2TzUqFqycWdwli0JG/orgwcCKTbrSfRchE/M8eCO2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764157910; c=relaxed/simple;
-	bh=Qw0OrNg8ENNr6TE56GmukcIumLBGKpgi4DVBCw5ouDw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bk0J2d373zDAeTdFTtbUmBT0DghWOZP3zOnoVI6oBZNphN6VKsCWaE95vNW1uuQ2qVpA1xvRNzwRUSE0rlt0Ckpvd0UO60N+CwNX1kpN3ff1MygIDmn+scSBycoiyaG/CTGxdw0gwZC+WS8TSP1EV9ZTWF/sTIQMOIX10jO20Cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=jBANWdfC; arc=none smtp.client-ip=101.71.155.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.51] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 2afc8ccb9;
-	Wed, 26 Nov 2025 19:51:34 +0800 (GMT+08:00)
-Message-ID: <e48e1918-8ee0-4ffe-93d5-e096af241f77@rock-chips.com>
-Date: Wed, 26 Nov 2025 19:51:33 +0800
+	s=arc-20240116; t=1764158414; c=relaxed/simple;
+	bh=/Y3uSQkTFQe9Mgw0t5lRENVodLVvsjzcu8QlXFwTCSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z84ugtCT1nxuqkfNPRiA33MX8A18bo7dQx0omROefdlP4IertPlOyGQEJaqv2x7tsHsWS6+EuFufsYjWwBjNx5mTDmqgFFhMCo1nRozhHbRHWCp4drFPB5anm7cwTL8NAPSimVxIHS664+NCTYn+esaGuOjCz1Ny07pCZeAIk7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YnYgleI8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D848DC113D0;
+	Wed, 26 Nov 2025 12:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1764158414;
+	bh=/Y3uSQkTFQe9Mgw0t5lRENVodLVvsjzcu8QlXFwTCSk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YnYgleI8MhA8c/OsYqtwXTplfjIeRUgaGrUY9ENSh2IarWAWMERa8XUrJ2X1cUtk2
+	 k7el2AOCvYx+YqgXforhwDqQR7gesUaMkeAXngB0zIdhFVWnnIDE5tpHjkp5CXvNx+
+	 o0lzalzVc6/yql6IF6URDLbyvi1hN1XtNkEjVIK0=
+Date: Wed, 26 Nov 2025 13:00:11 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Chen Changcheng <chenchangcheng@kylinos.cn>
+Cc: stern@rowland.harvard.edu, benjamin.tissoires@redhat.com,
+	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] usb: usb-storage: No additional quirks need to be
+ added to the EL-R12 optical drive.
+Message-ID: <2025112655-reunite-reptilian-9a35@gregkh>
+References: <20251125053201.31955-1-chenchangcheng@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 01/11] usb: typec: Add notifier functions
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Chaoyi Chen <kernel@airkyi.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Chen <hzpeterchen@gmail.com>, Luca Ceresoli
- <luca.ceresoli@bootlin.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <2025112102-laurel-mulch-58e4@gregkh>
- <462ad1bd-7eec-4f26-b383-96b049e14559@rock-chips.com>
- <2025112402-unopposed-polio-e6e9@gregkh>
- <a80483de-518d-45d5-b46a-9b70cca5b236@rock-chips.com>
- <2025112448-brush-porcupine-c851@gregkh>
- <c9cb7b79-37c8-4fef-97a6-7d6b8898f9c4@rock-chips.com> <aSV_lQYJPxN7oBM-@kuha>
- <2025112554-uncaring-curator-642a@gregkh>
- <cbb38c08-6937-4b7d-a0b0-d5ca6c17f466@rock-chips.com> <aSbLkwPG0dUzZvql@kuha>
- <2025112656-dreamland-retreat-2a65@gregkh>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <2025112656-dreamland-retreat-2a65@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9ac001308e03abkunmdaa20eca5ea8c5
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQk4dHVZIHUIeGBhNTRlNQh5WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
-	xVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=jBANWdfCXUE5gDGcQIlQs4pqUaqXDsXzhdChC4iwSgqp3kPQUaUPgNli4XbRKmNmCnFKOqtpFUnKe9D+Kt7p8xXmLhuiJ9Cw18Swcx5cYBTi/Gz5LHMm7Y0xygV99pjgLmQ02+Ajw3beBLk0/GiLF/nG8ov6UkJaZYaaBF/MbrY=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=h7ZJhr+0x5ygBrBW8UPFMD6T08Tpdt0hEWVktbHPqtg=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251125053201.31955-1-chenchangcheng@kylinos.cn>
 
-On 11/26/2025 7:44 PM, Greg Kroah-Hartman wrote:
-> On Wed, Nov 26, 2025 at 11:42:43AM +0200, Heikki Krogerus wrote:
->> Wed, Nov 26, 2025 at 09:46:19AM +0800, Chaoyi Chen kirjoitti:
->>> On 11/25/2025 7:49 PM, Greg Kroah-Hartman wrote:
->>>>> +static umode_t typec_is_visible(struct kobject *kobj, struct attribute *attr, int n)
->>>>> +{
->>>>> +	if (is_typec_port(kobj_to_dev(kobj)->parent))
->>>>
->>>> Why look at the parent?  Doesn't the device have a type that should show
->>>> this?
->>>>
->>>> Otherwise, looks good to me.
->>>
->>> They have same deivce type "typec_altmode_dev_type".
->>> The parent device has a different device type to distinguish between
->>> port device and partner device.
->>
->> I was already wondering would it make sense to provide separate device
->> types for the port, and also plug, alternate modes, but I'm not sure
->> if that's the right thing to do.
->>
->> There is a plan to register an "altmode" also for the USB4 mode,
->> which of course is not an alternate mode. So USB4 will definitely need a
->> separate device type.
->>
->> So if we supply separate device types for the port, plug and partner
->> alternate modes, we need to supply separate device types for port, plug
->> and partner USB4 mode as well.
->>
->> We certainly can still do that, but I'm just not sure if it makes
->> sense?
->>
->> I'll prepare a new version for this and include a separate patch where
->> instead of defining separate device types for the port and plug
->> alternate modes I'll just supply helpers is_port_alternate_mode() and
->> is_plug_alternate_mode().
+On Tue, Nov 25, 2025 at 01:32:01PM +0800, Chen Changcheng wrote:
+> The optical drive of EL-R12 has the same vid and pid as INIC-3069,
+> as follows:
+> T:  Bus=02 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+> D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+> P:  Vendor=13fd ProdID=3940 Rev= 3.10
+> S:  Manufacturer=HL-DT-ST
+> S:  Product= DVD+-RW GT80N
+> S:  SerialNumber=423349524E4E38303338323439202020
+> C:* #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=144mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=02 Prot=50 Driver=usb-storage
+> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=0a(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 > 
-> That feels like it would be better in the long run as it would be
-> easier to "match" on the device type.
->
+> This will result in the optical drive device also adding
+> the quirks of US_FL_NO_ATA_1X. When performing an erase operation,
+> it will fail, and the reason for the failure is as follows:
+> [  388.967742] sr 5:0:0:0: [sr0] tag#0 Send: scmd 0x00000000d20c33a7
+> [  388.967742] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
+> [  388.967773] sr 5:0:0:0: [sr0] tag#0 Done: SUCCESS Result: hostbyte=DID_TARGET_FAILURE driverbyte=DRIVER_OK cmd_age=0s
+> [  388.967773] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
+> [  388.967803] sr 5:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]
+> [  388.967803] sr 5:0:0:0: [sr0] tag#0 Add. Sense: Invalid field in cdb
+> [  388.967803] sr 5:0:0:0: [sr0] tag#0 scsi host busy 1 failed 0
+> [  388.967803] sr 5:0:0:0: Notifying upper driver of completion (result 8100002)
+> [  388.967834] sr 5:0:0:0: [sr0] tag#0 0 sectors total, 0 bytes done.
+> 
+> For the EL-R12 standard optical drive, all operational commands
+> and usage scenarios were tested without adding the IGNORE_RESIDUE quirks,
+> and no issues were encountered. It can be reasonably concluded
+> that removing the IGNORE_RESIDUE quirks has no impact.
+> 
+> Signed-off-by: Chen Changcheng <chenchangcheng@kylinos.cn>
+> ---
+>  drivers/usb/storage/unusual_uas.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-It make sense. But now can we first use the current "match" device type
-operation and then modify them later?
 
-> thanks,
-> 
-> greg k-h
-> 
-> 
+Hi,
 
--- 
-Best, 
-Chaoyi
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
