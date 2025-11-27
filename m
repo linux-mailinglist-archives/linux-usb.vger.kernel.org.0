@@ -1,148 +1,255 @@
-Return-Path: <linux-usb+bounces-30982-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30983-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5823EC8C269
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 23:05:33 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC61FC8C6FA
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 01:42:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CD43035ABD3
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Nov 2025 22:05:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A3A8B4E12D3
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 00:42:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25AD0342523;
-	Wed, 26 Nov 2025 22:04:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4843522A7E4;
+	Thu, 27 Nov 2025 00:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WS9TcaZy"
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="o5tij4GY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023078.outbound.protection.outlook.com [52.101.127.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DFA2E8E0C
-	for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 22:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764194697; cv=none; b=DVIguqx9pJ2rhZIxxatxZe81uZpjSH02tR70PsY9b/iYJF9FWhR7N5NHBrMU4DU+gw/BJBG4HGiO/Wkvw/oDo9C5/2KE9yawJMA1jnkrKQm+aZIlE/S3i8yztZtcXq3wXwcLq90dObTnTjEvqpdW49ADN8VSrVrL9A2mbZOtMvM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764194697; c=relaxed/simple;
-	bh=gqLSwHsrGZkhN+aFNTbmKSZgZc3SbCkcYs3ExiI7vJk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b8JaFl0pa5GqYizp66qF4tetGe1c7w2vG9IAmhkSFFHqXyVeqbJ83gF743JO9K4OzVitrIW6Z2mvvQFDY5fqSKcmXwQFgWMAwPvE7y/IN6z8RTogm6nBM5uTBzZuFtovclw4Zg5fCSp6pGUrLWxfRdTPMHndA/skGMDHfl71GXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WS9TcaZy; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7bb3092e4d7so212999b3a.0
-        for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 14:04:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764194694; x=1764799494; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ay1HyD/YXcJtqug9NBApq+fmqHdHRxdWGXWcfRUTS3Q=;
-        b=WS9TcaZy5nuL1InS9I6cg8WwqY/z6Ctxns7IUCSRhChQqYh2yMEnMxO6jaD0ZdbyR+
-         lVu8SiRoFXlsdMDMV1CePKlW1YyuOBd+ndZfLwgYqh/2/FY5mpExu57DZS0IeCcO8OeG
-         1/KVfvchS0fOaNRA1IO2NFXi3qA6Zf4hfhQl8kqXdChI7hNItu+Gmsr6tSxjSY/Ke2xq
-         gQjTpgMcNNtAex69WlIKxy1C/15AF300gW8aVpKg3n+cKng6u/z7id6POkFNbK1W9LtM
-         G6QlTjUF8jXOw7youvpnryZqExjsOFb7YBWMDNgK2UXe5jjurBkHkqsJMEdTheqORaVX
-         x+3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764194694; x=1764799494;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ay1HyD/YXcJtqug9NBApq+fmqHdHRxdWGXWcfRUTS3Q=;
-        b=FWTWPTlhT36p59N8d3ukhnncLg3IeZL/HpxovJKaD5FEJiw++NePdDGGgab52aYU34
-         TOA7FRUKbI9jpd+itOVToYWE25MWg0B+Lc3NnjEBaxV+YYpAvtK2NEUpSlge/uPsSC3U
-         XmCbZcdf7VdahtFOGhbhmoVieeBsvdHtw7yDzUKrT1Le3apbGjGwTdeFzTwNuYMA5oXr
-         S0TCbldop4QutHDi6i+UVDNw6qxwJDJ9EUuIOra07ubhTD8a1arT619LdgH3AD2MdU8B
-         jxj4IrUN1n14IE0ZqsTmyfCdEaUSVUcvhwee5R1jM4kf5n+GBX2be7LQ1UmDrtMQL6x+
-         mIaA==
-X-Forwarded-Encrypted: i=1; AJvYcCUMn1yw1Qfx0eTZ4XAwThhQUvZRMsKkUT1OiTb2vdYdL7BSgzRMel76ZIL7UUrovH4VXFaB8Q3pMsg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSv4K3j+/uWvYPMHy6vAasJF5JziBmUprLog0DulaQMRyMmTS1
-	oDemai5QdUH3pf99wAGSphA3hHNWwpzABz5+FC7jMCizUcgSw6VRc3gN19RBf0aLew==
-X-Gm-Gg: ASbGncu/hkKw6H5GCr2pPBnigYIl7IcQKg6OhMGLNx0M8wvpYGBdmNQzOB3TvsDDdlv
-	8GsBeHHYu8QXR2SxN9RowYld3Y2FsRvf2oxIq16HOjrKM0UcvUaxPU64z7R82Pn8zcheCdTBy9W
-	3vB09IeqlklzWibYuz5wsSuWCfbBRmtUmxl/AzIE6ki5CrEuT/LYEF2uG0VjOdqJayzSXBk+YY8
-	5d/uskMsOrNfOZaqKYfel2aCtB6abiVHid5oI7zeeIpZSEmD/1tUs5dPkcSJqsWpBZ4ymDt8Trw
-	FP2ZlDt7n3k82JyaCsqx4re1hxG2cpF2PIsf8Uf7X5o9meREV9s/iemg8nA4i6ej8ktBP80VIqR
-	ZQ7wNVRS/KkQsUeJQFBYl8eD39znfE6Lf3786MazBpnnhcgvZSuIAXIPCMjzJQO2zKjvktNuckl
-	jyESAYyZyOZs3kxZV7tHpDhkBkjOzw/zA7aL0xtaxsReK7Yj13wqbTclMLZGfqAwmaGkFv/sIew
-	LjSRy6iS6HJXw==
-X-Google-Smtp-Source: AGHT+IHgCBAVlJ/1/Oj2H+nvmtjVOEfs8Cj4GuvQ7p3t9lR/WHGAMof8mvn31hs8D+Fx43GprBkfMw==
-X-Received: by 2002:a05:6a20:244d:b0:343:64dc:8cc with SMTP id adf61e73a8af0-3614eb15e9fmr24287915637.12.1764194693250;
-        Wed, 26 Nov 2025 14:04:53 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:c116:b1c9:632d:a902? ([2a00:79e0:2e7c:8:c116:b1c9:632d:a902])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd75def6346sm20451772a12.4.2025.11.26.14.04.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Nov 2025 14:04:52 -0800 (PST)
-Message-ID: <be908072-fd0a-48dc-97e0-b120539f5584@google.com>
-Date: Wed, 26 Nov 2025 14:04:51 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AEE1E9B0B;
+	Thu, 27 Nov 2025 00:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764204134; cv=fail; b=IltdVANJqyoYtQkEZI4F5GuLkh8AE2LpQQkivUG0YP2A5ar1M6t4x8DmNfOTkm1Xth58637+nnaYCOirMPFRw7AJuoZHTKMJNUZhNJF84mlAtgALjz7bnlejUZ5iBKISDC7Kc6QO7rc/m7RIestcZ6Aqa5O5M28jJtNACX9zqr4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764204134; c=relaxed/simple;
+	bh=5BIbBx0FFQCZoH/ZJXeTIx9q1gzuBdjvbwWB1UV8+xQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=fIgxD47j1tXDTCaXG06jteWBgc/MIIe1EZeDJklVX7QrO3L7hXLJo3b+vcMlqpAQ3jQF0mXoHzQEeEeBiJ94lWVm9CwplLodOmbWqZJBVoHP2nljbpABTv4fvx7tO+jb4ZmjgUSwFa14ASoFY5SBbJJp8jxpkNEAaTc7Xllefzs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=o5tij4GY; arc=fail smtp.client-ip=52.101.127.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XmOAYtyyKu7X1sRpHiojNRejF4dzp8XHJuUqlJusIThIjVlKRZcbaCdGD5FM4gqY8ZgeN3sriyjJf3274k5UZmHcgPskvhI1PLQLUoC12mThrIdeAQ+s58Ry2U7QnT0LTdPfxVHtTZ2ETGiPnd4b06rFHc5ziyaGf7aT0rCDjsw+0sDows+HQaQeR64JxiHvyd1lglqRTkA+vLG2nab2SLFKB3RqCo1Wa8c452LO4BAXvX2Tu3Sk84doRsAGvTJ1lB/xdIgedwekWydYcvETL+2UJoKPSazVHhzWgLYdNm4oJ//aUTmmlMXY1fjvgOmmne7cwa6qxY4YCKToGnD3Ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C4i/Caz1u6zYpsNYeiyd6THKuFFLeCAFye2oxffRTJU=;
+ b=A/U86R8cQj9Z/HycjKFHoO/B8ZrrEgndmqdhZFRddwjYEqh+EoeGbnnsR/iTjmj1nC3wM6ZHjIWBMyXvNGntaf4AEy6eIbYtPdUo9ljm4s29YNN33iat8Dw0UtMeRv7g50/R8BMexDYZCubJd0h5sCG1dI30xsUCYuJC6DnMN1Hj8oKhtDyXTGiatuo+YQaEEfsJnuj+Y6US2vV4/i8VM/1qHTfSolzFB4GksRZRakaw3MGIkWHYrSSrLJLNcAvg1mI7kzoztJ9PHNx2W7PMEKFvrJPlzWWz/MXv2GxvnY7WCbY0Qg8NW8a3KOFpKRXA3DcYCXCpP/GuZ/d/xLtpLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C4i/Caz1u6zYpsNYeiyd6THKuFFLeCAFye2oxffRTJU=;
+ b=o5tij4GY552DohDud6qljniFwiwX+n/BAO9QJdVXsvCmh+r2wJWZaxaJocmVTVJdJ98FQAJIJeFQVDQtXFqxFBZ0TSFO3EWoc5LJJ30xx9Xj2j0njvDSm+HWWRUKD4GNhhg+v1NPHREodMyGH0/fof1OnXbXtvK6B97eexeej91CEy8P2lNEI1+p8CAFnizJSDib55uvZnNQD5sIaZtQO/mLMf7F2T4xRBE+mziVL8GUIVU5FeLqFpkHjoE4J313gqFezPMY2yoMSE2Coq0/u8RJIFycJKIlgh5PKyfFY5U4o+35HTmIuNm/lCUPb6WGCxFySyjvgO0jSfqqrlrWSA==
+Received: from TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com (2603:1096:408::791)
+ by SE1PPFFDBC8F9D9.apcprd06.prod.outlook.com (2603:1096:108:1::433) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.12; Thu, 27 Nov
+ 2025 00:42:03 +0000
+Received: from TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com
+ ([fe80::df4f:b1a1:1825:4a80]) by TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com
+ ([fe80::df4f:b1a1:1825:4a80%7]) with mapi id 15.20.9366.009; Thu, 27 Nov 2025
+ 00:42:03 +0000
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: Conor Dooley <conor@kernel.org>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery
+	<andrew@codeconstruct.com.au>, Benjamin Herrenschmidt
+	<benh@kernel.crashing.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/2] dt-bindings: usb: aspeed,usb-vhub: Add ast2700
+ support
+Thread-Topic: [PATCH 1/2] dt-bindings: usb: aspeed,usb-vhub: Add ast2700
+ support
+Thread-Index: AQHcXq5hLghdhBiMbE2n2i9qqcwkerUFT7QAgABfpNA=
+Date: Thu, 27 Nov 2025 00:42:03 +0000
+Message-ID:
+ <TY2PPF5CB9A1BE661637E3365B5ADEDC2BDF2DFA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
+References: <20251126-upstream_vhub-v1-0-910709937ee0@aspeedtech.com>
+ <20251126-upstream_vhub-v1-1-910709937ee0@aspeedtech.com>
+ <20251126-protegee-ragged-067de2fd6488@spud>
+In-Reply-To: <20251126-protegee-ragged-067de2fd6488@spud>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PPF5CB9A1BE6:EE_|SE1PPFFDBC8F9D9:EE_
+x-ms-office365-filtering-correlation-id: 04b53bc4-a35a-4381-938b-08de2d4dc8a4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|7416014|366016|1800799024|38070700021;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?iWAXb5meX30wOddTDsGz5F1OzVw6osbNHBvthRV4f8J9UJUOuNQ0qY/9TFMd?=
+ =?us-ascii?Q?OEhU2KgSko+X+ecQ96ROaToHTrCHy1p5BmfrmlQsyxwVjQzV6QS2Jl0cyfYh?=
+ =?us-ascii?Q?7RS0CdYCWavmzf6hUAP4IK7PJYW1mVGMpefBFwRaUY9b6EQnhYnU6dhP7GaK?=
+ =?us-ascii?Q?5o2u6n8iwg5WxtuflP4caGKQ5KWCAonZC1PYfcAkbCQuSC0+9v2iKAMDCsV1?=
+ =?us-ascii?Q?+U+3Lntc+Uqe4utmtWy1qm+/WMIAue5q2vIHr+KW24GIZLVPprOX+W0czaGa?=
+ =?us-ascii?Q?wuXp9YFDczG7QlJEBuwfdyilSS3IFB1VgjHLX5KKfUnX3Jck1nj3YTFhTatR?=
+ =?us-ascii?Q?Huh+d5acfj5UewwoavLQh+jHypJk9JPdNodNEFF0Z4MAWHARIXCxfRZq3kCI?=
+ =?us-ascii?Q?7UKytRGjiFKnZ97hAKDZ8h7JgXVvR9Vh+6qezsC1efKnBREDP6Raxxct0XnG?=
+ =?us-ascii?Q?EjjgqOVBa81R2BF5TBD2uvASR9iuRZ5xIG5o5m8SzgGtX3Y9Vx6bCQKp+P6S?=
+ =?us-ascii?Q?LU2HBqkLcpkd9lLFvh/MQDNnKUDJef0h7mCygpmy0NR5kQ+wUoSr6umeeJqq?=
+ =?us-ascii?Q?U8MaRg/0XaKx3O1WUdQJRs2PXKJLnxkFQ+ZXpWdA2lim8jnZXnT5SRsToomU?=
+ =?us-ascii?Q?1bFI1AgLdeIvyeWNOaRHBpYbFmayZ6YXeNeWL/SR4QY5LW28mWshq6fKp26Z?=
+ =?us-ascii?Q?11Thid7MwOpawv7rBWyaDOfdV+RIfx8lFMDqz9yUBadfiN0/n5Im7d11jHjD?=
+ =?us-ascii?Q?2acaqlq6PG0H66KVx9dHdVzZ0TvRx8u9uA24MiytNuoA6ME420G5JxDg/kMp?=
+ =?us-ascii?Q?bfmVe1ZMMUrUOqwKjecdRn2Zxw1Slifq/hLuIT0q1eENwtV22npdCX8h2QEF?=
+ =?us-ascii?Q?Q82QIMAQXFVJ5zAXl3lAFYdDuc4zaYkOuGoCxcmwhkTWaFku1gaCEru8pYlG?=
+ =?us-ascii?Q?4DDM8qz4ExlRukJKVcG/G/Ma7/pli8keT7ZTb4cV0rq7lhZy8RaDjSamEYaN?=
+ =?us-ascii?Q?Y6tvBTe21SzXxqr10Pj94wQVDnDkw2ha8J/8SCSB5HjZJdAOzRVW54F7wuAy?=
+ =?us-ascii?Q?Fwxo8JdZlfQd19d+s7pmKJG2yBbh+UaCEYJmWVLzOb5oCHbfXkPf/rJTFjRY?=
+ =?us-ascii?Q?mT9NmD2IvHcTFGU/A3WhO546bYEB1bX9BTCNQZUfs+dDMlxyxlRKGq75EGuf?=
+ =?us-ascii?Q?Q3pYK27Okw6tDhywWM3cZdDfEOX1s4oG+qHOohCNnmrD+CFPDp7XoJNP+tao?=
+ =?us-ascii?Q?OmGXEWg9+anmxXqVkcwI7AiXaoS6u4i8HKO7RVNiunZC0ildHJRqmnK1LzOD?=
+ =?us-ascii?Q?psBS+9aCm3k33TtpwGgNH7mg5y1asXPBH1nRuevw/AXnlmQe3kFsVQpIGKr2?=
+ =?us-ascii?Q?51nKrSm9WxP5FfUajPB3wct+87Mga59EFKVzCI0aScl99VtQUozF1l2O1p+a?=
+ =?us-ascii?Q?nC8qcKy3ygPNPdy7ZS04zSfPMOSzfm+7EK9JZKULy6Gs/NHim3QwB1S8jyrl?=
+ =?us-ascii?Q?FNMPrUqsgotQI6uztL39tFsb2M/C4ZWRh0Jx?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700021);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?WdtRAh61xc4VuZfp1q44FKm0c5738YhbhT3RQgEIDAz36U8WbMj6Kd3s0m06?=
+ =?us-ascii?Q?a1djmcDOq0yMayWB04VytfMPan6KL8JEPgKPgU0nSbwu8YHEEcNWHjryukbL?=
+ =?us-ascii?Q?pB7fHh96yFo8suSBrJUcWwlEiQAEOssd6t/C3USakm/rBtYXpy5qmhHAbkk7?=
+ =?us-ascii?Q?8e+NgZJiMZmUzN9rHtlcyp83jDMWOIwjxaGzdD3UE1Udz+tIaIdS9iBXIe21?=
+ =?us-ascii?Q?2R/j/ns/nJNrVyupJcfKqU3hQuuOaqzRGp5s75ifRCl3Jw56vYkjRhPLWuAG?=
+ =?us-ascii?Q?bEe0BIE/rxYsw3WNFNnVsMMkWIW50Lz/JsRP7spScbMnxlFMHH2owDx+N2fk?=
+ =?us-ascii?Q?6P4LSS7zd8QfdL9lamNmh++IT/uolUq1AgGRTILTe5LOkHpdbYRpUkYzCCbg?=
+ =?us-ascii?Q?X3AIF2B7bkNvaxu9gF4OKPLZbbSlrA7na1V/+9U0b+UMDWMHpVVCNA7t0P9T?=
+ =?us-ascii?Q?3+4RaU0rzZzqHZh49SiSqQ1/8hzQq+yC60az3IqVg0UKCcjOugqY7On1tCdv?=
+ =?us-ascii?Q?ZJU1CMVqsfbIpFuY7hd0WcDocRNvS6U9l4c5vpRSS6pERSklev0PKduWv+Ze?=
+ =?us-ascii?Q?Otp3FcehJCB0QHqjX1em8vh5M6CdGkpK39FhSMXatOVhquK7ybIKE9mkx08c?=
+ =?us-ascii?Q?pJVSYAzyDUnNxYozZ9a73PfQQa0z+jTs0h3si+gqtaENU27sMGLKTKdUDNNS?=
+ =?us-ascii?Q?FekskCVlEaIT9KH8m0h1jReFWJqMGXIGImjcF1+d9QJDgtpbZejCU7ZDDXQB?=
+ =?us-ascii?Q?KLii8AUxpcnjpNCORJEGI2kw1+IPObDQekUKXWqm+Pm9TdQeLj28PiYRPDAh?=
+ =?us-ascii?Q?oYw6hmqgibN2ezgDaXQgthzfEcwVsrrV3WBGYQmTHmPYz3nDedZBA/nFUwD9?=
+ =?us-ascii?Q?L3ubA5IirdR1mBYiy9i2wlb0VwbernJPI3ER8XJu0F1PbxFqJm+zBrkUvORL?=
+ =?us-ascii?Q?qs1zUIQUVPwAIUbHhJcz2c2D+lrza3K+zRm/xEhhWbZw4fjs148cuy+C1JRu?=
+ =?us-ascii?Q?59DZB3j3dpnGP/pSiWhNSJtuGhxYDeRh4GshFP6yoWUf13lo0MDx9vuMvDhM?=
+ =?us-ascii?Q?jZ115E3Wn7EuJOBO9Bim/WswrR0zrxp79sg2qQGc3nPL0NLbV3gm5awocrt7?=
+ =?us-ascii?Q?Xb4GqRjh+pLqkp2Gf7creMW4n+8PBrJXDD1M9uN70wpbodsRszNR+zM1+03W?=
+ =?us-ascii?Q?AXGPzmVNSiAKsGFtGGRL1kuyHrE/z0jO1N6cgcaYNdgoJHmDLjJlNduleuEJ?=
+ =?us-ascii?Q?VA3lL8RgCNdcgGLY22/e6Z0QAI+N4hMhP7att0pxltPTop3C3Mk3t0qzb793?=
+ =?us-ascii?Q?EIUt5gfzdUebvNjr0aurZlTGh4M35xgvk30a+VKSPquuQJ0byNjQq0QlcVtV?=
+ =?us-ascii?Q?IukcTJ7FqeykTIWU+lQAiK/yyQur1PQsjYOZhSvr5q13TXkYLcIrtaMfKAjo?=
+ =?us-ascii?Q?xrTH+TqZ5TR+rQXWDAwnNCXD/W9l8bet/l7iJK3YpGnwr7R9m9+iPyV4Tkaw?=
+ =?us-ascii?Q?X5CYzO2iS9xKLjOpjl5/wjKuGs82I4OT4AMqs5NxzvMWbHfSZhmcM2C38wLa?=
+ =?us-ascii?Q?9R0CNfW3JhHZLE0umq4bMJ6cXf5euqsjmhGQMHSg?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] power: supply: max77759: add charger driver
-To: kernel test robot <lkp@intel.com>,
- Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20251123-max77759-charger-v1-5-6b2e4b8f7f54@google.com>
- <202511261521.hSYp4ttf-lkp@intel.com>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <202511261521.hSYp4ttf-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04b53bc4-a35a-4381-938b-08de2d4dc8a4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2025 00:42:03.4892
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JWs+2TSuOab8NYfCvRG/iiSmVUOTSuVl70nf9nt+j3MPS5RJc+D4IjS7jHUEhoTcD+ClXF06UKFtv1kuRWU7bNDu4XztQe4/5hMrKzg4z1w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SE1PPFFDBC8F9D9
 
+> Subject: Re: [PATCH 1/2] dt-bindings: usb: aspeed,usb-vhub: Add ast2700
+> support
+>=20
+> On Wed, Nov 26, 2025 at 04:26:30PM +0800, Ryan Chen wrote:
+> > Add the "aspeed,ast2700-usb-vhub" compatible. The ast2700 vhub
+> > controller requires an reset, so make the "resets" property mandatory
+> > for this compatible to reflect the hardware requirement.
+> >
+> > Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml | 14
+> > ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> >
+> > diff --git
+> > a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> > b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> > index 7f22f9c031b2..c9ebb6e004d1 100644
+> > --- a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> > @@ -26,6 +26,7 @@ properties:
+> >        - aspeed,ast2400-usb-vhub
+> >        - aspeed,ast2500-usb-vhub
+> >        - aspeed,ast2600-usb-vhub
+> > +      - aspeed,ast2700-usb-vhub
+> >
+> >    reg:
+> >      maxItems: 1
+> > @@ -33,6 +34,9 @@ properties:
+> >    clocks:
+> >      maxItems: 1
+> >
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> >    interrupts:
+> >      maxItems: 1
+> >
+> > @@ -107,6 +111,16 @@ required:
+> >    - aspeed,vhub-downstream-ports
+> >    - aspeed,vhub-generic-endpoints
+> >
+> > +if:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        const: aspeed,ast2700-usb-vhub
+> > +
+> > +then:
+> > +  required:
+> > +    - resets
+>=20
+> Do other aspeed platforms have resets? If not, please add an else here to=
+ block
+> its use on other platforms.
 
-On 11/25/25 11:38 PM, kernel test robot wrote:
-> Hi Amit,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on 39f90c1967215375f7d87b81d14b0f3ed6b40c29]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-power-supply-Add-Maxim-MAX77759-charger/20251123-163840
-> base:   39f90c1967215375f7d87b81d14b0f3ed6b40c29
-> patch link:    https://lore.kernel.org/r/20251123-max77759-charger-v1-5-6b2e4b8f7f54%40google.com
-> patch subject: [PATCH 5/6] power: supply: max77759: add charger driver
-> config: um-randconfig-001-20251126 (https://download.01.org/0day-ci/archive/20251126/202511261521.hSYp4ttf-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251126/202511261521.hSYp4ttf-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511261521.hSYp4ttf-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->     /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
->     /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `max77759_charger_probe':
->>> max77759_charger.c:(.ltext+0x27b): undefined reference to `devm_regulator_register'
->     /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `enable_usb_otg':
->>> max77759_charger.c:(.ltext+0x983): undefined reference to `rdev_get_drvdata'
->     /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `disable_usb_otg':
->     max77759_charger.c:(.ltext+0x9c3): undefined reference to `rdev_get_drvdata'
->     /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `usb_otg_status':
->     max77759_charger.c:(.ltext+0xa06): undefined reference to `rdev_get_drvdata'
->     clang: error: linker command failed with exit code 1 (use -v to see invocation)
-I believe this is because of a missing "depends on REGULATOR". Will fix 
-it in the next revision.
+I will update to following.=20
+
+   if:
+      properties:
+        compatible:
+          contains:
+            const: aspeed,ast2700-usb-vhub
+    then:
+      required:
+        - resets
+
+    else:
+      properties:
+        resets: false
+
+Thanks your review.
+>=20
+> > +
+> >  additionalProperties: false
+> >
+> >  examples:
+> >
+> > --
+> > 2.34.1
+> >
 
