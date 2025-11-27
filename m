@@ -1,142 +1,187 @@
-Return-Path: <linux-usb+bounces-31004-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31005-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71A5BC8E37E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 13:14:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7575C8E3BE
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 13:20:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0AF7134C4C6
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 12:14:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3806A3A157B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 12:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F085F32E72C;
-	Thu, 27 Nov 2025 12:14:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF1A330305;
+	Thu, 27 Nov 2025 12:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSQ9BT8O"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="az0Jui6S";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qk/pU+f8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647C532AAA9;
-	Thu, 27 Nov 2025 12:14:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEE432FA3A;
+	Thu, 27 Nov 2025 12:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764245673; cv=none; b=Nsp+qGJJIhplsUGJkOV+e6ucq+jk6l81aTb2oBxHLv2vHpce0WsieGUUHMwuV3rvIJiw6XTGDN3gxpxcgCUeSmvSzmjHCX/NnuqRjJW0VprPOkKrqQUiC6oy4Y2Fyu293djreaMN/PzVHRl8Vyuqg08GU+8F5A7w46NN+T7K6TM=
+	t=1764246010; cv=none; b=F847/ieXb+VAfN+OSCtLEi/3UuMSi0VPBuQD7okFF5pboelZz3Kioy+JSGXC+YXXTfcPpBWPKayJMaJj7jHnFLA9Pchu6bbXR/QoGB2eOZe8f6WPPQ3LHEB1rvGaeixQ+74IjzL2cDuyJH69STApyt+AnuzvOar3VMIkl4PPDb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764245673; c=relaxed/simple;
-	bh=7/C/7geMsxC0/mEobiPtx4JPT6NXYbpIFFRUEwbEOtU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BN2+YLvE2GGg/uj+qjgU/mVWOoycesRI+5HyEps2fE1HKPhs726ARbsG3gT/Y0fJAXlEqqUfvpHwx9MtwLt4REByHXiQC72kIzurNBtwmsfyX6bKpIkfIwx4RjzS9urgyIw5b62fGur75vilnrWEFz8eIcTddWI1EV/RYF8BAxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSQ9BT8O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA45BC4CEF8;
-	Thu, 27 Nov 2025 12:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764245672;
-	bh=7/C/7geMsxC0/mEobiPtx4JPT6NXYbpIFFRUEwbEOtU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GSQ9BT8Op3MPoqtqrtrV+j1e4rbsvAnND6S9+ykNzjCpyzv78eNJb1n6yE/OYQGUk
-	 cXbLpJ2wuScBpq+s1TnIslmmN8ybyWoJ1OafxxHxW+awrhCdsb07Zquk1xhY1U8yjG
-	 QdLkNlCk/8hwg3nHNQOmxPNFdy6jfG84u9XjRHZoXNE1bKXgLmjN/ppINQvKG8fX2F
-	 3HMGhKbE6ZDoswET1sUsUfrd9CGXrCiC1gBdLyTkGOrSf7eeNlWgNYITg5k1GKIyWh
-	 jkdlvY7SiVZol8QUxbJFXga4VUW1vjJmbZUMMOiKI5HCWCuDq4ThoikxKxoTLmwa5Q
-	 MEUC87+XTaPZQ==
-Message-ID: <1df4fa7a-4b52-4816-bfa3-39afb5c7ad84@kernel.org>
-Date: Thu, 27 Nov 2025 13:14:26 +0100
+	s=arc-20240116; t=1764246010; c=relaxed/simple;
+	bh=d4jD9AOTsm+ieImUBdhYbb2Qb9QXDpy5qV6Gu6PVHos=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=btsqGRsBwGS7DRwA4NU/SubeQXPaGqNjKtQm2cVwcR1qHkk6Ndlw4E8DIqEBEgEFf8FBA+hn7Xu8xzxCEIak13Mdr6a/xdh2mLLFurrH2bxmJnpDuh1ICKNMmdGTVMh2fTniSkUkQZhBaLydg68S6W3PJrUvfOGet/uFronTnYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=az0Jui6S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qk/pU+f8; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
+	by mailflow.stl.internal (Postfix) with ESMTP id D324F13003D7;
+	Thu, 27 Nov 2025 07:20:05 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Thu, 27 Nov 2025 07:20:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1764246005;
+	 x=1764253205; bh=sM3zD+mOnITtJ9F2JG0yeMKEXacWXE8JL0HxA96TrJI=; b=
+	az0Jui6SJVlGY1WQSktongf+DQpnFhjn5+MDJKbtn6yUmbdYYWjXaRed33+9SNKP
+	YfPpU5/v60Ncn0T/CPmv9z0lwJrD/pcQ8sYrOyG+6kZu3LrIf4GdrrWOAdZHVlDq
+	4uFgwwvA9ktHNIjIzbzdbLoq6Fu0Qb0e1m3I93J+wA9p+iuNOTx0Hbb+Zt9ahTB4
+	1m6o92dI9fg2zcKaDqXUtrfYX38D+inI7FsW9FUhHST734Lmmg+HVk4T6ypHXzeU
+	J113+bVZ7uyrVvybwlqYRveDtcMzzRJR1WPGw5Ka51n1WVwLK0K9fV0XxZwujeIv
+	e1fnHB4tqTe5hMS/i31jtQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1764246005; x=
+	1764253205; bh=sM3zD+mOnITtJ9F2JG0yeMKEXacWXE8JL0HxA96TrJI=; b=q
+	k/pU+f8o2xuvEXHdHdJF/ptzEA56RCHHXJFuBExVSC8orUPlqJw/AIPLOFw8TBZJ
+	/d4ZbTGl8TcQ4G26SeY2rd8ZrwiwnW8TuzkWDWtLFjrQLgatRFrn+bYpFWxLrNWC
+	RRrGH/ccH5CeNPRZlYRoHB0mHLc60HXvrkIZ0QrecCPGC0ndV3RkN/jI3FIdzGaG
+	QelOYE5w20xRoJO1Qba/AVOcH1lslfT6FBNw7AD14z6CjJg+99Dv6TsGVhVBwTz+
+	nTS5Dfou2ALinWBhBKHYOn5qoRJLVR+d1mDQcYzNzM0HVUh1/sF8b61yzptpbKu5
+	cpiM+onI2AczDgK7mtLlQ==
+X-ME-Sender: <xms:9EEoaTOc2bZJ-bMzEJnVO9g6PT6lYvMPaH0WOzoto2IeFupDyHyxmw>
+    <xme:9EEoaWyQwaC1VYn-V06WincYJzQ-kdxtwgiWCuzJmLzMwEpCWNWnXBatacX7AefDO
+    vkqQrEKflhEKCGxw7ywfES45v9oad-dRZHiZTQ_7ShbiD-CHA>
+X-ME-Received: <xmr:9EEoaYnOJLlI5EAeMtv8qMAs7sK02YvihQmnHSMGJvyu9PVcz5vBUisExBRccud3aK_QDJNZhQeMaJrKRNZhXb3Pam7YcA6ONqAP8w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvgeejvdduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefhteefve
+    dtvdfgkefhvedvvedvudefuedvueetueduteejgeekveegffekfefgkeenucffohhmrghi
+    nhepsghoohhtlhhinhdrtghomhdpkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+    pdhnsggprhgtphhtthhopeefgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplh
+    hutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhgv
+    ohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepvhhkohhulheskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhishhhohhnsehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehhvghikhhosehsnhhtvggthhdruggvpdhrtghpthhtohepfihulhhfse
+    hrohgtkhdqtghhihhpshdrtghomhdprhgtphhtthhopehkvghvvghrrdihrghnghesrhho
+    tghkqdgthhhiphhsrdgtohhmpdhrtghpthhtohepmhhinhgrshdrhhgrrhhuthihuhhnhi
+    grnhesshihnhhophhshihsrdgtohhmpdhrtghpthhtohepshhtvghrnhesrhhofihlrghn
+    ugdrhhgrrhhvrghrugdrvgguuh
+X-ME-Proxy: <xmx:9EEoaeV7EwwzsZ2HQiAo2fEQpvlsJ1wGGAwchd69fZLf4ph6yCS7EQ>
+    <xmx:9EEoaZ0ftNEmtV8XNHZl6FoPmPZ0kjOVy9fn2Ig4vUb-pQWdja5bpg>
+    <xmx:9EEoaekYNad9XVy-y5CM2nw3630vz52mOwK6EVZIt6dlvXe1ZNYs8g>
+    <xmx:9EEoaQEquoa2rwLVTrZyXXq93MF1NaDgoBkI5tDhXCeRP_-XFBG1XQ>
+    <xmx:9UEoaUaKdpX-AbibV2W5OQy1HlJC2U05OYLnsD2QWCahwORmfif_J7oU>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Nov 2025 07:20:04 -0500 (EST)
+Date: Thu, 27 Nov 2025 13:20:02 +0100
+From: Greg KH <greg@kroah.com>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, William Wu <wulf@rock-chips.com>,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Louis Chauvet <louis.chauvet@bootlin.com>,
+	=?iso-8859-1?Q?Herv=E9?= Codina <herve.codina@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-phy@lists.infradead.org, linux-rockchip@lists.infradead.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] phy: rockchip: inno-usb2: fix disconnection in
+ gadget mode
+Message-ID: <2025112725-enviably-ground-9342@gregkh>
+References: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-0-239872f05f17@bootlin.com>
+ <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-1-239872f05f17@bootlin.com>
+ <DEHVRC8CY12S.3LSC6UVSMU0C1@bootlin.com>
+ <DEJD8DJZFNZO.11B1UBXJBN7MO@bootlin.com>
+ <DEJDSE73CJES.2AB8YSKLW6VE1@bootlin.com>
+ <DEJEFLKA9IJR.237ZLV8HBD2VS@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: dwc3: qcom: Support firmware-managed resource
- states for power management
-To: Sriram Dash <sriram.dash@oss.qualcomm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: jack.pham@oss.qualcomm.com, faisal.hassan@oss.qualcomm.com,
- krishna.kurapati@oss.qualcomm.com, andersson@kernel.org,
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Konrad Dybcio <konradybcio@kernel.org>,
- Shazad Hussain <shazad.hussain@oss.qualcomm.com>
-References: <20251127-controller_scmi_upstream-v1-0-38bcca513c28@oss.qualcomm.com>
- <20251127-controller_scmi_upstream-v1-2-38bcca513c28@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251127-controller_scmi_upstream-v1-2-38bcca513c28@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DEJEFLKA9IJR.237ZLV8HBD2VS@bootlin.com>
 
-On 27/11/2025 11:31, Sriram Dash wrote:
-> Add support for firmware-managed resource states in the
-> Qualcomm DWC3 USB controller driver. On platforms
-> like sa8255p, where controller resources are abstracted
-> and managed collectively by firmware, the driver communicates
-> power management transitions using dedicated resource state
-> levels via dev_pm_opp_set_level().
+On Thu, Nov 27, 2025 at 11:18:45AM +0100, Luca Ceresoli wrote:
+> Hi Théo,
 > 
-> Macros are introduced to represent key lifecycle events:
-> initialization, system and runtime suspend/resume, and exit.
-> The driver sets the appropriate resource state during probe,
-> remove, suspend, and resume operations, enabling bulk ON/OFF
-> transitions of grouped resources according to the
-> controller's operational state.
+> On Thu Nov 27, 2025 at 10:48 AM CET, Théo Lebrun wrote:
+> > On Thu Nov 27, 2025 at 10:22 AM CET, Luca Ceresoli wrote:
+> >> On Tue Nov 25, 2025 at 4:28 PM CET, Théo Lebrun wrote:
+> >>>> The code already checks for !rport->suspended, so add a guard for VBUS as
+> >>>> well to avoid a disconnection when a cable is connected.
+> >>>
+> >>> Your commit message was clear but I was missing one key point: what
+> >>> rport->suspended means. It isn't what I first thought. Instead it means
+> >>> phy is powered off. Naming is bad but unrelated to your series. Maybe
+> >>> add a comment to your commit message like the following?
+> >>>
+> >>>   The code already checks for !rport->suspended (PHY is powered on), ...
+> >>
+> >> You are right. I have added a slightly longer text:
+> >>
+> >>   The code already checks for !rport->suspended (which, somewhat
+> >>   counter-intuitively, means the PHY is powered on), ...
+> >>
+> >> Still worth your Reviewed-by?
+> >
+> > Even more so.
 > 
-> Signed-off-by: Sriram Dash <sriram.dash@oss.qualcomm.com>
-> Co-developed-by: Shazad Hussain <shazad.hussain@oss.qualcomm.com>
-> Signed-off-by: Shazad Hussain <shazad.hussain@oss.qualcomm.com>
+> Thanks, v2 on its way.
+> 
+> >> I also added the Cc: stable@vger.kernel.org line, which I noticed being
+> >> missing.
+> >
+> > I never add that Cc trailer and only rely on `Fixes:`. I thought it
+> > used to be documented as an alternative to that Cc trailer but it does
+> > not show up in `git log -p Documentation/process/stable-kernel-rules.rst`
+> >
+> > There is one indirect mention of "scripts that look for commits
+> > containing a 'Fixes:' tag":
+> > https://elixir.bootlin.com/linux/v6.17.9/source/Documentation/process/stable-kernel-rules.rst#L132-L134
+> >
+> > Anyway, you do right by explicitly tagging `Cc: stable@...`.
+> 
+> Theory says Cc: is needed:
+> 
+> > Note: Attaching a Fixes: tag does not subvert the stable kernel rules
+> > process nor the requirement to Cc: stable@vger.kernel.org on all stable
+> > patch candidates.
+> (https://docs.kernel.org/process/submitting-patches.html#reviewer-s-statement-of-oversight)
+> 
+> But in the practice I happened to forget Cc: stable in the past, the patch
+> got applied and the Fixes: tag was enough for correct cherry-pick in stable
+> branches.
 
+That is never guaranteed, it is a "best effort only when the stable
+maintainers are bored" type of thing.  Always be explicit, and use cc:
+stable, as the documentation has stated for the last 17+ years :)
 
-Messed order of tags. Please read carefully submitting patches, so you
-understand what you certify before you actually certify.
+thanks,
 
-Best regards,
-Krzysztof
+greg k-h
 
