@@ -1,168 +1,148 @@
-Return-Path: <linux-usb+bounces-31013-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31014-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E41BDC901FB
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 21:35:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE310C9043A
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 23:05:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 63E1334E381
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 20:35:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C70D53AA23A
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 22:05:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320083128DC;
-	Thu, 27 Nov 2025 20:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66F76258CE9;
+	Thu, 27 Nov 2025 22:04:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OWPzv8q3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E14682QM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C975262FF8
-	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 20:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868472417F0
+	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 22:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764275745; cv=none; b=Ckx3KRAQeeZn6YIOmbrMm5TcSMs18D3HYrq/p3r341ID2/bNAzX/0TQgcbO5l0GuXCcwVIO6nhDAQ22fQbLnBEnOcQwk2m3co3ajhJvu+mLkoaDA3gyJdUj9AympL3rgupP4TTgR/wmlXni1fIOZmlSQIIaWxu1fxTIazc4wHRM=
+	t=1764281098; cv=none; b=rShyXPtG7MqfsdRfECCr3KR4/WmdsZxMjo12JCjXjPvX+mt1TwGTUN4j6hLbK6Hk2QXZPeJmpgmaP+tUzhF/q+rVMOtUiNFSikXc2AtPSkb9V0zcab5fzHXhq0VqIODZMokot7siVyBYe3EufbffpZ79Fr2k9z3vEcAf5suVusc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764275745; c=relaxed/simple;
-	bh=HtDJiGKwBcd0MheKnVnzDxPgz7tlHfxmRyB9yTFfvLQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DVxLM60vzeh5zDoJvczLBNpMY5gj5fDxuSKTeHhjKVDA0WK1rWGDS0NN2eq08R7QpB0o8zH1MsBNoAHFvfH7ksmBHBrUvmS+v5qCqBv+XkuCCYBElkcoOdmaL+DwzzrqPi1z02rvIXpFW7uRDuEcVCEi4ZxyhHk2vjE4VCZ6i7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OWPzv8q3; arc=none smtp.client-ip=74.125.224.49
+	s=arc-20240116; t=1764281098; c=relaxed/simple;
+	bh=leQxvCDZGM0ZdtWs0cwDmQjkTiimbzrVICuk5cKWwNk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OLHwbYjlsRmzz6yf3uJQGXsiQ659qDGM5ty164iv5/Trjsry0ICkwCZpidK8JLXFSSEamQp48rSk5GmhmUUDA+vJid85h3kV+NUrUACp4hiRbfoEsfRJ7MVO8LyeTRGYzt48fdvLU78v5ErMNbDeMiU+7+d0ik4RlhiWxmYtRBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E14682QM; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-641e942242cso1062294d50.1
-        for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 12:35:43 -0800 (PST)
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-bc17d39ccd2so662854a12.3
+        for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 14:04:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764275742; x=1764880542; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LiJqKid1AUPaq0JBx2dwztOPzocSSNqSoSuSWdADDrE=;
-        b=OWPzv8q3Yyqzwfe12KbyyODlc+1jt13+A9+Bj7yHrw/48wfDIP+f3VbyRHuBSETRdF
-         yEeYd1D5zozE2koqY0wezaNB25tch8QL23CcHy4ImA32zENSi4m50OhgA26lw3GxNUrN
-         syDJPSgH3WJYoyYkxessaNfzEzHnJ6MIu0C1Tb3oFWNdIrVYPW2lUN69F3MhYc5iDnhx
-         UJNKuupsqa2B2PEgv2IpNjJSCAsdWNlj+jVbNPSspUWWLbL4E47e4JfoyyVgL1VofTeJ
-         Ef9hs8l6JuYLLFBlUgpDk4aT2XKNV/2l27CQ07wK7LCB54xNBRDxuPqd9eP7ctnP3Wuf
-         bRiw==
+        d=gmail.com; s=20230601; t=1764281096; x=1764885896; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eE3jWwUBeNBwotvMaOoLsxAW53Rx1wxHI/kdT4LjgPM=;
+        b=E14682QMpFyJD3l60Y47xyDStxcUpVCFwwPz/eykIMqWHyu/eEy8c4IuRk7mb5zbiu
+         BQKMqAs21Yn5Ee+LD8kmEHijp/vEG3Bha9O7avnOFHaTsBZOLTaU/fr032xgzrVPvC5Q
+         wru4jZFwN3VLklsYePrExOkQbJd26Vz0qCb4R3xolKxWV5Fl+X8hnoO1IrunI+aPrJxl
+         2Of3bsXen8EFJZ4U+OTVtBdbToeoBMTad82OOtfmear7Wk3FC4pCzZajiyOq0Mw30mF+
+         EaSED1sMOUEeIei0RX/8em/ybs5zkZ9sufq2x5yWNUm+hqhbcKOKKXQD6DlQOw9nKmxf
+         gMuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764275742; x=1764880542;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LiJqKid1AUPaq0JBx2dwztOPzocSSNqSoSuSWdADDrE=;
-        b=gVSsXkCfcLpjtq8HdKQ6jzP2mmgbSABO+xW3nNqE+eGTqQXXFLgwo5bAD0n7VYuz3Q
-         56xyztQN72P2e/ZQQbKtsyy9BibFytKbe/a4i2EhyJQGFlmvP+DfVyohzW7qQPYHVDMO
-         nesHvHLn2F/7roKjLI3oTRoZo1Lv8lJF/yz2UC1M0FG83eCYvztkN68uMar5javGDtIU
-         46ar5UCXt82tI1W3EZdlF1FsAHKDthmO0nQ4Td+GEtL392pjYU14EmSboGKnmziFoWGb
-         jgfZLHF0mKvo5qpqWRhoZ4qjmmN4lYg+e9I3VQsNTYJfjD5muQbF/f/NYZunwhln3/t4
-         QfMA==
-X-Gm-Message-State: AOJu0YypMB5X7TTRJ3VaMmiUxqY/Xx0jD5mhwFjUUaVK8+/KbdEWCUuL
-	B5EQEHe0TVDZQfd1Gs+0jt27QP6pFpWQMBj+GIMnrZG7cr0OGHH2ldVR
-X-Gm-Gg: ASbGnctJNK+S1DupIODcIW2E6nWBK+bW3toDWFqYpIZ03VHyPrTMHEUlklEPtbhDhhl
-	gHQ+0W6mh/veW+I6DKDLw7LBw4XDFy+h6GlgsDauxDwL3/Ipf9/othGA4PLGai0iFpcyW7uYDfh
-	mJn1Rzi/aJZBx1QghEUPHny2sRlgMf9Sb6hg5QcoobX9CLSDn2eshYKyfzfxg6vNmpxLstazdL2
-	RLcF76D7C4GdqeiAxkq2c7DByusqNmGUMQNuaqIOyMSNWLpYccghSjJ2dWoL0aJ8SX411DEdf7k
-	jLxMSZnwqw4trdyLK2fIzl3swDcg7adB7ZaZXxnvknc24mgNSuIz4kG5UYqU0w2zsuAGxLMx4g6
-	gK/gnJfO0d3oUIw1doFe6w5IDYhY+prjjtI2WFHmtRH3iBADfrHbsiaqcBVecO+oHwLb/cV8XkR
-	KRKolqxmN8iGJs2vZCMRFVqQNM9IrRd/lt1lDXWmFAKDY6Mjsorip4Bd9KV8x5wfmXuPzg
-X-Google-Smtp-Source: AGHT+IH1ZhvCQv2MEp+5/UarxbSxfCaOdxcBamQdmSSrJtRgTbE7ALnAkKsKzoTBGbYiZAzE6cNyag==
-X-Received: by 2002:a53:ce8f:0:b0:641:f5bc:6999 with SMTP id 956f58d0204a3-64302b39306mr12603551d50.85.1764275742186;
-        Thu, 27 Nov 2025 12:35:42 -0800 (PST)
-Received: from ?IPV6:2600:381:6a1e:8e2d:1df2:9a47:b4c6:d8c2? ([2600:381:6a1e:8e2d:1df2:9a47:b4c6:d8c2])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad0d5fe10sm8958637b3.14.2025.11.27.12.35.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Nov 2025 12:35:41 -0800 (PST)
-Message-ID: <70565b52-d42d-4808-84cd-ac8587c75b10@gmail.com>
-Date: Thu, 27 Nov 2025 15:35:37 -0500
+        d=1e100.net; s=20230601; t=1764281096; x=1764885896;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eE3jWwUBeNBwotvMaOoLsxAW53Rx1wxHI/kdT4LjgPM=;
+        b=Ul5oZgpa8yM/egenT9BAduHOMQ/JwwefTByDIFyVogzJpZcJXV82Xl3N1irqog9wMp
+         gUouQ+MG0yk1kZHZUrnusROoxW4olW+OZ7jBQHBkFI8FqxvFdPhPWWjW03KyWZJhZXaF
+         f6o5C4wF7k7qQelnTaFUK3r+tPLExXV86Xw2hGp4Oo/7n+AIpRGAPUX6GyAisak6rF2Z
+         Lg1oj6zBcdWbX39bZgxKOK4D64wbu5C0ErvOOhL3GV0ncmulwlWdi94oTos101LeG/wL
+         yvnnrf6yMk6ZS8dAs2rDe+09kfkk1qYfw5TcemkLrncz24B8uey5qI46tDNO3nav2ZtL
+         H9Pg==
+X-Forwarded-Encrypted: i=1; AJvYcCVhwDmhdHiHy6Bf+OFnVbWdpFGfgfBQJRZ6lnsupuiyeDKmBpqK9kz9QweFQ+ul/xoEvIlH8/6ejgA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWYDUyQ8lVbYF5BQ9PO4McshYxyQISaoxosDxJqxORrmNXoYF3
+	Utjl9iIvY0FSc9UhOgmHNQk3pxXZTTf+nY5CICfP0h7bHILLVR+h+7qH
+X-Gm-Gg: ASbGncs/HJEEfA5eH1Lf42QeXcVzXfUbPjO1MKs3bU59DP9pdbP9FUajJiWjIdE9065
+	hGNCzNSeG4ftS8DxsqhOT9gBJy/fbN4Lbo39PAslucnCk3horHrAmGnGru12wUAgjRouYg12L8+
+	rnKXfJtcbUs5yQhHBOQtr8rq5cX8pDAA6qK3bD1fJhjrcl1f7yMpt2erf710/xEMCCXWTlAg701
+	05Gufw751egpb1/uVo7AaXsv7vdNUiUOxFMsBPO9uA4V9GxajLBrq5iSXkfEmvqaa7HaYfJnpBA
+	r5/AkMvrE+BwO/7YaCq/XkSqbfia9laN2ztYkNatlxRpT/S0KV1RZQX5qiu2gq/8eAPbtLucT/g
+	p8B0kwafaEHQq1v1pNCnNyNpcRwZfzaO/nJ/xxi9AnAxxMT36JWyUsG90A/GWVSlB658ovnTj0n
+	m4hvsOxmspI4+8Ql/cSZuSS1X9C0eAGi4HKaapuRgkYS3D3DNVR2+7tA==
+X-Google-Smtp-Source: AGHT+IF9sx3tyNko/VRd2ErYrohrhI+XHQmwImdHaHPGXKSiSEtP/7hWCmOgd14XsBzeXqCS9rRf3w==
+X-Received: by 2002:a05:693c:800d:b0:2a4:3593:4674 with SMTP id 5a478bee46e88-2a9415a4876mr6126355eec.16.1764281095812;
+        Thu, 27 Nov 2025 14:04:55 -0800 (PST)
+Received: from lugathe ([2804:13c:46ac:1000:f491:d00a:e2fb:e67c])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a9653ca11esm9621462eec.0.2025.11.27.14.04.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Nov 2025 14:04:55 -0800 (PST)
+From: =?UTF-8?q?Rodrigo=20Lugathe=20da=20Concei=C3=A7=C3=A3o=20Alves?= <lugathe2@gmail.com>
+To: bentiss@kernel.org,
+	jikos@kernel.org
+Cc: linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	stern@rowland.harvard.edu,
+	dmitry.torokhov@gmail.com,
+	linuxhid@cosmicgizmosystems.com,
+	linuxsound@cosmicgizmosystems.com,
+	lugathe2@gmail.com,
+	michal.pecio@gmail.com
+Subject: [PATCH v3] HID: Apply quirk HID_QUIRK_ALWAYS_POLL to Edifier QR30 (2d99:a101)
+Date: Thu, 27 Nov 2025 19:03:57 -0300
+Message-ID: <20251127220357.1218420-1-lugathe2@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/8] usb: gadget: dummy_hcd: coding style improvements and
- error handling change
-To: Clint George <clintbgeorge@gmail.com>, stern@rowland.harvard.edu,
- gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
- khalid@kernel.org
-References: <20251119130840.14309-1-clintbgeorge@gmail.com>
-Content-Language: en-US
-From: David Hunter <david.hunter.linux@gmail.com>
-In-Reply-To: <20251119130840.14309-1-clintbgeorge@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/19/25 08:08, Clint George wrote:
-> This patch series focuses on addressing various coding style issues in
-> the dummy_hcd USB gadget driver. The changes include simplifying error
-> handling by preventing kernel-space crashes, improving readability, and
-> ensuring consistency with kernel coding conventions.
-> 
-> Clint George (8):
->   usb: gadget: dummy_hcd: replace BUG() with WARN_ON_ONCE()
+The USB speaker has a bug that causes it to reboot when changing the
+brightness using the physical knob.
 
-Hey Clint,
+Add a new vendor and product ID entry in hid-ids.h, and register
+the corresponding device in hid-quirks.c with the required quirk.
 
-Regarding our discussion on Discord, I wanted to give you advice and
-have it be closer to the code, so you could see what I was talking
-about. You asked about Greg's feedback regarding the "Bug()". Here is
-some context so that you can understand Greg's feedback a little better.
+Signed-off-by: Rodrigo Lugathe da Conceição Alves <lugathe2@gmail.com>
+---
+v3:
+ - Defined correct vendor
+ - Moved the added lines to the correct location
+v2:
+ - Fixed title
+ - Simplified commit message
+---
+ drivers/hid/hid-ids.h    | 3 +++
+ drivers/hid/hid-quirks.c | 1 +
+ 2 files changed, 4 insertions(+)
 
-In Kernel development, there are thousands of people writing code. As a
-result, developers will write something like "Bug()" or "Warn()" if a
-particular path/condition is met.This is to create a signal for future
-developers about situations that should not occur. A later developer
-might do something that causes that faulty condition to be met. When
-debugging, your goal is not to simply remove that line. Your goal is to
-find out what caused the faulty condition, and fix that.
-
-If all you do is eliminate the signal that there is an error, you are
-just "papering over" instead of addressing the actual issue.
-
-
->   usb: gadget: dummy_hcd: replace symbolic permissions (S_IRUGO) with
->     octal (0444)
->   usb: gadget: dummy_hcd: use 'unsigned int' instead of bare 'unsigned'
->   usb: gadget: dummy_hcd: fix block comments, blank lines and function
->     braces
-
-As we discussed, you can break your patches into something more focused
-on one type of fix. For example, one patch could be to just remove code
-and put in a more meaningful comment. Another patch could be removing
-unnecessary spaces.
-
->   usb: gadget: dummy_hcd: merge multi-line quoted strings into one line
->   usb: gadget: dummy_hcd: use sizeof(*ptr) instead of sizeof *ptr
->   usb: gadget: dummy_hcd: remove unnecessary 'else' after return
-
-Also, some things like your changing of the "else if" are things that
-you do not need to change. Some of the knowledge of what to change and
-what to ignore will come with experience. For that particular one, most
-developers are used to seeing "else if".
-
->   usb: gadget: dummy_hcd: fix miscellaneous coding style warnings
-> 
->  drivers/usb/gadget/udc/dummy_hcd.c | 139 ++++++++++++++---------------
->  1 file changed, 67 insertions(+), 72 deletions(-)
-> 
-
-Overall, my recommendation for you is to reduce the amount you are
-trying to tackle at once. You can work over a longer period of time on
-the file. Not everything needs to be accepted all at once.
-
-Also, feel free to continue reaching out on discord. I just wrote here
-to closer tie my feedback to particular patches.
-
-Good attempt at submitting your first patch series, and don't get
-discouraged. Getting feedback is a part of the process.
-
-Thanks,
-David Hunter
-
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 0723b4b1c9ec..fbccac79e75a 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -438,6 +438,9 @@
+ #define USB_DEVICE_ID_DWAV_EGALAX_MULTITOUCH_A001	0xa001
+ #define USB_DEVICE_ID_DWAV_EGALAX_MULTITOUCH_C002	0xc002
+ 
++#define USB_VENDOR_ID_EDIFIER		0x2d99
++#define USB_DEVICE_ID_EDIFIER_QR30	0xa101	/* EDIFIER Hal0 2.0 SE */
++
+ #define USB_VENDOR_ID_ELAN		0x04f3
+ #define USB_DEVICE_ID_TOSHIBA_CLICK_L9W	0x0401
+ #define USB_DEVICE_ID_HP_X2		0x074d
+diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+index bcd4bccf1a7c..f6b7ed467723 100644
+--- a/drivers/hid/hid-quirks.c
++++ b/drivers/hid/hid-quirks.c
+@@ -81,6 +81,7 @@ static const struct hid_device_id hid_quirks[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, USB_DEVICE_ID_DRAGONRISE_PS3), HID_QUIRK_MULTI_INPUT },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, USB_DEVICE_ID_DRAGONRISE_WIIU), HID_QUIRK_MULTI_INPUT },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_DWAV, USB_DEVICE_ID_EGALAX_TOUCHCONTROLLER), HID_QUIRK_MULTI_INPUT | HID_QUIRK_NOGET },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_EDIFIER, USB_DEVICE_ID_EDIFIER_QR30), HID_QUIRK_ALWAYS_POLL },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_ELAN, HID_ANY_ID), HID_QUIRK_ALWAYS_POLL },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_ELO, USB_DEVICE_ID_ELO_TS2700), HID_QUIRK_NOGET },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_EMS, USB_DEVICE_ID_EMS_TRIO_LINKER_PLUS_II), HID_QUIRK_MULTI_INPUT },
+-- 
+2.52.0
 
 
