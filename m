@@ -1,255 +1,78 @@
-Return-Path: <linux-usb+bounces-30983-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30984-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC61FC8C6FA
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 01:42:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A13C8CB02
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 03:46:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A3A8B4E12D3
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 00:42:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A88C3B26DD
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 02:46:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4843522A7E4;
-	Thu, 27 Nov 2025 00:42:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA6A828641F;
+	Thu, 27 Nov 2025 02:46:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="o5tij4GY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hd6RiPGB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023078.outbound.protection.outlook.com [52.101.127.78])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AEE1E9B0B;
-	Thu, 27 Nov 2025 00:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.78
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764204134; cv=fail; b=IltdVANJqyoYtQkEZI4F5GuLkh8AE2LpQQkivUG0YP2A5ar1M6t4x8DmNfOTkm1Xth58637+nnaYCOirMPFRw7AJuoZHTKMJNUZhNJF84mlAtgALjz7bnlejUZ5iBKISDC7Kc6QO7rc/m7RIestcZ6Aqa5O5M28jJtNACX9zqr4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764204134; c=relaxed/simple;
-	bh=5BIbBx0FFQCZoH/ZJXeTIx9q1gzuBdjvbwWB1UV8+xQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=fIgxD47j1tXDTCaXG06jteWBgc/MIIe1EZeDJklVX7QrO3L7hXLJo3b+vcMlqpAQ3jQF0mXoHzQEeEeBiJ94lWVm9CwplLodOmbWqZJBVoHP2nljbpABTv4fvx7tO+jb4ZmjgUSwFa14ASoFY5SBbJJp8jxpkNEAaTc7Xllefzs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=o5tij4GY; arc=fail smtp.client-ip=52.101.127.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XmOAYtyyKu7X1sRpHiojNRejF4dzp8XHJuUqlJusIThIjVlKRZcbaCdGD5FM4gqY8ZgeN3sriyjJf3274k5UZmHcgPskvhI1PLQLUoC12mThrIdeAQ+s58Ry2U7QnT0LTdPfxVHtTZ2ETGiPnd4b06rFHc5ziyaGf7aT0rCDjsw+0sDows+HQaQeR64JxiHvyd1lglqRTkA+vLG2nab2SLFKB3RqCo1Wa8c452LO4BAXvX2Tu3Sk84doRsAGvTJ1lB/xdIgedwekWydYcvETL+2UJoKPSazVHhzWgLYdNm4oJ//aUTmmlMXY1fjvgOmmne7cwa6qxY4YCKToGnD3Ig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C4i/Caz1u6zYpsNYeiyd6THKuFFLeCAFye2oxffRTJU=;
- b=A/U86R8cQj9Z/HycjKFHoO/B8ZrrEgndmqdhZFRddwjYEqh+EoeGbnnsR/iTjmj1nC3wM6ZHjIWBMyXvNGntaf4AEy6eIbYtPdUo9ljm4s29YNN33iat8Dw0UtMeRv7g50/R8BMexDYZCubJd0h5sCG1dI30xsUCYuJC6DnMN1Hj8oKhtDyXTGiatuo+YQaEEfsJnuj+Y6US2vV4/i8VM/1qHTfSolzFB4GksRZRakaw3MGIkWHYrSSrLJLNcAvg1mI7kzoztJ9PHNx2W7PMEKFvrJPlzWWz/MXv2GxvnY7WCbY0Qg8NW8a3KOFpKRXA3DcYCXCpP/GuZ/d/xLtpLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C4i/Caz1u6zYpsNYeiyd6THKuFFLeCAFye2oxffRTJU=;
- b=o5tij4GY552DohDud6qljniFwiwX+n/BAO9QJdVXsvCmh+r2wJWZaxaJocmVTVJdJ98FQAJIJeFQVDQtXFqxFBZ0TSFO3EWoc5LJJ30xx9Xj2j0njvDSm+HWWRUKD4GNhhg+v1NPHREodMyGH0/fof1OnXbXtvK6B97eexeej91CEy8P2lNEI1+p8CAFnizJSDib55uvZnNQD5sIaZtQO/mLMf7F2T4xRBE+mziVL8GUIVU5FeLqFpkHjoE4J313gqFezPMY2yoMSE2Coq0/u8RJIFycJKIlgh5PKyfFY5U4o+35HTmIuNm/lCUPb6WGCxFySyjvgO0jSfqqrlrWSA==
-Received: from TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com (2603:1096:408::791)
- by SE1PPFFDBC8F9D9.apcprd06.prod.outlook.com (2603:1096:108:1::433) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.12; Thu, 27 Nov
- 2025 00:42:03 +0000
-Received: from TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com
- ([fe80::df4f:b1a1:1825:4a80]) by TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com
- ([fe80::df4f:b1a1:1825:4a80%7]) with mapi id 15.20.9366.009; Thu, 27 Nov 2025
- 00:42:03 +0000
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: Conor Dooley <conor@kernel.org>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery
-	<andrew@codeconstruct.com.au>, Benjamin Herrenschmidt
-	<benh@kernel.crashing.org>, Philipp Zabel <p.zabel@pengutronix.de>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/2] dt-bindings: usb: aspeed,usb-vhub: Add ast2700
- support
-Thread-Topic: [PATCH 1/2] dt-bindings: usb: aspeed,usb-vhub: Add ast2700
- support
-Thread-Index: AQHcXq5hLghdhBiMbE2n2i9qqcwkerUFT7QAgABfpNA=
-Date: Thu, 27 Nov 2025 00:42:03 +0000
-Message-ID:
- <TY2PPF5CB9A1BE661637E3365B5ADEDC2BDF2DFA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
-References: <20251126-upstream_vhub-v1-0-910709937ee0@aspeedtech.com>
- <20251126-upstream_vhub-v1-1-910709937ee0@aspeedtech.com>
- <20251126-protegee-ragged-067de2fd6488@spud>
-In-Reply-To: <20251126-protegee-ragged-067de2fd6488@spud>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PPF5CB9A1BE6:EE_|SE1PPFFDBC8F9D9:EE_
-x-ms-office365-filtering-correlation-id: 04b53bc4-a35a-4381-938b-08de2d4dc8a4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|366016|1800799024|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?iWAXb5meX30wOddTDsGz5F1OzVw6osbNHBvthRV4f8J9UJUOuNQ0qY/9TFMd?=
- =?us-ascii?Q?OEhU2KgSko+X+ecQ96ROaToHTrCHy1p5BmfrmlQsyxwVjQzV6QS2Jl0cyfYh?=
- =?us-ascii?Q?7RS0CdYCWavmzf6hUAP4IK7PJYW1mVGMpefBFwRaUY9b6EQnhYnU6dhP7GaK?=
- =?us-ascii?Q?5o2u6n8iwg5WxtuflP4caGKQ5KWCAonZC1PYfcAkbCQuSC0+9v2iKAMDCsV1?=
- =?us-ascii?Q?+U+3Lntc+Uqe4utmtWy1qm+/WMIAue5q2vIHr+KW24GIZLVPprOX+W0czaGa?=
- =?us-ascii?Q?wuXp9YFDczG7QlJEBuwfdyilSS3IFB1VgjHLX5KKfUnX3Jck1nj3YTFhTatR?=
- =?us-ascii?Q?Huh+d5acfj5UewwoavLQh+jHypJk9JPdNodNEFF0Z4MAWHARIXCxfRZq3kCI?=
- =?us-ascii?Q?7UKytRGjiFKnZ97hAKDZ8h7JgXVvR9Vh+6qezsC1efKnBREDP6Raxxct0XnG?=
- =?us-ascii?Q?EjjgqOVBa81R2BF5TBD2uvASR9iuRZ5xIG5o5m8SzgGtX3Y9Vx6bCQKp+P6S?=
- =?us-ascii?Q?LU2HBqkLcpkd9lLFvh/MQDNnKUDJef0h7mCygpmy0NR5kQ+wUoSr6umeeJqq?=
- =?us-ascii?Q?U8MaRg/0XaKx3O1WUdQJRs2PXKJLnxkFQ+ZXpWdA2lim8jnZXnT5SRsToomU?=
- =?us-ascii?Q?1bFI1AgLdeIvyeWNOaRHBpYbFmayZ6YXeNeWL/SR4QY5LW28mWshq6fKp26Z?=
- =?us-ascii?Q?11Thid7MwOpawv7rBWyaDOfdV+RIfx8lFMDqz9yUBadfiN0/n5Im7d11jHjD?=
- =?us-ascii?Q?2acaqlq6PG0H66KVx9dHdVzZ0TvRx8u9uA24MiytNuoA6ME420G5JxDg/kMp?=
- =?us-ascii?Q?bfmVe1ZMMUrUOqwKjecdRn2Zxw1Slifq/hLuIT0q1eENwtV22npdCX8h2QEF?=
- =?us-ascii?Q?Q82QIMAQXFVJ5zAXl3lAFYdDuc4zaYkOuGoCxcmwhkTWaFku1gaCEru8pYlG?=
- =?us-ascii?Q?4DDM8qz4ExlRukJKVcG/G/Ma7/pli8keT7ZTb4cV0rq7lhZy8RaDjSamEYaN?=
- =?us-ascii?Q?Y6tvBTe21SzXxqr10Pj94wQVDnDkw2ha8J/8SCSB5HjZJdAOzRVW54F7wuAy?=
- =?us-ascii?Q?Fwxo8JdZlfQd19d+s7pmKJG2yBbh+UaCEYJmWVLzOb5oCHbfXkPf/rJTFjRY?=
- =?us-ascii?Q?mT9NmD2IvHcTFGU/A3WhO546bYEB1bX9BTCNQZUfs+dDMlxyxlRKGq75EGuf?=
- =?us-ascii?Q?Q3pYK27Okw6tDhywWM3cZdDfEOX1s4oG+qHOohCNnmrD+CFPDp7XoJNP+tao?=
- =?us-ascii?Q?OmGXEWg9+anmxXqVkcwI7AiXaoS6u4i8HKO7RVNiunZC0ildHJRqmnK1LzOD?=
- =?us-ascii?Q?psBS+9aCm3k33TtpwGgNH7mg5y1asXPBH1nRuevw/AXnlmQe3kFsVQpIGKr2?=
- =?us-ascii?Q?51nKrSm9WxP5FfUajPB3wct+87Mga59EFKVzCI0aScl99VtQUozF1l2O1p+a?=
- =?us-ascii?Q?nC8qcKy3ygPNPdy7ZS04zSfPMOSzfm+7EK9JZKULy6Gs/NHim3QwB1S8jyrl?=
- =?us-ascii?Q?FNMPrUqsgotQI6uztL39tFsb2M/C4ZWRh0Jx?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?WdtRAh61xc4VuZfp1q44FKm0c5738YhbhT3RQgEIDAz36U8WbMj6Kd3s0m06?=
- =?us-ascii?Q?a1djmcDOq0yMayWB04VytfMPan6KL8JEPgKPgU0nSbwu8YHEEcNWHjryukbL?=
- =?us-ascii?Q?pB7fHh96yFo8suSBrJUcWwlEiQAEOssd6t/C3USakm/rBtYXpy5qmhHAbkk7?=
- =?us-ascii?Q?8e+NgZJiMZmUzN9rHtlcyp83jDMWOIwjxaGzdD3UE1Udz+tIaIdS9iBXIe21?=
- =?us-ascii?Q?2R/j/ns/nJNrVyupJcfKqU3hQuuOaqzRGp5s75ifRCl3Jw56vYkjRhPLWuAG?=
- =?us-ascii?Q?bEe0BIE/rxYsw3WNFNnVsMMkWIW50Lz/JsRP7spScbMnxlFMHH2owDx+N2fk?=
- =?us-ascii?Q?6P4LSS7zd8QfdL9lamNmh++IT/uolUq1AgGRTILTe5LOkHpdbYRpUkYzCCbg?=
- =?us-ascii?Q?X3AIF2B7bkNvaxu9gF4OKPLZbbSlrA7na1V/+9U0b+UMDWMHpVVCNA7t0P9T?=
- =?us-ascii?Q?3+4RaU0rzZzqHZh49SiSqQ1/8hzQq+yC60az3IqVg0UKCcjOugqY7On1tCdv?=
- =?us-ascii?Q?ZJU1CMVqsfbIpFuY7hd0WcDocRNvS6U9l4c5vpRSS6pERSklev0PKduWv+Ze?=
- =?us-ascii?Q?Otp3FcehJCB0QHqjX1em8vh5M6CdGkpK39FhSMXatOVhquK7ybIKE9mkx08c?=
- =?us-ascii?Q?pJVSYAzyDUnNxYozZ9a73PfQQa0z+jTs0h3si+gqtaENU27sMGLKTKdUDNNS?=
- =?us-ascii?Q?FekskCVlEaIT9KH8m0h1jReFWJqMGXIGImjcF1+d9QJDgtpbZejCU7ZDDXQB?=
- =?us-ascii?Q?KLii8AUxpcnjpNCORJEGI2kw1+IPObDQekUKXWqm+Pm9TdQeLj28PiYRPDAh?=
- =?us-ascii?Q?oYw6hmqgibN2ezgDaXQgthzfEcwVsrrV3WBGYQmTHmPYz3nDedZBA/nFUwD9?=
- =?us-ascii?Q?L3ubA5IirdR1mBYiy9i2wlb0VwbernJPI3ER8XJu0F1PbxFqJm+zBrkUvORL?=
- =?us-ascii?Q?qs1zUIQUVPwAIUbHhJcz2c2D+lrza3K+zRm/xEhhWbZw4fjs148cuy+C1JRu?=
- =?us-ascii?Q?59DZB3j3dpnGP/pSiWhNSJtuGhxYDeRh4GshFP6yoWUf13lo0MDx9vuMvDhM?=
- =?us-ascii?Q?jZ115E3Wn7EuJOBO9Bim/WswrR0zrxp79sg2qQGc3nPL0NLbV3gm5awocrt7?=
- =?us-ascii?Q?Xb4GqRjh+pLqkp2Gf7creMW4n+8PBrJXDD1M9uN70wpbodsRszNR+zM1+03W?=
- =?us-ascii?Q?AXGPzmVNSiAKsGFtGGRL1kuyHrE/z0jO1N6cgcaYNdgoJHmDLjJlNduleuEJ?=
- =?us-ascii?Q?VA3lL8RgCNdcgGLY22/e6Z0QAI+N4hMhP7att0pxltPTop3C3Mk3t0qzb793?=
- =?us-ascii?Q?EIUt5gfzdUebvNjr0aurZlTGh4M35xgvk30a+VKSPquuQJ0byNjQq0QlcVtV?=
- =?us-ascii?Q?IukcTJ7FqeykTIWU+lQAiK/yyQur1PQsjYOZhSvr5q13TXkYLcIrtaMfKAjo?=
- =?us-ascii?Q?xrTH+TqZ5TR+rQXWDAwnNCXD/W9l8bet/l7iJK3YpGnwr7R9m9+iPyV4Tkaw?=
- =?us-ascii?Q?X5CYzO2iS9xKLjOpjl5/wjKuGs82I4OT4AMqs5NxzvMWbHfSZhmcM2C38wLa?=
- =?us-ascii?Q?9R0CNfW3JhHZLE0umq4bMJ6cXf5euqsjmhGQMHSg?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D61B35979
+	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 02:46:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764211572; cv=none; b=gN06oCCgtMl9gKejYxX0fCDgniXcG7iHmC5i5s7kqi1eR9czEMY6c6cmIzfbaH3QumHttwC3HU+kmtTEk/x4q1LWdyqQq37Mf77vD/ViKXZNGK/20LKTukWHREZ50YEH6IXUr0Yn2nHGzPclGg3f5ISytQ/8IKkTD6RXaBaaKIg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764211572; c=relaxed/simple;
+	bh=YKvxaFTOfmploXyBJI/Yb9hiou+Rm1ktRAO6666Wvuw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YeVt7WBWYITC16mkcZFo6+aJbr1nO6P1oMU4PsuDVTgBJjsMXQv2IPdZowdHVHrex2IHZstee54gtyV2E2L65S/zJy44gTEqLiE1zZIAXKry6Qe+dQbOHkssc+6ia9WFJcMC/F+YypGj+Q3psLCynDrCPz+nb0eTuWnG8jVsL0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hd6RiPGB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDBC8C4CEF7;
+	Thu, 27 Nov 2025 02:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764211569;
+	bh=YKvxaFTOfmploXyBJI/Yb9hiou+Rm1ktRAO6666Wvuw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hd6RiPGBLkk0U2JVvbGWSGaXBzUnwraRSr0YoeWzVOI1zELWBEecJsIPZzI70CThb
+	 UDnOeJtApDWknuhrLWyvXp52bcqA6B1pAceOnt0IsDXuVR1O9NfN+O6GXVMKjzJubJ
+	 r9fpuLQMgpECHBrRfR2NNHEXyQHETpNRpNcAHpoMfv/3xFL+ncaVwEgdW+jnkb2Ncv
+	 /rBJew2HfQkmaGsSimq4zJRT/LJx6ypOOPUTGhtrVzxtMhkTP9pLrzAqcX2rnYia0i
+	 DTUtI/EiNk0VZ8AW1A5sAc/dKRs6ce6Pi5tAP37i27Ir4m/TJJOJIdeke280ZaaNIU
+	 nKgA2PWfUd/iQ==
+Date: Thu, 27 Nov 2025 10:46:06 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: "Uri.Trichter@nuvoton.com" <Uri.Trichter@nuvoton.com>
+Cc: "tomer.maimon@nuvoton.com" <tomer.maimon@nuvoton.com>,
+	"Avi.Fishman@nuvoton.com" <Avi.Fishman@nuvoton.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: Maintainer of ChipID
+Message-ID: <aSe7brbIyYtsO5Ir@nchen-desktop>
+References: <KL1PR03MB7053BF80E52FB7C409F5AD3C85DEA@KL1PR03MB7053.apcprd03.prod.outlook.com>
+ <KL1PR03MB70537F6998668F54F407E29985DEA@KL1PR03MB7053.apcprd03.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04b53bc4-a35a-4381-938b-08de2d4dc8a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2025 00:42:03.4892
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JWs+2TSuOab8NYfCvRG/iiSmVUOTSuVl70nf9nt+j3MPS5RJc+D4IjS7jHUEhoTcD+ClXF06UKFtv1kuRWU7bNDu4XztQe4/5hMrKzg4z1w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SE1PPFFDBC8F9D9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <KL1PR03MB70537F6998668F54F407E29985DEA@KL1PR03MB7053.apcprd03.prod.outlook.com>
 
-> Subject: Re: [PATCH 1/2] dt-bindings: usb: aspeed,usb-vhub: Add ast2700
-> support
->=20
-> On Wed, Nov 26, 2025 at 04:26:30PM +0800, Ryan Chen wrote:
-> > Add the "aspeed,ast2700-usb-vhub" compatible. The ast2700 vhub
-> > controller requires an reset, so make the "resets" property mandatory
-> > for this compatible to reflect the hardware requirement.
-> >
-> > Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml | 14
-> > ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git
-> > a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-> > b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-> > index 7f22f9c031b2..c9ebb6e004d1 100644
-> > --- a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-> > @@ -26,6 +26,7 @@ properties:
-> >        - aspeed,ast2400-usb-vhub
-> >        - aspeed,ast2500-usb-vhub
-> >        - aspeed,ast2600-usb-vhub
-> > +      - aspeed,ast2700-usb-vhub
-> >
-> >    reg:
-> >      maxItems: 1
-> > @@ -33,6 +34,9 @@ properties:
-> >    clocks:
-> >      maxItems: 1
-> >
-> > +  resets:
-> > +    maxItems: 1
-> > +
-> >    interrupts:
-> >      maxItems: 1
-> >
-> > @@ -107,6 +111,16 @@ required:
-> >    - aspeed,vhub-downstream-ports
-> >    - aspeed,vhub-generic-endpoints
-> >
-> > +if:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        const: aspeed,ast2700-usb-vhub
-> > +
-> > +then:
-> > +  required:
-> > +    - resets
->=20
-> Do other aspeed platforms have resets? If not, please add an else here to=
- block
-> its use on other platforms.
+On 25-11-26 08:15:50, Uri.Trichter@nuvoton.com wrote:
+> Hi Peter
+> 
+> Are you the maintainer for ChipID USB device driver ?
+> If so, we would like a quick help from you
 
-I will update to following.=20
+Hi Uri,
 
-   if:
-      properties:
-        compatible:
-          contains:
-            const: aspeed,ast2700-usb-vhub
-    then:
-      required:
-        - resets
+You could send your question, and see if we could help you.
 
-    else:
-      properties:
-        resets: false
+-- 
 
-Thanks your review.
->=20
-> > +
-> >  additionalProperties: false
-> >
-> >  examples:
-> >
-> > --
-> > 2.34.1
-> >
+Best regards,
+Peter
 
