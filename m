@@ -1,187 +1,113 @@
-Return-Path: <linux-usb+bounces-31005-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31006-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7575C8E3BE
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 13:20:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CBD1C8E4B1
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 13:44:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3806A3A157B
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 12:20:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B2FD3A6D6F
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 12:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF1A330305;
-	Thu, 27 Nov 2025 12:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="az0Jui6S";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qk/pU+f8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D67BB332901;
+	Thu, 27 Nov 2025 12:43:36 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEE432FA3A;
-	Thu, 27 Nov 2025 12:20:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56C8331A41
+	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 12:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764246010; cv=none; b=F847/ieXb+VAfN+OSCtLEi/3UuMSi0VPBuQD7okFF5pboelZz3Kioy+JSGXC+YXXTfcPpBWPKayJMaJj7jHnFLA9Pchu6bbXR/QoGB2eOZe8f6WPPQ3LHEB1rvGaeixQ+74IjzL2cDuyJH69STApyt+AnuzvOar3VMIkl4PPDb4=
+	t=1764247416; cv=none; b=oittfYfZsVv8Tggtr7fIpPta/67GvnzFTrx/klrU5JGElKD9/QSSa2OeAfKM5Lhh8sx6b51NQ0nLlYbxaxo09EgbcfMQ6DZz42PFnw+SbhDeLegM2v7MB6KJrFJa249mnv1eVab4OM0Tlu7n9Mj9SOo4AhakyA5n2A5g0duprlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764246010; c=relaxed/simple;
-	bh=d4jD9AOTsm+ieImUBdhYbb2Qb9QXDpy5qV6Gu6PVHos=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=btsqGRsBwGS7DRwA4NU/SubeQXPaGqNjKtQm2cVwcR1qHkk6Ndlw4E8DIqEBEgEFf8FBA+hn7Xu8xzxCEIak13Mdr6a/xdh2mLLFurrH2bxmJnpDuh1ICKNMmdGTVMh2fTniSkUkQZhBaLydg68S6W3PJrUvfOGet/uFronTnYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=az0Jui6S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qk/pU+f8; arc=none smtp.client-ip=202.12.124.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailflow.stl.internal (Postfix) with ESMTP id D324F13003D7;
-	Thu, 27 Nov 2025 07:20:05 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Thu, 27 Nov 2025 07:20:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1764246005;
-	 x=1764253205; bh=sM3zD+mOnITtJ9F2JG0yeMKEXacWXE8JL0HxA96TrJI=; b=
-	az0Jui6SJVlGY1WQSktongf+DQpnFhjn5+MDJKbtn6yUmbdYYWjXaRed33+9SNKP
-	YfPpU5/v60Ncn0T/CPmv9z0lwJrD/pcQ8sYrOyG+6kZu3LrIf4GdrrWOAdZHVlDq
-	4uFgwwvA9ktHNIjIzbzdbLoq6Fu0Qb0e1m3I93J+wA9p+iuNOTx0Hbb+Zt9ahTB4
-	1m6o92dI9fg2zcKaDqXUtrfYX38D+inI7FsW9FUhHST734Lmmg+HVk4T6ypHXzeU
-	J113+bVZ7uyrVvybwlqYRveDtcMzzRJR1WPGw5Ka51n1WVwLK0K9fV0XxZwujeIv
-	e1fnHB4tqTe5hMS/i31jtQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1764246005; x=
-	1764253205; bh=sM3zD+mOnITtJ9F2JG0yeMKEXacWXE8JL0HxA96TrJI=; b=q
-	k/pU+f8o2xuvEXHdHdJF/ptzEA56RCHHXJFuBExVSC8orUPlqJw/AIPLOFw8TBZJ
-	/d4ZbTGl8TcQ4G26SeY2rd8ZrwiwnW8TuzkWDWtLFjrQLgatRFrn+bYpFWxLrNWC
-	RRrGH/ccH5CeNPRZlYRoHB0mHLc60HXvrkIZ0QrecCPGC0ndV3RkN/jI3FIdzGaG
-	QelOYE5w20xRoJO1Qba/AVOcH1lslfT6FBNw7AD14z6CjJg+99Dv6TsGVhVBwTz+
-	nTS5Dfou2ALinWBhBKHYOn5qoRJLVR+d1mDQcYzNzM0HVUh1/sF8b61yzptpbKu5
-	cpiM+onI2AczDgK7mtLlQ==
-X-ME-Sender: <xms:9EEoaTOc2bZJ-bMzEJnVO9g6PT6lYvMPaH0WOzoto2IeFupDyHyxmw>
-    <xme:9EEoaWyQwaC1VYn-V06WincYJzQ-kdxtwgiWCuzJmLzMwEpCWNWnXBatacX7AefDO
-    vkqQrEKflhEKCGxw7ywfES45v9oad-dRZHiZTQ_7ShbiD-CHA>
-X-ME-Received: <xmr:9EEoaYnOJLlI5EAeMtv8qMAs7sK02YvihQmnHSMGJvyu9PVcz5vBUisExBRccud3aK_QDJNZhQeMaJrKRNZhXb3Pam7YcA6ONqAP8w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvgeejvdduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefhteefve
-    dtvdfgkefhvedvvedvudefuedvueetueduteejgeekveegffekfefgkeenucffohhmrghi
-    nhepsghoohhtlhhinhdrtghomhdpkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-    pdhnsggprhgtphhtthhopeefgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplh
-    hutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhgv
-    ohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepvhhkohhulheskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhishhhohhnsehkvghrnhgvlhdrohhrghdp
-    rhgtphhtthhopehhvghikhhosehsnhhtvggthhdruggvpdhrtghpthhtohepfihulhhfse
-    hrohgtkhdqtghhihhpshdrtghomhdprhgtphhtthhopehkvghvvghrrdihrghnghesrhho
-    tghkqdgthhhiphhsrdgtohhmpdhrtghpthhtohepmhhinhgrshdrhhgrrhhuthihuhhnhi
-    grnhesshihnhhophhshihsrdgtohhmpdhrtghpthhtohepshhtvghrnhesrhhofihlrghn
-    ugdrhhgrrhhvrghrugdrvgguuh
-X-ME-Proxy: <xmx:9EEoaeV7EwwzsZ2HQiAo2fEQpvlsJ1wGGAwchd69fZLf4ph6yCS7EQ>
-    <xmx:9EEoaZ0ftNEmtV8XNHZl6FoPmPZ0kjOVy9fn2Ig4vUb-pQWdja5bpg>
-    <xmx:9EEoaekYNad9XVy-y5CM2nw3630vz52mOwK6EVZIt6dlvXe1ZNYs8g>
-    <xmx:9EEoaQEquoa2rwLVTrZyXXq93MF1NaDgoBkI5tDhXCeRP_-XFBG1XQ>
-    <xmx:9UEoaUaKdpX-AbibV2W5OQy1HlJC2U05OYLnsD2QWCahwORmfif_J7oU>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 27 Nov 2025 07:20:04 -0500 (EST)
-Date: Thu, 27 Nov 2025 13:20:02 +0100
-From: Greg KH <greg@kroah.com>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, William Wu <wulf@rock-chips.com>,
-	Kever Yang <kever.yang@rock-chips.com>,
-	Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Louis Chauvet <louis.chauvet@bootlin.com>,
-	=?iso-8859-1?Q?Herv=E9?= Codina <herve.codina@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-phy@lists.infradead.org, linux-rockchip@lists.infradead.org,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] phy: rockchip: inno-usb2: fix disconnection in
- gadget mode
-Message-ID: <2025112725-enviably-ground-9342@gregkh>
-References: <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-0-239872f05f17@bootlin.com>
- <20250722-rk3308-fix-usb-gadget-phy-disconnect-v1-1-239872f05f17@bootlin.com>
- <DEHVRC8CY12S.3LSC6UVSMU0C1@bootlin.com>
- <DEJD8DJZFNZO.11B1UBXJBN7MO@bootlin.com>
- <DEJDSE73CJES.2AB8YSKLW6VE1@bootlin.com>
- <DEJEFLKA9IJR.237ZLV8HBD2VS@bootlin.com>
+	s=arc-20240116; t=1764247416; c=relaxed/simple;
+	bh=htpQjyGg6rbL8pVJRI8Z62yalTqT/UlYgmSsEjm1l/g=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=AX1VZwE+nRx59ovehBIDPFKcCKxLAKkWE8Fzr96XixNut8bid3IcFb4VWHQWqVBBEzI6RFGs5G8ehqtHzQLfpWleyVcUsvge3ahI6NPgJSM0N12dYf5fRP2T47ZklBaINKxERnl7VtKvqYQSS+lGd0f8Eb6bUW+IDytAv5o+6O4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-949056882beso51296539f.2
+        for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 04:43:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764247414; x=1764852214;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1YF+f9gxsYrbRK90d6oxxj20fDjsgXfWi5xDRotlj30=;
+        b=FfKhafBHvHV5iKwnPH4yynn2Ihr5yVKy0U3jr7KUB9ns5TsEJoZ959OC6bWMdYVfeI
+         +cSrwK9qyGP0NO/s9SmeAJTkYSz+spB8cPvwx1RgupIvMI7i4AHoajE4FDge8ErlsvST
+         06VNm53ZpH/attkoRkEohuVul6QCqHxQzbU/l30GKnTc0BBeyDq7ZHmKOMaHBkgOOotZ
+         ikk5xdAWhy6XY24czH2m7WgVv1RNyLT3VfAtgrdlAm+c7HaDDx02QJY6HKHj6EocTnDQ
+         xbclsQZKHirI7wJBRqd26bUVZVuBNEsuNm/pxd10ajejzQgv3o36z8wia4aPpELpqFXg
+         cyjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKSmC/N7XA55bXhOIvQTKxsy6J53zud4Y5XIrX5wU4dbU5ewsNPkZWpWwIW9PLhoGD4r8Yr4Y4XJk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMV56usLpaiTzdRJ3i8GH/Z9ads9A8jx/DGU/+vwIqVBeErgPT
+	aNdNFJMwSkFg77IxmKsDPLqY9P8jNUQz+ZU4DBYEVoS+PMXo6/BzhfVV7BqIxSwusUEeI6w+BAJ
+	5Gby8457Ltx/8tigMsp5XRn1AuhtgNDq5IwgdPhjN7EVTzgUd1LJB72djKGk=
+X-Google-Smtp-Source: AGHT+IGiFOaYwaQvJtH2XjtTe/5PPk4b+HZ1y5xwxIvm7wGJyXqr9bNMrSgIgFCoqtu3AJATKUT0/svzh3b5Da/635LvIv/SmnWR
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DEJEFLKA9IJR.237ZLV8HBD2VS@bootlin.com>
+X-Received: by 2002:a05:6e02:b42:b0:433:74ba:8be9 with SMTP id
+ e9e14a558f8ab-435b9845bb0mr190411075ab.5.1764247413954; Thu, 27 Nov 2025
+ 04:43:33 -0800 (PST)
+Date: Thu, 27 Nov 2025 04:43:33 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69284775.a70a0220.d98e3.0106.GAE@google.com>
+Subject: [syzbot] Monthly usb report (Nov 2025)
+From: syzbot <syzbot+lista20ff1fea8bd2755f707@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 27, 2025 at 11:18:45AM +0100, Luca Ceresoli wrote:
-> Hi Théo,
-> 
-> On Thu Nov 27, 2025 at 10:48 AM CET, Théo Lebrun wrote:
-> > On Thu Nov 27, 2025 at 10:22 AM CET, Luca Ceresoli wrote:
-> >> On Tue Nov 25, 2025 at 4:28 PM CET, Théo Lebrun wrote:
-> >>>> The code already checks for !rport->suspended, so add a guard for VBUS as
-> >>>> well to avoid a disconnection when a cable is connected.
-> >>>
-> >>> Your commit message was clear but I was missing one key point: what
-> >>> rport->suspended means. It isn't what I first thought. Instead it means
-> >>> phy is powered off. Naming is bad but unrelated to your series. Maybe
-> >>> add a comment to your commit message like the following?
-> >>>
-> >>>   The code already checks for !rport->suspended (PHY is powered on), ...
-> >>
-> >> You are right. I have added a slightly longer text:
-> >>
-> >>   The code already checks for !rport->suspended (which, somewhat
-> >>   counter-intuitively, means the PHY is powered on), ...
-> >>
-> >> Still worth your Reviewed-by?
-> >
-> > Even more so.
-> 
-> Thanks, v2 on its way.
-> 
-> >> I also added the Cc: stable@vger.kernel.org line, which I noticed being
-> >> missing.
-> >
-> > I never add that Cc trailer and only rely on `Fixes:`. I thought it
-> > used to be documented as an alternative to that Cc trailer but it does
-> > not show up in `git log -p Documentation/process/stable-kernel-rules.rst`
-> >
-> > There is one indirect mention of "scripts that look for commits
-> > containing a 'Fixes:' tag":
-> > https://elixir.bootlin.com/linux/v6.17.9/source/Documentation/process/stable-kernel-rules.rst#L132-L134
-> >
-> > Anyway, you do right by explicitly tagging `Cc: stable@...`.
-> 
-> Theory says Cc: is needed:
-> 
-> > Note: Attaching a Fixes: tag does not subvert the stable kernel rules
-> > process nor the requirement to Cc: stable@vger.kernel.org on all stable
-> > patch candidates.
-> (https://docs.kernel.org/process/submitting-patches.html#reviewer-s-statement-of-oversight)
-> 
-> But in the practice I happened to forget Cc: stable in the past, the patch
-> got applied and the Fixes: tag was enough for correct cherry-pick in stable
-> branches.
+Hello usb maintainers/developers,
 
-That is never guaranteed, it is a "best effort only when the stable
-maintainers are bored" type of thing.  Always be explicit, and use cc:
-stable, as the documentation has stated for the last 17+ years :)
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-thanks,
+During the period, 3 new issues were detected and 1 were fixed.
+In total, 76 issues are still open and 401 have already been fixed.
 
-greg k-h
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  6383    Yes   KASAN: use-after-free Read in v4l2_fh_init
+                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
+<2>  3842    Yes   WARNING in usb_free_urb
+                   https://syzkaller.appspot.com/bug?extid=b466336413a1fba398a5
+<3>  3008    Yes   KASAN: use-after-free Read in v4l2_fh_open
+                   https://syzkaller.appspot.com/bug?extid=b2391895514ed9ef4a8e
+<4>  2141    Yes   INFO: task hung in jbd2_journal_commit_transaction (5)
+                   https://syzkaller.appspot.com/bug?extid=3071bdd0a9953bc0d177
+<5>  1824    Yes   possible deadlock in input_inject_event
+                   https://syzkaller.appspot.com/bug?extid=79c403850e6816dc39cf
+<6>  1646    Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<7>  1411    Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
+                   https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
+<8>  1068    Yes   WARNING in enable_work
+                   https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
+<9>  853     Yes   INFO: task hung in hub_port_init (3)
+                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+<10> 807     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
+                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
 
