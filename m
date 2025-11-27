@@ -1,393 +1,128 @@
-Return-Path: <linux-usb+bounces-31000-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31001-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D51C1C8DC87
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 11:34:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F8BEC8DEDA
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 12:17:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F2873B092D
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 10:33:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE1E93B0F5C
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 11:17:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A7BB32C938;
-	Thu, 27 Nov 2025 10:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F26E30103A;
+	Thu, 27 Nov 2025 11:17:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="i1gJD/9l";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="VxkAkxO2"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kAxInnwr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DEA32C939
-	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 10:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295342DC782
+	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 11:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764239562; cv=none; b=BXV6VqnSRxHRELwMZGWaoUpa6dhb3muqYNEYYR0GmH/eW9VWXS3O7YpNwo6vJUNvGvWuzE9ww9QEBFXFyRXloQdBgLpHibUuKJzp9YBhXETfJJlzvW2lVa+6AByeJWZdevJVWO52AdQjd55kv6F9IcFdRsvLLI2JR+ZcMBEdcJ0=
+	t=1764242228; cv=none; b=K5TctVoVysEeKx1JQewgksgRc2nCtctljhaCAwgjXYrR5j+uHmP+hYyAOcinknRhBv4F92KKh7pTUf67VVTwedpccL3kyW76cJyD6vHojtv0tDn+zzxpqO9MH75xM0B8OFNQJ697wiZWnW0prDXfum9KoJ8K87c1ulUEmZUbHYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764239562; c=relaxed/simple;
-	bh=3jY4jay0fa16bI6Cy4wTjwQK1KlO540uPMJDxUSvlmw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mk7LQmseiYGkyCUfJs3ZJ8//fh4bVw/gNJC3sARnRXPm+IHScok2/x04N9XVaKfHBJYdvmFZetVKKFltfadXLw/viZFxsLKsf4owf4XJAMb/+TUDY5gdlDSlNZVTQ3MVk2CfUdoKQL0ktknsE9jIecc/G1VqdI7UH7pd3erXl1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=i1gJD/9l; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=VxkAkxO2; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AR991xZ1668021
-	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 10:32:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	4wfsYUiRzfh9JsB1b2aoq8bGnceYTL/wE/22WZWN7Ks=; b=i1gJD/9lf+sOgjHR
-	hEREoKcOKP2AsBizOC1GrB0N1DjxcK41iP9iE+JCCmDGNU7s+TicjUGSDa5HQRgL
-	sMJ/IMVQf7ch5F9vf5YxfeFWhXTRto67kqngheicQTWGYuUVZ047aADpJSi2DxWs
-	C3yBf/Os5ORG66UCj8Y3eaauBF6bYs5EeZrmd3PJhX2NiOAdq7uvvOBSstN8g3/r
-	PVd4B3FIbvuo0dELnN1pqKAI7Z77mXyeCKvA1gLaXFQ43aWVwBumvASqjVvcCi4T
-	ko8p7JrvY22lGLRkF76FpI3HpjfkrUaa/Lzu5mBzV/x/tv0RtNPzCnsvVbVeiTPA
-	eioX9Q==
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ap0bmug4e-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 10:32:40 +0000 (GMT)
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-7a4c4eeeef2so1359921b3a.0
-        for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 02:32:40 -0800 (PST)
+	s=arc-20240116; t=1764242228; c=relaxed/simple;
+	bh=5eIN9fmc1QGV8trA/A9yTegASUpqMC9vmn8r3paozxk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m4juffkwACY//I6pseWXprF+7/+pb7L2+xoKV++fWSI4LqNtNpb6OhIOYXaFexZAJ6ils2UsluY62d5+m1h+Zb7zof+vTv7tl6FjNvl+Me9ID+5U1T2PWh0MjK//5CcB/CDMFpwczDKcTCIzxP/5Iw0MirJUy2UuHCq53YGqV0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kAxInnwr; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-640e9f5951aso2530836a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 03:17:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764239559; x=1764844359; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4wfsYUiRzfh9JsB1b2aoq8bGnceYTL/wE/22WZWN7Ks=;
-        b=VxkAkxO2mMaMWi/6qF7nT3JMPLmjX7wwDXVR62ZqiFnA2++l/rAeWWBhSj9LkuW3vD
-         Z2QZ3fP4xhF4GRG3kFV8DeZ/y0Uy55Segq4tSU1toCw6Oc6rPJFRgnhHMfRnKKOaOEBy
-         xZtcE8Fb0ipwQWevQe60KCG65uaLY1PvQXq2YxTOpyXDwCny3HBkaX5nQ4I4KNS7bedj
-         TmhCf4zAfbGCtkRWAciTJc1dzCAmrZ4MwIVItF3M6lZ6wRxe3WPv0D1FPRE6fk19utNB
-         s1RctCq9NtXNl0oWunOFoS6Y/ZpLCa5kp0vFN8vjTBAoZBika6/93E7xF/B6qMkF0jC9
-         Qkdg==
+        d=chromium.org; s=google; t=1764242224; x=1764847024; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GJVJA3oiVaBETKowUaWc1AtovR4cPiTo2+ur0NTpWtI=;
+        b=kAxInnwrzrbnyQi6iANFodU1cLRlU5o8Hq3LYIw2UD02KUadQxIHmHbfu9SHvYJ5fn
+         pvMIciZFq9JAAf4z44q/8yZydFiTurBGfzZ/2N3Fi7BCGCyvGtoJdCm702lCQ1YHAdrT
+         BqOpHtCPLnVj7E/FsE/XcelPL/Pv4mAQKTI98=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764239559; x=1764844359;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4wfsYUiRzfh9JsB1b2aoq8bGnceYTL/wE/22WZWN7Ks=;
-        b=KIWIUGSSq9gWth3/nOTvQOCsCRs+KmaSNK3w8bmFGF79s25EWZv/KdcLyLsi3Fhygv
-         Afs307UoNJdZ8LJ5LZfM8476k1xQqk04sw1dPYAgzPL+yHgIBqMk/R0CYpqPJGocDvUx
-         8M35ebY7sb5aXHgA2sGNOSQwcnl5o033c47lvK1pYHJGW1KE9Oh2qOqb4V1ryj/V4VAh
-         cKeCvb4pygTSyOklNjzXgPAlGfNw2kfc1U/vrMGyHydrKz4Q2ztDrGtqu0ARAvlgopkO
-         u3rf8xqXB+4cu9QsaQx9PREnuHBlcsvbUc7a5EIzXu5mKEFYfFqdzFu40ravUK9z/A6h
-         pAYw==
-X-Forwarded-Encrypted: i=1; AJvYcCUwLf8eT5Up6sDikz72LkZ4LkhvgmnZPnHA81mtFPdXRub/2hWrSK4SyGRG/xgUVVjrDpF1QSHkF4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY7EDkXa5sP9yVzL+AIaRC1km6fpo3XliOdn4KC+QZgA4f9myx
-	UZOcWyA6Sbh3fbou33QIYhPwameJntCHUlXM/Mj9Oc2v1rtBOjv2yz88M1oZKZbkJBpvYIYzF2q
-	2u52bfuTmCczxUPEW9yIVCVsouaQFRSE88h8RvmdvPXprT/A5PUKeIzpQaIW1HcDXz61lWvg=
-X-Gm-Gg: ASbGnctoBayw4ouDfQYzBPqWdGwUXA4tIEWjP6u3ueCDsKQo/CDPRS8hlG+beknQIIx
-	WI2gWwf3x6NHriePiERRZj3rtrY+vGHn+aDmSFW5DMyHPLsqaLHIwUWR0j+Gj3/g2uwi7tNsVLU
-	h9G8ElpZ2HepUO5jKPMTfkTqRj1WjHH/SVNciMCAtj9xwr4v3toDTOX3WF0S8uKlnS8JDktNZQH
-	xb+eGO8wIm/vb5vgKt1cscHd9E9sDL7Nbe2PQLdAYHL6rE7qZH9FnOUpXEaUGpqixxgYu/d7uRo
-	s2Lefw5czAIxmInEKag9sn+19m9a2JQLaqf69Cs7Mc/rDLryLlcjkWx5DmBUW2rO8X5KL3zgo+c
-	KPZdBjmVWNgDH1fqPXEfSertW0kYlOHthJwModAM=
-X-Received: by 2002:a05:6a00:10cb:b0:7b7:c078:9f7b with SMTP id d2e1a72fcca58-7ca8975f0a5mr14879353b3a.18.1764239559049;
-        Thu, 27 Nov 2025 02:32:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFOeS4h4J86AlUYFuq8VUrpWHIhe0O73BqzB2ZXtFJJExi3GnPo/+J0ssWgf74gvRSbwETcMQ==
-X-Received: by 2002:a05:6a00:10cb:b0:7b7:c078:9f7b with SMTP id d2e1a72fcca58-7ca8975f0a5mr14879324b3a.18.1764239558519;
-        Thu, 27 Nov 2025 02:32:38 -0800 (PST)
-Received: from hu-sriramd-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d15f457c38sm1479819b3a.54.2025.11.27.02.32.33
+        d=1e100.net; s=20230601; t=1764242224; x=1764847024;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GJVJA3oiVaBETKowUaWc1AtovR4cPiTo2+ur0NTpWtI=;
+        b=iCLo2848eRJ/d4UsVQCprajVBZeHnIlxPrlRX+xL76MuVdYrrTSZtisfZdyN3e++R1
+         K2feyWIG3S/RaaClnFApISEisTbsMGiDZ3o5uNmetDRtAoltffNENMBWuBFupTMu2ZN3
+         WzqIESLbhkpRcXPvm8MTIk50m6+7QwKiCKv/ONO/w4rZGidUogDlQZmNjK2Kq1X2E5bz
+         mCjNoK8FNsXBxES6KH5eYel7mmBb0RqBZ3QatkELsvycGR0gQFfWt+80elv6x+fJ5xjg
+         cGVYJN2AgASSXAiqSWYjYHpeFQVh/palKhufW3WHokFfOe+3nfL/YlK3CimJ5UWZSJYa
+         gQPQ==
+X-Gm-Message-State: AOJu0YxIknDpDGDvRlt/IHqOYi+BTZBa76s+n4KdOQzyBB2q6DpktQJr
+	IQM++ZndxSbYYDXUFndUxjT+B6BSzJ0xRupvLaYK0XHgBD11MVH4WqgXs+te3eYIUql5d8UCQcG
+	iiJXm
+X-Gm-Gg: ASbGncs6+MLK3IGSoQbDocFDgoaTI2BtaEtYEYtF14jy05ZPz9UF8ggFFuadIg9AHIy
+	o6uaBEh6I7OQ5uxJSmVA8EjiMs0lGoxBICvtSxY7dgT5qAX3K0eXxGzW2Rz6pBJNWJzG2ThS5Gl
+	i8EmChRtlQLUPJuYLtLbVKGiq+HTMQa/hNoZiv935/zfPp1wbIZ8GNRXMftxPkWTzI9BXONrSv2
+	ertP1TEdo1ZymYkF5t3sksNWaIli1k1zlrCtQSw7wTztIc6zMVRplcG8PhhEXM8ESMxIQfnjf7k
+	t5geAie5S62jcYLRFKcKqTTssws/Dm3k11nu++fssu6//kqQkUJLY8ZJiALvxslTmx8krA48jKw
+	TYFLawwP4E+acbOK9DJfuc3QVoxWMOJeqT/vFap+Hdb3LRkMbm4KN6dGA4zKukrNHFxH9quIpSS
+	oM09Y5qHg5E0T0lodQ8apgCu40Drx3usPJSMXtjq3LYeLhFtuJlRpmAmWNAFIut2I=
+X-Google-Smtp-Source: AGHT+IE+huPMKVkx99Dz9smUQr+C4LOMabu9B98nf9uQG/iI4ndCFTmSTFC7MWlwCN2ZTQviKYWA0w==
+X-Received: by 2002:a17:907:7246:b0:b3a:8070:e269 with SMTP id a640c23a62f3a-b766ef1d667mr2775997566b.14.1764242224446;
+        Thu, 27 Nov 2025 03:17:04 -0800 (PST)
+Received: from januszek.c.googlers.com.com (5.214.32.34.bc.googleusercontent.com. [34.32.214.5])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76f5a48c7bsm131702266b.64.2025.11.27.03.17.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 02:32:38 -0800 (PST)
-From: Sriram Dash <sriram.dash@oss.qualcomm.com>
-Date: Thu, 27 Nov 2025 16:01:45 +0530
-Subject: [PATCH 2/2] usb: dwc3: qcom: Support firmware-managed resource
- states for power management
+        Thu, 27 Nov 2025 03:17:04 -0800 (PST)
+From: "=?UTF-8?q?=C5=81ukasz=20Bartosik?=" <ukaszb@chromium.org>
+X-Google-Original-From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@google.com>
+To: Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Cc: linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v2] xhci: dbgtty: fix device unregister: fixup
+Date: Thu, 27 Nov 2025 11:16:44 +0000
+Message-ID: <20251127111644.3161386-1-ukaszb@google.com>
+X-Mailer: git-send-email 2.52.0.487.g5c8c507ade-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251127-controller_scmi_upstream-v1-2-38bcca513c28@oss.qualcomm.com>
-References: <20251127-controller_scmi_upstream-v1-0-38bcca513c28@oss.qualcomm.com>
-In-Reply-To: <20251127-controller_scmi_upstream-v1-0-38bcca513c28@oss.qualcomm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: jack.pham@oss.qualcomm.com, faisal.hassan@oss.qualcomm.com,
-        krishna.kurapati@oss.qualcomm.com, andersson@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sriram Dash <sriram.dash@oss.qualcomm.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Shazad Hussain <shazad.hussain@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1764239543; l=7775;
- i=sriram.dash@oss.qualcomm.com; s=20251022; h=from:subject:message-id;
- bh=3jY4jay0fa16bI6Cy4wTjwQK1KlO540uPMJDxUSvlmw=;
- b=N0Ht/zBgJJWL+0fYK5Xk+/xzqXmfV/mWUqizonEV+bvQscDDDGXXAXkR37csjawbfSkPZaWSD
- uUZz+d8CS97CCN8Ny1HRVUbeTyeO7sV60CJJhNltzRe49g2L+5vege2
-X-Developer-Key: i=sriram.dash@oss.qualcomm.com; a=ed25519;
- pk=balisq+aEVXEJ6Gnze3kqbYZiFlsdHUjTSdCvupAeP4=
-X-Authority-Analysis: v=2.4 cv=AKyLkLWT c=1 sm=1 tr=0 ts=692828c8 cx=c_pps
- a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=mTzkS-5CbVgYcLmgcBoA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=2VI0MkxyNR6bbpdq8BZq:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI3MDA3NyBTYWx0ZWRfX7BHtRJJW1T7q
- /oBVO22IB3gilpVt3k+ECLsdFjzDG7QHxVwP5e6UIZpk6NZMxp+iPx2vOmU5hNoa4RXUWAdxn9E
- NK/2TJokJDceCY+se979MSsMJ4ryYrcVgf1CJQWdOmG1wwSKHCx7govqsgADsddRePTJJEXQGGt
- 4vX2rFk1mxXVyr8SeXHeE+39qgaoqgZxwl/WLLjRPOdNe0eH3M66VPLnQsOMJ/hZAaxZ6e23Jtq
- NUz2Tsq9OBBlkrnDWQgIIktyTKXTqspSjXQrMPZrreUCi7B+c9Y08BAXxyMGBFspWPyHAfj+fX+
- 8yx8qJyjWMsYR2/fubWuhE4GMNnnE6Aimn+jnLEuHQXLoED889IHRIz2EOzKEm2SbIxk8nBmigm
- ezlJG4Wx5EqoWAuzWbJONrci3DwjKw==
-X-Proofpoint-GUID: HqHjqlra1GCuxuUoHBIS7cEQyNKNqbNv
-X-Proofpoint-ORIG-GUID: HqHjqlra1GCuxuUoHBIS7cEQyNKNqbNv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-25_02,2025-11-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 bulkscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 adultscore=0 malwarescore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511270077
 
-Add support for firmware-managed resource states in the
-Qualcomm DWC3 USB controller driver. On platforms
-like sa8255p, where controller resources are abstracted
-and managed collectively by firmware, the driver communicates
-power management transitions using dedicated resource state
-levels via dev_pm_opp_set_level().
+From: Łukasz Bartosik <ukaszb@chromium.org>
 
-Macros are introduced to represent key lifecycle events:
-initialization, system and runtime suspend/resume, and exit.
-The driver sets the appropriate resource state during probe,
-remove, suspend, and resume operations, enabling bulk ON/OFF
-transitions of grouped resources according to the
-controller's operational state.
+This fixup replaces tty_vhangup() call with call to
+tty_port_tty_vhangup(). Both calls hangup tty device
+synchronously however tty_port_tty_vhangup() increases
+reference count during the hangup operation using
+scoped_guard(tty_port_tty).
 
-Signed-off-by: Sriram Dash <sriram.dash@oss.qualcomm.com>
-Co-developed-by: Shazad Hussain <shazad.hussain@oss.qualcomm.com>
-Signed-off-by: Shazad Hussain <shazad.hussain@oss.qualcomm.com>
+Cc: stable@vger.kernel.org
+Fixes: 1f73b8b56cf3 ("xhci: dbgtty: fix device unregister")
+Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+Link: https://lore.kernel.org/stable/20251127101904.3097504-1-ukaszb%40google.com
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 97 ++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 88 insertions(+), 9 deletions(-)
+Changes in V2:
+- Added CC: stable@vger.kernel.org
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 9ac75547820d..9615ca6cfcae 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -13,6 +13,8 @@
- #include <linux/kernel.h>
- #include <linux/interconnect.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_opp.h>
- #include <linux/phy/phy.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
-@@ -85,10 +87,48 @@ struct dwc3_qcom {
- 	struct icc_path		*icc_path_apps;
- 
- 	enum usb_role		current_role;
-+	bool			fw_managed;
- };
- 
- #define to_dwc3_qcom(d) container_of((d), struct dwc3_qcom, dwc)
- 
-+/*
-+ * QCOM DWC3 USB Controller: Firmware-Managed Resource State Levels
-+ *
-+ * On select Qualcomm platforms, the USB controller’s power-related
-+ * resources including GDSC, reset lines, clocks, and interconnects
-+ * are managed collectively by system firmware via SCMI. The driver
-+ * signals the controller’s operational state to firmware using these
-+ * levels, each mapped to a specific power management transition or
-+ * lifecycle event:
-+ *
-+ * DWC3_QCOM_FW_MANAGED_INIT
-+ *	Enable GDSC, Assert and Deassert Resets, and turn ON all clocks
-+ *	and interconnects.
-+ *
-+ * DWC3_QCOM_FW_MANAGED_SYSTEM_RESUME
-+ *	Enable GDSC and turn ON all clocks and interconnects.
-+ *
-+ * DWC3_QCOM_FW_MANAGED_RUNTIME_RESUME
-+ *	Turn ON all clocks and interconnects.
-+ *
-+ * DWC3_QCOM_FW_MANAGED_EXIT
-+ *	Turn OFF all clocks and interconnects, Assert reset and disable GDSC.
-+ *
-+ * DWC3_QCOM_FW_MANAGED_SYSTEM_SUSPEND
-+ *	Turn OFF all clocks and interconnects and disable GDSC.
-+ *
-+ * DWC3_QCOM_FW_MANAGED_RUNTIME_SUSPEND
-+ *	Turn OFF clocks and interconnects.
-+ */
-+
-+#define DWC3_QCOM_FW_MANAGED_INIT			1
-+#define DWC3_QCOM_FW_MANAGED_SYSTEM_RESUME		2
-+#define DWC3_QCOM_FW_MANAGED_RUNTIME_RESUME		3
-+#define DWC3_QCOM_FW_MANAGED_EXIT			8
-+#define DWC3_QCOM_FW_MANAGED_SYSTEM_SUSPEND		9
-+#define DWC3_QCOM_FW_MANAGED_RUNTIME_SUSPEND		10
-+
- static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
- {
- 	u32 reg;
-@@ -335,7 +375,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
- 		dwc3_qcom_enable_port_interrupts(&qcom->ports[i]);
- }
- 
--static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
-+static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup, pm_message_t msg)
- {
- 	u32 val;
- 	int i, ret;
-@@ -348,6 +388,13 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
- 		if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
- 			dev_err(qcom->dev, "port-%d HS-PHY not in L2\n", i + 1);
- 	}
-+	if (qcom->fw_managed) {
-+		if (PMSG_IS_AUTO(msg))
-+			dev_pm_opp_set_level(qcom->dev, DWC3_QCOM_FW_MANAGED_RUNTIME_SUSPEND);
-+		else
-+			dev_pm_opp_set_level(qcom->dev, DWC3_QCOM_FW_MANAGED_SYSTEM_SUSPEND);
-+	}
-+
- 	clk_bulk_disable_unprepare(qcom->num_clocks, qcom->clks);
- 
- 	ret = dwc3_qcom_interconnect_disable(qcom);
-@@ -369,7 +416,7 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
- 	return 0;
- }
- 
--static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
-+static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup, pm_message_t msg)
- {
- 	int ret;
- 	int i;
-@@ -380,6 +427,18 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
- 	if (dwc3_qcom_is_host(qcom) && wakeup)
- 		dwc3_qcom_disable_interrupts(qcom);
- 
-+	if (qcom->fw_managed) {
-+		if (PMSG_IS_AUTO(msg))
-+			ret = dev_pm_opp_set_level(qcom->dev, DWC3_QCOM_FW_MANAGED_RUNTIME_RESUME);
-+		else
-+			ret = dev_pm_opp_set_level(qcom->dev, DWC3_QCOM_FW_MANAGED_SYSTEM_RESUME);
-+
-+		if (ret < 0) {
-+			dev_err(qcom->dev, "Failed to Resume fw managed device\n");
-+			return ret;
-+		}
-+	}
-+
- 	ret = clk_bulk_prepare_enable(qcom->num_clocks, qcom->clks);
- 	if (ret < 0)
- 		return ret;
-@@ -624,10 +683,18 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 
- 	qcom->dev = &pdev->dev;
- 
-+	qcom->fw_managed = device_get_match_data(dev);
-+	if (qcom->fw_managed) {
-+		ret = dev_pm_opp_set_level(qcom->dev, DWC3_QCOM_FW_MANAGED_INIT);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	qcom->resets = devm_reset_control_array_get_optional_exclusive(dev);
- 	if (IS_ERR(qcom->resets)) {
--		return dev_err_probe(&pdev->dev, PTR_ERR(qcom->resets),
--				     "failed to get resets\n");
-+		dev_err_probe(&pdev->dev, PTR_ERR(qcom->resets),
-+			      "failed to get resets\n");
-+		goto resources_off;
- 	}
- 
- 	ret = devm_clk_bulk_get_all(&pdev->dev, &qcom->clks);
-@@ -638,7 +705,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	ret = reset_control_assert(qcom->resets);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to assert resets, err=%d\n", ret);
--		return ret;
-+		goto resources_off;
- 	}
- 
- 	usleep_range(10, 1000);
-@@ -727,6 +794,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- clk_disable:
- 	clk_bulk_disable_unprepare(qcom->num_clocks, qcom->clks);
- 
-+resources_off:
-+	if (qcom->fw_managed)
-+		dev_pm_opp_set_level(qcom->dev, DWC3_QCOM_FW_MANAGED_EXIT);
-+
- 	return ret;
- }
- 
-@@ -739,6 +810,10 @@ static void dwc3_qcom_remove(struct platform_device *pdev)
- 		return;
- 
- 	dwc3_core_remove(&qcom->dwc);
-+
-+	if (qcom->fw_managed)
-+		dev_pm_opp_set_level(qcom->dev, DWC3_QCOM_FW_MANAGED_EXIT);
-+
- 	clk_bulk_disable_unprepare(qcom->num_clocks, qcom->clks);
- 	dwc3_qcom_interconnect_exit(qcom);
- 
-@@ -756,7 +831,7 @@ static int dwc3_qcom_pm_suspend(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	ret = dwc3_qcom_suspend(qcom, wakeup);
-+	ret = dwc3_qcom_suspend(qcom, wakeup, PMSG_SUSPEND);
- 	if (ret)
- 		return ret;
- 
-@@ -772,7 +847,7 @@ static int dwc3_qcom_pm_resume(struct device *dev)
- 	bool wakeup = device_may_wakeup(dev);
- 	int ret;
- 
--	ret = dwc3_qcom_resume(qcom, wakeup);
-+	ret = dwc3_qcom_resume(qcom, wakeup, PMSG_RESUME);
- 	if (ret)
- 		return ret;
- 
-@@ -809,7 +884,7 @@ static int dwc3_qcom_runtime_suspend(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	return dwc3_qcom_suspend(qcom, true);
-+	return dwc3_qcom_suspend(qcom, true, PMSG_AUTO_SUSPEND);
- }
- 
- static int dwc3_qcom_runtime_resume(struct device *dev)
-@@ -818,7 +893,7 @@ static int dwc3_qcom_runtime_resume(struct device *dev)
- 	struct dwc3_qcom *qcom = to_dwc3_qcom(dwc);
- 	int ret;
- 
--	ret = dwc3_qcom_resume(qcom, true);
-+	ret = dwc3_qcom_resume(qcom, true, PMSG_AUTO_RESUME);
- 	if (ret)
- 		return ret;
- 
-@@ -839,6 +914,10 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
- };
- 
- static const struct of_device_id dwc3_qcom_of_match[] = {
-+	{
-+		.compatible	= "qcom,snps-dwc3-fw-managed",
-+		.data		= (void *)true,
-+	},
- 	{ .compatible = "qcom,snps-dwc3" },
- 	{ }
- };
+---
+ drivers/usb/host/xhci-dbgtty.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
+index 57cdda4e09c8..90282e51e23e 100644
+--- a/drivers/usb/host/xhci-dbgtty.c
++++ b/drivers/usb/host/xhci-dbgtty.c
+@@ -554,7 +554,7 @@ static void xhci_dbc_tty_unregister_device(struct xhci_dbc *dbc)
+ 	 * Hang up the TTY. This wakes up any blocked
+ 	 * writers and causes subsequent writes to fail.
+ 	 */
+-	tty_vhangup(port->port.tty);
++	tty_port_tty_vhangup(&port->port);
+ 
+ 	tty_unregister_device(dbc_tty_driver, port->minor);
+ 	xhci_dbc_tty_exit_port(port);
 -- 
-2.34.1
+2.52.0.487.g5c8c507ade-goog
 
 
