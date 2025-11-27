@@ -1,193 +1,235 @@
-Return-Path: <linux-usb+bounces-30985-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30986-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1B6BC8CC27
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 04:36:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D81BEC8CCB7
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 05:15:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DC99F4E040A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 03:36:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7E663B1C26
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 04:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6A52C027F;
-	Thu, 27 Nov 2025 03:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0E532D8DA4;
+	Thu, 27 Nov 2025 04:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dKSetwv3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eIZBMn1n"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010039.outbound.protection.outlook.com [40.93.198.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9099979DA;
-	Thu, 27 Nov 2025 03:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.39
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764214564; cv=fail; b=Hf1H6W9U/LJp1et86DMLr2vaUiEX8neNe7m9cSjdAVc2ZWRfz57CnvCIn216bJDPlU0vxV3NbyTKH7BiZ4CEOBGFYm0bHBIhKxPgin81iMVf+1RMX3/3ziQkVTT3oEjJxziTVc03egSM9RKm5RJfvnJDtAReRgy69AaLBS0q3Yw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764214564; c=relaxed/simple;
-	bh=8aC4zbpaH6JIn7q5bXpCx3vyuGV4yKyngwv+6rbEvLk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OpH0v2rReKU5LQakGes0wK8+kAyFptrIWHV1E3kp6rt1QQpza7ov2AzuPEei4RjVsPFhVslJACS+n5Ba+T0SbHifnFPF6T8d6hHwZMOXcCBshUtXddeAss4Ij9dinVemggfFEeeE9QTKZdtEkMOIy+3UpuPEfLQVQ5SMWtrKEb4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dKSetwv3; arc=fail smtp.client-ip=40.93.198.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Qe939/mNP8BGSd+p1BguyiU01v4K8chDEyi2GKI910KSSLdtLN6W3z+tw9EMmULr/i/8aDRaBCyHy1o6cr3grzCXZXbOkywIBrnn53ZIr5HLxQTELPUqBjXm0sojTyL8VrT5ey2TBsFhwJK/KJbXrzB6b1xCFyOoQCmaZ4nvD0YLzP+ny+lUb5U7zibZCC6E+D2STOt7oazpMlRMPci4xB5IelhA0a04RwjpCd0W6YsUR12nlY4LKt8G2H/GMeIUdPXBo3LANpEYsl24Xued2fFq9Wpm0mFsDTuYmfWN1Ga8xDdfqsu89qJKLB64MI3oTR9rwWnBIJcKQmMtBEBUhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ma/C5vESKLnklSY+rofulKJgvH8Ah1zR3fhJj+rUp70=;
- b=TH2875WsG9TV0zlS9awSctueZVjf+wTQrE7LKY/J+8unRWMG0XkPQL7SjyQgVDTcJF2K5HESs4Nq7ZyOX7JK/pY/KOf514f2xi2x14iurUhK3VyEIw5pHL6ZFI0s38XQm3c3utHl1ZLQYzgwCWGLm6WsQyZ847U/KkhKHCtyP0dQhl3rmZlxldJqF39uTVm8lwrsAat3s0wMlQ7iwKW7kxPhVn5J7pGBM1cFzaVg4MJBdxVt/SnM6n7hncRl6cd3/EDhObo6f9qB1DKv5HlpIDDySa1XFsPqrkbT3qZHtmRb7bgwfofd8kypm3fZGeMC5ugKcOQ5MLITCr3KJPlkGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ma/C5vESKLnklSY+rofulKJgvH8Ah1zR3fhJj+rUp70=;
- b=dKSetwv3hrqdXLkkE8sZrNOJTsJbBzRaxdpKPBqSyc+rFRdS6ajQ/0dIRFP4tw/G5LrsXQu4EU0VhHaJjl8nMVHZm4uc2abexZ76Kp18OaC47yzfAMhJ6Jq3NAz5OjuxrIDHIcUu+Tpmitz41SiaUXkfoDWPePoL5Sio8o6LtSSDFUIuOkYJ4oRYZs8uxZ0WzE4hUk4K7uinywHPt/GAu73Y+OT858Cxjxky3X1fisJwZ+XVvNVYMg46NqKHJRup10Nf/hjZIbEUt0BP8WvjEuz7wvwHb1PHYbd7bpzm3LUpRB8447FF1KezCSy0lPjucF9+hy4hLx3Ta0MrkiSuug==
-Received: from SA1PR04CA0020.namprd04.prod.outlook.com (2603:10b6:806:2ce::29)
- by IA1PR12MB7613.namprd12.prod.outlook.com (2603:10b6:208:42a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.12; Thu, 27 Nov
- 2025 03:35:59 +0000
-Received: from SN1PEPF0002636B.namprd02.prod.outlook.com
- (2603:10b6:806:2ce:cafe::bc) by SA1PR04CA0020.outlook.office365.com
- (2603:10b6:806:2ce::29) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.13 via Frontend Transport; Thu,
- 27 Nov 2025 03:35:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SN1PEPF0002636B.mail.protection.outlook.com (10.167.241.136) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9366.7 via Frontend Transport; Thu, 27 Nov 2025 03:35:59 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 26 Nov
- 2025 19:35:45 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 26 Nov
- 2025 19:35:44 -0800
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (10.129.68.10) with Microsoft SMTP Server id 15.2.2562.20 via
- Frontend Transport; Wed, 26 Nov 2025 19:35:42 -0800
-From: Wayne Chang <waynec@nvidia.com>
-To: <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-	<jonathanh@nvidia.com>
-CC: <waynec@nvidia.com>, <haotienh@nvidia.com>, <linux-usb@vger.kernel.org>,
-	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<stable@vger.kernel.org>
-Subject: [PATCH 1/1] usb: gadget: tegra-xudc: Always reinitialize data toggle when clear halt
-Date: Thu, 27 Nov 2025 11:35:40 +0800
-Message-ID: <20251127033540.2287517-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E4E23EAA3
+	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 04:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764216944; cv=none; b=tM2g2SfoOKcUtd5854CBVWF+Wg99LGFJqN/mXrdbYEOFWB5/2ArNXR2nfwlz4pYYGajYrlbKKju3uaTSngLPX09ZuWJ7/41aBUYZ3LMwMVRK4wSe+EH8YIaj9oeY545LHhj8F6YmoF5BFew5ux+9NSgLkUbNzOqzw6L9oBi2Wp0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764216944; c=relaxed/simple;
+	bh=JGo7Z1jibLQxReWr7ufYyOjlW5ky5THyGr654nH0moM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g4SNawKZSYTdxFX1CZyiW3yuYJW6k7ikWVhWhthO/MGS1wAAuSmmRnpiE/OM3jHFl3Q20PV4G9z3FQClR2+cT+aeVuZxTlAMVM4bO6kFj+39dIX4ldfH2vOhnDYQ4WrDpvTVGcso/boIZ7TlaJUr/TMFzvTDPahPLxA4X1oDOmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eIZBMn1n; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-bddba676613so303562a12.2
+        for <linux-usb@vger.kernel.org>; Wed, 26 Nov 2025 20:15:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764216941; x=1764821741; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TkXUCD/sfJEqbYrrabHICoE25LMTNly9IBUsbDSuWOk=;
+        b=eIZBMn1nKLWpkamsDw6L7R0yM13dNgW4476aY3Iigcyh6OKAOd6G52zvJV8Frmlwtz
+         A9LT6/eH7mZgkYV3foIeFRPJcnL7n+ps34yqap+3E7kRvK735z+vcB3NyBawp97VVCd5
+         MrlxWGMuj1nulSePGsF7KOxJKjgEomm1iKYjebDK6IWN1xIUZ6qQ2nL01q5tUljRN+RI
+         i36C4bbVxLIPaZKWO0aFyCKEEJmxby+Ioe7Bxow/PUtDF0XfzosdicnTwGJkb+DBqbPu
+         KhQbEF80UDLsgxVml9caGXvjhKo99xV9Q2XzA0YkhZ3MGlqZ8MSImogM7G/EB8SHv2PH
+         M3qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764216941; x=1764821741;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TkXUCD/sfJEqbYrrabHICoE25LMTNly9IBUsbDSuWOk=;
+        b=YNUA1LaOhtpXZNP1h9HhYaiASknsbhOrMO3gUhAhShRwKlkiCDTGFlIMcb/l4IHytf
+         cVHrOSaHIAGWSU7wZ+8830LHt9hqjBiUjUjD7byaFhRiftQg3myBcEBWMAxV6diE7Zn9
+         Nvd3Fn2geERDCxeRMz7VMpvck8kuyRJgPR5wz2yPM7x6Lr8Rd/Yl0wCkhXadr/FdVBuh
+         gxGvXd+0cnf7p7x/8bsbwns01tQFL8Jn/DjCpJwRX7Kjp7FZhCE4zGT8sM3R/FmwvRgI
+         JFE8JVGGV5XpWD955bKa40HnhCpYC01Padvkinq85+OQ8EMyY6FQMzyZicw3cBPRBk5J
+         TicQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUtYYbLKTl7Y1mU9SPbq112PGmFbocSBBitZhDB4kIYyE49e839KlL62v+1qwjFCC7nGdSu1BfToSc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCnifZKS48xDsEztwUHBvLA36GyzhtKFKhZiXAZ3mQiM+pozcz
+	j9X77Sl3LBjmseF+0CYuP+BY74NYxkR7/LFyJ1YQSarS25yi7RFEcBEoxcdirjetcw==
+X-Gm-Gg: ASbGncuCUCLSuxPAyZyI1TrOTPNr+CYCx13Tz715FuhXc1kVTvNBolau9njxmKDl8sS
+	m1S29Y2GA5WYsFtQaEUPk2PtTeOVpgKjNISd2jxuq4FO3a32aGwZiOOuS3I55cA8A/UQNTLhLdZ
+	gD/dbYbetpotwJzetOM31y3J1PnpUzt97f95JMK4z8gt7eaqeXW2TglrAgofd4gROC1g5GsBa0v
+	qXuYjj4RILFky7Z69kjU6HlOVFzv5UCGGEePbcRQK0wcHi435+YKHpWjaCCz1eQOskUqRlbLlJP
+	alsq8al2KMEWbEuqf/KGZbEcA7Qaezk1v2G2o3Z6WCJWwF3h8/0VJBV+SESZdMYBQFy+vnCyjTa
+	2uZ3aeWRlqYNL5hPVO9VFy01R+pddErLzqDMv4+CvCnWKLuH0EF/ppjfjEygblsqnWRF4CeO7+Q
+	vQzPA326aR4ti04INnG+q5mrB0k5kyX3IJP7rd8SGne6ibY9iVu3Qr/G1OO37akz3JTBvrkakMY
+	e9DI0rmX9RVZg==
+X-Google-Smtp-Source: AGHT+IGdB7ijJFvVK8Snhgzlb9iXXr21271jtHTPlPGlAm0Ty7r+mUpMoHeF2HI52zomvLA2TJb3xQ==
+X-Received: by 2002:a05:7300:d405:b0:2a4:3593:c7d6 with SMTP id 5a478bee46e88-2a7195cb23fmr12999898eec.22.1764216940215;
+        Wed, 26 Nov 2025 20:15:40 -0800 (PST)
+Received: from ?IPV6:2a00:79e0:2e7c:8:c116:b1c9:632d:a902? ([2a00:79e0:2e7c:8:c116:b1c9:632d:a902])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a965b47caasm2419198eec.6.2025.11.26.20.15.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Nov 2025 20:15:39 -0800 (PST)
+Message-ID: <6f2f075b-3570-4424-9cc7-695fb8c3b988@google.com>
+Date: Wed, 26 Nov 2025 20:15:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/6] mfd: max77759: modify irq configs
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
+ <20251123-max77759-charger-v1-4-6b2e4b8f7f54@google.com>
+ <5c901a6c831775a04924880cc9f783814f75b6aa.camel@linaro.org>
+ <aa7bdeb1-c8a9-4353-af56-869f16a083c2@google.com>
+ <e25ff0e5ff103433942fc7744eea4a3c61ce1daf.camel@linaro.org>
+Content-Language: en-US
+From: Amit Sunil Dhamne <amitsd@google.com>
+In-Reply-To: <e25ff0e5ff103433942fc7744eea4a3c61ce1daf.camel@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002636B:EE_|IA1PR12MB7613:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d4572b3-a6ac-486d-2fad-08de2d66152a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1X0Ghttq8zevgOnfHxaysxeBbtKukFJWsdA51tVxgjztlGDSQBM7txHXYXBs?=
- =?us-ascii?Q?QwSP2kvj7r3m0j9mFka8Kxa179N9LUiYmp81saEhpIux5FcxEz98fsurr50X?=
- =?us-ascii?Q?1JCuBhixS7pBKGpK7oF/1ongcFTR2Y8Y5MMZWIuobr97IJX78G3CZHvBth2I?=
- =?us-ascii?Q?IkCSAse4PxM1yCKc9RUlCVQqbpUmpmkXs9IQTG0D+QfRoZmpdqv06knSUdKp?=
- =?us-ascii?Q?YrAIykcBwAVmBh6NebT6QZpqUel8XOsN80I1m1SaaznMfrlzt1eGA3+2wfH0?=
- =?us-ascii?Q?xXUarX+bI5DjQkd4aY5ut4xJX+X1o+qlJYvu4DZvH2L84wCIID2Ot/3kPmNH?=
- =?us-ascii?Q?uvmG+KUnGXdkfyItBIjqoL228qcq70APqXaAER0Cm+SYwSTSIl/CZQDbnpdL?=
- =?us-ascii?Q?a8VWNHwcL8tYVe7lpcLVhKXVpDaeGbHI6eO2ThjK4Jm6w3fAQXcmWZks0tEW?=
- =?us-ascii?Q?6KGYpaX1lfJWbHLa82sRVGNvDjAY0/eSPC14/EhVAQNmfLjl90CtU1trvPZ/?=
- =?us-ascii?Q?+rZFxvEUn1W04LUiaZ2cmP6c4QEGKpbPilr5X9n2NAl71S8CnGHG3hKqzL3u?=
- =?us-ascii?Q?7NiVcMPowPK3pkRuNoIKR9IavfL/9C4ltY/V1MAVXMHllVZHC1YMRD4MyvXi?=
- =?us-ascii?Q?pYU3WrUaASOVfAOEZkHiMJcG4xNj/JS2Sl48xmFs6VNtlQ/6LGjY9YrO3l10?=
- =?us-ascii?Q?BWs1Ux2OP6l5QQw7bOTt/sUrgYYdOcZM85S7phLS1VOCuEFsskbCSXHLO7Re?=
- =?us-ascii?Q?dKHkn/MsXvZtWHEd91c/0RZUKQEym84rMWoUZ+2gaNjk7fpTAzzr5KcAekKi?=
- =?us-ascii?Q?vf1+PPblB40YJQ7EdTgn2l4BOJr7MyRzL+qrB6XAj5MUh6jlrVwQwPZYZrCj?=
- =?us-ascii?Q?ma/jfMYOOUuvaD+Rwa1neR9lFYNrWgwNixd7ytXWzU+Urf3qIuZ9tpfAI0GN?=
- =?us-ascii?Q?TRbPWWHzNF3WPT9w0k5es+wKc+8gWdSYuL3Y9cjhUyQ6iS5hDHVBHw8Zps+Y?=
- =?us-ascii?Q?M3aPjJcRSARaWJCvXqGxrD2F1IMj7mQ52WXng4LBdx6VULtMGQLtmmUGL28R?=
- =?us-ascii?Q?I+q0kMvq2q9JPeZAXS0+RhMmVFB80RXlAt6XyqH1d7bsRoZWI8OHPdQ1tCTp?=
- =?us-ascii?Q?FUnpzuMPIDSrcMHXBYaW6l4qFOsbWXSs4uBw4XH1gnMAo9LU4G60U1tNUech?=
- =?us-ascii?Q?5h5vtPakUisaY/H4ZAldMMC7/5c4U7jBYDhrrpseCFc4DCilWNSOSAzDMqWV?=
- =?us-ascii?Q?2gZ4TzskJ7TpeaTv3/OiCeRNUN/sf0/MQj5dk07by+g11lzaLmNY8Ct9IlBH?=
- =?us-ascii?Q?T/f/pmosdG3JenvkU1gU5V8bcVfIN3CZR5Thain1pabgN8MISzzUfI7OHbvi?=
- =?us-ascii?Q?uQ538FMNtV4kYAjw73k0GgGhSsZ1WVg3dx89reGDpcaJ5IRq9cSiqcTsFR8s?=
- =?us-ascii?Q?ZO5zdQdzB+GB7DnTN9JhagKP9wciGTWNfX3JBuKACwBHnJvQbtdc9rAyu5RK?=
- =?us-ascii?Q?/ZMh6iK0nc1WI/77Wy+rHPa4MqiFnTV5ivYRBH9gFT42x1cXL/tb/Q7TlsZW?=
- =?us-ascii?Q?5JyLX88diUdrKUAA7QM=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2025 03:35:59.6675
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d4572b3-a6ac-486d-2fad-08de2d66152a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002636B.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7613
 
-From: Haotien Hsu <haotienh@nvidia.com>
 
-The driver previously skipped handling ClearFeature(ENDPOINT_HALT)
-when the endpoint was already not halted. This prevented the
-controller from resetting the data sequence number and reinitializing
-the endpoint state.
+On 11/25/25 10:44 PM, André Draszik wrote:
+> Hi Amit,
+>
+> On Tue, 2025-11-25 at 17:10 -0800, Amit Sunil Dhamne wrote:
+>> Hi André,
+>>
+>> On 11/23/25 10:21 PM, André Draszik wrote:
+>>> Hi Amit,
+>>>
+>>> Thanks for your patches to enable the charger!
+>> Ack!
+>>
+>>
+>>>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>>>
+>>>> Define specific bit-level masks for charger's registers and modify the
+>>>> irq mask for charger irq_chip. Also, configure the max77759 interrupt
+>>>> lines as active low to all interrupt registrations to ensure the
+>>>> interrupt controllers are configured with the correct trigger type.
+>>>>
+>>>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>>>> ---
+>>>>    drivers/mfd/max77759.c       | 24 +++++++++++++++++-------
+>>>>    include/linux/mfd/max77759.h |  9 +++++++++
+>>>>    2 files changed, 26 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/drivers/mfd/max77759.c b/drivers/mfd/max77759.c
+>>>> index 6cf6306c4a3b..5fe22884f362 100644
+>>>> --- a/drivers/mfd/max77759.c
+>>>> +++ b/drivers/mfd/max77759.c
+>>>> @@ -256,8 +256,17 @@ static const struct regmap_irq max77759_topsys_irqs[] = {
+>>>>    };
+>>>>    
+>>>>    static const struct regmap_irq max77759_chgr_irqs[] = {
+>>>> -	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_1, 0, GENMASK(7, 0)),
+>>>> -	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_2, 1, GENMASK(7, 0)),
+>>>> +	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_1, 0,
+>>>> +		       MAX77759_CHGR_REG_CHG_INT_AICL |
+>>>> +		       MAX77759_CHGR_REG_CHG_INT_CHGIN |
+>>>> +		       MAX77759_CHGR_REG_CHG_INT_CHG |
+>>>> +		       MAX77759_CHGR_REG_CHG_INT_INLIM),
+>>>> +	REGMAP_IRQ_REG(MAX77759_CHARGER_INT_2, 1,
+>>>> +		       MAX77759_CHGR_REG_CHG_INT2_BAT_OILO |
+>>>> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CC |
+>>>> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CV |
+>>>> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_TO |
+>>>> +		       MAX77759_CHGR_REG_CHG_INT2_CHG_STA_DONE),
+>>>>    };
+> You should also add the remaining bits in each register here, so that the
+> regulator-irq can mask them when no user exists. It will only touch the
+> bits it knows about, so the state of the mask register is non-
+> deterministic with this change as-is (depends on how the bootloader
+> configured it).
+>
+> [...]
 
-According to USB 3.2 specification Rev. 1.1, section 9.4.5,
-ClearFeature(ENDPOINT_HALT) must always reset the data sequence and
-set the stream state machine to Disabled, regardless of whether the
-endpoint was halted.
+I see what you're saying. I will remove this and keep it the way it was 
+before.
 
-Remove the early return so that ClearFeature(ENDPOINT_HALT) always
-resets the endpoint sequence state as required by the specification.
 
-Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
-Cc: stable@vger.kernel.org
-Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
- drivers/usb/gadget/udc/tegra-xudc.c | 6 ------
- 1 file changed, 6 deletions(-)
+>
+>>>
+>>>> diff --git a/include/linux/mfd/max77759.h b/include/linux/mfd/max77759.h
+>>>> index c6face34e385..0ef29a48deec 100644
+>>>> --- a/include/linux/mfd/max77759.h
+>>>> +++ b/include/linux/mfd/max77759.h
+>>>> @@ -62,7 +62,16 @@
+>>>>    #define MAX77759_CHGR_REG_CHG_INT               0xb0
+>>>>    #define MAX77759_CHGR_REG_CHG_INT2              0xb1
+>>>>    #define MAX77759_CHGR_REG_CHG_INT_MASK          0xb2
+>>>> +#define MAX77759_CHGR_REG_CHG_INT_AICL          BIT(7)
+>>>> +#define MAX77759_CHGR_REG_CHG_INT_CHGIN         BIT(6)
+>>>> +#define MAX77759_CHGR_REG_CHG_INT_CHG           BIT(4)
+>>>> +#define MAX77759_CHGR_REG_CHG_INT_INLIM         BIT(2)
+>>>>    #define MAX77759_CHGR_REG_CHG_INT2_MASK         0xb3
+>>>> +#define MAX77759_CHGR_REG_CHG_INT2_BAT_OILO     BIT(4)
+>>>> +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CC   BIT(3)
+>>>> +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CV   BIT(2)
+>>>> +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_TO   BIT(1)
+>>>> +#define MAX77759_CHGR_REG_CHG_INT2_CHG_STA_DONE BIT(0)
+>>> Even if wireless out of scope, it'd still be nice to add macros for
+>>> the remaining bits to make this complete and avoid having to update
+>>> these again in case wireless support gets added in the future.
+>> I would prefer to only define the macros I am currently using to keep
+>> the review focused, unless you consider this a strict requirement.
+> It makes sense to add them now, as per above.
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 0c38fc37b6e6..9d2007f448c0 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -1558,12 +1558,6 @@ static int __tegra_xudc_ep_set_halt(struct tegra_xudc_ep *ep, bool halt)
- 		return -ENOTSUPP;
- 	}
- 
--	if (!!(xudc_readl(xudc, EP_HALT) & BIT(ep->index)) == halt) {
--		dev_dbg(xudc->dev, "EP %u already %s\n", ep->index,
--			halt ? "halted" : "not halted");
--		return 0;
--	}
--
- 	if (halt) {
- 		ep_halt(xudc, ep->index);
- 	} else {
--- 
-2.25.1
+Okay. I will add them.
 
+
+>
+>
+>
+>>> Also, would be nice to keep existing style and indent the bits from
+>>> the registers (see existing bit definitions in this file a few lines
+>>> further up).
+>>> Finally, can you add the bits below the respective register (0xb0 / 0xb1)
+>>> please, to keep suffix meaningful, and to follow existing style for cases
+>>> like this (see MAX77759_MAXQ_REG_UIC_INT1).
+>> I will fix the indentation and ordering in the next revision.
+>>
+>> Regarding bit definitions: In [PATCH 5/6], the max77759_charger.c driver
+>> defines bits for the register addresses defined in this file. Currently,
+>> those macros are only used locally by the max77759 charger driver. Would
+>> you prefer I move those definitions to this header file as well?
+> Yes, would be nice to have them all in one place (in this file). That said,
+> CHG_INT, CHG_INT_MASK, and CHG_INT_OK all have the same layout and share
+> the same bits, so I personally would probably reuse the ones you added for
+> INT for all three of them - MASK (as you did already), and also for the OK
+> register. But up to you.
+
+Sounds good.
+
+
+Thanks,
+
+Amit
+
+> Cheers,
+> Andre'
 
