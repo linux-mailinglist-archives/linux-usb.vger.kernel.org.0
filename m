@@ -1,73 +1,119 @@
-Return-Path: <linux-usb+bounces-31002-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31003-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D64BFC8E0D1
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 12:30:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26E5AC8E375
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 13:14:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C7B4F34F593
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 11:30:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E306B4E3A7B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 12:14:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A50E32D0FF;
-	Thu, 27 Nov 2025 11:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95EDF32E727;
+	Thu, 27 Nov 2025 12:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5Evt9o+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bh6rPduj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D2E32BF24;
-	Thu, 27 Nov 2025 11:29:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F073617BA2;
+	Thu, 27 Nov 2025 12:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764242992; cv=none; b=g7kSNRvUcPbTcbkk8BulAJG+QGosEjn1x3aTbr0zsGcE1O67BR+XivAACdHtMMqPEEVj5qWSicb/JnPGganFDoWled6+fACp5l0mvbUQj9EYxuePwRmHFQuL1P7cyh2lkit//Tc6xuPPfo7q0HlbLYt5X5vnpJT4VbOp0UoMWtI=
+	t=1764245638; cv=none; b=oZN5UqbpXiSji+GnLrPCRkttJMlKA1riXUGYabAMcxQVi1jiSaQTXA19137NnU1Bbfjn+CyRtptownMr81X4zGoGe6am7dDScpZQZbvZj0udsYinDwBSsVTkRglH4PhgEyg9yN3mAgRZRUOEgqkWLqmfEAjcxoT510nhEfNmxtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764242992; c=relaxed/simple;
-	bh=CQgoFBd79VcsQ4RZAJQcFjQ439SnTQyomNvXL8kZETQ=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=lMC4ItQj31/hsypuho6/vvtM5rY5xvtqos2F3G1DiO2r6qdNb/FvU50SKSMXCb2oGNJ9hdvEyU1KwkSIsTiGR7nOvNoOIx5BgCpsx/e3EW8Q9ibMIDa+lo6BxAjllH0NKnEMadaXjU3wzJ5gLnkIqgZa/aosm3St/ZlbtKY1wdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5Evt9o+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD929C4CEF8;
-	Thu, 27 Nov 2025 11:29:51 +0000 (UTC)
+	s=arc-20240116; t=1764245638; c=relaxed/simple;
+	bh=vkyNrxzBL31HzfZQEt130P0SdOrTqfWzMLDKaesDnRM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NsqDa4Z3iAldW+uZ2Ww3MKr3bjyQ1YlmQngv5IVUx/EUbnRZpsZ7lM/W6UTrVOxpXjUKrXS9jpgdw06liSuddtMp9v0Est/IrXQoUIY8p1BE/dXDCM75/Qz9C4nsTs9ISIbZYoYga6GhK5VUO7OwQo83QtOo7vUrT8fu7touDcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bh6rPduj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB3DC4CEF8;
+	Thu, 27 Nov 2025 12:13:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764242992;
-	bh=CQgoFBd79VcsQ4RZAJQcFjQ439SnTQyomNvXL8kZETQ=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=J5Evt9o+U9srFc6Jzfb8in4lXjd4vFmP6GfTCOc8sqYg9la5nlDeAPCpzknXod8GL
-	 eotC959ferZV9gQqy/Y7g7PP+ZONm2U9Fnd/vq5NhTBWn1AS76mxhIZEvhm7SCF9pi
-	 HcTQ0l1LV1afGx2XXYIaeV0KsPq7q1lfOgmoZEqsCwmWX3zDZ/lgG+zkOX8m+39QJj
-	 yL2jvLJR4rVk2FPcH8SScaIq7OEafl+nELueJZJrPDg6aIkPB0xbjT4L2wYet451X3
-	 fZEkT7elK4vLEVQws7qVYB+oVKAIw1QHmPrqurGygFHUpD2zwnUzrYYIcQoE3sEMNW
-	 9r6szCqx5WNPQ==
-Date: Thu, 27 Nov 2025 05:29:50 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1764245637;
+	bh=vkyNrxzBL31HzfZQEt130P0SdOrTqfWzMLDKaesDnRM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bh6rPdujYrZQPzrSgAgzuVKL/dLj6OmBVgSd43P5wWB0BMk+laTRbydcqcwmiMHpb
+	 daeK5o5+TylY3HGnYduVFwUXtO10aHQ9F8R5KsLhgIl4bavL/A2UO55dTtifP3RrvJ
+	 5bJgYMp5Rj79aefyqoidWfMl3GPbLNrT5FG/q900Ae5W8zOWKs/yqMH8YE7Oq9fgJs
+	 cnfANV1p1iEUkc8/qyhzR/FDQqHpv7OUrpUl/eqvVM899VMVkOYqFsNlr62K6I0EZT
+	 kMsm3/DiSJqGEPmbj9cWU0bUalu6nzNL9NKiq2IoXN/sCOENKw83FBiuXz//1YQj9K
+	 5xTRxvwQ/tX5w==
+Message-ID: <e9363a14-183e-4d12-91b0-1ac5655e6e90@kernel.org>
+Date: Thu, 27 Nov 2025 13:13:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: krishna.kurapati@oss.qualcomm.com, faisal.hassan@oss.qualcomm.com, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, devicetree@vger.kernel.org, 
- jack.pham@oss.qualcomm.com, Konrad Dybcio <konradybcio@kernel.org>, 
- Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org, 
- andersson@kernel.org, Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To: Sriram Dash <sriram.dash@oss.qualcomm.com>
-In-Reply-To: <20251127-controller_scmi_upstream-v1-1-38bcca513c28@oss.qualcomm.com>
-References: <20251127-controller_scmi_upstream-v1-0-38bcca513c28@oss.qualcomm.com>
- <20251127-controller_scmi_upstream-v1-1-38bcca513c28@oss.qualcomm.com>
-Message-Id: <176424299042.3819969.16561802248968376640.robh@kernel.org>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] dt-bindings: usb: qcom,snps-dwc3: Add support for
  firmware-managed resources
+To: Sriram Dash <sriram.dash@oss.qualcomm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: jack.pham@oss.qualcomm.com, faisal.hassan@oss.qualcomm.com,
+ krishna.kurapati@oss.qualcomm.com, andersson@kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Konrad Dybcio <konradybcio@kernel.org>
+References: <20251127-controller_scmi_upstream-v1-0-38bcca513c28@oss.qualcomm.com>
+ <20251127-controller_scmi_upstream-v1-1-38bcca513c28@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251127-controller_scmi_upstream-v1-1-38bcca513c28@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-On Thu, 27 Nov 2025 16:01:44 +0530, Sriram Dash wrote:
+On 27/11/2025 11:31, Sriram Dash wrote:
 > On Qualcomm automotive SoC sa8255p, platform resources like clocks,
 > interconnect, resets, regulators and GDSC are configured remotely by
 > firmware.
@@ -87,49 +133,50 @@ On Thu, 27 Nov 2025 16:01:44 +0530, Sriram Dash wrote:
 >  .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    | 173 +++++++++++++--------
 >  1 file changed, 111 insertions(+), 62 deletions(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+> index 8cee7c5582f2..d2d1b42fbb07 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+> @@ -12,68 +12,65 @@ maintainers:
+>  description:
+>    Describes the Qualcomm USB block, based on Synopsys DWC3.
+>  
+> -select:
+> -  properties:
+> -    compatible:
+> -      contains:
+> -        const: qcom,snps-dwc3
+> -  required:
+> -    - compatible
 
-My bot found errors running 'make dt_binding_check' on your patch:
+I wonder why do you think dropping some code is fine...
 
-yamllint warnings/errors:
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a6f8800 (qcom,sdm845-dwc3): #address-cells: 1 was expected
-	from schema $id: http://devicetree.org/schemas/usb/qcom,snps-dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a6f8800 (qcom,sdm845-dwc3): #size-cells: 0 was expected
-	from schema $id: http://devicetree.org/schemas/usb/qcom,snps-dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a6f8800 (qcom,sdm845-dwc3): interrupt-names:0: 'dwc_usb3' was expected
-	from schema $id: http://devicetree.org/schemas/usb/qcom,snps-dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a6f8800 (qcom,sdm845-dwc3): interrupt-names:1: 'pwr_event' was expected
-	from schema $id: http://devicetree.org/schemas/usb/qcom,snps-dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a6f8800 (qcom,sdm845-dwc3): interrupt-names:2: 'hs_phy_irq' was expected
-	from schema $id: http://devicetree.org/schemas/usb/qcom,snps-dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a6f8800 (qcom,sdm845-dwc3): interrupt-names:3: 'dp_hs_phy_irq' was expected
-	from schema $id: http://devicetree.org/schemas/usb/qcom,snps-dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a6f8800 (qcom,sdm845-dwc3): interrupt-names:4: 'dm_hs_phy_irq' was expected
-	from schema $id: http://devicetree.org/schemas/usb/qcom,snps-dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a6f8800 (qcom,sdm845-dwc3): compatible: 'oneOf' conditional failed, one must be fixed:
-	'qcom,sdm845-dwc3' is not one of ['qcom,sa8255p-dwc3']
-	'qcom,snps-dwc3' was expected
-	'qcom,snps-dwc3-fw-managed' was expected
-	from schema $id: http://devicetree.org/schemas/usb/qcom,snps-dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a6f8800 (qcom,sdm845-dwc3): Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'ranges', 'usb@a600000' were unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/qcom,snps-dwc3.yaml
+> +      - items:
+> +          - enum:
+> +              - qcom,sa8255p-dwc3
+> +          - const: qcom,snps-dwc3-fw-managed
 
-doc reference errors (make refcheckdocs):
+No, you cannot keep coming with more generic compatibles.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20251127-controller_scmi_upstream-v1-1-38bcca513c28@oss.qualcomm.com
+If you want generic a compatible, you already have - qcom,snps-dwc3 -
+and that "generic" part already said that everything is compatible with it.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Now you claim that existing generic compatible qcom,snps-dwc3 is not
+generic enough and you need one more generic compatible.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Next year you will say that two generic compatibles are not generic
+enough and you need third generic compatible.
 
-pip3 install dtschema --upgrade
+In two years we will learn that three generic compatibles are not enough...
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+I think I was complaining on the lists a lot on this, so I am surprised
+it is still coming back.
 
+So no, you cannot claim that you need more generic compatibles because
+one generic is not generic. NAK.
+
+
+Best regards,
+Krzysztof
 
