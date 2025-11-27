@@ -1,114 +1,124 @@
-Return-Path: <linux-usb+bounces-30987-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-30988-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D755CC8D45D
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 09:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48BF9C8D4EB
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 09:19:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4CF9934A3D0
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 08:06:19 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BD9B0343AA5
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 08:19:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDEDA315D5A;
-	Thu, 27 Nov 2025 08:06:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A86322C66;
+	Thu, 27 Nov 2025 08:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel-space.org header.i=@kernel-space.org header.b="TT0nVQfq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f7dBK9Ip"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.kernel-space.org (v2202511311555398556.powersrv.de [46.38.245.6])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5489C3C1F
-	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 08:06:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.38.245.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63744320A00;
+	Thu, 27 Nov 2025 08:18:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764230773; cv=none; b=s3YjYvjAbd/WDF7YA4P06ZzEfR63K1jpzO3sWt8xggJzpi6IzPzF5jyx/IzBcLLE2bnx8U4VMEAuTfuM/yk+p/fXCefB/N/xOaqDnSxOgt+RbbGfdH+X4AKddqBKfpP+U3lyJ6/Smuu0IjacEba6o8HOGHV3FuNcXY+v4Z7eCGA=
+	t=1764231538; cv=none; b=fN2xloa9zFn3KxpXkB4kpvY+m4S72yDgHnkkfHAshsS4bte+4cSH1KU0T9HxxVNq8MpQGPHgm4JeOi/5xOJF3N7616yod2iFJAhd9TCO70adZtIXx3x0nTupUNJgnVefPhZNRLe/aKDGXNk21NDNqfl3usXtI8Wx/8vpR5ohjLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764230773; c=relaxed/simple;
-	bh=NrQ+hJsusNBo2Zjqn+nQlMnZGqlrRpOA94UA0Dw873g=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=hyRmLiRzLn3o2nJVFa5252y6JRE2F5xBBDSSvy4txd1Nym0HufHcnRhYoMZklkhORqwGFNxJ1u8YtRXlTnNW6i+psuYgM5/VRfU/x2pzFMkf/LtyV4lCZ9lx9IXLXLqWITOYEwZLIhcBNS/NvKrLgMvAcA1N8FF8BeEZ34/Cc3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kernel-space.org; spf=pass smtp.mailfrom=kernel-space.org; dkim=pass (1024-bit key) header.d=kernel-space.org header.i=@kernel-space.org header.b=TT0nVQfq; arc=none smtp.client-ip=46.38.245.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kernel-space.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel-space.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
-	s=s1; t=1764230768;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/aaleHV7thxaCatYLwwJ8YBvzzw52bC70bpWio06PkQ=;
-	b=TT0nVQfq21BEulhRAcZk87ea3GX2rzK3RqaTCi5cTIUaFXGrXw6SQ/UrPQel2+B9zLGPwR
-	p95DY1Oi9J4nIT2YdsLV9Vv32P0qW+TqnLoL6rL5IwbH/LCvtPd38c56zO9+QZ8sD+Agtc
-	G+ifidASFuVu+w5xzqyvcbcLBwt56EA=
-Received: from [IPV6:2a07:7e81:7daa:0:62cf:84ff:feee:627] (<unknown> [2a07:7e81:7daa:0:62cf:84ff:feee:627])
-	by oreshnik (OpenSMTPD) with ESMTPSA id 79c5ece5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-	for <linux-usb@vger.kernel.org>;
-	Thu, 27 Nov 2025 08:06:08 +0000 (UTC)
-Message-ID: <cbb3bbc1-e8c1-450b-a38f-7b3f4cda6006@kernel-space.org>
-Date: Thu, 27 Nov 2025 09:06:24 +0100
+	s=arc-20240116; t=1764231538; c=relaxed/simple;
+	bh=juhnSF2HavJvkTWKtwSuexvU9Ui7blsIIbUnzgubhTs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gJHrP815XBr+hKNsmW/0CMUsK9sjDybVNYhGtt7LM3zgWQn1iBAK0cqVWaoh6X/5WbTcBEG3WlVzH7kbstRK1/V50vRWWVNC/q4eo5U39KbzyKw1b2wSwihFtWL2QuXk9fSVPewmBIFEBUcFRMix8jFtehN4jNT+22x4cWkd6VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f7dBK9Ip; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5B7C4CEF8;
+	Thu, 27 Nov 2025 08:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764231538;
+	bh=juhnSF2HavJvkTWKtwSuexvU9Ui7blsIIbUnzgubhTs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=f7dBK9IpQVaHTm9vlHIa2QA3F8EbxHejGkIWx43jH70D9vBsFMFZ/Q8LW5QSwh/VO
+	 rFNGhszpI79P17W2xeZpS3HKG1HV1pii3PdlPQ61LIjm3udZtnNGrje6V2HXKRnjnu
+	 I+Smi3KJWK1zEoJtT1GWsLEOBhiyGPrHAWJJnrOcv1m6RQ5Mm9migmXUBFhOWiE2Ab
+	 JKXiDDwKhkWbfiR9FPH43NTuHrl9KNjA1FdTmnBHh8ESG/m0d2M+FHtLWGOssN71N2
+	 BdOBwOv9bzWl+zw5IrDuJnbw+ictkBv0BT2joenMn8guzdoSggbDXxC9t7OiOW8BYA
+	 baGZHpFh95GbA==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vOXDP-000000004Qn-2qVc;
+	Thu, 27 Nov 2025 09:18:59 +0100
+Date: Thu, 27 Nov 2025 09:18:59 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB serial updates for 6.19-rc1
+Message-ID: <aSgJc4X9NRkWyNJ4@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US, it
-To: linux-usb@vger.kernel.org
-From: Angelo Dureghello <angelo@kernel-space.org>
-Subject: testusb: epipe errors on test 9 and 10
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi all,
+The following changes since commit dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa:
 
-looking for some help on testusb tool tests 9,10 always failing with
--EPIPE, kind of ep stall. Peripheral side has g_zero loaded.
+  Linux 6.18-rc3 (2025-10-26 15:59:49 -0700)
 
-Devices under test are custom boards, have same qualcomm 8 cores cpu, and
-kernel is android 5.4. Involved drivers in both devices are xhci and dwc3.
-Anyway, connection under tests is 2.0 microusb connector on both side.
+are available in the Git repository at:
 
-/dev/bus/usb/001/007 test 9 --> 5 (I/O error)
-/dev/bus/usb/001/007 test 10 --> 32 (Broken pipe)
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.19-rc1
 
-usbmon shows for both cases some EPIPE:
+for you to fetch changes up to 072f2c49572547f4b0776fe2da6b8f61e4b34699:
 
-ffffff85bf04b100 1951528285 S Ci:1:007:0 s 80 00 0000 0000 0002 2 <
-ffffff85bf04b100 1951528785 C Ci:1:007:0 0 2 = 0100
-ffffff85bf04b100 1951529102 S Ci:1:007:0 s 81 00 0000 0000 0002 2 <
-ffffff85bf04b100 1951529554 C Ci:1:007:0 -32 0   <== EPIPE
-/dev/bus/usb/001/007 test 9 --> 5 (I/O error)
+  USB: serial: option: move Telit 0x10c7 composition in the right place (2025-11-26 17:09:30 +0100)
 
-ffffff85bb5b2100 3778244155 C Ci:1:007:0 0 18 = 12010002 ff000040 
-2505a0a4 04050102 0302
-ffffff85bb5b2100 3778244178 S Ci:1:007:0 s 80 06 0100 0000 0012 18 <
-ffffff85bb5b0100 3778245631 C Ci:1:007:0 0 9 = 09024500 010304c0 00
-ffffff85bb5b0100 3778245693 S Ci:1:007:0 s 80 06 0200 0000 0009 9 <
-ffffff85bb5b1500 3778247900 C Ci:1:007:0 0 1 = 00
-ffffff85bb5b1500 3778247964 S Ci:1:007:0 s 81 0a 0000 0000 0001 1 <
-ffffff85bb5b4100 3778249094 C Ci:1:007:0 -32 0    EPIPE
-ffffff85bb5b7100 3778249432 C Ci:1:007:0 -104 0   ECONNRESET
-ffffff85bb5b4500 3778249493 C Ci:1:007:0 -104 0
-ffffff85bb5b3500 3778249519 C Ci:1:007:0 -104 0
-ffffff85bb5b3900 3778249544 C Ci:1:007:0 -104 0
-ffffff85bb5b6500 3778249569 C Co:1:007:0 -104 0
-ffffff85bb5b6900 3778249602 C Ci:1:007:0 -104 0
-ffffff85c5b6e100 3778249631 C Ci:1:007:0 -104 0
-ffffff85c5b6ed00 3778249653 C Ci:1:007:0 -104 0
-ffffff85c5b6dd00 3778249674 C Ci:1:007:0 -104 0
-ffffff85c5b6d500 3778249697 C Ci:1:007:0 -104 0
-ffffff85c5b6b500 3778249727 C Ci:1:007:0 -104 0
-ffffff85c5b6fd00 3778249755 C Ci:1:007:0 -104 0
-ffffff85c5b6a900 3778249775 C Ci:1:007:0 -104 0
-ffffff85c5b6ad00 3778249795 C Ci:1:007:0 -104 0
-ffffff85c5b6b100 3778249815 C Ci:1:007:0 -104 0
-ffffff85c5b6c500 3778249844 C Ci:1:007:0 -104 0
-ffffff85c5b6d900 3778249869 C Ci:1:007:0 -104 0
-/dev/bus/usb/001/007 test 10 --> 32 (Broken pipe)
+----------------------------------------------------------------
+USB serial updates for 6.19-rc1
 
-Any help on how to debug this issue is really appreciated.
+Here are the USB serial updates for 6.19-rc1:
 
-Thanks a lot.
+ - fix belkin_sa and kobil_sct TIOCMBIS and TIOCMBIC ioctls
+ - match on interface number for dual-port ftdi devices with reserved
+   jtag port
+ - do not log reserved ftdi jtag ports on probe
+ - apply ftdi_sio NDI quirk remapping 19200 bps consistently
+ - drop ftdi_sio NDI quirk module parameter
+ - clean up ftdi_sio quirk implementations
+ - add more modem device ids
 
-angelo
+Included are also various clean ups.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Fabio Porcedda (2):
+      USB: serial: option: add Telit Cinterion FE910C04 new compositions
+      USB: serial: option: move Telit 0x10c7 composition in the right place
+
+Johan Hovold (16):
+      USB: serial: belkin_sa: fix TIOCMBIS and TIOCMBIC
+      USB: serial: kobil_sct: fix TIOCMBIS and TIOCMBIC
+      USB: serial: belkin_sa: clean up tiocmset()
+      USB: serial: kobil_sct: clean up tiocmset()
+      USB: serial: kobil_sct: clean up device type checks
+      USB: serial: kobil_sct: add control request helpers
+      USB: serial: kobil_sct: clean up set_termios()
+      USB: serial: kobil_sct: drop unnecessary initialisations
+      USB: serial: ftdi_sio: match on interface number for jtag
+      USB: serial: ftdi_sio: silence jtag probe
+      USB: serial: ftdi_sio: rewrite 8u2232c quirk
+      USB: serial: ftdi_sio: clean up quirk comments
+      USB: serial: ftdi_sio: rename quirk symbols
+      USB: serial: ftdi_sio: enable NDI speed hack consistently
+      USB: serial: ftdi_sio: clean up NDI speed hack
+      USB: serial: ftdi_sio: drop NDI quirk module parameter
+
+Slark Xiao (1):
+      USB: serial: option: add Foxconn T99W760
+
+ drivers/usb/serial/belkin_sa.c |  42 ++++-----
+ drivers/usb/serial/ftdi_sio.c  | 200 +++++++++++++--------------------------
+ drivers/usb/serial/kobil_sct.c | 210 +++++++++++++++--------------------------
+ drivers/usb/serial/option.c    |  22 ++++-
+ 4 files changed, 182 insertions(+), 292 deletions(-)
 
