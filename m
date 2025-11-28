@@ -1,55 +1,58 @@
-Return-Path: <linux-usb+bounces-31035-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31036-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC7DDC90FD2
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 07:52:41 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 311A7C9168B
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 10:20:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9CCFC34EC01
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 06:52:41 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A96CA34BC5F
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 09:19:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B51782D4B6D;
-	Fri, 28 Nov 2025 06:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ncHhgy2V"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1F2230217B;
+	Fri, 28 Nov 2025 09:19:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2798122D795;
-	Fri, 28 Nov 2025 06:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3957D3002DF;
+	Fri, 28 Nov 2025 09:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=59.120.186.242
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764312755; cv=none; b=aX9lmQQOvXpyK6/WpyAyGMF+HnVlPBqwTFJkTS/kF1cA5hVYyy5K8XkYzUavmCYdXdKubpK8vtj2nwLW+Pd9rrmdmV0zqlXcoppB1J5XTig3xh9n7NbobAv8t2IyOdYcuP3ayKMaziF2u1R6Aca30ZPZEzdot5Zs4w829m9qz8o=
+	t=1764321544; cv=none; b=RoF2yX4fAm5poKJpQ6JwzRbWUR2cS+JwR5Qqb4Ibln2Tb2vV8B9N3h3/N9v0AUNjA6mdmeSVxONKl7wVw04C6MySf9eVH1nt8F14MF4JvY9pyGvYlfv2I4wcJH7ibEadRQnrN7GvsryJOeKrtqxOjmZyFpvtuQZ9wD63Ry/5zM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764312755; c=relaxed/simple;
-	bh=Lki0wvuAhsj7+fxTSRsJO0onswPRq7keylLTjtE4EcA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=n6aZlIV2pFJKCirMMkEfHLsUUSpdv9ffLM4V8O+Vx04ko1uShFHHNu4/5aenoUC0cSgrDB1ihkKjGYgmMymWVdXkcBFmbuZOCUtCuc4S14Z+WoHYyAPT2/eWoUf8KUxWplBtwCv0EHvClfBSklkLqyoIy9eXDmxAvdebOUXPBz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ncHhgy2V; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=UQ
-	SvQjhNbGRnWFYW7P8hJgkderMaQWcTQw6PPCR5dy8=; b=ncHhgy2VuREnysdZPz
-	UEMdX7llPWTGq418cmjTekadT1EXN+XTQ+xNekgxCXko/RlPh9s0XErBEiqFOH3h
-	NNaOs3oJ8DyJZSjrkTna60qtdHcB6Hs2hcqFPRI2ovynC23drn3su/kO82pQiZYU
-	xGFYFofzkKv/DFVwLvap0CIVA=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wD3x+6YRilpMCBlCw--.102S2;
-	Fri, 28 Nov 2025 14:52:11 +0800 (CST)
-From: Miao Li <limiao870622@163.com>
-To: zaitcev@redhat.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	limiao870622@163.com,
-	Miao Li <limiao@kylinos.cn>
-Subject: [PATCH] USB: usblp: reset device at probe for Fuji Xerox DocuPrint P475 AP
-Date: Fri, 28 Nov 2025 14:52:06 +0800
-Message-Id: <20251128065206.361475-1-limiao870622@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1764321544; c=relaxed/simple;
+	bh=sbwLoZZUZOQDFg2jiKuIJo28gpwKQYQlCfIj5XoJaMQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JzgP9hvoNyiktUbBPCjLc8SN8lsOXq2T+UcbpLHPi/fNKXurTctrmfwELAzUH9FBI8y42Vpoq0wj3T7ZeuZF0jtnLB19o2N1Kd2bc7VTjZcUhLuUR8xL6/EcpH2jEej/d1CptgAbTBjm+XBPCvXZxSoI1nx9mF2pn4l3HrScxmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintek.com.tw; spf=pass smtp.mailfrom=fintek.com.tw; arc=none smtp.client-ip=59.120.186.242
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintek.com.tw
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintek.com.tw
+Received: from mail.fintek.com.tw (localhost [127.0.0.2] (may be forged))
+	by mail.fintek.com.tw with ESMTP id 5AS8rF93039108;
+	Fri, 28 Nov 2025 16:53:15 +0800 (+08)
+	(envelope-from peter_hong@fintek.com.tw)
+Received: from ag.fintek.com.tw ([192.168.1.45])
+	by mail.fintek.com.tw with ESMTP id 5AS8qkug039055;
+	Fri, 28 Nov 2025 16:52:46 +0800 (+08)
+	(envelope-from peter_hong@fintek.com.tw)
+X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 5AS8qk6nB2082397, This message is accepted by code: ctloc85258
+Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
+	by ag.fintek.com.tw (8.15.2/3.20/5.94) with ESMTPS id 5AS8qk6nB2082397
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 28 Nov 2025 16:52:46 +0800
+Received: from localhost (192.168.1.128) by vmMailSRV.fintek.com.tw
+ (192.168.1.1) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 28 Nov
+ 2025 16:52:45 +0800
+From: "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
+To: <johan@kernel.org>
+CC: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tom_tsai@fintek.com.tw>,
+        <peter_hong@fintek.com.tw>, <yu_chen@fintek.com.tw>
+Subject: [PATCH V2 1/1] USB: serial: f81232: fix incomplete serial port generation
+Date: Fri, 28 Nov 2025 16:52:44 +0800
+Message-ID: <20251128085244.14044-1-peter_hong@fintek.com.tw>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,61 +60,105 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3x+6YRilpMCBlCw--.102S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zw1DWryfJr1xWF48uw4fuFg_yoW8urWUpF
-	s8Cw45KFsrCF9Iv390kw4UAFyavw4fta43Kr9rG3yrZ3yrt3s5WF17JrWFkrW7CryxC347
-	t3Zrt3yrZFW7WrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi7PExUUUUU=
-X-CM-SenderInfo: 5olpxtbryxiliss6il2tof0z/xtbCzhtcKmkpRpsiQQAA3d
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27556.001
+X-TM-AS-Result: No-2.703100-8.000000-10
+X-TMASE-MatchedRID: w5BWZgGOCL6+0r2Yw7MQTi9iVDu7EPf8TFQnI+epPIZ3de2OoBqgwubd
+	9j4+b6jIFNeXAh2Nr3WwS7/aOrnZQn1VIn2QdLBcEhGH3CRdKUUE9jhJ6ArePMC5DTEMxpeQfiq
+	1gj2xET/gr0WZ6u+ypY3oiEesk8RkuREwNxj15QMgaafg6U60I2BVArUr0qIZlwV2iaAfSWcURS
+	Scn+QSXt0H8LFZNFG7doMssNsUwYUeIcGYev3Muf5pmtavLJLzLBZ48MRq5OUroGQLDKPgAdK6W
+	VN1MffbN9ghRtTDDlInjNB3L1HbhYydcU7qJq1PEVeyJqiYNQPX7GF+64huyLjmNKuuvgamoYI1
+	erIuEsW+g2RZj2FKy60Cnu9RmLpv
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--2.703100-8.000000
+X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27556.001
+X-TM-SNTS-SMTP:
+ 1742CFDDCD859571A4475BD17EE849285F82EB9551170CE30E2415EE30E325B12000:8
+X-DKIM-Results: [192.168.1.45]; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:mail.fintek.com.tw 5AS8rF93039108
 
-From: Miao Li <limiao@kylinos.cn>
+The Fintek F81532A/534A/535/536 family relies on the
+F81534A_CTRL_CMD_ENABLE_PORT (116h) register during initialization to
+both determine serial port status and control port creation. If the
+driver experiences fast load/unload cycles, the device state may becomes
+unstable, resulting in the incomplete generation of serial ports.
 
-when connecting Fuji Xerox DocuPrint P475 AP printer(which vid:pid is
-0550:020e) to Huawei hisi platform and do reboot test for 500 cycles,
-usblp probe function executed successfully but there is a small
-chance it might not work, we can reset the device at probe to deal
-with the problem.
+Performing a dummy read operation on the register prior to the initial
+write command resolves the issue. This clears the device's stale internal
+state. Subsequent write operations will correctly generate all serial
+ports.
 
-Signed-off-by: Miao Li <limiao@kylinos.cn>
+Tested on: HygonDM1SLT(Hygon C86 3250 8-core Processor)
+
+Signed-off-by: Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
 ---
- drivers/usb/class/usblp.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Changelog:
+v2:
+	1. remove loop in accessor function.
 
-diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-index a7a1d38b6bef..566930eb88a1 100644
---- a/drivers/usb/class/usblp.c
-+++ b/drivers/usb/class/usblp.c
-@@ -210,6 +210,7 @@ struct quirk_printer_struct {
- #define USBLP_QUIRK_BIDIR	0x1	/* reports bidir but requires unidirectional mode (no INs/reads) */
- #define USBLP_QUIRK_USB_INIT	0x2	/* needs vendor USB init string */
- #define USBLP_QUIRK_BAD_CLASS	0x4	/* descriptor uses vendor-specific Class or SubClass */
-+#define USBLP_QUIRK_RESET_DEV	0x8	/* reset USB device */
+ drivers/usb/serial/f81232.c | 38 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
+index 530b77fc2f78..c587c58cbacf 100644
+--- a/drivers/usb/serial/f81232.c
++++ b/drivers/usb/serial/f81232.c
+@@ -856,6 +856,21 @@ static int f81534a_ctrl_set_register(struct usb_interface *intf, u16 reg,
+ 	return status;
+ }
  
- static const struct quirk_printer_struct quirk_printers[] = {
- 	{ 0x03f0, 0x0004, USBLP_QUIRK_BIDIR }, /* HP DeskJet 895C */
-@@ -228,6 +229,7 @@ static const struct quirk_printer_struct quirk_printers[] = {
- 	{ 0x0482, 0x0010, USBLP_QUIRK_BIDIR }, /* Kyocera Mita FS 820, by zut <kernel@zut.de> */
- 	{ 0x04f9, 0x000d, USBLP_QUIRK_BIDIR }, /* Brother Industries, Ltd HL-1440 Laser Printer */
- 	{ 0x04b8, 0x0202, USBLP_QUIRK_BAD_CLASS }, /* Seiko Epson Receipt Printer M129C */
-+	{ 0x0550, 0x020e, USBLP_QUIRK_RESET_DEV }, /* FUJI XEROX DocuPrint P475 AP Printer */
- 	{ 0, 0 }
- };
- 
-@@ -1189,6 +1191,13 @@ static int usblp_probe(struct usb_interface *intf,
- 		le16_to_cpu(dev->descriptor.idVendor),
- 		le16_to_cpu(dev->descriptor.idProduct));
- 
-+	/*
-+	 * Some printer need to reset the device here or it might not work
-+	 * when finished probe.
-+	 */
-+	if (usblp->quirks & USBLP_QUIRK_RESET_DEV)
-+		usb_reset_device(dev);
++static int f81534a_ctrl_get_register(struct usb_interface *intf, u16 reg,
++					u16 size, void *val)
++{
++	return usb_control_msg_recv(interface_to_usbdev(intf),
++						0,
++						F81232_REGISTER_REQUEST,
++						F81232_GET_REGISTER,
++						reg,
++						0,
++						val,
++						size,
++						USB_CTRL_GET_TIMEOUT,
++						GFP_KERNEL);
++}
 +
- 	/* Analyze and pick initial alternate settings and endpoints. */
- 	protocol = usblp_select_alts(usblp);
- 	if (protocol < 0) {
+ static int f81534a_ctrl_enable_all_ports(struct usb_interface *intf, bool en)
+ {
+ 	unsigned char enable[2] = {0};
+@@ -869,6 +884,29 @@ static int f81534a_ctrl_enable_all_ports(struct usb_interface *intf, bool en)
+ 	 * bit 0~11	: Serial port enable bit.
+ 	 */
+ 	if (en) {
++		/*
++		 * The Fintek F81532A/534A/535/536 family relies on the
++		 * F81534A_CTRL_CMD_ENABLE_PORT (116h) register during
++		 * initialization to both determine serial port status and
++		 * control port creation.
++		 *
++		 * If the driver experiences fast load/unload cycles, the
++		 * device state may becomes unstable, resulting in the
++		 * incomplete generation of serial ports.
++		 *
++		 * Performing a dummy read operation on the register prior
++		 * to the initial write command resolves the issue.
++		 *
++		 * This clears the device's stale internal state. Subsequent
++		 * write operations will correctly generate all serial ports.
++		 */
++		status = f81534a_ctrl_get_register(intf,
++						F81534A_CTRL_CMD_ENABLE_PORT,
++						sizeof(enable),
++						enable);
++		if (status)
++			return status;
++
+ 		enable[0] = 0xff;
+ 		enable[1] = 0x8f;
+ 	}
 -- 
-2.25.1
+2.34.1
 
 
