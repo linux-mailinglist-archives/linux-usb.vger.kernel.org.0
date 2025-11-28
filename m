@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-31026-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31028-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1C6BC9093A
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 03:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 786A2C90952
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 03:08:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE0623ABC51
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 02:07:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60CA43AB9BC
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 02:07:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF202BEFE3;
-	Fri, 28 Nov 2025 02:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A15A2D23A5;
+	Fri, 28 Nov 2025 02:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="T0t9OvmM"
+	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="gdit/o07"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE24B2BD033;
-	Fri, 28 Nov 2025 02:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084E02C11F7;
+	Fri, 28 Nov 2025 02:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764295506; cv=none; b=BH6Bo2RT9q6vh08XlEsSgkrFT4oWUVEaOEkJJYnkLmdVJK3qqAPettgNRFVFUpBRhj4z4Ne6yCbBJWm+6G4H7JWZ4eGoW0rxdKhdBvnp0F1t2EVGPoVxdu1Xx1y3r7Coq03fnqbV8xRjOiOsBXjhuVuX3eJ5e84UAHMyevI2d0A=
+	t=1764295513; cv=none; b=bKYtBtHWWNWFnIyIDPd9N9dOQEYZu1kfRBjbjdSR48yeQ8Ph3VUebRGOdMFHXd5/OVflOx1OPv2iMRyCdbm3l8wb71xSwUl8++WWYKJtRxkYhXFm/A63T/EwZHE1i0IGCZmJC5w3S2xU/hUKXBSjD73kwzGdwgvgVzFe3OLhnnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764295506; c=relaxed/simple;
-	bh=xQWi5hMui5VLl4tahRe1U8Mp6lrTVfX1Yy/sdF1ONzs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=DB+ACBDtqMVdmd8lKXpxaCmrcfhISfrWqMbra3e2xTS6urfZHJgVQQ5ADVCrXFUpeYve1f8B6jBVUmg3D5rXdyZFdepVq0yBuibZlN9P0LDFeykYzc2GVY5KfitEqyFLTYBE+t3Dhzh61S4CqQICZjmMYaqovlm1Zg1/GAEZ6Ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=T0t9OvmM; arc=none smtp.client-ip=54.254.200.92
+	s=arc-20240116; t=1764295513; c=relaxed/simple;
+	bh=ktQe0TBZJXNabRClR1zK2GRlgnwznm7iN6OWZIxNePg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=UElnw0yAJhUuzIGZCMABcpA9jJ5SUkcfLatfJWYPaS+n4lzDYLr9s8qPAH9zKBJOwCjF08Hjhr1Amr+uTvyGcl+83oEifo/KXApcNzBLrT1Ioq0D7/ndtMlAY+Hs5GaOejCgzSro2Y2Dz4IXlYv3yaaG2S85IBigxKxkRwQas+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=gdit/o07; arc=none smtp.client-ip=54.207.19.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airkyi.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=airkyi.com;
-	s=altu2504; t=1764295489;
-	bh=BnSe20UyFWhCBwFpCZUGVdKqrQwY3y7cLZdXieRNPhI=;
+	s=altu2504; t=1764295493;
+	bh=sEWMlrnina66f1mkg7MgIF551DMwzRk8lseSsYVXv/E=;
 	h=From:To:Subject:Date:Message-Id;
-	b=T0t9OvmMUqBtEwAvvUhzYMLmfWvjQu/tzU3qKCeMUeNQqqQEH6UZh8A4wypyOmoZr
-	 YFsI9RA+hcMix2onDbjy+Jqfu5imPFcUmw+pnYIKFAg8yFiMIDxQr7X0MNnoABrdMR
-	 jMOCBbbgRLCzrNRu8255hzqKZgruUK1vAh45en9c=
-X-QQ-mid: esmtpsz21t1764295487t4741a73c
-X-QQ-Originating-IP: fhy5DRa5i3V80+bUs3WYZGySAtuFFVaE7fm+ADYYEpQ=
+	b=gdit/o070EBoAyWli+7QQCItqwMQ2Up1hFAVsO0ay7+AJQmxBmm+8UrZuWBBSthv1
+	 8o8/f/DxahSlUGUU/UFayVwPk41V6VVrl19MYtm8JLs1e6pmGMgOHoN7bxtcHBarzx
+	 Jti0U7QtiGyaT8pr/aX8R4BBeLbXXsp9ITaAbLWw=
+X-QQ-mid: esmtpsz21t1764295492t39aeb65b
+X-QQ-Originating-IP: HkeozkZkjMzhIQB9uVBGumvb7YNkx7zQ7Dq6hE3efOI=
 Received: from DESKTOP-8BT1A2O.localdomain ( [58.22.7.114])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 28 Nov 2025 10:04:44 +0800 (CST)
+	id ; Fri, 28 Nov 2025 10:04:49 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8450163399619758520
+X-BIZMAIL-ID: 15549458326781898726
 From: Chaoyi Chen <kernel@airkyi.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -85,30 +85,30 @@ Cc: linux-usb@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	dri-devel@lists.freedesktop.org
-Subject: [PATCH v11 07/11] phy: rockchip: phy-rockchip-typec: Add DRM AUX bridge
-Date: Fri, 28 Nov 2025 10:04:01 +0800
-Message-Id: <20251128020405.90-8-kernel@airkyi.com>
+Subject: [PATCH v11 08/11] drm/rockchip: cdn-dp: Support handle lane info without extcon
+Date: Fri, 28 Nov 2025 10:04:02 +0800
+Message-Id: <20251128020405.90-9-kernel@airkyi.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251128020405.90-1-kernel@airkyi.com>
 References: <20251128020405.90-1-kernel@airkyi.com>
 X-QQ-SENDSIZE: 520
 Feedback-ID: esmtpsz:airkyi.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: OVAgSpUT8SOPmEhyO6J5+fThtJjN+nYzEnmNLyi7HEPRphkMBq3TRE1g
-	NHqJmkmtzowc97G7nTuc1ZtrL8LLeFzcQRLqxv8hp+qBakY4MpDZH5h2jO401TX8TsKdwYC
-	PjwcFq2Dw92yRiVkxxuql3rSiacXI7gxZ4vV3zVgh6H3EjWNoF8bTFJj5RHroKfoEyXAJk2
-	o8vjVrChj8XyiSQZZCWEVpYMYvk/HfdOQunsONIWAxydUrbEoTZCw6H9UcD8ZlXB3wozKgm
-	RIKYPl+y4cEXlN4MXZlqQSLT+At0Jfo6gq9nYvvqpVSR5KILRTkObMk5kFtxqPbOQiHVYNX
-	PMVbAAncnrc7kpdRdopGCCsjT/wy1QF/p8fvP+cYIHuRbVkYxLl+D3aauEaiBK/W/A/PUf3
-	uPsgxC8/kR17jbIFIubMZ5wDTrQuyLqBYafQl8WRaTg9esoKow/e6zwbDXb3VjYjAQFhGqu
-	cG+Xi+ea3al+kFjuJjGYy979VWdL/ExPj+TZlJvdg31yDhDAXapHWboJ+TPROB4e5kdvCbe
-	wXsi1YkIFoTnG5zjwbSJNzLVjXFNnr3uZQoneZv6L5dGIG0xf8u/mJFuqjTHqjfpDjZBIVw
-	lkrheDru7IcUhIsH2V4H4GHciyetZ4XsbKcJ4qGhtEzxHJVu2CD9rvEcyQpXYe/+iNceSrE
-	ALqDzml0MbxP2DUs7vtPCdGc82TGD0ulaXNvwzGy2JDVjVzIy1lb8Aq7E2r3ZFil9nEEV0c
-	KWMaaayWL5SIqeJR6u2JfzsU64AeVRbeIlM25hn94d+PcgmAKB4BA91AQFmViKJzwvLGQo9
-	JugsEhQSDb15soN5X1FSuIgFa0FZwyqOk3XhRMv0OOxjBehdROtxbl2Onzoea7pvRabPrYJ
-	R1ovJ/RbYD/R8diL5OKXwC3HCt1H+Ng1XjR45DYbmJPBPon0U7vJYi8M4inhB2CbyL/qxdc
-	DAS9K6QCoTTTDsIZsAKvoM4Z4JY/sciA1+OTjzbWTc9sToYXe3+zz3/g5DgXuXHwPAm1lhZ
-	kqKRhdTvkOlz4xxt8MlwXxmLi/BTYIDkev7qu2qQ==
+X-QQ-XMAILINFO: MB4pI20wLd1DJNwAsx5KrYYZapI/67dVL7o/z5nq8vcwHuUMZuCZlf1N
+	GfqTuw+QzJZnNVb+Y7Dg0VCFkWcXpTVCFBoCAMFzyo6Pzqz5wIicH3lQC5MPTC2mRTzsck6
+	JpFnCKCyRMECON+ZuY0Sg7p5s1M970EJFMBah0CC01N5XHZq6fWPT42QfyJwFJtihnjtgnI
+	s0DCT0V6kWbioMB724Sinvsofw1di+e5c2swmHR+g1We8ffr5t8c8lbmlJItVle7WGENzYw
+	R2W1ohSeRpIY/FbLPLVrjFdBMehIzHedaFwXjXbHxGDiIef+ULI9Qhnvn3HnTy9rAsNptF4
+	mfgMHHgGIQuLPNUL3YRJ7PwaHAxRkkx3notTXqfqkrHrwzV4hmy1XsMxIHNrM5leRuUN3qZ
+	VbRpfHHVO/xD1IDsqNElaYLKe3ZM+VNzUCs4lcvBTY5WwLI+68dPN9djpGeJcvhV0uA6q3a
+	iYqMgrJP2hplgVIV+HgfbEaco5jcOMEZnKvDHifzo1zb9Di0lN+mTcdSa1yI9U7j5BR2irS
+	Y5sciWl5ga3kRoLrENj81LRjte9QRdtbDuYo614uPt4xqQegvDaqdTHoxCcxYKlgQeNtanP
+	z9SqAreKaoxAOhWwhH1qD5adhxubzpgOWulIvIxIhlQ+xwsK3i4F7e/XvCOw2yZNJWHe0ox
+	3uD+ML3D/bycYtvcUh8AZTKfp0GIS7ch6R91Bgr/qcr//4ciL4td0D5vfrp68wDKAApQ8YA
+	1ys2Uvwa+47eCUPE0a25FnnUKkFlp8itgQf+lmlVWB9D++59gKgqVlOV1OxLsQG4af5wjJE
+	D9cr/nSHyi4yJghOg7WO4Z0e6m2Qo50BBsdUlOPvlQta61hTFwjNY/XfhUJzbCgMrZpUIHV
+	bKoMZgUKcJNiMq9x+GDFiTS92VIE/fC5UqDOTZuvhJlM7R8trBg6Utk2aDHVFv/mt7Kd/N1
+	EwIH0mxMYUZmL9U9HiJhVpSiPLGXFcATmCZ5j+C+fuPqLKIw2IIyI2MudlbXiXx9GBPMN7+
+	wkQFu7cthPDU5aJZGzY2j2YTGaSV0At4QsOp0mFw==
 X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
 X-QQ-RECHKSPAM: 0
 Precedence: bulk
@@ -119,63 +119,100 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
 From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
 
-Using the DRM_AUX_BRIDGE helper to create the transparent DRM bridge
-device.
+This patch add support for get PHY lane info without help of extcon.
+
+There is no extcon needed if the Type-C controller is present. In this
+case, the lane info can be get from PHY instead of extcon.
+
+The extcon device should still be supported if Type-C controller is
+not present.
 
 Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
 
-(no changes since v11)
+(no changes since v5)
 
-Changes in v10:
-- Use drm_aux_bridge_register_from_node() instead.
+Changes in v4:
+- Remove cdn_dp_hpd_notify().
 
-(no changes since v7)
+(no changes since v3)
 
-Changes in v6:
-- Fix depend in Kconfig.
+Changes in v2:
+- Ignore duplicate HPD events.
 
- drivers/phy/rockchip/Kconfig              | 2 ++
- drivers/phy/rockchip/phy-rockchip-typec.c | 5 +++++
- 2 files changed, 7 insertions(+)
+ drivers/gpu/drm/rockchip/cdn-dp-core.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
-index db4adc7c53da..bcb5476222fc 100644
---- a/drivers/phy/rockchip/Kconfig
-+++ b/drivers/phy/rockchip/Kconfig
-@@ -120,6 +120,8 @@ config PHY_ROCKCHIP_TYPEC
- 	tristate "Rockchip TYPEC PHY Driver"
- 	depends on OF && (ARCH_ROCKCHIP || COMPILE_TEST)
- 	depends on TYPEC || TYPEC=n
-+	depends on DRM || DRM=n
-+	select DRM_AUX_BRIDGE if DRM_BRIDGE
- 	select EXTCON
- 	select GENERIC_PHY
- 	select RESET_CONTROLLER
-diff --git a/drivers/phy/rockchip/phy-rockchip-typec.c b/drivers/phy/rockchip/phy-rockchip-typec.c
-index 1f5b4142cbe4..e31b778c3537 100644
---- a/drivers/phy/rockchip/phy-rockchip-typec.c
-+++ b/drivers/phy/rockchip/phy-rockchip-typec.c
-@@ -56,6 +56,7 @@
- #include <linux/phy/phy.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
-+#include <drm/bridge/aux-bridge.h>
+diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+index b7e3f5dcf8d5..1e27301584a4 100644
+--- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
++++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+@@ -156,6 +156,9 @@ static int cdn_dp_get_port_lanes(struct cdn_dp_port *port)
+ 	int dptx;
+ 	u8 lanes;
  
- #define CMN_SSM_BANDGAP			(0x21 << 2)
- #define CMN_SSM_BIAS			(0x22 << 2)
-@@ -1312,6 +1313,10 @@ static int tcphy_setup_typec_mux(struct rockchip_typec_phy *tcphy)
- 	if (!of_property_read_bool(np, "mode-switch"))
- 		goto put_np;
- 
-+	ret = drm_aux_bridge_register_from_node(tcphy->dev, np);
-+	if (ret)
-+		goto put_np;
++	if (!edev)
++		return phy_get_bus_width(port->phy);
 +
- 	mux_desc.drvdata = tcphy;
- 	mux_desc.fwnode = device_get_named_child_node(tcphy->dev, "dp-port");
- 	mux_desc.set = tcphy_typec_mux_set;
+ 	dptx = extcon_get_state(edev, EXTCON_DISP_DP);
+ 	if (dptx > 0) {
+ 		extcon_get_property(edev, EXTCON_DISP_DP,
+@@ -219,7 +222,7 @@ static bool cdn_dp_check_sink_connection(struct cdn_dp_device *dp)
+ 	 * some docks need more time to power up.
+ 	 */
+ 	while (time_before(jiffies, timeout)) {
+-		if (!extcon_get_state(port->extcon, EXTCON_DISP_DP))
++		if (port->extcon && !extcon_get_state(port->extcon, EXTCON_DISP_DP))
+ 			return false;
+ 
+ 		if (!cdn_dp_get_sink_count(dp, &sink_count))
+@@ -385,11 +388,14 @@ static int cdn_dp_enable_phy(struct cdn_dp_device *dp, struct cdn_dp_port *port)
+ 		goto err_power_on;
+ 	}
+ 
+-	ret = extcon_get_property(port->extcon, EXTCON_DISP_DP,
+-				  EXTCON_PROP_USB_TYPEC_POLARITY, &property);
+-	if (ret) {
+-		DRM_DEV_ERROR(dp->dev, "get property failed\n");
+-		goto err_power_on;
++	property.intval = 0;
++	if (port->extcon) {
++		ret = extcon_get_property(port->extcon, EXTCON_DISP_DP,
++					  EXTCON_PROP_USB_TYPEC_POLARITY, &property);
++		if (ret) {
++			DRM_DEV_ERROR(dp->dev, "get property failed\n");
++			goto err_power_on;
++		}
+ 	}
+ 
+ 	port->lanes = cdn_dp_get_port_lanes(port);
+@@ -1028,6 +1034,9 @@ static int cdn_dp_bind(struct device *dev, struct device *master, void *data)
+ 	for (i = 0; i < dp->ports; i++) {
+ 		port = dp->port[i];
+ 
++		if (!port->extcon)
++			continue;
++
+ 		port->event_nb.notifier_call = cdn_dp_pd_event;
+ 		ret = devm_extcon_register_notifier(dp->dev, port->extcon,
+ 						    EXTCON_DISP_DP,
+@@ -1120,14 +1129,14 @@ static int cdn_dp_probe(struct platform_device *pdev)
+ 		    PTR_ERR(phy) == -EPROBE_DEFER)
+ 			return -EPROBE_DEFER;
+ 
+-		if (IS_ERR(extcon) || IS_ERR(phy))
++		if (IS_ERR(phy) || PTR_ERR(extcon) != -ENODEV)
+ 			continue;
+ 
+ 		port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
+ 		if (!port)
+ 			return -ENOMEM;
+ 
+-		port->extcon = extcon;
++		port->extcon = IS_ERR(extcon) ? NULL : extcon;
+ 		port->phy = phy;
+ 		port->dp = dp;
+ 		port->id = i;
 -- 
 2.51.1
 
