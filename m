@@ -1,148 +1,101 @@
-Return-Path: <linux-usb+bounces-31014-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31015-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE310C9043A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 23:05:03 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00AD0C906C9
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 01:27:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C70D53AA23A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Nov 2025 22:05:01 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 913D234ECB5
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 00:27:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66F76258CE9;
-	Thu, 27 Nov 2025 22:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E14682QM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9395F2139C9;
+	Fri, 28 Nov 2025 00:27:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868472417F0
-	for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 22:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED991F4C96;
+	Fri, 28 Nov 2025 00:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764281098; cv=none; b=rShyXPtG7MqfsdRfECCr3KR4/WmdsZxMjo12JCjXjPvX+mt1TwGTUN4j6hLbK6Hk2QXZPeJmpgmaP+tUzhF/q+rVMOtUiNFSikXc2AtPSkb9V0zcab5fzHXhq0VqIODZMokot7siVyBYe3EufbffpZ79Fr2k9z3vEcAf5suVusc=
+	t=1764289664; cv=none; b=nGZUS542s1RxLZPIv1s8ey3bDToWMXYDLQgBbweqeqTzfvOPa4GYDRU5KJ8SSTY2GoKZ/qlvO5x9bwfoBO4cV0Jgd1n5pbdqovKZE87VktWMxdhJsHApn5oM5vyakcdjmsOsNRLthA3P5L14g7ycAZLn4QoC2p++6sadwLsscE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764281098; c=relaxed/simple;
-	bh=leQxvCDZGM0ZdtWs0cwDmQjkTiimbzrVICuk5cKWwNk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OLHwbYjlsRmzz6yf3uJQGXsiQ659qDGM5ty164iv5/Trjsry0ICkwCZpidK8JLXFSSEamQp48rSk5GmhmUUDA+vJid85h3kV+NUrUACp4hiRbfoEsfRJ7MVO8LyeTRGYzt48fdvLU78v5ErMNbDeMiU+7+d0ik4RlhiWxmYtRBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E14682QM; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-bc17d39ccd2so662854a12.3
-        for <linux-usb@vger.kernel.org>; Thu, 27 Nov 2025 14:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764281096; x=1764885896; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eE3jWwUBeNBwotvMaOoLsxAW53Rx1wxHI/kdT4LjgPM=;
-        b=E14682QMpFyJD3l60Y47xyDStxcUpVCFwwPz/eykIMqWHyu/eEy8c4IuRk7mb5zbiu
-         BQKMqAs21Yn5Ee+LD8kmEHijp/vEG3Bha9O7avnOFHaTsBZOLTaU/fr032xgzrVPvC5Q
-         wru4jZFwN3VLklsYePrExOkQbJd26Vz0qCb4R3xolKxWV5Fl+X8hnoO1IrunI+aPrJxl
-         2Of3bsXen8EFJZ4U+OTVtBdbToeoBMTad82OOtfmear7Wk3FC4pCzZajiyOq0Mw30mF+
-         EaSED1sMOUEeIei0RX/8em/ybs5zkZ9sufq2x5yWNUm+hqhbcKOKKXQD6DlQOw9nKmxf
-         gMuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764281096; x=1764885896;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eE3jWwUBeNBwotvMaOoLsxAW53Rx1wxHI/kdT4LjgPM=;
-        b=Ul5oZgpa8yM/egenT9BAduHOMQ/JwwefTByDIFyVogzJpZcJXV82Xl3N1irqog9wMp
-         gUouQ+MG0yk1kZHZUrnusROoxW4olW+OZ7jBQHBkFI8FqxvFdPhPWWjW03KyWZJhZXaF
-         f6o5C4wF7k7qQelnTaFUK3r+tPLExXV86Xw2hGp4Oo/7n+AIpRGAPUX6GyAisak6rF2Z
-         Lg1oj6zBcdWbX39bZgxKOK4D64wbu5C0ErvOOhL3GV0ncmulwlWdi94oTos101LeG/wL
-         yvnnrf6yMk6ZS8dAs2rDe+09kfkk1qYfw5TcemkLrncz24B8uey5qI46tDNO3nav2ZtL
-         H9Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCVhwDmhdHiHy6Bf+OFnVbWdpFGfgfBQJRZ6lnsupuiyeDKmBpqK9kz9QweFQ+ul/xoEvIlH8/6ejgA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWYDUyQ8lVbYF5BQ9PO4McshYxyQISaoxosDxJqxORrmNXoYF3
-	Utjl9iIvY0FSc9UhOgmHNQk3pxXZTTf+nY5CICfP0h7bHILLVR+h+7qH
-X-Gm-Gg: ASbGncs/HJEEfA5eH1Lf42QeXcVzXfUbPjO1MKs3bU59DP9pdbP9FUajJiWjIdE9065
-	hGNCzNSeG4ftS8DxsqhOT9gBJy/fbN4Lbo39PAslucnCk3horHrAmGnGru12wUAgjRouYg12L8+
-	rnKXfJtcbUs5yQhHBOQtr8rq5cX8pDAA6qK3bD1fJhjrcl1f7yMpt2erf710/xEMCCXWTlAg701
-	05Gufw751egpb1/uVo7AaXsv7vdNUiUOxFMsBPO9uA4V9GxajLBrq5iSXkfEmvqaa7HaYfJnpBA
-	r5/AkMvrE+BwO/7YaCq/XkSqbfia9laN2ztYkNatlxRpT/S0KV1RZQX5qiu2gq/8eAPbtLucT/g
-	p8B0kwafaEHQq1v1pNCnNyNpcRwZfzaO/nJ/xxi9AnAxxMT36JWyUsG90A/GWVSlB658ovnTj0n
-	m4hvsOxmspI4+8Ql/cSZuSS1X9C0eAGi4HKaapuRgkYS3D3DNVR2+7tA==
-X-Google-Smtp-Source: AGHT+IF9sx3tyNko/VRd2ErYrohrhI+XHQmwImdHaHPGXKSiSEtP/7hWCmOgd14XsBzeXqCS9rRf3w==
-X-Received: by 2002:a05:693c:800d:b0:2a4:3593:4674 with SMTP id 5a478bee46e88-2a9415a4876mr6126355eec.16.1764281095812;
-        Thu, 27 Nov 2025 14:04:55 -0800 (PST)
-Received: from lugathe ([2804:13c:46ac:1000:f491:d00a:e2fb:e67c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a9653ca11esm9621462eec.0.2025.11.27.14.04.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 14:04:55 -0800 (PST)
-From: =?UTF-8?q?Rodrigo=20Lugathe=20da=20Concei=C3=A7=C3=A3o=20Alves?= <lugathe2@gmail.com>
-To: bentiss@kernel.org,
-	jikos@kernel.org
-Cc: linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	stern@rowland.harvard.edu,
-	dmitry.torokhov@gmail.com,
-	linuxhid@cosmicgizmosystems.com,
-	linuxsound@cosmicgizmosystems.com,
-	lugathe2@gmail.com,
-	michal.pecio@gmail.com
-Subject: [PATCH v3] HID: Apply quirk HID_QUIRK_ALWAYS_POLL to Edifier QR30 (2d99:a101)
-Date: Thu, 27 Nov 2025 19:03:57 -0300
-Message-ID: <20251127220357.1218420-1-lugathe2@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1764289664; c=relaxed/simple;
+	bh=UrnAKGkKlxEe5ApYlVlupJbZmp/owkUSOCyzAFd03ac=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=ByZ6mobJF3wzivTR+KKVgYXrp7+LMoBE7YjynUz5Rzm0i2z4K2KwXhX6e48V4Bcbn5/I97hwzmHb4mYwakWp8uika2DS15NRZLqY277tGbqBFXP9bAGix3Oa+oaiSz0PJnmFJkTcE0M+xx1hWNvdWrTgMfUTiXC2aeFr1j0711k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 28 Nov
+ 2025 08:27:34 +0800
+Received: from [127.0.1.1] (192.168.10.13) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
+ Transport; Fri, 28 Nov 2025 08:27:34 +0800
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+Subject: [PATCH v2 0/2] Add AST2700 support for Aspeed vhub
+Date: Fri, 28 Nov 2025 08:27:29 +0800
+Message-ID: <20251128-upstream_vhub-v2-0-1fa66a5833c2@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHHsKGkC/13MywrCMBSE4VcpZ20kl8barnwPKRLT0WTRC0kbl
+ NJ3NxbcuPwH5lspInhEaoqVApKPfhxyyENB1pnhCea73CS51EJIzZYpzgGmvyW33JmC5OVZmVJ
+ rUP5MAQ//2r1rm9v5OI/hvfNJfNefdPqTkmCc1YJXvK5VBfCLiRPQzbDuaMee2m3bPmllE7ivA
+ AAA
+X-Change-ID: 20251125-upstream_vhub-3e20483a455e
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery
+	<andrew@codeconstruct.com.au>, Benjamin Herrenschmidt
+	<benh@kernel.crashing.org>, Philipp Zabel <p.zabel@pengutronix.de>
+CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>, Ryan Chen <ryan_chen@aspeedtech.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1764289654; l=1048;
+ i=ryan_chen@aspeedtech.com; s=20251126; h=from:subject:message-id;
+ bh=UrnAKGkKlxEe5ApYlVlupJbZmp/owkUSOCyzAFd03ac=;
+ b=LGYVQGQ8i7g94NwVJWfNatY7KQZfrIp01emaDZlFrkoo8xIBtzqqpnkJqSdwTnEeuJh1jA+92
+ 9gQFRTNpRNdBXDIiyX6INWMuNOUOjzWveU5LwipX8snqn31NnmtAYc1
+X-Developer-Key: i=ryan_chen@aspeedtech.com; a=ed25519;
+ pk=Xe73xY6tcnkuRjjbVAB/oU30KdB3FvG4nuJuILj7ZVc=
 
-The USB speaker has a bug that causes it to reboot when changing the
-brightness using the physical knob.
+This series add Aspeed vhub support for AST2700.
+The AST2700 vhub requires a reset and uses 64-bit DMA.
+This series updates the binding and driver to support these two
+requirements.
 
-Add a new vendor and product ID entry in hid-ids.h, and register
-the corresponding device in hid-quirks.c with the required quirk.
-
-Signed-off-by: Rodrigo Lugathe da Conceição Alves <lugathe2@gmail.com>
+Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
 ---
-v3:
- - Defined correct vendor
- - Moved the added lines to the correct location
-v2:
- - Fixed title
- - Simplified commit message
----
- drivers/hid/hid-ids.h    | 3 +++
- drivers/hid/hid-quirks.c | 1 +
- 2 files changed, 4 insertions(+)
+Changes in v2:
+- add an else to block resets properties false on other platforms.
+- add AST2700 in capability in description.
+- Link to v1: https://lore.kernel.org/r/20251126-upstream_vhub-v1-0-910709937ee0@aspeedtech.com
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 0723b4b1c9ec..fbccac79e75a 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -438,6 +438,9 @@
- #define USB_DEVICE_ID_DWAV_EGALAX_MULTITOUCH_A001	0xa001
- #define USB_DEVICE_ID_DWAV_EGALAX_MULTITOUCH_C002	0xc002
- 
-+#define USB_VENDOR_ID_EDIFIER		0x2d99
-+#define USB_DEVICE_ID_EDIFIER_QR30	0xa101	/* EDIFIER Hal0 2.0 SE */
-+
- #define USB_VENDOR_ID_ELAN		0x04f3
- #define USB_DEVICE_ID_TOSHIBA_CLICK_L9W	0x0401
- #define USB_DEVICE_ID_HP_X2		0x074d
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index bcd4bccf1a7c..f6b7ed467723 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -81,6 +81,7 @@ static const struct hid_device_id hid_quirks[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, USB_DEVICE_ID_DRAGONRISE_PS3), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, USB_DEVICE_ID_DRAGONRISE_WIIU), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_DWAV, USB_DEVICE_ID_EGALAX_TOUCHCONTROLLER), HID_QUIRK_MULTI_INPUT | HID_QUIRK_NOGET },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_EDIFIER, USB_DEVICE_ID_EDIFIER_QR30), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_ELAN, HID_ANY_ID), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_ELO, USB_DEVICE_ID_ELO_TS2700), HID_QUIRK_NOGET },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_EMS, USB_DEVICE_ID_EMS_TRIO_LINKER_PLUS_II), HID_QUIRK_MULTI_INPUT },
+---
+Ryan Chen (2):
+      dt-bindings: usb: aspeed,usb-vhub: Add ast2700 support
+      usb: gadget: aspeed-vhub: Add ast2700 support
+
+ .../devicetree/bindings/usb/aspeed,usb-vhub.yaml   | 22 ++++++++++++++--
+ drivers/usb/gadget/udc/aspeed-vhub/core.c          | 30 ++++++++++++++++++++++
+ drivers/usb/gadget/udc/aspeed-vhub/vhub.h          |  1 +
+ 3 files changed, 51 insertions(+), 2 deletions(-)
+---
+base-commit: ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d
+change-id: 20251125-upstream_vhub-3e20483a455e
+
+Best regards,
 -- 
-2.52.0
+Ryan Chen <ryan_chen@aspeedtech.com>
 
 
