@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-31029-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31030-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BCDEC9095B
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 03:08:35 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41DF1C90961
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 03:08:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6FC07351709
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 02:08:16 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4FF123414F7
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 02:08:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C003C1F239B;
-	Fri, 28 Nov 2025 02:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D22BA27B352;
+	Fri, 28 Nov 2025 02:06:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="VLuZD4jY"
+	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="EbBg8PxY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41431E9919;
-	Fri, 28 Nov 2025 02:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8407426B75B;
+	Fri, 28 Nov 2025 02:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764295598; cv=none; b=izDHsNfXRFF9aQMYzcEAg7T3hLq1hhaPt06XBqM7HCAvhgKf8t6ud2W5TiMt6/PkMSJWkLOTrWpLa/C9EiJdYd5Hl+AvMAaOyAnlzLFFlqprfsBzvNKNSOWWHWHkgy9NXj5R5hXoJjrp2F0rwkUsXVfvvj5hyp5N9YonfJqvMbg=
+	t=1764295612; cv=none; b=XR3AJmls2PxwgSmt+9sCR6bcV615yqfqFQYwyaD0qCmhDA09r7BHwcFCwrzvADIEez93Z3N4Y/Hr49cV4kcK7P7hmziziTb24asxpeqknspsru2eyOr9puijDSBw+Okq3Jf9GRULL3m2/iCx0RD/spcQopylW0cHamvmdqNokBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764295598; c=relaxed/simple;
-	bh=UYBXRUGpsPucbSnyCek2T6kQGAmNcIEArFxOg+A85iE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=EsT45WlbyuIwDaqf5aQ9uYFsZsF+rnT+gj6qRtYCaj7oycWX8Q2daTYi/4TadPB9U+kKAkAqigDooe3hfIDDd/u26h98vMcUqRm7oQ4BUdJ/KNItLQxCx7Va8RW+OJr8gts9DXHWGIHfsnrTv5f1XDltCaEpbpHwXJdhXobbD/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=VLuZD4jY; arc=none smtp.client-ip=54.243.244.52
+	s=arc-20240116; t=1764295612; c=relaxed/simple;
+	bh=CogOCq7Dgo3J6O+ahfKV8yupDN4OJqUtveUj18KHbi4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=V3p0ILWCXApvZYU++lBXOsEr8SjqF8yWPJapxcFAG3r56YeVlhkBSrGtNaRHXBYKL6BMAZD71fkJslOCjnz7VhHGO73yqJhmkrI10HxKuHYmbCdL44RotjKeAkJ22P1i2D9BGHnZU+GPtCinhyNiRxNduQXmGxPms8hXWWJnQlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=EbBg8PxY; arc=none smtp.client-ip=18.132.163.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airkyi.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=airkyi.com;
-	s=altu2504; t=1764295586;
-	bh=pFI7M+6j2JewnD4BwkGRc0QPG+RPFm6rGXiCORxPrVE=;
+	s=altu2504; t=1764295596;
+	bh=Xn5Sqf6jlBXaETnSdjcUsZQPPZf1EW7Rcj8pIik+fGE=;
 	h=From:To:Subject:Date:Message-Id;
-	b=VLuZD4jYQ94cUbqZU4R6/FSzj96jJ3tOpjPrzV3j51Goy5r7hMj5JOQzVDo3vhSUc
-	 MN+U9G9N37eMSsLMFkUipJgpEN4ZSJu+rwzJEDVnBcKZVEe1HSf85Y8gff3aT8MXaW
-	 1kHkLyhZ9dNP2C0pczT22SevXsq8f4C7bqDc2yDM=
-X-QQ-mid: esmtpsz21t1764295500te85580f9
-X-QQ-Originating-IP: mJI2PEDtqc428+UDr15mULFM3tVFMG2XEZtF0eDz1FM=
+	b=EbBg8PxYBLxvH+1VNw/2H0IInlqrKmaGtgeE5uTqCOASnNwpAX9AQFXn/cSnkHMTZ
+	 IZTEExSHH8MSkw+DxluiA5MlXQ3HhtIlNzni0ovPNd9jJDFZXacR52C1ole0Ns5Es+
+	 RO2QbC5LOyxATVMeArYt2W+i6jTRpzL+yevevufY=
+X-QQ-mid: esmtpsz21t1764295504t070fa9fe
+X-QQ-Originating-IP: UWgdCrYrv3Bx+daCLD2y4YZxUbnWlNQBoAbOIiRJVns=
 Received: from DESKTOP-8BT1A2O.localdomain ( [58.22.7.114])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 28 Nov 2025 10:04:57 +0800 (CST)
+	id ; Fri, 28 Nov 2025 10:05:01 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17121756573935767410
+X-BIZMAIL-ID: 6933544831087385611
 From: Chaoyi Chen <kernel@airkyi.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -85,31 +85,31 @@ Cc: linux-usb@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	dri-devel@lists.freedesktop.org
-Subject: [PATCH v11 10/11] arm64: dts: rockchip: Add missing dp_out port for RK3399 CDN-DP
-Date: Fri, 28 Nov 2025 10:04:04 +0800
-Message-Id: <20251128020405.90-11-kernel@airkyi.com>
+Subject: [PATCH v11 11/11] arm64: dts: rockchip: rk3399-evb-ind: Add support for DisplayPort
+Date: Fri, 28 Nov 2025 10:04:05 +0800
+Message-Id: <20251128020405.90-12-kernel@airkyi.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251128020405.90-1-kernel@airkyi.com>
 References: <20251128020405.90-1-kernel@airkyi.com>
 X-QQ-SENDSIZE: 520
 Feedback-ID: esmtpsz:airkyi.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: No4GWyI4cWt60uvdy4BnzznIuSs/tjiJfmQiyb4dP5sUhU5D6up4huJl
-	oVbeQz6Tbx2kA2CtJeO1ZbL0iE/ZHy+NCpmfmBiJtuF1Wa3CsCb3h48FvyWuZhw/A4KESNJ
-	Qsox2ppkR6bzGE1p5G/iv7J2QJ+cXnMS0oqKBDc2jtf878ovaTwin9ZH8+GqyxE5p9QSOfN
-	ghseIhEwfyiIkMwN9FCq1fu8J4kBzhHr/eSMY2pAGww7NZD/vzs0y+BjWa8lPMGjriiogLO
-	vegrxVQsHgcST5bPfTrtz1o5TFDOyGN7IHMeSU0NHIWJSA6uD2UvBahLuOosPeLTrs9NhWs
-	8xc5yS5UIQzAGoxjdJqaW0FwALA2ybi0QjnpHPuScmiw4TI8D0/Q6hz8IV7M/bUuONmDpau
-	MVWVtpwwFw9TAGhYHIfMKFoRfyM4v+aU0JoMhv/AGXWTWcMGakQ27TCLu1b02XFHiDy7UyJ
-	oDaOmb7ntGfeL7BSq6fig78SSkFs8D7tT2L83vYDFuB6SpQ2z05WpZqiVwlgzC94K4nfh3i
-	hiYm9BwCJ1kiQu+X/FmxoEbE0cqaUvHSw3SiBqhwndXf1SxgS/+lpshFwKEwq9Z9nXfX4UH
-	IzZOWhkwxiKN6GOb7rHM0KGmH9oN7fZ+bl+3F8umR49wqTinhKy20NW4YBvLbIgAOlY3GIC
-	b5rzu6xxScKE7x0hic44IfA0fV9XasGb0kebWLRLM2xzP/KrQk8NVS0uwmXB3jcklr/tgdJ
-	HQCQCxUIRTZcxrLCYziyVS3BTNSsqLDo2P11tHNF9FFuIB6250AT71qbpxrn193pB4hP4fY
-	nszXVFmkOl8mPiO9S/jgQO2QsoRMKQsb4FmDvLqRpiD27/Tb0Es6PfXJO5zg/l5ecRRCdFY
-	ubx3HM5caFjzvUYujjA+Zn+K9S3ZuUM3QlInNepDBtaT56bVk3ThrQ8QMcOtt3eRlWaveLr
-	g8DU6rGvy1JjMAoki8wX9yvdb66hrczmOemUG8YE68CspUj7sFvEKGrA9bxdSprStVrMJ7r
-	ReSnTtE/ql8QMrPeTB
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+X-QQ-XMAILINFO: OAowhIcaKHQtd6oVjnadb7YVmufdYoLBTx8jeAXik2M36as4RdW1vR90
+	X3vRqfvWvOipF0uIkA67ExGPMX8XClDhCne/77biwy0JtVAFutZ1R49k18q2Yx9JJLJ06wg
+	6Nwzd6x7gXzXdr1yQJOyTLEdySkMPoVS2IS3NKjkFlk0+X1SA/6ux4jzpUgoJBojgyR4/kt
+	vELNUK8or7aktp4qsFm18B5mYwEz2TDZ2t/O4WgT2nsSY7Kh5UPx0cD3LphA+7UNswNFvws
+	H1gcO1JsKhNHU9quAhX/jbG13BEoa3W5UuqqVVkPP4UjY6HirYJdo6eaiBJqN5G3sdxkCWP
+	49FNK6Plg5mWHBXCsqneFnX+OkBCFLbLRJL95Jd0BdPXN2zOD+/TuTiqO3qX1piUu+CqwZ4
+	7R5g4IAx/5DX96eMzrZgN0BZzhN+j8I/9rYRTTZ6frvBoNKqNBeOQl9l+3Fe0w3nFphKp6r
+	1ii6Heh2Vymv0ZWc5YO/AfwVGalWu13Zzmu4A3S4KeeoaTaiEI19fQmRWiaFOSYpTqn5zXe
+	UwhCllZ6dz1gJLjzDP+Zia2gETifCrC+d2YASt4nLgk74mPXbid3O7aANIg5CQEFPjM5Hse
+	NtL697J0g+4PeI4O4dd7WIxCu7UXd/0KnJkLQUGwVzkpngVaqhDsul0KwZumO9lqIv3HESi
+	icfEMMIsGBi3tA8m2mB+lT/4ySmp5dklmKmJO5ejZgTtKuWwyMzrZ7uXnLqYMcKKq/S1elc
+	vaUOonvhld/uOHmJ/iPzxTNA1f5/oFoTzCNZHuV1RQeqJM3CudpG7X3CFWm27CNa0m1AK4B
+	N1tuf8jmVo9pT+6iRWvDVnxWjfnKux+O+WnyaFZQlv3H83a/9GtXUvYxxQpJM8RC4kWiwM6
+	58lCibLumpCKKUVXwS9KwB+fBJ+MrvXhcklF7eNcIRzJM/RYl2kMs2IoBFkz+IgmR+KyZ/V
+	vZkwKP6Vh+VWQOsms+0aJyTUYP390m8XhfpwxGiTJxapLdFOEeTIf2eXxX9EhB1FwNS1d29
+	DB4s6j5p1NJ0+cYfBVFaGNrR7L6Wg=
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
 X-QQ-RECHKSPAM: 0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -119,50 +119,245 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
 From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
 
-Let's make the ports nodes of cdn_dp in the same style as the other
-display interface, and match the style of ports's yaml.
+The RK3399 EVB IND board has a Type-C interface DisplayPort.
+It use fusb302 chip as Type-C controller.
+
+fusb302 chip ---> USB/DP PHY0 <----> CDN-DP controller
 
 Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
 ---
 
-(no changes since v5)
+(no changes since v10)
 
-Changes in v4:
-- Remove unnecessary #address/#size-cells
+Changes in v9:
+- Add usb role switch for Type-C.
+- Remove USB2 PHY in Type-C connection.
 
-(no changes since v1)
+(no changes since v4)
 
- arch/arm64/boot/dts/rockchip/rk3399-base.dtsi | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Changes in v3:
+- Fix wrong vdo value.
+- Fix port node in usb-c-connector.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-base.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-base.dtsi
-index 4dcceb9136b7..93b42820998f 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-base.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-base.dtsi
-@@ -618,7 +618,11 @@ cdn_dp: dp@fec00000 {
- 		status = "disabled";
+Changes in v2:
+- Add endpoint to link DP PHY and DP controller.
+- Fix devicetree coding style.
+
+ .../boot/dts/rockchip/rk3399-evb-ind.dts      | 147 ++++++++++++++++++
+ 1 file changed, 147 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts b/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts
+index 70aee1ab904c..be1e90f7a453 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts
+@@ -4,6 +4,7 @@
+  */
  
- 		ports {
--			dp_in: port {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			dp_in: port@0 {
-+				reg = <0>;
- 				#address-cells = <1>;
- 				#size-cells = <0>;
+ /dts-v1/;
++#include <dt-bindings/usb/pd.h>
+ #include "rk3399.dtsi"
  
-@@ -632,6 +636,10 @@ dp_in_vopl: endpoint@1 {
- 					remote-endpoint = <&vopl_out_dp>;
- 				};
- 			};
-+
-+			dp_out: port@1 {
-+				reg = <1>;
-+			};
- 		};
+ / {
+@@ -19,6 +20,21 @@ chosen {
+ 		stdout-path = "serial2:1500000n8";
  	};
  
++	sound: sound {
++		compatible = "rockchip,rk3399-gru-sound";
++		rockchip,cpu = <&i2s0 &spdif>;
++	};
++
++	vbus_typec: regulator-vbus-typec {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio1 RK_PC2 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&vcc5v0_typec0_en>;
++		regulator-name = "vbus_typec";
++		vin-supply = <&vcc5v0_sys>;
++	};
++
+ 	vcc5v0_sys: regulator-vcc5v0-sys {
+ 		compatible = "regulator-fixed";
+ 		enable-active-high;
+@@ -31,6 +47,11 @@ vcc5v0_sys: regulator-vcc5v0-sys {
+ 	};
+ };
+ 
++&cdn_dp {
++	phys = <&tcphy0_dp>;
++	status = "okay";
++};
++
+ &cpu_b0 {
+ 	cpu-supply = <&vdd_cpu_b>;
+ };
+@@ -55,6 +76,12 @@ &cpu_l3 {
+ 	cpu-supply = <&vdd_cpu_l>;
+ };
+ 
++&dp_out {
++	dp_controller_output: endpoint {
++		remote-endpoint = <&dp_phy_in>;
++	};
++};
++
+ &emmc_phy {
+ 	status = "okay";
+ };
+@@ -341,6 +368,71 @@ regulator-state-mem {
+ 	};
+ };
+ 
++&i2c4 {
++	i2c-scl-rising-time-ns = <475>;
++	i2c-scl-falling-time-ns = <26>;
++	status = "okay";
++
++	usbc0: typec-portc@22 {
++		compatible = "fcs,fusb302";
++		reg = <0x22>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <RK_PA2 IRQ_TYPE_LEVEL_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&usbc0_int>;
++		vbus-supply = <&vbus_typec>;
++
++		usb_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			data-role = "dual";
++			power-role = "dual";
++			try-power-role = "sink";
++			op-sink-microwatt = <1000000>;
++			sink-pdos =
++				<PDO_FIXED(5000, 2500, PDO_FIXED_USB_COMM)>;
++			source-pdos =
++				<PDO_FIXED(5000, 1500, PDO_FIXED_USB_COMM)>;
++
++			altmodes {
++				displayport {
++					svid = /bits/ 16 <0xff01>;
++					vdo = <0x00001c46>;
++				};
++			};
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++
++					usbc0_orien_sw: endpoint {
++						remote-endpoint = <&tcphy0_orientation_switch>;
++					};
++				};
++
++				port@1 {
++					reg = <1>;
++
++					usbc0_role_sw: endpoint {
++						remote-endpoint = <&dwc3_0_role_switch>;
++					};
++				};
++
++				port@2 {
++					reg = <2>;
++
++					dp_altmode_mux: endpoint {
++						remote-endpoint = <&tcphy0_typec_dp>;
++					};
++				};
++			};
++		};
++	};
++};
++
+ &i2s2 {
+ 	status = "okay";
+ };
+@@ -354,6 +446,16 @@ &io_domains {
+ };
+ 
+ &pinctrl {
++	usb-typec {
++		usbc0_int: usbc0-int {
++			rockchip,pins = <1 RK_PA2 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++
++		vcc5v0_typec0_en: vcc5v0-typec0-en {
++			rockchip,pins = <1 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
+ 	pmic {
+ 		pmic_int_l: pmic-int-l {
+ 			rockchip,pins = <1 RK_PC5 RK_FUNC_GPIO &pcfg_pull_up>;
+@@ -400,10 +502,48 @@ &sdmmc {
+ 	status = "okay";
+ };
+ 
++&sound {
++	rockchip,codec = <&cdn_dp>;
++	status = "okay";
++};
++
++&spdif {
++	status = "okay";
++};
++
+ &tcphy0 {
+ 	status = "okay";
+ };
+ 
++&tcphy0_dp {
++	mode-switch;
++
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		tcphy0_typec_dp: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&dp_altmode_mux>;
++		};
++
++		dp_phy_in: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&dp_controller_output>;
++		};
++	};
++};
++
++&tcphy0_usb3 {
++	orientation-switch;
++
++	port {
++		tcphy0_orientation_switch: endpoint {
++			remote-endpoint = <&usbc0_orien_sw>;
++		};
++	};
++};
++
+ &tcphy1 {
+ 	status = "okay";
+ };
+@@ -461,7 +601,14 @@ &usb_host1_ohci {
+ };
+ 
+ &usbdrd_dwc3_0 {
++	usb-role-switch;
+ 	status = "okay";
++
++	port {
++		dwc3_0_role_switch: endpoint {
++			remote-endpoint = <&usbc0_role_sw>;
++		};
++	};
+ };
+ 
+ &usbdrd3_0 {
 -- 
 2.51.1
 
