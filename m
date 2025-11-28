@@ -1,183 +1,120 @@
-Return-Path: <linux-usb+bounces-31017-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31018-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA3F9C906E4
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 01:28:24 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1006CC90772
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 02:02:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DC9E934F074
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 00:28:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DEF334E1968
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Nov 2025 01:02:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D699A237163;
-	Fri, 28 Nov 2025 00:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7BC1D5ABF;
+	Fri, 28 Nov 2025 01:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eg2aLcdU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4032236FC;
-	Fri, 28 Nov 2025 00:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B557F13C8E8
+	for <linux-usb@vger.kernel.org>; Fri, 28 Nov 2025 01:02:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764289668; cv=none; b=D3P7vVJgmjgc+bpziEkWtctLPKlp2Z/alTT1U7sigK72g4LEfkWry4nVC0jujNZRPpWq3G1Ks941ygoMknX6S9ddHyXZvU5eEHtsYyK1zQEsknm58q7MTAVnfiseva3dUv2REKh0Vg1OwhRxsacJE6jSeVut7uTulrjg5GFu+k8=
+	t=1764291729; cv=none; b=jmCXFseCFy5ZVfOHDH9mwnzB3ChHL6Bm6WqKRoE3apG1PDRsCkqwoiPUSFgFpq/9F02KhCDYp3ylFP1kCeT1S+KkDZM4e9VCBM45FwsZJpWO9wYBSoRS/j8O0eJWDsX8WeMVo+H6S05DUgI9HQLzdRyrIWdLEpFGytM/N/34wYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764289668; c=relaxed/simple;
-	bh=XJdF9MCn8Pm6rI4iV4Bh37iuRCq4FiLatSLLzYg37h8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=pU0/e/qnPAf4MVHCaKURFKz73rwDNuM0B1iqdmZ20VK3Cag6Qe3J8ARdxHk0DTJR9/oDD592rjHqDihbaZmpZzQGmftpK0F5hg/XXu1Bl5yshnLJ7inhSiiavzOP3qDFvT2HRCWs11YKHxk5liKysRgfeRPx8DJR68uu7tpcZxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 28 Nov
- 2025 08:27:34 +0800
-Received: from [127.0.1.1] (192.168.10.13) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
- Transport; Fri, 28 Nov 2025 08:27:34 +0800
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-Date: Fri, 28 Nov 2025 08:27:31 +0800
-Subject: [PATCH v2 2/2] usb: gadget: aspeed-vhub: Add ast2700 support
+	s=arc-20240116; t=1764291729; c=relaxed/simple;
+	bh=/w/13f6Mufr+Fhz0+Wi3GN6jsV0sX3TIONqS65ncsA8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pkbYJKzT+yUbl71+7POcy+Um9OXllweIBkN2nFg4Wn4I53TvLxCiWhpum1ZCFYg4FiMt6BvQoIl+kkje/ClOaKrqEfcMoRRpSzQj9q6d52r3YbbcMk4qavkAZO2bat8Lau3AoR+xrbVnBELZA77KnKHc5lt1zJGGQEZW/k5SGVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eg2aLcdU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DA3C4CEF8;
+	Fri, 28 Nov 2025 01:02:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764291728;
+	bh=/w/13f6Mufr+Fhz0+Wi3GN6jsV0sX3TIONqS65ncsA8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eg2aLcdUh7pYZCBlBKEaqc8UVCXxWVQtYlq3BIyGK3zyoD9LXc0EXb+ZiJpylTz2t
+	 1Ot9ZrwSYZ61yBORFbaS8f7WTEJKrNVU1fzROHmMO7JP98+6aED2rcUarDAq/jAERm
+	 a7tCk32yJYL42gYdFvcfrwXkjDDUUBg1zX4GCtAliXcy8usEbwW5c1Ct81E46SCB/N
+	 tihSs1jNTi9IQKG4VvrxFRNc9HkV5p2mkds6jZhEjIQZap9+qMVg5kOHAx/5xFRKBY
+	 EPCjnTpxj47ANLAtAihxqajwPf71Ves27XCpd6vvqY/lPa0Ud3bOi8Tk6/ZrfzlnJO
+	 NKev6E74CKBuw==
+Date: Fri, 28 Nov 2025 09:02:04 +0800
+From: "Peter Chen (CIX)" <peter.chen@kernel.org>
+To: "tomer.maimon@nuvoton.com" <tomer.maimon@nuvoton.com>
+Cc: "Uri.Trichter@nuvoton.com" <Uri.Trichter@nuvoton.com>,
+	"Avi.Fishman@nuvoton.com" <Avi.Fishman@nuvoton.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	xu.yang_2@nxp.com
+Subject: Re: Maintainer of ChipID
+Message-ID: <20251128010204.GA2702998@nchen-desktop>
+References: <KL1PR03MB7053BF80E52FB7C409F5AD3C85DEA@KL1PR03MB7053.apcprd03.prod.outlook.com>
+ <KL1PR03MB70537F6998668F54F407E29985DEA@KL1PR03MB7053.apcprd03.prod.outlook.com>
+ <aSe7brbIyYtsO5Ir@nchen-desktop>
+ <JH0PR03MB7634B9AA3CA0F0525E37EE7E84DFA@JH0PR03MB7634.apcprd03.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20251128-upstream_vhub-v2-2-1fa66a5833c2@aspeedtech.com>
-References: <20251128-upstream_vhub-v2-0-1fa66a5833c2@aspeedtech.com>
-In-Reply-To: <20251128-upstream_vhub-v2-0-1fa66a5833c2@aspeedtech.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery
-	<andrew@codeconstruct.com.au>, Benjamin Herrenschmidt
-	<benh@kernel.crashing.org>, Philipp Zabel <p.zabel@pengutronix.de>
-CC: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
-	<linux-kernel@vger.kernel.org>, Ryan Chen <ryan_chen@aspeedtech.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1764289654; l=3392;
- i=ryan_chen@aspeedtech.com; s=20251126; h=from:subject:message-id;
- bh=XJdF9MCn8Pm6rI4iV4Bh37iuRCq4FiLatSLLzYg37h8=;
- b=ecy2bG+wRDjEzJOpOxKlviBm2AUu1tXkDbMaZbOZAMJKnr+T61vmMRfng60CdMHf5b11i88JH
- 5V9Q4kE/96JAiITGpu8kf/ByIdNx4H92oqfH6VEF9Fq8MREdY0/DBMv
-X-Developer-Key: i=ryan_chen@aspeedtech.com; a=ed25519;
- pk=Xe73xY6tcnkuRjjbVAB/oU30KdB3FvG4nuJuILj7ZVc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <JH0PR03MB7634B9AA3CA0F0525E37EE7E84DFA@JH0PR03MB7634.apcprd03.prod.outlook.com>
 
-Add support for the AST2700 SOC in the vhub gadget driver. AST2700
-uses a 64-bit DMA addressing capability, so select 64-bit DMA mask
-for compatible. AST2700 vhub also requires an reset line, so hook
-up the optional reset control and assert/deassert it during probe
-and remove.
+On 25-11-27 17:13:40, tomer.maimon@nuvoton.com wrote:
+> Hi Peter,
+> 
+> Thanks for your prompt reply and appreciate your assistance.
+> 
+> We are using UDC Chipidea driver version 25 (ci_hdrc_npcm) in NPCM BMC SoC and we are facing UDC DMA synchronization issue
+> In the UDC Chipidea driver there is WA for version 22 and 24 that running reprime_dtd, not sure why
+> https://elixir.bootlin.com/linux/v6.18-rc7/source/drivers/usb/chipidea/udc.c#L840
+> 
+> Do you know if there are any errata list for in UDC Chipidea version25?
+> Does the UDC Chipidea driver covering version 25 as well?
 
-Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
----
- drivers/usb/gadget/udc/aspeed-vhub/core.c | 30 ++++++++++++++++++++++++++++++
- drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  1 +
- 2 files changed, 31 insertions(+)
+Add Yang Xu who may use chipidea IP currently, and describes your
+problems in detail please, we may has some ideas.
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-index f2685f89b3e5..19c1849ae665 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-@@ -23,6 +23,7 @@
- #include <linux/of.h>
- #include <linux/regmap.h>
- #include <linux/dma-mapping.h>
-+#include <linux/reset.h>
- 
- #include "vhub.h"
- 
-@@ -280,6 +281,8 @@ static void ast_vhub_remove(struct platform_device *pdev)
- 	if (vhub->clk)
- 		clk_disable_unprepare(vhub->clk);
- 
-+	reset_control_assert(vhub->rst);
-+
- 	spin_unlock_irqrestore(&vhub->lock, flags);
- 
- 	if (vhub->ep0_bufs)
-@@ -294,6 +297,7 @@ static void ast_vhub_remove(struct platform_device *pdev)
- static int ast_vhub_probe(struct platform_device *pdev)
- {
- 	enum usb_device_speed max_speed;
-+	const u64 *dma_mask_ptr;
- 	struct ast_vhub *vhub;
- 	struct resource *res;
- 	int i, rc = 0;
-@@ -348,6 +352,16 @@ static int ast_vhub_probe(struct platform_device *pdev)
- 		goto err;
- 	}
- 
-+	vhub->rst = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
-+	if (IS_ERR(vhub->rst)) {
-+		rc = PTR_ERR(vhub->rst);
-+		goto err;
-+	}
-+
-+	rc = reset_control_deassert(vhub->rst);
-+	if (rc)
-+		goto err;
-+
- 	/* Check if we need to limit the HW to USB1 */
- 	max_speed = usb_get_maximum_speed(&pdev->dev);
- 	if (max_speed != USB_SPEED_UNKNOWN && max_speed < USB_SPEED_HIGH)
-@@ -370,6 +384,12 @@ static int ast_vhub_probe(struct platform_device *pdev)
- 		goto err;
- 	}
- 
-+	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
-+	if (dma_mask_ptr) {
-+		rc = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
-+		if (rc)
-+			goto err;
-+	}
- 	/*
- 	 * Allocate DMA buffers for all EP0s in one chunk,
- 	 * one per port and one for the vHub itself
-@@ -412,15 +432,25 @@ static int ast_vhub_probe(struct platform_device *pdev)
- 	return rc;
- }
- 
-+static const u64 dma_mask_32 =	DMA_BIT_MASK(32);
-+static const u64 dma_mask_64 =	DMA_BIT_MASK(64);
-+
- static const struct of_device_id ast_vhub_dt_ids[] = {
- 	{
- 		.compatible = "aspeed,ast2400-usb-vhub",
-+		.data = &dma_mask_32,
- 	},
- 	{
- 		.compatible = "aspeed,ast2500-usb-vhub",
-+		.data = &dma_mask_32,
- 	},
- 	{
- 		.compatible = "aspeed,ast2600-usb-vhub",
-+		.data = &dma_mask_32,
-+	},
-+	{
-+		.compatible = "aspeed,ast2700-usb-vhub",
-+		.data = &dma_mask_64,
- 	},
- 	{ }
- };
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-index 6b9dfa6e10eb..aca2050e2db0 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-@@ -388,6 +388,7 @@ struct ast_vhub {
- 	spinlock_t			lock;
- 	struct work_struct		wake_work;
- 	struct clk			*clk;
-+	struct reset_control		*rst;
- 
- 	/* EP0 DMA buffers allocated in one chunk */
- 	void				*ep0_bufs;
+I think current chipidea driver has covered version 25, and Synopsys acquired
+Chipidea IP more than 10 years ago, you may get errata list from
+Synopsys.
+
+Peter
+> 
+> -----Original Message-----
+> From: Peter Chen (CIX) <peter.chen@kernel.org>
+> Sent: Thursday, 27 November 2025 4:46
+> To: IV00 Uri Trichter <Uri.Trichter@nuvoton.com>
+> Cc: IS20 Tomer Maimon <tomer.maimon@nuvoton.com>; IS20 Avi Fishman <Avi.Fishman@nuvoton.com>; linux-usb@vger.kernel.org
+> Subject: Re: Maintainer of ChipID
+> 
+> CAUTION - External Email: Do not click links or open attachments unless you acknowledge the sender and content.
+> 
+> 
+> On 25-11-26 08:15:50, Uri.Trichter@nuvoton.com wrote:
+> > Hi Peter
+> >
+> > Are you the maintainer for ChipID USB device driver ?
+> > If so, we would like a quick help from you
+> 
+> Hi Uri,
+> 
+> You could send your question, and see if we could help you.
+> 
+> --
+> 
+> Best regards,
+> Peter
+> ________________________________
+> ________________________________
+>  The privileged confidential information contained in this email is intended for use only by the addressees as indicated by the original sender of this email. If you are not the addressee indicated in this email or are not responsible for delivery of the email to such a person, please kindly reply to the sender indicating this fact and delete all copies of it from your computer and network server immediately. Your cooperation is highly appreciated. It is advised that any unauthorized use of confidential information of Nuvoton is strictly prohibited; and any information in this email irrelevant to the official business of Nuvoton shall be deemed as neither given nor endorsed by Nuvoton.
 
 -- 
-2.34.1
 
+Best regards,
+Peter
 
