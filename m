@@ -1,154 +1,190 @@
-Return-Path: <linux-usb+bounces-31052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1943EC95413
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Nov 2025 20:41:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB37AC955B2
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Nov 2025 23:59:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C4D97342293
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Nov 2025 19:41:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 122BD3A2020
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Nov 2025 22:59:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF632C178D;
-	Sun, 30 Nov 2025 19:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 422EF22576E;
+	Sun, 30 Nov 2025 22:59:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD2828000B
-	for <linux-usb@vger.kernel.org>; Sun, 30 Nov 2025 19:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40576247289
+	for <linux-usb@vger.kernel.org>; Sun, 30 Nov 2025 22:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764531688; cv=none; b=AqnluFmytsezZCo5rL5IMFJ63/btZnsOp781bjsqiAazF9hLV9cLQDaD/InYuw/9eS2YzIPJ3NQZ0nmkyyBDW0cuY7a7XadV1Yso0zN+EUSyzQ1Ly1TIbA5/3W/taRn+LTBRocTQBmErbw8GZuLUYNgewIINHUN9+iL3vFiC0LQ=
+	t=1764543566; cv=none; b=JHpc9YDC+Y3VhPAqkpqjF2UJ1/xfPKyZwzYjjgT8BNNigcgmT5l6jX7gMGoARj7q8515tvBMbgurvX3kizXZScNWvgkrNqKeL27VtlDacmyRXRfAbooKte3ceKa8HmFcgmI8slrHYTltLIE1jGJHq6w+GGCjg97yBCrCA0Kz34M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764531688; c=relaxed/simple;
-	bh=Y9+lc28z824Px+SX9SSjoFzVv7k3uaCBTivkz/KFmDY=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=kORRvLsSwHjcUwxUBOPDFssaJoKM01US0DoSlpcVHDGYHNcmwG0V/RB3Rfw3wMFpVZ32JMyJb4Wv7v3altXZYNOXTIVolVoQmovVztKQIw2dIFVi8ZLOLAdmGN9oaTkcbAFvUp4/M5CGvpVtOG2MX51zXyz7Yw9gkyGV9uIuSoQ=
+	s=arc-20240116; t=1764543566; c=relaxed/simple;
+	bh=G6/rKgm60d+pWNh6kz+EPALqHQ5oAnwR27uxa8+87xc=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=CGerofUzF7+S0CMAlFo4yaGueD2C50953ERkDkalQDWHVpta/NqI0z3K1ZRwMct5WdRtHZ28hKA/yZEWYsrE1XWL8vcSAUZ+cc4d1nKy4nz23oDGvSTx2yjbpEroet+/RSdnMKd1tb93y5xKJtUWLQJ+kDjSJtn7OqWzcdJsF5s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-43322b98837so33891755ab.2
-        for <linux-usb@vger.kernel.org>; Sun, 30 Nov 2025 11:41:26 -0800 (PST)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-4337e902d2bso22342145ab.3
+        for <linux-usb@vger.kernel.org>; Sun, 30 Nov 2025 14:59:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764531685; x=1765136485;
+        d=1e100.net; s=20230601; t=1764543564; x=1765148364;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zZ8yoruI0/UqgPNJ8wyDOIBw0EtRm4jXgwWARQ7nI1g=;
-        b=cP0ecIPQaepg3l6ARZYhkqzAI2fboCy91eCTlP1f8+iYi4sRUxt3G8tn3WgUkD/Fn1
-         0xKF/6O7jaoTLbAQbX6h6uYsh1Zyj8aHSJ2+p16B0PRPG+oEl3HZntIxRuZY2yOs7UoC
-         6DUdql8+EwCkqclGFCuyXhDPmxEiJylHT7kfaA4ql9Eeyzqa7qMpGnBMWEV71qAEMYjQ
-         azdCSSWrALw5KSlWQTvLpa/uyeYEZdWNUGOlhp07n2+RzNBNmuC2idWZfbr0v/RH5a14
-         DG3rfT/jI7qUxA3rT0sDRK7CbXAD4bt9SxXZ65yw7jOmi3e7i346v77z31djZ+PzMFr0
-         oLWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUiE8N0OcOQzGits4+R/0sTr26p776CR/5seXP01fZG+NnITNxO0DSTY98NkzUPm24Q+HLDq6kWs3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4JbjXwcBPvIoFq3syegat4icQ3pHBhtvWXlsMFA496N8IvFRh
-	Y/Hn9Oj52AwGwFL0ovKQY/8iA6F8J4FgaGomG68squLV5JoZp2T/xyNMn3woe1wDUblrWNWTFiM
-	oaooMyFZN8Rr3gsX06hO9v6C/RX+Jamn86aTGlw7DSv5Ow9psNss/CXTG+qk=
-X-Google-Smtp-Source: AGHT+IEo9XaLofKqMh0eO3FCJCBzwolvS0JEraH7Bazj4ARLuIm/fncy5erRgyMCZZNpW1KNObkWHgcD7EhK6L/oW/o3J6gjhxrN
+        bh=1bVu02Ri5Q6hECoyUQn61sUejeKwciH+qikOpjzZc3A=;
+        b=ZS5fsj6V1Iz5Hv20zWUNkIRCZSyAZugqRWv6TS9WeOE4kr1F64q+Hz/kfHBQuClF03
+         2OhRIWbhpj+RGstjoPcPvuxAvWYvY4h2EFEfsyrIJoWBTEYSwXlBnWwK4R8+xU0dpm4I
+         Hw+OlQS3BPVboVJx0adsgiTnwOfgnlfqjQo29E7N+i5OX6A0V3F+4yF0gKqRmI+ntoPP
+         qxiw/fsnUaAezVmjm+4TeObv8XTvs6ipFyig8YHfVwUNa8KR78Ez/Uqj8U2davS8QB0u
+         h3S1tIKXB7ymKybDJAOf1sjThRMhHDrhhXsWLm4EvxDFYvwi4/8EEfbGiBSUQkAYXIPi
+         eFbw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLAYv2yelAg3dtsHcaP0uzBRki+pyUaB4rhgaARh08KVVlbKzL8jIi1F4y32RJvOJdAbjKm404Vqs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdZEu3rgvchAfZVwcGiXc5rw/KfadCLQxdTrTr6MY3izs3A1aS
+	04UCg/NSN5PJs60gQ68pSbNFSnKcxBFddpo1X3wCGRPc8ZRr484K4dqWuzj80aZU93spyBXKkrN
+	GnsLXAgNH2+6mQtHy2gFxFUk1hyd6t0t3tlkETnOChlJ2jy9kjWLrPOC173U=
+X-Google-Smtp-Source: AGHT+IHi/oPdbwffPz93toY8g52FUJrvUkHwgPtjJvvhwILpX4SzLnN26zbEpZtWd6KaJdYQ7o7341T+g9ixpczquw22D4+fmUI0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c28:b0:433:2597:8cc with SMTP id
- e9e14a558f8ab-435b98e6bd8mr348161055ab.29.1764531685668; Sun, 30 Nov 2025
- 11:41:25 -0800 (PST)
-Date: Sun, 30 Nov 2025 11:41:25 -0800
+X-Received: by 2002:a05:6e02:1a87:b0:434:70bd:8b47 with SMTP id
+ e9e14a558f8ab-435b985b419mr298167025ab.11.1764543564273; Sun, 30 Nov 2025
+ 14:59:24 -0800 (PST)
+Date: Sun, 30 Nov 2025 14:59:24 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <692c9de5.050a0220.2ffa18.0016.GAE@google.com>
-Subject: [syzbot] [usb?] WARNING in usb_start_wait_urb
-From: syzbot <syzbot+e6a50a2e7cbb4f775d04@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <692ccc4c.a70a0220.d98e3.0175.GAE@google.com>
+Subject: [syzbot] [input?] [usb?] WARNING in cm109_urb_irq_callback
+From: syzbot <syzbot+c708736c2ec142a386fd@syzkaller.appspotmail.com>
+To: dmitry.torokhov@gmail.com, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    7d31f578f323 Add linux-next specific files for 20251128
+HEAD commit:    663d0d1af3fa Add linux-next specific files for 20251126
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=119c8192580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ec890b8333fce099
-dashboard link: https://syzkaller.appspot.com/bug?extid=e6a50a2e7cbb4f775d04
+console output: https://syzkaller.appspot.com/x/log.txt?x=14c584b4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c8705ffbbff9235f
+dashboard link: https://syzkaller.appspot.com/bug?extid=c708736c2ec142a386fd
 compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17bdbcb4580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1413b0c2580000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10746f42580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1456de12580000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9bcc6eb60940/disk-7d31f578.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/895bc1bfae48/vmlinux-7d31f578.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/48f15e4679f3/bzImage-7d31f578.xz
+disk image: https://storage.googleapis.com/syzbot-assets/bccd41a8a8ce/disk-663d0d1a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/21ebce6fa0f2/vmlinux-663d0d1a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/441ffa7b502f/bzImage-663d0d1a.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e6a50a2e7cbb4f775d04@syzkaller.appspotmail.com
+Reported-by: syzbot+c708736c2ec142a386fd@syzkaller.appspotmail.com
 
+cm109 1-1:0.8: cm109_urb_irq_callback: urb status -71
 ------------[ cut here ]------------
-usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType c0
-WARNING: drivers/usb/core/urb.c:414 at 0x0, CPU#0: syz.0.17/6025
+URB ffff8880269d7000 submitted while active
+WARNING: drivers/usb/core/urb.c:380 at 0x0, CPU#1: syz.0.17/6058
 Modules linked in:
-CPU: 0 UID: 0 PID: 6025 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+CPU: 1 UID: 0 PID: 6058 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
-RIP: 0010:usb_submit_urb+0x111c/0x18d0 drivers/usb/core/urb.c:412
-Code: b8 00 00 00 00 00 fc ff df 0f b6 44 05 00 84 c0 0f 85 a7 05 00 00 45 0f b6 45 00 48 8b 3c 24 48 8b 74 24 20 4c 89 fa 44 89 f1 <67> 48 0f b9 3a 49 bf 00 00 00 00 00 fc ff df e9 b7 f2 ff ff 89 e9
-RSP: 0018:ffffc90003487820 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffff8880726bb700 RCX: 0000000080000280
-RDX: ffff888071228200 RSI: ffffffff8c3575e0 RDI: ffffffff8fcf8fd0
-RBP: 1ffff1100e666078 R08: 00000000000000c0 R09: 0000000000000000
-R10: ffffc90003487920 R11: fffff52000690f30 R12: ffff888076835100
-R13: ffff8880733303c0 R14: 0000000080000280 R15: ffff888071228200
-FS:  00007fe073fd66c0(0000) GS:ffff888125a03000(0000) knlGS:0000000000000000
+RIP: 0010:usb_submit_urb+0x7e/0x18d0 drivers/usb/core/urb.c:380
+Code: 89 f0 48 c1 e8 03 42 80 3c 38 00 74 08 4c 89 f7 e8 67 4e 21 fb 49 83 3e 00 74 40 e8 bc fe ba fa 48 8d 3d 75 5b c5 08 48 89 de <67> 48 0f b9 3a b8 f0 ff ff ff eb 11 e8 a1 fe ba fa eb 05 e8 9a fe
+RSP: 0018:ffffc90000a08878 EFLAGS: 00010046
+RAX: ffffffff8706e144 RBX: ffff8880269d7000 RCX: ffff88802503bd00
+RDX: 0000000000000100 RSI: ffff8880269d7000 RDI: ffffffff8fcc3cc0
+RBP: 000000000000000f R08: 0000000000000003 R09: 0000000000000004
+R10: dffffc0000000000 R11: fffff52000141100 R12: 0000000000000820
+R13: ffff88807b288030 R14: ffff8880269d7008 R15: dffffc0000000000
+FS:  0000555591d77500(0000) GS:ffff888125b3e000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000200000001480 CR3: 000000007ecd2000 CR4: 00000000003526f0
+CR2: 00007f2160730e9c CR3: 000000007837a000 CR4: 00000000003526f0
 Call Trace:
+ <IRQ>
+ cm109_submit_ctl drivers/input/misc/cm109.c:380 [inline]
+ cm109_urb_irq_callback+0x709/0xcd0 drivers/input/misc/cm109.c:431
+ __usb_hcd_giveback_urb+0x376/0x540 drivers/usb/core/hcd.c:1661
+ dummy_timer+0x85f/0x45b0 drivers/usb/gadget/udc/dummy_hcd.c:1995
+ __run_hrtimer kernel/time/hrtimer.c:1777 [inline]
+ __hrtimer_run_queues+0x51c/0xc30 kernel/time/hrtimer.c:1841
+ hrtimer_run_softirq+0x187/0x2b0 kernel/time/hrtimer.c:1858
+ handle_softirqs+0x27d/0x850 kernel/softirq.c:626
+ __do_softirq kernel/softirq.c:660 [inline]
+ invoke_softirq kernel/softirq.c:496 [inline]
+ __irq_exit_rcu+0xca/0x1f0 kernel/softirq.c:727
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:743
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1056 [inline]
+ sysvec_apic_timer_interrupt+0xa6/0xc0 arch/x86/kernel/apic/apic.c:1056
+ </IRQ>
  <TASK>
- usb_start_wait_urb+0x115/0x4f0 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x232/0x3e0 drivers/usb/core/message.c:154
- dib0700_ctrl_rd drivers/media/usb/dvb-usb/dib0700_core.c:95 [inline]
- dib0700_i2c_xfer_legacy drivers/media/usb/dvb-usb/dib0700_core.c:315 [inline]
- dib0700_i2c_xfer+0xba7/0xf70 drivers/media/usb/dvb-usb/dib0700_core.c:361
- __i2c_transfer+0x871/0x2110 drivers/i2c/i2c-core-base.c:-1
- i2c_transfer+0x25b/0x3a0 drivers/i2c/i2c-core-base.c:2317
- i2cdev_ioctl_rdwr+0x460/0x740 drivers/i2c/i2c-dev.c:306
- i2cdev_ioctl+0x64b/0x820 drivers/i2c/i2c-dev.c:467
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:597 [inline]
- __se_sys_ioctl+0xfc/0x170 fs/ioctl.c:583
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
+RIP: 0010:_raw_spin_unlock_irqrestore+0xa8/0x110 kernel/locking/spinlock.c:194
+Code: 74 05 e8 eb f6 64 f6 48 c7 44 24 20 00 00 00 00 9c 8f 44 24 20 f6 44 24 21 02 75 4f f7 c3 00 02 00 00 74 01 fb bf 01 00 00 00 <e8> a3 7f 2c f6 65 8b 05 2c 61 59 07 85 c0 74 40 48 c7 04 24 0e 36
+RSP: 0018:ffffc90003b7faa0 EFLAGS: 00000206
+RAX: ea11a46cfad79300 RBX: 0000000000000a02 RCX: ea11a46cfad79300
+RDX: 0000000000000006 RSI: ffffffff8da6f16a RDI: 0000000000000001
+RBP: ffffc90003b7fb28 R08: ffffffff8fbf8277 R09: 1ffffffff1f7f04e
+R10: dffffc0000000000 R11: fffffbfff1f7f04f R12: dffffc0000000000
+R13: 1ffff1102887017f R14: ffff888144380000 R15: 1ffff9200076ff54
+ spin_unlock_irqrestore include/linux/spinlock.h:406 [inline]
+ dummy_pullup+0x18c/0x200 drivers/usb/gadget/udc/dummy_hcd.c:926
+ usb_gadget_disconnect_locked+0x143/0x490 drivers/usb/gadget/udc/core.c:780
+ gadget_unbind_driver+0xc7/0x460 drivers/usb/gadget/udc/core.c:1685
+ device_remove drivers/base/dd.c:569 [inline]
+ __device_release_driver drivers/base/dd.c:1274 [inline]
+ device_release_driver_internal+0x46f/0x800 drivers/base/dd.c:1297
+ driver_detach+0x1f3/0x2d0 drivers/base/dd.c:1360
+ bus_remove_driver+0x226/0x320 drivers/base/bus.c:785
+ usb_gadget_unregister_driver+0x4e/0x70 drivers/usb/gadget/udc/core.c:1751
+ raw_release+0xd7/0x260 drivers/usb/gadget/legacy/raw_gadget.c:463
+ __fput+0x44c/0xa70 fs/file_table.c:468
+ task_work_run+0x1d4/0x260 kernel/task_work.c:233
+ resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+ __exit_to_user_mode_loop kernel/entry/common.c:44 [inline]
+ exit_to_user_mode_loop+0xff/0x4f0 kernel/entry/common.c:75
+ __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
+ syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
+ syscall_exit_to_user_mode_work include/linux/entry-common.h:159 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:194 [inline]
+ do_syscall_64+0x2e3/0xf80 arch/x86/entry/syscall_64.c:100
  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fe07318f749
+RIP: 0033:0x7ff71818f749
 Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fe073fd6038 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fe0733e5fa0 RCX: 00007fe07318f749
-RDX: 0000200000000200 RSI: 0000000000000707 RDI: 0000000000000004
-RBP: 00007fe073213f91 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fe0733e6038 R14: 00007fe0733e5fa0 R15: 00007ffe02ef2178
+RSP: 002b:00007ffc6614e5d8 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
+RAX: 0000000000000000 RBX: 000000000001fed9 RCX: 00007ff71818f749
+RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000001 R09: 000000056614e8cf
+R10: 0000001b31f20000 R11: 0000000000000246 R12: 00007ff7183e5fac
+R13: 00007ff7183e5fa0 R14: ffffffffffffffff R15: 0000000000000003
  </TASK>
 ----------------
 Code disassembly (best guess):
-   0:	b8 00 00 00 00       	mov    $0x0,%eax
-   5:	00 fc                	add    %bh,%ah
-   7:	ff                   	(bad)
-   8:	df 0f                	fisttps (%rdi)
-   a:	b6 44                	mov    $0x44,%dh
-   c:	05 00 84 c0 0f       	add    $0xfc08400,%eax
-  11:	85 a7 05 00 00 45    	test   %esp,0x45000005(%rdi)
-  17:	0f b6 45 00          	movzbl 0x0(%rbp),%eax
-  1b:	48 8b 3c 24          	mov    (%rsp),%rdi
-  1f:	48 8b 74 24 20       	mov    0x20(%rsp),%rsi
-  24:	4c 89 fa             	mov    %r15,%rdx
-  27:	44 89 f1             	mov    %r14d,%ecx
+   0:	89 f0                	mov    %esi,%eax
+   2:	48 c1 e8 03          	shr    $0x3,%rax
+   6:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1)
+   b:	74 08                	je     0x15
+   d:	4c 89 f7             	mov    %r14,%rdi
+  10:	e8 67 4e 21 fb       	call   0xfb214e7c
+  15:	49 83 3e 00          	cmpq   $0x0,(%r14)
+  19:	74 40                	je     0x5b
+  1b:	e8 bc fe ba fa       	call   0xfabafedc
+  20:	48 8d 3d 75 5b c5 08 	lea    0x8c55b75(%rip),%rdi        # 0x8c55b9c
+  27:	48 89 de             	mov    %rbx,%rsi
 * 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
-  2f:	49 bf 00 00 00 00 00 	movabs $0xdffffc0000000000,%r15
-  36:	fc ff df
-  39:	e9 b7 f2 ff ff       	jmp    0xfffff2f5
-  3e:	89 e9                	mov    %ebp,%ecx
+  2f:	b8 f0 ff ff ff       	mov    $0xfffffff0,%eax
+  34:	eb 11                	jmp    0x47
+  36:	e8 a1 fe ba fa       	call   0xfabafedc
+  3b:	eb 05                	jmp    0x42
+  3d:	e8                   	.byte 0xe8
+  3e:	9a                   	(bad)
+  3f:	fe                   	.byte 0xfe
 
 
 ---
