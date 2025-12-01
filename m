@@ -1,189 +1,253 @@
-Return-Path: <linux-usb+bounces-31059-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31060-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBF2CC96B68
-	for <lists+linux-usb@lfdr.de>; Mon, 01 Dec 2025 11:48:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39B9FC97132
+	for <lists+linux-usb@lfdr.de>; Mon, 01 Dec 2025 12:38:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1E6173437B2
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Dec 2025 10:47:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C975E3A302D
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Dec 2025 11:36:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68068303CBB;
-	Mon,  1 Dec 2025 10:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CCCF2727ED;
+	Mon,  1 Dec 2025 11:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P7vS249u"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="K548kYGc";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ECj2RayR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35FEF24A051
-	for <linux-usb@vger.kernel.org>; Mon,  1 Dec 2025 10:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E28426ED51
+	for <linux-usb@vger.kernel.org>; Mon,  1 Dec 2025 11:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764586039; cv=none; b=GYYSfExYvJT6MwFVQVbCFInIkvn/3+WCO4JxZycnnJivJo8H9jiKNKNk/iYmxQ3lulGlqrQCLGA21fQquwmDNPzr3z98bGdld69qP7+gwGLm8BNP9NukzYyl7QuaEnKHG+1rDjx69vyK51K4dWsxJ88Ev5pYnHyUhxHZFWFTW7o=
+	t=1764588953; cv=none; b=p4xtGGEXvmtJ0yKHlJ8k1X9CNC1W0weslqa2UfW3pirFsyyDnm0t8tYUmfwUO1FoVw/Qyj0XEY6gL7+I452vnutdCNB2AXJYj+3Fl2zJBLwB6C3+KqkLOLJjYlHQxJNaI8+DUQMhWmd48si5rlKFLADDPJJgKT3aY7i5YqZwHCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764586039; c=relaxed/simple;
-	bh=ULD4yupbDE27rYGMxSf/jWwpZnWR3LhbXfbtdyZVFt0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BzeAVjRC1j+xHCE23GRoQzgaOP1C8177LTyE+loyHdS4e8iRKbr0TsdIvgUo9FXbtjQe4eEaLohFemfKE2Dzp9TyB47nIUBaJqNhx/emQaw4r9WzdoPxr4uF2qaCnMKGNZMev8C7hSmoZYXEQ31GjIuvRvvK+vkkmgQAHpnXSqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P7vS249u; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b737502f77bso552241466b.2
-        for <linux-usb@vger.kernel.org>; Mon, 01 Dec 2025 02:47:17 -0800 (PST)
+	s=arc-20240116; t=1764588953; c=relaxed/simple;
+	bh=bi1e3XR7pfCOOYVxdQSZ0zKYYdXXaCUk2xE3m1Eq04s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aKVxaYBp0q1elcc+5ZywC1I2UTbKOzTd9hGsg9nFJZ7zAO0vA2MPIdaBDtm4XrC3Xii4OvXa2AYL4mWKbVKc99gWlObLFtJiFK0PMlK7KvNTCukMkahv1P7mGcICxGCQXc93+5YNe++9Q21TZ0fN99MSxCej9dGvd/Nhp7/ZVnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=K548kYGc; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ECj2RayR; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B1AxnrG349699
+	for <linux-usb@vger.kernel.org>; Mon, 1 Dec 2025 11:35:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	lCWVNvn+OqeHLRLNj//Ta+HiE6qf46ogB4coZkDMqd0=; b=K548kYGc9YUcNeYk
+	8Ct9OIa8h6FE4P0OtDUrpW+iMUuZTCX9ttQcZxDuWCOP8KoZ7lwQN/5AkPuN++Lt
+	RN/9dIac29sQX0eAqCkEmyK7qyPXRwOx9uGfM+qMJeBHkchngnw3DHYZ3j+3oDCc
+	+im74SPrzRLZHlaP6GqHuk4C08u8X0JtVXhFKHrlycSN7J6lQfoJ1jLR0RBCpmxX
+	3ML3M3DvdksJEiu6Ku3in+uMsebXvSDqdgXu0uXgRQcxE1oKxnil2QiTTqknCfQR
+	xKXFmMuRENWSHsA7Ct85NsljrnigSpY4GBO+PrDWuFRKgKtYwXDiSbjVlmsjTlpt
+	dInO/g==
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4as9re030e-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 01 Dec 2025 11:35:50 +0000 (GMT)
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-343e262230eso4420314a91.2
+        for <linux-usb@vger.kernel.org>; Mon, 01 Dec 2025 03:35:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764586036; x=1765190836; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V57w6qXgAFJm1uGpq7MxniYcmUVxpe3AE4JhOHgx7SY=;
-        b=P7vS249uC5Era+J6/5voSrVj90DguQ6M3w90LlO1BVXyVFaaUVb4nIhhim3Q+B4c4l
-         d/ognHb9fPwJO6ccim2VpFNS5Gog9nv7CMxp8MxD7UBYiKdgYNe2+fvu6CttHXRp0msR
-         yPyg3kq1TvxXgwFeVy9/kR1z7Tn0U+i63QKPn/2YBVig4K5vDdfh8IHZ6tAdcwE7WeTc
-         3JVMDMzZKqt7MQGL0VD3Ts6Mq2MotoFAZ4at5TXF8B8w5+pBuLle8oPrKZAxIkr1ZIvY
-         N4SbYYotHjuEcNpUFawAmN3VeFnuTyXfQ155bCL+Jb6rocuniI9BO+a4Ipuq2kKMG9E5
-         OIjg==
+        d=oss.qualcomm.com; s=google; t=1764588950; x=1765193750; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lCWVNvn+OqeHLRLNj//Ta+HiE6qf46ogB4coZkDMqd0=;
+        b=ECj2RayRFz5+w6XESlBElIEPh+f7ohRoC8vpDmWvSw1bd5Ide2TgOA12XKy/gDZra8
+         tRqcnuqP+X01u8+ebdDLJcb+lF52g1QeN1wIKUiarXTe8O5CV4RPB59iWr9VTnaedPSG
+         SUmBDgaehP0BZ8GTYteqascaMd/LG1WcdPq3u3Ogc2Pvduulb+w9xbxqpk12vBMUAAA9
+         7HU2vBiebKpOBRhsl14L/HKJUrzZw+V5D9VTfaBz9zIvnOeJfcRwtJIYhQbrOZ//kjIE
+         7PwFw9lTdWzbBNpD/hKv3d0taqu2ylZqsJflpvellAni1GlGyOBzajmzmnMYEanJJfRm
+         fegg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764586036; x=1765190836;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=V57w6qXgAFJm1uGpq7MxniYcmUVxpe3AE4JhOHgx7SY=;
-        b=osh179XlK9vP1d1NKqzOJ8zmgNCSEN627ELZtzyb7rzwrJxTuoK7J/F58gTG6cqyNP
-         FtpSFN6627Rqii6RaAXTdRCLYO2JMbBVU/9Fck7UJLnL9QP1mZo4/luJzuGJ1kZOxrHu
-         +ZWZFg0vkay+6LQyeyjx90gQQHoL7wlNPIQq9NHriMNWy7GeDy2sK9p3qXCsGgQHM0qx
-         g6RNDSCDNxTax+hbd/YZx7rTDTzUwRRVkyeFUPdHoNds1WalMN3Q2F7EBqxV0xOXOEKp
-         fJNLwwNOJp46x2TFPdWG2timYXGIRUHIb0fH3cj8sQ7Jm6QWITKS3++qCO7tbyiOq6rC
-         LGkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2fI5MR+P4dsvp5luoCXgFejXwtaU2oZ2uaooEkJs7tLm/m68F6FDd0mjsPB9U7Il489YyOwzo+A8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjCh8g4i5Nhl5Sw2KSWOendAyrARyviK4w4PmyDUfkEdT4VNig
-	RpM9Y05Byqn0jCfEKW39DAsg+lCBilvDysOTanuzhTqmBNOSPm4XZ8ax
-X-Gm-Gg: ASbGnctxVsYcc1T7J31c0s56nx4jFapsRsFp+F/yINw3btIUqHiR+7ok3EUux9kAlz0
-	Z4B6Lj/4cEHm6eNoUQ9VJY/AFDkv5ZN1KRbYUnpoGTBYgRK2NVAbjaCvTHQ6mv+YfB/SBrecuzz
-	KsEj1QVsxQ/05sr5pgDmSq8k+nmdxmBoS3ciKZ7Cdb/VV2+8IArQeUYKpt5tmSg0FyQeMvyxl5a
-	8KMz1srzpV0WmHsltwu1GiVAZRrlDj9T/cl+F88npvseluC8/FBLBBY1lQS+dnHa6IoNIRyR878
-	za3JQCnXootmZA0A7OYA1sKBV4ryzaYBzG9xzykbFnJXk3QIsrRY/r4MshMG/NffPP0S4WnAFN4
-	PCIin8l6sARTIIV4vyzwBhcpv/vPOfLN+m3/3y37h6Sy5ukA2hPysD0ysGxYgaimhr412Tm+Kce
-	4kv+iRCz8ML6qRBwCjZQVC7H21fUlb3m9oyw==
-X-Google-Smtp-Source: AGHT+IHJ+rIlRaBl/+dxZ6W/cUfKTMrd7nfPT3/hTR/sz8+b2cY3NZEyeeFIVslJ/DYz5tNdaoswWw==
-X-Received: by 2002:a17:907:6eac:b0:b73:42e5:a59e with SMTP id a640c23a62f3a-b76c5355c0cmr2647911666b.12.1764586035968;
-        Mon, 01 Dec 2025 02:47:15 -0800 (PST)
-Received: from foxbook (bfg212.neoplus.adsl.tpnet.pl. [83.28.44.212])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76f59a6a5csm1202548466b.41.2025.12.01.02.47.09
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 01 Dec 2025 02:47:10 -0800 (PST)
-Date: Mon, 1 Dec 2025 11:47:05 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Dylan Robinson <dylan_robinson@motu.com>, linux-sound@vger.kernel.org,
- tiwai@suse.com, perex@perex.cz, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] ALSA: usb-audio: Fix max bytes-per-interval calculation
-Message-ID: <20251201114705.470325f5.michal.pecio@gmail.com>
-In-Reply-To: <87h5ubd8o7.wl-tiwai@suse.de>
-References: <20251124210518.90054-1-dylan_robinson@motu.com>
-	<20251129205639.48fdbdf9.michal.pecio@gmail.com>
-	<87jyz7dc6k.wl-tiwai@suse.de>
-	<20251130130035.6f44713e.michal.pecio@gmail.com>
-	<87h5ubd8o7.wl-tiwai@suse.de>
+        d=1e100.net; s=20230601; t=1764588950; x=1765193750;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lCWVNvn+OqeHLRLNj//Ta+HiE6qf46ogB4coZkDMqd0=;
+        b=IbqJc7H7wlZpnaFgwNCVB1gKQqDLipLgE7V1N3yk0ObWBJmsYXPEM1ZDSwJW2rxYhQ
+         2rXjIMMjB0dCNZtRCqrmpv4z5DKYJaJtH1rNg2JS1nej/5RII0mj5VeinCDw3aZRT3C9
+         qNgU6EElVAb2rzOHIA8DQXpVZtJG+n738lXo2JabSOYZ63VINTM+rSUQ1exUUS9Fdd1X
+         U6fYmNneDAQjsqtca+l2kPBnSSd2WUiZXEQr9+A+LPg3ZqHjtqj0RzcajsG/0WO9nRbg
+         VJQcykcXAjOrSkpuwgLMOUqt5ML1w8QZneXAXi90Jmi0UgUt3y5ycf6nldP+d0NR6kUC
+         +idA==
+X-Forwarded-Encrypted: i=1; AJvYcCU8egq3uSbedKeO9FMTjZrx1QNO8FTOElJGOro7n2s14CT1AkA1/STNNUGqh/uaL/ndSPy49bMcI0c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTshRK7CUVaDht9vHP9jaBHCxLnT9tqGRH563NgfjZKTVD0TIB
+	R9L6aqKY+ir8a9zHdSDwT7nvPlY4/PvJf+1mkJ0NwHZ2FfvWEDsMqZT/a0GT5wuL9xCh9NM/5dD
+	0kUmYNSAaAdu0MONpmANs626fo2HFgXQvSU4SiyjUWeX8/BIb1XwC8Ie8rsWTaZM=
+X-Gm-Gg: ASbGncszfacaP+p+t0IHe+Izs69FqcQSOosTohSBOyHNZsjsTLsHzZ3fHk/iFWb2Jes
+	I8aVzYEDt/OYs9N9qsNAj7xIp3o/+Y47B8VWiKxjkKqIyP6QrqWT7Z74gdMzn77lttDfIzKNDv2
+	4JAexNkwIcTl3Hpnh6H+CxJQqRtKQ1dE+lC0GHCtPCf7EJLSik7zxK6xE0wYLNwJy6Ub8qGgDFk
+	eP1nPcwULjebnEQg+mMpLS9QA6pAaW/8N2QZvBvpCaXbG9OZv1nrt5TwJUMSLfvaEBYge6xNABW
+	kEAHPKkKmdX9U6P9vUWE84VOhhfCPFMiexiWpuaPanOvymdRY+LyydZs3RlE6vrpzBB4PLw3DPB
+	oKCe9aBscXekBk8RN+FWph5QfP7oSqcOzhdahOA==
+X-Received: by 2002:a17:90b:3a4e:b0:341:2150:4856 with SMTP id 98e67ed59e1d1-3475ed50953mr27032064a91.17.1764588949817;
+        Mon, 01 Dec 2025 03:35:49 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE7FC+u+ZKqgI05yrxKREm/4X7WqyMNU6LzamBjg/C4D5mxmTtjxWlSovTOcCMbON9ZrQPULg==
+X-Received: by 2002:a17:90b:3a4e:b0:341:2150:4856 with SMTP id 98e67ed59e1d1-3475ed50953mr27032051a91.17.1764588949202;
+        Mon, 01 Dec 2025 03:35:49 -0800 (PST)
+Received: from [10.218.43.241] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3476a546ed0sm16660353a91.3.2025.12.01.03.35.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Dec 2025 03:35:48 -0800 (PST)
+Message-ID: <f96ed414-f69b-4eb6-91d5-c1db7d2a87be@oss.qualcomm.com>
+Date: Mon, 1 Dec 2025 17:05:42 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: usb: qcom,snps-dwc3: Add support for
+ firmware-managed resources
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: jack.pham@oss.qualcomm.com, faisal.hassan@oss.qualcomm.com,
+        krishna.kurapati@oss.qualcomm.com, andersson@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konradybcio@kernel.org>
+References: <20251127-controller_scmi_upstream-v1-0-38bcca513c28@oss.qualcomm.com>
+ <20251127-controller_scmi_upstream-v1-1-38bcca513c28@oss.qualcomm.com>
+ <e9363a14-183e-4d12-91b0-1ac5655e6e90@kernel.org>
+Content-Language: en-US
+From: Sriram Dash <sriram.dash@oss.qualcomm.com>
+In-Reply-To: <e9363a14-183e-4d12-91b0-1ac5655e6e90@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAxMDA5NCBTYWx0ZWRfX3OJTZlGSU51Y
+ Ou5VikHaZ7sXS/uaFtZO+71goKzgOGybxDz2QXIBtuk6b2H+nsa3XvClxEqrSYxSDlVl8WE0xMH
+ xdOshOMoJG4IFxFFBN3IY+9ZTyWWhCzDMeb24ciXkRbwUxAB+tv/YB5ZJ54powKDDl3korSx714
+ eL8e8MIWMpG9lL5+L/Eiow/9m5LrnwlpUn4p4FRHKS6vHTSKRTWs/VNfe/vJONtUe3b/Ei9sfb0
+ doNuLFIenVaaD66PbNZcwx8lsjRWDfNnw42cHqAW/Fc2/GZ5uXMwMU6ySZrHTmhudsb0lDiQtSJ
+ sXYrGr+CnrKjYcAIE4i/uiYZOohWRtoClYQmAqaHYisi8kw57eqWDm19DpkyX1arpRwdkfaPmyO
+ H+1ciPCcB/y0L4HTppOAQ+Tu3UGoPw==
+X-Authority-Analysis: v=2.4 cv=MNptWcZl c=1 sm=1 tr=0 ts=692d7d97 cx=c_pps
+ a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=6_TIFzAPhmGdkGW-2bEA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=uKXjsCUrEbL0IQVhDsJ9:22
+X-Proofpoint-ORIG-GUID: P8qGOExqcKHijghQ14KHJO6kNFT4VmZ9
+X-Proofpoint-GUID: P8qGOExqcKHijghQ14KHJO6kNFT4VmZ9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
+ definitions=main-2512010094
 
-On Sun, 30 Nov 2025 13:08:56 +0100, Takashi Iwai wrote:
-> On Sun, 30 Nov 2025 13:00:35 +0100,
-> Michal Pecio wrote:
-> > 
-> > On Sun, 30 Nov 2025 11:53:07 +0100, Takashi Iwai wrote:  
-> > > On Sat, 29 Nov 2025 20:56:39 +0100,
-> > > Michal Pecio wrote:  
-> > > > 
-> > > > On Mon, 24 Nov 2025 16:05:18 -0500, Dylan Robinson wrote:    
-> > > > > The maxpacksize field in struct audioformat represents the maximum number
-> > > > > of bytes per isochronous interval. The current implementation only
-> > > > > special-cases high-speed endpoints and does not account for the different
-> > > > > computations required for SuperSpeed, SuperSpeedPlus, or eUSB2. As a
-> > > > > result, USB audio class devices operating at these speeds may fail to
-> > > > > stream correctly. The issue was observed on a MOTU 16A (2025) interface,
-> > > > > which requires more than 1024 bytes per interval at SuperSpeed.
-> > > > > 
-> > > > > This patch replaces the existing logic with a helper that computes the
-> > > > > correct maximum bytes-per-interval for all USB speeds, borrowing the logic
-> > > > > used in drivers/usb/core/urb.c.    
-> > > > 
-> > > > Hi,
-> > > > 
-> > > > Since v6.18 we have usb_endpoint_max_periodic_payload(), which looks
-> > > > like the exact function you need. It is already used by uvcvideo and
-> > > > xhci_hcd, the latter being particularly important because it ensures
-> > > > that your endpoints will get the bandwidth allocation you expect.
-> > > > 
-> > > > The copy-pasta in urb.c should probably be cleaned up at this point,
-> > > > but that would be a separate and unrelated patch, of course.    
-> > > 
-> > > Thanks for the information!  So we can clean up a lot with this new
-> > > helper like below.  
-> > 
-> > Yes, something like that.
-> > 
-> > Note that there is a small gotcha here: Dylan's patch and the original
-> > code, as well as usb_submit_urb(), didn't take wBytesPerInterval into
-> > account, while usb_endpoint_max_periodic_payload() and xhci_hcd do.
-> > 
-> > Odd SuperSpeed endpoints like those below will now be considered to
-> > have 512B/1536B capacity, not 1KB/2KB. Whether any such UAC devices
-> > exist (mine is UVC) I don't know. My only SuperSpeed UAC device uses
-> > one packet per interval and wMaxPacketSize == wBytesPerInterval.
-> > 
-> >         wMaxPacketSize     0x0400  1x 1024 bytes
-> >         bInterval               1
-> >         bMaxBurst               0
-> >         wBytesPerInterval     512
-> > 
-> >         wMaxPacketSize     0x0400  1x 1024 bytes
-> >         bInterval               1
-> >         bMaxBurst               1       /* two packets per interval */
-> >         wBytesPerInterval    1536
-> > 
-> > I also don't know whether this affects UAC operation in any way, but
-> > it's something to watch out for.
-> > 
-> > Ignoring wBytesPerInterval wasn't right either, because xhci_hcd would
-> > still reserve wBytesPerInterval bandwidth (as per spec) and URBs which
-> > exceed that could complete with an error.
-> > 
-> > If a device is found where wBytesPerInterval makes no sense and must be
-> > ignored, it needs to be ignored consistently across the kernel.  
-> 
-> Agreed, it makes more sense to have the common criteria applied to all
-> places.
+On 11/27/2025 5:43 PM, Krzysztof Kozlowski wrote:
+> On 27/11/2025 11:31, Sriram Dash wrote:
+>> On Qualcomm automotive SoC sa8255p, platform resources like clocks,
+>> interconnect, resets, regulators and GDSC are configured remotely by
+>> firmware.
+>>
+>> PM OPP is used to abstract these resources in firmware and SCMI perf
+>> protocol is used to request resource operations by using runtime PM
+>> framework APIs such as pm_runtime_get/put_sync to signal firmware
+>> for managing resources accordingly for respective perf levels.
+>>
+>> "qcom,snps-dwc3-fw-managed" compatible helps determine if
+>> the device's resources are managed by firmware.
+>> Additionally, it makes the power-domains property mandatory
+>> and excludes the clocks property for the controller.
+>>
+>> Signed-off-by: Sriram Dash <sriram.dash@oss.qualcomm.com>
+>> ---
+>>  .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    | 173 +++++++++++++--------
+>>  1 file changed, 111 insertions(+), 62 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+>> index 8cee7c5582f2..d2d1b42fbb07 100644
+>> --- a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
+>> @@ -12,68 +12,65 @@ maintainers:
+>>  description:
+>>    Describes the Qualcomm USB block, based on Synopsys DWC3.
+>>  
+>> -select:
+>> -  properties:
+>> -    compatible:
+>> -      contains:
+>> -        const: qcom,snps-dwc3
+>> -  required:
+>> -    - compatible
+> I wonder why do you think dropping some code is fine...
+>
+>
+>> +      - items:
+>> +          - enum:
+>> +              - qcom,sa8255p-dwc3
+>> +          - const: qcom,snps-dwc3-fw-managed
+> No, you cannot keep coming with more generic compatibles.
+>
+> If you want generic a compatible, you already have - qcom,snps-dwc3 -
+> and that "generic" part already said that everything is compatible with it.
+>
+> Now you claim that existing generic compatible qcom,snps-dwc3 is not
+> generic enough and you need one more generic compatible.
+>
+> Next year you will say that two generic compatibles are not generic
+> enough and you need third generic compatible.
+>
+> In two years we will learn that three generic compatibles are not enough...
+>
+> I think I was complaining on the lists a lot on this, so I am surprised
+> it is still coming back.
+>
+> So no, you cannot claim that you need more generic compatibles because
+> one generic is not generic. NAK.
 
-FWIW, I cherry-picked these two patches on v6.18 and confirmed that
-my SuperSpeed HDMI capture adapter still works.
 
-But that was not surprising, its audio endpoint is completely boring
-and equivalent code existed in uvcvideo and xhci_hcd since forever.
+Hi Krzysztof,
 
-      Endpoint Descriptor:
-        bLength                 9
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes           13
-          Transfer Type            Isochronous
-          Synch Type               Synchronous
-          Usage Type               Data
-        wMaxPacketSize     0x00c0  1x 192 bytes
-        bInterval               4
-        bRefresh                0
-        bSynchAddress           0
-        bMaxBurst               0
-        wBytesPerInterval     192
+understood. Shall i make it platform specific then ? For example,
 
-Michal
+Say, For x1e80100, where platform resources are not managed by firmware,
+use compatible = "qcom,x1e80100-dwc3", "qcom,snps-dwc3";
+
+For Soc 8255p, where platform resources are managed by firmware, still
+will use the generic compatible say,  compatible = "qcom,sa8255p-dwc3",
+"qcom,snps-dwc3";
+
+
+and in the driver, we will handle with the platform specific compatible.
+
+static const struct of_device_id dwc3_qcom_of_match[] = {
+        {
+                .compatible     = "qcom,sa8255p-dwc3",
+                .data           = (void *)true,
+        },
+        { .compatible = "qcom,snps-dwc3" },
+        { }
+};
+
+
+For any other Soc where the resources are managed by firmware, we can
+still reuse the compatible qcom,sa8255p-dwc3
+
+say compatible = "qcom-foo-dwc3", "qcom,sa8255p-dwc3", "qcom,snps-dwc3";
+
+compatible = "qcom-bar-dwc3", "qcom,sa8255p-dwc3", "qcom,snps-dwc3";
+
+...
+
+
+>
+> Best regards,
+> Krzysztof
 
