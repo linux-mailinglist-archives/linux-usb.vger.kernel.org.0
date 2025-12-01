@@ -1,253 +1,207 @@
-Return-Path: <linux-usb+bounces-31060-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31061-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39B9FC97132
-	for <lists+linux-usb@lfdr.de>; Mon, 01 Dec 2025 12:38:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91E92C97410
+	for <lists+linux-usb@lfdr.de>; Mon, 01 Dec 2025 13:27:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C975E3A302D
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Dec 2025 11:36:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 297F93A3E33
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Dec 2025 12:26:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CCCF2727ED;
-	Mon,  1 Dec 2025 11:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A17330BB8D;
+	Mon,  1 Dec 2025 12:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="K548kYGc";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ECj2RayR"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NIX0hhER"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E28426ED51
-	for <linux-usb@vger.kernel.org>; Mon,  1 Dec 2025 11:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DC12FFDED
+	for <linux-usb@vger.kernel.org>; Mon,  1 Dec 2025 12:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764588953; cv=none; b=p4xtGGEXvmtJ0yKHlJ8k1X9CNC1W0weslqa2UfW3pirFsyyDnm0t8tYUmfwUO1FoVw/Qyj0XEY6gL7+I452vnutdCNB2AXJYj+3Fl2zJBLwB6C3+KqkLOLJjYlHQxJNaI8+DUQMhWmd48si5rlKFLADDPJJgKT3aY7i5YqZwHCQ=
+	t=1764591975; cv=none; b=hXlmXKdlFoulfIQAS0Fyhsfxupko+6aXyEYTYS1LiCSMHXGyDKhwL8dohT+2mQdEqRA7b/JVIA+Qym06uaoLHQaF1StsvgTCsWmDdlN1+dGjCsAksljncUmpA/R8q+B3+ZOaXS0SqkP14qw4tQdsBi+61koSJwj2zCxaKUoFYkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764588953; c=relaxed/simple;
-	bh=bi1e3XR7pfCOOYVxdQSZ0zKYYdXXaCUk2xE3m1Eq04s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aKVxaYBp0q1elcc+5ZywC1I2UTbKOzTd9hGsg9nFJZ7zAO0vA2MPIdaBDtm4XrC3Xii4OvXa2AYL4mWKbVKc99gWlObLFtJiFK0PMlK7KvNTCukMkahv1P7mGcICxGCQXc93+5YNe++9Q21TZ0fN99MSxCej9dGvd/Nhp7/ZVnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=K548kYGc; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ECj2RayR; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B1AxnrG349699
-	for <linux-usb@vger.kernel.org>; Mon, 1 Dec 2025 11:35:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	lCWVNvn+OqeHLRLNj//Ta+HiE6qf46ogB4coZkDMqd0=; b=K548kYGc9YUcNeYk
-	8Ct9OIa8h6FE4P0OtDUrpW+iMUuZTCX9ttQcZxDuWCOP8KoZ7lwQN/5AkPuN++Lt
-	RN/9dIac29sQX0eAqCkEmyK7qyPXRwOx9uGfM+qMJeBHkchngnw3DHYZ3j+3oDCc
-	+im74SPrzRLZHlaP6GqHuk4C08u8X0JtVXhFKHrlycSN7J6lQfoJ1jLR0RBCpmxX
-	3ML3M3DvdksJEiu6Ku3in+uMsebXvSDqdgXu0uXgRQcxE1oKxnil2QiTTqknCfQR
-	xKXFmMuRENWSHsA7Ct85NsljrnigSpY4GBO+PrDWuFRKgKtYwXDiSbjVlmsjTlpt
-	dInO/g==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4as9re030e-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 01 Dec 2025 11:35:50 +0000 (GMT)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-343e262230eso4420314a91.2
-        for <linux-usb@vger.kernel.org>; Mon, 01 Dec 2025 03:35:50 -0800 (PST)
+	s=arc-20240116; t=1764591975; c=relaxed/simple;
+	bh=6OIAP4fGmgimdtTJrfs4TMLavclr4sycXrfjFbr+ixw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LBVHGCeneEISYq28P1NI7n6XU5d6QrBXfGU2lXp0FDtYC7Rlww4whhwW5r7lS8Gvt8R1Bd+YaiVvHMhtILVVBacOYt5yZNbD11l82RfHVXyPjt92rQm4fyfs9iPpOO+h8vNl75agCwKCdZViT7140ReaqFDvAGmChxBy+CfjXj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=NIX0hhER; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b728a43e410so703972166b.1
+        for <linux-usb@vger.kernel.org>; Mon, 01 Dec 2025 04:26:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764588950; x=1765193750; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lCWVNvn+OqeHLRLNj//Ta+HiE6qf46ogB4coZkDMqd0=;
-        b=ECj2RayRFz5+w6XESlBElIEPh+f7ohRoC8vpDmWvSw1bd5Ide2TgOA12XKy/gDZra8
-         tRqcnuqP+X01u8+ebdDLJcb+lF52g1QeN1wIKUiarXTe8O5CV4RPB59iWr9VTnaedPSG
-         SUmBDgaehP0BZ8GTYteqascaMd/LG1WcdPq3u3Ogc2Pvduulb+w9xbxqpk12vBMUAAA9
-         7HU2vBiebKpOBRhsl14L/HKJUrzZw+V5D9VTfaBz9zIvnOeJfcRwtJIYhQbrOZ//kjIE
-         7PwFw9lTdWzbBNpD/hKv3d0taqu2ylZqsJflpvellAni1GlGyOBzajmzmnMYEanJJfRm
-         fegg==
+        d=chromium.org; s=google; t=1764591972; x=1765196772; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A+3pYB2i1GVS17Vzr4d6LX2uFwVFZUJ8kMPwOvWk9Mw=;
+        b=NIX0hhERlOQ51sIn3vC1GtagNThSMatWMCuH9husFtKfHdm2B9cNtt/LAdbKNebSRD
+         gUHT7jXKQhJ5LQTwJ+wVo+7Um5aqndE+U9V2/38F9I2+8obiptXIGGjDW8VMpHv6KKEY
+         VBvSlsFwZvXZdVHUdxXBioFw9deMpqAffe7Gk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764588950; x=1765193750;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lCWVNvn+OqeHLRLNj//Ta+HiE6qf46ogB4coZkDMqd0=;
-        b=IbqJc7H7wlZpnaFgwNCVB1gKQqDLipLgE7V1N3yk0ObWBJmsYXPEM1ZDSwJW2rxYhQ
-         2rXjIMMjB0dCNZtRCqrmpv4z5DKYJaJtH1rNg2JS1nej/5RII0mj5VeinCDw3aZRT3C9
-         qNgU6EElVAb2rzOHIA8DQXpVZtJG+n738lXo2JabSOYZ63VINTM+rSUQ1exUUS9Fdd1X
-         U6fYmNneDAQjsqtca+l2kPBnSSd2WUiZXEQr9+A+LPg3ZqHjtqj0RzcajsG/0WO9nRbg
-         VJQcykcXAjOrSkpuwgLMOUqt5ML1w8QZneXAXi90Jmi0UgUt3y5ycf6nldP+d0NR6kUC
-         +idA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8egq3uSbedKeO9FMTjZrx1QNO8FTOElJGOro7n2s14CT1AkA1/STNNUGqh/uaL/ndSPy49bMcI0c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTshRK7CUVaDht9vHP9jaBHCxLnT9tqGRH563NgfjZKTVD0TIB
-	R9L6aqKY+ir8a9zHdSDwT7nvPlY4/PvJf+1mkJ0NwHZ2FfvWEDsMqZT/a0GT5wuL9xCh9NM/5dD
-	0kUmYNSAaAdu0MONpmANs626fo2HFgXQvSU4SiyjUWeX8/BIb1XwC8Ie8rsWTaZM=
-X-Gm-Gg: ASbGncszfacaP+p+t0IHe+Izs69FqcQSOosTohSBOyHNZsjsTLsHzZ3fHk/iFWb2Jes
-	I8aVzYEDt/OYs9N9qsNAj7xIp3o/+Y47B8VWiKxjkKqIyP6QrqWT7Z74gdMzn77lttDfIzKNDv2
-	4JAexNkwIcTl3Hpnh6H+CxJQqRtKQ1dE+lC0GHCtPCf7EJLSik7zxK6xE0wYLNwJy6Ub8qGgDFk
-	eP1nPcwULjebnEQg+mMpLS9QA6pAaW/8N2QZvBvpCaXbG9OZv1nrt5TwJUMSLfvaEBYge6xNABW
-	kEAHPKkKmdX9U6P9vUWE84VOhhfCPFMiexiWpuaPanOvymdRY+LyydZs3RlE6vrpzBB4PLw3DPB
-	oKCe9aBscXekBk8RN+FWph5QfP7oSqcOzhdahOA==
-X-Received: by 2002:a17:90b:3a4e:b0:341:2150:4856 with SMTP id 98e67ed59e1d1-3475ed50953mr27032064a91.17.1764588949817;
-        Mon, 01 Dec 2025 03:35:49 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE7FC+u+ZKqgI05yrxKREm/4X7WqyMNU6LzamBjg/C4D5mxmTtjxWlSovTOcCMbON9ZrQPULg==
-X-Received: by 2002:a17:90b:3a4e:b0:341:2150:4856 with SMTP id 98e67ed59e1d1-3475ed50953mr27032051a91.17.1764588949202;
-        Mon, 01 Dec 2025 03:35:49 -0800 (PST)
-Received: from [10.218.43.241] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3476a546ed0sm16660353a91.3.2025.12.01.03.35.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Dec 2025 03:35:48 -0800 (PST)
-Message-ID: <f96ed414-f69b-4eb6-91d5-c1db7d2a87be@oss.qualcomm.com>
-Date: Mon, 1 Dec 2025 17:05:42 +0530
+        d=1e100.net; s=20230601; t=1764591972; x=1765196772;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A+3pYB2i1GVS17Vzr4d6LX2uFwVFZUJ8kMPwOvWk9Mw=;
+        b=mI+6I+kOxz0W5H9IDqv49pixodLmQXR2/lpMK1kI0/a1g5SUzAzHXScDnf2OdDBeax
+         JcuimxU9yBhQER/GFp7ImOphTw6QDzpt+24LmYOMawh57MqpiQVMnwiHbOL746VGQVfk
+         q1pc1daEgDh1QrDm02vicdG6DbmILnXETbtFFFZU3CI2cyFDod0ZfxfClpIUOrzA2i1i
+         yWV/8dgDtOmN4DV4H7wMCDI09ARnOMomzt5Pgf9U2ok4REk2DllnLEn2RRXMOsYMdMW/
+         zrPV8Z/Fb/bWXYvn9h/hJuHsvXFg8kyo9kOmwWILnBBDri2Nfnzejv2gG31gnCFETzHk
+         yMpA==
+X-Forwarded-Encrypted: i=1; AJvYcCVFfaTH1MNyrfBMND2Wl8VvXa1KPN5BaFgWLjH8NW2gLKb17gY5dfsfjaAJ6IknoO4ksmrgpBvJ4Nk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKVGW/Q1n7q+s4KAQKHgbE+tN4GAwmkeB89iodI87aLIp0Xrdr
+	8JaOnZLPbpXXZ1O/062pcWHHwBTtlAzCQgvxFfoZm0h9FZDNs1pZK9WzEMX9qmOnlw==
+X-Gm-Gg: ASbGnct3e2qjh1ST2xbMQgqYwo3HitdSz4ZzYcPo7/+Wm95UqFP7VJiRyYYeJZleK6D
+	+S8K1rMxmoRjjk6LcL88bc5nC+ks2k0JAiEbJgQhFpT9r8s2R0tlc9uZFiO+/7Sop/SZiNpaNaA
+	FQvpVC0Zw7fXso0IfI7ntNqdHyJ/jZZn9CZk66lbw/S1wg//p9T90oBaGqrzyJOMk1foKDWGczn
+	E4CGe4zMta+4AowfAlXdwvlfM23FPh/fheKJf9i7cqkQ1Hw9g7ANQzx9WDy92dqo1GyE5VgtPx2
+	Oe71B4MZvu4hLRkZseHXADm457MQPYauYWgf4CqU3AGsmtg9ywTpV2WXw5/j5k289IXpF88PLPr
+	TV7z9efdbOr7GX/wpY9GHDcXAvSItIdDzkIC61JtbbrLtaaqBoFeq9fBeY6COp/k3FmQev0/OLP
+	rGJV8gaCEUUqdTDRIQiiJjB9fvDAY3ovX7IV/PBCVYuRkoN0/sS7pjWJB1soggbsA02qxPAzDcN
+	5vQ+K4S6PZr+lQq2iEW0Q==
+X-Google-Smtp-Source: AGHT+IGH2kXVtk/N3N/Dg3EeJbOt8u37moIvhcU7Nkm4tdM0wE9npVXQZ9y8vtxtXB3dn6B6XLUOYw==
+X-Received: by 2002:a17:906:c14b:b0:b73:398c:c595 with SMTP id a640c23a62f3a-b767156556amr4621926966b.19.1764591971716;
+        Mon, 01 Dec 2025 04:26:11 -0800 (PST)
+Received: from akuchynski.c.googlers.com.com (218.127.147.34.bc.googleusercontent.com. [34.147.127.218])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76f519e331sm1229049266b.24.2025.12.01.04.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Dec 2025 04:26:11 -0800 (PST)
+From: Andrei Kuchynski <akuchynski@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Cc: Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Pooja Katiyar <pooja.katiyar@intel.com>,
+	Pavan Holla <pholla@chromium.org>,
+	Madhu M <madhu.m@intel.com>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	linux-kernel@vger.kernel.org,
+	Andrei Kuchynski <akuchynski@chromium.org>
+Subject: [PATCH RFC 0/8] USB Type-C alternate mode selection
+Date: Mon,  1 Dec 2025 12:25:56 +0000
+Message-ID: <20251201122604.1268071-1-akuchynski@chromium.org>
+X-Mailer: git-send-email 2.52.0.158.g65b55ccf14-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: usb: qcom,snps-dwc3: Add support for
- firmware-managed resources
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: jack.pham@oss.qualcomm.com, faisal.hassan@oss.qualcomm.com,
-        krishna.kurapati@oss.qualcomm.com, andersson@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konradybcio@kernel.org>
-References: <20251127-controller_scmi_upstream-v1-0-38bcca513c28@oss.qualcomm.com>
- <20251127-controller_scmi_upstream-v1-1-38bcca513c28@oss.qualcomm.com>
- <e9363a14-183e-4d12-91b0-1ac5655e6e90@kernel.org>
-Content-Language: en-US
-From: Sriram Dash <sriram.dash@oss.qualcomm.com>
-In-Reply-To: <e9363a14-183e-4d12-91b0-1ac5655e6e90@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAxMDA5NCBTYWx0ZWRfX3OJTZlGSU51Y
- Ou5VikHaZ7sXS/uaFtZO+71goKzgOGybxDz2QXIBtuk6b2H+nsa3XvClxEqrSYxSDlVl8WE0xMH
- xdOshOMoJG4IFxFFBN3IY+9ZTyWWhCzDMeb24ciXkRbwUxAB+tv/YB5ZJ54powKDDl3korSx714
- eL8e8MIWMpG9lL5+L/Eiow/9m5LrnwlpUn4p4FRHKS6vHTSKRTWs/VNfe/vJONtUe3b/Ei9sfb0
- doNuLFIenVaaD66PbNZcwx8lsjRWDfNnw42cHqAW/Fc2/GZ5uXMwMU6ySZrHTmhudsb0lDiQtSJ
- sXYrGr+CnrKjYcAIE4i/uiYZOohWRtoClYQmAqaHYisi8kw57eqWDm19DpkyX1arpRwdkfaPmyO
- H+1ciPCcB/y0L4HTppOAQ+Tu3UGoPw==
-X-Authority-Analysis: v=2.4 cv=MNptWcZl c=1 sm=1 tr=0 ts=692d7d97 cx=c_pps
- a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=6_TIFzAPhmGdkGW-2bEA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=uKXjsCUrEbL0IQVhDsJ9:22
-X-Proofpoint-ORIG-GUID: P8qGOExqcKHijghQ14KHJO6kNFT4VmZ9
-X-Proofpoint-GUID: P8qGOExqcKHijghQ14KHJO6kNFT4VmZ9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 bulkscore=0 adultscore=0 impostorscore=0
- priorityscore=1501 phishscore=0 spamscore=0 malwarescore=0 clxscore=1015
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2512010094
 
-On 11/27/2025 5:43 PM, Krzysztof Kozlowski wrote:
-> On 27/11/2025 11:31, Sriram Dash wrote:
->> On Qualcomm automotive SoC sa8255p, platform resources like clocks,
->> interconnect, resets, regulators and GDSC are configured remotely by
->> firmware.
->>
->> PM OPP is used to abstract these resources in firmware and SCMI perf
->> protocol is used to request resource operations by using runtime PM
->> framework APIs such as pm_runtime_get/put_sync to signal firmware
->> for managing resources accordingly for respective perf levels.
->>
->> "qcom,snps-dwc3-fw-managed" compatible helps determine if
->> the device's resources are managed by firmware.
->> Additionally, it makes the power-domains property mandatory
->> and excludes the clocks property for the controller.
->>
->> Signed-off-by: Sriram Dash <sriram.dash@oss.qualcomm.com>
->> ---
->>  .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    | 173 +++++++++++++--------
->>  1 file changed, 111 insertions(+), 62 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
->> index 8cee7c5582f2..d2d1b42fbb07 100644
->> --- a/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml
->> @@ -12,68 +12,65 @@ maintainers:
->>  description:
->>    Describes the Qualcomm USB block, based on Synopsys DWC3.
->>  
->> -select:
->> -  properties:
->> -    compatible:
->> -      contains:
->> -        const: qcom,snps-dwc3
->> -  required:
->> -    - compatible
-> I wonder why do you think dropping some code is fine...
->
->
->> +      - items:
->> +          - enum:
->> +              - qcom,sa8255p-dwc3
->> +          - const: qcom,snps-dwc3-fw-managed
-> No, you cannot keep coming with more generic compatibles.
->
-> If you want generic a compatible, you already have - qcom,snps-dwc3 -
-> and that "generic" part already said that everything is compatible with it.
->
-> Now you claim that existing generic compatible qcom,snps-dwc3 is not
-> generic enough and you need one more generic compatible.
->
-> Next year you will say that two generic compatibles are not generic
-> enough and you need third generic compatible.
->
-> In two years we will learn that three generic compatibles are not enough...
->
-> I think I was complaining on the lists a lot on this, so I am surprised
-> it is still coming back.
->
-> So no, you cannot claim that you need more generic compatibles because
-> one generic is not generic. NAK.
+This patch series introduces functionality to the USB Type-C Alternate Mode
+negotiation process by implementing a priority-based selection mechanism.
 
+Currently, DisplayPort and Thunderbolt drivers initiate a mode entry
+separately within their respective probe functions. The Power Delivery
+Controller (PDC) retains the ability to activate either USB4 mode or
+Alternate Modes based on its internal policy.
+The mode selection mechanism disables Alternate Modes to be entered by
+their respective drivers and the PDC. Instead, a priority-ordered approach
+is used to activate the most desirable mode.
 
-Hi Krzysztof,
+A new `priority` field is added to the `typec_altmode` structure to store
+a numerical priority value, with all priorities being unique.
+If the port driver supports the mode selection feature, it must set the
+`mode_selection` boolean field within the `typec_altmode` structure. This
+indicates to the alternate mode drivers that they are not to activate the
+altmode separately.
 
-understood. Shall i make it platform specific then ? For example,
+The mode selection process is managed by three API functions:
+- `typec_mode_selection_start`
+- `typec_altmode_state_update`
+- `typec_mode_selection_delete`
 
-Say, For x1e80100, where platform resources are not managed by firmware,
-use compatible = "qcom,x1e80100-dwc3", "qcom,snps-dwc3";
+When a partner device is connected, the `typec_mode_selection_start`
+function executes the following steps:
+- It compiles a priority-ordered list of Alternate Modes that are mutually
+supported by both the port and the partner.
+- A dedicated mode selection task is subsequently initiated on the Work
+Queue.
+- This task attempts to activate a mode by starting with the
+highest-priority altmode on the list. Alternate modes are identified with
+their SVIDs. Activation/Deactivation performed via `activate` typec_altmode
+operation. The process stops as soon as a mode is successfully entered.
+Otherwise, after a timeout or if an error occurs, the next alternative mode
+will be activated.
 
-For Soc 8255p, where platform resources are managed by firmware, still
-will use the generic compatible say,  compatible = "qcom,sa8255p-dwc3",
-"qcom,snps-dwc3";
+The `typec_altmode_state_update` function is invoked by the port driver to
+communicate the current mode of the Type-C connector.
 
+The `typec_mode_selection_delete` function is responsible for stopping the
+currently running mode selection process and releasing all associated
+system resources.
 
-and in the driver, we will handle with the platform specific compatible.
+USB4 activation can be handled in two distinct ways:
+- Treated like an Alternate Mode, using associated sysfs attributes -
+`activate` port attribute to enable/disable the mode, `activate` partner
+attribute to activate/deactivate the mode, `priority` to keep modes
+priority.
+- Like a separate USB mode representing in sysfs via `usb_capabily` ports
+attribute to enable the mode on the port and `usb_mode` partner attribute
+to activate the mode. In this scenario, USB4 is the highest-priority mode,
+without the need for a separate priority field. It is put on the top of the
+preferred list if it is supported by the partner (partner->usb_capability
+has USB_CAPABILITY_USB4 bit set) and is supported and enabled on the port
+(port->usb_mode is USB_MODE_USB4).
 
-static const struct of_device_id dwc3_qcom_of_match[] = {
-        {
-                .compatible     = "qcom,sa8255p-dwc3",
-                .data           = (void *)true,
-        },
-        { .compatible = "qcom,snps-dwc3" },
-        { }
-};
+This patch series implements the second approach. It identifies the USB4
+mode via its SVID 0xFF00. Instead of using the typec_altmode_ops activate()
+function, activation is handled via the typec_operations enter_usb_mode()
+function.
+Mode selection is initiated only once during partner registration, and only
+if the port driver provides support for this feature. Subsequent
+mode-switching activities can be managed via existing sysfs entries. Any
+modifications to altmode priorities are relevant only to future
+connections.
 
+This series was tested on an Android OS device with kernel 6.17, PDC:
+TI TPS6699, Realtek RTS5453.
+This series depends on the 'USB Type-C alternate mode priorities' series:
+https://lore.kernel.org/all/20251124124639.1101335-1-akuchynski@chromium.org/ 
 
-For any other Soc where the resources are managed by firmware, we can
-still reuse the compatible qcom,sa8255p-dwc3
+Andrei Kuchynski (8):
+  usb: typec: Implement mode selection
+  usb: typec: Integrate USB4 into the mode selection process
+  usb: typec: Introduce mode_selection bit
+  usb: typec: ucsi: Support mode selection to activate altmodes
+  usb: typec: ucsi: Enforce mode selection for cros_ec_ucsi
+  usb: typec: ucsi: Implement enter_usb_mode operation
+  usb: typec: ucsi: Support for Thunderbolt alt mode
+  platform/chrome: cros_ec_typec: Enforce priority-based mode selection
 
-say compatible = "qcom-foo-dwc3", "qcom,sa8255p-dwc3", "qcom,snps-dwc3";
+ drivers/platform/chrome/cros_ec_typec.c      |  47 ++-
+ drivers/platform/chrome/cros_typec_altmode.c |   8 +-
+ drivers/usb/typec/Makefile                   |   2 +-
+ drivers/usb/typec/altmodes/displayport.c     |   6 +-
+ drivers/usb/typec/altmodes/thunderbolt.c     |   2 +-
+ drivers/usb/typec/class.c                    |   1 +
+ drivers/usb/typec/class.h                    |   2 +
+ drivers/usb/typec/mode_selection.c           | 308 +++++++++++++++++++
+ drivers/usb/typec/ucsi/Makefile              |   4 +
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c        |  44 +++
+ drivers/usb/typec/ucsi/thunderbolt.c         | 199 ++++++++++++
+ drivers/usb/typec/ucsi/ucsi.c                |  56 +++-
+ drivers/usb/typec/ucsi/ucsi.h                |  27 ++
+ include/linux/usb/typec.h                    |   1 +
+ include/linux/usb/typec_altmode.h            |  43 +++
+ 15 files changed, 728 insertions(+), 22 deletions(-)
+ create mode 100644 drivers/usb/typec/mode_selection.c
+ create mode 100644 drivers/usb/typec/ucsi/thunderbolt.c
 
-compatible = "qcom-bar-dwc3", "qcom,sa8255p-dwc3", "qcom,snps-dwc3";
+-- 
+2.52.0.158.g65b55ccf14-goog
 
-...
-
-
->
-> Best regards,
-> Krzysztof
 
