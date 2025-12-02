@@ -1,177 +1,126 @@
-Return-Path: <linux-usb+bounces-31094-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31095-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A915C9A649
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 08:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FC33C9A998
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 09:01:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C337A3A52F1
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 07:09:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5BF03A26F1
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 08:01:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF70221546;
-	Tue,  2 Dec 2025 07:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Ss3Z4KGT";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="htkrx82c";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Ss3Z4KGT";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="htkrx82c"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8351305E08;
+	Tue,  2 Dec 2025 08:01:00 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CD8222597
-	for <linux-usb@vger.kernel.org>; Tue,  2 Dec 2025 07:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1686521883E;
+	Tue,  2 Dec 2025 08:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764659340; cv=none; b=TM/xh/Kq8I9AecsH1spxpAmsHjRrrMxcUynAmKI9t9QY5oAMVLZTSjspflUPcxu5G8r9amGyQej/jg2H9Ifi5ZFPq3qjUE2q30obPtRQUxzx5NfOfqfrdvFLIe6tlKU+T99sACIQIRRrCcxMCo0kOt2fEoKthY5GvkF+CQ6byCI=
+	t=1764662460; cv=none; b=ScoSICbDAlCXPSV5H0tel7culGYHf3avuqtKEZ9ZsUcWkMmWFBOLSUxdIMIhhlv8arrI1saXBdeGd9nIEATdk3XggYR/kreUqMJp353Q1GWgANpegM2yhItw9pj5r77DMmZuxiD+gh8K8DC6C1Z6IOfj8p7ON0QsfFvxVyUI7bA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764659340; c=relaxed/simple;
-	bh=9oni4O3FH546gzWvprfOZq7bFoZoCQe6UmotMQrKenE=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fmor1vZZXuj5L6ufLqEuOMtL1aFJpULk6aaQWJNkWsYE+TddFNoJyXs2yZyrSlEX6MoZd1rdf7f1n4KQ/EqK0KSXJyLMjdEHuRWHBcIX1HaK1D1nKwOxQGyKXX/Xo58DGx20bMokxN146vUOAv4FNzisCBSPXWGiBmc0qZ8hdmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Ss3Z4KGT; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=htkrx82c; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Ss3Z4KGT; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=htkrx82c; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 1C32233686;
-	Tue,  2 Dec 2025 07:08:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1764659336; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yjdRZGIHCXKY8AWyYEvxhWGGJE5P1QgCYAu0R0Zl/m4=;
-	b=Ss3Z4KGTXAUW6uTMQXPLRX9dJ5FtJ+cRw4OJsh8quuZJR77mwAPqrVxkMBkvkX28Km0lWT
-	MkZuDoxujKqG6B7Ek/Qr9H65G0rruD+WHnw1xECF/8T+ALVtEfXTfLjByCfZF8BZT/8fW7
-	PDRZJ8Ll/xf/+oCWdBTbAx2O9IJUDNk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1764659336;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yjdRZGIHCXKY8AWyYEvxhWGGJE5P1QgCYAu0R0Zl/m4=;
-	b=htkrx82cfcb4BWu/MoqH919ARpns8NKvD4wXeRW6FuAtjERiTzdvc/xRNeLRDwO4xcQp2M
-	UFUhcteOFsUmjXCw==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Ss3Z4KGT;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=htkrx82c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1764659336; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yjdRZGIHCXKY8AWyYEvxhWGGJE5P1QgCYAu0R0Zl/m4=;
-	b=Ss3Z4KGTXAUW6uTMQXPLRX9dJ5FtJ+cRw4OJsh8quuZJR77mwAPqrVxkMBkvkX28Km0lWT
-	MkZuDoxujKqG6B7Ek/Qr9H65G0rruD+WHnw1xECF/8T+ALVtEfXTfLjByCfZF8BZT/8fW7
-	PDRZJ8Ll/xf/+oCWdBTbAx2O9IJUDNk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1764659336;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yjdRZGIHCXKY8AWyYEvxhWGGJE5P1QgCYAu0R0Zl/m4=;
-	b=htkrx82cfcb4BWu/MoqH919ARpns8NKvD4wXeRW6FuAtjERiTzdvc/xRNeLRDwO4xcQp2M
-	UFUhcteOFsUmjXCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DF8133EA63;
-	Tue,  2 Dec 2025 07:08:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 6DdwNYeQLmkXYQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Tue, 02 Dec 2025 07:08:55 +0000
-Date: Tue, 02 Dec 2025 08:08:55 +0100
-Message-ID: <87sedt5piw.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Dylan Robinson <dylan_robinson@motu.com>
-Cc: Michal Pecio <michal.pecio@gmail.com>,
-	Takashi Iwai <tiwai@suse.de>,
-	linux-sound@vger.kernel.org,
-	tiwai@suse.com,
-	perex@perex.cz,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] ALSA: usb-audio: Fix max bytes-per-interval calculation
-In-Reply-To: <CA+Df+jeCQXAuxLp5woF1fb4wgPNcKn7uMNaXnNG6j8EvuKX-eQ@mail.gmail.com>
-References: <20251124210518.90054-1-dylan_robinson@motu.com>
-	<20251129205639.48fdbdf9.michal.pecio@gmail.com>
-	<87jyz7dc6k.wl-tiwai@suse.de>
-	<20251130130035.6f44713e.michal.pecio@gmail.com>
-	<87h5ubd8o7.wl-tiwai@suse.de>
-	<20251201114705.470325f5.michal.pecio@gmail.com>
-	<CA+Df+jeCQXAuxLp5woF1fb4wgPNcKn7uMNaXnNG6j8EvuKX-eQ@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.1 Mule/6.0
+	s=arc-20240116; t=1764662460; c=relaxed/simple;
+	bh=4+3G7wgD6VoCVjoPq6TA+9JR5eXz7qy4YIhoRFijXS4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F9soL67lCoj7qVbDPs8k5ERoL6pnvpefid/LsZVvExDZvh6OvYixcU6BtPNTjoyHz9TZkk0TY/iEBY+DHX7LNwf4w7rsEYcJM5yqGfIfjzDWJW7iON+lpEnPCx8WHnZ33C1MDX/ahbD1IYaOrn+fACTAAtJjtyAzwFYFNk32WVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from DESKTOP-L0HPE2S (unknown [124.16.141.245])
+	by APP-01 (Coremail) with SMTP id qwCowADHXc2snC5pZarVAg--.27319S2;
+	Tue, 02 Dec 2025 16:00:48 +0800 (CST)
+From: Haotian Zhang <vulab@iscas.ac.cn>
+To: stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Haotian Zhang <vulab@iscas.ac.cn>
+Subject: [PATCH] USB: ehci-omap: Fix missing usb_phy_init() error handling
+Date: Tue,  2 Dec 2025 16:00:27 +0800
+Message-ID: <20251202080027.1124-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Flag: NO
-X-Spam-Score: -2.01
-X-Rspamd-Queue-Id: 1C32233686
-X-Spamd-Result: default: False [-2.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[gmail.com,suse.de,vger.kernel.org,suse.com,perex.cz];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	TAGGED_RCPT(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Level: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qwCowADHXc2snC5pZarVAg--.27319S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urWDuryUtr1kXw4DKr4rXwb_yoW8AF1kpF
+	WqqF4Ygrn3Krs7trZ8Jr18ZF1rCw48trWj9a9rGa4fuw1UJr4qgr1Uta4FkF1rZFs5Ga1U
+	tas0qF95uF4UuaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
+	AVWUtwCY02Avz4vE14v_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+	IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0x
+	ZFpf9x0JU8PE-UUUUU=
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBg0EA2kuX3bfHQAAsg
 
-On Tue, 02 Dec 2025 00:10:21 +0100,
-Dylan Robinson wrote:
-> 
-> > Dylan, could you check whether the cleanup is OK?
-> > I'll apply it once after the confirmation.
-> 
-> Tested and seems to be working. The cleanup looks good to me.
-> 
-> This is what our endpoint looks like:
-> 
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x82  EP 2 IN
->         bmAttributes           37
->           Transfer Type            Isochronous
->           Synch Type               Asynchronous
->           Usage Type               Implicit feedback Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               1
->         bMaxBurst               3
->         wBytesPerInterval    3205
+usb_phy_init() may fail if the PHY clock or regulator setup fails,
+but ehci_hcd_omap_probe() does not check its return value,
+potentially causing later operations to act on an uninitialized PHY.
 
-Thanks for confirmation.  Then let's take this.
+Add proper error checking for usb_phy_init() calls. Add a new
+error label to properly remove the hcd.
 
+Fixes: 4e5c9e6fa2d2 ("USB: ehci-omap: Tweak PHY initialization sequence")
+Fixes: 49f092198f4f ("USB: ehci-omap: Fix detection in HSIC mode")
+Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
+---
+ drivers/usb/host/ehci-omap.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Takashi
+diff --git a/drivers/usb/host/ehci-omap.c b/drivers/usb/host/ehci-omap.c
+index db4a1acb27da..30b3586fd696 100644
+--- a/drivers/usb/host/ehci-omap.c
++++ b/drivers/usb/host/ehci-omap.c
+@@ -166,7 +166,11 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
+ 		omap->phy[i] = phy;
+ 
+ 		if (pdata->port_mode[i] == OMAP_EHCI_PORT_MODE_PHY) {
+-			usb_phy_init(omap->phy[i]);
++			ret = usb_phy_init(omap->phy[i]);
++			if (ret) {
++				dev_err(dev, "Failed to init PHY %d\n", i);
++				goto err_phy;
++			}
+ 			/* bring PHY out of suspend */
+ 			usb_phy_set_suspend(omap->phy[i], 0);
+ 		}
+@@ -205,13 +209,19 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
+ 		     pdata->port_mode[i] == OMAP_EHCI_PORT_MODE_PHY)
+ 			continue;
+ 
+-		usb_phy_init(omap->phy[i]);
++		ret = usb_phy_init(omap->phy[i]);
++		if (ret) {
++			dev_err(dev, "Failed to init PHY %d\n", i);
++			goto err_remove_hcd;
++		}
+ 		/* bring PHY out of suspend */
+ 		usb_phy_set_suspend(omap->phy[i], 0);
+ 	}
+ 
+ 	return 0;
+ 
++err_remove_hcd:
++	usb_remove_hcd(hcd);
+ err_pm_runtime:
+ 	pm_runtime_put_sync(dev);
+ 	pm_runtime_disable(dev);
+-- 
+2.50.1.windows.1
+
 
