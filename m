@@ -1,93 +1,182 @@
-Return-Path: <linux-usb+bounces-31101-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31102-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7640FC9ACC2
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 10:10:44 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB62EC9AD96
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 10:27:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4B40D4E220C
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 09:10:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 256AF4E2B43
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 09:27:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45E23093DD;
-	Tue,  2 Dec 2025 09:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B237830C348;
+	Tue,  2 Dec 2025 09:27:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V5wOAiBj"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZW0i6t4Y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89D41BC08F
-	for <linux-usb@vger.kernel.org>; Tue,  2 Dec 2025 09:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2822F5332;
+	Tue,  2 Dec 2025 09:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764666639; cv=none; b=mG+oYD9stU7HvKy6LI1MnljOYsCXvnhOIB7sWSKlYqqG1pEQy/RtBe/0Tq2ohC69iMzLYK3reD15SscZKvMaAYNy1wFmYUG/Bap3IeYEuApDzkdZctKugqT1NC7ZTkoJq2aKlqKxz9zggMuhlEd+kz8R0inkg7sgdfDeu/jEgfs=
+	t=1764667662; cv=none; b=riBphGpYsCug6GaOdu4DI7btwqv9tanb52oYM8PfimzLOOrpNKw13p9vr85oSj+kEK49avWE1NBgQ4DkplT51svNyYOqdOn6p4kzBy8Vjveq8RqWiDfbQ/7i2lFK2P3FSk3QjkYKrvVuF0vJKCbeIfKwoKI4NrJRl+2MRObtfxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764666639; c=relaxed/simple;
-	bh=nwkt4g67igwgD0iIanyZwRRI66tLAapM6oZnZ7oXTC0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=osP04RCJJdLgt5PqrwWzuMj9dpAtXTZIxODqz22cgoD0W2lm7p0BvH3XC5zxgOwhh5lgZh2B//m0OHvOasjuCezaIJXOgT51fLS3j3lWrZjKT91IS5NS9ezGx23UPlsotOm368p+4Te+ZoDt/os1crQp09+gyNAQyZFJlAcvwAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V5wOAiBj; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764666634;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=P0OXnun1cTU3b0TV9IIjL7ePyw5G4udRlrld/Da/LAQ=;
-	b=V5wOAiBjAmHK4cjFzD8lD4M3J4KT9GptTgB40sMw4sWrWvGmKfYS/EN5EUGl3sQvZyon7g
-	dPxOwFVcy3mXUU00U/7Xe5x5RLGYS7Zy5RJT/WlLPrAR6rDU1XmymuFcIofE9vGj31IJ+p
-	5aI6Gm56EKHe1kRPAmlAiEOkHfJptzI=
-From: Yi Cong <cong.yi@linux.dev>
-To: gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	yicong@kylinos.cn
-Subject: [PATCH v2] usb: linux/usb.h: Correct the description of the usb_device_driver member
-Date: Tue,  2 Dec 2025 17:09:48 +0800
-Message-Id: <20251202090948.334809-1-cong.yi@linux.dev>
+	s=arc-20240116; t=1764667662; c=relaxed/simple;
+	bh=BALjdQsLcT14uiuNhmlNyxPxxPDYE/UJ0M1HcNCiBZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OvyR+6Jes26cGJeDZFFchSVxd55MIDhuFz/T+h0LpjgHhThUA0iV266gMF8Z4S+4xJnNdvuK+rjlAQ2ecHtLV2N8oOjHKsYgIZ++KetVZ5bfa87bi1QLbymD3VDCQa9FeyNc7+ryDJDPg3O6XXtldXisHHT1q+vsFG8tkMpFQdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZW0i6t4Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D8ADC116D0;
+	Tue,  2 Dec 2025 09:27:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1764667661;
+	bh=BALjdQsLcT14uiuNhmlNyxPxxPDYE/UJ0M1HcNCiBZE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZW0i6t4YkdwaPTFOUPcOLpx713GubMhd+yoZyRnQkuRX82QMOCrxHlYE3m67DeoRD
+	 kVEaOmMu2zml4N6j29oeXnopijGZMxKZmEAl11c/nHt/0Xtk6kEjLngdONdaWDv8z2
+	 jusJMDgTusxSXykS1DTy71q/lw6AOSzQAxP4Sphw=
+Date: Tue, 2 Dec 2025 10:27:38 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Roy Luo <royluo@google.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Doug Anderson <dianders@google.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	Joy Chakraborty <joychakr@google.com>,
+	Naveen Kumar <mnkumar@google.com>
+Subject: Re: [PATCH v8 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+Message-ID: <2025120209-unstylish-john-2a6c@gregkh>
+References: <20251122-controller-v8-0-e7562e0df658@google.com>
+ <20251122-controller-v8-2-e7562e0df658@google.com>
+ <2025112226-heave-refrain-53e6@gregkh>
+ <CA+zupgwzQ5r=-_L79D74=9VRqRO94N0yTApHChM+Nu0cn1ss3w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <CA+zupgwzQ5r=-_L79D74=9VRqRO94N0yTApHChM+Nu0cn1ss3w@mail.gmail.com>
 
-From: Yi Cong <yicong@kylinos.cn>
+On Tue, Dec 02, 2025 at 03:01:13AM -0600, Roy Luo wrote:
+> On Sat, Nov 22, 2025 at 8:59 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sat, Nov 22, 2025 at 09:32:06AM +0000, Roy Luo wrote:
+> > > Add support for the DWC3 USB controller found on Google Tensor G5
+> > > (codename: laguna). The controller features dual-role functionality
+> > > and hibernation.
+> > >
+> > > The primary focus is implementing hibernation support in host mode,
+> > > enabling the controller to enter a low-power state (D3). This is
+> > > particularly relevant during system power state transition and
+> > > runtime power management for power efficiency.
+> > > Highlights:
+> > > - Align suspend callback with dwc3_suspend_common() for deciding
+> > >   between a full teardown and hibernation in host mode.
+> > > - Integration with `psw` (power switchable) and `top` power domains,
+> > >   managing their states and device links to support hibernation.
+> > > - A notifier callback dwc3_google_usb_psw_pd_notifier() for
+> > >   `psw` power domain events to manage controller state
+> > >   transitions to/from D3.
+> > > - Coordination of the `non_sticky` reset during power state
+> > >   transitions, asserting it on D3 entry and deasserting on D0 entry
+> > >   in hibernation scenario.
+> > > - Handling of high-speed and super-speed PME interrupts
+> > >   that are generated by remote wakeup during hibernation.
+> > >
+> > > Co-developed-by: Joy Chakraborty <joychakr@google.com>
+> > > Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> > > Co-developed-by: Naveen Kumar <mnkumar@google.com>
+> > > Signed-off-by: Naveen Kumar <mnkumar@google.com>
+> > > Signed-off-by: Roy Luo <royluo@google.com>
+> > > ---
+> > >  drivers/usb/dwc3/Kconfig       |  13 +
+> > >  drivers/usb/dwc3/Makefile      |   1 +
+> > >  drivers/usb/dwc3/dwc3-google.c | 628 +++++++++++++++++++++++++++++++++++++++++
+> > >  3 files changed, 642 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> > > index 4925d15084f816d3ff92059b476ebcc799b56b51..f58c70dabf108878cbefe0abea88572d9ae81e26 100644
+> > > --- a/drivers/usb/dwc3/Kconfig
+> > > +++ b/drivers/usb/dwc3/Kconfig
+> > > @@ -200,4 +200,17 @@ config USB_DWC3_GENERIC_PLAT
+> > >         the dwc3 child node in the device tree.
+> > >         Say 'Y' or 'M' here if your platform integrates DWC3 in a similar way.
+> > >
+> > > +config USB_DWC3_GOOGLE
+> > > +     tristate "Google Platform"
+> > > +     depends on COMPILE_TEST
+> > > +     depends on OF && COMMON_CLK && RESET_CONTROLLER
+> >
+> > Shouldn't this be:
+> >         depends on (OF && COMMON_CLK && RESET_CONTROLLER) || COMPILE_TEST
+> >
+> > I shouldn't have to enable those options to just get a build test here,
+> > the apis should be properly stubbed out if those options are not
+> > enabled, right?
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> Hi Greg,
+> 
+> I agree with your interpretation of COMPILE_TEST but it doesn't
+> seem to align with upstream convention. I found the following pattern
+> in several device driver Kconfig files (including but not limited to usb,
+> pinctrl and phy).
+> 
+>     depends on COMPILE_TEST || ARCH_XXX
+>     depends on CONFIG_A && CONFIG_B...
+> 
+> For this patch, the APIs exposed by OF, COMMON_CLK
+> and RESET_CONTROLLER are properly stubbed out so
+> I'm all good to go with your suggestion, but I'd like to make
+> sure this approach is conventional.
 
-In the current kernel USB device driver code, only the name field is
-required to be provided; all other fields are optional.
+Whatever works for building properly, as-is, what you have in this patch
+didn't work for my systems at all.
 
-Correct this part of the description.
+> I plan to add ARCH_GOOGLE as a dependency in the next
+> version per [1], so the "depends on" would probably look like
+> the following per your suggestion:
 
-Signed-off-by: Yi Cong <yicong@kylinos.cn>
+But "Google" is not an arch :(
 
----
-v2: update commit message
----
- include/linux/usb.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+And really, the whole "only have a sub-arch symbol" is something that
+personally, I think is totally wrong and prevents kernel images from
+being built for more than one "arch".  As an example, the Android GKI
+kernel has to support more than one of these, so what does putting this
+behind a symbol that no one will actually use mean anything?  Android
+will never be only building a ARCH_GOOGLE kernel.
 
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index e85105939af8e..fbfcc70b07fbe 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1295,8 +1295,7 @@ struct usb_driver {
-  *	resume and suspend functions will be called in addition to the driver's
-  *	own, so this part of the setup does not need to be replicated.
-  *
-- * USB drivers must provide all the fields listed above except driver,
-- * match, and id_table.
-+ * USB device drivers must provide a name, other driver fields are optional.
-  */
- struct usb_device_driver {
- 	const char *name;
--- 
-2.25.1
+>     depends on (OF && COMMON_CLK && RESET_CONTROLLER && ARCH_GOOGLE)
+> || COMPILE_TEST
+> 
+> Please let me know your thoughts.
+> [1] https://lore.kernel.org/linux-phy/1a53d473-fc13-4ac5-ba52-4701d95e3073@kernel.org/
 
+Again, I hate the ARCH_ stuff, but Krzysztof does seem to like it for
+some reason, so I'll defer to others here.  But note, as someone who
+helps maintain a "generic" ARM64 kernel, these ARCH_* usages for
+different platforms do nothing at all to help anyone out.
+
+thanks,
+
+greg k-h
 
