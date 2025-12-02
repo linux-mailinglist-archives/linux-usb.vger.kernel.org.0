@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-31104-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31105-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13C21C9AE9E
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 10:44:02 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id CACA7C9B8B5
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 14:00:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B62DB3A33C0
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 09:44:00 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5EFE13467A1
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 13:00:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD94311963;
-	Tue,  2 Dec 2025 09:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4EB3128C2;
+	Tue,  2 Dec 2025 13:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mwp4JlLM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfxAjIPv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E337E30F818;
-	Tue,  2 Dec 2025 09:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25201548C;
+	Tue,  2 Dec 2025 13:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764668565; cv=none; b=sBLhUPYZQFtrnH5sBcNWA7Q5O+0vTWXynVQ4VaIrwsgvWvttbcfpJv/Ef4hI2MAz6LpvtdZ9bRvO2yF1Rcc5oczsoPbd8PMEodFkgHMUpoEVYRhlVMf3RSNK3zl7PFMWeVa3fGby9GPltIWq3K6CUFT473QuxlLdJUlGYwi1PBQ=
+	t=1764680446; cv=none; b=Cb+bXN3NaDN8+OC3S+sPpJMCEWwXabFvAluEQoxtPsvVQMu+vp6wmG/FLKMwjooZBA5ryn3tMhMQk8p7pJGtx2wWS/hxCg08Uy8XCTxPEavCw/RRRp16XiFSPctl6fzHJBi4MMHr3kw2jcZR4xpp+tuU170g1vTwjOAOT0UFj2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764668565; c=relaxed/simple;
-	bh=0vFwPwr69dUxB+23zt64JFqnHSS+DXXyYRo5msdrQgs=;
+	s=arc-20240116; t=1764680446; c=relaxed/simple;
+	bh=O5dADBbz0/9mG0iK1bzqcE79NAjPo9jdhr65mtDfkmM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fLM2ZjoZ9NDTaOGLkSiEgPjO2Kf5UQXhVmHaDGYzFvas7G4xCCTFb08xEvHDQbVMC4nXmShP+fJIK0u4W9GrZLgPeRjvXgFiUe0NZFIhJIPp0OjEjpxF+tkvWosw1zOBEQDd51D9mpLp7BTc2inR2xCQ7kgmRA4NXYl0ZhMlHN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mwp4JlLM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3B31C4CEF1;
-	Tue,  2 Dec 2025 09:42:40 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=CDU+kMq+xhJHR1z2VhOggwScFzAYqhW70lmqEV6svnL/z6hPsxLsE/5x8dqvsE91mkx0Z33oS3JUgYqu3Ro5TsDyAa+mCkO9ztR3F59tGWZE570iLUhmBP+m1FrryrLMnJvqMAoaswnBHdfNMJ0B48HBTRq3agic5nLWc6l5vZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfxAjIPv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 385DCC4CEF1;
+	Tue,  2 Dec 2025 13:00:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764668564;
-	bh=0vFwPwr69dUxB+23zt64JFqnHSS+DXXyYRo5msdrQgs=;
+	s=k20201202; t=1764680445;
+	bh=O5dADBbz0/9mG0iK1bzqcE79NAjPo9jdhr65mtDfkmM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mwp4JlLMt6908s+AwuLH5sT3eeeu1kUsiDY2VppF9E39AKhrdGlVYNT6OpCgTTvnp
-	 0C7lXHnFoW6M9dwa620esR8oWLKfhfn1bWeN9aptq4Cg26JDxEW1F0xE/57hNqY1dc
-	 IRinLqE6nTFeAocBmTZBB8MNM7O1RFxmcChHqwUWBRM49UMj9cl2LSjntb3yUj4sUX
-	 gp9700panjvIva1xnSgeBScnMWnTxffdTkxGfPyUqeQrhAViyN5XOt89YcsOxfI72S
-	 PkAdoTUHY0pRH1UiYE7poiDTVPhEX1WbXtm0XyGjoshi5WCvkMij2uiokVBHo64638
-	 zwU6pBJ0weIww==
-Message-ID: <00d75fd3-a796-402a-a1a3-2172862fcf91@kernel.org>
-Date: Tue, 2 Dec 2025 10:42:38 +0100
+	b=VfxAjIPvFyqYqC/XRJRci+Dzk6nWVaa57bdk0arWM2/FfysAB/JJx5zWj+YyHVSYJ
+	 STZMh2WsDXmOHEY7/QeaL7yrf+8I0KZedS6d34BlyXtBx+FtNETtX4G14Isn0FuOxC
+	 yrnM2NLMXGcqRlG7Pb5HGwxB/J3Ji7ECy30uoHhgsLZ5CTvssuNHlsdZ/jSPCmE9aL
+	 YasY9N0op+CMjMDfMgWqIWHBZ99Fkp4sREf024I4MxwQ1r05rLQpZWg6gFMikLg5Y1
+	 EEBjfQ1/vX62DQdxy1/lHym/FLuc4uzih65BOSW1ygX04BK4iQ4eVJ9Th08euKrwOn
+	 AdsLHcR8J823A==
+Message-ID: <076777c3-b238-4d1d-a11b-602027348ee4@kernel.org>
+Date: Tue, 2 Dec 2025 14:00:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,25 +50,29 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Roy Luo <royluo@google.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Peter Griffin
- <peter.griffin@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Philipp Zabel <p.zabel@pengutronix.de>,
+Subject: Re: [PATCH 1/6] dt-bindings: power: supply: Add Maxim MAX77759
+ charger
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Badhri Jagan Sridharan <badhri@google.com>,
- Doug Anderson <dianders@google.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>
-References: <20251122-controller-v8-0-e7562e0df658@google.com>
- <20251122-controller-v8-2-e7562e0df658@google.com>
- <2025112226-heave-refrain-53e6@gregkh>
- <CA+zupgwzQ5r=-_L79D74=9VRqRO94N0yTApHChM+Nu0cn1ss3w@mail.gmail.com>
- <2025120209-unstylish-john-2a6c@gregkh>
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
+ Kyle Tso <kyletso@google.com>
+References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
+ <20251123-max77759-charger-v1-1-6b2e4b8f7f54@google.com>
+ <d4455f4b-2a0f-4bc0-b897-14f2e27af3ea@kernel.org>
+ <c9b059f8-9219-4219-95c8-23a3733fea58@google.com>
+ <20251125-amorphous-bobcat-of-whirlwind-afdab1@kuoka>
+ <7ad91325-e881-461d-b39e-6ff15d98b3c5@google.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,91 +118,110 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <2025120209-unstylish-john-2a6c@gregkh>
+In-Reply-To: <7ad91325-e881-461d-b39e-6ff15d98b3c5@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 02/12/2025 10:27, Greg Kroah-Hartman wrote:
->>>         depends on (OF && COMMON_CLK && RESET_CONTROLLER) || COMPILE_TEST
+On 26/11/2025 00:48, Amit Sunil Dhamne wrote:
+> 
+> On 11/25/25 1:56 AM, Krzysztof Kozlowski wrote:
+>> On Sun, Nov 23, 2025 at 06:34:05PM -0800, Amit Sunil Dhamne wrote:
+>>> Hi Krzysztof,
 >>>
->>> I shouldn't have to enable those options to just get a build test here,
->>> the apis should be properly stubbed out if those options are not
->>> enabled, right?
+>>> On 11/23/25 1:28 AM, Krzysztof Kozlowski wrote:
+>>>> On 23/11/2025 09:35, Amit Sunil Dhamne via B4 Relay wrote:
+>>>>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>>>>
+>>>>> Add bindings for Maxim max77759 charger device.
+>>>>>
+>>>>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>>>>> ---
+>>>>>   .../power/supply/maxim,max77759-charger.yaml       | 36 ++++++++++++++++++++++
+>>>>>   1 file changed, 36 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..71f866419774
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
+>>>>> @@ -0,0 +1,36 @@
+>>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://devicetree.org/schemas/power/supply/maxim,max77759-charger.yaml#
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: Maxim Integrated MAX77759 Battery charger
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Amit Sunil Dhamne <amitsd@google.com>
+>>>>> +
+>>>>> +description: |
+>>>>> +  This module is part of the MAX77759 PMIC. For additional information, see
+>>>>> +  Documentation/devicetree/bindings/mfd/maxim,max77759.yaml.
+>>>>> +
+>>>>> +  The Maxim MAX77759 is a dual input switch mode battery charger for portable
+>>>>> +  applications. It supports wired and wireless charging and can operate in buck
+>>>>> +  and boost mode.
+>>>>> +
+>>>>> +allOf:
+>>>>> +  - $ref: power-supply.yaml#
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: maxim,max77759-charger
+>>>>> +
+>>>> This should be just folded into parent node, no need for separate
+>>>> charger device or is just incomplete.
+>>> Thanks for the review! You are right, the binding is incomplete. This
+>>> charger block actually listens on its own I2C address, distinct from the
+>>> main PMIC.
 >>>
->>> thanks,
->>>
->>> greg k-h
+>>> I will update v2 to include the reg property. I will also add the
+>> AFAIK, the main (parent) device schema does not reference children via
+>> any sort of addressing, so reg here would not be suitable.
+> 
+> I agree that currently nvmem and gpio devices (which are children of 
+> PMIC device) are not referenced using any address. But I was guessing 
+> that's because they share the i2c client id with the PMIC and sharing 
+> its address space (implied).
+> 
+> The charger device while being part of the MAX77759 PMIC package has 
+> it's own i2c client id and address space that's why I proposed "reg". 
+> The underlying assumption I made was separate client id implies that a 
+> "reg" property required. But maybe that's incorrect.
+> 
+> I can understand the argument against having a "reg" property. As the 
+> i2c client id will remain same for a max77759 charger device (as it's a 
+> chip property and not a board property) it will always remain a 
+> constant. I will drop the "reg" proposal.
+> 
+> 
 >>
->> Hi Greg,
->>
->> I agree with your interpretation of COMPILE_TEST but it doesn't
->> seem to align with upstream convention. I found the following pattern
->> in several device driver Kconfig files (including but not limited to usb,
->> pinctrl and phy).
->>
->>     depends on COMPILE_TEST || ARCH_XXX
->>     depends on CONFIG_A && CONFIG_B...
->>
->> For this patch, the APIs exposed by OF, COMMON_CLK
->> and RESET_CONTROLLER are properly stubbed out so
->> I'm all good to go with your suggestion, but I'd like to make
->> sure this approach is conventional.
+>>> standard properties `constant-charge-current-max-microamp` and
+>>> `constant-charge-voltage-max-microvolt` to configure the hardware
+>>> limits, as this charger device does not manage the battery profile
+>>> directly (that is handled by a separate fuel gauge).
+>> Well, still, what's the benefit for the bindings to have it as a
+>> separate child? Kind of depends on your example, which is quite small -
+>> one regulator and supply. Grow the example with battery and other
+>> independent resources (if they are) to justify it. Or show arguments why
+>> this is re-usable.
 > 
-> Whatever works for building properly, as-is, what you have in this patch
-> didn't work for my systems at all.
-> 
->> I plan to add ARCH_GOOGLE as a dependency in the next
->> version per [1], so the "depends on" would probably look like
->> the following per your suggestion:
-> 
-> But "Google" is not an arch :(
-> 
-> And really, the whole "only have a sub-arch symbol" is something that
-> personally, I think is totally wrong and prevents kernel images from
-> being built for more than one "arch".  As an example, the Android GKI
+> The primary reasons for keeping the charger as a distinct child node are 
+> to model the hardware topology for the power supply subsystem and to 
 
-Probably you think ARCH_FOO as arch/FOO/ directory, but this is not the
-case. ARCH_FOO in this context is SoC platform, so e.g.
-arch/arm64/boot/dts/FOO/.
+You do not need children for that at all.
 
-All of ARCH_FOO build into one image and that's recommended way to limit
-unnecessary drivers.
+> house the OTG regulator provided by the charger block.
+> The charger needs to be referenced by the Fuel Gauge (which handles the 
+> battery profile) via power-supplies. Additionally, the charger block 
+> provides a regulator for USB OTG VBUS, which is cleaner to represent as 
+> a child node of the charger rather than mixing it into the top-level 
+> PMIC node.
 
-It's just confusing naming for whatever reason.
-
-> kernel has to support more than one of these, so what does putting this
-> behind a symbol that no one will actually use mean anything?  Android
-> will never be only building a ARCH_GOOGLE kernel.
-
-But distros will be, people will be. OK, maybe not for ARCH_GOOGLE, but
-ARCH_QCOM we do for Qualcomm-based laptops and embedded folks even more.
-
-We had this talk in the past. The point is that these drivers here are
-unusable outside of that hardware platform, so only when you choose
-hardware platform (ARCH_EXYNOS, ARCH_GOOGLE, ARCH_QCOM) you will be able
-to choose these drivers.
-
-You can also look at ARCH_FOO a bit orthogonal to actual kernel
-architecture, because ARCH_EXYNOS is for both arm (arm32) and arm64. The
-drivers should be available for all Exynos-platforms, regardless whether
-this is arm32 or arm64.
-
-> 
->>     depends on (OF && COMMON_CLK && RESET_CONTROLLER && ARCH_GOOGLE)
->> || COMPILE_TEST
->>
->> Please let me know your thoughts.
->> [1] https://lore.kernel.org/linux-phy/1a53d473-fc13-4ac5-ba52-4701d95e3073@kernel.org/
-> 
-> Again, I hate the ARCH_ stuff, but Krzysztof does seem to like it for
-> some reason, so I'll defer to others here.  But note, as someone who
-> helps maintain a "generic" ARM64 kernel, these ARCH_* usages for
-> different platforms do nothing at all to help anyone out.
-
-True and that's not their goal. The truly generic kernels, like you
-mentioned or arch/arm64/configs/defconfig, build everything for arm64.
-The entire point is to limit this for actual users wanting much smaller
-kernels and distros, which do not need these on for example RISC-V.
+Sorry but argument that you need a child device to be able to construct
+a phandle is just wrong. You can create phandles on every other way as well.
 
 
 Best regards,
