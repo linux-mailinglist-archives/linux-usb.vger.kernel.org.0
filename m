@@ -1,90 +1,86 @@
-Return-Path: <linux-usb+bounces-31106-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31107-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37558C9C0A0
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 16:53:24 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E01C4C9C190
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 17:06:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A9F6E349043
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 15:53:23 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5A589349A63
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 16:06:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0223B322C89;
-	Tue,  2 Dec 2025 15:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CCC52874FB;
+	Tue,  2 Dec 2025 16:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="j4JjL6We"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="KQIFYGTn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0296232143C
-	for <linux-usb@vger.kernel.org>; Tue,  2 Dec 2025 15:53:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E0B28468D
+	for <linux-usb@vger.kernel.org>; Tue,  2 Dec 2025 16:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764690797; cv=none; b=VakqBiO3BYe4zVnDYmv9xe9fZOemgml4ynBg5h0e2Cuz6leWU0IRA4cr/k5x9GPHnZt8LmFN2+CIFsHa0V5llH5vR1aIbkHZyKunc2flyL4uZYwV8YwUBFgUdd+mIEp9ZXlFYX8S8//nHK2h2ebrPLpK1Z0Y+BarjXClvhtsH10=
+	t=1764691550; cv=none; b=qhBSwtsjKT098SD8GPgsPA3IrOoT8cxAh1eAj8WM6J8gIObNcDqkqIWwY92ER9sND1mrX5br+lk9slghOpF91vM2MkCjt9jIq12Y0TBcj38g6NnYbTr9yx9wj5dOKyLd3oMkwHsXB3Gg9BLglrQrTTqhdlK93nCbEAYu337qjlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764690797; c=relaxed/simple;
-	bh=bLoq+0J4Pdz2yimFi9dyvez+MengAB4dZYv5B3C1McM=;
+	s=arc-20240116; t=1764691550; c=relaxed/simple;
+	bh=oBlUbm/4rajTOLUrUnf2zsSWelXrOsMnnCt8Bhe3JzU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JuaCGfvdq5hRJ4rV8Rt8lDY+UYvTDZ2zBRN11oDgnqjpS9kAYLyQlycucP0u9if0xaGnTJRBPEZsdnsIrOkXqJWaBaS+nChJYoOmGp7s8yz+SGmATNE2+B6j+Exjiaz53R4dZqUmBRIN5abopHCfKJJX7TEpISHaLZlJ+j31saU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=j4JjL6We; arc=none smtp.client-ip=209.85.222.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=jDcQvY3JQkjpBoIIeFDA5Dc+UpTfXutT/yltBYzF7Gp0ErriO0EZ/JIQRjQXsidD4O6BTEAqOnhEPuxz7+ogaE1EpaNnM5UkvfDqGH7zYu/SBPaqOXVKSR2vKDy0zs15tE9Af/WQ78P+CpOpWLi0oNUei1JJV/NlF3Wp/S7f/9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=KQIFYGTn; arc=none smtp.client-ip=209.85.160.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8b2d56eaaceso547107085a.0
-        for <linux-usb@vger.kernel.org>; Tue, 02 Dec 2025 07:53:15 -0800 (PST)
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4eda6c385c0so44772701cf.3
+        for <linux-usb@vger.kernel.org>; Tue, 02 Dec 2025 08:05:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1764690795; x=1765295595; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1764691548; x=1765296348; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ein3D251E2lqfEtSiRGhRdTfSxeVBVJFtAWknaD20lQ=;
-        b=j4JjL6WeU9rD/or1bsRybL/GFfdJBGjnQilc0zWYUiBJ6OIal/OjoI3o06ziKg3ZYi
-         yV4XkbjeXMJwozh1ZQ2SIZz908cMP1jlEFrKupQ5Y8HNbvxohb6npr3E/Zp1NyBN1kuO
-         pRV+qDjegCdbwQLf41MqiM9K0VHVK9OGGIil7/WPdC2d9kcLPQHVeihGXH/45eG4gBTb
-         fOPx8P+5mtCcy3BEiB3cF4/ixf81PW+z2NVq6oEesd2t57iM7c5Df3DxEzBaQKaWvZhB
-         GOMvrFObrfFRZTpNZM7fHLRKjb5WKdSqrt7E6co/PV7rnMgxVzRr8RKOUnqHThmg9LIz
-         Pplg==
+        bh=iEziSNrQQn4I05oBYvzUjY2FjKsIMByhRBoiclkMFIc=;
+        b=KQIFYGTnevjXpDUnDqt0jkUGh3z3F1Kw6qrgMY1NfxkuQGbUg8Kadewp5NTy9x0DO3
+         ClzkpaWxuLj6F5xwEZ5KhulRc+9qJNWx/ESMUFkxDM/+26czInQ7uCn1UvqhiZDxtN0T
+         8TIDQVOXUqHurcr+Uf6dU831Ya5Dr5kE95upkJPD9iC2wePhb6VHoxVraK3RzW/gOV42
+         Z62OJh0SqC6RFs8eCk1NISLZrxZVOVscI/gT5KjttOpmouhB9jRNpfX1w5Z2/hj1bZXR
+         jWy89pjPSf6byeId4N+nOnPSCJUKKGMAAFUP/pYlXvOyyrtpSslyWERJZj3F/MvgfT0u
+         NvAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764690795; x=1765295595;
+        d=1e100.net; s=20230601; t=1764691548; x=1765296348;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ein3D251E2lqfEtSiRGhRdTfSxeVBVJFtAWknaD20lQ=;
-        b=P7Pyn2vo5RcceE9ZpkrSYgsZqDJQK1ND2OSfGR4RXt1nHGQXYRfElK4xqmX8ELiSqp
-         d/vb6Rwkq7PS0OBPUlsfOaSsqCBHF7FLRkBOT85Vfmm2E2gV6PrxTdD4vYhwHDqkKw5d
-         EBIiJyJIweCPL6gh0W0LMN5M0IA2TfLT0v9gnUxTAfVbuYx7s0GEIgX2RSwJl9OW97Yh
-         7n+yMtjs++9sEhh67IuyIlT0tyLanO43SHXlsa/bUOYt+wMlUeJzy/z2N9k2oV6Ge4TI
-         w+DS66l9qDUzHa/k7/1f1yQUnu5a50u4PonknxvTsr77hkzwaD5XN5aF62nqIvm0Rxzs
-         nPpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUPSCF9NwjkdTWKR9S02oUKe8KXTNwddjiArui4+UE+R0+xgxFOW9qYvwq9WCqlfA6zVmRvgue0IYM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3DF9xtKsPPfVsS4SnmQgEXfC40h7rlF1V4eb+gzRYWhHsGO6N
-	zmYhB8pEQJIQzzHYuL1u9ecAZbxihpLQCwt9DCA01K1a8uIz9gLT5ZXcZkdIm9Yaog==
-X-Gm-Gg: ASbGnctiQDONHb904i5P0dLnGRytyoX2N68XZP3ampZXRdaqO98IX05vX3WBZBb2JAV
-	6vXGdRAv5Glp8Y1KQWh+SX/glK3tMOUxQGNIAiCIqqvr0efSunMnwt8TzM1KPbke9IO71rlEhx1
-	N/fKEYCv8dnGhqBsLfNcpTEKrJitugHADtQPb3uNiqos+CAKwLE0AgZh45dMN0GceQxxr9RcaLO
-	68VlYHKjXJ2vyAQnaFA2C8BvftIibYxbzQzuLaLE0qLK+WDx3QGSjeMLe46kxlFbldpa9iCBwuk
-	Asy/1Ti4GsTr9ZUMiyzbNqpLXBRl35oiTOm4U4nD699OuLTb95TFJeDAdaZFSy0Qmp0dPElvWCT
-	dcY5w2/11gY7e+aR9NqlN+PEJY8eNIkDUzIcvEnUWkr7LWrUZX9BdEbyOdQ87PposNGKvgn9O3u
-	XCtnb39EfEe+VY
-X-Google-Smtp-Source: AGHT+IG7imMaW6P034ogai9juXD7cZWXeGPG/KXNDrCibNV7M+DiAwK7QmWiAcjFYeItiAklgvwKWw==
-X-Received: by 2002:a05:620a:1a8f:b0:8b2:ea3f:2f91 with SMTP id af79cd13be357-8b33d48169emr5525748285a.81.1764690794744;
-        Tue, 02 Dec 2025 07:53:14 -0800 (PST)
+        bh=iEziSNrQQn4I05oBYvzUjY2FjKsIMByhRBoiclkMFIc=;
+        b=l5jTO0lKHTtpheerKfiwhriDbIEMNiLTk8yUPH3oRXYMr6WXMFUPnwQgDaSc1QBicR
+         ytumZ0NO5sWZZPmNiu8QjzxYlEc0dq0rjWStmgwQY93GoAaLFWp1bh6hUKEoY99W5mtT
+         0jLJjDPBvmNpJU5Yw8t8Ka/mKxzWAaAT1PvuS54sqecwK/YJVfYaDEZ3rGfMvuXCrmIi
+         JMaEjm2tuylgtgDbLeVmxQ7ndKQvBFz9D/zw0etZVtZS1o5mAhWAC9BQtLqjgftGLIh4
+         9zr0xL2hETJjpPbiPTz/ldc+2ea8hfQeQefVVhYtgsi95tbZ2DROXRo422C3PT1mGSEf
+         8a4w==
+X-Forwarded-Encrypted: i=1; AJvYcCUkOmhQZeY3WuWr7RaRFXJX2IT8ue8XLHS2TtqmqVJ0+V/bBPY9/SJ4rdhSbve5tg8I7OJw3g1X4BM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6v57ibIIQeqVrVOtps2WSJQTLHoFywOzAEHLHKPl0DXOOvIIR
+	mcd1J0Hn2TXwRD8Auj9cP1vip/Hl8POONf5TmR0/Fr7LJqi2KBlcTgJFQVZEtnMaDA==
+X-Gm-Gg: ASbGncs47VA3ibw+HTbYY/NTyySy11l0v2OphAW3IiVEwApHuj5XKTRvctHnZoA6JWV
+	X2gU1o/JN/oMqLyfBVjSdU1OfhAsW7PuQq8upwISz3ERmpbEChMk9/fKtzkCNqsud4dpK5Iz0rk
+	A62gj33OC+GGFcq/UeOzrDbepxxbN/5QT8KW/WnM8QNgv958bgBwW35dfbeuYdx375QbA3IrtkF
+	wteKBRw+HFilUfJ85KMcptM4USWeY0sf8ZSEkLMNoGrfc6+pxF1yylLiXiG2p4TKDbh01mILGLk
+	nsS/d8urXNzLd+Zh9YVpNfHxzZFS6Yl87W6VxklREvai+fYl52w7n4895UPnnlf6Wks0wuAhFSA
+	p9c/QnV9ly/SRhwCor3XnVWPpsD+Kjm11EjedtuBa9UWpZFoexty1RvW3sIc23ROdExh7s+NR+3
+	zCY4xTRUTC4bfj
+X-Google-Smtp-Source: AGHT+IHjgMbcY+byTZV1x8KfhonySSDxlQ5+BhItSw06ag+f4H5XsHVZFjDTTcOrdWE4HzLgPcTA0g==
+X-Received: by 2002:a05:622a:4c8:b0:4e6:ebcc:23fb with SMTP id d75a77b69052e-4efbda58b15mr409662561cf.36.1764691548001;
+        Tue, 02 Dec 2025 08:05:48 -0800 (PST)
 Received: from rowland.harvard.edu ([2601:19b:d03:1700::eaae])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b52a1ddd36sm1088799885a.51.2025.12.02.07.53.13
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4efd2f9a755sm96901011cf.3.2025.12.02.08.05.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Dec 2025 07:53:14 -0800 (PST)
-Date: Tue, 2 Dec 2025 10:53:11 -0500
+        Tue, 02 Dec 2025 08:05:47 -0800 (PST)
+Date: Tue, 2 Dec 2025 11:05:44 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Clint George <clintbgeorge@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, david.hunter.linux@gmail.com,
-	linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
-	khalid@kernel.org
-Subject: Re: [PATCH v2 0/6] usb: gadget: dummy_hcd: coding style improvements
-Message-ID: <17845408-4a9c-470d-8949-f4cd0a847615@rowland.harvard.edu>
-References: <20251119130840.14309-1-clintbgeorge@gmail.com>
- <20251201203715.17768-1-clintbgeorge@gmail.com>
- <2025120200-backslid-endocrine-e64d@gregkh>
+To: Haotian Zhang <vulab@iscas.ac.cn>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: ehci-omap: Fix missing usb_phy_init() error handling
+Message-ID: <7c6ed1af-46c8-425b-83a5-4692095144a6@rowland.harvard.edu>
+References: <20251202080027.1124-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -93,37 +89,68 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2025120200-backslid-endocrine-e64d@gregkh>
+In-Reply-To: <20251202080027.1124-1-vulab@iscas.ac.cn>
 
-On Tue, Dec 02, 2025 at 06:27:46AM +0100, Greg KH wrote:
-> On Tue, Dec 02, 2025 at 02:07:09AM +0530, Clint George wrote:
-> > As part of my LKMP mentorship i have to complete 5 patches as a criteria
-> > for graduation and thus have focused on working on such
-> > beginner-friendly patches so that not only do i get the required number
-> > of patches but also get familiar with the process of kernel
-> > developement.
+On Tue, Dec 02, 2025 at 04:00:27PM +0800, Haotian Zhang wrote:
+> usb_phy_init() may fail if the PHY clock or regulator setup fails,
+> but ehci_hcd_omap_probe() does not check its return value,
+> potentially causing later operations to act on an uninitialized PHY.
 > 
-> The LKMP internship should be done in drivers/staging/ as generally
-> coding style cleanups are NOT accepted in other parts of the kernel,
-> unless you get approval from the maintainer ahead of time.
+> Add proper error checking for usb_phy_init() calls. Add a new
+> error label to properly remove the hcd.
 > 
-> Does the maintainer of this driver want this to be used for the intern
-> project?
+> Fixes: 4e5c9e6fa2d2 ("USB: ehci-omap: Tweak PHY initialization sequence")
+> Fixes: 49f092198f4f ("USB: ehci-omap: Fix detection in HSIC mode")
+> Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
+> ---
+>  drivers/usb/host/ehci-omap.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-omap.c b/drivers/usb/host/ehci-omap.c
+> index db4a1acb27da..30b3586fd696 100644
+> --- a/drivers/usb/host/ehci-omap.c
+> +++ b/drivers/usb/host/ehci-omap.c
+> @@ -166,7 +166,11 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
+>  		omap->phy[i] = phy;
+>  
+>  		if (pdata->port_mode[i] == OMAP_EHCI_PORT_MODE_PHY) {
+> -			usb_phy_init(omap->phy[i]);
+> +			ret = usb_phy_init(omap->phy[i]);
+> +			if (ret) {
+> +				dev_err(dev, "Failed to init PHY %d\n", i);
+> +				goto err_phy;
+> +			}
+>  			/* bring PHY out of suspend */
+>  			usb_phy_set_suspend(omap->phy[i], 0);
+>  		}
+> @@ -205,13 +209,19 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
+>  		     pdata->port_mode[i] == OMAP_EHCI_PORT_MODE_PHY)
+>  			continue;
+>  
+> -		usb_phy_init(omap->phy[i]);
+> +		ret = usb_phy_init(omap->phy[i]);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to init PHY %d\n", i);
+> +			goto err_remove_hcd;
+> +		}
+>  		/* bring PHY out of suspend */
+>  		usb_phy_set_suspend(omap->phy[i], 0);
+>  	}
+>  
+>  	return 0;
+>  
+> +err_remove_hcd:
+> +	usb_remove_hcd(hcd);
+>  err_pm_runtime:
+>  	pm_runtime_put_sync(dev);
+>  	pm_runtime_disable(dev);
 
-In fact, Clint's changes are small and inoffensive enough, I wouldn't 
-mind having them applied to dummy-hcd.
+This basically looks okay.  But...
 
-However, Greg is perfectly right that this kind of stylistic update is 
-not something that should be submitted for most parts of the kernel.  It 
-just bulks up the Git history with essentially meaningless cruft, making 
-it all that much harder to see the changes that really matter.  That's 
-part of the reason for the suggestion that interns and beginners should 
-confine their efforts to drivers/staging.
-
-Also, remember that trivial changes like this are fine for learning the 
-procedure of submitting kernel patches, but the effects they have on the 
-kernel itself are minimal.  A patch that actually fixes a bug or adds a 
-functional enhancement would be a different story.
+I don't know much about the usb-phy code.  Is it really okay to call 
+usb_phy_shutdown() for something that hasn't gone through 
+usb_phy_init()?  (Yes, the original code already does this -- maybe 
+the original code is also wrong.)
 
 Alan Stern
 
