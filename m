@@ -1,163 +1,130 @@
-Return-Path: <linux-usb+bounces-31109-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31110-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 810BCC9C2F0
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 17:25:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70DF3C9C2F6
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 17:25:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3247D3A24F9
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 16:25:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 492BF4E3583
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 16:25:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D3D12853F7;
-	Tue,  2 Dec 2025 16:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E613284684;
+	Tue,  2 Dec 2025 16:25:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0qAAYlaL"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="OQpXWE9k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA81279DC0
-	for <linux-usb@vger.kernel.org>; Tue,  2 Dec 2025 16:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A2B5279DC0
+	for <linux-usb@vger.kernel.org>; Tue,  2 Dec 2025 16:25:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764692727; cv=none; b=ITzLe7ZfToSv6GMAquCS1BkpoKJ+hIU9HpTIWsDo86Kz1CRj93SMhuQAZyThI1p0wKGZr7wT6ND04tGek4iA2kodO9jbYvOaCobXpyghmyexExTyL+GB9IMYg+p/N09faSsF/0kbdHs0waQLHbu86wA9JttCwZQadpP5loSfcMI=
+	t=1764692743; cv=none; b=OVR9EYUL+G9VWSS3Fdqj+l6omjISiF2ZM19ueJDOHnIpMqyz9kQiWCAiTw6eZRIhyORQvty8NIEhbFkLZA49sl7512+XeHHlPDjq4BMi1nf9yWuO92FdolEVaAtNxtSkv9FhPqfJGMFuD5G5iTr0N1jPjjO5Wa8i3811bFKwWwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764692727; c=relaxed/simple;
-	bh=nZdtivljgxNkSnyAU+uPi1o13Tk7h3FCZtl989MAkTA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Sb10xnkd5BZhOogW1MHCqD+PHbBGUKvYyF/bFne39UsWz5XS1kTWQi6QSyewXg4u3ziZD+K2MtyhfF+WKOy/Ln8ZkLaB83+7RJkQFw4xYaqvFpzl9OnZ/eWbd3Qq69XvbuBucKPJkLyKp4tdVxzdZKNpsgkgRuUQd34c6T9VqN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0qAAYlaL; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4775895d69cso25134335e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 02 Dec 2025 08:25:25 -0800 (PST)
+	s=arc-20240116; t=1764692743; c=relaxed/simple;
+	bh=SsTcvI2ftfVEMiVeuXVd/UDaMG9+qaShNurQRWgp+HQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Orbp4ELLwnGGApafeKS6V5kYOlIWeb2f/B11oWiHWjlbsDnha0DdNNj+rFSMPhTzBl1kriNOyC6+QKUVMIxY/sle9jiWqguAHB++XL5fTERPiNstWgog+RAFc7/1CLJLgA6y+zF9VFkJq6MZEYIzBgIqkFVfxM4dsUlxefk0418=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=OQpXWE9k; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8b25dd7ab33so354112985a.1
+        for <linux-usb@vger.kernel.org>; Tue, 02 Dec 2025 08:25:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764692724; x=1765297524; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9CUlMgoqtU94MhEJOHiTF0drSAqmoR7IifiR5EWvc1M=;
-        b=0qAAYlaLYhBKcbotCxlVIUQUaJSAXCnrTbG6ElPD5SkhYU0J3w5k581lAPxiM71yYu
-         KhTibt2Upn+BS7+zyCz2zjVweKOhBm7mrxFz41KkdQIT88VBjR58IsZhjpUQHiG1PPM+
-         P1D3hIlPyZlB/ULoenNZTBsYTneqRdMeFZPUw5jihbX7dSdfs5kyKmS0y23tCHy7UXn+
-         sUyth23bw0jZHko4eaQicnBPZ8cC9nkLW9cnCgV3kh4WnIQfKZq4xgfldJvb+D0uhU0q
-         kUweWAqtga4m2ioKgQQJ4Q9JsIMNGHG/Lpa79xnPTURgdOjjYh6OHifQMsOu6p0jOCQg
-         LMww==
+        d=rowland.harvard.edu; s=google; t=1764692741; x=1765297541; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SBj57ghe+PJFT6VjATTBMITvWtoAHsfjekQgLKphYjk=;
+        b=OQpXWE9kLH1Bqfer7Mg8wwiDh9kvsd9k3gaww/XsnD2BjkIeErHAPJI/hu1eIMAWDV
+         W+9s/MzHI2H2MrBGLEhquPv46skaqEn+sPhPpyo10Kp2jFKfWQXIAW4iBoFS1oJoBLbD
+         39Q91g1aD8Jr7EnM3KGg2tkPpsQ7C/tFmqsRBj0GDkotNj4U4PYrEVL8ieBZlGIVSl/S
+         0agFzi3nslAc4ncWci/WDub70B6lGDXyE+TN7TCrBnMMvZbM3cKzDeZmeXhV8HzZjOg8
+         jatk4zHhW1BOJ5BjfUfVZZ5eqb5KjF87zB1ZE5hQ4EWZS9R1nTyNJmu4/lyD0KcLz9+S
+         n/WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764692724; x=1765297524;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9CUlMgoqtU94MhEJOHiTF0drSAqmoR7IifiR5EWvc1M=;
-        b=IZIm+p9A9SxwVkPkltnNIRYSlDJY6CnsIGXOaHbmMIHmNeUE2qPMPbzO7wE8NZ/0tP
-         BWHZtE/s0ohKZSjjY/8kcRUiQhOCgkQy+Mu/iHm802xnd2e15HgSxbF+WVOyWnaaFa0P
-         vv/egWObH5CEg7nYGYAmZuC6dWMiD2OU06Zgzq1tt2PvRJMPsFEKBA2bBavyaJIxvZAH
-         by7oNlE9GJLzmxhqrXnQhjE0VcWxsuyAsACIAxoZxOu2IR3mCJl1o+fG3ztm6jMmD0vx
-         Q1nxAUhVkyv2BzUlMwaAACJt82i5tiRi/E27L+TwfHLpLWRhtAX/Y9wYnhvKLeAdSGkz
-         mobw==
-X-Forwarded-Encrypted: i=1; AJvYcCWx4ysPKgN02Zvt4VEZXP9Kb9OjCeAyk5psm99hmLfTtkSmRrjw/lFN9RBd43L9Cxsa4QDFKZKl0tM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3IhFO8VO9YGWzlI2C6qI/JBlosmZHz+o9UjufKclfvZuMTgZs
-	xgtsZ9QpowH0AauMMB3HZBAQmRhr8eDETUxLSO//OZncjothiMRpY94v4izZ61V0LiXBLBVIb84
-	2IRRyR0A49MPIw7f7Aph+/DZDAQk7tc3LXTIuYcjs
-X-Gm-Gg: ASbGncv7GziYiZO6Cr5tu638QffFsPY/j9IYn+rT6Qz4IN2ghCY42NfY8reIfCC9OGK
-	+gQdH3cX9vEwvT5GIOxWO+sy78HwRsamd582ZCRvydtH+7RjilNiec4/ANkhwoazvNNefAmmgnF
-	QJXHNF17HeFFNdHeQV6GO9dNOobCopmQJVfdi0RjyQR3oT+5vEGto2aM4E3L6IrIX7zhbjjN90Y
-	9I2jZP2z29ulC0HAJmZE0GvbdiQHzzvQ3ty6Y2UcT5DFGm068QSnXF7lrmM19VtOoR6BdNIWUcA
-	srqSmHpdCGkePk2qJ/5WTtgpaObefRyb63B5
-X-Google-Smtp-Source: AGHT+IE4G9icvFTi4G31CX4WGeT5pU2lGVP4hWaU0UtxQPpBaqTsf8OMaEZe1X38AnxII3RFCgHJu8dMtfftlpYsffA=
-X-Received: by 2002:a05:600c:1547:b0:46f:d682:3c3d with SMTP id
- 5b1f17b1804b1-47904adff1cmr325914555e9.13.1764692723568; Tue, 02 Dec 2025
- 08:25:23 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764692741; x=1765297541;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SBj57ghe+PJFT6VjATTBMITvWtoAHsfjekQgLKphYjk=;
+        b=NV0wJRkpbXfx4j3g7M7juLTKFJPVpSF6j/bW8f9Wk4EHVsL0bWsokKo1NFmYq7Fv4h
+         sHQPXT1lj2OjaBkEyHKL09Yc8zRZs2H3lOlHn8rAe7/S8NzN+Sw52h70q5Et0JFi8ZWL
+         clOyvkGATozFA8zIHh5Of8aGNQSdRermqVkHzo9YCc83kTSMhIDXQXB3C8sRzd8sEyS+
+         LSNUuY4WWXiLbwc/0R4BMRzUv88XUV6N+o1/6fxOllvHMqsDzEdtUbms/eGfNevQXBUu
+         trSe+6lTWi1VRhk4qzOSxX5WCEyXX1qtBs3l224wn/W8wJ7HkZAE+vI1uikC219xnm9Y
+         S/vA==
+X-Forwarded-Encrypted: i=1; AJvYcCVRzakXPiLQAteYo3uu2l5MVlKj09GCXL/hEJrHBWS6jzMF/gj8gJItezQrZc2IZVRFlbZS+AEjrBA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzH2ASVTmnWydeXYRPSBpkHNeLFpTKzx2PWKvdbWGmlAfZ0tdlr
+	cLOuVMEqgDb9xB6YRqT5f5QyhahwravAUXIoLMR9RThPmRqoKmIZhAGdKgCZ/Cy7NcepOJgz1lG
+	+cHlahA==
+X-Gm-Gg: ASbGncsGTlKFioh3Hh26HiTPjR+wbPE6D1MuV5t8ETa9bEiDTfK2WsRdIXlSkhkHkCs
+	lHsMSt20Gvjx/mkOz3bC0sX/eMY8fkof4AK5rmNGCEsCGiulTz+sXUGqxSyhmuZS6TETvPHLhfG
+	e96V+SLyzQhVfRwYQT5qLkLb1GouaJbBRUe7ZuPkToW/YedMelFejVkWgD8nbUzvVX2GdJBT60S
+	jcageTFgCEsMZFWBhCrGXj5iMWgTtru7cdQBBG8VjAt4yUugZ8DlfpBz21t8pg8w4jovWSHZHJ5
+	5Qvghibyg9eOviBVqMcbuQm7jKtHT/N0m3i5xSeiwdgufR4nnDtZ1kEBaIsCIJfR3ee4+oJrBcT
+	DJyRB49mSiX4sFSAQdTu0gjl3Gjeh1Igyy9qOu2C7sydTS4aWDXvScMdJRsnt8Ta9vr/U3bmVu9
+	S5hZtIlvr6cue9
+X-Google-Smtp-Source: AGHT+IE8uZcA/qmcSxztagR4ijnZh4IG3xwIGZM44aUyEvBDO5ipaQ2QJcVwhTCmJn97srBRWAshgg==
+X-Received: by 2002:a05:620a:bc1:b0:8b2:e069:6912 with SMTP id af79cd13be357-8b4ebd9ebf7mr3932347485a.50.1764692740318;
+        Tue, 02 Dec 2025 08:25:40 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::eaae])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b52a1ddd36sm1094300685a.51.2025.12.02.08.25.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Dec 2025 08:25:39 -0800 (PST)
+Date: Tue, 2 Dec 2025 11:25:37 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Angelo Dureghello <angelo@kernel-space.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: testusb: epipe errors on test 9 and 10
+Message-ID: <5daaa7f3-7c51-4f72-b6e9-cf4f015f758b@rowland.harvard.edu>
+References: <cbb3bbc1-e8c1-450b-a38f-7b3f4cda6006@kernel-space.org>
+ <c17c0821-3dd8-47b3-b795-f42675fb0a75@rowland.harvard.edu>
+ <d8aa2f1e-fc44-4bb9-8245-d6ac76047dc3@kernel-space.org>
+ <9776c9fb-8fed-4e79-b312-0b1a872911b8@rowland.harvard.edu>
+ <bcc4f76a-985b-4932-a455-b4fedcafcd97@rowland.harvard.edu>
+ <20251201232911.s5diakt3w7ztzjv2@synopsys.com>
+ <82bc662b-70c6-46f8-acc7-3a666965d13e@rowland.harvard.edu>
+ <20251202042305.wl2uvxoe55ay5vxw@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251122-controller-v8-0-e7562e0df658@google.com>
- <20251122-controller-v8-2-e7562e0df658@google.com> <2025112226-heave-refrain-53e6@gregkh>
- <CA+zupgwzQ5r=-_L79D74=9VRqRO94N0yTApHChM+Nu0cn1ss3w@mail.gmail.com>
- <2025120209-unstylish-john-2a6c@gregkh> <00d75fd3-a796-402a-a1a3-2172862fcf91@kernel.org>
-In-Reply-To: <00d75fd3-a796-402a-a1a3-2172862fcf91@kernel.org>
-From: Doug Anderson <dianders@google.com>
-Date: Tue, 2 Dec 2025 08:25:12 -0800
-X-Gm-Features: AWmQ_blwqi9oyEjuzVvnRUnzW3pTAJekeVpgwKfN72pLxhs1IzFYcf2tLSKp3Dg
-Message-ID: <CAD=FV=VLOLiGDfQOWXOL0H+M4EnSj1kouYK37WHV=8OVEwt+qg@mail.gmail.com>
-Subject: Re: [PATCH v8 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Roy Luo <royluo@google.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Peter Griffin <peter.griffin@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Badhri Jagan Sridharan <badhri@google.com>, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251202042305.wl2uvxoe55ay5vxw@synopsys.com>
 
-Hi,
+On Tue, Dec 02, 2025 at 04:23:13AM +0000, Thinh Nguyen wrote:
+> On Mon, Dec 01, 2025, Alan Stern wrote:
+> > Are we talking about the same thing?  Clear-Feature is different from 
+> > Get-Interface-Status.
+> > 
+> 
+> Ah... I just saw the subject line testusb -EPIPE and assumed that it's
+> related to ClearFeature(halt_ep)..
+> 
+> The Get-Interface-Status should be hand-off and handled by gzero right?
+> The gadget driver knows about the status of the interface, not UDC
+> driver.
 
-On Tue, Dec 2, 2025 at 1:42=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
->
-> >> I plan to add ARCH_GOOGLE as a dependency in the next
-> >> version per [1], so the "depends on" would probably look like
-> >> the following per your suggestion:
-> >
-> > But "Google" is not an arch :(
-> >
-> > And really, the whole "only have a sub-arch symbol" is something that
-> > personally, I think is totally wrong and prevents kernel images from
-> > being built for more than one "arch".  As an example, the Android GKI
->
-> Probably you think ARCH_FOO as arch/FOO/ directory, but this is not the
-> case. ARCH_FOO in this context is SoC platform, so e.g.
-> arch/arm64/boot/dts/FOO/.
->
-> All of ARCH_FOO build into one image and that's recommended way to limit
-> unnecessary drivers.
->
-> It's just confusing naming for whatever reason.
->
-> > kernel has to support more than one of these, so what does putting this
-> > behind a symbol that no one will actually use mean anything?  Android
-> > will never be only building a ARCH_GOOGLE kernel.
->
-> But distros will be, people will be. OK, maybe not for ARCH_GOOGLE, but
-> ARCH_QCOM we do for Qualcomm-based laptops and embedded folks even more.
->
-> We had this talk in the past. The point is that these drivers here are
-> unusable outside of that hardware platform, so only when you choose
-> hardware platform (ARCH_EXYNOS, ARCH_GOOGLE, ARCH_QCOM) you will be able
-> to choose these drivers.
->
-> You can also look at ARCH_FOO a bit orthogonal to actual kernel
-> architecture, because ARCH_EXYNOS is for both arm (arm32) and arm64. The
-> drivers should be available for all Exynos-platforms, regardless whether
-> this is arm32 or arm64.
+For USB-2 devices, Get-Interface-Status is always supposed to return two 
+bytes of 0.  For USB-3 devices, it returns information about Function 
+Remote Wakeup and Function Remote Wakeup Capable, which is handled 
+already by the composite core.
 
-FWIW I don't feel strongly about the ARCH_XYZ Kconfig settings, but
-I'd tend to agree with Krzysztof that I personally find them useful.
-Sure, it's fine to just turn all of the ARCH_XYZ values on and they
-shouldn't conflict with each other, but it provides an easy way for
-someone to know that certain drivers are only useful if the kernel
-you're building supports a given arch. If I'm building a kernel that
-doesn't need to support any Qualcomm boards, for instance, I can just
-turn that arch off and I don't even need to think about all of the
-Qualcomm-related config options.
+So for SuperSpeed and above, the request should be delegated.  For high 
+speed and below, it could be done either way.  (dummy-hcd makes the 
+opposite mistake; it always returns zeros for Get-Interface-Status and 
+never delegates.)
 
-FWIW, if you do add a "depend" on ARCH_GOOGLE you should mention
-somewhere (maybe "after the cut" in your patch) that ARCH_GOOGLE
-doesn't exist yet. It should eventually exist when some version of
-this patch lands:
+If you think it's best always to delegate the request then composite.c 
+needs to be changed; it should handle the reply for non-SuperSpeed 
+connections.  A simple change; I can do it.  What do you prefer?
 
-https://lore.kernel.org/r/20251111112158.3.I35b9e835ac49ab408e5ca3e0983930a=
-1f1395814@changeid/
-
-...but it's not there yet. ;-)
-
--Doug
+Alan Stern
 
