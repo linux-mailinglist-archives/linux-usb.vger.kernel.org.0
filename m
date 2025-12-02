@@ -1,54 +1,56 @@
-Return-Path: <linux-usb+bounces-31089-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31090-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45BCDC9A16A
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 06:27:57 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33ED9C9A17F
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 06:29:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 305483A27F9
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 05:27:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 053BC4E29EE
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 05:29:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF6D2F6933;
-	Tue,  2 Dec 2025 05:27:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 389A82F693D;
+	Tue,  2 Dec 2025 05:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="T7HInX2w"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NVhv+QcI"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6A42951A7;
-	Tue,  2 Dec 2025 05:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6D629BDA9;
+	Tue,  2 Dec 2025 05:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764653269; cv=none; b=IMKz0Q/5MMEKjcQpeeRVIdEmt9x1HRzZ/4YI7UUZaRwWiTPk/W9vbNqN49KbXBkSnCqBk15eG6oUJQZcrG6d71Mnfi1E8f1RK1d2XvWZ8fHh2Kra0NX6YMJs9jSN7+Euxo6/ORjMoCri2s54enGB8T1/SApLwUDs/E8OJpyDfzc=
+	t=1764653352; cv=none; b=XgEZ2+aPIJsmBbt//L4XFfTTynMevz9JpFwpKtr63AlROZdZYNGWzcXxKdDP0G6CFCvhsy6UA3pq+byeaAtCoeDAOoGcqNIylbHNuHzondfy3Q3bYAJo0i2zI63rGvlVMGqGsttEDrNa0Il4kbojmwM+r+XEFwmrAzOmlIzt9uA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764653269; c=relaxed/simple;
-	bh=yrOBU9DwcPAqZ6fPKbWux1oxZV3GR/Jk/quk7iKOQpg=;
+	s=arc-20240116; t=1764653352; c=relaxed/simple;
+	bh=ePn68zIOv6CdcVw0/H5uUyEQ/xrEJ0Eubk/RpZUtfgI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XKGV49Ok+GY7L9aqXiMT4A7i86Sm+Y6UuG2E1R6HMDStipWtKL9m3KRpN4DPG052pbw6C91JCTF56D7Qk47T9/JMM3fOZcMYzwpB8SUaqwmshCZ6YXpev2CR6Ah36yOv7ChLRP8c/X44gS4MwLJ2yDIbGymwO7MjiYr6kIsqxOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=T7HInX2w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB51C4CEF1;
-	Tue,  2 Dec 2025 05:27:48 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=n+4qoOQNYTG6gzPnWueaAIeW0Gs5QiaxApmKqMZbbKYm7iqREXkZwD5qlCMiw2WzFMm+xDAJFEaICPNRoWTjuNN6gw/gdsxpPwxxuW7AIqU63rwkIuVJm9oeJcZ5UJks2Dmi2W+AuisdO2wTu98njGonMy+/qZAAFkW9y88d+y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NVhv+QcI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA51EC113D0;
+	Tue,  2 Dec 2025 05:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1764653269;
-	bh=yrOBU9DwcPAqZ6fPKbWux1oxZV3GR/Jk/quk7iKOQpg=;
+	s=korg; t=1764653352;
+	bh=ePn68zIOv6CdcVw0/H5uUyEQ/xrEJ0Eubk/RpZUtfgI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T7HInX2wkn3GycEuulaSRmRkBV92oX2WL4G1nq84Rn9qEiVqkoi9mzSyDz7Y2I+4u
-	 7qSIVoQ9pl+T4bkCvamEFpxtJ8qdHrEMy1xZkmk2V50B74rvyWPoB9ICfA63s2pxHF
-	 OM2DzHlLdp22RRjnFkKFEY4wLEvKDADOcuAsjzAM=
-Date: Tue, 2 Dec 2025 06:27:46 +0100
+	b=NVhv+QcI6e1Jt5vkELc7OpTe9R8wjvbmbmvZbAlhDzDnocRJeZa2xXa3yd3Voh93b
+	 5845dTyd5/O/g1iBdRFRnvE7eoQgflAvEbqVL0Om1EZS6GnIz3TTZs1Rbpap+XMrCb
+	 tPFegbGxSqtEn88XKu4IhnJHX/1i2clAjhzezMfg=
+Date: Tue, 2 Dec 2025 06:29:09 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Clint George <clintbgeorge@gmail.com>
 Cc: stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org, david.hunter.linux@gmail.com,
 	linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
 	khalid@kernel.org
-Subject: Re: [PATCH v2 0/6] usb: gadget: dummy_hcd: coding style improvements
-Message-ID: <2025120200-backslid-endocrine-e64d@gregkh>
+Subject: Re: [PATCH v2 2/6] usb: gadget: dummy_hcd: use 'unsigned int'
+ instead of bare 'unsigned'
+Message-ID: <2025120202-wanted-swab-479a@gregkh>
 References: <20251119130840.14309-1-clintbgeorge@gmail.com>
  <20251201203715.17768-1-clintbgeorge@gmail.com>
+ <20251201203715.17768-3-clintbgeorge@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,23 +59,22 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251201203715.17768-1-clintbgeorge@gmail.com>
+In-Reply-To: <20251201203715.17768-3-clintbgeorge@gmail.com>
 
-On Tue, Dec 02, 2025 at 02:07:09AM +0530, Clint George wrote:
-> As part of my LKMP mentorship i have to complete 5 patches as a criteria
-> for graduation and thus have focused on working on such
-> beginner-friendly patches so that not only do i get the required number
-> of patches but also get familiar with the process of kernel
-> developement.
+On Tue, Dec 02, 2025 at 02:07:11AM +0530, Clint George wrote:
+> Use 'unsigned int' instead of 'unsigned' wherever possible to maintain
+> consistency with the kernel coding style.
+> ---
+>  drivers/usb/gadget/udc/dummy_hcd.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-The LKMP internship should be done in drivers/staging/ as generally
-coding style cleanups are NOT accepted in other parts of the kernel,
-unless you get approval from the maintainer ahead of time.
+Hm, this patch is kind of proof of why coding style cleanups outside of
+drivers/staging/ is generally not a good idea :(
 
-Does the maintainer of this driver want this to be used for the intern
-project?
+Please stick to that portion of the kernel now, so you can get the
+development process understood more, before making changes elsewhere.
 
-thanks,
+good luck!
 
 greg k-h
 
