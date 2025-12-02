@@ -1,229 +1,129 @@
-Return-Path: <linux-usb+bounces-31105-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31106-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id CACA7C9B8B5
-	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 14:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37558C9C0A0
+	for <lists+linux-usb@lfdr.de>; Tue, 02 Dec 2025 16:53:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5EFE13467A1
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 13:00:57 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A9F6E349043
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Dec 2025 15:53:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4EB3128C2;
-	Tue,  2 Dec 2025 13:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0223B322C89;
+	Tue,  2 Dec 2025 15:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfxAjIPv"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="j4JjL6We"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25201548C;
-	Tue,  2 Dec 2025 13:00:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0296232143C
+	for <linux-usb@vger.kernel.org>; Tue,  2 Dec 2025 15:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764680446; cv=none; b=Cb+bXN3NaDN8+OC3S+sPpJMCEWwXabFvAluEQoxtPsvVQMu+vp6wmG/FLKMwjooZBA5ryn3tMhMQk8p7pJGtx2wWS/hxCg08Uy8XCTxPEavCw/RRRp16XiFSPctl6fzHJBi4MMHr3kw2jcZR4xpp+tuU170g1vTwjOAOT0UFj2s=
+	t=1764690797; cv=none; b=VakqBiO3BYe4zVnDYmv9xe9fZOemgml4ynBg5h0e2Cuz6leWU0IRA4cr/k5x9GPHnZt8LmFN2+CIFsHa0V5llH5vR1aIbkHZyKunc2flyL4uZYwV8YwUBFgUdd+mIEp9ZXlFYX8S8//nHK2h2ebrPLpK1Z0Y+BarjXClvhtsH10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764680446; c=relaxed/simple;
-	bh=O5dADBbz0/9mG0iK1bzqcE79NAjPo9jdhr65mtDfkmM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CDU+kMq+xhJHR1z2VhOggwScFzAYqhW70lmqEV6svnL/z6hPsxLsE/5x8dqvsE91mkx0Z33oS3JUgYqu3Ro5TsDyAa+mCkO9ztR3F59tGWZE570iLUhmBP+m1FrryrLMnJvqMAoaswnBHdfNMJ0B48HBTRq3agic5nLWc6l5vZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfxAjIPv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 385DCC4CEF1;
-	Tue,  2 Dec 2025 13:00:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764680445;
-	bh=O5dADBbz0/9mG0iK1bzqcE79NAjPo9jdhr65mtDfkmM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VfxAjIPvFyqYqC/XRJRci+Dzk6nWVaa57bdk0arWM2/FfysAB/JJx5zWj+YyHVSYJ
-	 STZMh2WsDXmOHEY7/QeaL7yrf+8I0KZedS6d34BlyXtBx+FtNETtX4G14Isn0FuOxC
-	 yrnM2NLMXGcqRlG7Pb5HGwxB/J3Ji7ECy30uoHhgsLZ5CTvssuNHlsdZ/jSPCmE9aL
-	 YasY9N0op+CMjMDfMgWqIWHBZ99Fkp4sREf024I4MxwQ1r05rLQpZWg6gFMikLg5Y1
-	 EEBjfQ1/vX62DQdxy1/lHym/FLuc4uzih65BOSW1ygX04BK4iQ4eVJ9Th08euKrwOn
-	 AdsLHcR8J823A==
-Message-ID: <076777c3-b238-4d1d-a11b-602027348ee4@kernel.org>
-Date: Tue, 2 Dec 2025 14:00:39 +0100
+	s=arc-20240116; t=1764690797; c=relaxed/simple;
+	bh=bLoq+0J4Pdz2yimFi9dyvez+MengAB4dZYv5B3C1McM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JuaCGfvdq5hRJ4rV8Rt8lDY+UYvTDZ2zBRN11oDgnqjpS9kAYLyQlycucP0u9if0xaGnTJRBPEZsdnsIrOkXqJWaBaS+nChJYoOmGp7s8yz+SGmATNE2+B6j+Exjiaz53R4dZqUmBRIN5abopHCfKJJX7TEpISHaLZlJ+j31saU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=j4JjL6We; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8b2d56eaaceso547107085a.0
+        for <linux-usb@vger.kernel.org>; Tue, 02 Dec 2025 07:53:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1764690795; x=1765295595; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ein3D251E2lqfEtSiRGhRdTfSxeVBVJFtAWknaD20lQ=;
+        b=j4JjL6WeU9rD/or1bsRybL/GFfdJBGjnQilc0zWYUiBJ6OIal/OjoI3o06ziKg3ZYi
+         yV4XkbjeXMJwozh1ZQ2SIZz908cMP1jlEFrKupQ5Y8HNbvxohb6npr3E/Zp1NyBN1kuO
+         pRV+qDjegCdbwQLf41MqiM9K0VHVK9OGGIil7/WPdC2d9kcLPQHVeihGXH/45eG4gBTb
+         fOPx8P+5mtCcy3BEiB3cF4/ixf81PW+z2NVq6oEesd2t57iM7c5Df3DxEzBaQKaWvZhB
+         GOMvrFObrfFRZTpNZM7fHLRKjb5WKdSqrt7E6co/PV7rnMgxVzRr8RKOUnqHThmg9LIz
+         Pplg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764690795; x=1765295595;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ein3D251E2lqfEtSiRGhRdTfSxeVBVJFtAWknaD20lQ=;
+        b=P7Pyn2vo5RcceE9ZpkrSYgsZqDJQK1ND2OSfGR4RXt1nHGQXYRfElK4xqmX8ELiSqp
+         d/vb6Rwkq7PS0OBPUlsfOaSsqCBHF7FLRkBOT85Vfmm2E2gV6PrxTdD4vYhwHDqkKw5d
+         EBIiJyJIweCPL6gh0W0LMN5M0IA2TfLT0v9gnUxTAfVbuYx7s0GEIgX2RSwJl9OW97Yh
+         7n+yMtjs++9sEhh67IuyIlT0tyLanO43SHXlsa/bUOYt+wMlUeJzy/z2N9k2oV6Ge4TI
+         w+DS66l9qDUzHa/k7/1f1yQUnu5a50u4PonknxvTsr77hkzwaD5XN5aF62nqIvm0Rxzs
+         nPpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUPSCF9NwjkdTWKR9S02oUKe8KXTNwddjiArui4+UE+R0+xgxFOW9qYvwq9WCqlfA6zVmRvgue0IYM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3DF9xtKsPPfVsS4SnmQgEXfC40h7rlF1V4eb+gzRYWhHsGO6N
+	zmYhB8pEQJIQzzHYuL1u9ecAZbxihpLQCwt9DCA01K1a8uIz9gLT5ZXcZkdIm9Yaog==
+X-Gm-Gg: ASbGnctiQDONHb904i5P0dLnGRytyoX2N68XZP3ampZXRdaqO98IX05vX3WBZBb2JAV
+	6vXGdRAv5Glp8Y1KQWh+SX/glK3tMOUxQGNIAiCIqqvr0efSunMnwt8TzM1KPbke9IO71rlEhx1
+	N/fKEYCv8dnGhqBsLfNcpTEKrJitugHADtQPb3uNiqos+CAKwLE0AgZh45dMN0GceQxxr9RcaLO
+	68VlYHKjXJ2vyAQnaFA2C8BvftIibYxbzQzuLaLE0qLK+WDx3QGSjeMLe46kxlFbldpa9iCBwuk
+	Asy/1Ti4GsTr9ZUMiyzbNqpLXBRl35oiTOm4U4nD699OuLTb95TFJeDAdaZFSy0Qmp0dPElvWCT
+	dcY5w2/11gY7e+aR9NqlN+PEJY8eNIkDUzIcvEnUWkr7LWrUZX9BdEbyOdQ87PposNGKvgn9O3u
+	XCtnb39EfEe+VY
+X-Google-Smtp-Source: AGHT+IG7imMaW6P034ogai9juXD7cZWXeGPG/KXNDrCibNV7M+DiAwK7QmWiAcjFYeItiAklgvwKWw==
+X-Received: by 2002:a05:620a:1a8f:b0:8b2:ea3f:2f91 with SMTP id af79cd13be357-8b33d48169emr5525748285a.81.1764690794744;
+        Tue, 02 Dec 2025 07:53:14 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::eaae])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b52a1ddd36sm1088799885a.51.2025.12.02.07.53.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Dec 2025 07:53:14 -0800 (PST)
+Date: Tue, 2 Dec 2025 10:53:11 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Clint George <clintbgeorge@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, david.hunter.linux@gmail.com,
+	linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
+	khalid@kernel.org
+Subject: Re: [PATCH v2 0/6] usb: gadget: dummy_hcd: coding style improvements
+Message-ID: <17845408-4a9c-470d-8949-f4cd0a847615@rowland.harvard.edu>
+References: <20251119130840.14309-1-clintbgeorge@gmail.com>
+ <20251201203715.17768-1-clintbgeorge@gmail.com>
+ <2025120200-backslid-endocrine-e64d@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: power: supply: Add Maxim MAX77759
- charger
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
- <20251123-max77759-charger-v1-1-6b2e4b8f7f54@google.com>
- <d4455f4b-2a0f-4bc0-b897-14f2e27af3ea@kernel.org>
- <c9b059f8-9219-4219-95c8-23a3733fea58@google.com>
- <20251125-amorphous-bobcat-of-whirlwind-afdab1@kuoka>
- <7ad91325-e881-461d-b39e-6ff15d98b3c5@google.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <7ad91325-e881-461d-b39e-6ff15d98b3c5@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2025120200-backslid-endocrine-e64d@gregkh>
 
-On 26/11/2025 00:48, Amit Sunil Dhamne wrote:
+On Tue, Dec 02, 2025 at 06:27:46AM +0100, Greg KH wrote:
+> On Tue, Dec 02, 2025 at 02:07:09AM +0530, Clint George wrote:
+> > As part of my LKMP mentorship i have to complete 5 patches as a criteria
+> > for graduation and thus have focused on working on such
+> > beginner-friendly patches so that not only do i get the required number
+> > of patches but also get familiar with the process of kernel
+> > developement.
 > 
-> On 11/25/25 1:56 AM, Krzysztof Kozlowski wrote:
->> On Sun, Nov 23, 2025 at 06:34:05PM -0800, Amit Sunil Dhamne wrote:
->>> Hi Krzysztof,
->>>
->>> On 11/23/25 1:28 AM, Krzysztof Kozlowski wrote:
->>>> On 23/11/2025 09:35, Amit Sunil Dhamne via B4 Relay wrote:
->>>>> From: Amit Sunil Dhamne <amitsd@google.com>
->>>>>
->>>>> Add bindings for Maxim max77759 charger device.
->>>>>
->>>>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->>>>> ---
->>>>>   .../power/supply/maxim,max77759-charger.yaml       | 36 ++++++++++++++++++++++
->>>>>   1 file changed, 36 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..71f866419774
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
->>>>> @@ -0,0 +1,36 @@
->>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>>> +%YAML 1.2
->>>>> +---
->>>>> +$id: http://devicetree.org/schemas/power/supply/maxim,max77759-charger.yaml#
->>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>> +
->>>>> +title: Maxim Integrated MAX77759 Battery charger
->>>>> +
->>>>> +maintainers:
->>>>> +  - Amit Sunil Dhamne <amitsd@google.com>
->>>>> +
->>>>> +description: |
->>>>> +  This module is part of the MAX77759 PMIC. For additional information, see
->>>>> +  Documentation/devicetree/bindings/mfd/maxim,max77759.yaml.
->>>>> +
->>>>> +  The Maxim MAX77759 is a dual input switch mode battery charger for portable
->>>>> +  applications. It supports wired and wireless charging and can operate in buck
->>>>> +  and boost mode.
->>>>> +
->>>>> +allOf:
->>>>> +  - $ref: power-supply.yaml#
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    const: maxim,max77759-charger
->>>>> +
->>>> This should be just folded into parent node, no need for separate
->>>> charger device or is just incomplete.
->>> Thanks for the review! You are right, the binding is incomplete. This
->>> charger block actually listens on its own I2C address, distinct from the
->>> main PMIC.
->>>
->>> I will update v2 to include the reg property. I will also add the
->> AFAIK, the main (parent) device schema does not reference children via
->> any sort of addressing, so reg here would not be suitable.
+> The LKMP internship should be done in drivers/staging/ as generally
+> coding style cleanups are NOT accepted in other parts of the kernel,
+> unless you get approval from the maintainer ahead of time.
 > 
-> I agree that currently nvmem and gpio devices (which are children of 
-> PMIC device) are not referenced using any address. But I was guessing 
-> that's because they share the i2c client id with the PMIC and sharing 
-> its address space (implied).
-> 
-> The charger device while being part of the MAX77759 PMIC package has 
-> it's own i2c client id and address space that's why I proposed "reg". 
-> The underlying assumption I made was separate client id implies that a 
-> "reg" property required. But maybe that's incorrect.
-> 
-> I can understand the argument against having a "reg" property. As the 
-> i2c client id will remain same for a max77759 charger device (as it's a 
-> chip property and not a board property) it will always remain a 
-> constant. I will drop the "reg" proposal.
-> 
-> 
->>
->>> standard properties `constant-charge-current-max-microamp` and
->>> `constant-charge-voltage-max-microvolt` to configure the hardware
->>> limits, as this charger device does not manage the battery profile
->>> directly (that is handled by a separate fuel gauge).
->> Well, still, what's the benefit for the bindings to have it as a
->> separate child? Kind of depends on your example, which is quite small -
->> one regulator and supply. Grow the example with battery and other
->> independent resources (if they are) to justify it. Or show arguments why
->> this is re-usable.
-> 
-> The primary reasons for keeping the charger as a distinct child node are 
-> to model the hardware topology for the power supply subsystem and to 
+> Does the maintainer of this driver want this to be used for the intern
+> project?
 
-You do not need children for that at all.
+In fact, Clint's changes are small and inoffensive enough, I wouldn't 
+mind having them applied to dummy-hcd.
 
-> house the OTG regulator provided by the charger block.
-> The charger needs to be referenced by the Fuel Gauge (which handles the 
-> battery profile) via power-supplies. Additionally, the charger block 
-> provides a regulator for USB OTG VBUS, which is cleaner to represent as 
-> a child node of the charger rather than mixing it into the top-level 
-> PMIC node.
+However, Greg is perfectly right that this kind of stylistic update is 
+not something that should be submitted for most parts of the kernel.  It 
+just bulks up the Git history with essentially meaningless cruft, making 
+it all that much harder to see the changes that really matter.  That's 
+part of the reason for the suggestion that interns and beginners should 
+confine their efforts to drivers/staging.
 
-Sorry but argument that you need a child device to be able to construct
-a phandle is just wrong. You can create phandles on every other way as well.
+Also, remember that trivial changes like this are fine for learning the 
+procedure of submitting kernel patches, but the effects they have on the 
+kernel itself are minimal.  A patch that actually fixes a bug or adds a 
+functional enhancement would be a different story.
 
-
-Best regards,
-Krzysztof
+Alan Stern
 
