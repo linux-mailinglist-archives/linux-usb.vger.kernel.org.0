@@ -1,242 +1,191 @@
-Return-Path: <linux-usb+bounces-31119-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31120-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 919DFC9D85A
-	for <lists+linux-usb@lfdr.de>; Wed, 03 Dec 2025 02:47:29 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D440C9D9BA
+	for <lists+linux-usb@lfdr.de>; Wed, 03 Dec 2025 04:05:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0BEB1348814
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Dec 2025 01:47:29 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5F6B834AB02
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Dec 2025 03:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9E9242D6E;
-	Wed,  3 Dec 2025 01:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CF582522B6;
+	Wed,  3 Dec 2025 03:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZLpulbdH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LqQ0Bp7K"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4533D22B8AB
-	for <linux-usb@vger.kernel.org>; Wed,  3 Dec 2025 01:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A97B23D7E6
+	for <linux-usb@vger.kernel.org>; Wed,  3 Dec 2025 03:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764726430; cv=none; b=mQlhixr2HxURfLA2S6u20afohJbSZWKWXyRwHQ7RKjg3koV4MaJgKi/kvhwhriw70EaYbqJcCyWh5J2hpplrLDd4vn2syDHNres4/UVja7F1BRpBrR+2jvAQKKtLuhdSsc9UNUay3AWxUvdBb3dDFgV8LbDI7PlhS2MQ27qhV0Y=
+	t=1764731136; cv=none; b=cTgZxR3B+59LrqCeyjke6zBquMRBsMZ2MKVEECFwo2h3LHV5WRUoyagq4CaifBI9w7ezRg4z1dyODI3fTkx+k2brGULVD+C94+x7gRx3jW6n1vpZPa0aCo0ZnDV2t+cIPLLrNjH2tykiJJETsH7WQL8dnwCH0hmG585rDJmu12E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764726430; c=relaxed/simple;
-	bh=3nO+YcV9+oE4XpniiLIyxdEaMIE8lYstD85AACwuLDo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rC926p+GupvtH1+3fgF0ty+3qAcRUxfWxVLOEBzlU2wvbCjYuiqgV4zqNee2dXXtp1vvoRVoMvVQt4UxTKNP6kaffT6S9oaN36tBIO7yHl6gNcab7PORWWXzjVlKxpgB3isBuitUWNm3l6S0BoNzgFI5QWDT8mQUV4nbkCOPQ4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZLpulbdH; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8b23b6d9f11so523682285a.3
-        for <linux-usb@vger.kernel.org>; Tue, 02 Dec 2025 17:47:07 -0800 (PST)
+	s=arc-20240116; t=1764731136; c=relaxed/simple;
+	bh=meSucs6aX2A4XVy1F+K5x4iZpmFlAAKDNrrl/ysjrUk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HrkluWbtJoMBuUa7dDcRlBURCyhwWWH/8SfjliXu6524iP22qs/1ynz1M3xmm4aMgxGWTXo1eNKufwz8lt60dr+oNFHy7dCB/eCyQ16dlIKhjoNVsBYahBhrrAmq8ATEJ1NoyMuHUhfWCDJPzUmMDSBrntaaoSJTCgJ1y9y1xE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LqQ0Bp7K; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2981f9ce15cso71870525ad.1
+        for <linux-usb@vger.kernel.org>; Tue, 02 Dec 2025 19:05:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764726426; x=1765331226; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1764731135; x=1765335935; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OtH1a85NzPXIElQyhEPKVrfDvnNRb+rvBUgIUrut7Kw=;
-        b=ZLpulbdHFBuz7J52MuyOIQ1Y3U8SB9lTC6264JsyNnqSRuJj7m0PZ8y7eKvMPM3Sol
-         rLVKMu1G7YfuxL5shNUWpOdxFn47imeoQ6KUY0AX9rlMudYEQsYNJo0X760eiWPXsFmp
-         jXbJuWOc+QKgkXBDBPJKuAHezVJEyIL0mC/AgQ/1SXp5PTfThL8Dvh8S/GiBYGibeUZy
-         KQJczWyAAovaz4St/568241YXbC56ygndDWzni8BqfwZZkY1JRsUwgNXrj9AtGdF1m1v
-         JAbaR73Joqe1miRLsL0NbyzJl/zgU1deueDJNhf4b5XJ2+AziBjqymuQhQuZcXHN/GE0
-         aoZg==
+        bh=2SUCSRcAh5wfvR1Ga9HOQmp+DboJkGyQoezHpnT4C/w=;
+        b=LqQ0Bp7KhS0KhismEEr5+U8U6Bi/4Vf18CBWatmFix6oD1V3A37C2kJBZ9RbHTv5Ml
+         QV9cbCseb+9r9alfZqburW/bcGrAgNVch9zypXszFw4g0YK0vn+F3/q8ujpeSKiwreMN
+         vrkYicNeobrKKpzcWG+YjUUNjvMCCdkjPZ98ncffWT4Nh3/bNWKEuiPmpMaWAJ0w03HI
+         OAs52Il3c16lh8qBysG8QOO2W0BQrsb2DYvzpFV+j36ty19skiyz85pvM656vyPodkK1
+         gOt5UuEeTAQrYQ7cvRs+brj/JVHHJ8LpdrZSpOFq4eNpgwmf+70hHMSx4tTvQO6K2QdC
+         y+6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764726426; x=1765331226;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1764731135; x=1765335935;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=OtH1a85NzPXIElQyhEPKVrfDvnNRb+rvBUgIUrut7Kw=;
-        b=M9yqSAp7Fp/0bZ7XMZjm0qxsk6q5wR3XN7OUj3pIT1diGnSV4aEqshNT3AAnx/Jrxh
-         HFD2V/3A06LBZJVeNIT4KxTIH7kfXP5VB5fj0Gq5L3KkRffvcLwp1UdZfRnKa7YV1ZAo
-         faWqSvoMRjG4j+kUll3Jsi0hxoKYHM1stB7HmjKKxwDpFHw4l2YyLbqPQ3h6x1zO9tqo
-         hzjafjPfB9k+A/QBzDV5BxKegN2I467gCMUebXBbWOOWA8JDLrN9TfBSd9PRaYeMeXkQ
-         TofFzXBJPl7gHOB1aQ2rB5ibAuXuZKLV6UG8hmln0OCknQKFesM9Ocf6GRiI54F/cyQ9
-         Lq+A==
-X-Forwarded-Encrypted: i=1; AJvYcCUQRFl0RvmKylD0POXO+pMD5CjSOTKV4R2fgrfNxuhxOiWvkrYi0sAb3WDREq6d2Il41dgRG8fS84Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJjmZ/gM8o7TaS1N96jeQR9gPwBUmDxsrEJns8dAGCm1DsPSOa
-	BLKOCRJtY8m85K5dl5c9algM+fe85p9Yn0V6wvIuJUQMA233/ixc5ZG3
-X-Gm-Gg: ASbGncuCXoH9xF/dBqSMguWnvKRxYJBwmHRsYu5ioGIHVVIb1EcOXuaUySbMVjBIzGc
-	M/IzuzNOxgbwVhvKR9Bgae290ji3XIoUn4h46wsAfEplxI/YBfsLDojnJFlF/HUMq8rVoUK6fjp
-	9bpw49UZtJmK9cAdrPRTInFWUNu9hanCNB83Q9C/eoiNZWum+JB730AqD2VsptQQ3A+/XzO9J6R
-	4LWrP8zro3Zp1TQ6AfhWumTKOt7vhTF7C5pl4CeGBRWT0NLdBbMBqMS/bJxzuPLc0Qt3x7eeknF
-	pKlGPZYvMv5Lyxo9cLTbw3hElYwxdc9bcfhCijejS7IsUvztYCV32PSed/kg3k0kHfh+9GPQtWY
-	MoSIXW98vSN8awfEl6HGirbPlQTSfjFYhpAXcS06E4+Em9kvcSL1GmIAyeUESZ/gNwiBAJB3Hmr
-	u0EK3FZOVEF45mOOJmedQbq/vfTd6EsyYJdGLbm1I01V6L2Hr3zY3rAhhrily23smAF1/ZXUCqw
-	8nCBeB/wb2kHIpDOm7U6i+dwQ==
-X-Google-Smtp-Source: AGHT+IFeMR+oSVn09EJ3IDZOwhh2uiS4UVZ0hp1HU+YMpxzfU9ogbzDHH3W62a3tJUAdySWBH37uAw==
-X-Received: by 2002:a05:620a:2805:b0:8b2:d56a:f2f1 with SMTP id af79cd13be357-8b5e47cfdaamr99382185a.12.1764726426099;
-        Tue, 02 Dec 2025 17:47:06 -0800 (PST)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-886524b1aa6sm119441246d6.8.2025.12.02.17.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Dec 2025 17:47:05 -0800 (PST)
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfauth.phl.internal (Postfix) with ESMTP id ACD9EF40079;
-	Tue,  2 Dec 2025 20:47:04 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Tue, 02 Dec 2025 20:47:04 -0500
-X-ME-Sender: <xms:mJYvaaDmnK-eQoA_EF5dIKBTmJFKJG6JnnoegiOnZKVT8CNUG_YZFg>
-    <xme:mJYvadSJ45vWYeQ9F5mL5h1nMVY-8bU-OaEP6MA5NELkAMhxMnC3oTCpPE77lCBHK
-    7T7DCcgyxDTJotNCxAXaXhpptJ3QWP-MaGb6ZrIeVNqxosuK0JF82c>
-X-ME-Received: <xmr:mJYvafxcm6YlRM-vftTxYa0HsgC9YSewKe3-7hU6gkHJFIR9j-dqDET8mDz9W_yI4jfLTFLmfy4EJaHEsee2Ieq8FtBpB-e8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgv
-    nhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrh
-    hnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueevieduffeivden
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquh
-    hnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudej
-    jeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrd
-    hnrghmvgdpnhgspghrtghpthhtohepkedupdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopegrlhhitggvrhihhhhlsehgohhoghhlvgdrtghomhdprhgtphhtthhopehruhhsth
-    dqfhhorhdqlhhinhhugiesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehl
-    ihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhope
-    hgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopegu
-    rghvihgurdhmrdgvrhhtmhgrnhesihhnthgvlhdrtghomhdprhgtphhtthhopehirhgrrd
-    ifvghinhihsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhgvohhnsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtph
-    htthhopegvlhhlvgesfigvrghthhgvrhgvugdqshhtvggvlhdruggvvh
-X-ME-Proxy: <xmx:mJYvafm1w4VDhZtfL-vbtABRjhTNIcFLz8_RoOmFJXiaSOHOJFRUsA>
-    <xmx:mJYvaTW4xPwqaL8AsLZ0eWuclQx3vE9Zqhyto1-mcNhBpI554zsuvg>
-    <xmx:mJYvaXX2hT3SDveYJ-poTdQsJ8M2nsxtzyvAAaEGn-Ah6ycumKDy0w>
-    <xmx:mJYvaS9D9MkMxArS_FuKXUpeU0lMFKOAD8JwuBHAD4qUAR-XYoc_nw>
-    <xmx:mJYvaaBq2FcntQ00GFur5OcCdB2TqHkbOovvZlruCm-nWJGwWixyD_zx>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 2 Dec 2025 20:47:03 -0500 (EST)
-Date: Tue, 2 Dec 2025 17:47:03 -0800
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dave Ertman <david.m.ertman@intel.com>,	Ira Weiny <ira.weiny@intel.com>,
- Leon Romanovsky <leon@kernel.org>,	Peter Zijlstra <peterz@infradead.org>,
-	Elle Rhumsaa <elle@weathered-steel.dev>,
-	Carlos Llamas <cmllamas@google.com>,	Yury Norov <yury.norov@gmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,	linux-block@vger.kernel.org,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-	Benno Lossin <lossin@kernel.org>,	Danilo Krummrich <dakr@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>,
-	linux-security-module@vger.kernel.org,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
-	Robin Murphy <robin.murphy@arm.com>, Lyude Paul <lyude@redhat.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>,	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Andrew Ballance <andrewjballance@gmail.com>,
-	maple-tree@lists.infradead.org, linux-mm@kvack.org,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vitaly Wool <vitaly.wool@konsulko.se>,	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>, devicetree@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Krzysztof =?iso-8859-1?Q?Wilczy=B4nski?= <kwilczynski@kernel.org>,
-	linux-pci@vger.kernel.org, Remo Senekowitsch <remo@buenzli.dev>,
-	"Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-	Will Deacon <will@kernel.org>, Fiona Behrens <me@kloenk.dev>,
-	Gary Guo <gary@garyguo.net>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,	Alexandre Courbot <acourbot@nvidia.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,	Ingo Molnar <mingo@redhat.com>,
- Waiman Long <longman@redhat.com>,
-	Mitchell Levy <levymitchell0@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	John Stultz <jstultz@google.com>, linux-usb@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Tamir Duberstein <tamird@gmail.com>
-Subject: Re: [PATCH 00/46] Allow inlining C helpers into Rust when using LTO
-Message-ID: <aS-WlwsvGrbGYIYs@tardis.local>
-References: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
+        bh=2SUCSRcAh5wfvR1Ga9HOQmp+DboJkGyQoezHpnT4C/w=;
+        b=bsiyr9hJVugOEsYjqdUZ2IGt9E+/Lm32RsfPnxXr4x9MhdJw3tp1sD/tTR9JCd2KrO
+         H955wmro9p0EBDxlzbOuwQIvlz8DPkXkFyLN6CYSAWFWljQuoMQo89muAs9/CRuFB26z
+         fQfd4TmppMZ4L2kkyGmhb34t86onZg8tJ7hQO2VcVyRl8bOnxOR1qqTu1LfPpKxISjC5
+         2h1G32OfNJ+8KC3EnjhS2G+WVmrcR7O9XkwQXGU9EkLf+x/YIv8D31aEh7beagWZOox/
+         ZDA4DjdFIeTehPmWU/C4UhDzSetiG0eO8jNAwTmN1dFARfhoAffb7HiXreP9dtuVEPzg
+         fTAA==
+X-Forwarded-Encrypted: i=1; AJvYcCXDa5u2JQyQZUZBcbxB7oyfOVyc34WO5qr2n30Jv38wkIsa91JQqySLtQaSBFb0n4djMFOwgbsbuZM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7sdvUAROoUF2/wV0159tZ4H3miXH25/Jc0pRAgoepR0GxKXS3
+	gMr+ixvtZAg1jFMzMdR5n6xSmNpLgrVff4r8E4EA4/VcUuLwR2aCJuY2bdUSzZx4ujGXkpd4vo7
+	RcsIqpJiV7eQV+Ke8N2RseSKemxIj1n6hw5iY3nYh
+X-Gm-Gg: ASbGncteOLA4jbPkN8DDZCNjJXQfh3mnZR6YwrOHLSevFqgQ4uT1jVQQ/w08e60rJNC
+	COdMxi2x5EAgvRVyG8ZiK0fOrsyPRD14mxrthu7g2Q3uRO/aUVnCU1BogIbqBm/3TAgb4/Tgdoh
+	YHv3ny+d61KZTOYLPj6/lMQCSL1RKJOmTScXH7mGB12XAzhlc8Gp51Yg1KfRjJunxIxaZvRUyS+
+	ta3IReFshEaXq2HBfvLzBlKh6a/ha3qiD2fAjZAt3tZhhL4Jbzx2Uhb2RCAxVyBpfpWgbDbD8xE
+	eS+agg==
+X-Google-Smtp-Source: AGHT+IEaw/KAaB9NQPn92QcJbyFAkEiHxEvdc+JFEc5o3oBuUZIzccLg55YH3cTE7CxVtrjUj9n7SYHTGXfIZWZDfhI=
+X-Received: by 2002:a05:7022:1b0f:b0:119:e569:fba0 with SMTP id
+ a92af1059eb24-11df0bee281mr624917c88.15.1764731133682; Tue, 02 Dec 2025
+ 19:05:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
+References: <20251122-controller-v8-0-e7562e0df658@google.com>
+ <20251122-controller-v8-2-e7562e0df658@google.com> <2025112226-heave-refrain-53e6@gregkh>
+ <CA+zupgwzQ5r=-_L79D74=9VRqRO94N0yTApHChM+Nu0cn1ss3w@mail.gmail.com>
+ <2025120209-unstylish-john-2a6c@gregkh> <00d75fd3-a796-402a-a1a3-2172862fcf91@kernel.org>
+ <CAD=FV=VLOLiGDfQOWXOL0H+M4EnSj1kouYK37WHV=8OVEwt+qg@mail.gmail.com>
+In-Reply-To: <CAD=FV=VLOLiGDfQOWXOL0H+M4EnSj1kouYK37WHV=8OVEwt+qg@mail.gmail.com>
+From: Roy Luo <royluo@google.com>
+Date: Wed, 3 Dec 2025 11:04:56 +0800
+X-Gm-Features: AWmQ_bnH8zw5DfDwDs1QuKD2A0QWVUVTK2D542APdmuEtTsd_99YivSDqmKY8X8
+Message-ID: <CA+zupgwiJmS9+MFt8F02HrPkRYPDidjg9dxNUJxd8d_0RM6cww@mail.gmail.com>
+Subject: Re: [PATCH v8 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+To: Doug Anderson <dianders@google.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Peter Griffin <peter.griffin@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Badhri Jagan Sridharan <badhri@google.com>, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 02, 2025 at 07:37:24PM +0000, Alice Ryhl wrote:
-> This patch series adds __rust_helper to every single rust helper. The
-> patches do not depend on each other, so maintainers please go ahead and
-> pick up any patches relevant to your subsystem! Or provide your Acked-by
-> so that Miguel can pick them up.
-> 
-> These changes were generated by adding __rust_helper and running
-> ClangFormat. Unrelated formatting changes were removed manually.
-> 
-> Why is __rust_helper needed?
-> ============================
-> 
-> Currently, C helpers cannot be inlined into Rust even when using LTO
-> because LLVM detects slightly different options on the codegen units.
-> 
-> * LLVM doesn't want to inline functions compiled with
->   `-fno-delete-null-pointer-checks` with code compiled without. The C
->   CGUs all have this enabled and Rust CGUs don't. Inlining is okay since
->   this is one of the hardening features that does not change the ABI,
->   and we shouldn't have null pointer dereferences in these helpers.
-> 
-> * LLVM doesn't want to inline functions with different list of builtins. C
->   side has `-fno-builtin-wcslen`; `wcslen` is not a Rust builtin, so
->   they should be compatible, but LLVM does not perform inlining due to
->   attributes mismatch.
-> 
-> * clang and Rust doesn't have the exact target string. Clang generates
->   `+cmov,+cx8,+fxsr` but Rust doesn't enable them (in fact, Rust will
->   complain if `-Ctarget-feature=+cmov,+cx8,+fxsr` is used). x86-64
->   always enable these features, so they are in fact the same target
->   string, but LLVM doesn't understand this and so inlining is inhibited.
->   This can be bypassed with `--ignore-tti-inline-compatible`, but this
->   is a hidden option.
-> 
-> (This analysis was written by Gary Guo.)
-> 
-> How is this fixed?
-> ==================
-> 
-> To fix this we need to add __always_inline to all helpers when compiling
-> with LTO. However, it should not be added when running bindgen as
-> bindgen will ignore functions marked inline. To achieve this, we are
-> using a #define called __rust_helper that is defined differently
-> depending on whether bindgen is running or not.
-> 
-> Note that __rust_helper is currently always #defined to nothing.
-> Changing it to __always_inline will happen separately in another patch
-> series.
-> 
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+On Wed, Dec 3, 2025 at 12:25=E2=80=AFAM Doug Anderson <dianders@google.com>=
+ wrote:
+>
+> Hi,
+>
+> On Tue, Dec 2, 2025 at 1:42=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.o=
+rg> wrote:
+> >
+> > >> I plan to add ARCH_GOOGLE as a dependency in the next
+> > >> version per [1], so the "depends on" would probably look like
+> > >> the following per your suggestion:
+> > >
+> > > But "Google" is not an arch :(
+> > >
+> > > And really, the whole "only have a sub-arch symbol" is something that
+> > > personally, I think is totally wrong and prevents kernel images from
+> > > being built for more than one "arch".  As an example, the Android GKI
+> >
+> > Probably you think ARCH_FOO as arch/FOO/ directory, but this is not the
+> > case. ARCH_FOO in this context is SoC platform, so e.g.
+> > arch/arm64/boot/dts/FOO/.
+> >
+> > All of ARCH_FOO build into one image and that's recommended way to limi=
+t
+> > unnecessary drivers.
+> >
+> > It's just confusing naming for whatever reason.
+> >
+> > > kernel has to support more than one of these, so what does putting th=
+is
+> > > behind a symbol that no one will actually use mean anything?  Android
+> > > will never be only building a ARCH_GOOGLE kernel.
+> >
+> > But distros will be, people will be. OK, maybe not for ARCH_GOOGLE, but
+> > ARCH_QCOM we do for Qualcomm-based laptops and embedded folks even more=
+.
+> >
+> > We had this talk in the past. The point is that these drivers here are
+> > unusable outside of that hardware platform, so only when you choose
+> > hardware platform (ARCH_EXYNOS, ARCH_GOOGLE, ARCH_QCOM) you will be abl=
+e
+> > to choose these drivers.
+> >
+> > You can also look at ARCH_FOO a bit orthogonal to actual kernel
+> > architecture, because ARCH_EXYNOS is for both arm (arm32) and arm64. Th=
+e
+> > drivers should be available for all Exynos-platforms, regardless whethe=
+r
+> > this is arm32 or arm64.
+>
+> FWIW I don't feel strongly about the ARCH_XYZ Kconfig settings, but
+> I'd tend to agree with Krzysztof that I personally find them useful.
+> Sure, it's fine to just turn all of the ARCH_XYZ values on and they
+> shouldn't conflict with each other, but it provides an easy way for
+> someone to know that certain drivers are only useful if the kernel
+> you're building supports a given arch. If I'm building a kernel that
+> doesn't need to support any Qualcomm boards, for instance, I can just
+> turn that arch off and I don't even need to think about all of the
+> Qualcomm-related config options.
+>
+> FWIW, if you do add a "depend" on ARCH_GOOGLE you should mention
+> somewhere (maybe "after the cut" in your patch) that ARCH_GOOGLE
+> doesn't exist yet. It should eventually exist when some version of
+> this patch lands:
+>
+> https://lore.kernel.org/r/20251111112158.3.I35b9e835ac49ab408e5ca3e098393=
+0a1f1395814@changeid/
+>
+> ...but it's not there yet. ;-)
+>
+> -Doug
 
-For the whole series:
+Hi all,
 
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+I appreciate the detailed discussion regarding Kconfig dependencies.
+Based on all the feedback, I'll make the following adjustments:
+- I will update the Kconfig dependency to depends on
+  ARCH_GOOGLE || COMPILE_TEST and drop the other
+  dependencies on OF && COMMON_CLK && RESET_CONTROLLER
+  as suggested by Krzysztof. This should also address the build
+  coverage concern from Greg.
+- As Doug pointed out, the ARCH_GOOGLE Kconfig option does
+  not exist... yet. I will add a note about this in the next version.
+
+Thank you all again for helping me improve this patch.
+I will send out a new version with these changes soon.
 
 Regards,
-Boqun
-
-> ---
-[...]
+Roy Luo
 
