@@ -1,100 +1,75 @@
-Return-Path: <linux-usb+bounces-31165-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31166-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D84F6CA3C41
-	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:19:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B064CA3CBD
+	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:24:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DA16830092A2
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:19:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 825E9303FA4C
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512D0340260;
-	Thu,  4 Dec 2025 13:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE41E33FE11;
+	Thu,  4 Dec 2025 13:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kPMP9FQv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cF/xVem3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254892D46B4;
-	Thu,  4 Dec 2025 13:19:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60F3DF6C;
+	Thu,  4 Dec 2025 13:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764854350; cv=none; b=WKU2t+347LBSQjNnneO86674CidlN+9UEHhx74mNyvcH6h7qdq32OTY9A9Zys12Oxbqg//g6Ph5Z5gAWPvgryE/g6Vhd69hT5gkIL+hcRim/RgLXj7AYbS2eEtZWX6xJeBPwkAjuLg7H+Kt89tlquFn5/osXThmbyiwGSqsoxMo=
+	t=1764854484; cv=none; b=EvT3YsIYbXrskIzHbYjZdhmcgAWfN75EvrDPHdGi499d444w4GW8Hj/TMoNviudKY4Pzv7yxx0gKf8PtZlVupAmKuRHIwm37tLVt9aXl8mVrVGxOEtd49j8wn5kyC6dl8FuLkBndL+LjF6cFL19HCtesPkgTL5xJSbJH4VE1Puo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764854350; c=relaxed/simple;
-	bh=xqFQrU44fEiJ1KuRpa3rRjXuBbQsUbuhOFIk0S/39e0=;
+	s=arc-20240116; t=1764854484; c=relaxed/simple;
+	bh=C+NU6l/RbJsSuvvywwgKFGVwR01FfnEEkNHaEakSK1Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S2m0pibSKJBx6l3YQEanx/aOJZ10mGnO/rw6a81QKZWrBD38VrTzuCdoCH4An5ExRfFf3mz3stXQn6V8hSZQAgpCGXeLISZ595owGmPnms5Ej5rsUjaSqfHSj451DeGBRojmtSS6PaB57T8+xPuFtUyyD5SQkOJaAsgDNwTnm2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kPMP9FQv; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=DaAzLo95CPCh/+sPZ2XStXuNMw97z6QmOKbdICZnnTBusool4QQXLLXKPtfbTJqzsf5O2r4LGZDOYGWCS6Iqn93J4IyLlE27j/Xc8vhpRyAx0syYWk64s1z74v1etR+gSFujzF3swgD6aOPqQ3L/5La/c5Oc36vyMwjeXIWf64s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cF/xVem3; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764854349; x=1796390349;
+  t=1764854482; x=1796390482;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xqFQrU44fEiJ1KuRpa3rRjXuBbQsUbuhOFIk0S/39e0=;
-  b=kPMP9FQvJg5NMbZ2n6JBYrcBxyAvluk9M4zaxITtrjo9c9KMuQieUNVo
-   aE80kAxyL3Tc/AvLV1+keeyJLQIO9ilto2tMuN4NJhl02Wa41N0t+osVr
-   l/7IwAdvq/rZtOb6Ho9TJAXjE/SU9bu6pdVclZQyWpJEAvlNXeNEQ43Xa
-   cOL81pYbfXEcppGq1Z+iwUE2fB/XDVaA46fuwHp9MhEEWbdF5CBTRFWgr
-   YA6kxWTtH4rv3kyxVcZT46WMnt84+slNKFCXJ5SC3lCUfoXkxubhAwkVh
-   oQWl6MEPgzpDR5fy/OM9FrYQrU8Pu4efelxZ53qD5P+hskGBwH4cO/27q
+  bh=C+NU6l/RbJsSuvvywwgKFGVwR01FfnEEkNHaEakSK1Q=;
+  b=cF/xVem3MhAcrVJ9bqz9BA+yYsPBPjOJONa1V4SMTMprrPdf7ZSy91QS
+   J/Lghd8XaZ+rFCMU8KT6wM8lEchjawP+GHuaG+F+uhJqh2NEMq7sLytiI
+   1a5RNH1aEX12VvFJ+acO9bW/fVHMYYAzxW6Kg6lo0ZTUwWAS48cVq1Xso
+   r65laLYo29OE6UQg/U6f3W39l1eKwmpZIBfnbAPSKxFOBy9G/EsPE91LI
+   +pIXahBaQ44ORzt8QVOWx7/PaTufglpmhgGxrt29cXGWAn0N7U0i4OvYD
+   T/BFqR0IDndDHM+zcLnx2w+CxdpEThRcb+IFypR4GsUuwBK2JZQXjVSjM
    g==;
-X-CSE-ConnectionGUID: 1SPnBYklRcGX1xyphMCcDA==
-X-CSE-MsgGUID: 5Rdq92FWTbiHlSkB/bZVCA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="77553069"
+X-CSE-ConnectionGUID: 7RgE/FLUREas6JkNJmf9GA==
+X-CSE-MsgGUID: lFuJBLnGSM661Kx+fdOkgQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="66914005"
 X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="77553069"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 05:19:08 -0800
-X-CSE-ConnectionGUID: 6hnV95oCRRiK6KPTByZfvQ==
-X-CSE-MsgGUID: HfWUZWD7SnmB6CaIbu9f3w==
+   d="scan'208";a="66914005"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 05:21:14 -0800
+X-CSE-ConnectionGUID: Shu53dbaR8qnHZFpAssbIQ==
+X-CSE-MsgGUID: cR56gBzvRGGn4ahR+TOk3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="199943225"
+   d="scan'208";a="195795445"
 Received: from rfrazer-mobl3.amr.corp.intel.com (HELO kuha) ([10.124.220.149])
-  by fmviesa004.fm.intel.com with SMTP; 04 Dec 2025 05:18:57 -0800
-Received: by kuha (sSMTP sendmail emulation); Thu, 04 Dec 2025 15:18:48 +0200
-Date: Thu, 4 Dec 2025 15:18:48 +0200
+  by fmviesa010.fm.intel.com with SMTP; 04 Dec 2025 05:21:10 -0800
+Received: by kuha (sSMTP sendmail emulation); Thu, 04 Dec 2025 15:21:02 +0200
+Date: Thu, 4 Dec 2025 15:21:02 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Chaoyi Chen <kernel@airkyi.com>
+To: Arnd Bergmann <arnd@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Pengyu Luo <mitltlatltl@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Pavan Holla <pholla@chromium.org>,
+	Yue Haibing <yuehaibing@huawei.com>,
 	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Peter Chen <hzpeterchen@gmail.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Yubing Zhang <yubing.zhang@rock-chips.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
-	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v11 03/11] drm/bridge: Implement generic USB Type-C DP
- HPD bridge
-Message-ID: <aTGKODdf7vsHFY72@kuha>
-References: <20251128020405.90-1-kernel@airkyi.com>
- <20251128020405.90-4-kernel@airkyi.com>
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: huawei-gaokin: add DRM dependency
+Message-ID: <aTGKvnoMaUGAVhLH@kuha>
+References: <20251204101111.1035975-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -103,75 +78,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251128020405.90-4-kernel@airkyi.com>
+In-Reply-To: <20251204101111.1035975-1-arnd@kernel.org>
 
-Hi,
+Thu, Dec 04, 2025 at 11:11:07AM +0100, Arnd Bergmann kirjoitti:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Selecting DRM_AUX_HPD_BRIDGE is not possible from a built-in driver when
+> CONFIG_DRM=m:
+> 
+> WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
+>   Depends on [m]: HAS_IOMEM [=y] && DRM [=m] && DRM_BRIDGE [=y] && OF [=y]
+>   Selected by [y]:
+>   - UCSI_HUAWEI_GAOKUN [=y] && USB_SUPPORT [=y] && TYPEC [=y] && TYPEC_UCSI [=y] && EC_HUAWEI_GAOKUN [=y] && DRM_BRIDGE [=y] && OF [=y]
+> 
+> Add the same dependency we have in similar drivers to work around this.
+> 
+> Fixes: 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Fri, Nov 28, 2025 at 10:03:57AM +0800, Chaoyi Chen kirjoitti:
-> diff --git a/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
-> new file mode 100644
-> index 000000000000..94be3d5f69e9
-> --- /dev/null
-> +++ b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
-> @@ -0,0 +1,51 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +#include <linux/of.h>
-> +#include <linux/usb/typec_altmode.h>
-> +#include <linux/usb/typec_dp.h>
-> +
-> +#include <drm/bridge/aux-bridge.h>
-> +
-> +static int drm_typec_bus_event(struct notifier_block *nb,
-> +			       unsigned long action, void *data)
-> +{
-> +	struct device *dev = (struct device *)data;
-> +	struct typec_altmode *alt = to_typec_altmode(dev);
-> +
-> +	if (action != BUS_NOTIFY_ADD_DEVICE)
-> +		goto done;
-> +
-> +	if (is_typec_partner_altmode(&alt->dev) || alt->svid != USB_TYPEC_DP_SID)
-> +		goto done;
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-There are also plug altmodes. Just make sure it's a plug altmode.
-
-	if (!is_typec_plug_altmode(&alt->dev) || alt->svid != USB_TYPEC_DP_SID)
-                goto done;
-
-> +	/*
-> +	 * alt->dev.parent->parent : USB-C controller device
-> +	 * alt->dev.parent         : USB-C connector device
-> +	 */
-> +	drm_dp_hpd_bridge_register(alt->dev.parent->parent,
-> +				   to_of_node(alt->dev.parent->fwnode));
-> +
-> +done:
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block drm_typec_event_nb = {
-> +	.notifier_call = drm_typec_bus_event,
-> +};
-> +
-> +static void drm_aux_hpd_typec_dp_bridge_module_exit(void)
-> +{
-> +	bus_unregister_notifier(&typec_bus, &drm_typec_event_nb);
-> +}
-> +
-> +static int __init drm_aux_hpd_typec_dp_bridge_module_init(void)
-> +{
-> +	bus_register_notifier(&typec_bus, &drm_typec_event_nb);
-> +
-> +	return 0;
-> +}
-> +
-> +module_init(drm_aux_hpd_typec_dp_bridge_module_init);
-> +module_exit(drm_aux_hpd_typec_dp_bridge_module_exit);
-> +
-> +MODULE_DESCRIPTION("DRM TYPEC DP HPD BRIDGE");
-> +MODULE_LICENSE("GPL");
-
-thanks,
+> ---
+>  drivers/usb/typec/ucsi/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+> index 7fcb1e1de5d6..b812be4d0e67 100644
+> --- a/drivers/usb/typec/ucsi/Kconfig
+> +++ b/drivers/usb/typec/ucsi/Kconfig
+> @@ -96,6 +96,7 @@ config UCSI_LENOVO_YOGA_C630
+>  config UCSI_HUAWEI_GAOKUN
+>  	tristate "UCSI Interface Driver for Huawei Matebook E Go"
+>  	depends on EC_HUAWEI_GAOKUN
+> +	depends on DRM || !DRM
+>  	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
+>  	help
+>  	  This driver enables UCSI support on the Huawei Matebook E Go tablet,
+> -- 
+> 2.39.5
 
 -- 
 heikki
