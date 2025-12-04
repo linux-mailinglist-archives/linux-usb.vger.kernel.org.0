@@ -1,97 +1,182 @@
-Return-Path: <linux-usb+bounces-31167-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31168-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8748CA3CC6
-	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:25:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFF6CCA3DB1
+	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:41:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D7EDC305E235
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:21:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DEACC301B127
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41BDF342527;
-	Thu,  4 Dec 2025 13:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA4C93469E7;
+	Thu,  4 Dec 2025 13:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PONcNKLr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iA42RosM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF682E2EEE;
-	Thu,  4 Dec 2025 13:21:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B895398FB6;
+	Thu,  4 Dec 2025 13:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764854506; cv=none; b=kXH7GYhJwy7y6TgEa04MTkLeA4JqcDfUAACkBRZyQWvgug8hofMiZJebA6TLqgd+v7ZwCZ/+HfS8WggGLDMP3TMsWaW2ZAqqpZ3rwdTk9N9uM5+RAQghqQPLaMmKXMAHe8ljx9eqm/wD7wDzGDC1i1sUSCDroK7hWqpHNMGbQIE=
+	t=1764855678; cv=none; b=HzmG34TCF/4wNx7rXqeTt0bHQEAR0ulsVmm9PuYNCw8UwQnhJUo5AXeWFkodV70YS1O4zpJpwyvdz0meV3K4Vty5C42M6gCG0ozIUaiUBeZTLYjXq5Ga2oSPRJeCKlzuBejlcM+4blfBB0UqcRxQyEPKnUypgePIHoJMJl1tNqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764854506; c=relaxed/simple;
-	bh=bzz0Z6DlTyXiigHgemprkU5O2lR9T56OJSKOt035fi8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JbS0jK6ZZxXVNsPLmrptvP+1DWPWst/HFkkHilSxf/JE6v1O2KEvIh/5iGlwsAYgkWQKPQ5je77VhdIWADvN25jPifrcK2W9Y2LCn/lLOwIe3OgaGM4lgFE7A21PkU+i4HQaBZjD1n9lffWrpMuzHIbFWVd69oRp/SzM8pH0hu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PONcNKLr; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=lv
-	Qc1rXcigKPfnEJkPS4F/wygNXYiWV4BtgNrmuO7Js=; b=PONcNKLroaPMptL7l1
-	kUZXd0cMIMte7JJJ6H+gsKBVgKj89TPX4Mq1FsAsp1pE6vjWKltO3IigtkiNLeQV
-	dofiQyf1Mx6YatZibECzeQjuHxyAk3e6uEeJaSU6HVFqfzFAVE2OtWKmth3s11QL
-	M0EakpPgqdnDpxfCrWRBvEFxE=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wAHwWrbijFp3tKbDw--.62377S4;
-	Thu, 04 Dec 2025 21:21:32 +0800 (CST)
-From: Haoxiang Li <haoxiang_li2024@163.com>
-To: gregkh@linuxfoundation.org,
-	haoxiang_li2024@163.com,
-	kuninori.morimoto.gx@renesas.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] usb: renesas_usbhs: Fix a resource leak in usbhs_pipe_malloc()
-Date: Thu,  4 Dec 2025 21:21:29 +0800
-Message-Id: <20251204132129.109234-1-haoxiang_li2024@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1764855678; c=relaxed/simple;
+	bh=5vrRVcLYPFCpzhwyAw2L34Cd/fwmvirgk6ahEYjKQ3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pIMua5+bwoaPaqsVE4GPuDzDYkQ7/4aIshQ5txq8BchTc0hNwZu+udotVCshU7yKG72RaidL8e9x9QDBrURR4yiYgOJb5wQQ2snQwHhrynILCBpnVOrNppcq96N8LC3f9m/MYea6pqUkGaaNFMKkPPfKfltcgW/u9HntzUXOwRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iA42RosM; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764855677; x=1796391677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5vrRVcLYPFCpzhwyAw2L34Cd/fwmvirgk6ahEYjKQ3Y=;
+  b=iA42RosM/IRGnCyWiVmbhNQ5nHSLRsIAmFMHcU47Q4ulifAYXAjiW824
+   guG5BEW2tMXYqAeMCfUuxDPNisnmvLLccJBow93N0+rqP3G/xrlC2TTAd
+   WaRpMbgxXYHy809Pf3GgZC3pEyrYrEJTsepLheeqq+ICroPfjIY1I+DmL
+   0dSleuuRF19U8bf2lPwJ/+EIyrLcony9IxZFAgtTkViING9Rw3iTO1OHf
+   SuLz3MyjrGvpFgUXh0nlSvpLnHsSTJvkb3+gkkMTkSFEUxaY5EBlh2Jjq
+   UrvwlVJC7GYwIBgRcnbouJdY8JOzwo8FTZH0BfepMgwWUnmFqUD2IVBok
+   g==;
+X-CSE-ConnectionGUID: Hs+JKHH0TQGHXTSFIhQuaw==
+X-CSE-MsgGUID: u8Ixy35aTwyNtHznpKCg2A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="77554961"
+X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
+   d="scan'208";a="77554961"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 05:41:16 -0800
+X-CSE-ConnectionGUID: cEDuTO85SkOa/8dziq4Xxg==
+X-CSE-MsgGUID: B4wj07nmRam/YVp9CHTeNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
+   d="scan'208";a="194056172"
+Received: from rfrazer-mobl3.amr.corp.intel.com (HELO kuha) ([10.124.220.149])
+  by orviesa006.jf.intel.com with SMTP; 04 Dec 2025 05:41:05 -0800
+Received: by kuha (sSMTP sendmail emulation); Thu, 04 Dec 2025 15:40:56 +0200
+Date: Thu, 4 Dec 2025 15:40:56 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Chaoyi Chen <kernel@airkyi.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Peter Chen <hzpeterchen@gmail.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Yubing Zhang <yubing.zhang@rock-chips.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Amit Sunil Dhamne <amitsd@google.com>,
+	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+	Dragan Simic <dsimic@manjaro.org>, Johan Jonker <jbx6244@gmail.com>,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RESEND PATCH v11 03/11] drm/bridge: Implement generic USB
+ Type-C DP HPD bridge
+Message-ID: <aTGPaJmwd7uHfrnV@kuha>
+References: <20251204063109.104-1-kernel@airkyi.com>
+ <20251204063109.104-4-kernel@airkyi.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAHwWrbijFp3tKbDw--.62377S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKr47ZFy3CF1fJw45Cw17KFg_yoWDtrb_Cr
-	1UArnrJr9rAryfKF1xJr43XFW09ws5XF1fGF1kKw4fAryj9rnF9wsFvFWrJr1UKF1IyrZ0
-	yws7Ar97A34xWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRAAwIUUUUUU==
-X-CM-SenderInfo: xkdr5xpdqjszblsqjki6rwjhhfrp/xtbCxR2A7mkxit2H5wAA3Z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251204063109.104-4-kernel@airkyi.com>
 
-usbhsp_get_pipe() set pipe's flags to IS_USED. In error paths,
-usbhsp_put_pipe() is required to clear pipe's flags to prevent
-pipe exhaustion.
+Hi,
 
-Fixes: f1407d5c6624 ("usb: renesas_usbhs: Add Renesas USBHS common code")
-Cc: stable@vger.kernel.org
-Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
----
- drivers/usb/renesas_usbhs/pipe.c | 2 ++
- 1 file changed, 2 insertions(+)
+I don't know what's going on here - this series is the 12th?
+In any case, you need to fix this..
 
-diff --git a/drivers/usb/renesas_usbhs/pipe.c b/drivers/usb/renesas_usbhs/pipe.c
-index 75fff2e4cbc6..56fc3ff5016f 100644
---- a/drivers/usb/renesas_usbhs/pipe.c
-+++ b/drivers/usb/renesas_usbhs/pipe.c
-@@ -713,11 +713,13 @@ struct usbhs_pipe *usbhs_pipe_malloc(struct usbhs_priv *priv,
- 	/* make sure pipe is not busy */
- 	ret = usbhsp_pipe_barrier(pipe);
- 	if (ret < 0) {
-+		usbhsp_put_pipe(pipe);
- 		dev_err(dev, "pipe setup failed %d\n", usbhs_pipe_number(pipe));
- 		return NULL;
- 	}
- 
- 	if (usbhsp_setup_pipecfg(pipe, is_host, dir_in, &pipecfg)) {
-+		usbhsp_put_pipe(pipe);
- 		dev_err(dev, "can't setup pipe\n");
- 		return NULL;
- 	}
+> diff --git a/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+> new file mode 100644
+> index 000000000000..94be3d5f69e9
+> --- /dev/null
+> +++ b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
+> @@ -0,0 +1,51 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +#include <linux/of.h>
+> +#include <linux/usb/typec_altmode.h>
+> +#include <linux/usb/typec_dp.h>
+> +
+> +#include <drm/bridge/aux-bridge.h>
+> +
+> +static int drm_typec_bus_event(struct notifier_block *nb,
+> +			       unsigned long action, void *data)
+> +{
+> +	struct device *dev = (struct device *)data;
+> +	struct typec_altmode *alt = to_typec_altmode(dev);
+> +
+> +	if (action != BUS_NOTIFY_ADD_DEVICE)
+> +		goto done;
+> +
+> +	if (is_typec_partner_altmode(&alt->dev) || alt->svid != USB_TYPEC_DP_SID)
+> +		goto done;
+
+That's still not enough because of the plug altmodes. You need to
+check that it's a port altmode:
+
+        if (is_typec_port_altmode(&alt->dev) && alt->svid == USB_TYPEC_DP_SID)
+        	drm_dp_hpd_bridge_register(alt->dev.parent->parent,
+        				   to_of_node(alt->dev.parent->fwnode));
+
+> +	/*
+> +	 * alt->dev.parent->parent : USB-C controller device
+> +	 * alt->dev.parent         : USB-C connector device
+> +	 */
+> +	drm_dp_hpd_bridge_register(alt->dev.parent->parent,
+> +				   to_of_node(alt->dev.parent->fwnode));
+> +
+> +done:
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static struct notifier_block drm_typec_event_nb = {
+> +	.notifier_call = drm_typec_bus_event,
+> +};
+> +
+> +static void drm_aux_hpd_typec_dp_bridge_module_exit(void)
+> +{
+> +	bus_unregister_notifier(&typec_bus, &drm_typec_event_nb);
+> +}
+> +
+> +static int __init drm_aux_hpd_typec_dp_bridge_module_init(void)
+> +{
+> +	bus_register_notifier(&typec_bus, &drm_typec_event_nb);
+> +
+> +	return 0;
+> +}
+> +
+> +module_init(drm_aux_hpd_typec_dp_bridge_module_init);
+> +module_exit(drm_aux_hpd_typec_dp_bridge_module_exit);
+> +
+> +MODULE_DESCRIPTION("DRM TYPEC DP HPD BRIDGE");
+> +MODULE_LICENSE("GPL");
+
+thanks,
+
 -- 
-2.25.1
-
+heikki
 
