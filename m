@@ -1,63 +1,63 @@
-Return-Path: <linux-usb+bounces-31168-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31169-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFF6CCA3DB1
-	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:41:20 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 850C0CA3DCE
+	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:42:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DEACC301B127
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:41:19 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2A7FD304AEC9
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA4C93469E7;
-	Thu,  4 Dec 2025 13:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E8533C1A8;
+	Thu,  4 Dec 2025 13:42:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iA42RosM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J7OdXf88"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B895398FB6;
-	Thu,  4 Dec 2025 13:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8E615C158;
+	Thu,  4 Dec 2025 13:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764855678; cv=none; b=HzmG34TCF/4wNx7rXqeTt0bHQEAR0ulsVmm9PuYNCw8UwQnhJUo5AXeWFkodV70YS1O4zpJpwyvdz0meV3K4Vty5C42M6gCG0ozIUaiUBeZTLYjXq5Ga2oSPRJeCKlzuBejlcM+4blfBB0UqcRxQyEPKnUypgePIHoJMJl1tNqc=
+	t=1764855740; cv=none; b=EGuDiRr6GZqTdKz6ktRJDbJdfYOPr35BfO5hhr5ls15ZUfNQBzKPZ9OL3lUN/5UrBo8VgMPAIBwGmUcIhnc+JvIvBZ/RLrqp3Iw+fKoSAbroNiC9/nDb1U9zv4aI2RZJ9HCt6Sw1OzX+fLqzhtkMCuGhrIIYF1shUpj4NfOy6zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764855678; c=relaxed/simple;
-	bh=5vrRVcLYPFCpzhwyAw2L34Cd/fwmvirgk6ahEYjKQ3Y=;
+	s=arc-20240116; t=1764855740; c=relaxed/simple;
+	bh=30wP0TX1VK3UbNCz19GHE9bCOLKLD8pr5Gzk2VuxvGw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pIMua5+bwoaPaqsVE4GPuDzDYkQ7/4aIshQ5txq8BchTc0hNwZu+udotVCshU7yKG72RaidL8e9x9QDBrURR4yiYgOJb5wQQ2snQwHhrynILCBpnVOrNppcq96N8LC3f9m/MYea6pqUkGaaNFMKkPPfKfltcgW/u9HntzUXOwRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iA42RosM; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=rf+uEKB4whLHLzXbXCgIYVkayKZvwTSV9oLiAp2OHz++WY5FNp91BDK5iA9TXQep3szmysUxe7VWtMVErqE8aIuttPSrmYHv0nPUqs4oNmEHOOlvsImhu1bd4eQ2kN6gh8oTC61ndvECmr5g9NgNsZgmqhS3YZB9x4u+sEONy5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J7OdXf88; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764855677; x=1796391677;
+  t=1764855739; x=1796391739;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5vrRVcLYPFCpzhwyAw2L34Cd/fwmvirgk6ahEYjKQ3Y=;
-  b=iA42RosM/IRGnCyWiVmbhNQ5nHSLRsIAmFMHcU47Q4ulifAYXAjiW824
-   guG5BEW2tMXYqAeMCfUuxDPNisnmvLLccJBow93N0+rqP3G/xrlC2TTAd
-   WaRpMbgxXYHy809Pf3GgZC3pEyrYrEJTsepLheeqq+ICroPfjIY1I+DmL
-   0dSleuuRF19U8bf2lPwJ/+EIyrLcony9IxZFAgtTkViING9Rw3iTO1OHf
-   SuLz3MyjrGvpFgUXh0nlSvpLnHsSTJvkb3+gkkMTkSFEUxaY5EBlh2Jjq
-   UrvwlVJC7GYwIBgRcnbouJdY8JOzwo8FTZH0BfepMgwWUnmFqUD2IVBok
+  bh=30wP0TX1VK3UbNCz19GHE9bCOLKLD8pr5Gzk2VuxvGw=;
+  b=J7OdXf88VyB6clJ4hxA884AlVbem4J/36zELpUTUsx2ijzaaLFdQ76Aq
+   Y79iBGYKWX7fMJkm9Mke+XENN8f1GzDZrqXeJoYI4I0jnK49FhvwW5iQp
+   3aJfqeOhaNFbbSWHViBXRxP3Nl9umH6EApoKeuICF1r/RKU5tfCwz0azw
+   C6XrxAxqrlUOfT4pXb62Ls1SND/XqGHcnbDfaBDUQ7qhq+nU0zyHi5gtV
+   Sdxzu215tt3yUwzC/h+hp9yHPDpjz2YFKpASLBUxgbNATh7b/a6HGCgKZ
+   jhPcbt59Zd1N7eNRiNPFovFZneaWsFJJIkw71M8Rq1nbJK/SDr0fdv3vY
    g==;
-X-CSE-ConnectionGUID: Hs+JKHH0TQGHXTSFIhQuaw==
-X-CSE-MsgGUID: u8Ixy35aTwyNtHznpKCg2A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="77554961"
+X-CSE-ConnectionGUID: O3g83J5mTO6mohvgPe0ozQ==
+X-CSE-MsgGUID: Lj+vzSjLQP2tpxZwiDl5uA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="66911010"
 X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="77554961"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 05:41:16 -0800
-X-CSE-ConnectionGUID: cEDuTO85SkOa/8dziq4Xxg==
-X-CSE-MsgGUID: B4wj07nmRam/YVp9CHTeNw==
+   d="scan'208";a="66911010"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 05:42:18 -0800
+X-CSE-ConnectionGUID: DxyftxzaSmuGPOccXE4iKQ==
+X-CSE-MsgGUID: kBWCfuAfTk6HBNfipdewYA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="194056172"
+   d="scan'208";a="199164378"
 Received: from rfrazer-mobl3.amr.corp.intel.com (HELO kuha) ([10.124.220.149])
-  by orviesa006.jf.intel.com with SMTP; 04 Dec 2025 05:41:05 -0800
-Received: by kuha (sSMTP sendmail emulation); Thu, 04 Dec 2025 15:40:56 +0200
-Date: Thu, 4 Dec 2025 15:40:56 +0200
+  by orviesa003.jf.intel.com with SMTP; 04 Dec 2025 05:42:05 -0800
+Received: by kuha (sSMTP sendmail emulation); Thu, 04 Dec 2025 15:41:56 +0200
+Date: Thu, 4 Dec 2025 15:41:56 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Chaoyi Chen <kernel@airkyi.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -90,11 +90,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-Subject: Re: [RESEND PATCH v11 03/11] drm/bridge: Implement generic USB
- Type-C DP HPD bridge
-Message-ID: <aTGPaJmwd7uHfrnV@kuha>
+Subject: Re: [RESEND PATCH v11 02/11] usb: typec: Export typec bus and typec
+ altmode device type
+Message-ID: <aTGPpInIEzFhftf4@kuha>
 References: <20251204063109.104-1-kernel@airkyi.com>
- <20251204063109.104-4-kernel@airkyi.com>
+ <20251204063109.104-3-kernel@airkyi.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -103,79 +103,138 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251204063109.104-4-kernel@airkyi.com>
+In-Reply-To: <20251204063109.104-3-kernel@airkyi.com>
 
-Hi,
+Thu, Dec 04, 2025 at 02:31:00PM +0800, Chaoyi Chen kirjoitti:
+> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+> 
+> The DRM may want to register a notifier on the typec bus to know when
+> a typec altmode device is added, and distinguish between different
+> types of typec altmode device.
+> 
+> Export these things.
+> 
+> Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
 
-I don't know what's going on here - this series is the 12th?
-In any case, you need to fix this..
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> diff --git a/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
-> new file mode 100644
-> index 000000000000..94be3d5f69e9
-> --- /dev/null
-> +++ b/drivers/gpu/drm/bridge/aux-hpd-typec-dp-bridge.c
-> @@ -0,0 +1,51 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +#include <linux/of.h>
-> +#include <linux/usb/typec_altmode.h>
-> +#include <linux/usb/typec_dp.h>
+> ---
+> 
+> Changes in v11:
+> - Also export typec bus.
+> - Add more detailed comments.
+> 
+> (no changes since v9)
+> 
+>  drivers/usb/typec/bus.c           |  1 +
+>  drivers/usb/typec/bus.h           | 10 ----------
+>  drivers/usb/typec/class.c         |  3 +++
+>  include/linux/usb/typec.h         |  3 +++
+>  include/linux/usb/typec_altmode.h |  8 ++++++++
+>  5 files changed, 15 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
+> index a33da7f458a5..e84b134a3381 100644
+> --- a/drivers/usb/typec/bus.c
+> +++ b/drivers/usb/typec/bus.c
+> @@ -569,3 +569,4 @@ const struct bus_type typec_bus = {
+>  	.probe = typec_probe,
+>  	.remove = typec_remove,
+>  };
+> +EXPORT_SYMBOL_GPL(typec_bus);
+> diff --git a/drivers/usb/typec/bus.h b/drivers/usb/typec/bus.h
+> index b58e131450d1..7df5deb1dd3a 100644
+> --- a/drivers/usb/typec/bus.h
+> +++ b/drivers/usb/typec/bus.h
+> @@ -5,7 +5,6 @@
+>  
+>  #include <linux/usb/typec_altmode.h>
+>  
+> -struct bus_type;
+>  struct typec_mux;
+>  struct typec_retimer;
+>  
+> @@ -28,13 +27,4 @@ struct altmode {
+>  
+>  #define to_altmode(d) container_of(d, struct altmode, adev)
+>  
+> -extern const struct bus_type typec_bus;
+> -extern const struct device_type typec_port_altmode_dev_type;
+> -extern const struct device_type typec_plug_altmode_dev_type;
+> -extern const struct device_type typec_partner_altmode_dev_type;
+> -
+> -#define is_typec_port_altmode(dev) ((dev)->type == &typec_port_altmode_dev_type)
+> -#define is_typec_plug_altmode(dev) ((dev)->type == &typec_plug_altmode_dev_type)
+> -#define is_typec_partner_altmode(dev) ((dev)->type == &typec_partner_altmode_dev_type)
+> -
+>  #endif /* __USB_TYPEC_ALTMODE_H__ */
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index d6b88317f8a4..c4ff4310ff58 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -537,18 +537,21 @@ const struct device_type typec_port_altmode_dev_type = {
+>  	.groups = typec_altmode_groups,
+>  	.release = typec_altmode_release,
+>  };
+> +EXPORT_SYMBOL_GPL(typec_port_altmode_dev_type);
+>  
+>  const struct device_type typec_plug_altmode_dev_type = {
+>  	.name = "typec_plug_alternate_mode",
+>  	.groups = typec_altmode_groups,
+>  	.release = typec_altmode_release,
+>  };
+> +EXPORT_SYMBOL_GPL(typec_plug_altmode_dev_type);
+>  
+>  const struct device_type typec_partner_altmode_dev_type = {
+>  	.name = "typec_partner_alternate_mode",
+>  	.groups = typec_altmode_groups,
+>  	.release = typec_altmode_release,
+>  };
+> +EXPORT_SYMBOL_GPL(typec_partner_altmode_dev_type);
+>  
+>  static struct typec_altmode *
+>  typec_register_altmode(struct device *parent,
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 309251572e2e..c6fd46902fce 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -20,12 +20,15 @@ struct typec_port;
+>  struct typec_altmode_ops;
+>  struct typec_cable_ops;
+>  
+> +struct bus_type;
+>  struct fwnode_handle;
+>  struct device;
+>  
+>  struct usb_power_delivery;
+>  struct usb_power_delivery_desc;
+>  
+> +extern const struct bus_type typec_bus;
 > +
-> +#include <drm/bridge/aux-bridge.h>
+>  enum typec_port_type {
+>  	TYPEC_PORT_SRC,
+>  	TYPEC_PORT_SNK,
+> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+> index f7db3bd4c90e..9197a4637a93 100644
+> --- a/include/linux/usb/typec_altmode.h
+> +++ b/include/linux/usb/typec_altmode.h
+> @@ -9,6 +9,14 @@
+>  
+>  #define MODE_DISCOVERY_MAX	6
+>  
+> +extern const struct device_type typec_port_altmode_dev_type;
+> +extern const struct device_type typec_plug_altmode_dev_type;
+> +extern const struct device_type typec_partner_altmode_dev_type;
 > +
-> +static int drm_typec_bus_event(struct notifier_block *nb,
-> +			       unsigned long action, void *data)
-> +{
-> +	struct device *dev = (struct device *)data;
-> +	struct typec_altmode *alt = to_typec_altmode(dev);
+> +#define is_typec_port_altmode(dev) ((dev)->type == &typec_port_altmode_dev_type)
+> +#define is_typec_plug_altmode(dev) ((dev)->type == &typec_plug_altmode_dev_type)
+> +#define is_typec_partner_altmode(dev) ((dev)->type == &typec_partner_altmode_dev_type)
 > +
-> +	if (action != BUS_NOTIFY_ADD_DEVICE)
-> +		goto done;
-> +
-> +	if (is_typec_partner_altmode(&alt->dev) || alt->svid != USB_TYPEC_DP_SID)
-> +		goto done;
-
-That's still not enough because of the plug altmodes. You need to
-check that it's a port altmode:
-
-        if (is_typec_port_altmode(&alt->dev) && alt->svid == USB_TYPEC_DP_SID)
-        	drm_dp_hpd_bridge_register(alt->dev.parent->parent,
-        				   to_of_node(alt->dev.parent->fwnode));
-
-> +	/*
-> +	 * alt->dev.parent->parent : USB-C controller device
-> +	 * alt->dev.parent         : USB-C connector device
-> +	 */
-> +	drm_dp_hpd_bridge_register(alt->dev.parent->parent,
-> +				   to_of_node(alt->dev.parent->fwnode));
-> +
-> +done:
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block drm_typec_event_nb = {
-> +	.notifier_call = drm_typec_bus_event,
-> +};
-> +
-> +static void drm_aux_hpd_typec_dp_bridge_module_exit(void)
-> +{
-> +	bus_unregister_notifier(&typec_bus, &drm_typec_event_nb);
-> +}
-> +
-> +static int __init drm_aux_hpd_typec_dp_bridge_module_init(void)
-> +{
-> +	bus_register_notifier(&typec_bus, &drm_typec_event_nb);
-> +
-> +	return 0;
-> +}
-> +
-> +module_init(drm_aux_hpd_typec_dp_bridge_module_init);
-> +module_exit(drm_aux_hpd_typec_dp_bridge_module_exit);
-> +
-> +MODULE_DESCRIPTION("DRM TYPEC DP HPD BRIDGE");
-> +MODULE_LICENSE("GPL");
-
-thanks,
+>  struct typec_altmode_ops;
+>  
+>  /**
+> -- 
+> 2.51.1
 
 -- 
 heikki
