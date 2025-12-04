@@ -1,63 +1,79 @@
-Return-Path: <linux-usb+bounces-31136-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31137-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70B4ACA1FAE
-	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 00:42:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D50E8CA20E4
+	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 01:44:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 80DA8300C6DC
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Dec 2025 23:41:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CA90F301F25C
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 00:43:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4DC2E0B5C;
-	Wed,  3 Dec 2025 23:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DD521DF246;
+	Thu,  4 Dec 2025 00:43:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WxXljbeb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Be9HZ9My"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1EF2BEC43;
-	Wed,  3 Dec 2025 23:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544DE17A31E
+	for <linux-usb@vger.kernel.org>; Thu,  4 Dec 2025 00:43:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764805306; cv=none; b=esUxMRWmITNlOQsorHg1Ivt8zWizoxSQBJ2WfBtPRLWG5ITJM8xhtjD12AU0C85FTWRs9mmFF/qgQsjc4OU0m6WDp5jvz8sLH4oz6yP9I3Cadg4FY0QKeNh6NNVnMxjYxDPPsripLh7ZdqPH0D4V5VHYHYbfxzRHrlw0FnA+Fc0=
+	t=1764809032; cv=none; b=nEhQkyea8vYA4LHaoTBPSTfU3l1DCr1coGIAbMeU8QchdPsIwk/Gr79vd3Am3TOgslmg2epvQYk2fak2CwSqHCeVwCUSG1DdAJ5b21eRC4tMQYr7D7BUEMXY3PdsKCdzLx/+CWl8eydjpxyyFZXJHKVoFBN9KuXtiWnEEym8iv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764805306; c=relaxed/simple;
-	bh=V2Ednu6eGGlo1Fo3FGOtGpPoQRmz0QOBQscU0iXbHvI=;
+	s=arc-20240116; t=1764809032; c=relaxed/simple;
+	bh=7C4m9y22CDhJly1Sa/M8ZgDQxAAaoOub7TsjprrN6mo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xm/YK6GToFAkQX80ZrcXBeO6BdS6LMTikkgadxXOGxYuB7bdHU4DgmvPzaMIFL6gL7hy78FIKUClJhpzFnREJBO5keK1lEZ9izuLPJ85hsILxXN5o+ilW6LFlbB5ABbasdugKGo+jKXDMsGa2zmNeQutsIq+sjtQEq2dV/HcZFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WxXljbeb; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764805303; x=1796341303;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=V2Ednu6eGGlo1Fo3FGOtGpPoQRmz0QOBQscU0iXbHvI=;
-  b=WxXljbebfG+PbUNZDen+JyxN34xrbpFaXUhu74G0/3tKj7yu7AwXsK9s
-   E/s0wH77dxyXBqvgHFuO8LweoWlUjxboee6d4j7mO3jSOYW5eAbjodnqp
-   OuPEg1wP38TArTN5WAadZas0UyXItYV6ipTGm8w37OCKz9JtMoqILJ96L
-   kVIqagRj7V5Bsc5jOubek2f/wIgWY2Yi3qgwnGwDzo7He0Bf6+Ubae033
-   SCSjf8J2jsA/EVdos53bMQjCQ0FjrHVvFtvP7k2WB/O59uQGA2qAJR+vO
-   OdXH+nSSLrQ8hu3Bvgo31TD08qY8g40hWUiIw1XMR5QLu1cy+MwHC/6nM
-   Q==;
-X-CSE-ConnectionGUID: VcVKq9y9ScqGqQPKJcJHvQ==
-X-CSE-MsgGUID: 4mvuUe6zQXmCelkGZb/dhA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="78167199"
-X-IronPort-AV: E=Sophos;i="6.20,247,1758610800"; 
-   d="scan'208";a="78167199"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 15:41:43 -0800
-X-CSE-ConnectionGUID: KogLQMSYQVKx/rbD/s9/bA==
-X-CSE-MsgGUID: lgSVF/S9RqCB4XdqthLlaw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,247,1758610800"; 
-   d="scan'208";a="193895080"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO [10.245.245.51]) ([10.245.245.51])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 15:41:40 -0800
-Message-ID: <f8ee4a2f-6b95-4f91-9ffc-b7df45464d46@linux.intel.com>
-Date: Thu, 4 Dec 2025 01:41:37 +0200
+	 In-Reply-To:Content-Type; b=cPkFHJfWspyKnGuzWyU+pAs4iF1TYlZNwEFsXijAhuwvmGzTlEnjt1IfOQr8SAIPqif6a8HCfPyUhKLEaRHxQH3Z7L+w+eePQwgyKu/KUIqdjWvMAaa5V79bdgCxFTzLa7Xxpm9NSEw4D3nl0/ckj9Gep/wqUvt3bQO97Bw+AqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Be9HZ9My; arc=none smtp.client-ip=209.85.221.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-559966a86caso99279e0c.2
+        for <linux-usb@vger.kernel.org>; Wed, 03 Dec 2025 16:43:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764809028; x=1765413828; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=61Fg0qope6bIFTvBwF2PK7eB2MmgYw/t+V2Q9FitbBc=;
+        b=Be9HZ9MySgglRr1HWmtn8CGu2d4yljbZQSPUKCsu1OuQw6pADH7M2WljWvuEsedf0D
+         tgB7owH6xe7PokSA2280G5mGw3qRFS9ZL2boQSXHIBb9L3bsLRoJjDWYqF6y2dlHaDbA
+         6epo5xUSdSNNjxcTffT+V2eThTJAyUYze7AeMyRzZSYkvZ9oXafqggq/mmNdRAuleF5B
+         x9f1sucaSYLHvti4SN6/OYRd/dvA3dwjp+ltUkzfgiSbJM3773ro5CQDg/6Z01EvCzad
+         CNjVrW0ppgRXCkTOlTcjQyqdJZXQce4sOU2JokH0x4yDURJS39b7FQZnrOrf6FRffYKH
+         y82g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764809028; x=1765413828;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=61Fg0qope6bIFTvBwF2PK7eB2MmgYw/t+V2Q9FitbBc=;
+        b=I6MScxges3j0n9LJ/7obpnd7AAv25slst4ucdekId5tfUIhauZih/SvXLMY7tMxI28
+         DbN/7PV4u3CdZvOzd+l6MtSHMNTlwQwnyiw6xO1thXcT9/LGUWc1rsIcCTRfdrluCjvd
+         /Tliy/gqKOGHJMIrHn1PnP8WXZJezkpwIc+QmxblbfoQ865ipUN+J1j6aU7cSXN9HrSD
+         8Y/X9Ml7vdUFhw+6X1rnt01wBFUay011qUD/CKMreeqqDHtIV+h/03E5+cAh5sEXE5V3
+         SHgO92rXtZFCIR6eh/tkzoFCIdYAyjJD1+5ZXcoViwKYdqf0VKmi0JJamTna9Z97NZrV
+         PPbw==
+X-Gm-Message-State: AOJu0YwEwJvXt7fnFYt4M2TbZKZ1BkCyYY6CLziOgAweqWx0tfB3MhA6
+	ge9WhXJjlfgajCbVW+5IlY8C7OGY+Zi8JfBYqeERVX6fQfqjvG6OrM4y
+X-Gm-Gg: ASbGnctJW8CPRV60knfkGX6AJYyKr1J5N4ynh1MQ+mEr/HhdmHakof46VxWlHpeSXaJ
+	Yf5u9Q5q/32BSE2Yo363k4PRZU+Xelv3B8WaYtMLLG+EjIgXm/6ZFwX6JEs1akCNEmDcT04ADSi
+	FsL/8qV7wcwxaIgBTb2Qkof6rMx/HsT9Yh82weVkLnL4nTkcUnWzRK4O7grawo6Gx+62lrdQVtM
+	zjyBFrqLvMaAUrqFlS3zI3XDXaBHhZn/r00Z12nlarOP91yPs8tOb40zA+YkiPCrJDeVsPaEoOJ
+	peMHCo8l6vAUJcewpnLJqmCJ62UrPnWXbFeI2udgWxZoe+VYbaQ2p2fX07kOgx0SsHOsN06At1z
+	HQJ8bwPvJtuHC8XSgk5zPoW6DvUZ6QfIkChigk09jquZHtEpJXgytxEOWgi4isGy0xUgYmMK6pf
+	ObpBeoI3+hlywvkG9Bx2UoVhbCyjBB
+X-Google-Smtp-Source: AGHT+IGsuatuhKh4iVq8o2lXvbj9+Qg260ROC3Yx+Y7OG23faK6RtOzwe4m6qVvfmSN3u8YYtNXYFg==
+X-Received: by 2002:a05:6122:8c7:b0:55b:aab:95e8 with SMTP id 71dfb90a1353d-55e69d8b1e4mr240706e0c.9.1764809028159;
+        Wed, 03 Dec 2025 16:43:48 -0800 (PST)
+Received: from [172.16.226.146] ([98.254.184.207])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-55e6c56853esm77504e0c.1.2025.12.03.16.43.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Dec 2025 16:43:47 -0800 (PST)
+Message-ID: <fb90cdeb-3286-43df-9043-eb474bf4ba8a@gmail.com>
+Date: Wed, 3 Dec 2025 19:43:44 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,250 +81,70 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION][BISECTED] usb: hub: total system freeze after
- running adb
-To: Forest <forestix@gaga.casa>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alan Stern <stern@rowland.harvard.edu>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Stefan Eichenberger <stefan.eichenberger@toradex.com>,
- Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-References: <qc0nhk9c6l0a08bkfeplrm3qjssgrjkvkp@sonic.net>
- <cc788286-c327-4b1f-adb4-8494c0145d74@linux.intel.com>
- <bu3vhk5i8pttoi6t8fan58lpe7l2eb12ib@sonic.net>
+Subject: Re: [PATCH v2 0/6] usb: gadget: dummy_hcd: coding style improvements
+To: Clint George <clintbgeorge@gmail.com>, stern@rowland.harvard.edu,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
+ khalid@kernel.org
+References: <20251119130840.14309-1-clintbgeorge@gmail.com>
+ <20251201203715.17768-1-clintbgeorge@gmail.com>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <bu3vhk5i8pttoi6t8fan58lpe7l2eb12ib@sonic.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: David Hunter <david.hunter.linux@gmail.com>
+In-Reply-To: <20251201203715.17768-1-clintbgeorge@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Thanks for the info and testing, got hung up on some other tasks for a while
-
-On 11/21/25 00:04, Forest wrote:
-> On Tue, 18 Nov 2025 11:21:18 +0200, Mathias Nyman wrote:
+On 12/1/25 15:37, Clint George wrote:
+> This patch series focuses on addressing various coding style issues in
+> the dummy_hcd USB gadget driver. The changes includes adding relevant
+> comments, improving readability, and ensuring consistency with kernel
+> coding conventions.
 > 
->> If the bisected patch is the issue then disabling runtime suspend could help.
->> For all usb* roothubs:
->>
->> echo on > /sys/bus/usb/devices/usb*/power/control
->>
->> Does it affect anything?
+> Clint George (6):
+>   usb: gadget: dummy_hcd: replace symbolic permissions (S_IRUGO) with octal (0444)
+>   usb: gadget: dummy_hcd: use 'unsigned int' instead of bare 'unsigned'
+>   usb: gadget: dummy_hcd: document ISO endpoint allocation pattern
+>   usb: gadget: dummy_hcd: use sizeof(*ptr) instead of sizeof *ptr
+>   usb: gadget: dummy_hcd: remove unnecessary parentheses
+>   usb: gadget: dummy_hcd: move function braces
 > 
-> Yes. After setting all of those to 'on', I have been unable to
-> reproduce the freeze. Tested for nearly 12 hours so far, so I think
-> it does avoid the problem. (I'll do some more testing and report
-> back if that changes.)
+>  drivers/usb/gadget/udc/dummy_hcd.c | 52 ++++++++++++------------------
+>  1 file changed, 21 insertions(+), 31 deletions(-)
 > 
->> Could you share some info about this setup:
+> ---
 > 
-...
-
-> 0f:00.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Raphael/Granite Ridge USB 2.0 xHCI [1022:15b8] (prog-if 30 [XHCI])
->          Subsystem: ASUSTeK Computer Inc. Device [1043:8877]
->          Flags: fast devsel, IRQ 24, IOMMU group 31
->          Memory at f6e00000 (64-bit, non-prefetchable) [size=1M]
->          Capabilities: [48] Vendor Specific Information: Len=08 <?>
->          Capabilities: [50] Power Management version 3
->          Capabilities: [64] Express Endpoint, IntMsgNum 0
->          Capabilities: [a0] MSI: Enable- Count=1/8 Maskable- 64bit+
->          Capabilities: [c0] MSI-X: Enable+ Count=8 Masked-
->          Capabilities: [100] Vendor Specific Information: ID=0001 Rev=1 Len=010 <?>
->          Capabilities: [270] Secondary PCI Express
->          Capabilities: [2a0] Access Control Services
->          Capabilities: [410] Physical Layer 16.0 GT/s <?>
->          Capabilities: [450] Lane Margining at the Receiver
->          Kernel driver in use: xhci_hcd
->          Kernel modules: xhci_pci
-
-This looks like a special xhci that only has a usb2 roothub.
-Those did cause issues earlier with hub post resume work, but should be fixed now.
-
+> Testing:
+> - Ran compiler testing with no new warnings detected.
+> - Ensured the module builds and inserts cleanly without issues.
+> - Used Static Analysis tools to confirm no new issues were introduced.
 > 
->> Enabling usb core and xhci dynamic debug could share some light on this:
->>
->> mount -t debugfs none /sys/kernel/debug
->> echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
->> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
->> < Reproduce issue >
->> Send output of dmesg
+> Please review the changes and let me know if any modifications
+> or further testing of the module is required.
 > 
-> With these enabled and adb running, dmesg produces a 90-line burst of
-> output roughly each second. This generated megabytes of output before
-> the freeze happened. Comparing the last three bursts, I found them to
-> be identical except for the relative order of a few lines, and the
-> timestamps.
-
-Ok, so with this setup we end up running a runtime suspend/resume stress
-test that wakes up and suspends the hosts about once a second.
-
+> As part of my LKMP mentorship i have to complete 5 patches as a criteria
+> for graduation and thus have focused on working on such
+> beginner-friendly patches so that not only do i get the required number
+> of patches but also get familiar with the process of kernel
+> developement. Thus, while this patch series doesn't address the max_stream value
+> exceeding problem that triggers the BUG() API, i will take some time to
+> dig deeper and truly understand the problem and fix it and not just
+> paper-over the problem.
 > 
-> I was redirecting `dmesg --follow` to a file while watching it in a
-> terminal, in hopes that any buffered output that wasn't written
-> to the file when the freeze happened would be visible on-screen.
-> A photo of the screen showed the same messages as found at the tail
-> of the file, but with newer timestamps.
+> Again, i am very grateful for your feedback greg and alan to guide a
+> beginner like me. 
 > 
-> Here is the last burst of logged messages:
-> 
-> [ 3516.610664] xhci_hcd 0000:0f:00.0: Setting command ring address to 0xffffe001
-> [ 3516.611616] xhci_hcd 0000:0f:00.0: xhci_resume: starting usb7 port polling.
-> [ 3516.611619] xhci_hcd 0000:0f:00.0: xhci_hub_status_data: stopping usb7 port polling
-> [ 3516.611621] xhci_hcd 0000:0f:00.0: hcd_pci_runtime_resume: 0
-> [ 3516.611624] usb usb7: usb auto-resume
-> [ 3516.611628] hub 7-0:1.0: hub_resume
-> [ 3516.611632] xhci_hcd 0000:0f:00.0: Get port status 7-1 read: 0x2a0, return 0x100
-> [ 3516.611689] hub 7-0:1.0: state 7 ports 1 chg 0000 evt 0000
-> [ 3516.611695] hub 7-0:1.0: hub_suspend
-> [ 3516.611704] usb usb7: bus auto-suspend, wakeup 1
-> [ 3516.611708] xhci_hcd 0000:0f:00.0: xhci_hub_status_data: stopping usb7 port polling
-> [ 3516.611712] xhci_hcd 0000:0f:00.0: config port 7-1 wake bits, portsc: 0xa0002a0, write: 0xa0202a0
-> [ 3516.611714] xhci_hcd 0000:0f:00.0: xhci_suspend: stopping usb7 port polling.
-> [ 3516.611726] xhci_hcd 0000:0f:00.0: Setting command ring address to 0xffffe001
-> [ 3516.612681] xhci_hcd 0000:0f:00.0: hcd_pci_runtime_suspend: 0
-> [ 3516.622567] xhci_hcd 0000:0e:00.4: Setting command ring address to 0xffffe001
-> [ 3516.623346] xhci_hcd 0000:0e:00.4: xhci_resume: starting usb5 port polling.
-> [ 3516.623349] xhci_hcd 0000:0e:00.4: xhci_hub_status_data: stopping usb6 port polling
-> [ 3516.623351] xhci_hcd 0000:0e:00.4: xhci_hub_status_data: stopping usb5 port polling
-> [ 3516.623352] xhci_hcd 0000:0e:00.4: hcd_pci_runtime_resume: 0
-> [ 3516.623354] usb usb6: usb auto-resume
-> [ 3516.623378] hub 6-0:1.0: hub_resume
-> [ 3516.650531] xhci_hcd 0000:0e:00.4: Get port status 6-1 read: 0x2a0, return 0x2a0
-> [ 3516.650565] xhci_hcd 0000:0e:00.4: Get port status 6-2 read: 0x2a0, return 0x2a0
-> [ 3516.650614] usb usb5: usb auto-resume
-> [ 3516.650632] hub 5-0:1.0: hub_resume
-> [ 3516.650635] xhci_hcd 0000:0e:00.4: Get port status 5-1 read: 0x2a0, return 0x100
-> [ 3516.650642] hub 6-0:1.0: state 7 ports 2 chg 0000 evt 0000
-> [ 3516.650664] xhci_hcd 0000:0e:00.4: Get port status 5-2 read: 0x2a0, return 0x100
-> [ 3516.650689] hub 5-0:1.0: state 7 ports 2 chg 0000 evt 0000
-> [ 3516.650697] hub 5-0:1.0: hub_suspend
-> [ 3516.650715] usb usb5: bus auto-suspend, wakeup 1
-> [ 3516.650733] xhci_hcd 0000:0e:00.4: xhci_hub_status_data: stopping usb5 port polling
-> [ 3516.662574] xhci_hcd 0000:0e:00.3: Setting command ring address to 0xffffe001
-> [ 3516.663352] xhci_hcd 0000:0e:00.3: xhci_resume: starting usb3 port polling.
-> [ 3516.663355] xhci_hcd 0000:0e:00.3: xhci_hub_status_data: stopping usb4 port polling
-> [ 3516.663357] xhci_hcd 0000:0e:00.3: xhci_hub_status_data: stopping usb3 port polling
-> [ 3516.663358] xhci_hcd 0000:0e:00.3: hcd_pci_runtime_resume: 0
-> [ 3516.663360] usb usb4: usb auto-resume
-> [ 3516.663383] hub 4-0:1.0: hub_resume
-> [ 3516.686531] xhci_hcd 0000:0e:00.3: Get port status 4-1 read: 0x2a0, return 0x2a0
-> [ 3516.686560] xhci_hcd 0000:0e:00.3: Get port status 4-2 read: 0x2a0, return 0x2a0
-> [ 3516.686588] hub 4-0:1.0: state 7 ports 2 chg 0000 evt 0000
-> [ 3516.686616] usb usb3: usb auto-resume
-> [ 3516.686637] hub 3-0:1.0: hub_resume
-> [ 3516.686640] xhci_hcd 0000:0e:00.3: Get port status 3-1 read: 0x2a0, return 0x100
-> [ 3516.686655] xhci_hcd 0000:0e:00.3: Get port status 3-2 read: 0x2a0, return 0x100
-> [ 3516.686676] hub 3-0:1.0: state 7 ports 2 chg 0000 evt 0000
-> [ 3516.686684] hub 3-0:1.0: hub_suspend
-> [ 3516.686704] usb usb3: bus auto-suspend, wakeup 1
-> [ 3516.686722] xhci_hcd 0000:0e:00.3: xhci_hub_status_data: stopping usb3 port polling
-> [ 3516.686736] usb usb2: usb auto-resume
-> [ 3516.686744] hub 2-0:1.0: hub_resume
-> [ 3516.710545] xhci_hcd 0000:0c:00.0: Get port status 2-1 read: 0x2a0, return 0x2a0
-> [ 3516.710578] xhci_hcd 0000:0c:00.0: Get port status 2-2 read: 0x2a0, return 0x2a0
-> [ 3516.710599] xhci_hcd 0000:0c:00.0: Get port status 2-3 read: 0x2a0, return 0x2a0
-> [ 3516.710624] xhci_hcd 0000:0c:00.0: Get port status 2-4 read: 0x2a0, return 0x2a0
-> [ 3516.710645] xhci_hcd 0000:0c:00.0: Get port status 2-5 read: 0x2a0, return 0x2a0
-> [ 3516.710670] hub 2-0:1.0: state 7 ports 5 chg 0000 evt 0000
-> [ 3516.858535] xhci_hcd 0000:0e:00.4: set port remote wake mask, actual port 6-1 status  = 0xe0002a0
-> [ 3516.858551] xhci_hcd 0000:0e:00.4: set port remote wake mask, actual port 6-2 status  = 0xe0002a0
-> [ 3516.858559] hub 6-0:1.0: hub_suspend
-> [ 3516.858567] usb usb6: bus auto-suspend, wakeup 1
-> [ 3516.858594] xhci_hcd 0000:0e:00.4: xhci_hub_status_data: stopping usb6 port polling
-> [ 3516.858600] xhci_hcd 0000:0e:00.4: config port 6-1 wake bits, portsc: 0xa0002a0, write: 0xa0202a0
-> [ 3516.858615] xhci_hcd 0000:0e:00.4: config port 6-2 wake bits, portsc: 0xa0002a0, write: 0xa0202a0
-> [ 3516.858636] xhci_hcd 0000:0e:00.4: config port 5-1 wake bits, portsc: 0xa0002a0, write: 0xa0202a0
-> [ 3516.858658] xhci_hcd 0000:0e:00.4: config port 5-2 wake bits, portsc: 0xa0002a0, write: 0xa0202a0
-> [ 3516.858660] xhci_hcd 0000:0e:00.4: xhci_suspend: stopping usb5 port polling.
-> [ 3516.858677] xhci_hcd 0000:0e:00.4: Setting command ring address to 0xffffe001
-> [ 3516.859456] xhci_hcd 0000:0e:00.4: hcd_pci_runtime_suspend: 0
-> [ 3516.894548] xhci_hcd 0000:0e:00.3: set port remote wake mask, actual port 4-1 status  = 0xe0002a0
-> [ 3516.894567] xhci_hcd 0000:0e:00.3: set port remote wake mask, actual port 4-2 status  = 0xe0002a0
-> [ 3516.894575] hub 4-0:1.0: hub_suspend
-> [ 3516.894582] usb usb4: bus auto-suspend, wakeup 1
-> [ 3516.894610] xhci_hcd 0000:0e:00.3: xhci_hub_status_data: stopping usb4 port polling
-> [ 3516.894615] xhci_hcd 0000:0e:00.3: config port 4-1 wake bits, portsc: 0xa0002a0, write: 0xa0202a0
-> [ 3516.894631] xhci_hcd 0000:0e:00.3: config port 4-2 wake bits, portsc: 0xa0002a0, write: 0xa0202a0
-> [ 3516.894653] xhci_hcd 0000:0e:00.3: config port 3-1 wake bits, portsc: 0xa0002a0, write: 0xa0202a0
-> [ 3516.894674] xhci_hcd 0000:0e:00.3: config port 3-2 wake bits, portsc: 0xa0002a0, write: 0xa0202a0
-> [ 3516.894676] xhci_hcd 0000:0e:00.3: xhci_suspend: stopping usb3 port polling.
-> [ 3516.894693] xhci_hcd 0000:0e:00.3: Setting command ring address to 0xffffe001
-> [ 3516.895472] xhci_hcd 0000:0e:00.3: hcd_pci_runtime_suspend: 0
-> [ 3516.918537] xhci_hcd 0000:0c:00.0: set port remote wake mask, actual port 2-1 status  = 0xe0002a0
-> [ 3516.918551] xhci_hcd 0000:0c:00.0: set port remote wake mask, actual port 2-2 status  = 0xe0002a0
-> [ 3516.918561] xhci_hcd 0000:0c:00.0: set port remote wake mask, actual port 2-3 status  = 0xe0002a0
-> [ 3516.918569] xhci_hcd 0000:0c:00.0: set port remote wake mask, actual port 2-4 status  = 0xe0002a0
-> [ 3516.918578] xhci_hcd 0000:0c:00.0: set port remote wake mask, actual port 2-5 status  = 0xe0002a0
-> [ 3516.918584] hub 2-0:1.0: hub_suspend
-> [ 3516.918591] usb usb2: bus auto-suspend, wakeup 1
-> [ 3516.918599] xhci_hcd 0000:0c:00.0: xhci_hub_status_data: stopping usb2 port polling
+> Thanks,
+> Clint
 > 
 
-I can't see anything suspicious in here.
-xHCI hosts and their roothubs resume, USB2 roothubs suspend back almost immediately, USB 3 hubs after
-200ms of post resume delay. host controller suspend right after that.
+Hey Clint,
 
-Best guess is that something is still messed up with flushing the work.
+In general, when submitting version 2 of a patch series, most
+maintainers will prefer that you send it as a new patch series and not
+as a reply. I usually recommend putting the links to the respective
+previous versions in the change log.
 
-If possible, could you try with the same usb debugging enabled as last time,
-and add HUNG_TASK debugging entries in kernel config:
-
-CONFIG_DETECT_HUNG_TASK=y
-CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=30
-CONFIG_DETECT_HUNG_TASK_BLOCKER=y
-
-And add the following patch to hub driver:
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 256fe8c86828..6863a2feb1d5 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1383,6 +1383,7 @@ static void hub_post_resume(struct work_struct *ws)
-  {
-  	struct usb_hub *hub = container_of(ws, struct usb_hub, post_resume_work.work);
-  
-+	dev_err(hub->intfdev, "HUBHANG hub_post_resume()\n");
-  	usb_autopm_put_interface_async(to_usb_interface(hub->intfdev));
-  	hub_put(hub);
-  }
-@@ -1395,6 +1396,7 @@ static void hub_quiesce(struct usb_hub *hub, enum hub_quiescing_type type)
-  {
-  	struct usb_device *hdev = hub->hdev;
-  	unsigned long flags;
-+	bool flushed;
-  	int i;
-  
-  	/* hub_wq and related activity won't re-trigger */
-@@ -1412,7 +1414,11 @@ static void hub_quiesce(struct usb_hub *hub, enum hub_quiescing_type type)
-  
-  	/* Stop hub_wq and related activity */
-  	timer_delete_sync(&hub->irq_urb_retry);
--	flush_delayed_work(&hub->post_resume_work);
-+	dev_err(hub->intfdev, "HUBHANG %pS -> hub_quiesce() flush post resume work\n",
-+		  __builtin_return_address(0));
-+	flushed = flush_delayed_work(&hub->post_resume_work);
-+	dev_err(hub->intfdev, "HUBHANG post resume work flush%s\n",
-+		  flushed ? "ed" : " not needed");
-  	usb_kill_urb(hub->urb);
-  	if (hub->has_indicators)
-  		cancel_delayed_work_sync(&hub->leds);
-@@ -1781,6 +1787,7 @@ static void hub_release(struct kref *kref)
-  {
-  	struct usb_hub *hub = container_of(kref, struct usb_hub, kref);
-  
-+	dev_err(hub->intfdev, "hub_release()\n");
-  	usb_put_dev(hub->hdev);
-  	usb_put_intf(to_usb_interface(hub->intfdev));
-  	kfree(hub);
--- 
-2.43.0
-
-Thanks
-Mathias
-
-
-
-
-
-
+Thanks,
+David Hunter
 
