@@ -1,122 +1,97 @@
-Return-Path: <linux-usb+bounces-31166-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31167-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B064CA3CBD
-	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8748CA3CC6
+	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 825E9303FA4C
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:21:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D7EDC305E235
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:21:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE41E33FE11;
-	Thu,  4 Dec 2025 13:21:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41BDF342527;
+	Thu,  4 Dec 2025 13:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cF/xVem3"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PONcNKLr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60F3DF6C;
-	Thu,  4 Dec 2025 13:21:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF682E2EEE;
+	Thu,  4 Dec 2025 13:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764854484; cv=none; b=EvT3YsIYbXrskIzHbYjZdhmcgAWfN75EvrDPHdGi499d444w4GW8Hj/TMoNviudKY4Pzv7yxx0gKf8PtZlVupAmKuRHIwm37tLVt9aXl8mVrVGxOEtd49j8wn5kyC6dl8FuLkBndL+LjF6cFL19HCtesPkgTL5xJSbJH4VE1Puo=
+	t=1764854506; cv=none; b=kXH7GYhJwy7y6TgEa04MTkLeA4JqcDfUAACkBRZyQWvgug8hofMiZJebA6TLqgd+v7ZwCZ/+HfS8WggGLDMP3TMsWaW2ZAqqpZ3rwdTk9N9uM5+RAQghqQPLaMmKXMAHe8ljx9eqm/wD7wDzGDC1i1sUSCDroK7hWqpHNMGbQIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764854484; c=relaxed/simple;
-	bh=C+NU6l/RbJsSuvvywwgKFGVwR01FfnEEkNHaEakSK1Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DaAzLo95CPCh/+sPZ2XStXuNMw97z6QmOKbdICZnnTBusool4QQXLLXKPtfbTJqzsf5O2r4LGZDOYGWCS6Iqn93J4IyLlE27j/Xc8vhpRyAx0syYWk64s1z74v1etR+gSFujzF3swgD6aOPqQ3L/5La/c5Oc36vyMwjeXIWf64s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cF/xVem3; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764854482; x=1796390482;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C+NU6l/RbJsSuvvywwgKFGVwR01FfnEEkNHaEakSK1Q=;
-  b=cF/xVem3MhAcrVJ9bqz9BA+yYsPBPjOJONa1V4SMTMprrPdf7ZSy91QS
-   J/Lghd8XaZ+rFCMU8KT6wM8lEchjawP+GHuaG+F+uhJqh2NEMq7sLytiI
-   1a5RNH1aEX12VvFJ+acO9bW/fVHMYYAzxW6Kg6lo0ZTUwWAS48cVq1Xso
-   r65laLYo29OE6UQg/U6f3W39l1eKwmpZIBfnbAPSKxFOBy9G/EsPE91LI
-   +pIXahBaQ44ORzt8QVOWx7/PaTufglpmhgGxrt29cXGWAn0N7U0i4OvYD
-   T/BFqR0IDndDHM+zcLnx2w+CxdpEThRcb+IFypR4GsUuwBK2JZQXjVSjM
-   g==;
-X-CSE-ConnectionGUID: 7RgE/FLUREas6JkNJmf9GA==
-X-CSE-MsgGUID: lFuJBLnGSM661Kx+fdOkgQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="66914005"
-X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="66914005"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 05:21:14 -0800
-X-CSE-ConnectionGUID: Shu53dbaR8qnHZFpAssbIQ==
-X-CSE-MsgGUID: cR56gBzvRGGn4ahR+TOk3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="195795445"
-Received: from rfrazer-mobl3.amr.corp.intel.com (HELO kuha) ([10.124.220.149])
-  by fmviesa010.fm.intel.com with SMTP; 04 Dec 2025 05:21:10 -0800
-Received: by kuha (sSMTP sendmail emulation); Thu, 04 Dec 2025 15:21:02 +0200
-Date: Thu, 4 Dec 2025 15:21:02 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Pengyu Luo <mitltlatltl@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Pavan Holla <pholla@chromium.org>,
-	Yue Haibing <yuehaibing@huawei.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: huawei-gaokin: add DRM dependency
-Message-ID: <aTGKvnoMaUGAVhLH@kuha>
-References: <20251204101111.1035975-1-arnd@kernel.org>
+	s=arc-20240116; t=1764854506; c=relaxed/simple;
+	bh=bzz0Z6DlTyXiigHgemprkU5O2lR9T56OJSKOt035fi8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JbS0jK6ZZxXVNsPLmrptvP+1DWPWst/HFkkHilSxf/JE6v1O2KEvIh/5iGlwsAYgkWQKPQ5je77VhdIWADvN25jPifrcK2W9Y2LCn/lLOwIe3OgaGM4lgFE7A21PkU+i4HQaBZjD1n9lffWrpMuzHIbFWVd69oRp/SzM8pH0hu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PONcNKLr; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=lv
+	Qc1rXcigKPfnEJkPS4F/wygNXYiWV4BtgNrmuO7Js=; b=PONcNKLroaPMptL7l1
+	kUZXd0cMIMte7JJJ6H+gsKBVgKj89TPX4Mq1FsAsp1pE6vjWKltO3IigtkiNLeQV
+	dofiQyf1Mx6YatZibECzeQjuHxyAk3e6uEeJaSU6HVFqfzFAVE2OtWKmth3s11QL
+	M0EakpPgqdnDpxfCrWRBvEFxE=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wAHwWrbijFp3tKbDw--.62377S4;
+	Thu, 04 Dec 2025 21:21:32 +0800 (CST)
+From: Haoxiang Li <haoxiang_li2024@163.com>
+To: gregkh@linuxfoundation.org,
+	haoxiang_li2024@163.com,
+	kuninori.morimoto.gx@renesas.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: renesas_usbhs: Fix a resource leak in usbhs_pipe_malloc()
+Date: Thu,  4 Dec 2025 21:21:29 +0800
+Message-Id: <20251204132129.109234-1-haoxiang_li2024@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251204101111.1035975-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAHwWrbijFp3tKbDw--.62377S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKr47ZFy3CF1fJw45Cw17KFg_yoWDtrb_Cr
+	1UArnrJr9rAryfKF1xJr43XFW09ws5XF1fGF1kKw4fAryj9rnF9wsFvFWrJr1UKF1IyrZ0
+	yws7Ar97A34xWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRAAwIUUUUUU==
+X-CM-SenderInfo: xkdr5xpdqjszblsqjki6rwjhhfrp/xtbCxR2A7mkxit2H5wAA3Z
 
-Thu, Dec 04, 2025 at 11:11:07AM +0100, Arnd Bergmann kirjoitti:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Selecting DRM_AUX_HPD_BRIDGE is not possible from a built-in driver when
-> CONFIG_DRM=m:
-> 
-> WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
->   Depends on [m]: HAS_IOMEM [=y] && DRM [=m] && DRM_BRIDGE [=y] && OF [=y]
->   Selected by [y]:
->   - UCSI_HUAWEI_GAOKUN [=y] && USB_SUPPORT [=y] && TYPEC [=y] && TYPEC_UCSI [=y] && EC_HUAWEI_GAOKUN [=y] && DRM_BRIDGE [=y] && OF [=y]
-> 
-> Add the same dependency we have in similar drivers to work around this.
-> 
-> Fixes: 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+usbhsp_get_pipe() set pipe's flags to IS_USED. In error paths,
+usbhsp_put_pipe() is required to clear pipe's flags to prevent
+pipe exhaustion.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Fixes: f1407d5c6624 ("usb: renesas_usbhs: Add Renesas USBHS common code")
+Cc: stable@vger.kernel.org
+Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
+---
+ drivers/usb/renesas_usbhs/pipe.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> ---
->  drivers/usb/typec/ucsi/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-> index 7fcb1e1de5d6..b812be4d0e67 100644
-> --- a/drivers/usb/typec/ucsi/Kconfig
-> +++ b/drivers/usb/typec/ucsi/Kconfig
-> @@ -96,6 +96,7 @@ config UCSI_LENOVO_YOGA_C630
->  config UCSI_HUAWEI_GAOKUN
->  	tristate "UCSI Interface Driver for Huawei Matebook E Go"
->  	depends on EC_HUAWEI_GAOKUN
-> +	depends on DRM || !DRM
->  	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
->  	help
->  	  This driver enables UCSI support on the Huawei Matebook E Go tablet,
-> -- 
-> 2.39.5
-
+diff --git a/drivers/usb/renesas_usbhs/pipe.c b/drivers/usb/renesas_usbhs/pipe.c
+index 75fff2e4cbc6..56fc3ff5016f 100644
+--- a/drivers/usb/renesas_usbhs/pipe.c
++++ b/drivers/usb/renesas_usbhs/pipe.c
+@@ -713,11 +713,13 @@ struct usbhs_pipe *usbhs_pipe_malloc(struct usbhs_priv *priv,
+ 	/* make sure pipe is not busy */
+ 	ret = usbhsp_pipe_barrier(pipe);
+ 	if (ret < 0) {
++		usbhsp_put_pipe(pipe);
+ 		dev_err(dev, "pipe setup failed %d\n", usbhs_pipe_number(pipe));
+ 		return NULL;
+ 	}
+ 
+ 	if (usbhsp_setup_pipecfg(pipe, is_host, dir_in, &pipecfg)) {
++		usbhsp_put_pipe(pipe);
+ 		dev_err(dev, "can't setup pipe\n");
+ 		return NULL;
+ 	}
 -- 
-heikki
+2.25.1
+
 
