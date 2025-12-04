@@ -1,362 +1,267 @@
-Return-Path: <linux-usb+bounces-31153-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31155-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06BC3CA28D6
-	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 07:36:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A480CA28F5
+	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 07:47:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 32DF53096CE2
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 06:33:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 46E4F30285D5
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 06:47:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086773128A1;
-	Thu,  4 Dec 2025 06:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A632C027F;
+	Thu,  4 Dec 2025 06:47:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="mUYk7IKF"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="DMfKoLH0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038861D516C;
-	Thu,  4 Dec 2025 06:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D7638D;
+	Thu,  4 Dec 2025 06:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764829982; cv=none; b=tbOQMk3jwGDcbktMGryh34HgVqKIbwM0vNQxoGIWCklnsjyF6RY+RrIZl+WQV6RS6p06b9mUSIqb4xSmUa3t6CWr0HN+zgWVRYn+5Ovt6IKR7YcxpbO7l0eiKAUqhJFOWJgHDGEVFh8FczDHBTjBjBeO5gG/5/RqCuJCmWLxYN4=
+	t=1764830820; cv=none; b=QLiw6+gFKabfFe0DKolZyfYma6+HmTrB8U1a7hKUHBW5bUgkbhcuUXKs0apdZu/yZMgeetkzavEFmJzS2c9K7GqHCp/2eGPlFzgEgRAJ9jg26yX+1ZF1uVkDYVOTEYmN6pj/fcr5gIaxN9eirBZMNzaJnGm9353RVwDISyq8W10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764829982; c=relaxed/simple;
-	bh=CogOCq7Dgo3J6O+ahfKV8yupDN4OJqUtveUj18KHbi4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Eok9hc9CX6slN1TLwJjgTn0SJnWo2aLilKCCXw1FddlooK5SqOHN2tnW1g26SlwHrxo2TAxO5ejZjHbBexLyxPJSoSuZuHNyc8oOgWVLaKy011HTwXze3Z8UNhGjVr3ayTHGfXRav1TXc8VBwGe+SShyxAYgeF5eSZcC/jpWu38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=mUYk7IKF; arc=none smtp.client-ip=54.206.16.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airkyi.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=airkyi.com;
-	s=altu2504; t=1764829972;
-	bh=Xn5Sqf6jlBXaETnSdjcUsZQPPZf1EW7Rcj8pIik+fGE=;
-	h=From:To:Subject:Date:Message-Id;
-	b=mUYk7IKFO62yWgvcas562YXn+UB1szp0PeCAEDJ8WdeoecWrnl9usiXIuu3n7SbNy
-	 9y7YRdEJ3WksFjrX53E7qQAjjWjkUVZmoL3pKDDWC68X1FkXIunscCZtdaVsR0vZSX
-	 13V9H9N1wLbweNVJtGcR4cIAUZz7udKiCWOq1r5k=
-X-QQ-mid: esmtpsz21t1764829926tf415c76b
-X-QQ-Originating-IP: tkTUpIKVnQyvaBhmC4pEHcMzVxAgXDbEu6gyl29qYRw=
-Received: from DESKTOP-8BT1A2O.localdomain ( [58.22.7.114])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 04 Dec 2025 14:32:03 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3720791288520952193
-From: Chaoyi Chen <kernel@airkyi.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	s=arc-20240116; t=1764830820; c=relaxed/simple;
+	bh=JvsNdwxxyzpivZxILB10Eu494+vyyKv0nrXCXxkjz3g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=okI0utWkgYOMhNnVmGGJ2uiJzavmF9P+8ai3bSGk5vzBtF/cs5SeoQrfn81KhliTWLoDwbuA8gZR6W1cMKdRaaDi75SeAa7yofnqK+zUqymhiYB57HUtKgKEwjqBfUvbK/65bynMKAAnIQlGDXwzSwyXsiixuDjxQ4kvRhu2OTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=DMfKoLH0; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=6V+oBcK/j52G6lsVveD6nE1Y0DSxEoZWG7pTjATtvx0=; b=DMfKoLH0UioN2bZkTLYha18j63
+	teVEXM2GOEXu0WVLPSffJuq1oNWr3Y8E4BvLx/NQpTGLhn/A7nraB5izgk5B/up/rep0ox91kQqvc
+	iFuyRCUTDTMjVojmT48vkXvYqwxDtvyQ3mzCTBAQwg1vOYto/f6IOmX8yscxV8lJEkrK+XvEf8qK9
+	hzvOhwPJZe8gEGdrzwrq4S+j9OQRnxivkeQXc6xVa8UID5cW6BeKT63HYouXuMiSyHuSo5/fWbbtR
+	nXID9o4oSOQd75OJkYQreZuMnJhLfbAPgK+N7TIK/toyLJjf29/y6kqHAuKzcdo8lUfesJy3aC6T9
+	hLfqJadg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vR37K-0000000A4eR-3hi7;
+	Thu, 04 Dec 2025 06:47:07 +0000
+Date: Thu, 4 Dec 2025 06:47:06 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Ian Kent <raven@themaw.net>, Miklos Szeredi <miklos@szeredi.hu>,
+	NeilBrown <neil@brown.name>,
+	Andreas Hindborg <a.hindborg@kernel.org>, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	Kees Cook <kees@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Peter Chen <hzpeterchen@gmail.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Yubing Zhang <yubing.zhang@rock-chips.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Amit Sunil Dhamne <amitsd@google.com>,
-	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Johan Jonker <jbx6244@gmail.com>,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Peter Robinson <pbrobinson@gmail.com>
-Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	dri-devel@lists.freedesktop.org
-Subject: [RESEND PATCH v11 11/11] arm64: dts: rockchip: rk3399-evb-ind: Add support for DisplayPort
-Date: Thu,  4 Dec 2025 14:31:09 +0800
-Message-Id: <20251204063109.104-12-kernel@airkyi.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20251204063109.104-1-kernel@airkyi.com>
-References: <20251204063109.104-1-kernel@airkyi.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:airkyi.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: MI8xiyr9SLuAXVPvvA1fD2UVI9ooUgKnNUS6Umv7n1kVpCvmgQu415wj
-	z7ruqPFpIhIcp1fi/7uZLJmDcCC79V+Tf36VWIJTqAicDbEsrBcA1Dp23OXzJkJUH6po8xK
-	YJifUrfY769qYmJXkXaqE4QJ4FigIJho4iK6Fs/2eSbxaEY9k0xuyJseySKYQbVjiRSScRw
-	UHHuMR4Puz6CrMXVxsTGKhOrUNw/x33WoaB9nSasOZsQyqw31+AzjDyMagZsmkbg2qewcpq
-	1u+jvemoS7wdAFtTairCgUaYQ7UPzVNgD2fVgz5XfIhNJGOvtPMCaXBq+8ianhBrC8o0mPP
-	wPLMW2CxOOW2d1Qu6ucRoi2rLAvOhyXAt7M+PynyINNHqiQdAMxpQ0ys7z33ucRsX44Gotr
-	cyObX2QZ6CqNULgV/YM90mudQkMr05yyNLjJfXoWqsEGbj905TaYgZpijXQ0pX/Dz5YLoyB
-	0nJVj+Jmx3JYEu6cXXp/yHQHUy7weqKUpS92pLYeonPrJV0O+NwqBTW/o+aQarEAHW4Rzer
-	8sAZ5SQeQHwvZKV8QzEIdR38NZP5KzGAcy8kpQfRxlJejzRZImO0pwCRa/3P/bIIB7plmbO
-	hXQo36muSD1KsU+E+Ku/zU018q3XFskI8yzdVfLU1W7eVgCFCGvQuZQ902e8ALlObKlk9/h
-	WU0ifUG8NUxuUIMuVQnzrTjU6XqPiJcg/rtyprZdfv8w6g4C5bSgFptp1BNqlO+IJWVfzYo
-	RuoA+frwOTcs3eLhVvw9xhrGVbDaMXJmVV9WfwjTw9aQ7yLVaoj+WoXab/n5cik2OCPs5PW
-	7SgsbgsgcdMcKOH0YAtGt8SMK86R7OUnZhpoNnAX5+2CE9DcNugca93SJUs8zKdO4jOSZ32
-	vTaLhPr+Gsthz+94UBrDZc03EOX4c9ohwNt5dh9Va0fXcIBW+afJbUaflmyzRoNAda0WDaR
-	quaEQI+63vvnlyqBlzRSyLFNWvKkyt3Nb6LOb0brnkRPLQh5Pw9gRYVJJgpLh0TZVQeMTYi
-	lr1YH4myeCeBMn43F+
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-X-QQ-RECHKSPAM: 0
+	linux-usb@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	John Johansen <john.johansen@canonical.com>,
+	selinux@vger.kernel.org,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	bpf@vger.kernel.org, Chris Mason <clm@meta.com>
+Subject: [git pull][vfs] tree-in-dcache stuff
+Message-ID: <20251204064706.GJ1712166@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c:
 
-The RK3399 EVB IND board has a Type-C interface DisplayPort.
-It use fusb302 chip as Type-C controller.
+  Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
 
-fusb302 chip ---> USB/DP PHY0 <----> CDN-DP controller
+are available in the Git repository at:
 
-Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
----
+  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-persistency
 
-(no changes since v10)
+for you to fetch changes up to eb028c33451af08bb34f45c6be6967ef1c98cbd1:
 
-Changes in v9:
-- Add usb role switch for Type-C.
-- Remove USB2 PHY in Type-C connection.
+  d_make_discardable(): warn if given a non-persistent dentry (2025-11-17 23:59:27 -0500)
 
-(no changes since v4)
+	Conflicts in Documentation/filesystems/porting.rst, fs/dcache.c,
+fs/debugfs/inode.c and security/apparmor/apparmorfs.c; proposed resolution
+in #proposed-merge (same as in -next).  Details of conflicts:
+Documentation/filesystems/porting.rst:
+	usual trivial append/append conflict
+fs/dcache.c in d_instantiate_new():
+	pulling spin_unlock(&entry->d_lock) from __d_instantiate() into
+	callers in this branch vs. changes of the lines immediately
+	following the call of __d_instantiate() in mainline.  Obvious
+	resolution.
+fs/debugfs/inode.c in __debugfs_create_file(), debugfs_create_dir()
+	and debugfs_create_automount():
+	removal of pointless check in this branch vs. changes of
+	(unreachable) failure handling in mainline.
+	Resolution: remove it, it's still a dead code.
+fs/debugfs/inode.c in debugfs_create_symlink():
+	d_instantiate() -> d_make_persistent() in this branch,
+	end_creating() -> debugfs_end_creating() in mainline.
+	Obvious resolution...
+security/apparmor/apparmorfs.c in aafs_remove():
+	switch of simple_rmdir() and simple_unlink() to
+	__simple_{rmdir,unlink}() in this branch vs. switch to
+	start_removing_dentry()/end_removing() around those calls
+	in mainline.  Resolution: switch simple_{rmdir,unlink}() as in
+	this branch.  TBH, I rather doubt that mainline change there was
+	worthwhile - aafs interaction with VFS locking is...  special,
+	and _ANY_ changes of locking protocol on our end will have to
+	consider that location very carefully anyway; making it look
+	like a regular removal is at that stage is asking for trouble.
 
-Changes in v3:
-- Fix wrong vdo value.
-- Fix port node in usb-c-connector.
+----------------------------------------------------------------
+Some filesystems use a kinda-sorta controlled dentry refcount leak to pin
+dentries of created objects in dcache (and undo it when removing those).
+Reference is grabbed and not released, but it's not actually _stored_
+anywhere.  That works, but it's hard to follow and verify; among other
+things, we have no way to tell _which_ of the increments is intended
+to be an unpaired one.  Worse, on removal we need to decide whether
+the reference had already been dropped, which can be non-trivial if
+that removal is on umount and we need to figure out if this dentry is
+pinned due to e.g. unlink() not done.  Usually that is handled by using
+kill_litter_super() as ->kill_sb(), but there are open-coded special
+cases of the same (consider e.g. /proc/self).
 
-Changes in v2:
-- Add endpoint to link DP PHY and DP controller.
-- Fix devicetree coding style.
+Things get simpler if we introduce a new dentry flag (DCACHE_PERSISTENT)
+marking those "leaked" dentries.  Having it set claims responsibility
+for +1 in refcount.
 
- .../boot/dts/rockchip/rk3399-evb-ind.dts      | 147 ++++++++++++++++++
- 1 file changed, 147 insertions(+)
+The end result this series is aiming for:
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts b/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts
-index 70aee1ab904c..be1e90f7a453 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-evb-ind.dts
-@@ -4,6 +4,7 @@
-  */
- 
- /dts-v1/;
-+#include <dt-bindings/usb/pd.h>
- #include "rk3399.dtsi"
- 
- / {
-@@ -19,6 +20,21 @@ chosen {
- 		stdout-path = "serial2:1500000n8";
- 	};
- 
-+	sound: sound {
-+		compatible = "rockchip,rk3399-gru-sound";
-+		rockchip,cpu = <&i2s0 &spdif>;
-+	};
-+
-+	vbus_typec: regulator-vbus-typec {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio1 RK_PC2 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc5v0_typec0_en>;
-+		regulator-name = "vbus_typec";
-+		vin-supply = <&vcc5v0_sys>;
-+	};
-+
- 	vcc5v0_sys: regulator-vcc5v0-sys {
- 		compatible = "regulator-fixed";
- 		enable-active-high;
-@@ -31,6 +47,11 @@ vcc5v0_sys: regulator-vcc5v0-sys {
- 	};
- };
- 
-+&cdn_dp {
-+	phys = <&tcphy0_dp>;
-+	status = "okay";
-+};
-+
- &cpu_b0 {
- 	cpu-supply = <&vdd_cpu_b>;
- };
-@@ -55,6 +76,12 @@ &cpu_l3 {
- 	cpu-supply = <&vdd_cpu_l>;
- };
- 
-+&dp_out {
-+	dp_controller_output: endpoint {
-+		remote-endpoint = <&dp_phy_in>;
-+	};
-+};
-+
- &emmc_phy {
- 	status = "okay";
- };
-@@ -341,6 +368,71 @@ regulator-state-mem {
- 	};
- };
- 
-+&i2c4 {
-+	i2c-scl-rising-time-ns = <475>;
-+	i2c-scl-falling-time-ns = <26>;
-+	status = "okay";
-+
-+	usbc0: typec-portc@22 {
-+		compatible = "fcs,fusb302";
-+		reg = <0x22>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <RK_PA2 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&usbc0_int>;
-+		vbus-supply = <&vbus_typec>;
-+
-+		usb_con: connector {
-+			compatible = "usb-c-connector";
-+			label = "USB-C";
-+			data-role = "dual";
-+			power-role = "dual";
-+			try-power-role = "sink";
-+			op-sink-microwatt = <1000000>;
-+			sink-pdos =
-+				<PDO_FIXED(5000, 2500, PDO_FIXED_USB_COMM)>;
-+			source-pdos =
-+				<PDO_FIXED(5000, 1500, PDO_FIXED_USB_COMM)>;
-+
-+			altmodes {
-+				displayport {
-+					svid = /bits/ 16 <0xff01>;
-+					vdo = <0x00001c46>;
-+				};
-+			};
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					usbc0_orien_sw: endpoint {
-+						remote-endpoint = <&tcphy0_orientation_switch>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					usbc0_role_sw: endpoint {
-+						remote-endpoint = <&dwc3_0_role_switch>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					dp_altmode_mux: endpoint {
-+						remote-endpoint = <&tcphy0_typec_dp>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &i2s2 {
- 	status = "okay";
- };
-@@ -354,6 +446,16 @@ &io_domains {
- };
- 
- &pinctrl {
-+	usb-typec {
-+		usbc0_int: usbc0-int {
-+			rockchip,pins = <1 RK_PA2 RK_FUNC_GPIO &pcfg_pull_up>;
-+		};
-+
-+		vcc5v0_typec0_en: vcc5v0-typec0-en {
-+			rockchip,pins = <1 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	pmic {
- 		pmic_int_l: pmic-int-l {
- 			rockchip,pins = <1 RK_PC5 RK_FUNC_GPIO &pcfg_pull_up>;
-@@ -400,10 +502,48 @@ &sdmmc {
- 	status = "okay";
- };
- 
-+&sound {
-+	rockchip,codec = <&cdn_dp>;
-+	status = "okay";
-+};
-+
-+&spdif {
-+	status = "okay";
-+};
-+
- &tcphy0 {
- 	status = "okay";
- };
- 
-+&tcphy0_dp {
-+	mode-switch;
-+
-+	port {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		tcphy0_typec_dp: endpoint@0 {
-+			reg = <0>;
-+			remote-endpoint = <&dp_altmode_mux>;
-+		};
-+
-+		dp_phy_in: endpoint@1 {
-+			reg = <1>;
-+			remote-endpoint = <&dp_controller_output>;
-+		};
-+	};
-+};
-+
-+&tcphy0_usb3 {
-+	orientation-switch;
-+
-+	port {
-+		tcphy0_orientation_switch: endpoint {
-+			remote-endpoint = <&usbc0_orien_sw>;
-+		};
-+	};
-+};
-+
- &tcphy1 {
- 	status = "okay";
- };
-@@ -461,7 +601,14 @@ &usb_host1_ohci {
- };
- 
- &usbdrd_dwc3_0 {
-+	usb-role-switch;
- 	status = "okay";
-+
-+	port {
-+		dwc3_0_role_switch: endpoint {
-+			remote-endpoint = <&usbc0_role_sw>;
-+		};
-+	};
- };
- 
- &usbdrd3_0 {
--- 
-2.51.1
+* get these unbalanced dget() and dput() replaced with new primitives that
+  would, in addition to adjusting refcount, set and clear persistency flag.
+* instead of having kill_litter_super() mess with removing the remaining
+  "leaked" references (e.g. for all tmpfs files that hadn't been removed
+  prior to umount), have the regular shrink_dcache_for_umount() strip
+  DCACHE_PERSISTENT of all dentries, dropping the corresponding
+  reference if it had been set.  After that kill_litter_super() becomes
+  an equivalent of kill_anon_super().
 
+Doing that in a single step is not feasible - it would affect too many places
+in too many filesystems.  It has to be split into a series.
+
+This work has really started early in 2024; quite a few preliminary pieces
+have already gone into mainline.  This chunk is finally getting to the
+meat of that stuff - infrastructure and most of the conversions to it.
+
+Some pieces are still sitting in the local branches, but the bulk of
+that stuff is here.
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+
+----------------------------------------------------------------
+Al Viro (54):
+      fuse_ctl_add_conn(): fix nlink breakage in case of early failure
+      tracefs: fix a leak in eventfs_create_events_dir()
+      new helper: simple_remove_by_name()
+      new helper: simple_done_creating()
+      introduce a flag for explicitly marking persistently pinned dentries
+      primitives for maintaining persisitency
+      convert simple_{link,unlink,rmdir,rename,fill_super}() to new primitives
+      convert ramfs and tmpfs
+      procfs: make /self and /thread_self dentries persistent
+      configfs, securityfs: kill_litter_super() not needed
+      convert xenfs
+      convert smackfs
+      convert hugetlbfs
+      convert mqueue
+      convert bpf
+      convert dlmfs
+      convert fuse_ctl
+      convert pstore
+      convert tracefs
+      convert debugfs
+      debugfs: remove duplicate checks in callers of start_creating()
+      convert efivarfs
+      convert spufs
+      convert ibmasmfs
+      ibmasmfs: get rid of ibmasmfs_dir_ops
+      convert devpts
+      binderfs: use simple_start_creating()
+      binderfs_binder_ctl_create(): kill a bogus check
+      convert binderfs
+      autofs_{rmdir,unlink}: dentry->d_fsdata->dentry == dentry there
+      convert autofs
+      convert binfmt_misc
+      selinuxfs: don't stash the dentry of /policy_capabilities
+      selinuxfs: new helper for attaching files to tree
+      convert selinuxfs
+      functionfs: don't abuse ffs_data_closed() on fs shutdown
+      functionfs: don't bother with ffs->ref in ffs_data_{opened,closed}()
+      functionfs: need to cancel ->reset_work in ->kill_sb()
+      functionfs: fix the open/removal races
+      functionfs: switch to simple_remove_by_name()
+      convert functionfs
+      gadgetfs: switch to simple_remove_by_name()
+      convert gadgetfs
+      hypfs: don't pin dentries twice
+      hypfs: switch hypfs_create_str() to returning int
+      hypfs: swich hypfs_create_u64() to returning int
+      convert hypfs
+      convert rpc_pipefs
+      convert nfsctl
+      convert rust_binderfs
+      get rid of kill_litter_super()
+      convert securityfs
+      kill securityfs_recursive_remove()
+      d_make_discardable(): warn if given a non-persistent dentry
+
+ Documentation/filesystems/porting.rst     |   7 ++
+ arch/powerpc/platforms/cell/spufs/inode.c |  17 ++-
+ arch/s390/hypfs/hypfs.h                   |   6 +-
+ arch/s390/hypfs/hypfs_diag_fs.c           |  60 ++++------
+ arch/s390/hypfs/hypfs_vm_fs.c             |  21 ++--
+ arch/s390/hypfs/inode.c                   |  82 +++++--------
+ drivers/android/binder/rust_binderfs.c    | 121 ++++++-------------
+ drivers/android/binderfs.c                |  82 +++----------
+ drivers/base/devtmpfs.c                   |   2 +-
+ drivers/misc/ibmasm/ibmasmfs.c            |  24 ++--
+ drivers/usb/gadget/function/f_fs.c        | 144 +++++++++++++----------
+ drivers/usb/gadget/legacy/inode.c         |  49 ++++----
+ drivers/xen/xenfs/super.c                 |   2 +-
+ fs/autofs/inode.c                         |   2 +-
+ fs/autofs/root.c                          |  11 +-
+ fs/binfmt_misc.c                          |  69 ++++++-----
+ fs/configfs/dir.c                         |  10 +-
+ fs/configfs/inode.c                       |   3 +-
+ fs/configfs/mount.c                       |   2 +-
+ fs/dcache.c                               | 111 +++++++++++-------
+ fs/debugfs/inode.c                        |  32 ++----
+ fs/devpts/inode.c                         |  57 ++++-----
+ fs/efivarfs/inode.c                       |   7 +-
+ fs/efivarfs/super.c                       |   5 +-
+ fs/fuse/control.c                         |  38 +++---
+ fs/hugetlbfs/inode.c                      |  12 +-
+ fs/internal.h                             |   1 -
+ fs/libfs.c                                |  52 +++++++--
+ fs/nfsd/nfsctl.c                          |  18 +--
+ fs/ocfs2/dlmfs/dlmfs.c                    |   8 +-
+ fs/proc/base.c                            |   6 +-
+ fs/proc/internal.h                        |   1 +
+ fs/proc/root.c                            |  14 +--
+ fs/proc/self.c                            |  10 +-
+ fs/proc/thread_self.c                     |  11 +-
+ fs/pstore/inode.c                         |   7 +-
+ fs/ramfs/inode.c                          |   8 +-
+ fs/super.c                                |   8 --
+ fs/tracefs/event_inode.c                  |   7 +-
+ fs/tracefs/inode.c                        |  13 +--
+ include/linux/dcache.h                    |   4 +-
+ include/linux/fs.h                        |   6 +-
+ include/linux/proc_fs.h                   |   2 -
+ include/linux/security.h                  |   2 -
+ init/do_mounts.c                          |   2 +-
+ ipc/mqueue.c                              |  12 +-
+ kernel/bpf/inode.c                        |  15 +--
+ mm/shmem.c                                |  38 ++----
+ net/sunrpc/rpc_pipe.c                     |  27 ++---
+ security/apparmor/apparmorfs.c            |  13 ++-
+ security/inode.c                          |  35 +++---
+ security/selinux/selinuxfs.c              | 185 +++++++++++++-----------------
+ security/smack/smackfs.c                  |   2 +-
+ 53 files changed, 649 insertions(+), 834 deletions(-)
 
