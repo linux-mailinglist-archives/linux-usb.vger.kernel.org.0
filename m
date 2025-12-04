@@ -1,440 +1,349 @@
-Return-Path: <linux-usb+bounces-31163-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31164-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45F40CA3BF8
-	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:15:39 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4950FCA3C16
+	for <lists+linux-usb@lfdr.de>; Thu, 04 Dec 2025 14:16:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9A2AE3009B4B
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:15:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EA94630443FE
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Dec 2025 13:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2728234321C;
-	Thu,  4 Dec 2025 13:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C73EA33CEA9;
+	Thu,  4 Dec 2025 13:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nqn+97Nb"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="VwG0WAuy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3351B342501;
-	Thu,  4 Dec 2025 13:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE99343D67
+	for <linux-usb@vger.kernel.org>; Thu,  4 Dec 2025 13:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764854128; cv=none; b=T11cAEzolDry/9Oy7SwrGxI5lTxiV4j5n3A6yQ5r7Zykebpc29f7fGWstMWHdyzel/3P0COYxBgw8ZUIc+og6tAUqbJ1ZKPNSf9iRgPN6YDAhBWL56VaB7UVu3f4vHLNkTDPiCMe6weXdPmDFQEFDUKGVqI3cE1OBx9szU/G8Ao=
+	t=1764854167; cv=none; b=bbdk4zbbPGOkO+GXa/WkvRq7WlFEMdlFslCUp8bp3fmJGO8rbBqEaNA7lBcIFKxldQ8TZJ54rNArMp/mFnfPC8UP+UzF0EGEu4DYhUP6h3gyZTEMJpaiepASUZ88nNbTGSgRrfIQEe6wiEqKX1aEt+X6fPiroQdY5AR+B5czsRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764854128; c=relaxed/simple;
-	bh=mbYf9s61hZbO1/3BKVmN4lnCdGsGpn5DBMdhu2GQ5Bs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e+shdvhdyGA6jK0gOWIsWrEdmaFhQML4Z2v5pPzVcp9vMjuYsmdoIkyfPFuZPrqiAKVb6eORsANTiIjx/0C9Bm5zQ531eLbF36Nb65KBmiig+whRce13JTLDCeeESEXSXDqkCatRqrOwFh61PhqGn2THS29sjYhMpFgEsJ/rHZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nqn+97Nb; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764854127; x=1796390127;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mbYf9s61hZbO1/3BKVmN4lnCdGsGpn5DBMdhu2GQ5Bs=;
-  b=nqn+97NbdVdzgTt/Ll/cCTn08mOF8P6NZJy+pvsNZfB72kOEUWw/DJVn
-   BtAeiI+sKDs/veEHrR1k72x4GM0Q7rdKXGX17/85Faz4Z4uE+w5rimSDu
-   WOiZ9wYmxkPEciLVkICKY8dBA3AfDxCR6CaLn2Eaq5ZuU7ZmlkHuCpqiJ
-   l78ozf7aIQJ0dRyNZ7V+gRKxFBJQvYzz4WX4Hw6nckKlSzYtyIUDomJws
-   xGnlJ6h65guKvTyXt8ReX4Awb7cWgLXkFbSA2dx3xMGamA/eWcb+on6Qd
-   gpzRCVXNVbQSTSziw2rvj/++GHqMI1ZzTWxZZDHSUDISER61qC17OP0Of
-   A==;
-X-CSE-ConnectionGUID: oqR2nEdXTz2iN7uI0uKNSQ==
-X-CSE-MsgGUID: XrpEx0rTTZyNGbxeUzPLFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="66804640"
-X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="66804640"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 05:15:26 -0800
-X-CSE-ConnectionGUID: 7W3MHYAbSGydfAtJ1ATcuw==
-X-CSE-MsgGUID: gPH0sPJ2ThWez4OxVgHgag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="199159105"
-Received: from rfrazer-mobl3.amr.corp.intel.com (HELO kuha) ([10.124.220.149])
-  by orviesa003.jf.intel.com with SMTP; 04 Dec 2025 05:15:18 -0800
-Received: by kuha (sSMTP sendmail emulation); Thu, 04 Dec 2025 15:15:08 +0200
-Date: Thu, 4 Dec 2025 15:15:08 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] drm: bridge: anx7625: implement minimal Type-C
- support
-Message-ID: <aTGJXAnlkK5vQTzk@kuha>
-References: <20251126-anx7625-typec-v1-0-22b30f846a88@oss.qualcomm.com>
- <20251126-anx7625-typec-v1-2-22b30f846a88@oss.qualcomm.com>
+	s=arc-20240116; t=1764854167; c=relaxed/simple;
+	bh=ybH7x2KDbXBkDaWVwlH2cYcn9EPoixMp6t/Fyk3084o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=La1pK6V5z/AuLMTzF2Kw301tcE9D9F9lzFzpfWj42AGG/qGrfjTi4y1ZqCE0nkI6e2ZluovNMnLQjPquQPmo7kLZf12BqKxTokK6XZ7ILE0r3IO4DpkkrSZcL4rNs0F6CQ4skvmDNgmchc3pvcaPY27EElHACmuRfAY+8lLVvTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=VwG0WAuy; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20251204131555epoutp026963f1843a3e6595ece7ec0314b6a077~_BYDwb7pq2741927419epoutp02G
+	for <linux-usb@vger.kernel.org>; Thu,  4 Dec 2025 13:15:55 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20251204131555epoutp026963f1843a3e6595ece7ec0314b6a077~_BYDwb7pq2741927419epoutp02G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1764854155;
+	bh=P6WcT+qxBHgUdkap/JDzpLygjk5zky/P5bSUXIAtC5g=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=VwG0WAuyoqd2wiKxRlSBJ832zOeeVFhlbWgu/hwR4sOE56aOFU0SRWja22Qu3c7Ea
+	 W75UomatBi0pUsRl6DYAWdZ665MDx5zukivAnhFNEY9zcnke0WbXo6DjVxRdt71lbL
+	 iG+8VSM81yD4n4MqROFLMIDLdLUlf8GnjvdIrjEU=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20251204131554epcas5p32cfbcc337f656fde7ab11640c80250c4~_BYDTPNMY0774007740epcas5p3D;
+	Thu,  4 Dec 2025 13:15:54 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.90]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4dMZkx6JL4z3hhT3; Thu,  4 Dec
+	2025 13:15:53 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20251204131553epcas5p43d885690c1c62f26cd6a2eb4decf3914~_BYBnBS-f0305203052epcas5p40;
+	Thu,  4 Dec 2025 13:15:53 +0000 (GMT)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20251204131550epsmtip1d4d75fc2802d2cdbc54707e72848eeb7~_BX-Lv5PE0249302493epsmtip1Q;
+	Thu,  4 Dec 2025 13:15:50 +0000 (GMT)
+Message-ID: <9d309a6f-39b2-43da-96a6-b7c59b98431e@samsung.com>
+Date: Thu, 4 Dec 2025 18:45:49 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251126-anx7625-typec-v1-2-22b30f846a88@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Prevent EPs resource conflict
+ during StartTransfer
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "jh0801.jung@samsung.com"
+	<jh0801.jung@samsung.com>, "dh10.jung@samsung.com" <dh10.jung@samsung.com>,
+	"naushad@samsung.com" <naushad@samsung.com>, "akash.m5@samsung.com"
+	<akash.m5@samsung.com>, "h10.kim@samsung.com" <h10.kim@samsung.com>,
+	"eomji.oh@samsung.com" <eomji.oh@samsung.com>, "alim.akhtar@samsung.com"
+	<alim.akhtar@samsung.com>, "thiagu.r@samsung.com" <thiagu.r@samsung.com>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <20251204015125.qgio53oimdes5kjr@synopsys.com>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20251204131553epcas5p43d885690c1c62f26cd6a2eb4decf3914
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20251204015221epcas5p3ed1b6174589b47629ea9333e3ddbb176
+References: <20251117155920.643-1-selvarasu.g@samsung.com>
+	<20251118022116.spdwqjdc7fyls2ht@synopsys.com>
+	<f4d27a4c-df75-42b8-9a1c-3fe2a14666ed@rowland.harvard.edu>
+	<20251119014858.5phpkofkveb2q2at@synopsys.com>
+	<d53a1765-f316-46ff-974e-f42b22b31b25@rowland.harvard.edu>
+	<20251120020729.k6etudqwotodnnwp@synopsys.com>
+	<2b944e45-c39a-4c34-b159-ba91dd627fe4@rowland.harvard.edu>
+	<20251121022156.vbnheb6r2ytov7bt@synopsys.com>
+	<f6bba9d1-2221-4bad-a7d7-564a5a311de1@rowland.harvard.edu>
+	<4e82c0dd-4a36-4e1d-a93a-9bef5d63aa50@samsung.com>
+	<CGME20251204015221epcas5p3ed1b6174589b47629ea9333e3ddbb176@epcas5p3.samsung.com>
+	<20251204015125.qgio53oimdes5kjr@synopsys.com>
 
-Wed, Nov 26, 2025 at 11:41:57AM +0200, Dmitry Baryshkov kirjoitti:
-> ANX7625 can be used as a USB-C controller, handling USB and DP data
-> streams. Provide minimal Type-C support necessary for ANX7625 to
-> register the Type-C port device and properly respond to data / power
-> role events from the Type-C partner.
-> 
-> While ANX7625 provides TCPCI interface, using it would circumvent the
-> on-chip running firmware. Analogix recommended using the higher-level
-> interface instead of TCPCI.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-FWIW:
+On 12/4/2025 7:21 AM, Thinh Nguyen wrote:
+> On Wed, Dec 03, 2025, Selvarasu Ganesan wrote:
+>> On 11/21/2025 8:38 AM, Alan Stern wrote:
+>>> On Fri, Nov 21, 2025 at 02:22:02AM +0000, Thinh Nguyen wrote:
+>>>> On Wed, Nov 19, 2025, Alan Stern wrote:
+>>>>> ->set_alt() is called by the composite core when a Set-Interface or
+>>>>> Set-Config control request arrives from the host.  It happens within the
+>>>>> composite_setup() handler, which is called by the UDC driver when a
+>>>>> control request arrives, which means it happens in the context of the
+>>>>> UDC driver's interrupt handler.  Therefore ->set_alt() callbacks must
+>>>>> not sleep.
+>>>> This should be changed. I don't think we can expect set_alt() to
+>>>> be in interrupt context only.
+>>> Agreed.
+>>>
+>>>>> To do this right, I can't think of any approach other than to make the
+>>>>> composite core use a work queue or other kernel thread for handling
+>>>>> Set-Interface and Set-Config calls.
+>>>> Sounds like it should've been like this initially.
+>>> I guess the nobody thought through the issues very carefully at the time
+>>> the composite framework was designed.  Maybe the UDCs that existed back
+>>> did not require a lot of time to flush endpoints; I can't remember.
+>>>
+>>>>> Without that ability, we will have to audit every function driver to
+>>>>> make sure the ->set_alt() callbacks do ensure that endpoints are flushed
+>>>>> before they are re-enabled.
+>>>>>
+>>>>> There does not seem to be any way to fix the problem just by changing
+>>>>> the gadget core.
+>>>>>
+>>>> We can have a workaround in dwc3 that can temporarily "work" with what
+>>>> we have. However, eventually, we will need to properly rework this and
+>>>> audit the gadget drivers.
+>>> Clearly, the first step is to change the composite core.  That can be
+>>> done without messing up anything else.  But yes, eventually the gadget
+>>> drivers will have to be audited.
+>>>
+>>> Alan Stern
+>>
+>> Hi Thinh,
+>>
+>> Do you have any suggestions that might be helpful for us to try on our side?
+>> This EP resource‑conflict problem becomes easily observable when the
+>> RNDIS network test executing ifconfig rndis0 down/up is run repeatedly
+>> on the device side.
+>>
+>> Thanks,
+>> Selva
+> At the moment, I can't think of a way to workaround for all cases. Let's
+> just leave bulk streams alone for now. Until we have proper fixes to the
+> gadget framework, let's just try the below.
+>
+> Thanks,
+> Thinh
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 3830aa2c10a9..974573304441 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -960,11 +960,18 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+>   	}
+>   
+>   	/*
+> -	 * Issue StartTransfer here with no-op TRB so we can always rely on No
+> -	 * Response Update Transfer command.
+> +	 * For streams, at start, there maybe a race where the
+> +	 * host primes the endpoint before the function driver
+> +	 * queues a request to initiate a stream. In that case,
+> +	 * the controller will not see the prime to generate the
+> +	 * ERDY and start stream. To workaround this, issue a
+> +	 * no-op TRB as normal, but end it immediately. As a
+> +	 * result, when the function driver queues the request,
+> +	 * the next START_TRANSFER command will cause the
+> +	 * controller to generate an ERDY to initiate the
+> +	 * stream.
+>   	 */
+> -	if (usb_endpoint_xfer_bulk(desc) ||
+> -			usb_endpoint_xfer_int(desc)) {
+> +	if (dep->stream_capable) {
+>   		struct dwc3_gadget_ep_cmd_params params;
+>   		struct dwc3_trb	*trb;
+>   		dma_addr_t trb_dma;
+> @@ -983,35 +990,21 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+>   		if (ret < 0)
+>   			return ret;
+>   
+> -		if (dep->stream_capable) {
+> -			/*
+> -			 * For streams, at start, there maybe a race where the
+> -			 * host primes the endpoint before the function driver
+> -			 * queues a request to initiate a stream. In that case,
+> -			 * the controller will not see the prime to generate the
+> -			 * ERDY and start stream. To workaround this, issue a
+> -			 * no-op TRB as normal, but end it immediately. As a
+> -			 * result, when the function driver queues the request,
+> -			 * the next START_TRANSFER command will cause the
+> -			 * controller to generate an ERDY to initiate the
+> -			 * stream.
+> -			 */
+> -			dwc3_stop_active_transfer(dep, true, true);
+> +		dwc3_stop_active_transfer(dep, true, true);
+>   
+> -			/*
+> -			 * All stream eps will reinitiate stream on NoStream
+> -			 * rejection.
+> -			 *
+> -			 * However, if the controller is capable of
+> -			 * TXF_FLUSH_BYPASS, then IN direction endpoints will
+> -			 * automatically restart the stream without the driver
+> -			 * initiation.
+> -			 */
+> -			if (!dep->direction ||
+> -			    !(dwc->hwparams.hwparams9 &
+> -			      DWC3_GHWPARAMS9_DEV_TXF_FLUSH_BYPASS))
+> -				dep->flags |= DWC3_EP_FORCE_RESTART_STREAM;
+> -		}
+> +		/*
+> +		 * All stream eps will reinitiate stream on NoStream
+> +		 * rejection.
+> +		 *
+> +		 * However, if the controller is capable of
+> +		 * TXF_FLUSH_BYPASS, then IN direction endpoints will
+> +		 * automatically restart the stream without the driver
+> +		 * initiation.
+> +		 */
+> +		if (!dep->direction ||
+> +		    !(dwc->hwparams.hwparams9 &
+> +		      DWC3_GHWPARAMS9_DEV_TXF_FLUSH_BYPASS))
+> +			dep->flags |= DWC3_EP_FORCE_RESTART_STREAM;
+>   	}
+>   
+>   out:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> ---
->  drivers/gpu/drm/bridge/analogix/Kconfig   |   1 +
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 163 ++++++++++++++++++++++++++++--
->  drivers/gpu/drm/bridge/analogix/anx7625.h |  21 +++-
->  3 files changed, 175 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/analogix/Kconfig b/drivers/gpu/drm/bridge/analogix/Kconfig
-> index 4846b2e9be7c2a5da18f6a3cdec53ef5766455e0..f3448b0631fea42e7e7ab10368777a93ce33cee7 100644
-> --- a/drivers/gpu/drm/bridge/analogix/Kconfig
-> +++ b/drivers/gpu/drm/bridge/analogix/Kconfig
-> @@ -34,6 +34,7 @@ config DRM_ANALOGIX_ANX7625
->  	tristate "Analogix Anx7625 MIPI to DP interface support"
->  	depends on DRM
->  	depends on OF
-> +	depends on TYPEC || !TYPEC
->  	select DRM_DISPLAY_DP_HELPER
->  	select DRM_DISPLAY_HDCP_HELPER
->  	select DRM_DISPLAY_HELPER
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> index 6f3fdcb6afdb9d785bc4515300676cf3988c5807..a44405db739669dfd2907b0afd41293a7b173035 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -3,6 +3,7 @@
->   * Copyright(c) 2020, Analogix Semiconductor. All rights reserved.
->   *
->   */
-> +#include <linux/cleanup.h>
->  #include <linux/gcd.h>
->  #include <linux/gpio/consumer.h>
->  #include <linux/i2c.h>
-> @@ -15,6 +16,9 @@
->  #include <linux/regulator/consumer.h>
->  #include <linux/slab.h>
->  #include <linux/types.h>
-> +#include <linux/usb.h>
-> +#include <linux/usb/pd.h>
-> +#include <linux/usb/role.h>
->  #include <linux/workqueue.h>
->  
->  #include <linux/of_graph.h>
-> @@ -1325,7 +1329,7 @@ static int anx7625_read_hpd_gpio_config_status(struct anx7625_data *ctx)
->  static void anx7625_disable_pd_protocol(struct anx7625_data *ctx)
->  {
->  	struct device *dev = ctx->dev;
-> -	int ret, val;
-> +	int ret;
->  
->  	/* Reset main ocm */
->  	ret = anx7625_reg_write(ctx, ctx->i2c.rx_p0_client, 0x88, 0x40);
-> @@ -1339,6 +1343,11 @@ static void anx7625_disable_pd_protocol(struct anx7625_data *ctx)
->  		DRM_DEV_DEBUG_DRIVER(dev, "disable PD feature fail.\n");
->  	else
->  		DRM_DEV_DEBUG_DRIVER(dev, "disable PD feature succeeded.\n");
-> +}
-> +
-> +static void anx7625_configure_hpd(struct anx7625_data *ctx)
-> +{
-> +	int val;
->  
->  	/*
->  	 * Make sure the HPD GPIO already be configured after OCM release before
-> @@ -1369,7 +1378,9 @@ static int anx7625_ocm_loading_check(struct anx7625_data *ctx)
->  	if ((ret & FLASH_LOAD_STA_CHK) != FLASH_LOAD_STA_CHK)
->  		return -ENODEV;
->  
-> -	anx7625_disable_pd_protocol(ctx);
-> +	if (!ctx->typec_port)
-> +		anx7625_disable_pd_protocol(ctx);
-> +	anx7625_configure_hpd(ctx);
->  
->  	DRM_DEV_DEBUG_DRIVER(dev, "Firmware ver %02x%02x,",
->  			     anx7625_reg_read(ctx,
-> @@ -1472,6 +1483,115 @@ static void anx7625_start_dp_work(struct anx7625_data *ctx)
->  	DRM_DEV_DEBUG_DRIVER(dev, "Secure OCM version=%02x\n", ret);
->  }
->  
-> +#if IS_REACHABLE(CONFIG_TYPEC)
-> +static void anx7625_typec_set_orientation(struct anx7625_data *ctx)
-> +{
-> +	u32 val = anx7625_reg_read(ctx, ctx->i2c.rx_p0_client, SYSTEM_STSTUS);
-> +
-> +	if (val & (CC1_RP | CC1_RD))
-> +		typec_set_orientation(ctx->typec_port, TYPEC_ORIENTATION_NORMAL);
-> +	else if (val & (CC2_RP | CC2_RD))
-> +		typec_set_orientation(ctx->typec_port, TYPEC_ORIENTATION_REVERSE);
-> +	else
-> +		typec_set_orientation(ctx->typec_port, TYPEC_ORIENTATION_NONE);
-> +}
-> +
-> +static void anx7625_typec_isr(struct anx7625_data *ctx,
-> +			      unsigned int intr_vector,
-> +			      unsigned int intr_status)
-> +{
-> +	if (intr_vector & CC_STATUS)
-> +		anx7625_typec_set_orientation(ctx);
-> +	if (intr_vector & DATA_ROLE_STATUS) {
-> +		usb_role_switch_set_role(ctx->role_sw,
-> +					 (intr_status & DATA_ROLE_STATUS) ?
-> +					 USB_ROLE_HOST : USB_ROLE_DEVICE);
-> +		typec_set_data_role(ctx->typec_port,
-> +				    (intr_status & DATA_ROLE_STATUS) ?
-> +				    TYPEC_HOST : TYPEC_DEVICE);
-> +	}
-> +	if (intr_vector & VBUS_STATUS)
-> +		typec_set_pwr_role(ctx->typec_port,
-> +				   (intr_status & VBUS_STATUS) ?
-> +				   TYPEC_SOURCE : TYPEC_SINK);
-> +	if (intr_vector & VCONN_STATUS)
-> +		typec_set_vconn_role(ctx->typec_port,
-> +				     (intr_status & VCONN_STATUS) ?
-> +				     TYPEC_SOURCE : TYPEC_SINK);
-> +}
-> +
-> +static int anx7625_typec_register(struct anx7625_data *ctx)
-> +{
-> +	struct typec_capability typec_cap = { };
-> +	struct fwnode_handle *fwnode __free(fwnode_handle) = NULL;
-> +	u32 val;
-> +	int ret;
-> +
-> +	fwnode = device_get_named_child_node(ctx->dev, "connector");
-> +	if (!fwnode)
-> +		return 0;
-> +
-> +	ret = typec_get_fw_cap(&typec_cap, fwnode);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	typec_cap.revision = 0x0120;
-> +	typec_cap.pd_revision = 0x0300;
-> +	typec_cap.usb_capability = USB_CAPABILITY_USB2 | USB_CAPABILITY_USB3;
-> +	typec_cap.orientation_aware = true;
-> +
-> +	typec_cap.driver_data = ctx;
-> +
-> +	ctx->typec_port = typec_register_port(ctx->dev, &typec_cap);
-> +	if (IS_ERR(ctx->typec_port))
-> +		return PTR_ERR(ctx->typec_port);
-> +
-> +	ctx->role_sw = fwnode_usb_role_switch_get(fwnode);
-> +	if (IS_ERR(ctx->role_sw)) {
-> +		typec_unregister_port(ctx->typec_port);
-> +		return PTR_ERR(ctx->role_sw);
-> +	}
-> +
-> +	val = anx7625_reg_read(ctx, ctx->i2c.rx_p0_client, SYSTEM_STSTUS);
-> +	anx7625_typec_set_orientation(ctx);
-> +	usb_role_switch_set_role(ctx->role_sw,
-> +				 (val & DATA_ROLE_STATUS) ?
-> +				 USB_ROLE_HOST : USB_ROLE_DEVICE);
-> +	typec_set_data_role(ctx->typec_port,
-> +			    (val & DATA_ROLE_STATUS) ?
-> +			    TYPEC_HOST : TYPEC_DEVICE);
-> +	typec_set_pwr_role(ctx->typec_port,
-> +			    (val & VBUS_STATUS) ?
-> +			    TYPEC_SOURCE : TYPEC_SINK);
-> +	typec_set_vconn_role(ctx->typec_port,
-> +			     (val & VCONN_STATUS) ?
-> +			     TYPEC_SOURCE : TYPEC_SINK);
-> +
-> +	return 0;
-> +}
-> +
-> +static void anx7625_typec_unregister(struct anx7625_data *ctx)
-> +{
-> +	usb_role_switch_put(ctx->role_sw);
-> +	typec_unregister_port(ctx->typec_port);
-> +}
-> +#else
-> +static void anx7625_typec_isr(struct anx7625_data *ctx,
-> +			      unsigned int intr_vector,
-> +			      unsigned int intr_status)
-> +{
-> +}
-> +
-> +static int anx7625_typec_register(struct anx7625_data *ctx)
-> +{
-> +	return 0;
-> +}
-> +
-> +static void anx7625_typec_unregister(struct anx7625_data *ctx)
-> +{
-> +}
-> +#endif
-> +
->  static int anx7625_read_hpd_status_p0(struct anx7625_data *ctx)
->  {
->  	return anx7625_reg_read(ctx, ctx->i2c.rx_p0_client, SYSTEM_STSTUS);
-> @@ -1566,7 +1686,7 @@ static void dp_hpd_change_handler(struct anx7625_data *ctx, bool on)
->  	}
->  }
->  
-> -static int anx7625_hpd_change_detect(struct anx7625_data *ctx)
-> +static int anx7625_intr_status(struct anx7625_data *ctx)
->  {
->  	int intr_vector, status;
->  	struct device *dev = ctx->dev;
-> @@ -1593,9 +1713,6 @@ static int anx7625_hpd_change_detect(struct anx7625_data *ctx)
->  		return status;
->  	}
->  
-> -	if (!(intr_vector & HPD_STATUS_CHANGE))
-> -		return -ENOENT;
-> -
->  	status = anx7625_reg_read(ctx, ctx->i2c.rx_p0_client,
->  				  SYSTEM_STSTUS);
->  	if (status < 0) {
-> @@ -1604,6 +1721,12 @@ static int anx7625_hpd_change_detect(struct anx7625_data *ctx)
->  	}
->  
->  	DRM_DEV_DEBUG_DRIVER(dev, "0x7e:0x45=%x\n", status);
-> +
-> +	anx7625_typec_isr(ctx, intr_vector, status);
-> +
-> +	if (!(intr_vector & HPD_STATUS))
-> +		return -ENOENT;
-> +
->  	dp_hpd_change_handler(ctx, status & HPD_STATUS);
->  
->  	return 0;
-> @@ -1622,7 +1745,7 @@ static void anx7625_work_func(struct work_struct *work)
->  		return;
->  	}
->  
-> -	event = anx7625_hpd_change_detect(ctx);
-> +	event = anx7625_intr_status(ctx);
->  
->  	mutex_unlock(&ctx->lock);
->  
-> @@ -2741,11 +2864,29 @@ static int anx7625_i2c_probe(struct i2c_client *client)
->  	}
->  
->  	if (!platform->pdata.low_power_mode) {
-> -		anx7625_disable_pd_protocol(platform);
-> +		struct fwnode_handle *fwnode;
-> +
-> +		fwnode = device_get_named_child_node(dev, "connector");
-> +		if (fwnode)
-> +			fwnode_handle_put(fwnode);
-> +		else
-> +			anx7625_disable_pd_protocol(platform);
-> +
-> +		anx7625_configure_hpd(platform);
-> +
->  		pm_runtime_get_sync(dev);
->  		_anx7625_hpd_polling(platform, 5000 * 100);
->  	}
->  
-> +	if (platform->pdata.intp_irq)
-> +		anx7625_reg_write(platform, platform->i2c.rx_p0_client,
-> +				  INTERFACE_CHANGE_INT_MASK, 0);
-> +
-> +	/* After getting runtime handle */
-> +	ret = anx7625_typec_register(platform);
-> +	if (ret)
-> +		goto pm_suspend;
-> +
->  	/* Add work function */
->  	if (platform->pdata.intp_irq) {
->  		enable_irq(platform->pdata.intp_irq);
-> @@ -2759,6 +2900,10 @@ static int anx7625_i2c_probe(struct i2c_client *client)
->  
->  	return 0;
->  
-> +pm_suspend:
-> +	if (!platform->pdata.low_power_mode)
-> +		pm_runtime_put_sync_suspend(&client->dev);
-> +
->  free_wq:
->  	if (platform->workqueue)
->  		destroy_workqueue(platform->workqueue);
-> @@ -2774,6 +2919,8 @@ static void anx7625_i2c_remove(struct i2c_client *client)
->  {
->  	struct anx7625_data *platform = i2c_get_clientdata(client);
->  
-> +	anx7625_typec_unregister(platform);
-> +
->  	drm_bridge_remove(&platform->bridge);
->  
->  	if (platform->pdata.intp_irq)
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> index eb5580f1ab2f86b48b6f2df4fa4d6c3be603ad48..f9570cd6d22e55fd70a12c15960714cbb783d059 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> @@ -51,9 +51,21 @@
->  #define INTR_RECEIVED_MSG BIT(5)
->  
->  #define SYSTEM_STSTUS 0x45
-> +#define INTERFACE_CHANGE_INT_MASK 0x43
->  #define INTERFACE_CHANGE_INT 0x44
-> -#define HPD_STATUS_CHANGE 0x80
-> -#define HPD_STATUS 0x80
-> +#define VCONN_STATUS	BIT(2)
-> +#define VBUS_STATUS	BIT(3)
-> +#define CC_STATUS	BIT(4)
-> +#define DATA_ROLE_STATUS	BIT(5)
-> +#define HPD_STATUS	BIT(7)
-> +
-> +#define NEW_CC_STATUS 0x46
-> +#define CC1_RD                  BIT(0)
-> +#define CC1_RA                  BIT(1)
-> +#define CC1_RP			(BIT(2) | BIT(3))
-> +#define CC2_RD                  BIT(4)
-> +#define CC2_RA                  BIT(5)
-> +#define CC2_RP			(BIT(6) | BIT(7))
->  
->  /******** END of I2C Address 0x58 ********/
->  
-> @@ -447,9 +459,14 @@ struct anx7625_i2c_client {
->  	struct i2c_client *tcpc_client;
->  };
->  
-> +struct typec_port;
-> +struct usb_role_switch;
-> +
->  struct anx7625_data {
->  	struct anx7625_platform_data pdata;
->  	struct platform_device *audio_pdev;
-> +	struct typec_port *typec_port;
-> +	struct usb_role_switch *role_sw;
->  	int hpd_status;
->  	int hpd_high_cnt;
->  	int dp_en;
-> 
-> -- 
-> 2.47.3
+Hi Thinh,
 
--- 
-heikki
+Thanks for the changes. We understand the given fix and have verified 
+that the original issue is resolved, but a similar below warning appears 
+again in `dwc3_gadget_ep_queue` when we run a long duration our test. 
+And we confirmed this is not due to this new given changes.
+
+This warning is caused by a race between `dwc3_gadget_ep_disable` and 
+`dwc3_gadget_ep_queue` that manipulates `dep->flags`.
+
+Please refer the below sequence for the reference.
+
+The warning originates from a race condition between 
+dwc3_gadget_ep_disable and dwc3_send_gadget_ep_cmd from 
+dwc3_gadget_ep_queue that both manipulate dep->flags. Proper 
+synchronization or a check is needed when masking (dep->flags &= mask) 
+inside dwc3_gadget_ep_disable.
+
+
+Thread#1:
+usb_ep_queue
+  ->dwc3_gadget_ep_queue
+   ->__dwc3_gadget_kick_transfer
+    -> starting = !(dep->flags & DWC3_EP_TRANSFER_STARTED);
+     ->if(starting)
+        ->dwc3_send_gadget_ep_cmd (cmd = DWC3_DEPCMD_STARTTRANSFER)
+          ->dep->flags |= DWC3_EP_TRANSFER_STARTED;
+
+
+Thread#2:
+dwc3_gadget_ep_disable
+  ->__dwc3_gadget_ep_disable
+   ->dwc3_remove_requests
+    ->dwc3_stop_active_transfer
+     ->__dwc3_stop_active_transfer
+      -> dwc3_send_gadget_ep_cmd (cmd =DWC3_DEPCMD_ENDTRANSFER)
+       ->if(!interrupt)dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
+           ...
+           While Thread#2 is still running, Thread #1 starts again:
+
+Thread#1:
+usb_ep_queue
+  ->dwc3_gadget_ep_queue
+   ->__dwc3_gadget_kick_transfer
+    -> starting = !(dep->flags & DWC3_EP_TRANSFER_STARTED);
+     ->if(starting)
+       ->dwc3_send_gadget_ep_cmd (cmd = DWC3_DEPCMD_STARTTRANSFER)
+        ->dep->flags |= DWC3_EP_TRANSFER_STARTED;
+          ...
+###### Thread#2: Continuation (race)
+           ->__dwc3_gadget_ep_disable
+            ->mask = DWC3_EP_TXFIFO_RESIZED | DWC3_EP_RESOURCE_ALLOCATED;
+             ->dep->flags &= mask; --> // Possible of clears
+                 DWC3_EP_TRANSFER_STARTED flag as well without
+                 sending DWC3_DEPCMD_ENDTRANSFER
+
+Thread#1:(Failure due to race)
+usb_ep_queue
+  ->dwc3_gadget_ep_queue
+   ->__dwc3_gadget_kick_transfer
+    -> starting = !(dep->flags & DWC3_EP_TRANSFER_STARTED);
+      ->if(starting)
+        ->dwc3_send_gadget_ep_cmd (cmd = DWC3_DEPCMD_STARTTRANSFER) ->
+                 Results in “No resource” allocation error because the
+                 previous transfer was never end with ENDTRANSFER.
+
+
+     ------------[ cut here ]------------
+  dwc3 13200000.dwc3: No resource for ep1in
+  WARNING: CPU: 7 PID: 1748 at drivers/usb/dwc3/gadget.c:398 
+dwc3_send_gadget_ep_cmd+0x2f8/0x76c
+  pc : dwc3_send_gadget_ep_cmd+0x2f8/0x76c
+  lr : dwc3_send_gadget_ep_cmd+0x2f8/0x76c
+  Call trace:
+  dwc3_send_gadget_ep_cmd+0x2f8/0x76c
+  __dwc3_gadget_kick_transfer+0x2ec/0x3f4
+  dwc3_gadget_ep_queue+0x140/0x1f0
+  usb_ep_queue+0x60/0xec
+  mp_tx_task+0x100/0x134
+  mp_tx_timeout+0xd0/0x1e0
+  __hrtimer_run_queues+0x130/0x318
+  hrtimer_interrupt+0xe8/0x340
+  exynos_mct_comp_isr+0x58/0x80
+  __handle_irq_event_percpu+0xcc/0x25c
+  handle_irq_event+0x40/0x9c
+  handle_fasteoi_irq+0x154/0x2c8
+  generic_handle_domain_irq+0x58/0x80
+  gic_handle_irq+0x48/0x104
+  call_on_irq_stack+0x3c/0x50
+  do_interrupt_handler+0x4c/0x84
+  el1_interrupt+0x34/0x58
+  el1h_64_irq_handler+0x18/0x24
+  el1h_64_irq+0x68/0x6c
+  _raw_spin_unlock_irqrestore+0xc/0x4c
+  binder_wakeup_thread_ilocked+0x50/0xb4
+  binder_proc_transaction+0x308/0x6ec
+  binder_transaction+0x1aec/0x23b0
+  binder_ioctl_write_read+0xa28/0x2534
+  binder_ioctl+0x1fc/0xb3c
+  __arm64_sys_ioctl+0xa8/0xe4
+  invoke_syscall+0x58/0x10c
+  el0_svc_common+0x80/0xdc
+  do_el0_svc+0x1c/0x28
+  el0_svc+0x38/0x88
+  el0t_64_sync_handler+0x70/0xbc
+  el0t_64_sync+0x1a8/0x1ac
+  ---[ end trace 0000000000000000 ]---
+
+Thanks,
+Selva
 
