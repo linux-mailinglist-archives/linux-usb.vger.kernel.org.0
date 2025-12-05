@@ -1,192 +1,248 @@
-Return-Path: <linux-usb+bounces-31207-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31208-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AB3FCA8408
-	for <lists+linux-usb@lfdr.de>; Fri, 05 Dec 2025 16:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82F47CA8206
+	for <lists+linux-usb@lfdr.de>; Fri, 05 Dec 2025 16:13:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4827A3128ACD
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Dec 2025 15:39:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 88C0231C903E
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Dec 2025 15:12:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8194733D6F4;
-	Fri,  5 Dec 2025 15:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB5A3346E42;
+	Fri,  5 Dec 2025 15:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="RfqT+acj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f79.google.com (mail-ot1-f79.google.com [209.85.210.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012003.outbound.protection.outlook.com [52.101.66.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2081C2EA737
-	for <linux-usb@vger.kernel.org>; Fri,  5 Dec 2025 15:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.79
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764947011; cv=none; b=nf69bYtqES13AcNf+jtpIDuHv3moJNM28TVSG2D1hoG+9w6twTcC2vRXqHx6koCQ7NjQbRGGzOr2IfImj+cqum/FJ16HmF2HZBPrQR3yjFUewakBdiyMkNoA3m9v0VVAqUG7F9ucf+Z4T4J2x03ti51w2Gj1pm/4IykLm8A95Gc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764947011; c=relaxed/simple;
-	bh=H8d8ZgxBp+MJmziHi/e+b235tqYhFPQdWYXwUDtYYwA=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=YvJ7IlotBCz92rHRdY3vHp+2XyoSiEOvB5DQz6pfOg4eNRrIVMKI7Pahp+pp14fDvVDmD4ED+Q4vRH60HvLJDj77qqvkhUFcaX47sci6lR4wbxB/atYRQECv+rJbFG/vhq/v+nX22i0ypEaPs7FZy89aqsavXHExiBecRjIOPEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f79.google.com with SMTP id 46e09a7af769-7c766d79592so5282047a34.0
-        for <linux-usb@vger.kernel.org>; Fri, 05 Dec 2025 07:03:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764947005; x=1765551805;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mZKFrS8XaCz5ZAVZPhJSZM2i//Nrp4m2i8bb62103AU=;
-        b=S0IQyTr3nYoV/irSc19Ii7QS7D6F2jYTefJ1YnykVCoCUGdqsj3YzKjs935hOGi5RG
-         iLVXoykitoXGKPs+cVX9HxUoA2dIt1RribpOdgHES8vCwyH1M2NeFCjJVjmnSC8K85nW
-         l6J3FXxv7nakXh7Vt9HhyyuasvsHEJOj8IxQSeYeu+wAjg1TRu52JoskdoDKgcSxNWZ2
-         ZKxhp0FDLOy41NKxBq7uRwQHxHx1gOVFEu/kspeVRkldvTXBFBRfkn5Mnulu/kU5JjLw
-         1dVxS/9G7KtLQx3jqn4ZmFX1dQjfpcOMbz58lMab4cwmJSGWqpkP0woqf7bdlg9MXQeG
-         nANQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWtz37YWly70gYA7rdJBbfAF0e5AyrArEXX6vNFE6RWi++GMPihzZ5Cz/D4y59f/KYt445z8X4705w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytPpLxnqjNHePsvt/2tOa/1YOoqHWomu92uS6HdzDPY0danbMw
-	ICvvTocuKubFHzvPEYNIC84ykmpVqAigmZyXrZsjFFxoTH6RqjSlZsjEt6B6RvGO4k+/fXuZIL9
-	1AwY91We8enBk+Zr8yTdXWRw2WcXlJ+NUJTFdQNj9+0MWjAkmO7oXwd6T5xw=
-X-Google-Smtp-Source: AGHT+IHoCMSNZxkfLUxmG4WkZE2nzhRHxjsZBfDI/5hxG3CFpHHTxb4vc9kfXHV2SzD2x6XCnzwyVNRUAkEnBfJafNtJQOFsy/r3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D52329C5E;
+	Fri,  5 Dec 2025 15:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.3
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764947552; cv=fail; b=SZMC3fkOGTUhLp9uNc6QAL0bAeQl8ttvRU49jmzlUZUe8p+79ahoyygEJ4cbdRLQM/SQMmPe3uMHM6uum9CD3Cd4j94eBI79mucvh//Y90OK341M4DWg7BqotNpyizrZUFC6+wElTQLDz0y11l13YHSVj+tmXu7cF2cfH8lo57c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764947552; c=relaxed/simple;
+	bh=WxMR/LKu4ekYoOWxorLeFlW3ygmy4lRAVjTe1ngVpaM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qgrMMry6KHhPjiRnPnq/6ZoRw1hrXCwTH3M7NCc18mefn07HTGA8v8noPIZeU9oarch+tORvAI7aJnU+PZRyQa/cGGucxOb1IoDJZsoGEXije9FxJhHjzi1nPXtGHKcdKSlP8LlJC8Ljr11MM68GpK1ppGQ3aSNIg2IGWxPxrhw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=RfqT+acj; arc=fail smtp.client-ip=52.101.66.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=O4zBQsICyCTOdUig7FsqU1PLIaSmrByvWmMgzFPlifjponr0Y1rNLXYMOcSBzaHCsMeLO+Muleoe1fGp1SfeUor23XcfHbyfzVc7mXd6qre2t8akLSK8mrQx0xXdfFEc/HoTS4FeuLvaKmgbJ9pFHq7C/QylqmitioU3CjpiDvgULZ8+aPmtctiPrxfSGR7Hszb356BGX4O6J/sXW9Jaf1BpPuNgQ9oHmpHec0VlUzCoVChDNXgqL982wqM0KqHkJz2oIa2gw+Ry/DqqNBlW56m0Uw6SSyPN+sgo4rxD7wByXmdECJAs8TcFxj/KoVnF973QRx37rh9bNkrvT9theA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r4VnFOJSnBCySgcVyAkoAwokFV1vpjEcQd1xySJrCzU=;
+ b=TLrjm2iPGELCJgCqmg0rUSBYXzEvyWhTeXmAvKfpskxA2SKhNpuLEUBa7ttXE50E7xgMFJYnrT7gfboHIS39zQrOR4yH3TKdu+/JDbF7PaxuSeZP0LNvEMPbkrcuxkQPdZoFiZpuWQ3mqLQydkLZ0lpcANWfENA2V67B+nvgBQXkfUC7IWH1mK5OMCAgbVru4AxhysX9lro7I1dzcoCvaJ2KSPfCldXkB61UJym66WvzEKmcJh1Us7XNXXQ6oWRFxqAPnUHfmk6xjh3VWYlZRis7vNy6bcrW2TLRA/HWTGpTtNPaN5v6/YhfYk/wotoojf+7jNIJWk6pDkKdCSr1Yg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r4VnFOJSnBCySgcVyAkoAwokFV1vpjEcQd1xySJrCzU=;
+ b=RfqT+acjYJhnoJZ/3whJioghTsqYcBg1poZkiTlv3rC1i0lcY8F319LqroQt1Y7Is0WHyvfY5P84MPqXECcUs8Ha+oOMUN6ut4JYGCw2+WDoHOcrtUhqOlRkXz5AqpH2FF8s9/qLTafgHvXtUDAa6zc2ZTQzv4a1IR9zasPUor+wWhS3haz9I5uZknKRjwEa22oRehmRgXUx2kgfSwT9ty8sp0MqqxqMKTYYysgUpLIDDo6toH/trwlDT5D47FvSMB931HaN3ICGeBmRPeq6ljO6gMOev8eFx6+YdEcnVlTApwRvrrBwtzcMFQJ1t+xK7N8JTczEgaUPcO13EiCMkQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
+ by PAXPR04MB8863.eurprd04.prod.outlook.com (2603:10a6:102:20e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.12; Fri, 5 Dec
+ 2025 15:12:16 +0000
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9388.003; Fri, 5 Dec 2025
+ 15:12:16 +0000
+Date: Fri, 5 Dec 2025 10:12:09 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, jun.li@nxp.com
+Subject: Re: [PATCH v2 2/3] usb: dwc3: imx8mp: rename dwc3 to dwc3_pdev in
+ struct dwc3_imx8mp
+Message-ID: <aTL2ScHJNTjj9AU3@lizhi-Precision-Tower-5810>
+References: <20251205032942.2259671-1-xu.yang_2@nxp.com>
+ <20251205032942.2259671-2-xu.yang_2@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251205032942.2259671-2-xu.yang_2@nxp.com>
+X-ClientProxiedBy: PH8P222CA0026.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:510:2d7::10) To DU2PR04MB8951.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e2::22)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:3008:b0:441:8f74:fc8 with SMTP id
- 5614622812f47-45379ddf7c9mr3526983b6e.53.1764947005487; Fri, 05 Dec 2025
- 07:03:25 -0800 (PST)
-Date: Fri, 05 Dec 2025 07:03:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6932f43d.a70a0220.38f243.0002.GAE@google.com>
-Subject: [syzbot] [pvrusb2?] [usb?] WARNING in pvr2_send_request_ex
-From: syzbot <syzbot+405dcd13121ff75a9e16@syzkaller.appspotmail.com>
-To: isely@pobox.com, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, pvrusb2@isely.net, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|PAXPR04MB8863:EE_
+X-MS-Office365-Filtering-Correlation-Id: af869684-8154-40d3-b9e4-08de3410ad4e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|1800799024|366016|7416014|376014|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?a1U1tAKxmMHluJTbB7BdTllOutmpehr0PGm18aLQzqwiqxRCycyiHwySF60U?=
+ =?us-ascii?Q?1KyBP02HIaHenb2vf8pXO3sIkuiX/oWDVDAoPIBzmPMtWsPcfHJMFyNBg5oF?=
+ =?us-ascii?Q?qAtINSYSQG4Re4jutoYK3NcQRM6uT+e+oTL54/4HvmlG1J+ZR3M6lChCARFM?=
+ =?us-ascii?Q?gs+BgsrzI2WF8D5SZDPEB9EwgAij2ohptK9kMr3+pNZ647KMzRN5GiXxNH3C?=
+ =?us-ascii?Q?iOksLhxCvRAZ6MN6aqVnppCX7jv1luuz/Kiz5GzKEMsVfcq378F9AaZZVmY6?=
+ =?us-ascii?Q?0iM14ULngBUL1EyU9LsMIp2ETyFg2XEZT/UcvrTRDTPnDC4sFljOmX8iVkqF?=
+ =?us-ascii?Q?4NPA1FOFSKd+lDatWodf0HUhUrcGc337Tbv1p2JYqDpDWzC6fT29pAI4lvVK?=
+ =?us-ascii?Q?QgBpko+4QxlFRnpPTCRu365PRoDX3t+AxrRg+dHDQyIIZElBD+AckWXyxCxq?=
+ =?us-ascii?Q?+zJp1Dul085vTPFdNmJ0v53EWkTUvdJIvH6EN7Jqbk1Hai/x4ZetAopPYGqy?=
+ =?us-ascii?Q?BH8m/cl62svfQ/vtF6oa1Lm+QxVVGk8b2EBT8G7ELSqjS9gjqZJEh1RyutOy?=
+ =?us-ascii?Q?zwsQ2gLNmygEl1RQ8hzfKEEsGY0EIMAfqu0nCE/B1qQBaJabH/FLPi+3EHA8?=
+ =?us-ascii?Q?CuOIZXHWg+0h0Z7ZONOkpibGO3svNVAi8mbFH84o2q72WiVOIRMPK2rWIIE+?=
+ =?us-ascii?Q?7gD1UEM05R9AaONYLXA1J4+6CyvBbDHLaYyk4LpMfYC5l6H8jyH1Jk5wnlIv?=
+ =?us-ascii?Q?MHAizwtMtKatW5bocopLxhJiNvDzOhOeanoTa6+o+VQV7svNgr56o/W905BV?=
+ =?us-ascii?Q?1juorZnMUqVhg4c2sRTUTacE3ZzaywPY6Pr8Dl89N4qceuD6AkLoFj3Uzcm/?=
+ =?us-ascii?Q?qI1yQvPPhZdg51TuhEwVDlVgSaB2+oYqcF6l+vXV+ERWP77cRWXi6ugGeRws?=
+ =?us-ascii?Q?XhEKCdHrUNL1RYAp+FogkIVxHZbMhKTCnivM6aJqiDGA5PnNwMF5icgTMyXs?=
+ =?us-ascii?Q?ea8EtOgHp63B0giyXZXO6+Z+MQbv9ejqkGUJ8+61QmWGG86sRYz3kWle9XRg?=
+ =?us-ascii?Q?0Li5LorCRnjC31sWL0m+XARvM1hdmByueqgIqC7cP6lPiB+zBGxkGY/HsK+l?=
+ =?us-ascii?Q?kZDaeEmxbMVKUBTCtN6PrsCDEKWo9oDJ4KJWobdoz94LswQ8DFb9+U9m9sRW?=
+ =?us-ascii?Q?rDTlf88ipE7/7vebHa9Ig3ikdCu99xt5aBmTswcXlxjCkAujA7raip3CJuJS?=
+ =?us-ascii?Q?9Ej356EvzbKmyuzKc+HdMSMOD8hTDRmw3hy+3NH2MYYQ1eiff9+PvlazIS/0?=
+ =?us-ascii?Q?EfqmSZfXuWFKTMBnJwQYFxN9oEOJQKozxTUITEQ/wetYFXl2vsnpWEQFEZp5?=
+ =?us-ascii?Q?SXCEkPxP0getEaVHSblTyxvycxEE8w6my0zO7BUbJa834d6HyZJZfiBaNYwe?=
+ =?us-ascii?Q?XUCtxrswyD0cfHcG7MpxXv3V1isln6DEnfMS458UZxF/8+p8S3x/RD2RBZhB?=
+ =?us-ascii?Q?xSC0Tk03xuDI3skBEdUXVvy83cOzMKNPGNMu?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(366016)(7416014)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?6GO74N/N/Wyf8Xo2aK7wzmzN+BX/FzMh04+5QpVIfRYlPuDitlNpNlSTTuMq?=
+ =?us-ascii?Q?zWNkY7yoPYH3CEzcpDp9b6GiFhBsqODGsOInyY0WuHJueB+gzEPloIzME6Nj?=
+ =?us-ascii?Q?EYHvS9ksAfvUqS9kvqQJCK/9KH2n09h9Nwtky+VuD7M2iW8MVXBO6mYmgVi/?=
+ =?us-ascii?Q?tGmIzKtxeRAMb8KlQ2QlWWPRtKbfm6e6OlJ5WdopkHKD3Ux1UtodgjKbXr8N?=
+ =?us-ascii?Q?K4Xc4Qlw1xFL6Rk7L8nR3Irlcl4mi/6TuI+PpwT6qA4l0Q753mqL9tDu513x?=
+ =?us-ascii?Q?gDx2NxAIc9Q8raPXjwUgxrz4nqeanZ5xjSYJxIkmjOb4AK6rWgUs4tHMUK1O?=
+ =?us-ascii?Q?8XfPwbN22ybpghU07z0Qxw74ut2eXtlqF6fJWTyUsIhB8mxH6+Yxt6wd1PYO?=
+ =?us-ascii?Q?Rg3ADEP+2TA0Ttp8l+FmJdUt6NaRg3Ycz+D6yez1P37zhTzt5abGHFAt/3KZ?=
+ =?us-ascii?Q?7HcXa+c1jM9Rjs7Wm1/DhBrGkNpHM3FvZYASR4vTnGd3T+ue8EcVaalCfjow?=
+ =?us-ascii?Q?87bFATUmw/s1tYmaClWZ2afoo/zE50Rl30BG0xowZ2fyD49nIMF15WmGgPwh?=
+ =?us-ascii?Q?sgDveTRX6QXQ77jn0dbDmycXWDWRfMzk2Junk0cvNvJ3UOPXAQXKd7ky/1Kt?=
+ =?us-ascii?Q?FPv7JztfkOys0IF75rJ2sYd3qZ1DHyvHB7/7CrWMs3zXy9idWil1JvXjTExb?=
+ =?us-ascii?Q?LSaRj8T8BC6yJYwcD4SOD9gUgb3SgBLPrdAzlhQoYoYequ/2UM3HIBniRz8s?=
+ =?us-ascii?Q?ybnEeRpuqSSZHr2AoP1knM4bHPPsijID9AHmUC2O7O2GiHdHzyS5kh2jdZYo?=
+ =?us-ascii?Q?1edA5NdRLIYRF0Gyb6iWt4JyVT7vAxEAXSM+bPKYd5PyzmhBrgGVAm3Um7y5?=
+ =?us-ascii?Q?xbcFvckBxE9Ty7bumy5XsVAezSuE0T/BGqR0a4XQ/ceaxovfaBpMpYztW9xw?=
+ =?us-ascii?Q?tKuKi5JU5KVlIFH9RnCW940mgMsMTVXnszFiQE9o6eYe3k1xsZO1Kg431fIf?=
+ =?us-ascii?Q?3XIbAu2L+q2vp6iMnD4Bfmixy0DeHvGpLUGwxI1KwjuvZ9nQJAsNP8HAc2DV?=
+ =?us-ascii?Q?RICNMoVBhQa/49t2Sv5vv2xuBUYOQ7eNvOGdCg3GOf6GtokNWRnJup70dO3I?=
+ =?us-ascii?Q?Ej06KEiVhTVSApjLFBN/3TiADpO2X1iT9krm+WHafwzc/f/qyFZu3lK03Ft6?=
+ =?us-ascii?Q?XmlBRgJFvRuHr9/dPOFeGe2Bs0MPlCMHTs0bOjefCOoVCNZ8JJEP8sxqISku?=
+ =?us-ascii?Q?pO2GsSBPRpUfpuQhfrjcui75fYITgf2lMnK/KBKCGrmWiLmqfT+9xiib7vG3?=
+ =?us-ascii?Q?sNkmyKLq7k91ySRS82/DnaFBozqmJTtoRlKruxKQ1fzbsPOJQ+JsnKp1kRzL?=
+ =?us-ascii?Q?S3xH8rWuFvR0NTmLb3JOx+7zFFhHkqMpoqqDbjJQ5iCHgIKZSW31gt5aEWw6?=
+ =?us-ascii?Q?oMBkDzuO2Bg+antjA2ZtVoi4sF16kKuvneC9r1NLTAypkqRuviD7/QyVZnjc?=
+ =?us-ascii?Q?PxgtLPCisWNTP+pYgu5XjSNge1Z+Am0rJZmEcwREUWxRU81i/DTMMF1fz1zh?=
+ =?us-ascii?Q?IL8cEA61KMlU6XIGPxJwFZul5H6STV2NRqD9CoBc?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af869684-8154-40d3-b9e4-08de3410ad4e
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2025 15:12:16.7256
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: a2DsJqmfXsdVLA+sKGW7yDhQUo6oZKVSQNBoPrcgXnaiIA7UZIpS6mHKI3EJWVF0At8ORA74XdraQrUMMDStmQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8863
 
-Hello,
+On Fri, Dec 05, 2025 at 11:29:41AM +0800, Xu Yang wrote:
+> It's confuse to let "dwc3" represent a platform_device, because "dwc3"
+> may also represent a dwc3 core structure. Rename it for better
+> distinction.
+>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+>
 
-syzbot found the following issue on:
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-HEAD commit:    7d31f578f323 Add linux-next specific files for 20251128
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12e42192580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ec890b8333fce099
-dashboard link: https://syzkaller.appspot.com/bug?extid=405dcd13121ff75a9e16
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10de0512580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17392512580000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9bcc6eb60940/disk-7d31f578.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/895bc1bfae48/vmlinux-7d31f578.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/48f15e4679f3/bzImage-7d31f578.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+405dcd13121ff75a9e16@syzkaller.appspotmail.com
-
-pvrusb2: Invalid read control endpoint
-------------[ cut here ]------------
-URB ffff88814e172b00 submitted while active
-WARNING: drivers/usb/core/urb.c:380 at 0x0, CPU#0: pvrusb2-context/2345
-Modules linked in:
-CPU: 0 UID: 0 PID: 2345 Comm: pvrusb2-context Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
-RIP: 0010:usb_submit_urb+0x7e/0x18d0 drivers/usb/core/urb.c:380
-Code: 89 f0 48 c1 e8 03 42 80 3c 38 00 74 08 4c 89 f7 e8 07 cf 20 fb 49 83 3e 00 74 40 e8 6c 82 ba fa 48 8d 3d e5 1e c8 08 48 89 de <67> 48 0f b9 3a b8 f0 ff ff ff eb 11 e8 51 82 ba fa eb 05 e8 4a 82
-RSP: 0018:ffffc90004f268a0 EFLAGS: 00010293
-RAX: ffffffff870770c4 RBX: ffff88814e172b00 RCX: ffff88802a5c8000
-RDX: 0000000000000000 RSI: ffff88814e172b00 RDI: ffffffff8fcf8fb0
-RBP: ffffc90004f26b00 R08: 0000000000000000 R09: 0000000000000000
-R10: dffffc0000000000 R11: fffffbfff1f85a8f R12: 0000000000000cc0
-R13: ffff88806783d5f8 R14: ffff88814e172b08 R15: dffffc0000000000
-FS:  0000000000000000(0000) GS:ffff888125a03000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f910bc43e9c CR3: 000000000e13a000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- pvr2_send_request_ex+0xc2a/0x2030 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3676
- pvr2_send_request+0x38/0x50 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3819
- pvr2_i2c_read drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:130 [inline]
- pvr2_i2c_basic_op+0x44e/0x930 drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:172
- pvr2_i2c_xfer+0x9e3/0xda0 drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:445
- __i2c_transfer+0x871/0x2110 drivers/i2c/i2c-core-base.c:-1
- i2c_smbus_xfer_emulated drivers/i2c/i2c-core-smbus.c:470 [inline]
- __i2c_smbus_xfer+0xf80/0x1e40 drivers/i2c/i2c-core-smbus.c:608
- i2c_smbus_xfer+0x275/0x3c0 drivers/i2c/i2c-core-smbus.c:546
- i2c_smbus_read_byte_data+0xfe/0x1c0 drivers/i2c/i2c-core-smbus.c:143
- saa711x_detect_chip drivers/media/i2c/saa7115.c:1710 [inline]
- saa711x_probe+0x1c1/0x1570 drivers/media/i2c/saa7115.c:1816
- i2c_device_probe+0x87e/0xc00 drivers/i2c/i2c-core-base.c:592
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x26d/0xad0 drivers/base/dd.c:659
- __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
- driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
- __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
- bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
- __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
- device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1086
- bus_probe_device+0x12a/0x220 drivers/base/bus.c:574
- device_add+0x7b6/0xb80 drivers/base/core.c:3689
- i2c_new_client_device+0xa11/0x1150 drivers/i2c/i2c-core-base.c:1019
- v4l2_i2c_new_subdev_board+0x86/0x250 drivers/media/v4l2-core/v4l2-i2c.c:81
- v4l2_i2c_new_subdev+0x14a/0x1e0 drivers/media/v4l2-core/v4l2-i2c.c:136
- pvr2_hdw_load_subdev drivers/media/usb/pvrusb2/pvrusb2-hdw.c:-1 [inline]
- pvr2_hdw_load_modules drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2074 [inline]
- pvr2_hdw_setup_low drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2155 [inline]
- pvr2_hdw_setup drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2261 [inline]
- pvr2_hdw_initialize+0xe18/0x3ac0 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2338
- pvr2_context_check drivers/media/usb/pvrusb2/pvrusb2-context.c:111 [inline]
- pvr2_context_thread_func+0x487/0xaf0 drivers/media/usb/pvrusb2/pvrusb2-context.c:158
- kthread+0x711/0x8a0 kernel/kthread.c:463
- ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	89 f0                	mov    %esi,%eax
-   2:	48 c1 e8 03          	shr    $0x3,%rax
-   6:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1)
-   b:	74 08                	je     0x15
-   d:	4c 89 f7             	mov    %r14,%rdi
-  10:	e8 07 cf 20 fb       	call   0xfb20cf1c
-  15:	49 83 3e 00          	cmpq   $0x0,(%r14)
-  19:	74 40                	je     0x5b
-  1b:	e8 6c 82 ba fa       	call   0xfaba828c
-  20:	48 8d 3d e5 1e c8 08 	lea    0x8c81ee5(%rip),%rdi        # 0x8c81f0c
-  27:	48 89 de             	mov    %rbx,%rsi
-* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
-  2f:	b8 f0 ff ff ff       	mov    $0xfffffff0,%eax
-  34:	eb 11                	jmp    0x47
-  36:	e8 51 82 ba fa       	call   0xfaba828c
-  3b:	eb 05                	jmp    0x42
-  3d:	e8                   	.byte 0xe8
-  3e:	4a                   	rex.WX
-  3f:	82                   	.byte 0x82
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+> ---
+> Changes in v2:
+>  - new patch
+> ---
+>  drivers/usb/dwc3/dwc3-imx8mp.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
+> index 050da327f785..8bece4baecbf 100644
+> --- a/drivers/usb/dwc3/dwc3-imx8mp.c
+> +++ b/drivers/usb/dwc3/dwc3-imx8mp.c
+> @@ -51,7 +51,7 @@
+>
+>  struct dwc3_imx8mp {
+>  	struct device			*dev;
+> -	struct platform_device		*dwc3;
+> +	struct platform_device		*dwc3_pdev;
+>  	void __iomem			*hsio_blk_base;
+>  	void __iomem			*glue_base;
+>  	struct clk			*hsio_clk;
+> @@ -100,7 +100,7 @@ static void imx8mp_configure_glue(struct dwc3_imx8mp *dwc3_imx)
+>  static void dwc3_imx8mp_wakeup_enable(struct dwc3_imx8mp *dwc3_imx,
+>  				      pm_message_t msg)
+>  {
+> -	struct dwc3	*dwc3 = platform_get_drvdata(dwc3_imx->dwc3);
+> +	struct dwc3	*dwc3 = platform_get_drvdata(dwc3_imx->dwc3_pdev);
+>  	u32		val;
+>
+>  	if (!dwc3)
+> @@ -142,7 +142,7 @@ static const struct software_node dwc3_imx8mp_swnode = {
+>  static irqreturn_t dwc3_imx8mp_interrupt(int irq, void *_dwc3_imx)
+>  {
+>  	struct dwc3_imx8mp	*dwc3_imx = _dwc3_imx;
+> -	struct dwc3		*dwc = platform_get_drvdata(dwc3_imx->dwc3);
+> +	struct dwc3		*dwc = platform_get_drvdata(dwc3_imx->dwc3_pdev);
+>
+>  	if (!dwc3_imx->pm_suspended)
+>  		return IRQ_HANDLED;
+> @@ -233,8 +233,8 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
+>  		goto remove_swnode;
+>  	}
+>
+> -	dwc3_imx->dwc3 = of_find_device_by_node(dwc3_np);
+> -	if (!dwc3_imx->dwc3) {
+> +	dwc3_imx->dwc3_pdev = of_find_device_by_node(dwc3_np);
+> +	if (!dwc3_imx->dwc3_pdev) {
+>  		dev_err(dev, "failed to get dwc3 platform device\n");
+>  		err = -ENODEV;
+>  		goto depopulate;
+> @@ -253,7 +253,7 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
+>  	return 0;
+>
+>  put_dwc3:
+> -	put_device(&dwc3_imx->dwc3->dev);
+> +	put_device(&dwc3_imx->dwc3_pdev->dev);
+>  depopulate:
+>  	of_platform_depopulate(dev);
+>  remove_swnode:
+> @@ -270,7 +270,7 @@ static void dwc3_imx8mp_remove(struct platform_device *pdev)
+>  	struct dwc3_imx8mp *dwc3_imx = platform_get_drvdata(pdev);
+>  	struct device *dev = &pdev->dev;
+>
+> -	put_device(&dwc3_imx->dwc3->dev);
+> +	put_device(&dwc3_imx->dwc3_pdev->dev);
+>
+>  	pm_runtime_get_sync(dev);
+>  	of_platform_depopulate(dev);
+> @@ -296,7 +296,7 @@ static int dwc3_imx8mp_suspend(struct dwc3_imx8mp *dwc3_imx, pm_message_t msg)
+>
+>  static int dwc3_imx8mp_resume(struct dwc3_imx8mp *dwc3_imx, pm_message_t msg)
+>  {
+> -	struct dwc3	*dwc = platform_get_drvdata(dwc3_imx->dwc3);
+> +	struct dwc3	*dwc = platform_get_drvdata(dwc3_imx->dwc3_pdev);
+>  	int ret = 0;
+>
+>  	if (!dwc3_imx->pm_suspended)
+> --
+> 2.34.1
+>
 
