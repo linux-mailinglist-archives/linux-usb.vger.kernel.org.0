@@ -1,809 +1,286 @@
-Return-Path: <linux-usb+bounces-31191-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31192-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0935CA5E8E
-	for <lists+linux-usb@lfdr.de>; Fri, 05 Dec 2025 03:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F35DFCA5ED3
+	for <lists+linux-usb@lfdr.de>; Fri, 05 Dec 2025 03:48:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C49EC3195D67
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Dec 2025 02:27:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6592031496FA
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Dec 2025 02:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56C542877FC;
-	Fri,  5 Dec 2025 02:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D90E2246332;
+	Fri,  5 Dec 2025 02:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tmytefRL"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="GVfzF+HS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013071.outbound.protection.outlook.com [52.101.72.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45B702E54A1
-	for <linux-usb@vger.kernel.org>; Fri,  5 Dec 2025 02:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764901636; cv=none; b=jtbAWa55PySWCv0ZCZlZIjDSV6PdylkNjZlbi0+obAS1ZwjaPOJ5IDCK+AUKgBlUfi+FTTtjkee10uV4pVsSpuQIHBzZUT17y5ErIE9r6AoyMXmqBbbtCkdXvp6cGsEe0XdlhRv741UWqqpDe2c21aC93TFum33gMPUKxcXO2+0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764901636; c=relaxed/simple;
-	bh=o52BV29grUB1YeBUo+gPHSmpf2uvHTKeR6RWM9YiAd0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=u1f1GV1bbMfEDI/T59a66A79X+gj0xmuplntMspXBBhQoDxujPYZqeSzLvZQkip8USQezojOv5nhKnS/01P9HFfrrQ4MLAKeSqbBaUpfYR/Siy4goYAoZe0W3ZWaBkHDdBD/Z4h581FvXXmAewpez3rBG5JyXXne8nWPAh2gQYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tmytefRL; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-29846a9efa5so31459375ad.0
-        for <linux-usb@vger.kernel.org>; Thu, 04 Dec 2025 18:27:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764901633; x=1765506433; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n6zpxffxjTX42uQbMb2/AduWKA1atyM8mBh31TdaB60=;
-        b=tmytefRLStLKnxvLT3XbN2ClxKSErekFFgCctS2wWwSlcQSml1UP/8VAk0zSmVSINa
-         DyHuufLITVYTN1IqKUjfwNN+Kwfqk/IpKr/8vF9gN+1i5DQMF0vO7/azTKh4Twq6Fvpg
-         psKYYdmFZyjsjm5YD21t3QmVCgZTN1WqpQMG4EL76nZ+TkpRyhUY9JPx1hwRya6tt2TS
-         HMdhYrY835WjspX3S0tVTuC+/ErR9XBMYA1qCw3Bd85d4LfvZgBdF2rll1i+Z+suIYF+
-         jnTLHq7VC1TccDgckpEI32ez5Jr3p56Eq2K9MCu4ZWmpVKLA6uSBDursDBTskm0c0jY3
-         B/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764901633; x=1765506433;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n6zpxffxjTX42uQbMb2/AduWKA1atyM8mBh31TdaB60=;
-        b=lBojB6dCUJF5we1TMrhTJKZMrgx+OyRJDhIv/wQ+V3XeKrdzkChURy257KqdM1+gfz
-         fcP7I11dT5/sYh0UDafVZ81OLQ8QvlXfSnCZl+cXDjoaiYWCZVcqZlp3cqlMthNtpcNp
-         c3+V32SPkcukayb8trw7aWI2rWP3jeX/n1xCneE987B6d+eVd9j0KLMo06emvadYlLWi
-         fHIH8KDr/7FwqILIjnalbentMOf7UB3P/Ih1tpjLXBiXKr5Ci7Lk4ISS7C+tDIGeSDYd
-         aWwG9kAInXFVlTcDqzxpzrYIQy4/oGL0cnP/ZlPYzqqpSJdKEA96Mh76a+MNW6hoIjr8
-         7tfw==
-X-Forwarded-Encrypted: i=1; AJvYcCUqgFGJZSJ3lYI2jQMh2e1GDMo6CMlO2LhKR8/aYYCKlmyTtgLI//bjkERw6m3hQOjx7CucYW+8Zi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMbh2fxd65Uxh/ODNdfUv7MeVpS6MdGemnHt+GfcNfxoDAYqtf
-	/2Z8QrGLdJCdI4th/qX1KDCQYtbibfzCbT329x5iD9HH2np9khEiaEYLpBByImngPXSXLKquoTM
-	IeoxFyw==
-X-Google-Smtp-Source: AGHT+IHLRWwT2Sf2vZM2m3giy/wP/dZ/NtagYlAtTdfDPuzI3m83gPNuRz730r+IXHbpuVs6ew53RwUTEVg=
-X-Received: from dlii13.prod.google.com ([2002:a05:7022:418d:b0:11a:5223:14ab])
- (user=royluo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:60a:b0:119:e569:fbb4
- with SMTP id a92af1059eb24-11df0c48d5emr5790447c88.35.1764901633281; Thu, 04
- Dec 2025 18:27:13 -0800 (PST)
-Date: Fri, 05 Dec 2025 02:26:38 +0000
-In-Reply-To: <20251205-controller-v9-0-9f158b18f979@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195731A317D;
+	Fri,  5 Dec 2025 02:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764902921; cv=fail; b=XSwdvs5bNNX6xVkdDomNXjL6ZBtGuClrcRJuxceUQhTyrDfLatK6qcd8ys1W6V81PeNduwN8V1BPg5PqyW5P52NyrpXF/75nmb4AHkN/NjL8VY3lgDO/wpQzg5br0oZVPPkGCfO5L/64ozKtq7cJRUCznWTZF9yGLMrnlEBMIbg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764902921; c=relaxed/simple;
+	bh=vf0pmMHfkP855UW6ISOQ1DP+OemE1JIfNauKZXppbbw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Y/ETrSMNn/wwn4ifQt97wZeRF7rUkjaedBFDfGeTFIflGOfO/6fzwtaBwnIQjr6+TPDAjls7+cEdh4fn7NzFG4ABrFPHCR4gNzkHBJNonfYCwH2gqqNaXP10EwGoYS0ci+O4K4eBCMmxSWAFW0pz9Ihv8ink5woKJ6E5JQ5OoyM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=GVfzF+HS; arc=fail smtp.client-ip=52.101.72.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GDZba01VXGnAplh5CJJ2HibR/7Em6su5C5IFVX6nfuT7Xnsztgj1p4UeH7RIyN7w/T0stiMc34YZASS9Jph7LtP3vUuEonSDOlQTiaXzHlDrm9oCatEOoRrtXAHhARwS3/aK61KMXd9Gy5Rr8GE59nd4tFwWGREUc15EgpXV0EAi2iVv0Y3NG46e8jrBV2wT6EhSdABY+pEAsXGioVgvwgiboV1udjyQjZIfGNJYu81B1hupjkuBIfrFHtcqOCjmsMVQgqMXiKq/41nSG8zosULzcu0B5wD053KfrmVOMGYPqtNzqS8VBdtlTUawX3oUP0P5DZ4f60rjZOyJuDprQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a3V3e12sGkeOrzFtpEF7+b1EFkEJYeS4dm7/DPTGQjo=;
+ b=D+R/V76S6LyV4q8XrUfqmG47jZaPviIZ/BxXwD1P1PB7KlecxdxWK34w1XwZehNz/MzBYYJxk+pFLjlf2YE5NbtlaUH+foyA5zENzeoU03262DtfWvdr+a7J7FiO7h/yN45a/ulLNnFxCsA5zjISVB91pxJtuE0nKdP1J3vWCogWU3zBpV+EXA5fwzetksMlJ6f872a5N1DCDAAlxn0BLEtvCQ9v9KnB15vUJOmD3pD+QcZ9jUK7xyHOttPsWxVwU4zrMWg1i+DzIL9AzRGfLMYfrYjkAsmxvXwpRLX/Otwxs8AXLMXZFD061xhrO9j3a1WU34D4L9wu2DIWlrjGLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a3V3e12sGkeOrzFtpEF7+b1EFkEJYeS4dm7/DPTGQjo=;
+ b=GVfzF+HSMhTrrUqCyMs3++MoRaBJ76GC2rlwGlLSOm2OzbsDPU9Y5wE9W3QSMrHSb0TU+bOu/6MML5cKXFwvAwHRsTZMKWM3Q8URZBOraEXpGmCisnL/9fx7DtTyQZbtMISWA3QB9g+TRL+9PbaXBPOFd9Awb22fa4wPDEkVQzH1FH9OtBNNbWwox/UMQD4434oKif+MukRF6uqlQ2uMv+RLiYRulV8jBO3C+W7zVYbo1vZLvMg9FslHJUwCpVb4qMWpfU8vrpZadVCScL+K/SFD+GFOcZS2K4KmwcWfN19u7ikIva0fC9sgb/7dUcnQlDloQewEkcM1Z1V1bQxvqQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9SPRMB0022.eurprd04.prod.outlook.com (2603:10a6:10:366::7) by
+ AM9PR04MB8841.eurprd04.prod.outlook.com (2603:10a6:20b:408::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.9; Fri, 5 Dec
+ 2025 02:48:33 +0000
+Received: from DB9SPRMB0022.eurprd04.prod.outlook.com
+ ([fe80::8c26:6739:46ea:171c]) by DB9SPRMB0022.eurprd04.prod.outlook.com
+ ([fe80::8c26:6739:46ea:171c%4]) with mapi id 15.20.9366.012; Fri, 5 Dec 2025
+ 02:48:33 +0000
+Date: Fri, 5 Dec 2025 10:41:42 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"shawnguo@kernel.org" <shawnguo@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>, 
+	"kernel@pengutronix.de" <kernel@pengutronix.de>, "festevam@gmail.com" <festevam@gmail.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"imx@lists.linux.dev" <imx@lists.linux.dev>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "jun.li@nxp.com" <jun.li@nxp.com>
+Subject: Re: [PATCH 2/2] usb: dwc3: imx8mp: disable auto suspend for host role
+Message-ID: <qnaxqfnnjxx4vnsceemcgsq37uai4apqypcjiudyrdb7jrz5bf@qyhzmjf43vvb>
+References: <20251105074504.1427926-1-xu.yang_2@nxp.com>
+ <20251105074504.1427926-2-xu.yang_2@nxp.com>
+ <20251113230541.wbzt6xbine5gdmpp@synopsys.com>
+ <7kpf7gnftumdwdowutryjz73nkap4vp3cfisrigt6def4f36vg@ijlj2eqwzsip>
+ <20251121003742.q54ouezxhghmpwgn@synopsys.com>
+ <bj6hroepwqflz5z3wabxacfhxltt2u6x274gd5v66rihosy3my@pzgq2e4v45fx>
+ <20251202000013.qnv3nkhyr7gtlu6n@synopsys.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251202000013.qnv3nkhyr7gtlu6n@synopsys.com>
+X-ClientProxiedBy: SGXP274CA0003.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::15)
+ To DB9SPRMB0022.eurprd04.prod.outlook.com (2603:10a6:10:366::7)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251205-controller-v9-0-9f158b18f979@google.com>
-X-Developer-Key: i=royluo@google.com; a=ed25519; pk=nTq1n8WcJActRWe1s8jdcy+TzpTK4a+IYRCIWvQfq5k=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1764901627; l=22405;
- i=royluo@google.com; s=20251120; h=from:subject:message-id;
- bh=o52BV29grUB1YeBUo+gPHSmpf2uvHTKeR6RWM9YiAd0=; b=pDl/9K+MqNtdneRqgR9X6Z7pRNjNNfmirRbg2vtFod43QyPW9ij8AHvE3yVI4LzR/G26im6Hx
- IKx4RCbboyGDZu+H/EUOeA8W4UkLHSMl1nAhdGnzMzSP0BrdFuxjx3U
-X-Mailer: b4 0.14.2
-Message-ID: <20251205-controller-v9-2-9f158b18f979@google.com>
-Subject: [PATCH v9 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
-From: Roy Luo <royluo@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Peter Griffin <peter.griffin@linaro.org>, 
-	"=?utf-8?q?Andr=C3=A9_Draszik?=" <andre.draszik@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Badhri Jagan Sridharan <badhri@google.com>, Doug Anderson <dianders@google.com>, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>, Roy Luo <royluo@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9SPRMB0022:EE_|AM9PR04MB8841:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54561292-04ce-4b95-9e27-08de33a8c72d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|19092799006|1800799024|376014|52116014|7416014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?kSd2ldBapCQZtxCfy7/Szj6+2/1WNGWMlJAS+9VH78v0cL/MV7XiE2xzfcju?=
+ =?us-ascii?Q?izWmlm2ev0nbapis99xY831vWDdRB5S4JMlHxp4z6UO2YLTfqHqUV1p+gFmV?=
+ =?us-ascii?Q?OZHeQIqVJBBmvXjC5ChKdJTHa8n4ihK+Q5QtjnBY4z7uW68CGI3G0qgnvUhm?=
+ =?us-ascii?Q?Cx+71V2rgtijQsRTA0KFVWGJkVYOa6R+oJMhs0Nr4XYAuV3WXgF/Rq3S+E84?=
+ =?us-ascii?Q?eqT6uvxwYGG7r4xxj5FJ5sABpzx8JFtbr0e39LYsG8tscYrPWqEleqR8Zj92?=
+ =?us-ascii?Q?8Pe2p5UHgeCYIE8GN10V3Ig2iGPrOlSijwzBBEDoAqHiZ31OXrrUfGeWgb2H?=
+ =?us-ascii?Q?kb1bLQrV9qxsW6mFm7n6z8Z4k9uc4i4R7DAviHCDwlCq18RlFdSQh70o799H?=
+ =?us-ascii?Q?Ijc+sNuQ7FZS4HKMwv9ItLr0ha/1+KqkpLJBx99XsZI63TPZcsQW+OYp4S5U?=
+ =?us-ascii?Q?llNgm1UZJ8i1MXHTCnGGUiGEhnpM9DtIg5J1PTXOUhzLcJcVCNfzlY2j7S2P?=
+ =?us-ascii?Q?nbOiTj0HjcrwYcFWtfPYG4bS7kvRwH6r8JvlMxLVd+7KIJ1ZNQ+PbkBb7K5b?=
+ =?us-ascii?Q?F5BCF34QYF898b/Eh3NmjWtx+YDhUKYOxfLeQVzSkqnWYS9loUPDj91iarqb?=
+ =?us-ascii?Q?35ivca9pMeBr1hdQy8PKrKHDhmwdYwO0Jfj7BLz9K+vhhuFZZHzSgIeP9s/h?=
+ =?us-ascii?Q?q8opt7mJ6ZRW75qlvbtW4iIwyHAxUWS11Q4VplEdZ4n7aREkbEFVsb7ddf8b?=
+ =?us-ascii?Q?BnNyVqJeWoFvxZ2r2UNMDBrZpIzkRzzn0J5mGXaGkmQNML9zMwbk9i5IFL7t?=
+ =?us-ascii?Q?Aa3icB56LpsNxsxtqdiB5pVHyV87LoqVBhZ8hvaZFJHH2HTCxR2v1KvEP7y8?=
+ =?us-ascii?Q?IKHDtEVUtOtwRHMf5BLxzsWQUbqcgE6L52mkiCsqP0Y99xU2v2EsUEZdwBWx?=
+ =?us-ascii?Q?28ct5nKZBJoe/Q4m7UCi0eCEuRthbRa1V7X5/VhX1FxwK14Ok4g7V/yTOCxz?=
+ =?us-ascii?Q?bhBpXjtSxIiSpH1GsHXi6NkOovv8nds+Pb3wg6luY8ZIhKZ7+VlGkaekxBTx?=
+ =?us-ascii?Q?ufUTidKW5lmM9iYj52TZHZl9mgAJXd2aZdR1cbZ6z+DRp7rZYUmSBZe94lmG?=
+ =?us-ascii?Q?GRf0aj+nY+DrZjaZ/bHdZDholdqvg25l5RtEMAjRWK3X3mGzPi2g/DVODXn2?=
+ =?us-ascii?Q?mUrrj3uRLm4BHltrJ1gDl7p7xyH/I47nc82la4qfDIHxpRrWx9OccWx0jljd?=
+ =?us-ascii?Q?WqnfBFsdVePBanX/W0esNMl6BbTPVLNM9PHrB7uKn4GPKI1CCH1yFPl+3ll4?=
+ =?us-ascii?Q?amP8vogfqLq85RTL1putbzIphHPvfwlemDMkQ3BdNO8+jWIDj3KoPhgDD9w1?=
+ =?us-ascii?Q?reCrxepyPWM8+AwWbWDqXIyE/7cHwKzbgiyaKhqpEEmaFv/28arE3+k9jvk5?=
+ =?us-ascii?Q?T7DnH7GKXNRVTOcgsoe2SUQCtqlmdOD9rGpDIuwe6zkOQIBDB88pgZimc56l?=
+ =?us-ascii?Q?wMNrmJh7lX5Q0ATlN+GKglo3exapclYhaEBH?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9SPRMB0022.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(1800799024)(376014)(52116014)(7416014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?B0m2+kjSw+kKz8THUsENogWfmZvcCqwt2mo3zWCGvHfgw5ZVcHnY76RX9mR8?=
+ =?us-ascii?Q?We7YNrJ6H+ttBzjQRhcw/uHZkct/88fHYKMMaebnA4rr05e6BMOjfEdZ14F8?=
+ =?us-ascii?Q?/Zh3DybrrSo0fEH7FnhfGeCJDXclSw7ndE4Vp24Ywf9FomLb41hqBz6dZtb2?=
+ =?us-ascii?Q?BQ+vhfnmGHy8S7DAF/ZMZgiPhx5zuRCYYpdAiyBhN5fWHpGn9hw/cgH0kSnt?=
+ =?us-ascii?Q?iDxkm1DjYxcRSzTsP/VCnZr1KghSbqdTxDmLPDmTVgbMeC0p+4xnbKPSEwdJ?=
+ =?us-ascii?Q?ms9N2AN8wY3Bgcl7sGO2/kOx/Tqf9mIqobOMvKkD+bQ46UH0AYFgamPF88Yh?=
+ =?us-ascii?Q?BEuEtZK1Qcsotigd26XSe0EFKGDAVlGapcca6TeUeklRai2n4bMWx3PEz18J?=
+ =?us-ascii?Q?0ykmvIdeaLBCqxRr90Avpdyy6SycDNsc53IjToQIbosT7wvr2OMa2r39y03H?=
+ =?us-ascii?Q?HO6Gv4r0uvZY7Ik4x5q7QQq8MqyfV0PUoTU7Ykh5iiaYLUNwkGbJnSzHSdqj?=
+ =?us-ascii?Q?5PTr7EueWNyxnBCc/eOr1ff4aXfcn2Z+2ryBtxtvenXUjFsRGlK6j9harhj4?=
+ =?us-ascii?Q?wVwb2iUERS2r/lDCTADyRfABT72tEq8DSkBZULD3MxT700iY8D3Ib+wNWwGa?=
+ =?us-ascii?Q?MiLm+c2olDBMEHH6Vr0G9147KdAyFWaAhKbunw9SlQva1yu084zqEBGmjTwu?=
+ =?us-ascii?Q?XLXYdCyakmDPHcaqWsOLJmQ/qQiy7b3ngSIr31IR65JwvJb0sbSXqbF/LGpr?=
+ =?us-ascii?Q?RhTEz9M2JlMihds654o+lL8V6YiBIS116L6i6lZg2PpMr2kCh7eydLucLvaI?=
+ =?us-ascii?Q?z6qgNUAktXH9zljKpTyUCzG6oZATE5o8UL4pCYnEE6livruFZubuhOpQr5bc?=
+ =?us-ascii?Q?7JGver4H49OU4Jd0u/FVWErqiivcZoR6ezLOfX5nXhj6YzIu5a6AFPNpAmHt?=
+ =?us-ascii?Q?dR5zQgM3RqFyRRYC65xvPs9JlEkYYZw3NEXN7X8M6sYj76TiyfzlOefhx6m8?=
+ =?us-ascii?Q?rn1H8I2+HeSLKgczKIWzKc71jtYFglAFaw0ISgEDbpA8N/HIXTN7MnZnvGXu?=
+ =?us-ascii?Q?oGFbLHAnKaRimJbg/TVyhnkk1RRFugBV8fo+CDu+oO5HrW2wPsOqPD/LN+vE?=
+ =?us-ascii?Q?oLd5jsnWgH8qIhFQDxPeCf66Oyl/AYch3L5MB+L3nGPZqGypvWUboeM03o5U?=
+ =?us-ascii?Q?VE1FhqaxKPhDRkRbywCEnUNUgExesxLA1sZBLbTwr6eSGvO7nxKM3rDKu/Kc?=
+ =?us-ascii?Q?KAhP7zKgwGLgbOECAGVoBhrXg5t9yBqEhGqLUjLOomVBEscVtRiQebJdzsql?=
+ =?us-ascii?Q?8Od3ZK5sZUBljsnko1UtAj5fAmZMuRXoWwNaaVy9Oe3z4+gj8rq+P0wczd3L?=
+ =?us-ascii?Q?vKRUT3qWVMpJheg2Bruur3TnbWwzkRym1/kXCXoqvjIyk7frIe6IIkWvv7Ki?=
+ =?us-ascii?Q?ndqJVxVwgh7CQcJ1317TCrB/MFv/l+frA6dXw9rICmRjT74WznoIl+ncvm47?=
+ =?us-ascii?Q?bDBATtSqDWZEn0QssjDHl934Frwj3cNHNkbgnvkxkvP9wTFh10a6isQYSMJH?=
+ =?us-ascii?Q?6Gg9cA20Nes7vk6s9sAtDNyBddbKUcW29QtSEfUT?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54561292-04ce-4b95-9e27-08de33a8c72d
+X-MS-Exchange-CrossTenant-AuthSource: DB9SPRMB0022.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2025 02:48:33.2002
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XjnABECZsoqkbMayIlMiv8nDjBQ+HiENgltYMcsCKkas2M09hwd6RRj7GELFfvIXwMv9vj4eBegkCaHsqpenhw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8841
 
-Add support for the DWC3 USB controller found on Google Tensor G5
-(codename: laguna). The controller features dual-role functionality
-and hibernation.
+On Tue, Dec 02, 2025 at 12:00:16AM +0000, Thinh Nguyen wrote:
+> On Tue, Nov 25, 2025, Xu Yang wrote:
+> > On Fri, Nov 21, 2025 at 12:37:47AM +0000, Thinh Nguyen wrote:
+> > > On Mon, Nov 17, 2025, Xu Yang wrote:
+> > > > On Thu, Nov 13, 2025 at 11:05:43PM +0000, Thinh Nguyen wrote:
+> > > > > On Wed, Nov 05, 2025, Xu Yang wrote:
+> > > > > > Do dwc3 core auto suspend enable for device and disable for host
+> > > > > > , this can make sure dwc3 core device auto suspend setting is
+> > > > > > correct all the time, the background of disable dwc3 core device
+> > > > > > auto suspend is to make its parent device suspend immediately
+> > > > > > (so wakeup enable can be enabled) after xhci-plat device suspended,
+> > > > > > for device mode, we keep the dwc3 core device auto suspend is to
+> > > > > > give some wait for gadget to be enumerated.
+> > > > > > 
+> > > > > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > > > > ---
+> > > > > >  drivers/usb/dwc3/dwc3-imx8mp.c | 31 +++++++++++++++++++++++++++++++
+> > > > > >  1 file changed, 31 insertions(+)
+> > > > > > 
+> > > > > > diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
+> > > > > > index bce6af82f54c..80a431cb6fed 100644
+> > > > > > --- a/drivers/usb/dwc3/dwc3-imx8mp.c
+> > > > > > +++ b/drivers/usb/dwc3/dwc3-imx8mp.c
+> > > > > > @@ -158,11 +158,31 @@ static irqreturn_t dwc3_imx8mp_interrupt(int irq, void *_dwc3_imx)
+> > > > > >  	return IRQ_HANDLED;
+> > > > > >  }
+> > > > > >  
+> > > > > > +static void dwc3_imx_pre_set_role(struct dwc3 *dwc, enum usb_role role)
+> > > > > > +{
+> > > > > > +	if (role == USB_ROLE_HOST)
+> > > > > > +		/*
+> > > > > > +		 * For xhci host, we need disable dwc core auto
+> > > > > > +		 * suspend, because during this auto suspend delay(5s),
+> > > > > > +		 * xhci host RUN_STOP is cleared and wakeup is not
+> > > > > > +		 * enabled, if device is inserted, xhci host can't
+> > > > > > +		 * response the connection.
+> > > > > > +		 */
+> > > > > > +		pm_runtime_dont_use_autosuspend(dwc->dev);
+> > > > > > +	else
+> > > > > > +		pm_runtime_use_autosuspend(dwc->dev);
+> > > > > 
+> > > > > Would this override the user setting everytime there's a role switch?
+> > > > 
+> > > > From what I know, the user can't control whether to enable or disable
+> > > > autosuspend feature. So there should be no overriding problem. When
+> > > > user change autosuspend_delay_ms, the delay setting will be kept
+> > > > everytime there's a role switch.
+> > > 
+> > > Should we set pm_runtime_mark_last_busy()?
+> > 
+> > I think we needn't explicitly call pm_runtime_mark_last_busy().
+> > Since commit "08071e64cb64 PM: runtime: Mark last busy stamp in pm_runtime_autosuspend()",
+> > pm_runtime_autosuspend() will do that thing automatically once dwc3 device is idle.
+> 
+> Ok.
+> 
+> > 
+> > > 
+> > > Also, if pm_runtime_use_autosuspend() is set, make sure to unwind with
+> > > pm_runtime_dont_use_autosuspend() on remove.
+> > > 
+> > > > 
+> > > > > 
+> > > > > > +}
+> > > > > > +
+> > > > > > +struct dwc3_glue_ops dwc3_imx_glue_ops = {
+> > > > > > +	.pre_set_role   = dwc3_imx_pre_set_role,
+> > > > > > +};
+> > > > > > +
+> > > > > >  static int dwc3_imx8mp_probe(struct platform_device *pdev)
+> > > > > >  {
+> > > > > >  	struct device		*dev = &pdev->dev;
+> > > > > >  	struct device_node	*node = dev->of_node;
+> > > > > >  	struct dwc3_imx8mp	*dwc3_imx;
+> > > > > > +	struct dwc3		*dwc3;
+> > > > > >  	struct resource		*res;
+> > > > > >  	int			err, irq;
+> > > > > >  
+> > > > > > @@ -240,6 +260,17 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
+> > > > > >  		goto depopulate;
+> > > > > >  	}
+> > > > > >  
+> > > > > > +	dwc3 = platform_get_drvdata(dwc3_imx->dwc3);
+> > > > > 
+> > > > > It's confusing how dwc3_imx->dwc3 is also named dwc3...
+> > > > 
+> > > > I will rename it later.
+> > > > 
+> > > > > 
+> > > > > > +	if (!dwc3) {
+> > > > > > +		err = dev_err_probe(dev, -EPROBE_DEFER, "failed to get dwc3 platform data\n");
+> > > > > > +		goto depopulate;
+> > > > > > +	}
+> > > > > > +
+> > > > > > +	dwc3->glue_ops = &dwc3_imx_glue_ops;
+> > > > > 
+> > > > > If you want to use glue_ops, please use the new flatten model. I
+> > > > > don't want dwc3 to be initialized again after of_platform_populate().
+> > > > 
+> > > > I understand the new flatten model is a more suitable way. Considering that
+> > > > many i.MX devices are using this legacy unflatten model, do you mind allow
+> > > > this change firstly and we will switch to the new flatten model in the future?
+> > > > 
+> > > 
+> > > Do you have plans for this transition? Perhaps this is a good time to
+> > > initiate the process so to avoid having and maintaining this improper
+> > > code while we still don't have it yet.
+> > 
+> > OK. It's a trend to use new flatten model. I do have plan for it. I'll
+> > prepare for it later.
+> > 
+> 
+> Ok. Can we add a note that this is a temporary solution until we switch
+> to using the new model in the commit message.
 
-The primary focus is implementing hibernation support in host mode,
-enabling the controller to enter a low-power state (D3). This is
-particularly relevant during system power state transition and
-runtime power management for power efficiency.
-Highlights:
-- Align suspend callback with dwc3_suspend_common() for deciding
-  between a full teardown and hibernation in host mode.
-- Integration with `psw` (power switchable) and `top` power domains,
-  managing their states and device links to support hibernation.
-- A notifier callback dwc3_google_usb_psw_pd_notifier() for
-  `psw` power domain events to manage controller state
-  transitions to/from D3.
-- Coordination of the `non_sticky` reset during power state
-  transitions, asserting it on D3 entry and deasserting on D0 entry
-  in hibernation scenario.
-- Handling of high-speed and super-speed PME interrupts
-  that are generated by remote wakeup during hibernation.
+Ok. Will do. Thank you!
 
-Co-developed-by: Joy Chakraborty <joychakr@google.com>
-Signed-off-by: Joy Chakraborty <joychakr@google.com>
-Co-developed-by: Naveen Kumar <mnkumar@google.com>
-Signed-off-by: Naveen Kumar <mnkumar@google.com>
-Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
-Signed-off-by: Roy Luo <royluo@google.com>
----
- MAINTAINERS                    |   1 +
- drivers/usb/dwc3/Kconfig       |  12 +
- drivers/usb/dwc3/Makefile      |   1 +
- drivers/usb/dwc3/dwc3-google.c | 628 +++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 642 insertions(+)
+Thanks,
+Xu Yang
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 61f5768b31ae31cd72f4c2a3b74398f9473e192b..0659847b980128801b63014de96294c07abca3a0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10666,6 +10666,7 @@ F:	Documentation/devicetree/bindings/usb/google,lga-dwc3.yaml
- F:	arch/arm64/boot/dts/exynos/google/
- F:	drivers/clk/samsung/clk-gs101.c
- F:	drivers/phy/samsung/phy-gs101-ufs.c
-+F:	drivers/usb/dwc3/dwc3-google.c
- F:	include/dt-bindings/clock/google,gs101.h
- K:	[gG]oogle.?[tT]ensor
- 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index 4925d15084f816d3ff92059b476ebcc799b56b51..05e4b7e1d98b1c03c8887c50dfff7e39d365f2a3 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -200,4 +200,16 @@ config USB_DWC3_GENERIC_PLAT
- 	  the dwc3 child node in the device tree.
- 	  Say 'Y' or 'M' here if your platform integrates DWC3 in a similar way.
- 
-+config USB_DWC3_GOOGLE
-+	tristate "Google Platform"
-+	depends on ARCH_GOOGLE || COMPILE_TEST
-+	help
-+	  Support the DesignWare Core USB3 IP found on Google Tensor SoCs,
-+	  starting with the G5 generation (Laguna). This driver includes
-+	  support for hibernation in host mode.
-+	  Say 'Y' or 'M' if you have one such device.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called dwc3-google.ko.
-+
- endif
-diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
-index 96469e48ff9d189cc8d0b65e65424eae2158bcfe..cf1cd408d938b3ac26d58b9be7fcc5af3ee82660 100644
---- a/drivers/usb/dwc3/Makefile
-+++ b/drivers/usb/dwc3/Makefile
-@@ -58,3 +58,4 @@ obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
- obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
- obj-$(CONFIG_USB_DWC3_RTK)		+= dwc3-rtk.o
- obj-$(CONFIG_USB_DWC3_GENERIC_PLAT)	+= dwc3-generic-plat.o
-+obj-$(CONFIG_USB_DWC3_GOOGLE)		+= dwc3-google.o
-diff --git a/drivers/usb/dwc3/dwc3-google.c b/drivers/usb/dwc3/dwc3-google.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..a19857bd6b131d841d165717b70f2959b4bac806
---- /dev/null
-+++ b/drivers/usb/dwc3/dwc3-google.c
-@@ -0,0 +1,628 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * dwc3-google.c - Google DWC3 Specific Glue Layer
-+ *
-+ * Copyright (c) 2025, Google LLC
-+ * Author: Roy Luo <royluo@google.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/iopoll.h>
-+#include <linux/irq.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/regmap.h>
-+#include <linux/reset.h>
-+#include "core.h"
-+#include "glue.h"
-+
-+/* HOST CFG registers */
-+#define HC_STATUS_OFFSET 0x0
-+#define HC_STATUS_CURRENT_POWER_STATE_U2PMU GENMASK(1, 0)
-+#define HC_STATUS_CURRENT_POWER_STATE_U3PMU GENMASK(4, 3)
-+
-+#define HOST_CFG1_OFFSET 0x4
-+#define HOST_CFG1_PME_EN BIT(3)
-+#define HOST_CFG1_PM_POWER_STATE_REQUEST GENMASK(5, 4)
-+#define HOST_CFG1_PM_POWER_STATE_D0 0x0
-+#define HOST_CFG1_PM_POWER_STATE_D3 0x3
-+
-+/* USBINT registers */
-+#define USBINT_CFG1_OFFSET 0x0
-+#define USBINT_CFG1_USBDRD_PME_GEN_U2P_INTR_MSK BIT(2)
-+#define USBINT_CFG1_USBDRD_PME_GEN_U3P_INTR_MSK BIT(3)
-+#define USBINT_CFG1_USBDRD_PME_GEN_U2P_INTR_INT_EN BIT(8)
-+#define USBINT_CFG1_USBDRD_PME_GEN_U3P_INTR_INT_EN BIT(9)
-+#define USBINT_CFG1_USBDRD_PME_GEN_U2_INTR_CLR BIT(14)
-+#define USBINT_CFG1_USBDRD_PME_GEN_U3_INTR_CLR BIT(15)
-+
-+#define USBINT_STATUS_OFFSET 0x4
-+#define USBINT_STATUS_USBDRD_PME_GEN_U2P_INTR_STS_RAW BIT(2)
-+#define USBINT_STATUS_USBDRD_PME_GEN_U3P_INTR_STS_RAW BIT(3)
-+
-+#define USBCS_TOP_CTRL_CFG1_OFFSET 0xc
-+#define USBCS_TOP_CTRL_CFG1_USB2ONLY_MODE BIT(5)
-+
-+#define DWC3_GOOGLE_MAX_RESETS	4
-+
-+struct dwc3_google {
-+	struct device		*dev;
-+	struct dwc3		dwc;
-+	struct clk_bulk_data	*clks;
-+	int			num_clks;
-+	struct reset_control_bulk_data rsts[DWC3_GOOGLE_MAX_RESETS];
-+	int			num_rsts;
-+	struct reset_control	*non_sticky_rst;
-+	struct device		*usb_psw_pd;
-+	struct device_link	*usb_psw_pd_dl;
-+	struct notifier_block	usb_psw_pd_nb;
-+	struct device		*usb_top_pd;
-+	struct device_link	*usb_top_pd_dl;
-+	struct regmap		*usb_cfg_regmap;
-+	unsigned int		host_cfg_offset;
-+	unsigned int		usbint_cfg_offset;
-+	int			hs_pme_irq;
-+	int			ss_pme_irq;
-+	bool			is_usb2only;
-+	bool			is_hibernation;
-+};
-+
-+#define to_dwc3_google(d) container_of_const((d), struct dwc3_google, dwc)
-+
-+static int dwc3_google_rst_init(struct dwc3_google *google)
-+{
-+	int ret;
-+
-+	google->num_rsts = 4;
-+	google->rsts[0].id = "non_sticky";
-+	google->rsts[1].id = "sticky";
-+	google->rsts[2].id = "drd_bus";
-+	google->rsts[3].id = "top";
-+
-+	ret = devm_reset_control_bulk_get_exclusive(google->dev,
-+						    google->num_rsts,
-+						    google->rsts);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	google->non_sticky_rst = google->rsts[0].rstc;
-+
-+	return 0;
-+}
-+
-+static int dwc3_google_set_pmu_state(struct dwc3_google *google, int state)
-+{
-+	u32 reg;
-+	int ret;
-+
-+	regmap_read(google->usb_cfg_regmap,
-+		    google->host_cfg_offset + HOST_CFG1_OFFSET, &reg);
-+
-+	reg &= ~HOST_CFG1_PM_POWER_STATE_REQUEST;
-+	reg |= (FIELD_PREP(HOST_CFG1_PM_POWER_STATE_REQUEST, state) |
-+		HOST_CFG1_PME_EN);
-+	regmap_write(google->usb_cfg_regmap,
-+		     google->host_cfg_offset + HOST_CFG1_OFFSET, reg);
-+
-+	ret = regmap_read_poll_timeout(google->usb_cfg_regmap,
-+				       google->host_cfg_offset + HC_STATUS_OFFSET, reg,
-+				       (FIELD_GET(HC_STATUS_CURRENT_POWER_STATE_U2PMU,
-+						  reg) == state &&
-+					FIELD_GET(HC_STATUS_CURRENT_POWER_STATE_U3PMU,
-+						  reg) == state),
-+				       10, 10000);
-+
-+	if (ret)
-+		dev_err(google->dev, "failed to set PMU state %d\n", state);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Clear pme interrupts and report their status.
-+ * The hardware requires write-1 then write-0 sequence to clear the interrupt bits.
-+ */
-+static u32 dwc3_google_clear_pme_irqs(struct dwc3_google *google)
-+{
-+	u32 irq_status, reg_set, reg_clear;
-+
-+	regmap_read(google->usb_cfg_regmap,
-+		    google->usbint_cfg_offset + USBINT_STATUS_OFFSET, &irq_status);
-+
-+	irq_status &= (USBINT_STATUS_USBDRD_PME_GEN_U2P_INTR_STS_RAW |
-+		       USBINT_STATUS_USBDRD_PME_GEN_U3P_INTR_STS_RAW);
-+	if (!irq_status)
-+		return irq_status;
-+
-+	regmap_read(google->usb_cfg_regmap,
-+		    google->usbint_cfg_offset + USBINT_CFG1_OFFSET, &reg_set);
-+
-+	reg_clear = reg_set;
-+	if (irq_status & USBINT_STATUS_USBDRD_PME_GEN_U2P_INTR_STS_RAW) {
-+		reg_set |= USBINT_CFG1_USBDRD_PME_GEN_U2_INTR_CLR;
-+		reg_clear &= ~USBINT_CFG1_USBDRD_PME_GEN_U2_INTR_CLR;
-+	}
-+	if (irq_status & USBINT_STATUS_USBDRD_PME_GEN_U3P_INTR_STS_RAW) {
-+		reg_set |= USBINT_CFG1_USBDRD_PME_GEN_U3_INTR_CLR;
-+		reg_clear &= ~USBINT_CFG1_USBDRD_PME_GEN_U3_INTR_CLR;
-+	}
-+
-+	regmap_write(google->usb_cfg_regmap,
-+		     google->usbint_cfg_offset + USBINT_CFG1_OFFSET, reg_set);
-+	regmap_write(google->usb_cfg_regmap,
-+		     google->usbint_cfg_offset + USBINT_CFG1_OFFSET, reg_clear);
-+
-+	return irq_status;
-+}
-+
-+static void dwc3_google_enable_pme_irq(struct dwc3_google *google)
-+{
-+	u32 reg;
-+
-+	regmap_read(google->usb_cfg_regmap,
-+		    google->usbint_cfg_offset + USBINT_CFG1_OFFSET, &reg);
-+	reg &= ~(USBINT_CFG1_USBDRD_PME_GEN_U2P_INTR_MSK |
-+		 USBINT_CFG1_USBDRD_PME_GEN_U3P_INTR_MSK);
-+	reg |= (USBINT_CFG1_USBDRD_PME_GEN_U2P_INTR_INT_EN |
-+		USBINT_CFG1_USBDRD_PME_GEN_U3P_INTR_INT_EN);
-+	regmap_write(google->usb_cfg_regmap,
-+		     google->usbint_cfg_offset + USBINT_CFG1_OFFSET, reg);
-+
-+	enable_irq(google->hs_pme_irq);
-+	enable_irq(google->ss_pme_irq);
-+	enable_irq_wake(google->hs_pme_irq);
-+	enable_irq_wake(google->ss_pme_irq);
-+}
-+
-+static void dwc3_google_disable_pme_irq(struct dwc3_google *google)
-+{
-+	u32 reg;
-+
-+	regmap_read(google->usb_cfg_regmap,
-+		    google->usbint_cfg_offset + USBINT_CFG1_OFFSET, &reg);
-+	reg &= ~(USBINT_CFG1_USBDRD_PME_GEN_U2P_INTR_INT_EN |
-+		 USBINT_CFG1_USBDRD_PME_GEN_U3P_INTR_INT_EN);
-+	reg |= (USBINT_CFG1_USBDRD_PME_GEN_U2P_INTR_MSK |
-+		USBINT_CFG1_USBDRD_PME_GEN_U3P_INTR_MSK);
-+	regmap_write(google->usb_cfg_regmap,
-+		     google->usbint_cfg_offset + USBINT_CFG1_OFFSET, reg);
-+
-+	disable_irq_wake(google->hs_pme_irq);
-+	disable_irq_wake(google->ss_pme_irq);
-+	disable_irq_nosync(google->hs_pme_irq);
-+	disable_irq_nosync(google->ss_pme_irq);
-+}
-+
-+static irqreturn_t dwc3_google_resume_irq(int irq, void *data)
-+{
-+	struct dwc3_google      *google = data;
-+	struct dwc3             *dwc = &google->dwc;
-+	u32 irq_status, dr_role;
-+
-+	irq_status = dwc3_google_clear_pme_irqs(google);
-+	dr_role = dwc->current_dr_role;
-+
-+	if (!irq_status || !google->is_hibernation ||
-+	    dr_role != DWC3_GCTL_PRTCAP_HOST) {
-+		dev_dbg(google->dev, "spurious pme irq %d, hibernation %d, dr_role %u\n",
-+			irq, google->is_hibernation, dr_role);
-+		return IRQ_HANDLED;
-+	}
-+
-+	if (dwc->xhci)
-+		pm_runtime_resume(&dwc->xhci->dev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int dwc3_google_request_irq(struct dwc3_google *google, struct platform_device *pdev,
-+				   const char *irq_name, const char *req_name)
-+{
-+	int ret;
-+	int irq;
-+
-+	irq = platform_get_irq_byname(pdev, irq_name);
-+	if (irq < 0) {
-+		dev_err(google->dev, "invalid irq name %s\n", irq_name);
-+		return irq;
-+	}
-+
-+	irq_set_status_flags(irq, IRQ_NOAUTOEN);
-+	ret = devm_request_threaded_irq(google->dev, irq, NULL,
-+					dwc3_google_resume_irq,
-+					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
-+					req_name, google);
-+	if (ret < 0) {
-+		dev_err(google->dev, "failed to request irq %s\n", req_name);
-+		return ret;
-+	}
-+
-+	return irq;
-+}
-+
-+static int dwc3_google_usb_psw_pd_notifier(struct notifier_block *nb, unsigned long action, void *d)
-+{
-+	struct dwc3_google *google = container_of(nb, struct dwc3_google, usb_psw_pd_nb);
-+	int ret;
-+
-+	if (!google->is_hibernation)
-+		return NOTIFY_OK;
-+
-+	if (action == GENPD_NOTIFY_OFF) {
-+		dev_dbg(google->dev, "enter D3 power state\n");
-+		dwc3_google_set_pmu_state(google, HOST_CFG1_PM_POWER_STATE_D3);
-+		ret = reset_control_assert(google->non_sticky_rst);
-+		if (ret)
-+			dev_err(google->dev, "non sticky reset assert failed: %d\n", ret);
-+	} else if (action == GENPD_NOTIFY_ON) {
-+		dev_dbg(google->dev, "enter D0 power state\n");
-+		dwc3_google_clear_pme_irqs(google);
-+		ret = reset_control_deassert(google->non_sticky_rst);
-+		if (ret)
-+			dev_err(google->dev, "non sticky reset deassert failed: %d\n", ret);
-+		dwc3_google_set_pmu_state(google, HOST_CFG1_PM_POWER_STATE_D0);
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static void dwc3_google_pm_domain_deinit(struct dwc3_google *google)
-+{
-+	if (google->usb_top_pd_dl)
-+		device_link_del(google->usb_top_pd_dl);
-+
-+	if (!IS_ERR_OR_NULL(google->usb_top_pd)) {
-+		device_set_wakeup_capable(google->usb_top_pd, false);
-+		dev_pm_domain_detach(google->usb_top_pd, true);
-+	}
-+
-+	if (google->usb_psw_pd_dl)
-+		device_link_del(google->usb_psw_pd_dl);
-+
-+	if (!IS_ERR_OR_NULL(google->usb_psw_pd)) {
-+		dev_pm_genpd_remove_notifier(google->usb_psw_pd);
-+		dev_pm_domain_detach(google->usb_psw_pd, true);
-+	}
-+}
-+
-+static int dwc3_google_pm_domain_init(struct dwc3_google *google)
-+{
-+	int ret;
-+
-+	/*
-+	 * Establish PM RUNTIME link between dwc dev and its power domain usb_psw_pd,
-+	 * register notifier block to handle hibernation.
-+	 */
-+	google->usb_psw_pd = dev_pm_domain_attach_by_name(google->dev, "psw");
-+	if (IS_ERR_OR_NULL(google->usb_psw_pd)) {
-+		dev_err(google->dev, "failed to get psw pd");
-+		ret = google->usb_psw_pd ? PTR_ERR(google->usb_psw_pd) : -ENODATA;
-+		return ret;
-+	}
-+
-+	google->usb_psw_pd_nb.notifier_call = dwc3_google_usb_psw_pd_notifier;
-+	ret = dev_pm_genpd_add_notifier(google->usb_psw_pd, &google->usb_psw_pd_nb);
-+	if (ret) {
-+		dev_err(google->dev, "failed to add psw pd notifier");
-+		goto err;
-+	}
-+
-+	google->usb_psw_pd_dl = device_link_add(google->dev, google->usb_psw_pd,
-+						DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME |
-+						DL_FLAG_RPM_ACTIVE);
-+	if (!google->usb_psw_pd_dl) {
-+		dev_err(google->usb_psw_pd, "failed to add device link");
-+		ret = -ENODEV;
-+		goto err;
-+	}
-+
-+	/*
-+	 * usb_top_pd is the parent power domain of usb_psw_pd. Keeping usb_top_pd on
-+	 * while usb_psw_pd is off places the controller in a power-gated state,
-+	 * essential for hibernation. Acquire a handle to usb_top_pd and sets it as
-+	 * wakeup-capable to allow the domain to be left on during system suspend.
-+	 */
-+	google->usb_top_pd = dev_pm_domain_attach_by_name(google->dev, "top");
-+	if (IS_ERR_OR_NULL(google->usb_top_pd)) {
-+		dev_err(google->dev, "failed to get top pd");
-+		ret = google->usb_top_pd ? PTR_ERR(google->usb_top_pd) : -ENODATA;
-+		goto err;
-+	}
-+	device_set_wakeup_capable(google->usb_top_pd, true);
-+
-+	google->usb_top_pd_dl = device_link_add(google->dev, google->usb_top_pd,
-+						DL_FLAG_STATELESS);
-+	if (!google->usb_top_pd_dl) {
-+		dev_err(google->usb_top_pd, "failed to add device link");
-+		ret = -ENODEV;
-+		goto err;
-+	}
-+
-+	return 0;
-+
-+err:
-+	dwc3_google_pm_domain_deinit(google);
-+
-+	return ret;
-+}
-+
-+static void dwc3_google_program_usb2only(struct dwc3_google *google)
-+{
-+	u32 reg;
-+
-+	regmap_read(google->usb_cfg_regmap,
-+		    google->usbint_cfg_offset + USBCS_TOP_CTRL_CFG1_OFFSET, &reg);
-+	reg |= USBCS_TOP_CTRL_CFG1_USB2ONLY_MODE;
-+	regmap_write(google->usb_cfg_regmap,
-+		     google->usbint_cfg_offset + USBCS_TOP_CTRL_CFG1_OFFSET, reg);
-+}
-+
-+static int dwc3_google_probe(struct platform_device *pdev)
-+{
-+	struct dwc3_probe_data	probe_data = {};
-+	struct device		*dev = &pdev->dev;
-+	struct dwc3_google	*google;
-+	struct resource		*res;
-+	int			ret;
-+	u32			args[2];
-+
-+	google = devm_kzalloc(&pdev->dev, sizeof(*google), GFP_KERNEL);
-+	if (!google)
-+		return -ENOMEM;
-+
-+	google->dev = &pdev->dev;
-+
-+	ret = dwc3_google_pm_domain_init(google);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to init pdom\n");
-+
-+	google->usb_cfg_regmap =
-+		syscon_regmap_lookup_by_phandle_args(dev->of_node,
-+						     "google,usb-cfg-csr",
-+						     ARRAY_SIZE(args), args);
-+	if (IS_ERR(google->usb_cfg_regmap)) {
-+		return dev_err_probe(dev, PTR_ERR(google->usb_cfg_regmap),
-+				     "invalid usb cfg csr\n");
-+	}
-+
-+	google->host_cfg_offset = args[0];
-+	google->usbint_cfg_offset = args[1];
-+
-+	if (device_property_match_string(dev, "phy-names", "usb3-phy") < 0) {
-+		google->is_usb2only = true;
-+		dwc3_google_program_usb2only(google);
-+	}
-+
-+	ret = devm_clk_bulk_get_all_enabled(dev, &google->clks);
-+	if (ret < 0) {
-+		ret = dev_err_probe(dev, ret, "failed to get and enable clks\n");
-+		goto err_deinit_pdom;
-+	}
-+	google->num_clks = ret;
-+
-+	ret = dwc3_google_rst_init(google);
-+	if (ret) {
-+		ret = dev_err_probe(dev, ret, "failed to get resets\n");
-+		goto err_deinit_pdom;
-+	}
-+
-+	ret = reset_control_bulk_deassert(google->num_rsts, google->rsts);
-+	if (ret) {
-+		ret = dev_err_probe(dev, ret, "failed to deassert rsts\n");
-+		goto err_deinit_pdom;
-+	}
-+
-+	ret = dwc3_google_request_irq(google, pdev, "hs_pme", "USB HS wakeup");
-+	if (ret < 0) {
-+		ret = dev_err_probe(dev, ret, "failed to request hs pme irq");
-+		goto err_reset_assert;
-+	}
-+	google->hs_pme_irq = ret;
-+
-+	ret = dwc3_google_request_irq(google, pdev, "ss_pme", "USB SS wakeup");
-+	if (ret < 0) {
-+		ret = dev_err_probe(dev, ret, "failed to request ss pme irq");
-+		goto err_reset_assert;
-+	}
-+	google->ss_pme_irq = ret;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res) {
-+		ret = dev_err_probe(dev, -ENODEV, "invalid memory\n");
-+		goto err_reset_assert;
-+	}
-+
-+	device_init_wakeup(dev, true);
-+
-+	google->dwc.dev = dev;
-+	probe_data.dwc = &google->dwc;
-+	probe_data.res = res;
-+	probe_data.ignore_clocks_and_resets = true;
-+	ret = dwc3_core_probe(&probe_data);
-+	if (ret)  {
-+		ret = dev_err_probe(dev, ret, "failed to register DWC3 Core\n");
-+		goto err_reset_assert;
-+	}
-+
-+	return 0;
-+
-+err_reset_assert:
-+	reset_control_bulk_assert(google->num_rsts, google->rsts);
-+
-+err_deinit_pdom:
-+	dwc3_google_pm_domain_deinit(google);
-+
-+	return ret;
-+}
-+
-+static void dwc3_google_remove(struct platform_device *pdev)
-+{
-+	struct dwc3 *dwc = platform_get_drvdata(pdev);
-+	struct dwc3_google *google = to_dwc3_google(dwc);
-+
-+	dwc3_core_remove(&google->dwc);
-+
-+	reset_control_bulk_assert(google->num_rsts, google->rsts);
-+
-+	dwc3_google_pm_domain_deinit(google);
-+}
-+
-+static int dwc3_google_suspend(struct dwc3_google *google, pm_message_t msg)
-+{
-+	if (pm_runtime_suspended(google->dev))
-+		return 0;
-+
-+	if (google->dwc.current_dr_role == DWC3_GCTL_PRTCAP_HOST) {
-+		/*
-+		 * Follow dwc3_suspend_common() guidelines for deciding between
-+		 * a full teardown and hibernation.
-+		 */
-+		if (PMSG_IS_AUTO(msg) || device_may_wakeup(google->dev)) {
-+			dev_dbg(google->dev, "enter hibernation");
-+			pm_runtime_get_sync(google->usb_top_pd);
-+			device_wakeup_enable(google->usb_top_pd);
-+			dwc3_google_enable_pme_irq(google);
-+			google->is_hibernation = true;
-+			return 0;
-+		}
-+	}
-+
-+	reset_control_bulk_assert(google->num_rsts, google->rsts);
-+	clk_bulk_disable_unprepare(google->num_clks, google->clks);
-+
-+	return 0;
-+}
-+
-+static int dwc3_google_resume(struct dwc3_google *google, pm_message_t msg)
-+{
-+	int ret;
-+
-+	if (google->is_hibernation) {
-+		dev_dbg(google->dev, "exit hibernation");
-+		dwc3_google_disable_pme_irq(google);
-+		device_wakeup_disable(google->usb_top_pd);
-+		pm_runtime_put_sync(google->usb_top_pd);
-+		google->is_hibernation = false;
-+		return 0;
-+	}
-+
-+	if (google->is_usb2only)
-+		dwc3_google_program_usb2only(google);
-+
-+	ret = clk_bulk_prepare_enable(google->num_clks, google->clks);
-+	if (ret)
-+		return ret;
-+
-+	ret = reset_control_bulk_deassert(google->num_rsts, google->rsts);
-+	if (ret) {
-+		clk_bulk_disable_unprepare(google->num_clks, google->clks);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int dwc3_google_pm_suspend(struct device *dev)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+	struct dwc3_google *google = to_dwc3_google(dwc);
-+	int ret;
-+
-+	ret = dwc3_pm_suspend(&google->dwc);
-+	if (ret)
-+		return ret;
-+
-+	return dwc3_google_suspend(google, PMSG_SUSPEND);
-+}
-+
-+static int dwc3_google_pm_resume(struct device *dev)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+	struct dwc3_google *google = to_dwc3_google(dwc);
-+	int ret;
-+
-+	ret = dwc3_google_resume(google, PMSG_RESUME);
-+	if (ret)
-+		return ret;
-+
-+	return dwc3_pm_resume(&google->dwc);
-+}
-+
-+static void dwc3_google_complete(struct device *dev)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+
-+	dwc3_pm_complete(dwc);
-+}
-+
-+static int dwc3_google_prepare(struct device *dev)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+
-+	return dwc3_pm_prepare(dwc);
-+}
-+
-+static int dwc3_google_runtime_suspend(struct device *dev)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+	struct dwc3_google *google = to_dwc3_google(dwc);
-+	int ret;
-+
-+	ret = dwc3_runtime_suspend(&google->dwc);
-+	if (ret)
-+		return ret;
-+
-+	return dwc3_google_suspend(google, PMSG_AUTO_SUSPEND);
-+}
-+
-+static int dwc3_google_runtime_resume(struct device *dev)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+	struct dwc3_google *google = to_dwc3_google(dwc);
-+	int ret;
-+
-+	ret = dwc3_google_resume(google, PMSG_AUTO_RESUME);
-+	if (ret)
-+		return ret;
-+
-+	return dwc3_runtime_resume(&google->dwc);
-+}
-+
-+static int dwc3_google_runtime_idle(struct device *dev)
-+{
-+	return dwc3_runtime_idle(dev_get_drvdata(dev));
-+}
-+
-+static const struct dev_pm_ops dwc3_google_dev_pm_ops = {
-+	SYSTEM_SLEEP_PM_OPS(dwc3_google_pm_suspend, dwc3_google_pm_resume)
-+	RUNTIME_PM_OPS(dwc3_google_runtime_suspend, dwc3_google_runtime_resume,
-+		       dwc3_google_runtime_idle)
-+	.complete = pm_sleep_ptr(dwc3_google_complete),
-+	.prepare = pm_sleep_ptr(dwc3_google_prepare),
-+};
-+
-+static const struct of_device_id dwc3_google_of_match[] = {
-+	{ .compatible = "google,lga-dwc3" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, dwc3_google_of_match);
-+
-+static struct platform_driver dwc3_google_driver = {
-+	.probe		= dwc3_google_probe,
-+	.remove		= dwc3_google_remove,
-+	.driver		= {
-+		.name	= "dwc3-google",
-+		.pm	= pm_ptr(&dwc3_google_dev_pm_ops),
-+		.of_match_table	= dwc3_google_of_match,
-+	},
-+};
-+
-+module_platform_driver(dwc3_google_driver);
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("DesignWare DWC3 Google Glue Driver");
-
--- 
-2.52.0.223.gf5cc29aaa4-goog
-
+> 
+> Thanks,
+> Thinh
 
