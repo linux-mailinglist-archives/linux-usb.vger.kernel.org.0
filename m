@@ -1,299 +1,82 @@
-Return-Path: <linux-usb+bounces-31197-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31198-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6943ACA62EE
-	for <lists+linux-usb@lfdr.de>; Fri, 05 Dec 2025 06:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2173BCA633D
+	for <lists+linux-usb@lfdr.de>; Fri, 05 Dec 2025 07:05:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6D1E03158457
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Dec 2025 05:50:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 23E3F3116622
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Dec 2025 06:05:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE392BE7A7;
-	Fri,  5 Dec 2025 05:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 527342EBDDE;
+	Fri,  5 Dec 2025 06:05:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FASgR0Rw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ysHn1/ZB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C7E21507F
-	for <linux-usb@vger.kernel.org>; Fri,  5 Dec 2025 05:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE99398FB9;
+	Fri,  5 Dec 2025 06:05:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764913816; cv=none; b=TpQNagzxRJWF3ilodinSZRt+RsWDhI2Fxv4JvwWSkBkE7S1864ORbywziZTL5uUshuuv6nVYCtaRUsAk6SSELSixtdllJsi2TcNrOKBy1UOdkXpzWbF9JktFYgZdggJFk7+oo9pPXUOWsnp54s0lH9oQaNwdoNLiZLGwE4pbx7E=
+	t=1764914730; cv=none; b=LFV8KAX0cdo1/XcGN2jd1rwg7ctgma00SZf/HlnOWSBeIzr585eKTOUYL3b62cYPJU9JkKfH6aJZYCdWjyvWhYNULqGAQXgduSdbfv3IzwYbxyfzrGu3oiYvwjzDqBGSE8qo1M5JcCYSREPT+4WUJi0WGndJcSJQ23ocfBOb+8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764913816; c=relaxed/simple;
-	bh=I5y1anxpbGUPuI7+N6DhRy5eW8OvaQHyYusJeN62NX4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=EuAr2DZKyf+OlRqKtboVNkRhYkqKIWMREbwy2pdToNyiBnBBOhBsuoBlQZfBZHx9X3jOX7ibRqYuIABFhwrTCV500pOVsdrwnG+sklGCUimmQTJ+drPkz9+a0kSbLMu+CMldpkBjQK7NFPQ5nLSlckS6g6QlUD3nUK/R59JzV0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FASgR0Rw; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-298456bb53aso23316505ad.0
-        for <linux-usb@vger.kernel.org>; Thu, 04 Dec 2025 21:50:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1764913814; x=1765518614; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8AUVbX1TOmwb16DX97d8X9EDhxuQuPh2onLfTtVa/1M=;
-        b=FASgR0Rwvk6R554Ab7yKGIjByzXSkKqr4sS/ZymaadJG1B7F/mNNOh8tdnue8BU5RI
-         9cxVpFSBaD1xUeQTgrSO2YPk4rWPoMK6oz81ZpXuJp2+IbGpqBhgKQgNtAAim911TVhy
-         5VMbhORTts3KLng69FCpW8J9piyTark90A9WQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764913814; x=1765518614;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8AUVbX1TOmwb16DX97d8X9EDhxuQuPh2onLfTtVa/1M=;
-        b=e6VuoGX4wy4StYaPe9k8j/qUt6XnlboHavTQYR4Y5Vd65jwmILA3rW9eS0vAArFeAD
-         pu3EVt6oMnlLJsRY+svVv5FmqP32EpiEdrnRsV6DyU1FMzR59FjNe4Zvt8wJDhwWmjaR
-         wn1gF7gDBsbCBQpmcyrG9Stc5eedWMcWPIaH1e105CR5kdy7FbC1eRy1w4C6ng4V0ejK
-         m9JZIhnHNe9UNiT/em+eGqh+rrD/ZI0qry51C3eguWW0qJcM1eFqinjKFtgzouUAGQBJ
-         2Ym/ecrtsIdpycHb7dvTG9Ejmuj7UXj3b5eVInxCfPzyaRApc6MtWSC5ZZ6i7bWcWmAE
-         Eb5A==
-X-Gm-Message-State: AOJu0YyRm5K/L3U8EzQfX8/WuHJ/caFKy/LJSHoSPp+xDXGhikiptwqo
-	bLZipZp0rmw0uvkEQkq3UEfXUDMLGACyGre5VEMaPZHG/GhgkZJb3pC959PEOfArYQnUMw6xDNW
-	yV2A=
-X-Gm-Gg: ASbGnctYeJaKNDO20csx715ia3m1V6GQW0UjgfwtL1YsJHHRGqUrrmVKA23STW1EeLA
-	e40dl7sx+wOBZOyh264U9RMeqIKidvtPMWAJDwFhEm8wqQ1VSA95N13psBGSmyq4iaEz9UUycHa
-	VaazYeAWK2aR8vQy6Dc6W6h7dvnDcL2YJe0C0xFNN83Eo2Nwj1IjB+0gHeGbfGjeEyZeJShvFsD
-	RJ+P1Jz99nk4+OXxSpO+3SQApvBNvg9UmZ1NxAm7sObrzajkGKsOj1MoGApUcdoya4lJEkIfMCA
-	3ZVN4Y4TagmrNnEL22zMhRaTEXbElz+AaOc7zvBz2N/0jO3atySzRPEzksDKiWoTfjROtCj+Vno
-	6lK02vzmgODDcZCME/6OKiKFWHjsMQIg/9bp86aTIhAF6l22RG1aGd81SFPf2uvvuq0WBzyO+jb
-	yc+33tnsU6R/DQT2EzLOAWu+46qfRjU8xymQobllZz7129SxBQ2lLChWClX29kpgqbl1+HIzQRL
-	4jb/gAEbwle
-X-Google-Smtp-Source: AGHT+IFnigvKzzQUuNFalavhwjtmJL5Oxu5Fg6CyLssv2l+bE0VS3DXPfhB7aTEK96V7/ZhObRhJtQ==
-X-Received: by 2002:a17:903:1b50:b0:295:2276:6704 with SMTP id d9443c01a7336-29d683d8d2emr93303425ad.51.1764913814114;
-        Thu, 04 Dec 2025 21:50:14 -0800 (PST)
-Received: from yuanhsinte-p620-1.tpe.corp.google.com ([2a00:79e0:201d:8:fc0:6b2a:7c91:70fd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29daeae6d75sm36621985ad.98.2025.12.04.21.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Dec 2025 21:50:13 -0800 (PST)
-From: Hsin-Te Yuan <yuanhsinte@chromium.org>
-Date: Fri, 05 Dec 2025 13:50:10 +0800
-Subject: [PATCH v5] usb: typec: ucsi: Get connector status after enable
- notifications
+	s=arc-20240116; t=1764914730; c=relaxed/simple;
+	bh=jab9snt46oPpyIlOxpmF0rFOtQv/+fyPPNBeaMr1cIw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lx6FUhO47nDgq+2bpoir5YEOByZkQDgQcFol4mNzfMiL0y1CtiPhXuHMgHiPyVlw39mYEfxIFYp/Nn0wZo+nNTb2atwiPGFvaStl6Et+AqXGFH7fElpkazdgwGaWVN3WeaoVPq03oCX2MNCc6YB8HPUCAAEmoNXu4r5LJZuRfl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ysHn1/ZB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79510C4CEF1;
+	Fri,  5 Dec 2025 06:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1764914730;
+	bh=jab9snt46oPpyIlOxpmF0rFOtQv/+fyPPNBeaMr1cIw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ysHn1/ZB7IVhRmNXcEX77XYvFL5Tth6pQYyODG62Q5P5fRGU2k91InSh4EOy8mEdV
+	 7PUZC7RNjslG6UVWiVjCqX8Z2bxP1VlFpY4b0WS6IgRv5FA0mO/30lYJXSUPOdZf5e
+	 Sv6mkHFeApBsVGUVcuET1rXH0PVAEh0AipEoKyNY=
+Date: Fri, 5 Dec 2025 07:05:24 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Roy Luo <royluo@google.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Doug Anderson <dianders@google.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	Joy Chakraborty <joychakr@google.com>,
+	Naveen Kumar <mnkumar@google.com>
+Subject: Re: [PATCH v9 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+Message-ID: <2025120553-suffrage-divisive-5890@gregkh>
+References: <20251205-controller-v9-0-9f158b18f979@google.com>
+ <20251205-controller-v9-2-9f158b18f979@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251205-ucsi-v5-1-488eb89bc9b8@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAJFyMmkC/23MTQ6DIBCG4asY1rVh+FHaVe/RdIEDKgu1gUraG
- O9eNC6MMaw+Ms87kWC9s4Hcs4l4G11wQ5+GvGQEW903NncmbcIokwBQ5iMGlyMztVVIaWFKkk7
- f3tbuu2aer7RbFz6D/63VCMvvIRAhT89ghdLqQrDqga0fOjd218E3ZGlEtndqcyw5w0EYSTnnl
- p04vnMMNseTq4CKEjUvoVInTuyd3JxITuFNyEIZo7U8uHme/6Mx76hDAQAA
-X-Change-ID: 20251117-ucsi-c2dfe8c006d7
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Hsin-Te Yuan <yuanhsinte@chromium.org>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251205-controller-v9-2-9f158b18f979@google.com>
 
-Originally, the notification for connector change will be enabled after
-the first read of the connector status. Therefore, if the event happens
-during this window, it will be missing and make the status unsynced.
+On Fri, Dec 05, 2025 at 02:26:38AM +0000, Roy Luo wrote:
+> +config USB_DWC3_GOOGLE
+> +	tristate "Google Platform"
+> +	depends on ARCH_GOOGLE || COMPILE_TEST
 
-Get the connector status only after enabling the notification for
-connector change to ensure the status is synced.
+There is no ARCH_GOOGLE in the tree now, so how is this supposed to
+work?  Shouldn't tools that check for "invalid config options" trigger
+on this?
 
-Fixes: c1b0bc2dabfa ("usb: typec: Add support for UCSI interface")
-Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
----
-Changes in v5:
-- Hold the lock of each connector during the initialization to avoid
-  race condition between initialization and other event handler
-- Add Fixes tag
-- Link to v4: https://lore.kernel.org/r/20251125-ucsi-v4-1-8c94568ddaa5@chromium.org
+thanks,
 
-Changes in v4:
-- Handle a single connector in ucsi_init_port() and call it in a loop
-- Link to v3: https://lore.kernel.org/r/20251121-ucsi-v3-1-b1047ca371b8@chromium.org
-
-Changes in v3:
-- Seperate the status checking part into a new function called
-  ucsi_init_port() and call it after enabling the notifications
-- Link to v2: https://lore.kernel.org/r/20251118-ucsi-v2-1-d314d50333e2@chromium.org
-
-Changes in v2:
-- Remove unnecessary braces.
-- Link to v1: https://lore.kernel.org/r/20251117-ucsi-v1-1-1dcbc5ea642b@chromium.org
----
- drivers/usb/typec/ucsi/ucsi.c | 126 +++++++++++++++++++++++-------------------
- 1 file changed, 69 insertions(+), 57 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 3f568f790f39b0271667e80816270274b8dd3008..9073b005c5ba92fcb6ed1fdf7dd65090832c7058 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1560,11 +1560,70 @@ static struct fwnode_handle *ucsi_find_fwnode(struct ucsi_connector *con)
- 	return NULL;
- }
- 
-+static void ucsi_init_port(struct ucsi *ucsi, struct ucsi_connector *con)
-+{
-+	enum usb_role u_role = USB_ROLE_NONE;
-+	int ret;
-+
-+	/* Get the status */
-+	ret = ucsi_get_connector_status(con, false);
-+	if (ret) {
-+		dev_err(ucsi->dev, "con%d: failed to get status\n", con->num);
-+		return;
-+	}
-+
-+	if (ucsi->ops->connector_status)
-+		ucsi->ops->connector_status(con);
-+
-+	switch (UCSI_CONSTAT(con, PARTNER_TYPE)) {
-+	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
-+	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
-+		u_role = USB_ROLE_HOST;
-+		fallthrough;
-+	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
-+		typec_set_data_role(con->port, TYPEC_HOST);
-+		break;
-+	case UCSI_CONSTAT_PARTNER_TYPE_DFP:
-+		u_role = USB_ROLE_DEVICE;
-+		typec_set_data_role(con->port, TYPEC_DEVICE);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	/* Check if there is already something connected */
-+	if (UCSI_CONSTAT(con, CONNECTED)) {
-+		typec_set_pwr_role(con->port, UCSI_CONSTAT(con, PWR_DIR));
-+		ucsi_register_partner(con);
-+		ucsi_pwr_opmode_change(con);
-+		ucsi_port_psy_changed(con);
-+		if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
-+			ucsi_get_partner_identity(con);
-+		if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
-+			ucsi_check_cable(con);
-+	}
-+
-+	/* Only notify USB controller if partner supports USB data */
-+	if (!(UCSI_CONSTAT(con, PARTNER_FLAG_USB)))
-+		u_role = USB_ROLE_NONE;
-+
-+	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
-+	if (ret)
-+		dev_err(ucsi->dev, "con:%d: failed to set usb role:%d\n",
-+			con->num, u_role);
-+
-+	if (con->partner && UCSI_CONSTAT(con, PWR_OPMODE) == UCSI_CONSTAT_PWR_OPMODE_PD) {
-+		ucsi_register_device_pdos(con);
-+		ucsi_get_src_pdos(con);
-+		ucsi_check_altmodes(con);
-+		ucsi_check_connector_capability(con);
-+	}
-+}
-+
- static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- {
- 	struct typec_capability *cap = &con->typec_cap;
- 	enum typec_accessory *accessory = cap->accessory;
--	enum usb_role u_role = USB_ROLE_NONE;
- 	u64 command;
- 	char *name;
- 	int ret;
-@@ -1659,62 +1718,6 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 		goto out;
- 	}
- 
--	/* Get the status */
--	ret = ucsi_get_connector_status(con, false);
--	if (ret) {
--		dev_err(ucsi->dev, "con%d: failed to get status\n", con->num);
--		goto out;
--	}
--
--	if (ucsi->ops->connector_status)
--		ucsi->ops->connector_status(con);
--
--	switch (UCSI_CONSTAT(con, PARTNER_TYPE)) {
--	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
--	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
--		u_role = USB_ROLE_HOST;
--		fallthrough;
--	case UCSI_CONSTAT_PARTNER_TYPE_CABLE:
--		typec_set_data_role(con->port, TYPEC_HOST);
--		break;
--	case UCSI_CONSTAT_PARTNER_TYPE_DFP:
--		u_role = USB_ROLE_DEVICE;
--		typec_set_data_role(con->port, TYPEC_DEVICE);
--		break;
--	default:
--		break;
--	}
--
--	/* Check if there is already something connected */
--	if (UCSI_CONSTAT(con, CONNECTED)) {
--		typec_set_pwr_role(con->port, UCSI_CONSTAT(con, PWR_DIR));
--		ucsi_register_partner(con);
--		ucsi_pwr_opmode_change(con);
--		ucsi_port_psy_changed(con);
--		if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
--			ucsi_get_partner_identity(con);
--		if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
--			ucsi_check_cable(con);
--	}
--
--	/* Only notify USB controller if partner supports USB data */
--	if (!(UCSI_CONSTAT(con, PARTNER_FLAG_USB)))
--		u_role = USB_ROLE_NONE;
--
--	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
--	if (ret) {
--		dev_err(ucsi->dev, "con:%d: failed to set usb role:%d\n",
--			con->num, u_role);
--		ret = 0;
--	}
--
--	if (con->partner && UCSI_CONSTAT(con, PWR_OPMODE) == UCSI_CONSTAT_PWR_OPMODE_PD) {
--		ucsi_register_device_pdos(con);
--		ucsi_get_src_pdos(con);
--		ucsi_check_altmodes(con);
--		ucsi_check_connector_capability(con);
--	}
--
- 	trace_ucsi_register_port(con->num, con);
- 
- out:
-@@ -1823,6 +1826,10 @@ static int ucsi_init(struct ucsi *ucsi)
- 			goto err_unregister;
- 	}
- 
-+	/* Delay other interactions with each connector until ucsi_init_port is done */
-+	for (i = 0; i < ucsi->cap.num_connectors; i++)
-+		mutex_lock(&connector[i].lock);
-+
- 	/* Enable all supported notifications */
- 	ntfy = ucsi_get_supported_notifications(ucsi);
- 	command = UCSI_SET_NOTIFICATION_ENABLE | ntfy;
-@@ -1833,6 +1840,11 @@ static int ucsi_init(struct ucsi *ucsi)
- 	ucsi->connector = connector;
- 	ucsi->ntfy = ntfy;
- 
-+	for (i = 0; i < ucsi->cap.num_connectors; i++) {
-+		ucsi_init_port(ucsi, &connector[i]);
-+		mutex_unlock(&connector[i].lock);
-+	}
-+
- 	mutex_lock(&ucsi->ppm_lock);
- 	ret = ucsi->ops->read_cci(ucsi, &cci);
- 	mutex_unlock(&ucsi->ppm_lock);
-
----
-base-commit: 2061f18ad76ecaddf8ed17df81b8611ea88dbddd
-change-id: 20251117-ucsi-c2dfe8c006d7
-
-Best regards,
--- 
-Hsin-Te Yuan <yuanhsinte@chromium.org>
-
+greg k-h
 
