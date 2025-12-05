@@ -1,118 +1,192 @@
-Return-Path: <linux-usb+bounces-31206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 192F2CA809D
-	for <lists+linux-usb@lfdr.de>; Fri, 05 Dec 2025 15:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AB3FCA8408
+	for <lists+linux-usb@lfdr.de>; Fri, 05 Dec 2025 16:49:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B1DAD3088A3E
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Dec 2025 14:58:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4827A3128ACD
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Dec 2025 15:39:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9C0F336EF2;
-	Fri,  5 Dec 2025 14:58:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ESUoXs0e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8194733D6F4;
+	Fri,  5 Dec 2025 15:03:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f79.google.com (mail-ot1-f79.google.com [209.85.210.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604EC335551;
-	Fri,  5 Dec 2025 14:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2081C2EA737
+	for <linux-usb@vger.kernel.org>; Fri,  5 Dec 2025 15:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.79
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764946682; cv=none; b=e+V3j07ANLCsIYZKnTRZcKgSuObMHjEnIOj3pVnBedzzBHPuj6wxvtLXDc302LxSWob52LyvPj+8GquSP9yUo5zCobcUlPtTlHD/IVbMm+AxKrF8XzL4TD1hYRAa/Z/RB/mgDmPwt5phwp1s+fQJZyfsyokQT9iQj96ncgd4uOw=
+	t=1764947011; cv=none; b=nf69bYtqES13AcNf+jtpIDuHv3moJNM28TVSG2D1hoG+9w6twTcC2vRXqHx6koCQ7NjQbRGGzOr2IfImj+cqum/FJ16HmF2HZBPrQR3yjFUewakBdiyMkNoA3m9v0VVAqUG7F9ucf+Z4T4J2x03ti51w2Gj1pm/4IykLm8A95Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764946682; c=relaxed/simple;
-	bh=nLhQ+6puMkQt1v1zxy7NeuDc0Bm0+2SoBcV2k6IPUns=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nPQlmF/BUNcNdcl127r0IDxtZu9zJ/5P0FqNSl/o0cv1bQDMYjIH/gSn6YP4IFb+j6LMpNIEdtw9V+DVV7Ef0C6ansI2lrmLzahnBEjgwPfXIPmDq44565EH0EV6PMVR9KYbBx0J/TKpAJdDHIBCTnqTyazbO464w20f3fBNIWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ESUoXs0e; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764946678; x=1796482678;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nLhQ+6puMkQt1v1zxy7NeuDc0Bm0+2SoBcV2k6IPUns=;
-  b=ESUoXs0eqS9U3UTYLv0wEzsGicGHENm+IHkfaS9s9PuWka3z5+HKuU8o
-   tVBIBPD8b52s8m7CCY241xQLwiCvKN2IzFAs7/XgSuArnY4YNx/nWnFzS
-   y7yK9KtHB+LqmOxX3yhEfhAsMFlmnb81sJSjXs2kqpK2UdIXCzKKeTY7X
-   ithgRSxWtIUNoK+WOUwcXYDiRytFA6cBX+chWLdlUpslDztzeWCYs1xn5
-   pD+jfA5Dn5D4OWOQpTVJf3xgNB1spdcr8NJCWuA0clMGh9gDHR1/JSdEd
-   tJ4PKEommLgb88vYt34MFrJAlNzMvSqJaJgviI1vQ+Jnrxvf9zo9+M/k2
-   w==;
-X-CSE-ConnectionGUID: 2tZ6VmXIRY+/3P0r0331sQ==
-X-CSE-MsgGUID: fjiBo7s0SFigL40+UTyI4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="67056155"
-X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
-   d="scan'208";a="67056155"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 06:57:55 -0800
-X-CSE-ConnectionGUID: IlvSvx9PQQGL3wjLdvECjQ==
-X-CSE-MsgGUID: ZF8nmjC9RbiuHY8YTnpetg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
-   d="scan'208";a="195130953"
-Received: from amilburn-desk.amilburn-desk (HELO [10.245.244.111]) ([10.245.244.111])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 06:57:52 -0800
-Message-ID: <7a6dfc17-12cc-4972-88d8-acf86e4fca45@linux.intel.com>
-Date: Fri, 5 Dec 2025 16:57:45 +0200
+	s=arc-20240116; t=1764947011; c=relaxed/simple;
+	bh=H8d8ZgxBp+MJmziHi/e+b235tqYhFPQdWYXwUDtYYwA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=YvJ7IlotBCz92rHRdY3vHp+2XyoSiEOvB5DQz6pfOg4eNRrIVMKI7Pahp+pp14fDvVDmD4ED+Q4vRH60HvLJDj77qqvkhUFcaX47sci6lR4wbxB/atYRQECv+rJbFG/vhq/v+nX22i0ypEaPs7FZy89aqsavXHExiBecRjIOPEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f79.google.com with SMTP id 46e09a7af769-7c766d79592so5282047a34.0
+        for <linux-usb@vger.kernel.org>; Fri, 05 Dec 2025 07:03:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764947005; x=1765551805;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mZKFrS8XaCz5ZAVZPhJSZM2i//Nrp4m2i8bb62103AU=;
+        b=S0IQyTr3nYoV/irSc19Ii7QS7D6F2jYTefJ1YnykVCoCUGdqsj3YzKjs935hOGi5RG
+         iLVXoykitoXGKPs+cVX9HxUoA2dIt1RribpOdgHES8vCwyH1M2NeFCjJVjmnSC8K85nW
+         l6J3FXxv7nakXh7Vt9HhyyuasvsHEJOj8IxQSeYeu+wAjg1TRu52JoskdoDKgcSxNWZ2
+         ZKxhp0FDLOy41NKxBq7uRwQHxHx1gOVFEu/kspeVRkldvTXBFBRfkn5Mnulu/kU5JjLw
+         1dVxS/9G7KtLQx3jqn4ZmFX1dQjfpcOMbz58lMab4cwmJSGWqpkP0woqf7bdlg9MXQeG
+         nANQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWtz37YWly70gYA7rdJBbfAF0e5AyrArEXX6vNFE6RWi++GMPihzZ5Cz/D4y59f/KYt445z8X4705w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytPpLxnqjNHePsvt/2tOa/1YOoqHWomu92uS6HdzDPY0danbMw
+	ICvvTocuKubFHzvPEYNIC84ykmpVqAigmZyXrZsjFFxoTH6RqjSlZsjEt6B6RvGO4k+/fXuZIL9
+	1AwY91We8enBk+Zr8yTdXWRw2WcXlJ+NUJTFdQNj9+0MWjAkmO7oXwd6T5xw=
+X-Google-Smtp-Source: AGHT+IHoCMSNZxkfLUxmG4WkZE2nzhRHxjsZBfDI/5hxG3CFpHHTxb4vc9kfXHV2SzD2x6XCnzwyVNRUAkEnBfJafNtJQOFsy/r3
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION][BISECTED] usb: hub: total system freeze after
- running adb
-To: Forest <forestix@gaga.casa>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alan Stern <stern@rowland.harvard.edu>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Stefan Eichenberger <stefan.eichenberger@toradex.com>,
- Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-References: <qc0nhk9c6l0a08bkfeplrm3qjssgrjkvkp@sonic.net>
- <cc788286-c327-4b1f-adb4-8494c0145d74@linux.intel.com>
- <bu3vhk5i8pttoi6t8fan58lpe7l2eb12ib@sonic.net>
- <f8ee4a2f-6b95-4f91-9ffc-b7df45464d46@linux.intel.com>
- <fod4jk1tp199qsvqqlspl45nf29i5k3c0i@sonic.net>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <fod4jk1tp199qsvqqlspl45nf29i5k3c0i@sonic.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6808:3008:b0:441:8f74:fc8 with SMTP id
+ 5614622812f47-45379ddf7c9mr3526983b6e.53.1764947005487; Fri, 05 Dec 2025
+ 07:03:25 -0800 (PST)
+Date: Fri, 05 Dec 2025 07:03:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6932f43d.a70a0220.38f243.0002.GAE@google.com>
+Subject: [syzbot] [pvrusb2?] [usb?] WARNING in pvr2_send_request_ex
+From: syzbot <syzbot+405dcd13121ff75a9e16@syzkaller.appspotmail.com>
+To: isely@pobox.com, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mchehab@kernel.org, pvrusb2@isely.net, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 12/5/25 03:56, Forest wrote:
-> On Thu, 4 Dec 2025 01:41:37 +0200, Mathias Nyman wrote:
-> 
->> If possible, could you try with the same usb debugging enabled as last time,
->> and add HUNG_TASK debugging entries in kernel config:
->>
->> CONFIG_DETECT_HUNG_TASK=y
->> CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=30
->> CONFIG_DETECT_HUNG_TASK_BLOCKER=y
->>
->> And add the following patch to hub driver:
-> 
-> That patch failed to apply, due to tab/space differences. I guess Thunderbird
-> might have taken liberties when you sent it. It was easy enough to make those
-> edits by hand, though.
-> 
-> The result was again bursts of dmesg output roughly once per second, this time
-> 107 lines each. I compared the last three bursts that made it to my redirected
-> output file, and they were again the same except for timestamps and a few lines
-> being reordered.
-> 
-> A screen photo once again shows newer timestamps than the file. I did not
-> read every line in the photo to compare it with the log file, but the last
-> dozen lines look the same. I suppose I can send you the photo if you like.
-> 
+Hello,
 
-Yes please, small differences, ordering, and timing matter in this case
+syzbot found the following issue on:
 
-Thanks
-Mathias
+HEAD commit:    7d31f578f323 Add linux-next specific files for 20251128
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12e42192580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ec890b8333fce099
+dashboard link: https://syzkaller.appspot.com/bug?extid=405dcd13121ff75a9e16
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10de0512580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17392512580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/9bcc6eb60940/disk-7d31f578.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/895bc1bfae48/vmlinux-7d31f578.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/48f15e4679f3/bzImage-7d31f578.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+405dcd13121ff75a9e16@syzkaller.appspotmail.com
+
+pvrusb2: Invalid read control endpoint
+------------[ cut here ]------------
+URB ffff88814e172b00 submitted while active
+WARNING: drivers/usb/core/urb.c:380 at 0x0, CPU#0: pvrusb2-context/2345
+Modules linked in:
+CPU: 0 UID: 0 PID: 2345 Comm: pvrusb2-context Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+RIP: 0010:usb_submit_urb+0x7e/0x18d0 drivers/usb/core/urb.c:380
+Code: 89 f0 48 c1 e8 03 42 80 3c 38 00 74 08 4c 89 f7 e8 07 cf 20 fb 49 83 3e 00 74 40 e8 6c 82 ba fa 48 8d 3d e5 1e c8 08 48 89 de <67> 48 0f b9 3a b8 f0 ff ff ff eb 11 e8 51 82 ba fa eb 05 e8 4a 82
+RSP: 0018:ffffc90004f268a0 EFLAGS: 00010293
+RAX: ffffffff870770c4 RBX: ffff88814e172b00 RCX: ffff88802a5c8000
+RDX: 0000000000000000 RSI: ffff88814e172b00 RDI: ffffffff8fcf8fb0
+RBP: ffffc90004f26b00 R08: 0000000000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: fffffbfff1f85a8f R12: 0000000000000cc0
+R13: ffff88806783d5f8 R14: ffff88814e172b08 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff888125a03000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f910bc43e9c CR3: 000000000e13a000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ pvr2_send_request_ex+0xc2a/0x2030 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3676
+ pvr2_send_request+0x38/0x50 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3819
+ pvr2_i2c_read drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:130 [inline]
+ pvr2_i2c_basic_op+0x44e/0x930 drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:172
+ pvr2_i2c_xfer+0x9e3/0xda0 drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:445
+ __i2c_transfer+0x871/0x2110 drivers/i2c/i2c-core-base.c:-1
+ i2c_smbus_xfer_emulated drivers/i2c/i2c-core-smbus.c:470 [inline]
+ __i2c_smbus_xfer+0xf80/0x1e40 drivers/i2c/i2c-core-smbus.c:608
+ i2c_smbus_xfer+0x275/0x3c0 drivers/i2c/i2c-core-smbus.c:546
+ i2c_smbus_read_byte_data+0xfe/0x1c0 drivers/i2c/i2c-core-smbus.c:143
+ saa711x_detect_chip drivers/media/i2c/saa7115.c:1710 [inline]
+ saa711x_probe+0x1c1/0x1570 drivers/media/i2c/saa7115.c:1816
+ i2c_device_probe+0x87e/0xc00 drivers/i2c/i2c-core-base.c:592
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26d/0xad0 drivers/base/dd.c:659
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
+ __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1086
+ bus_probe_device+0x12a/0x220 drivers/base/bus.c:574
+ device_add+0x7b6/0xb80 drivers/base/core.c:3689
+ i2c_new_client_device+0xa11/0x1150 drivers/i2c/i2c-core-base.c:1019
+ v4l2_i2c_new_subdev_board+0x86/0x250 drivers/media/v4l2-core/v4l2-i2c.c:81
+ v4l2_i2c_new_subdev+0x14a/0x1e0 drivers/media/v4l2-core/v4l2-i2c.c:136
+ pvr2_hdw_load_subdev drivers/media/usb/pvrusb2/pvrusb2-hdw.c:-1 [inline]
+ pvr2_hdw_load_modules drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2074 [inline]
+ pvr2_hdw_setup_low drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2155 [inline]
+ pvr2_hdw_setup drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2261 [inline]
+ pvr2_hdw_initialize+0xe18/0x3ac0 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2338
+ pvr2_context_check drivers/media/usb/pvrusb2/pvrusb2-context.c:111 [inline]
+ pvr2_context_thread_func+0x487/0xaf0 drivers/media/usb/pvrusb2/pvrusb2-context.c:158
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	89 f0                	mov    %esi,%eax
+   2:	48 c1 e8 03          	shr    $0x3,%rax
+   6:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1)
+   b:	74 08                	je     0x15
+   d:	4c 89 f7             	mov    %r14,%rdi
+  10:	e8 07 cf 20 fb       	call   0xfb20cf1c
+  15:	49 83 3e 00          	cmpq   $0x0,(%r14)
+  19:	74 40                	je     0x5b
+  1b:	e8 6c 82 ba fa       	call   0xfaba828c
+  20:	48 8d 3d e5 1e c8 08 	lea    0x8c81ee5(%rip),%rdi        # 0x8c81f0c
+  27:	48 89 de             	mov    %rbx,%rsi
+* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
+  2f:	b8 f0 ff ff ff       	mov    $0xfffffff0,%eax
+  34:	eb 11                	jmp    0x47
+  36:	e8 51 82 ba fa       	call   0xfaba828c
+  3b:	eb 05                	jmp    0x42
+  3d:	e8                   	.byte 0xe8
+  3e:	4a                   	rex.WX
+  3f:	82                   	.byte 0x82
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
