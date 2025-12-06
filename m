@@ -1,173 +1,129 @@
-Return-Path: <linux-usb+bounces-31221-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31222-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DD32CAAE8E
-	for <lists+linux-usb@lfdr.de>; Sat, 06 Dec 2025 22:53:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8421CAAF39
+	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 00:16:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3FCDF3004D28
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Dec 2025 21:53:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 96028303EF61
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Dec 2025 23:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECFDB2DC76B;
-	Sat,  6 Dec 2025 21:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E01D42D8379;
+	Sat,  6 Dec 2025 23:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dKfllvQ6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWROfoyf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8BF2D94A3
-	for <linux-usb@vger.kernel.org>; Sat,  6 Dec 2025 21:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C24274B23
+	for <linux-usb@vger.kernel.org>; Sat,  6 Dec 2025 23:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765058027; cv=none; b=jugAm4dXEGQHvULdeNj9gPsXnRp8SOUXe5W2hFu9svpJqQGMqsMjlQwdYVTJ0x/K3NYfsTcWNeZChMxaxbeyy9x2NK1jc5xddQwclTHFOid5ALACtasAyNOo++jFJZlYp7otVKmwDkcaDJw9aH19kC+nBPEZmGOETi5droB6ckE=
+	t=1765062977; cv=none; b=Oe1hioGBMqUPQ4kot9jgSNocvrwdpokaj2JU9mmBxVI81YFQCnlC65H2nFcCmJO2dAt1nSVw7P338MP7AUnaUWirbHkp5CHeBDSIe+fEb+CXGJ1WP++ilBjzBU9IKZSQQPtSUQ34LW84HV705s5lrSTpn1TRjnGD9+Z28RVkOfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765058027; c=relaxed/simple;
-	bh=43TX5frqeFMefjQIw3xSaro6MZidnaNM32Znkp2b9JI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s7Baio+5ivhU+tuzWOKoOsxzNhfO4qjlsKjbIYOfTcc/ddxEUjiHNMNSTanhjpXHtjVoJXYSReeDCtjw0CbqBXMQQW/Q6rN0j5M2fND7vf2VtR+M4mQ00i8xMSDqp6F8At63CLeZ+VQ29IBHH4n8UZAvqv9V7k320ZYlVJ8kIEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dKfllvQ6; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1765062977; c=relaxed/simple;
+	bh=sHzfrNNc5TiZOJevop9wIz2ZjtFwVDhSUdmNHa4qp1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oRDtzNgvN52yo6xepsxHXcIpvJqfrafzBfLX/OucTb3R6BPw0cv8wn8JZqG16SmCC+6YzePmkHV+hS1TnB5f2UJmI42SmZceIoVHaTM4Z0iEqar4sYYdt4MHowMc2v9Kg9X4O6KkeeS2beI4SAy4ymILozVbFhXGYrXy48HMLms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWROfoyf; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47755de027eso24768525e9.0
-        for <linux-usb@vger.kernel.org>; Sat, 06 Dec 2025 13:53:44 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-647a3bca834so4342819a12.2
+        for <linux-usb@vger.kernel.org>; Sat, 06 Dec 2025 15:16:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765058023; x=1765662823; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZlSc46iEGMKsSwCu/roR86i2e0LFt7xxWxcFqpVt+ug=;
-        b=dKfllvQ6rOsLe51Hfikl9pIM1Q+bSFybpOGnLLagzzPx53FHNboQgbOxW9KMnHb2a3
-         lnbD2riOnlpritWbi5JfuRBYzG3AEUm1Pu2ce6EEw8fb5dlioeIzryOuo4HYg88SrZ6O
-         umrzPfewH8aIpD7zZtsSqahwxfjbmY5825VwfP+UejxrI7Pgh6xtYfEORLhnjJ9iV2Vl
-         24g4mK5QFoJK4cK8j0xCS9mRnKSsYCf/UEawBWcyzdyHxflYMJg2fIGQjZJZWUWd/dqr
-         f/PqNfOAIYQqVyGVyOWxTyVHadDVY77KOs8V8969POhZ67rMQl5CrQ4XHjT0VDSqyeEf
-         BGXw==
+        d=gmail.com; s=20230601; t=1765062974; x=1765667774; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sHzfrNNc5TiZOJevop9wIz2ZjtFwVDhSUdmNHa4qp1A=;
+        b=QWROfoyfmqank1B+D60sDDmaEuEAVyHbQtxPsmnTIO7yt5Qm6yN/ofZ//wxV8MeAbQ
+         f7vDFIupR7utaEgv6OGp099coRnwsIRUIQxU+SjTPlBddcuMpJCugLpV95PQIYwYpVvT
+         zX9qxdM7kQOVpQtrEGnv5HWX606CAbwBBv1GWTK1eMbzl+HbtMy8oOJ/P12SBVwbm+8C
+         8vwowt+Cn+tvRZgJdnZ1WTjCZr2grpVN8S0eG87IUkpTyFKW3rTE2n33jpIQ/5HNBDq7
+         wyqv8sJ90BXokOsDJksJTxabCFagcvc7Tt21Y8cypQpVZvEJDR4ZAuEOgeFTgkkEzNRA
+         bphA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765058023; x=1765662823;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZlSc46iEGMKsSwCu/roR86i2e0LFt7xxWxcFqpVt+ug=;
-        b=EWv2B6LAGlzVAb8+mIPkmTy1KFCeKxAqrnbyGNfbq/88DmtF8iNvdA2Y/grH1kE9U5
-         MSD2HBydXfxVqg55DMUqzRrYtgAOrxtm3ZcGnPXqVSSmJJ8VAFCV5sEU2lkmtl+3uuPo
-         F6GSBrNbQbM/lawG9T0IA8Xs3V1ONM4zwW1MUttrs3EfED7hTlI+fXLd4IyRORXkZxCF
-         o2z4Hkd8sX7WGi6oYYxpEr7KrUJBhfUB7dspWPK2R1zWp/jcW+5lP2tU9MQZ3B/Hovfa
-         YwHqQtZ6oW0ostyWIKbZsrB+MfxPbT0GXCVhR/3CEuQYjBtcwfgGhKSI+bV6pFdiY4/v
-         WK6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWOf+3CbY4S3VJ3t+cLAiVzVM7EuAv7zB58ZgH+Hf7KGhKWXysC+nUZEPBnkDIObjktDhq5K2oU0q8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkG3RBTgNGNlLvJoTnSxnw5CSR9hS1Lxr/SrLcQJK59Irje+5i
-	aUuD834PmD+LCSmkQHNnThOBJMNoN3kIVfdI/XGfBszB3RC7i1elmpQj
-X-Gm-Gg: ASbGnctj/uomITLsnyiDqENKYpw9a93ojJWMpjHrUJOr+0iX6CRoI1jmT/77faiCobt
-	FYNrofyHEq2UlxgBFKZATVbeeobmcWEiJJi4aJqm63rjyweNlQAtvfg6iRCmb7jBLcfDwbqX+Hb
-	E9c1CK9nFCCSBVAOERRs1aHk7jSo5MSqJaRitTnYj6k6Y6u8gjlJiE7HXsPDjPcf/LAkGqrJweh
-	KdJqHZyszeGx8DQ+2ehObaCvkwDYqUtZklQ0GuVAZeLy/r6xRIvJH4jBbYgsV28gqmmwhlxdWQu
-	5KShSHxH+64/9LYDgFQPCl4lOr45EWXqrEN3RlAv1HayiU91u+PEOQKUs9zNqF1Cy9LmU53YRMS
-	Yyon2x6dkO20D0JyyAdeRDtAeHwGtLcwJrtNxS8rjVDsnRdzApuG339R2VPd0oeBg6cmpJAcgOq
-	ZBjmQEbau/BmbR5YymSzLR
-X-Google-Smtp-Source: AGHT+IHbCGiQk3fsXEj22BoPr+p1X+aNsAMv3ycLRRhbH+uIBzuybMZ3eZdnq4HZjmb9nLBzlNXi4g==
-X-Received: by 2002:a5d:64e3:0:b0:42b:39ee:286f with SMTP id ffacd0b85a97d-42f89f53e46mr3097057f8f.48.1765058022382;
-        Sat, 06 Dec 2025 13:53:42 -0800 (PST)
-Received: from [192.168.1.50] ([79.119.240.187])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7cbff352sm16634775f8f.17.2025.12.06.13.53.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Dec 2025 13:53:42 -0800 (PST)
-Message-ID: <44c9c325-14a8-4391-adce-4bbe8c68b446@gmail.com>
-Date: Sat, 6 Dec 2025 23:53:38 +0200
+        d=1e100.net; s=20230601; t=1765062974; x=1765667774;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sHzfrNNc5TiZOJevop9wIz2ZjtFwVDhSUdmNHa4qp1A=;
+        b=pDc/1xY717lRbyWbraLpmoLTPOuU39MeNE7n9xEuWqIupsvSRbG3UJzp9BLO93EK6W
+         wr/8UH049RTFHstYHz9Xo46okhW7qHyxESgvqBTgKr2IxXqSeTmGx4lcvMYaELnJrtsw
+         k9FfNZXXdDhesuVv3dp5FTAKna7f+7B8Lg6O267m5bi4q2hI9WlkGadhUVueSFVXQ2/y
+         /PvINZhP4LOj8G6R59+tm+VjXcRXPTOTcYcA4cyAQjTIUXXhdycGjkZehSy78il3eNNT
+         Yqfjs6L6dRLi6xgy4a2cFeF+IV4LmuYaY+7RJgPPjE74XJFBii2hfRuDQnI7AOEmBCbL
+         THqg==
+X-Forwarded-Encrypted: i=1; AJvYcCUXwhpiIOmweHON+19fmJOmXM4MCA9p+TbHLpjxQYbVOBYC6lZcNAhwwfmtTca1IdMIcj9huFfm2go=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrYM8yK4E40gU2iHbbn5QiQIbj91CTWjpL6tr71UOuKT30va0i
+	eHJAuiMZrb8g1ypRTVX990WfMSkVJbX9/1iwDpkWHbaWg6hfcs2SPqsxU4ekgA==
+X-Gm-Gg: ASbGncsktRCT0vFnIlF5Y4Z9nsDJgKa0CaQaWYMl+yV02fwaEJ5wIqGbVtJ0rMCu1Sz
+	bPrGJ/w/jjJKGKIvSUpJuqyfScotDljmuQCKvWSXGzlwzeV49FRhdtz0rwXjxRshJVynbzoGOza
+	qtb0kv3IfgWSG03Qj2Wv7zn3OOBUTo1+vHJIDNb+ATx5U7LONKTbKLuiTlCvVqxJOp1KBgU18O/
+	cCBFU9qYysjer7I+gRCRLRsdIfVt5UmsDyfFGwTbSbin89pMAE05Vji4+thHVTF9Tm9RoREbWMF
+	m7boZOvOWg4LIW5Jkwvh9wm7TEP0rwIFPO+sQPY8bItg9Q2Zxga0KZxxKK6k6E4NweYooukOqj7
+	pxMCCMfkVY/jGuScuUKp2rcj5GYQiWXw/eL+cbVEmG2cd+At2+lc3bMJ5YXP8zHqMSNAVCvP9eU
+	7hJwFmfd0qVpc/gGD3rLLV8LU=
+X-Google-Smtp-Source: AGHT+IHtKFCmYVxjR1we6OXMVDfxzf8n+wwXaLbAzbV2+PkWV7ti0OR445B6RzpBr5bddwpvBpKOcw==
+X-Received: by 2002:a17:907:6ea4:b0:b7a:101:f86c with SMTP id a640c23a62f3a-b7a242be758mr391922566b.10.1765062973847;
+        Sat, 06 Dec 2025 15:16:13 -0800 (PST)
+Received: from foxbook (bfg212.neoplus.adsl.tpnet.pl. [83.28.44.212])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b79f4459378sm754765966b.6.2025.12.06.15.16.12
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 06 Dec 2025 15:16:13 -0800 (PST)
+Date: Sun, 7 Dec 2025 00:16:08 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+Cc: Ping-Ke Shih <pkshih@realtek.com>, Zenm Chen <zenmchen@gmail.com>,
+ "gustavo@embeddedor.com" <gustavo@embeddedor.com>, "Jes.Sorensen@gmail.com"
+ <Jes.Sorensen@gmail.com>, "gustavoars@kernel.org" <gustavoars@kernel.org>,
+ "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+ linux-usb@vger.kernel.org
+Subject: Re: [PATCH][next] wifi: rtl8xxxu: Avoid
+ -Wflex-array-member-not-at-end warnings
+Message-ID: <20251207001608.1f6940bf.michal.pecio@gmail.com>
+In-Reply-To: <44c9c325-14a8-4391-adce-4bbe8c68b446@gmail.com>
+References: <ff184c0e-17f2-445f-9339-f4db9943db86@embeddedor.com>
+	<20251121111132.4435-1-zenmchen@gmail.com>
+	<475b4336-eed0-4fae-848f-aae26f109606@gmail.com>
+	<c0d187d6fead4e5387db2a14129be96c@realtek.com>
+	<44c9c325-14a8-4391-adce-4bbe8c68b446@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] wifi: rtl8xxxu: Avoid
- -Wflex-array-member-not-at-end warnings
-To: Ping-Ke Shih <pkshih@realtek.com>, Zenm Chen <zenmchen@gmail.com>,
- "gustavo@embeddedor.com" <gustavo@embeddedor.com>
-Cc: "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>,
- "gustavoars@kernel.org" <gustavoars@kernel.org>,
- "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
- linux-usb@vger.kernel.org
-References: <ff184c0e-17f2-445f-9339-f4db9943db86@embeddedor.com>
- <20251121111132.4435-1-zenmchen@gmail.com>
- <475b4336-eed0-4fae-848f-aae26f109606@gmail.com>
- <c0d187d6fead4e5387db2a14129be96c@realtek.com>
-Content-Language: en-US
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-In-Reply-To: <c0d187d6fead4e5387db2a14129be96c@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 26/11/2025 05:26, Ping-Ke Shih wrote:
-> Hi Bitterblue,
-> 
-> Bitterblue Smith <rtl8821cerfe2@gmail.com> wrote:
->> On 21/11/2025 13:11, Zenm Chen wrote:
->>> Gustavo A. R. Silva <gustavo@embeddedor.com> 於 2025年11月21日 週五 下午6:20寫道：
->>>>
->>>> Hi,
->>>>
->>>> On 11/21/25 19:06, Zenm Chen wrote:
->>>>> Dear maintainers,
->>>>>
->>>>> With this patch applied, my system always freezes right after the rtl8xxxu
->>>>> driver is loaded. is it normal?
->>>>
->>>> I don't think so... It probably means that struct urb urb; cannot really be
->>>> moved to the end of struct rtl8xxxu_rx_urb or struct rtl8xxxu_tx_urb?
->>>>
->>>> It'd be great if you could share a log.
->>>>
->>>
->>> Hi,
->>>
->>> Nothing helpful found from the kernel log. Maybe Realtek drivers maintainer
->>> Ping-Ke could take a look what is wrong next Monday.
->>>
->> [...]
->>
->> I got something. In my case everything seemed fine until I unplugged the
->> wifi adapter. And then the system still worked for a few minutes before
->> it froze.
->>
-> 
-> Zenm and I tested below changes which can also reproduce the symptom, so
-> I wonder driver might assume urb is the first member of struct, but 
-> unfortunately I can't find that. Could you also help to review if something
-> I missed? Thanks.
-> 
+Hi,
 
-Sorry, I didn't find anything either. Maybe someone from linux-usb
-has an idea? The errors I got are here:
+> >> I got something. In my case everything seemed fine until I
+> >> unplugged the wifi adapter. And then the system still worked for a
+> >> few minutes before it froze.
 
-https://lore.kernel.org/linux-wireless/475b4336-eed0-4fae-848f-aae26f109606@gmail.com/
+Sounds like memory corruption.
 
-> 
-> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.h
-> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.h
-> @@ -1942,15 +1942,19 @@ struct rtl8xxxu_vif {
->  };
-> 
->  struct rtl8xxxu_rx_urb {
-> +       u8 pad[128];
->         struct urb urb;
->         struct ieee80211_hw *hw;
->         struct list_head list;
-> };
-> 
->  struct rtl8xxxu_tx_urb {
-> +       u8 pad[128];
->         struct urb urb;
->         struct ieee80211_hw *hw;
->         struct list_head list;
-> };
-> 
->  struct rtl8xxxu_fileops {
-> 
-> 
+> > Zenm and I tested below changes which can also reproduce the
+> > symptom, so I wonder driver might assume urb is the first member of
+> > struct, but unfortunately I can't find that.
 
+That's what it seems to be doing, because it uses usb_init_urb()
+on urbs embedded in some struct and then usb_free_urb().
+
+If you look what usb_free_urb() does, it decrements refcount and
+attempts to free urb. But here urb is a member of a larger struct,
+so I guess the whole struct is freed (and this was either intentional
+or a bug that didn't happen to blow up yet).
+
+Now a bogus address is being passed to kfree() and things go boom.
+Or at least that's my first guess after spending a few minutes.
+But that's the direction I would be looking at.
+
+Regards,
+Michal
 
