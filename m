@@ -1,81 +1,80 @@
-Return-Path: <linux-usb+bounces-31217-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31218-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 368E0CAA51B
-	for <lists+linux-usb@lfdr.de>; Sat, 06 Dec 2025 12:28:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC86CCAA74F
+	for <lists+linux-usb@lfdr.de>; Sat, 06 Dec 2025 14:42:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 49041313D3E3
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Dec 2025 11:28:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5A2233067D3C
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Dec 2025 13:38:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765CE2F3C28;
-	Sat,  6 Dec 2025 11:27:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3792D2FC009;
+	Sat,  6 Dec 2025 13:38:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Gy3Zp7rU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eW4ZX2xm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64531FE451
-	for <linux-usb@vger.kernel.org>; Sat,  6 Dec 2025 11:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B21D2F1FEE
+	for <linux-usb@vger.kernel.org>; Sat,  6 Dec 2025 13:38:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765020477; cv=none; b=oxxgW8ovL4uM9r6Xa0T0wq9o8PCPHIxy87cVrBHiOtclB43lquVzq73ETsEMMc/mS0DNhBP0LITRZ/o+XosB789xqHi3JHYkjg5S2zesjtYQCfewk2YVWoGMxDjqc1DXC/lDd5GoM5zocZhPr1bhzkbxxDLIk7R6DRO4dduc4UI=
+	t=1765028309; cv=none; b=SXqk+i2kEVX3ghdHzjg28JhihypHxxGjCJpZZd7j8d4vTgLT/kmHHh0F64WCC35EgGnhZ/iVPKlKiZg7NPyNffJXrBObZVNgpEEwvJdECpozwKmxcCnhDpprOQxcF0GLCdlyQKj+3d+VXbVziT8omrvNHZ9iUXWp4VueSw4/OeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765020477; c=relaxed/simple;
-	bh=XaNiArVUEN4ZsQecQjF6gbv7SF9bNnSkov1ro/kUthE=;
+	s=arc-20240116; t=1765028309; c=relaxed/simple;
+	bh=ym2C2sVMhc+W20ObHTcDmFSRkzCbP8pObQd9rfJb+4c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XFIeEnqRxkSSDLDdqX+kDIAhUgdygrTJOZ+92jIMnJuAQFLPxVbSPDtNB6w55SQs85X0un7w/Y32cFQl/t+HDQPGc1Z9ZyBSh/jfbzTfcF6d7CBOIPjekDqWnchGXk4fS8FzAnwJ+UQLA7WrRcS/gOFtOSwEav6QvcYV68uPgiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Gy3Zp7rU; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477770019e4so30079725e9.3
-        for <linux-usb@vger.kernel.org>; Sat, 06 Dec 2025 03:27:54 -0800 (PST)
+	 In-Reply-To:Content-Type; b=j9noBKo7eX3zBRxKHeZG9dqRN/1ms7OKoEQxgejfXjSCymryrj2Rp/H9nqHMAvOlhBdc5EEAJDhOV6vtb/9Vzjqq/hcGPzr727lss6Zjz+vFmv5FEOWG7rH6JH0NK5nuTcRo0xMIFlCILO3jVNSzpZuYM2kX+8YX4IxgIW0V3Wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eW4ZX2xm; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-bdcae553883so2539316a12.0
+        for <linux-usb@vger.kernel.org>; Sat, 06 Dec 2025 05:38:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1765020473; x=1765625273; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
+        d=gmail.com; s=20230601; t=1765028308; x=1765633108; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=54ozK3Z1QShV9IRHsBfnCuV50Wy1Uh8rW7bx3u1PONQ=;
-        b=Gy3Zp7rU8uTvPrWpHslNpe5sk8Uo4lUaftPiYN7NlJEkjNB0vCnlz+wn7nEDoZCuzR
-         ArpP/Ip0O7qhTIlg2YMyfxbory6ebAxCRE4ytwn9izpPVDsvMNQbh7mvrKin0v1j1qQG
-         SkcC2UGVTEa4R+DjfmtQqJoHlxrExteZLw7ZdoKTlBaQi1tXXN5+8jOVvVsYS16gtHdG
-         iU7+IhMkEoIJAhxwp4cNq0syOOc7jzkCvpEMUuR5w8MnQs4w9uIQ23V8pGuILVKsUxo1
-         hu5j6KbXS0a55PrZO2bPDvKyTsSjKazG5sRgOnj/SWx6qWHXXF5SPtojl3m33LG1QXBY
-         VZbA==
+        bh=r6ThddeExf5Und4u30qaitIGfC7qXYJM9H2MDxYn+/s=;
+        b=eW4ZX2xmM0ZFaJSsGwvK0AV5B1YYScuasf+DHJC8CT/AyEOKblA2t5XWUMcD9fr+pC
+         3boBpyRzE500xj/C/oDGAAFGzGAvhALxNcXqAKWISutxm41UKNPPCtG69znDjxSS8iGi
+         tyYkH8Nke1KtcZnUpxjdBnWGbGFF0agxHIoQdaqx+daGdHvSuesa14xFAT097IIVEjl6
+         g3L1M+Rh3YyccUaKok00EpN9abL1vic8N1inH99mo7G4Ikb03PKMwU2S3TkjNghjH7g5
+         jJIlzS519W6G4hcKLm1d0oB2mCSLkm5mNFj+BLiqQda336Ph6BjD9NLHvJA9Dr0plK/r
+         dAEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765020473; x=1765625273;
-        h=content-transfer-encoding:in-reply-to:content-language:from
+        d=1e100.net; s=20230601; t=1765028308; x=1765633108;
+        h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=54ozK3Z1QShV9IRHsBfnCuV50Wy1Uh8rW7bx3u1PONQ=;
-        b=OYq1ncB+CsEogpsIuC4rxxWk+iCmDBjTEYVL6UFkpC550OJzhTo/xt4q9TyFLXfmld
-         oSW/PnR91hvM1Q4anBxWBumPrTEY26CyQqlTyGCIEB8lq0Vk+0A0a3MjFurv6LBSF4ie
-         hrYiRWGDAkyOuPqx0HJYqX9qBCQQ81bqMiYqZJe5vLBb8D1mkX4vz/lKpUIWdmQACt7C
-         vt+kTXGBFtxNxMoWZJfi5up/235SbolgaPiAZeTek9GKI7Qy3XYJK0a5OQy5YKNozGW+
-         0302gS7ufGcXSWDnIjsJvrfs1WMlcKBYwNaeYGrVEAW7ayMhcxSFz30zlhsdPOhiqr6c
-         Z7Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCXT/EYG+6a5Fx0fXdOpng8lzwfyS/gXDk5QlmiOxU0rxQHbfJxbql467KKnc9356sWTmywNfvsmbDo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTjCXmsw4q43pHdbamn6g5aFlwbsSv2RGrZrAo8PTTsqO4h0GT
-	zi1RzAL959aXykZNWkLsrIGPINt+265KGKq2zZG5bhVxt0qW81gUBUuQ9XVxauEKWFMcnEl9oCb
-	DdLUp
-X-Gm-Gg: ASbGncvakP8rYy7ZqgXXrZxZrEiFDHbToP78ZlLX8Z0jBI3qkRo6FzA/4WRu5Oo0v6r
-	hzzwna38ZLpFvQ3N+ijqOh/dSOGm7lY1I2461q+dIbjoPvs1hVre8P6THjDvwtqJRsl1zYY089h
-	Qu0hoSUdn/01r2bZVi3sfgH3q0JnRlZZZ7vs54QVtoqPi4DKrEgJCdaea+07aZOtUdNtjpyJBnp
-	DelY6TQSDi7tj9o+WsaHA/773q4jtK+XGv/Nwlk8yyV5xUadbE4oFaoM+GLow6MSg/50tLjIu2D
-	ZeVZqMuIvbsCufDDEdh3m5whYMA+yCpaN8cEuzJNi2VP0gN26H7xwY6qSBJ1mzK14EAPFeH+SwD
-	JKLZi4jQv/5BsgG8p1mcaAB3tNm6Lcd3Gdtabh2qYpSMYHYjcPUhm1Rh7Zcb6/TB5Z4t/IOoNYS
-	o8PnFRdkaod5XwKKCBknY=
-X-Google-Smtp-Source: AGHT+IGuJHqRDLXzE6pBV+O5clnghz1M3R3qGXhTy8JipjIwofYQPlM3zKjZV4m7mJ7/Nt62yMVZiw==
-X-Received: by 2002:a05:600c:8b34:b0:477:7f4a:44b0 with SMTP id 5b1f17b1804b1-47939e49385mr21133625e9.33.1765020473081;
-        Sat, 06 Dec 2025 03:27:53 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.134])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7d353f80sm14204709f8f.41.2025.12.06.03.27.51
+        bh=r6ThddeExf5Und4u30qaitIGfC7qXYJM9H2MDxYn+/s=;
+        b=YHUSrUDWED61yPPVK2CO1MxTys7d/mlCtiVVqrOu45vtw35hW3Pqk8ioikjweZgP4t
+         Xkj90X5LWrCYldwEkhHygYrIm30DpIH3VVCr4YTxEoAu85Nez1XowdmsT8HumsabFJu4
+         pARh3FmAoslKUBmwjWXIVBaHNSVB4oCmqdHTMG3W3LcgzpF/nxxiJmhnY+RqTh/FIDmC
+         o4C/acwD1iHLXXOnCfeOnA68gfUNIkNfSnmTULiyvJshebC1Ag47Aoe59wTAoubIEj/L
+         gmDb7BKXtHlefIVZrhaMg188eK8uzgjqSlQG9HK37DYF6g38QkCFjE4vQFF1NsZAG6wQ
+         WS/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUBMJhbTXvzshnrOibk3wpFXgV2algG1sE2fgBg5vPlRak81mAWeb8BhqRJg3nh5Xb8xUT7PbCPW64=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8TIgjvz+ZkykCseQ2YUNBD3vG6i3x5NrxWUVOnlcwSdBaZxJQ
+	IrdwRrY4swP34t/VHEx836TyUH91xg10RM2Mun44uDuITqEcltqUEnP406hkl21C
+X-Gm-Gg: ASbGnctYBHAsBn9pEi1X4SODrLGT1/Q0HGhEUzEyTbI+5OFLtqIrdhdOVDdSaG9arXt
+	8TOrmh4JhJC52tTe9yAPFzgGDYoJh3QylZYgST3WEE/Ij/lz5z7mRMNFlr8Pk84dIhL13T4lnhk
+	rHBGzToVyIftNGDKQW+carK96Y01jsEpHkKQReUbE/w9MffNVZUKeWT0tPxsjjWeJVEUm8jX6ir
+	Kqe6FNRRZmdeX3HXrxCWsNEzo/kmRJNs5Cm/9giAam7gcakdFSkX1/YFYXeOrYF/BDhP6a4qJBE
+	YjceaWMVnkhy/awCHeTsJfaE5W8YkNiebPGlhfO4kYRSW133iZVhxinSiKMZLWJ3/RCQ4KAxlKr
+	U0AheiNvtidoZ8Qltrs5yStUAQtUuK35pxWJatgF29/I72Zu1oizLnDMCxSBiuJzYi/devFTe72
+	G3oAiK85wrf45cVtW/yotXPQr9KgauCirpvrzoRpY7wGhTfdJGruS6FRh/gMka59ZKpw==
+X-Google-Smtp-Source: AGHT+IHudn4wc9Rw0jaM+dT7ajZ0xLPd+O8RxvshtGbYFKCr+YXAEgY1D8jUpwi2hZh1idoooj33ng==
+X-Received: by 2002:a05:7300:f3c6:b0:2a4:3593:6467 with SMTP id 5a478bee46e88-2abc71dc43bmr1174301eec.23.1765028307527;
+        Sat, 06 Dec 2025 05:38:27 -0800 (PST)
+Received: from ?IPV6:2804:14d:4c64:82a2:4ba7:7b91:594d:8d90? ([2804:14d:4c64:82a2:4ba7:7b91:594d:8d90])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7576932sm30215436c88.4.2025.12.06.05.38.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Dec 2025 03:27:52 -0800 (PST)
-Message-ID: <99b0dbae-0014-4d09-8724-092c03393dac@tuxon.dev>
-Date: Sat, 6 Dec 2025 13:27:50 +0200
+        Sat, 06 Dec 2025 05:38:26 -0800 (PST)
+Message-ID: <de0b9059-30c0-4704-b0b8-9f4f5abfaa04@gmail.com>
+Date: Sat, 6 Dec 2025 10:38:19 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,110 +82,66 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: usb: Add Microchip LAN969x support
-To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org,
- nicolas.ferre@microchip.com, mturquette@baylibre.com, sboyd@kernel.org,
- richardcochran@gmail.com, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- daniel.machon@microchip.com, UNGLinuxDriver@microchip.com
-Cc: luka.perkov@sartura.hr
-References: <20251203122313.1287950-1-robert.marko@sartura.hr>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: Re: [PATCH v2] dt-bindings: usb: maxim,max3421: convert to DT schema
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, davidm@egauge.net, ~lkcamp/patches@lists.sr.ht,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251107001812.10180-1-rodrigo.gobbi.7@gmail.com>
+ <20251107-agile-alligator-of-philosophy-03d923@kuoka>
 Content-Language: en-US
-In-Reply-To: <20251203122313.1287950-1-robert.marko@sartura.hr>
+From: Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>
+In-Reply-To: <20251107-agile-alligator-of-philosophy-03d923@kuoka>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi, Robert,
-
-On 12/3/25 14:21, Robert Marko wrote:
-> Microchip LAN969x has DWC3 compatible controller, though limited to 2.0(HS)
-> speed, so document it.
+On 11/7/25 05:03, Krzysztof Kozlowski wrote:
+> On Thu, Nov 06, 2025 at 09:06:22PM -0300, Rodrigo Gobbi wrote:
+>> Convert legacy maxim,max3421.txt to proper format.
+>> 
+>> Signed-off-by: Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>
+>> ---
+>> Hi, all
+>> 
+>> At this v2, I`m reverting my previous idea about documenting new properties
+>> because this is just a conversion from txt file. At v1, a question
+>> was raised about that:
+>> 
+>> On 10/9/25 22:34, Krzysztof Kozlowski wrote:
+>> > maxim,vbus-en-pin, maxim,gpx-pin, reset pin and supplies. Also add a
+>> > Why new properties? You must explain not only the difference but WHY you
+>> > are doing this.
+>> In this case, I`ve kept the maxim,vbus-en-pin prop because it was already
+>> described in the legacy file and the driver expects that property according
+>> to [1] and [2].
 > 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
->  .../bindings/usb/microchip,lan9691-dwc3.yaml  | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/microchip,lan9691-dwc3.yaml
+> This is not a commit msg. Apply this patch from the lists and look
+> whether the information is there.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/microchip,lan9691-dwc3.yaml b/Documentation/devicetree/bindings/usb/microchip,lan9691-dwc3.yaml
-> new file mode 100644
-> index 000000000000..7ffcbbd1e0f4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/microchip,lan9691-dwc3.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/microchip,lan9691-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip LAN969x SuperSpeed DWC3 USB SoC controller
-> +
-> +maintainers:
-> +  - Robert Marko <robert.marko@sartura.hr>
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        enum:
-> +          - microchip,lan9691-dwc3
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - microchip,lan9691-dwc3
-> +      - const: snps,dwc3
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Gated USB DRD clock
-> +      - description: Controller reference clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: bus_early
-> +      - const: ref
-> +
-> +unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +allOf:
-> +  - $ref: snps,dwc3.yaml#
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/microchip,lan969x.h>
-> +
-> +    usb@300000 {
-> +      compatible = "microchip,lan9691-dwc3", "snps,dwc3";
+> So again:
+> 
+> You commit msg explain any unusual changes - like modifying binding
+> while ONLY converting it - and WHY you are doing the unusual changes.
+> 
+> Best regards,
+> Krzysztof
+> 
 
-AFICT, the examples should be indented by 4 spaces.
+Hi, Krzysztof,
+I was wondering about this again and I need to clarify the expectations here. 
+So my v2 patch is only doing the conversion from txt to yaml without any additional
+changes. That being said, at v2, there are no new properties and no unusual changes.
 
-> +      reg = <0x300000 0x80000>;
-> +      interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
-> +      clocks = <&clks GCK_GATE_USB_DRD>,
-> +               <&clks GCK_ID_USB_REFCLK>;
-> +      clock-names = "bus_early", "ref";
-> +    };
+What happened was that under the ---, in order to save the lore and the previous discussion
+from v1, I`ve quoted the sentence about the "maxim,vbus-en-pin" prop from v1. Here, at v2,
+what I meant under the --- was that the "maxim,vbus-en-pin" was not new and it already existed
+in .txt file and the driver is already expecting that.
 
+So, even if I send a v3, it will be exactly the same direct conversion with the same commit msg
+because nothing was changed from txt.
+Maybe my intention was not right, my idea was to just save the lore/"answer" a previous point
+raised inside ---. 
+
+Tks and best regards.
 
