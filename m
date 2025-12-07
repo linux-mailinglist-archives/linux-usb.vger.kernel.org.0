@@ -1,157 +1,162 @@
-Return-Path: <linux-usb+bounces-31233-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31234-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFBE1CAB2A2
-	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 09:05:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 158D0CAB2EC
+	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 10:04:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id CE1643004458
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Dec 2025 08:05:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AFBB530056CB
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Dec 2025 09:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28FE2459EA;
-	Sun,  7 Dec 2025 08:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED982D73A6;
+	Sun,  7 Dec 2025 09:04:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G5osyJex"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dj/9W5/B"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B831E1E12
-	for <linux-usb@vger.kernel.org>; Sun,  7 Dec 2025 08:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B202701B6
+	for <linux-usb@vger.kernel.org>; Sun,  7 Dec 2025 09:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765094709; cv=none; b=k3PQYz19reFOdYjzbGBfl2vb7icSOmovEZ+oSUankr1S/X9Uje1ZxlFDZgPaS5smIbI2gzkgqKPo3ISM4iRlJ06ANqjPNBZyfyYrWyTStwt8e7OTBKgbQKLyoGPRIaSwEAm3a/wpZqi2ABYcDCXqgErYEWf7UQ7W7orACx/e4kU=
+	t=1765098267; cv=none; b=rsJnqRv08vVOgMWOj1WNGpltCjAtRxLJOU2knL8QwxBbAGhX3Bq4jQPnbrbAOHVQWUmUxRYlnlAFV8ncCT6cfg1dcm2JK+2QsKvMPBz3RQqM621Shl48aWvSLRkslPEDFel+BSwEanIFLo+Xuz5g2DQ8LaSww4Lr9hkyL9LbMuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765094709; c=relaxed/simple;
-	bh=u3VBf7nZ7V6oWtVB4N88DTum6HAok9ZrSwVvYxFRdys=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oQMjQjeCgpUGWnXQMvfP38D/Kc33lkD0MpHlhuL5C5l7cKr8jUOln/mYoqxI2/5a6fwP/9yvd/xSSp84LnazUVyKnBfEw9TqJOy1aAR2GBiweoaUxSfVdNtNojF5a9Dc/ryZmINQyVS9wa6lvVJyuwkrLwB+mZfqK5rD9whF0ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G5osyJex; arc=none smtp.client-ip=209.85.208.50
+	s=arc-20240116; t=1765098267; c=relaxed/simple;
+	bh=ZhjXU5ryGjMzVHDyTnMOHavrgCpNZrhuPmDwM+XImyU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CNWbinWwDsdWwAnb0h7Ahh8inR4IgjDI/yFL2HyC618YJfu6jKquXQ8WHckuPiFS7ujjpUr5snRkELinHjCDi7Kat361WoPvPwGLdxI/z6BBO/4WcqjCUjZrTvhRkJI4zBRLfMxS8IB2SULs3UzmaGbuLxX+PisP9kW7CP/9IzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dj/9W5/B; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-640a0812658so6155538a12.0
-        for <linux-usb@vger.kernel.org>; Sun, 07 Dec 2025 00:05:07 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47775fb6c56so31353805e9.1
+        for <linux-usb@vger.kernel.org>; Sun, 07 Dec 2025 01:04:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765094706; x=1765699506; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765098264; x=1765703064; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C5q5Xq0sGlEaLAo2BW6b3E5rJGoYi1LAD4X7rgAhzhM=;
-        b=G5osyJexw7WwXiGvu0sfCaSe5yndcLGVFG8gjNy7xMoRVyJEa1VQ6JlLTBATW49SVX
-         VldfplwuzCb+yRSSE+huJ20l0EMLg1FGBoGr3PdBP42U+uu+Zfqq0vjTQukFmIvuIXAN
-         cA8mhRAD8S4IU33q00G+AgSy96LGKpF7G4bVxHwHiWxh7djyPVefDEbUuPrmPH0sFAyf
-         GDlTY6yJzset+iTHbh83w5K3qA/SWEfNbBXO6CLcS3j6JyUGs5v6l7TOHI3rhW2Xxz15
-         +iulWeNbpRi5bHOzORc/87XbIpLi08iRuGUnDJ8qtfde6MMI0A1hE2eWlkh6/DMD1Aqx
-         lv9Q==
+        bh=+9s85LTeAJem+8/i2VjmBRnt8KjRvs9SPXgDJ7YGLXw=;
+        b=Dj/9W5/BGtiVC0Uw1a6jYa8RlVjxqH5GFsKfnjmvswnTSotgZRAXTAKbchI2rF+vvF
+         BEV9YzBV+NUDGcXvB+x46eY2RRY8JPmz/oHveTKDLRAQkAX7h75izHDlXREH9Adzgmqq
+         oAEWI5DWkFeQBQBPmmiV1DseXl/H4b6LQdZoNjTElCvhcp23lV/MS5nescMlWPs3RpFz
+         pXHiJFAJiNyr1PbNncq3lQMJBVIwhj61VwYAk6m5thLgWZTw4ySlx3AK/LGQ5KB0JqYx
+         1cS+OJ28d1hY06drr8ysAB6ELCkfW912te/rJjGA96OMVDuG667gqSqWNUs5mF+F67QU
+         bD2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765094706; x=1765699506;
+        d=1e100.net; s=20230601; t=1765098264; x=1765703064;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=C5q5Xq0sGlEaLAo2BW6b3E5rJGoYi1LAD4X7rgAhzhM=;
-        b=KfIH8PCCKNynwIj4RCwVXC+8uiVB4z5aQIbhx2HSoHXmRC2d8mBIOOx8YXXNHPXF3G
-         yBrxyMO12HBhQhrC3lLrW9Hht5HEscH7dz4njMT2u/gkfR2cue94DGmtSZv4UgLsKyOm
-         RfgjSjbLCNloFGwdFLUb1SsBepupWMLUaqXb/5E1/6SifQyKjNXej8lGmjpjVJ7brDCK
-         bXFiSKLk9S9kVqHej3LHP/SXiAsdJHx/wKJhWjhh/4wVzkMhHTVjsJWtYvmOa/Z3iTpV
-         hCJiujwcTZByMFbm3HlzJvluJQT3CBKy5g/tzLiZXdwoTofYoM7N2ETikL1SvZ/ozaFH
-         uGMA==
-X-Forwarded-Encrypted: i=1; AJvYcCXEfqtNQk7YjQlOIylXXbSl2s2Fa4nCLASCb2QKrUlq8L/dTwR7mlxbUSju+2SALfWel0jOROYDegc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPZdQ7Wt2VHkgCaZ6UmQBBDIJL6ZJNKnP3/4Z/NAmUJ8aiCbsP
-	DY7B1L19GEg3nILm6+n9RGJp+mARuDHDKAzIknCaa5VpYEqKU3e3xETn
-X-Gm-Gg: ASbGncvYLFZpETWhQPb7PZ5TpP5iM13lE6e7De8Nka2pBmrb96+hqdIOgpGTuK3FVkU
-	gjAXsa+SLT4JVnM/R3SmaJ5PHfVDi1YIxtxsneJv6SiXgu++Fq0O7PHNKbt2IOfk7tVxliqffEu
-	Fiipio4egZ0o8F14KhQrVTRDtUzIX3oWkLiQRrgx7XUPQ3pdnegtmoqevF5+zDT7GIs4P+qLPlc
-	guoirknoyqhh1mCAHN/w8aA4YIr+mxMpUEWM3+bOq/aQF9ODalf89E5hAajDzOoLO4kbUIzBymE
-	sqatoeK7iX/nmwkRAtRtNlRZUi7n0bsunNw/jVxL68Exs8dZXcNlyEE0UdZZVIqjSZZKsZIVDcg
-	8hoxgQEmKQoazXSIB+2k3/blBliRmKorLfY9m2r4C5zEF/vOZBFwFAqZf7HeCvXrv5EhJOyOE5H
-	h6ZYu+CLLvzGUttunnOAa/+kE=
-X-Google-Smtp-Source: AGHT+IG3Fb6sFELWMDgiQ9Jhbis9xCT1Vxpk4srIFV8hPtA69hlwDRkseJRO10ljQ/uXJfKJ+qudEA==
-X-Received: by 2002:a17:907:3e11:b0:b73:6e0d:4f6b with SMTP id a640c23a62f3a-b7a2476f945mr396070366b.36.1765094705602;
-        Sun, 07 Dec 2025 00:05:05 -0800 (PST)
-Received: from foxbook (bfg212.neoplus.adsl.tpnet.pl. [83.28.44.212])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b79f4976c43sm813393666b.42.2025.12.07.00.05.04
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 07 Dec 2025 00:05:05 -0800 (PST)
-Date: Sun, 7 Dec 2025 09:05:01 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Greg KH <greg@kroah.com>
-Cc: Bitterblue Smith <rtl8821cerfe2@gmail.com>, Ping-Ke Shih
- <pkshih@realtek.com>, Zenm Chen <zenmchen@gmail.com>,
- "gustavo@embeddedor.com" <gustavo@embeddedor.com>, "Jes.Sorensen@gmail.com"
- <Jes.Sorensen@gmail.com>, "gustavoars@kernel.org" <gustavoars@kernel.org>,
- "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
- linux-usb@vger.kernel.org
-Subject: Re: [PATCH][next] wifi: rtl8xxxu: Avoid
- -Wflex-array-member-not-at-end warnings
-Message-ID: <20251207090501.41980a50.michal.pecio@gmail.com>
-In-Reply-To: <2025120716-sway-hypnotic-8cb6@gregkh>
-References: <ff184c0e-17f2-445f-9339-f4db9943db86@embeddedor.com>
-	<20251121111132.4435-1-zenmchen@gmail.com>
-	<475b4336-eed0-4fae-848f-aae26f109606@gmail.com>
-	<c0d187d6fead4e5387db2a14129be96c@realtek.com>
-	<44c9c325-14a8-4391-adce-4bbe8c68b446@gmail.com>
-	<20251207001608.1f6940bf.michal.pecio@gmail.com>
-	<2025120716-sway-hypnotic-8cb6@gregkh>
+        bh=+9s85LTeAJem+8/i2VjmBRnt8KjRvs9SPXgDJ7YGLXw=;
+        b=vYVtKVbdng5ixMRPbSr5yLgSqaTyNnuFjP+6CgQYeiL6Pg3Jjw7Hzwldn//7j1FWXk
+         MoJ60bFtpV4mP8Sg1Ena1FOSRKia7xDpPFmcwrXmxZc/HyJ2wbosdlEIReO7teHcmDxr
+         GSndaP0Eeqj3QDyj4PyJId3IzjcrIjWLK/9FQxCHjsKbuPGykhnZby8dMqCklKSmQAna
+         PWEVWQfboAxcKX48XZgXoog7quKkSgW6sY+JHqt5UymTY9I+4jLIiBnqdWu+ThhpEzdg
+         wOqysPzfyUNh/tK6Iq1srgAU32JvuTSfKIJvR+P94ASbwsbMPWaWxKkndkJF/p0R3nro
+         LFHQ==
+X-Gm-Message-State: AOJu0YxigVIJ51YmyPQyusk/AZdmhsPHaZvsCneTKzwVHs7fP48kShTv
+	UeApafdC4Bv1O9NOAvJBbecG7WdAzY4Wh0XRFpEtRR/8D2pSlS/dQ4ddbr8UUIhcIXo=
+X-Gm-Gg: ASbGncsYrs9TvbilFU+XhRs0k6vS+fRRgJi8x/r+Dbap4pR0rmB5IVGvC8mFYDBMcNf
+	FYE2hjglQPiAbff/CT70YkCSPEcTJKcEi4QvETCrq7OQMfHtpt16Rb1R5P5xs0nCi4c2sCwLlv/
+	DKx2dnZOtEkJgBjM5jB88E9Tp97Aqje9c9KgDCUktGsdMh3pE82pSKFbEFXOgMSgXkVgxyQqRx0
+	oo35fbH2kLH0Cuf9Lpbg/754+fbqAqnG1GwDjjc9jOJiJiDJHd2zcCRRQMF+LFT8D0EkFGHxdxM
+	J4Qj1GFDoDC934gf8uDxjwP3knTYGUZJTQaLtP1/n/AX7CCXU9yfmdG1RDTtT1Dz98Zgo56Ds5W
+	V2o+UqvdpD5uFDnOQy/k39GkKMn19gnKa+Juf/izXTKRZU5Wx5dJBBgBa+2VrOfC2ihGlUtWKl6
+	9fdwGj2OVzKe2ROyUNARAKTkiM+xwPANQBeDEX63YV1Nd6oLXuSPJC8gGRbooHzoPTuQ4Wx6pv
+X-Google-Smtp-Source: AGHT+IHFycVlm3j3IA133xM0FQQfOMMWANn3xMmOUfnOizYWzE863mvkTbkvqNq7eRJ2cxPJvpS8sQ==
+X-Received: by 2002:a05:600c:1c89:b0:477:7bca:8b34 with SMTP id 5b1f17b1804b1-47939deca19mr50951355e9.6.1765098264093;
+        Sun, 07 Dec 2025 01:04:24 -0800 (PST)
+Received: from workstation (ip-176-198-166-064.um43.pools.vodafone-ip.de. [176.198.166.64])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4792b04d4e6sm97216745e9.6.2025.12.07.01.04.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Dec 2025 01:04:22 -0800 (PST)
+From: =?UTF-8?q?Johannes=20Br=C3=BCderl?= <johannes.bruederl@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
+	larsm17@gmail.com,
+	=?UTF-8?q?Johannes=20Br=C3=BCderl?= <johannes.bruederl@gmail.com>
+Subject: [PATCH v3 1/1] usb: core: add USB_QUIRK_NO_BOS for devices that hang on BOS descriptor
+Date: Sun,  7 Dec 2025 10:02:20 +0100
+Message-ID: <20251207090220.14807-1-johannes.bruederl@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <a9088e84-3800-4a87-a639-9a2a48036873@gmail.com>
+References: <a9088e84-3800-4a87-a639-9a2a48036873@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, 7 Dec 2025 08:55:59 +0900, Greg KH wrote:
-> On Sun, Dec 07, 2025 at 12:16:08AM +0100, Michal Pecio wrote:
-> > Hi,
-> >   
-> > > >> I got something. In my case everything seemed fine until I
-> > > >> unplugged the wifi adapter. And then the system still worked
-> > > >> for a few minutes before it froze.  
-> > 
-> > Sounds like memory corruption.
-> >   
-> > > > Zenm and I tested below changes which can also reproduce the
-> > > > symptom, so I wonder driver might assume urb is the first
-> > > > member of struct, but unfortunately I can't find that.  
-> > 
-> > That's what it seems to be doing, because it uses usb_init_urb()
-> > on urbs embedded in some struct and then usb_free_urb().
-> > 
-> > If you look what usb_free_urb() does, it decrements refcount and
-> > attempts to free urb. But here urb is a member of a larger struct,
-> > so I guess the whole struct is freed (and this was either
-> > intentional or a bug that didn't happen to blow up yet).  
-> 
-> That's not ok at all, it's amazing this is working today.  urbs need
-> to be "stand alone" structures and never embedded into anything else.
+Add USB_QUIRK_NO_BOS quirk flag to skip requesting the BOS descriptor
+for devices that cannot handle it.
 
-Is it though?
+Add Elgato 4K X (0fd9:009b) to the quirk table. This device hangs when
+the BOS descriptor is requested at SuperSpeed Plus (10Gbps).
 
-usb_init_urb() is exported and documented as below. Neither of which
-suggests that the function must not be used by drivers.
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=220027
+Signed-off-by: Johannes Brüderl <johannes.bruederl@gmail.com>
+---
+Hi Lars,
+you are right, good catch! This should be correctly sorted now.
 
-/**
- * usb_init_urb - initializes a urb so that it can be used by a USB driver
- * @urb: pointer to the urb to initialize
- *
- * Initializes a urb so that the USB subsystem can use it properly.
- *
- * If a urb is created with a call to usb_alloc_urb() it is not
- * necessary to call this function.  Only use this if you allocate the
- * space for a struct urb on your own.  If you call this function, be
- * careful when freeing the memory for your urb that it is no longer in
- * use by the USB core.
- *
- * Only use this function if you _really_ understand what you are doing.
- */
+v3: Move quirk entry to correct position in sorted VID:PID order.
+v2: Return -ENOMSG instead of 0 to properly indicate no BOS data.
 
-I see that there are some sound drivers which embed URBs in larger
-structures too, so if this is some tree-wide campaign there is a risk
-of breaking them too.
+BR,
+Johannes
 
-Regards,
-Michal
+ drivers/usb/core/config.c  | 5 +++++
+ drivers/usb/core/quirks.c  | 3 +++
+ include/linux/usb/quirks.h | 3 +++
+ 3 files changed, 11 insertions(+)
+
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+index baf5bc844b6f..2bb1ceb9d621 100644
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -1040,6 +1040,11 @@ int usb_get_bos_descriptor(struct usb_device *dev)
+ 	__u8 cap_type;
+ 	int ret;
+ 
++	if (dev->quirks & USB_QUIRK_NO_BOS) {
++		dev_dbg(ddev, "skipping BOS descriptor\n");
++		return -ENOMSG;
++	}
++
+ 	bos = kzalloc(sizeof(*bos), GFP_KERNEL);
+ 	if (!bos)
+ 		return -ENOMEM;
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 47f589c4104a..c4d85089d19b 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -450,6 +450,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	{ USB_DEVICE(0x0c45, 0x7056), .driver_info =
+ 			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
+ 
++	/* Elgato 4K X - BOS descriptor fetch hangs at SuperSpeed Plus */
++	{ USB_DEVICE(0x0fd9, 0x009b), .driver_info = USB_QUIRK_NO_BOS },
++
+ 	/* Sony Xperia XZ1 Compact (lilac) smartphone in fastboot mode */
+ 	{ USB_DEVICE(0x0fce, 0x0dde), .driver_info = USB_QUIRK_NO_LPM },
+ 
+diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
+index 59409c1fc3de..2f7bd2fdc616 100644
+--- a/include/linux/usb/quirks.h
++++ b/include/linux/usb/quirks.h
+@@ -75,4 +75,7 @@
+ /* short SET_ADDRESS request timeout */
+ #define USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT	BIT(16)
+ 
++/* skip BOS descriptor request */
++#define USB_QUIRK_NO_BOS			BIT(17)
++
+ #endif /* __LINUX_USB_QUIRKS_H */
+-- 
+2.52.0
+
 
