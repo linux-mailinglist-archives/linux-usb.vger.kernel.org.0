@@ -1,76 +1,78 @@
-Return-Path: <linux-usb+bounces-31241-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31240-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B93DCAB4F2
-	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 13:50:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FCDBCAB4E6
+	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 13:49:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1EF82307078C
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Dec 2025 12:49:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 30472305F665
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Dec 2025 12:49:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40ACD2F0C46;
-	Sun,  7 Dec 2025 12:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 766512ED853;
+	Sun,  7 Dec 2025 12:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gbu4CXgc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BwZRHrBA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B481E9906
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366122BEFFA
 	for <linux-usb@vger.kernel.org>; Sun,  7 Dec 2025 12:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765111760; cv=none; b=GbElg/S/ORdLPAfRvYbfU9SyNFgLRcc5Zf5MYioRS1cMlCNQFtWDl5LJPr34qt01lscUUEVAuWKR91vphQiCfK49sa6IsHvHixt2F3wpRMSH8EdO+k3Z6Bv7/W+xQnhEt64XuNjkbOHWTkpTJ90cZ3/R2IEo/Dc5KQzEffJIIqo=
+	t=1765111760; cv=none; b=jsuVRG35X0tB6y3y5Vy9YWVVIb6GEoo5+o/VKhwkb3nt+cnrfww9YNoixPwqPSxko4nepurlVoaDYsEg80Bm9zGKttF8RJgTzhBVt2u18+gkuqAk9xZQlmBSXFz00e9KdM8zkrYSpjeNQj9hTWUDD36PvRyiJ3Ikjfl8q44a9sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765111760; c=relaxed/simple;
-	bh=FX+8sBh0D0k7gtmDN0+MFagdL0M/PD/C6G2dNuAPiNw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UDlrJiafV/GcYvPwUvsYfJjxa55YL0CR7eLECzbfS2sOXvwXjTXEL4MQHC8O5SJ/C1tgmxa3iHhU7ONJVfRTnnfQAbVyZ7tQc3aY6g1QyZqx45+3bx7C3wLTp1Z+gdV8s7RkH9dTqz2cRAzCvasPqvoXx/CPHCLj11MYQulnpKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gbu4CXgc; arc=none smtp.client-ip=209.85.218.53
+	bh=Lot9yyrysMIoFKrFBRyHq7ofMZNCgMG6b0MvoWmbSp8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NNnJtaeyUL8Gv9z0AztyODENIgnSMC0LSI2xn7FCZS8VSWBhAzmcF/HDLk4ozCWy4sLGIj6vEjPTTxDU0RZLgyHxW5u5poWilYwL1j/kb0swyoAe0dgxRbSdxceoj3BIVc7mIDapLl9TzDiA6s4dcPg8dwsSAJzvCjk2Zau+VSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BwZRHrBA; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b75c7cb722aso504627566b.1
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b79f8f7ea43so612402466b.2
         for <linux-usb@vger.kernel.org>; Sun, 07 Dec 2025 04:49:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20230601; t=1765111756; x=1765716556; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sgZ0eJYW8otbjQ3WIsasw8sc769o73QNisF0rtObE7A=;
-        b=Gbu4CXgcobLbuAj9ck1oFBnQedc7+Bu1PlGolw2LrnP5j/g1qL0lm8Ro5GmL51A+Ax
-         mI+bcwIDtXuwyNGAjjblpNM8i+MMRcdY/eip8V0vJQ4yVLOHOGoLz/vgi/p+tMmjS2MH
-         CXfwEwFk16FU/pbYhkdnItRwUILjMyOzj3Qp2QY5wYeLmiTWh1SnmegIsPt76e2Bj5Gt
-         RIr91OW/2MvKAO1gTWvwi4R9C4ygUBY0Bn/J7Rkg5qL/kc63fqq/FcznDbDZA/HDzPae
-         C+9C+r5bsDHw57IAMrRiqaLSVZrbUwXcw9mNh0P0h48SAkrNkL2vqnMVqf3fEwzKgJ5A
-         KXiA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Iuw7MrNQpJ+liSkmkNaHY/c1VIRpuVgXZGRp2BUwU38=;
+        b=BwZRHrBAZQ83JDV7Kqz5xfSF9eetL784lWA6BWjV+BhGR9ijthN2YNU+VOBR6/XL3T
+         txMdI9AM3bTPBM5hrCSZS+RFNKNHqtFQ6JfDFZpRmP/irR5Wffv26/0xR8sk8Mr4o3Jg
+         +4kMkXrIkB7uGWInp2H4w8zh7UzH6HzDzy/oKmKN/q2gPJofVxcglZecHXaiUdfNmvhp
+         evPT00Kk2wFSdngrd45etEWYhGOYIPOHn1O7WCA6J/GXmaMs/ccjT3KKh35zOqpn9LMI
+         5BYdjn32FsZsDQq/TBSCs0Vm7Ofgyq1+thQ5YLotxUWF8aVT82tbTOj6J8PVK/gmAgun
+         yvkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1765111756; x=1765716556;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sgZ0eJYW8otbjQ3WIsasw8sc769o73QNisF0rtObE7A=;
-        b=nCac0RXvHm714uTw+4obEBur7JUsIP9n4oY49jgjeHsCtklVvl4gnzekt/lJQci8JD
-         euvQvB2kjSJPIjOyLPc/lA3THNF035jDwgqixq6Te4JFRnu9OPWfyGoSyHgr6kR8u+rH
-         u6TJXj6Gzo2fD/DTZSBXlka+nka4py9jkDzyo4oP9aKFR2+Nk8eqA2efMswWkrGv46QQ
-         Y3j4bt+zsav3fWZ9GeTEpnOhUplB6A5v01jsdeHNhpG6nb4jntBsTkHcVJ8HxgOqQMdj
-         bpMocqKtCulP1qkqSp4lvJqhJsgQvX4pU123VIF16+80uNS7H/IRf7hL3OuTVnxc8rOA
-         o9EQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVPoP0GBjeLBWGiwH699FROUZSWU5LTZ+KN1y/JB0DFJ376o8MGIIPuMKP5JNL+6pD0SiG/e7yo/X4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyY5XGe+I3OTP0riGcqO1DuxYF5/wekjd9GdIZYtwvLgs80ARtA
-	8JEbv28yT//ShxWv2734wYdXQ2DcuSiwyF3W6/3amZJqJfpfAa2HO0YtYVRyNw==
-X-Gm-Gg: ASbGncv7446kxMsfxdQ4CjPtVVP78NEtTCNYqmZJ9ReIwl6y4aFfAM+2OPeoIu2PjpC
-	HyCI5SloA+somv2H0KNXE5VkgH5Xo0lYhFeGbLADmd7C3tZQxFoDyrwEYgNN9WHFWBhARL2LGu4
-	/+JHZx1pnjVodzMoisx8coA8SepCOnHvrTlzvE2TrOmon+OSRaglHyxqvz+DTg4MQNEaaGQ1wUx
-	+JO96AMAaTVoVo/MzJ2WBTndgWBDcwEMS8CPE4cqMbgfDkFWGB0sCHOHS1AMVQqEi56cfQRRH0K
-	Mp7TpM97/+2qKl7EOBogL0rW29hEaO8UfLK7NJyd9aAxyfUF2NgCukmOgozx5f9QDW4mxUNLb3F
-	KqhkX9mKDYFkqnxaIqAHU9X7lUuFMdUNu12IVTgwO+CjlhqCRQN4hZwurTDPuvFULxC9Avcc+St
-	nEBs4HwzCu2PMeAdAJdONqPBv/I/VnoI0dKZITFCuS+Q0lc8Z1ooj5MUs9zbrDABTmZJxpz3yLw
-	GHSYGA65KOxez3o
-X-Google-Smtp-Source: AGHT+IHeMd1I7UftN9k36AnFkP3iiSo/Kt50+PZXp0E67sjZ/8vadRt+vTTWVoCd6F9E/0ysGllf/A==
-X-Received: by 2002:a17:907:96a6:b0:b72:91bc:9b35 with SMTP id a640c23a62f3a-b7a244e42e4mr487088166b.39.1765111755733;
-        Sun, 07 Dec 2025 04:49:15 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Iuw7MrNQpJ+liSkmkNaHY/c1VIRpuVgXZGRp2BUwU38=;
+        b=u5YOOK5oozBBALDWYLq592VDmmHAhd2Y/x2Gkj9MQF7kUwv6ZSggpfwzL//TA84GO0
+         s1v75bDwwPZy5Gat4oXbXz/zMiRUm5Yi/Rb5rFfH+bj3pr21B1c47NF611EgxjsE68vD
+         yB4DnIX5syD0wd8BXbL60RXvRrHkAGWTsDf4/iyEJp+Kjd70XWFKLG2ZMhS+jMcLXS0A
+         O4DOtNfybgDPEI4sTaZOu0AQtTQTHqGcGm+k4Oy72DHUlTQjDEdCb92huXp32sNJPwPa
+         2J6bQ3LYh1DzzV/LTW32/GUdBoHxLqiOkRHCZ9qLDuqckEd1I8pEeFHAKZhHhFMZxw8L
+         kEog==
+X-Forwarded-Encrypted: i=1; AJvYcCWXH/aKX4Spk+TXHSeFqrx+FIkh7Bk5cGy3o76pmHPtpvwyr+2+cm7pNREILAbKljrRjHu30M4iB08=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwY3zN3Uysrr4uBi9ALFYvrUVylG648YRRAqlu2NQdMDPul1axQ
+	Liq5L1NA+h6q6qInX/lzV9n46VcFtOivOmbtha3bNluTW754Qx7bkvxK
+X-Gm-Gg: ASbGnctYw7prRtqZUJtA5OFLk1aQLbHZwLyPCkhIXo8BNz4yez2SCjL0Q9xgMeC4kR/
+	ZNIvdMgoSjE0lAuNezVyY8v8o6iidvRP4IroJTxLvAxV/1Cn13sWEEsEuqVTOxIcJF+SOdWwwFk
+	/DgMoJ5IrbvisCZ/upPGKjQLRJZEUCuJx7EY3VUhk6V6lD2WQOmV2xugpUwZN6o4vzazMWdiSbx
+	iwFIchnKKJi2E4Nc0bcvTlr8pwEU2LHz5PmJIWyoPpy3dZefL1B4+e+32Vaz3nRw8wPmkR3N8Kn
+	p8mM791uxbMY5I+tjDa7ZzzOlfju/D7QJLWjXhs3Nllzvcucv++nku3oen1NlQR7X1fSmkZCx2m
+	tNOuXMJC5xh8RgVGefmEMwqvO7G6InxPyx4VBasJZrSiGtuw+SenZ2ChZcQoF6ID7nlcEN/Brxl
+	a/W+zuywTGYp60JYY7JepcR0zPmLRzFhVOeJN1tS9DF3AZ8BXtORKcDa7rxjRUYZXuvDd2ulxbD
+	QNfPlnE8yIiuM0T
+X-Google-Smtp-Source: AGHT+IHLzMKabsop3+vKMOfNa/2/F5jDp+SeGjf8fqwP0dHCFJSa+7kOwDVwH52EYDKJMBc3IQm3QQ==
+X-Received: by 2002:a17:907:d8b:b0:b76:23df:c993 with SMTP id a640c23a62f3a-b7a2481dccdmr511981766b.56.1765111756345;
+        Sun, 07 Dec 2025 04:49:16 -0800 (PST)
 Received: from localhost.localdomain (host86-162-200-138.range86-162.btcentralplus.com. [86.162.200.138])
         by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b79f445967fsm848078366b.10.2025.12.07.04.49.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Dec 2025 04:49:15 -0800 (PST)
+        Sun, 07 Dec 2025 04:49:16 -0800 (PST)
 From: Biju <biju.das.au@gmail.com>
 X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
 To: Alan Stern <stern@rowland.harvard.edu>,
@@ -84,10 +86,12 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 0/2] usb: host: Drop resume calls on {e,o}hci_platform_suspend()
-Date: Sun,  7 Dec 2025 12:47:25 +0000
-Message-ID: <20251207124742.96526-1-biju.das.jz@bp.renesas.com>
+Subject: [PATCH 1/2] usb: host: ehci-platform: Drop ehci_resume from ehci_platform_suspend()
+Date: Sun,  7 Dec 2025 12:47:26 +0000
+Message-ID: <20251207124742.96526-2-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251207124742.96526-1-biju.das.jz@bp.renesas.com>
+References: <20251207124742.96526-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -98,23 +102,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Biju Das <biju.das.jz@bp.renesas.com>
 
-As per the suspend_devices_and_enter() [1], if .suspend() fails, it invoke
-the .resume() callback. This patch series drops redundant resume() from
-{e,o}hci_platform_suspend()
+As per the suspend_devices_and_enter(), if .suspend() fails, it invoke the
+.resume() callback. Currently ehci_resume() is called in 2 times if the
+reset_control_assert fails in ehci_platform_suspend(). Drop the duplicate
+ehci_resume() from ehci_platform_suspend() callback, as it is called
+later from ehci_platform_resume() callback.
 
-[1]
-https://elixir.bootlin.com/linux/v6.18-rc7/source/kernel/power/suspend.c#L519
+Also, drop the other duplicate callbacks pdata->power_on() and
+quirk_poll_init().
 
-Biju Das (2):
-  usb: host: ehci-platform: Drop ehci_resume from
-    ehci_platform_suspend()
-  usb: host: ohci-platform: Drop ohci_resume from
-    ohci_platform_suspend()
-
+Fixes: c31a401fe7ab ("usb: host: ehci-platform: Call reset assert/deassert on suspend/resume")
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
  drivers/usb/host/ehci-platform.c | 13 +------------
- drivers/usb/host/ohci-platform.c | 10 +---------
- 2 files changed, 2 insertions(+), 21 deletions(-)
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
+diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+index f61f095cedab..253405efe50e 100644
+--- a/drivers/usb/host/ehci-platform.c
++++ b/drivers/usb/host/ehci-platform.c
+@@ -454,18 +454,7 @@ static int __maybe_unused ehci_platform_suspend(struct device *dev)
+ 	if (pdata->power_suspend)
+ 		pdata->power_suspend(pdev);
+ 
+-	ret = reset_control_assert(priv->rsts);
+-	if (ret) {
+-		if (pdata->power_on)
+-			pdata->power_on(pdev);
+-
+-		ehci_resume(hcd, false);
+-
+-		if (priv->quirk_poll)
+-			quirk_poll_init(priv);
+-	}
+-
+-	return ret;
++	return reset_control_assert(priv->rsts);
+ }
+ 
+ static int __maybe_unused ehci_platform_resume(struct device *dev)
 -- 
 2.43.0
 
