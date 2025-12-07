@@ -1,76 +1,76 @@
-Return-Path: <linux-usb+bounces-31240-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31242-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FCDBCAB4E6
-	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 13:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0777BCAB4F5
+	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 13:50:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 30472305F665
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Dec 2025 12:49:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AE83530847B8
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Dec 2025 12:49:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 766512ED853;
-	Sun,  7 Dec 2025 12:49:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2D5A2F2610;
+	Sun,  7 Dec 2025 12:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BwZRHrBA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K/p2mTnO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366122BEFFA
-	for <linux-usb@vger.kernel.org>; Sun,  7 Dec 2025 12:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94092C11CA
+	for <linux-usb@vger.kernel.org>; Sun,  7 Dec 2025 12:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765111760; cv=none; b=jsuVRG35X0tB6y3y5Vy9YWVVIb6GEoo5+o/VKhwkb3nt+cnrfww9YNoixPwqPSxko4nepurlVoaDYsEg80Bm9zGKttF8RJgTzhBVt2u18+gkuqAk9xZQlmBSXFz00e9KdM8zkrYSpjeNQj9hTWUDD36PvRyiJ3Ikjfl8q44a9sc=
+	t=1765111761; cv=none; b=TB4e5yYQu3uOBvKqfHxelEp9HbO2q5s4/pzt7r8vXJaAp1G+qOs7+x+My3GtAgbb11RKONdxxb7EeiPlLyvtZj9/04omSCTGcJ5pNugVfhj228Rz2bruWiQwDtrCMkN39PACtnMg2M/EWiEV0+zyCCqYdWDwXMzKXqq14htgCd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765111760; c=relaxed/simple;
-	bh=Lot9yyrysMIoFKrFBRyHq7ofMZNCgMG6b0MvoWmbSp8=;
+	s=arc-20240116; t=1765111761; c=relaxed/simple;
+	bh=bQFpEG3o9LQ536f6JxBdq8z7Y1JAJhEjOJQfUO1giYg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NNnJtaeyUL8Gv9z0AztyODENIgnSMC0LSI2xn7FCZS8VSWBhAzmcF/HDLk4ozCWy4sLGIj6vEjPTTxDU0RZLgyHxW5u5poWilYwL1j/kb0swyoAe0dgxRbSdxceoj3BIVc7mIDapLl9TzDiA6s4dcPg8dwsSAJzvCjk2Zau+VSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BwZRHrBA; arc=none smtp.client-ip=209.85.218.45
+	 MIME-Version; b=lk7dtXqeX954SPkU3iG34VTME/7Cr7AdvjohYHNBE3rG9fjjabBfmnDZY1vxBDZpBeuCqw7kxPVeE18Pj98qYtf3JhlDWjcWGlhIjdNgJLFdyOUWwXWoHY/jzSLV66JF04qQoCjYeNbK7oVo5aDBfLUZx/+Q7xik4iClCTEhOy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K/p2mTnO; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b79f8f7ea43so612402466b.2
-        for <linux-usb@vger.kernel.org>; Sun, 07 Dec 2025 04:49:17 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b735b7326e5so565759066b.0
+        for <linux-usb@vger.kernel.org>; Sun, 07 Dec 2025 04:49:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765111756; x=1765716556; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765111757; x=1765716557; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Iuw7MrNQpJ+liSkmkNaHY/c1VIRpuVgXZGRp2BUwU38=;
-        b=BwZRHrBAZQ83JDV7Kqz5xfSF9eetL784lWA6BWjV+BhGR9ijthN2YNU+VOBR6/XL3T
-         txMdI9AM3bTPBM5hrCSZS+RFNKNHqtFQ6JfDFZpRmP/irR5Wffv26/0xR8sk8Mr4o3Jg
-         +4kMkXrIkB7uGWInp2H4w8zh7UzH6HzDzy/oKmKN/q2gPJofVxcglZecHXaiUdfNmvhp
-         evPT00Kk2wFSdngrd45etEWYhGOYIPOHn1O7WCA6J/GXmaMs/ccjT3KKh35zOqpn9LMI
-         5BYdjn32FsZsDQq/TBSCs0Vm7Ofgyq1+thQ5YLotxUWF8aVT82tbTOj6J8PVK/gmAgun
-         yvkw==
+        bh=v+8cllFdmmZn50x4l8XYZK9RXQXxmWBAkLfGXs7iEf0=;
+        b=K/p2mTnOjDFUbX8/I2xpJm10EtLnLD8QLDQvtpy8kyIhN4Ejetp8vQF8g22nI/Plhj
+         SeZ2TPtUYVjktIIC8GNr4bbUe11bcxCSHrIadLm4dYu2jx808hzOtw7O0twqYqsTPDPs
+         p3mY6tU/OSl1kZMgEIm2lkLRncky9bf24MSpRZPmJ1DG/bUyUWAhUQq6ImTlNF4OFH0W
+         Bmo+6ej4h8lDxUt0REVbr/Xvu1e1rUBNhnOLnxaw0XkS3rHuS1D5Sp2KFs44hRCK+rCF
+         bWxLFU2KHGuohLT2rQxKTOq7IoA/n8JGlpDH59FpIrvrsCSdV+s+KQPii7RvOJ+G/2/1
+         ES0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765111756; x=1765716556;
+        d=1e100.net; s=20230601; t=1765111757; x=1765716557;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Iuw7MrNQpJ+liSkmkNaHY/c1VIRpuVgXZGRp2BUwU38=;
-        b=u5YOOK5oozBBALDWYLq592VDmmHAhd2Y/x2Gkj9MQF7kUwv6ZSggpfwzL//TA84GO0
-         s1v75bDwwPZy5Gat4oXbXz/zMiRUm5Yi/Rb5rFfH+bj3pr21B1c47NF611EgxjsE68vD
-         yB4DnIX5syD0wd8BXbL60RXvRrHkAGWTsDf4/iyEJp+Kjd70XWFKLG2ZMhS+jMcLXS0A
-         O4DOtNfybgDPEI4sTaZOu0AQtTQTHqGcGm+k4Oy72DHUlTQjDEdCb92huXp32sNJPwPa
-         2J6bQ3LYh1DzzV/LTW32/GUdBoHxLqiOkRHCZ9qLDuqckEd1I8pEeFHAKZhHhFMZxw8L
-         kEog==
-X-Forwarded-Encrypted: i=1; AJvYcCWXH/aKX4Spk+TXHSeFqrx+FIkh7Bk5cGy3o76pmHPtpvwyr+2+cm7pNREILAbKljrRjHu30M4iB08=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY3zN3Uysrr4uBi9ALFYvrUVylG648YRRAqlu2NQdMDPul1axQ
-	Liq5L1NA+h6q6qInX/lzV9n46VcFtOivOmbtha3bNluTW754Qx7bkvxK
-X-Gm-Gg: ASbGnctYw7prRtqZUJtA5OFLk1aQLbHZwLyPCkhIXo8BNz4yez2SCjL0Q9xgMeC4kR/
-	ZNIvdMgoSjE0lAuNezVyY8v8o6iidvRP4IroJTxLvAxV/1Cn13sWEEsEuqVTOxIcJF+SOdWwwFk
-	/DgMoJ5IrbvisCZ/upPGKjQLRJZEUCuJx7EY3VUhk6V6lD2WQOmV2xugpUwZN6o4vzazMWdiSbx
-	iwFIchnKKJi2E4Nc0bcvTlr8pwEU2LHz5PmJIWyoPpy3dZefL1B4+e+32Vaz3nRw8wPmkR3N8Kn
-	p8mM791uxbMY5I+tjDa7ZzzOlfju/D7QJLWjXhs3Nllzvcucv++nku3oen1NlQR7X1fSmkZCx2m
-	tNOuXMJC5xh8RgVGefmEMwqvO7G6InxPyx4VBasJZrSiGtuw+SenZ2ChZcQoF6ID7nlcEN/Brxl
-	a/W+zuywTGYp60JYY7JepcR0zPmLRzFhVOeJN1tS9DF3AZ8BXtORKcDa7rxjRUYZXuvDd2ulxbD
-	QNfPlnE8yIiuM0T
-X-Google-Smtp-Source: AGHT+IHLzMKabsop3+vKMOfNa/2/F5jDp+SeGjf8fqwP0dHCFJSa+7kOwDVwH52EYDKJMBc3IQm3QQ==
-X-Received: by 2002:a17:907:d8b:b0:b76:23df:c993 with SMTP id a640c23a62f3a-b7a2481dccdmr511981766b.56.1765111756345;
+        bh=v+8cllFdmmZn50x4l8XYZK9RXQXxmWBAkLfGXs7iEf0=;
+        b=fo6bILMMenH+epPB4F1Av/jNhdO+pZzLFD+X0/gfjLSTqfH9NY8BRMzedbXAvBrfhL
+         km4/Q39+BABdb4nplXf3y2wwPoY8l49koVzBXX/sVyOGv9R23B3Cs8ZmsZfJQqVoVTfx
+         XERyD4I3JAlYI5bbyzZ5/7I8mCChFoIZuEmEFEz77wMrA4ERUPyKtO344WlmiWnSpXS0
+         mUW9envGo4/z19gZ7nPXWGqUCLLozlyfOEcSYMQytphTFQ+Vm4UjNCbd7/eK5HFEbsrz
+         XHDGvACehW6FKYjCe3Uqw5ZOM35auyp8J2JSFUPCvr/Lf1XeRutN37iatTh6jCZYzHD3
+         qbdg==
+X-Forwarded-Encrypted: i=1; AJvYcCWvYn4S0FbLDlxUqLodhyKXNVwdvZlu7pznSkP4ZiqBeWt5wKB//f9W+UB1danf+NE3McZSPyR1ATo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTaXiC8RkTB+EWm2WK3164HLSeEQz/WygWE7Ss+/ulhyc1GanP
+	WwZ3QJssR4F4NhImVt4YrwwrTHQkYPJzxRv4hN4NkrnDVitRkL9SC6Nx
+X-Gm-Gg: ASbGnct0hXyvgaaOXVU8b091aDxBVU0Y0mkB6mb9xApxlZTdfq8va6K76BrLEPVOg+z
+	jkT4mqQeYaQzK5qmCLnfOdrNKkw2aB5uFSHdcjEoUke6R82HD/kc27ZXDCdRTM7oZpYrusqP7SL
+	vmeoF5hAj1EwxIh+SWQTivFZofsD2OnzSgZXcGmsmBWBWpyfKTUZVuXuYTXH1ukQQ5kwrNnxTKv
+	emt0M/bBG/q2ekqeXD6n0z7BUz0KABFa4uJV6bKL8bnQNNHoIjNJhItw25lTn+vJzkiNeHxWiCw
+	kjGf5rdR7mspjmpvMLvSUq+YLnFCKWx2IZVH1UxTMhKCRBTrwptgn3aZxGvzqXuCjFQZsUq6e/H
+	zFr2WwCa7+4ARP74iAoqFqiB+1fiv71nHRikPIl5CCaVWrKQs7bZncxtcrPiCm0DbFanW2PRzZM
+	hjwBpwql3tLhOF+jA26R/lILz3XobDMdb7F5ymI/aJURn+jGzsN9Z805AxcC33k9rykj0XtztVb
+	AZdd3orniX0SsT0
+X-Google-Smtp-Source: AGHT+IE8fOENHVwPtQI3pGjpRrNOqeblBeyp2cP1u+Su1TipXnFYjjo9bgkVLkCyRo2mgZyc5c7Cfw==
+X-Received: by 2002:a17:907:3f8e:b0:b71:60a3:a8b9 with SMTP id a640c23a62f3a-b7a23b7f165mr540412066b.29.1765111756891;
         Sun, 07 Dec 2025 04:49:16 -0800 (PST)
 Received: from localhost.localdomain (host86-162-200-138.range86-162.btcentralplus.com. [86.162.200.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b79f445967fsm848078366b.10.2025.12.07.04.49.15
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b79f445967fsm848078366b.10.2025.12.07.04.49.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 07 Dec 2025 04:49:16 -0800 (PST)
 From: Biju <biju.das.au@gmail.com>
@@ -86,9 +86,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 1/2] usb: host: ehci-platform: Drop ehci_resume from ehci_platform_suspend()
-Date: Sun,  7 Dec 2025 12:47:26 +0000
-Message-ID: <20251207124742.96526-2-biju.das.jz@bp.renesas.com>
+Subject: [PATCH 2/2] usb: host: ohci-platform: Drop ohci_resume from ohci_platform_suspend()
+Date: Sun,  7 Dec 2025 12:47:27 +0000
+Message-ID: <20251207124742.96526-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251207124742.96526-1-biju.das.jz@bp.renesas.com>
 References: <20251207124742.96526-1-biju.das.jz@bp.renesas.com>
@@ -103,44 +103,40 @@ Content-Transfer-Encoding: 8bit
 From: Biju Das <biju.das.jz@bp.renesas.com>
 
 As per the suspend_devices_and_enter(), if .suspend() fails, it invoke the
-.resume() callback. Currently ehci_resume() is called in 2 times if the
-reset_control_assert fails in ehci_platform_suspend(). Drop the duplicate
-ehci_resume() from ehci_platform_suspend() callback, as it is called
-later from ehci_platform_resume() callback.
+.resume() callback. Currently ohci_resume() is called in 2 times if the
+reset_control_assert fails in ohci_platform_suspend(). Drop the duplicate
+ohci_resume() from ohci_platform_suspend() callback, as it is called
+later from ohci_platform_resume() callback.
 
-Also, drop the other duplicate callbacks pdata->power_on() and
-quirk_poll_init().
+Also, drop the other duplicate callback pdata->power_on().
 
-Fixes: c31a401fe7ab ("usb: host: ehci-platform: Call reset assert/deassert on suspend/resume")
+Fixes: e4d9da32bf60 ("usb: host: ohci-platform: Call reset assert/deassert on suspend/resume")
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- drivers/usb/host/ehci-platform.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+ drivers/usb/host/ohci-platform.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-index f61f095cedab..253405efe50e 100644
---- a/drivers/usb/host/ehci-platform.c
-+++ b/drivers/usb/host/ehci-platform.c
-@@ -454,18 +454,7 @@ static int __maybe_unused ehci_platform_suspend(struct device *dev)
+diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+index 2e4bb5cc2165..5342cffbee47 100644
+--- a/drivers/usb/host/ohci-platform.c
++++ b/drivers/usb/host/ohci-platform.c
+@@ -281,15 +281,7 @@ static int ohci_platform_suspend(struct device *dev)
  	if (pdata->power_suspend)
  		pdata->power_suspend(pdev);
  
--	ret = reset_control_assert(priv->rsts);
+-	ret = reset_control_assert(priv->resets);
 -	if (ret) {
 -		if (pdata->power_on)
 -			pdata->power_on(pdev);
 -
--		ehci_resume(hcd, false);
--
--		if (priv->quirk_poll)
--			quirk_poll_init(priv);
+-		ohci_resume(hcd, false);
 -	}
 -
 -	return ret;
-+	return reset_control_assert(priv->rsts);
++	return reset_control_assert(priv->resets);
  }
  
- static int __maybe_unused ehci_platform_resume(struct device *dev)
+ static int ohci_platform_resume_common(struct device *dev, bool hibernated)
 -- 
 2.43.0
 
