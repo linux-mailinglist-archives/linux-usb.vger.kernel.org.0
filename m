@@ -1,113 +1,282 @@
-Return-Path: <linux-usb+bounces-31237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C907CAB399
-	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 11:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C5BACCAB3B1
+	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 11:47:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DE23A3066714
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Dec 2025 10:37:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A5BED3032FFC
+	for <lists+linux-usb@lfdr.de>; Sun,  7 Dec 2025 10:47:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EAD22EB5CD;
-	Sun,  7 Dec 2025 10:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB6A28489B;
+	Sun,  7 Dec 2025 10:47:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="Txdp2IUY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VO6oeVmP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA78A221FCF;
-	Sun,  7 Dec 2025 10:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6113D76
+	for <linux-usb@vger.kernel.org>; Sun,  7 Dec 2025 10:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765103872; cv=none; b=Cj1hY/cAou1E4HpDqjrTEkiPXd8qkJa294cic84bx5SluHCu6MrRLoqct9Cud3Me0WjUvFz9LUTrZbkQJFT6zO9TJxMmrTe+b9pQTTYLOgS6gsSFLX2l4WL1dqe4bD8mMJ/D9Et5Va9e4qQl/Ef4vSdAw4hyKokFB6wfYQaD2OU=
+	t=1765104468; cv=none; b=i0i5fy6fsDnARLK6/FyEDO/AT0Gevgu42mCJxHD72WtU6/bO7Woa8Rp3LpRnXuYNTjztHIMBVl2JGK8PAyAIcDX9sOm9ibr1/+WdOpCP7nEL/a9Ze3Fzw6YoVqq171nUyH7BDxcEW7EbnHrN56IyQuGYA9SB68jURN/YsgxIPYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765103872; c=relaxed/simple;
-	bh=f58tmviWW8wB6CDXyLDjtKl6eAJO2Th8XtawvDxeRq0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qZpfnU294/nqweY+4vjdFlZ4pfqFaR6DGRgoc/y5qLrxTYd7S7LDM2ukQxgQ/yYaNdas07lXlBNspoHS8Z+Xu3tPALKTzblVm0ZBFIRaTJxVOhkoaA7h94rl1VsRE5YuGNARm+uYteMEFx60IoFf98OD504GaSC76CGRqw1lRx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=Txdp2IUY; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 0BC766000860;
-	Sun,  7 Dec 2025 10:37:41 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id 1B9Dpx7YnSAb; Sun,  7 Dec 2025 10:37:38 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 43A16600086B;
-	Sun,  7 Dec 2025 10:37:37 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1765103858;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AJWxtI4gCfBR7mMObe5wer/KxRtyUAzfWw+A7UhxlwM=;
-	b=Txdp2IUYBZ08pj1l70+nHFNe697eFIh3dJ7NihA/rJ90d6Z/FKx0OrmByop4yJRGPz+4dW
-	fHOvLeg7pV6+bEumOJ9UoAOYyvTBUcFBt2iDJDz04MkrwWt1EprKQWK6bMymYc55KLrSNg
-	X1kyPaWDvJP6JcAiNbUtuKmuHynQ2eQV2om+6/jAEkIZz7a1wxrZWSFuoJnQgJsjM/Udw9
-	ldui40CscTkQu63KIi2IRaWlm1tPmj/MfuofutDUh2txBukCq59xl0bLfONfMUuH07iPUv
-	KfWGP20rwQgizWBBptMZKEGAqbxkB2K49q7SZd71eV0OpiteDFj2h4O4MqllDg==
-Received: from [IPV6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde] (unknown [IPv6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id C3D18360105;
-	Sun,  7 Dec 2025 10:37:35 +0000 (WET)
-Message-ID: <b03b9b3e-14b3-42e3-96e5-7ca48d91be94@tecnico.ulisboa.pt>
-Date: Sun, 7 Dec 2025 10:37:31 +0000
+	s=arc-20240116; t=1765104468; c=relaxed/simple;
+	bh=xP+0SVtVspi0+G79aNp9AyFHmC9yiDXopoang1jkb5o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kKucF3oKoNGqyeDzPTU7BginlOzRMyqpaOeH2PkEijMIA4SWbyH7zCbagy3a4IzGX9pzO76W7I5w/oJJ9Yhkk1jSaOS828dTIM1uaFygUjiermcF5WeV53uektz6jOXFDZ5EQTqOAR3vh13y+KghIIcDQf3AK+MdfC3seb9m6lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VO6oeVmP; arc=none smtp.client-ip=209.85.167.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-4510974a8cdso1925151b6e.0
+        for <linux-usb@vger.kernel.org>; Sun, 07 Dec 2025 02:47:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765104465; x=1765709265; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7gFTWgF5R594M9CAV4R1m+SIXDgDwwP/nrl26geopHY=;
+        b=VO6oeVmP5emiL5bZpceYyaJm9eLmfNpqgCa978BFerJAQ8Ly0poapGJs3XjaKl76kK
+         Ku5tadIw7zvXghK3kDUUdLPv1yr6aZAKtEBQPWNN9PYWx9zMGyBU0g/7smBhD6/8+3mX
+         8WpyJ98fgCPJewLWtjt42outCMKnXzOSfUV4GlLKUeFqKvbvFMX9I3xcK7NngxnUX38C
+         VijmyV4SfLzzzMCJ0RihZy13gNjSsVAAqqlpzbhizWoDMIDdkSiHpsKqYBDczVFl38Z6
+         lQlbzF28cqDqvtzlWAZzKYnDp/0gy3Q+DTV+fC/FeRCrH7acd7AxIVZYmZ+AGr8kCJKB
+         7BhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765104465; x=1765709265;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7gFTWgF5R594M9CAV4R1m+SIXDgDwwP/nrl26geopHY=;
+        b=ueLjPFNS1eEYq3vNptiq24ZH4EonJ4Px/gVkb9AZJLwhabw6wMxnv2JdEitSi947PI
+         xOc15t0gbg6A9CjWQth9321YoDwzhx0pyvvNwr83fptLLI9DLTi/IVQNIKv7DuhSvW2d
+         l8H1M+DcieRUHkc9z2+uuePwW3SxJ5nLgq7lP72s5W02iPiijJZTOn9ReDtMFqxxn5v0
+         s+odZ0JGsVAFpWfZN3p6H+3MhNwQrfij9rrhBpNwJRRfZgYgCGQkfavIMonRMzUrpEVO
+         UolYHeKxKnD+dGQxl4Em/dws33830OGDtlIUAUMUUP2NkUMXKEGcmB5Lw3jHYunumxRU
+         Rp+w==
+X-Gm-Message-State: AOJu0Yw5QwE8VwgrvCO3I0bRMxSYQ1HpvHC+RIIS+/yM5jNujki2nyss
+	Iv8JumDRMcFaxiQASAPrU+FtHfI/2ATbeHURcqUPaag6y4aA1iHY2KivHtwZER37yBU0OtObbgO
+	EZZtHUuMIVcCcbZjVOA/S8ynzvDyjC6A6myCnztELHQ==
+X-Gm-Gg: ASbGnctAlq9Wx0ZzCfweiudea++onwopslACZypzLtNeEMS2bPmZp3answ0bKNJ0D8G
+	/ifKDAA/+x7Gm71OOgLYXq/+SCMvrQDdMsCjjiu1TuwCAVasvqMZayFhGrrym/OWGnMzmdcBmna
+	fcqKVF8+vYnY1DteX7GSb1NHWpAwFEoVv64pO8pLHRVMQYzx4heGuRsHcH3CynNnCMMbJpBwBiw
+	70YHa/flQ7g/VKgX5wbOcHT2smL78XoE3o7kYMksoyxlqhRUKFoXTN7RJKMof7Bhy7FvlAC
+X-Google-Smtp-Source: AGHT+IGHwp9fLSkW3X2v68K70UtwVPYj7VQfoCv0ml/ie/Bj5RT0WLBhWSufbUsum2cNscbM/C2ejRg+0ybP0r/3+Dg=
+X-Received: by 2002:a05:6808:6507:b0:450:b215:8f22 with SMTP id
+ 5614622812f47-4539e098cc9mr1889509b6e.55.1765104465284; Sun, 07 Dec 2025
+ 02:47:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] usb: host: tegra: Remove redundant
- pm_runtime_mark_last_busy() call
-To: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org
-References: <20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt>
- <20251204-diogo-tegra_phy-v1-1-51a2016d0be8@tecnico.ulisboa.pt>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-In-Reply-To: <20251204-diogo-tegra_phy-v1-1-51a2016d0be8@tecnico.ulisboa.pt>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <2025120708-header-startling-ffaf@gregkh> <20251207012059.7899-1-johannes.bruederl@gmail.com>
+ <20251207084012.7c232e52.michal.pecio@gmail.com> <CAP=XvD+dNNDj75DYjjByE3o7F8i-QxusAdz-5+hG24fCesWYRw@mail.gmail.com>
+ <20251207104505.1d5f3718.michal.pecio@gmail.com>
+In-Reply-To: <20251207104505.1d5f3718.michal.pecio@gmail.com>
+From: =?UTF-8?Q?Johannes_Br=C3=BCderl?= <johannes.bruederl@gmail.com>
+Date: Sun, 7 Dec 2025 11:47:34 +0100
+X-Gm-Features: AQt7F2py01xPCU7ZUjfuTuVkF92Yyvzr36_aUtaq2WYZeELrkvR5rjuPGiEYRa4
+Message-ID: <CAP=XvDJJP2orxYcgiKzp0FrQE2UMiXndZe8Z6BdBRFvkujWu5w@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: core: add USB_QUIRK_NO_BOS for devices that hang
+ on BOS descriptor
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Please ignore this patch as this has already been addressed in a patch
-in this merge window; sorry for the extra noise.
+On Sun, Dec 7, 2025 at 10:45=E2=80=AFAM Michal Pecio <michal.pecio@gmail.co=
+m> wrote:
+>
+> On Sun, 7 Dec 2025 10:22:41 +0100, Johannes Br=C3=BCderl wrote:
+> > Here's the BOS Descriptor section when running w/ root.
+> > This is without this patch, so it "reconnected" with SuperSpeed (5Gbps)=
+.
+> >
+> > Binary Object Store Descriptor:
+> >   bLength                 5
+> >   bDescriptorType        15
+> >   wTotalLength       0x0016
+> >   bNumDeviceCaps          2
+> >   USB 2.0 Extension Device Capability:
+> >     bLength                 7
+> >     bDescriptorType        16
+> >     bDevCapabilityType      2
+> >     bmAttributes   0x00000000
+> >       (Missing must-be-set LPM bit!)
+> >   SuperSpeed USB Device Capability:
+> >     bLength                10
+> >     bDescriptorType        16
+> >     bDevCapabilityType      3
+> >     bmAttributes         0x00
+> >     wSpeedsSupported   0x000e
+> >       Device can operate at Full Speed (12Mbps)
+> >       Device can operate at High Speed (480Mbps)
+> >       Device can operate at SuperSpeed (5Gbps)
+> >     bFunctionalitySupport   3
+> >       Lowest fully-functional device speed is SuperSpeed (5Gbps)
+> >     bU1DevExitLat           0 micro seconds
+> >     bU2DevExitLat           0 micro seconds
+> >
+> > (Missing must-be-set LPM bit!) seems to be weird? As it looks like
+> > just nulled data.
+>
+> OK, so it's broken during enumeration and after enumeration.
+>
+> But that's the "fallback" case after hanging during SS+ enumeration,
+> which we would like to prevent from happening. What about 5gbps ports,
+> does it work correctly at SS or still report zero LPM?
+>
+> And running at SS+ with the patch applied, does the device produce
+> sensible BOS descriptor? The previous one did.
+>
+> What if you extend the patch to also apply at SS? It won't fix LPM
+> during enumeration, but would it fix the descriptor seen by lsusb?
 
-On 12/4/25 21:27, Diogo Ivo wrote:
-> As pm_runtime_put_autosuspend() called at the end of tegra_xhci_id_work()
-> already calls pm_runtime_mark_last_busy() remove the prior redundant call.
-> 
-> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-> ---
->   drivers/usb/host/xhci-tegra.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-> index 5255b1002893..9c69fccdc6e8 100644
-> --- a/drivers/usb/host/xhci-tegra.c
-> +++ b/drivers/usb/host/xhci-tegra.c
-> @@ -1399,8 +1399,6 @@ static void tegra_xhci_id_work(struct work_struct *work)
->   		}
->   
->   		tegra_xhci_set_port_power(tegra, true, true);
-> -		pm_runtime_mark_last_busy(tegra->dev);
-> -
->   	} else {
->   		if (tegra->otg_usb3_port >= 0)
->   			tegra_xhci_set_port_power(tegra, false, false);
-> 
+Hello Michal,
+
+very good questions.. the result was surprising to me.
+
+1) How does it do on 5GBps port?
+
+Without patch:
+
+[ 1522.177297] usb 6-1: new SuperSpeed USB device number 4 using xhci_hcd
+[ 1527.440481] usb 6-1: unable to get BOS descriptor or descriptor too shor=
+t
+[ 1527.465514] usb 6-1: unable to read config index 0 descriptor/start: -71
+[ 1527.465520] usb 6-1: can't read configurations, error -71
+[ 1527.648035] usb 6-1: new SuperSpeed USB device number 5 using xhci_hcd
+[ 1527.839295] usb 6-1: LPM exit latency is zeroed, disabling LPM.
+
+Looks like the BOS descriptor cannot be read either.
+
+Any, very interesting:
+
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x0016
+  bNumDeviceCaps          2
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x00000000
+      (Missing must-be-set LPM bit!)
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   3
+      Lowest fully-functional device speed is SuperSpeed (5Gbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+
+Very interesting - even reading it "manually" via lsusb - seems to
+fail, even at SS.
+
+2) Does it produce a sensible BOS descriptor post-patch at SS+ ? It
+looks like it.
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x002a
+  bNumDeviceCaps          3
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x0000f41e
+      BESL Link Power Management (LPM) Supported
+      Baseline BESL value    400 us
+      Deep BESL value      10000 us
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat        2047 micro seconds
+  SuperSpeedPlus USB Device Capability:
+    bLength                20
+    bDescriptorType        16
+    bDevCapabilityType     10
+    bmAttributes         0x00000001
+      Sublink Speed Attribute count 2
+      Sublink Speed ID count 1
+    wFunctionalitySupport   0x1100
+      Min functional Speed Attribute ID: 0
+      Min functional RX lanes: 1
+      Min functional TX lanes: 1
+    bmSublinkSpeedAttr[0]   0x000a4030
+      Speed Attribute ID: 0 10Gb/s Symmetric RX SuperSpeedPlus
+    bmSublinkSpeedAttr[1]   0x000a40b0
+      Speed Attribute ID: 0 10Gb/s Symmetric TX SuperSpeedPlus
+
+3) What if I apply the patch to SS as well?
+
+Connect:
+[    3.293251] usb 6-1: new SuperSpeed USB device number 2 using xhci_hcd
+[    3.349030] usb 6-1: skipping BOS descriptor
+[    3.429817] usb 6-1: New USB device found, idVendor=3D0fd9,
+idProduct=3D009c, bcdDevice=3D 0.02
+[    3.429825] usb 6-1: New USB device strings: Mfr=3D6, Product=3D7, Seria=
+lNumber=3D3
+[    3.429828] usb 6-1: Product: Elgato 4K X
+[    3.429830] usb 6-1: Manufacturer: Elgato
+[    3.429833] usb 6-1: SerialNumber: A7SNB517214G5K
+[    9.019651] usb 6-1: 3:2: failed to get current value for ch 0 (-22)
+[    9.028103] usb 6-1: Found UVC 1.00 device Elgato 4K X (0fd9:009c)
+
+sudo lsusb -v -d 0fd9:009c
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x0016
+  bNumDeviceCaps          2
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x00000000
+      (Missing must-be-set LPM bit!)
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   3
+      Lowest fully-functional device speed is SuperSpeed (5Gbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+
+Again (Missing must-be-set LPM bit!).
+
+So.. if i summarize it correctly: on SS, BOS fetch seems to fail
+immediately when connecting, but also "later" when I use lsusb.
+But, on SS+, if i skip BOS fetch on connect, it works when done later...
+
+For what it's worth: I've recorded a few hours of Gameplay with the
+patch, and rebooted a couple times, it seems to do the trick.
+
+BR,
+Johannes
 
