@@ -1,128 +1,165 @@
-Return-Path: <linux-usb+bounces-31266-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31267-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83439CAC82F
-	for <lists+linux-usb@lfdr.de>; Mon, 08 Dec 2025 09:34:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47372CAC8AD
+	for <lists+linux-usb@lfdr.de>; Mon, 08 Dec 2025 09:47:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 882563003163
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Dec 2025 08:34:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 13ED1303FE24
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Dec 2025 08:47:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 304AD2D97A5;
-	Mon,  8 Dec 2025 08:34:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7581E296BC2;
+	Mon,  8 Dec 2025 08:47:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f78.google.com (mail-ot1-f78.google.com [209.85.210.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF3F4C97
-	for <linux-usb@vger.kernel.org>; Mon,  8 Dec 2025 08:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F41D2192F4
+	for <linux-usb@vger.kernel.org>; Mon,  8 Dec 2025 08:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765182883; cv=none; b=cdfDUsBuglmAo2KLN936ak84K0kSLWXRFjQpOlInXWRkdDHefSqrczpQZIXOFCyf+iMIVHlhq3wktZm6A9UBFWsVfnX1Svzm8Z4K4b8InKsPaSOjGp5/DxauTZtPBOSbuSeTcr2lCicMVbpNy6xFYYgy905T/2BdcJy8ysMXfGY=
+	t=1765183647; cv=none; b=uo8mK4uliCusu1lhKmgzAlKH+W/CNOcth9nuJfC5UmSsmV7bskZzkqOk08I0GtD5x3tzvDA1sHWpoJrPuiAFQpm+EyEFLYbf6o/KEDtDXXVjCWqLwOAjOzjFflRv0B5MqqWdNoDaWJAQ8q1TegrczKw8q5QySZkJHzA4Ohoyjq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765182883; c=relaxed/simple;
-	bh=wxklaITTiQXTVJ+dbLE+L/UFZqjXXbmDp/4K8U20LKY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fPfyYMhQsmZRKUoYG1DeYbe4cjKk1TA0+E8zKpeVw7ki0PpwUTyOzDf+SQcwDxaxKdZvdfU7J66/PU/m6pmFD1RIe/MSrWB17u6opSo8xIcBsM3PFhPZ/Kts8NOm2EImqGk66g5iREPrgK8x4djBlOR5vlXM+ZN+e82gKSLW9Qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vSWhM-0007Da-2M; Mon, 08 Dec 2025 09:34:24 +0100
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vSWhK-004a29-2n;
-	Mon, 08 Dec 2025 09:34:22 +0100
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vSWhK-000000003Xn-3MwU;
-	Mon, 08 Dec 2025 09:34:22 +0100
-Message-ID: <b417865397822176e83bca6b9d8094fe92ff2451.camel@pengutronix.de>
-Subject: Re: [PATCH 0/2] usb: host: Drop resume calls on
- {e,o}hci_platform_suspend()
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Biju Das <biju.das.jz@bp.renesas.com>, Alan Stern
-	 <stern@rowland.harvard.edu>, "biju.das.au" <biju.das.au@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Claudiu Beznea	
- <claudiu.beznea.uj@bp.renesas.com>, "linux-usb@vger.kernel.org"	
- <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"	
- <linux-kernel@vger.kernel.org>, Geert Uytterhoeven
- <geert+renesas@glider.be>,  Prabhakar Mahadev Lad
- <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- "linux-renesas-soc@vger.kernel.org"	 <linux-renesas-soc@vger.kernel.org>
-Date: Mon, 08 Dec 2025 09:34:22 +0100
-In-Reply-To: <TY3PR01MB1134603CBC4385178E2E57E3886A2A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20251207124742.96526-1-biju.das.jz@bp.renesas.com>
-	 <db985cbf-4813-44d1-a4c6-16826f935c17@rowland.harvard.edu>
-	 <TY3PR01MB1134603CBC4385178E2E57E3886A2A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-0+deb13u1 
+	s=arc-20240116; t=1765183647; c=relaxed/simple;
+	bh=ihnUjRDVz7IvFxHpXnG2hzi/Pd6GyqJSgESo2ypJRV4=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=T3pdHr8BXK59ZhwjRgdf8qAQx6pI+A4bAdMUTpWYHN/FzeJ8hhlxq6qhmAbqs73kU0YbAo1oMv8GRh8vLZGo4ilj88zs4V3BVGdX8aGChMb4fF0c8lQzIW9v8PfnuH077r7gY9UZhbUAXd4irIhj1nvDughgSOZ4MHCvI+dyA6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f78.google.com with SMTP id 46e09a7af769-7c982b11ccbso1140732a34.0
+        for <linux-usb@vger.kernel.org>; Mon, 08 Dec 2025 00:47:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765183645; x=1765788445;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DGCYqsNkvZTyehNsH8OtSaP7Q2LaD7JciDZVUEAed3Y=;
+        b=GzkCzsjWrJ++5HL/cZmPabJ1lDzPg8zeOylk1ySv04TUEJC3hWPIoP1plA5ZybXx9m
+         3eaJaCeDo50Z93dNBE38usE/mZSzNPELY9GgVibk4tJXwrIjxQeoghFGXW2ZvwB5wKbz
+         x51cGWQeFL7ElwbzK0oAkwD9dxOmF+2sHpXSEceeLpORJ6gM5ShD5YwxkUf1ZI1B5yOm
+         UXr2GXSPm6CtYdiOVi0EAXEYqTM7XGo6VcYaFXekcWZPO4GGKoW9lI1f6t/CxSqMEuDL
+         Fkd4i+aHf8wnbL5tiPqs2ymqnE2ykNvkf74GJxlTqIgFmySFlAIstRqbBvkR7OkhoiNi
+         lI7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU/8NzdKsrz2BDo+xz/65F6U+3cuxuWWCYvRfSDEL9VefZs25bkqRadNwrMxR98AdEkVOw6/9oDaB8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/xyrGQHa4gMfFP13n3qiP4Xsw/ZbOyOSOCMkMqcBZfhdE4Mg9
+	GHNPGOkVJXBMufFaZhAo2WUo6rfsA5XAJa2B5hrAtM2qs028/v7aU1cWscowEW5YfTAvLWVbiwQ
+	b0sC2HVIDktzYji8TpYwwlZZ8c1KBzniZkGM8Q/hvir5MciBbW4+xLn7m3CE=
+X-Google-Smtp-Source: AGHT+IG5VogNgX4Re39k7Gqj+zkKFQJj+QnIC80qt7KVfcqOyFpUpY/b3VRiko3SNG4abDUIjqQr6v3mmxi7Z8aDPIQykG4YfoFA
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Received: by 2002:a05:6820:2293:b0:657:70af:4e21 with SMTP id
+ 006d021491bc7-6599a8c3813mr3363688eaf.8.1765183644789; Mon, 08 Dec 2025
+ 00:47:24 -0800 (PST)
+Date: Mon, 08 Dec 2025 00:47:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6936909c.a70a0220.38f243.0099.GAE@google.com>
+Subject: [syzbot] [usb-storage?] WARNING in usb_stor_msg_common
+From: syzbot <syzbot+4e26f67fa7f5bb2dafcc@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com, usb-storage@lists.one-eyed-alien.net
+Content-Type: text/plain; charset="UTF-8"
 
-On Mo, 2025-12-08 at 07:50 +0000, Biju Das wrote:
-> Hi Alan Stern,
->=20
-> > -----Original Message-----
-> > From: Alan Stern <stern@rowland.harvard.edu>
-> > Sent: 07 December 2025 16:36
-> > Subject: Re: [PATCH 0/2] usb: host: Drop resume calls on {e,o}hci_platf=
-orm_suspend()
-> >=20
-> > On Sun, Dec 07, 2025 at 12:47:25PM +0000, Biju wrote:
-> > > From: Biju Das <biju.das.jz@bp.renesas.com>
-> > >=20
-> > > As per the suspend_devices_and_enter() [1], if .suspend() fails, it
-> > > invoke the .resume() callback.
-> >=20
-> > Quite wrong.  If .suspend() fails, the core assumes the device is still=
- at full power.  It does not
-> > try to resume the device.
->=20
-> But now in ehci/ohci suspend() is calling ehci_resume without checking th=
-e status of reset_deassert
-> that can lead to synchronous abort and reboot is the only way to recover.
->=20
-> For the reset_assert failure cases in suspend(),
->=20
-> Case 1) Exclusive reset assert, reset register bit set to assert, but sta=
-tus bit is not set, so we get timeout error
-> 	  The following access to ehci registers can lead to synchronous abort.
+Hello,
 
-Let the reset controller driver set the reset register bit back to
-deasserted state when returning a timeout error after waiting for the
-status bit to change.
+syzbot found the following issue on:
 
-> Case 2) Array reset assert, reset register bit is set to deassert, but we=
- are not checking the status bit
->         and if the device not transitioned to deassert state, then that c=
-an lead to synchronous abort
+HEAD commit:    bc04acf4aeca Add linux-next specific files for 20251204
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10e6bcc2580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b9f785244b836412
+dashboard link: https://syzkaller.appspot.com/bug?extid=4e26f67fa7f5bb2dafcc
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=110bb01a580000
 
-The status of array resets can not be checked with the current API.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f2d7ef7b5470/disk-bc04acf4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ee299a9cd371/vmlinux-bc04acf4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ed3cdf46e7b2/bzImage-bc04acf4.xz
 
-> I guess we should explicirtly call reset_control_deassert(priv->rsts) to =
-make sure
-> the device is in deasserted state before calling ehci_resume().
->=20
-> I may be wrong. Please correct me if I am wrong.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4e26f67fa7f5bb2dafcc@syzkaller.appspotmail.com
 
-The reset controller driver should leave the reset in a deasserted
-state when returning an error from reset_control_assert().
+------------[ cut here ]------------
+URB ffff888144371a00 submitted while active
+WARNING: drivers/usb/core/urb.c:380 at 0x0, CPU#1: usb-storage/5993
+Modules linked in:
+CPU: 1 UID: 0 PID: 5993 Comm: usb-storage Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+RIP: 0010:usb_submit_urb+0x7e/0x18d0 drivers/usb/core/urb.c:380
+Code: 89 f0 48 c1 e8 03 42 80 3c 38 00 74 08 4c 89 f7 e8 87 b4 1f fb 49 83 3e 00 74 40 e8 fc 5f b9 fa 48 8d 3d 15 c4 c7 08 48 89 de <67> 48 0f b9 3a b8 f0 ff ff ff eb 11 e8 e1 5f b9 fa eb 05 e8 da 5f
+RSP: 0018:ffffc900034672e0 EFLAGS: 00010293
+RAX: ffffffff87089394 RBX: ffff888144371a00 RCX: ffff88807801bd00
+RDX: 0000000000000000 RSI: ffff888144371a00 RDI: ffffffff8fd057b0
+RBP: ffffc900034674b8 R08: 0000000000000002 R09: 0000000000000000
+R10: ffffc900034673e0 R11: fffff5200068ce87 R12: 0000000000000c00
+R13: ffff8880314b0fc8 R14: ffff888144371a08 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff888125af0000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffff7d5bdc8 CR3: 000000007291a000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ usb_stor_msg_common+0x27c/0x4b0 drivers/usb/storage/transport.c:143
+ usb_stor_bulk_transfer_buf+0x151/0x2a0 drivers/usb/storage/transport.c:395
+ ene_send_scsi_cmd+0x10d/0x5f0 drivers/usb/storage/ene_ub6250.c:502
+ ene_get_card_type drivers/usb/storage/ene_ub6250.c:1843 [inline]
+ ene_init+0x14f/0x380 drivers/usb/storage/ene_ub6250.c:2197
+ ene_transport+0x39b6/0x4660 drivers/usb/storage/ene_ub6250.c:2310
+ usb_stor_invoke_transport+0x10a/0x19c0 drivers/usb/storage/transport.c:611
+ usb_stor_control_thread+0x450/0x8e0 drivers/usb/storage/usb.c:462
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	89 f0                	mov    %esi,%eax
+   2:	48 c1 e8 03          	shr    $0x3,%rax
+   6:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1)
+   b:	74 08                	je     0x15
+   d:	4c 89 f7             	mov    %r14,%rdi
+  10:	e8 87 b4 1f fb       	call   0xfb1fb49c
+  15:	49 83 3e 00          	cmpq   $0x0,(%r14)
+  19:	74 40                	je     0x5b
+  1b:	e8 fc 5f b9 fa       	call   0xfab9601c
+  20:	48 8d 3d 15 c4 c7 08 	lea    0x8c7c415(%rip),%rdi        # 0x8c7c43c
+  27:	48 89 de             	mov    %rbx,%rsi
+* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
+  2f:	b8 f0 ff ff ff       	mov    $0xfffffff0,%eax
+  34:	eb 11                	jmp    0x47
+  36:	e8 e1 5f b9 fa       	call   0xfab9601c
+  3b:	eb 05                	jmp    0x42
+  3d:	e8                   	.byte 0xe8
+  3e:	da                   	.byte 0xda
+  3f:	5f                   	pop    %rdi
 
-regards
-Philipp
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
