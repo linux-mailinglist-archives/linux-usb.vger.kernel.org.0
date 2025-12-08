@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-31255-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31254-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BADECABC1B
-	for <lists+linux-usb@lfdr.de>; Mon, 08 Dec 2025 02:56:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E95BCCABC3F
+	for <lists+linux-usb@lfdr.de>; Mon, 08 Dec 2025 02:57:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9AE01300BD88
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Dec 2025 01:55:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 86956302EFC9
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Dec 2025 01:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F059B25C802;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846EC256C8D;
 	Mon,  8 Dec 2025 01:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="lyRPzx08"
+	dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b="m5OfjLA/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A6C3242D98;
-	Mon,  8 Dec 2025 01:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B3623D7FF;
+	Mon,  8 Dec 2025 01:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765158946; cv=none; b=O0nyMdHm1yADvXllCW9ZiMQrC1Btt4hJMwzgL06VQwcXoTvMikLfhtOcjNF5K+LWvfXJMTeEGaIfqxDBj/ktsnJFBTz4TrOVMe0YabmQlzzcTFQWe64dxmUTdckquGmCVU7FuKIP6N8tnmpyUUkzu3/uoPSaGCnJ9RbeNffC04g=
+	t=1765158945; cv=none; b=oQG2tgD3mWtUFlb+Zrgu2c/eeCdaeht1M0GLNq+hox0Gk9jiBMyvkRwFIlW6w/kM2dnyEqsCuU1kZBLFM+fJkLoc4KY2g6fIpZeZJp6Ys+bwJ2BKhD9jC56ABQnH2AVuDUm/KdY0qMc2MqO2Bb29yrN5RoBEVLy/+Jp/2xF5wW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765158946; c=relaxed/simple;
-	bh=er8jqugAOtZH14+xsvNPaWFL5/vXyjQ3XZItkrwqyNA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=rD12Sz+MJKDU86m3IVoURFgjH9WQ46zvuwI7mWFO94cPRbG1U8YIyEtpl4gLCqRkgZnZCZKxZQxVDJCXvimapdRxUlwy/23wjVr37X7kVPrkM0/jXXCBeZfJirEMzDjapap4TluipDSyr4aKuqgWv6ttlKnFd373IKrubD8K7CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=lyRPzx08; arc=none smtp.client-ip=54.206.16.166
+	s=arc-20240116; t=1765158945; c=relaxed/simple;
+	bh=PZVWV9La4AVAK585StcPgOtfdN1ZVMCq4aFPpEmKQzo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=DKpWQoewtFJmGHDJsoYiVQk6dP5v8uOjrwD4jyIkBAqfaW4HdCvoWM4JF/40hynDsnoGuGlS6jxjsI9ma3RCJxzPIn5A1z/rc/phTWQis4eQv5QsWUcVtjwsRHY/WyZ/f6m0AYNrW4ZZ2shLsjY3B0YmsEh0cK5D+yz6ycqe/6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com; spf=pass smtp.mailfrom=airkyi.com; dkim=pass (1024-bit key) header.d=airkyi.com header.i=@airkyi.com header.b=m5OfjLA/; arc=none smtp.client-ip=54.254.200.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=airkyi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airkyi.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=airkyi.com;
-	s=altu2504; t=1765158930;
-	bh=RCoApW58uwU2PDY/YzjUBVlUXFHY8idxqTE/wHC6S8g=;
+	s=altu2504; t=1765158934;
+	bh=26BNys9MtzTfRweLMQzeXqwDzhVXLyZIh9kJ9w6YpoA=;
 	h=From:To:Subject:Date:Message-Id;
-	b=lyRPzx08NxIJiY9L6U9EipOSloT79349AJAORhsq9lppMlqtzGAlwRvEnJh0+h6bY
-	 Zf9yQQrFybvkSQ2+uC0ko1yF/l1DoTcABWqFPjWWgstcds052UNrsrQp+wlSTAuYOp
-	 ZlTC3YtAu9CV2BUfk5azFNOfZI/Nblq3WXmoESy4=
-X-QQ-mid: esmtpsz19t1765158928te5f51995
-X-QQ-Originating-IP: kcxCGZPPcU96TfidxkPp4h6SAeMB0/ABmBp+GsBCCJo=
+	b=m5OfjLA/w4B0AgiE+5kPJ+F7EcQ7/5Hpu3r+VrFtmG3K7mtbhNa5gIpKTxVU5H0km
+	 L3MQbu5j12ZvoveBAefKlffdyoDbJDRizA0yVk8MpVNKTjXs4uR+jHT9layYD3MIPL
+	 Pp/5f9psdNDlET0PXRC289Clh71rknZS/YSGfxX8=
+X-QQ-mid: esmtpsz19t1765158932t5038dae8
+X-QQ-Originating-IP: A0v0FaGYKIPVoze7Vm4qC1xZ0nc+XoFwr/1hG633FZU=
 Received: from DESKTOP-8BT1A2O.localdomain ( [58.22.7.114])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 08 Dec 2025 09:55:25 +0800 (CST)
+	id ; Mon, 08 Dec 2025 09:55:29 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12888051069085088122
+X-BIZMAIL-ID: 5449390531767649988
 From: Chaoyi Chen <kernel@airkyi.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -83,31 +83,31 @@ Cc: linux-usb@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	dri-devel@lists.freedesktop.org
-Subject: [PATCH v13 04/11] drm/bridge: aux: Add drm_aux_bridge_register_from_node()
-Date: Mon,  8 Dec 2025 09:54:53 +0800
-Message-Id: <20251208015500.94-5-kernel@airkyi.com>
+Subject: [PATCH v13 05/11] dt-bindings: phy: rockchip: rk3399-typec-phy: Support mode-switch
+Date: Mon,  8 Dec 2025 09:54:54 +0800
+Message-Id: <20251208015500.94-6-kernel@airkyi.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251208015500.94-1-kernel@airkyi.com>
 References: <20251208015500.94-1-kernel@airkyi.com>
 X-QQ-SENDSIZE: 520
 Feedback-ID: esmtpsz:airkyi.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: NDRJhlKLIrRL+NIQ68Wi+BYoMjn8X7rPAg5zBmu4cK7UZrkbLdgeyAe6
-	1cSFFlke0TsnJWHkIXk6iVOWxR5ZB2lv0Llhq7XD1xml2LABkqP0MFIjvh+wCxo009ubdTK
-	gkCRPDfnjz2VKrlNje/lj/TSvNi+fY0kJ/YnPD06XmvWMsWF6bUNharJ59ZS14LH6U5eRbj
-	zjf4AsrhyX6A02UQsHbU1OJiaGIHm0IBdLq0KAdM2/aTJhlXLGgbZgGAZpMOGH3qjIUJQGX
-	1G0evQ+pqJBfhbajAlzftDNPIaywXADa9KLw3r8sW1ytRCd91BHzvdVTlcctxv4uN/HAypO
-	sq/93fQNqlVQEXOYrZjo8D0EJUZ7y6rgZwQzqoAQ5IAervr7KIywCj+hgII9nYOnO0AVcJI
-	nuXuZqKf80GOis8G2qmwxHLS3KYh0myRL23M4+HYCKSBxxzS+acj99r3gQCFYz2FBHimp8R
-	nLdXbk54O1qcyoUvYXTTWqbMm7Eod3m98pnbXLcuc8kTBQc+zV2uBef8PgXRoFCV/CEsCIs
-	kNGKJEi6ApdmKwCnA+0GyqllLsWtP4+8nQoHHQTq/JEHGp1fXdfoWRX1DOb83Eb+ooKlp0/
-	z/N7baN2NUbT+zkisKxEkuTV+IsG5OQWoB7gfqxrLza6bNeY5AYdF8C2KBWHMcrIkNU+e8s
-	sB2Gx7WwgvZrACUJ/U0slQdB/SEAHn1IDoe0kyURM1guJmNaaDXf/3n7WRnxcXAr67t5Vmy
-	oR1cQ2xDCtkynJaXIVsVX3qUoKoIPU+QY/93s1SG5urixWtAMoaFRY7IigmI4G1hCQlU1B0
-	Dwf3VZEDLZdZF67mSQvR7H42f5pF6hp45WaqrKcjA6hcOyx/7rEbDfocg3PwPHuqk3TX5g2
-	gcBE/ZPLinP1d/lHGivnekGouRMFGIhKWtSoZwwtSmg60GCqYMF0W71FgR0SAfoZfvDhxuy
-	w4ZQTx8RAY7A6TSuH6TjOiOXpdIlPtCJLrvRGre0ORrIMydnveK28tEiXKu+pDe9stOWV6d
-	EdkCZvNyy174R5ZqYYAvM4JFWm/YA=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+X-QQ-XMAILINFO: OI6yGjxefbMXXkTMtD3zx1Sj4oI5QEq6y+G3d9voC+VOEcjgF38xCtot
+	Zg28QG9UlPWuMumU9AD+8R04Htr184efaWYEr5zMeTZQq4tHFk6pH1OizaaIwM60EnY+k/P
+	+WQznx0DiL7z716YbjpnXnfgpGRcUeV2hSHHUOv1FhJ3nSUWo9bVLd30CT/f8KeW+5A1t1m
+	0H/5z/0uNXAyY1gvx0s7pCiP6hAXxUoeYapDE4TSscrFfksj4EcfBGBQBsZufrDqANFXJO9
+	+iwvl8clS9u3uY4m7Hq0M4v4Pe7ZGLLXGxZXNX9Ij6WUUAx2D/OF8CsmoqB2jWUc1RHxocx
+	MShqoOfcLhleUjh6wRucP0uoHITNjCs9/U71o6+eeUMJij7W+LqzAlHmIyUPCgkcHToiE7a
+	B3Tul7UlVy+sxTypozisDU7azcB4aJczUNAqi+8KXLLJ8GGuRCfpOpro9r0UflaFzsO8+mk
+	W4J04TnZpSbhgrrVDJ0oMC5b+Y5UuiaSi+uBYauUN1qpd/3O13WurySrIyMNG6i1wZSacn4
+	x63hPs79RRWE3QxxKGPT+GPnvNuT/CLasrzKQHRSA+kjRVqgylAV7L+AH1J+tadrg7FDwYD
+	WDjwMA6JofZgKD+bt4KxwqPjiKTwLYi6tQjXVIYKfBPaai+ktDcDfacKNE4/5wRvGUL/xv2
+	cmcWeRyPLdD6ps9CmTpnnjtY7DvsamaznccKfib9HteLYFUpjd16bxDwAERLOET34iWykD4
+	uH+6iU9LM1Ul1ILgZGDK59xg+EfaFe36H884yBjnF9bODrqd/HQinWog4xNCP2duDO7Z5Bd
+	mByuJb+PEheiSC6Q4ByMpYPYvCd6j8i8uvPg+KCGXm6tcJpQjP/sa6gkoaAQIYCCFMNt0hU
+	iRE0JE+/2IJ7bJL2zCmSGinKcy0Y5EQlrWPIhAjZzSsDBdbjdEvI9IbLlfiLfbRAaoGWD1h
+	jJ5iQ8k5OJSYviLfQwlFeWKEwIid/DjcT3UOodWpBYsSQ34myUN/qcRZROLyANdaOBvMZbq
+	vuM4f+7Q==
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
 X-QQ-RECHKSPAM: 0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -117,100 +117,58 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
 From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
 
-The drm_aux_bridge_register() uses the device->of_node as the
-bridge->of_node.
+The RK3399 SoC integrates two USB/DP combo PHYs, each of which
+supports software-configurable pin mapping and DisplayPort lane
+assignment. These capabilities enable the PHY itself to handle both
+mode switching and orientation switching, based on the Type-C plug
+orientation and USB PD negotiation results.
 
-This patch adds drm_aux_bridge_register_from_node() to allow
-specifying the of_node corresponding to the bridge.
+While an external Type-C controller is still required to detect cable
+attachment and report USB PD events, the actual mode and orientation
+switching is performed internally by the PHY through software
+configuration. This allows the PHY to act as a Type-C multiplexer for
+both data role and DP altmode configuration.
+
+To reflect this hardware design, this patch introduces a new
+"mode-switch" property for the dp-port node in the device tree bindings.
+This property indicates that the connected PHY is capable of handling
+Type-C mode switching itself.
 
 Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 
-(no changes since v11)
+(no changes since v5)
 
- drivers/gpu/drm/bridge/aux-bridge.c | 24 ++++++++++++++++++++++--
- include/drm/bridge/aux-bridge.h     |  6 ++++++
- 2 files changed, 28 insertions(+), 2 deletions(-)
+Changes in v4:
+- Remove "|" in description.
 
-diff --git a/drivers/gpu/drm/bridge/aux-bridge.c b/drivers/gpu/drm/bridge/aux-bridge.c
-index b3e4cdff61d6..52dff4601c2d 100644
---- a/drivers/gpu/drm/bridge/aux-bridge.c
-+++ b/drivers/gpu/drm/bridge/aux-bridge.c
-@@ -35,6 +35,7 @@ static void drm_aux_bridge_unregister_adev(void *_adev)
- /**
-  * drm_aux_bridge_register - Create a simple bridge device to link the chain
-  * @parent: device instance providing this bridge
-+ * @np: device node pointer corresponding to this bridge instance
-  *
-  * Creates a simple DRM bridge that doesn't implement any drm_bridge
-  * operations. Such bridges merely fill a place in the bridge chain linking
-@@ -42,7 +43,7 @@ static void drm_aux_bridge_unregister_adev(void *_adev)
-  *
-  * Return: zero on success, negative error code on failure
-  */
--int drm_aux_bridge_register(struct device *parent)
-+int drm_aux_bridge_register_from_node(struct device *parent, struct device_node *np)
- {
- 	struct auxiliary_device *adev;
- 	int ret;
-@@ -62,7 +63,10 @@ int drm_aux_bridge_register(struct device *parent)
- 	adev->dev.parent = parent;
- 	adev->dev.release = drm_aux_bridge_release;
+Changes in v3:
+- Add more descriptions to clarify the role of the PHY in switching.
+
+Changes in v2:
+- Reuse dp-port/usb3-port in rk3399-typec-phy binding.
+
+ .../devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml  | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml b/Documentation/devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml
+index 91c011f68cd0..83ebcde096ea 100644
+--- a/Documentation/devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/rockchip,rk3399-typec-phy.yaml
+@@ -51,6 +51,12 @@ properties:
+       '#phy-cells':
+         const: 0
  
--	device_set_of_node_from_dev(&adev->dev, parent);
-+	if (np)
-+		device_set_node(&adev->dev, of_fwnode_handle(np));
-+	else
-+		device_set_of_node_from_dev(&adev->dev, parent);
- 
- 	ret = auxiliary_device_init(adev);
- 	if (ret) {
-@@ -80,6 +84,22 @@ int drm_aux_bridge_register(struct device *parent)
- 
- 	return devm_add_action_or_reset(parent, drm_aux_bridge_unregister_adev, adev);
- }
-+EXPORT_SYMBOL_GPL(drm_aux_bridge_register_from_node);
++      mode-switch:
++        description:
++          Indicates the PHY can handle altmode switching. In this case,
++          requires an external USB Type-C controller to report USB PD message.
++        type: boolean
 +
-+/**
-+ * drm_aux_bridge_register - Create a simple bridge device to link the chain
-+ * @parent: device instance providing this bridge
-+ *
-+ * Creates a simple DRM bridge that doesn't implement any drm_bridge
-+ * operations. Such bridges merely fill a place in the bridge chain linking
-+ * surrounding DRM bridges.
-+ *
-+ * Return: zero on success, negative error code on failure
-+ */
-+int drm_aux_bridge_register(struct device *parent)
-+{
-+	return drm_aux_bridge_register_from_node(parent, NULL);
-+}
- EXPORT_SYMBOL_GPL(drm_aux_bridge_register);
- 
- struct drm_aux_bridge_data {
-diff --git a/include/drm/bridge/aux-bridge.h b/include/drm/bridge/aux-bridge.h
-index c2f5a855512f..7dd1f17a1354 100644
---- a/include/drm/bridge/aux-bridge.h
-+++ b/include/drm/bridge/aux-bridge.h
-@@ -13,11 +13,17 @@ struct auxiliary_device;
- 
- #if IS_ENABLED(CONFIG_DRM_AUX_BRIDGE)
- int drm_aux_bridge_register(struct device *parent);
-+int drm_aux_bridge_register_from_node(struct device *parent, struct device_node *np);
- #else
- static inline int drm_aux_bridge_register(struct device *parent)
- {
- 	return 0;
- }
-+
-+static inline int drm_aux_bridge_register_from_node(struct device *parent, struct device_node *np)
-+{
-+	return 0;
-+}
- #endif
- 
- #if IS_ENABLED(CONFIG_DRM_AUX_HPD_BRIDGE)
+       port:
+         $ref: /schemas/graph.yaml#/properties/port
+         description: Connection to USB Type-C connector
 -- 
 2.51.1
 
