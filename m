@@ -1,117 +1,137 @@
-Return-Path: <linux-usb+bounces-31248-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31249-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAED8CABA5A
-	for <lists+linux-usb@lfdr.de>; Sun, 07 Dec 2025 23:06:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEF39CABB1B
+	for <lists+linux-usb@lfdr.de>; Mon, 08 Dec 2025 01:05:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6CA73300DCBC
-	for <lists+linux-usb@lfdr.de>; Sun,  7 Dec 2025 22:06:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 911083016CED
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Dec 2025 00:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E2702E54A1;
-	Sun,  7 Dec 2025 22:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C78CEEBA;
+	Mon,  8 Dec 2025 00:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZyAcx00G"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L7d7XWsA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1181FBEA8
-	for <linux-usb@vger.kernel.org>; Sun,  7 Dec 2025 22:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C8933E7
+	for <linux-usb@vger.kernel.org>; Mon,  8 Dec 2025 00:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765145201; cv=none; b=SjqpMjgn1ZTrm7D9Z+xmGpOmDqqlazTG0q8XC2qOTBUr5U6P+ZqtAY9PAOHSKdl+t3+Hpr6YHH21SbtbnFcCeogFa/ss0rZyczqf7DeQuMh5NN3HZGUqWMu5APZcDYrw8f3Wom5HehYzw2TqN3vRJvh1ftTk0GK+Ad7TxC8U0pk=
+	t=1765152326; cv=none; b=IvLwyZZM5FfWnzIdqvTOt/+RdT5Yea4LQ7+NpQy4aBsJNQGmlrkCSa2dZBHA+QlvvvcEeg1fQxaNeaXWKy3ujjGluuAPOtn8Ukrky6KFtuT2pnfANgqdzeKilly9QgcaDdIyfd1KPuFVtE7Kj802GOT58uVvLZHx3aEe6IVD9TU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765145201; c=relaxed/simple;
-	bh=yT6tc7i4bprUf+4J93CVvBqZCIInBPoW4tDt9vX/0To=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q45rvKl9Ao6l+00jmAEWG2kvCgCQv77dsdpY/XnvzcARMBi+aHQ+b6g02pRb4j3ouoeEBWSRrEB9HqcpVcdVeUVPZnCtZ7HNZKAftQczPXV2aqqY6yM4F15GOIoxXOPHQbcuFfJuBL1MA27DkUjxkwzTZJ0Ly2bBhbL14tRKlZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZyAcx00G; arc=none smtp.client-ip=209.85.218.49
+	s=arc-20240116; t=1765152326; c=relaxed/simple;
+	bh=kF1RpIs85tnz0Mum9qzIvXTUhZPttSkvcmreMhDe0bc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MVjQRDhQexU5z8Uha1KEqhVeYQQdMnkJ3dR7zaqPHwT0xud5wyurcpdVIESBwv3Vny+C4m339QhrmU+sjsuaaCoIEPLiL88g0/9H9Jrw0Xsi8MpT9Mhc2helOwuCrYnG+5KUstTuft0ioOdMFyWE8YooivYB1RuPk5iwr3sdt2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L7d7XWsA; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b7355f6ef12so436469666b.3
-        for <linux-usb@vger.kernel.org>; Sun, 07 Dec 2025 14:06:39 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47775fb6cb4so31953855e9.0
+        for <linux-usb@vger.kernel.org>; Sun, 07 Dec 2025 16:05:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765145198; x=1765749998; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yT6tc7i4bprUf+4J93CVvBqZCIInBPoW4tDt9vX/0To=;
-        b=ZyAcx00GbCltPgeR50SlmUjasYOA7vNW5tZtXIMCHewkHBBroc/jb1yyJo/GuhYfgk
-         R/zfWmgTy78oailaP/JHEz+FBny0Ldoj2nfEDuy0HD8aT9jAuTh3i+8F4F8e5foBvFbL
-         lufvqwaJMGYLKTCfzEGYeyidkZ6rqYG+a82rLzjeiEnBCEcZLh3v5DOW67QxXJknLEPV
-         QzosVFguUHCmaJL3eau3+D65+OjgG9NNkTLaPU/oR0o+2iUYbCQiWOt+pCFh2fTYb3eF
-         Dki3WZT95MuW8YPnFv2dve9DuR0HsAQRp1Oo+yELrCriwrxsYS4yoFcUC0V36ahg1YsH
-         I7GA==
+        d=gmail.com; s=20230601; t=1765152323; x=1765757123; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=crGWNTCrIJBXutZfz1g08zhcxUbU3pl9o/ZTSXj4LR4=;
+        b=L7d7XWsAJu+QYNfNMEd4db7PJe786XwKJanzJq4zwHPXDhp2Atetpf8+xp9vX3E6r5
+         JW4I2oNmQx4VmsVFyNzT8fOTEoiJ0EAlzPk6iPv0RsCVigghduvHsB1KhPOU2Rttw/gR
+         nGpJiCcojGRBIvOL7oElyMrtamNdhpmYTXWAj9PFMxF+8sDbnwOFM2rt/O25i5vKbfvV
+         PAlY/ExztpdHx3MjrUqA1TFZhQtarE2CDeCmAALt9pe4rWvfEVHE8lSbERiSQZ/waSzH
+         Gro232B8Hi84PO353U5C0Gmae90FmmvNbvqP8Bztl3Z91c91BDfJvV/y044jZZpMTB9/
+         +d6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765145198; x=1765749998;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yT6tc7i4bprUf+4J93CVvBqZCIInBPoW4tDt9vX/0To=;
-        b=A4LAIbyvloHRyf7VTjZVzaCwwJ1lcgqqn3jmyfYwi7MLwY/eJ5MQFvaCCVKw1BZQfg
-         /8xbfQZMnrDrrYAR/qU+XmObRxBlLECMZ7EI+dNpDa4Aiz46hakdCodXriHv4UlAPTnb
-         yC1iDTrE2IVys8dWnn+CaSJmxMJfIng31NAJM8xgAUaqxiIGR6uZMGLWwx5dq9dw9FTj
-         Yc2lsYLP7KyUWnIAec9U9orJT70/H9ulAAIgqdVXcLXY3q/7aRf23ZodmG8HwsJtGuJz
-         U1wPLsQVT9RB/yxsALedAnYt+Q52AgGQq4tFPrJ7IGS4XcLNlkejTLcjHy1pySffpBL9
-         bh2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUIxE2xAkfqXjYjbReFdPT/1wCwkX7jPCTsB8yuaWmvC4ffUvPZ0srfYzNMBWfiyGrmx/ZwwvK2A6A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YythR6bnDZ85yFvgl0VrNz2tMK+2UxaiWRRXpzVp11T//Axnm43
-	X6tdhGEy13FGcEeXAHg0EG1KECBtcqekuV72G/q9HVE55/OgUfFrellA3JHujA==
-X-Gm-Gg: ASbGncsVVWr3klTEIGtwOLiBQM+BUV9ri0g81dcm0okhE4dfLbQKvS2Q4bu8BtMsYxA
-	+MoHsqhVS+6l8nyglap01qcw+82JCml96AXMyb9GOn1Xpxke2Tj1jciHdUGhscql47YA3py25Xu
-	aEm+s/dFhE2jzeVXXTr/SSWS6wxdefesjDydCtGKs4xwhYZ/sRePrmgcf93NWdwu5M2yMR5dx48
-	R8TyAiLiY4RbbZnfUZnBQpEQ/IdxUkUBNpvIutOjwQO44HZsM+RqInHfDK9dJ0LLMb0JUd+rZq2
-	wPQs6Vi/CyJbjYw+f8ooD6wyrUOMab12/Y9FUiKz7eVCrrzt2muR+Vxd7S2WNerZ++jZ8fldt1v
-	d9gnepbrPXsTV5g++WA6lYskAyUn1adIbgfUoCvgiqaTWAx790tQcq4dpX6kN8u4RcD0krMPBxC
-	0NCDDoXanrw1DENa6tHHxeUvM=
-X-Google-Smtp-Source: AGHT+IEzBR8h58u0S1pm2qfyheZ9U4Na5T6T15R/233PTZkB7ddDrfFWPCj8rDw2jCfiG+AlBbLcag==
-X-Received: by 2002:a17:906:4789:b0:b76:791d:1c5c with SMTP id a640c23a62f3a-b7a242cfdd6mr534884266b.9.1765145198384;
-        Sun, 07 Dec 2025 14:06:38 -0800 (PST)
-Received: from foxbook (bfg212.neoplus.adsl.tpnet.pl. [83.28.44.212])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b79f4498865sm938369566b.17.2025.12.07.14.06.37
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 07 Dec 2025 14:06:38 -0800 (PST)
-Date: Sun, 7 Dec 2025 23:06:34 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Johannes =?UTF-8?B?QnLDvGRlcmw=?= <johannes.bruederl@gmail.com>,
- linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: core: add USB_QUIRK_NO_BOS for devices that
- hang on BOS descriptor
-Message-ID: <20251207230634.7b279127.michal.pecio@gmail.com>
-In-Reply-To: <2025120846-nearby-breath-e5fe@gregkh>
-References: <2025120708-header-startling-ffaf@gregkh>
-	<20251207012059.7899-1-johannes.bruederl@gmail.com>
-	<20251207084012.7c232e52.michal.pecio@gmail.com>
-	<CAP=XvD+dNNDj75DYjjByE3o7F8i-QxusAdz-5+hG24fCesWYRw@mail.gmail.com>
-	<20251207104505.1d5f3718.michal.pecio@gmail.com>
-	<CAP=XvDJJP2orxYcgiKzp0FrQE2UMiXndZe8Z6BdBRFvkujWu5w@mail.gmail.com>
-	<2025120748-extras-retrain-16eb@gregkh>
-	<2025120846-nearby-breath-e5fe@gregkh>
+        d=1e100.net; s=20230601; t=1765152323; x=1765757123;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=crGWNTCrIJBXutZfz1g08zhcxUbU3pl9o/ZTSXj4LR4=;
+        b=B/E9nuYT290VSnIXQaNYqJd2SP4KwJitfk2h47yNhH5jo16MOZ8gz8sBd3cH869w0t
+         qAKS/QjhYn5QoxdqAw6HCDqI2w7uLvZ6Vet/eoqOB/NcWsPBgt2TF+2OgkErb9eGb0Xl
+         isLkXEuOwQvdkiNnt36pSk15Db0iK3fJaZfgNUqTzkOKe/jIyxaRvw/yk6hAC5q520Ic
+         Z15/zVWMmVdnp/coWFLzJqU9GNSfUJFU9Ud5HBkbgRwtABj8PxTNxgU5Fzt02dCqx8+c
+         +cLje1hI2B8mKsDsBUzoEtBprXhLkDL9XznlnJRw3wpHlUOeXUxlq8vDwpeTA695ebEA
+         ahjA==
+X-Forwarded-Encrypted: i=1; AJvYcCXi20YBKHiJRKyYriZzxDFyXiibEwqqT58uIsdl5sZwEY56ImcDc2oPPUsYNTwCWqDuyuDQWqnco94=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmKRl7+sjbTNsww5GeQ/xHJCxMQUyhUfAVuN1BNyf2Jc7hTz6R
+	E361pmKVYXUT0cIQz7kn9brt6v4+ii1pWV4H9A7YmWnEKC2wByU7aGmq
+X-Gm-Gg: ASbGncvcDC8WAuPZ6vghrKzikMXkmKxLmbXILNWfYqVRX3qGayu8kZptsBzVFD5xvdc
+	fD3E6jHJeh+658yapppvVyDqYIacqveBQ4af4Olzt66FyjAn/Qe0mytuZSYOn22fXsDOds1UBWu
+	YyK3Z1AioSDXa3lzRMENFuvW8IEBwO5kjkh0YifXD52+PaLVtWiDzLUmUzmto/4uO1AC0fD4MxZ
+	hswn227y24DFx21VIRAAERchbk30TiQiFXkg7dnipX3ENkNrNqi0BDDpHCOtlc2KXEG6XnuOGQv
+	PRn90wrtLMiFscQlWFhezo8qlBwlMiqnxdrJtFWvDVZ2K+nEDypobbYX9vTCtoWreGFPanHYVNL
+	rsfudrYouCvxhSG4X3Q2kGHtnEoTI3p+0KrIeKiwfOQf30RGdoYYvJ7jpsKRyhO2hlxqI+OShPo
+	gBU9VTHt3EJVJDp3h+M6Kp
+X-Google-Smtp-Source: AGHT+IElnljE3VByHdqZRQQCN5eSGajqd6Tvz9JHksaJP8BhX7orlEgII4Jmd3VFk5TSm0OmokF2mg==
+X-Received: by 2002:a05:600c:529b:b0:479:3a88:de5d with SMTP id 5b1f17b1804b1-4793a88deb1mr59110375e9.36.1765152323202;
+        Sun, 07 Dec 2025 16:05:23 -0800 (PST)
+Received: from [192.168.1.50] ([79.119.240.187])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479308cd87csm225552475e9.0.2025.12.07.16.05.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Dec 2025 16:05:22 -0800 (PST)
+Message-ID: <f6f7cca3-0de8-4b97-9b8c-b76ba2561f0e@gmail.com>
+Date: Mon, 8 Dec 2025 02:05:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH][next] wifi: rtl8xxxu: Avoid
+ -Wflex-array-member-not-at-end warnings
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Ping-Ke Shih <pkshih@realtek.com>, Zenm Chen <zenmchen@gmail.com>,
+ "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+ "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>,
+ "gustavoars@kernel.org" <gustavoars@kernel.org>,
+ "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+ linux-usb@vger.kernel.org
+References: <ff184c0e-17f2-445f-9339-f4db9943db86@embeddedor.com>
+ <20251121111132.4435-1-zenmchen@gmail.com>
+ <475b4336-eed0-4fae-848f-aae26f109606@gmail.com>
+ <c0d187d6fead4e5387db2a14129be96c@realtek.com>
+ <44c9c325-14a8-4391-adce-4bbe8c68b446@gmail.com>
+ <20251207001608.1f6940bf.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+In-Reply-To: <20251207001608.1f6940bf.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Mon, 8 Dec 2025 06:12:15 +0900, Greg KH wrote:
-> I'm sure this isn't going to be the only device that can't handle the
-> BOS descriptor if Windows isn't querying for it
+On 07/12/2025 01:16, Michal Pecio wrote:
+> Hi,
+> 
+>>>> I got something. In my case everything seemed fine until I
+>>>> unplugged the wifi adapter. And then the system still worked for a
+>>>> few minutes before it froze.
+> 
+> Sounds like memory corruption.
+> 
+>>> Zenm and I tested below changes which can also reproduce the
+>>> symptom, so I wonder driver might assume urb is the first member of
+>>> struct, but unfortunately I can't find that.
+> 
+> That's what it seems to be doing, because it uses usb_init_urb()
+> on urbs embedded in some struct and then usb_free_urb().
+> 
+> If you look what usb_free_urb() does, it decrements refcount and
+> attempts to free urb. But here urb is a member of a larger struct,
+> so I guess the whole struct is freed (and this was either intentional
+> or a bug that didn't happen to blow up yet).
+> 
+> Now a bogus address is being passed to kfree() and things go boom.
+> Or at least that's my first guess after spending a few minutes.
+> But that's the direction I would be looking at.
+> 
+> Regards,
+> Michal
 
-I speculated in bugzilla that maybe Windows isn't asking for it, but I
-doubt it now because BOS is required for LPM. More likely it was simply
-WinPCAP failing to capture those queries when I tried.
-
-lsusb works, so something "fixes" this device - maybe just waiting long
-enough, maybe using different wLength, mabye getting config descriptors
-before BOS or setting configuration first, I don't know.
-
-Windows in a VM may show you how to do it ;)
-
-Regards,
-Michal
+Ahhh, I see it now, thank you.
 
