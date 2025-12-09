@@ -1,157 +1,145 @@
-Return-Path: <linux-usb+bounces-31346-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31347-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10CE3CB13FF
-	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 22:56:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CB42CB14B9
+	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 23:31:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F102330F9284
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 21:54:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B144A304791F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 22:31:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C95592DF125;
-	Tue,  9 Dec 2025 21:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804402EA493;
+	Tue,  9 Dec 2025 22:31:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CDT4WvDf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Thl7bYNE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FAA262FC1;
-	Tue,  9 Dec 2025 21:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5C22BD11;
+	Tue,  9 Dec 2025 22:31:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765317283; cv=none; b=fF4mWUbahSimVBgZSbzU1qheuDQ+u0P/h57k+f1v02zAJd70E1MFBcA4WW7uCsVm6tsP4kiEVgq2R7fKvzxvLlX2gzQc1WFqov2ZK4xbzJ3EH8C4KHcwY/irILZFGR9nL+V635HIxfdwWtvIo5S0bOUlMjnrOZRlUEh/gGST1SI=
+	t=1765319491; cv=none; b=qM1A2m0qjCu0OaImekA5g8c7c/a7lSxE4J2f0KJsDbxpMugNQHrIQ5JT6ejsrXWhqrYOecizLPrenXQwARWq1FlCFjfclgGcQdUn2m5ks7gLihXrp8Wi9yGPIharW6NWaXov6z6O90JaaZda6HRb5ge0WxdJb1C44FNPFFQcFXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765317283; c=relaxed/simple;
-	bh=xtYLyHUmG1D0oKjx5ZhX3mwTe2vJZTh9I0Ydg0tBMjQ=;
+	s=arc-20240116; t=1765319491; c=relaxed/simple;
+	bh=YMYNTULoE1bIg0iXTvcT8JKk/HRg0xEHn9+7P7my0Is=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CH3nUfvvXyY2zTJvVjd1f3L4d9pNIPE58DaQ69PiYtbnIXDmgvWJpuB9OntKToimkJl9S2sfkCPMQQIcdtT4dB4qVZJWb1kkHCBqm2cpZuRDwsSEQ+SgBzdOinr21VxnIoezEHdGUtJGgdFM79+Ee6vyaGlnW3JM6UJLdOjeyxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CDT4WvDf; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765317282; x=1796853282;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xtYLyHUmG1D0oKjx5ZhX3mwTe2vJZTh9I0Ydg0tBMjQ=;
-  b=CDT4WvDfaiFmt1eA9KbXD1rYNHtqO9GfB7PuMOSlZY3TPXbUvZoWPvTa
-   ou8YdcLqhAVcxWGIXYBrq25a7dq92blxZzTg9d+h1P+nGNgdyVtyw72Q0
-   6O5SMj27GxlYmIqBBHdTW5ev+snixP/DVWMAJw6GJl3UvNlSZ/WD/JM+S
-   PLN5sduEWH38uFZVWAX86pxFeLNBP9Knbak8dgTT1VhXxG6OwaJamT5Sf
-   0p3HUWvUYZ7BqVdC4SGs8hPPdo9xjilXor6zTJ/Fw4jdsqU84jmaJaZo0
-   jSIwtg/OgM7ABo2vbRvkVzhDIPBWg57QI11wh2/q7hJeHX1wE5iHavJpI
-   Q==;
-X-CSE-ConnectionGUID: 1Fs+mFqaRxOIHm2+P7oa4w==
-X-CSE-MsgGUID: LepQURjsQAqku/24tor4Jw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="67335278"
-X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
-   d="scan'208";a="67335278"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 13:54:41 -0800
-X-CSE-ConnectionGUID: xvwgSbk6Qq+Tzw0Qk9o/AQ==
-X-CSE-MsgGUID: p7dPqkNBQYS9nOuDpCUxjA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
-   d="scan'208";a="200817543"
-Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.237])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 13:54:37 -0800
-Date: Tue, 9 Dec 2025 23:54:34 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Crt Mori <cmo@melexis.com>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Luo Jie <quic_luoj@quicinc.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Simon Horman <simon.horman@netronome.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: Re: [PATCH 4/9] bitfield: Copy #define parameters to locals
-Message-ID: <aTiamjTnVw8sYhE0@smile.fi.intel.com>
-References: <20251209100313.2867-1-david.laight.linux@gmail.com>
- <20251209100313.2867-5-david.laight.linux@gmail.com>
- <aThFlDZVFBEyBhFq@smile.fi.intel.com>
- <20251209191148.16b7fdee@pumpkin>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mCyVDBMd5boUSRW018r+fuTFk+pxgVxeqvYY/Ik96taN+ULaInXiWi8ZVkcY2DYg9YwRZMXDxRnfyg91royuhfjU6DEoh0RDiRfL8b+wGfbs7duB/5N725Z3EBOlnMDn8wMcoJwyJ0zkTOMnVT8/RC2Aa/CZ5J8/1wCAOdgOnfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Thl7bYNE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42A26C4CEF5;
+	Tue,  9 Dec 2025 22:31:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765319490;
+	bh=YMYNTULoE1bIg0iXTvcT8JKk/HRg0xEHn9+7P7my0Is=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Thl7bYNEsNmHR8v9P29/veeSmJI9qvFNd1caWZ5jQLM+AduMjtFUYY9hn1d9tInsM
+	 9lE06Jv39ccS0/31gNEG0kVM4P7w5sviWM+E0xkyV/Avs6qjP8D1TPx4f4RBfcsC/H
+	 3E00vPjJNyWOirxtHdE5j/7rT+TO7etn6mFs9rgB5xsksvjI7nkYrbXYlBOL11qTJ9
+	 /bAbYsdAQ2Zsy109c7H7qMEo0C4+b9Cd6ZX8q+K9j7fY/3R4tg4tTITr9lL+yX3uuc
+	 1OW+BZbFFJvHLdxvZqlMqHog4V54jRbuoL/+SDmG5kXIKOi8NAGHzzcbV5W/96EHSz
+	 TkIPth3JWXhTw==
+Date: Tue, 9 Dec 2025 16:31:27 -0600
+From: Rob Herring <robh@kernel.org>
+To: adrianhoyin.ng@altera.com
+Cc: gregkh@linuxfoundation.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	dinguyen@kernel.org, Thinh.Nguyen@synopsys.com,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] usb: dwc3: Add support for Agilex5 in
+ dwc3-generic-platform driver
+Message-ID: <20251209223127.GA1242261-robh@kernel.org>
+References: <cover.1765249127.git.adrianhoyin.ng@altera.com>
+ <a9db62422d39ac51cb26b73c5537ca2f8130f7a3.1765249127.git.adrianhoyin.ng@altera.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251209191148.16b7fdee@pumpkin>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a9db62422d39ac51cb26b73c5537ca2f8130f7a3.1765249127.git.adrianhoyin.ng@altera.com>
 
-On Tue, Dec 09, 2025 at 07:11:48PM +0000, David Laight wrote:
-> On Tue, 9 Dec 2025 17:51:48 +0200
-> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
-> > On Tue, Dec 09, 2025 at 10:03:08AM +0000, david.laight.linux@gmail.com wrote:
-
-...
-
-> > > -#define __BF_FIELD_CHECK_MASK(_mask, _val, _pfx)			\
-> > > +#define __BF_FIELD_CHECK_MASK(mask, val, pfx)				\
-> > >  	({								\
-> > > -		BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),		\
-> > > -				 _pfx "mask is not constant");		\
-> > > -		BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");	\
-> > > -		BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
-> > > -				 ~((_mask) >> __bf_shf(_mask)) &	\
-> > > -					(0 + (_val)) : 0,		\
-> > > -				 _pfx "value too large for the field"); \
-> > > -		__BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +			\
-> > > -					      (1ULL << __bf_shf(_mask))); \
-> > > +		BUILD_BUG_ON_MSG(!__builtin_constant_p(mask),		\
-> > > +				 pfx "mask is not constant");		\
-> > > +		BUILD_BUG_ON_MSG((mask) == 0, _pfx "mask is zero");	\
-> > > +		BUILD_BUG_ON_MSG(__builtin_constant_p(val) ?		\
-> > > +				 ~((mask) >> __bf_shf(mask)) &		\
-> > > +					(0 + (val)) : 0,		\
-> > > +				 pfx "value too large for the field");	\
-> > > +		__BUILD_BUG_ON_NOT_POWER_OF_2((mask) +			\
-> > > +					      (1ULL << __bf_shf(mask))); \
-> > >  	})  
-> > 
-> > I looks like renaming parameters without any benefit, actually the opposite
-> > it's very hard to see if there is any interesting change here. Please, drop
-> > this or make it clear to focus only on the things that needs to be changed.
+On Tue, Dec 09, 2025 at 02:25:11PM +0800, adrianhoyin.ng@altera.com wrote:
+> From: Adrian Ng Ho Yin <adrianhoyin.ng@altera.com>
 > 
-> I'm pretty sure there are no other changes in that bit.
+> Adds support for Agilex5 in the dwc3-generic-platform driver. Extends
+> generic driver to support configurable driver data to enable dwc3 core
+> property configuration from glue driver.
+> 
+> Agilex5 DWC3 wrapper has a 40-bit DMA address bus limitation. When SMMU
+> is enabled, using the default 64-bit DMA mask can cause DMA addresses to
+> be truncated, leading to translation faults.
+> 
+> This patch adds a `dma_addressable_bits` field in struct dwc3, allowing
+> the glue driver to set a 40-bit DMA mask during probe.
+> 
+> Signed-off-by: Adrian Ng Ho Yin <adrianhoyin.ng@altera.com>
+> ---
+>  drivers/usb/dwc3/core.c              |  6 +++++-
+>  drivers/usb/dwc3/core.h              |  5 +++++
+>  drivers/usb/dwc3/dwc3-generic-plat.c | 20 +++++++++++++++++++-
+>  3 files changed, 29 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index ae140c356295..1fca55637844 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -2243,7 +2243,11 @@ int dwc3_core_probe(const struct dwc3_probe_data *data)
+>  
+>  	if (!dwc->sysdev_is_parent &&
+>  	    DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0) == 64) {
+> -		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
+> +		if (!dwc->dma_addressable_bits)
+> +			dwc->dma_addressable_bits = 64;
+> +
+> +		ret = dma_set_mask_and_coherent(dwc->sysdev,
+> +						DMA_BIT_MASK(dwc->dma_addressable_bits));
+>  		if (ret)
+>  			goto err_disable_clks;
+>  	}
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index a5fc92c4ffa3..a09800fe6577 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1180,6 +1180,10 @@ struct dwc3_glue_ops {
+>   * @wakeup_pending_funcs: Indicates whether any interface has requested for
+>   *			 function wakeup in bitmap format where bit position
+>   *			 represents interface_id.
+> + * @dma_addressable_bits: The number of address bits the device can drive on
+> + *			the DMA bus. The driver uses this value to program DMA masks and
+> + *			ensure DMA buffers are allocated within the device’s reachable
+> + *			address space.
+>   */
+>  struct dwc3 {
+>  	struct work_struct	drd_work;
+> @@ -1414,6 +1418,7 @@ struct dwc3 {
+>  	struct dentry		*debug_root;
+>  	u32			gsbuscfg0_reqinfo;
+>  	u32			wakeup_pending_funcs;
+> +	u32			dma_addressable_bits;
+>  };
+>  
+>  #define INCRX_BURST_MODE 0
+> diff --git a/drivers/usb/dwc3/dwc3-generic-plat.c b/drivers/usb/dwc3/dwc3-generic-plat.c
+> index d96b20570002..e9650df6cf81 100644
+> --- a/drivers/usb/dwc3/dwc3-generic-plat.c
+> +++ b/drivers/usb/dwc3/dwc3-generic-plat.c
+> @@ -20,6 +20,11 @@ struct dwc3_generic {
+>  	struct reset_control	*resets;
+>  };
+>  
+> +struct dwc3_generic_config {
+> +	u32 flags;
+> +};
+> +
+> +#define DWC3_HAS_40BIT_DMA_QUIRK BIT(0)
 
-Yes, but the rule of thumb to avoid putting several logical changes into a
-single patch and here AFAICT the renaming should be avoided  / split to a
-precursor or do it after this.
+Quirk flags are good, but if we have 10 different address sizes that's 
+10 flags. Just make a dma_addressable_bits field here too, and then it 
+is just a straight assignment.
 
-> (The entire define is pretty much re-written in a later patch and I
-> did want to separate the changes.)
-
-Then probably don't do the change at all (renaming), as it's useless here?
-
-> I wanted to the file to be absolutely consistent with the parameter/variable
-> names.
-
-No objection on this.
-
-> Plausibly the scheme could be slightly different:
-> 'user' parameters are 'xxx', '__auto_type' variables are '_xxx'.
-> But internal defines that evaluate/expand parameters more than once are
-> '_xxx' and must be 'copied' by an outer define.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Rob
 
