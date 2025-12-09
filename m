@@ -1,78 +1,78 @@
-Return-Path: <linux-usb+bounces-31343-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31344-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id C92F6CB0DFE
-	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 19:55:01 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 313B5CB0E8C
+	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 20:12:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5A431301CFAB
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 18:55:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6C17E3006598
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 19:11:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D96E303A26;
-	Tue,  9 Dec 2025 18:54:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1A93043CF;
+	Tue,  9 Dec 2025 19:11:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hgmPErcd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V2x8JN5a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0830B26980F
-	for <linux-usb@vger.kernel.org>; Tue,  9 Dec 2025 18:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EFE303CB6
+	for <linux-usb@vger.kernel.org>; Tue,  9 Dec 2025 19:11:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765306497; cv=none; b=KHn515WTnd7nzViUVmW4MqnSbgERfuFpC7FiClRIZAIFDR6pv/WbsPQQv2ncL1NWRWTbsS2ARkjbO27IevCSkEPcpoDAE3a1Ugyz3akCFtmWImy68Rmm8978zYp6ORH+92UOqQM4XQeB699b+0B6LiFAJc3nCNAoTUzAOTkuNKw=
+	t=1765307516; cv=none; b=piMLtk8y4KpzG0ND1mDzWtgJPdAkBK/xzZNZaOaW/+jXgY/bhOGb/qqbCoHZwWvp3/L0Pb0srHeR6nD5oUevHdZ7Fh0jRJhE0iqxO6K7LTXJNNd0zFXwCHyH9aL/Z96UjerD0j9jnNqexYblSDdq+owqT/NAHrqS/lMR7BRGraY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765306497; c=relaxed/simple;
-	bh=oxnsSzSSQAu/Bk/v2zSRSRpD8UW0cATc07H6GarnzDA=;
+	s=arc-20240116; t=1765307516; c=relaxed/simple;
+	bh=Vigss2VmDX7bEdaP1IC8CfMj88h+qnBHbPLRY6X9h5g=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FrVO4PhXhCDzvosam8x/xiCZ/N80GzdjXpeUpqFZCuKlhlmrHGiKiTgUjTbhH2SeK4HvOCLEC/jgUh6a+3/f5sw5CQtYJBKyB85E3MHFXSuiJ1eTujw4ovaseGu+VXfGjqVX8Cb6aZmEMbZ6sfxZJkdGo1ZLDxrKOkOpR6zTClw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hgmPErcd; arc=none smtp.client-ip=209.85.128.54
+	 MIME-Version:Content-Type; b=BRbIT8ygzWhYBUh8H9hmmE469tdwCgPGHYOGA3gzeDwR0v9E1ED/uoAdhMGkJOJipRCOZN2WEqqwPxEMhWAgvApd5K0rmWCMAAsnLmsWnEPH4zSEUVBzPK16yxAF8pbeF047+eN5AUI4vYi6HAJkClbgnv3bXuETHPK1Ss6h88k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V2x8JN5a; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477a1c28778so75546645e9.3
-        for <linux-usb@vger.kernel.org>; Tue, 09 Dec 2025 10:54:55 -0800 (PST)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4779cb0a33fso79698505e9.0
+        for <linux-usb@vger.kernel.org>; Tue, 09 Dec 2025 11:11:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765306494; x=1765911294; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765307512; x=1765912312; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HpdLUaMszOte+9P9trLbr49o0T/8IL0zVkv1y9a6ACQ=;
-        b=hgmPErcdpbOmWNv97DFI6MjvwovMomPavckD2iQ/zkYmw1PxLyXmJNwIWcKt5I0EDk
-         U+5r5ujCHuKSyWjPGyaBIqyP4UmwKS+lUsWnqCCLTwKg5GbDGIkrA16ZidVCfyFlDwCU
-         hPT2D9Ki5Tl88Y0jMGMa3SPDMA7LYl2LbkUT2fOsuwB1psGSHE93Twai/5sDGyyyeBSI
-         TPQxA6fONxJKZjbFxAa53IJsk3n2T4gytPU7mD5H2QKFqRi9ESqMzGwApHiWW0P9uciX
-         N17Av0DtfJjkw7TJ6YyWk/JmhOV8uS7XcLGfr2WhQHXYLXg35yxesgy4BqgXfzIYdr6A
-         0iKw==
+        bh=7VrojYWmad2/hXGEw6Ve6lcVoq3UDRgDrKieHhrBvuI=;
+        b=V2x8JN5aduJWBdc8uCNsZyEklP+C0uNfe+QvXzXdSWGvPA5xiAIQL5Z0UmQMFUmDvy
+         rl7dk1XxmNLpyMDbbo8ew3yoLhZPEC7VUrntT3JNTRqWzTEg22Ee4qtHJaiIRiVUDkhz
+         Fw9t6SxoD2kuWNJEqbX93PUy3cB79ZgtEFh7dwI3SLcnxSy/RkbUH4BkQx/3Gl3VXd25
+         bxRY5grX8OSWpzIvyRnyJjxze080GeypAE5qKRiKqw8mZaijNarH1I4hh7U3kot3lCS2
+         3x+iPvKJemi5fbenOq/INQyYPzNKFOxfHPNoCfHXPGdwniPI4CqM8RAwUZRrDk1OOM9H
+         vg+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765306494; x=1765911294;
+        d=1e100.net; s=20230601; t=1765307512; x=1765912312;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=HpdLUaMszOte+9P9trLbr49o0T/8IL0zVkv1y9a6ACQ=;
-        b=M110aiWGXj0DFdfNZExGGgVLUkikPkEpV12HpoxKoyM8qPqUDAZDiJOC07cU9v2WCa
-         7l7lnXFAb8sT3WsC2Xef7PoNGHMrrakVr7m/tOym/eVH7u/isq0lZcoowK4qJuKB+2JB
-         Sdqv4ffxvBOqWhE1etxnuQAPRteeYzWbYUvUihacqalaRaSkuYwGmRF/63Hi0y+nTS36
-         Gojx2jzet3VPNYuvof3if0xywGYKjEsQJzNT4aWXXgLko5nUsBB6pEY2/hXMLzLhdeIY
-         r4pZsbqB04sAKAFZyP/oW91gqJVZ/QSwmzJfsnNfxFjVS3U/5tmE0moTogKRlgvGlQpe
-         G3jg==
-X-Forwarded-Encrypted: i=1; AJvYcCVixAJt6KVrj5pI4Ou+z4aESwaA/BpPNx7SWwXV98lQpdwZYwSCiLW7Lx+up32KohzERaCUwc896i8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy13hMefqcLW/q4jRSw/XRx2ImFJrW4xc9JGkE5hoAuAL2P8eR0
-	wtvszNyVk9mleFgzQH2RLZ2P9IlWoz2wMajMlp/XEhCSvxQRQAHGZYhS
-X-Gm-Gg: ASbGncv8DqV6vThVRiz9jraaWo/YGW8b7tPBHDu1cnA9nNK6G2+dzXEkFH4B87qQ91O
-	z+qxC7sg8OG6HXDRBC1grCNAI8cn5iwd4SkR5Nf/nuLFRmsTlBZIH/gcu4Hhlypx5RnN5lYLNx+
-	PIAPkj9F96XDg9KXJMO+Oj/xIzIxZwsW4vUe6QoXbba2NKmeDFAfl47X27IT+/RV9CbT4DN0UlZ
-	KN7SGb146Nl5Lo3lKgfeTnXPP6/p5f2+/W6zFVHioo0hEvHYTBV9C7CFe8fJRNFSkE7OUV7DNLm
-	yFePzUvHTKdZ7pC4riSu2OWk1guh89IYKNa3SgzjqN6YyqIpv3IpFvJb3LEw8V+rIwy+WbyupEx
-	PJ30J9lLup5taQ4gay9qWurA8fYn8867Lg6Qd2aKECQu3S78kKLPcqHoShPG0VmctO1QTQ8tIdr
-	7I+Xf+SL+JPz8NCajGolsVQz51Dos2AiSwr+lQWw+YBxkZE4AdNhDGQ9icawtabrI=
-X-Google-Smtp-Source: AGHT+IFirw91TWSXU8QHpRvuGGX1U+haycOXGSNcwfW+RwtLxsf2h/xkUvj8XnU+zmLfR4fhgmr1+A==
-X-Received: by 2002:a05:600c:444a:b0:477:6e02:54a5 with SMTP id 5b1f17b1804b1-47939e20a92mr115156485e9.18.1765306494210;
-        Tue, 09 Dec 2025 10:54:54 -0800 (PST)
+        bh=7VrojYWmad2/hXGEw6Ve6lcVoq3UDRgDrKieHhrBvuI=;
+        b=OiOJwsc0JM3+tiTDu/064xMu/4CcHK42TivhQPgcCQ0Bx1lw6c2rMyTpkaowfUSjxU
+         RqBfl7zyzR3Vmn93bycde2O3taTTc6VGl/sK5Uu88NEQvqvz0rv1NCqp4iQEbS04iQRQ
+         KxgiTBw5SqRRARMM4dYTMz+nI8quZtTWmeCfWe7UbQFp+qm1zfXXx1BhSQ9gKtN94z5f
+         1KsFN0a2h4JG5iqf0XCw24A2apR/DX6mAXcoWzO11IE5aMitpfZc/T0lJF3y/pik6Onx
+         rWfIzVOVhLalGgLPtvv9i22rOAMBokNicU1gsI6obTIhXpjI7PzixX/5f55Vr0krGehS
+         PpGA==
+X-Forwarded-Encrypted: i=1; AJvYcCW/LQJXgWQjBPyxBlx3eRJ9kfurubVKtHbB31G7Sv3G57UU42TXo0/kLOzHmLqav1aotZDgMuJuc0Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyw9tUq0bS7AoKaOAM8s75JFSQa84ngZVsYDd3BQT1wH2F6IiN0
+	QXSDiRuBt/mSivPtVEgGNAfz7mVSWGdpOCA1Hd8C8gVfCXQkX2U9KSHw
+X-Gm-Gg: ASbGncsBJ2w8SetjITCuMRmUSH92+5K1OdxHTBP6au3fmTVaKsm0OOzPNqiVEAfcTJG
+	YpQqcjFKbx1KpUeNvrcBZr7UUQDWSv4wyOg7d67O/LQpCCgQs4XlAkCJuSW4dXHFKQ0b0L+yOWe
+	oKAN+jXu/qKq3lOpPZv79oI84/hK8A6xcrkznocDFsptPmS8f4XtoG4kdiW5qGA+Mk1N17Dhbgt
+	Vx9Hg7zp+uVx/NLFY7zklMtFPh2Wzu1flUpHRVHByWvZxXo9LEbQqwuRduoOZCtwsEeBs0vVdrx
+	+FxWEj44jInU6jcobbH90qoL/aV7wT6sDlkIkKU8vKT3OCaXHTdSIwhsRHFfx1NxEKzGU06Rz4h
+	yDyN/2srgdWGBMsbJlis4Mfz3HO6PR9gHucaMkWH449dIQVnBbgM8CZgn3V3hsupEDxZfWN74IE
+	9sMYRP5uCGumvqPmDHS0Fg186jmTHc+YNS4IZpANQKGJzHWEBuHoNL
+X-Google-Smtp-Source: AGHT+IF6wLKEoqKWHUIso/KMV2us/t6CixsT57DQtOhmkn/Y6ES7LiNIjvfalect3nhhJyAITGuBxw==
+X-Received: by 2002:a05:600c:37c3:b0:46e:35a0:3587 with SMTP id 5b1f17b1804b1-47939e37b60mr131029595e9.27.1765307512383;
+        Tue, 09 Dec 2025 11:11:52 -0800 (PST)
 Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7d331092sm33581359f8f.30.2025.12.09.10.54.53
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7d222478sm32697794f8f.20.2025.12.09.11.11.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Dec 2025 10:54:53 -0800 (PST)
-Date: Tue, 9 Dec 2025 18:54:52 +0000
+        Tue, 09 Dec 2025 11:11:52 -0800 (PST)
+Date: Tue, 9 Dec 2025 19:11:48 +0000
 From: David Laight <david.laight.linux@gmail.com>
 To: Andy Shevchenko <andriy.shevchenko@intel.com>
 Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
@@ -87,13 +87,12 @@ Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
  <mika.westerberg@linux.intel.com>, Andreas Noever
  <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: Re: [PATCH 3/9] bitmap: Use FIELD_PREP() in expansion of
- FIELD_PREP_WM16()
-Message-ID: <20251209185452.707f4dbe@pumpkin>
-In-Reply-To: <aThETSRch_okmCbe@smile.fi.intel.com>
+Subject: Re: [PATCH 4/9] bitfield: Copy #define parameters to locals
+Message-ID: <20251209191148.16b7fdee@pumpkin>
+In-Reply-To: <aThFlDZVFBEyBhFq@smile.fi.intel.com>
 References: <20251209100313.2867-1-david.laight.linux@gmail.com>
-	<20251209100313.2867-4-david.laight.linux@gmail.com>
-	<aThETSRch_okmCbe@smile.fi.intel.com>
+	<20251209100313.2867-5-david.laight.linux@gmail.com>
+	<aThFlDZVFBEyBhFq@smile.fi.intel.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -104,37 +103,84 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 9 Dec 2025 17:46:21 +0200
+On Tue, 9 Dec 2025 17:51:48 +0200
 Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 
-> On Tue, Dec 09, 2025 at 10:03:07AM +0000, david.laight.linux@gmail.com wrote:
+> On Tue, Dec 09, 2025 at 10:03:08AM +0000, david.laight.linux@gmail.com wrote:
 > 
-> > Instead of directly expanding __BF_FIELD_CHECK() (which really ought
-> > not be used outside bitfield) and open-coding the generation of the
-> > masked value, just call FIELD_PREP() and add an extra check for
-> > the mask being at most 16 bits.  
+> > Use __auto_type to take copies of parameters to both ensure they are
+> > evaluated only once and to avoid bloating the pre-processor output.
+> > In particular 'mask' is likely to be GENMASK() and the expension
+> > of FIELD_GET() is then about 18KB.
+> > 
+> > Remove any extra (), update kerneldoc.  
+> 
+> > Consistently use xxx for #define formal parameters and _xxx for
+> > local variables.  
+> 
+> Okay, I commented below, and I think this is too huge to be in this commit.
+> Can we make it separate?
+
+I originally wrote a much longer patch set, then merged some to reduce
+the number of patches - you can't win really.
+
+> 
+> > Rather than use (typeof(mask))(val) to ensure bits aren't lost when
+> > val is shifted left, use '__auto_type _val = 1 ? (val) : _mask;'
+> > relying on the ?: operator to generate a type that is large enough.
+> > 
+> > Remove the (typeof(mask)) cast from __FIELD_GET(), it can only make
+> > a difference if 'reg' is larger than 'mask' and the caller cares about
+> > the actual type.
+> > Note that mask usually comes from GENMASK() and is then 'unsigned long'.
+> > 
+> > Rename the internal defines __FIELD_PREP to __BF_FIELD_PREP and
+> > __FIELD_GET to __BF_FIELD_GET.
+> > 
+> > Now that field_prep() and field_get() copy their parameters there is
+> > no need for the __field_prep() and __field_get() defines.
+> > But add a define to generate the required 'shift' to use in both defines.  
 > 
 > ...
 > 
-> > +#define FIELD_PREP_WM16(mask, val)				\
-> > +({								\
-> > +	__auto_type _mask = mask;				\
-> > +	u32 _val = FIELD_PREP(_mask, val);			\  
+> > -#define __BF_FIELD_CHECK_MASK(_mask, _val, _pfx)			\
+> > +#define __BF_FIELD_CHECK_MASK(mask, val, pfx)				\
+> >  	({								\
+> > -		BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),		\
+> > -				 _pfx "mask is not constant");		\
+> > -		BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");	\
+> > -		BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
+> > -				 ~((_mask) >> __bf_shf(_mask)) &	\
+> > -					(0 + (_val)) : 0,		\
+> > -				 _pfx "value too large for the field"); \
+> > -		__BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +			\
+> > -					      (1ULL << __bf_shf(_mask))); \
+> > +		BUILD_BUG_ON_MSG(!__builtin_constant_p(mask),		\
+> > +				 pfx "mask is not constant");		\
+> > +		BUILD_BUG_ON_MSG((mask) == 0, _pfx "mask is zero");	\
+> > +		BUILD_BUG_ON_MSG(__builtin_constant_p(val) ?		\
+> > +				 ~((mask) >> __bf_shf(mask)) &		\
+> > +					(0 + (val)) : 0,		\
+> > +				 pfx "value too large for the field");	\
+> > +		__BUILD_BUG_ON_NOT_POWER_OF_2((mask) +			\
+> > +					      (1ULL << __bf_shf(mask))); \
+> >  	})  
 > 
-> > +	BUILD_BUG_ON_MSG(_mask > 0xffffu,			\
-> > +			 "FIELD_PREP_WM16: mask too large");	\  
-> 
-> Can it be static_assert() instead?
+> I looks like renaming parameters without any benefit, actually the opposite
+> it's very hard to see if there is any interesting change here. Please, drop
+> this or make it clear to focus only on the things that needs to be changed.
 
-No, they have to be 'integer constant expressions' not just
-'compile time constants'.
-Pretty useless for anything non-trivial.
+I'm pretty sure there are no other changes in that bit.
+(The entire define is pretty much re-written in a later patch and I
+did want to separate the changes.)
+
+I wanted to the file to be absolutely consistent with the parameter/variable
+names.
+Plausibly the scheme could be slightly different:
+'user' parameters are 'xxx', '__auto_type' variables are '_xxx'.
+But internal defines that evaluate/expand parameters more than once are
+'_xxx' and must be 'copied' by an outer define.
 
 	David
-
-> 
-> > +	_val | (_mask << 16);					\
-> > +})  
-> 
 
 
