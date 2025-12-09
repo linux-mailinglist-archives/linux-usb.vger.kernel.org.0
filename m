@@ -1,153 +1,181 @@
-Return-Path: <linux-usb+bounces-31336-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31338-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DC50CB078A
-	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 16:53:53 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 909A9CB08A2
+	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 17:22:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1A3963074CEA
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 15:53:45 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0829D301C5F4
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 16:22:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320702FFF8D;
-	Tue,  9 Dec 2025 15:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F841301477;
+	Tue,  9 Dec 2025 16:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hi6l+Td6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aLYXDRge"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457F427F759;
-	Tue,  9 Dec 2025 15:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7CA19F12A;
+	Tue,  9 Dec 2025 16:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765295622; cv=none; b=dyqFVg1g8lQGk9ptTU8N0EtVbTpBCu55NSYxkVkoT4GCD4h2sA45KxRaSQj9RjYhlkdi4lVBj3t4jR/kNh+xkAYeWcOTEEa4f1RhmHZfNjMBLvkV2TBUutSL3ATCIrSFjiZkjw5CLF3apNUwYCPLu5fo0sEmTathxW22wCuePrw=
+	t=1765297359; cv=none; b=AK0k+oejORpx2rnJTsnp8YxErQv1CZMdJL1MzAIAM1DevL1WpR7cxzhC3oyWTXdDUWbzvFJLZKyyd4LhupFQ05wGEF8Hv+csGAIiX8rlsXmIFWZ5+Oj5rCdJQkEQtY00ozw4ywXglQKkVH/4PnuNGKmHJi8WkLnYptxAaDyfgoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765295622; c=relaxed/simple;
-	bh=ldAUQ3qlJKlypdnT8395n30k3scG1Hsh/4akiujI2kM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XksiIQINafxwQzbReJN2DeHgZf++Yty43Q/K4VE8OwE/MwLR9ydNw7pqTOkhrSrNBQWAwfx9m3gaW7N6BodVAbwBwE2V4z9TKYlY2ki/mADO+qBOuzKXiuWtBgv232WpZBZLaNta0vXXmFZmkNZLvIp6UAce769HS7reZxwFc0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hi6l+Td6; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765295621; x=1796831621;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ldAUQ3qlJKlypdnT8395n30k3scG1Hsh/4akiujI2kM=;
-  b=Hi6l+Td6884fOkH07XDA+sZb/Np4WMs2XgwO20rEhew2DQisABsHbByl
-   /2bZSjX9nerZL9lHQyDqMJGTpTu7seYC6Ml9sDiQIqAABAyQbXqsJMHvt
-   Hlp6Z7r8CFWaU2KQMtD/bc7rr8x0b+jT0BBXNda3VMhca8Luo9Wb+OG6j
-   srA9ObH60E2GbuHJ+6o8euzn8+zYO6DhDAPZMlPuzJMA0CmhbQ3/j5iYt
-   AsM5NFx+x18GjrlbMhPjSZ57dAcFaCo3OWIWleGA68pW13W/9RVZJbYvV
-   GtvcwpuvQyX0K54n8SzVJaBq0rk5cXyZyyF15fK6ptnE7I9OzTZPgP+oq
-   A==;
-X-CSE-ConnectionGUID: vrZCjXSeRdq9jNNMMol1xw==
-X-CSE-MsgGUID: lfMMAXNVRtCFxuc97jUXOQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="77871103"
-X-IronPort-AV: E=Sophos;i="6.20,261,1758610800"; 
-   d="scan'208";a="77871103"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 07:53:40 -0800
-X-CSE-ConnectionGUID: ssg/azmWQPiVweOFzVaN/w==
-X-CSE-MsgGUID: LLu7/m6lSSmvCyjtUOkH0w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,261,1758610800"; 
-   d="scan'208";a="196022254"
-Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.237])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 07:53:36 -0800
-Date: Tue, 9 Dec 2025 17:53:33 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: david.laight.linux@gmail.com
-Cc: Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Crt Mori <cmo@melexis.com>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Luo Jie <quic_luoj@quicinc.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Simon Horman <simon.horman@netronome.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: Re: [PATCH 8/9] bitfield: Add comment block for the host/fixed
- endian functions
-Message-ID: <aThF_cYiyRjS38Ok@smile.fi.intel.com>
-References: <20251209100313.2867-1-david.laight.linux@gmail.com>
- <20251209100313.2867-9-david.laight.linux@gmail.com>
+	s=arc-20240116; t=1765297359; c=relaxed/simple;
+	bh=SC+Q2Xx7G4zUf/y1G3B7CY3xaRwx0zRKq2UmADlF4do=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SP8A7RcefEulPr1oaEIXvsvydI5qLH22NHQZtsOID753P62TAeNBalJAZTU+Qi+b9y1o+j/b4T2sTORMZCcQeU1s7WB/2VQ+vwh6UvtTU9W51x9xZALfUiL9wQxs5jqpJc6gVM2oT8PSflo8DvcCNMpqk1WVOwYRazvVNlaPcvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aLYXDRge; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3788C4CEF5;
+	Tue,  9 Dec 2025 16:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765297358;
+	bh=SC+Q2Xx7G4zUf/y1G3B7CY3xaRwx0zRKq2UmADlF4do=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=aLYXDRgekjMrAbiT0u8/y+2Nmsz8LytniLen/55oNSVY010jUvOoc7eR0sRtBb67h
+	 jctqB2Ibhpq75tHI64rYN3YgMKw5lzAkpmxuiPEb2gfaoVO5dWXgHyMvRoHcFCDtwc
+	 ZrPT206BKdd23EcPWbG4P76s4EViGjD64hn31fJ12NmdalEMVIGCZC4oFwKGa0JjO5
+	 jmOn10feTZkudS50Ye2aWf0xztlLJtGVULp5w//qz0BQL5PGIJhsmJGJwKMeVxIRU8
+	 6RmHyCGbV4cuBgxMupILu+KvA2c7sBM5amNpC+zci18BrlCDHuPP1wyFZ5sUHaLAkx
+	 7Mm9oH5VU13ZQ==
+Message-ID: <2bf30256-7647-488a-a8d8-4b4d2f0af813@kernel.org>
+Date: Tue, 9 Dec 2025 17:22:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251209100313.2867-9-david.laight.linux@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/6] media: uvcvideo: Import standard controls from
+ uvcdynctrl
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, Manav Gautama <bandwidthcrunch@gmail.com>,
+ Martin Rubli <martin_rubli@logitech.com>
+References: <20251119-uvcdynctrl-v2-0-0359ffb98c9e@chromium.org>
+ <20251119-uvcdynctrl-v2-2-0359ffb98c9e@chromium.org>
+ <779a1a39-64f9-4985-b733-92f8673f3d3e@kernel.org>
+ <1ea79ef0-ceba-43b3-9190-7a92c823e3d2@kernel.org>
+ <CANiDSCsrAvwygBrQLsF9RVOUGpdOEaOhzE90=c2CrW8GGe6-=g@mail.gmail.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <CANiDSCsrAvwygBrQLsF9RVOUGpdOEaOhzE90=c2CrW8GGe6-=g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 09, 2025 at 10:03:12AM +0000, david.laight.linux@gmail.com wrote:
+Hi,
 
-> Copied almost verbatim from the commit message that added the functions.
+On 9-Dec-25 7:28 AM, Ricardo Ribalda wrote:
+> Hi Hans
+> 
+> 
+> On Mon, 8 Dec 2025 at 20:12, Hans de Goede <hansg@kernel.org> wrote:
+>>
+>> Hi,
+>>
+>> On 8-Dec-25 12:02 PM, Hans de Goede wrote:
+>>> Hi Ricardo,
+>>>
+>>> Thank you very much for doing this, this has been on my own TODO list for
+>>> a long time, so it is great to finally see this happen.
+>>>
+>>> On 19-Nov-25 8:37 PM, Ricardo Ribalda wrote:
+>>>> The uvcdynctrl tool from libwebcam:
+>>>> https://sourceforge.net/projects/libwebcam/
+>>>> maps proprietary controls into v4l2 controls using the UVCIOC_CTRL_MAP
+>>>> ioctl.
+>>>>
+>>>> The tool has not been updated for 10+ years now, and there is no reason
+>>>> for the UVC driver to not do the mapping by itself.
+>>>>
+>>>> This patch adds the mappings from the uvcdynctrl into the driver. Hopefully
+>>>> this effort can help in deprecating the UVCIOC_CTRL_MAP ioctl.
+>>>
+>>> ...
+>>>
+>>> Question what happens if uvcdynctrl is run after applying this patch ?
+>>
+>> Answering my own question here, we will hit:
+>>
+>> drivers/media/usb/uvc/uvc_ctrl.c: 3166:
+>>
+>>         list_for_each_entry(map, &ctrl->info.mappings, list) {
+>>                 if (mapping->id == map->id) {
+>>                         uvc_dbg(dev, CONTROL,
+>>                                 "Can't add mapping '%s', control id 0x%08x already exists\n",
+>>                                 uvc_map_get_name(mapping), mapping->id);
+>>                         ret = -EEXIST;
+>>                         goto done;
+>>                 }
+>>         }
+>>
+>> So uvcdynctrl will see an EEXIST error. I think we need to add an -EEXIST check
+>> to uvc_ctrl_add_mapping() )or uvc_ioctl_xu_ctrl_map() which is the only caller of
+>> uvc_ctrl_add_mapping()) and if -EEXIST is returned do a uvc_warn_once() that duplicate
+>> mappings are being ignored and return 0 instead of -EEXIST to avoid breaking existing
+> 
+> uvcdynctrl seems to handle this kind of error ok:
+> 
+> https://sourceforge.net/p/libwebcam/code/ci/master/tree/libwebcam/dynctrl.c#l1215
+> 
+> while(node_mapping) {
+>   CResult ret = process_mapping(node_mapping, ctx);
+>   if(ctx->info) {
+>     if(ret)
+>       ctx->info->stats.mappings.successful++;
+>     else
+>       ctx->info->stats.mappings.failed++;
+>   }
+>   node_mapping = xml_get_next_sibling_by_name(node_mapping, "mapping");
+> }
+> 
+> https://sourceforge.net/p/libwebcam/code/ci/master/tree/libwebcam/dynctrl.c#l1199
+> if(v4l2_ret != 0
+> #ifdef DYNCTRL_IGNORE_EEXIST_AFTER_PASS1
+> && (ctx->pass == 1 || errno != EEXIST)
+> #endif
+> )
+> 
+> https://sourceforge.net/p/libwebcam/code/ci/master/tree/libwebcam/libwebcam.h#l69
+> /// Ignore EEXIST errors for the UVCIOC_CTRL_ADD and UVCIOC_CTRL_MAP ioctls for
+> /// all but the first device. This is required if the driver uses
+> global controls
+> /// instead of per-device controls.
+> #define DYNCTRL_IGNORE_EEXIST_AFTER_PASS1
+> 
+> 
+> (BTW, I think the last comment ^^^ is wrong, it should be. Ignore
+> EEXIST errors, or errors for second passes.
+> But I might need a coffee :P)
+> 
+> 
+> Looking at the debian codesearch:
+> https://codesearch.debian.net/search?q=UVCIOC_CTRL_MAP+-path%3Aioctl.rs+-path%3Auvc_v4l2.c+-file%3Auvcvideo.rst+-file%3Auvc_ctrl.c+-file%3Auvcvideo.h&literal=1
+> 
+> the only occurrence that I am no sure if it will properly handle -EEXIST is:
+> https://sources.debian.org/src/chromium/143.0.7499.40-1/chrome/browser/ash/chromebox_for_meetings/xu_camera/xu_camera_service.cc?hl=400#L400
+> But that is ash-> ChromeOS browser. I can ask the code owner to fix it
+> if needed.
+> 
+> 
+> I'd rather not add the quirk that you are proposing if possible. I
+> would expect that any/all the userspace handles -EEXIST because the
+> uvc control state outlives the userspace.
+> 
+> 
+> Let me know what you think.
 
-...
+Based on what you wrote above I think that going with -EEXIST is ok for
+now, we can always revisit if we get complaints about this.
 
-> +/*
+Regards,
 
-Can it be a global DOC for being processed by kernel-doc?
-
-> + * Primitives for manipulating bitfields both in host- and fixed-endian.
-> + *
-> + * * u32 le32_get_bits(__le32 val, u32 field) extracts the contents of the
-> + *   bitfield specified by @field in little-endian 32bit object @val and
-> + *   converts it to host-endian.
-> + *
-> + * * void le32p_replace_bits(__le32 *p, u32 v, u32 field) replaces
-> + *   the contents of the bitfield specified by @field in little-endian
-> + *   32bit object pointed to by @p with the value of @v.  New value is
-> + *   given in host-endian and stored as little-endian.
-> + *
-> + * * __le32 le32_replace_bits(__le32 old, u32 v, u32 field) is equivalent to
-> + *   ({__le32 tmp = old; le32p_replace_bits(&tmp, v, field); tmp;})
-> + *   In other words, instead of modifying an object in memory, it takes
-> + *   the initial value and returns the modified one.
-> + *
-> + * * __le32 le32_encode_bits(u32 v, u32 field) is equivalent to
-> + *   le32_replace_bits(0, v, field).  In other words, it returns a little-endian
-> + *   32bit object with the bitfield specified by @field containing the
-> + *   value of @v and all bits outside that bitfield being zero.
-> + *
-> + * Such set of helpers is defined for each of little-, big- and host-endian
-> + * types; e.g. u64_get_bits(val, field) will return the contents of the bitfield
-> + * specified by @field in host-endian 64bit object @val, etc.  Of course, for
-> + * host-endian no conversion is involved.
-> + *
-> + * Fields to access are specified as GENMASK() values - an N-bit field
-> + * starting at bit #M is encoded as GENMASK(M + N - 1, M).  Note that
-> + * bit numbers refer to endianness of the object we are working with -
-> + * e.g. GENMASK(11, 0) in __be16 refers to the second byte and the lower
-> + * 4 bits of the first byte.  In __le16 it would refer to the first byte
-> + * and the lower 4 bits of the second byte, etc.
-> + *
-> + * Field specification must be a constant; __builtin_constant_p() doesn't
-> + * have to be true for it, but compiler must be able to evaluate it at
-> + * build time.  If it cannot or if the value does not encode any bitfield,
-> + * the build will fail.
-> + *
-> + * If the value being stored in a bitfield is a constant that does not fit
-> + * into that bitfield, a warning will be generated at compile time.
-> + */
-
--- 
-With Best Regards,
-Andy Shevchenko
+Hans
 
 
 
