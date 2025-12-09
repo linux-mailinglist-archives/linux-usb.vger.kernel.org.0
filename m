@@ -1,170 +1,157 @@
-Return-Path: <linux-usb+bounces-31345-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31346-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1335BCB102F
-	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 21:09:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10CE3CB13FF
+	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 22:56:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9859D308C7B7
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 20:09:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F102330F9284
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 21:54:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06FE0307496;
-	Tue,  9 Dec 2025 20:09:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C95592DF125;
+	Tue,  9 Dec 2025 21:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=semex-engcon.com header.i=u.mohr@semex-engcon.com header.b="ntaFZ5He"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CDT4WvDf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B2126056E;
-	Tue,  9 Dec 2025 20:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FAA262FC1;
+	Tue,  9 Dec 2025 21:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765310944; cv=none; b=mrd1rJ6pXzckVVgn8pvq/SmNyDeui8GhSDbzTw+vKGvtJ3CXOmCelfELbprSmtUF2wLKbLJgsC82KHE0wlRANUnzIvntSE2WTWCSuZNTjcYSTj6gysAQWO9X8+tjrA3ngYnGfXb6Nx5YjB5jkxzoeljbn8m7upDbJgEjiZB6mf8=
+	t=1765317283; cv=none; b=fF4mWUbahSimVBgZSbzU1qheuDQ+u0P/h57k+f1v02zAJd70E1MFBcA4WW7uCsVm6tsP4kiEVgq2R7fKvzxvLlX2gzQc1WFqov2ZK4xbzJ3EH8C4KHcwY/irILZFGR9nL+V635HIxfdwWtvIo5S0bOUlMjnrOZRlUEh/gGST1SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765310944; c=relaxed/simple;
-	bh=BKg91UCMYdz32JKQrPGy+o0cvJvL2fhS4OEYqHn4A2c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DDTyf+kFVva4MTmMcwixv2yyG5VAEgyWAN2fOSrMgb1puSWb8QFrIioQBsWrx2a5SG5pMnjhGqvfzr/wjGLfFRauyTffiIAgU8M3VIa+4Io5/MPYyNtDaS3b1HLDbl2aKS+7OXQshNirR0R8zVo3aXzigGoBhZatHK0PIKcBb9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=semex-engcon.com; spf=pass smtp.mailfrom=semex-engcon.com; dkim=pass (2048-bit key) header.d=semex-engcon.com header.i=u.mohr@semex-engcon.com header.b=ntaFZ5He; arc=none smtp.client-ip=217.72.192.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=semex-engcon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=semex-engcon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=semex-engcon.com;
-	s=s1-ionos; t=1765310939; x=1765915739; i=u.mohr@semex-engcon.com;
-	bh=Mcy7QVLKSok0f6mGGIhiPgpErANt/9b1uUpIwOrklDE=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=ntaFZ5HengyPzO/rgmGRe1rnICE1sCfto5pOzPTenrUhsBFqmYh0zEkypWBij958
-	 z+mO2ZkWXQtZjFRBK7s937x6RKxykn7uqoLGeCu+LjlVNK9a5x09b9kSKgPV58tHn
-	 yAykqOgxSvpZe3+d5wtVt6mI3fcfsTFNyZumUqQq8qleOqeQTZW1rkTMLdI+PrUeE
-	 36WaBAJphnW2lGwMjjxZHHFHu1R5asJnAiUotnNuMZU4BokGDHXIUva6R6HYpYM17
-	 F1qWGiIEUz7Ni2j4bQjny40ks/eZlDrtCtVq9XUz6XvbjFNlFbd42Y59riKW/tgRq
-	 K0hzsK6uovYCAaSxow==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from SE-UM-LT.semexengcon.local ([89.246.161.244]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MEFrX-1vLg2I3Izl-00CC3Y; Tue, 09 Dec 2025 21:08:59 +0100
-From: Ulrich Mohr <u.mohr@semex-engcon.com>
-To: linux-usb@vger.kernel.org
-Cc: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org,
-	Ulrich Mohr <u.mohr@semex-engcon.com>
-Subject: [PATCH v2] USB: serial: option: add Telit LE910 MBIM composition
-Date: Tue,  9 Dec 2025 21:08:41 +0100
-Message-Id: <20251209200841.21207-1-u.mohr@semex-engcon.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1765317283; c=relaxed/simple;
+	bh=xtYLyHUmG1D0oKjx5ZhX3mwTe2vJZTh9I0Ydg0tBMjQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CH3nUfvvXyY2zTJvVjd1f3L4d9pNIPE58DaQ69PiYtbnIXDmgvWJpuB9OntKToimkJl9S2sfkCPMQQIcdtT4dB4qVZJWb1kkHCBqm2cpZuRDwsSEQ+SgBzdOinr21VxnIoezEHdGUtJGgdFM79+Ee6vyaGlnW3JM6UJLdOjeyxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CDT4WvDf; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765317282; x=1796853282;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xtYLyHUmG1D0oKjx5ZhX3mwTe2vJZTh9I0Ydg0tBMjQ=;
+  b=CDT4WvDfaiFmt1eA9KbXD1rYNHtqO9GfB7PuMOSlZY3TPXbUvZoWPvTa
+   ou8YdcLqhAVcxWGIXYBrq25a7dq92blxZzTg9d+h1P+nGNgdyVtyw72Q0
+   6O5SMj27GxlYmIqBBHdTW5ev+snixP/DVWMAJw6GJl3UvNlSZ/WD/JM+S
+   PLN5sduEWH38uFZVWAX86pxFeLNBP9Knbak8dgTT1VhXxG6OwaJamT5Sf
+   0p3HUWvUYZ7BqVdC4SGs8hPPdo9xjilXor6zTJ/Fw4jdsqU84jmaJaZo0
+   jSIwtg/OgM7ABo2vbRvkVzhDIPBWg57QI11wh2/q7hJeHX1wE5iHavJpI
+   Q==;
+X-CSE-ConnectionGUID: 1Fs+mFqaRxOIHm2+P7oa4w==
+X-CSE-MsgGUID: LepQURjsQAqku/24tor4Jw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="67335278"
+X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
+   d="scan'208";a="67335278"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 13:54:41 -0800
+X-CSE-ConnectionGUID: xvwgSbk6Qq+Tzw0Qk9o/AQ==
+X-CSE-MsgGUID: p7dPqkNBQYS9nOuDpCUxjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
+   d="scan'208";a="200817543"
+Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.237])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 13:54:37 -0800
+Date: Tue, 9 Dec 2025 23:54:34 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Crt Mori <cmo@melexis.com>,
+	Richard Genoud <richard.genoud@bootlin.com>,
+	Luo Jie <quic_luoj@quicinc.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Simon Horman <simon.horman@netronome.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: Re: [PATCH 4/9] bitfield: Copy #define parameters to locals
+Message-ID: <aTiamjTnVw8sYhE0@smile.fi.intel.com>
+References: <20251209100313.2867-1-david.laight.linux@gmail.com>
+ <20251209100313.2867-5-david.laight.linux@gmail.com>
+ <aThFlDZVFBEyBhFq@smile.fi.intel.com>
+ <20251209191148.16b7fdee@pumpkin>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+URUiFQ/MR4DYTgQc5zqylmzXbBITzdiQXX69wk96pBHQsWOMmT
- 3PGrR4VmfHMZaqvootvpgjwW2KXTR8H0n5HR5oB8R2JM4DOSo9Wjw9gBSfgshUAG+YEsW92
- KlseYec6z2i7vnG4LCESXIeVJxNKsUx/RmtCGDuT9dJLObRwURwcqlqZBsc1FwqkUwiL2LH
- CQO26xCsNgUr0tpmZLU1Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:I9N74gmaie8=;g+DMxsiIAvDvaGSS7CDjE+Fu+GJ
- +UtUSYInTz3DHXisERn3nk5MopXOyzlv/8ThmyXd0HSJtqOCKXQ+fE1nWJRHYASpAqkSop7ve
- 8Sndzp+JnOhC8D/gi8H4wjM3WqFjy3vY/cFvki0iaWnn/FGLuhSzO/Ukm82Df0fnVgtcG3xK3
- e/uzeANXnIfu6tMd3qnPjYi4OVnhml71wGjVzB76CX63cxFbjh3Aog42BFxixlZT0ynXgdbrj
- 50zR3bxgDr9/VIswh1JI5eIOmUw13PTp1zNrAc2slGp5QSUA/vmDI6lFaRiU3BYQLKc9habKW
- R09s4RMs3JdXkyVvA6vavVZmqRf+BKiTdVQipLeXa6DtsVZQrBbSxccmgm4CtDrahoyurjf+6
- p8aIz3Aro6rsQz497Qbhdn4dwA/yqQRJIcu30e+X+wHqaDcncJWSkuYtMYFg9BmNGLefRCpu7
- ATQ/W0srngQeXrK/SIvDQB3lhvq6sVdBNo5RFH2BBk2ViZ2k/Q51hGE63XTuI7B9fV9f2mSFZ
- l1rXuFoFeMJSm99aJA976JkN7vX86Isbr/gUe7IGabUgDiV+eFb4X9VFZCHec1JthD9jFmRJ2
- DBnmD+D7vHC+U4Ulf0QY/Y5CA3lp0NbpazlMJYK4yDyShlO++IFaesUxZlPGB3k47x4Us+GW5
- WSEdvJVI6vk2cvue3z34smJnzVwaFNZKT39aRUK2/ACHbps13WcgifEtaRq+sTrvIYazz6gy0
- euzD9P/mcrUw+hdQK/nPNoJODxZRD0puUAKuzgiUMdEvCdh4NhcsyHG3d8WqURzjnUgHR68n2
- WnnjdDbvp2YrODuKw4bqlU+4SZsEDRorv7PaG+4wVc7gRyKXZ5SM73ArfTaHJS11UU1jvzzRG
- ErKI+Am4bBiw6jAkrvOifwCcV4WKJtqT514Z3REjfCpncW+VUVPUqIgvZs1Xwiyjy7XTKIZEl
- w3jzJm7jS0cxp8vG1WBDvJX1TFwT7kue9ryzXc8vLg3YdDv2OOMs32e9PxN2teSOLokCh/ydB
- sNi7/SCeRmhpOCEeZLFEqGrJxvnPivAEEcY2vFA3IFPxc7oZhVjrwmqaHj4r6conjTAc0gtIA
- CZM6I6q1oxYHU3sALPy+9HKrC1WiBteqvoQHVtolBKTuuYUDaj05c04fPq5pQmqfbMGh09C/6
- qUh7F3ASD1LVr9lLbIAUUIGVfyTVUeZ9Bryyn/4XCXurmwj2ZfRrqNNlGfIf0I2W/QUV+4aCo
- BOIV3z+Dlf57/7UA3byjq2oJ/DVidXgt44e0SrVO7DMG1TgL5VKQWqZol8GzZP3qlAC7ivpws
- NhAEQsZw/G4GXWjp5KZuvRixrvys5+tAg+2cjXl5T8u65VI54a8b/Fwvp7y8V4QNNbH73cKAc
- fKBXmas/ve7tLKjXkFD32oSxwk1t/WRYle77V9Zu0UHukbGWOzE2mZ1Nplisf7aCzHFpagFHD
- V6zRDwhK5tsBOUaIkadjbww2HvFhJyqnaHcdifyIJgXim8eX1RcqAckhBhkf6bnPtiMnsHZdc
- RJF6RF6fxE0Vm/L3lRJf9qRzZh/5uJgKZTMinpWz0ympTE+5cWVIzKXxwq9aQ3i2qX/JMS/hb
- BuruKgyTIXr5uRgfl0QwsHzQGLYSQMs6la0Xup/tJwFQc7cgcr06vrcjWoSXKo11tFhxwAenh
- OjzoXE3ibQ/dY6wu7Dk3w9J8sJ3usZ6TGLvladiySU4R54cXpe4aJUwb7cAkhW6BFS+ZKTKJH
- Bsef0hCPkO8gH4dL8XNnELcZMlnjHkhlTF4y0f1k6PEi7y0WkuUl4on/uIZ5D/bYFxcmilIWt
- uh0h
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251209191148.16b7fdee@pumpkin>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Add support for Telit LE910 module when operating in MBIM composition
-with additional ttys. This usb product ID is used by the module
-when AT#USBCFG is set to 7.
+On Tue, Dec 09, 2025 at 07:11:48PM +0000, David Laight wrote:
+> On Tue, 9 Dec 2025 17:51:48 +0200
+> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+> > On Tue, Dec 09, 2025 at 10:03:08AM +0000, david.laight.linux@gmail.com wrote:
 
-0x1252: MBIM + tty(NMEA) + tty(MODM) + tty(MODEM) +SAP
-T:  Bus=3D01 Lev=3D01 Prnt=3D01 Port=3D01 Cnt=3D01 Dev#=3D  2 Spd=3D480  M=
-xCh=3D 0
-D:  Ver=3D 2.00 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D1bc7 ProdID=3D1252 Rev=3D03.18
-S:  Manufacturer=3DAndroid
-S:  Product=3DLE910C1-EU
-S:  SerialNumber=3D0123456789ABCDEF
-C:  #Ifs=3D 6 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
-I:  If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D02(commc) Sub=3D0e Prot=3D00 Driver=
-=3Dcdc_mbim
-E:  Ad=3D82(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D32ms
-I:  If#=3D 1 Alt=3D 1 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D02 Driver=
-=3Dcdc_mbim
-E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-I:  If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D83(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D84(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-I:  If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3D(none)
-E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D85(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D86(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-I:  If#=3D 4 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D87(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D88(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
-I:  If#=3D 5 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
-=3Doption
-E:  Ad=3D05(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D89(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-E:  Ad=3D8a(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+...
 
-Signed-off-by: Ulrich Mohr <u.mohr@semex-engcon.com>
-=2D--
-Changes in v2: Omit define for PID, use PID (0x1252) directly
-=2D--
- drivers/usb/serial/option.c | 1 +
- 1 file changed, 1 insertion(+)
+> > > -#define __BF_FIELD_CHECK_MASK(_mask, _val, _pfx)			\
+> > > +#define __BF_FIELD_CHECK_MASK(mask, val, pfx)				\
+> > >  	({								\
+> > > -		BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),		\
+> > > -				 _pfx "mask is not constant");		\
+> > > -		BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");	\
+> > > -		BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
+> > > -				 ~((_mask) >> __bf_shf(_mask)) &	\
+> > > -					(0 + (_val)) : 0,		\
+> > > -				 _pfx "value too large for the field"); \
+> > > -		__BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +			\
+> > > -					      (1ULL << __bf_shf(_mask))); \
+> > > +		BUILD_BUG_ON_MSG(!__builtin_constant_p(mask),		\
+> > > +				 pfx "mask is not constant");		\
+> > > +		BUILD_BUG_ON_MSG((mask) == 0, _pfx "mask is zero");	\
+> > > +		BUILD_BUG_ON_MSG(__builtin_constant_p(val) ?		\
+> > > +				 ~((mask) >> __bf_shf(mask)) &		\
+> > > +					(0 + (val)) : 0,		\
+> > > +				 pfx "value too large for the field");	\
+> > > +		__BUILD_BUG_ON_NOT_POWER_OF_2((mask) +			\
+> > > +					      (1ULL << __bf_shf(mask))); \
+> > >  	})  
+> > 
+> > I looks like renaming parameters without any benefit, actually the opposite
+> > it's very hard to see if there is any interesting change here. Please, drop
+> > this or make it clear to focus only on the things that needs to be changed.
+> 
+> I'm pretty sure there are no other changes in that bit.
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 5de856f65f0d..e57aee524858 100644
-=2D-- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1489,10 +1489,11 @@ static const struct usb_device_id option_ids[] =3D=
- {
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1230, 0xff),	/* Telit LE=
-910Cx (rmnet) */
- 	  .driver_info =3D NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),	/* Telit LE=
-910Cx (RNDIS) */
- 	  .driver_info =3D NCTRL(2) | RSVD(3) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x1250, 0xff, 0x00, 0x0=
-0) },	/* Telit LE910Cx (rmnet) */
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1252, 0xff) },	/* Telit =
-LE910Cx (MBIM) */
- 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
- 	  .driver_info =3D NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
- 	  .driver_info =3D NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1900),				/* Telit LN940 (QMI) */
-=2D-=20
-2.39.5
+Yes, but the rule of thumb to avoid putting several logical changes into a
+single patch and here AFAICT the renaming should be avoided  / split to a
+precursor or do it after this.
+
+> (The entire define is pretty much re-written in a later patch and I
+> did want to separate the changes.)
+
+Then probably don't do the change at all (renaming), as it's useless here?
+
+> I wanted to the file to be absolutely consistent with the parameter/variable
+> names.
+
+No objection on this.
+
+> Plausibly the scheme could be slightly different:
+> 'user' parameters are 'xxx', '__auto_type' variables are '_xxx'.
+> But internal defines that evaluate/expand parameters more than once are
+> '_xxx' and must be 'copied' by an outer define.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
