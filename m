@@ -1,212 +1,256 @@
-Return-Path: <linux-usb+bounces-31313-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31314-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D667CAF0F1
-	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 07:42:18 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8CBDCAF168
+	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 08:06:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F3E1E3034A39
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 06:42:01 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D95C53006732
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 07:06:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD0626F295;
-	Tue,  9 Dec 2025 06:42:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4C825A321;
+	Tue,  9 Dec 2025 07:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kCHMoK82"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IwXbvoqK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63E126E17F
-	for <linux-usb@vger.kernel.org>; Tue,  9 Dec 2025 06:41:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601473B8D48;
+	Tue,  9 Dec 2025 07:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765262520; cv=none; b=QqvHzURGl4ng0SaK3of+DG+d3Acq7nFXCVxkhNTz0ITgH7zVzdL/thbTC1pge0FjdIsSPUKIC7htlNr8CYcTAxdvl6kNOSK8q85mPBiTvJ3vBP5OgxUiF0UiCrlmPsWw0eksOiwDmE4INATEWLn1dTObUstm/vhhB2y3oBcZJRc=
+	t=1765264000; cv=none; b=YJl9hyoln3ztghvgvhCGDsdqa6b4lc4wRj1kmU44KmCA83+VrhXWRx0fOTgx22rrujSGchTLuATONf+2JrrMfl/fOutZPA38kVwVEnMgqRZSzZUtcN7h4qBbpt9mFuOwt+97Zc4xy7/yrN/8AR8K/rvRAdIQVl0UsoGiK7H42K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765262520; c=relaxed/simple;
-	bh=lJU4xMyw0Ics4R7iF/dtEFW5XPTHjrAML86unhjdaw8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KJ4oK29gJW34PLy+cNYgysZo5C8Z2P3fxVFO/k7U8uTATNmsEQjcfqo0oK072ukSTDUzJu37SiLNTxt5c/KwBKGBZVdV7O+JvH2Wl9WViLAJA7wBgl6e+B+PlDLpaHIqoKi0MUT2xzij9xAB9ILExR7Iwf7aRTi7yxtM+sfdKno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kCHMoK82; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5958931c9c7so6512885e87.2
-        for <linux-usb@vger.kernel.org>; Mon, 08 Dec 2025 22:41:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1765262516; x=1765867316; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0V9C2N/EaSoH4hcssL4pcExp5whRbaljeVrNMKSIqrs=;
-        b=kCHMoK82lyt2xPNNwlLL54xJxAdt+t9jGIDM5J4b09cx53EEtLsnYH5OasDAK6Sb8L
-         /f0No1ROU08AYFYL5+s2IoN86wex3ADln+6iQS95XmqCwUYGFFVfUbK4LRkaZkD9xuo0
-         PH9Ysjfmo4gDibhR5t3g7+RaPqW917pVEwFtA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765262516; x=1765867316;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0V9C2N/EaSoH4hcssL4pcExp5whRbaljeVrNMKSIqrs=;
-        b=dzgIa0Cus8ekZtHfSr4dsEow49yfl7zwE0uCYLg2BAuvmzskoLvMYnYzxjL93no1bM
-         56hRUJ+NNVAikIP5jFivzh93ggo6+QpHdpYL1aJjGUCEduMuj+9WzEKIc5sFSOAa9lHd
-         7kymZcJn9nQhReeUZHreG9Xb/G5S5+uEXx2V6XEjDHZ9qpVs5BCiEIjTWJpLTEVhEN57
-         3mi0Tzdd+yuUgx0xqg7/+Up+Vm3Lknh264PZksL0M9TxN8VZ5C+hgz+A6om3ifmyqNFp
-         wRW4bpexvc3WXPD7Y8APVuP1DqDF8xBBm+HAWUPbyj2EeKyyAPFSuCefLdlfMkUNbENM
-         1E2A==
-X-Forwarded-Encrypted: i=1; AJvYcCVE+7dT8iuMMUq9r2lSL1OtoiVEhTeuPjTSBGj/mvLEnIaLNlhhC3qTLSy69cdrD0vzqZ55wU0TYtc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwlxfTU1R6CKJOuZvT8VagAX+0GlEXiqgU+Zurg6rsmpXKug6w
-	Sg/n3YbK+pDcoCDk6t85jMGP9hBNEI2Gs4N7hh8qyvdWtE5rm7p3ZznO47/gUawcu8X5AH6fRgj
-	zA/Hvxw==
-X-Gm-Gg: ASbGncsI8ShqLM55XrT6Vl7cuTIazhIp04iNApXJ3qTEcZi6JnVhqJiCN8rqKRWwd4M
-	PKYlXVVXi38cEg8mGsW4cnMxZyFJ3wXDYMN9u0o9oo2NjIC8XRqGUB9w2mlYxSnGbtUkGIgD0OA
-	OEa4By0q5XzS6v6d/i39ttKqElJHxAerxpd/QEGi7ju1tEXvO1UIEJwFoUS8LCbIjHsgGmss1Lt
-	K64mzHpPB2NtBxJUmHANOSN93KC2lkICqzAnFwt0dyAMFOfcvRCRFqXv8e1481+LWyNy/WqhQja
-	a1r6WtwX3kUcuchQ6js7RYljt5OrjF/Bw/Ih14BRIkZlxkKD/w7mi9LIzfG64quXdwFjoGfeWUq
-	FCD7hzQNGbwml79ZJfWnIFbrZ/uxf5siV2R+N8ACKy1Ay87UnwQ7x+jGa9nK06mvAwOaPiuHIO9
-	w8lRqngOsu/H8R3CBnk3rkSlBsg9bmwvN4oBk5JebGHS6vDF11o3NV
-X-Google-Smtp-Source: AGHT+IFfNWtc9b04xJej00a5Ok7rnumGZyqU8zhcZGn+/7qCuJe+ixNT2Qb83U68Z1JSqZmapJYlQg==
-X-Received: by 2002:a05:6512:b0f:b0:593:ffa:6988 with SMTP id 2adb3069b0e04-5987e8cb684mr3778536e87.21.1765262516245;
-        Mon, 08 Dec 2025 22:41:56 -0800 (PST)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-597d7b24719sm4792215e87.24.2025.12.08.22.41.55
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Dec 2025 22:41:55 -0800 (PST)
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-37a33b06028so47765641fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 08 Dec 2025 22:41:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWbqJ22u+x+FV1Rtl/yZkWPdhxf4vhmfFyGTMFvj2r7CZEE64LiMC9TZsGjKz5A29baZWaaWiCfLf8=@vger.kernel.org
-X-Received: by 2002:a05:6512:2312:b0:594:522d:68f4 with SMTP id
- 2adb3069b0e04-598853bc5fcmr2669981e87.28.1765262514587; Mon, 08 Dec 2025
- 22:41:54 -0800 (PST)
+	s=arc-20240116; t=1765264000; c=relaxed/simple;
+	bh=JFh7HPhuLym8mK3+eGVTboKZ9PMTTWUWJgHnmAYPvwY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZL0q7r4dFPYs3cfwcxx+9NIIBLOqfsePLReVvViTlYnu8fFeQinXZMNQdyWhICfaIAcTRYcqFrsVmdd02KAimedNSMwjuK9WTDhsmmmEXBeb9FqyVJH/gdqO30+1UclEkbe7Q68hFULu3RaKgD6+JFgSw8r9zWrAcPkgT9Tlbx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IwXbvoqK; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765263997; x=1796799997;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=JFh7HPhuLym8mK3+eGVTboKZ9PMTTWUWJgHnmAYPvwY=;
+  b=IwXbvoqKPYw6b5xy3snFSz4BuyeHq7CmeIiYMUxPUnW4Wjb3IImheZdV
+   orvBfclUd1pEYbvFFkXa0NahZKbT9pxTeUGWWrUJpWym5pzlNmbMzgdQ6
+   D+laDOew4iqljRYq0QxN94gTTOOgOhDBzIPaavBWIBSnyzy/ErPhSg0ha
+   RofYxJC20FImes2QpPKtcu8jdShk00CQ/EMk6bGN2V9tkAejNJisKWSin
+   V4lvycZhfDuxW0baa6xWnM9B3wXMS+XaHrw0oYx8t38o0cCd+HXKQ1BHr
+   JPQHcPRJb3epjO2wS2gCnP9hp9nNIAwS2/Fp1zm4feigjMQwev1NVSZi1
+   w==;
+X-CSE-ConnectionGUID: MEx2yjV0SZS1tXkH4l3kSQ==
+X-CSE-MsgGUID: mrn1GXq+TYenQT+BCcaB0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11636"; a="78331196"
+X-IronPort-AV: E=Sophos;i="6.20,260,1758610800"; 
+   d="scan'208";a="78331196"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2025 23:06:36 -0800
+X-CSE-ConnectionGUID: eKdG8O0kTfCg0rERUo46yA==
+X-CSE-MsgGUID: A6LJDm5zRe284CcAtE/gjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,260,1758610800"; 
+   d="scan'208";a="195924161"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa009.jf.intel.com with ESMTP; 08 Dec 2025 23:06:35 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 8AD9F93; Tue, 09 Dec 2025 08:06:33 +0100 (CET)
+Date: Tue, 9 Dec 2025 08:06:33 +0100
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH] [RFC] thunderbolt: Add delay for Dell U2725QE link width
+Message-ID: <20251209070633.GA2275908@black.igk.intel.com>
+References: <20251209054141.1975982-1-acelan.kao@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251119-uvcdynctrl-v2-0-0359ffb98c9e@chromium.org>
- <20251119-uvcdynctrl-v2-3-0359ffb98c9e@chromium.org> <f7cbf5ab-7564-4c81-84c9-b38b09e977f9@kernel.org>
-In-Reply-To: <f7cbf5ab-7564-4c81-84c9-b38b09e977f9@kernel.org>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Tue, 9 Dec 2025 07:41:39 +0100
-X-Gmail-Original-Message-ID: <CANiDSCvr7VRw91-AuJ8JTuhsuJNcg5XqLVvgjJycmqOKMcf3fg@mail.gmail.com>
-X-Gm-Features: AQt7F2oN1rLCiK5YAJ9rb0hF0CEMsaJ2yvHl5AqU5ZukcLwFi80je33jOhwtgDM
-Message-ID: <CANiDSCvr7VRw91-AuJ8JTuhsuJNcg5XqLVvgjJycmqOKMcf3fg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/6] media: uvcvideo: Announce deprecation intentions
- for UVCIOC_CTRL_MAP
-To: Hans de Goede <hansg@kernel.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251209054141.1975982-1-acelan.kao@canonical.com>
 
-Hi Hans
++Mario since this is AMD related.
 
+[Also keeping all the context].
 
-On Mon, 8 Dec 2025 at 20:17, Hans de Goede <hansg@kernel.org> wrote:
->
-> Hi,
->
-> On 19-Nov-25 8:37 PM, Ricardo Ribalda wrote:
-> > The UVCIOC_CTRL_MAP lets userspace create a mapping for a custom
-> > control.
-> >
-> > This mapping is usually created by the uvcdynctrl userspace utility. We
-> > would like to get the mappings into the driver instead.
-> >
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  Documentation/userspace-api/media/drivers/uvcvideo.rst | 2 ++
-> >  drivers/media/usb/uvc/uvc_v4l2.c                       | 4 ++++
-> >  2 files changed, 6 insertions(+)
-> >
-> > diff --git a/Documentation/userspace-api/media/drivers/uvcvideo.rst b/Documentation/userspace-api/media/drivers/uvcvideo.rst
-> > index dbb30ad389ae4d53bc734b4269ebea20ecdd7535..b09d2f8ba66ecde67f1e35fd77858a505ad44eb1 100644
-> > --- a/Documentation/userspace-api/media/drivers/uvcvideo.rst
-> > +++ b/Documentation/userspace-api/media/drivers/uvcvideo.rst
-> > @@ -109,6 +109,8 @@ IOCTL reference
-> >  UVCIOC_CTRL_MAP - Map a UVC control to a V4L2 control
-> >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> >
-> > +**This IOCTL is deprecated and will be eventually removed**
-> > +
-> >  Argument: struct uvc_xu_control_mapping
-> >
-> >  **Description**:
-> > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> > index 9e4a251eca88085a1b4e0e854370015855be92ee..03c64b5698bf4331fed8437fa6e9c726a07450bd 100644
-> > --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> > @@ -1044,6 +1044,8 @@ static long uvc_ioctl_default(struct file *file, void *priv, bool valid_prio,
-> >       switch (cmd) {
-> >       /* Dynamic controls. */
-> >       case UVCIOC_CTRL_MAP:
-> > +             pr_warn_once("uvcvideo: " DEPRECATED
-> > +                          "UVCIOC_CTRL_MAP ioctl will be eventually removed.\n");
-> >               return uvc_ioctl_xu_ctrl_map(chain, arg);
-> >
-> >       case UVCIOC_CTRL_QUERY:
->
-> Deprecating and then removing this is going to be a long slow process.
->
-> I was thinking that rather then remove it we would keep accepting the ioctl but instead
-> of calling uvc_ioctl_xu_ctrl_map() we would simply return 0. E.g. change the above to:
->
->         case UVCIOC_CTRL_MAP:
->                 pr_warn_once("uvcvideo: " DEPRECATED
->                              "UVCIOC_CTRL_MAP ioctl will eventually be ignored.\n");
->                 return uvc_ioctl_xu_ctrl_map(chain, arg);
->
-> And then say in one year after a kernel with the above is released change it to:
->
->         case UVCIOC_CTRL_MAP:
->                 pr_warn_once("uvcvideo: " DEPRECATED
->                              "UVCIOC_CTRL_MAP ioctls are ignored.\n");
->                 return 0;
->
->
-> I think removing it in 1 year is too soon, but ignoring it is ok. This does mean
-> that people will lose the custom v4l2-ctrls for which patch 2/6 is not adding
-> mappings into the driver in 1 year after a kernel with the warning is released...
->
-> I'm not 100% sure about this plan, so please let me know what you think. For
-> outright deprecation warning + full removal I think we need to wait at least
-> 2 years after shipping a kernel with the deprecation warning.
+On Tue, Dec 09, 2025 at 01:41:41PM +0800, Chia-Lin Kao (AceLan) wrote:
+> When plugging in a Dell U2725QE Thunderbolt monitor, the kernel produces
+> a call trace during initial enumeration. The device automatically
+> disconnects and reconnects ~3 seconds later, and works correctly on the
+> second attempt.
+> 
+> Issue Description:
+> ==================
+> The Dell U2725QE (USB4 device 8087:b26) requires additional time during
+> link width negotiation from single lane to dual lane. On first plug, the
+> following sequence occurs:
+> 
+> 1. Port state reaches TB_PORT_UP (link established, single lane)
+> 2. Path activation begins immediately
+> 3. tb_path_activate() - > tb_port_write() returns -ENOTCONN (error -107)
+> 4. Call trace is generated at tb_path_activate()
+> 5. Device disconnects/reconnects automatically after ~3 seconds
+> 6. Second attempt succeeds with full dual-lane bandwidth
+> 
+> First attempt dmesg (failure):
+> -------------------------------
+> [   36.030347] thunderbolt 0000:c7:00.6: 2:16: available bandwidth for new USB3 tunnel 9000/9000 Mb/s
+> [   36.030613] thunderbolt 0000:c7:00.6: 2: USB3 tunnel creation failed
+> [   36.031530] thunderbolt 0000:c7:00.6: PCIe Down path activation failed
+> [   36.031531] WARNING: drivers/thunderbolt/path.c:589 at 0x0, CPU#12: pool-/usr/libex/3145
+> 
+> Second attempt dmesg (success):
+> --------------------------------
+> [   40.440012] thunderbolt 0000:c7:00.6: 2:16: available bandwidth for new USB3 tunnel 36000/36000 Mb/s
+> [   40.440261] thunderbolt 0000:c7:00.6: 2:16: maximum required bandwidth for USB3 tunnel 9000 Mb/s
+> [   40.440269] thunderbolt 0000:c7:00.6: 0:4 <-> 2:16 (USB3): activating
+> [   40.440271] thunderbolt 0000:c7:00.6: 0:4 <-> 2:16 (USB3): allocating initial bandwidth 9000/9000 Mb/s
+> 
+> The bandwidth difference (9000 vs 36000 Mb/s) indicates the first attempt
+> occurs while the link is still in single-lane mode.
+> 
+> Root Cause Analysis:
+> ====================
+> The error originates from the Thunderbolt/USB4 device hardware itself:
+> 
+> 1. Port config space read/write returns TB_CFG_ERROR_PORT_NOT_CONNECTED
+> 2. This gets translated to -ENOTCONN in tb_cfg_get_error()
+> 3. The port's control channel is temporarily unavailable during state
+>    transition from single lane to dual lane (lane bonding)
+> 
+> The comment in drivers/thunderbolt/ctl.c explains this is expected:
+>   "Port is not connected. This can happen during surprise removal.
+>    Do not warn."
+> 
+> Attempted Solutions:
+> ====================
+> 1. Retry logic on -ENOTCONN in tb_path_activate():
+>    Result: Caused host port (0:0) lockup with hundreds of "downstream
+>    port is locked" errors. Rejected by user.
+> 
+> 2. Increased tb_port_wait_for_link_width() timeout from 100ms to 3000ms:
+>    Result: Did not resolve the issue. The timeout increase alone is
+>    insufficient because the port state hasn't reached TB_PORT_UP when
+>    lane bonding is attempted.
+> 
+> 3. Added msleep(2000) at various points in enumeration flow:
+>    Locations tested:
+>    - Before tb_switch_configure(): Works ✓
+>    - Before tb_switch_add(): Works ✓
+>    - Before usb4_port_hotplug_enable(): Works ✓
+>    - After tb_switch_add(): Doesn't work ✗
+>    - In tb_configure_link(): Doesn't work ✗
+>    - In tb_switch_lane_bonding_enable(): Doesn't work ✗
+>    - In tb_port_wait_for_link_width(): Doesn't work ✗
+> 
+>    The pattern shows the delay must occur BEFORE hotplug enable, which
+>    happens early in tb_switch_port_hotplug_enable() -> usb4_port_hotplug_enable().
+> 
+> Current Workaround:
+> ===================
+> Add a 2-second delay in tb_wait_for_port() when the port state reaches
+> TB_PORT_UP. This is the earliest point where we know:
+> - The link is physically established
+> - The device is responsive
+> - But lane width negotiation may still be in progress
+> 
+> This location is chosen because:
+> 1. It's called during port enumeration before any tunnel creation
+> 2. The port has just transitioned to TB_PORT_UP state
+> 3. Allows sufficient time for lane bonding to complete
+> 4. Avoids affecting other code paths
+> 
+> Testing Results:
+> ================
+> With this patch:
+> - No call trace on first plug
+> - Device enumerates correctly on first attempt
+> - Full bandwidth (36000 Mb/s) available immediately
+> - No disconnect/reconnect cycle
+> - USB and PCIe tunnels create successfully
+> 
+> Without this patch:
+> - Call trace on every first plug
+> - Only 9000 Mb/s bandwidth (single lane) on first attempt
+> - Automatic disconnect/reconnect after ~3 seconds
+> - Second attempt works with 36000 Mb/s
+> 
+> Discussion Points for RFC:
+> ===========================
+> 1. Is a fixed 2-second delay acceptable, or should we poll for a
+>    specific hardware state?
+> 
+> 2. Should we check PORT_CS_18_TIP (Transition In Progress) bit instead
+>    of using a fixed delay?
+> 
+> 3. Is there a better location for this delay in the enumeration flow?
+> 
+> 4. Should this be device-specific (based on vendor/device ID) or apply
+>    to all USB4 devices?
+> 
+> 5. The 100ms timeout in tb_switch_lane_bonding_enable() may be too
+>    short for other devices as well. Should we increase it universally?
 
-Let me rephrase what you have written:
+We should understand the issue better. This is Intel Goshen Ridge based
+monitor which I'm pretty sure does not require additional quirks, at least
+I have not heard any issues like this. I suspect this is combination of the
+AMD and Intel hardware that is causing the issue.
 
-today:
-pr_warn_once("uvcvideo: " DEPRECATED "UVCIOC_CTRL_MAP ioctl will be
-eventually ignored.\n");
-return uvc_ioctl_xu_ctrl_map(chain, arg);
+Looking at your dmesg, even before your issue there is suspicious log
+entry:
 
-in 1 year:
-pr_warn_once("uvcvideo: " DEPRECATED "UVCIOC_CTRL_MAP ioctl is ignored.\n");
-return 0;
+[    5.852476] localhost kernel: [31] thunderbolt 0000:c7:00.5: acking hot unplug event on 0:6
+[    5.852492] localhost kernel: [12] thunderbolt 0000:c7:00.5: 0:6: DP IN resource unavailable: adapter unplug
 
-in  2 years:
-return -ENOIOCTLCMD;
+This causes tearing down the DP tunnel. It is unexpected for the host
+router to send this unless you plugged monitor directly to some of the
+Type-C ports at this time?
 
+I wonder if you could take trace logs too from the issue? Instructions:
 
-Normally I would prefer not to lie to userspace (saying that the
-mapping was done, but not doing it).
+https://github.com/intel/tbtools?tab=readme-ov-file#tracing
+https://github.com/intel/tbtools/wiki/Useful-Commands#tracing
 
-But in this case, UVCIOC_CTRL_MAP does not seem to be very widely used
-(check previous email), so I do not think it really matters if we skip
-the "1 year step" and just return -ENOIOCTLCMD in 2 years.
+Please provide both full dmesg and the trace.out or the merged one. That
+would allow us to look what is going on (hopefully).
 
-I leave it up to you to decide the deprecation steps.
-
-Best regards!
-
->
-> Regards,
->
-> Hans
->
->
-
-
--- 
-Ricardo Ribalda
+> Hardware Details:
+> =================
+> Device: Dell U2725QE Thunderbolt Monitor
+> USB4 Router: 8087:b26 (Intel USB4 controller)
+> Host: AMD Thunderbolt 4 controller (0000:c7:00.6)
+> 
+> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+> ---
+> Full dmesg log available at: https://paste.ubuntu.com/p/CXs2T4XzZ3/
+> ---
+>  drivers/thunderbolt/switch.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> index b3948aad0b955..e0c65e5fb0dca 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -530,6 +530,8 @@ int tb_wait_for_port(struct tb_port *port, bool wait_if_unplugged)
+>  			return 0;
+>  
+>  		case TB_PORT_UP:
+> +			msleep(2000);
+> +			fallthrough;
+>  		case TB_PORT_TX_CL0S:
+>  		case TB_PORT_RX_CL0S:
+>  		case TB_PORT_CL1:
+> -- 
+> 2.43.0
 
