@@ -1,151 +1,83 @@
-Return-Path: <linux-usb+bounces-31315-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31316-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 762C9CAF17A
-	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 08:08:24 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4B2ECAF323
+	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 08:49:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2035F300FE01
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 07:08:16 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id AC0FD3019F4A
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 07:49:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27DE226F2B8;
-	Tue,  9 Dec 2025 07:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D87527B335;
+	Tue,  9 Dec 2025 07:49:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SzYlI+ww"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sXNnhTHr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44FE1A9FA7;
-	Tue,  9 Dec 2025 07:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F2E22F01;
+	Tue,  9 Dec 2025 07:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765264093; cv=none; b=nlBD4Z+fd79ZvxNsZLz3/hiuyNCChcsAa4/MjBSO8VKO6XQ1iov6uqFZtQ4lGLEAVOSFnXgQGLKeKbV7g2plTyqesNFWYsGWheRXyuZ878xdEpkbnSQ8OuGZZyUkjgSgJLQxsqEgCAUUuEPr4th9kuvxP2n39vnBX37BCqwcBEU=
+	t=1765266551; cv=none; b=oUblWMpZuNxF2XhbCXDjp4saBFdtSjkxyC0qRisCf6wiEXAhIy0GgiZDtXRuah1Ssn77MVJWDQp3F5tlTDR3sSwTagI/PPAXSVzJjXNxpLcMj2LzQ2qzWm6MidC6dOOEc7KgAjxanvs3aKbS4WAAGTzubyvevEUCUnJ3lw8/hCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765264093; c=relaxed/simple;
-	bh=XUk8c97smgUycZ+dUUGpaqenwZ1xCSXNi6QZTKrj3zI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A1/EYRP0ojYroqMBQ/BQbidsiPZVrz7RcCII5NTwqJBqU2kHbnNgFeQTuAgd4KZahGnH/kj27369O9QexrulsxnlDV98sFnPDE5NHFwiUEvNGMFOxZmumRZQ5ZCuM3idHjIHxGAzouNjmRQoQtqjgheFlIhtt5Vxt5hNTzKMLIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SzYlI+ww; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765264091; x=1796800091;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XUk8c97smgUycZ+dUUGpaqenwZ1xCSXNi6QZTKrj3zI=;
-  b=SzYlI+wwNHtLuY/pyyF561jZTE3isE2O977sZSTvUfaCXMylgNNUnPJX
-   yQS6rfOG/RUrbCBtteKvRW0n/0a6xHUaTAqh/+wa4+bU9v96QJhUa0wJO
-   9IX2sq02I8bUyRC37NiEDizgOqGoho/A8pcxUFYYZfD8NTL2mhIQ3AWCl
-   rUCK7nIfK+tM/eE7mjKQIBAH6JHHAFFcJoDczZ/yPuB2Su9BNT3vwEtdW
-   MWaiOTRLqXM/8jNLWMyHbopROwyz4kJIBMnzEWHxiF91kqGzD6nA57ez3
-   omZs+Twz0XoRXVK+GfHJvXr6UPaXmXChAqW3YMRQCmJ1YtWnyryDOQJqU
-   Q==;
-X-CSE-ConnectionGUID: S/nQKAYQTAeXdGHLjdeMaQ==
-X-CSE-MsgGUID: 9MNLPOo7RP+fg5O3tmNawg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11636"; a="67099569"
-X-IronPort-AV: E=Sophos;i="6.20,260,1758610800"; 
-   d="scan'208";a="67099569"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2025 23:08:11 -0800
-X-CSE-ConnectionGUID: /glDrjHiSxC1TRmfUayU/g==
-X-CSE-MsgGUID: V2s5QJoRRAWbHWcjfsAb+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,260,1758610800"; 
-   d="scan'208";a="196050485"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa006.fm.intel.com with ESMTP; 08 Dec 2025 23:08:07 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 5426D93; Tue, 09 Dec 2025 08:08:06 +0100 (CET)
-Date: Tue, 9 Dec 2025 08:08:06 +0100
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: david.laight.linux@gmail.com
-Cc: Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Crt Mori <cmo@melexis.com>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Luo Jie <quic_luoj@quicinc.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Simon Horman <simon.horman@netronome.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>
+	s=arc-20240116; t=1765266551; c=relaxed/simple;
+	bh=AQfCgr/2BxTNWm4TTVxZ3VOxU83+R3WB1gT9ntGoYiw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CeYkfTfzMNJCAO5AODDHGp/y3PlcRSKGjYr3IFa7l00kmyiVvF9Vlhv+iDarkjGyyUg/w4F196RIrXPXtxpjqvzV+une4txS4Bs4N3d5I9j1uvie2WKet8nS6rW4FwXs6V1bCgyD+snuCsCtZ/zUyFE9+m5q6LIReqMTyBKO1mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sXNnhTHr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37934C4CEF5;
+	Tue,  9 Dec 2025 07:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765266550;
+	bh=AQfCgr/2BxTNWm4TTVxZ3VOxU83+R3WB1gT9ntGoYiw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=sXNnhTHrT0sU+MIKJhbnTFh+TmfTKkddnJIk4Wlmsd+rh8Um/+uKUNYU5+pao8Se7
+	 Two3SjztLjkTgs9yym43a9mNO7FHaSy8ZXPbiCK6oHxOdGc/aCQcO5iUpyN0fpfgJK
+	 LoHyE0E3meNeV7lMwaVmg30qgoYgANtKY7FyPrjqZ8sypQMTxoO370vCFvz09iwUb2
+	 z4iiFpGcl8KXPXE6yx7A99oeHso7Ks1+WJqKQwTrAVe99xiD/eCkGP6oeHaryhomvY
+	 GO8HXdCMpu38zPNLH4rg/2ZtBAfPpLxf/zOAsmN2iLrOG7EL/iV1T4URiHTcHIIS6F
+	 EsPZXwRv01R8g==
+Date: Tue, 9 Dec 2025 16:49:04 +0900
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+ david.laight.linux@gmail.com
+Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>, Crt Mori <cmo@melexis.com>, Richard Genoud
+ <richard.genoud@bootlin.com>, Andy Shevchenko
+ <andriy.shevchenko@intel.com>, Luo Jie <quic_luoj@quicinc.com>, Peter
+ Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org, "David S . Miller"
+ <davem@davemloft.net>, Simon Horman <simon.horman@netronome.com>, Andreas
+ Noever <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>
 Subject: Re: [PATCH 0/9] bitfield: tidy up bitfield.h
-Message-ID: <20251209070806.GB2275908@black.igk.intel.com>
+Message-ID: <20251209164904.6163fcff@kernel.org>
+In-Reply-To: <20251209070806.GB2275908@black.igk.intel.com>
 References: <20251208224250.536159-1-david.laight.linux@gmail.com>
+	<20251209070806.GB2275908@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251208224250.536159-1-david.laight.linux@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi David,
+On Tue, 9 Dec 2025 08:08:06 +0100 Mika Westerberg wrote:
+> > drivers/thunderbolt/tb.h passes a bifield to FIELD_GET(), these can't
+> > be used with sizeof or __auto_type. The usual solution is to add zero,
+> > but that can't be done in FIELD_GET() because it doesn't want the value
+> > promoted to 'int' (no idea how _Generic() treated it.)
+> > The fix is just to add zero at the call site.
+> > (The bitfield seems to be in a structure rad from hardware - no idea
+> > how that works on BE (or any LE that uses an unusual order for bitfields.)  
+> 
+> Okay but can you CC me the actual patch too? I only got the cover letter
+> ;-)
 
-On Mon, Dec 08, 2025 at 10:42:41PM +0000, david.laight.linux@gmail.com wrote:
-> From: David Laight <david.laight.linux@gmail.com>
-> 
-> I noticed some very long (18KB) error messages from the compiler.
-> Turned out they were errors on lines that passed GENMASK() to FIELD_PREP().
-> Since most of the #defines are already statement functions the values
-> can be copied to locals so the actual parameters only get expanded once.
-> 
-> The 'bloat' is reduced further by using a simple test to ensure 'reg'
-> is large enough, slightly simplifying the test for constant 'val' and
-> only checking 'reg' and 'val' when the parameters are present.
-> 
-> The first two patches are slightly problematic.
-> 
-> drivers/net/ethernet/netronome/nfp/nfpcore/nfp_nsp_eth.c manages to use
-> a #define that should be an internal to bitfield.h, the changed file
-> is actually more similar to the previous version.
-> 
-> drivers/thunderbolt/tb.h passes a bifield to FIELD_GET(), these can't
-> be used with sizeof or __auto_type. The usual solution is to add zero,
-> but that can't be done in FIELD_GET() because it doesn't want the value
-> promoted to 'int' (no idea how _Generic() treated it.)
-> The fix is just to add zero at the call site.
-> (The bitfield seems to be in a structure rad from hardware - no idea
-> how that works on BE (or any LE that uses an unusual order for bitfields.)
-
-Okay but can you CC me the actual patch too? I only got the cover letter
-;-)
-
-> Both changes may need to to through the same tree as the header file changes.
-> 
-> The changes are based on 'next' and contain the addition of field_prep()
-> and field_get() for non-constant values.
-> 
-> I also know it is the merge window.
-> I expect to be generating a v2 in the new year (someone always has a comment).
-> 
-> David Laight (9):
->   nfp: Call FIELD_PREP() in NFP_ETH_SET_BIT_CONFIG() wrapper
->   thunderblot: Don't pass a bitfield to FIELD_GET
->   bitmap: Use FIELD_PREP() in expansion of FIELD_PREP_WM16()
->   bitfield: Copy #define parameters to locals
->   bitfield: FIELD_MODIFY: Only do a single read/write on the target
->   bitfield: Update sanity checks
->   bitfield: Reduce indentation
->   bitfield: Add comment block for the host/fixed endian functions
->   bitfield: Update comments for le/be functions
-> 
->  .../netronome/nfp/nfpcore/nfp_nsp_eth.c       |  16 +-
->  drivers/thunderbolt/tb.h                      |   2 +-
->  include/linux/bitfield.h                      | 278 ++++++++++--------
->  include/linux/hw_bitfield.h                   |  17 +-
->  4 files changed, 166 insertions(+), 147 deletions(-)
-> 
-> -- 
-> 2.39.5
+Right, David, please fix your CC lists. kernel dev 101..
 
