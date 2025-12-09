@@ -1,93 +1,62 @@
-Return-Path: <linux-usb+bounces-31331-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31332-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FD8FCB0125
-	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 14:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6677ACB01E8
+	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 14:57:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2A2D1308F20A
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 13:36:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5694131071E4
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 13:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF3D2322B8E;
-	Tue,  9 Dec 2025 13:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF8F283FE6;
+	Tue,  9 Dec 2025 13:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arturia.com header.i=@arturia.com header.b="dxCCDJrw"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="NDPOWBpL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx4.sberdevices.ru (mx4.sberdevices.ru [152.89.196.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6BA321428
-	for <linux-usb@vger.kernel.org>; Tue,  9 Dec 2025 13:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B947F263F5D;
+	Tue,  9 Dec 2025 13:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=152.89.196.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765287409; cv=none; b=HNuFbSc9H8hqXSJ3yU+yd5ZcYAXZSJeVxKBONopAnAxaZ2CEvYBm9AAUsO0yPeQqcYsHqJgdznw8GVoucOFQryOqJkqs9UJlOfQWrzf3nnNJqcdOTysId2kVhRlkh8vPDGCQdbyIHnViVL3z8hpB0vxKQTW4DBbacnIlFw8u/QU=
+	t=1765288317; cv=none; b=Ywi1ctwTok8OksZPvS7puUW2NM+p2HTspUJV/CW6DdW7e+5wbNQAw8yAPaBnIXW+WPDd93AG1CffzndZvrvCDeerTcgNFqEpAL5ELWu/qSNHcE8lfhYsLYJI+FJz7eyTXIMVnxbEWrihYNzakBOBk5A3V8Zhpm75Cpjo6GsbgPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765287409; c=relaxed/simple;
-	bh=iH+mKip9BThSt4Z1Yt6XIxE/CO4awif4L8UsfkUJYKA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W89Af0hi1lEucjz90Hk8aw7HW8laL0PvaTx8/k7USOcnvaRLcgOnpyygFuf2nZuiIzRp0pll283DqWq9p7O5fJ+yPpN1ptqPMYQZif20HeIRy9yd2BtHOPxPSIC0ioYzbXhO8nXnv2BDYkHEqQo8OboDImhCnPP9OQhUCcVWslU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arturia.com; spf=pass smtp.mailfrom=arturia.com; dkim=pass (2048-bit key) header.d=arturia.com header.i=@arturia.com header.b=dxCCDJrw; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arturia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arturia.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4779ce2a624so72155305e9.2
-        for <linux-usb@vger.kernel.org>; Tue, 09 Dec 2025 05:36:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arturia.com; s=arturia; t=1765287405; x=1765892205; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L47NwAZXapx1ZFaEBDIq979VM6cx+Hx9xyj4bcjltKo=;
-        b=dxCCDJrwL9zenC8OBC8MCmiKyWw/z6FxnNvVh36LV273xK2pSTqA4F01rVSMNpQnnP
-         KMUhzamIfEweQROXrsmh58Z0O4IXg8Dc96sBCxCHlxacZzqG9YUyZfZOPKibXfaHSiF4
-         o2g5x0rersFUNHR3N1UBm1PvrWBYwTmzFZYNZaHsLDhyX3NCik8brg9pX8MyEHMmIPOy
-         BpmvQOprli9XxaQQ8DA2lrREPn4VrrcEumIY0Q4ZqevhSTPtqaM6O1pQhYeExYmZoXaT
-         hApd3Y3AfcEZSZ1wjkyCtzEnbrLiAVam7AXH8TlA9x3f4jlgcP5nsw8bz2hcvOuv/Pxo
-         vK0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765287405; x=1765892205;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=L47NwAZXapx1ZFaEBDIq979VM6cx+Hx9xyj4bcjltKo=;
-        b=VarvYtb6njGE7iZQn1MPSFZNvG04ZALDCHnPG11alord3Wjlc94f2mzEXiP0sSdeTq
-         AYmFXbuAV8m3Y51rGWsJnQraxlrp++8I7Lau40YCYEL0CDEBCSTf3PvAPoYW5NqVE/RC
-         UVv+/reoF9CuLFwweM1OuPvsKj+WvUCj+o6ocE9nw8ztIxU/KmTSFmeqwCOjn0aEmdvp
-         dWNXrxVAP8ognLm84l43oBzGtQc2Wngb8cS+ykJgcdfn+QSlLIRPOVEj/0Aw7FH/rQ0y
-         zudo+WD/8D7BY1wXXrApbMRuDYVR6xPlz60dyvhwCNzGZxVZ6nYm3zzyaCz0QaZdr3Z6
-         nVvg==
-X-Forwarded-Encrypted: i=1; AJvYcCUIA4wQ1XixRA7TBtLoFIjJp3sVLzUGHVERyYlfWUI8mrspENIA9CgqAMwyDqEuFWKhfV/cPtUvpRA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSaZoanFkAe8JTru0TNSEiXQiG5A1zEPunq5eu4aqGO/8k5k6b
-	Pgk8BkOt0ti72wzPILPHCet/kba2GJQQDhqTG/ScFUmwGaoxPCQARuecnojHtqu4mbQ=
-X-Gm-Gg: AY/fxX5NvAxhEe49YwKtNsAWfzcsBWd+kGcRgSkA59zMvH+AukVmc/EzsNNSfTFm7pm
-	O4cyJiuDGTyto9acvnISTHqcPNsk/EKKrM1vj4hkepG/gD0XVM55uUTB9SPrqnwHKU7EdN1HTg3
-	Fv0dHdHAPygrEfQY/+JFvR/atev4Erxs+8XLia56rm22kGTXuua9LJnmGG3nsA/WnkkxYTnrXqb
-	6solzzOPM++Q1ijHanvg7Wta6XorwAUKMyxLQa1C5iTkre+BJ26k0BOLACAktVBHoaIovm/K+iO
-	jbY+iVaWynvTr9vvc8U7bqskO69v+5cHnt02Z2aFCf6Ysk/YU+olWMfy4GMuCP1boMPJuH9I9DG
-	f72Ob6r8mjFzdwD5+9OFwou1y/s8MU0kqFGxQdTm0EkQXA8EWsX8JDkZXFel9D1cCqNK8Ff5M2X
-	TpI8EN2jClZIFOrSyc/wyjgoOWu/LAEU+nT5KgQA==
-X-Google-Smtp-Source: AGHT+IGAYkGZwdzbJRIlZugFkToaxLmToprgNx7g9MCnu51+1onFFMptY/5Qd8N5T9/q+oWVJu227Q==
-X-Received: by 2002:a5d:584d:0:b0:42f:7616:6c6b with SMTP id ffacd0b85a97d-42f89f094c8mr10395465f8f.8.1765287404957;
-        Tue, 09 Dec 2025 05:36:44 -0800 (PST)
-Received: from localhost.localdomain ([2a01:cb15:854c:e000:e58b:a5ca:200b:e2e2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7d331e62sm31617885f8f.35.2025.12.09.05.36.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Dec 2025 05:36:44 -0800 (PST)
-From: Victor Krawiec <victor.krawiec@arturia.com>
-To: tiwai@suse.de
-Cc: abdul.rahim@myyahoo.com,
-	gregkh@linuxfoundation.org,
-	jilliandonahue58@gmail.com,
-	jkeeping@inmusicbrands.com,
-	kees@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	victor.krawiec@arturia.com
-Subject: Re: [PATCH] usb: gadget: f_midi: allow customizing the USB MIDI interface string through configfs
-Date: Tue,  9 Dec 2025 14:36:43 +0100
-Message-ID: <20251209133643.52560-1-victor.krawiec@arturia.com>
+	s=arc-20240116; t=1765288317; c=relaxed/simple;
+	bh=EaBNdtvGji+Jc9a9AWgccgi2Te5zFw3bRryDm5pqg5o=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GwBtCYq+RCgLPKRN1lYtvU7n5SZ0dsoUAzKBr4OZY/j/Jz4M7+PkpTlKdRO0Elwx18BbUDyz/iqEdkipD7qDiYd6fJO23Fjvg1hwS10idaAKsFtrvNMI3EwYjIFSVWgOVex37ACG+x+Imv83qzvS+A3E0S9RIJ3Xoq333mm6JBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=NDPOWBpL; arc=none smtp.client-ip=152.89.196.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-antispam-ksmg-sc-msk02.sberdevices.ru (localhost [127.0.0.1])
+	by mx4.sberdevices.ru (Postfix) with ESMTP id 8936D40031;
+	Tue,  9 Dec 2025 16:44:29 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx4.sberdevices.ru 8936D40031
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=post; t=1765287869;
+	bh=8NgfupwQnnM3HJQHAr6uQeUFtm0uGMNGiJcoSxhpdzc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=NDPOWBpLt5giQKDGiA+CnKhsP8gY4snKGs2dEea74fiLyGgNSCXy1v2z+EuWA+zII
+	 XSg+sGWU75yOia+hQrJ5D/EEAukRr20EatV7BKfPzbI1QIANNJs34wrby+Ub9D6OFs
+	 ampwm0KNi9BwpnF4wqz5nQCWMFF3l8p1je4JyPXXMa+6smQo4uUCISa0S1QmHMyjNL
+	 lGblkEvgOkh5SRocSVJhzg9pEkuptDZVkU1EBDpIrZTK+wLL6E3gREOcpRhgb0ft5h
+	 ul5X46JjrYu/tzQ+7utOhJOIKraM1I2FfqdLQjDnbO4SiBqnRC2mrsbvxCjQYw/Nbr
+	 L8/3wuPhlAiLg==
+Received: from smtp.sberdevices.ru (p-exch-cas-a-m1.sberdevices.ru [172.24.201.216])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "sberdevices.ru", Issuer "R12" (verified OK))
+	by mx4.sberdevices.ru (Postfix) with ESMTPS;
+	Tue,  9 Dec 2025 16:44:28 +0300 (MSK)
+From: Arseniy Krasnov <avkrasnov@salutedevices.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Akash M
+	<akash.m5@samsung.com>
+CC: <oxffffaa@gmail.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <kernel@salutedevices.com>, Arseniy Krasnov
+	<avkrasnov@salutedevices.com>
+Subject: [PATCH v1] usb: gadget: f_fs: trim extra bytes from USB req
+Date: Tue, 9 Dec 2025 16:44:11 +0300
+Message-ID: <20251209134412.577797-1-avkrasnov@salutedevices.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <87a52gb9cr.wl-tiwai@suse.de>
-References: <87a52gb9cr.wl-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -95,18 +64,112 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: p-exch-cas-a-m2.sberdevices.ru (172.24.201.210) To
+ p-exch-cas-a-m1.sberdevices.ru (172.24.201.216)
+X-KSMG-AntiPhishing: NotDetected
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Envelope-From: avkrasnov@salutedevices.com
+X-KSMG-AntiSpam-Info: LuaCore: 84 0.3.84 c2f198c3716e341b2aaf9aead95378b399603242, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, salutedevices.com:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;smtp.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiSpam-Lua-Profiles: 198832 [Dec 09 2025]
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Version: 6.1.1.20
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2025/12/09 10:11:00 #28035548
+X-KSMG-AntiVirus-Status: NotDetected, skipped
+X-KSMG-KATA-Status: Not Scanned
+X-KSMG-LinksScanning: NotDetected
+X-KSMG-Message-Action: skipped
+X-KSMG-Rule-ID: 5
 
-> SNDRV_DEFAULT_STR1 is NULL, and this fact can simplify things a lot.
-> 
-> So, it's better to initialize explicitly with NULL instead of
-> SNDRV_DEFAULT_STR1, then you can just do NULL-check of the pointer
-> without the use of *_allocated field (that can be dropped).
+In '__ffs_epfile_read_data()' number of bytes to copy to user iter is
+returned by USB driver in field 'actual' of structure 'usb_request'
+(see 'ffs_epfile_io_complete()'). Looks like some buggy driver may
+return value larger than actual size of kernel buffer of such USB
+request. This leads to the following crash (produced on 'dwc2' USB
+driver). To prevent this, let's add extra check, which trims reported
+request length.
 
-Thank you for the review. I apologize for the delayed reply.
+[] usercopy: Kernel memory exposure attempt detected from SLUB
+   object 'kmalloc-32' (offset 0, size 64)!
+[] ------------[ cut here ]------------
+[] kernel BUG at mm/usercopy.c:102!
+[] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+[] Modules linked in: vlsicomm(O)
+[] CPU: 1 UID: 0 PID: 768 Comm: adbd Tainted: G O 6.15.11-sdkernel #1
+   PREEMPT
+[] Tainted: [O]=OOT_MODULE
+[] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[] pc : usercopy_abort+0x8c/0x90
+[] lr : usercopy_abort+0x8c/0x90
+[] sp : ffff800082283830
+[] x29: ffff800082283840 x28: ffff0000034e6300 x27: 0000000000000000
+[] x26: 0000000000000000 x25: ffff0000026b1f80 x24: 0001000000000000
+[] x23: 000000000371dac0 x22: 0000000000000001 x21: ffff00000371db00
+[] x20: 0000000000000040 x19: ffff00000371dac0 x18: 0000000000000006
+[] x17: 656a626f2042554c x16: 53206d6f72662064 x15: 6574636574656420
+[] x14: 00000000ffffffea x13: ffff800082283598 x12: ffff800080d70ec0
+[] x11: ffff800080d5af18 x10: ffff800080d70f18 x9 : 0000000000000001
+[] x8 : 0000000000000001 x7 : 0000000000005fe8 x6 : c0000000fffffbff
+[] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+[] x2 : 0000000000000000 x1 : ffff00000119cd80 x0 : 0000000000000064
+[] Call trace:
+[] usercopy_abort+0x8c/0x90 (P)
+[] **check_heap_object+0xd4/0xf0
+[]** check_object_size+0x204/0x2b0
+[] ffs_epfile_io+0x6b8/0x820
+[] ffs_epfile_read_iter+0xb4/0x180
+[] vfs_read+0x2f4/0x320
+[] ksys_read+0xec/0x110
+[] __arm64_sys_read+0x1c/0x30
+[] invoke_syscall+0x70/0x100
+[] el0_svc_common.constprop.0+0x40/0xe0
+[] do_el0_svc_compat+0x1c/0x40
+[] el0_svc_compat+0x2c/0x80
+[] el0t_32_sync_handler+0xb0/0x140
+[] el0t_32_sync+0x1a0/0x1a4
+[] Code: aa0003e3 90005960 91244000 97fff3d5 (d4210000)
+[] ---[ end trace 0000000000000000 ]---
+[] Kernel panic - not syncing: Oops - BUG: Fatal exception
+[] SMP: stopping secondary CPUs
+[] Kernel Offset: disabled
+[] CPU features: 0x0000,00000000,01000000,0200420b
+[] Memory Limit: none
+[] Rebooting in 5 seconds..
 
-In my next iteration I will drop the *_allocated field and do simple NULL-checks.
-I will also update Documentation as I realized this is missing from the patch.
+Signed-off-by: Arseniy Krasnov <avkrasnov@salutedevices.com>
+---
+ drivers/usb/gadget/function/f_fs.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Best regards
-Victor
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 2dea9e42a0f86..de27dc93d0c55 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1142,11 +1142,18 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+ 
+ 		if (interrupted)
+ 			ret = -EINTR;
+-		else if (io_data->read && io_data->status > 0)
++		else if (io_data->read && io_data->status > 0) {
++			if (io_data->status > data_len) {
++				dev_warn(&epfile->ffs->gadget->dev,
++					 "trim read length from %d to %zi\n",
++					 io_data->status, data_len);
++				io_data->status = data_len;
++			}
+ 			ret = __ffs_epfile_read_data(epfile, data, io_data->status,
+ 						     &io_data->data);
+-		else
++		} else {
+ 			ret = io_data->status;
++		}
+ 		goto error_mutex;
+ 	} else if (!(req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC))) {
+ 		ret = -ENOMEM;
+-- 
+2.47.3
+
 
