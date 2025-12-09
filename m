@@ -1,171 +1,140 @@
-Return-Path: <linux-usb+bounces-31342-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31343-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C5C1CB0D86
-	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 19:30:39 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id C92F6CB0DFE
+	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 19:55:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE45E30C3CBE
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 18:30:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5A431301CFAB
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 18:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEDB03016F3;
-	Tue,  9 Dec 2025 18:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D96E303A26;
+	Tue,  9 Dec 2025 18:54:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DWGE+SJJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hgmPErcd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F7330147D
-	for <linux-usb@vger.kernel.org>; Tue,  9 Dec 2025 18:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0830B26980F
+	for <linux-usb@vger.kernel.org>; Tue,  9 Dec 2025 18:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765305007; cv=none; b=Eb344eRz9mMUKwsczvETrLaXA1O4Ca5kdMiDmzqGDz3ioe8grdC+ITGAMdN9bouQ7J0M7Di2JyZtLAlu1A+eVpt/QaX6YrXupJ4fy5LzU6EVIzum1ETL7hq3o1EuCng5zwbG1NU8bUM9A9+IMaDiCwlrPABq3u/EkU1vF7MsiAU=
+	t=1765306497; cv=none; b=KHn515WTnd7nzViUVmW4MqnSbgERfuFpC7FiClRIZAIFDR6pv/WbsPQQv2ncL1NWRWTbsS2ARkjbO27IevCSkEPcpoDAE3a1Ugyz3akCFtmWImy68Rmm8978zYp6ORH+92UOqQM4XQeB699b+0B6LiFAJc3nCNAoTUzAOTkuNKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765305007; c=relaxed/simple;
-	bh=pQJKbGT140e8VsvefKWjTYRzq3P0Ac0M8meWMb9iudU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IK1GFtaELTZGD6JASwWCIbnlJtu6qY5fbnlcOyVS1Mb4NOqeMjnqyzRlIob5x03Iyo/Tt5yfnsUuiJtqVKwRcqQp7SsWphbyPx9v7Pi3ZWyUzDRFnOjhLKDXXqfasT5NHbcnzhnSddhNEGC4QT4IHElzdVOoPyyPAhr1zEhPXfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DWGE+SJJ; arc=none smtp.client-ip=209.85.128.48
+	s=arc-20240116; t=1765306497; c=relaxed/simple;
+	bh=oxnsSzSSQAu/Bk/v2zSRSRpD8UW0cATc07H6GarnzDA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FrVO4PhXhCDzvosam8x/xiCZ/N80GzdjXpeUpqFZCuKlhlmrHGiKiTgUjTbhH2SeK4HvOCLEC/jgUh6a+3/f5sw5CQtYJBKyB85E3MHFXSuiJ1eTujw4ovaseGu+VXfGjqVX8Cb6aZmEMbZ6sfxZJkdGo1ZLDxrKOkOpR6zTClw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hgmPErcd; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-477563e28a3so974535e9.1
-        for <linux-usb@vger.kernel.org>; Tue, 09 Dec 2025 10:30:05 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477a1c28778so75546645e9.3
+        for <linux-usb@vger.kernel.org>; Tue, 09 Dec 2025 10:54:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765305004; x=1765909804; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VEl3GwptBTruJVeLW9dxIQGp74pqpc9XND7IOfdh9Qc=;
-        b=DWGE+SJJCfzzuivIYofzuMoC5fB5tgOjv6deViUn+fSAHRpJwjKdh2cYa+0HFFHjMg
-         BfvJDncU8UhSBUcZXI/gjSjVfydeWQxUhkNMgRlAyrsQY5kqEqajPyYA52rhrOL3Z8dW
-         j/xwePMa57AZzD9Wyyxbw78+g44Lsji9HV+/T44taa4qGNKHLbM+VrzOp2ygt8W7oygf
-         K30pi1vedd+I1vWDG5GWuNQ4uzNVr+TfOkAIq9eMHK5gBudUj8YFomWClTKRFP6PGD3O
-         ittAjy0StS8XiLjxMjFjRQo6r457dyYQ7/GOeunoo+ClJ5Ax2s9tQTr6uFt5+W8MV/K2
-         7EQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765305004; x=1765909804;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1765306494; x=1765911294; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VEl3GwptBTruJVeLW9dxIQGp74pqpc9XND7IOfdh9Qc=;
-        b=nrHFMw5dDPNl/FM5TAQWOJ2u/GM98vegkW49mTuqd/kCZ2sgaqdqw5TTSRgPcNYQ2/
-         dbsk/9I8IRnmvRwe5pinq1Hr1wpx2uAGrFSppxjpNxjSw3E2tzUxQw9mww4xVYKRQFsj
-         937m7Kp3pv3FMktNMDm8eMfNrSIIwL1eTD5dCwtN8StqMps+m7aem0oiS8W/8TBwvX4W
-         DVIC75ie7BKE22xeNJkHdae6aCUOtmLfUgXCko7NYYM6mT9deo5KrDgdM/KG7Hg2Rqsi
-         hKw1jd6DWmV0pWYbrANVyTZGQcab93M8j1POWUmv9GUxaHDzrVIgM1MPuOpX63G4SWQs
-         Y8bg==
-X-Gm-Message-State: AOJu0YzKniqHc09CwzgOP66JHt2p/nL6TdXrRblvvjEn4A/v8+lh+tiO
-	6Eszi+b+2QiSU7e83U8NlC00cdKhTdAZ1d/MxOKnqxmcxhyPDQ1SyDXcKfjbkq7lLmjRz1WbaX6
-	VHhudujyyDr+CL5ztud1jkQTvjkfxFKU1TQ==
-X-Gm-Gg: ASbGncseFZ/kC0TZ0CWwx4eQpP8MbDlfUmUTN/JZNx8vup8nEAqlEQ703snxPetUjGg
-	CGJ7nDvLYrdfW4FQC8oZpcYKyoNWmYjy1hJTKvW1aX1bNEp1NHrMS7Z9pNxS3ysW4qX1934GZK/
-	GrvCJsJJaMPRjrUKTBQu1vF8zI95QQLZhh0p+KPlrkIxrPQLmpOml4EKrUyW4Ow651whWh3tazN
-	v4Dte0iqD5jsNj7t9/8tGg7LU0TOdAY/ZjhkjB1/Z8vKCdzUykIE6Osfa2OMOEMuj3CSTg=
-X-Google-Smtp-Source: AGHT+IFvOKsP3QbkZvHZBaY4+i6QngaBKJfU3lLD/mHEBTHzVKp4vbpEAiQccn4yvlyL1MHJoXSEaYrIymWBxK7vdwI=
-X-Received: by 2002:a05:600c:1d18:b0:479:255f:8805 with SMTP id
- 5b1f17b1804b1-47a7fa13c7fmr29759525e9.4.1765305003577; Tue, 09 Dec 2025
- 10:30:03 -0800 (PST)
+        bh=HpdLUaMszOte+9P9trLbr49o0T/8IL0zVkv1y9a6ACQ=;
+        b=hgmPErcdpbOmWNv97DFI6MjvwovMomPavckD2iQ/zkYmw1PxLyXmJNwIWcKt5I0EDk
+         U+5r5ujCHuKSyWjPGyaBIqyP4UmwKS+lUsWnqCCLTwKg5GbDGIkrA16ZidVCfyFlDwCU
+         hPT2D9Ki5Tl88Y0jMGMa3SPDMA7LYl2LbkUT2fOsuwB1psGSHE93Twai/5sDGyyyeBSI
+         TPQxA6fONxJKZjbFxAa53IJsk3n2T4gytPU7mD5H2QKFqRi9ESqMzGwApHiWW0P9uciX
+         N17Av0DtfJjkw7TJ6YyWk/JmhOV8uS7XcLGfr2WhQHXYLXg35yxesgy4BqgXfzIYdr6A
+         0iKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765306494; x=1765911294;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=HpdLUaMszOte+9P9trLbr49o0T/8IL0zVkv1y9a6ACQ=;
+        b=M110aiWGXj0DFdfNZExGGgVLUkikPkEpV12HpoxKoyM8qPqUDAZDiJOC07cU9v2WCa
+         7l7lnXFAb8sT3WsC2Xef7PoNGHMrrakVr7m/tOym/eVH7u/isq0lZcoowK4qJuKB+2JB
+         Sdqv4ffxvBOqWhE1etxnuQAPRteeYzWbYUvUihacqalaRaSkuYwGmRF/63Hi0y+nTS36
+         Gojx2jzet3VPNYuvof3if0xywGYKjEsQJzNT4aWXXgLko5nUsBB6pEY2/hXMLzLhdeIY
+         r4pZsbqB04sAKAFZyP/oW91gqJVZ/QSwmzJfsnNfxFjVS3U/5tmE0moTogKRlgvGlQpe
+         G3jg==
+X-Forwarded-Encrypted: i=1; AJvYcCVixAJt6KVrj5pI4Ou+z4aESwaA/BpPNx7SWwXV98lQpdwZYwSCiLW7Lx+up32KohzERaCUwc896i8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy13hMefqcLW/q4jRSw/XRx2ImFJrW4xc9JGkE5hoAuAL2P8eR0
+	wtvszNyVk9mleFgzQH2RLZ2P9IlWoz2wMajMlp/XEhCSvxQRQAHGZYhS
+X-Gm-Gg: ASbGncv8DqV6vThVRiz9jraaWo/YGW8b7tPBHDu1cnA9nNK6G2+dzXEkFH4B87qQ91O
+	z+qxC7sg8OG6HXDRBC1grCNAI8cn5iwd4SkR5Nf/nuLFRmsTlBZIH/gcu4Hhlypx5RnN5lYLNx+
+	PIAPkj9F96XDg9KXJMO+Oj/xIzIxZwsW4vUe6QoXbba2NKmeDFAfl47X27IT+/RV9CbT4DN0UlZ
+	KN7SGb146Nl5Lo3lKgfeTnXPP6/p5f2+/W6zFVHioo0hEvHYTBV9C7CFe8fJRNFSkE7OUV7DNLm
+	yFePzUvHTKdZ7pC4riSu2OWk1guh89IYKNa3SgzjqN6YyqIpv3IpFvJb3LEw8V+rIwy+WbyupEx
+	PJ30J9lLup5taQ4gay9qWurA8fYn8867Lg6Qd2aKECQu3S78kKLPcqHoShPG0VmctO1QTQ8tIdr
+	7I+Xf+SL+JPz8NCajGolsVQz51Dos2AiSwr+lQWw+YBxkZE4AdNhDGQ9icawtabrI=
+X-Google-Smtp-Source: AGHT+IFirw91TWSXU8QHpRvuGGX1U+haycOXGSNcwfW+RwtLxsf2h/xkUvj8XnU+zmLfR4fhgmr1+A==
+X-Received: by 2002:a05:600c:444a:b0:477:6e02:54a5 with SMTP id 5b1f17b1804b1-47939e20a92mr115156485e9.18.1765306494210;
+        Tue, 09 Dec 2025 10:54:54 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7d331092sm33581359f8f.30.2025.12.09.10.54.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Dec 2025 10:54:53 -0800 (PST)
+Date: Tue, 9 Dec 2025 18:54:52 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>, Crt Mori <cmo@melexis.com>, Richard Genoud
+ <richard.genoud@bootlin.com>, Luo Jie <quic_luoj@quicinc.com>, Peter
+ Zijlstra <peterz@infradead.org>, Jakub Kicinski <kuba@kernel.org>,
+ netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Simon
+ Horman <simon.horman@netronome.com>, Mika Westerberg
+ <mika.westerberg@linux.intel.com>, Andreas Noever
+ <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: Re: [PATCH 3/9] bitmap: Use FIELD_PREP() in expansion of
+ FIELD_PREP_WM16()
+Message-ID: <20251209185452.707f4dbe@pumpkin>
+In-Reply-To: <aThETSRch_okmCbe@smile.fi.intel.com>
+References: <20251209100313.2867-1-david.laight.linux@gmail.com>
+	<20251209100313.2867-4-david.laight.linux@gmail.com>
+	<aThETSRch_okmCbe@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251209155038.912-1-u.mohr@semex-engcon.com>
-In-Reply-To: <20251209155038.912-1-u.mohr@semex-engcon.com>
-From: Daniele Palmas <dnlplm@gmail.com>
-Date: Tue, 9 Dec 2025 19:29:51 +0100
-X-Gm-Features: AQt7F2r9yiN-sFlphW0ECOT4MEuafCx6s0vC7EZNt5D31uoHDhaLCzuRlQs8MWg
-Message-ID: <CAGRyCJF=gzm=wEq0wzYaHzZi=tuCOqkzxkpurX-ru2BvNeic6Q@mail.gmail.com>
-Subject: Re: [PATCH] USB: serial: option: add Telit LE910 MBIM composition
-To: Ulrich Mohr <u.mohr@semex-engcon.com>
-Cc: linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello Ulrich,
+On Tue, 9 Dec 2025 17:46:21 +0200
+Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 
-Il giorno mar 9 dic 2025 alle ore 17:17 Ulrich Mohr
-<u.mohr@semex-engcon.com> ha scritto:
->
-> Add support for Telit LE910 module when operating in MBIM composition
-> with additional ttys. This usb product ID is used by the module
-> when AT#USBCFG is set to 7.
->
-> 0x1052: MBIM + tty(NMEA) + tty(MODM) + tty(MODEM) +SAP
+> On Tue, Dec 09, 2025 at 10:03:07AM +0000, david.laight.linux@gmail.com wrote:
+> 
+> > Instead of directly expanding __BF_FIELD_CHECK() (which really ought
+> > not be used outside bitfield) and open-coding the generation of the
+> > masked value, just call FIELD_PREP() and add an extra check for
+> > the mask being at most 16 bits.  
+> 
+> ...
+> 
+> > +#define FIELD_PREP_WM16(mask, val)				\
+> > +({								\
+> > +	__auto_type _mask = mask;				\
+> > +	u32 _val = FIELD_PREP(_mask, val);			\  
+> 
+> > +	BUILD_BUG_ON_MSG(_mask > 0xffffu,			\
+> > +			 "FIELD_PREP_WM16: mask too large");	\  
+> 
+> Can it be static_assert() instead?
 
-This should be 0x1252.
+No, they have to be 'integer constant expressions' not just
+'compile time constants'.
+Pretty useless for anything non-trivial.
 
-> T:  Bus=01 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=1bc7 ProdID=1252 Rev=03.18
-> S:  Manufacturer=Android
-> S:  Product=LE910C1-EU
-> S:  SerialNumber=0123456789ABCDEF
-> C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=88(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=8a(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
->
-> Signed-off-by: Ulrich Mohr <u.mohr@semex-engcon.com>
-> ---
->  drivers/usb/serial/option.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 5de856f65f0d..19921f129c0e 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -335,10 +335,11 @@ static void option_instat_callback(struct urb *urb);
->  #define TELIT_PRODUCT_LE920A4_1208             0x1208
->  #define TELIT_PRODUCT_LE920A4_1211             0x1211
->  #define TELIT_PRODUCT_LE920A4_1212             0x1212
->  #define TELIT_PRODUCT_LE920A4_1213             0x1213
->  #define TELIT_PRODUCT_LE920A4_1214             0x1214
-> +#define TELIT_PRODUCT_LE910_USBCFG7            0x1252
->
+	David
 
-The latest entries do not have a define, I think you can directly use the PID.
+> 
+> > +	_val | (_mask << 16);					\
+> > +})  
+> 
 
-Regards,
-Daniele
-
->  /* ZTE PRODUCTS */
->  #define ZTE_VENDOR_ID                          0x19d2
->  #define ZTE_PRODUCT_MF622                      0x0001
->  #define ZTE_PRODUCT_MF628                      0x0015
-> @@ -1489,10 +1490,11 @@ static const struct usb_device_id option_ids[] = {
->         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1230, 0xff),    /* Telit LE910Cx (rmnet) */
->           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
->         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),    /* Telit LE910Cx (RNDIS) */
->           .driver_info = NCTRL(2) | RSVD(3) },
->         { USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x1250, 0xff, 0x00, 0x00) },   /* Telit LE910Cx (rmnet) */
-> +       { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910_USBCFG7, 0xff) },     /* Telit LE910Cx (MBIM) */
->         { USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
->           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
->         { USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
->           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
->         { USB_DEVICE(TELIT_VENDOR_ID, 0x1900),                          /* Telit LN940 (QMI) */
-> --
-> 2.39.5
->
->
 
