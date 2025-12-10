@@ -1,170 +1,293 @@
-Return-Path: <linux-usb+bounces-31349-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31350-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DC41CB1597
-	for <lists+linux-usb@lfdr.de>; Tue, 09 Dec 2025 23:51:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9235ECB1C74
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 04:16:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9EF5F30295B3
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Dec 2025 22:51:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 293883014D9A
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 03:15:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4569F2F49F0;
-	Tue,  9 Dec 2025 22:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C7C927FD54;
+	Wed, 10 Dec 2025 03:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Iy1gBp9Y";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="EEhaQ+BV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i74G7DWy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F974271457
-	for <linux-usb@vger.kernel.org>; Tue,  9 Dec 2025 22:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025CC1E8342
+	for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 03:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765320668; cv=none; b=aZ1f1QS4++a8GqorXZ1q7YWgtJNPvcbIOCSFvUGAONSFJfOf3rdc7V68wMTqYqQO7fLJ3hYxmyzITReID2xTWdWS+nsY/xf+uE/pnZiK39JPK7ZR/U6ofc4hQCLXeoQYeBPYS/fSkZFKdYDXDr69G7PPnM0BSxFFwH3kPdJ3gD0=
+	t=1765336536; cv=none; b=jQqE1h4v5rsAxUxaBfGyOaQZrIn5hpGl/RN8xAOsSx6rEa/2OX1wDxLkjeRCSfCu6H6RtAHdhE2oNVTIJyUdZy7FVO3QIilijPciLZcuHE9+5HfWgYkEXkGcy9dDrNbDs0IUwuBK/aVn7hNgu2yRTUa3tQKSbvim4xTWI3b1RWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765320668; c=relaxed/simple;
-	bh=4UviVE+MKxH5YXkUKOH1o7lscfz0/UhOf9AiPURZags=;
+	s=arc-20240116; t=1765336536; c=relaxed/simple;
+	bh=bZTqksrpBv2DrNLxZZS34vBm2UQ3LWxjYTFVL1QFk3M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iK5QRum0Io+v/ExkY3JmgAf8UVowaN4DmDv6aI6RkLyVYlTCg4G1STehnH5jt6fW6L/oC6LTazFZ8NuNL+Si18MkpC2lH7WdN5Fyv3QseuZh05Hv1KNfEqOLAWjNclHvI67bpg2RPgAktiKC6RjfsnJztH9FZNRtIw6i1JeKT0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Iy1gBp9Y; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=EEhaQ+BV; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B9Mm8VX104114
-	for <linux-usb@vger.kernel.org>; Tue, 9 Dec 2025 22:51:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=QEQMzl7vqNIap2ByUNZYi+y3
-	EAq/MDWdLePRuwHVOoc=; b=Iy1gBp9YC7bM+9rD0CFVoQcnDIzWXbZb0blFrH/t
-	OzDmsj1dZ87Z65SyzJ8fwsvO+e7F23EqzgLhF1bKfhkCs0PvuG+pH3dMfDJb/hZr
-	AYE5MX/cD3Iq+fmo8pscBgEwRWDpViRHt4Y6C+hdclZGYc7SH3Y7RUu10IOl6KKj
-	qLYEfxo+AxUQt1xfzUkhlpuRwlsz64jozRnDV6UPJ8oXOLrimgUgOnb7kVPrCfUu
-	X+5pTC2SMz0wJvGqs5UKD9gxyDOzxgKV4IVwXdFTzkUxfhKrL0LWaSurr51K5QJV
-	eFTgtw3tRMGweJve7sYm9Y80dILNL58CeM+AGafZgRiLXg==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4axesf2wbm-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 09 Dec 2025 22:51:06 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4ee09211413so145955311cf.2
-        for <linux-usb@vger.kernel.org>; Tue, 09 Dec 2025 14:51:06 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=kB4+CRF5e7b+FHPOpWP3PyFg96tCY5VKSYW/aD+IdD3s9dR1crtvlo4ywDT/6JN2gPS7Nu2gtVzYtMYK2rJow4yaoVPsKEmAbcTCjY//xcIMGrAmVYHt1Wv5hq9LOPD3ogtW17UDIv4LY5r7C6a4v8zWz98w09+vUr/B5FHBpa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i74G7DWy; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-29586626fbeso73029885ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 09 Dec 2025 19:15:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1765320665; x=1765925465; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QEQMzl7vqNIap2ByUNZYi+y3EAq/MDWdLePRuwHVOoc=;
-        b=EEhaQ+BVvVSN9JIb1ybMRN3mbl43weM3mZBVP2dtXIe9emognnSZFcRKvz8SBTD6lc
-         5YNqI0kGLTixbVPIK4LnsaYusax9WtSy1r3XQBN8wVE59TVEqsSZv75XI2h3C+Mp5TNu
-         7NVW+kMMkiRlfsIToAvyVd0/08hCgwpp3T6Zuh5/tXyUqBF9aK2vkRtH7b7ULjYf0e2/
-         r+0GbYQ2Bsmi2NmLRjUYsLpUIiEwSoQlhRfiG61zI24Y8GuxYiaZFbbrLAEiPPIVygHP
-         MvbWksJgXoEiLjtohT6Q3ztb/R9tSpWUL02UXPzoDkNywMnQm045udzgodQarmOnBgBD
-         q37w==
+        d=gmail.com; s=20230601; t=1765336533; x=1765941333; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mozq4iTByOjAFbmy+ytE/IJyyTlJdLj7+crXi19pnTw=;
+        b=i74G7DWy7vZ5a5cDP/N144OuhXEq0YJYdJv0iytkPkdvkt6UQqEAZ1DffiuTJTCwC9
+         2O3jzbIPljJEiXzetCynsZZMPGrNUV/kuZyxns0e0l/LvMKTahlNlbinFq9c4TlqFBuI
+         ByOAQPHxvdvvR94Q+EgnQkS4X1tigQz1b+TXyV+SguroULBFwObAkovglVwPVyueqE7c
+         vYkmcR3Rx1HF7pk8slbBJHny4n0xN2tKNYxl/GwS+BqRUPMtUXkBr6EQa/Dw3gFMiw/9
+         /B1lHTWmgBk+zKfZ46iXq8DBK3Tyymz/wxLLwSBbYsAxTB9gcCxrIQAKJtysyrCpGM50
+         Nd9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765320665; x=1765925465;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QEQMzl7vqNIap2ByUNZYi+y3EAq/MDWdLePRuwHVOoc=;
-        b=CYI6mGw2VXKhL0XBN6WYK0ImrUpGhxQLmufC0awA9Ib4eESrmA5FpTBmYbTH/VAIcy
-         MvxQ7NycoIt/q8EPPzxHWTJgv3lN9H2N2BM6dKJAl8WVpJ0aFRvkBRGQA+iO29nAIFRU
-         nbpDIAwwDrJPYCFvVYRda4NUbTVEr6Vcrq8WMFV8J4Nl0CN9H01Q8gfBJUa8sZJ4tG46
-         k8das5P9uJbcbAukgQGT8El+gYs5WN1DNiPQBRkq6wrN/s9pzLf6H7Ooaz7u5EeW6asU
-         OK+BhLashMuH6t/b35NNDNCg4GPZtRgLGCkvU/bJf/qKqOT9AK8RE4/krFMhXgwJycvg
-         eb8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVQY5puSNJc7QwqU1zpVCQ8mwK346R3ceteygpRJ8i7K9cZDtXs4/5QwdTIxDwuOE5yONlhSC+36Bo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhlfM8s6hQtLnVshpvMSAI/kfwZfsOYShlTegOMbFrT4qQ9vBR
-	DPtIOaXr1GkJ6N8wmtAO0Q20dEcn6J5m83hPUPU3cnjXx6nCIBmYwx9CrOJoK4t71tS9SGNoBYr
-	tEgJinSKQWu4Qpgx2M0En35WtQ17JlBkaQA/0LJiLlm1X+ZTckNkTJFRUbAkKgz4=
-X-Gm-Gg: ASbGncu7BuqNd8SvY//C841uE7LrgIXGJGcLSkp0/Vb9LNiPKflZpAe/IohvF9Zuu2o
-	fQc64q2BFaQD/LbdbqazMwSd2T3l1dHkDIyPCXtq+da/jsunZ+Y/uZFobeWDNapN04PDTc3w21i
-	8568PHtQds8pVX0xYwyIqmmbIb3NhJo3oaUap/leiijZd3bDW0dS3dSuL1TFlSIJ54P6wkUO9Z7
-	mUII8oWbC8wQu+QDUjy1SLXJZOTK97pMEfPHX/GNf7oR4mZXlW2L2W0K2uWkdSXYiaDYGGFxnxH
-	bV6iJYqC50AWyeYN/xaShRUFrpMY16036X8JyraZK33OSZHXk8K+hkZPTnYWeU6SyOQq7MhHNmf
-	Am9cCrsqPBv6sveXDgLkxhb0EqTE68kyn7XU2zfBtNyY6HOLh2te2ukbNao/JEnatOWlEUZfgYx
-	j+WtJpNrOEtVe0DLrkjRHFZE4=
-X-Received: by 2002:a05:622a:229a:b0:4ed:1948:a8a2 with SMTP id d75a77b69052e-4f1b1a7e138mr5189901cf.40.1765320665284;
-        Tue, 09 Dec 2025 14:51:05 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGqXfCXoGkec/geIDZqj9qtcWGnUkW/xMVVONs/SH655X16SAhaO0w/9u2YnfaCWf+p71MfPg==
-X-Received: by 2002:a05:622a:229a:b0:4ed:1948:a8a2 with SMTP id d75a77b69052e-4f1b1a7e138mr5189521cf.40.1765320664869;
-        Tue, 09 Dec 2025 14:51:04 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-597d7c1e476sm5689248e87.54.2025.12.09.14.51.03
+        d=1e100.net; s=20230601; t=1765336533; x=1765941333;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mozq4iTByOjAFbmy+ytE/IJyyTlJdLj7+crXi19pnTw=;
+        b=xUi62T+GD5TO50R+ie5XVApw/MFopFLk2i1VUcXEvhVM9XatINqC49EctHAWn0krTb
+         o/CsXt6vP6bMNHjVlicHC6cRTtGfq7kdNnP6s7ppaP8lTsUGJ4K7PoLbX3MsW9MaIpwc
+         qErBmawYAr/F+eVxhZxWVQWOVPpegYG4BwxypFvO9h7Zd2AHP1eW+RREdxtcIyUIe8xa
+         IG/7mvC1jPI272bvrQC90EDOUvYQbTDXE95ULodOgmr2/yZj35lWHt6WET42i7oapewM
+         Zhrl6bvk1UxwyXQ+BZ9bnuxmumGzntVoNAVWxBWSXPHSJv52vuk+Vyxxmn7RJRo8Ym5g
+         wRoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVwRWr+NFp70MweOTFRnYMmZqmn49ndcTRgNlBKNAIrGO/rAjBXQTuGj3v7hh3uEUDoCsm/muDqsZs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1W3SIfxdMpoGWp0Qz/C+ex6X+U1G92uD32mnO+NW95jIncuwg
+	+9hXlojKl9Jrm5BS06/7EOmh0BdfZrhgxap4g21uF4OU3gZSRuFn/cui
+X-Gm-Gg: AY/fxX6K7yL/oYfRGkiLqJFBIQHDQG0WQYPTpjQ6DmgDY2Qu40RW7b3UHgDOL3Nms0x
+	qiRBASZhiqg+6IqkzzCQ4IzxhaT7eHo6Bnva+0iDDHIx2NWcFQglCRWE/Ackku/dmiX2Vw5yfq8
+	bc2LeWJXEVw5q9hRLfwLY1T4IeTkt12/xTFixIsXl/24fMzzEMCoM1YVVmI319X3CC9IA+0vVt1
+	7mIslhVGZkI06ZAvzm9+MC0aTIp+s/L0wx1tiQQ0nSNJRkVYr+UxdhlqJgdKkbFE1S6wG6sdfAL
+	p7cPpok4UnH0iYYcxBCeloImcXUs9iyibPfTNO93JyqMOVQkVtMMVK9qOp5lBZY+27pGzrC+v+2
+	EPfcl1+3WGtYxOhqaVUb36WxYGnRb90ZMvexrO/57RtS7iMCFELfW1Jb3P563QgNYd/ZVCVIocD
+	7xTqvL
+X-Google-Smtp-Source: AGHT+IFVLUHLgccmhLjotVAGoYiTDCLQw2jseK84qWI/Fc8mYpW2JOxmc7nctzTDKwdIX174jUBYBg==
+X-Received: by 2002:a17:903:2984:b0:295:8a2a:9595 with SMTP id d9443c01a7336-29ec2486e7amr12387605ad.39.1765336532990;
+        Tue, 09 Dec 2025 19:15:32 -0800 (PST)
+Received: from localhost ([2001:67c:1562:8007::aac:4468])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29daeaabf7csm166667715ad.79.2025.12.09.19.15.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Dec 2025 14:51:04 -0800 (PST)
-Date: Wed, 10 Dec 2025 00:51:02 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Xin Ji <xji@analogixsemi.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC 2/2] drm: bridge: anx7625: implement minimal Type-C
- support
-Message-ID: <7wp25rctnwydxa3zfpbmddgygyxmg5eg5crv4yuo45k6ovvww2@bnvcw3yorqw2>
-References: <20251126-anx7625-typec-v1-0-22b30f846a88@oss.qualcomm.com>
- <20251126-anx7625-typec-v1-2-22b30f846a88@oss.qualcomm.com>
- <aTGJXAnlkK5vQTzk@kuha>
- <BY5PR04MB673939B585B2419534D48E77C7A2A@BY5PR04MB6739.namprd04.prod.outlook.com>
+        Tue, 09 Dec 2025 19:15:32 -0800 (PST)
+Sender: AceLan Kao <acelan@gmail.com>
+Date: Wed, 10 Dec 2025 11:15:25 +0800
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Andreas Noever <andreas.noever@gmail.com>, 
+	Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH] [RFC] thunderbolt: Add delay for Dell U2725QE link width
+Message-ID: <pjn5d7oz433z4jph6whdalhowf652xknnk2fh5q7elffgb5ogo@7dtpvywxc6nw>
+Mail-Followup-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Andreas Noever <andreas.noever@gmail.com>, 
+	Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Mario Limonciello <mario.limonciello@amd.com>
+References: <20251209054141.1975982-1-acelan.kao@canonical.com>
+ <20251209070633.GA2275908@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <BY5PR04MB673939B585B2419534D48E77C7A2A@BY5PR04MB6739.namprd04.prod.outlook.com>
-X-Proofpoint-ORIG-GUID: -clWzNVjzgtbs0xFgZ1yTc-INEwZRry1
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA5MDE3OCBTYWx0ZWRfX6EeBJsU4LM1d
- Z1znRreml1fQM8nHfRnkWuRGzOhLXb31U6RxKM2ZxU1rVogNg0lZ0UXwKeRdvYwSBJTzhKEqxUm
- ksBtTMyrazVYU9dM+SxORT763uJ0CRLmKkegshOY86F46Lw7LAkPC+FUZJd13YXIWs9D8yr3rVC
- n+2JwjTj6l8ZGeMTqieo9TxxXpIbG7kZFZ6NR1gw/sfsRjV9NjNH9ecyWDWKr1JsKq8nbC30bfh
- pkZdC6DTupUiMHahrFmqxKJL3joRAy/mIVOqMDsSywnIJ78xpErj3gwFv4GYFNZ6/JRS/2e2G98
- 0+wXQeq30W0RSyfOfkEAanKU9tAUH0RnIHOnzV/BCnKLi+hdxZN/DjULaj/4MBZeXLW6+gGeC33
- 8Xh6d04dX882YLoIpal3Edm3ojRqOg==
-X-Authority-Analysis: v=2.4 cv=fMc0HJae c=1 sm=1 tr=0 ts=6938a7da cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=GaQpPoNlAAAA:8 a=cm27Pg_UAAAA:8 a=PJmAgKdD5_Fpd0EMymkA:9 a=CjuIK1q_8ugA:10
- a=a_PwQJl-kcHnX1M80qC6:22 a=xF5q_uoM5gZT5J3czcBi:22
-X-Proofpoint-GUID: -clWzNVjzgtbs0xFgZ1yTc-INEwZRry1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-09_05,2025-12-09_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 clxscore=1015 suspectscore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 malwarescore=0 spamscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512090178
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251209070633.GA2275908@black.igk.intel.com>
 
-On Mon, Dec 08, 2025 at 07:37:30AM +0000, Xin Ji wrote:
-> Hi Dmitry, I found there is another patch "Register USB Type-C mode switches" which provided by Pin-yen Lin <treapking@chromium.org>, but I didn't find it in the v6.18, is it obsolete?.
+Hi Mika,
 
-It has been posted 2 years ago, it has not been reposted since that
-time, it targets a very specific ChromeOS usecase. I can't call it
-obsolete, but it wasn't merged.
-
-> https://patchew.org/linux/20221124102056.393220-1-treapking@chromium.org/20221124102056.393220-6-treapking@chromium.org/
+On Tue, Dec 09, 2025 at 08:06:33AM +0100, Mika Westerberg wrote:
+> +Mario since this is AMD related.
 > 
-> Thanks,
-> Xin
+> [Also keeping all the context].
+> 
+> On Tue, Dec 09, 2025 at 01:41:41PM +0800, Chia-Lin Kao (AceLan) wrote:
+> > When plugging in a Dell U2725QE Thunderbolt monitor, the kernel produces
+> > a call trace during initial enumeration. The device automatically
+> > disconnects and reconnects ~3 seconds later, and works correctly on the
+> > second attempt.
+> > 
+> > Issue Description:
+> > ==================
+> > The Dell U2725QE (USB4 device 8087:b26) requires additional time during
+> > link width negotiation from single lane to dual lane. On first plug, the
+> > following sequence occurs:
+> > 
+> > 1. Port state reaches TB_PORT_UP (link established, single lane)
+> > 2. Path activation begins immediately
+> > 3. tb_path_activate() - > tb_port_write() returns -ENOTCONN (error -107)
+> > 4. Call trace is generated at tb_path_activate()
+> > 5. Device disconnects/reconnects automatically after ~3 seconds
+> > 6. Second attempt succeeds with full dual-lane bandwidth
+> > 
+> > First attempt dmesg (failure):
+> > -------------------------------
+> > [   36.030347] thunderbolt 0000:c7:00.6: 2:16: available bandwidth for new USB3 tunnel 9000/9000 Mb/s
+> > [   36.030613] thunderbolt 0000:c7:00.6: 2: USB3 tunnel creation failed
+> > [   36.031530] thunderbolt 0000:c7:00.6: PCIe Down path activation failed
+> > [   36.031531] WARNING: drivers/thunderbolt/path.c:589 at 0x0, CPU#12: pool-/usr/libex/3145
+> > 
+> > Second attempt dmesg (success):
+> > --------------------------------
+> > [   40.440012] thunderbolt 0000:c7:00.6: 2:16: available bandwidth for new USB3 tunnel 36000/36000 Mb/s
+> > [   40.440261] thunderbolt 0000:c7:00.6: 2:16: maximum required bandwidth for USB3 tunnel 9000 Mb/s
+> > [   40.440269] thunderbolt 0000:c7:00.6: 0:4 <-> 2:16 (USB3): activating
+> > [   40.440271] thunderbolt 0000:c7:00.6: 0:4 <-> 2:16 (USB3): allocating initial bandwidth 9000/9000 Mb/s
+> > 
+> > The bandwidth difference (9000 vs 36000 Mb/s) indicates the first attempt
+> > occurs while the link is still in single-lane mode.
+> > 
+> > Root Cause Analysis:
+> > ====================
+> > The error originates from the Thunderbolt/USB4 device hardware itself:
+> > 
+> > 1. Port config space read/write returns TB_CFG_ERROR_PORT_NOT_CONNECTED
+> > 2. This gets translated to -ENOTCONN in tb_cfg_get_error()
+> > 3. The port's control channel is temporarily unavailable during state
+> >    transition from single lane to dual lane (lane bonding)
+> > 
+> > The comment in drivers/thunderbolt/ctl.c explains this is expected:
+> >   "Port is not connected. This can happen during surprise removal.
+> >    Do not warn."
+> > 
+> > Attempted Solutions:
+> > ====================
+> > 1. Retry logic on -ENOTCONN in tb_path_activate():
+> >    Result: Caused host port (0:0) lockup with hundreds of "downstream
+> >    port is locked" errors. Rejected by user.
+> > 
+> > 2. Increased tb_port_wait_for_link_width() timeout from 100ms to 3000ms:
+> >    Result: Did not resolve the issue. The timeout increase alone is
+> >    insufficient because the port state hasn't reached TB_PORT_UP when
+> >    lane bonding is attempted.
+> > 
+> > 3. Added msleep(2000) at various points in enumeration flow:
+> >    Locations tested:
+> >    - Before tb_switch_configure(): Works ✓
+> >    - Before tb_switch_add(): Works ✓
+> >    - Before usb4_port_hotplug_enable(): Works ✓
+> >    - After tb_switch_add(): Doesn't work ✗
+> >    - In tb_configure_link(): Doesn't work ✗
+> >    - In tb_switch_lane_bonding_enable(): Doesn't work ✗
+> >    - In tb_port_wait_for_link_width(): Doesn't work ✗
+> > 
+> >    The pattern shows the delay must occur BEFORE hotplug enable, which
+> >    happens early in tb_switch_port_hotplug_enable() -> usb4_port_hotplug_enable().
+> > 
+> > Current Workaround:
+> > ===================
+> > Add a 2-second delay in tb_wait_for_port() when the port state reaches
+> > TB_PORT_UP. This is the earliest point where we know:
+> > - The link is physically established
+> > - The device is responsive
+> > - But lane width negotiation may still be in progress
+> > 
+> > This location is chosen because:
+> > 1. It's called during port enumeration before any tunnel creation
+> > 2. The port has just transitioned to TB_PORT_UP state
+> > 3. Allows sufficient time for lane bonding to complete
+> > 4. Avoids affecting other code paths
+> > 
+> > Testing Results:
+> > ================
+> > With this patch:
+> > - No call trace on first plug
+> > - Device enumerates correctly on first attempt
+> > - Full bandwidth (36000 Mb/s) available immediately
+> > - No disconnect/reconnect cycle
+> > - USB and PCIe tunnels create successfully
+> > 
+> > Without this patch:
+> > - Call trace on every first plug
+> > - Only 9000 Mb/s bandwidth (single lane) on first attempt
+> > - Automatic disconnect/reconnect after ~3 seconds
+> > - Second attempt works with 36000 Mb/s
+> > 
+> > Discussion Points for RFC:
+> > ===========================
+> > 1. Is a fixed 2-second delay acceptable, or should we poll for a
+> >    specific hardware state?
+> > 
+> > 2. Should we check PORT_CS_18_TIP (Transition In Progress) bit instead
+> >    of using a fixed delay?
+> > 
+> > 3. Is there a better location for this delay in the enumeration flow?
+> > 
+> > 4. Should this be device-specific (based on vendor/device ID) or apply
+> >    to all USB4 devices?
+> > 
+> > 5. The 100ms timeout in tb_switch_lane_bonding_enable() may be too
+> >    short for other devices as well. Should we increase it universally?
+> 
+> We should understand the issue better. This is Intel Goshen Ridge based
+> monitor which I'm pretty sure does not require additional quirks, at least
+> I have not heard any issues like this. I suspect this is combination of the
+> AMD and Intel hardware that is causing the issue.
+Actually, we encountered the same issue on Intel machine, too.
+Here is the log captured by my ex-colleague, and at that time he used
+6.16-rc4 drmtip kernel and should have reported this issue somewhere.
+https://paste.ubuntu.com/p/bJkBTdYMp6/
 
--- 
-With best wishes
-Dmitry
+The log combines with drm debug log, and becomes too large to be
+pasted on the pastebin, so I removed some unrelated lines between 44s
+~ 335s.
+
+> 
+> Looking at your dmesg, even before your issue there is suspicious log
+> entry:
+> 
+> [    5.852476] localhost kernel: [31] thunderbolt 0000:c7:00.5: acking hot unplug event on 0:6
+> [    5.852492] localhost kernel: [12] thunderbolt 0000:c7:00.5: 0:6: DP IN resource unavailable: adapter unplug
+> 
+> This causes tearing down the DP tunnel. It is unexpected for the host
+> router to send this unless you plugged monitor directly to some of the
+> Type-C ports at this time?
+No, I didn't plug any device during booting.
+
+> 
+> I wonder if you could take trace logs too from the issue? Instructions:
+> 
+> https://github.com/intel/tbtools?tab=readme-ov-file#tracing
+> https://github.com/intel/tbtools/wiki/Useful-Commands#tracing
+> 
+> Please provide both full dmesg and the trace.out or the merged one. That
+> would allow us to look what is going on (hopefully).
+Got it, I'll do it tomorrow.
+
+> 
+> > Hardware Details:
+> > =================
+> > Device: Dell U2725QE Thunderbolt Monitor
+> > USB4 Router: 8087:b26 (Intel USB4 controller)
+> > Host: AMD Thunderbolt 4 controller (0000:c7:00.6)
+> > 
+> > Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+> > ---
+> > Full dmesg log available at: https://paste.ubuntu.com/p/CXs2T4XzZ3/
+> > ---
+> >  drivers/thunderbolt/switch.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> > index b3948aad0b955..e0c65e5fb0dca 100644
+> > --- a/drivers/thunderbolt/switch.c
+> > +++ b/drivers/thunderbolt/switch.c
+> > @@ -530,6 +530,8 @@ int tb_wait_for_port(struct tb_port *port, bool wait_if_unplugged)
+> >  			return 0;
+> >  
+> >  		case TB_PORT_UP:
+> > +			msleep(2000);
+> > +			fallthrough;
+> >  		case TB_PORT_TX_CL0S:
+> >  		case TB_PORT_RX_CL0S:
+> >  		case TB_PORT_CL1:
+> > -- 
+> > 2.43.0
 
