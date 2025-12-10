@@ -1,179 +1,330 @@
-Return-Path: <linux-usb+bounces-31371-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31372-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F214CB3C9E
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 19:45:59 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 103B0CB3D96
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 20:19:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3B392305B59B
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 18:45:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D274A301276C
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 19:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41F8329367;
-	Wed, 10 Dec 2025 18:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C5A329C5A;
+	Wed, 10 Dec 2025 19:19:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iURLgJFw"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="f2GhHC1T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4611D7E42
-	for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 18:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765392345; cv=none; b=Dvewl9BMO2oTGHabGZdFE8UdgsbNYdCx/8YD1la2YJypALg8EjcQtVv+x1UgD9ja9hzXy110kAmKCtOkSQeL7QBTpvRZJXRjt33gkxyTzypWOwglBYe+jKlc/5RPQEOEb42hg0UxJ2dZU4X4g2TGR2zbJ46cw9MdxICoCG4yNtk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765392345; c=relaxed/simple;
-	bh=t7/Putf0iwaHC3Fwy9HCNAfeymtD9y6WUelPzXFP2Qk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R6mTawHIoXDoqqqPUlnsQyeqzfkbFh6NXH9C5zIXEuCYcl9WFZiEBfDKwhVWQvX4X8guvdgGj7Lm/DgZ5C961i9sI0Qyj5EisjUQK/lG9/6hl9gWvEOpdIwPpnezDetCOY7Wv3wo5NU2iF+Coaj/sKjmF/s9eQN90n1zL2IB3NA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iURLgJFw; arc=none smtp.client-ip=74.125.224.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-6433f99eb15so127160d50.3
-        for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 10:45:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765392343; x=1765997143; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NKWMAGHjySPur4SPWNwyNpZjWd2mvX3sGd2Im7efoPw=;
-        b=iURLgJFwEw+KnLSa2GZhP0G/xmhccY5qWJms2ru00fJkOUgqcDZyRN1QfCocYf5sBR
-         wPOEmvWDEi9fpx0rgvERrdp86G8LpbrpG8Dz5rqYCEcxluZn7/Yz3hrKz+nHzNZMsYcS
-         gpN2zIFqZ7/ZKsDNpVZBQ94irhagXStbGHFw4UviJhN6HO5q2Wg6bLQPalsrWiw1IcH5
-         bKuGG1zezDdJ84PQYY8ri6tZfxwCuGKpPgvT205kitRACOjzYoqGqwyBte71P/znlo0b
-         JC3GxODOV4VeKfM5Kw/dtUm90mnnC2JxVABWRFGZhFXz2bWLDljGAc4trnuAq37vuWBG
-         N/rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765392343; x=1765997143;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NKWMAGHjySPur4SPWNwyNpZjWd2mvX3sGd2Im7efoPw=;
-        b=QqvaqDYzZll0GfN1Xy9ZP3H9uQY5ngXmfOSYGnzK+4sy3lnuc+U9ElsSITvjqw4Azv
-         kMIbWiBcGW9GNhQ8M7CMx1hpFf1ePJKP7qI7hJp6AmX7Phm0bhrlSbj/wUUdzLgfgEhu
-         HcfRebShoCP64yDV/0EsjdepvHlpagjpb59tFXtd6Iqy+JdWq8Tjnxt9U+m2XiPYfYiV
-         jthUU8gDcm5xA1xFTjyA3QGApWeniXs3qNfUm5YdcpIzIclEerCgy3u+WozbVcDaqI2z
-         NhWFnS1/r9PcvdPcxlmj0VR69yxumyU0Mai74tNHazh68gECYo0jZXSK8C9vYFZXRa8J
-         Tcdw==
-X-Forwarded-Encrypted: i=1; AJvYcCUY0taSlcKeN9JB7AguJwxdl7+KIPMc2uwgEfT6MMe4xXJNVEGcjxIYvxP/tygFr69xZxAUg30mzx0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOmfpdG5+5RbvAr8XHAqbKRj7iVT2quPld3ZR3iud2XqUSrEGK
-	ZnUUk2rwt6tP8toAjVcRdC3fzWA+SVQhw6yz7es+8z6broqfO/oxFfTD
-X-Gm-Gg: AY/fxX7GWQ7FT9246GoATCi6XVpKnuR2N0Obtll4ODh0UEb0q8v9WnFb7AYd3eZ7QKD
-	5Zfmz4avESRtK0GZ36VJkjYtCAxGIlxGJUQGB+srGYCwemaZGAgQgDs3/utvURvYqfnYnS+THU9
-	s45tKPVmz1xjwSOKhOxxnz9e8pLjsYOtMDxGSCGKJr/JTtj3jaou3PiMm33PpjuaNTUCw5e7sMM
-	/I+cXcDOeqlk8kwiqLp27IY1ERFVjrysmOKsyCf71+bGUQyp/1vZDp5Zh3k4XZN8TYmxb6HC7fm
-	PG47L/dfHLbGn0QThToPH3ds6TemZBwbhTB+Yz7NslMLO4dvcc6WM6u11G7m6h6mmvbt9iafO4K
-	4HEIWwXn+PyQ3dl3KPdHl/abY3zIH88QjWOHNaOwfz1DH3l2HrwwUqJMcJub3IOvmuwOODa1D7+
-	O8EtVDdp4=
-X-Google-Smtp-Source: AGHT+IHq6bwat4MhwQe1AguHAFxnp5U2Bs8TJxUWtTtn0EtgRmStw4pjkxRdMxlyDvVig7YOr1+nUQ==
-X-Received: by 2002:a05:690e:4284:20b0:644:6c79:62d7 with SMTP id 956f58d0204a3-6446eafb7acmr2315073d50.63.1765392342590;
-        Wed, 10 Dec 2025 10:45:42 -0800 (PST)
-Received: from localhost ([2601:346:0:79bd:74ed:2211:108a:e77a])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64477d3a336sm189571d50.3.2025.12.10.10.45.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Dec 2025 10:45:42 -0800 (PST)
-Date: Wed, 10 Dec 2025 13:45:41 -0500
-From: Yury Norov <yury.norov@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: david.laight.linux@gmail.com,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Crt Mori <cmo@melexis.com>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Luo Jie <quic_luoj@quicinc.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Simon Horman <simon.horman@netronome.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: Re: [PATCH 4/9] bitfield: Copy #define parameters to locals
-Message-ID: <aTm_1cJhtnrCy7FM@yury>
-References: <20251209100313.2867-1-david.laight.linux@gmail.com>
- <20251209100313.2867-5-david.laight.linux@gmail.com>
- <aThFlDZVFBEyBhFq@smile.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CFB3B8D75;
+	Wed, 10 Dec 2025 19:19:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765394366; cv=pass; b=Sn1x5detNBL4yFmROQy2v0R9h1M1nn75RXN/CCB/YqzZG+gwESy/tGVWG8eP349lDQlQNAQBCHCVzTxCvM7adU4NV/TAldin/3lZH/U1YwBcwuYiaNFjEW7TZoD+PQgK9VMBLqWnxkvcnXshnetn7NDq1ZEtfMA8/ASJZGiUnDE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765394366; c=relaxed/simple;
+	bh=qpqeS8IY7ytezFjaY1n8JNgWEvn7E++Jo6BtI1yqF1U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=L2i1SK7hAmun42Ia0pZuMdaggNTJpsXBTudYsJFvxoFWmTfS/Ddz7CuaLLEdudEWgCxXaw0C9kUllQcfcmkeM6S/fYZuwrVL6h3p7w9eN5FDMYtXlSWTr3wOrI9AcKBKRqzVBkAtGl2Id26n3RysBtbe+EYq08RwC+vGAKfcDsE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=f2GhHC1T; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1765394320; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=aqe3TBAt+Tf0ej1pnT0Q/FVbFd4P3HQepnc0AnxzkzXCpk5Lcgd22x15NG92ZfY0xZHuUqCPWrFyaa2GWF4/ctlh8b/VJF6vdQWERqyTCJ2iQDrdRSWUzWffnehi0CkfFmfSuvKb6LUqVMmkECcUbUTA55HMScAeeWBF/1mV2t4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1765394320; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=/seT+FFLHD7j8BZlv3zXV+mp3M09SGTEChMYjY4N0aM=; 
+	b=dxzjcuBCZYLaV3HfHUgxcTDhdnlvqiooOiKOk4OYtKkWTAPbedWwkA30j7fNaP+gqUnZFhNNriMlL3EC83cfYulP9tmv/6+wOscpEbvErY64b4XypzC1Xwya9wHO9geLShdqQbJWkEztNSyjHltdgMilCRucOgEQFJ4w2RJ0kdY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1765394320;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=/seT+FFLHD7j8BZlv3zXV+mp3M09SGTEChMYjY4N0aM=;
+	b=f2GhHC1TsWeTycQokWrZsUlRhL9O8gqFrjxSBXdgjw5RLD+K9bVw6dT21a8iXV5W
+	3bgVD3OmXuWkBbXri3DX2gklcQUGMaOZLGmcBEBzq2NtMN5WGZ9M0luYMK50DWp/BSw
+	Q5UHYNw4A+Dwl5GBHVPqIS7IIRlM5Dz7fVCYRnWk=
+Received: by mx.zohomail.com with SMTPS id 176539431766081.4852419704248;
+	Wed, 10 Dec 2025 11:18:37 -0800 (PST)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Yury Norov <yury.norov@gmail.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, Crt Mori <cmo@melexis.com>,
+ Richard Genoud <richard.genoud@bootlin.com>,
+ Andy Shevchenko <andriy.shevchenko@intel.com>,
+ Luo Jie <quic_luoj@quicinc.com>, Peter Zijlstra <peterz@infradead.org>,
+ Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+ "David S . Miller" <davem@davemloft.net>,
+ Simon Horman <simon.horman@netronome.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>, david.laight.linux@gmail.com
+Cc: David Laight <david.laight.linux@gmail.com>
+Subject:
+ Re: [PATCH 3/9] bitmap: Use FIELD_PREP() in expansion of FIELD_PREP_WM16()
+Date: Wed, 10 Dec 2025 20:18:30 +0100
+Message-ID: <2262600.PYKUYFuaPT@workhorse>
+In-Reply-To: <20251209100313.2867-4-david.laight.linux@gmail.com>
+References:
+ <20251209100313.2867-1-david.laight.linux@gmail.com>
+ <20251209100313.2867-4-david.laight.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aThFlDZVFBEyBhFq@smile.fi.intel.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, Dec 09, 2025 at 05:51:48PM +0200, Andy Shevchenko wrote:
-> On Tue, Dec 09, 2025 at 10:03:08AM +0000, david.laight.linux@gmail.com wrote:
+On Tuesday, 9 December 2025 11:03:07 Central European Standard Time david.laight.linux@gmail.com wrote:
+> From: David Laight <david.laight.linux@gmail.com>
 > 
-> > Use __auto_type to take copies of parameters to both ensure they are
-> > evaluated only once and to avoid bloating the pre-processor output.
-> > In particular 'mask' is likely to be GENMASK() and the expension
-> > of FIELD_GET() is then about 18KB.
-> > 
-> > Remove any extra (), update kerneldoc.
+> Instead of directly expanding __BF_FIELD_CHECK() (which really ought
+> not be used outside bitfield) and open-coding the generation of the
+> masked value, just call FIELD_PREP() and add an extra check for
+> the mask being at most 16 bits.
 > 
-> > Consistently use xxx for #define formal parameters and _xxx for
-> > local variables.
+> Signed-off-by: David Laight <david.laight.linux@gmail.com>
+> ---
+>  include/linux/hw_bitfield.h | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
 > 
-> Okay, I commented below, and I think this is too huge to be in this commit.
-> Can we make it separate?
+> diff --git a/include/linux/hw_bitfield.h b/include/linux/hw_bitfield.h
+> index df202e167ce4..d7f21b60449b 100644
+> --- a/include/linux/hw_bitfield.h
+> +++ b/include/linux/hw_bitfield.h
+> @@ -23,15 +23,14 @@
+>   * register, a bit in the lower half is only updated if the corresponding bit
+>   * in the upper half is high.
+>   */
+> -#define FIELD_PREP_WM16(_mask, _val)					     \
+> -	({								     \
+> -		typeof(_val) __val = _val;				     \
+> -		typeof(_mask) __mask = _mask;				     \
+> -		__BF_FIELD_CHECK(__mask, ((u16)0U), __val,		     \
+> -				 "HWORD_UPDATE: ");			     \
+> -		(((typeof(__mask))(__val) << __bf_shf(__mask)) & (__mask)) | \
+> -		((__mask) << 16);					     \
+> -	})
+> +#define FIELD_PREP_WM16(mask, val)				\
+> +({								\
+> +	__auto_type _mask = mask;				\
+> +	u32 _val = FIELD_PREP(_mask, val);			\
+> +	BUILD_BUG_ON_MSG(_mask > 0xffffu,			\
+> +			 "FIELD_PREP_WM16: mask too large");	\
+> +	_val | (_mask << 16);					\
+> +})
+>  
+>  /**
+>   * FIELD_PREP_WM16_CONST() - prepare a constant bitfield element with a mask in
+> 
 
-I'm next to Andy. The commit message covers 6 or 7 independent
-changes, and patch body itself seems to be above my abilities to
-review. This should look like a series if nice cleanups, now it looks
-like a patch bomb.
- 
-> > Rather than use (typeof(mask))(val) to ensure bits aren't lost when
-> > val is shifted left, use '__auto_type _val = 1 ? (val) : _mask;'
-> > relying on the ?: operator to generate a type that is large enough.
-> > 
-> > Remove the (typeof(mask)) cast from __FIELD_GET(), it can only make
-> > a difference if 'reg' is larger than 'mask' and the caller cares about
-> > the actual type.
-> > Note that mask usually comes from GENMASK() and is then 'unsigned long'.
-> > 
-> > Rename the internal defines __FIELD_PREP to __BF_FIELD_PREP and
-> > __FIELD_GET to __BF_FIELD_GET.
-> > 
-> > Now that field_prep() and field_get() copy their parameters there is
-> > no need for the __field_prep() and __field_get() defines.
-> > But add a define to generate the required 'shift' to use in both defines.
-> 
-> ...
-> 
-> > -#define __BF_FIELD_CHECK_MASK(_mask, _val, _pfx)			\
-> > +#define __BF_FIELD_CHECK_MASK(mask, val, pfx)				\
-> >  	({								\
-> > -		BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),		\
-> > -				 _pfx "mask is not constant");		\
-> > -		BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");	\
-> > -		BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
-> > -				 ~((_mask) >> __bf_shf(_mask)) &	\
-> > -					(0 + (_val)) : 0,		\
-> > -				 _pfx "value too large for the field"); \
-> > -		__BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +			\
-> > -					      (1ULL << __bf_shf(_mask))); \
-> > +		BUILD_BUG_ON_MSG(!__builtin_constant_p(mask),		\
-> > +				 pfx "mask is not constant");		\
-> > +		BUILD_BUG_ON_MSG((mask) == 0, _pfx "mask is zero");	\
-> > +		BUILD_BUG_ON_MSG(__builtin_constant_p(val) ?		\
-> > +				 ~((mask) >> __bf_shf(mask)) &		\
-> > +					(0 + (val)) : 0,		\
-> > +				 pfx "value too large for the field");	\
-> > +		__BUILD_BUG_ON_NOT_POWER_OF_2((mask) +			\
-> > +					      (1ULL << __bf_shf(mask))); \
-> >  	})
-> 
-> I looks like renaming parameters without any benefit, actually the opposite
-> it's very hard to see if there is any interesting change here. Please, drop
-> this or make it clear to focus only on the things that needs to be changed.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
+This breaks the build for at least one driver that uses
+FIELD_PREP_WM16, namely phy-rockchip-emmc.c:
+
+drivers/phy/rockchip/phy-rockchip-emmc.c:109:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  109 |                      HIWORD_UPDATE(PHYCTRL_PDB_PWR_OFF,
+      |                      ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:25:4: note: expanded from macro 'HIWORD_UPDATE'
+   25 |                 (FIELD_PREP_WM16((mask) << (shift), (val)))
+      |                  ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:114:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  114 |                      HIWORD_UPDATE(PHYCTRL_ENDLL_DISABLE,
+      |                      ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:25:4: note: expanded from macro 'HIWORD_UPDATE'
+   25 |                 (FIELD_PREP_WM16((mask) << (shift), (val)))
+      |                  ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:167:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  167 |                      HIWORD_UPDATE(PHYCTRL_PDB_PWR_ON,
+      |                      ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:25:4: note: expanded from macro 'HIWORD_UPDATE'
+   25 |                 (FIELD_PREP_WM16((mask) << (shift), (val)))
+      |                  ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:190:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  190 |                      HIWORD_UPDATE(freqsel, PHYCTRL_FREQSEL_MASK,
+      |                      ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:25:4: note: expanded from macro 'HIWORD_UPDATE'
+   25 |                 (FIELD_PREP_WM16((mask) << (shift), (val)))
+      |                  ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:196:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  196 |                      HIWORD_UPDATE(PHYCTRL_ENDLL_ENABLE,
+      |                      ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:25:4: note: expanded from macro 'HIWORD_UPDATE'
+   25 |                 (FIELD_PREP_WM16((mask) << (shift), (val)))
+      |                  ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:291:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  291 |                      HIWORD_UPDATE(rk_phy->drive_impedance,
+      |                      ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:25:4: note: expanded from macro 'HIWORD_UPDATE'
+   25 |                 (FIELD_PREP_WM16((mask) << (shift), (val)))
+      |                  ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:298:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  298 |                      HIWORD_UPDATE(PHYCTRL_OTAPDLYENA,
+      |                      ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:25:4: note: expanded from macro 'HIWORD_UPDATE'
+   25 |                 (FIELD_PREP_WM16((mask) << (shift), (val)))
+      |                  ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:305:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  305 |                      HIWORD_UPDATE(rk_phy->output_tapdelay_select,
+      |                      ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:25:4: note: expanded from macro 'HIWORD_UPDATE'
+   25 |                 (FIELD_PREP_WM16((mask) << (shift), (val)))
+      |                  ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:312:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  312 |                      HIWORD_UPDATE(rk_phy->enable_strobe_pulldown,
+      |                      ^
+drivers/phy/rockchip/phy-rockchip-emmc.c:25:4: note: expanded from macro 'HIWORD_UPDATE'
+   25 |                 (FIELD_PREP_WM16((mask) << (shift), (val)))
+      |                  ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+
+Maybe the wrapping in HIWORD_UPDATE (which was done to make the
+transitionary patch easier) is playing a role here.
+
+pcie-dw-rockchip.c is similarly broken by this change, except
+without the superfluous wrapper:
+
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:191:37: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  191 |         rockchip_pcie_writel_apb(rockchip, PCIE_CLIENT_ENABLE_LTSSM,
+      |                                            ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:43:35: note: expanded from macro 'PCIE_CLIENT_ENABLE_LTSSM'
+   43 | #define  PCIE_CLIENT_ENABLE_LTSSM       FIELD_PREP_WM16(BIT(2), 1)
+      |                                         ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:197:37: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  197 |         rockchip_pcie_writel_apb(rockchip, PCIE_CLIENT_DISABLE_LTSSM,
+      |                                            ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:44:36: note: expanded from macro 'PCIE_CLIENT_DISABLE_LTSSM'
+   44 | #define  PCIE_CLIENT_DISABLE_LTSSM      FIELD_PREP_WM16(BIT(2), 0)
+      |                                         ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:222:38: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  222 |                 rockchip_pcie_writel_apb(rockchip, PCIE_CLKREQ_READY,
+      |                                                    ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:67:29: note: expanded from macro 'PCIE_CLKREQ_READY'
+   67 | #define  PCIE_CLKREQ_READY              FIELD_PREP_WM16(BIT(0), 1)
+      |                                         ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:234:6: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  234 |                                  PCIE_CLKREQ_PULL_DOWN | PCIE_CLKREQ_NOT_READY,
+      |                                  ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:69:33: note: expanded from macro 'PCIE_CLKREQ_PULL_DOWN'
+   69 | #define  PCIE_CLKREQ_PULL_DOWN          FIELD_PREP_WM16(GENMASK(13, 12), 1)
+      |                                         ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:234:30: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  234 |                                  PCIE_CLKREQ_PULL_DOWN | PCIE_CLKREQ_NOT_READY,
+      |                                                          ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:68:33: note: expanded from macro 'PCIE_CLKREQ_NOT_READY'
+   68 | #define  PCIE_CLKREQ_NOT_READY          FIELD_PREP_WM16(BIT(0), 0)
+      |                                         ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:535:9: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  535 |                 val = FIELD_PREP_WM16(PCIE_LTSSM_APP_DLY2_DONE, 1);
+      |                       ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:574:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  574 |         val = FIELD_PREP_WM16(PCIE_LTSSM_ENABLE_ENHANCE, 1);
+      |               ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:578:6: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  578 |                                  PCIE_CLIENT_SET_MODE(PCIE_CLIENT_MODE_RC),
+      |                                  ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:41:34: note: expanded from macro 'PCIE_CLIENT_SET_MODE'
+   41 | #define  PCIE_CLIENT_SET_MODE(x)        FIELD_PREP_WM16(PCIE_CLIENT_MODE_MASK, (x))
+      |                                         ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:592:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  592 |         val = FIELD_PREP_WM16(PCIE_RDLH_LINK_UP_CHGED, 0);
+      |               ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:624:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  624 |         val = FIELD_PREP_WM16(PCIE_LTSSM_ENABLE_ENHANCE, 1) |
+      |               ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:625:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  625 |               FIELD_PREP_WM16(PCIE_LTSSM_APP_DLY2_EN, 1);
+      |               ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:629:6: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  629 |                                  PCIE_CLIENT_SET_MODE(PCIE_CLIENT_MODE_EP),
+      |                                  ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:41:34: note: expanded from macro 'PCIE_CLIENT_SET_MODE'
+   41 | #define  PCIE_CLIENT_SET_MODE(x)        FIELD_PREP_WM16(PCIE_CLIENT_MODE_MASK, (x))
+      |                                         ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:653:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  653 |         val = FIELD_PREP_WM16(PCIE_RDLH_LINK_UP_CHGED, 0) |
+      |               ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+drivers/pci/controller/dwc/pcie-dw-rockchip.c:654:8: error: variable '_mask' declared with deduced type '__auto_type' cannot appear in its own initializer
+  654 |               FIELD_PREP_WM16(PCIE_LINK_REQ_RST_NOT_INT, 0);
+      |               ^
+include/linux/hw_bitfield.h:29:24: note: expanded from macro 'FIELD_PREP_WM16'
+   29 |         u32 _val = FIELD_PREP(_mask, val);                      \
+      |                               ^
+14 errors generated.
+
+Kind regards,
+Nicolas Frattaroli
+
+
 
