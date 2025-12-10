@@ -1,167 +1,188 @@
-Return-Path: <linux-usb+bounces-31368-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31369-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 874FBCB323B
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 15:26:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 055EFCB3B9C
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 19:14:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8911B3004CFE
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 14:26:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D6E34305C4DE
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 18:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F39A3233FA;
-	Wed, 10 Dec 2025 14:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 343193271FD;
+	Wed, 10 Dec 2025 18:13:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel-space.org header.i=@kernel-space.org header.b="MkcH4VSO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VIkVp+Pj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.kernel-space.org (v2202511311555398556.powersrv.de [46.38.245.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545632E92B4
-	for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 14:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.38.245.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E54730AD05
+	for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 18:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765376780; cv=none; b=kAOVfEvD0pW+9D5iy/GSM7Eu3nK8H88AgNJn1v4re7dC70YIL9jvOL9wm8BSWEbyrHFMzdz3x8uJ8ORvkjOMIAPV2mdweMFpKhchAdkvtSbJ44x7t0tC+AckKKCnL3SruXWLuarIHbU7U7Rxp4PJ8iujqxvxc6vq46e5TU7Byj0=
+	t=1765390438; cv=none; b=kNyc7j4HNT1Fe2ELBoi34dubjngSL13w7jZ9bcemO0Yply2qNBw0lnrzueDWwoYpd9k6mB2SoxJtQWicvPI1a+yVgnafAE4M46zHpJEN7BaAGxl+MOv/fj5SxbJZVR0Abt38mdrg1On3/wtOdhqfKas4FIKyU5OOJpID1E/1yKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765376780; c=relaxed/simple;
-	bh=pYUhUcRTkTChSG61Fbzr7/0JibstPRX9XddhLldFgzc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Si5W1nGQUcVPmpDISi/6fNSysDgKGM/8/GFklWuPGYHMnzWvaSTO6BIATfJjqhR6MbwkwRjoIMwxIEzh/nNrq+c3gWuJ902e8rVERmsP52FdBzs6eH1HOUgvNGI7Wny/qRJI068iqkyfLceBbB2BalvSemO0kEGAX5Lek68uRm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kernel-space.org; spf=pass smtp.mailfrom=kernel-space.org; dkim=pass (1024-bit key) header.d=kernel-space.org header.i=@kernel-space.org header.b=MkcH4VSO; arc=none smtp.client-ip=46.38.245.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kernel-space.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel-space.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
-	s=s1; t=1765376375;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iKBHrXxL4yGb7kqfSw6JlHOQbCHiitIUewV/B52KDrA=;
-	b=MkcH4VSOWDXSWsX3h+Wr7Z6INa88VevsKKtG6h004qN1j5DuiR1sVJvL1HujMmzZNdwvUu
-	dLuOKqyotalJGw99lcq6ATnCZuHYYFVHj+HK2PEei82P9UTgjOxL58lXvkZeHha4ZPuhZR
-	MihfZlls4TkPShZFre4RHHEJzzIOzvo=
-Received: from [IPV6:2a07:7e81:7daa:0:62cf:84ff:feee:627] (<unknown> [2a07:7e81:7daa:0:62cf:84ff:feee:627])
-	by oreshnik (OpenSMTPD) with ESMTPSA id 03020e42 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Wed, 10 Dec 2025 14:19:35 +0000 (UTC)
-Message-ID: <6ca433ef-5395-4143-8203-504f9237339e@kernel-space.org>
-Date: Wed, 10 Dec 2025 15:20:18 +0100
+	s=arc-20240116; t=1765390438; c=relaxed/simple;
+	bh=Wtn11a9iEnf43J1eX/LK36QsqtWTGu7jL2VTy9DfQB0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q95H66QKlVNTyvZHCsIqVlfBvGCYBuUg+LnsrZFXo69tsVDrkP4TNMVDnXt5TdZs9kpVEEHPif3TtTuaCf2NtWNqe85O4zr5y5JxsGbUNTO0qWVMfTMpPJwHiptmDQ+7DWGBcsS4oTtfdQw0+nC9GntJJwfNWt7thbbtW2m26aY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VIkVp+Pj; arc=none smtp.client-ip=74.125.224.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-64472121ad5so126756d50.0
+        for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 10:13:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765390436; x=1765995236; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9+csY2ByO8RttGedAiCGy1ilPBafiqYG3jRO+0XdJFE=;
+        b=VIkVp+Pji01mIAVj9Vr920CctEdTk9D94QfCltJuceXWyYj0dSXoFef2nguNmTDYN8
+         /Cezcl2RdJZ/30+7ja2DEKZXfqn0d2MWdofhX85HgD5wx5Zk3bWLQQTx+h6P5LONcs3H
+         g4vIO3fwf6PHvgACRq/nOZ/4hkh8/y+wq3aw8RqTMTzPdlpKfu+3MdE2QSxEPZT0SEEk
+         tLGET54KSmuTtSxwDN3n736pFf1fOLNwJjL93JofxGFd4NF7RYAtUBsYbHLV1Q174sKA
+         4llpefqOqc7q06vChIuL2HL1lUKhTztNPOlbgOfn4frUfbqhlkIHRFWZ3lo6hJpkv8HA
+         eksg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765390436; x=1765995236;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9+csY2ByO8RttGedAiCGy1ilPBafiqYG3jRO+0XdJFE=;
+        b=Jm2ovNIht4x8fahDGU3Edj+f9WgiDCkUaZ6/5WMzmTar7b3RVwrtjUuCddZCaPmLbg
+         ptH0kYw0XWCJtP1ipCIoyV9FEfWbjSE3zGJb45WtkhTl7jRhW7izuoPySpwoP1QIHZqM
+         tyWtHG8Q0PYfruKICM0bCMfA/arZsHUdCkRzxKaB4kFHJlBituyd3HBDZ7wZAhJJ3Kco
+         F/bG/jOssfrI4I4UNDuU8sj8cAyeYqipSR7qJKct5C19xUkDRSL2YaPRKM6sPCs3w3DF
+         cMXCBwwXHF9lQ+FQQmQa0uMJoJ7et7T6jwhUWkDaVCpGfLvjXOG0VAGBRiXbDhFyZJSx
+         FyvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWGAvRbjVX4Te309XDfFlKHfHYrPiLRSgzUYkH7FMB/RQ1XZ0t3ARo2Na+7NlHVeflMXeSweWo/cFs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2G7sV99IJPr1Pr75zBBD6ZS3Bgn4F4UR0E+Ui8gB1H+lNURPo
+	ZvF0QdQaTGUKp4gC/qTNJ/R+OOBB7VpT/MmcbB0CTm+BMKnObwXrtsXP
+X-Gm-Gg: AY/fxX47P6fKWUy2Sr02MFYD3NgLXur8xqVykrllfilnZ8BUhDmOMdwOX/n0DxHlKhN
+	duL3Y8dWTtVF/EkTij3BmBfbQGNZXC4NhxNQ2EUsPsyuKi5yrroVxQnjqkOExcTkJ95nRxiymwB
+	YbknmeGhQzBeVUifrrPMiVwAng9XRERecdPs8yuVPPDTaPkSK1ApXPATfn9eBH0LulZuTG51TKl
+	UXOgDQVMv2z1/lwyYDXPa9y5etv+6Im3E1nv6J97zWrWnTNm9SC8C4neF8RTjPJ3DdX08GZ3oSt
+	tkEBXtzYc9KK40oUdnaRVdNKDLXnLG9rQ6y6HEhychkNIWsGbzGIfUAhCNx0xMwKYPUxyPI8e5o
+	UYhzq1sgKRw3Dwxi0YfuOL01xCHhoXzRZhWxi+ReKqdrHRcVIuq91uMXRWY8wsxgixC1Qu9vDm1
+	b2dySAcbI=
+X-Google-Smtp-Source: AGHT+IFNQ+uuN8jF42ubdJrRT5xIjGkXIwoFJdbKXMVHKukzaq26xU+wZQxTC29eXTthtXTon21EyQ==
+X-Received: by 2002:a05:690e:1287:b0:63f:b4ee:792c with SMTP id 956f58d0204a3-6446e9116famr2757099d50.19.1765390436050;
+        Wed, 10 Dec 2025 10:13:56 -0800 (PST)
+Received: from localhost ([2601:346:0:79bd:74ed:2211:108a:e77a])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64477dab6f4sm149212d50.12.2025.12.10.10.13.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Dec 2025 10:13:55 -0800 (PST)
+Date: Wed, 10 Dec 2025 13:13:55 -0500
+From: Yury Norov <yury.norov@gmail.com>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Crt Mori <cmo@melexis.com>,
+	Richard Genoud <richard.genoud@bootlin.com>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Luo Jie <quic_luoj@quicinc.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Simon Horman <simon.horman@netronome.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: Re: [PATCH 2/9] thunderblot: Don't pass a bitfield to FIELD_GET
+Message-ID: <aTm4Y-avX8qoLLoe@yury>
+References: <20251209100313.2867-1-david.laight.linux@gmail.com>
+ <20251209100313.2867-3-david.laight.linux@gmail.com>
+ <20251210055617.GD2275908@black.igk.intel.com>
+ <20251210093403.5b0f440e@pumpkin>
+ <20251210094102.GF2275908@black.igk.intel.com>
+ <20251210101842.022d1a99@pumpkin>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: testusb: epipe errors on test 9 and 10
-To: Alan Stern <stern@rowland.harvard.edu>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <cbb3bbc1-e8c1-450b-a38f-7b3f4cda6006@kernel-space.org>
- <c17c0821-3dd8-47b3-b795-f42675fb0a75@rowland.harvard.edu>
- <d8aa2f1e-fc44-4bb9-8245-d6ac76047dc3@kernel-space.org>
- <9776c9fb-8fed-4e79-b312-0b1a872911b8@rowland.harvard.edu>
- <bcc4f76a-985b-4932-a455-b4fedcafcd97@rowland.harvard.edu>
- <20251201232911.s5diakt3w7ztzjv2@synopsys.com>
- <82bc662b-70c6-46f8-acc7-3a666965d13e@rowland.harvard.edu>
- <20251202042305.wl2uvxoe55ay5vxw@synopsys.com>
- <5daaa7f3-7c51-4f72-b6e9-cf4f015f758b@rowland.harvard.edu>
- <20251202232237.w624ilc24wad7chg@synopsys.com>
- <06229e27-db5f-410c-8c80-39cd2a18aed7@rowland.harvard.edu>
-Content-Language: en-US, it
-From: Angelo Dureghello <angelo@kernel-space.org>
-In-Reply-To: <06229e27-db5f-410c-8c80-39cd2a18aed7@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251210101842.022d1a99@pumpkin>
 
-Hi Alan,
+On Wed, Dec 10, 2025 at 10:18:42AM +0000, David Laight wrote:
+> On Wed, 10 Dec 2025 10:41:02 +0100
+> Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> 
+> > On Wed, Dec 10, 2025 at 09:34:03AM +0000, David Laight wrote:
+> > > On Wed, 10 Dec 2025 06:56:17 +0100
+> > > Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> > >   
+> > > > $subject has typo: thunderblot -> thunderbolt ;-)
+> > > > 
+> > > > On Tue, Dec 09, 2025 at 10:03:06AM +0000, david.laight.linux@gmail.com wrote:  
+> > > > > From: David Laight <david.laight.linux@gmail.com>
+> > > > > 
+> > > > > FIELD_GET needs to use __auto_type to get the value of the 'reg'
+> > > > > parameter, this can't be used with bifields.
+> > > > > 
+> > > > > FIELD_GET also want to verify the size of 'reg' so can't add zero
+> > > > > to force the type to int.
+> > > > > 
+> > > > > So add a zero here.
+> > > > > 
+> > > > > Signed-off-by: David Laight <david.laight.linux@gmail.com>
+> > > > > ---
+> > > > >  drivers/thunderbolt/tb.h | 2 +-
+> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+> > > > > index e96474f17067..7ca2b5a0f01e 100644
+> > > > > --- a/drivers/thunderbolt/tb.h
+> > > > > +++ b/drivers/thunderbolt/tb.h
+> > > > > @@ -1307,7 +1307,7 @@ static inline struct tb_retimer *tb_to_retimer(struct device *dev)
+> > > > >   */
+> > > > >  static inline unsigned int usb4_switch_version(const struct tb_switch *sw)
+> > > > >  {
+> > > > > -	return FIELD_GET(USB4_VERSION_MAJOR_MASK, sw->config.thunderbolt_version);
+> > > > > +	return FIELD_GET(USB4_VERSION_MAJOR_MASK, sw->config.thunderbolt_version + 0);    
+> > > > 
+> > > > Can't this use a cast instead? If not then can you also add a comment here
+> > > > because next someone will send a patch "fixing" the unnecessary addition.  
+> > > 
+> > > A cast can do other (possibly incorrect) conversions, adding zero is never going
+> > > to so any 'damage' - even if it looks a bit odd.
+> > > 
+> > > Actually, I suspect the best thing here is to delete USB4_VERSION_MAJOR_MASK and
+> > > just do:
+> > > 	/* The major version is in the top 3 bits */
+> > > 	return sw->config.thunderbolt_version > 5;  
+> > 
+> > You mean 
+> > 
+> > 	return sw->config.thunderbolt_version >> 5;
+> > 
+> > ?
+> > 
+> > Yes that works but I prefer then:
+> > 
+> > 	return sw->config.thunderbolt_version >> USB4_VERSION_MAJOR_SHIFT;
+> 
+> I've put that in for the next version (without the comment line).
 
-On 12/4/25 23:26, Alan Stern wrote:
-> On Tue, Dec 02, 2025 at 11:22:38PM +0000, Thinh Nguyen wrote:
->> On Tue, Dec 02, 2025, Alan Stern wrote:
->>> On Tue, Dec 02, 2025 at 04:23:13AM +0000, Thinh Nguyen wrote:
->>>> On Mon, Dec 01, 2025, Alan Stern wrote:
->>>>> Are we talking about the same thing?  Clear-Feature is different from
->>>>> Get-Interface-Status.
->>>>>
->>>> Ah... I just saw the subject line testusb -EPIPE and assumed that it's
->>>> related to ClearFeature(halt_ep)..
->>>>
->>>> The Get-Interface-Status should be hand-off and handled by gzero right?
->>>> The gadget driver knows about the status of the interface, not UDC
->>>> driver.
->>> For USB-2 devices, Get-Interface-Status is always supposed to return two
->>> bytes of 0.  For USB-3 devices, it returns information about Function
->>> Remote Wakeup and Function Remote Wakeup Capable, which is handled
->>> already by the composite core.
->>>
->>> So for SuperSpeed and above, the request should be delegated.  For high
->>> speed and below, it could be done either way.  (dummy-hcd makes the
->>> opposite mistake; it always returns zeros for Get-Interface-Status and
->>> never delegates.)
->>>
->>> If you think it's best always to delegate the request then composite.c
->>> needs to be changed; it should handle the reply for non-SuperSpeed
->>> connections.  A simple change; I can do it.  What do you prefer?
->>>
->> Right this change is simple. I think it's probably easier to delegate
->> and enforce this in the composite library instead of auditing all the
->> UDC drivers.
-> Here's a patch to try.  Angelo, can you test this?
->
-> Alan Stern
->
->
->
-> Index: usb-devel/drivers/usb/gadget/composite.c
-> ===================================================================
-> --- usb-devel.orig/drivers/usb/gadget/composite.c
-> +++ usb-devel/drivers/usb/gadget/composite.c
-> @@ -1966,25 +1966,27 @@ composite_setup(struct usb_gadget *gadge
->   			break;
->   		}
->   
-> -		/*
-> -		 * USB 3.0 additions:
-> -		 * Function driver should handle get_status request. If such cb
-> -		 * wasn't supplied we respond with default value = 0
-> -		 * Note: function driver should supply such cb only for the
-> -		 * first interface of the function
-> -		 */
-> -		if (!gadget_is_superspeed(gadget))
-> -			goto unknown;
-> +		/* UDC driver should handle device and endpoint recipients */
->   		if (ctrl->bRequestType != (USB_DIR_IN | USB_RECIP_INTERFACE))
->   			goto unknown;
-> -		value = 2;	/* This is the length of the get_status reply */
-> -		put_unaligned_le16(0, req->buf);
->   		if (!cdev->config || intf >= MAX_CONFIG_INTERFACES)
->   			break;
->   		f = cdev->config->interface[intf];
->   		if (!f)
->   			break;
->   
-> +		value = 2;	/* This is the length of the get_status reply */
-> +		put_unaligned_le16(0, req->buf);
-> +		if (!gadget_is_superspeed(gadget))
-> +			break;	/* USB-2 always returns zeros */
-> +
-> +		/*
-> +		 * USB 3.0 additions:
-> +		 * Function driver should handle get_status request. If such cb
-> +		 * wasn't supplied we respond with default value = 0
-> +		 * Note: function driver should supply such cb only for the
-> +		 * first interface of the function
-> +		 */
->   		if (f->get_status) {
->   			status = f->get_status(f);
->   
-thanks a lot.
+FIELD_GET() is here exactly to let people to not opencode this
+error-prone bit manipulation. So, let's continue using it.
 
-I am actually stuck working in 5-4 kernel, where the issue was detected, 
-but will do my best to test this
-as soon as i can .
+David, can you explain in details why this code needs to be fixed? Why
+and when typecast wouldn't work so that you have to use an ugly '+0'
+hack, or even drop the FIELD_GET().
 
-Regards,
-angelo
+My current understanding is that the existing FIELD_GET()
+implementation works well with any data types, including bitfields,
+and what you suggested in this series - does not.
 
+If it's correct, I don't think that switching to your version is
+well-justified.
 
+Thanks,
+Yury
 
