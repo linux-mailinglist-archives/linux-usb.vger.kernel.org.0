@@ -1,56 +1,56 @@
-Return-Path: <linux-usb+bounces-31355-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31356-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74130CB2164
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 07:35:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED14BCB2188
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 07:36:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DB8FC302CCAB
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 06:35:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 650CF30F7038
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 06:35:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 046522E5439;
-	Wed, 10 Dec 2025 06:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82ACC2E5439;
+	Wed, 10 Dec 2025 06:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tBPpplOz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lfEU8ZKR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762322765ED;
-	Wed, 10 Dec 2025 06:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3B1305058;
+	Wed, 10 Dec 2025 06:35:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765348512; cv=none; b=fvaj10z5ip1YqwpKBRxDdek3eh8ihZB+m6BJ4d0hvaNs66zq9qg704n59QegKi75syHnc3plV4HFT/PBJcbIoF72Akw3zqscKvgk1YbOyHKZv0x/tRnaW1bOQ1Sen3G+jGFP9hBN1Xv8ZsSsZlYn3frA1yrgIZTxwRVIRZ1A4k8=
+	t=1765348518; cv=none; b=Rc8er4PaA6jIPH46Hj9rkzk9qcbcqp+DQ8XkdgfXPsBAC1gpol0x8eER6dAcM6I3MjrQa94sSkGnrpTOQTcEhfr6xtkJ7A88lnniVJDaL4lhvtsM8wz7wbjc+0SxG8SevwuF92XSag319fIC2HUrijNQfxWysxaAIpDZbhphl08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765348512; c=relaxed/simple;
-	bh=rgFkTHqO82auohP6XdbN3mzAXw0NxrdMgjtUOuJNaGk=;
+	s=arc-20240116; t=1765348518; c=relaxed/simple;
+	bh=fA+B30h0YeaX0w+Bbx8pzkya4tRo/QUCwnmrtws7R5o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gt970jJ5m6AlXSvWPPXMEorMefVH3QH3oF753lVWfZ/B6VXS10Pqfpmh/4DVJZrCUacnhyU3hv7zMV3gUJwWwfWIfJyaA+hlQUlIpq3XB+0VGUTA8ojR8FQStz33hMYnZW3+bk6tUqzcL/UEO4ceJmkEDKGfMTcqiOOHcVu6zEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tBPpplOz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C92A4C4CEF1;
-	Wed, 10 Dec 2025 06:35:10 +0000 (UTC)
+	 MIME-Version:Content-Type; b=pe2HB60wQluh5tB4wr5Yehj2mvj0HD4zxzyZWFe9d+ppU15J2JfMkrkcE99wRkRzLi18q8bBlv0TQQWvYBGRyp6rQI7KF7t1GC5p7KF6ljGZ9P/y6a2cjrqN1JmsgBA3WVC4Z34JtAV5qgtNhlSW/WFp6EELozDyFXDhNeP1nO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lfEU8ZKR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89205C19422;
+	Wed, 10 Dec 2025 06:35:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765348512;
-	bh=rgFkTHqO82auohP6XdbN3mzAXw0NxrdMgjtUOuJNaGk=;
+	s=k20201202; t=1765348517;
+	bh=fA+B30h0YeaX0w+Bbx8pzkya4tRo/QUCwnmrtws7R5o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tBPpplOzvwr2+he2d7OW/hvbfaWqD9K8262Lv8nKVpHbFHTWzqXTvbKEeKZJqSzsx
-	 5rPf67FLuuDo+7tWTMVjLarL3/8a+/MGOiv9yduMvl2qDA2yHvCAiShWPEWtQTvD1O
-	 sb9/9D9PcR8iZpvaNQclJGMg/eSGDBPaf99lR8cJYvPuYy/Dr8jSh+s78arGYOZD/2
-	 tHqI43nP8B0cBnu4+Y22y7HsmLmjdTSAu9uioMOV4queosxS2Kizyu/D+yhSyCUMIg
-	 26h0VKG8Ukl5R0BBxSem8B5rNJ1KxY5VGAX4+APn8g79AhZQBS+oxOtIGM4RK23aWO
-	 +bS3QAGgauKoA==
+	b=lfEU8ZKRs6WzzaKDzwrPBW5FP2hpJoyCdtGWhp5O/cgbRtTZ6Cn/3gZf0tZDsJxPL
+	 ZlsJyJUzSbmtM/QyhI3azONWjElRwkx/DBcpAzKouCQNqWS3QTCcb6nZ/Q1hpVn4Px
+	 C4IOsSMBy5AsFUrbjLs7hfctk2xzv2yjjGKk5zyIW5t1dgZ5kjqBiwSSvFQ38Z7ps8
+	 S/AbuzqnaZzRG5aNQ1PswZZFBd0stYu3Joy+IxZNBpi0hkMt1OwyGnmBRNB2y25J+e
+	 +alTTxvSIoijMm49SnyzeGcPMTnUuPp3mNbFnHz2Y9Px+++4qoSx1LztcH47oE9MDS
+	 uvzqjdcSE0WUw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Michal Pecio <michal.pecio@gmail.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
+Cc: Chen Changcheng <chenchangcheng@kylinos.cn>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	mathias.nyman@intel.com,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-6.17] usb: xhci: Don't unchain link TRBs on quirky HCs
-Date: Wed, 10 Dec 2025 01:34:35 -0500
-Message-ID: <20251210063446.2513466-6-sashal@kernel.org>
+	stern@rowland.harvard.edu,
+	linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net
+Subject: [PATCH AUTOSEL 6.18-5.10] usb: usb-storage: No additional quirks need to be added to the EL-R12 optical drive.
+Date: Wed, 10 Dec 2025 01:34:37 -0500
+Message-ID: <20251210063446.2513466-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251210063446.2513466-1-sashal@kernel.org>
 References: <20251210063446.2513466-1-sashal@kernel.org>
@@ -66,252 +66,138 @@ X-stable-base: Linux 6.18
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Michal Pecio <michal.pecio@gmail.com>
+From: Chen Changcheng <chenchangcheng@kylinos.cn>
 
-[ Upstream commit e6aec6d9f5794e85d2312497a5d81296d885090e ]
+[ Upstream commit 955a48a5353f4fe009704a9a4272a3adf627cd35 ]
 
-Some old HCs ignore transfer ring link TRBs whose chain bit is unset.
-This breaks endpoint operation and sometimes makes it execute other
-ring's TDs, which may corrupt their buffers or cause unwanted device
-action. We avoid this by chaining all link TRBs on affected rings.
+The optical drive of EL-R12 has the same vid and pid as INIC-3069,
+as follows:
+T:  Bus=02 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=13fd ProdID=3940 Rev= 3.10
+S:  Manufacturer=HL-DT-ST
+S:  Product= DVD+-RW GT80N
+S:  SerialNumber=423349524E4E38303338323439202020
+C:* #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=144mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=02 Prot=50 Driver=usb-storage
+E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=0a(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 
-Fix an omission which allows them to be unchained by cancelling TDs.
+This will result in the optical drive device also adding
+the quirks of US_FL_NO_ATA_1X. When performing an erase operation,
+it will fail, and the reason for the failure is as follows:
+[  388.967742] sr 5:0:0:0: [sr0] tag#0 Send: scmd 0x00000000d20c33a7
+[  388.967742] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
+[  388.967773] sr 5:0:0:0: [sr0] tag#0 Done: SUCCESS Result: hostbyte=DID_TARGET_FAILURE driverbyte=DRIVER_OK cmd_age=0s
+[  388.967773] sr 5:0:0:0: [sr0] tag#0 CDB: ATA command pass through(12)/Blank a1 11 00 00 00 00 00 00 00 00 00 00
+[  388.967803] sr 5:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]
+[  388.967803] sr 5:0:0:0: [sr0] tag#0 Add. Sense: Invalid field in cdb
+[  388.967803] sr 5:0:0:0: [sr0] tag#0 scsi host busy 1 failed 0
+[  388.967803] sr 5:0:0:0: Notifying upper driver of completion (result 8100002)
+[  388.967834] sr 5:0:0:0: [sr0] tag#0 0 sectors total, 0 bytes done.
 
-The patch was tested by reproducing this condition on an isochronous
-endpoint (non-power-of-two TDs are sometimes split not to cross 64K)
-and printing link TRBs in trb_to_noop() on good and buggy HCs.
+For the EL-R12 standard optical drive, all operational commands
+and usage scenarios were tested without adding the IGNORE_RESIDUE quirks,
+and no issues were encountered. It can be reasonably concluded
+that removing the IGNORE_RESIDUE quirks has no impact.
 
-Actual hardware malfunction is rare since it requires Missed Service
-Error shortly before the unchained link TRB, at least on NEC and AMD.
-I have never seen it after commit bb0ba4cb1065 ("usb: xhci: Apply the
-link chain quirk on NEC isoc endpoints"), but it's Russian roulette
-and I can't test all affected hosts and workloads. Fairly often MSEs
-happen after cancellation because the endpoint was stopped.
-
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://patch.msgid.link/20251119142417.2820519-11-mathias.nyman@linux.intel.com
+Signed-off-by: Chen Changcheng <chenchangcheng@kylinos.cn>
+Link: https://patch.msgid.link/20251121064020.29332-1-chenchangcheng@kylinos.cn
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-## Comprehensive Analysis
+## Summary
 
-### 1. Commit Message Analysis
+**What the commit does:**
+This commit fixes a device conflict where the EL-R12 optical drive (HL-
+DT-ST DVD+-RW GT80N) with firmware revision 3.10 incorrectly receives
+USB quirks intended for the INIC-3069 controller because they share the
+same VID:PID (0x13fd:0x3940). The fix narrows the firmware revision
+range from "all revisions" (0x0000-0x9999) to only revision 3.09
+(0x0309-0x0309).
 
-**Subject**: "usb: xhci: Don't unchain link TRBs on quirky HCs"
+**History context:**
+- Original quirk added in 2015 (commit bda13e35d584d) - was marked `Cc:
+  stable@vger.kernel.org # 3.16`
+- IGNORE_RESIDUE added in 2017 (commit 89f23d51defcb) - also marked for
+  stable
+- The quirk entry has existed in stable trees for years
 
-The commit message clearly describes a **hardware bug fix**:
-- Some old xHCI HCs "ignore transfer ring link TRBs whose chain bit is
-  unset"
-- This "breaks endpoint operation and sometimes makes it execute other
-  ring's TDs"
-- Can "corrupt their buffers or cause unwanted device action"
+## Meets Stable Criteria Assessment
 
-**Key signals**:
-- ❌ No `Cc: stable@vger.kernel.org` tag
-- ❌ No explicit `Fixes:` tag
-- ✅ References related fix commit `bb0ba4cb1065` for context
-- ✅ Well-documented testing methodology
-- ✅ Sign-offs from xHCI maintainer (Mathias Nyman) and USB maintainer
-  (Greg Kroah-Hartman)
+| Criterion | Assessment |
+|-----------|------------|
+| Obviously correct | ✅ Yes - simple revision range narrowing |
+| Fixes real bug | ✅ Yes - disc erase operations fail completely |
+| Small and contained | ✅ Yes - 1 line change |
+| No new features | ✅ Yes - just fixes quirk scope |
+| Important issue | ✅ Yes - device operations completely fail |
 
-### 2. Code Change Analysis
+## Risk vs Benefit
 
-The change is **small and surgical**:
+**Benefits:**
+- Fixes real functional failure (disc erase operations)
+- Users with EL-R12 optical drives can use them properly
+- Minimal change, low regression risk
 
-1. **`trb_to_noop()` modification**: Adds an `unchain_links` parameter -
-   only unchain link TRBs when `unchain_links=true`
+**Risks:**
+- Could theoretically affect INIC-3069 devices with firmware versions
+  other than 3.09 if they exist and need these quirks
+- However, the original report was from a specific device/tester, and no
+  evidence suggests other firmware versions need the quirks
 
-2. **`td_to_noop()` modification**:
-   - Now takes `xhci` and `ep` parameters
-   - Checks `xhci_link_chain_quirk()` to determine if unchaining is safe
-   - Only unchains on HCs without the quirk
+**Mitigating factors:**
+- The quirk was originally based on a single reporter's device (Benjamin
+  Tissoires)
+- If multiple firmware versions needed quirks, we'd likely have seen
+  additional reports over the ~10 years since the original quirk was
+  added
+- The commit author thoroughly tested the EL-R12 without the quirks
 
-3. **Call sites updated**: 5 call sites properly pass the new parameters
+## Concerns
 
-**Technical mechanism**: On quirky HCs, when TDs are cancelled and
-converted to no-ops, link TRBs were being unchained unconditionally. The
-quirky HCs then ignored these unchained link TRBs, causing the HC to
-continue past the segment boundary and potentially execute other rings'
-TRBs.
+1. **No explicit Cc: stable tag** - The maintainer didn't explicitly
+   request stable backport
+2. **No Fixes: tag** - No specific commit is pointed to as introducing
+   the bug
+3. **Revision specificity** - We don't have absolute confirmation that
+   0x0309 was the original reporter's exact firmware revision
 
-### 3. Dependency Analysis
+## Conclusion
 
-**Critical dependency**: The fix uses `xhci_link_chain_quirk()`:
-- Introduced in commit 7476a2215c077 (June 2024)
-- First available in **v6.11** and later
+This is a standard USB quirk adjustment that fixes a real user-facing
+bug (optical drive operations failing). USB device quirks are routinely
+backported to stable. The change is minimal (single line), surgical, and
+addresses documented hardware compatibility issues. The risk of
+regression is low since the original quirk was based on a single
+reporter's device, and narrowing the scope shouldn't affect other users.
 
-This limits clean backporting to **6.11+ stable trees** only. Older LTS
-trees (6.6.y, 6.1.y, 5.15.y) would require adaptation.
-
-### 4. Scope and Risk Assessment
-
-| Factor | Assessment |
-|--------|------------|
-| Lines changed | ~30 net lines in one file |
-| Files touched | 1 (drivers/usb/host/xhci-ring.c) |
-| Complexity | Low - adds conditional check |
-| Regression risk | **Very Low** - only affects HCs with quirk |
-
-### 5. User Impact
-
-- **Affected hardware**: Older NEC, AMD 0x96 xHCI controllers
-- **Severity**: Data corruption, endpoint malfunction
-- **Trigger**: TD cancellation (relatively common operation)
-- **Author's note**: "Actual hardware malfunction is rare" but
-  acknowledges "it's Russian roulette"
-
-### 6. Classification
-
-- ✅ Bug fix (hardware quirk handling omission)
-- ✅ Not a new feature
-- ✅ Uses existing quirk infrastructure
-- ✅ Affects specific hardware with known quirks
-
-### 7. Stable Criteria Evaluation
-
-| Criterion | Met? |
-|-----------|------|
-| Obviously correct | ✅ Uses existing quirk logic correctly |
-| Fixes real bug | ✅ Data corruption/hardware malfunction |
-| Small scope | ✅ One file, surgical change |
-| No new features | ✅ Fixes existing functionality |
-| Already in mainline | ✅ Yes |
-| Testable | ✅ Author tested on good/buggy HCs |
-
-### Risk vs Benefit
-
-**Benefits**:
-- Prevents data corruption on quirky HCs
-- Prevents USB endpoint malfunction
-- Low regression risk (only affects quirky HCs)
-
-**Risks**:
-- Minimal - change is conditional
-- No explicit stable tag from maintainers
-
-### Concerns
-
-1. **No stable tag**: The maintainers didn't explicitly request stable
-   backport, possibly:
-   - Oversight
-   - Wanting it to bake in mainline first
-   - Considering the bug "rare" enough
-
-2. **Dependency on 6.11+ infrastructure**: Clean backport limited to
-   6.11+ stable trees
-
-### Conclusion
-
-This commit fixes a legitimate hardware bug that can cause **data
-corruption** and **USB endpoint malfunction** on older xHCI controllers.
-The fix is:
-- Small and surgical
-- Uses existing, tested quirk infrastructure
-- Low risk of regression
-- Well-tested by the author
-- Properly reviewed and signed off by maintainers
-
-The lack of explicit stable tags is concerning but doesn't disqualify it
-- the fix clearly addresses a real hardware issue. For stable trees 6.11
-and later where the helper function exists, this is a good backport
-candidate.
+While the lack of a Cc: stable tag is notable, USB quirk fixes of this
+nature are commonly backported because they enable proper hardware
+operation. The fix allows the EL-R12 optical drive to work correctly
+without impacting the original INIC-3069 devices that need the quirks.
 
 **YES**
 
- drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+ drivers/usb/storage/unusual_uas.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 5bdcf9ab2b99d..25185552287c0 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -128,11 +128,11 @@ static void inc_td_cnt(struct urb *urb)
- 	urb_priv->num_tds_done++;
- }
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index 1477e31d77632..b695f5ba9a409 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -98,7 +98,7 @@ UNUSUAL_DEV(0x125f, 0xa94a, 0x0160, 0x0160,
+ 		US_FL_NO_ATA_1X),
  
--static void trb_to_noop(union xhci_trb *trb, u32 noop_type)
-+static void trb_to_noop(union xhci_trb *trb, u32 noop_type, bool unchain_links)
- {
- 	if (trb_is_link(trb)) {
--		/* unchain chained link TRBs */
--		trb->link.control &= cpu_to_le32(~TRB_CHAIN);
-+		if (unchain_links)
-+			trb->link.control &= cpu_to_le32(~TRB_CHAIN);
- 	} else {
- 		trb->generic.field[0] = 0;
- 		trb->generic.field[1] = 0;
-@@ -465,7 +465,7 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
- 		xhci_dbg(xhci, "Turn aborted command %p to no-op\n",
- 			 i_cmd->command_trb);
- 
--		trb_to_noop(i_cmd->command_trb, TRB_CMD_NOOP);
-+		trb_to_noop(i_cmd->command_trb, TRB_CMD_NOOP, false);
- 
- 		/*
- 		 * caller waiting for completion is called when command
-@@ -797,13 +797,18 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
-  * (The last TRB actually points to the ring enqueue pointer, which is not part
-  * of this TD.)  This is used to remove partially enqueued isoc TDs from a ring.
-  */
--static void td_to_noop(struct xhci_td *td, bool flip_cycle)
-+static void td_to_noop(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
-+			struct xhci_td *td, bool flip_cycle)
- {
-+	bool unchain_links;
- 	struct xhci_segment *seg	= td->start_seg;
- 	union xhci_trb *trb		= td->start_trb;
- 
-+	/* link TRBs should now be unchained, but some old HCs expect otherwise */
-+	unchain_links = !xhci_link_chain_quirk(xhci, ep->ring ? ep->ring->type : TYPE_STREAM);
-+
- 	while (1) {
--		trb_to_noop(trb, TRB_TR_NOOP);
-+		trb_to_noop(trb, TRB_TR_NOOP, unchain_links);
- 
- 		/* flip cycle if asked to */
- 		if (flip_cycle && trb != td->start_trb && trb != td->end_trb)
-@@ -1091,16 +1096,16 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 						  "Found multiple active URBs %p and %p in stream %u?\n",
- 						  td->urb, cached_td->urb,
- 						  td->urb->stream_id);
--					td_to_noop(cached_td, false);
-+					td_to_noop(xhci, ep, cached_td, false);
- 					cached_td->cancel_status = TD_CLEARED;
- 				}
--				td_to_noop(td, false);
-+				td_to_noop(xhci, ep, td, false);
- 				td->cancel_status = TD_CLEARING_CACHE;
- 				cached_td = td;
- 				break;
- 			}
- 		} else {
--			td_to_noop(td, false);
-+			td_to_noop(xhci, ep, td, false);
- 			td->cancel_status = TD_CLEARED;
- 		}
- 	}
-@@ -1125,7 +1130,7 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 				continue;
- 			xhci_warn(xhci, "Failed to clear cancelled cached URB %p, mark clear anyway\n",
- 				  td->urb);
--			td_to_noop(td, false);
-+			td_to_noop(xhci, ep, td, false);
- 			td->cancel_status = TD_CLEARED;
- 		}
- 	}
-@@ -4273,7 +4278,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	 */
- 	urb_priv->td[0].end_trb = ep_ring->enqueue;
- 	/* Every TRB except the first & last will have its cycle bit flipped. */
--	td_to_noop(&urb_priv->td[0], true);
-+	td_to_noop(xhci, xep, &urb_priv->td[0], true);
- 
- 	/* Reset the ring enqueue back to the first TRB and its cycle bit. */
- 	ep_ring->enqueue = urb_priv->td[0].start_trb;
+ /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
+-UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
++UNUSUAL_DEV(0x13fd, 0x3940, 0x0309, 0x0309,
+ 		"Initio Corporation",
+ 		"INIC-3069",
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
 -- 
 2.51.0
 
