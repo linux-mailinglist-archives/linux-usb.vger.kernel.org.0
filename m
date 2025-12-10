@@ -1,81 +1,81 @@
-Return-Path: <linux-usb+bounces-31373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31374-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58D05CB3F41
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 21:25:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 462B7CB4049
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 21:59:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 99F29300E022
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 20:23:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 254A330133CD
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 20:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2531C32BF41;
-	Wed, 10 Dec 2025 20:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0370632C926;
+	Wed, 10 Dec 2025 20:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DGUpH0OK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UYljs9pz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B24320CCB
-	for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 20:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114CA4D8CE
+	for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 20:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765398232; cv=none; b=HhYnmHNJvixUliS7j+KPQFIyxLzl36k3SeDd4TkZWyXTLIZVFEoKs6XoP6EY19zXrQoCS5/ykIynmZ2uPQIdcjDigHcLepkCe8bXiP3D14saX+pMEe+JoEd2hfj+UqAfIAOoI7voCVaAEBOm2jLTcbM8KKnuOsfCQcXZ1ynhfp4=
+	t=1765400362; cv=none; b=C3WgVkPUuov/ePOV+dw6Knj3IkPPd8ZUyezTq7jks2yEFBn4Q7OHzHklLFDDe87p74bD2OlTRtKDSg1+/baEgV+dsQdNfJAL97ZWgGfIew5ajHuaQKcAkYaqTcLOo8KSzwK4m2cSKc7Y8yThbxJgTsoMnoLqigiUsJeVThyuY1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765398232; c=relaxed/simple;
-	bh=Xkp2ztF/WLqLLEEOjJNjmUCQbM4bisOn7lYjEwpDaQw=;
+	s=arc-20240116; t=1765400362; c=relaxed/simple;
+	bh=ZcpC8Yxl/yp8T2h64azfVcrrmb4wlFbuHSjkmVg+Wjw=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IoD8SpRj6uxs0BP7l5y3Wzhrb6+rgcAbL6qEHD6lIqw780wuZ1hjDhonVfJdhwWbHpCQ0rj78yxO6I7hJTgsMH4yKNjUwE13Q6Xq+GXbtvdfrANECeo5LGVAtMNYndaq74UGVESV4wGa43xBCxYkLlm6dBVNFUAwRMS1MMtAosA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DGUpH0OK; arc=none smtp.client-ip=209.85.128.65
+	 MIME-Version:Content-Type; b=d2tIXKzQserm5+LOSHMfh6KJ8YR1r52q7wVQf53UZelUkOgzrL00+SDzPOYb31JBmnK8Sgtxge2nmfFIWqbSXK8FknMyJS6CmlP7m4r9IKJFDs2pdB8+eWvEQxb8EZM0siBGCXRDsUfP9CEq4eGrBrukiXWMIbjLHrJeFIF4ldo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UYljs9pz; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-47774d3536dso2287745e9.0
-        for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 12:23:50 -0800 (PST)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4775895d69cso1076235e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 12:59:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765398229; x=1766003029; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765400358; x=1766005158; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u062iQEuovwo6zUqu/O7EkP7WT8CbsZ5+gioYjPqoyU=;
-        b=DGUpH0OKR7h22rQroctEiOctsBN6+2OsGavEXBUUS1Cu/mo4l9ELp0cSmQQBFgeNTH
-         GPoC+l9XiAtEtusIQ5mbIkGiLVszd73MmwrfcytUOqbJ4ORGYqVlgHP8i7GqQbqfDpbQ
-         z/dVeJSbLg64GZ1+Dwe19HAGWHTr+ED63ggwb1NUINUFexFpIvbi8MYtS/AswZKiNMNh
-         r1a1hNkzmN1QsEqKcHQgK0mt6AnU21N7xlAdPS2mniM4Q3Tyfej+vM1FP7vdnH05F1ns
-         oYpNKOckhZ2rz7aLNo2TBGVMoebbJSzpOqdyqJLCdKSndztFRR4npYyTKFDMVyfJ2pPS
-         +y4w==
+        bh=0XOBeiFzLRRI29udaIQcvDgIeWaap6zQQyEf4EzZYCk=;
+        b=UYljs9pznvRD9MzX6MYUacxIqSINCRfbY5mWBARDuSYv7K32CGbYdHwD35NOBeavze
+         iScvmXoAcWODmMQrRvzV5XvNyQ9aLZs0E7tOoy6JjudtLbV2zAQBco9mahJSCKCCRduc
+         3bxjzIXEH/fETAsoRjTS1EXqLqeK5rwjQ9G96dQdfd9NzrD0rSB5ancpY1BxM3G8YFLz
+         TEabuXdzHD2JutZa0oBozU1x19KOikCs0hyBD3E+fXczr7dmq4hKigFR9faBzSGPraZr
+         AKReKW4yAUk6hXfM3LhjHdvq2eCvQGJfTUvX4Oee0UVdG1D+sv8hWXKpsFCPkp+rXs6n
+         /Q8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765398229; x=1766003029;
+        d=1e100.net; s=20230601; t=1765400358; x=1766005158;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=u062iQEuovwo6zUqu/O7EkP7WT8CbsZ5+gioYjPqoyU=;
-        b=D8yIr6TTZT4B1zg7k/ZFgCtMre25wqzn34jBzar3VYdWAnriYcL1ZYPnOBmdcZtIDY
-         tx9jctL6ks5OqGnES/xoSIk/05+ieemDyOREoMAb8oW4Hph2UbKzou5MiZa8PE0tySlx
-         iKlB5Zo7tdJzTURnvrHzirUvYceMjj2eTWGJS7DZI38eSgOHhJR7jw3jaImeu/hy8M76
-         yDhxKwxtQur8zQBpPC4ZiTvLTPgPVxYdXaXTnvZoTreg/os2QPGnBiPmQPnyOxDqdYMy
-         x5V0RugK9bMswRakn7NVpR2+8jEgAVKpPH66adIeEnqUKJJ2IJBGMC84MLdlJ/05CO1F
-         ITNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXA9IVLypmYxDaUybwlSqrGpBEiapLJ6/JdAoqfmd6mv+FT9N94wGJ0QbkLqeS3a2NoMlaUm8HG7H0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQ6BLriU/yZZvNXCgiyOleUnHX4G5HLVxwulSOoGs7BKoOJwst
-	EDTzbfDZNLQI/xPQeCnfqoxc/cGp8QR4GfmhmpCQyKHZTRU1hSyIum5q
-X-Gm-Gg: ASbGncvgRh1/ozk6LFj1t4Q9hRF46CmMnIlJ8ldDH7Rv6Gbdi31jTzyst/60at7yUET
-	fYFoqTX6ke3VWLf2n62UVwjWBcgzDAbjZ3bRvJLz0XU7g5/9ac9atA8h8/VMZPJ2m7sxznbwpFg
-	DbWSD6JqmmzUGu8K+6Kr6IBKy8asZgdfn+aiYM6Q1rGsuiAuPvPq/5y6dhViIkf1Jux1faPmxCi
-	7BZnG+XSp0s5kPSJU1vjKZvgMwaK+lHxjUHTEcswJmCUDxreQ0/krwC5uRm8QVOvRfqOVRXEXYR
-	Kch94WUpup/9gOx14NuRonPGN2gxTC5xrQZaTq2mj7Hg2C5fIB2dEjlD7XyaE8cBr4hA26EvqMK
-	2v/GsvIWw0X/vGRsQslN6TTePxv+dKYb1aglNXauM94MWGeP2ZkzWInLji5neFUAGK/WAUTCLZX
-	wIrAHEH4ktNSLogO0MURqfQfAPypxaN5DW+QN4CeRxyWLR9e0bCrgX
-X-Google-Smtp-Source: AGHT+IECXiRyTvyughOZ385ChJyIGPXYYRRTCEwIU16ua79rRSK1ielTpHqLT+w4Y1HkWvXA4V++mg==
-X-Received: by 2002:a05:600c:230f:b0:475:d7fd:5c59 with SMTP id 5b1f17b1804b1-47a888dd26amr4204965e9.16.1765398228969;
-        Wed, 10 Dec 2025 12:23:48 -0800 (PST)
+        bh=0XOBeiFzLRRI29udaIQcvDgIeWaap6zQQyEf4EzZYCk=;
+        b=nznHUQYET7wSjZ88xbVZuPWb2ffy7Piwknp6tsAuAxaR33vXh/eVgu62ojlScVyImq
+         xnZaX710Y4Hh+FEf0DZqj9qtqkKDSNO1bEy0YUvO80m1CnmodenJF1UC6JFC9hTpfkaz
+         cg6hKNPvARRuAADdsa59+F+g3ooLUxXVgzfoe2tKfBWhs7+144PCP6YDJ5xz/z6jYjRg
+         Q8c8nkI+jzfxikefThyfJHvCqd+RRx8fz6+dtOaQjVQt3KfeVg2NQC611PKdJqotfXbz
+         QM4YKKvb75HzS38YfBS5O5PflmcjZAVD2uF3UPqn+xjUOStjaUTxBsBxOLqRjYci2Uvi
+         egZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWQ32XdxMT/8P7J6rX2AMjCKhp5NFoUvssMTXqBzyRnsOLxxNmc0OvVCcoaqn0ucm4yfS/iaC8fYfs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuroopqOF8pK/VhpQMWFdwdYPrhE8m+QkQA7OoJYd2PZQOw6tP
+	tHJIdcHhMwytZaxOBSOB5f/upBufzTllfkxw0/hfRHc8j5Y5XrtgIeWw
+X-Gm-Gg: ASbGncsjpYfzWtIuZLImBSJkci4mZzAANau4QsdapB5C0ULAamB0EJT+exR6rCkeCe5
+	OqgAvXxoP8d12NE4LZaphiWixt988kmTYgN9uI1UarB4hQDDSNGHqX5CG/171sowHmJbYkhkc05
+	kr8O0II5qhbrmvdjo/bTKs3/6ElecUvITxuBFlzqkMO+RfQhUBVm/0ooDOp/MqLbYF/dXxQATFS
+	TAWc/rQ3sIRdbNs7wVjIMr4q+1Yxlapb8yqTN3AKdFIbqGfToomS30XRsHW34G3lXVhUcb6UiUT
+	dEFkCfGJ4bNKNbHuCBYyO10cnuAOiuD05ePHOtQrgWMpdP1sdXwji+D+dhCg4zVZKawpXVhUseZ
+	ult0B4WACYubKhIMaGsXirqbSJx0mf7wgErxOgElqjumU6lSBA8SQhuR44lcvvDSVYMlDLk1IRb
+	UiR7nzP9wqlS+7jSRsKXDdSNmw/vH2APByuCO7XDbrdCXiq28Ej2V1
+X-Google-Smtp-Source: AGHT+IFqWl1AEZJdv33HjXUj4u2PW+9exisa6AWNrimk2s7J9PgpfVbwFVoIk0HS4W55/QiDrON3lw==
+X-Received: by 2002:a05:600c:3105:b0:477:fcb:226b with SMTP id 5b1f17b1804b1-47a8376e315mr34983765e9.2.1765400358218;
+        Wed, 10 Dec 2025 12:59:18 -0800 (PST)
 Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42fa8b8a97esm1087769f8f.31.2025.12.10.12.23.48
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42fa8b85feasm1051301f8f.27.2025.12.10.12.59.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Dec 2025 12:23:48 -0800 (PST)
-Date: Wed, 10 Dec 2025 20:23:46 +0000
+        Wed, 10 Dec 2025 12:59:18 -0800 (PST)
+Date: Wed, 10 Dec 2025 20:59:15 +0000
 From: David Laight <david.laight.linux@gmail.com>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, Rasmus Villemoes
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
  <linux@rasmusvillemoes.dk>, linux-kernel@vger.kernel.org,
  linux-usb@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>, Jonathan Cameron
@@ -84,19 +84,16 @@ Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, Rasmus Villemoes
  <andriy.shevchenko@intel.com>, Luo Jie <quic_luoj@quicinc.com>, Peter
  Zijlstra <peterz@infradead.org>, Jakub Kicinski <kuba@kernel.org>,
  netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Simon
- Horman <simon.horman@netronome.com>, Andreas Noever
- <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: Re: [PATCH 2/9] thunderblot: Don't pass a bitfield to FIELD_GET
-Message-ID: <20251210202346.669c8c33@pumpkin>
-In-Reply-To: <aTm4Y-avX8qoLLoe@yury>
+ Horman <simon.horman@netronome.com>, Mika Westerberg
+ <mika.westerberg@linux.intel.com>, Andreas Noever
+ <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: [PATCH 3/9] bitmap: Use FIELD_PREP() in expansion of
+ FIELD_PREP_WM16()
+Message-ID: <20251210205915.3b055b7c@pumpkin>
+In-Reply-To: <2262600.PYKUYFuaPT@workhorse>
 References: <20251209100313.2867-1-david.laight.linux@gmail.com>
-	<20251209100313.2867-3-david.laight.linux@gmail.com>
-	<20251210055617.GD2275908@black.igk.intel.com>
-	<20251210093403.5b0f440e@pumpkin>
-	<20251210094102.GF2275908@black.igk.intel.com>
-	<20251210101842.022d1a99@pumpkin>
-	<aTm4Y-avX8qoLLoe@yury>
+	<20251209100313.2867-4-david.laight.linux@gmail.com>
+	<2262600.PYKUYFuaPT@workhorse>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -107,114 +104,69 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 10 Dec 2025 13:13:55 -0500
-Yury Norov <yury.norov@gmail.com> wrote:
+On Wed, 10 Dec 2025 20:18:30 +0100
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com> wrote:
 
-> On Wed, Dec 10, 2025 at 10:18:42AM +0000, David Laight wrote:
-> > On Wed, 10 Dec 2025 10:41:02 +0100
-> > Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
-> >   
-> > > On Wed, Dec 10, 2025 at 09:34:03AM +0000, David Laight wrote:  
-> > > > On Wed, 10 Dec 2025 06:56:17 +0100
-> > > > Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
-> > > >     
-> > > > > $subject has typo: thunderblot -> thunderbolt ;-)
-> > > > > 
-> > > > > On Tue, Dec 09, 2025 at 10:03:06AM +0000, david.laight.linux@gmail.com wrote:    
-> > > > > > From: David Laight <david.laight.linux@gmail.com>
-> > > > > > 
-> > > > > > FIELD_GET needs to use __auto_type to get the value of the 'reg'
-> > > > > > parameter, this can't be used with bifields.
-> > > > > > 
-> > > > > > FIELD_GET also want to verify the size of 'reg' so can't add zero
-> > > > > > to force the type to int.
-> > > > > > 
-> > > > > > So add a zero here.
-> > > > > > 
-> > > > > > Signed-off-by: David Laight <david.laight.linux@gmail.com>
-> > > > > > ---
-> > > > > >  drivers/thunderbolt/tb.h | 2 +-
-> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> > > > > > index e96474f17067..7ca2b5a0f01e 100644
-> > > > > > --- a/drivers/thunderbolt/tb.h
-> > > > > > +++ b/drivers/thunderbolt/tb.h
-> > > > > > @@ -1307,7 +1307,7 @@ static inline struct tb_retimer *tb_to_retimer(struct device *dev)
-> > > > > >   */
-> > > > > >  static inline unsigned int usb4_switch_version(const struct tb_switch *sw)
-> > > > > >  {
-> > > > > > -	return FIELD_GET(USB4_VERSION_MAJOR_MASK, sw->config.thunderbolt_version);
-> > > > > > +	return FIELD_GET(USB4_VERSION_MAJOR_MASK, sw->config.thunderbolt_version + 0);      
-> > > > > 
-> > > > > Can't this use a cast instead? If not then can you also add a comment here
-> > > > > because next someone will send a patch "fixing" the unnecessary addition.    
-> > > > 
-> > > > A cast can do other (possibly incorrect) conversions, adding zero is never going
-> > > > to so any 'damage' - even if it looks a bit odd.
-> > > > 
-> > > > Actually, I suspect the best thing here is to delete USB4_VERSION_MAJOR_MASK and
-> > > > just do:
-> > > > 	/* The major version is in the top 3 bits */
-> > > > 	return sw->config.thunderbolt_version > 5;    
-> > > 
-> > > You mean 
-> > > 
-> > > 	return sw->config.thunderbolt_version >> 5;
-> > > 
-> > > ?
-> > > 
-> > > Yes that works but I prefer then:
-> > > 
-> > > 	return sw->config.thunderbolt_version >> USB4_VERSION_MAJOR_SHIFT;  
+> On Tuesday, 9 December 2025 11:03:07 Central European Standard Time david.laight.linux@gmail.com wrote:
+> > From: David Laight <david.laight.linux@gmail.com>
 > > 
-> > I've put that in for the next version (without the comment line).  
+> > Instead of directly expanding __BF_FIELD_CHECK() (which really ought
+> > not be used outside bitfield) and open-coding the generation of the
+> > masked value, just call FIELD_PREP() and add an extra check for
+> > the mask being at most 16 bits.
+> > 
+> > Signed-off-by: David Laight <david.laight.linux@gmail.com>
+> > ---
+> >  include/linux/hw_bitfield.h | 17 ++++++++---------
+> >  1 file changed, 8 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/include/linux/hw_bitfield.h b/include/linux/hw_bitfield.h
+> > index df202e167ce4..d7f21b60449b 100644
+> > --- a/include/linux/hw_bitfield.h
+> > +++ b/include/linux/hw_bitfield.h
+> > @@ -23,15 +23,14 @@
+> >   * register, a bit in the lower half is only updated if the corresponding bit
+> >   * in the upper half is high.
+> >   */
+> > -#define FIELD_PREP_WM16(_mask, _val)					     \
+> > -	({								     \
+> > -		typeof(_val) __val = _val;				     \
+> > -		typeof(_mask) __mask = _mask;				     \
+> > -		__BF_FIELD_CHECK(__mask, ((u16)0U), __val,		     \
+> > -				 "HWORD_UPDATE: ");			     \
+> > -		(((typeof(__mask))(__val) << __bf_shf(__mask)) & (__mask)) | \
+> > -		((__mask) << 16);					     \
+> > -	})
+> > +#define FIELD_PREP_WM16(mask, val)				\
+> > +({								\
+> > +	__auto_type _mask = mask;				\
+> > +	u32 _val = FIELD_PREP(_mask, val);			\
+> > +	BUILD_BUG_ON_MSG(_mask > 0xffffu,			\
+> > +			 "FIELD_PREP_WM16: mask too large");	\
+> > +	_val | (_mask << 16);					\
+> > +})
+> >  
+> >  /**
+> >   * FIELD_PREP_WM16_CONST() - prepare a constant bitfield element with a mask in
+> >   
 > 
-> FIELD_GET() is here exactly to let people to not opencode this
-> error-prone bit manipulation. So, let's continue using it.
-> 
-> David, can you explain in details why this code needs to be fixed? Why
-> and when typecast wouldn't work so that you have to use an ugly '+0'
-> hack, or even drop the FIELD_GET().
-> 
-> My current understanding is that the existing FIELD_GET()
-> implementation works well with any data types, including bitfields,
-> and what you suggested in this series - does not.
+> This breaks the build for at least one driver that uses
+> FIELD_PREP_WM16, namely phy-rockchip-emmc.c:
 
-The underlying issue is that FIELD_GET() does a check that the supplied 'reg'
-field is large enough for the mask.
-In this case the 'reg' is a bitfield and you can't use sizeof(), typeof() or
-__auto_type on a bitfield.
+Not in my allmodconfig build.
+... 
+> pcie-dw-rockchip.c is similarly broken by this change, except
+> without the superfluous wrapper:
 
-I don't want to (for example) add zero inside FIELD_GET() (as is done
-for 'val') because that would promote u8/u16 to 32 bits - making the
-size check less useful.
+That one did get built.
 
-Ok, the current version relies on how the compiler happens to treat:
-	_Generic(foo->bitfield, ...)
-clang seems to treat a bitfield as 'int' (so sizeof() the result is 4)
-regardless of the width.
-OTOH gcc treats 'u32 bits:8' as 'unsigned char', but bits:7 selects
-the 'default' and then __unsigned_scaler_typeof() fails.
-
-I don't know what the standard says - but at least one of the compilers
-is buggy.
-
-So the current code doesn't really work with bitfields at all.
-
-An alternate change would be to make the 4 fields in DWORD (sic) 4
-just u8 instead of u32 xxx:8.
-This would be similar to the two u16 at the top.
-
-Perhaps that is the best fix.
+The problem is that FIELD_PREP_WM16() needs to use different 'local'
+variables than FIELD_PREP().
+The 'proper' fix is to use unique names (as min() and max() do), but that
+makes the whole thing unreadable and is best avoided unless nesting is
+likely.
+In this case s/mask/wm16_mask/ and s/val/wm16_val/ might be best.
 
 	David
-
-> 
-> If it's correct, I don't think that switching to your version is
-> well-justified.
-> 
-> Thanks,
-> Yury
 
 
