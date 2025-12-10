@@ -1,45 +1,45 @@
-Return-Path: <linux-usb+bounces-31360-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31361-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2B58CB2890
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 10:23:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1E69CB2910
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 10:33:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 288CF30D5218
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 09:23:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3B03C3011760
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Dec 2025 09:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCFC30F817;
-	Wed, 10 Dec 2025 09:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BC030EF82;
+	Wed, 10 Dec 2025 09:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ck7jynYc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FL5i5bE2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D547302159;
-	Wed, 10 Dec 2025 09:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359392701D1;
+	Wed, 10 Dec 2025 09:29:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765358587; cv=none; b=a2qXtTD7TGPfYrWGB1k0jjiyx4F3zsSppJVRomjpXUIpiSLtCywZMFRqLRKdx1Z/NsJPsfLZ/ur4Ddhwqfn5CufJ1mwjWzrZr/SpauAulrvccs33A2grqyp4S599GrFHkueI0hQyN4lGcznE9wucsMbpcxP2nc2M40U4YJ1IAxY=
+	t=1765358993; cv=none; b=cm5/T5897jF3qbbo1tpdJB3uk9jXa8SCTs4//8YQoqgep6IofGB43B3x2xo+8FGT02IhRo5jArsW8fGLkI4lzELXI/FvptrmR6Ydf4pfP3XweK5pcBIWDp7MMNHk+LwUscCppUlleEFBrTFryuAqEnsU/EJIXYRN1zVXpDKCLjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765358587; c=relaxed/simple;
-	bh=Wqbff4s4GyZOnqiHaxwSXqM1T/Tp1LWJaVCaUfT7reQ=;
+	s=arc-20240116; t=1765358993; c=relaxed/simple;
+	bh=AynZBjv1eSG1MhPauC7nKqm3Up3b7E1eGgP/VWwx9KM=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YQkdNGgeAc8HnEdCEyyy0p58wlpVp1qDwSUypywggLfSpL/q+Z4pMeXd0LFD5k6IQAKDk2a7iX0lZn7AZ6xbjregwSJQNmlIG6dioX69MOjqicAmj1JXGNQ3HsRdzkC5hnEZ+HVJJsF6/QuBSthLwAzv+HTSFSpojGDy4HgClYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ck7jynYc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55B4C4CEF1;
-	Wed, 10 Dec 2025 09:23:02 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Q1wMj7R3unOnTldr9gUrLCEiQpFRNan47yzxP9o3yIOfAfqL8XUJ8h4VSPOHAUyF/OgOB5uKesjoJyDkCd/yv18nyM42dQCZgSj+tDswR+WVYxlwyL4YfdYxUsaFfL88GkRT81AV8EL6TJPajTbDj2Ji/P1hHCU/DKI8dEc3frQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FL5i5bE2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C156BC4CEF1;
+	Wed, 10 Dec 2025 09:29:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765358586;
-	bh=Wqbff4s4GyZOnqiHaxwSXqM1T/Tp1LWJaVCaUfT7reQ=;
+	s=k20201202; t=1765358992;
+	bh=AynZBjv1eSG1MhPauC7nKqm3Up3b7E1eGgP/VWwx9KM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Ck7jynYcQnyLWZLEUD7PNgZSw+bdu4ssH7dPDXD9ir5pfJluO7RCNsfgN1R0lrrAY
-	 Hyhg73btUHUGRRKOozSob3Mvd3ss/VDtiwcXDQOtbWsK5rNBaBTQkOy91DCx9as0Fg
-	 CLuYoYgPJATtrxasLJmiVLqCvLT4Kh9FiDzcu8xkvQNVI+MiKCQI2R8wWsJBx8CjJt
-	 Rc7b6EziLpa4SIUuzDbRDq8BIHgoY3TPhN2DKzEXkRm1G/tT3mVyQNad1KpLGdym1b
-	 yLahrKDfelNf7P1yzt8kVt6ZU2OmLzpB0sTFXpOXBZFHziQGkddQwCOYgTF1OgsNxn
-	 WcReObqryMZaQ==
-Date: Wed, 10 Dec 2025 18:23:00 +0900
+	b=FL5i5bE2SR/jbZ1e33g3aMnHrXfI0346A9r4E/T3tLdiH4fyFTSMnXstwdnM/MEt7
+	 z476/Q/Oq63J8L0lmJlQ0wOCdVtG4Qaz1Ez2NNykENtC1/kZeHcV7jqEqqUVqCTUIl
+	 LWUsMMkXHVk9PBQgnEAZGkwZtMZkPAdFjeMc1LppRRhvW3CM0GYxoANB2/fGOGlZ+p
+	 aYTVpMzbekBcizxZq6dxp97NUES0g2wwLIZfTSF2H6tVbpJde1CwV/AzmPvwrtq+cg
+	 SB38PcBmNiVLIR0e6B/PfIafnKTz0brh+RFkJ6eJ4yIpdq3HipB5tZo0GOzPHJX6NT
+	 k+OWrm9sabPlg==
+Date: Wed, 10 Dec 2025 18:29:47 +0900
 From: Jakub Kicinski <kuba@kernel.org>
 To: david.laight.linux@gmail.com
 Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
@@ -54,12 +54,12 @@ Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
  Westerberg <mika.westerberg@linux.intel.com>, Andreas Noever
  <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: Re: [PATCH 8/9] bitfield: Add comment block for the host/fixed
- endian functions
-Message-ID: <20251210182300.3fabcf74@kernel.org>
-In-Reply-To: <20251209100313.2867-9-david.laight.linux@gmail.com>
+Subject: Re: [PATCH 1/9] nfp: Call FIELD_PREP() in NFP_ETH_SET_BIT_CONFIG()
+ wrapper
+Message-ID: <20251210182947.3f628953@kernel.org>
+In-Reply-To: <20251209100313.2867-2-david.laight.linux@gmail.com>
 References: <20251209100313.2867-1-david.laight.linux@gmail.com>
-	<20251209100313.2867-9-david.laight.linux@gmail.com>
+	<20251209100313.2867-2-david.laight.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,11 +69,17 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue,  9 Dec 2025 10:03:12 +0000 david.laight.linux@gmail.com wrote:
-> + * * u32 le32_get_bits(__le32 val, u32 field) extracts the contents of the
-> + *   bitfield specified by @field in little-endian 32bit object @val and
-> + *   converts it to host-endian.
+On Tue,  9 Dec 2025 10:03:05 +0000 david.laight.linux@gmail.com wrote:
+> Rather than use a define that should be internal to the implementation
+> of FIELD_PREP(), pass the shifted 'val' to nfp_eth_set_bit_config()
+> and change the test for 'value unchanged' to match.
+> 
+> This is a simpler change than the one used to avoid calling both
+> FIELD_GET() and FIELD_PREP() with non-constant mask values.
 
-possibly also add declarations for these? So that ctags and co. sees
-them?
+I'd like this code to be left out of the subjective churn please.
+I like it the way I wrote it. I also liked the bitfield.h the way
+I wrote it but I guess that part "belongs" to the community at large.
+
+FWIW - thumbs up for patch 8, no opinion on the rest.
 
