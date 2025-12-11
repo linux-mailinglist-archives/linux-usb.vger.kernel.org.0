@@ -1,174 +1,121 @@
-Return-Path: <linux-usb+bounces-31387-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31388-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5169ACB610A
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 14:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F441CB611F
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 14:42:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CCD4A301D9DC
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 13:41:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6D1DE301AE14
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 13:42:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC22C3148B1;
-	Thu, 11 Dec 2025 13:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CAD31352D;
+	Thu, 11 Dec 2025 13:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NhAFrF2V"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f77.google.com (mail-oo1-f77.google.com [209.85.161.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5141C312803
-	for <linux-usb@vger.kernel.org>; Thu, 11 Dec 2025 13:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B2623AE62;
+	Thu, 11 Dec 2025 13:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765460487; cv=none; b=rnpKVlmpBvTyVv1YkkQFC0g5wJRmotvY0jUvUFZ444TNJPV8m7l9yT29TDBROmiS1mUSD7bNWq1iTeqblfxmJsRmU4Ncg8HZ+g1u8p5GL2qr5ZPmRxF/5loQAfbuuKFKEc2ivBjNAMOjiOUVI+ArKAQKAom90Si9EdV5Dy6z9b8=
+	t=1765460551; cv=none; b=IFbXO5R7dKbCuPeshJS3fyytGy8VVxc2MemqvgxeLwwqQNfwadVAYCA27to1iuBN1wVC21uFKjra5Q8LfxgIhebCy9eJRAmmB/AO7bamYk5Q8ZHa2k3SAT03rEg7MURNCT+0Z9d2SEEliilcn6oo5Fy6OKAV45Qar5lGsWYuBQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765460487; c=relaxed/simple;
-	bh=CDE1ttNTa5AMSgjBBmBwDvE2XcaWTCNIO92rjWyj8sE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=UXrhd3uwR62L/vUQi+OcdY1tyL1n6MQXqO+HoPBgmNJy3lD7QT0K+kmndKVbwUQsUOXIDxqWdat04puYSlw9G0aaWTfFGzfptT+edGP4amGJwT9QYP3daWE30XdpN2WMMV3rdBRihrI+/SUXiDB0ZZD7U+JJVfvjztMu/W/YXrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f77.google.com with SMTP id 006d021491bc7-656cc4098f3so96240eaf.2
-        for <linux-usb@vger.kernel.org>; Thu, 11 Dec 2025 05:41:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765460484; x=1766065284;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZdhV1m8aeGU2YokLDtNvPFAfeUluHSpx/80Pd07MRPc=;
-        b=O9V5uArRA6BDyul8MMvvYr5JRQlK8CHMvDUr0Vddph8rQ6RPLxhHlIVkttG3sgO7x+
-         4r1jS1mx1xvZ+rLlkZnY0ahy9OudRE/JZySKzOHASn28NcZ0SlKfSCeGDzNfwckRkQEu
-         gnkJM3rMO0mIejCQ7z3vWMWZg+m6Bu/xYRCoJ4+m+H3/geOsGUd22otVAnkel5eiie9z
-         hjbvNV93S4qFjZaJ6KK2KSO+zrkK+tLNiIKW+xxN2LwFeeMSbWurmGlcRPMTK6dwg4sL
-         JqCP23Tm4F0YVWTXfhrCroy9x/az8qQoezaMWtgC3ecRNAZiZu9ZAduLE/bEvRhQYdHv
-         gSkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUkwT6xypKPxnvDwO4Fw4k0G2LclgvZpPiTC6Fo6TWiQqtUfuKDY2jcqXAGNDpRW54GSYZ8YI4egGw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTzFuAE2qV5upotxJDl9Wx5REuacVB0CSTSIToyUM3zJoi/NRP
-	eksgyna886TG0mLOptI+n3UhZgUqKE3ttKAB9GFXJm3hH7UAmXJutpxCc3QDkq9pu9S2NvaCo8v
-	MkZFbQwcye7Yls6lrFa+wqjQVpuPJAcIDmNKvt0xUDPmEXCF44TTEMUTjBOk=
-X-Google-Smtp-Source: AGHT+IGNnZYJRKkVKEoqr1aOebOWcitP/eJc29wiPAqSj9kqrQC8LVU+8N0bc9k787UTSjA5rJaWEWXkMS8eEhLrT67SHYwSjOZO
+	s=arc-20240116; t=1765460551; c=relaxed/simple;
+	bh=DXB+albUs7qjZXiSV8szFw0zSiV1oclQ+zF5jpW6srE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kGiDG1a8oqxjqJH+qQpIYviZJb6EZpvVXJiGQleyPVUUUxRxrBcCOHnYwMpdi4xoG/hJUAvktbVQhidtS+YPTJdDqte0cLpgjEeVezhBHtz32Hxmp7IQu13bc2c+MjEPCo9VyKDUJa6m45RKdIncwSGw2jRRz45nLbLhJd6WcMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NhAFrF2V; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765460549; x=1796996549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DXB+albUs7qjZXiSV8szFw0zSiV1oclQ+zF5jpW6srE=;
+  b=NhAFrF2VLannGNwpgnCUHRPCnTinlQcgNQGdxbXbnR8aSVqlk4cd0Y4K
+   Kv8QOCFS/55f/QltCyBPHsWRY4AV0LU7E1wrgnaoZH4XDnHx5BzWxPl2V
+   l6bi8jn0DW6ijNCFjWoHLM/wyv9YIziIdoZ+NDPKyp/Bv11befcFJei+k
+   gYBB332dusan68oSwbOl8s+omKvGzoY3BtSk60Kg4ghCi2DTjS1A4igjr
+   MZ0pw8uwWf6AOjt/vxQgpjqytQ/7gBCW94G53mncvtXnUl1s7ToSNHxfD
+   8VIctkHpg1jy86z4Vgq8AYgw+llX/9gESIZRSX3MecqKyAsdgBGdD6uJW
+   w==;
+X-CSE-ConnectionGUID: b7697KP5TdS3bELzInU3dA==
+X-CSE-MsgGUID: FcZg3E+0QF6VLjlLQXCgAw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11639"; a="67174550"
+X-IronPort-AV: E=Sophos;i="6.21,141,1763452800"; 
+   d="scan'208";a="67174550"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2025 05:42:28 -0800
+X-CSE-ConnectionGUID: 0rjdKFBWRWaoclDO0wy4Nw==
+X-CSE-MsgGUID: cv96XoGNR72fvJCJWc7nFQ==
+X-ExtLoop1: 1
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO kuha) ([10.124.222.61])
+  by fmviesa003.fm.intel.com with SMTP; 11 Dec 2025 05:42:25 -0800
+Received: by kuha (sSMTP sendmail emulation); Thu, 11 Dec 2025 15:42:14 +0200
+Date: Thu, 11 Dec 2025 15:42:14 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
+Cc: gregkh@linuxfoundation.org, rdbabiera@google.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: altmodes/displayport: Drop the device
+ reference in dp_altmode_probe()
+Message-ID: <aTrKNrvXX1gZ49cS@kuha>
+References: <20251206070445.190770-1-lihaoxiang@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:3084:b0:659:9a49:8ff5 with SMTP id
- 006d021491bc7-65b2accaa61mr3088477eaf.34.1765460484238; Thu, 11 Dec 2025
- 05:41:24 -0800 (PST)
-Date: Thu, 11 Dec 2025 05:41:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <693aca04.050a0220.4004e.0346.GAE@google.com>
-Subject: [syzbot] [wireless?] WARNING in __alloc_workqueue
-From: syzbot <syzbot+392a2c3f461094707435@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, pkshih@realtek.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251206070445.190770-1-lihaoxiang@isrc.iscas.ac.cn>
 
-Hello,
+Sat, Dec 06, 2025 at 03:04:45PM +0800, Haoxiang Li kirjoitti:
+> In error paths, call typec_altmode_put_plug() to drop the device reference
+> obtained by typec_altmode_get_plug().
+> 
+> Fixes: 71ba4fe56656 ("usb: typec: altmodes/displayport: add SOP' support")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
 
-syzbot found the following issue on:
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-HEAD commit:    37bb2e7217b0 Merge tag 'staging-6.19-rc1' of git://git.ker..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=125bceb4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e79f218bc0cd167b
-dashboard link: https://syzkaller.appspot.com/bug?extid=392a2c3f461094707435
-compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1046f21a580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12b9521a580000
+> ---
+>  drivers/usb/typec/altmodes/displayport.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index 1dcb77faf85d..5d02c97e256e 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -764,12 +764,16 @@ int dp_altmode_probe(struct typec_altmode *alt)
+>  	if (!(DP_CAP_PIN_ASSIGN_DFP_D(port->vdo) &
+>  	      DP_CAP_PIN_ASSIGN_UFP_D(alt->vdo)) &&
+>  	    !(DP_CAP_PIN_ASSIGN_UFP_D(port->vdo) &
+> -	      DP_CAP_PIN_ASSIGN_DFP_D(alt->vdo)))
+> -		return -ENODEV;
+> +	      DP_CAP_PIN_ASSIGN_DFP_D(alt->vdo))) {
+> +		typec_altmode_put_plug(plug);
+> +		return -ENODEV;
+> +	}
+>  
+>  	dp = devm_kzalloc(&alt->dev, sizeof(*dp), GFP_KERNEL);
+> -	if (!dp)
+> +	if (!dp) {
+> +		typec_altmode_put_plug(plug);
+>  		return -ENOMEM;
+> +	}
+>  
+>  	INIT_WORK(&dp->work, dp_altmode_work);
+>  	mutex_init(&dp->lock);
+> -- 
+> 2.25.1
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/26124775173b/disk-37bb2e72.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/bd4182168b83/vmlinux-37bb2e72.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a78be0ee345d/bzImage-37bb2e72.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+392a2c3f461094707435@syzkaller.appspotmail.com
-
-usb 3-1: SerialNumber: syz
-usb 3-1: config 0 descriptor??
-------------[ cut here ]------------
-WARNING: kernel/workqueue.c:5701 at __alloc_workqueue+0x114c/0x1810 kernel/workqueue.c:5701, CPU#0: kworker/0:2/121
-Modules linked in:
-CPU: 0 UID: 0 PID: 121 Comm: kworker/0:2 Not tainted syzkaller #0 PREEMPT(voluntary) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:__alloc_workqueue+0x114c/0x1810 kernel/workqueue.c:5701
-Code: e9 de fc ff ff 48 c7 44 24 08 e8 55 e8 88 e9 8f f6 ff ff 41 be 08 00 00 00 41 bd 00 04 00 00 e9 53 f1 ff ff e8 a5 9a 34 00 90 <0f> 0b 90 31 ed e9 af fc ff ff e8 95 9a 34 00 90 0f 0b 90 31 ed e9
-RSP: 0018:ffffc900014aedf8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: ffffffff814b4179
-RDX: ffff88810caa9d40 RSI: ffffffff814b527b RDI: 0000000000000005
-RBP: ffffc900014aef60 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000002 R11: ffff88810caaa7e8 R12: 0000000000000003
-R13: 0000000000000000 R14: ffffffff87e3cc20 R15: ffffc900014aeea0
-FS:  0000000000000000(0000) GS:ffff888268bf5000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8d89852a60 CR3: 0000000117746000 CR4: 00000000003506f0
-Call Trace:
- <TASK>
- alloc_workqueue_noprof+0xd2/0x200 kernel/workqueue.c:5820
- rtw_usb_init_rx drivers/net/wireless/realtek/rtw88/usb.c:968 [inline]
- rtw_usb_probe+0x13bf/0x2d10 drivers/net/wireless/realtek/rtw88/usb.c:1295
- usb_probe_interface+0x303/0xa80 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:581 [inline]
- really_probe+0x241/0xb20 drivers/base/dd.c:659
- __driver_probe_device+0x1de/0x470 drivers/base/dd.c:801
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:831
- __device_attach_driver+0x1df/0x350 drivers/base/dd.c:959
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:500
- __device_attach+0x1e4/0x4e0 drivers/base/dd.c:1031
- device_initial_probe+0xaa/0xc0 drivers/base/dd.c:1086
- bus_probe_device+0x64/0x150 drivers/base/bus.c:574
- device_add+0x116e/0x1980 drivers/base/core.c:3689
- usb_set_configuration+0x1187/0x1e50 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
- usb_probe_device+0xef/0x400 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:581 [inline]
- really_probe+0x241/0xb20 drivers/base/dd.c:659
- __driver_probe_device+0x1de/0x470 drivers/base/dd.c:801
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:831
- __device_attach_driver+0x1df/0x350 drivers/base/dd.c:959
- bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:500
- __device_attach+0x1e4/0x4e0 drivers/base/dd.c:1031
- device_initial_probe+0xaa/0xc0 drivers/base/dd.c:1086
- bus_probe_device+0x64/0x150 drivers/base/bus.c:574
- device_add+0x116e/0x1980 drivers/base/core.c:3689
- usb_new_device+0xd07/0x1a90 drivers/usb/core/hub.c:2695
- hub_port_connect drivers/usb/core/hub.c:5567 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
- port_event drivers/usb/core/hub.c:5871 [inline]
- hub_event+0x31bf/0x5420 drivers/usb/core/hub.c:5953
- process_one_work+0x9ba/0x1b20 kernel/workqueue.c:3257
- process_scheduled_works kernel/workqueue.c:3340 [inline]
- worker_thread+0x6c8/0xf10 kernel/workqueue.c:3421
- kthread+0x3c5/0x780 kernel/kthread.c:463
- ret_from_fork+0x74f/0xa30 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+heikki
 
