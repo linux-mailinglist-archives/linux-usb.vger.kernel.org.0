@@ -1,212 +1,174 @@
-Return-Path: <linux-usb+bounces-31386-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31387-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D904BCB611C
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 14:42:40 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5169ACB610A
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 14:41:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 98375304DEF6
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 13:40:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CCD4A301D9DC
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 13:41:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 445333126C6;
-	Thu, 11 Dec 2025 13:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GGgu3jc1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC22C3148B1;
+	Thu, 11 Dec 2025 13:41:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f77.google.com (mail-oo1-f77.google.com [209.85.161.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E75313529;
-	Thu, 11 Dec 2025 13:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5141C312803
+	for <linux-usb@vger.kernel.org>; Thu, 11 Dec 2025 13:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765460436; cv=none; b=qwgMyMJ7Hxo1wg/XptsemsOUKfYeCcPuzMxzsfwWwYjH5wvC/evz89+3rgZxK09oBxazMj2wAnuc+EXGGVw2AWqUWKmuTQaEnIcOb8bvPbpa9C7Le7VHF2thi1UcBYItICbJHiIUvwNsZdZZ5jOz9ghX3WTL7H5aK6DI1wsM/9M=
+	t=1765460487; cv=none; b=rnpKVlmpBvTyVv1YkkQFC0g5wJRmotvY0jUvUFZ444TNJPV8m7l9yT29TDBROmiS1mUSD7bNWq1iTeqblfxmJsRmU4Ncg8HZ+g1u8p5GL2qr5ZPmRxF/5loQAfbuuKFKEc2ivBjNAMOjiOUVI+ArKAQKAom90Si9EdV5Dy6z9b8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765460436; c=relaxed/simple;
-	bh=4ASCa5tSVFa5F5Mlrk4KxCo2wiu6Y8ZoR39RFaFuTaY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g69FiwzD+8l+ZC68JG5JANxwnLhRkOoailFUrhXSt4f4rYfPkByprVLGFrpApkwyVuFi73T4nmROhBjnzMMCHA9UB91mXqKAyiU21NI6iMAlPiXSkzyD7BaYHfBr2mpe4RRBOrabxXP6QPSZBnvhZh9QcWiVAv/k8z1RDmWNiTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GGgu3jc1; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765460435; x=1796996435;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4ASCa5tSVFa5F5Mlrk4KxCo2wiu6Y8ZoR39RFaFuTaY=;
-  b=GGgu3jc12ZpryVoKMGus0SwoO8k8PvQU3aCwNvQm3XWvVOts0tSfECkj
-   m3KLFTuchCS9oUFxbSxy44BnyP93P4C0KYM8176k7gdtp+Bn2S2veE7PW
-   r3HWLeND1rIeyWIYarCTKV/yAOY/+Eo8lKeu63ocxXsAJpwFJMEA8vElF
-   hvu0XBxmDTxXWpaEaJuuPFRpGTrlWQZkj/W9nbZEcjRUHOzzl8aEwS3Kc
-   TtZkTuuY8X+ug1MXi6i72x20tL+59f+gVZ/a/5+wN4pEhM2ySG6qBV7Xc
-   mZMG1fPbb/a8NzJMD9CeSIdpZS5/jz7JPmz8Otryv5KtHMpl+mbCZapbj
-   A==;
-X-CSE-ConnectionGUID: P7IXRRLxSXOhiTpT+DxAFA==
-X-CSE-MsgGUID: yKN8flv9RMaX9E7UJF5paQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11639"; a="67327240"
-X-IronPort-AV: E=Sophos;i="6.21,141,1763452800"; 
-   d="scan'208";a="67327240"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2025 05:40:34 -0800
-X-CSE-ConnectionGUID: Im8UbXZsTL2/wJrvmy+/xw==
-X-CSE-MsgGUID: /OZB2tKKRDe+EiIdhTrnmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,141,1763452800"; 
-   d="scan'208";a="197620652"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO kuha) ([10.124.222.61])
-  by fmviesa010.fm.intel.com with SMTP; 11 Dec 2025 05:40:27 -0800
-Received: by kuha (sSMTP sendmail emulation); Thu, 11 Dec 2025 15:40:16 +0200
-Date: Thu, 11 Dec 2025 15:40:16 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Pavan Holla <pholla@chromium.org>, Madhu M <madhu.m@intel.com>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 0/8] USB Type-C alternate mode selection
-Message-ID: <aTrJwA7Y4fWiTMzB@kuha>
-References: <20251201122604.1268071-1-akuchynski@chromium.org>
+	s=arc-20240116; t=1765460487; c=relaxed/simple;
+	bh=CDE1ttNTa5AMSgjBBmBwDvE2XcaWTCNIO92rjWyj8sE=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=UXrhd3uwR62L/vUQi+OcdY1tyL1n6MQXqO+HoPBgmNJy3lD7QT0K+kmndKVbwUQsUOXIDxqWdat04puYSlw9G0aaWTfFGzfptT+edGP4amGJwT9QYP3daWE30XdpN2WMMV3rdBRihrI+/SUXiDB0ZZD7U+JJVfvjztMu/W/YXrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f77.google.com with SMTP id 006d021491bc7-656cc4098f3so96240eaf.2
+        for <linux-usb@vger.kernel.org>; Thu, 11 Dec 2025 05:41:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765460484; x=1766065284;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZdhV1m8aeGU2YokLDtNvPFAfeUluHSpx/80Pd07MRPc=;
+        b=O9V5uArRA6BDyul8MMvvYr5JRQlK8CHMvDUr0Vddph8rQ6RPLxhHlIVkttG3sgO7x+
+         4r1jS1mx1xvZ+rLlkZnY0ahy9OudRE/JZySKzOHASn28NcZ0SlKfSCeGDzNfwckRkQEu
+         gnkJM3rMO0mIejCQ7z3vWMWZg+m6Bu/xYRCoJ4+m+H3/geOsGUd22otVAnkel5eiie9z
+         hjbvNV93S4qFjZaJ6KK2KSO+zrkK+tLNiIKW+xxN2LwFeeMSbWurmGlcRPMTK6dwg4sL
+         JqCP23Tm4F0YVWTXfhrCroy9x/az8qQoezaMWtgC3ecRNAZiZu9ZAduLE/bEvRhQYdHv
+         gSkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUkwT6xypKPxnvDwO4Fw4k0G2LclgvZpPiTC6Fo6TWiQqtUfuKDY2jcqXAGNDpRW54GSYZ8YI4egGw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTzFuAE2qV5upotxJDl9Wx5REuacVB0CSTSIToyUM3zJoi/NRP
+	eksgyna886TG0mLOptI+n3UhZgUqKE3ttKAB9GFXJm3hH7UAmXJutpxCc3QDkq9pu9S2NvaCo8v
+	MkZFbQwcye7Yls6lrFa+wqjQVpuPJAcIDmNKvt0xUDPmEXCF44TTEMUTjBOk=
+X-Google-Smtp-Source: AGHT+IGNnZYJRKkVKEoqr1aOebOWcitP/eJc29wiPAqSj9kqrQC8LVU+8N0bc9k787UTSjA5rJaWEWXkMS8eEhLrT67SHYwSjOZO
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251201122604.1268071-1-akuchynski@chromium.org>
+X-Received: by 2002:a05:6820:3084:b0:659:9a49:8ff5 with SMTP id
+ 006d021491bc7-65b2accaa61mr3088477eaf.34.1765460484238; Thu, 11 Dec 2025
+ 05:41:24 -0800 (PST)
+Date: Thu, 11 Dec 2025 05:41:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <693aca04.050a0220.4004e.0346.GAE@google.com>
+Subject: [syzbot] [wireless?] WARNING in __alloc_workqueue
+From: syzbot <syzbot+392a2c3f461094707435@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, pkshih@realtek.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Mon, Dec 01, 2025 at 12:25:56PM +0000, Andrei Kuchynski kirjoitti:
-> This patch series introduces functionality to the USB Type-C Alternate Mode
-> negotiation process by implementing a priority-based selection mechanism.
-> 
-> Currently, DisplayPort and Thunderbolt drivers initiate a mode entry
-> separately within their respective probe functions. The Power Delivery
-> Controller (PDC) retains the ability to activate either USB4 mode or
-> Alternate Modes based on its internal policy.
-> The mode selection mechanism disables Alternate Modes to be entered by
-> their respective drivers and the PDC. Instead, a priority-ordered approach
-> is used to activate the most desirable mode.
-> 
-> A new `priority` field is added to the `typec_altmode` structure to store
-> a numerical priority value, with all priorities being unique.
-> If the port driver supports the mode selection feature, it must set the
-> `mode_selection` boolean field within the `typec_altmode` structure. This
-> indicates to the alternate mode drivers that they are not to activate the
-> altmode separately.
-> 
-> The mode selection process is managed by three API functions:
-> - `typec_mode_selection_start`
-> - `typec_altmode_state_update`
-> - `typec_mode_selection_delete`
-> 
-> When a partner device is connected, the `typec_mode_selection_start`
-> function executes the following steps:
-> - It compiles a priority-ordered list of Alternate Modes that are mutually
-> supported by both the port and the partner.
-> - A dedicated mode selection task is subsequently initiated on the Work
-> Queue.
-> - This task attempts to activate a mode by starting with the
-> highest-priority altmode on the list. Alternate modes are identified with
-> their SVIDs. Activation/Deactivation performed via `activate` typec_altmode
-> operation. The process stops as soon as a mode is successfully entered.
-> Otherwise, after a timeout or if an error occurs, the next alternative mode
-> will be activated.
-> 
-> The `typec_altmode_state_update` function is invoked by the port driver to
-> communicate the current mode of the Type-C connector.
-> 
-> The `typec_mode_selection_delete` function is responsible for stopping the
-> currently running mode selection process and releasing all associated
-> system resources.
-> 
-> USB4 activation can be handled in two distinct ways:
-> - Treated like an Alternate Mode, using associated sysfs attributes -
-> `activate` port attribute to enable/disable the mode, `activate` partner
-> attribute to activate/deactivate the mode, `priority` to keep modes
-> priority.
-> - Like a separate USB mode representing in sysfs via `usb_capabily` ports
-> attribute to enable the mode on the port and `usb_mode` partner attribute
-> to activate the mode. In this scenario, USB4 is the highest-priority mode,
-> without the need for a separate priority field. It is put on the top of the
-> preferred list if it is supported by the partner (partner->usb_capability
-> has USB_CAPABILITY_USB4 bit set) and is supported and enabled on the port
-> (port->usb_mode is USB_MODE_USB4).
-> 
-> This patch series implements the second approach. It identifies the USB4
-> mode via its SVID 0xFF00. Instead of using the typec_altmode_ops activate()
-> function, activation is handled via the typec_operations enter_usb_mode()
-> function.
-> Mode selection is initiated only once during partner registration, and only
-> if the port driver provides support for this feature. Subsequent
-> mode-switching activities can be managed via existing sysfs entries. Any
-> modifications to altmode priorities are relevant only to future
-> connections.
-> 
-> This series was tested on an Android OS device with kernel 6.17, PDC:
-> TI TPS6699, Realtek RTS5453.
-> This series depends on the 'USB Type-C alternate mode priorities' series:
-> https://lore.kernel.org/all/20251124124639.1101335-1-akuchynski@chromium.org/ 
+Hello,
 
-Without going into the code review yet, I'm okay with this in general,
-except with the artificial SID for the USB4. I still don't understand
-why do you guys think we should use that instead of an USB4 specific
-device type?
+syzbot found the following issue on:
 
-I think somebody said earlier that the user space can't see the device
-type of the alt modes? If that's really the case, then I think there
-is some bigger issue here. Are you really sure that if you check the
-device type of an alternate mode for example with udevadm, it does not
-say DEVTYPE=typec_alternate_mode ?
+HEAD commit:    37bb2e7217b0 Merge tag 'staging-6.19-rc1' of git://git.ker..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=125bceb4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e79f218bc0cd167b
+dashboard link: https://syzkaller.appspot.com/bug?extid=392a2c3f461094707435
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1046f21a580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12b9521a580000
 
-        % udevadm info -q property --property=DEVTYPE /sys/bus/typec/devices/port0-partner.0
-        DEVTYPE=typec_alternate_mode
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/26124775173b/disk-37bb2e72.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/bd4182168b83/vmlinux-37bb2e72.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a78be0ee345d/bzImage-37bb2e72.xz
 
-Br,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+392a2c3f461094707435@syzkaller.appspotmail.com
 
-> Andrei Kuchynski (8):
->   usb: typec: Implement mode selection
->   usb: typec: Integrate USB4 into the mode selection process
->   usb: typec: Introduce mode_selection bit
->   usb: typec: ucsi: Support mode selection to activate altmodes
->   usb: typec: ucsi: Enforce mode selection for cros_ec_ucsi
->   usb: typec: ucsi: Implement enter_usb_mode operation
->   usb: typec: ucsi: Support for Thunderbolt alt mode
->   platform/chrome: cros_ec_typec: Enforce priority-based mode selection
-> 
->  drivers/platform/chrome/cros_ec_typec.c      |  47 ++-
->  drivers/platform/chrome/cros_typec_altmode.c |   8 +-
->  drivers/usb/typec/Makefile                   |   2 +-
->  drivers/usb/typec/altmodes/displayport.c     |   6 +-
->  drivers/usb/typec/altmodes/thunderbolt.c     |   2 +-
->  drivers/usb/typec/class.c                    |   1 +
->  drivers/usb/typec/class.h                    |   2 +
->  drivers/usb/typec/mode_selection.c           | 308 +++++++++++++++++++
->  drivers/usb/typec/ucsi/Makefile              |   4 +
->  drivers/usb/typec/ucsi/cros_ec_ucsi.c        |  44 +++
->  drivers/usb/typec/ucsi/thunderbolt.c         | 199 ++++++++++++
->  drivers/usb/typec/ucsi/ucsi.c                |  56 +++-
->  drivers/usb/typec/ucsi/ucsi.h                |  27 ++
->  include/linux/usb/typec.h                    |   1 +
->  include/linux/usb/typec_altmode.h            |  43 +++
->  15 files changed, 728 insertions(+), 22 deletions(-)
->  create mode 100644 drivers/usb/typec/mode_selection.c
->  create mode 100644 drivers/usb/typec/ucsi/thunderbolt.c
-> 
-> -- 
-> 2.52.0.158.g65b55ccf14-goog
+usb 3-1: SerialNumber: syz
+usb 3-1: config 0 descriptor??
+------------[ cut here ]------------
+WARNING: kernel/workqueue.c:5701 at __alloc_workqueue+0x114c/0x1810 kernel/workqueue.c:5701, CPU#0: kworker/0:2/121
+Modules linked in:
+CPU: 0 UID: 0 PID: 121 Comm: kworker/0:2 Not tainted syzkaller #0 PREEMPT(voluntary) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__alloc_workqueue+0x114c/0x1810 kernel/workqueue.c:5701
+Code: e9 de fc ff ff 48 c7 44 24 08 e8 55 e8 88 e9 8f f6 ff ff 41 be 08 00 00 00 41 bd 00 04 00 00 e9 53 f1 ff ff e8 a5 9a 34 00 90 <0f> 0b 90 31 ed e9 af fc ff ff e8 95 9a 34 00 90 0f 0b 90 31 ed e9
+RSP: 0018:ffffc900014aedf8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: ffffffff814b4179
+RDX: ffff88810caa9d40 RSI: ffffffff814b527b RDI: 0000000000000005
+RBP: ffffc900014aef60 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000002 R11: ffff88810caaa7e8 R12: 0000000000000003
+R13: 0000000000000000 R14: ffffffff87e3cc20 R15: ffffc900014aeea0
+FS:  0000000000000000(0000) GS:ffff888268bf5000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f8d89852a60 CR3: 0000000117746000 CR4: 00000000003506f0
+Call Trace:
+ <TASK>
+ alloc_workqueue_noprof+0xd2/0x200 kernel/workqueue.c:5820
+ rtw_usb_init_rx drivers/net/wireless/realtek/rtw88/usb.c:968 [inline]
+ rtw_usb_probe+0x13bf/0x2d10 drivers/net/wireless/realtek/rtw88/usb.c:1295
+ usb_probe_interface+0x303/0xa80 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:581 [inline]
+ really_probe+0x241/0xb20 drivers/base/dd.c:659
+ __driver_probe_device+0x1de/0x470 drivers/base/dd.c:801
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:831
+ __device_attach_driver+0x1df/0x350 drivers/base/dd.c:959
+ bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:500
+ __device_attach+0x1e4/0x4e0 drivers/base/dd.c:1031
+ device_initial_probe+0xaa/0xc0 drivers/base/dd.c:1086
+ bus_probe_device+0x64/0x150 drivers/base/bus.c:574
+ device_add+0x116e/0x1980 drivers/base/core.c:3689
+ usb_set_configuration+0x1187/0x1e50 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
+ usb_probe_device+0xef/0x400 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:581 [inline]
+ really_probe+0x241/0xb20 drivers/base/dd.c:659
+ __driver_probe_device+0x1de/0x470 drivers/base/dd.c:801
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:831
+ __device_attach_driver+0x1df/0x350 drivers/base/dd.c:959
+ bus_for_each_drv+0x159/0x1e0 drivers/base/bus.c:500
+ __device_attach+0x1e4/0x4e0 drivers/base/dd.c:1031
+ device_initial_probe+0xaa/0xc0 drivers/base/dd.c:1086
+ bus_probe_device+0x64/0x150 drivers/base/bus.c:574
+ device_add+0x116e/0x1980 drivers/base/core.c:3689
+ usb_new_device+0xd07/0x1a90 drivers/usb/core/hub.c:2695
+ hub_port_connect drivers/usb/core/hub.c:5567 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x31bf/0x5420 drivers/usb/core/hub.c:5953
+ process_one_work+0x9ba/0x1b20 kernel/workqueue.c:3257
+ process_scheduled_works kernel/workqueue.c:3340 [inline]
+ worker_thread+0x6c8/0xf10 kernel/workqueue.c:3421
+ kthread+0x3c5/0x780 kernel/kthread.c:463
+ ret_from_fork+0x74f/0xa30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
 
--- 
-heikki
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
