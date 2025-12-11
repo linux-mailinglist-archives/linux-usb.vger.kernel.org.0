@@ -1,82 +1,88 @@
-Return-Path: <linux-usb+bounces-31379-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31380-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 396B1CB4DCB
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 07:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 577B2CB4EFA
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 07:53:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 83BF5300BBAD
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 06:22:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 00C71303091C
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 06:49:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE49226B96A;
-	Thu, 11 Dec 2025 06:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944FD2BE622;
+	Thu, 11 Dec 2025 06:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UuzhO5At"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X4lCIV7K"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA3338DEC
-	for <linux-usb@vger.kernel.org>; Thu, 11 Dec 2025 06:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559B229B8C7
+	for <linux-usb@vger.kernel.org>; Thu, 11 Dec 2025 06:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765434126; cv=none; b=FHbDDOMZ2UNzuwnbRx9coPHu+qdHG0cpu+1v3DGedfZcVyw4mRgqZJ+3jnpyC1b6VQQJ+W//tdypMW9cdkSSPhke/3V6RDZ+xjqnC5ZLpb8gTZ6zuQIBEtzylNoO5AG6ECVE6hvSX1pm7e8640RwYZE87ZcLTHvGl4A8HmN0ZT8=
+	t=1765435790; cv=none; b=MaLLLxsD6gUeN5yp4Bask3Q5cTY0h5QJLmRNnWk9LlHOne0Gsv2MxWlKe/PdKJFENrKw6xw6UkfF01gAHV+3x6MFa8dNs+upIhwKIJ3D8Y6+dfb77pr6rATwmJ/Wc9dDL1Xkqvah5SViVsESlDyFvTygI9GmHBNgepZP+W/yy9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765434126; c=relaxed/simple;
-	bh=ejNmUkNsy2DDxTYKBProBrA5RdV480Ius/UYayQUH+k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=juXafDaoyB7nzWle2QLTIbjH8c/3U+Je+WpO56MWOE1954FXY+H+ym0KFSsRcvmHlY/OwfN7rK0Yzuy0d0o6v4xFiOOK9aI4j8li/3Fj/r1AIDJa+r9gjHTmGH6l5+M8QXuKDBJV9bNQrwqfm1zHHOoms0KDAt6x0Rb9yQW0ZA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UuzhO5At; arc=none smtp.client-ip=209.85.215.196
+	s=arc-20240116; t=1765435790; c=relaxed/simple;
+	bh=jLIEbOil8JUvwvgoHLS0xgagSdpZFVnP6mw3L4Fg5os=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lSTGUXgJEkR2pWRmH2FCj09CWhZRqkBiMCIpeFZWDodnBzt/T6y3it680GFKhqBOc8iOha3+1kv2/fz0JBP1JU+9yCHPYf0pEL0DTUaTUMHAUou5jLWC22vKOS8mmFzO721iC6fpoU/wTBJDpd/CST0qJmhAJOnBiqSrb/iK5Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X4lCIV7K; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f196.google.com with SMTP id 41be03b00d2f7-bc17d39ccd2so387671a12.3
-        for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 22:22:04 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2980d9b7df5so9712705ad.3
+        for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 22:49:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765434124; x=1766038924; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765435788; x=1766040588; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGqqL02UfC+vWBbqRBVTn5+VBHJjxRxIfjPPCX5exjE=;
-        b=UuzhO5AtM1aRpP7itnQq9gBH2NPDZwWtwVQXaQ2T2urUzh62vSrMcbBFXWm9j9mcA6
-         nxNKXwvW80jB96fZ5WadFM7wVr/+O8plFDc+ZLWjowQvIwFS5tvLEhNg54YcRMY4qsU9
-         rTC5WftHMaUecPU0zY/JQ6W8M1k8Mmh5If2r8SMhAp1YaY/S4X6hWy81ux+mBIe2DOS6
-         j9w4VZPe3DeSDnKjh1ErX7FUpfz9+5oN8G7hgeX04KJXymHw+hjIdUOiI5cfNMKK1ZDW
-         fuqrDJGfJwTf/exGCRPW0O87AtROjHKKN02ygLN9/004xNGF6QPNnVBkbDWXM/kIDdLZ
-         olOQ==
+        bh=A930R/Xs4QOYTiiYr4F9dDu2dd52LTZ9/1wSdEBmY94=;
+        b=X4lCIV7KIkrdHL97r40ojr5tWwjy1SLV27XpVWFgLUDTyXT0E1BTgsPRsyGsKUq0BH
+         3L3uq4xyMRakOPLe+PMUXAmZF0A8lveTiJ/I0Lev8Q2ml3q4oGMVOE4/fbTV3Um9Gqfs
+         3okM/7vXTGxWUMxipkIUW91euh3Lnk/XKSOhzQu+4Cznb4cIA5fTvY21KkyhjGNjLpMp
+         P0YKwasupl6R0WSvydYwkL1pvU58uFLb0hmcV8P0+NMjIBj9kAgYc0E/ekqwoyjen84c
+         0LeacveXue4iNh0ZiburhIOhda6+QI7K4+TCbHpeteXjMTVmqVIXxLb5MVbzrGbcarv/
+         KucQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765434124; x=1766038924;
+        d=1e100.net; s=20230601; t=1765435788; x=1766040588;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zGqqL02UfC+vWBbqRBVTn5+VBHJjxRxIfjPPCX5exjE=;
-        b=q3KbDlRdPWEaDiTwJHxat9xInm4X6F1kX77IXE3AzkilR5RKg1vXuDOes27MFucsDb
-         PNjjabJq7gAQiM9ysNWPMxqJ5I7ATB4FRyxtRr4ZStOfkC9cIlKEm/DerrK3atr29PNH
-         sVJYTZ86KU+ltlKhIKLrV9YrCOCIaaKRuskxQKuAznfD4UFKsIk6nw/f4mWsvjbpjhil
-         N1S6BWKwT7G+aJ6sTiv3HKd40L/yDhAfTQO0B16JoSZx9E1ZtFFPeaGoKHjglmKlM1WN
-         RKQm9MEUb5dxSsZsza3ioV7bZSdUyCGZ/nE52QHekZtRJvYrznKq5sZGnyB6NKWtRdhW
-         OTIQ==
-X-Gm-Message-State: AOJu0YxgJRDYtCkSlS5iON/SBdHaoks1T9ti6WsBlv6pfCavecGulyY5
-	Z65A8gl1Q5y+3h2OOwD65tak1V2OE/gf5GoYaWtYrhBy7RvSmb8o6i+39r3lwHBrWLFBaw==
-X-Gm-Gg: AY/fxX4nyD7xc2+ruA5OJF2TDZH0gaT+Gc1BdAVMyBEj1jWfva/SyBT1ylWadDafAwl
-	CvxH7EG1wVH9tyCVyE+WCQuLcuIxrs9gulGrOjs6sQ+StkUoSrT8XUBvQw2FbnHiJfRMaWlM218
-	51FZD6uyzQeGv19Xa7OQGTi/v+w1CSwA8qGcWFMSHd53SnjsSULnXA7d8HzBkfeGAllcMcZjoPm
-	kk3GifOPkeNGm7mdpMc3sDRzxgf5RfZcJ9lPe4t/vbrHz0QeZ++BBkGspeWUpOSEn98Gj1YACQE
-	mY9tfCMng2pVKUTFkGN90zxYBrv+dSKptjQu/cfrWafjtjKrp2dDI8AZJNpQ+BoQ+EtTm7wbPQ/
-	VCho4xSXe3Dgy9M8CbHYhyGayyMZjSphSsC0RX7UKmkSyZ8rzZmP875T8hQaX85MP/fKlOUkuYn
-	CDJyyYfHbNGg1HkPAYGJvs5HuVDj+Slh8SWliE8C1YEnTqxyO5SGczU3J3wqF19A+CBUQDkD0i3
-	6YnqSQOm3jKs/0=
-X-Google-Smtp-Source: AGHT+IEIonuCSLjlxhO4RSJl2p32iUioKetHjlnISBvmbMGl6MY5eePnpxt1YMFBduKsYvpu+HA3+Q==
-X-Received: by 2002:a05:7300:c3af:b0:2a4:3593:466b with SMTP id 5a478bee46e88-2ac0553ba6dmr3365382eec.7.1765434124152;
-        Wed, 10 Dec 2025 22:22:04 -0800 (PST)
-Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e2ff110sm5478844c88.10.2025.12.10.22.22.03
+        bh=A930R/Xs4QOYTiiYr4F9dDu2dd52LTZ9/1wSdEBmY94=;
+        b=sZNLp+dYaEU1NccNXcBtkacymKHTWxrEfM2rcEU8XWN8qruRv5wd5IB+Y3K9sx161P
+         +fezHCbksxl8o7+IKKQgfjNEt0FQcSt91Gp7agTjTSTw/3tEMl8lQ31KEy4W/DP3Ga+Z
+         UTW7gOF0RYKQZsqiIFem7L4ayCvGpn9dZxhD+MDriT5u2jM6gZ2dECWfgDpOZsszpUF6
+         Odx0ak0qzaLD10JUfD57MCY0WimByvkuylNj+5G+xl4ts/2k8LJ9ki8OkWFfx7K21rG5
+         tsdDrrEddARznnCUGn8btn7xFerpF2T9jvkgWOH4D3DuorbVib5k6l/jjwowaN5mKA/T
+         f9lg==
+X-Forwarded-Encrypted: i=1; AJvYcCW6Wfm7J2wztEeNNDE//+p1S9gXPchSKP7ZxKSPeB2QgONpw9EudxDb4CP0tHPLWHPQvqTNnyFq2gU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycQJ+S/bEQj3/iW1D68RG7HcZP8V/aLHL8Ki0lKOutY5Z3FHxP
+	2IbSAFvs6XFA5eArTHFLfUUWqsdRyR6H9uOan8vkGQlS2/d3D7bZ23RB
+X-Gm-Gg: AY/fxX6XvhTOHImMsU7tpbxL2XUaa8cliuu7C8YkBX1Hc5Yh9daXUJujyDPeHkFCs76
+	PGmm/zwuWOOj7mQ6Zw9hZ/60GPhjb4VodSDhOCSSD29n5olq8FqUIE7/FKK4cqccxua91r5gfPI
+	loet0d/na2+VMKdYY3oYjaqblzbuHx734vOWisLYAlwDWx9oVFAXK4zU+lhf/7eVQtL2BREb2sK
+	nt810dUMQqBE+KFAT6rxxQTLhRt7JYBLppCq7XKcCniPj0am8zSbckvNhaMc5LRkRrTLNc9mPU7
+	r7yurNGv3VDIR5/dhoL00PddIAcLHWEP2w4VI7biHUllgTd4zakwr8gjUaOSSN/FURm8GX/x03j
+	yt5yAYEydjlL7PW+azviYvPuGvswJmQSoS8gBmnOxT58t0JjtOGIXiGVGiSQlYW27v1oiPkjxPS
+	lmV0L/WmBOKfVA0+R/97EZqSFG8bzD/BulNA==
+X-Google-Smtp-Source: AGHT+IHpmykci4B0OIJtBdbWIngC1cFWd1IKB2ZOgzuk8178NaUix/BQGoMHNT6ECQIxjsjZDCl8TQ==
+X-Received: by 2002:a17:903:1904:b0:295:73f:90d0 with SMTP id d9443c01a7336-29ec27b8670mr40699845ad.50.1765435788379;
+        Wed, 10 Dec 2025 22:49:48 -0800 (PST)
+Received: from c45b92c47440.. ([202.120.234.58])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-29eea016ef4sm13694335ad.56.2025.12.10.22.49.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Dec 2025 22:22:03 -0800 (PST)
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Subject: [PATCH] USB: storage: Ignore driver CD interface of SR9700 USB Ethernet adapters
-Date: Wed, 10 Dec 2025 22:21:44 -0800
-Message-ID: <20251211062144.138796-1-enelsonmoore@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Wed, 10 Dec 2025 22:49:47 -0800 (PST)
+From: Miaoqian Lin <linmq006@gmail.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: linmq006@gmail.com,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: dwc3: of-simple: fix clock resource leak in dwc3_of_simple_probe
+Date: Thu, 11 Dec 2025 10:49:36 +0400
+Message-Id: <20251211064937.2360510-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,36 +91,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some SR9700 devices have an SPI flash chip containing a virtual driver
-CD, in which case they appear as a device with two interfaces and
-product ID 0x9702. Interface 0 is the driver CD and interface 1 is the
-Ethernet device. A separate patch to the sr9700 driver will add
-support for these devices.
+When clk_bulk_prepare_enable() fails, the error path jumps to
+err_resetc_assert, skipping clk_bulk_put_all() and leaking the
+clock references acquired by clk_bulk_get_all().
 
-Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Add err_clk_put_all label to properly release clock resources
+in all error paths.
+
+Found via static analysis and code review.
+
+Fixes: c0c61471ef86 ("usb: dwc3: of-simple: Convert to bulk clk API")
+Cc: stable@vger.kernel.org
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/usb/storage/unusual_devs.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/usb/dwc3/dwc3-of-simple.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index 47f50d7a385c..b5a764d1ed50 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -1719,6 +1719,13 @@ UNUSUAL_DEV(  0x0fce, 0xe092, 0x0000, 0x0000,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_IGNORE_RESIDUE ),
+diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+index a4954a21be93..c116143335d9 100644
+--- a/drivers/usb/dwc3/dwc3-of-simple.c
++++ b/drivers/usb/dwc3/dwc3-of-simple.c
+@@ -70,11 +70,11 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+ 	simple->num_clocks = ret;
+ 	ret = clk_bulk_prepare_enable(simple->num_clocks, simple->clks);
+ 	if (ret)
+-		goto err_resetc_assert;
++		goto err_clk_put_all;
  
-+/* Ignore driver CD interface of SR9700 USB Ethernet adapters */
-+UNUSUAL_DEV( 0x0fe6, 0x9702, 0x0000, 0xffff,
-+		"CoreChips",
-+		"SR9700 USB Ethernet Adapter",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_DEVICE ),
-+
- /*
-  * Reported by Kevin Cernekee <kpc-usbdev@gelato.uiuc.edu>
-  * Tested on hardware version 1.10.
+ 	ret = of_platform_populate(np, NULL, NULL, dev);
+ 	if (ret)
+-		goto err_clk_put;
++		goto err_clk_disable;
+ 
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
+@@ -82,8 +82,9 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ 
+-err_clk_put:
++err_clk_disable:
+ 	clk_bulk_disable_unprepare(simple->num_clocks, simple->clks);
++err_clk_put_all:
+ 	clk_bulk_put_all(simple->num_clocks, simple->clks);
+ 
+ err_resetc_assert:
 -- 
-2.43.0
+2.25.1
 
 
