@@ -1,142 +1,139 @@
-Return-Path: <linux-usb+bounces-31380-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31381-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 577B2CB4EFA
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 07:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CE8FCB5013
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 08:44:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 00C71303091C
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 06:49:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BA7B33009A9E
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Dec 2025 07:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944FD2BE622;
-	Thu, 11 Dec 2025 06:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38CD2299AAB;
+	Thu, 11 Dec 2025 07:44:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X4lCIV7K"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xF60Oolx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559B229B8C7
-	for <linux-usb@vger.kernel.org>; Thu, 11 Dec 2025 06:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A3222068F
+	for <linux-usb@vger.kernel.org>; Thu, 11 Dec 2025 07:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765435790; cv=none; b=MaLLLxsD6gUeN5yp4Bask3Q5cTY0h5QJLmRNnWk9LlHOne0Gsv2MxWlKe/PdKJFENrKw6xw6UkfF01gAHV+3x6MFa8dNs+upIhwKIJ3D8Y6+dfb77pr6rATwmJ/Wc9dDL1Xkqvah5SViVsESlDyFvTygI9GmHBNgepZP+W/yy9o=
+	t=1765439055; cv=none; b=YDDRYmhawty+Moj4+UkN1C2VjLA3ex12RgWBbpwTrXsGfw+ivG+jt1FyniA7z1b5gfWVQc6Zjh1xrbK2NMZgDFOALcDDjdtWu65tDRnBWPyIRv5elgii+kGVYmsx8riqnsgHfEdxcx0By+1byLwMmyHuos6xkY1qEvl0I5iqALU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765435790; c=relaxed/simple;
-	bh=jLIEbOil8JUvwvgoHLS0xgagSdpZFVnP6mw3L4Fg5os=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lSTGUXgJEkR2pWRmH2FCj09CWhZRqkBiMCIpeFZWDodnBzt/T6y3it680GFKhqBOc8iOha3+1kv2/fz0JBP1JU+9yCHPYf0pEL0DTUaTUMHAUou5jLWC22vKOS8mmFzO721iC6fpoU/wTBJDpd/CST0qJmhAJOnBiqSrb/iK5Fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X4lCIV7K; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2980d9b7df5so9712705ad.3
-        for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 22:49:49 -0800 (PST)
+	s=arc-20240116; t=1765439055; c=relaxed/simple;
+	bh=+nLvnvd/TcPlWyDUi4sC0649/vYg6Fyqw8hlyGbLylQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Y+EQUZ7+01VGEZPNELzqbAXenkir/KmVf2ZiF7hHdT8fOzmtELZCSUAZsm1Ej42zG4gQIEFBql9fumj3kC5f5FiPpTc/HS9vDc+HlJKOwck+tRC3V0U9uZqxcJ5fnC5rcQKGcsWrZ87dUzfpYnwPN4ncbv2Qa5iJz7pC7Lit71E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xF60Oolx; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-477b5e0323bso8863125e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 10 Dec 2025 23:44:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765435788; x=1766040588; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=A930R/Xs4QOYTiiYr4F9dDu2dd52LTZ9/1wSdEBmY94=;
-        b=X4lCIV7KIkrdHL97r40ojr5tWwjy1SLV27XpVWFgLUDTyXT0E1BTgsPRsyGsKUq0BH
-         3L3uq4xyMRakOPLe+PMUXAmZF0A8lveTiJ/I0Lev8Q2ml3q4oGMVOE4/fbTV3Um9Gqfs
-         3okM/7vXTGxWUMxipkIUW91euh3Lnk/XKSOhzQu+4Cznb4cIA5fTvY21KkyhjGNjLpMp
-         P0YKwasupl6R0WSvydYwkL1pvU58uFLb0hmcV8P0+NMjIBj9kAgYc0E/ekqwoyjen84c
-         0LeacveXue4iNh0ZiburhIOhda6+QI7K4+TCbHpeteXjMTVmqVIXxLb5MVbzrGbcarv/
-         KucQ==
+        d=linaro.org; s=google; t=1765439052; x=1766043852; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7PTY0JPAENNEp01Gq3EaTeFE6LLPntXWdMybRZFQEXo=;
+        b=xF60OolxdJWy6D5IW50vasWgw6SPhPzPoHFfSQ92nzS5Pz2jfItvvr7ADyr4x2taR6
+         m7BBkhZnneXK+vaHYw0OGfvg1pxf2s4Of/v4X+HWEjGmrN5dKtWEqTJzZdMunThTzV97
+         VK3vqHzlUkMT3q2L4YdLhR+5qmvVrXIgqHwzAbabhuPu65O6cS+PH3HCIbx8z14qyd+J
+         i4UbymuUJPwCVhoasnTmdlpf6GApP19bGYb9tM3nJQPptL7N+94riAcCrM7R0V+W/fAq
+         BgIxoBFVeDjVyvhsf6O6V/LzOTJnYrNqu6AlWojmW8DhKLzX/QD1GKyGEl3ulanQHxN8
+         Xb3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765435788; x=1766040588;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A930R/Xs4QOYTiiYr4F9dDu2dd52LTZ9/1wSdEBmY94=;
-        b=sZNLp+dYaEU1NccNXcBtkacymKHTWxrEfM2rcEU8XWN8qruRv5wd5IB+Y3K9sx161P
-         +fezHCbksxl8o7+IKKQgfjNEt0FQcSt91Gp7agTjTSTw/3tEMl8lQ31KEy4W/DP3Ga+Z
-         UTW7gOF0RYKQZsqiIFem7L4ayCvGpn9dZxhD+MDriT5u2jM6gZ2dECWfgDpOZsszpUF6
-         Odx0ak0qzaLD10JUfD57MCY0WimByvkuylNj+5G+xl4ts/2k8LJ9ki8OkWFfx7K21rG5
-         tsdDrrEddARznnCUGn8btn7xFerpF2T9jvkgWOH4D3DuorbVib5k6l/jjwowaN5mKA/T
-         f9lg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6Wfm7J2wztEeNNDE//+p1S9gXPchSKP7ZxKSPeB2QgONpw9EudxDb4CP0tHPLWHPQvqTNnyFq2gU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycQJ+S/bEQj3/iW1D68RG7HcZP8V/aLHL8Ki0lKOutY5Z3FHxP
-	2IbSAFvs6XFA5eArTHFLfUUWqsdRyR6H9uOan8vkGQlS2/d3D7bZ23RB
-X-Gm-Gg: AY/fxX6XvhTOHImMsU7tpbxL2XUaa8cliuu7C8YkBX1Hc5Yh9daXUJujyDPeHkFCs76
-	PGmm/zwuWOOj7mQ6Zw9hZ/60GPhjb4VodSDhOCSSD29n5olq8FqUIE7/FKK4cqccxua91r5gfPI
-	loet0d/na2+VMKdYY3oYjaqblzbuHx734vOWisLYAlwDWx9oVFAXK4zU+lhf/7eVQtL2BREb2sK
-	nt810dUMQqBE+KFAT6rxxQTLhRt7JYBLppCq7XKcCniPj0am8zSbckvNhaMc5LRkRrTLNc9mPU7
-	r7yurNGv3VDIR5/dhoL00PddIAcLHWEP2w4VI7biHUllgTd4zakwr8gjUaOSSN/FURm8GX/x03j
-	yt5yAYEydjlL7PW+azviYvPuGvswJmQSoS8gBmnOxT58t0JjtOGIXiGVGiSQlYW27v1oiPkjxPS
-	lmV0L/WmBOKfVA0+R/97EZqSFG8bzD/BulNA==
-X-Google-Smtp-Source: AGHT+IHpmykci4B0OIJtBdbWIngC1cFWd1IKB2ZOgzuk8178NaUix/BQGoMHNT6ECQIxjsjZDCl8TQ==
-X-Received: by 2002:a17:903:1904:b0:295:73f:90d0 with SMTP id d9443c01a7336-29ec27b8670mr40699845ad.50.1765435788379;
-        Wed, 10 Dec 2025 22:49:48 -0800 (PST)
-Received: from c45b92c47440.. ([202.120.234.58])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-29eea016ef4sm13694335ad.56.2025.12.10.22.49.44
+        d=1e100.net; s=20230601; t=1765439052; x=1766043852;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7PTY0JPAENNEp01Gq3EaTeFE6LLPntXWdMybRZFQEXo=;
+        b=txuRAD4fYtXQy9viZ/zFyk9obktcVY3VeE6TM13qwKrqYgK7Y/NBueITNOGT1zzQD3
+         r/KGzqjwtHmrhGEO9gc+jZ7LeVQCdMXDqqq4SxSTkE79jjycxPMYGNSYhDm0iLnfNTpq
+         /tFrtOzOTMmXF++WSgajRNRDU1690dVmCA2T7XAM0MVDsaxW34+adomVKBb/A/akOrnd
+         FpPGZ/xyFHsm6OJGEqVCdEzJhnqb4QkUHTMCDJwNe+1rqkG8ME+Afhi4kULjiE7DZYb+
+         iggHXHXp4h8iDKvO+4ypZnRQufAwYqJCs2O7uN6VHJ+mgXT4qMTD9c+GPyaKbsAHIU8M
+         PuOw==
+X-Gm-Message-State: AOJu0YzOCxsexmkKhoRzrnJYCxTo+IgynLrHKnblAtnEQoCBoWwKsqFd
+	tvr/6yUVFZGqEP13ZZXkZ+IN9dF2foDMNGdWTKvTVYU2a1dgRhBZ8SZD/ET4Sj+uepU=
+X-Gm-Gg: AY/fxX550gMzaMT3vy/+rK59V7mbMsvjnrEywzPQTkZyjbEJVBHPVYgLsSKSJ7rEFKJ
+	ZfaiubmYbGJyTp/U8rjSvi5vxy/rTJFZjMm3f/nyZHjLn7oxHdvsSubDSjIJjTg+Oie6gx59iDM
+	qbbLrmbGm+2gyOpkkwIhLVLl4pacy5iJZhXqcW0w7gLFcafEfDINmtnO2RkTCDgJ/1FLY4O86q0
+	WSmawYh8x30yuuaRCYPg6LKXY/KA646qP1Uvc4T9vylFDelCQ+vYbGRzxzjsbk6/cEEiV+QQjb5
+	cxWjQEqlZlvNfrIdTaxmLJkuf6gQVXsDWmTE5Ps7UW1oMQH6Ghocj0Gn+IHhA2N7LEseg4G8Vlg
+	xKir5PNRJGJkzDFuaKCLFCvPwe4ryonjmHOL4wAzAkypek91oBRNIq78AXYvtXAxzGakbkhZ+R9
+	y47mFExSVkok5o47/d
+X-Google-Smtp-Source: AGHT+IGxtqWP87wJz85Ka2QmNNb9bbiBp9C5m5Rc6onDLrqvEn4ypOsYvbG8b1spWjQO0iyL913GOw==
+X-Received: by 2002:a05:6000:208a:b0:42b:2db2:159f with SMTP id ffacd0b85a97d-42fab242bdamr1334057f8f.12.1765439051634;
+        Wed, 10 Dec 2025 23:44:11 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42fa8a70379sm4137033f8f.11.2025.12.10.23.44.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Dec 2025 22:49:47 -0800 (PST)
-From: Miaoqian Lin <linmq006@gmail.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Felipe Balbi <felipe.balbi@linux.intel.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: linmq006@gmail.com,
-	stable@vger.kernel.org
-Subject: [PATCH] usb: dwc3: of-simple: fix clock resource leak in dwc3_of_simple_probe
-Date: Thu, 11 Dec 2025 10:49:36 +0400
-Message-Id: <20251211064937.2360510-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 10 Dec 2025 23:44:11 -0800 (PST)
+Date: Thu, 11 Dec 2025 10:44:07 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Pawel Laszczak <pawell@cadence.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [bug report] usb: cdns2: Add main part of Cadence USBHS driver
+Message-ID: <aTp2R8dGyrW1XglR@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When clk_bulk_prepare_enable() fails, the error path jumps to
-err_resetc_assert, skipping clk_bulk_put_all() and leaking the
-clock references acquired by clk_bulk_get_all().
+Hello Pawel Laszczak,
 
-Add err_clk_put_all label to properly release clock resources
-in all error paths.
+Commit 3eb1f1efe204 ("usb: cdns2: Add main part of Cadence USBHS
+driver") from Jun 2, 2023 (linux-next), leads to the following Smatch
+static checker warning:
 
-Found via static analysis and code review.
+	drivers/usb/gadget/udc/cdns2/cdns2-gadget.c:1239 cdns2_thread_usb_irq_handler()
+	warn: 0x10000 is larger than 8 bits
 
-Fixes: c0c61471ef86 ("usb: dwc3: of-simple: Convert to bulk clk API")
-Cc: stable@vger.kernel.org
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/usb/dwc3/dwc3-of-simple.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+drivers/usb/gadget/udc/cdns2/cdns2-gadget.c
+    1210 static irqreturn_t cdns2_thread_usb_irq_handler(struct cdns2_device *pdev)
+    1211 {
+    1212         u8 usb_irq, ext_irq;
+    1213         int speed;
+    1214         int i;
+    1215 
+    1216         ext_irq = readb(&pdev->interrupt_regs->extirq) & EXTIRQ_WAKEUP;
+    1217         writeb(ext_irq, &pdev->interrupt_regs->extirq);
+    1218 
+    1219         usb_irq = readb(&pdev->interrupt_regs->usbirq) & USB_IEN_INIT;
+    1220         writeb(usb_irq, &pdev->interrupt_regs->usbirq);
+    1221 
+    1222         if (!ext_irq && !usb_irq)
+    1223                 return IRQ_NONE;
+    1224 
+    1225         trace_cdns2_usb_irq(usb_irq, ext_irq);
+    1226 
+    1227         if (ext_irq & EXTIRQ_WAKEUP) {
+    1228                 if (pdev->gadget_driver && pdev->gadget_driver->resume) {
+    1229                         spin_unlock(&pdev->lock);
+    1230                         pdev->gadget_driver->resume(&pdev->gadget);
+    1231                         spin_lock(&pdev->lock);
+    1232                 }
+    1233         }
+    1234 
+    1235         if (usb_irq & USBIRQ_LPM) {
+    1236                 u8 reg = readb(&pdev->usb_regs->lpmctrl);
+    1237 
+    1238                 /* LPM1 enter */
+--> 1239                 if (!(reg & LPMCTRLLH_LPMNYET))
 
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index a4954a21be93..c116143335d9 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -70,11 +70,11 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
- 	simple->num_clocks = ret;
- 	ret = clk_bulk_prepare_enable(simple->num_clocks, simple->clks);
- 	if (ret)
--		goto err_resetc_assert;
-+		goto err_clk_put_all;
- 
- 	ret = of_platform_populate(np, NULL, NULL, dev);
- 	if (ret)
--		goto err_clk_put;
-+		goto err_clk_disable;
- 
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
-@@ -82,8 +82,9 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
--err_clk_put:
-+err_clk_disable:
- 	clk_bulk_disable_unprepare(simple->num_clocks, simple->clks);
-+err_clk_put_all:
- 	clk_bulk_put_all(simple->num_clocks, simple->clks);
- 
- err_resetc_assert:
--- 
-2.25.1
+LPMCTRLLH_LPMNYET is BIT(16) but "reg" is a u8, so this condition is
+always true.
 
+    1240                         writeb(0, &pdev->usb_regs->sleep_clkgate);
+    1241         }
+    1242 
+    1243         if (usb_irq & USBIRQ_SUSPEND) {
+
+regards,
+dan carpenter
 
