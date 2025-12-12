@@ -1,207 +1,154 @@
-Return-Path: <linux-usb+bounces-31400-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31401-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97CA3CB81E2
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 08:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D93ECB8932
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 11:09:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 644BF3029D2B
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 07:30:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 44CE730184C9
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 10:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80B1430DEC0;
-	Fri, 12 Dec 2025 07:30:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54BB72E0901;
+	Fri, 12 Dec 2025 10:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="Zy5C2mH3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48AF2B2DA;
-	Fri, 12 Dec 2025 07:30:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=59.120.186.242
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203612DFA3A
+	for <linux-usb@vger.kernel.org>; Fri, 12 Dec 2025 10:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765524620; cv=none; b=ZRdi4mpKby7ypeOemHfuVgwi+VPfKAMPfbs1yClSejwg4tSGCVdckx86tkFRxGCtjCSd1mJf5Rq0NPVV2EMSa+zYPuMZ/OUUMLnjeLH9YSTD98JkmQNSvs5NpSz94Rd0jo6zTeW2qMOV/GAqvhJHnuguXyx2HJtQqhwm73xPOlQ=
+	t=1765534156; cv=none; b=fHxtZKEPIPZJcVRkOgI+hL8S1gjiEDYHF/SWA02tXRem2KV2OLVLJkQgkIFZ7SYxPbi0wrBe6AoE0DSysAEJr3NsmTFB/BM8SFEi3qEqUKT3nRVAH89OBvjFqviDimjPiudpX5cfcfDn7dBiwQVnGHNNvQyvgYVLjTZ/uhq+lRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765524620; c=relaxed/simple;
-	bh=KAv5+sz1LelZpMvCJzFPpbdpcvnmHOnG+jATDF9+kpA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n4GMtn0KvxFqJyTdiQRkhQfaE7ucayjcQ8R3vPT+UFuj6FL8Zl6oFlNmm2HFrFXWXTIH28jTkma5Nb/B4E3VyTNOUGQmtTS3IJ1jbwpXX4FiiZG7N7DaUlsevSXKrOKQsBUksZdiBFUDpa9QPh8Ny4gXz1fwHMyF9gqqHZxDG5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintek.com.tw; spf=pass smtp.mailfrom=fintek.com.tw; arc=none smtp.client-ip=59.120.186.242
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintek.com.tw
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintek.com.tw
-Received: from mail.fintek.com.tw (localhost [127.0.0.2] (may be forged))
-	by mail.fintek.com.tw with ESMTP id 5BC795pk039296;
-	Fri, 12 Dec 2025 15:09:05 +0800 (+08)
-	(envelope-from peter_hong@fintek.com.tw)
-Received: from ag.fintek.com.tw ([192.168.1.45])
-	by mail.fintek.com.tw with ESMTP id 5BC78U82039188;
-	Fri, 12 Dec 2025 15:08:30 +0800 (+08)
-	(envelope-from peter_hong@fintek.com.tw)
-X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 5BC78V6f82115132, This message is accepted by code: ctloc85258
-Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
-	by ag.fintek.com.tw (8.15.2/3.20/5.94) with ESMTPS id 5BC78V6f82115132
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 12 Dec 2025 15:08:31 +0800
-Received: from localhost (192.168.1.128) by vmMailSRV.fintek.com.tw
- (192.168.1.1) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 12 Dec
- 2025 15:08:31 +0800
-From: "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
-To: <johan@kernel.org>, <hpeter+linux_kernel@gmail.com>
-CC: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <tom_tsai@fintek.com.tw>,
-        <peter_hong@fintek.com.tw>, <yu_chen@fintek.com.tw>
-Subject: [PATCH V3 1/1] USB: serial: f81232: fix incomplete serial port generation
-Date: Fri, 12 Dec 2025 15:08:31 +0800
-Message-ID: <20251212070831.16334-1-peter_hong@fintek.com.tw>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1765534156; c=relaxed/simple;
+	bh=+CgqYVH9orNZOCijPAUqc+h3PhteR2BDiAlkPl93y2o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vEoInPe5xRXjzQ0q+CtRTgreLlohB8vKspUjrgw9V/03W0n5QVP+eciBTSeYuS0GB65WqNhoV0JAwAH2tEXpz0UBqz2dhgI95pL5H4NbHn7zeLfMzWmZgLHMhzGlUp+SjedEB4lvb0dAcEWYX1tMTRo9PIQ9nmuCrEh15Reox2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=Zy5C2mH3; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-640c6577120so1876494a12.1
+        for <linux-usb@vger.kernel.org>; Fri, 12 Dec 2025 02:09:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1765534153; x=1766138953; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=piKeicldVFohFnPgSVyUwsQHuUt89125myGk5tf25V8=;
+        b=Zy5C2mH3YV3kmR8lWvRj8ihyBacWLyf8HZzakMAOQgEjFKxqUOQMQLlRSmB8qVh1R0
+         W2M9hL6vEtna1D83xuWy5rYzO9keo72jTylMimmImti0eu6FonAXHdCIlGm76sYGZEw0
+         /UKwjUsaUGcvqx17waTIfbZDmDlfhilMEraLQChb5RzE2/6hVEhJdpsr1BrNTz6+QEp1
+         sGYGKWrwh0XaTtvs1nw3ZILQWbcmRUxOqkY942oB0YsTRQ67W/DIdAg4vOF5tbsDXhE6
+         oghjsaETf666NTM5iqFHV7DDklMqNaD9uqQRn9XTTrZCjIe1y9xVVOX0JaTG00j4RH44
+         cXgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765534153; x=1766138953;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=piKeicldVFohFnPgSVyUwsQHuUt89125myGk5tf25V8=;
+        b=IsiSCdDm+bmGBguw2n31BYvvLkT8dN/67bEYfIJNM5JTPD1DmJR4N1viWyo627ovbw
+         H8N07lFd0yDhjVIZNekGZv6JEOQ9isvW/qyMqg0IS2JaqObYPjDMFc2MQjJC69A2myRI
+         BQM0MYN2qeYCsW9V8mAO1qoEfErIie5z9Nq423NkoXpN/oIrHyMhfI6+FVLYZvriFkEX
+         7fEz062NkDy6bsUHD83ccZ6K7/DGE2vTkL9o7J5K+zTnc0EyAFbC7HfsbMUyHv7euwv8
+         1301xlfLSs2qQO2xAgykb3O2jlr+OuuJNiQWEix/aaQK/4KTz+CHDZCeuoEixSabNbp3
+         gqBw==
+X-Forwarded-Encrypted: i=1; AJvYcCVq17oquONJruT29VMAAaRCbL5z34RFplwyJwUnOhiG7X8pUZ2qacPTczQV286bmzWIdZo1yIecyMo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKwMuIJupWGLEJvNTDNJVNHyPzfFZQOyO+fFWBinIUpTE6u+Fl
+	JLDRIZkqlAqVEFAfVlTnDXzsG4WuPdN95NJbgeJk1ipR506DlNHfcCCXtsuV6OpmA2YWtQppRcL
+	LsAvCbl7aUUbCG2wWUTP9mqUwyZuqTaTz/mNcWeDGvQ==
+X-Gm-Gg: AY/fxX7NMRmwR1TvyKNf2BOsqKj3hzuBJ1ikwtv9pxbm9Gv9gvqMKXPrb6NEe5huGbn
+	Ta7QQ+ydGj55hMRAkV+rXfRzZf12aOFupvHWamtVWV2TQIG0bo9BpEgurTOPCuywLh4R8uJ8CR7
+	3+sf7jTNf+r7WmA0JqVoSZWqy7OYJaAV39EzZBRosaxW0DQhX2vSKdEeHLrgyHU+xkpSsPfrgyI
+	biOT4LmI6lIbJkXWgdv+gsRvWCWOo+Vd/gasDBzTULy89DBAvrey3doGpGu5mdvHzmwnlY=
+X-Google-Smtp-Source: AGHT+IGu9UDsKSPu1wQCEy9ZSntpZSOo/9V+U0kQrHcNkQAxG5oPTpTaMv6wXo2k7lZ0/X2pNnXrjg4sARyaZrNmc5Q=
+X-Received: by 2002:a17:906:f5a9:b0:b76:8077:4eaa with SMTP id
+ a640c23a62f3a-b7d23618a6dmr134378366b.6.1765534153256; Fri, 12 Dec 2025
+ 02:09:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27556.001
-X-TM-AS-Result: No-7.001900-8.000000-10
-X-TMASE-MatchedRID: 2Yg28zQHJnW+0r2Yw7MQTi9iVDu7EPf8TFQnI+epPIZ3de2OoBqgwubd
-	9j4+b6jIFNeXAh2Nr3WwS7/aOrnZQg8rYO92b9Nms/Hes76OTZCs4IQYg+G3CMC5DTEMxpeQfiq
-	1gj2xET8qqtDuUtwyfO6GocZ0Ez3RqKY8zTsCX1L4Zi3x/9WFO0Ee5VjFzwNbR6RHdVK85hUHzY
-	bIalkde0icwIvRoCjm3DF/pTYh6NC2W4Yb6P/V/pciNJzaqUX1fS0Ip2eEHnz3IzXlXlpamPoLR
-	4+zsDTt/KO2LNTSuGP5TrP0k00XHZRIFcTs0/awrAMXLR8bCCVylPItM/xe8g==
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--7.001900-8.000000
-X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27556.001
-X-TM-SNTS-SMTP:
- D4AD856F7D148968354A4BE359E3C7785B6759C3CB3521EB4E7EC6E5D21D201E2000:8
-X-DKIM-Results: [192.168.1.45]; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:mail.fintek.com.tw 5BC795pk039296
+References: <20251203122313.1287950-1-robert.marko@sartura.hr>
+ <20251203122313.1287950-2-robert.marko@sartura.hr> <20251203-duly-leotard-86b83bd840c6@spud>
+ <CA+HBbNH6wO2VWOp1Dn52ArrYg6z89FgYnT3x-jsHsTVJ5xSBSA@mail.gmail.com> <20251208-absolute-diploma-6575729ab43f@spud>
+In-Reply-To: <20251208-absolute-diploma-6575729ab43f@spud>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Fri, 12 Dec 2025 11:09:01 +0100
+X-Gm-Features: AQt7F2qi9N_ckMGJFgowBcvF34rbB96zRSF2oUqF51CXmoKh0Qd3rJ2sqP-K-eQ
+Message-ID: <CA+HBbNHuYCq9oV4ZjWGjwnJM=oz-O85p_tqB+UnTBmivzDoowg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] dt-bindings: arm: Document Microchip LAN969x
+To: Conor Dooley <conor@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	gregkh@linuxfoundation.org, nicolas.ferre@microchip.com, 
+	claudiu.beznea@tuxon.dev, mturquette@baylibre.com, sboyd@kernel.org, 
+	richardcochran@gmail.com, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
+	luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The Fintek F81532A/534A/535/536 family relies on the
-F81534A_CTRL_CMD_ENABLE_PORT (116h) register during initialization to
-both determine serial port status and control port creation. If the
-driver experiences fast load/unload cycles, the device state may becomes
-unstable, resulting in the incomplete generation of serial ports.
+On Mon, Dec 8, 2025 at 6:10=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
+e:
+>
+> On Mon, Dec 08, 2025 at 11:30:28AM +0100, Robert Marko wrote:
+> > On Wed, Dec 3, 2025 at 8:19=E2=80=AFPM Conor Dooley <conor@kernel.org> =
+wrote:
+> > >
+> > > On Wed, Dec 03, 2025 at 01:21:30PM +0100, Robert Marko wrote:
+> > > > Microchip LAN969x is a series of multi-port, multi-gigabit switches=
+ based
+> > > > on ARMv8 Cortex-A53 CPU.
+> > > >
+> > > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > > > ---
+> > > >  .../bindings/arm/microchip,lan969x.yaml       | 32 +++++++++++++++=
+++++
+> > >
+> > > This should not be in a unique file, put it in with the other microch=
+ip
+> > > arm devices please. Also, the wildcard in the compatible is not
+> > > permitted, only way it'd make sense is if these are different binning=
+s
+> > > of the same silicon. If that's the case, you need to explain why,
+> > > because compatibles are meant to be soc-specific.
+> >
+> > Hi Conor,
+> > The issue is that there is no unique place for Microchip SoC-s,
+> > LAN966x series is in the AT91 bindings
+> > while SparX-5 has its own bindings file.
+> >
+> > What would you suggest in this case?
+>
+> Ideally, arm/atmel-at91.yaml and arm/microchip,sparx5.yaml would just
+> become arm/microchip.yaml. The axi@600000000 thing in the sparx5 file
+> looks pointless and can be deleted IMO.
 
-Performing a dummy read operation on the register prior to the initial
-write command resolves the issue. This clears the device's stale internal
-state. Subsequent write operations will correctly generate all serial
-ports.
+Ok, I merged them all in one generic microchip.yaml binding, but I noticed =
+that
+arm/atmel-at91.yaml is licensed under GPL-2.0 while arm/microchip,sparx5.ya=
+ml
+is dual-licensed as its preferred for bindings.
 
-This patch also removes the retry loop in f81534a_ctrl_set_register()
-because the stale state has been fixed.
+Is that going to be an issue?
 
-Tested on: HygonDM1SLT(Hygon C86 3250 8-core Processor)
+Regards,
+Robert
+>
 
-Signed-off-by: Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
----
- drivers/usb/serial/f81232.c | 77 ++++++++++++++++++++++---------------
- 1 file changed, 47 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
-index 530b77fc2f78..9262a2ac97f5 100644
---- a/drivers/usb/serial/f81232.c
-+++ b/drivers/usb/serial/f81232.c
-@@ -70,7 +70,6 @@ MODULE_DEVICE_TABLE(usb, combined_id_table);
- #define F81232_REGISTER_REQUEST		0xa0
- #define F81232_GET_REGISTER		0xc0
- #define F81232_SET_REGISTER		0x40
--#define F81534A_ACCESS_REG_RETRY	2
- 
- #define SERIAL_BASE_ADDRESS		0x0120
- #define RECEIVE_BUFFER_REGISTER		(0x00 + SERIAL_BASE_ADDRESS)
-@@ -824,36 +823,31 @@ static void f81232_lsr_worker(struct work_struct *work)
- static int f81534a_ctrl_set_register(struct usb_interface *intf, u16 reg,
- 					u16 size, void *val)
- {
--	struct usb_device *dev = interface_to_usbdev(intf);
--	int retry = F81534A_ACCESS_REG_RETRY;
--	int status;
--
--	while (retry--) {
--		status = usb_control_msg_send(dev,
--					      0,
--					      F81232_REGISTER_REQUEST,
--					      F81232_SET_REGISTER,
--					      reg,
--					      0,
--					      val,
--					      size,
--					      USB_CTRL_SET_TIMEOUT,
--					      GFP_KERNEL);
--		if (status) {
--			status = usb_translate_errors(status);
--			if (status == -EIO)
--				continue;
--		}
--
--		break;
--	}
--
--	if (status) {
--		dev_err(&intf->dev, "failed to set register 0x%x: %d\n",
--				reg, status);
--	}
-+	return usb_control_msg_send(interface_to_usbdev(intf),
-+						0,
-+						F81232_REGISTER_REQUEST,
-+						F81232_SET_REGISTER,
-+						reg,
-+						0,
-+						val,
-+						size,
-+						USB_CTRL_SET_TIMEOUT,
-+						GFP_KERNEL);
-+}
- 
--	return status;
-+static int f81534a_ctrl_get_register(struct usb_interface *intf, u16 reg,
-+					u16 size, void *val)
-+{
-+	return usb_control_msg_recv(interface_to_usbdev(intf),
-+						0,
-+						F81232_REGISTER_REQUEST,
-+						F81232_GET_REGISTER,
-+						reg,
-+						0,
-+						val,
-+						size,
-+						USB_CTRL_GET_TIMEOUT,
-+						GFP_KERNEL);
- }
- 
- static int f81534a_ctrl_enable_all_ports(struct usb_interface *intf, bool en)
-@@ -869,6 +863,29 @@ static int f81534a_ctrl_enable_all_ports(struct usb_interface *intf, bool en)
- 	 * bit 0~11	: Serial port enable bit.
- 	 */
- 	if (en) {
-+		/*
-+		 * The Fintek F81532A/534A/535/536 family relies on the
-+		 * F81534A_CTRL_CMD_ENABLE_PORT (116h) register during
-+		 * initialization to both determine serial port status and
-+		 * control port creation.
-+		 *
-+		 * If the driver experiences fast load/unload cycles, the
-+		 * device state may becomes unstable, resulting in the
-+		 * incomplete generation of serial ports.
-+		 *
-+		 * Performing a dummy read operation on the register prior
-+		 * to the initial write command resolves the issue.
-+		 *
-+		 * This clears the device's stale internal state. Subsequent
-+		 * write operations will correctly generate all serial ports.
-+		 */
-+		status = f81534a_ctrl_get_register(intf,
-+						F81534A_CTRL_CMD_ENABLE_PORT,
-+						sizeof(enable),
-+						enable);
-+		if (status)
-+			return status;
-+
- 		enable[0] = 0xff;
- 		enable[1] = 0x8f;
- 	}
--- 
-2.34.1
-
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
