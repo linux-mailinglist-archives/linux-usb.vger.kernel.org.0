@@ -1,197 +1,206 @@
-Return-Path: <linux-usb+bounces-31402-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31403-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49AC3CB8D05
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 13:39:54 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01093CB8D08
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 13:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AA2F4306C147
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 12:39:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 67F2A301E22B
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 12:39:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F961322B8C;
-	Fri, 12 Dec 2025 12:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BBFD3203B5;
+	Fri, 12 Dec 2025 12:39:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=analogixsemi.com header.i=@analogixsemi.com header.b="VUfu42TI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X+NzNw2p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11021109.outbound.protection.outlook.com [52.101.52.109])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015933C38;
-	Fri, 12 Dec 2025 12:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.109
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765543182; cv=fail; b=eYFqLlBqkmSYeozoTqDA5OwgDrnZQ/WLPJq/UlMHgxxXBD02/IHXy1JW9gHX3U+5pwoWtnAjTdM/DJVSWgcI9CAui7jV+dZBJpjXtnczSakvVBynjcqodNAwnsJ3Hehj8fjipc2Nc9p7RFjRdbQ3n81o8DUrHPLhJfA48fhN3jM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765543182; c=relaxed/simple;
-	bh=uJLGEbNuQq9T1u/tTvPKaW/OAn0jBC75o3FjJEbjl3A=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=sJBPhwffq9VY25HQ0oGwTBpF8ktSnLDRGT4Ys3Bg+M9wNLMm6XAbFQY5wvGMZSL+0siyFCb50xTtEQZzNUABRo5kBlyrWvg7YKaabW5WY/FYD8XSIvMG9fyP9Tk9/ly71O3qgqxopgBmCP0OvQBD1hsYZyTRAIPbilUpzIpMLYs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analogixsemi.com; spf=pass smtp.mailfrom=analogixsemi.com; dkim=pass (1024-bit key) header.d=analogixsemi.com header.i=@analogixsemi.com header.b=VUfu42TI; arc=fail smtp.client-ip=52.101.52.109
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analogixsemi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analogixsemi.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PHGSjro3osblpQCDjJtBcrft+u+fC22KLJS5NSb6O1wVJGCDvEW7dcrz0iyWKjfqXvx5f2q8DXW6CopHT59wsG5KPReQaNC11sx+00/X59A2c/IaMbKzcZBmeVYmneS4cj04g6i5nKnqCxhuW7AV/SCU3NXRonr9hGTeS98XDTfTMejdRjG8xil+6mlYxEDeEZd7QwPLj7O6m9dXMEL7J+jEbNoPM6sr1DWfI5jcqDArKiSpWSeHoeyFMH188VEle7GDiB2xw2znRf83XgDSdbtoJfnsCMe2CWflaG59cwwJN1udcDIdre4OMy6NBJ9ZBrfwLm6/IGE6ISQ9DBcV6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uJLGEbNuQq9T1u/tTvPKaW/OAn0jBC75o3FjJEbjl3A=;
- b=LMztrtYpGvmQdtit2/bP+0h4B3+xYshW8iORTXpn0Yz/7Up/phOhcIhkiQ9K57Ayk9btqTE81uCoXKNFv9R/zn5X5D5dlJ/CLJ9mHjKqb2cN1u5vJJLvwPCv6DjyIxJxdL5hg33Hkaid37/kiH6qgUuWAOWFPHIw1RJ/kQ0NzCYSPWrPHvbJgNhb8jciBvNx7dcSEI8cDdvW+NNure4E+IMWKx72drx9chzkgYB1xuS9P/jRrNwXeSW+b4mgSIbOJJCLnVJTBO6qiXekuA7IWJbUTQeIHMZUZeaow7r779qXoiYVNy6QDLnwcQN3oF0Ir6TKyQil9v3lJYrOGV8e4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analogixsemi.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uJLGEbNuQq9T1u/tTvPKaW/OAn0jBC75o3FjJEbjl3A=;
- b=VUfu42TIlld4P6+Y27EBeRqouDD8sZC+7Jq05Dby/sbomsnmursf5ld4E7X69mMbBnT7+qPET8dhkzO0RcJyrTp1X5ulur+RRBve3xyj77RGzch1JapfiyXCFFN2XmJRgLyttvuWDCIkfEoD9S3TblaV0nNpGjgnGdAMG11orJ4=
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by LV2PR04MB9833.namprd04.prod.outlook.com (2603:10b6:408:34f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.14; Fri, 12 Dec
- 2025 12:39:35 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::d0a9:7455:cb02:ca08]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::d0a9:7455:cb02:ca08%4]) with mapi id 15.20.9412.005; Fri, 12 Dec 2025
- 12:39:35 +0000
-From: Xin Ji <xji@analogixsemi.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Pin-yen Lin
-	<treapking@chromium.org>
-CC: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Andrzej Hajda
-	<andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, Robert
- Foss <rfoss@kernel.org>, Laurent Pinchart
-	<Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, Jernej
- Skrabec <jernej.skrabec@gmail.com>, David Airlie <airlied@gmail.com>, Simona
- Vetter <simona@ffwll.ch>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH RFC 2/2] drm: bridge: anx7625: implement minimal Type-C
- support
-Thread-Topic: [PATCH RFC 2/2] drm: bridge: anx7625: implement minimal Type-C
- support
-Thread-Index: AQHcXrjt6airW14k7Eq2XOw6vcl4hLURgpQAgAXoBbCAApSLAIAECqYw
-Date: Fri, 12 Dec 2025 12:39:35 +0000
-Message-ID:
- <BY5PR04MB6739715B26DCF794FBD34993C7AEA@BY5PR04MB6739.namprd04.prod.outlook.com>
-References: <20251126-anx7625-typec-v1-0-22b30f846a88@oss.qualcomm.com>
- <20251126-anx7625-typec-v1-2-22b30f846a88@oss.qualcomm.com>
- <aTGJXAnlkK5vQTzk@kuha>
- <BY5PR04MB673939B585B2419534D48E77C7A2A@BY5PR04MB6739.namprd04.prod.outlook.com>
- <7wp25rctnwydxa3zfpbmddgygyxmg5eg5crv4yuo45k6ovvww2@bnvcw3yorqw2>
-In-Reply-To: <7wp25rctnwydxa3zfpbmddgygyxmg5eg5crv4yuo45k6ovvww2@bnvcw3yorqw2>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY5PR04MB6739:EE_|LV2PR04MB9833:EE_
-x-ms-office365-filtering-correlation-id: b0d88c35-885a-418e-7a7e-08de397b81f8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|366016|1800799024|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?QALQjdpdqJ9h8VX/u7or9Mvv5SssPP5XRfKtxHG7Gsfn4DiHcYIcwFdAQrBA?=
- =?us-ascii?Q?x1ePZoCCo+vmK32dooY2hmNFgArrPpx8hQzr50FC2/Mc4S4xM77vCcauscVv?=
- =?us-ascii?Q?0wfuxLZohj8g7JgwdlbnPAYskEAasKbcMiTjbyo+RvcchLrstuBC6+Kh5DaF?=
- =?us-ascii?Q?jzRyuBKUpkmu+zOrRSeA8QxhsEHMRzCjFMo+cyTMzyix4P1fPGx2Dy6CCZSO?=
- =?us-ascii?Q?kxKEYOu3aSQd2aJgSSSfQudmg7TrxnpInT26vESRCg/bp9KxuQrpS0uPErP9?=
- =?us-ascii?Q?zSKZ1FLVmm4WdywW69gF5OBRLA+df5r1YNFwqtN7PAbpuOJdd7Edcmyru9zs?=
- =?us-ascii?Q?EagKFzuK+lPWrio4eFD6zwWZ58MMe8Fsd8bOqSu9MTv558Y1o4T1vv0WquEI?=
- =?us-ascii?Q?u9xPRIidbWhjtrtaON7llGaFc+pOdSEVF74ZKMRWI79E/JYnVGv0lYuq8HGE?=
- =?us-ascii?Q?dtvSgrn7LrO5M6ceianpyy2BX/GqYLPvJFzM8l/EAbYfWL5lnKjLFtbz/lZW?=
- =?us-ascii?Q?KE2Qw4M0fL5YD3hDIJBrIW0gDumNOIOrLKE9bUV2i80PNs/iC5rPiiMxIgrM?=
- =?us-ascii?Q?+50JgT/Dcounvd96Lg3N4uhOKEoHaFrlg+vfrmP1bmbnvC6c8WIj6MmprQHq?=
- =?us-ascii?Q?7bF3EwMniy5zlzyuRuckejGQWlBKX4pnjX9qYQKXE9MqOHTZnYPls9PNl62x?=
- =?us-ascii?Q?09QWDmU5TLEe4An2pmghfzplfwplXPLpRf2aR8ecGZlnvIlXI6qnoh1CMBr2?=
- =?us-ascii?Q?FtmUPbchePGSlYWLDNJP2ipxT4GK1zYcs6SgNj//YBh4HsGcI9L6kdkS/KjM?=
- =?us-ascii?Q?GMnMoGTzmA4zv9XSZMasCHJEhDSsfWiPJgRMt79h9ntacfqAtVFPRhprh3RX?=
- =?us-ascii?Q?QsNitGuNKkE3By/481tV/SwQAEv/xXjWbz2ShYE+PugooUULRGVxfpj7UmFi?=
- =?us-ascii?Q?zFFcDuNKkV8MSoEZw8yg6Np9WBwoap9a2bY2gCKHoFdix9jmOXyB+71HDQBV?=
- =?us-ascii?Q?4jLnG5Zi/bVvD9dFWB69JZLTB4ia0MQWrwNVRxt+gVGD8WlPBwE7GqqqJ828?=
- =?us-ascii?Q?yxelFTM3jT+f0RrEMUXfTCb9uUHfGOiZDXxtOyZCpgulrrmRJ9gXaYqNXt0R?=
- =?us-ascii?Q?CVrU/EGPZn5CI5e2pjdp7bNvgrMmCloT1Z10gfK203eWs79kKg/p8M+THCs5?=
- =?us-ascii?Q?zfA6luZjrYLo9JVJnwoPAsBERLvYYj3luKdoJkaaFFPLf22gvto+3fe986oR?=
- =?us-ascii?Q?V2C4v6/y3O1wTMA2RltFrAOP09HD0G9OO8KquI6LSuY4n0nsbllpL3k460Yk?=
- =?us-ascii?Q?XmSBuvdsfkv+Riv9nhxhZ0Px3loVCFL/bx1Wk4bnnGGCM2gMP2/ZB6iQh5g/?=
- =?us-ascii?Q?Yrkq9EhG+EPlZogPn4ePbxzgz3aX94fTl2GcV38V8ZEjtBQsj0MYBTrwEOsz?=
- =?us-ascii?Q?tL6ZIwtNpPMCwdTkW2beukOsyo+XZMpu8PYrlYmX5lfULM2ZenbnXQ=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?ckc94TiQg9VFHlDtzNMmcM3WFzy4JXdzyd1E+OOVdPDYoUUM2/1bTtQjZ931?=
- =?us-ascii?Q?S9l4eKSig2GUc13TnCoxNjfTSbIKHxTy+NtWkIhJ3sf7v95bbbKWeg+3e3tH?=
- =?us-ascii?Q?zwSWWocPru3f/7Vf5FDSc942tDVZLs9nFGIYyBC+AiKs4+WPdyzd2O2ndZO/?=
- =?us-ascii?Q?EgL6JYyyl2ce8NUwpim7gK37yMvYTAZgqQofkyJ++xj0c9OI4cr6MrMy95Cy?=
- =?us-ascii?Q?8Yj1i49zcUzdh4HSI8mbk7o6FFS/6D9KRy/6HpCji/n2IuRhR9gyaRpXw/Js?=
- =?us-ascii?Q?tXnQTpbeanZgVvkGaNvz0KCV5fIELHkZ1BGDrI2uypz6Kc0TyTWOtKanaqS9?=
- =?us-ascii?Q?lZ7domQFzDqUpVaG1fB11QhZMaWlDQPE8dyCfpPLKCmEGvsUiGwN+SJAU2Bw?=
- =?us-ascii?Q?oB3O42xBL8AOoQQXfM/kSSONYYhyQOgdglgnOKf8CtwzKCkoHlcfoMOLgNv8?=
- =?us-ascii?Q?zLsAFMsCthiRYwLuTHVeTb76aufUSKJ1F/IxlboOBm8wblNgXghHqXkT++7M?=
- =?us-ascii?Q?o+3URLzYWPiUT6yrTN1kYUQZyWg0Of2cvK4ZTyygLksYUXErREOb5C9OsrDs?=
- =?us-ascii?Q?sHOl6TtHYFVjDUk66jPJ/QeDUfPc1PmZLNBM8zjJhcY7KLY5VvSq5cl737k+?=
- =?us-ascii?Q?c1Rx5obWkp8ov5cj6hEkl9jIG25cJupa5sbTgu2GwNziMaq68eONklBcHhK3?=
- =?us-ascii?Q?nkXRbFL6mfvAIToK8vroWSYGdOug/E7r87XE8hjQHdYEBZphsaMxuurwshRL?=
- =?us-ascii?Q?FJCgBVmyGhurqbQh12jECbAjG5AlxOJrBG4YVafYKN+ESIxWAmVuX9O0rOIu?=
- =?us-ascii?Q?0qoXeD3eAxUq5Mzxbml0IKJdDsrBbdl6SlSz5n8FxUij7gtb+CVJvpCwVlie?=
- =?us-ascii?Q?bShgjU0EKo+y12eoIQdI9i78EY+23IeZx+eJXhhrmVOU22xfkleTe1VtUsIG?=
- =?us-ascii?Q?OM+Xq/fdmAkWXK2QNFssC3hdJr3L7QK4NRnkoARojSqHeT1igZVj6OtvaaUM?=
- =?us-ascii?Q?yEFOXOcl2zlpkB5C3VOo2vkz6rfVgshSPGalyKU/16EuxcNL3wUNtAdrVxi7?=
- =?us-ascii?Q?TCWfl61Aht/QALBIO1HjvEfxBZbvv3ByQ07mf0SfZoO5ytq2T2rSXXfs2w/l?=
- =?us-ascii?Q?SLvkOnOC+ns6RG8ETnvPUFbjZP4G6+PHks49r339lz2sGMEHzqXagX6yFM2e?=
- =?us-ascii?Q?KY9SVZWlkKa+jN7vBl1NeKErCb6jn8Yiq3OmXt+2yG+oPmjD+UjbwCIQwRyG?=
- =?us-ascii?Q?LYctJDnbLgjic3qLuFHH2YVKOvyjB9nJ3Ik3Kl6qVST6h9t7jadw0lqamkvF?=
- =?us-ascii?Q?yxBEBC9niSxY3ycEZBFwkE08jG1+lq445bSZlRaZmw98FAE1TIMUUPZeKtKZ?=
- =?us-ascii?Q?yKAjYD8I8oSEVesfWYgY7bQ0mFTBei2CAVcZTDhNeBdu8pcdDw+7Pufb4jHD?=
- =?us-ascii?Q?8kP27KyzKri548BabSwtVG4sNWFRtbRHNNPWaNyLJK6vFC1lVfeiz35V0Ui0?=
- =?us-ascii?Q?E6Vp2Q6NVtDJhdZPWBrVIB7oY4+wfFsGgXNdlfI8b3Y+VglGXRMlWUdqQPtE?=
- =?us-ascii?Q?y26TkkPzAL35V+BASa4sBxzW/+ukij5g2+cSFu5T?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6601A322C9D;
+	Fri, 12 Dec 2025 12:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765543187; cv=none; b=B6LtlTg1uHf0sirYkc1cAMwmyWeOmGPr2UKOk5uW0ZMXPobrX9GDA/FhzPOVzWAY3wRfPMjicxun+c2Lkwba1KIrgsghQVBXq+1VoVoBhN1S0zutbWNIzNOckhNChlB1SPCRvElj1yZW52cpVjTta0586+neCuurXR/ryWj5A/g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765543187; c=relaxed/simple;
+	bh=d5J8QD69kBZ5IkTrq6Bv6jVfgnR3v3lNf9x5UqsSZdM=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XmXK16fh8ZC8fYMc/6uuSovPCITGi87udv8+EiQiVLOjMHvT3Mdvh6W7a59VBARgCphw0QWTzC7jdSyBn8IBFqYD5fWxGjhu5lAf773gT3AuB2YH93WL1NTkYMmDDfVtUARVbTgsiFDQc5zrBu4OuRDstv5EsweJyya8C/W81kQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X+NzNw2p; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765543185; x=1797079185;
+  h=date:from:to:subject:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to;
+  bh=d5J8QD69kBZ5IkTrq6Bv6jVfgnR3v3lNf9x5UqsSZdM=;
+  b=X+NzNw2p0Ft0kWQ2Py9zqKVhGlDSuP6PKvIvIVRFwhOPOfNXdhjCOhpu
+   mFY0djz+nLKQjvBvyRKhAEmDHfpyN3WcYkFqxjye8SI8cFinxkCgW+/BT
+   2eih2QPoUPB8pz9uiD9hJytfJoCRHGbgarPmWlseYuCmnDcm1XjqQekpy
+   086dM4zjJOnE0uPKJV0t0Q7dWlIpZlPSVvC5j5sVDFK4hrxxfVHPW6MHR
+   AtIxBGFfSrsWl/59Er+GuSZqieWtoj5pKGFUvrFSGdMYWeRdTokS8Ideg
+   GTB/IXPRocaSQ9LXksNuEZxIoZMoEAgpz3ttHvKSZJJ2bQIQiRVIq31rH
+   A==;
+X-CSE-ConnectionGUID: 8QP8l3SlQ1q6thCmMSjxSg==
+X-CSE-MsgGUID: 8t33jZqjR/6HI1CuFwvalg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11639"; a="67587874"
+X-IronPort-AV: E=Sophos;i="6.21,143,1763452800"; 
+   d="scan'208";a="67587874"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2025 04:39:45 -0800
+X-CSE-ConnectionGUID: ywa8bhkvRK2tbA34PNJCTw==
+X-CSE-MsgGUID: olYrOOiAScuEtiCdJcy7Xw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,143,1763452800"; 
+   d="scan'208";a="220457672"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa002.fm.intel.com with ESMTP; 12 Dec 2025 04:39:43 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id D651293; Fri, 12 Dec 2025 13:39:41 +0100 (CET)
+Date: Fri, 12 Dec 2025 13:39:41 +0100
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Sanath.S@amd.com,
+	"Lin, Wayne" <Wayne.Lin@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH] [RFC] thunderbolt: Add delay for Dell U2725QE link width
+Message-ID: <20251212123941.GK2275908@black.igk.intel.com>
+References: <20251209054141.1975982-1-acelan.kao@canonical.com>
+ <20251209070633.GA2275908@black.igk.intel.com>
+ <pjn5d7oz433z4jph6whdalhowf652xknnk2fh5q7elffgb5ogo@7dtpvywxc6nw>
+ <20251210074133.GE2275908@black.igk.intel.com>
+ <4634177b-8ed1-4d65-9f3c-754d8c1eb828@amd.com>
+ <coxrm5gishdztghznuvzafg2pbdk4qk3ttbkbq7t5whsfv2lk5@3gqepcs6h4uc>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0d88c35-885a-418e-7a7e-08de397b81f8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2025 12:39:35.7094
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pH6GAGeZxbWzdN6K2LpSRlcBGeeFBxIBiHkaR0ZS0F5HmMXZRlKS+yua+Zkid98T/IYC8jXVbDaadzRbcir8BQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR04MB9833
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <coxrm5gishdztghznuvzafg2pbdk4qk3ttbkbq7t5whsfv2lk5@3gqepcs6h4uc>
 
->> Hi Dmitry, I found there is another patch "Register USB Type-C mode swit=
-ches" which provided by Pin-yen Lin <treapking@chromium.org>, but I didn't =
-find it in the v6.18, is it obsolete?.
+Hi,
 
->It has been posted 2 years ago, it has not been reposted since that time, =
-it targets a very specific ChromeOS usecase. I can't call it obsolete, but =
-it wasn't merged.
+On Fri, Dec 12, 2025 at 12:10:24PM +0800, Chia-Lin Kao (AceLan) wrote:
+> Hi Mika,
+> 
+> On Wed, Dec 10, 2025 at 03:42:21PM -0600, Mario Limonciello wrote:
+> > +Wayne
+> > 
+> > Here is the full thread since you're being added in late.
+> > 
+> > https://lore.kernel.org/linux-usb/20251209054141.1975982-1-acelan.kao@canonical.com/
+> > 
+> > On 12/10/25 1:41 AM, Mika Westerberg wrote:
+> > > Hi,
+> > > 
+> > > On Wed, Dec 10, 2025 at 11:15:25AM +0800, Chia-Lin Kao (AceLan) wrote:
+> > > > > We should understand the issue better. This is Intel Goshen Ridge based
+> > > > > monitor which I'm pretty sure does not require additional quirks, at least
+> > > > > I have not heard any issues like this. I suspect this is combination of the
+> > > > > AMD and Intel hardware that is causing the issue.
+> > > > Actually, we encountered the same issue on Intel machine, too.
+> > > > Here is the log captured by my ex-colleague, and at that time he used
+> > > > 6.16-rc4 drmtip kernel and should have reported this issue somewhere.
+> > > > https://paste.ubuntu.com/p/bJkBTdYMp6/
+> > > > 
+> > > > The log combines with drm debug log, and becomes too large to be
+> > > > pasted on the pastebin, so I removed some unrelated lines between 44s
+> > > > ~ 335s.
+> > > 
+> > > Okay I see similar unplug there:
+> > > 
+> > > [  337.429646] [374] thunderbolt:tb_handle_dp_bandwidth_request:2752: thunderbolt 0000:00:0d.2: 0:5: handling bandwidth allocation request, retry 0
+> > > ...
+> > > [  337.430291] [165] thunderbolt:tb_cfg_ack_plug:842: thunderbolt 0000:00:0d.2: acking hot unplug event on 0:1
+> > > 
+> > > We had an issue with MST monitors but that resulted unplug of the DP OUT
+> > > not link going down. That was fixed with:
+> > > 
+> > >    9cb15478916e ("drm/i915/dp_mst: Work around Thunderbolt sink disconnect after SINK_COUNT_ESI read")
+> > > 
+> > > If you have Intel hardware still there it would be good if you could try
+> > > and provide trace from that as well.
+> I tried the latest mainline kernel, d358e5254674, which should include the commit you
+> mentioned, but no luck.
+> 
+> I put all the logs here for better reference
+> https://people.canonical.com/~acelan/bugs/tbt_call_trace/
+> 
+> Here is how I get the log
+> ```
+> $ cat debug
+> #!/bin/sh
+> 
+> . ~/.cargo/env
+> sudo ~/.cargo/bin/tbtrace enable
+> sleep 10 # plug in the monitor
+> sudo ~/.cargo/bin/tbtrace disable
+> sudo ~/.cargo/bin/tbtrace dump -vv > trace.out
+> sudo dmesg > dmesg.out
+> ./tbtools/scripts/merge-logs.py dmesg.out trace.out > merged.out
+> ```
+> 
+> And here is the log
+> https://people.canonical.com/~acelan/bugs/tbt_call_trace/intel/merged_6.18.0-d358e5254674+.out
 
-OK, thanks!
-Xin
+Thanks!
 
->> https://patchew.org/linux/20221124102056.393220-1-treapking@chromium.o
->> rg/20221124102056.393220-6-treapking@chromium.org/
-=20
+It shows that right before the unplug the driver is still enumerating
+retimers:
 
->>=20
->> Thanks,
->> Xin
+[   39.812733] tb_tx Read Request Domain 0 Route 3 Adapter 1 / Lane
+               0x00/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String High
+               0x01/---- 0x00000003 0b00000000 00000000 00000000 00000011 .... Route String Low
+               0x02/---- 0x02082091 0b00000010 00001000 00100000 10010001 ....
+                 [00:12]       0x91 Address
+                 [13:18]        0x1 Read Size
+                 [19:24]        0x1 Adapter Num
+                 [25:26]        0x1 Configuration Space (CS) → Adapter Configuration Space
+                 [27:28]        0x0 Sequence Number (SN)
+[   39.813005] tb_rx Read Response Domain 0 Route 3 Adapter 1 / Lane
+               0x00/---- 0x80000000 0b10000000 00000000 00000000 00000000 .... Route String High
+               0x01/---- 0x00000003 0b00000000 00000000 00000000 00000011 .... Route String Low
+               0x02/---- 0x02082091 0b00000010 00001000 00100000 10010001 ....
+                 [00:12]       0x91 Address
+                 [13:18]        0x1 Read Size
+                 [19:24]        0x1 Adapter Num
+                 [25:26]        0x1 Configuration Space (CS) → Adapter Configuration Space
+                 [27:28]        0x0 Sequence Number (SN)
+               0x03/0091 0x81620408 0b10000001 01100010 00000100 00001000 .b.. PORT_CS_1
+                 [00:07]        0x8 Address
+                 [08:15]        0x4 Length
+                 [16:18]        0x2 Target
+                 [20:23]        0x6 Re-timer Index
+                 [24:24]        0x1 WnR
+                 [25:25]        0x0 No Response (NR)
+                 [26:26]        0x0 Result Code (RC)
+                 [31:31]        0x1 Pending (PND)
+[   39.814180] tb_tx Read Request Domain 0 Route 3 Adapter 1 / Lane
+               0x00/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String High
+               0x01/---- 0x00000003 0b00000000 00000000 00000000 00000011 .... Route String Low
+               0x02/---- 0x02082091 0b00000010 00001000 00100000 10010001 ....
+                 [00:12]       0x91 Address
+                 [13:18]        0x1 Read Size
+                 [19:24]        0x1 Adapter Num
+                 [25:26]        0x1 Configuration Space (CS) → Adapter Configuration Space
+                 [27:28]        0x0 Sequence Number (SN)
+[   39.815193] tb_event Hot Plug Event Packet Domain 0 Route 0 Adapter 3 / Lane
+               0x00/---- 0x80000000 0b10000000 00000000 00000000 00000000 .... Route String High
+               0x01/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String Low
+               0x02/---- 0x80000003 0b10000000 00000000 00000000 00000011 ....
+                 [00:05]        0x3 Adapter Num
+                 [31:31]        0x1 UPG
+[   39.815196] [2821] thunderbolt 0000:00:0d.2: acking hot unplug event on 0:3
 
+By default it does not access retimers beyond the Type-C connector. I
+wonder if you have CONFIG_USB4_DEBUGFS_MARGINING set in your kernel
+.config? And if yes can you disable that and try again.
 
