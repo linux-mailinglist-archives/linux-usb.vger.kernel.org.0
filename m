@@ -1,164 +1,207 @@
-Return-Path: <linux-usb+bounces-31399-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31400-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF4BECB7F4B
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 06:35:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97CA3CB81E2
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 08:30:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9039F300B83E
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 05:35:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 644BF3029D2B
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 07:30:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06C5428DF07;
-	Fri, 12 Dec 2025 05:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=natalieee.net header.i=@natalieee.net header.b="DxeD3YuD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80B1430DEC0;
+	Fri, 12 Dec 2025 07:30:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.sakamoto.pl (mail.sakamoto.pl [185.236.240.130])
+Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 460E2248F6A
-	for <linux-usb@vger.kernel.org>; Fri, 12 Dec 2025 05:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.236.240.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48AF2B2DA;
+	Fri, 12 Dec 2025 07:30:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=59.120.186.242
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765517711; cv=none; b=bbkHf498w/PY5gQBg6qdTxPhtHhxbd3i76nQyeNuhi8eZsWr+g8CyZBYEByy0EkH2p9RVQaFXmSo6jQR3vV2sRKQ5dq3CCSi37rV+pPLAtk5New6TKo52AGSOrNSoqoJE0Gf56pHrnUKyxCxsA9ad1tb6Md6UymsSMWLS2f1fJs=
+	t=1765524620; cv=none; b=ZRdi4mpKby7ypeOemHfuVgwi+VPfKAMPfbs1yClSejwg4tSGCVdckx86tkFRxGCtjCSd1mJf5Rq0NPVV2EMSa+zYPuMZ/OUUMLnjeLH9YSTD98JkmQNSvs5NpSz94Rd0jo6zTeW2qMOV/GAqvhJHnuguXyx2HJtQqhwm73xPOlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765517711; c=relaxed/simple;
-	bh=iFMHFgT5lL7gx1RxtbruztoJYKdpM/fshbDFlQGhOXo=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=VK7cT7ZzwRSF48oTKWYvxOJJC9cysdceLmaALb/g2nfOX8l565yMtkdWRPFcFxzHFrXukPbu0aSRQAd1TBaWoeGtBoTTXH/7s5PGlnp0tfMq6GpaHumRlyqa/zfY1vGdh5Kwb4HRgqz/GuoImZqAMfcGMekBrA5q2DWRLVtHrW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=natalieee.net; spf=pass smtp.mailfrom=natalieee.net; dkim=pass (2048-bit key) header.d=natalieee.net header.i=@natalieee.net header.b=DxeD3YuD; arc=none smtp.client-ip=185.236.240.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=natalieee.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=natalieee.net
-Authentication-Results: mail.sakamoto.pl;
-	auth=pass (plain)
-Message-ID: <9c4491aa-88d3-4c9a-843c-2f0d471263e0@natalieee.net>
-Date: Thu, 11 Dec 2025 21:33:51 -0800
+	s=arc-20240116; t=1765524620; c=relaxed/simple;
+	bh=KAv5+sz1LelZpMvCJzFPpbdpcvnmHOnG+jATDF9+kpA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n4GMtn0KvxFqJyTdiQRkhQfaE7ucayjcQ8R3vPT+UFuj6FL8Zl6oFlNmm2HFrFXWXTIH28jTkma5Nb/B4E3VyTNOUGQmtTS3IJ1jbwpXX4FiiZG7N7DaUlsevSXKrOKQsBUksZdiBFUDpa9QPh8Ny4gXz1fwHMyF9gqqHZxDG5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintek.com.tw; spf=pass smtp.mailfrom=fintek.com.tw; arc=none smtp.client-ip=59.120.186.242
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintek.com.tw
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintek.com.tw
+Received: from mail.fintek.com.tw (localhost [127.0.0.2] (may be forged))
+	by mail.fintek.com.tw with ESMTP id 5BC795pk039296;
+	Fri, 12 Dec 2025 15:09:05 +0800 (+08)
+	(envelope-from peter_hong@fintek.com.tw)
+Received: from ag.fintek.com.tw ([192.168.1.45])
+	by mail.fintek.com.tw with ESMTP id 5BC78U82039188;
+	Fri, 12 Dec 2025 15:08:30 +0800 (+08)
+	(envelope-from peter_hong@fintek.com.tw)
+X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 5BC78V6f82115132, This message is accepted by code: ctloc85258
+Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
+	by ag.fintek.com.tw (8.15.2/3.20/5.94) with ESMTPS id 5BC78V6f82115132
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 12 Dec 2025 15:08:31 +0800
+Received: from localhost (192.168.1.128) by vmMailSRV.fintek.com.tw
+ (192.168.1.1) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 12 Dec
+ 2025 15:08:31 +0800
+From: "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
+To: <johan@kernel.org>, <hpeter+linux_kernel@gmail.com>
+CC: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tom_tsai@fintek.com.tw>,
+        <peter_hong@fintek.com.tw>, <yu_chen@fintek.com.tw>
+Subject: [PATCH V3 1/1] USB: serial: f81232: fix incomplete serial port generation
+Date: Fri, 12 Dec 2025 15:08:31 +0800
+Message-ID: <20251212070831.16334-1-peter_hong@fintek.com.tw>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: linux-usb@vger.kernel.org
-From: natalie roentgen connolly <natalie@natalieee.net>
-Subject: Trouble with drivers for Epson Moverio BT-40
-Autocrypt: addr=natalie@natalieee.net; keydata=
- xjMEZyF+dhYJKwYBBAHaRw8BAQdAuh3EVhqODqs4DQasm/jUILG+4cNj0Q3Gb8SITEhqNNvN
- PW5hdGFsaWUgcm9lbnRnZW4gY29ubm9sbHkgKGJlZXAgYm9vcCkgPG5hdGFsaWVAbmF0YWxp
- ZWVlLm5ldD7CmQQTFgoAQRYhBJo0/NsX3ToM9ZBiC6HD1we8+QjlBQJnIX52AhsDBQkDwmcA
- BQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheAAAoJEKHD1we8+Qjl0VYBAKrJtKM2bJj6hsU+
- kTt8HXxDNdCY37eSL6GxzQ4fGBqJAP9NuysVDyyFVL7HOkUa3XbNFkxgSNNfDSXnyXG1/JnZ
- Ds44BGchfnYSCisGAQQBl1UBBQEBB0CebBBPcowxbCbOIAM9aJAe2kHbNZ4bIxZT7klRjf0+
- WgMBCAfCfgQYFgoAJhYhBJo0/NsX3ToM9ZBiC6HD1we8+QjlBQJnIX52AhsMBQkDwmcAAAoJ
- EKHD1we8+QjldDoBAIj3f2uA6AWu08lWSBkEDKrzKMduShD/Pv8jvDyznHvHAP0VskOMQSFg
- 9MBrwZ+7azZzgnCs2FSiZvHJW7HTo4v9Bw==
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Haraka-GeoIP: US
-X-Haraka-GeoIP-Received: 2601:1c2:880:14b0::6234:US
-Received: from localhost (Unknown [127.0.0.1])
-	by mail.sakamoto.pl (Haraka/3.0.3) with ESMTPSA id D7FCA2CD-A946-453D-B0A8-7BECB6EC1806.1
-	envelope-from <natalie@natalieee.net>
-	tls TLS_AES_256_GCM_SHA384 (authenticated bits=0);
-	Fri, 12 Dec 2025 06:33:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalieee.net;
- h=Content-Transfer-Encoding: Content-Type: Subject: From: To:
- MIME-Version: Date: Message-ID; q=dns/txt; s=s20250406155; t=1765517622;
- bh=cN4Fxguzec83feOiPfXtrA1sgfYQGoseWL5MY3vkhFc=;
- b=DxeD3YuDcEAFDF3DTaBPryIdZZHUaIpimDjFDx1xjdQkIroLuW1LPitQB5ooLUBq0mnG7cKkW
- 6dzMEwulJP8WwEx6bFhibwy/+RteeGoRYBKMr94/CGkLE1qFmDloAD7Dz56Gsg/sMOiYVcB2MKb
- 1DZldw49Qj6z1GmxnQIHdZSOEQQzC3Is2uwIzshXCBPvIE0KPQ5DAuDcJgnoJQBGt+o9qg7d6hb
- t0nMSiQnr+fbuPmQGrNEPCV57VnWnIMIdUqrhUpCvJNGUXmCX9qqu7wV03h8ok5uJnriAc/mUK7
- ryNXaEGBd7JUG6bvx9S0giFj6FdmKb5bgmZci1txpNoQ==
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27556.001
+X-TM-AS-Result: No-7.001900-8.000000-10
+X-TMASE-MatchedRID: 2Yg28zQHJnW+0r2Yw7MQTi9iVDu7EPf8TFQnI+epPIZ3de2OoBqgwubd
+	9j4+b6jIFNeXAh2Nr3WwS7/aOrnZQg8rYO92b9Nms/Hes76OTZCs4IQYg+G3CMC5DTEMxpeQfiq
+	1gj2xET8qqtDuUtwyfO6GocZ0Ez3RqKY8zTsCX1L4Zi3x/9WFO0Ee5VjFzwNbR6RHdVK85hUHzY
+	bIalkde0icwIvRoCjm3DF/pTYh6NC2W4Yb6P/V/pciNJzaqUX1fS0Ip2eEHnz3IzXlXlpamPoLR
+	4+zsDTt/KO2LNTSuGP5TrP0k00XHZRIFcTs0/awrAMXLR8bCCVylPItM/xe8g==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--7.001900-8.000000
+X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27556.001
+X-TM-SNTS-SMTP:
+ D4AD856F7D148968354A4BE359E3C7785B6759C3CB3521EB4E7EC6E5D21D201E2000:8
+X-DKIM-Results: [192.168.1.45]; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:mail.fintek.com.tw 5BC795pk039296
 
-Hello,
+The Fintek F81532A/534A/535/536 family relies on the
+F81534A_CTRL_CMD_ENABLE_PORT (116h) register during initialization to
+both determine serial port status and control port creation. If the
+driver experiences fast load/unload cycles, the device state may becomes
+unstable, resulting in the incomplete generation of serial ports.
 
-I am attempting to get linux to recognize the serial port on an Epson 
-Moverio
-BT-40. I initially found a means of doing this with the generic usbserial
-driver, however upon reading the kernel log I was directed here.
+Performing a dummy read operation on the register prior to the initial
+write command resolves the issue. This clears the device's stale internal
+state. Subsequent write operations will correctly generate all serial
+ports.
 
-I found a thread regarding this same device from a few years ago, in which
-someone stated:
- > The proper driver is cdc-acm but your device has to be defined in the
- > driver with the quirk NO_UNION_NORMAL due to the flawed Union descriptor
- > in your device.
-(https://lore.kernel.org/linux-usb/27d60f61-77cf-46d5-9e60-8f60e8469008@gmail.com/)
+This patch also removes the retry loop in f81534a_ctrl_set_register()
+because the stale state has been fixed.
 
-accordingly, I added the following code to `acm_ids` in
-drivers/usb/class/cdc-acm.c:
-{ USB_DEVICE(0x04b8, 0x0d12), /* Epson Moverio BT-40 */
-.driver_info = NO_UNION_NORMAL,
-},
+Tested on: HygonDM1SLT(Hygon C86 3250 8-core Processor)
 
-I then recompiled and reloaded the module. The device continued to not 
-appear in
-/dev/ttyACM*, and the following logs were present in dmesg:
-[74979.083657] [T14633] usbcore: deregistering interface driver cdc_acm
-[74982.121760] [T14686] cdc_acm 7-1.2:1.1: probe with driver cdc_acm 
-failed with error -22
-[74982.121771] [T14686] cdc_acm 7-1.2:1.2: probe with driver cdc_acm 
-failed with error -22
-[74982.121799] [T14686] usbcore: registered new interface driver cdc_acm
-[74982.121800] [T14686] cdc_acm: USB Abstract Control Model driver for 
-USB modems and ISDN adapters
+Signed-off-by: Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
+---
+ drivers/usb/serial/f81232.c | 77 ++++++++++++++++++++++---------------
+ 1 file changed, 47 insertions(+), 30 deletions(-)
 
-The same invalid argument errors occur upon disconnecting and 
-reconnecting the
-device. I determined the errors in dmesg to originate in acm_probe() at 
-line
-1326 in the following code:
+diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
+index 530b77fc2f78..9262a2ac97f5 100644
+--- a/drivers/usb/serial/f81232.c
++++ b/drivers/usb/serial/f81232.c
+@@ -70,7 +70,6 @@ MODULE_DEVICE_TABLE(usb, combined_id_table);
+ #define F81232_REGISTER_REQUEST		0xa0
+ #define F81232_GET_REGISTER		0xc0
+ #define F81232_SET_REGISTER		0x40
+-#define F81534A_ACCESS_REG_RETRY	2
+ 
+ #define SERIAL_BASE_ADDRESS		0x0120
+ #define RECEIVE_BUFFER_REGISTER		(0x00 + SERIAL_BASE_ADDRESS)
+@@ -824,36 +823,31 @@ static void f81232_lsr_worker(struct work_struct *work)
+ static int f81534a_ctrl_set_register(struct usb_interface *intf, u16 reg,
+ 					u16 size, void *val)
+ {
+-	struct usb_device *dev = interface_to_usbdev(intf);
+-	int retry = F81534A_ACCESS_REG_RETRY;
+-	int status;
+-
+-	while (retry--) {
+-		status = usb_control_msg_send(dev,
+-					      0,
+-					      F81232_REGISTER_REQUEST,
+-					      F81232_SET_REGISTER,
+-					      reg,
+-					      0,
+-					      val,
+-					      size,
+-					      USB_CTRL_SET_TIMEOUT,
+-					      GFP_KERNEL);
+-		if (status) {
+-			status = usb_translate_errors(status);
+-			if (status == -EIO)
+-				continue;
+-		}
+-
+-		break;
+-	}
+-
+-	if (status) {
+-		dev_err(&intf->dev, "failed to set register 0x%x: %d\n",
+-				reg, status);
+-	}
++	return usb_control_msg_send(interface_to_usbdev(intf),
++						0,
++						F81232_REGISTER_REQUEST,
++						F81232_SET_REGISTER,
++						reg,
++						0,
++						val,
++						size,
++						USB_CTRL_SET_TIMEOUT,
++						GFP_KERNEL);
++}
+ 
+-	return status;
++static int f81534a_ctrl_get_register(struct usb_interface *intf, u16 reg,
++					u16 size, void *val)
++{
++	return usb_control_msg_recv(interface_to_usbdev(intf),
++						0,
++						F81232_REGISTER_REQUEST,
++						F81232_GET_REGISTER,
++						reg,
++						0,
++						val,
++						size,
++						USB_CTRL_GET_TIMEOUT,
++						GFP_KERNEL);
+ }
+ 
+ static int f81534a_ctrl_enable_all_ports(struct usb_interface *intf, bool en)
+@@ -869,6 +863,29 @@ static int f81534a_ctrl_enable_all_ports(struct usb_interface *intf, bool en)
+ 	 * bit 0~11	: Serial port enable bit.
+ 	 */
+ 	if (en) {
++		/*
++		 * The Fintek F81532A/534A/535/536 family relies on the
++		 * F81534A_CTRL_CMD_ENABLE_PORT (116h) register during
++		 * initialization to both determine serial port status and
++		 * control port creation.
++		 *
++		 * If the driver experiences fast load/unload cycles, the
++		 * device state may becomes unstable, resulting in the
++		 * incomplete generation of serial ports.
++		 *
++		 * Performing a dummy read operation on the register prior
++		 * to the initial write command resolves the issue.
++		 *
++		 * This clears the device's stale internal state. Subsequent
++		 * write operations will correctly generate all serial ports.
++		 */
++		status = f81534a_ctrl_get_register(intf,
++						F81534A_CTRL_CMD_ENABLE_PORT,
++						sizeof(enable),
++						enable);
++		if (status)
++			return status;
++
+ 		enable[0] = 0xff;
+ 		enable[1] = 0x8f;
+ 	}
+-- 
+2.34.1
 
-if (data_interface->cur_altsetting->desc.bInterfaceClass != 
-USB_CLASS_CDC_DATA) {
-   if (control_interface->cur_altsetting->desc.bInterfaceClass == 
-USB_CLASS_CDC_DATA) {
-     dev_dbg(&intf->dev,
-       "Your device has switched interfaces.\n");
-     swap(control_interface, data_interface);
-   } else {
-     return -EINVAL;
-   }
-}
-
-At this point I am unsure as to what to do as I have no experience 
-working with
-kernel code. As far as I can tell, cdc-acm is indeed the correct driver 
-to use
-here, as others said so in the thread I found.
-(https://lore.kernel.org/linux-usb/2023112652-scowling-submarine-5071@gregkh/)
-
-Here is the device as it appears in /sys/kernel/debug/usb/devices:
-T:  Bus=07 Lev=02 Prnt=10 Port=01 Cnt=02 Dev#= 12 Spd=12   MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=04b8 ProdID=0d12 Rev= 2.00
-S:  Manufacturer=Seiko Epson Corporation
-S:  Product=EPSON HMD Com&Sens
-S:  SerialNumber=NPH269690136
-C:* #Ifs= 4 Cfg#= 1 Atr=c0 MxPwr=100mA
-A:  FirstIf#= 1 IfCount= 2 Cls=02(comm.) Sub=02 Prot=01
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=1ms
-I:* If#= 1 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=01 Driver=(none)
-E:  Ad=84(I) Atr=03(Int.) MxPS=   8 Ivl=16ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=(none)
-E:  Ad=01(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=1ms
-
-The interfaces with "Driver=(none)" remain that way regardless of if I 
-load the
-unmodified cdc-acm driver, the cdc-acm driver with my addition in `acm_ids`,
-or if I echo "04b8 0d12" in to /sys/bus/usb/drivers/cdc_acm/new_id after 
-loading
-either version of the module.
-
-Apologies if I have missed something obvious, as stated I have no experience
-working with kernel code. Similarly, apologies if I have broken mailing list
-conventions in some way, this is the first time I have interacted with one.
-
-Thanks,
-Natalie
 
