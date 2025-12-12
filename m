@@ -1,140 +1,153 @@
-Return-Path: <linux-usb+bounces-31406-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31421-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95564CB97D4
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 18:55:35 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE330CB9BD3
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 21:13:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0F01C30168E0
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 17:55:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8B56D3015672
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Dec 2025 20:13:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9844A2F5A07;
-	Fri, 12 Dec 2025 17:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC03130E0E7;
+	Fri, 12 Dec 2025 20:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HAB0zwkL"
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="rcQrJ1Uq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA3726980F;
-	Fri, 12 Dec 2025 17:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70AF22DFA3A;
+	Fri, 12 Dec 2025 20:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765562133; cv=none; b=fLFTht5SGZcIhjWRA8IYl4RPkGBqiPf/T/NRfsoPhHGMf5vqy/RFHV1/aGbxpHCjrJgfwnT+xISxlwlmmCtFqdvpRZuUi5HBkrVeWoUL7Jse2+kgrvcOltan/C51zk7Nw10uAYgHqPkhRBlr83PZCR7OnQvAVBigoaT6AMkT+Xk=
+	t=1765570380; cv=none; b=nD9iToPmw7sr+PRR8NfyMQSIXPK2UPknvRfzloBIgJakUqKbX/UqcJ1QS0EMM859yq/5alrJZPG8aKHs/hTW9kUcGAHxBtqa+bhZy3cOoOinIB/95Q960lAR1nI0wXvp8Zmef693KbK6FUwmXT93t22gf//l7chTGP0W7pAEn4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765562133; c=relaxed/simple;
-	bh=TT3BjiDXo7vLPijIYy6fIZThrWVyzGnxiLcPa/Xmfuw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JV5LkT1S1fqYOSYbAIZqMPipp6DPC5wt/cHoeUsRfPl3JI/ZUT5k2kI+vuhBVoGeCKubw6hlLTm/+5fLxiQ0WTKiivy+KEI86u/7/+zUWfFUiCWltJX2XotpQzT3OH093RsHAdXtBNfP0geyBQySYg95Au98c4VLsn0J0L8ZknE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HAB0zwkL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3004AC19421;
-	Fri, 12 Dec 2025 17:55:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765562132;
-	bh=TT3BjiDXo7vLPijIYy6fIZThrWVyzGnxiLcPa/Xmfuw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HAB0zwkLUGYg5Vcyi7Ms2WP5CJQHFP5S+cVj3UkFnmqiNW2xTlcmzLOVdkyEPCDpJ
-	 l6baQspDib/b05s84imOxcfD5oi6iPxoY2rhHFyfnvLDG632Yb5C9cpBsjEjA80X9v
-	 7GoDgZQZZ3itPz62rz4J5+qGpwULDouEUKh2jsEJLdhYmi7nv98gALs61leSuqv4OS
-	 A86YdE9JPCe0qNhStkxyUT/tb8i7GqRNr4LcSDcJt4bPYF279MbUPr9BwU/ioXJlA5
-	 GHSSusvNAXbNgmG8JvFMfp4jvBQjQIw5jTzuhADq2TlHkU12uxVFjUFL0KnlsYTgYu
-	 1dRDsSX7Lj/iw==
-Date: Fri, 12 Dec 2025 17:55:26 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-	claudiu.beznea@tuxon.dev, mturquette@baylibre.com, sboyd@kernel.org,
-	richardcochran@gmail.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
-	luka.perkov@sartura.hr
-Subject: Re: [PATCH 2/4] dt-bindings: arm: Document Microchip LAN969x
-Message-ID: <20251212-dazzler-agility-d45940bd27d2@spud>
-References: <20251203122313.1287950-1-robert.marko@sartura.hr>
- <20251203122313.1287950-2-robert.marko@sartura.hr>
- <20251203-duly-leotard-86b83bd840c6@spud>
- <CA+HBbNH6wO2VWOp1Dn52ArrYg6z89FgYnT3x-jsHsTVJ5xSBSA@mail.gmail.com>
- <20251208-absolute-diploma-6575729ab43f@spud>
- <CA+HBbNHuYCq9oV4ZjWGjwnJM=oz-O85p_tqB+UnTBmivzDoowg@mail.gmail.com>
+	s=arc-20240116; t=1765570380; c=relaxed/simple;
+	bh=v4FUhHFdi5ZXqVqGPGRtWuk27Ggt9EW1AEDL4D/CxK4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q5AQyjhmDrEeVIXO4uT1rHNLRuYIVSML91qIsfsFCSTVDluS79vQFPoVCuSX9nYOHtfXzze+LlinWXMk/fsoZON7oSunJxNPniFYaQMwAvE90/23DOId1qMPUBN0dPwbIlFuVtstnKOXURvxF3T/YIBTL7w71JlLv9MLTK1me54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=rcQrJ1Uq; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <david.laight.linux_spam@runbox.com>)
+	id 1vU8xb-0087YP-88; Fri, 12 Dec 2025 20:37:51 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+	 s=selector2; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+	Subject:Cc:To:From; bh=4XbSLZvBmYJ9LzNNMyiNSXY8ll6ZHX2gvyxQipHU0mg=; b=rcQrJ1
+	UqegrICDo4fAnkhXKRRqrV0O8Ls326sDv/JcKcAk6Al2todKLnhlDNHsWwE3AK6hL1vZSqmtNyNVE
+	1OroZmCdGG07T7I6ydVzd/0k9mznWFvrss5MbAQmlkY6gfYbY6wdrXKKJTBvudku0zcOZrcX7kXs6
+	MCA+d2s5ZzuEFiEIdof9pZd6Ezoxs68O7fatVUKHjvMLYTxCWcRixnBFSnf/aJwm0C9NJCGdMjTq5
+	udguTWojDliIij6K8xW7LDs1g/RP381FYb0iKSH4SOcYfKKVbtxo46b/ul2fQTf3YFHb7+4Uta+sI
+	pOo4poy5yN6CaWpipJVUCkx0WELQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <david.laight.linux_spam@runbox.com>)
+	id 1vU8xZ-00039D-A3; Fri, 12 Dec 2025 20:37:49 +0100
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vU8xY-0030pR-Gm; Fri, 12 Dec 2025 20:37:48 +0100
+From: david.laight.linux@gmail.com
+To: Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Crt Mori <cmo@melexis.com>,
+	Richard Genoud <richard.genoud@bootlin.com>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Luo Jie <quic_luoj@quicinc.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	netdev@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: David Laight <david.laight.linux@gmail.com>
+Subject: [PATCH v2 0/16] bitfield: tidy up bitfield.h
+Date: Fri, 12 Dec 2025 19:37:05 +0000
+Message-Id: <20251212193721.740055-1-david.laight.linux@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2+Dmjsrlr/kIiniW"
-Content-Disposition: inline
-In-Reply-To: <CA+HBbNHuYCq9oV4ZjWGjwnJM=oz-O85p_tqB+UnTBmivzDoowg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
+From: David Laight <david.laight.linux@gmail.com>
 
---2+Dmjsrlr/kIiniW
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I noticed some very long (18KB) error messages from the compiler.
+Turned out they were errors on lines that passed GENMASK() to FIELD_PREP().
+Since most of the #defines are already statement functions the values
+can be copied to locals so the actual parameters only get expanded once.
 
-On Fri, Dec 12, 2025 at 11:09:01AM +0100, Robert Marko wrote:
-> On Mon, Dec 8, 2025 at 6:10=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
-ote:
-> >
-> > On Mon, Dec 08, 2025 at 11:30:28AM +0100, Robert Marko wrote:
-> > > On Wed, Dec 3, 2025 at 8:19=E2=80=AFPM Conor Dooley <conor@kernel.org=
-> wrote:
-> > > >
-> > > > On Wed, Dec 03, 2025 at 01:21:30PM +0100, Robert Marko wrote:
-> > > > > Microchip LAN969x is a series of multi-port, multi-gigabit switch=
-es based
-> > > > > on ARMv8 Cortex-A53 CPU.
-> > > > >
-> > > > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > > > > ---
-> > > > >  .../bindings/arm/microchip,lan969x.yaml       | 32 +++++++++++++=
-++++++
-> > > >
-> > > > This should not be in a unique file, put it in with the other micro=
-chip
-> > > > arm devices please. Also, the wildcard in the compatible is not
-> > > > permitted, only way it'd make sense is if these are different binni=
-ngs
-> > > > of the same silicon. If that's the case, you need to explain why,
-> > > > because compatibles are meant to be soc-specific.
-> > >
-> > > Hi Conor,
-> > > The issue is that there is no unique place for Microchip SoC-s,
-> > > LAN966x series is in the AT91 bindings
-> > > while SparX-5 has its own bindings file.
-> > >
-> > > What would you suggest in this case?
-> >
-> > Ideally, arm/atmel-at91.yaml and arm/microchip,sparx5.yaml would just
-> > become arm/microchip.yaml. The axi@600000000 thing in the sparx5 file
-> > looks pointless and can be deleted IMO.
->=20
-> Ok, I merged them all in one generic microchip.yaml binding, but I notice=
-d that
-> arm/atmel-at91.yaml is licensed under GPL-2.0 while arm/microchip,sparx5.=
-yaml
-> is dual-licensed as its preferred for bindings.
->=20
-> Is that going to be an issue?
+The 'bloat' is reduced further by using a simple test to ensure 'reg'
+is large enough, slightly simplifying the test for constant 'val' and
+only checking 'reg' and 'val' when the parameters are present.
 
-I *think* everyone that contributed, other than maybe Wolfram has
-already okayed any binding going to dual license. Just do it as a
-standalone commit in the patchset and make sure you CC Michael Walle
-and Wolfram Sang.
+The first two patches are slightly problematic.
 
---2+Dmjsrlr/kIiniW
-Content-Type: application/pgp-signature; name="signature.asc"
+drivers/net/ethernet/netronome/nfp/nfpcore/nfp_nsp_eth.c manages to use
+a #define that should be an internal to bitfield.h, the changed file
+is actually more similar to the previous version.
 
------BEGIN PGP SIGNATURE-----
+drivers/thunderbolt/tb.h passes a bifield to FIELD_GET(), these can't
+be used with sizeof, typeof or __auto_type.
+The existing FIELD_GET() uses _Generic(); gcc treats 'u32 foo:8' as
+'unsigned char' and clang treats 'u32 foo:n' as 'unsigned int'.
+So the code currentyly compiles 'by accident', pass 'u32 foo:6' and
+gcc will error the attempt to use typeof with a bitfield.
+For v2 fixed by changing the structure definition to use u8 for the
+relevant field.
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaTxXCwAKCRB4tDGHoIJi
-0th0AQCeGvXNFnRESx7BYMbBp8z3ebY/JmtThhaK/pvT8fDEAgEA+31CSiBsVH57
-cSVa85MdpgBrlggqpPrz+t3kfd+Vhg0=
-=/YvB
------END PGP SIGNATURE-----
+Both changes may need to to through the same tree as the header file changes.
 
---2+Dmjsrlr/kIiniW--
+The changes are based on 'next' and contain the addition of field_prep()
+and field_get() for non-constant values.
+
+I also know it is the merge window.
+I expect to be generating a v3 in the new year (someone always has a comment).
+
+Changes for v2:
+- Change thunderbolt header (see above).
+- Fix variable name re-use in FIELD_PREP_WM16()
+- Use 'mask' (not _mask) in __BF_SHIFT().
+The changes to bitfield.h have been split into multiple patches,
+but the actual final file only has whitespace differences.
+
+David Laight (16):
+  nfp: Call FIELD_PREP() in NFP_ETH_SET_BIT_CONFIG() wrapper
+  thunderbolt: Don't pass a bitfield to FIELD_GET
+  bitmap: Use FIELD_PREP() in expansion of FIELD_PREP_WM16()
+  bitfield: Copy #define parameters to locals
+  bitfield: Merge __field_prep/get() into field_prep/get()
+  bitfield: Remove some pointless casts
+  bitfield: FIELD_MODIFY: Only do a single read/write on  the target
+  bitfield: Simplify __BF_FIELD_CHECK_REG()
+  bitfield: Rename __FIELD_PREP/GET() to __BF_FIELD_PREP/GET()
+  bitfield: Split the 'val' check out of __BF_FIELD_CHECK_MASK()
+  bitfield: Common up validation of the mask parameter
+  bitfield: Remove leading _ from #define formal parameter names
+  bitfield: Reduce indentation
+  bitfield: Add comment block for the host/fixed endian functions
+  bitfield: Update comments for le/be functions
+  build_bug.h; Remove __BUILD_BUG_ON_NOT_POWER_OF_2()
+
+ .../netronome/nfp/nfpcore/nfp_nsp_eth.c       |  16 +-
+ drivers/thunderbolt/tb_regs.h                 |  16 +-
+ include/linux/bitfield.h                      | 278 ++++++++++--------
+ include/linux/build_bug.h                     |   2 -
+ include/linux/hw_bitfield.h                   |  21 +-
+ 5 files changed, 175 insertions(+), 158 deletions(-)
+
+-- 
+2.39.5
+
 
