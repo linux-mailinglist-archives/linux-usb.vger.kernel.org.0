@@ -1,172 +1,97 @@
-Return-Path: <linux-usb+bounces-31431-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31432-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6D38CBBC43
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Dec 2025 16:10:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FE23CBBEDE
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Dec 2025 19:38:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 906513009963
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Dec 2025 15:10:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D67AD3007C52
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Dec 2025 18:37:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C14270568;
-	Sun, 14 Dec 2025 15:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB07F30C63D;
+	Sun, 14 Dec 2025 18:37:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="PxVbtPzy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S9SYFWTo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BF03B8D7D;
-	Sun, 14 Dec 2025 15:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E520F513
+	for <linux-usb@vger.kernel.org>; Sun, 14 Dec 2025 18:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765724995; cv=none; b=HhYMxEJUlnIehbU6d9KmL8loLU5XVXt+ONNgEWeFosDRLE/Ite856a+gQt5f0u38COB8SHZg8T88nGeUVjim9y/h2utwvCn4UY2AC8zku3da9Po91OhYB+8yIdFGxV16rWoctVwNub7tR/5WMH+BMDAp0y/b9LLE9amNmnTxtIk=
+	t=1765737476; cv=none; b=tiLGkXJtthkLaxnMqZn1lcQxPSEswgFnaU1ysOlOn5MvN2feWjcxxOhbHA6oa9nNu6JaUbatxSqKv9hAf8V7Dcd6fTTbHuhZZJV4JR+ef24UDBozy0+5ht3eyykgGECBKcQw5nU8UDix1MgkiAL7dnbaUiA0kgv4O1n/588IsGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765724995; c=relaxed/simple;
-	bh=7oeA8hAZfE+OuLV++8wZ+w2h0OVtO5IPbc17sDI9JjU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SfbjSYaypVYKPAQDr12nY4QV2t4Z6jTS56SEflz84sJlNfjMv9js+O3cCbOj1kQPV47kNcIm9bYxPrAYcbLaBIibqT6eXtK9eQIYO+QEG621crFi6ODJllSaBLl+TdqSk1zfewzCtGA7/6eyEVceFwOTVqkjErQWiTWcsvgoghE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=PxVbtPzy; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=0JiRvR1x3x+Bzzb86M9yv4aMLpalBB1ekM0TQwCAoWQ=; b=PxVbtPzyIfFJlaJW5foctIXtAQ
-	F6487yj01zYIfclv+GqA9fn8oUF+CMtEcyThKd3apZ/M9DY+DGnwGFvTa13mJC7aEhmz74/nL2M+5
-	/2IlWyIOpQL3cfzKepIVVHz754hB2pHtfXCcpeQ8jnjxadaWpoQI2qCaU4tcJ6mDVnIu24Gr9HcFy
-	ime3c91/vbncUN8WIurTstJB4FWH8ARqcPPrLr3TpWoFQ1hoe6+5fyd5W8rzU6sfagjVis3Tr9nle
-	xQedFBoskWEamkkT/lFy9rxlBbzlWQigaoGbutrfqDQzAvcZA7JYHL8vs+9FkHFjgmuceGpUP/rlq
-	kvTPVXNg==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <carnil@debian.org>)
-	id 1vUnjJ-00BGub-Jc; Sun, 14 Dec 2025 15:09:49 +0000
-Received: by eldamar.lan (Postfix, from userid 1000)
-	id C0800BE2EE7; Sun, 14 Dec 2025 16:09:48 +0100 (CET)
-Date: Sun, 14 Dec 2025 16:09:48 +0100
-From: Salvatore Bonaccorso <carnil@debian.org>
-To: Sam Halliday <sam.halliday@gmail.com>, 1122193@bugs.debian.org,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: usb hid descriptor requirements are rejecting hardware (ZWO EFWmini,
- 03c3:1f01)
-Message-ID: <aT7TPAInuBOXctEZ@eldamar.lan>
-References: <176520622961.2658.15817888352918425136.reportbug@Samwise>
+	s=arc-20240116; t=1765737476; c=relaxed/simple;
+	bh=fnRBvnMiDNGGg/pXU74r/vKffuu0OcsAnSa85V/W5Q8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dOj7+VcOdGVTK6OrfUbK5kYKcwCDoKnoZpeuCqdCrlGveymym+mQaTd//AKOQ3W1MuTr1UQaELu+iLg6G6WyOtnD/UTb0sbBTlAL2VIk0S/aV2Bt+RiQxzqzPYKIJLqNRz+G7Y6WnCJc90TwcVHBlKcnE6cuQZfMEDTQl0Lg8Qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S9SYFWTo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38A41C4CEF1;
+	Sun, 14 Dec 2025 18:37:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765737475;
+	bh=fnRBvnMiDNGGg/pXU74r/vKffuu0OcsAnSa85V/W5Q8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=S9SYFWTo4Uf9h//1NBc+EK/T7k8Nxm1CDrK5ZxheEDR0Mlvxwcz3lZUAUSadkqki5
+	 L/XFl4apQtZpK2Vt5yKHQMc4WiQ6H3+1r33beFaf5h1qzYQddNgPPbspArNcQ25rYG
+	 MUMEdqNNlBrxHikC/Qp7E8LR1wM9AU7tT1xIT7lg0iVzOLia0W/NSUWz6kNlI4U0Mb
+	 sIs05Vd1TC6+/CD4EodI1Y5rkTZZKO5zWSoUrT8rkhS8/6ZAr7jKqddSBJJkNjfsCY
+	 5QLbcNCBhhCgoPW3QVbQwik1YCsdZNykpQQgllod/sgvkKX2ZQwACwr3EHsiw5ltEd
+	 twWhTRwyVQ1HQ==
+From: "Mario Limonciello (AMD)" <superm1@kernel.org>
+To: mario.limonciello@amd.com,
+	heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	lumag@kernel.org,
+	ukaszb@chromium.org
+Cc: "Mario Limonciello (AMD)" <superm1@kernel.org>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: Fix null pointer dereference in ucsi_sync_control_common
+Date: Sun, 14 Dec 2025 12:36:41 -0600
+Message-ID: <20251214183729.150811-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <176520622961.2658.15817888352918425136.reportbug@Samwise>
-X-Debian-User: carnil
+Content-Transfer-Encoding: 8bit
 
-Hi Sam,
+Add missing null check for cci parameter before dereferencing it in
+ucsi_sync_control_common(). The function can be called with cci=NULL
+from ucsi_acknowledge(), which leads to a null pointer dereference
+when accessing *cci in the condition check.
 
-Jiri, Benjamin, this is about a report originally done in Debian as
-https://bugs.debian.org/1122193 where Sam's device, a ZWO EFWmini with
-vendor and product id's as 03c3:1f01 is not working, usbhid not
-loaded.
+The crash occurs because the code checks if cci is not null before
+calling ucsi->ops->read_cci(ucsi, cci), but then immediately
+dereferences cci without a null check in the following condition:
+(*cci & UCSI_CCI_COMMAND_COMPLETE).
 
-On Mon, Dec 08, 2025 at 03:03:49PM +0000, Sam Halliday wrote:
-> Package: linux-image-amd64
-> Version: 6.12.57-1
-> Severity: normal
-> Tags: patch
-> X-Debbugs-Cc: debian-amd64@lists.debian.org
-> User: debian-amd64@lists.debian.org
-> Usertags: amd64
-> 
-> Dear Maintainer,
-> 
-> I propose a patch to workaround USB HID descriptor requirements that
-> are stopping users from being able to use astrophotography
-> equipment.
-> 
-> I have a usb device (an ZWO EFWmini, used for astronomy) which has
-> the following vendor information: 03c3:1f01 ZWO ZWO EFW
-> 
-> This device is known to offer a suboptimal descriptor, e.g. see the lsusb output
-> 
->       Warning: Descriptor too short
->         HID Device Descriptor:
->           bLength                 9
->           bDescriptorType        33
->           bcdHID               1.01
->           bCountryCode            0 Not supported
->           bNumDescriptors         2
->           bDescriptorType        34 (null)
->           wDescriptorLength      68
->           bDescriptorType         0 (null)
->           wDescriptorLength       0
->           Report Descriptors: 
->             ** UNAVAILABLE **
-> 
-> My software (I write it, it is GPLv3, I'm the only user, but it isn't particularly relevant...) runs primarilly on a raspberry pi, which accepts this with kernel 6.12.25-1+rpt1, and I've also done some desktop development on archlinux (unknown kernel versions but up to at least 6 months ago). I only access the hardware for development from a debian desktop computer.
-> 
-> Since moving to Debian 13, my hardware no longer works, with dmesg showing the following error:
-> 
-> [   14.182522] usb 1-2.2: new full-speed USB device number 10 using xhci_hcd
-> [   14.276921] usb 1-2.2: New USB device found, idVendor=03c3, idProduct=1f01, bcdDevice= 0.00
-> [   14.276930] usb 1-2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> [   14.276933] usb 1-2.2: Product: ZWO EFW
-> [   14.276935] usb 1-2.2: Manufacturer: ZW0
-> [   14.282951] usbhid 1-2.2:1.0: can't add hid device: -22
-> [   14.282963] usbhid 1-2.2:1.0: probe with driver usbhid failed with error -22
-> 
-> I have tried going back as far as debian's kernel from bullseye (5.10), bookworm (6.1), trixie (6.12) and backports (6.17) but it's the same error every time.
-> 
-> Communicating with the ZWO (the device manufacturer) support team, they recommended patching the kernel, which I did, and it now works.
-> 
-> I applied the following patch and built my own kernel
-> 
-> ===========================================================================
-> --- drivers/hid/usbhid/hid-core.c.orig	2025-12-08 13:15:08.657917762 +0000
-> +++ drivers/hid/usbhid/hid-core.c	2025-12-08 13:16:24.293959487 +0000
-> @@ -1015,7 +1015,7 @@
->  			      (hdesc->bNumDescriptors - 1) * sizeof(*hcdesc)) {
->  		dbg_hid("hid descriptor invalid, bLen=%hhu bNum=%hhu\n",
->  			hdesc->bLength, hdesc->bNumDescriptors);
-> -		return -EINVAL;
-> +		// return -EINVAL;
->  	}
->  
->  	hid->version = le16_to_cpu(hdesc->bcdHID);
-> ===========================================================================
-> 
-> The new dmesg output is
-> 
-> [  366.477628] usbhid 1-2:1.0: 1 unsupported optional hid class descriptors
-> [  366.478327] hid-generic 0003:03C3:1F01.0006: hiddev1,hidraw4: USB HID v1.01 Device [ZW0 ZWO EFW] on usb-000
-> 
-> 
-> Apologies but I don't think I'm giving you a particularly good patch
-> because the author of this code clearly intended for a -EINVAL
-> failure. A kernel dev may prefer to create a hardware quirk (which
-> ideally should be enabled for 03c3:1f01 by default) to exit if the
-> descriptor isn't valid. I'm not a kernel developer so that's beyond
-> me.
-> 
-> The device works perfectly fine despite the descriptor not meeting
-> the kernel's current requirements. And I don't believe a firmware
-> upgrade is possible... it's just a little motor that turns a wheel
-> containing photographic filters.
+KASAN trace:
+  KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+  RIP: 0010:ucsi_sync_control_common+0x2ae/0x4e0 [typec_ucsi]
 
-I suspect your case can be a candidate for HID-BPF, cf.
-https://docs.kernel.org/hid/hid-bpf.html and you might try to fixup
-the required descriptors.
+Fixes: 667ecac55861 ("usb: typec: ucsi: return CCI and message from sync_control callback")
+Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But I'm not entirely sure. Jiri and Benjamin is that something we
-could have quirk for the device or the problem tackled in some other
-way?
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 9b3df776137a1..7129973f19e7e 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -97,7 +97,7 @@ int ucsi_sync_control_common(struct ucsi *ucsi, u64 command, u32 *cci)
+ 	if (!ret && cci)
+ 		ret = ucsi->ops->read_cci(ucsi, cci);
+ 
+-	if (!ret && ucsi->message_in_size > 0 &&
++	if (!ret && cci && ucsi->message_in_size > 0 &&
+ 	    (*cci & UCSI_CCI_COMMAND_COMPLETE))
+ 		ret = ucsi->ops->read_message_in(ucsi, ucsi->message_in,
+ 						 ucsi->message_in_size);
+-- 
+2.43.0
 
-Regards,
-Salvatore
 
