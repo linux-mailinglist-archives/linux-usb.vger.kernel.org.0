@@ -1,392 +1,153 @@
-Return-Path: <linux-usb+bounces-31429-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31430-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66AC3CBB6F2
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Dec 2025 07:19:57 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E605CBBB1B
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Dec 2025 14:17:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 787383005094
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Dec 2025 06:19:55 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 62EFA3009DB9
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Dec 2025 13:17:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8A526FA50;
-	Sun, 14 Dec 2025 06:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD6A22D7B9;
+	Sun, 14 Dec 2025 13:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n30+CsPh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fS6rKOxE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991842AD22;
-	Sun, 14 Dec 2025 06:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280E62A1BF
+	for <linux-usb@vger.kernel.org>; Sun, 14 Dec 2025 13:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765693192; cv=none; b=snYwsrXjSG+WjwtB4kaqSSB3HyeXvZaWqnbIoGmK2hJxQELHM68spyzRguCW8ToykpjyaPpfHGJsGoR6I0P6DV2xPORZOa6RndRQIK6pDBm5FKlIjva+5LS/f2NSKEZ5+UzlywohPFh94JjxihFNs522p/GRHRaFxfR2Zm051es=
+	t=1765718266; cv=none; b=smW5WI9I/AzjZEDrNzXFClpo49THQ8ToU8KJSD+4SVgFXyp8EsqFDqfe1kUW6pr03knhFBGq49NRGceSoxOFiiXEf1Gp6rw7qc3XoYsNdScddJyvJ8mr+rDUGLb1kgWVeDuuR/dKA+JnjzPDQo0eW6HfDHcAir4WmEgWBwpsv6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765693192; c=relaxed/simple;
-	bh=eZUgN1MEjmI69Dx6xkOmA6NzMD2tqyUe/mkRtjP8KY0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MGJUpDFxxeB53k9UGE86AGhDMZ1x3Y2jfbem0Aj2NAnnqPLfNd1D7PRhAht3WQxzsu8sr2xnaPosbGRF2r2PAE9ijO6fboIZnv3p3W97xU59CqQX3IUJFerWejn4dEu0awMjRjuC9Net9O62tSQwDAuTuKloVaUqzlN1NaPUDxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n30+CsPh; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765693191; x=1797229191;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eZUgN1MEjmI69Dx6xkOmA6NzMD2tqyUe/mkRtjP8KY0=;
-  b=n30+CsPh/60fTCJLq3sU9ABvlYg0gQTOvm/ikoASz1zHTYaen2bKeV8X
-   InLjjSpOSK916/4pejySqfKz7q29iOPhOO9W6qVcpnZI087bpSQRAvRgS
-   h9+FK5p6qtfZT9rDqQ/vr4EeW+9C3QK/8M7zLGyJkQjeSsL2KuMobgCxS
-   xZg7HTAx3I5LZIWwx6TVjOQO5HnLGT2cWegMEpJFdxe+jN7CqWKgxosdT
-   K+LyRvaoAjVXLsUDxyTWC6h+PqcXdygnwv1+FYJnCqQV22B3+k/BFw5Fb
-   J7GEmqT3vgbyBXLiGTHt7/jG7KF8bVYAIxx+hN9YwTW/cckdMTs+qQIVm
-   g==;
-X-CSE-ConnectionGUID: 36meaS38SmG2CjU/mVqSMQ==
-X-CSE-MsgGUID: g1HTcv/4SCSTskVtfdslRw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11641"; a="77947755"
-X-IronPort-AV: E=Sophos;i="6.21,147,1763452800"; 
-   d="scan'208";a="77947755"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 22:19:50 -0800
-X-CSE-ConnectionGUID: i5grRnW/RNeIrsP1MNjeLg==
-X-CSE-MsgGUID: I6iPCiSRQwqpIjzZltUqpg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,147,1763452800"; 
-   d="scan'208";a="201869248"
-Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 13 Dec 2025 22:19:45 -0800
-Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vUfSI-000000008ez-2MLv;
-	Sun, 14 Dec 2025 06:19:42 +0000
-Date: Sun, 14 Dec 2025 14:19:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: david.laight.linux@gmail.com, Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Crt Mori <cmo@melexis.com>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Luo Jie <quic_luoj@quicinc.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	David Laight <david.laight.linux@gmail.com>
+	s=arc-20240116; t=1765718266; c=relaxed/simple;
+	bh=XmtOq1WlOXv5tvapcKs/oIm0cZgNGon3Gb1VCrDVVgw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fjlDbR43TNNYjWQPVrGM/w/Tk0YYn+OyUwkaDCjP1sbPYSj8obSGZ3KzK3e2BTzaOX7MO80L+RYf64H26Q0zrm5TQbkPzYL9eVzFOJ6K+Hrx9rnmQ7soGSGfvOhpAGlM0MH+U5s2Ysi0P63RshLeP7wO2urFnkjkYsAC+wYWZiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fS6rKOxE; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-47118259fd8so26734545e9.3
+        for <linux-usb@vger.kernel.org>; Sun, 14 Dec 2025 05:17:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765718262; x=1766323062; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mpywd0ooBqabRS+5lH7EYtrqn3sd1kp/pArhDDLgKLk=;
+        b=fS6rKOxECWqFG4sVcdaFbufZFN0mNF9qFZ7VjjqnN2KZvEygJpFhJLZAxt6NvZLFVu
+         f+DTEadQhuz4AekF2cWxUtc6075GBBhfbApDp9/0MkXytirYBLDLrsEkIpf3RmmSUoFY
+         8tcMQNJd0mGu4nsxXGfrhywKa38I1GfrSwBJGNcYbeh/8r4lexXrBsGXlAkT87Sds8Kk
+         nH2liVbqLto6rS6LS8W2358HZ8t5i9WjGSzZxZ7OoxpYuLrwKqYZlj+hDenqkQNvMuzh
+         CNOG/kWR9nYlRX+m2jvmUVrJEBsmVFXfaElXRHb5q/Qm5XLoW3cxaNskk7RcpcLhz3OJ
+         vePA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765718262; x=1766323062;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mpywd0ooBqabRS+5lH7EYtrqn3sd1kp/pArhDDLgKLk=;
+        b=oCKvcOcdtDO2+OsXL+0fi/uzSGbnJ5DIa5lwJXp1NjBsslEtSbmpuMMB/mgNACwf9e
+         SFcu3v01JNwf0oL0jd+CPtBvKuZCWacJStWvua4IaOZfmzPF3MSaE+93mrbMNRa+T4Zo
+         VAxQ5324nXzmpb2lR1R2WB1x4aQfkgH0iKpyB7LyNC2Fjy/SP6jEe+KW/zsV75Muj2Nn
+         ttg91Ku9i32n3rs3c5PLX5Hc5wMaWF7uALzAg69KgDEvmDRoykJZc4ckwWxxcGJQ7WIc
+         oyBJRE1KG423tafGPNaZjv/dxSYC2IShbR5L8Obz7JMKbCiNQegPFpo3rzmNVuEgzOQ4
+         1DWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVn90zHP2pK+aoooGr0AEeUm59T/pTSn98aty8coubj6EzVWQutUf526NC6zy9Z94NWLzjrRUjui5o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPuSqEKzre7TpEOab6qW6/UbjK6XLcgh8yc2le3bQfeF/sMQfR
+	fdyzH8PVPeo1DFscFIFO47mBycowWT9qYbrzLM5KJOHEOt+z3NmuJIhY
+X-Gm-Gg: AY/fxX4zSAzEIj4lh1HUWaR98cQbspT4r/MlLe8OB0rm/TTYZSHv162+/fCI8fIWEQl
+	nWA4euPYeaGpAdDY/G3/5QELhYGYg+8pkL/BnfOYEG9Zraj9wRGE43gN7Lfz/PIMBLSTTO54yhe
+	w9zoUxvuiyWFBkapqRvSkscjZM+x+GuzyYaGufKvmb27MkEfe1Avgy556of/7PgtT2Shc1FPc3Q
+	8W2jyUMBnf/jzA1ac5V/iB3VULOUakeOzvB871bC2YAUne0e+jaq3fWI5Oucg7HqIQVu3qh7dS9
+	cCr7qxXG/LlCVWuNdSDbTTlAj6ZlGhzuUR2Q8hiofXfW+7G8T9eh1fV9J3s8eP9MiUldzgcYPLI
+	+inKIiIgbGwhs9j2YBNBaHtTBWlrRja2hzE7ZwHiTlK9SMRqp0cWbXQf7thhIBaI8rBpApcKYSz
+	snSpXd6SC8IEp2zHGbMmeOydV/BAfeqPJmCEKwQurF6cLocOJLgLjW
+X-Google-Smtp-Source: AGHT+IHTX2KIoo6rHKnWJhWyrUXne9SI979vSJQ8O09DKd6yhp5jXCNNQXUTEJFhlKpFkjoCo3wQwg==
+X-Received: by 2002:a05:600c:a009:b0:46f:d682:3c3d with SMTP id 5b1f17b1804b1-47a8f8c4b8emr81227825e9.13.1765718262416;
+        Sun, 14 Dec 2025 05:17:42 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47a8f4af065sm50301095e9.6.2025.12.14.05.17.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Dec 2025 05:17:42 -0800 (PST)
+Date: Sun, 14 Dec 2025 13:17:40 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>, Crt Mori <cmo@melexis.com>, Richard Genoud
+ <richard.genoud@bootlin.com>, Andy Shevchenko
+ <andriy.shevchenko@intel.com>, Luo Jie <quic_luoj@quicinc.com>, Peter
+ Zijlstra <peterz@infradead.org>, Jakub Kicinski <kuba@kernel.org>,
+ netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Mika
+ Westerberg <mika.westerberg@linux.intel.com>, Andreas Noever
+ <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ oe-kbuild-all@lists.linux.dev
 Subject: Re: [PATCH v2 11/16] bitfield: Common up validation of the mask
  parameter
-Message-ID: <202512141305.J3aPiiBv-lkp@intel.com>
+Message-ID: <20251214131740.40063fd7@pumpkin>
+In-Reply-To: <202512141305.J3aPiiBv-lkp@intel.com>
 References: <20251212193721.740055-12-david.laight.linux@gmail.com>
+	<202512141305.J3aPiiBv-lkp@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251212193721.740055-12-david.laight.linux@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On Sun, 14 Dec 2025 14:19:30 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-kernel test robot noticed the following build errors:
+> Hi,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.19-rc1 next-20251212]
+> [cannot apply to westeri-thunderbolt/next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/david-laight-linux-gmail-com/nfp-Call-FIELD_PREP-in-NFP_ETH_SET_BIT_CONFIG-wrapper/20251213-040625
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20251212193721.740055-12-david.laight.linux%40gmail.com
+> patch subject: [PATCH v2 11/16] bitfield: Common up validation of the mask parameter
+> config: i386-randconfig-053-20251213 (https://download.01.org/0day-ci/archive/20251214/202512141305.J3aPiiBv-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251214/202512141305.J3aPiiBv-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202512141305.J3aPiiBv-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/gpu/drm/xe/xe_guc.c:639:19: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]  
+>      639 |                 klvs[count++] = PREP_GUC_KLV_TAG(OPT_IN_FEATURE_EXT_CAT_ERR_TYPE);
+>          |                                 ^
+>    drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
+>       62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
+>          |         ^
+>    drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
+>       38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
+>          |                           ^
+>    drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
+>       36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
+>          |                                                          ^
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.19-rc1 next-20251212]
-[cannot apply to westeri-thunderbolt/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I've just sent a patch to move that warning to W=2.
+It is picking up the same sort of things that -Wtype-limits does - already in W=2.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/david-laight-linux-gmail-com/nfp-Call-FIELD_PREP-in-NFP_ETH_SET_BIT_CONFIG-wrapper/20251213-040625
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251212193721.740055-12-david.laight.linux%40gmail.com
-patch subject: [PATCH v2 11/16] bitfield: Common up validation of the mask parameter
-config: i386-randconfig-053-20251213 (https://download.01.org/0day-ci/archive/20251214/202512141305.J3aPiiBv-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251214/202512141305.J3aPiiBv-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512141305.J3aPiiBv-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/xe/xe_guc.c:639:19: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     639 |                 klvs[count++] = PREP_GUC_KLV_TAG(OPT_IN_FEATURE_EXT_CAT_ERR_TYPE);
-         |                                 ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
->> drivers/gpu/drm/xe/xe_guc.c:639:19: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_guc.c:642:19: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     642 |                 klvs[count++] = PREP_GUC_KLV_TAG(OPT_IN_FEATURE_DYNAMIC_INHIBIT_CONTEXT_SWITCH);
-         |                                 ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_guc.c:642:19: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   4 errors generated.
---
->> drivers/gpu/drm/xe/xe_guc_submit.c:371:12: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     371 |         *emit++ = PREP_GUC_KLV_TAG(SCHEDULING_POLICIES_RENDER_COMPUTE_YIELD);
-         |                   ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
->> drivers/gpu/drm/xe/xe_guc_submit.c:371:12: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   2 errors generated.
---
->> drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:163:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     163 |                 PREP_GUC_KLV_TAG(VF_CFG_GGTT_START),
-         |                 ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
->> drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:163:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:166:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     166 |                 PREP_GUC_KLV_TAG(VF_CFG_GGTT_SIZE),
-         |                 ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:166:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:177:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     177 |                 PREP_GUC_KLV_TAG(VF_CFG_BEGIN_CONTEXT_ID),
-         |                 ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:177:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:179:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     179 |                 PREP_GUC_KLV_TAG(VF_CFG_NUM_CONTEXTS),
-         |                 ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:179:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:189:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     189 |                 PREP_GUC_KLV_TAG(VF_CFG_BEGIN_DOORBELL_ID),
-         |                 ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:189:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:62:2: note: expanded from macro 'PREP_GUC_KLV_TAG'
-      62 |         PREP_GUC_KLV_CONST(MAKE_GUC_KLV_KEY(TAG), MAKE_GUC_KLV_LEN(TAG))
-         |         ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c:191:3: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     191 |                 PREP_GUC_KLV_TAG(VF_CFG_NUM_DOORBELLS),
-         |                 ^
---
->> drivers/gpu/drm/xe/xe_sriov_packet.c:381:16: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     381 |         klvs[len++] = PREP_GUC_KLV_CONST(MIGRATION_KLV_DEVICE_DEVID_KEY,
-         |                       ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
->> drivers/gpu/drm/xe/xe_sriov_packet.c:381:16: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_sriov_packet.c:384:16: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-     384 |         klvs[len++] = PREP_GUC_KLV_CONST(MIGRATION_KLV_DEVICE_REVID_KEY,
-         |                       ^
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:38:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      38 |         (FIELD_PREP_CONST(GUC_KLV_0_KEY, (key)) | \
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:36:35: note: expanded from macro 'GUC_KLV_0_KEY'
-      36 | #define GUC_KLV_0_KEY                           (0xffffu << 16)
-         |                                                          ^
-   drivers/gpu/drm/xe/xe_sriov_packet.c:384:16: error: converting the result of '<<' to a boolean always evaluates to true [-Werror,-Wtautological-constant-compare]
-   drivers/gpu/drm/xe/xe_guc_klv_helpers.h:39:20: note: expanded from macro 'PREP_GUC_KLV_CONST'
-      39 |          FIELD_PREP_CONST(GUC_KLV_0_LEN, (len)))
-         |                           ^
-   drivers/gpu/drm/xe/abi/guc_klvs_abi.h:37:35: note: expanded from macro 'GUC_KLV_0_LEN'
-      37 | #define GUC_KLV_0_LEN                           (0xffffu << 0)
-         |                                                          ^
-   4 errors generated.
-
-
-vim +639 drivers/gpu/drm/xe/xe_guc.c
-
-9c7d93a8f1ec04 Daniele Ceraolo Spurio 2025-06-25  616  
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  617  #define OPT_IN_MAX_DWORDS 16
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  618  int xe_guc_opt_in_features_enable(struct xe_guc *guc)
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  619  {
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  620  	struct xe_device *xe = guc_to_xe(guc);
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  621  	CLASS(xe_guc_buf, buf)(&guc->buf, OPT_IN_MAX_DWORDS);
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  622  	u32 count = 0;
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  623  	u32 *klvs;
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  624  	int ret;
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  625  
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  626  	if (!xe_guc_buf_is_valid(buf))
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  627  		return -ENOBUFS;
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  628  
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  629  	klvs = xe_guc_buf_cpu_ptr(buf);
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  630  
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  631  	/*
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  632  	 * The extra CAT error type opt-in was added in GuC v70.17.0, which maps
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  633  	 * to compatibility version v1.7.0.
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  634  	 * Note that the GuC allows enabling this KLV even on platforms that do
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  635  	 * not support the extra type; in such case the returned type variable
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  636  	 * will be set to a known invalid value which we can check against.
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  637  	 */
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  638  	if (GUC_SUBMIT_VER(guc) >= MAKE_GUC_VER(1, 7, 0))
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25 @639  		klvs[count++] = PREP_GUC_KLV_TAG(OPT_IN_FEATURE_EXT_CAT_ERR_TYPE);
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  640  
-9c7d93a8f1ec04 Daniele Ceraolo Spurio 2025-06-25  641  	if (supports_dynamic_ics(guc))
-9c7d93a8f1ec04 Daniele Ceraolo Spurio 2025-06-25  642  		klvs[count++] = PREP_GUC_KLV_TAG(OPT_IN_FEATURE_DYNAMIC_INHIBIT_CONTEXT_SWITCH);
-9c7d93a8f1ec04 Daniele Ceraolo Spurio 2025-06-25  643  
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  644  	if (count) {
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  645  		xe_assert(xe, count <= OPT_IN_MAX_DWORDS);
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  646  
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  647  		ret = __guc_opt_in_features_enable(guc, xe_guc_buf_flush(buf), count);
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  648  		if (ret < 0) {
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  649  			xe_gt_err(guc_to_gt(guc),
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  650  				  "failed to enable GuC opt-in features: %pe\n",
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  651  				  ERR_PTR(ret));
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  652  			return ret;
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  653  		}
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  654  	}
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  655  
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  656  	return 0;
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  657  }
-a7ffcea8631af9 Daniele Ceraolo Spurio 2025-06-25  658  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	David
 
