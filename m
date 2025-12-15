@@ -1,189 +1,132 @@
-Return-Path: <linux-usb+bounces-31438-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31439-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E43FFCBD529
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 11:12:00 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A750CBD83F
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 12:36:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A2084300E0C4
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 10:11:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 03F9030198E3
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 11:36:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96D6432C93B;
-	Mon, 15 Dec 2025 10:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E88326D73;
+	Mon, 15 Dec 2025 11:36:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lz540RxS"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="VwyGvywQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018CD314A80;
-	Mon, 15 Dec 2025 10:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5412253B0
+	for <linux-usb@vger.kernel.org>; Mon, 15 Dec 2025 11:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765793516; cv=none; b=tbBqLIt2vGeoDIGeXTEoJGwaoAk1PNsIquHFPNmjCBCefotWLjzwmVqTqISpi6lz1FAAzrJ35zFDsziHEE7HTHDVdCsmqW26c7hBlhOdA4YfOEHr+yWxtnkDBjjK6+8Gda/2h0SujwqD4cmtNVNvWncqD0UdFPqXuk1HhnhSkg4=
+	t=1765798599; cv=none; b=Vnl0akNvlMjtAHKvj21xqcnSsMGBhuhu2JNHFFKpJZxgg5CxtsreZnnezXAsJ7FUTQLKFUGnyWmMuAfwoN0g7RaSLTDZI5M5h4Ygk6VzUdDxqfOn8g6UMMClhN9BikzFqNiQfu2tnxIWu4SHKnsk23y9bCDRxloo98jn3u402oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765793516; c=relaxed/simple;
-	bh=HSu6Sf5u3pHHYKurzBwkbEf/+hWGsNFYcpTqiUbY/S4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HTaoCykyAPuUPE6NzLGRTXz9aPqkJvZdEIhEQUNk6KBou68OBdutcjwqd4KypGhJzxjvOrLJ2Tg0YMQMFZ/zV3qTspZLyr/qXMDlwfxGa8SUP7RblIgElof2Vd+CXKIimeC7e7yZMx/yc1jN3/KX+XJeJzOTpOaCnPO3ZnsSVbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lz540RxS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C25AC4CEFB;
-	Mon, 15 Dec 2025 10:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765793515;
-	bh=HSu6Sf5u3pHHYKurzBwkbEf/+hWGsNFYcpTqiUbY/S4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lz540RxSBx6pFp2cmUXnuSmXHnvQbuRuhvLlPL+DvRAHKqd8zK+h+MQbQjBED+yTn
-	 Tne9G4FU1WvX0TjP6kyczX5UPrho8my60Ie7o68xblB3fwaSIbfWwKHqzHlroIviGY
-	 EOvQqtXCUE7kKcIpP8J1aWz5SQNThtwTA081CdLoSSbp2+a1JknwiW+12aN9xOXW61
-	 KTtIfZMLHAvBynSrLIRN8iaQ8ZZbf9e8Qcu9q/JZDjE1EsVZa1Lhbg3oroG65ckatn
-	 tQ7cJCfdRxSwavu5xj7AJ65JLfHyQP0ADhAY3KkBZFAzrZ05J0sSAsWaZG0cy9AluA
-	 zPq4LHPqWqNEw==
-Date: Mon, 15 Dec 2025 11:11:51 +0100
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Salvatore Bonaccorso <carnil@debian.org>
-Cc: Sam Halliday <sam.halliday@gmail.com>, 1122193@bugs.debian.org, 
-	Jiri Kosina <jikos@kernel.org>, linux-usb@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: usb hid descriptor requirements are rejecting hardware (ZWO
- EFWmini, 03c3:1f01)
-Message-ID: <cpgdwmdhfl7tkqe2x263o2xeeclgvbal5onlkj7qcte73jhs5i@h2tdtzmiabcn>
-References: <176520622961.2658.15817888352918425136.reportbug@Samwise>
- <aT7TPAInuBOXctEZ@eldamar.lan>
+	s=arc-20240116; t=1765798599; c=relaxed/simple;
+	bh=8K5CQGNJve1RW39NoSUfaSDkqaJ3UQVV/VleCfTk9x8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=myJAYAQApjkfF6fA4NASRsOrfE1BZMWYx47XMnp1xeENDBr4PMxL1ohYb2nBQg9WFlB/aqQIvZJBNzwIlPafquayX87aVwPZC1Y/dHfEVfP6thjoiZ/zcqFGLkbMMq8d73x9lEIK33jI40nTsnp6AEDY/4dJPItLuhn5FFmUIPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=VwyGvywQ; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b79f8f7ea43so709449466b.2
+        for <linux-usb@vger.kernel.org>; Mon, 15 Dec 2025 03:36:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1765798596; x=1766403396; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Our2tTrLeS9+cKoDnOgCot+9A7UItxQonDfN3Zuzcsc=;
+        b=VwyGvywQGp1uMScnX1vlpHce6SV2NoXE/I2TmQo+qJiFufjCa7dCX02s0Z/MCDCNN+
+         1rHF6lmg1nY84K6oQTjyMOuRi2AgLCv3V6O5RLCiI0PAFJQcGpxkFpWqLD9MI8Sc1GuV
+         NrTBzTgGLqtuKFzlUYrIofbnmMOueyf/heQhGpBOTdpxyZTldQwuj/4bhB5FpXyVl4PJ
+         KA4Ue24LdKM08COAAdoJJGxHzyHbuRswh1HSA1xkSun99A9lawP0mTi8QEzvP5zXEnyI
+         8Mi3aZuAPYs9CViWk/U6/h7K2imxo/eKm5e35a+282FxjEper6auPCj4sBzfqlaREd+m
+         JhmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765798596; x=1766403396;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Our2tTrLeS9+cKoDnOgCot+9A7UItxQonDfN3Zuzcsc=;
+        b=LPKnOomfqlsALpV8gMKKwUY0I7Vw4ny0BXw+XUwP+btARS24rEPLpc7YGGodOa/AFd
+         MkgFdu0tpha5qjNEucXcBR0rdi/TV6OKWM8KjEqfUQRX3wNUwziG1JfdP4MXw9pY6aBg
+         xcwCnsYZA3gWXqjOozXbcNtb9pGXXJZqOMVOoX2MQ0aPer3vcP+XvhcF7q00iaNPPZh5
+         vlYV9ZgbtYqqFcqiwPYBV1OuBSFaLv6DoW0WpxY3321onrDW0y7YxmL3fs5yWMRdzDpx
+         X0TmQ4SZxXYE1zo/O/+Y0FK0FHa7umSq8MHaiCfpz5UeYeGpNo6P8/XDSyG0GbiujCf6
+         V+mQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUWyHrJ3f7azRT6PJzKszccaK+aTiOrRpYk4MvmEhZ2pc/EVm4rm8nf7os6xX95kwKt8LnydpAxO1E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygLjyg+XCuYdVWlXigRqMZn8IktKV5W0lH6ascaXModgDWAetr
+	BU/fqdVzEbOhhmXc/ZZURKwdZqKXPiSyPbGeyCvIOBMguvYdUdGq38HntN2Og4UW+GPeFTru7Oq
+	nOuWlyC10iKFWPFtF8LS6y1V6cZpKoVq4KUYRRp6Dng==
+X-Gm-Gg: AY/fxX5BI+xnFbwRErA8bABiB+WJIgKyA0+th1zl4n83ibEHVsVHTZFa4CDaoULNil0
+	L2ULcTJAH3rUK7aPoKsIEohJ7GYl5Jrle8pIpR1idG5wcLjcDzp1bpFblr25xLhv+nA/rXVuLta
+	mXbX7UmLogeQcmJrLZ4V6sXpmZGqPJnFDMyIFU7uLFh063fS6E1wZkcZoth48rnjcQddVANU3AC
+	h1X3Rpa0ZqEU9MmdIDtIuMUBD2C6SIUmm664taTn2W7s09frhYnsd5NjVnGnhCvblWlzK7T
+X-Google-Smtp-Source: AGHT+IFe8rw0qhWAiH0mQoOljUOiqcSqb5gRs5qS5m8hogOLlJs+w47H8LQqQzDIOFZ44fMZWWGRbbSWXqIYIq4YXXE=
+X-Received: by 2002:a17:907:9628:b0:b73:8798:3be6 with SMTP id
+ a640c23a62f3a-b7d23665c4fmr1116568866b.24.1765798596197; Mon, 15 Dec 2025
+ 03:36:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aT7TPAInuBOXctEZ@eldamar.lan>
+References: <20251203122313.1287950-1-robert.marko@sartura.hr>
+ <20251203122313.1287950-4-robert.marko@sartura.hr> <20251203-splendor-cubbyhole-eda2d6982b46@spud>
+In-Reply-To: <20251203-splendor-cubbyhole-eda2d6982b46@spud>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Mon, 15 Dec 2025 12:36:25 +0100
+X-Gm-Features: AQt7F2oZT8D46ks79tXEN44Gcwk4DCt-08YRdCse_jKqK0ZpniHWAPSwJLfDHCc
+Message-ID: <CA+HBbNGdd-u=4PtXZtirqRkFBhKwraa5gV-32QChDDjfVARPRg@mail.gmail.com>
+Subject: Re: [PATCH 4/4] arm64: dts: microchip: add LAN969x support
+To: Conor Dooley <conor@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	gregkh@linuxfoundation.org, nicolas.ferre@microchip.com, 
+	claudiu.beznea@tuxon.dev, mturquette@baylibre.com, sboyd@kernel.org, 
+	richardcochran@gmail.com, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
+	luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Dec 14 2025, Salvatore Bonaccorso wrote:
-> Hi Sam,
-> 
-> Jiri, Benjamin, this is about a report originally done in Debian as
-> https://bugs.debian.org/1122193 where Sam's device, a ZWO EFWmini with
-> vendor and product id's as 03c3:1f01 is not working, usbhid not
-> loaded.
-> 
-> On Mon, Dec 08, 2025 at 03:03:49PM +0000, Sam Halliday wrote:
-> > Package: linux-image-amd64
-> > Version: 6.12.57-1
-> > Severity: normal
-> > Tags: patch
-> > X-Debbugs-Cc: debian-amd64@lists.debian.org
-> > User: debian-amd64@lists.debian.org
-> > Usertags: amd64
-> > 
-> > Dear Maintainer,
-> > 
-> > I propose a patch to workaround USB HID descriptor requirements that
-> > are stopping users from being able to use astrophotography
-> > equipment.
-> > 
-> > I have a usb device (an ZWO EFWmini, used for astronomy) which has
-> > the following vendor information: 03c3:1f01 ZWO ZWO EFW
-> > 
-> > This device is known to offer a suboptimal descriptor, e.g. see the lsusb output
-> > 
-> >       Warning: Descriptor too short
-> >         HID Device Descriptor:
-> >           bLength                 9
-> >           bDescriptorType        33
-> >           bcdHID               1.01
-> >           bCountryCode            0 Not supported
-> >           bNumDescriptors         2
-> >           bDescriptorType        34 (null)
-> >           wDescriptorLength      68
-> >           bDescriptorType         0 (null)
-> >           wDescriptorLength       0
-> >           Report Descriptors: 
-> >             ** UNAVAILABLE **
-> > 
-> > My software (I write it, it is GPLv3, I'm the only user, but it isn't particularly relevant...) runs primarilly on a raspberry pi, which accepts this with kernel 6.12.25-1+rpt1, and I've also done some desktop development on archlinux (unknown kernel versions but up to at least 6 months ago). I only access the hardware for development from a debian desktop computer.
-> > 
-> > Since moving to Debian 13, my hardware no longer works, with dmesg showing the following error:
-> > 
-> > [   14.182522] usb 1-2.2: new full-speed USB device number 10 using xhci_hcd
-> > [   14.276921] usb 1-2.2: New USB device found, idVendor=03c3, idProduct=1f01, bcdDevice= 0.00
-> > [   14.276930] usb 1-2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> > [   14.276933] usb 1-2.2: Product: ZWO EFW
-> > [   14.276935] usb 1-2.2: Manufacturer: ZW0
-> > [   14.282951] usbhid 1-2.2:1.0: can't add hid device: -22
-> > [   14.282963] usbhid 1-2.2:1.0: probe with driver usbhid failed with error -22
-> > 
-> > I have tried going back as far as debian's kernel from bullseye (5.10), bookworm (6.1), trixie (6.12) and backports (6.17) but it's the same error every time.
-> > 
-> > Communicating with the ZWO (the device manufacturer) support team, they recommended patching the kernel, which I did, and it now works.
-> > 
-> > I applied the following patch and built my own kernel
-> > 
-> > ===========================================================================
-> > --- drivers/hid/usbhid/hid-core.c.orig	2025-12-08 13:15:08.657917762 +0000
-> > +++ drivers/hid/usbhid/hid-core.c	2025-12-08 13:16:24.293959487 +0000
-> > @@ -1015,7 +1015,7 @@
-> >  			      (hdesc->bNumDescriptors - 1) * sizeof(*hcdesc)) {
-> >  		dbg_hid("hid descriptor invalid, bLen=%hhu bNum=%hhu\n",
-> >  			hdesc->bLength, hdesc->bNumDescriptors);
-> > -		return -EINVAL;
-> > +		// return -EINVAL;
+On Wed, Dec 3, 2025 at 8:21=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
+e:
+>
+> On Wed, Dec 03, 2025 at 01:21:32PM +0100, Robert Marko wrote:
+> > Add support for Microchip LAN969x switch SoC, including the EV23X71A
+> > EVB board.
+> >
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> >  arch/arm64/boot/dts/microchip/Makefile        |   2 +
+> >  .../boot/dts/microchip/lan9696-ev23x71a.dts   | 761 ++++++++++++++++++
+>
+> >  arch/arm64/boot/dts/microchip/lan969x.dtsi    | 482 +++++++++++
+>
+> The majority of devices in this file are missing soc-specific
+> compatibles.
 
-That looks like the wrong thing to do, especialy because the 2 previous
-commits introducing that check are to protect against out of bound
-errors:
-See fe7f7ac8e0c7 ("HID: usbhid: Eliminate recurrent out-of-bounds bug in usbhid_parse()")
+Hi,
+I missed this before.
 
-Can we get the debug output from the line above (or just add plain
-printks in the running kernel)? I suspect we might losen the test with a
-'<' instead of an '!='.
+The majority of the devices are simply reused from the AT91 series, so
+I thought it was not required to
+update all of the bindings to add the LAN9691 compatible.
 
-> >  	}
-> >  
-> >  	hid->version = le16_to_cpu(hdesc->bcdHID);
-> > ===========================================================================
-> > 
-> > The new dmesg output is
-> > 
-> > [  366.477628] usbhid 1-2:1.0: 1 unsupported optional hid class descriptors
-> > [  366.478327] hid-generic 0003:03C3:1F01.0006: hiddev1,hidraw4: USB HID v1.01 Device [ZW0 ZWO EFW] on usb-000
-> > 
-> > 
-> > Apologies but I don't think I'm giving you a particularly good patch
-> > because the author of this code clearly intended for a -EINVAL
-> > failure. A kernel dev may prefer to create a hardware quirk (which
-> > ideally should be enabled for 03c3:1f01 by default) to exit if the
-> > descriptor isn't valid. I'm not a kernel developer so that's beyond
-> > me.
-> > 
-> > The device works perfectly fine despite the descriptor not meeting
-> > the kernel's current requirements. And I don't believe a firmware
-> > upgrade is possible... it's just a little motor that turns a wheel
-> > containing photographic filters.
-> 
-> I suspect your case can be a candidate for HID-BPF, cf.
-> https://docs.kernel.org/hid/hid-bpf.html and you might try to fixup
-> the required descriptors.
+If that is required, I will do so in v2.
 
-Unfortunatelly no. HID-BPF works for fixing HID protocol errors, but in
-this case the device is not presented by the transport layer, so we can
-not do anything there :(
-
-> 
-> But I'm not entirely sure. Jiri and Benjamin is that something we
-> could have quirk for the device or the problem tackled in some other
-> way?
-
-Quirking seems the wrong approach. I would be curious to know the length
-of the binary descriptor. I suspect there is some mismatch and the end
-is filled with 0. If the length is shorter, that's going to be a bigger
-problem to solve.
-
-Cheers,
-Benjamin
-
-> 
-> Regards,
-> Salvatore
+Regards,
+Robert
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
