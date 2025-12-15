@@ -1,171 +1,186 @@
-Return-Path: <linux-usb+bounces-31433-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31434-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CABECBC3AA
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 03:10:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9F4CCBC3B0
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 03:10:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 601B6300F31F
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 02:10:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 82DA4300508B
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 02:10:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80E782459D7;
-	Mon, 15 Dec 2025 02:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0B4C24677D;
+	Mon, 15 Dec 2025 02:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Ea7WMpio"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D86913C8EA;
-	Mon, 15 Dec 2025 02:10:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A821FF1C4
+	for <linux-usb@vger.kernel.org>; Mon, 15 Dec 2025 02:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765764610; cv=none; b=khBji5mIBTydMoJjZ1/J1UTZmjK8jr3dA3vxBhtgYet6q6/mzL9IYGCjubkrt/RuT/atpKLsbsO8dKU2Fdd+YS6BhVw806zsKXn5XEoueW9hW0iBjX6I5/qo5PZAYRPlavttiPbf2P7MR0kAcKw9POT5Kx5CFbPdxMaoReYEHXc=
+	t=1765764642; cv=none; b=sWvr6LLsgfXEfpC+fUJMFXTI7W7mC5fhYzgp0AtQhQzX0MVO5x9AShB86eQB/gIcS8sxHznDwTxH2v8ziW7z5X9GKA+fEFfMOqB5Qk3zkwTLYVhfib28L8b/vJYrN8D35yK+ZvspEXS7tXri7glGf33TY1kyxTjw9rBuO4Z91yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765764610; c=relaxed/simple;
-	bh=ABQA0ihfy3yC10ylmjjcgOVN9AClr0X7OWptoTgYIY4=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=WcEV/ongdHpjgyn2vS87NvNdmdGebmJ6xdQ4rvdPbgQlovHK/WQY8mj9evMpm4m0jEfpjxpJK2Ph0N7j8p7XHWeNjhalJM7nnPrplubsIKXW69YWfvyzWRfDnjDxcgoOlY9smq80323AKy5vG5kNApjTkiLPbgB+z8dboN+a6xU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost.localdomain (unknown [202.112.113.212])
-	by APP-01 (Coremail) with SMTP id qwCowACHLmrcbT9pNeSyAA--.35718S2;
-	Mon, 15 Dec 2025 10:09:40 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: gregkh@linuxfoundation.org,
-	vz@mleia.com,
-	piotr.wojtaszczyk@timesys.com,
-	make24@iscas.ac.cn,
-	stigge@antcom.de,
-	arnd@arndb.de
-Cc: linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org,
-	stable@vger.kernel.org
-Subject: [PATCH v2] USB: Fix error handling in gadget driver
-Date: Mon, 15 Dec 2025 10:09:31 +0800
-Message-Id: <20251215020931.15324-1-make24@iscas.ac.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID:qwCowACHLmrcbT9pNeSyAA--.35718S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF48CrWxCryUAry7Gr15Arb_yoW5uF1fpw
-	1xGFWYkFWUGwnrKwnxAa1DuF1FkF4Iy34rtrZrG3Wq93ZxZ3srJ3W8WF1IqF4xKF97Ar4a
-	yanFya10yF1UuFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-	6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-	1j6rxdM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-	W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
-	0VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwV
-	AFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUmLvtU
-	UUUU=
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
+	s=arc-20240116; t=1765764642; c=relaxed/simple;
+	bh=CCIMITnWYRI5bZVQuacY9Hsiu9S/XOPOJSMygTdWwfM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PYqCs++8Hi3U7r6kpQksLZivv+WpeKGRS8Y7Hk6/CgekmV06Bkc8/J6GKgxwW+gENZ8yFWFzp3AFXo7Rw94q0fQqKGPzTD++UXymWyN6YAkmNj1DLi5lLzan8F1w6yaPEtIbCDyre+g7XNuF+5gLcP4/6w/HmowdGogoMm0raG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=Ea7WMpio; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a087b2a9c0so19411195ad.0
+        for <linux-usb@vger.kernel.org>; Sun, 14 Dec 2025 18:10:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1765764640; x=1766369440; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IPGRtSGrv+ONhLXGuN0IDSDXOT3OnLCdCzkHGTQZGf4=;
+        b=Ea7WMpioW8m+Ebrzm5Sn2WBHhYrDRhsyP3R2VCQVfpvZ9BlQO8TZlWJcEF9u425KIP
+         0kDkD3xExhS3Te/DIL8++bEwMOyQX+oMvXMxuimopE6XINrgAZ9eMJj4PhW6djnkeYi/
+         zwU+508+Ay0it4/pUquWxghWTQIo6GY0Ce7fBlukAwVzJ8p8f52J4J8PiD/3QlFQNXQI
+         Xrx0Y3HbqG4IGbOezepCYRVBZNH1V8AlNf1lJytTITHCGmWF4FqeH3Q0S1rVdWKMPIsF
+         /fj8ur4sircwYPS/LybVZHzGjwifTYMnYeuIlZ/yd+o65wiqIcuOvmu5PeIiTNnEwI9F
+         h6sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765764640; x=1766369440;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IPGRtSGrv+ONhLXGuN0IDSDXOT3OnLCdCzkHGTQZGf4=;
+        b=txOMS/RSIJ4+WrJrFi+otbeOov1acoQetoboe/Egjtonq1CUUMcwbxyi14+K2Rzan7
+         e/Mr0/gV9fcl0aR+WbmmdxFj0A2wW+yrnJKW1H5Eb+xpQqhqA9GALKiLjCgVCOOORpIZ
+         eL3ivF4noWF2Qmf2ibLjxm6cHBpxi+QIkXO4Cb4quabT9eOu2pl3PuPqts3itzbxK0Zc
+         SPc5XACVxBGZMlrnUXvId39GJqtOKncLR7apZf1WvrjjSVYecTiFEjEYZOPB+310csJu
+         EmVPq5Xy40v4Stz3qm/9kvVI7dKY9H5utaMnd7V+CXBkPcOIwbtbqlChTkTy3BU3hhdK
+         +4zg==
+X-Forwarded-Encrypted: i=1; AJvYcCU62/EGhrc35/d4spdWs4AB3qPqfeTDAek7p6aMUHTRG24x1kdFd3oHTcgTn3rUwCzXIwdhpIt+s9s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhFV1/05oniEz/2iCpCwVr03CMR/RJ5KPPojjguDvtXfdci6dF
+	jAcC68aQ1l+R5QD+iR/xFCzcUHLQl3MOhRKCW+EhV38X+FEtSIA+w/LLVfEWdov9KPyY4hGtvxH
+	XxWmyF78EkwJ1htJh8jXnCR3FTOjr37lwvZ4v
+X-Gm-Gg: AY/fxX63Ap2XeFn6HCZRrpMphxRoW7F7ocZv4u520NFfDtb0BOMRWZzVfW4KLV4z21h
+	hIkPykRjpg9QWdd1phXlUswPmhRtCUbY9f3lZIJXeuehMUPTdFlKzejfB5WTK4tn1e5OFMa+qHm
+	RKFwatswfIkzD5HrXvbAEXiB+3Zg3TJj0OdGgG+oVuO3MmkMAOhoQ3CeTH2Q4EhMELB1yG5ocFK
+	VbxhESwXG64Du46WHfuJUXkUtJSx3wJo0jB3vfnPmLmHgJ30swN4+2pVoH0GcAvMhFpik4pmKf1
+	CiqdJvJv8dPjdTitUKTNInxG2sG4KyuhSNaEbs8=
+X-Google-Smtp-Source: AGHT+IH8h+iLAFTHbLzeRSFMpvqY+B6gSpNp0cnCziIr7/WIVwVogFL7lPwTYji3seOccOFId00CR0ByWGZM+TQK+bk=
+X-Received: by 2002:a17:902:d4cb:b0:2a0:b438:fc15 with SMTP id
+ d9443c01a7336-2a0b438ff57mr37088875ad.11.1765764640114; Sun, 14 Dec 2025
+ 18:10:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <aCHHfY2FkVW2j0ML@hovoldconsulting.com> <CAFBinCAUNNfOp4qvn2p8AETossePv2aL7jBkFxVZV_XzzULgVg@mail.gmail.com>
+ <aINXS813fmWNJh3A@hovoldconsulting.com> <CAFBinCBMTOM-FMgENS-mrnV17HbKzhtPUd44_dDiwnD=+HVMWQ@mail.gmail.com>
+ <aIiXyEuPmWU00hFf@hovoldconsulting.com> <CAFBinCBZhjs7DGEgxhz54Dg8aW3NX9_LdnoZeUZpm5ohaT_-oQ@mail.gmail.com>
+ <aJCoRFe-RFW1MuDk@hovoldconsulting.com> <CAFBinCCYsWHsNwi99kFqvLv+xOYtp9u3omhrPdV-hdH+5Cfyew@mail.gmail.com>
+ <aK7Y9rRIsGBKRFAO@hovoldconsulting.com> <CAFBinCD19CVc0kX-aqa8pw71O2F3Nwy9ght+2TCn9B4PbOCBfw@mail.gmail.com>
+ <aS2hxeBR-tptevYd@hovoldconsulting.com>
+In-Reply-To: <aS2hxeBR-tptevYd@hovoldconsulting.com>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Mon, 15 Dec 2025 03:10:29 +0100
+X-Gm-Features: AQt7F2oUxyJwGd_WKCwwLF80-V75bjB5XWJtUOeV1SpEEBwZKD7mzdmljBNalKI
+Message-ID: <CAFBinCAt1DevnggWJdzBzh3X1Yfb0ScZXYsgkrA1cGrUmfXVwg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
+To: Johan Hovold <johan@kernel.org>
+Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, david@ixit.cz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-lpc32xx_udc_probe() acquires an i2c_client reference through
-isp1301_get_client() but fails to release it in both error handling
-paths and the normal removal path. This could result in a reference
-count leak for the I2C device, preventing proper cleanup and
-potentially leading to resource exhaustion. Add put_device() to
-release the reference in the probe failure path and in the remove
-function.
+Hi Johan,
 
-Calling path: isp1301_get_client() -> of_find_i2c_device_by_node() ->
-i2c_find_device_by_fwnode(). As comments of
-i2c_find_device_by_fwnode() says, 'The user must call
-put_device(&client->dev) once done with the i2c client.'
+On Mon, Dec 1, 2025 at 3:10=E2=80=AFPM Johan Hovold <johan@kernel.org> wrot=
+e:
+[...]
+> > Unfortunately I don't know how to read the HW flow control state from
+> > the hardware.
+> > Do you have any suggestions, how I can test HW flow control (after
+> > manually enabling it for a port)?
+>
+> You can try disabling reading from the device (e.g. never submit the
+> read urbs) and see if the RTS is deasserted when the buffer fills up.
+Doing so results in:
+- lots of UART_LSR_OE
+- RTS stays LOW (pulled to GND)
 
-Found by code review.
+UART_LSR_OE increasing seems correct as far as I understand this.
+RTS being LOW is wrong and I cannot manage to get ch348 to pull it to HIGH.
 
-Cc: stable@vger.kernel.org
-Fixes: 24a28e428351 ("USB: gadget driver for LPC32xx")
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
----
-Changes in v2:
-- simplified the patch as suggestions.
----
- drivers/usb/gadget/udc/lpc32xx_udc.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+I did some more research and found that ch348 implements UART_IIR_MSI
+and provides a fully standard compatible UART_MSR.
+This is either triggered by a status change on the pins (UART_MSR
+delta bits and the actual status bits), or by requesting an update
+using the VEN_R command (UART_MSR status bits only, no delta bits).
 
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-index 1a7d3c4f652f..73c0f28a8585 100644
---- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -3020,7 +3020,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
- 	pdev->dev.dma_mask = &lpc32xx_usbd_dmamask;
- 	retval = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
- 	if (retval)
--		return retval;
-+		goto i2c_fail;
- 
- 	udc->board = &lpc32xx_usbddata;
- 
-@@ -3038,28 +3038,32 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
- 	/* Get IRQs */
- 	for (i = 0; i < 4; i++) {
- 		udc->udp_irq[i] = platform_get_irq(pdev, i);
--		if (udc->udp_irq[i] < 0)
--			return udc->udp_irq[i];
-+		if (udc->udp_irq[i] < 0) {
-+			retval = udc->udp_irq[i];
-+			goto i2c_fail;
-+		}
- 	}
- 
- 	udc->udp_baseaddr = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(udc->udp_baseaddr)) {
- 		dev_err(udc->dev, "IO map failure\n");
--		return PTR_ERR(udc->udp_baseaddr);
-+		retval = PTR_ERR(udc->udp_baseaddr);
-+		goto i2c_fail;
- 	}
- 
- 	/* Get USB device clock */
- 	udc->usb_slv_clk = devm_clk_get(&pdev->dev, NULL);
- 	if (IS_ERR(udc->usb_slv_clk)) {
- 		dev_err(udc->dev, "failed to acquire USB device clock\n");
--		return PTR_ERR(udc->usb_slv_clk);
-+		retval = PTR_ERR(udc->usb_slv_clk);
-+		goto i2c_fail;
- 	}
- 
- 	/* Enable USB device clock */
- 	retval = clk_prepare_enable(udc->usb_slv_clk);
- 	if (retval < 0) {
- 		dev_err(udc->dev, "failed to start USB device clock\n");
--		return retval;
-+		goto i2c_fail;
- 	}
- 
- 	/* Setup deferred workqueue data */
-@@ -3161,6 +3165,8 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
- 	dma_free_coherent(&pdev->dev, UDCA_BUFF_SIZE,
- 			  udc->udca_v_base, udc->udca_p_base);
- i2c_fail:
-+	if (udc->isp1301_i2c_client)
-+		put_device(&udc->isp1301_i2c_client->dev);
- 	clk_disable_unprepare(udc->usb_slv_clk);
- 	dev_err(udc->dev, "%s probe failed, %d\n", driver_name, retval);
- 
-@@ -3189,6 +3195,9 @@ static void lpc32xx_udc_remove(struct platform_device *pdev)
- 	dma_free_coherent(&pdev->dev, UDCA_BUFF_SIZE,
- 			  udc->udca_v_base, udc->udca_p_base);
- 
-+	if (udc->isp1301_i2c_client)
-+		put_device(&udc->isp1301_i2c_client->dev);
-+
- 	clk_disable_unprepare(udc->usb_slv_clk);
- }
- 
--- 
-2.17.1
+In a very simple test-case I've used jumper cables on port #0 of ch348:
+- RX and TX connected together
+- CTS and RTS connected together
 
+If I remove the jumper between CTS and RTS I get:
+  ch348 ttyUSB0: got MSR =3D 0x01 // jumper removed
+  ch348 ttyUSB0: got MSR =3D 0x11 // jumper connected again
+  ch348 ttyUSB0: got MSR =3D 0x01 // jumper removed again
+
+So the hardware does register the change.
+
+Earlier I thought I found a fix: I had the values for
+R_C4_HW_FLOW_CONTROL_OFF and R_C4_HW_FLOW_CONTROL_ON swapped.
+That however didn't fix it.
+
+My current work can be found here: [0]
+If you also don't have any further ideas then I'll drop the whole
+RTS/CTS code for now so the ch348 driver can finally make it into
+Linux 6.20
+
+> And in the other direction, verify that writes are buffered after you
+> deassert RTS manually on the other end. That should be easier.
+This seems to work: if I pull CTS up then ch348 stops sending data
+
+> > In case I can't easily figure it out: would you also accept a driver
+> > that doesn't support RTS/CTS for its initial version?
+>
+> It's good to at least be able to control DTR/RST at open/close (i.e.
+> implement dtr_rts()) so that you can communicate when the other end
+> has hw flow enabled. Sound like you're really close to doing so.
+In the meantime I found out why I had trouble with the DTR signal on port 1=
+.
+It was a user(space) error. I've been using [1] for some of my tests
+and it has a bug where it would clear c_cflag HUPCL [2], which
+prevents the kernel from turning DTR off on port close.
+
+[...]
+> You can (should) set num_ports higher (e.g. indirectly via
+> calc_num_ports()) for devices that mux data for multiple ports over
+> a shared endpoint (like this device, iirc).
+>
+> mxuport and a couple of other drivers implements such a scheme.
+I saw this and I'm switching over to use this as it simplifies my code.
+
+> > This, together with delaying the call to
+> > usb_serial_generic_write_bulk_callback() until we receive
+> > UART_IIR_THRI allowed me to get rid of the workqueue and re-use a lot
+> > more code from the USB serial core.
+>
+> For writing if you need to wait for THRE per port then it may be best to
+> just use a driver specific write implementation (using a single urb per
+> port). That should be more readable/maintainable.
+>
+> You can still let core allocate the urb and writer buffer for you (by
+> providing the endpoint mapping in calc_num_ports()).
+I started implementing the endpoint mapping in calc_num_ports and it
+simplified the code.
+
+
+Best regards,
+Martin
+
+
+[0] https://github.com/xdarklight/ch348/blob/v9-prep-20251214/ch348.c
+[1] https://github.com/cbrake/linux-serial-test/
+[2] https://github.com/cbrake/linux-serial-test/pull/70
 
