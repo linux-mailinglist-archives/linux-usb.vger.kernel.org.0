@@ -1,400 +1,204 @@
-Return-Path: <linux-usb+bounces-31441-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31442-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D423CBDCF9
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 13:31:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B41C7CBDD56
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 13:36:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CA57B3014AC2
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 12:25:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8E91E303B7E3
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 12:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D203244664;
-	Mon, 15 Dec 2025 12:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NppVhiOd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5DF3221277;
+	Mon, 15 Dec 2025 12:30:36 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f77.google.com (mail-oo1-f77.google.com [209.85.161.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E964B1A9FAB;
-	Mon, 15 Dec 2025 12:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F143B2040B6
+	for <linux-usb@vger.kernel.org>; Mon, 15 Dec 2025 12:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765801506; cv=none; b=atAFd5ZlbNcPNtLCQOwf3Ukq9t7fiR3VO0futjjYZccsaJPiHQm9lfmtEnHA3r5Jb6HVINXUoEhmFujmRA1X13/sLUEilwkYsYL/ZL7inSwo393fUgQXpV8Tj1t0Sf6Rj/nEXxeUvo7oVWDyfJ5HE1Tf+XCuSX15AWeme3DQQ9o=
+	t=1765801834; cv=none; b=d+g3yStAyb5HTKiHPbuwXx5MRjAcgxPdtOnFnTt7nsPsKDH1UPtGbfFH+oyGrC6/eXr7MFygzKwsaKV0En/DVZ1/fhqvRK/m4guFdHJAGz1xMzs3gmVYbWsnDAUiq9zCxtifrwX1yNgV9umNeLJWr0krck2c1E6w1cu5EysnR3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765801506; c=relaxed/simple;
-	bh=54O/o+NXfIbUPOj9ZLP3re6xSen+WDvkoxoCgT1QRRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PT693C0rDlFAhY51SSnDyB6e5eYHZrYm4LjON9WKa464wouK6KS+UkwT/c8Ej8eO1y/tY7uNgsp4cQAxRxa4Umpp3Ue3UxJO4eC3a/KV0auWdn9B7Bc2RDF0jmIz31ae9d2hcc9Md2eBtP7TtWNAH/crpTYcFYKJK/k54el7oVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NppVhiOd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57778C4CEFB;
-	Mon, 15 Dec 2025 12:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765801504;
-	bh=54O/o+NXfIbUPOj9ZLP3re6xSen+WDvkoxoCgT1QRRs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NppVhiOd6/HjkPxqVPG2pPoMhDtupDVeKkq3e2IIA27hAIfbqOiXPHSHAA6Kcy2Y7
-	 tLUmJxMGu1Hu7s1pRSVu5Taa6v6z/lcYHswUs6q3KNV+3RVWxzBUxezwncNAGH0kI9
-	 wV6O/SRq+Fju7adItmpwSRW3UjbQGVoZuRnX/IoFPbtJdKBzX3qUHmBcu3TuW9RREn
-	 S8iUXz1U0+oMY1vo2sulj3KnVOzAZM3YIpBtkBW6FoUkDZcpq8dCK8q/0BCJ8bTRhn
-	 kNuLsC5k5Y4SMTVFcZIGGdkAE9M5DueGtEZu96y5yU+kvkNPA9IL2vPsediosDTlC1
-	 0KDe3KYlHFJqA==
-Date: Mon, 15 Dec 2025 13:25:00 +0100
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Sam Halliday <sam.halliday@gmail.com>
-Cc: Salvatore Bonaccorso <carnil@debian.org>, 1122193@bugs.debian.org, 
-	Jiri Kosina <jikos@kernel.org>, linux-usb@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: usb hid descriptor requirements are rejecting hardware (ZWO
- EFWmini, 03c3:1f01)
-Message-ID: <hea3geox2cji2iye6ortlgxqlgtcnjv35imkko33vp2ksrywbi@cd3n32uwx73y>
-References: <176520622961.2658.15817888352918425136.reportbug@Samwise>
- <aT7TPAInuBOXctEZ@eldamar.lan>
- <cpgdwmdhfl7tkqe2x263o2xeeclgvbal5onlkj7qcte73jhs5i@h2tdtzmiabcn>
+	s=arc-20240116; t=1765801834; c=relaxed/simple;
+	bh=t7mnA1JXNIt1sowABfFOYKVU4INnCQt8fzFOmRHGBxo=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=AjtUGKr+gVdwOqTo7DjSDMUN9QBXYXqruVrQvu7HdDeCp95cs0AGdV5pCTQLL3vic9aZU3BaXjI/KdHXQcWTYvAuPYOUyjfMT97wW8poTAxpjR94CU4o7OZMk/ZIY1JBrEQuwY1q3Q+LGNfIEVnYkCc+zLTSZ8s+MO/RVrjVuN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f77.google.com with SMTP id 006d021491bc7-65b325457e5so3155107eaf.1
+        for <linux-usb@vger.kernel.org>; Mon, 15 Dec 2025 04:30:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765801830; x=1766406630;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FmkbodutDZC8hdluHMNGaoY/QA3lBOYK1JpBNIovc6o=;
+        b=NzQR//GCVky8tL1gOre3lwlBsaufxYdUhh73qpLHwwHuZF2GzHXFF4Ht5X8LNdL7kT
+         CyQLMo33OePChvDbx95xGGZoaJt6ZlESEghRPSuH87D07BEuKB7yaSZ7z9idGYfzgoIY
+         XGp1Zx9sumxy1jfW+uD7yhDmXUeqS7cZxuAKu3/2TuoK9hq9KXt+j9iCBRacKy3v0+Tw
+         aoCj/j3zPhDMffCy8mnNVsIVCa0uOG+bTeG5Yb29839lmsX9tEvwzh4DKkMjhGYVj82V
+         iv+CtPg6k8B+2cDaeoxoIlam1gZCuH0HhMvL66Qp9ScjsIvVq6Dyv6EgU/A0v0dV6ZZM
+         pXMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVumQODf1SXA8IeSgZq3wy+UUAJG+22VGmbYvBXc2HoLjvsCUImfJqcfXXAhWKd1f4qm1xR7W1U88A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3vubnJMK8uuye2Ru7SSAut1jALayJfS6NmDvlYn4HLewRK+4V
+	0NoltR8YTz0xO8RErxVdloRFDqZbUdXBb5OQjx3xx8AlOBv4wopx/TfzOxAsGjz9wdf9HD3GO4Z
+	bbfwoqKSCflr66fI6VG2erMyvwJdR4ol8qvxUi43BMxQFHPKQisWwN5WtpUQ=
+X-Google-Smtp-Source: AGHT+IFBpHRYsDCnNt2eAl1dpSRNDfYZWXdJ00ZGq0lOAKWf1vzhcrgROGEj8y0yiOAlvGdE03Dxkp/doBRwRaci4pJ+5cVKzusy
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cpgdwmdhfl7tkqe2x263o2xeeclgvbal5onlkj7qcte73jhs5i@h2tdtzmiabcn>
+X-Received: by 2002:a05:6820:f009:b0:657:5723:76c8 with SMTP id
+ 006d021491bc7-65b451812f6mr5115110eaf.6.1765801830725; Mon, 15 Dec 2025
+ 04:30:30 -0800 (PST)
+Date: Mon, 15 Dec 2025 04:30:30 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <693fff66.a70a0220.104cf0.033d.GAE@google.com>
+Subject: [syzbot] [net?] [usb?] WARNING in mdiobus_get_phy
+From: syzbot <syzbot+3d43c9066a5b54902232@syzkaller.appspotmail.com>
+To: andrew@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	hkallweit1@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux@armlinux.org.uk, netdev@vger.kernel.org, 
+	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Dec 15, 2025, Sam Halliday wrote:
-> Hi Ben,
-> 
-> In answer to your logging request, this is the output after running
-> 
-> echo 'file drivers/hid/usbhid/hid-core.c +p' | sudo tee /sys/kernel/debug/dynamic_debug/control
-> 
-> and plugging in the device (with the debian kernel, not my patched one)
-> 
-> [  371.897694] usb 1-2: new full-speed USB device number 8 using xhci_hcd
-> [  372.036133] usb 1-2: New USB device found, idVendor=03c3, idProduct=1f01, bcdDevice= 0.00
-> [  372.036145] usb 1-2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> [  372.036149] usb 1-2: Product: ZWO EFW
-> [  372.036152] usb 1-2: Manufacturer: ZW0
-> [  372.043375] drivers/hid/usbhid/hid-core.c: HID probe called for ifnum 0
-> [  372.043404] drivers/hid/usbhid/hid-core.c: hid descriptor invalid, bLen=9 bNum=2
+Hello,
 
-Looks like the length is shorter than expected. However, after looking
-more carefully into the code, it seems we can bypass the check as long
-as the provided length is greater than sizeof(*hdesc), because later in
-the code we simply ignore any optional HID class descriptors.
+syzbot found the following issue on:
 
-Would you mind testing the following patch?:
+HEAD commit:    5ce74bc1b7cb Add linux-next specific files for 20251211
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=130b51c2580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b9f785244b836412
+dashboard link: https://syzkaller.appspot.com/bug?extid=3d43c9066a5b54902232
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13baa61a580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e550c10060d5/disk-5ce74bc1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/80331ba2b4cc/vmlinux-5ce74bc1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/4bcb4f82dfcf/bzImage-5ce74bc1.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3d43c9066a5b54902232@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+addr 207 out of range
+WARNING: drivers/net/phy/mdio_bus.c:76 at mdiobus_find_device drivers/net/phy/mdio_bus.c:76 [inline], CPU#0: kworker/0:5/6044
+WARNING: drivers/net/phy/mdio_bus.c:76 at mdiobus_get_phy+0xaf/0xd0 drivers/net/phy/mdio_bus.c:86, CPU#0: kworker/0:5/6044
+Modules linked in:
+CPU: 0 UID: 0 PID: 6044 Comm: kworker/0:5 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:mdiobus_find_device drivers/net/phy/mdio_bus.c:76 [inline]
+RIP: 0010:mdiobus_get_phy+0xb1/0xd0 drivers/net/phy/mdio_bus.c:86
+Code: e8 34 1c 73 fb eb 07 e8 ed 17 73 fb 31 db 48 89 d8 5b 41 5e 41 5f c3 cc cc cc cc cc e8 d8 17 73 fb 48 8d 3d 31 16 81 09 89 de <67> 48 0f b9 3a eb db 89 f9 80 e1 07 80 c1 03 38 c1 7c b1 e8 57 7a
+RSP: 0018:ffffc900033a6aa8 EFLAGS: 00010293
+RAX: ffffffff864edf78 RBX: 00000000000000cf RCX: ffff88802a9ebd00
+RDX: 0000000000000000 RSI: 00000000000000cf RDI: ffffffff8fcff5b0
+RBP: ffffc900033a6bf0 R08: ffffc900033a6787 R09: 1ffff92000674cf0
+R10: dffffc0000000000 R11: fffff52000674cf1 R12: ffff888078e2cdc0
+R13: dffffc0000000000 R14: ffff88807cd12000 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8881259e6000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f1c669c9e9c CR3: 000000000e13a000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ ax88772_init_phy+0x8e/0x390 drivers/net/usb/asix_devices.c:722
+ ax88772_bind+0x961/0xde0 drivers/net/usb/asix_devices.c:937
+ usbnet_probe+0xab5/0x28f0 drivers/net/usb/usbnet.c:1802
+ usb_probe_interface+0x668/0xc90 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26d/0xad0 drivers/base/dd.c:659
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
+ __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1086
+ bus_probe_device+0x12a/0x220 drivers/base/bus.c:574
+ device_add+0x7b6/0xb80 drivers/base/core.c:3689
+ usb_set_configuration+0x1a87/0x2110 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0x8d/0x150 drivers/usb/core/generic.c:250
+ usb_probe_device+0x1c4/0x3c0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26d/0xad0 drivers/base/dd.c:659
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
+ __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1086
+ bus_probe_device+0x12a/0x220 drivers/base/bus.c:574
+ device_add+0x7b6/0xb80 drivers/base/core.c:3689
+ usb_new_device+0xa39/0x1720 drivers/usb/core/hub.c:2695
+ hub_port_connect drivers/usb/core/hub.c:5567 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x29b1/0x4ef0 drivers/usb/core/hub.c:5953
+ process_one_work+0x93a/0x15a0 kernel/workqueue.c:3279
+ process_scheduled_works kernel/workqueue.c:3362 [inline]
+ worker_thread+0x9b0/0xee0 kernel/workqueue.c:3443
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	e8 34 1c 73 fb       	call   0xfb731c39
+   5:	eb 07                	jmp    0xe
+   7:	e8 ed 17 73 fb       	call   0xfb7317f9
+   c:	31 db                	xor    %ebx,%ebx
+   e:	48 89 d8             	mov    %rbx,%rax
+  11:	5b                   	pop    %rbx
+  12:	41 5e                	pop    %r14
+  14:	41 5f                	pop    %r15
+  16:	c3                   	ret
+  17:	cc                   	int3
+  18:	cc                   	int3
+  19:	cc                   	int3
+  1a:	cc                   	int3
+  1b:	cc                   	int3
+  1c:	e8 d8 17 73 fb       	call   0xfb7317f9
+  21:	48 8d 3d 31 16 81 09 	lea    0x9811631(%rip),%rdi        # 0x9811659
+  28:	89 de                	mov    %ebx,%esi
+* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
+  2f:	eb db                	jmp    0xc
+  31:	89 f9                	mov    %edi,%ecx
+  33:	80 e1 07             	and    $0x7,%cl
+  36:	80 c1 03             	add    $0x3,%cl
+  39:	38 c1                	cmp    %al,%cl
+  3b:	7c b1                	jl     0xffffffee
+  3d:	e8                   	.byte 0xe8
+  3e:	57                   	push   %rdi
+  3f:	7a                   	.byte 0x7a
+
 
 ---
-From 07020d68764a29a9e5d4e95be1820e0c75a4216a Mon Sep 17 00:00:00 2001
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Mon, 15 Dec 2025 12:57:21 +0100
-Subject: [PATCH] HID: usbhid: paper over wrong bNumDescriptor field
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Some faulty devices (ZWO EFWmini) have a wrong optional HID class
-descriptor count compared to the provided length.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Given that we plainly ignore those optional descriptor, we can attempt
-to fix the provided number so we do not lock out those devices.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- drivers/hid/usbhid/hid-core.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index aac0051a2cf6..758eb21430cd 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -985,6 +985,7 @@ static int usbhid_parse(struct hid_device *hid)
- 	struct usb_device *dev = interface_to_usbdev (intf);
- 	struct hid_descriptor *hdesc;
- 	struct hid_class_descriptor *hcdesc;
-+	__u8 fixed_opt_descriptors_size;
- 	u32 quirks = 0;
- 	unsigned int rsize = 0;
- 	char *rdesc;
-@@ -1015,7 +1016,21 @@ static int usbhid_parse(struct hid_device *hid)
- 			      (hdesc->bNumDescriptors - 1) * sizeof(*hcdesc)) {
- 		dbg_hid("hid descriptor invalid, bLen=%hhu bNum=%hhu\n",
- 			hdesc->bLength, hdesc->bNumDescriptors);
--		return -EINVAL;
-+
-+		/*
-+		 * Some devices may expose a wrong number of descriptors compared
-+		 * to the provided length.
-+		 * However, we ignore the optional hid class descriptors entirely
-+		 * so we can safely recompute the proper field.
-+		 */
-+		if (hdesc->bLength >= sizeof(*hdesc)) {
-+			fixed_opt_descriptors_size = hdesc->bLength - sizeof(*hdesc);
-+
-+			hid_warn(intf, "fixing wrong optional hid class descriptors count\n");
-+			hdesc->bNumDescriptors = fixed_opt_descriptors_size / sizeof(*hcdesc) + 1;
-+		} else {
-+			return -EINVAL;
-+		}
- 	}
- 
- 	hid->version = le16_to_cpu(hdesc->bcdHID);
--- 
-2.51.1
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
----
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-Cheers,
-Benjamin
-
-> [  372.043409] usbhid 1-2:1.0: can't add hid device: -22
-> [  372.043422] usbhid 1-2:1.0: probe with driver usbhid failed with error -22
-> 
-> Also here is a more detailed lsusb output
-> 
-> 
-> Bus 001 Device 008: ID 03c3:1f01 ZWO ZWO EFW
-> Negotiated speed: Full Speed (12Mbps)
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               1.10
->   bDeviceClass            0 [unknown]
->   bDeviceSubClass         0 [unknown]
->   bDeviceProtocol         0
->   bMaxPacketSize0        16
->   idVendor           0x03c3 ZWO
->   idProduct          0x1f01 ZWO EFW
->   bcdDevice            0.00
->   iManufacturer           1 ZW0
->   iProduct                2 ZWO EFW
->   iSerial                 0
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x0029
->     bNumInterfaces          1
->     bConfigurationValue     1
->     iConfiguration          0
->     bmAttributes         0x80
->       (Bus Powered)
->     MaxPower               64mA
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass         3 Human Interface Device
->       bInterfaceSubClass      0 [unknown]
->       bInterfaceProtocol      0
->       iInterface              0
->       Warning: Descriptor too short
->         HID Device Descriptor:
->           bLength                 9
->           bDescriptorType        33
->           bcdHID               1.01
->           bCountryCode            0 Not supported
->           bNumDescriptors         2
->           bDescriptorType        34 (null)
->           wDescriptorLength      68
->           bDescriptorType         0 (null)
->           wDescriptorLength       0
->           Report Descriptor: (length is 68)
->             Item(Global): Usage Page, data= [ 0x00 0xff ] 65280
->                             (null)
->             Item(Local ): (null), data= [ 0x01 ] 1
->                             (null)
->             Item(Main  ): (null), data= [ 0x01 ] 1
->                             Application
->             Item(Global): (null), data= [ 0x01 ] 1
->             Item(Global): (null), data= [ 0x0f ] 15
->             Item(Global): (null), data= [ 0x08 ] 8
->             Item(Global): (null), data= [ 0xff 0x00 ] 255
->             Item(Global): (null), data= [ 0x00 ] 0
->             Item(Local ): (null), data= [ 0x01 ] 1
->                             (null)
->             Item(Main  ): (null), data= [ 0x02 ] 2
->                             Data Variable Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Global): (null), data= [ 0x02 ] 2
->             Item(Global): (null), data= [ 0x0f ] 15
->             Item(Global): (null), data= [ 0x08 ] 8
->             Item(Global): (null), data= [ 0xff 0x00 ] 255
->             Item(Global): (null), data= [ 0x00 ] 0
->             Item(Local ): (null), data= [ 0x01 ] 1
->                             (null)
->             Item(Main  ): (null), data= [ 0x02 ] 2
->                             Data Variable Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Global): (null), data= [ 0x03 ] 3
->             Item(Global): (null), data= [ 0x0f ] 15
->             Item(Global): (null), data= [ 0x08 ] 8
->             Item(Global): (null), data= [ 0xff 0x00 ] 255
->             Item(Global): (null), data= [ 0x00 ] 0
->             Item(Local ): (null), data= [ 0x01 ] 1
->                             (null)
->             Item(Main  ): (null), data= [ 0x02 ] 2
->                             Data Variable Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Global): (null), data= [ 0x04 ] 4
->             Item(Global): (null), data= [ 0x0f ] 15
->             Item(Global): (null), data= [ 0x08 ] 8
->             Item(Global): (null), data= [ 0xff 0x00 ] 255
->             Item(Global): (null), data= [ 0x00 ] 0
->             Item(Local ): (null), data= [ 0x01 ] 1
->                             (null)
->             Item(Main  ): (null), data= [ 0x02 ] 2
->                             Data Variable Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Main  ): (null), data=none
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x81  EP 1 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0010  1x 16 bytes
->         bInterval              10
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x01  EP 1 OUT
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0010  1x 16 bytes
->         bInterval              10
-> Device Status:     0x0000
->
->
->   (Bus Powered)> On Dec 15 2025, Benjamin Tissoires wrote:
-> > On Dec 14 2025, Salvatore Bonaccorso wrote:
-> > > Hi Sam,
-> > > 
-> > > Jiri, Benjamin, this is about a report originally done in Debian as
-> > > https://bugs.debian.org/1122193 where Sam's device, a ZWO EFWmini with
-> > > vendor and product id's as 03c3:1f01 is not working, usbhid not
-> > > loaded.
-> > > 
-> > > On Mon, Dec 08, 2025 at 03:03:49PM +0000, Sam Halliday wrote:
-> > > > Package: linux-image-amd64
-> > > > Version: 6.12.57-1
-> > > > Severity: normal
-> > > > Tags: patch
-> > > > X-Debbugs-Cc: debian-amd64@lists.debian.org
-> > > > User: debian-amd64@lists.debian.org
-> > > > Usertags: amd64
-> > > > 
-> > > > Dear Maintainer,
-> > > > 
-> > > > I propose a patch to workaround USB HID descriptor requirements that
-> > > > are stopping users from being able to use astrophotography
-> > > > equipment.
-> > > > 
-> > > > I have a usb device (an ZWO EFWmini, used for astronomy) which has
-> > > > the following vendor information: 03c3:1f01 ZWO ZWO EFW
-> > > > 
-> > > > This device is known to offer a suboptimal descriptor, e.g. see the lsusb output
-> > > > 
-> > > >       Warning: Descriptor too short
-> > > >         HID Device Descriptor:
-> > > >           bLength                 9
-> > > >           bDescriptorType        33
-> > > >           bcdHID               1.01
-> > > >           bCountryCode            0 Not supported
-> > > >           bNumDescriptors         2
-> > > >           bDescriptorType        34 (null)
-> > > >           wDescriptorLength      68
-> > > >           bDescriptorType         0 (null)
-> > > >           wDescriptorLength       0
-> > > >           Report Descriptors: 
-> > > >             ** UNAVAILABLE **
-> > > > 
-> > > > My software (I write it, it is GPLv3, I'm the only user, but it isn't particularly relevant...) runs primarilly on a raspberry pi, which accepts this with kernel 6.12.25-1+rpt1, and I've also done some desktop development on archlinux (unknown kernel versions but up to at least 6 months ago). I only access the hardware for development from a debian desktop computer.
-> > > > 
-> > > > Since moving to Debian 13, my hardware no longer works, with dmesg showing the following error:
-> > > > 
-> > > > [   14.182522] usb 1-2.2: new full-speed USB device number 10 using xhci_hcd
-> > > > [   14.276921] usb 1-2.2: New USB device found, idVendor=03c3, idProduct=1f01, bcdDevice= 0.00
-> > > > [   14.276930] usb 1-2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> > > > [   14.276933] usb 1-2.2: Product: ZWO EFW
-> > > > [   14.276935] usb 1-2.2: Manufacturer: ZW0
-> > > > [   14.282951] usbhid 1-2.2:1.0: can't add hid device: -22
-> > > > [   14.282963] usbhid 1-2.2:1.0: probe with driver usbhid failed with error -22
-> > > > 
-> > > > I have tried going back as far as debian's kernel from bullseye (5.10), bookworm (6.1), trixie (6.12) and backports (6.17) but it's the same error every time.
-> > > > 
-> > > > Communicating with the ZWO (the device manufacturer) support team, they recommended patching the kernel, which I did, and it now works.
-> > > > 
-> > > > I applied the following patch and built my own kernel
-> > > > 
-> > > > ===========================================================================
-> > > > --- drivers/hid/usbhid/hid-core.c.orig	2025-12-08 13:15:08.657917762 +0000
-> > > > +++ drivers/hid/usbhid/hid-core.c	2025-12-08 13:16:24.293959487 +0000
-> > > > @@ -1015,7 +1015,7 @@
-> > > >  			      (hdesc->bNumDescriptors - 1) * sizeof(*hcdesc)) {
-> > > >  		dbg_hid("hid descriptor invalid, bLen=%hhu bNum=%hhu\n",
-> > > >  			hdesc->bLength, hdesc->bNumDescriptors);
-> > > > -		return -EINVAL;
-> > > > +		// return -EINVAL;
-> > 
-> > That looks like the wrong thing to do, especialy because the 2 previous
-> > commits introducing that check are to protect against out of bound
-> > errors:
-> > See fe7f7ac8e0c7 ("HID: usbhid: Eliminate recurrent out-of-bounds bug in usbhid_parse()")
-> > 
-> > Can we get the debug output from the line above (or just add plain
-> > printks in the running kernel)? I suspect we might losen the test with a
-> > '<' instead of an '!='.
-> > 
-> > > >  	}
-> > > >  
-> > > >  	hid->version = le16_to_cpu(hdesc->bcdHID);
-> > > > ===========================================================================
-> > > > 
-> > > > The new dmesg output is
-> > > > 
-> > > > [  366.477628] usbhid 1-2:1.0: 1 unsupported optional hid class descriptors
-> > > > [  366.478327] hid-generic 0003:03C3:1F01.0006: hiddev1,hidraw4: USB HID v1.01 Device [ZW0 ZWO EFW] on usb-000
-> > > > 
-> > > > 
-> > > > Apologies but I don't think I'm giving you a particularly good patch
-> > > > because the author of this code clearly intended for a -EINVAL
-> > > > failure. A kernel dev may prefer to create a hardware quirk (which
-> > > > ideally should be enabled for 03c3:1f01 by default) to exit if the
-> > > > descriptor isn't valid. I'm not a kernel developer so that's beyond
-> > > > me.
-> > > > 
-> > > > The device works perfectly fine despite the descriptor not meeting
-> > > > the kernel's current requirements. And I don't believe a firmware
-> > > > upgrade is possible... it's just a little motor that turns a wheel
-> > > > containing photographic filters.
-> > > 
-> > > I suspect your case can be a candidate for HID-BPF, cf.
-> > > https://docs.kernel.org/hid/hid-bpf.html and you might try to fixup
-> > > the required descriptors.
-> > 
-> > Unfortunatelly no. HID-BPF works for fixing HID protocol errors, but in
-> > this case the device is not presented by the transport layer, so we can
-> > not do anything there :(
-> > 
-> > > 
-> > > But I'm not entirely sure. Jiri and Benjamin is that something we
-> > > could have quirk for the device or the problem tackled in some other
-> > > way?
-> > 
-> > Quirking seems the wrong approach. I would be curious to know the length
-> > of the binary descriptor. I suspect there is some mismatch and the end
-> > is filled with 0. If the length is shorter, that's going to be a bigger
-> > problem to solve.
-> > 
-> > Cheers,
-> > Benjamin
-> > 
-> > > 
-> > > Regards,
-> > > Salvatore
+If you want to undo deduplication, reply with:
+#syz undup
 
