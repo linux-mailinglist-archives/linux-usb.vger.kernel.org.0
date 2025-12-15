@@ -1,108 +1,114 @@
-Return-Path: <linux-usb+bounces-31436-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31437-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD84BCBCEDD
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 09:12:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5566ACBD4B5
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 10:56:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8D8CF300948F
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 08:12:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9505E3013ECE
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Dec 2025 09:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43ACF31B137;
-	Mon, 15 Dec 2025 08:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BB5315772;
+	Mon, 15 Dec 2025 09:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UzwM+eU0"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="Y6qIWE3W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail1.manjaro.org (mail1.manjaro.org [142.132.176.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B851E31354E
-	for <linux-usb@vger.kernel.org>; Mon, 15 Dec 2025 08:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968B429B777;
+	Mon, 15 Dec 2025 09:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=142.132.176.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765786376; cv=none; b=J3UM9eghPJgDHGYkjFr5wQIfqqzSXGuPs5vFSOvjxy58j/5Rp95pZbUyteUGKT8olOs+kwYAIYigpJaGtznZBR5G/M2y+6g/HTeaq30AQ+e6XZOikIX2Ip+ViFdYid7Ya/XKNkAV7/SuETizEakVmL51OtoQ1e9sommrQRCIESI=
+	t=1765792586; cv=none; b=B/WCkShmALLZz95OZKLla0DwMS6yz+2fn88KCp/h00VCXVS/mx9ImD6W8Tq2jIvHR+CQaJ/c1u1izgbPc02mo3eWvPLuH93HDEtfp51HgmKb8kg7vr//Np7IjwzBdUnMr2a+/ipFzdbp3WJfO76zl7u/nwPjrzOPBtUyVQL143Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765786376; c=relaxed/simple;
-	bh=TnibSIuqTD+xw/Wq7pm+z3eTrmr1rBbaEd4Hm7rUSA4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tijg5MA0mvg58JWVgJK20Dy6Uw/3MTm2XWxnB0QuA4fopwveXJ68PoPplajuhrYfXCLm3vVgGUoGn3GiOmIMxwmZoho0pYn5hO/DQT5Wc6tD4yzJAvXpOJ3W2ZMHrv5yxCiJ2tq5g/8CCJOskbPUI6IExZJKMkhZiqA2KtcdQN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UzwM+eU0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E92B2C4CEF5;
-	Mon, 15 Dec 2025 08:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1765786376;
-	bh=TnibSIuqTD+xw/Wq7pm+z3eTrmr1rBbaEd4Hm7rUSA4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UzwM+eU0CIru7vTSNGYyykujKmhRcP8fIg5WZxRe/MirissAGPXn9GdSPuAZgt0o9
-	 LA6sS/1EKYYmeL7+7BRz3EO3iG40Ld0eBQvrdIMKGfGNISpSZqz91WxcVQ9qIXeasD
-	 mlxsn6tkrqf23oxZPAPtx5Z3uFeUfvHwPJiIJ/mU=
-Date: Mon, 15 Dec 2025 09:12:52 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: mario.limonciello@amd.com, heikki.krogerus@linux.intel.com,
-	lumag@kernel.org, ukaszb@chromium.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Fix null pointer dereference in
- ucsi_sync_control_common
-Message-ID: <2025121542-implicate-ideally-dfa5@gregkh>
-References: <20251214183729.150811-1-superm1@kernel.org>
+	s=arc-20240116; t=1765792586; c=relaxed/simple;
+	bh=lSNbYAu8lkoVN+OFRFDSmjK26Hg0H3/ilQ5CXzMzMYI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=VISSeJD/FeC3JZiqW2JSfKwOkD2hshgpErto7ZcRjZ73N0pDIBvAlh9YvKSf3UMIfmmzgUzQLl0qdyCKXygOLjCFl33a7wTBsg0wLlwvODyM8lwwYkHXwv4G0uMvsXrbOefe1fcSJ+TnhX+Ny4ZA6eCnQ2E6e5+dTfJOyinhG1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=Y6qIWE3W; arc=none smtp.client-ip=142.132.176.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 42757417C1;
+	Mon, 15 Dec 2025 10:56:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=dkim;
+	t=1765792572; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=TzFLaCh6dPkm5xGJzF1dzK9jvaJm/GhhTTcNtMo0sIU=;
+	b=Y6qIWE3WFN8ROcTe4WexoFaNeRQvqBJejqVpY5RGJUrbawF6gd/GEoS0ZLZKUzIVeyc7fS
+	kvJrodY5xzmsIQOVglR7DE/U+2uPsl6JnOX2KlaapsBBGHwTTbDjJh++mpviUry1i9fk1J
+	1//JA8uNpNkukDZhBC6urOKRVxZCR4XIGwNjwgziva1Ye+Mgy+WDuu0zdGSJle540cd4U4
+	NkgyH+4LldtaVXb/rFEl7wF4JluyzFybn/6xwjlcvSBuzmf4k5d2PosPZ+Ne0DfVb+nChg
+	R3HmHxppFqAbPOMzYPQaT7WbLXrZNZt2pUyl8Vhos0JLXyDEbIm/FAfJIAEJiQ==
+From: Dragan Simic <dsimic@manjaro.org>
+To: arnaud.ferraris@collabora.com
+Cc: badhri@google.com,
+	gregkh@linuxfoundation.org,
+	heikki.krogerus@linux.intel.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	m.grzeschik@pengutronix.de,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] tcpm: allow looking for role_sw device in the main node
+Date: Mon, 15 Dec 2025 10:55:52 +0100
+Message-Id: <20251215095552.3240340-1-dsimic@manjaro.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20251127-fix-ppp-power-v1-1-52cdd74c0ee6@collabora.com>
+References: <20251127-fix-ppp-power-v1-1-52cdd74c0ee6@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251214183729.150811-1-superm1@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Sun, Dec 14, 2025 at 12:36:41PM -0600, Mario Limonciello (AMD) wrote:
-> Add missing null check for cci parameter before dereferencing it in
-> ucsi_sync_control_common(). The function can be called with cci=NULL
-> from ucsi_acknowledge(), which leads to a null pointer dereference
-> when accessing *cci in the condition check.
+Hello Arnaud,
+
+Thanks for this patch!  Please, see some comments below.
+
+On Thu, 27 Nov 2025 15:04:15 +0100, Arnaud Ferraris <arnaud.ferraris@collabora.com> wrote:
+> When ports are defined in the tcpc main node, fwnode_usb_role_switch_get
+> returns an error, meaning usb_role_switch_get (which would succeed)
+> never gets a chance to run as port->role_sw isn't NULL, causing a
+> regression on devices where this is the case.
 > 
-> The crash occurs because the code checks if cci is not null before
-> calling ucsi->ops->read_cci(ucsi, cci), but then immediately
-> dereferences cci without a null check in the following condition:
-> (*cci & UCSI_CCI_COMMAND_COMPLETE).
-> 
-> KASAN trace:
->   KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
->   RIP: 0010:ucsi_sync_control_common+0x2ae/0x4e0 [typec_ucsi]
-> 
-> Fixes: 667ecac55861 ("usb: typec: ucsi: return CCI and message from sync_control callback")
-> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+> Fix this by turning the NULL check into IS_ERR_OR_NULL, so
+> usb_role_switch_get can actually run and the device get properly probed.
+
+It's usual to denote functions by always appending a pair of braces
+to their names, so we'd have "fwnode_usb_role_switch_get()" in the
+patch description above, for example.
+
+> Fixes: 2d8713f807a4 ("tcpm: switch check for role_sw device with fw_node")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Arnaud Ferraris <arnaud.ferraris@collabora.com>
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 2 +-
+>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index cc78770509dbc..37698204d48d2 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -7877,7 +7877,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>  	port->partner_desc.identity = &port->partner_ident;
+>  
+>  	port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode);
+> -	if (!port->role_sw)
+> +	if (IS_ERR_OR_NULL(port->role_sw))
+>  		port->role_sw = usb_role_switch_get(port->dev);
+>  	if (IS_ERR(port->role_sw)) {
+>  		err = PTR_ERR(port->role_sw);
 
-Hi,
+This is looking good to me.  The usb_role_switch_is_parent() function,
+invoked by fwnode_usb_role_switch_get(), can return -EPROBE_DEFER, so
+using IS_ERR_OR_NULL() is the way to go.  It's already used in the
+fwnode_usb_role_switch_get() function itself for checking against error
+conditions, which solidifies this as a proper regression fix.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+With the above-mentioned nitpicks addressed, please feel free to include
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Reviewed-by: Dragan Simic <dsimic@manjaro.org>
 
