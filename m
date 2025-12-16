@@ -1,150 +1,136 @@
-Return-Path: <linux-usb+bounces-31484-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31485-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8676CC419A
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 17:03:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A87ECC4266
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 17:11:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9BEE43031FB2
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 16:03:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7AEA63103E7E
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 16:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74BA3587C7;
-	Tue, 16 Dec 2025 15:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65113333759;
+	Tue, 16 Dec 2025 15:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iSLdp/M/";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="O2Rp3LTE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KnJY5LCi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F26B35772B
-	for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 15:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32E92D3737;
+	Tue, 16 Dec 2025 15:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765898060; cv=none; b=U1jYBl55P6ByQ9Q5OZpE+mXKGRnuZGXqzKVSsPFhnvMGiDjVHc2ayUMfdxRnRCc43WvTR5PlYobU2dKnGGp++I8c4TbxvVJqTWBK3H/GOd48SDc9Z1cpbxSrkGV0ikHrHwqaQbJa63hTXyr4i6zwYnS9EcOh6Vk2HhnqDzIj2VI=
+	t=1765900507; cv=none; b=R7zzo6vz3SY1YGXki1+fsK8v0Kio3tXel1Td53nqpD2jk+W0RqDm8flVRL9N8+v6jW5j5B3StfPbWMFCdUrmNz0eQHXFLzxfSYV26Qvbj3aCowEmOFJwzvIfuDPnfWNx/lPjLdVrWLbF4a/962n/cE/ZbeGATwveOifsdmGZ+x0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765898060; c=relaxed/simple;
-	bh=l3aFcFIb/rETTTHoywtwScOBMd14d3C/McfXoy+MH7g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fFYFTJ29kt/hf71uiNTmgzIsyt3hqSi+CPAv3/ZnnvlfMf0perV94zcQerC8qGniarP5g7HsUxmKZL5GOEnUpg/a9sUlS5JkIRWkLm7kHrRowC3LJlf+3uyD/Ps2Gls92Wd1kHRHylvW0h6DdxLpVK/IeEfXhHqPYCjlu6Lf3b4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iSLdp/M/; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=O2Rp3LTE; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1765898057;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KGroo1FRQJLcCV21iN/HVdCn1Y2Qr7NjzdMpGVOhIKQ=;
-	b=iSLdp/M/yZA/QDdLjwC6OIgbJXuZWv5pkYdUiGl20ijtFgbnMNoIccJpsIxiYzZolGGJT6
-	Ii7EhmkBqQmy6Ra8sWKvg1+2PZlKiGGjMjB+JHrXNMib79yl/Ytblv7EYD+S0EYYnJkrG8
-	41yvKPX4OmkH9D3QJcMD/TVTVHOrZqA=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-39-HJNt36HGMY-9zHv9vSiWlQ-1; Tue, 16 Dec 2025 10:14:15 -0500
-X-MC-Unique: HJNt36HGMY-9zHv9vSiWlQ-1
-X-Mimecast-MFC-AGG-ID: HJNt36HGMY-9zHv9vSiWlQ_1765898054
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-29da1ea0b97so120293695ad.3
-        for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 07:14:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1765898054; x=1766502854; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KGroo1FRQJLcCV21iN/HVdCn1Y2Qr7NjzdMpGVOhIKQ=;
-        b=O2Rp3LTEPAPHfbrnLQhN/g4LZBnNRN/U/p1rPmAb4+C+7HuX5CbY9P4LsbxtY1LrN9
-         h5nHwT17bgW0pQbhmd0lZE/l9ZZSGtqLFduV8pOpReyFegvHW1cGmFf/euuyTmIXc9Ow
-         ++wWt1yqoywvVzDf4QAGY+DoFFXudpJRcKzC+XHJPlnEVs/4h3FLL0tktoTYmtOpPelf
-         LeLST5uf4L02LKFkg9fNkvaeZvirQoOF35MGTQ+ZwVojGQAF68cdSLcKKfsVDNmgp+JO
-         Ky9yICpi3zlrRV/PbtgkCQlPTN3eY70mrKGr/iWB2sgbhanVxbMYORfkEkmfMrG1/3Ri
-         SlRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765898054; x=1766502854;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KGroo1FRQJLcCV21iN/HVdCn1Y2Qr7NjzdMpGVOhIKQ=;
-        b=ruzNVT2zTyPlrAgUkyC8hzPwlYOcfG4E6GXHd8mkyIBBB1f7qEFLVjGoWZnJqSNttB
-         aMY7rW/v/XyVv7YP3O2RgIjg4omwmJME+ye2pes4l2adaJW+WJjxgf+4gsoZ8GBN7kzu
-         8NTSoDw+r6DHOfQS6Op8Em9YQMyTm4y5YW20R1XxqJbJfdLBFJ/NYv2poEd7pn2uRQ12
-         seUZCHMyKvxjKBdbABG/AetMG3fi2mZgxxLSVK0RQhdo0QrSArCUq548SkwiNA/eaMyc
-         xBJvOfmypzyor5uwTHlHtzexZDVXBqHbfd+DDcRDfMHVr7VcdpG75Ckha98FlCCG/INF
-         zdZg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/dzksUfX2EfFSCEPHhXZ7TQWmO1zLK9JBLYonh0WBFuc1XEqC6/ICl6FyWbK5y9IgCyLj+K0Q6r0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqaaXbHN+EEUaDhLIYQQo44aMNsSkRpTax3f8ZPdbor269G8/2
-	KvUPtrNf+HszCJON8N6ZoHZuir5VYibWmOE8u3CbEoi/LPQpttA4MzoZmoxFXym3MPAZbA14SzY
-	qEu/YwcHwBAuPmhWT5AC9jCHEl374JDdVJi24Fhi/kbTLbPTSUt9+u3+reHld
-X-Gm-Gg: AY/fxX7DSJygYZzYX2ULsAnRVlNsPx3imjmb5bKXDFCtMIPHUb6rxk5EXSD1ELUwd02
-	1P+KNdmyxSVR4wrT6cPhI2rYJDRAn44Z16RRxOAj70Okmr39CU0JxnWIR5bH22FWz0+/Eulj0os
-	proxL4s/WEi2jFTGIRfAiPGqhUUQjIKGQ1BrduwDYMLqQIY+y8ryKel719pm3v7e/y8CBI5Qibr
-	SjlBqA0kYn5zoQkPESmX9jBO83a1tT2BoQWbreBt3uY3gn1wxXkRA+u659DNrSaxAb8Th1GzuH6
-	m+qYzT+DCFaOXY/ZfBvMZkMXyVjinOerx3EvrvzFA/JpoXULPVoA0Ny+gxX+OMbO6xCQFv20ALm
-	P2cQUqz3BQt9wsKlOJBoaY/L5CdH//sX+MihWKA==
-X-Received: by 2002:a17:902:e947:b0:2a0:f488:24e with SMTP id d9443c01a7336-2a0f488039cmr72598925ad.28.1765898054339;
-        Tue, 16 Dec 2025 07:14:14 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHreRegPQkGmWbCVch5XFt0fM9KZJ4HiBSvqPfGMq3/Z86mPrICGllWYxJgnaXN7I+HROG0mA==
-X-Received: by 2002:a17:902:e947:b0:2a0:f488:24e with SMTP id d9443c01a7336-2a0f488039cmr72598365ad.28.1765898053897;
-        Tue, 16 Dec 2025 07:14:13 -0800 (PST)
-Received: from dkarn-thinkpadp16vgen1.punetw6.csb ([2402:e280:3e0d:a45:3861:8b7f:6ae1:6229])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29f177ff327sm137688045ad.101.2025.12.16.07.14.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 07:14:13 -0800 (PST)
-From: Deepakkumar Karn <dkarn@redhat.com>
-To: petkan@nucleusys.com,
-	netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzbot+8dd915c7cb0490fc8c52@syzkaller.appspotmail.com,
-	Deepakkumar Karn <dkarn@redhat.com>
-Subject: [PATCH] net: usb: rtl8150: fix memory leak on usb_submit_urb() failure
-Date: Tue, 16 Dec 2025 20:43:05 +0530
-Message-ID: <20251216151304.59865-2-dkarn@redhat.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1765900507; c=relaxed/simple;
+	bh=01o5UEZSfkctZGOC5qlwlYDaww6GquCTHK/kGSGT9Qs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JnQYZrp2x0OZdMWLvktVyfnHViFljIF0q27YRYy4jYP7zJzXOfWANh4ZO3WwSYT4BtiBPdsn/40biBdXsmAqYeCAmnb1l2cS9xO45/5IZdC9Y9UP8mN0GZnH88P6PHRucLGzHQRWKbfvWH1QZ/4XCSYy8Qg7PydWltFBmV5xPig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KnJY5LCi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1484C4CEF1;
+	Tue, 16 Dec 2025 15:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765900506;
+	bh=01o5UEZSfkctZGOC5qlwlYDaww6GquCTHK/kGSGT9Qs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KnJY5LCi/daDI436cW11l2Wqr+RJlCMtWNkJk2AtzanmHz93rQJ124FWk4sFUtsA6
+	 iVo4ZZWRFT4V/zqvlbP7Mu/vlS+xtrtlI7SYy3E04iqXohV2Oe4HUDa6isZCRbzxTc
+	 /mvQXq7uA8hGmtra8djoYst0s2tt0EfGlkx6wwR7MTb0KQ4BY4unq4LgWmGXccHlMy
+	 ZHbUYJRJJh3TZgot7Lt2gxaABElqBUyrBX2iIfqM6dvs/N9XGlNoObcZlgTWXH9FO7
+	 9E6+x2wXTqTogPi50AcxgqckAp2FL7Su9wOSPLWvnUCCQAPFKrt8DexSDUaYg5cK1x
+	 HTM+jBrwl41cA==
+Message-ID: <d9665340-5a96-4105-88e9-ec14a715df5a@kernel.org>
+Date: Tue, 16 Dec 2025 16:54:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/19] dt-bindings: arm: AT91: relicense to dual
+ GPL-2.0/BSD-2-Clause
+To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+ Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
+ UNGLinuxDriver@microchip.com, herbert@gondor.apana.org.au,
+ davem@davemloft.net, vkoul@kernel.org, linux@roeck-us.net,
+ andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org,
+ olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com,
+ sboyd@kernel.org, richardcochran@gmail.com,
+ wsa+renesas@sang-engineering.com, romain.sioen@microchip.com,
+ Ryan.Wanner@microchip.com, lars.povlsen@microchip.com,
+ tudor.ambarus@linaro.org, charan.pedumuru@microchip.com,
+ kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-clk@vger.kernel.org, mwalle@kernel.org
+Cc: luka.perkov@sartura.hr
+References: <20251215163820.1584926-1-robert.marko@sartura.hr>
+ <20251215163820.1584926-3-robert.marko@sartura.hr>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251215163820.1584926-3-robert.marko@sartura.hr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-  In async_set_registers(), when usb_submit_urb() fails, the allocated
-  async_req structure and URB are not freed, causing a memory leak.
+On 15/12/2025 17:35, Robert Marko wrote:
+> As it is preferred to have bindings dual licensed, lets relicense the AT91
+> bindings from GPL-2.0 only to GPL-2.0/BSD-2 Clause.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
-  The completion callback async_set_reg_cb() is responsible for freeing
-  these allocations, but it is only called after the URB is successfully
-  submitted and completes (successfully or with error). If submission
-  fails, the callback never runs and the memory is leaked.
+You need all contributors to ack this...
 
-  Fix this by freeing both the URB and the request structure in the error
-  path when usb_submit_urb() fails.
-
-Reported-by: syzbot+8dd915c7cb0490fc8c52@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=8dd915c7cb0490fc8c52
-Fixes: 4d12997a9bb3 ("drivers: net: usb: rtl8150: concurrent URB bugfix")
-Signed-off-by: Deepakkumar Karn <dkarn@redhat.com>
----
- drivers/net/usb/rtl8150.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-index 278e6cb6f4d9..e40b0669d9f4 100644
---- a/drivers/net/usb/rtl8150.c
-+++ b/drivers/net/usb/rtl8150.c
-@@ -211,6 +211,8 @@ static int async_set_registers(rtl8150_t *dev, u16 indx, u16 size, u16 reg)
- 		if (res == -ENODEV)
- 			netif_device_detach(dev->netdev);
- 		dev_err(&dev->udev->dev, "%s failed with %d\n", __func__, res);
-+		kfree(req);
-+		usb_free_urb(async_urb);
- 	}
- 	return res;
- }
--- 
-2.52.0
-
+Best regards,
+Krzysztof
 
