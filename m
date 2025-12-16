@@ -1,161 +1,180 @@
-Return-Path: <linux-usb+bounces-31472-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31473-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE736CC19D5
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 09:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E2C45CC1E82
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 11:07:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C6E223033685
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 08:39:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CF3C23022F03
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 10:06:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F8C13148D2;
-	Tue, 16 Dec 2025 08:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="M+CsR9nY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6516327C1F;
+	Tue, 16 Dec 2025 10:06:38 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-oi1-f206.google.com (mail-oi1-f206.google.com [209.85.167.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E292312837
-	for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 08:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3B52BE043
+	for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 10:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765874392; cv=none; b=Al2bsb2KEaD7n0age7WVgNoG8r+zBtBz8O2fuz0+fVLhjo5r/xwjcHsfYyGi9Xx5XcEXaAkeKhAFMjJNLG0moWSoWzUO+Tr3jv7bxAWjf6MlT4I60W32BE27ZuIUQTsOrISNYUh1w8hUEbWiGMpr28w5dGDJKgtTjU+yU5rLK40=
+	t=1765879598; cv=none; b=P8E60tEgrC6mXVWUXgc3lLXWHzIP/HsZpPdDy4tkET3TuPiolHyyPlgWpUGOkR83wNZ19RebApwr4/DV7j5glJOW++LhkHZcqLOPuDHVDd4CSdwBY0Zp0AP8XkTmJ//pCs8BUXGPhHV2JCRdO2ad1WGrHan/aTdzXB5ZmYJcUI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765874392; c=relaxed/simple;
-	bh=OE5fUgnbvjTeQdaQPicHiJDHoA0Pdynn/WLvHqPYvdw=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:References:
-	 From:In-Reply-To; b=r/Je8df0YRrtClOFySKAihZ8R+J1aZODi4i+OH3cC7euz/aAInRvK1zFDQaEdmZw48ERN2eLvdfUPQjFNt3nhcMGyRRbxObLKTCYsyOxJQmIenKu3XkTAK0n0MZTbJwv4drKsWNSjfpFI5QdjXnA/l6UzO9VCjl5YR1TPLWLXYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=M+CsR9nY; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-47796a837c7so31242495e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 00:39:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1765874387; x=1766479187; darn=vger.kernel.org;
-        h=in-reply-to:from:content-language:references:to:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D7Qv9SslRhpmsahtPfS+bjwRGa7x7sZp13OuHI7Wm7w=;
-        b=M+CsR9nYSwvAhqD1qq3kv+WkmF4maUqH6SGNl1px7r26IPcyAbBvRjYqjQsWotfc4g
-         R8wDenNrGl36Lchlyy0wqRxezak6/TFhjh55OekP+/ERsS+xjGgUjQxCCYCHmcCJfRX0
-         F+Ihx/4JRaXB5+gPQNwQYzAZwKf3QRN4Uxy8/X9FHQw311aYdjzYondy7OzW+9l+vaSz
-         GfYC+4qkTi9uDpDoTQha957EVJ0QGX2rEiLMSzB+PksNwzI205waj+XPG1TPdybntloM
-         8SFjYdIBdlUjQ7wQv9ubbnBZy+73R/6hLi6uTnKaY+iiYPPfO7irSrCHkIIXK0Ylbz08
-         SeTQ==
+	s=arc-20240116; t=1765879598; c=relaxed/simple;
+	bh=Qvd1NP5Xf9TeKcs1qYesTBGue9jRZL+FCu0Kzl25spo=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=JCTH25fBYF4+2WDHd8fiHpetxWY47CB6kmOgqGlODk4xy50p9tmBveEDge78BL1R962V0C/oCnp/dFCd4KKAtoPptaSNB5PuJNywgIPvBbhVEEljAsbCuRksATUsJ3nku+o/0YVF06r24/K0h3tDqm+X+CA88pROH8z7UiP+WPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f206.google.com with SMTP id 5614622812f47-4537c9e1c14so3451391b6e.1
+        for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 02:06:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765874387; x=1766479187;
-        h=in-reply-to:from:content-language:references:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D7Qv9SslRhpmsahtPfS+bjwRGa7x7sZp13OuHI7Wm7w=;
-        b=cu6RYWwHuPPioUyIaii4+Xi3Sz5JfuPCfIY3l0jYCqbYhcSaGpCN//6Rmb2O8vZXJ9
-         jxp7ItU59LzEDOdvHA3hiPyjs0uxhkI2iXan0uVp8tX71Dybge8sNOnYlCwKlLDUXhDH
-         SV/3SNBi9VFGC4i+bE1uBPDZJm2KmdFDOsa/qOJstOVnil0xh9HJ1b3GTkqdGbEp6kZa
-         wSY9aGtwhbrELCtjbDbyHa+IpcI1ToIWUBKDF7pnAbNEQPUBDc0vHQ4coie8wob12eNu
-         GjxRT5tQFDbBgvxxJzfeQQ141dK10DKkiZceO752GDsFM4+yaW9Ogl5CCtAjknkcis3t
-         FoiA==
-X-Forwarded-Encrypted: i=1; AJvYcCVbet2Ky2IofasdZcL9c0VoHDJ5Hmodn1Jg9B1mOdtxIWfuMc/ADAxB3LmFWjnYSwHSSSniDi8Pe6Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyD+Fusso8Y0ILpbvLYioYNXFSJYi/WMoSVsqRgB7+p+s39Ae9w
-	/cND//gXunFKvbFGFzEYk4nMIhLlsM2+OMKnHDfotQvw/LkzxVZRprgGytpUYwccTCE=
-X-Gm-Gg: AY/fxX7REyVO/jVoJcDJD1/k9z1zgGstfHkjZc/EJDgD6UGFQOKXQ4FV9l9HfNabR7G
-	p5uIu6n5T0fu4C1CQiFdNZ9uXfB6S5s0uEFo/JuQVXG9/OOIwyoaKBXqQO09cAHWret/uF/fuqK
-	lYjll1A761n6kNWUDT1CYFsFvkUUXdwfnN7RhAq2JaM1BYWOZPV3UmzNpRT4M6NRD+7yGZYrelm
-	dQS0pB8yg/YSOSamLtK33kYhyhlEHOfRTKs00AgxltRoxmZUoTFQt4V6kwBo/IdpnRDSDdMW2P7
-	8UYxNHKyDyN7A70LqJTBwgwAO8a3ZlmwA9HUXsp+rW3S33a20Psj7oCx/otPczGAp1qrC8+ez1C
-	WAUh31KLdnvzp3ZLVjse+hWFscXJOqnyK5hBl//5Snyp5k+ER4eyMtGEzYlrLUpCSwQKnynaGAP
-	Y2vmUaHQCUa+XFvp8GKrKM+NHv1LYBLPWC+4hAeYdCi8mLVfcuEAGxZxE=
-X-Google-Smtp-Source: AGHT+IH0HP/s4qO9Cgo2HUtlMoysysqu3ANanEUUPBpNA8ADJN4UH5SGnWOo+835oNH1l76BTpwUlw==
-X-Received: by 2002:a05:600c:46cb:b0:47a:810f:1d06 with SMTP id 5b1f17b1804b1-47a8f89cb47mr147837255e9.4.1765874387498;
-        Tue, 16 Dec 2025 00:39:47 -0800 (PST)
-Received: from ?IPV6:2001:a61:1386:f701:7efb:ef00:b697:5d05? ([2001:a61:1386:f701:7efb:ef00:b697:5d05])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42fa8b85d1esm34513800f8f.26.2025.12.16.00.39.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Dec 2025 00:39:47 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------CfkTvbG7f8400si7CR5Vk5p7"
-Message-ID: <b0899011-78bb-4fdd-9e49-3dad6b11a9e6@suse.com>
-Date: Tue, 16 Dec 2025 09:39:46 +0100
+        d=1e100.net; s=20230601; t=1765879595; x=1766484395;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SUJpa87UrKKziuKtUiBdGUaEWcsGpioTwzn+vG4XG6I=;
+        b=cpziPg0G+GrfTY364M0iQafh33h2d34glCfc9BDGBQEv9bU8c5E86DtQIqAE5HiJmH
+         pYmnkNrJwdFmz1WckvkX8x5O+METFH8G0x9PYb4icvZKL4EIrpNm+fY8pnGhH7gCz/tD
+         QpYG4+fxIwh40qnkUi7LFp968kwl3GoaAACBtXbIHKiELYgIY1IEMu3VKOPkAG3AkftQ
+         SswR+2gpxtwuReKfWo9/q9WAJWqd7TcLzbXem6Rj1mOh30y1A58HVCQYWBXhQtExRrCT
+         naBrwydmIm9+lcsSt2No8WY1AnYrfK4mz8VQ9PW7J2Ns9tvZ9t0A1J9ymdx7Z129tngm
+         xkEw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9JFHva7uTcFNDj3lPcgQzSQ4kQITDcNrbfGmGvxtzn9ehvY1zeaRD8iljjSNNHtTEAQ2WMRRbUos=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCEs7RhkRPcn+c8lQ6h1NTYhbNlSN+2RQiyGzDeADwt01s25p/
+	X8fpm4id0GYgwuBDEorZtTnN8GAY2e+C05LLujHcLVJAAfI2cBLGepdoUU7hTAZYv8btdpY+0xS
+	lEfSSiKE+jPGIySRYLZD3Gn+HwIEFvYxWwGEu3CNuu9Mi18feMmDi7fjUNpQ=
+X-Google-Smtp-Source: AGHT+IG7G6T3Hen13lkGA8rw46Ci0BTT+qn6Zc2NlE4Bh+pJMOxQZ+ETXsSn5SZdkhQrKFYELYTi8O0kF1wYhens5JFzSG9VE3Xp
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Trouble with drivers for Epson Moverio BT-40
-To: natalie roentgen connolly <natalie@natalieee.net>,
- Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-References: <9c4491aa-88d3-4c9a-843c-2f0d471263e0@natalieee.net>
- <ade89a9d-6034-43e6-ba74-778db2f8837c@suse.com>
- <ce3a8714-bce5-4cac-ba80-f3c64e6ff5e9@natalieee.net>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <ce3a8714-bce5-4cac-ba80-f3c64e6ff5e9@natalieee.net>
+X-Received: by 2002:a05:6820:1607:b0:65b:81eb:ae5c with SMTP id
+ 006d021491bc7-65b81ebb6dbmr279838eaf.8.1765879595628; Tue, 16 Dec 2025
+ 02:06:35 -0800 (PST)
+Date: Tue, 16 Dec 2025 02:06:35 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69412f2b.a70a0220.104cf0.034b.GAE@google.com>
+Subject: [syzbot] [net?] [usb?] memory leak in rtl8150_set_multicast
+From: syzbot <syzbot+8dd915c7cb0490fc8c52@syzkaller.appspotmail.com>
+To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org, pabeni@redhat.com, petkan@nucleusys.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-This is a multi-part message in MIME format.
---------------CfkTvbG7f8400si7CR5Vk5p7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    d358e5254674 Merge tag 'for-6.19/dm-changes' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11e431c2580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9a0268003e02068d
+dashboard link: https://syzkaller.appspot.com/bug?extid=8dd915c7cb0490fc8c52
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12dd661a580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e79f317bb571/disk-d358e525.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cf9e2849af10/vmlinux-d358e525.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/73d80a967038/bzImage-d358e525.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8dd915c7cb0490fc8c52@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff888127d51010 (size 16):
+  comm "dhcpcd", pid 5479, jiffies 4294951443
+  hex dump (first 16 bytes):
+    40 05 30 01 00 00 02 00 9e 00 00 00 00 00 00 00  @.0.............
+  backtrace (crc 5546a3be):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4958 [inline]
+    slab_alloc_node mm/slub.c:5263 [inline]
+    __kmalloc_cache_noprof+0x3b2/0x570 mm/slub.c:5771
+    kmalloc_noprof include/linux/slab.h:957 [inline]
+    async_set_registers drivers/net/usb/rtl8150.c:192 [inline]
+    rtl8150_set_multicast+0x7a/0x1c0 drivers/net/usb/rtl8150.c:679
+    __dev_set_rx_mode+0xc5/0x120 net/core/dev.c:9655
+    dev_set_rx_mode net/core/dev.c:9661 [inline]
+    __dev_open+0x23f/0x3c0 net/core/dev.c:1691
+    __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
+    netif_change_flags+0x35/0x90 net/core/dev.c:9797
+    dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
+    devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
+    inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
+    sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
+    sock_ioctl+0x149/0x480 net/socket.c:1375
+    vfs_ioctl fs/ioctl.c:51 [inline]
+    __do_sys_ioctl fs/ioctl.c:597 [inline]
+    __se_sys_ioctl fs/ioctl.c:583 [inline]
+    __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
+    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
+    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+BUG: memory leak
+unreferenced object 0xffff8881282bae40 (size 192):
+  comm "dhcpcd", pid 5479, jiffies 4294951443
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 58 ae 2b 28 81 88 ff ff  ........X.+(....
+  backtrace (crc d110b1b3):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4958 [inline]
+    slab_alloc_node mm/slub.c:5263 [inline]
+    __do_kmalloc_node mm/slub.c:5656 [inline]
+    __kmalloc_noprof+0x3e0/0x660 mm/slub.c:5669
+    kmalloc_noprof include/linux/slab.h:961 [inline]
+    usb_alloc_urb+0x66/0xa0 drivers/usb/core/urb.c:75
+    async_set_registers drivers/net/usb/rtl8150.c:195 [inline]
+    rtl8150_set_multicast+0x97/0x1c0 drivers/net/usb/rtl8150.c:679
+    __dev_set_rx_mode+0xc5/0x120 net/core/dev.c:9655
+    dev_set_rx_mode net/core/dev.c:9661 [inline]
+    __dev_open+0x23f/0x3c0 net/core/dev.c:1691
+    __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
+    netif_change_flags+0x35/0x90 net/core/dev.c:9797
+    dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
+    devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
+    inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
+    sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
+    sock_ioctl+0x149/0x480 net/socket.c:1375
+    vfs_ioctl fs/ioctl.c:51 [inline]
+    __do_sys_ioctl fs/ioctl.c:597 [inline]
+    __se_sys_ioctl fs/ioctl.c:583 [inline]
+    __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
+    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
+    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On 15.12.25 15:17, natalie roentgen connolly wrote:
-> Hello,
-> 
-> Without adding {USB_DEVICE(0x04b8, 0x0d12)} to acm_ids, the stock driver
-> emits no logs:
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Hi,
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-OK, I see the issue. There is no nice solution to this
-issue, so here is the ugly solution. Could you test the attached patch?
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-	Regards
-		Oliver
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
---------------CfkTvbG7f8400si7CR5Vk5p7
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-cdc-acm-new-quirk-for-EPSON-HMD.patch"
-Content-Disposition: attachment;
- filename="0001-cdc-acm-new-quirk-for-EPSON-HMD.patch"
-Content-Transfer-Encoding: base64
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-RnJvbSA1NjU0MGUxOGQzNjc2NDE3ZWM3NWUyNWY0ZmU5ZWI1Njc3MGUwNzVjIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
-PgpEYXRlOiBUdWUsIDE2IERlYyAyMDI1IDA5OjM2OjIzICswMTAwClN1YmplY3Q6IFtQQVRD
-SF0gY2RjLWFjbTogbmV3IHF1aXJrIGZvciBFUFNPTiBITUQKClRoaXMgZGV2aWNlIGhhcyBh
-IHVuaW9uIGRlc2NyaXB0b3IgdGhhdCBpcyBqdXN0IGdhcmJhZ2UKYW5kIG5lZWRzIGEgY3Vz
-dG9tIGRlc2NyaXB0b3IuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3Vt
-QHN1c2UuY29tPgpDQzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwotLS0KIGRyaXZlcnMvdXNi
-L2NsYXNzL2NkYy1hY20uYyB8IDkgKysrKysrKysrCiBkcml2ZXJzL3VzYi9jbGFzcy9jZGMt
-YWNtLmggfCAxICsKIDIgZmlsZXMgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKQoKZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvdXNiL2NsYXNzL2NkYy1hY20uYyBiL2RyaXZlcnMvdXNiL2NsYXNz
-L2NkYy1hY20uYwppbmRleCA1NGJlNGFhMWRjYjIuLjAwYzcyZGRkNGNlMSAxMDA2NDQKLS0t
-IGEvZHJpdmVycy91c2IvY2xhc3MvY2RjLWFjbS5jCisrKyBiL2RyaXZlcnMvdXNiL2NsYXNz
-L2NkYy1hY20uYwpAQCAtMTIyNSw2ICsxMjI1LDEyIEBAIHN0YXRpYyBpbnQgYWNtX3Byb2Jl
-KHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRmLAogCQlpZiAoIWRhdGFfaW50ZXJmYWNlIHx8
-ICFjb250cm9sX2ludGVyZmFjZSkKIAkJCXJldHVybiAtRU5PREVWOwogCQlnb3RvIHNraXBf
-bm9ybWFsX3Byb2JlOworCX0gZWxzZSBpZiAocXVpcmtzID09IE5PX1VOSU9OXzEyKSB7CisJ
-CWRhdGFfaW50ZXJmYWNlID0gdXNiX2lmbnVtX3RvX2lmKHVzYl9kZXYsIDIpOworCQljb250
-cm9sX2ludGVyZmFjZSA9IHVzYl9pZm51bV90b19pZih1c2JfZGV2LCAxKTsKKwkJaWYgKCFk
-YXRhX2ludGVyZmFjZSB8fCAhY29udHJvbF9pbnRlcmZhY2UpCisJCQkgcmV0dXJuIC1FTk9E
-RVY7CisJCWdvdG8gc2tpcF9ub3JtYWxfcHJvYmU7CiAJfQogCiAJLyogbm9ybWFsIHByb2Jp
-bmcqLwpAQCAtMTc0Niw2ICsxNzUyLDkgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB1c2JfZGV2
-aWNlX2lkIGFjbV9pZHNbXSA9IHsKIAl7IFVTQl9ERVZJQ0UoMHgwNDViLCAweDAyNEQpLAkv
-KiBSZW5lc2FzIFItQ2FyIEUzIFVTQiBEb3dubG9hZCBtb2RlICovCiAJLmRyaXZlcl9pbmZv
-ID0gRElTQUJMRV9FQ0hPLAkvKiBEb24ndCBlY2hvIGJhbm5lciAqLwogCX0sCisJeyBVU0Jf
-REVWSUNFKDB4MDRiOCwgMHgwZDEyKSwJLyogRVBTT04gSE1EIENvbSZTZW5zICovCisJLmRy
-aXZlcl9pbmZvID0gTk9fVU5JT05fMTIsCS8qIHVuaW9uIGRlc2NyaXB0b3IgaXMgZ2FyYmFn
-ZSAqLworCX0sCiAJeyBVU0JfREVWSUNFKDB4MGU4ZCwgMHgwMDAzKSwgLyogRklSRUZMWSwg
-TWVkaWFUZWsgSW5jOyBhbmRyZXkuYXJhcG92QGdtYWlsLmNvbSAqLwogCS5kcml2ZXJfaW5m
-byA9IE5PX1VOSU9OX05PUk1BTCwgLyogaGFzIG5vIHVuaW9uIGRlc2NyaXB0b3IgKi8KIAl9
-LApkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvY2xhc3MvY2RjLWFjbS5oIGIvZHJpdmVycy91
-c2IvY2xhc3MvY2RjLWFjbS5oCmluZGV4IDc1OWFjMTU2MzFkMy4uMGUzMjMzMDM5MWNhIDEw
-MDY0NAotLS0gYS9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmgKKysrIGIvZHJpdmVycy91
-c2IvY2xhc3MvY2RjLWFjbS5oCkBAIC0xMTMsMyArMTEzLDQgQEAgc3RydWN0IGFjbSB7CiAj
-ZGVmaW5lIENMRUFSX0hBTFRfQ09ORElUSU9OUwkJQklUKDUpCiAjZGVmaW5lIFNFTkRfWkVS
-T19QQUNLRVQJCUJJVCg2KQogI2RlZmluZSBESVNBQkxFX0VDSE8JCQlCSVQoNykKKyNkZWZp
-bmUgTk9fVU5JT05fMTIJCQlCSVQoOCkKLS0gCjIuNTIuMAoK
-
---------------CfkTvbG7f8400si7CR5Vk5p7--
+If you want to undo deduplication, reply with:
+#syz undup
 
