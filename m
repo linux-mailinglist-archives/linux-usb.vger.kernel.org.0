@@ -1,180 +1,166 @@
-Return-Path: <linux-usb+bounces-31473-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31474-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2C45CC1E82
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 11:07:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70795CC3306
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 14:26:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CF3C23022F03
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 10:06:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E71333052B35
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Dec 2025 13:23:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6516327C1F;
-	Tue, 16 Dec 2025 10:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4858E3612C8;
+	Tue, 16 Dec 2025 12:08:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KHtFUFi8";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="RugadaPJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f206.google.com (mail-oi1-f206.google.com [209.85.167.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3B52BE043
-	for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 10:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675313612C7
+	for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 12:08:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765879598; cv=none; b=P8E60tEgrC6mXVWUXgc3lLXWHzIP/HsZpPdDy4tkET3TuPiolHyyPlgWpUGOkR83wNZ19RebApwr4/DV7j5glJOW++LhkHZcqLOPuDHVDd4CSdwBY0Zp0AP8XkTmJ//pCs8BUXGPhHV2JCRdO2ad1WGrHan/aTdzXB5ZmYJcUI4=
+	t=1765886888; cv=none; b=WKZOuj6DAgd3C+d+IcXpdrRCeNIxS6E2bJ2gXVZH+KKhF4rlf3qvD+Fxaq/+6T+sgj7OlsA/BqWOe9mprDOxX5r8Z5VHLZaLsc23cZ/9dJGJuwNS3qvOeauj+QQ62xGaQDdz5c7g3JR9SMR8JXn+HFSWQt7RMZ6WGtQZPvz07fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765879598; c=relaxed/simple;
-	bh=Qvd1NP5Xf9TeKcs1qYesTBGue9jRZL+FCu0Kzl25spo=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=JCTH25fBYF4+2WDHd8fiHpetxWY47CB6kmOgqGlODk4xy50p9tmBveEDge78BL1R962V0C/oCnp/dFCd4KKAtoPptaSNB5PuJNywgIPvBbhVEEljAsbCuRksATUsJ3nku+o/0YVF06r24/K0h3tDqm+X+CA88pROH8z7UiP+WPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f206.google.com with SMTP id 5614622812f47-4537c9e1c14so3451391b6e.1
-        for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 02:06:36 -0800 (PST)
+	s=arc-20240116; t=1765886888; c=relaxed/simple;
+	bh=H9abZfOkYQts6D4SGcICwKtFQofYukdrYeyR6tT4CQI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cnrKXr2LE3NK7i2mBO7s6aWm9gLDkQ/i6NOK1Rgt0MAjjCf3X8jvD0qNTMNf49OVXYurEsQKCQeVNPxQ0VYMZDdszeHDPWMibSvbeq8aZHxmUkqbSrb4bf+hec3A1rBRTAX+vE5sYXB1A4MNKF+x71QcVZ701ZIw3YKR3PM3OPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KHtFUFi8; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=RugadaPJ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BG8JTH52573341
+	for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 12:08:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=0TtjIbhvpwUJJPB/dQ889ENI1wVn4pYy08t
+	WsWt09M0=; b=KHtFUFi80kNircPvQpnVELjl7Y6bZszGYW8aLftHETg+0VtCaHJ
+	ijKUpx6LBDM2aE2EgsVPRtT0eMXXjoU8lfCQJFQgYAQoxEymjnxkbjmDTuJxSF28
+	sumIvHCIzLW4JOez5uoTD0jBJpymdJvAjUGF/so/kWIs4C44tQa5Pto5xiiVT0pV
+	Gvx5UE2OfCjhzuBJVXg7q0TcCsQS0Xf9prpfZuF9HSdIqcZT84LblCtNTf+Eusel
+	zZXKK9m3jbjStUo0JchDpsuL9TFH8uvSF+RGCI1oHm6phtEF8vITAns60CBcTT8v
+	iOdgyas9ZAFmILU4RsEx0MA9HMrZPtGcxXQ==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b33thrxg4-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 12:08:06 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2a0a0bad5dfso57790715ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 04:08:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1765886886; x=1766491686; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0TtjIbhvpwUJJPB/dQ889ENI1wVn4pYy08tWsWt09M0=;
+        b=RugadaPJzeClGD2nxlEjYBWmJcUR0YABpRN7fyhpPMjice0MgHS0KIbAbvBLmpwo4G
+         sd2bypiGx8TeKPhABPuD6Kp/cckYGpY4EshXkQ5vk4c+Aco6KL5fq6ynp0ZjWroKLx3o
+         J93hNxP0RY87VZdifdM673NPEFjX5xDHe79hfADOVakrqVYCmczfjfuRd8PzLT7ef//J
+         Qd7nw2UI7qUCE8aaorWWWvRLuNOj2tTq4iDawFoCxEx9oQrQDgrVtNkrOr3rCyXnENsn
+         7B5lWeqnkQ/7974SxbHbRVcWEBrQspXvvDYPtdwwi1qcXIbmDv2DTSW/jCEdGMSaen4y
+         kQ0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765879595; x=1766484395;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SUJpa87UrKKziuKtUiBdGUaEWcsGpioTwzn+vG4XG6I=;
-        b=cpziPg0G+GrfTY364M0iQafh33h2d34glCfc9BDGBQEv9bU8c5E86DtQIqAE5HiJmH
-         pYmnkNrJwdFmz1WckvkX8x5O+METFH8G0x9PYb4icvZKL4EIrpNm+fY8pnGhH7gCz/tD
-         QpYG4+fxIwh40qnkUi7LFp968kwl3GoaAACBtXbIHKiELYgIY1IEMu3VKOPkAG3AkftQ
-         SswR+2gpxtwuReKfWo9/q9WAJWqd7TcLzbXem6Rj1mOh30y1A58HVCQYWBXhQtExRrCT
-         naBrwydmIm9+lcsSt2No8WY1AnYrfK4mz8VQ9PW7J2Ns9tvZ9t0A1J9ymdx7Z129tngm
-         xkEw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9JFHva7uTcFNDj3lPcgQzSQ4kQITDcNrbfGmGvxtzn9ehvY1zeaRD8iljjSNNHtTEAQ2WMRRbUos=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCEs7RhkRPcn+c8lQ6h1NTYhbNlSN+2RQiyGzDeADwt01s25p/
-	X8fpm4id0GYgwuBDEorZtTnN8GAY2e+C05LLujHcLVJAAfI2cBLGepdoUU7hTAZYv8btdpY+0xS
-	lEfSSiKE+jPGIySRYLZD3Gn+HwIEFvYxWwGEu3CNuu9Mi18feMmDi7fjUNpQ=
-X-Google-Smtp-Source: AGHT+IG7G6T3Hen13lkGA8rw46Ci0BTT+qn6Zc2NlE4Bh+pJMOxQZ+ETXsSn5SZdkhQrKFYELYTi8O0kF1wYhens5JFzSG9VE3Xp
+        d=1e100.net; s=20230601; t=1765886886; x=1766491686;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0TtjIbhvpwUJJPB/dQ889ENI1wVn4pYy08tWsWt09M0=;
+        b=t11IwaTnDnuaUkH4FhLFUgCieU+NXZUCzbC2WvEzxXsTFF6Gt3p1Z3xHmZEL4xHCQ3
+         fm7epZ/ZYJMdzabacGWIIAwqLcbK/mLjEigAQEtin139Gsk3U2USRKjYd0iZu5/8XvBi
+         Pmo1vgsJTFF+KERHuX57Imn+hy8MeH50o+UkM8Kl0+NCJbX47DFLuQesDdrcLPfx/XsB
+         xEuN1siTw5FFI/nBABEf0CjmQkL5pyUljwzME/9W/A4nC6BOLmaeqdZJyOQJqwovrLHW
+         owsTRn7kjuSKfHfeRwAqsr9apYuAmOXdR/5HBIX+pAwG52aspghUE9G7FqSjx5czHVbQ
+         JXyg==
+X-Gm-Message-State: AOJu0YzSu5UeuA3itBBud3C+ty87lkqisx3VVK2FNWvHOw9cHdvtp9HT
+	74oX53CPs+NPSaQCWMOHx5Ia81atV35Fl6xrcH9bug3iSTVEOlqyHKIOQY88V9IDQIDpZcm3Zi6
+	V1/k2lKQvB73dgMPJO75xoDSiRP7FDYIvzPL5k/aBsBXDMsi21LEfVga6021226E=
+X-Gm-Gg: AY/fxX7UVI+yheFuHCnyNSq2QDpT+0xUcCEZZIb7izv+rEbOwkp5BYI3qjTbVdIvrBJ
+	6KrNFDsSG2Iw9Ftgb2kFvW9iWGT/T6poRK5Jo3qapRe/jwnwfiTBX/eQsXoANCeBobJ5j5rF+A/
+	AcTDz6K+8ZjJ/oXh7qlCbxaf+XZMKdb+WrOxuzQ/K1QCbaIS8PoR617tjceAnfOjCNKTxo4dSgd
+	uhBkADTwyW9+d9TUdypeiw5988/bE8i0HJA8TB2Lr7hFJ9bC2AwAi1HGvCPMfueicBVT11NJMZ0
+	jjiLuAQyIiFGd62lBJoR5d29WD2Xj+k73s8nyuvEyleDjLhwihAUhrXCjt644y3Td+wHTj6wfBI
+	Lq+MRlfIErRwBh76bo3CTYddWhtyU/fh2l72IGyBjxMs=
+X-Received: by 2002:a17:902:cf03:b0:2a0:bb05:df4f with SMTP id d9443c01a7336-2a0bb05e314mr83402925ad.44.1765886885894;
+        Tue, 16 Dec 2025 04:08:05 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFiw6zSvfczmhqR9lmIDcnmAukNtHBZazConwujUupumT2t8wOfkgbilHRFxoLYk9MMrzDSSw==
+X-Received: by 2002:a17:902:cf03:b0:2a0:bb05:df4f with SMTP id d9443c01a7336-2a0bb05e314mr83402605ad.44.1765886885453;
+        Tue, 16 Dec 2025 04:08:05 -0800 (PST)
+Received: from hu-swatagar-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a110f6374asm48568695ad.63.2025.12.16.04.08.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Dec 2025 04:08:04 -0800 (PST)
+From: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
+        =?UTF-8?q?J=20=2E=20Neusch=C3=A4fer?= <j.ne@posteo.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Catalin Popescu <catalin.popescu@leica-geosystems.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+Subject: [PATCH v2 0/4] Enable USB1 controller in host mode
+Date: Tue, 16 Dec 2025 17:37:45 +0530
+Message-Id: <20251216120749.94007-1-swati.agarwal@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:1607:b0:65b:81eb:ae5c with SMTP id
- 006d021491bc7-65b81ebb6dbmr279838eaf.8.1765879595628; Tue, 16 Dec 2025
- 02:06:35 -0800 (PST)
-Date: Tue, 16 Dec 2025 02:06:35 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69412f2b.a70a0220.104cf0.034b.GAE@google.com>
-Subject: [syzbot] [net?] [usb?] memory leak in rtl8150_set_multicast
-From: syzbot <syzbot+8dd915c7cb0490fc8c52@syzkaller.appspotmail.com>
-To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, petkan@nucleusys.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=ZIPaWH7b c=1 sm=1 tr=0 ts=69414ba6 cx=c_pps
+ a=JL+w9abYAAE89/QcEU+0QA==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=T81NLgZPhjG5DizPKtsA:9
+ a=324X-CrmTo6CU4MGRt3R:22
+X-Proofpoint-GUID: cAdLf43hrLVSf7N5eAo2AJG7QkhxctQI
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE2MDEwMyBTYWx0ZWRfX7FHdUjCK0iW0
+ SeCAD6LM1mCeSPgUltusJ6FLMC9GV4ERBoZWjXrIqJWhGyWyvljlX320aQTFFUO+D4vLeAthG5+
+ KgcZPWT0m8S93DKRHPrRy2N/D1bhELDofTuOjfTttpjwJWqZJkvMPO+xJ4KiV3/ej7JMKw4QnW8
+ /NqTPJFsVvDFPlhgp15GaOfIP8APHB2hlX7lQrEV9Y8otnwXUUFaOqQkQOx7j7ZZNy1FSGNeltA
+ xy90am92kWAQ3eKBOS+NuV1zSnGMGaGxDBFvslTaJA9srhsI/6iZ5X6VgZXrDXbRXtRh8dGftI1
+ ZvTJGichUI/pF4DHtJFuL2OL4A8325zxhNBBbAeJo8OWWeaWNlPsux+TI5r10t/dye//1BvHALN
+ ZEBUCDe5SbAxBfnvt3a0k+gaJmadWw==
+X-Proofpoint-ORIG-GUID: cAdLf43hrLVSf7N5eAo2AJG7QkhxctQI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-16_02,2025-12-15_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 adultscore=0 clxscore=1011 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512160103
 
-Hello,
+Enable USB1 controller in host mode on EVK platforms.
 
-syzbot found the following issue on:
+changes in v2:
+Added Genesys Logic GL3590 hub support.
+Renamed hd3ss3220_ instance for primary port controller.
 
-HEAD commit:    d358e5254674 Merge tag 'for-6.19/dm-changes' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11e431c2580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9a0268003e02068d
-dashboard link: https://syzkaller.appspot.com/bug?extid=8dd915c7cb0490fc8c52
-compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12dd661a580000
+Link to v1:
+https://lore.kernel.org/all/20251203-swati-v1-1-250efcb4e6a7@oss.qualcomm.com/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e79f317bb571/disk-d358e525.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/cf9e2849af10/vmlinux-d358e525.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/73d80a967038/bzImage-d358e525.xz
+Swati Agarwal (4):
+  dt-bindings: usb: Add binding for Genesys Logic GL3590 hub
+  usb: misc: onboard_usb_hub: Add Genesys Logic GL3590 hub support
+  arm64: dts: qcom: lemans-evk: Rename hd3ss3220_ instance for primary
+    port controller
+  arm64: dts: qcom: lemans-evk: Enable USB1 controller for host mode
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8dd915c7cb0490fc8c52@syzkaller.appspotmail.com
+ .../bindings/usb/genesys,gl850g.yaml          |   1 +
+ arch/arm64/boot/dts/qcom/lemans-evk.dts       | 167 +++++++++++++++++-
+ drivers/usb/misc/onboard_usb_dev.c            |   1 +
+ drivers/usb/misc/onboard_usb_dev.h            |   1 +
+ 4 files changed, 166 insertions(+), 4 deletions(-)
 
-BUG: memory leak
-unreferenced object 0xffff888127d51010 (size 16):
-  comm "dhcpcd", pid 5479, jiffies 4294951443
-  hex dump (first 16 bytes):
-    40 05 30 01 00 00 02 00 9e 00 00 00 00 00 00 00  @.0.............
-  backtrace (crc 5546a3be):
-    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
-    slab_post_alloc_hook mm/slub.c:4958 [inline]
-    slab_alloc_node mm/slub.c:5263 [inline]
-    __kmalloc_cache_noprof+0x3b2/0x570 mm/slub.c:5771
-    kmalloc_noprof include/linux/slab.h:957 [inline]
-    async_set_registers drivers/net/usb/rtl8150.c:192 [inline]
-    rtl8150_set_multicast+0x7a/0x1c0 drivers/net/usb/rtl8150.c:679
-    __dev_set_rx_mode+0xc5/0x120 net/core/dev.c:9655
-    dev_set_rx_mode net/core/dev.c:9661 [inline]
-    __dev_open+0x23f/0x3c0 net/core/dev.c:1691
-    __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
-    netif_change_flags+0x35/0x90 net/core/dev.c:9797
-    dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
-    devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
-    inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
-    sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
-    sock_ioctl+0x149/0x480 net/socket.c:1375
-    vfs_ioctl fs/ioctl.c:51 [inline]
-    __do_sys_ioctl fs/ioctl.c:597 [inline]
-    __se_sys_ioctl fs/ioctl.c:583 [inline]
-    __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
-    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
-    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
-    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+-- 
+2.34.1
 
-BUG: memory leak
-unreferenced object 0xffff8881282bae40 (size 192):
-  comm "dhcpcd", pid 5479, jiffies 4294951443
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 58 ae 2b 28 81 88 ff ff  ........X.+(....
-  backtrace (crc d110b1b3):
-    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
-    slab_post_alloc_hook mm/slub.c:4958 [inline]
-    slab_alloc_node mm/slub.c:5263 [inline]
-    __do_kmalloc_node mm/slub.c:5656 [inline]
-    __kmalloc_noprof+0x3e0/0x660 mm/slub.c:5669
-    kmalloc_noprof include/linux/slab.h:961 [inline]
-    usb_alloc_urb+0x66/0xa0 drivers/usb/core/urb.c:75
-    async_set_registers drivers/net/usb/rtl8150.c:195 [inline]
-    rtl8150_set_multicast+0x97/0x1c0 drivers/net/usb/rtl8150.c:679
-    __dev_set_rx_mode+0xc5/0x120 net/core/dev.c:9655
-    dev_set_rx_mode net/core/dev.c:9661 [inline]
-    __dev_open+0x23f/0x3c0 net/core/dev.c:1691
-    __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
-    netif_change_flags+0x35/0x90 net/core/dev.c:9797
-    dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
-    devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
-    inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
-    sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
-    sock_ioctl+0x149/0x480 net/socket.c:1375
-    vfs_ioctl fs/ioctl.c:51 [inline]
-    __do_sys_ioctl fs/ioctl.c:597 [inline]
-    __se_sys_ioctl fs/ioctl.c:583 [inline]
-    __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
-    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
-    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
-    entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
