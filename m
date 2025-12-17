@@ -1,157 +1,78 @@
-Return-Path: <linux-usb+bounces-31546-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31547-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5190CCC7DCE
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 14:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 950A1CC7E12
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 14:40:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D3D74307474B
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 13:33:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 052FB30BEA46
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 13:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D2C365A11;
-	Wed, 17 Dec 2025 13:33:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC0ED3659F4;
+	Wed, 17 Dec 2025 13:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="G3TZwRs8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="a2GkAmSe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65C1364042
-	for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 13:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0703385AA;
+	Wed, 17 Dec 2025 13:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765978386; cv=none; b=l863kgMlPvFdXx+0pJLJvR9gxyiLqd3ZG2XmVJXK4qjt8JwRaw2hcthIo23qp0rYlqxIFE3SFAbR3IBq7dPLcZncUQuRWuWBqpHt00t0U7fT9eHaZ0qoEgbYMeYAA3D3Va6qEOspQiYo5b9faekF3dNZz0TCfDiyX/c1+a24V3s=
+	t=1765978510; cv=none; b=VduxN73YbqCMsDaq3bG5ZEBAMP2NHM9pEu0Ye4QVWBHavnjuPUCzGVK58epIKuKLBc36F9ElnFUN2msDDAXtim+lIhsdAvENEPggFHd15EQIL/YL5djNfrvT0Y1mzXoHIL5uAsmhSzxQLeDVzVCpJgkQVXzenwOCXPvuWEwRnWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765978386; c=relaxed/simple;
-	bh=3NxV/sdr2BZyW6Fp6jeGvfWxTA5ctLtFaPPYKmOmWzs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CUB0bZ8j8An/lYOfMAJlupCvqbNf2Qax9b7QBG2ADpSDq1G33XFmb3JrM3RHOoLnbO20ijVbO6bYfH7zffqXFM9RyCmddOKKRh9RbezejqQS41N4C2LFTVWJZ7+q6/VTv/Qcm3d5JBNJZcsvP5r4c2/AnzzIgnBjuhMGRDXl5yE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=G3TZwRs8; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-64981b544a1so7797359a12.1
-        for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 05:33:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1765978382; x=1766583182; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3NxV/sdr2BZyW6Fp6jeGvfWxTA5ctLtFaPPYKmOmWzs=;
-        b=G3TZwRs8slika+uM8zA2b/tbxbmR9UD4zQjKjHTYFdQgFKQIvb5WcOE963ZZ02V0Mc
-         qP0y3gHvcLeM0uzdbqcjgz/OUiak06hFqxxk2bqy9JyIuV+hWAOR+yfQT3/puygEdmcZ
-         mSOwl2czqg7bWviUHQvoqfL2VNr6lSNSEKluYXqSdbSaAHT1yuKd6fpzL1rD93FYSdgq
-         nGfR/UWTLwfs3EF6NQKalofoEucjD9bsNEEN4J8bADznJikY/0q8pziBBNcl66wb0YW6
-         VefrjPLW58syX/GbFPK5ltyANGRw4PSWy3W4rvQNgVF5nVe6Cj7L6F0oCvRlAt9PVq8m
-         SAHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765978382; x=1766583182;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3NxV/sdr2BZyW6Fp6jeGvfWxTA5ctLtFaPPYKmOmWzs=;
-        b=DPd304NtqGv/uyJNNw09F0B4yZXVDlDjD90aUyAZ843isxIC4NHODxRPX3Dl56lqTg
-         m9aMncJYk/Yu7Dv4G43mG2jAW91mDT+uMKrz4lsE+3ex9jtTsBpoadV0MzD4/6wSz+5H
-         B1g6CysBlYA1SRsPbENYZPsLw/NNhtQbZ1+GVRE75TG3oSoxwxTbg9ZqTaooffltoXw6
-         ZDN2RPnN5AbTT3joAKOUkPfIZu4lPF5Ek/XrWBA4QlOuI/i8XaJFHLsq4IMapRylxFxR
-         9nQFuoT/6U9kgSd++azfKdejx6WgLtav0vxcpN/gG30FD9Bspme6WCPjlSuvsRJPbGBl
-         0llA==
-X-Forwarded-Encrypted: i=1; AJvYcCX6Z7KY0ul4XbHDuslLxBMaNFb5z92YLXuppwiF1qXWqtS1yBuQc9ZG0fbwIRlWNpLjSuY2rp5qMh4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNlVQHH9s3jq5NI/2z5e9oBJTRuKoSqoD3YRBZPZUWCD0HzH2j
-	FoVSB68SyuTH268+vOP7/horGsKdjgGF2YKgzB2hS+yc/HLIfMyF8qymWLQSqy4KtZPmRo94hAt
-	syNhzZJ/bGeacrdItNI1klJE68Oe4U7z4SSi/U7qe/w==
-X-Gm-Gg: AY/fxX6UP0kouDI0+efIVZ38C9GE4FGyueDb6+EivPTW6MKZoRXveh7JVMHyLyArg9O
-	O/klBB2yI5lDMAXJ8jPX4bv+ACYwaEEQDoyo8TlZhM8PkEhHtuvqAMz71x6FgmyxLodAo39gAVh
-	7M6hb86zfQjwCoQB3Bx5fwSojFmgk0GQepK5YeGgR779HrEyc7kSL2gWS5Sj5HPmaV32Ze5j8yZ
-	NrbIIQ7RdjI4++6FRzpce5CfRr07PEFxVTEDrnImXPDtC4X9AjFjiLQpaatMBCa6cH6Q9MEZBTi
-	wCrF9NRdSERHg7msmXstnqdHvThaGnKTmkEKRuXNOSx36uLTe+Jf
-X-Google-Smtp-Source: AGHT+IHQBmS2mrQa3fgyiBBuz2kWHV24zlBwa/1NFFHKPKgWTqO46GlqIXXFCMupFuoXyMzVWH1kl/6iZAAmZg0kVsk=
-X-Received: by 2002:a17:906:c39e:b0:b7f:e709:d447 with SMTP id
- a640c23a62f3a-b7fe709d458mr591500066b.33.1765978382116; Wed, 17 Dec 2025
- 05:33:02 -0800 (PST)
+	s=arc-20240116; t=1765978510; c=relaxed/simple;
+	bh=3JVKRm3qp4wihBmBWmB8QpaJf864GacxatKGeaxtOUI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aaCtTaVEBf6cPTvYM3oCoG+LFi5rtg4BoBLJUwVRaOmHHf3/RXWmxkX2QmvnnfjH19KVqV/kqyyeyhfmqfuzLnUZ259X6jlymNNi+WYzgoVM7lof6BwCwyadSc0tSiglWGpmnUVNwV5SxEJdoXZvq/dYy/27Zw6hEoM12oOokmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=a2GkAmSe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57B4DC4CEF5;
+	Wed, 17 Dec 2025 13:35:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1765978509;
+	bh=3JVKRm3qp4wihBmBWmB8QpaJf864GacxatKGeaxtOUI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=a2GkAmSe7eIsGg/v1Ai9BYguOXpAWvi3YnSg0fWayofR0pyUlRSOjRjGfTqkQ4uBW
+	 brPrWkDV3KBIowGUpp/dTmKANjsYttln9NwHM5W8RkKh3UnEjnl3mKqyOY9wT/IcTv
+	 hfrhx93m3kfv0hagEuB+btJ8u0mXanMom8OwV25Y=
+Date: Wed, 17 Dec 2025 14:35:06 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Arseniy Krasnov <avkrasnov@salutedevices.com>
+Cc: Akash M <akash.m5@samsung.com>, oxffffaa@gmail.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@salutedevices.com
+Subject: Re: [PATCH v1] usb: gadget: f_fs: trim extra bytes from USB req
+Message-ID: <2025121718-paltry-caress-43fd@gregkh>
+References: <20251209134412.577797-1-avkrasnov@salutedevices.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-5-robert.marko@sartura.hr> <fe15fcce-865a-4969-9b6f-95920fcaa5c7@kernel.org>
- <CA+HBbNGNMGRL11kdg14LwkiTazXJYXOZeVCKsmW6-XF6k5+sVA@mail.gmail.com> <3d6f254c-d53f-47d9-8081-8506d202bf9d@kernel.org>
-In-Reply-To: <3d6f254c-d53f-47d9-8081-8506d202bf9d@kernel.org>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Wed, 17 Dec 2025 14:32:49 +0100
-X-Gm-Features: AQt7F2p7AtghDvAyv4NK8Ascs8BHBx___HwB1JF-DX23awYiIEMyiUo7jk7sWyI
-Message-ID: <CA+HBbNEKJ2qG4s51Gq9dh0uGuSwyPDfsq+mb5w6Kry6e9N0VSg@mail.gmail.com>
-Subject: Re: [PATCH v2 05/19] dt-bindings: arm: microchip: move SparX-5 to
- generic Microchip binding
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com, 
-	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, 
-	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com, 
-	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
-	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
-	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
-	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-clk@vger.kernel.org, mwalle@kernel.org, luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251209134412.577797-1-avkrasnov@salutedevices.com>
 
-On Wed, Dec 17, 2025 at 2:23=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 16/12/2025 18:01, Robert Marko wrote:
-> > On Tue, Dec 16, 2025 at 4:58=E2=80=AFPM Krzysztof Kozlowski <krzk@kerne=
-l.org> wrote:
-> >>
-> >> On 15/12/2025 17:35, Robert Marko wrote:
-> >>> Now that we have a generic Microchip binding, lets move SparX-5 as we=
-ll as
-> >>> there is no reason to have specific binding file for each SoC series.
-> >>>
-> >>> The check for AXI node was dropped.
-> >>
-> >> Why?
-> >
-> > According to Conor, it is pointless [1]
->
-> You have entire commit msg to explain this. It's basically my third
-> question where reasoning behind changes is not explained.
->
-> When you send v3, you will get the same questions...
+On Tue, Dec 09, 2025 at 04:44:11PM +0300, Arseniy Krasnov wrote:
+> In '__ffs_epfile_read_data()' number of bytes to copy to user iter is
+> returned by USB driver in field 'actual' of structure 'usb_request'
+> (see 'ffs_epfile_io_complete()'). Looks like some buggy driver may
+> return value larger than actual size of kernel buffer of such USB
+> request. This leads to the following crash (produced on 'dwc2' USB
+> driver). To prevent this, let's add extra check, which trims reported
+> request length.
 
-Hi Krzysztof,
-Considering that instead of merging the bindings LAN969x will be added
-to Atmel instead,
-this will be dropped in v3.
-Sorry for the inconvenience.
+Why not fix the broken driver instead?  That would resolve this
+properly, and not force the gadget code to work around obviously-broken
+kernel code.
 
-Regards,
-Robert
->
->
-> Best regards,
-> Krzysztof
+We try to fix bugs at the root, not paper over them elsewhere.
 
+So what driver is causing this?
 
+thanks,
 
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+greg k-h
 
