@@ -1,182 +1,124 @@
-Return-Path: <linux-usb+bounces-31526-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31527-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F070CC598D
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 01:26:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB4D3CC5B7C
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 02:43:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 03CF3302B774
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 00:26:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 99BA03011A5D
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 01:43:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88871C3BFC;
-	Wed, 17 Dec 2025 00:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8437257423;
+	Wed, 17 Dec 2025 01:43:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="elYhHcuE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AGnq+gw1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90FB3A1E7C
-	for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 00:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E5819CC28
+	for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 01:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765931161; cv=none; b=JwXQYeNxy4yu3biHVYRLjXhb91IYP+oHiZfPLroE7fYCaPKA3OeM+RUHtmu6YcKCLu3XZPItLfzwVqtlRWcfgjB/Apfyjci5npTCYgRwPj/enIf+K/AGMwE6eym6EoOep6eerUPMP4KqpVe2SyXYvGh0vFnl1eS/WGkq3dxJ1yY=
+	t=1765935817; cv=none; b=nvf/z+s/pJUzK8cPEfpEGyiLPA++secEY9npMnp8Y0+nrt91SLotQMti+nGm2/bDGiYJS+8f0URz5VfTkgSPgbiKQNgnAFUIcvVIDdKgPMAzS+JTmbwZBMfmeR91hzKA6G7xZj0OwstjFNwTBnqdScUEuJTmE74KgCV+9aEfvMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765931161; c=relaxed/simple;
-	bh=9QZkPyxxxv0XvNVPkvBCDLdyp8ZhJIeiVto9GvIKdqE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dIrsv1aR1I7t8Ho6x7GxJ+YKO+OJrBP/VEsNOENqyfPUbGTnAYW9k1I+TGInImXKAgW0gR1xl5PNrbqdlUV7nnM89PtSsL3P10jS44XceYE/ao4gwRsApRMHIkbBwi4M3ktu4bwIjsctH96rgo+rlfJ8T1raSMwguyAEEr7a94c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=elYhHcuE; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c0ec27cad8cso2993925a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 16:25:59 -0800 (PST)
+	s=arc-20240116; t=1765935817; c=relaxed/simple;
+	bh=KTv2ZHe+Pf2UP7Gc46z2Dv4PlUrx7h0Lcu9f7VVuRtY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=gjsA1KaZlWsNlKNqkl9GLS/MOSiHgfVKnev6LD0lCWhVWixxs1lNrUjfpMSR9ckALKCGx5AV5d8cuXmqWRACQ3kLOOUdIwduHtaC7brXFL5LxHhDHk13m6a1WC0etbDYFftPPSSSro3k/UT+g1XkNvUddJ5Xv3bJXRn+PyW+3v4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AGnq+gw1; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-34c6f6566a7so724023a91.3
+        for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 17:43:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765931159; x=1766535959; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nStCldhYeJbsakQb9GL71otPBPnGKef27diqrwm9pSQ=;
-        b=elYhHcuEis90cotJkLhvVkSvTEGlv24MJuRH51JIvNxByNiIKS1m72XZcLqebgzoNC
-         Qmls4KA6phCM2T4hJG9jG3tXGPrUH2JEBXnu8ldbdPkQst+n9Iepg+cQVPn2PPjgav2m
-         xvBaS4l40VGc7HIpPUOGWlFSQQjRw/8a8Sm9MaHMTx10PZeaSp4Xm3hrKp2hlIdJ5tKL
-         WDmN9CqaR1qwCuOOcxP+a+j1wtSbWjstxgr4eqqrbXfNVx4CO3PvYwwuHbqoaN07q2o3
-         q4ee+PK5O7Nu2wcED6bBAr0zY7ZHo2gGIQNo48BZl4VgCS+D2k+Smygte3FJwXAYIJn1
-         5UMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765931159; x=1766535959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=gmail.com; s=20230601; t=1765935815; x=1766540615; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=nStCldhYeJbsakQb9GL71otPBPnGKef27diqrwm9pSQ=;
-        b=PmbDvHhAI0bTYHSiTZyMV3RE/NALOcXQcp8IDGO6hke2cgJluIzN67ep48y4PSc9p+
-         V8XkqflJZ9Q82uLc6Tfxs3nmMeOjwxDuL/wpxpPPLYj0MRbshIh6Y6E2xyHdB6FzqBuz
-         0yLAffSsHyqwuFK0+aydgV5WfOyy4vtwBiPABvFscLU+3MMPNMhz90U9aY+5ZimMplpa
-         nHGe0ymE2tE+ySWxa+2iFOJj1EbAYAoG7aRN6qdxrTwm7BeUOBdV06BvlICrytcI3YAP
-         lbGtqlXTU4UdTgi0KN1KX/madXgKxgyaLkPWP/AEtqg7bxZlGTTjnMbIe/9zWCLshxiv
-         qB1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUG4S2AkA1T7ATjPNXhgO9ZvNLEUi6YdQyPDVD/zKT4yM1Lg1Qje525dur6UMngsAFZ/uF+FOm4/3M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygWQ/kd9ymboG8w/cMwRciPudVulPMXmlBRBOTu25IUfxZiEuv
-	jDQ2370c3OgVnuBHXrlM/EoYBAKq+jkqj12WOe79ijbg7OUK0wFndr0hFJpVLGxPuI2d9MCjCi3
-	iwvCLOkj/Y3xAKp5bDaRTYMBbAJ5a+voMScsHNR6x
-X-Gm-Gg: AY/fxX7fEB9q1u1FjSaIp4AbecQZuuWJzRXj/pLabM5RRZBa4Jdpg5FEPuq4ul9qk/E
-	Va+xE7gPWwKPeI6E95kco2ftvLCM+ZncgCMdJO5UQMt3PtYhwqKXRFVvdUQzLMN5K1DsLW3Sido
-	Wn+zY1tdoF4yrLakm/+xUL99/D7Npe4Ktrre6MTIZ24EknlzCOB7r1fhhm3hCFD/TCkFjl2e3ze
-	7s0rfazaMg+Lhp8FaVjZJACBNFdjs9HWtzxJejOieksE4eagzlidU+yPcrNCiTil1P6FDj8CjW5
-	ou192lLVq27TXSKTwdYnIP6Y1KP0DQQ+Nz4t
-X-Google-Smtp-Source: AGHT+IE72YZLvmMskEnRrYKXqAR/Z4B1+w1UCRGWDCS1wBfVqFBXKeWBfxxKkJ6DLO7fN/x56A6EPSj52vq8pdguqrA=
-X-Received: by 2002:a05:7301:7015:b0:2a7:1232:f3a2 with SMTP id
- 5a478bee46e88-2ac2f92967fmr10246834eec.0.1765931158534; Tue, 16 Dec 2025
- 16:25:58 -0800 (PST)
+        bh=hcmcva5D3bcMY/RGiF1OQIJue0+9CAWp28PjOvFTVsg=;
+        b=AGnq+gw17Emdpu9aMUboDpkhM+elqedbmcG503yVHfL39iF44wsLx0h4t0oAm1qynQ
+         2D/GnTWxA786cajH+gH7wXXSmblQYnWpQL7kx1mshTOb1FPXdJIg2FkBvOKdQD24ke09
+         HnyiWQZQLBg3VekQNi34tRcBDSXPxWyvJmnXoJy7uNFdFp8exqFexoNA8UMy2cblUyhJ
+         43ij1EdmrY0XLjbTZEKJ6IHrRGbZU4Qo/ctGF8G9Q5cfCwNXumeV+1jj0tJfiJycbMhZ
+         Dg9GcbrV1htZHSPAdemPhNddj/ebifvAFdItddkDd8mfDYruEPH6nUIiELXK9vQ1ZC+H
+         FoiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765935815; x=1766540615;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hcmcva5D3bcMY/RGiF1OQIJue0+9CAWp28PjOvFTVsg=;
+        b=fELKOWPHmsEtGWxjCs8IZgTF3C/FlVy+ZKsmdE9I0Z/QTa7jdfscbxXeD5WfBRagBH
+         BmYlU5Wyt+XRyd3ZlEhnC3emhalcoMTFyXgMzh+LkEFna9KGMITN4FWqRIUUuCPrsOoN
+         wQEcIcS0Xek1amrzkw7+b/OGUKnCb1OGhXvKJny7fI37T+vwttBDnhUHsdct0wheGrkL
+         kFJZ7Btkp419zSEDOeULjlvYVHyJm0THK5nxTBl8/rwaQ4N+TPCXsNBzpgWhHGCF6jSz
+         fh4lWcz4PUhxlddUQBV/H4taG6xgeJ57B+qfiM2BnZS7zPTxBUxD/qyAuqeNYKH5A7yB
+         L0lg==
+X-Forwarded-Encrypted: i=1; AJvYcCWFKfsegPX8ST5FETRQCh2xKjfAq7fIwub7E2Bvay3hsBl+xYTaWOO7XI3JtQ1tBFn3y6P9aytOdbA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxhy+uaZiR6aMxm6egBjpmEQtGmo+aX+iqdK4nOkLl2pPg/5Yk0
+	iFN5xtzgNKskI6GzcKcfajuAfM+2i3BOn3e1DoYZt0dPxtdYZjHql3Qcra7ppQ==
+X-Gm-Gg: AY/fxX5NB8GdXaFuGO38mCfbz945QwHhUdQDg+iWDFe6J6MvuMnFvoSqswTwDmd1nll
+	WrpSZUC3HHikJ30A8gpN3Sx5qzKqnx0US+nPD9myWqR3LfRZdlz+/UxwwDOP3oCjfEFnwr5CQKB
+	ys/FOIIzeXwlRsHTbAfzAqsz6kUapKspfFU+0oCIkH/8D4goA+fxnh2SK9FI3E/s4jTyZ4vr+Ao
+	8L15uxc1qCViaZLjMKRF0If36eEIOcAP6zy6bafbtKT3AMDr93lM47Q/+DvKfItlUvGNWV8RSSK
+	hZxGVgbU+HNPy757YylXMyH9cP4ogMqB+O8xoFfXzwOKa//zbU7mXh06R+vAvpoG5wOTHKvlqzH
+	pmf1e6KKXmh/8OsVdDG6+Q/9Ytdc37nlw8r/wHUnB18kz4TlFmm8PfliqPHlIZN5CxTHr9rhaS4
+	ANzyite+KNqOK3o7B39nyJgw==
+X-Google-Smtp-Source: AGHT+IEvYT2dtudRmQm/bn6C+b2uveteegEC5cy8ieEVjUTt8/LNqv/L0djHPan73XAHBCyQvW/waA==
+X-Received: by 2002:a17:90b:4f41:b0:341:88c1:6a89 with SMTP id 98e67ed59e1d1-34abd7e3bd4mr11530747a91.2.1765935815417;
+        Tue, 16 Dec 2025 17:43:35 -0800 (PST)
+Received: from [192.168.1.7] ([159.192.237.173])
+        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-34cd9a832absm1112773a91.4.2025.12.16.17.43.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Dec 2025 17:43:35 -0800 (PST)
+Message-ID: <5227fbeb-0338-4006-845e-37f00b09218d@gmail.com>
+Date: Wed, 17 Dec 2025 08:43:28 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251205-controller-v9-0-9f158b18f979@google.com>
- <20251205-controller-v9-2-9f158b18f979@google.com> <2025120553-suffrage-divisive-5890@gregkh>
- <CA+zupgzL7v5MZDpxKDQQCqAZaqTdHbiG9-xTr+8RnigMFZJ_7Q@mail.gmail.com> <20251216233439.vqigcx2zs6taergz@synopsys.com>
-In-Reply-To: <20251216233439.vqigcx2zs6taergz@synopsys.com>
-From: Roy Luo <royluo@google.com>
-Date: Tue, 16 Dec 2025 16:25:21 -0800
-X-Gm-Features: AQt7F2r_jcpuKgHpjELMuIOr3JbsyWh8DSH9IaZ5PBx8OH-Ix2ElNBkBRfsI7ik
-Message-ID: <CA+zupgxV0aHEXqmmHbe6cKSQUvYg1iFXjiDfG7wKdF7KKTo6iA@mail.gmail.com>
-Subject: Re: [PATCH v9 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Peter Griffin <peter.griffin@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Badhri Jagan Sridharan <badhri@google.com>, Doug Anderson <dianders@google.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>, Joy Chakraborty <joychakr@google.com>, 
-	Naveen Kumar <mnkumar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: Trouble with drivers for Epson Moverio BT-40
+To: Oliver Neukum <oneukum@suse.com>,
+ natalie roentgen connolly <natalie@natalieee.net>, linux-usb@vger.kernel.org
+References: <9c4491aa-88d3-4c9a-843c-2f0d471263e0@natalieee.net>
+ <ade89a9d-6034-43e6-ba74-778db2f8837c@suse.com>
+ <ce3a8714-bce5-4cac-ba80-f3c64e6ff5e9@natalieee.net>
+ <b0899011-78bb-4fdd-9e49-3dad6b11a9e6@suse.com>
+Content-Language: en-US
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <b0899011-78bb-4fdd-9e49-3dad6b11a9e6@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 16, 2025 at 3:34=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
->
-> On Thu, Dec 04, 2025, Roy Luo wrote:
-> > On Thu, Dec 4, 2025 at 10:05=E2=80=AFPM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Fri, Dec 05, 2025 at 02:26:38AM +0000, Roy Luo wrote:
-> > > > +config USB_DWC3_GOOGLE
-> > > > +     tristate "Google Platform"
-> > > > +     depends on ARCH_GOOGLE || COMPILE_TEST
-> > >
-> > > There is no ARCH_GOOGLE in the tree now, so how is this supposed to
-> > > work?  Shouldn't tools that check for "invalid config options" trigge=
-r
-> > > on this?
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> > Hi Greg,
-> >
-> > The menuconfig looks like the following and it doesn't complain:
-> > | Symbol: ARCH_GOOGLE [=3DARCH_GOOGLE]
-> > | Type  : unknown
-> > |
-> > | Symbol: PHY_GOOGLE_USB [=3Dy]
-> > | Type  : tristate
-> > | Defined at drivers/phy/Kconfig:104
-> > |     Prompt: Google Tensor SoC USB PHY driver
-> > |     Depends on: ARCH_GOOGLE || COMPILE_TEST [=3Dy]
-> >
-> > According to Kconfig documentation [1], the unknown symbol
-> > would simply be evaluated as an "n", which is what we want.
-> > "Convert the symbol into an expression. Boolean and tristate
-> > symbols are simply converted into the respective expression
-> > values. All other symbol types result in =E2=80=98n=E2=80=99."
-> >
-> > In a different Kconfig documentation, an environment variable
-> > "KCONFIG_WARN_UNKNOWN_SYMBOLS" is there to detect
-> > undefined symbols in the "config input", but I can't find one that
-> > catches undefined symbols in the Kconfig tree itself.
-> >
-> > That is, the tool seems to allow this.
-> > However, if this turns out to be a major problem. I think we
-> > can either:
-> > - Remove ARCH_GOOGLE and leave COMPILE_TEST as
-> >   the only dependency. Then add ARCH_GOOGLE back
-> >   later once it's in the tree.
-> > - Defer the whole patch series until ARCH_GOOGLE is
-> >   present (I hope not).
-> >
-> > [1] https://urldefense.com/v3/__https://docs.kernel.org/kbuild/kconfig-=
-language.html*menu-dependencies__;Iw!!A4F2R9G_pg!e-y2_BsSNhXF1v5K6tBJX-Oabg=
-KJM9WVdvwyKoB6tg9ooCLVg8WiQ4UrStOF2YZQ_Zs6tC6HVh7wCpqkEfU$
-> > [2] https://urldefense.com/v3/__https://www.kernel.org/doc/Documentatio=
-n/kbuild/kconfig.rst__;!!A4F2R9G_pg!e-y2_BsSNhXF1v5K6tBJX-OabgKJM9WVdvwyKoB=
-6tg9ooCLVg8WiQ4UrStOF2YZQ_Zs6tC6HVh7wHpoUlhY$
-> >
->
-> Hi Greg, Roy,
->
-> Just checking, are we aligned here?
->
-> BR,
-> Thinh
+On 2025-12-16 15:39, Oliver Neukum wrote:
+> 
+> 
+> On 15.12.25 15:17, natalie roentgen connolly wrote:
+>> Hello,
+>>
+>> Without adding {USB_DEVICE(0x04b8, 0x0d12)} to acm_ids, the stock driver
+>> emits no logs:
+> 
+> Hi,
+> 
+> OK, I see the issue. There is no nice solution to this
+> issue, so here is the ugly solution. Could you test the attached patch?
+> 
+>      Regards
+>          Oliver
 
-Thinh,
+Oliver,
+your solution is more ugly than it has to be because it assigns fixed 
+interface numbers to the cdc-acm interface pairs and won't work for
+devices with faulty union using pairs 2,3 or 3,4 and so on.
+Instead, when parsing the control interface then assign data interface 
+number to next interface number.
 
-Thanks for checking in. I'm still waiting on Greg's reply
-regarding the Kconfig question.
-
-BTW, I silently dropped your Ack-by tag in v8 due to the
-changes in Kconfig and MAINTAINERS files, which I
-should've noted in the changelog but I didn't. Sorry for
-the inconvenience. Could you please review the current
-version again and provide your tag if it looks good?
-
-Regards,
-Roy
+thanks
+Lars
 
