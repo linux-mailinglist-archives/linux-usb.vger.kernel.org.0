@@ -1,112 +1,157 @@
-Return-Path: <linux-usb+bounces-31545-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31546-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3E56CC7DAD
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 14:36:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5190CCC7DCE
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 14:37:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 59F48303358F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 13:35:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D3D74307474B
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 13:33:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466C23596F0;
-	Wed, 17 Dec 2025 13:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D2C365A11;
+	Wed, 17 Dec 2025 13:33:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d+0UXIdp"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="G3TZwRs8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EA03590DD;
-	Wed, 17 Dec 2025 13:27:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65C1364042
+	for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 13:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765978055; cv=none; b=c+yHo3onn/93yDJi/IuFMKFUH81R6eInCQfMzNTLavR8lv/Ne4LXDJTuNwAZ9F00vNd8abyZjBU/Y77icTf2M0x6xy5elxbBWwIYsE2m7jo9vVNcJpPbg5nWYbZJz0dmGvFdgua3CxJpnrrlCj3AYHEBCoJHkaEBrorIR7YOM4E=
+	t=1765978386; cv=none; b=l863kgMlPvFdXx+0pJLJvR9gxyiLqd3ZG2XmVJXK4qjt8JwRaw2hcthIo23qp0rYlqxIFE3SFAbR3IBq7dPLcZncUQuRWuWBqpHt00t0U7fT9eHaZ0qoEgbYMeYAA3D3Va6qEOspQiYo5b9faekF3dNZz0TCfDiyX/c1+a24V3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765978055; c=relaxed/simple;
-	bh=VnDZMETIp/4sSPGHuaAyIV65nEVItusuWNcr9hwFVCc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hjFBFcWyLlrs1KUibGj9kRG7MrroY6Vy327U3ppUIvrUoK0aQvUo5DRWSqJYtgDCnEzfPMRgW4Jkehnl111I3hwDdMMFW59oJhaBxyHJbr6y9lF1Q9t2azRVfc4S7oLHMyxLi0COXE47KlV6dUjpqc/T3hbQFnHyINJH8lzMpyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=d+0UXIdp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC10C4CEF5;
-	Wed, 17 Dec 2025 13:27:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1765978055;
-	bh=VnDZMETIp/4sSPGHuaAyIV65nEVItusuWNcr9hwFVCc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d+0UXIdpNtnPvn9B5/M3ECUNY/X+9Jiatu9FeOJaVJQ+w4M/WjP7y3m2ihQIvTyYh
-	 kpvw53z0KGcBqR1kbNsxQ7GZ3nxB4pgOJ4Q4LShmP+Xja4+AbNSBlNNa1LqEVARNb+
-	 nGseCNq/mLRozkLueVlfbSGuVFRFgUcF3YGOgsMg=
-Date: Wed, 17 Dec 2025 14:27:27 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Miao Li <limiao870622@163.com>
-Cc: zaitcev@redhat.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Miao Li <limiao@kylinos.cn>
-Subject: Re: [PATCH] USB: usblp: reset device at probe for Fuji Xerox
- DocuPrint P475 AP
-Message-ID: <2025121739-parking-swizzle-3cf2@gregkh>
-References: <20251128065206.361475-1-limiao870622@163.com>
+	s=arc-20240116; t=1765978386; c=relaxed/simple;
+	bh=3NxV/sdr2BZyW6Fp6jeGvfWxTA5ctLtFaPPYKmOmWzs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CUB0bZ8j8An/lYOfMAJlupCvqbNf2Qax9b7QBG2ADpSDq1G33XFmb3JrM3RHOoLnbO20ijVbO6bYfH7zffqXFM9RyCmddOKKRh9RbezejqQS41N4C2LFTVWJZ7+q6/VTv/Qcm3d5JBNJZcsvP5r4c2/AnzzIgnBjuhMGRDXl5yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=G3TZwRs8; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-64981b544a1so7797359a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 05:33:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1765978382; x=1766583182; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3NxV/sdr2BZyW6Fp6jeGvfWxTA5ctLtFaPPYKmOmWzs=;
+        b=G3TZwRs8slika+uM8zA2b/tbxbmR9UD4zQjKjHTYFdQgFKQIvb5WcOE963ZZ02V0Mc
+         qP0y3gHvcLeM0uzdbqcjgz/OUiak06hFqxxk2bqy9JyIuV+hWAOR+yfQT3/puygEdmcZ
+         mSOwl2czqg7bWviUHQvoqfL2VNr6lSNSEKluYXqSdbSaAHT1yuKd6fpzL1rD93FYSdgq
+         nGfR/UWTLwfs3EF6NQKalofoEucjD9bsNEEN4J8bADznJikY/0q8pziBBNcl66wb0YW6
+         VefrjPLW58syX/GbFPK5ltyANGRw4PSWy3W4rvQNgVF5nVe6Cj7L6F0oCvRlAt9PVq8m
+         SAHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765978382; x=1766583182;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3NxV/sdr2BZyW6Fp6jeGvfWxTA5ctLtFaPPYKmOmWzs=;
+        b=DPd304NtqGv/uyJNNw09F0B4yZXVDlDjD90aUyAZ843isxIC4NHODxRPX3Dl56lqTg
+         m9aMncJYk/Yu7Dv4G43mG2jAW91mDT+uMKrz4lsE+3ex9jtTsBpoadV0MzD4/6wSz+5H
+         B1g6CysBlYA1SRsPbENYZPsLw/NNhtQbZ1+GVRE75TG3oSoxwxTbg9ZqTaooffltoXw6
+         ZDN2RPnN5AbTT3joAKOUkPfIZu4lPF5Ek/XrWBA4QlOuI/i8XaJFHLsq4IMapRylxFxR
+         9nQFuoT/6U9kgSd++azfKdejx6WgLtav0vxcpN/gG30FD9Bspme6WCPjlSuvsRJPbGBl
+         0llA==
+X-Forwarded-Encrypted: i=1; AJvYcCX6Z7KY0ul4XbHDuslLxBMaNFb5z92YLXuppwiF1qXWqtS1yBuQc9ZG0fbwIRlWNpLjSuY2rp5qMh4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNlVQHH9s3jq5NI/2z5e9oBJTRuKoSqoD3YRBZPZUWCD0HzH2j
+	FoVSB68SyuTH268+vOP7/horGsKdjgGF2YKgzB2hS+yc/HLIfMyF8qymWLQSqy4KtZPmRo94hAt
+	syNhzZJ/bGeacrdItNI1klJE68Oe4U7z4SSi/U7qe/w==
+X-Gm-Gg: AY/fxX6UP0kouDI0+efIVZ38C9GE4FGyueDb6+EivPTW6MKZoRXveh7JVMHyLyArg9O
+	O/klBB2yI5lDMAXJ8jPX4bv+ACYwaEEQDoyo8TlZhM8PkEhHtuvqAMz71x6FgmyxLodAo39gAVh
+	7M6hb86zfQjwCoQB3Bx5fwSojFmgk0GQepK5YeGgR779HrEyc7kSL2gWS5Sj5HPmaV32Ze5j8yZ
+	NrbIIQ7RdjI4++6FRzpce5CfRr07PEFxVTEDrnImXPDtC4X9AjFjiLQpaatMBCa6cH6Q9MEZBTi
+	wCrF9NRdSERHg7msmXstnqdHvThaGnKTmkEKRuXNOSx36uLTe+Jf
+X-Google-Smtp-Source: AGHT+IHQBmS2mrQa3fgyiBBuz2kWHV24zlBwa/1NFFHKPKgWTqO46GlqIXXFCMupFuoXyMzVWH1kl/6iZAAmZg0kVsk=
+X-Received: by 2002:a17:906:c39e:b0:b7f:e709:d447 with SMTP id
+ a640c23a62f3a-b7fe709d458mr591500066b.33.1765978382116; Wed, 17 Dec 2025
+ 05:33:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251128065206.361475-1-limiao870622@163.com>
+References: <20251215163820.1584926-1-robert.marko@sartura.hr>
+ <20251215163820.1584926-5-robert.marko@sartura.hr> <fe15fcce-865a-4969-9b6f-95920fcaa5c7@kernel.org>
+ <CA+HBbNGNMGRL11kdg14LwkiTazXJYXOZeVCKsmW6-XF6k5+sVA@mail.gmail.com> <3d6f254c-d53f-47d9-8081-8506d202bf9d@kernel.org>
+In-Reply-To: <3d6f254c-d53f-47d9-8081-8506d202bf9d@kernel.org>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Wed, 17 Dec 2025 14:32:49 +0100
+X-Gm-Features: AQt7F2p7AtghDvAyv4NK8Ascs8BHBx___HwB1JF-DX23awYiIEMyiUo7jk7sWyI
+Message-ID: <CA+HBbNEKJ2qG4s51Gq9dh0uGuSwyPDfsq+mb5w6Kry6e9N0VSg@mail.gmail.com>
+Subject: Re: [PATCH v2 05/19] dt-bindings: arm: microchip: move SparX-5 to
+ generic Microchip binding
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com, 
+	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
+	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, 
+	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com, 
+	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
+	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
+	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
+	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
+	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-clk@vger.kernel.org, mwalle@kernel.org, luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 28, 2025 at 02:52:06PM +0800, Miao Li wrote:
-> From: Miao Li <limiao@kylinos.cn>
-> 
-> when connecting Fuji Xerox DocuPrint P475 AP printer(which vid:pid is
-> 0550:020e) to Huawei hisi platform and do reboot test for 500 cycles,
-> usblp probe function executed successfully but there is a small
-> chance it might not work, we can reset the device at probe to deal
-> with the problem.
-> 
-> Signed-off-by: Miao Li <limiao@kylinos.cn>
-> ---
->  drivers/usb/class/usblp.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-> index a7a1d38b6bef..566930eb88a1 100644
-> --- a/drivers/usb/class/usblp.c
-> +++ b/drivers/usb/class/usblp.c
-> @@ -210,6 +210,7 @@ struct quirk_printer_struct {
->  #define USBLP_QUIRK_BIDIR	0x1	/* reports bidir but requires unidirectional mode (no INs/reads) */
->  #define USBLP_QUIRK_USB_INIT	0x2	/* needs vendor USB init string */
->  #define USBLP_QUIRK_BAD_CLASS	0x4	/* descriptor uses vendor-specific Class or SubClass */
-> +#define USBLP_QUIRK_RESET_DEV	0x8	/* reset USB device */
->  
->  static const struct quirk_printer_struct quirk_printers[] = {
->  	{ 0x03f0, 0x0004, USBLP_QUIRK_BIDIR }, /* HP DeskJet 895C */
-> @@ -228,6 +229,7 @@ static const struct quirk_printer_struct quirk_printers[] = {
->  	{ 0x0482, 0x0010, USBLP_QUIRK_BIDIR }, /* Kyocera Mita FS 820, by zut <kernel@zut.de> */
->  	{ 0x04f9, 0x000d, USBLP_QUIRK_BIDIR }, /* Brother Industries, Ltd HL-1440 Laser Printer */
->  	{ 0x04b8, 0x0202, USBLP_QUIRK_BAD_CLASS }, /* Seiko Epson Receipt Printer M129C */
-> +	{ 0x0550, 0x020e, USBLP_QUIRK_RESET_DEV }, /* FUJI XEROX DocuPrint P475 AP Printer */
->  	{ 0, 0 }
->  };
->  
-> @@ -1189,6 +1191,13 @@ static int usblp_probe(struct usb_interface *intf,
->  		le16_to_cpu(dev->descriptor.idVendor),
->  		le16_to_cpu(dev->descriptor.idProduct));
->  
-> +	/*
-> +	 * Some printer need to reset the device here or it might not work
-> +	 * when finished probe.
-> +	 */
-> +	if (usblp->quirks & USBLP_QUIRK_RESET_DEV)
-> +		usb_reset_device(dev);
+On Wed, Dec 17, 2025 at 2:23=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 16/12/2025 18:01, Robert Marko wrote:
+> > On Tue, Dec 16, 2025 at 4:58=E2=80=AFPM Krzysztof Kozlowski <krzk@kerne=
+l.org> wrote:
+> >>
+> >> On 15/12/2025 17:35, Robert Marko wrote:
+> >>> Now that we have a generic Microchip binding, lets move SparX-5 as we=
+ll as
+> >>> there is no reason to have specific binding file for each SoC series.
+> >>>
+> >>> The check for AXI node was dropped.
+> >>
+> >> Why?
+> >
+> > According to Conor, it is pointless [1]
+>
+> You have entire commit msg to explain this. It's basically my third
+> question where reasoning behind changes is not explained.
+>
+> When you send v3, you will get the same questions...
 
-This feels very very wrong.  Why must a driver tell the device to reset
-itself?  How does it pass any Windows USB validation without such a
-"reset"?  Why does it require this?
+Hi Krzysztof,
+Considering that instead of merging the bindings LAN969x will be added
+to Atmel instead,
+this will be dropped in v3.
+Sorry for the inconvenience.
 
-Are you sure this isn't a bug in the host controller logic instead?
+Regards,
+Robert
+>
+>
+> Best regards,
+> Krzysztof
 
-thanks,
 
-greg k-h
+
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
