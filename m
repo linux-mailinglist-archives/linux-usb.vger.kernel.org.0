@@ -1,126 +1,110 @@
-Return-Path: <linux-usb+bounces-31544-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31545-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26F6CCC7D25
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 14:27:49 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3E56CC7DAD
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 14:36:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B25FE3042FCC
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 13:24:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 59F48303358F
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 13:35:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22FFE364057;
-	Wed, 17 Dec 2025 13:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466C23596F0;
+	Wed, 17 Dec 2025 13:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nbny4sEA"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d+0UXIdp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7A734A79E;
-	Wed, 17 Dec 2025 13:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EA03590DD;
+	Wed, 17 Dec 2025 13:27:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765977871; cv=none; b=ZLySV/3JXM2ju4iw6+VK0CHxZW+PvzFUetqHcet7wQRjdhmP6ZBlmsrJnoFTPkWJdjOFU0m3kS22piIrcqMHBFOwBG50CvQmZhsnjb98bOVVV+1gDw+CYDq5O+By9q7Btdz67VGmVbjTMGACFjABHdLbUEj4rKfokipnAqE6hWk=
+	t=1765978055; cv=none; b=c+yHo3onn/93yDJi/IuFMKFUH81R6eInCQfMzNTLavR8lv/Ne4LXDJTuNwAZ9F00vNd8abyZjBU/Y77icTf2M0x6xy5elxbBWwIYsE2m7jo9vVNcJpPbg5nWYbZJz0dmGvFdgua3CxJpnrrlCj3AYHEBCoJHkaEBrorIR7YOM4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765977871; c=relaxed/simple;
-	bh=S4mO0XF+32E7SFhkQwowz/nXG8YSqhpXqW4U5Y8ZoMU=;
+	s=arc-20240116; t=1765978055; c=relaxed/simple;
+	bh=VnDZMETIp/4sSPGHuaAyIV65nEVItusuWNcr9hwFVCc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P2tgiqPwCSGj13YQuIC6XfbtCpdIszFZKu7whd4BD3IqqG+o0mGCW7pzVOO8XpIrctZmRAiDfr6ABiRJgmLU8rnNio9ouD6KCEUcrZo9dRoi7Otr8ULvyBs97nl4arKl0W+aI0n8/45tQNjtIrSJt0eoqMEnayja+UAmIElK2ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nbny4sEA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F5AC4CEF5;
-	Wed, 17 Dec 2025 13:24:29 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hjFBFcWyLlrs1KUibGj9kRG7MrroY6Vy327U3ppUIvrUoK0aQvUo5DRWSqJYtgDCnEzfPMRgW4Jkehnl111I3hwDdMMFW59oJhaBxyHJbr6y9lF1Q9t2azRVfc4S7oLHMyxLi0COXE47KlV6dUjpqc/T3hbQFnHyINJH8lzMpyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=d+0UXIdp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC10C4CEF5;
+	Wed, 17 Dec 2025 13:27:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1765977870;
-	bh=S4mO0XF+32E7SFhkQwowz/nXG8YSqhpXqW4U5Y8ZoMU=;
+	s=korg; t=1765978055;
+	bh=VnDZMETIp/4sSPGHuaAyIV65nEVItusuWNcr9hwFVCc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nbny4sEAa3vtjAV51VCdRhWNa3o885gFfxTIyISmrDt3HSxaTS3uTncYjewmC2+SJ
-	 FoiodPOp8/dKAZn/a4e5o7la/5iqh4pYt5+7+hl3i2nAPSjysY/eF9WqnI8vOilh4e
-	 BKiZFGXmZl4A/J36w6g2xZo2FwivWFSzXC/4Qdoc=
-Date: Wed, 17 Dec 2025 14:24:27 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Roy Luo <royluo@google.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Doug Anderson <dianders@google.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	Joy Chakraborty <joychakr@google.com>,
-	Naveen Kumar <mnkumar@google.com>
-Subject: Re: [PATCH v9 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
-Message-ID: <2025121728-reliably-crabgrass-2601@gregkh>
-References: <20251205-controller-v9-0-9f158b18f979@google.com>
- <20251205-controller-v9-2-9f158b18f979@google.com>
- <2025120553-suffrage-divisive-5890@gregkh>
- <CA+zupgzL7v5MZDpxKDQQCqAZaqTdHbiG9-xTr+8RnigMFZJ_7Q@mail.gmail.com>
+	b=d+0UXIdpNtnPvn9B5/M3ECUNY/X+9Jiatu9FeOJaVJQ+w4M/WjP7y3m2ihQIvTyYh
+	 kpvw53z0KGcBqR1kbNsxQ7GZ3nxB4pgOJ4Q4LShmP+Xja4+AbNSBlNNa1LqEVARNb+
+	 nGseCNq/mLRozkLueVlfbSGuVFRFgUcF3YGOgsMg=
+Date: Wed, 17 Dec 2025 14:27:27 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Miao Li <limiao870622@163.com>
+Cc: zaitcev@redhat.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Miao Li <limiao@kylinos.cn>
+Subject: Re: [PATCH] USB: usblp: reset device at probe for Fuji Xerox
+ DocuPrint P475 AP
+Message-ID: <2025121739-parking-swizzle-3cf2@gregkh>
+References: <20251128065206.361475-1-limiao870622@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+zupgzL7v5MZDpxKDQQCqAZaqTdHbiG9-xTr+8RnigMFZJ_7Q@mail.gmail.com>
+In-Reply-To: <20251128065206.361475-1-limiao870622@163.com>
 
-On Thu, Dec 04, 2025 at 11:14:39PM -0800, Roy Luo wrote:
-> On Thu, Dec 4, 2025 at 10:05 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Dec 05, 2025 at 02:26:38AM +0000, Roy Luo wrote:
-> > > +config USB_DWC3_GOOGLE
-> > > +     tristate "Google Platform"
-> > > +     depends on ARCH_GOOGLE || COMPILE_TEST
-> >
-> > There is no ARCH_GOOGLE in the tree now, so how is this supposed to
-> > work?  Shouldn't tools that check for "invalid config options" trigger
-> > on this?
-> >
-> > thanks,
-> >
-> > greg k-h
+On Fri, Nov 28, 2025 at 02:52:06PM +0800, Miao Li wrote:
+> From: Miao Li <limiao@kylinos.cn>
 > 
-> Hi Greg,
+> when connecting Fuji Xerox DocuPrint P475 AP printer(which vid:pid is
+> 0550:020e) to Huawei hisi platform and do reboot test for 500 cycles,
+> usblp probe function executed successfully but there is a small
+> chance it might not work, we can reset the device at probe to deal
+> with the problem.
 > 
-> The menuconfig looks like the following and it doesn't complain:
-> | Symbol: ARCH_GOOGLE [=ARCH_GOOGLE]
-> | Type  : unknown
-> |
-> | Symbol: PHY_GOOGLE_USB [=y]
-> | Type  : tristate
-> | Defined at drivers/phy/Kconfig:104
-> |     Prompt: Google Tensor SoC USB PHY driver
-> |     Depends on: ARCH_GOOGLE || COMPILE_TEST [=y]
+> Signed-off-by: Miao Li <limiao@kylinos.cn>
+> ---
+>  drivers/usb/class/usblp.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> According to Kconfig documentation [1], the unknown symbol
-> would simply be evaluated as an "n", which is what we want.
-> "Convert the symbol into an expression. Boolean and tristate
-> symbols are simply converted into the respective expression
-> values. All other symbol types result in ‘n’."
-> 
-> In a different Kconfig documentation, an environment variable
-> "KCONFIG_WARN_UNKNOWN_SYMBOLS" is there to detect
-> undefined symbols in the "config input", but I can't find one that
-> catches undefined symbols in the Kconfig tree itself.
-> 
-> That is, the tool seems to allow this.
-> However, if this turns out to be a major problem. I think we
-> can either:
-> - Remove ARCH_GOOGLE and leave COMPILE_TEST as
->   the only dependency. Then add ARCH_GOOGLE back
->   later once it's in the tree.
+> diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+> index a7a1d38b6bef..566930eb88a1 100644
+> --- a/drivers/usb/class/usblp.c
+> +++ b/drivers/usb/class/usblp.c
+> @@ -210,6 +210,7 @@ struct quirk_printer_struct {
+>  #define USBLP_QUIRK_BIDIR	0x1	/* reports bidir but requires unidirectional mode (no INs/reads) */
+>  #define USBLP_QUIRK_USB_INIT	0x2	/* needs vendor USB init string */
+>  #define USBLP_QUIRK_BAD_CLASS	0x4	/* descriptor uses vendor-specific Class or SubClass */
+> +#define USBLP_QUIRK_RESET_DEV	0x8	/* reset USB device */
+>  
+>  static const struct quirk_printer_struct quirk_printers[] = {
+>  	{ 0x03f0, 0x0004, USBLP_QUIRK_BIDIR }, /* HP DeskJet 895C */
+> @@ -228,6 +229,7 @@ static const struct quirk_printer_struct quirk_printers[] = {
+>  	{ 0x0482, 0x0010, USBLP_QUIRK_BIDIR }, /* Kyocera Mita FS 820, by zut <kernel@zut.de> */
+>  	{ 0x04f9, 0x000d, USBLP_QUIRK_BIDIR }, /* Brother Industries, Ltd HL-1440 Laser Printer */
+>  	{ 0x04b8, 0x0202, USBLP_QUIRK_BAD_CLASS }, /* Seiko Epson Receipt Printer M129C */
+> +	{ 0x0550, 0x020e, USBLP_QUIRK_RESET_DEV }, /* FUJI XEROX DocuPrint P475 AP Printer */
+>  	{ 0, 0 }
+>  };
+>  
+> @@ -1189,6 +1191,13 @@ static int usblp_probe(struct usb_interface *intf,
+>  		le16_to_cpu(dev->descriptor.idVendor),
+>  		le16_to_cpu(dev->descriptor.idProduct));
+>  
+> +	/*
+> +	 * Some printer need to reset the device here or it might not work
+> +	 * when finished probe.
+> +	 */
+> +	if (usblp->quirks & USBLP_QUIRK_RESET_DEV)
+> +		usb_reset_device(dev);
 
-Please do this.  I do not want to take patches that purposfully add
-dependencies on config options that might, or might not, appear in the
-future.  Please just remove all of the dependancies for now, as they are
-not needed, right?
+This feels very very wrong.  Why must a driver tell the device to reset
+itself?  How does it pass any Windows USB validation without such a
+"reset"?  Why does it require this?
+
+Are you sure this isn't a bug in the host controller logic instead?
 
 thanks,
 
