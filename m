@@ -1,176 +1,116 @@
-Return-Path: <linux-usb+bounces-31553-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31554-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D49AFCC9769
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 21:14:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1614CCC9B0D
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 23:22:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 87A6E301CC6F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 20:14:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5CFF5303DD18
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 22:21:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1C73306D3D;
-	Wed, 17 Dec 2025 20:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDD59311596;
+	Wed, 17 Dec 2025 22:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aKTEqYOn"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="gehIvb8v"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF0D2FFDDC
-	for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 20:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7255422FDEC;
+	Wed, 17 Dec 2025 22:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766002482; cv=none; b=OZUE9SBtJeXp2KR82aIrFKnxH+a8Hzb0Y0CvWHA0a3+Dyp8S5xaCqwrK2H7Aeh1T2jK97pgO9G8Xxr1Zhz6lgQ5enR8ZVCAicrwvrwHD6pLPKiag6BQmsRolGVEaWLsKf+EJ+kLZ1dCOETk2PnT8VLu2lN+ITzSwPUfAcE+e2Oc=
+	t=1766010106; cv=none; b=lM2s0BSp6EBZUUGtZiWpQ7sf4fPqwqz5ditz5+uJ2JksfFOCSU4mWOWE+Cq4ADSF8vJAyC0ptqaDftWfQDy+SOhfrDyXP0Tp2jLLn/LImGEozIwcvAx8iHAd+qk9K72vP+2mgMUXoe6trEq1kx9qmt5/M8n5u5upRMjkiDnM91E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766002482; c=relaxed/simple;
-	bh=3ptYz/wLgIC9dYQ1kM92VS/MK6iPLAxyt07DMgLnkfY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UfCyiMc4GeIcgLYQAhCY/J9pGEtIB7y9McGiszOvKB8z10H9JAxmsASNXhqBgUhekp1zwsWpIy89UBu++w1dub4H98zZTErKQicDzzK6ovfVnJm1wKl86/4/hcASYeuI44h45AAmgmgb32XqwgiLqZYN4CWsz4cDJvfyYptXMx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aKTEqYOn; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b735b89501fso809922166b.0
-        for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 12:14:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766002479; x=1766607279; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tM/V/k/fSUtW462XR6FXOM+8RdQaX18bynBaXcytSDg=;
-        b=aKTEqYOn16v1yXOtEhRQyp9zfAxw8+EeFMR87bJq4GJH3bkSi9gAzg9fl/XKpBpxXZ
-         3hknlu6XFsmigt4MyCHKYzUfxTuoKORxHdCUxr2cHrWHV+AhyV7Dm1qwPa9JEbVqO3mn
-         MV9G2ynpci1CYr2RFhftofUeYj55t+zUKBqqbkAN1RsrJBCkZrruxOpXTgQEv8uqaUmI
-         k198pEKyN6h+/xNIcxwOjt6Dk8p+oZqmanvhChtkg/QPNuwlLjgQmIDK3Ja1pyloZf30
-         RL6HHwi/CzHlI8cvpprXfyFwxxEzvow0YL8ZoaYrdGN7/+ev1MckCKuJPFn9D1lgRPBV
-         Px0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766002479; x=1766607279;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tM/V/k/fSUtW462XR6FXOM+8RdQaX18bynBaXcytSDg=;
-        b=d4gapKq5BQLoCiuwXOcfib4wzoTbfWBBq2Rs4WOE3b9fbW+SoT4lTsZQYvfRrMNjZo
-         5bDvERvjlgfr8vQHGW7b6Xvj9xJngi0VEZY2fffcRQIeC1sXy9ygrP7K719UO+hjFdwF
-         VjqLDctIiKPnnMXEnbS+KYdJoMSRWTP6Bc8sXJuXL87IID0VRpy/H+bwPvc4V4JVHvAQ
-         gpDMY9KkOKgc/qAKxp0EXTISZQhXES9nhr7KookGTy6jdmRrUdjfk4WYMy2G+p2QpiiS
-         UzKAc+qJPqkM6Jyez56l3brn/XPGqVkohQ6EiB/IHPotn1BoAWFiLagnAzAuONHRv4H8
-         eIpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUoN9YmgG6pNgA34Qji7qnnrfVzxxvpZc39MZNRNAUKtdPLM1QZPvvHFNvpo2HfZRm7hvGWVAoTgac=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAYR+6tNL4wWoQMtCVA7w7dQ75lNJp1EzW1E/+9ZsNin7gQmtr
-	IhdLDpvKEuh36IcEEoWDFdRVNnf6VKEJ0Ebo3b0OaGiA1+E9IiF0chFHPN+nrdxt8iafDbT/8HA
-	cXLHT01Gy4kk+7DX+6KPKaojnxPxhkce4Ezz1k7JB
-X-Gm-Gg: AY/fxX690/PA1wEA1Y3AdEHnZL8Vn3v3q2Oyl6uQNSHqXCcb9Orvwf1Ya1VaLQDcQNm
-	26K9UwOumwwhjDHKaalHqbTOvb8Kf2KA/0ARF+6VzSVy3aIuROQyNZ99wKEElFsGxjxpms0dGUV
-	Q5w5+b86X6eXILXL/lIFOgS6VIVd8PnCdePqBcYrO4F7h7JvLGCuCPcy15eXDSvOI7UCg4/A3QY
-	tSmFS9j/VdUkg8FEfr7Cghpwt+dO5b875dV/nhW6HlmhtEp43fH0x7xaWvdKTDIg3XdwNU5sdfh
-	zvZpWRgJlFaf6KOXY5MAHgzCGA==
-X-Google-Smtp-Source: AGHT+IG4PFt6/xl6TY17qdZDo/fSC5jvUriMDmtoPhK6WjCwoIZvzT7uFwVBMWf3+gIeet+IH6pEPp4HA0evjsAE9aQ=
-X-Received: by 2002:a17:907:96a6:b0:b79:d152:566a with SMTP id
- a640c23a62f3a-b7d236ca22emr1906214666b.28.1766002478506; Wed, 17 Dec 2025
- 12:14:38 -0800 (PST)
+	s=arc-20240116; t=1766010106; c=relaxed/simple;
+	bh=8TVQULurGcGRotUrDk4zQTVLEFon/CSyK+2OIoPapxs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZV1s+Ge+Mqpq8/NPu2sbq7EzkJP2/NiyZ3zeuRe+7GV67zNEKGcv/mG6ye4jvSE4bJzBsADhEsXl8fsiQFbmnO/GTp1aL3A8hbH71kzqq3bDyLknRHx/il+nntV1N9S+Sbm2SXNJsgeZnCtqVFctb2TiLEtxYrpzoWzkfMi6NzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=gehIvb8v; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=rx4a/Tij62thpCcp6gcHLKgQ2+6op4+X9dBMhuA0NbM=; b=gehIvb8vh+VFwQGU+TlRKzXVME
+	g3jp0Qb984HJBHPLgnoXIehEK9X2VLiMj7eZaR0RNTJER85l77Uc81UUVZuYgl++qA1wW52iVaWP6
+	4JoR5o8jy03D6dVIS7x4qjYNeILyJEZdkTYosJFsgLlbsIhSJ0xaBSNA+nUD/GjLxtC4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vVztl-00HGQp-UY; Wed, 17 Dec 2025 23:21:33 +0100
+Date: Wed, 17 Dec 2025 23:21:33 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Deepanshu Kartikey <kartikey406@gmail.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, khalasa@piap.pl,
+	o.rempel@pengutronix.de, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	syzbot+3d43c9066a5b54902232@syzkaller.appspotmail.com
+Subject: Re: [PATCH] net: usb: asix: validate PHY address before use
+Message-ID: <f2d9f69c-ab08-4e65-8078-0404a474af80@lunn.ch>
+References: <20251217085057.270704-1-kartikey406@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251205-controller-v9-0-9f158b18f979@google.com>
- <20251205-controller-v9-2-9f158b18f979@google.com> <2025120553-suffrage-divisive-5890@gregkh>
- <CA+zupgzL7v5MZDpxKDQQCqAZaqTdHbiG9-xTr+8RnigMFZJ_7Q@mail.gmail.com>
- <2025121728-reliably-crabgrass-2601@gregkh> <CA+zupgxZCyNonfNPbGnFymGGOQuaWR1TsL+hujTbH4DEcfEt9Q@mail.gmail.com>
-In-Reply-To: <CA+zupgxZCyNonfNPbGnFymGGOQuaWR1TsL+hujTbH4DEcfEt9Q@mail.gmail.com>
-From: Doug Anderson <dianders@google.com>
-Date: Wed, 17 Dec 2025 12:14:25 -0800
-X-Gm-Features: AQt7F2r-ws7J5EyDz0pvtMEQpxK_o2RQbdVkWKJTgzdUasSvuVkdkxrUDLQsMMI
-Message-ID: <CAD=FV=U63F-wxwKDo9be6_X2P2zp6aTBjNghZRbXX1rn4jFNyg@mail.gmail.com>
-Subject: Re: [PATCH v9 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
-To: Roy Luo <royluo@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Peter Griffin <peter.griffin@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Badhri Jagan Sridharan <badhri@google.com>, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251217085057.270704-1-kartikey406@gmail.com>
 
-Hi,
+On Wed, Dec 17, 2025 at 02:20:57PM +0530, Deepanshu Kartikey wrote:
+> The ASIX driver reads the PHY address from the USB device via
+> asix_read_phy_addr(). A malicious or faulty device can return an
+> invalid address (>= PHY_MAX_ADDR), which causes a warning in
+> mdiobus_get_phy():
+> 
+>   addr 207 out of range
+>   WARNING: drivers/net/phy/mdio_bus.c:76
+> 
+> Validate the PHY address before returning it from asix_read_phy_addr().
+> 
+> Reported-by: syzbot+3d43c9066a5b54902232@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3d43c9066a5b54902232
+> Tested-by: syzbot+3d43c9066a5b54902232@syzkaller.appspotmail.com
+> Fixes: 7e88b11a862a ("net: usb: asix: refactor asix_read_phy_addr() and handle errors on return")
+> Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
+> ---
+>  drivers/net/usb/asix_common.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+> index 7fd763917ae2..6ab3486072cb 100644
+> --- a/drivers/net/usb/asix_common.c
+> +++ b/drivers/net/usb/asix_common.c
+> @@ -335,6 +335,11 @@ int asix_read_phy_addr(struct usbnet *dev, bool internal)
+>  	offset = (internal ? 1 : 0);
+>  	ret = buf[offset];
+>  
+> +	if (ret >= PHY_MAX_ADDR) {
+> +		netdev_err(dev->net, "invalid PHY address: %d\n", ret);
+> +		return -ENODEV;
+> +	}
+> +
 
-On Wed, Dec 17, 2025 at 11:18=E2=80=AFAM Roy Luo <royluo@google.com> wrote:
->
-> On Wed, Dec 17, 2025 at 5:24=E2=80=AFAM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Dec 04, 2025 at 11:14:39PM -0800, Roy Luo wrote:
-> > > On Thu, Dec 4, 2025 at 10:05=E2=80=AFPM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Fri, Dec 05, 2025 at 02:26:38AM +0000, Roy Luo wrote:
-> > > > > +config USB_DWC3_GOOGLE
-> > > > > +     tristate "Google Platform"
-> > > > > +     depends on ARCH_GOOGLE || COMPILE_TEST
-> > > >
-> > > > There is no ARCH_GOOGLE in the tree now, so how is this supposed to
-> > > > work?  Shouldn't tools that check for "invalid config options" trig=
-ger
-> > > > on this?
-> > > >
-> > > > thanks,
-> > > >
-> > > > greg k-h
-> > >
-> > > Hi Greg,
-> > >
-> > > The menuconfig looks like the following and it doesn't complain:
-> > > | Symbol: ARCH_GOOGLE [=3DARCH_GOOGLE]
-> > > | Type  : unknown
-> > > |
-> > > | Symbol: PHY_GOOGLE_USB [=3Dy]
-> > > | Type  : tristate
-> > > | Defined at drivers/phy/Kconfig:104
-> > > |     Prompt: Google Tensor SoC USB PHY driver
-> > > |     Depends on: ARCH_GOOGLE || COMPILE_TEST [=3Dy]
-> > >
-> > > According to Kconfig documentation [1], the unknown symbol
-> > > would simply be evaluated as an "n", which is what we want.
-> > > "Convert the symbol into an expression. Boolean and tristate
-> > > symbols are simply converted into the respective expression
-> > > values. All other symbol types result in =E2=80=98n=E2=80=99."
-> > >
-> > > In a different Kconfig documentation, an environment variable
-> > > "KCONFIG_WARN_UNKNOWN_SYMBOLS" is there to detect
-> > > undefined symbols in the "config input", but I can't find one that
-> > > catches undefined symbols in the Kconfig tree itself.
-> > >
-> > > That is, the tool seems to allow this.
-> > > However, if this turns out to be a major problem. I think we
-> > > can either:
-> > > - Remove ARCH_GOOGLE and leave COMPILE_TEST as
-> > >   the only dependency. Then add ARCH_GOOGLE back
-> > >   later once it's in the tree.
-> >
-> > Please do this.  I do not want to take patches that purposfully add
-> > dependencies on config options that might, or might not, appear in the
-> > future.  Please just remove all of the dependancies for now, as they ar=
-e
-> > not needed, right?
-> >
-> > thanks,
-> >
-> > greg k-h
->
-> Greg,
->
-> Yes, we can remove ARCH_GOOGLE for now.
-> To clarify, we're not removing all of the dependencies, we still want
-> to keep COMPILE_TEST for build tests, right?
-> Please let me know if you think otherwise.
+https://elixir.bootlin.com/linux/v6.18.1/source/drivers/net/usb/ax88172a.c#L213
 
-I think you'd just remove all of them. Normally COMPILE_TEST just
-allows folks to compile stuff even when they don't want the ARCH. We
-can can add ARCH_GOOGLE back in later once the config exists.
+	ret = asix_read_phy_addr(dev, priv->use_embdphy);
+	if (ret < 0)
+		goto free;
+	if (ret >= PHY_MAX_ADDR) {
+		netdev_err(dev->net, "Invalid PHY address %#x\n", ret);
+		ret = -ENODEV;
+		goto free;
+	}
 
--Doug
+Your change makes this a repeated netdev_err(). Please can you extend
+your patch by removing this second error message.
+
+    Andrew
+
+---
+pw-bot: cr
 
