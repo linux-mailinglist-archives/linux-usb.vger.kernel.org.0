@@ -1,124 +1,281 @@
-Return-Path: <linux-usb+bounces-31527-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31528-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB4D3CC5B7C
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 02:43:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03479CC5DDA
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 04:07:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 99BA03011A5D
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 01:43:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5E0DA302A95B
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Dec 2025 03:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8437257423;
-	Wed, 17 Dec 2025 01:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F29329ACCD;
+	Wed, 17 Dec 2025 03:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AGnq+gw1"
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="j5uemvq+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E5819CC28
-	for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 01:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE8B27B34F
+	for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 03:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765935817; cv=none; b=nvf/z+s/pJUzK8cPEfpEGyiLPA++secEY9npMnp8Y0+nrt91SLotQMti+nGm2/bDGiYJS+8f0URz5VfTkgSPgbiKQNgnAFUIcvVIDdKgPMAzS+JTmbwZBMfmeR91hzKA6G7xZj0OwstjFNwTBnqdScUEuJTmE74KgCV+9aEfvMY=
+	t=1765940829; cv=none; b=Of9DTazX8iCKY92fJ5b6XEvDGjbV2R+zLvcNzBsViQMzVMoeUp1fwFevFd7Aut5cOHGZycNqvpx9p1W3qW0qxDaf9eH3LhcGO8r2yQc8/8QxRi3BAeGfX4/WEZziNg48RQLnpjtw3l+VhpzV5Vc9g3OtW+9SetsenNm2f9SHDQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765935817; c=relaxed/simple;
-	bh=KTv2ZHe+Pf2UP7Gc46z2Dv4PlUrx7h0Lcu9f7VVuRtY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=gjsA1KaZlWsNlKNqkl9GLS/MOSiHgfVKnev6LD0lCWhVWixxs1lNrUjfpMSR9ckALKCGx5AV5d8cuXmqWRACQ3kLOOUdIwduHtaC7brXFL5LxHhDHk13m6a1WC0etbDYFftPPSSSro3k/UT+g1XkNvUddJ5Xv3bJXRn+PyW+3v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AGnq+gw1; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-34c6f6566a7so724023a91.3
-        for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 17:43:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765935815; x=1766540615; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hcmcva5D3bcMY/RGiF1OQIJue0+9CAWp28PjOvFTVsg=;
-        b=AGnq+gw17Emdpu9aMUboDpkhM+elqedbmcG503yVHfL39iF44wsLx0h4t0oAm1qynQ
-         2D/GnTWxA786cajH+gH7wXXSmblQYnWpQL7kx1mshTOb1FPXdJIg2FkBvOKdQD24ke09
-         HnyiWQZQLBg3VekQNi34tRcBDSXPxWyvJmnXoJy7uNFdFp8exqFexoNA8UMy2cblUyhJ
-         43ij1EdmrY0XLjbTZEKJ6IHrRGbZU4Qo/ctGF8G9Q5cfCwNXumeV+1jj0tJfiJycbMhZ
-         Dg9GcbrV1htZHSPAdemPhNddj/ebifvAFdItddkDd8mfDYruEPH6nUIiELXK9vQ1ZC+H
-         FoiA==
+	s=arc-20240116; t=1765940829; c=relaxed/simple;
+	bh=QACzJcfL1VQ4YlSxvvFrONUOh8zfO32TwUYm8JZ3LSo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=t2ujflCBzgQ9ot+EQrEmXkcwhIo8G3vH4ZBtOB4GIIRC0KzlWW0W+fXXDcbzy8k6hYNw4692z4WDlzMPK5IXLT4taG5kpr0hO0dgfo9LoTw0lYO2AMvaZrGh6mr1/UXA4H2xntvR4ADaIzwJNwr2g00Jen4QZToPltvzJFkfFtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=j5uemvq+; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EA1E43F66E
+	for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 03:07:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1765940824;
+	bh=/WvGs1CRtHxG6LYkK92WqxFN46GI/vd4s/GrJoklmDk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=j5uemvq++drmehkDarP/vSKQyYYVQRY4A1/t5naXaO2fX1Ajcn0mCVOND59r6EKsv
+	 yHtx6J4p15yHrpDbkazjjQ9Rn7fLltci3VWfkOiUyVdBOUqtQsrT23icQ4N58ICoI4
+	 tiQ/wn/ZGRE+W0ZDYra+/G5MbKUnNX0fMLRdrKFvODZuaYTiHfdL0c7oxCm+EsgGWq
+	 3m6dcMD59f5tDHHx07zgEOIgBRwJsQb4CTfN3wnmcZE2l50Q50UbrScu6QyCXbbnzJ
+	 rL9a/CwJkRc9Jq8KcbFDIFZ/LQo68fZrHbwyk4U3IsbvvBxEFNbgEDA54tSBN/IU85
+	 8nq/puIfwV/RrUktN3ebtsgLNqeDDp6SQ3dLW+FzyrMxA+p9jnv5gCJQ68H4t/NAhd
+	 xhhlwl1jkA1d+KKr/rSt4xSBcwwx1DOlD0fREsHxTSO2VJewCtXk1mdES4O0NVMnEn
+	 FxFjjK/tX1+u79kh/zNbRLB+kxRCKT1b9OYtst4ClF7UPR/ARFzM0Ae6S8v6VvcidQ
+	 IS+Tor+8ldqGZZfUTLbDu+0LLQsEUyeJBZq5PW6+bLiVxl0AeEI/OwBAj6/FcxkUAK
+	 IpugH20JWmszlCotUtDSUdvWazQytpvM06pA9Nj/lfKVbGMnJsEdlNh4jN+/lVJCn2
+	 Jsli0WLP+5kHVqklwnXpJp9s=
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-b79ff60ed8eso812941266b.0
+        for <linux-usb@vger.kernel.org>; Tue, 16 Dec 2025 19:07:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765935815; x=1766540615;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hcmcva5D3bcMY/RGiF1OQIJue0+9CAWp28PjOvFTVsg=;
-        b=fELKOWPHmsEtGWxjCs8IZgTF3C/FlVy+ZKsmdE9I0Z/QTa7jdfscbxXeD5WfBRagBH
-         BmYlU5Wyt+XRyd3ZlEhnC3emhalcoMTFyXgMzh+LkEFna9KGMITN4FWqRIUUuCPrsOoN
-         wQEcIcS0Xek1amrzkw7+b/OGUKnCb1OGhXvKJny7fI37T+vwttBDnhUHsdct0wheGrkL
-         kFJZ7Btkp419zSEDOeULjlvYVHyJm0THK5nxTBl8/rwaQ4N+TPCXsNBzpgWhHGCF6jSz
-         fh4lWcz4PUhxlddUQBV/H4taG6xgeJ57B+qfiM2BnZS7zPTxBUxD/qyAuqeNYKH5A7yB
-         L0lg==
-X-Forwarded-Encrypted: i=1; AJvYcCWFKfsegPX8ST5FETRQCh2xKjfAq7fIwub7E2Bvay3hsBl+xYTaWOO7XI3JtQ1tBFn3y6P9aytOdbA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxhy+uaZiR6aMxm6egBjpmEQtGmo+aX+iqdK4nOkLl2pPg/5Yk0
-	iFN5xtzgNKskI6GzcKcfajuAfM+2i3BOn3e1DoYZt0dPxtdYZjHql3Qcra7ppQ==
-X-Gm-Gg: AY/fxX5NB8GdXaFuGO38mCfbz945QwHhUdQDg+iWDFe6J6MvuMnFvoSqswTwDmd1nll
-	WrpSZUC3HHikJ30A8gpN3Sx5qzKqnx0US+nPD9myWqR3LfRZdlz+/UxwwDOP3oCjfEFnwr5CQKB
-	ys/FOIIzeXwlRsHTbAfzAqsz6kUapKspfFU+0oCIkH/8D4goA+fxnh2SK9FI3E/s4jTyZ4vr+Ao
-	8L15uxc1qCViaZLjMKRF0If36eEIOcAP6zy6bafbtKT3AMDr93lM47Q/+DvKfItlUvGNWV8RSSK
-	hZxGVgbU+HNPy757YylXMyH9cP4ogMqB+O8xoFfXzwOKa//zbU7mXh06R+vAvpoG5wOTHKvlqzH
-	pmf1e6KKXmh/8OsVdDG6+Q/9Ytdc37nlw8r/wHUnB18kz4TlFmm8PfliqPHlIZN5CxTHr9rhaS4
-	ANzyite+KNqOK3o7B39nyJgw==
-X-Google-Smtp-Source: AGHT+IEvYT2dtudRmQm/bn6C+b2uveteegEC5cy8ieEVjUTt8/LNqv/L0djHPan73XAHBCyQvW/waA==
-X-Received: by 2002:a17:90b:4f41:b0:341:88c1:6a89 with SMTP id 98e67ed59e1d1-34abd7e3bd4mr11530747a91.2.1765935815417;
-        Tue, 16 Dec 2025 17:43:35 -0800 (PST)
-Received: from [192.168.1.7] ([159.192.237.173])
-        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-34cd9a832absm1112773a91.4.2025.12.16.17.43.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Dec 2025 17:43:35 -0800 (PST)
-Message-ID: <5227fbeb-0338-4006-845e-37f00b09218d@gmail.com>
-Date: Wed, 17 Dec 2025 08:43:28 +0700
+        d=1e100.net; s=20230601; t=1765940824; x=1766545624;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/WvGs1CRtHxG6LYkK92WqxFN46GI/vd4s/GrJoklmDk=;
+        b=PnTDunPkLX5ZFqlT5/LGspJf8+dI5oxnNrpAoGUmYpG7t4OlW0a/2vklS+40suTcJg
+         AUPGjJswtZr6zwOI7YS35F+eXitZ76YPz2Cp8Ln8dUf2oImPCeDfwJSkKW9mB0Yh9CpW
+         ZKoYvJH8GHaIhd4O4ppYgeqALCXsyHr6M2hAyXuSw//J2xi2/8lrCs1GuCumiCyT12By
+         XI3ckrhU78aHxrSeBcufq+vet+iRE8kyYa7x4UFRRNrMD7UI00tD5ewVCgkbmittxNVh
+         a54tmOPFgt09PIrjkDkNP4Tl9EZ7FlaBt3pBSofJctEnGba+d+zu9OBG0UYer4giZfoK
+         E36w==
+X-Forwarded-Encrypted: i=1; AJvYcCVHyLrqgKh/+pytUNEozg+J+gMIr8b6sQamemZuqeJ+i+zm496ETc4OEowYlV3+GUTtVVyghdU4kmk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu9puhtEwp/DQDRckBBrhVfPmbHwGVaY+kVdG3QUgJcQqlw0Cg
+	hjm7+5Nb77+LAzgKhAF2mh3dmzpMPy9pYJENLSaAZ2POHpTERmYbSpHUSsQpEOH4L6twFmcW03R
+	jMZwr17JB/9sCQ9i3qf4Mr7jRg72OKncLAMskZjiZHiJV7U0easl8LxeffYRrhLq5/3HK/lhkIg
+	sUORIdTUAjGpCZ4IF419MM+YM6S9t8EXv8THv6TFfmXpjFaoc5Mnup
+X-Gm-Gg: AY/fxX4+h7l6pCcQwP6ljRBnFnjBqEdrOqVDF7nnQNrYWHyatygW9fUdzbkyuCxEkHH
+	EJSmFc9rNeIMVtMyPflXCzOxGOW6NOFuNG3jfDt2+lkZUc6gOuTeYSGNtwXPdALx8loB4YMEMKp
+	3mWoNGchGYV+Ye/9mOylI1fC687ovhHPahcQYLCVMJbWchj77SozVdQJZSEyaTe/GMlxk=
+X-Received: by 2002:a17:907:e111:b0:b7f:bc1b:2121 with SMTP id a640c23a62f3a-b7fbc1b2166mr990719366b.25.1765940824328;
+        Tue, 16 Dec 2025 19:07:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFkKz1wP6iJzBVX0H8fhjLI3c+dW05bU+XFJl7pecepaRYhLOFmOtbNVwIddQKVLml8tf0byTtXzNg615jwUYY=
+X-Received: by 2002:a17:907:e111:b0:b7f:bc1b:2121 with SMTP id
+ a640c23a62f3a-b7fbc1b2166mr990718366b.25.1765940823909; Tue, 16 Dec 2025
+ 19:07:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Trouble with drivers for Epson Moverio BT-40
-To: Oliver Neukum <oneukum@suse.com>,
- natalie roentgen connolly <natalie@natalieee.net>, linux-usb@vger.kernel.org
-References: <9c4491aa-88d3-4c9a-843c-2f0d471263e0@natalieee.net>
- <ade89a9d-6034-43e6-ba74-778db2f8837c@suse.com>
- <ce3a8714-bce5-4cac-ba80-f3c64e6ff5e9@natalieee.net>
- <b0899011-78bb-4fdd-9e49-3dad6b11a9e6@suse.com>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <b0899011-78bb-4fdd-9e49-3dad6b11a9e6@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20251209054141.1975982-1-acelan.kao@canonical.com>
+ <20251209070633.GA2275908@black.igk.intel.com> <pjn5d7oz433z4jph6whdalhowf652xknnk2fh5q7elffgb5ogo@7dtpvywxc6nw>
+ <20251210074133.GE2275908@black.igk.intel.com> <4634177b-8ed1-4d65-9f3c-754d8c1eb828@amd.com>
+ <coxrm5gishdztghznuvzafg2pbdk4qk3ttbkbq7t5whsfv2lk5@3gqepcs6h4uc>
+ <20251212123941.GK2275908@black.igk.intel.com> <484ff606-ec10-477c-acfe-d4d781e2873d@amd.com>
+In-Reply-To: <484ff606-ec10-477c-acfe-d4d781e2873d@amd.com>
+From: AceLan Kao <acelan.kao@canonical.com>
+Date: Wed, 17 Dec 2025 11:06:52 +0800
+X-Gm-Features: AQt7F2p3E4VLWBennp0pGKq4huMBTUQCWFqXaUAOczrQbafd-GHNryOCnK7cDgM
+Message-ID: <CAFv23Q=bLCif750y8eDEP4J+KwVy8CknZawYOGZWWrBSiE8FNA@mail.gmail.com>
+Subject: Re: [PATCH] [RFC] thunderbolt: Add delay for Dell U2725QE link width
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Andreas Noever <andreas.noever@gmail.com>, Mika Westerberg <westeri@kernel.org>, 
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Sanath.S@amd.com, 
+	"Lin, Wayne" <Wayne.Lin@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-12-16 15:39, Oliver Neukum wrote:
-> 
-> 
-> On 15.12.25 15:17, natalie roentgen connolly wrote:
->> Hello,
->>
->> Without adding {USB_DEVICE(0x04b8, 0x0d12)} to acm_ids, the stock driver
->> emits no logs:
-> 
-> Hi,
-> 
-> OK, I see the issue. There is no nice solution to this
-> issue, so here is the ugly solution. Could you test the attached patch?
-> 
->      Regards
->          Oliver
+Mario Limonciello <mario.limonciello@amd.com> =E6=96=BC 2025=E5=B9=B412=E6=
+=9C=8812=E6=97=A5=E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:40=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+>
+> On 12/12/25 6:39 AM, Mika Westerberg wrote:
+> > Hi,
+> >
+> > On Fri, Dec 12, 2025 at 12:10:24PM +0800, Chia-Lin Kao (AceLan) wrote:
+> >> Hi Mika,
+> >>
+> >> On Wed, Dec 10, 2025 at 03:42:21PM -0600, Mario Limonciello wrote:
+> >>> +Wayne
+> >>>
+> >>> Here is the full thread since you're being added in late.
+> >>>
+> >>> https://lore.kernel.org/linux-usb/20251209054141.1975982-1-acelan.kao=
+@canonical.com/
+> >>>
+> >>> On 12/10/25 1:41 AM, Mika Westerberg wrote:
+> >>>> Hi,
+> >>>>
+> >>>> On Wed, Dec 10, 2025 at 11:15:25AM +0800, Chia-Lin Kao (AceLan) wrot=
+e:
+> >>>>>> We should understand the issue better. This is Intel Goshen Ridge =
+based
+> >>>>>> monitor which I'm pretty sure does not require additional quirks, =
+at least
+> >>>>>> I have not heard any issues like this. I suspect this is combinati=
+on of the
+> >>>>>> AMD and Intel hardware that is causing the issue.
+> >>>>> Actually, we encountered the same issue on Intel machine, too.
+> >>>>> Here is the log captured by my ex-colleague, and at that time he us=
+ed
+> >>>>> 6.16-rc4 drmtip kernel and should have reported this issue somewher=
+e.
+> >>>>> https://paste.ubuntu.com/p/bJkBTdYMp6/
+> >>>>>
+> >>>>> The log combines with drm debug log, and becomes too large to be
+> >>>>> pasted on the pastebin, so I removed some unrelated lines between 4=
+4s
+> >>>>> ~ 335s.
+> >>>>
+> >>>> Okay I see similar unplug there:
+> >>>>
+> >>>> [  337.429646] [374] thunderbolt:tb_handle_dp_bandwidth_request:2752=
+: thunderbolt 0000:00:0d.2: 0:5: handling bandwidth allocation request, ret=
+ry 0
+> >>>> ...
+> >>>> [  337.430291] [165] thunderbolt:tb_cfg_ack_plug:842: thunderbolt 00=
+00:00:0d.2: acking hot unplug event on 0:1
+> >>>>
+> >>>> We had an issue with MST monitors but that resulted unplug of the DP=
+ OUT
+> >>>> not link going down. That was fixed with:
+> >>>>
+> >>>>     9cb15478916e ("drm/i915/dp_mst: Work around Thunderbolt sink dis=
+connect after SINK_COUNT_ESI read")
+> >>>>
+> >>>> If you have Intel hardware still there it would be good if you could=
+ try
+> >>>> and provide trace from that as well.
+> >> I tried the latest mainline kernel, d358e5254674, which should include=
+ the commit you
+> >> mentioned, but no luck.
+> >>
+> >> I put all the logs here for better reference
+> >> https://people.canonical.com/~acelan/bugs/tbt_call_trace/
+> >>
+> >> Here is how I get the log
+> >> ```
+> >> $ cat debug
+> >> #!/bin/sh
+> >>
+> >> . ~/.cargo/env
+> >> sudo ~/.cargo/bin/tbtrace enable
+> >> sleep 10 # plug in the monitor
+> >> sudo ~/.cargo/bin/tbtrace disable
+> >> sudo ~/.cargo/bin/tbtrace dump -vv > trace.out
+> >> sudo dmesg > dmesg.out
+> >> ./tbtools/scripts/merge-logs.py dmesg.out trace.out > merged.out
+> >> ```
+> >>
+> >> And here is the log
+> >> https://people.canonical.com/~acelan/bugs/tbt_call_trace/intel/merged_=
+6.18.0-d358e5254674+.out
+> >
+> > Thanks!
+> >
+> > It shows that right before the unplug the driver is still enumerating
+> > retimers:
+> >
+> > [   39.812733] tb_tx Read Request Domain 0 Route 3 Adapter 1 / Lane
+> >                 0x00/---- 0x00000000 0b00000000 00000000 00000000 00000=
+000 .... Route String High
+> >                 0x01/---- 0x00000003 0b00000000 00000000 00000000 00000=
+011 .... Route String Low
+> >                 0x02/---- 0x02082091 0b00000010 00001000 00100000 10010=
+001 ....
+> >                   [00:12]       0x91 Address
+> >                   [13:18]        0x1 Read Size
+> >                   [19:24]        0x1 Adapter Num
+> >                   [25:26]        0x1 Configuration Space (CS) =E2=86=92=
+ Adapter Configuration Space
+> >                   [27:28]        0x0 Sequence Number (SN)
+> > [   39.813005] tb_rx Read Response Domain 0 Route 3 Adapter 1 / Lane
+> >                 0x00/---- 0x80000000 0b10000000 00000000 00000000 00000=
+000 .... Route String High
+> >                 0x01/---- 0x00000003 0b00000000 00000000 00000000 00000=
+011 .... Route String Low
+> >                 0x02/---- 0x02082091 0b00000010 00001000 00100000 10010=
+001 ....
+> >                   [00:12]       0x91 Address
+> >                   [13:18]        0x1 Read Size
+> >                   [19:24]        0x1 Adapter Num
+> >                   [25:26]        0x1 Configuration Space (CS) =E2=86=92=
+ Adapter Configuration Space
+> >                   [27:28]        0x0 Sequence Number (SN)
+> >                 0x03/0091 0x81620408 0b10000001 01100010 00000100 00001=
+000 .b.. PORT_CS_1
+> >                   [00:07]        0x8 Address
+> >                   [08:15]        0x4 Length
+> >                   [16:18]        0x2 Target
+> >                   [20:23]        0x6 Re-timer Index
+> >                   [24:24]        0x1 WnR
+> >                   [25:25]        0x0 No Response (NR)
+> >                   [26:26]        0x0 Result Code (RC)
+> >                   [31:31]        0x1 Pending (PND)
+> > [   39.814180] tb_tx Read Request Domain 0 Route 3 Adapter 1 / Lane
+> >                 0x00/---- 0x00000000 0b00000000 00000000 00000000 00000=
+000 .... Route String High
+> >                 0x01/---- 0x00000003 0b00000000 00000000 00000000 00000=
+011 .... Route String Low
+> >                 0x02/---- 0x02082091 0b00000010 00001000 00100000 10010=
+001 ....
+> >                   [00:12]       0x91 Address
+> >                   [13:18]        0x1 Read Size
+> >                   [19:24]        0x1 Adapter Num
+> >                   [25:26]        0x1 Configuration Space (CS) =E2=86=92=
+ Adapter Configuration Space
+> >                   [27:28]        0x0 Sequence Number (SN)
+> > [   39.815193] tb_event Hot Plug Event Packet Domain 0 Route 0 Adapter =
+3 / Lane
+> >                 0x00/---- 0x80000000 0b10000000 00000000 00000000 00000=
+000 .... Route String High
+> >                 0x01/---- 0x00000000 0b00000000 00000000 00000000 00000=
+000 .... Route String Low
+> >                 0x02/---- 0x80000003 0b10000000 00000000 00000000 00000=
+011 ....
+> >                   [00:05]        0x3 Adapter Num
+> >                   [31:31]        0x1 UPG
+> > [   39.815196] [2821] thunderbolt 0000:00:0d.2: acking hot unplug event=
+ on 0:3
+> >
+> > By default it does not access retimers beyond the Type-C connector. I
+> > wonder if you have CONFIG_USB4_DEBUGFS_MARGINING set in your kernel
+> > .config? And if yes can you disable that and try again.
+Sorry, it looks like I got some troubles with my MTA, some emails are
+not sent out correctly.
 
-Oliver,
-your solution is more ugly than it has to be because it assigns fixed 
-interface numbers to the cdc-acm interface pairs and won't work for
-devices with faulty union using pairs 2,3 or 3,4 and so on.
-Instead, when parsing the control interface then assign data interface 
-number to next interface number.
+I've rebuilt the kernel without CONFIG_USB4_DEBUGFS_MARGINING, and
+here is the log
+There is a tbt storage daisy-chained after the tbt monitor, it's
+easier to reproduce this issue.
+https://people.canonical.com/~acelan/bugs/tbt_call_trace/intel/merged_6.18.=
+0-d358e5254674+.2.out
 
-thanks
-Lars
+And this one is only the tbt monitor plugged.
+https://people.canonical.com/~acelan/bugs/tbt_call_trace/intel/merged_6.18.=
+0-d358e5254674+.3.out
+
+>
+> If this does end up being the reason - maybe we should make this really
+> noisy in logs and/or taint the kernel.
 
