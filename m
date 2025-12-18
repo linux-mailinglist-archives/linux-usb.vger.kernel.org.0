@@ -1,46 +1,47 @@
-Return-Path: <linux-usb+bounces-31576-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31578-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2353BCCC421
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 15:23:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EBDACCC42B
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 15:23:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0DB3A30E1895
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 14:20:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3791330E4217
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 14:20:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D62628751D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A2B02877EA;
 	Thu, 18 Dec 2025 14:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LUVWJ9bn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mH4mhZSy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8122248886;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81BE257852;
 	Thu, 18 Dec 2025 14:20:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766067646; cv=none; b=JsWfRRdT3rV/HoB0PGg5ZTbO6kChcGreR9IwK5Tl1fbd3MrE8pYJfrt9LxJqKAT86DrYPWmd6pvKXQj4e6aYrpzp9bsL16xPDtjf1UUzbbq5ZwBd3hBp6Ji/G1nWPsrdHc1W8a5z54GV+OHvUJlZ1RmZgWi+wPzFs+Jq2lTZ8IQ=
+	t=1766067646; cv=none; b=k0MtO8VOhH+uNP3RyQvdST31kZjKy5KUtXIAshdf6C6bqsUn9cTtEZyI6Xlq6jFiyCO4GQJPC8c3yR7NZJ9fn9DIGyPCYQmD2/iSPBYyW8WJNjgw3rliCtq0FnztYqSqynWR9fgCFncUIoANFlWTC6+6dDNl11gzC2rTlHDk5ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1766067646; c=relaxed/simple;
-	bh=wF26NQBIHpeYuZsa0o8hohE86D5KBU/gDr6Nos9QJl8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VUjE26nYZa4qbpDF5/OGkDJGzRZ/b7s9/cNw8nbDAtX8VLUzcYLWkGUbGYAFBdw62+H7c3p+DSwPaxjS2QNNQ2URBHlGN2XersOF9VwEiqOL2qjqNsl98NbNDNIk9C1wm2/P/yI8nQj+Ot/XLx07QhwX5HHOlJiGNWSGuzjgrYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LUVWJ9bn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61A3DC4CEFB;
+	bh=n1EbVAM7CU4kmC42XnjfjvQExlpZouOeA9C4bDSbnCk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kxjI6bL48MdjKHcU9sMb4JKlFdwyW8shDIFoaDnos6Tox+eJbna7Rbc2ZZM/zM8wiolChQhKfNvLODccON1WfWtYV9jv+pFRHyi7Mg1oruK/DG37fP4pOEA4b551UHsBmwsV/9SL2+1vLMf4mnyUOvvZ9Z6Th2NBCGPpv/nFVOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mH4mhZSy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818C6C116C6;
 	Thu, 18 Dec 2025 14:20:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1766067646;
-	bh=wF26NQBIHpeYuZsa0o8hohE86D5KBU/gDr6Nos9QJl8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=LUVWJ9bnnMcqIyBabbJIuvFGUnBagY2Ydg3EPGOMkyIqbzxmECrBwIdNeLjf5RmRT
-	 emYzrUSh0mvoVeuxYWZpWkUZq0OWpPKg9Gx4x7az3ieiDE/TGhnsB4xVsjWV91JVKa
-	 ISvVk983TvxhevXqVN2YVAYlDT0y4/O0b6Lmgm5LL4HuTJFSm3EcCoJLp30JciSJaj
-	 /DpwYuSHCzxxOoOXNAZHEHv3YxoiH68X9FJp+ZXGseZWqcMSifjZeqQtCj6LUPyZVs
-	 v1EnVBw7T1YrMc+tOGTQdj4TiQobgEaXDRQ5NmF6yFeYgdwUOlVPTxti7ra0h+MVkM
-	 VcosordbhyHcg==
+	bh=n1EbVAM7CU4kmC42XnjfjvQExlpZouOeA9C4bDSbnCk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=mH4mhZSyKLO5PFKSsDNX04SyNYfZTlQ5ApFSKS0+GQKXCjf0xW87qp/Nw+8CP9pYS
+	 eqIfrC2M+MOZ8AwvPwd2hrRV5Zkxb1/D39s3IhNobVyY1wgI4tOG6pkficJpI+joKR
+	 Jjq6kIuJyJU4lPM8qO9WBMaSE7Mpfy7YSsVIef/9kONKGV7Agwji1Ouab2G8Bbcy4k
+	 +b1wFDZJCfxX1iPNvwEGfHgKMZNDn1lbDqkPgST5K8EZadkGeoF8x3hIh8qHw9bzmH
+	 DmsjFw+Zzu3Hrlgnd6nmF6kkV1H/gTrd3aDEoPCcyy2Q/2zAtQyMWWNAT5ZqEDD4V0
+	 P+lBPvF9l2uuw==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1vWErz-000000001YE-3lAw;
+	id 1vWEs0-000000001YG-2rLt;
 	Thu, 18 Dec 2025 15:20:44 +0100
 From: Johan Hovold <johan@kernel.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -50,11 +51,14 @@ Cc: Vladimir Zapolskiy <vz@mleia.com>,
 	Ma Ke <make24@iscas.ac.cn>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>
-Subject: [PATCH 0/5] USB: lpc32xx: fix error handling
-Date: Thu, 18 Dec 2025 15:19:40 +0100
-Message-ID: <20251218141945.5884-1-johan@kernel.org>
+	Johan Hovold <johan@kernel.org>,
+	stable@vger.kernel.org
+Subject: [PATCH 1/5] usb: gadget: lpc32xx_udc: fix clock imbalance in error path
+Date: Thu, 18 Dec 2025 15:19:41 +0100
+Message-ID: <20251218141945.5884-2-johan@kernel.org>
 X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20251218141945.5884-1-johan@kernel.org>
+References: <20251218141945.5884-1-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,29 +71,94 @@ A recent change fixing a device reference leak introduced a clock
 imbalance by reusing an error path so that the clock may be disabled
 before having been enabled.
 
-The very same change could also lead to a use-after-free in case the
-driver is used with non-OF probing.
+Note that the clock framework allows for passing in NULL clocks so there
+is no risk for a NULL pointer dereference.
 
-This series fixes the resulting mess as well as the device leak in the
-NXP OHCI driver.
+Also drop the bogus I2C client NULL check added by the offending commit
+as the pointer has already been verified to be non-NULL.
 
-Included are also two related cleanups.
+Fixes: c84117912bdd ("USB: lpc32xx_udc: Fix error handling in probe")
+Cc: stable@vger.kernel.org
+Cc: Ma Ke <make24@iscas.ac.cn>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/gadget/udc/lpc32xx_udc.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Johan
-
-
-Johan Hovold (5):
-  usb: gadget: lpc32xx_udc: fix clock imbalance in error path
-  usb: phy: isp1301: fix non-OF device reference imbalance
-  usb: ohci-nxp: fix device leak on probe failure
-  usb: gadget: lpc32xx_udc: clean up probe error labels
-  usb: ohci-nxp: clean up probe error labels
-
- drivers/usb/gadget/udc/lpc32xx_udc.c | 41 ++++++++++++++--------------
- drivers/usb/host/ohci-nxp.c          | 18 ++++++------
- drivers/usb/phy/phy-isp1301.c        |  7 ++++-
- 3 files changed, 36 insertions(+), 30 deletions(-)
-
+diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
+index 73c0f28a8585..a962d4294fbe 100644
+--- a/drivers/usb/gadget/udc/lpc32xx_udc.c
++++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+@@ -3020,7 +3020,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	pdev->dev.dma_mask = &lpc32xx_usbd_dmamask;
+ 	retval = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
+ 	if (retval)
+-		goto i2c_fail;
++		goto err_put_client;
+ 
+ 	udc->board = &lpc32xx_usbddata;
+ 
+@@ -3040,7 +3040,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 		udc->udp_irq[i] = platform_get_irq(pdev, i);
+ 		if (udc->udp_irq[i] < 0) {
+ 			retval = udc->udp_irq[i];
+-			goto i2c_fail;
++			goto err_put_client;
+ 		}
+ 	}
+ 
+@@ -3048,7 +3048,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(udc->udp_baseaddr)) {
+ 		dev_err(udc->dev, "IO map failure\n");
+ 		retval = PTR_ERR(udc->udp_baseaddr);
+-		goto i2c_fail;
++		goto err_put_client;
+ 	}
+ 
+ 	/* Get USB device clock */
+@@ -3056,14 +3056,14 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(udc->usb_slv_clk)) {
+ 		dev_err(udc->dev, "failed to acquire USB device clock\n");
+ 		retval = PTR_ERR(udc->usb_slv_clk);
+-		goto i2c_fail;
++		goto err_put_client;
+ 	}
+ 
+ 	/* Enable USB device clock */
+ 	retval = clk_prepare_enable(udc->usb_slv_clk);
+ 	if (retval < 0) {
+ 		dev_err(udc->dev, "failed to start USB device clock\n");
+-		goto i2c_fail;
++		goto err_put_client;
+ 	}
+ 
+ 	/* Setup deferred workqueue data */
+@@ -3165,9 +3165,10 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	dma_free_coherent(&pdev->dev, UDCA_BUFF_SIZE,
+ 			  udc->udca_v_base, udc->udca_p_base);
+ i2c_fail:
+-	if (udc->isp1301_i2c_client)
+-		put_device(&udc->isp1301_i2c_client->dev);
+ 	clk_disable_unprepare(udc->usb_slv_clk);
++err_put_client:
++	put_device(&udc->isp1301_i2c_client->dev);
++
+ 	dev_err(udc->dev, "%s probe failed, %d\n", driver_name, retval);
+ 
+ 	return retval;
+@@ -3195,10 +3196,9 @@ static void lpc32xx_udc_remove(struct platform_device *pdev)
+ 	dma_free_coherent(&pdev->dev, UDCA_BUFF_SIZE,
+ 			  udc->udca_v_base, udc->udca_p_base);
+ 
+-	if (udc->isp1301_i2c_client)
+-		put_device(&udc->isp1301_i2c_client->dev);
+-
+ 	clk_disable_unprepare(udc->usb_slv_clk);
++
++	put_device(&udc->isp1301_i2c_client->dev);
+ }
+ 
+ #ifdef CONFIG_PM
 -- 
 2.51.2
 
