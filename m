@@ -1,126 +1,226 @@
-Return-Path: <linux-usb+bounces-31608-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31609-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDE9ACCD4DD
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 20:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A951CCD51E
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 20:04:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE59A3015A88
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 18:58:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F05243062E02
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 19:03:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07CFD32E72E;
-	Thu, 18 Dec 2025 18:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B0B5313E1E;
+	Thu, 18 Dec 2025 19:03:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NzOjmPrn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e3NMCRnA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1EAB2ED17C
-	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 18:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD74314D2C
+	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 19:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766084327; cv=none; b=OkIbHj6rDs4rdYXzxSe+s3HQAsbv0soa4DThI9aJSlgLusJHWKyRlURNGk+hT+6aJITDecO3iL0oqVcLmBfWxB96efDlaJikQdZO0iBv6QEKlZ2VML2ttCiIAw6n7fc1Iwljxr6oCoC/eHYmin+oZj7yBYiGigrX1SEGifNVDk0=
+	t=1766084588; cv=none; b=FWHxLK6BnCc8fxY1gbDpk0XdJZTWJEd0nHqhJW7arpzq+G/uNQBNBIIqFllxnxXLuywgWe17L6bBnBxAxmqQLCg5RL7bLbP+pju1QJG6VJPa3+yI2x5t+NCZNqNpMbVu5jIJ6Y5LnVVi4blSEk1djO/GIldJxf1RuIBTc6nwmxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766084327; c=relaxed/simple;
-	bh=Jku28IM/c1IYSHnKsavbvy9aaLBIgMj3F4YQHgrupho=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fql9EefKWN0X6rWKax3aUSxWTRvc0bntj2M+qOdfYFAbcgOUgdtE0m4Ljj6zjpOAiesQWaamREKzOxjfVSmmJc68zRBSqGgZ/jg7LPlo1ox76ktLyr+f9GZYwI4YjwtpSx4ZVvFoU5+c0DokSuwVCKnxIxN0xfnFqnT1y249XEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NzOjmPrn; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a099233e8dso9563885ad.3
-        for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 10:58:40 -0800 (PST)
+	s=arc-20240116; t=1766084588; c=relaxed/simple;
+	bh=ZIqvP7iL1pnOGTT3mHNvxEK6HapIGS532C02nV8uGts=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SPCTSV2Cpq9N7HnsVaqLEjsJZe8il8UbbtQhIJtNRMXTRoEKJGjF6HNHjV0sxkJJQ5AOJvJk/+X50zC8Iyr+gwNKfTM7dINkD6B0KS6itGTKB85bJ0v1/R8Z4M40FmQKH8XpIE78V7SLfL0iPoHBSie9l0y7ngztGCClvS2IOvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e3NMCRnA; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a0d06ffa2aso11300015ad.3
+        for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 11:03:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766084317; x=1766689117; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AQfRVSe9fO1PObUKRZHse1cNpjrf0uUXBusNVMTFfiA=;
-        b=NzOjmPrn46f7eL94kTiu7+0zvL7EqcBFTL/HGLf3Rc6h3rBZjvJM5i3qCCD2fYrXy7
-         eJklrOOWGmpDdYURm2bD9+/3PlBRsY8WKHCZ2GLGzwLcw74QlWuQ3QwUrvnoh8XgWay8
-         gOij/Oftk04H9HcDeMjrum7Gp/tJMDS9TcpBQwDo75WutLi+yiY8j3WBiG0hbm0He5W7
-         e9CpO9bAAOVDpz+N+io0xTJRBjOcs9kNkjAd+Z+kY0znjtSG4hOPaCJlbg1PV1xakEpj
-         cFYP81lVX+QhyL2f1NFGqqWTbtem9suiHwzZLYFwy//KO+NJmpEmbUADkYq65Km/0XcM
-         myZA==
+        d=google.com; s=20230601; t=1766084585; x=1766689385; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UZURydBRs6THPGEYtxtuXyqkrMfiNHxW6djvEvJyle0=;
+        b=e3NMCRnAvfYuH093iQMCYioAIC78Xp3yhoqjVsoU48QsKoezqh/U3FjaUHADJvE5Nv
+         MWhLoG6Ee+uSsHcjOmeOtJIFf/yI8UBH/WQTd1BJr0NESXbXhpIs5kBD/dEE7rUJYUTs
+         DGelPFm5izTwcsft78qKb4MaagKby1SPgdwqy0sGX2RRsS9X664UjorIHUo+pIxCdLce
+         br5YfjVR4bHrshVAuUjJVBOYRhUUtLDNX/B2aUUbRTiR8MunYrBfIgwmLxjWr1Sio3wy
+         JlFFJsP2+/9vPfkCilQnhBkzBXDXmcFfDu7ByEJZGgiKb78rHa2LKKq49u1Q16umbaap
+         S2sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766084317; x=1766689117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AQfRVSe9fO1PObUKRZHse1cNpjrf0uUXBusNVMTFfiA=;
-        b=dMVMnIO++n6Nw4RNhZx9xlRN/SubhszoMBMfNX1J9tKJkL9lJjjXAFo+1vT9YGN+bH
-         W8KEm6DxcF1WYXiKylce4/r/1FYP9Vla+It+3ml+tNdtPyvDwjoT0Z9+r5CHTJpJ2+1J
-         Pxk+p0yB7JxsNAwQJ0CDMBCA798dUEnwYbEvhVoCd/1PMmQ2sI24y0GsKK1tPZX/q4XX
-         l5aI0JCxzD7zxqJWRDTkPRIIkoMWPFI9QqfEsiCPfNGsgwan7JFgXfD/t2oZuYByLD2Q
-         XjDhm2zkRPvwCPN+bs2pmNRwcPaQd5p1h3nQfeHnyqm81dhEcYPDczZgXqEUSYksz1R+
-         imlA==
-X-Forwarded-Encrypted: i=1; AJvYcCUt2xnTmp10FliKFfujcK/a507gR3rEJrAvqdMbLUsFl4N7UDjYiNGRNI56NvZNKiIKeky8pIIVVME=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc6ZcaAKqVKLQ7b49uB2azvSvZeidzG2tNNBRIFGfXGKwQTSZa
-	5VjdltMs3lofRMGXGAW1BWQNPGnTURXOGRuXwlvlWXB/YbmfgyEPFrWK
-X-Gm-Gg: AY/fxX7Yl8ludX8qmVILUgsecMZCw9IkiAa4yFV2hkG7tbthUCDOSsMTfPP8YPxgrLT
-	uLRsKzCAgHbqfSfCkaUMKfJylOEYeey8NesqYSbfw5v9+Jeb3JqoLFWNzOhmpE1kZ7qdY14ZejN
-	fjWJCywNCtZTfpKigmhhYE0cSNKlPTu0ouVlrgj8rL9Tp/FiSwMl/XKPmxV9l5L0Mjhn8eqf/1a
-	W8S7/po4pBEvuD+NxsBm4hpqo7vEyDTg9kQWUyJ9eWTfmJczl4i8axOml2LYM5ZC9JbKqHkivvf
-	GEWesG8cmyNvE1r1GiSRospWKSAkBQEwjqaUrjLc+SkfzmSlH6TUmgWtXtwnFyuDJHDW1I7jWxW
-	bYw2pXi2KtPTrvjATtHz10/iqcHAGkaUbcWlrL7IGzeym1pWbzzdNAgOydG/9W3H/bc1GjYF/lk
-	UHZzOVsWgCWqH3TAbHvQW9lNGc
-X-Google-Smtp-Source: AGHT+IFf3D0xeHaQPPXEeazhorZHgIgTwRHiyRuussKNgJjGtFBYIJhQUMgRhb/IHzjPiFdB5lKzgg==
-X-Received: by 2002:a05:7022:3705:b0:119:e56b:91e9 with SMTP id a92af1059eb24-121722dff1cmr177764c88.26.1766084317443;
-        Thu, 18 Dec 2025 10:58:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217253c0c6sm299016c88.12.2025.12.18.10.58.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Dec 2025 10:58:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 18 Dec 2025 10:58:35 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com,
-	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	linusw@kernel.org, olivia@selenic.com, radu_nicolae.pirea@upb.ro,
-	richard.genoud@bootlin.com, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-	richardcochran@gmail.com, wsa+renesas@sang-engineering.com,
-	romain.sioen@microchip.com, Ryan.Wanner@microchip.com,
-	lars.povlsen@microchip.com, tudor.ambarus@linaro.org,
-	charan.pedumuru@microchip.com, kavyasree.kotagiri@microchip.com,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-clk@vger.kernel.org, mwalle@kernel.org,
-	luka.perkov@sartura.hr
-Subject: Re: [PATCH v2 15/19] dt-bindings: hwmon: sparx5: add
- microchip,lan9691-temp
-Message-ID: <8462a516-4e8f-413c-813d-e7ff0e6eaa1d@roeck-us.net>
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-15-robert.marko@sartura.hr>
+        d=1e100.net; s=20230601; t=1766084585; x=1766689385;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UZURydBRs6THPGEYtxtuXyqkrMfiNHxW6djvEvJyle0=;
+        b=jTS6KzGrmrXTSMV8TjjtlRxi2HgQJQGlJRuS7ggem/z3AtHxMpWoc9f8HwEsV9FmJB
+         s7H66UYH+2UIPz6RsJlOreaYYlYpc7LNtgLodEqWFjBwYTk8XZ6ulnyApf639U5zNL0y
+         uuv0wDAqK85onQtql4mmgtxPI67P1mSZIOKunuNC5pR1xBHFACDkdPxJioZke4ToDgnJ
+         BJwNbthaD65XIPF/MU39JIuktT1DhXj/Hs7qMBVe9yyhGNf6mtSvNKDfJ01b+h4k8UVE
+         y19UQ7C1mSPzryGiBTzudalfj2KfD518NL4xJkrUcDOLbYVRl8uSnKLDtKmzThWQ/cO1
+         gelQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVddifuQXSNYPJfNbU3Ef91WUFrc6lUY6wVjwrnuDTAoPyy5kzJPYoaXUuNOwHhhfpfywOG9ijeGLw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+s6jB8qxDfh2JgZENmUAgMmtlfkkJu6n/MoCJAxYHIDBQBasF
+	ma3YUdCPP30Iw72oaSmn2Ucpu+z5EgAUSK1gfmJZ4PCPJrT3vnVXgkPVwB59JgTvWEy/UDGvXOE
+	+PQ3Ian4ogZ4xp+tBjMZaKpoanTfKZrya9IfMUfOM
+X-Gm-Gg: AY/fxX65bts7QIQPfIEHA8x6F3yZ0zUhd2HVEuUpn6Mn+0F8lk85/8LfYuoDFj8h4C9
+	6jiu4By7SNdJWjriC+8x/4R+l0mNnAzHs6y/tR5JVlAITefmBhd2EGA0/vMBqOWAD4xzPugB0ml
+	c1u2u9KvlhVj1lf4m0ErYG5VuEZltuH7jT/XN1ao+/pxvudwZGFdaFCa9PDmQmnE3q0F4qL13eC
+	gak6d+DBXn11NfDNuGkMlu0xyuN1U6N+nsxc/R1ZfnWG/0jx7EhgujgPjfRlCQK9mnLThIYl1dg
+	eXsePa1L6L50/7SWOBry2KvDUjHJQVc3rlPq
+X-Google-Smtp-Source: AGHT+IHjlHQlXH87LizBV98xCNNrE/r6NnWxVA8MyqbsxcZpdW5xdnwO9aFCs2usLY1INPEf7TlgBEyb3iR7vLbl1rw=
+X-Received: by 2002:a05:7022:2586:b0:11b:8278:9f3a with SMTP id
+ a92af1059eb24-121722a760fmr302395c88.8.1766084584998; Thu, 18 Dec 2025
+ 11:03:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251215163820.1584926-15-robert.marko@sartura.hr>
+References: <20251205-controller-v9-0-9f158b18f979@google.com>
+ <20251205-controller-v9-2-9f158b18f979@google.com> <2025120553-suffrage-divisive-5890@gregkh>
+ <CA+zupgzL7v5MZDpxKDQQCqAZaqTdHbiG9-xTr+8RnigMFZJ_7Q@mail.gmail.com>
+ <2025121728-reliably-crabgrass-2601@gregkh> <CA+zupgxZCyNonfNPbGnFymGGOQuaWR1TsL+hujTbH4DEcfEt9Q@mail.gmail.com>
+ <CAD=FV=U63F-wxwKDo9be6_X2P2zp6aTBjNghZRbXX1rn4jFNyg@mail.gmail.com>
+ <CA+zupgyG4Nov0=jihSApp_3_0hy6YNZMkfOp6Q4-zmERFm10Ag@mail.gmail.com> <067e0b1f-ffb6-4f38-b4ac-8abdf46518ea@kernel.org>
+In-Reply-To: <067e0b1f-ffb6-4f38-b4ac-8abdf46518ea@kernel.org>
+From: Roy Luo <royluo@google.com>
+Date: Thu, 18 Dec 2025 11:02:28 -0800
+X-Gm-Features: AQt7F2rN06AK2QuvXUYDJOc3cWSY2JUStjC0ZUUhHBMZr4GDA95FFHyZwdmt4so
+Message-ID: <CA+zupgwgfKwPYqj8G2tNf4pEXNEWA+vL2WYJPhJ16xExgko7Dw@mail.gmail.com>
+Subject: Re: [PATCH v9 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Doug Anderson <dianders@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Peter Griffin <peter.griffin@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Badhri Jagan Sridharan <badhri@google.com>, linux-usb@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 15, 2025 at 05:35:32PM +0100, Robert Marko wrote:
-> Document LAN969x hwmon temperature sensor compatible.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+On Wed, Dec 17, 2025 at 11:06=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.o=
+rg> wrote:
+>
+> On 18/12/2025 02:34, Roy Luo wrote:
+> > On Wed, Dec 17, 2025 at 12:14=E2=80=AFPM Doug Anderson <dianders@google=
+.com> wrote:
+> >>
+> >> Hi,
+> >>
+> >> On Wed, Dec 17, 2025 at 11:18=E2=80=AFAM Roy Luo <royluo@google.com> w=
+rote:
+> >>>
+> >>> On Wed, Dec 17, 2025 at 5:24=E2=80=AFAM Greg Kroah-Hartman
+> >>> <gregkh@linuxfoundation.org> wrote:
+> >>>>
+> >>>> On Thu, Dec 04, 2025 at 11:14:39PM -0800, Roy Luo wrote:
+> >>>>> On Thu, Dec 4, 2025 at 10:05=E2=80=AFPM Greg Kroah-Hartman
+> >>>>> <gregkh@linuxfoundation.org> wrote:
+> >>>>>>
+> >>>>>> On Fri, Dec 05, 2025 at 02:26:38AM +0000, Roy Luo wrote:
+> >>>>>>> +config USB_DWC3_GOOGLE
+> >>>>>>> +     tristate "Google Platform"
+> >>>>>>> +     depends on ARCH_GOOGLE || COMPILE_TEST
+> >>>>>>
+> >>>>>> There is no ARCH_GOOGLE in the tree now, so how is this supposed t=
+o
+> >>>>>> work?  Shouldn't tools that check for "invalid config options" tri=
+gger
+> >>>>>> on this?
+> >>>>>>
+> >>>>>> thanks,
+> >>>>>>
+> >>>>>> greg k-h
+> >>>>>
+> >>>>> Hi Greg,
+> >>>>>
+> >>>>> The menuconfig looks like the following and it doesn't complain:
+> >>>>> | Symbol: ARCH_GOOGLE [=3DARCH_GOOGLE]
+> >>>>> | Type  : unknown
+> >>>>> |
+> >>>>> | Symbol: PHY_GOOGLE_USB [=3Dy]
+> >>>>> | Type  : tristate
+> >>>>> | Defined at drivers/phy/Kconfig:104
+> >>>>> |     Prompt: Google Tensor SoC USB PHY driver
+> >>>>> |     Depends on: ARCH_GOOGLE || COMPILE_TEST [=3Dy]
+> >>>>>
+> >>>>> According to Kconfig documentation [1], the unknown symbol
+> >>>>> would simply be evaluated as an "n", which is what we want.
+> >>>>> "Convert the symbol into an expression. Boolean and tristate
+> >>>>> symbols are simply converted into the respective expression
+> >>>>> values. All other symbol types result in =E2=80=98n=E2=80=99."
+> >>>>>
+> >>>>> In a different Kconfig documentation, an environment variable
+> >>>>> "KCONFIG_WARN_UNKNOWN_SYMBOLS" is there to detect
+> >>>>> undefined symbols in the "config input", but I can't find one that
+> >>>>> catches undefined symbols in the Kconfig tree itself.
+> >>>>>
+> >>>>> That is, the tool seems to allow this.
+> >>>>> However, if this turns out to be a major problem. I think we
+> >>>>> can either:
+> >>>>> - Remove ARCH_GOOGLE and leave COMPILE_TEST as
+> >>>>>   the only dependency. Then add ARCH_GOOGLE back
+> >>>>>   later once it's in the tree.
+> >>>>
+> >>>> Please do this.  I do not want to take patches that purposfully add
+> >>>> dependencies on config options that might, or might not, appear in t=
+he
+> >>>> future.  Please just remove all of the dependancies for now, as they=
+ are
+> >>>> not needed, right?
+> >>>>
+> >>>> thanks,
+> >>>>
+> >>>> greg k-h
+> >>>
+> >>> Greg,
+> >>>
+> >>> Yes, we can remove ARCH_GOOGLE for now.
+> >>> To clarify, we're not removing all of the dependencies, we still want
+> >>> to keep COMPILE_TEST for build tests, right?
+> >>> Please let me know if you think otherwise.
+> >>
+> >> I think you'd just remove all of them. Normally COMPILE_TEST just
+> >> allows folks to compile stuff even when they don't want the ARCH. We
+> >> can can add ARCH_GOOGLE back in later once the config exists.
+> >>
+> >> -Doug
+> >
+> > Doug,
+> >
+> > Thanks for chiming in. I'm hesitant to remove COMPILE_TEST
+> > because Greg specifically requested its inclusion in v7 [1].
+>
+>
+> What? No, that's not what Greg requested. Your COMPILE_TEST in current
+> form helps nothing in build testing. It makes absolutely no sense at all.
+>
+> > Also it seems beneficial to get some build coverage before
+> > ARCH_GOOGLE is officially added to the tree.
+>
+> And COMPILE_TEST like you wrote it does not give you that. Please first
+> read how this function works.
+>
+> > Greg, could you clarify?
+>
+> Can you first look at Linux kernel sources to see how this is properly
+> written?
+>
+> >
+> > [1] https://lore.kernel.org/linux-usb/2025112144-claw-recolor-49c3@greg=
+kh/
+> >
+> > Thanks,
+> > Roy
+>
+>
+> Best regards,
+> Krzysztof
 
-Applied.
+Greg and Krzysztof,
 
-Thanks,
-Guenter
+Thanks for the clarification.
+
+Regards,
+Roy
 
