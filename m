@@ -1,207 +1,184 @@
-Return-Path: <linux-usb+bounces-31572-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31573-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AAE3CCAFA7
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 09:44:59 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2444CCB440
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 10:52:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 894D1301274F
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 08:44:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 251DE3017390
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 09:52:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E099A2D2398;
-	Thu, 18 Dec 2025 08:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J7HNO1GH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B388833290B;
+	Thu, 18 Dec 2025 09:52:50 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266B22EC0AD
-	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 08:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7280E1F9F70;
+	Thu, 18 Dec 2025 09:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.248.49.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766047493; cv=none; b=uU3xfvjKoP4RTkriuwnaFkQ07xw0orQtpVOYP7yVSbkCWIYwTUEXd39jxOm2BGMwx34uFh2BSYFSe8V0/fIf7UiXcNCoIo1/52w9O2rbjMVPMxEdLo61Pvxmvg5UDWk7evMGp1MkCNQQSqmguTu5iJxvG8olNFmIqn/7Bhiqpyw=
+	t=1766051568; cv=none; b=mouvUXBR5HppC6cly0ozaH8v9+w+UOTFLMJTItSbStiAi540Rz1P/9DJO1fVc3wQMzvcpACF4ZNQ9NJyyThl8m+R1jJi4/rfZCK8UV4jNEKYJbPinZ2TRh1Ay3NyMcmYQIgXZRwCFysL8XbGlSO77gBMjWm4DdXeJNY/mHHutOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766047493; c=relaxed/simple;
-	bh=5u3i+h+gDY6CdOEWpn+Beo7NNaVht96wfUN2hkRg5As=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PTogvT85/75suc0h8GwxIxNLIlEv5mX2kDxWfOIR75vtYZ4icPQEvjtkK4foDs1xhstd+8dYHFFigj3IMse+ExxEhY0EcdisaVc/mCAdr7WBL6kqDLKZaHFCjztkEDR+XFKSsBu3sHoh7C/2v5AMODB81BiAHLc45U2Mc5bXzWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J7HNO1GH; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so2343965e9.2
-        for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 00:44:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766047489; x=1766652289; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8UY/yArC4o6EdxdfNYyVM9hqIXvxv+BzpVpHyD2GXVc=;
-        b=J7HNO1GHJb06tmZ94fE4GvdgnRNd9yjhtSXC1V2w/P5dgs3AJ+59ixdJzdGgcof823
-         4gF4l8lfXzakuQfCsb0lf5PikXJfKO04RVN3XGBsAikcbGwkRZ8KAJjnR8A4S9uQHDOI
-         R6y4OOP9xXjYeKtayQMxH6YwaelacT+hQWikC8eYyXwilC3FfuBITm+kcXM74XSW+X3v
-         rCG+57/Cy+DuGZ0YjsISAE72MGFixNggApusJaZPDh2ptepjVi2kPln34OhVFcOFv/dl
-         ysaNBLm4bnFrJvrL9MxvCwqKkZ6D/xTB0UGWmpmmsFnN7uBZl+LM56hX+y6EcGkN2a84
-         pFpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766047489; x=1766652289;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8UY/yArC4o6EdxdfNYyVM9hqIXvxv+BzpVpHyD2GXVc=;
-        b=LyN3A+Fpcl/PUUsG7h1RzAr5Z9I4boYaiRKzATHQvoQN9V1JSw0J+ALLIplAxXe946
-         hRboosbrsUXIMHMBnZ+MbPQGtoy3wkkL4Hybu32EZ25Qr/+WhqQLfEq6bjw2kHl1JCRS
-         ua7ziuDn6nafm4dxf4TWzf/Psrsv2KB4Slgc4PaNJoTGZ+tYxi0tbsrioyugIfpOGsFh
-         PF1VBQY5bFYSE9jS13TxpQ6eHOWm/kcEaZYJauqkYpcY7cFGMqGs+lTy/cnoj+y1p1DE
-         isBShA56lwSnN8NcTeF7vVhSpfaodxLT98pAd+1jBttt5kektYDbAzVEoHlT1B85385L
-         zkCA==
-X-Forwarded-Encrypted: i=1; AJvYcCVirZ/CEtNXIOpzcoelhiQF0NxAHvsCdBHFpd+e4TQYFCEldFZse25BY81tyL/z6qkN/k6Z/JgFL00=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTYCrVi2FMr/NRL3ELtzz50XiSlVWO8vIW/mIMNmD2QlK6GBwE
-	aCjXkRSMYcymBuQoAjZ+yUJR4l+ZDlIsui7uTWZLktgrU9QdRcALAXZp
-X-Gm-Gg: AY/fxX4msOjH6tq5XZxzq4Vo9TFH2OeSUwmlMole88l3OHwquURjJGFjw3HGkidHDKW
-	dBDSAnJj6N6Q6RPwgkgNkVtNtHT0gAFdyGpj3Du87e6dwmJ05pZGgH9A+fUBtilA7Lyt0p/a24i
-	zQwYF8N3SZ9FT4vp/Uw3/mDTSARhWZ5BUN9w1tek2bZ0kkNlMH2+olC9mA+vOkhQTL4eLbyN0TQ
-	XHUtQ0HK+N40ue3Wxc8qPodswVbA3Ch7muMbEtxIMoK6Kjurth6GEMY32OWuMKGXUqHkWQVXZeD
-	bWOskLwshcqepYOBPgZ03v8sH3tvwdYPTC+IcUerqOyrfU2UZMB6YHx8a9Jp7bj9OUGVEqHoda3
-	/8/zhiW1vKGBNOIiFCJYvpCf6BtwMm0QMVrW8lSYZT4tJEG/ehFZhSQevOBMxKHa3XvF55Q64U3
-	ed89bmyK8499s2Xu4RQ6piUhEz83+HXxvAlLUlap1wdzycazyVw69H
-X-Google-Smtp-Source: AGHT+IGxKeRhQYKrkJnvOfNy88ecEa71cowOWYtNvzpQsro+N005TxE21DHaH/Asg8ETI09DOi2fpA==
-X-Received: by 2002:a05:600c:c4b7:b0:45d:e28c:875a with SMTP id 5b1f17b1804b1-47a97193f3amr163980825e9.31.1766047488655;
-        Thu, 18 Dec 2025 00:44:48 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be3029fb7sm26083015e9.8.2025.12.18.00.44.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Dec 2025 00:44:48 -0800 (PST)
-Date: Thu, 18 Dec 2025 08:44:46 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Rasmus Villemoes
- <linux@rasmusvillemoes.dk>, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>, Crt Mori <cmo@melexis.com>, Richard Genoud
- <richard.genoud@bootlin.com>, Andy Shevchenko
- <andriy.shevchenko@intel.com>, Luo Jie <quic_luoj@quicinc.com>, Peter
- Zijlstra <peterz@infradead.org>, Jakub Kicinski <kuba@kernel.org>,
- netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Mika
- Westerberg <mika.westerberg@linux.intel.com>, Andreas Noever
- <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [PATCH v2 03/16] bitmap: Use FIELD_PREP() in expansion of
- FIELD_PREP_WM16()
-Message-ID: <20251218084446.580f29b9@pumpkin>
-In-Reply-To: <aUNHyjKS9b2KwdGJ@yury>
-References: <20251212193721.740055-1-david.laight.linux@gmail.com>
-	<20251212193721.740055-4-david.laight.linux@gmail.com>
-	<5257288.LvFx2qVVIh@workhorse>
-	<aUNHyjKS9b2KwdGJ@yury>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1766051568; c=relaxed/simple;
+	bh=ZAg+Vxb7Yy4hbcKu3h+/HwRKNvvS+LmAMjg1tpUKHnE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eu376FWvEzmmdYz3v3MtmaibWnW2YPgS8OPcWEtgGnOcQhSBi2aGbCBHmB27cWPBCITd91eioEje5/c1J0HlKTVKF9NaQkST2Qkmn+CQcLx5IifRLthPaSHOBvq8vpffnaFTZG9+Iqq/Ub2qK1u72Hlv6uOBMER2LePgyNlZyCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=socionext.com; spf=pass smtp.mailfrom=socionext.com; arc=none smtp.client-ip=202.248.49.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=socionext.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=socionext.com
+Received: from unknown (HELO iyokan3-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 18 Dec 2025 18:52:34 +0900
+Received: from mail.mfilter.local (mail-arc02.css.socionext.com [10.213.46.40])
+	by iyokan3-ex.css.socionext.com (Postfix) with ESMTP id ACA992091484;
+	Thu, 18 Dec 2025 18:52:34 +0900 (JST)
+Received: from iyokan3.css.socionext.com ([172.31.9.53]) by m-FILTER with ESMTP; Thu, 18 Dec 2025 18:52:34 +0900
+Received: from [10.212.247.110] (unknown [10.212.247.110])
+	by iyokan3.css.socionext.com (Postfix) with ESMTP id AC36E10A01F;
+	Thu, 18 Dec 2025 18:52:33 +0900 (JST)
+Message-ID: <e773f4ef-1772-47d5-bce8-9b97979391a5@socionext.com>
+Date: Thu, 18 Dec 2025 18:52:36 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: usb: Add Socionext Uniphier DWC3 controller
+To: Rob Herring <robh@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20251215212507.3317805-1-robh@kernel.org>
+ <0775e913-e531-44b5-b191-7ce0cf4d1e3a@socionext.com>
+ <CAL_Jsq+sXky33rD1-DkLvWdNcUEBNAty8t2NzvHFx-2ZK1cCSQ@mail.gmail.com>
+Content-Language: en-US
+From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+In-Reply-To: <CAL_Jsq+sXky33rD1-DkLvWdNcUEBNAty8t2NzvHFx-2ZK1cCSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, 17 Dec 2025 19:16:10 -0500
-Yury Norov <yury.norov@gmail.com> wrote:
-
-> On Wed, Dec 17, 2025 at 02:22:32PM +0100, Nicolas Frattaroli wrote:
-> > On Friday, 12 December 2025 20:37:08 Central European Standard Time david.laight.linux@gmail.com wrote:  
-> > > From: David Laight <david.laight.linux@gmail.com>
-> > > 
-> > > Instead of directly expanding __BF_FIELD_CHECK() (which really ought
-> > > not be used outside bitfield) and open-coding the generation of the
-> > > masked value, just call FIELD_PREP() and add an extra check for
-> > > the mask being at most 16 bits.
-> > > The extra check is added after calling FIELD_PREP() to get a sane
-> > > error message if 'mask' isn't constant.
-> > > 
-> > > Remove the leading _ from the formal parameter names.
-> > > Prefix the local variables with _wm16_ to hopefully make them
-> > > unique.
-> > > 
-> > > Signed-off-by: David Laight <david.laight.linux@gmail.com>
-> > > ---
-> > > 
-> > > Changes for v2:
-> > > - Update kerneldoc to match changed formal parameter names.
-> > > - Change local variables to not collide with those in FIELD_PREP().
-> > > 
-> > > Most of the examples are constants and get optimised away.
-> > > 
-> > >  include/linux/hw_bitfield.h | 21 ++++++++++-----------
-> > >  1 file changed, 10 insertions(+), 11 deletions(-)
-> > > 
-> > > diff --git a/include/linux/hw_bitfield.h b/include/linux/hw_bitfield.h
-> > > index df202e167ce4..0bd1040a5f93 100644
-> > > --- a/include/linux/hw_bitfield.h
-> > > +++ b/include/linux/hw_bitfield.h
-> > > @@ -12,8 +12,8 @@
-> > >  
-> > >  /**
-> > >   * FIELD_PREP_WM16() - prepare a bitfield element with a mask in the upper half
-> > > - * @_mask: shifted mask defining the field's length and position
-> > > - * @_val:  value to put in the field
-> > > + * @mask: shifted mask defining the field's length and position
-> > > + * @val:  value to put in the field
-> > >   *
-> > >   * FIELD_PREP_WM16() masks and shifts up the value, as well as bitwise ORs the
-> > >   * result with the mask shifted up by 16.
-> > > @@ -23,15 +23,14 @@
-> > >   * register, a bit in the lower half is only updated if the corresponding bit
-> > >   * in the upper half is high.
-> > >   */
-> > > -#define FIELD_PREP_WM16(_mask, _val)					     \
-> > > -	({								     \
-> > > -		typeof(_val) __val = _val;				     \
-> > > -		typeof(_mask) __mask = _mask;				     \
-> > > -		__BF_FIELD_CHECK(__mask, ((u16)0U), __val,		     \
-> > > -				 "HWORD_UPDATE: ");			     \
-> > > -		(((typeof(__mask))(__val) << __bf_shf(__mask)) & (__mask)) | \
-> > > -		((__mask) << 16);					     \
-> > > -	})
-> > > +#define FIELD_PREP_WM16(mask, val)				\
-> > > +({								\
-> > > +	__auto_type _wm16_mask = mask;				\
-> > > +	u32 _wm16_val = FIELD_PREP(_wm16_mask, val);		\
-> > > +	BUILD_BUG_ON_MSG(_wm16_mask > 0xffffu,			\
-> > > +			 "FIELD_PREP_WM16: mask too large");	\
-> > > +	_wm16_val | (_wm16_mask << 16);				\
-> > > +})
-> > >  
-> > >  /**
-> > >   * FIELD_PREP_WM16_CONST() - prepare a constant bitfield element with a mask in
-> > >   
-> > 
-> > Tested-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > 
-> > Compiled it with my usual config and booted it on a board that uses
-> > drivers that make use of these macros, and checked that things are
-> > working.  
+On 2025/12/17 1:38, Rob Herring wrote:
+> On Mon, Dec 15, 2025 at 7:22 PM Kunihiko Hayashi
+> <hayashi.kunihiko@socionext.com> wrote:
+>>
+>> Hi Rob,
+>>
+>> On 2025/12/16 6:25, Rob Herring (Arm) wrote:
+>>> The Socionext Uniphier DWC3 controller binding is already in use, but
+>>> undocumented. It's a straight-forward binding similar to other DWC3
+>>> bindings.
+>>
+>> After being pointed out by Krzysztof at OSSJapan, I've checked the
+>> bindings
+>> and was preparing some additions or fixes to resolve the warning.
+>>
+>> It's almost the same as my proposal, however, I add a little.
+>>
+>>>
+>>> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+>>> ---
+>>>    .../bindings/usb/socionext,uniphier-dwc3.yaml | 89 +++++++++++++++++++
+>>>    1 file changed, 89 insertions(+)
+>>>    create mode 100644
+>>> Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
+>>>
+>>> diff --git
+>>> a/Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
+>>> b/Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
+>>> new file mode 100644
+>>> index 000000000000..892ae3458c1b
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
+>>> @@ -0,0 +1,89 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/usb/socionext,uniphier-dwc3.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Socionext Uniphier SuperSpeed DWC3 USB SoC controller
+>>> +
+>>> +maintainers:
+>>> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>>> +  - Masami Hiramatsu <mhiramat@kernel.org>
+>>> +
+>>> +select:
+>>> +  properties:
+>>> +    compatible:
+>>> +      contains:
+>>> +        const: socionext,uniphier-dwc3
+>>> +  required:
+>>> +    - compatible
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - const: socionext,uniphier-dwc3
+>>> +      - const: snps,dwc3
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    minItems: 1
+>>> +    items:
+>>> +      - description: Host or single combined interrupt
+>>> +      - description: Peripheral interrupt
+>>> +
+>>> +  interrupt-names:
+>>> +    minItems: 1
+>>> +    items:
+>>> +      - enum:
+>>> +          - dwc_usb3
+>>> +          - host
+>>> +      - const: peripheral
+>> There's no problem, but how about the following description
+>> following snps,dwc3.yaml?
+>>
+>>     interrupt-names:
+>>       oneOf:
+>>         - const: dwc_usb3
+>>         - items:
+>>             enum: [host, peripheral]
 > 
-> Nicolas, thanks for testing! Would you also want to add an explicit
-> ack or review tag?
+> That allows for 'peripheral, host' or just 'peripheral'. Mine would
+> seemingly allow 'dwc_usb3, host', but snps,dwc3.yaml will prevent
+> that.
+
+I see. The property combinations are complex, so
+I'll follow your suggestion from the currnet .dts files.
+  
+>>
+>>> +
+>>> +  clocks:
+>>> +    maxItems: 3
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: ref
+>>> +      - const: bus_early
+>>> +      - const: suspend
+>>> +
+>>> +  phys:
+>>> +    description: 1 to 4 HighSpeed PHYs followed by 1 or 2 SuperSpeed
+>>> PHYs
+>>> +    minItems: 2
+>>> +    maxItems: 6
+>>
+>> Since Pro4 only has one PHY, so:
+>>       minItems: 1
 > 
-> David, I'm OK with this change. Please add bloat-o-meter and code
-> generation examples, and minimize the diff as I asked in v1, before I
-> can merge it.
+> Ah, I only checked arm64. Will fix> 
+> If there's other arm32 warnings, I'm not looking at those. So fixes
+> appreciated there.
 
-That is pretty much the minimal diff.
-By the time you've changed the three lines that do anything 'real'
-and realigned the continuation markers all the lines have changed.
+Yes, I'll address the arm32 warnings.
 
-I did look at the generated code, but since 'mask' is a constant
-the whole thing is just ((val << const_a) | const_b) pretty much
-regardless of the actual source - most of which is compile-time checks.
-There isn't anything for the bloat-o-meter to find.
-	
-	David
+Thank you,
 
-
-> 
-> Thanks,
-> Yury
-
+---
+Best Regards
+Kunihiko Hayashi
 
