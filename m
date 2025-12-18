@@ -1,196 +1,206 @@
-Return-Path: <linux-usb+bounces-31562-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31563-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 089A1CC9FCC
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 02:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33B6ACC9FD5
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 02:38:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4293A301EFA0
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 01:35:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 46B80301B805
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 01:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66DB1BC3F;
-	Thu, 18 Dec 2025 01:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3990025EFBC;
+	Thu, 18 Dec 2025 01:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m+3tcswS"
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="G+EX2sml"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB24321CC59
-	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 01:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DC223D7F7
+	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 01:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766021716; cv=none; b=bRCmPt3vyDPJ8z4sDCvkKgWiEW1q+oyLBAjvpRAUE074uih2Rp/N81UMC9a1sl9tjMNagg9NgRZYlpTHuEtTDn32u4zZf45v8tCTKKYgmGcd2IP14Fj7SkYwkujtVDrPCNXRo2dUdaOpkNa675WfTqJIIxhIOt1EGpc8PyjRbAc=
+	t=1766021916; cv=none; b=b4Nq9WVCdOIY4NAihSjyIkHsys3JfKFU8dU5RK9L/RsWYnqcwTT2YcQe8zU0TYS4UMo7z2cATkJyEnia8jj3mdf+5VaS+QF4FreuAwqBAlYpCLHEpD9592BGo7fHF9HKkA5+2aDMqkGvdpR2hNvwuuS5CISAXmzwQGVQBX4zKMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766021716; c=relaxed/simple;
-	bh=4OIfYeRjyIluIN6mXlTgKbEzj1gZ3VU1A0xxCANr4Bg=;
+	s=arc-20240116; t=1766021916; c=relaxed/simple;
+	bh=aHa+C0jYAbwg8X1uEBdutq7UF/INAv+FUqhgqnY3a0s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CglxOylTOPw0ex/+UKL6+Zej7maPkZ58+pihw50ZpAkBjTYOELObIFQwWGv4CJb9NUK+zfRKs7/YQJB5VK+gpGoSVDHD3qoWxZ3QXHyAdtWrfz522wDnoc9NLKhEnZOFnn/d1bEs/3yuCWzSXqNXnKUqakfnEjMqLhdktC4pjUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m+3tcswS; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-34b75fba315so124540a91.3
-        for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 17:35:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766021714; x=1766626514; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+3lPJkHRSCmKfOfDwhUgx/Hppf9Vk27dkhOuGa4j0X8=;
-        b=m+3tcswSXE7mPLhypN6oDMTWOsQHb5FL+5ywg+UOzUiOpUr1Hs0c50swf3yDHmspE4
-         u949zUW1tVQn1kMw1J5WTN9H+C/3/oTjpFQwdPcJ1IsC53tq5e1CdQXltdof7eG253X/
-         kTYjk8gl/o/fr08qSIIYd7HVUcl9BHf0OJsrjLhNwbWdURpTmQX14vr8Ko4vlHQC/BtK
-         Wh24tfdugnPeEG8pLS/VB+ldYUXbk/qi7t9xXIfWUz6iqS+m/7d/ZOp6YAOAPw5Cfyxj
-         5Gfz49ShYk6FOav5dQHwCxg1UekrR4kwFhE7rVjfF//O0/28XXG+W+W5rLKh/Pzs6kTP
-         1U8Q==
+	 To:Cc:Content-Type; b=hjSBp5iD2yfZvoNVb0vmCx4iheGoO97hJDcfjOkfcR9cq4KwdM6RV4o7XVdXIO4Kd0N5wuG56eYeOvF9W+l4J25Uf0M5xEWBiBkfTIWsYshDThZYSZPZRWAvMaL32DgmpjYcAUs2Eu59QvOcuHvmzFYC2CgHHAXn9JJfFfyhxuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=G+EX2sml; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2110C3F686
+	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 01:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1766021906;
+	bh=/ijQCX+MNtx3W98HgK7EDgyBXSBnHG30l0q8EiJpkEs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=G+EX2smlZLRyjiDXxfkbiPhydDj9pjdIG6mc5K/8YyVIy6E1wF3/Nfb1JdbbceDyT
+	 /ggSzTJbC/xXQO4ZZNsisaL6vx6vijCwg+i79moGVrnHHUfYC4bK5wICZrFawS34IG
+	 p4iKYqYkzBHQYwVcxeNIYYiv1BD2BvaYWMGbmRUfp3Q985HDJOkJyK7PXdK/knOcKU
+	 diRbx/ZrwbK3CMN8Z648HCN03S/glNIrsgQG+tg3hkVp3iyADidr6T8qaZvM3040IL
+	 APB2DJMvjGs9xjVSdPtHhPi9LdYtCSvKDErGHiCNZnlEWcZD+4ZhMPv6HcnM3eHa0Y
+	 N+BRANfgKRN7PuTRedHmUItbf2VPRYbj1U1KmuWATmCXGjbMKDtHJ2wzSI9BTouw0t
+	 27mSpsiRCI2pI0AHnDsKjIjDCfu25jqnGew7yEyq7Laj2aftp2+qcgDb2RGOWYWqMW
+	 yfbVvvGLi04uDiA7E6x18ys1H3CGrm6kjPYbCewy9cA2iGCv/FwpKVKOZjhQFjJO/X
+	 bBuYjQOJAP1KJ1atI46zeUEGQ0Oc/ApXVhVRc3z7KJjK7/8hhvSVVR84BSI/tiZMck
+	 7cMLGtrmEaiecZxCKKqJQXKbUDNXkH3Uc1Q/u5UM/5yrH74n4Zbv+bFeeHie/Kcx+X
+	 EGiElRy2OaKzjUZtRMg4btuU=
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-647854f707bso1695102a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 17 Dec 2025 17:38:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766021714; x=1766626514;
+        d=1e100.net; s=20230601; t=1766021905; x=1766626705;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+3lPJkHRSCmKfOfDwhUgx/Hppf9Vk27dkhOuGa4j0X8=;
-        b=QG6wVdSVgqQ8fTCDidnFAcsy3cgNxN1kW4V96FWWe0qRuZ9NwGa35B39jio2ZobsKg
-         VWm5JM8fyqMXBCPIZ2i90IKvELtFwtiXGHgPPzF2aHu9TwsxgJXfVXVyEcVebfAKfFJd
-         5srMC6ioxGui7rLK7aNsdd1Vri/w1e1WqWPSRc6/wxXfOP4IvB3hwXM7wXbmprg0mst0
-         I8yy5oenP1wM+kfSEZhQo2wqBejEfXdgLZcX+YU5SAYqpOUDfUiweopp7pdWsbNzthLV
-         ctUUM+Sc6b6rn6AUM3wbxMWGSMiL1rI96EvTbLWcF6Y5UyN3kJTFY8ea/WE1No9BtY1b
-         b3nQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVHS+qzvPAr0sSHhx3f3GUiNb7tPmuGu0RJbe+CORhGE74j8G9QpwXOecvcVTIqCULO5Rk8EwXjxOI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcXoksezxG3JEmfHqH8mwY6bUZmR2SGhPd8rQ4nbqrkxQgxR1j
-	eM6zDdIAG8WINZKPOjJF770CNIM+yEy1gG096mcOAhJprN1ZtA6sy9vxS3iwfzeG9CEnU2P5Xz+
-	pVIsf6WT9B0Zi93jv7qA+XTKpXYFwr6HgIUrp8Jk4
-X-Gm-Gg: AY/fxX6AdxOAofImlz536Nc41VoK84XLjyx9K45CnjmlrGK17hhrfvZD2l5MjXQYtJ/
-	VPZvEZr+kcOidh2Z83njEIbK25vk8ay3ipFZvA3ZsMStg460sB94BAOT+fym2KiGzkXC5hmC7Q/
-	0PhlcH9hve4V/Mb2Ff9eNreMbrwJAus4Oaw4D9TFMkdxbqaGf0du13IT6j08fvkKAyQwrOcwKky
-	VBo5QyiwTtSylc7iPF4hTPEQI5SyfCdlIT2sPHGxs+62slhxg0xwGJqcPJBT/UPSrzfQMefS6z8
-	dZwkopWK1HRRkd/8kvTYiI67iA==
-X-Google-Smtp-Source: AGHT+IGvcyO+atFMG40EK+LXFzuEE58sYgxepefDuuFDeJNb4XXiKi+RzM8fyWk9RSGm3Ityaatl5SIXnMbRo8k0DJM=
-X-Received: by 2002:a05:7022:f686:b0:119:e569:fba9 with SMTP id
- a92af1059eb24-11f354cc907mr17457322c88.24.1766021713688; Wed, 17 Dec 2025
- 17:35:13 -0800 (PST)
+        bh=/ijQCX+MNtx3W98HgK7EDgyBXSBnHG30l0q8EiJpkEs=;
+        b=iIitHFosiuVPQMoEKB10QnSSjRd48S9qLBFrrjXAWGIo4Po0zYNz4l4MBepZRZsYgc
+         t4dru9rw+t2dS4obzKvILuL57LP+Y4Ler8svzD0raL5qTAIZLfsXF4P4GgC1okSJAASR
+         Zkh2uaOjbzdbrv8KPd9qpGQJJ+virZkGdkZ/59whZJXbgy79WMLtXqE/Hsm2u727cWry
+         TktASOTdRLbQNclJ9q+2bG8prAvvOb7EcqOCYhKhSzr6hELDwH+kj3XjsD+Uelm3Oa/H
+         zD0qZC1++4rHQQqKNmlQZmEBiGhWbcttQcLpFnzRqSAOfz4fgXYU0SXEarwLUI/IT3U3
+         9Pig==
+X-Forwarded-Encrypted: i=1; AJvYcCVRI6TxzjK/lAz+YEzMfrt8EHWtB69K1rnNVW0aVdSvbaqkblYRWQXdBx1IP54KwDinlylTVi7RFqA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2pm4AjqAdDBDF8A5rte8bOdqnDjeTJtMkyz5136UlQhTAVlp4
+	4k9CV3eivKDUW+EfWfXDSZ4RiLrgfMQZ4rOhIwCjWNQjeoH/KbAF7rcWq3TKN/D0rp/syLMU1DT
+	49/nHStRGY4eNgKsh6xQdOs2aPYxo9KS+XDQIWXyAmkr4cY98cwiGLfksh3i/eKacELGHVDTQeo
+	KQKGToQd7btJsBxTRcq4ZLwtzaixFukQQ/cHLbFJ6l4J9aJ27LTy/L
+X-Gm-Gg: AY/fxX6wlErSrXkVVo9SeiuHAW6maC422yQ0vQ70d45DNtr6Dg1QFdmfRwfmuW5RbuK
+	6L60tRTIIxF6nzZPsgR9GNAXbkw7Mw6UbwGm5tLlv5B7A2RTZznP1J2LJRPLtC6OXJqkEPKB2Xy
+	UmYTUogxpz1t9t54kLxjBJjsazxBT6cnavTXPR/l9fS+SjNHmsdqpmhKdxRpNnTjA+3U8=
+X-Received: by 2002:a17:906:3194:b0:b76:b791:b58f with SMTP id a640c23a62f3a-b801ff9bcc2mr97507366b.0.1766021905586;
+        Wed, 17 Dec 2025 17:38:25 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHad9jckdqmmFlTyutiv54ottbPBIASuJEfqweunCdwIZfUvMhtc1f5ohYmaPlH+zt+qXJavwWhviY83w+J5yc=
+X-Received: by 2002:a17:906:3194:b0:b76:b791:b58f with SMTP id
+ a640c23a62f3a-b801ff9bcc2mr97506166b.0.1766021905087; Wed, 17 Dec 2025
+ 17:38:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251205-controller-v9-0-9f158b18f979@google.com>
- <20251205-controller-v9-2-9f158b18f979@google.com> <2025120553-suffrage-divisive-5890@gregkh>
- <CA+zupgzL7v5MZDpxKDQQCqAZaqTdHbiG9-xTr+8RnigMFZJ_7Q@mail.gmail.com>
- <2025121728-reliably-crabgrass-2601@gregkh> <CA+zupgxZCyNonfNPbGnFymGGOQuaWR1TsL+hujTbH4DEcfEt9Q@mail.gmail.com>
- <CAD=FV=U63F-wxwKDo9be6_X2P2zp6aTBjNghZRbXX1rn4jFNyg@mail.gmail.com>
-In-Reply-To: <CAD=FV=U63F-wxwKDo9be6_X2P2zp6aTBjNghZRbXX1rn4jFNyg@mail.gmail.com>
-From: Roy Luo <royluo@google.com>
-Date: Wed, 17 Dec 2025 17:34:37 -0800
-X-Gm-Features: AQt7F2rkORh0Ym1VQOfQeQf2IHUEB9pEt5kMbxWWeEa9-paUYGoUbCv0CV7TpLY
-Message-ID: <CA+zupgyG4Nov0=jihSApp_3_0hy6YNZMkfOp6Q4-zmERFm10Ag@mail.gmail.com>
-Subject: Re: [PATCH v9 2/2] usb: dwc3: Add Google Tensor SoC DWC3 glue driver
-To: Doug Anderson <dianders@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Peter Griffin <peter.griffin@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Badhri Jagan Sridharan <badhri@google.com>, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	Joy Chakraborty <joychakr@google.com>, Naveen Kumar <mnkumar@google.com>
+References: <20251209054141.1975982-1-acelan.kao@canonical.com>
+ <20251209070633.GA2275908@black.igk.intel.com> <pjn5d7oz433z4jph6whdalhowf652xknnk2fh5q7elffgb5ogo@7dtpvywxc6nw>
+ <20251210074133.GE2275908@black.igk.intel.com> <4634177b-8ed1-4d65-9f3c-754d8c1eb828@amd.com>
+ <coxrm5gishdztghznuvzafg2pbdk4qk3ttbkbq7t5whsfv2lk5@3gqepcs6h4uc>
+ <20251212123941.GK2275908@black.igk.intel.com> <484ff606-ec10-477c-acfe-d4d781e2873d@amd.com>
+ <CAFv23Q=bLCif750y8eDEP4J+KwVy8CknZawYOGZWWrBSiE8FNA@mail.gmail.com>
+ <20251217125507.GR2275908@black.igk.intel.com> <5d7f2661-f02b-4985-b438-196b48c10237@amd.com>
+In-Reply-To: <5d7f2661-f02b-4985-b438-196b48c10237@amd.com>
+From: AceLan Kao <acelan.kao@canonical.com>
+Date: Thu, 18 Dec 2025 09:38:13 +0800
+X-Gm-Features: AQt7F2rYooN6PmmghNAR7Dx-hx_9IF9oB5RlqIO5t62YjI_c5iD6JT0xR331uOc
+Message-ID: <CAFv23QknLmZkC9Fc0FTFKCofngRUQipw4hGVG_P2k+TUb=KOeA@mail.gmail.com>
+Subject: Re: [PATCH] [RFC] thunderbolt: Add delay for Dell U2725QE link width
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Andreas Noever <andreas.noever@gmail.com>, Mika Westerberg <westeri@kernel.org>, 
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Sanath.S@amd.com, 
+	"Lin, Wayne" <Wayne.Lin@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 17, 2025 at 12:14=E2=80=AFPM Doug Anderson <dianders@google.com=
-> wrote:
+Mario Limonciello <mario.limonciello@amd.com> =E6=96=BC 2025=E5=B9=B412=E6=
+=9C=8817=E6=97=A5=E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8811:53=E5=AF=AB=E9=81=
+=93=EF=BC=9A
 >
-> Hi,
->
-> On Wed, Dec 17, 2025 at 11:18=E2=80=AFAM Roy Luo <royluo@google.com> wrot=
-e:
+> On 12/17/25 6:55 AM, Mika Westerberg wrote:
+> > Hi,
 > >
-> > On Wed, Dec 17, 2025 at 5:24=E2=80=AFAM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Thu, Dec 04, 2025 at 11:14:39PM -0800, Roy Luo wrote:
-> > > > On Thu, Dec 4, 2025 at 10:05=E2=80=AFPM Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > > > >
-> > > > > On Fri, Dec 05, 2025 at 02:26:38AM +0000, Roy Luo wrote:
-> > > > > > +config USB_DWC3_GOOGLE
-> > > > > > +     tristate "Google Platform"
-> > > > > > +     depends on ARCH_GOOGLE || COMPILE_TEST
-> > > > >
-> > > > > There is no ARCH_GOOGLE in the tree now, so how is this supposed =
-to
-> > > > > work?  Shouldn't tools that check for "invalid config options" tr=
-igger
-> > > > > on this?
-> > > > >
-> > > > > thanks,
-> > > > >
-> > > > > greg k-h
-> > > >
-> > > > Hi Greg,
-> > > >
-> > > > The menuconfig looks like the following and it doesn't complain:
-> > > > | Symbol: ARCH_GOOGLE [=3DARCH_GOOGLE]
-> > > > | Type  : unknown
-> > > > |
-> > > > | Symbol: PHY_GOOGLE_USB [=3Dy]
-> > > > | Type  : tristate
-> > > > | Defined at drivers/phy/Kconfig:104
-> > > > |     Prompt: Google Tensor SoC USB PHY driver
-> > > > |     Depends on: ARCH_GOOGLE || COMPILE_TEST [=3Dy]
-> > > >
-> > > > According to Kconfig documentation [1], the unknown symbol
-> > > > would simply be evaluated as an "n", which is what we want.
-> > > > "Convert the symbol into an expression. Boolean and tristate
-> > > > symbols are simply converted into the respective expression
-> > > > values. All other symbol types result in =E2=80=98n=E2=80=99."
-> > > >
-> > > > In a different Kconfig documentation, an environment variable
-> > > > "KCONFIG_WARN_UNKNOWN_SYMBOLS" is there to detect
-> > > > undefined symbols in the "config input", but I can't find one that
-> > > > catches undefined symbols in the Kconfig tree itself.
-> > > >
-> > > > That is, the tool seems to allow this.
-> > > > However, if this turns out to be a major problem. I think we
-> > > > can either:
-> > > > - Remove ARCH_GOOGLE and leave COMPILE_TEST as
-> > > >   the only dependency. Then add ARCH_GOOGLE back
-> > > >   later once it's in the tree.
-> > >
-> > > Please do this.  I do not want to take patches that purposfully add
-> > > dependencies on config options that might, or might not, appear in th=
-e
-> > > future.  Please just remove all of the dependancies for now, as they =
-are
-> > > not needed, right?
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
+> > On Wed, Dec 17, 2025 at 11:06:52AM +0800, AceLan Kao wrote:
+> >>>> By default it does not access retimers beyond the Type-C connector. =
+I
+> >>>> wonder if you have CONFIG_USB4_DEBUGFS_MARGINING set in your kernel
+> >>>> .config? And if yes can you disable that and try again.
+> >> Sorry, it looks like I got some troubles with my MTA, some emails are
+> >> not sent out correctly.
+> >>
+> >> I've rebuilt the kernel without CONFIG_USB4_DEBUGFS_MARGINING, and
+> >> here is the log
+> >> There is a tbt storage daisy-chained after the tbt monitor, it's
+> >> easier to reproduce this issue.
+> >> https://people.canonical.com/~acelan/bugs/tbt_call_trace/intel/merged_=
+6.18.0-d358e5254674+.2.out
+> >>
+> >> And this one is only the tbt monitor plugged.
+> >> https://people.canonical.com/~acelan/bugs/tbt_call_trace/intel/merged_=
+6.18.0-d358e5254674+.3.out
 > >
-> > Greg,
+> > Okay from the first trace at least scanning of the retimer at index 2
+> > (which does not exist) does not complete too fast and I suspect there i=
+s
+> > some timeout on the device side that triggers. We had already similar w=
+ith
+> > Pluggable devices but perhaps this is implemented in the Dell version t=
+oo?
 > >
-> > Yes, we can remove ARCH_GOOGLE for now.
-> > To clarify, we're not removing all of the dependencies, we still want
-> > to keep COMPILE_TEST for build tests, right?
-> > Please let me know if you think otherwise.
+> > I wonder it is enough if we set configuration valid and then scan the
+> > downstream retimers? Can you try the attached patch? We do need to scan
+> > them before DP tunnels are created to support ALPM (this is work in
+> > progress).
 >
-> I think you'd just remove all of them. Normally COMPILE_TEST just
-> allows folks to compile stuff even when they don't want the ARCH. We
-> can can add ARCH_GOOGLE back in later once the config exists.
+> If it needs to go even later - there is OFC the possibility of doing
+> upstream ones first and USB3 tunnels first too.
 >
-> -Doug
+> I'd say if the below doesn't work Acelan you can try pushing it right
+> before tp_add_dp_resources() to see.
+Hi Mario,
 
-Doug,
+It's still no luck to move tb_retimer_scan() right before tp_add_dp_resourc=
+es()
+https://people.canonical.com/~acelan/bugs/tbt_call_trace/intel/merged_6.18.=
+0-d358e5254674+.patched2.out
 
-Thanks for chiming in. I'm hesitant to remove COMPILE_TEST
-because Greg specifically requested its inclusion in v7 [1].
-Also it seems beneficial to get some build coverage before
-ARCH_GOOGLE is officially added to the tree.
-Greg, could you clarify?
+>
+> >
+> > diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> > index d7f32a63fc1e..e23e0ee9c95f 100644
+> > --- a/drivers/thunderbolt/tb.c
+> > +++ b/drivers/thunderbolt/tb.c
+> > @@ -1380,14 +1380,6 @@ static void tb_scan_port(struct tb_port *port)
+> >       upstream_port =3D tb_upstream_port(sw);
+> >       tb_configure_link(port, upstream_port, sw);
+> >
+> > -     /*
+> > -      * Scan for downstream retimers. We only scan them after the
+> > -      * router has been enumerated to avoid issues with certain
+> > -      * Pluggable devices that expect the host to enumerate them
+> > -      * within certain timeout.
+> > -      */
+> > -     tb_retimer_scan(port, true);
+> > -
+> >       /*
+> >        * CL0s and CL1 are enabled and supported together.
+> >        * Silently ignore CLx enabling in case CLx is not supported.
+> > @@ -1406,6 +1398,13 @@ static void tb_scan_port(struct tb_port *port)
+> >        */
+> >       tb_switch_configuration_valid(sw);
+> >
+> > +     /*
+> > +      * Scan for downstream retimers. We only scan them after the
+> > +      * router has been enumerated to avoid issues with certain
+> > +      * Pluggable devices that expect the host to enumerate them
+> > +      * within certain timeout.
+> > +      */
+> > +     tb_retimer_scan(port, true);
+Hi Mika,
 
-[1] https://lore.kernel.org/linux-usb/2025112144-claw-recolor-49c3@gregkh/
+This doesn't work.
+https://people.canonical.com/~acelan/bugs/tbt_call_trace/intel/merged_6.18.=
+0-d358e5254674+.patched1.out
 
-Thanks,
-Roy
+>
+> Just a note in case this turns into a proper patch/solution.  Make sure
+> you update the comment to cover this monitor too.
+>
+> >       /* Scan upstream retimers */
+> >       tb_retimer_scan(upstream_port, true);
+> >
 
