@@ -1,219 +1,106 @@
-Return-Path: <linux-usb+bounces-31599-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31601-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58C3DCCC900
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 16:49:13 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEE49CCC970
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 16:57:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1F4F93051F04
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 15:45:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C780D3022BF1
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 15:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4AC834D910;
-	Thu, 18 Dec 2025 15:45:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C53F134F48C;
+	Thu, 18 Dec 2025 15:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="qGm6160e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BggJZifg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx-relay95-hz2.antispameurope.com (mx-relay95-hz2.antispameurope.com [94.100.136.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F862FCBE3
-	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 15:45:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.136.195
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766072716; cv=pass; b=MneTtxSJ1p+3Gkfl6vhbpNbTCB9JCQj7mcxFfvyHdEuC/doGF5u9nhsbzn9I5UNWlIMtwXqIUW/LZHiLkuBv8Yy/h9jG2mjE2cpoNZRIkz4iJBkFfKMEwQDxufzVCzzQXTUxgmGD82EPZASmGeoij8wwqnb7QoVDX5yhvMRhpf0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766072716; c=relaxed/simple;
-	bh=lYmjpxP0uO6WQqzTJeVwXGBg09KGDuuPwir+lNZhhrQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DwM+qcYncqVIg7ox0J7XYCA9UDTRuQE3bt9Q4AEiz3/nbIBnDq24URI9BOqrJZqRY14Rn61RfQxwoxyT3fHPPCuTGW71kSe0aFeHvPU5kGGv2r+D4uFmtpGc+hq4nW6SHVcKxTEUkH57LfXf28yojy3wIFt48t/i2dm52vwct3w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=qGm6160e; arc=pass smtp.client-ip=94.100.136.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-ARC-Authentication-Results: i=1; mx-gate95-hz2.hornetsecurity.com 1; spf=pass
- reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
- smtp.mailfrom=ew.tq-group.com
- smtp.helo=hmail-p-smtp01-out04-hz1.hornetsecurity.com; dmarc=pass
- header.from=ew.tq-group.com orig.disposition=pass
-ARC-Message-Signature: a=rsa-sha256;
- bh=cNktqPdORa2qnhbyWV/LXLPJYGLHHIks8TSaavnZQv8=; c=relaxed/relaxed;
- d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
- t=1766072684;
- b=DoN+oObrc7Bt7S5gEAI6gytzqhBw5otYSviYkBLstvhBiE/RXy9sOceMhxtPqw7UWUBlx3zN
- W+0iCIuHxGYH6Kl6C7oQVDCuCYfMuHcdknHqKlDLoFM5TvLxk8xRCUYu+h56ZYAdorlPrmsLYiR
- kz3duABBNFVRcNe4ZdpwX5uzqbd/CBANylg4pKkBlmCA9K3QHDCIcEPocY5gd41u4k1tiVaP0qy
- ceFIaY5PNzqwR2Nq8TTaj1AQjx8XgGfoPHium4uzg9+xjHo6leBa0gbsEYthLGuiPczuVpM+34C
- BIZOe2UkMNFlcIfzmbQxwlElePGJOWpSr5hQMUC2MHUaQ==
-ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
- t=1766072684;
- b=rBV9DxJRjbsJKPZY6GcW4sAwfgFcOZ2LgtUy0EXxiPbe/B+Vpr7MKw4s1id9iBK7U+bt9DOV
- GjOVC1cp1S/dexj2rqN473IzQkYEGGdmun/MF252fQf5TFO31467ebJtCkaI5t2tnhvleSDiVoe
- D8T1TfufvGejXTGmIq20F70i7SklefexKLFB8iebsvqC/IRBH/mpAjZ/99WjCxiTs3fLw9NX9ud
- U5uVA7z2rkUJ7vsPNYdP/xfjJwNhk2tgdKwV8b8ZALxnAKUpblXZvsZ7OFJVWNmr2nK3WWeOkxc
- yIlhE1o19VsfiDfQlT0r97661o8iE1UMlnTYI3Dy5hcpQ==
-Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay95-hz2.antispameurope.com;
- Thu, 18 Dec 2025 16:44:44 +0100
-Received: from steina-w.tq-net.de (host-82-135-125-110.customer.m-online.net [82.135.125.110])
-	(Authenticated sender: alexander.stein@ew.tq-group.com)
-	by hmail-p-smtp01-out04-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 6EA1B220619;
-	Thu, 18 Dec 2025 16:44:25 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Peter Chen <peter.chen@kernel.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Marek Vasut <marex@denx.de>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux@ew.tq-group.com
-Subject: [PATCH 6/6] arm64: dts: imx8qm-tqma8qm-mba8x: Disable Cortex-A72 cluster
-Date: Thu, 18 Dec 2025 16:44:08 +0100
-Message-ID: <20251218154412.1524249-2-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251218152058.1521806-1-alexander.stein@ew.tq-group.com>
-References: <20251218152058.1521806-1-alexander.stein@ew.tq-group.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A08B34E774
+	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 15:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766072868; cv=none; b=FqXxVRNc9ExGAVLDKxB9VEiBhV2QbaJJ2x2Ykh9CwFF6TGe3rrjj1NgRO4IAXeRmIJCh7wOVHOZCFX/Ql3ep8k8vaoCfURnZQ7j33IScWW+61aXhYoKWQ86XARdvnUf3+LYn7ZVElvG+lSIn9slnAM5bxYZW03i4eyGtLylGMno=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766072868; c=relaxed/simple;
+	bh=LzxNzF7MpItYcU3pEGmTXATHal65pD7N5vjHukp5bDE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ed3eCqK9icYyHmJrv+ct2Z+91tSwv/i+UzeOlLtt66pmXwOlXzfgiHYt21TUD+D+u7+Uugj++AFgvaA+4YX+DnhGspttFqxHtLR/tubxm8FHyLwk+rzwDizMsGP6nUlqWWc4OXDc4dDJJZk6F+3GgV4+HJ5zo/6B+McUBftzx2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BggJZifg; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-59431f57bf6so840383e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 07:47:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766072864; x=1766677664; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LzxNzF7MpItYcU3pEGmTXATHal65pD7N5vjHukp5bDE=;
+        b=BggJZifgjvx24PLzSYnjQCRW8lcVGi8OQ3JZYKH1fJf+W1Yphj6PpOXaY/v+7/K3Wq
+         svn7fUsuVdAD8JmSROt9ZGzmbTXjYttt2FcrmgoL0MMQc5OGRIf2ubxQfS9ZRLXP1poC
+         ljDz/txTjHP5Sg82DWwHJHrkU8aPNTpnkAsintYGBGw1KwwG74ZAxbJ5/21OQAjIrT9g
+         Zg4M2Xk8tsIh9wGMDbpVgX6TqPuZb1kmeYVaoYa7NNhxa5eKwL3ZW+KBSNKNbsam59hC
+         Tf9/JyaokJRpw5kT9rU1gJaIl4QPPQaWLx56+SBJPNIZl8SkOVFdUvA3EUTrqZkJn6e6
+         QQ5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766072864; x=1766677664;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LzxNzF7MpItYcU3pEGmTXATHal65pD7N5vjHukp5bDE=;
+        b=f3ul57zCkryjEnWxrsgjat8BJFnXpgq69+v88TAIxgrkNFAcvquD2WJVjZYuMzxI3J
+         5ftPumbUKHdgTeyWOklUkzf5cO3hSS7t4fiiIOkoOV8OiFWPhky9M+dAprTnzAbT7yil
+         avXXTbu3ySQkV4qSq96QVnnQ7eT7Itm9eMgdpYEk7+Fw0BiRY1zPW4Fix00jEIAMCFj9
+         t/s8c0lqfw4JvGCC+4rK9JKeJbRGXqKoX/rg3FvG7MYya4/ZaoK1C25UqtT/CzzPOvVe
+         L6Mpo+eL8Ec5MPSwuTzIFOOjxzZvSxTYKBvqxyULuEl8ly8pl7hUK5QfhZc9/13LspoT
+         CtOw==
+X-Forwarded-Encrypted: i=1; AJvYcCX/D3Eu1RyG6tMgUaxqG4+gobKhV3xCfR9XYORic1cf35HvtaCWohXi7GZ+Z7SequLxYb9gjD8B884=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxBv0kpY0PQH47nVFXngaf62ov59NnW44vzzgpUgBu78N1CTGs
+	Iscp/tFSaY1tjGmh3V6xODsfwSC1rRWT3/v4bWaM/bTizDqVN2Z8Yxb7yFywYy+q4nP4Up30WS1
+	qMjhAbMyQqcZYyeXV8u1HHg++DZzy6rg=
+X-Gm-Gg: AY/fxX526ZNLwU2jNc19oAhogRcIASaMgbuTqGqxj++Nk/oY9ZSv3pbchJ7KX4J8W7K
+	dFvL1coavY6ot/zgEDT1qpgrQSIInnjpSjWtkZR6JJR2+8qWjEIewx1wzw3CIHNFKeb3CdwSJ1P
+	MFpcCeCXhZH3FXtW+Bs9Ure97UkmMC+nbtrZNUAzmZg9dwX0bcYgthBbhjfpzsAXq5XykQwO4I4
+	Wx3EgZR1gAbzuH4okPcjQZzfXbj9xaSI5lu1vLCp9r18mJd2c7EEA3SEzwNVg6vyVVAw/frM44V
+	LdM8vAlgHokVzUaVGC2LkVfsZqU=
+X-Google-Smtp-Source: AGHT+IGrYbGUckFbA0uI/Uak1RoxWaGizxcWDMRvFWxpw/hL/+bdMgS3hQvghW4USBbg4LCsrOKENWVewsmE9VZ7WWY=
+X-Received: by 2002:a05:6512:128c:b0:598:eaf8:8f5a with SMTP id
+ 2adb3069b0e04-59a17d573afmr14623e87.38.1766072864074; Thu, 18 Dec 2025
+ 07:47:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-cloud-security-sender:alexander.stein@ew.tq-group.com
-X-cloud-security-recipient:linux-usb@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Mailarchiv: E-Mail archived for: alexander.stein@ew.tq-group.com
-X-cloud-security-Mailarchivtype:outbound
-X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay95-hz2.antispameurope.com with 4dXFMt4MRFz2F8Jm
-X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
-X-cloud-security-Digest:30ac5d452f02eb17521dada3ca6d72f8
-X-cloud-security:scantime:1.560
-DKIM-Signature: a=rsa-sha256;
- bh=cNktqPdORa2qnhbyWV/LXLPJYGLHHIks8TSaavnZQv8=; c=relaxed/relaxed;
- d=ew.tq-group.com;
- h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
- t=1766072684; v=1;
- b=qGm6160ezwQKVUXmoN9OeRllcKCseOr+91Ydqow5uSU0fmNKj9Kf4lY07B/+Hb2yXa3yi0c/
- /rDkeh0GfsZenUpfvMm7H+TXFQ5lRbekfM4yTm45akYcV3QX5rkZB6Psc+yiPc1A16gFVNb4kj1
- 2VIHz6a9zphe959k8I/1FWqZ+xqHjn3x/pgl+EiTYj6n6NoPdjyL6cSyffsjY+PA106fPjVRdBn
- 3CDwsK03mEOIgciVtQ7y5s7Ufpv1e9+7NSKRBYcOD/wzXOf/V3tMVTYfKODszmrEQB8kpT1oYOB
- Ye4CW4QlfhASH0DDaOUJIbS+OpvX4nXo2t2+R7KK7vEkg==
+References: <20251218152058.1521806-1-alexander.stein@ew.tq-group.com> <20251218154412.1524249-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20251218154412.1524249-1-alexander.stein@ew.tq-group.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 18 Dec 2025 12:47:33 -0300
+X-Gm-Features: AQt7F2qc4TJ7gyArwoED7PIRPB0eAsifB8ZnC9eeMqM3yyZByNJJ_XOF-WESW6g
+Message-ID: <CAOMZO5CmP_rdFA=PqGSmKDU+ObzifHFDjwYMD3J67bjs0h_sfw@mail.gmail.com>
+Subject: Re: [PATCH 5/6] arm64: dts: Add TQ imx8qm based board
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, 
+	Roger Quadros <rogerq@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, 
+	Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-usb@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux@ew.tq-group.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Due to missing workaround for "ERR050104: Arm/A53: Cache coherency issue"
-disable the whole Cortex-A72 cluster.
+On Thu, Dec 18, 2025 at 12:45=E2=80=AFPM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> * TQMa8QM on MBa8x
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- .../dts/freescale/imx8qm-tqma8qm-mba8x.dts    | 39 -------------------
- .../boot/dts/freescale/imx8qm-tqma8qm.dtsi    | 13 +++++--
- 2 files changed, 10 insertions(+), 42 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8qm-tqma8qm-mba8x.dts b/arch/arm64/boot/dts/freescale/imx8qm-tqma8qm-mba8x.dts
-index ba19c3c17c496..4a5ab14ddc550 100644
---- a/arch/arm64/boot/dts/freescale/imx8qm-tqma8qm-mba8x.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8qm-tqma8qm-mba8x.dts
-@@ -296,45 +296,6 @@ map3 {
- 				};
- 			};
- 		};
--
--		cpu1-thermal {
--			trips {
--				soc_active1_0: trip-active0 {
--					temperature = <40000>;
--					hysteresis = <5000>;
--					type = "active";
--				};
--
--				soc_active1_1: trip-active1 {
--					temperature = <48000>;
--					hysteresis = <3000>;
--					type = "active";
--				};
--
--				soc_active1_2: trip-active2 {
--					temperature = <60000>;
--					hysteresis = <10000>;
--					type = "active";
--				};
--			};
--
--			cooling-maps {
--				map1 {
--					trip = <&soc_active1_0>;
--					cooling-device = <&fan0 1 1>;
--				};
--
--				map2 {
--					trip = <&soc_active1_1>;
--					cooling-device = <&fan0 2 2>;
--				};
--
--				map3 {
--					trip = <&soc_active1_2>;
--					cooling-device = <&fan0 3 3>;
--				};
--			};
--		};
- 	};
- };
- 
-diff --git a/arch/arm64/boot/dts/freescale/imx8qm-tqma8qm.dtsi b/arch/arm64/boot/dts/freescale/imx8qm-tqma8qm.dtsi
-index 718c792259a65..57d06817aab63 100644
---- a/arch/arm64/boot/dts/freescale/imx8qm-tqma8qm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8qm-tqma8qm.dtsi
-@@ -11,6 +11,13 @@ / {
- 	model = "TQ-Systems i.MX8QM TQMa8QM";
- 	compatible = "tq,imx8qm-tqma8qm", "fsl,imx8qm";
- 
-+	/* Due to missing workaround for ERR050104 */
-+	cpus {
-+		/delete-node/ cpu-map;
-+		/delete-node/ cpu@100;
-+		/delete-node/ cpu@101;
-+	};
-+
- 	memory@80000000 {
- 		device_type = "memory";
- 		/*
-@@ -171,6 +178,8 @@ &mu2_m0 {
- };
- 
- &thermal_zones {
-+	/delete-node/ cpu1-thermal;
-+
- 	pmic0-thermal {
- 		polling-delay-passive = <250>;
- 		polling-delay = <2000>;
-@@ -196,9 +205,7 @@ map0 {
- 					<&A53_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
- 					<&A53_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
- 					<&A53_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--					<&A53_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--					<&A72_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
--					<&A72_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+					<&A53_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
- 			};
- 		};
- 	};
--- 
-2.43.0
-
+This commit log should be improved by explaining the SoM and base
+board in more detail, providing a URL, etc.
 
