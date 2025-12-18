@@ -1,45 +1,45 @@
-Return-Path: <linux-usb+bounces-31570-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31571-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id A04D9CCAD87
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 09:22:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB76CCAD5B
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 09:19:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E9698300B301
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 08:22:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BE4263063864
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 08:14:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5878133122C;
-	Thu, 18 Dec 2025 08:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D37336EE7;
+	Thu, 18 Dec 2025 08:14:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D/B1jtPM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YqkD4ufu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E402F2913;
-	Thu, 18 Dec 2025 08:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F044335BC1;
+	Thu, 18 Dec 2025 08:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766045604; cv=none; b=Snl+5E9itYbtpcjl6ffQQdXaMTZerFj512Q3TO4R4dgpRKYi8Equ//ifFkR2w1yDaU11Rj/HffV+TGlSmGKwENvfayweDd9U6dtTduWxgJOP7IjsAeX67wlwUIoyX6owV7S/daPZ+RGwtJ8PGHyLrMadrQj5ERAyFfdwmqEBPaQ=
+	t=1766045684; cv=none; b=KF51EeTGe3UBAaKyltf5Fx/HjX8E+6OBjRMSMYu29Nlv1yh8iaMr1fv08YCpGyPKCyqUbmGJO1prMidUTulE65znFlFhKy506DwTV7ZqitSbTtIpQsIAV64SsXRePUzyriAXRcNGzRBL2r8RphN2i159Q7I1psDQv7EfG2C5B44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766045604; c=relaxed/simple;
-	bh=GuMVOmjC3D+gLDhC5c14ynNE2/7FKdRL6OvdYcv6+j4=;
+	s=arc-20240116; t=1766045684; c=relaxed/simple;
+	bh=y7TtX8+iLOnaZvRGv4vOgDBVzMPtjU08gAuozivb/eM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IyJippGX2TS5zV9wZbpg/7nVjFfHugAppbaO2P2hMMZeU3QxvHsGYZ/8LqSXYSf1hB00BCJZ8Ei8Z71j88vpGCtQ0ocYz3VhSqNlFNEGZIHxPabqDUPLj95Dtt4wM7taVQs67zf5xZ+sGrxmvcjHBOhHb+lGJqx47iDC75Rola8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D/B1jtPM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D127EC113D0;
-	Thu, 18 Dec 2025 08:13:22 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=IwDm8BuHXKjlrMvy5QG4yOGBAr0HWoDP7udxW99rSBUcp0nkwiXnwVj6cTifFVnhijH4GUSbLzIB3GOT0mmIFy2HZVsGm6XlAF9uOkHphiiF+TUWA1rV82tjeDxiIXa8QvCuDZSXbrRCN+jEuLtKEQPzjRn7XxncSLMmpVbymxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YqkD4ufu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80F2CC4CEFB;
+	Thu, 18 Dec 2025 08:14:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766045603;
-	bh=GuMVOmjC3D+gLDhC5c14ynNE2/7FKdRL6OvdYcv6+j4=;
+	s=k20201202; t=1766045684;
+	bh=y7TtX8+iLOnaZvRGv4vOgDBVzMPtjU08gAuozivb/eM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D/B1jtPM25JPHwd9O54VUTxxepoHQbyOqTpRVL7ZGHDSHQaK8ex9JxaO91wu1JLOm
-	 wP91JjC6I8WYZ8GGVlQwEgJkkyS/Nqi1na9UHQtwAZ0zd6AaNO28i05Ts0gzn/1YOK
-	 v2zjj1us28co9IWgA9LILZIDvZorm7jNeP1NAVJ0BSwHB1/bkQLbR+SyiCEDoMmKoO
-	 g2lHKkAacruEidy/oi9gXc4QQb2JPcunsNchjCK2bnJzB6zlXq/4EaHf37Zw6WW3ym
-	 W9Ka8K/KEiquzAjkHoUuePaHfPVw5UWJvyWAcR8oUR5hC41Zdh3R+EsfaOwvGK1olx
-	 23uBiRkhjJ03Q==
-Date: Thu, 18 Dec 2025 09:13:20 +0100
+	b=YqkD4ufulbLCET4gYmTzcEh4Aj8WoamMUS19qmiC+KY5q84cOm9derASQRQSw3GEm
+	 YPdPKXr2WNgsZi+jvgVconDppJLCIkxwTRVNak/B1svlD9WTOLcMv06A7x4/6Q0G+b
+	 vPIYK5mQNfBkluTtf2ytyYoBWGAwtJrp7aevwAFr/Gc3IZCIqhqGUfwQG6vgI8KbqB
+	 9gHVpPDeQXYUJLlHDwoPsZ8tUw/ACOotR4+Q7UDAJc0caCPbopDKp2Etckr08i5ZLa
+	 dR/PrhFgVPMFm7egU5g2M1+NEVr8/vX8NTQkK2Itx3aUpkQtocU6A/nWk8RJoBRloa
+	 Aj3immWtyNVnA==
+Date: Thu, 18 Dec 2025 09:14:41 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -50,11 +50,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Pin-yen Lin <treapking@chromium.org>, Catalin Popescu <catalin.popescu@leica-geosystems.com>, 
 	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
 	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: Add binding for Genesys Logic
- GL3590 hub
-Message-ID: <20251218-silky-daring-octopus-9a9c11@quoll>
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: lemans-evk: Enable USB1
+ controller for host mode
+Message-ID: <20251218-winged-hypnotic-jellyfish-370cda@quoll>
 References: <20251216120749.94007-1-swati.agarwal@oss.qualcomm.com>
- <20251216120749.94007-2-swati.agarwal@oss.qualcomm.com>
+ <20251216120749.94007-5-swati.agarwal@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,27 +63,58 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251216120749.94007-2-swati.agarwal@oss.qualcomm.com>
+In-Reply-To: <20251216120749.94007-5-swati.agarwal@oss.qualcomm.com>
 
-On Tue, Dec 16, 2025 at 05:37:46PM +0530, Swati Agarwal wrote:
-> Add the binding for the USB3.2 Genesys Logic GL3590 hub.
+On Tue, Dec 16, 2025 at 05:37:49PM +0530, Swati Agarwal wrote:
+> Enable USB1 controller for host mode on EVK Platform.
 > 
-> Signed-off-by: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
-> ---
->  Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> For secondary USB Typec port, there is a genesys USB HUB GL3590 having 4
+> ports sitting in between SOC and HD3SS3220 Type-C port controller and SS
+> lines run from the SoC through the hub to the Port controller. Mark the
+> second USB controller as host only capable.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> index 9a94b2a74a1e..6665fc4baf61 100644
-> --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> @@ -15,6 +15,7 @@ properties:
->        - usb5e3,608
->        - usb5e3,610
->        - usb5e3,620
-> +      - usb5e3,625
+> Added HD3SS3220 Type-C port controller along with Type-c connector for
 
-Incomplete patch. Please read entire binding.
+
+"Add". Write consistent messages.
+
+> controlling vbus supply.
+
+...
+
+> +			port@1 {
+> +				reg = <1>;
+> +
+> +				usb1_hs_in: endpoint {
+> +					remote-endpoint = <&usb_hub_2_1>;
+> +				};
+> +
+> +			};
+> +
+> +			port@2 {
+> +				reg = <2>;
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +				usb1_ss_in: endpoint {
+> +					remote-endpoint = <&usb_hub_3_1>;
+> +				};
+> +
+> +			};
+> +		};
+> +	};
+> +
+>  	edp0-connector {
+>  		compatible = "dp-connector";
+>  		label = "EDP0";
+> @@ -140,6 +182,16 @@ vbus_supply_regulator_0: regulator-vbus-supply-0 {
+>  		enable-active-high;
+>  	};
+>  
+> +	vbus_supply_regulator_1: vbus-supply-regulator-1 {
+
+No, do not introduce your own style. Read the code here - how such
+nodes are called?
 
 Best regards,
 Krzysztof
