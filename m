@@ -1,118 +1,96 @@
-Return-Path: <linux-usb+bounces-31575-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31576-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F275CCB666
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 11:34:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2353BCCC421
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 15:23:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 61C2C30A4228
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 10:29:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0DB3A30E1895
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 14:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95ACE346AD2;
-	Thu, 18 Dec 2025 10:20:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D62628751D;
+	Thu, 18 Dec 2025 14:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Md1ZYcsF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LUVWJ9bn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723A2346A08;
-	Thu, 18 Dec 2025 10:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8122248886;
+	Thu, 18 Dec 2025 14:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766053227; cv=none; b=BDFMDEznS8ENh/v+v5ZCvVNYlV4v6CcBoJrg7PebcfEltRCD9YLx9ChKyWHtPscoQaaUhwoNkoFamztudKqsJ2NT8/h2r9QFAwY8Wa/kRpabACU8khQuWCQFbkbWz1TKrck25JrfbMYf7OGdbxshfhO81M2XZoWw+LkSKjdqEK4=
+	t=1766067646; cv=none; b=JsWfRRdT3rV/HoB0PGg5ZTbO6kChcGreR9IwK5Tl1fbd3MrE8pYJfrt9LxJqKAT86DrYPWmd6pvKXQj4e6aYrpzp9bsL16xPDtjf1UUzbbq5ZwBd3hBp6Ji/G1nWPsrdHc1W8a5z54GV+OHvUJlZ1RmZgWi+wPzFs+Jq2lTZ8IQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766053227; c=relaxed/simple;
-	bh=KoK7e/3h6e13eRjLuAuqEv/mD4f7/qd/2dnukRXwsk8=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j++3AxY+0z7ws6CyqFOV/E1NqXQaa9vLwalItVPVcwlwNio4QBOgK5tpL7tzC0LTxJ+IE1doGyi9SIHZcl81fFDPrmIoVpQXu0PG7AxijQcDlErk+gvWMttn6bB4+rMcJzZCq4Mgv5dzu6Fb2U1rXwmxe3p64vUFfJhEplylbJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Md1ZYcsF; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766053225; x=1797589225;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=KoK7e/3h6e13eRjLuAuqEv/mD4f7/qd/2dnukRXwsk8=;
-  b=Md1ZYcsFD+2oAIhkZvKMVYRhjCccXlKarK+Vylt4W8VS0suWRFwp4m2+
-   4T175COPhpqjnfMmh0T4KPZZww8AOIwLbkiEyOJF49VwpRbdBI4KDfEqw
-   UdeFIL48tK7TagI5HvK661QJXSnd/ePkk32wwZeWgU4bxOgmgG9uxLPuq
-   kENka1w+ub3yYHGrs0QVxm73wgRX+cmMq46foJt2YekNh73qVQsi4rb0B
-   OvKibEVDgrW5+G3dUZhgVADK/L3TC9maNC9sRVim0fl4nfOY0DFANWfek
-   L9/Rc09UXsHHidz/uqBgn5PmUuJafwXie6MrXNCahp4kvZ820iQbXyf0V
-   A==;
-X-CSE-ConnectionGUID: wGxJU3LhSiWyYvmOoSfH8A==
-X-CSE-MsgGUID: 4X9PrKVKQJ6vK6ePJTwlfQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11645"; a="71862861"
-X-IronPort-AV: E=Sophos;i="6.21,158,1763452800"; 
-   d="scan'208";a="71862861"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2025 02:20:24 -0800
-X-CSE-ConnectionGUID: WNrRx+wGQHOvpFpIW97cYg==
-X-CSE-MsgGUID: 7A7Oo+JrRl6lFJLMb15ZpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,158,1763452800"; 
-   d="scan'208";a="199380610"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa010.fm.intel.com with ESMTP; 18 Dec 2025 02:20:22 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id AA21F8E; Thu, 18 Dec 2025 11:20:21 +0100 (CET)
-Date: Thu, 18 Dec 2025 11:20:21 +0100
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Sanath.S@amd.com,
-	"Lin, Wayne" <Wayne.Lin@amd.com>
-Subject: Re: [PATCH] [RFC] thunderbolt: Add delay for Dell U2725QE link width
-Message-ID: <20251218102021.GV2275908@black.igk.intel.com>
-References: <4634177b-8ed1-4d65-9f3c-754d8c1eb828@amd.com>
- <coxrm5gishdztghznuvzafg2pbdk4qk3ttbkbq7t5whsfv2lk5@3gqepcs6h4uc>
- <20251212123941.GK2275908@black.igk.intel.com>
- <484ff606-ec10-477c-acfe-d4d781e2873d@amd.com>
- <CAFv23Q=bLCif750y8eDEP4J+KwVy8CknZawYOGZWWrBSiE8FNA@mail.gmail.com>
- <20251217125507.GR2275908@black.igk.intel.com>
- <5d7f2661-f02b-4985-b438-196b48c10237@amd.com>
- <CAFv23QknLmZkC9Fc0FTFKCofngRUQipw4hGVG_P2k+TUb=KOeA@mail.gmail.com>
- <20251218072125.GU2275908@black.igk.intel.com>
- <6inne3luvw4ot3wqnsaw3gzhlxtd4756i465oto6so5ox3syxp@kibuv4vhvexx>
+	s=arc-20240116; t=1766067646; c=relaxed/simple;
+	bh=wF26NQBIHpeYuZsa0o8hohE86D5KBU/gDr6Nos9QJl8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VUjE26nYZa4qbpDF5/OGkDJGzRZ/b7s9/cNw8nbDAtX8VLUzcYLWkGUbGYAFBdw62+H7c3p+DSwPaxjS2QNNQ2URBHlGN2XersOF9VwEiqOL2qjqNsl98NbNDNIk9C1wm2/P/yI8nQj+Ot/XLx07QhwX5HHOlJiGNWSGuzjgrYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LUVWJ9bn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61A3DC4CEFB;
+	Thu, 18 Dec 2025 14:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766067646;
+	bh=wF26NQBIHpeYuZsa0o8hohE86D5KBU/gDr6Nos9QJl8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LUVWJ9bnnMcqIyBabbJIuvFGUnBagY2Ydg3EPGOMkyIqbzxmECrBwIdNeLjf5RmRT
+	 emYzrUSh0mvoVeuxYWZpWkUZq0OWpPKg9Gx4x7az3ieiDE/TGhnsB4xVsjWV91JVKa
+	 ISvVk983TvxhevXqVN2YVAYlDT0y4/O0b6Lmgm5LL4HuTJFSm3EcCoJLp30JciSJaj
+	 /DpwYuSHCzxxOoOXNAZHEHv3YxoiH68X9FJp+ZXGseZWqcMSifjZeqQtCj6LUPyZVs
+	 v1EnVBw7T1YrMc+tOGTQdj4TiQobgEaXDRQ5NmF6yFeYgdwUOlVPTxti7ra0h+MVkM
+	 VcosordbhyHcg==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vWErz-000000001YE-3lAw;
+	Thu, 18 Dec 2025 15:20:44 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Ma Ke <make24@iscas.ac.cn>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/5] USB: lpc32xx: fix error handling
+Date: Thu, 18 Dec 2025 15:19:40 +0100
+Message-ID: <20251218141945.5884-1-johan@kernel.org>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6inne3luvw4ot3wqnsaw3gzhlxtd4756i465oto6so5ox3syxp@kibuv4vhvexx>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 18, 2025 at 03:35:05PM +0800, Chia-Lin Kao (AceLan) wrote:
-> > Now since USB 2.x has its own wires in Type-C cable this tells me that
-> > there is some real problem with the connection. Have you tried different
-> > cables already?
-> Here is the log I got with another tbt4 cable.
-> I'm using the kernel with Mario suggests modification.
-> 
-> https://people.canonical.com/~acelan/bugs/tbt_call_trace/intel/merged_6.18.0-d358e5254674+.patched2.2_new_cable.out
+A recent change fixing a device reference leak introduced a clock
+imbalance by reusing an error path so that the clock may be disabled
+before having been enabled.
 
-Here I see (assuming I read it right) that the USB 2.x enumerates only
-after the first unplug:
+The very same change could also lead to a use-after-free in case the
+driver is used with non-OF probing.
 
-[   28.589861] usb 3-2: New USB device found, idVendor=1d5c, idProduct=5801, bcdDevice= 1.01
-[   28.589864] usb 3-2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-[   28.589865] usb 3-2: Product: USB2.0 Hub
-[   28.589866] usb 3-2: Manufacturer: Fresco Logic, Inc.
+This series fixes the resulting mess as well as the device leak in the
+NXP OHCI driver.
 
-Since Goshen Ridge is pretty stable in Linux I'm kind of suspecting still a
-connection issue rather than SW. Or could be power related too. AFAIK the
-USB 2.x should be rock solid but here it seems not. Are you using active or
-passive cables and do they have the lightning logo?
+Included are also two related cleanups.
 
-You could still try to comment out both tb_retimer_scan() calls and see if
-that makes any difference but I doubt since your last log unplug happened
-when we were reading DROM of the second device router not when sidband
-access was done.
+Johan
+
+
+Johan Hovold (5):
+  usb: gadget: lpc32xx_udc: fix clock imbalance in error path
+  usb: phy: isp1301: fix non-OF device reference imbalance
+  usb: ohci-nxp: fix device leak on probe failure
+  usb: gadget: lpc32xx_udc: clean up probe error labels
+  usb: ohci-nxp: clean up probe error labels
+
+ drivers/usb/gadget/udc/lpc32xx_udc.c | 41 ++++++++++++++--------------
+ drivers/usb/host/ohci-nxp.c          | 18 ++++++------
+ drivers/usb/phy/phy-isp1301.c        |  7 ++++-
+ 3 files changed, 36 insertions(+), 30 deletions(-)
+
+-- 
+2.51.2
+
 
