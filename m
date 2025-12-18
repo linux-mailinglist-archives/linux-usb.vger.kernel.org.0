@@ -1,275 +1,150 @@
-Return-Path: <linux-usb+bounces-31583-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31584-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7268BCCC4E1
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 15:38:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27DC1CCC82E
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 16:37:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 713F43078C89
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 14:37:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 95A0C30B6735
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 15:32:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE7232D3A6D;
-	Thu, 18 Dec 2025 14:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75A633B6C3;
+	Thu, 18 Dec 2025 15:09:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ccJFwdXD"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="QrhELO0b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3F72D5C92
-	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 14:26:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5452133987E
+	for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 15:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766067970; cv=none; b=PYuLdVSGv8TYT/1jeqkHarT/F59Bl617KP+LxtgHI0koqChYW9+24xowGSf5GW1cJDKfj7NhzjcHDSHH9u/I1SENzyDi/9+KtaS3XF7olBpMF584vCgVLAGSyooaBLF4PdCC6ygIVAEV6k4k+0SwEI5t7E8Ry9tf4c/rvN3KetM=
+	t=1766070598; cv=none; b=s05Apvyj403BVEFzycd7a180zlX2bTKgBNTgAfQXwnmworusfdA3GzDn4T749vmsfgZ7gZb0bMSxUe4JNF4v3loG+2qQWNmvDu6LtdZjpgpzP1CbmnA+32rOjz4EHSt/Kn6ahZEiWprVWZxHCLA6SfJxAOWOS3ibjaFB8jFLBAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766067970; c=relaxed/simple;
-	bh=lwkCkmmB+5g9ExwaQ+JwBkwwxRrORcv+v8OSSBz7hBA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=XmYD96uw5nvh9KgnYA9DGP9dmheeatsJOixbNpml3JpjI26IYdxCwYQPc/R/ChVu24/mKydoMSQLetOH/Uh4P/A32od/8FQVat35cjt/YD35D468CET+FeKUCrT/O/8724i6Dn5k4LDqPApfOI3au7A7dTAJoxmQsmPsmzB3ZJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ccJFwdXD; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766067968; x=1797603968;
-  h=date:from:to:cc:subject:message-id;
-  bh=lwkCkmmB+5g9ExwaQ+JwBkwwxRrORcv+v8OSSBz7hBA=;
-  b=ccJFwdXDUrdALIGJ7xxS0xvTQP/6/qovcWSbd/fdJahFyKHe0h0c++Js
-   XZq+hnFd+53HeEVvJ15NXcdXs6WJOTBi3JIsV4G57FEAOGE+Ym8zZijrg
-   oQg9x3XdeQ0pg0KjmE8E03x1zUBETMURxs05K8dP6K5vWSoDR3XRfn+3Y
-   BJV2fbDQMOEk/CZCa18DkDJCzAEwS1yBphfVCyAw2xB1Fb/iS/FNtf8Wj
-   65DEYzyeH+TjjgAZlhE+O/ASjOpuzM0cwiKj4PYfa58C/4vKDguXa7YuU
-   GGSg6KHJ8xc3jT4CqUTv8iGPVGK0xBvC3N8/Y/MObPTAAk50RPslaEzyU
-   w==;
-X-CSE-ConnectionGUID: 1PVImX+5Rq6Bfo3yh1vE2g==
-X-CSE-MsgGUID: eu53EDWIQcuxSulYZ5ndlA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="78335798"
-X-IronPort-AV: E=Sophos;i="6.21,158,1763452800"; 
-   d="scan'208";a="78335798"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2025 06:26:08 -0800
-X-CSE-ConnectionGUID: i4bUFkdyTYWQKt7lWXXmSA==
-X-CSE-MsgGUID: +DHBauk2TW+pkmyBWySfHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,158,1763452800"; 
-   d="scan'208";a="203681201"
-Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 18 Dec 2025 06:26:07 -0800
-Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vWExA-000000002B2-28bR;
-	Thu, 18 Dec 2025 14:26:04 +0000
-Date: Thu, 18 Dec 2025 22:25:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 3b4961313d31e200c9e974bb1536cdea217f78b5
-Message-ID: <202512182223.zm7oMWco-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1766070598; c=relaxed/simple;
+	bh=GyIDox64oAhXs+cWAqmAu/mNEobhQiLAUvWZCeDilLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SBYX3S4S6iDmq6iULwWOnfTkYiskkcVVzzl5tOszzei5bk85EU04nJFKiRBMPPpFAUHACZs7GdWL0OX/wXOgq4Z8DeHznEVRKYAm9AKzILGCD07MD2xepI4tkHVymlzBpQgkJPelKPj6BLQykI0I4Y9js0GSrScCwRjLvQs2xwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=QrhELO0b; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8b21fc25ae1so72555685a.1
+        for <linux-usb@vger.kernel.org>; Thu, 18 Dec 2025 07:09:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1766070595; x=1766675395; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JzaJvVThloEXKVKLCSqFNRa/Fj7OHCrP1e6taNw3RLg=;
+        b=QrhELO0bSXHknYZXqH9ck660k+1Z5p2lNQ0a/oWgjEdAAy9FOQ8dSPn44jk33hiBpy
+         j0Sz72qTsZWusXriVOtKbXWQavsKxQgQaIAP92RmHwArN7qtn5oxiISCn/y7UpQHfK7h
+         sbB00KRpXyRjWHVlK5mWVclpysKaY7KzDRXxdHxA/fr3a7zpf/M/xEHivgmrPuRXO/o+
+         viC577p7AUkzid/wSGS573vsJLLo09tpKUC9ZXj21Klp2FdVncxWE5JDOCTRNNrkFy2h
+         oZLC2dbwZDOwU88rJ3hVctqTTe/XkRrLmlHYICzT0ydz9j7ardimmN+Oyn0ScmidRa7H
+         ACyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766070595; x=1766675395;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JzaJvVThloEXKVKLCSqFNRa/Fj7OHCrP1e6taNw3RLg=;
+        b=ptQrPU66O4pX6QxHnPS0/DHZglHAClB+TrYGh/sMW/9BqTafUmLyOke3sdooIBnOiT
+         agoga65t8l3m24qcb6vli4B6MOih2Ejk8iHuHZcVPo4twut7+perrsFS56CViU7cTRZH
+         d1+QSlzdEefeuiakbDH4a59WPVJEStYzPMbidu/wPTFT2Xn2REjT47PgeD2H8qe7WsT4
+         zo+abiBOkxbAv0SIHjvAJ/h3ZXXgfpFtON6yl40OG/+SFyogEiDY6LafC4gSnDbRN3ga
+         FHZ4BoxMDnfeGgundk6ojviMBvdjZcyINmscRO4PZSzhWfMZfEz4T5AiWQRUs292ispu
+         6hxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXpTKv6KGJb7TX9V3ORvlTjZpwhwSjfSY0FyfjzGDV/fnW39JKXT9RroR+zLpR4a7xsgzejIi75I7M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjPtdO4RzuyGZfwLP+dsPx133pdylMO5SrW8a8MSvvhClR5CmU
+	H/cDYfrvVuLOqUXEj8PfFOw6AMKCGoGL7mmX5dEsRgXdZHMAmuoPQvsk6AN47BB2CQ==
+X-Gm-Gg: AY/fxX6C8QFPAGCT2lcRwwPJ96IChYP9SU6rMWYSnevALz/P3t8OlXAnr+FbH46u1K3
+	vX9jQtBdV8LC/HB/B9QgrcZY97rct7a6UZl5CZCRQv8bxpkiDq29UU0N5OQGmV7AqEYtwmH+Cit
+	DkjQiQkWSYWwgjTxJg/pVcqdGfItfzfDMUfSkywaM8UK0nxB4FpfesYhM2UIucjuguPvmPGxRMB
+	1dkZUptCuaXtqHiLpQGtkaIJA0aSSVH0V6aZSNTeCzAUIU75Rysasq+moYwIvc8rb1AbNvXXndY
+	hAgN3UeUXwmj6yRfzcGKsAmxBDvs0rbc2k77fcm8K8fba7qwa/fKaGRAIIAhlPaNrW5KZqwJ7j0
+	+grI5OLdoXtaxq88II4qUYzhS0NrW4wHvtisyUa0pSS2xliQAn2ieBRvCD0FTpgodwFaKKKRy9k
+	lJ+NfwSgx50WIM6dBYEcLFMAPy6SZfiA==
+X-Google-Smtp-Source: AGHT+IGyxZj7tM1qgZsTUFEyxzuZ4qZWpNIRaxcpRdo2gUBAdUSZImncBLxIljLtq1qdhdQuc+nelw==
+X-Received: by 2002:a05:620a:371e:b0:8b2:e7db:2545 with SMTP id af79cd13be357-8bb3a36d230mr2878833885a.53.1766070595009;
+        Thu, 18 Dec 2025 07:09:55 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8beeba3c1aesm175983085a.46.2025.12.18.07.09.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Dec 2025 07:09:54 -0800 (PST)
+Date: Thu, 18 Dec 2025 10:09:52 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Ma Ke <make24@iscas.ac.cn>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] usb: ohci-nxp: clean up probe error labels
+Message-ID: <a23e4407-9017-449c-a514-6e9464ec0266@rowland.harvard.edu>
+References: <20251218141945.5884-1-johan@kernel.org>
+ <20251218141945.5884-6-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251218141945.5884-6-johan@kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 3b4961313d31e200c9e974bb1536cdea217f78b5  usb: dwc3: of-simple: fix clock resource leak in dwc3_of_simple_probe
+On Thu, Dec 18, 2025 at 03:19:45PM +0100, Johan Hovold wrote:
+> Error labels should be named after what they do rather than after from
+> where they are jumped to.
+> 
+> Rename the probe error labels for consistency and to improve
+> readability.
+> 
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
 
-elapsed time: 1451m
+Johan, in the 3/5 patch you also changed a statement label, which was 
+not directly related to that patch's actual purpose, but it is directly 
+related to this one's.  Can you move that rename from that patch to this 
+one?
 
-configs tested: 184
-configs skipped: 0
+Alan Stern
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    gcc-15.1.0
-arc                              allmodconfig    clang-16
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    clang-22
-arc                                 defconfig    gcc-15.1.0
-arc                   randconfig-001-20251218    clang-22
-arc                   randconfig-002-20251218    clang-22
-arm                               allnoconfig    gcc-15.1.0
-arm                              allyesconfig    clang-16
-arm                                 defconfig    gcc-15.1.0
-arm                       imx_v6_v7_defconfig    gcc-15.1.0
-arm                         lpc32xx_defconfig    clang-22
-arm                         orion5x_defconfig    clang-22
-arm                   randconfig-001-20251218    clang-22
-arm                   randconfig-002-20251218    clang-22
-arm                   randconfig-003-20251218    clang-22
-arm                   randconfig-004-20251218    clang-22
-arm                        spear3xx_defconfig    gcc-15.1.0
-arm64                            allmodconfig    clang-22
-arm64                             allnoconfig    gcc-15.1.0
-arm64                               defconfig    gcc-15.1.0
-arm64                 randconfig-001-20251218    gcc-14.3.0
-arm64                 randconfig-002-20251218    gcc-14.3.0
-arm64                 randconfig-003-20251218    gcc-14.3.0
-arm64                 randconfig-004-20251218    gcc-14.3.0
-csky                             allmodconfig    gcc-15.1.0
-csky                              allnoconfig    gcc-15.1.0
-csky                                defconfig    gcc-15.1.0
-csky                  randconfig-001-20251218    gcc-14.3.0
-csky                  randconfig-002-20251218    gcc-14.3.0
-hexagon                          allmodconfig    gcc-15.1.0
-hexagon                           allnoconfig    gcc-15.1.0
-hexagon                             defconfig    gcc-15.1.0
-hexagon               randconfig-001-20251218    gcc-11.5.0
-hexagon               randconfig-002-20251218    gcc-11.5.0
-i386                             allmodconfig    clang-20
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    gcc-15.1.0
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20251218    gcc-14
-i386        buildonly-randconfig-002-20251218    gcc-14
-i386        buildonly-randconfig-003-20251218    gcc-14
-i386        buildonly-randconfig-004-20251218    gcc-14
-i386        buildonly-randconfig-005-20251218    gcc-14
-i386        buildonly-randconfig-006-20251218    gcc-14
-i386                                defconfig    gcc-15.1.0
-i386                  randconfig-001-20251218    gcc-12
-i386                  randconfig-002-20251218    gcc-12
-i386                  randconfig-003-20251218    gcc-12
-i386                  randconfig-004-20251218    gcc-12
-i386                  randconfig-005-20251218    gcc-12
-i386                  randconfig-006-20251218    gcc-12
-i386                  randconfig-007-20251218    gcc-12
-i386                  randconfig-011-20251218    clang-20
-i386                  randconfig-012-20251218    clang-20
-i386                  randconfig-013-20251218    clang-20
-i386                  randconfig-014-20251218    clang-20
-i386                  randconfig-015-20251218    clang-20
-i386                  randconfig-016-20251218    clang-20
-i386                  randconfig-017-20251218    clang-20
-loongarch                        allmodconfig    clang-22
-loongarch                         allnoconfig    gcc-15.1.0
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20251218    gcc-11.5.0
-loongarch             randconfig-002-20251218    gcc-11.5.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    clang-16
-m68k                                defconfig    clang-19
-m68k                           sun3_defconfig    clang-22
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    clang-19
-mips                             allmodconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                             allyesconfig    gcc-15.1.0
-mips                          ath25_defconfig    gcc-15.1.0
-nios2                            allmodconfig    clang-22
-nios2                             allnoconfig    clang-22
-nios2                               defconfig    clang-19
-nios2                 randconfig-001-20251218    gcc-11.5.0
-nios2                 randconfig-002-20251218    gcc-11.5.0
-openrisc                         allmodconfig    clang-22
-openrisc                          allnoconfig    clang-22
-openrisc                            defconfig    gcc-15.1.0
-openrisc                  or1klitex_defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    clang-22
-parisc                           allyesconfig    clang-19
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20251218    gcc-8.5.0
-parisc                randconfig-002-20251218    gcc-8.5.0
-parisc64                            defconfig    clang-19
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    clang-22
-powerpc                     ppa8548_defconfig    clang-22
-powerpc               randconfig-001-20251218    gcc-8.5.0
-powerpc               randconfig-002-20251218    gcc-8.5.0
-powerpc                     tqm8560_defconfig    gcc-15.1.0
-powerpc64             randconfig-001-20251218    gcc-8.5.0
-powerpc64             randconfig-002-20251218    gcc-8.5.0
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    clang-22
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    gcc-15.1.0
-riscv                    nommu_virt_defconfig    gcc-15.1.0
-riscv                 randconfig-001-20251218    gcc-8.5.0
-riscv                 randconfig-002-20251218    gcc-8.5.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    gcc-15.1.0
-s390                  randconfig-001-20251218    gcc-8.5.0
-s390                  randconfig-002-20251218    gcc-8.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    clang-22
-sh                               allyesconfig    clang-19
-sh                        apsh4ad0a_defconfig    gcc-15.1.0
-sh                                  defconfig    gcc-14
-sh                          r7780mp_defconfig    clang-22
-sh                    randconfig-001-20251218    gcc-8.5.0
-sh                    randconfig-002-20251218    gcc-8.5.0
-sh                           se7750_defconfig    clang-22
-sh                          urquell_defconfig    gcc-15.1.0
-sparc                             allnoconfig    clang-22
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251218    gcc-15.1.0
-sparc                 randconfig-002-20251218    gcc-15.1.0
-sparc                       sparc32_defconfig    clang-22
-sparc64                          allmodconfig    clang-22
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20251218    gcc-15.1.0
-sparc64               randconfig-002-20251218    gcc-15.1.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-15.1.0
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251218    gcc-15.1.0
-um                    randconfig-002-20251218    gcc-15.1.0
-um                           x86_64_defconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-22
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20251218    gcc-14
-x86_64      buildonly-randconfig-002-20251218    gcc-14
-x86_64      buildonly-randconfig-003-20251218    gcc-14
-x86_64      buildonly-randconfig-004-20251218    gcc-14
-x86_64      buildonly-randconfig-005-20251218    gcc-14
-x86_64      buildonly-randconfig-006-20251218    gcc-14
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20251218    clang-20
-x86_64                randconfig-002-20251218    clang-20
-x86_64                randconfig-003-20251218    clang-20
-x86_64                randconfig-004-20251218    clang-20
-x86_64                randconfig-005-20251218    clang-20
-x86_64                randconfig-006-20251218    clang-20
-x86_64                randconfig-011-20251218    gcc-14
-x86_64                randconfig-012-20251218    gcc-14
-x86_64                randconfig-013-20251218    gcc-14
-x86_64                randconfig-014-20251218    gcc-14
-x86_64                randconfig-015-20251218    gcc-14
-x86_64                randconfig-016-20251218    gcc-14
-x86_64                randconfig-071-20251218    gcc-12
-x86_64                randconfig-072-20251218    gcc-12
-x86_64                randconfig-073-20251218    gcc-12
-x86_64                randconfig-074-20251218    gcc-12
-x86_64                randconfig-075-20251218    gcc-12
-x86_64                randconfig-076-20251218    gcc-12
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    clang-22
-xtensa                           allyesconfig    clang-22
-xtensa                randconfig-001-20251218    gcc-15.1.0
-xtensa                randconfig-002-20251218    gcc-15.1.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  drivers/usb/host/ohci-nxp.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
+> index 9a05828bbba1..7663f2aa35e9 100644
+> --- a/drivers/usb/host/ohci-nxp.c
+> +++ b/drivers/usb/host/ohci-nxp.c
+> @@ -198,7 +198,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+>  	hcd->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>  	if (IS_ERR(hcd->regs)) {
+>  		ret = PTR_ERR(hcd->regs);
+> -		goto fail_resource;
+> +		goto err_put_hcd;
+>  	}
+>  	hcd->rsrc_start = res->start;
+>  	hcd->rsrc_len = resource_size(res);
+> @@ -206,7 +206,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+>  	irq = platform_get_irq(pdev, 0);
+>  	if (irq < 0) {
+>  		ret = -ENXIO;
+> -		goto fail_resource;
+> +		goto err_put_hcd;
+>  	}
+>  
+>  	ohci_nxp_start_hc();
+> @@ -220,7 +220,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	ohci_nxp_stop_hc();
+> -fail_resource:
+> +err_put_hcd:
+>  	usb_put_hcd(hcd);
+>  err_put_client:
+>  	put_device(&isp1301_i2c_client->dev);
+> -- 
+> 2.51.2
+> 
 
