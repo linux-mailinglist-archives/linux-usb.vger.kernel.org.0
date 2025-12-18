@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-31577-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31580-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11716CCC430
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BE65CCC431
 	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 15:24:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7C98330E4750
+	by sea.lore.kernel.org (Postfix) with ESMTP id 97E1B30E477B
 	for <lists+linux-usb@lfdr.de>; Thu, 18 Dec 2025 14:20:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A33D2877F4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C78828851E;
 	Thu, 18 Dec 2025 14:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L1qogwPG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="up+ynGcy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80B423D7FF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D36260566;
 	Thu, 18 Dec 2025 14:20:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766067646; cv=none; b=kLBjW9BI2ekgAgbwSY7o6ibPfgDIpwFPlp2JW/d4MUYKbCUghp+0Y8MT+3MHffX2d6YYGkqjQh7wQQXl09nO3tRFkrmaX3lURTCCZcL5bYQigvY7yRWqCA6kE+ucYqEYWomxIQcIOx/3g6CwxddXqWNhHSj1rKqmraLmHj7SokE=
+	t=1766067647; cv=none; b=u7S/ZxXRmCoELRv16gjgnR1av9HJoI5GsTloyNaqCRSjDnQN/JYM94mrqLLlbg4jCosYbwU5uXxp5HZ/APk9/e/+kq5+Aonaz4fPrph1UjJMJtcceRIj/t/O06xW6vL49qMANteSiMA7hxibJOw1JrQ4PRrkwRv9nXQ14l01A3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766067646; c=relaxed/simple;
-	bh=FhwZAwxk5GSdjJw5kwHI4Ojzyh/ABP7YaR9bgf68cMY=;
+	s=arc-20240116; t=1766067647; c=relaxed/simple;
+	bh=ZoOMPbu15uszbv6DNmVkTA9G5hpJWLOSYd86M5kLijs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GUWKdwcpoL1g/pNskdbUgKes49bVtC8wDUAw0SleRDMnLNuGh4rh+n9clMQ2BQSSlbJm5lCz7zaCfKxBYOdSiBK0IihfICAUVV6u/0ZtCn6+zyPQPIYDeUa4lAgFkXGi21hT5bMzkK4+3Vyy7ojYU0msOc9vZLWZOOfyGY85PP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L1qogwPG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BC1C19422;
+	 MIME-Version; b=ZatylDpJTE522zMVzj/NyjPB4oWJOV9XDCapNx0lgaWxVXnEhJxCUmLNNvTziyuEd5+j5FZKjnb54X0gz3avfRfFad0rBtM8xg/w9EM61aBOW3bIBP1rAJ+KGid1sUPCNK74al1xmtNx1Cx9HLwIut+3NxrhI8vJueknwadJ75A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=up+ynGcy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B941C19421;
 	Thu, 18 Dec 2025 14:20:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1766067646;
-	bh=FhwZAwxk5GSdjJw5kwHI4Ojzyh/ABP7YaR9bgf68cMY=;
+	bh=ZoOMPbu15uszbv6DNmVkTA9G5hpJWLOSYd86M5kLijs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=L1qogwPGzBaD9hwd1h9D1mHjLUEBpD5l1/ZK3BjjYX3SpxgvGhse9RArBzhNoWXO7
-	 0GmQbr30h9PB0Zc/m63Yn1iDySyU1z7acpVCnoKNMI/cZwKKlsoOeOy40Wo9VRIMm2
-	 PxT28n4IT2/7/j54z2fjqFASMRbcxR1jJUc9CVYGsOQAuYqYctyXfxb7QY0wbt4Fqp
-	 Knlr46/nLtmrUVmmPCyfeqDySD3YkVf3XJwmNgtquvRSBPjEGL1QJIFyYwZnV0tFJI
-	 Q+pKBm5109VsuSJgW/2gd+He05jVJ1ujP5gw8urqnUbKa/owbtAfk9KVrU6SBVYFY+
-	 /ztM9f1rQENxA==
+	b=up+ynGcyvTia1cbBevKvKgN+sJ0JztDcjqoXnmXolQIbdGojikh4G4M3vzwoPIKub
+	 tLN35WOwM9b3e5CYr8n2evL23Ly+FWYZ5VKM0E/GTgOupbr8aOYB6F6SazFGpdnUM3
+	 iB3Jfm/jj0/3CKZmM+PVJygQo+vPLW8pem5ADUQ7gCMbSLtNwVOOdpBSaKiKi7pEJL
+	 pCTs2EJxAP2O5+ivdm+Od8g53DOh3crkQAwURCIav0VbeHR3C7GY5UqjEvSmjU8Hk1
+	 8/RvAWgFbUJ3zBLiM0qvc+omFK6YUVIBuxmmLd+zAeleUfPl/OXcv3nwJScmyk+Hjl
+	 CMNVqepCL9IoA==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1vWEs0-000000001YL-3cGR;
+	id 1vWEs0-000000001YO-42Jo;
 	Thu, 18 Dec 2025 15:20:44 +0100
 From: Johan Hovold <johan@kernel.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -51,11 +51,10 @@ Cc: Vladimir Zapolskiy <vz@mleia.com>,
 	Ma Ke <make24@iscas.ac.cn>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH 3/5] usb: ohci-nxp: fix device leak on probe failure
-Date: Thu, 18 Dec 2025 15:19:43 +0100
-Message-ID: <20251218141945.5884-4-johan@kernel.org>
+	Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4/5] usb: gadget: lpc32xx_udc: clean up probe error labels
+Date: Thu, 18 Dec 2025 15:19:44 +0100
+Message-ID: <20251218141945.5884-5-johan@kernel.org>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20251218141945.5884-1-johan@kernel.org>
 References: <20251218141945.5884-1-johan@kernel.org>
@@ -67,75 +66,100 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Make sure to drop the reference taken when looking up the PHY I2C device
-during probe on probe failure (e.g. probe deferral) and on driver
-unbind.
+Error labels should be named after what they do rather than after from
+where they are jumped to.
 
-Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
-Cc: stable@vger.kernel.org	# 3.5
-Reported-by: Ma Ke <make24@iscas.ac.cn>
-Link: https://lore.kernel.org/lkml/20251117013428.21840-1-make24@iscas.ac.cn/
+Rename the probe error labels for consistency and to improve
+readability.
+
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/host/ohci-nxp.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/udc/lpc32xx_udc.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-index 24d5a1dc5056..9a05828bbba1 100644
---- a/drivers/usb/host/ohci-nxp.c
-+++ b/drivers/usb/host/ohci-nxp.c
-@@ -169,13 +169,13 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
- 
- 	ret = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
- 	if (ret)
--		goto fail_disable;
-+		goto err_put_client;
- 
- 	dev_dbg(&pdev->dev, "%s: " DRIVER_DESC " (nxp)\n", hcd_name);
- 	if (usb_disabled()) {
- 		dev_err(&pdev->dev, "USB is disabled\n");
- 		ret = -ENODEV;
--		goto fail_disable;
-+		goto err_put_client;
+diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
+index a962d4294fbe..83c7e243dcf9 100644
+--- a/drivers/usb/gadget/udc/lpc32xx_udc.c
++++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+@@ -3084,7 +3084,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	if (!udc->udca_v_base) {
+ 		dev_err(udc->dev, "error getting UDCA region\n");
+ 		retval = -ENOMEM;
+-		goto i2c_fail;
++		goto err_disable_clk;
+ 	}
+ 	udc->udca_p_base = dma_handle;
+ 	dev_dbg(udc->dev, "DMA buffer(0x%x bytes), P:0x%08x, V:0x%p\n",
+@@ -3097,7 +3097,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	if (!udc->dd_cache) {
+ 		dev_err(udc->dev, "error getting DD DMA region\n");
+ 		retval = -ENOMEM;
+-		goto dma_alloc_fail;
++		goto err_free_dma;
  	}
  
- 	/* Enable USB host clock */
-@@ -183,7 +183,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
- 	if (IS_ERR(usb_host_clk)) {
- 		dev_err(&pdev->dev, "failed to acquire and start USB OHCI clock\n");
- 		ret = PTR_ERR(usb_host_clk);
--		goto fail_disable;
-+		goto err_put_client;
+ 	/* Clear USB peripheral and initialize gadget endpoints */
+@@ -3111,14 +3111,14 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	if (retval < 0) {
+ 		dev_err(udc->dev, "LP request irq %d failed\n",
+ 			udc->udp_irq[IRQ_USB_LP]);
+-		goto irq_req_fail;
++		goto err_destroy_pool;
+ 	}
+ 	retval = devm_request_irq(dev, udc->udp_irq[IRQ_USB_HP],
+ 				  lpc32xx_usb_hp_irq, 0, "udc_hp", udc);
+ 	if (retval < 0) {
+ 		dev_err(udc->dev, "HP request irq %d failed\n",
+ 			udc->udp_irq[IRQ_USB_HP]);
+-		goto irq_req_fail;
++		goto err_destroy_pool;
  	}
  
- 	isp1301_configure();
-@@ -192,7 +192,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
- 	if (!hcd) {
- 		dev_err(&pdev->dev, "Failed to allocate HC buffer\n");
- 		ret = -ENOMEM;
--		goto fail_disable;
-+		goto err_put_client;
+ 	retval = devm_request_irq(dev, udc->udp_irq[IRQ_USB_DEVDMA],
+@@ -3126,7 +3126,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	if (retval < 0) {
+ 		dev_err(udc->dev, "DEV request irq %d failed\n",
+ 			udc->udp_irq[IRQ_USB_DEVDMA]);
+-		goto irq_req_fail;
++		goto err_destroy_pool;
  	}
  
- 	hcd->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-@@ -222,7 +222,8 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
- 	ohci_nxp_stop_hc();
- fail_resource:
- 	usb_put_hcd(hcd);
--fail_disable:
-+err_put_client:
-+	put_device(&isp1301_i2c_client->dev);
- 	isp1301_i2c_client = NULL;
- 	return ret;
- }
-@@ -234,6 +235,7 @@ static void ohci_hcd_nxp_remove(struct platform_device *pdev)
- 	usb_remove_hcd(hcd);
- 	ohci_nxp_stop_hc();
- 	usb_put_hcd(hcd);
-+	put_device(&isp1301_i2c_client->dev);
- 	isp1301_i2c_client = NULL;
- }
+ 	/* The transceiver interrupt is used for VBUS detection and will
+@@ -3137,7 +3137,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	if (retval < 0) {
+ 		dev_err(udc->dev, "VBUS request irq %d failed\n",
+ 			udc->udp_irq[IRQ_USB_ATX]);
+-		goto irq_req_fail;
++		goto err_destroy_pool;
+ 	}
  
+ 	/* Initialize wait queue */
+@@ -3146,7 +3146,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 
+ 	retval = usb_add_gadget_udc(dev, &udc->gadget);
+ 	if (retval < 0)
+-		goto add_gadget_fail;
++		goto err_destroy_pool;
+ 
+ 	dev_set_drvdata(dev, udc);
+ 	device_init_wakeup(dev, 1);
+@@ -3158,13 +3158,12 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	dev_info(udc->dev, "%s version %s\n", driver_name, DRIVER_VERSION);
+ 	return 0;
+ 
+-add_gadget_fail:
+-irq_req_fail:
++err_destroy_pool:
+ 	dma_pool_destroy(udc->dd_cache);
+-dma_alloc_fail:
++err_free_dma:
+ 	dma_free_coherent(&pdev->dev, UDCA_BUFF_SIZE,
+ 			  udc->udca_v_base, udc->udca_p_base);
+-i2c_fail:
++err_disable_clk:
+ 	clk_disable_unprepare(udc->usb_slv_clk);
+ err_put_client:
+ 	put_device(&udc->isp1301_i2c_client->dev);
 -- 
 2.51.2
 
