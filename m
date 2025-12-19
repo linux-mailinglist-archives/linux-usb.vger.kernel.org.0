@@ -1,181 +1,140 @@
-Return-Path: <linux-usb+bounces-31635-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31636-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59153CCF115
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 09:58:12 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EED7CCFE25
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 13:49:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 805A8304C1C6
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 08:57:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1272D30223E1
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 12:49:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20ED92EC563;
-	Fri, 19 Dec 2025 08:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED0C329E65;
+	Fri, 19 Dec 2025 12:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="MmcJhdaV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fU+CFVns"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx-relay122-hz1.antispameurope.com (mx-relay122-hz1.antispameurope.com [94.100.132.114])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EEA2BDC03
-	for <linux-usb@vger.kernel.org>; Fri, 19 Dec 2025 08:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.132.114
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766134627; cv=pass; b=TNwf1pm1Zen3kheE/TqvGvsAGF+sFlCqMSdc/tJJXEEBdmQFXpaGCHTB2DISPIyyV0H4p6BcSuy8X8l3pEwvNmv1L3tmNrS4keY0KJq2GidkwWoZ5Ljb3AKmu7NaoOH0q7iRB+um+4o7dGo4EP6tTwYjQ/iCWcu4k6XtZ1nCJMY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766134627; c=relaxed/simple;
-	bh=BDiH1mpKIlJOp3ZxWBeYxiYLVyM0lqkiGH2JKubyH6A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fs19IYSfakpDzd3A+hDnMFC/raW+U9Iose1W+gUYuL4Vp/exmLeGIq76+4QlUee38omdt+LLljfOrAynIfMsbKjV7s52SByfMJw9oopMRlDVehAjUh0rAnkqFuA6/I7cAhJjtcW4GTvHsy5ttuP1HxMfqngDsEQl8o0waMYGVG4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=MmcJhdaV; arc=pass smtp.client-ip=94.100.132.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-ARC-Authentication-Results: i=1; mx-gate122-hz1.hornetsecurity.com 1;
- spf=pass reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
- smtp.mailfrom=ew.tq-group.com smtp.helo=smtp-out01-hz1.hornetsecurity.com;
- dmarc=pass header.from=ew.tq-group.com orig.disposition=pass
-ARC-Message-Signature: a=rsa-sha256;
- bh=W8AHnpnpM3XjqYhTIhCiVYGeLezuM8A5xZRbfy0K3Bs=; c=relaxed/relaxed;
- d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
- t=1766134563;
- b=opToWVkzOhU/+9gHxzwXdzHKwePQD6mw+pR8DWTUH9OqQIRKkB5+MYB4tVYU72iyFXf+g1+2
- 3R6Qp2TffxfEYbNZ06awAhJV2V50mfnUvLkxF03vMRN7TMlyJivdxswtIgFK9imGQ8GRrZjyYu+
- PWr90GJA03sZEPX4gcE0/ZKjRouk22TEq7n+pGg88D8gafLGkJSTwoUsoh3I9pJ3KeiJipO/TMt
- GZzhcyesvH+zkYYHInfODXyTvySYsyp3MlCdMRxKVPowbSGrtwNVW90zy7GyI1t2mgUUCqixJXj
- jRF9e6pxXHKkcMMKVkFjCDuPOOH89BLmiLK9CKxh9pl7g==
-ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
- t=1766134563;
- b=BLtRxWx3CWBUjXUaKqfO0c55B3b7z1gGOjP1Iws8u8rUWk+DAYZmsyNASflWpsLL9GT+TRpw
- IJ0ZIXNxQxcLl6uzG0MehkvAkg7M10ot22hbB4nIyDVJaWY0+BNM8fomnnqJRAo+AfOHA+NRHmE
- MKIpoUauKhJ0duefLCkdfr5ImiFv2sbuDvrRTh4fed4NLKixTQhgfojym9svQTr1Cupj0oYgQoT
- vz/bJeQqU/dt4qkyovIxxzk3gNScK3DDIp3Ee5Zk8tAdYyzdTm/y7PFHIFl7NDq6aMC+uA/mZFs
- TDRwbM5HUEDQdbkfnt4eVlN3UljJdlPUR2l8YzWO63Ifw==
-Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay122-hz1.antispameurope.com;
- Fri, 19 Dec 2025 09:56:03 +0100
-Received: from steina-w.localnet (host-82-135-125-110.customer.m-online.net [82.135.125.110])
-	(Authenticated sender: alexander.stein@ew.tq-group.com)
-	by smtp-out01-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 6FEDAA4140A;
-	Fri, 19 Dec 2025 09:55:39 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
- Roger Quadros <rogerq@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Magnus Damm <magnus.damm@gmail.com>,
- Marek Vasut <marex@denx.de>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-usb@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux@ew.tq-group.com
-Subject: Re: [PATCH 3/6] arm64: dts: imx8qm-ss-hsio: Wire up DMA IRQ for PCIe
-Date: Fri, 19 Dec 2025 09:55:38 +0100
-Message-ID: <10076440.NyiUUSuA9g@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20251218152058.1521806-4-alexander.stein@ew.tq-group.com>
-References:
- <20251218152058.1521806-1-alexander.stein@ew.tq-group.com>
- <20251218152058.1521806-4-alexander.stein@ew.tq-group.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2382F25FB;
+	Fri, 19 Dec 2025 12:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766148544; cv=none; b=fL+3k+OIQAQ3l5D9cODzDGqPnOKaTlH18uJBrP7VyCDIYw2IhgJcZHys7T0cHD6ls4lKWygwJXcXT2hS8P+Sf9RPKVWDfA5WmtbIqSEzmFSkaljTr/C791Q+h9gzCiMtOGWK6LokfLOEVDZDjljY11MK9D13Bx8zlonz0tK7Kes=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766148544; c=relaxed/simple;
+	bh=vNoLmA6jXFHjaxRGMII6E8iSvRmtYfcJwVtOQJJhIqU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hzH6LCrG5mZgrkAQJtJs3A31GQUfXfRmOVeDHij3rVqLq3/4Hy1/YyoUrcZORULQUoPCSNCsk4QYY5+m/OUqCf/EIMZKeZrskO4HLFDbdkMcSSz3A2Qvns61aCsevgzLHr2KSqP6j4XWQfeS2RIym+zY5f3RKH855mvTANrPR7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fU+CFVns; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766148543; x=1797684543;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vNoLmA6jXFHjaxRGMII6E8iSvRmtYfcJwVtOQJJhIqU=;
+  b=fU+CFVnsLbS+caBpMKdzP6RLT6pznHnDIqokqTQrCXGyZOo1n7aJwdsN
+   DmoCzljYu5aoC3U2fS6HJH3SlHRv2KzB551sR7tGu4pCOBLkxBitc4sZk
+   LQtJWbpbChEDNMs4J4Aim7xANOhzwTV8V7DHs2uPwoKrHHMsGoDBJSQrL
+   kND4h1eKXrl0EPYMRzZREjQTkZzsxQfufWOG1RqKajObEtDibDaitVEv2
+   B8uXrJPoO3zgPClVKkoaTKHc4TeQWGRC4Ue3yRVcO/UgTPCF0ABdu9cIG
+   ZXJBUSNssvU70gLoDyx+IAsEUMFdN3ExEYCcDHaLl63jPy0fAdvcIKEzO
+   w==;
+X-CSE-ConnectionGUID: 2G4hAOHVTSCAKvxOsnFa0Q==
+X-CSE-MsgGUID: n9O5K0K/SxOlOkGDfpj7cw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="71739178"
+X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
+   d="scan'208";a="71739178"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 04:49:03 -0800
+X-CSE-ConnectionGUID: rzdh/xfCSyuKW723v+vgXw==
+X-CSE-MsgGUID: 9XKaticPQtOjSNIWKK747w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
+   d="scan'208";a="199108598"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO [10.245.245.43]) ([10.245.245.43])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 04:49:00 -0800
+Message-ID: <4935bdf5-4d36-45c3-9bcd-9d14606dd54e@linux.intel.com>
+Date: Fri, 19 Dec 2025 14:48:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart3460692.usQuhbGJ8B";
- micalg="pgp-sha512"; protocol="application/pgp-signature"
-X-cloud-security-sender:alexander.stein@ew.tq-group.com
-X-cloud-security-recipient:linux-usb@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Mailarchiv: E-Mail archived for: alexander.stein@ew.tq-group.com
-X-cloud-security-Mailarchivtype:outbound
-X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay122-hz1.antispameurope.com with 4dXhFm4fp5z34Lby
-X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
-X-cloud-security-Digest:0c47e991cdd1e2cd38041c89430f069c
-X-cloud-security:scantime:2.240
-DKIM-Signature: a=rsa-sha256;
- bh=W8AHnpnpM3XjqYhTIhCiVYGeLezuM8A5xZRbfy0K3Bs=; c=relaxed/relaxed;
- d=ew.tq-group.com;
- h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
- t=1766134562; v=1;
- b=MmcJhdaVOa6vomYVg2EzQeSm4d9Jf5o/vhsYfrVogdQsyU8FNlbw/qZBj3HyYH/lT6RMCIH3
- f9fGm+EuNUIxC1MDSk1xr92me2P58lH3EO7frsKuJ/CJy/H6pH2istY+vYF5TMjn53P4MDA06jP
- MNX7jYc/ZpmBMZnCLYZpNYiKuCJ6lQbLxpq6k3Hj+9MYarXLQ5gjcvmKB/twA+ivCIABw22rv4I
- qPY9ipIE1XciOspxH6/G6PEb+00qsPMbkL7SxQEng1frREGvsQAWlPyrHqKMC8JHCM+DPijJm7d
- njnQWEJLFD0wGkjfJD0/wXX5ksbq1d64fvs4pvW3bY+Ng==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: xhci: check Null pointer in segment alloc
+To: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sarah Sharp <sarah.a.sharp@linux.intel.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---nextPart3460692.usQuhbGJ8B
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"; protected-headers="v1"
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-Date: Fri, 19 Dec 2025 09:55:38 +0100
-Message-ID: <10076440.NyiUUSuA9g@steina-w>
-Organization: TQ-Systems GmbH
-MIME-Version: 1.0
+On 12/19/25 09:18, 胡连勤 wrote:
+> From: Lianqin Hu <hulianqin@vivo.com>
+> 
+> Considering that in some extreme cases,
+> when a digital headset is connected and a wake-up
+> operation is performed,if the headset is plug out
+> or the headset connection is abnormally disconnected at this time,
+> segment_pool will be set to null, resulting in accessing a null pointer.
+> 
+> So, add null pointer checks to fix the problem.
+> 
+> Call trace:
+>   dma_pool_alloc+0x3c/0x248
+>   xhci_segment_alloc+0x9c/0x184
+>   xhci_alloc_segments_for_ring+0xcc/0x1cc
+>   xhci_ring_alloc+0xc4/0x1a8
+>   xhci_endpoint_init+0x36c/0x4ac
+>   xhci_add_endpoint+0x18c/0x2a4
+>   usb_hcd_alloc_bandwidth+0x384/0x3e4
+>   usb_set_interface+0x144/0x510
+>   usb_reset_and_verify_device+0x248/0x5fc
+>   usb_port_resume+0x580/0x700
+>   usb_generic_driver_resume+0x24/0x5c
+>   usb_resume_both+0x104/0x32c
+>   usb_runtime_resume+0x18/0x28
+>   __rpm_callback+0x94/0x3d4
+>   rpm_resume+0x3f8/0x5fc
+>   rpm_resume+0x1fc/0x5fc
+> 
+> Fixes: 0ebbab374223 ("USB: xhci: Ring allocation and initialization.")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
+> 
+>   drivers/usb/host/xhci-mem.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> index c708bdd69f16..2ea5fb810a80 100644
+> --- a/drivers/usb/host/xhci-mem.c
+> +++ b/drivers/usb/host/xhci-mem.c
+> @@ -35,6 +35,9 @@ static struct xhci_segment *xhci_segment_alloc(struct xhci_hcd *xhci,
+>   	dma_addr_t	dma;
+>   	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+>   
+> +	if (!xhci->segment_pool)
+> +		return NULL;
+> +
 
-Am Donnerstag, 18. Dezember 2025, 16:20:50 CET schrieb Alexander Stein:
-> IRQ mapping is already present. Add the missing DMA interrupt. This is
-> similar to commit 0b4c46f9ad79c ("arm64: dts: imx8qm-ss-hsio: Wire up
-> DMA IRQ for PCIe")
->=20
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8qm-ss-hsio.dtsi | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/arm64/boot/dts/freescale/imx8qm-ss-hsio.dtsi b/arch/arm=
-64/boot/dts/freescale/imx8qm-ss-hsio.dtsi
-> index bd6e0aa27efe9..f2c94cdb682b9 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8qm-ss-hsio.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8qm-ss-hsio.dtsi
-> @@ -20,8 +20,9 @@ pcie0: pciea: pcie@5f000000 {
->  		ranges =3D <0x81000000 0 0x00000000 0x4ff80000 0 0x00010000>,
->  			 <0x82000000 0 0x40000000 0x40000000 0 0x0ff00000>;
->  		#interrupt-cells =3D <1>;
-> -		interrupts =3D <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
-> -		interrupt-names =3D "msi";
-> +		interrupts =3D <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>,
-> +			     <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-names =3D "msi", "dma";
->  		#address-cells =3D <3>;
->  		#size-cells =3D <2>;
->  		clocks =3D <&pciea_lpcg IMX_LPCG_CLK_6>,
->=20
+The xhci->segment_pool is created in xhci_mem_init() and destroyed in xhci_mem_cleanup().
+It should never be NULL when xhci driver tries to allocate a ring segment.
 
-This one is actually independent of the rest in this series and can be
-picked on it's own, especially as I won't be able to work on the board
-support until February. I just wanted to give some context / usage.
+If you can trigger a null pointer dereference here, then please share a backtrace.
+There is likely something else is wrong that needs to be fixed.
 
-Best regards,
-Alexander
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
---nextPart3460692.usQuhbGJ8B
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEByESxqszIvkmWRwbaS+g2M0Z/iUFAmlFEwsACgkQaS+g2M0Z
-/iVAFAf/c5CwO26Ggu/BI/ZSuZzcaL1LqCQ6HXiIkEKJpXXjrmbMAJ6LFFIo9ARY
-MP753fb/XeCGm0ozq9rvZEfe+MQ+SYFD3GV3cNRmU59JwwBNpErTOw/jXOC67y+Q
-hASUB/UEN5V7UtxEUMARpH7N0PodmW0cIQwceQoO9T9S0n+g4OwjIJV+0T7/LHx5
-LOh++EEOGH/KbeOtVKwmDY/mvlYFJcO5TxNbvYfo8OrT/3PltCu2awfi+ZSOac5l
-ATtxTkihCWtUFHeXYtwteS0hDXOoldi4A1137WzS5MNWkCeq8TxB/F3Fk3sKSHJk
-7U2L6kHUhAjtsnQPLnIQ4yuhF7BL4w==
-=Pd9W
------END PGP SIGNATURE-----
-
---nextPart3460692.usQuhbGJ8B--
+Thanks
+Mathias
 
 
 
