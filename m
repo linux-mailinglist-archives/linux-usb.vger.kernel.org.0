@@ -1,140 +1,191 @@
-Return-Path: <linux-usb+bounces-31636-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31637-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EED7CCFE25
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 13:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35958CCFFF1
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 14:14:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1272D30223E1
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 12:49:08 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9ED8F3028316
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 13:12:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED0C329E65;
-	Fri, 19 Dec 2025 12:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E165B3009F7;
+	Fri, 19 Dec 2025 13:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fU+CFVns"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="ackrrqks"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2382F25FB;
-	Fri, 19 Dec 2025 12:49:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766148544; cv=none; b=fL+3k+OIQAQ3l5D9cODzDGqPnOKaTlH18uJBrP7VyCDIYw2IhgJcZHys7T0cHD6ls4lKWygwJXcXT2hS8P+Sf9RPKVWDfA5WmtbIqSEzmFSkaljTr/C791Q+h9gzCiMtOGWK6LokfLOEVDZDjljY11MK9D13Bx8zlonz0tK7Kes=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766148544; c=relaxed/simple;
-	bh=vNoLmA6jXFHjaxRGMII6E8iSvRmtYfcJwVtOQJJhIqU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hzH6LCrG5mZgrkAQJtJs3A31GQUfXfRmOVeDHij3rVqLq3/4Hy1/YyoUrcZORULQUoPCSNCsk4QYY5+m/OUqCf/EIMZKeZrskO4HLFDbdkMcSSz3A2Qvns61aCsevgzLHr2KSqP6j4XWQfeS2RIym+zY5f3RKH855mvTANrPR7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fU+CFVns; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766148543; x=1797684543;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vNoLmA6jXFHjaxRGMII6E8iSvRmtYfcJwVtOQJJhIqU=;
-  b=fU+CFVnsLbS+caBpMKdzP6RLT6pznHnDIqokqTQrCXGyZOo1n7aJwdsN
-   DmoCzljYu5aoC3U2fS6HJH3SlHRv2KzB551sR7tGu4pCOBLkxBitc4sZk
-   LQtJWbpbChEDNMs4J4Aim7xANOhzwTV8V7DHs2uPwoKrHHMsGoDBJSQrL
-   kND4h1eKXrl0EPYMRzZREjQTkZzsxQfufWOG1RqKajObEtDibDaitVEv2
-   B8uXrJPoO3zgPClVKkoaTKHc4TeQWGRC4Ue3yRVcO/UgTPCF0ABdu9cIG
-   ZXJBUSNssvU70gLoDyx+IAsEUMFdN3ExEYCcDHaLl63jPy0fAdvcIKEzO
-   w==;
-X-CSE-ConnectionGUID: 2G4hAOHVTSCAKvxOsnFa0Q==
-X-CSE-MsgGUID: n9O5K0K/SxOlOkGDfpj7cw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="71739178"
-X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="71739178"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 04:49:03 -0800
-X-CSE-ConnectionGUID: rzdh/xfCSyuKW723v+vgXw==
-X-CSE-MsgGUID: 9XKaticPQtOjSNIWKK747w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="199108598"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO [10.245.245.43]) ([10.245.245.43])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 04:49:00 -0800
-Message-ID: <4935bdf5-4d36-45c3-9bcd-9d14606dd54e@linux.intel.com>
-Date: Fri, 19 Dec 2025 14:48:58 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F31021ABDC;
+	Fri, 19 Dec 2025 13:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766149946; cv=pass; b=kHa+Rpz2zvWKGnCd2JMcDPKxzz27I44GfPYA23M7rowPUdpCgOBA2BAo/UBOK+uSPW2a865JsP0v7zsGRQxYcjuH+jFmSeO4mg1bvC9g9YqRE+vr6X0l4twgrlPNc86eCMggGi42zZqVeyjguqZ1nrdXrP+Lozzn++nvQDyAZkg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766149946; c=relaxed/simple;
+	bh=sB0pU3XzDtEZyPXrJ9MhP+taMGJeMC32bcB98EmLKxo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=F4GGmNU0i9FKmq9uTQOL/Y4L50ozMjqdv+Ib543k4O8y7jQVcAAv0vRMITtq/mBsVXI3Nf/3PK2TfDaz4BkVPsgmH0On2M8faIlMR58WrrrHDxlwt1cW3feRMDl+jmGV+NdrBHZucFcqDCjQCkWpZe+W9OYBgyGKOSpyNzmBcEk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=ackrrqks; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1766149902; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=h/1Nxtxor5f2a0qadiTmKCU5OxnryxbhKgFwOw3mXeZ9d89pwjCzkG+JPBqd9F2iFNpb/O+Ey2aMUHj5M8DrWI6YOUy/NpRPeBteYLTUCSNtEDDoqgTKZ8jKR9//4NxJmNRcw5GECRsV7f54bkeXQRsuGDIAhC/awok0Dyx8UdU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1766149902; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=9+kwT7cTq8h6pPJlieCyoVIEFRzcWrfER4cYYgnn5ko=; 
+	b=Io4vh9lil4++o9Pgd90SbW4WC3i1fh2mxSuafjRhwJVu9OCrNUDA+BoKLec6ZkIaS/O1WbjGPxqENq1Uq9mWWAvdE4aUwi957R5tWIFYCXYk5TzZqa/CUdjyawjJiV7HQZYpwu0ylsnCtxsW7/AMsmXMH6XUtuBDJxz6zdcNQyI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1766149902;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=9+kwT7cTq8h6pPJlieCyoVIEFRzcWrfER4cYYgnn5ko=;
+	b=ackrrqksLxL3+DfSFCyDNvDpORh4y2VN8InPMjWmukQJbb4N/Py0yRXvfLdwHIno
+	6r8elofRE1gA855pd4a0nliNuxvNuIL/DGNdygApgHjmMgI4oTrTOtHWUYrGdLMD1WW
+	XL8cyVBclhFeHyHZmRPmAk7XrUgVOp1gq9Hyaqkc=
+Received: by mx.zohomail.com with SMTPS id 17661499003347.950368020915107;
+	Fri, 19 Dec 2025 05:11:40 -0800 (PST)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Yury Norov <yury.norov@gmail.com>, david.laight.linux@gmail.com
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, Crt Mori <cmo@melexis.com>,
+ Richard Genoud <richard.genoud@bootlin.com>,
+ Andy Shevchenko <andriy.shevchenko@intel.com>,
+ Luo Jie <quic_luoj@quicinc.com>, Peter Zijlstra <peterz@infradead.org>,
+ Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+ "David S . Miller" <davem@davemloft.net>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject:
+ Re: [PATCH v2 03/16] bitmap: Use FIELD_PREP() in expansion of
+ FIELD_PREP_WM16()
+Date: Fri, 19 Dec 2025 14:11:33 +0100
+Message-ID: <7313978.lOV4Wx5bFT@workhorse>
+In-Reply-To: <aUNHyjKS9b2KwdGJ@yury>
+References:
+ <20251212193721.740055-1-david.laight.linux@gmail.com>
+ <5257288.LvFx2qVVIh@workhorse> <aUNHyjKS9b2KwdGJ@yury>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: xhci: check Null pointer in segment alloc
-To: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sarah Sharp <sarah.a.sharp@linux.intel.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On 12/19/25 09:18, 胡连勤 wrote:
-> From: Lianqin Hu <hulianqin@vivo.com>
+On Thursday, 18 December 2025 01:16:10 Central European Standard Time Yury Norov wrote:
+> On Wed, Dec 17, 2025 at 02:22:32PM +0100, Nicolas Frattaroli wrote:
+> > On Friday, 12 December 2025 20:37:08 Central European Standard Time david.laight.linux@gmail.com wrote:
+> > > From: David Laight <david.laight.linux@gmail.com>
+> > > 
+> > > Instead of directly expanding __BF_FIELD_CHECK() (which really ought
+> > > not be used outside bitfield) and open-coding the generation of the
+> > > masked value, just call FIELD_PREP() and add an extra check for
+> > > the mask being at most 16 bits.
+> > > The extra check is added after calling FIELD_PREP() to get a sane
+> > > error message if 'mask' isn't constant.
+> > > 
+> > > Remove the leading _ from the formal parameter names.
+> > > Prefix the local variables with _wm16_ to hopefully make them
+> > > unique.
+> > > 
+> > > Signed-off-by: David Laight <david.laight.linux@gmail.com>
+> > > ---
+> > > 
+> > > Changes for v2:
+> > > - Update kerneldoc to match changed formal parameter names.
+> > > - Change local variables to not collide with those in FIELD_PREP().
+> > > 
+> > > Most of the examples are constants and get optimised away.
+> > > 
+> > >  include/linux/hw_bitfield.h | 21 ++++++++++-----------
+> > >  1 file changed, 10 insertions(+), 11 deletions(-)
+> > > 
+> > > diff --git a/include/linux/hw_bitfield.h b/include/linux/hw_bitfield.h
+> > > index df202e167ce4..0bd1040a5f93 100644
+> > > --- a/include/linux/hw_bitfield.h
+> > > +++ b/include/linux/hw_bitfield.h
+> > > @@ -12,8 +12,8 @@
+> > >  
+> > >  /**
+> > >   * FIELD_PREP_WM16() - prepare a bitfield element with a mask in the upper half
+> > > - * @_mask: shifted mask defining the field's length and position
+> > > - * @_val:  value to put in the field
+> > > + * @mask: shifted mask defining the field's length and position
+> > > + * @val:  value to put in the field
+> > >   *
+> > >   * FIELD_PREP_WM16() masks and shifts up the value, as well as bitwise ORs the
+> > >   * result with the mask shifted up by 16.
+> > > @@ -23,15 +23,14 @@
+> > >   * register, a bit in the lower half is only updated if the corresponding bit
+> > >   * in the upper half is high.
+> > >   */
+> > > -#define FIELD_PREP_WM16(_mask, _val)					     \
+> > > -	({								     \
+> > > -		typeof(_val) __val = _val;				     \
+> > > -		typeof(_mask) __mask = _mask;				     \
+> > > -		__BF_FIELD_CHECK(__mask, ((u16)0U), __val,		     \
+> > > -				 "HWORD_UPDATE: ");			     \
+> > > -		(((typeof(__mask))(__val) << __bf_shf(__mask)) & (__mask)) | \
+> > > -		((__mask) << 16);					     \
+> > > -	})
+> > > +#define FIELD_PREP_WM16(mask, val)				\
+> > > +({								\
+> > > +	__auto_type _wm16_mask = mask;				\
+> > > +	u32 _wm16_val = FIELD_PREP(_wm16_mask, val);		\
+> > > +	BUILD_BUG_ON_MSG(_wm16_mask > 0xffffu,			\
+> > > +			 "FIELD_PREP_WM16: mask too large");	\
+> > > +	_wm16_val | (_wm16_mask << 16);				\
+> > > +})
+> > >  
+> > >  /**
+> > >   * FIELD_PREP_WM16_CONST() - prepare a constant bitfield element with a mask in
+> > > 
+> > 
+> > Tested-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> > 
+> > Compiled it with my usual config and booted it on a board that uses
+> > drivers that make use of these macros, and checked that things are
+> > working.
 > 
-> Considering that in some extreme cases,
-> when a digital headset is connected and a wake-up
-> operation is performed,if the headset is plug out
-> or the headset connection is abnormally disconnected at this time,
-> segment_pool will be set to null, resulting in accessing a null pointer.
-> 
-> So, add null pointer checks to fix the problem.
-> 
-> Call trace:
->   dma_pool_alloc+0x3c/0x248
->   xhci_segment_alloc+0x9c/0x184
->   xhci_alloc_segments_for_ring+0xcc/0x1cc
->   xhci_ring_alloc+0xc4/0x1a8
->   xhci_endpoint_init+0x36c/0x4ac
->   xhci_add_endpoint+0x18c/0x2a4
->   usb_hcd_alloc_bandwidth+0x384/0x3e4
->   usb_set_interface+0x144/0x510
->   usb_reset_and_verify_device+0x248/0x5fc
->   usb_port_resume+0x580/0x700
->   usb_generic_driver_resume+0x24/0x5c
->   usb_resume_both+0x104/0x32c
->   usb_runtime_resume+0x18/0x28
->   __rpm_callback+0x94/0x3d4
->   rpm_resume+0x3f8/0x5fc
->   rpm_resume+0x1fc/0x5fc
-> 
-> Fixes: 0ebbab374223 ("USB: xhci: Ring allocation and initialization.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
-> 
->   drivers/usb/host/xhci-mem.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index c708bdd69f16..2ea5fb810a80 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -35,6 +35,9 @@ static struct xhci_segment *xhci_segment_alloc(struct xhci_hcd *xhci,
->   	dma_addr_t	dma;
->   	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
->   
-> +	if (!xhci->segment_pool)
-> +		return NULL;
-> +
+> Nicolas, thanks for testing! Would you also want to add an explicit
+> ack or review tag?
 
-The xhci->segment_pool is created in xhci_mem_init() and destroyed in xhci_mem_cleanup().
-It should never be NULL when xhci driver tries to allocate a ring segment.
+Sure!
 
-If you can trigger a null pointer dereference here, then please share a backtrace.
-There is likely something else is wrong that needs to be fixed.
+Reviewed-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
-Thanks
-Mathias
+(not sure if an ack is meaningful for me, since I'm technically not
+the maintainer, but:)
+
+Acked-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
+I've taken some more time to compare the binary outputs with and
+without the change, and they're the same. I've also looked at the
+code itself, and it appears correct (and more correct than the
+original in fact, since I used "HWORD_UPDATE" by accident in the
+error message).
+
+Kind regards,
+Nicolas Frattaroli
+
+> 
+> David, I'm OK with this change. Please add bloat-o-meter and code
+> generation examples, and minimize the diff as I asked in v1, before I
+> can merge it.
+> 
+> Thanks,
+> Yury
+> 
+
 
 
 
