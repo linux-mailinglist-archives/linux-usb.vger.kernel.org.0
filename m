@@ -1,147 +1,118 @@
-Return-Path: <linux-usb+bounces-31626-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31627-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B40EDCCE692
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 05:01:55 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE89BCCEA20
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 07:21:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BB630305A613
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 03:57:43 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6A023302FB77
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 06:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF152BDC03;
-	Fri, 19 Dec 2025 03:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D412BDC0C;
+	Fri, 19 Dec 2025 06:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ysgt2Rh7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from r9220.ps.combzmail.jp (r9220.ps.combzmail.jp [160.16.65.223])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A19A28751D
-	for <linux-usb@vger.kernel.org>; Fri, 19 Dec 2025 03:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.16.65.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4A515746E;
+	Fri, 19 Dec 2025 06:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766116663; cv=none; b=Edwcci4cM4n1rqn14Y5KqO7z7oq1Hn7HhNDiFEBsmGBMY53ji+QBT6tWwy4lU0uQ/nhgEunMF8rl6XkEyxTwxLa6I64HhF49AHqyMAInPxU+kQIuLQkAakRV/aF0BaIQkwJA9bstDlrdQDkAtE7fmF6X0gnQVcz3UHWxvS79Mzw=
+	t=1766125258; cv=none; b=uEG+DOPW67gJXlqHP1slW3FhS9yn65ARgEgKp8JSRRABmgbdz1k/gtWvpVWkBqIv+Qjnmhf2O7dGZIjvkzPaWwk8/JrioVxTZ6Rg55vqwD73CJvgMrb/L11nUX8FLWFetYC12MUnetM1pod9ubFK62s6/fFxCfl3S2OUp1eUAH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766116663; c=relaxed/simple;
-	bh=rxdtig4WuSuZp/vzyTbggKH9HEirYly2qrtPpy17VQw=;
-	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=fSFIyMTwFR1mMW58dYnBIgW6Qnrfh4qvBjMY77HZHioCcL5atwTNxyg+gYrz97sCdoFqNyb5FzG2S8mVeH2MPcY+hsGvg3eBJqq8Rwf7npd40x6Fe6TPXlsm5uVviIdBsTpEXL2Hrumnrsx8g26Yqiv0Osyyv7c+JF+j0lu+Zgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onelife-lab.jp; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=160.16.65.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onelife-lab.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magerr.combzmail.jp
-Received: by r9220.ps.combzmail.jp (Postfix, from userid 99)
-	id 65E66C1639; Fri, 19 Dec 2025 12:45:48 +0900 (JST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 r9220.ps.combzmail.jp 65E66C1639
-To: linux-usb@vger.kernel.org
-From: =?ISO-2022-JP?B?GyRCJVolQyVISl04bjtZMWclOyVfJUohPBsoQg==?= <info@onelife-lab.jp>
-X-Ip: 37381823411250
-X-Ip-source: k85gj77948dnsa46u0p6gd
-Precedence: bulk
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
-Subject: =?ISO-2022-JP?B?GyRCIVYlWiVDJUgwJiFXMG4kbCRrISI3UDFEGyhC?=
- =?ISO-2022-JP?B?GyRCPFRNTSRYGyhC?=
+	s=arc-20240116; t=1766125258; c=relaxed/simple;
+	bh=CFffmxEAlIDNCbiW2RnxGade/KI8oIITcwBqKbPxO98=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WHkLUP6FSDT5rkhoc1zK7szwEuvGkhqN4vF3odHg4dhLseimfZWJb2/c8QwAsrxk0UCZOUIoI6b0FcOOvJANHH+4z11Bb80HKXGNxxtl/Fem+8n7rkVUFP55yBzJkm1P/c3E45ifDZqnp33f5sfFAoQB32pnf6ph3/kL0ISdFT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ysgt2Rh7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDCEFC4CEF1;
+	Fri, 19 Dec 2025 06:20:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766125257;
+	bh=CFffmxEAlIDNCbiW2RnxGade/KI8oIITcwBqKbPxO98=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ysgt2Rh7JdK0aX43AueDcmgI7/CrD+uG/873ohvSZc5tuhbc1T7d0FdVMtPqi4+DX
+	 xNAI4Q8iZGDXUB/+tx0U0kNu1XpDiWwJ6rvVilWEjwK2NaJZnWKOq916fDDJV1KZIy
+	 tJtVXT9WnwgBqZGfUAJqvCJs2dkGAhtbE3VT1NIhDJ8aB0zubynjFJ4eQ9oq3aIXyq
+	 bS4cUFbb+2xtEQWvfbIWaXU76Qbtryd/QmgYbzaFNO/Ol/WRSRLEuKYoWAiQs95iyN
+	 6+bNmOtQDCc3Z2Y/Sa+9uBKCUqW9R666daRtnn+zqB+tA5fli3e4Gb1aPFOOkoUVz4
+	 MosVPb56u7fgg==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vWTrC-000000001YG-3wkr;
+	Fri, 19 Dec 2025 07:20:55 +0100
+Date: Fri, 19 Dec 2025 07:20:54 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Alan Stern <stern@rowland.harvard.edu>, Ma Ke <make24@iscas.ac.cn>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] usb: phy: isp1301: fix non-OF device reference
+ imbalance
+Message-ID: <aUTuxjyqh3EE_wJd@hovoldconsulting.com>
+References: <20251218153519.19453-1-johan@kernel.org>
+ <20251218153519.19453-3-johan@kernel.org>
+ <71adaa7f-808a-47df-85ed-55ec12da4561@mleia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-2022-jp
-Content-Transfer-Encoding: 7bit
-X-MagazineId: 7946
-X-uId: 6763335740485968724370211054
-X-Sender: CombzMailSender
-X-Url: http://www.combzmail.jp/
-Message-Id: <20251219034622.65E66C1639@r9220.ps.combzmail.jp>
-Date: Fri, 19 Dec 2025 12:45:48 +0900 (JST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <71adaa7f-808a-47df-85ed-55ec12da4561@mleia.com>
 
-　「ペット愛」溢れる、経営者様へ
-　
-　動物の尊い命を救い、働く喜びを支援する
-　革新的な新規事業を始めませんか？
+On Fri, Dec 19, 2025 at 02:15:12AM +0200, Vladimir Zapolskiy wrote:
+> On 12/18/25 17:35, Johan Hovold wrote:
+> > A recent change fixing a device reference leak in a UDC driver
+> > introduced a potential use-after-free in the non-OF case as the
+> > isp1301_get_client() helper only increases the reference count for the
+> > returned I2C device in the OF case.
+> 
+> Fortunatly there is no non-OF users of this driver, it's been discussed
+> recently.
 
-−−−−−−−−−−−−−−−−−−−−−−−
-　■ フランチャイズシステム説明会 ■
+Yeah, I saw the discussion, but figured it was best to just fix up the
+existing code before you guys get on with ripping out the legacy
+support.
 
-　社会貢献と高収益を両立！
+> > Increment the reference count also for non-OF so that the caller can
+> > decrement it unconditionally.
+> > 
+> > Note that this is inherently racy just as using the returned I2C device
+> > is since nothing is preventing the PHY driver from being unbound while
+> > in use.
+> > 
+> > Fixes: c84117912bdd ("USB: lpc32xx_udc: Fix error handling in probe")
+> > Cc: stable@vger.kernel.org
+> > Cc: Ma Ke <make24@iscas.ac.cn>
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
 
-　ペット保護×就労継続支援B型事業
-　”ONEPET（ワンペット）”
+> > @@ -149,7 +149,12 @@ struct i2c_client *isp1301_get_client(struct device_node *node)
+> >   		return client;
+> >   
+> >   	/* non-DT: only one ISP1301 chip supported */
+> > -	return isp1301_i2c_client;
+> > +	if (isp1301_i2c_client) {
+> > +		get_device(&isp1301_i2c_client->dev);
+> > +		return isp1301_i2c_client;
+> > +	}
+> > +
+> > +	return NULL;
+> >   }
+> >   EXPORT_SYMBOL_GPL(isp1301_get_client);
+> >   
+> 
+> Okay, let's go the way of fixing the broken commit instead of its reversal.
+> 
+> Reviewed-by: Vladimir Zapolskiy <vz@mleia.com>
 
-　※本部が徹底サポート！「経験や資格が無くても」
-　　リスクを抑えて安心して始められます。
+Thanks for reviewing.
 
-　■ 開催方式
-　　オンライン（申込後に参加方法をご案内）
-
-　■ 日程
-　　12月17日（水）17：00〜18：30　満席
-　　12月19日（金）16：00〜17：30　受付終了
-　　12月26日（金）17：00〜18：30　残2枠
-　
-　■ 定員
-　　各回4名 ／ 1社2名まで
-
-　■ 視聴予約はこちら
-   　https://onelife-pet.jp/onepet/
-−−−−−−−−−−−−−−−−−−−−−−−
-　
-　お世話になります。
-　
-　この度は、「保護犬・猫」と「就労支援」を組み合わせた、
-　革新的なフランチャイズ事業の説明会をご案内いたします。
-
-　私たちがご提供する ONEPET（ワンペット） は、
-　　「殺処分を待つ命を救う」
-　　「働きたいと願う人々の自立を支援する」
-
-　という、二つの大きな社会課題を同時に
-　解決するビジネスモデルです。
-　
-　社会貢献事業は、収益がイマイチ。と、思わないでください。
-　
-　
-　ONEPETでは、“動物と関わる”という圧倒的な差別化コンテンツを持つことで
-　利用者から「やってみたい」と選ばれ、極めて高い集客力を誇ります。
-　（オープン2ヶ月で400件超の問合せを達成）
-　
-　さらに、国の給付金によるストック型収益と
-　ペット事業による店舗収益の二本柱で、
-　景気に左右されにくい安定経営を実現しています。
-　
-　事実、年商7,000万円／営業利益率40％を目指せる高収益事業として、
-　多くの経営者様にご注目いただいています。
-　
-　
-　ここまでこの文章を読まれたということは、
-　あなたも動物への深い愛情と、社会に貢献したいという
-　強い意志をお持ちなのではないでしょうか。
-　
-　先輩FCオーナー様も福祉業界の経験がなくても、
-　「定員満員までWeb広告費本部負担」
-　「稼働率50％までロイヤリティ無料」
-　
-　といった、本部の手厚いサポートのもと
-　事業を成功させています。
-　
-　この革新的なビジネスモデルの詳細を聞き逃さないよう、
-　新規事業を探している経営者様は、この機会にぜひご視聴ください。
-　
-　
-　「社会課題解決」と「安定収益」を両立する、
-　新しい社会貢献のカタチを一緒につくっていきましょう。
-
-■ 視聴予約はこちら
-    https://onelife-pet.jp/onepet/
-
-+++++++++++++++++++++++++++++++++++++++
-
-本メールのご不要な方には大変ご迷惑をおかけいたしました。
-お手数お掛けしますが、メール解除のお手続きは
-下記よりお願いいたします。
-<依頼フォーム>
-https://onelife-pet.jp/mail/
-
-+++++++++++++++++++++++++++++++++++++++
-
-ONEPET（ワンペット）　フランチャイズ本部　
-群馬県前橋市広瀬町3-18-15
-TEL：080-7723-6089
+Johan
 
