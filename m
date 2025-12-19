@@ -1,150 +1,153 @@
-Return-Path: <linux-usb+bounces-31629-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31630-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FE95CCEE74
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 09:11:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8F6ECCEFC0
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 09:31:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D362A306EF77
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 08:10:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5CAAA30B71DE
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 08:27:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893642E6116;
-	Fri, 19 Dec 2025 08:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC71B30B502;
+	Fri, 19 Dec 2025 08:17:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="jkpKtc8N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aSYKo/wA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx-relay49-hz3.antispameurope.com (mx-relay49-hz3.antispameurope.com [94.100.134.238])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18502E093B
-	for <linux-usb@vger.kernel.org>; Fri, 19 Dec 2025 08:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.134.238
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766131813; cv=pass; b=BHZ/Ip2QMPqQf/J8uApgsvUO9JZfcQup7wI8X4YCAygo0x+DRMlAY6Rtk2Y4WKIxQemCXg+X/yVOMg2/W/wMU31geIY5U6KCyBEiKrbeEN5BPWg1wAs+MqVLh2FmRj48sBNAS+SmHpuDtUUnBTc7sc3roc/tmYeGtHftfTcQ68c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766131813; c=relaxed/simple;
-	bh=SshNRPgIyfZhOL9g00Tx3x9NU8S7Oou4WRUj0p6RJMc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fkmR7IuejpJ6vngGxDazSncNeBA8vuhnVVFkpetdU+0JcbL39ZWPw77Wexokt/8zaxwcrTp6Sjljg37y1xz8/r3jndbdXzgndkwtspEWUzxCN77NM7wMZ0en7WZB4ixqIDiRxvEfrW7VJxiPjMWR/xGqPTJ+doYnMdUVGkeWkzM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=jkpKtc8N; arc=pass smtp.client-ip=94.100.134.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-ARC-Authentication-Results: i=1; mx-gate49-hz3.hornetsecurity.com 1; spf=pass
- reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
- smtp.mailfrom=ew.tq-group.com
- smtp.helo=hmail-p-smtp01-out03-hz1.hornetsecurity.com; dmarc=pass
- header.from=ew.tq-group.com orig.disposition=pass
-ARC-Message-Signature: a=rsa-sha256;
- bh=9ZkmG5LDdBWcr5F9UYs40lXE33P3xPwDRyGsRHQ2ZJw=; c=relaxed/relaxed;
- d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
- t=1766131788;
- b=sbjaQ9mY875n0+heze8wVjMqfq9E79+eLQWqcmzbXY7Zi3HruTKcOKsFvk6c1wUsfgutJ8Ym
- c6tGWvTXW65b7B8oMdfpxFwUNdc+2yMowVmuXQkQZAXXDYjXmE3aBUXQVJH8gHWlctq+udxaWeS
- XdU/NcwVfPyGsvK/QkJuIwmwYTmTgJKIY76sgCLXE5Qo0+WM6PlM0xJNn171tkEf5vUDK5A+1es
- HRF2CzGtLsA49DgbMciO+M6puweJO27epd1Zr0KMcdaqN9eoEbbyFRVoQNhcawA5xA1gGSxjm/C
- O4g6EQNGIpA5tVNmoWIiZXHjuizPpNIVgBgNuikYysKHQ==
-ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
- t=1766131788;
- b=A/dML3fmhfPjeZYmT++vDXCKLrTq3tkWEB53Coij4Ci7LYZUHh5JOq0cIRPhMsH8Ajzl9YdE
- ePEEzpECTI0Tma8g2tKwGnDN+3cmx5H+I/SP3AVU69T490iURhPScHjGZlltjamqOK5yKK/FSHu
- B41hRbaka9FtITnAkkvk6XujV+qbzuIb1P2hzfrqKXACF2Qpsi8vxnDTxKtbSXqk0P1lRrysY+X
- 1jqN8XOz8+YZ6llcDloTif658QlYuBxg4Ol7He7yBkrCzLSSH4A1z+byTmVXD9425BPafnbDoFI
- dvDYsVSVWCkscgBWV/Y+/+O7ZKXlh1m6A3gw5s/dsLCrA==
-Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay49-hz3.antispameurope.com;
- Fri, 19 Dec 2025 09:09:47 +0100
-Received: from steina-w.localnet (host-82-135-125-110.customer.m-online.net [82.135.125.110])
-	(Authenticated sender: alexander.stein@ew.tq-group.com)
-	by hmail-p-smtp01-out03-hz1.hornetsecurity.com (Postfix) with ESMTPSA id AC51CCC0DAC;
-	Fri, 19 Dec 2025 09:09:23 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
- Roger Quadros <rogerq@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Magnus Damm <magnus.damm@gmail.com>,
- Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-usb@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux@ew.tq-group.com
-Subject:
- Re: [PATCH 1/6] dt-bindings: clk: rs9: add clock-output-names property
-Date: Fri, 19 Dec 2025 09:09:23 +0100
-Message-ID: <3357591.tdWV9SEqCh@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To:
- <CAMuHMdWEJ-eYwUTnotsTVEtKrujYVsEB4kFVjRYh3wXZvyjfGQ@mail.gmail.com>
-References:
- <20251218152058.1521806-1-alexander.stein@ew.tq-group.com>
- <20251218152058.1521806-2-alexander.stein@ew.tq-group.com>
- <CAMuHMdWEJ-eYwUTnotsTVEtKrujYVsEB4kFVjRYh3wXZvyjfGQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA613093CE;
+	Fri, 19 Dec 2025 08:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766132273; cv=none; b=p+II/GOmkWiByJbqLQs4Z5gJemZqeMBMAzt3WYkZIOQFUfNdo9PL3YoXQY6Q2o3UFAdboZyT+j81Yg+hnLmWv11Z/zPnAJ7m0LDpB13xL+CssCEqjPhPsxcQ88w13JguuqDisVeYbHMlsLMsG1H1DYRO5WVZYw4NKck5jMJFVlc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766132273; c=relaxed/simple;
+	bh=Iqk/M9Co/YKAnwZryRQErxxsPqA/ewpz3JzOLw4fFqU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TQtbezj0JIinvmND59R+Iu17Fb8OB0HaMBlInWa2KtSXdMrmmNrGTRiY9WbPo2OljHKUS3PZgmq7u8iemV/LPrjwYutfuwnkKsoKlcW6yXLLtf7wTdlW20GE+XZ5JfVZSDHRy3aECuNSNNVldaB8YnNwwsHaqJTV6UJy7wGolWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aSYKo/wA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C06FC4CEF1;
+	Fri, 19 Dec 2025 08:17:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766132272;
+	bh=Iqk/M9Co/YKAnwZryRQErxxsPqA/ewpz3JzOLw4fFqU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=aSYKo/wAIEqbFmOcL46QP9MR0KNdwq4lYug5aMHF/R9os70B0asi1hpQdOmBYGBpz
+	 ooIK7TXlma0tqRrSs/ivjghMcXo6+LoMkDkALWk2bzqcdevKGxH6D0fwIQ/WG/pxQD
+	 G0CMpzKv9R9f6Pmdl2SA8RNumRwvOW+TmVMGW+P6InyIFll0QCiPiuxuea5yiF9jlN
+	 QKNknAt6hQxosC7XfFUrA6E+krT1Vqzt+Ge0zx1UXpKN7sCDu4mZtl3/asHMhd0ip0
+	 fPffRhPXnLAihctwLXznl+n82xjQp2gaKxdNviHSnLf2SZfTMaFLFpa6CrYaoBFhq0
+	 v69/df9fpJ46A==
+Message-ID: <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+Date: Fri, 19 Dec 2025 09:17:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-cloud-security-sender:alexander.stein@ew.tq-group.com
-X-cloud-security-recipient:linux-usb@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Mailarchiv: E-Mail archived for: alexander.stein@ew.tq-group.com
-X-cloud-security-Mailarchivtype:outbound
-X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay49-hz3.antispameurope.com with 4dXgDN6fwtz3yb91
-X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
-X-cloud-security-Digest:5b88bc5d9b014baba218eed2fec8b5d2
-X-cloud-security:scantime:2.167
-DKIM-Signature: a=rsa-sha256;
- bh=9ZkmG5LDdBWcr5F9UYs40lXE33P3xPwDRyGsRHQ2ZJw=; c=relaxed/relaxed;
- d=ew.tq-group.com;
- h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
- t=1766131787; v=1;
- b=jkpKtc8NaQrRlJUJHjs+qSZrd2rOHQOOi2sH9d8qxrD0ox4YkRIvFSAPm60SXJRH8ZDt/Do6
- KSB00G8HZIEyXnFtVpR0L0shpEuvma99W9ALY0p69nniexbn+UPcSSWu+HLoKIqwrAXAUD5hYs0
- zAvLy4E2zSyTPn+GPV2JJDZ7evsd3yI0P4JSnLoUtGta7VzNcYo5F0ut0mk4hhTqPdMjQWk7aX9
- P7vJCkZ3+xTNz0S6KeOddfMFVuLZ9RqZpg5+Ur+C/zjCXHr5IBuE1CxlK493J6YRkCMnD6ffkaI
- N7+sltCTcYrLGaE/XhHQYJejxe7zkGZ9W4qXhucPJ5ZFw==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/5] dt-bindings: mfd: maxim,max77759: add charger
+ child node
+To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20251218-max77759-charger-v2-0-2b259980a686@google.com>
+ <20251218-max77759-charger-v2-1-2b259980a686@google.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251218-max77759-charger-v2-1-2b259980a686@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Am Donnerstag, 18. Dezember 2025, 16:26:10 CET schrieb Geert Uytterhoeven:
-> Hi Alexander,
->=20
-> On Thu, 18 Dec 2025 at 16:21, Alexander Stein
-> <alexander.stein@ew.tq-group.com> wrote:
-> > Add "clock-output-names" which is a standard property for clock
-> > providers.
->=20
-> Why? Isn't that property sort of deprecated?
-
-It is? Oh, I wasn't aware of that. Maybe the property should be
-marked deprecated in dt schema then.
-
-Thanks and best regards,
-Alexander
-
->=20
-> Will be replying to the cover letter next...
->=20
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
->=20
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+On 18/12/2025 23:49, Amit Sunil Dhamne via B4 Relay wrote:
+> From: Amit Sunil Dhamne <amitsd@google.com>
+> 
+> The Maxim MAX77759 MFD includes a charger function. Extend the max77759
+> binding to include the charger. Also, update the example to include
+> charger.
+> 
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> ---
+>  .../devicetree/bindings/mfd/maxim,max77759.yaml    | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+> index 525de9ab3c2b..1cffdf2e5776 100644
+> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+> @@ -37,6 +37,30 @@ properties:
+>    nvmem-0:
+>      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
+>  
+> +  charger:
+> +    type: object
+> +    description: This is a dual input switch mode battery charger for portable
+> +      applications. It supports wired and wireless charging and can operate in
+> +      buck and boost mode.
+> +
 
 
+I do not see any improvements, so same comment: this should be folded
+into the parent.
+
+Please read DTS 101 slides or writing bindings or any other talks...
+
+Best regards,
+Krzysztof
 
