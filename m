@@ -1,371 +1,682 @@
-Return-Path: <linux-usb+bounces-31641-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31642-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 131FECD0F86
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 17:49:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84904CD1216
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 18:25:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D6CB6300995F
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 16:49:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 36E9E303ACA5
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Dec 2025 17:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3536366560;
-	Fri, 19 Dec 2025 16:49:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238B433C522;
+	Fri, 19 Dec 2025 17:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wx2/VHkZ"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="e7g0HYFb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEEB35505F;
-	Fri, 19 Dec 2025 16:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61D233BBA3;
+	Fri, 19 Dec 2025 17:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766162948; cv=none; b=Lo18xy9ZmkcZhd35IFUFlDsQfXiEsCPwXikyqao/Q1cYaqsHP14zYsc6XgzVeGgYvGN7pF7epsfq1oE/0T+D0cVU01o/420VJhb9SS8c5ocaafjH1DApX0I54s3Rmyflg05hE2N4jeSinFbHwRZbZUlXsx0mrBb+8GXvhUd2fYM=
+	t=1766165126; cv=none; b=O3Y/6qKSAsvJOXNqK2lqIl9HpL6j3rc24sjeyQzGpiKhJHPG4/I9sE3cxUssm98in4gBMAAqEkczhkZLDLY3k+Nrna3aRxeJr/xR3PdU/0WkXelqCV3ndNxGiQr/U8FReUQxjFgBNHiJfy7P6cxeuZekkWHX2oxABabQuWjF/m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766162948; c=relaxed/simple;
-	bh=k3LBmjqi2XqQEaxLfGxUjft8TSwKuJs0iVDFAYlyWhY=;
-	h=From:Date:Content-Type:MIME-Version:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=ZdXAa6owcHkIr6NSiahXFyh5nC3Fc5U60kvH2aR056GVo2wE4j2XyS/WqQ8k0h/1BnyAmGEff5n6Mn14yfttOWkVAT/YHpBp0tlk9X2++2sXXYomCZVRHqnb2Lm2dm0bONW9iCOP0+FZc1zBBsKCvlILicmC25eZ4THfTkcVBmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wx2/VHkZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1E8C4CEF1;
-	Fri, 19 Dec 2025 16:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766162946;
-	bh=k3LBmjqi2XqQEaxLfGxUjft8TSwKuJs0iVDFAYlyWhY=;
-	h=From:Date:Cc:To:In-Reply-To:References:Subject:From;
-	b=Wx2/VHkZhhQrp1M6P1F3p1BFo6NtZQPGus+IR0IufHerO8doZ2+zez0C0DCw5eTm+
-	 Wg+Fl0d7S4yQxmkCqW9w8tmyL2dNzjEIJPbuiHgZlK9ACGVuoH5Bn4gAV7Ss3eUvUX
-	 6cirAeTB93EuEEIrHL474OhR7nXRn3Cy2vr4qBVSuetlXlbDXkjwGDwgNtCs65eCL2
-	 EDvec9HneEuAx+DgHerxD3SLoWUyj6HIfyJTvGOpVeDlFOwQzZ5L8w0fVRszRIn2OM
-	 90XsxfMw2sKdD8Znt8a+QWioWzCib2y5WLRziQt0E7uYqhLCVn+RADJmvmoCaqxNdL
-	 Fz+Rt2Uui8L9Q==
-From: Rob Herring <robh@kernel.org>
-Date: Fri, 19 Dec 2025 10:49:03 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1766165126; c=relaxed/simple;
+	bh=P4wyN4sXu4qpnGUTF1wVGAh9dbpb4b17hrMy39eNbJU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XexywMXh77ILYAkoC+S6yv/nBsGdf1UQHvaflL9OV8hXwQOuZP7er2oKInLmJh3JB/JzWfbllifq/LMK4BehuedWhAOTpJQebmd9FHc3Zh/ntMV+Qz+ho7s2t/uE2UEnnavm+qvfl0ZuGEY9QFAW/1Kj6HDhI6mKuYS25wbsfFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=e7g0HYFb; arc=none smtp.client-ip=80.12.242.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from fedora.home ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
+	by smtp.orange.fr with ESMTPA
+	id We5ev3fgv4T6dWe5ev4qxr; Fri, 19 Dec 2025 18:16:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1766164591;
+	bh=16fiDFAEma/YNPCGnky1v786VZfgiqaGFU+bhEZDTUk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=e7g0HYFb+S9JCCLZcSdXdSkZ1WtlwWEcv7Vkxe63IEKmA4R5WgRw4BDroIIawkf6z
+	 UZcbqI+eFsEWnA7Fv1Nx9rAt3mNDSPA+3wklUxsEAaGNZy0a4o3TsP+MUlSTsNokkt
+	 w5KdpflCeimOOZN1m0uAlrNpumVjBcjj6bvljvOZQZ2pjy8R6NlNsSrL8EIOeCaFo4
+	 6RVmvlk7vcesl7218VJbRymS7FTVpR4yPasBjqOHP/1ZqkPKTFoM4+WHBfa92Cz6ll
+	 4NPKvTcOMBFd0GIikb89FKXsV/uQnH8+BLyjKLG6rYHAGeDQlPkNajvTSlN5Bf7W8P
+	 VGVpUpalG6IVw==
+X-ME-Helo: fedora.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 19 Dec 2025 18:16:31 +0100
+X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: gadget: Constify struct configfs_item_operations and configfs_group_operations
+Date: Fri, 19 Dec 2025 18:16:15 +0100
+Message-ID: <49cec1cb84425f854de80b6d69b53a5a3cda8189.1766164523.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Cc: devicetree@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>, 
- linux-usb@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>, 
- linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
- Stephen Boyd <sboyd@kernel.org>, linux-renesas-soc@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux@ew.tq-group.com, 
- Conor Dooley <conor+dt@kernel.org>, linux-arm-kernel@lists.infradead.org, 
- Roger Quadros <rogerq@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Fabio Estevam <festevam@gmail.com>, Pawel Laszczak <pawell@cadence.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Peter Chen <peter.chen@kernel.org>, imx@lists.linux.dev, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, linux-clk@vger.kernel.org, 
- Marek Vasut <marex@denx.de>, Magnus Damm <magnus.damm@gmail.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-In-Reply-To: <20251218152058.1521806-1-alexander.stein@ew.tq-group.com>
-References: <20251218152058.1521806-1-alexander.stein@ew.tq-group.com>
-Message-Id: <176616243172.3584134.12135958492433215984.robh@kernel.org>
-Subject: Re: [PATCH 0/6] Support TQMa8QM
+Content-Transfer-Encoding: 8bit
 
+'struct configfs_item_operations' and 'configfs_group_operations' are not
+modified in these drivers.
 
-On Thu, 18 Dec 2025 16:20:47 +0100, Alexander Stein wrote:
-> Hi,
-> 
-> this series adds support for TQ's TQMa8QM. The first 3 patches are prepatory:
-> 1. Add support for clock-output-names for clk-renesas-pcie. This is necessary
-> as clk-imx8qxp-lpcg.c (driver for phyx1 phyx2 clock gating) reqiures that
-> property on the parent clock.
-> 
-> 2. Add support for USB devices in cdns USB3 host controller, namely
-> onboard-devices as USB hubs. Implemented similarily to snps,dwc3-common.yaml.
-> 
-> 3. Add DMA IRQ for PCIe controller. Similar to commit 0b4c46f9ad79c
-> ("arm64: dts: imx8qm-ss-hsio: Wire up DMA IRQ for PCIe") which was only tested
-> on imx8qxp which just has one PCIe controller.
-> 
-> 4 & 5. Device bindings and platform DT
-> 
-> 6. Workaround for missing "ERR050104: Arm/A53: Cache coherency issue"
-> workaround. See [1] for details. Split into separate commit for easy revert
-> once an errata workaround has been integrated.
-> 
-> Best regards,
-> Alexander
-> 
-> [1] https://lore.kernel.org/all/20230420112952.28340-1-iivanov@suse.de/
-> 
-> Alexander Stein (6):
->   dt-bindings: clk: rs9: add clock-output-names property
->   dt-bindings: usb: cdns,usb3: support USB devices in DT
->   arm64: dts: imx8qm-ss-hsio: Wire up DMA IRQ for PCIe
->   dt-bindings: arm: fsl: add bindings for TQMa8x
->   arm64: dts: Add TQ imx8qm based board
->   arm64: dts: imx8qm-tqma8qm-mba8x: Disable Cortex-A72 cluster
-> 
->  .../devicetree/bindings/arm/fsl.yaml          |  10 +
->  .../bindings/clock/renesas,9series.yaml       |  37 +
->  .../devicetree/bindings/usb/cdns,usb3.yaml    |  11 +
->  arch/arm64/boot/dts/freescale/Makefile        |   1 +
->  .../boot/dts/freescale/imx8qm-ss-hsio.dtsi    |   5 +-
->  .../dts/freescale/imx8qm-tqma8qm-mba8x.dts    | 869 ++++++++++++++++++
->  .../boot/dts/freescale/imx8qm-tqma8qm.dtsi    | 322 +++++++
->  7 files changed, 1253 insertions(+), 2 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-tqma8qm-mba8x.dts
->  create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-tqma8qm.dtsi
-> 
-> --
-> 2.43.0
-> 
-> 
-> 
+Constifying these structures moves some data to a read-only section, so
+increases overall security, especially when the structure holds some
+function pointers.
 
+On a x86_64, with allmodconfig, as an example:
+Before:
+======
+   text	   data	    bss	    dec	    hex	filename
+  65061	  20968	    256	  86285	  1510d	drivers/usb/gadget/configfs.o
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+After:
+=====
+   text	   data	    bss	    dec	    hex	filename
+  66181	  19848	    256	  86285	  1510d	drivers/usb/gadget/configfs.o
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Compile tested only.
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+This change is possible since commits f2f36500a63b and f7f78098690d.
+---
+ drivers/usb/gadget/configfs.c                 | 24 ++++++-------
+ drivers/usb/gadget/function/f_acm.c           |  2 +-
+ drivers/usb/gadget/function/f_fs.c            |  2 +-
+ drivers/usb/gadget/function/f_hid.c           |  2 +-
+ drivers/usb/gadget/function/f_loopback.c      |  2 +-
+ drivers/usb/gadget/function/f_mass_storage.c  |  6 ++--
+ drivers/usb/gadget/function/f_midi.c          |  2 +-
+ drivers/usb/gadget/function/f_midi2.c         | 10 +++---
+ drivers/usb/gadget/function/f_obex.c          |  2 +-
+ drivers/usb/gadget/function/f_phonet.c        |  2 +-
+ drivers/usb/gadget/function/f_printer.c       |  2 +-
+ drivers/usb/gadget/function/f_serial.c        |  2 +-
+ drivers/usb/gadget/function/f_sourcesink.c    |  2 +-
+ drivers/usb/gadget/function/f_tcm.c           |  2 +-
+ drivers/usb/gadget/function/f_uac1.c          |  2 +-
+ drivers/usb/gadget/function/f_uac1_legacy.c   |  2 +-
+ drivers/usb/gadget/function/f_uac2.c          |  2 +-
+ .../usb/gadget/function/u_ether_configfs.h    |  2 +-
+ drivers/usb/gadget/function/uvc_configfs.c    | 36 +++++++++----------
+ include/linux/usb/gadget_configfs.h           |  4 +--
+ 20 files changed, 55 insertions(+), 55 deletions(-)
 
-  pip3 install dtschema --upgrade
-
-
-This patch series was applied (using b4) to base:
- Base: attempting to guess base-commit...
- Base: tags/v6.18-rc7-1585-gfa10d5a2b8f9 (best guess, 3/5 blobs matched)
- Base: tags/v6.18-rc7-1585-gfa10d5a2b8f9 (use --merge-base to override)
-
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/freescale/' for 20251218152058.1521806-1-alexander.stein@ew.tq-group.com:
-
-Error: arch/arm64/boot/dts/freescale/imx8qm-tqma8qm.dtsi:180.1-15 Label or path thermal_zones not found
-FATAL ERROR: Syntax error parsing input tree
-make[3]: *** [scripts/Makefile.dtbs:132: arch/arm64/boot/dts/freescale/imx8qm-tqma8qm-mba8x.dtb] Error 1
-make[2]: *** [scripts/Makefile.build:556: arch/arm64/boot/dts/freescale] Error 2
-make[2]: Target 'arch/arm64/boot/dts/freescale/imx8qm-tqma8qm-mba8x.dtb' not remade because of errors.
-make[1]: *** [/home/rob/proj/linux-dt-testing/Makefile:1478: freescale/imx8qm-tqma8qm-mba8x.dtb] Error 2
-make: *** [Makefile:248: __sub-make] Error 2
-make: Target 'freescale/imx8dx-colibri-eval-v3.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-var-som-symphony.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-nitrogen-enc-carrier-board.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1046a-qds.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-prt8mm.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1028a-kontron-sl28.dtb' not remade because of errors.
-make: Target 'freescale/imx8qxp-tqma8xqp-mba8xx.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-beacon-kit.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-venice-gw73xx-2x.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-var-som-symphony.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-icore-mx8mp-edimm2.2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-innocomm-wb15-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8qm-apalis-v1.1-eval.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-aristainetos3-proton2s.dtb' not remade because of errors.
-make: Target 'freescale/imx8dx-colibri-iris-v2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-ddr3l-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-icore-mx8mm-edimm2.2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-dhcom-pdk3.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-phyboard-polis-rdk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-venice-gw72xx-2x.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-venice-gw7901.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-beacon-kit.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1028a-kontron-sl28-var1.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1028a-kontron-sl28-var3.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-debix-som-a-bmb-08.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-nonwifi-dahlia.dtb' not remade because of errors.
-make: Target 'freescale/imx8qxp-ai_ml.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-wifi-dev.dtb' not remade because of errors.
-make: Target 'freescale/s32v234-evb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-skov-revb-lt6.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-phg.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-nitrogen-smarc-universal-board.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-venice-gw71xx-0x.dtb' not remade because of errors.
-make: Target 'freescale/imx8ulp-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8qxp-colibri-iris.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-emtop-baseboard.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-hummingboard-pro.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1028a-kontron-sl28-var4.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-librem5-r4.dtb' not remade because of errors.
-make: Target 'freescale/imx8dx-colibri-aster.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-rve-gateway.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-venice-gw71xx-2x.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls2080a-rdb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-pico-pi.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-wifi-mallow.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-msc-sm2s-ep1.dtb' not remade because of errors.
-make: Target 'freescale/imx8dxl-evk.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1043a-qds.dtb' not remade because of errors.
-make: Target 'freescale/s32g399a-rdb3.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-venice-gw72xx-0x.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-wifi-ivy.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-bsh-smm-s2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-aristainetos3-adpismarc.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-tx8p-ml81-moduline-display-106.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-nonwifi-mallow.dtb' not remade because of errors.
-make: Target 'freescale/imx8qxp-tqma8xqps-mb-smarc-2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-dimonoff-gateway-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx93-tqma9352-mba93xxca.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-tqma8mq-mba8mx.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1012a-oxalis.dtb' not remade because of errors.
-make: Target 'freescale/imx93-14x14-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8dx-colibri-iris.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-var-som-symphony.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-kontron-smarc-eval-carrier.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls2080a-simu.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1046a-frwy.dtb' not remade because of errors.
-make: Target 'freescale/imx93-9x9-qsb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-wifi-yavia.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-nonwifi-yavia.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-wifi-mallow.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-debix-model-a.dtb' not remade because of errors.
-make: Target 'freescale/imx8qm-apalis-v1.1-ixora-v1.2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-icore-mx8mm-ctouch2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-zii-ultra-rmb3.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-phygate-tauri-l.dtb' not remade because of errors.
-make: Target 'freescale/imx8qm-apalis-v1.1-eval-v1.2.dtb' not remade because of errors.
-make: Target 'freescale/fsl-lx2162a-clearfog.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-data-modul-edm-sbc.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-librem5-devkit.dtb' not remade because of errors.
-make: Target 'freescale/fsl-lx2160a-tqmlx2160a-mblx2160a.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1012a-tqmls1012al-mbls1012al-emmc.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-cubox-m.dtb' not remade because of errors.
-make: Target 'freescale/fsl-lx2160a-honeycomb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-skov-revb-hdmi.dtb' not remade because of errors.
-make: Target 'freescale/imx8qm-apalis-eval.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-venice-gw7904.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-skov-revb-mi1010ait-1cp1.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-navqp.dtb' not remade because of errors.
-make: Target 'freescale/fsl-lx2160a-qds.dtb' not remade because of errors.
-make: Target 'freescale/fsl-lx2160a-bluebox3.dtb' not remade because of errors.
-make: Target 'freescale/imx93-var-som-symphony.dtb' not remade because of errors.
-make: Target 'freescale/imx8dxp-tqma8xdps-mb-smarc-2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-nitrogen-r2.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1046a-rdb.dtb' not remade because of errors.
-make: Target 'freescale/imx93-tqma9352-mba91xxca.dtb' not remade because of errors.
-make: Target 'freescale/imx95-tqma9596sa-mb-smarc-2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-ddr4-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-bsh-smm-s2pro.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-phanbell.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-venice-gw7903.dtb' not remade because of errors.
-make: Target 'freescale/s32g274a-evb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-ddr4-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-dhcom-pdk2.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1012a-frdm.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1012a-qds.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1043a-rdb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-phyboard-pollux-rdk.dtb' not remade because of errors.
-make: Target 'freescale/imx8qm-mek.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1088a-qds.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1088a-rdb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-wifi-dev.dtb' not remade because of errors.
-make: Target 'freescale/imx8qm-apalis-v1.1-ixora-v1.1.dtb' not remade because of errors.
-make: Target 'freescale/imx91-tqma9131-mba91xxca.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-hummingboard-mate.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-venice-gw75xx-0x.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-venice-gw74xx.dtb' not remade because of errors.
-make: Target 'freescale/imx8qm-apalis-ixora-v1.1.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-aristainetos3-helios.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-skov-revc-bd500.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-nonwifi-dahlia.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-iot-gateway.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-librem5-r2.dtb' not remade because of errors.
-make: Target 'freescale/imx95-libra-rdk-fpsc.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1088a-ten64.dtb' not remade because of errors.
-make: Target 'freescale/imx8ulp-9x9-evk.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1028a-qds.dtb' not remade because of errors.
-make: Target 'freescale/imx8qm-tqma8qm-mba8x.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-wifi-dahlia.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-beacon-kit.dtb' not remade because of errors.
-make: Target 'freescale/fsl-lx2162a-qds.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1046a-tqmls1046a-mbls10xxa.dtb' not remade because of errors.
-make: Target 'freescale/imx91-11x11-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-wifi-dahlia.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-evkb.dtb' not remade because of errors.
-make: Target 'freescale/imx93-tqma9352-mba93xxla.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-emcon-avari.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-edm-g-wb.dtb' not remade because of errors.
-make: Target 'freescale/imx93-11x11-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx95-19x19-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-hummingboard-ripple.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1012a-tqmls1012al-mbls1012al.dtb' not remade because of errors.
-make: Target 'freescale/fsl-lx2160a-clearfog-cx.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-tqma8mqml-mba8mx.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-nonwifi-ivy.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-dhcom-drc02.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-toradex-smarc-dev.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-wifi-ivy.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-tqma8mpql-mba8mp-ras314.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-nonwifi-yavia.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1012a-rdb.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1012a-frwy.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1028a-kontron-sl28-var2.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-nonwifi-mallow.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-venice-gw73xx-0x.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1043a-tqmls1043a-mbls10xxa.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-kontron-bl-osm-s.dtb' not remade because of errors.
-make: Target 'freescale/fsl-lx2160a-bluebox3-rev-a.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1088a-tqmls1088a-mbls10xxa.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-wifi-yavia.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-mx8menlo.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls2081a-rdb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-mnt-reform2.dtb' not remade because of errors.
-make: Target 'freescale/imx8qxp-colibri-iris-v2.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls2088a-rdb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-zii-ultra-zest.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-tqma8mpql-mba8mpxl.dtb' not remade because of errors.
-make: Target 'freescale/imx8qm-apalis-eval-v1.2.dtb' not remade because of errors.
-make: Target 'freescale/s32g274a-rdb2.dtb' not remade because of errors.
-make: Target 'freescale/imx93-phyboard-nash.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-verdin-nonwifi-dev.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-ultra-mach-sbc.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-tqma8mqnl-mba8mx.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-kontron-bl-osm-s.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls2080a-qds.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-nonwifi-ivy.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-data-modul-edm-sbc.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-librem5-r3.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls2088a-qds.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-kontron-pitx-imx8m.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-venice-gw7902.dtb' not remade because of errors.
-make: Target 'freescale/fsl-lx2160a-rdb.dtb' not remade because of errors.
-make: Target 'freescale/imx95-19x19-evk-sof.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-venice-gw82xx-2x.dtb' not remade because of errors.
-make: Target 'freescale/imx93-phyboard-segin.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-verdin-nonwifi-dev.dtb' not remade because of errors.
-make: Target 'freescale/imx8mm-kontron-bl.dtb' not remade because of errors.
-make: Target 'freescale/imx8dxp-tqma8xdp-mba8xx.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-hummingboard-pulse.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-libra-rdk-fpsc.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-venice-gw75xx-2x.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8qxp-colibri-eval-v3.dtb' not remade because of errors.
-make: Target 'freescale/imx943-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8qxp-colibri-aster.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-nitrogen.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-skov-basic.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-thor96.dtb' not remade because of errors.
-make: Target 'freescale/fsl-ls1028a-rdb.dtb' not remade because of errors.
-make: Target 'freescale/imx8mq-hummingboard-pulse.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-iota2-lumpy.dtb' not remade because of errors.
-make: Target 'freescale/imx8mn-venice-gw7902.dtb' not remade because of errors.
-make: Target 'freescale/imx8qxp-mek.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-skov-revc-tian-g07017.dtb' not remade because of errors.
-make: Target 'freescale/imx93-kontron-bl-osm-s.dtb' not remade because of errors.
-make: Target 'freescale/imx95-15x15-evk.dtb' not remade because of errors.
-make: Target 'freescale/imx8mp-dhcom-picoitx.dtb' not remade because of errors.
-
-
-
-
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 6bcac85c5550..acef1c6f199c 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -409,7 +409,7 @@ static void gadget_info_attr_release(struct config_item *item)
+ 	kfree(gi);
+ }
+ 
+-static struct configfs_item_operations gadget_root_item_ops = {
++static const struct configfs_item_operations gadget_root_item_ops = {
+ 	.release                = gadget_info_attr_release,
+ };
+ 
+@@ -514,7 +514,7 @@ static void config_usb_cfg_unlink(
+ 	WARN(1, "Unable to locate function to unbind\n");
+ }
+ 
+-static struct configfs_item_operations gadget_config_item_ops = {
++static const struct configfs_item_operations gadget_config_item_ops = {
+ 	.release                = gadget_config_attr_release,
+ 	.allow_link             = config_usb_cfg_link,
+ 	.drop_link              = config_usb_cfg_unlink,
+@@ -663,7 +663,7 @@ static void function_drop(
+ 	config_item_put(item);
+ }
+ 
+-static struct configfs_group_operations functions_ops = {
++static const struct configfs_group_operations functions_ops = {
+ 	.make_group     = &function_make,
+ 	.drop_item      = &function_drop,
+ };
+@@ -766,7 +766,7 @@ static void config_desc_drop(
+ 	config_item_put(item);
+ }
+ 
+-static struct configfs_group_operations config_desc_ops = {
++static const struct configfs_group_operations config_desc_ops = {
+ 	.make_group     = &config_desc_make,
+ 	.drop_item      = &config_desc_drop,
+ };
+@@ -799,7 +799,7 @@ static void gadget_language_attr_release(struct config_item *item)
+ 	kfree(gs);
+ }
+ 
+-static struct configfs_item_operations gadget_language_langid_item_ops = {
++static const struct configfs_item_operations gadget_language_langid_item_ops = {
+ 	.release                = gadget_language_attr_release,
+ };
+ 
+@@ -852,7 +852,7 @@ static void gadget_string_release(struct config_item *item)
+ 	kfree(string);
+ }
+ 
+-static struct configfs_item_operations gadget_string_item_ops = {
++static const struct configfs_item_operations gadget_string_item_ops = {
+ 	.release	= gadget_string_release,
+ };
+ 
+@@ -901,7 +901,7 @@ static void gadget_language_string_drop(struct config_group *group,
+ 		string->usb_string.id = i++;
+ }
+ 
+-static struct configfs_group_operations gadget_language_langid_group_ops = {
++static const struct configfs_group_operations gadget_language_langid_group_ops = {
+ 	.make_item		= gadget_language_string_make,
+ 	.drop_item		= gadget_language_string_drop,
+ };
+@@ -960,7 +960,7 @@ static void gadget_language_drop(struct config_group *group,
+ 	config_item_put(item);
+ }
+ 
+-static struct configfs_group_operations gadget_language_group_ops = {
++static const struct configfs_group_operations gadget_language_group_ops = {
+ 	.make_group     = &gadget_language_make,
+ 	.drop_item      = &gadget_language_drop,
+ };
+@@ -1266,7 +1266,7 @@ static void os_desc_unlink(struct config_item *os_desc_ci,
+ 	mutex_unlock(&gi->lock);
+ }
+ 
+-static struct configfs_item_operations os_desc_ops = {
++static const struct configfs_item_operations os_desc_ops = {
+ 	.allow_link		= os_desc_link,
+ 	.drop_link		= os_desc_unlink,
+ };
+@@ -1391,7 +1391,7 @@ static void usb_os_desc_ext_prop_release(struct config_item *item)
+ 	kfree(ext_prop); /* frees a whole chunk */
+ }
+ 
+-static struct configfs_item_operations ext_prop_ops = {
++static const struct configfs_item_operations ext_prop_ops = {
+ 	.release		= usb_os_desc_ext_prop_release,
+ };
+ 
+@@ -1456,7 +1456,7 @@ static void ext_prop_drop(struct config_group *group, struct config_item *item)
+ 	config_item_put(item);
+ }
+ 
+-static struct configfs_group_operations interf_grp_ops = {
++static const struct configfs_group_operations interf_grp_ops = {
+ 	.make_item	= &ext_prop_make,
+ 	.drop_item	= &ext_prop_drop,
+ };
+@@ -2061,7 +2061,7 @@ static void gadgets_drop(struct config_group *group, struct config_item *item)
+ 	config_item_put(item);
+ }
+ 
+-static struct configfs_group_operations gadgets_ops = {
++static const struct configfs_group_operations gadgets_ops = {
+ 	.make_group     = &gadgets_make,
+ 	.drop_item      = &gadgets_drop,
+ };
+diff --git a/drivers/usb/gadget/function/f_acm.c b/drivers/usb/gadget/function/f_acm.c
+index 106046e17c4e..0ad857f1f325 100644
+--- a/drivers/usb/gadget/function/f_acm.c
++++ b/drivers/usb/gadget/function/f_acm.c
+@@ -793,7 +793,7 @@ static void acm_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations acm_item_ops = {
++static const struct configfs_item_operations acm_item_ops = {
+ 	.release                = acm_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 05c6750702b6..6a0a4d870865 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -4004,7 +4004,7 @@ static void ffs_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations ffs_item_ops = {
++static const struct configfs_item_operations ffs_item_ops = {
+ 	.release	= ffs_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index 3ddfd4f66f0b..bee0d0458ff7 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -1328,7 +1328,7 @@ static void hid_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations hidg_item_ops = {
++static const struct configfs_item_operations hidg_item_ops = {
+ 	.release	= hid_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_loopback.c b/drivers/usb/gadget/function/f_loopback.c
+index 49b009a7d5d7..39862e236837 100644
+--- a/drivers/usb/gadget/function/f_loopback.c
++++ b/drivers/usb/gadget/function/f_loopback.c
+@@ -464,7 +464,7 @@ static void lb_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&lb_opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations lb_item_ops = {
++static const struct configfs_item_operations lb_item_ops = {
+ 	.release		= lb_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 94d478b6bcd3..5c3f34a2f35c 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -3153,7 +3153,7 @@ static void fsg_lun_attr_release(struct config_item *item)
+ 	kfree(lun_opts);
+ }
+ 
+-static struct configfs_item_operations fsg_lun_item_ops = {
++static const struct configfs_item_operations fsg_lun_item_ops = {
+ 	.release		= fsg_lun_attr_release,
+ };
+ 
+@@ -3369,7 +3369,7 @@ static void fsg_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations fsg_item_ops = {
++static const struct configfs_item_operations fsg_item_ops = {
+ 	.release		= fsg_attr_release,
+ };
+ 
+@@ -3462,7 +3462,7 @@ static struct configfs_attribute *fsg_attrs[] = {
+ 	NULL,
+ };
+ 
+-static struct configfs_group_operations fsg_group_ops = {
++static const struct configfs_group_operations fsg_group_ops = {
+ 	.make_group	= fsg_lun_make,
+ 	.drop_item	= fsg_lun_drop,
+ };
+diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+index da82598fcef8..9a93604b49d9 100644
+--- a/drivers/usb/gadget/function/f_midi.c
++++ b/drivers/usb/gadget/function/f_midi.c
+@@ -1086,7 +1086,7 @@ static void midi_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations midi_item_ops = {
++static const struct configfs_item_operations midi_item_ops = {
+ 	.release	= midi_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_midi2.c b/drivers/usb/gadget/function/f_midi2.c
+index de16b02d857e..95ec87bed3ee 100644
+--- a/drivers/usb/gadget/function/f_midi2.c
++++ b/drivers/usb/gadget/function/f_midi2.c
+@@ -2316,7 +2316,7 @@ static void f_midi2_block_opts_release(struct config_item *item)
+ 	kfree(opts);
+ }
+ 
+-static struct configfs_item_operations f_midi2_block_item_ops = {
++static const struct configfs_item_operations f_midi2_block_item_ops = {
+ 	.release	= f_midi2_block_opts_release,
+ };
+ 
+@@ -2479,11 +2479,11 @@ static void f_midi2_ep_opts_release(struct config_item *item)
+ 	kfree(opts);
+ }
+ 
+-static struct configfs_item_operations f_midi2_ep_item_ops = {
++static const struct configfs_item_operations f_midi2_ep_item_ops = {
+ 	.release	= f_midi2_ep_opts_release,
+ };
+ 
+-static struct configfs_group_operations f_midi2_ep_group_ops = {
++static const struct configfs_group_operations f_midi2_ep_group_ops = {
+ 	.make_group	= f_midi2_opts_block_make,
+ 	.drop_item	= f_midi2_opts_block_drop,
+ };
+@@ -2618,11 +2618,11 @@ static void f_midi2_opts_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations f_midi2_item_ops = {
++static const struct configfs_item_operations f_midi2_item_ops = {
+ 	.release	= f_midi2_opts_release,
+ };
+ 
+-static struct configfs_group_operations f_midi2_group_ops = {
++static const struct configfs_group_operations f_midi2_group_ops = {
+ 	.make_group	= f_midi2_opts_ep_make,
+ 	.drop_item	= f_midi2_opts_ep_drop,
+ };
+diff --git a/drivers/usb/gadget/function/f_obex.c b/drivers/usb/gadget/function/f_obex.c
+index 1305e2326cdf..6d498f63183e 100644
+--- a/drivers/usb/gadget/function/f_obex.c
++++ b/drivers/usb/gadget/function/f_obex.c
+@@ -390,7 +390,7 @@ static void obex_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations obex_item_ops = {
++static const struct configfs_item_operations obex_item_ops = {
+ 	.release	= obex_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_phonet.c b/drivers/usb/gadget/function/f_phonet.c
+index 0aa9e8224cae..d644d5495fdc 100644
+--- a/drivers/usb/gadget/function/f_phonet.c
++++ b/drivers/usb/gadget/function/f_phonet.c
+@@ -585,7 +585,7 @@ static void phonet_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations phonet_item_ops = {
++static const struct configfs_item_operations phonet_item_ops = {
+ 	.release		= phonet_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index d295ade8fa67..b2fa2b56c37e 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -1220,7 +1220,7 @@ static void printer_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations printer_item_ops = {
++static const struct configfs_item_operations printer_item_ops = {
+ 	.release	= printer_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_serial.c b/drivers/usb/gadget/function/f_serial.c
+index 0f266bc067f5..e6b412e0e045 100644
+--- a/drivers/usb/gadget/function/f_serial.c
++++ b/drivers/usb/gadget/function/f_serial.c
+@@ -260,7 +260,7 @@ static void serial_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations serial_item_ops = {
++static const struct configfs_item_operations serial_item_ops = {
+ 	.release	= serial_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_sourcesink.c b/drivers/usb/gadget/function/f_sourcesink.c
+index ec5fd25020fd..44c644877d3d 100644
+--- a/drivers/usb/gadget/function/f_sourcesink.c
++++ b/drivers/usb/gadget/function/f_sourcesink.c
+@@ -882,7 +882,7 @@ static void ss_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&ss_opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations ss_item_ops = {
++static const struct configfs_item_operations ss_item_ops = {
+ 	.release		= ss_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+index 6e8804f04baa..92f90592004e 100644
+--- a/drivers/usb/gadget/function/f_tcm.c
++++ b/drivers/usb/gadget/function/f_tcm.c
+@@ -2446,7 +2446,7 @@ static void tcm_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations tcm_item_ops = {
++static const struct configfs_item_operations tcm_item_ops = {
+ 	.release		= tcm_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 9da9fb4e1239..efe9f270b02d 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -1512,7 +1512,7 @@ static void f_uac1_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations f_uac1_item_ops = {
++static const struct configfs_item_operations f_uac1_item_ops = {
+ 	.release	= f_uac1_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_uac1_legacy.c b/drivers/usb/gadget/function/f_uac1_legacy.c
+index 49cf5aae90ca..8fc452b4b39a 100644
+--- a/drivers/usb/gadget/function/f_uac1_legacy.c
++++ b/drivers/usb/gadget/function/f_uac1_legacy.c
+@@ -812,7 +812,7 @@ static void f_uac1_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations f_uac1_item_ops = {
++static const struct configfs_item_operations f_uac1_item_ops = {
+ 	.release	= f_uac1_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index dd252ff2fb4e..98f0f50dc7a8 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -1874,7 +1874,7 @@ static void f_uac2_attr_release(struct config_item *item)
+ 	usb_put_function_instance(&opts->func_inst);
+ }
+ 
+-static struct configfs_item_operations f_uac2_item_ops = {
++static const struct configfs_item_operations f_uac2_item_ops = {
+ 	.release	= f_uac2_attr_release,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/u_ether_configfs.h b/drivers/usb/gadget/function/u_ether_configfs.h
+index f558c3139ebe..51f0d79e5eca 100644
+--- a/drivers/usb/gadget/function/u_ether_configfs.h
++++ b/drivers/usb/gadget/function/u_ether_configfs.h
+@@ -21,7 +21,7 @@
+ 		usb_put_function_instance(&opts->func_inst);		\
+ 	}								\
+ 									\
+-	static struct configfs_item_operations _f_##_item_ops = {	\
++	static const struct configfs_item_operations _f_##_item_ops = {	\
+ 		.release	= _f_##_attr_release,			\
+ 	}
+ 
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index a4a2d3dcb0d6..2e74816b9faf 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -127,7 +127,7 @@ static void uvcg_config_item_release(struct config_item *item)
+ 	kfree(group);
+ }
+ 
+-static struct configfs_item_operations uvcg_config_item_ops = {
++static const struct configfs_item_operations uvcg_config_item_ops = {
+ 	.release	= uvcg_config_item_release,
+ };
+ 
+@@ -284,7 +284,7 @@ static struct config_item *uvcg_control_header_make(struct config_group *group,
+ 	return &h->item;
+ }
+ 
+-static struct configfs_group_operations uvcg_control_header_grp_ops = {
++static const struct configfs_group_operations uvcg_control_header_grp_ops = {
+ 	.make_item		= uvcg_control_header_make,
+ };
+ 
+@@ -1232,7 +1232,7 @@ static void uvcg_extension_drop_link(struct config_item *src, struct config_item
+ 	mutex_unlock(su_mutex);
+ }
+ 
+-static struct configfs_item_operations uvcg_extension_item_ops = {
++static const struct configfs_item_operations uvcg_extension_item_ops = {
+ 	.release	= uvcg_extension_release,
+ 	.allow_link	= uvcg_extension_allow_link,
+ 	.drop_link	= uvcg_extension_drop_link,
+@@ -1297,7 +1297,7 @@ static struct config_item *uvcg_extension_make(struct config_group *group, const
+ 	return &xu->item;
+ }
+ 
+-static struct configfs_group_operations uvcg_extensions_grp_ops = {
++static const struct configfs_group_operations uvcg_extensions_grp_ops = {
+ 	.make_item	= uvcg_extension_make,
+ 	.drop_item	= uvcg_extension_drop,
+ };
+@@ -1413,7 +1413,7 @@ static void uvcg_control_class_drop_link(struct config_item *src,
+ 	mutex_unlock(su_mutex);
+ }
+ 
+-static struct configfs_item_operations uvcg_control_class_item_ops = {
++static const struct configfs_item_operations uvcg_control_class_item_ops = {
+ 	.release	= uvcg_config_item_release,
+ 	.allow_link	= uvcg_control_class_allow_link,
+ 	.drop_link	= uvcg_control_class_drop_link,
+@@ -1663,7 +1663,7 @@ static void uvcg_format_drop_link(struct config_item *src, struct config_item *t
+ 	mutex_unlock(su_mutex);
+ }
+ 
+-static struct configfs_item_operations uvcg_format_item_operations = {
++static const struct configfs_item_operations uvcg_format_item_operations = {
+ 	.release	= uvcg_config_item_release,
+ 	.allow_link	= uvcg_format_allow_link,
+ 	.drop_link	= uvcg_format_drop_link,
+@@ -1839,7 +1839,7 @@ static void uvcg_streaming_header_drop_link(struct config_item *src,
+ 	mutex_unlock(su_mutex);
+ }
+ 
+-static struct configfs_item_operations uvcg_streaming_header_item_ops = {
++static const struct configfs_item_operations uvcg_streaming_header_item_ops = {
+ 	.release	= uvcg_config_item_release,
+ 	.allow_link	= uvcg_streaming_header_allow_link,
+ 	.drop_link	= uvcg_streaming_header_drop_link,
+@@ -1913,7 +1913,7 @@ static struct config_item
+ 	return &h->item;
+ }
+ 
+-static struct configfs_group_operations uvcg_streaming_header_grp_ops = {
++static const struct configfs_group_operations uvcg_streaming_header_grp_ops = {
+ 	.make_item		= uvcg_streaming_header_make,
+ };
+ 
+@@ -2260,7 +2260,7 @@ static void uvcg_format_set_indices(struct config_group *fmt)
+  * streaming/uncompressed/<NAME>
+  */
+ 
+-static struct configfs_group_operations uvcg_uncompressed_group_ops = {
++static const struct configfs_group_operations uvcg_uncompressed_group_ops = {
+ 	.make_item		= uvcg_frame_make,
+ 	.drop_item		= uvcg_frame_drop,
+ };
+@@ -2507,7 +2507,7 @@ static struct config_group *uvcg_uncompressed_make(struct config_group *group,
+ 	return &h->fmt.group;
+ }
+ 
+-static struct configfs_group_operations uvcg_uncompressed_grp_ops = {
++static const struct configfs_group_operations uvcg_uncompressed_grp_ops = {
+ 	.make_group		= uvcg_uncompressed_make,
+ };
+ 
+@@ -2524,7 +2524,7 @@ static const struct uvcg_config_group_type uvcg_uncompressed_grp_type = {
+  * streaming/mjpeg/<NAME>
+  */
+ 
+-static struct configfs_group_operations uvcg_mjpeg_group_ops = {
++static const struct configfs_group_operations uvcg_mjpeg_group_ops = {
+ 	.make_item		= uvcg_frame_make,
+ 	.drop_item		= uvcg_frame_drop,
+ };
+@@ -2697,7 +2697,7 @@ static struct config_group *uvcg_mjpeg_make(struct config_group *group,
+ 	return &h->fmt.group;
+ }
+ 
+-static struct configfs_group_operations uvcg_mjpeg_grp_ops = {
++static const struct configfs_group_operations uvcg_mjpeg_grp_ops = {
+ 	.make_group		= uvcg_mjpeg_make,
+ };
+ 
+@@ -2714,7 +2714,7 @@ static const struct uvcg_config_group_type uvcg_mjpeg_grp_type = {
+  * streaming/framebased/<NAME>
+  */
+ 
+-static struct configfs_group_operations uvcg_framebased_group_ops = {
++static const struct configfs_group_operations uvcg_framebased_group_ops = {
+ 	.make_item              = uvcg_frame_make,
+ 	.drop_item              = uvcg_frame_drop,
+ };
+@@ -2952,7 +2952,7 @@ static struct config_group *uvcg_framebased_make(struct config_group *group,
+ 	return &h->fmt.group;
+ }
+ 
+-static struct configfs_group_operations uvcg_framebased_grp_ops = {
++static const struct configfs_group_operations uvcg_framebased_grp_ops = {
+ 	.make_group             = uvcg_framebased_make,
+ };
+ 
+@@ -3055,7 +3055,7 @@ static void uvcg_color_matching_release(struct config_item *item)
+ 	kfree(color_match);
+ }
+ 
+-static struct configfs_item_operations uvcg_color_matching_item_ops = {
++static const struct configfs_item_operations uvcg_color_matching_item_ops = {
+ 	.release	= uvcg_color_matching_release,
+ };
+ 
+@@ -3088,7 +3088,7 @@ static struct config_group *uvcg_color_matching_make(struct config_group *group,
+ 	return &color_match->group;
+ }
+ 
+-static struct configfs_group_operations uvcg_color_matching_grp_group_ops = {
++static const struct configfs_group_operations uvcg_color_matching_grp_group_ops = {
+ 	.make_group	= uvcg_color_matching_make,
+ };
+ 
+@@ -3529,7 +3529,7 @@ static void uvcg_streaming_class_drop_link(struct config_item *src,
+ 	mutex_unlock(su_mutex);
+ }
+ 
+-static struct configfs_item_operations uvcg_streaming_class_item_ops = {
++static const struct configfs_item_operations uvcg_streaming_class_item_ops = {
+ 	.release	= uvcg_config_item_release,
+ 	.allow_link	= uvcg_streaming_class_allow_link,
+ 	.drop_link	= uvcg_streaming_class_drop_link,
+@@ -3697,7 +3697,7 @@ static void uvc_func_drop_link(struct config_item *src, struct config_item *tgt)
+ 	mutex_unlock(&opts->lock);
+ }
+ 
+-static struct configfs_item_operations uvc_func_item_ops = {
++static const struct configfs_item_operations uvc_func_item_ops = {
+ 	.release	= uvc_func_item_release,
+ 	.allow_link	= uvc_func_allow_link,
+ 	.drop_link	= uvc_func_drop_link,
+diff --git a/include/linux/usb/gadget_configfs.h b/include/linux/usb/gadget_configfs.h
+index 6b5d6838f865..23c1091e88c0 100644
+--- a/include/linux/usb/gadget_configfs.h
++++ b/include/linux/usb/gadget_configfs.h
+@@ -30,7 +30,7 @@ static ssize_t __struct##_##__name##_show(struct config_item *item, char *page)
+ 	CONFIGFS_ATTR(struct_name##_, _name)
+ 
+ #define USB_CONFIG_STRING_RW_OPS(struct_in)				\
+-static struct configfs_item_operations struct_in##_langid_item_ops = {	\
++static const struct configfs_item_operations struct_in##_langid_item_ops = {	\
+ 	.release                = struct_in##_attr_release,		\
+ };									\
+ 									\
+@@ -86,7 +86,7 @@ static void struct_in##_strings_drop(					\
+ 	config_item_put(item);						\
+ }									\
+ 									\
+-static struct configfs_group_operations struct_in##_strings_ops = {	\
++static const struct configfs_group_operations struct_in##_strings_ops = {	\
+ 	.make_group     = &struct_in##_strings_make,			\
+ 	.drop_item      = &struct_in##_strings_drop,			\
+ };									\
+-- 
+2.52.0
 
 
