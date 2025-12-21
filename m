@@ -1,120 +1,206 @@
-Return-Path: <linux-usb+bounces-31660-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31661-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 717C3CD42E4
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Dec 2025 17:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 87C18CD45E7
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Dec 2025 22:36:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE6CD3007611
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Dec 2025 16:23:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 45D8E30076A0
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Dec 2025 21:36:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4582301011;
-	Sun, 21 Dec 2025 16:23:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5C012222B2;
+	Sun, 21 Dec 2025 21:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IPgL+TBP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L/FyYU5O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA961E492D;
-	Sun, 21 Dec 2025 16:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CB6186A
+	for <linux-usb@vger.kernel.org>; Sun, 21 Dec 2025 21:35:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766334181; cv=none; b=kYQCSq2AdtkqYzBa+pdZcBi1f7Skz75G6B30RDYWRUEsfzA75k8q/eDenqbynxafAjtuqzKC20Dj6VVpzD7w0ceeBmG0eqHwfZ8/my0IShmcFc4Txli0g/V9EkRIDOBdHZNyA3yhgZLerbuCoUm5quNaT8KF7Mm3oyvJLL0kiLg=
+	t=1766352961; cv=none; b=HAq2z6cM4vDn7iSOm2n5No+w/wNxQSArqyH94IM6SRH5V9zasmew04VpBPJFIkmECafaI+eKNoSKpN0R1GEX/rX5hmcW8E5AZJ14mxTja/V6rAj1h5/WV6DVQ492mbI6nbnv5MYyIvYBELVL6LxE0pd4l/hWpqkU3yuUaOZS9n0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766334181; c=relaxed/simple;
-	bh=HFVDEYEven2cCpWR+rsQYn2YYudIq3KS0/uxFk/Wz2I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HQwHzMw44EsVT7aahWo5bSi2jTI8tkTlzKadqhA1BXc89D1YeO20rfyxeuY6B5aWJA6vVrraGx9ZWK86phnVTXO1pCoGRpfFiesZVK3dqDO3sOqAGkiltt8Qd1rAFZtqA+Qkxwq64bSN4QRWRTwokrr37k4/hZA2LJJy878eSlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IPgL+TBP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1631AC4CEFB;
-	Sun, 21 Dec 2025 16:22:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1766334180;
-	bh=HFVDEYEven2cCpWR+rsQYn2YYudIq3KS0/uxFk/Wz2I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IPgL+TBPgFquq/tuRIaxt0tq7b4qfdtrji7ITrupfI76SlkzjUZSMKYDpCpEmlkIc
-	 zstKML5PaqljHWmPbBYaPVLcUx3Vm9AFNoWpppS/ojtLyG0DvimMamYnxYJ05gQLzS
-	 TNR3w4zg9Ra6+sE2TOtaVgfj2u2f3qTiZMoct/ic=
-Date: Sun, 21 Dec 2025 17:22:57 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: =?utf-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
-	Sarah Sharp <sarah.a.sharp@linux.intel.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: xhci: check Null pointer in segment alloc
-Message-ID: <2025122131-jaunt-obtuse-4585@gregkh>
-References: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+	s=arc-20240116; t=1766352961; c=relaxed/simple;
+	bh=B14wI8QVS1YbTKm7Mp+pkArlyY72cmqt0sf4fSSt/RU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=IyX4xUW9BSOtiX2Dbupc68e5Sq5R/B8Nf/Yq7cM+ZcMB6fiBaIhbj31zl+IRFRVEMfMTutlsivkTNj8cT5MGeTLCwSh5dNsUpLNcBjT8fXk0NqmitVVrmsT5AhNG2qol4as6ed8Sp1AQJk7yM27MXPLsovAWVJpV+DoUJmQZxCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L/FyYU5O; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-88a3b9ddd40so18187436d6.1
+        for <linux-usb@vger.kernel.org>; Sun, 21 Dec 2025 13:35:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766352958; x=1766957758; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lSp/J1pHvXv5+rE0RMX4gnZmHm+WJfaHuHekfIZgQ34=;
+        b=L/FyYU5ObbHAJ8JgF54EY4wbSgDsuo90tKrZ4sARNUP5/dpjMDtYQcW9bxLX++8Wxu
+         tdr+JgP8SOhsI7wR0rzcXBURsGn8M75VrtnqTf9oSZfAxJgV7cUBH+sVb9ssU0Eoo0vl
+         0rLGBM6pq16fWk70F1+Kakg+W5vuWpAFG0WaIS5EN0ryI7kZZBkmPM96TamGAtlVaPhr
+         4xsKFjdG8yVfjJC5YS7Ut39kA6pZyu8TZeBA3J6/gv053+ZwjdeyljqRfapK67y3NJRa
+         CGatF1mXn5135XpRVFX/YNAfpFUcv/kuGz+aynsetCRKjEVpCdTtfiJ0jckZdTbs9D4i
+         Hyew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766352958; x=1766957758;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lSp/J1pHvXv5+rE0RMX4gnZmHm+WJfaHuHekfIZgQ34=;
+        b=R1MfomlccmohR+PCch81AN7oC2R1gVMTwCis8Zz2oZrBuyjpV8KtNuvedFzVH82/r+
+         LzQQ+wD7Ab1i+niVepc8u19zewZMeP/aUkXShE09CBxQHvpVnVNdUiuyZv03nz1eSEsl
+         T/qXjzDRu8pitvN0I0ZlB60GSHL8Epjov7VIY8a0TZlENz8iBK4e3NS8bnHVdutBqHM6
+         MwOQKmchl5vOIyifeVOgEhqfSgwTg3ev139uRwwRvHCw8UOVsT/Q87auB6Bj7yE3WVeC
+         6BmvLjbta8v9aNqTNVy6LsJWr5f0jGoUETscJE2yxMzZ8X0SWTYtNrDNFL8se1NJV4wS
+         ++Qg==
+X-Gm-Message-State: AOJu0Yz4cLGu/u8oTCnU5OhhLGNMXNiNBYlDxgxD1B1EmyBZVysh2lYd
+	PClv9konNGGBhLz/qp9UEM/DyXWPJMLMvRcaXetOqHeHclgtZRGVZrQELge0rEDdW6MHPAW0RfW
+	1NSeoHmKFf3j65bd9plln1OUQZDkAmganw9nu
+X-Gm-Gg: AY/fxX7RJMKRIRG8OI3W38OReKP8WI+zf9ieiAiwyD/li3iY7yarIJwE6VkqsGooIwk
+	uSZVaRtwGgefXuIZMgLYEfIfjuNa/S5n8jgcLvuox9AxL8hzxmkAC5MhaErswaEn8+6nC4CF2Tq
+	ZrgUYTMs0KHxBGdehxREmZonlxSNamk3tG2NUrfXKI/O4X14RZYW/q0m3Ga1XHSWyfwQuyNwEkC
+	EDSnavwSBr4DvcF9VopqDrV0q7lCcFDVMIuE3W/sgbWdHZDMBkLyS9md2FgXG3TjCNntlHhXhDq
+	Jfo=
+X-Google-Smtp-Source: AGHT+IF4sRJwNcjBe8OvRlQqQbkUtn4l+1ergLa0QZ40/JvGjZNQcoAtmR/1I0yfkKGM+3Pts1YvlCcJDfB5eKyrhkw=
+X-Received: by 2002:a05:6214:4e85:b0:888:87ea:c7db with SMTP id
+ 6a1803df08f44-88d83793297mr132674246d6.39.1766352958595; Sun, 21 Dec 2025
+ 13:35:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+From: Slackwa Slack <slackwa@gmail.com>
+Date: Sun, 21 Dec 2025 23:35:47 +0100
+X-Gm-Features: AQt7F2oZRkfYHQeKSPTKlvUAdSQ49b95L16HCXGuc-amho0lp7n3zyisAAqL37U
+Message-ID: <CACw+751Y=f4ARfdiPYAMaXrE0jCBGkrL-k3+XDoCHEo-6kZxzw@mail.gmail.com>
+Subject: [BUG] RTL8157 (0bda:8157): firmware lockup with TX SG/GSO using
+ Realtek r8152 out-of-tree; in-tree r8152 on 6.17.9-zen1 does not bind
+To: netdev@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Dec 19, 2025 at 07:18:10AM +0000, 胡连勤 wrote:
-> From: Lianqin Hu <hulianqin@vivo.com>
-> 
-> Considering that in some extreme cases,
-> when a digital headset is connected and a wake-up
-> operation is performed,if the headset is plug out
-> or the headset connection is abnormally disconnected at this time,
-> segment_pool will be set to null, resulting in accessing a null pointer.
+Hello,
 
-Nit, please wrap your changelog at 72 columns.
+I would like to report a reproducible firmware lockup issue affecting
+Realtek RTL8157 (USB 10GbE) devices using the r8152 driver.
 
-> So, add null pointer checks to fix the problem.
-> 
-> Call trace:
->  dma_pool_alloc+0x3c/0x248
->  xhci_segment_alloc+0x9c/0x184
->  xhci_alloc_segments_for_ring+0xcc/0x1cc
->  xhci_ring_alloc+0xc4/0x1a8
->  xhci_endpoint_init+0x36c/0x4ac
->  xhci_add_endpoint+0x18c/0x2a4
->  usb_hcd_alloc_bandwidth+0x384/0x3e4
->  usb_set_interface+0x144/0x510
->  usb_reset_and_verify_device+0x248/0x5fc
->  usb_port_resume+0x580/0x700
->  usb_generic_driver_resume+0x24/0x5c
->  usb_resume_both+0x104/0x32c
->  usb_runtime_resume+0x18/0x28
->  __rpm_callback+0x94/0x3d4
->  rpm_resume+0x3f8/0x5fc
->  rpm_resume+0x1fc/0x5fc
-> 
-> Fixes: 0ebbab374223 ("USB: xhci: Ring allocation and initialization.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lianqin Hu <hulianqin@vivo.com>
-> 
->  drivers/usb/host/xhci-mem.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index c708bdd69f16..2ea5fb810a80 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -35,6 +35,9 @@ static struct xhci_segment *xhci_segment_alloc(struct xhci_hcd *xhci,
->  	dma_addr_t	dma;
->  	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
->  
-> +	if (!xhci->segment_pool)
-> +		return NULL;
+The issue is triggered by TX scatter-gather / GSO traffic, typically
+during sustained upload workloads.
 
-What prevents segment_pool from being set to NULL right after checking
-this?
+Hardware
+USB Ethernet adapter: Realtek RTL8157
+USB ID: 0bda:8157
 
-And what happens when you return "out of memory" like this is doing?
-Doesn't that cause problems with the caller?  Looking at the callbacks
-it seems like the whole ring will then be torn down, is that the proper
-thing to do on system resume?
+Host: AMD X399 platform
 
-thanks,
+USB controller: xHCI (USB 3.1 Gen2, 10 Gbps)
 
-greg k-h
+Cable / link: USB 10Gbps negotiated correctly
+
+Software
+Kernel: 6.17.9-zen1 (also observed on other 6.x kernels)
+
+Driver: r8152 (Realtek version v2.21.4/v2.19.2)
+
+Distribution: Slackware-based (no vendor driver)
+
+Problem description
+Under sustained TX load (e.g. iperf3 upload, large TCP streams), when
+scatter-gather / GSO is enabled, the RTL8157 firmware eventually
+becomes unresponsive.
+
+Once triggered:
+
+TX stalls and NETDEV WATCHDOG fires
+
+USB control transfers start timing out (-ETIMEDOUT)
+
+The kernel attempts to reset the USB device
+
+During reset, OCP register accesses fail, triggering WARNs
+
+At that point the device is unrecoverable without a full USB reset.
+
+Kernel trace (excerpt)
+WARNING: CPU: 7 PID: 5220 at r8152.c:1393 ocp_word_w0w1+0xe6/0x100 [r8152]
+
+Call Trace:
+  rtl_disable
+  rtl8153_disable
+  rtl8152_pre_reset
+  usb_reset_device
+Followed by repeated USB control failures:
+
+r8152 ... read type=0x0100, index=0xe84c fail -110
+This indicates the firmware is already wedged when ocp_word_w0w1() is
+called during reset handling.
+
+Analysis
+All PHY/MAC management on RTL8157 goes through OCP (On-Chip
+Peripheral) access, implemented via USB control transfers.
+
+When SG/GSO TX is enabled, the firmware appears to enter a deadlock state:
+
+TX descriptors stop progressing
+
+OCP engine stops responding
+
+All further control accesses time out
+
+The WARN in ocp_word_w0w1() is therefore a symptom, not the root cause.
+
+The issue does not appear to be related to:
+
+xHCI
+
+USB bus negotiation
+
+host memory constraints
+
+It is reproducible only when TX segmentation / scatter-gather is enabled.
+
+Workaround / mitigation
+The issue is fully mitigated by:
+
+Disabling SG / FRAGLIST for RTL8157
+
+Keeping TSO enabled but with linear buffers only
+
+In practice:
+
+NETIF_F_SG and NETIF_F_FRAGLIST disabled
+
+tp->sg_use = false forced for RTL8157
+
+TSO size limited (RTL_LIMITED_TSO_SIZE)
+
+With this configuration:
+
+No firmware lockups observed
+
+No OCP timeouts
+
+Device remains stable under sustained upload
+
+Slight TX performance reduction is acceptable
+
+Conclusion
+This appears to be a firmware bug specific to RTL8157, triggered by
+scatter-gather TX paths.
+
+A driver-side quirk disabling SG for RTL8157 would prevent firmware
+lockups and avoid repeated USB resets and WARNs.
+
+I am happy to provide:
+
+additional logs
+
+a minimal patch implementing the quirk
+
+further testing if needed
+
+Thank you for your time.
+
+Best regards,
 
