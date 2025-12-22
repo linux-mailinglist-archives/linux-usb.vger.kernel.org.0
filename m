@@ -1,440 +1,165 @@
-Return-Path: <linux-usb+bounces-31682-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31683-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 978EBCD6AC1
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 17:33:45 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13E6ACD6B4E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 17:49:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0D74F3030D99
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 16:33:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B009A3014B66
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 16:49:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B27A322DBB;
-	Mon, 22 Dec 2025 16:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 361533328F6;
+	Mon, 22 Dec 2025 16:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="MBsb2Gs8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NbxREXt8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451F033985
-	for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 16:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E102C11E2
+	for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 16:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766421206; cv=none; b=WLjfuHlRUvmJUHf3D0CDOZsaNqfsLUdehTGwiq9jkG2iwMa/4k66kBG/+yzaTCw4K+Le76KCeob2Ob9P6GzqgGHyAN5VLKTmxZY2u4UR0YXNT6fYAd6Lrd8RXJltzwmN9DiTExsJnWpfYnHB0vMgLIMvlNYqTke3mlglAaqfRUY=
+	t=1766422182; cv=none; b=nwhrwmDoyKKF9HIHbQVQyMn6OIV28bPCvXUykPdlXXeeggJ8mxEqgGnGFfAwI38CN37gHS2YU6vyzWc9k+Bh/k6JmmdbK1Ap5caq/RB8wjqDdkEkzrX2dBYnBh0fO4cSpXiFsOU5Zr0EyP96CEDRyMZ860forkNzWx4bF+56sXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766421206; c=relaxed/simple;
-	bh=X9tXTL24I8iThY2UeiPe/WZAZ1ranZr9kEUNlyYEuT8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MDfoAnGwa3GCtO/maLWXPXuCSeL1mniXrmPaA+LNwedZjVSb3edeWrdJfMgUuciQWfvdHC57+WMXoD/D3/dgMYDBKYezvl1F536dNsB60VAQVYAjh6k0aJeklGBqZihy/z0jbuSWuS6kzJuVPSJS5LkK3VURmr/OhcYFPNLSYLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=MBsb2Gs8; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [10.50.4.39] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4dZkGL3tdbz15bS;
-	Mon, 22 Dec 2025 11:33:13 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1766421195; bh=X9tXTL24I8iThY2UeiPe/WZAZ1ranZr9kEUNlyYEuT8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=MBsb2Gs8Q/HkQtpSi4loonGvI79wqH2RlQsPa6T99SnryJY5DEHpvwEJ/cRUNzR3J
-	 geqkMrlgaC7dg5vTMc7tm7ubbxQk6oqPVejlXkIrQmYAbUpfR4rUsQzUM8X9TYJefp
-	 lGbbwOibcgpH0CUaqB9Q8EUJrg4UibOqZwkHYWSs=
-Message-ID: <fd12f7d2-98ed-46fc-9847-370da9ddfd50@panix.com>
-Date: Mon, 22 Dec 2025 08:33:12 -0800
+	s=arc-20240116; t=1766422182; c=relaxed/simple;
+	bh=s4al1YcouowCwEMJpRHJhKgg9Wb10qp8TsQHudR5GSw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Zw/LmxIJAvT6fisrwSpflSCdV9RisMnlvOPtjBmVshtpjfI1fdIWNh+L7aN5kOL3gZsPcbRzIYS4CBqnscuN+dezWtg+gt01EkihJZNCbnDUGC9siJYqY0WF7/uR5mEMf1lxFVaaSHh8iq4YzgTYzR4Svb4L6JUEpzxte2SKlsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NbxREXt8; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-64b8123c333so5819930a12.3
+        for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 08:49:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766422179; x=1767026979; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y2TeGU1yZihTwXXuF0l6WZeB3CYaTSrLUKvNNXrmTmU=;
+        b=NbxREXt8qrNLnJ9WJw2LUuohXLeqz0qvRZ8rkDShgbA5sxQ/e/dXXnLRVn/ERxiIBQ
+         /qOkS++HMW3xw2WP0gRCDrSfAIhhkffA8PG9Rbaq6YreG7cKviBVvgUJp/rWhGm6p16s
+         wmT3IWrqEqEEzVwJ9t+Q2rEkFsIiG7TNgXBrvhQSyeYxoyP99kLGGLetTUJn1gUWHTiy
+         HYAQhJ+yvkzm6TgfUn/0ve12JWO1tpJNELbAykbxgGNFrLO7okhWoMM8Z/f+KfguvOeV
+         6q3n3q0eIbN7qxlR4JUx5+p0cfqytytjy7njQunyezYMGFyQ1ivtx1V/WbsN16UDNVOH
+         /pFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766422179; x=1767026979;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Y2TeGU1yZihTwXXuF0l6WZeB3CYaTSrLUKvNNXrmTmU=;
+        b=UlJw1XML2qNDKCTZe+Kz1DKQihHCSuIU0UAz4XQWN/tDf/iM7dZmGhvitil6JMka+l
+         IVmOdd3uVbK7I8EuP9ViEItKKRNmZtrRvwB6if8WA4yJLwMqcdGiAv7yV1wHCAGlquWH
+         29LHKSQiac4ZeXgIUuxTRicYuYllb/FLii8aJHGvLkx4+pr5KA8LXnz1P9VqhVsozdV9
+         tHKICugiChwoYk1f526nCAxMRliVVR6Q/KJ3r1BWvUcIsAhOEjLEX5AXZXzf9Wb2Ijse
+         CkVP0gM2203QW3DLf4YJZpWGtKbkvZc1FvZ+vaRzQHAM32WXAvkRvg/8oovwPY4PA69S
+         qhzA==
+X-Forwarded-Encrypted: i=1; AJvYcCVQW3J3QPTp/ggZJyADVkkNysAhXPTi/ugoMKyslYcc3K1YNcZhOs2cCaOKIEfVTrSO1qBUV9Sgin0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt8MK1ykSYYY3W1iS+w2mwOj9YM++Q3dtpwg3dyCxOr08uL00c
+	Opo5qN+2BYQYjUg249I0hxuJqT/4cxsaE3P9Pr9cPBC3sMbSxx36drhq
+X-Gm-Gg: AY/fxX4strrW0E/2lOv92phnNwu2PgBe0BcdjDionRAy9iy2jOqKqZWAgUvdVHBolpR
+	a1ritEvBq0jd3PSs1lfPvxbwIjO3j6nJSjl+QmoAMKeZtZ8/9Uy+z2uRzK4KU55R6pn1zpNWHvY
+	5kpQ0y3wp/AX5t7ywjHYKH1Qz6IgYM/KGUHswYnYRQ+LB1NXGyXP2JYRzaci+tzyOgYIJXbQpag
+	r95y3+dw3B9cs6aZvcLZ5ySNalCwGjMBPCpuD/AmzV+VZsHM98OBkrUDEasJC228OBLaRuJSswh
+	CH/yWAxK5vpi+/9qLkRj184VDiEDKy93NEVldlbmZTjEFw96SGgRkkbRl45+gVc/TzekVzIHlzb
+	mvbdl3pH+wRX+id3zjjVz3yCdAgh0u1Rvk4G4jBtFdpumsEGDTJH7+AvBQZPK5/pjPrtwI7hrn1
+	ohJp96I+HbQI9chgjQ5HcUmF0=
+X-Google-Smtp-Source: AGHT+IEuoajuyQPlnJMJHAzpLoiP+2gWrQxeVR+VMMx8YYpqOOZ/n023XBImwrvD2WSRLXwF4/OUGg==
+X-Received: by 2002:a05:6402:3c6:b0:647:a127:7c1e with SMTP id 4fb4d7f45d1cf-64b8ec6dfb0mr8295768a12.20.1766422179064;
+        Mon, 22 Dec 2025 08:49:39 -0800 (PST)
+Received: from foxbook (bfd193.neoplus.adsl.tpnet.pl. [83.28.41.193])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64b9105a9c4sm10993483a12.12.2025.12.22.08.49.38
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 22 Dec 2025 08:49:38 -0800 (PST)
+Date: Mon, 22 Dec 2025 17:49:34 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, Mathias Nyman
+ <mathias.nyman@linux.intel.com>, Mathias Nyman <mathias.nyman@intel.com>,
+ Sarah Sharp <sarah.a.sharp@linux.intel.com>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: xhci: check Null pointer in segment alloc
+Message-ID: <20251222174934.4c9b62d2.michal.pecio@gmail.com>
+In-Reply-To: <eb5715b5-613a-4610-9852-1a6ae67b4153@rowland.harvard.edu>
+References: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+	<4935bdf5-4d36-45c3-9bcd-9d14606dd54e@linux.intel.com>
+	<TYUPR06MB6217AC2CE5431DC9B3956FE7D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+	<20251220141510.1bc1ef19.michal.pecio@gmail.com>
+	<20251222064252.GA1196800@google.com>
+	<2025122253-stopper-tweed-6e68@gregkh>
+	<20251222085543.4d7430d5.michal.pecio@gmail.com>
+	<TYUPR06MB6217CB438F21763401A93E6ED2B4A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+	<eb5715b5-613a-4610-9852-1a6ae67b4153@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: xhci: route endpoints to secondary interrupters
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, raoxu <raoxu@uniontech.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- michal.pecio@gmail.com, niklas.neronin@linux.intel.com, zhanjun@uniontech.com
-References: <D7A2A2BD5BF19E5A+20251217094608.3848027-1-raoxu@uniontech.com>
- <12d644fc-4d7f-41f5-8ed4-e520b422d01a@linux.intel.com>
- <8cfadd23-e1ee-4691-bfbd-9177d883899f@panix.com>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <8cfadd23-e1ee-4691-bfbd-9177d883899f@panix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, 22 Dec 2025 08:34:14 -0500, Alan Stern wrote:
+> On Mon, Dec 22, 2025 at 12:21:09PM +0000, =E8=83=A1=E8=BF=9E=E5=8B=A4 wro=
+te:
+> > Hi Michal:
+> >  =20
+> > > On Mon, 22 Dec 2025 08:13:21 +0100, Greg Kroah-Hartman wrote: =20
+> > > > > An API that insists on its users exercising care, knowledge
+> > > > > and cognisance sounds fragile and vulnerable. =20
+> > > >
+> > > > Fragile yes, vulnerable no.  Let's fix the fragility then, but
+> > > > as has been pointed out in this thread, we don't know the root
+> > > > cause, and I don't even think this "fix" would do the right
+> > > > thing anyway. =20
+> > >=20
+> > > The patch looks wrong. I suspect this happens when add_endpoint()
+> > > is called concurrently with resume(), which makes little sense.
+> > > And it means the same code can probably call add_endpoint()
+> > > before resume(), which makes no sense either. We can't do that
+> > > with suspended HW.
+> > >=20
+> > > Chances are that this crash isn't even the only thing that could
+> > > go wrong when such calls are attempted. For one, xhci_resume()
+> > > drops the spinlock after reporting usb_root_hub_lost_power(), so
+> > > your guess elsewhere was correct - this code isn't even locked
+> > > properly.
+> > >=20
+> > > It seems no operations on USB devices during resume() are
+> > > expected. =20
+>=20
+> Let's be more precise.  No extraneous operations are expected on a
+> USB device while that device is being resumed (i.e., no operations
+> other than those directly involved with the resume itself).  However,=20
+> operations on a USB hub or controller are expected and allowed while
+> a downstream device is being resumed.
 
-I'm gonna have to jump in with a "NAK" as well; it breaks resuming from 
-hibernation (and in a big way, system is totally frozen once the resume 
-finishes, can't even force a core-dump via SysRq-C).
+That's not the situation here. The problematic resume is that of the
+host controller itself, it's the only place I see which is expected to
+destroy the segment pool at runtime (other than stop()) and possibly
+cause the reported NULL derefence.
 
-(My (totally-random) guess is that upon resume (and therefore, a 
-power-cycle) the boot IRQs and the resumed-image IRQs are different, but 
-I'd think this would also affect other blocks' IRQs, though.)
+It is not expected that anyone will add endpoints (and probably do
+anything) while the HC is resuming. No sanity checks for that either,
+the driver just does stupid things. It likely does stupid things too
+if you try to manipulate devices while the HC is suspended.
 
--K
+And it looks like somebody found a way of doing just that, by calling
+snd_usb_autoresume() at inappropriate time for some reason. The export
+was added by Wesley Chang, so I guess it was part of "audio offload".
+IDK if offload uses it correctly. Somebody uses it incorrectly.
 
-On 12/18/25 09:01, Kenneth Crudup wrote:
-> 
-> FWIW, I rebased this (perhaps the previous spin?) for v.19-rc1 (see 
-> attached) and tried it out, before I saw you guys' objections ... 
-> whoops ... but FWIW, it seems to be working here OK (that being said, I 
-> haven't had any USB errors so not sure what'll happen then, based on the 
-> followup comments).
-> 
-> If nothing else, I'll run it 'till my next reboot at least and see if 
-> there's any anomalies, but I guess you can put a "Tested-By" here?
-> 
-> Before, e.g.,:
-> 
-> ----
->   178:     675913          0          0          0          0          0 
->    12944781          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
->   186:    3286163          0          0          0          0          0 
->           0          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
-> ----
-> 
-> ... after (and after a couple of "Bonnie" runs):
-> 
-> ----
->   178:          0          0          0          0          0          0 
->        1470          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
->   179:          0          0          0          0          0          0 
->           0     369210          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
->   180:          0          0          0          0          0          0 
->           0          0     264964          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
->   181:          0          0          0          0          0          0 
->           0          0          0     632289          0          0    0 
->          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
->   182:          0          0          0          0          0          0 
->           0          0          0          0     557895          0    0 
->          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
->   183:          0          0          0          0          0          0 
->           0          0          0          0          0      75643    0 
->          0 IR-PCI-MSI-0000:00:0d.0    5-edge      xhci_hcd
->   184:          0          0          0          0          0          0 
->           0          0          0          0          0          0 9806 
->          0 IR-PCI-MSI-0000:00:0d.0    6-edge      xhci_hcd
->   185:          0          0          0          0          0          0 
->           0          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:0d.0    7-edge      xhci_hcd
->   186:        935          0          0          0          0          0 
->           0          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
->   187:          0      48742          0          0          0          0 
->           0          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
->   188:          0          0      30631          0          0          0 
->           0          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
->   189:          0          0          0          0          0          0 
->           0          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
->   190:          0          0          0          0          0          0 
->           0          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
->   191:          0          0          0          0          0        157 
->           0          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:14.0    5-edge      xhci_hcd
->   192:          0          0          0          0          0          0 
->        4820          0          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:14.0    6-edge      xhci_hcd
->   193:          0          0          0          0          0          0 
->           0       2915          0          0          0          0    0 
->          0 IR-PCI-MSI-0000:00:14.0    7-edge      xhci_hcd
-> ----
-> 
-> -K
-> 
-> On 12/18/25 07:49, Mathias Nyman wrote:
->> Hi Xu Rao
->>
->> Thanks for the updated version
->>
->> On 12/17/25 11:46, raoxu wrote:
->>> From: Xu Rao <raoxu@uniontech.com>
->>>
->>> Some xHCI hosts expose multiple MSI/MSI-X vectors, but the driver
->>> currently routes all transfer completions through interrupter 0.
->>> This can lead to unnecessary contention on the primary event ring
->>> and IRQ vector.
->>>
->>> If the host reports more than one interrupter, allocate secondary
->>> interrupters [1..max_interrupters-1] and cap the number of created
->>> interrupters by num_online_cpus(). Each secondary interrupter has
->>> its own event ring and can be requested as a separate IRQ vector.
->>
->> This can lead to excessive amounts of interrupters on systems that
->> usually don't really use usb that much.
->>
->> 96 core systems would have 96 interrupters, each with an 8k event ring
->> to serve maybe one usb keyboard.
->>
->> Lets start with something simple like 2 or 4 interrupters.
->>
->>>
->>> An interrupter is bound to each endpoint once at endpoint enable
->>> time. EP0 is always kept on interrupter 0, while all other endpoints
->>> are assigned in a round-robin fashion over the enabled secondary
->>> interrupters. Multiple endpoints may therefore share the same
->>> interrupter.
->>
->> I think it would be better to assign a whole USB device to the same
->> interrupter, and set the "Interrupter Target" field in the slot
->> context to that interrupter.
->>
->> This way special transfer events such as 'ring overrun' and 'ring 
->> underrun'
->> will end up on the same event ring as the rest of the transfer events for
->> that endpoint, and avoid some of the issues Michal pointed out.
->>
->>>
->>> Interrupt routing is performed by programming TRB_INTR_TARGET()
->>> from the endpoint's bound interrupter number when queueing TRBs.
->>> As a result, transfer completions are delivered to the event ring
->>> (and IRQ vector) of the selected interrupter instead of always
->>> landing on interrupter 0.
->>>
->>> All interrupters share a common IRQ handler. STS_EINT is only
->>> checked and cleared for interrupter 0, as it is only meaningful
->>> for the primary interrupter. Secondary MSI/MSI-X vectors may fire
->>> independently and simply process their associated event rings.
->>>
->>> When requesting IRQs, the usb_hcd pointer is used as the dev_id
->>> for both primary and secondary vectors. Although each secondary
->>> interrupter has its own event ring, using per-interrupter dev_id
->>> objects complicates teardown ordering in xhci_cleanup_msix().
->>> In particular, IRQs must be freed before the corresponding
->>> interrupter structures are removed, and the existing cleanup
->>> sequence imposes constraints on dev_id lifetime. Using a common
->>> dev_id avoids dev_id mismatches during free_irq() and keeps the
->>> IRQ teardown consistent with the current xHCI removal flow.
->>>
->>> Testing on an MSI-X capable host controller shows that interrupts
->>> are effectively distributed across secondary vectors. For example,
->>> after sustained USB transfers:
->>>
->>>    /proc/interrupts (filtered):
->>>      32:          0          0          0          0 0          0 \
->>>            0        522  IR-PCI-MSIX-0000:03:00.3  0-edge  xhci_hcd
->>>      33:      12297          0          0          0 0          0 \
->>>            0          0  IR-PCI-MSIX-0000:03:00.3  1-edge  xhci_hcd
->>>      34:          0      17082          0          0 0          0 \
->>>            0          0  IR-PCI-MSIX-0000:03:00.3  2-edge  xhci_hcd
->>>      35:          0          0      27567          0 0          0 \
->>>            0          0  IR-PCI-MSIX-0000:03:00.3  3-edge  xhci_hcd
->>>      36:          0          0          0      33234 0          0 \
->>>            0          0  IR-PCI-MSIX-0000:03:00.3  4-edge  xhci_hcd
->>>      37:          0          0          0          0 1519411          
->>> 0 \
->>>            0          0  IR-PCI-MSIX-0000:03:00.3  5-edge  xhci_hcd
->>>
->>> This demonstrates that transfer completions are no longer handled
->>> exclusively by interrupter 0, but are instead distributed across
->>> multiple MSI-X vectors.
->>>
->>> Signed-off-by: Xu Rao <raoxu@uniontech.com>
->>> ---
->>> Changelog:
->>> v1 -> v2:
->>>    - Bind interrupters to endpoints at enable time instead of selecting
->>>      per transfer.
->>>    - Store the selected interrupter in struct xhci_virt_ep and program
->>>      TRB_INTR_TARGET() from the bound interrupter.
->>>    - Use a single IRQ handler for both primary and secondary vectors,
->>>      with STS_EINT handling restricted to interrupter 0.
->>>    - Keep a common dev_id for IRQ registration to match the existing
->>>      xhci_cleanup_msix() teardown constraints and avoid dev_id
->>>      lifetime issues.
->>>    - Clarify secondary interrupter teardown to avoid double-free or
->>>      use-after-free during xHCI removal.
->>> v2 -> v3:
->>>    - modify commit information
->>> ---
->>>   drivers/usb/host/xhci-mem.c  | 86 +++++++++++++++++++++++++++++++++---
->>>   drivers/usb/host/xhci-pci.c  | 28 ++++++++++++
->>>   drivers/usb/host/xhci-ring.c | 79 ++++++++++++++++++++++++---------
->>>   drivers/usb/host/xhci.c      | 38 ++++++++++++++++
->>>   drivers/usb/host/xhci.h      |  7 +++
->>>   5 files changed, 212 insertions(+), 26 deletions(-)
->>>
->>> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
->>> index c4a6544aa107..277d395c03b8 100644
->>> --- a/drivers/usb/host/xhci-mem.c
->>> +++ b/drivers/usb/host/xhci-mem.c
->>> @@ -1408,6 +1408,36 @@ static u32 xhci_get_max_esit_payload(struct 
->>> usb_device *udev,
->>>       return max_packet * max_burst;
->>>   }
->>> +/* Pick an interrupter for an endpoint (EP0 always stays on 
->>> interrupter 0). */
->>> +static struct xhci_interrupter *
->>> +xhci_pick_ep_interrupter(struct xhci_hcd *xhci, unsigned int ep_index)
->>> +{
->>> +    unsigned int idx;
->>> +
->>> +    /* Keep EP0 on primary interrupter */
->>> +    if (ep_index == 0 || !xhci->nr_xfer_interrupters)
->>> +        return xhci->interrupters[0];
->>> +
->>> +    /* round-robin over enabled secondary interrupters */
->>> +    idx = (unsigned int)atomic_inc_return(&xhci->next_xfer_intr);
->>> +    idx = (idx - 1) % xhci->nr_xfer_interrupters;
->>> +    return xhci->xfer_interrupters[idx] ?: xhci->interrupters[0];
->>> +}
->>
->> Set same interrupter for a whole device instead of round-robin for 
->> endpoints.
->> Skip the atomic_inc_return and whole atomic variable and do something 
->> like:
->> idx = slot_id % number_of_interrupters;
->>
->>> +
->>> +/* Bind the endpoint to one interrupter at enable time. */
->>> +static void xhci_bind_ep_interrupter(struct xhci_hcd *xhci,
->>> +        struct xhci_virt_device *virt_dev,
->>> +        unsigned int ep_index)
->>> +{
->>> +    struct xhci_virt_ep *xep;
->>> +    struct xhci_interrupter *ir;
->>> +
->>> +    xep = &virt_dev->eps[ep_index];
->>> +    ir = xhci_pick_ep_interrupter(xhci, ep_index);
->>> +
->>> +    xep->interrupter = ir;
->>> +}
->>
->> This helper doesn't do much.
->> Can be skipped.
->>
->>> +
->>>   /* Set up an endpoint with one ring segment.  Do not allocate 
->>> stream rings.
->>>    * Drivers will have to call usb_alloc_streams() to do that.
->>>    */
->>> @@ -1511,6 +1541,9 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
->>>       ep_ctx->tx_info = 
->>> cpu_to_le32(EP_MAX_ESIT_PAYLOAD_LO(max_esit_payload) |
->>>                         EP_AVG_TRB_LENGTH(avg_trb_len));
->>> +    /* bind endpoint to an interrupter once at enable time */
->>> +    xhci_bind_ep_interrupter(xhci, virt_dev, ep_index);
->>> +
->>>       return 0;
->>>   }
->>> @@ -1902,17 +1935,31 @@ 
->>> EXPORT_SYMBOL_GPL(xhci_remove_secondary_interrupter);
->>>   void xhci_mem_cleanup(struct xhci_hcd *xhci)
->>>   {
->>>       struct device    *dev = xhci_to_hcd(xhci)->self.sysdev;
->>> +    struct usb_hcd  *hcd = xhci_to_hcd(xhci);
->>>       int i, j, num_ports;
->>>       cancel_delayed_work_sync(&xhci->cmd_timer);
->>> -    for (i = 0; xhci->interrupters && i < xhci->max_interrupters; i+ 
->>> +) {
->>> -        if (xhci->interrupters[i]) {
->>> -            xhci_remove_interrupter(xhci, xhci->interrupters[i]);
->>> -            xhci_free_interrupter(xhci, xhci->interrupters[i]);
->>> -            xhci->interrupters[i] = NULL;
->>> +    if (xhci->interrupters && xhci->interrupters[0]) {
->>> +        xhci_remove_interrupter(xhci, xhci->interrupters[0]);
->>> +        xhci_free_interrupter(xhci, xhci->interrupters[0]);
->>> +        xhci->interrupters[0] = NULL;
->>> +    }
->>> +
->>> +    for (i = 0; xhci->xfer_interrupters && i < xhci->xfer_irq_num; 
->>> i+ +) {
->>> +        if (xhci->xfer_interrupters[i]) {
->>> +            xhci_remove_secondary_interrupter(hcd, xhci- 
->>> >xfer_interrupters[i]);
->>> +            xhci->xfer_interrupters[i] = NULL;
->>>           }
->>>       }
->>> +
->>> +    if (xhci->xfer_irq_num) {
->>> +        kfree(xhci->xfer_interrupters);
->>> +        xhci->xfer_interrupters = NULL;
->>> +        xhci->xfer_irq_num = 0;
->>> +        atomic_set(&xhci->next_xfer_intr, 0);
->>
->> Hmm, so we now have two arrays of interrupters
->>    xhci->interrupters[]
->>    xhci->xfer_interripters[]
->>
->> And some variables to keep track how many xhci interrupters are 
->> allocated,
->> and others to show how man actual interrupt vectors are in use.
->>
->> I don't have a better way out of the box but it seems like
->> like there probably is a neater way to do this.
->>
->>
->>> +    }
->>> +
->>>       xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Freed interrupters");
->>>       if (xhci->cmd_ring)
->>> @@ -2412,6 +2459,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t 
->>> flags)
->>>   {
->>>       struct device    *dev = xhci_to_hcd(xhci)->self.sysdev;
->>>       dma_addr_t    dma;
->>> +    int        i;
->>>       /*
->>>        * xHCI section 5.4.6 - Device Context array must be
->>> @@ -2505,6 +2553,34 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t 
->>> flags)
->>>       if (!xhci->interrupters[0])
->>>           goto fail;
->>> +    /*
->>> +     * Allocate secondary interrupters [1..max_interrupters-1].
->>> +     * Cap by num_online_cpus() to avoid excessive vectors.
->>> +     */
->>> +    xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocating secondary 
->>> event ring");
->>> +    if (xhci->max_interrupters > 1) {
->>> +        xhci->xfer_irq_num = min(num_online_cpus(),
->>> +                    (unsigned int)xhci->max_interrupters - 1);
->>> +        xhci->xfer_interrupters = kcalloc_node(xhci->xfer_irq_num,
->>> +                sizeof(*xhci->xfer_interrupters),
->>> +                flags, dev_to_node(dev));
->>> +
->>> +        if (!xhci->xfer_interrupters)
->>> +            goto fail;
->>> +    } else
->>> +        xhci->xfer_irq_num = 0;
->>> +
->>> +    for (i = 0; i < xhci->xfer_irq_num; i++) {
->>> +        struct xhci_interrupter *ir;
->>> +        /* Create secondary interrupter with intr_num = i + 1. */
->>> +        ir = xhci_create_secondary_interrupter(xhci_to_hcd(xhci),
->>> +                i + 1, xhci->imod_interval, 0);
->>> +        if (!ir)
->>> +            goto fail;
->>
->> Don't fail completely just because we can't get a secondary interrupter.
->> Roll back to only using primary, or use fewer secondary interrupters
->>
->> At this stage we don't yet know if hardware really can provide the actual
->> interrupt vectors, and if request_irq() will be successful.
->>
->> xhci->nvecs could be useful here, but it is not yet set.
->>
->> Could allocating the xhci secondary interrupters and call request_irq()
->> be done in the same loop in xhci_pci_run()?
->>
->> That would simpify things.
->>
->> Note, Niklas was looking at this idea recently, and pointed out is
->> would need changes to xhci_resume() power_lost path
->>
->> Thanks
->> Mathias
->>
-> 
+> > Currently, after checking the logic of our KO section, we found that
+> > there might be two places simultaneously calling snd_usb_autoresume
+> > to wake up the headset device.
 
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+Resuming some USB device wouldn't destroy the segment pool and cause
+this crash. Here, device resume tries to add an endpoint and crashes
+because something else has destroyed the pool.
 
+Regards,
+Michal
 
