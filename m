@@ -1,124 +1,165 @@
-Return-Path: <linux-usb+bounces-31668-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31669-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B31E7CD4EA7
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 08:56:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99AE1CD5BC7
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 12:08:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5B09D30184EF
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 07:55:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 74D593054C8A
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 11:06:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3947D30B51A;
-	Mon, 22 Dec 2025 07:55:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1322D334C06;
+	Mon, 22 Dec 2025 10:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f6oCG2Xa"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LIIF8/QH";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="IXG2V66w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5702F744F
-	for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 07:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED9D333752
+	for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 10:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766390151; cv=none; b=e0dq0A/fERXND5TzV+8TqNUXu0MhpEJULv8QMJvcgAoA1uPp2ITRGXO74iyTJkXhdXj1rXRuJzWBxvqhw3MPxd4BnGD4O3h0wfw0ZIXqIRbFhFxdxrvkRR88CAZ0J6W/SfDeAR7Cw0afODZsPtxUYPyDfrMYLpuEpAR/ep5ty68=
+	t=1766398659; cv=none; b=lZf1L25YmL8hogP6nTmQ4dDqJMrK/X7omuXy80AoqbZJI4z08gaLsIfvwuY/3y+rXsvCxY4tfUaZRBhMEZ3TibaagzJu8ckuSvOnNI9mBo8+CXHEQORChjgZULgW/f89g3MGbDUJ/nRM+dFkjdmUYGXxwe68g/wGrTgCSkefvNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766390151; c=relaxed/simple;
-	bh=+yPOjc+fqkDPEHqb4AUcpPWxXHxorRpawbbFTVTvM6c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NxgZ03nMPo9cB9I8K9zplyfiOuMTotMfn7j9zoOuEXs/5yO37ErxEmlHdGofAbDBlJeunpN7oqyQrCvi6WyUmHSh5E639ENf5sZQbBLA2BjiEVRf+Xs9TrTO40h+gQ15BJsERxL0hWtNgCRUfAEC5bXPjfY5G3XTFh+sgtZHRlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f6oCG2Xa; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b7a6e56193cso610473566b.3
-        for <linux-usb@vger.kernel.org>; Sun, 21 Dec 2025 23:55:49 -0800 (PST)
+	s=arc-20240116; t=1766398659; c=relaxed/simple;
+	bh=xXZbaRRaVBV4tbxkMrzlNg7kC1b4Tmotuky38v4lGTU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bENi5kMZFZm9ozc7EXe/Aruk9FRQQjwxxB6Kb+KVOVRIw0m0b8SikYNM627Jodp3SuK8YJB87A2M0gylmDFQx1wiiNiW8442lqv7rJle7uZSKXCUEtng2+Fs3ht7gk08JcJsX6I3R0EzjRArV9MrVdq+7uG0963N8P4yMwVLZU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LIIF8/QH; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=IXG2V66w; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BM8DdpG3765565
+	for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 10:17:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Dbj9Z2sRBrC9i4pAVSuPAM3xhIH7VjDm5nW3cIqJKlY=; b=LIIF8/QHLvcMDoO0
+	rTtKyOIZTVezN/TwKYbPNEbjPD4NsBtbIMPG+vyMReSQ3wBesI22ZC+mqg7IAHVn
+	OG8ng3cDXYDD6/jRjluxW7yGbNeKrN2DCqrJR7A+INsoSNSkYK72PrHEf7VM1q+m
+	PE3Id84pRai2mKtdxdex8lL1XaGYh8nwkbAbGx6do/LwGdQIxeAa2Qs+QTsvvfVN
+	RNm9E7n9xmuKPGaXmvd0PcJ+v2jKZxDFyLQJsURBseRfex33OJcsLr9xKSYxs1Ny
+	UGJsuVjyniKYPRnHMqUG3PjMfwI8YmdnMAYrTe6l4AN5pqJYIUTlb+Dflo03Bcf1
+	O15olA==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b5mry4kbn-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 10:17:35 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4f1aba09639so11461201cf.0
+        for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 02:17:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766390148; x=1766994948; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yaHVBuWBeHTZHoY+QCI6EjtKxWsuUfcPRstWfRihDUk=;
-        b=f6oCG2Xaq1IXK1Y6f/cS6dz41cxVvNtpnikdw6aKCNzILxf0p+1yKmeCAwjZZ0/wbK
-         OJgE/ZERHZ7RiFg1nn6T5fL+jfdMcCvciiU/fccGNq/h5lgNgM8XJSalGJtCDUBjbVVf
-         MgpA3LrU+/VtcgPBHrxZ1KauRy2fEJTWEzQjPUg1PP6xvDQ/6G0R0tnpvMDKZTVE9g67
-         nx67ApPewrwxwFRbcsFAAX9lXH+QNXF+NrbyV7FXXCUA4QNS4cbw3kZ37Wdi5OqYojIf
-         IzSSmgeidtPy8A5EydOHnQjK775+AbPNJazudm4NxC+Rflbi5WfaR6kF5oJtzp76gXZx
-         xORQ==
+        d=oss.qualcomm.com; s=google; t=1766398655; x=1767003455; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Dbj9Z2sRBrC9i4pAVSuPAM3xhIH7VjDm5nW3cIqJKlY=;
+        b=IXG2V66wEXiBgbAiZc9JFU17wI6691MiYVIu/bcaDQHP+SAvMZW024t9W3pWGGbmFF
+         4siit1jzPFYN1Wc53Pyb1+HsRuhULembBU90bPL3zA8LeKnAA2hClp5TeeiUZ+0RPKCw
+         CXfLA1qc1zl6jRIUCDYSYvDNMi4gB2Vhfq1ybPSEJO2wmDF1RXM7tQQDOewaYBC086v2
+         7sIgeXlPiJ8zHbSVTjDtHBy805UzYEuMSgqjvWp63OHyEJSJEpoJe0uHVQSJLXOkkt8X
+         xmI7zMl335D00D8zOFDj6C5FafJc/20SmkFqZVX6nQag8o1E927V6PzY7bgcfCbDRGhF
+         DxJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766390148; x=1766994948;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yaHVBuWBeHTZHoY+QCI6EjtKxWsuUfcPRstWfRihDUk=;
-        b=COLYcc0PhDLL0lncOjnZ4gRYjY7ROT7gym/usL08r0DdF/bC/wkeucHEdhWhtYnItD
-         pHD93YdfHB67mB8Fo24Tnjk0TeM2HGDkOrRTFSXgKAm4aNbNu2Cyjgg4fcmVgHxg0tsu
-         nL+C1uJVy8rDF1tPODEC93hnYLQM1dfjU2wwoTCLaopR0kga47eFHjJjzNKum98E/8P+
-         39nrIQmxvCJsUnzbNqDd7dKpEFJ0m1GirUGkK3k0bdxvO/d2sbsRiXcrBuQ+kw9CykqW
-         HH9FRJGSqEb4ilhsou30956zHTdM87TLqDsz+yV4LzyyCRC0X0zFFN/4Id160kNlwW3l
-         aqXg==
-X-Forwarded-Encrypted: i=1; AJvYcCU6Hw42D/ex9Xla0hsQTx+cc6MTNiP5VFLg4PS8kAEYvJkPCpeWHkYqOPQnNvqolgd43GEUYJ3mghA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7FNfkER7PZuDvmUB29AR8XL/8U28hASyE+f/3XSLqfdLU76ZU
-	48Z3Zwg/8GqqxNXsXzJwyVPq8jCwFdqymRGzXbDLGSRoLDKb6ZZLVXdJ
-X-Gm-Gg: AY/fxX59O+swo7KjV6FHKtZjuxDpWoWETILW1cJ+A/1as7iX+ByQ5KL3pLgBZ9EaZFP
-	JhcXyXH7JKaqOMkvdCpyFZi2fi7ibG4MTu34wpKYedre0uRswcGCxzCscggqRnM2+zH/OH3Bpw5
-	BWyohj7a7cDnQ36lhy//2/dEesLn0uC3Xr+1JGHt1TUVOlQsvsnIdiNcAfuyyH2/ziHEFQr1oE4
-	4+Ozugz0deS+Bs57DecBeUxqu4rXHcHvf7/lD25BCG4RQEC03kN+v5PZAilh/RDzQiWY/NosLAb
-	sLOce1Jz9I1LFDrJbnl4KdqJKUvH1lzxrIl9KJ89BYAhvGOZ0T+kKoC+tp0db5+FsdIwve8tQVo
-	BPRzlWHAZKth7yVZ+ODR8cFlw8vR0yEoubdRtrwq7ctrrxiqf/O18KFCsRbB0LGTKXbVf6uW8jX
-	PRMPYZAuO2+CuLAj42aJg+c2s=
-X-Google-Smtp-Source: AGHT+IEMxTuUMUeAngDSLDPqkKs6ChHZnQLqP3jie8llW6T/pcPh84Oq0OS1p+ubMfZ3MFLNjD+3vQ==
-X-Received: by 2002:a17:907:7638:b0:b80:6ddc:7dcd with SMTP id a640c23a62f3a-b806ddc842amr211586466b.31.1766390148233;
-        Sun, 21 Dec 2025 23:55:48 -0800 (PST)
-Received: from foxbook (bfd193.neoplus.adsl.tpnet.pl. [83.28.41.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037f0ebbasm985598766b.55.2025.12.21.23.55.46
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 21 Dec 2025 23:55:47 -0800 (PST)
-Date: Mon, 22 Dec 2025 08:55:43 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Lee Jones <lee@kernel.org>, =?UTF-8?B?6IOh6L+e5Yuk?=
- <hulianqin@vivo.com>, Mathias Nyman <mathias.nyman@linux.intel.com>,
- Mathias Nyman <mathias.nyman@intel.com>, Sarah Sharp
- <sarah.a.sharp@linux.intel.com>, "linux-usb@vger.kernel.org"
- <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: xhci: check Null pointer in segment alloc
-Message-ID: <20251222085543.4d7430d5.michal.pecio@gmail.com>
-In-Reply-To: <2025122253-stopper-tweed-6e68@gregkh>
-References: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
-	<4935bdf5-4d36-45c3-9bcd-9d14606dd54e@linux.intel.com>
-	<TYUPR06MB6217AC2CE5431DC9B3956FE7D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
-	<20251220141510.1bc1ef19.michal.pecio@gmail.com>
-	<20251222064252.GA1196800@google.com>
-	<2025122253-stopper-tweed-6e68@gregkh>
+        d=1e100.net; s=20230601; t=1766398655; x=1767003455;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dbj9Z2sRBrC9i4pAVSuPAM3xhIH7VjDm5nW3cIqJKlY=;
+        b=vkaipPauuTGJvpYbx8hOB7Vuo4+G4XC+rclM4iXTlI3pxxJJYkuervAX4td/VcFb9q
+         1Z4yhohUwaNklS4aQzqZhrgnjusl44Hiv843/a6ep8066RItvoGrhdxz2AbxcpH5ku8D
+         TtDwKPKMWwof7dKiNccmeB13dCPQSrLw/BfIy0xPs+fi3ZaFkBvL8ePVpvJjT/eiVh8/
+         Y2i0MbbI3cJ7AqS3NGDbZxxeH01dmGGiGfBg6gpAH3Igpqnol3RlTQOXrwVIZICqmV0F
+         HX04IYm906ewwDKqxhHf6VDlEPboLS5DfZFHEsAck3OCi9RLmnRi6fkf8M+ufIeVtW8O
+         MTiQ==
+X-Gm-Message-State: AOJu0Yyn2sJEIpK2A4BLzd9UoZG/PE7VYkjYWf8L4uHe6xNBA+pdTca0
+	TN8O52kVuHxBf6iZECy2BmoClHs8lRRUvs5FCLXIXbuYPBlRPrd0oZ1q2tUdHshZKJoWSAtw+nK
+	2sBbpYsO7RnRQPTcqCKUxslsgjNkhOPmks2K8tZm3+Bea5LaBeABtiSM3FOVyBgM=
+X-Gm-Gg: AY/fxX6GQ+ZvRkVmEvTj+fJPl0TJliOuB+oBamZ0+Phgwb8EhyrT4oJEPRuaCBMGoXG
+	OaEw0KlGVLUZphjB8pYMMmPLqLOFJ9i86VgrMyOFdbG9ZmzlO1MzKRNj4WJjcSJ9EO2d7gfj5Sw
+	PlSzRAHtbA6zX1WqR4RzW8Y0hN5uG5lydmJpZmxbczZuHxGvuUjTtNGhNlTEGNEDiokWDzBAsG5
+	yt0AsWlsbs19IwH/a06c9qRy2ADMuBelJm2Js0zlMnq/1qizdnJ/MnvcyixRRAfF7g76eyFqxsu
+	uIk3Qn4tPFSCfLYWR12IMbqABf9y9l24Sps/7pFB9u8epNuKA3cWYP+3cK0qM5s9Lt5CKevk69A
+	BFdCyJYagrONrOj9RJNEvl2AZ79gkzAQveqUszva9mjFsEZHznFply8aLnSniZlZj/A==
+X-Received: by 2002:a05:622a:5c8:b0:4ed:a574:64cb with SMTP id d75a77b69052e-4f4abd173a9mr123973171cf.3.1766398654930;
+        Mon, 22 Dec 2025 02:17:34 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFlpAk0bRbTQVcybJQgim4hONTeK4OwTpfgIKCYDa3kRmH0DDmQU9WXzXl/VS5edLANdvVztw==
+X-Received: by 2002:a05:622a:5c8:b0:4ed:a574:64cb with SMTP id d75a77b69052e-4f4abd173a9mr123972781cf.3.1766398654442;
+        Mon, 22 Dec 2025 02:17:34 -0800 (PST)
+Received: from [192.168.119.72] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037a614acsm1053395766b.3.2025.12.22.02.17.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Dec 2025 02:17:34 -0800 (PST)
+Message-ID: <a1cd5f1b-8b2f-4795-9878-1e61ce0aeb40@oss.qualcomm.com>
+Date: Mon, 22 Dec 2025 11:17:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/4] arm64: dts: qcom: lemans-evk: Rename hd3ss3220_
+ instance for primary port controller
+To: Swati Agarwal <swati.agarwal@oss.qualcomm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        =?UTF-8?B?SiAuIE5ldXNjaMOkZmVy?=
+ <j.ne@posteo.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Catalin Popescu <catalin.popescu@leica-geosystems.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Pin-yen Lin <treapking@chromium.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20251220063537.3639535-1-swati.agarwal@oss.qualcomm.com>
+ <20251220063537.3639535-4-swati.agarwal@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20251220063537.3639535-4-swati.agarwal@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=cbbfb3DM c=1 sm=1 tr=0 ts=69491abf cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=QSmBtm_2O9qDCKvZU0MA:9
+ a=QEXdDO2ut3YA:10 a=dawVfQjAaf238kedN5IG:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIyMDA5MyBTYWx0ZWRfX15/n2NOjM5h+
+ u35Z+ML0xDPpcLIJbUk/f+DsoRRvfBbhSuLAGqpAVfXaElhAniZ93C+VPac5xumWWD9JzJ36hSL
+ VTZ1L7JwwbSolzwNRPT3JLuDu+T3r7/IPdmGHYSsKOL/dQYItCvK/+HAx+J0pShWxVptcJIm4VY
+ IcJC0HJnogZMm7atp5QdDcGSHJM5WsKnFUoq1PN8cbrXwBQpZO7dCHBtcjIBYfTmasHB0mM8hBp
+ w4nt46QsZ15QaDWTFLjlt6JxYOL5DESwNKVQ4sI9t42OJc1jX2i3KYUy9li9OW8lYzJYcjJwdpR
+ TNZMNMS/sthQVF98Ik42haEHfobOPpkjHdW74pxW17bMLbdjy79nlSoEb39Vccqe2YCsboHrLBf
+ R8fdUdChAoNF61nBc53l2Kg/3rdOi0KbdjnV0G6+4mK4HcJDNGqIRzks2cqjha/5Y4y+JKqcHdg
+ Cd/ujTBhDop4Y11bisQ==
+X-Proofpoint-GUID: y8C-QPNCsQmqu1HeOuD2sjmn5rEpwnOq
+X-Proofpoint-ORIG-GUID: y8C-QPNCsQmqu1HeOuD2sjmn5rEpwnOq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-21_05,2025-12-19_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 clxscore=1015 phishscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 suspectscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512220093
 
-On Mon, 22 Dec 2025 08:13:21 +0100, Greg Kroah-Hartman wrote:
-> > An API that insists on its users exercising care, knowledge and
-> > cognisance sounds fragile and vulnerable.  
+On 12/20/25 7:35 AM, Swati Agarwal wrote:
+> Rename the hd3ss3220_ instance to improve clarity and simplify usage when
+> adding a secondary port controller.
 > 
-> Fragile yes, vulnerable no.  Let's fix the fragility then, but as has
-> been pointed out in this thread, we don't know the root cause, and I
-> don't even think this "fix" would do the right thing anyway.
+> Signed-off-by: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+> ---
 
-The patch looks wrong. I suspect this happens when add_endpoint() is
-called concurrently with resume(), which makes little sense. And it
-means the same code can probably call add_endpoint() before resume(),
-which makes no sense either. We can't do that with suspended HW.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Chances are that this crash isn't even the only thing that could go
-wrong when such calls are attempted. For one, xhci_resume() drops
-the spinlock after reporting usb_root_hub_lost_power(), so your guess
-elsewhere was correct - this code isn't even locked properly.
+Konrad
 
-It seems no operations on USB devices during resume() are expected.
-
-Regards,
-Michal
 
