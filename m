@@ -1,102 +1,99 @@
-Return-Path: <linux-usb+bounces-31673-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31675-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EB2ACD64FB
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 15:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC2CCD684F
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 16:27:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D249330848AE
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 14:00:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 004D530DDA38
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 15:22:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118ED26F291;
-	Mon, 22 Dec 2025 14:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32B4F32B9BB;
+	Mon, 22 Dec 2025 15:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="01ZSSEA1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NE+VDqrZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598FA264617;
-	Mon, 22 Dec 2025 14:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A633F2F5328;
+	Mon, 22 Dec 2025 15:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766412019; cv=none; b=RFM9I/TDHgooOh0v+cDcpzF5D69WotSDOlh3l1CLS5LJbuWTM4yXwZWdgvFiKevXkbvVzhwNJHsJ2V3IrI2NZOSjfn+asogB30N5Y6RlOOx5pL7OzD84Yngk99yZi1AFYK6YKM2CUbZwCJoyJZV1GD3qtVDM2ZIO06RD1D6cK1k=
+	t=1766416957; cv=none; b=huwAAcOOUiL0IinIpkyNnt8i3+bn+rQn2IVR0E4YoHNJ3aGYGQx/TL5hGzcG0dGRTWuPIeRu9YJt9aGrZcd2ACC0Qu2mUNYWVIE8vuFTTY0j0iPd1p9Dc/TR0Yd9uEmkwtOCm72y2CEZkLk0auF9vgEEQo4D+BVLd0i7ds3Jw9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766412019; c=relaxed/simple;
-	bh=GTUzA14xHl39+BNggpbMdm7wJOX5NaMJ/TDbGuOkuO8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TU0J3QtXYTRQa8wCJkd7udvluZrF99GwiaZvr3BpQvphqUlaDpwGYNcDKH644lg9RK5P3oi+pqm/5WSZ6SLFmpiQxXqeWbYY54EnPgnoS3EyPE99Rd1bRe90fykkbsKtzz9yiPExpgjXW3IUHEdg3Se6ltTfV80BhulqZg+4+UA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=01ZSSEA1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 429F4C4CEF1;
-	Mon, 22 Dec 2025 14:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1766412018;
-	bh=GTUzA14xHl39+BNggpbMdm7wJOX5NaMJ/TDbGuOkuO8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=01ZSSEA1hMGEmezSnvC5g5NDUuMl8OzQ4PNu9ZBEQLhbpVPRUgH4Id1VOd66BtSyv
-	 DrB5SdZ+wTbl191T9xKPdWr6Og9ugQEFJbDh10P0QvnBFsyAufP3J+P8hahMtaO7Jo
-	 1sHMYLy8vF/wznPoRfBXzXrwyKgAtxAE+ZDsBSLQ=
-Date: Mon, 22 Dec 2025 15:00:15 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: =?utf-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>
-Cc: Michal Pecio <michal.pecio@gmail.com>, Lee Jones <lee@kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Sarah Sharp <sarah.a.sharp@linux.intel.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: =?utf-8?B?562U5aSN?= =?utf-8?Q?=3A?= [PATCH] usb: xhci: check
- Null pointer in segment alloc
-Message-ID: <2025122250-commend-bondless-c7e1@gregkh>
-References: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <4935bdf5-4d36-45c3-9bcd-9d14606dd54e@linux.intel.com>
- <TYUPR06MB6217AC2CE5431DC9B3956FE7D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <20251220141510.1bc1ef19.michal.pecio@gmail.com>
- <20251222064252.GA1196800@google.com>
- <2025122253-stopper-tweed-6e68@gregkh>
- <20251222085543.4d7430d5.michal.pecio@gmail.com>
- <TYUPR06MB6217CB438F21763401A93E6ED2B4A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+	s=arc-20240116; t=1766416957; c=relaxed/simple;
+	bh=p1IehbesLuEfw+2HZh3NB/Swcs3UNEs9pnu3GXPMhJI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JM79INHvxAfBSZ15ll5yFoADVwaBVGft4GEhc4YtBb5dGxrwnMkjKpGjJtypb5n+8k5cziMC9gJ+oWCIff5/BoE44/j6qmHqsBqPpAds3tZd6dkq8nAIfYCyaSLLAo+FLYSCWnv5a/tWR5psM3POwPCt8KynPpWQv3wgODpACEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NE+VDqrZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BB4C116D0;
+	Mon, 22 Dec 2025 15:22:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766416957;
+	bh=p1IehbesLuEfw+2HZh3NB/Swcs3UNEs9pnu3GXPMhJI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NE+VDqrZYmb4u7ATN79oxNqMRsVR0YKbF+JpgzVk+S52j9VPEwsCbGI9DRRmrijV7
+	 VFvFr/iqb3e73vfCft2FEUnRDl1jciRr/Dc9i35MyVV2WYLwcradBprZotYh/udy1h
+	 Rpw4Mc4aUuIKDmmPwPYoetUiPos4sZji3WHxDKOl6+yA4pcM7kyT6STpfNHAUCxZ0K
+	 4IpH8skJZ/McgBj0fSmqYPEyezQMeJVaa0QILTgtY+/f6YGIo5mBZZqT2+++yIIyTC
+	 wztO3rvAGcxmrBsbC5acrf0OzIZ0fzcGt7C9hWTRbS69ve/G+2cBfw9Q9K8xV6afKo
+	 sl67g5VEETyzQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vXhkA-000000000kc-1E93;
+	Mon, 22 Dec 2025 16:22:43 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Pooja Katiyar <pooja.katiyar@intel.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/4] usb: typec: ucsi: revert broken buffer management
+Date: Mon, 22 Dec 2025 16:22:00 +0100
+Message-ID: <20251222152204.2846-1-johan@kernel.org>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYUPR06MB6217CB438F21763401A93E6ED2B4A@TYUPR06MB6217.apcprd06.prod.outlook.com>
 
-On Mon, Dec 22, 2025 at 12:21:09PM +0000, 胡连勤 wrote:
-> Hi Michal:
-> 
-> > On Mon, 22 Dec 2025 08:13:21 +0100, Greg Kroah-Hartman wrote:
-> > > > An API that insists on its users exercising care, knowledge and
-> > > > cognisance sounds fragile and vulnerable.
-> > >
-> > > Fragile yes, vulnerable no.  Let's fix the fragility then, but as has
-> > > been pointed out in this thread, we don't know the root cause, and I
-> > > don't even think this "fix" would do the right thing anyway.
-> > 
-> > The patch looks wrong. I suspect this happens when add_endpoint() is called
-> > concurrently with resume(), which makes little sense. And it means the same
-> > code can probably call add_endpoint() before resume(), which makes no
-> > sense either. We can't do that with suspended HW.
-> > 
-> > Chances are that this crash isn't even the only thing that could go wrong
-> > when such calls are attempted. For one, xhci_resume() drops the spinlock
-> > after reporting usb_root_hub_lost_power(), so your guess elsewhere was
-> > correct - this code isn't even locked properly.
-> > 
-> > It seems no operations on USB devices during resume() are expected.
-> 
-> Currently, after checking the logic of our KO section, 
-> we found that there might be two places simultaneously calling snd_usb_autoresume to wake up the headset device.
+The new buffer management code has not been tested or reviewed properly
+and breaks boot of machines like the Lenovo ThinkPad X13s.
 
-Can you provide a link to the source for your kernel code so that we can
-review it as well?
+Fixing this will require designing a proper interface for managing these
+transactions, something which most likely involves reverting most of the
+offending commit anyway.
+	    
+Revert the broken code to fix the regression and let Intel come up with
+a properly tested implementation for a later kernel.
 
-thanks,
+Johan
 
-greg k-h
+
+Johan Hovold (4):
+  Revert "usb: typec: ucsi: Add support for SET_PDOS command"
+  Revert "usb: typec: ucsi: Enable debugfs for message_out data
+    structure"
+  Revert "usb: typec: ucsi: Add support for message out data structure"
+  Revert "usb: typec: ucsi: Update UCSI structure to have message in and
+    message out fields"
+
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c   |   5 +-
+ drivers/usb/typec/ucsi/debugfs.c        |  36 +-------
+ drivers/usb/typec/ucsi/displayport.c    |  11 +--
+ drivers/usb/typec/ucsi/ucsi.c           | 118 ++++++++----------------
+ drivers/usb/typec/ucsi/ucsi.h           |  22 ++---
+ drivers/usb/typec/ucsi/ucsi_acpi.c      |  25 +----
+ drivers/usb/typec/ucsi/ucsi_ccg.c       |  11 ++-
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c |  15 +--
+ 8 files changed, 71 insertions(+), 172 deletions(-)
+
+-- 
+2.51.2
+
 
