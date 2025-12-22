@@ -1,215 +1,116 @@
-Return-Path: <linux-usb+bounces-31665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1921CD4B76
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 06:27:43 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52805CD4D10
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 07:43:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B887030021DA
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 05:27:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id ECECF3005281
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 06:43:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4623C30100D;
-	Mon, 22 Dec 2025 05:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3354E327C1F;
+	Mon, 22 Dec 2025 06:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kdKl1nBG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f78.google.com (mail-oa1-f78.google.com [209.85.160.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52FDD25332E
-	for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 05:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92961A9F87;
+	Mon, 22 Dec 2025 06:42:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766381254; cv=none; b=ECZaf+wuUnfYtCle6zfY/DvgQ2ULZ/YphEcNKirRMqlCmow6txyvAEEx5pBfKgOoIVf/FYbuxm9d5ziSDH+8E5GC7DZZwKDg+kbT93ei0KPa4ME4QEjGFLn3JlH69pQ/ghJwOfe4Qh66ZvSBCcmqsedmB4wNldpOhn2YmD/6xNc=
+	t=1766385780; cv=none; b=Ca0s/xvciGrGDOWvRhfduFPB8WRkMIF+ccCc9T5V1CVc8YtJlYnpoZD0eZl9kEbt/ud0EUnAVZ4xBKnf3QBZQVkqLQBIzymT8blGEBot28Xi5UB8pUK7yiT97jNY/D4ou96TthCXlN7KIbY7WidWolKOqSKJpguaY1QC7/FllM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766381254; c=relaxed/simple;
-	bh=aPIbrt7GGLrfv5AcQ5Qjn7jAWZbt/XLoIRVMYOV3h+w=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Skubc+lrK2ltNaLCwF66yYZvH+WHQnaLTZ3ErlXRhaGmWQX1kNJ1qKjLjqZBkrLv6XLPgPw2Z5y8uM7/8c+05Zt8s+V3xZKKbXveckSEb6uzXSEpdD9KxdFu1wCUXkmrLHx+JujeYkBuH5lcQD/k0TWp63cywWRraNp5zendzS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.160.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oa1-f78.google.com with SMTP id 586e51a60fabf-3ec31d72794so4231953fac.0
-        for <linux-usb@vger.kernel.org>; Sun, 21 Dec 2025 21:27:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766381251; x=1766986051;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oGHuYto+8CuPalLvrvDjBVuP9UGH/7aaB3v6lesisXk=;
-        b=bCQpqAmRuvksgwoXa3Z7COkPbB/MNXDUrQhSZtnWqzg46Y0r8uZHUYNbdIl9HB2wKS
-         DSeB4DuU+9iUKzu9SmpcEFdWoQIGP8BiXYWuDbt7ARzLtSHT5+yFjJ7fLTo3koVVtQ5X
-         5uBYF8DDL4AAQKik2DcJHE72F9ppSrscJj0qPKp85mCvYBWxujLBPZ5JCW4cgOo3/r2w
-         4rj9I2J6N0nTu1tKBdLxoKY1eDP/3I3OGBq3Q8v97v9rl1D1QaSQicBzNK6qyAr2n4WF
-         q8a542CqcmGP6/SO4qM/TshzUZcmKWxyqGSrx2aXVNPdVouV+EV2wZ7L3vnPztpcebxB
-         eE1A==
-X-Forwarded-Encrypted: i=1; AJvYcCXCFrrohdXBylePHqZBlfD5BrU0lQIkVR3x5zwGtXPQ+AGKMTWwduJ6KN7ROvSkQ/+V+U6n2IcAp7U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzsy8VdBc4J6MmvIjh7L63OUa/L8C3eoQWOWvNXrgQ0iXJZ0zOS
-	wlqaf7hkAT5Wb8gD7CwA+Ig64y9qAwcLy04UIiHiT0cauHhDqD4FSJ/4rQbSCW/k47nWSpRyILy
-	rV9wyibVsZx8+kX+oiuBgxGSRkD9FB55UNSTJ9pN8BhxDHT1RqeELa4bWEPs=
-X-Google-Smtp-Source: AGHT+IGk0ek5uffGPoavwZo0zVQo2uF0GBp2uIUEqjqWBrJT5XAVVE+CBzdTYEvsvnzrqK4mQXFzsog0NKX0LoVQF51JGXQvFiwP
+	s=arc-20240116; t=1766385780; c=relaxed/simple;
+	bh=JLEGQdVYOKssTCU+pTswTVxi5+MXygtSvz56nlBSlGk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o5cv+Y3rXqrRrCAcG93oljt3t1q37dH5lnDzjDiLz52utHRe63X+dlZX0hB+s71TZnHIpte5gaoeNJDxwxnqjpCmvRuoKEe3B3myry8wcC0MovwiubApG9D0niMcYHVc20pDQQ1kfEkdSMT2hg8LX4eUZHp6R2jNMsbf6j/4eaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kdKl1nBG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47068C4CEF1;
+	Mon, 22 Dec 2025 06:42:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766385778;
+	bh=JLEGQdVYOKssTCU+pTswTVxi5+MXygtSvz56nlBSlGk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kdKl1nBGhiJiiC3fU2hViaTxEEk8FWqCI8Q8LzMxLukgB4qa+nsIm8pmXPvH8LULr
+	 b2/0CVWYw7EcFnElRtMFUHQbrKCEkA6k8cd07dz+1OjSLuUHQIEtxo32Ekil2YMMrY
+	 XHDj8vYGqij46Nb5do6aJaLKKn7v4CbJaJAVC/YZkaHyUNm/XLcdWnaV0roznM3Dg0
+	 wdk60JKg6/KP0fzLdpdfu23YOMzi/3QUpz+lNfIk9mwkuApCkbFEIsVYAsAYZlkivF
+	 royaZ64oSKF4wpR/mC/xp7MEll5JIv7nhQQe7atePszZU6FpfQECQKDAPMhRTxJPNu
+	 L+kI/AWliqNfg==
+Date: Mon, 22 Dec 2025 06:42:52 +0000
+From: Lee Jones <lee@kernel.org>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: =?utf-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sarah Sharp <sarah.a.sharp@linux.intel.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: xhci: check Null pointer in segment alloc
+Message-ID: <20251222064252.GA1196800@google.com>
+References: <TYUPR06MB6217F5AA7DA1E43A567CBA04D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <4935bdf5-4d36-45c3-9bcd-9d14606dd54e@linux.intel.com>
+ <TYUPR06MB6217AC2CE5431DC9B3956FE7D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <20251220141510.1bc1ef19.michal.pecio@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a4a:e059:0:b0:65b:5013:818a with SMTP id
- 006d021491bc7-65cfe6a996cmr4502298eaf.18.1766381251184; Sun, 21 Dec 2025
- 21:27:31 -0800 (PST)
-Date: Sun, 21 Dec 2025 21:27:31 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6948d6c3.a70a0220.25eec0.0084.GAE@google.com>
-Subject: [syzbot] [usb?] memory leak in es58x_open
-From: syzbot <syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251220141510.1bc1ef19.michal.pecio@gmail.com>
 
-Hello,
+On Sat, 20 Dec 2025, Michal Pecio wrote:
 
-syzbot found the following issue on:
+> Hi,
+> 
+> On Fri, 19 Dec 2025 15:53:08 +0000, 胡连勤 wrote:
+> > [ 4021.987665][  T332] Call trace:
+> > [ 4021.987668][  T332]  dma_pool_alloc+0x3c/0x248
+> > [ 4021.987676][  T332]  xhci_segment_alloc+0x9c/0x184
+> > [ 4021.987682][  T332]  xhci_alloc_segments_for_ring+0xcc/0x1cc
+> > [ 4021.987688][  T332]  xhci_ring_alloc+0xc4/0x1a8
+> > [ 4021.987693][  T332]  xhci_endpoint_init+0x36c/0x4ac
+> > [ 4021.987698][  T332]  xhci_add_endpoint+0x18c/0x2a4
+> > [ 4021.987702][  T332]  usb_hcd_alloc_bandwidth+0x384/0x3e4
+> > [ 4021.987711][  T332]  usb_set_interface+0x144/0x510
+> > [ 4021.987716][  T332]  usb_reset_and_verify_device+0x248/0x5fc
+> > [ 4021.987723][  T332]  usb_port_resume+0x580/0x700
+> > [ 4021.987730][  T332]  usb_generic_driver_resume+0x24/0x5c
+> > [ 4021.987735][  T332]  usb_resume_both+0x104/0x32c
+> > [ 4021.987740][  T332]  usb_runtime_resume+0x18/0x28
+> > [ 4021.987746][  T332]  __rpm_callback+0x94/0x3d4
+> > [ 4021.987754][  T332]  rpm_resume+0x3f8/0x5fc
+> > [ 4021.987762][  T332]  rpm_resume+0x1fc/0x5fc
+> > [ 4021.987769][  T332]  __pm_runtime_resume+0x4c/0x90
+> > [ 4021.987777][  T332]  usb_autopm_get_interface+0x20/0x4c
+> > [ 4021.987783][  T332]  snd_usb_autoresume+0x68/0x124
+> > [ 4021.987792][  T332]  suspend_resume_store+0x2a0/0x2b4 [dwc3_msm a4b7997a2e35cfe1a4a429762003b34dd4e85076]
+> 
+> This looks like some out of tree driver tries to resume a sound device,
+> and apparently it's doing it while xhci_hcd isn't ready, perhaps during
+> the power_lost branch in xhci_resume() after full system suspend.
+> 
+> I suppose dynamic debug could show better what's going on:
+> echo 'module usbcore +p' >/proc/dynamic_debug/control
+> echo 'module xhci_hcd +p' >/proc/dynamic_debug/control
+> 
+> If my guess is right then USB core is failing to prevent device resume
+> during HC resume, but IDK whether it's supposed to prevent that or if
+> the out of tree driver simply shouldn't be trying such things.
 
-HEAD commit:    ea1013c15392 Merge tag 'bpf-fixes' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1607bdc2580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d60836e327fd6756
-dashboard link: https://syzkaller.appspot.com/bug?extid=e8cb6691a7cf68256cb8
-compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=131add92580000
+Lower-level functionality shouldn't be able to attack / fuzz core-code
+in this way.  Shouldn't the core be resistant to any possible mistakes
+or a lack of education exhibited by it's consumers?  An API that insists
+on its users exercising care, knowledge and cognisance sounds fragile
+and vulnerable.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5ee91238d53c/disk-ea1013c1.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b8eb70b8203f/vmlinux-ea1013c1.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3aed81c1b1c5/bzImage-ea1013c1.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88812623e000 (size 512):
-  comm "dhcpcd", pid 5478, jiffies 4294946142
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace (crc 0):
-    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
-    slab_post_alloc_hook mm/slub.c:4958 [inline]
-    slab_alloc_node mm/slub.c:5263 [inline]
-    __do_kmalloc_node mm/slub.c:5656 [inline]
-    __kmalloc_noprof+0x3e0/0x660 mm/slub.c:5669
-    kmalloc_noprof include/linux/slab.h:961 [inline]
-    hcd_buffer_alloc+0x151/0x190 drivers/usb/core/buffer.c:134
-    usb_alloc_coherent+0x44/0x70 drivers/usb/core/usb.c:1010
-    es58x_alloc_urb+0x4c/0xc0 drivers/net/can/usb/etas_es58x/es58x_core.c:1553
-    es58x_alloc_rx_urbs drivers/net/can/usb/etas_es58x/es58x_core.c:1711 [inline]
-    es58x_open+0x1b3/0x470 drivers/net/can/usb/etas_es58x/es58x_core.c:1785
-    __dev_open+0x1be/0x3c0 net/core/dev.c:1683
-    __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
-    netif_change_flags+0x35/0x90 net/core/dev.c:9797
-    dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
-    devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
-    inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
-    sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
-    sock_ioctl+0x149/0x480 net/socket.c:1375
-    vfs_ioctl fs/ioctl.c:51 [inline]
-    __do_sys_ioctl fs/ioctl.c:597 [inline]
-    __se_sys_ioctl fs/ioctl.c:583 [inline]
-    __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
-    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
-    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
-    entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-BUG: memory leak
-unreferenced object 0xffff888126112200 (size 512):
-  comm "dhcpcd", pid 5478, jiffies 4294946373
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace (crc 0):
-    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
-    slab_post_alloc_hook mm/slub.c:4958 [inline]
-    slab_alloc_node mm/slub.c:5263 [inline]
-    __do_kmalloc_node mm/slub.c:5656 [inline]
-    __kmalloc_noprof+0x3e0/0x660 mm/slub.c:5669
-    kmalloc_noprof include/linux/slab.h:961 [inline]
-    hcd_buffer_alloc+0x151/0x190 drivers/usb/core/buffer.c:134
-    usb_alloc_coherent+0x44/0x70 drivers/usb/core/usb.c:1010
-    es58x_alloc_urb+0x4c/0xc0 drivers/net/can/usb/etas_es58x/es58x_core.c:1553
-    es58x_alloc_rx_urbs drivers/net/can/usb/etas_es58x/es58x_core.c:1711 [inline]
-    es58x_open+0x1b3/0x470 drivers/net/can/usb/etas_es58x/es58x_core.c:1785
-    __dev_open+0x1be/0x3c0 net/core/dev.c:1683
-    __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
-    netif_change_flags+0x35/0x90 net/core/dev.c:9797
-    dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
-    devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
-    inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
-    sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
-    sock_ioctl+0x149/0x480 net/socket.c:1375
-    vfs_ioctl fs/ioctl.c:51 [inline]
-    __do_sys_ioctl fs/ioctl.c:597 [inline]
-    __se_sys_ioctl fs/ioctl.c:583 [inline]
-    __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
-    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
-    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
-    entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-BUG: memory leak
-unreferenced object 0xffff888126188800 (size 512):
-  comm "dhcpcd", pid 5478, jiffies 4294946404
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace (crc 0):
-    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
-    slab_post_alloc_hook mm/slub.c:4958 [inline]
-    slab_alloc_node mm/slub.c:5263 [inline]
-    __do_kmalloc_node mm/slub.c:5656 [inline]
-    __kmalloc_noprof+0x3e0/0x660 mm/slub.c:5669
-    kmalloc_noprof include/linux/slab.h:961 [inline]
-    hcd_buffer_alloc+0x151/0x190 drivers/usb/core/buffer.c:134
-    usb_alloc_coherent+0x44/0x70 drivers/usb/core/usb.c:1010
-    es58x_alloc_urb+0x4c/0xc0 drivers/net/can/usb/etas_es58x/es58x_core.c:1553
-    es58x_alloc_rx_urbs drivers/net/can/usb/etas_es58x/es58x_core.c:1711 [inline]
-    es58x_open+0x1b3/0x470 drivers/net/can/usb/etas_es58x/es58x_core.c:1785
-    __dev_open+0x1be/0x3c0 net/core/dev.c:1683
-    __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
-    netif_change_flags+0x35/0x90 net/core/dev.c:9797
-    dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
-    devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
-    inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
-    sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
-    sock_ioctl+0x149/0x480 net/socket.c:1375
-    vfs_ioctl fs/ioctl.c:51 [inline]
-    __do_sys_ioctl fs/ioctl.c:597 [inline]
-    __se_sys_ioctl fs/ioctl.c:583 [inline]
-    __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
-    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
-    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
-    entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+Lee Jones [李琼斯]
 
