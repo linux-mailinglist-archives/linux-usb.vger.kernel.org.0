@@ -1,119 +1,82 @@
-Return-Path: <linux-usb+bounces-31680-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31681-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74585CD6897
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 16:32:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABF57CD689D
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 16:33:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BF8FD307DBBE
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 15:29:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ACA7E304F12F
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Dec 2025 15:33:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C52BB32AAD3;
-	Mon, 22 Dec 2025 15:29:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14E5B32D431;
+	Mon, 22 Dec 2025 15:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jZfnMFU1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="StU+x9Sd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C7B32AAD2
-	for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 15:29:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D47532D0E1
+	for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 15:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766417390; cv=none; b=XA2qt8LHDqwupvEM9x0A9K2HmMkWAcNgFY9URpKS0MyVxFpvdYnj004P47IwdriIOfZdjNRczHNtRWs4AFN02YJITy896jPn6W/QXh9hiVd4A3qbfaUJVDiRJw7DYQN0czr8e59HQPxfmPdFL0CjQXtf0TmESylaAI6+EHH4zPA=
+	t=1766417601; cv=none; b=JuIb5UGc4Pzfz/h6E6WPJG00YPd5Gq3EdaFrw9EDaqU8FIjd8qvZooiG8iwAtBjPfY9S/RxtKRNAB1PXl9VAqM2tLsfP9E9iq1JpEIZTCknqkxJnvRBjLZGjG4m8hPy5Xb4kX3fyYmchJXaB3ybnGO4KbdRlGSf+iDOCGS0ciXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766417390; c=relaxed/simple;
-	bh=VKYVMzmse4VENDeaxPRZlnUBo4oocwkoZeRYW616Yh0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A2x0HDHY6SSFpKn1XAnzOGVUMQo7SX6DhuskUwOxrYHehqavja+lWbLsYWZnnIjdjxs52owIuzKw5QMAQn6cOdtBlmHKoAGo1B/SyHPBHar5Mn1SRaSqjbFHtSV62TXS8S/v4l1YIa4e+eTl1PvqLHRf4NCV+1Wsgo8GBpAkjiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jZfnMFU1; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4775895d69cso17231155e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 22 Dec 2025 07:29:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766417387; x=1767022187; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j+OKjLww5FUfSr52sUiaIMe+sYSZvUySZJiUbOG9H3w=;
-        b=jZfnMFU1neYz2N0+LZ0xZBvAMMGME99q80aCW09FNEb5XJ4fvdzUoItA0Z2PnEpIt8
-         2cLFmD/1Lfrz1LLz8LL6wSLR3g3AptCvUOHKvz9JthfxbNLzURY/xdA0+GrV7VUo/OA1
-         hrG3UAD2d0uLtjI1RFgbg3krwI2PdY4NbaniL63Uh7yHfEewxQ8y/ek/E4iaI0RprnzY
-         WQYWhkymAFmJ6gejWhpPyRNdNby2CDCrYVCl69scI/EcLOCyHizaUZG4V98s4lqGq7t2
-         dPHXSKfpJEutBWg+siqyJtA0l0pdcmq5/jrdVMfCxKcP9nVYM5ppnN62UZMVLLYmGMOU
-         O5wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766417387; x=1767022187;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j+OKjLww5FUfSr52sUiaIMe+sYSZvUySZJiUbOG9H3w=;
-        b=jpvGyabS+zbehdoLQpiIvvC2EN34Hy3hH9zpmWKWzezIuZwg6alxdXbuFGfBoDt/gl
-         jfDN+D3IPax0MLVw70FFk7DUJ993hM8bc8YtG1JdvXptLnmgmTJ9jRkYwoItTAvB8ipK
-         3bwODCloOTx2GKAf1hOLacXFwCjJ07wgncD3Gk+mhcsYesW+aQHK2oicrRdPzbpaNmO7
-         6r8aE12Br6LlHCCKcYZwdNgGa1XxEU9uew9luaqFRh6tTFWPafa3tl9c+MI0w9e9tVPF
-         jcTrmRUAj1JmKdcmF7R4ed+gRq89h7WWIXBMeVoQl0Stgurqm+yfjIIlvx5DlXm9o/lQ
-         BhIg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0Pc3bJjv+sG+dYTQ7evtVS2AXFyzBhEvRtXZWyktdNE6SCuJM5Q4x/MJHW1SEVF0Wc9m4EzbG58Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqhIUoO8Va78ignnF5iK8WCfs/AEs6DAvfi3cibq4QdpKySLGb
-	OeCegVgMMbdSVW7WAqGYuEq2NN5SCTApDfol5IEPgr+QrmaGOH/oWk1+
-X-Gm-Gg: AY/fxX4QeGoF+kQWQvEAPUaKFh1y66YofiSLvh1QOhMCz+0n8qw4hRxyayU5jhH0Jwb
-	TFBmPKa4jpBklx5wpHhSe4icTbk9z7seNs5aCKjofmxcqKuVURSBJw+8S+ULl5npcOJZ6Gu9OuR
-	S5AbYR33T0iZhuncIwUoZ5ueEglC+DF6pt56nx/g9Sg4zEtJ4gFOVxtDW1lGDZpNCfX6AiZiMB2
-	aKWYbFJa0grTnqp7UFemJeihxWPQLE1bjEWjh0H1l3p/oAJMsNIPobqMh1UQ0s+bFNIVYueJAKS
-	GH1ZROiKwZbJn2WwaaX7CH+SnT95cttAGhYm6bLfN2VEHBQIM5MVrew5zlhRN8Uk9GIkXxKBXmX
-	B0o0iW9F5EGC3rlhr8KOvL1cjYGeyBd8jXESM2ZNUhSsTqa2OWs82QV4GjBQi4QmGGt7yFsfpXO
-	sBDz4zrKTem4oaNA38U7KCLw9+0jEZDK1lPcWKiky97M7w0CqTjInUb96bESKbtw==
-X-Google-Smtp-Source: AGHT+IGM6fQvuIIOpREP+B+O3M3ibRqFT50uyGcMNAnyJoixh9A0Qh1WuuHB5+i9945AYtgxkpjduQ==
-X-Received: by 2002:a05:600c:37c6:b0:47a:7fd0:9eea with SMTP id 5b1f17b1804b1-47d1953c178mr121525005e9.3.1766417386840;
-        Mon, 22 Dec 2025 07:29:46 -0800 (PST)
-Received: from localhost (224.85-87-222.dynamic.clientes.euskaltel.es. [85.87.222.224])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be2724fe8sm296520225e9.1.2025.12.22.07.29.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Dec 2025 07:29:46 -0800 (PST)
-From: Jaime Saguillo Revilla <jaime.saguillo@gmail.com>
-To: andreas.noever@gmail.com,
-	westeri@kernel.org
-Cc: corbet@lwn.net,
-	linux-doc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Jaime Saguillo Revilla <jaime.saguillo@gmail.com>
-Subject: [PATCH] docs: admin-guide: thunderbolt: replace ifconfig with ip
-Date: Mon, 22 Dec 2025 16:29:26 +0100
-Message-ID: <20251222152927.38101-1-jaime.saguillo@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1766417601; c=relaxed/simple;
+	bh=zNZ/5lk12wryEhTchqArvcx97LowI/LmhgVDNv/k1fA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RBuL6ykzaEzKRVoRwbfevgc2knHupKE+ZVPG7I5NoVKXJ90FYdAy6PcTBc5M4jELE91YFtZKDYwbbhfTCqy+p+n13pPisB3qomemBd1+6GFbW3oDY3WFhxkRqLettIYUN933wep9REzzKbNZJVJ9vTmoHaBZv0+CccXV8Q8UHn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=StU+x9Sd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10688C19422;
+	Mon, 22 Dec 2025 15:33:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766417601;
+	bh=zNZ/5lk12wryEhTchqArvcx97LowI/LmhgVDNv/k1fA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=StU+x9SdI2sfjgqk9X1JvD/SiGvpBhvbmcp1AUi7S29q11FXSnS0ylFfTBYEQ9+n6
+	 RfLUT1GX+iO08D76GsTFHjVNdJp/inB9kym71xkv13iPFnJi+lLwWwUGEjlLlTmXLx
+	 6113uIq6am81Q6LK0XIKYXOhbAjn3mW5hdHnzb4EwLEi7oNEbqzvkXQ0wRPGAlTLK2
+	 px7i8iYwdsHJpJbO7LL8qFTlArhxNopdv87sjWkktnZcX9PZQgASYdujCjL+XJlHOx
+	 zIIhfFgIQ9tkoPk6U/tyaTl1XojbF0ohBan9HghmVoeeKZElb/9k2+j/BsPQukGxSv
+	 0OcfFQWNhnzVA==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vXhuY-000000000ul-3ui9;
+	Mon, 22 Dec 2025 16:33:26 +0100
+Date: Mon, 22 Dec 2025 16:33:26 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Pedro Falcato <pfalcato@suse.de>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <lumag@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: ucsi oops on system resume (6.19-rc1)
+Message-ID: <aUlkxpe_FP_l9-E4@hovoldconsulting.com>
+References: <ac4m5qtjpnmx336r5astuxkvtqfjhlt6674odmtecsn2e6sqja@hndb7jdcqsp3>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac4m5qtjpnmx336r5astuxkvtqfjhlt6674odmtecsn2e6sqja@hndb7jdcqsp3>
 
-ifconfig is a legacy tool and no longer installed by default on many
-modern distributions. Update the documentation to reference ip from
-iproute2 instead.
+On Wed, Dec 17, 2025 at 11:38:25AM +0000, Pedro Falcato wrote:
+> as usual I'm running the -rc1 for this cycle. Found a nice fun oops in ucsi
+> code that brought the laptop to its knees:
 
-No functional change.
+> I have only reproduced it once (now), but it may be reproducible. I had a USB-C
+> device plugged in before suspend, then on resume it wasn't there anymore.
+> Perhaps that was it?
 
-Signed-off-by: Jaime Saguillo Revilla <jaime.saguillo@gmail.com>
----
- Documentation/admin-guide/thunderbolt.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The culprit is the new ucsi buffer management code which completely
+ignores concurrency. I hit a NULL deref on every other boot of the
+Lenovo ThinkPad X13s.
 
-diff --git a/Documentation/admin-guide/thunderbolt.rst b/Documentation/admin-guide/thunderbolt.rst
-index 07303c1346fb..89df26553aa0 100644
---- a/Documentation/admin-guide/thunderbolt.rst
-+++ b/Documentation/admin-guide/thunderbolt.rst
-@@ -370,7 +370,7 @@ is built-in to the kernel image, there is no need to do anything.
- 
- The driver will create one virtual ethernet interface per Thunderbolt
- port which are named like ``thunderbolt0`` and so on. From this point
--you can either use standard userspace tools like ``ifconfig`` to
-+you can either use standard userspace tools like ``ip`` to
- configure the interface or let your GUI handle it automatically.
- 
- Forcing power
--- 
-2.43.0
+This fix for now is to revert the broken code:
 
+	https://lore.kernel.org/lkml/20251222152204.2846-1-johan@kernel.org/
+
+Johan
 
