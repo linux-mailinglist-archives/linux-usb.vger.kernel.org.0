@@ -1,184 +1,159 @@
-Return-Path: <linux-usb+bounces-31703-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31704-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00683CD92C9
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 13:07:07 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1324CD9712
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 14:32:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EA28E301CC77
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 12:07:06 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5C11430012DE
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 13:32:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D05F32E6AC;
-	Tue, 23 Dec 2025 12:07:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F1A340285;
+	Tue, 23 Dec 2025 13:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BzVKOu1I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tsX+elyp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46F82D2496
-	for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 12:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 694B01A9F85;
+	Tue, 23 Dec 2025 13:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766491625; cv=none; b=C3YrxH+FZThBVL7Fiely4aPWTP4AeugU5Wm6uz3kfUF9eIPJH4GB9PiqwTPSDmiyvfk0XEsjxBg4lhPjqo6iB4WYMlsY9heFFx8G4D1+vFS14MK/843Ftk8fuW5xN0JWQQQo87SOLaedGUHO8cQm5PTPBctL4gSKFhnN0+4RknA=
+	t=1766496755; cv=none; b=O9DZD4cOxuBG2+5mNUsc0UuP60C4u8t7z/pLwA103npfWEOuQ0o6qx7CoY3lFfMISCzSqQpZUXcAYkexIK8NwyPmqAgZTeABK/obMUpHDDiKi3+/p5pBOabtQyL6P6JpYMqdkDQhH7TPJh8Kvi+otiC1ylxK+AQjUpO5xFbyEw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766491625; c=relaxed/simple;
-	bh=sT8pHCCS8jQB+TSfNuYVh7NcZp6Y5HCDDuwS/BuHwIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WVK7JNeDTDwTLUiThxIXcnJ/uhCiQRY4qqHj6gMhXqh4Dn64kL4wPkwvQ/HW+2qHU7DmQ9MJb8TnhPSj3643Ash4qrT0lc6JZUloACLMCqlDjBcmQy/MXhcIPZV6Un7kVEWyss0CJLZGZu0PRGohTxeRokAxOJeTsNbpx7ep1yE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BzVKOu1I; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766491625; x=1798027625;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sT8pHCCS8jQB+TSfNuYVh7NcZp6Y5HCDDuwS/BuHwIE=;
-  b=BzVKOu1IRZ3xGjYTBKk7cCWCQHFO1HzqbB5ivfb5vsk/dmQbChrpoBB2
-   y+qstjatFkWE8qb4koXTOwWB+iRibjpnSUshRHAp5QmC4GO6moJE0vFkc
-   +VW+v88qdSXhVv2WFj6z6yFgTOQcKfSY/zq0HZ4D7NQEVp8wWqmgNjS1N
-   fDMEm190hS6yzC1DRbWVJEVS8I7Y4nkw1YkDR4lIdf/wOxJ9VR6y8jnFf
-   abldKeQFsLTT+54gpPmeziZnM/Zk0JsKkGiNHl7kP+lUDmNqMSZsLp/CU
-   6pfbUEZSAHtxtHEm40Rxah/jDSuGcuT9SGHC/rLRNPtoKqgBOvZFP7ddw
-   A==;
-X-CSE-ConnectionGUID: JEzo/51BTCiBwGFPS/5WRg==
-X-CSE-MsgGUID: qwoj60scRXKhPPUJ6V+Sdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="90997071"
-X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
-   d="scan'208";a="90997071"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 04:07:04 -0800
-X-CSE-ConnectionGUID: a7i0/HGiSs6AO8WBLCtHGg==
-X-CSE-MsgGUID: 2CClESY6RbSeWHUuJsCQvw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
-   d="scan'208";a="199680656"
-Received: from bkammerd-mobl.amr.corp.intel.com (HELO kuha) ([10.124.220.158])
-  by fmviesa006.fm.intel.com with SMTP; 23 Dec 2025 04:06:59 -0800
-Received: by kuha (sSMTP sendmail emulation); Tue, 23 Dec 2025 14:06:44 +0200
-Date: Tue, 23 Dec 2025 14:06:44 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	"Katiyar, Pooja" <pooja.katiyar@linux.intel.com>
-Cc: Pooja Katiyar <pooja.katiyar@intel.com>, linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Subject: Re: [PATCH v5 1/4] usb: typec: ucsi: Update UCSI structure to have
- message in and message out fields
-Message-ID: <aUqF1EGxbiY1A1Eq@kuha>
-References: <cover.1761773881.git.pooja.katiyar@intel.com>
- <214b0a90c3220db33084ab714f4f33a004f70a41.1761773881.git.pooja.katiyar@intel.com>
- <2tlusuyqp2jif37smm57skeo3g2trzdspirv6minlopo5cey7m@z23tworiljkg>
- <66950556-3313-470b-bb51-82e14ce144cd@linux.intel.com>
- <349e1f70-7e40-4e3e-b078-6e001bbb5f1a@oss.qualcomm.com>
+	s=arc-20240116; t=1766496755; c=relaxed/simple;
+	bh=xbt9uegKH0QnNNxNVuyDChxCTc/MnbUT0LpZPpYj1po=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=emmfS7CxAm6FjEw1IZZfXb3MgcLDfYH1zmF/gcUV2DzMO50oKpHTOxlKRu/tnPvcyQP35MN92xMWCFu9awcu8nq70E3vO6knAbdgJozbUYpmuH3NwQdGRqbzbXBrC2pbQo1u6zrGKXE71WZqtM5M+/fB+3hq4Y5v15SRZzPXSiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tsX+elyp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE05C113D0;
+	Tue, 23 Dec 2025 13:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766496754;
+	bh=xbt9uegKH0QnNNxNVuyDChxCTc/MnbUT0LpZPpYj1po=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=tsX+elypj/hcJ7YpsHnJrxshuDSNi4bG3RAvK5wBIPQZJH1tak151baA3vKZDut+u
+	 kDvLkeeFUrrOC0PJuLX6jVkoSF6oPV9NgjRyFcksn2rzKVuFTT5ctSPJYRTQQJxKX9
+	 Zw60jNdVb7HLc7Y9y4Jb3lILntG5slQJA8Gxsg5RExuspURxBk919xqBcQXRIOxvPV
+	 4C39mqSw4bXe9ZmcsqXXf1n+u2DBjn7M9S2KolaN1wqhHDsVT3oSCrQCCf4fyrtj1L
+	 Zybb6+FaAjlgJe/emkTEw9VwixbGjISutLKqKXpawszu0a9yeHhTuo6fvOSaGx8Zg5
+	 1NYO9ar5YMZmw==
+Message-ID: <3d156c45-b55d-4ca4-95d6-0d06e067bbdb@kernel.org>
+Date: Tue, 23 Dec 2025 14:32:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <349e1f70-7e40-4e3e-b078-6e001bbb5f1a@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/5] dt-bindings: mfd: maxim,max77759: add charger
+ child node
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20251218-max77759-charger-v2-0-2b259980a686@google.com>
+ <20251218-max77759-charger-v2-1-2b259980a686@google.com>
+ <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
-
-Thu, Dec 18, 2025 at 03:22:43AM +0200, Dmitry Baryshkov kirjoitti:
-> On 18/12/2025 03:17, Katiyar, Pooja wrote:
-> > Hello,
-> > 
-> > On Fri, Dec 12, 2025 at 06:58:06PM -0800, Dmitry Baryshkov wrote:
-> > > On Thu, Oct 30, 2025 at 07:48:55AM -0700, Pooja Katiyar wrote:
-> > > > Update UCSI structure by adding fields for incoming and outgoing
-> > > > messages. Update .sync_control function and other related functions
-> > > > to use these new fields within the UCSI structure, instead of handling
-> > > > them as separate parameters.
-> > > > 
-> > > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > Signed-off-by: Pooja Katiyar <pooja.katiyar@intel.com>
-> > > > ---
-> > > > Changelog v3:
-> > > > - Added message fields to UCSI structure and updated sync_control handling.
-> > > 
-> > > Colleagues, after looking at this patch I have a question. What prevents
-> > > message_{in,out}{,_size} to be modified concurrently? While we have PPM
-> > > lock around command submission, size fields and buffers are modified /
-> > > accessed outside of the lock. Granted all the notifications and async
-> > > nature of the UCSI and USB-C protocols, what prevents two commands from
-> > > being executed at the same time with one of the execution threads
-> > > accessing the results returned by the other command?
-> > > 
-> > > In other words:
-> > > 
-> > > - thread A sets message_in_size, calls ucsi_send_command(CMD_A), which
-> > >    takes PPM lock
-> > > 
-> > >     - meanwhile thread B writes another value to message_in_size and
-> > >       calls ucsi_send_command(CMD_B), which now waits on PPM lock
-> > > 
-> > > - thread A finishes execution of the CMD_A, copies data (with the
-> > >    wrong size!) to the message_in_buf, then it releases PPM lock.
-> > > 
-> > > - thread A gets preempted
-> > > 
-> > >      - thread B gets scheduled, it takes PPM lock, executes CMD_B, gets
-> > >        data into the message_in_buf and finally it releases PPM lock
-> > > 
-> > > - finally at some later point thread A gets scheduled, it accesses
-> > >    message_in_buf, reading data that has been overwritten by CMD_B
-> > >    execution.
-> > > 
-> > > WDYT?
-> > 
-> > Thank you for identifying this race condition. You are correct about the
-> > concurrent access issue with the message buffer fields.
-> > 
-> > Here are two potential approaches I see to resolve this:
-> > 
-> > Option 1: Separate mutex locks for message variables
-> > Add a dedicated message_lock mutex to protect message_{in,out}{,_size}.
-> > message_{in,out}{,_size} will only be modified within the message_lock
-> > protection.
-> > 
-> > 	mutex_lock(&ucsi->message_lock);
-> > 	ucsi->message_in_size = size;
-> > 	ret = ucsi_send_command(ucsi, cmd);
-> > 	memcpy(buffer, ucsi->message_in, size);
-> > 	mutex_unlock(&ucsi->message_lock);
-> > 
-> > Option 2: Pass message variables as function arguments
-> > Pass message buffers and sizes as parameters down to where ppm_lock is
-> > acquired, ensuring protection throughout command execution.
-> > 
-> > 	int ucsi_send_command(ucsi, cmd, msg_in_buf, msg_in_size, msg_out_buf,
-> > 			      msg_out_size) {
-> >      		mutex_lock(&ucsi->ppm_lock);
-> >      		ucsi->message_in_size = msg_in_size;
-> >      		// execute command and copy results to msg_in_buf
-> > 		memcpy(msg_in_buf, ucsi->message_in, msg_in_size);
-> >      		mutex_unlock(&ucsi->ppm_lock);
-> > 	}
-> > 
-> > I'm leaning toward Option 1 as it resolves the concern of passing too many args.
-> > What are your thoughts on the suggested options or do you have alternative
-> > suggestions?
+On 19/12/2025 09:17, Krzysztof Kozlowski wrote:
+> On 18/12/2025 23:49, Amit Sunil Dhamne via B4 Relay wrote:
+>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>
+>> The Maxim MAX77759 MFD includes a charger function. Extend the max77759
+>> binding to include the charger. Also, update the example to include
+>> charger.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>  .../devicetree/bindings/mfd/maxim,max77759.yaml    | 33 ++++++++++++++++++++++
+>>  1 file changed, 33 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>> index 525de9ab3c2b..1cffdf2e5776 100644
+>> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>> @@ -37,6 +37,30 @@ properties:
+>>    nvmem-0:
+>>      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
+>>  
+>> +  charger:
+>> +    type: object
+>> +    description: This is a dual input switch mode battery charger for portable
+>> +      applications. It supports wired and wireless charging and can operate in
+>> +      buck and boost mode.
+>> +
 > 
-> I'm slightly biased towards  the second option (it doesn't required extra
-> locks and it also is a bit more idiomatic), but I'm fine either way.
 > 
-> Looking forward to seeing the fixing patch!
+> I do not see any improvements, so same comment: this should be folded
+> into the parent.
+> 
+> Please read DTS 101 slides or writing bindings or any other talks...
+> 
 
-I don't think you are fully solving the problem.
+No responses to my emails for a few days, so I assume discussion is done
+and I mark it as changes requested in patchwork.
 
-Pooja, you know my opinion. This whole approach of using separate
-files is wrong. IMO we should only have a single file for the entire
-UCSI mailbox, and the mailbox should be allocated searately for
-everyone that opens the file. I don't think there is any way to
-guarantee that the data in these separate files isn't for somebody
-else.
-
-thanks,
-
--- 
-heikki
+Best regards,
+Krzysztof
 
