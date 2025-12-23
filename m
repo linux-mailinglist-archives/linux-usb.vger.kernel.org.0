@@ -1,502 +1,191 @@
-Return-Path: <linux-usb+bounces-31698-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31699-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D66BCD8A74
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 10:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8345FCD8D00
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 11:32:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 86845301FF52
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 09:51:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 11DCD302D282
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 10:31:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4470A32C920;
-	Tue, 23 Dec 2025 09:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2E95352924;
+	Tue, 23 Dec 2025 10:06:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ktTu6UL9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="faiMMrQl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B2732AACA
-	for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 09:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B707D357A4B
+	for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 10:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766483146; cv=none; b=tTfcTQ4L2BP5saFmN2F/qO/DfiCVSVxjJz3soRO5NBUn6VHgjWWqbNyI3hJ3wdPuoiqrrE7kswmJiCaJsjVcqH61VoTGG+GTMYVl/v0gZ29KGNLSaVcH/YRZsVUrnj8Fon+UXn+9msuHBSYOYc3FQZLycnLy1r5hLZRXttbOWSU=
+	t=1766484391; cv=none; b=XhOovsOMrMafuYvHnPFUGYzMXdHPTXkP+glIk/3s9DLwPoMGLuabgl84XapIhgB9FthwPdd4RIWsfHsby3bSgd9U+3p2K7fh/eIxk1MveJOgQW3EIZ2vF6Cu+WIjQdEdTN3AQfLba74JdGICKSadgZnIXu+PnWAvuYulCfDl/B0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766483146; c=relaxed/simple;
-	bh=2CwjCktaAAvQP52hVAcQSiYNs442fX7cEjzBglFlmOQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QWoI114qYpdaG/mIlFWbuX8DbX85IyQpWhSM7vsbbn28VX1CDLzZ2rVMVcY3rh5Wva0cQDh2OYMisxzRbMvPgpSeAtp61juX8XDrZqtgLVBu8GR3c2BW3ywezt+5u7LOn/LNbo10GGZlxk14S4msN00lkcNerP4H9/kRrnp+F6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ktTu6UL9; arc=none smtp.client-ip=209.85.221.53
+	s=arc-20240116; t=1766484391; c=relaxed/simple;
+	bh=5Fkn+5VzU1zCfX7VhROqZyNQ7AQdJvWc0ebzXz0ZRSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ORWNHlc+x5fLqra7KNpeu6mWg8HqyXQrqYZiCSZaZ+Cnbl0mt4WdcuPDvhV4euOaU36Di073gcjFOuIvbwEBY/R2G6CJGLHuqitOVm1sW4kuQ7N3Jl0hlwplkBQe2Gc9sViweLSF1PMVvJmBsXJL1zBssIz42eb2qaNhWhDtDvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=faiMMrQl; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-42e2d52c24dso2001691f8f.1
-        for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 01:45:42 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b7ffbf4284dso591281766b.3
+        for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 02:06:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766483141; x=1767087941; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1766484386; x=1767089186; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PtmZyPmcNnWj/pPrYtT2bQOdQiTp1GNJXWQfrbQ1Sro=;
-        b=ktTu6UL9ZqOc38FAGXPDFviiigS4hQWTaCHp9Us72HwBsRLgpg3w7wLw8q8eniXSON
-         yT9dgYYYVJVQxx5mMpq1rJHTHDc6VifrUthKipLWpu0hbN2E4eIgrPqDz8T0K75gSODG
-         H23avs4Zt7o+I6kDeI8Yss+H/UubE/VcLQTq1w+aDM8pl3BkiIU5eSI2Pr45Z72WMLYp
-         kPkTpo6CQcwOy7WWvwXEoWLJW/y8mIOsWF8G96rICj0u1VrQeq7DOY0O+reZhtvSO2gV
-         J6+QhtoXTmFz6R6s5HKoiKec4SQiD8xH1AB8yZwl3UC79PFpADh91WxmJ3fOW0zSZ5OV
-         y12Q==
+        bh=RRWnjSr0jciI1Z5HoAfkG1mju3Morov9W5gQzuml8Uw=;
+        b=faiMMrQld1T60IJN0TGcyH9Giy49bUZtWs2jBfL0/G3xQ7C1Jm8UDNp5J5A4KjtAtm
+         g27nRL8BrnKzF+dBm1IZ4XWKGz6bko4tC2/QVnsGsa5q/H2cYQRiuevPmsOlhzO7Qj45
+         54iT89Ha19ekh6ODNmUFM0W0/RWQFxpKzKvi6jsZ08bLNIIpLdgl/RvQK9tqr+xHjYHE
+         tf1pHorecdKomp6cIGtsrAxzFNzx+BwWmVqt/12Oj5AM1PWpHKTzJz0ttICKe9BC2jnT
+         K0tgmDjBuM6RcHv2tw2aLhTg0EjFy7x9tVQ1lZK35fXT0VPAc/3r+qUX/XPezREf+ldh
+         2LxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766483141; x=1767087941;
+        d=1e100.net; s=20230601; t=1766484386; x=1767089186;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=PtmZyPmcNnWj/pPrYtT2bQOdQiTp1GNJXWQfrbQ1Sro=;
-        b=FKUg1/5HtHXgwEPQHjTpJhPMkp7lq9rOAdv5yJnz68o8/3PJiPRXfT6RmXrVzQURlm
-         c01fGtcBtFFjPPn6nP1FAW/HH6TO/UbSVfIeU28QYgKz47e4z5WcRcWuXTvyThPOSrVh
-         cvnftb3OsmV2gPy/D/41BecHwRNRDghXCiDznhzgfvZBVlVCtOCMVZjhr1zmI47K5DQz
-         SodmmcBvA/RVzebHqONqWNBCEHnyLB++RTgWA7qpSokf4l2cBo2l7dshkLwZU6QaX8mw
-         48Wy57dCTXq6zz6PY8bJChXJseYvWv4pbyJ3aVqHUmrPWg92Gy3DjokhoPqp9/VtOEX6
-         cevw==
-X-Gm-Message-State: AOJu0YxqASU3cHJR7q6eybrqYy4fp+FIJp+o4x9RXN5Q+C2Wd9ccYew7
-	N4rHb41ycrRcJ7tlrONLrdrVqiKOAOKl89iFlJyiFB7ETwUtxhAdbCwy
-X-Gm-Gg: AY/fxX5lNhmRfkKfMbxP68c3bsEqtG7zbhM7GRcDWEltvD74JKatDFlnC63Uqx1lYml
-	eQPhjK9rjZYbP8wZZ+nPDWTHPDboAeD8w/yyA975nCXDQIbJM8gCFijuwNE/rZuhdOHSVvLUkXb
-	/EwCBXR0LTJvgE1mGAF1ZZnsxMSL9I4W/VLTdWeVjg8QQWAEnL53vly0zr1oP8wM0NrihLhSOj5
-	XrshTIRfMxk82bR81VfrN8tQu+Xv+exBYHWxvXkvUQXKaf0xBjwoU07hIM96DTWLT1k+8GKYspC
-	F4jIr/MCK1+86ebiqOrhEIUQPpnydZDAkSg5gKiLi9SUlyuO7IL/Sy0DcNK+SZHUAcmRhPq4oVo
-	+KqAI+akofaYed38Ks2T8O5OqwGB/kSVga5dy5ChUlv1PNTRQP92S108abMB0qu5DX2TRLRncw+
-	Jh
-X-Google-Smtp-Source: AGHT+IHrFmA3PPM8ft+5rTNEgWxkKLDHXqcquDXCom6fZSokZOHfeaGKqpPd0DmltR1qlbma/iIK0w==
-X-Received: by 2002:a05:6000:4305:b0:431:8ec:9372 with SMTP id ffacd0b85a97d-4324e5108c1mr12648847f8f.55.1766483140982;
-        Tue, 23 Dec 2025 01:45:40 -0800 (PST)
-Received: from xeon ([188.163.112.70])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea1ae12sm25759024f8f.6.2025.12.23.01.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Dec 2025 01:45:40 -0800 (PST)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Thierry Reding <treding@nvidia.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Svyatoslav Ryhel <clamor95@gmail.com>,
-	Dmitry Osipenko <digetx@gmail.com>
-Cc: linux-usb@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] usb: phy: tegra: add HSIC support
-Date: Tue, 23 Dec 2025 11:45:29 +0200
-Message-ID: <20251223094529.7202-3-clamor95@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251223094529.7202-1-clamor95@gmail.com>
-References: <20251223094529.7202-1-clamor95@gmail.com>
+        bh=RRWnjSr0jciI1Z5HoAfkG1mju3Morov9W5gQzuml8Uw=;
+        b=Zg06eJJi+8MQlB4oWEe932g6Y+GuT1ZqnkqKgU8RrpqLGkLcahWaD+vxNX/q9wCA80
+         Ma6Ft1tBbToCEuIGgKJXM93NsOcu7t/eJ5OKo3TDV6fVdTfeZOKcBYhcIkPws5c7FJDj
+         EShp6D7P6QNBxm/QJAwiRKEyTpZHWIsp8GSTdvtqOERxSj+GkuOZRX/dRI2f8r2xGyiT
+         1qymJJjbrtuJ/TUwFF6qhvCOYC1jztqZm6lStayQyDeDWxPaKAaWRmj7hFbqu+xMGtDW
+         qvdn4WGOSG5W6HFvHmJghuaP03QWNX8YzIO09jJ+jXF26cIDfK/IG6REg4VQ7Q0o3oqG
+         Gz4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXVBwy2QMloM62mR/BENeidJTjizW41reTxokVnRufQAhoB2OEu5h3iiiElLLyR8B9NcmwArC8ifWA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3Hnd4QsFtGSAx9uyrr9m1Z5xD6CiTBAZts3cvRf6cYTWViSKE
+	M1gJZNO53TE7WM1gmsqFZYP7e6iMMV9aJ7d9agonn2HxkyyXeCMH/qXs
+X-Gm-Gg: AY/fxX7CVQODQPLLmjxe26VGacIAO3BVW/B78//KJxV6Rm8FgMvBxpcK9AeO72z9Rod
+	QH56nBimn9ZeRh39TxDZAg9474NWEE9JQg/YGPKO8qmZhxDuaU54yiNzG6X90k6YFpCt+NkH9nQ
+	N0DpOAxUZm9YeeNStSN/bzt9F7Cea41EfQ+H+c9iCkQ6Dl47HTgkmmoHRc4BpkGmKIvvfPNEVoi
+	ZmYv3mvwuASgxvAZms1FbEjlI7JOGOKbh7kTB0Mf0LfAEpCQyXhI7iajSEgLIoHUHWqf5/bHOGF
+	TKOowLRCIAMFAEt2rOcX2V5NtU+xMyMG0Y1vlILTdVySb699lAzKjnA1Ti7G3kH1aECs5jdiU1d
+	T3hc2hTWMUqDeLdeiEPNDYoAL195EYAlcXOPU+QfqC+XmVJNGLQxIjkoso96fmcy4hlchnVCDCz
+	ojmxD2UQF9DrbJ2A41FYzzH+0=
+X-Google-Smtp-Source: AGHT+IFu5veOu4SBeNEymO0Qtwjb4692B+3YWX9WqbFNp2m+8exlv+EKlDBSKlCxA2o28x/YCpJO2A==
+X-Received: by 2002:a17:907:7e85:b0:b73:4006:1875 with SMTP id a640c23a62f3a-b803719ef9amr1225976066b.38.1766484385871;
+        Tue, 23 Dec 2025 02:06:25 -0800 (PST)
+Received: from foxbook (bfd193.neoplus.adsl.tpnet.pl. [83.28.41.193])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037de10dfsm1330374766b.36.2025.12.23.02.06.24
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 23 Dec 2025 02:06:25 -0800 (PST)
+Date: Tue, 23 Dec 2025 11:06:21 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: =?UTF-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Lee Jones <lee@kernel.org>, Mathias Nyman
+ <mathias.nyman@linux.intel.com>, "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: xhci: check Null pointer in segment alloc
+Message-ID: <20251223110621.2b53f63d.michal.pecio@gmail.com>
+In-Reply-To: <e2ec66ae-2516-4030-8bb2-51ed5c8918db@rowland.harvard.edu>
+References: <TYUPR06MB6217AC2CE5431DC9B3956FE7D2A9A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+	<20251220141510.1bc1ef19.michal.pecio@gmail.com>
+	<20251222064252.GA1196800@google.com>
+	<2025122253-stopper-tweed-6e68@gregkh>
+	<20251222085543.4d7430d5.michal.pecio@gmail.com>
+	<TYUPR06MB6217CB438F21763401A93E6ED2B4A@TYUPR06MB6217.apcprd06.prod.outlook.com>
+	<eb5715b5-613a-4610-9852-1a6ae67b4153@rowland.harvard.edu>
+	<20251222174934.4c9b62d2.michal.pecio@gmail.com>
+	<38822950-6d69-4ad6-be28-fb8f328c8ae5@rowland.harvard.edu>
+	<20251222220349.2d6c1a43.michal.pecio@gmail.com>
+	<e2ec66ae-2516-4030-8bb2-51ed5c8918db@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add support for HSIC USB mode, which can be set for second USB controller
-and PHY on Tegra SoC along with already supported UTMI or ULPI.
+On Mon, 22 Dec 2025 22:24:35 -0500, Alan Stern wrote:
+> > I see that devices recursively call bus_resume() before resuming,
+> 
+> Are you talking about hcd_bus_resume()?  (There is no function named 
+> bus_resume() in usbcore.)  That's the routine in charge of resuming
+> root hubs.  The PM core ensures that all of a device's ancestors are
+> at full power before the device is resumed, so it would (indirectly)
+> call this routine if an entire USB bus was suspended when a resume
+> was requested for one of the devices on that bus.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- drivers/usb/phy/phy-tegra-usb.c   | 249 ++++++++++++++++++++++++++++--
- include/linux/usb/tegra_usb_phy.h |   5 +
- 2 files changed, 243 insertions(+), 11 deletions(-)
+Yes, I mean this function and the bus_resume() method of the HCD,
+which the function calls.
 
-diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
-index 13232b074649..31c0b6e34bc8 100644
---- a/drivers/usb/phy/phy-tegra-usb.c
-+++ b/drivers/usb/phy/phy-tegra-usb.c
-@@ -29,17 +29,26 @@
- #include <linux/usb/tegra_usb_phy.h>
- #include <linux/usb/ulpi.h>
- 
-+#define USB_TXFILLTUNING			0x154
-+#define USB_FIFO_TXFILL_THRES(x)		(((x) & 0x1f) << 16)
-+#define USB_FIFO_TXFILL_MASK			0x1f0000
-+
- #define ULPI_VIEWPORT				0x170
- 
- /* PORTSC PTS/PHCD bits, Tegra20 only */
- #define TEGRA_USB_PORTSC1			0x184
--#define TEGRA_USB_PORTSC1_PTS(x)		(((x) & 0x3) << 30)
--#define TEGRA_USB_PORTSC1_PHCD			BIT(23)
-+#define   TEGRA_USB_PORTSC1_PTS(x)		(((x) & 0x3) << 30)
-+#define   TEGRA_USB_PORTSC1_PHCD		BIT(23)
-+#define   TEGRA_USB_PORTSC1_WKOC		BIT(22)
-+#define   TEGRA_USB_PORTSC1_WKDS		BIT(21)
-+#define   TEGRA_USB_PORTSC1_WKCN		BIT(20)
- 
- /* HOSTPC1 PTS/PHCD bits, Tegra30 and above */
-+#define TEGRA30_USB_PORTSC1			0x174
- #define TEGRA_USB_HOSTPC1_DEVLC			0x1b4
--#define TEGRA_USB_HOSTPC1_DEVLC_PTS(x)		(((x) & 0x7) << 29)
--#define TEGRA_USB_HOSTPC1_DEVLC_PHCD		BIT(22)
-+#define   TEGRA_USB_HOSTPC1_DEVLC_PTS(x)	(((x) & 0x7) << 29)
-+#define   TEGRA_USB_HOSTPC1_DEVLC_PHCD		BIT(22)
-+#define   TEGRA_USB_HOSTPC1_DEVLC_PTS_HSIC	BIT(2)
- 
- /* Bits of PORTSC1, which will get cleared by writing 1 into them */
- #define TEGRA_PORTSC1_RWC_BITS	(PORT_CSC | PORT_PEC | PORT_OCC)
-@@ -51,11 +60,12 @@
- #define   USB_SUSP_CLR				BIT(5)
- #define   USB_PHY_CLK_VALID			BIT(7)
- #define   UTMIP_RESET				BIT(11)
--#define   UHSIC_RESET				BIT(11)
- #define   UTMIP_PHY_ENABLE			BIT(12)
- #define   ULPI_PHY_ENABLE			BIT(13)
- #define   USB_SUSP_SET				BIT(14)
-+#define   UHSIC_RESET				BIT(14)
- #define   USB_WAKEUP_DEBOUNCE_COUNT(x)		(((x) & 0x7) << 16)
-+#define   UHSIC_PHY_ENABLE			BIT(19)
- 
- #define USB_PHY_VBUS_SENSORS			0x404
- #define   B_SESS_VLD_WAKEUP_EN			BIT(14)
-@@ -156,6 +166,58 @@
- #define UTMIP_BIAS_CFG1				0x83c
- #define   UTMIP_BIAS_PDTRK_COUNT(x)		(((x) & 0x1f) << 3)
- 
-+/*
-+ * Tegra20 has no UTMIP registers on PHY2 and UHSIC registers start from 0x800
-+ * just where UTMIP registers should have been. This is the case only with Tegra20
-+ * Tegra30+ have UTMIP registers at 0x800 and UHSIC registers shifter by 0x400
-+ * to 0xc00, but register layout is preserved.
-+ */
-+#define UHSIC_PLL_CFG1				0x804
-+#define   UHSIC_XTAL_FREQ_COUNT(x)		(((x) & 0xfff) << 0)
-+#define   UHSIC_PLLU_ENABLE_DLY_COUNT(x)	(((x) & 0x1f) << 14)
-+
-+#define UHSIC_HSRX_CFG0				0x808
-+#define   UHSIC_ELASTIC_UNDERRUN_LIMIT(x)	(((x) & 0x1f) << 2)
-+#define   UHSIC_ELASTIC_OVERRUN_LIMIT(x)	(((x) & 0x1f) << 8)
-+#define   UHSIC_IDLE_WAIT(x)			(((x) & 0x1f) << 13)
-+
-+#define UHSIC_HSRX_CFG1				0x80c
-+#define   UHSIC_HS_SYNC_START_DLY(x)		(((x) & 0x1f) << 1)
-+
-+#define UHSIC_TX_CFG0				0x810
-+#define   UHSIC_HS_READY_WAIT_FOR_VALID		BIT(9)
-+
-+#define UHSIC_MISC_CFG0				0x814
-+#define   UHSIC_SUSPEND_EXIT_ON_EDGE		BIT(7)
-+#define   UHSIC_DETECT_SHORT_CONNECT		BIT(8)
-+#define   UHSIC_FORCE_XCVR_MODE			BIT(15)
-+#define   UHSIC_DISABLE_BUSRESET		BIT(20)
-+
-+#define UHSIC_MISC_CFG1				0x818
-+#define   UHSIC_PLLU_STABLE_COUNT(x)		(((x) & 0xfff) << 2)
-+
-+#define UHSIC_PADS_CFG0				0x81c
-+#define   UHSIC_TX_RTUNEN			0xf000
-+#define   UHSIC_TX_RTUNE(x)			(((x) & 0xf) << 12)
-+
-+#define UHSIC_PADS_CFG1				0x820
-+#define   UHSIC_PD_BG				BIT(2)
-+#define   UHSIC_PD_TX				BIT(3)
-+#define   UHSIC_PD_TRK				BIT(4)
-+#define   UHSIC_PD_RX				BIT(5)
-+#define   UHSIC_PD_ZI				BIT(6)
-+#define   UHSIC_RX_SEL				BIT(7)
-+#define   UHSIC_RPD_DATA			BIT(9)
-+#define   UHSIC_RPD_STROBE			BIT(10)
-+#define   UHSIC_RPU_DATA			BIT(11)
-+#define   UHSIC_RPU_STROBE			BIT(12)
-+
-+#define UHSIC_CMD_CFG0				0x824
-+#define   UHSIC_PRETEND_CONNECT_DETECT		BIT(5)
-+
-+#define UHSIC_STAT_CFG0				0x828
-+#define   UHSIC_CONNECT_DETECT			BIT(0)
-+
- /* For Tegra30 and above only, the address is different in Tegra20 */
- #define USB_USBMODE				0x1f8
- #define   USB_USBMODE_MASK			(3 << 0)
-@@ -174,7 +236,8 @@ struct tegra_xtal_freq {
- 	u8 enable_delay;
- 	u8 stable_count;
- 	u8 active_delay;
--	u8 xtal_freq_count;
-+	u8 utmi_xtal_freq_count;
-+	u16 hsic_xtal_freq_count;
- 	u16 debounce;
- };
- 
-@@ -184,7 +247,8 @@ static const struct tegra_xtal_freq tegra_freq_table[] = {
- 		.enable_delay = 0x02,
- 		.stable_count = 0x2F,
- 		.active_delay = 0x04,
--		.xtal_freq_count = 0x76,
-+		.utmi_xtal_freq_count = 0x76,
-+		.hsic_xtal_freq_count = 0x1CA,
- 		.debounce = 0x7530,
- 	},
- 	{
-@@ -192,7 +256,8 @@ static const struct tegra_xtal_freq tegra_freq_table[] = {
- 		.enable_delay = 0x02,
- 		.stable_count = 0x33,
- 		.active_delay = 0x05,
--		.xtal_freq_count = 0x7F,
-+		.utmi_xtal_freq_count = 0x7F,
-+		.hsic_xtal_freq_count = 0x1F0,
- 		.debounce = 0x7EF4,
- 	},
- 	{
-@@ -200,7 +265,8 @@ static const struct tegra_xtal_freq tegra_freq_table[] = {
- 		.enable_delay = 0x03,
- 		.stable_count = 0x4B,
- 		.active_delay = 0x06,
--		.xtal_freq_count = 0xBB,
-+		.utmi_xtal_freq_count = 0xBB,
-+		.hsic_xtal_freq_count = 0x2DD,
- 		.debounce = 0xBB80,
- 	},
- 	{
-@@ -208,7 +274,8 @@ static const struct tegra_xtal_freq tegra_freq_table[] = {
- 		.enable_delay = 0x04,
- 		.stable_count = 0x66,
- 		.active_delay = 0x09,
--		.xtal_freq_count = 0xFE,
-+		.utmi_xtal_freq_count = 0xFE,
-+		.hsic_xtal_freq_count = 0x3E0,
- 		.debounce = 0xFDE8,
- 	},
- };
-@@ -541,7 +608,7 @@ static int utmi_phy_power_on(struct tegra_usb_phy *phy)
- 		val = readl_relaxed(base + UTMIP_PLL_CFG1);
- 		val &= ~(UTMIP_XTAL_FREQ_COUNT(~0) |
- 			UTMIP_PLLU_ENABLE_DLY_COUNT(~0));
--		val |= UTMIP_XTAL_FREQ_COUNT(phy->freq->xtal_freq_count) |
-+		val |= UTMIP_XTAL_FREQ_COUNT(phy->freq->utmi_xtal_freq_count) |
- 			UTMIP_PLLU_ENABLE_DLY_COUNT(phy->freq->enable_delay);
- 		writel_relaxed(val, base + UTMIP_PLL_CFG1);
- 	}
-@@ -812,6 +879,153 @@ static int ulpi_phy_power_off(struct tegra_usb_phy *phy)
- 	return 0;
- }
- 
-+static u32 tegra_hsic_readl(struct tegra_usb_phy *phy, u32 reg)
-+{
-+	void __iomem *base = phy->regs;
-+	u32 shift = phy->soc_config->uhsic_registers_shift;
-+
-+	return readl_relaxed(base + shift + reg);
-+}
-+
-+static void tegra_hsic_writel(struct tegra_usb_phy *phy, u32 reg, u32 value)
-+{
-+	void __iomem *base = phy->regs;
-+	u32 shift = phy->soc_config->uhsic_registers_shift;
-+
-+	writel_relaxed(value, base + shift + reg);
-+}
-+
-+static int uhsic_phy_power_on(struct tegra_usb_phy *phy)
-+{
-+	struct tegra_utmip_config *config = phy->config;
-+	void __iomem *base = phy->regs;
-+	u32 val;
-+
-+	val = tegra_hsic_readl(phy, UHSIC_PADS_CFG1);
-+	val &= ~(UHSIC_PD_BG | UHSIC_PD_TX | UHSIC_PD_TRK | UHSIC_PD_RX |
-+		 UHSIC_PD_ZI | UHSIC_RPD_DATA | UHSIC_RPD_STROBE);
-+	val |= UHSIC_RX_SEL;
-+	tegra_hsic_writel(phy, UHSIC_PADS_CFG1, val);
-+
-+	udelay(2);
-+
-+	val = readl_relaxed(base + USB_SUSP_CTRL);
-+	val |= UHSIC_RESET;
-+	writel_relaxed(val, base + USB_SUSP_CTRL);
-+
-+	udelay(30);
-+
-+	val = readl_relaxed(base + USB_SUSP_CTRL);
-+	val |= UHSIC_PHY_ENABLE;
-+	writel_relaxed(val, base + USB_SUSP_CTRL);
-+
-+	val = tegra_hsic_readl(phy, UHSIC_HSRX_CFG0);
-+	val &= ~(UHSIC_IDLE_WAIT(~0) |
-+		 UHSIC_ELASTIC_UNDERRUN_LIMIT(~0) |
-+		 UHSIC_ELASTIC_OVERRUN_LIMIT(~0));
-+	val |= UHSIC_IDLE_WAIT(config->idle_wait_delay) |
-+		UHSIC_ELASTIC_UNDERRUN_LIMIT(config->elastic_limit) |
-+		UHSIC_ELASTIC_OVERRUN_LIMIT(config->elastic_limit);
-+	tegra_hsic_writel(phy, UHSIC_HSRX_CFG0, val);
-+
-+	val = tegra_hsic_readl(phy, UHSIC_HSRX_CFG1);
-+	val &= ~UHSIC_HS_SYNC_START_DLY(~0);
-+	val |= UHSIC_HS_SYNC_START_DLY(config->hssync_start_delay);
-+	tegra_hsic_writel(phy, UHSIC_HSRX_CFG1, val);
-+
-+	val = tegra_hsic_readl(phy, UHSIC_MISC_CFG0);
-+	val |= UHSIC_SUSPEND_EXIT_ON_EDGE;
-+	tegra_hsic_writel(phy, UHSIC_MISC_CFG0, val);
-+
-+	val = tegra_hsic_readl(phy, UHSIC_MISC_CFG1);
-+	val &= ~UHSIC_PLLU_STABLE_COUNT(~0);
-+	val |= UHSIC_PLLU_STABLE_COUNT(phy->freq->stable_count);
-+	tegra_hsic_writel(phy, UHSIC_MISC_CFG1, val);
-+
-+	val = tegra_hsic_readl(phy, UHSIC_PLL_CFG1);
-+	val &= ~(UHSIC_XTAL_FREQ_COUNT(~0) |
-+		UHSIC_PLLU_ENABLE_DLY_COUNT(~0));
-+	val |= UHSIC_XTAL_FREQ_COUNT(phy->freq->hsic_xtal_freq_count) |
-+		UHSIC_PLLU_ENABLE_DLY_COUNT(phy->freq->enable_delay);
-+	tegra_hsic_writel(phy, UHSIC_PLL_CFG1, val);
-+
-+	val = readl_relaxed(base + USB_SUSP_CTRL);
-+	val &= ~UHSIC_RESET;
-+	writel_relaxed(val, base + USB_SUSP_CTRL);
-+
-+	udelay(2);
-+
-+	if (phy->soc_config->requires_usbmode_setup) {
-+		val = readl_relaxed(base + USB_USBMODE);
-+		val &= ~USB_USBMODE_MASK;
-+		if (phy->mode == USB_DR_MODE_HOST)
-+			val |= USB_USBMODE_HOST;
-+		else
-+			val |= USB_USBMODE_DEVICE;
-+		writel_relaxed(val, base + USB_USBMODE);
-+	}
-+
-+	if (phy->soc_config->has_hostpc)
-+		set_pts(phy, TEGRA_USB_HOSTPC1_DEVLC_PTS_HSIC);
-+	else
-+		set_pts(phy, 0);
-+
-+	val = readl_relaxed(base + USB_TXFILLTUNING);
-+	if ((val & USB_FIFO_TXFILL_MASK) != USB_FIFO_TXFILL_THRES(0x10)) {
-+		val = USB_FIFO_TXFILL_THRES(0x10);
-+		writel_relaxed(val, base + USB_TXFILLTUNING);
-+	}
-+
-+	if (phy->soc_config->has_hostpc) {
-+		val = readl_relaxed(base + TEGRA30_USB_PORTSC1);
-+		val &= ~(TEGRA_USB_PORTSC1_WKOC | TEGRA_USB_PORTSC1_WKDS |
-+			 TEGRA_USB_PORTSC1_WKCN);
-+		writel_relaxed(val, base + TEGRA30_USB_PORTSC1);
-+	} else {
-+		val = readl_relaxed(base + TEGRA_USB_PORTSC1);
-+		val &= ~(TEGRA_USB_PORTSC1_WKOC | TEGRA_USB_PORTSC1_WKDS |
-+			 TEGRA_USB_PORTSC1_WKCN);
-+		writel_relaxed(val, base + TEGRA_USB_PORTSC1);
-+	}
-+
-+	val = tegra_hsic_readl(phy, UHSIC_PADS_CFG0);
-+	val &= ~UHSIC_TX_RTUNEN;
-+	val |= UHSIC_TX_RTUNE(phy->soc_config->uhsic_tx_rtune);
-+	tegra_hsic_writel(phy, UHSIC_PADS_CFG0, val);
-+
-+	if (utmi_wait_register(base + USB_SUSP_CTRL, USB_PHY_CLK_VALID,
-+			       USB_PHY_CLK_VALID))
-+		dev_err(phy->u_phy.dev,
-+			"Timeout waiting for PHY to stabilize on enable (HSIC)\n");
-+
-+	return 0;
-+}
-+
-+static int uhsic_phy_power_off(struct tegra_usb_phy *phy)
-+{
-+	void __iomem *base = phy->regs;
-+	u32 val;
-+
-+	set_phcd(phy, true);
-+
-+	val = tegra_hsic_readl(phy, UHSIC_PADS_CFG1);
-+	val |= (UHSIC_PD_BG | UHSIC_PD_TX | UHSIC_PD_TRK | UHSIC_PD_RX |
-+		UHSIC_PD_ZI | UHSIC_RPD_DATA | UHSIC_RPD_STROBE);
-+	tegra_hsic_writel(phy, UHSIC_PADS_CFG1, val);
-+
-+	val = readl_relaxed(base + USB_SUSP_CTRL);
-+	val |= UHSIC_RESET;
-+	writel_relaxed(val, base + USB_SUSP_CTRL);
-+
-+	udelay(30);
-+
-+	val = readl_relaxed(base + USB_SUSP_CTRL);
-+	val &= ~UHSIC_PHY_ENABLE;
-+	writel_relaxed(val, base + USB_SUSP_CTRL);
-+
-+	return 0;
-+}
-+
- static int tegra_usb_phy_power_on(struct tegra_usb_phy *phy)
- {
- 	int err = 0;
-@@ -828,6 +1042,10 @@ static int tegra_usb_phy_power_on(struct tegra_usb_phy *phy)
- 		err = ulpi_phy_power_on(phy);
- 		break;
- 
-+	case USBPHY_INTERFACE_MODE_HSIC:
-+		err = uhsic_phy_power_on(phy);
-+		break;
-+
- 	default:
- 		break;
- 	}
-@@ -859,6 +1077,10 @@ static int tegra_usb_phy_power_off(struct tegra_usb_phy *phy)
- 		err = ulpi_phy_power_off(phy);
- 		break;
- 
-+	case USBPHY_INTERFACE_MODE_HSIC:
-+		err = uhsic_phy_power_off(phy);
-+		break;
-+
- 	default:
- 		break;
- 	}
-@@ -1256,6 +1478,8 @@ static const struct tegra_phy_soc_config tegra20_soc_config = {
- 	.requires_usbmode_setup = false,
- 	.requires_extra_tuning_parameters = false,
- 	.requires_pmc_ao_power_up = false,
-+	.uhsic_registers_shift = 0,
-+	.uhsic_tx_rtune = 0, /* 40 ohm */
- };
- 
- static const struct tegra_phy_soc_config tegra30_soc_config = {
-@@ -1264,6 +1488,8 @@ static const struct tegra_phy_soc_config tegra30_soc_config = {
- 	.requires_usbmode_setup = true,
- 	.requires_extra_tuning_parameters = true,
- 	.requires_pmc_ao_power_up = true,
-+	.uhsic_registers_shift = 0x400,
-+	.uhsic_tx_rtune = 8,  /* 50 ohm */
- };
- 
- static const struct of_device_id tegra_usb_phy_id_table[] = {
-@@ -1360,6 +1586,7 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
- 	tegra_phy->phy_type = of_usb_get_phy_mode(np);
- 	switch (tegra_phy->phy_type) {
- 	case USBPHY_INTERFACE_MODE_UTMI:
-+	case USBPHY_INTERFACE_MODE_HSIC:
- 		err = utmi_phy_probe(tegra_phy, pdev);
- 		if (err)
- 			return err;
-diff --git a/include/linux/usb/tegra_usb_phy.h b/include/linux/usb/tegra_usb_phy.h
-index e394f4880b7e..4e79f1c2173a 100644
---- a/include/linux/usb/tegra_usb_phy.h
-+++ b/include/linux/usb/tegra_usb_phy.h
-@@ -24,6 +24,9 @@ struct gpio_desc;
-  * requires_extra_tuning_parameters: true if xcvr_hsslew, hssquelch_level
-  *      and hsdiscon_level should be set for adequate signal quality
-  * requires_pmc_ao_power_up: true if USB AO is powered down by default
-+ * uhsic_registers_shift: for Tegra30+ where HSIC registers were shifted
-+ *      comparing to Tegra20 by 0x400, since Tegra20 has no UTMIP on PHY2
-+ * uhsic_tx_rtune: fine tuned 50 Ohm termination resistor for NMOS/PMOS driver
-  */
- 
- struct tegra_phy_soc_config {
-@@ -32,6 +35,8 @@ struct tegra_phy_soc_config {
- 	bool requires_usbmode_setup;
- 	bool requires_extra_tuning_parameters;
- 	bool requires_pmc_ao_power_up;
-+	u32 uhsic_registers_shift;
-+	u32 uhsic_tx_rtune;
- };
- 
- struct tegra_utmip_config {
--- 
-2.51.0
+> I can't see it being an autoresume in that situation, though.  An 
+> autoresume is one that was requested by the device itself -- a wakeup 
+> request -- and that can't happen if the HC is suspended.
+
+Indeed, the crashing call stack looks like some driver manually
+resuming a USB device.
+
+[ 4021.987702][  T332]  usb_hcd_alloc_bandwidth+0x384/0x3e4
+[ 4021.987711][  T332]  usb_set_interface+0x144/0x510
+[ 4021.987716][  T332]  usb_reset_and_verify_device+0x248/0x5fc
+[ 4021.987723][  T332]  usb_port_resume+0x580/0x700
+[ 4021.987730][  T332]  usb_generic_driver_resume+0x24/0x5c
+[ 4021.987735][  T332]  usb_resume_both+0x104/0x32c
+[ 4021.987740][  T332]  usb_runtime_resume+0x18/0x28
+[ 4021.987746][  T332]  __rpm_callback+0x94/0x3d4
+[ 4021.987754][  T332]  rpm_resume+0x3f8/0x5fc
+[ 4021.987762][  T332]  rpm_resume+0x1fc/0x5fc
+[ 4021.987769][  T332]  __pm_runtime_resume+0x4c/0x90
+[ 4021.987777][  T332]  usb_autopm_get_interface+0x20/0x4c
+[ 4021.987783][  T332]  snd_usb_autoresume+0x68/0x124
+[ 4021.987792][  T332]  suspend_resume_store+0x2a0/0x2b4 [dwc3_msm a4b7997a2e35cfe1a4a429762003b34dd4e85076]
+
+Before we got here, we should have attempted an hcd_bus_resume().
+If xhci_hcd tracked its HW_ACCESSIBLE state better, that would have
+failed and hopefully aborted device resume before it crashed.
+
+> > this fails with -ESHUTDOWN if the flag is unset, which seems to
+> > prevent device resume from progressing further and crashing. Is
+> > this what is meant to happen in such case?  
+> 
+> I'm not sure what code in what routine you're talking about.
+> However, it's obvious that if the host controller's registers can't
+> be accessed then no downstream device resume is going to work.
+
+If HW_ACCESSIBLE isn't set then xhci_bus_resume() returns -ESHUTDOWN.
+It always returns zero otherwise.
+
+So in the light of your explanation, the fact that xhci_resume() sets
+HW_ACCESSIBLE before actually completing resume and thus allows root
+hub resume to pretend to work, is obviously a bug.
+
+> > So I guess it's not happening because xhci_resume() sets this flag
+> > right away and then it may drop the lock and start deallocating
+> > memory to reset everything. So we can "successfully" complete
+> > bus_resume() and allow USB devices to resume while HC resume is
+> > still in progress.  
+> 
+> The root-hub resume (i.e., the ->bus_resume() callback) does not
+> occur until after the HC's own resume handler returns.
+
+If PM core is supposed to prevent it then this is getting weird.
+If not, then I'm not sure what else can prevent it.
+
+> Is it possible that the HC's resume handler decided that the HC was 
+> dead, and so started deallocating stuff, but failed to call 
+> usb_hc_died()?  (But note that resume_common() in hcd-pci.c calls 
+> usb_hc_died() automatically on the HCD's behalf when a resume fails.)
+
+Hopefully not.
+
+xhci->segment_pool is only modified by xhci_mem_cleanup() and by
+xhci_mem_init() if allocation fails. And those functions are only
+called at probe time, during HC resume and by hc_driver->stop().
+
+I'm out of ideas without more logs. The xhci HW_ACCESSIBLE bug should
+be fixed, but I'm not sure about correct ordering of setting this bit
+wrt some calls done by xhci_resume(), so no patch from me.
+
+Regards,
+Michal
+
 
 
