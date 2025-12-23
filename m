@@ -1,78 +1,97 @@
-Return-Path: <linux-usb+bounces-31736-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31737-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5670CDAD25
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 00:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC6A1CDADA4
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 00:46:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 900BF300CAD3
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 23:15:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DA29B30217B5
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 23:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570F5290D81;
-	Tue, 23 Dec 2025 23:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347452C030E;
+	Tue, 23 Dec 2025 23:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WhhS6ucb"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="V8ZtiXMs";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6vBh1HAu";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="V8ZtiXMs";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6vBh1HAu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B2938DEC;
-	Tue, 23 Dec 2025 23:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3910F1A2C0B
+	for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 23:46:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766531755; cv=none; b=oWTCLKxa/s5LX58iEwyPYq8EM4uokjv9XOqTouR4kkKRFsd4XTb3R8ApM4doPEQ6tZeS0Dh11AVMz0jJWS4KmVqlpquN2RiuSdq/DO1UUnuiDhuAVrVDa1bEQa/bsvFpFtjgxNNbjQMgnjwp6S3qnzpcDY8U40MKMyWbxEacdbA=
+	t=1766533570; cv=none; b=bV9AnG/XFnAIGMNw80Qmp5pcgkCFDwwMooH084+UWWFtmFfCyaRGnW6b6Ct2Xwjs9Gjn8yQglymcj4ZQecmubvaz0BoyPWkTw1ikprMohfDjwAJOc1v34LQcoaPGo3qOq21+LzFHLcFY8qYpSgsV2QwwKSiTmSJAAd7nP3AOq9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766531755; c=relaxed/simple;
-	bh=0mSJkPl/ka32Vr2UFQsN9pJHnFvlWfIgKc/b90M8gAY=;
+	s=arc-20240116; t=1766533570; c=relaxed/simple;
+	bh=wvY0i6cbTTXSARd9w5CrEAT7qmccFf0I76/U6zHNQ48=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dmzFMCO9lMY5NyEqkO/QjYF1HxXjPixUHFg1+D8QmaKAttrvyXyEHQA1v0OvWInRTeKWaPERGireuLAL6xsMzZFm3R7X8F3ZDUBWNMIE5Kw/G3uWn17hCKt0LcC81Nm5WzNnUxGQOXebT18b+4R9cwaESjoeoI/8rvnQ4TiCAMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WhhS6ucb; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766531754; x=1798067754;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0mSJkPl/ka32Vr2UFQsN9pJHnFvlWfIgKc/b90M8gAY=;
-  b=WhhS6ucbpcN6NMsVCV62Rlvvj480qWTWQlpqS0DGfEd4gHnt9J3z1mvA
-   v4dqP3KYBHeqot2lWZKXg74jDtyqWYBXFNxC2KAwPRJ+c52hduf7pXzI3
-   ace+hQG1ZLwU7GLwDhYuJUzj7EECce++dhx2LgCSjvABqq8ChErRVVPz4
-   dPFj+WSukBy4t3zznhNQsfhx2FbwxjRNo+ceqZW6RMv/Bgp3IDrcXuZL5
-   BWLrTzgi4c85VksEoUD12gPJVOoggOtQP+Vks2Pj88qPG0eQzDb5XV6Lm
-   EFj3z5uIOyPNxxH2ycQoVeqKwqqdZPABw1sjlXQ/x9H5Q8aKR3HD5iDPO
-   w==;
-X-CSE-ConnectionGUID: ITI3oJSvQgCDSet1fed87w==
-X-CSE-MsgGUID: 5vnVg1+cQwSt8EVFdOdKpg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="55948117"
-X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="55948117"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 15:15:54 -0800
-X-CSE-ConnectionGUID: qdVn1HOuSVSKhRN4YyqiSw==
-X-CSE-MsgGUID: nG+foIbFQMeiZMynm5QOvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="230923062"
-Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 23 Dec 2025 15:15:51 -0800
-Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vYBbZ-000000002TJ-08J0;
-	Tue, 23 Dec 2025 23:15:49 +0000
-Date: Wed, 24 Dec 2025 07:15:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Dmitry Osipenko <digetx@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] usb: phy: tegra: use phy type directly
-Message-ID: <202512240627.LvJwMSta-lkp@intel.com>
-References: <20251223094529.7202-2-clamor95@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RrT0eu7ZnhNvQKjIfeX2kFZWAJogp4SB7eXuziHe1MvkRQ7/u0t2nuNDYo3byhLi0BtM58A0rWo6TD+XN3umj9Dzdu8RqyRd3LJ0wPJYCfYIz5G2PQN9qWI1+35IstGoZ+WnJeWf7UmDYsVnSkKOd0Vv+xx3Q2BhhiSvIIvNjzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=V8ZtiXMs; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6vBh1HAu; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=V8ZtiXMs; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6vBh1HAu; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 186445BCF5;
+	Tue, 23 Dec 2025 23:46:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1766533565; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IfYmmg7IlwmZFIJtj2k/eg7vIZ86AM4p8ZvGCr8l5Qk=;
+	b=V8ZtiXMsJSLk2lXf8nQ1VvJCYfgRSlv8LOVGQj0NvLXYrS4fd3ANRVt8kFPjg86sm3xUek
+	q2LL0saFOW7qCDuimuXmB3pIKph1gOeztCfbrXoojFzy17BNNt95hgBt5eV2NPoq0L4vkV
+	1nPf2+ETPAAjbkVzuQ9OOxOYsiE/XFY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1766533565;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IfYmmg7IlwmZFIJtj2k/eg7vIZ86AM4p8ZvGCr8l5Qk=;
+	b=6vBh1HAuufCmH9N4NVaDUQSdJuhboMaPPrr8bzn9uOQ43ToRiThEadTYdMJ+NL28lTfUTo
+	n+yaCt7vvNlLxXBA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=V8ZtiXMs;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=6vBh1HAu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1766533565; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IfYmmg7IlwmZFIJtj2k/eg7vIZ86AM4p8ZvGCr8l5Qk=;
+	b=V8ZtiXMsJSLk2lXf8nQ1VvJCYfgRSlv8LOVGQj0NvLXYrS4fd3ANRVt8kFPjg86sm3xUek
+	q2LL0saFOW7qCDuimuXmB3pIKph1gOeztCfbrXoojFzy17BNNt95hgBt5eV2NPoq0L4vkV
+	1nPf2+ETPAAjbkVzuQ9OOxOYsiE/XFY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1766533565;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IfYmmg7IlwmZFIJtj2k/eg7vIZ86AM4p8ZvGCr8l5Qk=;
+	b=6vBh1HAuufCmH9N4NVaDUQSdJuhboMaPPrr8bzn9uOQ43ToRiThEadTYdMJ+NL28lTfUTo
+	n+yaCt7vvNlLxXBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9104913A54;
+	Tue, 23 Dec 2025 23:46:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id r7hFH7wpS2nrXQAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Tue, 23 Dec 2025 23:46:04 +0000
+Date: Tue, 23 Dec 2025 23:46:02 +0000
+From: Pedro Falcato <pfalcato@suse.de>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Baryshkov <lumag@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: ucsi oops on system resume (6.19-rc1)
+Message-ID: <kapqzmifxktrqqv7umwzolc7dp7zegwuwc5dxalcct3ksmxo5c@ovs34r2an6kt>
+References: <ac4m5qtjpnmx336r5astuxkvtqfjhlt6674odmtecsn2e6sqja@hndb7jdcqsp3>
+ <9c4e32eb-4ec6-44a1-aa8e-04f9e6b4ce74@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,79 +100,53 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251223094529.7202-2-clamor95@gmail.com>
+In-Reply-To: <9c4e32eb-4ec6-44a1-aa8e-04f9e6b4ce74@kernel.org>
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 186445BCF5
+X-Spam-Flag: NO
+X-Spam-Score: -4.01
 
-Hi Svyatoslav,
+On Thu, Dec 18, 2025 at 09:24:47PM -0600, Mario Limonciello wrote:
+> 
+> 
+> On 12/17/25 5:38 AM, Pedro Falcato wrote:
+> > Hi,
+> > 
+> Here's a fix:
+> 
+> https://lore.kernel.org/linux-usb/20251216122210.5457-1-superm1@kernel.org/T/#u
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tegra/for-next]
-[also build test WARNING on usb/usb-testing usb/usb-next usb/usb-linus staging/staging-testing staging/staging-next staging/staging-linus drm-tegra/drm/tegra/for-next linus/master v6.19-rc2 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/usb-phy-tegra-use-phy-type-directly/20251223-175449
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
-patch link:    https://lore.kernel.org/r/20251223094529.7202-2-clamor95%40gmail.com
-patch subject: [PATCH v2 1/2] usb: phy: tegra: use phy type directly
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20251224/202512240627.LvJwMSta-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 4ef602d446057dabf5f61fb221669ecbeda49279)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512240627.LvJwMSta-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512240627.LvJwMSta-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/phy/phy-tegra-usb.c:853:2: warning: variable 'err' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-     853 |         default:
-         |         ^~~~~~~
-   drivers/usb/phy/phy-tegra-usb.c:857:6: note: uninitialized use occurs here
-     857 |         if (err)
-         |             ^~~
-   drivers/usb/phy/phy-tegra-usb.c:839:9: note: initialize the variable 'err' to silence this warning
-     839 |         int err;
-         |                ^
-         |                 = 0
-   1 warning generated.
-
-
-vim +/err +853 drivers/usb/phy/phy-tegra-usb.c
-
-   836	
-   837	static int tegra_usb_phy_power_off(struct tegra_usb_phy *phy)
-   838	{
-   839		int err;
-   840	
-   841		if (!phy->powered_on)
-   842			return 0;
-   843	
-   844		switch (phy->phy_type) {
-   845		case USBPHY_INTERFACE_MODE_UTMI:
-   846			err = utmi_phy_power_off(phy);
-   847			break;
-   848	
-   849		case USBPHY_INTERFACE_MODE_ULPI:
-   850			err = ulpi_phy_power_off(phy);
-   851			break;
-   852	
- > 853		default:
-   854			break;
-   855		}
-   856	
-   857		if (err)
-   858			return err;
-   859	
-   860		phy->powered_on = false;
-   861	
-   862		return 0;
-   863	}
-   864	
+Thanks, I think we've picked it up with 6.19-rc2. I'll report back if I
+find anything borked again (though I am, admittedly, not doing much
+dogfooding through the holidays).
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Pedro
 
