@@ -1,93 +1,114 @@
-Return-Path: <linux-usb+bounces-31707-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31708-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF54DCD99C8
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 15:24:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90863CD9A19
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 15:28:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id ADE883018903
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 14:24:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 483293037CDA
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 14:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A0C325495;
-	Tue, 23 Dec 2025 14:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B599B3385B6;
+	Tue, 23 Dec 2025 14:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WVx7kfvY"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gfv8xKfC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6197830BF6C;
-	Tue, 23 Dec 2025 14:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A1C33372A;
+	Tue, 23 Dec 2025 14:27:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766499868; cv=none; b=fcNgfZwbB+QU/79Pgdeb8MSepGNntX3QcUyJS1GAJZD9kGOrBBBR43BswED18LK72SKf0xNnN7fhcZLovTZxmBuoUOg9JA/A1eymb5SQ3wv1rxif0e42i0KF4Yx0HU1vMl35ohOg5l3/j4W/d9WwYWBpNstG57U87GEUl+9Y79g=
+	t=1766500053; cv=none; b=GwKlofd9BDSX2uuQG1hGTK6iMIFGJIBlc7Vgj8sF5LZN16pR7pJfQYfvvbFzFv09MUZt35g91QkSKrfRnzFHa2vfNPKCHTQWG1VgmNMLcaUXSGakpYWxER2oaK6khB8CTFXL5aZK9Nn8ZVzMHhyolfWCNhrSTHcydmb1oE7ZLQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766499868; c=relaxed/simple;
-	bh=9Ap3jdMoLYof3AgrL//q1oyKp3J7iaaqb4vJtzM6pvE=;
+	s=arc-20240116; t=1766500053; c=relaxed/simple;
+	bh=icBEl8Zbktq9bZa0C7MLEY1JA0FECoyQ8ZNhMQCbl+A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZbPvn0VWyWzL64lYP6VrvFuQfgXvwR3DK80iOfEla3S263jxE61qnK9MBfqsJKTQOhISPSmk6m6RfVNN/r9x/RNqlgJ9TC+/xDkZqjzC3WI9HNgpRIe7rOFZKCsNX2Tn1r9XI2d+EbPtdSCHE0DaWOPI28ai8SO2EGdmPsYHkz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WVx7kfvY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29FFC113D0;
-	Tue, 23 Dec 2025 14:24:27 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=luNy1bVcjLQCnwkOq+Pxrr6nXdW77Z9kH5hxFMCJs3LOd7+IwS8bIGIV0ueeXKFkcf8hgXXbehNYWDz2VioUM86sNz7fYz4NJKOZ69/UmMoSm9yBjhIx/G2ZdaU5pkAh1HgIMRwb/oBepVLLd7jL3ihdz6NX2lnzSoP3a8js6SE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gfv8xKfC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403A4C113D0;
+	Tue, 23 Dec 2025 14:27:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1766499868;
-	bh=9Ap3jdMoLYof3AgrL//q1oyKp3J7iaaqb4vJtzM6pvE=;
+	s=korg; t=1766500051;
+	bh=icBEl8Zbktq9bZa0C7MLEY1JA0FECoyQ8ZNhMQCbl+A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WVx7kfvY1u1UB8aDmsqyTL8Fflwtg4rOcN5LCeDbk7uIRIIcPZ1Ts2CnwdCeIQaIP
-	 DjhA+70VfiM0DW2yCS5dKOzAEcwYwxTqwnUqwdN5h2iwYtnmwLhfET485L9LLoq/7K
-	 bWmJr9kkxwgxJEW49VyosgePuuzz/sL1sHK76/Gg=
-Date: Tue, 23 Dec 2025 15:24:24 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: "Katiyar, Pooja" <pooja.katiyar@linux.intel.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] usb: typec: ucsi: revert broken buffer management
-Message-ID: <2025122344-purely-subsonic-4b97@gregkh>
-References: <20251222152204.2846-1-johan@kernel.org>
- <a6073f4f-edb3-470c-be63-4c3054d497a0@linux.intel.com>
- <aUqhgbxGIbq_V9Cz@hovoldconsulting.com>
+	b=gfv8xKfCSfCOeaWWPt7oAqaXnZB4sx8nF5d3+au6DKInfiuUN09NtBi0kg5JZY0Ts
+	 zrPTbsGdZIwjOgwW6VuAN6enSLGJTBgqXHRWjZg0qMhZSajw+jwy81/0WwCmbBZ9d4
+	 ivTXer4f784fheJptzBj88Mc3RlAsSg/Ee4Hxq1g=
+Date: Tue, 23 Dec 2025 15:27:28 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
+Cc: heikki.krogerus@linux.intel.com, sean.anderson@seco.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: ulpi: fix a double free in ulpi_register_interface()
+Message-ID: <2025122313-pebbly-petunia-5f2d@gregkh>
+References: <20251219154859.650819-1-lihaoxiang@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aUqhgbxGIbq_V9Cz@hovoldconsulting.com>
+In-Reply-To: <20251219154859.650819-1-lihaoxiang@isrc.iscas.ac.cn>
 
-On Tue, Dec 23, 2025 at 03:04:49PM +0100, Johan Hovold wrote:
-> On Mon, Dec 22, 2025 at 02:15:10PM -0800, Katiyar, Pooja wrote:
-> > On Mon, Dec 22, 2025 at 07:22:00AM -0800, Johan Hovold wrote:
-> > > The new buffer management code has not been tested or reviewed properly
-> > > and breaks boot of machines like the Lenovo ThinkPad X13s.
-> > > 
-> > > Fixing this will require designing a proper interface for managing these
-> > > transactions, something which most likely involves reverting most of the
-> > > offending commit anyway.
-> > > 	    
-> > > Revert the broken code to fix the regression and let Intel come up with
-> > > a properly tested implementation for a later kernel.
-> > > 
-> > 
-> > Thanks! A fix patch addressing the race condition has been identified and
-> > is being tested right now. It will be submitted for review shortly.
-> > 
-> > Here’s the discussion on same - 
-> > https://lore.kernel.org/all/349e1f70-7e40-4e3e-b078-6e001bbb5f1a@oss.qualcomm.com/
+On Fri, Dec 19, 2025 at 11:48:59PM +0800, Haoxiang Li wrote:
+> If ulpi_register() fails, put_device() is called in ulpi_register(),
+> kfree() in ulpi_register_interface() will result in a double free.
 > 
-> Yes, I'm aware that discussion and I still think this needs to be
-> reverted. Then you can propose a redesigned and tested implementation
-> that we can help you review as that kind of work is not something that
-> should be done as part of rc stabilisation.
+> Also, refactor the device registration sequence to use a unified
+> put_device() cleanup path, addressing multiple error returns in
+> ulpi_register().
+> 
+> Found by code review and compiled on ubuntu 20.04.
 
-I agree, I don't see a submitted patch yet so I'll go take your reverts
-at this point in time.  That way people have more time to get this
-correct instead of being rushed this time of the year.
+"compiled on" doesn't really provide any information, sorry.  Espeically
+for a VERY old distro release :(
+
+How was this tested?
+
+> Fixes: 0a907ee9d95e ("usb: ulpi: Call of_node_put correctly")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
+> ---
+>  drivers/usb/common/ulpi.c | 25 ++++++++++++-------------
+>  1 file changed, 12 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+> index 4a2ee447b213..c81a0cb24067 100644
+> --- a/drivers/usb/common/ulpi.c
+> +++ b/drivers/usb/common/ulpi.c
+> @@ -278,6 +278,7 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
+>  	int ret;
+>  	struct dentry *root;
+>  
+> +	device_initialize(&ulpi->dev);
+>  	ulpi->dev.parent = dev; /* needed early for ops */
+>  	ulpi->dev.bus = &ulpi_bus;
+>  	ulpi->dev.type = &ulpi_dev_type;
+> @@ -287,19 +288,15 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
+>  
+>  	ret = ulpi_of_register(ulpi);
+>  	if (ret)
+> -		return ret;
+> +		goto err_register;
+>  
+>  	ret = ulpi_read_id(ulpi);
+> -	if (ret) {
+> -		of_node_put(ulpi->dev.of_node);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		goto err_register;
+>  
+> -	ret = device_register(&ulpi->dev);
+
+Splitting this up into init/add instead of just register is usually only
+done if you _HAVE_ to do that.  I really don't see why that is required
+here at all, sorry.  Are you sure this is the correct solution?
 
 thanks,
 
