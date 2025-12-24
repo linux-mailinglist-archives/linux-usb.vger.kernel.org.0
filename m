@@ -1,67 +1,100 @@
-Return-Path: <linux-usb+bounces-31745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02C7BCDBB05
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 09:40:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EEC2CDBCD8
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 10:30:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4F6B33031984
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 08:40:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 29769301514C
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 09:30:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60E4132ED32;
-	Wed, 24 Dec 2025 08:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CrRpvlGj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F16ED330B33;
+	Wed, 24 Dec 2025 09:29:57 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE6F32AAAF;
-	Wed, 24 Dec 2025 08:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B16121FF5F;
+	Wed, 24 Dec 2025 09:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766565609; cv=none; b=fm2Xg8gsLZiz5ffXenZkumJT9RRTYPqQA6sE7C43TugnirCQKLNYfkhU3SJQfws0HSbZMXq3IFNn/z7bDPQ5SpMqdkKRly50Z75emq75ZKgqx3ODfPSyD98fUZRA+l59qpba+y4rMV/KQF0EDOB22v2+KxZDcNc47F3/Qo61ApY=
+	t=1766568597; cv=none; b=nwjB/HPJx118u6ksNDKZH/cMebTY/KpMlgoBehv8ETHFt0dqW83hGkslslWE/z3WGahJ+2B6uh+lH8mxFVURlsGY4XYrmPZ7qIzqX+dhEGGsFUNdFbb1Z4f+MnC2/kkE7FmZo0CkgdusXIoMLpLDtEBsBRrVsKAdykSiCPCZSR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766565609; c=relaxed/simple;
-	bh=GWwxhJVDkHjtUDMVXrW/mwqCRPpUaZKHzoOfZwjM0Yw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VIkuEEe2nVYSF0unXSHJzDnMs1tyNA3IZXo6AD7mLjbo19j72xqU2CbYwU+HFWooCyVPgR//EDzw9W9+dkwv2zZ8gIJKYNfTLPCe6pSc+hR/2dSJKMMVcMNQt4VhvsOQdfDjf5jzB6F8dEbJphjyM1L3ooWfHWvwBL+QiPO8meM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CrRpvlGj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9738C4CEFB;
-	Wed, 24 Dec 2025 08:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1766565606;
-	bh=GWwxhJVDkHjtUDMVXrW/mwqCRPpUaZKHzoOfZwjM0Yw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CrRpvlGjgFkUf88MnKvbW4ciLcopgzIfstOpm97ywuEOJJvk//Unf+YHQuVDoQjwO
-	 icC4hsLOAt/8ZLQqhr9XfKx/L45tByIDlJhd0UNdGBCS1kc09JSfdKIRpJatzOwVde
-	 DBXVNhcIlcB/obIel3T2eGX31ZNordma0pfMcu10=
-Date: Wed, 24 Dec 2025 09:40:03 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jason Sun <jason.sun689@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	sunqian@senarytech.com
-Subject: Re: [PATCH v2] dwc2: Delay resume until device connection is stable
-Message-ID: <2025122444-handcraft-hammock-c020@gregkh>
-References: <20251215125317.85624-1-sunqian@senarytech.com>
- <20251224082013.87100-1-jason.sun689@gmail.com>
+	s=arc-20240116; t=1766568597; c=relaxed/simple;
+	bh=TBZ9ucNnudTFC+zBXs8zp7F8yi2VaSJP7qncIjt0p0I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z9lBBlbGnZDBvtO3TqoB1SGn0yzpZKutqFRK5V2m/MU/+JdSOuPhY+0e3unRmEWtP+BmUapGxTgqzeB9+AgDUs0eN5BWh1bhzkS4Axz70533eptoQx7ZKhtiawPcq7doAh3BpSO4cX998FbNojxaHMC3xG/Id9ADiDq2686zKKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from localhost.localdomain (unknown [36.112.3.209])
+	by APP-03 (Coremail) with SMTP id rQCowAB3lt2AsktpnNTRAQ--.3493S2;
+	Wed, 24 Dec 2025 17:29:36 +0800 (CST)
+From: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
+To: peter.chen@kernel.org,
+	pawell@cadence.com,
+	rogerq@kernel.org,
+	gregkh@linuxfoundation.org,
+	felipe.balbi@linux.intel.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: cdns3: fix a null pointer dereference in cdns3_gadget_ep_queue()
+Date: Wed, 24 Dec 2025 17:29:35 +0800
+Message-Id: <20251224092935.1574571-1-lihaoxiang@isrc.iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251224082013.87100-1-jason.sun689@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowAB3lt2AsktpnNTRAQ--.3493S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4UArW5Xr17urykuryDJrb_yoWfKrXEkw
+	40939rGrWYq3s5Cw4UG343Cr1jkFnIv3WkWanrtFy3Ca4UKr4kAry5Xrs5CF17Za1UGr1k
+	J3WrKanxCFsxWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
+	Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+	1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r1q
+	6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+	0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
+	0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+	WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+	IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbGQ6JUUUU
+	U==
+X-CM-SenderInfo: 5olkt0x0ld0ww6lv2u4olvutnvoduhdfq/1tbiDAUGE2lLmjpYOwAAs9
 
-On Wed, Dec 24, 2025 at 04:20:13PM +0800, Jason Sun wrote:
-> Tested on:
->   - Kernel: v5.15.140
+If cdns3_gadget_ep_alloc_request() fails, a null pointer dereference
+occurs. Add a check to prevent it.
 
-That's a very old kernel version.  How about 6.18?
+Found by code review and compiled on ubuntu 20.04.
 
-thanks,
+Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-greg k-h
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 168707213ed9..cc2421a34588 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -2659,6 +2659,8 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
+ 		struct cdns3_request *priv_req;
+ 
+ 		zlp_request = cdns3_gadget_ep_alloc_request(ep, GFP_ATOMIC);
++		if (!zlp_request)
++			return -ENOMEM;
+ 		zlp_request->buf = priv_dev->zlp_buf;
+ 		zlp_request->length = 0;
+ 
+-- 
+2.25.1
+
 
