@@ -1,76 +1,76 @@
-Return-Path: <linux-usb+bounces-31740-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31741-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7570CDB8D3
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 08:01:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21591CDB8DC
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 08:01:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 39CC2302955E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 07:00:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C72CB302E861
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 07:00:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDDA92EB5AF;
-	Wed, 24 Dec 2025 07:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D8A02F7445;
+	Wed, 24 Dec 2025 07:00:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QXq1F9Dw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="efUx4c65"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBE327586E
-	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 07:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3A52E8DEA
+	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 07:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766559641; cv=none; b=aSvrEd/RYuvMom8iQaL+sUvnvc3YMM9i7VMu00NUc84B+rgYUOFpEwUw/p+oHY4UMtZ3PqfXNlWUliIkYujA6NUDuupM5O9fnxDLkOGbW57gF/AvfJ4Bwcxe6vh/0zmW+QOS0mbykhYi0AC7cIibndlJkhrdqwZTaP9asJViIig=
+	t=1766559651; cv=none; b=fBJeQDD7NFIj3JyKBiYHZPmIHlgMnV7cFItsU3YlR9Hpn0r1VZ5qtXrj4sP2W3p1+oudTELQ9JCtarXpFjX3wlaoPv9O+srO7sx38PJqJQRdVhoqBBhZlCTAk9iQY3d+BRA/1Y8GTzygemB5bKStYyN4a2xSOHE63CFdPSPJa9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766559641; c=relaxed/simple;
-	bh=KH43oBq4+TPoaYKFrooKp1xqASoTugvbw6ddTqPhTmE=;
+	s=arc-20240116; t=1766559651; c=relaxed/simple;
+	bh=X4YNszymi67cvqDx0r605mpfLRctrcxu5rYY4etxIPU=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z7LHWZoTDNdVWLFp9RkWQxGdInfs0x62JOaJUtH5w4lDX4enKUCUzlFkYDsUvGleaUhFqquQIJgMz7ZY1coaapOHwMx0NVAWDn2uintaovRAQV8IW8nWlwM8X2cL/83gAcH/Ql54v+HpP8zE0rZR3jZq/Ti7t0S/yZb5jWdum+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QXq1F9Dw; arc=none smtp.client-ip=209.85.210.171
+	 MIME-Version; b=V2AdnZbaarKnVvlHzl/ooqIoIhNLgW54Nl5Amampl25e8OTawtfN3yXJyNFNyz8Ysf9WLCr6MNUUfwu/UbyWYGsvMBXKos4Lc2vPJI7oKmG3yJLQVr4Cj+Ms4Y1dtYIDQ0C6SYX/kI2hbnU5XfLZbB5Kf6TaH1MxynNpbaJHAoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=efUx4c65; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7b7828bf7bcso6528118b3a.2
-        for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 23:00:39 -0800 (PST)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7a9c64dfa8aso4414845b3a.3
+        for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 23:00:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766559639; x=1767164439; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1766559647; x=1767164447; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tv5xvbiMyFlxCL9YfZXWb/oehOWWEqTnU3TyA382yEA=;
-        b=QXq1F9DwRZg9+Qhhbxim9QVaHKkOK1mo0WXOkuRuCk1zFMXmhsEB+edVECXA8pr12g
-         1V+fms+a39xF+iA0L6sAxZp0Vfui37KPeetER5r8VJuWeUC3ytZ2mpovWtOyPWSD8ysI
-         8KwaHm21WUKfdGEVbd/Sy3M4pcPodNh042SKqOuB9KG+tPIZ6LGyjCoJLb8dlZGK6reL
-         hKvbzGpxvqouhvwqqQW5djFk+emXJYSobD7dxgsDSTy9MZXqG2HM+4Eqsel8Ie8IdaCp
-         b4YOD5VtNO6y+sEiAKnMPVy4mfIXyQeJThTw9IAjLuuVJa94fM25PcOOKx8/3w3EAG4Y
-         y7ng==
+        bh=O1syORaoZB4GZ15xwqBQocGrk5Mo6Ls1+izJMCL7eio=;
+        b=efUx4c652BL/44+7T6QK092yd8Zx5Gy52pyV5kGXx9u1rlQLkud1szi5y42pcD6xpd
+         9rwAaLfWwQVMqhNEu6/JbWIIVgQv6+hTjf+FpTXTKL2joPvLlvWZ2JCK6OfZoFq6SEqw
+         g0y9VdHRcK3+C5tz17FebXXPgMnqUzT/ioAd2ssoRe8bdxQl+c3KxliIsDaW8hXrfCma
+         7OV6YYAoMaKRwlSp447wX8tvDqwX41/PeRel4+Z4xsydCt5boTSY6CmxlK7nZP6L7DqF
+         SkENKZwuCloWLYZMfezKJgVQrGRw0mCaat4anIE0Q3UpVad/QndWry0vP7f/Xj0Pr4nh
+         kghA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766559639; x=1767164439;
+        d=1e100.net; s=20230601; t=1766559647; x=1767164447;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:sender:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tv5xvbiMyFlxCL9YfZXWb/oehOWWEqTnU3TyA382yEA=;
-        b=fSWesamXviIhEBQ+n5Rf0AIg9yjcAwOvUFQD5SSsNuXP+oXUMOPMFPMpEFEtQcvwjU
-         ROBYGNIto/3hfX4VbhR8Z8SGMsWmytvKItZUggDj/bVdLcXb/Ej+j5sMuJO/jpOYHlZG
-         XqnFSThYlI0o38hrNUBq2DCJ+etXR3clR+VKz18aRN7tRixl1xLR4hh29QmLCvhd/48o
-         T32FbYBoqpaunXbE4vAwj1bF1/o10ywwQ8xw8sRVqItq9jDA6w7jJdT+CYCjahk3n9j6
-         /DK4vgNQaZ/D7Fry9oYzR6GNCDWqk4FxgJehqfHf7VKnan+m+ChfBjVWbzGPZMNwgPPs
-         kGKw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0YPPl+bSU42k3t1Y62PuxHR/Y2q2a1ptDMfMJ+5xAV3wMhy5yJWITQ9WlQBJP1wc+hrVS/yRI8dQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXB1r6U5eFyWyiDudn8lUgrcEPwPjm6tpc9ND5Qzm18C86cBNX
-	SFnzVqct1msHJOVtKMmuR/chiLBum1Gv2SpudGVdJeqmA6YyOqSTetVJ
-X-Gm-Gg: AY/fxX5f9aDqhVQgQ1c8URPSm4er6OZoSCmSJL1vXotIy177nqOpX+wC3gEBdocwQQe
-	lyUWUYL+jHY3C2lb/xijG5rm/2xbdYrg/6nu+HsNYo/BbtyKMK/Q7mIj0C3JNFwsFbrxKt36xnh
-	dYT4QtR5zVmsJDdmRWtEG3/yWpvWLc3tClja1zeUAcFaU70tlIewLxvKYXRTToMVueblAeIj78T
-	uFLvEEJfVXHiN5Qr5EAzCuaadh2KDVh05V8Igx1JT3SWsrGif5GqNd4zFfeprE634tt4ySK5Wgb
-	MPbBQ2wA/Qyj8xmTIKpKr9sCHvkq881IhL7jWZH32jPWFxV3BnXYvaTV0SMGTXTSvLd9nyzwDye
-	QyxRrt7YlWpR47KkdDArDq0sXU7N7L2X/z0UcEoKex++e0eitfwGBpUa/9WT/oCh/gapLiw==
-X-Google-Smtp-Source: AGHT+IGCYub4EBMgDYdkOQ6LL5GzRM+qyfK0eE8rnhAVoQQcV0w2n4AIPngpZT2QHZTo3df2rOLnNw==
-X-Received: by 2002:a05:6a00:451a:b0:7fc:da5:f85c with SMTP id d2e1a72fcca58-7ff6607b30dmr15241206b3a.38.1766559638882;
-        Tue, 23 Dec 2025 23:00:38 -0800 (PST)
+        bh=O1syORaoZB4GZ15xwqBQocGrk5Mo6Ls1+izJMCL7eio=;
+        b=ZErpXqC6SrYF4AZcXD1FUYBfTIwRPIBmaER+LgqoB1DjJ6PEgrx5kJHQY1qs0mKXjK
+         QsZzqWvyGzT1otwZbM10Ei45yrB87w4egSyR+ijeeiQ7z7HQDwZ6F39wMAEJhT06kxia
+         ExJqBV4Vuzw457mrc/KKeTU+EV4ObkWX/i4Fp8jblYZMVPbGBF5GyTtaKX0P+YgtnFjl
+         Ev9m9kAE2/A6iQMAk0wVDs0DR6NWAEUOU2Rz5iXDlFTaqtwt/d7iFYL21LLryl89WYtU
+         /NaQ002VUVwpjRzhxYqxCvmn55xUUPqoWKb8UbjBXyBxDQkMc/WVyHAeuhPZqp0OX4+z
+         32gA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwxK6rcFn3AOmXgjzoSHEOKPGEvg5eTM5PgS3THeM5SjkEoDVmhkAsSwlSCatuB8XRoTXWbT3WPb0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdB9z3BJfgVl9IcsiwkSIzpEv3d0UowKhwr6EaoQgWfWk5BHrG
+	iEvtccwl8C3NW1egfkvtZTb0FPi7Z0xPXdmWENxCvDb0RqIMjrzY630Y
+X-Gm-Gg: AY/fxX4q5rIJzftUg1EU0KwN9+cMB6zG3HyvItnyT5l5irZCwLXAcKH1bTtkeZUkJAW
+	7p296n1ANxYZC6w6AHbwRDiuIkoK4Xm5Txbyxu/REu1TODTKNiUQLDYbeTHnfgUQC+xs0Qr8WyV
+	VqOtjBWLeXDsp897S22KA2GuWNQHi9F+G4+GIXWJUQlhY2Q1sIBF1QIC0nYFYtISMcD03aCO9Ls
+	7DSzIbIwesb4nkJo0V9O31nZpPhZM+uU6tDxPF3LHF1Ie2UWaObhaPITMyZi2GeX38MV2C87mZn
+	EWkyNFxzN14SS2wIuVQ84z2zQBX+7x4Lggq4RYy/Cs4X/xLuJ4iOn+V0dsoqWe53qqCUIc68/GO
+	iIPmOtWQHhGS5E8z4KA4g9/xvvidvs9qV2xm33Y0PLExlZ+9Eu/srj6PzZkARtj/SxJpFwQ==
+X-Google-Smtp-Source: AGHT+IHgKGKMQSPmhWkryjHE26bt4OZ6n7CmEA9rIhNkuWvSMwQo3JSZAKVnkve737KvIHpBhXFbPQ==
+X-Received: by 2002:a05:6a00:6ca8:b0:7e8:43f5:bd51 with SMTP id d2e1a72fcca58-7ff676624demr14762804b3a.61.1766559647081;
+        Tue, 23 Dec 2025 23:00:47 -0800 (PST)
 Received: from localhost ([2001:67c:1562:8007::aac:4468])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7a93b441sm15536280b3a.9.2025.12.23.23.00.36
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7a93ab3csm15617471b3a.7.2025.12.23.23.00.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Dec 2025 23:00:38 -0800 (PST)
+        Tue, 23 Dec 2025 23:00:46 -0800 (PST)
 Sender: AceLan Kao <acelan@gmail.com>
 From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -85,9 +85,9 @@ To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	"Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/3] usb: typec: ucsi: Add duplicate detection to nvidia registration path
-Date: Wed, 24 Dec 2025 15:00:21 +0800
-Message-ID: <20251224070022.4082182-2-acelan.kao@canonical.com>
+Subject: [PATCH v3 3/3] usb: typec: ucsi: yoga_c630: Remove redundant duplicate altmode handling
+Date: Wed, 24 Dec 2025 15:00:22 +0800
+Message-ID: <20251224070022.4082182-3-acelan.kao@canonical.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251224070022.4082182-1-acelan.kao@canonical.com>
 References: <20251224070022.4082182-1-acelan.kao@canonical.com>
@@ -99,63 +99,71 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend the duplicate altmode detection to ucsi_register_altmodes_nvidia()
-which is used when a driver provides the update_altmodes() callback.
+This reverts commit e0c48e42d818 ("usb: typec: ucsi: yoga-c630: remove
+duplicate AltModes").
 
-This ensures all drivers benefit from duplicate detection, whether they
-use the standard registration path or the nvidia path with update_altmodes
-callback.
+The yoga_c630 driver previously implemented its own duplicate altmode
+detection in yoga_c630_ucsi_update_altmodes() to work around buggy EC
+firmware that returns duplicate AltModes instead of empty ones.
 
-Without this fix, drivers using the nvidia path (like yoga_c630) would
-still encounter duplicate altmode registration errors from buggy firmware.
+With the introduction of the common ucsi_altmode_is_duplicate() helper
+in both the standard and nvidia registration paths, duplicate detection
+is now handled automatically in the core UCSI code. This makes the
+yoga_c630-specific implementation added in e0c48e42d818 redundant.
 
-Fixes: a79f16efcd00 ("usb: typec: ucsi: Add support for the partner USB Modes")
-Cc: stable@vger.kernel.org
+Remove yoga_c630_ucsi_update_altmodes() and its callback to eliminate
+code duplication and simplify the driver. Note that this causes the
+driver to switch back from the nvidia registration path to the standard
+path, which is the original behavior before e0c48e42d818. Both paths
+now include duplicate detection, ensuring the firmware bug is still
+properly handled.
+
 Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 23 -----------------------
+ 1 file changed, 23 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index b99c86e9f31cb..e41973bd982aa 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -625,19 +625,25 @@ ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
+diff --git a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+index 299081444caa9..564c1e660d53c 100644
+--- a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
++++ b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+@@ -136,28 +136,6 @@ static int yoga_c630_ucsi_sync_control(struct ucsi *ucsi,
+ 	return ret;
+ }
  
- 	/* now register altmodes */
- 	for (i = 0; i < max_altmodes; i++) {
--		memset(&desc, 0, sizeof(desc));
--		if (multi_dp) {
--			desc.svid = updated[i].svid;
--			desc.vdo = updated[i].mid;
--		} else {
--			desc.svid = orig[i].svid;
--			desc.vdo = orig[i].mid;
+-static bool yoga_c630_ucsi_update_altmodes(struct ucsi *ucsi,
+-					   u8 recipient,
+-					   struct ucsi_altmode *orig,
+-					   struct ucsi_altmode *updated)
+-{
+-	int i;
+-
+-	if (orig[0].svid == 0 || recipient != UCSI_RECIPIENT_SOP)
+-		return false;
+-
+-	/* EC is nice and repeats altmodes again and again. Ignore copies. */
+-	for (i = 1; i < UCSI_MAX_ALTMODES; i++) {
+-		if (orig[i].svid == orig[0].svid) {
+-			dev_dbg(ucsi->dev, "Found duplicate altmodes, starting from %d\n", i);
+-			memset(&orig[i], 0, (UCSI_MAX_ALTMODES - i) * sizeof(*orig));
+-			break;
 -		}
--		desc.roles = TYPEC_PORT_DRD;
-+		struct ucsi_altmode *altmode_array = multi_dp ? updated : orig;
+-	}
+-
+-	return false;
+-}
+-
+ static void yoga_c630_ucsi_update_connector(struct ucsi_connector *con)
+ {
+ 	if (con->num == 1)
+@@ -171,7 +149,6 @@ static const struct ucsi_operations yoga_c630_ucsi_ops = {
+ 	.read_message_in = yoga_c630_ucsi_read_message_in,
+ 	.sync_control = yoga_c630_ucsi_sync_control,
+ 	.async_control = yoga_c630_ucsi_async_control,
+-	.update_altmodes = yoga_c630_ucsi_update_altmodes,
+ 	.update_connector = yoga_c630_ucsi_update_connector,
+ };
  
--		if (!desc.svid)
-+		if (!altmode_array[i].svid)
- 			return 0;
- 
-+		/*
-+		 * Check for duplicates in current array and already
-+		 * registered altmodes. Skip if duplicate found.
-+		 */
-+		if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
-+					      altmode_array[i].svid,
-+					      altmode_array[i].mid, i))
-+			continue;
-+
-+		memset(&desc, 0, sizeof(desc));
-+		desc.svid = altmode_array[i].svid;
-+		desc.vdo = altmode_array[i].mid;
-+		desc.roles = TYPEC_PORT_DRD;
-+
- 		ret = ucsi_register_altmode(con, &desc, recipient);
- 		if (ret)
- 			return ret;
 -- 
 2.43.0
 
