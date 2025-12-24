@@ -1,219 +1,273 @@
-Return-Path: <linux-usb+bounces-31753-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31754-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBFACCDC2AC
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 13:00:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91EA3CDC3C1
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 13:39:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 47BC6300647D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 12:00:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 86CA430A1600
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 12:33:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CABE23168E6;
-	Wed, 24 Dec 2025 12:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C82337102;
+	Wed, 24 Dec 2025 12:32:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RIOcvQVI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i/pcEnUw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F531386DA
-	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 12:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6978D3358BB
+	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 12:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766577619; cv=none; b=Hvq2YxTTwUzPqwdE4Lp9WP7IFBWfEXJOH5EMZY0j0968bk9CPIZ/HhBvejO2z/2nws6oaEcA/wnD53Y+LnOyYfZy/50nfVwBXJIvxkueKouaO7mUzhNn9Lv3kS3cgW4zxetU38ZuiTDQT+14eHN02jm9S0n/WP+sDs0RVkfuyT0=
+	t=1766579541; cv=none; b=GUO3c6akoIqYcnYmzl3e8GzbjZfC5Kj7Q8u8qI/Zcu9/fISDNbJl0aBwNgvCTsF5FD12Tf/R18BVB02V0JCAdVpHlQdpYBDxtGjax9ymZykbXvzozfvYIN45OzwqZY+EkmS4JZUKrLGLhka/PPpQT8fEhSVve2tGXFChoLTxHkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766577619; c=relaxed/simple;
-	bh=Gng2LHY/8KVfhOPkgvZqvZwljHCsj4cCR8aAF8gLRso=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Zi83iEJ0HvpVLxwU1sb/AOUHjN1lPkv8wTAeBXe2Irvk8EGpaTsXWsc/2hUrmydz6bYCeAJHv649pp1NuoAZy0r+nIloWWBfvG2mymLSKhhE02KbYM5ahRz7kQoYJnx/B40i3eDOib114mvfwj3TFKG0xU0Djezq8sO5Y8Mr+xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RIOcvQVI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CCE91C4CEFB
-	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 12:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766577618;
-	bh=Gng2LHY/8KVfhOPkgvZqvZwljHCsj4cCR8aAF8gLRso=;
-	h=From:To:Subject:Date:From;
-	b=RIOcvQVIfgi3F+B+wHZSuZjFgPLt8j1/ipSd/Vr+sCBioA2T3sZglGGCLFUtLFdYE
-	 rMYtCmpJu++qjz2yE9Zdm7F9Ey8LtsTFxQdcr+gYuzzF7JZFgqlljzx5SnCqp8uuXn
-	 WOfEV2aISne3u82LABs2mvMk1a1YswNHvNqp44XvtLgQc6yzFJYOlELdPcgeKc16JU
-	 peg/bvncBvMaP8SwcETu9cI4U+jYMoPUliFzpu3uhBaZwxf99z/MOMhlhJzWKG4Bkj
-	 LkJcdMjhR9J00yOrcoVMVlmvWbdfNHrwDEHq6Ogj5iuoHA+16SLizHiOo6WljuXqca
-	 3+VNPkF03kN8w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id BD5E4C3279F; Wed, 24 Dec 2025 12:00:18 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220904] New: [BUG] ucsi_acpi: USB 3.0 SuperSpeed not negotiated
- on USB-C hot-plug
-Date: Wed, 24 Dec 2025 12:00:18 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: thomas@jetzinger.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys bug_status bug_severity priority
- component assigned_to reporter cf_regression attachments.created
-Message-ID: <bug-220904-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1766579541; c=relaxed/simple;
+	bh=E/4uUY6fvXaNCbhx422z1hJufvT9zmA/1pnSwmTTRqU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=rTZvOCYUYjqGsNn2KIVlTGN6CFZ+bDm6WJn/ggsJd8ooVfQmhVj660UKZgzMgsKKkIeHZGrketDAfClW9CXFnOZgu2HpIymah/NjfcbQbydk40ZHBLwuLIx7JDOSmyEpXX2yhwMLP8b1LU80D4hIjyfhQw+EOM5DOM8MSMSjvi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i/pcEnUw; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766579538; x=1798115538;
+  h=date:from:to:cc:subject:message-id;
+  bh=E/4uUY6fvXaNCbhx422z1hJufvT9zmA/1pnSwmTTRqU=;
+  b=i/pcEnUwWdiMaj0q/X9aTRvj+GxHY6cKOtPs/vS+428exinDL40H4CAn
+   ePRnLgK5iv3OC/KgJS9Qa18rm8bHqxaJ+j1EuTIzTtEx9dVbjSdv8RFmw
+   Ju5WuCH3/SNcbr+cDtYSmupPP40PNRBg+MZddW7Scnv/Yd44L8vmQNSAm
+   1flDpgslqVEFmEap+AGaZRriOV4CNkL9R8pLfVCkUuS5TLmW59Ez0r0uO
+   8NhImxFtb09N8yPkjSfYWpSkaRNCAPJtN/dNrWPgBbFmZx5LdtCUUu1se
+   3xgJDyVUvhJMHxlRLGoa74wr3QYln4aqQn7JmpYT+6/xwOCvBEc/PZLv4
+   Q==;
+X-CSE-ConnectionGUID: F0332yDySUGlNRigZJDSaw==
+X-CSE-MsgGUID: wpQVh/hKSLiDtELG8HXkVQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="72278573"
+X-IronPort-AV: E=Sophos;i="6.21,173,1763452800"; 
+   d="scan'208";a="72278573"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 04:32:18 -0800
+X-CSE-ConnectionGUID: HL19vqd2QwKzngCKLOmMiA==
+X-CSE-MsgGUID: YT75LFgMSMSFXGy7gx7W9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,173,1763452800"; 
+   d="scan'208";a="204929324"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 24 Dec 2025 04:32:16 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vYO2I-0000000033j-2cY9;
+	Wed, 24 Dec 2025 12:32:14 +0000
+Date: Wed, 24 Dec 2025 20:28:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 8995a37371bf489ede768271aac56e4e6a55bcb2
+Message-ID: <202512242048.WmsXUVM3-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220904
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 8995a37371bf489ede768271aac56e4e6a55bcb2  usb: dwc3: Add Google Tensor SoC DWC3 glue driver
 
-            Bug ID: 220904
-           Summary: [BUG] ucsi_acpi: USB 3.0 SuperSpeed not negotiated on
-                    USB-C hot-plug
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 6.18.2-zen2-1-zen
-          Hardware: Intel
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: thomas@jetzinger.com
-        Regression: No
+elapsed time: 1314m
 
-Created attachment 309074
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D309074&action=3Dedit
-Kernel .config for 6.18.2-zen2-1-zen (Arch Linux zen kernel)
+configs tested: 182
+configs skipped: 5
 
-[1.] One line summary of the problem:
-USB-C dock USB 3.0 devices fail to enumerate on hot-plug (only USB 2.0 work=
-s);
-works at boot and on Windows
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-[2.] Full description of the problem/report:
-On ThinkPad X1 Carbon Gen 11 with ThinkPad USB-C Dock Gen2 (40AS), USB 3.0
-devices
-(including ethernet adapter) do not enumerate when hot-plugging the dock. O=
-nly
-USB 2.0
-devices (audio, HID) enumerate. The same dock works correctly when connecte=
-d at
-boot,
-and hot-plug works correctly on Windows 11, indicating this is a Linux driv=
-er
-issue.
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    gcc-15.1.0
+arc                              allmodconfig    clang-16
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    clang-22
+arc                              allyesconfig    gcc-15.1.0
+arc                                 defconfig    gcc-15.1.0
+arc                   randconfig-001-20251224    gcc-10.5.0
+arc                   randconfig-002-20251224    gcc-10.5.0
+arm                              alldefconfig    clang-22
+arm                               allnoconfig    clang-22
+arm                               allnoconfig    gcc-15.1.0
+arm                              allyesconfig    clang-16
+arm                              allyesconfig    gcc-15.1.0
+arm                                 defconfig    gcc-15.1.0
+arm                           omap1_defconfig    clang-22
+arm                   randconfig-001-20251224    gcc-10.5.0
+arm                   randconfig-002-20251224    gcc-10.5.0
+arm                   randconfig-003-20251224    gcc-10.5.0
+arm                   randconfig-004-20251224    gcc-10.5.0
+arm                           sama5_defconfig    clang-22
+arm64                            allmodconfig    clang-19
+arm64                            allmodconfig    clang-22
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    gcc-15.1.0
+arm64                 randconfig-001-20251224    gcc-15.1.0
+arm64                 randconfig-002-20251224    gcc-15.1.0
+arm64                 randconfig-003-20251224    gcc-15.1.0
+arm64                 randconfig-004-20251224    gcc-15.1.0
+csky                             allmodconfig    gcc-15.1.0
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    gcc-15.1.0
+csky                  randconfig-001-20251224    gcc-15.1.0
+csky                  randconfig-002-20251224    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    gcc-15.1.0
+hexagon                           allnoconfig    clang-22
+hexagon                           allnoconfig    gcc-15.1.0
+hexagon                             defconfig    gcc-15.1.0
+hexagon               randconfig-001-20251224    gcc-15.1.0
+hexagon               randconfig-002-20251224    gcc-15.1.0
+i386                             allmodconfig    clang-20
+i386                              allnoconfig    gcc-14
+i386                              allnoconfig    gcc-15.1.0
+i386                             allyesconfig    clang-20
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20251224    gcc-14
+i386        buildonly-randconfig-002-20251224    gcc-14
+i386        buildonly-randconfig-003-20251224    gcc-14
+i386        buildonly-randconfig-004-20251224    gcc-14
+i386        buildonly-randconfig-005-20251224    gcc-14
+i386        buildonly-randconfig-006-20251224    gcc-14
+i386                                defconfig    gcc-15.1.0
+i386                  randconfig-001-20251224    clang-20
+i386                  randconfig-002-20251224    clang-20
+i386                  randconfig-003-20251224    clang-20
+i386                  randconfig-004-20251224    clang-20
+i386                  randconfig-005-20251224    clang-20
+i386                  randconfig-006-20251224    clang-20
+i386                  randconfig-007-20251224    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                        allmodconfig    clang-22
+loongarch                         allnoconfig    clang-22
+loongarch                         allnoconfig    gcc-15.1.0
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20251224    gcc-15.1.0
+loongarch             randconfig-002-20251224    gcc-15.1.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    clang-16
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    clang-19
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    clang-19
+mips                             allmodconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                             allyesconfig    gcc-15.1.0
+nios2                            allmodconfig    clang-22
+nios2                            allmodconfig    gcc-11.5.0
+nios2                             allnoconfig    clang-22
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    clang-19
+nios2                 randconfig-001-20251224    gcc-15.1.0
+nios2                 randconfig-002-20251224    gcc-15.1.0
+openrisc                         allmodconfig    clang-22
+openrisc                         allmodconfig    gcc-15.1.0
+openrisc                          allnoconfig    clang-22
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    clang-22
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    clang-19
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20251224    clang-22
+parisc                randconfig-002-20251224    clang-22
+parisc64                            defconfig    clang-19
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    clang-22
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc               randconfig-001-20251224    clang-22
+powerpc               randconfig-002-20251224    clang-22
+powerpc                     skiroot_defconfig    clang-22
+powerpc                     tqm8548_defconfig    clang-22
+powerpc64             randconfig-001-20251224    clang-22
+powerpc64             randconfig-002-20251224    clang-22
+riscv                            allmodconfig    clang-22
+riscv                             allnoconfig    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    gcc-15.1.0
+riscv                 randconfig-001-20251224    gcc-15.1.0
+riscv                 randconfig-002-20251224    gcc-15.1.0
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                          debug_defconfig    clang-22
+s390                                defconfig    gcc-15.1.0
+s390                  randconfig-001-20251224    gcc-15.1.0
+s390                  randconfig-002-20251224    gcc-15.1.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    clang-22
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    clang-19
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-14
+sh                        edosk7760_defconfig    clang-22
+sh                    randconfig-001-20251224    gcc-15.1.0
+sh                    randconfig-002-20251224    gcc-15.1.0
+sparc                             allnoconfig    clang-22
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20251224    gcc-14
+sparc                 randconfig-002-20251224    gcc-14
+sparc64                          allmodconfig    clang-22
+sparc64                             defconfig    gcc-14
+sparc64               randconfig-001-20251224    gcc-14
+sparc64               randconfig-002-20251224    gcc-14
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    gcc-14
+um                               allyesconfig    gcc-15.1.0
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20251224    gcc-14
+um                    randconfig-002-20251224    gcc-14
+um                           x86_64_defconfig    gcc-14
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-20
+x86_64                            allnoconfig    clang-22
+x86_64                           allyesconfig    clang-20
+x86_64                              defconfig    gcc-14
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20251224    gcc-14
+x86_64                randconfig-002-20251224    gcc-14
+x86_64                randconfig-003-20251224    gcc-14
+x86_64                randconfig-004-20251224    gcc-14
+x86_64                randconfig-005-20251224    gcc-14
+x86_64                randconfig-006-20251224    gcc-14
+x86_64                randconfig-011-20251224    gcc-14
+x86_64                randconfig-012-20251224    gcc-14
+x86_64                randconfig-013-20251224    gcc-14
+x86_64                randconfig-014-20251224    gcc-14
+x86_64                randconfig-015-20251224    gcc-14
+x86_64                randconfig-016-20251224    gcc-14
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-14
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-14
+x86_64                           rhel-9.4-ltp    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    clang-22
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                           allyesconfig    clang-22
+xtensa                randconfig-001-20251224    gcc-14
+xtensa                randconfig-002-20251224    gcc-14
 
-Detailed analysis:
-- At boot: Dock connects via Thunderbolt 4 controller (0000:00:0d.0), USB 3=
-.0
-devices
-  enumerate on Bus 2 (20Gbps SuperSpeed), ethernet (r8152) works
-- On hot-plug: Thunderbolt USB buses report "root hub lost power or was res=
-et"
-but
-  dock falls back to internal xHCI controller (0000:00:14.0) Bus 3 at USB 2=
-.0
-speeds only
-
-The typec subsystem shows the issue:
-- At boot: dock connects as port0-partner, port0 has USB connector bindings
-  (usb2-port1, usb3-port1, usb4_port1)
-- On hot-plug: dock may connect as port1-partner, but port1 has NO USB
-connector
-  bindings in ACPI (possible BIOS deficiency)
-- Even when hot-plugging to port0: SuperSpeed lanes are not negotiated, only
-USB 2.0
-
-dmesg on hot-plug shows:
-  usb usb1: root hub lost power or was reset
-  usb usb2: root hub lost power or was reset
-  usb 3-1: new high-speed USB device  <-- Only USB 2.0 enumeration, no
-SuperSpeed
-
-The UCSI driver does not appear to trigger USB 3.0 SuperSpeed lane
-renegotiation
-on partner connect. No typec connector binding messages appear on hot-plug.
-
-Tested workarounds that do NOT fix the issue:
-- xHCI controller unbind/rebind (echo 0000:00:0d.0 >
-/sys/bus/pci/drivers/xhci_hcd/unbind)
-- UCSI driver reload (modprobe -r ucsi_acpi && modprobe ucsi_acpi)
-- Using either physical USB-C port
-
-Working workaround: Boot with dock already connected.
-
-[3.] Keywords (i.e., modules, networking, kernel):
-ucsi_acpi, typec_ucsi, typec, USB-C, Thunderbolt, hot-plug, SuperSpeed,
-xhci_hcd
-
-[4.] Kernel information
-[4.1.] Kernel version (from /proc/version):
-Linux version 6.18.2-zen2-1-zen (linux-zen@archlinux) (gcc (GCC) 15.2.1
-20251112, GNU ld (GNU Binutils) 2.45.1) #1 ZEN SMP PREEMPT_DYNAMIC Thu, 18 =
-Dec
-2025 18:00:58 +0000
-
-[4.2.] Kernel .config file:
-[Attached separately as kernel-config.txt]
-
-[5.] Most recent kernel version which did not have the bug:
-Unknown
-
-[6.] Output of Oops.. message (if applicable) with symbolic information:
-No kernel oops. The only relevant messages are:
-  usb usb1: root hub lost power or was reset
-  usb usb2: root hub lost power or was reset
-And then USB 2.0-only enumeration on Bus 3 instead of SuperSpeed on Bus 2.
-
-[7.] A small shell script or example program which triggers the problem (if
-possible):
-# Reproduce steps:
-# 1. Boot system WITHOUT dock connected
-# 2. Log in to desktop
-# 3. Connect ThinkPad USB-C Dock Gen2 via USB-C cable
-# 4. Check USB topology:
-lsusb -t
-# Expected: Dock on Bus 2 with 20000M devices
-# Actual: Dock on Bus 3 with 480M devices only, Bus 2 empty
-
-# Diagnostic commands:
-ls /sys/class/typec/  # Shows port0-partner or port1-partner
-ls /sys/class/typec/port0/usb*  # port0 has bindings
-ls /sys/class/typec/port1/usb*  # port1 has NO bindings (ACPI issue?)
-ip link show | grep enp  # Ethernet interface missing on hot-plug
-
-[8.] Environment:
-Hardware: Lenovo ThinkPad X1 Carbon Gen 11 (21HMCTO1WW)
-BIOS: N3XET63W (1.38) dated 2025-10-08
-Dock: ThinkPad USB-C Dock Gen2 (40AS), firmware 5.05.00
-OS: Arch Linux (rolling)
-Desktop: Hyprland (Wayland)
-
-USB Controllers:
-- 0000:00:0d.0: Intel Thunderbolt 4 (USB 3.2, buses 1+2)
-- 0000:00:14.0: Intel Alder Lake xHCI (USB 3.1, buses 3+4)
-
-ACPI USB-C controller: USBC000:00 with two ports (device:a2=3Dport0,
-device:a3=3Dport1)
-
-Related bug reports:
-- Red Hat Bugzilla #2248484: UCSI driver bug
-- Arch Linux Forum: https://bbs.archlinux.org/viewtopic.php?id=3D308325
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
