@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-31760-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31761-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A716DCDD055
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 20:07:51 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8DE6CDD070
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 20:11:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 976AB3022F3E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 19:07:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DD9DE3002077
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 19:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29BC533B6E6;
-	Wed, 24 Dec 2025 19:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 408ED1DF74F;
+	Wed, 24 Dec 2025 19:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jt48wwVz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GzfI67hK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906292D6E72
-	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 19:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E72296BC2
+	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 19:11:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766603264; cv=none; b=LSWy8Cocyzt2kO/gTjGW9I/6GURw4Le67a0aPaDvAcfFNfAcv7ruQNPJAm9ihDgJqRB9jwE9wNxltEJ/FzGnwv05QiRdsd050GROtTHQ7j6JRFsQnjVp+f7M9fesWr5rBsKEhdLWYW4bOG32y7cPi+w2sfV5z2KxjKUyqOfN+1k=
+	t=1766603508; cv=none; b=VYr1nZ7Pt9tQW58E1Q9uQVYGiB6WLUl6aDK4pVAzVKmSBCTI2jwEAvJcm+ciB1GkqZ6SR8sFQSfLkHoA9BSeQgynn7QX+G1QYcRXq/oZp9QX5Qj7QoWRMKXBEFOZzh6GOX7GMHKw63fQMjWMo0OnzZ/aHp8aZp7Y4uPDLmrR1m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766603264; c=relaxed/simple;
-	bh=xGMey4A7iFVHAmrVZuSavckmgLulJhGs63Zh3metjjY=;
+	s=arc-20240116; t=1766603508; c=relaxed/simple;
+	bh=k8Byl028CgHsF3DBvdHOc7E8XGBxj49LJk7WEGiE6aI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sAAGnT2VHMypMYEmw/AiL8B2QvNiQZpbuCfvwlVYG5Nk8wDQAFHQIoiKJzVhRSbXGvA9tOEtopx4BshjsBbHBAtq2AO5GMb0twcAkNacpjU63gAwA9qJXkZ2qIeWPziT3jbe66G485Qxy0fsvyr1abd4Lv3TOol20yUb8O5kHsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jt48wwVz; arc=none smtp.client-ip=209.85.128.176
+	 In-Reply-To:Content-Type; b=kBtG38pl7SbZYT+Ix7lwMoDlymYf9Y4+jZmmjRo+U/NN4Uc30UYIxpmJgrlFJaL8JRXFBoFAF5Jsm9zDCsVrhpk2rspY2z/jp6OUtUYrroClcKpldlLRQ8BbZTDaT2dzrJy+BKxCurwRcF7fPRlTfzCtjvbPQM0JkageT/dE69E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GzfI67hK; arc=none smtp.client-ip=74.125.224.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-78a6a7654a4so53449107b3.0
-        for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 11:07:42 -0800 (PST)
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-6446c924f9eso5642445d50.1
+        for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 11:11:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766603261; x=1767208061; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1766603505; x=1767208305; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NzIVnDZpOLjchy2wgbEcpJaoavN6zFZmqhSGhoRwcq0=;
-        b=jt48wwVzAY30EJsCgsBi7TrUZHYIH4B7dENfIKwBOgf+orFGCMZ9TbGni6VSrbHmdI
-         LPK3rS9lwcDDXS6PnM9tsNqrFgZ7p2KuWtrjQMcqMm//eCk9BKnUomcvLXovIP2xunU2
-         B6SbxvRopOesHK+AkV3hoIJG//jR3l+5+m301qKjGd44VvSJfsthjTX2uhcGj/bSFdIv
-         /RNSYyo8UUlEjlTDCeM13EDgRLXa1Am1Xyvy1AR6PHvQqG9BJn9aCjzvQPJrv6iWzFDk
-         EGY1aznIp1KannV8iZph+snCe15e2bn28pj/gkm5t81hhSPQDlAsc8A5HMnv1mP/5xq9
-         uSfg==
+        bh=oXhnYTRKWSBrdTvGbB7qy2q3xu05EvIJIuYEgLdKQ5w=;
+        b=GzfI67hKYeYlQLM5vk0CbRE07x/BJr8BLGWiDztt24R5JmN8Sy8ahJ2Fsmp0oS3QvX
+         bTvvmZtvmquMg7J9GH1SsZoI9gaff2UIWohHpfzfnTcBCXlRQL3A/eOLV3UZDY5ciGCo
+         I5KMc0ZuR9/W13MeLwgCYErKb95DsS/IMCG7fCHyTXfLyIJ5/1MhkaYB6Pb1vJBh2PIK
+         1fQHKGquv6CVuE0tzGYn7nXdGzECGonkbuc9Rsy/9epAgCtswCfD1CprXbGMWRCzKVpy
+         xm+22BTH3PFgF70Sgwaf78lpb83svr/AJpMWtytRcBWNoSmxwSnc4mL2Be0Hn9Ou6stF
+         AZtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766603261; x=1767208061;
+        d=1e100.net; s=20230601; t=1766603505; x=1767208305;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NzIVnDZpOLjchy2wgbEcpJaoavN6zFZmqhSGhoRwcq0=;
-        b=dr/XesDJ3wsjQa/NtmJ+JM9Z4YhUisuSwx3G0b27E09Rznqc5/mOI4L+Yh2+uE947Q
-         EdKRIoXD19Y2EAKxvePA6iW9Ro7sTzBdmq+PdpLADyYrZPRbuYdOUOo+IkCgAWvA6xeO
-         DHB4sRpGA2lw2YuTU/5w0bYUk+NYb2ngSCkcSHC8+rc/UMpYD4D81e7RKV/I3tbik2/C
-         8Zzy8NYstaT8uMnXiQKSjS3+X9DwnarnesdUdlM1fwvVV2o7ntp9BvBJ/fePwwL7YFTH
-         hPEzw2Lu36S612aA3HmF6eb8QHHRXevZexmT4lQGC//0XGRAA2UQfIe/q15qHtalvkhU
-         9P8g==
-X-Forwarded-Encrypted: i=1; AJvYcCW7/hIxKPG1T0RyeZguntRRvdX9V4bJ+zZBqGgU5B6tNqmWakukjFcldl/NxyQYupo2XGOI6ac4IdM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSko665fCPwKv9h+viB/Dnh6iljO1zmIXNtAAcXuZXAOXoQlml
-	qdrefwbuNwwyjBFj9HOUU0Kc4dNimt9PzyGXx0PShHPpl+CKmglgHagCfPTVymqI5w==
-X-Gm-Gg: AY/fxX63j9VNjB0lVCI1E1JbC9rGc89jmgm5fxvBLTQ8yZwr/qgYVaPNzNc/bQejQVH
-	+nIudY1w7RYjJcHPZuqCOwmeqCd5EAxkrikaeRVOcLKOs7uGDm6ewzjqfVop2ndOsvhjqEfLzp5
-	BtM5oE/kh9NUQk0+Ka5B1UZmidVzISrEi2zY2WuWk6RAQnaSlRlLVAOXrzcyfCrupnT4NLj1zjN
-	YefER0wwXsnOBC/vpormrl5uRC7z6UTXvl59XzDAsLaZmX5ha1+6tbHHY9WnNixNBaay9oHXJ9R
-	WBX/0qAoBFYP8xuYoYcU8ngy7Rq7Fab8zYt1Mm5xlVTUCZFA/dwuOjaL6AcHeDhNQv3N68/yOGk
-	o4DYiaFWgvuLUrF44eA4CT9C5HAYuAq3BtOxrjc2zEGzlWS1HXDbxmKL2Z2LcDfWw8q80RIDqd/
-	sKI+cnaUh2uBmpmndIHACV1m8dXm1/jcKm6fzyJSc3TebgWpg4DnwKfGTzki4=
-X-Google-Smtp-Source: AGHT+IEY4Bkjt/yYbrhofiHe25t6FYtL51Cgg0/pcmheFBExP5e5Z7qmADlL5vL1uqS/fVBKeLgjpg==
-X-Received: by 2002:a53:bdc5:0:b0:63f:2bc7:7074 with SMTP id 956f58d0204a3-6466a8aba62mr11525267d50.60.1766603261316;
-        Wed, 24 Dec 2025 11:07:41 -0800 (PST)
+        bh=oXhnYTRKWSBrdTvGbB7qy2q3xu05EvIJIuYEgLdKQ5w=;
+        b=a665OEyCpDSC3y3SUmXTr2YstpPkCIfC6ZBytmD4TyaI9+RLLSFfcGBvpodW8z1YMW
+         6EH6Qb6y6eYfeLc3pQuX7PZK8n0Htf/ddWV7vuSV+jI0axyDMYiKdLB5632ZQdIn+ZvB
+         zvNBXsqblde4YhcKRYAD0cmLUxS2jf5s5QRx4RX1tK8svbyDOzj8wCL6ND8z08+55iQQ
+         /hT6Ob/y/vq7fFXEj+DyThspSByJ3DloK+gMvxk0xB45XCy9uYW24G0ScS8EVS6KcZ/R
+         1jKgfUZ6g6Euimwg1+V2ukpKhyKB0PllF/J10oExFIlExqYTVm8QLUO5LducVriftJkp
+         UiEg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqNGX/Ah7VMZjZd/OtXDA/COSOaE18t3Nyyx8gPoIc3HUnseuOsk7Pt7ec8+WpRwIYWRyYRCliJu0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjKN09ajp/Z3/sAzaf03glpHmwiXJ/nUyJ86dxe5sXJFcJsjAn
+	qz4laStu8YWIfiGcq1CW4i5ZjrbLtooBbu5Ol7p0MwAVMUQe7Z+jLAA8jXFKQsCxPA==
+X-Gm-Gg: AY/fxX7xba+n5TEdamJcpZn6vJRI6uT4nL/iEZqlU3ioTdOEqE/KCwTfx6p5/19yAk+
+	4v04Zro4nt/TOp/fxU8iPLKtkVAN0ZHdEM9k9MS/etASHsUDdJtYo0i8ktJRWQXT58jPheVtW/y
+	0Ygts/NWUqFuvlUsMCl0C2zVKamNFbwg335ZTxkButUi9yZe1XZIr6+YBUfIW+LYWRyZb2k12Oh
+	DpcB74WnbeCZ7/eOaanmeI0x04cFFRnYgMXgBfJsO9bpLnCiYs1a4MU93rOaUN1OtKLia3nqZDf
+	QhnGtpVOrQpvrccISinnXv2yS/0BWhhif6wuB1um2JmSxLdXLzzAMVBNDrWBF2BnpzVHhLtWNHv
+	Sp/8cT5BMT03mAjh1xtkdKllED5cDLbu32+YSMEQwVBAGD9sNyMZhgLa5wwOn2xx9q+kd812R3m
+	SzN4wJly+07F/e6ElEfEg3sQVKAzmtei4XSGbsFE3dQLGifZUQ8BXCDSjSUxY=
+X-Google-Smtp-Source: AGHT+IF4+78/ybW8h2aFs9XZbSKza4sj6Czw5R4tW02KVHwiK1CyevWiPabB7l4R0Pz1pzDMvfJfng==
+X-Received: by 2002:a05:690e:1486:b0:63f:31f7:b956 with SMTP id 956f58d0204a3-6466a898fbbmr15286144d50.27.1766603505319;
+        Wed, 24 Dec 2025 11:11:45 -0800 (PST)
 Received: from ?IPV6:2600:1700:4570:89a0:6872:f79a:c2ff:4f4f? ([2600:1700:4570:89a0:6872:f79a:c2ff:4f4f])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6466a8b16e2sm8621687d50.2.2025.12.24.11.07.39
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6466a81d4e4sm8640178d50.0.2025.12.24.11.11.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Dec 2025 11:07:40 -0800 (PST)
-Message-ID: <c3599851-6e19-4ed9-9ce7-703746b978e7@google.com>
-Date: Wed, 24 Dec 2025 11:07:38 -0800
+        Wed, 24 Dec 2025 11:11:44 -0800 (PST)
+Message-ID: <27d2a9de-487a-409b-8807-d1d3bf9e8ee7@google.com>
+Date: Wed, 24 Dec 2025 11:11:42 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -102,62 +102,52 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 References: <20251218-max77759-charger-v2-0-2b259980a686@google.com>
  <20251218-max77759-charger-v2-1-2b259980a686@google.com>
  <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+ <3d156c45-b55d-4ca4-95d6-0d06e067bbdb@kernel.org>
 From: Amit Sunil Dhamne <amitsd@google.com>
 Content-Language: en-US
-In-Reply-To: <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+In-Reply-To: <3d156c45-b55d-4ca4-95d6-0d06e067bbdb@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
 
-On 12/19/25 12:17 AM, Krzysztof Kozlowski wrote:
-> On 18/12/2025 23:49, Amit Sunil Dhamne via B4 Relay wrote:
->> From: Amit Sunil Dhamne <amitsd@google.com>
+On 12/23/25 5:32 AM, Krzysztof Kozlowski wrote:
+> On 19/12/2025 09:17, Krzysztof Kozlowski wrote:
+>> On 18/12/2025 23:49, Amit Sunil Dhamne via B4 Relay wrote:
+>>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>>
+>>> The Maxim MAX77759 MFD includes a charger function. Extend the max77759
+>>> binding to include the charger. Also, update the example to include
+>>> charger.
+>>>
+>>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>>> ---
+>>>  .../devicetree/bindings/mfd/maxim,max77759.yaml    | 33 ++++++++++++++++++++++
+>>>  1 file changed, 33 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>>> index 525de9ab3c2b..1cffdf2e5776 100644
+>>> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>>> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>>> @@ -37,6 +37,30 @@ properties:
+>>>    nvmem-0:
+>>>      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
+>>>  
+>>> +  charger:
+>>> +    type: object
+>>> +    description: This is a dual input switch mode battery charger for portable
+>>> +      applications. It supports wired and wireless charging and can operate in
+>>> +      buck and boost mode.
+>>> +
 >>
->> The Maxim MAX77759 MFD includes a charger function. Extend the max77759
->> binding to include the charger. Also, update the example to include
->> charger.
+>> I do not see any improvements, so same comment: this should be folded
+>> into the parent.
 >>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> ---
->>  .../devicetree/bindings/mfd/maxim,max77759.yaml    | 33 ++++++++++++++++++++++
->>  1 file changed, 33 insertions(+)
+>> Please read DTS 101 slides or writing bindings or any other talks...
 >>
->> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->> index 525de9ab3c2b..1cffdf2e5776 100644
->> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->> @@ -37,6 +37,30 @@ properties:
->>    nvmem-0:
->>      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
->>  
->> +  charger:
->> +    type: object
->> +    description: This is a dual input switch mode battery charger for portable
->> +      applications. It supports wired and wireless charging and can operate in
->> +      buck and boost mode.
->> +
->
-> I do not see any improvements, so same comment: this should be folded
-> into the parent.
+> No responses to my emails for a few days,so I assume discussion is done
+> and I mark it as changes requested in patchwork.
 
-I misunderstood the folding comment for merging the charger binding into
-mfd.
-
-
-> Please read DTS 101 slides or writing bindings or any other talks...
-
-This gives a lot more context. Thanks for the pointer. I also reviewed a
-few recently merged mfd (with charger being a cell) patches as well.
-
-I realize that you're asking me to remove the charger node and re-anchor
-its properties to the pmic mfd device. I will update it in the next
-revision.
-
-
-BR,
-
-Amit
+Yes please. Sorry about the delay.
 
 >
 > Best regards,
