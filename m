@@ -1,296 +1,229 @@
-Return-Path: <linux-usb+bounces-31738-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31739-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5AFDCDB605
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 06:16:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02F9DCDB8D0
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 08:01:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D57A9301463D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 05:15:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2A18E302F1AA
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 07:00:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC782989B5;
-	Wed, 24 Dec 2025 05:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D64422D46B6;
+	Wed, 24 Dec 2025 07:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="CybNPw4a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KBp36Qle"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7CE8635D
-	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 05:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D848258CDC
+	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 07:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766553346; cv=none; b=f5XpXz1CW5VBj57KGy0x6DtGtbj3b7u/klLSv2jtt/0JNUdmHn/QAH76oOTq9nJcGJtEhs1MroFUFPHy4orzweHvPZOgHol1J4hUIGbo4DSIVu5N56SYOL099uvFbV8FPF1KVCSknuxQjJ7SCocTl4F91ClDD+GgSCMCtFkEOk8=
+	t=1766559633; cv=none; b=uAtki4TwXsS2GsJcNd0OosmfVZ5uIGEQTXGNs3csDph+Oz/p/Js6dM7ezOaxiNNZCWIKwe1gfbeYYHN45dyUAKJvcLSBYdaWcfFtMGQhyjUHZbJGElV4gP/Sek7cs43LUMcnMARzEtB1Z9mC1M/y+SzQ4RZvcxHV3mcJusI0BFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766553346; c=relaxed/simple;
-	bh=iY91bWCwiL2yU6XlErShHEs/AWxxXBdbR/oZ3a/cBxc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nb6pTtt3x5cNic4I2Ubqhu/aa7cYUSNGME5tw1b14hJQNXsjUYxahcpLOW+tnlp5jjryYyEERuhR8iQh6AcYdmI9LNyL0CJ812NY1FEEL7HNU0reUDqTsGDn36NLogKI/hsUzE0IN1cJlInnfRzYy+CRbJEE/1uSi7rjne8THOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=CybNPw4a; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [192.168.55.29] (ip174-65-98-148.sd.sd.cox.net [174.65.98.148])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4dbg7V3syDz11cl;
-	Wed, 24 Dec 2025 00:15:34 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1766553337; bh=iY91bWCwiL2yU6XlErShHEs/AWxxXBdbR/oZ3a/cBxc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=CybNPw4as1Z5Heg19GvDmG2zRTPbK8cOCz8Wy79XSIf3eHCkXyGn3XVPtA/UgsXtf
-	 xgz3nS+4tvmnujtghPXQdNr8Bm2Df5ULumPq3vib9m7FPEbIeV7YQttxQ4UIQ5iazI
-	 K56LJMz6fY09nPDZOHT+htwmDBnQh11gaO1CVdNw=
-Message-ID: <4da533b8-d216-4846-b4b4-c69a5ea6e2ee@panix.com>
-Date: Tue, 23 Dec 2025 21:15:31 -0800
+	s=arc-20240116; t=1766559633; c=relaxed/simple;
+	bh=wVhZHC006jqWNNOeLcPUfH+a+2jtTevJEhgD3p1yZf0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Kyb8RqOLRFgFC/gPXhuRGPjfafWJzkPzXn1EXDnvU2WbBw3giwSz9lfs7bRuxanjzAAEp4DjpsE9hCDini81alSBt2b8Su886eluMhygrgD4Cea0hIzL3hVkRujTaes64R4W23pqp/IiDVJBYQXdtyvZpnETDyxkuWpe2eBEbJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KBp36Qle; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7d26a7e5639so6513157b3a.1
+        for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 23:00:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766559630; x=1767164430; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=SMTCsgh6JYOlhQfaow1g1fw0qYa2mAXHCMrv5bEPizM=;
+        b=KBp36Qle+njM6TyjHPBXLmUiI6xeFiZv0728JLralgSOi0CkEydj/FhiiPz+N5vneY
+         ZsJNsBE3+0j2yQQW0GyIRZ4ogtWCb/twItAwkCN81LFo8j8sUyR36fp9yHTlzoUoegUJ
+         uVsJcjZDlbnrXz2CUldynIGk4RzDQU/PwmkZW4l0AYNtxQsLbYlW8DUkDuLm/9J0+hax
+         diF3cDOM3U5/fsMaKCvqzI9a/ruPyciPFKirze2CpzOO6gGX1TaZF4tMzY0+RVRhjq08
+         3MNjYPg5Iy8/MTpRMaB1FsrsZfWGEaTpi00XuxUZZ3+4kWNjKiybqdxqeH3FL9xSxUTe
+         Hncg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766559630; x=1767164430;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SMTCsgh6JYOlhQfaow1g1fw0qYa2mAXHCMrv5bEPizM=;
+        b=GFSM9Y5rhH7z7wHyF0UR3XNGHwfpzzkSur00zwMzxnUbZrxZ+2pi5FgHI+1xq3383T
+         aGG2ZX5vK69uHmyDRB7U32RP9T0RMCmeIS2lckGHHXvWGd3hmToH+e4yE1NyQ1c2FL3m
+         Ledob+AHPxWZgts7Di1VitqiWJq4LyBGIV0miKuPc2POPjZNuY5EdAcwtNrpLC8Sruw/
+         DEvgvyq8alcYoM46ovX4gHBpMTAhzacRElO3PLSJWLwzqgnffNI9Huru6cya6+oSkFRA
+         s7V5v6URwyy5ugQr4gDUc/rbEJfQMWsfocyvjwFv35hiGHqueAbZQjvOarbdiEmQAkXN
+         5rvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVdbwlMYSoEC+InrEhyl3+iJJlGAF0PanNdVX6bG5kxXUfQjKiolhVn4bK2FZeoe0S5ouUZnt0iMBQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLDQuqhufoEamH+iaLOZe+P6Xzq8lDbqbheCvT8J0g/twR57Pa
+	Hkc78Fk/VFvBmonKiRKWDPOxGTy45pvFMUDDix2idJlK2LgpE7xSYyEO
+X-Gm-Gg: AY/fxX7k5sacxKgizO3lZuY+hOcGN1cXkzSHwnOGYAx7SiAE8fG0XWY70+jd4JFTM5m
+	wWZjkWfiJ9yZ8Om8TCV9sdwujUi2veyQ4S6AL0TkjptcCgo8sjwwPtMAloFzpEkamY5kqY8xCyK
+	BcVOjPhFfbZJnAmk3vcfWvHgrYTvUfP5oYIcTA5jKUCJcXiNrF16h/AgEAwiHJ3k6+Xr+sOnc05
+	6HFQ/hJcY6q4VXPSSmC0HiP68bgxuPF6Q9G7Pp2dKJ82iZ3w5n/0xAkqIET2aWV9P2NiPiqAn34
+	HlYNV9uwgtw67I3HDXWY4TFqMhoY8aK/Jt3j7NMcV8IVJP5eLvKs1WqeRioF10sqIVDBXFP8wX3
+	bfAwfzbn9IVD6uzdoZ6icwNm80Y2HSiaRbauZhWvnefUIH9o/KeHvCKExgNDNt+V4hhnCBA==
+X-Google-Smtp-Source: AGHT+IH1IloN1W3pKJ5DD+so7COtqqiVPdP45v24vrlI8zF/WrVlzczzUy2Pi7xHaFUVnLdum9n8YQ==
+X-Received: by 2002:a05:6a00:1d87:b0:7f6:4922:89d5 with SMTP id d2e1a72fcca58-7ff648ee136mr15342309b3a.19.1766559630072;
+        Tue, 23 Dec 2025 23:00:30 -0800 (PST)
+Received: from localhost ([2001:67c:1562:8007::aac:4468])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7a843396sm15817636b3a.1.2025.12.23.23.00.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Dec 2025 23:00:29 -0800 (PST)
+Sender: AceLan Kao <acelan@gmail.com>
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Pooja Katiyar <pooja.katiyar@intel.com>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Andrei Kuchynski <akuchynski@chromium.org>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Pei Xiao <xiaopei01@kylinos.cn>,
+	"Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/3] usb: typec: ucsi: Detect and skip duplicate altmodes from buggy firmware
+Date: Wed, 24 Dec 2025 15:00:20 +0800
+Message-ID: <20251224070022.4082182-1-acelan.kao@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V4] usb:xhci:route device to secondary interrupters
-To: raoxu <raoxu@uniontech.com>, mathias.nyman@linux.intel.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- michal.pecio@gmail.com, niklas.neronin@linux.intel.com, zhanjun@uniontech.com
-References: <B857856CEAB5DF94+20251223101929.202681-1-raoxu@uniontech.com>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <B857856CEAB5DF94+20251223101929.202681-1-raoxu@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Some firmware implementations incorrectly return the same altmode
+multiple times at different offsets when queried via UCSI_GET_ALTERNATE_MODES.
+This causes sysfs duplicate filename errors and kernel call traces when
+the driver attempts to register the same altmode twice:
 
-On 12/23/25 02:19, raoxu wrote:
+  sysfs: cannot create duplicate filename '/devices/.../typec/port0/port0.0/partner'
+  typec-thunderbolt port0-partner.1: failed to create symlinks
+  typec-thunderbolt port0-partner.1: probe with driver typec-thunderbolt failed with error -17
 
-> Some xHCI hosts expose multiple MSI/MSI-X vectors, but the driver
-> currently routes all transfer completions through interrupter 0.
-> This can lead to unnecessary contention on the primary event ring
-> and IRQ vector.
-> 
-> Create a small set of secondary interrupters in xhci_mem_init().
-> Cap the number in software (MAX_SECONDARY_INTRNUM, default 4).
-> If any secondary allocation fails, roll back and keep using
-> interrupter 0 only.
+Detect duplicate altmodes by comparing SVID and VDO before registration.
+If a duplicate is detected, skip it and print a single clean warning
+message instead of generating a kernel call trace:
 
-> Unify primary and secondary handling on xhci->interrupters[].
-> Use the same paths for enable/disable and teardown.
-> Keep behavior consistent across run/stop/resume.
+  ucsi_acpi USBC000:00: con2: Firmware bug: duplicate partner altmode SVID 0x8087 (VDO 0x8087a043 vs 0x00000001) at offset 1, ignoring. Please update your system firmware.
 
-I've been trying to break it (suspend/resume/sudden 
-disconnect/disconnected while suspended/resumed) and so far, so good.
+This makes the error handling more user-friendly while still alerting
+users to the firmware bug.
 
-That being said, when it comes back from a hibernation resume the IRQ 
-grouping seems to be "different", with it using a different set of IRQs 
-after before the hibernation; not sure if that's intentional or not:
+The duplicate detection logic is implemented in a reusable helper
+function ucsi_altmode_is_duplicate() and used in ucsi_register_altmodes().
+The fix applies to all three recipient types: partner (SOP), port (CON),
+and plug (SOP_P) altmodes.
 
-----
-[E0] 1119 /home/kenny> fgrep xhci /proc/interrupts
-  178:          0          0          0          0          0          0 
-        185          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
-  179:          0          0          0          0          0          0 
-          0    1395350          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
-  180:          0          0          0          0          0          0 
-          0          0        121          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
-  181:          0          0          0          0          0          0 
-          0          0          0    1250385          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
-  182:          0          0          0          0          0          0 
-          0          0          0          0        300          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
-  186:        592          0          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
-  187:          0      11118          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
-  188:          0          0      57856          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
-  189:          0          0          0      61344          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
-  190:          0          0          0          0     234011          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
-[23/21:01:16 kenny@xps-9320]
-[E0] 1120 /home/kenny> fgrep xhci /proc/interrupts
-  178:          0          0          0          0          0          0 
-        185          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
-  179:          0          0          0          0          0          0 
-          0    1395350          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
-  180:          0          0          0          0          0          0 
-          0          0        121          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
-  181:          0          0          0          0          0          0 
-          0          0          0    1250385          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
-  182:          0          0          0          0          0          0 
-          0          0          0          0        300          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
-  186:        592          0          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
-  187:          0      11118          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
-  188:          0          0      57856          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
-  189:          0          0          0      61344          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
-  190:          0          0          0          0     234011          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
-[23/21:01:18 kenny@xps-9320]
-[E0] 1121 /home/kenny> systemctl hibernate
-[23/21:01:35 kenny@xps-9320]
-[E0] 1122 /home/kenny> fgrep xhci /proc/interrupts
-  178:          0          0          0          0          0          0 
-        185          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
-  179:          0          0          0          0          0          0 
-          0    1395350          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
-  180:          0          0          0          0          0          0 
-          0          0        121          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
-  181:          0          0          0          0          0          0 
-          0          0          0    1250385          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
-  182:          0          0          0          0          0          0 
-          0          0          0          0        300          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
-  186:        796          0          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
-  187:          0      11128          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
-  188:         55          0      57856          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
-  189:      60793          0          0      61344          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
-  190:       5951          0          0          0     234011          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
-[23/21:05:12 kenny@xps-9320]
-[E0] 1123 /home/kenny> fgrep xhci /proc/interrupts
-  178:          0          0          0          0          0          0 
-        185          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
-  179:          0          0          0          0          0          0 
-          0    1395350          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
-  180:          0          0          0          0          0          0 
-          0          0        121          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
-  181:          0          0          0          0          0          0 
-          0          0          0    1250385          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
-  182:          0          0          0          0          0          0 
-          0          0          0          0        300          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
-  186:        796          0          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
-  187:          0      11128          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
-  188:         55          0      57856          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
-  189:      60793          0          0      61344          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
-  190:       5951          0          0          0     234011          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
-[23/21:05:27 kenny@xps-9320]
-[E0] 1124 /home/kenny> fgrep xhci /proc/interrupts
-  178:          0          0          0          0          0          0 
-        185          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
-  179:          0          0          0          0          0          0 
-          0    1395350          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
-  180:          0          0          0          0          0          0 
-          0          0        121          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
-  181:          0          0          0          0          0          0 
-          0          0          0    1250385          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
-  182:          0          0          0          0          0          0 
-          0          0          0          0        300          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
-  186:        796          0          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
-  187:          0      11128          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
-  188:         55          0      57856          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
-  189:      60793          0          0      61344          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
-  190:       5951          0          0          0     234011          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
-[23/21:05:55 kenny@xps-9320]
-[E0] 1125 /home/kenny> fgrep xhci /proc/interrupts
-  178:          0          0          0          0          0          0 
-        185          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
-  179:          0          0          0          0          0          0 
-          0    1395350          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
-  180:          0          0          0          0          0          0 
-          0          0        121          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
-  181:          0          0          0          0          0          0 
-          0          0          0    1250385          0          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
-  182:          0          0          0          0          0          0 
-          0          0          0          0        300          0 
-    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
-  186:        796          0          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
-  187:          0      11128          0          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
-  188:         55          0      57856          0          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
-  189:      60793          0          0      61344          0          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
-  190:       5951          0          0          0     234011          0 
-          0          0          0          0          0          0 
-    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
-[23/21:06:35 kenny@xps-9320]
-----
+Fixes: a79f16efcd00 ("usb: typec: ucsi: Add support for the partner USB Modes")
+Cc: stable@vger.kernel.org
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+---
+v3. 1. move ucsi_altmode_is_duplicate() before ucsi_register_altmodes_nvidia()
+       for later modification on ucsi_register_altmodes_nvidia()
+    2. use struct typec_altmode **altmodes to simplify the logic
+---
+ drivers/usb/typec/ucsi/ucsi.c | 76 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
-So:
-
-Tested-By: Kenneth R. Crudup <kenny@panix.com>
-
-> Tested:
-> S3 suspend/resume
-> S4 hibernate/resume
-> USB storage (U-disk), camera, mouse
--K
-
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 9b3df776137a1..b99c86e9f31cb 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -501,6 +501,73 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
+ 	return ret;
+ }
+ 
++/*
++ * Check if an altmode is a duplicate. Some firmware implementations
++ * incorrectly return the same altmode multiple times, causing sysfs errors.
++ * Returns true if the altmode should be skipped.
++ */
++static bool ucsi_altmode_is_duplicate(struct ucsi_connector *con, u8 recipient,
++				      const struct ucsi_altmode *alt_batch, int batch_idx,
++				      u16 svid, u32 vdo, int offset)
++{
++	struct typec_altmode **altmodes;
++	const char *recipient_name;
++	int k;
++
++	/* Check for duplicates within the current batch first */
++	for (k = 0; k < batch_idx; k++) {
++		if (alt_batch[k].svid == svid && alt_batch[k].mid == vdo) {
++			dev_warn_once(con->ucsi->dev,
++				      "con%d: Firmware bug: duplicate altmode SVID 0x%04x in same response at offset %d, ignoring. Please update your system firmware.\n",
++				      con->num, svid, offset);
++			return true;
++		}
++	}
++
++	/* Check for duplicates in already registered altmodes */
++
++	switch (recipient) {
++	case UCSI_RECIPIENT_CON:
++		altmodes = con->port_altmode;
++		recipient_name = "port";
++		break;
++	case UCSI_RECIPIENT_SOP:
++		altmodes = con->partner_altmode;
++		recipient_name = "partner";
++		break;
++	case UCSI_RECIPIENT_SOP_P:
++		altmodes = con->plug_altmode;
++		recipient_name = "plug";
++		break;
++	default:
++		return false;
++	}
++
++	for (k = 0; k < UCSI_MAX_ALTMODES; k++) {
++		if (!altmodes[k])
++			break;
++
++		/* Check SVID for all, VDO only for non-SOP */
++		if (altmodes[k]->svid != svid)
++			continue;
++		if (recipient != UCSI_RECIPIENT_SOP && altmodes[k]->vdo != vdo)
++			continue;
++
++		if (recipient == UCSI_RECIPIENT_SOP) {
++			dev_warn(con->ucsi->dev,
++				 "con%d: Firmware bug: duplicate %s altmode SVID 0x%04x (VDO 0x%08x vs 0x%08x) at offset %d, ignoring. Please update your system firmware.\n",
++				 con->num, recipient_name, svid, altmodes[k]->vdo, vdo, offset);
++		} else {
++			dev_warn_once(con->ucsi->dev,
++				      "con%d: Firmware bug: duplicate %s altmode SVID 0x%04x at offset %d, ignoring. Please update your system firmware.\n",
++				      con->num, recipient_name, svid, offset);
++		}
++		return true;
++	}
++
++	return false;
++}
++
+ static int
+ ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
+ {
+@@ -631,6 +698,15 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
+ 			if (!alt[j].svid)
+ 				return 0;
+ 
++			/*
++			 * Check for duplicates in current batch and already
++			 * registered altmodes. Skip if duplicate found.
++			 */
++			if (ucsi_altmode_is_duplicate(con, recipient, alt, j,
++						      alt[j].svid, alt[j].mid,
++						      i - num + j))
++				continue;
++
+ 			memset(&desc, 0, sizeof(desc));
+ 			desc.vdo = alt[j].mid;
+ 			desc.svid = alt[j].svid;
 -- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+2.43.0
 
 
