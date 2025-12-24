@@ -1,152 +1,296 @@
-Return-Path: <linux-usb+bounces-31737-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31738-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC6A1CDADA4
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 00:46:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5AFDCDB605
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 06:16:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DA29B30217B5
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Dec 2025 23:46:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D57A9301463D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 05:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347452C030E;
-	Tue, 23 Dec 2025 23:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC782989B5;
+	Wed, 24 Dec 2025 05:15:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="V8ZtiXMs";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6vBh1HAu";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="V8ZtiXMs";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6vBh1HAu"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="CybNPw4a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3910F1A2C0B
-	for <linux-usb@vger.kernel.org>; Tue, 23 Dec 2025 23:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7CE8635D
+	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 05:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766533570; cv=none; b=bV9AnG/XFnAIGMNw80Qmp5pcgkCFDwwMooH084+UWWFtmFfCyaRGnW6b6Ct2Xwjs9Gjn8yQglymcj4ZQecmubvaz0BoyPWkTw1ikprMohfDjwAJOc1v34LQcoaPGo3qOq21+LzFHLcFY8qYpSgsV2QwwKSiTmSJAAd7nP3AOq9w=
+	t=1766553346; cv=none; b=f5XpXz1CW5VBj57KGy0x6DtGtbj3b7u/klLSv2jtt/0JNUdmHn/QAH76oOTq9nJcGJtEhs1MroFUFPHy4orzweHvPZOgHol1J4hUIGbo4DSIVu5N56SYOL099uvFbV8FPF1KVCSknuxQjJ7SCocTl4F91ClDD+GgSCMCtFkEOk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766533570; c=relaxed/simple;
-	bh=wvY0i6cbTTXSARd9w5CrEAT7qmccFf0I76/U6zHNQ48=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RrT0eu7ZnhNvQKjIfeX2kFZWAJogp4SB7eXuziHe1MvkRQ7/u0t2nuNDYo3byhLi0BtM58A0rWo6TD+XN3umj9Dzdu8RqyRd3LJ0wPJYCfYIz5G2PQN9qWI1+35IstGoZ+WnJeWf7UmDYsVnSkKOd0Vv+xx3Q2BhhiSvIIvNjzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=V8ZtiXMs; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6vBh1HAu; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=V8ZtiXMs; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6vBh1HAu; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 186445BCF5;
-	Tue, 23 Dec 2025 23:46:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1766533565; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IfYmmg7IlwmZFIJtj2k/eg7vIZ86AM4p8ZvGCr8l5Qk=;
-	b=V8ZtiXMsJSLk2lXf8nQ1VvJCYfgRSlv8LOVGQj0NvLXYrS4fd3ANRVt8kFPjg86sm3xUek
-	q2LL0saFOW7qCDuimuXmB3pIKph1gOeztCfbrXoojFzy17BNNt95hgBt5eV2NPoq0L4vkV
-	1nPf2+ETPAAjbkVzuQ9OOxOYsiE/XFY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1766533565;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IfYmmg7IlwmZFIJtj2k/eg7vIZ86AM4p8ZvGCr8l5Qk=;
-	b=6vBh1HAuufCmH9N4NVaDUQSdJuhboMaPPrr8bzn9uOQ43ToRiThEadTYdMJ+NL28lTfUTo
-	n+yaCt7vvNlLxXBA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=V8ZtiXMs;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=6vBh1HAu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1766533565; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IfYmmg7IlwmZFIJtj2k/eg7vIZ86AM4p8ZvGCr8l5Qk=;
-	b=V8ZtiXMsJSLk2lXf8nQ1VvJCYfgRSlv8LOVGQj0NvLXYrS4fd3ANRVt8kFPjg86sm3xUek
-	q2LL0saFOW7qCDuimuXmB3pIKph1gOeztCfbrXoojFzy17BNNt95hgBt5eV2NPoq0L4vkV
-	1nPf2+ETPAAjbkVzuQ9OOxOYsiE/XFY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1766533565;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IfYmmg7IlwmZFIJtj2k/eg7vIZ86AM4p8ZvGCr8l5Qk=;
-	b=6vBh1HAuufCmH9N4NVaDUQSdJuhboMaPPrr8bzn9uOQ43ToRiThEadTYdMJ+NL28lTfUTo
-	n+yaCt7vvNlLxXBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9104913A54;
-	Tue, 23 Dec 2025 23:46:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id r7hFH7wpS2nrXQAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Tue, 23 Dec 2025 23:46:04 +0000
-Date: Tue, 23 Dec 2025 23:46:02 +0000
-From: Pedro Falcato <pfalcato@suse.de>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Baryshkov <lumag@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: ucsi oops on system resume (6.19-rc1)
-Message-ID: <kapqzmifxktrqqv7umwzolc7dp7zegwuwc5dxalcct3ksmxo5c@ovs34r2an6kt>
-References: <ac4m5qtjpnmx336r5astuxkvtqfjhlt6674odmtecsn2e6sqja@hndb7jdcqsp3>
- <9c4e32eb-4ec6-44a1-aa8e-04f9e6b4ce74@kernel.org>
+	s=arc-20240116; t=1766553346; c=relaxed/simple;
+	bh=iY91bWCwiL2yU6XlErShHEs/AWxxXBdbR/oZ3a/cBxc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nb6pTtt3x5cNic4I2Ubqhu/aa7cYUSNGME5tw1b14hJQNXsjUYxahcpLOW+tnlp5jjryYyEERuhR8iQh6AcYdmI9LNyL0CJ812NY1FEEL7HNU0reUDqTsGDn36NLogKI/hsUzE0IN1cJlInnfRzYy+CRbJEE/1uSi7rjne8THOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=CybNPw4a; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.55.29] (ip174-65-98-148.sd.sd.cox.net [174.65.98.148])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4dbg7V3syDz11cl;
+	Wed, 24 Dec 2025 00:15:34 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1766553337; bh=iY91bWCwiL2yU6XlErShHEs/AWxxXBdbR/oZ3a/cBxc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=CybNPw4as1Z5Heg19GvDmG2zRTPbK8cOCz8Wy79XSIf3eHCkXyGn3XVPtA/UgsXtf
+	 xgz3nS+4tvmnujtghPXQdNr8Bm2Df5ULumPq3vib9m7FPEbIeV7YQttxQ4UIQ5iazI
+	 K56LJMz6fY09nPDZOHT+htwmDBnQh11gaO1CVdNw=
+Message-ID: <4da533b8-d216-4846-b4b4-c69a5ea6e2ee@panix.com>
+Date: Tue, 23 Dec 2025 21:15:31 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9c4e32eb-4ec6-44a1-aa8e-04f9e6b4ce74@kernel.org>
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 186445BCF5
-X-Spam-Flag: NO
-X-Spam-Score: -4.01
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V4] usb:xhci:route device to secondary interrupters
+To: raoxu <raoxu@uniontech.com>, mathias.nyman@linux.intel.com
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ michal.pecio@gmail.com, niklas.neronin@linux.intel.com, zhanjun@uniontech.com
+References: <B857856CEAB5DF94+20251223101929.202681-1-raoxu@uniontech.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <B857856CEAB5DF94+20251223101929.202681-1-raoxu@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Dec 18, 2025 at 09:24:47PM -0600, Mario Limonciello wrote:
-> 
-> 
-> On 12/17/25 5:38 AM, Pedro Falcato wrote:
-> > Hi,
-> > 
-> Here's a fix:
-> 
-> https://lore.kernel.org/linux-usb/20251216122210.5457-1-superm1@kernel.org/T/#u
 
-Thanks, I think we've picked it up with 6.19-rc2. I'll report back if I
-find anything borked again (though I am, admittedly, not doing much
-dogfooding through the holidays).
+On 12/23/25 02:19, raoxu wrote:
+
+> Some xHCI hosts expose multiple MSI/MSI-X vectors, but the driver
+> currently routes all transfer completions through interrupter 0.
+> This can lead to unnecessary contention on the primary event ring
+> and IRQ vector.
+> 
+> Create a small set of secondary interrupters in xhci_mem_init().
+> Cap the number in software (MAX_SECONDARY_INTRNUM, default 4).
+> If any secondary allocation fails, roll back and keep using
+> interrupter 0 only.
+
+> Unify primary and secondary handling on xhci->interrupters[].
+> Use the same paths for enable/disable and teardown.
+> Keep behavior consistent across run/stop/resume.
+
+I've been trying to break it (suspend/resume/sudden 
+disconnect/disconnected while suspended/resumed) and so far, so good.
+
+That being said, when it comes back from a hibernation resume the IRQ 
+grouping seems to be "different", with it using a different set of IRQs 
+after before the hibernation; not sure if that's intentional or not:
+
+----
+[E0] 1119 /home/kenny> fgrep xhci /proc/interrupts
+  178:          0          0          0          0          0          0 
+        185          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
+  179:          0          0          0          0          0          0 
+          0    1395350          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
+  180:          0          0          0          0          0          0 
+          0          0        121          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
+  181:          0          0          0          0          0          0 
+          0          0          0    1250385          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
+  182:          0          0          0          0          0          0 
+          0          0          0          0        300          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
+  186:        592          0          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
+  187:          0      11118          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
+  188:          0          0      57856          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
+  189:          0          0          0      61344          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
+  190:          0          0          0          0     234011          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
+[23/21:01:16 kenny@xps-9320]
+[E0] 1120 /home/kenny> fgrep xhci /proc/interrupts
+  178:          0          0          0          0          0          0 
+        185          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
+  179:          0          0          0          0          0          0 
+          0    1395350          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
+  180:          0          0          0          0          0          0 
+          0          0        121          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
+  181:          0          0          0          0          0          0 
+          0          0          0    1250385          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
+  182:          0          0          0          0          0          0 
+          0          0          0          0        300          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
+  186:        592          0          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
+  187:          0      11118          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
+  188:          0          0      57856          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
+  189:          0          0          0      61344          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
+  190:          0          0          0          0     234011          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
+[23/21:01:18 kenny@xps-9320]
+[E0] 1121 /home/kenny> systemctl hibernate
+[23/21:01:35 kenny@xps-9320]
+[E0] 1122 /home/kenny> fgrep xhci /proc/interrupts
+  178:          0          0          0          0          0          0 
+        185          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
+  179:          0          0          0          0          0          0 
+          0    1395350          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
+  180:          0          0          0          0          0          0 
+          0          0        121          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
+  181:          0          0          0          0          0          0 
+          0          0          0    1250385          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
+  182:          0          0          0          0          0          0 
+          0          0          0          0        300          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
+  186:        796          0          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
+  187:          0      11128          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
+  188:         55          0      57856          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
+  189:      60793          0          0      61344          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
+  190:       5951          0          0          0     234011          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
+[23/21:05:12 kenny@xps-9320]
+[E0] 1123 /home/kenny> fgrep xhci /proc/interrupts
+  178:          0          0          0          0          0          0 
+        185          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
+  179:          0          0          0          0          0          0 
+          0    1395350          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
+  180:          0          0          0          0          0          0 
+          0          0        121          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
+  181:          0          0          0          0          0          0 
+          0          0          0    1250385          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
+  182:          0          0          0          0          0          0 
+          0          0          0          0        300          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
+  186:        796          0          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
+  187:          0      11128          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
+  188:         55          0      57856          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
+  189:      60793          0          0      61344          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
+  190:       5951          0          0          0     234011          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
+[23/21:05:27 kenny@xps-9320]
+[E0] 1124 /home/kenny> fgrep xhci /proc/interrupts
+  178:          0          0          0          0          0          0 
+        185          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
+  179:          0          0          0          0          0          0 
+          0    1395350          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
+  180:          0          0          0          0          0          0 
+          0          0        121          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
+  181:          0          0          0          0          0          0 
+          0          0          0    1250385          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
+  182:          0          0          0          0          0          0 
+          0          0          0          0        300          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
+  186:        796          0          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
+  187:          0      11128          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
+  188:         55          0      57856          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
+  189:      60793          0          0      61344          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
+  190:       5951          0          0          0     234011          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
+[23/21:05:55 kenny@xps-9320]
+[E0] 1125 /home/kenny> fgrep xhci /proc/interrupts
+  178:          0          0          0          0          0          0 
+        185          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    0-edge      xhci_hcd
+  179:          0          0          0          0          0          0 
+          0    1395350          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    1-edge      xhci_hcd
+  180:          0          0          0          0          0          0 
+          0          0        121          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    2-edge      xhci_hcd
+  181:          0          0          0          0          0          0 
+          0          0          0    1250385          0          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    3-edge      xhci_hcd
+  182:          0          0          0          0          0          0 
+          0          0          0          0        300          0 
+    0          0 IR-PCI-MSI-0000:00:0d.0    4-edge      xhci_hcd
+  186:        796          0          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
+  187:          0      11128          0          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    1-edge      xhci_hcd
+  188:         55          0      57856          0          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    2-edge      xhci_hcd
+  189:      60793          0          0      61344          0          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    3-edge      xhci_hcd
+  190:       5951          0          0          0     234011          0 
+          0          0          0          0          0          0 
+    0          0 IR-PCI-MSI-0000:00:14.0    4-edge      xhci_hcd
+[23/21:06:35 kenny@xps-9320]
+----
+
+So:
+
+Tested-By: Kenneth R. Crudup <kenny@panix.com>
+
+> Tested:
+> S3 suspend/resume
+> S4 hibernate/resume
+> USB storage (U-disk), camera, mouse
+-K
 
 -- 
-Pedro
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
+
 
