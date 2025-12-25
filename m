@@ -1,80 +1,46 @@
-Return-Path: <linux-usb+bounces-31761-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31762-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8DE6CDD070
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 20:11:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D753BCDD88A
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Dec 2025 09:48:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DD9DE3002077
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Dec 2025 19:11:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4BEA1303641C
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Dec 2025 08:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 408ED1DF74F;
-	Wed, 24 Dec 2025 19:11:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E590314B95;
+	Thu, 25 Dec 2025 08:47:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GzfI67hK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rSQfAtpu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E72296BC2
-	for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 19:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6900314A83;
+	Thu, 25 Dec 2025 08:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766603508; cv=none; b=VYr1nZ7Pt9tQW58E1Q9uQVYGiB6WLUl6aDK4pVAzVKmSBCTI2jwEAvJcm+ciB1GkqZ6SR8sFQSfLkHoA9BSeQgynn7QX+G1QYcRXq/oZp9QX5Qj7QoWRMKXBEFOZzh6GOX7GMHKw63fQMjWMo0OnzZ/aHp8aZp7Y4uPDLmrR1m4=
+	t=1766652472; cv=none; b=K3NXHeyp1NAIvAgv7IEwBd4StYUFQPoSmtGS+xD8LzLwZ8YKO7T8iqtaA/res1ppLYDeJdiyyUanZteOkNo9SzNIstG7m0s1fhwBS9cZFdL8uvwYqamIr2LkhTRwe7sCW2QfiR3xuwFC8InzuxLdHjvbHz2qB/0pTttLB2kv2UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766603508; c=relaxed/simple;
-	bh=k8Byl028CgHsF3DBvdHOc7E8XGBxj49LJk7WEGiE6aI=;
+	s=arc-20240116; t=1766652472; c=relaxed/simple;
+	bh=tGzoiwIypyZ1iLWL1dGZAiulpww0GETNLT0hTiOL9vU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kBtG38pl7SbZYT+Ix7lwMoDlymYf9Y4+jZmmjRo+U/NN4Uc30UYIxpmJgrlFJaL8JRXFBoFAF5Jsm9zDCsVrhpk2rspY2z/jp6OUtUYrroClcKpldlLRQ8BbZTDaT2dzrJy+BKxCurwRcF7fPRlTfzCtjvbPQM0JkageT/dE69E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GzfI67hK; arc=none smtp.client-ip=74.125.224.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-6446c924f9eso5642445d50.1
-        for <linux-usb@vger.kernel.org>; Wed, 24 Dec 2025 11:11:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766603505; x=1767208305; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oXhnYTRKWSBrdTvGbB7qy2q3xu05EvIJIuYEgLdKQ5w=;
-        b=GzfI67hKYeYlQLM5vk0CbRE07x/BJr8BLGWiDztt24R5JmN8Sy8ahJ2Fsmp0oS3QvX
-         bTvvmZtvmquMg7J9GH1SsZoI9gaff2UIWohHpfzfnTcBCXlRQL3A/eOLV3UZDY5ciGCo
-         I5KMc0ZuR9/W13MeLwgCYErKb95DsS/IMCG7fCHyTXfLyIJ5/1MhkaYB6Pb1vJBh2PIK
-         1fQHKGquv6CVuE0tzGYn7nXdGzECGonkbuc9Rsy/9epAgCtswCfD1CprXbGMWRCzKVpy
-         xm+22BTH3PFgF70Sgwaf78lpb83svr/AJpMWtytRcBWNoSmxwSnc4mL2Be0Hn9Ou6stF
-         AZtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766603505; x=1767208305;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oXhnYTRKWSBrdTvGbB7qy2q3xu05EvIJIuYEgLdKQ5w=;
-        b=a665OEyCpDSC3y3SUmXTr2YstpPkCIfC6ZBytmD4TyaI9+RLLSFfcGBvpodW8z1YMW
-         6EH6Qb6y6eYfeLc3pQuX7PZK8n0Htf/ddWV7vuSV+jI0axyDMYiKdLB5632ZQdIn+ZvB
-         zvNBXsqblde4YhcKRYAD0cmLUxS2jf5s5QRx4RX1tK8svbyDOzj8wCL6ND8z08+55iQQ
-         /hT6Ob/y/vq7fFXEj+DyThspSByJ3DloK+gMvxk0xB45XCy9uYW24G0ScS8EVS6KcZ/R
-         1jKgfUZ6g6Euimwg1+V2ukpKhyKB0PllF/J10oExFIlExqYTVm8QLUO5LducVriftJkp
-         UiEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUqNGX/Ah7VMZjZd/OtXDA/COSOaE18t3Nyyx8gPoIc3HUnseuOsk7Pt7ec8+WpRwIYWRyYRCliJu0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjKN09ajp/Z3/sAzaf03glpHmwiXJ/nUyJ86dxe5sXJFcJsjAn
-	qz4laStu8YWIfiGcq1CW4i5ZjrbLtooBbu5Ol7p0MwAVMUQe7Z+jLAA8jXFKQsCxPA==
-X-Gm-Gg: AY/fxX7xba+n5TEdamJcpZn6vJRI6uT4nL/iEZqlU3ioTdOEqE/KCwTfx6p5/19yAk+
-	4v04Zro4nt/TOp/fxU8iPLKtkVAN0ZHdEM9k9MS/etASHsUDdJtYo0i8ktJRWQXT58jPheVtW/y
-	0Ygts/NWUqFuvlUsMCl0C2zVKamNFbwg335ZTxkButUi9yZe1XZIr6+YBUfIW+LYWRyZb2k12Oh
-	DpcB74WnbeCZ7/eOaanmeI0x04cFFRnYgMXgBfJsO9bpLnCiYs1a4MU93rOaUN1OtKLia3nqZDf
-	QhnGtpVOrQpvrccISinnXv2yS/0BWhhif6wuB1um2JmSxLdXLzzAMVBNDrWBF2BnpzVHhLtWNHv
-	Sp/8cT5BMT03mAjh1xtkdKllED5cDLbu32+YSMEQwVBAGD9sNyMZhgLa5wwOn2xx9q+kd812R3m
-	SzN4wJly+07F/e6ElEfEg3sQVKAzmtei4XSGbsFE3dQLGifZUQ8BXCDSjSUxY=
-X-Google-Smtp-Source: AGHT+IF4+78/ybW8h2aFs9XZbSKza4sj6Czw5R4tW02KVHwiK1CyevWiPabB7l4R0Pz1pzDMvfJfng==
-X-Received: by 2002:a05:690e:1486:b0:63f:31f7:b956 with SMTP id 956f58d0204a3-6466a898fbbmr15286144d50.27.1766603505319;
-        Wed, 24 Dec 2025 11:11:45 -0800 (PST)
-Received: from ?IPV6:2600:1700:4570:89a0:6872:f79a:c2ff:4f4f? ([2600:1700:4570:89a0:6872:f79a:c2ff:4f4f])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6466a81d4e4sm8640178d50.0.2025.12.24.11.11.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Dec 2025 11:11:44 -0800 (PST)
-Message-ID: <27d2a9de-487a-409b-8807-d1d3bf9e8ee7@google.com>
-Date: Wed, 24 Dec 2025 11:11:42 -0800
+	 In-Reply-To:Content-Type; b=UZzeGi6q+nj8y7x1iEgJScub8HC0APJ8wOZB8jaZznlyaDsHLEoO/2MSkNOLndJSJ2cc7lm3kawrl4JW837WTMriJckbqCJ0K12vLngK9rFDfFSCD4TTHxXGxirO/UVaOs7usuVUZuuKkV+RDwP874a8NB0NXLfbFnO3Wn/ELxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rSQfAtpu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C230FC4CEF1;
+	Thu, 25 Dec 2025 08:47:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766652472;
+	bh=tGzoiwIypyZ1iLWL1dGZAiulpww0GETNLT0hTiOL9vU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=rSQfAtpu1Tvje/pcoez2UitanssUVwM5Cw1SU9kJa9Dw+XhVX2F+U9GlYoKtGJVbX
+	 yg+sXK4KfXtEVLU+r7yvHaiA8uPZaF4WDYdaALbqFC8+I2x4MDvryas+cJma11Ktgl
+	 bD/8n2VD+10tm2Qlrlbp4Uz5mFXnFttIOL5jxnpnZbqe/hojpQ/ctBkpk4ebOK7p53
+	 Jk0AxOaAoVTP73KCHaPr876LRnUVqNn4CHB1Bz/f24N2otmhGdG08GivmZk4jTOXzA
+	 kjH/eT9zXi3CGjKZ95ockcCO0V8gAcyf/rnmeM89AJXIW3sf8z5SUCO7F2KFrsQEdq
+	 HKbnq3pWlXfqg==
+Message-ID: <d210552f-c8bf-4084-9317-b743075d9946@kernel.org>
+Date: Thu, 25 Dec 2025 09:47:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,74 +48,110 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] dt-bindings: mfd: maxim,max77759: add charger
- child node
-To: Krzysztof Kozlowski <krzk@kernel.org>, Sebastian Reichel
- <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20251218-max77759-charger-v2-0-2b259980a686@google.com>
- <20251218-max77759-charger-v2-1-2b259980a686@google.com>
- <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
- <3d156c45-b55d-4ca4-95d6-0d06e067bbdb@kernel.org>
-From: Amit Sunil Dhamne <amitsd@google.com>
+Subject: Re: [PATCH v3 01/15] include: dt-bindings: add LAN969x clock bindings
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+ claudiu.beznea@tuxon.dev, herbert@gondor.apana.org.au, davem@davemloft.net,
+ vkoul@kernel.org, andi.shyti@kernel.org, lee@kernel.org,
+ andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, linusw@kernel.org, Steen.Hegelund@microchip.com,
+ daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+ olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, lars.povlsen@microchip.com,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-clk@vger.kernel.org, luka.perkov@sartura.hr
+References: <20251223201921.1332786-1-robert.marko@sartura.hr>
+ <20251223201921.1332786-2-robert.marko@sartura.hr>
+ <20251224-berserk-mackerel-of-snow-4cae54@quoll>
+ <CA+HBbNGym6Q9b166n-P=h_JssOHm0yfyL73JZ+G9P81muK=g4A@mail.gmail.com>
+ <78bf252c-fd5e-4a36-b1a3-ca8ed26fde7a@kernel.org>
+ <CA+HBbNG+ZVD6grGDp32Ninx7H1AyEbGvP0nwc0zUv94tOV8hYg@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-In-Reply-To: <3d156c45-b55d-4ca4-95d6-0d06e067bbdb@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <CA+HBbNG+ZVD6grGDp32Ninx7H1AyEbGvP0nwc0zUv94tOV8hYg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-
-On 12/23/25 5:32 AM, Krzysztof Kozlowski wrote:
-> On 19/12/2025 09:17, Krzysztof Kozlowski wrote:
->> On 18/12/2025 23:49, Amit Sunil Dhamne via B4 Relay wrote:
->>> From: Amit Sunil Dhamne <amitsd@google.com>
->>>
->>> The Maxim MAX77759 MFD includes a charger function. Extend the max77759
->>> binding to include the charger. Also, update the example to include
->>> charger.
->>>
->>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->>> ---
->>>  .../devicetree/bindings/mfd/maxim,max77759.yaml    | 33 ++++++++++++++++++++++
->>>  1 file changed, 33 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->>> index 525de9ab3c2b..1cffdf2e5776 100644
->>> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->>> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->>> @@ -37,6 +37,30 @@ properties:
->>>    nvmem-0:
->>>      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
->>>  
->>> +  charger:
->>> +    type: object
->>> +    description: This is a dual input switch mode battery charger for portable
->>> +      applications. It supports wired and wireless charging and can operate in
->>> +      buck and boost mode.
->>> +
+On 24/12/2025 15:01, Robert Marko wrote:
+> On Wed, Dec 24, 2025 at 2:05 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >>
->> I do not see any improvements, so same comment: this should be folded
->> into the parent.
+>> On 24/12/2025 11:30, Robert Marko wrote:
+>>> On Wed, Dec 24, 2025 at 11:21 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>>>
+>>>> On Tue, Dec 23, 2025 at 09:16:12PM +0100, Robert Marko wrote:
+>>>>> Add the required LAN969x clock bindings.
+>>>>
+>>>> I do not see clock bindings actually here. Where is the actual binding?
+>>>> Commit msg does not help me at all to understand why you are doing this
+>>>> without actual required bindings.
+>>>
+>>> I guess it is a bit confusing, there is no schema here, these are the
+>>> clock indexes that
+>>> reside in dt-bindings and are used by the SoC DTSI.
 >>
->> Please read DTS 101 slides or writing bindings or any other talks...
->>
-> No responses to my emails for a few days,so I assume discussion is done
-> and I mark it as changes requested in patchwork.
+>> I understand as not used by drivers? Then no ABI and there is no point
+>> in putting them into bindings.
+> 
+> It is not included by the driver directly, but it requires these exact
+> indexes to be passed
+> so its effectively ABI.
 
-Yes please. Sorry about the delay.
+How it requires the exact index? In what way? I do not see anything in
+the gck driver using/relying on these values. Nothing. Please point me
+to the line which directly uses these values.... or how many times I
+will need to write this is not ABI?
 
->
-> Best regards,
-> Krzysztof
+
+
+Best regards,
+Krzysztof
 
