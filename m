@@ -1,131 +1,154 @@
-Return-Path: <linux-usb+bounces-31773-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31774-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C945FCDF163
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Dec 2025 23:31:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A00FCDF28A
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Dec 2025 01:05:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 14F22300A1F6
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Dec 2025 22:31:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 608C43009133
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Dec 2025 00:05:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0BF527587D;
-	Fri, 26 Dec 2025 22:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F284914EC73;
+	Sat, 27 Dec 2025 00:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WEJErnLq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qjQQ0qIU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862BA7640E
-	for <linux-usb@vger.kernel.org>; Fri, 26 Dec 2025 22:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5311B625;
+	Sat, 27 Dec 2025 00:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766788270; cv=none; b=E53qOHmyTZmP5l27O9QbL0FLxhDPKfQBuGUmrirrPcLP1/SaHa0QI57CIW0/7ZyjaYIHhf9NG1d6awD9+hlwdUzV1+Mq6ZqMqzefZhfgmYKPgZWB/cla4c9TEdnCQbhGpzZu9s+QGLkO/l/OXNKUd/Jd8WQSjzhaUSAgDhUcQQQ=
+	t=1766793899; cv=none; b=kyoOGBAfWmtOgWY1Xq413LCc/yn0QKuSNi5QJaPl+PonpQA6PoMpWVIOHwmj9vygIXvabwXLgMRvo87q6KcNnrS68+HIDjZAMCdLBe6ISUFufvWzOzrwflpC0fROO8jNLDhHNWDWQRInua18XTyiXPaMojUM2tsD8xR5AnXk50w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766788270; c=relaxed/simple;
-	bh=K/7eMZxfEHX7vo68xSNfuDo9aAU6+thzgJeaK/X+ydU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sx6SRZ+JSCvH37o+YNhAQEx9BLDFJjdjLY465PnNLXX1/L++CkByiQGW5pea9F+O/PxxFBLv+DIiOcF/ea/pTN/YdiyHMF5VDus0lYHil+1lr3p1EFXXHHkEMNNyawc0gy0o7wZ+A1rrm1Qc6A+cCgDg7bNz0d//b2YxB/h1hWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WEJErnLq; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47774d3536dso59314435e9.0
-        for <linux-usb@vger.kernel.org>; Fri, 26 Dec 2025 14:31:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766788267; x=1767393067; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYhKsfmKyRLGYUKXgcmzYEyxmyTNayWLcnyCustFjdM=;
-        b=WEJErnLqyLPLqPMyIZ7UPv/lwvZn37gIHEaFxObx3xuOWs243E1lPkwdsh0pu3ymIi
-         WXrphFA6Lcp6SAEGr3/7aEeDj5WVYteyWIMlShiC96Y3uqfWr3bPJcV7CSyIYt4qjyf6
-         8wou7caQc2LmxctvfJx4JKgAN7EKYyEYolIPgDwOtBM7g9+LrVZ2zPwS+RQwH94sHcfa
-         Jehfpdk/vIIrs4NjxzMtnvB3mZuAuvHwnr5IpQfbAYdSEBiH2HZ2Oj37HqDBdCC+OtIa
-         hkzFsuP+HaWY0YrHT5LvNxHcP8bl51JJVYT+b6r3MW3R9e7Z6wr+vnCg4qZ0kFZvK4bP
-         Vv9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766788267; x=1767393067;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kYhKsfmKyRLGYUKXgcmzYEyxmyTNayWLcnyCustFjdM=;
-        b=eOia4Pd9J0eOzj5lFoWgopTGbmVUAFigjs0VPYqIMLtmUEnS4+jiNmI2DkiqKTPTTE
-         6dlzN2afk2xaTgGQCqGM5/jhlFRW4TBf6inznl4s1ROfzp8COejToxf1PRfiJo6/gM7a
-         wcxjyYQx2ZpABPzjKgDH7R7nzwhPI0Ix585x+VcI7a+gpmiGlmTVtGQfqezUa5pRONt3
-         gTPjYWKEgzqcq71xTFC+CIiYWdotSH79RHHVE5eznXmfdK7KLpAHWGJSumRoSNrpATtY
-         XA2Opr7o/SrCpqo3gn0Ut8v/Hael93q4+M5N8LZfx5SCCHooeLWBgxJp2l2BYfV33ZvM
-         jGhw==
-X-Forwarded-Encrypted: i=1; AJvYcCWNaFlux+H2R/7QE027VNYUvs4p2jWyNg6HZN/LHGXW2u4zsJeKVeRTcEvFk9YAIN+YE4rxfn4O4Zk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzn0oOcq9wBvGIsLdPM70EP0mMSHpBV7U22kKBKNkAv9eoMY2fT
-	OmeF3PLkkk9c0jjN/i6/Ysv/pYT4kblCz2HYCuQUmqFQk16yNhL22LgD
-X-Gm-Gg: AY/fxX5dp8CLLRX4WsPYJdumxWSsrpM9c65WrbN6BKNf0jOTt2HkGneURMiLxQad0vY
-	USKKJzgfO45fSYElEI0NK9B1yx6Ga4q8RXEDEYI5JNndzbOC85fEbNVO0mDGbRatl+YqVp+Kvj6
-	5wSnrJ6qtNPw/NUnPq+OJ/WKZZ88GE2GdUYQweTfTEO92zoIqD/UG1k6o+Rc/KXUHL9EFYXfSnH
-	Rb7+WUpMQQYAnwYx5rylYDU9E0Ug5l2Q34zE4sZPGYxDlUjs47dkj8uuAyDrF/Qx431L65kg+tx
-	lB7dMK6/2yRa7fS2/Fak5Ny+GHRAxRu9Qo43GubJFTewLQrCpnsMxHSJV3XhUCL/f/eiMRJ189s
-	E2xkVxVkkFWbJYPeRW3s5OGhVHlovQLbgruTN9MQsciZd+Ffol/5yLpp7ylYmJu+g1qiP31m/iK
-	U3zMQ2JJv0uHD3ep7sC/FCp8nPTyfDfwH77Nbnr0qZNe7UvioNNbDUPz/iaaGNlxCJC/km6dtKo
-	5k=
-X-Google-Smtp-Source: AGHT+IFmWQXNK1wv9MJYHyLPbTQxbcB6DPrsAA4CF1+BS18uTfC/1R7KEvt0pZ4fv6hdU4QEgS7g0g==
-X-Received: by 2002:a05:600c:4746:b0:477:9fa0:7495 with SMTP id 5b1f17b1804b1-47d18be144fmr236909205e9.14.1766788266604;
-        Fri, 26 Dec 2025 14:31:06 -0800 (PST)
-Received: from ivan-laptop.. (cpc92320-cmbg19-2-0-cust3144.5-4.cable.virginm.net. [82.13.76.73])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be3a2b419sm190017475e9.1.2025.12.26.14.31.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Dec 2025 14:31:06 -0800 (PST)
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org
-Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	pooja.katiyar@intel.com
-Subject: [PATCH] usb: ucsi: Fix null pointer dereference in ucsi_sync_control_common
-Date: Fri, 26 Dec 2025 22:30:53 +0000
-Message-ID: <20251226223054.5565-1-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1766793899; c=relaxed/simple;
+	bh=l+eK+53HFS6Nf1N+WzqWh69/CWIpr9CIKF2aOQzhUPE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UTbJsj0LgPe67/MqCQm9l5ci7miw/o8UAoJKxV8E5+/p4X8zi8xcgiXbJLMyFJ76JtsJyulSHnUtdp/sHoqZGGX0qrRzMFMNGwa0yJVAMLgXcrEnHSht9x5knBObPU0ZUjYZNn3SVHgBA6et1bJtvq6tsbjVMH8yE1JmZfBdHlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qjQQ0qIU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1A4AC4CEF7;
+	Sat, 27 Dec 2025 00:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766793898;
+	bh=l+eK+53HFS6Nf1N+WzqWh69/CWIpr9CIKF2aOQzhUPE=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=qjQQ0qIUhWW8aOCRi5zJ/5DhGTXTBop1xqdqUVTkTSgfmmPK2JTAGt447hxrJIEev
+	 bw759ytgrtFQeMAGiOP92vvIFUsQ5I3yh0ppgpxXexT0YtQodXauWZ/I02qC1nh2bI
+	 dKdXNxOL31FhMToP1Z/rlP7ESrf/xVDfOo/5xj46tfnDc9kl1LpuiLxPqtDUgObwwu
+	 wdlxBIrYNkKnAKg4Blscs7yY3CvxXqpUlNHQv6/AhVGz+NhqZEnjLoU59t0cjyEOus
+	 EwoF5K2p5Li0g7o/tijVjY0SckGsMJNzJ9PLli/VzWrPJjv6dUzxLaA8zWtrBbQTjR
+	 OtE/S7BHwHScw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3C9CE8FDAF;
+	Sat, 27 Dec 2025 00:04:58 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Subject: [PATCH v3 0/5] Introduce MAX77759 charger driver
+Date: Sat, 27 Dec 2025 00:04:20 +0000
+Message-Id: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAIQiT2kC/23NSw6CMBCA4auQrq1pB/rAlfcwLgoMpYlQ05oGQ
+ 7i7hZgYo8t/JvPNQiIGh5GcioUETC46P+UoDwVpBzNZpK7LTYCB4JwJOppZKSVqmtfBYqBaQCN
+ BdlJyQ/LZPWDv5p28XHMPLj58eO4fEt+mbwzKXyxxyqhsAKtG96oX1dl6b294bP1INi3BRwCu/
+ wiQBWhA1LVmRmr5Jazr+gJoktcj8wAAAA==
+X-Change-ID: 20251105-max77759-charger-852b626d661a
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
+ Amit Sunil Dhamne <amitsd@google.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766793897; l=3010;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=l+eK+53HFS6Nf1N+WzqWh69/CWIpr9CIKF2aOQzhUPE=;
+ b=v8dBC0vdvLgYRAJ47ZiiomwUGFw58iVgkYJp8pVD8h8B/j98E/xV5G2OAoJkxhHyABv8ppu86
+ +eTiiO+nyNoBUrO0p1xSNVV8iuFkwjHAduzkWjeHkoNWM4+jH9ereWg
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
 
-Before 'ucsi_acknowledge' calls 'ucsi_sync_control_common', it sets
-'message_in_size' to 0. However, if 'ucsi_register_device_pdos' was
-called after 'message_in_size' was set to 0, but before
+MAX77759 PMIC is used in Pixel 6 and 6 Pro (Oriole/Raven) boards.
+One of the functions of the MAX77759 PMIC is a battery charger. This
+patchset introduces a driver for this function. One of the unique
+features of this charger driver is that it works with a USB input where
+the Type-C controller is TCPCI based.
 
-  if (!ret && ucsi->message_in_size > 0 && *cci & ...)
+Changes to the board files will follow soon once this patchset is reviewed.
 
-condition is evaluated, 'ucsi_sync_control_common' ends up dereferencing
-'cci' which points to NULL. This is precisely what I'm observing on my
-Framework 16 laptop on the latest mainline kernel build.
+For reference to the MAX77759 MFD based patchset (present in upstream):
+https://lore.kernel.org/all/20250509-max77759-mfd-v10-0-962ac15ee3ef@linaro.org/
 
-I don't see any synchronization primitives used to protect 'ucsi', so
-I presume just checking that 'cci' is not null here should fix the
-problem. It seems like prior to commit 3e082978c331 ("usb: typec: ucsi: Update UCSI structure to have message in and message out fields"),
-'data' argument was checked in this condition, and it was always set to
-NULL from 'ucsi_acknowledge'. Thus, this problem did not exist.
-
-Fixes: 3e082978c331 ("usb: typec: ucsi: Update UCSI structure to have message in and message out fields")
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v3:
+- Had incorrectly folded the charger sub-device with the pmic parent.
+  Corrected it. (Krzysztof Kozlowski)
+- Link to v2: https://lore.kernel.org/r/20251218-max77759-charger-v2-0-2b259980a686@google.com
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 9b3df776137a..7d1f2a702d90 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -98,7 +98,7 @@ int ucsi_sync_control_common(struct ucsi *ucsi, u64 command, u32 *cci)
- 		ret = ucsi->ops->read_cci(ucsi, cci);
- 
- 	if (!ret && ucsi->message_in_size > 0 &&
--	    (*cci & UCSI_CCI_COMMAND_COMPLETE))
-+	    cci && (*cci & UCSI_CCI_COMMAND_COMPLETE))
- 		ret = ucsi->ops->read_message_in(ucsi, ucsi->message_in,
- 						 ucsi->message_in_size);
- 
+Changes in v2:
+- Fold charger binding in maxim,max77759-charger.yaml to its parent
+  node. (Krzysztof Kozlowski)
+- Renamed regulator supplier & consumer. (Krzysztof Kozlowski & Heikki
+  Krogerus)
+- Removed explicit setting of irq trigger types in max77759 driver.
+  (André Draszik & Krzysztof Kozlowski)
+- Complete bit definitions for IRQ registers. (André Draszik)
+- Consolidate all bit definitions for charger IP in mfd/max77759.h.
+  (André Draszik)
+- Modify the handling of charger IRQs such that regmap IRQ chip handles
+  masking, de-mux and acking of interrupts. (André Draszik)
+- Remove unused macro definitions relating to Charger modes in tcpci
+  maxim driver (André Draszik)
+- Add dependency on Regulator class in Kconfig definition for max77759
+  chg. (Kernel Test Robot)
+- Link to v1: https://lore.kernel.org/r/20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com
+
+---
+Amit Sunil Dhamne (5):
+      dt-bindings: mfd: maxim,max77759: reference power-supply schema and add regulator property
+      dt-bindings: usb: maxim,max33359: Add supply property for vbus
+      mfd: max77759: add register bitmasks and modify irq configs for charger
+      power: supply: max77759: add charger driver
+      usb: typec: tcpm/tcpci_maxim: deprecate WAR for setting charger mode
+
+ .../devicetree/bindings/mfd/maxim,max77759.yaml    |  16 +-
+ .../devicetree/bindings/usb/maxim,max33359.yaml    |   4 +
+ MAINTAINERS                                        |   6 +
+ drivers/mfd/max77759.c                             |  91 ++-
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/max77759_charger.c            | 764 +++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpci_maxim.h               |   1 +
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c          |  54 +-
+ include/linux/mfd/max77759.h                       | 202 +++++-
+ 10 files changed, 1091 insertions(+), 59 deletions(-)
+---
+base-commit: dd9b004b7ff3289fb7bae35130c0a5c0537266af
+change-id: 20251105-max77759-charger-852b626d661a
+
+Best regards,
 -- 
-2.43.0
+Amit Sunil Dhamne <amitsd@google.com>
+
 
 
