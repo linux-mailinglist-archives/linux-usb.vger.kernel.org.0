@@ -1,265 +1,141 @@
-Return-Path: <linux-usb+bounces-31782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31783-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA46CCDFE06
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Dec 2025 15:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D8A9CE4962
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Dec 2025 06:48:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 181363012259
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Dec 2025 14:52:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 913353013ECD
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Dec 2025 05:48:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC8C21B9F5;
-	Sat, 27 Dec 2025 14:52:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B64258CD0;
+	Sun, 28 Dec 2025 05:48:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="NdbMrXp6";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BmBTEieX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JbfKqeV1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56EBA17A31C
-	for <linux-usb@vger.kernel.org>; Sat, 27 Dec 2025 14:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59822580F3
+	for <linux-usb@vger.kernel.org>; Sun, 28 Dec 2025 05:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766847156; cv=none; b=O/URF4Rtc6jmt/CNRnISV23cT6er+Y9/f1/TwaTE6hFt1XuVR7KmFgMbkqbx57MGu30P8K9ICarbAtZQL9Qk4SBEvzLJiKMPSirlTp+Zvx+W3p3OuOBNMI2eX5QR95zZmPLhGyI9R0CjeIUSUqXIFPwZVi1P2h35TNu6TiHnHt0=
+	t=1766900911; cv=none; b=s4uTOYR5SJJ6YtGktVejA7MCv9jf3CY7a0NJnG8gNYATRMF+e/Jh8hb2+PlVTqkL2Sbv1uZorTi9uN+UIKfrBDdcJU4jYpofWZmS9L9amNwMX77Z1qYI6XJ2RQ7PBtm0ZNghjo8F7TmHzRcOa1WHmP9hJAuNAc6sGnt+q0SHFDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766847156; c=relaxed/simple;
-	bh=QVwu/cly5PIg5l9ixNViMh4+cYAoXOja3oSlSRthxkI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZTvQBA0S0lZGAV3Jy8tJ6Af6mwhyGFeEZ4YrsMq+UWaCYFbb4BxULSLY0gm85AsxATOvNoKiyRYgIsGDy8TRaNJo7lMyImrHFaHkZgLqxDRuczc6Xxio5HVRRiOsogzk5/uUmyxhHw0/XpdjMBm5WTAfWFgn91J3xRroZrMmoy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=NdbMrXp6; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BmBTEieX; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BRBnlMR4155515
-	for <linux-usb@vger.kernel.org>; Sat, 27 Dec 2025 14:52:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=AEWtHZcWLawGiNRhaHiYMPStvPGArMGlYGW
-	jUW6JiB0=; b=NdbMrXp6on+oFdvplw2M0LMlsScb3nStqj8C8GYlh18B/Or+2Eh
-	EiTuUct1sCeLfvD3XeNkwlVDC+F9OJo8Lkmc+iGu8IvF4xq6WIjeezrVwiwiCKKI
-	31VUWP0HZ2eVRrw4d7ZLAMa12rV4bWsnnLvurOROMjJn+TPxJCN8Grobxcf+4kTt
-	SSKqa0uZ/Z05eGQobb1IAHTyX08h4NzgDb2GJPUbPmW7oR8c1IjsNXse9iYmzTXL
-	hmVWkVutMQ6n0ScdaPqVcxykZa1RZrqtr2/d83Yqsd66dqp0f6ndmirt9n8nRNM4
-	cS8M3fJXCtBqx38HdQ+Jjn6XGwKPpD9lORQ==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ba87brncm-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Sat, 27 Dec 2025 14:52:33 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-7ba9c366057so20074839b3a.1
-        for <linux-usb@vger.kernel.org>; Sat, 27 Dec 2025 06:52:33 -0800 (PST)
+	s=arc-20240116; t=1766900911; c=relaxed/simple;
+	bh=1pJCobo7skl3IqJjut1/aoDj5JGv6MK8u9FvD8pNb2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Xv3y8S+zKS/iC8FLYwR+JkUK+XRX2YyvClE7hq7WD/pVlDpEx7hj9R7pOwHkvyQFrsR9ZclzHhxzUxMU61iDoKlFoaAnbbA+AW0copBAkFOTs/5drCX7uh13cttncv3JVr+rqw5CqI9p5pT1c5I7Ei22cWM5bobmV7LxPlog6ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JbfKqeV1; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-59581e32163so9646057e87.1
+        for <linux-usb@vger.kernel.org>; Sat, 27 Dec 2025 21:48:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766847153; x=1767451953; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AEWtHZcWLawGiNRhaHiYMPStvPGArMGlYGWjUW6JiB0=;
-        b=BmBTEieX3DR0HDoevRqdw/yyVhL9w3Hwq5rX3bEHS+oZUzjlFFS2bpRmQyjxi/jUCI
-         FpO5y71Rj/gWvZg65N0KzTRtGMnJiVAsd2PLO3PL+jneUAHBeinKbrFGn7QehLEgN/X3
-         h/6YT3nBW8cMaKvze/bypD0GGJUjaZreVoL7FL4lM0AnvpoXDdXFkLl8IG6NN4WMSOA6
-         FaXCsqmXk2rh6RnmI95fsPXCUTpZ3/7RcrvJChhWW4HWpIBPjhqHEBP7WVQy+4ToUAjM
-         uFedqwqB81lnlFS1Fa8RCh9ArT5kdXZoryuUJVZ+wRXG/8/nS5mZKGhKsqNNSm9UNtrg
-         R+VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766847153; x=1767451953;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1766900908; x=1767505708; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AEWtHZcWLawGiNRhaHiYMPStvPGArMGlYGWjUW6JiB0=;
-        b=b/OGl6YzI1PmrJEp+MN2w8v9gnC0ejhNymGids2JfSn2/kEV3nyg2a7vFlh1q3yc5g
-         sJLOlswC6KdDXxOTzWgXP7STeZw/1Z72Grvw7N5TEJ1cDVI5vcLUz7P2Gs0dFgZ0HkFw
-         OsiAaggYoLEjHOOBhIvEOLnQ2aMH47fj7RAs/npMY7iZ475wTh27n8ucjSFF33Kn7mDU
-         a5rla+FL/vYDv1z5v9A9+X8BWqyP1nOM9uiWO2ccRriQeoHmcYizRf+winXQx9eP3oXJ
-         DnrJBjDIoEdtupAyIbeIm7rNk3hownIXYWeO4LcGCLgfolGq3rL3YAuI9s8GDpxi7V2n
-         o7DA==
-X-Gm-Message-State: AOJu0YypDnrhcnEri1mvOua+vNy1YKf0em5plfoO3od7CHee/dmHblIp
-	jW6NAg9cT1KWKqkwS7RkT/P/xOc8UzeYdl7Jdfh0nLaySUFzAKQ/UZyhwc4xVJHWafVozLxUHzw
-	EKOHG2dUXz+I1zsAHpJA2cK+ukaaFsNHFGctve7yX99HncAlimwLWiFIDHRl2My4=
-X-Gm-Gg: AY/fxX6OH9frWo3UdVUQ7Xphurp7LFDo9roNRAYq3iOSWY60W4KsuTWgI+Lehr+58Aw
-	5dXyz2pQ1SucCGzY7rlv138o3uLhbwO3SqVCT15GiKPQu3RQhghC0RGSc4fJNVoHn01dNuHYO5G
-	/oCFcQ+aSiijmviHWjM0fjFA9ZecfoGRqhisCexoSH42rxDnXb8LYT46h4DvTd/hqPsd+fsiGRe
-	XwSTYyTxtz7jgPlnNrE1d0dsWeFAzymUTxi+y+8IRo8GjfhHzk+e3n9hkWZdNQxsqHAkQAN8+J5
-	vRgxzchYkUnxeXWhxdlh/hCOlVEl91zzpB13e8dG1pYvNVLjAKixFwx/CwXONeVYj2vMGYzaOT6
-	/lOz/D19vU2YuTQ7OkbUWq5I0theXXZeovdOtxoX6w0iljK0=
-X-Received: by 2002:a05:6a00:4006:b0:7e8:450c:6196 with SMTP id d2e1a72fcca58-7ff66480856mr25050467b3a.45.1766847152779;
-        Sat, 27 Dec 2025 06:52:32 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHSfMKtxceN14N4MPlrZYOzEaI7Q7GksOqhJKTSN+nRa2lD1z1LjfzKg/21jcBUycRzSgSeUg==
-X-Received: by 2002:a05:6a00:4006:b0:7e8:450c:6196 with SMTP id d2e1a72fcca58-7ff66480856mr25050455b3a.45.1766847152354;
-        Sat, 27 Dec 2025 06:52:32 -0800 (PST)
-Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7e0a1a2asm24706340b3a.41.2025.12.27.06.52.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Dec 2025 06:52:31 -0800 (PST)
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: [PATCH] usb: gadget: f_sourcesink: Support maxburst configurability for bulk endpoints
-Date: Sat, 27 Dec 2025 20:22:24 +0530
-Message-Id: <20251227145224.2091397-1-krishna.kurapati@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
+        bh=gpbqpIsug6MH33BRSdVEMnAsF4zSM1dpRpn6fI+y1V8=;
+        b=JbfKqeV1R/D9PDEPPrpO1wYpIfzCnjYN8WzGCDsrD7n0KnJV0u3PDx7jcRD+sYwnIA
+         eVLB3CpQB849HOmn+7qyvDAGHdjogV/RbhTM5RC3nhmHCZ0TyW6xK3JNdZNaqYQmvrUg
+         cdF2N3n6AHfVPNdJ1ryI3wA2QGNWbPVUL4Yf3rtoYhAqO0T+o3WymyughkijcxLCR87V
+         +fnF79OAU7EfREe3nNHWZEso4Y17g0IgnlTErD8PjLZJPzIMAvaP5vrtBPD9WVBks/2a
+         8UcdzNEASY5xEWPA2yfKwUq+h/WI08DI0xTyf9s2SAxgEpPfJCz/aEfymR47u8T5Gj3+
+         bs5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766900908; x=1767505708;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gpbqpIsug6MH33BRSdVEMnAsF4zSM1dpRpn6fI+y1V8=;
+        b=oknFkO/TAmwySNbaj3uoCnhXDrpSim4Rn1kGQJ+cydigeCl4zoGbXTv3/v8is3BLqN
+         o9wqC/fRz82v1uP2owoaYd9H/wJ4s4WnPKhR/Ki2qcHsTWrbcI+1IjeRncRHAxV6HR9y
+         vh3+OSN+jslmWyxeqq27BSeu4dXgNRRnWwQqpyZ2BRIkod2QWGLaLbZCvq56Cuiq5IQy
+         g4UgzF8L1SEMMgvVDZ4+uyLWIZ/LvGN0iEaNmZNjB3Vjceq8q+FLYFaQe3LW4d6LhyMg
+         GLP4qeuZQsKL6hc3svvRc5j3638cpXjw+DQ70o80ZUmDInqvjmtZa0vPmXwNGe5kK/Oz
+         nmBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUgVGMFEGenF6flwlYFWG8D0rGsFzz+HTRUWQo3u0XJ2ny7mxnw6RnpjNRj1CLI3z5xBzjiIv+Xqh8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVwPn9y4S4Eal+Kr1Q7aQe3x8kLwPTmLmSL1Hr8oJ4KmdAoaO5
+	UDxXq6RpU10lRg21VHuUc/lEfBgXpDf9zaJnqKZ8hVNNtEO0zBvdkU+i
+X-Gm-Gg: AY/fxX5uCsH5cgLc9KvBPsjAoF5GVUvypZokj293aoc8q5h0POOggmoGAoEbUY9GKN3
+	KokDhLVnrfHG4q525sByrEcGH0kymm6q9EoQYJOKviz+wIcBf2Amup5KdNODng6H2Kxr3jhwOZv
+	UoDOkIIvlp2SKPezipNYn9IDKJSpan5KgPDgqy73OFK3wby9qNrG6xZgRw2CwEp6BtSqUp8GL6I
+	hUCzEj3JucOFJLDNx8lEUJNGoV80jffRkFI7niAmmxbMs9MrN4luh44c31DI1DtDhNo/A2FRd1F
+	9rMVmHQdGHy64WjARWojhxsei+XlYIxZ04vRbOn72qkd+C+dK11LZ4niO4ZH5T61iPpLMT73TTU
+	mkR/zjtQ+Q4e+05tv5Ew2FZUUu5oaXtTVKZoG3STqSsguhron7AjeEF5jbD07ddJsaKk0aFngBN
+	eXyAVprEJQwhXqMp4nHKw=
+X-Google-Smtp-Source: AGHT+IHbwDkZ0ZrkYZSKb3xcvqlBhmZdaEoQdezjtjNsk1jz3+5apfKEePyLYdpuFJXN8OT07eFG0Q==
+X-Received: by 2002:a05:6512:3b9f:b0:595:7cb9:8e51 with SMTP id 2adb3069b0e04-59a17d1fa1dmr9400930e87.12.1766900907593;
+        Sat, 27 Dec 2025 21:48:27 -0800 (PST)
+Received: from localhost ([194.190.17.114])
+        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-59a185d5ee4sm8077427e87.17.2025.12.27.21.48.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Dec 2025 21:48:27 -0800 (PST)
+From: Askar Safin <safinaskar@gmail.com>
+To: nfraprado@collabora.com
+Cc: Tim.Bird@sony.com,
+	bhelgaas@google.com,
+	dan.carpenter@linaro.org,
+	davidgow@google.com,
+	devicetree@vger.kernel.org,
+	dianders@chromium.org,
+	gregkh@linuxfoundation.org,
+	groeck@chromium.org,
+	kernel@collabora.com,
+	kernelci@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	robh+dt@kernel.org,
+	saravanak@google.com,
+	shuah@kernel.org
+Subject: Re: [PATCH v4 3/3] kselftest: devices: Add sample board file for XPS 13 9300
+Date: Sun, 28 Dec 2025 08:47:42 +0300
+Message-ID: <20251228054804.2515185-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
+References: <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: CpmCAYX4uxPkA9FG5srOsOKJrPnRQCZ7
-X-Proofpoint-GUID: CpmCAYX4uxPkA9FG5srOsOKJrPnRQCZ7
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjI3MDE0MCBTYWx0ZWRfXxwtV6JSMGaUZ
- 1B5x1GDbgjUou1nbWATG6xoj90vmpgtJlS9LBIU2MWtB3AXcSmmZtxc7VTIVkHxsHd38qHYRTtm
- gRSKvt02gJLGcciql72+DtcVbKPEujzK9cjkxdAuE9sA3yCTtNSzXaX7zNSWOnaewd8oiDpb84+
- oKivNkq+PMmaEOUR8m+4W+ZHKLVLzmbptC9fUsyoDAkN2TAtGyuhUDVK+YT0VSZ1DMkHUtYtdbn
- 6MRoj8vQ6Gw1/imwQnHAiN3VN7jJnTDwfNPKtHYRFHymayMdY9Zeg/nI1a9vrFI6BMptlTr/S9C
- /FTZ0XIayuYaYf39jGF0rX/dsBFnjM0YUAnbUq8UKZct6Yl95r2/huUO4Wmx5y7k6jE7fvViLna
- GmdeMH34Wnk/XPSdGyQ26NUX5PCk0e7aJXJldVzu/M7lVOtlh4jofc4OszehWzf+wm33VmYvcmd
- KNB4Z+e7f36rOXjIraA==
-X-Authority-Analysis: v=2.4 cv=do7Wylg4 c=1 sm=1 tr=0 ts=694ff2b1 cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=UBjmvLYHQkscieVNT2UA:9 a=OpyuDcXvxspvyRM73sMx:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-27_03,2025-12-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 malwarescore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
- adultscore=0 spamscore=0 suspectscore=0 phishscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512270140
 
-Add support to configure maxburst via configfs for bulk endpoints.
-Update gadget documentation describing the new configfs property.
+"Nícolas F. R. A. Prado" <nfraprado@collabora.com>:
+> Add a sample board file describing the file's format and with the list
+> of devices expected to be probed on the XPS 13 9300 machine as an
+> example x86 platform.
 
-Signed-off-by: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
----
-Note:
-- Verified by checking bulk ep descriptors on host after changing values
-via configfs.
-- Ignored two checkpatch errors complaining usage of "unsigned" instead of
-"unsinged int". This was done to maintain consistency in declaration of
-variables in structures.
+And now "Dell Inc.,XPS 13 9300.yaml" became the only file in the repository,
+which has space in its name:
 
- Documentation/usb/gadget-testing.rst       |  1 +
- drivers/usb/gadget/function/f_sourcesink.c | 52 ++++++++++++++++++++++
- drivers/usb/gadget/function/g_zero.h       |  1 +
- 3 files changed, 54 insertions(+)
+$ find . -name '* *'
+./tools/testing/selftests/devices/probe/boards/Dell Inc.,XPS 13 9300.yaml
 
-diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-index 5f90af1fb573..e32c5ad29e2d 100644
---- a/Documentation/usb/gadget-testing.rst
-+++ b/Documentation/usb/gadget-testing.rst
-@@ -686,6 +686,7 @@ The SOURCESINK function provides these attributes in its function directory:
- 	isoc_mult	0..2 (hs/ss only)
- 	isoc_maxburst	0..15 (ss only)
- 	bulk_buflen	buffer length
-+	bulk_maxburst	0..15 (ss only)
- 	bulk_qlen	depth of queue for bulk
- 	iso_qlen	depth of queue for iso
- 	=============== ==================================
-diff --git a/drivers/usb/gadget/function/f_sourcesink.c b/drivers/usb/gadget/function/f_sourcesink.c
-index ec5fd25020fd..ca80b26e4fc9 100644
---- a/drivers/usb/gadget/function/f_sourcesink.c
-+++ b/drivers/usb/gadget/function/f_sourcesink.c
-@@ -46,6 +46,7 @@ struct f_sourcesink {
- 	unsigned isoc_mult;
- 	unsigned isoc_maxburst;
- 	unsigned buflen;
-+	unsigned bulk_maxburst;
- 	unsigned bulk_qlen;
- 	unsigned iso_qlen;
- };
-@@ -328,6 +329,12 @@ sourcesink_bind(struct usb_configuration *c, struct usb_function *f)
- 	source_sink_intf_alt0.bInterfaceNumber = id;
- 	source_sink_intf_alt1.bInterfaceNumber = id;
- 
-+	if (ss->bulk_maxburst > 15)
-+		ss->bulk_maxburst = 15;
-+
-+	ss_source_comp_desc.bMaxBurst = ss->bulk_maxburst;
-+	ss_sink_comp_desc.bMaxBurst = ss->bulk_maxburst;
-+
- 	/* allocate bulk endpoints */
- 	ss->in_ep = usb_ep_autoconfig(cdev->gadget, &fs_source_desc);
- 	if (!ss->in_ep) {
-@@ -853,6 +860,7 @@ static struct usb_function *source_sink_alloc_func(
- 	ss->isoc_mult = ss_opts->isoc_mult;
- 	ss->isoc_maxburst = ss_opts->isoc_maxburst;
- 	ss->buflen = ss_opts->bulk_buflen;
-+	ss->bulk_maxburst = ss_opts->bulk_maxburst;
- 	ss->bulk_qlen = ss_opts->bulk_qlen;
- 	ss->iso_qlen = ss_opts->iso_qlen;
- 
-@@ -1101,6 +1109,49 @@ static ssize_t f_ss_opts_isoc_maxburst_store(struct config_item *item,
- 
- CONFIGFS_ATTR(f_ss_opts_, isoc_maxburst);
- 
-+static ssize_t f_ss_opts_bulk_maxburst_show(struct config_item *item, char *page)
-+{
-+	struct f_ss_opts *opts = to_f_ss_opts(item);
-+	int result;
-+
-+	mutex_lock(&opts->lock);
-+	result = sysfs_emit(page, "%u\n", opts->bulk_maxburst);
-+	mutex_unlock(&opts->lock);
-+
-+	return result;
-+}
-+
-+static ssize_t f_ss_opts_bulk_maxburst_store(struct config_item *item,
-+					     const char *page, size_t len)
-+{
-+	struct f_ss_opts *opts = to_f_ss_opts(item);
-+	int ret;
-+	u8 num;
-+
-+	mutex_lock(&opts->lock);
-+	if (opts->refcnt) {
-+		ret = -EBUSY;
-+		goto end;
-+	}
-+
-+	ret = kstrtou8(page, 0, &num);
-+	if (ret)
-+		goto end;
-+
-+	if (num > 15) {
-+		ret = -EINVAL;
-+		goto end;
-+	}
-+
-+	opts->bulk_maxburst = num;
-+	ret = len;
-+end:
-+	mutex_unlock(&opts->lock);
-+	return ret;
-+}
-+
-+CONFIGFS_ATTR(f_ss_opts_, bulk_maxburst);
-+
- static ssize_t f_ss_opts_bulk_buflen_show(struct config_item *item, char *page)
- {
- 	struct f_ss_opts *opts = to_f_ss_opts(item);
-@@ -1222,6 +1273,7 @@ static struct configfs_attribute *ss_attrs[] = {
- 	&f_ss_opts_attr_isoc_mult,
- 	&f_ss_opts_attr_isoc_maxburst,
- 	&f_ss_opts_attr_bulk_buflen,
-+	&f_ss_opts_attr_bulk_maxburst,
- 	&f_ss_opts_attr_bulk_qlen,
- 	&f_ss_opts_attr_iso_qlen,
- 	NULL,
-diff --git a/drivers/usb/gadget/function/g_zero.h b/drivers/usb/gadget/function/g_zero.h
-index 98b8462ad538..7bd66004821f 100644
---- a/drivers/usb/gadget/function/g_zero.h
-+++ b/drivers/usb/gadget/function/g_zero.h
-@@ -34,6 +34,7 @@ struct f_ss_opts {
- 	unsigned isoc_mult;
- 	unsigned isoc_maxburst;
- 	unsigned bulk_buflen;
-+	unsigned bulk_maxburst;
- 	unsigned bulk_qlen;
- 	unsigned iso_qlen;
- 
+I kindly ask you to rename file. New name should not contain space or comma
+in it.
+
+The file name in its current form breaks tools. For example, it breaks
+"xargs".
+
+For example, the following will work in "fs" directory:
+
+stable/fs$ find . | xargs chmod -w
+
+But it will not work in root of source tree because of this
+"Dell Inc.,XPS 13 9300.yaml" file:
+
+stable$ find . | xargs chmod -w
+chmod: cannot access './tools/testing/selftests/devices/probe/boards/Dell': No such file or directory
+chmod: cannot access 'Inc.,XPS': No such file or directory
+chmod: cannot access '13': No such file or directory
+chmod: cannot access '9300.yaml': No such file or directory
+
 -- 
-2.34.1
-
+Askar Safin
 
