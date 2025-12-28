@@ -1,154 +1,144 @@
-Return-Path: <linux-usb+bounces-31785-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31786-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21059CE4E6A
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Dec 2025 13:54:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96EFCCE4F3B
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Dec 2025 13:58:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4DA063017020
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Dec 2025 12:53:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F34153014DED
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Dec 2025 12:55:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FDEE2E54B3;
-	Sun, 28 Dec 2025 12:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88CD2D5C61;
+	Sun, 28 Dec 2025 12:54:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="aJZxRPDK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aOMqtfvn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED062E36F8;
-	Sun, 28 Dec 2025 12:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98CB82D6401
+	for <linux-usb@vger.kernel.org>; Sun, 28 Dec 2025 12:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766925871; cv=none; b=p8a/KhKA3uCOz5RSAxPyArkSYQdlMeqwECtbRZwZrZguFV04WxY65++niY3i4mJiT1oVlJrjshjuTqxixCL0o0D2AWSSUssTK2hk35+9KnLizBIaHEO1nU0zO1imbSwo6zDu1NN2szCN+nCZyj2DnxaYN4mu9HIDIS5kIqkDP6o=
+	t=1766926492; cv=none; b=d0KDGIXu4qdja6nCNAkpHpoABlNDpDTmwuZgZML58Yfl5KyVkfsKeGL77tKKuQ35PE/NiJZcjCZ1GoOvmb6FmfWxqgw7svWpI3x+Mqfk44ArDrwclHnZ4AV0xxWlAGzmUQNub0hXW54pIDf01EeCfsgHTopcyq7U0UdpRRCMxTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766925871; c=relaxed/simple;
-	bh=7c9S4tstvUJy8SctuYVwrPWCg1jYZ3iMiBlz6vITYYs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GyXPRTSjj9GXZ/zRfjh2UF7fBln9cQkThbDnWO8ksOlWqA5rtkcvgJ1cwzxi/oLoEAJekRDeaDz8OYqbXKrCd5db42cfMPJ0lYC1vB3ck8pnrP7TOiOjmGPfIQ5AFv1d3Qz6dEoc9MxZJRLPq+yRi8u+bv30gLKn4jmuCiQQUW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=aJZxRPDK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF09C4CEFB;
-	Sun, 28 Dec 2025 12:44:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1766925871;
-	bh=7c9S4tstvUJy8SctuYVwrPWCg1jYZ3iMiBlz6vITYYs=;
-	h=Date:From:To:Cc:Subject:From;
-	b=aJZxRPDK5MdDPpGK5QOBeeAz9WdkoBpVUXfGCquwpBj4kIs9OthXPcwMNZMl+FLio
-	 eVWz5322tFgbmFMnX1ybbgUS7CfMhhPo8m9ipVgXXf4yc/K824CxOme1MklbypV8Ha
-	 DgrMSdc/itY0OmXHTimad2zoeqhgrcTazNltuN4Q=
-Date: Sun, 28 Dec 2025 13:44:28 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.19-rc3
-Message-ID: <aVEmLOWNDg7eHH5L@kroah.com>
+	s=arc-20240116; t=1766926492; c=relaxed/simple;
+	bh=k1udt5i4JC/KiX/tMYzcN0APlVV4RgNQMCCSYZRuXjY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vD6d5e1gA+JI6057wwThIr8ex2Ekzbfh0EZ6Xg7BbkVcLtK8qGohN8UhQTlJQc8eOcpb/1KSaxbtUAV8LmknSlscG3/Z6wGP9wOdd3i44ceHj0bGLEtN4zVsZ1CSik5jiik/Srb01NEXa1F6yYjwEpRcaQ39JPeA/Zd8iT7f78w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aOMqtfvn; arc=none smtp.client-ip=209.85.167.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-455af5758fdso5482046b6e.1
+        for <linux-usb@vger.kernel.org>; Sun, 28 Dec 2025 04:54:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766926485; x=1767531285; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2mbO8ygl0+LvUYCsXs5tELsSvHTLlshwMLulQXQvMj8=;
+        b=aOMqtfvnvZOWY4U/e45kxbJ2PbKBBYlBbKkGTXmrMpYWMI/UJrMbh314wdmSv2OY9q
+         RS8l+M0mhAoBQjZQWh5ZYDmptoNMD/Oa9qvvae1t+Xuu4gi5aeoZr6VZEGUPshIAkDAU
+         qgnEoRRcMTg0BI7m/EWU92Y+jZb4Ypqrc0g/td66RyJ2tMSnSPwqsMuYrORE5EuNDwDc
+         GuldWB5ju1ntmnue8ezI5sr+TUk8jk3wf4O/YJn/eWCagwn8dQ1j8vvjBb+jlvJw05T5
+         l0eTebeNRpKnxYsW+4iAuH9/zosjpVU778UBuvsaE80nYqbVpWoKNtDmbW9JoDXX+cw3
+         4hCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766926485; x=1767531285;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2mbO8ygl0+LvUYCsXs5tELsSvHTLlshwMLulQXQvMj8=;
+        b=VPbZXIg9r2dhorbcd+lErYICiAWAbEEIJasFKMNOkBpjl3a10IiOUisXtOUxe8K8Q5
+         pw8XJeNQ8Wp0Tn0cLsULJs47ZFRgySqz3zDeuZXGa0BJHnuuRPWsfjxU75iuFAg/8Rdf
+         6W3KMOCfjXf3dnnmefSaxc1288NZc7Ae8duReFNHGwn84tx/etcTYEU4ZfcZxWCvvmjQ
+         I94Du9qYOGunqiwDg3SpI8mp4gorN4fgNY1Ji4Mdij0rReGCXf+1uIb1pFA0NzWoT8RU
+         NyOswZGYv/S6DPFo+3Vi9Dphfp6DrAFoHktnI1oxWYGJfXGf5LJPb9IglWJ/EMptiq49
+         tLYw==
+X-Forwarded-Encrypted: i=1; AJvYcCWwAa+ErNDOO6EpnczEX0f64d1NvneUOUX8Wd87Y6dzKHS5h08VIO5GJyLuVNBVkFlxaJcLivgo/N8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLLjwt+QONWXR/JnUus91Vd3rpypnmGerVxIo0tn4cG5okMB9d
+	o7FoceL57Sj+8Qnbh0Kls/+WLuMfak/GlhQE0kmij4/LfljENgxDQq9HeTjxpZopnzcq7UZR6WH
+	uGC2MVYF96sgCat7htp1NboHMlKnjOJ0=
+X-Gm-Gg: AY/fxX4i6vvVHyk0C46jeZmFkAXSlrYExTmuO8xEqPQvVUXiJqVc6J2HbjNR6uphE2m
+	02tP6QIttRMIpF1OsntqaEghPwNjGjgDQdxbyEQE9VwJ2V9if8uZwigIOR+HFf0s+rpp5baxC3F
+	psPt5uJU+kqRIs4T1KjrjO7fkFo1VVVtb5w0ZW234tPhWen5DE1muz6DWUFSl9nkltvJArKmEFh
+	WM/jXmYvVaro1cCypaVdssV2RbCb+9ldv0iJEZVLdx+yXv6TsO5X0lwvyNfZzUXUO2zwkrT
+X-Google-Smtp-Source: AGHT+IGBfZaDj3d0RLZMvLfclop/f+T5HGv5WKLD5CwM1UJOPXPe37hGHp1ADBWCEYh5abMCNyGRmJsdvDQ2e5Xu/7c=
+X-Received: by 2002:a05:6808:4449:b0:450:b7a0:41d3 with SMTP id
+ 5614622812f47-457b2281a36mr13313878b6e.67.1766926485284; Sun, 28 Dec 2025
+ 04:54:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <2025120708-header-startling-ffaf@gregkh> <20251207012059.7899-1-johannes.bruederl@gmail.com>
+ <20251207084012.7c232e52.michal.pecio@gmail.com> <CAP=XvD+dNNDj75DYjjByE3o7F8i-QxusAdz-5+hG24fCesWYRw@mail.gmail.com>
+ <20251207104505.1d5f3718.michal.pecio@gmail.com> <CAP=XvDJJP2orxYcgiKzp0FrQE2UMiXndZe8Z6BdBRFvkujWu5w@mail.gmail.com>
+ <2025120748-extras-retrain-16eb@gregkh> <2025120846-nearby-breath-e5fe@gregkh>
+ <dacafa36-10dc-4f2a-95fd-10ff785e4670@suse.com> <2025120941-unhappily-smilingly-59e9@gregkh>
+In-Reply-To: <2025120941-unhappily-smilingly-59e9@gregkh>
+From: =?UTF-8?Q?Johannes_Br=C3=BCderl?= <johannes.bruederl@gmail.com>
+Date: Sun, 28 Dec 2025 13:54:34 +0100
+X-Gm-Features: AQt7F2qp6YVb23S2GmL9gjH-ktgjQDp8Tq5F7c6QB1CyZJyZc_8vNBMSdXowXek
+Message-ID: <CAP=XvD+LDvjyX7XRueuQ-NnHvuZEoJ7zH=nWOJhoOzupKMjuOQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: core: add USB_QUIRK_NO_BOS for devices that hang
+ on BOS descriptor
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Oliver Neukum <oneukum@suse.com>, Michal Pecio <michal.pecio@gmail.com>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+On Mon, Dec 8, 2025 at 9:46=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
+ wrote:
+>
+> On Mon, Dec 08, 2025 at 09:58:55AM +0100, Oliver Neukum wrote:
+> > On 07.12.25 22:12, Greg KH wrote:
+> > > Ok, I can duplicate this here.  Maybe we just don't ask for the BOS
+> > > descriptor if no one needs/asks for it.  I can play with that later a=
+nd
+> > > see if that helps as I'm sure this isn't going to be the only device
+> > > that can't handle the BOS descriptor if Windows isn't querying for it=
+,
+> > > so we don't want to make a huge quirk table if we don't have to.
+> >
+> > 1. That means we'd let lsusb crash devices. Not a good idea.
+>
+> I don't think that it will crash.  hopefully not, as just reading a
+> descriptor after enumerated shouldn't cause that.  I'll test it out...
+>
+> > 2. It is, unfortunately, possible that firmware authors simply
+> > script a detection sequence. That means devices would crash
+> > if you request a descriptor at a time when Windows would not
+> > request it, not just in general.
+> > I am afraid I need to point you at the horrible example
+> > of HID_ALWAYS_POLL
+>
+> That is horrible, hopefully we don't have to do that here :(
+>
+> thanks,
+>
+> greg k-h
 
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+Hello Greg,
+I apologize for the "blunt bump" of this topic.
+Are you (still) open to considering the quirk ?
 
-are available in the Git repository at:
+A small number of users have started using the Patch, and it seems to
+solve a real problem.. (ref:
+https://www.reddit.com/r/elgato/comments/1lw1e0v/comment/ntrdjpb/?utm_sourc=
+e=3Dshare&utm_medium=3Dweb3x&utm_name=3Dweb3xcss&utm_term=3D1&utm_content=
+=3Dshare_button)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.19-rc3
+Given that the options for 4k60fps recording are very limited for
+Linux these days - I suggest it might be worth it. AFAIK, there's no
+good other option in terms of hardware as of December 2025.
+I understand it's a special quirk for just this device, which is not pretty=
+..
 
-for you to fetch changes up to 22201800f198ad33c225e5ce2f0f254df828d01b:
+(Note: i've submitted a v3 patch that addressed the feedback).
 
-  Merge patch series "usb: typec: ucsi: revert broken buffer management" (2025-12-23 15:59:03 +0100)
-
-----------------------------------------------------------------
-USB fixes for 6.19-rc3
-
-Here are some small USB fixes, and bunch of reverts for 6.19-rc3.
-Included in here are:
-  - reverts of some typec ucsi driver changes that had a lot of
-    regression reports after -rc1.  Let's just revert it all for now and
-    it will come back in a way that is better tested.
-  - other typec bugfixes
-  - usb-storage quirk fixups
-  - dwc3 driver fix
-  - other minor USB fixes for reported problems.
-
-All of these have passed 0-day testing and individual testing.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      usb: typec: ucsi: huawei-gaokin: add DRM dependency
-
-Chen Changcheng (1):
-      usb: usb-storage: Maintain minimal modifications to the bcdDevice range.
-
-Duoming Zhou (1):
-      usb: phy: fsl-usb: Fix use-after-free in delayed work during device removal
-
-Greg Kroah-Hartman (3):
-      Revert "usb: typec: ucsi: Get connector status after enable notifications"
-      Revert "usb: typec: ucsi: Fix null pointer dereference in ucsi_sync_control_common"
-      Merge patch series "usb: typec: ucsi: revert broken buffer management"
-
-Haoxiang Li (2):
-      usb: renesas_usbhs: Fix a resource leak in usbhs_pipe_malloc()
-      usb: typec: altmodes/displayport: Drop the device reference in dp_altmode_probe()
-
-Hsin-Te Yuan (1):
-      usb: typec: ucsi: Get connector status after enable notifications
-
-Johan Hovold (9):
-      usb: gadget: lpc32xx_udc: fix clock imbalance in error path
-      usb: phy: isp1301: fix non-OF device reference imbalance
-      usb: ohci-nxp: fix device leak on probe failure
-      usb: gadget: lpc32xx_udc: clean up probe error labels
-      usb: ohci-nxp: clean up probe error labels
-      Revert "usb: typec: ucsi: Add support for SET_PDOS command"
-      Revert "usb: typec: ucsi: Enable debugfs for message_out data structure"
-      Revert "usb: typec: ucsi: Add support for message out data structure"
-      Revert "usb: typec: ucsi: Update UCSI structure to have message in and message out fields"
-
-Ma Ke (1):
-      USB: lpc32xx_udc: Fix error handling in probe
-
-Mario Limonciello (AMD) (1):
-      usb: typec: ucsi: Fix null pointer dereference in ucsi_sync_control_common
-
-Miaoqian Lin (1):
-      usb: dwc3: of-simple: fix clock resource leak in dwc3_of_simple_probe
-
-Udipto Goswami (1):
-      usb: dwc3: keep susphy enabled during exit to avoid controller faults
-
-Łukasz Bartosik (1):
-      xhci: dbgtty: fix device unregister: fixup
-
- drivers/usb/dwc3/dwc3-of-simple.c        |   7 +-
- drivers/usb/dwc3/gadget.c                |   2 +-
- drivers/usb/dwc3/host.c                  |   2 +-
- drivers/usb/gadget/udc/lpc32xx_udc.c     |  42 ++++++-----
- drivers/usb/host/ohci-nxp.c              |  18 ++---
- drivers/usb/host/xhci-dbgtty.c           |   2 +-
- drivers/usb/phy/phy-fsl-usb.c            |   1 +
- drivers/usb/phy/phy-isp1301.c            |   7 +-
- drivers/usb/renesas_usbhs/pipe.c         |   2 +
- drivers/usb/storage/unusual_uas.h        |   2 +-
- drivers/usb/typec/altmodes/displayport.c |   8 ++-
- drivers/usb/typec/ucsi/Kconfig           |   1 +
- drivers/usb/typec/ucsi/cros_ec_ucsi.c    |   5 +-
- drivers/usb/typec/ucsi/debugfs.c         |  36 ++--------
- drivers/usb/typec/ucsi/displayport.c     |  11 +--
- drivers/usb/typec/ucsi/ucsi.c            | 118 ++++++++++---------------------
- drivers/usb/typec/ucsi/ucsi.h            |  22 ++----
- drivers/usb/typec/ucsi/ucsi_acpi.c       |  25 ++-----
- drivers/usb/typec/ucsi/ucsi_ccg.c        |  11 +--
- drivers/usb/typec/ucsi/ucsi_yoga_c630.c  |  15 ++--
- 20 files changed, 130 insertions(+), 207 deletions(-)
+Thanks and Best Regards,
+Johannes
 
