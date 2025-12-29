@@ -1,102 +1,151 @@
-Return-Path: <linux-usb+bounces-31798-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31799-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0399FCE6EE0
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Dec 2025 14:57:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4C58CE6F2B
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Dec 2025 14:59:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 746AA300750E
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Dec 2025 13:57:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 912BA3016984
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Dec 2025 13:59:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25CEC318151;
-	Mon, 29 Dec 2025 13:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B864319852;
+	Mon, 29 Dec 2025 13:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="I5qcZiKs";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dbHkKS7k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jb4vi6OU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE85F22A4EB;
-	Mon, 29 Dec 2025 13:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028911E51E0
+	for <linux-usb@vger.kernel.org>; Mon, 29 Dec 2025 13:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767016654; cv=none; b=a9bXK6XTDsZHk1b2uprnA+b05fSEUuxvQd7V246EuAJfwGuIFDUngv3K9h1ufnoCaPn6oM04u3+Z2Y+Hun2rJ7sCNkvbJPRkuDW0XnxSFuLvwN+FJorD1lh7q49A9TYsZH6uohVZD8imWXHAz10TrXwAJ0JmftufxYPu+AjZgKo=
+	t=1767016756; cv=none; b=Qt5pEjUaJRWgbkH3Z46ANkn6SxDJc/8tdEqqQsPPqwigYVFnKS+S9Ekgbd7n2zXOLbteMVRNXkNA4D6vS0Usg9AA5nXyEMGohQfnzflT6c/r36Mzv5fXLHIyBpEE+auIXCbETtvqit6PwFKC9+/I8HqRxg6s2hKW9w/Zn+oZ0EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767016654; c=relaxed/simple;
-	bh=q9jk6pdPEBQYIy34ofx1tOOTdyh9/Soq/BIZTagnNkk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oi56vTYH4NC3/08htcvKU4masiCdc9tj1W6CLAZNkSy0uhZ4KPn/AQSpxjn8xpt03lBNEndaW7/ac+U5CCxoj0335SbfBHl/ONnBhcxG5TI8jX9y7YzQCrDHCIkewND7FvMv9+HhOj8laSkhp+868GKWA6Aj6brPuKINk3wOgPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=I5qcZiKs; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dbHkKS7k; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 29 Dec 2025 14:57:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1767016650;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=b2+4kIzxc3Y23tv43jhWLxYxiyYeeu8jb11lSSlPEI0=;
-	b=I5qcZiKs0kZuG6WFijLQpjUDQslghyctI6bq3ZbRMPidB6gii+vuf2mv9WilX3zHFofmIO
-	QDtP3gz79coZq4XJxofSWVRwoK82EtataOuq4LHR9BeL2Snsopbl0SOQM9M7VZMspskgvd
-	bvKf9Wh81hMOgx+68Sj/RNxeUeSvlezZhATZ5riJVuo/9FFQm+/30v51U2y6RYW+qNFXLk
-	rkMwi7DYwcMzOwHkxI92+vi8MQ4+RL5L1ka99lLZw13a+FrZwDSWoigB8pbThLQPIa6FhB
-	UoGxvowJugXRneNc+wD9TAyBT0a6+SU8ma5u2s8zShT01IE0R5WyMjoUOaD8lg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1767016650;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=b2+4kIzxc3Y23tv43jhWLxYxiyYeeu8jb11lSSlPEI0=;
-	b=dbHkKS7kIeECJgZK+9wsENJu90OJsTxc5pTWAzCXjBrSyBNOOtYiE/2Nl+cpHlKtBvdo/0
-	c9FxZxlT3c1j3hAw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-Cc: Shuah Khan <shuah@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Bjorn Helgaas <bhelgaas@google.com>, kernelci@lists.linux.dev, 
-	kernel@collabora.com, Tim Bird <Tim.Bird@sony.com>, linux-pci@vger.kernel.org, 
-	David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org, 
-	Rob Herring <robh+dt@kernel.org>, Doug Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org, 
-	Saravana Kannan <saravanak@google.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Guenter Roeck <groeck@chromium.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] kselftest: Add test to verify probe of devices
- from discoverable buses
-Message-ID: <20251229145542-059157e7-1864-4407-8734-0a32589f9b0b@linutronix.de>
-References: <20240122-discoverable-devs-ksft-v4-0-d602e1df4aa2@collabora.com>
- <20240122-discoverable-devs-ksft-v4-1-d602e1df4aa2@collabora.com>
+	s=arc-20240116; t=1767016756; c=relaxed/simple;
+	bh=k257uZ3HPDKFfAze/hz1Hfmw8/7Hf+9ogZi61Nyan10=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kwE3YMNNH+PLbBL/DJ1mR9aWPuxbLDaHQJ+1rVyyQIW69ZmdcmvGLipyzxLbL4gI5ZC3H1fI1TGWYKzz5471Ye0Y45joj3UBnhtjjg2R4yFjkXxektuj/tN5qX/1tyDP35HVu/ZmTKbLVfGHSYSV8QQ++JM+ClkTPkPWtIqKKpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jb4vi6OU; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-47797676c62so9126185e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 29 Dec 2025 05:59:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767016752; x=1767621552; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jnurlv5ZkeGevc2yEP3yL2OMFl89R04sLNUEhoXlc4A=;
+        b=Jb4vi6OUmolZ4NXViQlAkeq0JttPiAGs85sSgTroLRQN6PTW3eJ0Qx3lk4q4uljvuw
+         hY9QD7hSwXfbp/I/Uuldx6Pou/8Kv8NqMzpG1+EEMTiaOxSHjdDOUPMdooPJvLO3bgrQ
+         fCL2C1VDR+wLBEildF9gD831DPeJGwNsvtKw2eWJOCRVAgEIEVwo1HVLcH+aXZV4KGRO
+         DZX1zoLxHJ7+zgAsrUl5a+N7J5DC9d3PYmD1CsE1BDztKcCSRKebIWEKm//NvNf/38rp
+         ohxAD8pFkM6X7cwgMPp7NlvYiagUcfRxNBB2dPAcNvO1i8nCJWNeGB+GRHYYwDMjZv6u
+         z8bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767016752; x=1767621552;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jnurlv5ZkeGevc2yEP3yL2OMFl89R04sLNUEhoXlc4A=;
+        b=GYTIRukTsuLGRVGvBry4e0/KwkGL32PK1HVKlquKe5TSbydtoBA6/55w6Cnf2IR84z
+         zHK2iS1jSO6ZEwYCAJ1U7tsai1B1W/rT/npmTtTLxguy1gy3ncpjJay3DVLcglaSeAQx
+         5kRXcVVVoKR3IeTsrG2nwbTkW9SCYsmpTxsTajAIs3ThjDMt9Uvh4OL4DbKeFVA6baZl
+         8+f9FGE8bfG5hmX+qG9wjUmAPMk81gRurvnQWcxDNS08ac/kNeIztpoVwdk7lTkitDM7
+         uUggskWsEW+D1pUMWzVqXTs1MglNKo3Kb155ovBcfhEQDrcwUJU46coZpSaZlrHrGcE6
+         e0eA==
+X-Forwarded-Encrypted: i=1; AJvYcCVOzQbYGL4Wn7nnIL328rGUPM4nozhJ9nbjZYhYlc/6lEZ6JL44tFBI9qUPPM3yMkxJkpNaYkxO5CQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXX/7Bn97N2jntyO6zYPgKQWVYNrbXWazaZu5gaViDK0qUWc0+
+	seksWjYksUNYnVZvTG6K692DNcbDjITMnFrQfOV2AVIv7wTYeeK+ppbE
+X-Gm-Gg: AY/fxX6xKHGINDcxVZK58PGnxPxVC+9AhVa5A12ZpyNzzTrD3nnwQ1PaKAJOSvyCa1S
+	YIXobXxD/iiGoCAHeDJKkYrRgNhGPlc/mIkDlLkd8C02h9KdAZI5nKqQY2h90ADmy+2ivdw+isz
+	9PNRTyCy6n31VNq49lCVjgBzMcAjVlT/BAB6GoLIWCc9Am16LuTo2g+5uQBD+B7NZLNW67V7Kvc
+	jRQYvrSrsr8peizXmnXD2/pLOM0bdueuo6Cir0NwXMySXjv/49CL2bT8v54jwxQC2CmLgrFOe4o
+	RelB9Dco27Ay+lgJd52mNg32hLwIS4QyeSxNMUFOuez0dXKyke/0e7Q7MHV3Z9yiaXHHHJxuaL7
+	yPuoj/tvxnkiNtX3yXLWOULzDDffHgbf67jPpSeMjLqYDxbTgAxdCNRpZE9k5E04FYYLDmj2XyV
+	umtCrZgog6MEcZy2JeP7ouFACQn9IP7wMzlhIbQ9zrGzmXrjklX2FGVPvsJKn2bpuRlpJ6UsOUU
+	RwEgwI=
+X-Google-Smtp-Source: AGHT+IG9xRAmZubwF+oTURx72QKNS8IBmfurtixzLyk4corHAwr+82eB/ZvmEfCyKAkZ8m72tcMOWQ==
+X-Received: by 2002:a05:600c:3ba4:b0:468:7a5a:14cc with SMTP id 5b1f17b1804b1-47d1957af0emr232438825e9.3.1767016752121;
+        Mon, 29 Dec 2025 05:59:12 -0800 (PST)
+Received: from thomas-precision3591.paris.inria.fr (wifi-pro-83-215.paris.inria.fr. [128.93.83.215])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4324ea1b1bdsm61881417f8f.8.2025.12.29.05.59.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Dec 2025 05:59:11 -0800 (PST)
+From: Thomas Fourier <fourier.thomas@gmail.com>
+To: 
+Cc: Thomas Fourier <fourier.thomas@gmail.com>,
+	stable@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Wayne Chang <waynec@nvidia.com>,
+	Haotien Hsu <haotienh@nvidia.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Liao Yuanhong <liaoyuanhong@vivo.com>,
+	Nagarjuna Kristam <nkristam@nvidia.com>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	linux-usb@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: Fix trb_virt_to_phys() error value
+Date: Mon, 29 Dec 2025 14:58:49 +0100
+Message-ID: <20251229135853.33222-1-fourier.thomas@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240122-discoverable-devs-ksft-v4-1-d602e1df4aa2@collabora.com>
 
-On Mon, Jan 22, 2024 at 03:53:21PM -0300, Nícolas F. R. A. Prado wrote:
-> Add a new test to verify that a list of expected devices from
-> discoverable buses (ie USB, PCI) have been successfully instantiated and
-> probed by a driver.
-> 
-> The per-platform list of expected devices is selected from the ones
-> under the boards/ directory based on the DT compatible or the DMI IDs.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
->  tools/testing/selftests/Makefile                   |   1 +
->  tools/testing/selftests/devices/Makefile           |   4 +
+0 is a valid DMA address, so returning DMA_MAPPING_ERROR in
+trb_virt_to_phys().  Also, dma_mapping_error() wouldn't
+flag 0 as an error address.
+Checking the return value directly because the dma_addr
+does not come directly from dma_map().
 
->  tools/testing/selftests/devices/ksft.py            |  90 ++++++
+Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Thomas Fourier <fourier.thomas@gmail.com>
+---
+v1->v2:
+  - Add Cc: tag
+ drivers/usb/gadget/udc/tegra-xudc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-This seems to be a copy of tools/testing/selftests/kselftest/ksft.py.
-Instead of copying the file, try to use it from the standard location.
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 9d2007f448c0..63f7eeddb401 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -904,7 +904,7 @@ static dma_addr_t trb_virt_to_phys(struct tegra_xudc_ep *ep,
+ 	index = trb - ep->transfer_ring;
+ 
+ 	if (WARN_ON(index >= XUDC_TRANSFER_RING_SIZE))
+-		return 0;
++		return DMA_MAPPING_ERROR;
+ 
+ 	return (ep->transfer_ring_phys + index * sizeof(*trb));
+ }
+@@ -1484,7 +1484,7 @@ __tegra_xudc_ep_dequeue(struct tegra_xudc_ep *ep,
+ 			deq_ptr = trb_virt_to_phys(ep,
+ 					&ep->transfer_ring[ep->enq_ptr]);
+ 
+-			if (dma_mapping_error(xudc->dev, deq_ptr)) {
++			if (deq_ptr == DMA_MAPPING_ERROR) {
+ 				ret = -EINVAL;
+ 			} else {
+ 				ep_ctx_write_deq_ptr(ep->context, deq_ptr);
+@@ -2834,7 +2834,7 @@ static void tegra_xudc_reset(struct tegra_xudc *xudc)
+ 
+ 	deq_ptr = trb_virt_to_phys(ep0, &ep0->transfer_ring[ep0->deq_ptr]);
+ 
+-	if (!dma_mapping_error(xudc->dev, deq_ptr)) {
++	if (deq_ptr != DMA_MAPPING_ERROR) {
+ 		ep_ctx_write_deq_ptr(ep0->context, deq_ptr);
+ 		ep_ctx_write_dcs(ep0->context, ep0->pcs);
+ 	}
+-- 
+2.43.0
 
->  .../selftests/devices/test_discoverable_devices.py | 318 +++++++++++++++++++++
->  4 files changed, 413 insertions(+)
-
-(...)
 
