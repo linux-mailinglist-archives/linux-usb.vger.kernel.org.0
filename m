@@ -1,140 +1,92 @@
-Return-Path: <linux-usb+bounces-31790-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31791-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C48ECE5863
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Dec 2025 23:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 53862CE5A89
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Dec 2025 02:17:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0504A300F9CF
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Dec 2025 22:50:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ACF423006AAD
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Dec 2025 01:17:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E7F529BDA3;
-	Sun, 28 Dec 2025 22:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ADB11E0DFE;
+	Mon, 29 Dec 2025 01:17:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WrvU2ZKk"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XWal3SkJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A100277016
-	for <linux-usb@vger.kernel.org>; Sun, 28 Dec 2025 22:50:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416943A1E99;
+	Mon, 29 Dec 2025 01:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766962211; cv=none; b=hZ5TV2Ajv05OyrBuekciVtakzPa+6VbqnCh9wXGt6SWvKPOdK5GOTq4WLpCbs0lRMZSmMd2cv9i6Mw5TnIqj3f3oLKgDyandZv1lifHZWc+mAsA0QbkPgRXuAwL3GsQMAsRkZpxhAnjnAkRjk2ic1ZNuGggwpN/KxIvCDBaBIm4=
+	t=1766971020; cv=none; b=X57Z12X1v2r7ptHt0nsVO6yeUV+AFmwFrRt30Ei2AHMh02Drg9Qd95moyQCNh68LVN9D41P4Ywa65Det5fyLi11eAGirfmOHz79mr094t+pXVVvt/UVJjPBwK/15KFAhKbFoi/5v0FWoPJaGpDTqSw4Q259Af6JEsEuEQ/MRu1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766962211; c=relaxed/simple;
-	bh=9KgZlOWCyyz97q21E9W8EANe41Dc0IJ33MJtTZbxqmI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=utd9jcahNGUG0UZml59du0PDssSzs5XcwUmKNQrbkKc8xHXY8FOuyfk9tdfxWCWJUBsM7mEV4nz+QdZybr44cwE9QjhW7h10pgl9dj2t1icNzHczU4oIHdVXe9BjKRTMiw8B+8nhzB9Psx0KCZ6cYDnLPzcBsQOEdq6zCG5tRiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WrvU2ZKk; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-430f57cd471so4236822f8f.0
-        for <linux-usb@vger.kernel.org>; Sun, 28 Dec 2025 14:50:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766962207; x=1767567007; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dLa9rIWMcGJ8cd3NrQlUFNZ6zmYa0bxNCj5XPgKm3rs=;
-        b=WrvU2ZKkHWaMlv7oRkd+S+QEtyC1YuhJKXO7LueTJvIn//5dwNhQ4G8JtP2icFhnPx
-         Gz4/ji3vdh/OTs91Ww+RboZbn9yTv0bdQCUtdEDeffvUG6mJAZpUywRn4THuOIsQlWku
-         wSpjJgwH3siDX0WafPL4SJFBMeaFj93tfsHooD4ra27hvT2UZdYtr76tks1s+1EPIGMe
-         /5Y8CtNk5G84L5xS21viUSTYS5jyXajv95Tj2typ46M9gB6LPYA74QkiWXlR6ldxVKUi
-         diEpWgSyO+pI88uWaTW6oH1XBjTw3A4LpcaBn6bb8DMRux2uTTAJ2YTtbyLO7x1a8Iob
-         l4UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766962207; x=1767567007;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dLa9rIWMcGJ8cd3NrQlUFNZ6zmYa0bxNCj5XPgKm3rs=;
-        b=f1jXKqeJ52FUbxx6bw39dLCjYMM0XwDXwL7Xrbo2b4mXN/eyq7bTw+QQgOrjDTHIpt
-         cs/D+rknGW4r32H4Ho6gWUz9pTRuZ2P0CEfo+lfyByjdaweWBij78t2ngw6BUowUWJQK
-         lFPsbu8fA7q28uyDeUv83hNSl6wB5RJ3GARyCJN2M9N0LFeKp8301EBKfQghbg+K2U10
-         csJ/RAplr5hVcVIebfgwZw3kvSQOddLXSyTKk1bYSWzwYW1kczyDPhJ1iFrfdKe1ubX1
-         VqajpBGRclX9q+7SDlWYsQn9FlrnUuR/sP/jF9ZMkndtblBl5Cy8AuUmTuhi7DB2MW4X
-         Fw6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWX1Fz9YkulXfjN5+2paKc3sY24vJi3p+mZ7XmDCJRNH3wUU1YumaNui3K38UnPpL52Whmv6UnY9EA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDqM7BgO0UStZYgd0w+RdrF6q33AemJmKLzS6XbBegJX4iEa+U
-	GcV35wsTKqc1JwwrooBfNvrujtckzLn63JJ/qhoKfzAb8hv9aNDnvZYpp+hHow==
-X-Gm-Gg: AY/fxX6bVFpkB4d+6/YpU0T0qwBd6qp/5IB/pEUsoLn8ClSjU+Mz33rv4tXQ7JJHlCb
-	qxIUrwL5ArTqoW4iUvgk4n6VQr908T3/6yWcPZ4bZw4OV/mUMXGnIZ09Gabgq66fw/OivwTBNFW
-	umDW05il0Y2+W/c0JMfoW9/5tNke/KpUtPzpcl118Fen9uMUnE/An0H7mawWt/7DMFdsbtQV6Rh
-	Lu5upYvSsCRKFz7DpZvnnClpPIh7e3v4ESjjofjFXDLvdHZQkLj6VsX2JTS2NMvhY3/sITWi49Q
-	ANhcKNtroc0OXPOrzA094Y1jWOvYdRzDVvlcdYQpzGn6lWOuZzLG4ScmjS+yS+QPy2nDwk/lnCl
-	J+/BM+AlN5llQ/uCb6OjFEvnWwwXbjz9troRskUGN9jpr3dSjAs2f9Hh6a2LVNEDPqMer0P8Osk
-	X/7zgqb6h+eNwoE5s/Mhqnlxq04o6uXb6znyvCQ5EfqsXqFjdkTvJb
-X-Google-Smtp-Source: AGHT+IGDmQFJXpTex84Sjvl3OcjyzaSsuGGpBNcSV45EAoewFsb1Yr42jHw1dToXppS6Ot5xXmfiDQ==
-X-Received: by 2002:adf:f70b:0:b0:432:5c43:64 with SMTP id ffacd0b85a97d-4325c4302c7mr23626302f8f.41.1766962206674;
-        Sun, 28 Dec 2025 14:50:06 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324eab33f5sm59078509f8f.41.2025.12.28.14.50.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Dec 2025 14:50:06 -0800 (PST)
-Date: Sun, 28 Dec 2025 22:50:04 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Jonathan Cameron <jonathan.cameron@huawei.com>, Yury Norov
- <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, Geert Uytterhoeven
- <geert+renesas@glider.be>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Crt Mori <cmo@melexis.com>, Richard Genoud
- <richard.genoud@bootlin.com>, Luo Jie <quic_luoj@quicinc.com>, Peter
- Zijlstra <peterz@infradead.org>, Jakub Kicinski <kuba@kernel.org>,
- netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Mika
- Westerberg <mika.westerberg@linux.intel.com>, Andreas Noever
- <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: Re: [PATCH v2 08/16] bitfield: Simplify __BF_FIELD_CHECK_REG()
-Message-ID: <20251228225004.69a6972f@pumpkin>
-In-Reply-To: <aVF8uQxjz9trZAHY@smile.fi.intel.com>
-References: <20251212193721.740055-1-david.laight.linux@gmail.com>
-	<20251212193721.740055-9-david.laight.linux@gmail.com>
-	<20251217102618.0000465f@huawei.com>
-	<20251217223155.52249236@pumpkin>
-	<aVF8uQxjz9trZAHY@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1766971020; c=relaxed/simple;
+	bh=GsqiO1dlmXSxSXkrGCNN9JoRLx3kBa5JhbuUvR+dx48=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TvHvno5gs/WGEn1d2C/J3QIJ57r5yAncAHifbOHiyumWaCwq1UO8jOdW65VMlqtQhyg3qxjdIrwuRcjl05+pip7dPrEohLknvI76ub9kSBhmn+vurrHcgKOqM2e1c0py+R//WNncRxshc+2txu6KhvZ+VAk5h1lp/0P81e4uRqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XWal3SkJ; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=76
+	qem/aKL/wEIk5T6rRZUUx66AXDU8O/Hm5H1rG7iN0=; b=XWal3SkJBPeao7bpHx
+	OWZyHQS200pAMzaAHTP7KI6h3PHh/aKJts79+c5aCpweOA3PB1u6shQvp9A45oNK
+	9OjgTn7+2WwIJDoKp2q8331uYy9xCKbbFm6X0OAA1J6qdyITrhYYFtPJAqVTyB6U
+	DlCxq0zW9QIbQsG2JPmFuZreM=
+Received: from ProDesk-480.. (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id PigvCgDXKfZp1lFp19WvJQ--.140S2;
+	Mon, 29 Dec 2025 09:16:33 +0800 (CST)
+From: Andy Yan <andyshrk@163.com>
+To: badhri@google.com
+Cc: gregkh@linuxfoundation.org,
+	heikki.krogerus@linux.intel.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Andy Yan <andyshrk@163.com>
+Subject: [PATCH] tcpm: Fix a typo
+Date: Mon, 29 Dec 2025 09:16:22 +0800
+Message-ID: <20251229011624.146700-1-andyshrk@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PigvCgDXKfZp1lFp19WvJQ--.140S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7JFyktF4fAry7tF47Cw47CFg_yoWDKFX_uF
+	y8Cr17Ww4F9FZxAw17CF9IvrWay3Z7W3WvgFnYqanxCFy2yr1Sgryqvr1kJwn5Ka9rJF98
+	WrWDJrWIkw1rWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sR_AwxtUUUUU==
+X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/xtbCxhGA3mlR1nEVJwAA3k
 
-On Sun, 28 Dec 2025 20:53:45 +0200
-Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+There should be a space between the two words: Responder and supports.
 
-> On Wed, Dec 17, 2025 at 10:31:55PM +0000, David Laight wrote:
-> > On Wed, 17 Dec 2025 10:26:18 +0000
-> > Jonathan Cameron <jonathan.cameron@huawei.com> wrote:  
-> > > On Fri, 12 Dec 2025 19:37:13 +0000
-> > > david.laight.linux@gmail.com wrote:  
-> 
-> ...
-> 
-> > > > +	BUILD_BUG_ON_MSG((mask) + 0U + 0UL + 0ULL >			\
-> > > > +			 ~0ULL >> (64 - 8 * sizeof (reg)),		\    
-> > > 
-> > > Trivial.  sizeof(reg) is much more comment syntax in kernel code.  
-> >                                      (common)
-> > 
-> > Hmm. sizeof is an operator not a function.
-> > Its argument is either a variable/expression or a bracketed type
-> > (I don't usually put variables in brackets).
-> > So 'sizeof(reg)' is nearly as bad as 'return(reg)'.  
-> 
-> Yet, it's a style used de facto in the Linux kernel. I am with Jonathan on this.
+Signed-off-by: Andy Yan <andyshrk@163.com>
+---
 
-Not hard to change :-)
+ drivers/usb/typec/tcpm/tcpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-There is a more interesting question as to whether that check is
-needed at all?
-It is only really the sanity checks (and the fact that __builtin_ffs() is
-sub-optimal) that stop the functions being 'reasonable' for non-constant
-values.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 4ca2746ce16b..6acb69a158fb 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1808,7 +1808,7 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt,
+ 	/*
+ 	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
+ 	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
+-	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
++	 * 6-19). If the Responder supports 12 or more SVID then the Discover
+ 	 * SVIDs Command Shall be executed multiple times until a Discover
+ 	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
+ 	 * the last part of the last VDO or with a VDO containing two SVIDs
+-- 
+2.43.0
 
-	David
+base-commit: 9448598b22c50c8a5bb77a9103e2d49f134c9578
+branch: master
+
 
