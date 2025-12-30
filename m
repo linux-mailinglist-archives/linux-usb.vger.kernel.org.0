@@ -1,104 +1,154 @@
-Return-Path: <linux-usb+bounces-31842-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31843-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9500CE9955
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 12:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90252CE9C2D
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 14:15:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 99E82301C97D
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 11:54:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 417E0301EFB3
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 13:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BED82E9EBB;
-	Tue, 30 Dec 2025 11:54:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O6HUWEhO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF086221DAC;
+	Tue, 30 Dec 2025 13:15:19 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A5F1F3BA4
-	for <linux-usb@vger.kernel.org>; Tue, 30 Dec 2025 11:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2842D2AEE4;
+	Tue, 30 Dec 2025 13:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767095697; cv=none; b=KYhIOShkzrx4IsaeSiAmL/FLKCLtXBN5kz+Vq/ksRaUWNHL9sPRcXyXBYRJbbi0WcaakvK0IalEXrTUjVYXhXDp7vNqVrRgrTKvDwSISlTwnU8oyWvgV82i7sJ5hjmDa4y5ApOGqQFpbItuccnGVD3DJ2eFgsEKHGoxOYRfxM6E=
+	t=1767100519; cv=none; b=G54+4kaGhTvZLUsIUxbZwz55UlJAYAYsR3m/h7hA2TDZNcwxPTQ9VLV3ef1e3jCSF8xDrJjWAcvD0LzXtDEAO54W64arQzLGrztmdNb0jq4/UebiCBcFNGmJwnOLamBi17wr8tEFCCSU06hp4oHIJ84aZuh+0WsY5YkYrK4jK5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767095697; c=relaxed/simple;
-	bh=SRcuPUu3svl0PB7Yp62kpOLtVntaRxux1aVOwLi9OwU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OBJ1aCPrYN+K9oa3mtLDjRKCqH63ufZkZBf2O30mMjEgRn6dSr5+IBF5oVaa43YoyzSUWzk5mpEHFGkbSP3nWgmuUEEburyTKbIE0hu6K1yoEbd96CQD8RLvLqfpcYIbuYHJLEc+h01KXTELRssqAx4zASu5L6xQcyakbpkw81M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O6HUWEhO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99F2FC4CEFB
-	for <linux-usb@vger.kernel.org>; Tue, 30 Dec 2025 11:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767095696;
-	bh=SRcuPUu3svl0PB7Yp62kpOLtVntaRxux1aVOwLi9OwU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=O6HUWEhOl0BJUYCOUoIzJWj+/ydBBK4RhFdq/x2uof3NivbfZJPNF5IoCiHNJnPJA
-	 /wjBGNW9dCO5qZg3zt4kgSKZVdBsddu7Fuyj0355V7RBwL7ZBFVGJbh6cPSgMd+eyl
-	 vwt2eJy4d/dFdcUzEWHFU6L1zoEVj7A84Tb2ncZAkxZq6MWZnDb1XaNDjrNko0PG2M
-	 yi1Km6t4aHBvdAHkR2dT/pSz0yf/fxmlYC6vmsIqoqxrM+y0obJU8CEdqUz7YpuQ6e
-	 MN3WHtvOGc9DoJyEQ33ZuEpcSAeyNStL6MZfn9qInE0mzyBP44RfgA/8LG6gsoS0JB
-	 9LTFc3gSyBXFA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 927A6C41614; Tue, 30 Dec 2025 11:54:56 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220904] [BUG] ucsi_acpi: USB 3.0 SuperSpeed not negotiated on
- USB-C hot-plug
-Date: Tue, 30 Dec 2025 11:54:56 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: heikki.krogerus@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220904-208809-IzT64v9VS0@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220904-208809@https.bugzilla.kernel.org/>
-References: <bug-220904-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1767100519; c=relaxed/simple;
+	bh=pkIc6LzLszAxCZ0DbsZw7IMl29WtKbww7eFuUTQsLPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cprdm7pJz7/NNeyvrJ8PYaYuy9YNnFcoKyV70+ziArkp3lXVqAdp8UrcH+VmTnIDsSmI8clpjgTM5theqaSzyL2ILJmcrYHiGXIsh/rjP6Yea8IUsAAilDoSGlLEmzsYWWDZ/t5oILiZmnryaBsAA2ySo/OeSWpvz3n6MH/gMb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from duge-virtual-machine (unknown [183.192.221.253])
+	by APP-05 (Coremail) with SMTP id zQCowADHWAw00FNpCvqIAg--.28864S2;
+	Tue, 30 Dec 2025 21:14:30 +0800 (CST)
+Date: Tue, 30 Dec 2025 21:14:28 +0800
+From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: conor@kernel.org, vkoul@kernel.org, gregkh@linuxfoundation.org,
+	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, neil.armstrong@linaro.org, krzk+dt@kernel.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/5] dt-bindings: soc: canaan: Add top syscon for Canaan
+ K230 SoC
+Message-ID: <aVPQNIhyfR/Da/gk@duge-virtual-machine>
+References: <20251230023725.15966-1-jiayu.riscv@isrc.iscas.ac.cn>
+ <20251230023725.15966-3-jiayu.riscv@isrc.iscas.ac.cn>
+ <20251230-jumping-visionary-coyote-c0be31@quoll>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251230-jumping-visionary-coyote-c0be31@quoll>
+X-CM-TRANSID:zQCowADHWAw00FNpCvqIAg--.28864S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr13ZF43Xry3Kr4xZF4UCFg_yoW8uFyUpF
+	y7GFWjkF4DXr4Fyr48try8WF9xG3yDKrZ8Zr1rtryDJ398uFW0yF4jgF93ur4UWFs7Zw42
+	vF45Zas7Cr1DJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
+	MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+	67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x07betCcUUUUU=
+X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220904
+On Tue, Dec 30, 2025 at 08:39:19AM +0100, Krzysztof Kozlowski wrote:
+> On Tue, Dec 30, 2025 at 10:37:21AM +0800, Jiayu Du wrote:
+> > The Canaan K230 SoC top system controller provides register access
+> > to configure related modules. It includes a USB2 PHY and eMMC/SDIO PHY.
+> > 
+> > Signed-off-by: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+...
+> > +
+> > +  "#size-cells":
+> > +    const: 1
+> > +
+> > +  usb-phy@70:
+> > +    $ref: schemas/phy/canaan,k230-usb-phy.yaml#
+> 
+> So that's why you did not have example there? But where did you explain
+> merging strategy/constraints/dependencies? How maintainers can now they
+> can apply this or not?
 
-Heikki Krogerus (heikki.krogerus@linux.intel.com) changed:
+Sorry, I will update in v2.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mika.westerberg@linux.intel
-                   |                            |.com
+> 
+> 
+> > +    unevaluatedProperties: false
+> > +
+> > +  usb-phy@90:
+> > +    $ref: schemas/phy/canaan,k230-usb-phy.yaml#
+> > +    unevaluatedProperties: false
+> 
+> Anyway, these are not really real children. Defining child per phy,
+> where each such phy is just few registers, is way too granular. Instead
+> define one phy with phy-cells=2.
+> 
+> You also MUST make this device - hisys - binding complete. If you do
+> not, then my review is: fold the children here, because you do not have
+> any other resources for the parent.
 
---- Comment #1 from Heikki Krogerus (heikki.krogerus@linux.intel.com) ---
-There are no logs here so I'm not completely sure what's going on, but the
-symptoms sound very similar to a know issue with USB4/TBT where the PCI dev=
-ices
-fail to enumerate after resume.
+This hisys memory area not only includes the usbphy registers,
+but also contains the registers of sd/mmc phy. Therefore, the
+hisys node is necessary and cannot be folded.
 
-This probable is not a Type-C issue, because this is UCSI system, and UCSI =
-is
-just a status interface. But you can always confirm that by disabling the u=
-csi
-drivers before reproducing the issues.
 
---=20
-You may reply to this email to add a comment.
+If what I said above is accepted by you, do I still need to
+merge the two usb phy nodes by defining one phy with phy-cells=2?
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> 
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    hi_sys_config: syscon@91585000 {
+> > +        compatible = "canaan,k230-hisys-cfg", "syscon", "simple-mfd";
+> > +        reg = <0x91585000 0x400>;
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> > +
+> > +        usbphy0: usb-phy@70 {
+> > +            compatible = "canaan,k230-usb-phy";
+> > +            reg = <0x70 0x1C>, <0xb0 0x8>;
+> > +            clocks = <&sysclk K230_HS_USB0_AHB_GATE>;
+> 
+> You never bothered to test your code. Community is not a testing
+> service. It's your job to TEST IT before sending.
+
+Sorry, I've realized this now. I'll test it.
+
+Best regards,
+jiayu
+
+>
+> Best regards,
+> Krzysztof
+> 
+
 
