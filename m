@@ -1,171 +1,140 @@
-Return-Path: <linux-usb+bounces-31844-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31845-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5051CE9D84
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 15:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D080DCE9F47
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 15:41:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 35EDD3031A2A
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 14:00:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C308D302629F
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 14:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA21C239E75;
-	Tue, 30 Dec 2025 14:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75CB2741AB;
+	Tue, 30 Dec 2025 14:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CDAYa7W8"
+	dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b="ON1iMg9B"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C653189BB0;
-	Tue, 30 Dec 2025 14:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A538B273D66
+	for <linux-usb@vger.kernel.org>; Tue, 30 Dec 2025 14:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767103233; cv=none; b=txODIi7zkIddP+6kKN+07TcsVdMK2GJK5HPapVt7lRKAcc9UVB5Oxg/0+ibDBF86p1FOhq228HXbbR4kvQZ5OtnJw9iflGMBReBEEGB0ogxYUyt61dCeoffOunvD154o5XHyiWrNZouOQ6MmOcq5KhIDLaJXsC+lGwYpRQCxY0A=
+	t=1767105638; cv=none; b=o87eO6yerh+o2fd8C+BFTEJr/nsTPdnn65OjWaVCk66ALVL/Z27Wj3cEtpNwLVd4+DmlC/zg38GLi7l2s/MA2nM++MLElyTSeseH7vSZoZ9LPzPDO0IWUeoeOKH8p+2cxJmvoZR7RPhnhgsHIkmoYN73v7EuWp8uBHotMXAW4Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767103233; c=relaxed/simple;
-	bh=qszXpoahE4ALvto425hqG2uUu1+aPT/ZbY4aF26L4E4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k9kAnYs7vHsoMBqB2HRmS3JcaNNHClSeNUMqjK7A18rTX/n2UTOvLSWlSrKaorNTf7qapcpHTjGq73XhsVvioNUty/HymzM4gobp3JkHJekWRKLZiLaDSSiIutdSypBEmrm482zTtqKgx1TIIW9UPgnKDsYSxhQpr8LJJTviGYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CDAYa7W8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F462C4CEFB;
-	Tue, 30 Dec 2025 14:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767103231;
-	bh=qszXpoahE4ALvto425hqG2uUu1+aPT/ZbY4aF26L4E4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CDAYa7W8rTgPiF0BzqeFhpS2ssZTvHQOcKPH54L8AhCoiHE0qkVRLvbS5OAoaRSS0
-	 YrpMIOAgvP7NYo/VfBb67LEStItwiUaGtR1g8aZI/rMFH9Y6kYzZ3g6HQkx4Ou1fH+
-	 s1LUnf/M02rU+nSe/LY8Y2hdUELMzCFzSz1UvXzzoMXdoVLZr+8EuMXSshKW0FdRuX
-	 t8nM35JGkKfPVY9kcjhegXzTr66gMYD0vsXiU2aGyiZxyk7DCQsD6U977yS98KS846
-	 3hGiDv5ibjzOMrEmENg1YLOHc+ZAjoSV2k3mgEEq3qSgZ7uFEGIIPIlS9CRILyvTYq
-	 Qqh1eBsicJZFA==
-Message-ID: <572407e8-bac7-4277-bfbd-ed42327b0ff4@kernel.org>
-Date: Tue, 30 Dec 2025 15:00:26 +0100
+	s=arc-20240116; t=1767105638; c=relaxed/simple;
+	bh=IdtnV5Di0vox3pEoEtaNIt1U9telRL/FRWwLH7rRPBc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=WBWXE5IlqXqaviQwLHaTfhbCFLOjCNbD8/pPaKOYCLtff7cjyo3WsymT8b82hAOQ2ZHDHkcgUsidw5N4hlDfIyPNZ7ToCm7zn7p1TXkuCfZ2BV+qgQQJtC7YlCTnr713pWomLHIQUauLMiJaMolT1PCzdVCxpyl+xaLj4qVxEVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com; spf=pass smtp.mailfrom=cknow-tech.com; dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b=ON1iMg9B; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow-tech.com
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] dt-bindings: soc: canaan: Add top syscon for Canaan
- K230 SoC
-To: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-Cc: conor@kernel.org, vkoul@kernel.org, gregkh@linuxfoundation.org,
- pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
- neil.armstrong@linaro.org, krzk+dt@kernel.org,
- linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org
-References: <20251230023725.15966-1-jiayu.riscv@isrc.iscas.ac.cn>
- <20251230023725.15966-3-jiayu.riscv@isrc.iscas.ac.cn>
- <20251230-jumping-visionary-coyote-c0be31@quoll>
- <aVPQNIhyfR/Da/gk@duge-virtual-machine>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <aVPQNIhyfR/Da/gk@duge-virtual-machine>
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow-tech.com;
+	s=key1; t=1767105632;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ziEtXLcpFBCjfzgTqfbUWrGVwPN/l0EtRe61oQ0DM/A=;
+	b=ON1iMg9Bde60GDrSW9qBWkAlnQa98vY6cncy+4tqwyL/LWvtXCV6Bw//W/q2W6z30znFrd
+	iLuTO94uUBQBaKNtxIez5lr/Ds0XwLm/7R+JOFi7+isjI5Okbx5Zgo2C1jvXaLaFe0VfDT
+	PAPMCiMYW1GCCYtojD6Z5P8fBndBcSEA2jdDeRf5JbKGYoA7Cq2Zep3oNSzPYS3NTLoCIq
+	G+8tdWSPAexSdcS1D655pgtr+hbkstqh+mdZW4kX10J8EjfBhLPx/qsIpQ8wwi+bRcXdtX
+	Ale7LYAd9602sceNKzCqZJF4dmkzphU/xR7hAOxuDvlCT9BbnF0lQu4TBXI4+g==
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Tue, 30 Dec 2025 15:40:27 +0100
+Message-Id: <DFBMNYF0U5PK.24YOAUZFZ0ESB@cknow-tech.com>
+Cc: "Huacai Chen" <chenhuacai@kernel.org>, "Alan Stern"
+ <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>, "Shengwen Xiao"
+ <atzlinux@sina.com>, <linux-rockchip@lists.infradead.org>
+Subject: Re: [PATCH] USB: OHCI/UHCI: Add soft dependencies on ehci_hcd
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Diederik de Haas" <diederik@cknow-tech.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Huacai Chen"
+ <chenhuacai@loongson.cn>
+References: <20251230080014.3934590-1-chenhuacai@loongson.cn>
+ <2025123049-cadillac-straggler-d2fb@gregkh>
+In-Reply-To: <2025123049-cadillac-straggler-d2fb@gregkh>
+X-Migadu-Flow: FLOW_OUT
 
-On 30/12/2025 14:14, Jiayu Du wrote:
-> On Tue, Dec 30, 2025 at 08:39:19AM +0100, Krzysztof Kozlowski wrote:
->> On Tue, Dec 30, 2025 at 10:37:21AM +0800, Jiayu Du wrote:
->>> The Canaan K230 SoC top system controller provides register access
->>> to configure related modules. It includes a USB2 PHY and eMMC/SDIO PHY.
->>>
->>> Signed-off-by: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-> ...
->>> +
->>> +  "#size-cells":
->>> +    const: 1
->>> +
->>> +  usb-phy@70:
->>> +    $ref: schemas/phy/canaan,k230-usb-phy.yaml#
->>
->> So that's why you did not have example there? But where did you explain
->> merging strategy/constraints/dependencies? How maintainers can now they
->> can apply this or not?
-> 
-> Sorry, I will update in v2.
-> 
->>
->>
->>> +    unevaluatedProperties: false
->>> +
->>> +  usb-phy@90:
->>> +    $ref: schemas/phy/canaan,k230-usb-phy.yaml#
->>> +    unevaluatedProperties: false
->>
->> Anyway, these are not really real children. Defining child per phy,
->> where each such phy is just few registers, is way too granular. Instead
->> define one phy with phy-cells=2.
+On Tue Dec 30, 2025 at 9:15 AM CET, Greg Kroah-Hartman wrote:
+> On Tue, Dec 30, 2025 at 04:00:14PM +0800, Huacai Chen wrote:
+>> Commit 9beeee6584b9aa4f ("USB: EHCI: log a warning if ehci-hcd is not
+>> loaded first") said that ehci-hcd should be loaded before ohci-hcd and
+>> uhci-hcd. However, commit 05c92da0c52494ca ("usb: ohci/uhci - add soft
+>> dependencies on ehci_pci") only makes ohci-pci/uhci-pci depend on ehci-
+>> pci, which is not enough and we may still see the warnings in boot log.
+>> So fix it by also making ohci-hcd/uhci-hcd depend on ehci-hcd.
+>>=20
+>> Cc: stable@vger.kernel.org
+>> Reported-by: Shengwen Xiao <atzlinux@sina.com>
+>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>> ---
+>>  drivers/usb/host/ohci-hcd.c | 1 +
+>>  drivers/usb/host/uhci-hcd.c | 1 +
+>>  2 files changed, 2 insertions(+)
+>>=20
+>> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+>> index 9c7f3008646e..549c965b7fbe 100644
+>> --- a/drivers/usb/host/ohci-hcd.c
+>> +++ b/drivers/usb/host/ohci-hcd.c
+>> @@ -1355,4 +1355,5 @@ static void __exit ohci_hcd_mod_exit(void)
+>>  	clear_bit(USB_OHCI_LOADED, &usb_hcds_loaded);
+>>  }
+>>  module_exit(ohci_hcd_mod_exit);
+>> +MODULE_SOFTDEP("pre: ehci_hcd");
+>
+> Ick, no, this way lies madness.  I hate the "softdep" stuff, it's
+> usually a sign that something is wrong elsewhere.
+>
+> And don't add this _just_ to fix a warning message in a boot log, if you
+> don't like that message, then build the module into your kernel, right?
+>
+> And I really should just go revert 05c92da0c524 ("usb: ohci/uhci - add
+> soft dependencies on ehci_pci") as well, that feels wrong too.
 
-Just a note: phy-cells=1, I made mistake before.
+FWIW, I've been seeing this warning on several of my Rockchip based
+devices as well. I thought I had already mentioned that on some ML, but
+couldn't find it on lore.k.o ... turns out I reported it on my 'own' ML:
+https://lists.sr.ht/~diederik/pine64-discuss/%3CDD65LB64HB7K.15ZYRTB98X8G2@=
+cknow.org%3E
+(and likely on #linux-rockchip IRC channel)
 
->>
->> You also MUST make this device - hisys - binding complete. If you do
->> not, then my review is: fold the children here, because you do not have
->> any other resources for the parent.
-> 
-> This hisys memory area not only includes the usbphy registers,
-> but also contains the registers of sd/mmc phy. Therefore, the
-> hisys node is necessary and cannot be folded.
+Most of it is just my research notes, but the last post also had this:
 
-Can be. There is absolutely nothing stopping it.
+```
+I checked the last 20 boots on my devices to see that warning (or not).
+Device				Number of times that warning showed up
+Rock64 (rk3328)			16x
+RockPro64 (rk3399)		11x
+Quartz64 Model A (rk3566)	 7x
+Quartz64 Model B (rk3566)	14x
+PineTab2 (rk3566)		17x
+NanoPi R5S (rk3568)		13x
+Rock 5B (rk3588)		12x
+```
 
-Anyway, define all nodes.
+While I generally don't like seeing warning messages, it often also
+resulted in USB2 ports not working. Maybe even every time, but I only
+notice it when I actually tried to use one of the USB2 ports.
 
-> 
-> 
-> If what I said above is accepted by you, do I still need to
-> merge the two usb phy nodes by defining one phy with phy-cells=2?
+The first post mentioned what I 'assume' to be the problem:
+```
+CONFIG_USB_XHCI_HCD=3Dm
+CONFIG_USB_EHCI_HCD=3Dm
+CONFIG_USB_OHCI_HCD=3Dm
+```
 
-You should read your datasheet, not exactly rely on me guessing. In
-current form of the binding, you must fold the child into the parent.
+So I guess USB_EHCI_HCD doesn't work with '=3Dm'.
 
-Best regards,
-Krzysztof
+Cheers,
+  Diederik
 
