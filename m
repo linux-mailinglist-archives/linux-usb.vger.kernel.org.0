@@ -1,143 +1,412 @@
-Return-Path: <linux-usb+bounces-31836-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31837-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89C63CE9511
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 11:13:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80C99CE9520
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 11:14:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 07CFC300386C
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 10:13:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7EE4E302C8F4
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Dec 2025 10:13:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7C32C21EC;
-	Tue, 30 Dec 2025 10:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33E82DCF43;
+	Tue, 30 Dec 2025 10:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NIuSXd9t"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hmvDQjME"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B588258CE7
-	for <linux-usb@vger.kernel.org>; Tue, 30 Dec 2025 10:13:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5892C2D7DDD
+	for <linux-usb@vger.kernel.org>; Tue, 30 Dec 2025 10:13:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767089614; cv=none; b=BjjuWHFCGj+THFeicxFuup/itm8FmxiQG5kaGmu1ycF9PBOOd2tTV0YEaJmYNVyLSUTteBzotW+Qnw4WuEYSwx2YwbXDWg50X84/nD0i8OWAX6J/PpnPq5QNmWzS5w6+Vn4dQjXq/jUuZYJIbi2hx+99DUW7N/f8Y2uaR+1VwHA=
+	t=1767089616; cv=none; b=tFgo3SBPVPKaL8mTsudiDQ7JUmBeJGPTqd6S4Rd44zHYEhwmiM+rAfYfYcLtTOgS7aRxAbe/muZVXUOPH3AMTC1A/NkYKXzY2oPii/2kmPzgD2a+pjeFh5hIlrN2XUQTr96aNorEPOUUKEC6ZUXb3x8CQGR4KmxMnOVijSGOntI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767089614; c=relaxed/simple;
-	bh=GqjS8NhsN2P/EGV88kKMv9onh82daaNIe8QViAbDeFA=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=sMU4Z9fYQgb55y3cdtQj6vMKqEvXVAmRxqAWEEvewgeVXnObWQ7O5Amns7kqL8ZZnA7UzLACV0nm2RBHTWx6qjuVPOgUQGPV66FEZKGNaSUcFfYAYo/TcZlTxUge4u1+TJvZV6olzwXHG30BO80hbebFmjud9j9FNcoT1hRiqz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NIuSXd9t; arc=none smtp.client-ip=209.85.210.201
+	s=arc-20240116; t=1767089616; c=relaxed/simple;
+	bh=fjzdqqF7M1DPdLIRQxhjMHlueWC39nU6SrTa3Xb0wHw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=mUSb/XZA0ARVqQBBr36qYyoPJeCuWKccetJwZ+fUVvGgKviLohmkyE/ipIkkiMq28yxn5QO9D/qK4uoaMC4QCzjaBLkLK83l7i2bPaJalJt236udW/S4uAZ1/r5nquyygCthvfszckc8e979UBt1W2rePN2FCJpVyRdY2ARzPjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hmvDQjME; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7b9090d9f2eso18447994b3a.0
-        for <linux-usb@vger.kernel.org>; Tue, 30 Dec 2025 02:13:32 -0800 (PST)
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7d481452732so18726878b3a.1
+        for <linux-usb@vger.kernel.org>; Tue, 30 Dec 2025 02:13:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767089611; x=1767694411; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=urNf4tibA/ClGGMLFCybJdJKvxoBLt6em6cEb4hXuC0=;
-        b=NIuSXd9tc+3zTHD2560j/qvv8P6tFIbZGLarC1LufUG0MJHepvtRBF8NJDVk+R4AR0
-         oOb6ddUUy356fKR+g5L88Qu6vYtWRg9pe0+LmgVKBxeWDq3UNhYcYfB5uUfld28Lc+m3
-         bPhgRywkfqzba+a5Ij3iAo639C4DoBpFaRIlYoHp2XmvJ9WELy9LgmpLizAqP+zpNbD7
-         13OqT9faEdR1O+7zavgcOAgKd4NX7YpBcX/AVLzz+fRbhOY7/4nR6O+j8qqAj9ikubWb
-         yhpfrVaO4q6MydEhu4H5ARAFAAjVkLeLg2C0YPsoQithQpF3dBHlnq/AAu/BSUPFKraO
-         TLag==
+        d=google.com; s=20230601; t=1767089613; x=1767694413; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kk89meB0ud2XOdFPAu8jbVTDVuurvx3TMcS0DOeOUAg=;
+        b=hmvDQjMEkbnZTeC6rYqn8OfIULc96YIaXU6yeUq9zacmrzzuelw4IJFaG4yumzsM2f
+         nAQ/A9BnosPWORmKOmbY2cYmjmT3d5ZYrcsV6MhBWLpAjnLw/Bp8kbtQMxWMHF5dJbCR
+         GzgITSRDMrN/AUO20jvtwjy++2oHtKck4VrwldR+YFR0TGvTsCYK323wGYIDAXTlKiQZ
+         Bz+yo6ZYLE5YZ7/mdtJEu4foTjSbdEKhmbpU97/p8dsDwsMhJ8mk4HKK0x+tHX4ubaS0
+         3VaAMsCtxGT3BG4ilxuKTBEIq+/Da46FwuvPY1bFp1e/nD+PRSgzZpJFJvWHzX8GopK8
+         p+aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767089611; x=1767694411;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=urNf4tibA/ClGGMLFCybJdJKvxoBLt6em6cEb4hXuC0=;
-        b=BKt/NZeomSfBleBhxzVedpTII+UBmgyamdw7T1FMuaFNnjsDpGGcKcwBZyQSx8/8Z7
-         yTsbd3B1hVF5DpynA+cm9LYji04B0CgO0i6Ri6j1kmsSJvQm62/yCXXxHPiCxyITcwl6
-         pw+SuCl6Armidwm9Df9Leo7zAhA4Hzb9R0mR2k6K2sc1kb0aPJhbxwNbxyOZZlixvXLu
-         AHOrpv19JakxycVCIwKBSZKfloIe6F1p2VhWoRF716Dg4rDqFkxnV2cEbf6ipk/vOOFL
-         VZUIc9jmM1JgI5a1va2T6O1KWzlQYY3Ia8JgqOD6yL/Eh86JHW87eNIwN4v1rTvC/52X
-         Qs3g==
-X-Gm-Message-State: AOJu0YyI3hwlFlr99Mc+geOKdEuPI3fxRRVUU0twU3C/0pQLUISBA/7D
-	ICKbgUFM4EoPX2isjkhr8D64Rx5xt1FEb0Lm3vczy+TXtoYTGGTyN0kcC5XpvXScBLn+az0dskD
-	xJly8TQ==
-X-Google-Smtp-Source: AGHT+IFuEt4dfp5NeDiOEVezMAfxVhj7x2iY5wCwSqw2kjLdIRp4jrbxbujwgbHzxeCxyqprmF8jKrEyDHQ=
-X-Received: from pfdr5.prod.google.com ([2002:aa7:8b85:0:b0:77e:32f7:68cd])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4392:b0:7e8:4398:b351
- with SMTP id d2e1a72fcca58-7ff66079db6mr25933079b3a.36.1767089611501; Tue, 30
- Dec 2025 02:13:31 -0800 (PST)
-Date: Tue, 30 Dec 2025 18:13:13 +0800
+        d=1e100.net; s=20230601; t=1767089613; x=1767694413;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kk89meB0ud2XOdFPAu8jbVTDVuurvx3TMcS0DOeOUAg=;
+        b=P3oiYvhwkMF06uzLmxaQmW8vRLnKUq2Z+RnpUJju+pirfIH6/zZPfovvc7MqzJiVcq
+         1K8TUkUXS6TvARxLulojZH/Rc4ud/n6vu2E6l4dzKskaUGiQjJ52QpuKB7MJ9AgwTi5N
+         urRp/UZlcH/xcK4J0T62tNLyw6wf4fhdq+ubeFpR3uxOv8hTU/7y/Y3IPsmeYsE+IZb8
+         dDiVvNkcLudg125OltuwTapBDufDzYmaqgfh1iiojArpzY+tAeElMtIMtgeMmXeN8owa
+         Xz2nSEnJ0734skMSRxpltT1tv6JD1b5Dql0HwlJfLLu01fLzG/r+NX8LMLqo8K8oiTQw
+         Pq1g==
+X-Gm-Message-State: AOJu0Yy0N9MRj/3QSXhUqPS57H7y1zsWCmzBv7W8WdD9SDhGLxa3V8cM
+	+++SjxCgtz+ZNPYTqGVdT2Gxb2wFnkkxckVcZlzwBiLyMlRmRiL1hkzRNuXy1LF3YGoccpFlnAT
+	qk+PlHQ==
+X-Google-Smtp-Source: AGHT+IGWHxYFnuval1C8ZpHUVPo7+TVbRjkOJoynJUNTc5/AEHtkyMwclyiWTmgCt0O/hlFsjOwnnYlA/EE=
+X-Received: from pgtl20.prod.google.com ([2002:a65:6814:0:b0:c1d:27c6:5305])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:748e:b0:364:1318:caaf
+ with SMTP id adf61e73a8af0-376aa4eaa1emr33427908637.58.1767089613485; Tue, 30
+ Dec 2025 02:13:33 -0800 (PST)
+Date: Tue, 30 Dec 2025 18:13:14 +0800
+In-Reply-To: <20251230-ncm-refactor-v1-0-793e347bc7a7@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIALmlU2kC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDI2MD3bzkXN2i1LTE5JL8Il1LC4s0y0SzFBNTS0MloJYCoExmBdi46Nj aWgDNx154XgAAAA==
-X-Change-Id: 20251230-ncm-refactor-988f9a6d4591
+References: <20251230-ncm-refactor-v1-0-793e347bc7a7@google.com>
 X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767089609; l=2412;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767089609; l=11544;
  i=khtsai@google.com; s=20250916; h=from:subject:message-id;
- bh=GqjS8NhsN2P/EGV88kKMv9onh82daaNIe8QViAbDeFA=; b=AbW/6gIYS6dUtdNHdwNzGMmYpR74iMN1U1MWdqIoFUDMP2XXl613rVEf5hkhz63aTJlDWjq2g
- e2qMWFM8l1CDuoJPYJBmkFCo6AHWUybbL8cUoiRbdfXOVPwkCfzNDCO
+ bh=fjzdqqF7M1DPdLIRQxhjMHlueWC39nU6SrTa3Xb0wHw=; b=neR3LoFKR7LqnFMAHLQ4VRxKimfCI0cHRZHWexdzaxnvTx4RZlY7AJGbdzAXf8OmIuspQDwhe
+ twmSyeAAdEuBfpDY0rMX3E6KptpDLL5cpweWe1OZA8/yWY4QLClwX7j
 X-Mailer: b4 0.14.2
-Message-ID: <20251230-ncm-refactor-v1-0-793e347bc7a7@google.com>
-Subject: [PATCH 0/3] usb: gadget: Refactor NCM net_device lifecycle
+Message-ID: <20251230-ncm-refactor-v1-1-793e347bc7a7@google.com>
+Subject: [PATCH 1/3] usb: gadget: u_ether: add gether_opts for config caching
 From: Kuen-Han Tsai <khtsai@google.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Felipe Balbi <balbi@ti.com>, 
 	Prashanth K <prashanth.k@oss.qualcomm.com>, Kyungmin Park <kyungmin.park@samsung.com>, 
 	Andrzej Pietrasiewicz <andrzej.p@samsung.com>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kuen-Han Tsai <khtsai@google.com>, stable@kernel.org
+	Kuen-Han Tsai <khtsai@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Refactor the network device lifecycle management within the USB gadget
-NCM function and the underlying u_ether library.
+Currently, the net_device is allocated when the function instance is
+created (e.g., in ncm_alloc_inst()). While this allows userspace to
+configure the device early, it decouples the net_device lifecycle from
+the actual USB connection state (bind/unbind). The goal is to defer
+net_device creation to the bind callback to properly align the lifecycle
+with its parent gadget device.
 
-The primary goal is to align the net_device lifetime with the USB
-function's bind/unbind events rather than the function instance 
-allocation/deallocation. This resolves issues with dangling sysfs 
-symbolic links and potential use-after-free scenarios when the gadget is
-disconnected, as the net_device could previously outlive its parent
-gadget device.
+However, deferring net_device allocation would prevent userspace from
+configuring parameters (like interface name or MAC address) before the
+net_device exists.
 
-Other gadget function drivers using u_ether (e.g., ECM, EEM, RNDIS) may
-have similar net_device lifecycle mismatches. While not addressed in 
-this series, they could potentially benefit from a similar refactoring
-in the future.
+Introduce a new structure, struct gether_opts, associated with the
+usb_function_instance, to cache settings independently of the
+net_device. These settings include the interface name pattern, MAC
+addresses (device and host), queue multiplier, and address assignment
+type.
 
-The series is structured as follows:
+New helper functions are added:
+- gether_setup_opts_default(): Initializes struct gether_opts with
+  defaults, including random MAC addresses.
+- gether_apply_opts(): Applies the cached options from a struct
+  gether_opts to a valid net_device.
 
-1. u_ether: add gether_opts for config caching: Introduce a new struct
-gether_opts to cache network settings (MAC addresses, ifname, etc.)
-from configfs independently of the net_device. This allows deferring
-net_device creation to the bind phase without losing pre-configuration
-capabilities.
+To expose these options to userspace, new configfs macros
+(USB_ETHER_OPTS_ITEM and USB_ETHER_OPTS_ATTR_*) are defined in
+u_ether_configfs.h. These attributes are part of the function
+instance's configfs group.
 
-2. u_ether: Add auto-cleanup helper for freeing net_device: Introduce 
-gether_unregister_free_netdev() and DEFINE_FREE to support auto-cleanup
-for net_device within the bind path, preparing for net_device allocation
-changes in f_ncm.
-
-3. f_ncm: align net_device lifecycle with bind/unbind: The main patch
-that moves net_device allocation/registration into ncm_bind() and
-unregistration/freeing into ncm_unbind(). It utilizes the gether_opts
-for applying cached settings and the new cleanup helper.
+This refactoring is a preparatory step. It allows the subsequent patch
+to safely move the net_device allocation from the instance creation
+phase to the bind phase without losing the ability to pre-configure
+the interface via configfs.
 
 Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 ---
-Kuen-Han Tsai (3):
-      usb: gadget: u_ether: add gether_opts for config caching
-      usb: gadget: u_ether: Add auto-cleanup helper for freeing net_device
-      usb: gadget: f_ncm: align net_device lifecycle with bind/unbind
-
- drivers/usb/gadget/function/f_ncm.c            | 128 +++++++++---------
- drivers/usb/gadget/function/u_ether.c          |  45 +++++++
- drivers/usb/gadget/function/u_ether.h          |  30 +++++
+ drivers/usb/gadget/function/u_ether.c          |  30 +++++
+ drivers/usb/gadget/function/u_ether.h          |  28 ++++
  drivers/usb/gadget/function/u_ether_configfs.h | 176 +++++++++++++++++++++++++
- drivers/usb/gadget/function/u_ncm.h            |   4 +-
- 5 files changed, 317 insertions(+), 66 deletions(-)
----
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20251230-ncm-refactor-988f9a6d4591
+ 3 files changed, 234 insertions(+)
 
-Best regards,
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index f58590bf5e02f5f785cf5bdc287f5ce9c95e47c3..745ed2c212e3a706b0e6725731b42d34428f8b22 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -1039,6 +1039,36 @@ int gether_set_ifname(struct net_device *net, const char *name, int len)
+ }
+ EXPORT_SYMBOL_GPL(gether_set_ifname);
+ 
++void gether_setup_opts_default(struct gether_opts *opts, const char *name)
++{
++	opts->qmult = QMULT_DEFAULT;
++	snprintf(opts->name, sizeof(opts->name), "%s%%d", name);
++	eth_random_addr(opts->dev_mac);
++	opts->addr_assign_type = NET_ADDR_RANDOM;
++	eth_random_addr(opts->host_mac);
++}
++EXPORT_SYMBOL_GPL(gether_setup_opts_default);
++
++void gether_apply_opts(struct net_device *net, struct gether_opts *opts)
++{
++	struct eth_dev *dev = netdev_priv(net);
++
++	dev->qmult = opts->qmult;
++
++	if (opts->ifname_set) {
++		strscpy(net->name, opts->name, sizeof(net->name));
++		dev->ifname_set = true;
++	}
++
++	memcpy(dev->host_mac, opts->host_mac, sizeof(dev->host_mac));
++
++	if (opts->addr_assign_type == NET_ADDR_SET) {
++		memcpy(dev->dev_mac, opts->dev_mac, sizeof(dev->dev_mac));
++		net->addr_assign_type = opts->addr_assign_type;
++	}
++}
++EXPORT_SYMBOL_GPL(gether_apply_opts);
++
+ void gether_suspend(struct gether *link)
+ {
+ 	struct eth_dev *dev = link->ioport;
+diff --git a/drivers/usb/gadget/function/u_ether.h b/drivers/usb/gadget/function/u_ether.h
+index 34be220cef77c49262b2098771c211326d038407..63a0240df4d749bd91c9dd6743406075093a3168 100644
+--- a/drivers/usb/gadget/function/u_ether.h
++++ b/drivers/usb/gadget/function/u_ether.h
+@@ -38,6 +38,31 @@
+ 
+ struct eth_dev;
+ 
++/**
++ * struct gether_opts - Options for Ethernet gadget function instances
++ * @name: Pattern for the network interface name (e.g., "usb%d").
++ *        Used to generate the net device name.
++ * @qmult: Queue length multiplier for high/super speed.
++ * @host_mac: The MAC address to be used by the host side.
++ * @dev_mac: The MAC address to be used by the device side.
++ * @ifname_set: True if the interface name pattern has been set by userspace.
++ * @addr_assign_type: The method used for assigning the device MAC address
++ *                    (e.g., NET_ADDR_RANDOM, NET_ADDR_SET).
++ *
++ * This structure caches network-related settings provided through configfs
++ * before the net_device is fully instantiated. This allows for early
++ * configuration while deferring net_device allocation until the function
++ * is bound.
++ */
++struct gether_opts {
++	char			name[IFNAMSIZ];
++	unsigned int		qmult;
++	u8			host_mac[ETH_ALEN];
++	u8			dev_mac[ETH_ALEN];
++	bool			ifname_set;
++	unsigned char		addr_assign_type;
++};
++
+ /*
+  * This represents the USB side of an "ethernet" link, managed by a USB
+  * function which provides control and (maybe) framing.  Two functions
+@@ -259,6 +284,9 @@ int gether_set_ifname(struct net_device *net, const char *name, int len);
+ 
+ void gether_cleanup(struct eth_dev *dev);
+ 
++void gether_setup_opts_default(struct gether_opts *opts, const char *name);
++void gether_apply_opts(struct net_device *net, struct gether_opts *opts);
++
+ void gether_suspend(struct gether *link);
+ void gether_resume(struct gether *link);
+ 
+diff --git a/drivers/usb/gadget/function/u_ether_configfs.h b/drivers/usb/gadget/function/u_ether_configfs.h
+index f558c3139ebe50d67b63a92cdc4bc0786998e23a..a3696797e074a79eafccfdf565b7af47485e4ce0 100644
+--- a/drivers/usb/gadget/function/u_ether_configfs.h
++++ b/drivers/usb/gadget/function/u_ether_configfs.h
+@@ -13,6 +13,12 @@
+ #ifndef __U_ETHER_CONFIGFS_H
+ #define __U_ETHER_CONFIGFS_H
+ 
++#include <linux/cleanup.h>
++#include <linux/if_ether.h>
++#include <linux/mutex.h>
++#include <linux/netdevice.h>
++#include <linux/rtnetlink.h>
++
+ #define USB_ETHERNET_CONFIGFS_ITEM(_f_)					\
+ 	static void _f_##_attr_release(struct config_item *item)	\
+ 	{								\
+@@ -197,4 +203,174 @@ out:									\
+ 									\
+ 	CONFIGFS_ATTR(_f_##_opts_, _n_)
+ 
++#define USB_ETHER_OPTS_ITEM(_f_)						\
++	static void _f_##_attr_release(struct config_item *item)		\
++	{									\
++		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
++										\
++		usb_put_function_instance(&opts->func_inst);			\
++	}									\
++										\
++	static struct configfs_item_operations _f_##_item_ops = {		\
++		.release	= _f_##_attr_release,				\
++	}
++
++#define USB_ETHER_OPTS_ATTR_DEV_ADDR(_f_)					\
++	static ssize_t _f_##_opts_dev_addr_show(struct config_item *item,	\
++						char *page)			\
++	{									\
++		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
++										\
++		guard(mutex)(&opts->lock);					\
++		return sysfs_emit(page, "%pM\n", opts->net_opts.dev_mac);	\
++	}									\
++										\
++	static ssize_t _f_##_opts_dev_addr_store(struct config_item *item,	\
++						 const char *page, size_t len)	\
++	{									\
++		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
++		u8 new_addr[ETH_ALEN];						\
++		const char *p = page;						\
++										\
++		guard(mutex)(&opts->lock);					\
++		if (opts->refcnt)						\
++			return -EBUSY;						\
++										\
++		for (int i = 0; i < ETH_ALEN; i++) {				\
++			unsigned char num;					\
++			if ((*p == '.') || (*p == ':'))				\
++				p++;						\
++			num = hex_to_bin(*p++) << 4;				\
++			num |= hex_to_bin(*p++);				\
++			new_addr[i] = num;					\
++		}								\
++		if (!is_valid_ether_addr(new_addr))				\
++			return -EINVAL;						\
++		memcpy(opts->net_opts.dev_mac, new_addr, ETH_ALEN);		\
++		opts->net_opts.addr_assign_type = NET_ADDR_SET;			\
++		return len;							\
++	}									\
++										\
++	CONFIGFS_ATTR(_f_##_opts_, dev_addr)
++
++#define USB_ETHER_OPTS_ATTR_HOST_ADDR(_f_)					\
++	static ssize_t _f_##_opts_host_addr_show(struct config_item *item,	\
++						 char *page)			\
++	{									\
++		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
++										\
++		guard(mutex)(&opts->lock);					\
++		return sysfs_emit(page, "%pM\n", opts->net_opts.host_mac);	\
++	}									\
++										\
++	static ssize_t _f_##_opts_host_addr_store(struct config_item *item,	\
++						  const char *page, size_t len)	\
++	{									\
++		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
++		u8 new_addr[ETH_ALEN];						\
++		const char *p = page;						\
++										\
++		guard(mutex)(&opts->lock);					\
++		if (opts->refcnt)						\
++			return -EBUSY;						\
++										\
++		for (int i = 0; i < ETH_ALEN; i++) {				\
++			unsigned char num;					\
++			if ((*p == '.') || (*p == ':'))				\
++				p++;						\
++			num = hex_to_bin(*p++) << 4;				\
++			num |= hex_to_bin(*p++);				\
++			new_addr[i] = num;					\
++		}								\
++		if (!is_valid_ether_addr(new_addr))				\
++			return -EINVAL;						\
++		memcpy(opts->net_opts.host_mac, new_addr, ETH_ALEN);		\
++		return len;							\
++	}									\
++										\
++	CONFIGFS_ATTR(_f_##_opts_, host_addr)
++
++#define USB_ETHER_OPTS_ATTR_QMULT(_f_)						\
++	static ssize_t _f_##_opts_qmult_show(struct config_item *item,		\
++					     char *page)			\
++	{									\
++		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
++										\
++		guard(mutex)(&opts->lock);					\
++		return sysfs_emit(page, "%u\n", opts->net_opts.qmult);		\
++	}									\
++										\
++	static ssize_t _f_##_opts_qmult_store(struct config_item *item,		\
++					      const char *page, size_t len)	\
++	{									\
++		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
++		u32 val;							\
++		int ret;							\
++										\
++		guard(mutex)(&opts->lock);					\
++		if (opts->refcnt)						\
++			return -EBUSY;						\
++										\
++		ret = kstrtou32(page, 0, &val);					\
++		if (ret)							\
++			return ret;						\
++										\
++		opts->net_opts.qmult = val;					\
++		return len;							\
++	}									\
++										\
++	CONFIGFS_ATTR(_f_##_opts_, qmult)
++
++#define USB_ETHER_OPTS_ATTR_IFNAME(_f_)						\
++	static ssize_t _f_##_opts_ifname_show(struct config_item *item,		\
++					      char *page)			\
++	{									\
++		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
++		const char *name;						\
++										\
++		guard(mutex)(&opts->lock);					\
++		rtnl_lock();							\
++		if (opts->net_opts.ifname_set)					\
++			name = opts->net_opts.name;				\
++		else if (opts->net)						\
++			name = netdev_name(opts->net);				\
++		else								\
++			name = "(inactive net_device)";				\
++		rtnl_unlock();							\
++		return sysfs_emit(page, "%s\n", name);				\
++	}									\
++										\
++	static ssize_t _f_##_opts_ifname_store(struct config_item *item,	\
++					       const char *page, size_t len)	\
++	{									\
++		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
++		char tmp[IFNAMSIZ];						\
++		const char *p;							\
++		size_t c_len = len;						\
++										\
++		if (c_len > 0 && page[c_len - 1] == '\n')			\
++			c_len--;						\
++										\
++		if (c_len >= sizeof(tmp))					\
++			return -E2BIG;						\
++										\
++		strscpy(tmp, page, c_len + 1);					\
++		if (!dev_valid_name(tmp))					\
++			return -EINVAL;						\
++										\
++		/* Require exactly one %d */					\
++		p = strchr(tmp, '%');						\
++		if (!p || p[1] != 'd' || strchr(p + 2, '%'))			\
++			return -EINVAL;						\
++										\
++		guard(mutex)(&opts->lock);					\
++		if (opts->refcnt)						\
++			return -EBUSY;						\
++		strscpy(opts->net_opts.name, tmp, sizeof(opts->net_opts.name));	\
++		opts->net_opts.ifname_set = true;				\
++		return len;							\
++	}									\
++										\
++	CONFIGFS_ATTR(_f_##_opts_, ifname)
++
+ #endif /* __U_ETHER_CONFIGFS_H */
+
 -- 
-Kuen-Han Tsai <khtsai@google.com>
+2.52.0.351.gbe84eed79e-goog
 
 
