@@ -1,92 +1,211 @@
-Return-Path: <linux-usb+bounces-31857-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31858-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCDD7CEBAE6
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Dec 2025 10:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E767CEBB46
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Dec 2025 10:37:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A134F300E78D
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Dec 2025 09:24:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 78D0F302D5D8
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Dec 2025 09:37:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF646304BB7;
-	Wed, 31 Dec 2025 09:24:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26A47318140;
+	Wed, 31 Dec 2025 09:37:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GyqbWdk0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lzWifXpU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F1A19EED3
-	for <linux-usb@vger.kernel.org>; Wed, 31 Dec 2025 09:24:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41192264BB
+	for <linux-usb@vger.kernel.org>; Wed, 31 Dec 2025 09:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767173054; cv=none; b=VLCeX3nvE0wmchloS/XgyB8eXkqF/dahwjZS6e4QiFe08KpPIrTOiwA0ZLxtI/4WHrD5l9y3Y7zBJJPeGbfJNgVnYbXp+kLmJRLpkG7mduK65uJLx8gGZJhMPlIysVikuPJ6vM9h125o+1zuUC65RUd7ScXAqrUQP+Gpn3D/21o=
+	t=1767173868; cv=none; b=YfHNP2TAZHjjd0Nw3SzF8sjz3iakj6/mMkZwMQ1ORY81h7DgppySc56Qw5XoS2L5sN0EJ5QNUMQN7P9ddnSIluis9LsUBCrzbU37xXiXQ9N5vmBNscfUbb7vCG7vxkGJ/GUwS8vJHFdACUJ7ZYshcxaHepU98HBZHTvPBixx9Rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767173054; c=relaxed/simple;
-	bh=hT0dyhBhUA1so/yMOsADX+mXStooVvHfnQnGLH7mFfw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IAzBO/IEVMqqLFs3DJ0kPwi7hgk6Np6D/+htGJE6+OZVkytO+7xrmlgwMEXqPY7V02dpHa3uJi9e83egtbGA3oKUenWc6tUyYVv31/vhCfBwIDT231hN7vsYefEAze+yonrN0ncDB7c6YhhTktg4Mx5ht/xwW8oWbdBOkG9I+Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GyqbWdk0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0CA88C116D0
-	for <linux-usb@vger.kernel.org>; Wed, 31 Dec 2025 09:24:13 +0000 (UTC)
+	s=arc-20240116; t=1767173868; c=relaxed/simple;
+	bh=CrFviPTfnO5MrTM9rh8FOMVvcVix84wLkSJAzKgr7zc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WkzfEeD6/ed7x/VuHshZ/7KZBWzodSirUPauic+w6/gRXhA8cCwvb69lMHQfNeuN6vo+8ueybgr7FGFY24b9k5FthzKHO2bv3TlHBzIOGtV362vYzBqf4ZGfw1ByAISlFtV2LsnLNQH3rKUjKs2ufmRk4jbUgffmcuyLnPt+8H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lzWifXpU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 531ABC19422
+	for <linux-usb@vger.kernel.org>; Wed, 31 Dec 2025 09:37:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767173053;
-	bh=hT0dyhBhUA1so/yMOsADX+mXStooVvHfnQnGLH7mFfw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=GyqbWdk0NWC+QRCrvGOmQRdcSIj7QB42RhMQXG0SCJTZ7KG9AHYDH3LGZBRRtuIAJ
-	 K/GZFmuhed/Ukml0M5x3BQDGquhXKUNm5bsS93U5a8k3PkwuxKDBhP+Om44BUqENka
-	 sL1cq8sWPXKnF4hPTUAe6XwWLAVcMeMHY6LlUseqlCuq41W7UMvhf/pWpDGoHS7J49
-	 fU6X+s3jPVL+Am2ns26LtlE4NNXzIBYCq+oUfwW+huXot3iLvZtdfwadzpQvYdWZE5
-	 xl2jZ4ykogK0Kyqfb0ZSh736L2Ue9+kJhmFO0jRVPthi1GB+5trMojZx4NgB8pAvtV
-	 dLrkDKbov/rPg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E6CC3C41612; Wed, 31 Dec 2025 09:24:12 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220904] [BUG] ucsi_acpi: USB 3.0 SuperSpeed not negotiated on
- USB-C hot-plug
-Date: Wed, 31 Dec 2025 09:24:12 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220904-208809-3XHDVZk27t@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220904-208809@https.bugzilla.kernel.org/>
-References: <bug-220904-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1767173868;
+	bh=CrFviPTfnO5MrTM9rh8FOMVvcVix84wLkSJAzKgr7zc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=lzWifXpUGD8+E5nYogerhv72hssoknpG7XMlR6Z7ekxi2zayQG16WxiPqryzNJ47L
+	 gWp64/BUYIqae392n6LnXQFMu8qdS+OtCNgmKRv73P2xxTx3PtINGY0EJaly8vpN3B
+	 ztyQ/PkW94PfXgacNdR7fZTZGY1AFWvIqSeiSk8fUuwZeVFJpVBl81BMpwr/+XTZw7
+	 9iDORh4w6uWJC5XV9EsVXDq1HpmC7lPxzV/K44ppLKiXYlN/xsYh1L1Nlu9lAZzfv5
+	 uz+d/efR5N3wD7aIrjsiO8xSqVoUCYGKZm0hvGgw3ED8Cndbd/mnIA1WJnNiRxp+8i
+	 wsBoVAzt67FFw==
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b76b5afdf04so1603765366b.1
+        for <linux-usb@vger.kernel.org>; Wed, 31 Dec 2025 01:37:48 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXbdyI4sN802X/ev5ZPdd/SXA/lId3DsPMtOF4T93u/JDK4+JFOG6D2u2Lh8zqc6eIqaZJ6nQfjKnE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+5Pwhgx+pSmMdjbj1t1hlaWjVlKtI1NHV3SqSdqfOroE7VaXm
+	gj1r72qMC1PT9jtADIPlghKemz5KlmG4+t1cbzNvSI2MQSyvq5Hjr3D5WPOBwKu1e0VQmumdHIb
+	EFILAkfNvjOJoXeoHmJ5By1UM+g+awVM=
+X-Google-Smtp-Source: AGHT+IFVb1yQlzwVWFcEH4gHbnF69rkD0X0KgI3cOZ0pbxR47ekJuboYf5pLm4002RPGE5nWv6FYA/qq4tZgE3O6nAs=
+X-Received: by 2002:a17:907:7f15:b0:b76:b632:1123 with SMTP id
+ a640c23a62f3a-b8037159828mr3701463566b.42.1767173866870; Wed, 31 Dec 2025
+ 01:37:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20251230080014.3934590-1-chenhuacai@loongson.cn>
+ <2025123049-cadillac-straggler-d2fb@gregkh> <DFBMNYF0U5PK.24YOAUZFZ0ESB@cknow-tech.com>
+ <73d472ea-e660-474c-b319-b0e8758406c0@rowland.harvard.edu>
+In-Reply-To: <73d472ea-e660-474c-b319-b0e8758406c0@rowland.harvard.edu>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 31 Dec 2025 17:38:05 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6drj1df3Y4_Z67t4TzJ5n6YiexsEHKTPvi1caNvw5H9A@mail.gmail.com>
+X-Gm-Features: AQt7F2oD7Hfhx3jnbBzE8YCrXoyByHlqtt_1IlJHGjEXZIcJ2n-YDfOhaboCLwI
+Message-ID: <CAAhV-H6drj1df3Y4_Z67t4TzJ5n6YiexsEHKTPvi1caNvw5H9A@mail.gmail.com>
+Subject: Re: [PATCH] USB: OHCI/UHCI: Add soft dependencies on ehci_hcd
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Diederik de Haas <diederik@cknow-tech.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Huacai Chen <chenhuacai@loongson.cn>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org, Shengwen Xiao <atzlinux@sina.com>, 
+	linux-rockchip@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220904
+Hi, Alan,
 
---- Comment #5 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Okay thanks! This dock is not TB/USB4 so not related to USB4 link. I wonder=
- if
-you tried to disable runtime PM from the 0d.0 xHCI?
+On Wed, Dec 31, 2025 at 12:42=E2=80=AFAM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
+>
+> On Tue, Dec 30, 2025 at 03:40:27PM +0100, Diederik de Haas wrote:
+> > On Tue Dec 30, 2025 at 9:15 AM CET, Greg Kroah-Hartman wrote:
+> > > On Tue, Dec 30, 2025 at 04:00:14PM +0800, Huacai Chen wrote:
+> > >> Commit 9beeee6584b9aa4f ("USB: EHCI: log a warning if ehci-hcd is no=
+t
+> > >> loaded first") said that ehci-hcd should be loaded before ohci-hcd a=
+nd
+> > >> uhci-hcd. However, commit 05c92da0c52494ca ("usb: ohci/uhci - add so=
+ft
+> > >> dependencies on ehci_pci") only makes ohci-pci/uhci-pci depend on eh=
+ci-
+> > >> pci, which is not enough and we may still see the warnings in boot l=
+og.
+> > >> So fix it by also making ohci-hcd/uhci-hcd depend on ehci-hcd.
+> > >>
+> > >> Cc: stable@vger.kernel.org
+> > >> Reported-by: Shengwen Xiao <atzlinux@sina.com>
+> > >> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > >> ---
+> > >>  drivers/usb/host/ohci-hcd.c | 1 +
+> > >>  drivers/usb/host/uhci-hcd.c | 1 +
+> > >>  2 files changed, 2 insertions(+)
+> > >>
+> > >> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd=
+.c
+> > >> index 9c7f3008646e..549c965b7fbe 100644
+> > >> --- a/drivers/usb/host/ohci-hcd.c
+> > >> +++ b/drivers/usb/host/ohci-hcd.c
+> > >> @@ -1355,4 +1355,5 @@ static void __exit ohci_hcd_mod_exit(void)
+> > >>    clear_bit(USB_OHCI_LOADED, &usb_hcds_loaded);
+> > >>  }
+> > >>  module_exit(ohci_hcd_mod_exit);
+> > >> +MODULE_SOFTDEP("pre: ehci_hcd");
+> > >
+> > > Ick, no, this way lies madness.  I hate the "softdep" stuff, it's
+> > > usually a sign that something is wrong elsewhere.
+> > >
+> > > And don't add this _just_ to fix a warning message in a boot log, if =
+you
+> > > don't like that message, then build the module into your kernel, righ=
+t?
+> > >
+> > > And I really should just go revert 05c92da0c524 ("usb: ohci/uhci - ad=
+d
+> > > soft dependencies on ehci_pci") as well, that feels wrong too.
+> >
+> > FWIW, I've been seeing this warning on several of my Rockchip based
+> > devices as well. I thought I had already mentioned that on some ML, but
+> > couldn't find it on lore.k.o ... turns out I reported it on my 'own' ML=
+:
+> > https://lists.sr.ht/~diederik/pine64-discuss/%3CDD65LB64HB7K.15ZYRTB98X=
+8G2@cknow.org%3E
+> > (and likely on #linux-rockchip IRC channel)
+> >
+> > Most of it is just my research notes, but the last post also had this:
+> >
+> > ```
+> > I checked the last 20 boots on my devices to see that warning (or not).
+> > Device                                Number of times that warning show=
+ed up
+> > Rock64 (rk3328)                       16x
+> > RockPro64 (rk3399)            11x
+> > Quartz64 Model A (rk3566)      7x
+> > Quartz64 Model B (rk3566)     14x
+> > PineTab2 (rk3566)             17x
+> > NanoPi R5S (rk3568)           13x
+> > Rock 5B (rk3588)              12x
+> > ```
+> >
+> > While I generally don't like seeing warning messages, it often also
+> > resulted in USB2 ports not working. Maybe even every time, but I only
+> > notice it when I actually tried to use one of the USB2 ports.
+> >
+> > The first post mentioned what I 'assume' to be the problem:
+> > ```
+> > CONFIG_USB_XHCI_HCD=3Dm
+> > CONFIG_USB_EHCI_HCD=3Dm
+> > CONFIG_USB_OHCI_HCD=3Dm
+> > ```
+> >
+> > So I guess USB_EHCI_HCD doesn't work with '=3Dm'.
+>
+> Not true, it really does work with "=3Dm".
+>
+> And in fact, your systems should work even if the modules are loaded in
+> the wrong order.  The issue is that doing so can cause a brief
+> interruption in the existing USB connections when the ehci-pci module is
+> loaded.
+>
+> If your systems don't use PCI for these host controllers then I don't
+> know how they would behave.  The issue is: How does the hardware route
+> low-speed and full-speed USB connections to the different types of
+> controller?
+>
+> On PCI systems, when ehci-pci isn't loaded, the hardware routes all
+> connections directly to the companion UHCI or OHCI controller.  When
+> ehci-pci is loaded, the hardware routes connections to the EHCI
+> controller, and when the driver sees that a connection isn't running at
+> high speed (480 Mb/s), it tells the hardware to switch the connection
+> over to the companion.
+>
+> So if a low-speed (1.5 Mb/s) or full-speed (12 Mb/s) device is connected
+> before ehci-pci loads, its connection will get routed to the companion
+> controller.  Then when ehci-pci loads, the connection will be switched
+> over to the EHCI controller, which will cause the existing connection to
+> be dropped.  Then the connection will be routed back to the companion
+> controller, but it will be perceived as a new connection, resulting in a
+> brief interruption in service.  For many devices this won't matter, but
+> for some it might.  The only way to avoid the problem is to load
+> ehci-pci before uhci-pci and ohci-pci.
+>
+> (A similar problem can occur with high-speed-capable devices.  When
+> initially attached to the companion controller, they are forced to
+> connect at full speed.  But when the connection is changed to the EHCI
+> controller, they are able to run at high speed -- and again, the result
+> is a new connection, causing service to be interrupted and then start up
+> fresh but running much faster.)
+From your long explanation I think the order is still important. "New
+connection" may be harmless for USB keyboard/mouse, but really
+unacceptable for USB storage.
 
-# echo on > /sys/bus/pci/devices/0000:00:0d.0/power/control
+If we revert 05c92da0c524 and 9beeee6584b9, the real problem doesn't
+disappear. Then we go back to pre-2008 to rely on distributions
+providing a correct modprobe.conf?
 
---=20
-You may reply to this email to add a comment.
+Huacai
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+>
+> Alan Stern
 
