@@ -1,122 +1,91 @@
-Return-Path: <linux-usb+bounces-31870-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31871-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2099CED9E0
-	for <lists+linux-usb@lfdr.de>; Fri, 02 Jan 2026 04:19:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38B8DCEE595
+	for <lists+linux-usb@lfdr.de>; Fri, 02 Jan 2026 12:29:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 60A633004CED
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jan 2026 03:19:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 100C5302E14C
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jan 2026 11:27:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7455E1EEA55;
-	Fri,  2 Jan 2026 03:19:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 119CE2F12DF;
+	Fri,  2 Jan 2026 11:27:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iTSpnP65"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sduzlXxE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D58072639
-	for <linux-usb@vger.kernel.org>; Fri,  2 Jan 2026 03:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BF42DECBF;
+	Fri,  2 Jan 2026 11:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767323955; cv=none; b=oyvTPAzZZbl6bzF7odtvjiokPjWaMavZYekpwwShvXrKLls0AaVOQ6GA5SmBw9LwWOrotnh6Da19is+t9AKYsAxBXv8IPssuE06cIkKPIzjGXLGlJ5rd6Q69GWMo8WcDjtu+5r+M+3AcCKwn+NQPAHN/W1oujF+m0fSGC8OARro=
+	t=1767353246; cv=none; b=XYgnHb2qgwhTZgwHooXLRZd4oqZC4Zzek40k2tQAsaDnjOaCcFM7+5E7y8W1J72feBzIE/zNjtl2a5WH9Ud2FMpN/etlIEt/IYhYuxeTAmmU3R3VMQvzVAaE3xHl3AlSPJZmrcoCem07YY5JfA65BCb1paXREHK4yBxRHVG46lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767323955; c=relaxed/simple;
-	bh=Mf8J5qmsAHAJdJQjjuQFS9ySQRt9ffULCZDxv0ZZgDo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=nBrstNYf7iMuET10kgvg8/IIorzsJ2wLSU7n3/3+WpazNLqM0ED7odiy8POzHYbHxWsSimADUj/jSkZrzD/RkEDFwgtjCbQYOJGJlPrb36aD5rm7z/c2LPGJQCcn1ywIMNO2q4kg/wkjaprUhao6CqkWGu1K+TNqXzAANkWZvSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iTSpnP65; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47d493a9b96so23384825e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 01 Jan 2026 19:19:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767323951; x=1767928751; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RXIbZbmVL5aob0CGYAVwj4rorrq4kmy9zuIwG/cSSPo=;
-        b=iTSpnP65NcYdg7HsBT1DDE+ynBZdFCiCJlBcspSHDm7rIL6EO4uWRGuyNavdG0+ZK0
-         MEaXE1vWWfGxP7CMTxJtLp/Zkzfh9XSNv0z1tt1bYQskp2B/QITEVx8fTWx1KPhkbDx3
-         Um/eOYEuR2MViWvhqF5Yr2hiwlAP/FBi2XqfgyRwRTZ5FOH3QynOSIqsh5mn2Kgg5DEy
-         O6bfaRmasEL/2d5TNIDRQVhIb4dBAYQohyjcijMK8mZd5aIFcWVHPB5h92hq9l2B6U8K
-         2BHgkuDzNyKB4u6DyuAkF8j7VrqmcQlrzVR6jJvdSOeUMEFwvfQLJFbBZNy7fqMptPZ7
-         VUlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767323951; x=1767928751;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RXIbZbmVL5aob0CGYAVwj4rorrq4kmy9zuIwG/cSSPo=;
-        b=t2P6bwGVja6VCEb8HC5BC9RYji7HTciyVv3/reruKJxbG4bemNCXWFxmzahy/hPjFj
-         V5sv45o7sa5IOmX5uD2VBI+KTqpa4O4ZJIUcr6JzQ9kG2lnQp3O89Bn29vLRJwBk1zCS
-         iawFmJ/UK3tSIaFqwqdo8AzoLg/Ft0CJFk4pAlY3+tKhmbVHS+Up46Kl7FixHSY1zpXP
-         MRj9CFAf6UA+Pd9kBH3PjIZlPdCMIPfhxPBYMH/tb19PZ711Zw/xhngCJiTi+l60Sowx
-         iN8yiR6/vptR/reuWxoijNK6w1X6r0P9k4xj0Cl03vswMRXEYCVzsJLva1LG8uAj2dLd
-         OiLw==
-X-Forwarded-Encrypted: i=1; AJvYcCXvlmkCthzxmiAkrzb8KcZWmF474n8akKU80s4KzPHjxR9eoYo/94F2x1qB+s74QUjytnMi1fPDRYU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzY4Qn2A5BTJybkdXcdI2l6j4QeIZ+rH+Z11eS8AS7NSaAKg65o
-	IoMExG9Hub0RIFnQ6Kq4c0+t1ttmWDNrsrKECXHeTSGLk1bhwGIWM6hY
-X-Gm-Gg: AY/fxX53hW8D6YZ8H8TQJMTjj64BJW2v7S4npi/uE6VXZWW0eeks/KhXMI4/2bpBbQo
-	dLcK/I28ad+7iLhWmqpqpkNw7BA2Zleb6hbCHZYgG9XZNmT/x4tHhH1RMJn83MznBHlPEcBkc+w
-	4yOtxe3xyyuSAJ8aQ9JAr5rMdHrFAJbLPm2hu7OZFd9khVHiaiub2OKHh6PJlk58kPf5EI911Uz
-	RMluH4iK8WajIAc7paYwWfOCEbEfiEQoBee8mU/TUPWUv/M3509EwcDdkRnvhZMK/uFjEpcTSdu
-	684HHCbwggTEAPOw4faJx6uWQXjx7Cs3zczbYaljDDDTfA2QXPP+Vx7/7bdsxsssqzXdwsM1FqM
-	RVGfGc62GioM1MMaqqpQlSbgoAZMj+byRg8U+EWjtYXVmZHr5BRhQBv7PzUlyzOLwhRbIpF1n4F
-	ug/of+OqaBZiXAmReTCJotmjKG+TIgHzYSYG326gMhvovmttuaf20=
-X-Google-Smtp-Source: AGHT+IEmP+CjMTwa8bcfa2ehuVQFG2zxiJypBd7KDVBwsdmirid6sXl64mB90EZnMqE4y/HrrF5YCw==
-X-Received: by 2002:a05:600c:35c4:b0:475:dd9a:f791 with SMTP id 5b1f17b1804b1-47d195869e7mr560606275e9.28.1767323951301;
-        Thu, 01 Jan 2026 19:19:11 -0800 (PST)
-Received: from localhost (211-75-139-220.hinet-ip.hinet.net. [211.75.139.220])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be279c5f8sm742090205e9.9.2026.01.01.19.19.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jan 2026 19:19:10 -0800 (PST)
-Sender: AceLan Kao <acelan@gmail.com>
-From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
-To: Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] thunderbolt: log path activation failures without WARN backtraces
-Date: Fri,  2 Jan 2026 11:19:05 +0800
-Message-ID: <20260102031905.27416-1-acelan.kao@canonical.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1767353246; c=relaxed/simple;
+	bh=xbvV5fwRq66P4s5/ppnbu0eZKKjOaSgsshF9SrY4u5U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iz0Zp/+AJMqTx6u33PflGRqOPi3sDNmtmqhvYNNyBEnlbk7ER5ji4jPbP2tfhjGEvdYGZW8szD5zilGKpnPwgsclJkDXZo7/NwxhBkrNo7a445WCnSXIyOJwH23QxAFIM67l28f1k00/quWZhg7/rCoKRId+LGiavfnpQ2vQuGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sduzlXxE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649F2C116B1;
+	Fri,  2 Jan 2026 11:27:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767353246;
+	bh=xbvV5fwRq66P4s5/ppnbu0eZKKjOaSgsshF9SrY4u5U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sduzlXxEBW2JqVGpPpZrolHGVsvT/brBmOzas+7lORK/7/1yALAPxsD2rAVebveE7
+	 3lmLCS40qEKj61+MgbMYllqQWDdgGpXzrr9xOFq5zaV24qvTMwwFkvd0mZhcr9mfwH
+	 /4mq8fpe4k1qfJhJcrCPScyoITfmWM7ZQfrn/7YiYQFaTiMD4QxD69BLAmrq+smpff
+	 4Sr9s8wOgjaOkARj5mnZ7KkhqWbtQk9iisOEFVCHe/RnpXToWb6EsaQ27rZipkbezL
+	 CwsN80C7a2ynbR0vEbIhfVdVxKR7G5i5kwgYvuHXqLDxABTYT411Il1idyysP23lCs
+	 rcbX8US3aWnXQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vbdJJ-000000004F2-0QBB;
+	Fri, 02 Jan 2026 12:27:13 +0100
+Date: Fri, 2 Jan 2026 12:27:13 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	pooja.katiyar@intel.com
+Subject: Re: [PATCH] usb: ucsi: Fix null pointer dereference in
+ ucsi_sync_control_common
+Message-ID: <aVerkZPY-z-NjPPk@hovoldconsulting.com>
+References: <20251226223054.5565-1-ivan.orlov0322@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251226223054.5565-1-ivan.orlov0322@gmail.com>
 
-tb_path_activate() currently logs failures with tb_WARN(), which triggers
-a stack trace. Transient conditions such as lane bonding or Type-C link
-hiccups can fail path activation briefly, and the resulting backtraces are
-noisy without aiding diagnosis.
+On Fri, Dec 26, 2025 at 10:30:53PM +0000, Ivan Orlov wrote:
+> Before 'ucsi_acknowledge' calls 'ucsi_sync_control_common', it sets
+> 'message_in_size' to 0. However, if 'ucsi_register_device_pdos' was
+> called after 'message_in_size' was set to 0, but before
+> 
+>   if (!ret && ucsi->message_in_size > 0 && *cci & ...)
+> 
+> condition is evaluated, 'ucsi_sync_control_common' ends up dereferencing
+> 'cci' which points to NULL. This is precisely what I'm observing on my
+> Framework 16 laptop on the latest mainline kernel build.
+> 
+> I don't see any synchronization primitives used to protect 'ucsi', so
+> I presume just checking that 'cci' is not null here should fix the
+> problem. It seems like prior to commit 3e082978c331 ("usb: typec: ucsi: Update UCSI structure to have message in and message out fields"),
+> 'data' argument was checked in this condition, and it was always set to
+> NULL from 'ucsi_acknowledge'. Thus, this problem did not exist.
+> 
+> Fixes: 3e082978c331 ("usb: typec: ucsi: Update UCSI structure to have message in and message out fields")
+> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 
-Switch to tb_warn() for all path activation failures. The error code is
-already returned to callers, and the warning still shows the message
-without the backtrace.
+This has been fixed in rc3 by reverting the offending commit:
 
-Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
----
- drivers/thunderbolt/path.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+	https://lore.kernel.org/lkml/20251222152204.2846-1-johan@kernel.org/
 
-diff --git a/drivers/thunderbolt/path.c b/drivers/thunderbolt/path.c
-index f9b11dadfbdd..50659bd55d7b 100644
---- a/drivers/thunderbolt/path.c
-+++ b/drivers/thunderbolt/path.c
-@@ -586,7 +586,7 @@ int tb_path_activate(struct tb_path *path)
- 	tb_dbg(path->tb, "%s path activation complete\n", path->name);
- 	return 0;
- err:
--	tb_WARN(path->tb, "%s path activation failed\n", path->name);
-+	tb_warn(path->tb, "%s path activation failed: %d\n", path->name, res);
- 	return res;
- }
- 
--- 
-2.43.0
-
+Johan
 
