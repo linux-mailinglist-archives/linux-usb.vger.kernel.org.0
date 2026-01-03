@@ -1,77 +1,77 @@
-Return-Path: <linux-usb+bounces-31878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31879-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A0A4CEFCBD
-	for <lists+linux-usb@lfdr.de>; Sat, 03 Jan 2026 09:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6209FCEFCC6
+	for <lists+linux-usb@lfdr.de>; Sat, 03 Jan 2026 09:34:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6FA5F303E007
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Jan 2026 08:33:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DC2783027DB4
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Jan 2026 08:33:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56972F49E3;
-	Sat,  3 Jan 2026 08:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1079F2F4A05;
+	Sat,  3 Jan 2026 08:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AFOxU7nW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fyl7+60J"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4322BD586
-	for <linux-usb@vger.kernel.org>; Sat,  3 Jan 2026 08:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0685D29B22F
+	for <linux-usb@vger.kernel.org>; Sat,  3 Jan 2026 08:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767429185; cv=none; b=mmGls3jx55tAQASD7Ea9vTXK5tzt00NcaQF9hZ0hHQ+coA+I2HrxsB3jY95HsE5HmIoXk7V6cw3+AYAv+DrQyrb7A6AIXrOcj1Mm/klhyM9EcHCGxCznx8DgkLkf5Yak8o8N4NYUwD/Lj6BIDya3N0iEdh6CDeTgEjh1hLdXbdg=
+	t=1767429204; cv=none; b=V7qGDECGyZY46jAT8cxv8B5aC/2Z50s38Ir+zxnrL+9xNt3rrqcLrbOvYElfj9l59ubq5Zx5RS2Hgvw8h8ax43pbESQPPxTZ+gonsl6ExrHTDBq+E/PnbUWYeV4wUO9gOhOwfJ6QPXBInRLYIAifVoCQa3Rfn0PKF1C3eXZpkBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767429185; c=relaxed/simple;
-	bh=TE3kngwJ0Q/M8PG4jM5YkANzvwJ2ZBoXO6QH83Kep4E=;
+	s=arc-20240116; t=1767429204; c=relaxed/simple;
+	bh=izi4VvU/qHkp/nGvi/OJ7celFPcbQBwlswNh4vYfIMk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rs/4U+WUofi1Nu2oGJfQr2GuUnBOCj9XFt8ncAlhNu77pB8lyTO7u4oAeWBbN+hYbAX7+KFpR5Ia93Cnv7x/bTKSKvS4qoYO9gTkMh95m0ym+PZzQuXvDBvH0cTs7T59eqAxsrSKYUDv3fUBLuLAeKOBH+M7ain5HU6SJ0nycPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AFOxU7nW; arc=none smtp.client-ip=209.85.214.193
+	 MIME-Version; b=jjkdDRJJyC2RukSQtNz33YPmpxKeEJmxpShCnbjNu61D4CfGp2MFl9g8Soc2SDAH05SRDmKqppfbYiY7XgbwVXJN5cF3AoTzucQj2f58uG2GVgOmBppj++iUIH2/wn3qGTJIO9A1RIECfmD+D+v9Fs5h07/I2q9GhTBglE22ML4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fyl7+60J; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2a09d981507so3586585ad.1
-        for <linux-usb@vger.kernel.org>; Sat, 03 Jan 2026 00:33:03 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2a099233e8dso106348265ad.3
+        for <linux-usb@vger.kernel.org>; Sat, 03 Jan 2026 00:33:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767429183; x=1768033983; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767429202; x=1768034002; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mtp/dZW9ya4TxwOta3UUFMIrN/FXohK03+kMMLH28dY=;
-        b=AFOxU7nWtCWWzSNkNkmJETzPS85qZfZP3Njn4VUqNOOErbFLC72SwO+B1JojwTXJqr
-         EBwYx3xmyRzrMfY5k8olfkP7pYCVT+GVW1iKmyGT0onFEfP/J3XEpeJMa5399vmn59FC
-         JajQE9t9vuL3/nObQcTSh5QRvujZtmR7rJpAEd1rhjv9sNsP1G8+Ngd9K8Y2tbz4gpKu
-         C/kkwFYU7pLpZSH2jsjEPn3PiDG+1fJO4RXzayFQEskdxzk2mlQ5xaStWAh/8Ib6Zwr+
-         se0LuvC+Wh1SuJNOh8aSRna1I5P1JFtlNsIJstxKjuwspJiapfr//XoVPtFrSrEWpMAV
-         8j8A==
+        bh=29VsiJqR0uFBbQHYC75VBavG4DpR3+cDRVjS52nwMSM=;
+        b=Fyl7+60JpdPVFOBSwjT60+F8rl1CPaxLMz1yXxZLezLVX3nANOrDhW6yB21uyG42kS
+         RiSgzPOiB3iwMKeCtBZSOmWhjkEcbuTqbABosuEn1bU0AFLy4A7BDp5klMKJc4/YQL3y
+         9hlGLrhfEvmnH23G69GPULiG/IuHAUOZiTl5d9p1Uv81PeaaoR9hPCfrp7kyRZzli+/p
+         byPdaNHodC9QNMeg8ETBmX7jIr2aA2Rv4Hz6soGXJk3DB4CKsj7zsOChbLfvHTp/BaTa
+         1QYKC7RaLqOjLLq3qrsyMaLIyDrGiQlrWFZ1utYhtUKiMW6ZvrtiGn9JceI3PBs52nrV
+         oh9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767429183; x=1768033983;
+        d=1e100.net; s=20230601; t=1767429202; x=1768034002;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=mtp/dZW9ya4TxwOta3UUFMIrN/FXohK03+kMMLH28dY=;
-        b=O2A2YWrrXxihzDpVKAfQm6zprYGrpwIi45FQbq0aXXK2pGySlTwW7Pw/E/X6ls+F5L
-         DCzx7SEQptdYstuKnSDqXYqIeQkj6/OF7aWwZFAJ51F+Nj9FpFybN2+e3tXfBsBsXM2d
-         6IkaI/JQph5ym4vK3DRex/ja559lvVeP90xyO6XvYgAe3VbJtGOxx2GrPxQQNpmfoGm4
-         99mJ5BRyGdwvruGIFWCpp5y1AztKmjFDvR+Bi/iehBWO9XtUxDE4ZXzhpZ+UrQKM8EBI
-         fPW4U9/ax55Yw4rV7TRTT4umjxRj+VH5cc6euXVFqsexl3A+j1cEiz3SQsH7q12T9kh5
-         AlDw==
-X-Forwarded-Encrypted: i=1; AJvYcCUH8uEuiv7W1CqKhogNI1XTDd3QhcXC4g2IH7GdsNMQePUCiAuDNwoLoHWzO6JX9x7XSgdVvqII+6o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIVSt6WrYm5Cmi4iD7ENXuKDcPNOi6XVhlv6ORJtsXlJieoONS
-	xkT1nEUiQkLqB8Xsic2wFOOjNEbaoKxSfq82rhtD7JWEju8EKYihchNq
-X-Gm-Gg: AY/fxX7U3y7kuBnGbo4Q1S0cFAjYJHrFJ0+BayGe3m3bAS9WDhlrVg+rbdHs+5S17oN
-	LQHT3vUk+LAj4+RAOTYyXwBST38IUprIvkhGuEFOc+/5xncyeHv8RtYVdwvN+A3XdlQ7KSlFudT
-	xvabyIxJkttaq6TRyZYXzdGIWRh8i4gDxzBf2e6Ffm1F/t/H/LMl0M9eUYL/bHeeyhutwwOg08N
-	DNQ53NvzL3Fe/ZvMvdH039QocwOTUfNrCOXtn9P8MsR7JMdRCv8bc8GzxkyOJLJ9g2UI3mIaozV
-	WOsBsbuMiftZ/mFiwUDfOjCnM59Dr2o9fjoxRdivPROSVAPnsuKza5h0vhOcQfsUZCOTKeD4Czs
-	3zMfBOjhFWN+cf8g8TlWXyIMblr+oq1Pp12Bl2olywVc9mkt7mFddCmwtNiwdmQigZt7jopOIh6
-	Ccf5ls5A==
-X-Google-Smtp-Source: AGHT+IF4+KGquo7ddnKSZYTeA5YRjfMxJO2/EkJueXQkQkzBA1/AjlzM6p5PsyRepGJBGL2j9Swfbw==
-X-Received: by 2002:a17:903:2442:b0:29f:1b1f:784 with SMTP id d9443c01a7336-2a3c0940a8bmr16854045ad.4.1767429183029;
-        Sat, 03 Jan 2026 00:33:03 -0800 (PST)
+        bh=29VsiJqR0uFBbQHYC75VBavG4DpR3+cDRVjS52nwMSM=;
+        b=uZbGUeTHjy7UA4CdzIPC22DmpQSeKjCWxZV9/tSlTOpMnr2II3zoWVBRSkqRXestuu
+         1HFvyZsn7CkGHFQljvzhO//3w4J17vQY0itg6L0rIo0ugrLQIRVLyPkRVkRJsRV0NW7E
+         /Hzx/ILJmLdgC0oSOlqROO4J5b3p8bCQQimgq2rxetI0GwVOcW2w+eM8r1qtYuNsLfNN
+         t90SvrsrzC9w+xRW1BiCLih34C4y3RuURHbs5ZdLJAkZ3eaS3VPSFsPTiaMAD49Cr5FP
+         Ezrm/0lnJ5tw29fiJlWIKp+42cTtFrJlNYy6v8CEwtnSOpvHRWY4iI47ghCyfdf5Co/Y
+         GQoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVh0wnsNGiJNGw1xXVdub0L4t9NIHkOJ4lZokc8LMDbVvWkEKAws3/JzadFG9LBpa7rBavOwd1+oXw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNuEPreKslM6NkgWJBnfZK474eiRYhNkqv5iOkUgRGqVbVleoo
+	M/jIin+2gRs+M3KA7VoyjbWy0Wd8CUuV9E0kdfeCNPJwBSm/UXoIsw1H
+X-Gm-Gg: AY/fxX6XDzm1KtrE8zfX90/5sWwqhrPigiKDkT5prl5g0nBKXIMqnX1GNAr6eXqFy/Y
+	yh/GBIPy55ZX+HSM73awvIlKSv7gR5rcZ2J+hzuzZpku7gxq/p+yNMcTWNZR0Bp4kYyqsH3K8qV
+	27K5WZonD8UZrcl+R9+WaXWSjyDZKf18TwogKPu21x2iptzAUlnZMc2DOuN6wgbtbAJNTwuRD0g
+	C/sAvLEj+O2oO2z3EhPiwbxB9OplWNPH5nsYIAgygwzhQ+hzVilG0aDrUTzFjtu/qu31jx0jD4w
+	1LRaP6uzno+5NsPzG4me3a+tBqii//mcB0ksopMaYdIYFQI1DumgXhJV/zMDAiDCAmvpvKOhsyi
+	5Wf1PdCP5JdaJp52suwDRJ1jMzWh76zlw+11bFeqtPBgk8TK2fV1QnTFboQcSoex8N1d4dx0f1e
+	6Oz23BCw==
+X-Google-Smtp-Source: AGHT+IEdATA9P7k2n5CWUx8yOsmhm/F/9su5pYtPk4wylobkfRFEAHqb0+3yD3t4l4QDFzSZPoWtgw==
+X-Received: by 2002:a17:903:1c8:b0:2a1:3769:1cf8 with SMTP id d9443c01a7336-2a2f2734d5emr447661885ad.33.1767429202381;
+        Sat, 03 Jan 2026 00:33:22 -0800 (PST)
 Received: from rockpi-5b ([45.112.0.8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3c666d5sm391700365ad.21.2026.01.03.00.32.57
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3c666d5sm391700365ad.21.2026.01.03.00.33.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jan 2026 00:33:02 -0800 (PST)
+        Sat, 03 Jan 2026 00:33:21 -0800 (PST)
 From: Anand Moon <linux.amoon@gmail.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -82,7 +82,7 @@ To: Rob Herring <robh@kernel.org>,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
 	FUKAUMI Naoki <naoki@radxa.com>,
-	Diederik de Haas <didi.debian@cknow.org>,
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
 	Yongbo Zhang <giraffesnn123@gmail.com>,
 	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
 	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC support),
@@ -90,9 +90,9 @@ To: Rob Herring <robh@kernel.org>,
 	linux-kernel@vger.kernel.org (open list),
 	linux-usb@vger.kernel.org (open list:USB TYPEC CLASS)
 Cc: Anand Moon <linux.amoon@gmail.com>
-Subject: [PATCH v1 1/3] arm64: dts: rockchip: rk3588-rock-5b-5bp-5t: Correct Type-C pin bias settings
-Date: Sat,  3 Jan 2026 14:01:17 +0530
-Message-ID: <20260103083232.9510-2-linux.amoon@gmail.com>
+Subject: [PATCH v1 2/3] arm64: dts: rockchip: rk3588-rock-5b-5bp-5t: Fix USB host phy-supply on Rock 5b-5bp-5t SbC
+Date: Sat,  3 Jan 2026 14:01:18 +0530
+Message-ID: <20260103083232.9510-3-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260103083232.9510-1-linux.amoon@gmail.com>
 References: <20260103083232.9510-1-linux.amoon@gmail.com>
@@ -104,44 +104,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-As pre FUSB302 datasheet interrupt line (INT_N) is an open-drain,
-active-low signal. It requires a pull-up resistor to maintain a stable
-high state when deasserted. Similarly, the TYPEC5V_PWREN_H enable signal
-requires a pull-down resistor to ensure it defaults to a low state,
-preventing unintended power delivery during the boot sequence.
+The USB host USB2 and USB3 on the Rock 5B, 5BP, and 5T is powered by the
+USB_HOST_PWREN_H gpio pin which is used to enable vcc5v0_host host
+regulator which ensures proper power sequencing and management for onboard
+Double-USB-HOST.
 
-Update the pinctrl entries to use pcfg_pull_up for usbc0_int and
-pcfg_pull_down for vbus5v0_typec_en to align with the hardware's
-electrical requirements.
+Update the u2phy2_host node to reference the correct phy-supply.
 
 Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-Fixes: 67b2c15d8fb3 ("arm64: dts: rockchip: add USB-C support for ROCK 5B/5B+/5T")
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-v1: As per the shematics CC_INT_L interrupt pin is GPIO3_B4_u
-    As per the shematics TYPEC5V_PWREN_H pin is GPIO2_B6_d
----
- arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
-index b3e76ad2d869..0cd8ac7bf538 100644
+index 0cd8ac7bf538..886d788572fc 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
-@@ -537,11 +537,11 @@ pcie3_vcc3v3_en: pcie3-vcc3v3-en {
- 
- 	usb {
- 		usbc0_int: usbc0-int {
--			rockchip,pins = <3 RK_PB4 RK_FUNC_GPIO &pcfg_pull_none>;
-+			rockchip,pins = <3 RK_PB4 RK_FUNC_GPIO &pcfg_pull_up>;
- 		};
- 
- 		vbus5v0_typec_en: vbus5v0-typec-en {
--			rockchip,pins = <2 RK_PB6 RK_FUNC_GPIO &pcfg_pull_none>;
-+			rockchip,pins = <2 RK_PB6 RK_FUNC_GPIO &pcfg_pull_down>;
- 		};
- 	};
+@@ -981,8 +981,7 @@ &u2phy2 {
  };
+ 
+ &u2phy2_host {
+-	/* connected to USB hub, which is powered by vcc5v0_sys */
+-	phy-supply = <&vcc5v0_sys>;
++	phy-supply = <&vcc5v0_host>;
+ 	status = "okay";
+ };
+ 
 -- 
 2.50.1
 
