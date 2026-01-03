@@ -1,223 +1,183 @@
-Return-Path: <linux-usb+bounces-31881-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31882-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58A95CEFE9C
-	for <lists+linux-usb@lfdr.de>; Sat, 03 Jan 2026 13:02:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94098CF0088
+	for <lists+linux-usb@lfdr.de>; Sat, 03 Jan 2026 14:53:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 93E94301F03A
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Jan 2026 12:02:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C6A5D301FF71
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Jan 2026 13:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996AF2BDC19;
-	Sat,  3 Jan 2026 12:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 720E230BBAB;
+	Sat,  3 Jan 2026 13:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vtskogp2"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="Sxq5Vpnt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110ED219E8;
-	Sat,  3 Jan 2026 12:02:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767441729; cv=none; b=O6c1+etdZWFFYRPhTWXZPEelhU2HkbbMpgQm3aaiAqnAO3y/Z+oNeTdsrTcPmxyQaMcc52/CN020zsKy2O2QvOrt8DMfm0dHZboLH9bJdjtTinf+MZCaRWD7kMZGjEiz1b1orqM8GaRPXrWJnNI8w5K//DOX4gdmh14fRvJ2CGo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767441729; c=relaxed/simple;
-	bh=1x1FZr6RcPuO0JFTJZCAvrYneabcp2bRuH04E9/5pX4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=A6IkZh+/2gVTlIHYYhwr5A0rY1wTDUt2E6KKGbVzvKpeaKM/0wGGBAZuuqTP6t+t9CAMWdBySuDm6f8jJMZkyyzh/SDzlNxFPgDrtcauDzAvpyRBp3TZOjl8Ft8uwWZpS0trI7K42uRLHVPvjyrapO8pHSZuft+IDIj3vjHdqHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vtskogp2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA7CCC113D0;
-	Sat,  3 Jan 2026 12:02:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767441725;
-	bh=1x1FZr6RcPuO0JFTJZCAvrYneabcp2bRuH04E9/5pX4=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=Vtskogp2qUAVd/DM4TkDqX7xhp75/RE4O/3djH0Ggd1RNArNybeRlzM9h+4xWnEXY
-	 XHN81oSHhzHnJVvX/LYYI+eORArVWUOZUrf70THyHL6THPbDXlv/2B4F/adETfbJsJ
-	 Bp2HlCanAv3xncnNRucIJI2Hz9n0JHN5pyGnfYOWLrhkiM9L46ZgUE7Q18kaz0uHhC
-	 3jxgcirES+Q0OYgP5Nft2bzET7CDZqJ1fERAAEJEVJx/MTyePCUxDX7TCYKv6D6aPb
-	 cCken4S8d5opzrahawWNIi6hVZYvZsLvHTe6BvRh4sDzw2xxFpIHDbhi4T3bme/S51
-	 r53uT1Zxm/bXA==
-Message-ID: <6f30a01c-8fc4-4368-88ef-7c513c505515@kernel.org>
-Date: Sat, 3 Jan 2026 13:01:58 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6FE1C3BF7;
+	Sat,  3 Jan 2026 13:53:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767448417; cv=pass; b=nta7DxwAmp/jSUrKub13O+iS3thteYysB6dkxN9rRkEJAA3iToPmYpt8KJ7OCzpulOyRKMGqc38ivHfhRPR0I41fmKHftjmKeghDjwO08b+3p+n8FyM18k56n7SRB1IM9bZ35Gl/SpGX0rRnn18cMWEJ0otMLzk69/PyD4BIKLE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767448417; c=relaxed/simple;
+	bh=Y5Ip+rY8zrCI3sEu3f8EYm4Ck++Bkr6j3eOP3rTS3dg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nj4vvziMGu0o/pr0QL2qFNgtWsfKsqLXA2Tz3Qc8xCquqg0LfJbZOTguz2TPz2UjWWG54TVdo6hz4Lx8nu94Vg8dsMbBQMOS19p5D3X+/3WJ20/JlL5Ah4GiT+kgtOGAy+Wc+y/jLnZzJwEE8qXmwlIC1zIfzv+j9c2PFkE7jpo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=Sxq5Vpnt; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1767448380; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=IDcuSeXH2CICFAdm65XISS6csPuDye1jA/nhxRiRK6YMQM12LYDxTaCVVQ4rbbIdp27i5JRf16TAhfu1JYS+zTQt/CIh03k2luJ3uVWsNuBM08iTOHxAvrDFSIrqDylrgxWGNJ1sjDAqJeOuojaWudVLknBaQmJ7yYY7DmXgdL8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1767448380; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=d9H7y6YgOMKmHV3+yZbIO63YJ0wpHijUok8tAbtehVI=; 
+	b=DqtH6+e3u69ksoK5kcrZTy0bIIZw3+54+VHz34hV59f4WSuVCxPJ/W6DbiG6qqKlqpajswX3i5hv63fh92v+dJcO6x2yuDx+gNp4rNbEMBtqUFZcDJ5iNqq1dpxGKABGg80YOnHChy6mMuNU0LWy/yEjM4gX+FOlUCh4p0WW2DE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767448380;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=d9H7y6YgOMKmHV3+yZbIO63YJ0wpHijUok8tAbtehVI=;
+	b=Sxq5VpntLYcVgyUsXFWqi2JLqQB6A3kAks8oO07M3eVS0R2IpY+LCS02nVEbZRL/
+	U0NDdJSSazUI68G0BqabQ3XugbHJQ5J7Pk5tdUENmcXgSC4mh0tJD5/4s2bvyV4Ehv2
+	3VLeUumbLQptuQKi8LgI/DpZ6K7XpKFqbaZjMe+Y=
+Received: by mx.zohomail.com with SMTPS id 1767448375895378.81651063590607;
+	Sat, 3 Jan 2026 05:52:55 -0800 (PST)
+Received: by venus (Postfix, from userid 1000)
+	id 7AB8F18054C; Sat, 03 Jan 2026 14:52:50 +0100 (CET)
+Date: Sat, 3 Jan 2026 14:52:50 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Anand Moon <linux.amoon@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
+	FUKAUMI Naoki <naoki@radxa.com>, Diederik de Haas <didi.debian@cknow.org>, 
+	Yongbo Zhang <giraffesnn123@gmail.com>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
+	"moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>, 
+	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v1 1/3] arm64: dts: rockchip: rk3588-rock-5b-5bp-5t:
+ Correct Type-C pin bias settings
+Message-ID: <aVke1kQnHJLqWGHi@venus>
+References: <20260103083232.9510-1-linux.amoon@gmail.com>
+ <20260103083232.9510-2-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/3] usb: typec: fusb302: Switch to threaded interrupt
- handler
-To: Anand Moon <linux.amoon@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- FUKAUMI Naoki <naoki@radxa.com>,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
- Yongbo Zhang <giraffesnn123@gmail.com>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
- "moderated list:ARM/Rockchip SoC support"
- <linux-arm-kernel@lists.infradead.org>,
- "open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
-References: <20260103083232.9510-1-linux.amoon@gmail.com>
- <20260103083232.9510-4-linux.amoon@gmail.com>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <20260103083232.9510-4-linux.amoon@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="j3clvygndka2x6e6"
+Content-Disposition: inline
+In-Reply-To: <20260103083232.9510-2-linux.amoon@gmail.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.4.3/267.430.24
+X-ZohoMailClient: External
+
+
+--j3clvygndka2x6e6
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 1/3] arm64: dts: rockchip: rk3588-rock-5b-5bp-5t:
+ Correct Type-C pin bias settings
+MIME-Version: 1.0
 
 Hi,
 
-On 3-Jan-26 09:31, Anand Moon wrote:
-> The fusb302 driver triggers a "BUG: Invalid wait context" lockdep warning
-> under certain configurations (such as when CONFIG_PROVE_RAW_LOCK_NESTING
-> is enabled). This occurs because the interrupt handler, fusb302_irq_intn,
-> attempts to acquire a regular spinlock (&chip->irq_lock) while running
-> in hardirq context can lead to invalid wait context reports if the lock is
-> considered "sleepable" or has incompatible nesting levels with the
-> underlying interrupt controller's locks.
-> 
-> lockdep warnings:
-> 
-> [   38.935276] [      C0] =============================
-> [   38.935690] [      C0] [ BUG: Invalid wait context ]
-> [   38.936106] [      C0] 6.19.0-rc2-2-ARM64-GCC #2 Tainted: GT
-> [   38.936716] [      C0] -----------------------------
-> [   38.937129] [      C0] kworker/0:0/8 is trying to lock:
-> [   38.937566] [      C0] ffff000112c04190 (&chip->irq_lock){....}-{3:3}, at: fusb302_irq_intn+0x38/0x98 [fusb302]
-> [   38.938450] [      C0] other info that might help us debug this:
-> [   38.938953] [      C0] context-{2:2}
-> [   38.939247] [      C0] 2 locks held by kworker/0:0/8:
-> [   38.939670] [      C0]  #0: ffff000100025148 ((wq_completion)events_freezable){+.+.}-{0:0}, at: process_one_work+0x224/0x4b8
-> [   38.940645] [      C0]  #1: ffff8000800fbd90 ((work_completion)(&(&host->detect)->work)){+.+.}-{0:0}, at: process_one_work+0x24c/0x4b8
-> [   38.941691] [      C0] stack backtrace:
-> [   38.942010] [      C0] CPU: 0 UID: 0 PID: 8 Comm: kworker/0:0 Tainted: GT   6.19.0-rc2-2-ARM64-GCC #2 PREEMPT(full)  bd73c5afc1bd41f04ef9699c14f0381f835f4deb
-> [   38.942017] [      C0] Tainted: [T]=RANDSTRUCT
-> [   38.942019] [      C0] Hardware name: Radxa ROCK 5B (DT)
-> [   38.942022] [      C0] Workqueue: events_freezable mmc_rescan
-> [   38.942031] [      C0] Call trace:
-> [   38.942033] [      C0]  show_stack+0x24/0x40 (C)
-> [   38.942041] [      C0]  dump_stack_lvl+0x90/0xd8
-> [   38.942047] [      C0]  dump_stack+0x1c/0x3c
-> [   38.942051] [      C0]  __lock_acquire+0x5e8/0x9c8
-> [   38.942059] [      C0]  lock_acquire+0x134/0x280
-> [   38.942065] [      C0]  _raw_spin_lock_irqsave+0x80/0xb0
-> [   38.942072] [      C0]  fusb302_irq_intn+0x38/0x98 [fusb302 634bac905a09c450b54f88b96019accd2820228f]
-> [   38.942082] [      C0]  __handle_irq_event_percpu+0x138/0x3f0
-> [   38.942088] [      C0]  handle_irq_event+0x58/0xd8
-> [   38.942093] [      C0]  handle_level_irq+0x108/0x190
-> [   38.942099] [      C0]  handle_irq_desc+0x4c/0x78
-> [   38.942106] [      C0]  generic_handle_domain_irq+0x24/0x40
-> [   38.942113] [      C0]  rockchip_irq_demux+0x128/0x240
-> [   38.942120] [      C0]  handle_irq_desc+0x4c/0x78
-> [   38.942127] [      C0]  generic_handle_domain_irq+0x24/0x40
-> [   38.942133] [      C0]  __gic_handle_irq_from_irqson.isra.0+0x260/0x370
-> [   38.942141] [      C0]  gic_handle_irq+0x68/0xa0
-> [   38.942146] [      C0]  call_on_irq_stack+0x48/0x68
-> [   38.942152] [      C0]  do_interrupt_handler+0x74/0x98
-> [   38.942158] [      C0]  el1_interrupt+0x88/0xb0
-> [   38.942165] [      C0]  el1h_64_irq_handler+0x1c/0x30
-> [   38.942170] [      C0]  el1h_64_irq+0x84/0x88
-> [   38.942175] [      C0]  arch_counter_get_cntpct+0x4/0x20 (P)
-> [   38.942181] [      C0]  __const_udelay+0x30/0x48
-> [   38.942187] [      C0]  mci_send_cmd.constprop.0+0x84/0xc8
-> [   38.942194] [      C0]  dw_mci_setup_bus+0x60/0x210
-> [   38.942200] [      C0]  dw_mci_set_ios+0x1c8/0x260
-> [   38.942206] [      C0]  mmc_set_initial_state+0x110/0x140
-> [   38.942211] [      C0]  mmc_rescan_try_freq+0x154/0x198
-> [   38.942216] [      C0]  mmc_rescan+0x1cc/0x278
-> [   38.942221] [      C0]  process_one_work+0x284/0x4b8
-> [   38.942225] [      C0]  worker_thread+0x264/0x3a0
-> [   38.942230] [      C0]  kthread+0x11c/0x138
-> [   38.942236] [      C0]  ret_from_fork+0x10/0x20
-> [   38.969307] [     T11] rockchip-dw-pcie a41000000.pcie: PCI host bridge to bus 0004:40
-> [   38.969995] [     T11] pci_bus 0004:40: root bus resource [bus 40-4f]
-> 
-> Following changes resolves the lockdep warnings and aligns the driver with best
-> practices for I2C-based interrupt handling.
-> 
-> Cc: Hans de Goede <hansg@kernel.org>
-> Cc: Yongbo Zhang <giraffesnn123@gmail.com>
+On Sat, Jan 03, 2026 at 02:01:17PM +0530, Anand Moon wrote:
+> As pre FUSB302 datasheet interrupt line (INT_N) is an open-drain,
+> active-low signal. It requires a pull-up resistor to maintain a stable
+> high state when deasserted. Similarly, the TYPEC5V_PWREN_H enable signal
+> requires a pull-down resistor to ensure it defaults to a low state,
+> preventing unintended power delivery during the boot sequence.
+>=20
+> Update the pinctrl entries to use pcfg_pull_up for usbc0_int and
+> pcfg_pull_down for vbus5v0_typec_en to align with the hardware's
+> electrical requirements.
+>=20
 > Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Fixes: 309b6341d557 ("usb: typec: fusb302: Revert incorrect threaded irq fix")
+> Fixes: 67b2c15d8fb3 ("arm64: dts: rockchip: add USB-C support for ROCK 5B=
+/5B+/5T")
 > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-
-If you look closer at the code then you will see that
-fusb302_irq_intn() is effectively doing its own threaded
-interrupt handling this is done to be able to delay
-the threaded part till after the i2c-controller is
-resumed when a fusb302 irq wakes up the system.
-
-See commit 207338ec5a27 ("usb: typec: fusb302: Improve
-suspend/resume handling") for details.
-
-And if you look at the fusb302 git history then you'll
-seen an earlier change the switch the interrupt handler
-to a threaded IRQ which was reverted (mostly due to it
-also making other undesirable changes).
-
-This change is different though. This is actually quite
-similar to commit cee3dba7b741 ("mei: vsc: Fix "BUG: Invalid
-wait context" lockdep error"). Where I fixed more or less
-the same issue in the same way. So I guess this change also
-is ok.
-
-Still ideally we would solve this in another way then
-switching to a threaded IRQ handler.
-
-As the commit message of the mei-vsc fix mentions
-the root cause of these errors is typically an interrupt
-chip driver which uses IRQF_NO_THREAD disabling the auto
-threading of all interrupt handlers in RT mode.
-
-So the first question here would be to see if that flag is
-used in the interrupt chip and if yes, is that flag really
-necessary ?
-
-Regards,
-
-Hans
-
-
-
-
-
-
-
-
-
-
-
 > ---
->  drivers/usb/typec/tcpm/fusb302.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index 870a71f953f6..089722b52fbb 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -1755,9 +1755,10 @@ static int fusb302_probe(struct i2c_client *client)
->  		goto destroy_workqueue;
->  	}
->  
-> -	ret = request_irq(chip->gpio_int_n_irq, fusb302_irq_intn,
-> -			  IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-> -			  "fsc_interrupt_int_n", chip);
-> +	ret = request_threaded_irq(chip->gpio_int_n_irq,
-> +				   NULL, fusb302_irq_intn,
-> +				   IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-> +				   "fsc_interrupt_int_n", chip);
->  	if (ret < 0) {
->  		dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=%d", ret);
->  		goto tcpm_unregister_port;
+> v1: As per the shematics CC_INT_L interrupt pin is GPIO3_B4_u
+>     As per the shematics TYPEC5V_PWREN_H pin is GPIO2_B6_d
+> ---
 
+Checking the schematics:
+
+5B v1.45 - CC_INT_L - R2613 10K pull-up resistor
+5B v1.45 - TYPEC5V_PWREN_H - GPIO is effectively unused because R95035 is NC
+
+5B+ v1.2 - CC_INT_L - R2613 10K pull-up resistor
+5B+ v1.2 - TYPEC5V_PWREN_H - R163 100K pull-down resistor
+
+5T v1.2 - CC_INT_L - R2613 10K pull-up resistor
+5T v1.2 - TYPEC5V_PWREN_H - R163 100K pull-down resistor
+
+TLDR: All GPIOs have pull resistors in discrete hardware and do not
+need them muxed in the SoC.
+
+Greetings,
+
+-- Sebastian
+
+>  arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi b/ar=
+ch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
+> index b3e76ad2d869..0cd8ac7bf538 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
+> @@ -537,11 +537,11 @@ pcie3_vcc3v3_en: pcie3-vcc3v3-en {
+> =20
+>  	usb {
+>  		usbc0_int: usbc0-int {
+> -			rockchip,pins =3D <3 RK_PB4 RK_FUNC_GPIO &pcfg_pull_none>;
+> +			rockchip,pins =3D <3 RK_PB4 RK_FUNC_GPIO &pcfg_pull_up>;
+>  		};
+> =20
+>  		vbus5v0_typec_en: vbus5v0-typec-en {
+> -			rockchip,pins =3D <2 RK_PB6 RK_FUNC_GPIO &pcfg_pull_none>;
+> +			rockchip,pins =3D <2 RK_PB6 RK_FUNC_GPIO &pcfg_pull_down>;
+>  		};
+>  	};
+>  };
+> --=20
+> 2.50.1
+>=20
+
+--j3clvygndka2x6e6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmlZHy8ACgkQ2O7X88g7
++po4Og/9H83sPXhEoMq5arPCN6/ta/CDQCipwx6OZLyN6znuNtnhXP5yq7ymZ/wf
+06Nuv4Abjr7/hl3DyyprGK8nSQiZ6BpFNzbqP/9VcVxdZHHbOrqRLLb8DllfhZeR
+OgeIx5Lg1NkyyEIPLEUn72KuI7FD+jwfKzk1ptdYc8VW3woDefWwKVOCD1pFlyb0
+jYbSI+4oVtq7sPLlH+Eu0H2ef7btVvmOFNFbuM0xgQQnL5jxHLux4fOd66hVJQb6
+5PGzVQkppms6Srq34fF11/+pdCEAZFs3D1nIXsF46HkxILxHhObUkz21FIZ2MKOX
+VaYyb0aFGxgqKnFMGFUXlvDWHZreHKZZHwTpaMABiQGp+4E/k0ORW3FmX3Djgu69
+UPdPf16M1mZNYzj7N0iR36Jb6lGkeW0BAc4+qdEhuJc78t73kHObkM1KoNXXzFEx
+fuANSDk/OAw6o8eCv0Jw3H/bPrwj2J67YLN1ZITxrWxWjuX3bPq2aorWWW5aBMPo
+d3PXQwHz0r3bcvgsSY/DWa2xaQilt8w2iT/1OY49zkFty+1EDznqZExprL3TM8zG
+4uOw9kMuk7+RvbZjZzgxlowzroN08ICWYhCgPld36DCb25YMQNeARU4/y+lBpnoA
+XPy+YtUpDtM1I/JRXDsMdEIeyTK6GwgvoaS7xsnephRytgPosuQ=
+=NzfA
+-----END PGP SIGNATURE-----
+
+--j3clvygndka2x6e6--
 
