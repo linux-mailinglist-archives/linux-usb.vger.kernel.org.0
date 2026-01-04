@@ -1,108 +1,145 @@
-Return-Path: <linux-usb+bounces-31888-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31889-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5659DCF07B6
-	for <lists+linux-usb@lfdr.de>; Sun, 04 Jan 2026 02:41:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE63CCF07BC
+	for <lists+linux-usb@lfdr.de>; Sun, 04 Jan 2026 02:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9187B3011416
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jan 2026 01:41:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EA94D3011EE1
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jan 2026 01:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC591F4CB3;
-	Sun,  4 Jan 2026 01:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 174D41F471F;
+	Sun,  4 Jan 2026 01:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fTDtgB65"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB8D1E7C03;
-	Sun,  4 Jan 2026 01:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA691F03C5
+	for <linux-usb@vger.kernel.org>; Sun,  4 Jan 2026 01:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767490876; cv=none; b=LkrIP/GKOMLM8BzVeUksfvJ8rGjd/+AjT2+Jy1QlVSRS2J6pt2MAX9CCew7Jc5F98knz5pHMwDs+dyl0AsQ5Jf9vrF+083qikVsh9zntLXns2q4XKqLJKnjNSkVHEIda1Pjje4GN7vZowQeIRvKBvlXOFcuenff9qvyEyRhB5Fw=
+	t=1767490939; cv=none; b=s1a36I0w6ClnWdoDj/nSomsxwuz18tMUMOurz+Ogv/zd6Wi9XluBsrHQPLpnqr5XEwAWyMSYPqlRc4gS9UBB1y7bj3cd+TPjP+MTTcp351zZPYVqBow4plE7TzQp71U4J9h0ziQ2rzYAP1sejDF2W6hZJlHHv/+G6U/2wzyRDYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767490876; c=relaxed/simple;
-	bh=sukF+HLWzcwzlOW9mzjcbVDENYR58LaY7GrnVEarMVE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jQYJHvpNIbVqTCrfp7jY0KH3rPVzbmSne897UlLHx7+8uf6M17dBKGGbpkGQURkJSzVgH5qssic4b/oT1CFeSmTZFdOHXw3hhEsmxMy/Lld7ZE8qPSVgvuiqVA2OEGXgnPKhsv/bd93seYB8rl2G0cs3JUjR4JV4izz16h6N6zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from duge-virtual-machine (unknown [223.160.207.26])
-	by APP-03 (Coremail) with SMTP id rQCowAA3T9YpxVlpeARJAw--.62026S2;
-	Sun, 04 Jan 2026 09:41:00 +0800 (CST)
-Date: Sun, 4 Jan 2026 09:40:57 +0800
-From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: conor@kernel.org, vkoul@kernel.org, gregkh@linuxfoundation.org,
-	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	alex@ghiti.fr, neil.armstrong@linaro.org, krzk+dt@kernel.org,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/5] dt-bindings: soc: canaan: Add top syscon for Canaan
- K230 SoC
-Message-ID: <aVnFKX43C8wl4QiB@duge-virtual-machine>
-References: <20251230023725.15966-1-jiayu.riscv@isrc.iscas.ac.cn>
- <20251230023725.15966-3-jiayu.riscv@isrc.iscas.ac.cn>
- <20251230-jumping-visionary-coyote-c0be31@quoll>
- <aVPQNIhyfR/Da/gk@duge-virtual-machine>
- <572407e8-bac7-4277-bfbd-ed42327b0ff4@kernel.org>
+	s=arc-20240116; t=1767490939; c=relaxed/simple;
+	bh=uo7jRJUYl8n7kI4BS57pyrn8ttsy5cSp40iRdvkyW5E=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=i1tW2sfSyyDIWdzyfXrL6WPfrQ7ne8MfReaZ8Bzlqd90hq9T0PSE33W/CMrfc8QTo7k2lxKSR1r17gqWZ51pQnR17mvzkJq6TGvVB/YwC3FyheDCOQuuiSamQYMjiW3lsFk5Qb3+3Pqr85uXLDz/3NT0gAUY0q51D3MdvkkeNuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fTDtgB65; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F2A80C113D0
+	for <linux-usb@vger.kernel.org>; Sun,  4 Jan 2026 01:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767490939;
+	bh=uo7jRJUYl8n7kI4BS57pyrn8ttsy5cSp40iRdvkyW5E=;
+	h=From:To:Subject:Date:From;
+	b=fTDtgB65pZWbiiaofaFamsvGynvt1x22iBIIGMwdb8X0dHa2bwCgjuYq/hIYU36yY
+	 C7e1y/6Th6eWbr0UwSlNK8toDF2lSg3u+l/UwT+cnw5kRlbMRHTD5zYJCteMz61r96
+	 GtlBaO4TNyExiT05Pw1L9t0U3tnlM3WDQmPUGPrG04Dc4Yd6/8urm6FPhRUt3KoYQZ
+	 DwHeZJljsXMJK4vxCHQc49R+nOpfkm8djyhhJh91EUzazgsGm+ut3sNlM7EmE0sYZ4
+	 O92mFQrZP9Wwk7xG0oo4mq/mX1yx3tXBAJ/RWa5NrUrDzlJfxKLDYaya46Hyts2tuc
+	 fq6Kgs8tgLqTQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id DF3A2C3279F; Sun,  4 Jan 2026 01:42:18 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220936] New: ASMedia ASM4242 USB 3.2 xHCI Controller gives
+ command timeout
+Date: Sun, 04 Jan 2026 01:42:18 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stuart.a.hayhurst@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression attachments.created
+Message-ID: <bug-220936-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <572407e8-bac7-4277-bfbd-ed42327b0ff4@kernel.org>
-X-CM-TRANSID:rQCowAA3T9YpxVlpeARJAw--.62026S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruF48GFyrJr4xtF1DtrWfGrg_yoWDtrc_XF
-	WDAw1xCw47CFZrtws7KF4kJry3Ka47GryjqrZ5Xr4jvr13ur95Aw4rC34xJw1kGFWUKF15
-	Gr10vw4rW34YgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbsxYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-	6I8E6xAIw20EY4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-	8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0
-	cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z2
-	80aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-	w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
-	vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY
-	1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-	C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-	wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-	v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
-	jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
-	ZFpf9x07b0SoAUUUUU=
-X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 
-On Tue, Dec 30, 2025 at 03:00:26PM +0100, Krzysztof Kozlowski wrote:
-> On 30/12/2025 14:14, Jiayu Du wrote:
-> > On Tue, Dec 30, 2025 at 08:39:19AM +0100, Krzysztof Kozlowski wrote:
-> >> On Tue, Dec 30, 2025 at 10:37:21AM +0800, Jiayu Du wrote:
-> > This hisys memory area not only includes the usbphy registers,
-> > but also contains the registers of sd/mmc phy. Therefore, the
-> > hisys node is necessary and cannot be folded.
-> 
-> Can be. There is absolutely nothing stopping it.
-> 
-> Anyway, define all nodes.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220936
 
-I will fold the child into the parent in v2, thanks for your guidance.
+            Bug ID: 220936
+           Summary: ASMedia ASM4242 USB 3.2 xHCI Controller gives command
+                    timeout
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: stuart.a.hayhurst@gmail.com
+        Regression: No
 
-> > 
-> > 
-> > If what I said above is accepted by you, do I still need to
-> > merge the two usb phy nodes by defining one phy with phy-cells=2?
-> 
-> You should read your datasheet, not exactly rely on me guessing. In
-> current form of the binding, you must fold the child into the parent.
-> 
-> Best regards,
-> Krzysztof
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Created attachment 309123
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D309123&action=3Dedit
+dmesg log with the warning
 
+After enabling the USB 4 controller on my motherboard (previously disabled =
+to
+use the lanes for an NVMe), I've started seeing a warning about a command /
+suspend timeout for that controller.
+
+I'm running mainline 6.18.3 on top of Debian Sid, the motherboard is an MSI
+X870E Tomahawk WiFi. This also happens on 6.17 kernels, I didn't test any
+further back.
+
+I've attached a full log, but the warning I get:
+```
+[  160.064098] xhci_hcd 0000:77:00.0: WARN: xHC CMD_RUN timeout
+[  160.064117] xhci_hcd 0000:77:00.0: PM: suspend_common(): xhci_pci_suspend
+[xhci_pci] returns -110
+[  160.064124] xhci_hcd 0000:77:00.0: can't suspend (hcd_pci_runtime_suspend
+[usbcore] returned -110)
+```
+
+Corresponding part of `lspci`:
+```
+77:00.0 USB controller: ASMedia Technology Inc. ASM4242 USB 3.2 xHCI Contro=
+ller
+(rev 01)
+78:00.0 USB controller: ASMedia Technology Inc. ASM4242 USB 4 / Thunderbolt=
+ 3
+Host Router (rev 01)
+79:00.0 Non-Essential Instrumentation [1300]: Advanced Micro Devices, Inc.
+[AMD] Raphael/Granite Ridge PCIe Dummy Function (rev c3)
+79:00.2 Encryption controller: Advanced Micro Devices, Inc. [AMD] Family 19h
+PSP/CCP
+79:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Raphael/Granite
+Ridge USB 3.1 xHCI
+79:00.4 USB controller: Advanced Micro Devices, Inc. [AMD] Raphael/Granite
+Ridge USB 3.1 xHCI
+79:00.6 Audio device: Advanced Micro Devices, Inc. [AMD] Ryzen HD Audio
+Controller
+7a:00.0 USB controller: Advanced Micro Devices, Inc. [AMD] Raphael/Granite
+Ridge USB 2.0 xHCI
+```
+
+Sorry if this is the wrong category, I wasn't sure exactly where to put it
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
