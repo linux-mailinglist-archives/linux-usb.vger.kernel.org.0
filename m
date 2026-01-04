@@ -1,155 +1,280 @@
-Return-Path: <linux-usb+bounces-31895-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31896-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E978CF142A
-	for <lists+linux-usb@lfdr.de>; Sun, 04 Jan 2026 20:20:44 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABE9DCF172D
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 00:13:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5B70C302514A
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jan 2026 19:19:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 03AC430019C5
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jan 2026 23:13:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B1AE30FF3B;
-	Sun,  4 Jan 2026 19:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7CCD27F163;
+	Sun,  4 Jan 2026 23:13:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="OVy1MA56"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f79.google.com (mail-oo1-f79.google.com [209.85.161.79])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB403A1E7F
-	for <linux-usb@vger.kernel.org>; Sun,  4 Jan 2026 19:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC393A1E94
+	for <linux-usb@vger.kernel.org>; Sun,  4 Jan 2026 23:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767554372; cv=none; b=hIi3XSBX/WnPba0DR7riaFg6BMbiXtXIpwDZmcrm+z0Zkzqvj1x/80T0Ch82zzbyk1u5v8H8pZxRw6srC3K3lzEIcD6uS4feCFPhi4xDtgNiRfeXmCWCBseR/g34OV1nXJn3VjdOnxfphZ9z7uPZhAgoh1Cbd7fjBOxt2kXoY34=
+	t=1767568396; cv=none; b=plnYPdKC6hpcXjPU+gBnhoA17dyBLnN+PyXxkPY+1HV6weuFabFlvgBUnb2o4NTwjDZ1ngX9wFDxWLf2T36SMH+Ie6GBt1W04N9vz4tIhJ51Wb5Y5Nx9elaRLKzD2ZJPb/zdblMbvAQnNOQ8jqVxrL2ECnjjuwptfOCx4b89JUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767554372; c=relaxed/simple;
-	bh=Vlv6MQDmmOGEXZHTPr5+NVQB75zXXPfxUMaNWJNqc8s=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=I0tVa9r8exff9GI9lXpyqkUQzWcPiasmL2koUkXfITN0Si2ARDa9uTXzHC8iW2hdbWh6vYolnMQp1dM6wsUCt+iiw4yOTCwVAaBd0TBOZwejpgGm8ANAqEXgJRUJXWkL2rQmTce2ESFxczdNfYNtCvEwF4ZGwf6slQC8u88Hrbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f79.google.com with SMTP id 006d021491bc7-6574d3d44f9so26231488eaf.3
-        for <linux-usb@vger.kernel.org>; Sun, 04 Jan 2026 11:19:30 -0800 (PST)
+	s=arc-20240116; t=1767568396; c=relaxed/simple;
+	bh=fuetiow+ojjAaCFZgPoEMa/6FpsWYCZH0hUXETqpBi8=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Qsnk/m4hTh7V+kPRPRG2KlX7CQMC9mVMMX+qOUpaynpA+MHWwyQau/QX37kxlpkN+wsTsqjlwj7pBeo2mlfcmhZTWsGWejbPSMhY4s1Mj1xItDHf6qCb+3AddZ4r+ROrkcz+N6+KYkJCByPkcEDMjSYyKL2NOABDLHNuXHMHXFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=OVy1MA56; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b7cf4a975d2so2120858566b.2
+        for <linux-usb@vger.kernel.org>; Sun, 04 Jan 2026 15:13:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1767568393; x=1768173193; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WzFi4r4ltN51Cim3BRtNQcm5/o5VopK3YDgML2QimT4=;
+        b=OVy1MA560+j0kZHKWh4ERMcp8URB4RoWwhBm4esbhIzyYo+S6qy5OXxqRHYNxXyesy
+         VDAWMMN8UreeEOmPzcGCmVf89NAPrnItLGwHZvBsJA26Pssw/+4tUcZ6/NV+cDS+KapB
+         pU3A4LpM5IC0IelZqiVzJlnZrSNE+UM9LAvaAggw53zxj55LoFHHK6wLBBExkrlCcRB+
+         6f96VtqR3qmQSse4lZDYN7TC+snv76nq/u/0jwkupXTXzgcq9gLMiftJS8hfElMGnwY4
+         /AhZiOmQ1hundTnQmL8EFKrnuezjSUazjPZoz1KwXPltZWMk/g3KfMXgsspHHEl5WqN4
+         HIlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767554369; x=1768159169;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        d=1e100.net; s=20230601; t=1767568393; x=1768173193;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Y5h4CcQ4i6CybYIdLNzSySVZ/jerdRgkkf/ATpg6lY=;
-        b=DprEWcdm7mOGBW/Xh7wcfwJeXR75HTjNZRE7gznmS5lRKWi02oN20v2h/0XtJY5uCs
-         evncbx0NPO+huRMrmvcqdPtJymsiuOEc8BqZl6caLqb2E5/YcCvepgPHBUuipH+M3Ddt
-         VzqhtjPWEVUmxurS5Jd9QGmYWyIOvMPPYbO6DAnZqdDyZUElIaj0BM3NNTol6vgKPfki
-         KWHsbEPWWT0XQ+LwF5QYvFx6HtJMFHvaDfccqKaLJupGwFCE+CNr4GoR9B8DHUkpKzcl
-         6OP2jzHIPlaek/MypknTkgH4Y6/JP1TeGDcjV3a8r+2mWiX7HE+AD80d/cPNkWarZ8gj
-         ZVUA==
-X-Forwarded-Encrypted: i=1; AJvYcCVmAvAdy2AQ+ISFpfPOi/Ao+HNzHnA55+Bu/wbfpVxPl05Op/6EwmVPwbpNDdVvxa3zkamh5wS5Bno=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+nDmGrf6JnkzcSTDMvT0sM8oIi/r61reh5CLOUFHyBl/IGTli
-	+aTU7zdRDwXYdeuvor/IzFfdsgGxq/i20qqPClTi9rQAqXjVjRSwIngegATjgK7uwzXxiw0N/oh
-	BacPOlFyLMPEp15gLsOcCRYW/inbKw4pOU1Fe5tCr4Ush0ySSQetokHN3uG8=
-X-Google-Smtp-Source: AGHT+IH/F24mGMAL6rxDkOJvknWOJ2y0DW5Rb9IgryNEQV4SOTECJN1KG44dYtDrhqQxY9w4i/0+rYwOfgw8DYOdAsEMcLSaYpX6
+        bh=WzFi4r4ltN51Cim3BRtNQcm5/o5VopK3YDgML2QimT4=;
+        b=bdO5yokvEKWcfnksKX/vtlbPyJJ/1K+rTOf8UxFITVdGjtw0laKxd7Z/L77GuRaOAQ
+         gu7Ug9em7u45n5An0XjmigM37Bzdz5ESx0hjP74VnCFGKcVKKaXAzveIiD65j3PHU9gt
+         wVrUq7/hkFFkZoHv2Dbgxvvj49oSwRwxFNlZAKe6TO9jC1wteWFrHYb5buODCe1IAbpv
+         H4EsBKCihY7op07fLVoLngmrTUbzl0MXthTW9fdsYM+uUsRR0WeJbNzGaz+6sG5R+r8N
+         rX1cQwTAu1RgD4iuL3oRPJzxLqb7aVZZM+25ZcLgitfTCw0frASo38TY94CfLXGnTEL0
+         lf8A==
+X-Gm-Message-State: AOJu0YzOLb2ZqbWyvWZWssXQrT4Sg8NKj5uae9v4W6dhxLKEb6d+dAWy
+	94Ij59fWrb35MRH33JOyCJxfDnF6yMl1RkCfeyBFWJHJjoe/zSYMBtM8ZFj0PdHDTv+qS1JzZG5
+	6zCRpOIY3d8wnQrQ8rCy27br7QWbJoYc=
+X-Gm-Gg: AY/fxX6Eb/n/oqJvot6WWzeXwZL0IEywu/oISmpJ6cW7TzoPxDvHrhFrow+p5RtT7RV
+	cgub43wFoU854Vc1NKOnxobchiwsZQiqt+8gBrXSu7wvatBlkCZhY/5NP3EA9j8hORyZ/8v/mpp
+	E6cxrVwKrZBZ8wyvBJw2+jkS0dhjo9s0ffYNmEj5ClzfNrGULbxRoEq3XOBoC9SaXPFPZOj6KGe
+	qkW7zXhcsfwYzhGPQjZw8NYkeU+Qn8pBPJBClELvyQ/01tyQ4YhcvO+aktabjFIAmq/1PWBnEXz
+	Dwf4xpmYCf0uRgFhgjr+96+3Qg==
+X-Google-Smtp-Source: AGHT+IEym2U47DN3s3+S6c1te1TKH68FSwTefyZLxOufl/QB3VmkHCevXkx7YRl5D2dw02qmq1dwUcvIKwGD7wEeb2g=
+X-Received: by 2002:a17:907:7295:b0:b72:d56f:3468 with SMTP id
+ a640c23a62f3a-b803718321fmr4470592166b.50.1767568392450; Sun, 04 Jan 2026
+ 15:13:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:2228:b0:659:9a49:8fe1 with SMTP id
- 006d021491bc7-65d0e932cb2mr19967934eaf.14.1767554369500; Sun, 04 Jan 2026
- 11:19:29 -0800 (PST)
-Date: Sun, 04 Jan 2026 11:19:29 -0800
-In-Reply-To: <69322f1d.a70a0220.d98e3.01e2.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <695abd41.050a0220.a1b6.0392.GAE@google.com>
-Subject: Re: [syzbot] [usb?] WARNING in ADDR_ctrl_msg/usb_submit_urb
-From: syzbot <syzbot+427909a2e3b2f83d78cb@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+From: Marco Schuschnig <m.schuster91@googlemail.com>
+Date: Mon, 5 Jan 2026 00:13:01 +0100
+X-Gm-Features: AQt7F2qvMIqVggZhm7PnnokClUye2OszFuQRW7-j0MzxzrOnll9sH1puuaZar-Y
+Message-ID: <CAEhB=Bt13wr1+cc1rfzwPxnEEuawMgTew=RJic2FsVb=Gccm+A@mail.gmail.com>
+Subject: usbip: Kernel oops when trying to bind devices from Windows client
+To: valentina.manea.m@gmail.com, shuah@kernel.org
+Cc: linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-syzbot has found a reproducer for the following issue on:
+Hello all,
 
-HEAD commit:    cc3aa43b44bd Add linux-next specific files for 20251219
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1336269a580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=da1bc82c6189c463
-dashboard link: https://syzkaller.appspot.com/bug?extid=427909a2e3b2f83d78cb
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11698074580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1736269a580000
+I am trying to get usbip working with a Raspberry Pi Zero 2 W
+(Raspberry Pi OS / Debian Trixie, kernel 6.2.47) as host and a Windows
+10 machine as client (using usbip-win2 0.9.7.3). The device to be
+shared is a "145f:0276 Trust GXT 165 Gaming Mouse".
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/30bf539e6f28/disk-cc3aa43b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0e2f8b08e342/vmlinux-cc3aa43b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ec7ee6ece11f/bzImage-cc3aa43b.xz
+Upon attaching from the Windows machine, the Raspberry Pi
+kernel-oopses pretty much immediately. Sometimes, the Pi locks up hard
+until it is either power-cycled or the watchdog kicks in, sometimes it
+keeps running. In the latter case, when attempting to detach on the
+Windows machine, another kernel oops follows like in the attached
+stacktrace (sec. 158).
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+427909a2e3b2f83d78cb@syzkaller.appspotmail.com
+The issue is fully reproducible, the attached stacktrace was produced
+with usbip_debug_flag=0xFFFFFFFF.
 
-------------[ cut here ]------------
-usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType c0
-WARNING: drivers/usb/core/urb.c:414 at usb_submit_urb+0x105c/0x18d0 drivers/usb/core/urb.c:412, CPU#0: syz.0.17/6000
-Modules linked in:
-CPU: 0 UID: 0 PID: 6000 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
-RIP: 0010:usb_submit_urb+0x111c/0x18d0 drivers/usb/core/urb.c:412
-Code: b8 00 00 00 00 00 fc ff df 0f b6 44 05 00 84 c0 0f 85 a7 05 00 00 45 0f b6 45 00 48 8b 3c 24 48 8b 74 24 20 4c 89 fa 44 89 f1 <67> 48 0f b9 3a 49 bf 00 00 00 00 00 fc ff df e9 b7 f2 ff ff 89 e9
-RSP: 0018:ffffc9000ecf7760 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffff888032177a00 RCX: 0000000080000280
-RDX: ffff8880203d1e80 RSI: ffffffff8c341f40 RDI: ffffffff8faef860
-RBP: 1ffff110283df6ec R08: 00000000000000c0 R09: 0000000000000000
-R10: ffffc9000ecf7860 R11: fffff52001d9ef18 R12: ffff8881426d1100
-R13: ffff888141efb760 R14: 0000000080000280 R15: ffff8880203d1e80
-FS:  0000555584472500(0000) GS:ffff888125c25000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30663fff CR3: 00000000762fe000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- usb_start_wait_urb+0x115/0x4f0 drivers/usb/core/message.c:59
- usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
- usb_control_msg+0x232/0x3e0 drivers/usb/core/message.c:154
- ce6230_ctrl_msg+0x2b1/0x660 drivers/media/usb/dvb-usb-v2/ce6230.c:61
- ce6230_i2c_master_xfer+0x4ce/0x6d0 drivers/media/usb/dvb-usb-v2/ce6230.c:113
- __i2c_transfer+0x871/0x2110 drivers/i2c/i2c-core-base.c:-1
- i2c_transfer+0x25b/0x3a0 drivers/i2c/i2c-core-base.c:2317
- i2cdev_ioctl_rdwr+0x460/0x740 drivers/i2c/i2c-dev.c:306
- i2cdev_ioctl+0x64b/0x820 drivers/i2c/i2c-dev.c:467
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:597 [inline]
- __se_sys_ioctl+0xfc/0x170 fs/ioctl.c:583
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f10c3b8f749
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe182be228 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f10c3de5fa0 RCX: 00007f10c3b8f749
-RDX: 0000200000000a40 RSI: 0000000000000707 RDI: 0000000000000004
-RBP: 00007f10c3c13f91 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f10c3de5fa0 R14: 00007f10c3de5fa0 R15: 0000000000000003
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	b8 00 00 00 00       	mov    $0x0,%eax
-   5:	00 fc                	add    %bh,%ah
-   7:	ff                   	(bad)
-   8:	df 0f                	fisttps (%rdi)
-   a:	b6 44                	mov    $0x44,%dh
-   c:	05 00 84 c0 0f       	add    $0xfc08400,%eax
-  11:	85 a7 05 00 00 45    	test   %esp,0x45000005(%rdi)
-  17:	0f b6 45 00          	movzbl 0x0(%rbp),%eax
-  1b:	48 8b 3c 24          	mov    (%rsp),%rdi
-  1f:	48 8b 74 24 20       	mov    0x20(%rsp),%rsi
-  24:	4c 89 fa             	mov    %r15,%rdx
-  27:	44 89 f1             	mov    %r14d,%ecx
-* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
-  2f:	49 bf 00 00 00 00 00 	movabs $0xdffffc0000000000,%r15
-  36:	fc ff df
-  39:	e9 b7 f2 ff ff       	jmp    0xfffff2f5
-  3e:	89 e9                	mov    %ebp,%ecx
+An issue with the hardware can be ruled out, as when using a Raspberry
+Pi 5 as client (same kernel version) the usbip connection works
+flawlessly. Incidentally, when using the Raspberry Pi 5 as host
+together with the Windows 10 machine as client, usbip works just fine.
+I have tested with the same results an USB keyboard and an Android
+smartphone to rule out a misbehaving USB device.
 
+It might be possible that the culprit is something Windows does to USB
+devices or a bug in the usbip-win2 package, but even if Windows sends
+corrupt USB packets, these should IMHO not lead to a kernel-oops.
+
+If you need any further investigation beyond the crash log (e.g. a
+wireshark dump), I'm happy to help out.
+
+Kind regards
+Marco
 
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+$ uname -a
+Linux rpi-xxx 6.12.47+rpt-rpi-v8 #1 SMP PREEMPT Debian
+1:6.12.47-1+rpt1 (2025-09-16) aarch64 GNU/Linux
+$ lsusb -t
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=dwc_otg/1p, 480M
+    |__ Port 001: Dev 002, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 001: Dev 003, 1.5M
+        |__ Port 003: Dev 004, 12M
+$ lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 1a40:0101 Terminus Technology Inc. Hub
+Bus 001 Device 003: ID 1a2c:4c5e China Resource Semico Co., Ltd USB Keyboard
+Bus 001 Device 004: ID 145f:0276 Trust GXT 165 Gaming Mouse
+
+---
+[   84.292485] usbip-host 1-1.3: stub up
+[   84.432511] usbip-core00000000: 01000000 03000000 04000100 01000000
+[   84.432547] usbip-core00000010: 00000000 00000000 40000000 00000000
+[   84.432565] usbip-core00000020: ffffffff 00000000 01000680 00400000
+[   84.445978] usbip-core00000000: 01000000 05000000 04000100 01000000
+[   84.446009] usbip-core00000010: 00000000 00000000 12000000 00000000
+[   84.446026] usbip-core00000020: ffffffff 00000000 01000680 00120000
+[   85.050622] usbip-core00000000: 01000000 07000000 04000100 01000000
+[   85.050658] usbip-core00000010: 00000000 00000000 40000000 00000000
+[   85.050675] usbip-core00000020: ffffffff 00000000 01000680 00400000
+[   85.165815] usbip-core00000000: 01000000 09000000 04000100 01000000
+[   85.165849] usbip-core00000010: 00000000 00000000 12000000 00000000
+[   85.165866] usbip-core00000020: ffffffff 00000000 01000680 00120000
+[   85.176263] usbip-core00000000: 01000000 0b000000 04000100 01000000
+[   85.176295] usbip-core00000010: 00000000 00000000 ff000000 00000000
+[   85.176312] usbip-core00000020: ffffffff 00000000 02000680 00ff0000
+[   85.180278] usbip-core00000000: 01000000 0d000000 04000100 01000000
+[   85.180309] usbip-core00000010: 00000000 00000000 ff000000 00000000
+[   85.180326] usbip-core00000020: ffffffff 00000000 03000680 00ff0000
+[   85.183476] usbip-core00000000: 01000000 0f000000 04000100 01000000
+[   85.183506] usbip-core00000010: 00000000 00000000 ff000000 00000000
+[   85.183523] usbip-core00000020: ffffffff 00000000 03020680 00ff0409
+[   85.188020] usbip-core00000000: 01000000 11000000 04000100 01000000
+[   85.188050] usbip-core00000010: 00000000 00000000 12000000 00000000
+[   85.188067] usbip-core00000020: ffffffff 00000000 01000680 00120000
+[   85.194198] usbip-core00000000: 01000000 13000000 04000100 01000000
+[   85.194228] usbip-core00000010: 00000000 00000000 12000000 00000000
+[   85.194245] usbip-core00000020: ffffffff 00000000 01000680 00120000
+[   85.201859] usbip-core00000000: 01000000 15000000 04000100 01000000
+[   85.201889] usbip-core00000010: 00000000 00000000 12000000 00000000
+[   85.201906] usbip-core00000020: ffffffff 00000000 01000680 00120000
+[   85.202644] Unable to handle kernel paging request at virtual
+address 0000000200000083
+[   85.202687] Mem abort info:
+[   85.202704]   ESR = 0x0000000096000005
+[   85.202724]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   85.202749]   SET = 0, FnV = 0
+[   85.202768]   EA = 0, S1PTW = 0
+[   85.202787]   FSC = 0x05: level 1 translation fault
+[   85.202809] Data abort info:
+[   85.202826]   ISV = 0, ISS = 0x00000005, ISS2 = 0x00000000
+[   85.202849]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[   85.202873]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[   85.202899] user pgtable: 4k pages, 39-bit VAs, pgdp=0000000005c94000
+[   85.202926] [0000000200000083] pgd=0000000000000000,
+p4d=0000000000000000, pud=0000000000000000
+[   85.202988] Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+[   85.203020] Modules linked in: rfcomm cmac algif_hash aes_arm64
+aes_generic algif_skcipher af_alg bnep binfmt_misc brcmfmac_wcc joydev
+brcmfmac vc4 snd_soc_hdmi_codec drm_display_helper cec brcmutil
+drm_dma_helper drm_kms_helper cfg80211 hci_uart snd_soc_core btbcm
+bcm2835_codec(C) bcm2835_v4l2(C) bcm2835_isp(C) bluetooth snd_compress
+bcm2835_mmal_vchiq(C) snd_pcm_dmaengine vc_sm_cma(C) v4l2_mem2mem
+videobuf2_vmalloc videobuf2_dma_contig videobuf2_memops videobuf2_v4l2
+videodev raspberrypi_hwmon ecdh_generic ecc rfkill videobuf2_common
+libaes mc snd_bcm2835(C) snd_pcm raspberrypi_gpiomem snd_timer snd
+uio_pdrv_genirq uio sch_fq_codel usbip_host usbip_core zram drm
+lz4_compress fuse drm_panel_orientation_quirks backlight nfnetlink
+ip_tables x_tables ipv6 i2c_bcm2835
+[   85.203605] CPU: 0 UID: 0 PID: 985 Comm: stub_tx Tainted: G
+C         6.12.47+rpt-rpi-v8 #1  Debian 1:6.12.47-1+rpt1
+[   85.203655] Tainted: [C]=CRAP
+[   85.203675] Hardware name: Raspberry Pi Zero 2 W Rev 1.0 (DT)
+[   85.203702] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   85.203737] pc : stub_send_ret_submit+0xd4/0x610 [usbip_host]
+[   85.203786] lr : stub_send_ret_submit+0xd4/0x610 [usbip_host]
+[   85.203826] sp : ffffffc081aabcd0
+[   85.203847] x29: ffffffc081aabd90 x28: 0000000000000000 x27: ffffff8002476200
+[   85.203898] x26: 0000000000000000 x25: 0000000000000000 x24: 00000001ffffffff
+[   85.203947] x23: ffffff801b77dbb8 x22: 0000000000000000 x21: ffffff801b77db94
+[   85.203997] x20: ffffff801b77db00 x19: ffffffc081aabd58 x18: ffffffffffffffff
+[   85.204046] x17: 0000000000000000 x16: ffffffd5f6b9bb40 x15: 0000000000000000
+[   85.204095] x14: ffffffc081aa3848 x13: 0000000000000000 x12: 0000000000000313
+[   85.204144] x11: 00000000000000c0 x10: 0000000000001a40 x9 : ffffffd5adc56264
+[   85.204194] x8 : ffffffc081aabd58 x7 : 0000000000000000 x6 : ffffff801b77dbf0
+[   85.204243] x5 : ffffff801b77dbf0 x4 : 0000000000000000 x3 : 0000000000000020
+[   85.204292] x2 : 0000000000000008 x1 : 0000000000000000 x0 : ffffffc081aabcf0
+[   85.204342] Call trace:
+[   85.204362]  stub_send_ret_submit+0xd4/0x610 [usbip_host]
+[   85.204403]  stub_tx_loop+0x5c/0x158 [usbip_host]
+[   85.204441]  kthread+0x118/0x128
+[   85.204475]  ret_from_fork+0x10/0x20
+[   85.204517] Code: a9007e7f a9017e7f a9027e7f 97fff3d9 (b9408702)
+[   85.204549] ---[ end trace 0000000000000000 ]---
+[   90.216451] usbip-core00000000: 02000000 16000000 04000100 00000000
+[   90.216524] usbip-core00000010: 00000000 15000000 12000000 00000000
+[   90.216573] usbip-core00000020: ffffffff 00000000 01000680 00120000
+[   90.236005] usbip-core00000000: 01000000 19000000 04000100 01000000
+[   90.236066] usbip-core00000010: 00000000 00000000 40000000 00000000
+[   90.236101] usbip-core00000020: ffffffff 00000000 01000680 00400000
+[  158.004537] usbip-host 1-1.3: recv a header, 0
+[  158.005176] Unable to handle kernel paging request at virtual
+address 000000020000003f
+[  158.005246] Mem abort info:
+[  158.005265]   ESR = 0x0000000096000005
+[  158.005288]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  158.005373]   SET = 0, FnV = 0
+[  158.005399]   EA = 0, S1PTW = 0
+[  158.005454]   FSC = 0x05: level 1 translation fault
+[  158.005480] Data abort info:
+[  158.005499]   ISV = 0, ISS = 0x00000005, ISS2 = 0x00000000
+[  158.005525]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[  158.005551]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[  158.005583] user pgtable: 4k pages, 39-bit VAs, pgdp=0000000005cd7000
+[  158.005615] [000000020000003f] pgd=0000000000000000,
+p4d=0000000000000000, pud=0000000000000000
+[  158.005675] Internal error: Oops: 0000000096000005 [#2] PREEMPT SMP
+[  158.005708] Modules linked in: rfcomm cmac algif_hash aes_arm64
+aes_generic algif_skcipher af_alg bnep binfmt_misc brcmfmac_wcc joydev
+brcmfmac vc4 snd_soc_hdmi_codec drm_display_helper cec brcmutil
+drm_dma_helper drm_kms_helper cfg80211 hci_uart snd_soc_core btbcm
+bcm2835_codec(C) bcm2835_v4l2(C) bcm2835_isp(C) bluetooth snd_compress
+bcm2835_mmal_vchiq(C) snd_pcm_dmaengine vc_sm_cma(C) v4l2_mem2mem
+videobuf2_vmalloc videobuf2_dma_contig videobuf2_memops videobuf2_v4l2
+videodev raspberrypi_hwmon ecdh_generic ecc rfkill videobuf2_common
+libaes mc snd_bcm2835(C) snd_pcm raspberrypi_gpiomem snd_timer snd
+uio_pdrv_genirq uio sch_fq_codel usbip_host usbip_core zram drm
+lz4_compress fuse drm_panel_orientation_quirks backlight nfnetlink
+ip_tables x_tables ipv6 i2c_bcm2835
+[  158.006301] CPU: 0 UID: 0 PID: 12 Comm: kworker/u16:0 Tainted: G
+  D  C         6.12.47+rpt-rpi-v8 #1  Debian 1:6.12.47-1+rpt1
+[  158.006355] Tainted: [D]=DIE, [C]=CRAP
+[  158.006377] Hardware name: Raspberry Pi Zero 2 W Rev 1.0 (DT)
+[  158.006405] Workqueue: usbip_event event_handler [usbip_core]
+[  158.006466] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  158.006501] pc : usb_kill_urb+0xc/0x50
+[  158.006542] lr : stub_device_cleanup_urbs+0x98/0x180 [usbip_host]
+[  158.006589] sp : ffffffc08007bcb0
+[  158.006611] x29: ffffffc08007bcb0 x28: 0000000000000000 x27: 0000000000000000
+[  158.006662] x26: ffffff801b77db00 x25: ffffff801b77dbb8 x24: ffffff801b77dba8
+[  158.006712] x23: ffffff801b77db98 x22: ffffff801b77db94 x21: ffffff801b77db00
+[  158.006762] x20: ffffff8002476200 x19: 0000000000000001 x18: 0000000000000000
+[  158.006811] x17: ffffff8001f0d800 x16: ffffffd5f67c4e78 x15: 0000000000001000
+[  158.006861] x14: 0000000000000000 x13: 0000000000000002 x12: 0000000000000000
+[  158.006911] x11: 00000000000000c0 x10: 0000000000001a40 x9 : ffffffd5adc55220
+[  158.006961] x8 : ffffffc08007bc20 x7 : ffffffaa13ce9000 x6 : ffffff800af2c880
+[  158.007011] x5 : ffffff8001e84200 x4 : ffffff801b77dbb8 x3 : ffffff801b77dbb8
+[  158.007061] x2 : ffffff8002476208 x1 : ffffff8003fe2fc0 x0 : 00000001ffffffff
+[  158.007112] Call trace:
+[  158.007133]  usb_kill_urb+0xc/0x50
+[  158.007170]  stub_shutdown_connection+0x84/0x178 [usbip_host]
+[  158.007212]  event_handler+0xa4/0x1a0 [usbip_core]
+[  158.007257]  process_one_work+0x158/0x3d0
+[  158.007294]  worker_thread+0x2c4/0x3e8
+[  158.007327]  kthread+0x118/0x128
+[  158.007356]  ret_from_fork+0x10/0x20
+[  158.007397] Code: ffffffd5 aa1e03e9 d503201f b4000180 (f9402002)
+[  158.007430] ---[ end trace 0000000000000000 ]---
 
