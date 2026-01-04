@@ -1,49 +1,52 @@
-Return-Path: <linux-usb+bounces-31887-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31888-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 746B3CF07A5
-	for <lists+linux-usb@lfdr.de>; Sun, 04 Jan 2026 02:38:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5659DCF07B6
+	for <lists+linux-usb@lfdr.de>; Sun, 04 Jan 2026 02:41:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AF36630011A5
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jan 2026 01:38:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9187B3011416
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jan 2026 01:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93C5D1EF36C;
-	Sun,  4 Jan 2026 01:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC591F4CB3;
+	Sun,  4 Jan 2026 01:41:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5407D14B96E;
-	Sun,  4 Jan 2026 01:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB8D1E7C03;
+	Sun,  4 Jan 2026 01:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767490694; cv=none; b=NRQZtWBGi8nvdN1wFIzEOjRryJXuMTiZdDlsRS5EiqkoctQrzqxLyiCDe/JeLhVokl3sAfg/PnCkbdo1ushKx+GUWmbrs1GwBYw/Dqrg9uroZKiRdW/gb71Ngr6CJ2wJXbTnLfrwSMoRHuzBKJFpcwmkJymM62Xusyn62Q5kjPA=
+	t=1767490876; cv=none; b=LkrIP/GKOMLM8BzVeUksfvJ8rGjd/+AjT2+Jy1QlVSRS2J6pt2MAX9CCew7Jc5F98knz5pHMwDs+dyl0AsQ5Jf9vrF+083qikVsh9zntLXns2q4XKqLJKnjNSkVHEIda1Pjje4GN7vZowQeIRvKBvlXOFcuenff9qvyEyRhB5Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767490694; c=relaxed/simple;
-	bh=TaVoauf7Ih98vRBjjk/gaeABr7IwgbgWseWXOYsr+HM=;
+	s=arc-20240116; t=1767490876; c=relaxed/simple;
+	bh=sukF+HLWzcwzlOW9mzjcbVDENYR58LaY7GrnVEarMVE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BT/ZrKr3lW1KOGaXmFzjdngRUr8h4AML1r9tMDNDgQ6NqsavaxhwIHrpoFb5Z5cclarVwzIaNVpKQYwsLgGlSzTxDrAFHPEH39eTv2/CjR0rbXpZiDRNvzH+0CRHNqVijqqZa3p1ZU+/u6U9RfHHY2IHJe6bH4g1MaywGKYlgQo=
+	 Content-Type:Content-Disposition:In-Reply-To; b=jQYJHvpNIbVqTCrfp7jY0KH3rPVzbmSne897UlLHx7+8uf6M17dBKGGbpkGQURkJSzVgH5qssic4b/oT1CFeSmTZFdOHXw3hhEsmxMy/Lld7ZE8qPSVgvuiqVA2OEGXgnPKhsv/bd93seYB8rl2G0cs3JUjR4JV4izz16h6N6zc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
 Received: from duge-virtual-machine (unknown [223.160.207.26])
-	by APP-03 (Coremail) with SMTP id rQCowAAXFbxDxFlp5eBIAw--.15S2;
-	Sun, 04 Jan 2026 09:37:09 +0800 (CST)
-Date: Sun, 4 Jan 2026 09:37:07 +0800
+	by APP-03 (Coremail) with SMTP id rQCowAA3T9YpxVlpeARJAw--.62026S2;
+	Sun, 04 Jan 2026 09:41:00 +0800 (CST)
+Date: Sun, 4 Jan 2026 09:40:57 +0800
 From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-To: Vinod Koul <vkoul@kernel.org>
-Cc: conor@kernel.org, gregkh@linuxfoundation.org, pjw@kernel.org,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	neil.armstrong@linaro.org, krzk+dt@kernel.org,
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: conor@kernel.org, vkoul@kernel.org, gregkh@linuxfoundation.org,
+	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, neil.armstrong@linaro.org, krzk+dt@kernel.org,
 	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
 	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 4/5] phy: usb: Add driver for Canaan K230 USB 2.0 PHY
-Message-ID: <aVnEQ4+coOd397Hk@duge-virtual-machine>
+Subject: Re: [PATCH 2/5] dt-bindings: soc: canaan: Add top syscon for Canaan
+ K230 SoC
+Message-ID: <aVnFKX43C8wl4QiB@duge-virtual-machine>
 References: <20251230023725.15966-1-jiayu.riscv@isrc.iscas.ac.cn>
- <20251230023725.15966-5-jiayu.riscv@isrc.iscas.ac.cn>
- <aVZQ4YVXGryHz0ds@vaman>
+ <20251230023725.15966-3-jiayu.riscv@isrc.iscas.ac.cn>
+ <20251230-jumping-visionary-coyote-c0be31@quoll>
+ <aVPQNIhyfR/Da/gk@duge-virtual-machine>
+ <572407e8-bac7-4277-bfbd-ed42327b0ff4@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,94 +55,54 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aVZQ4YVXGryHz0ds@vaman>
-X-CM-TRANSID:rQCowAAXFbxDxFlp5eBIAw--.15S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFykWr1xAryUKFy5uw1ftFb_yoW8WFWxpa
-	95Ja1UtFs7WF40vFsF9w18Ja4SqFZ3GwnI9w15CrWvqas0qrW0kFy3CFs8Z3Z7WF1kZr10
-	yrW8ta48uFn8uaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4
-	A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-	c7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-	14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-	IFyTuYvjxUqiFxDUUUU
+In-Reply-To: <572407e8-bac7-4277-bfbd-ed42327b0ff4@kernel.org>
+X-CM-TRANSID:rQCowAA3T9YpxVlpeARJAw--.62026S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruF48GFyrJr4xtF1DtrWfGrg_yoWDtrc_XF
+	WDAw1xCw47CFZrtws7KF4kJry3Ka47GryjqrZ5Xr4jvr13ur95Aw4rC34xJw1kGFWUKF15
+	Gr10vw4rW34YgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbsxYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+	6I8E6xAIw20EY4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+	8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0
+	cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z2
+	80aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+	w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
+	vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY
+	1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+	C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+	wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+	v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+	jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+	ZFpf9x07b0SoAUUUUU=
 X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 
-On Thu, Jan 01, 2026 at 04:18:01PM +0530, Vinod Koul wrote:
-> On 30-12-25, 10:37, Jiayu Du wrote:
-> > Add driver for the USB 2.0 PHY in Canaan K230 SoC, which supports PHY
-> > initialization, power management and USB mode switching.
+On Tue, Dec 30, 2025 at 03:00:26PM +0100, Krzysztof Kozlowski wrote:
+> On 30/12/2025 14:14, Jiayu Du wrote:
+> > On Tue, Dec 30, 2025 at 08:39:19AM +0100, Krzysztof Kozlowski wrote:
+> >> On Tue, Dec 30, 2025 at 10:37:21AM +0800, Jiayu Du wrote:
+> > This hisys memory area not only includes the usbphy registers,
+> > but also contains the registers of sd/mmc phy. Therefore, the
+> > hisys node is necessary and cannot be folded.
+> 
+> Can be. There is absolutely nothing stopping it.
+> 
+> Anyway, define all nodes.
+
+I will fold the child into the parent in v2, thanks for your guidance.
+
 > > 
-> > Add Kconfig/Makefile under drivers/phy/canaan/.
 > > 
-> > Signed-off-by: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-...
-> > +#define TEST_CTL3_OFFSET	0x0C
+> > If what I said above is accepted by you, do I still need to
+> > merge the two usb phy nodes by defining one phy with phy-cells=2?
 > 
-> Lowercase hex values please.. do you need a test register :-)
-
-Sorry, I will convert the hex to lowercase.
-
-In the TRM manual, the registers are named TEST_CTL and they are
-used to describe the otg0 phy port control. The TRM manual is here[1].
-The description of this register is located on page 1015.
-
-Therefore, I have retained the names as stated in the TRM manual.
-
-Link:
-https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_Technical_Reference_Manual_V0.3.1_20241118.pdf
-[1]
-
-> > +	FIELD_PREP(USB_CTL0_PLLPTUNE_MASK, 0xC) | \
+> You should read your datasheet, not exactly rely on me guessing. In
+> current form of the binding, you must fold the child into the parent.
 > 
-> lower hex here and rest
-
-I will fix it in v2.
-
+> Best regards,
+> Krzysztof
 > 
-> > +	ret = regmap_update_bits(phy->regmap, phy->reg_test_offset +
-> > +				 TEST_CTL3_OFFSET, val, val);
-> 
-> so we are writing to a test register..?
-
-As I mentioned above, this is actually otg0 phy port control
-register.
-
-> > +	int ret;
-> > +	u32 offset;
-> > +	struct regmap *regmap;
-> > +	struct phy *generic_phy;
-> > +	struct k230_usb_phy *phy;
-> > +	struct phy_provider *provider;
-> > +	struct device *dev = &pdev->dev;
-> 
-> reverse christmas  tree order would look better...
-
-I will fix it in v2.
-
-> > +
-> > +
-> 
-> why two lines...?
-
-I will fix it in v2.
-
-> 
-> > +MODULE_LICENSE("GPL");
-> > -- 
-> > 2.52.0
-> 
-> -- 
-> ~Vinod
-
-Regards,
-Jiayu Du
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
 
