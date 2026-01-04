@@ -1,82 +1,49 @@
-Return-Path: <linux-usb+bounces-31886-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31887-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7D8DCF02EF
-	for <lists+linux-usb@lfdr.de>; Sat, 03 Jan 2026 17:52:45 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 746B3CF07A5
+	for <lists+linux-usb@lfdr.de>; Sun, 04 Jan 2026 02:38:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 827FA30142D0
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Jan 2026 16:52:43 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AF36630011A5
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jan 2026 01:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341FE2BF012;
-	Sat,  3 Jan 2026 16:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="jGTc3p4+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93C5D1EF36C;
+	Sun,  4 Jan 2026 01:38:14 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2721A2E65D
-	for <linux-usb@vger.kernel.org>; Sat,  3 Jan 2026 16:52:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5407D14B96E;
+	Sun,  4 Jan 2026 01:38:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767459160; cv=none; b=QU9jMXFhVhMl9F44yX7+VPXDcQ1Ewgn2GrLGzGtTAWhSNA1wG1B6eO07LmtlitoYlq5X97NyfJCN3h+ZPoeQe62A4yF7Ao0jnVIx3GAYYXAWXNTMtZnJEk6vFAIrBSGBa5BcVLeNWdXesMlD7rq5aKFW8HpxBtGUPw+sH5JZgcg=
+	t=1767490694; cv=none; b=NRQZtWBGi8nvdN1wFIzEOjRryJXuMTiZdDlsRS5EiqkoctQrzqxLyiCDe/JeLhVokl3sAfg/PnCkbdo1ushKx+GUWmbrs1GwBYw/Dqrg9uroZKiRdW/gb71Ngr6CJ2wJXbTnLfrwSMoRHuzBKJFpcwmkJymM62Xusyn62Q5kjPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767459160; c=relaxed/simple;
-	bh=H60UYXxSQidbFBN9xb3ejM/CgZenz0pXMflcbLSaDn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=szn2H/Vuqz/KWIVO5OsM5KGaO9g57wlXGrVlJeK1NiZ+cYGMwz3SNdVG9tNxDKG0UpnnEnwfChtr5RGwJmGH+hN320WnP4xEJABUC8PPkKS4IJPU8Co1wzVffoBcHQqE0G/2qvf1pqpFlyqPZOR/7eT1YujaXWrDlhU2zuF9WVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=jGTc3p4+; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8b2ec756de0so1376569785a.3
-        for <linux-usb@vger.kernel.org>; Sat, 03 Jan 2026 08:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1767459158; x=1768063958; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A5MBRZKMi6bXOFJwQ+FrYSJRg6IG5AM9H9ErrTiVuVo=;
-        b=jGTc3p4+cNlBc2Rn7xinJSGI4Nxgkf/M0ogOvG7BvPmK2SrtZBElMrqVZ6vs42Oy1P
-         qnu1G9g70uGdFfjBix11rcRDNaxGHSMgmZCSwkrUpAPLLmT0CBJPKLUdoEBNWA/BPPMY
-         oCsej2GLmXomVXqKFhGLnsrXD9b+e+z6Giv6pRb2TL+LAq19DjPLTjtaRicJHCHOSGJ9
-         plH9LeyttSGqpjw98IifPEIJ88U/Ka1oxCkS8khqOb+aA7QzjGj4ePHZrPgW5qUHrwA5
-         fl2UDRwB1YvxIdH9gKTFnXt3BKmW7ic2TAx7c3VRo21zhIlaT0vXbiHegWBTJfsEBYp6
-         tqcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767459158; x=1768063958;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A5MBRZKMi6bXOFJwQ+FrYSJRg6IG5AM9H9ErrTiVuVo=;
-        b=fh9NqLkiK0FHuH8Wgug0MgcVAuW9QJk+TvCB7wB471df60gnxvVYqCrBem68hbBIhs
-         rWqgcUiT2xd7CAreCwsZhYqD01Jv0Y4FP35ZdODz1IDKg+S4tMu8dmM3uquVlFDsFi+z
-         AFihGPa9L0goC4cyAO9ugjNljNaugVIx2zjBWv+d2RBYit4s8EPl36x6jLc0atwVSryW
-         /7uQwqdvZC+zAzhVXzqybDg3ucQeNVpwBAwECbR8OwDJJno7esGbVMICkVZItEDyrsgL
-         p8yvyMDOcxy7sAaLjDtoDtyDYJoDpo7IM87WH7divZtR2ppqto57GMq0ddgsYYf3LcVJ
-         Fd/A==
-X-Gm-Message-State: AOJu0Yzhfwb0+I2qpueTKu3xQ19JdBjBqfZOmGOnSyImXUEN9eOjSj+Q
-	CDYPX/LqVBcfP1C9ANRzGKEWh1PeAOVOi0J9kiZp7kCD8mCRBLFvcXq/DwZD/a2GfsQA7Z2/8LT
-	FRnA=
-X-Gm-Gg: AY/fxX7OxgLAbWIhAITWW47ibXRn0SVs/kRv/cWnsX2wtKcAddJVvkLhkXgnS0dwyYA
-	xDnmmqbNv4Q4GfTjVPkkJzMz+KLEqpbv4+zw4lNCF8NxCQ2KTXQxWM3xiCuYotyqRWFuxnE7VFp
-	G63TPqhRBABSIf0iswZJwlJJf75j0o6QYosxpvoMiy5QE2YxnfYilB5gNsUaw1Xu0dqtCqFlEUI
-	4mOmKY3vOpOD89rNbFl79VsGxzYIBsblQ6h79TSeBJMH9rub4TpfhCljQZS5yfOJr0KS3SDVqFq
-	prNCS89ZZEVzoj6ZdmLKX19uCH8m2KXbU4KrzKypuTS1P/AnEQ/RHeuEP+C9Z1XGtcMzcrl24yf
-	OOGDaOIEXOuQN9COUJyQb4vu9VWBJHFjozl8Yzup9evw+Uanfpxu+a7U8DYyx12ZIQLWr98PAPw
-	rIyf+U5juhIPAb
-X-Google-Smtp-Source: AGHT+IEdOeMnLuDo5wk6JxgkQ5m/xxoPNXUEmkORfojKinqnTeP8vItzlz0nLoFphUX28QZJodKUpg==
-X-Received: by 2002:a05:620a:46ac:b0:8b2:bf20:f0ef with SMTP id af79cd13be357-8c08fa99992mr5943185985a.54.1767459157956;
-        Sat, 03 Jan 2026 08:52:37 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::16e7])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c0975ec0f0sm3387280885a.50.2026.01.03.08.52.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jan 2026 08:52:37 -0800 (PST)
-Date: Sat, 3 Jan 2026 11:52:35 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Diederik de Haas <diederik@cknow-tech.com>
-Cc: USB mailing list <linux-usb@vger.kernel.org>
-Subject: Track down EHCI and companion errors on rk3xxx systems
-Message-ID: <073879e4-aea8-4625-bc83-c4b6dd9c9231@rowland.harvard.edu>
+	s=arc-20240116; t=1767490694; c=relaxed/simple;
+	bh=TaVoauf7Ih98vRBjjk/gaeABr7IwgbgWseWXOYsr+HM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BT/ZrKr3lW1KOGaXmFzjdngRUr8h4AML1r9tMDNDgQ6NqsavaxhwIHrpoFb5Z5cclarVwzIaNVpKQYwsLgGlSzTxDrAFHPEH39eTv2/CjR0rbXpZiDRNvzH+0CRHNqVijqqZa3p1ZU+/u6U9RfHHY2IHJe6bH4g1MaywGKYlgQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from duge-virtual-machine (unknown [223.160.207.26])
+	by APP-03 (Coremail) with SMTP id rQCowAAXFbxDxFlp5eBIAw--.15S2;
+	Sun, 04 Jan 2026 09:37:09 +0800 (CST)
+Date: Sun, 4 Jan 2026 09:37:07 +0800
+From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+To: Vinod Koul <vkoul@kernel.org>
+Cc: conor@kernel.org, gregkh@linuxfoundation.org, pjw@kernel.org,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	neil.armstrong@linaro.org, krzk+dt@kernel.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 4/5] phy: usb: Add driver for Canaan K230 USB 2.0 PHY
+Message-ID: <aVnEQ4+coOd397Hk@duge-virtual-machine>
+References: <20251230023725.15966-1-jiayu.riscv@isrc.iscas.ac.cn>
+ <20251230023725.15966-5-jiayu.riscv@isrc.iscas.ac.cn>
+ <aVZQ4YVXGryHz0ds@vaman>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,32 +52,94 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aVZQ4YVXGryHz0ds@vaman>
+X-CM-TRANSID:rQCowAAXFbxDxFlp5eBIAw--.15S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFykWr1xAryUKFy5uw1ftFb_yoW8WFWxpa
+	95Ja1UtFs7WF40vFsF9w18Ja4SqFZ3GwnI9w15CrWvqas0qrW0kFy3CFs8Z3Z7WF1kZr10
+	yrW8ta48uFn8uaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
+	c7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+	IFyTuYvjxUqiFxDUUUU
+X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 
-[Changed the Subject: line and started a new email thread]
-
-On Sat, Jan 03, 2026 at 12:00:13PM +0100, Diederik de Haas wrote:
-> Hi Alan,
+On Thu, Jan 01, 2026 at 04:18:01PM +0530, Vinod Koul wrote:
+> On 30-12-25, 10:37, Jiayu Du wrote:
+> > Add driver for the USB 2.0 PHY in Canaan K230 SoC, which supports PHY
+> > initialization, power management and USB mode switching.
+> > 
+> > Add Kconfig/Makefile under drivers/phy/canaan/.
+> > 
+> > Signed-off-by: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+...
+> > +#define TEST_CTL3_OFFSET	0x0C
 > 
-> On Wed Dec 31, 2025 at 7:09 PM CET, Alan Stern wrote:
-> > I can't say anything specific about your systems without a lot more 
-> > information.  However, I suspect that any problems you are running into 
-> > are not related to that warning.
+> Lowercase hex values please.. do you need a test register :-)
+
+Sorry, I will convert the hex to lowercase.
+
+In the TRM manual, the registers are named TEST_CTL and they are
+used to describe the otg0 phy port control. The TRM manual is here[1].
+The description of this register is located on page 1015.
+
+Therefore, I have retained the names as stated in the TRM manual.
+
+Link:
+https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_Technical_Reference_Manual_V0.3.1_20241118.pdf
+[1]
+
+> > +	FIELD_PREP(USB_CTL0_PLLPTUNE_MASK, 0xC) | \
 > 
-> What kind of information do you need? I have quite a few schematics and
-> TRMs (which are also publicly available). Also happy to run various
-> tests if that helps. I just need to know which.
+> lower hex here and rest
 
-We can start with the output from "lsusb -t" as well as the dmesg log 
-from a boot in which something (a USB-2 port, for example) didn't work.  
-If the log shows something going wrong when you plugged in a device 
-after boot, explain what you did, what happened, and what was wrong.
+I will fix it in v2.
 
-For now, concentrate on just a single system.  It will be much too 
-confusing to try handling all this material one seven different 
-computers, all at once.
+> 
+> > +	ret = regmap_update_bits(phy->regmap, phy->reg_test_offset +
+> > +				 TEST_CTL3_OFFSET, val, val);
+> 
+> so we are writing to a test register..?
 
-Alan Stern
+As I mentioned above, this is actually otg0 phy port control
+register.
 
-PS: Always use Reply-to-All so that your messages get sent to the 
-mailing list as well as to me.
+> > +	int ret;
+> > +	u32 offset;
+> > +	struct regmap *regmap;
+> > +	struct phy *generic_phy;
+> > +	struct k230_usb_phy *phy;
+> > +	struct phy_provider *provider;
+> > +	struct device *dev = &pdev->dev;
+> 
+> reverse christmas  tree order would look better...
+
+I will fix it in v2.
+
+> > +
+> > +
+> 
+> why two lines...?
+
+I will fix it in v2.
+
+> 
+> > +MODULE_LICENSE("GPL");
+> > -- 
+> > 2.52.0
+> 
+> -- 
+> ~Vinod
+
+Regards,
+Jiayu Du
+
 
