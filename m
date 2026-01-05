@@ -1,119 +1,137 @@
-Return-Path: <linux-usb+bounces-31900-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31901-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A107CF27EF
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 09:43:26 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07DB9CF2810
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 09:44:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 65B6D30517EB
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 08:39:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 94CDC3002857
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 08:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63EC12D9EFF;
-	Mon,  5 Jan 2026 08:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 611CB31AA94;
+	Mon,  5 Jan 2026 08:44:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="YlxmWa/H"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=arnaud.ferraris@collabora.com header.b="V8JkBV2F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1018E1EEA55
-	for <linux-usb@vger.kernel.org>; Mon,  5 Jan 2026 08:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767602353; cv=none; b=piDZVTIZbT8gAgnG8NlnS1NxZnHZIaFlwdS47eEromSlC/gdVjCjyZxrovBCUb3IfYU2OF2FIdoQZr9LO3LT3AHor/qlSqBQUXfMbZtmpuTXIAAoEENpZ4MJwShD94a4j8B8Gg3C/Df1xhC7rbek+4V+TOzI+a1N7yr6o272Xrk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767602353; c=relaxed/simple;
-	bh=UcLdHcEUUxspfAh1ahdBBitcr9+ZQeZG2m7rL2EVDFs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nljXylVEEAMquUxuEmeq1WJlm0sFIkHF6pzlmdESQBu+l690IpQrcDZumXut/I4xpve/DTXJpGj1iJ7BoZLkOe87HWCf7oJ+DZncCcHhcs5dAFIVsobsBAnBtc1DuOZaUFgXfaCKthmHvZZugnwpgslzEAgpCUENBtFwTAMwxxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=YlxmWa/H; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b713c7096f9so2185341766b.3
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jan 2026 00:39:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1767602350; x=1768207150; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8TxlOhxGTQLr4k5AxaGAg2GK3aGvHdvQdZ/a9Zb3F7g=;
-        b=YlxmWa/HDQjBqk8sY1U//FX73g2DfV8YSt996HyuBUtei1A4u8xYlNR60kS1hXfHdL
-         xxoqGybn2KTawGVqTj6hxoIwHAaeZrXTK4dmEpRuqfpG5t+nli6wKjavjbnEk4WopUGx
-         McCvguR+wFAFJ30pkmpw5Cf2LCBcfqcj3CtrEZZgB6NoWCIYqw2WFar5985aH4qPMfYL
-         XeJpFqZoS3nrQH6J97Ro8isQZCbdvevXKazb1m7ArNejw+D65Yxb1nh29fKEdNqqNPy9
-         0qsS5fKPW/j2JokW0EYvbQjurcOTFHaSNdePsQ88fY+bdshaJaJQPufg9uo0RAIB2sp3
-         tr0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767602350; x=1768207150;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8TxlOhxGTQLr4k5AxaGAg2GK3aGvHdvQdZ/a9Zb3F7g=;
-        b=Ky+3p9Tzt/+GdGJidhF+vgvyeBY6daHVSWl51lc8cd4fXHXZbGn5dtOJqcCJ/uQNLd
-         skNpiXCAfKBmTOiooF9c4z1sFmhDNDL2ybdDW3HfnJaqQ7GWrHOZle6oIbQnadU1qDwK
-         VJ+5Km6yof1PaLJzms0hucvkKraGOrWmMFjKUeSz3r3Y8ykAFpoJNdTowzTJYASyDd/W
-         PljaS0pb0kJPifUOMgjkjyGlBY+237GFSRVLJ2YlOF3ng9xZG4WxxEFpGtY0pkEptTqR
-         PVJt0pe2ZweVHnAN6sWUyeKNrCtLT74ppIE+wiEY1z+mR19KBogKaStTW81TGklvKNYk
-         8dDw==
-X-Forwarded-Encrypted: i=1; AJvYcCWISU4M5bsjVrgGgchi59JdMMxFDsHIGpX5WBL2frzgVCQHvgpmmys6Zrt1l3iJRfCzwUaA5I5FX/M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwL996DnJOvabAYYrzOpWM+7Fy6l7IxBslbuwMkcStVWi6VYL5N
-	1MnpPapES9J7qWEyeO6+XbL0R4NTwIvmmurUWiK9CHAl9Q5NTKjKWl2iaa1sCG4QdA2ip7zvTHg
-	pyIUaGeaJ3gHk6tXzS7Mj2H7BgZRlhXw=
-X-Gm-Gg: AY/fxX4vdGvUai/8JQlMqip03/9xaC+dFDeckHQ96yGh7Ft+I2YqdvFlbL1uzlT5iDP
-	qtY4GPoht0NrQD9oHp4X/spXHsL1JPW5D3B53CVQdRfP5yKdEzd9CtriU6H9blRBmDEJexJ6vlL
-	whmkUX6TJlU/yrqdksCvheqoa8czxzlLFfClafKrsGCbUNSJkHHM/9uECG2ZPDsM1a2ektZ5h+m
-	eG8sCziHcZ8Qi2hF7LW2GRRKMcH1DEQsf0HZQ7pjxQypLdrpATU/S6RE2mbYTnkO1TmLxFIGoI9
-	eGsH3PhfKQdOYQnrDuWWIUgUJg==
-X-Google-Smtp-Source: AGHT+IFr0JBtzxVQnXH06V4yl+WbGy32WaVnJ+AQf1gjM8b0HSOTsX4VV/HZjMLXyg9k4auxprW4Se9eOZHisZrnBhM=
-X-Received: by 2002:a17:907:971e:b0:b83:288a:2bce with SMTP id
- a640c23a62f3a-b83288a314amr3001061366b.24.1767602349966; Mon, 05 Jan 2026
- 00:39:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121A931327B;
+	Mon,  5 Jan 2026 08:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767602680; cv=pass; b=BHf2tSI8fyVG9o6s4QqtT1EIoU5YEi3QcEZwh3HThLE3Thr1l18rH00iIJrhGAI8TKcmgKwtob7hTsgfs5QogwJ+60M+isGLSc5wU0qdsQHdQZNW17SenMI7Vxne4egU7gJOk/x2pEfNSjuoL4vBEIYe5bag8eGRPcqspVKaZHQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767602680; c=relaxed/simple;
+	bh=hwT/CLG4lyg1rnPS0bDBMJo3Ucwba/T665KGkUmSYw4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rKjLyMMqtxXUu6bH5+b5h3qeU863eqh6s2W6i4VlD5mMGYKQYakrN3iQZT2TIrgbynJ0s3twbgBrkrUkJ8trsL0WCDtpwno6SRil6T+JYCI4woPJQa7dg2z7I7qwfCKH4xjNKAv7RV8vudxeNbwCzpNyvbdrHspDlecCAboMseI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=arnaud.ferraris@collabora.com header.b=V8JkBV2F; arc=pass smtp.client-ip=136.143.188.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1767602664; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=bTnZvmT/7Y70TQ1Yb80dVrzduDWflF/nYUb9s3M28K/QD65FTjEWgcf3IEHTK/YQS0AImySRYQfvVs9P+eJ7oQMS+8stQLmtzfISsyL/imJ4c/fGsCpSIj+5QGyUwUphax+Tc/1+c2rkTSX8tPsXlkjexZKnwahiF+V/GekzwUg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1767602664; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=bR8vnC+25hlvZCXz81UWFMEaAs3IoPXaBpMnjlIa7+s=; 
+	b=AG8SM47ujnemUDqH0RKM04bfcRYuX8OMMlltkExDTg6Wf9YBI0k8f4kR/s2d15BUsBtPBXZkfQavoXbMvlUH+lYI2yCpnDkLUrDBLmTXXcTrJmvPgOHEA1oDbQBXzKKKnQQnJuN2ZBcWsHPfYRIXHcdZ2a2v6yXXMkL+zNjVAvA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=arnaud.ferraris@collabora.com;
+	dmarc=pass header.from=<arnaud.ferraris@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767602664;
+	s=zohomail; d=collabora.com; i=arnaud.ferraris@collabora.com;
+	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:To:To:Cc:Cc:Reply-To;
+	bh=bR8vnC+25hlvZCXz81UWFMEaAs3IoPXaBpMnjlIa7+s=;
+	b=V8JkBV2FrEvoS9ry8F49nCqFpGqZjEUPTrYdwrGAJ03lTi/O5r3nTcbrJYJHcYp6
+	xvzG9i3Cjm6r0mUggDhXVcGbOP3gxlfs2lQJP25W1UsDpwYpk5dOjh3xjtKyoS9Y6ho
+	2NUIJpglh/6JDuPQcosCQ2VL1v8vNDrws2O99jLQ=
+Received: by mx.zohomail.com with SMTPS id 1767602660593833.5025653575118;
+	Mon, 5 Jan 2026 00:44:20 -0800 (PST)
+From: Arnaud Ferraris <arnaud.ferraris@collabora.com>
+Date: Mon, 05 Jan 2026 09:43:23 +0100
+Subject: [PATCH v2] tcpm: allow looking for role_sw device in the main node
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAEhB=Bt13wr1+cc1rfzwPxnEEuawMgTew=RJic2FsVb=Gccm+A@mail.gmail.com>
- <2026010533-swiftness-character-1cc3@gregkh>
-In-Reply-To: <2026010533-swiftness-character-1cc3@gregkh>
-From: Marco Schuschnig <m.schuster91@googlemail.com>
-Date: Mon, 5 Jan 2026 09:38:58 +0100
-X-Gm-Features: AQt7F2p3AfV7eN60aT0PQcPOGsLSy9ojADPya5VdSReon7mtQr9GFY0EE7icRpA
-Message-ID: <CAEhB=Bs6zUWx=2igGEbf3mKDWbRu47St2yJ9zjsCX7v1o_qHXA@mail.gmail.com>
-Subject: Re: usbip: Kernel oops when trying to bind devices from Windows client
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: valentina.manea.m@gmail.com, shuah@kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260105-fix-ppp-power-v2-1-6924f5a41224@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAKp5W2kC/3WMwQ7CIBAFf6XZs2sKUjCe+h+mB4TFktRCwKCm4
+ d/F3j3Oy5vZIFPylOHSbZCo+OzD2oAfOjCzXu+E3jYG3vOBMa7Q+TfGGDGGFyWUVih30kpId4b
+ mxETtsPeuU+PZ52dInz1f2G/9VyoMGQ7cWKuE6YnkaMKy6FtI+mjCA6Za6xcvEpAhrgAAAA==
+X-Change-ID: 20251127-fix-ppp-power-6d47f3a746f8
+To: Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Dragan Simic <dsimic@manjaro.org>, 
+ Arnaud Ferraris <arnaud.ferraris@collabora.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1713;
+ i=arnaud.ferraris@collabora.com; h=from:subject:message-id;
+ bh=hwT/CLG4lyg1rnPS0bDBMJo3Ucwba/T665KGkUmSYw4=;
+ b=owEBbQKS/ZANAwAIAdPrtZZruZGWAcsmYgBpW3niwdIpHgdTFBqpj2G09M0VQ94RNlgrLcYkY
+ 6KK0hPcofCJAjMEAAEIAB0WIQR5bbOT3D/0AiK26iLT67WWa7mRlgUCaVt54gAKCRDT67WWa7mR
+ lnF2EACaIsp2ILS9bvK2ge+xGmNtn2CP2K7aindt0MYqFGFzseN16d5/wg3uGEEsNzpVshVgJ7j
+ TlePbahfU0Cz1VBzlA4Xb8F406/2vlKEq7BN3SPyBxfpv9Mt3vmfEVynumtPP7E/SU1kzcWnWKZ
+ 5hLue6HpejO01Ry3OAc8VYB1K2KQXAJbxMhcSJdFX8F4Jfvsydgysy2J72LheOji0GrSrFcL/Hm
+ Q28hZOHvm3as2DOBPxs0onpNrZFoyBXcyezjw1D5vT25i8TwtggZWFyjzv09sXCgGg6P23uNvBv
+ +2Nm0cDUaRTY/2g9IMR+e/sD8OTNkrdF07pKAayB5GUrJJqkiUdIeQIQIsxyjZnH5Hia0MMBtPl
+ BGU2wk2uU3f/oDmEoTOBO6MTq9Tkd2wJwys/LtgcOwker/At3BPrEuW/+hn/OIdn6PqzkvKjh9x
+ M8RLeimxsdpz/3shGLZTTKSZIoHqF9lDI8441wcTUhnDAN1H0sgCclNndawvf4Cnvwke23PaAFZ
+ +qPaPrIVqBL7ed/ZuANznA8u6oyp11Yo9MALKI03mHMrIx45l8yB4TM+MTt44Y0o5TqWqttXmZ9
+ SKgsLWGw1/mnpDYH+jrWsFegZV9G/uq4jr5HY+ISP85GiKNSKTdpWVKa6H9KrQfecnAQER5HF4V
+ Ba5s0Qkja3myb0A==
+X-Developer-Key: i=arnaud.ferraris@collabora.com; a=openpgp;
+ fpr=796DB393DC3FF40222B6EA22D3EBB5966BB99196
+X-ZohoMailClient: External
 
-Hi,
+If ports are defined in the tcpc main node, fwnode_usb_role_switch_get()
+returns an error, meaning usb_role_switch_get() (which would succeed)
+never gets a chance to run as port->role_sw isn't NULL, causing a
+regression on devices where this is the case.
 
-thanks for the answer. Sorry, I mistyped - it's 6.*12*.47, Raspberry
-Pi's latest official package which should be a Linux LTS version as
-well. Recompiling the kernel with a patch should be pretty
-straightforward, but I'll try if I can build, run and test with a
-current stable kernel for the Pi, not sure how far Raspberry Pi and
-then Debian diverge from upstream.
+Fix this by turning the NULL check into IS_ERR_OR_NULL(), so
+usb_role_switch_get() can actually run and the device get properly probed.
 
-Kind regards
-Marco
+Fixes: 2d8713f807a4 ("tcpm: switch check for role_sw device with fw_node")
+Cc: stable@vger.kernel.org
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Dragan Simic <dsimic@manjaro.org>
+Signed-off-by: Arnaud Ferraris <arnaud.ferraris@collabora.com>
+---
+Changes in v2:
+- Apply suggestions improving commit message
+- Link to v1: https://lore.kernel.org/r/20251127-fix-ppp-power-v1-1-52cdd74c0ee6@collabora.com
+---
+ drivers/usb/typec/tcpm/tcpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Am Mo., 5. Jan. 2026 um 09:08 Uhr schrieb Greg KH <gregkh@linuxfoundation.org>:
->
-> On Mon, Jan 05, 2026 at 12:13:01AM +0100, Marco Schuschnig wrote:
-> > Hello all,
-> >
-> > I am trying to get usbip working with a Raspberry Pi Zero 2 W
-> > (Raspberry Pi OS / Debian Trixie, kernel 6.2.47) as host and a Windows
-> > 10 machine as client (using usbip-win2 0.9.7.3). The device to be
-> > shared is a "145f:0276 Trust GXT 165 Gaming Mouse".
->
-> That is a very old, and obsolete kernel version, one of which we really
-> don't know anything about anymore, sorry (there is no 6.2.47 kernel
-> release).  I would contact whomever is supporting / creating that kernel
-> image and ask them for help with this as even if we can point you at a
-> fix, you'll have to get it updated into that tree, right?
->
-> sorry,
->
-> greg k-h
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 4ca2746ce16bc..be49a976428fc 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -7890,7 +7890,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+ 	port->partner_desc.identity = &port->partner_ident;
+ 
+ 	port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode);
+-	if (!port->role_sw)
++	if (IS_ERR_OR_NULL(port->role_sw))
+ 		port->role_sw = usb_role_switch_get(port->dev);
+ 	if (IS_ERR(port->role_sw)) {
+ 		err = PTR_ERR(port->role_sw);
+
+---
+base-commit: 3609fa95fb0f2c1b099e69e56634edb8fc03f87c
+change-id: 20251127-fix-ppp-power-6d47f3a746f8
+
+Best regards,
+-- 
+Arnaud Ferraris <arnaud.ferraris@collabora.com>
+
 
