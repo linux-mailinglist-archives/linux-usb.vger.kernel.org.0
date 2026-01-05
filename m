@@ -1,176 +1,212 @@
-Return-Path: <linux-usb+bounces-31938-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31939-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B26E8CF565D
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 20:36:56 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6F86CF5726
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 20:59:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F2F81301B673
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 19:36:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B039F30ABCE6
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 19:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CBF531ED86;
-	Mon,  5 Jan 2026 19:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E91383054EE;
+	Mon,  5 Jan 2026 19:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="Dnzlbt6D"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hNKsoOtV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A982D594B;
-	Mon,  5 Jan 2026 19:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767641811; cv=pass; b=CnV8Lrz892+Ens0il3i8T/BpYVK1gRIC3JvxoEO9dVrHIo8N9GTPPYI233SzZ9Sii7Y5h/uSGwlbTR9vYpA9fGcsRLlT//9M5dYGC3Z/XtZLZfjHpTdyfLvKcAQTPzHpnwR5AV60i7ixOo27RBotE5RaI+rWaxBKRoKT7Ma4pMk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767641811; c=relaxed/simple;
-	bh=NOLzM3hfyYjnd/RZuThB1GmZd6pLgrUCAyjtSpPqeGQ=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=NyK44CWp4we5lQ1rFXNZQdS9qe1NW4FjMfqhIRR3bI165XMWR5a6AR1IMk4oQcGiBOKAfTisU86eMrdMkcfiHkgeMdxvhSoFgr+GDhvNBWT0hD/J2c05NjI7yhi8IMhe5RPjb3RQBNjb7V0TKaRocrCqi1YiHyKdOwMEJ0JSozg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=Dnzlbt6D; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1767641795; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=mJ7ocap0z00LzgH6dUA/QnPOo5XlSO9gF7V5DvCF1lXDKp9LP9iheJwDtg3FMsXVe3rHNec/NuD+aUqa1vf2ur+8mhxHt6lYBsUxHwBpHgwLvVLf5bUWT0rF4xRvUCnbQJm7t0e4HNX2IkiO5/07+6OQOpLHk4juoGRIlc+pRxo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1767641795; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=V8rkArDroROGCqjbxcdHVXYkVb4w45VDAC6IIJgz/y4=; 
-	b=nQoPePk0HiOuTGYrm/Go1BskLaff+ZzDudmDDsdxsiY4tru4c+RrJa11WOiweGorzLMDN8lLHbEyBhC8xS1SPhpITclWYfL44H2j7KnYKSKu8/6joAd58nBIOzdu+xNOeY6g86+NTOGAuehF4aoTJFe+dqqyNNvgooQwL4/dpRw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767641795;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=V8rkArDroROGCqjbxcdHVXYkVb4w45VDAC6IIJgz/y4=;
-	b=Dnzlbt6DeFuxjTl4Zbw0GKuVnMZQhl5l980ZbbXV7m93tJUeMS5VBGdgM+16BpwR
-	970Ph3YJK5ITScmJGkWoF+1OmhyD6RspElJKQpvRGEIJ3VJcmfGAn2qbscmsvNVeIKa
-	f1AjAkkBhxojX1J7WkqandXjRA9RQHQpvR/SEq1Q=
-Received: by mx.zohomail.com with SMTPS id 1767641792993582.2537549424134;
-	Mon, 5 Jan 2026 11:36:32 -0800 (PST)
-Content-Type: text/plain;
-	charset=us-ascii
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19B72BE051
+	for <linux-usb@vger.kernel.org>; Mon,  5 Jan 2026 19:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767643114; cv=none; b=ANHNR3DNqEadoPB8MKhL2d89Ci479hccUhBXxkj5hprnx8wRpBMdQEwRu+n/l0P+c3/gxuU7yhPexPZnAtYzpm+zqsYyH4bS+jEw/q2PQ6M0JugnZ48Ju+u61XyXVXW1R/10Tzmw6WwU0okLS6P4y8Dcukce+hyRfyiXgeQrodU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767643114; c=relaxed/simple;
+	bh=M+mgHPLZQJfA6q4BXgM2dcEStPY5JylfnRcjT3LMCio=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WA7WgOPq1I7TDJdMZgWeLuT3eVHuGnhjCFm5bOLJWOmX/HJpwMWy7JVa+NyIeSBTEm9OntAkFJQYpydeIJVm25tN/nuiCpNhN8D6DgTKYOebVcslTo9eV7gK2qDEOCT/o41qRT2fwq1ZIb9ISiT218aiFtqfWxkt0a4nQiAooOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hNKsoOtV; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7bc248dc16aso290904b3a.0
+        for <linux-usb@vger.kernel.org>; Mon, 05 Jan 2026 11:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1767643112; x=1768247912; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F8DuddcYEOiefRlBzZKrtL15qZCqx9WVAFvprpXIUBQ=;
+        b=hNKsoOtV2WQth0XJ1aFVqKGepQRtZY++pRh5LuGYdtlUCsaHASl0WsIS8y2Iassvfp
+         VC7lKG8sMMwa5Cuis4KRaQEIZOiE/Dr6jLIitaa7NFp3hZR23g8wBPK3N8wjCNDpb77c
+         r/muJ5PpcdAJr4NEqkl52eIUHJ29Qx4T5jzbIq1ZmBQrZLQLDTCB5FMHpq5oAETrWWgY
+         fRSUwTVtTDl0mUeMw/92w6kR/1HQ6alLAA6KaIC6cC6LgQc1DJMQ/b/pZ3A6r0x6cz+C
+         2xfeHy99HQxIYFfE4M9Uh5aA42jJeqAnXczEwHgGEer2afgktysxLP1kySOe7umad/o1
+         ZekQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767643112; x=1768247912;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F8DuddcYEOiefRlBzZKrtL15qZCqx9WVAFvprpXIUBQ=;
+        b=jO8Ta4Nsiae6SJJLjPaAYrxHWqr3qFe/bJv62eG6bAVItL4pk2s8ZXF5bBfeJS0E5L
+         oqiUiBvZ+BX5xU/tCapgcUST/XlbV1/LX4+Yhx7pajEzsKI8OIHRN4/R6VoksI1uy48r
+         ZS8vM3UQx9onPNDfxWf+uYJl88xA2FrRqglBnprThgwvLjclAiqfEHUygROvWxZhTDfB
+         jnSaRmtzdliTSmv/rRY8dmxQvp6ohNXUnwgm18ZhBOkMT2lNeLZpibzFsG619oLCxo9y
+         r4SpxZgtsXfz0gQlWfjprvEEkzqizhQa8UIL7NQhdKGFByK4Ht67C6zQwwxc8jJY0hc1
+         Rdkg==
+X-Forwarded-Encrypted: i=1; AJvYcCV2GQ9XhAnwPR/OdqucYd2/a+ovNimG5AzeJ99mrpwqTeFOfpQGf+bWabUSvnILJueN9nQp+IO5zls=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPcAuUxg/+ZJZFQq2HJ4fYL3lqrVIhDsOFyBwgMWfgBtOtkYIq
+	xvKPwIFQBobOz9v6sWdf3bNP3J/6lae2HnVGd5BiUnpgV/8FjbHNPJY2h9aiEMro7Q==
+X-Gm-Gg: AY/fxX6wyZeqnGaj+kj4+xx+Xe5mYGTbzep+fvC91PhJfazDUmovlHyFUabA0RetHW/
+	YgfBpte5EKVhHSe5KcMlknsEgUIChNX8/hqdK6q6k+EXk0eQVWLiu1WxV4QszsX41GYuq+WtWCm
+	AG9SKGemTeuB4rkMpWcm7k2Kan2n9cVdgCL3Cd5TO1ulXwV5TTFnh/480eJ55jYUrbKIMCfL9jW
+	5xxajwBeMNw+t/lvGemHN3nRLzY8NhIQUiohB2U+CI28JGWwvqu54cQadctktkE+iFdfMeB76QS
+	045WQLETvCuyJTU18p44qCloE68pmNIU9ETbF6dWpdokbi3VwdnyQuv0ovQBlCq/MlS8oV8ouAd
+	a6WRQ5q11YqmDFi+sqtr5qkNkhtfNxmmpxB4+bdVRfrr4822Kk6A6x2l7sAN3Q893I0z9qa3E00
+	QIpAjRXDzS69/EGBBn0cROuRchbpwwVDLjwtKqg8jPbXRIfQ1a/1QHgL9sGWtZ6jyoLG/rc5Zm6
+	VyrJiYei9/6LV+tbBiwv94U
+X-Google-Smtp-Source: AGHT+IFYi37OgBvlreLAlI6opJMukcl64WhdUNqoIdTxzRCBTYpyF7jQRnopByzdWT0cS1RWXEtYww==
+X-Received: by 2002:a05:7022:2215:b0:11b:c86b:386a with SMTP id a92af1059eb24-121f18a3909mr496909c88.5.1767643111325;
+        Mon, 05 Jan 2026 11:58:31 -0800 (PST)
+Received: from ?IPV6:2a00:79e0:2e7c:8:7c3d:6070:7e67:29c5? ([2a00:79e0:2e7c:8:7c3d:6070:7e67:29c5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f12209efsm1739565c88.3.2026.01.05.11.58.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jan 2026 11:58:30 -0800 (PST)
+Message-ID: <f1f2a382-64d9-43dd-bed1-8b1ac9e53470@google.com>
+Date: Mon, 5 Jan 2026 11:58:29 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH 4/5] rust: usb: use "kernel vertical" style for imports
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20260105142123.95030-4-dakr@kernel.org>
-Date: Mon, 5 Jan 2026 16:36:17 -0300
-Cc: gregkh@linuxfoundation.org,
- rafael@kernel.org,
- ojeda@kernel.org,
- boqun.feng@gmail.com,
- gary@garyguo.net,
- bjorn3_gh@protonmail.com,
- lossin@kernel.org,
- a.hindborg@kernel.org,
- aliceryhl@google.com,
- tmgross@umich.edu,
- david.m.ertman@intel.com,
- ira.weiny@intel.com,
- leon@kernel.org,
- linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org,
- linux-usb@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D5B126F1-B6F5-410F-9BE9-FA688C990A10@collabora.com>
-References: <20260105142123.95030-1-dakr@kernel.org>
- <20260105142123.95030-4-dakr@kernel.org>
-To: Danilo Krummrich <dakr@kernel.org>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/5] mfd: max77759: add register bitmasks and modify
+ irq configs for charger
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
+ <20251227-max77759-charger-v3-3-54e664f5ca92@google.com>
+ <d2c50afe586956ef3a60f17eb77b20fc73fe8dc8.camel@linaro.org>
+Content-Language: en-US
+From: Amit Sunil Dhamne <amitsd@google.com>
+In-Reply-To: <d2c50afe586956ef3a60f17eb77b20fc73fe8dc8.camel@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
+On 1/5/26 8:45 AM, André Draszik wrote:
+> On Sat, 2025-12-27 at 00:04 +0000, Amit Sunil Dhamne via B4 Relay wrote:
+>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>
+>> Add register bitmasks for charger function.
+>> In addition split the charger IRQs further such that each bit represents
+>> an IRQ downstream of charger regmap irq chip. In addition populate the
+>> ack_base to offload irq ack to the regmap irq chip framework.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>   drivers/mfd/max77759.c       |  91 +++++++++++++++++--
+>>   include/linux/mfd/max77759.h | 202 ++++++++++++++++++++++++++++++++++++-------
+>>   2 files changed, 256 insertions(+), 37 deletions(-)
+>>
+>> [...]
+>>   
+>> diff --git a/include/linux/mfd/max77759.h b/include/linux/mfd/max77759.h
+>> index c6face34e385..e674a519e782 100644
+>> --- a/include/linux/mfd/max77759.h
+>> +++ b/include/linux/mfd/max77759.h
+>> @@ -59,35 +59,65 @@
+>>   #define MAX77759_MAXQ_REG_AP_DATAIN0            0xb1
+>>   #define MAX77759_MAXQ_REG_UIC_SWRST             0xe0
+>>   
+>> -#define MAX77759_CHGR_REG_CHG_INT               0xb0
+>> -#define MAX77759_CHGR_REG_CHG_INT2              0xb1
+>> -#define MAX77759_CHGR_REG_CHG_INT_MASK          0xb2
+>> -#define MAX77759_CHGR_REG_CHG_INT2_MASK         0xb3
+>> -#define MAX77759_CHGR_REG_CHG_INT_OK            0xb4
+>> -#define MAX77759_CHGR_REG_CHG_DETAILS_00        0xb5
+>> -#define MAX77759_CHGR_REG_CHG_DETAILS_01        0xb6
+>> -#define MAX77759_CHGR_REG_CHG_DETAILS_02        0xb7
+>> -#define MAX77759_CHGR_REG_CHG_DETAILS_03        0xb8
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_00           0xb9
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_01           0xba
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_02           0xbb
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_03           0xbc
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_04           0xbd
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_05           0xbe
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_06           0xbf
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_07           0xc0
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_08           0xc1
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_09           0xc2
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_10           0xc3
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_11           0xc4
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_12           0xc5
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_13           0xc6
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_14           0xc7
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_15           0xc8
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_16           0xc9
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_17           0xca
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_18           0xcb
+>> -#define MAX77759_CHGR_REG_CHG_CNFG_19           0xcc
+>> +#define MAX77759_CHGR_REG_CHG_INT                      0xb0
+>> +#define   MAX77759_CHGR_REG_CHG_INT_AICL               BIT(7)
+>> +#define   MAX77759_CHGR_REG_CHG_INT_CHGIN              BIT(6)
+>> +#define   MAX77759_CHGR_REG_CHG_INT_WCIN               BIT(5)
+>> +#define   MAX77759_CHGR_REG_CHG_INT_CHG                BIT(4)
+>> +#define   MAX77759_CHGR_REG_CHG_INT_BAT                BIT(3)
+>> +#define   MAX77759_CHGR_REG_CHG_INT_INLIM              BIT(2)
+>> +#define   MAX77759_CHGR_REG_CHG_INT_THM2               BIT(1)
+>> +#define   MAX77759_CHGR_REG_CHG_INT_BYP                BIT(0)
+>> +#define MAX77759_CHGR_REG_CHG_INT2                     0xb1
+>> +#define   MAX77759_CHGR_REG_CHG_INT2_INSEL             BIT(7)
+>> +#define   MAX77759_CHGR_REG_CHG_INT2_SYS_UVLO1         BIT(6)
+>> +#define   MAX77759_CHGR_REG_CHG_INT2_SYS_UVLO2         BIT(5)
+>> +#define   MAX77759_CHGR_REG_CHG_INT2_BAT_OILO          BIT(4)
+>> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CC        BIT(3)
+>> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CV        BIT(2)
+>> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_TO        BIT(1)
+>> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_DONE      BIT(0)
+>> +#define MAX77759_CHGR_REG_CHG_INT_MASK                 0xb2
+>> +#define MAX77759_CHGR_REG_CHG_INT2_MASK                0xb3
+>> +#define MAX77759_CHGR_REG_CHG_INT_OK                   0xb4
+>> +#define MAX77759_CHGR_REG_CHG_DETAILS_00               0xb5
+>> +#define   MAX77759_CHGR_REG_CHG_DETAILS_OO_CHGIN_DTLS  GENMASK(6, 5)
+>> +#define MAX77759_CHGR_REG_CHG_DETAILS_01               0xb6
+>> +#define   MAX77759_CHGR_REG_CHG_DETAILS_01_BAT_DTLS    GENMASK(6, 4)
+>> +#define   MAX77759_CHGR_REG_CHG_DETAILS_01_CHG_DTLS    GENMASK(3, 0)
+>> +#define MAX77759_CHGR_REG_CHG_DETAILS_02               0xb7
+>> +#define   MAX77759_CHGR_REG_CHG_DETAILS_02_CHGIN_STS   BIT(5)
+>> +#define MAX77759_CHGR_REG_CHG_DETAILS_03               0xb8
+>> +#define MAX77759_CHGR_REG_CHG_CNFG_00                  0xb9
+>> +#define   MAX77759_CHGR_REG_CHG_CNFG_00_MODE           GENMASK(3, 0)
+>> +#define MAX77759_CHGR_REG_CHG_CNFG_01                  0xba
+>> +#define MAX77759_CHGR_REG_CHG_CNFG_02                  0xbb
+>> +#define   MAX77759_CHGR_REG_CHG_CNFG_02_CHGCC	       GENMASK(5, 0)
+> Small nit - there seems to be a stray TAB in this line.
 
-> On 5 Jan 2026, at 11:19, Danilo Krummrich <dakr@kernel.org> wrote:
->=20
-> Convert all imports to use "kernel vertical" style.
->=20
-> With this, subsequent patches neither introduce unrelated changes nor
-> leave an inconsistent import pattern.
->=20
-> While at it, drop unnecessary imports covered by prelude::*.
->=20
-> Link: https://docs.kernel.org/rust/coding-guidelines.html#imports
-> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
-> ---
-> @Greg: If you agree I will take this through the driver-core tree. I =
-will have
-> driver-core patches building on top of this.
-> ---
-> rust/kernel/usb.rs              | 21 +++++++++++++++------
-> samples/rust/rust_driver_usb.rs | 10 +++++++++-
-> 2 files changed, 24 insertions(+), 7 deletions(-)
->=20
-> diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
-> index d10b65e9fb6a..99b07b5ac491 100644
-> --- a/rust/kernel/usb.rs
-> +++ b/rust/kernel/usb.rs
-> @@ -6,14 +6,23 @@
-> //! C header: [`include/linux/usb.h`](srctree/include/linux/usb.h)
->=20
-> use crate::{
-> -    bindings, device,
-> -    device_id::{RawDeviceId, RawDeviceIdIndex},
-> +    bindings,
-> +    device,
-> +    device_id::{
-> +        RawDeviceId,
-> +        RawDeviceIdIndex, //
-> +    },
->     driver,
-> -    error::{from_result, to_result, Result},
-> +    error::{
-> +        from_result,
-> +        to_result, //
-> +    },
->     prelude::*,
-> -    str::CStr,
-> -    types::{AlwaysRefCounted, Opaque},
-> -    ThisModule,
-> +    types::{
-> +        AlwaysRefCounted,
-> +        Opaque, //
-> +    },
-> +    ThisModule, //
-> };
-> use core::{
->     marker::PhantomData,
-> diff --git a/samples/rust/rust_driver_usb.rs =
-b/samples/rust/rust_driver_usb.rs
-> index 4eaad14867b2..ab72e99e1274 100644
-> --- a/samples/rust/rust_driver_usb.rs
-> +++ b/samples/rust/rust_driver_usb.rs
-> @@ -3,7 +3,15 @@
->=20
-> //! Rust USB driver sample.
->=20
-> -use kernel::{device, device::Core, prelude::*, sync::aref::ARef, =
-usb};
-> +use kernel::{
-> +    device::{
-> +        self,
-> +        Core, //
-> +    },
-> +    prelude::*,
-> +    sync::aref::ARef,
-> +    usb, //
-> +};
->=20
-> struct SampleDriver {
->     _intf: ARef<usb::Interface>,
-> --=20
-> 2.52.0
->=20
->=20
+Will fix it in the next revision.
 
-OOC: can rustfmt do this, or is it a manual process for the time being?
 
-Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+BR,
 
+Amit
+
+>
+> Other than that:
+> Reviewed-by: André Draszik <andre.draszik@linaro.org>
 
