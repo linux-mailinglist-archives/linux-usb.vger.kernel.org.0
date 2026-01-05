@@ -1,174 +1,104 @@
-Return-Path: <linux-usb+bounces-31930-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31931-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9CC2CF4AED
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 17:29:39 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8275CF4C46
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 17:42:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C672A303ADC2
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 16:24:38 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C0939300A922
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 16:42:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F9D31AA8F;
-	Mon,  5 Jan 2026 16:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA4EF314D2A;
+	Mon,  5 Jan 2026 16:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GPjcKII0"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="14hux3Ra"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1591932ED4E;
-	Mon,  5 Jan 2026 16:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4091F2D97B5;
+	Mon,  5 Jan 2026 16:27:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767630272; cv=none; b=YJaOeXTSVA7+7Fxp9UHSPNGmdPv2U5E2csXKEnsQvoJ5WOO7CZs3JCszpVKKNJO5Wh9IFh7HVOAW+Rw+/hIHMgbZIEmTJE7LLfwyzthHRFEsYh31yXD1BhAfFXdJy1l/XvuE37A0VY12pTvGCqmGM7FE/ObXDdmqUlUvinghCCI=
+	t=1767630473; cv=none; b=bn3rFeeb/ztz/Ota2NcUUGt8hNAflvNlOKa33BwtosBzcsD1DrJIp6BsAVBD5a3wrK6jGweHqQoRiGZipvBrU7RpV6gzvBLUtBH7rk19Yrv2ifZ5YhDqdK/Y0nCl6+CzkO6qn+/EaFReh6OII0mHD4l/fnprDOLffqB1M4bq8Oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767630272; c=relaxed/simple;
-	bh=lYCW3siDQNRZY+GsyMzVi9UL/1vFDJTQoDJqk5WeLXk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PUvhWZsGKme/FwOy8aOpJdL9YGVv1eIY9oSlV1unM22WFLtXOVElbMpydC7vhie17TmiHhvOTagLGVWkXiqnB45dLZh6IlSBI/GLmvtzxB2YJj9m7vB7UUQ0Y8xVvgP3AWUpGA84FvBk8PkDqYo5+WOXtjDBazm6mq7b5KiEOa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GPjcKII0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B09C116D0;
-	Mon,  5 Jan 2026 16:24:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767630270;
-	bh=lYCW3siDQNRZY+GsyMzVi9UL/1vFDJTQoDJqk5WeLXk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GPjcKII0OHEUX4sJTxAE62ChobNYZmkA/Y73pMem5xTDSVO5jhPzKqBCMAVJTQRwm
-	 7Yt1EsjtuZiZnM77g2ULdAc2Y7y9v9HO0v8QHt8Mb9zMCT5TULXuU1UT7O2UQQc+0a
-	 LbqTZJ4M7wFSU6ZlyR67Ifn9LFgcfup5aOpCujbJLhzK2AgvPzeiG37W4iCOCC2SM9
-	 cep0MaDn6gAKbW7AQVSS57ZwNb4iSGTLg57ur7j1PyZWNEZraKrvYsOpUfD2TlXCvX
-	 OketC79ovpwhXE13BuTiCpBC82BUk2BzQTMsGiFBsBdS4yEs+FIB6gYNicUr7PalTg
-	 tSudURb0MsIEA==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: usb: Add Socionext Uniphier DWC3 controller
-Date: Mon,  5 Jan 2026 10:24:16 -0600
-Message-ID: <20260105162418.2842825-1-robh@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1767630473; c=relaxed/simple;
+	bh=P0a3EQx3om18xEGI1A6m2E4Bk4dei6gG1+wZfR9LXmM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MCRMFkfBAIKF+ImxDjmkrp/STPtIu2J1C97PqlqKtntyx9bSxzerWsDexBNs+wTGCan2j3T7Kj26/NIUwY+CEn+Rnli7dq4iES7es903z94Fpfa/kYbIpPE3hh+lh3L+DfhTLUkBX+Ji1gpU4FQ/+/Ih/LeOa+9JlfVRjSf2JEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=14hux3Ra; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C63C116D0;
+	Mon,  5 Jan 2026 16:27:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1767630472;
+	bh=P0a3EQx3om18xEGI1A6m2E4Bk4dei6gG1+wZfR9LXmM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=14hux3RamtF3ha94Oc4mQEF5SgzS2AO1mAPkRHp0ipbz8ybi5hd9p7LRcUEP5WPEK
+	 rhH3hP8/uFdKei5YyL4LIXKDqUFgICWxldvUZb6Uo2hSR5cljoH91Snx6T7Jj03q5M
+	 Kkp7NA0My0Fbs4MQ9e++A90p9mt9sCJ37qusT6bw=
+Date: Mon, 5 Jan 2026 17:27:48 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Prashanth K <prashanth.k@oss.qualcomm.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] Add the DWC3 instance name in traces
+Message-ID: <2026010528-animal-avenging-dad2@gregkh>
+References: <20260105115325.1765176-1-prashanth.k@oss.qualcomm.com>
+ <2026010555-squealing-easily-7659@gregkh>
+ <20260105161145.podzns57ekzjg3pj@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260105161145.podzns57ekzjg3pj@synopsys.com>
 
-The Socionext Uniphier DWC3 controller binding is already in use, but
-undocumented. It's a straight-forward binding similar to other DWC3
-bindings.
+On Mon, Jan 05, 2026 at 04:11:50PM +0000, Thinh Nguyen wrote:
+> Hi Greg,
+> 
+> On Mon, Jan 05, 2026, Greg Kroah-Hartman wrote:
+> > On Mon, Jan 05, 2026 at 05:23:22PM +0530, Prashanth K wrote:
+> > > When multiple DWC3 controllers are being used, trace events from
+> > > different instances get mixed up making debugging difficult as
+> > > there's no way to distinguish which instance generated the trace.
+> > > 
+> > > Hence append the controller base address into ftrace. This needs
+> > > the following reworks which is addressed using this patch series.
+> > > 
+> > >   1. Removal of dep->regs and use dwc->regs everywhere
+> > >   2. Use dwc pointer in all dwc3_readl/writel()
+> > >   3. Adding the base addr in traces.
+> > > 
+> > > Changes in v2:
+> > > - Avoid using macros for dwc3_readl/writel()
+> > > - Use base address intraces instead of dev name.
+> > 
+> > Wait, why change this?  The dev name is what you should care about.
+> > "base address" doesn't make much sense as this is on a lot of different
+> > busses, right?
+> > 
+> 
+> I asked Prashanth to do so. The reason is because the device name is not
+> consistent and not obvious for different busses. For example, for PCI
+> devices, the device name may be in a form of "dwc3.N.auto". If we only
+> have access to the traces and not the testing setup (which often is the
+> case), it's difficult to tell which is which. Also, very often the
+> consumer of the traces is also the hardware validation engineer, and
+> IMO, it's more understandable reading base address than device name.
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
-v2:
- - Allow 1 phy entry for Pro4
----
- .../bindings/usb/socionext,uniphier-dwc3.yaml | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
+But all you need to know is "this is different than the other one", you
+don't "need" the io address, right?  And if you really did, just add
+that to the trace as well _when_ you actually need it.
 
-diff --git a/Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml b/Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
-new file mode 100644
-index 000000000000..2b253339c199
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
-@@ -0,0 +1,89 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/socionext,uniphier-dwc3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Socionext Uniphier SuperSpeed DWC3 USB SoC controller
-+
-+maintainers:
-+  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-+  - Masami Hiramatsu <mhiramat@kernel.org>
-+
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        const: socionext,uniphier-dwc3
-+  required:
-+    - compatible
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: socionext,uniphier-dwc3
-+      - const: snps,dwc3
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 1
-+    items:
-+      - description: Host or single combined interrupt
-+      - description: Peripheral interrupt
-+
-+  interrupt-names:
-+    minItems: 1
-+    items:
-+      - enum:
-+          - dwc_usb3
-+          - host
-+      - const: peripheral
-+
-+  clocks:
-+    maxItems: 3
-+
-+  clock-names:
-+    items:
-+      - const: ref
-+      - const: bus_early
-+      - const: suspend
-+
-+  phys:
-+    description: 1 to 4 HighSpeed PHYs followed by 1 or 2 SuperSpeed PHYs
-+    minItems: 1
-+    maxItems: 6
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - phys
-+
-+unevaluatedProperties: false
-+
-+allOf:
-+  - $ref: snps,dwc3.yaml#
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    usb@65a00000 {
-+        compatible = "socionext,uniphier-dwc3", "snps,dwc3";
-+        reg = <0x65a00000 0xcd00>;
-+        interrupt-names = "dwc_usb3";
-+        interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
-+        clock-names = "ref", "bus_early", "suspend";
-+        clocks = <&sys_clk 12>, <&sys_clk 12>, <&sys_clk 12>;
-+        resets = <&usb0_rst 15>;
-+        phys = <&usb0_hsphy0>, <&usb0_hsphy1>,
-+               <&usb0_ssphy0>, <&usb0_ssphy1>;
-+        dr_mode = "host";
-+    };
--- 
-2.51.0
+device name is how Linux handles devices, please use that otherwise it
+just gets confusing for everyone in the end (hint, teach the hardware
+engineer what it means.)
 
+thanks,
+
+greg k-h
 
