@@ -1,110 +1,120 @@
-Return-Path: <linux-usb+bounces-31917-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31918-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57EACCF3A62
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 13:59:01 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B01DCF3DD6
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 14:40:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A5F01300A3C1
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 12:58:43 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id ACE343005F05
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 13:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70D5A346FB3;
-	Mon,  5 Jan 2026 12:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65C6D341058;
+	Mon,  5 Jan 2026 13:40:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nz5BKJw/"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="bhIi7bCv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2445346E64;
-	Mon,  5 Jan 2026 12:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767617231; cv=none; b=FJKe3vEm/4n+ZKx2rhjh+QAtFT3M4+qxaRp5NGRkfNshiZqlNkncRb6S6d8z0AHHbSTU+GVsWqoIemOSx4qBebrORoPlTNexs28VMo11Ne/iRkK/ks5tb5+q7AIrn9dBSkSfPMMz26FqObyiktWBEhQvVOPpe+dBSpvtCgcMNTw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767617231; c=relaxed/simple;
-	bh=DcK9JhgklTlks/dbMU+80cGJYIWzHkB6Fy6SWnC+6X4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HoCR0KRRlpdsPBo9c2/AmpDVc+hkbQ0MKouk5w5QDWI9LHiKBkM5wcjwyFUbk6SoPHDpo2qywan8s/ULpcLGKbmpEpKr1WuuGwzBcS7xoFP8O2YOYTpUuh5qWGoJIS2ooQMmUTpzIlFtcosgB0PxYjVSweFvV0y8ki+wR1bCS3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nz5BKJw/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3606CC116D0;
-	Mon,  5 Jan 2026 12:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767617227;
-	bh=DcK9JhgklTlks/dbMU+80cGJYIWzHkB6Fy6SWnC+6X4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nz5BKJw/SW7aFh5PDOn4mjTKTV+LFDrfIA0RGg+0ukrtI/PWWaAkWyRxPhjHOORJ2
-	 F/w6WBFrMWFgCSU2ISdgFwjDlN6RJQGUpNtbSDFRgxj0nCBCNDcP/L8EDfUCsH9gEc
-	 mlu4FBl2Ci2EU2Ws0he3TS3VVhUptlYr949Nb1Pt3prNClT7c60WGSzHXKmRhXNJ6j
-	 AahYn0rfC6Gh2cHn5zTWUzZEAv/8eKMksb2N723rGz9Dh7iCNZ/zP1/Y/1u5wxBIyA
-	 1Un3saqGObtBBTQaXpEhtVjmp3anbCGER1NIrZ5yjgzlo4HO5YIiuhg64BQYow0aEu
-	 K25kQXvV5JU6Q==
-Date: Mon, 5 Jan 2026 12:46:57 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev, herbert@gondor.apana.org.au,
-	davem@davemloft.net, vkoul@kernel.org, andi.shyti@kernel.org,
-	lee@kernel.org, andrew+netdev@lunn.ch, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org,
-	Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
-	UNGLinuxDriver@microchip.com, olivia@selenic.com,
-	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org,
-	lars.povlsen@microchip.com, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	luka.perkov@sartura.hr, Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v4 04/15] dt-bindings: spi: at91: add
- microchip,lan9691-spi
-Message-ID: <2ff4b417-871b-4b0e-a4f5-424ce535ebd3@sirena.org.uk>
-References: <20251229184004.571837-1-robert.marko@sartura.hr>
- <20251229184004.571837-5-robert.marko@sartura.hr>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03206340DB2;
+	Mon,  5 Jan 2026 13:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767620430; cv=pass; b=FzsKPb4WkrHITxeV+v54ZIzB5VqtyYfY0T7HGnE7U8QGI6yjXucyiQf8GkEy+BI+jWQ5EQ9o9dQIlvozw7JaWLaJ9hmdGzmX7I/9s4B0rIrx55l80flz7lr0lYXvV0v8Hir2FN6yVCFHatfOFLd+zHYuWu4hRIC8CVTB2IO8z/g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767620430; c=relaxed/simple;
+	bh=bVBizW76SECHShuv+DZh5Mbhrg8dkvmw9aI4M5tHzYs=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=diiBIoIXA0lJJ3pACIPyRD4H+Ut6bFUvD1w6mF/rDTuVSgARXEM3CBZLlz+SoYm3gNccD1bD4LoTvZy70GylUUhJvzrUfF/3GzZEMvwKjJcjGDB7l8SpFKBuMwyft+yKPMOKlDzf7SAtHv1mIT4tpmnUOa69Tatwmvfi4BeUrl8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=bhIi7bCv; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1767620420; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=X0vHW3vGku20OakSmzaXWNsB4NoCa/lF11yE7FHKaRnYRe9RAqbUypyDE0g1TQWOKbwyS1c9I+qwmmqbOcHEtvDp6oPrP7Jar/t4Fic3CzPdIizg3UUB08X+vGnwRQH2rcC5v2IJnyVhJVtArdvCP2B1JTkG30YpVGTvtHZgNxQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1767620420; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=bVBizW76SECHShuv+DZh5Mbhrg8dkvmw9aI4M5tHzYs=; 
+	b=UOxzpLBp3GLnHAENZmCHvU89agIxAxksPmq+v0H8IFevumDOdt3CNSjjRWHCpuoHvs7ggKOUcGbEqcPrO1eWYcLHkED7x8RPOsee9+yTJOkx2pPvbXcPZal3Xx/B2r+XRjgbmNR3L4uyUsOkLc4knocfPIr+mlvB9IXQOatLTlg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767620420;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=bVBizW76SECHShuv+DZh5Mbhrg8dkvmw9aI4M5tHzYs=;
+	b=bhIi7bCvoChEdbJpCXWdAyEXbDK2GR6S51wclz7XKUZY+l4ZeI/impofs99k3UwT
+	4C6EhxtSVu8cg+nf292MrDY64FHJD7j5h7dty3lQTlZ4f11c7uGM/2cRX3E8BSac2Oz
+	u88ldmMZL+qlM0WLYrlMvMDZjYMdDBLR7UVyfluQ=
+Received: by mx.zohomail.com with SMTPS id 1767620418499859.6597161259574;
+	Mon, 5 Jan 2026 05:40:18 -0800 (PST)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="L5qsEAHx6q9dJj52"
-Content-Disposition: inline
-In-Reply-To: <20251229184004.571837-5-robert.marko@sartura.hr>
-X-Cookie: So many women
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH v2 24/27] rust: usb: add __rust_helper to helpers
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20260105-define-rust-helper-v2-24-51da5f454a67@google.com>
+Date: Mon, 5 Jan 2026 10:40:04 -0300
+Cc: rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C2DE044A-4CC6-4C4E-BC26-ADF46055940F@collabora.com>
+References: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
+ <20260105-define-rust-helper-v2-24-51da5f454a67@google.com>
+To: Alice Ryhl <aliceryhl@google.com>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
 
---L5qsEAHx6q9dJj52
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Dec 29, 2025 at 07:37:45PM +0100, Robert Marko wrote:
+> On 5 Jan 2026, at 09:42, Alice Ryhl <aliceryhl@google.com> wrote:
+>=20
+> This is needed to inline these helpers into Rust code.
+>=20
+> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> ---
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: Daniel Almeida <daniel.almeida@collabora.com>
+> ---
+> rust/helpers/usb.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/rust/helpers/usb.c b/rust/helpers/usb.c
+> index =
+fb2aad0cbf4d26ac7fb1a3f176ee7a1d30800f92..eff1cf7be3c2d10b7e9248252d354eb8=
+a4fd4c94 100644
+> --- a/rust/helpers/usb.c
+> +++ b/rust/helpers/usb.c
+> @@ -2,7 +2,8 @@
+>=20
+> #include <linux/usb.h>
+>=20
+> -struct usb_device *rust_helper_interface_to_usbdev(struct =
+usb_interface *intf)
+> +__rust_helper struct usb_device *
+> +rust_helper_interface_to_usbdev(struct usb_interface *intf)
+> {
+> return interface_to_usbdev(intf);
+> }
+>=20
+> --=20
+> 2.52.0.351.gbe84eed79e-goog
+>=20
+>=20
 
-> Document Microchip LAN969x SPI compatible.
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---L5qsEAHx6q9dJj52
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlbssAACgkQJNaLcl1U
-h9D4Xwf/SR39qhC6yLd9TVLdTbJvbv9td/1UUXSFHjr1far0W1wTnHIk9agrEcs+
-/CUvNmq9Xga7s68neH9NM4e3phBnJZt74a3J3zzhvBekn3xXCyKfmhw9WFU+rGGC
-dLJg/c/VyK4Dzfq6tzvajmvH8NYGkfWsf8TDYMAQkWfyFf3iASqrWODzvobA5l8D
-f4Q5wCZqo6GnSlAfW2+galQbUNMK85g0ponFRfi1JfjuTyYb2ZKghpKWLJGOTJzj
-PMinOleBkv3jp7jH4T6Lh+DiCyhddXuYJhoGGfDIlnhZrm+1fCifyVtpxwbXKXH3
-bT3c73me1CxD3Ncn8Q6E2gOrpidxdg==
-=VKTA
------END PGP SIGNATURE-----
-
---L5qsEAHx6q9dJj52--
+Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>=
 
