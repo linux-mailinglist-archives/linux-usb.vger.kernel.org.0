@@ -1,251 +1,130 @@
-Return-Path: <linux-usb+bounces-31913-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31914-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB78FCF399F
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 13:45:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BF36CF3A4A
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 13:58:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0F13C302709E
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 12:43:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6F0E83133AE1
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 12:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F233333752;
-	Mon,  5 Jan 2026 12:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F6533D516;
+	Mon,  5 Jan 2026 12:43:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YsCGNIp1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AHbIohl4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE25330B0C
-	for <linux-usb@vger.kernel.org>; Mon,  5 Jan 2026 12:42:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6E233CEA7
+	for <linux-usb@vger.kernel.org>; Mon,  5 Jan 2026 12:43:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767616963; cv=none; b=dGTzoxxR786RAsckJXjTQgDoieOj3CPvf87RyW5Awb0Mlzvqp1PTwkhSvjiPqv+wturb+B0PDWwoV22464ViKhWmpj2VM5VmcAXk2Ixqyc6eFLwuj/KnXBQVu6V11WafuoW1vfIMtFhd3tjPtg/h2Ksl3XKySRy5DCE8RZv7X2E=
+	t=1767616995; cv=none; b=OydiolU937xOY0OwuP5iJ8vARoMmsqQb+Z/vstFyFGJrFY+QQNg95AyPZte4mZyXo9NO57zrkGGksOCjYp9F9i5cMDe5QvjF6nr63MhykjmZ7m+Zqlzq7gjDQ2nio84L30mANmbWmFCW7EvMzFuf58teBVE35W2n6QOvwtnuZvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767616963; c=relaxed/simple;
-	bh=kMOE8SG+apSYdkSF9wxqn459O1XV4mgd4R9CI30yqRE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=FfRuPk8CttGTIfYkTeoJP3uxXEKyWy+RggXWRb/qaAUd56XCC7homI6k61MkbY2394rByqceoW1pJuX3XQdaHDtPG7mt0riAYBaCPFYVC2ZO9MrKJAUZBFPIv0hzr8NOGOie0XJvbNeyfE2nlgUk36tU7VZyXmRKvHu0/L06RGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YsCGNIp1; arc=none smtp.client-ip=209.85.218.73
+	s=arc-20240116; t=1767616995; c=relaxed/simple;
+	bh=B0MohqxbCI1xTkiB4+VB9WUTW3/7Lcw24CWoxffFhss=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=k01VKNwTFXwbBloaMBaO7VEp9CwezTtiOTc5coiN9/0aOz32nDTVAaJ0suPqxRX8NnVFz3ewf36mTtlvom5twb3QNMmCrugueR+NLvvrW0W6B5FkNVc+pK2YsM17VU9b0hLt9DgRGpQpityyVFGBtVRkTipVCaCiQ730eY7t1Z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AHbIohl4; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-b73586b1195so40179266b.3
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jan 2026 04:42:40 -0800 (PST)
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-477cf2230c8so141997375e9.0
+        for <linux-usb@vger.kernel.org>; Mon, 05 Jan 2026 04:43:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767616959; x=1768221759; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=suTH4y/aK07UioTUbupgL2cgp19BWpg3A0c3oYdgR0I=;
-        b=YsCGNIp18JiGPOzkn/DPqh3z2eIbkvQNR5id0hInLs9r4OT02HbOpXEnRMQN9GNph7
-         sNtBrV0a1xzlfML3GhTwslx/r9T+QVOIOcd0gZpfVoVUrD4+Eu3Nf6lBxL45vz9jJrp8
-         4XubaQW22q/62ZXfYZPDmGok+6228nh4BGDPaTP1bW2iOLUnJsvQRrXhuru43enR+bIb
-         R7ytnolmQtzV6DKNzvAsDPwtk8yR6ZxPb8DovB8DmE05T+k7WcdWWLjiL7lveNuDYsOf
-         0uAbaR6Rn8J8ZlqDVl4t7mqxTnscmGqYHPCpZEUUYsZvQpGNhO2whJYj1Zus4BDHRwuz
-         u+Rw==
+        d=google.com; s=20230601; t=1767616991; x=1768221791; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JmgFkrV+p7IPs0w7DRe6C0kHZv7GtilwGuTKSjHcuPE=;
+        b=AHbIohl4Tjvh71bstdJO32eLMV7qymLo02EzdYQAFFrJ6smu/gTTfC8r/FzQWrTQXi
+         y1phsYWSPQPJTfh+slMaApT0iXuJsY4osls1XDOTLKc97e9rwVOEH5gVMcZEePYNdbv0
+         gVTKlLWpU9DcAn2XMqVNr6vawcisJblP4Vl5ipQgv+ABWZ5FNNVLA085tu01MnACcAIU
+         4MJ6O8/e/TLC8w91tEXr0jVFigtFf5Hop1PW6DIACPhHkeaN6hEPlgJKfmvaXks+w9MR
+         PDb1GobirXcYJaGQKnLaMWsNDm6/SKrtV5dpz6rpHRNGZZ4084mvVy549AfcNC3Z0FUj
+         tbsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767616959; x=1768221759;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=suTH4y/aK07UioTUbupgL2cgp19BWpg3A0c3oYdgR0I=;
-        b=RKqJ1cZ5uQvRD+UnkX3i/VNeQG8FaN/SHp+nnOUMs14yRwXucvmPfpRDuULd1+r8kb
-         2l0khqOcFJjmw3k9l/OotwnwaB5B+sDLUV+cfcEGIwfAG0IR0Kq4xvYmEpANNPk+yr3g
-         J1kb2KIxczAX+sMhZQUCfni+kO2DONPJ2Ps4w+CUTAzC09AvGTU9DkFXEjEKiZ6ZPPFA
-         nC3gWbP7THYk9iB9dnV2gvU/ggIIbVPlTXTNCjFHp/x52os532kaNfzq/05J3rRBZEFE
-         Rk07so4D1M6mZecLgCM0Cv8gAwQC2zIdUun++CGAxfgco5OlYQ0iHb4ygmtqO15n/B+q
-         Xrcg==
-X-Forwarded-Encrypted: i=1; AJvYcCXD6leR2uQ+4SLbryoL+ldEz1Up2FNz/DZbJLOW8SnHTrTKhA0fg/84CObB+IH9BDEdq+8p1SUXChU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaEFYd/uCwNAwmUNpZ5S4qOOzFj6rOW+KDjNxJkYCLfMgxEfMe
-	lrtQQjhkPdjixR/gmXxWUqkvm3XncBhYqy44B9oVe+H0lvme0g/ajh2RD6XDWVmT5LplVRqjajd
-	2f+sYnMbUYuLuVaZk2w==
-X-Google-Smtp-Source: AGHT+IGf1O7IHkQTlTr95Pslbnl5wrFL8+HDWkBjzBEOHejeoVvO3AomqVuVaw8gUaSkcMI/MyfZHpwyBJwWEqs=
-X-Received: from ejcul5.prod.google.com ([2002:a17:907:ca85:b0:b73:3b0d:754d])
+        d=1e100.net; s=20230601; t=1767616991; x=1768221791;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JmgFkrV+p7IPs0w7DRe6C0kHZv7GtilwGuTKSjHcuPE=;
+        b=FcyC4tgu1e8uOxHK9nL17enIr/36AdC7wcsbW8qSQJVPWpaxF63UsdG4gdCPXt3zTQ
+         LvFB/eIEzLwPkRggdttbfVNpVrTYYwJqYLYt3F04G/RNNB+ZMgm/gGh58DmsSuVuBRNz
+         MBkOFJww6M3Uurm0tQyh9eIotfUxO8LaBtl/BOPmv6LTPU0kLi7l1I40Z7TGpxTHURuh
+         AFDS2y7MK5L7VTGSA6EnR7FzsiAVUYEqisx9Rp37NJNMSm5m5iLLylMyeYMbJj9IXXCJ
+         tWf9NmNZyNgpe3ZNDpPJMdh7Vc9O2LRUn6zyrY9zdLaK9wiFlNIFJRs2ldumGjiMXkA7
+         BkUA==
+X-Forwarded-Encrypted: i=1; AJvYcCXQy3OKMRyMrHH0a1CkQkRcuRUGb8ZLpXy7jBZioOt6h7OA5SzhYu0gokugbHfDgk4ns9UVAGb4cJM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsaoHk0c9f9eCCJ0IPIR4F1W0nHW4XFPPRBv+WkJj1k7JuQry0
+	5LP8yVnJry01mvfmCUTQOO51OFtjrDA6cU9EBVP4q+mFZ7BFh3lcbJNyUoFePcZ4mk6htiWrnmd
+	6LjR4pH2xQyyQ5ZetHA==
+X-Google-Smtp-Source: AGHT+IGd0e6KVaNU7yKaJNmfg+LVDSD8ZTaNCVkdFCCmBxQPqIAvE4LsH/9LstZQvjjFZZIDWSoUtoQGBk0gRj4=
+X-Received: from wmlu14.prod.google.com ([2002:a05:600c:210e:b0:47a:916c:e045])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:906:318c:b0:b80:402e:6e77 with SMTP id a640c23a62f3a-b80402e6f1fmr3924567866b.54.1767616958861;
- Mon, 05 Jan 2026 04:42:38 -0800 (PST)
-Date: Mon, 05 Jan 2026 12:42:13 +0000
+ 2002:a05:600c:3b8f:b0:475:e09c:960e with SMTP id 5b1f17b1804b1-47d19593d0dmr790735885e9.32.1767616991722;
+ Mon, 05 Jan 2026 04:43:11 -0800 (PST)
+Date: Mon, 05 Jan 2026 12:42:37 +0000
+In-Reply-To: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAKWxW2kC/32NTQrCMBCFr1Jm7UgmoUZceQ/pok2nSaAmJalBK
- b27sQdw8+B7vJ8NMifPGW7NBomLzz6GCvLUgHF9sIx+rAxSyJaq4MiTD4zplVd0PC+ccNJDq+h
- KSggNtbikmnkfo4+usvN5jelzfBT6uX/nCqHAXjIpMxjS/eVuY7Qzn018Qrfv+xf9TXaXtQAAA A==
-X-Change-Id: 20251202-define-rust-helper-f7b531813007
+References: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
 X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5550; i=aliceryhl@google.com;
- h=from:subject:message-id; bh=kMOE8SG+apSYdkSF9wxqn459O1XV4mgd4R9CI30yqRE=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBpW7G2KP3s3XkvuUe28vfCsN8trnhXVpe23MOsp
- r09yEuuWCGJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCaVuxtgAKCRAEWL7uWMY5
- RvWlEAClQm3dLefLdyw558cl7DXXFM/HG6E0PYtjbQN8CJN5Z73NMsBCPkh4yi3buGxEDSwuLgK
- knLtqhBaD1uekLELc+gYUWfr87wmwKWNdTFPwiPPorV51hNabNaXw8G7fOYYMdF+oxPpF/1MkqL
- +h2mkAAuC4NIQrJ858OmgnAGAMmLTFdB1n+a62gCy4lbEQ+P19PHaV421HMwhz7HZ2zymicnR/I
- YQegrNv3LY5G3K38u1cG0t0TmheZacr6GTA969Qw4qbJHpcuwYXq7kxEqXbgX6m59pwD3Wjjpry
- hw/QZRKqddie8OdfN4X9hVSaRnZ2YTxS914ZbYHeNxK2aAKzT3hK7KA+iR9yICYNMqRl6tfchAn
- dbu/pDyjlflom6arj6cS+By423tUdk5jbgU5+GtHRr6jE58lI65j3HOKfdWNAGC68BugTffPYy4
- ZB6WJ7vIOjICkbpwY3OY8xNiKhiA8NRRgNDmBCtMrU4q1Z02hhm639rqkLt4Ls9fGBvO9/g97YD
- 6dOKVGW4yqgDQhLSoUQhSGPZSRLMfaz9tqZ4lsyNhCq0/edLIJfsQhCRB3ZHADjjhOMMHK/lpdZ
- w1UiXgV48Dh91eOwO4H2r6iHlqp4Eydgtc/WDsVIaegqEKCM57R/ttatf0zojd8qfWcDHJyPgdD qkahi/Z6S+Gc45Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=934; i=aliceryhl@google.com;
+ h=from:subject:message-id; bh=B0MohqxbCI1xTkiB4+VB9WUTW3/7Lcw24CWoxffFhss=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBpW7G9nnDphlnEHAacIORi0SP1Wt7Lg49jqi1FY
+ 20FIkOEQlqJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCaVuxvQAKCRAEWL7uWMY5
+ RiTfD/4yebLqWfLaXDE2OIbogSUDyVLIkDSvS2ibQ/81QGqtSo9zuf+JF7Wis0pAfk+i8e/2oyL
+ RvQU3KwltdboZ+Kb9afEunqYR4jdYoFwTazNt/Bhd6oV6RBAGK4rRG3i90Ut5Sz8XKN/gxsVx0B
+ a/XYBx6nzJvec0N/Y9naXBja2cgku+ohWp83EhM4yO2/j/WUMCLQYv5hH1TQWo/vG+i9nPoja0R
+ 4sXyVWAm2Xcgv4llNJX/VDAPappJcDLzq6e6NAl8OUr5LD/ctF7PcOvobYBP2cio6Gjn9Y2+wax
+ u4G3aCLwXWiCYb0MOOKW0Cx0LiC8F1e4qyzhPjsU7eNVOed0uTk36HHLcs+ObMimvcaN8P8V32v
+ ewQecA6+KOGzDWDrXEQy5s7PniD/4EG/t85nBKqIcxFcj5mt7Rzf3N+gV19UwSEzYet9nOdpmtO
+ P1A83TBsJyl936AqKAH7nLBMAJ0F+xZEoNzVqtekFk+OEHUyPsC8BFlaAT5r1IVQ7Vs2lavkU/t
+ 7mjEIcbAP1T3pxQOLBXn2ck9rZoED/z/JltLbwQk5lSUtJSRjR6TBfUIJwYrfd+PVkUdeZuRAA4
+ I3dzeO3ghmo7e2gNaEtElOsiyxC7fPQSZTxXhV/mh+dDjD2AarTGHsVvA2dGDZVmAatTRitqWS+ uKtBoCadNGhdM9Q==
 X-Mailer: b4 0.14.2
-Message-ID: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
-Subject: [PATCH v2 00/27] Allow inlining C helpers into Rust when using LTO
+Message-ID: <20260105-define-rust-helper-v2-24-51da5f454a67@google.com>
+Subject: [PATCH v2 24/27] rust: usb: add __rust_helper to helpers
 From: Alice Ryhl <aliceryhl@google.com>
 To: rust-for-linux@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Alice Ryhl <aliceryhl@google.com>, 
 	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Peter Zijlstra <peterz@infradead.org>, Elle Rhumsaa <elle@weathered-steel.dev>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, linux-block@vger.kernel.org, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org, 
-	Benno Lossin <lossin@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Paul Moore <paul@paul-moore.com>, 
-	Serge Hallyn <sergeh@kernel.org>, linux-security-module@vger.kernel.org, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Andrew Ballance <andrewjballance@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, maple-tree@lists.infradead.org, 
-	linux-mm@kvack.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, Vitaly Wool <vitaly.wool@konsulko.se>, 
-	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Michal Wilczynski <m.wilczynski@samsung.com>, 
-	linux-pwm@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org, 
-	Will Deacon <will@kernel.org>, Fiona Behrens <me@kloenk.dev>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, Ingo Molnar <mingo@redhat.com>, 
-	Waiman Long <longman@redhat.com>, Mitchell Levy <levymitchell0@gmail.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Lyude Paul <lyude@redhat.com>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, John Stultz <jstultz@google.com>, linux-usb@vger.kernel.org, 
-	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Matthew Wilcox <willy@infradead.org>, Tamir Duberstein <tamird@gmail.com>, linux-fsdevel@vger.kernel.org
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	Daniel Almeida <daniel.almeida@collabora.com>
 Content-Type: text/plain; charset="utf-8"
 
-This patch series adds __rust_helper to every single rust helper. The
-patches do not depend on each other, so maintainers please go ahead and
-pick up any patches relevant to your subsystem! Or provide your Acked-by
-so that Miguel can pick them up.
+This is needed to inline these helpers into Rust code.
 
-These changes were generated by adding __rust_helper and running
-ClangFormat. Unrelated formatting changes were removed manually.
-
-Why is __rust_helper needed?
-============================
-
-Currently, C helpers cannot be inlined into Rust even when using LTO
-because LLVM detects slightly different options on the codegen units.
-
-* LLVM doesn't want to inline functions compiled with
-  `-fno-delete-null-pointer-checks` with code compiled without. The C
-  CGUs all have this enabled and Rust CGUs don't. Inlining is okay since
-  this is one of the hardening features that does not change the ABI,
-  and we shouldn't have null pointer dereferences in these helpers.
-
-* LLVM doesn't want to inline functions with different list of builtins. C
-  side has `-fno-builtin-wcslen`; `wcslen` is not a Rust builtin, so
-  they should be compatible, but LLVM does not perform inlining due to
-  attributes mismatch.
-
-* clang and Rust doesn't have the exact target string. Clang generates
-  `+cmov,+cx8,+fxsr` but Rust doesn't enable them (in fact, Rust will
-  complain if `-Ctarget-feature=+cmov,+cx8,+fxsr` is used). x86-64
-  always enable these features, so they are in fact the same target
-  string, but LLVM doesn't understand this and so inlining is inhibited.
-  This can be bypassed with `--ignore-tti-inline-compatible`, but this
-  is a hidden option.
-
-(This analysis was written by Gary Guo.)
-
-How is this fixed?
-==================
-
-To fix this we need to add __always_inline to all helpers when compiling
-with LTO. However, it should not be added when running bindgen as
-bindgen will ignore functions marked inline. To achieve this, we are
-using a #define called __rust_helper that is defined differently
-depending on whether bindgen is running or not.
-
-Note that __rust_helper is currently always #defined to nothing.
-Changing it to __always_inline will happen separately in another patch
-series.
-
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Reviewed-by: Gary Guo <gary@garyguo.net>
 Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 ---
-Changes in v2:
-- Pick up Reviewed-by: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>
-- Update formatting in mm and slab patches.
-- Add new helpers in files uaccess, pwm, and time.
-- Drop any patches that have been merged.
-- Link to v1: https://lore.kernel.org/r/20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com
-
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: Daniel Almeida <daniel.almeida@collabora.com>
 ---
-Alice Ryhl (27):
-      rust: barrier: add __rust_helper to helpers
-      rust: blk: add __rust_helper to helpers
-      rust: bug: add __rust_helper to helpers
-      rust: clk: add __rust_helper to helpers
-      rust: completion: add __rust_helper to helpers
-      rust: cpu: add __rust_helper to helpers
-      rust: cred: add __rust_helper to helpers
-      rust: err: add __rust_helper to helpers
-      rust: jump_label: add __rust_helper to helpers
-      rust: maple_tree: add __rust_helper to helpers
-      rust: mm: add __rust_helper to helpers
-      rust: of: add __rust_helper to helpers
-      rust: processor: add __rust_helper to helpers
-      rust: pwm: add __rust_helper to helpers
-      rust: rbtree: add __rust_helper to helpers
-      rust: rcu: add __rust_helper to helpers
-      rust: refcount: add __rust_helper to helpers
-      rust: security: add __rust_helper to helpers
-      rust: slab: add __rust_helper to helpers
-      rust: sync: add __rust_helper to helpers
-      rust: task: add __rust_helper to helpers
-      rust: time: add __rust_helper to helpers
-      rust: uaccess: add __rust_helper to helpers
-      rust: usb: add __rust_helper to helpers
-      rust: wait: add __rust_helper to helpers
-      rust: workqueue: add __rust_helper to helpers
-      rust: xarray: add __rust_helper to helpers
+ rust/helpers/usb.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- rust/helpers/barrier.c    |  6 +++---
- rust/helpers/blk.c        |  4 ++--
- rust/helpers/bug.c        |  4 ++--
- rust/helpers/build_bug.c  |  2 +-
- rust/helpers/clk.c        | 24 +++++++++++++-----------
- rust/helpers/completion.c |  2 +-
- rust/helpers/cpu.c        |  2 +-
- rust/helpers/cred.c       |  4 ++--
- rust/helpers/err.c        |  6 +++---
- rust/helpers/jump_label.c |  2 +-
- rust/helpers/maple_tree.c |  3 ++-
- rust/helpers/mm.c         | 20 ++++++++++----------
- rust/helpers/mutex.c      | 13 +++++++------
- rust/helpers/of.c         |  2 +-
- rust/helpers/page.c       |  9 +++++----
- rust/helpers/processor.c  |  2 +-
- rust/helpers/pwm.c        |  6 +++---
- rust/helpers/rbtree.c     |  9 +++++----
- rust/helpers/rcu.c        |  4 ++--
- rust/helpers/refcount.c   | 10 +++++-----
- rust/helpers/security.c   | 26 +++++++++++++++-----------
- rust/helpers/signal.c     |  2 +-
- rust/helpers/slab.c       |  4 ++--
- rust/helpers/spinlock.c   | 13 +++++++------
- rust/helpers/sync.c       |  4 ++--
- rust/helpers/task.c       | 24 ++++++++++++------------
- rust/helpers/time.c       | 14 +++++++-------
- rust/helpers/uaccess.c    | 10 ++++++----
- rust/helpers/usb.c        |  3 ++-
- rust/helpers/vmalloc.c    |  2 +-
- rust/helpers/wait.c       |  2 +-
- rust/helpers/workqueue.c  |  8 +++++---
- rust/helpers/xarray.c     | 10 +++++-----
- 33 files changed, 136 insertions(+), 120 deletions(-)
----
-base-commit: 9ace4753a5202b02191d54e9fdf7f9e3d02b85eb
-change-id: 20251202-define-rust-helper-f7b531813007
+diff --git a/rust/helpers/usb.c b/rust/helpers/usb.c
+index fb2aad0cbf4d26ac7fb1a3f176ee7a1d30800f92..eff1cf7be3c2d10b7e9248252d354eb8a4fd4c94 100644
+--- a/rust/helpers/usb.c
++++ b/rust/helpers/usb.c
+@@ -2,7 +2,8 @@
+ 
+ #include <linux/usb.h>
+ 
+-struct usb_device *rust_helper_interface_to_usbdev(struct usb_interface *intf)
++__rust_helper struct usb_device *
++rust_helper_interface_to_usbdev(struct usb_interface *intf)
+ {
+ 	return interface_to_usbdev(intf);
+ }
 
-Best regards,
 -- 
-Alice Ryhl <aliceryhl@google.com>
+2.52.0.351.gbe84eed79e-goog
 
 
