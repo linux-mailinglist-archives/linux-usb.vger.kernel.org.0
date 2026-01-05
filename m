@@ -1,44 +1,44 @@
-Return-Path: <linux-usb+bounces-31923-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31924-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C7DBCF4233
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 15:34:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD0EFCF443B
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 16:01:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3FF3B304B4D9
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 14:32:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BF4D33121BDE
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 14:53:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF4AD308F1D;
-	Mon,  5 Jan 2026 14:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 898993093A6;
+	Mon,  5 Jan 2026 14:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jdudrJwi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HApxgfk/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FCE307AE3;
-	Mon,  5 Jan 2026 14:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080D63090E6;
+	Mon,  5 Jan 2026 14:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767622917; cv=none; b=T2tX+XRAST2DkX39kFqIFx+WK5QVdV/4YROD2az2MbYaNLGl+EgWFmTOdAoaqvzBRgpkIScx6Lhd/U9sIjszd2TAQPnvlfJECS8IaPEjFzEZdpgPMfTifA6OZhFq5EbX3r1D+Wkhuw/JQPZiha+8hOsz6gNBQzm37JBkvmKe79U=
+	t=1767622921; cv=none; b=ihBMosmPEf+3REO3V+SXbF2JiXc1LD8631sA8gMKNHh8trEtVO7yC6KyzSFqTLug3CZCMC+PPWqotNnfov0fhQKN1OCoJMT5UaqwtKbx3bTLr7W4HWRPEnjAuu+ogfW7HAEUKglvEfc+JeA+H1dgSRTRv9ZlvfqXqbacfFh7+es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767622917; c=relaxed/simple;
-	bh=lKwdXzQY+IBJqElPYqhZAd4xBmPlPD7EgiPF3AwIIjg=;
+	s=arc-20240116; t=1767622921; c=relaxed/simple;
+	bh=UQ8AbtKe3Ds0x5KlF74Uw5U33Fq6uSy/CdB2/tSHvdQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bcuXtFa5HizjZvL5GJwZqYXwxSFBSFx5vL79CI8VPAD2yQawtzXD89+Dk2mGGsOB1kb+qSdgglAWtuvj01qmdll3UDfD77uaOMosyK3ukI8Hw/zizto63SnVWpAdNXgSClUBF7vWaCdEmVKKdfVqLpiwJuEB6qOLT8OaNJ54KYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jdudrJwi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C3B7C116D0;
-	Mon,  5 Jan 2026 14:21:53 +0000 (UTC)
+	 MIME-Version; b=u5qCcGYBP2R219jnG5TYX08F39dcF6z7dACnbGr/PPhhBUrSjYGMR2G/NEd/iRHJ8tJULHgTJe2/bWre5TjB8xVKV4eY4ZcCdXyPBNNV/NdFYLJyWStTowkptpLO+eyvAez2FZOQBFYhdE47PXGNMuzv5q6oNRLhAu8LBeWxEb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HApxgfk/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52838C19425;
+	Mon,  5 Jan 2026 14:21:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767622916;
-	bh=lKwdXzQY+IBJqElPYqhZAd4xBmPlPD7EgiPF3AwIIjg=;
+	s=k20201202; t=1767622920;
+	bh=UQ8AbtKe3Ds0x5KlF74Uw5U33Fq6uSy/CdB2/tSHvdQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jdudrJwi8kgSPIPeyGrxbpLD9xBmfHSKnAiN6l70WFUieCh9zgAmZrO9Omx4/AusR
-	 yVpgGTKIDsvrmrSCM1WFJDbNYyi7O2VSJHPg/LXo0pz5rcPzRPUJ6kVoqzddDLETXF
-	 opB18iPN3FNEJw+R2vce/k7BirzU56jKABTnQRLro+nmlv23zJRrrsr/rUdBR1fM5B
-	 Kmx+GbJrEBYthk8sBwPJ9C07Ll4JXl7RmGEIoG8TSYAsIVLaVFE1j/UABO8jugk5ws
-	 im74a07HiewxAM6CCHAltUNxiXOO8SQ0M38G4BUxJdCMwt7ba5d6prn0Qx5uYtNr7V
-	 kbci09RbPt5qA==
+	b=HApxgfk/8pOti8n4wYAML3YheRz75iI4NriIldRF3sUhZmBC/2/+vhu7DmRqTTeRy
+	 cj+BoHAWxZGYu9NOHKbfRydS30RPzCnxegFcQDy3Q7iju1o+dEt4+n45lx6vJ4SmO4
+	 kW/py8Yy3mr8y2FyGKxOnKE6PfLzaobf7leOT/bzdV35AGiNTSpan/7zT7Oa3QR9DF
+	 pXBuDwT8afxenOXO7i6yEdn389l7j2AUePkLKtpdhRGWhGMRrMPsVjjDR0ThgYuJZV
+	 GRGeuGnEuiAVJB7jVdim5FEN3jk7SfGIBgpLifFIE1JKi8e0MnSUDf5wV6KqB5dkjR
+	 0i6NhAccQ0L5w==
 From: Danilo Krummrich <dakr@kernel.org>
 To: gregkh@linuxfoundation.org,
 	rafael@kernel.org,
@@ -57,9 +57,9 @@ Cc: linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	linux-usb@vger.kernel.org,
 	Danilo Krummrich <dakr@kernel.org>
-Subject: [PATCH 4/5] rust: usb: use "kernel vertical" style for imports
-Date: Mon,  5 Jan 2026 15:19:45 +0100
-Message-ID: <20260105142123.95030-4-dakr@kernel.org>
+Subject: [PATCH 5/5] rust: faux: use "kernel vertical" style for imports
+Date: Mon,  5 Jan 2026 15:19:46 +0100
+Message-ID: <20260105142123.95030-5-dakr@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260105142123.95030-1-dakr@kernel.org>
 References: <20260105142123.95030-1-dakr@kernel.org>
@@ -81,68 +81,33 @@ While at it, drop unnecessary imports covered by prelude::*.
 Link: https://docs.kernel.org/rust/coding-guidelines.html#imports
 Signed-off-by: Danilo Krummrich <dakr@kernel.org>
 ---
-@Greg: If you agree I will take this through the driver-core tree. I will have
-driver-core patches building on top of this.
----
- rust/kernel/usb.rs              | 21 +++++++++++++++------
- samples/rust/rust_driver_usb.rs | 10 +++++++++-
- 2 files changed, 24 insertions(+), 7 deletions(-)
+ rust/kernel/faux.rs | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
-index d10b65e9fb6a..99b07b5ac491 100644
---- a/rust/kernel/usb.rs
-+++ b/rust/kernel/usb.rs
-@@ -6,14 +6,23 @@
- //! C header: [`include/linux/usb.h`](srctree/include/linux/usb.h)
+diff --git a/rust/kernel/faux.rs b/rust/kernel/faux.rs
+index 7fe2dd197e37..43b4974f48cd 100644
+--- a/rust/kernel/faux.rs
++++ b/rust/kernel/faux.rs
+@@ -6,8 +6,17 @@
+ //!
+ //! C header: [`include/linux/device/faux.h`](srctree/include/linux/device/faux.h)
  
- use crate::{
--    bindings, device,
--    device_id::{RawDeviceId, RawDeviceIdIndex},
+-use crate::{bindings, device, error::code::*, prelude::*};
+-use core::ptr::{addr_of_mut, null, null_mut, NonNull};
++use crate::{
 +    bindings,
 +    device,
-+    device_id::{
-+        RawDeviceId,
-+        RawDeviceIdIndex, //
-+    },
-     driver,
--    error::{from_result, to_result, Result},
-+    error::{
-+        from_result,
-+        to_result, //
-+    },
-     prelude::*,
--    str::CStr,
--    types::{AlwaysRefCounted, Opaque},
--    ThisModule,
-+    types::{
-+        AlwaysRefCounted,
-+        Opaque, //
-+    },
-+    ThisModule, //
- };
- use core::{
-     marker::PhantomData,
-diff --git a/samples/rust/rust_driver_usb.rs b/samples/rust/rust_driver_usb.rs
-index 4eaad14867b2..ab72e99e1274 100644
---- a/samples/rust/rust_driver_usb.rs
-+++ b/samples/rust/rust_driver_usb.rs
-@@ -3,7 +3,15 @@
- 
- //! Rust USB driver sample.
- 
--use kernel::{device, device::Core, prelude::*, sync::aref::ARef, usb};
-+use kernel::{
-+    device::{
-+        self,
-+        Core, //
-+    },
-+    prelude::*,
-+    sync::aref::ARef,
-+    usb, //
++    prelude::*, //
++};
++use core::ptr::{
++    addr_of_mut,
++    null,
++    null_mut,
++    NonNull, //
 +};
  
- struct SampleDriver {
-     _intf: ARef<usb::Interface>,
+ /// The registration of a faux device.
+ ///
 -- 
 2.52.0
 
