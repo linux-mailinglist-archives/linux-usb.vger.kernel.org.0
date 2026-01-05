@@ -1,44 +1,44 @@
-Return-Path: <linux-usb+bounces-31921-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31922-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E22FACF42E4
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 15:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 492F8CF426C
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 15:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1D81930230D5
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 14:35:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 354ED3035F7A
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 14:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77281304BDF;
-	Mon,  5 Jan 2026 14:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4950306D26;
+	Mon,  5 Jan 2026 14:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I6OJYZ08"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPtStrTt"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FCC304BB2;
-	Mon,  5 Jan 2026 14:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4E3304BB2;
+	Mon,  5 Jan 2026 14:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767622910; cv=none; b=ReIdOxHfsbyTYrJT0XCW/i7DP5rXaZF6WmZRD+Jc0GsLOP5oNqLs0HgkQTSbT4F1Eq2Dwb4odfsnwTNjLrADXtjupeNecs05ivT4z4/VM7mw09ErDZbjSK7/ENzENsjq6BHmHZeORkAtwu/RUtPFqa5udiw5bwJI5GCYsdhwNOE=
+	t=1767622913; cv=none; b=YUyuExu3mYgCDK3O+UDdYLevE5wN6mRhDZwFfvZz/WiHmGJ756+GMThzDElzHTlUlBX82IcCzmh4jI/MuJobBhBqyClKALho6Rh1UUMonuAufoWl7u8JUv7CZjdoxH9C0avD1F1hATFgoHU3itIw6Xb56L3pyH3K52AGOJPUxvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767622910; c=relaxed/simple;
-	bh=mI9cyjhv9VV3guCPEWgAQe4eYwa0gQ3hEasBHAOC4FI=;
+	s=arc-20240116; t=1767622913; c=relaxed/simple;
+	bh=JyBiZ3iOCQ7wxiwcmq3NMY4BKvuKaT2ijxh4c9rJz4s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dHRwN/YeiDwORBIWAZiJZj7YIyMNpVKcEDUmap6cUfRRv6w3Wzh/rNucHh7VP7J1WoJhxjGe3d15fCexInBYDv1olNNjjSkhwYX/PwrYeuT3Kfb4/Q8YmSLZt6jnZhF5hSrrWUIGF+3gu5bFliZdIi84QUR5hfowk6UUJmY+WMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I6OJYZ08; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C662C19421;
-	Mon,  5 Jan 2026 14:21:46 +0000 (UTC)
+	 MIME-Version; b=F6e3sFVWMWQnxjnbLqhey5Z3izuFEAKHHkpNisVb6jWQ/Ym2286+dMKIdBDLEAS/8tQ1S5rHitg7KhVhVmz521GlwU/sKyeQ43T3/gBJGek9rki4hLVWT/+hj3/ZQgn3KRWlkZ0bf9/m1QOLXUsd5KU66suJi37F/UNve1mbdzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPtStrTt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E658FC116D0;
+	Mon,  5 Jan 2026 14:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767622909;
-	bh=mI9cyjhv9VV3guCPEWgAQe4eYwa0gQ3hEasBHAOC4FI=;
+	s=k20201202; t=1767622913;
+	bh=JyBiZ3iOCQ7wxiwcmq3NMY4BKvuKaT2ijxh4c9rJz4s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=I6OJYZ08NHyTP3ZgBZ2zNk/2anm9+x2nf4HzUjTBxSPmPaioeb7fGntoU7v6G+ZnH
-	 2h9aIbHX4Gu9ffCl2YGxSi9tDrpQwJxkvhOuwu70kdGfPjC7/t4+ZQBBWKqx2rbTJ3
-	 UUHpI4hkzUrrtI0DJwND6977h38bNLq+WFR32gKxo+3Vmmqme4pyp9xNLhAKBPYbt6
-	 5N+PMvT5xaRpvQTsr57bKIrpk02tTlfvMJ6BWrY3BdPiRfiE+CSOV3FxQr/Y29dPd0
-	 cFZRsBaRkQxX7hgRbK46L+z7u0YCu6yvwMmm3dWuwSJa3Fwouuj9gCrsS3HLFPMObI
-	 r4pxfr794/Naw==
+	b=CPtStrTtdiVvpO4zzP2NPPq89V2F6WpgwZHlrl7g6sy4Kq2wGIIomTosBiUg4KNrT
+	 6hSLZDILU7SNSGNmo3q+H4izv8eeqc8S/cdyXNC0WE2lFgBsV40uGE7ss4jVGpGwQu
+	 gZOt0nntH0Lgw7d+8bvmQUBwcGvj2Haqad0XVndNMxet4ygXZaJQXwjOzOFWmpYaAR
+	 mqNQTESbP65tu0GlA6gs8L4LLoTgOccyzobjOCs6a9EsLMWU1FOHdUh+ZBTUIp99w9
+	 WDCQ+WZE2HEEUt279tzg2/JklHqcsKJtCEV66dOYJQzd5I6UIhQrtc9MBdU08NXGL1
+	 4NKbg1ccr8XJQ==
 From: Danilo Krummrich <dakr@kernel.org>
 To: gregkh@linuxfoundation.org,
 	rafael@kernel.org,
@@ -57,9 +57,9 @@ Cc: linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	linux-usb@vger.kernel.org,
 	Danilo Krummrich <dakr@kernel.org>
-Subject: [PATCH 2/5] rust: platform: use "kernel vertical" style for imports
-Date: Mon,  5 Jan 2026 15:19:43 +0100
-Message-ID: <20260105142123.95030-2-dakr@kernel.org>
+Subject: [PATCH 3/5] rust: driver-core: use "kernel vertical" style for imports
+Date: Mon,  5 Jan 2026 15:19:44 +0100
+Message-ID: <20260105142123.95030-3-dakr@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260105142123.95030-1-dakr@kernel.org>
 References: <20260105142123.95030-1-dakr@kernel.org>
@@ -81,86 +81,99 @@ While at it, drop unnecessary imports covered by prelude::*.
 Link: https://docs.kernel.org/rust/coding-guidelines.html#imports
 Signed-off-by: Danilo Krummrich <dakr@kernel.org>
 ---
- rust/kernel/platform.rs              | 31 +++++++++++++++++++++-------
- samples/rust/rust_driver_platform.rs | 10 ++++++---
- 2 files changed, 31 insertions(+), 10 deletions(-)
+ rust/kernel/device.rs | 14 +++++++++++---
+ rust/kernel/devres.rs | 25 +++++++++++++++++++------
+ rust/kernel/driver.rs | 12 ++++++++----
+ 3 files changed, 38 insertions(+), 13 deletions(-)
 
-diff --git a/rust/kernel/platform.rs b/rust/kernel/platform.rs
-index bddb593cee7b..8836ac46b066 100644
---- a/rust/kernel/platform.rs
-+++ b/rust/kernel/platform.rs
-@@ -5,22 +5,39 @@
- //! C header: [`include/linux/platform_device.h`](srctree/include/linux/platform_device.h)
+diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+index a13f6ee24b09..ec9b0945b74c 100644
+--- a/rust/kernel/device.rs
++++ b/rust/kernel/device.rs
+@@ -5,12 +5,20 @@
+ //! C header: [`include/linux/device.h`](srctree/include/linux/device.h)
  
  use crate::{
--    acpi, bindings, container_of,
--    device::{self, Bound},
-+    acpi,
+-    bindings, fmt,
 +    bindings,
-+    container_of,
++    fmt,
+     prelude::*,
+     sync::aref::ARef,
+-    types::{ForeignOwnable, Opaque},
++    types::{
++        ForeignOwnable,
++        Opaque, //
++    }, //
++};
++use core::{
++    any::TypeId,
++    marker::PhantomData,
++    ptr, //
+ };
+-use core::{any::TypeId, marker::PhantomData, ptr};
+ 
+ use crate::str::CStrExt as _;
+ 
+diff --git a/rust/kernel/devres.rs b/rust/kernel/devres.rs
+index 835d9c11948e..db02f8b1788d 100644
+--- a/rust/kernel/devres.rs
++++ b/rust/kernel/devres.rs
+@@ -8,13 +8,26 @@
+ use crate::{
+     alloc::Flags,
+     bindings,
+-    device::{Bound, Device},
+-    error::{to_result, Error, Result},
+-    ffi::c_void,
 +    device::{
-+        self,
-+        Bound, //
++        Bound,
++        Device, //
 +    },
-     driver,
--    error::{from_result, to_result, Result},
--    io::{mem::IoRequest, Resource},
--    irq::{self, IrqRequest},
-+    error::{
-+        from_result,
-+        to_result, //
-+    },
-+    io::{
-+        mem::IoRequest,
-+        Resource, //
-+    },
-+    irq::{
-+        self,
-+        IrqRequest, //
-+    },
-     of,
++    error::to_result,
      prelude::*,
-     types::Opaque,
--    ThisModule,
-+    ThisModule, //
- };
- 
- use core::{
-     marker::PhantomData,
-     mem::offset_of,
--    ptr::{addr_of_mut, NonNull},
-+    ptr::{
-+        addr_of_mut,
-+        NonNull, //
+-    revocable::{Revocable, RevocableGuard},
+-    sync::{aref::ARef, rcu, Completion},
+-    types::{ForeignOwnable, Opaque, ScopeGuard},
++    revocable::{
++        Revocable,
++        RevocableGuard, //
++    },
++    sync::{
++        aref::ARef,
++        rcu,
++        Completion, //
++    },
++    types::{
++        ForeignOwnable,
++        Opaque,
++        ScopeGuard, //
 +    },
  };
  
- /// An adapter for the registration of platform drivers.
-diff --git a/samples/rust/rust_driver_platform.rs b/samples/rust/rust_driver_platform.rs
-index a3044d773176..9537dc38c563 100644
---- a/samples/rust/rust_driver_platform.rs
-+++ b/samples/rust/rust_driver_platform.rs
-@@ -66,13 +66,17 @@
-     acpi,
-     device::{
-         self,
--        property::{FwNodeReferenceArgs, NArgs},
-+        property::{
-+            FwNodeReferenceArgs,
-+            NArgs, //
-+        },
-         Core,
-     },
--    of, platform,
+ use pin_init::Wrapper;
+diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
+index 9beae2e3d57e..866d5d76ca7e 100644
+--- a/rust/kernel/driver.rs
++++ b/rust/kernel/driver.rs
+@@ -90,10 +90,14 @@
+ //! [`pci::Driver`]: kernel::pci::Driver
+ //! [`platform::Driver`]: kernel::platform::Driver
+ 
+-use crate::error::{Error, Result};
+-use crate::{acpi, device, of, str::CStr, try_pin_init, types::Opaque, ThisModule};
+-use core::pin::Pin;
+-use pin_init::{pin_data, pinned_drop, PinInit};
++use crate::{
++    acpi,
++    device,
 +    of,
-+    platform,
-     prelude::*,
-     str::CString,
--    sync::aref::ARef,
-+    sync::aref::ARef, //
- };
++    prelude::*,
++    types::Opaque,
++    ThisModule, //
++};
  
- struct SampleDriver {
+ /// The [`RegistrationOps`] trait serves as generic interface for subsystems (e.g., PCI, Platform,
+ /// Amba, etc.) to provide the corresponding subsystem specific implementation to register /
 -- 
 2.52.0
 
