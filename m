@@ -1,87 +1,84 @@
-Return-Path: <linux-usb+bounces-31928-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31929-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D8C6CF4B95
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 17:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 391E2CF4BB3
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 17:37:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6C1B3331FFBE
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 16:15:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6A9A331ACD0A
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 16:16:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7010E34CFC1;
-	Mon,  5 Jan 2026 15:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A65BE32ABF1;
+	Mon,  5 Jan 2026 16:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="PfZXt8UI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dgQc0b4b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3AF34CFAE
-	for <linux-usb@vger.kernel.org>; Mon,  5 Jan 2026 15:55:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417882F25E4;
+	Mon,  5 Jan 2026 16:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767628532; cv=none; b=rIwJD45wXeuqcAmJhV1vRO5JL0DGHQk4flYDJLY1zc+BtvMOjcZ53wyAJo6LqCTPNebp4P/uFq6tDf+xL8aHGa70vSlcS1g4xfE3yIUz3FVs5myFlNuDd5sVNoz8lGlNMLA8fRz5FpWeUQ+Ik2KzkJbsvC3re84RVuBdTjmM0rk=
+	t=1767629429; cv=none; b=uUTGfjnVMSg09h/Itz5egqgdu+enqI1fRI1zqIncxvaOLmHTKghn5Lp0kfYRlqguiIO18L/uR4NGW18eVdM/UuP0VrbMkHtdqet1C/R50sMSBSh6hY/XZrjOrIWbncLtNSPWvRtzZB/zQOKSAbed/ixX1p15z9Hsi9F4LwCInJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767628532; c=relaxed/simple;
-	bh=hes2MbdkVF9yIn9MnCpJxkd66Lx7SdXTjEcqnRJvL2s=;
+	s=arc-20240116; t=1767629429; c=relaxed/simple;
+	bh=kzCRFUztXQTIWieGzaPRB5F9NacR2ZhvKHo9n5T7lCs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QAV6xYZPnnsTIBI59mGbYtP3jxCoiYuC0Yx+jATv9egs4pLzMyF7Jx4nnNiAlk2CMtR3FgTDv9f2coDTFfd9kLEaSoEXx6EA3MPP4PwxkfqVDgTuFn9pCqMGI4ki/5J/q9XE/5z/Tinr2DbNFynbDOzirG3OduRb0dtzE8tpQ8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=PfZXt8UI; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8c30365ac43so3769785a.0
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jan 2026 07:55:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1767628528; x=1768233328; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BeAT9vM71VqfwMjw1Ny+vwWqsDrL2cWSeK9CC94wID0=;
-        b=PfZXt8UIwV9X5jSxDa/YJR6KDeAw1vPkpvUsEo4Nu6QtS9ezZAYL7BQzBoT/kd70QH
-         Qq6ukcZ4JIPz/eh5OQeqjjT9ckIeTCElDALahsZeQjk44ubHNNu7CGXJg3OFlufPxcWh
-         Vwz6Zo3AqA3rIfxvN3JU6IJFqwQ4I4iS+jAYAnYB47yt8z5vDMeHqn+4yOMztq4kPBmd
-         Q+Jj7UbrsEo6oX5z1TL0bVpsDFSljEQ23vRfqMiGMYEo8okJnjPWApw4PMaypdZ4RaV9
-         y66/MvLA6j3L//dz6klrIKn2XQRjZcL9Tb+GMk88R1ctPp9EUiN3aUu4sipuiKOMy68V
-         e/iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767628528; x=1768233328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BeAT9vM71VqfwMjw1Ny+vwWqsDrL2cWSeK9CC94wID0=;
-        b=QzN54rdDCuiANpTRP8Oyz6ocvRNCqLfzq4tfi3alsaoipd/d7GyCbn3/hdMa9GvvQg
-         vgvtaLshuhXp8ZXbuXm2U3LkSAb9yEoiPJ/X7gvi9obl1WL2Xc0AAhBBS5vhFjV/E8hK
-         veQWBFuo2lzRWW7Xao4ME7/nyjpn5xwMSjBPCMgK3wVlrQW7pfpygh8EGsZpbWdCnoR2
-         FxVhM6AK7sYU43uQZ8yhUe4Ihm8N6zo4iLKMDPorWuVtz/FHRCtupIqUZCJsU1HgJcE0
-         LeremcuUh2sodMItZ0roj3oJNWOc7rpEa6zf8o2pHrD7sHLO9gyBFAVzwBpGqF6RDPVV
-         TIMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBx5e0gdM7f8x/q09hDLdMjRos6Wix8I/p6QpPzYxVcdfPsgncjkHAF0tFoCftVfHraBTfbNNL4rg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznZYHyHPhHE3VqMMUcSFj6WBYQPxz6yJpJ7AsfrJ1m5FZIplfQ
-	15xF6mizhSBB3OfoimVhicxIuWpzxpERhstVzuiqeRm1NXXqzAqvbkf74gfLmjd4JgeogOBMTeG
-	ryZM=
-X-Gm-Gg: AY/fxX7i+QmEMXMWwU9Voldv0c65Sz6QB25FKpRZxK/pLEyAY2KbzuwIe6d5CD0mpuq
-	GUrLSUrt1nWQhNmDV6/1Wi83lTaV+ClU7Nzpol1z9TxDAhhGQWIK7lr//+OvbkG+i1FWz4qgD0F
-	7hvdjT9jsSikUDoUk0GlDIFOt/ku+qF05XL4mS71n7XAqyftmlAVcnAm5v6f2kiPx/SjsK5FhCf
-	83z9LHSMt/xtfvd64/XizP8a+77IJ1RLdm/EIpVKfLhRCUwy76+ECBEWHYl45YJJGfUti41RzII
-	00FIx3dVkF6vg3R7IIUlzATQmE8OSM8IjcTC2yIq1FOCWdF8RyenTNd97HelCWMFb/hNo+r2q2Y
-	IZuEAM1Rz+7VzuEYkzyw0fg3YhchvpTq4rRHW0eykKZoJe/e3Jy0wVKvGv5Wi7oqFg2RTPwOsvw
-	+NonC06/MmrFvb
-X-Google-Smtp-Source: AGHT+IGlRMQLJRb3GZ220nv5wnHw42Zy7HSuNwfcckmPxpt35yifoP1PGs5uvmjp44CbejRczhio9w==
-X-Received: by 2002:a05:622a:5c05:b0:4ee:1f22:3615 with SMTP id d75a77b69052e-4f4abd753a9mr725214301cf.51.1767628527916;
-        Mon, 05 Jan 2026 07:55:27 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::e55f])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ffa7201af4sm705951cf.33.2026.01.05.07.55.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 07:55:27 -0800 (PST)
-Date: Mon, 5 Jan 2026 10:55:24 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Udipto Goswami <udipto.goswami@oss.qualcomm.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZXZ/tSdSRvCf7vP27mCSoNjpiKKBy7FB2Mh2Im6fAaXgLI95bLJU/Aw8kyncSAsA27czDyjBUAVckAu+LRAjc2D0SY9semw9SIrF7z/wnvbinMzK8q6FwbDmi7tTPuVByNOlLjx4NClWt1iyHvAx1haJE8hJILpQjVt9Hl4dg10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dgQc0b4b; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767629427; x=1799165427;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kzCRFUztXQTIWieGzaPRB5F9NacR2ZhvKHo9n5T7lCs=;
+  b=dgQc0b4bkVdYXVUk7Sfz79trgYSNc4RnsHIBQuSZyhsnxODh+tDI0pbL
+   Pm6Qqc+F84QfruQ4xUz8iS3xKAk4HWWDV1nL/Tj3kFbvLAV65HYE56cJL
+   TCq6RyalR9CyZTkKfDPlCvdsqagGIptLdukZbnzGifjHaMJhP3F7Xi5l5
+   IaPSoMURAQ7gLqR8nhsq4Q3kW+9O/YRSJaNAr3orkgZC4uMCCgbqYjaR5
+   slCNaSMMM9YHhRsrt+QnyCC3hFPRoeduJIcGDAZjbSjnlEFqK+30V+JKc
+   iLAt575Hj/0/ffEEG5vJfmUcngKZn+L/KN9XyibD5VQgFko6ZuKB8Yf5t
+   Q==;
+X-CSE-ConnectionGUID: WltLiaPeTc+VR7OvQGbH2A==
+X-CSE-MsgGUID: ZnO4oCPJRd6JAVOFyN8jLA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11662"; a="79300044"
+X-IronPort-AV: E=Sophos;i="6.21,203,1763452800"; 
+   d="scan'208";a="79300044"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2026 08:10:26 -0800
+X-CSE-ConnectionGUID: zs90m1P/T/6PV/+GxPKxMQ==
+X-CSE-MsgGUID: 6BWfqYvcS/SbRp4lnJP65w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,203,1763452800"; 
+   d="scan'208";a="202469155"
+Received: from rfrazer-mobl3.amr.corp.intel.com (HELO kuha) ([10.124.222.12])
+  by orviesa008.jf.intel.com with SMTP; 05 Jan 2026 08:10:20 -0800
+Received: by kuha (sSMTP sendmail emulation); Mon, 05 Jan 2026 18:10:01 +0200
+Date: Mon, 5 Jan 2026 18:10:01 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: amitsd@google.com
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Lee Jones <lee@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH] usb: gadget: uvc: Prevent smmu fault in unstopped
- stream uvc teardown
-Message-ID: <9101e538-022a-4802-8bec-891c14b221a9@rowland.harvard.edu>
-References: <20260105050724.2041581-1-udipto.goswami@oss.qualcomm.com>
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v3 5/5] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
+ setting charger mode
+Message-ID: <aVvhvuq6Ls1v3B_E@kuha>
+References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
+ <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -90,52 +87,135 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260105050724.2041581-1-udipto.goswami@oss.qualcomm.com>
+In-Reply-To: <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
 
-On Mon, Jan 05, 2026 at 10:37:24AM +0530, Udipto Goswami wrote:
-> When switching USB compositions while the camera is streaming, an SMMU
-> fault can occur because dwc3_remove_requests() unmaps buffers via
-> dwc3_gadget_giveback() while the controller hardware is still performing
-> DMA operations on subsequent requests in the started_list.
+Sat, Dec 27, 2025 at 12:04:25AM +0000, Amit Sunil Dhamne via B4 Relay kirjoitti:
+> From: Amit Sunil Dhamne <amitsd@google.com>
 > 
-> Fix this by adding a delay in uvc_video_complete() when handling the first
-> -ESHUTDOWN event  (detected by checking !UVC_QUEUE_DISCONNECTED) to allow
-> the controller to  complete in-flight DMA and drain its FIFO before
-> dwc3_remove_requests()  proceeds to unmap remaining buffers,
-> preventing the SMMU translation fault.
+> TCPCI maxim driver directly writes to the charger's register space to
+> set charger mode depending on the power role. As MAX77759 chg driver
+> exists, this WAR is not required.
+> 
+> Instead, use a regulator interface to source vbus when typec is in
+> source power mode. In other power modes, this regulator will be turned
+> off if active.
+> 
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
 
-Wouldn't it be better to wait for the in-flight URBs to complete, so 
-that you _know_ the controller is finished with them, instead of 
-delaying for some arbitrary and possibly too-short amount of time?
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Also, wouldn't it be better to avoid calling mdelay() while in interrupt 
-or atomic context?
-
-Alan Stern
-
-> Signed-off-by: Udipto Goswami <udipto.goswami@oss.qualcomm.com>
 > ---
->  drivers/usb/gadget/function/uvc_video.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  drivers/usb/typec/tcpm/tcpci_maxim.h      |  1 +
+>  drivers/usb/typec/tcpm/tcpci_maxim_core.c | 54 +++++++++++++++++++------------
+>  2 files changed, 34 insertions(+), 21 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index fb77b0b21790..04724bd44ab9 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -366,7 +366,15 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
+> index b33540a42a95..b314606eb0f6 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim.h
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
+> @@ -60,6 +60,7 @@ struct max_tcpci_chip {
+>  	struct tcpm_port *port;
+>  	enum contamiant_state contaminant_state;
+>  	bool veto_vconn_swap;
+> +	struct regulator *vbus_reg;
+>  };
 >  
->  	case -ESHUTDOWN:	/* disconnect from host. */
->  		uvcg_dbg(&video->uvc->func, "VS request cancelled.\n");
-> +		if (!(queue->flags & UVC_QUEUE_DISCONNECTED))
-> +			delay = 1;
->  		uvcg_queue_cancel(queue, 1);
-> +		if (delay) {
-> +			if (in_interrupt() || irqs_disabled() || in_atomic())
-> +				 mdelay(1);
-> +			else
-> +				msleep(50);
+>  static inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> index 19f638650796..e9e2405c5ca0 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/usb/pd.h>
+>  #include <linux/usb/tcpci.h>
+>  #include <linux/usb/tcpm.h>
+> @@ -35,12 +36,6 @@
+>   */
+>  #define TCPC_RECEIVE_BUFFER_LEN				32
+>  
+> -#define MAX_BUCK_BOOST_SID				0x69
+> -#define MAX_BUCK_BOOST_OP				0xb9
+> -#define MAX_BUCK_BOOST_OFF				0
+> -#define MAX_BUCK_BOOST_SOURCE				0xa
+> -#define MAX_BUCK_BOOST_SINK				0x5
+> -
+>  static const struct regmap_range max_tcpci_tcpci_range[] = {
+>  	regmap_reg_range(0x00, 0x95)
+>  };
+> @@ -202,32 +197,49 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
+>  	tcpm_pd_receive(chip->port, &msg, rx_type);
+>  }
+>  
+> +static int get_vbus_regulator_handle(struct max_tcpci_chip *chip)
+> +{
+> +	if (IS_ERR_OR_NULL(chip->vbus_reg)) {
+> +		chip->vbus_reg = devm_regulator_get_exclusive(chip->dev,
+> +							      "vbus");
+> +		if (IS_ERR_OR_NULL(chip->vbus_reg)) {
+> +			dev_err(chip->dev,
+> +				"Failed to get vbus regulator handle");
+> +			return -ENODEV;
 > +		}
->  		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata, bool source, bool sink)
+>  {
+>  	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
+> -	u8 buffer_source[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SOURCE};
+> -	u8 buffer_sink[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SINK};
+> -	u8 buffer_none[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_OFF};
+> -	struct i2c_client *i2c = chip->client;
+>  	int ret;
 >  
->  	default:
+> -	struct i2c_msg msgs[] = {
+> -		{
+> -			.addr = MAX_BUCK_BOOST_SID,
+> -			.flags = i2c->flags & I2C_M_TEN,
+> -			.len = 2,
+> -			.buf = source ? buffer_source : sink ? buffer_sink : buffer_none,
+> -		},
+> -	};
+> -
+>  	if (source && sink) {
+>  		dev_err(chip->dev, "Both source and sink set\n");
+>  		return -EINVAL;
+>  	}
+>  
+> -	ret = i2c_transfer(i2c->adapter, msgs, 1);
+> +	ret = get_vbus_regulator_handle(chip);
+> +	if (ret) {
+> +		/*
+> +		 * Regulator is not necessary for sink only applications. Return
+> +		 * success in cases where sink mode is being modified.
+> +		 */
+> +		return source ? ret : 1;
+> +	}
+> +
+> +	if (source) {
+> +		if (!regulator_is_enabled(chip->vbus_reg))
+> +			ret = regulator_enable(chip->vbus_reg);
+> +	} else {
+> +		if (regulator_is_enabled(chip->vbus_reg))
+> +			ret = regulator_disable(chip->vbus_reg);
+> +	}
+>  
+> -	return  ret < 0 ? ret : 1;
+> +	return ret < 0 ? ret : 1;
+>  }
+>  
+>  static void process_power_status(struct max_tcpci_chip *chip)
+> 
+> -- 
+> 2.52.0.351.gbe84eed79e-goog
+> 
+
+-- 
+heikki
 
