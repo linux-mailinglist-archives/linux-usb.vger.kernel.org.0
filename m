@@ -1,212 +1,109 @@
-Return-Path: <linux-usb+bounces-31939-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31940-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6F86CF5726
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 20:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B579CF5738
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 21:00:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B039F30ABCE6
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 19:58:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 24EA730FF193
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 19:59:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E91383054EE;
-	Mon,  5 Jan 2026 19:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73DD331A555;
+	Mon,  5 Jan 2026 19:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hNKsoOtV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="o3P1qXUa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19B72BE051
-	for <linux-usb@vger.kernel.org>; Mon,  5 Jan 2026 19:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A701D2BE051;
+	Mon,  5 Jan 2026 19:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767643114; cv=none; b=ANHNR3DNqEadoPB8MKhL2d89Ci479hccUhBXxkj5hprnx8wRpBMdQEwRu+n/l0P+c3/gxuU7yhPexPZnAtYzpm+zqsYyH4bS+jEw/q2PQ6M0JugnZ48Ju+u61XyXVXW1R/10Tzmw6WwU0okLS6P4y8Dcukce+hyRfyiXgeQrodU=
+	t=1767643147; cv=none; b=l7uS41GYuZjXmkk42a21vA7RbzpKs9EebK8gvFPOWjB5BZC7aJpYlXYU/RegSh89dn/dt1Pbvv26kkK4BXg/IcOjgnssPjjMOFiiG3/k6A29DGDr1iXLl1lf4T9pIpTfGObhz/JqntUcI2gEnuvEsHORzLKOsyjaFo5wP1JJSv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767643114; c=relaxed/simple;
-	bh=M+mgHPLZQJfA6q4BXgM2dcEStPY5JylfnRcjT3LMCio=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WA7WgOPq1I7TDJdMZgWeLuT3eVHuGnhjCFm5bOLJWOmX/HJpwMWy7JVa+NyIeSBTEm9OntAkFJQYpydeIJVm25tN/nuiCpNhN8D6DgTKYOebVcslTo9eV7gK2qDEOCT/o41qRT2fwq1ZIb9ISiT218aiFtqfWxkt0a4nQiAooOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hNKsoOtV; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7bc248dc16aso290904b3a.0
-        for <linux-usb@vger.kernel.org>; Mon, 05 Jan 2026 11:58:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767643112; x=1768247912; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F8DuddcYEOiefRlBzZKrtL15qZCqx9WVAFvprpXIUBQ=;
-        b=hNKsoOtV2WQth0XJ1aFVqKGepQRtZY++pRh5LuGYdtlUCsaHASl0WsIS8y2Iassvfp
-         VC7lKG8sMMwa5Cuis4KRaQEIZOiE/Dr6jLIitaa7NFp3hZR23g8wBPK3N8wjCNDpb77c
-         r/muJ5PpcdAJr4NEqkl52eIUHJ29Qx4T5jzbIq1ZmBQrZLQLDTCB5FMHpq5oAETrWWgY
-         fRSUwTVtTDl0mUeMw/92w6kR/1HQ6alLAA6KaIC6cC6LgQc1DJMQ/b/pZ3A6r0x6cz+C
-         2xfeHy99HQxIYFfE4M9Uh5aA42jJeqAnXczEwHgGEer2afgktysxLP1kySOe7umad/o1
-         ZekQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767643112; x=1768247912;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F8DuddcYEOiefRlBzZKrtL15qZCqx9WVAFvprpXIUBQ=;
-        b=jO8Ta4Nsiae6SJJLjPaAYrxHWqr3qFe/bJv62eG6bAVItL4pk2s8ZXF5bBfeJS0E5L
-         oqiUiBvZ+BX5xU/tCapgcUST/XlbV1/LX4+Yhx7pajEzsKI8OIHRN4/R6VoksI1uy48r
-         ZS8vM3UQx9onPNDfxWf+uYJl88xA2FrRqglBnprThgwvLjclAiqfEHUygROvWxZhTDfB
-         jnSaRmtzdliTSmv/rRY8dmxQvp6ohNXUnwgm18ZhBOkMT2lNeLZpibzFsG619oLCxo9y
-         r4SpxZgtsXfz0gQlWfjprvEEkzqizhQa8UIL7NQhdKGFByK4Ht67C6zQwwxc8jJY0hc1
-         Rdkg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2GQ9XhAnwPR/OdqucYd2/a+ovNimG5AzeJ99mrpwqTeFOfpQGf+bWabUSvnILJueN9nQp+IO5zls=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPcAuUxg/+ZJZFQq2HJ4fYL3lqrVIhDsOFyBwgMWfgBtOtkYIq
-	xvKPwIFQBobOz9v6sWdf3bNP3J/6lae2HnVGd5BiUnpgV/8FjbHNPJY2h9aiEMro7Q==
-X-Gm-Gg: AY/fxX6wyZeqnGaj+kj4+xx+Xe5mYGTbzep+fvC91PhJfazDUmovlHyFUabA0RetHW/
-	YgfBpte5EKVhHSe5KcMlknsEgUIChNX8/hqdK6q6k+EXk0eQVWLiu1WxV4QszsX41GYuq+WtWCm
-	AG9SKGemTeuB4rkMpWcm7k2Kan2n9cVdgCL3Cd5TO1ulXwV5TTFnh/480eJ55jYUrbKIMCfL9jW
-	5xxajwBeMNw+t/lvGemHN3nRLzY8NhIQUiohB2U+CI28JGWwvqu54cQadctktkE+iFdfMeB76QS
-	045WQLETvCuyJTU18p44qCloE68pmNIU9ETbF6dWpdokbi3VwdnyQuv0ovQBlCq/MlS8oV8ouAd
-	a6WRQ5q11YqmDFi+sqtr5qkNkhtfNxmmpxB4+bdVRfrr4822Kk6A6x2l7sAN3Q893I0z9qa3E00
-	QIpAjRXDzS69/EGBBn0cROuRchbpwwVDLjwtKqg8jPbXRIfQ1a/1QHgL9sGWtZ6jyoLG/rc5Zm6
-	VyrJiYei9/6LV+tbBiwv94U
-X-Google-Smtp-Source: AGHT+IFYi37OgBvlreLAlI6opJMukcl64WhdUNqoIdTxzRCBTYpyF7jQRnopByzdWT0cS1RWXEtYww==
-X-Received: by 2002:a05:7022:2215:b0:11b:c86b:386a with SMTP id a92af1059eb24-121f18a3909mr496909c88.5.1767643111325;
-        Mon, 05 Jan 2026 11:58:31 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:7c3d:6070:7e67:29c5? ([2a00:79e0:2e7c:8:7c3d:6070:7e67:29c5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f12209efsm1739565c88.3.2026.01.05.11.58.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jan 2026 11:58:30 -0800 (PST)
-Message-ID: <f1f2a382-64d9-43dd-bed1-8b1ac9e53470@google.com>
-Date: Mon, 5 Jan 2026 11:58:29 -0800
+	s=arc-20240116; t=1767643147; c=relaxed/simple;
+	bh=cRaS5r3lgkI/yPdjV2VtjiMfycKB0unfFxQ5VsEkHGs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MUc7UgdC8n16w4ukCv/dRn5Y4IhQd5q1GRBdK8yVUn2kTfH6ZLWxAm9J/WgQbpub+M4k3/S+7uLh2ePH8VEf0Hx4HfQ6GcqnTkYpbDyflSbk8E8fGoVHO0wSJiCaRwYjRR81lcqA2oSgHSWKjC/tsxl8lyc5s3vbSB6H82kCLvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=o3P1qXUa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5642C116D0;
+	Mon,  5 Jan 2026 19:59:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1767643147;
+	bh=cRaS5r3lgkI/yPdjV2VtjiMfycKB0unfFxQ5VsEkHGs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o3P1qXUayEhhRve+eqKN/vQ/4NXgOaAW1TW4Bb6VwhBcvBnw6sH9yyaSt+y3rpGRi
+	 /FTWvtBziJsUg+chAt4VVxoPFxq1gBmg7wtcIP6a5dwPsAWNP7ljK7DUFZdZU2V1w/
+	 2gy0njFsKwbn3O6hRlvqmvltMu/HbWOki4EQt0V8=
+Date: Mon, 5 Jan 2026 20:59:04 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Prashanth K <prashanth.k@oss.qualcomm.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] Add the DWC3 instance name in traces
+Message-ID: <2026010513-kinsman-moody-6d63@gregkh>
+References: <20260105115325.1765176-1-prashanth.k@oss.qualcomm.com>
+ <2026010555-squealing-easily-7659@gregkh>
+ <20260105161145.podzns57ekzjg3pj@synopsys.com>
+ <2026010528-animal-avenging-dad2@gregkh>
+ <20260105170044.vuuoyiszyptokmfp@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/5] mfd: max77759: add register bitmasks and modify
- irq configs for charger
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
- <20251227-max77759-charger-v3-3-54e664f5ca92@google.com>
- <d2c50afe586956ef3a60f17eb77b20fc73fe8dc8.camel@linaro.org>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <d2c50afe586956ef3a60f17eb77b20fc73fe8dc8.camel@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260105170044.vuuoyiszyptokmfp@synopsys.com>
 
+On Mon, Jan 05, 2026 at 05:01:00PM +0000, Thinh Nguyen wrote:
+> On Mon, Jan 05, 2026, Greg Kroah-Hartman wrote:
+> > On Mon, Jan 05, 2026 at 04:11:50PM +0000, Thinh Nguyen wrote:
+> > > Hi Greg,
+> > > 
+> > > On Mon, Jan 05, 2026, Greg Kroah-Hartman wrote:
+> > > > On Mon, Jan 05, 2026 at 05:23:22PM +0530, Prashanth K wrote:
+> > > > > When multiple DWC3 controllers are being used, trace events from
+> > > > > different instances get mixed up making debugging difficult as
+> > > > > there's no way to distinguish which instance generated the trace.
+> > > > > 
+> > > > > Hence append the controller base address into ftrace. This needs
+> > > > > the following reworks which is addressed using this patch series.
+> > > > > 
+> > > > >   1. Removal of dep->regs and use dwc->regs everywhere
+> > > > >   2. Use dwc pointer in all dwc3_readl/writel()
+> > > > >   3. Adding the base addr in traces.
+> > > > > 
+> > > > > Changes in v2:
+> > > > > - Avoid using macros for dwc3_readl/writel()
+> > > > > - Use base address intraces instead of dev name.
+> > > > 
+> > > > Wait, why change this?  The dev name is what you should care about.
+> > > > "base address" doesn't make much sense as this is on a lot of different
+> > > > busses, right?
+> > > > 
+> > > 
+> > > I asked Prashanth to do so. The reason is because the device name is not
+> > > consistent and not obvious for different busses. For example, for PCI
+> > > devices, the device name may be in a form of "dwc3.N.auto". If we only
+> > > have access to the traces and not the testing setup (which often is the
+> > > case), it's difficult to tell which is which. Also, very often the
+> > > consumer of the traces is also the hardware validation engineer, and
+> > > IMO, it's more understandable reading base address than device name.
+> > 
+> > But all you need to know is "this is different than the other one", you
+> > don't "need" the io address, right?  And if you really did, just add
+> > that to the trace as well _when_ you actually need it.
+> 
+> The base address preserves that context to know which instance is which.
+> If we have the base address, do we still need the device name?
 
-On 1/5/26 8:45 AM, André Draszik wrote:
-> On Sat, 2025-12-27 at 00:04 +0000, Amit Sunil Dhamne via B4 Relay wrote:
->> From: Amit Sunil Dhamne <amitsd@google.com>
->>
->> Add register bitmasks for charger function.
->> In addition split the charger IRQs further such that each bit represents
->> an IRQ downstream of charger regmap irq chip. In addition populate the
->> ack_base to offload irq ack to the regmap irq chip framework.
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> ---
->>   drivers/mfd/max77759.c       |  91 +++++++++++++++++--
->>   include/linux/mfd/max77759.h | 202 ++++++++++++++++++++++++++++++++++++-------
->>   2 files changed, 256 insertions(+), 37 deletions(-)
->>
->> [...]
->>   
->> diff --git a/include/linux/mfd/max77759.h b/include/linux/mfd/max77759.h
->> index c6face34e385..e674a519e782 100644
->> --- a/include/linux/mfd/max77759.h
->> +++ b/include/linux/mfd/max77759.h
->> @@ -59,35 +59,65 @@
->>   #define MAX77759_MAXQ_REG_AP_DATAIN0            0xb1
->>   #define MAX77759_MAXQ_REG_UIC_SWRST             0xe0
->>   
->> -#define MAX77759_CHGR_REG_CHG_INT               0xb0
->> -#define MAX77759_CHGR_REG_CHG_INT2              0xb1
->> -#define MAX77759_CHGR_REG_CHG_INT_MASK          0xb2
->> -#define MAX77759_CHGR_REG_CHG_INT2_MASK         0xb3
->> -#define MAX77759_CHGR_REG_CHG_INT_OK            0xb4
->> -#define MAX77759_CHGR_REG_CHG_DETAILS_00        0xb5
->> -#define MAX77759_CHGR_REG_CHG_DETAILS_01        0xb6
->> -#define MAX77759_CHGR_REG_CHG_DETAILS_02        0xb7
->> -#define MAX77759_CHGR_REG_CHG_DETAILS_03        0xb8
->> -#define MAX77759_CHGR_REG_CHG_CNFG_00           0xb9
->> -#define MAX77759_CHGR_REG_CHG_CNFG_01           0xba
->> -#define MAX77759_CHGR_REG_CHG_CNFG_02           0xbb
->> -#define MAX77759_CHGR_REG_CHG_CNFG_03           0xbc
->> -#define MAX77759_CHGR_REG_CHG_CNFG_04           0xbd
->> -#define MAX77759_CHGR_REG_CHG_CNFG_05           0xbe
->> -#define MAX77759_CHGR_REG_CHG_CNFG_06           0xbf
->> -#define MAX77759_CHGR_REG_CHG_CNFG_07           0xc0
->> -#define MAX77759_CHGR_REG_CHG_CNFG_08           0xc1
->> -#define MAX77759_CHGR_REG_CHG_CNFG_09           0xc2
->> -#define MAX77759_CHGR_REG_CHG_CNFG_10           0xc3
->> -#define MAX77759_CHGR_REG_CHG_CNFG_11           0xc4
->> -#define MAX77759_CHGR_REG_CHG_CNFG_12           0xc5
->> -#define MAX77759_CHGR_REG_CHG_CNFG_13           0xc6
->> -#define MAX77759_CHGR_REG_CHG_CNFG_14           0xc7
->> -#define MAX77759_CHGR_REG_CHG_CNFG_15           0xc8
->> -#define MAX77759_CHGR_REG_CHG_CNFG_16           0xc9
->> -#define MAX77759_CHGR_REG_CHG_CNFG_17           0xca
->> -#define MAX77759_CHGR_REG_CHG_CNFG_18           0xcb
->> -#define MAX77759_CHGR_REG_CHG_CNFG_19           0xcc
->> +#define MAX77759_CHGR_REG_CHG_INT                      0xb0
->> +#define   MAX77759_CHGR_REG_CHG_INT_AICL               BIT(7)
->> +#define   MAX77759_CHGR_REG_CHG_INT_CHGIN              BIT(6)
->> +#define   MAX77759_CHGR_REG_CHG_INT_WCIN               BIT(5)
->> +#define   MAX77759_CHGR_REG_CHG_INT_CHG                BIT(4)
->> +#define   MAX77759_CHGR_REG_CHG_INT_BAT                BIT(3)
->> +#define   MAX77759_CHGR_REG_CHG_INT_INLIM              BIT(2)
->> +#define   MAX77759_CHGR_REG_CHG_INT_THM2               BIT(1)
->> +#define   MAX77759_CHGR_REG_CHG_INT_BYP                BIT(0)
->> +#define MAX77759_CHGR_REG_CHG_INT2                     0xb1
->> +#define   MAX77759_CHGR_REG_CHG_INT2_INSEL             BIT(7)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_SYS_UVLO1         BIT(6)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_SYS_UVLO2         BIT(5)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_BAT_OILO          BIT(4)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CC        BIT(3)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_CV        BIT(2)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_TO        BIT(1)
->> +#define   MAX77759_CHGR_REG_CHG_INT2_CHG_STA_DONE      BIT(0)
->> +#define MAX77759_CHGR_REG_CHG_INT_MASK                 0xb2
->> +#define MAX77759_CHGR_REG_CHG_INT2_MASK                0xb3
->> +#define MAX77759_CHGR_REG_CHG_INT_OK                   0xb4
->> +#define MAX77759_CHGR_REG_CHG_DETAILS_00               0xb5
->> +#define   MAX77759_CHGR_REG_CHG_DETAILS_OO_CHGIN_DTLS  GENMASK(6, 5)
->> +#define MAX77759_CHGR_REG_CHG_DETAILS_01               0xb6
->> +#define   MAX77759_CHGR_REG_CHG_DETAILS_01_BAT_DTLS    GENMASK(6, 4)
->> +#define   MAX77759_CHGR_REG_CHG_DETAILS_01_CHG_DTLS    GENMASK(3, 0)
->> +#define MAX77759_CHGR_REG_CHG_DETAILS_02               0xb7
->> +#define   MAX77759_CHGR_REG_CHG_DETAILS_02_CHGIN_STS   BIT(5)
->> +#define MAX77759_CHGR_REG_CHG_DETAILS_03               0xb8
->> +#define MAX77759_CHGR_REG_CHG_CNFG_00                  0xb9
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_00_MODE           GENMASK(3, 0)
->> +#define MAX77759_CHGR_REG_CHG_CNFG_01                  0xba
->> +#define MAX77759_CHGR_REG_CHG_CNFG_02                  0xbb
->> +#define   MAX77759_CHGR_REG_CHG_CNFG_02_CHGCC	       GENMASK(5, 0)
-> Small nit - there seems to be a stray TAB in this line.
+If you have only the "base address", how do you know which device is which?
 
-Will fix it in the next revision.
+thanks,
 
-
-BR,
-
-Amit
-
->
-> Other than that:
-> Reviewed-by: André Draszik <andre.draszik@linaro.org>
+greg k-h
 
