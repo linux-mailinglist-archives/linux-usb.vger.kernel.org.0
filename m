@@ -1,104 +1,118 @@
-Return-Path: <linux-usb+bounces-31931-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31932-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8275CF4C46
-	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 17:42:04 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E0E5CF4B7A
+	for <lists+linux-usb@lfdr.de>; Mon, 05 Jan 2026 17:34:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C0939300A922
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 16:42:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 420883009D53
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jan 2026 16:34:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA4EF314D2A;
-	Mon,  5 Jan 2026 16:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1821E33E34C;
+	Mon,  5 Jan 2026 16:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="14hux3Ra"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Kzkj8ilV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4091F2D97B5;
-	Mon,  5 Jan 2026 16:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9738633D6D4
+	for <linux-usb@vger.kernel.org>; Mon,  5 Jan 2026 16:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767630473; cv=none; b=bn3rFeeb/ztz/Ota2NcUUGt8hNAflvNlOKa33BwtosBzcsD1DrJIp6BsAVBD5a3wrK6jGweHqQoRiGZipvBrU7RpV6gzvBLUtBH7rk19Yrv2ifZ5YhDqdK/Y0nCl6+CzkO6qn+/EaFReh6OII0mHD4l/fnprDOLffqB1M4bq8Oc=
+	t=1767630881; cv=none; b=oyJI6vCVZBN1b4NyFGjMmxb6gDhHYX+U10D/FGTmM8kLI5cmxgihnQv6VOnDlPCzaysvS4KhgHxuVb8lOkJumGNI8NbphQiLK9CDFvlehJaLbk21KRwBzzMxXJDYWnb/4F94aHvgkhep5UMpAs49JG9oV/yQDn2srLgzhrfdxTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767630473; c=relaxed/simple;
-	bh=P0a3EQx3om18xEGI1A6m2E4Bk4dei6gG1+wZfR9LXmM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MCRMFkfBAIKF+ImxDjmkrp/STPtIu2J1C97PqlqKtntyx9bSxzerWsDexBNs+wTGCan2j3T7Kj26/NIUwY+CEn+Rnli7dq4iES7es903z94Fpfa/kYbIpPE3hh+lh3L+DfhTLUkBX+Ji1gpU4FQ/+/Ih/LeOa+9JlfVRjSf2JEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=14hux3Ra; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C63C116D0;
-	Mon,  5 Jan 2026 16:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1767630472;
-	bh=P0a3EQx3om18xEGI1A6m2E4Bk4dei6gG1+wZfR9LXmM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=14hux3RamtF3ha94Oc4mQEF5SgzS2AO1mAPkRHp0ipbz8ybi5hd9p7LRcUEP5WPEK
-	 rhH3hP8/uFdKei5YyL4LIXKDqUFgICWxldvUZb6Uo2hSR5cljoH91Snx6T7Jj03q5M
-	 Kkp7NA0My0Fbs4MQ9e++A90p9mt9sCJ37qusT6bw=
-Date: Mon, 5 Jan 2026 17:27:48 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Prashanth K <prashanth.k@oss.qualcomm.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] Add the DWC3 instance name in traces
-Message-ID: <2026010528-animal-avenging-dad2@gregkh>
-References: <20260105115325.1765176-1-prashanth.k@oss.qualcomm.com>
- <2026010555-squealing-easily-7659@gregkh>
- <20260105161145.podzns57ekzjg3pj@synopsys.com>
+	s=arc-20240116; t=1767630881; c=relaxed/simple;
+	bh=fonikX7z7K1ohHQZl6vZ41UkDK6dK2RBIq07hZiimXM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PyDo2JMAwGMxxgfCuLDkNjcIVVekPYZp706MaSqJ0uI1g6dsPrHymS2N3vD+OTLSDJeufeMadiwgojTmh2o2OEilE+CXkhPW4I498lmYT+zcBkkSJxUSSbbEEiVm1bqEMwxwh8UyauJ//AqSfOI8xIgWNnp8kgr4fR0q2hZ8Cm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Kzkj8ilV; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-64b791b5584so134226a12.0
+        for <linux-usb@vger.kernel.org>; Mon, 05 Jan 2026 08:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1767630876; x=1768235676; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fonikX7z7K1ohHQZl6vZ41UkDK6dK2RBIq07hZiimXM=;
+        b=Kzkj8ilVNzMJFRW1nbm2QkX1jFeSKl5WkENFpQPkTe6EfrRyB4/2A5M3hGGHB8uyNm
+         RVnxTbxgCEXDZthOXFVd/ohUQ8eH/gvIbNkjERHjJgVCBoEoLZrfj8SH4U9/2OuUBiHG
+         lycvPdYAIjkB4nBjVEUMDHuD/wQMijclKtxYmSHkIbWPYRKGichS5cMGSmeCGMiHA4jS
+         GyDuZXVdd6ZzjRVHA4VqYbib0xmmABB3FDdbgKEG24kM3ewUXFg+Ui+LC3XhztVQsjOy
+         fY5YNig0nJEtLyuFN24S0aFYzIM2sCIccS1E1qxCtCL4iy+OYMI53Y9nB6h3K83FLqUM
+         t6wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767630876; x=1768235676;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fonikX7z7K1ohHQZl6vZ41UkDK6dK2RBIq07hZiimXM=;
+        b=geanlx6MjX50ujrNcn6vu7M15zaBdsHAbzqA3VnA7rAnjrXLI3m2AH7m/Zaf0i2Y64
+         sIIFrPDiQG77jAPu+ZEq7pfsV7zvaIXDwSmBtBXERg1p5UaO/s6ZEsA1ghcVei5kwJe7
+         zr14BrGYFYf/TevlUyfYbGa2goO5aYqSAI14RHks6q/4LLCdexQFGi4jpStvKzuMpQT4
+         u6W0+zQhfRTK88KkyFcr9UBb5jzLm+YktyNwxBA4SIVEJQGoM9+rQXes37DqzSQaEcpn
+         RTgMo023nJHaaqIwTAFS8yNa2MCJgepwFaUbqYkhMg9XpefP86nItU86RUXV7mYkHf+m
+         tcFg==
+X-Forwarded-Encrypted: i=1; AJvYcCWO3s93yKvcqpg2y2oEpJ7njsPeIzJWYNGofaLHBKLvHuucnGJ4ypbZeYRO2LyRs5Q+SYd/b45sZBg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2vsvAw0/eAYyM2TxAjhebspb7y3rFze9nZyHiLNER/WwLyDq/
+	qekkcdBFEMqnobrv+MXkeEcaPA0yhmbEsE1D6LYlsHiBZbxNQBz6fQ2Ep5EdgbLB3sA=
+X-Gm-Gg: AY/fxX6LGCLQdBx7Y1GuaCYCGHH8AF9X4uiurEU+Fh6md9rbxxtcqvzWhBWdwtlJAFG
+	YR2d2Ku5ZKVbZdiEmhv/dtgw7y6yq1joASjxFGwn6FIUS8Q8rPo4RVSHge+QKsOg5XKgyt7yIv6
+	aCZLoTzAOk5BNzjgWiZKEbeN1WwaaR2WbhKM/0sG2FA37KVl4LWRjB/EUs1mwoK+uKSWoheJ1+5
+	yaAWMiM2rj2DMHhKC9b3qyG1YP/8PSSBJTgpPfIytknMK1mEE+mIobUvpRjYcltpYhgK2Qh1oy3
+	9OaajdSGryRycQb7M5NKFxlPa5t1nt0P/qj35WNR91LpWccAfz2pa6K12QUjGjpza3zc9rVEMd7
+	nVqaW9VBKwwgYOcM+yl8D0AWwNnFBCeBiJvMneYyh9J8HuVQ5+5ozf0V41dKV6jgiRDrlf3foep
+	STJbWibFVu5Xl4mcIPPg==
+X-Google-Smtp-Source: AGHT+IHIyW6EL5Qeds3ppqsne/ep5l8vVI6WL/+6EbkwC3Ri0haHzlrCKUwNVD3J8FuYeN4YtG8RdA==
+X-Received: by 2002:a17:907:a43:b0:b76:74b6:dbf8 with SMTP id a640c23a62f3a-b8426a67855mr36978666b.14.1767630875838;
+        Mon, 05 Jan 2026 08:34:35 -0800 (PST)
+Received: from draszik.lan ([212.129.74.225])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b84265ac3ecsm40253166b.11.2026.01.05.08.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jan 2026 08:34:35 -0800 (PST)
+Message-ID: <6eb57ad14908ae894f090ce83c756e4cbc834aba.camel@linaro.org>
+Subject: Re: [PATCH v3 1/5] dt-bindings: mfd: maxim,max77759: reference
+ power-supply schema and add regulator property
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>, Rob Herring	
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley	
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, Greg Kroah-Hartman	
+ <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Peter Griffin
+ <peter.griffin@linaro.org>, Tudor Ambarus	 <tudor.ambarus@linaro.org>, Alim
+ Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
+ Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Date: Mon, 05 Jan 2026 16:35:09 +0000
+In-Reply-To: <20251227-max77759-charger-v3-1-54e664f5ca92@google.com>
+References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
+	 <20251227-max77759-charger-v3-1-54e664f5ca92@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2+build3 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260105161145.podzns57ekzjg3pj@synopsys.com>
 
-On Mon, Jan 05, 2026 at 04:11:50PM +0000, Thinh Nguyen wrote:
-> Hi Greg,
-> 
-> On Mon, Jan 05, 2026, Greg Kroah-Hartman wrote:
-> > On Mon, Jan 05, 2026 at 05:23:22PM +0530, Prashanth K wrote:
-> > > When multiple DWC3 controllers are being used, trace events from
-> > > different instances get mixed up making debugging difficult as
-> > > there's no way to distinguish which instance generated the trace.
-> > > 
-> > > Hence append the controller base address into ftrace. This needs
-> > > the following reworks which is addressed using this patch series.
-> > > 
-> > >   1. Removal of dep->regs and use dwc->regs everywhere
-> > >   2. Use dwc pointer in all dwc3_readl/writel()
-> > >   3. Adding the base addr in traces.
-> > > 
-> > > Changes in v2:
-> > > - Avoid using macros for dwc3_readl/writel()
-> > > - Use base address intraces instead of dev name.
-> > 
-> > Wait, why change this?  The dev name is what you should care about.
-> > "base address" doesn't make much sense as this is on a lot of different
-> > busses, right?
-> > 
-> 
-> I asked Prashanth to do so. The reason is because the device name is not
-> consistent and not obvious for different busses. For example, for PCI
-> devices, the device name may be in a form of "dwc3.N.auto". If we only
-> have access to the traces and not the testing setup (which often is the
-> case), it's difficult to tell which is which. Also, very often the
-> consumer of the traces is also the hardware validation engineer, and
-> IMO, it's more understandable reading base address than device name.
+On Sat, 2025-12-27 at 00:04 +0000, Amit Sunil Dhamne via B4 Relay wrote:
+> From: Amit Sunil Dhamne <amitsd@google.com>
+>=20
+> Extend the max77759 binding to reference power-supply schema, so that
+> PMIC node can reference its supplier. Also, add regulator property to
+> control CHGIN (OTG) voltage.
+>=20
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> ---
+> =C2=A0.../devicetree/bindings/mfd/maxim,max77759.yaml=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 16 +++++++++++++++-
+> =C2=A01 file changed, 15 insertions(+), 1 deletion(-)
 
-But all you need to know is "this is different than the other one", you
-don't "need" the io address, right?  And if you really did, just add
-that to the trace as well _when_ you actually need it.
-
-device name is how Linux handles devices, please use that otherwise it
-just gets confusing for everyone in the end (hint, teach the hardware
-engineer what it means.)
-
-thanks,
-
-greg k-h
+Reviewed-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
 
