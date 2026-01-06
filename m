@@ -1,41 +1,46 @@
-Return-Path: <linux-usb+bounces-31944-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31945-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3291CF6AA6
-	for <lists+linux-usb@lfdr.de>; Tue, 06 Jan 2026 05:35:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E03ACF6B9D
+	for <lists+linux-usb@lfdr.de>; Tue, 06 Jan 2026 06:06:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2D4FB302B10C
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jan 2026 04:35:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 39BE9301956D
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jan 2026 05:06:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C27FA281503;
-	Tue,  6 Jan 2026 04:35:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D18F72DBF45;
+	Tue,  6 Jan 2026 05:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="sQPfIxjC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD0EE1C695;
-	Tue,  6 Jan 2026 04:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.248.49.38
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B67275AFD
+	for <linux-usb@vger.kernel.org>; Tue,  6 Jan 2026 05:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767674108; cv=none; b=puDXwUtetQXd5YGxgJOYEPiEcNFtB+gVqkLrbw2uf2A85YSKuP0KS4rn1l/nzAZcd9wzqRiqvc4toJueaDjadAJU/rXxhlIwBjmAwn6EeLnnvxGrBr6x9Gi4ops+N834vfDWYmKILM7UvrGS80yeXQ2obfCSr+d39hbbRu1VHAg=
+	t=1767675959; cv=none; b=oismieUI0lhlf+4CMM/5v1tyi0CyhtD6v1NkrILCJ9ch0sJd7USCdwcfMURPfr/DwmsXCQ+pcND6oyCFQWv3fWkIcBUz0rjSZaqQ15SJqAgmTS+4Z2Z7YqIroBibTdVW2T1lKUM+Rywe7C/Wbh2YkijY9IZHRmIl8K3h31CU7V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767674108; c=relaxed/simple;
-	bh=L+jEmFQETdzHWRv3HazDBegfYXdNx2zNcl/X42sqhs0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BzDhrRobMlW8vBfS56cB1NXO7yXmvYX1obxIvmWd49h11mWTnqdWF+t6/BgKRG113ttm7ULX3Ib366RD7tLt3kjm7h8Cueoaov9nmMg8rIIFDCDxEH7DAiik7kVHMVNUKfi17Vq+ciq2f93dHDbaOIOvr+ThqlUEeS3qU4wS4Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=socionext.com; spf=pass smtp.mailfrom=socionext.com; arc=none smtp.client-ip=202.248.49.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=socionext.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=socionext.com
-Received: from unknown (HELO iyokan3-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 06 Jan 2026 13:33:54 +0900
-Received: from mail.mfilter.local (mail-arc01.css.socionext.com [10.213.46.36])
-	by iyokan3-ex.css.socionext.com (Postfix) with ESMTP id 1E82D2091484;
-	Tue,  6 Jan 2026 13:33:54 +0900 (JST)
-Received: from iyokan3.css.socionext.com ([172.31.9.53]) by m-FILTER with ESMTP; Tue, 6 Jan 2026 13:33:53 +0900
-Received: from [10.212.247.110] (unknown [10.212.247.110])
-	by iyokan3.css.socionext.com (Postfix) with ESMTP id 0C09F10A003;
-	Tue,  6 Jan 2026 13:33:53 +0900 (JST)
-Message-ID: <2dde6891-a0e3-4e60-a773-302061a8e5a5@socionext.com>
-Date: Tue, 6 Jan 2026 13:33:56 +0900
+	s=arc-20240116; t=1767675959; c=relaxed/simple;
+	bh=qiWh9Y7ZlB2EDNoeBW6pgATQcdBqDyx7sORIIqd5h8k=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To; b=Ufy4ElKtQYPqjaXnu1vQwqh6IqKsBYotSv8co4wWNghfmPTaKg+A/v11bwys6p5MoLp+HicKvAf+xeAivIzOdCiYke1ryY1tVoOSDFTH0VkjxpJeMPgMJWLwHRJSrkjKMH/tz2TEfFIK7QaKMxYXoZR1m/3aWlRf3nc5Y+Zojg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=sQPfIxjC; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4dlfJK4Yw9zypT;
+	Tue,  6 Jan 2026 00:05:53 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1767675954; bh=qiWh9Y7ZlB2EDNoeBW6pgATQcdBqDyx7sORIIqd5h8k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=sQPfIxjChiY+QINU3uAdtZ5J+NSTWo+ggdltF9bCnIi5jI/739vUf3BL3X0GjCR3u
+	 vDMHizuEXcgmWhCvx0ZeyAJxg30fahzgPEYFxSEtkU5qjiRZW+xJeKNhiQ7ci/9q+u
+	 Otix5xtzMTPk97KJYkyKltmHcvqeBtrTLs+pNcdY=
+Content-Type: multipart/mixed; boundary="------------XrKqO0b0YrWrylsVF3PbiEH8"
+Message-ID: <1e9c0750-884e-42f8-b129-4bade6aab10a@panix.com>
+Date: Mon, 5 Jan 2026 21:05:52 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -43,143 +48,346 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: usb: Add Socionext Uniphier DWC3
- controller
-To: "Rob Herring (Arm)" <robh@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260105162418.2842825-1-robh@kernel.org>
+Subject: Re: [PATCH V6] usb:xhci:route device to secondary interrupters
+To: raoxu <raoxu@uniontech.com>, mathias.nyman@linux.intel.com
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ michal.pecio@gmail.com, niklas.neronin@linux.intel.com,
+ zhanjun@uniontech.com, Kenneth C <kenny@panix.com>
+References: <762990E68725043A+20260106023749.254767-1-raoxu@uniontech.com>
 Content-Language: en-US
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <20260105162418.2842825-1-robh@kernel.org>
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <762990E68725043A+20260106023749.254767-1-raoxu@uniontech.com>
+
+This is a multi-part message in MIME format.
+--------------XrKqO0b0YrWrylsVF3PbiEH8
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Rob,
 
-On 2026/01/06 1:24, Rob Herring (Arm) wrote:
-> The Socionext Uniphier DWC3 controller binding is already in use, but
-> undocumented. It's a straight-forward binding similar to other DWC3
-> bindings.
+On 1/5/26 18:37, raoxu wrote:
+
+> From: Xu Rao <raoxu@uniontech.com>
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
-> v2:
->   - Allow 1 phy entry for Pro4
-> ---
->   .../bindings/usb/socionext,uniphier-dwc3.yaml | 89 +++++++++++++++++++
->   1 file changed, 89 insertions(+)
->   create mode 100644
-> Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
+> Some xHCI hosts expose multiple MSI/MSI-X vectors, but the driver
+> currently routes all transfer completions through interrupter 0.
+> This can lead to unnecessary contention on the primary event ring
+> and IRQ vector.
 > 
-> diff --git
-> a/Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
-> b/Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
-> new file mode 100644
-> index 000000000000..2b253339c199
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
-> @@ -0,0 +1,89 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/socionext,uniphier-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Socionext Uniphier SuperSpeed DWC3 USB SoC controller
-> +
-> +maintainers:
-> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> +  - Masami Hiramatsu <mhiramat@kernel.org>
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: socionext,uniphier-dwc3
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: socionext,uniphier-dwc3
-> +      - const: snps,dwc3
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    items:
-> +      - description: Host or single combined interrupt
-> +      - description: Peripheral interrupt
-> +
-> +  interrupt-names:
-> +    minItems: 1
-> +    items:
-> +      - enum:
-> +          - dwc_usb3
-> +          - host
-> +      - const: peripheral
-> +
-> +  clocks:
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ref
-> +      - const: bus_early
-> +      - const: suspend
-> +
-> +  phys:
-> +    description: 1 to 4 HighSpeed PHYs followed by 1 or 2 SuperSpeed PHYs
-> +    minItems: 1
-> +    maxItems: 6
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - phys
-> +
-> +unevaluatedProperties: false
-> +
-> +allOf:
-> +  - $ref: snps,dwc3.yaml#
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    usb@65a00000 {
-> +        compatible = "socionext,uniphier-dwc3", "snps,dwc3";
-> +        reg = <0x65a00000 0xcd00>;
-> +        interrupt-names = "dwc_usb3";
-> +        interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
-> +        clock-names = "ref", "bus_early", "suspend";
-> +        clocks = <&sys_clk 12>, <&sys_clk 12>, <&sys_clk 12>;
-> +        resets = <&usb0_rst 15>;
-> +        phys = <&usb0_hsphy0>, <&usb0_hsphy1>,
-> +               <&usb0_ssphy0>, <&usb0_ssphy1>;
-> +        dr_mode = "host";
-> +    };
+> Create a small set of secondary interrupters in xhci_mem_init().
+> Cap the number in software (MAX_SECONDARY_INTRNUM, default 4).
+> If any secondary allocation fails, roll back and keep using
+> interrupter 0 only.
+> 
+> Unify primary and secondary handling on xhci->interrupters[].
+> Use the same paths for enable/disable and teardown.
+> Keep behavior consistent across run/stop/resume.
+> 
+> Route transfers per USB device (slot).
+> Add vdev->interrupter in struct xhci_virt_device.
+> Pick the default interrupter at device alloc time.
+> Program TRB_INTR_TARGET() from vdev->interrupter->intr_num for
+> bulk/ctrl/isoc/intr, so completions land on the selected event ring.
+> 
+> Route MSI/MSI-X IRQs to the right interrupter in xhci_msi_irq().
+> Store the struct xhci_interrupter pointer in irq handler_data.
+> Map vectors by index (0..N) to xhci->interrupters[].
+> Keep STS_EINT handling restricted to interrupter 0.
+> Spread MSI-X vectors with irq_set_affinity() and re-apply on resume.
+> 
+> Tested:
+> S3 suspend/resume
+> S4 hibernate/resume
+> USB storage (U-disk), camera, mouse
+> /proc/interrupts:
+>    32:         51          0          0          0          0          0
+>                0        320 IR-PCI-MSIX-0000:03:00.3    0-edge
+>                xhci_hcd
+>    33:       5696          0          0          0          0          0
+>                0          0 IR-PCI-MSIX-0000:03:00.3    1-edge
+>                xhci_hcd
+>    34:          0      60682          0          0          0          0
+>                0          0 IR-PCI-MSIX-0000:03:00.3    2-edge
+>                xhci_hcd
+>    35:          0          0      48205          0          0          0
+>                0          0 IR-PCI-MSIX-0000:03:00.3    3-edge
+>                xhci_hcd
+>    36:          0          0          0         32          0          0
+>                0          0 IR-PCI-MSIX-0000:03:00.3    4-edge
+>                xhci_hcd
+> 
+> Signed-off-by: Xu Rao <raoxu@uniontech.com>
+> ---
+> Changelog:
+> v1 -> v2:
+>    - Bind interrupters to endpoints at enable time instead of selecting
+>      per transfer.
+>    - Store the selected interrupter in struct xhci_virt_ep and program
+>      TRB_INTR_TARGET() from the bound interrupter.
+>    - Use a single IRQ handler for both primary and secondary vectors,
+>      with STS_EINT handling restricted to interrupter 0.
+>    - Keep a common dev_id for IRQ registration to match the existing
+>      xhci_cleanup_msix() teardown constraints and avoid dev_id
+>      lifetime issues.
+>    - Clarify secondary interrupter teardown to avoid double-free or
+>      use-after-free during xHCI removal.
+> v2 -> v3:
+>    - modify commit information
+> v3 -> v4:
+>    - Bind interrupters per USB device (slot) via struct xhci_virt_device,
+>      program TRB_INTR_TARGET() from vdev->interrupter for bulk/ctrl/isoc.
+>    - Drop xfer_interrupters and unify on xhci->interrupters[] for both
+>      primary and secondary event rings and IRQ routing.
+>    - Allocate secondary interrupters in xhci_mem_init; on any allocation
+>      failure, rollback and continue with primary interrupter only.
+>    - Cap secondary interrupter creation with MAX_SECONDARY_INTRNUM,
+>      defaulting to 4.
+>    - Route xhci_msi_irq by irq handler_data token (intr_num + 1) to keep
+>      correct interrupter selection across resume/power_lost.
+>    - Apply MSI-X affinity hints for secondary vectors.
+> v4 -> v5:
+>    - Fix min() signedness build error reported by 0day CI.
+>    - Rebase onto v6.19-rc2.
+> v5 -> v6:
+>    - Route secondary MSI/MSI-X IRQs by storing struct xhci_interrupter in
+>      irq handler_data, instead of using an (intr_num + 1) token mapping.
+>    - Program Slot Context Interrupter Target (tt_info[31:22]) from
+>      vdev->interrupter to keep slot default routing aligned with TRB
+>      TRB_INTR_TARGET() selection.
+> ---
+>   drivers/usb/host/xhci-mem.c  |  39 ++++++++++++
+>   drivers/usb/host/xhci-pci.c  | 119 ++++++++++++++++++++++++++++++++++-
+>   drivers/usb/host/xhci-pci.h  |   5 ++
+>   drivers/usb/host/xhci-ring.c |  77 +++++++++++++++--------
+>   drivers/usb/host/xhci.c      |  41 ++++++++++++
+>   drivers/usb/host/xhci.h      |  20 ++++++
+>   6 files changed, 274 insertions(+), 27 deletions(-)
 
-I've checked this with ARCH=arm and ARCH=arm64.
+Tested-By: Kenneth R. Crudup <kenny@panix.com>
 
-Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Attached are some IRQ dumps, with some resumes from hibernation and suspend.
 
-Thank you,
+-K
 
----
-Best Regards
-Kunihiko Hayashi
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
+
+--------------XrKqO0b0YrWrylsVF3PbiEH8
+Content-Type: text/plain; charset=UTF-8; name="xhci-irqs"
+Content-Disposition: attachment; filename="xhci-irqs"
+Content-Transfer-Encoding: base64
+
+ICAgICAgICAgICAgQ1BVMCAgICAgICBDUFUyICAgICAgIENQVTQgICAgICAgQ1BVNiAgICAg
+ICBDUFU4ICAgICAgIENQVTEwICAgICAgQ1BVMTIgICAgICBDUFUxMyAgICAgIENQVTE0ICAg
+ICAgQ1BVMTUgICAgICBDUFUxNiAgICAgIENQVTE3ICAgICAgQ1BVMTggICAgICBDUFUxOSAg
+ICAgIAogMTc4OiAgICAgICAgNDI5ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAw
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgSVItUENJLU1TSS0wMDAwOjAwOjBkLjAgICAgMC1lZGdlICAgICAgeGhjaV9oY2QKIDE3
+OTogICAgICAgICAgMCAgICAgICAgMjI5ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBD
+SS1NU0ktMDAwMDowMDowZC4wICAgIDEtZWRnZSAgICAgIHhoY2lfaGNkCiAxODA6ICAgICAg
+ICAgIDAgICAgICAgICAgMCAgICAgICA2Njk5ICAgICAgICAgIDAgICAgICAgICAgMCAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAw
+MDA6MDA6MGQuMCAgICAyLWVkZ2UgICAgICB4aGNpX2hjZAogMTgxOiAgICAgICAgICAwICAg
+ICAgICAgIDAgICAgICAgICAgMCAgICAgICAxMzIxICAgICAgICAgIDAgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjBk
+LjAgICAgMy1lZGdlICAgICAgeGhjaV9oY2QKIDE4MjogICAgICAgICAgMCAgICAgICAgICAw
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAxNDI1ODE2ICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBDSS1NU0ktMDAwMDowMDowZC4wICAgIDQt
+ZWRnZSAgICAgIHhoY2lfaGNkCiAxODY6ICAgICAgICA1NjggICAgICAgICAgMCAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAg
+ICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6MTQuMCAgICAwLWVkZ2UgICAg
+ICB4aGNpX2hjZAogMTg3OiAgICAgICAgICAwICAgICAgICAyMjIgICAgICAgICAgMCAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAg
+ICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjE0LjAgICAgMS1lZGdlICAgICAgeGhjaV9o
+Y2QKIDE4ODogICAgICAgICAgMCAgICAgICAgICAwICAgICAxMjM5NjcgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAw
+IElSLVBDSS1NU0ktMDAwMDowMDoxNC4wICAgIDItZWRnZSAgICAgIHhoY2lfaGNkCiAxODk6
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgIDE3MjEgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCBJUi1QQ0kt
+TVNJLTAwMDA6MDA6MTQuMCAgICAzLWVkZ2UgICAgICB4aGNpX2hjZAogMTkwOiAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgMTIwMjggICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAg
+ICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgSVItUENJLU1TSS0wMDAw
+OjAwOjE0LjAgICAgNC1lZGdlICAgICAgeGhjaV9oY2QKTW9uIEphbiAgNSAxOTowODozMCBQ
+U1QgMjAyNgogICAgICAgICAgICBDUFUwICAgICAgIENQVTIgICAgICAgQ1BVNCAgICAgICBD
+UFU2ICAgICAgIENQVTggICAgICAgQ1BVMTAgICAgICBDUFUxMiAgICAgIENQVTEzICAgICAg
+Q1BVMTQgICAgICBDUFUxNSAgICAgIENQVTE2ICAgICAgQ1BVMTcgICAgICBDUFUxOCAgICAg
+IENQVTE5ICAgICAgCiAxNzg6ICAgICAgICA0MjkgICAgICAgICAgMCAgICAgICAgICAwICAg
+ICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6MGQuMCAgICAwLWVkZ2UgICAgICB4aGNp
+X2hjZAogMTc5OiAgICAgICAgICAwICAgICAgICAyMjkgICAgICAgICAgMCAgICAgICAgICAw
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgSVItUENJLU1TSS0wMDAwOjAwOjBkLjAgICAgMS1lZGdlICAgICAgeGhjaV9oY2QKIDE4
+MDogICAgICAgICAgMCAgICAgICAgICAwICAgICAgIDY3MzEgICAgICAgICAgMCAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBD
+SS1NU0ktMDAwMDowMDowZC4wICAgIDItZWRnZSAgICAgIHhoY2lfaGNkCiAxODE6ICAgICAg
+ICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgIDEzMjEgICAgICAgICAgMCAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAw
+MDA6MDA6MGQuMCAgICAzLWVkZ2UgICAgICB4aGNpX2hjZAogMTgyOiAgICAgICAgICAwICAg
+ICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgIDE0MjU4MTYgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjBk
+LjAgICAgNC1lZGdlICAgICAgeGhjaV9oY2QKIDE4NjogICAgICAgIDU2OCAgICAgICAgICAw
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBDSS1NU0ktMDAwMDowMDoxNC4wICAgIDAt
+ZWRnZSAgICAgIHhoY2lfaGNkCiAxODc6ICAgICAgICAgIDAgICAgICAgIDIyMiAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAg
+ICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6MTQuMCAgICAxLWVkZ2UgICAg
+ICB4aGNpX2hjZAogMTg4OiAgICAgICAgICAwICAgICAgICAgIDAgICAgIDEyNDAwOSAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAg
+ICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjE0LjAgICAgMi1lZGdlICAgICAgeGhjaV9o
+Y2QKIDE4OTogICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgMTcyMSAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAw
+IElSLVBDSS1NU0ktMDAwMDowMDoxNC4wICAgIDMtZWRnZSAgICAgIHhoY2lfaGNkCiAxOTA6
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAxMjAy
+OCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCBJUi1QQ0kt
+TVNJLTAwMDA6MDA6MTQuMCAgICA0LWVkZ2UgICAgICB4aGNpX2hjZApNb24gSmFuICA1IDE5
+OjA4OjMxIFBTVCAyMDI2CiAgICAgICAgICAgIENQVTAgICAgICAgQ1BVMiAgICAgICBDUFU0
+ICAgICAgIENQVTYgICAgICAgQ1BVOCAgICAgICBDUFUxMCAgICAgIENQVTEyICAgICAgQ1BV
+MTMgICAgICBDUFUxNCAgICAgIENQVTE1ICAgICAgQ1BVMTYgICAgICBDUFUxNyAgICAgIENQ
+VTE4ICAgICAgQ1BVMTkgICAgICAKIDE3ODogICAgICAgIDQyOSAgICAgICAgICAwICAgICAg
+ICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwIElSLVBDSS1NU0ktMDAwMDowMDowZC4wICAgIDAtZWRnZSAg
+ICAgIHhoY2lfaGNkCiAxNzk6ICAgICAgICAgIDAgICAgICAgIDIyOSAgICAgICAgICAwICAg
+ICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6MGQuMCAgICAxLWVkZ2UgICAgICB4aGNp
+X2hjZAogMTgwOiAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgNjczOSAgICAgICAgICAw
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgSVItUENJLU1TSS0wMDAwOjAwOjBkLjAgICAgMi1lZGdlICAgICAgeGhjaV9oY2QKIDE4
+MTogICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgMTMyMSAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBD
+SS1NU0ktMDAwMDowMDowZC4wICAgIDMtZWRnZSAgICAgIHhoY2lfaGNkCiAxODI6ICAgICAg
+ICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgMTQyNTgxNiAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAw
+MDA6MDA6MGQuMCAgICA0LWVkZ2UgICAgICB4aGNpX2hjZAogMTg2OiAgICAgICAgNTY4ICAg
+ICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjE0
+LjAgICAgMC1lZGdlICAgICAgeGhjaV9oY2QKIDE4NzogICAgICAgICAgMCAgICAgICAgMjIy
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBDSS1NU0ktMDAwMDowMDoxNC4wICAgIDEt
+ZWRnZSAgICAgIHhoY2lfaGNkCiAxODg6ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgMTI0
+MDE1ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAg
+ICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6MTQuMCAgICAyLWVkZ2UgICAg
+ICB4aGNpX2hjZAogMTg5OiAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAg
+ICAxNzIxICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAg
+ICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjE0LjAgICAgMy1lZGdlICAgICAgeGhjaV9o
+Y2QKIDE5MDogICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAg
+ICAgIDEyMDI4ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAw
+IElSLVBDSS1NU0ktMDAwMDowMDoxNC4wICAgIDQtZWRnZSAgICAgIHhoY2lfaGNkCk1vbiBK
+YW4gIDUgMTk6MTA6MDIgUFNUIDIwMjYKICAgICAgICAgICAgQ1BVMCAgICAgICBDUFUyICAg
+ICAgIENQVTQgICAgICAgQ1BVNiAgICAgICBDUFU4ICAgICAgIENQVTEwICAgICAgQ1BVMTIg
+ICAgICBDUFUxMyAgICAgIENQVTE0ICAgICAgQ1BVMTUgICAgICBDUFUxNiAgICAgIENQVTE3
+ICAgICAgQ1BVMTggICAgICBDUFUxOSAgICAgIAogMTc4OiAgICAgICAgNDUzICAgICAgICAg
+IDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjBkLjAgICAg
+MC1lZGdlICAgICAgeGhjaV9oY2QKIDE3OTogICAgICAgICAgMCAgICAgICAgMjI5ICAgICAg
+ICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwIElSLVBDSS1NU0ktMDAwMDowMDowZC4wICAgIDEtZWRnZSAg
+ICAgIHhoY2lfaGNkCiAxODA6ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICA3NTkxICAg
+ICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6MGQuMCAgICAyLWVkZ2UgICAgICB4aGNp
+X2hjZAogMTgxOiAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAxMzIy
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgSVItUENJLU1TSS0wMDAwOjAwOjBkLjAgICAgMy1lZGdlICAgICAgeGhjaV9oY2QKIDE4
+MjogICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAxNDI1
+ODU5ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBD
+SS1NU0ktMDAwMDowMDowZC4wICAgIDQtZWRnZSAgICAgIHhoY2lfaGNkCiAxODY6ICAgICAg
+ICA2MzQgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAw
+MDA6MDA6MTQuMCAgICAwLWVkZ2UgICAgICB4aGNpX2hjZAogMTg3OiAgICAgICAgICAwICAg
+ICAgICAyMjggICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjE0
+LjAgICAgMS1lZGdlICAgICAgeGhjaV9oY2QKIDE4ODogICAgICAgICAgMCAgICAgICAgICAw
+ICAgICAxMjQ4NTYgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBDSS1NU0ktMDAwMDowMDoxNC4wICAgIDIt
+ZWRnZSAgICAgIHhoY2lfaGNkCiAxODk6ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAg
+ICAwICAgICAgIDE5MzMgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAg
+ICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6MTQuMCAgICAzLWVkZ2UgICAg
+ICB4aGNpX2hjZAogMTkwOiAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAg
+ICAgICAwICAgICAgMTIwODUgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAg
+ICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjE0LjAgICAgNC1lZGdlICAgICAgeGhjaV9o
+Y2QKTW9uIEphbiAgNSAyMDo1MTo1NyBQU1QgMjAyNgogICAgICAgICAgICBDUFUwICAgICAg
+IENQVTIgICAgICAgQ1BVNCAgICAgICBDUFU2ICAgICAgIENQVTggICAgICAgQ1BVMTAgICAg
+ICBDUFUxMiAgICAgIENQVTEzICAgICAgQ1BVMTQgICAgICBDUFUxNSAgICAgIENQVTE2ICAg
+ICAgQ1BVMTcgICAgICBDUFUxOCAgICAgIENQVTE5ICAgICAgCiAxNzg6ICAgICAgICA1MzAg
+ICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAw
+ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6
+MGQuMCAgICAwLWVkZ2UgICAgICB4aGNpX2hjZAogMTc5OiAgICAgICAgICAwICAgICAgICAz
+MTggICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjBkLjAgICAg
+MS1lZGdlICAgICAgeGhjaV9oY2QKIDE4MDogICAgICAgICAgMCAgICAgICAgICAwICAgICAg
+IDc3MjEgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwIElSLVBDSS1NU0ktMDAwMDowMDowZC4wICAgIDItZWRnZSAg
+ICAgIHhoY2lfaGNkCiAxODE6ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAg
+ICAgIDE0MzAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6MGQuMCAgICAzLWVkZ2UgICAgICB4aGNp
+X2hjZAogMTgyOiAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAw
+ICAgIDE0MjU5MzggICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgSVItUENJLU1TSS0wMDAwOjAwOjBkLjAgICAgNC1lZGdlICAgICAgeGhjaV9oY2QKIDE4
+NjogICAgICAgMTI5MSAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBD
+SS1NU0ktMDAwMDowMDoxNC4wICAgIDAtZWRnZSAgICAgIHhoY2lfaGNkCiAxODc6ICAgICAg
+ICAgIDAgICAgICAgIDU2MyAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAg
+ICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAg
+ICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAw
+MDA6MDA6MTQuMCAgICAxLWVkZ2UgICAgICB4aGNpX2hjZAogMTg4OiAgICAgICAgICAwICAg
+ICAgICAgIDAgICAgIDE5OTM0NSAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAg
+ICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
+ICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAgSVItUENJLU1TSS0wMDAwOjAwOjE0
+LjAgICAgMi1lZGdlICAgICAgeGhjaV9oY2QKIDE4OTogICAgICAgICAgMCAgICAgICAgICAw
+ICAgICAgICAgIDAgICAgICAgODA5OCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAg
+MCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
+IDAgICAgICAgICAgMCAgICAgICAgICAwIElSLVBDSS1NU0ktMDAwMDowMDoxNC4wICAgIDMt
+ZWRnZSAgICAgIHhoY2lfaGNkCiAxOTA6ICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAg
+ICAwICAgICAgICAgIDAgICAgICAxNDc3MiAgICAgICAgICAwICAgICAgICAgIDAgICAgICAg
+ICAgMCAgICAgICAgICAwICAgICAgICAgIDAgICAgICAgICAgMCAgICAgICAgICAwICAgICAg
+ICAgIDAgICAgICAgICAgMCBJUi1QQ0ktTVNJLTAwMDA6MDA6MTQuMCAgICA0LWVkZ2UgICAg
+ICB4aGNpX2hjZAo=
+
+--------------XrKqO0b0YrWrylsVF3PbiEH8--
 
