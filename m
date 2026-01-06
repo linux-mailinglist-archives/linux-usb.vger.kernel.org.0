@@ -1,77 +1,76 @@
-Return-Path: <linux-usb+bounces-31968-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31969-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94F1DCFB139
-	for <lists+linux-usb@lfdr.de>; Tue, 06 Jan 2026 22:21:01 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2008FCFB33E
+	for <lists+linux-usb@lfdr.de>; Tue, 06 Jan 2026 23:08:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DC23F306BC48
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jan 2026 21:17:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 98D41303C221
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jan 2026 22:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41D0F29BDBD;
-	Tue,  6 Jan 2026 21:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79ABE274B42;
+	Tue,  6 Jan 2026 22:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CCEOqlLO"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZEu2vLbN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82249296BBF
-	for <linux-usb@vger.kernel.org>; Tue,  6 Jan 2026 21:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82D813FEE
+	for <linux-usb@vger.kernel.org>; Tue,  6 Jan 2026 22:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767734252; cv=none; b=IXPuLaS2hnDY50y5KpvxI3j4ZtZ/MYThm4uS4KAj4vflR25p6ncPAkjKd1pxXaDf63Zi/7jMbRPtosUWCmI4yCqAjdNFioL8ZmbxD1dFFgUe+9z+9n4lz12IT+3NqOGAbC75x4yRxDoHmyvjwu8NcwbrefrJUmGSuqZPbPvqgqs=
+	t=1767737253; cv=none; b=eDL9rL4HsnRbgdw72NMfMJG9QL97G22xsXEZfhd0UOpDtUT69Ve9YOa+P2Ccg6eMHm56rbI6ih0mRhOJu0AjfmxMJcGfEtzbbh3UP7q2ozyGRmm+K+KiQD4KPrwDx/jANBtc0nlC0yzuUED4KzG08DovbeZ77hZgK7cKoKQ1H78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767734252; c=relaxed/simple;
-	bh=SwBHNG6vZFlNypLfpkmH3I0VlIqMQzsKM6FWB0bvaHM=;
+	s=arc-20240116; t=1767737253; c=relaxed/simple;
+	bh=k9yFdjCy/jVHkwe1y6ekqSsx3cBF/d/4zhfVEpxvJ+E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QV1W8eg1UIaTGcoScIb2wpZRPNP/ZeSOfrwms0PE94AfH43hygi20hTVYA+itUSfDF+yOfMxC0Ea8NGuI+NIEasV1+DqTjN6ouVscD3I992b8aSC16zrkSXmoghZHzVujiAe48piffgiXoxXtq/kECcoK8O1lHPQOLTyfPefdRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CCEOqlLO; arc=none smtp.client-ip=209.85.210.54
+	 In-Reply-To:Content-Type; b=nFzVQkwiOqBzsAKtLf3dnX/LL4s06dCfwZUr4wqY2uF6Ovs9L6t021mz5V5qlbQ8WjY8CrZQq64TxrjkUk6SIMV7oYjpkchKoTokaS1F9fHtPVchlg7MtiqY9X8/LOqCQlSJukUWNbzYXfE0vjx8sk4NAhLrA5AabkfzB1UmcJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZEu2vLbN; arc=none smtp.client-ip=209.85.167.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7c6dbdaced8so1143091a34.1
-        for <linux-usb@vger.kernel.org>; Tue, 06 Jan 2026 13:17:30 -0800 (PST)
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-455749af2e1so98136b6e.1
+        for <linux-usb@vger.kernel.org>; Tue, 06 Jan 2026 14:07:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1767734249; x=1768339049; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1767737251; x=1768342051; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y1hcFi/+aH4515Cm19J8LXmnl2xD7ej4ub/6q1d4ewA=;
-        b=CCEOqlLOswNxF5jiVLNlpv7iH5SlHdcjAbYPeu7Ptpx5uKdcEhXm1h5zb8UAdOqSK6
-         X5dmH4a5exMs4TlELQGhojrDHyx3Z8w5I9O6zUXpW77QP03nU64/KoJdG1wspJqVCWv7
-         Bn+XwTIGmQqU+mplPQIRo5eGOZFHh1j4frYvw=
+        bh=ctgVESUh38PtfqrHQrNI2U46ufIoTkhya3EAN3eYJco=;
+        b=ZEu2vLbNR8PYfrjZj2R+jLURptTYY0GrRpjqufR+FbEehK/97DXctAo7P2wWD+sGZC
+         WeyxGW09QHXxy4iUuRtTgeqXHueMFPOgMqb39vkGdOf9ApOMkC0Grn6p1ERIDvIFN1DJ
+         TcTlygGK+qkj8cyrAfVu0BN2dqBGhWFn4wkcc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767734249; x=1768339049;
+        d=1e100.net; s=20230601; t=1767737251; x=1768342051;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Y1hcFi/+aH4515Cm19J8LXmnl2xD7ej4ub/6q1d4ewA=;
-        b=l8188KBCrgyET99rRI2Xk7ahjiqD22CJwIXdlPAp9II+EoAKWpMP6FKaQMIQW4cdlg
-         NWf8g4M9M38Mut2cI/yaLgzQ1HEcU4fad/rdabosRrlC5l93ZY8Mc0EyT7wvRryt8p2m
-         KNixAjX91Y3SyMb7Lf9ycnBcFHjiwCIWmc6IsgLUFdvPXSoPfe2SDInJyJ+mysKqJH4T
-         iomCq01nIJxgg0nF6sUpDYK6WU6IPNC1ZBckFeP7AQ2zydCCgoeVusUE0vRkN0VCp1dR
-         jiIPF5nlEgS2eg39j/ZIP6viih11ip5jTNNNeNt/CISfaWv3IkpIWuVqOmfImKpyhugh
-         h0NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXtB6tqEE9f6XUz6LuGU9CGAnaaUaTCzC1GUm2XTp/tQ+yi3zWq/cf4Sgwpq3BeWu3GL+P5kgkIGOE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJ1YiXefDfltmIhO+oXkwodP3Dgs5JwqkuCxtocyzR54fz8ms/
-	6Y8H5z1+849CcSSCaeojn7uakna8aExEdd70ZhuhzZHM8HzmMmp5JiNOSf97RyYeiA8=
-X-Gm-Gg: AY/fxX43AkUobyER9W/ZJCgLt8COatG5GMd/RR21XhMXJkpBRFbolyQzSbGw+Jsw5/G
-	/rvWsDMdH1jVSXkMeD6G9tEu1vnW7OgGckmcUxUb08LBorjN8TszmzBsTXxAuIxndwBPSECBGZ8
-	RTSDdBsrnC9/Pn7XDoLQ5CRssJgZje7+kgSPnt16WlRr7buPAHRnXb0YADytt2sSAmEuA1aG6MF
-	HHtEbS3DwDygGVbiS0t6FVP6ZIpYNAoiDnvTNYryVzLPsW2yhhNrW8FIb13QTFhiDupRyWrnJMw
-	pUvCZSnHtvHby51zCxJrhNS3Ev9ytbYj5BIh3sjHSQ6yHZcbt5NauwbfocTFHljXotzwcelXNxc
-	G6Opgh4eoIyO1B4/l1xxhrB4M2SAejEVK247KTuKSlYgdIDsEJKUW8WTyDiNjknWB5vA6770CJa
-	Q+3dd/Ocwidd8pD/czSLkC4Sk=
-X-Google-Smtp-Source: AGHT+IHEacIRqIlAShQOHh2PodTizmFqHc2wJtebm0T7MBL1rx5BeFXM5pd0ajw2EVPBOoXFGurQeg==
-X-Received: by 2002:a05:6830:3147:b0:7c7:5907:b1a1 with SMTP id 46e09a7af769-7ce508a99bbmr349289a34.1.1767734249390;
-        Tue, 06 Jan 2026 13:17:29 -0800 (PST)
+        bh=ctgVESUh38PtfqrHQrNI2U46ufIoTkhya3EAN3eYJco=;
+        b=IAmbQ4+7c37cjZns1uuXHGVvMzCiwSLocAESuWb4r6LNEhg3mauUbybDDabk41RBjy
+         gxU4I3B0pJk9K0cGlVwTstDZbY4U+4tUKvKj+ILMk9Dtn2jZrktRUYy2kuGG4Qi++7Eu
+         p6YvTNK4qr3hUoPCKwUaO5H7ltr2VGq5/SRZ8IUdAD7m1Iljm/d4Ed1Rzv79wafFBK5H
+         Bch9+I8KHrnanOS9lVNVoTi2w2PpJ8XJIamaSdC+/k2xZFTcfYCbGQVJHfVV/tF+K91D
+         3gu15t4f2gXjIxFRnJ0LHSHsZZK8iUdt0U7mI1KYBYNBhXnNJKCllgyVwjtv/42wTLeL
+         SmWQ==
+X-Gm-Message-State: AOJu0YzXFz8NwfO3KeRz5T/8Z4NAkGwGFZbTlXF9Z7MB8sQoT8WXVXiU
+	aElSTwchMJkzk1t2HxiU9P80ib0MgFDi2EMbK2oqZoBBb/oNxh54kskT5o1vgIm1ftM=
+X-Gm-Gg: AY/fxX5TeZbDUKGk0opW8v8E6FrwTvvi5sp4wEXGXfgRBxnBOOXxDr9sJz6qmBRxJcR
+	fs/Oiow3PcIzEvUpN/R3q+2Oc17Kmzh6e7VloMckOZL07fSMKsDpNRD8U63ancvRwSFXxsxIzps
+	rsbs3HzR7SrdyFpZtzDISAmX7mh85pkfewYdSm73FS5bEF40o8GhjPGYIeL6JVUUgXt4YtjHLqs
+	pikmsk3NRGSqO8y/sGnAtSXHdZsWjNONt6ScYsXtNLzOg2Gm3GF43TGT+Ut252mV1LgMfttZRe+
+	uPblcEk0hgG/5PnCNnh5lDoDY1HvrP70vimPZ6f/a6OPCch81BXh8u6Xv2HHOC24kQ4CA7cfreV
+	NlJuvOKEHEkEBWt3yBKmbeQ3sMnKrjpCPAvcwHViQa9ect+2wXUPhaprvrIuOkOBhh1RAgSnzs0
+	EqQBQzecbBSZx4vq6Iv/oTci4=
+X-Google-Smtp-Source: AGHT+IHPl/QcPW9EZ/LG7vOpGrRA47pBElzn74mM6bGkUzq4dvnnx36jGhdDsNtuZJ+iplIyl4UyIw==
+X-Received: by 2002:a05:6808:c165:b0:450:826e:5df1 with SMTP id 5614622812f47-45a6b82101bmr290609b6e.19.1767737250772;
+        Tue, 06 Jan 2026 14:07:30 -0800 (PST)
 Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ce478d9c2esm2198512a34.21.2026.01.06.13.17.28
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-45a5e2894e0sm1538194b6e.13.2026.01.06.14.07.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jan 2026 13:17:28 -0800 (PST)
-Message-ID: <c4559ccc-d4d4-4971-bc28-b02d80e57594@linuxfoundation.org>
-Date: Tue, 6 Jan 2026 14:17:27 -0700
+        Tue, 06 Jan 2026 14:07:30 -0800 (PST)
+Message-ID: <7220f3ee-141a-4fb3-b515-c2961ebd77ea@linuxfoundation.org>
+Date: Tue, 6 Jan 2026 15:07:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,50 +78,60 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: USB/IP bug report - dmesg filled with to usb_unlink_urb() when
- using two instances of same device
-To: Ignacio Hernandez-Ros <ignacio@hernandez-ros.com>,
- valentina.manea.m@gmail.com, shuah@kernel.org, linux-usb@vger.kernel.org
-Cc: i@zenithal.me, Shuah Khan <skhan@linuxfoundation.org>
-References: <0101019b92e81c20-09906fb4-d5e8-40a6-9192-ab693eef4179-000000@us-west-2.amazonses.com>
+Subject: Re: usbip: Kernel oops when trying to bind devices from Windows
+ client
+To: Marco Schuschnig <m.schuster91@googlemail.com>,
+ valentina.manea.m@gmail.com, shuah@kernel.org
+Cc: linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <CAEhB=Bt13wr1+cc1rfzwPxnEEuawMgTew=RJic2FsVb=Gccm+A@mail.gmail.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <0101019b92e81c20-09906fb4-d5e8-40a6-9192-ab693eef4179-000000@us-west-2.amazonses.com>
+In-Reply-To: <CAEhB=Bt13wr1+cc1rfzwPxnEEuawMgTew=RJic2FsVb=Gccm+A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 1/6/26 03:44, Ignacio Hernandez-Ros wrote:
-> Hello maintainers,
+On 1/4/26 16:13, Marco Schuschnig wrote:
+> Hello all,
 > 
-> I would like to submit a bug report related to the usbip-host module. Here is the context:
-> 
-> 1. I’ve two equal UPS devices attached to a single Raspberry PI. The Raspberry run Debian trixie and is sharing the two devices with same VID and PID but different serial number and port attached (one is at 1-1.2 and the other is at 1-1.4)
+> I am trying to get usbip working with a Raspberry Pi Zero 2 W
+> (Raspberry Pi OS / Debian Trixie, kernel 6.2.47) as host and a Windows
+> 10 machine as client (using usbip-win2 0.9.7.3). The device to be
+> shared is a "145f:0276 Trust GXT 165 Gaming Mouse".
 
-Can you elaborate on this "sharing the two devices" part.
+Are you using vhci_hcd equivalent on Windows and usbip_host on
+Linux? This won't work because usbip_host and vhci_hcd have to
+be both Linux systems.
 
-> 2. Launching ‘dmesg’ in the host shows this result:
 > 
+> Upon attaching from the Windows machine, the Raspberry Pi
+> kernel-oopses pretty much immediately. Sometimes, the Pi locks up hard
+> until it is either power-cycled or the watchdog kicks in, sometimes it
+> keeps running. In the latter case, when attempting to detach on the
+> Windows machine, another kernel oops follows like in the attached
+> stacktrace (sec. 158).
+> 
+> The issue is fully reproducible, the attached stacktrace was produced
+> with usbip_debug_flag=0xFFFFFFFF.
+> 
+> An issue with the hardware can be ruled out, as when using a Raspberry
+> Pi 5 as client (same kernel version) the usbip connection works
+> flawlessly. 
 
-Please send the full demsg and also how the devices are
-attached?
-> 
-> …
-> [63386.686712] usbip-host 1-1.2: unlinked by a call to usb_unlink_urb()
-> [63387.003578] usbip-host 1-1.4: unlinked by a call to usb_unlink_urb()
-> [63388.688086] usbip-host 1-1.2: unlinked by a call to usb_unlink_urb()
-> [63389.004953] usbip-host 1-1.4: unlinked by a call to usb_unlink_urb()
-> [63390.689275] usbip-host 1-1.2: unlinked by a call to usb_unlink_urb()
-> [63391.006049] usbip-host 1-1.4: unlinked by a call to usb_unlink_urb()
-> …
-> 
-> Every second or so, there is a new line in the log.
-> 
-> 3. Looking at the possible reasons for this problem I dig into https://github.com/torvalds/linux/blob/7f98ab9da046865d57c102fd3ca9669a29845f67/drivers/usb/usbip/stub_rx.c#L635
-> 
-> And the source of the issue (Note: I’m not 100% sure about this statement ) might be related to the flag “is_tweaked” that is not distinct per device but common to all num_urbs.
-> 
+Yes this is a supported configuration.
 
-I need more information to be able to figure out what's going on.
+Incidentally, when using the Raspberry Pi 5 as host
+> together with the Windows 10 machine as client, usbip works just fine.
+
+I am surprised this works. What's the kernel version Raspberry Pi 5?
+> I have tested with the same results an USB keyboard and an Android
+> smartphone to rule out a misbehaving USB device.
+> 
+> It might be possible that the culprit is something Windows does to USB
+> devices or a bug in the usbip-win2 package, but even if Windows sends
+> corrupt USB packets, these should IMHO not lead to a kernel-oops.
+
+The reason is Windows usbip client and Linux host aren't compatible.
+We don't test this case and support this case.
 
 thanks,
 -- Shuah
