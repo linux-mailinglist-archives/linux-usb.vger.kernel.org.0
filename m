@@ -1,138 +1,81 @@
-Return-Path: <linux-usb+bounces-32019-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32020-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0C8BD000F5
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 21:51:05 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEC1DD0010A
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 21:53:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E1CC93019270
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 20:50:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 86495301E9B3
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 20:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 595A4318ED7;
-	Wed,  7 Jan 2026 20:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934D132FA30;
+	Wed,  7 Jan 2026 20:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfEsJaxc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yxg3WAX0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0AC1225402;
-	Wed,  7 Jan 2026 20:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE67274B4D;
+	Wed,  7 Jan 2026 20:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767819056; cv=none; b=jwQttyaHEjUEf5TRGmGb8xaYQ6UN54D+3IJR80HZxr37OuqMiWAu2INOBZQtJCn0vBMw5GX2OpEjcxx/TdEH+jLvKJKBhPTlEYW1Fh5lTXoesFTgFyQE41eEuppzxn28Rn3SwpzrxqNo0C+FfUqcDbgTYJh60bUy381p3iB3TSQ=
+	t=1767819215; cv=none; b=SXWL691QdJJw1Iilzi14dq2V0qNA/K+5lKBPMlLFtfjOZJ0kEnTqQD/r0dmnQ5XobKzcCFkpgVHKErPNxCQTSD5oD5wLb9TX3eNF1ws6bLJPJb1bSf2M/+W2VTYbxG6JYj9k+sjYxg5ixbFXstDpgDYRIllq8lfXAPJWq0Xk9Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767819056; c=relaxed/simple;
-	bh=/bQLQQ7/t8+fmjmDDrfiZS8Ka1/aGXekq+aewTtU4Do=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I8n2vC0g/LliC/J0U3T1Sg95MJO/9LKZhS1TSaiXpP0265KES4BcTWwrQA8RsAsOOoUIwZhTiSJDsJvcCfa/t3NWNB+fZqMY37eibneMLjpOYUe/kdLQl1Cn0uB/YfJY32EZ5KVn1uvmfJLL6mXCV0XMElx83UAEU/4xSNYYwPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfEsJaxc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE048C16AAE;
-	Wed,  7 Jan 2026 20:50:55 +0000 (UTC)
+	s=arc-20240116; t=1767819215; c=relaxed/simple;
+	bh=d9cyx/YAvf1aIW8KBGCLVirG2QSe0/UVBSpNRs6IGBI=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=bqHTrJmJXky3edgdArfYdak+K2J110hyh5Fz2yXAEt8cErTQFZURmxFv0P87LDvsYmsjNI6zXjctz5iPVEq9ekU9Sg497fS/bGWCmwZ0Q9jNgzH+lZnUWbXAQZMJPis5nuZCPo0TtPpRx51wPHlEAQwGrgXzaqViIrvs9IySCKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yxg3WAX0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE20C4CEF1;
+	Wed,  7 Jan 2026 20:53:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767819056;
-	bh=/bQLQQ7/t8+fmjmDDrfiZS8Ka1/aGXekq+aewTtU4Do=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VfEsJaxcJ2jyzxF29azq81lmR+QoahN3LkJl7s7vkxTdUt1OsQbOZHYLQPPIKY//z
-	 I3h3T72gSAPivO7zK5WY2Gxx8hmM+6CQRhak0069pH2rDDB15la8hTHy9jasoxCEkA
-	 3zhbLUM01ZJJa4SUrFhizGDdF65SsGS2ExcPsQkipU/qLMAy0b3SL0B8uO07lWgjaJ
-	 BXsJQcXKg3CPsiL2dXaCE1Ym2I8RrkplBZdKLjHutO5/jJivQlkxwYGPJxIR8n1NG6
-	 XddSx/Jf65Bc17dj7u4tq/H7d4dtaa4/Zh6fkAvq/KlYGYDRcApyyB21w3zxG1NRnv
-	 KysdVl856oPnQ==
-Message-ID: <158442b3-28c2-4f8c-ba42-0b9c6661c650@kernel.org>
-Date: Wed, 7 Jan 2026 14:50:54 -0600
+	s=k20201202; t=1767819214;
+	bh=d9cyx/YAvf1aIW8KBGCLVirG2QSe0/UVBSpNRs6IGBI=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=Yxg3WAX0ewgE6zRlk3Z7tXzaADG5/5pTNTPT4L3WbU49vSe/6fOoB8GABQfhOkk6J
+	 7gpjbW1qS0GRWMRyZ4ZHcpdIrJ+GEGTMohcr+smaMv4bIaCYOl1OWv+BzUAgdzjfp+
+	 bcW22LU5GxDsMnDzTTuLduo7LqYHD4oGSEEHFWDlIxweYumd9DZovs4MOlpqcEBDG3
+	 MrRYzqxWkLblihlV4qisLT8P56F1xn7NkxMfDCmhny1XFmBNa7OUKKnQUtr1R/ToSI
+	 tG7vYP1LgCJLCdtTYFHfq/gGpR5EoZPvR20VZ00eSUEOTy9UhZBNhiCqweSRTsIhiH
+	 fEKTLZEZbiQNQ==
+Date: Wed, 7 Jan 2026 21:53:31 +0100 (CET)
+From: Jiri Kosina <jikos@kernel.org>
+To: =?ISO-8859-15?Q?Rodrigo_Lugathe_da_Concei=E7=E3o_Alves?= <lugathe2@gmail.com>
+cc: bentiss@kernel.org, linux-input@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+    stern@rowland.harvard.edu, dmitry.torokhov@gmail.com, 
+    linuxhid@cosmicgizmosystems.com, linuxsound@cosmicgizmosystems.com, 
+    michal.pecio@gmail.com
+Subject: Re: [PATCH v3] HID: Apply quirk HID_QUIRK_ALWAYS_POLL to Edifier
+ QR30 (2d99:a101)
+In-Reply-To: <20251127220357.1218420-1-lugathe2@gmail.com>
+Message-ID: <144738o8-qn08-3pr8-1orq-o5r5s11q37o4@xreary.bet>
+References: <20251127220357.1218420-1-lugathe2@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] thunderbolt: Fix S4 resume incongruities
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
- linux-kernel@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>,
- Yehezkel Bernat <YehezkelShB@gmail.com>
-References: <20260106053749.61440-1-superm1@kernel.org>
- <20260107093353.GO2275908@black.igk.intel.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <20260107093353.GO2275908@black.igk.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-On 1/7/26 3:33 AM, Mika Westerberg wrote:
-> Hi,
-> 
-> On Mon, Jan 05, 2026 at 11:37:47PM -0600, Mario Limonciello (AMD) wrote:
->> When a machine is restored from S4 if the firmware CM has created
->> tunnels there can be an incongruity of expectation from the kernel
->> when compared to booting from S5.  This series addresses those.
-> 
-> I suspect there is no Firmware CM in AMD platforms so this actually means
-> the BIOS CM, correct?
+On Thu, 27 Nov 2025, Rodrigo Lugathe da Concei=C3=A7=C3=A3o Alves wrote:
 
-That's correct.
+> The USB speaker has a bug that causes it to reboot when changing the
+> brightness using the physical knob.
+>=20
+> Add a new vendor and product ID entry in hid-ids.h, and register
+> the corresponding device in hid-quirks.c with the required quirk.
+>=20
+> Signed-off-by: Rodrigo Lugathe da Concei=C3=A7=C3=A3o Alves <lugathe2@gma=
+il.com>
 
-> 
-> However, on S4 we actually do reset host router when the "boot kernel" is
-> started before loading and jumping to the hibernation image. 
+Applied to hid.git#for-6.19/upstream-fixes. Thanks,
 
-That's only if thunderbolt.ko is built into the kernel or is included in 
-the initramfs before it does the pivot to the hibernation image.
-
-At least in the tests we were doing it's not part of the boot kernel.
-
-> It might be
-> that this boot kernel tunnel configuration is causing the issues you are
-> seeing (can you elaborate on those?) 
-
-The issues manifest "downstream" in the GPU driver.  There are a bunch 
-of aux failures and a non functional display.  Tracing it back the GPU 
-driver isn't alive at the time that the tunnels are attempted to be 
-reconstructed at the moment and so CM tears DP tunnel down and then when 
-GPU driver does come up it is not functional.
-
-DP tunnel constructed at:
-
-[  486.007194] thunderbolt 0000:c6:00.6: AUX RX path activation complete
-
-First DPRx timeout at:
-
-[  486.135483] thunderbolt 0000:c6:00.6: 0:6 <-> 2:13 (DP): DPRX read 
-timeout
-
-DP tunnel deactivating at:
-
-  [  486.331856] thunderbolt 0000:c6:00.6: 0:6 <-> 2:13 (DP): deactivating
-
-First DPRx DPCD reading starts at:
-
-[  486.351765] amdgpu 0000:c4:00.0: amdgpu: [drm] DPIA AUX failed on 
-0xf0000(10), error 7
-
-I believe by doing the reset in this series we instead get HPD events 
-and react to those.  If we keep things as they are today I think we need 
-to work out some changes to device ordering.
-
-> but given that it is (typically the
-> same kernel binary) it should be creating the tunnels the same way.
-> 
->>
->> v1:
->> Link: https://lore.kernel.org/linux-usb/20251023050354.115015-1-superm1@kernel.org/
->>
->> Mario Limonciello (AMD) (2):
->>    thunderbolt: Move nhi_reset before pmops declaration
->>    thunderbolt: Reset NHI during S4 restore_noirq() callback
->>
->>   drivers/thunderbolt/nhi.c | 77 ++++++++++++++++++++++-----------------
->>   drivers/thunderbolt/tb.c  | 29 ++++++++-------
->>   drivers/thunderbolt/tb.h  |  1 +
->>   3 files changed, 61 insertions(+), 46 deletions(-)
->>
->> -- 
->> 2.43.0
+--=20
+Jiri Kosina
+SUSE Labs
 
 
