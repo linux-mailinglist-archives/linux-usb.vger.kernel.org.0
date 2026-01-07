@@ -1,81 +1,77 @@
-Return-Path: <linux-usb+bounces-32020-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32021-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEC1DD0010A
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 21:53:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E120D002AD
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 22:30:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 86495301E9B3
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 20:53:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3CB8B3021071
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 21:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934D132FA30;
-	Wed,  7 Jan 2026 20:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D45E22C3277;
+	Wed,  7 Jan 2026 21:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yxg3WAX0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qXwn5Jda"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE67274B4D;
-	Wed,  7 Jan 2026 20:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F96A277C9A;
+	Wed,  7 Jan 2026 21:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767819215; cv=none; b=SXWL691QdJJw1Iilzi14dq2V0qNA/K+5lKBPMlLFtfjOZJ0kEnTqQD/r0dmnQ5XobKzcCFkpgVHKErPNxCQTSD5oD5wLb9TX3eNF1ws6bLJPJb1bSf2M/+W2VTYbxG6JYj9k+sjYxg5ixbFXstDpgDYRIllq8lfXAPJWq0Xk9Fg=
+	t=1767821365; cv=none; b=mzkITT6S/6BlgP08qsHbbJdH1WtC4tCHEcXmCpC3RLcCsH96tLcgDXP/1jZygiq2i0zYyblevuNs7Bgndiq+MoPZ9sV4woml0ujM2OMfKieBIVnIc2m78JP3yerQrlttGaC/4Ahvq01gJyeGat/AD3+CB4PC0K15aFux5eYWon0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767819215; c=relaxed/simple;
-	bh=d9cyx/YAvf1aIW8KBGCLVirG2QSe0/UVBSpNRs6IGBI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=bqHTrJmJXky3edgdArfYdak+K2J110hyh5Fz2yXAEt8cErTQFZURmxFv0P87LDvsYmsjNI6zXjctz5iPVEq9ekU9Sg497fS/bGWCmwZ0Q9jNgzH+lZnUWbXAQZMJPis5nuZCPo0TtPpRx51wPHlEAQwGrgXzaqViIrvs9IySCKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yxg3WAX0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE20C4CEF1;
-	Wed,  7 Jan 2026 20:53:33 +0000 (UTC)
+	s=arc-20240116; t=1767821365; c=relaxed/simple;
+	bh=pm770hh4O2MaMARtanwz/nSS37WcPCggw0QXX3rwW8k=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=mCAt1oc3umwBfIXXyvIKYXvGhGHGOEFu18pGXrLg/tnQsCQgiGeTWdRFB+lKoA3E97krpoMCIEpcNPfmn3K/z562AE35MWzH0adfCCZ/TUT3Vv7HJvCXut2dT76AD5P6ioE5BNAaCAfKye065/7QGcGNWusQaPpc5AOw49UJGr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qXwn5Jda; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9283EC4CEF1;
+	Wed,  7 Jan 2026 21:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767819214;
-	bh=d9cyx/YAvf1aIW8KBGCLVirG2QSe0/UVBSpNRs6IGBI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=Yxg3WAX0ewgE6zRlk3Z7tXzaADG5/5pTNTPT4L3WbU49vSe/6fOoB8GABQfhOkk6J
-	 7gpjbW1qS0GRWMRyZ4ZHcpdIrJ+GEGTMohcr+smaMv4bIaCYOl1OWv+BzUAgdzjfp+
-	 bcW22LU5GxDsMnDzTTuLduo7LqYHD4oGSEEHFWDlIxweYumd9DZovs4MOlpqcEBDG3
-	 MrRYzqxWkLblihlV4qisLT8P56F1xn7NkxMfDCmhny1XFmBNa7OUKKnQUtr1R/ToSI
-	 tG7vYP1LgCJLCdtTYFHfq/gGpR5EoZPvR20VZ00eSUEOTy9UhZBNhiCqweSRTsIhiH
-	 fEKTLZEZbiQNQ==
-Date: Wed, 7 Jan 2026 21:53:31 +0100 (CET)
-From: Jiri Kosina <jikos@kernel.org>
-To: =?ISO-8859-15?Q?Rodrigo_Lugathe_da_Concei=E7=E3o_Alves?= <lugathe2@gmail.com>
-cc: bentiss@kernel.org, linux-input@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-    stern@rowland.harvard.edu, dmitry.torokhov@gmail.com, 
-    linuxhid@cosmicgizmosystems.com, linuxsound@cosmicgizmosystems.com, 
-    michal.pecio@gmail.com
-Subject: Re: [PATCH v3] HID: Apply quirk HID_QUIRK_ALWAYS_POLL to Edifier
- QR30 (2d99:a101)
-In-Reply-To: <20251127220357.1218420-1-lugathe2@gmail.com>
-Message-ID: <144738o8-qn08-3pr8-1orq-o5r5s11q37o4@xreary.bet>
-References: <20251127220357.1218420-1-lugathe2@gmail.com>
+	s=k20201202; t=1767821364;
+	bh=pm770hh4O2MaMARtanwz/nSS37WcPCggw0QXX3rwW8k=;
+	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
+	b=qXwn5Jda0GWsfHNPYITlcuA16Vxr0+P9lSRk9DGFkjEs9HMXMe+9bVK13atzBOU0C
+	 EDFcme+JU+TwUIPp58nZ7bA01q5/NF6hCz6+TFLqnzQ5QT/h7jirOHnamp9QykbHr8
+	 vLb2UKwVglDoNffGZ0kfnzKGnQ5wVkOMT7e7RHpyyRjKXgOVzGNOzrcStESK7twOgN
+	 UOVqYDabgW5/mIlX3bb17D10nS+BnLJIrvEwxzz/0KmVVjONIUfr2eJ2NfHuDqP7T2
+	 Dl+p74tsUG7WalXW03IrR3LKvU44KblxAePIW0y401l+wzD6Gsz2zZHz1G4bQ5y0/M
+	 zZlk/MYftq6Hw==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Date: Wed, 07 Jan 2026 22:29:19 +0100
+Message-Id: <DFIODD3AJUDB.1YR5XJSI07V3V@kernel.org>
+To: <gregkh@linuxfoundation.org>, <rafael@kernel.org>, <ojeda@kernel.org>,
+ <boqun.feng@gmail.com>, <gary@garyguo.net>, <bjorn3_gh@protonmail.com>,
+ <lossin@kernel.org>, <a.hindborg@kernel.org>, <aliceryhl@google.com>,
+ <tmgross@umich.edu>, <david.m.ertman@intel.com>, <ira.weiny@intel.com>,
+ <leon@kernel.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH 1/5] rust: auxiliary: use "kernel vertical" style for
+ imports
+Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <linux-usb@vger.kernel.org>
+References: <20260105142123.95030-1-dakr@kernel.org>
+In-Reply-To: <20260105142123.95030-1-dakr@kernel.org>
 
-On Thu, 27 Nov 2025, Rodrigo Lugathe da Concei=C3=A7=C3=A3o Alves wrote:
+On Mon Jan 5, 2026 at 3:19 PM CET, Danilo Krummrich wrote:
+> Convert all imports to use "kernel vertical" style.
+>
+> With this, subsequent patches neither introduce unrelated changes nor
+> leave an inconsistent import pattern.
+>
+> While at it, drop unnecessary imports covered by prelude::*.
+>
+> Link: https://docs.kernel.org/rust/coding-guidelines.html#imports
+> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
 
-> The USB speaker has a bug that causes it to reboot when changing the
-> brightness using the physical knob.
->=20
-> Add a new vendor and product ID entry in hid-ids.h, and register
-> the corresponding device in hid-quirks.c with the required quirk.
->=20
-> Signed-off-by: Rodrigo Lugathe da Concei=C3=A7=C3=A3o Alves <lugathe2@gma=
-il.com>
-
-Applied to hid.git#for-6.19/upstream-fixes. Thanks,
-
---=20
-Jiri Kosina
-SUSE Labs
-
+Applied to driver-core-testing, thanks!
 
