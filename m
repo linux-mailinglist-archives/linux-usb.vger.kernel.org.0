@@ -1,113 +1,120 @@
-Return-Path: <linux-usb+bounces-31980-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31981-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E8DDCFCDFF
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 10:34:01 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 933B4CFD122
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 11:02:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DC17F30028B0
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 09:34:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3E78E3074F46
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 10:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E002F7475;
-	Wed,  7 Jan 2026 09:33:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E55532E732;
+	Wed,  7 Jan 2026 09:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RhfNwhml"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WswTie/n"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67E1220F49;
-	Wed,  7 Jan 2026 09:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A0432E72B
+	for <linux-usb@vger.kernel.org>; Wed,  7 Jan 2026 09:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767778438; cv=none; b=t2hP1JuQALmUMhtFj/bNV3dubtrYx6hGZ7thWHSY/xmw2pmY8Bd6IDMYlhJD5GeWetRduzMWOC0kYwxtro9Aj8F8NoHnYC767eJPDaUweXdRNCUBfdmBiYxQzATdC8llpbXfQzX95QGrbO2ajOXSuqulYz9JPxpoBjFmaU6unQs=
+	t=1767779576; cv=none; b=M58gj83yI9QcxRKcm9TXyPfW1dwW+wh0t8grQ5aLj58qjVaInzDyp+aG3qEdQhBIzsrXo4teWDO6pJecPpSSyFV96gVsO9pSf1ZHleW8wFBzwEsjbU4aw9WDNA5mKXcq4WEdfobuXDCxQJlKeWpgpvbMUUvrmliUOBq/ZDwW3I4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767778438; c=relaxed/simple;
-	bh=bnHmxdh1FeNx/GO2QTX1Itdvc+HNVyrzFaSiVi6IJzE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cl7KFyDrjtbK0EDhj3rORCG8/KW7eVQx3+GfqwF2ji+ndwdPziq34Aff5iGdNqdbl33aOO5KvhVIsnhtLUXtyzOQPjp62FjZgX942z7f5OHowScl9zD8D07T6z2sIre8i4prlXKGC0sNaoMnY0zYYyQrFZOqixRTRuK5yFz989I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RhfNwhml; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767778436; x=1799314436;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bnHmxdh1FeNx/GO2QTX1Itdvc+HNVyrzFaSiVi6IJzE=;
-  b=RhfNwhmlRg6vJu5WpEwyP5jB1CBAR1fdqnHjDeCCVbKFfeRMdcV4zQuR
-   BN0zhhHMqKtFIBgIPtj666/M2JIpMnxJmTwKgDfpiMN6tzMq8gsyv4sbX
-   kkSJY+kZyVHQEFLtFFTzlNpk9on4DBwnB1Ijh7UanLV4UprN+kEAw7O2s
-   aZCmCIpc6dU/qitrtexp9MXIiVpVEyTdxIrFyQbWlSWSeexDF/R4u32D3
-   s4GtvH0Nr9VBX99ey/YdojG7zuiYpSPQr9DXPjlRf0qynZ1V/jLG7jRE1
-   iKMoKUp8gR3fAq5ntiOzpL1G97jT/B1cSPLt3UsV0Din4Y3W4CH6izQuv
-   A==;
-X-CSE-ConnectionGUID: 3t3AjH5zROSkaBjxOiyygg==
-X-CSE-MsgGUID: Ya9G7mGGR6iuZjqCALqkIA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11663"; a="72776883"
-X-IronPort-AV: E=Sophos;i="6.21,207,1763452800"; 
-   d="scan'208";a="72776883"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 01:33:56 -0800
-X-CSE-ConnectionGUID: lDdQhBghTEGcFnvYWPHZUA==
-X-CSE-MsgGUID: /Wc6r8BLQEqqHsX+yeBjEw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,207,1763452800"; 
-   d="scan'208";a="207027959"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa003.jf.intel.com with ESMTP; 07 Jan 2026 01:33:54 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id AD54E98; Wed, 07 Jan 2026 10:33:53 +0100 (CET)
-Date: Wed, 7 Jan 2026 10:33:53 +0100
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [PATCH v2 0/2] thunderbolt: Fix S4 resume incongruities
-Message-ID: <20260107093353.GO2275908@black.igk.intel.com>
-References: <20260106053749.61440-1-superm1@kernel.org>
+	s=arc-20240116; t=1767779576; c=relaxed/simple;
+	bh=rvvOv0vv9H8q++Ltdf0WVIDOuGmNQfGsyInkVBB65VM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TYLJh43yuwFXxhKBEzPmHG31Ko+TdrWAopPhEQ724v1I455lGJPV3Ma5jphWp4G/htX3rDfg0ts0kIwE7hGsrjKM+BxGZdGpEQP15GQfHkij3f8vcIew8XOosU0Hua8tjTkwmkMdQG4xGCmkgX5yo9U9zxA0aljgd13bjIRZMwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WswTie/n; arc=none smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2abf5900cd5so1342890eec.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jan 2026 01:52:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767779570; x=1768384370; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rvvOv0vv9H8q++Ltdf0WVIDOuGmNQfGsyInkVBB65VM=;
+        b=WswTie/n5RBFA0VsXfSj6Grz4pfH3N8bWz7h4XXYcQYM0vqU1QkjNe/l6SWrgFNX/H
+         HqaQjv483NMUVuzWVxSwKLhasfeaF/eGNqEYH8mals3YX3Lj5fj8ubvcmykAx6hrRBlt
+         sHSFw+yWhOdxMFDrtIvtpoUZc/tNO5+5jywWByOvTuEHuragievh59iIFtlwvtBuYZiY
+         b7qJt16EnXBtugx8VgH+fb47WuJV7S1nATJ7Y3yua5IHepk1GkzvLEA/haDx7wMdCWZD
+         E8j2hykGCKTWHFzHqpOzqTIF8ruDCe5I6xJMj+NP0f3xOEUVKnTIIOuilctYWHdJig7Y
+         sANg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767779570; x=1768384370;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rvvOv0vv9H8q++Ltdf0WVIDOuGmNQfGsyInkVBB65VM=;
+        b=ozG2Hdb2Nnp8q8iRqVZRhyzW4PKz7jRQZ9dtFZy+Iy9f8LdNDchT9ZRvAd/4sA7isk
+         PnDWIDNVwG0AIq680Q1EkDh6BORSK51YWWOImT4hStKBZMWs/EK2U/4x8OYbCxJgAooz
+         jfRQO/+bc9sNXR6QQdcCMVC4C/bhazMD70zjSmatN/m3HCuLIZJ6ubBztup8PZQZrck3
+         raUkgRYsZM6kLTSj0Bht3JT4+m2sq5qD8ClledeT49fR0ECSPgjSSkgaZkoFNiNWdr02
+         CPHGJCt0fbyb/cEPzuEybQg13DT+w7201SfiR+8s4nsqsOWKhnMmyTt4IOYvJ3pE1Nf1
+         7psQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWAy5GG5FMtjkD3LhbsnwjbBKpncQQyBf+ZPoJNTIbohDt0tXE4AhiYMmMni9n3HSLKJBHZbyEoJxw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMD2QrOpoA045Tmmd+cKvGQ+jlzFvAXMroO9lwI0XJ4oEHGQv0
+	DIZmWmJJnUFLfIf6/ORNjKd7VxG3FNOb1t8yVQ5an1ti6dytt5+TM9CwF4sFX3tDakrlxHe3Kn2
+	XVS5/DAwrZhrmLbN4yr+cf8V1zo56N/hyw3OyzgY=
+X-Gm-Gg: AY/fxX6NBuOKvIuzE/cblAYVikra6oairIwPnh8HEUMIbxTBuIKggjuFnIWI04RXltI
+	xNKj66Y+DbS+QPjQ9oeoeHK/H9pn9RLS2ssgFjabXsoSX1rc9EISfJucKLJVHZwa/m7jB7SDGXG
+	7Fgir6/dw+W/ZxaYngdM8aHvdqO36Yll6n8ojRyRJw9Tgn9P13dFxDNvmVt22iLeXjB6VZxn7Q9
+	01XWzA3dmU2PwPgzhCzGXbalwD5YakHkYCHGNZG/Hf6IfYJmNQrW1m5ayx872gzPOdwrfA=
+X-Google-Smtp-Source: AGHT+IEsT6AYnql0T7zlCNvOahx8BTYyJ+IW0sH1UvnJzbYCCmPWp7Cct2vMxCYT86QC+/C8HxYvBejoGMBDAF+WblE=
+X-Received: by 2002:a05:7300:5781:b0:2ae:5e6b:dc41 with SMTP id
+ 5a478bee46e88-2b17d21b748mr1497359eec.14.1767779570503; Wed, 07 Jan 2026
+ 01:52:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260106053749.61440-1-superm1@kernel.org>
+References: <20260103083232.9510-1-linux.amoon@gmail.com> <20260103083232.9510-4-linux.amoon@gmail.com>
+ <6f30a01c-8fc4-4368-88ef-7c513c505515@kernel.org>
+In-Reply-To: <6f30a01c-8fc4-4368-88ef-7c513c505515@kernel.org>
+From: =?UTF-8?B?5byg5rC45rOi?= <giraffesnn123@gmail.com>
+Date: Wed, 7 Jan 2026 17:52:38 +0800
+X-Gm-Features: AQt7F2p0-kEhpv052gHNNvlDi9s6r7fu21_si4nAOG3q3nXtXMATV47Jwa2xpS8
+Message-ID: <CACpCAL0GLMV-2p1tKAXe6R+N2c4YadH9vpEG3GdPoHTNTQSuow@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] usb: typec: fusb302: Switch to threaded interrupt handler
+To: Hans de Goede <hansg@kernel.org>
+Cc: Anand Moon <linux.amoon@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, FUKAUMI Naoki <naoki@radxa.com>, 
+	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
+	"moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>, 
+	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+> Still ideally we would solve this in another way then
+> switching to a threaded IRQ handler.
+>
+> As the commit message of the mei-vsc fix mentions
+> the root cause of these errors is typically an interrupt
+> chip driver which uses IRQF_NO_THREAD disabling the auto
+> threading of all interrupt handlers in RT mode.
+>
+> So the first question here would be to see if that flag is
+> used in the interrupt chip and if yes, is that flag really
+> necessary ?
+This is very similar to the issue addressed in commit 24b176d8827d
+("drm/msm/dsi: Remove spurious IRQF_ONESHOT flag").
+The IRQF_ONESHOT flag is preventing forced threading here.
 
-On Mon, Jan 05, 2026 at 11:37:47PM -0600, Mario Limonciello (AMD) wrote:
-> When a machine is restored from S4 if the firmware CM has created
-> tunnels there can be an incongruity of expectation from the kernel
-> when compared to booting from S5.  This series addresses those.
+In irq_setup_forced_threading(), the conversion to threaded interrupts
+is explicitly skipped if any of the IRQF_NO_THREAD, IRQF_PERCPU,
+or IRQF_ONESHOT flags are present. In this case, IRQF_ONESHOT
+appears to be the reason.
 
-I suspect there is no Firmware CM in AMD platforms so this actually means
-the BIOS CM, correct?
-
-However, on S4 we actually do reset host router when the "boot kernel" is
-started before loading and jumping to the hibernation image. It might be
-that this boot kernel tunnel configuration is causing the issues you are
-seeing (can you elaborate on those?) but given that it is (typically the
-same kernel binary) it should be creating the tunnels the same way.
-
-> 
-> v1:
-> Link: https://lore.kernel.org/linux-usb/20251023050354.115015-1-superm1@kernel.org/
-> 
-> Mario Limonciello (AMD) (2):
->   thunderbolt: Move nhi_reset before pmops declaration
->   thunderbolt: Reset NHI during S4 restore_noirq() callback
-> 
->  drivers/thunderbolt/nhi.c | 77 ++++++++++++++++++++++-----------------
->  drivers/thunderbolt/tb.c  | 29 ++++++++-------
->  drivers/thunderbolt/tb.h  |  1 +
->  3 files changed, 61 insertions(+), 46 deletions(-)
-> 
-> -- 
-> 2.43.0
+Regards,
+giraffesnn
 
