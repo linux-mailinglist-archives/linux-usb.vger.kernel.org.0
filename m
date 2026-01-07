@@ -1,117 +1,405 @@
-Return-Path: <linux-usb+bounces-31996-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31993-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19507CFD4C3
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 12:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 889A3CFD54D
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 12:08:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 158B730A1AA6
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 10:52:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 094FC30970A9
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 11:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB71B322B7D;
-	Wed,  7 Jan 2026 10:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE96D314B60;
+	Wed,  7 Jan 2026 10:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ckVthmuU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X70SgUj/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6A82417C3;
-	Wed,  7 Jan 2026 10:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1244730DED4;
+	Wed,  7 Jan 2026 10:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767783170; cv=none; b=DoWbewsXURv8c1k8EBBztXiPsTXqqQzONBcMNzETV3xJZNLfAGy/IZo4TJChVPcXpWvfPDi87Sc4RekgTTJANJR1Ndras7ooWQEt8vfELtTeEkkzxWKCZfspCmkGKpjJTcjgibeWobH7WVvBUvc+jLuPl97RDB11BDl/cEzrr5Y=
+	t=1767782157; cv=none; b=t5cNMiu9cv2chSx81SWGtTeZM8XYd2unm84MhBXBlMrJaU7u31cPhOUg6Uvk5znWg8GAtmmE3FtOZwbhX0pIbWP+w++mkjQ4/YLQqYGZ+qmYtteTc0HOEqo/EbbWp3QNAAm7u9ZAK8Rt44uLFaNtSj6W2pl0V2X/jNS8hUdUSUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767783170; c=relaxed/simple;
-	bh=DUPfhQrr6JmsNOZ+CZkxyykOITDhWOpKmSkWkyOkKbs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K7eCkATLOFLlQQhI5t+xsxiL3QmRqTCtYKrS6NtVwrkMjw32eKGzHQvy7Kp0Gqzh4B7NshY8CaAIucq7XgPX0br5C6XQm64g8SFn4/7/7Abpbr1Mj9hWVzb2yAOS1u6L2GjXViQBcHt7/7oQZA+E+JMch1fhhWKoiMjnlh6GPHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ckVthmuU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C0D6C4CEF7;
-	Wed,  7 Jan 2026 10:52:46 +0000 (UTC)
+	s=arc-20240116; t=1767782157; c=relaxed/simple;
+	bh=N18NZ3MvjG11zo05vBY5H6zEWihoOHUn/jN+IusSagk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Wnfu79ptwS4W6bih3FLO9lRYE3Wjq2KfJZYCxOyzsvzPNBKQOW/h6XHCdfOfNJYpgojTWlG5XkxIqaqvnI10v9lBfvlgZlbiOxleH0uFJojVqyPAhYYF1JaxXGJzVWIG1XudHug6Xi/CYhKB5cMhl5Dc++pTnkyRlZp5S+0i+qY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X70SgUj/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF8AC2BC9E;
+	Wed,  7 Jan 2026 10:35:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767783169;
-	bh=DUPfhQrr6JmsNOZ+CZkxyykOITDhWOpKmSkWkyOkKbs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ckVthmuUcZvDSlqlewy/Kb/0H0z9BF+bBYcIAw27KQ3c3NmdvXya8myv9+GoPEXrA
-	 A5xs9jJ54qtmCIwJAzoSLo6BBxnPuM9s/t0QWsf+tKYaz0kKoS4bGbM5mEwoEb2kXB
-	 W+EYW+kRftV9Q7tbpAx6XgsH2bu1pu80ToV5bcABTzafxespe1jlLasXmZmwxNxd4X
-	 2KTfcVLSTsFiDvQtVlvQOTH7BuY0t3+0OFzw5k0frvDJYAF81W2HIpmTRriSZqheQ1
-	 YO5zupcgJWtnGiJkjaNFgxIcYFUBj3bwGg09gi12jpkYSbqV5oLu1tQ+QPlDQUKNRE
-	 h1vtfC+TizTwQ==
-Message-ID: <080d9ed6-18f9-437e-89d4-aba8f69120fb@kernel.org>
-Date: Wed, 7 Jan 2026 11:52:44 +0100
+	s=k20201202; t=1767782156;
+	bh=N18NZ3MvjG11zo05vBY5H6zEWihoOHUn/jN+IusSagk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=X70SgUj/DeYJ+TJzCQraKyNYXN/wVdOJb0fKPYuP8NfuvTZUmihzX/Bv7IB44HN6x
+	 n5TV+eRigt4iqq8X7WSGfE655xrVHEc60tPaPF2dCzocScNAfpP/s12O4igs/lbdR0
+	 yrWYPU8nS7z6qIM3tpPiI3Fo84DdFZr5cyYsqBZCesWDG3zmcbZQbRjlswrBEqefgj
+	 596hamNn6eURii26t9rKWUx9WMpCNA/QLdPpXDwpYSQN6InXv5K8G1PCNRHRdeh9sq
+	 HH7c2HtRc7dq0T+2luWFdlKQbkY8P2G9qZq86DsrCICLAhbhq0Bj6v/R0hDb8Mcwb6
+	 Vv9Sgzoo7Zr6Q==
+From: Danilo Krummrich <dakr@kernel.org>
+To: gregkh@linuxfoundation.org,
+	rafael@kernel.org,
+	igor.korotin.linux@gmail.com,
+	ojeda@kernel.org,
+	boqun.feng@gmail.com,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	david.m.ertman@intel.com,
+	ira.weiny@intel.com,
+	leon@kernel.org,
+	bhelgaas@google.com,
+	kwilczynski@kernel.org,
+	wsa+renesas@sang-engineering.com
+Cc: linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Danilo Krummrich <dakr@kernel.org>
+Subject: [PATCH 6/6] rust: driver: drop device private data post unbind
+Date: Wed,  7 Jan 2026 11:35:05 +0100
+Message-ID: <20260107103511.570525-7-dakr@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260107103511.570525-1-dakr@kernel.org>
+References: <20260107103511.570525-1-dakr@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/3] usb: typec: fusb302: Switch to threaded interrupt
- handler
-To: =?UTF-8?B?5byg5rC45rOi?= <giraffesnn123@gmail.com>
-Cc: Anand Moon <linux.amoon@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- FUKAUMI Naoki <naoki@radxa.com>,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
- "moderated list:ARM/Rockchip SoC support"
- <linux-arm-kernel@lists.infradead.org>,
- "open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
-References: <20260103083232.9510-1-linux.amoon@gmail.com>
- <20260103083232.9510-4-linux.amoon@gmail.com>
- <6f30a01c-8fc4-4368-88ef-7c513c505515@kernel.org>
- <CACpCAL0GLMV-2p1tKAXe6R+N2c4YadH9vpEG3GdPoHTNTQSuow@mail.gmail.com>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <CACpCAL0GLMV-2p1tKAXe6R+N2c4YadH9vpEG3GdPoHTNTQSuow@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Currently, the driver's device private data is allocated and initialized
+from driver core code called from bus abstractions after the driver's
+probe() callback returned the corresponding initializer.
 
-On 7-Jan-26 10:52, 张永波 wrote:
->> Still ideally we would solve this in another way then
->> switching to a threaded IRQ handler.
->>
->> As the commit message of the mei-vsc fix mentions
->> the root cause of these errors is typically an interrupt
->> chip driver which uses IRQF_NO_THREAD disabling the auto
->> threading of all interrupt handlers in RT mode.
->>
->> So the first question here would be to see if that flag is
->> used in the interrupt chip and if yes, is that flag really
->> necessary ?
-> This is very similar to the issue addressed in commit 24b176d8827d
-> ("drm/msm/dsi: Remove spurious IRQF_ONESHOT flag").
-> The IRQF_ONESHOT flag is preventing forced threading here.
-> 
-> In irq_setup_forced_threading(), the conversion to threaded interrupts
-> is explicitly skipped if any of the IRQF_NO_THREAD, IRQF_PERCPU,
-> or IRQF_ONESHOT flags are present. In this case, IRQF_ONESHOT
-> appears to be the reason.
+Similarly, the driver's device private data is dropped within the
+remove() callback of bus abstractions after calling the remove()
+callback of the corresponding driver.
 
-Ah, well the code effectively does its own IRQF_ONESHOT handling,
-since it needs to do its own threaded-irq like handling for
-suspend/resume reasons. It disables the IRQ when it fires and
-then only re-enables it once the work has done processing the IRQ.
+However, commit 6f61a2637abe ("rust: device: introduce
+Device::drvdata()") introduced an accessor for the driver's device
+private data for a Device<Bound>, i.e. a device that is currently bound
+to a driver.
 
-So it should be perfectly safe to drop the IRQF_ONESHOT flag.
+Obviously, this is in conflict with dropping the driver's device private
+data in remove(), since a device can not be considered to be fully
+unbound after remove() has finished:
 
-If that also works to resolve the lockdep issue that would be
-the preferred way of fixing this IMHO.
+We also have to consider registrations guarded by devres - such as IRQ
+or class device registrations - which are torn down after remove() in
+devres_release_all().
 
-Regards,
+Thus, it can happen that, for instance, a class device or IRQ callback
+still calls Device::drvdata(), which then runs concurrently to remove()
+(which sets dev->driver_data to NULL and drops the driver's device
+private data), before devres_release_all() started to tear down the
+corresponding registration. This is because devres guarded registrations
+can, as expected, access the corresponding Device<Bound> that defines
+their scope.
 
-Hans
+In C it simply is the driver's responsibility to ensure that its device
+private data is freed after e.g. an IRQ registration is unregistered.
+
+Typically, C drivers achieve this by allocating their device private data
+with e.g. devm_kzalloc() before doing anything else, i.e. before e.g.
+registering an IRQ with devm_request_threaded_irq(), relying on the
+reverse order cleanup of devres.
+
+Technically, we could do something similar in Rust. However, the
+resulting code would be pretty messy:
+
+In Rust we have to differentiate between allocated but uninitialized
+memory and initialized memory in the type system. Thus, we would need to
+somehow keep track of whether the driver's device private data object
+has been initialized (i.e. probe() was successful and returned a valid
+initializer for this memory) and conditionally call the destructor of
+the corresponding object when it is freed.
+
+This is because we'd need to allocate and register the memory of the
+driver's device private data *before* it is initialized by the
+initializer returned by the driver's probe() callback, because the
+driver could already register devres guarded registrations within
+probe() outside of the driver's device private data initializer.
+
+Luckily there is a much simpler solution: Instead of dropping the
+driver's device private data at the end of remove(), we just drop it
+after the device has been fully unbound, i.e. after all devres callbacks
+have been processed.
+
+For this, we introduce a new post_unbind() callback private to the
+driver-core, i.e. the callback is neither exposed to drivers, nor to bus
+abstractions.
+
+This way, the driver-core code can simply continue to conditionally
+allocate the memory for the driver's device private data when the
+driver's initializer is returned from probe() - no change needed - and
+drop it when the driver-core code receives the post_unbind() callback.
+
+Closes: https://lore.kernel.org/all/DEZMS6Y4A7XE.XE7EUBT5SJFJ@kernel.org/
+Fixes: 6f61a2637abe ("rust: device: introduce Device::drvdata()")
+Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+---
+ drivers/base/dd.c             |  4 ++++
+ include/linux/device/driver.h | 11 +++++++++++
+ rust/kernel/auxiliary.rs      |  4 ++--
+ rust/kernel/device.rs         | 20 ++++++++++---------
+ rust/kernel/driver.rs         | 36 ++++++++++++++++++++++++++++++++++-
+ rust/kernel/i2c.rs            |  4 ++--
+ rust/kernel/pci.rs            |  4 ++--
+ rust/kernel/platform.rs       |  4 ++--
+ rust/kernel/usb.rs            |  4 ++--
+ 9 files changed, 71 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 349f31bedfa1..2d9871503614 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -548,6 +548,10 @@ static DEVICE_ATTR_RW(state_synced);
+ static void device_unbind_cleanup(struct device *dev)
+ {
+ 	devres_release_all(dev);
++#ifdef CONFIG_RUST
++	if (dev->driver->p_cb.post_unbind)
++		dev->driver->p_cb.post_unbind(dev);
++#endif
+ 	arch_teardown_dma_ops(dev);
+ 	kfree(dev->dma_range_map);
+ 	dev->dma_range_map = NULL;
+diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+index cd8e0f0a634b..51a9ebdd8a2d 100644
+--- a/include/linux/device/driver.h
++++ b/include/linux/device/driver.h
+@@ -85,6 +85,8 @@ enum probe_type {
+  *		uevent.
+  * @p:		Driver core's private data, no one other than the driver
+  *		core can touch this.
++ * @p_cb:	Callbacks private to the driver core; no one other than the
++ *		driver core is allowed to touch this.
+  *
+  * The device driver-model tracks all of the drivers known to the system.
+  * The main reason for this tracking is to enable the driver core to match
+@@ -119,6 +121,15 @@ struct device_driver {
+ 	void (*coredump) (struct device *dev);
+ 
+ 	struct driver_private *p;
++#ifdef CONFIG_RUST
++	struct {
++		/*
++		 * Called after remove() and after all devres entries have been
++		 * processed.
++		 */
++		void (*post_unbind)(struct device *dev);
++	} p_cb;
++#endif
+ };
+ 
+ 
+diff --git a/rust/kernel/auxiliary.rs b/rust/kernel/auxiliary.rs
+index cb26238e95b0..2b4a9aaabb65 100644
+--- a/rust/kernel/auxiliary.rs
++++ b/rust/kernel/auxiliary.rs
+@@ -96,9 +96,9 @@ extern "C" fn remove_callback(adev: *mut bindings::auxiliary_device) {
+         // SAFETY: `remove_callback` is only ever called after a successful call to
+         // `probe_callback`, hence it's guaranteed that `Device::set_drvdata()` has been called
+         // and stored a `Pin<KBox<T>>`.
+-        let data = unsafe { adev.as_ref().drvdata_obtain::<T>() };
++        let data = unsafe { adev.as_ref().drvdata_borrow::<T>() };
+ 
+-        T::unbind(adev, data.as_ref());
++        T::unbind(adev, data);
+     }
+ }
+ 
+diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+index 71b200df0f40..031720bf5d8c 100644
+--- a/rust/kernel/device.rs
++++ b/rust/kernel/device.rs
+@@ -232,30 +232,32 @@ pub fn set_drvdata<T: 'static>(&self, data: impl PinInit<T, Error>) -> Result {
+     ///
+     /// # Safety
+     ///
+-    /// - Must only be called once after a preceding call to [`Device::set_drvdata`].
+     /// - The type `T` must match the type of the `ForeignOwnable` previously stored by
+     ///   [`Device::set_drvdata`].
+-    pub unsafe fn drvdata_obtain<T: 'static>(&self) -> Pin<KBox<T>> {
++    pub(crate) unsafe fn drvdata_obtain<T: 'static>(&self) -> Option<Pin<KBox<T>>> {
+         // SAFETY: By the type invariants, `self.as_raw()` is a valid pointer to a `struct device`.
+         let ptr = unsafe { bindings::dev_get_drvdata(self.as_raw()) };
+ 
+         // SAFETY: By the type invariants, `self.as_raw()` is a valid pointer to a `struct device`.
+         unsafe { bindings::dev_set_drvdata(self.as_raw(), core::ptr::null_mut()) };
+ 
++        if ptr.is_null() {
++            return None;
++        }
++
+         // SAFETY:
+-        // - By the safety requirements of this function, `ptr` comes from a previous call to
+-        //   `into_foreign()`.
++        // - If `ptr` is not NULL, it comes from a previous call to `into_foreign()`.
+         // - `dev_get_drvdata()` guarantees to return the same pointer given to `dev_set_drvdata()`
+         //   in `into_foreign()`.
+-        unsafe { Pin::<KBox<T>>::from_foreign(ptr.cast()) }
++        Some(unsafe { Pin::<KBox<T>>::from_foreign(ptr.cast()) })
+     }
+ 
+     /// Borrow the driver's private data bound to this [`Device`].
+     ///
+     /// # Safety
+     ///
+-    /// - Must only be called after a preceding call to [`Device::set_drvdata`] and before
+-    ///   [`Device::drvdata_obtain`].
++    /// - Must only be called after a preceding call to [`Device::set_drvdata`] and before the
++    ///   device is fully unbound.
+     /// - The type `T` must match the type of the `ForeignOwnable` previously stored by
+     ///   [`Device::set_drvdata`].
+     pub unsafe fn drvdata_borrow<T: 'static>(&self) -> Pin<&T> {
+@@ -271,7 +273,7 @@ impl Device<Bound> {
+     /// # Safety
+     ///
+     /// - Must only be called after a preceding call to [`Device::set_drvdata`] and before
+-    ///   [`Device::drvdata_obtain`].
++    ///   the device is fully unbound.
+     /// - The type `T` must match the type of the `ForeignOwnable` previously stored by
+     ///   [`Device::set_drvdata`].
+     unsafe fn drvdata_unchecked<T: 'static>(&self) -> Pin<&T> {
+@@ -320,7 +322,7 @@ pub fn drvdata<T: 'static>(&self) -> Result<Pin<&T>> {
+ 
+         // SAFETY:
+         // - The above check of `dev_get_drvdata()` guarantees that we are called after
+-        //   `set_drvdata()` and before `drvdata_obtain()`.
++        //   `set_drvdata()`.
+         // - We've just checked that the type of the driver's private data is in fact `T`.
+         Ok(unsafe { self.drvdata_unchecked() })
+     }
+diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
+index 77c1f7434897..6e32376d4c7c 100644
+--- a/rust/kernel/driver.rs
++++ b/rust/kernel/driver.rs
+@@ -177,7 +177,39 @@ unsafe impl<T: RegistrationOps> Sync for Registration<T> {}
+ // any thread, so `Registration` is `Send`.
+ unsafe impl<T: RegistrationOps> Send for Registration<T> {}
+ 
+-impl<T: RegistrationOps> Registration<T> {
++impl<T: RegistrationOps + 'static> Registration<T> {
++    extern "C" fn post_unbind_callback(dev: *mut bindings::device) {
++        // SAFETY: The driver core only ever calls the post unbind callback with a valid pointer to
++        // a `struct device`.
++        //
++        // INVARIANT: `dev` is valid for the duration of the `post_unbind_callback()`.
++        let dev = unsafe { &*dev.cast::<device::Device<device::CoreInternal>>() };
++
++        // `remove()` and all devres callbacks have been completed at this point, hence drop the
++        // driver's device private data.
++        //
++        // SAFETY: By the safety requirements of the `Driver` trait, `T::DriverData` is the
++        // driver's device private data.
++        drop(unsafe { dev.drvdata_obtain::<T::DriverData>() });
++    }
++
++    /// Attach generic `struct device_driver` callbacks.
++    fn callbacks_attach(drv: &Opaque<T::DriverType>) {
++        let ptr = drv.get().cast::<u8>();
++
++        // SAFETY:
++        // - `drv.get()` yields a valid pointer to `Self::DriverType`.
++        // - Adding `DEVICE_DRIVER_OFFSET` yields the address of the embedded `struct device_driver`
++        //   as guaranteed by the safety requirements of the `Driver` trait.
++        let base = unsafe { ptr.add(T::DEVICE_DRIVER_OFFSET) };
++
++        // CAST: `base` points to the offset of the embedded `struct device_driver`.
++        let base = base.cast::<bindings::device_driver>();
++
++        // SAFETY: It is safe to set the fields of `struct device_driver` on initialization.
++        unsafe { (*base).p_cb.post_unbind = Some(Self::post_unbind_callback) };
++    }
++
+     /// Creates a new instance of the registration object.
+     pub fn new(name: &'static CStr, module: &'static ThisModule) -> impl PinInit<Self, Error> {
+         try_pin_init!(Self {
+@@ -189,6 +221,8 @@ pub fn new(name: &'static CStr, module: &'static ThisModule) -> impl PinInit<Sel
+                 // just been initialised above, so it's also valid for read.
+                 let drv = unsafe { &*(ptr as *const Opaque<T::DriverType>) };
+ 
++                Self::callbacks_attach(drv);
++
+                 // SAFETY: `drv` is guaranteed to be pinned until `T::unregister`.
+                 unsafe { T::register(drv, name, module) }
+             }),
+diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
+index 6a3923a8b8a7..c1813f94da7a 100644
+--- a/rust/kernel/i2c.rs
++++ b/rust/kernel/i2c.rs
+@@ -178,9 +178,9 @@ extern "C" fn remove_callback(idev: *mut bindings::i2c_client) {
+         // SAFETY: `remove_callback` is only ever called after a successful call to
+         // `probe_callback`, hence it's guaranteed that `I2cClient::set_drvdata()` has been called
+         // and stored a `Pin<KBox<T>>`.
+-        let data = unsafe { idev.as_ref().drvdata_obtain::<T>() };
++        let data = unsafe { idev.as_ref().drvdata_borrow::<T>() };
+ 
+-        T::unbind(idev, data.as_ref());
++        T::unbind(idev, data);
+     }
+ 
+     extern "C" fn shutdown_callback(idev: *mut bindings::i2c_client) {
+diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
+index fe63b53d55d6..8fdc18faeb4c 100644
+--- a/rust/kernel/pci.rs
++++ b/rust/kernel/pci.rs
+@@ -123,9 +123,9 @@ extern "C" fn remove_callback(pdev: *mut bindings::pci_dev) {
+         // SAFETY: `remove_callback` is only ever called after a successful call to
+         // `probe_callback`, hence it's guaranteed that `Device::set_drvdata()` has been called
+         // and stored a `Pin<KBox<T>>`.
+-        let data = unsafe { pdev.as_ref().drvdata_obtain::<T>() };
++        let data = unsafe { pdev.as_ref().drvdata_borrow::<T>() };
+ 
+-        T::unbind(pdev, data.as_ref());
++        T::unbind(pdev, data);
+     }
+ }
+ 
+diff --git a/rust/kernel/platform.rs b/rust/kernel/platform.rs
+index af94fb58aafb..6f81186a7919 100644
+--- a/rust/kernel/platform.rs
++++ b/rust/kernel/platform.rs
+@@ -101,9 +101,9 @@ extern "C" fn remove_callback(pdev: *mut bindings::platform_device) {
+         // SAFETY: `remove_callback` is only ever called after a successful call to
+         // `probe_callback`, hence it's guaranteed that `Device::set_drvdata()` has been called
+         // and stored a `Pin<KBox<T>>`.
+-        let data = unsafe { pdev.as_ref().drvdata_obtain::<T>() };
++        let data = unsafe { pdev.as_ref().drvdata_borrow::<T>() };
+ 
+-        T::unbind(pdev, data.as_ref());
++        T::unbind(pdev, data);
+     }
+ }
+ 
+diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
+index b09fe8bcca13..e6080955f742 100644
+--- a/rust/kernel/usb.rs
++++ b/rust/kernel/usb.rs
+@@ -103,9 +103,9 @@ extern "C" fn disconnect_callback(intf: *mut bindings::usb_interface) {
+         // SAFETY: `disconnect_callback` is only ever called after a successful call to
+         // `probe_callback`, hence it's guaranteed that `Device::set_drvdata()` has been called
+         // and stored a `Pin<KBox<T>>`.
+-        let data = unsafe { dev.drvdata_obtain::<T>() };
++        let data = unsafe { dev.drvdata_borrow::<T>() };
+ 
+-        T::disconnect(intf, data.as_ref());
++        T::disconnect(intf, data);
+     }
+ }
+ 
+-- 
+2.52.0
 
 
