@@ -1,79 +1,74 @@
-Return-Path: <linux-usb+bounces-31979-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31980-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23EFDCFCDF1
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 10:33:34 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E8DDCFCDFF
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 10:34:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C2A5A30198A9
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 09:30:30 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DC17F30028B0
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 09:34:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A79325488;
-	Wed,  7 Jan 2026 09:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E002F7475;
+	Wed,  7 Jan 2026 09:33:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iVP/8wKa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RhfNwhml"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F1A323406;
-	Wed,  7 Jan 2026 09:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67E1220F49;
+	Wed,  7 Jan 2026 09:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767778228; cv=none; b=j0Wg/SYUBSNtpE+EJutDJQFp7yeXylNGzFs0bXQkSHYNL1OivVCPbM+XPb8EsJKLCi1x6qIyEdGKo3mzdoMH4JkS03iks+9q2Qy7IV3P3NmpWS442mVlcFBaBh7Z6bEljr7dgOjO/83ZIE/pUvVrZf6TOtJjHYZgBl+qH6timKc=
+	t=1767778438; cv=none; b=t2hP1JuQALmUMhtFj/bNV3dubtrYx6hGZ7thWHSY/xmw2pmY8Bd6IDMYlhJD5GeWetRduzMWOC0kYwxtro9Aj8F8NoHnYC767eJPDaUweXdRNCUBfdmBiYxQzATdC8llpbXfQzX95QGrbO2ajOXSuqulYz9JPxpoBjFmaU6unQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767778228; c=relaxed/simple;
-	bh=vJCiQiX91Kz+4OSF27zEmECdRZJ4K0r0E2a+idG/6eA=;
+	s=arc-20240116; t=1767778438; c=relaxed/simple;
+	bh=bnHmxdh1FeNx/GO2QTX1Itdvc+HNVyrzFaSiVi6IJzE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F1sCnGefQ4IkOBj15juTKpdUU2fZ0fKRGc64O4ZrMD6iYUzr8Lr7qq04BeEKMxvsB3frmmCxEHPDdJ7NpIYwH/ofr2hmQkXosQCxRb+mqEqeBT494g5S1pbxxa5oisX/AzTqAh3fo5RZdxT/eT41tSN+lnxCHTgvpXfkYoRNkLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iVP/8wKa; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cl7KFyDrjtbK0EDhj3rORCG8/KW7eVQx3+GfqwF2ji+ndwdPziq34Aff5iGdNqdbl33aOO5KvhVIsnhtLUXtyzOQPjp62FjZgX942z7f5OHowScl9zD8D07T6z2sIre8i4prlXKGC0sNaoMnY0zYYyQrFZOqixRTRuK5yFz989I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RhfNwhml; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767778226; x=1799314226;
+  t=1767778436; x=1799314436;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=vJCiQiX91Kz+4OSF27zEmECdRZJ4K0r0E2a+idG/6eA=;
-  b=iVP/8wKa8iC5A4FruNiziYSijHRVinQ/OGqzdQjRjpJyix1qMu7aw5oF
-   NA7iK+G9EM45SxKtt09BW89Ec12tcLDyKClV704pwxLISwmmL+alnpNRi
-   eW6zgweaNVlyC+GZWJsN3NoSNyhurtJC0c9Xvv+a3C4pkgDYPdzsEa+wo
-   QOSFcSQIPBU261bRZMj9jpiUaab+gJSKrlLFwkY2I8tuE9ZYu23DMOjfn
-   pozvdZ5Ro3InDHX31CAyULXibg4xUKB5dAa2XQt/Fp9G4qjCIUUnG3PZ+
-   f6/v+k2wIBUTwbIN9IH2bkUvwbVEvLRyJC1bzVdKmSsMEd7hiLSOxtOPK
-   g==;
-X-CSE-ConnectionGUID: on2Xl3XtTKieO8fzaAJUMw==
-X-CSE-MsgGUID: QxXbactCQm2/wIhBSxV+0w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11663"; a="86560997"
+  bh=bnHmxdh1FeNx/GO2QTX1Itdvc+HNVyrzFaSiVi6IJzE=;
+  b=RhfNwhmlRg6vJu5WpEwyP5jB1CBAR1fdqnHjDeCCVbKFfeRMdcV4zQuR
+   BN0zhhHMqKtFIBgIPtj666/M2JIpMnxJmTwKgDfpiMN6tzMq8gsyv4sbX
+   kkSJY+kZyVHQEFLtFFTzlNpk9on4DBwnB1Ijh7UanLV4UprN+kEAw7O2s
+   aZCmCIpc6dU/qitrtexp9MXIiVpVEyTdxIrFyQbWlSWSeexDF/R4u32D3
+   s4GtvH0Nr9VBX99ey/YdojG7zuiYpSPQr9DXPjlRf0qynZ1V/jLG7jRE1
+   iKMoKUp8gR3fAq5ntiOzpL1G97jT/B1cSPLt3UsV0Din4Y3W4CH6izQuv
+   A==;
+X-CSE-ConnectionGUID: 3t3AjH5zROSkaBjxOiyygg==
+X-CSE-MsgGUID: Ya9G7mGGR6iuZjqCALqkIA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11663"; a="72776883"
 X-IronPort-AV: E=Sophos;i="6.21,207,1763452800"; 
-   d="scan'208";a="86560997"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 01:30:25 -0800
-X-CSE-ConnectionGUID: M7htaIpHSVeC08aD1xnReg==
-X-CSE-MsgGUID: bUJlVdA4QjanzLcd+bEdfQ==
+   d="scan'208";a="72776883"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 01:33:56 -0800
+X-CSE-ConnectionGUID: lDdQhBghTEGcFnvYWPHZUA==
+X-CSE-MsgGUID: /Wc6r8BLQEqqHsX+yeBjEw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,207,1763452800"; 
-   d="scan'208";a="234022481"
+   d="scan'208";a="207027959"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa001.fm.intel.com with ESMTP; 07 Jan 2026 01:30:22 -0800
+  by orviesa003.jf.intel.com with ESMTP; 07 Jan 2026 01:33:54 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 4AF0898; Wed, 07 Jan 2026 10:30:21 +0100 (CET)
-Date: Wed, 7 Jan 2026 10:30:21 +0100
+	id AD54E98; Wed, 07 Jan 2026 10:33:53 +0100 (CET)
+Date: Wed, 7 Jan 2026 10:33:53 +0100
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Feng Tang <feng.tang@linux.alibaba.com>, linux-pci@vger.kernel.org,
+To: "Mario Limonciello (AMD)" <superm1@kernel.org>
+Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
 	linux-kernel@vger.kernel.org,
 	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] PCI/portdev: Disable AER for Titan Ridge 4C 2018
-Message-ID: <20260107093021.GN2275908@black.igk.intel.com>
-References: <e45f4544-7ff4-4e75-b8d0-3ec3480b1444@linux.intel.com>
- <20260106204801.GA374317@bhelgaas>
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: [PATCH v2 0/2] thunderbolt: Fix S4 resume incongruities
+Message-ID: <20260107093353.GO2275908@black.igk.intel.com>
+References: <20260106053749.61440-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,71 +77,37 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260106204801.GA374317@bhelgaas>
+In-Reply-To: <20260106053749.61440-1-superm1@kernel.org>
 
-On Tue, Jan 06, 2026 at 02:48:01PM -0600, Bjorn Helgaas wrote:
-> [+cc Thunderbolt folks]
-> 
-> On Tue, Jan 06, 2026 at 11:00:52AM -0800, Kuppuswamy Sathyanarayanan wrote:
-> > On 1/6/2026 10:20 AM, Atharva Tiwari wrote:
-> > > Disable AER for Intel Titan Ridge 4C 2018
-> > > (used in T2 iMacs, where the warnings appear)
-> > > that generates continuous pcieport warnings. such as:
-> > > 
-> > > pcieport 0000:00:1c.4: AER: Correctable error message received from 0000:07:00.0
-> > > pcieport 0000:07:00.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
-> > > pcieport 0000:07:00.0:   device [8086:15ea] error status/mask=00000080/00002000
-> > > pcieport 0000:07:00.0:    [ 7] BadDLLP
-> > > 
-> > > (see: https://bugzilla.kernel.org/show_bug.cgi?id=220651)
-> > > 
-> > > macOS also disables AER for Thunderbolt devices and controllers in
-> > > their drivers.
-> > 
-> > Why not disable it in BIOS or use noaer command line option?
-> 
-> If the kernel can figure this out by itself, we should do that so
-> users don't have to debug issues and figure out how to disable in BIOS
-> or use a command line option.
-> 
-> But if this is really a hardware issue, I would expect to see some
-> reports on the web, and I can't find AER reports that mention these
-> devices except this problem report.
-> 
-> Adding Thunderbolt folks in case they know about any errata.
+Hi,
 
-I wonder if these AER messages are caused by PTM too?
+On Mon, Jan 05, 2026 at 11:37:47PM -0600, Mario Limonciello (AMD) wrote:
+> When a machine is restored from S4 if the firmware CM has created
+> tunnels there can be an incongruity of expectation from the kernel
+> when compared to booting from S5.  This series addresses those.
 
-Can you try the latest mainline. It has this commit:
+I suspect there is no Firmware CM in AMD platforms so this actually means
+the BIOS CM, correct?
 
-  044b9f1a7f4f ("PCI/PTM: Enable only if device advertises relevant role")
-
-and see if that changes anything?
+However, on S4 we actually do reset host router when the "boot kernel" is
+started before loading and jumping to the hibernation image. It might be
+that this boot kernel tunnel configuration is causing the issues you are
+seeing (can you elaborate on those?) but given that it is (typically the
+same kernel binary) it should be creating the tunnels the same way.
 
 > 
-> > > Signed-off-by: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
-> > > ---
-> > >  drivers/pci/pcie/portdrv.c | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> > > index 38a41ccf79b9..5330a679fcff 100644
-> > > --- a/drivers/pci/pcie/portdrv.c
-> > > +++ b/drivers/pci/pcie/portdrv.c
-> > > @@ -240,7 +240,9 @@ static int get_port_device_capability(struct pci_dev *dev)
-> > >  	if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
-> > >               pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
-> > >  	    dev->aer_cap && pci_aer_available() &&
-> > > -	    (pcie_ports_native || host->native_aer))
-> > > +	    (pcie_ports_native || host->native_aer) &&
-> > > +	    !(dev->vendor == PCI_VENDOR_ID_INTEL &&
-> > > +		    (dev->device >= 0x15EA && dev->device <= 0x15EC)))
-> > >  		services |= PCIE_PORT_SERVICE_AER;
-> > >  #endif
-> > >  
-> > 
-> > -- 
-> > Sathyanarayanan Kuppuswamy
-> > Linux Kernel Developer
-> > 
+> v1:
+> Link: https://lore.kernel.org/linux-usb/20251023050354.115015-1-superm1@kernel.org/
+> 
+> Mario Limonciello (AMD) (2):
+>   thunderbolt: Move nhi_reset before pmops declaration
+>   thunderbolt: Reset NHI during S4 restore_noirq() callback
+> 
+>  drivers/thunderbolt/nhi.c | 77 ++++++++++++++++++++++-----------------
+>  drivers/thunderbolt/tb.c  | 29 ++++++++-------
+>  drivers/thunderbolt/tb.h  |  1 +
+>  3 files changed, 61 insertions(+), 46 deletions(-)
+> 
+> -- 
+> 2.43.0
 
