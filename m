@@ -1,236 +1,134 @@
-Return-Path: <linux-usb+bounces-32016-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32018-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56730CFFBC8
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 20:26:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6398ECFFD5E
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 20:48:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B598A302AAE7
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 19:25:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 71AAC305223A
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 19:06:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E93813563E0;
-	Wed,  7 Jan 2026 16:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A152ECEBB;
+	Wed,  7 Jan 2026 19:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EIb4bIcq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mrYMjEOh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E8533893A;
-	Wed,  7 Jan 2026 16:50:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F0D221FBD
+	for <linux-usb@vger.kernel.org>; Wed,  7 Jan 2026 19:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767804653; cv=none; b=lODyqHbCLcC8r984s3XkM1gmPw+BBQQtc1KWtjYLVYNkCiBJYMrCFizz2tKPyDS3OgFR68s0SXKPopgfyEldbZUHJvrmCBfSNQ2G2cEk/7QiYbHDKi/9fKnL4wELDcgmwunPeixG+U0j4g6zmev+DeJTZmbgwkhrEor5AHKgIuE=
+	t=1767812789; cv=none; b=Y0d9vl70nNSxj4SVKESqRkiLFiYCd9VbVwhJimNrkUWsLv+0T8cwCS+RgZwrO0r6kzNOHkEMEX8FnewfXIUsFLmqG0LEJthVr4UcxRsNS2/swJzM0RC/d2gGY4LDpzpUmxwTqsw4AwEWTysfg8e23FSeoZqCITvt1j38jdU5F1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767804653; c=relaxed/simple;
-	bh=i/U5MZWtlXTGl/E8czaA+BEf0sT081SVk9J0XXvf3so=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p4pT5QqZxGj39fFEoV/++y2SOQHPXbe09C18Hiibrhs7+1Lzt7AKt+JDte8vXHYQrTriQtwxk2+IW9N+e1MLAPF+8zbkY6MuqtT4PW8kuQoPlftvj7gaHlImrn9EwTwayiCgMRHIAgQ1qlvOsTU+5r/ycPXAiveqZtJoG8ROhfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EIb4bIcq; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767804649; x=1799340649;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=i/U5MZWtlXTGl/E8czaA+BEf0sT081SVk9J0XXvf3so=;
-  b=EIb4bIcqhWwicLnzDu91F9AIuUwHj7qCB3G1/a4MO12xwdVaoSp0ghqm
-   7qsamt3rtZgBLQzMkXlr+dh05eeYZScq+aieQ6+vjq4xrxSTC9cq7yts2
-   mrmQknRNm4jsMy2PElg/pA04CMlRhAVxTLNDfUXXG+u3TCsN+Bv1UcCjK
-   IhEfk7BbKpwWz00LPax27TgnXZtlft8QSKIuOstFebHpUmDw8tgoGEnxy
-   Rw5tewc68SnzL6WIwSC6mCD1+MiVu2tBnXM8jNUZz4PtInMbHVaV2gMRI
-   z7T9yFn2AT8qEJ2ITsBC6MEPVUSY0icRp0pespIxnjnyrKwnpmtOcfpcV
-   A==;
-X-CSE-ConnectionGUID: b/VeXuZIQKuk1zsKqUusfw==
-X-CSE-MsgGUID: /Scq98l3RxG/PeeHXpGhUQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="94648347"
-X-IronPort-AV: E=Sophos;i="6.21,208,1763452800"; 
-   d="scan'208";a="94648347"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 08:50:45 -0800
-X-CSE-ConnectionGUID: kuTaT++hS2CJrN8LbpYrSQ==
-X-CSE-MsgGUID: UG21bC86Rg2nnMWX/KkFuw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,208,1763452800"; 
-   d="scan'208";a="202588373"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO [10.245.245.115]) ([10.245.245.115])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 08:50:43 -0800
-Message-ID: <7631bc7d-e3b2-45b2-9b85-f03ed1d6b3cd@linux.intel.com>
-Date: Wed, 7 Jan 2026 18:50:40 +0200
+	s=arc-20240116; t=1767812789; c=relaxed/simple;
+	bh=mo9f8JN8GAsJLjzlBTgtgtfEI/899McY8QQtapaY2bs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XAwGGXijh0B2gJhM+bUMIxJLGr1TY+v0rQLSeSGXpoHtglWaW65wXvbB/C6Ih3zhgeXkSkS59DK8deAQ7ptGeyMiAX0gezVRfkik1xjAdWgcsM6mtwA0dxhHrRlP2q02Mu4P9EN6cT2LzsjIQfhskKBWt/l+AtvcZso1cNymSC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mrYMjEOh; arc=none smtp.client-ip=209.85.210.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7c6dbdaced8so1948331a34.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jan 2026 11:06:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767812786; x=1768417586; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T2pCwQ7xIIDyyL8BKt+UlW+6LMqGQZaMTa7KhQupEF4=;
+        b=mrYMjEOhVqjZjLBoCWUvo33BajY+xPGz0qHIPAnkEt3YlJyH4lpJqgGQbJHnPOmlz4
+         9mBrxwt96Re8chNMi2anlfXtAE8sbGYNWo9uJxcVUqspulBXiXcg5aLvIGo7ojjLqtoR
+         pS4urnpt2PiIrL0uC0KVfN+fTVe/LTBTp1gA3hm1F+P/iEfzxNf4u1k9rQZdLtGEhKOn
+         7O5quJ4indAZQ0hHUeAaOKboPT78IFjQ5fgrldiSlSMus4qWSSnMjluW/rvEFHpiQ/6Y
+         ZBQNWRGfwZIo7MLF6pYoFckQ9OX1oY6HaZq9iYpZvEogW1L80c8s153C+q9cFdhgR+Iw
+         R9ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767812786; x=1768417586;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T2pCwQ7xIIDyyL8BKt+UlW+6LMqGQZaMTa7KhQupEF4=;
+        b=fJbJUNFKtLNZQB7US3O/FZV5fOlVPMd6DsaFwwBEH6BQj/IY5g7TN1+CKzcehYZk8z
+         bOmadnsgnfAeCoNXJ0A3CgM+37uNHF8GihhahIDIEEwsBVfjVE5Bs9hwE5cilP8VzNg1
+         LBVDi2A7nqhays9htrAFGC9kq1skM8JCeEXaFu8cUax4313j/pM7L4RW0hoci53jfuPR
+         QuZfuJJmSA+OI5/kTEs1FplFRCErYZa7f0EpYmARtnPOgrLIMmDBQtsSDy5+9e2w/7UT
+         gVl9WYanCA120fcyvr7XIOwj/qI7+neyb14TtYg3xbpiKZkbR4TpLioGeaS+Vq6vMftE
+         yQeg==
+X-Forwarded-Encrypted: i=1; AJvYcCW4rsZDMGqqjnNQg4BxUbIuu55vI4RskPDyQoFXN5sTNG8wrSsWN6mbqyjXhQDfQvd+eWRnqqMusxk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyekUsA5KQK6s7CJqCaIIl8295MGNyKDxpCGx6QZRE/ulDS7p88
+	sPmuEceitWJq0e28zDHvMpR1s1A1u5nZZNVDMI8+86WYPqSOjikCFVSI
+X-Gm-Gg: AY/fxX64250+KRJ+cRQHkyFKb3qe44jzNuO9S1WPIxmisVMwKRw+fBrApKesjlJ3vUp
+	hNnIiA0LkgVIxgIsjH80WUR2yk57Ao+T2UpKu+GNnJVsM3Lld9Y3oWqgsozZLcIheoQgApVZcUr
+	nNPqUtnU3hE/4KpnJob7t2CXdHcHGPM4Y6GoDIGz5CYccYX4bhQsOdLCHnm6soGeVx1SL3YWiBk
+	MD1GvLVNV7yqlM8Cx7qOkWVTuMKSg1pAjI2ZMh79FjO48tDdzaX7oYmu0BRhlsklXQyQjsYaMEA
+	7eEnC+2kVZ4TiYnLTKkeW8C8DKDIck8Tjgl1Hil7B7kpKOLXoiMCLKUVtkC31Wh+mpuqxcMCek7
+	FCSlSyqzsjCWVSqWmqr6POpkEafKST0/NOzNClZ5Ah/mxBFveVWAfwE5l73pbLIMhtCW2RNyxBT
+	PpG9fnUKd6C5FGHE0U3cEYiWaGIpJwzMThSXn+9f4c/4o=
+X-Google-Smtp-Source: AGHT+IHPdrsMXLuo8RFcL3m7hcu7Ci26TgWVmCMCOgCc1zrCB24qO+Ip+H5K7gfnRLglFF6kk19onw==
+X-Received: by 2002:a05:6830:25c3:b0:7c7:471:55ff with SMTP id 46e09a7af769-7ce508ddce9mr1836539a34.10.1767812785772;
+        Wed, 07 Jan 2026 11:06:25 -0800 (PST)
+Received: from newman.cs.purdue.edu ([128.10.127.250])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ce4781eecasm3796581a34.10.2026.01.07.11.06.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jan 2026 11:06:25 -0800 (PST)
+From: Jiasheng Jiang <jiashengjiangcool@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Cc: Jiasheng Jiang <jiashengjiangcool@gmail.com>,
+	Chen Yufeng <chenyufeng@iie.ac.cn>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_tcm: initialize data_len in UAS path for consistency
+Date: Wed,  7 Jan 2026 19:06:22 +0000
+Message-Id: <20260107190622.26070-1-jiashengjiangcool@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] usb: xhci: Skip configure EP for disabled slots
- during teardown
-To: Udipto Goswami <udipto.goswami@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
-References: <20260105084805.2155251-1-udipto.goswami@oss.qualcomm.com>
- <5f0e0401-fc0b-4ac7-ab95-7f85e6677b86@linux.intel.com>
- <CAMTwNXDFM=csMEJ1ZhiTOeQ-dDH4eu4ze9XRFbSj0d-4Fxsp=g@mail.gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <CAMTwNXDFM=csMEJ1ZhiTOeQ-dDH4eu4ze9XRFbSj0d-4Fxsp=g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 1/6/26 12:22, Udipto Goswami wrote:
-> On Mon, Jan 5, 2026 at 4:32 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>
->> Hi
->>
->> On 1/5/26 10:48, Udipto Goswami wrote:
->>> Consider a scenario when a HS headset fails resume and the hub performs
->>> a logical disconnect, the USB core tears down endpoints and calls
->>> hcd->check_bandwidth() on the way out, which with xHCI translates to a
->>> drop-only Configure Endpoint command (add_flags == SLOT_FLAG, drop_flags
->>> != 0). If the slot is already disabled (slot_id == 0) or the virtual
->>> device has been freed, issuing this Configure Endpoint command is
->>> pointless and may appear stuck until event handling catches up,
->>> causing unnecessary delays during disconnect teardown.
->>>
->>> Fix this by adding a check in xhci_check_bandwidth(), return success
->>> immediately if slot_id == 0 or vdev is missing, preventing the
->>> Configure Endpoint command from being queued at all. Additionally,
->>> in xhci_configure_endpoint() for drop-only Configure Endpoint operations,
->>> return success early if slot_id == 0 or vdev is already freed,
->>> avoiding spurious command waits.
->>>
->>> Signed-off-by: Udipto Goswami <udipto.goswami@oss.qualcomm.com>
->>
->> Makes sense to prevent unnecessary 'configure endpoint' commands
->>
->> Could you share more details how we end up tearing down endpoints and
->> calling xhci_check_bandwidth() after vdev is freed and slot_id set to zero?
->>
->> Did the whole xHC controller fail to resume and was reinitialized in
->> xhci_resume() power_lost path?
->>
->> Or is this related to audio offload and xhci sideband usage?
->>
->> If we end up in this situation in normal headset resume failure then there
->> might be something else wrong.
->>
-> 
-> Apologies! My mailbox was configured with HTML.
-> Re-sending in plain text.
-> 
-> Hi Mathias,
-> 
-> Yes, we are using offloaded audio in this case and xhci-sideband is involved.
-> 
-> Scenario:
-> The headset is connected to the platform with no active playback, so
-> it suspends. No physical disconnect occurs.
-> 
-> 1. Audio DSP sends a playback request while the USB headset (device
-> 1-1) is suspended
-> 2. Resume chain is triggered:
->     handle_uaudio_stream_req
->     → enable_audio_stream
->     → snd_usb_autoresume
->     → dwc3-parent_wrapper (Qualcomm) → xhci → roothub → USB headset (1-1)
-> 3. Resume fails at device 1-1:The headset fails to resume from
-> suspend. Note that the xHCI controller itself resumes
-> successfully—only the headset device fails.
-> 4. Hub performs logical disconnect as a recovery mechanism
-> 5. Race condition occurs: The USB core begins to teardown (calling
-> 'check_bandwidth()'), but the xHCI driver may have already started
-> freeing the slot due to the failed resume.
-> 
-> Two parallel paths:
-> PATH1: (slower usb core teardown)
-> 
-> hub_port_connect_change()
-> └─ Device resume fails
->     └─ hub_port_logical_disconnect()
->        └─ usb_disconnect()
->           └─ usb_disable_device()
->              ├─ usb_disable_endpoint() [for each endpoint]
->              │  └─ usb_hcd_disable_endpoint()
->              └─ usb_hcd_alloc_bandwidth()
->                 └─ usb_hcd_check_bandwidth()
->                    └─ xhci_check_bandwidth() ← POINT OF FAILURE
->                       └─ Tries to issue Configure Endpoint
->                          └─ But slot_id == 0 or virt_dev == NULL!
-> 
-> PATH2: (faster - xhci slot cleanup)
-> hub_port_logical_disconnect()
-> └─ usb_disconnect()
->     └─ usb_release_dev()
->        └─ usb_hcd_free_dev()
->           └─ xhci_free_dev()
->              └─ xhci_disable_slot()
->                 ├─ Issues TRB_DISABLE_SLOT command
->                 ├─ Waits for completion
->                 └─ xhci_free_virt_device()
->                    ├─ Sets udev->slot_id = 0
->                    ├─ Frees virt_dev
->                    └─ Sets xhci->devs[slot_id] = NULL
-> 
-> RACE TIMELINE:
-> 
-> Path 2 (fast)
->        Path 1 (slow)
-> ─────────────────────────────────────────────────
-> T1: xhci_free_dev() starts
-> T2: xhci_disable_slot() issued
-> T3: slot_id = 0
-> T4: virt_dev freed
-> usb_disable_endpoint()
-> T5: xhci->devs[slot_id] = NULL                             (still processing...)
-> T6:
->       xhci_check_bandwidth() ← RACE!
-> T7:
->       Tries Configure Endpoint
-> T8:
->       But slot is already freed!
-> 
-> Path 1 is slower because it must iterate through all endpoints,
-> calling usb_disable_endpoint() for each one before reaching
-> check_bandwidth().
-> Path 2 completes faster with a single disable slot command. So if
-> T3-T5 has already executed, meaning tthe slot has already freed then
-> configure endpoint commands can be skipped i.e T6-T8.
-> Please let me know if this makes sense ?
+In usbg_submit_command(), which handles the UAS protocol, the 'data_len'
+member of the 'usbg_cmd' structure was left uninitialized by the
+logic, relying instead on the zeroing performed by usbg_get_cmd().
 
-Thanks, well explained and nicely laid out.
+In contrast, the BOT path (bot_submit_command) explicitly initializes
+this field from the Command Block Wrapper (CBW). This discrepancy is
+evident in error handling paths where __target_init_cmd() is called
+using cmd->data_len.
 
-There is something still odd in this scenario.
+Explicitly initialize cmd->data_len to 0 in the UAS path and use this
+variable when calling target_submit_cmd(). This ensures architectural
+consistency between the UAS and BOT protocols within the driver and
+avoids reliance on implicit memory state during error transitions.
 
-There shouldn't be two racing paths as both cases should be handled by
-the hub work 'thread' that only has one active work item.
+Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
+---
+ drivers/usb/gadget/function/f_tcm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-If resume fails then hub_port_logical_disconnect() is called and marks the device
-as "USB_STATE_NOTATTACHED", and adds a change_bit for the port.
-hub work should take over from there.
-
-hub work should then do:
-hub_event()
-   port_event(hub, i);    // because hub->change_bit is set for this port
-     hub_port_connect_change()
-       hub_port_connect()
-         if (udev)
-           usb_disconnect()
-             usb_disable_device()  //children first
-               usb_disable_device_endpoints()  // for each endpoint
-                 usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
-                   hcd->driver->check_bandwidth()  // does all the configure endpoint commands
-             device_del(&udev->dev);
-             hub_free_dev(udev)
-               hcd->driver->free_dev(hcd, udev);  // clears virt_dev and slot_id here
-             put_device(&udev->dev);
-
-To me this looks like driver->check_bandwitdth() is called before driver->free_dev().
-  
-Thanks
-Mathias
+diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+index 6e8804f04baa..822cebc7b405 100644
+--- a/drivers/usb/gadget/function/f_tcm.c
++++ b/drivers/usb/gadget/function/f_tcm.c
+@@ -1227,7 +1227,7 @@ static void usbg_submit_cmd(struct usbg_cmd *cmd)
+ 		goto out;
+ 
+ 	target_submit_cmd(se_cmd, tv_nexus->tvn_se_sess, cmd->cmd_buf,
+-			  cmd->sense_iu.sense, cmd->unpacked_lun, 0,
++			  cmd->sense_iu.sense, cmd->unpacked_lun, cmd->data_len,
+ 			  cmd->prio_attr, dir, flags);
+ 
+ 	return;
+@@ -1389,6 +1389,7 @@ static int usbg_submit_command(struct f_uas *fu, struct usb_request *req)
+ 	cmd->tmr_func = 0;
+ 	cmd->tmr_rsp = RC_RESPONSE_UNKNOWN;
+ 	cmd->flags = 0;
++	cmd->data_len = 0;
+ 
+ 	cmd_iu = (struct command_iu *)iu;
+ 
+-- 
+2.25.1
 
 
