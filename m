@@ -1,77 +1,110 @@
-Return-Path: <linux-usb+bounces-32024-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32027-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 845C9D0034C
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 22:45:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24186D004FD
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 23:30:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3D87D305F32B
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 21:40:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 24A8B3019963
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 22:30:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5E32EAD1B;
-	Wed,  7 Jan 2026 21:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83D0B2DC791;
+	Wed,  7 Jan 2026 22:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7jLNW0A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2yJiHUd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909F52E7F20;
-	Wed,  7 Jan 2026 21:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A0B23AB90;
+	Wed,  7 Jan 2026 22:30:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767821450; cv=none; b=NQZq0riIzAd+0AqcxRpkHYSd3hmL+g5QTmD0kCQbbSy3JPcYcGgoEUrHynkPRn8o2ChUJOrLQLVtw5KzKmuF1arsXlXJVG4WiWDYMbxrj2kEr0GNbKBWeEcEnqyrYmF9Qi1WGFzr6HHihE5JU01hFSqCB9OTa9WqdjU9I0QED2E=
+	t=1767825024; cv=none; b=aIjK7gaeiYPIExoD6qoAE5UVn6mMUERvLD8kanXnqp19/jInYIiQAk+gVyuiq3Iudv7z9bEZMWGWdRrTYu9ohsjyZkRgH4oY/BJENISWFJdlV5WjkKdcK3evTBlwd7awQLToHNvnGUUnXxInWyo6M1orY9ROsA4zSJGdtH42i3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767821450; c=relaxed/simple;
-	bh=pm770hh4O2MaMARtanwz/nSS37WcPCggw0QXX3rwW8k=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=XRjJqfvxixBODd41jt2lPqaOS/mqY8jjZDKkIArf1wjDGRJS/378FJuL3TYvaWCYfrdDBbtM+B+hICCiaOPsx6mr9+B9NReD7m08Hg8zUg7WQEwPQQhSKzkKCuITab5AWnhHuBBpBrgegMEFfyRKjjXEXRtBxInDPAofBO0fj0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7jLNW0A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32401C4CEF1;
-	Wed,  7 Jan 2026 21:30:47 +0000 (UTC)
+	s=arc-20240116; t=1767825024; c=relaxed/simple;
+	bh=NpEMi+FFcLqCy+VebtjlU5KccAtE1btumT4cEIVROu0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GNtOy0jd4rjcfq/e/gXsm15IWIT/GDsMNMAZB4HDGnraeqXBuYCIQOYwB3Hff0GF+RSLAw59YuQqWyQmAY1HgspGV+RNHt17HVu+OtIYya9BVOXl51trjBlNdzTBfik5qzUBPpWHbYMXeek+l0yH93KTLP2mjDEJBRe8WsK08/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2yJiHUd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 954FCC4CEF1;
+	Wed,  7 Jan 2026 22:30:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767821450;
-	bh=pm770hh4O2MaMARtanwz/nSS37WcPCggw0QXX3rwW8k=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
-	b=h7jLNW0AbahXy2Ghkj2S2SzUOCxcHgYVyI3ZjKaXZh6mnibJT1lBYLypiPP0EJ6LF
-	 QHGLHhVGJIopi3BSw4huOabhpbNr+GHWSyeWRpaOsdOzY1C9vQQPE4d3tpoywfLa1/
-	 NLF2P6p8LTd8AR/E45cFa13CXeEif0eIuEuoKtft/KPSqPygLO20RtVwlt/+JBgWOo
-	 DvxcBn1edd+zLDBb66F8I6J8Jn6vIqaENN2vn3OJ5GfmLtpB3VZwp/TmlSQ0xefe0U
-	 AvG5ygfU6C7jKLvwgp/wE96qs/uBLvp3SxjK6fYjjjRpWdxkJCm1n/X69RBnDVhoVc
-	 pKVT3xy4cPWJA==
+	s=k20201202; t=1767825023;
+	bh=NpEMi+FFcLqCy+VebtjlU5KccAtE1btumT4cEIVROu0=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=o2yJiHUd7aIdFkYwrmU+TMQNZV6iGEwkkZr2czySp0vmBbt0zYA4r6UG44/VhdhmF
+	 IsfSRXWyvq+0NFaGGHNahC7EKH0jTZ5eoHxmoZrQsya/ZgrFMs+Ph952rE10yRDEaP
+	 ZCUoat6MA7IcCKM3qEalCJDf3ctII+NVSkxUgjSK2nMHwEfvCfm3oPR7Z+82DDbS8a
+	 DCJicJ0Corl8f7B1rcALbinyJyD6wWpka1b46T+RO852RfIKi6nwzCJ0bdFAhm8O58
+	 cqrSMKjym79MBsWDG6f0DrPZsnTrd9zDx7lDA0HoLINZFtJh9q5t8vKQlchSK0X+Ks
+	 wnskE0LjMqsog==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82752D0D16D;
+	Wed,  7 Jan 2026 22:30:23 +0000 (UTC)
+From: Sam Day via B4 Relay <devnull+me.samcday.com@kernel.org>
+Subject: [PATCH 0/2] usb: gadget: f_fs: DMA-BUF fixes
+Date: Thu, 08 Jan 2026 08:30:19 +1000
+Message-Id: <20260108-ffs-dmabuf-ioctl-fix-v1-0-e51633891a81@samcday.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 07 Jan 2026 22:30:45 +0100
-Message-Id: <DFIOEGHXC1P7.39XP584UDB7R6@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH 5/5] rust: faux: use "kernel vertical" style for imports
-Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
- <linux-usb@vger.kernel.org>
-To: <gregkh@linuxfoundation.org>, <rafael@kernel.org>, <ojeda@kernel.org>,
- <boqun.feng@gmail.com>, <gary@garyguo.net>, <bjorn3_gh@protonmail.com>,
- <lossin@kernel.org>, <a.hindborg@kernel.org>, <aliceryhl@google.com>,
- <tmgross@umich.edu>, <david.m.ertman@intel.com>, <ira.weiny@intel.com>,
- <leon@kernel.org>
-References: <20260105142123.95030-1-dakr@kernel.org>
- <20260105142123.95030-5-dakr@kernel.org>
-In-Reply-To: <20260105142123.95030-5-dakr@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDQ0MT3bS0Yt2U3MSk0jTdzPzkkhzdtMwKXSNzIxNLc0MLozQLMyWg1oK
+ iVKAw2Njo2NpaAN0/RwNmAAAA
+X-Change-ID: 20251114-ffs-dmabuf-ioctl-fix-272497182f86
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Sam Day <me@samcday.com>, David Heidelberg <david@ixit.cz>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767825022; l=960;
+ i=me@samcday.com; s=20240502; h=from:subject:message-id;
+ bh=NpEMi+FFcLqCy+VebtjlU5KccAtE1btumT4cEIVROu0=;
+ b=225R0QWiOaY4AzMFirxupqQeTXM+RWuCMCHsZJOaHWooi5dyVMGKeFJxvG2f4baryYjxMgELG
+ ZNMYJpt/2AxCNqn8nRsR279l5Uy/gZtpyPpLbr6Ux3wNU97buREp99l
+X-Developer-Key: i=me@samcday.com; a=ed25519;
+ pk=bzyS0akxWMqr9+AXzgBRIp28KKpEOs+GjYMc2yf+aeU=
+X-Endpoint-Received: by B4 Relay for me@samcday.com/20240502 with
+ auth_id=595
+X-Original-From: Sam Day <me@samcday.com>
+Reply-To: me@samcday.com
 
-On Mon Jan 5, 2026 at 3:19 PM CET, Danilo Krummrich wrote:
-> Convert all imports to use "kernel vertical" style.
->
-> With this, subsequent patches neither introduce unrelated changes nor
-> leave an inconsistent import pattern.
->
-> While at it, drop unnecessary imports covered by prelude::*.
->
-> Link: https://docs.kernel.org/rust/coding-guidelines.html#imports
-> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+I recently started kicking the tires on DMA-BUF support in FunctionFS.
+In the process, I found a couple of issues that are fixed in this
+series.
 
-Applied to driver-core-testing, thanks!
+One issue is a minor bug in how the ioctl handler treats invalid calls.
+The other is more serious and breaks DMA transfers on systems with a
+tenacious SMMU.
+
+I created a fairly minimal reproducer of the DMA issue in this gist, to
+assist in testing:
+
+https://gist.github.com/samcday/d23aaf95be678bcdd1dd62b4b79861ea
+
+Tested on:
+ - Pixel 3a
+ - OnePlus 6T
+
+Signed-off-by: Sam Day <me@samcday.com>
+---
+Sam Day (2):
+      usb: gadget: f_fs: Fix ioctl error handling
+      usb: gadget: f_fs: fix DMA-BUF OUT queues
+
+ drivers/usb/gadget/function/f_fs.c | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
+---
+base-commit: f0b9d8eb98dfee8d00419aa07543bdc2c1a44fb1
+change-id: 20251114-ffs-dmabuf-ioctl-fix-272497182f86
+
+Best regards,
+-- 
+Sam Day <me@samcday.com>
+
+
 
