@@ -1,120 +1,109 @@
-Return-Path: <linux-usb+bounces-31981-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31982-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 933B4CFD122
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 11:02:08 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B945ECFD02C
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 10:54:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3E78E3074F46
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 10:01:03 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 9C7413006708
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 09:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E55532E732;
-	Wed,  7 Jan 2026 09:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1F71330642;
+	Wed,  7 Jan 2026 09:54:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WswTie/n"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzYtDwS2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A0432E72B
-	for <linux-usb@vger.kernel.org>; Wed,  7 Jan 2026 09:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1691532F764
+	for <linux-usb@vger.kernel.org>; Wed,  7 Jan 2026 09:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767779576; cv=none; b=M58gj83yI9QcxRKcm9TXyPfW1dwW+wh0t8grQ5aLj58qjVaInzDyp+aG3qEdQhBIzsrXo4teWDO6pJecPpSSyFV96gVsO9pSf1ZHleW8wFBzwEsjbU4aw9WDNA5mKXcq4WEdfobuXDCxQJlKeWpgpvbMUUvrmliUOBq/ZDwW3I4=
+	t=1767779684; cv=none; b=OpnrDQfVhoaaYL1uxNkFeGpjPxb/zo8WoMTRvN8LRqBgZqkctgjGi4ory4Guh6Ba/MPwbpYTd+fjYz5/lHbIE2Ke9CcSwdJImSFpJyZ5X9FI/q6vdPd6WO2PNCE72jKBy/Hp4K3YTaAVh5EILuR1eT9hPLZaZJklQWCYZevnoOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767779576; c=relaxed/simple;
-	bh=rvvOv0vv9H8q++Ltdf0WVIDOuGmNQfGsyInkVBB65VM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TYLJh43yuwFXxhKBEzPmHG31Ko+TdrWAopPhEQ724v1I455lGJPV3Ma5jphWp4G/htX3rDfg0ts0kIwE7hGsrjKM+BxGZdGpEQP15GQfHkij3f8vcIew8XOosU0Hua8tjTkwmkMdQG4xGCmkgX5yo9U9zxA0aljgd13bjIRZMwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WswTie/n; arc=none smtp.client-ip=74.125.82.170
+	s=arc-20240116; t=1767779684; c=relaxed/simple;
+	bh=ANYs6i6trLGcerht4yR1tZmU8onsevcVhIQsE+VbHQM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aK4wajbWg95PrZCCzF5o/t1AJMWq7hrWgv925/DpsVY4AY95XHQwU1YiWFFC+6/kGo1Qv5kgTwTAMK04lC4vft0NMB1fJhgIXx8hEDSSlYn8a+V+kg9RtLVC2OFq8IspnwGe2JM6NQkU+bO2RtgfUNIx5uTtDg/jdw/2OOYexPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzYtDwS2; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2abf5900cd5so1342890eec.1
-        for <linux-usb@vger.kernel.org>; Wed, 07 Jan 2026 01:52:51 -0800 (PST)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7f0da2dfeaeso1710222b3a.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jan 2026 01:54:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767779570; x=1768384370; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rvvOv0vv9H8q++Ltdf0WVIDOuGmNQfGsyInkVBB65VM=;
-        b=WswTie/n5RBFA0VsXfSj6Grz4pfH3N8bWz7h4XXYcQYM0vqU1QkjNe/l6SWrgFNX/H
-         HqaQjv483NMUVuzWVxSwKLhasfeaF/eGNqEYH8mals3YX3Lj5fj8ubvcmykAx6hrRBlt
-         sHSFw+yWhOdxMFDrtIvtpoUZc/tNO5+5jywWByOvTuEHuragievh59iIFtlwvtBuYZiY
-         b7qJt16EnXBtugx8VgH+fb47WuJV7S1nATJ7Y3yua5IHepk1GkzvLEA/haDx7wMdCWZD
-         E8j2hykGCKTWHFzHqpOzqTIF8ruDCe5I6xJMj+NP0f3xOEUVKnTIIOuilctYWHdJig7Y
-         sANg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767779570; x=1768384370;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1767779682; x=1768384482; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rvvOv0vv9H8q++Ltdf0WVIDOuGmNQfGsyInkVBB65VM=;
-        b=ozG2Hdb2Nnp8q8iRqVZRhyzW4PKz7jRQZ9dtFZy+Iy9f8LdNDchT9ZRvAd/4sA7isk
-         PnDWIDNVwG0AIq680Q1EkDh6BORSK51YWWOImT4hStKBZMWs/EK2U/4x8OYbCxJgAooz
-         jfRQO/+bc9sNXR6QQdcCMVC4C/bhazMD70zjSmatN/m3HCuLIZJ6ubBztup8PZQZrck3
-         raUkgRYsZM6kLTSj0Bht3JT4+m2sq5qD8ClledeT49fR0ECSPgjSSkgaZkoFNiNWdr02
-         CPHGJCt0fbyb/cEPzuEybQg13DT+w7201SfiR+8s4nsqsOWKhnMmyTt4IOYvJ3pE1Nf1
-         7psQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWAy5GG5FMtjkD3LhbsnwjbBKpncQQyBf+ZPoJNTIbohDt0tXE4AhiYMmMni9n3HSLKJBHZbyEoJxw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMD2QrOpoA045Tmmd+cKvGQ+jlzFvAXMroO9lwI0XJ4oEHGQv0
-	DIZmWmJJnUFLfIf6/ORNjKd7VxG3FNOb1t8yVQ5an1ti6dytt5+TM9CwF4sFX3tDakrlxHe3Kn2
-	XVS5/DAwrZhrmLbN4yr+cf8V1zo56N/hyw3OyzgY=
-X-Gm-Gg: AY/fxX6NBuOKvIuzE/cblAYVikra6oairIwPnh8HEUMIbxTBuIKggjuFnIWI04RXltI
-	xNKj66Y+DbS+QPjQ9oeoeHK/H9pn9RLS2ssgFjabXsoSX1rc9EISfJucKLJVHZwa/m7jB7SDGXG
-	7Fgir6/dw+W/ZxaYngdM8aHvdqO36Yll6n8ojRyRJw9Tgn9P13dFxDNvmVt22iLeXjB6VZxn7Q9
-	01XWzA3dmU2PwPgzhCzGXbalwD5YakHkYCHGNZG/Hf6IfYJmNQrW1m5ayx872gzPOdwrfA=
-X-Google-Smtp-Source: AGHT+IEsT6AYnql0T7zlCNvOahx8BTYyJ+IW0sH1UvnJzbYCCmPWp7Cct2vMxCYT86QC+/C8HxYvBejoGMBDAF+WblE=
-X-Received: by 2002:a05:7300:5781:b0:2ae:5e6b:dc41 with SMTP id
- 5a478bee46e88-2b17d21b748mr1497359eec.14.1767779570503; Wed, 07 Jan 2026
- 01:52:50 -0800 (PST)
+        bh=ANYs6i6trLGcerht4yR1tZmU8onsevcVhIQsE+VbHQM=;
+        b=gzYtDwS2mYC9RovpNcHgNQebi7B/n13yvzxBb01+nbvR0O9Ekau1MxVTry8SSYYc76
+         5lK4MiydPKdpaHgyd5m+SJPNHl+RsdFVG+R+semjb3nR3GWatXikB0uoVDhydLJLeeV5
+         i/nQ0ETtHM6nzFOontNVJMS4npVCgJfUAknms5BzqneulLzQ8YC1WaDdk1sryfVdN8Ni
+         gRIgyPmYEHrnftIgcP3Jh20WEqArGezvvD3K5FHfeCon8OC/178dAqtI0Lg6V9T47lQD
+         BXDeCvk1Gel8slQdqBGdY5ioxff8BsUcwvJBoI21LUBgAMvyuZ5P7EzHFCWW+ATvBrt0
+         JK1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767779682; x=1768384482;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ANYs6i6trLGcerht4yR1tZmU8onsevcVhIQsE+VbHQM=;
+        b=nHyFfXi46bitb+y7thxLPV97UW05F8tcpk+XgiISpGRyw0emd4d0M34M/gi7huSGgO
+         Q3fUJXLGTAPm2a24PLGu5JpVHEDYhGxIsxzX3dktvcGxsbT3QmhmhaYGpXTS4zMJCQc+
+         stVP76Ggwhh9Uiy5445L/H6QNsq/AUksekFaiTIyK8jBEqHjsNVSU1n5p8FuZUpcjD4T
+         qo4JoL2PYsazNO8OD9srMwCLb9UWZv7cdMkee2mI+1D29ey7bDkJcB0J0uPttXdVcfvU
+         2z/AkMOB06OcyiaVxoTjFS3xcVhoV9HhPMx7jWuQdmKoLRbgP+ZfBWNZ9jYS60cvT74j
+         UFmg==
+X-Forwarded-Encrypted: i=1; AJvYcCU7mAhVpeOYRSIl0EW3v/JamjHbexrBc40MQh2F6t66OB5XqRYp6+6vJytUE37O2RmwzIBEARoZmQ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaG04NEpHnqrZ9x/zVNLDnWTILRyregOKkqrWtgwCyED99ZG1X
+	Jy7+1yO5UZrG2J4FK5d04hlRC8OuMCYn8UIuhYivXg/tS6AE4VeWFMQ=
+X-Gm-Gg: AY/fxX6pB848xr5irMwBKBq2gQqW1YEAQ3zK01SSxINvNrJIMYuxmzZR8V2kNf8Y5Tp
+	ArfemuDXmj2HbNJw9EVMVb/Yy0DRkWky+AXJlc70DI6A7/cthLTpPl7l0Yli93uxMkLs0PurUGI
+	NWOd95SFL9YU//lHZ3MncmDhw4Dj/vdlueTHupKV1y5u8iSyBGOg/oAYs7/0ZU/GTKE2bSd2elk
+	H1/bIcWdAmbGt6QvnEaw8hi0zlvXklgc97cwaUzCKluIfTAzQZdLWb1oxXI1oLI9LDEEIonVgub
+	DGBIjZZthL8/KWJZTKhnpp0B6/b2/NjyFOw5reJ7rH9mYKLxc70KI9PVoXk/2UelaLXnBWGY+7v
+	DoMKF8D/RCTRVY5dgouo5S3VKFwe3qizRm4IZHnr6mY4oOW9C1oJjjku6B+BISpKwhBuUlrE9Zu
+	AN8gL5PCSg1ciNgrE=
+X-Google-Smtp-Source: AGHT+IGAXBAfvt9+HKGFTfnKpIlZhyLpeWAQmEI7acjOkyIBy2z200DLidZSG3Vic7Jdxr5MpccL5w==
+X-Received: by 2002:a05:6a20:7287:b0:35d:d477:a7f1 with SMTP id adf61e73a8af0-3898f99146bmr1696314637.43.1767779682366;
+        Wed, 07 Jan 2026 01:54:42 -0800 (PST)
+Received: from at.. ([171.61.166.195])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f5f7c2666sm4557245a91.5.2026.01.07.01.54.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jan 2026 01:54:42 -0800 (PST)
+From: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
+To: mika.westerberg@linux.intel.com
+Cc: YehezkelShB@gmail.com,
+	andreas.noever@gmail.com,
+	atharvatiwarilinuxdev@gmail.com,
+	bhelgaas@google.com,
+	dave.jiang@intel.com,
+	feng.tang@linux.alibaba.com,
+	helgaas@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	lukas@wunner.de,
+	sathyanarayanan.kuppuswamy@linux.intel.com,
+	westeri@kernel.org
+Subject: Re: [PATCH] PCI/portdev: Disable AER for Titan Ridge 4C 2018
+Date: Wed,  7 Jan 2026 09:54:33 +0000
+Message-ID: <20260107095435.1390-1-atharvatiwarilinuxdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260107093021.GN2275908@black.igk.intel.com>
+References: <20260107093021.GN2275908@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260103083232.9510-1-linux.amoon@gmail.com> <20260103083232.9510-4-linux.amoon@gmail.com>
- <6f30a01c-8fc4-4368-88ef-7c513c505515@kernel.org>
-In-Reply-To: <6f30a01c-8fc4-4368-88ef-7c513c505515@kernel.org>
-From: =?UTF-8?B?5byg5rC45rOi?= <giraffesnn123@gmail.com>
-Date: Wed, 7 Jan 2026 17:52:38 +0800
-X-Gm-Features: AQt7F2p0-kEhpv052gHNNvlDi9s6r7fu21_si4nAOG3q3nXtXMATV47Jwa2xpS8
-Message-ID: <CACpCAL0GLMV-2p1tKAXe6R+N2c4YadH9vpEG3GdPoHTNTQSuow@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] usb: typec: fusb302: Switch to threaded interrupt handler
-To: Hans de Goede <hansg@kernel.org>
-Cc: Anand Moon <linux.amoon@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heiko Stuebner <heiko@sntech.de>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, FUKAUMI Naoki <naoki@radxa.com>, 
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
-	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
-	"moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-> Still ideally we would solve this in another way then
-> switching to a threaded IRQ handler.
->
-> As the commit message of the mei-vsc fix mentions
-> the root cause of these errors is typically an interrupt
-> chip driver which uses IRQF_NO_THREAD disabling the auto
-> threading of all interrupt handlers in RT mode.
->
-> So the first question here would be to see if that flag is
-> used in the interrupt chip and if yes, is that flag really
-> necessary ?
-This is very similar to the issue addressed in commit 24b176d8827d
-("drm/msm/dsi: Remove spurious IRQF_ONESHOT flag").
-The IRQF_ONESHOT flag is preventing forced threading here.
-
-In irq_setup_forced_threading(), the conversion to threaded interrupts
-is explicitly skipped if any of the IRQF_NO_THREAD, IRQF_PERCPU,
-or IRQF_ONESHOT flags are present. In this case, IRQF_ONESHOT
-appears to be the reason.
-
-Regards,
-giraffesnn
+I’ve been using the mainline kernel
+(which I compiled about two weeks ago),
+and the problem still isn’t fixed,
+so PTM is most likely not the root cause.
 
