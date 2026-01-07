@@ -1,228 +1,240 @@
-Return-Path: <linux-usb+bounces-32011-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32012-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87599CFF12F
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 18:22:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 829C5CFF105
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 18:19:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 98097315D695
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 16:04:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 01AAC352084D
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 17:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009C434DB46;
-	Wed,  7 Jan 2026 15:25:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05EF6396D2C;
+	Wed,  7 Jan 2026 15:52:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kgkIYNdE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sVG+Gvxz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F8834C81F;
-	Wed,  7 Jan 2026 15:25:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37319396D1D
+	for <linux-usb@vger.kernel.org>; Wed,  7 Jan 2026 15:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767799545; cv=none; b=BbX2dyEZ304Nbfoq/Dxg7dROp2BWpW3YKHS7sN4QCR6Ovf8yVI11pIByxomsp6n2ZY5/x8XWe8bLqUZuJHBjIdDhWKxwnCEn46TJpzmsOa/0SUbEHBPsRMafno51PTIq3ESm589Xz7ANpCRZeqQWcmWkwFoEcZV5XctdIH2m/i4=
+	t=1767801137; cv=none; b=EX42410v41Xtb4UR5OKaAiILaBpobh06nB+CUjEE8YGmSwc7O22SEtAA6cRPw3wi9e5+ky0a3FPSaL3LnmGhJ0c523GjBI282SyRzkbN15DTZgwPUPvUjPsg7UbmuHwNhlVNrS6EZML7LsrW42Uh8vowuW9G4wefzSesND1r+N0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767799545; c=relaxed/simple;
-	bh=ggmBg80JnZ2x/AW3qKzvOyx9RbkjHwdHwiy+ZrpQC+4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Lx2MOQS5dvT4CWw9Xeocg90GTZ+uIjSTuKa/Ueh1WhPmzwGJesJFN5GvGytA6MisaClf9bEweZvIcLOyrO/WXB/OwgPw14d2vy8KPa30uIGs44YRLcsjQXaGDfUdIU6P391C15V/dgqbTRUN9UnUZTcAo3ZKuQN6+HQU+YI575E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kgkIYNdE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A8CC4CEF1;
-	Wed,  7 Jan 2026 15:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1767799545;
-	bh=ggmBg80JnZ2x/AW3qKzvOyx9RbkjHwdHwiy+ZrpQC+4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=kgkIYNdEZ6paLZviuho5A9ukqrPEm9Frryu75TX7i10MALVJBcRR05yeA65jildYy
-	 kugw8G/Js6oMLLzh7HD9gPGO3CRiu9SkrxXQDrXBybUyeVoU/eNtbPCVaCdwdtozSG
-	 /hoQ+O05IVo2uyK0FPjtaLNsgeTcTMM8XnPEyeDI=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH] USB: HCD: remove logic about which hcd is loaded
-Date: Wed,  7 Jan 2026 16:25:40 +0100
-Message-ID: <2026010739-diffuser-shelter-e31c@gregkh>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1767801137; c=relaxed/simple;
+	bh=WXZMe4HP3vNPReOPTMwzVrsjCdvjsyH5VjpRkjOfyhU=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Jgizzhoczah1HyMKvCQY+T/ShnuXEZBygKsWWeOlf8muxmffRt3YeWhP/SpLy0JeLy/rz2//nl7gs0wN6oPSz4SkM1fdoCX9fDbc1oSiWdEKrtig/7aMGxig7PmotbztyKm/RFu0awPfjq4zkDDkvwUf2A4tVk1KRMeXz8sFdXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sVG+Gvxz; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4779edba8f3so20832855e9.3
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jan 2026 07:52:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1767801120; x=1768405920; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KzJooJr2ofQffqYH6J44S/NyT0tH1jNqXbKY2GqyAaM=;
+        b=sVG+GvxzA/bIWQCZReXPeS1jCtipHwLFJ8H3+TTr7IHjtw9oscdftuiV7uHVLznSrt
+         ZzbtUYvJiZ03Mf2u/b2ceb9RzILJgjR+prkpzAViQCrI25G/PNz9zCUZLE18eE+KTBl1
+         NjBQDCD8M6YFO7oPZIsM4A++l3HnCICPOZ8DlgwUkjALAlVXlN71d4lm3VwGY7lfSKIw
+         KvSemEGGw8aFqsvdu0U1ml42nsIUGG3Azl4CCSARJLj6rUzdXQrw92zFIe3AhqpukNi8
+         LsShOMI+p8mAfOkMtMqHFEdBRngLc0FWko5NYzAg8WQn2jW9kRVKlJeljJsvRgJsafDZ
+         Yb+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767801120; x=1768405920;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KzJooJr2ofQffqYH6J44S/NyT0tH1jNqXbKY2GqyAaM=;
+        b=VbJA8cSCn/ysFl1gR7VoUmkMG8YD3VmB5DvuJIK5tbSdQgwX8OkY9Xb/QUHd2Ev02u
+         +mQdU+y/JDtivDSksdYs0vmwfVvw+KpCtNNAXo/S0a64abgDPSmyj1D6TQl2sXemsyMb
+         d8JDBJ0yQTBInCIigeR6GRV3pCT8iVVztwgVAhnXBBWPW9NhWCONOKviPc4UD82pFkuK
+         tHNUcWHvv5zkDBbzCcyRMr3ywLegvWYN3SeRu0xKui04GhapKrFYhocu2XijeczdRflB
+         WEeXAzUsRhJ8jJ2npa6H7bWqm3QMzp1ElCEdvWu/uJbb0XPto2nfoWqH1/tkLP+HtuGM
+         B/bA==
+X-Forwarded-Encrypted: i=1; AJvYcCVvdUBeVVGD0XIpeM5Fo2gbLulSxZTjrgdWimscaxAEAws14/zhBMmnUDh4NR5Brpk9RDfygQGVe8I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKjWQqwCNwoDxtE9Aw7QxRDq5hqPSq13w7Yme61i+B1vh8q30r
+	sqDtoR1whJx8vESMQbZ6KD+i4+V7Kh0wiVNN+6J9YXb+wED8XEMoTfvmf8elHm4l+sRm5SnyyVo
+	OfC8Jy4Gt9E47dNow/A==
+X-Google-Smtp-Source: AGHT+IGf7S57fwqtaG/Y63VwksZsm6MPDrdn5BaGxjtMY+WZa3f+qrbuzEydbLZth9rk78JW5kkgVrJK4VKyKM0=
+X-Received: from wmbz13.prod.google.com ([2002:a05:600c:c08d:b0:479:3624:3472])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:82c3:b0:477:9392:8557 with SMTP id 5b1f17b1804b1-47d84b3463fmr32388425e9.18.1767801120462;
+ Wed, 07 Jan 2026 07:52:00 -0800 (PST)
+Date: Wed, 7 Jan 2026 15:51:59 +0000
+In-Reply-To: <20260107103511.570525-1-dakr@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Lines: 168
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5914; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=ggmBg80JnZ2x/AW3qKzvOyx9RbkjHwdHwiy+ZrpQC+4=; b=owGbwMvMwCRo6H6F97bub03G02pJDJlxVZ+ZXKZ+MhfwPdL/Um5XTIafImPI/5ad6zgPsL1Jl L7h63+3I5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACayRIlhQb//7NKIvwkNvteu M4se1QpbI8b4mWFBj9a3ul+FBcx+Bnp1618/muzcXGkAAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260107103511.570525-1-dakr@kernel.org>
+Message-ID: <aV6BHw-Liv0SVAwO@google.com>
+Subject: Re: [PATCH 0/6] Address race condition with Device::drvdata()
+From: Alice Ryhl <aliceryhl@google.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: gregkh@linuxfoundation.org, rafael@kernel.org, 
+	igor.korotin.linux@gmail.com, ojeda@kernel.org, boqun.feng@gmail.com, 
+	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
+	a.hindborg@kernel.org, tmgross@umich.edu, david.m.ertman@intel.com, 
+	ira.weiny@intel.com, leon@kernel.org, bhelgaas@google.com, 
+	kwilczynski@kernel.org, wsa+renesas@sang-engineering.com, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-It turns out that warning about which USB host controller is loaded
-before another one doesn't really matter.  All that really is needed is
-the PCI softdep module loading logic, which has been present in the
-kernel ever since commit 05c92da0c524 ("usb: ohci/uhci - add soft
-dependencies on ehci_pci")
+On Wed, Jan 07, 2026 at 11:34:59AM +0100, Danilo Krummrich wrote:
+> Currently, the driver's device private data is allocated and initialized
+> from driver core code called from bus abstractions after the driver's
+> probe() callback returned the corresponding initializer.
+> 
+> Similarly, the driver's device private data is dropped within the
+> remove() callback of bus abstractions after calling the remove()
+> callback of the corresponding driver.
+> 
+> However, commit 6f61a2637abe ("rust: device: introduce
+> Device::drvdata()") introduced an accessor for the driver's device
+> private data for a Device<Bound>, i.e. a device that is currently bound
+> to a driver.
+> 
+> Obviously, this is in conflict with dropping the driver's device private
+> data in remove(), since a device can not be considered to be fully
+> unbound after remove() has finished:
+> 
+> We also have to consider registrations guarded by devres - such as IRQ
+> or class device registrations - which are torn down after remove() in
+> devres_release_all().
+> 
+> Thus, it can happen that, for instance, a class device or IRQ callback
+> still calls Device::drvdata(), which then runs concurrently to remove()
+> (which sets dev->driver_data to NULL and drops the driver's device
+> private data), before devres_release_all() started to tear down the
+> corresponding registration. This is because devres guarded registrations
+> can, as expected, access the corresponding Device<Bound> that defines
+> their scope.
+> 
+> In C it simply is the driver's responsibility to ensure that its device
+> private data is freed after e.g. an IRQ registration is unregistered.
+> 
+> Typically, C drivers achieve this by allocating their device private data
+> with e.g. devm_kzalloc() before doing anything else, i.e. before e.g.
+> registering an IRQ with devm_request_threaded_irq(), relying on the
+> reverse order cleanup of devres [1].
+> 
+> Technically, we could do something similar in Rust. However, the
+> resulting code would be pretty messy:
+> 
+> In Rust we have to differentiate between allocated but uninitialized
+> memory and initialized memory in the type system. Thus, we would need to
+> somehow keep track of whether the driver's device private data object
+> has been initialized (i.e. probe() was successful and returned a valid
+> initializer for this memory) and conditionally call the destructor of
+> the corresponding object when it is freed.
+> 
+> This is because we'd need to allocate and register the memory of the
+> driver's device private data *before* it is initialized by the
+> initializer returned by the driver's probe() callback, because the
+> driver could already register devres guarded registrations within
+> probe() outside of the driver's device private data initializer.
+> 
+> Luckily there is a much simpler solution: Instead of dropping the
+> driver's device private data at the end of remove(), we just drop it
+> after the device has been fully unbound, i.e. after all devres callbacks
+> have been processed.
+> 
+> For this, we introduce a new post_unbind() callback private to the
+> driver-core, i.e. the callback is neither exposed to drivers, nor to bus
+> abstractions.
+> 
+> This way, the driver-core code can simply continue to conditionally
+> allocate the memory for the driver's device private data when the
+> driver's initializer is returned from probe() - no change needed - and
+> drop it when the driver-core code receives the post_unbind() callback.
+> 
+> --
+> 
+> Dependency wise we need a common Driver trait that describes the layout of a
+> specific driver structure, such as struct pci_driver or struct platform_driver.
+> Additional to this specific driver type (which was previously the associated
+> type RegType of the RegistrationOps) it provides the offset to the embedded
+> struct device_driver and the type of the driver's device private data.
+> 
+> This patch series contains two additional dependencies:
+> 
+>   (1) A fix for i2c::Driver::shutdown() to not free the driver's device
+>       private data at all, which otherwise causes the exact same bug, and
+>       is not necessary in the first place anyways.
+> 
+>   (2) Add the auxiliary::Driver::unbind() callback. Strictly speaking,
+>       this is not a dependency, but without this patch the main fix of this
+>       series leaves the remove() callback of the auxiliary bus
+>       abstraction with either dead code or quite some code removed;
+>       code that we would otherwise add back immediately afterwards.
+> 
+> --
+> 
+> [1] In fact, the cleanup ordering of devres is a separate challenge in
+>     Rust, since it is technically unsound to rely on the driver to pick
+>     the correct order. I am already working on a solution for this;
+>     luckily this also has some synergies with optimizing the required
+>     synchronize_rcu() calls required by the Rust Devres container
+>     structure down to exactly one per driver unbind.
 
-So remove the warning messages, they are not useful, not needed, and
-only confuse people.  As can be seen in the discussion at
-https://lore.kernel.org/r/20251230080014.3934590-1-chenhuacai@loongson.cn
+I don't think these are really separate problems. And I think this may
+be the wrong fix.
 
-Cc: Huacai Chen <chenhuacai@loongson.cn>
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/core/hcd.c            | 4 ----
- drivers/usb/fotg210/fotg210-hcd.c | 6 ------
- drivers/usb/host/ehci-hcd.c       | 8 --------
- drivers/usb/host/ohci-hcd.c       | 3 ---
- drivers/usb/host/uhci-hcd.c       | 5 -----
- include/linux/usb/hcd.h           | 6 ------
- 6 files changed, 32 deletions(-)
+If a &Device<Bound> lets you access a given value, then we must not
+destroy that value until after the last &Device<Bound> has expired.
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 24feb0de1c00..2d99a59d9f3f 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -77,10 +77,6 @@
- 
- /*-------------------------------------------------------------------------*/
- 
--/* Keep track of which host controller drivers are loaded */
--unsigned long usb_hcds_loaded;
--EXPORT_SYMBOL_GPL(usb_hcds_loaded);
--
- /* host controllers we manage */
- DEFINE_IDR (usb_bus_idr);
- EXPORT_SYMBOL_GPL (usb_bus_idr);
-diff --git a/drivers/usb/fotg210/fotg210-hcd.c b/drivers/usb/fotg210/fotg210-hcd.c
-index 64c4965a160f..fbb5d590eab6 100644
---- a/drivers/usb/fotg210/fotg210-hcd.c
-+++ b/drivers/usb/fotg210/fotg210-hcd.c
-@@ -5625,11 +5625,6 @@ int __init fotg210_hcd_init(void)
- 	if (usb_disabled())
- 		return -ENODEV;
- 
--	set_bit(USB_EHCI_LOADED, &usb_hcds_loaded);
--	if (test_bit(USB_UHCI_LOADED, &usb_hcds_loaded) ||
--			test_bit(USB_OHCI_LOADED, &usb_hcds_loaded))
--		pr_warn("Warning! fotg210_hcd should always be loaded before uhci_hcd and ohci_hcd, not after\n");
--
- 	pr_debug("%s: block sizes: qh %zd qtd %zd itd %zd\n",
- 			hcd_name, sizeof(struct fotg210_qh),
- 			sizeof(struct fotg210_qtd),
-@@ -5643,5 +5638,4 @@ int __init fotg210_hcd_init(void)
- void __exit fotg210_hcd_cleanup(void)
- {
- 	debugfs_remove(fotg210_debug_root);
--	clear_bit(USB_EHCI_LOADED, &usb_hcds_loaded);
- }
-diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index 6d1d190c914d..3c46bb18c7f3 100644
---- a/drivers/usb/host/ehci-hcd.c
-+++ b/drivers/usb/host/ehci-hcd.c
-@@ -1354,12 +1354,6 @@ static int __init ehci_hcd_init(void)
- 	if (usb_disabled())
- 		return -ENODEV;
- 
--	set_bit(USB_EHCI_LOADED, &usb_hcds_loaded);
--	if (test_bit(USB_UHCI_LOADED, &usb_hcds_loaded) ||
--			test_bit(USB_OHCI_LOADED, &usb_hcds_loaded))
--		printk(KERN_WARNING "Warning! ehci_hcd should always be loaded"
--				" before uhci_hcd and ohci_hcd, not after\n");
--
- 	pr_debug("%s: block sizes: qh %zd qtd %zd itd %zd sitd %zd\n",
- 		 hcd_name,
- 		 sizeof(struct ehci_qh), sizeof(struct ehci_qtd),
-@@ -1390,7 +1384,6 @@ static int __init ehci_hcd_init(void)
- 	debugfs_remove(ehci_debug_root);
- 	ehci_debug_root = NULL;
- #endif
--	clear_bit(USB_EHCI_LOADED, &usb_hcds_loaded);
- 	return retval;
- }
- module_init(ehci_hcd_init);
-@@ -1404,6 +1397,5 @@ static void __exit ehci_hcd_cleanup(void)
- #ifdef CONFIG_DYNAMIC_DEBUG
- 	debugfs_remove(ehci_debug_root);
- #endif
--	clear_bit(USB_EHCI_LOADED, &usb_hcds_loaded);
- }
- module_exit(ehci_hcd_cleanup);
-diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-index 9c7f3008646e..30840922f729 100644
---- a/drivers/usb/host/ohci-hcd.c
-+++ b/drivers/usb/host/ohci-hcd.c
-@@ -1282,7 +1282,6 @@ static int __init ohci_hcd_mod_init(void)
- 
- 	pr_debug ("%s: block sizes: ed %zd td %zd\n", hcd_name,
- 		sizeof (struct ed), sizeof (struct td));
--	set_bit(USB_OHCI_LOADED, &usb_hcds_loaded);
- 
- 	ohci_debug_root = debugfs_create_dir("ohci", usb_debug_root);
- 
-@@ -1332,7 +1331,6 @@ static int __init ohci_hcd_mod_init(void)
- 	debugfs_remove(ohci_debug_root);
- 	ohci_debug_root = NULL;
- 
--	clear_bit(USB_OHCI_LOADED, &usb_hcds_loaded);
- 	return retval;
- }
- module_init(ohci_hcd_mod_init);
-@@ -1352,7 +1350,6 @@ static void __exit ohci_hcd_mod_exit(void)
- 	ps3_ohci_driver_unregister(&PS3_SYSTEM_BUS_DRIVER);
- #endif
- 	debugfs_remove(ohci_debug_root);
--	clear_bit(USB_OHCI_LOADED, &usb_hcds_loaded);
- }
- module_exit(ohci_hcd_mod_exit);
- 
-diff --git a/drivers/usb/host/uhci-hcd.c b/drivers/usb/host/uhci-hcd.c
-index 14e6dfef16c6..8bb11109b66c 100644
---- a/drivers/usb/host/uhci-hcd.c
-+++ b/drivers/usb/host/uhci-hcd.c
-@@ -867,8 +867,6 @@ static int __init uhci_hcd_init(void)
- 	if (usb_disabled())
- 		return -ENODEV;
- 
--	set_bit(USB_UHCI_LOADED, &usb_hcds_loaded);
--
- #ifdef CONFIG_DYNAMIC_DEBUG
- 	errbuf = kmalloc(ERRBUF_LEN, GFP_KERNEL);
- 	if (!errbuf)
-@@ -912,8 +910,6 @@ static int __init uhci_hcd_init(void)
- 
- errbuf_failed:
- #endif
--
--	clear_bit(USB_UHCI_LOADED, &usb_hcds_loaded);
- 	return retval;
- }
- 
-@@ -930,7 +926,6 @@ static void __exit uhci_hcd_cleanup(void)
- #ifdef CONFIG_DYNAMIC_DEBUG
- 	kfree(errbuf);
- #endif
--	clear_bit(USB_UHCI_LOADED, &usb_hcds_loaded);
- }
- 
- module_init(uhci_hcd_init);
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index ac95e7c89df5..181db044c4d2 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -760,12 +760,6 @@ static inline void usbmon_urb_complete(struct usb_bus *bus, struct urb *urb,
-  */
- extern struct rw_semaphore ehci_cf_port_reset_rwsem;
- 
--/* Keep track of which host controller drivers are loaded */
--#define USB_UHCI_LOADED		0
--#define USB_OHCI_LOADED		1
--#define USB_EHCI_LOADED		2
--extern unsigned long usb_hcds_loaded;
--
- #endif /* __KERNEL__ */
- 
- #endif /* __USB_CORE_HCD_H */
--- 
-2.52.0
+A &Device<Bound> lets you access the driver private data. And a
+&Device<Bound> lets you access the contents of a Devres<T>.
 
+Thus, the last &Device<Bound> must expire before we destroy driver
+private data or values inside of Devres<T>. Etc.
+
+What are sources of &Device<Bound> today?
+
+* Most driver callbacks.
+* IRQ callbacks.
+* Workqueue callbacks. (In the future.)
+* I think that's it ...?
+
+Thus, we must call free_irq() before we destroy *the first* Devres<T>
+resource or the driver private data.
+
+Thus, we must ensure that driver callbacks are somehow synchronized to
+exit before we destroy *the first* Devres<T> resource or the driver
+private data.
+
+One thing is that this means that using a Devres<_> container and
+callback as the mechanism for calling free_irq() is not possible.
+
+I'm thinking that we may need two domains of callbacks:
+
+1. devm_early_*
+2. DEVICE IS NOW CONSIDERED UNBOUND - there must no longer be any &Device<Bound> left
+3. free driver private data
+4. devm_*
+
+And devm_early_*() would be a new set of callbacks where we can run
+things such as free_irq(). It would use a separate DevresEarly<_>
+container, for which &Device<Bound> does *not* let you peek inside. And
+the usual Devres<_> is cleaned up in step 4, where it is legal to peek
+inside given a &Device<Bound>.
+
+We could potentially revoke Devres<_> containers during devm_early_*,
+but actually destroy their contents in devm_*. This gives you a clean
+mechanism to replace the per-Devres<_> synchronize_rcu() calls with a
+single one. (By declaring step 2 must last at least one rcu grace
+period.)
+
+Not sure whether remove() should run before or after step (2). If it
+runs before, then it does not need to be synchronized with other device
+callbacks and can free the driver private data. If it runs after (2),
+then we can't destroy driver private data in remove().
+
+Alice
 
