@@ -1,220 +1,147 @@
-Return-Path: <linux-usb+bounces-32013-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32015-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BACACFF1FB
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 18:33:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D46AACFF4FE
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 19:11:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE4723201A22
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 16:19:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 99010341908B
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 17:02:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF2EE379960;
-	Wed,  7 Jan 2026 15:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B165B3557F5;
+	Wed,  7 Jan 2026 16:40:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jWsw4rN9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWRXAf6v"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5888D39A7F9;
-	Wed,  7 Jan 2026 15:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663343A0B08;
+	Wed,  7 Jan 2026 16:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767801219; cv=none; b=BKH2FtRQxri0M5UQzryeBy7WS3Eu5FsNR07pxwJw92YKL7k9o6T5nnN6M1d0gEftR9Ia83JIni/M0RuBbcdQsc6BmLfF3AOXHBbj4Auqg2VdcPmJdyvss7r0CRBPIGWrP60R8ooVeh1YPfSYefeX71Uig57Q1H2yMOA8bLx6vFw=
+	t=1767804028; cv=none; b=kPEJHBKt37hRI6/C79A5/VI9XvSNYHo8SvT81NFpIVt+zPpj+eqo4/wgmkd5esS1bwQ/KYQL5HBFjG8ZvG8e8RlWvfC0scUtEoRdJsCMMs2cZMgNH4YpTNykUa1e3kp1U3qpbrVtfAZl1hMWt1PLL0vRcusTWPSYvhbgou2oZBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767801219; c=relaxed/simple;
-	bh=wdMvfSJWGFav7L/E7nCk3KbVSxk4Vh8tBkpPa3X7OJ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jy9nOYul1IUcE6dLVxfDtCQeDN4UV9e5fdLPNADHcDrhQZhxykgK87vGPChd3s9U1cm1+8iaSLEivrg/SM3HnYrSzjPSpZezDwMioO1TWfJmPQGQBvP4TdNzGt7mHbdIPwcm86zjwMrQZHKMyEwlig68QOK1Veqyz/vqnNfG61Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWsw4rN9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9466C4CEF1;
-	Wed,  7 Jan 2026 15:53:36 +0000 (UTC)
+	s=arc-20240116; t=1767804028; c=relaxed/simple;
+	bh=z3POv5J4x+meLVYbsQCf7mB/6gWPZ96vXCB8Job/Vvs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=axs/PjgMijKadLf9YG8M733ZFbJO7ro6viyxvbIiZfGtXbWNO+Dxo+M3gLpSoD7FvrxrzLOdGz5HiVrlCqra6wDgLZ8n6OkMwZXxuOvGBJQPpts+XmgxcfhQFaH7IlGMBPsh6AzGPztHLIEB4LVe7+yVyi98OxNQMGA5OYJ230o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWRXAf6v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99E7C4CEF1;
+	Wed,  7 Jan 2026 16:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767801217;
-	bh=wdMvfSJWGFav7L/E7nCk3KbVSxk4Vh8tBkpPa3X7OJ4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jWsw4rN90FF58SpdPWPw351Zo29UHf1psFRMlL+voC1010tUq1lc9/zQxw0OZ2XB8
-	 BYDoXnPuDQekMHWokwWiwAQbS4vGLGmvVKVpoY80EwWn3ekZ0xQy0OMUT6ooDvwXme
-	 tbv1npfULPb8QYT2gQwT+GHpT6QeFwLnalTTTNP4n5tAgt/Dt0VwCHmFrkukyLiOas
-	 CvrVhCuQbfLjBE93S4b+eauk+WQt2a4/2LSmgSLyp/9bv5wnfMTTk+J5gTGqJFsDSf
-	 38ClIgiQqO6JjDakKM7pWD/+U5Aoalm0w9N3JdwX9HlpMCgsAiX/eZEL62qmAkwS/C
-	 pr7+xqj203U7Q==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-5.10] net: usb: sr9700: support devices with virtual driver CD
-Date: Wed,  7 Jan 2026 10:53:07 -0500
-Message-ID: <20260107155329.4063936-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260107155329.4063936-1-sashal@kernel.org>
-References: <20260107155329.4063936-1-sashal@kernel.org>
+	s=k20201202; t=1767804026;
+	bh=z3POv5J4x+meLVYbsQCf7mB/6gWPZ96vXCB8Job/Vvs=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=eWRXAf6v4PEvZFPNQ9MSIq4mhg/lKsxd/ojHLmtL2/9VcVDlrbVbiA6snO1GiXnbT
+	 /iNW0LDo1Dz0qk+FFbvfyzNtvX+elFdZITVNrrTvhKVyf/LVuWfqkhsfVQnnYPtiU0
+	 Vnb4F482tZaEa6J/nyNruw4kS+S4lRntIo1DLkfvW7STpDVoBqQARyTGc7zWnmdrb1
+	 o7+QJUM2BvERsQ9+vZbgeOxEiE1VL1Uyg3meBjb3sebKBGMokS+eLWqd2MIVUC4D0C
+	 r/1djN+F3ERXtW3oDP2zqj/ApnebxGZ4HqbnDJX7zrf/gMIL7w8/WtL7SVbyuy07tb
+	 ptDO8D4095e0A==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.18.3
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Wed, 07 Jan 2026 17:40:20 +0100
+Message-Id: <DFII83QY76O0.2PKZ73WCTVGPR@kernel.org>
+Subject: Re: [PATCH 0/6] Address race condition with Device::drvdata()
+Cc: <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+ <igor.korotin.linux@gmail.com>, <ojeda@kernel.org>, <boqun.feng@gmail.com>,
+ <gary@garyguo.net>, <bjorn3_gh@protonmail.com>, <lossin@kernel.org>,
+ <a.hindborg@kernel.org>, <tmgross@umich.edu>, <david.m.ertman@intel.com>,
+ <ira.weiny@intel.com>, <leon@kernel.org>, <bhelgaas@google.com>,
+ <kwilczynski@kernel.org>, <wsa+renesas@sang-engineering.com>,
+ <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <linux-pci@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+ <linux-i2c@vger.kernel.org>
+To: "Alice Ryhl" <aliceryhl@google.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260107103511.570525-1-dakr@kernel.org>
+ <aV6BHw-Liv0SVAwO@google.com>
+In-Reply-To: <aV6BHw-Liv0SVAwO@google.com>
 
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+On Wed Jan 7, 2026 at 4:51 PM CET, Alice Ryhl wrote:
+> If a &Device<Bound> lets you access a given value, then we must not
+> destroy that value until after the last &Device<Bound> has expired.
+>
+> A &Device<Bound> lets you access the driver private data. And a
+> &Device<Bound> lets you access the contents of a Devres<T>.
+>
+> Thus, the last &Device<Bound> must expire before we destroy driver
+> private data or values inside of Devres<T>. Etc.
 
-[ Upstream commit bf4172bd870c3a34d3065cbb39192c22cbd7b18d ]
+Yes, the last &Device<Bound> must expire before we destroy the device priva=
+te
+data. This is exactly what is achieved by this patch. The device private da=
+ta is
+destroyed after all devres callbacks have been processed, which guarantees =
+that
+there can't be any contexts left that provide a &Device<Bound>.
 
-Some SR9700 devices have an SPI flash chip containing a virtual driver
-CD, in which case they appear as a device with two interfaces and
-product ID 0x9702. Interface 0 is the driver CD and interface 1 is the
-Ethernet device.
+As for the values inside of a Devres<T>, this is exactly what I refer to in=
+ my
+paragraph above talking about the unsoundness of the devres cleanup orderin=
+g in
+Rust.
 
-Link: https://github.com/name-kurniawan/usb-lan
-Link: https://www.draisberghof.de/usb_modeswitch/bb/viewtopic.php?t=2185
-Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Link: https://patch.msgid.link/20251211062451.139036-1-enelsonmoore@gmail.com
-[pabeni@redhat.com: fixes link tags]
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+I also mention that I'm already working on a solution and it is in fact pre=
+tty
+close to the solution you propose below, i.e. a generic mechanism to suppor=
+t
+multiple devres domains (which I also see advantages for in C code).
 
-LLM Generated explanations, may be completely bogus:
+As mentioned, this will also help with getting the required synchronize_rcu=
+()
+calls down to exactly one per device unbind.
 
-## Analysis of Commit: net: usb: sr9700: support devices with virtual
-driver CD
+Technically, we could utilize such a devres domain for dropping the device
+private data, but there is no need to have a separate domain just for this,=
+ we
+already have a distinct place for dropping and freeing the device private d=
+ata
+after the device has been fully unbound, which is much simpler than a separ=
+ate
+devres domain.
 
-### 1. COMMIT MESSAGE ANALYSIS
+Now, you may argue we don't need a separate devres domain, and that we coul=
+d use
+the non-early devres domain. However, this would have the following implica=
+tion:
 
-The commit adds support for SR9700 USB Ethernet devices that include a
-virtual driver CD-ROM. These devices use product ID 0x9702 (vs the
-standard 0x9700) and present two interfaces: interface 0 is the CD-ROM,
-interface 1 is the actual Ethernet device.
+In the destructor of the device private data, drivers could still try to us=
+e
+device resources stored in the device private data through try_access(), wh=
+ich
+may or may not succeed depending on whether the corresponding Devres<T>
+containers are part of the device private data initializer or whether they =
+have
+been allocated separately.
 
-External links reference real-world user issues with these devices
-(usb_modeswitch discussions, GitHub repo), confirming this addresses
-actual hardware in the field.
+Or in other words it would leave room for drivers to abuse this behavior.
 
-### 2. CODE CHANGE ANALYSIS
+Therefore, the desired order is:
 
-The change is minimal and straightforward:
-```c
-{
-    /* SR9700 with virtual driver CD-ROM - interface 0 is the CD-ROM
-device */
-    USB_DEVICE_INTERFACE_NUMBER(0x0fe6, 0x9702, 1),
-    .driver_info = (unsigned long)&sr9700_driver_info,
-},
-```
+  1. Driver::unbind() (A place for drivers to tear down the device;
+     registrations are up - unless explicitly revoked by the driver (this i=
+s a
+     semantic choice) - and device resources are accessible.)
 
-This adds a single entry to the USB device ID table:
-- Same vendor ID (0x0fe6) as existing SR9700
-- New product ID (0x9702) for devices with virtual CD-ROM
-- Matches only interface 1 (the Ethernet interface, avoiding the CD-ROM
-  on interface 0)
-- Uses the exact same `sr9700_driver_info` - no driver code changes
+  2. devm_early_* (Drop all devres guarded registrations.)
 
-### 3. CLASSIFICATION
+  3. No more &Device<Bound> left.
 
-**This is a NEW DEVICE ID addition** - one of the explicitly allowed
-exceptions for stable backports.
+  4. devm_* (Drop all device resources.)
 
-- NOT a new feature in the traditional sense
-- NOT adding a new driver
-- NOT changing any APIs or driver logic
-- Simply adding a USB ID to enable hardware on an existing, mature
-  driver
+  5. No more device resources left.
 
-### 4. SCOPE AND RISK ASSESSMENT
+  6. Drop and free device private data. (try_access() will never succeed in=
+ the
+     destructor of the device private data.
 
-| Metric | Assessment |
-|--------|------------|
-| Lines changed | +5 lines |
-| Files touched | 1 |
-| Code complexity | Trivial - USB ID table entry only |
-| Risk level | **Very Low** |
-
-The sr9700 driver is mature and unchanged. The only "new" aspect is
-using `USB_DEVICE_INTERFACE_NUMBER()` instead of `USB_DEVICE()` to
-specifically bind to interface 1, which is correct behavior for this
-dual-interface device.
-
-### 5. USER IMPACT
-
-- **Affected users**: Anyone with SR9700 USB Ethernet adapters that have
-  the virtual CD-ROM feature (product ID 0x9702)
-- **Current state**: Device is completely non-functional without this
-  patch - the driver doesn't recognize it
-- **Severity**: Hardware unusable - users cannot access their network
-  adapter
-- **Evidence**: External links show real users encountering this issue
-
-### 6. STABILITY INDICATORS
-
-- Signed-off-by Paolo Abeni (Red Hat networking maintainer)
-- Clean, follows established patterns for USB device ID additions
-- Uses standard kernel macros (`USB_DEVICE_INTERFACE_NUMBER`)
-
-### 7. DEPENDENCY CHECK
-
-- No dependencies on other commits
-- The sr9700 driver exists in all maintained stable kernels (driver
-  added in 2013)
-- Patch applies cleanly with no modifications needed
-
----
-
-## Verdict
-
-This commit is a **textbook example** of what should be backported to
-stable:
-
-**Meets stable criteria:**
-- ✅ Obviously correct - simple USB ID table entry
-- ✅ Fixes real bug - hardware completely unusable without it
-- ✅ Small and contained - 5 lines, single file, no logic changes
-- ✅ No new features - enables existing driver for device variant
-- ✅ Falls into Device ID exception - explicitly allowed for stable
-
-**Risk assessment:**
-- Minimal risk - cannot affect existing 0x9700 device users
-- Worst case if wrong: only affects users with 0x9702 devices who
-  already can't use them
-
-**Benefit:**
-- Clear user benefit - enables hardware that otherwise doesn't work at
-  all
-
-**NO** concerns:
-- No backport adjustments needed
-- No dependencies
-- Driver code is identical across stable versions
-
-**YES**
-
- drivers/net/usb/sr9700.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-index 091bc2aca7e8..d8ffb59eaf34 100644
---- a/drivers/net/usb/sr9700.c
-+++ b/drivers/net/usb/sr9700.c
-@@ -539,6 +539,11 @@ static const struct usb_device_id products[] = {
- 		USB_DEVICE(0x0fe6, 0x9700),	/* SR9700 device */
- 		.driver_info = (unsigned long)&sr9700_driver_info,
- 	},
-+	{
-+		/* SR9700 with virtual driver CD-ROM - interface 0 is the CD-ROM device */
-+		USB_DEVICE_INTERFACE_NUMBER(0x0fe6, 0x9702, 1),
-+		.driver_info = (unsigned long)&sr9700_driver_info,
-+	},
- 	{},			/* END */
- };
- 
--- 
-2.51.0
-
+- Danilo
 
