@@ -1,42 +1,42 @@
-Return-Path: <linux-usb+bounces-32007-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32008-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD343CFEAC4
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 16:48:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE0A1CFEB2A
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 16:52:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 98293307CF1F
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 15:45:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5651B310997C
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 15:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B822535F8B8;
-	Wed,  7 Jan 2026 15:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F9FA361DB8;
+	Wed,  7 Jan 2026 15:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DhB2eXJI"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RxrWvC2E"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3687335F8A6;
-	Wed,  7 Jan 2026 15:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8FB3612F8;
+	Wed,  7 Jan 2026 15:09:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767798569; cv=none; b=FwxaKx4wspB6lxGLQwkb40UUMfK4mdVTAH9cxHVZHTVl5q0VJRea6AQIDZM65QiBFxHin9wXL/1MVGfjD1VGYUypweSdwrVT19xfETVJx9JsdN0YVR70R4NwW2YrIxrBDjVfz3RDWn0+AdfzEbeNwCSBk5T0Ua/s2vpX7bSTHIU=
+	t=1767798582; cv=none; b=ahcjLhJKmMIAwy+oN8YzV09z2Y5OzQwaloOaO+OkfvugcyURbHyDt4EUwqqfYHdVeFgWpKKbhkA0+2Oc+i90hOexqisfQwuOJNDQifIH57Owrw1CpW7xVrC3Mm9Y2+HuT5MQbGUjsilYgJ/YLz/6UPLxCoz0pPYLmO9gTKkFMkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767798569; c=relaxed/simple;
-	bh=R7dfa7Jo2aqE5IAC7RTt9oluIXiX6KZLg6IluUq7y6E=;
+	s=arc-20240116; t=1767798582; c=relaxed/simple;
+	bh=NGNgNL+FKGpgUa4+ZN3QdwJfKg5r7UY5CkOjWeKE28A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VZNVNQ+IWdSjYxOx6VMWE231PFXv3k792xXMSp63aac4H38L5CvXnudiB5XmDjUGxzQvVL+QK0/cj4sJ87rDLkbE/hfMDy25px3/tUahNLuCXUZGMZg9rpbLi1/462aEbJPTLoSmj+xb5L6GoNxNeeCn85yltG8dJ8YuExuuwS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DhB2eXJI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CE6DC19422;
-	Wed,  7 Jan 2026 15:09:28 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QSfKtu0A4Ka0ja/94IkYShoywmOStHky2OABkQppoALDEABD6xWu2twcMiOodKud5mX7Ktl89qnadhcKSrXsru9eZM0mBYOOuDhuG3SURgquIKPDqoc4rg+koX4YwC6to5nehixGOJCo8yaOIO5liatnMre+hTPvrE+VGmWbQDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RxrWvC2E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C25B2C4CEF1;
+	Wed,  7 Jan 2026 15:09:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1767798569;
-	bh=R7dfa7Jo2aqE5IAC7RTt9oluIXiX6KZLg6IluUq7y6E=;
+	s=korg; t=1767798582;
+	bh=NGNgNL+FKGpgUa4+ZN3QdwJfKg5r7UY5CkOjWeKE28A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DhB2eXJIUy22tXUmlhuKzKoKqKOlHW+QL7KWoUOM9zjUCRS3L59C5TBMH5SXDR0oI
-	 Zp/BAh5K0cGaWKJN1psjDJqRKN41cu31tDBpzb/u+27y6Qo7drzWVYFUOMUS0X9Azi
-	 biloH00XIGDjHkOC74fZWe2y7X9djUQwcZi7hI6o=
-Date: Wed, 7 Jan 2026 16:09:26 +0100
+	b=RxrWvC2EpRW9x1zZE1qI1Kg7Cp8cTfHvry2XSeUnM7u1o8wNMdmKyLZC+GAa0bKJI
+	 qtk/Hv2qd7YMtUzl94vh6gEUp/Up/ygvuZb0tEtfOOf0pCm6f9A9wP/WJJKgeHTDoh
+	 lQl4sY2Veht5uqekxxyS0OoJApTCD74np6Xq0hyU=
+Date: Wed, 7 Jan 2026 16:09:39 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Danilo Krummrich <dakr@kernel.org>
 Cc: rafael@kernel.org, ojeda@kernel.org, boqun.feng@gmail.com,
@@ -45,11 +45,10 @@ Cc: rafael@kernel.org, ojeda@kernel.org, boqun.feng@gmail.com,
 	david.m.ertman@intel.com, ira.weiny@intel.com, leon@kernel.org,
 	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 4/5] rust: usb: use "kernel vertical" style for imports
-Message-ID: <2026010718-ensnare-epidermal-19ff@gregkh>
+Subject: Re: [PATCH 5/5] rust: faux: use "kernel vertical" style for imports
+Message-ID: <2026010734-darkness-daytime-2795@gregkh>
 References: <20260105142123.95030-1-dakr@kernel.org>
- <20260105142123.95030-4-dakr@kernel.org>
- <DFHR4WMDV5U7.KFFXHIYXI6M3@kernel.org>
+ <20260105142123.95030-5-dakr@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,26 +57,50 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DFHR4WMDV5U7.KFFXHIYXI6M3@kernel.org>
+In-Reply-To: <20260105142123.95030-5-dakr@kernel.org>
 
-On Tue, Jan 06, 2026 at 08:26:40PM +0100, Danilo Krummrich wrote:
-> On Mon Jan 5, 2026 at 3:19 PM CET, Danilo Krummrich wrote:
-> > Convert all imports to use "kernel vertical" style.
-> >
-> > With this, subsequent patches neither introduce unrelated changes nor
-> > leave an inconsistent import pattern.
-> >
-> > While at it, drop unnecessary imports covered by prelude::*.
-> >
-> > Link: https://docs.kernel.org/rust/coding-guidelines.html#imports
-> > Signed-off-by: Danilo Krummrich <dakr@kernel.org>
-> > ---
-> > @Greg: If you agree I will take this through the driver-core tree. I will have
-> > driver-core patches building on top of this.
+On Mon, Jan 05, 2026 at 03:19:46PM +0100, Danilo Krummrich wrote:
+> Convert all imports to use "kernel vertical" style.
 > 
-> Nevermind, I don't need it in the driver-core tree after all. :)
+> With this, subsequent patches neither introduce unrelated changes nor
+> leave an inconsistent import pattern.
+> 
+> While at it, drop unnecessary imports covered by prelude::*.
+> 
+> Link: https://docs.kernel.org/rust/coding-guidelines.html#imports
+> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+> ---
+>  rust/kernel/faux.rs | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/rust/kernel/faux.rs b/rust/kernel/faux.rs
+> index 7fe2dd197e37..43b4974f48cd 100644
+> --- a/rust/kernel/faux.rs
+> +++ b/rust/kernel/faux.rs
+> @@ -6,8 +6,17 @@
+>  //!
+>  //! C header: [`include/linux/device/faux.h`](srctree/include/linux/device/faux.h)
+>  
+> -use crate::{bindings, device, error::code::*, prelude::*};
+> -use core::ptr::{addr_of_mut, null, null_mut, NonNull};
+> +use crate::{
+> +    bindings,
+> +    device,
+> +    prelude::*, //
+> +};
+> +use core::ptr::{
+> +    addr_of_mut,
+> +    null,
+> +    null_mut,
+> +    NonNull, //
+> +};
+>  
+>  /// The registration of a faux device.
+>  ///
+> -- 
+> 2.52.0
+> 
 
-Ok, I'll take it through the usb one now, thanks.
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-greg k-h
 
