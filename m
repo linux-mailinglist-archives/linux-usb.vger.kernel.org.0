@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-31972-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-31973-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD64FCFBB07
-	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 03:16:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F0A0CFBB38
+	for <lists+linux-usb@lfdr.de>; Wed, 07 Jan 2026 03:22:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 72036304BCBE
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 02:16:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7CCE93014AEB
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jan 2026 02:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79224284898;
-	Wed,  7 Jan 2026 02:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5192323ABB0;
+	Wed,  7 Jan 2026 02:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAu0O6AF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZPBnWS2E"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013BD281356
-	for <linux-usb@vger.kernel.org>; Wed,  7 Jan 2026 02:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD89230BD5
+	for <linux-usb@vger.kernel.org>; Wed,  7 Jan 2026 02:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767752183; cv=none; b=QO51Yu3BPztS/2/Gbk98GF904I/rUceyMlkVPXw1PTc+7/KLHaYu8eIGLauc2fjy/qPL6dWAnaZnuR2KJJENIdfLu58z6ISSXKqDnAMnOChNjsKYDgFmpio0ZCZzO13Xj3/P+XGK8UgeMsFJ/6gUPgIIuYgYX7bcRVYZNA8freE=
+	t=1767752215; cv=none; b=Orqlejkr/RU5Rtz7nDGNGM9TsoTZyIVfXFgzhvLstcJlhZR1b+bIw+WQChxpPazmp1EPGxtODjhDxM/RUZWUCf7Wn5RnKRECUzRNjlCk3g5PKdwmd8a1hu5+wLMqo+UDk9y1VrfkmGiaBZuC3OtZfucvw6QeuoVDi6EaVOH5BU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767752183; c=relaxed/simple;
-	bh=Jj4s8533l07DVHzONn4MhppO1E6IJdaUwZQDkVIbRvw=;
+	s=arc-20240116; t=1767752215; c=relaxed/simple;
+	bh=4L9PC1uWF4ad2WGlpy3eQok2Utb5T4mR27yRWTd9qXI=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UoDVWRng9aawOHYdg3n9zYyFyUOYZF7FUKm57zoWJfMJM4Ol30iSWlwUv2zseo5Gm7wNNG1uFCgOGNVBtQxr+jBLi2Pnt3r5B9k/DqJCBP3njkdGXILQiPQzheXGzqM1p6iaRAbInlVOlItIIhl1g9kxa0KleARX8EmOYWLSqi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAu0O6AF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9658C19423
-	for <linux-usb@vger.kernel.org>; Wed,  7 Jan 2026 02:16:22 +0000 (UTC)
+	 Content-Type:MIME-Version; b=N3WqbXKEv0mBIdNIlbAWpfgE+pjHpipLj4JzhvO+w1G/U8Q4zk6mRUrm1S5ns1MqntqsgV6kighiwSG/XiW7gYHk1M4uxmiYMNNBVRrXzvRfG41PNHmFzcZ2udtuCx4M6g902qNnxZ4R1ibixS2Jn2djvAAW9qBsjGxpoYc8+0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZPBnWS2E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 41F53C16AAE
+	for <linux-usb@vger.kernel.org>; Wed,  7 Jan 2026 02:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767752182;
-	bh=Jj4s8533l07DVHzONn4MhppO1E6IJdaUwZQDkVIbRvw=;
+	s=k20201202; t=1767752215;
+	bh=4L9PC1uWF4ad2WGlpy3eQok2Utb5T4mR27yRWTd9qXI=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=AAu0O6AFj5eT/Pp8AAONW2JKThLIxHAY4LkCSdwsisAjLnIiZOutCqOyRVmcAekKM
-	 5rbt96Y6HvBQQtEiWLNHWYLhTJGL75dB3l5ENcp9WXoKOmlwhhZ6W4AtaQk+CdDOzo
-	 IZ+aAo3MDUVk60cUIlflpBdfJzZ0P8o7tI8BR6SU1j40GhUiTCyQ3mZny+ohHlO/qc
-	 Angrqv4qmwMg9Z7YSeKyJ1S7uBSrnTNA38EBxP6QNSHro5my+hkveY6iYk/hxHDuGe
-	 1WDgcs8LC5MTh5FS3Tjfga/JDjtJc5Cu2Vkav1LbpDDqcfslm/7U2VliH/jJCJrOwa
-	 igTlbq2r3xbMw==
+	b=ZPBnWS2EhWyqlczwpqud4I5xmfkk2s6al1+efb2f7M8Rnhx6l0blGzxenqsX2yOk5
+	 hNnLcVHt/W6wRWSUPAL/wG2X942zDqPvex2ybvvlfTXlvsOa4L40X0fqdxImyQj0UG
+	 skio/h3N6cBrsaDrbrRznOj89l5im80KalXZy9kPkKzaY74WkEbtidDXtuDKOzMJnI
+	 kyCrh7M5dXA74dMt3cXpelNlkpV5Ij4y5cQeYuxmtV6vgSKkNe2W/TWSchttiklGrl
+	 Bs69hTa4TmrLEx4oUGT9NgxTNy5grtFMOG/fGmgYAN+IcPR2cMtfS2NoqvKTwA8gIb
+	 IEL2GCtBvIduA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id BDCF7C41613; Wed,  7 Jan 2026 02:16:22 +0000 (UTC)
+	id 3AC78C433E1; Wed,  7 Jan 2026 02:16:55 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220002] USB tethering fails with rndis_host on 6.14.2
-Date: Wed, 07 Jan 2026 02:16:22 +0000
+Date: Wed, 07 Jan 2026 02:16:55 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -59,8 +59,8 @@ X-Bugzilla-Resolution: ANSWERED
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220002-208809-XSCoDBbGYB@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220002-208809-ZVW9zl6TlC@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220002-208809@https.bugzilla.kernel.org/>
 References: <bug-220002-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -76,13 +76,7 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220002
 
-cvb3452025@proton.me changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |cvb3452025@proton.me
-
---- Comment #5 from cvb3452025@proton.me ---
+--- Comment #6 from cvb3452025@proton.me ---
 static const struct usb_device_id rndis_wwan_ids[] =3D {
     { USB_DEVICE(0x12d1, 0x14dc) }, /* Huawei example */
     { USB_DEVICE(0x19d2, 0x1405) }, /* ZTE example */
