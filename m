@@ -1,557 +1,200 @@
-Return-Path: <linux-usb+bounces-32062-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32061-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6D4AD02571
-	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 12:17:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58872D024B4
+	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 12:05:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A13E731FC91C
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 11:09:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AF5B53069201
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 11:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76AA448850D;
-	Thu,  8 Jan 2026 10:34:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E860E3EF0C6;
+	Thu,  8 Jan 2026 10:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AZO3LpUT"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="b0Foe8W/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011026.outbound.protection.outlook.com [52.101.65.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBEB43E49C
-	for <linux-usb@vger.kernel.org>; Thu,  8 Jan 2026 10:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767868458; cv=none; b=Li3zdN8HT/VccPJRgV545/JG9JdPJalaG/az3hFrY/JLPymb+hLPS2BgawKkRnN8cFVAlc3HgpmM8JlZwKliXzPZMvK4DNqEBXQywxHAfn27QEQCtY4YkmU1C6EeuDxD0LfD/WMABOQs1Ilv3uvP8r/80709D49mhmYvab+iM5U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767868458; c=relaxed/simple;
-	bh=U5nPp3+cFm1W/s+K3tenL4kVGeUDXVoblLL996mXuNs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PjQWeIdlJ1KuALw28w5pQZusnGV9hapP63Chn8ivqzx9jWBDGov9cNEYk3cX7pLbod14q3+RGIXV2rUg+XpQTo5M4QZSxlKzqEyiMI3J49PoT0vXHjAfjZx94zFaZhMfYpADJyLd/0vzsoFW38mwvs0jtvYK+bALYO2K4alebCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AZO3LpUT; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-34ca40c1213so1790326a91.0
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jan 2026 02:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767868448; x=1768473248; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SchtY8It9mr1HUo0oIkx5e99zWrF/tN41rh1aJndtgI=;
-        b=AZO3LpUTF1dQg8IBCOUXUIf2gw++W02QgMtHiWlGk6YAcccy5J7ECVNqMalFIjcBFD
-         X9ZVHGquKd1ACJ9Re7a49T9Okwx+rQ1t8PCRQ1OOEgy5TSAl+Ayb+wNjJZdZctHR93s2
-         TnqsoXERehCzxAYC89m/38wZh6faYuO7wNJSni6th01aj84lj2kTx67DPnTnRnRhOhjq
-         K264iuAAtB1Pg9CnTKFEeZLi5IFYpozh1Nm0NNA13zS8lUfoPzw3xwXmUYnSrVuU16oa
-         iYcA8hSFIukO6JUAnkA78Co+1nwKl+ksGOg5k9MIjlT+CD/Flrcdey3MKiZX80ncCxC2
-         yVqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767868448; x=1768473248;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SchtY8It9mr1HUo0oIkx5e99zWrF/tN41rh1aJndtgI=;
-        b=CzxN8OUfAjYCEmtVzMzHXdIUFc1xVMmA5CX2B7bcH8To5Mq8EA5SMg6G2v+V61i8VQ
-         l2sS+SkRj1sXdmwKOeYidnpbl580lz2RHCIfrC5JzsH7Xkm66wT5ovRRnrMkb8oSjvIw
-         J9HqPI7qFwQkDUeimChrrhV/VtZhpMBgA5GY29HkbCnQD71zQCNIp1Uy9rmLXIJWlODU
-         4iqcxoxdlp1KMXhEFIDhTLFsyWJUKyHdMfamxahQZ3Nbzyx3hqlMmU09ESFcc14m6J65
-         qlEqzemUbI2rIqK+mpdw0aZ7X5tUVqO6ndLOzdfYjjvlCDlAbIJeVhlpzwVGgMhf61hQ
-         reXg==
-X-Forwarded-Encrypted: i=1; AJvYcCUnUFppGSEM6lb461XZTCU8lGXQH76b0aFCDaUBEzQngkEhUsSCxPpNlz+CuaW/vnrR0jbDfzqkEvM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+6EMJ14tC+nnswIvn1hzBL3KbClOZk7pHN/rXVWHBeY5CmLL6
-	gKuxELVNdL2Im7h3t+i74yLqjjlUFXaDlCyiZuRJw7Fm0sz2o4pShYc=
-X-Gm-Gg: AY/fxX7LzF1ytFQk6Gf3IvQuZxLtoV49orb2u1+lU451sm6zhuy0Xk/9H0cuoCeqj6r
-	lp6a4zlk6ZaooCMHBYY88eWEt4hUoiJ0XCs62wONlwH9CO8gzh3oj9XT8Ga0ePv5Gb5r6h4c6tA
-	SFSNA4AtP5vb3GwbkCO4RMWvj05GPXYwqCX4g1cF7n65YdJQIAWHiJ4sC2Dep8Ku/++O1wJMiEe
-	/u/LxbwAaiWPGGlKiM8QYZPzaNTYLYuGD3bGa5VBBBtjUJkCD2LKZnSxNVtmZYABMZYSqfcv1gY
-	WsIdxzliRdSuKRTRV6b85fhlo3BgwnoZ0cvDWzhTMeN3sKZiB1OdyWAS3hS+btcmQhnSpmXAnsN
-	FO4L0LzSmqmZiyFhYGGAJBkf6K46uSi7zMCwqQOIQz3iVfurbFPfmN1P043593759rSZxKDP0LM
-	HAQAqYHQ6KnjXxIGM=
-X-Google-Smtp-Source: AGHT+IGSd4pqyzRTa9kCebAhz5z7/YLz8YNjS9INTF2rptBIEH3dNgoen2GPtqhNVW/zSj9Hgy2ZTQ==
-X-Received: by 2002:a17:90b:5708:b0:34c:4c6d:ad0f with SMTP id 98e67ed59e1d1-34f68cc29a4mr5712763a91.37.1767868447636;
-        Thu, 08 Jan 2026 02:34:07 -0800 (PST)
-Received: from at.. ([171.61.166.195])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f6b8a762bsm1960761a91.4.2026.01.08.02.34.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 02:34:07 -0800 (PST)
-From: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
-To: mika.westerberg@linux.intel.com
-Cc: YehezkelShB@gmail.com,
-	andreas.noever@gmail.com,
-	atharvatiwarilinuxdev@gmail.com,
-	bhelgaas@google.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	feng.tang@linux.alibaba.com,
-	hpa@zytor.com,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B24A44E038;
+	Thu,  8 Jan 2026 10:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.26
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767868455; cv=fail; b=Lao+77p9/UswJEB3SddvCNVbOf6Bzm1mHC7Bx1CXPW4oYs3rxORVUsIyXp7EwZf98oc4wNdrQH8Fjq6fgdV+fww/3sHQvEyA6EGDqkL61INhAD8l3uJUalkxDFNJ0VWniCDmJ49feyxM+So7UW7Ofd1GVT4Wa2NSdADHXPyfuSg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767868455; c=relaxed/simple;
+	bh=0ETAwnN8aC6p70ftb8BaG+xH/XcP88L51grfqaC6FPg=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=fI6Cu2QJi++LE4eUng2sRYwRKPVkih9B6tkthisE3Ip0LHsF3EcmkfCj1HlcFJg5Gw+smnrHUX5beD5qqVjjaFWXMruTHeFqZfkcocBhKoUcw5jcJszHpe47BSd8HMT2KjhgxiFnZTgsoKUwdVRHU6taZXwEkoFT99y3jpNAxeU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=b0Foe8W/; arc=fail smtp.client-ip=52.101.65.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vgin8ys9/oQSpaz00DEqn2ufpxr32qT9917phBLOoFH0I1IwnZKDOABzMXAmSOMAFSnCcwh2lyBbJGo8cXMCLlNuzCqO79jEioiMbLP2QbJ95uYxlrgrfCj9KLwvUWcSdBfr5R3oyVnTHbD2VvRX5ZnLqQhp9RYLP24dF56p+qTKIyxpG8Bk5RgHlZRi1ymXooebTLj/nGbMi6V/kUpg8JJ2PKwnKcAa8LqPWJrVtCJBMb96TK40n0buRK9H6gOIErB7DpDjl1nw+yD6crCt5QLqYPxPRd2DKO859X1XfxLfDqqv1uGvhsgmG9fUCQhVPNPdt2sebPOiI1Dz5PwlrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tnf2muTLweWl2GbXBhZPNfgPgREBpokQwZJ5qJygHbI=;
+ b=D3dfxFylvtFe26ybxzLRf28X/pocrX+dlNzkZZ8Nz+DiOg4myU2tviYhZyyBN/ps/afsH19+9TXKcoF5hoJGHyGnOUZJm5mugdl89eSE0II8UHz4nqbyDiLjQUdgS6uWtRELZTaw0HrrCHHZrZSFtP6HyawInI/KRpqSyoUhnWO0ORAt9/UFeCS/eyAJiqY9glCOjJDRFQc6CFE/q+FGeoA4IgAqAphdjMqW4QXNBayXcI1UOxmhWYIFZ3JQYrpciMcR/kSEH92EaFcMlsH8A1u+qowHmV33aX9FypCsI1RrOfmvYDc/DzGA2jZYPCuTrT7X9QNfkT45IaW3f0kT6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tnf2muTLweWl2GbXBhZPNfgPgREBpokQwZJ5qJygHbI=;
+ b=b0Foe8W/qhtbiMbI1xC1lPKUUQX45Wb9MZbuza79Z7oag4gF0HOwuYzlInt6JzGLKS5DkQ9XyqhLPbfamudQOJJ8YLCt3anjJ+XE7iCi7zyh60pcy0TaYW22suBiyE68rXOzyIYQbLCKuH8BOeAwLEkJ8UI5L2wRlwdJz4L2stFAzGbkTHOI2r0vvTAJ2EanMPlMJnWvXC8aZpFovTLKFi1B9t6WOZ3OMmyNvbMtV6TeOOlCmqa1uuYej0Juq1Yulrp9T+fvU9t2RVBlpbURU0s/xMpGDaAlOvofwBsd/DQ6oW1i6eZOymbxHLT4e7pTECrT0nM9UpwxW9P3hRea3w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AM9PR04MB8355.eurprd04.prod.outlook.com (2603:10a6:20b:3b7::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.2; Thu, 8 Jan
+ 2026 10:34:04 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9478.004; Thu, 8 Jan 2026
+ 10:34:04 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: peter.chen@kernel.org,
+	gregkh@linuxfoundation.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com
+Cc: linux-usb@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	lukas@wunner.de,
-	mahesh@linux.ibm.com,
-	mingo@redhat.com,
-	oohall@gmail.com,
-	sathyanarayanan.kuppuswamy@linux.intel.com,
-	tglx@linutronix.de,
-	westeri@kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v4] PCI/portdev: Disable AER for Titan Ridge 4C 2018
-Date: Thu,  8 Jan 2026 10:33:58 +0000
-Message-ID: <20260108103358.3412-1-atharvatiwarilinuxdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260108095303.GQ2275908@black.igk.intel.com>
-References: <20260108095303.GQ2275908@black.igk.intel.com>
+	jun.li@nxp.com
+Subject: [PATCH] usb: chipidea: ci_hdrc_imx: use "wakeup" suffix for wakeup interrupt name
+Date: Thu,  8 Jan 2026 18:35:21 +0800
+Message-Id: <20260108103521.2139824-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0029.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::20) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AM9PR04MB8355:EE_
+X-MS-Office365-Filtering-Correlation-Id: a44a2d67-2580-4b6f-40a7-08de4ea171b0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|52116014|19092799006|7416014|376014|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?zsSMxU/5ioZq5QbVJWGM9506LnPirb3WtQzoz/1N6gM1Z/kBn8hA4I0FdihU?=
+ =?us-ascii?Q?kcmwFFhT99Us1tJZmJtx06tZKHCox40bKFACQbvIsrfBiNFKIBSpRyuvrd+L?=
+ =?us-ascii?Q?smqGKcbdYQeaQCVw2OZMMFeLgxy7w28JSDpllL64NzrnakwzfnlmzmeJKeAV?=
+ =?us-ascii?Q?CVzGynvRDlxi0mv51EDZz2oRstE/SXhL9C5sKccBR6XTo5LPPqQLw6Cfe5yA?=
+ =?us-ascii?Q?lVOGnIRUCYEGC/4vtlchoxbakZiSQ1aRly+9L+p76MMLpvEVPuN/xTdxN8tO?=
+ =?us-ascii?Q?L1vAheeod2JUNh7MOTNxvmP3yXNvqQZaHkuF3ygh4IrE5gwccWHJaRhFwZwY?=
+ =?us-ascii?Q?cuYiUBUk3atWZgCTwD/mI9dzyPDeVgrbD8S02PpzENwT+7bdR6XXB2qLueJ9?=
+ =?us-ascii?Q?qHpgHUNezQFith1Pcg/hdmPjacpwIQZR4URYDKEnLcuSbOY/yF6Yw0dRSwu/?=
+ =?us-ascii?Q?D4xeDLfukV4h+tntTExHBuZrfLH8piq+euvfOflv9aIlKeO1orB7i2Y7YR6m?=
+ =?us-ascii?Q?HvYIySdvqTWygdSbZOvfkpkhLHD04n+rZam/aD290TJt0CgtzEyz9onO9kWq?=
+ =?us-ascii?Q?AfICvZnZYPJefPnWFfciS0OPUO3E/B6gB/Z2qFgG7Dar6ovERDMXGTcnp8oD?=
+ =?us-ascii?Q?ZkA50T/sRsJ2CzTqtezFl4ek8fkxjrhJhh4cNhlWa865fmYIIREeDZrSE3aj?=
+ =?us-ascii?Q?6sTwXVMPxCkKQwDc5egwoOdTYQPymYEpqoqRQwvamtwBUrJDRU+1iED7+Y3b?=
+ =?us-ascii?Q?mHpQBxad1PwJiZ4lH+VjIxoEkKtpadlPfMMpPtCjk4++P7Mz+6if8oClEhXV?=
+ =?us-ascii?Q?gpFEjp0wnaU1h/BqyMTGVVdb2+isir0rAsq7dCCH/dEYuW1EZFRNv6CBTktu?=
+ =?us-ascii?Q?Pp0e8vPLbMtPPDVsFF+gJYwU8NvLA6wTUGTiflb5RSNUPUYqH5dBGM7QHM+b?=
+ =?us-ascii?Q?X/mlgXXYJTHpy9RY8oz+TC7b3xbJ8XdxDKhMlnyy7rqaRNYt15SYJ2ced6C+?=
+ =?us-ascii?Q?nXggiDC0onRHoc/HKy/u5nBYiosAc06XX7VEueU8DOZzcBN45VJATtX1MQGB?=
+ =?us-ascii?Q?afCanrmHsuKeqkfr5YgQG2sRngH/zHpLfxymaAxOJUpzWQJhjpwuehcXNQKS?=
+ =?us-ascii?Q?oi+ujg/FHVn8iNN0IBmwcWrNYNEH91HxQJPkPxAjQpeKk5Jz8kBaEY9nPnl4?=
+ =?us-ascii?Q?aJnVY19lvQklomOTzMJ2PlwvCG26IOZSFuP5R9KxAMejvQB0Uy1kdRf45EGf?=
+ =?us-ascii?Q?FCh3AdojjJiVn44FvJ3x/RdShwo9t05lgc0ObsVST5FRA6F7nCU28qRp4sth?=
+ =?us-ascii?Q?gA7T9wicOBU+Z162aJ/+G+l6XCibHaEYMne4DLxjqnkKdlBOnp2rk+lYPa6g?=
+ =?us-ascii?Q?FwneOPNxif5EnfCAYd1q/HF/ky9lM0yEmSMPLDxf0Wew7Xz62xi1W93toG+B?=
+ =?us-ascii?Q?88KX7rRD+o2RWKcH631heX4mcqUMhPCzxR+xT4b7YUZ+pI84IUOqlKuy6p9T?=
+ =?us-ascii?Q?QkpejKgjjLz8oBn6ImeBAyN95R6g+hUAptek?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(19092799006)(7416014)(376014)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?2xgTJaadnUaOMMutJ9tV5b43C16QJWr0fTUr1CA4hhmKBBGP9aLgBYJyTfrx?=
+ =?us-ascii?Q?RHe9z7a25iDW2naAP89+k9MDXSozMJCqXGVeQZwjzKvkq/PZLC8TOkJAYpNv?=
+ =?us-ascii?Q?v854+dANHd0FtRHlyo+xFlTk8b5KUQWq5IULwlZdQX2A0TjI2jqLWoH1yxAO?=
+ =?us-ascii?Q?1S8ACXqbAGUF14eii8GKN8jmrXdTUQebCP3vkgy5Wyk1t/8HZcWx7NEsPs1V?=
+ =?us-ascii?Q?NvHTY6+RdrfU5WaBy3fbDMMwk+6RGb87j0APwzVC86SwNb7fqAYnaMIHrtFV?=
+ =?us-ascii?Q?SKIx4rr5GbGrHBWXdIkroDMva/1+aGmGV4dhF9SlbIGFd6ObOETY+ceYN5+P?=
+ =?us-ascii?Q?zlD6BENksUvrt924bq69snaqDEfDp6Yw0Vk3l5ToPoupDp+AG2KAyIFL+KTP?=
+ =?us-ascii?Q?gSFpEJJrDT0rMmbJxnxjt9iPfWNekyUhfkvhVe6KGqtXB9xpX9n3xrFXvsnn?=
+ =?us-ascii?Q?DSCqPtRjVZ0w8xNQzJbHy+yDuCWeA8MYwllklMB8DNwwC5WL6Tvnepjo0tuv?=
+ =?us-ascii?Q?4n1FSh+OMzbxcCvvOrkmmr6kdUZk9NkxG29O6Fjt+VvmE9/qh6U65Us2zg3J?=
+ =?us-ascii?Q?I5fZNL+Ax6dZR75RShu+RNTz/NoUnu8UYv3xm1MDlVxoz+18AYHUhzV6HyIs?=
+ =?us-ascii?Q?qPfu7pLnYBNd6CIkytZ4gMT4NY/RmxL+j9tZ0APCeHBvwPhD0kTBQqu7Lzhg?=
+ =?us-ascii?Q?y6GAMjiPdo3nTus/MzzMK41ZZnBUo3sDCCZA9WW4Dtllj5dXDp4mJaRRjNfy?=
+ =?us-ascii?Q?4EybULomZuOX6UupmvGa9f5pQvry4JlVd0MY+ANJaJYVHoQezVwn5oSo7RBT?=
+ =?us-ascii?Q?c338mNP3hCHB/dwaA6x9CF6s+V/SQ8VccW6Lwy6Fmf9ByTsaQI5MuqOOeGqJ?=
+ =?us-ascii?Q?5CQa6yT1hyw7aU7+SlyGpMW0CWPv3Qg0VBuNsN4zE5bpBZNRvw8YLxPi+Pnd?=
+ =?us-ascii?Q?bKfvBS9kHGLGEQRS+xUOXYX/E0IukJiYAZKf/A1lqxMzj5RMUu2VuQeB0dU+?=
+ =?us-ascii?Q?vNpxyGl4fZcTykexYViSKeySvttAqAZ72txlnQ80BLsyfnvwE2OLWcT6BTZR?=
+ =?us-ascii?Q?o6JL1Bf7jS8S9kZnjx8KTAPr8fQOBmIfr0wsCVPRDOLtf2y8CYlPsHrGpn05?=
+ =?us-ascii?Q?BQlr3Lbek5NO/EjB/4Pm/+FfZ4Uag/22Lc4So2qlpR8paKZGcQZjKPaIJFhd?=
+ =?us-ascii?Q?IR7YuvAkmsqFEOJteDBOCf/EiGWCOhwHgZSxIJoQbtm+7Ld7fB7IZESJzQqj?=
+ =?us-ascii?Q?EKy+1HYUA48hjf69iS8LCDBUWVBncBKnfEv3YwzgEjPzYpedb6Vr0QZmZexA?=
+ =?us-ascii?Q?D/AXnZx/csijNri3fVQy5Ey+8MT9BssAOehzuBR2m9V3Qjwzu1HeO+dMWKqz?=
+ =?us-ascii?Q?5ZSI5ayWyTi1MgQJPbefxY+m96nyYgeNMhkR/5rwosfS748e38kEdWckCOyB?=
+ =?us-ascii?Q?Bp1MBtk29rRqPafR9cH0UA1CFywPmxCpTqkLj3ky6R7cZCJjJkd81Xo0gJub?=
+ =?us-ascii?Q?uLnrXoLCdJv5wqnfK0G6ZxkCh69MqgO5555jp2khNjc2vogrY3MTyUKUeVDY?=
+ =?us-ascii?Q?oOxK62jL37U63OdjwunFgqqcvsMNeR5I5xkrsjQ3znqIBz8fC2M64YTsWr9i?=
+ =?us-ascii?Q?WiwCukVFEwYolytUvU2eg6Kc8ZHgDKjpKqqUIcAdLVZu6VlHE4ow4sM5oR4m?=
+ =?us-ascii?Q?gLfbAYC4SRz3Ufb9l3OptxWbMBP9XU5RKFM15d9Zaa0crKPd4XUeHAMohx4g?=
+ =?us-ascii?Q?mz49dHZUIQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a44a2d67-2580-4b6f-40a7-08de4ea171b0
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 10:34:04.1499
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bokW1uyok5RDVYhlb+7arP4Fd9Fhjwn3e0k6i4b6QwF+Ur63T0ymBWeZ1/YSuUOpOVxhiSA+CTlr0ybnAkFYWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8355
 
-I am using a SD-card reader in the thunderbolt port (usb-c)
+Currently the wakeup and controller interrupt name are same. It's not
+easy to find the correct one in /proc/interrupt at the first glance.
+Rename the wakeup interrupt name for better distinction.
 
-Unfoutunatly my linux install got bricked because of macOS update,
-so i cant provide dmesg, but i have lspci saved on macOS:
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+---
+ drivers/usb/chipidea/ci_hdrc_imx.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-00:00.0 Host bridge [0600]: Intel Corporation Comet Lake-S 6c Host Bridge/DRAM Controller [8086:9b53] (rev 03)
-	DeviceName: SATA
-	Subsystem: Intel Corporation Comet Lake-S 6c Host Bridge/DRAM Controller [8086:7270]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ >SERR- <PERR- INTx-
-	Latency: 0
-	IOMMU group: 0
-	Capabilities: <access denied>
-	Kernel driver in use: skl_uncore
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index d4ee9e16332f..e4345e0eea59 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -385,6 +385,7 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+ 	const struct ci_hdrc_imx_platform_flag *imx_platform_flag;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct device *dev = &pdev->dev;
++	const char *irq_name;
+ 
+ 	imx_platform_flag = of_device_get_match_data(&pdev->dev);
+ 
+@@ -525,10 +526,11 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+ 
+ 	data->wakeup_irq = platform_get_irq_optional(pdev, 1);
+ 	if (data->wakeup_irq > 0) {
++		irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s:wakeup", pdata.name);
+ 		ret = devm_request_threaded_irq(dev, data->wakeup_irq,
+ 						NULL, ci_wakeup_irq_handler,
+ 						IRQF_ONESHOT | IRQF_NO_AUTOEN,
+-						pdata.name, data);
++						irq_name, data);
+ 		if (ret)
+ 			goto err_clk;
+ 	}
+-- 
+2.34.1
 
-00:01.0 PCI bridge [0604]: Intel Corporation 6th-10th Gen Core Processor PCIe Controller (x16) [8086:1901] (rev 03) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation 6th-10th Gen Core Processor PCIe Controller (x16) [8086:7270]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 25
-	IOMMU group: 1
-	Bus: primary=00, secondary=01, subordinate=03, sec-latency=0
-	I/O behind bridge: 3000-3fff [size=4K] [16-bit]
-	Memory behind bridge: 81600000-817fffff [size=2M] [32-bit]
-	Prefetchable memory behind bridge: a0000000-b01fffff [size=258M] [32-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-00:12.0 Signal processing controller [1180]: Intel Corporation Comet Lake PCH Thermal Controller [8086:06f9]
-	Subsystem: Intel Corporation Comet Lake PCH Thermal Controller [8086:7270]
-	Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Interrupt: pin A routed to IRQ -2147483648
-	IOMMU group: 2
-	Region 0: Memory at 81816000 (64-bit, non-prefetchable) [size=4K]
-	Capabilities: <access denied>
-	Kernel driver in use: intel_pch_thermal
-	Kernel modules: intel_pch_thermal
-
-00:14.0 USB controller [0c03]: Intel Corporation Comet Lake USB 3.1 xHCI Host Controller [8086:06ed] (prog-if 30 [XHCI])
-	Subsystem: Intel Corporation Comet Lake USB 3.1 xHCI Host Controller [8086:7270]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 33
-	IOMMU group: 3
-	Region 0: Memory at 81800000 (64-bit, non-prefetchable) [size=64K]
-	Capabilities: <access denied>
-	Kernel driver in use: xhci_hcd
-
-00:14.2 RAM memory [0500]: Intel Corporation Comet Lake PCH Shared SRAM [8086:06ef]
-	Control: I/O- Mem- BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	IOMMU group: 3
-	Region 0: Memory at 81814000 (64-bit, non-prefetchable) [disabled] [size=8K]
-	Region 2: Memory at 81817000 (64-bit, non-prefetchable) [disabled] [size=4K]
-	Capabilities: <access denied>
-
-00:16.0 Communication controller [0780]: Intel Corporation Comet Lake HECI Controller [8086:06e0]
-	Subsystem: Intel Corporation Comet Lake HECI Controller [8086:7270]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 66
-	IOMMU group: 4
-	Region 0: Memory at 81818000 (64-bit, non-prefetchable) [size=4K]
-	Capabilities: <access denied>
-	Kernel driver in use: mei_me
-	Kernel modules: mei_me
-
-00:1b.0 PCI bridge [0604]: Intel Corporation Comet Lake PCI Express Root Port #17 [8086:06c0] (rev f0) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation Comet Lake PCI Express Root Port [8086:7270]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 26
-	IOMMU group: 5
-	Bus: primary=00, secondary=04, subordinate=04, sec-latency=0
-	I/O behind bridge: [disabled] [16-bit]
-	Memory behind bridge: [disabled] [32-bit]
-	Prefetchable memory behind bridge: b0400000-b16fffff [size=19M] [32-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-00:1c.0 PCI bridge [0604]: Intel Corporation Device [8086:06b8] (rev f0) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation Device [8086:7270]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 27
-	IOMMU group: 6
-	Bus: primary=00, secondary=05, subordinate=05, sec-latency=0
-	I/O behind bridge: [disabled] [16-bit]
-	Memory behind bridge: 81000000-814fffff [size=5M] [32-bit]
-	Prefetchable memory behind bridge: [disabled] [64-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR+ <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-00:1c.1 PCI bridge [0604]: Intel Corporation Device [8086:06b9] (rev f0) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation Device [8086:7270]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin B routed to IRQ 28
-	IOMMU group: 7
-	Bus: primary=00, secondary=06, subordinate=06, sec-latency=0
-	I/O behind bridge: [disabled] [16-bit]
-	Memory behind bridge: 80000000-800fffff [size=1M] [32-bit]
-	Prefetchable memory behind bridge: b1700000-b17fffff [size=1M] [32-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-00:1c.4 PCI bridge [0604]: Intel Corporation Device [8086:06bc] (rev f0) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation Device [8086:7270]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 29
-	IOMMU group: 8
-	Bus: primary=00, secondary=07, subordinate=7c, sec-latency=0
-	I/O behind bridge: 5000-8fff [size=16K] [16-bit]
-	Memory behind bridge: 81900000-8fafffff [size=226M] [32-bit]
-	Prefetchable memory behind bridge: b1800000-bf7fffff [size=224M] [32-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-00:1e.0 Communication controller [0780]: Intel Corporation Comet Lake PCH Serial IO UART Host Controller #0 [8086:06a8]
-	Subsystem: Intel Corporation Comet Lake PCH Serial IO UART Host Controller [8086:7270]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 20
-	IOMMU group: 9
-	Region 0: Memory at 4000100000 (64-bit, non-prefetchable) [size=4K]
-	Capabilities: <access denied>
-	Kernel driver in use: intel-lpss
-	Kernel modules: intel_lpss_pci
-
-00:1e.1 Communication controller [0780]: Intel Corporation Comet Lake PCH Serial IO UART Host Controller #1 [8086:06a9]
-	Subsystem: Intel Corporation Comet Lake PCH Serial IO UART Host Controller [8086:7270]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin B routed to IRQ 21
-	IOMMU group: 9
-	Region 0: Memory at 4000101000 (64-bit, non-prefetchable) [size=4K]
-	Capabilities: <access denied>
-	Kernel driver in use: intel-lpss
-	Kernel modules: intel_lpss_pci
-
-00:1f.0 ISA bridge [0601]: Intel Corporation Z490 Chipset LPC/eSPI Controller [8086:0685]
-	Subsystem: Intel Corporation Z490 Chipset LPC/eSPI Controller [8086:7270]
-	Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap- 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	IOMMU group: 10
-
-00:1f.3 Audio device [0403]: Intel Corporation Comet Lake PCH cAVS [8086:06c8]
-	Subsystem: Intel Corporation Comet Lake PCH cAVS [8086:7270]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 64, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 68
-	IOMMU group: 10
-	Region 0: Memory at 81810000 (64-bit, non-prefetchable) [size=16K]
-	Region 4: Memory at 4000000000 (64-bit, non-prefetchable) [size=1M]
-	Capabilities: <access denied>
-	Kernel driver in use: snd_hda_intel
-	Kernel modules: snd_soc_avs, snd_sof_pci_intel_cnl, snd_hda_intel
-
-00:1f.4 SMBus [0c05]: Intel Corporation Comet Lake PCH SMBus Controller [8086:06a3]
-	Subsystem: Intel Corporation Comet Lake PCH SMBus Controller [8086:7270]
-	Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Interrupt: pin A routed to IRQ 16
-	IOMMU group: 10
-	Region 0: Memory at 8181b000 (64-bit, non-prefetchable) [size=256]
-	Region 4: I/O ports at 4040 [size=32]
-	Kernel driver in use: i801_smbus
-	Kernel modules: i2c_i801
-
-00:1f.5 Serial bus controller [0c80]: Intel Corporation Comet Lake PCH SPI Controller [8086:06a4]
-	Subsystem: Intel Corporation Comet Lake PCH SPI Controller [8086:7270]
-	Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap- 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	IOMMU group: 10
-	Region 0: Memory at fe010000 (32-bit, non-prefetchable) [size=4K]
-	Kernel driver in use: intel-spi
-	Kernel modules: spi_intel_pci
-
-01:00.0 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 XL Upstream Port of PCI Express Switch [1002:1478] (rev 47) (prog-if 00 [Normal decode])
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 16
-	IOMMU group: 1
-	Region 0: Memory at 81700000 (32-bit, non-prefetchable) [size=16K]
-	Bus: primary=01, secondary=02, subordinate=03, sec-latency=0
-	I/O behind bridge: 3000-3fff [size=4K] [16-bit]
-	Memory behind bridge: 81600000-816fffff [size=1M] [32-bit]
-	Prefetchable memory behind bridge: a0000000-b01fffff [size=258M] [32-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-02:00.0 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 XL Downstream Port of PCI Express Switch [1002:1479] (prog-if 00 [Normal decode])
-	Subsystem: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 XL Downstream Port of PCI Express Switch [1002:1479]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 30
-	IOMMU group: 1
-	Bus: primary=02, secondary=03, subordinate=03, sec-latency=0
-	I/O behind bridge: 3000-3fff [size=4K] [16-bit]
-	Memory behind bridge: 81600000-816fffff [size=1M] [32-bit]
-	Prefetchable memory behind bridge: a0000000-b01fffff [size=258M] [32-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-03:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 14 [Radeon RX 5500/5500M / Pro 5500M] [1002:7340] (rev 47) (prog-if 00 [VGA controller])
-	Subsystem: Apple Inc. Navi 14 [Radeon RX 5500/5500M / Pro 5500M] [106b:0219]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 255
-	IOMMU group: 1
-	Region 0: Memory at a0000000 (64-bit, prefetchable) [size=256M]
-	Region 2: Memory at b0000000 (64-bit, prefetchable) [size=2M]
-	Region 4: I/O ports at 3000 [size=256]
-	Region 5: Memory at 81600000 (32-bit, non-prefetchable) [size=512K]
-	Expansion ROM at 81680000 [disabled] [size=128K]
-	Capabilities: <access denied>
-	Kernel modules: amdgpu
-
-03:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 HDMI Audio [1002:ab38]
-	Subsystem: Apple Inc. Navi 10 HDMI Audio [106b:0219]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin B routed to IRQ 67
-	IOMMU group: 1
-	Region 0: Memory at 816a0000 (32-bit, non-prefetchable) [size=16K]
-	Capabilities: <access denied>
-	Kernel driver in use: snd_hda_intel
-	Kernel modules: snd_hda_intel
-
-04:00.0 Mass storage controller [0180]: Apple Inc. ANS2 NVMe Controller [106b:2005] (rev 01) (prog-if 02)
-	Subsystem: Apple Inc. ANS2 NVMe Controller [106b:1800]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin ? routed to IRQ 49
-	IOMMU group: 11
-	Region 0: Memory at b0400000 (64-bit, prefetchable) [size=4M]
-	Region 2: Memory at b1400000 (64-bit, prefetchable) [size=512K]
-	Region 4: Memory at b1600000 (64-bit, prefetchable) [size=64K]
-	Capabilities: <access denied>
-	Kernel driver in use: nvme
-	Kernel modules: nvme
-
-04:00.1 Non-VGA unclassified device [0000]: Apple Inc. T2 Bridge Controller [106b:1801] (rev 01)
-	Subsystem: Apple Inc. T2 Bridge Controller [106b:1801]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	IOMMU group: 11
-	Region 0: Memory at b0800000 (64-bit, prefetchable) [size=4M]
-	Region 2: Memory at b1480000 (64-bit, prefetchable) [size=512K]
-	Region 4: Memory at b1610000 (64-bit, prefetchable) [size=64K]
-	Capabilities: <access denied>
-
-04:00.2 Non-VGA unclassified device [0000]: Apple Inc. T2 Secure Enclave Processor [106b:1802] (rev 01)
-	Subsystem: Apple Inc. T2 Secure Enclave Processor [106b:1802]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	IOMMU group: 11
-	Region 0: Memory at b0c00000 (64-bit, prefetchable) [size=4M]
-	Region 2: Memory at b1500000 (64-bit, prefetchable) [size=512K]
-	Region 4: Memory at b1620000 (64-bit, prefetchable) [size=64K]
-	Capabilities: <access denied>
-
-04:00.3 Multimedia audio controller [0401]: Apple Inc. Apple Audio Device [106b:1803] (rev 01)
-	Subsystem: Apple Inc. Apple Audio Device [106b:188b]
-	Control: I/O- Mem- BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	IOMMU group: 11
-	Region 0: Memory at b1000000 (64-bit, prefetchable) [disabled] [size=4M]
-	Region 2: Memory at b1580000 (64-bit, prefetchable) [disabled] [size=512K]
-	Region 4: Memory at b1630000 (64-bit, prefetchable) [disabled] [size=64K]
-	Capabilities: <access denied>
-
-05:00.0 Network controller [0280]: Broadcom Inc. and subsidiaries BCM4364 802.11ac Wireless Network Adapter [14e4:4464] (rev 04)
-	Subsystem: Apple Inc. BCM4364 802.11ac Wireless Network Adapter [106b:07bf]
-	Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort+ <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Interrupt: pin A routed to IRQ 16
-	IOMMU group: 12
-	Region 0: Memory at 81400000 (64-bit, non-prefetchable) [size=32K]
-	Region 2: Memory at 81000000 (64-bit, non-prefetchable) [size=4M]
-	Capabilities: <access denied>
-	Kernel modules: brcmfmac
-
-06:00.0 Ethernet controller [0200]: Broadcom Inc. and subsidiaries NetXtreme BCM57766 Gigabit Ethernet PCIe [14e4:1686] (rev 01)
-	Subsystem: Broadcom Inc. and subsidiaries NetXtreme BCM57766 Gigabit Ethernet PCIe [14e4:1686]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0, Cache Line Size: 256 bytes
-	Interrupt: pin A routed to IRQ 17
-	IOMMU group: 13
-	Region 0: Memory at b1700000 (64-bit, prefetchable) [size=64K]
-	Region 2: Memory at b1710000 (64-bit, prefetchable) [size=64K]
-	Expansion ROM at 80000000 [disabled] [size=2K]
-	Capabilities: <access denied>
-	Kernel driver in use: tg3
-	Kernel modules: tg3
-
-07:00.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:15ea] (rev 06) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:0000]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 16
-	IOMMU group: 14
-	Bus: primary=07, secondary=08, subordinate=7c, sec-latency=0
-	I/O behind bridge: 5000-8fff [size=16K] [16-bit]
-	Memory behind bridge: 81900000-8fafffff [size=226M] [32-bit]
-	Prefetchable memory behind bridge: b1800000-bf7fffff [size=224M] [32-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-08:00.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:15ea] (rev 06) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:0000]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 16
-	IOMMU group: 15
-	Bus: primary=08, secondary=09, subordinate=09, sec-latency=0
-	I/O behind bridge: [disabled] [32-bit]
-	Memory behind bridge: 81a00000-81afffff [size=1M] [32-bit]
-	Prefetchable memory behind bridge: [disabled] [64-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-08:01.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:15ea] (rev 06) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:0000]
-	Physical Slot: 1
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 31
-	IOMMU group: 16
-	Bus: primary=08, secondary=0b, subordinate=43, sec-latency=0
-	I/O behind bridge: 5000-6fff [size=8K] [16-bit]
-	Memory behind bridge: 81b00000-88afffff [size=112M] [32-bit]
-	Prefetchable memory behind bridge: b1800000-b87fffff [size=112M] [32-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-08:02.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:15ea] (rev 06) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:0000]
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 18
-	IOMMU group: 17
-	Bus: primary=08, secondary=0a, subordinate=0a, sec-latency=0
-	I/O behind bridge: [disabled] [32-bit]
-	Memory behind bridge: 81900000-819fffff [size=1M] [32-bit]
-	Prefetchable memory behind bridge: [disabled] [64-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-08:04.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:15ea] (rev 06) (prog-if 00 [Normal decode])
-	Subsystem: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:0000]
-	Physical Slot: 2
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 32
-	IOMMU group: 18
-	Bus: primary=08, secondary=44, subordinate=7c, sec-latency=0
-	I/O behind bridge: 7000-8fff [size=8K] [16-bit]
-	Memory behind bridge: 88b00000-8fafffff [size=112M] [32-bit]
-	Prefetchable memory behind bridge: b8800000-bf7fffff [size=112M] [32-bit]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: <access denied>
-	Kernel driver in use: pcieport
-
-09:00.0 System peripheral [0880]: Intel Corporation JHL7540 Thunderbolt 3 NHI [Titan Ridge 4C 2018] [8086:15eb] (rev 06)
-	Subsystem: Intel Corporation JHL7540 Thunderbolt 3 NHI [Titan Ridge 4C 2018] [8086:0000]
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 16
-	IOMMU group: 19
-	Region 0: Memory at 81a00000 (32-bit, non-prefetchable) [size=256K]
-	Region 1: Memory at 81a40000 (32-bit, non-prefetchable) [size=4K]
-	Capabilities: <access denied>
-	Kernel driver in use: thunderbolt
-	Kernel modules: thunderbolt
-
-0a:00.0 USB controller [0c03]: Intel Corporation JHL7540 Thunderbolt 3 USB Controller [Titan Ridge 4C 2018] [8086:15ec] (rev 06) (prog-if 30 [XHCI])
-	Subsystem: Intel Corporation JHL7540 Thunderbolt 3 USB Controller [Titan Ridge 4C 2018] [8086:0000]
-	Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Interrupt: pin A routed to IRQ 41
-	IOMMU group: 20
-	Region 0: Memory at 81900000 (32-bit, non-prefetchable) [size=64K]
-	Capabilities: <access denied>
-	Kernel driver in use: xhci_hcd 
 
