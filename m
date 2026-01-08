@@ -1,91 +1,93 @@
-Return-Path: <linux-usb+bounces-32030-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32031-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96E72D01529
-	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 07:58:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D31CD014EE
+	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 07:55:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B7AFF3083C58
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 06:54:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6D11830263DA
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 06:55:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74F832A3CC;
-	Thu,  8 Jan 2026 06:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A63BB329E6F;
+	Thu,  8 Jan 2026 06:55:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NBBizf9K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ELlDaww6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA0C325714
-	for <linux-usb@vger.kernel.org>; Thu,  8 Jan 2026 06:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67EEC32936F
+	for <linux-usb@vger.kernel.org>; Thu,  8 Jan 2026 06:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767855286; cv=none; b=g7FViioasCMgg/Zwl7R4++zzTjrkR9jDtDBVEh4eZ6fZT+7i4yxDv2ACX3Bb/GtPzYYRElsDoMVjQvizSnMdMMUmZf2B84o3tz6gUAVN/ddyTRq9ONG7u5CUHRMd3DwKzn0mJ5o8krETMoFfUs2xlWnB6eIMDkqaj95kSY1690I=
+	t=1767855314; cv=none; b=BvA/GPnaI4cSTrw6ICj1RBs4bI+mcUi6JEwj191/A1aaI8mQZU6o455QV7vg4vzsv8gkrkc4uS1kURRO62m/jG2HaMGoJ+t3UMv4QR12G1i47EUSOkrUENz7ufoJO2VxmBDIVmSwfuGXTc6bA9IQJVYIskCeKJAVsgFGt8rKMcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767855286; c=relaxed/simple;
-	bh=I0IAqekf4TGghfW5e2aKU55t9EkUQdopLZdt0j/GIUM=;
+	s=arc-20240116; t=1767855314; c=relaxed/simple;
+	bh=nv7ToIuFJIGd8gMwVOMF9mTcX77kfw0ugV6X5a2Vr0c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qocKJd86YrFiA+AbDbhN42L9an6nrg3t0lgzzyCAMu3E/GWJCPTgRTWZacnt7jjPrVWHpHwGZLHdRYSIzgBAr4BkuaUldMF9s1aRh9dElpJHH5WS4Eg+K4XHqC1aGzCHUIPS7Q3GzWhW1Qr90bSuMRditjQ9W01fneTahmgHds0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NBBizf9K; arc=none smtp.client-ip=209.85.218.54
+	 To:Cc:Content-Type; b=GMCk8iGeKLePrTAn1sfuhrpycLO8EKjbstHqVEDCWauI4IUurM/quSUP8hM67NGH2DlnOTd2Df7DjyWH3FJUJcUvNWgOkm4uUZwlZrfExDDOdlV+JT4pEXUGR5OGFFMQadtUCppn20D9n/cFHkVlmDkqMVePtX8SRfztnVszEO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ELlDaww6; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b79af62d36bso498602366b.3
-        for <linux-usb@vger.kernel.org>; Wed, 07 Jan 2026 22:54:42 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-64d4d8b3ad7so4401409a12.2
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jan 2026 22:55:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767855281; x=1768460081; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767855311; x=1768460111; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t4F2SB9f5d/mNn04/BKllqtDvhQr4G3ijObEiEkrROg=;
-        b=NBBizf9K1w9x3Ir/L0X7eWSv96wQpiPD1dkZLWGfMHx+j1mXiUlz3mS7sZAGv8nIfL
-         yTOYBSUP51vsqVwuuC2DtpVIe4Cz+kUsdQZrhrAcXlI3xHsf/7I4HOqU9KJs+tnSqQWC
-         ofbxf6QAVcVrGm3BNJlXHZOjf1ez1EVhOzru6IrfWhRtb907hv2jJSH4mmEZdGK5IuIU
-         gVnPn/XvP8sVgwb1bfX1mcX2+2qmUa9PuF+XwewHysyyd+YEIZnfIRoTfYlPpeFXqXDu
-         lBqK/ULi8j2rAHnKZ1/g+vq3a+r+0C1awltQZjkBLFQwucfeOEa6aUktQa7g7U0J0Hgq
-         aa+g==
+        bh=yAyXDWLGELFvv1UWhWJn7SNZwSDSfP0ZE2dhDg/EXvA=;
+        b=ELlDaww64bzX78NMuA58zlh8/lVlvogXpxA9JU0/PoFalLtXRXyzq85obaCscwBnaj
+         72aJsLLS1MLzA7gT7qULSEkeP45Q4Pj9CBr8qP6iYLilgAhqkcB5QhTjfkBh7bZd9TMw
+         G4sc0kY2YMTKwUe1rHoQh5Uu772jo5jXT7eYcbxhfhZroIyD3kZhzF1iCckRtdyQRkd0
+         h9OykPaHYNaL0HnyFLS4ZdVl9I4XPyYhq5wS3vtuZqK668Uus5El8bXFc/MlWrN4SL9k
+         EdL+jbGOIkDna9OuEKJm6brq/8mZ224oYmooPcUfPNuLQJXBYY7vjKg1lB+udXaSS08m
+         lt7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767855281; x=1768460081;
+        d=1e100.net; s=20230601; t=1767855311; x=1768460111;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t4F2SB9f5d/mNn04/BKllqtDvhQr4G3ijObEiEkrROg=;
-        b=iq8L/FnRbIWRkSsuq2J7a7Gwuq9t8UP86aE/9M+OmFsm7exQDWvJsZ56sTnsWhyZi9
-         nt/QQV8lHK0B6FDCpKTcU3aX72amjqySjrRUnnzL44jIapadd6ape5aSFkUKhVk0nQqg
-         PYKZBvv5A8UJzgubH6sxEZmLhIZWeabhs9favyDtuhtJ8ZXOpa0SKR4cxdsQ6g0H1ZhL
-         xFK6PTfiygSqqWXZhplp14Td786FA0r2KyX7J6KdEub72eXdj5ejpfjqoUx/CXK5OeFb
-         WLAWlpC4OInjWTGStmN8Az4CCPXkHvQxExTQOSaGywZQNDxbvRBGR+rDPjRiGfEpNaNC
-         3vdA==
-X-Forwarded-Encrypted: i=1; AJvYcCXYiok9U6XTSQjUyp176F8/0yLzYiGSOW7EA6VRdJQUz9IBsRHwFUBl7MeqcvM5Xz7nGSYVa/r6HbA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZJ4d5OLLJBDXROkWOgIeCRwMnoPcdELVk1/FjFJUR5J+bql+9
-	cSlBWHvzKaAlRgABgWj/FpnWKzh3gQlnSZS+HAXUyu6W8JGp/ONE12FzCN1JPAppddyv98nuRbY
-	PYFtZpQxnMleNAA0Q1M25PUG8QCiSgkc=
-X-Gm-Gg: AY/fxX7dycyY/Q0w1s365Lh/8fousfhKin08L/auVY9psNKVFbbqS2LBHYk4sDy897K
-	Zs07rYJEOpUsC+3YAIRifp2OY7X5/PucOfJP8WMzYXZdfWQRmkUXL0bqd15rPJuT0kjTLxmZvF5
-	lEIEajjwZh0epD2GJ8RkvMGPWaq2k7cSU1hsWAwOpW2WNl+vSzo7N/lcy3QMJ9S7aRdegwn291a
-	NFh6KUvDbihyt9VCeiqkGBASMmiD8yfXuY/ZNBb8oukM6QhjKV6Jq3TW1sXKdUx4IQ=
-X-Google-Smtp-Source: AGHT+IGASGpRE5geGPMFFoH+KZfseqKENFRmeBW4XZyTHbSYGX+MpMWOD4bcwRl1hOH7/QKo+S7o0hqO3wHruKhhRKs=
-X-Received: by 2002:a17:907:1c82:b0:b83:95ca:589b with SMTP id
- a640c23a62f3a-b8444c4007dmr536411766b.10.1767855281293; Wed, 07 Jan 2026
- 22:54:41 -0800 (PST)
+        bh=yAyXDWLGELFvv1UWhWJn7SNZwSDSfP0ZE2dhDg/EXvA=;
+        b=mS1Qd12Beblc0obLi84vfcAU9oa1DgT8tpv9AwnfN+Tvtkqh4DiLtCbWlFiJ1a6ktI
+         jM6eoAY1U0h0xATda6L8So9XjxuPS8J2Au88WJjkI9zIRKiXN/h17tbiI1+PN7O4pqiZ
+         1q2o59zuHGyhqhwiMvpWk7AmmJSL/M50vZS4rc8a/qb3zRgV9r1dOnJ6tMUY26PWuqPH
+         Bv9LJgarqxSn1z0cJyVF/GFTd+LVH/cYmLUyZ5KvwID6TRrdh9uzp/09Lr5H7GdgX9VP
+         DoHxMMvWksRot6dXktoDnv3z7mm+O4kw3cCInSgV8Xrx4tJgWMShXbaJt1nhg2Cc/qrd
+         epmA==
+X-Forwarded-Encrypted: i=1; AJvYcCXkCnAd7KeoiF8avu3Eq+EXXeVSuQ0JBiHOnz0Dvu8gW78NxgtZMurMvRrHmjy5PxsdF+eNNR3nDj0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6Qvyv7nmnvG+EZ0WRcFPpfcghDYc9jvoRY0r1IlhfXC4e1Yt1
+	NKLHFe9wnA5vfslak+a2Iv57xWxf4YPL70jeozuU+AOPABDByROSX3sF4i0itQAZb1KNtHbZVvH
+	eFTwCGZdi06WH3kd6xF/3I0ojCMnAAjU=
+X-Gm-Gg: AY/fxX4b2ElG+TtA7bf4KcdkzTBPJwtElGEcVc+kv6lMaNxoq4KPgLuw7IMs7TNvnLr
+	Xx5SAMaib9G7qAmL5g83970H21y06muAkObqezqIAcc1jwg91XV7Oy9qLuvi4ltZdOCW8yP+rA1
+	lqeqVvBVmVaQ1+hc7pnddR5EmSVhPbjOiWMXZ2eKKPUk8YdkdWWNUnUdcFy8k3iPOOrK0GDGmqr
+	BaAsemW7/H5lIyIc/G7EWyKjvq8nWyzOBTkAVr2/IKJPOCTfWgNcaiA9+GNikQ38LA=
+X-Google-Smtp-Source: AGHT+IG4m9qvtkc1tMc4hksJp1Vna2m4aQX4wMUQg4Vqs3Y0Vu+b7EVPh7KsSp/EWOjuxv2xkQR9qBYjiSFRJ2sMnsk=
+X-Received: by 2002:a05:6402:27c8:b0:64b:5f4e:9e88 with SMTP id
+ 4fb4d7f45d1cf-65097e4d851mr3774748a12.21.1767855310352; Wed, 07 Jan 2026
+ 22:55:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260103083232.9510-1-linux.amoon@gmail.com> <aVkinPvh_jxdh9wm@venus>
-In-Reply-To: <aVkinPvh_jxdh9wm@venus>
+References: <20260103083232.9510-1-linux.amoon@gmail.com> <20260103083232.9510-2-linux.amoon@gmail.com>
+ <aVke1kQnHJLqWGHi@venus>
+In-Reply-To: <aVke1kQnHJLqWGHi@venus>
 From: Anand Moon <linux.amoon@gmail.com>
-Date: Thu, 8 Jan 2026 12:24:23 +0530
-X-Gm-Features: AQt7F2pq5ftUc3DeChtgdMDzbUbVtPyMHskj6HVuSaMN15yeS4QpeYTTmedIXIo
-Message-ID: <CANAwSgS=u3CG_5R21SZ=euEQuqQ=edxZmFp5LhzZN5Lk5ozqXA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] Typc fusb302 powerloss issue on Radxa Rock 5b
+Date: Thu, 8 Jan 2026 12:24:50 +0530
+X-Gm-Features: AQt7F2qhaPGkLVIcZtPHVBeTYLw90eQbbpNMhgJtysYJBe3JW3HGYEkeT1DfTvQ
+Message-ID: <CANAwSgSd0TLrkxpnS5qdot8B7vkd4wH76-g8hAixqfbEtH4LyA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] arm64: dts: rockchip: rk3588-rock-5b-5bp-5t:
+ Correct Type-C pin bias settings
 To: Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
 	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
 	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, FUKAUMI Naoki <naoki@radxa.com>, 
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Diederik de Haas <didi.debian@cknow.org>, 
-	Yongbo Zhang <giraffesnn123@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, FUKAUMI Naoki <naoki@radxa.com>, 
+	Diederik de Haas <didi.debian@cknow.org>, Yongbo Zhang <giraffesnn123@gmail.com>, 
 	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
 	"moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>, 
 	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>, 
@@ -95,84 +97,92 @@ Content-Type: text/plain; charset="UTF-8"
 
 Hi Sebastian,
 
-Thanks for sharing the details.
+Thanks for your review comments.
 
-On Sat, 3 Jan 2026 at 19:54, Sebastian Reichel
+On Sat, 3 Jan 2026 at 19:23, Sebastian Reichel
 <sebastian.reichel@collabora.com> wrote:
 >
-> Hello Anand,
+> Hi,
 >
-> On Sat, Jan 03, 2026 at 02:01:16PM +0530, Anand Moon wrote:
-> > On the Radxa Rock 5B, the system occasionally experiences intermittent
-> > hard resets during the boot process. Initially, I suspected a power supply
-> > issue, but further investigation points to the Type-C fusb302 module as
-> > the cause.
+> On Sat, Jan 03, 2026 at 02:01:17PM +0530, Anand Moon wrote:
+> > As pre FUSB302 datasheet interrupt line (INT_N) is an open-drain,
+> > active-low signal. It requires a pull-up resistor to maintain a stable
+> > high state when deasserted. Similarly, the TYPEC5V_PWREN_H enable signal
+> > requires a pull-down resistor to ensure it defaults to a low state,
+> > preventing unintended power delivery during the boot sequence.
 > >
-> > Specifically, probing or reloading the fusb302 module triggers a hard reset,
-> > which can result in immediate power loss and a reboot.
+> > Update the pinctrl entries to use pcfg_pull_up for usbc0_int and
+> > pcfg_pull_down for vbus5v0_typec_en to align with the hardware's
+> > electrical requirements.
 > >
-> > [root@rockpi-5b ~]# rmmod fusb302
-> > [root@rockpi-5b ~]# lsmod | grep  fusb302
-> > [root@rockpi-5b ~]# modprobe fusb302
-> > [root@rockpi-5b ~]# [ 3389.031608][ T7143] typec_fusb302 4-0022: Initiating hard-reset, which might result in machine power-loss.
-> > [ 3390.030444][ T7143] typec_fusb302 4-0022: Initiating hard-reset, which might result in machine power-loss.
+> > Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > Fixes: 67b2c15d8fb3 ("arm64: dts: rockchip: add USB-C support for ROCK 5B/5B+/5T")
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> > v1: As per the shematics CC_INT_L interrupt pin is GPIO3_B4_u
+> >     As per the shematics TYPEC5V_PWREN_H pin is GPIO2_B6_d
+> > ---
 >
-> If you see this message the TypeC port manager (TCPM) state machine
-> reached the hard reset error state. A USB-PD hard reset involves
-> removing VBUS for a short time, which effectively removes the board
-> power on ROCK 5B. Unfortunately the situation is quite complex :)
+> Checking the schematics:
 >
-I completely understand this issue,
-> > I attempted to trace the issue using ftrace but was unable to
-> > pinpoint the root cause. The problem appears to originate either
-> > from the I2C controller or the PMIC reset.
+> 5B v1.45 - CC_INT_L - R2613 10K pull-up resistor
+> 5B v1.45 - TYPEC5V_PWREN_H - GPIO is effectively unused because R95035 is NC
 >
-> I2C and PMIC are not at fault. This is all about USB-PD
-> communication itself.
+> 5B+ v1.2 - CC_INT_L - R2613 10K pull-up resistor
+> 5B+ v1.2 - TYPEC5V_PWREN_H - R163 100K pull-down resistor
 >
-> > I have identified a potential workaround involving the I2C SCL debounce settings
-> > for the RK3588 and submitted a patch here:
-> >
-> > [1] https://lore.kernel.org/all/20260103052506.6743-1-linux.amoon@gmail.com/
+> 5T v1.2 - CC_INT_L - R2613 10K pull-up resistor
+> 5T v1.2 - TYPEC5V_PWREN_H - R163 100K pull-down resistor
 >
-> This is most likely a red herring and just slightly changing timings
-> in the USB PD communication.
-Yes, but it's related I2C protocol.
->
-> > Please note that the submitted changes address a minor aspect but do not fully
-> > resolve the underlying issue.
->
-> I don't expect any fix from this series regarding your problem. Also
-> I suggest having a look at my talk at the Linux Plumbers Conference
-> from last month where I discussed this issue :)
->
-> slides: https://lpc.events/event/19/contributions/2156/attachments/1784/3861/improving-stability-for-TCPM-using-boards-that-are-not-self-powered.pdf
-> video: https://www.youtube.com/watch?v=DmLsePJoH8I
->
-It's a great talk. I understood the issue much better
+CC_INT_L is gpio interrupt pin to enable the I2C read operation.
 
-I have understood the previous discussion regarding the reset failure.
-In this specific case, the Type-C power is controlled by the USB 3.0 and USB 2.0
-host controller power domains, I feel so.
+As per FUSB302 datasheet, here is the updated version of the commit message
 
-> Something that might be sensible to do on your end is figure out
-> *how* the state machine ended up in the error state and check if
-> we can avoid it. The related code for that lives in
-> drivers/usb/typec/tcpm/tcpm.c and quite complex. I use the
-> following two patches to ease debugging:
->
->  * https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/commit/6edc68e3c0ec4c209b5e96b848e17201059ce9ee
->  * https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/commit/8ca8b1d6ee36e80f794bcf351a8b78d5a96daf06
->
-> Combined with CONFIG_DYNAMIC_DEBUG=y and booting with the following
-> kernel arguments: loglevel=8 tcpm.dyndbg="+p" fusb302.dyndbg="+p"
->
-Yep, I have enabled this, but I could not find many details
+Configure CC_INT_L as an active-low, open-drain output. Per the hardware design,
+this pin utilizes an external pull-up and is driven LOW by the Type-C
+controller to
+signal the processor to perform I2C register reads.
 
-> Greetings,
+The TYPEC5V_PWREN_H pull-down resistor is turned on as a signal to
+the Type-C regulator, which has an active-enable-high property. In this context,
+the regulator is used to set the polarity of the GPIO used to enable or disable
+the regulator.
+
+> TLDR: All GPIOs have pull resistors in discrete hardware and do not
+> need them muxed in the SoC.
 >
-> -- Sebastian
->
+It depends on the GPIO, pinctrl PMU configuration.
+
+I was thinking of converting the vbus5v0_typec regulator to 'regulator-gpio.'
+to better reflect the hardware schematics. The TYPEC5V_PWREN_H signal
+(GPIO2_B6_d) acts as a state controller rather than a simple enable pin,
+and this change ensures the device tree aligns with that design
+
+[1] https://dl.radxa.com/rock5/5b/docs/hw/radxa_rock_5b_v1450_schematic.pdf
+(page 28)
+
+$ git diff arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
+b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
+index 5f58e339a052..387ff009ec76 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b-5bp-5t.dtsi
+@@ -57,9 +57,10 @@ rfkill-bt {
+        };
+
+        vbus5v0_typec: vbus5v0-typec {
+-               compatible = "regulator-fixed";
++               compatible = "regulator-gpio";
+                enable-active-high;
+-               gpio = <&gpio2 RK_PB6 GPIO_ACTIVE_HIGH>;
++               gpios = <&gpio2 RK_PB6 GPIO_ACTIVE_HIGH>;
++               states = <5000000 0x1>, <0 0x0>;
+                pinctrl-names = "default";
+                pinctrl-0 = <&vbus5v0_typec_en>;
+                regulator-name = "vbus5v0_typec";
+
+Could you please try this at your end?
+
 Thanks
 -Anand
 
