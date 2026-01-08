@@ -1,75 +1,75 @@
-Return-Path: <linux-usb+bounces-32044-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32045-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5D58D01F1E
-	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 10:52:05 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47075D01C05
+	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 10:10:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6FF33337BB35
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 08:44:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0E38B38305E6
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 08:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D717389458;
-	Thu,  8 Jan 2026 08:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6636364E8F;
+	Thu,  8 Jan 2026 08:25:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mu+m6rYJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="COHAo9Fa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607AE38944D
-	for <linux-usb@vger.kernel.org>; Thu,  8 Jan 2026 08:19:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24AD03563C7
+	for <linux-usb@vger.kernel.org>; Thu,  8 Jan 2026 08:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767860395; cv=none; b=dsox4QD9UsbOfAGzolZLnttBuaxz1ew0FyBz65+RUbOULr44OfOc2Efgs/hAamlh4sQBZFds9wNQxRdlE/y3cPS4tLovgm1RRkh0tXWSGtzuDAm1KQkbBTLFVkJndaujOAfRiSwf7EOY7+X3W5k36tkjRaKLIrcrqXxFzdHbSYg=
+	t=1767860734; cv=none; b=jqW146Ec6W0ZrZTNhZ+EQXVi24tHIV27TaBKsjiAXIcnP5FeNHDmSbrIrzmL70UfcQ23SoMkbwqDDjTHTYaXNJUfrS4owaF96Z+6OHFoQ9B/Pz97BrfcrlO9tnLtaroc30JPFnC7vcFi1OFC2YD3XRx069XE4ZucUYOeTTtZEVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767860395; c=relaxed/simple;
-	bh=ZqmOf0gGy6Ui7/SWJdII1LH9oZpSkCVX842PERXe3X4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=t11x2HQSbl3GzG4RHW2mFR5gkA/W8TsthsYd6JLVmSsNdOK0B1V/laKnK9/07Fv29ldVfUJZAvrSjtikJ3Jk7MXZgmC9/Fx7L1IsF4BuSZ9fXlLAFbpqj9JZpBPEw9EBF27EYA97guKSAlKEfUqr985dBvBYbKWnipscu8xuO9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mu+m6rYJ; arc=none smtp.client-ip=209.85.216.51
+	s=arc-20240116; t=1767860734; c=relaxed/simple;
+	bh=KziMa7QNGUm/4xZVgFBikODfU6bmya2+U35lZ61t6IU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b6lBCmWOqQB6ib7psi63RaGcU2Y1+xGKIQKo0TVz5rbOlDdas8PEXPZDkmDSiPqB+YXMgD/q5mlo3deiEiX72xpCigvamjg2WynEU8niUQ1ZYXpyv55JauKpP7pvawO1z+Qy418nG2JiuPuzWFtwK4JNvEOoJDDZu/IEUxZThp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=COHAo9Fa; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-34c9edf63a7so2399343a91.1
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jan 2026 00:19:35 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a0bb2f093aso23061305ad.3
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jan 2026 00:25:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767860372; x=1768465172; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767860724; x=1768465524; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fHAmKcdoN135Asq9ijVI3O1LODaST52jtA9RClzYjcQ=;
-        b=Mu+m6rYJif3CKKWodxrZjtUHYfu7+RksKV1fiLl+HFWLSys58vVNHXieOeOi0deWz4
-         3+eOfGNQ4GGnQtQ3hqsampxlb3o5aNnJtct/o8MSiqKaD6vAcjF822N5/MKF1cwjL8kl
-         HIqKm0W0Mk+Uz1GvWCRjqzWOgKYit7sY9GaoEFEK8bG2OF0f8nmEeFlQdLYwGi3NHOm2
-         F+yWKlMYXhuFiCsNqXM2dxmP1FfxFwyJG52EP3bGwxoOWx8s2TFXHZGx8TkMI1rViX9W
-         DmKzdeQQdMxokPr5WxyX5GU7HnfBor4wkk0NSgFB+6biazEzj87oLbYtOENHaYQNdlmd
-         dOdA==
+        bh=x8t1+RviBZBkQiz1+F0jLoZoAGkcEhuc2rfeggUJxJA=;
+        b=COHAo9Fadf1BUBEBbBuBuRFX794Igrky/O6OKgvi+ot2aYw8LXRpuPbABRts3k0y3W
+         fTi5ZfvtOsYZHAl1MgA3+wht4f95hpELRmMeu/vpjP5YYngbGvnSbnE9lNd9+xJ5TtQ+
+         2MqgfQ3/YMpHC1csfF9HBF53/D2XpRMONjtBB3wF9SE5/efNfI26+ZahAr35OeFZls3u
+         SrlYcHe3sC6HB8a7ndUahZ5QNWQvxr6IdMo2zF+ACpV/KwNOpb7+P63VZaQ4frVjCpxH
+         6hEej5AgqDi0RDbh2UutrunlgJ958WDyLdzl9gEgC6ZdBicsxc6HSNLEpxYiufpzdZgQ
+         BiOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767860372; x=1768465172;
+        d=1e100.net; s=20230601; t=1767860724; x=1768465524;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fHAmKcdoN135Asq9ijVI3O1LODaST52jtA9RClzYjcQ=;
-        b=b9hcwfO9yRmnHnGaR8YkuhdOsPSeSqkYdtOzf0cLlTtdxRvRuBi8qL2BdU6QJC8AO7
-         oKcxJHxwy1vK/uHx2R6BRzS/LDcK1ylCFWOwEiMGnANnpboQ1nAQQ1ih7he1EV2kS2jQ
-         zddmALfP4+IwgoeEHWwXcDUl17OZJnjrj79FLNOAfcub+kVeXTy8BHCPkkgbR7SxSFQF
-         8KpN/Ull9vcELMryunF/oXtv78Xkstx9DLw9GtgLe7CTUforJ6tX/sp4IHrZzHe/bv+3
-         tVNCrHkkvpMiKEKGh3U76m4TpJRUPECIESKH/rZCC2p0RlhV22S/8M0Z+eDfVtTvq6E/
-         y25Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWicJmdfND4D3BQktmJ3fMqhn9SbfAh4Lt8kmTzSq2ii4DVP2kf32NWQmPfOcmrvGZSE+uTiJAGb5w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNUNKvesCj/FDgxDLQk3z04C5EmAeO8uSvw4PnQe5tpNf350pl
-	ZJUfayBYQu6XYcgVNuH6F/W5J4KvZheQJ8yc71wUoN6v9HpWttHfBBE=
-X-Gm-Gg: AY/fxX5k5niwRXPMjyU0g4QddefJFCkz3Hs0il4AtJQ27EDaOhlj0GI10+2gSpHXJB4
-	xE5tuLOGadMyCky2dNmXO5NmM3W1ZSihiZO7fPZy/Ts2qIebpX4rw1Nxo131wmEtWxMYMsESW1U
-	uevB9yvl5S3CgnIp8B9ZHx1FUr4Im+ENUqKQ+zCd+lBmoaSZLf1SJ4bqq7otG2EUXyEiniq5if1
-	ftIaZiYL6qAbeQyeeG2rst9RaKdEDTzTAvcKiUoV9SwC1tp4j3kD88JSwUL4gK4ZZ9Hhu70F+KN
-	s4Lvuua3VwbA8xyNJ/8ZShyB1QSkdMSL3zl7kmL/Yx/xu8HRxxXwmJIo34cF9qHSd31jElTrU02
-	xQ7Kua0w0BIR+52ndr9UNIcWEXLE/Vv+tRmdI23rZKJwqQJ2TecfbgT3A1AEW1kFFc4nTmEFPVq
-	dakUuEDUKhgPPBTOs=
-X-Google-Smtp-Source: AGHT+IFDK5YD6a2Lz09PpXPJx2QnY/5/782hB7zl/Zgtvf8GF5ogkiCdodmnp0MwEz339uVRHb9Okw==
-X-Received: by 2002:a17:90b:4c11:b0:338:3d07:5174 with SMTP id 98e67ed59e1d1-34f68c7a647mr5191292a91.5.1767860371991;
-        Thu, 08 Jan 2026 00:19:31 -0800 (PST)
+        bh=x8t1+RviBZBkQiz1+F0jLoZoAGkcEhuc2rfeggUJxJA=;
+        b=fbASx/f1KW2C4MdwUuCwM9qxC7be/7/Xs4ih8s1H7F9l9C9nxHZiGK+y4jfxptKBht
+         rdOYj+HMfSKWSqccmTaRSlvQg/wupCZBAQSN16n3x2cLB7WUFDOZrTUytvmfoTJ50k98
+         h3i1tnqjHNoH5TkE25coDgmrSEWf0rfM35b40q7ZjFOJ9a7GaVq+qUI9Hjx6JPCiXn6p
+         mU8tLyp57X04tNzzIHlTlIcA/R/PCzHQgTxtPLhwcnzT6YnIs0HiMxYloWKgkqyrM2Il
+         IklvTV1FtA58a7J9bg0aX8npilNCFCmrM38/zuqul5J/MCTMPenrcgFKOvdSxNlxoeOe
+         cebA==
+X-Forwarded-Encrypted: i=1; AJvYcCWnbVXLRvDORRb0l7i6kHnaGP6p9CF9EWGAIA8EnA470UQvutEmzlwcPIMavV9/1yKzFoUfOjH3Heg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXSQCVAKkwSuWNY7E05mStEdDV+BAMpcqrY6zp0mChT4Lwjkzz
+	o/gLuxiowsJVHm4fqJYN24Y+n9KkUcktgWFQ/u/T1KkTtL6vJG5tytw=
+X-Gm-Gg: AY/fxX6NfQYcEANVEmEi3FcFzctPMknGTJ/y0QSXsAXsq5DZrFT0r0rLRsOMlhTfVLX
+	gDGWUiUKEAbnyxH7eLM6qjktr5SMAzVg+nNcECibmE0UTlYPRjq+Xnb0H4kNKeHZJBttjSccnS1
+	7z3YWZtwl/XXyLWnlBMbabLsj7AjcrU98n6zXaCnTFZDOiBP4qUuikz/PqkJZNnMwbAq5BuAgDh
+	PNqw0y29Oip+BG86j96cf7mMQ0wH3nmtCWKNNl+GZgLNzDu46UwETlqU+Z+IVz9rGa2cUpBy9wS
+	NGYqntzxjiQ973llYiKIJbyO8I828lFbJJasKNdIBFpiaOVk3oK8ZArvU+N67Gtpwgb4NNEVd7M
+	oXl6FukhhTjTNh/c/UuTvYjmFzH3xWKZvznQokrJKhai2TqEeqAsLHcMWCZXq3qifb6070IlEIB
+	FPKUVZm0eMN7nI7IE=
+X-Google-Smtp-Source: AGHT+IFlqu/P/5sh9z5DWE3DsjYa1JH40CTlBeUg8uyttdF4r71Kg5WERp3YCavi1Kt+WDXEmDPaOw==
+X-Received: by 2002:a17:903:3c30:b0:2a0:fe4a:d67c with SMTP id d9443c01a7336-2a3ee437a5dmr49953365ad.10.1767860724001;
+        Thu, 08 Jan 2026 00:25:24 -0800 (PST)
 Received: from at.. ([171.61.166.195])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f5f7b19ebsm6979077a91.3.2026.01.08.00.19.26
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c47303sm70625825ad.24.2026.01.08.00.25.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 00:19:31 -0800 (PST)
+        Thu, 08 Jan 2026 00:25:23 -0800 (PST)
 From: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
 To: 
 Cc: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>,
@@ -86,16 +86,15 @@ Cc: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>,
 	Mika Westerberg <westeri@kernel.org>,
 	Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Lukas Wunner <lukas@wunner.de>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
 	Feng Tang <feng.tang@linux.alibaba.com>,
 	linux-pci@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH v3] PCI/portdev: Disable AER for Titan Ridge 4C 2018
-Date: Thu,  8 Jan 2026 08:18:53 +0000
-Message-ID: <20260108081904.2881-1-atharvatiwarilinuxdev@gmail.com>
+Subject: [PATCH v4] PCI/portdev: Disable AER for Titan Ridge 4C 2018
+Date: Thu,  8 Jan 2026 08:25:03 +0000
+Message-ID: <20260108082509.3028-1-atharvatiwarilinuxdev@gmail.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -105,9 +104,6 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-
-Changes since v1:
-	Transferred log
 
 Disable AER for Intel Titan Ridge 4C 2018
 (used in T2 iMacs, where the warnings appear)
@@ -124,7 +120,9 @@ Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220651
 Signed-off-by: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
 
 ---
-Changes in v2:
+Chnages since v3:
+- Fixed Grammer mistakes
+Changes since v2:
 - Transferred logic to arch/x86/pci/fixup.c to only target x86
 - Added DMI quirk to only target Apple Systems
 Changes since v1:
