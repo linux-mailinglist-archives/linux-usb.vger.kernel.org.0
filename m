@@ -1,219 +1,202 @@
-Return-Path: <linux-usb+bounces-32041-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32044-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F7C3D01E46
-	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 10:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B5D58D01F1E
+	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 10:52:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9BCA7331665B
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 08:35:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6FF33337BB35
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 08:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F81D3A9D81;
-	Thu,  8 Jan 2026 08:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D717389458;
+	Thu,  8 Jan 2026 08:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ftNvVwgO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mu+m6rYJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010048.outbound.protection.outlook.com [52.101.69.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F503AA199;
-	Thu,  8 Jan 2026 08:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767860021; cv=fail; b=SrBWm7eO2GZKgzTUvr1gmJ0/E1nvudzK+zSCgVMUz+fUgqd1H2eSllnNOuKigXzWq4dFi5s2rSMBnSJ9ITTLTox5UfjwofdXr3Pyd8W31Moot38bm+WKHt+izIUBQFMKsPLeFLhAwimFUUm50qcij4EHhR+ZJjIeWsOI/3hoj/Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767860021; c=relaxed/simple;
-	bh=6q74r1Ptm3EhYevDbXds9igBbeOMcLeebYsQsu85fuk=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=eiBeb45ajmbyA1Hx4VWhsWhzhZ5bJQiHH+9DdjpfjF6tGlXAjRara+Wt6u5ylIjolwkbtT9BYPMJ1t13hYTsdCcECLJ2Rbe/J9L2rBYXu5Ot1+IUKVpL+quwAQVCYLKms1ZI71tGAzMM3F5sh2eYibhHkbm+dDgkP5mMKRwaomU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ftNvVwgO; arc=fail smtp.client-ip=52.101.69.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XGpvxemBlGu1YcBFkWIUexVTFcR53BCGIv5YvZfvmtJI6pyRxd2XqL1dHX7TzZm6UzP7mTgqSFtsaecWSCatScd3sxxU11J8BglmXoIq1Z99MfJtR2GWYShYhlKXQbTOC/ZhRoWVIPSr0sbPWueJfEqDjWCrc48Iz3ZUAHe5ItsFhX82R7V6I8qCYzICvHWHvmMv7RrK9yWgakIClYwOVEmUcHbhxsL9ejp3m/Fp98/13T5DjqF3CjJsQRGQPYzce9sTbbRm9mZWoeF84DGDXzQlb16hIOkLJcht1MEPimxhp90DdX5zaO3tuCJl/IQd+AAEa10f1t2qPUOmh6iclg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HxUNfnMYYPF9M7KuXFPyTL9/k98FAYEfI+7aubFcQ/0=;
- b=h5uKxffg31p+vxc6kDmyTWNnqDCBcvJmhbxE4naA1Qr39h2pHlB9yunL7gmLaEcadY+n1UsLC/5xE+VfOzbd0zYp6rKryEvrSlwMLacqs28c0R27N3pat5Ctt7TlWU3BOCJnkwsH0d3GW/TgJAPFRs2YlU7aHaTffz6iRfhXAKiBaIWkTIB8TE6dwMwuPD2c/QJV9ZfKcZ2CfKH1fwUKrrMHBV29E4ZF++bl/2ozttFc8wOTALnV/ZYabVC6usJ7qy21VBa9M/74k/P06qwmZSzNMMn3XVbErC3qkPd+tAqbXau9YAGglwybpu2ZeK/S+5X/PWtJPL5rSKCSrAmV2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HxUNfnMYYPF9M7KuXFPyTL9/k98FAYEfI+7aubFcQ/0=;
- b=ftNvVwgO57W5vM/9kQUagyeIV4EC2EZYWU9iXgqDlBIbEcQellst3vz7/ByOFAoyCT6S3V2WPFDrlWGTNh1DucW+4to8HNU0blhfGw7McgurEGcxAj3ONZ/6M1kIrTQr6ipbycR7AXPM2jp4JIWpsKXchl69/9X/F5afmj/s1uVGErie+UT7EAJw7BBGIf3LDSjrmn141/V3wExKHkzcuOkPmu23IHgQUy1kKYuL1P2HJ3E36DPVkhTS9jTdiMTsIpxLMWE32vFjBTbd9qHlAxMkpiMk1pp13mpp/mI8oHi2ST+npUMN+rdobBMg8YAlZd6Jme98t1zAhIowYQGthQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by AM0PR04MB11916.eurprd04.prod.outlook.com (2603:10a6:20b:6fc::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.3; Thu, 8 Jan
- 2026 08:13:15 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::c67b:71cd:6338:9dce%5]) with mapi id 15.20.9478.004; Thu, 8 Jan 2026
- 08:13:15 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Thinh.Nguyen@synopsys.com,
-	gregkh@linuxfoundation.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com
-Cc: linux-usb@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607AE38944D
+	for <linux-usb@vger.kernel.org>; Thu,  8 Jan 2026 08:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767860395; cv=none; b=dsox4QD9UsbOfAGzolZLnttBuaxz1ew0FyBz65+RUbOULr44OfOc2Efgs/hAamlh4sQBZFds9wNQxRdlE/y3cPS4tLovgm1RRkh0tXWSGtzuDAm1KQkbBTLFVkJndaujOAfRiSwf7EOY7+X3W5k36tkjRaKLIrcrqXxFzdHbSYg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767860395; c=relaxed/simple;
+	bh=ZqmOf0gGy6Ui7/SWJdII1LH9oZpSkCVX842PERXe3X4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=t11x2HQSbl3GzG4RHW2mFR5gkA/W8TsthsYd6JLVmSsNdOK0B1V/laKnK9/07Fv29ldVfUJZAvrSjtikJ3Jk7MXZgmC9/Fx7L1IsF4BuSZ9fXlLAFbpqj9JZpBPEw9EBF27EYA97guKSAlKEfUqr985dBvBYbKWnipscu8xuO9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mu+m6rYJ; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-34c9edf63a7so2399343a91.1
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jan 2026 00:19:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767860372; x=1768465172; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fHAmKcdoN135Asq9ijVI3O1LODaST52jtA9RClzYjcQ=;
+        b=Mu+m6rYJif3CKKWodxrZjtUHYfu7+RksKV1fiLl+HFWLSys58vVNHXieOeOi0deWz4
+         3+eOfGNQ4GGnQtQ3hqsampxlb3o5aNnJtct/o8MSiqKaD6vAcjF822N5/MKF1cwjL8kl
+         HIqKm0W0Mk+Uz1GvWCRjqzWOgKYit7sY9GaoEFEK8bG2OF0f8nmEeFlQdLYwGi3NHOm2
+         F+yWKlMYXhuFiCsNqXM2dxmP1FfxFwyJG52EP3bGwxoOWx8s2TFXHZGx8TkMI1rViX9W
+         DmKzdeQQdMxokPr5WxyX5GU7HnfBor4wkk0NSgFB+6biazEzj87oLbYtOENHaYQNdlmd
+         dOdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767860372; x=1768465172;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fHAmKcdoN135Asq9ijVI3O1LODaST52jtA9RClzYjcQ=;
+        b=b9hcwfO9yRmnHnGaR8YkuhdOsPSeSqkYdtOzf0cLlTtdxRvRuBi8qL2BdU6QJC8AO7
+         oKcxJHxwy1vK/uHx2R6BRzS/LDcK1ylCFWOwEiMGnANnpboQ1nAQQ1ih7he1EV2kS2jQ
+         zddmALfP4+IwgoeEHWwXcDUl17OZJnjrj79FLNOAfcub+kVeXTy8BHCPkkgbR7SxSFQF
+         8KpN/Ull9vcELMryunF/oXtv78Xkstx9DLw9GtgLe7CTUforJ6tX/sp4IHrZzHe/bv+3
+         tVNCrHkkvpMiKEKGh3U76m4TpJRUPECIESKH/rZCC2p0RlhV22S/8M0Z+eDfVtTvq6E/
+         y25Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWicJmdfND4D3BQktmJ3fMqhn9SbfAh4Lt8kmTzSq2ii4DVP2kf32NWQmPfOcmrvGZSE+uTiJAGb5w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNUNKvesCj/FDgxDLQk3z04C5EmAeO8uSvw4PnQe5tpNf350pl
+	ZJUfayBYQu6XYcgVNuH6F/W5J4KvZheQJ8yc71wUoN6v9HpWttHfBBE=
+X-Gm-Gg: AY/fxX5k5niwRXPMjyU0g4QddefJFCkz3Hs0il4AtJQ27EDaOhlj0GI10+2gSpHXJB4
+	xE5tuLOGadMyCky2dNmXO5NmM3W1ZSihiZO7fPZy/Ts2qIebpX4rw1Nxo131wmEtWxMYMsESW1U
+	uevB9yvl5S3CgnIp8B9ZHx1FUr4Im+ENUqKQ+zCd+lBmoaSZLf1SJ4bqq7otG2EUXyEiniq5if1
+	ftIaZiYL6qAbeQyeeG2rst9RaKdEDTzTAvcKiUoV9SwC1tp4j3kD88JSwUL4gK4ZZ9Hhu70F+KN
+	s4Lvuua3VwbA8xyNJ/8ZShyB1QSkdMSL3zl7kmL/Yx/xu8HRxxXwmJIo34cF9qHSd31jElTrU02
+	xQ7Kua0w0BIR+52ndr9UNIcWEXLE/Vv+tRmdI23rZKJwqQJ2TecfbgT3A1AEW1kFFc4nTmEFPVq
+	dakUuEDUKhgPPBTOs=
+X-Google-Smtp-Source: AGHT+IFDK5YD6a2Lz09PpXPJx2QnY/5/782hB7zl/Zgtvf8GF5ogkiCdodmnp0MwEz339uVRHb9Okw==
+X-Received: by 2002:a17:90b:4c11:b0:338:3d07:5174 with SMTP id 98e67ed59e1d1-34f68c7a647mr5191292a91.5.1767860371991;
+        Thu, 08 Jan 2026 00:19:31 -0800 (PST)
+Received: from at.. ([171.61.166.195])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f5f7b19ebsm6979077a91.3.2026.01.08.00.19.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 00:19:31 -0800 (PST)
+From: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
+To: 
+Cc: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	"Oliver O'Halloran" <oohall@gmail.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Feng Tang <feng.tang@linux.alibaba.com>,
+	linux-pci@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	jun.li@nxp.com
-Subject: [PATCH v3 1/3] usb: dwc3: drd: extend dwc3_pre_set_role() to extcon and otg usecase
-Date: Thu,  8 Jan 2026 16:14:31 +0800
-Message-Id: <20260108081433.2119328-1-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0194.apcprd01.prod.exchangelabs.com
- (2603:1096:4:189::22) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	linuxppc-dev@lists.ozlabs.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v3] PCI/portdev: Disable AER for Titan Ridge 4C 2018
+Date: Thu,  8 Jan 2026 08:18:53 +0000
+Message-ID: <20260108081904.2881-1-atharvatiwarilinuxdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AM0PR04MB11916:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d178304-e722-4d9b-1ac5-08de4e8dc60b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|19092799006|376014|7416014|1800799024|366016|38350700014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?/Xdsy6MS7tpEWBOiPxB+0AHXs+8y0GtV5VCr5K5xYK/yweNJFZGAirGtGOVN?=
- =?us-ascii?Q?ZtFFfnaLklXSonWnAo4nO8c2l1YVFAW9r+14LEccd4dw4UAjGE9tJdZ0P0rg?=
- =?us-ascii?Q?fhwGtxQwV4csesbdQhUsH5TAnbxn8b6sKUz9Mt1w1Cll8wkebKGZPmHRXodM?=
- =?us-ascii?Q?tMYyJ5mWRQ/PmOKd1gA47+dAKRUnZ2C41dOK7Qz/FfGN3xqmPDNxaC9zQtHI?=
- =?us-ascii?Q?GCMLc2xLg+7cg35D14+d/jUGq6MbuHPNwxGQeIGuEre/skEqMRGs+PqbIKPt?=
- =?us-ascii?Q?3bISpviePAL8voSqV+ssd8A8hUg1YEVyIPtNxyzAJTqGLkBfNv0tfwvH/Hbk?=
- =?us-ascii?Q?kcPyJsfPgd4gI+cVLCsoE7uBaAk00LLMYKNb9BPajzxJiPeXfemrygUkJxAc?=
- =?us-ascii?Q?doELIvT6XdtIpaoaeJ6oVKfJHdzP9Y3HUlL3vVjMYrJxg/cb55XyOpGmdAZj?=
- =?us-ascii?Q?cDgkfivwZw41jR9BvOOPP/AuPCUZmLSbaxIfCwOce37VA8U6jnXt6ZosTtHn?=
- =?us-ascii?Q?x0tPqJXR5dTAN2Ake7aw7hVp0jUOe3WP0cF0cQ2qe+9kwUAN+uBXCnBj8S5y?=
- =?us-ascii?Q?dp4REkjXW3hDraD3G1sNuLCXqWbz87T7t2i68Gnts6QOU4y/ubuqjZ+qoTNV?=
- =?us-ascii?Q?4jNAFvVgMAwfNj/g5lrkkms0fte9ZWzBoXrN9ob4kz8wbfGSLJcm0sez8NjA?=
- =?us-ascii?Q?FZQjXpQTiJdbNigw4Qigwq9B1be2rYaBvhSfgBXVBBVCbCAyHQ3ZAHyprjht?=
- =?us-ascii?Q?e6FbQa4J+SfMAOBLMgZo4Efz334q8vMBfYVdjlCyz8WgeLeC0fGC1wDAly72?=
- =?us-ascii?Q?4YtiTl5aS66BNlfknnvRAZn8emlsXTesPtxiDNL9qX94pMS4z2h3URRuvdkc?=
- =?us-ascii?Q?weraJ/H1lpB+fKPkZnPxj+++DVWTCsjLKzuWrg1dpuZ8kv+gh62Y65KoC+bo?=
- =?us-ascii?Q?2MacvPKKp3uMmwv9ezOLaFa6ozHhFYgnJ7RS+Ohfcd/cOPCLpk8cwOwDxKl1?=
- =?us-ascii?Q?MTLvPchZ0UEh/uZbDNi4FR30wmGaj7n/ppBUAHBO1sGbW9M/iCm7gySArRr/?=
- =?us-ascii?Q?euK33aWWsc/zUYGpa9KWR+CfQscShyqcigCUwUXbTDsaN+27dGi+YfmbQlPu?=
- =?us-ascii?Q?oNBPcn72deQf4kEGVSjn6TqD14MlZT1tSwLDf/Pxib5ZSaTjr9wnSqpLugbH?=
- =?us-ascii?Q?mPQ5pJ4Lewhe75sWRj6qJ/Fe6QR4qSYUO8MO9K/tA0QfoFooRuyVv53yotGg?=
- =?us-ascii?Q?v+aKu+52uRMw3hwfR7L+hi0pwS3B4B3t8buKSDHMMjXMOVe2fyu0L7VrfNbj?=
- =?us-ascii?Q?u1czgy6n72nED0OPMofbZ+bBfYfFhzyLdsJPXFW2ea8608XGF9/5i1mWxsb0?=
- =?us-ascii?Q?n4ZRpOYhRedfV4O0Eon3qmcMAkRdyiXsUThGVj6cvw72UWzK+M/p/ZsBvNGX?=
- =?us-ascii?Q?wEDcIPCDQ/sm8Hp9+TpTG3Z7WLOQuYRfN5mx5m6mIQhCTnbTqlr7PSdZ4O1G?=
- =?us-ascii?Q?qDmfcvQH8/GkbyxLTadyGj3OLvfoX/UKtsxI?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(19092799006)(376014)(7416014)(1800799024)(366016)(38350700014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?pMWALI8OKKCrNpZ/xW6mSKqc9u9Cw1iDGOHQs6fRq14H2xntBy2LezUY9Xmi?=
- =?us-ascii?Q?Y86IGDxcdMSOJ+DCRZcoQglx7s5d3mKtceYilLpeW4Wnb66xYw3Nbq8P/5Sj?=
- =?us-ascii?Q?ATsSo5o/SxaseEkH943rTHTdwDe/kP3I+UCTg6fsU5cDXNIiE54BPCT3NjXg?=
- =?us-ascii?Q?c5ngxz2A1MU1f7KnVL29/Qo7XJlqPXiKb5SstaLebiidO2xmMEL7HJz/bemA?=
- =?us-ascii?Q?pzCSJrqJ1gikisNnOEBjal1IrAvpre3zsyroHzXQPDg1Ci7nUH65Dzu0mIMo?=
- =?us-ascii?Q?eEGSgV+n3M23KYI91DLuFF9vwj/fBTICgAjWnWesy9bT+oOBwi8t1/iZrEQH?=
- =?us-ascii?Q?QP8rtC/G8f7cgIyIByzF+e2anUaLGf7Q6RyLWmIYg0wHMQD+WEJahecnwGi3?=
- =?us-ascii?Q?Lc5l9VJdoCF4B4MaQJZH8v8kvKLQgopEOec7UkrEIjXDfOOikzgk1Y0pqCvf?=
- =?us-ascii?Q?uzYkvTsSgrxI/mHSmAFhOtbTxOWUuuQ9jdzARSYMGHjymdps+nDlqLGg8UFF?=
- =?us-ascii?Q?V3sIGy1QMKRFhTQuUMe4/mKQ4axaTL3/0CKFMCwN42c+eWqOv4amRq11bqs+?=
- =?us-ascii?Q?bBKk2jWcu/gakn12W84bq2S/A9WZRUDTht+/4MGK97DlmZrFXtq+0WfgRuSq?=
- =?us-ascii?Q?L6r8NFWTQZYRnwj8AEwVNKaRYwDJH+476MJPc1kD3uixo2gM+mt53yj+Wi/b?=
- =?us-ascii?Q?IiKwjfJc5S9YCcWiBV/g6HL/FUrmx1KH7WnV8doDdo4J+wa5z2B1skdxnt1L?=
- =?us-ascii?Q?2frWygM+KvaMD+cRUWu7mfYnT4Fu2MuGWRwgn4xi5qHeohg4MWGuu9CReg2Y?=
- =?us-ascii?Q?lxrIzvfCH/zyqyOaBpq5Fjb2LuksYJiwVI24ns6aA/7ahEqWl6CV/yqH7qPm?=
- =?us-ascii?Q?SACj0cb3o2AS97pqRBt7C5bBn9D8DDuzSfwbKkZDjx5xKJbXgJgiuCuoTNjJ?=
- =?us-ascii?Q?WB0ny/fvc9Shl6wWDgVEiazljrwsgVl5i2ahRx6HvUgRm0nmHcpL1Kv8xi4x?=
- =?us-ascii?Q?ogxKAjWE/+anD0RKRFbcqlh1zFivW5fQcE75GqUlITpK3xQpTWzdg3rVuSSv?=
- =?us-ascii?Q?BwVcgYvje38hl/heTgIlz/SDbJe5UrjOwKH9r6Fpr/ENpxmFkf2Sc8b38QEC?=
- =?us-ascii?Q?irTaMFceZ+9+I+jHX4oMf/6ea7yNkufC/uWJKkIWDw8J1PrrxLEswFFhA5wt?=
- =?us-ascii?Q?kf/qEe99VsyvYu/xQplncBZnosJ2tayWSKMmbSihmZETmoseybtwfe5nbpFU?=
- =?us-ascii?Q?bl4AG3MQfT3ny47jAnYkajkwilH966BYCBVY2FHvrxPD8J6ELA6+M4jFpEUJ?=
- =?us-ascii?Q?CeIuj7Z0D9PAeulWoemFZghHSyPY9mGnusCeEl9ybwHDgvzs9wjj6U/2WB4e?=
- =?us-ascii?Q?f/t5JRosZk834+z9Hd/On/uwS/xxmVSHyMmjAIQykZM4fQIzrn9DWFDucEJu?=
- =?us-ascii?Q?+r8d46TPGF0iPrYaCrpVO1lM5dmrSFOx+MsbOJoDY7M6l5QOUv1UJPti4igf?=
- =?us-ascii?Q?HRtXSz2xCl1bIpbxNifbnmZTJEA3Umi1hQN7BZoKUbOVWUe30PnZyBWUjlc9?=
- =?us-ascii?Q?pzIVOSbBBnU3mhfp8FRjgPvQTrGN8IJ6sXMtnmgMlBT1Cga1yvH/JTFR/C1L?=
- =?us-ascii?Q?1PoWvsDQb+YSwTLfnefTggbXhA3cRgVh8SnkUUisozLkHaBV+PageVqTsPgw?=
- =?us-ascii?Q?+6M1bo4vrGyY+Gri+3es1puCR+hgolVp9eBTMZxO+KylJF3hllzHlL1vYPBt?=
- =?us-ascii?Q?9ms9JW5AAg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d178304-e722-4d9b-1ac5-08de4e8dc60b
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 08:13:15.5650
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NWyewnFdEyDIoZCRtYMJGepaBzvyOj9GvcljJ1iTrF2FWbubStM/m8JbGda5ar406fHNn+idT7SG4dHqX/5axg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB11916
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Call dwc3_pre_set_role() to support both extcon and otg usecase, so that
-the glue driver can do proper action in case of role changes.
+Changes since v1:
+	Transferred log
 
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Disable AER for Intel Titan Ridge 4C 2018
+(used in T2 iMacs, where the warnings appear)
+that generate continuous pcieport warnings. such as:
+
+pcieport 0000:00:1c.4: AER: Correctable error message received from 0000:07:00.0
+pcieport 0000:07:00.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
+pcieport 0000:07:00.0:   device [8086:15ea] error status/mask=00000080/00002000
+pcieport 0000:07:00.0:    [ 7] BadDLLP
+
+macOS also disables AER for Thunderbolt devices and controllers in their drivers.
+
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220651
+Signed-off-by: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
 
 ---
-Changes in v3:
- - no changes
 Changes in v2:
- - improve commit message
- - add Rb and Ab tag
+- Transferred logic to arch/x86/pci/fixup.c to only target x86
+- Added DMI quirk to only target Apple Systems
+Changes since v1:
+- Transferred logic to drivers/pci/quicks.c
 ---
- drivers/usb/dwc3/drd.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+---
+ arch/x86/pci/fixup.c       | 12 ++++++++++++
+ drivers/pci/pcie/aer.c     |  3 +++
+ drivers/pci/pcie/portdrv.c |  2 +-
+ include/linux/pci.h        |  1 +
+ 4 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 589bbeb27454..031cfd12300a 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -381,6 +381,7 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
- 		dwc3_otgregs_init(dwc);
- 		dwc3_otg_host_init(dwc);
- 		spin_unlock_irqrestore(&dwc->lock, flags);
-+		dwc3_pre_set_role(dwc, USB_ROLE_HOST);
- 		ret = dwc3_host_init(dwc);
- 		if (ret) {
- 			dev_err(dwc->dev, "failed to initialize host\n");
-@@ -406,6 +407,7 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
- 			otg_set_vbus(dwc->usb2_phy->otg, false);
- 		if (dwc->usb2_generic_phy[0])
- 			phy_set_mode(dwc->usb2_generic_phy[0], PHY_MODE_USB_DEVICE);
-+		dwc3_pre_set_role(dwc, USB_ROLE_DEVICE);
- 		ret = dwc3_gadget_init(dwc);
- 		if (ret)
- 			dev_err(dwc->dev, "failed to initialize peripheral\n");
-@@ -433,10 +435,12 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
- 			     unsigned long event, void *ptr)
- {
- 	struct dwc3 *dwc = container_of(nb, struct dwc3, edev_nb);
-+	u32 mode = event ? DWC3_GCTL_PRTCAP_HOST : DWC3_GCTL_PRTCAP_DEVICE;
-+	enum usb_role role = mode == DWC3_GCTL_PRTCAP_HOST ?
-+				     USB_ROLE_HOST : USB_ROLE_DEVICE;
- 
--	dwc3_set_mode(dwc, event ?
--		      DWC3_GCTL_PRTCAP_HOST :
--		      DWC3_GCTL_PRTCAP_DEVICE);
-+	dwc3_pre_set_role(dwc, role);
-+	dwc3_set_mode(dwc, mode);
- 
- 	return NOTIFY_DONE;
+diff --git a/arch/x86/pci/fixup.c b/arch/x86/pci/fixup.c
+index 25076a5acd96..bd72f7cf5db9 100644
+--- a/arch/x86/pci/fixup.c
++++ b/arch/x86/pci/fixup.c
+@@ -1081,3 +1081,15 @@ static void quirk_tuxeo_rp_d3(struct pci_dev *pdev)
  }
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x1502, quirk_tuxeo_rp_d3);
+ #endif /* CONFIG_SUSPEND */
++
++#ifdef CONFIG_PCIEAER
++
++static void quirk_disable_aer(struct pci_dev *pdev)
++{
++	if (dmi_match(DMI_SYS_VENDOR, "Apple"))
++		pdev->no_aer = 1;
++}
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x15EA, quirk_disable_aer);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x15EB, quirk_disable_aer);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x15EC, quirk_disable_aer);
++#endif /* CONFIG_PCIEAER */
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index e0bcaa896803..45604564ce6f 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -389,6 +389,9 @@ void pci_aer_init(struct pci_dev *dev)
+ {
+ 	int n;
+ 
++	if (dev->no_aer)
++		return;
++
+ 	dev->aer_cap = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_ERR);
+ 	if (!dev->aer_cap)
+ 		return;
+diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+index 38a41ccf79b9..ab904a224296 100644
+--- a/drivers/pci/pcie/portdrv.c
++++ b/drivers/pci/pcie/portdrv.c
+@@ -240,7 +240,7 @@ static int get_port_device_capability(struct pci_dev *dev)
+ 	if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
+              pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
+ 	    dev->aer_cap && pci_aer_available() &&
+-	    (pcie_ports_native || host->native_aer))
++	    (pcie_ports_native || host->native_aer) && !dev->no_aer)
+ 		services |= PCIE_PORT_SERVICE_AER;
+ #endif
+ 
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 864775651c6f..f447f86c6bdf 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -440,6 +440,7 @@ struct pci_dev {
+ 	unsigned int	multifunction:1;	/* Multi-function device */
+ 
+ 	unsigned int	is_busmaster:1;		/* Is busmaster */
++	unsigned int	no_aer:1;		/* May not use AER */
+ 	unsigned int	no_msi:1;		/* May not use MSI */
+ 	unsigned int	no_64bit_msi:1;		/* May only use 32-bit MSIs */
+ 	unsigned int	block_cfg_access:1;	/* Config space access blocked */
 -- 
-2.34.1
+2.43.0
 
 
