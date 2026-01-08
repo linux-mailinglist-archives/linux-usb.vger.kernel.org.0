@@ -1,208 +1,221 @@
-Return-Path: <linux-usb+bounces-32077-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32078-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AAA8D04548
-	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 17:24:57 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FC86D0499A
+	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 17:58:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3908030B7A44
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 16:16:46 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5382E30124F3
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 16:57:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FBA424A076;
-	Thu,  8 Jan 2026 16:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747512E9749;
+	Thu,  8 Jan 2026 16:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="XT2+mREG"
+	dkim=pass (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b="hsoXPE6N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013013.outbound.protection.outlook.com [52.101.72.13])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012045.outbound.protection.outlook.com [52.101.66.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786442673B7;
-	Thu,  8 Jan 2026 16:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969A32E7637
+	for <linux-usb@vger.kernel.org>; Thu,  8 Jan 2026 16:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767888979; cv=fail; b=Y8YujvnZSjXhcSUgk6CG1byY10rX37iVOFgET7fV0cBBlAAEp453tfZZOV2hiS+Hfip6KxGmdS+0OLFJejdJ7qWXLdrJUqv3XeTFCuOfHgam3r1DCOUilePOQaVxgUg5PeQ7luaeYrOIpNLGH4C8x8ATjbQsrPUlxlUhBVHNxFg=
+	t=1767891469; cv=fail; b=oqN0/4a7M9z7YCk9DwZJtW9MJjib8tHDgIvNZCWz5qVeV3lFXdlwQM6jA3Ixg7xcojhJtF5oH8xAjx1PGte9gkvpNtOybnTWUHfO7KedZsFL/LQdOkPwGPeIU2i/l/2D2fyO6BMXhoB4ivBpI7vOy4Fb9W3UpLztc1k4hn1Dgps=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767888979; c=relaxed/simple;
-	bh=iCiOnVA26KFx2P4qMvqnZupPOSXuWMrL6MIkur6iyuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=PohDrkcD0KVATa1/d+eClsWuUtKEIzza3B8u07Srh0qWRxttfVrU4qDh9JLiv7J1FRW0ws8zVqehVizIvapBfBZULPhrYxXQsKw/J2itul7yGtdNPhhClRgPhIxLUklL51sg0I1TDzA2RyliR38540AY0ySudUl8G7ofDGFM+QY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=XT2+mREG; arc=fail smtp.client-ip=52.101.72.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1767891469; c=relaxed/simple;
+	bh=G7O2b73o9Auak+sxqFaIAlDumcbUu6nqp3t6HJLECq8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=acP2GBT1qUcsspPGQUhVE0Tp/IOvKxMbE5p7e/5g6UE2PZ/k1OYLvM8BtH3F0WGYbcQUNoE0bh10A6Hpxl2jArA9+KmQj/BwMtx6PTF6u8eHfw3rJLYqZr9/t6UwOwZkpi6GHvB+WBWGs1UHUejyv4aMVPY3lqH8gXAXRJ5IWm8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com; spf=fail smtp.mailfrom=leica-geosystems.com; dkim=pass (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b=hsoXPE6N; arc=fail smtp.client-ip=52.101.66.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=leica-geosystems.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kabrrQ1spaCIbNBU+ZD5HdEWDnyIFxJiWravWafYy/iZXtrlLVZG50UTpE6lt+4ekWbdh1gI+5Dwdd3oI/3FYSMO+jv1T5CS7leWfzbOgt44bBZVheuoUL901T4b+2bgRmnWZlkT0GmeISnCn7Rl+njw1AmWZn4MkgyiTGW0jv52rSdw5AqWqXH5jqqjvsPGiza7JEMiUQDG3HYo28KOoV2XiJYtLGM/Kt1pmdR6nhW+q1xYfL7ydbbVw9CrGfCQem/PdTffbYy/7bWxbdpK0uGdSKM9b+i/9JwPpgviwyzXAGfXRRSucsPoZj0nUwwnmKSWgaAdqb7pqjkbl8YDWQ==
+ b=wi3pqtNYWDMMgCTePqG5ncXRkwh7jAc5uYSQID+eg9I/tBkd2hpMgdNZM7sIpIbNXLIFsJESKWi2am6v2PWA+WJJTvGdN/0Z98+qbixw4OED5TqV3g+bKMPQ2f5VJ6zAmJ+RdPnjO3J/0dtgTHLqD5BdR6E4kn7jAYM5NNl/2PVjlcMO3WjwZMVOqc71gzgJFEBjRJOBrE1QaECi1N1fpvV9/YkXU9AIPdxfn3F6+En5M7Ex++JthDXf9aV+OgYUxp28UHKiI+8uSsy6fSryDWe31dOc1M4DtovrZMDdeS4xlnDe09lwnWipNo9+hE0FHn4rdysCsbOq6x0YZsmAoQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o8ju3tmbhB0CdbUdK+DtdNguZiZPVTvUrNzz+uyL7So=;
- b=wIe6kzA1L6ETnW3B5JF8yV4tlF78jGZm8Ttjj7cWsLQM1sd+03v2bSFb21aJ0yQorniRwyg39LlnX52mvqtPo/lu2BbMW05nOjcMLTaMUGDKcBAlb1SmoCDmEGnUCkCe9FpliDiLi8EDe7CalaKiO4+6u2pDPZQ+CQu6XnombQ/xu1etd16DwbEQlhFFexWHw8j6Iqp8FgSclgSDfT1suTUKj+MPQKFEpWKncgZiEQH2bKxqpzHphcsuPdD6M4Wa3AbPa96j/Wyb+Y9cVFOaP8XATJ0MV3iRHjZ+4klw3Bc4f4QmX7Bepmx9A2ZXXiE5VuaNQFh3UdTC+82z2zT4Zw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ bh=5P/xubNAWueJo+m+96z5FM/QBkDCOnakAhWMvfzV2hs=;
+ b=hVc0zEMo3Cl4wmwGqh0slui7+NAX044lNfqWzJMwgxyz4KcLNFhuDWQUzFZdMVFRo7atrNx4l8/PTeO0xDAq3vJ5CvaaqTHZ1suH2MSiFTRtJ8/Bkg+6X+B8ROLM4Yw689We98LvQIplVfs9rcccDEi1IvzJT8sQRcuiY5+vFDGaPo+GRxmdcOuQbq0PIbtqdgOLpRCwtPubf+iG+yr8vRexiw49Nk1CoQEvFWVJ6d4AbWHTbxCwMQengUbnHYScZR+GcSQjQe81MryqRpPMebM31mrGjseO3a65v3eqYfwAIZNX5bxftIC6GemMUOhxGDhnjGU1OPAud7pDjmAK9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 193.8.40.99) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=leica-geosystems.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=leica-geosystems.com; dkim=none (message not signed);
+ arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o8ju3tmbhB0CdbUdK+DtdNguZiZPVTvUrNzz+uyL7So=;
- b=XT2+mREGg2wYm81HQm1CzAglDfBZBjxMLOkqB4uxvAyocau405eYG/aWISPtlDJGX8xgiRu+uOvGwxyjC/awnvIRbv8Ch9UpVpBPmRYeM76SyFF3bVl1Uy7kCTzaWFKkzGjUclf9gB64qkASaDQi2IKS8O267w3DyAz8DzlDBorbji42UYV/ru8eLfSYS9sxMUcoOYtsI9tv3Ehxx5oZRdSbNUAXSVi4wpjf2IaaU2yxans/x4SKd52kJgJ7m4wqIu8d+Dc+v/p6RxltK2MwGM7YlXl5hm+tKyUgDhbVUnsCc3pFeaUmZCeirpqhYjWv5/5GDErSSopOQ7sVEXIi6A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
- by PA4PR04MB7854.eurprd04.prod.outlook.com (2603:10a6:102:c2::20) with
+ bh=5P/xubNAWueJo+m+96z5FM/QBkDCOnakAhWMvfzV2hs=;
+ b=hsoXPE6N94a94KzHqlusvoxtNDlFoWUDNK5GpuVOjnH3UYQWz45VR70I7i1WXWgo0Tl0xlbwo0hh9Wvm2BbXSET04NwWFe7n9uOfnJTUfU/H1vPgRfREzKyT3Uc/B+Z6bUUIOV3joyIRGDO/Uj1ebpzl4RhbZ0InRBOaWZ0XfDM=
+Received: from AS4P191CA0041.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:657::14)
+ by AS5PR06MB8779.eurprd06.prod.outlook.com (2603:10a6:20b:67f::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.3; Thu, 8 Jan
- 2026 16:16:14 +0000
-Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
- ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
- ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9478.004; Thu, 8 Jan 2026
- 16:16:14 +0000
-Date: Thu, 8 Jan 2026 11:16:08 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>, jun.li@nxp.com,
-	imx@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] usb: gadget: uvc: retry vb2_reqbufs() with
- vb_vmalloc_memops if use_sg fail
-Message-ID: <aV/YSGHubVjaZBzz@lizhi-Precision-Tower-5810>
-References: <20260108-uvc-gadget-fix-patch-v1-0-8b571e5033cc@nxp.com>
- <20260108-uvc-gadget-fix-patch-v1-4-8b571e5033cc@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260108-uvc-gadget-fix-patch-v1-4-8b571e5033cc@nxp.com>
-X-ClientProxiedBy: PH8PR20CA0007.namprd20.prod.outlook.com
- (2603:10b6:510:23c::9) To DU2PR04MB8951.eurprd04.prod.outlook.com
- (2603:10a6:10:2e2::22)
+ 2026 16:57:39 +0000
+Received: from AM4PEPF00027A64.eurprd04.prod.outlook.com
+ (2603:10a6:20b:657:cafe::4) by AS4P191CA0041.outlook.office365.com
+ (2603:10a6:20b:657::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9499.3 via Frontend Transport; Thu, 8
+ Jan 2026 16:57:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.99)
+ smtp.mailfrom=leica-geosystems.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=leica-geosystems.com;
+Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com
+ designates 193.8.40.99 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.8.40.99; helo=hexagon.com; pr=C
+Received: from hexagon.com (193.8.40.99) by
+ AM4PEPF00027A64.mail.protection.outlook.com (10.167.16.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9520.1 via Frontend Transport; Thu, 8 Jan 2026 16:57:38 +0000
+Received: from aherlnxbspsrv01.lgs-net.com ([10.61.228.61]) by hexagon.com with Microsoft SMTPSVC(10.0.17763.1697);
+	 Thu, 8 Jan 2026 17:57:38 +0100
+From: Mario Peter <mario.peter@leica-geosystems.com>
+To: xu.yang_2@nxp.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	mario.peter@leica-geosystems.com,
+	peter.chen@kernel.org
+Subject: Re: [PATCH v1] usb: chipidea: udc: fix DMA and SG cleanup in _ep_nuke()
+Date: Thu,  8 Jan 2026 16:57:38 +0000
+Message-ID: <20260108165738.793331-1-mario.peter@leica-geosystems.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <ofw7h7s7jbhzjzbj6fpkzp5m2av25ovlyfp7fdlcvt2dd6x6a5@kx3rnlojdzdy>
+References: <ofw7h7s7jbhzjzbj6fpkzp5m2av25ovlyfp7fdlcvt2dd6x6a5@kx3rnlojdzdy>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 08 Jan 2026 16:57:38.0618 (UTC) FILETIME=[E52AF9A0:01DC80BF]
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|PA4PR04MB7854:EE_
-X-MS-Office365-Filtering-Correlation-Id: 307ac10b-f159-470e-1a53-08de4ed13efe
+X-MS-TrafficTypeDiagnostic: AM4PEPF00027A64:EE_|AS5PR06MB8779:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 836a0339-11cd-42af-bde2-08de4ed707be
+X-SET-LOWER-SCL-SCANNER: YES
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|19092799006|366016|376014|38350700014;
+	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ZE3hloxPF3jJ+T12XkAdK0xpcFReoVnxVW0sJvl/1kzoD3ac99F3IrTl/bmx?=
- =?us-ascii?Q?aW4an+GeiD2ztO26glcVGbWyI1PCBAnWNG+NjC0XE6DI78EfvSJcWC4UhRy0?=
- =?us-ascii?Q?oRebAnVbn1NobsL1OrvFiB+j+8DHJr51nkcBwGRw3yGRii89X/PWHzvU2qkD?=
- =?us-ascii?Q?71wBBgsRN4PVXFDGkPKtmRbKcBOaGU4iYmRW9kBtpUeS6ZsqFbNcpeMuPPF2?=
- =?us-ascii?Q?R2rriLnQbBM1E2/B1bWASwdtMpfXk4mE45oAszFjKtfBp5CNLG9GJIOX5EuM?=
- =?us-ascii?Q?eE2gglh5ZxCCAITOSUmbVFSZRrEaYRMQXX3QlC1BivX4lpeMTl+63wdEocAC?=
- =?us-ascii?Q?f2rx/2DTbnwh2gXsZgOgJq0XzC7OjvXzdUFlatlweZ0PJtfdKmlFbHck5TpV?=
- =?us-ascii?Q?H+FloMIn7oGbOjXvTx5cjFBWwZJ8tomU/2w/R0Q91Dv66S3m5VSSg20maxNU?=
- =?us-ascii?Q?O5LxWqzkUBdPcKY6T83VS+zb37JoPKP3DRC0e5J0IViUe32V+MmnynQRSBLP?=
- =?us-ascii?Q?Ui9FMp8ILmB8RshObI0q1zI0Co584mn+qPBc42LlDgB7fMKWtS9yW92nBGTk?=
- =?us-ascii?Q?ww3PrSNq++F7y+35qnQgJpENMNdMHas9PItJ4a16Fp65LQ5S6AB/2r2omoKr?=
- =?us-ascii?Q?0UQpjTiNhWk1Hnl2Chlk/U2Zvo+KLO/chU9Q9vQy+9d0xvalTCz4TKJAi+Hi?=
- =?us-ascii?Q?Zc01I9O4vViu/JqoOa6H6uVh3yUGcXvK4eoa0KYSxYovQWn+ljBjFnECVDh4?=
- =?us-ascii?Q?PghQhVBdoWvyCAiks9lkYpcTccriUV3rq+3K7nRi38On3ZWdyyUmBcap8Lhj?=
- =?us-ascii?Q?BEZFrO5Jil1iZsOHzGKSP6aIPMeTtBeOQGpp/VQyY4ng/4wCpgGub1hOnZk/?=
- =?us-ascii?Q?lt2i8wlMZ4EMj9Wvp5ZMIjdnXPwvhIBkZe7i2sTPXTTU8s6V7Amb/qdaanF5?=
- =?us-ascii?Q?XjKbHad4SKj0e7EvpioZbKPsC60WSf797r3Dgx3+XKu+mCa/4PjBXPxlhO6X?=
- =?us-ascii?Q?uAWoFV3h6BJi4D6CFgoTIqZwjT7VOXpD2WkvbDgqpiwAI7b9sHy/Zuu9DrR9?=
- =?us-ascii?Q?zC4ARlT91mfDl7ew+r25bLr8oFT2tpX6mpar5G9fZmuZW+M4nk/AiSEIdgHM?=
- =?us-ascii?Q?Zknr4KDJADA+w7jj/rGEom5q4T1HSSTzrg/yuG3Tg28BiVJV5K/svQfoeR4u?=
- =?us-ascii?Q?l360v4WKiZGkBRriWtW0xiPRk5nrPTCYo/pJyPrTmRkrFPyDukrlxxjXM2Ig?=
- =?us-ascii?Q?9WIifSWEjysRCpD0NT4z1y9puCisEHtJjwqvQRkQdPYA2qkZwkbyldF6JmOp?=
- =?us-ascii?Q?SG/OmQbV/x87N29SWw3peg3w43BPUdj/8ffGHMAodkkyoAPfNVo0U+kNWuxO?=
- =?us-ascii?Q?DTMuI8Ekocd7y6Es097FIgBg51p7Ku0R6fXTdrzzFE/BgGYzpySLW1CvP8hQ?=
- =?us-ascii?Q?Rtba1co8jFpjR5O61MN/aT6LblcG53yAR6Hv6sTBQVREyGu9EueuF4DDfARV?=
- =?us-ascii?Q?WMMLZaYTUJYrdhTAsHXTVUZO2+ouArzQ9ZmWuEf/lb9qDQGpROWMvq9alQ?=
- =?us-ascii?Q?=3D=3D?=
+	=?us-ascii?Q?skn9dlp/HQbofvImDxwKKbxKImy1VxBQReU4F2W0UNIVZ/+XcsyEJWGdUaUc?=
+ =?us-ascii?Q?kLIcqYg6hBKJRJfEzweehs69KH9uDBha3s9W1z/apfJ0zxaNHVArI4p95xNL?=
+ =?us-ascii?Q?IH/6E6+OoVuPHAEgdw18vrBlcmROJVJxf/6uJbr4PvxWH4+cP3siW0KlJ2yU?=
+ =?us-ascii?Q?lYiYQGAZUJINyKmQQV9O9iLSwqXLGtSqMfGGVjco/Yq57rQRByDOd6czVTP+?=
+ =?us-ascii?Q?EtMtKE+yshp96V+3dOUqt4Ph9y1ERIyOJrDdQSkN3e3+ReDpXfVZ4thR60kZ?=
+ =?us-ascii?Q?yLknkQ4TgRh+C3RlIxOCT0mTd0ftilR2PnVSNuHhv2OBr7S0JmB8pXVtrKfq?=
+ =?us-ascii?Q?QgfXFwRPPhqSXNu9938z8CMyPbL2usvnzPNYrh6Hed87kAPDX3OQTmADy/yd?=
+ =?us-ascii?Q?wwWtQLPC1Vfp4zhdNoWFF99hvVmF1wlu6aJx7EGvrmt1+BIbo9A212jh4dDz?=
+ =?us-ascii?Q?UJ4uex3tPc1CIf9CGGcpw96KmsENAF6y5MU+gsMuyCYMD/3waBYQMyahi0M5?=
+ =?us-ascii?Q?W8WeCeC5AI4lyqJfJ2sIyfMJJul9DG6wnbxKnBSvfSLA4RGTr+/mdfZ2ljuU?=
+ =?us-ascii?Q?fibwW8iSgthgUWhZ71IoQS3BzbhdGhTaBkOnILPJ/fkrGVm6J8TERp6h9oRy?=
+ =?us-ascii?Q?oUVlxlMrjKdEO8pEkPK3InjvJTkHAyVdubX3cUuvbilCxn+ER+3U1eB2Ay/d?=
+ =?us-ascii?Q?hWrnCIqwgNWx1JyZBk4kcfz+XueVVNtOhcAIdqA59ebTycoHd0Wb0AJDlAOi?=
+ =?us-ascii?Q?Ey0Z11x481sdFZqafQjOk6Fp8bSIwBZLUo+HpSSIG1pll/bk5gDct2a7zdyu?=
+ =?us-ascii?Q?JhyW4XKdj96Bu0jbU0LThovAblDge8+cAjOxYwpWLpFh+rh41wuHgkfzqvHd?=
+ =?us-ascii?Q?roqnM4z1Tp0dH/HLT3k4u93JWbuAedmjqiroahaChbvL9cZFvbIsAF5tM0po?=
+ =?us-ascii?Q?ziHOY6RpHmZTQo5zj7K/lueSfSRlM7aJetY8e1L7r88ee6ck6A5jVyhDO/We?=
+ =?us-ascii?Q?lBgTgq2zCh8kPqsTswrQZU+xtxCDnBOauzGHizlQrtwQRRXXC0jB/7OuDj4g?=
+ =?us-ascii?Q?QpuAQ6io9bbj9471eo2z34/EmDSOUYi0hnVDIRxvR2cLGT3WQKx307nr6znr?=
+ =?us-ascii?Q?jQOIJtPklGC/912T9ZJpQZ89LXl1EHETqAkIPlfcZNT1m/jZebwmyYWHHAAu?=
+ =?us-ascii?Q?6ACzs8X7+6xzz2RcJ/8mwaHfKDHDFjfxky4NRDjU0EZswrGjGVnbxcu+qtjN?=
+ =?us-ascii?Q?A2zAODRW/haL7b+c09z9G6B7as81ir19fXZgoLLbOU18Dcr09co0LcDRaplx?=
+ =?us-ascii?Q?mlA5tAHz9FT0qQZ8GcJI8gnt9dp0syBuM/rBq19bp5pGYVnipQfrY7tS+dzR?=
+ =?us-ascii?Q?b6FR0A78UQ5ChFDi2fKWN3IYh9Yy8CPW/ylCSfAvl+htPiMFLm0IIG2GVUY5?=
+ =?us-ascii?Q?Rsd+c0k1p8R6NxQBGzj4K6Xbix+NFAwpIyfJ99Q83Uv2wi4Lo7/TNRU8vfif?=
+ =?us-ascii?Q?R0eHkN9gpvUOsoR2j+kQf2Vi9U9WmN4RSyYHcTA/rIgEbDfA+B5mMhfCg8hG?=
+ =?us-ascii?Q?byxcWn5zOrEbi6b7g8A=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(19092799006)(366016)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?/eKWKYQd0SbXl6+N5/YQzeHI3iat3qCpMVZamoyIYAQZgZKEjKIdWdKlkc87?=
- =?us-ascii?Q?VZZZzeqscpEOuchq3MCVoyUOXo0qFqCQ+1oS6AzUOZLt4jxLu4MmBCHIKgrh?=
- =?us-ascii?Q?wxXYZKYPWExAbHDIdA8lR9Pmv89fVd0s7gYL6g5plvh2z4zt4DHhjyDl6gFZ?=
- =?us-ascii?Q?LyCUpS31mjspYm9Tqb7liivdQR8IZDWTvVM8yyVEe5CEWrffMvXbhdETEZzd?=
- =?us-ascii?Q?F4Qjr7ZF+8D80CoWfoyKpEssDO+0Sb5MhGFlwwH8VN1FL6vEE8R9Df6H3hHE?=
- =?us-ascii?Q?vgaRjwtgknwUNubd5SvCK8A687PVSK/st+LlcGuRjaPx+qb9m7wPT32nxfBt?=
- =?us-ascii?Q?w/R+4pCQdW1B+dC4Nip+qGaB1pu0fNJbdTeugBqop7lZ/frZJ2pqMYsc0ZmC?=
- =?us-ascii?Q?YhX+Yp2Nr7lt/G9lNKK6J3A3PvphApdFiV8BCO7V4B1P51a2a6GTMPwm5jvj?=
- =?us-ascii?Q?4dFpB3rw8NADZAIm3y82wM5c59tRUV5eMZzumZKU43Fuws1EbNND4vQfNTRe?=
- =?us-ascii?Q?C0DAoGo9QL5LO18SKZmBNFpBFkMqDPRZO3gGYnkJ8Wr+dugGot2Vood/0Fgv?=
- =?us-ascii?Q?QOMllB+oxEuP7BujJwtAUCf1rnUk3iwMtxGm7+SFHw0p4dq7UcBG7VYwgU3l?=
- =?us-ascii?Q?ZdvG9aMojaoCuo0SsnmlGN1r4MtrLUBzgy2NP2Q8vebNk5CTZ7onxHSUwgSY?=
- =?us-ascii?Q?Qt9FYSSpximpDwtbs25UAYTlj9PEZlrH8RuUrJbwyG3PWnHCXSkGShvDVZeY?=
- =?us-ascii?Q?oScQBlnssZNjX8aHXccGWLSdlnrBizgHaYeztTsKh6FnaeeHnDcLjsWrLkBa?=
- =?us-ascii?Q?Fv7nzxeNZ6sCp6hrJBDWi+dhQACIqq3svbWnzaeJ171WceD/mPS+IUwYFnqT?=
- =?us-ascii?Q?WhJyl0eBxPaTUlnPhVurUX9eM0DrsX0oa7FN2At779U/WrEdaLxvaWWBPXQO?=
- =?us-ascii?Q?m+A1Y6aGDy7CPUBB7rLrTFr4qUMmGNcKMI4kSaMp1BbibkkU8zilcN1z+T2C?=
- =?us-ascii?Q?/TcQAWxhz0T2anerA2awcaH10oNHwWmxHExiK9h6JHSKGWYZQO8fGYjkY96s?=
- =?us-ascii?Q?gdnsacwub/Kq0lAm/edbRQQg/j0k1FHfpVW6BVScaKDiwanxi7IujfYgJND+?=
- =?us-ascii?Q?AqV39ez/Yyx5mrZDrZlHG11R9wigCXBoedqSYcVRiGFIG+kmiO2FXnn0Yw52?=
- =?us-ascii?Q?Bj2+I9d7rfinfJcxh3VDej9ctsNd0pqK1wCcswQnk1e6OkqMk7T8tFvViAWl?=
- =?us-ascii?Q?vHgqi6l1vsHk1SjSqWonWGRbVh4AC6bcCMjtlzUJxG+WLzYoFq+CoxZrolNd?=
- =?us-ascii?Q?PpTLobygirXtpSBfFQvhtV1yzt0/bnLkUP5nr0b2LY9oiY0TXhyJHUYKacQu?=
- =?us-ascii?Q?FBhQ/3g1JyWbnloDYmcv+IBj9rHucWTNDYvKBm1CaANHd4ynIwj8IlzsSxaJ?=
- =?us-ascii?Q?MfpfU0cCGnyKX4lj3M9EU53G0KMIEsRIA4VCt6q3ccy99or8s+W0JDX1n4wv?=
- =?us-ascii?Q?18SwpZ6aD7AnSFRD79iJrkYBn4sBgSksRpFCSCx/+mbKmVc6cPuCnmOqPfY3?=
- =?us-ascii?Q?Cd1UdPb9isBt9nXKNpNsGyKbHWsRi5DkfRCOR6BIBe4JkVHs4cg5JJYHlk+f?=
- =?us-ascii?Q?iPiNfX5nsjKLqLidOjmCG2dHCAdo1kZtx3b9l/CuiWmp+brwcU3DJwlanu1v?=
- =?us-ascii?Q?ss6VE8jRgplVS9To5DTvJSYz8inZbMyoKo1fOM+YQx+1C+MT?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 307ac10b-f159-470e-1a53-08de4ed13efe
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 16:16:14.6960
+	CIP:193.8.40.99;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:hexagon.com;PTR:ahersrvdom51.leica-geosystems.com;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: leica-geosystems.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 16:57:38.7705
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eQwyfXDu3jMwr3G3JOLRI4KPC8UtOAGV+I9/TvkIfxRizROI73sT7In6Orfk09ZFPTkEIXL402Z9TpCVz7m7DQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7854
+X-MS-Exchange-CrossTenant-Network-Message-Id: 836a0339-11cd-42af-bde2-08de4ed707be
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.99];Helo=[hexagon.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM4PEPF00027A64.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR06MB8779
 
-On Thu, Jan 08, 2026 at 03:43:05PM +0800, Xu Yang wrote:
-> Based on the reality[1][2] that vb2_dma_sg_alloc() can't alloc buffer with
-> device DMA limits, those device will always get below error: "swiotlb
-> buffer is full (sz: 393216 bytes), total 65536 (slots), used 2358 (slots)"
-> and the uvc gadget function can't work at all.
+>> The ChipIdea UDC driver can encounter "not page aligned sg buffer"
+>> errors when a USB device is reconnected after being disconnected
+>> during an active transfer. This occurs because _ep_nuke() returns
+>> requests to the gadget layer without properly unmapping DMA buffers
+>> or cleaning up scatter-gather bounce buffers.
+>>
+>> Root cause:
+>> When a disconnect happens during a multi-segment DMA transfer, the
+>> request's num_mapped_sgs field and sgt.sgl pointer remain set with
+>> stale values. The request is returned to the gadget driver with status
+>> -ESHUTDOWN but still has active DMA state. If the gadget driver reuses
+>> this request on reconnect without reinitializing it, the stale DMA
+>> state causes _hardware_enqueue() to skip DMA mapping (seeing non-zero
+>> num_mapped_sgs) and attempt to use freed/invalid DMA addresses,
+>> leading to alignment errors and potential memory corruption.
+>>
+>> The normal completion path via _hardware_dequeue() properly calls
+>> usb_gadget_unmap_request_by_dev() and sglist_do_debounce() before
+>> returning the request. The _ep_nuke() path must do the same cleanup
+>> to ensure requests are returned in a clean, reusable state.
+>>
+>> Fix:
+>> Add DMA unmapping and bounce buffer cleanup to _ep_nuke() to mirror
+>> the cleanup sequence in _hardware_dequeue():
+>> - Call usb_gadget_unmap_request_by_dev() if num_mapped_sgs is set
+>> - Call sglist_do_debounce() with copy=false if bounce buffer exists
+>>
+>> This ensures that when requests are returned due to endpoint shutdown,
+>> they don't retain stale DMA mappings. The 'false' parameter to
+>> sglist_do_debounce() prevents copying data back (appropriate for
+>> shutdown path where transfer was aborted).
+>>
+>> Signed-off-by: Mario Peter <mario.peter@leica-geosystems.com>
+>> ---
+>>
+>> v1: submitted
+>>
+>>  drivers/usb/chipidea/udc.c | 9 +++++++++
+>>  1 file changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+>> index 1a48e6440e6c..8e1e0f9ae7c3 100644
+>> --- a/drivers/usb/chipidea/udc.c
+>> +++ b/drivers/usb/chipidea/udc.c
+>> @@ -931,6 +931,15 @@ __acquires(hwep->lock)
+>>  		list_del_init(&hwreq->queue);
+>>  		hwreq->req.status = -ESHUTDOWN;
+>>
+>> +		/* Unmap DMA and clean up bounce buffers before giving back */
+>> +		if (hwreq->req.num_mapped_sgs) {
 >
-> The videobuf2-dma-sg.c driver doesn't has a formal improve about this issue
-> till now. To workaround the issue, lets retry vb2_reqbufs() with
-> vb_vmalloc_memops if it fails to allocate buffer with vb2_dma_sg_memops.
+> It is redundant to check req.num_mapped_sgs since usb_gadget_unmap_request_by_dev()
+> will do that.
 >
-> Link[1]: https://lore.kernel.org/linux-media/20230828075420.2009568-1-anle.pan@nxp.com/
-> Link[2]: https://lore.kernel.org/linux-media/20230914145812.12851-1-hui.fang@nxp.com/
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->  drivers/usb/gadget/function/uvc_queue.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-> index 21d80322cb6148ed87eb77f453a1f1644e4923ae..586e5524c171f115d98af5dda43fb800466f46d2 100644
-> --- a/drivers/usb/gadget/function/uvc_queue.c
-> +++ b/drivers/usb/gadget/function/uvc_queue.c
-> @@ -182,7 +182,15 @@ int uvcg_alloc_buffers(struct uvc_video_queue *queue,
->  {
->  	int ret;
->
-> +retry:
->  	ret = vb2_reqbufs(&queue->queue, rb);
-> +	if (ret < 0 && queue->use_sg) {
-> +		uvc_trace(UVC_TRACE_IOCTL,
-> +			  "failed to alloc buffer with sg enabled, try non-sg mode\n");
-> +		queue->use_sg = 0;
-> +		queue->queue.mem_ops = &vb2_vmalloc_memops;
 
-How it work if dma_sg_alloc() failure,  vmalloc success, follow dma_map()
-should be failure for vmalloc()
+Ack, removed the redundant check in v2.
 
-Frank
+>> +			usb_gadget_unmap_request_by_dev(hwep->ci->dev->parent,
+>> +							&hwreq->req, hwep->dir);
+>> +		}
+>> +		if (hwreq->sgt.sgl) {
+>> +			sglist_do_debounce(hwreq, false);
+>> +		}
+>
+> The brackets can be removed if only 1 line code in it.
 
-> +		goto retry;
-> +	}
+Removed in v2.
+
 >
->  	return ret ? ret : rb->count;
->  }
->
-> --
-> 2.34.1
->
+> Thanks,
+> Xu Yang
+>> +
+>>  		if (hwreq->req.complete != NULL) {
+>>  			spin_unlock(hwep->lock);
+>>  			usb_gadget_giveback_request(&hwep->ep, &hwreq->req);
+>> --
+>> 2.43.0
+>>
 
