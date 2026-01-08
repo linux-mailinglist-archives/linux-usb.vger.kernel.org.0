@@ -1,225 +1,144 @@
-Return-Path: <linux-usb+bounces-32081-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32082-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A163FD055A2
-	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 19:07:03 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA2D8D05C9A
+	for <lists+linux-usb@lfdr.de>; Thu, 08 Jan 2026 20:19:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4A83D30E1167
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 18:02:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 459C33035F65
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jan 2026 19:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E075C2FD69F;
-	Thu,  8 Jan 2026 18:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72E0D2F12D4;
+	Thu,  8 Jan 2026 19:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XsP4h4Kg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I1DQO7Nz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213CA2ECD39
-	for <linux-usb@vger.kernel.org>; Thu,  8 Jan 2026 18:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39891DF97C;
+	Thu,  8 Jan 2026 19:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767895268; cv=none; b=EAIIk5tNViATlKUQL0a2v1JQJaQFtGVe00smQ44NfmYqPOUO5ZskPkXrhiOSA0NbME4kHKOM48lhRgFOTovGj4b3QSd9hiC7i7B+Da11yq8O4nkA93/L1BuGciYpmbv6Tz/6WLW1afgUdocdaPFiH2QRGSNSld1i2D1SxxpD2dU=
+	t=1767899940; cv=none; b=sCGRfENcREA2Ggasj4ASLcm+NlCuxbsRH4ZHHwWLd7D0ul5kO7P7y57ngeOu3pz+92xkrpIehFawxfKTb6Lu0YFCG7a1rUlUgTMDWd+YoTM74LMv5uTjcuEX0X2Z0w5ZW+fO14u2gBUmRF4AF+p780zc+Fn167gO9+JBn84uIlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767895268; c=relaxed/simple;
-	bh=/2uKl6r0yKYfeAq9kRoTaTWcmJ+lELhTarzQj1cMZ00=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=WeinlSbs4ws9d0yJSqlo65lp5JlUBGnbyprUawgCtiH/ySFP2dXR0JZWKBq4mA5XJmVopJV3PMSrG8xw++F11k6xlORfQxnaOcUe4ys3Mko96TN142g5LyZ71/2lgbOxlVlyeJplzqsmuVbK1TfLTLsxvZjPLbPRuvdcXtTpwCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XsP4h4Kg; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767895265; x=1799431265;
-  h=date:from:to:cc:subject:message-id;
-  bh=/2uKl6r0yKYfeAq9kRoTaTWcmJ+lELhTarzQj1cMZ00=;
-  b=XsP4h4KggjLrAr8G1/G9mpQgad8UKoAMPC9en5j7/t60ORvE6XmAUoFF
-   fX/2yASxznsqEFc7exoCglFuMcqc0HUOvcQX1XhVdix3DBQGPmrCFMOig
-   e8YkyPgLJsrzFPy71O87m/Quhc8TZ7ndVEscayzMPWTSIHWBVoQfp8iSr
-   v8Osb8MM2TBqayV4IjRHujibuAL5EDlMFwDEKMttqVBR4SlhGoOt9ADEY
-   vZa76FBSXowVKiryu+y3Lbr4kJW57wBR3QI+mv/AlCTyHGNav6tT67Djb
-   vg46MKFbqSulztNF3X+vTNguDzCLuMRSHaWsgRsp125/24mrzfs2qzEWk
-   Q==;
-X-CSE-ConnectionGUID: LBKPWtIRQBmlStyoZqX6IA==
-X-CSE-MsgGUID: OWLJT7V1QR2C0tetGk+/fw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="79919300"
-X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
-   d="scan'208";a="79919300"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 10:01:03 -0800
-X-CSE-ConnectionGUID: 0rRM3TOxQ0Gyz/UqXqw4qA==
-X-CSE-MsgGUID: O6AJ9ZjTTte4aROl5jvnIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
-   d="scan'208";a="240756074"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 08 Jan 2026 10:01:02 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vduJf-0000000052N-2f96;
-	Thu, 08 Jan 2026 18:00:59 +0000
-Date: Fri, 09 Jan 2026 02:00:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 2740ac33c87b3d0dfa022efd6ba04c6261b1abbd
-Message-ID: <202601090238.TwKJ0dMh-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1767899940; c=relaxed/simple;
+	bh=w2lBp29bboEib3MWb4ez9Qx/ZyS8nUKvbngJN37g+kA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rdtJrh+WDwItaSr2LySLxf73PolUbLwkNGbJwkOAoAFCJBXQQVJseHsFRr0h/W+PpeDT2RQk0H8G+dkqqAbncaUOCEnnR6vUH/ap8o8jd18RA0fSYN/UviTgy434PI2Lz2rRaNRVGQ+RtkPxemi54PWrNpP92og3IAhaE8sYyK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I1DQO7Nz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23FE6C116C6;
+	Thu,  8 Jan 2026 19:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767899939;
+	bh=w2lBp29bboEib3MWb4ez9Qx/ZyS8nUKvbngJN37g+kA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=I1DQO7NzPWxe36edjW2XTc/ApFcPqZ9l+8h/rGmuOsFoFqbS1iUgUrzDOVXrHPtq9
+	 tH+L7X50u+fXSA7yCFsVxJQ66LcN7QeKSUdeiVoraEa2TBsxn8bspEveUO3DHWoxnf
+	 Ly7MENdtcJwyM7ahvhwp0ejJXeQaRQyI5UxJiLYw3E3/kbE0NXwZk4f2nOoSQ6+elt
+	 yK79SqgQiwsGMA1btAUk92+aUzuZS/u1h/r0Wj43k9mP/kjboGyahrvG6aUy91A8n5
+	 nTPNNIT4CFYZVDO/mKeozhTP9o/JLU8FeiwrjT5lH+GRzzWvLOddveK+wzGEdpRBHw
+	 yjf+oy5OfQV7Q==
+Message-ID: <ad8cf89d-a171-4e72-996e-8b09d16f9017@kernel.org>
+Date: Thu, 8 Jan 2026 13:18:58 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/2] thunderbolt: Fix S4 resume incongruities
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>
+References: <20260106053749.61440-1-superm1@kernel.org>
+ <20260107093353.GO2275908@black.igk.intel.com>
+ <158442b3-28c2-4f8c-ba42-0b9c6661c650@kernel.org>
+ <20260108114205.GS2275908@black.igk.intel.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <20260108114205.GS2275908@black.igk.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 2740ac33c87b3d0dfa022efd6ba04c6261b1abbd  usb: core: add USB_QUIRK_NO_BOS for devices that hang on BOS descriptor
+On 1/8/26 5:42 AM, Mika Westerberg wrote:
+> On Wed, Jan 07, 2026 at 02:50:54PM -0600, Mario Limonciello wrote:
+>> On 1/7/26 3:33 AM, Mika Westerberg wrote:
+>>> Hi,
+>>>
+>>> On Mon, Jan 05, 2026 at 11:37:47PM -0600, Mario Limonciello (AMD) wrote:
+>>>> When a machine is restored from S4 if the firmware CM has created
+>>>> tunnels there can be an incongruity of expectation from the kernel
+>>>> when compared to booting from S5.  This series addresses those.
+>>>
+>>> I suspect there is no Firmware CM in AMD platforms so this actually means
+>>> the BIOS CM, correct?
+>>
+>> That's correct.
+>>
+>>>
+>>> However, on S4 we actually do reset host router when the "boot kernel" is
+>>> started before loading and jumping to the hibernation image.
+>>
+>> That's only if thunderbolt.ko is built into the kernel or is included in the
+>> initramfs before it does the pivot to the hibernation image.
+> 
+> Ah good point.
+> 
+>> At least in the tests we were doing it's not part of the boot kernel.
+>>
+>>> It might be
+>>> that this boot kernel tunnel configuration is causing the issues you are
+>>> seeing (can you elaborate on those?)
+>>
+>> The issues manifest "downstream" in the GPU driver.  There are a bunch of
+>> aux failures and a non functional display.  Tracing it back the GPU driver
+>> isn't alive at the time that the tunnels are attempted to be reconstructed
+>> at the moment and so CM tears DP tunnel down and then when GPU driver does
+>> come up it is not functional.
+>>
+>> DP tunnel constructed at:
+>>
+>> [  486.007194] thunderbolt 0000:c6:00.6: AUX RX path activation complete
+>>
+>> First DPRx timeout at:
+>>
+>> [  486.135483] thunderbolt 0000:c6:00.6: 0:6 <-> 2:13 (DP): DPRX read
+>> timeout
+>>
+>> DP tunnel deactivating at:
+>>
+>>   [  486.331856] thunderbolt 0000:c6:00.6: 0:6 <-> 2:13 (DP): deactivating
+> 
+> Hmm, we have dprx_timeout by default 12 seconds. How come it tears down the
+> tunnel already?
 
-elapsed time: 1525m
+*I believe* it's because of a hot unplug event that occurs from it not 
+working.
 
-configs tested: 134
-configs skipped: 3
+> 
+>>
+>> First DPRx DPCD reading starts at:
+>>
+>> [  486.351765] amdgpu 0000:c4:00.0: amdgpu: [drm] DPIA AUX failed on
+>> 0xf0000(10), error 7
+> 
+> This would have maked it within the 12s if I read the timestamps right.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Let me just share the whole log so you can see the full context.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                     haps_hs_smp_defconfig    gcc-15.1.0
-arc                   randconfig-001-20260108    gcc-9.5.0
-arc                   randconfig-002-20260108    gcc-9.5.0
-arm                               allnoconfig    gcc-15.1.0
-arm                            hisi_defconfig    gcc-15.1.0
-arm                   randconfig-001-20260108    gcc-9.5.0
-arm                   randconfig-002-20260108    gcc-9.5.0
-arm                   randconfig-003-20260108    gcc-9.5.0
-arm                   randconfig-004-20260108    gcc-9.5.0
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20260108    gcc-10.5.0
-arm64                 randconfig-002-20260108    gcc-10.5.0
-arm64                 randconfig-003-20260108    gcc-10.5.0
-arm64                 randconfig-004-20260108    gcc-10.5.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20260108    gcc-10.5.0
-csky                  randconfig-002-20260108    gcc-10.5.0
-hexagon                           allnoconfig    gcc-15.1.0
-hexagon               randconfig-001-20260108    gcc-8.5.0
-hexagon               randconfig-002-20260108    gcc-8.5.0
-i386                              allnoconfig    gcc-15.1.0
-i386        buildonly-randconfig-001-20260108    clang-20
-i386        buildonly-randconfig-002-20260108    clang-20
-i386        buildonly-randconfig-003-20260108    clang-20
-i386        buildonly-randconfig-004-20260108    clang-20
-i386        buildonly-randconfig-005-20260108    clang-20
-i386        buildonly-randconfig-006-20260108    clang-20
-i386                  randconfig-001-20260108    gcc-14
-i386                  randconfig-002-20260108    gcc-14
-i386                  randconfig-003-20260108    gcc-14
-i386                  randconfig-004-20260108    gcc-14
-i386                  randconfig-005-20260108    gcc-14
-i386                  randconfig-006-20260108    gcc-14
-i386                  randconfig-007-20260108    gcc-14
-i386                  randconfig-011-20260108    gcc-14
-i386                  randconfig-012-20260108    gcc-14
-i386                  randconfig-013-20260108    gcc-14
-i386                  randconfig-014-20260108    gcc-14
-i386                  randconfig-015-20260108    gcc-14
-i386                  randconfig-016-20260108    gcc-14
-i386                  randconfig-017-20260108    gcc-14
-loongarch                         allnoconfig    gcc-15.1.0
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20260108    gcc-8.5.0
-loongarch             randconfig-002-20260108    gcc-8.5.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                       bvme6000_defconfig    gcc-15.1.0
-m68k                                defconfig    clang-19
-m68k                        m5272c3_defconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                          defconfig    clang-19
-mips                              allnoconfig    gcc-15.1.0
-mips                  decstation_64_defconfig    gcc-15.1.0
-mips                      loongson3_defconfig    gcc-15.1.0
-nios2                             allnoconfig    clang-22
-nios2                               defconfig    clang-19
-nios2                 randconfig-001-20260108    gcc-8.5.0
-nios2                 randconfig-002-20260108    gcc-8.5.0
-openrisc                          allnoconfig    clang-22
-openrisc                            defconfig    gcc-15.1.0
-parisc                            allnoconfig    clang-22
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20260108    clang-22
-parisc                randconfig-002-20260108    clang-22
-parisc64                            defconfig    clang-19
-powerpc                           allnoconfig    clang-22
-powerpc                  mpc866_ads_defconfig    gcc-15.1.0
-powerpc               randconfig-001-20260108    clang-22
-powerpc               randconfig-002-20260108    clang-22
-powerpc64             randconfig-001-20260108    clang-22
-powerpc64             randconfig-002-20260108    clang-22
-riscv                             allnoconfig    clang-22
-riscv                               defconfig    gcc-15.1.0
-riscv                 randconfig-001-20260108    gcc-13.4.0
-riscv                 randconfig-002-20260108    gcc-13.4.0
-s390                              allnoconfig    clang-22
-s390                                defconfig    gcc-15.1.0
-s390                  randconfig-001-20260108    gcc-13.4.0
-sh                                allnoconfig    clang-22
-sh                                  defconfig    gcc-14
-sh                    randconfig-001-20260108    gcc-13.4.0
-sh                    randconfig-002-20260108    gcc-13.4.0
-sparc                             allnoconfig    clang-22
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20260108    gcc-8.5.0
-sparc                 randconfig-002-20260108    gcc-8.5.0
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20260108    gcc-8.5.0
-sparc64               randconfig-002-20260108    gcc-8.5.0
-um                                allnoconfig    clang-22
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20260108    gcc-8.5.0
-um                    randconfig-002-20260108    gcc-8.5.0
-um                           x86_64_defconfig    gcc-14
-x86_64                            allnoconfig    clang-22
-x86_64      buildonly-randconfig-001-20260108    gcc-14
-x86_64      buildonly-randconfig-002-20260108    gcc-14
-x86_64      buildonly-randconfig-003-20260108    gcc-14
-x86_64      buildonly-randconfig-004-20260108    gcc-14
-x86_64      buildonly-randconfig-005-20260108    gcc-14
-x86_64      buildonly-randconfig-006-20260108    gcc-14
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20260108    gcc-12
-x86_64                randconfig-002-20260108    gcc-12
-x86_64                randconfig-003-20260108    gcc-12
-x86_64                randconfig-004-20260108    gcc-12
-x86_64                randconfig-005-20260108    gcc-12
-x86_64                randconfig-006-20260108    gcc-12
-x86_64                randconfig-011-20260108    clang-20
-x86_64                randconfig-012-20260108    clang-20
-x86_64                randconfig-013-20260108    clang-20
-x86_64                randconfig-014-20260108    clang-20
-x86_64                randconfig-015-20260108    clang-20
-x86_64                randconfig-016-20260108    clang-20
-x86_64                randconfig-071-20260108    gcc-14
-x86_64                randconfig-072-20260108    gcc-14
-x86_64                randconfig-073-20260108    gcc-14
-x86_64                randconfig-074-20260108    gcc-14
-x86_64                randconfig-075-20260108    gcc-14
-x86_64                randconfig-076-20260108    gcc-14
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-xtensa                            allnoconfig    clang-22
-xtensa                randconfig-001-20260108    gcc-8.5.0
-xtensa                randconfig-002-20260108    gcc-8.5.0
-xtensa                    smp_lx200_defconfig    gcc-15.1.0
+https://gist.github.com/superm1/6798fff44d0875b4ed0fe43d0794f81e
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Notice that GPU driver resume hasn't started yet at the time of the 
+first two instances of DPRX timeout.  This is the time that display has 
+been brought back up.
+
+[  486.328339] amdgpu 0000:c4:00.0: amdgpu: [drm] DMUB hardware 
+initialized: version=0x09001C01
+
+
+
 
