@@ -1,122 +1,121 @@
-Return-Path: <linux-usb+bounces-32112-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32113-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6F20D0A648
-	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 14:25:42 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20436D0A536
+	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 14:16:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7BF7930C06DA
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 13:15:19 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3451F30259D8
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 13:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914AC35C185;
-	Fri,  9 Jan 2026 13:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20DA35BDDD;
+	Fri,  9 Jan 2026 13:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Js9LxSzO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="URXrZvXw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F70835B137;
-	Fri,  9 Jan 2026 13:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF412857FA;
+	Fri,  9 Jan 2026 13:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767964514; cv=none; b=eKNEzL67CMWEetkSLWZwrAbS5j8AJlCWzOCCXuzyMGBUeeJC36Y0/RkUx33UK07QcYW9m9Ys4kPp0GukR7SF8Rfvhsnya69Qk35Eh6/MIAVuHxzTal9VUdyMuur6lP7ROhyVbO2w2GxNdn7DE6MNCJE9wJMMKKp42/ik5njo3EM=
+	t=1767964572; cv=none; b=Md1DV6GHuh4xfJLXLzkHCecmh3jQ7pIWISw8tczD7tioYYaUFSTujnXQjSKYqkJ1b8Z0e57UO3Gn53HTkHZkAfV804RWFtq8PyezMF4wG2XuCLhoMwcUnvTMjKcixjLmk9gxsMyIUnjGkvE7q2KqctoW6srNnaTnW74aGjQ/ay0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767964514; c=relaxed/simple;
-	bh=MJStCIZmQ7PngNhFtsuW1zFBiSqzPLcTWAfWV/VvXr8=;
+	s=arc-20240116; t=1767964572; c=relaxed/simple;
+	bh=RrJsJcfKWs2Eg0JH/bR8NjfJepen3ZOxs3LygZYNGWM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bfaKgNAicGji1cS2f4ayTlxFHYg4m2B3sz1PXM8AgrZhetxqQTzr89lGOEFiKiW4XiAbnyXFaWwdbz7SQIQstO+zrHYYsb9+jMNmwVw45PTx14yJ8vEGzcPTLckVUDV/peJod5yTmjkbKAyRztifnSelBU69r2WrLZI5E9SHVOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Js9LxSzO; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=mrpKG9ZeMZ7MsEkj9tQo6BxqP/iL5ITeFvBabXx9XKjkHdautMN5fdaq1uJlMUhych9x4ZzqRGy1+xgqYDfRAUXHyMaziS6j5/1E361oe9REgEDcwVg9DOASDPzVszOPabEA1UKW22zcDJvbxvgT0/HXsKkOaS2QjU8T8qsVLhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=URXrZvXw; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767964512; x=1799500512;
+  t=1767964570; x=1799500570;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MJStCIZmQ7PngNhFtsuW1zFBiSqzPLcTWAfWV/VvXr8=;
-  b=Js9LxSzOVhNCBDHPHcWElKq58eXEipE7+RWlMqInLDK/9LlXgVKm4hPB
-   tqzom4AF0BRFNFgWGPBGkp35JgMrNjAm49m2nf0761Rtf/iRhbe4TNg5Z
-   Ock+p3mLowhVGxQLycmMbv0afzFm4Sf2gWpBWSAX8zlZt8tOAB3gCbPsC
-   4P22oypY0e2T53RU1LQ/cLzZQK7W8GsxU2EUVrMikCBuKUXu4urEuXl9/
-   FEaBlt1EcQ5UPmOm3yWK8d6CtxLoyqrrXBC93t1/e33Kw/Htp+ojprAoX
-   C+Vw5twXo/GPYgVTE/0N1nnr19bBAysAZXOEenodbqw9GpWgxsC+jNIIv
-   g==;
-X-CSE-ConnectionGUID: ymK+dPm3RACeICPKSPQ2YQ==
-X-CSE-MsgGUID: heJOkgSIT+WPcpO52eAxMw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11666"; a="71920545"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=RrJsJcfKWs2Eg0JH/bR8NjfJepen3ZOxs3LygZYNGWM=;
+  b=URXrZvXw2VtBz6G4H5LkDClSB/Q1ecG4LzqVo1j5uuRysj3S+SG8a1Ng
+   Lv0Dtn3IiDbVheyeuCv/dZ5OI4q4rJast/q13CHBCWMjo+igrICqHEebW
+   724azp13aoyBcIVolYfus++AiF2JUR5TKDhKgg1hR4abqbEq49iv6qZIc
+   D4XQSsQ/pY5cN2dx2Wk6/NDvnJcB0gXM7wti03a0FrgM5gWJFkiQy1H/H
+   Bsz6tCs4H2MJUT12VZIMJ8COKXQcdH5HuXM3lkBnx0cA7bcSasMFo2DZ1
+   WbXtLtrDSm1B1re5EcFWejnCoimyy++VmegPkbIUmmCXRaFG3dY3vRpBy
+   w==;
+X-CSE-ConnectionGUID: 15g1xIi+RDC/lyWgJ58y5g==
+X-CSE-MsgGUID: u6+YZ08fQ0yXVjaCF7sCFA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11666"; a="69082785"
 X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="71920545"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 05:15:11 -0800
-X-CSE-ConnectionGUID: 08MobHMCRUqmHqgXvw+L8g==
-X-CSE-MsgGUID: Yah7IGNCQyidLxn0wPz3gA==
+   d="scan'208";a="69082785"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 05:16:09 -0800
+X-CSE-ConnectionGUID: FwaceYeTQkmd/c46naZTrA==
+X-CSE-MsgGUID: akvF155HRie2ESsMgAnexQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="203384669"
+   d="scan'208";a="203750522"
 Received: from khuang2-desk.gar.corp.intel.com (HELO kuha) ([10.124.223.90])
-  by fmviesa006.fm.intel.com with SMTP; 09 Jan 2026 05:15:05 -0800
-Received: by kuha (sSMTP sendmail emulation); Fri, 09 Jan 2026 15:14:44 +0200
-Date: Fri, 9 Jan 2026 15:14:44 +0200
+  by fmviesa008.fm.intel.com with SMTP; 09 Jan 2026 05:16:06 -0800
+Received: by kuha (sSMTP sendmail emulation); Fri, 09 Jan 2026 15:15:44 +0200
+Date: Fri, 9 Jan 2026 15:15:44 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: amitsd@google.com
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Lee Jones <lee@kernel.org>,
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org, Pavan Holla <pholla@chromium.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v3 5/5] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
- setting charger mode
-Message-ID: <aWD_RIPp1ULH9St1@kuha>
-References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
- <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
+	Jameson Thies <jthies@google.com>,
+	Andrei Kuchynski <akuchynski@chromium.org>,
+	chrome-platform@lists.linux.dev, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: drop an unused Kconfig symbol
+Message-ID: <aWD_gJ-8ZHaPehKW@kuha>
+References: <20251228190604.2484082-1-rdunlap@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251228190604.2484082-1-rdunlap@infradead.org>
 
-Hi,
+Sun, Dec 28, 2025 at 11:06:03AM -0800, Randy Dunlap kirjoitti:
+> EXTCON_TCSS_CROS_EC isn't used anywhere else in the kernel tree,
+> so drop it from this Kconfig file.
+> 
+> (unless it should be EXTCON_USBC_CROS_EC ?)
+> 
+> Fixes: f1a2241778d9 ("usb: typec: ucsi: Implement ChromeOS UCSI driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
-> +	if (source) {
-> +		if (!regulator_is_enabled(chip->vbus_reg))
-> +			ret = regulator_enable(chip->vbus_reg);
-> +	} else {
-> +		if (regulator_is_enabled(chip->vbus_reg))
-> +			ret = regulator_disable(chip->vbus_reg);
-> +	}
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-It looks like you have to do one more round, so can drop the
-regulator_is_enabled() checks and just always enable/disable it
-unconditionally.
-
-        if (source)
-		ret = regulator_enable(chip->vbus_reg);
-	else
-		ret = regulator_disable(chip->vbus_reg);
-
-I don't think you need the check in any case, but if I've understood
-this correctly, you should not use that check when the regulator does
-not support that check because then the API claims it's always
-enabled. So I guess in that case "if (!regulator_is_enabled())" may
-not work as expected, and you may actually be left with a disabled
-regulator. This may not be a problem on current platforms, but who
-knows what happens in the future.
-
-thanks,
+> ---
+> Cc: Pavan Holla <pholla@chromium.org>
+> Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> Cc: Łukasz Bartosik <ukaszb@chromium.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jameson Thies <jthies@google.com>
+> Cc: Andrei Kuchynski <akuchynski@chromium.org>
+> Cc: chrome-platform@lists.linux.dev
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: linux-usb@vger.kernel.org
+> 
+>  drivers/usb/typec/ucsi/Kconfig |    1 -
+>  1 file changed, 1 deletion(-)
+> 
+> --- linux-next-20251219.orig/drivers/usb/typec/ucsi/Kconfig
+> +++ linux-next-20251219/drivers/usb/typec/ucsi/Kconfig
+> @@ -73,7 +73,6 @@ config CROS_EC_UCSI
+>  	tristate "UCSI Driver for ChromeOS EC"
+>  	depends on MFD_CROS_EC_DEV
+>  	depends on CROS_USBPD_NOTIFY
+> -	depends on !EXTCON_TCSS_CROS_EC
+>  	default MFD_CROS_EC_DEV
+>  	help
+>  	  This driver enables UCSI support for a ChromeOS EC. The EC is
 
 -- 
 heikki
