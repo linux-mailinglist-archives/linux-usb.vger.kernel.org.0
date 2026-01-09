@@ -1,105 +1,123 @@
-Return-Path: <linux-usb+bounces-32111-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32112-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D877FD09ABA
-	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 13:31:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6F20D0A648
+	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 14:25:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1EFFE30CC8CE
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 12:19:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7BF7930C06DA
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 13:15:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 017B635A956;
-	Fri,  9 Jan 2026 12:19:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914AC35C185;
+	Fri,  9 Jan 2026 13:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4ChupAI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Js9LxSzO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F95826ED41
-	for <linux-usb@vger.kernel.org>; Fri,  9 Jan 2026 12:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F70835B137;
+	Fri,  9 Jan 2026 13:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767961141; cv=none; b=sfqyrah9o2wg2yrr+OIaX5QCurNfX4BAn8roFwOtD3Ft/5mKJrTdor5indk+NPFpUeOaXbbTkAxdghQcU/CdUbr0lk9GpITz9TBA6waYarHLQC4+spVWKGkgykQ50p2QIS5o5oSUSZrSi9scE60MnblurVMwW7kgKue2hFG+Lnw=
+	t=1767964514; cv=none; b=eKNEzL67CMWEetkSLWZwrAbS5j8AJlCWzOCCXuzyMGBUeeJC36Y0/RkUx33UK07QcYW9m9Ys4kPp0GukR7SF8Rfvhsnya69Qk35Eh6/MIAVuHxzTal9VUdyMuur6lP7ROhyVbO2w2GxNdn7DE6MNCJE9wJMMKKp42/ik5njo3EM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767961141; c=relaxed/simple;
-	bh=lEFoKWMfH/J/df3JqoqmkTJCBaFmDKRdzpB+Mh4iGfw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m47mjB8e9zb3Mt+We2k8uTrvbetrYdzhxivC0+3hRDjJq/3qFkVoyo1mJHlRHnqWpxzqasCo6IIXZ3RaKOpIzF+tEll5mPbm1HDo2D0Pi1Q172km6Mf2N8zhDoR4kW3uiunFAjgxRlXJISZQ0LdQwHi1hFPO0I0YnngyHx/yOMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4ChupAI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 48A9BC16AAE
-	for <linux-usb@vger.kernel.org>; Fri,  9 Jan 2026 12:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767961141;
-	bh=lEFoKWMfH/J/df3JqoqmkTJCBaFmDKRdzpB+Mh4iGfw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=j4ChupAIpqpGMSFFIWYTLN9xEVPo6Nn5fsA3j5k8TpAAHzFdqjIEMgrLPKnhv//9O
-	 XMTIuA6rTqsoqSL2+ONdpoAI5aN+W2IRC/5RoKWA5QI5fC356wQrvpmDpS/dS0Lx3v
-	 aBJ+7Kw5g187SzWfG8oN8Mm9I0Jmf3dLrgiWTQ2GJOwl301VdEKmtUD6mvoQKwMs7k
-	 rNVf0vOf4v0WC4RLhY29jgBohUjm/6moM95FeSl3bRLHmlPsZC0hDBg8dX4iOmC9Ov
-	 8qUrzoWSxtUfY7IKnoFCY1G1xM1jHgPO0TFeTOXOZ+77SxYrxNhkj4RxbYsuTvEW2b
-	 K1kjq2ngfHrcg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4139BC41614; Fri,  9 Jan 2026 12:19:01 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220904] [BUG] ucsi_acpi: USB 3.0 SuperSpeed not negotiated on
- USB-C hot-plug
-Date: Fri, 09 Jan 2026 12:19:00 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: thomas@jetzinger.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-220904-208809-lpzCYQ8hw7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220904-208809@https.bugzilla.kernel.org/>
-References: <bug-220904-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1767964514; c=relaxed/simple;
+	bh=MJStCIZmQ7PngNhFtsuW1zFBiSqzPLcTWAfWV/VvXr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bfaKgNAicGji1cS2f4ayTlxFHYg4m2B3sz1PXM8AgrZhetxqQTzr89lGOEFiKiW4XiAbnyXFaWwdbz7SQIQstO+zrHYYsb9+jMNmwVw45PTx14yJ8vEGzcPTLckVUDV/peJod5yTmjkbKAyRztifnSelBU69r2WrLZI5E9SHVOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Js9LxSzO; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767964512; x=1799500512;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MJStCIZmQ7PngNhFtsuW1zFBiSqzPLcTWAfWV/VvXr8=;
+  b=Js9LxSzOVhNCBDHPHcWElKq58eXEipE7+RWlMqInLDK/9LlXgVKm4hPB
+   tqzom4AF0BRFNFgWGPBGkp35JgMrNjAm49m2nf0761Rtf/iRhbe4TNg5Z
+   Ock+p3mLowhVGxQLycmMbv0afzFm4Sf2gWpBWSAX8zlZt8tOAB3gCbPsC
+   4P22oypY0e2T53RU1LQ/cLzZQK7W8GsxU2EUVrMikCBuKUXu4urEuXl9/
+   FEaBlt1EcQ5UPmOm3yWK8d6CtxLoyqrrXBC93t1/e33Kw/Htp+ojprAoX
+   C+Vw5twXo/GPYgVTE/0N1nnr19bBAysAZXOEenodbqw9GpWgxsC+jNIIv
+   g==;
+X-CSE-ConnectionGUID: ymK+dPm3RACeICPKSPQ2YQ==
+X-CSE-MsgGUID: heJOkgSIT+WPcpO52eAxMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11666"; a="71920545"
+X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
+   d="scan'208";a="71920545"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 05:15:11 -0800
+X-CSE-ConnectionGUID: 08MobHMCRUqmHqgXvw+L8g==
+X-CSE-MsgGUID: Yah7IGNCQyidLxn0wPz3gA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
+   d="scan'208";a="203384669"
+Received: from khuang2-desk.gar.corp.intel.com (HELO kuha) ([10.124.223.90])
+  by fmviesa006.fm.intel.com with SMTP; 09 Jan 2026 05:15:05 -0800
+Received: by kuha (sSMTP sendmail emulation); Fri, 09 Jan 2026 15:14:44 +0200
+Date: Fri, 9 Jan 2026 15:14:44 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: amitsd@google.com
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Lee Jones <lee@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v3 5/5] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
+ setting charger mode
+Message-ID: <aWD_RIPp1ULH9St1@kuha>
+References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
+ <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220904
+Hi,
 
---- Comment #10 from Thomas Jetzinger (thomas@jetzinger.com) ---
-Created attachment 309154
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D309154&action=3Dedit
-Tested with dynamic debug enabled. s2idle suspend/resume issue:
+> +	if (source) {
+> +		if (!regulator_is_enabled(chip->vbus_reg))
+> +			ret = regulator_enable(chip->vbus_reg);
+> +	} else {
+> +		if (regulator_is_enabled(chip->vbus_reg))
+> +			ret = regulator_disable(chip->vbus_reg);
+> +	}
 
-After resume, Thunderbolt xHCI (00:0d.0) reports "root hub lost power":
+It looks like you have to do one more round, so can drop the
+regulator_is_enabled() checks and just always enable/disable it
+unconditionally.
 
-  usb usb1: root hub lost power or was reset
-  usb usb2: root hub lost power or was reset
-  usb 2-3: Waited 2000ms for CONNECT
-  usb 2-3: can't resume, status -19
-  usb 2-3: USB disconnect
-  r8152-cfgselector 2-3.1: USB disconnect
+        if (source)
+		ret = regulator_enable(chip->vbus_reg);
+	else
+		ret = regulator_disable(chip->vbus_reg);
 
-All USB3 devices on Bus 2 disconnect and don't recover. Requires reboot.
+I don't think you need the check in any case, but if I've understood
+this correctly, you should not use that check when the regulator does
+not support that check because then the API claims it's always
+enabled. So I guess in that case "if (!regulator_is_enabled())" may
+not work as expected, and you may actually be left with a disabled
+regulator. This may not be a problem on current platforms, but who
+knows what happens in the future.
 
-Full dmesg with xhci_hcd and usbcore debug attached.
+thanks,
 
-Kernel: 6.18.3-arch1-1
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+heikki
 
