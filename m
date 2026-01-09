@@ -1,78 +1,79 @@
-Return-Path: <linux-usb+bounces-32098-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32099-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A467D07793
-	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 07:58:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 334E6D078E5
+	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 08:25:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6712D30381B8
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 06:57:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8D26A30464E2
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 07:23:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B282E92BA;
-	Fri,  9 Jan 2026 06:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3212EC562;
+	Fri,  9 Jan 2026 07:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VClQ3CQf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l1ijlRWn"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B00223322;
-	Fri,  9 Jan 2026 06:57:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A8F2367CF;
+	Fri,  9 Jan 2026 07:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767941873; cv=none; b=kPNS1VwcSkU4wvhjTbDc77trjnq3QJkh+MmWbn9Ef3/07c7k/F78XkNn1MCuxBxi2WvX5zJqbf3rKxCMunNce/hhHWxsWPdtU2jIyzmNBGGB+hgWdr0Xgw/Gk3kGHadm603OFC31caL8xE58aV0zUzDsJsRBlSbf5IzhPRMe4+g=
+	t=1767943403; cv=none; b=gN3S2aNMoL1CdwgeXKDSsQVbR7oht3xQa7N0fMmwTdwdvg1WIeXBOTHTOOY44YtECQEITrYtW2fr4vkMkM3ODPqbXyc/I3hPzd42joXIi2An5I9Kc1PIJveyDsQ9ia4iyuk0pCbwngkEJzkCcuZKFnWwDIPGT1OWCZRh3llyHsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767941873; c=relaxed/simple;
-	bh=FlO0xEN6Jh0wwWYqypG+Z0Vs7hkbD+IyuhpO4YrXzCQ=;
+	s=arc-20240116; t=1767943403; c=relaxed/simple;
+	bh=bf8ZcgeEjpKmLqVz1N+HioqUbjhdnrXyhiGFSpwSbwk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PDqP0ELyoNnpBIn+x4E3341IzJdaNA2BfrKpUpCuTk6qpua6t4zIs1KPKCpQD3u4Afbtg2ephJUY6Q+2xh0FqmNNutuWZYvWywCSeePJPflvYZgM3aXbErxt4JRR821izSAtXh1G9lMS2vYQoksEA11RFlKezbQRSoaVDV7xeuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VClQ3CQf; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=NRnp0L1rvV8SYW2M34KpWRyeHK3EG82FGP1vtgj0GBsQvyX5+Zzzc/PlirlDZZNtdZUhRy0QbgWPY80zZby5MUGv4w4li05JJACjli4VywmFVVrEBPAllRS0lobBHTcmcxEgEinc8FwZKdsuoURVBruuGSlLYhrYmelZHTo7sPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l1ijlRWn; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767941872; x=1799477872;
+  t=1767943402; x=1799479402;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FlO0xEN6Jh0wwWYqypG+Z0Vs7hkbD+IyuhpO4YrXzCQ=;
-  b=VClQ3CQfGkYz2cUAQYhtLhOaC10jD10pgCDdqgMwNLC1XE4/G7IN/Tu4
-   G6ABIDkbTvuLGGhjJdPxQeqO4rBgsynvi+p6uqy9zAKGC8+5lkFK7pjS2
-   N9OJPyEiG8gNTJe3vQ+594dhHAKnSR45v0C2yvZCzitu0J/r5QS8dfjSv
-   g5LXKXn2uOdlvXz5FpH4PiF5TOKxUQd/RTlfc3U6KLKRMuLOeTvoBr92S
-   pItLry33fv/DbbV/fBEhY48UFaa7EB50GUH5+sTgRd6jvvTU6ri+Ru8NX
-   viP8hbhSPWvnzy13cWwJRmVP/iO+mpOe3eFG/i39bzb9fYUing8U/sM/t
+  bh=bf8ZcgeEjpKmLqVz1N+HioqUbjhdnrXyhiGFSpwSbwk=;
+  b=l1ijlRWnTWeEZN7qRT7zFIqSy5aTTTdFUR1aoHhroEh2r1OwSsHwPgC7
+   aRHyFL5f0EM5GENbTXzIJmqz1rCHQ5dy/5ui60DU5H7kv7QEmcEDTZ3Wt
+   jefz/npdP88LlKIxwHo50Ac9xR9HV34Y5jTMMJz9T0Abakt8nJmi/9Why
+   AHAO93UfbxntQXIwxFmB3cSAz6zOXDbLizib9Mtx71pu73r42d9wxlnac
+   MkfDZptdjWyK2RMnsGDW73TG2Kk4yGlwuEafskz7ii1TQZ0/co6um7tIT
+   E4z6tDh4tndiFvCmDnZdlxwD7e7ZszcWUWP/W+7EauXvqZ8WAvMW7elKS
    Q==;
-X-CSE-ConnectionGUID: mEJdaGIVSQGhiN8Dogk0dg==
-X-CSE-MsgGUID: JwCCQsntTFyQ4oWKiiAvOg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="79619253"
+X-CSE-ConnectionGUID: etJaulfAQPC5pvg7AofHpQ==
+X-CSE-MsgGUID: obpIoXI1S+CosLYy0ygrgA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="79620784"
 X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="79619253"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 22:57:51 -0800
-X-CSE-ConnectionGUID: YDNB1ScjQaiMHEmYsfgGfg==
-X-CSE-MsgGUID: wqzbjOnoS9+MoeRdKTcM8g==
+   d="scan'208";a="79620784"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 23:23:22 -0800
+X-CSE-ConnectionGUID: 51aIpcNTSyum0MXfnZDbaA==
+X-CSE-MsgGUID: 6toyWCMVRsexq7ju9/I4ow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="208236178"
+   d="scan'208";a="203830032"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa004.fm.intel.com with ESMTP; 08 Jan 2026 22:57:47 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 08 Jan 2026 23:23:19 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 3E18994; Fri, 09 Jan 2026 07:57:46 +0100 (CET)
-Date: Fri, 9 Jan 2026 07:57:46 +0100
+	id 91DBB94; Fri, 09 Jan 2026 08:23:18 +0100 (CET)
+Date: Fri, 9 Jan 2026 08:23:18 +0100
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
-Cc: YehezkelShB@gmail.com, andreas.noever@gmail.com, bhelgaas@google.com,
-	bp@alien8.de, dave.hansen@linux.intel.com,
-	feng.tang@linux.alibaba.com, hpa@zytor.com,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	lukas@wunner.de, mahesh@linux.ibm.com, mingo@redhat.com,
-	oohall@gmail.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-	tglx@linutronix.de, westeri@kernel.org, x86@kernel.org
-Subject: Re: [PATCH v4] PCI/portdev: Disable AER for Titan Ridge 4C 2018
-Message-ID: <20260109065746.GT2275908@black.igk.intel.com>
-References: <20260108113701.GR2275908@black.igk.intel.com>
- <20260108141804.1086-1-atharvatiwarilinuxdev@gmail.com>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Pooja Katiyar <pooja.katiyar@intel.com>,
+	Rene Sapiens <rene.sapiens@linux.intel.com>
+Subject: Re: [PATCH v2 0/2] thunderbolt: Fix S4 resume incongruities
+Message-ID: <20260109072318.GU2275908@black.igk.intel.com>
+References: <20260106053749.61440-1-superm1@kernel.org>
+ <20260107093353.GO2275908@black.igk.intel.com>
+ <158442b3-28c2-4f8c-ba42-0b9c6661c650@kernel.org>
+ <20260108114205.GS2275908@black.igk.intel.com>
+ <ad8cf89d-a171-4e72-996e-8b09d16f9017@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,104 +82,111 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260108141804.1086-1-atharvatiwarilinuxdev@gmail.com>
+In-Reply-To: <ad8cf89d-a171-4e72-996e-8b09d16f9017@kernel.org>
 
-On Thu, Jan 08, 2026 at 02:18:04PM +0000, Atharva Tiwari wrote:
-> linux mint wouldnt install, because it gives a GRUB error.
-> so i cant compile the kernel, so the lspci is from 6.12:
+On Thu, Jan 08, 2026 at 01:18:58PM -0600, Mario Limonciello wrote:
+> On 1/8/26 5:42 AM, Mika Westerberg wrote:
+> > On Wed, Jan 07, 2026 at 02:50:54PM -0600, Mario Limonciello wrote:
+> > > On 1/7/26 3:33 AM, Mika Westerberg wrote:
+> > > > Hi,
+> > > > 
+> > > > On Mon, Jan 05, 2026 at 11:37:47PM -0600, Mario Limonciello (AMD) wrote:
+> > > > > When a machine is restored from S4 if the firmware CM has created
+> > > > > tunnels there can be an incongruity of expectation from the kernel
+> > > > > when compared to booting from S5.  This series addresses those.
+> > > > 
+> > > > I suspect there is no Firmware CM in AMD platforms so this actually means
+> > > > the BIOS CM, correct?
+> > > 
+> > > That's correct.
+> > > 
+> > > > 
+> > > > However, on S4 we actually do reset host router when the "boot kernel" is
+> > > > started before loading and jumping to the hibernation image.
+> > > 
+> > > That's only if thunderbolt.ko is built into the kernel or is included in the
+> > > initramfs before it does the pivot to the hibernation image.
+> > 
+> > Ah good point.
+> > 
+> > > At least in the tests we were doing it's not part of the boot kernel.
+> > > 
+> > > > It might be
+> > > > that this boot kernel tunnel configuration is causing the issues you are
+> > > > seeing (can you elaborate on those?)
+> > > 
+> > > The issues manifest "downstream" in the GPU driver.  There are a bunch of
+> > > aux failures and a non functional display.  Tracing it back the GPU driver
+> > > isn't alive at the time that the tunnels are attempted to be reconstructed
+> > > at the moment and so CM tears DP tunnel down and then when GPU driver does
+> > > come up it is not functional.
+> > > 
+> > > DP tunnel constructed at:
+> > > 
+> > > [  486.007194] thunderbolt 0000:c6:00.6: AUX RX path activation complete
+> > > 
+> > > First DPRx timeout at:
+> > > 
+> > > [  486.135483] thunderbolt 0000:c6:00.6: 0:6 <-> 2:13 (DP): DPRX read
+> > > timeout
+> > > 
+> > > DP tunnel deactivating at:
+> > > 
+> > >   [  486.331856] thunderbolt 0000:c6:00.6: 0:6 <-> 2:13 (DP): deactivating
+> > 
+> > Hmm, we have dprx_timeout by default 12 seconds. How come it tears down the
+> > tunnel already?
+> 
+> *I believe* it's because of a hot unplug event that occurs from it not
+> working.
+> 
+> > 
+> > > 
+> > > First DPRx DPCD reading starts at:
+> > > 
+> > > [  486.351765] amdgpu 0000:c4:00.0: amdgpu: [drm] DPIA AUX failed on
+> > > 0xf0000(10), error 7
+> > 
+> > This would have maked it within the 12s if I read the timestamps right.
+> 
+> Let me just share the whole log so you can see the full context.
+> 
+> https://gist.github.com/superm1/6798fff44d0875b4ed0fe43d0794f81e
 
-That's fine, thanks!
+Thanks!
 
-> 00:1c.4/07:00.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:15ea] (rev 06) (prog-if 00 [Normal decode])
-> 	Subsystem: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:0000]
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0
-> 	Interrupt: pin A routed to IRQ 10
-> 	IOMMU group: 14
-> 	Bus: primary=07, secondary=08, subordinate=7c, sec-latency=0
-> 	I/O behind bridge: 5000-8fff [size=16K] [16-bit]
-> 	Memory behind bridge: 81900000-8fafffff [size=226M] [32-bit]
-> 	Prefetchable memory behind bridge: b1800000-bf7fffff [size=224M] [32-bit]
-> 	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-> 	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-> 		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-> 	Capabilities: [80] Power Management version 3
-> 		Flags: PMEClk- DSI- D1+ D2+ AuxCurrent=375mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [88] MSI: Enable- Count=1/1 Maskable- 64bit+
-> 		Address: 0000000000000000  Data: 0000
-> 	Capabilities: [ac] Subsystem: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 4C 2018] [8086:0000]
-> 	Capabilities: [c0] Express (v2) Upstream Port, MSI 00
-> 		DevCap:	MaxPayload 128 bytes, PhantFunc 0
-> 			ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+ SlotPowerLimit 25W
-> 		DevCtl:	CorrErr+ NonFatalErr+ FatalErr+ UnsupReq+
-> 			RlxdOrd+ ExtTag+ PhantFunc- AuxPwr- NoSnoop+
-> 			MaxPayload 128 bytes, MaxReadReq 512 bytes
-> 		DevSta:	CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr+ TransPend-
-> 		LnkCap:	Port #0, Speed 8GT/s, Width x4, ASPM L1, Exit Latency L1 <2us
-> 			ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp+
-> 		LnkCtl:	ASPM Disabled; Disabled- CommClk+
-> 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 8GT/s, Width x4
-> 			TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
-> 		DevCap2: Completion Timeout: Not Supported, TimeoutDis- NROPrPrP- LTR+
-> 			 10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt- EETLPPrefix-
-> 			 EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
-> 			 FRS-
-> 			 AtomicOpsCap: Routing-
-> 		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR+ 10BitTagReq- OBFF Disabled,
-> 			 AtomicOpsCtl: EgressBlck-
-> 		LnkCap2: Supported Link Speeds: 2.5-8GT/s, Crosslink- Retimer- 2Retimers- DRS-
-> 		LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-
-> 			 Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
-> 			 Compliance Preset/De-emphasis: -6dB de-emphasis, 0dB preshoot
-> 		LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+ EqualizationPhase1+
-> 			 EqualizationPhase2+ EqualizationPhase3+ LinkEqualizationRequest-
-> 			 Retimer- 2Retimers- CrosslinkRes: unsupported
-> 	Capabilities: [50] Capability ID 0x15 [0000]
-> 	Capabilities: [100 v1] Device Serial Number ee-ad-a4-f1-8e-b3-02-00
-> 	Capabilities: [200 v1] Advanced Error Reporting
-> 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UESvrt:	DLP+ SDES- TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-> 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
-> 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
-> 		AERCap:	First Error Pointer: 00, ECRCGenCap- ECRCGenEn- ECRCChkCap- ECRCChkEn-
-> 			MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
-> 		HeaderLog: 00000000 00000000 00000000 00000000
-> 	Capabilities: [300 v1] Virtual Channel
-> 		Caps:	LPEVC=0 RefClk=100ns PATEntryBits=1
-> 		Arb:	Fixed- WRR32- WRR64- WRR128-
-> 		Ctrl:	ArbSelect=Fixed
-> 		Status:	InProgress-
-> 		VC0:	Caps:	PATOffset=00 MaxTimeSlots=1 RejSnoopTrans-
-> 			Arb:	Fixed+ WRR32- WRR64- WRR128- TWRR128- WRR256-
-> 			Ctrl:	Enable+ ID=0 ArbSelect=Fixed TC/VC=ff
-> 			Status:	NegoPending- InProgress-
-> 	Capabilities: [400 v1] Power Budgeting <?>
-> 	Capabilities: [500 v1] Vendor Specific Information: ID=1234 Rev=1 Len=100 <?>
-> 	Capabilities: [600 v1] Vendor Specific Information: ID=8086 Rev=2 Len=04c <?>
-> 	Capabilities: [700 v1] Secondary PCI Express
-> 		LnkCtl3: LnkEquIntrruptEn- PerformEqu-
-> 		LaneErrStat: 0
-> 	Capabilities: [800 v1] Latency Tolerance Reporting
-> 		Max snoop latency: 0ns
-> 		Max no snoop latency: 0ns
-> 	Capabilities: [a00 v1] L1 PM Substates
-> 		L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
-> 			  PortCommonModeRestoreTime=0us PortTPowerOnTime=10us
-> 		L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1.1-
-> 			   T_CommonMode=0us LTR1.2_Threshold=0ns
-> 		L1SubCtl2: T_PwrOn=10us
-> 	Capabilities: [b00 v1] Precision Time Measurement
-> 		PTMCap: Requester:- Responder:- Root:-
-> 		PTMClockGranularity: Unimplemented
-> 		PTMControl: Enabled:+ RootSelected:-
+[Side note, you seem to have the link trained at Gen2 (20G) instead of Gen3
+(40G).]
 
-At least this shows a similar issue we fixed for Barlow Ridge.
+Looking at the dmesg I recalled that there is an internal report about
+similar issue by Pooja and Rene (Cc'd) and it all boils down to this log
+entry:
 
-I don't have Titan Ridge host here so cannot try to repro but I wonder if
-you could still try with CONFIG_PCIE_PTM=n and see if that changes
-anything? Of course assuming you get the Linux installation working again.
+[  489.339148] thunderbolt 0000:c6:00.6: 2:13: could not allocate DP tunnel
+
+They made a hack patch that works it around, see below. I wonder if you
+could try that too? If that's the issue (not releasing HopIDs) then we need
+to figure a way to fix it properly. One suggestion is to release DP
+resources earlier, and of course doing full reset as done here. I would
+prefer "smallest" possible change.
+
+@Pooja, any updates on your side to this?
+
+diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+index 28c1e5c062f3..45f7ee940f10 100644
+--- a/drivers/thunderbolt/tunnel.c
++++ b/drivers/thunderbolt/tunnel.c
+@@ -1084,6 +1084,9 @@ static void tb_dp_dprx_work(struct work_struct *work)
+ 
+ static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
+ {
++	if (tunnel->dprx_started)
++		return 0;
++
+ 	/*
+ 	 * Bump up the reference to keep the tunnel around. It will be
+ 	 * dropped in tb_dp_dprx_stop() once the tunnel is deactivated.
+-- 
+2.43.0
+
 
