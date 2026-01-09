@@ -1,219 +1,166 @@
-Return-Path: <linux-usb+bounces-32105-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32106-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3712D088E9
-	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 11:29:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24A71D088B1
+	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 11:25:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 19E25301FD59
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 10:23:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9B03B302CF44
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 10:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 423293370FE;
-	Fri,  9 Jan 2026 10:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E983382E4;
+	Fri,  9 Jan 2026 10:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="ZGI+t2nW";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SFd3Rlw+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oexwprhn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BCE1336EC8;
-	Fri,  9 Jan 2026 10:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6EE335BCC
+	for <linux-usb@vger.kernel.org>; Fri,  9 Jan 2026 10:25:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767954193; cv=none; b=H8QJhcjlkJeDgJSburJKmY6+RcvTOqbTNRnNDzjga2p+vdIug7c2vfnMmo0Q2m7jFXcBBuzml7zhKW2mdV95UMUjbOU6HbDPUYnCnnf+/3PlDuxRufdDUMa9DnwsJv0JAVOM0TB+wUrbG5lQGIy9xGJcbS1jwV+Vs/9mCVVNkdE=
+	t=1767954353; cv=none; b=MWlQOKcFxdDmbBQDLVqMsVu/13dxR513pCN4n/nqnpcCtGIOEyFuenb7+tvpN18jba2IBreVO2alu8QzukYx0mlht4pLUX0A30NfBKin0AHDEYmb0BJSIec8FXAOnt91HlvubquzDbRMzbl+lmtWw3J7ij7dGW3fUTBIYyLCPvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767954193; c=relaxed/simple;
-	bh=VNATSDjCrEY/jf8XaE9+O0ats9QWrtrAh4NUr3CL8s0=;
+	s=arc-20240116; t=1767954353; c=relaxed/simple;
+	bh=KT2GLDDyg167DaZVifyDhp7xoisKy4gGhAbIcQbNLeM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nw35T/EDHsCH7xfqF+/ByW4y5hk+7l05rNnSunWnL/MsCVnOtDqdfn8s8oRegcF5BRWbDkqb32URt6jPgHJwIdHO92QWMoSEr7El4EnDJ4Ybn5c7vjKaEdSpAgomsZ0YKOtasNYWQQK2HkEDrwuGuDpbcCM9+2TUv5srE9zkQyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=ZGI+t2nW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SFd3Rlw+; arc=none smtp.client-ip=202.12.124.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 4DCF37A0159;
-	Fri,  9 Jan 2026 05:23:11 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Fri, 09 Jan 2026 05:23:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1767954191; x=1768040591; bh=QyD5/S3P7h
-	Qhgp+mxf+HZfsHxt4R/xJ40k1a8U9/co8=; b=ZGI+t2nWoU+whtBN4otdN/Ep9W
-	SMkAffK4Gvk81+dnR2mIY27qv7kFjRugMwX23sPNh5kWr6nPokJ7FAD0gHtMYzKx
-	PtnOi4AjwZnIephM2weZAQSpTVGJHYddFoATUptKE8eV8rcyzVKZm6HxjgmmqaoR
-	IZePIH2JivWNGvVBIb1DmvL2vQmHuZMJ9GkSzZ8cEAV78ixWNKEKPS3slYnHjgL9
-	yty3Q/9/7HWg40v9A4t4EM7eAasYByETz6RHqjiJTVSqSHwtxKLcUlsRYajmadD8
-	8LuYl6ZMGDEx0tn58TcM/I22Z2cHNVD7JuQh/90SdpvTGRN0rxmSwlVKLlMg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1767954191; x=1768040591; bh=QyD5/S3P7hQhgp+mxf+HZfsHxt4R/xJ40k1
-	a8U9/co8=; b=SFd3Rlw+L5aou7JPLylh5yMmduWngesz6OC3jlrkt5xF32sFXAT
-	cCSnh61B2CbfGcdSzxz43BwVsBbQSTECZb1bo+fJMYTZGGU1vEaNp69HuHkdH9f9
-	I/8gI2WYT8q0vZpuRwBbL8dKdlECvj0iNC7ZcxM7JJCXX5OSZuogARIO2DWz/GsR
-	cbfIyDG7UY4p3GXWFHe1KaW94bZtpUuQX2Bzb/eTNxRP98CZXkNKWXnA9f/Mv+Dj
-	xmvhStvc8TcOCkuZkwib6BTpEVVDwckKRTtP0MNff/EkFxsZ/wAgokkQ4Wsof7MX
-	/7qz4qoxz1DEtOkXS41RNe0oHZ9zbLvIqFg==
-X-ME-Sender: <xms:DtdgaRdyhcMJucOoseeHa_yxjmGROU_SnYAML2vFoBkWk4F25UY9NA>
-    <xme:DtdgadfD_qX0DZHWFwvGyczWaTIeWoPeEHx5LGJ6uNMPKNEWTXVFpSIa_lIcUSx3s
-    nkI1Wfuj6d4cl06bSNM22vjma-6Pev3qXt2vSM9OjsnGCbkfvq0XKI>
-X-ME-Received: <xmr:DtdgaT3Q7oSNJ735QCddXUpMKolfpQNgiOgZSOuqRpyK66MdXTmfpnHuGQ93yM5B7nPzJfF7Lw5RkZ73A72vJuzhujyRNNcSbw8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddutdekheehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomheplfgrnhhnvgcu
-    ifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqeenucggtffrrghtthgvrhhnpefgvd
-    ffveelgedujeeffeehheekheelheefgfejffeftedugeethfeuudefheefteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruh
-    drnhgvthdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopehsvhgvnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgvrghlsehgohhmph
-    grrdguvghvpdhrtghpthhtohepthhhihhnhhdrnhhguhihvghnsehshihnohhpshihshdr
-    tghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdroh
-    hrghdprhgtphhtthhopegrshgrhhhisehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghp
-    thhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrg
-    gurdhorhhgpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehjtggrlhhlihhgvghrohhsleelsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:Dtdgad9K5v0acRiFtqxSTkV5bcwXjiToHXTmIf_IpzO-O2vmNNsfpw>
-    <xmx:DtdgaQ5WsTkBqmMoFd4pp24thbILTdc9j-WdF-vblOJwCh40GVJWpw>
-    <xmx:Dtdgadui6xmFHk4oKdV6nzGqOzsUj5OI3lJF4WBB99k9COGcXt6DBg>
-    <xmx:Dtdgaa1S2pG-wjfJYerCosMUsClraUwXBBgY921jqWf3p97yjgrtvw>
-    <xmx:D9dgacc9QpM8zOFf9mJEjXzxAXtmi_wEMmVGfhvEb4D94VZ-9N41SCEA>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Jan 2026 05:23:09 -0500 (EST)
-Date: Fri, 9 Jan 2026 11:23:09 +0100
-From: Janne Grunau <j@jannau.net>
-To: Sven Peter <sven@kernel.org>
-Cc: Neal Gompa <neal@gompa.dev>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	James Calligeros <jcalligeros99@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: apple: Set USB2 PHY mode before dwc3 init
-Message-ID: <20260109102309.GE4068972@robin.jannau.net>
-References: <20260108-dwc3-apple-usb2phy-fix-v1-1-5dd7bc642040@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bhc6SeSaplRawRT+Lw1elwM11xm5Fr2N/j6Wk1fO+hDT+JzxF+DSNA8Pi6zpsTTm8Msy0r9k1vjT2pk6Ql3zSmqL2Ql/NCFyiB0qbtpsDkcXFFPBu/ZNsg1yXHikkED9oIIkNhtGtQxrS5DFiDsjmj6Dzrf3putwHHUeuaaWRbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oexwprhn; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42fed090e5fso2228842f8f.1
+        for <linux-usb@vger.kernel.org>; Fri, 09 Jan 2026 02:25:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767954350; x=1768559150; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dh/CNzH+BY3nn9nQjVmqxLLVylpWqSRv8nq2jkZouxY=;
+        b=OexwprhnmY+xRFY8e61cTnBIx+IqneNNax0LQE64EtbQj3v8M5w/3oB9Cz/Sm/Apqp
+         oMPUVpG4lv/tmtMxG7ygl2EF/DOcgONkkzdFvBm5m4XokH/DwhA7llWbQ/79CaPmidy7
+         n2tGpWm5wyF/0pBOLP2Pvc9gs48s/YQxXXZ5+Ks21OrzUGerYkHlcqPklW2dR4FcEkHF
+         oTOvOXkPHAIVZRss9/QlI0vL1g1FtGyKZyZU4Augx5svgSZADr/irA48gsig/qTBEAVJ
+         GvQ6k5KYkBieeXTPmoFFH/yq/cZjpDb6CSqEdCHak6u4eBUQd/EbrmqmIbHmCWaFuggb
+         8RsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767954350; x=1768559150;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dh/CNzH+BY3nn9nQjVmqxLLVylpWqSRv8nq2jkZouxY=;
+        b=bv1wF7T3tnqWpMDjmGbF+j7nXWHOR71x9HMJKvWfCjj964omfJIcRebSO9iWTYza1A
+         LXPqF7Mi5wL4snkakNnImuEGTP/L4opmJhOBivSZDWpKcOQgYTaHtosTDNc0NhYYlSUl
+         Amh1r06Ys9y+I16QtMKDrVtXU+4X+PWDo+gUhX0x39gN2CSCbo1TGPcdxztHyAO4lcEu
+         H7h67OgIUtgiVkKBQhojI6duXhVNT6ZRURglkvjqXQ4SnDYNv6tL1PsT8xDxFmO6y3lg
+         xpDA18O3nuJVhlx+UCNuzBPBzV0wM3l17DMspUYaqLWmm1EKH5XOa0V03AaW2nBHK/If
+         oxlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV+DYgWgBdEmDycISK92qeYbJ+4Tl87vYe1uqoZ1u/hWmALUAMNtVW6JF/JYHaaApXSRLTTGKMhgkE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQLmtANHWUqPVFUetWmzfaAUv5+KHmBUPbcpE3Ef/GteZqU7VM
+	CyRp/N+EsrzPfhPKJL1jOdl8VxSE2jOhCl9uwuFwb6ZGnhHnCSByLq6d
+X-Gm-Gg: AY/fxX4mKdjOK4Y7p8fLI8NpuWrq+MLsVMtmc2s7oCEIG1f+4cZWQ1j8KbBPlBFsU0y
+	U9NrnvZBCPrlEV1+CrWxAzc0ZNN05S69YZVFKZqC/5xGNXDTPuMzIr4Esx65a+/+fhj7Ja92W7D
+	7wfWs6RhBkk5GAHTof2pDJDnk19tcewcrxBMzAg4rgB9Mc5j1SHk+R/4WRY3OQJx4Ni1CAw8tmn
+	giX5JK3oSyx9djvDHJP/SreXBxlaCHcCpeGcu8lgxBwFvfC0y8HSJd2Bxbd2XVMctzy5BB/VrlW
+	plMHt3dRonYH4pf1lO8K60CePIJ05PW6A7FQYWU/c4qoT84aaek2ShZzJ3kzcD+OcD2h7yLpun1
+	FQEjQuZrr0TpofG4CSbsdbVSEwkbbTDEkbCKJ+kktenw6dqOQ+7MejX9AGtpLM1lcV7DCYUESJV
+	BL4BtkWvlEE8tHmQKDRppIVkxfSQO3YKJIuD2jxICz39ZMW1QtM8CzcqBqVCH8eZ6i6Tp/cpVo/
+	p7mbBwhpFy7Gw==
+X-Google-Smtp-Source: AGHT+IGrC1El39PZ7oXtpxmiYe1IRGze8vOJElC+6t6cZaNyFb4zuAzTIvYYroxDo4htbszVXN7K8w==
+X-Received: by 2002:a05:6000:2483:b0:42f:b0ab:7b48 with SMTP id ffacd0b85a97d-432c3627fbamr10452852f8f.1.1767954349892;
+        Fri, 09 Jan 2026 02:25:49 -0800 (PST)
+Received: from ernest.hoecke-nb (248.201.173.83.static.wline.lns.sme.cust.swisscom.ch. [83.173.201.248])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ff1e9sm22667040f8f.41.2026.01.09.02.25.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jan 2026 02:25:49 -0800 (PST)
+Date: Fri, 9 Jan 2026 11:25:48 +0100
+From: Ernest Van Hoecke <ernestvanhoecke@gmail.com>
+To: Kuen-Han Tsai <khtsai@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Felipe Balbi <balbi@ti.com>, Prashanth K <prashanth.k@oss.qualcomm.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Andrzej Pietrasiewicz <andrzej.p@samsung.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, stable@kernel.org
+Subject: Re: [PATCH 3/3] usb: gadget: f_ncm: align net_device lifecycle with
+ bind/unbind
+Message-ID: <52usixapyb5hqtek4qlmiuzwvoz6xgzh3sxspn2ueetd5orfz2@qdoqxnuydbwb>
+References: <20251230-ncm-refactor-v1-0-793e347bc7a7@google.com>
+ <20251230-ncm-refactor-v1-3-793e347bc7a7@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260108-dwc3-apple-usb2phy-fix-v1-1-5dd7bc642040@kernel.org>
+In-Reply-To: <20251230-ncm-refactor-v1-3-793e347bc7a7@google.com>
 
-On Thu, Jan 08, 2026 at 08:21:45PM +0100, Sven Peter wrote:
-> Now that the upstream code has been getting broader test coverage by our
-> users we occasionally see issues with USB2 devices plugged in during boot.
-> Before Linux is running, the USB2 PHY has usually been running in device
-> mode and it turns out that sometimes host->device or device->host
-> transitions don't work.
-> The root cause: If the role inside the USB2 PHY is re-configured when it
-> has already been powered on or when dwc2 has already enabled the ULPI
-
-"dwc3", typo noticed by Mark Kettenis
-
-> interface the new configuration sometimes doesn't take affect until dwc3
-> is reset again. Fix this rare issue by configuring the role much earlier.
-> Note that the USB3 PHY does not suffer from this issue and actually
-> requires dwc3 to be up before the correct role can be configured there.
+On Tue, Dec 30, 2025 at 06:13:16PM +0800, Kuen-Han Tsai wrote:
+> Currently, the net_device is allocated in ncm_alloc_inst() and freed in
+> ncm_free_inst(). This ties the network interface's lifetime to the
+> configuration instance rather than the USB connection (bind/unbind).
 > 
-> Reported-by: James Calligeros <jcalligeros99@gmail.com>
-> Reported-by: Janne Grunau <j@jannau.net>
-> Fixes: 0ec946d32ef7 ("usb: dwc3: Add Apple Silicon DWC3 glue layer driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sven Peter <sven@kernel.org>
-> ---
->  drivers/usb/dwc3/dwc3-apple.c | 48 +++++++++++++++++++++++++++++--------------
->  1 file changed, 33 insertions(+), 15 deletions(-)
+> This decoupling causes issues when the USB gadget is disconnected where
+> the underlying gadget device is removed. The net_device can outlive its
+> parent, leading to dangling sysfs links and NULL pointer dereferences
+> when accessing the freed gadget device.
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-apple.c b/drivers/usb/dwc3/dwc3-apple.c
-> index cc47cad232e397ac4498b09165dfdb5bd215ded7..c2ae8eb21d514e5e493d2927bc12908c308dfe19 100644
-> --- a/drivers/usb/dwc3/dwc3-apple.c
-> +++ b/drivers/usb/dwc3/dwc3-apple.c
-> @@ -218,25 +218,31 @@ static int dwc3_apple_core_init(struct dwc3_apple *appledwc)
->  	return ret;
->  }
->  
-> -static void dwc3_apple_phy_set_mode(struct dwc3_apple *appledwc, enum phy_mode mode)
-> -{
-> -	lockdep_assert_held(&appledwc->lock);
-> -
-> -	/*
-> -	 * This platform requires SUSPHY to be enabled here already in order to properly configure
-> -	 * the PHY and switch dwc3's PIPE interface to USB3 PHY.
-> -	 */
-> -	dwc3_enable_susphy(&appledwc->dwc, true);
-> -	phy_set_mode(appledwc->dwc.usb2_generic_phy[0], mode);
-> -	phy_set_mode(appledwc->dwc.usb3_generic_phy[0], mode);
-> -}
-> -
->  static int dwc3_apple_init(struct dwc3_apple *appledwc, enum dwc3_apple_state state)
->  {
->  	int ret, ret_reset;
->  
->  	lockdep_assert_held(&appledwc->lock);
->  
-> +	/*
-> +	 * The USB2 PHY on this platform must be configured for host or device mode while it is
-> +	 * still powered off and before dwc3 tries to access it. Otherwise, the new configuration
-> +	 * will sometimes only take affect after the *next* time dwc3 is brought up which causes
-> +	 * the connected device to just not work.
-> +	 * The USB3 PHY must be configured later after dwc3 has already been initialized.
-> +	 */
-> +	switch (state) {
-> +	case DWC3_APPLE_HOST:
-> +		phy_set_mode(appledwc->dwc.usb2_generic_phy[0], PHY_MODE_USB_HOST);
-> +		break;
-> +	case DWC3_APPLE_DEVICE:
-> +		phy_set_mode(appledwc->dwc.usb2_generic_phy[0], PHY_MODE_USB_DEVICE);
-> +		break;
-> +	default:
-> +		/* Unreachable unless there's a bug in this driver */
-> +		return -EINVAL;
-> +	}
-> +
->  	ret = reset_control_deassert(appledwc->reset);
->  	if (ret) {
->  		dev_err(appledwc->dev, "Failed to deassert reset, err=%d\n", ret);
-> @@ -257,7 +263,13 @@ static int dwc3_apple_init(struct dwc3_apple *appledwc, enum dwc3_apple_state st
->  	case DWC3_APPLE_HOST:
->  		appledwc->dwc.dr_mode = USB_DR_MODE_HOST;
->  		dwc3_apple_set_ptrcap(appledwc, DWC3_GCTL_PRTCAP_HOST);
-> -		dwc3_apple_phy_set_mode(appledwc, PHY_MODE_USB_HOST);
-> +		/*
-> +		 * This platform requires SUSPHY to be enabled here already in order to properly
-> +		 * configure the PHY and switch dwc3's PIPE interface to USB3 PHY. The USB2 PHY
-> +		 * has already been configured to the correct mode earlier.
-> +		 */
-> +		dwc3_enable_susphy(&appledwc->dwc, true);
-> +		phy_set_mode(appledwc->dwc.usb3_generic_phy[0], PHY_MODE_USB_HOST);
->  		ret = dwc3_host_init(&appledwc->dwc);
->  		if (ret) {
->  			dev_err(appledwc->dev, "Failed to initialize host, ret=%d\n", ret);
-> @@ -268,7 +280,13 @@ static int dwc3_apple_init(struct dwc3_apple *appledwc, enum dwc3_apple_state st
->  	case DWC3_APPLE_DEVICE:
->  		appledwc->dwc.dr_mode = USB_DR_MODE_PERIPHERAL;
->  		dwc3_apple_set_ptrcap(appledwc, DWC3_GCTL_PRTCAP_DEVICE);
-> -		dwc3_apple_phy_set_mode(appledwc, PHY_MODE_USB_DEVICE);
-> +		/*
-> +		 * This platform requires SUSPHY to be enabled here already in order to properly
-> +		 * configure the PHY and switch dwc3's PIPE interface to USB3 PHY. The USB2 PHY
-> +		 * has already been configured to the correct mode earlier.
-> +		 */
-> +		dwc3_enable_susphy(&appledwc->dwc, true);
-> +		phy_set_mode(appledwc->dwc.usb3_generic_phy[0], PHY_MODE_USB_DEVICE);
->  		ret = dwc3_gadget_init(&appledwc->dwc);
->  		if (ret) {
->  			dev_err(appledwc->dev, "Failed to initialize gadget, ret=%d\n", ret);
+> Problem 1: NULL pointer dereference on disconnect
+>  Unable to handle kernel NULL pointer dereference at virtual address
+>  0000000000000000
+>  Call trace:
+>    __pi_strlen+0x14/0x150
+>    rtnl_fill_ifinfo+0x6b4/0x708
+>    rtmsg_ifinfo_build_skb+0xd8/0x13c
+>    rtmsg_ifinfo+0x50/0xa0
+>    __dev_notify_flags+0x4c/0x1f0
+>    dev_change_flags+0x54/0x70
+>    do_setlink+0x390/0xebc
+>    rtnl_newlink+0x7d0/0xac8
+>    rtnetlink_rcv_msg+0x27c/0x410
+>    netlink_rcv_skb+0x134/0x150
+>    rtnetlink_rcv+0x18/0x28
+>    netlink_unicast+0x254/0x3f0
+>    netlink_sendmsg+0x2e0/0x3d4
 > 
+> Problem 2: Dangling sysfs symlinks
+>  console:/ # ls -l /sys/class/net/ncm0
+>  lrwxrwxrwx ... /sys/class/net/ncm0 ->
+>  /sys/devices/platform/.../gadget.0/net/ncm0
+>  console:/ # ls -l /sys/devices/platform/.../gadget.0/net/ncm0
+>  ls: .../gadget.0/net/ncm0: No such file or directory
+> 
+> Move the net_device allocation to ncm_bind() and deallocation to
+> ncm_unbind(). This ensures the network interface exists only when the
+> gadget function is actually bound to a configuration.
+> 
+> To support pre-bind configuration (e.g., setting interface name or MAC
+> address via configfs), cache user-provided options in f_ncm_opts
+> using the gether_opts structure. Apply these cached settings to the
+> net_device upon creation in ncm_bind().
+> 
+> Preserve the use-after-free fix from commit 6334b8e4553c ("usb: gadget:
+> f_ncm: Fix UAF ncm object at re-bind after usb ep transport error").
+> Check opts->net in ncm_set_alt() and ncm_disable() to ensure
+> gether_disconnect() runs only if a connection was established.
+> 
+> Fixes: 40d133d7f542 ("usb: gadget: f_ncm: convert to new function interface with backward compatibility")
+> Cc: stable@kernel.org
+> Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 
-Tested-by: Janne Grunau <j@jannau.net>
-Reviewed-by: Janne Grunau <j@jannau.net>
+Hi Kuen-Han,
 
-Janne
+Thank you for all your work on this.
+
+When using the DWC3 IP for USB OTG on an iMX95 with our Aquila iMX95
+SoM, USB NCM does not function properly when booting the board with this
+USB in host mode.
+
+Your patch series completely solves this issue, I was debugging it
+before and saw that there were indeed issues with the relation between
+the net device and the gadget.
+
+Tested-by: Ernest Van Hoecke <ernest.vanhoecke@toradex.com> # Aquila iMX95
+
+Kind regards,
+Ernest
 
