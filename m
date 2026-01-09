@@ -1,51 +1,48 @@
-Return-Path: <linux-usb+bounces-32094-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32095-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED42DD06EF4
-	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 04:14:54 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E7AAD072D9
+	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 05:59:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D50F4304918D
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 03:14:42 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AEC2A3011981
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 04:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E08AC2EA482;
-	Fri,  9 Jan 2026 03:14:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A2302DB794;
+	Fri,  9 Jan 2026 04:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="ZlTNKhna"
+	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="UhljJ8fl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2219F2ECE98;
-	Fri,  9 Jan 2026 03:14:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2E719309C;
+	Fri,  9 Jan 2026 04:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767928480; cv=none; b=Fxu+nIPAcVxr6ItZu9dZ6SUIH8RZuleYV02XrM60pF42c7ae9YJgcovzeA01s6jk0sBSACU7JfWATqxeOQB8FwHRngCfGCZDBC4iAW4NbUHu1aKMVU212UpP90zfFqp6EBaiHn9PQO14wSPmxad1EN6U+DXeP0FP0/n1+51jRr0=
+	t=1767934779; cv=none; b=DpvKtUy4PHWcZPsHaO7c1vSS4Ik5kMDvWF6pJ+VAyiUQxYpKr6B6tgjA3axKog/u58oQ39SAfdKDrPjN1PB9H+XTRZKht9FqPWgpKBoD43GYDVlHCbSyPEIZtqiyyK2kTbuDD/lT4wvpWnrC+OieRM8v1S4vxr8sCkOggwkiEG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767928480; c=relaxed/simple;
-	bh=/0r8SwXN2uqPFgub3vScOCBwPKUaSDDgHhDXceaXG0E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FI/pBCN5SWj4SgGwqfUn4+z3d3eAzSkWsUY4zdQUJfLbTA/BwAtsScIku6S692JvO3ZYM8bar0hkfRo1aMFJHGtQwU7jqI4Rr48efGx01IR/lkokn/UAUs/fN/4/a4ZtTv4eOe0y/9FPdCiRHuMoi+ciV7CIvId2eSB495GI0QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=ZlTNKhna; arc=none smtp.client-ip=101.71.155.101
+	s=arc-20240116; t=1767934779; c=relaxed/simple;
+	bh=TJOb7KEcOt+3t1rVfUqPdvOHd4fNrR1Y+D/CiqkkKyU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=deNCoYmgIZ6ft7qWZhyfKWWOqEgLnpSl+u3YyGzFjzzp7rVx+FotsygcQK22mfI+HUJarHHSZJjSwyMkotiBGzYWIo+weFIWii44aZHwqZ6vcjtMJImA46gYJ/4oIdE2RfspV7wrg8U8sgSXtm0bPcKhU7wCdPfNCkTJWhY4QR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=UhljJ8fl; arc=none smtp.client-ip=45.254.49.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
-Received: from LAPTOP-N070L597.localdomain (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 300666a2a;
-	Fri, 9 Jan 2026 11:14:30 +0800 (GMT+08:00)
+Received: from LAPTOP-N070L597.localdomain (unknown [222.191.246.242])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 300925f8f;
+	Fri, 9 Jan 2026 12:54:12 +0800 (GMT+08:00)
 From: Zilin Guan <zilin@seu.edu.cn>
-To: gregkh@linuxfoundation.org
-Cc: jianhao.xu@seu.edu.cn,
-	linux-kernel@vger.kernel.org,
+To: mathias.nyman@intel.com
+Cc: gregkh@linuxfoundation.org,
 	linux-usb@vger.kernel.org,
-	mathias.nyman@intel.com,
-	stable@vger.kernel.org,
-	zilin@seu.edu.cn
-Subject: Re: [PATCH v2] usb: xhci: Fix memory leak in xhci_disable_slot()
-Date: Fri,  9 Jan 2026 03:14:29 +0000
-Message-Id: <20260109031429.1472804-1-zilin@seu.edu.cn>
+	linux-kernel@vger.kernel.org,
+	jianhao.xu@seu.edu.cn,
+	Zilin Guan <zilin@seu.edu.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH v3] usb: xhci: Fix memory leak in xhci_disable_slot()
+Date: Fri,  9 Jan 2026 04:54:10 +0000
+Message-Id: <20260109045410.1532614-1-zilin@seu.edu.cn>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2026010840-rage-sprang-2662@gregkh>
-References: <2026010840-rage-sprang-2662@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,54 +50,82 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9ba0bf9a9803a1kunmf84f701073b2e
+X-HM-Tid: 0a9ba11ae37303a1kunm8cf0fa377ade2
 X-HM-MType: 10
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCSU5JVh1NSkIZTxgZHk1LQ1YeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUJCSU5LVUpLS1VKQktCWQ
-	Y+
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaHx1LVh5PQhlNShlCS00eS1YeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlJSUlVSkJKVUlPTVVJT0lZV1kWGg8SFR0UWUFZT0tIVUpLSUhOQ0NVSktLVU
+	tZBg++
 DKIM-Signature: a=rsa-sha256;
-	b=ZlTNKhna/RVu6LOIAp+5waAldQ8u4eB2nbXxDCeV2wRWhTVU+eHUIsAGCOyVdg34Km5JTWSmJqty4exV6P1LXQ4AvjG1lmj9Jy2daHHaGSRJXfMHNNpUYC4GTyoC3Ovjac1mA4KaT8Y1hIl9xe7H4lrLaPiUBJ3tTu5IXwqZPPM=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
-	bh=gNFEVQqGBhcVIOW3B/VaCDYtgPyQD7HkCiM2nrPvsDU=;
+	b=UhljJ8flJiVXlbk2uSPPed2pUXmWlHoVrBvcwM5HvahUd4pHkp0rj8a8x99JbUIflaR05uZzsENwPGy3DH7R6HuI8A4sZ5D71xCM2FubzLyvK+pqjHahi684A6iLXpGgPKO8nWeC2rbUAEFavIZH9W4mOk3YrH2zG2KN6YUi5Mc=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
+	bh=Cs1CY+zAzDKhEhBICahC7weJ16C5vCiADWr9j9neVh4=;
 	h=date:mime-version:subject:message-id:from;
 
-On Thu, Jan 08, 2026 at 04:28:42PM +0100, Greg KH wrote:
-> On Thu, Jan 08, 2026 at 02:11:08PM +0000, Zilin Guan wrote:
-> > xhci_alloc_command() allocates a command structure and, when the
-> > second argument is true, also allocates a completion structure.
-> > Currently, the error handling path in xhci_disable_slot() only frees
-> > the command structure using kfree(), causing the completion structure
-> > to leak.
-> > 
-> > Use xhci_free_command() instead of kfree(). xhci_free_command() correctly
-> > frees both the command structure and the associated completion structure.
-> > Since the command structure is allocated with zero-initialization,
-> > command->in_ctx is NULL and will not be erroneously freed by
-> > xhci_free_command().
-> > 
-> > This bug was found using an experimental static analysis tool we are
-> > developing. The tool is based on the LLVM framework and is specifically
-> > designed to detect memory management issues. It is currently under
-> > active development and not yet publicly available, but we plan to
-> > open-source it after our research is published.
-> > 
-> > The analysis was performed on Linux kernel v6.13-rc1.
-> 
-> That is a very old kernel version, from December 2024, please redo this
-> to verify it is relevent to todays tree.
-> 
-> thanks,
-> 
-> greg k-h
+xhci_alloc_command() allocates a command structure and, when the
+second argument is true, also allocates a completion structure.
+Currently, the error handling path in xhci_disable_slot() only frees
+the command structure using kfree(), causing the completion structure
+to leak.
 
-Sorry for the confusion caused by our description. While the static 
-analysis was indeed performed on v6.13-rc1, we have manually verified 
-that the bug still exists in the latest mainline kernel before submitting
-the patch.
+Use xhci_free_command() instead of kfree(). xhci_free_command() correctly
+frees both the command structure and the associated completion structure.
+Since the command structure is allocated with zero-initialization,
+command->in_ctx is NULL and will not be erroneously freed by
+xhci_free_command().
 
-I will clarify this distinction in the v3 patch and update the version 
-information.
+This bug was found using an experimental static analysis tool we are
+developing. The tool is based on the LLVM framework and is specifically
+designed to detect memory management issues. It is currently under
+active development and not yet publicly available, but we plan to
+open-source it after our research is published.
 
-Thanks,
-Zilin Guan
+The bug was originally detected on v6.13-rc1 using our static analysis
+tool, and we have verified that the issue persists in the latest mainline
+kernel.
+
+We performed build testing on x86_64 with allyesconfig using GCC=11.4.0.
+Since triggering these error paths in xhci_disable_slot() requires specific
+hardware conditions or abnormal state, we were unable to construct a test
+case to reliably trigger these specific error paths at runtime.
+
+Fixes: 7faac1953ed1 ("xhci: avoid race between disable slot command and host runtime suspend")
+CC: stable@vger.kernel.org
+Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
+---
+Changes in v3:
+- Update the commit message to reflect that the analysis applies to the mainline kernel.
+
+Changes in v2:
+- Add detailed information required by researcher guidelines.
+- Clarify the safety of using xhci_free_command() in this context.
+- Correct the Fixes tag to point to the commit that introduced this issue.
+
+ drivers/usb/host/xhci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 02c9bfe21ae2..f0beed054954 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4137,7 +4137,7 @@ int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id)
+ 	if (state == 0xffffffff || (xhci->xhc_state & XHCI_STATE_DYING) ||
+ 			(xhci->xhc_state & XHCI_STATE_HALTED)) {
+ 		spin_unlock_irqrestore(&xhci->lock, flags);
+-		kfree(command);
++		xhci_free_command(xhci, command);
+ 		return -ENODEV;
+ 	}
+ 
+@@ -4145,7 +4145,7 @@ int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id)
+ 				slot_id);
+ 	if (ret) {
+ 		spin_unlock_irqrestore(&xhci->lock, flags);
+-		kfree(command);
++		xhci_free_command(xhci, command);
+ 		return ret;
+ 	}
+ 	xhci_ring_cmd_db(xhci);
+-- 
+2.34.1
+
 
