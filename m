@@ -1,191 +1,208 @@
-Return-Path: <linux-usb+bounces-32099-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32100-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 334E6D078E5
-	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 08:25:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37D29D079F3
+	for <lists+linux-usb@lfdr.de>; Fri, 09 Jan 2026 08:43:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8D26A30464E2
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 07:23:24 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A857630504E0
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 07:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3212EC562;
-	Fri,  9 Jan 2026 07:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE1BA2F12AC;
+	Fri,  9 Jan 2026 07:42:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l1ijlRWn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XNKBu+zt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A8F2367CF;
-	Fri,  9 Jan 2026 07:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F172A2EDD50
+	for <linux-usb@vger.kernel.org>; Fri,  9 Jan 2026 07:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767943403; cv=none; b=gN3S2aNMoL1CdwgeXKDSsQVbR7oht3xQa7N0fMmwTdwdvg1WIeXBOTHTOOY44YtECQEITrYtW2fr4vkMkM3ODPqbXyc/I3hPzd42joXIi2An5I9Kc1PIJveyDsQ9ia4iyuk0pCbwngkEJzkCcuZKFnWwDIPGT1OWCZRh3llyHsg=
+	t=1767944564; cv=none; b=XiWwUiJAxi/X20GBd61otCcF1dfPEe0wHSt2v28GUgaz4sDw8/MPoZb7gU8caHaXvYbYD37+RIe0/kMY3ifR1Scm+XPSEcMK594Q2FRwFC7NLZAuSfTx68q/INVuxdPQcijPbHScHX8X60RAuMM6PP0JEgU239YHARFo4l8ASEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767943403; c=relaxed/simple;
-	bh=bf8ZcgeEjpKmLqVz1N+HioqUbjhdnrXyhiGFSpwSbwk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NRnp0L1rvV8SYW2M34KpWRyeHK3EG82FGP1vtgj0GBsQvyX5+Zzzc/PlirlDZZNtdZUhRy0QbgWPY80zZby5MUGv4w4li05JJACjli4VywmFVVrEBPAllRS0lobBHTcmcxEgEinc8FwZKdsuoURVBruuGSlLYhrYmelZHTo7sPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l1ijlRWn; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767943402; x=1799479402;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bf8ZcgeEjpKmLqVz1N+HioqUbjhdnrXyhiGFSpwSbwk=;
-  b=l1ijlRWnTWeEZN7qRT7zFIqSy5aTTTdFUR1aoHhroEh2r1OwSsHwPgC7
-   aRHyFL5f0EM5GENbTXzIJmqz1rCHQ5dy/5ui60DU5H7kv7QEmcEDTZ3Wt
-   jefz/npdP88LlKIxwHo50Ac9xR9HV34Y5jTMMJz9T0Abakt8nJmi/9Why
-   AHAO93UfbxntQXIwxFmB3cSAz6zOXDbLizib9Mtx71pu73r42d9wxlnac
-   MkfDZptdjWyK2RMnsGDW73TG2Kk4yGlwuEafskz7ii1TQZ0/co6um7tIT
-   E4z6tDh4tndiFvCmDnZdlxwD7e7ZszcWUWP/W+7EauXvqZ8WAvMW7elKS
-   Q==;
-X-CSE-ConnectionGUID: etJaulfAQPC5pvg7AofHpQ==
-X-CSE-MsgGUID: obpIoXI1S+CosLYy0ygrgA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="79620784"
-X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="79620784"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 23:23:22 -0800
-X-CSE-ConnectionGUID: 51aIpcNTSyum0MXfnZDbaA==
-X-CSE-MsgGUID: 6toyWCMVRsexq7ju9/I4ow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="203830032"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa009.fm.intel.com with ESMTP; 08 Jan 2026 23:23:19 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 91DBB94; Fri, 09 Jan 2026 08:23:18 +0100 (CET)
-Date: Fri, 9 Jan 2026 08:23:18 +0100
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1767944564; c=relaxed/simple;
+	bh=eSn6OwD3SrFNXw5tP/h9H/Ii7V8Im22C2P69wloFwSM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WYpbZgY5//zZLvMe0623ai6FosdMliwtbm9N0xqUSm/11PqwrNbN8Lx/tEXWkw5bMKTvJ3Vf1ZVpnPe7yjhMTWMfKeaGxIbRlSrvf5ECg71jXtxqQiQ+j0u7wWLHQw29rNhwObr33WZZ9GOPRfqxwLrBSYn0KGfKzgzY8/jCeBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XNKBu+zt; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c05d66dbab2so2565163a12.0
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jan 2026 23:42:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767944562; x=1768549362; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o9AYRVJbls5kMz4af/phakvFWuIaNCCibN2SZ7D9nuU=;
+        b=XNKBu+ztV19Ia0ght1UHkOTunpMrvdVHurrb+9xjDr78fERdwAlqih6chUBZG1vZ6f
+         IBb6z3815BytyMPQtBmUlWXleVc6ADWBn5aJNFxGzdPFRUNDVhwf7Y09EzwOgaYt6lxv
+         K8Bs/CzhQqhn8ENEimMkEwy5Rtsd2fQM6AzM+gRDK+E8vx7CSRYVlYgWrzv+EiCXqhUJ
+         uQVdUer1oD1O2F5C1DYg8Xnwk+Yl6KDHuQ0ZStnyu+BhpmeudKdX6/ESAjP5UkYV1DsL
+         gATNZNzoaLuno6CWeFmWvSDIcSsxYkRZTbn+FsluYw0Qlo6oxptGp2IzeQhC/Mf7tPeV
+         oJWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767944562; x=1768549362;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o9AYRVJbls5kMz4af/phakvFWuIaNCCibN2SZ7D9nuU=;
+        b=Yj02y5/eFOE6hhxljoxXq+MAj8tT0g6i8YxZtOHFQllZNw6gkIroskI5G/eE38nM/n
+         Skbt3MsTaVreqyhLfM3pls1hDAr+ysuO76ErY4UeAWW+Cm5RCkNi09ypkyCEOCgVkR0t
+         ru2uQl0CXOMjiVEJoNcgK5x3tN+nll/vcZNoaooUMjiCyx3pV7E8cwkYfLHkZPf1ONPR
+         RhzDGwz3xpd65F1M3SgpMiOrlXJBQV83mQJQMvma+0FbH3QISzgOjQY+pI7gGq+bVvHo
+         g9pyC6RHpOkzfcqgFv0OFXDc+SqQcjpuqw/0l97KWindhcIW3KWhKGBoJs0Rl5NSR5D5
+         h/8g==
+X-Forwarded-Encrypted: i=1; AJvYcCUn2oPArC/HZGOofYnz86fpwCIbeW5gq57Yk4jJbhbUcwR3RfjwjbbELcIWk6R5Apjtf6csfLrnedU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRH7fEkSYMr52JAJMmzITeFfyp9v669GQSP8AymWk85Vpf4bnr
+	iDdaXDF6IGU5k7EC1/NiDmUeyJf09H7uw7w8TB0O0HAE6VwN4XgXh+o=
+X-Gm-Gg: AY/fxX5bUTZk/MCovAZ+pPeyZkg/Csxk1ayYqXEvgSN1rhQSVIYvrskNKFcH82H2wcy
+	bjtWMja5vpJ0cevsP4LRaIAlPWlPJPnpjGtLTrowjeHmw6gMmYM454JSshf2t/UpkjDhJCejKul
+	6R60HmaX77RUwkYjMCESyxhBOaieTBo0in5f3RRCMwoWYSTIeLmVxtPUhYo2cdC8gnyLRo1UvwA
+	EVZ5l5vmOvtXOetFwr17VqS+kEypWRIn77cjARKFHmGWMkIxE/7K7mKh7Am7xNK2k/+pY3eepCj
+	EElMZd7ba58HbnRQk5UCqEvcesTzXOUmMYDMxLh0LYM4MSbhILxkpCjPa6oPW3rDKmEeVE8TgdL
+	/aGn5a5Z4DztcgHJFbOFUJGXLWGD6dlI/TOf44hacADZ5FlK0/VuLc24xM6CygvmW8k2c3rZaW0
+	h+Y7dCSrQVJKeUb0Q=
+X-Google-Smtp-Source: AGHT+IHJ/rsYu1MTPilthw7eQlciakMyESsgvffAUTB6sGttF8HsOFwXFQjB3kokh4VKOvwm/Db7+Q==
+X-Received: by 2002:a05:6a20:a10e:b0:33c:2154:d4f4 with SMTP id adf61e73a8af0-3898f9975b1mr8593154637.49.1767944562266;
+        Thu, 08 Jan 2026 23:42:42 -0800 (PST)
+Received: from at.. ([171.61.163.202])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cbf28fa85sm9756036a12.5.2026.01.08.23.42.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 23:42:41 -0800 (PST)
+From: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
+To: 
+Cc: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	"Oliver O'Halloran" <oohall@gmail.com>,
 	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
 	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Rene Sapiens <rene.sapiens@linux.intel.com>
-Subject: Re: [PATCH v2 0/2] thunderbolt: Fix S4 resume incongruities
-Message-ID: <20260109072318.GU2275908@black.igk.intel.com>
-References: <20260106053749.61440-1-superm1@kernel.org>
- <20260107093353.GO2275908@black.igk.intel.com>
- <158442b3-28c2-4f8c-ba42-0b9c6661c650@kernel.org>
- <20260108114205.GS2275908@black.igk.intel.com>
- <ad8cf89d-a171-4e72-996e-8b09d16f9017@kernel.org>
+	Lukas Wunner <lukas@wunner.de>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Feng Tang <feng.tang@linux.alibaba.com>,
+	linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v6] PCI/portdev: Disable AER for Titan Ridge 4C 2018
+Date: Fri,  9 Jan 2026 07:42:24 +0000
+Message-ID: <20260109074232.2545-1-atharvatiwarilinuxdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ad8cf89d-a171-4e72-996e-8b09d16f9017@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 08, 2026 at 01:18:58PM -0600, Mario Limonciello wrote:
-> On 1/8/26 5:42 AM, Mika Westerberg wrote:
-> > On Wed, Jan 07, 2026 at 02:50:54PM -0600, Mario Limonciello wrote:
-> > > On 1/7/26 3:33 AM, Mika Westerberg wrote:
-> > > > Hi,
-> > > > 
-> > > > On Mon, Jan 05, 2026 at 11:37:47PM -0600, Mario Limonciello (AMD) wrote:
-> > > > > When a machine is restored from S4 if the firmware CM has created
-> > > > > tunnels there can be an incongruity of expectation from the kernel
-> > > > > when compared to booting from S5.  This series addresses those.
-> > > > 
-> > > > I suspect there is no Firmware CM in AMD platforms so this actually means
-> > > > the BIOS CM, correct?
-> > > 
-> > > That's correct.
-> > > 
-> > > > 
-> > > > However, on S4 we actually do reset host router when the "boot kernel" is
-> > > > started before loading and jumping to the hibernation image.
-> > > 
-> > > That's only if thunderbolt.ko is built into the kernel or is included in the
-> > > initramfs before it does the pivot to the hibernation image.
-> > 
-> > Ah good point.
-> > 
-> > > At least in the tests we were doing it's not part of the boot kernel.
-> > > 
-> > > > It might be
-> > > > that this boot kernel tunnel configuration is causing the issues you are
-> > > > seeing (can you elaborate on those?)
-> > > 
-> > > The issues manifest "downstream" in the GPU driver.  There are a bunch of
-> > > aux failures and a non functional display.  Tracing it back the GPU driver
-> > > isn't alive at the time that the tunnels are attempted to be reconstructed
-> > > at the moment and so CM tears DP tunnel down and then when GPU driver does
-> > > come up it is not functional.
-> > > 
-> > > DP tunnel constructed at:
-> > > 
-> > > [  486.007194] thunderbolt 0000:c6:00.6: AUX RX path activation complete
-> > > 
-> > > First DPRx timeout at:
-> > > 
-> > > [  486.135483] thunderbolt 0000:c6:00.6: 0:6 <-> 2:13 (DP): DPRX read
-> > > timeout
-> > > 
-> > > DP tunnel deactivating at:
-> > > 
-> > >   [  486.331856] thunderbolt 0000:c6:00.6: 0:6 <-> 2:13 (DP): deactivating
-> > 
-> > Hmm, we have dprx_timeout by default 12 seconds. How come it tears down the
-> > tunnel already?
-> 
-> *I believe* it's because of a hot unplug event that occurs from it not
-> working.
-> 
-> > 
-> > > 
-> > > First DPRx DPCD reading starts at:
-> > > 
-> > > [  486.351765] amdgpu 0000:c4:00.0: amdgpu: [drm] DPIA AUX failed on
-> > > 0xf0000(10), error 7
-> > 
-> > This would have maked it within the 12s if I read the timestamps right.
-> 
-> Let me just share the whole log so you can see the full context.
-> 
-> https://gist.github.com/superm1/6798fff44d0875b4ed0fe43d0794f81e
+Disable AER for Intel Titan Ridge 4C 2018
+(used in T2 iMacs, where the warnings appear)
+that generate continuous pcieport warnings. such as:
 
-Thanks!
+pcieport 0000:00:1c.4: AER: Correctable error message received from 0000:07:00.0
+pcieport 0000:07:00.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
+pcieport 0000:07:00.0:   device [8086:15ea] error status/mask=00000080/00002000
+pcieport 0000:07:00.0:    [ 7] BadDLLP
 
-[Side note, you seem to have the link trained at Gen2 (20G) instead of Gen3
-(40G).]
+macOS also disables AER for Thunderbolt devices and controllers in their drivers.
 
-Looking at the dmesg I recalled that there is an internal report about
-similar issue by Pooja and Rene (Cc'd) and it all boils down to this log
-entry:
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220651
+Signed-off-by: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
 
-[  489.339148] thunderbolt 0000:c6:00.6: 2:13: could not allocate DP tunnel
+---
+Changes since v5:
+- Used the correct name for DMI check
+- Used DECLARE_PCI_FIXUP_EARLY instead of DECLARE_PCI_FIXUP_FINAL
+  to disable aer, before the aer init function
+Changes since v4:
+- Used lowercase hex letters
+- Used DMI_BOARD_VENDOR instead of DMI_SYS_VENDOR
+Chnages since v3:
+- Fixed Grammer mistakes
+Changes since v2:
+- Transferred logic to arch/x86/pci/fixup.c to only target x86
+- Added DMI quirk to only target Apple Systems
+Changes since v1:
+- Transferred logic to drivers/pci/quicks.c
+---
+---
+ arch/x86/pci/fixup.c       | 12 ++++++++++++
+ drivers/pci/pcie/aer.c     |  3 +++
+ drivers/pci/pcie/portdrv.c |  2 +-
+ include/linux/pci.h        |  1 +
+ 4 files changed, 17 insertions(+), 1 deletion(-)
 
-They made a hack patch that works it around, see below. I wonder if you
-could try that too? If that's the issue (not releasing HopIDs) then we need
-to figure a way to fix it properly. One suggestion is to release DP
-resources earlier, and of course doing full reset as done here. I would
-prefer "smallest" possible change.
-
-@Pooja, any updates on your side to this?
-
-diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index 28c1e5c062f3..45f7ee940f10 100644
---- a/drivers/thunderbolt/tunnel.c
-+++ b/drivers/thunderbolt/tunnel.c
-@@ -1084,6 +1084,9 @@ static void tb_dp_dprx_work(struct work_struct *work)
- 
- static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
- {
-+	if (tunnel->dprx_started)
-+		return 0;
+diff --git a/arch/x86/pci/fixup.c b/arch/x86/pci/fixup.c
+index 25076a5acd96..402387e41450 100644
+--- a/arch/x86/pci/fixup.c
++++ b/arch/x86/pci/fixup.c
+@@ -1081,3 +1081,15 @@ static void quirk_tuxeo_rp_d3(struct pci_dev *pdev)
+ }
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x1502, quirk_tuxeo_rp_d3);
+ #endif /* CONFIG_SUSPEND */
 +
- 	/*
- 	 * Bump up the reference to keep the tunnel around. It will be
- 	 * dropped in tb_dp_dprx_stop() once the tunnel is deactivated.
++#ifdef CONFIG_PCIEAER
++
++static void quirk_disable_aer(struct pci_dev *pdev)
++{
++	if (dmi_match(DMI_BOARD_VENDOR, "Apple Inc."))
++		pdev->no_aer = 1;
++}
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ea, quirk_disable_aer);
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15eb, quirk_disable_aer);
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ec, quirk_disable_aer);
++#endif /* CONFIG_PCIEAER */
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index e0bcaa896803..45604564ce6f 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -389,6 +389,9 @@ void pci_aer_init(struct pci_dev *dev)
+ {
+ 	int n;
+ 
++	if (dev->no_aer)
++		return;
++
+ 	dev->aer_cap = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_ERR);
+ 	if (!dev->aer_cap)
+ 		return;
+diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+index 38a41ccf79b9..ab904a224296 100644
+--- a/drivers/pci/pcie/portdrv.c
++++ b/drivers/pci/pcie/portdrv.c
+@@ -240,7 +240,7 @@ static int get_port_device_capability(struct pci_dev *dev)
+ 	if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
+              pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
+ 	    dev->aer_cap && pci_aer_available() &&
+-	    (pcie_ports_native || host->native_aer))
++	    (pcie_ports_native || host->native_aer) && !dev->no_aer)
+ 		services |= PCIE_PORT_SERVICE_AER;
+ #endif
+ 
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 864775651c6f..f447f86c6bdf 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -440,6 +440,7 @@ struct pci_dev {
+ 	unsigned int	multifunction:1;	/* Multi-function device */
+ 
+ 	unsigned int	is_busmaster:1;		/* Is busmaster */
++	unsigned int	no_aer:1;		/* May not use AER */
+ 	unsigned int	no_msi:1;		/* May not use MSI */
+ 	unsigned int	no_64bit_msi:1;		/* May only use 32-bit MSIs */
+ 	unsigned int	block_cfg_access:1;	/* Config space access blocked */
 -- 
 2.43.0
 
