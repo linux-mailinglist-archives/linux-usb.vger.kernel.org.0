@@ -1,111 +1,156 @@
-Return-Path: <linux-usb+bounces-32124-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32125-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AB92D0C8EA
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 00:36:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEDB3D0CA4B
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 01:42:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BF6703020CE9
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jan 2026 23:35:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 356603010FCC
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 00:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5AF33F369;
-	Fri,  9 Jan 2026 23:35:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72D41FBC8E;
+	Sat, 10 Jan 2026 00:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tl5OvW02"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h9xBNPQ1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A945633AD95
-	for <linux-usb@vger.kernel.org>; Fri,  9 Jan 2026 23:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FF41EF36E;
+	Sat, 10 Jan 2026 00:42:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768001754; cv=none; b=AsL4WMfu8lER/mFv2U1SVHI5SAXSaDu6whbVsaLbDeOW6ANMAKlV2Cp8fzxUwKJoyJ+ntWrpy6rSyn40Wd6HttWYVL6Hc6C1w0MWVrKMDOXK8H1qhAVxkc0gZh5g6IjlRBfZ2tUSDDUsvY//exzJavPUKKnLrEFS3SEy4bcRVjI=
+	t=1768005738; cv=none; b=ejHRKRrJaEf3IdWqs8Jofs13AM08D2Snnj0bMOkOfobsNYKIwFvCpV+/kFvyTrZUgH8uT0pikuLjxE8Wsmbv/PNdChB5cZLwKIkmFq/ElC1qTdikYBonVytjVkEEX1zlcbctGIQpNfFIMhIgWJnDJLpRGlBoCikfz4wQkCHqyM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768001754; c=relaxed/simple;
-	bh=AlFF3UUSbW6igFTDFRXQzE2LI1M2EiRcf25uYzTIWKU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AlkAzsJVQCSjCHG71dUXkCVlLCmM3W/SAe7B8KRsM4PsIxPkLqts7TShp7/4iH6k3ITa5teXAX+5psv2s9gy5sDaPwXiwwBwvORWGZIcJ1v4PE3YWm2tX5vEKdT9FmNKM9RQ4/4JlqvtG/iCH2MQ+nFZp7vQ1xJeYABbypmlBMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tl5OvW02; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 41B01C4CEF1
-	for <linux-usb@vger.kernel.org>; Fri,  9 Jan 2026 23:35:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768001754;
-	bh=AlFF3UUSbW6igFTDFRXQzE2LI1M2EiRcf25uYzTIWKU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=tl5OvW02bJNtDrdjjc8QTmdfRi3zeUmBVc1P1otvpnvpr3Lb/j409sSupzqbjAmem
-	 uWfU48WirZThiK4vSe3+1fLVBlRgZkRxk2bVC/3Ss49kBFzoRrBnm81e03CcRsA0Qa
-	 oeq9By1RKekhRJH3ETa7GUMM8TvoCS7QyVD9sRQ8ys3pJtKuNOjt/v8jNvevCrN8vp
-	 5l6klEiVDK6xiQcnid1IGSmu510k540wpk74UtqiqvbUrXUTdHJX6t2Me7mLVxgiec
-	 6gj1uca9yPnk/oTfP94frs4hbiJ/2t6v7ymY0VfyXnS2b+s+azZ9BykWAJFY1grCIW
-	 dgOWzcFZzXa2Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 342EEC3279F; Fri,  9 Jan 2026 23:35:54 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 220238] Blue Yeti microphone doesn't consistently work after
- unplugging and plugging back in or reboot.
-Date: Fri, 09 Jan 2026 23:35:54 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: faaris.ansari@proton.me
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-220238-208809-rSALd1JnW7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220238-208809@https.bugzilla.kernel.org/>
-References: <bug-220238-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1768005738; c=relaxed/simple;
+	bh=+tXVoJqJpEXBvQ0n3RP8hrJXdZg4dpK2OyWkWHsEupQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cIPF/N1HZXzEWqh/1xZQph/mnUx8dP179wBgPoVWugdsT/3xo6nbvHleGyrG3Rc7jGfONzJ7LIVLNyn6xGveSPaGjEZq9ij2fyGOOQehbYaOO3219xiJ5qqGyUOHjFKtIhyOpR49f4czOmY/trSC24WBJahmpLjbIiEWsmgOk7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h9xBNPQ1; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768005734; x=1799541734;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+tXVoJqJpEXBvQ0n3RP8hrJXdZg4dpK2OyWkWHsEupQ=;
+  b=h9xBNPQ1DiAADo3C04WJldy5JTFHeFmiGT5UAVgPZw2FGODqCh+1ZCeV
+   RuEEVIng5oTOZR/s6jKsuPRPUVD0gqTzGbAmcCq289kAce2vu3kcM7mCj
+   hkh0D5LaebCn7TcZVjfchGCsbBK9INJrHr50l/glO+fiSGrb4WcKx8Gtt
+   o8zOJVNeKSUY7SZgnHRAOhr236tfcSen+q/dBYA2biS2rxynJrGRC2ux7
+   tYI/iwRdT5CGwyFRUj/zSZ8FW5NzhQyBCYizd+QNCQiwIjZp/OL+/3Pw7
+   /I7YB7f4eLA1lBctQjfsbVqRk39GluCCZdeGufyuxM3oxpI5RAOFy7aO4
+   w==;
+X-CSE-ConnectionGUID: AI/hyUipSSmes8nsvP1GVQ==
+X-CSE-MsgGUID: xfwYWiSnRBqMEv/KuWPQwQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11666"; a="68588421"
+X-IronPort-AV: E=Sophos;i="6.21,215,1763452800"; 
+   d="scan'208";a="68588421"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 16:42:12 -0800
+X-CSE-ConnectionGUID: JBMxeFVrTduIQbbZ86RKdA==
+X-CSE-MsgGUID: 25rbMIe6TKe3EjZc7UYjRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,215,1763452800"; 
+   d="scan'208";a="207738172"
+Received: from soc-5cg1426swj.clients.intel.com (HELO [10.121.200.231]) ([10.121.200.231])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 16:42:12 -0800
+Message-ID: <eb4685e6-04fc-4d21-bd98-2a297c183966@linux.intel.com>
+Date: Fri, 9 Jan 2026 16:42:06 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/2] thunderbolt: Fix S4 resume incongruities
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Mario Limonciello <superm1@kernel.org>
+Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>,
+ Pooja Katiyar <pooja.katiyar@intel.com>,
+ Rene Sapiens <rene.sapiens@linux.intel.com>
+References: <20260106053749.61440-1-superm1@kernel.org>
+ <20260107093353.GO2275908@black.igk.intel.com>
+ <158442b3-28c2-4f8c-ba42-0b9c6661c650@kernel.org>
+ <20260108114205.GS2275908@black.igk.intel.com>
+ <ad8cf89d-a171-4e72-996e-8b09d16f9017@kernel.org>
+ <20260109072318.GU2275908@black.igk.intel.com>
+Content-Language: en-US
+From: "Katiyar, Pooja" <pooja.katiyar@linux.intel.com>
+In-Reply-To: <20260109072318.GU2275908@black.igk.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220238
+Hi,
 
-faaris (faaris.ansari@proton.me) changed:
+On Thu, Jan 8, 2026 at 11:23:18PM -0800, Mika Westerberg wrote:
+> On Thu, Jan 08, 2026 at 01:18:58PM -0600, Mario Limonciello wrote:
+>> On 1/8/26 5:42 AM, Mika Westerberg wrote:
+>>
+>> Let me just share the whole log so you can see the full context.
+>>
+>> https://gist.github.com/superm1/6798fff44d0875b4ed0fe43d0794f81e
+> 
+> Thanks!
+> 
+> [Side note, you seem to have the link trained at Gen2 (20G) instead of Gen3
+> (40G).]
+> 
+> Looking at the dmesg I recalled that there is an internal report about
+> similar issue by Pooja and Rene (Cc'd) and it all boils down to this log
+> entry:
+> 
+> [  489.339148] thunderbolt 0000:c6:00.6: 2:13: could not allocate DP tunnel
+> 
+> They made a hack patch that works it around, see below. I wonder if you
+> could try that too? If that's the issue (not releasing HopIDs) then we need
+> to figure a way to fix it properly. One suggestion is to release DP
+> resources earlier, and of course doing full reset as done here. I would
+> prefer "smallest" possible change.
+> 
+> @Pooja, any updates on your side to this?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |faaris.ansari@proton.me
+Looking at the log "could not allocate DP tunnel", this appears to be
+similar to kref synchronization issue during S4 resume that we are
+facing. The problem we have identified is during S4 entry, hibernation
+image is created first, and then the DP tunnels are freed. This means
+the hibernation image still contains the tunnels in their active state.
+However, when resuming from S4, the tunnels are restored from the
+hibernation image (as active) and then the resume flow reactivates
+them again, causing kref count mismatch. This leads to HopID allocation
+conflicts and the "could not allocate DP tunnel" error on next
+connect/tunnel activation.
 
---- Comment #16 from faaris (faaris.ansari@proton.me) ---
-I can confirm that this bug is still happening on kernel version 6.18.3. My
-motherboard does actually have the options for ErP Ready, which by other
-reports online should work around the problem, however even with this optio=
-n I
-still require a hotplug to get the microphone up and running again.
+The hack patch works around this by preventing double activation via
+dprx_started flag. You could try this hack to confirm if it's the same
+issue we're dealing with.
 
-On my end, the mic works perfectly when I first boot my computer. It only s=
-tops
-working and requires the hotplug after a reboot, or wake from suspend.
+For a proper fix, we are working on a patch which releases the DP resources
+before saving the hibernation image and creates them again during resume,
+managing the resources properly. The patch is currently under review and
+testing and will send shortly.
 
-I've attempted using `usbreset` on the device, which didn't seem to bring it
-back to life. Only physically unplugging it and plugging it back in has got=
-ten
-it up and running for me.
 
-I've tried the microphone on Windows, where it works great through sleep cy=
-cles
-and reboots.
+> 
+> diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+> index 28c1e5c062f3..45f7ee940f10 100644
+> --- a/drivers/thunderbolt/tunnel.c
+> +++ b/drivers/thunderbolt/tunnel.c
+> @@ -1084,6 +1084,9 @@ static void tb_dp_dprx_work(struct work_struct *work)
+>  
+>  static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
+>  {
+> +	if (tunnel->dprx_started)
+> +		return 0;
+> +
+>  	/*
+>  	 * Bump up the reference to keep the tunnel around. It will be
+>  	 * dropped in tb_dp_dprx_stop() once the tunnel is deactivated.
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks,
+Pooja
 
