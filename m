@@ -1,165 +1,198 @@
-Return-Path: <linux-usb+bounces-32126-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32127-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DA55D0CCC8
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 03:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9659FD0CEBC
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 05:05:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E1A5E302BF42
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 02:17:06 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 271733014DCF
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 04:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB6F2494FF;
-	Sat, 10 Jan 2026 02:17:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5302E28003A;
+	Sat, 10 Jan 2026 04:05:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cU9icCWA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="orFDyOk1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8BF1F09AD
-	for <linux-usb@vger.kernel.org>; Sat, 10 Jan 2026 02:17:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB00027602C
+	for <linux-usb@vger.kernel.org>; Sat, 10 Jan 2026 04:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768011424; cv=none; b=nAasER22aBdeRPGpK2JB8F7AdLKKiszH/vXUjO91ykqcWIROEXHTSGPhOM/6r9nTH4tdME4NLc6fiyJQuq7qHrXKvAplxLH0qWYbeCrAnm4HV4Cv/uSi3US0xfC5vCuF/O9vQuAfEjtj/8pOgcx+L9iPprohrjI1q31dNBba/7k=
+	t=1768017929; cv=none; b=BEsW9ZROe5rnJlyckCZoTFcqbtWKrKnB20b04alkjKzd+RVw1vB9KYEL+l6Dn5qqM8tDPmRlyfibgYCtW0mdk+PWlQXjEXRVUoLqiJm+qOWiPhTp4Y9Jsr0EM2LNu0ctF6mR5DA6/Et5DuGXY6StoBJ49mziwa40Cq++A4FQFvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768011424; c=relaxed/simple;
-	bh=MR82Uddn6LpIx7Prbvd5G0/4W/Nrnou4KGzkP2OeRrw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ai/Ta9v3t8qzUyT3KA3SpyLaZ0l55nKGetXUUfONAh0jEq9thI4e5Cv6dP8tlPl8rFUJBx0iMNyy1QmnogFciMOSAVk7aTOii/RXYAckn4BEplM9vGXaw4YEzhqZ9/qpHYvpM2FBsj/5CKuQ0dDlEwGWvXVVAkz2g4P1TVPnK1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cU9icCWA; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-78fb7704cb4so47669907b3.3
-        for <linux-usb@vger.kernel.org>; Fri, 09 Jan 2026 18:17:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768011421; x=1768616221; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/CS+sPGCudOBw/4dF2tLtNG4zOFpBZ8fj0ZBfM+xSUg=;
-        b=cU9icCWAe69IHgPF9ny/jE9bgV79h1TuCqsvuhAsSJ8+MRS9KeAAyXPKT5oP+lxnQq
-         tZvDL5TpoeaTaVMSSL6w1+Y0oZon0bnl0i8fOhgVcxYeD03/3H4l1c5KFtp1ESOjD7zn
-         Uiyv9mEFNX1ctzeKBUb8WDIw5HvzIhxF5Tm6JkbRoc5v8FhH9erwYfGAijysBUuYp7lh
-         0FyhWdaqhhEZ4gNvCOvXAZSDQRdSHNMdMTx+Ln/Cp9uzfNtAD8p7dM024iO8HGm9/JO/
-         +o6wIe7g46q+ELhPPSCeKTWNziX7YdmLkg5R3IJ0wKzh3Np5niXILsWzlti/TQuOr4Vb
-         Zkrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768011421; x=1768616221;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/CS+sPGCudOBw/4dF2tLtNG4zOFpBZ8fj0ZBfM+xSUg=;
-        b=OjMMgbleTmZTlcd8TZcja1zXPsFUoxziJEIA1fUVkTKUHb16ytJlOD+APKzyqWnck2
-         z6/zMSvpvWZCgANWqE7NG+70hYS9FTA8Dl6sMOtqKMOlLN8NSQlrYt/18qwxF//rYfqL
-         UriEXQ2SC0bHjPAWlartFBFTvZ9f8Qa3M5KpPfLPur7U4c90ads10XfTLX/uQmoFbgDH
-         3eDyKpmEiXFzDq54naHoq1OWRLEl4CD7hWRd7Gt8M24k0hA6ftQAXwV5nIVaRnp4oave
-         XyiK1chM9L0faWI4b+zphy4y0ul9tAvkhEQwOd8V7BcYBcCzbL5fedrDDcW2Ako1KL+d
-         +Q/A==
-X-Forwarded-Encrypted: i=1; AJvYcCUhIqABycbU/Ic33099krlllOEBfkiJX0N+j3gmrT7Knm1VHwbJSBeCc8xRSzkvUNDlIEQBbKjnpxE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnKp+Dxm7Afsnwmx96vo8iYXF6VY9MUrdeqJjPZswLWEnRnEjA
-	vdWr3hJX3r3IMx4+lkvHbXLz5PvLMbAdQCuScTgWT4Y809s00VL0m1Gt06rcEQsl1w==
-X-Gm-Gg: AY/fxX6ACEAWsfZX5t1ILZk5xElC4b5fiiL8FkvHeeW+N0qZFJjgilj5yOgLG8lXymR
-	QHilW2FXhjOSmHRx7xTQJUUDAg9+pMQQvg0AHWSrum3c8HeqdrTUZ9booxt+ud5q6SraLXb1t48
-	CZL9KyT8kd7Uz56Zzipgjb7HpBNAuILKt3dRsFLPrMj96kMH9qKO+1PHfBoKNGVQ1nmU6mLXZa5
-	BWnNF9fN8Tf0RRbuE0tXCCbXrCLcDhDeXO2Ld4hBSZmL/CnXSaqJGyrpCZE9i+pvvx7THNnT6Zn
-	U6z8dzc/Wouz5/RHyFzmW4Jso9CQKQLGyYXtINm0VSaBJhYpl8GxmJQEFzuVFGBQIOYafdbFMgX
-	tlUedaGFxJymvXmYiqRaFcm6WOt3c0U5xJ4R0GyVgBhfg3AC8uHQLEocdmeQLt4AeAkMQtbYoME
-	itWy5Vz/qbcsLPCRBOJbSV3HpAOlNeXMYh+IeWtah65O9CxDNEvpbuJqJNBfvzPHE3TIJytA==
-X-Google-Smtp-Source: AGHT+IGX5MeGSKttRFeAc0MSgP/y2VLZfmVAUtwN+S37FdIJqLLc9vxJfr4q2stpMVFT7lLIyB/0qA==
-X-Received: by 2002:a05:690c:6809:b0:78f:a6e7:76d8 with SMTP id 00721157ae682-790b5758359mr102216847b3.18.1768011421232;
-        Fri, 09 Jan 2026 18:17:01 -0800 (PST)
-Received: from ?IPV6:2600:1700:4570:89a0:1dd1:9ef2:39ca:beb4? ([2600:1700:4570:89a0:1dd1:9ef2:39ca:beb4])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-790aa553ac3sm47388137b3.5.2026.01.09.18.16.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jan 2026 18:17:00 -0800 (PST)
-Message-ID: <9f94993e-dd69-4c9e-b467-aad6031c83d4@google.com>
-Date: Fri, 9 Jan 2026 18:16:57 -0800
+	s=arc-20240116; t=1768017929; c=relaxed/simple;
+	bh=oyBxyaESQlE9z4FcjPvxQNUkT0mRyxsawflqvPboayo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mwPKaZ2ck8bVvwI12fLIK6pYkyLkdNj8VXF9/gl8rn4sGPFVcinit0KpicL2SkuZkls9CNEZOIE9PSvPN0XaXUYf+p/yL1WfwJ3NMQh35XlSDLV81lyPKuGjkdOZ2gUQCCUsrFw6sYY2nQ+rwan90fk7m5U+KHgIhLDkdypz0RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=orFDyOk1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859D5C19424
+	for <linux-usb@vger.kernel.org>; Sat, 10 Jan 2026 04:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768017929;
+	bh=oyBxyaESQlE9z4FcjPvxQNUkT0mRyxsawflqvPboayo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=orFDyOk1UBzzYK/ekd8aexI4XK6IenRs9PXdqJUfcK7v1b3/xUjlEH5cbzLBRvusM
+	 PFzKgw+T+F94Ltmcdymj3W8Xt6oBsOvkYVC094cZfCD5s5Sb+GyXZae05apc4NXWaQ
+	 wGkD+axaIcgUz2t+8nZ9bVDkUEsoqxz2zSh/IsGFZPpPNkd6ktxJqVEj3pmPVSlJV+
+	 rqDRIt2s3FHqMdN1Y+RXSOxsjqB95YcvO9q32P1SFqZgelIsDhgIpnc+KMogCT4WsG
+	 aDdbR0NzrM7T5tjX2s3xS+NrJvBzzlNk1auKGjr6ISww4UUHsj16bWcUX9vvObDSui
+	 wAxD7ADSZ5UFg==
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-64d0d41404cso7563664a12.0
+        for <linux-usb@vger.kernel.org>; Fri, 09 Jan 2026 20:05:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU24E2vA1rLEvj92EVIgCdAGhNk1XxOvRnDiL+Sl4xjfmAtE3PN6xSpMtLodwmweIxVELLGOX3ycn8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytPWSKQ6ncwJb8qxrLhluQMOfbe2DjCViW6w0WwT1VdMvtGjMs
+	54uDzv4Bio2F71Dyme6xrUrTmCPS4fls7cBC8titLDZQffeFF/J+SwRenLrPTjZ9E4kWQo2hEld
+	qa7gGj3khARxsZ6F/fqesfc2WGPqB6MM=
+X-Google-Smtp-Source: AGHT+IE8Fl+yT7jNZTYLKoUlApxaI4gjo5FvC344BEz7mQNcOW7hRfmh1nCSGX2cGkYHv/qgI1i9vtuuCqYnIM1IPBI=
+X-Received: by 2002:a17:907:3d42:b0:b80:46f5:cabe with SMTP id
+ a640c23a62f3a-b8444c4d2aemr1258316866b.4.1768017928111; Fri, 09 Jan 2026
+ 20:05:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/5] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
- setting charger mode
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
- <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
- <aWD_RIPp1ULH9St1@kuha>
-From: Amit Sunil Dhamne <amitsd@google.com>
-Content-Language: en-US
-In-Reply-To: <aWD_RIPp1ULH9St1@kuha>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <2025123049-cadillac-straggler-d2fb@gregkh> <DFBMNYF0U5PK.24YOAUZFZ0ESB@cknow-tech.com>
+ <73d472ea-e660-474c-b319-b0e8758406c0@rowland.harvard.edu>
+ <CAAhV-H6drj1df3Y4_Z67t4TzJ5n6YiexsEHKTPvi1caNvw5H9A@mail.gmail.com>
+ <0c85d288-405f-4aaf-944e-b1d452d0f275@rowland.harvard.edu>
+ <CAAhV-H5GdkMg-uzMpDQPGLs+gWNAy6ZOH33VoLqnNyWbRenNDw@mail.gmail.com>
+ <34c7edd0-3c0c-4a57-b0ea-71e4cba2ef26@rowland.harvard.edu>
+ <CAAhV-H7j=cD9dkaB5bWxNdPtoVR4NUFvFs=n46TaNte1zGqoOA@mail.gmail.com>
+ <98e36c6f-f0ee-40d2-be7f-d2ad9f36de07@rowland.harvard.edu>
+ <CAAhV-H601B96D9rFrnARho4Lr9A+ah7Cx7eKiPr=epbG17ODHQ@mail.gmail.com> <561129d8-67ff-406c-afe8-73430484bd96@rowland.harvard.edu>
+In-Reply-To: <561129d8-67ff-406c-afe8-73430484bd96@rowland.harvard.edu>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 10 Jan 2026 12:05:19 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H41kwndL+oz2Gcfpe3-MCagaQd2X21gK9kMO2vpw_thhA@mail.gmail.com>
+X-Gm-Features: AZwV_QghiCrKozy6ftSqUa9rEeMafQzFWOvCDRhlJ-mzUd72Krxpo_omrImpt8E
+Message-ID: <CAAhV-H41kwndL+oz2Gcfpe3-MCagaQd2X21gK9kMO2vpw_thhA@mail.gmail.com>
+Subject: Re: [PATCH] USB: OHCI/UHCI: Add soft dependencies on ehci_hcd
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Diederik de Haas <diederik@cknow-tech.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Huacai Chen <chenhuacai@loongson.cn>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org, Shengwen Xiao <atzlinux@sina.com>, 
+	linux-rockchip@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Heikki,
-
-Thanks for the review!
-
-On 1/9/26 5:14 AM, Heikki Krogerus wrote:
-> Hi,
+On Sun, Jan 4, 2026 at 12:41=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
 >
->> +	if (source) {
->> +		if (!regulator_is_enabled(chip->vbus_reg))
->> +			ret = regulator_enable(chip->vbus_reg);
->> +	} else {
->> +		if (regulator_is_enabled(chip->vbus_reg))
->> +			ret = regulator_disable(chip->vbus_reg);
->> +	}
-> It looks like you have to do one more round, so can drop the
-> regulator_is_enabled() checks and just always enable/disable it
-> unconditionally.
+> On Sat, Jan 03, 2026 at 11:57:47AM +0800, Huacai Chen wrote:
+> > On Sat, Jan 3, 2026 at 11:33=E2=80=AFAM Alan Stern <stern@rowland.harva=
+rd.edu> wrote:
+> > > Since these systems don't use PCI, the question I raised earlier stil=
+l
+> > > needs to be answered: How do they route connections between the ports
+> > > and the two controllers?
+> > >
+> > > There may be some exceptions, but for the most part, the code in
+> > > ehci-hcd was written assuming that only PCI-based controllers will ha=
+ve
+> > > companions.  If you want to make an exception for loongson-2k0500, yo=
+u
+> > > will need to figure out how to get it to work.
+> > Loongson-2K0500 use EHCI/OHCI with platform bus, while
+> > Loongson-2K1000/2000 use EHCI/OHCI with PCI bus. They use the same USB
+> > IP cores, so the route connections are probably the same.
 >
->         if (source)
-> 		ret = regulator_enable(chip->vbus_reg);
-> 	else
-> 		ret = regulator_disable(chip->vbus_reg);
+> With PCI we know exactly which companion controller each port is
+> connected to.  Is that true in your situation?
+>
+> Or do you have only one companion controller?
+>
+> For that matter, how many USB ports do these systems have?  Are some of
+> them USB-1 only or USB-2 only?
+>
+> > > Have you tested any of those systems to see how they behave if a USB-=
+1
+> > > device is already plugged in and running when the ehci-hcd driver get=
+s
+> > > loaded?
+>
+> You did not answer this question.
+On Loongson-2K0500 (OHCI/EHCI with platform bus).
 
-The regulator framework uses refcounting on the number of enables. If
-the number of times regulator is disabled > enabled, a warning will be
-thrown. Also, I don't want to call regulator_enable more than once for
-the same refcounting reason (will have to call disable those many number
-of times to actually disable).
+If ohci-platform loaded before ehci-platform:
 
-> I don't think you need the check in any case, but if I've understood
-> this correctly, you should not use that check when the regulator does
-> not support that check because then the API claims it's always
-> enabled. So I guess in that case "if (!regulator_is_enabled())" may
-> not work as expected, and you may actually be left with a disabled
-> regulator. This may not be a problem on current platforms, but who
-> knows what happens in the future.
+[   30.530103] ohci-platform 1f058000.usb: Generic Platform OHCI controller
+[   30.555362] ohci-platform 1f058000.usb: new USB bus registered,
+assigned bus number 1
+[   30.583586] ohci-platform 1f058000.usb: irq 28, io mem 0x1f058000
+[   30.671500] hub 1-0:1.0: USB hub found
+[   30.687929] hub 1-0:1.0: 4 ports detected
+[   30.798553] Warning! ehci_hcd should always be loaded before
+uhci_hcd and ohci_hcd, not after
+[   31.015178] usb 1-4: new low-speed USB device number 2 using ohci-platfo=
+rm
+[   31.090527] ehci-platform 1f050000.usb: EHCI Host Controller
+[   31.107968] ehci-platform 1f050000.usb: new USB bus registered,
+assigned bus number 2
+[   31.143813] ehci-platform 1f050000.usb: irq 29, io mem 0x1f050000
+[   31.227286] ehci-platform 1f050000.usb: USB 2.0 started, EHCI 1.00
+[   31.248271] usb 1-4: device descriptor read/all, error -62
+[   31.256845] hub 2-0:1.0: USB hub found
+[   31.279310] hub 2-0:1.0: 4 ports detected
+[   31.915149] usb 1-4: new low-speed USB device number 3 using ohci-platfo=
+rm
+[   32.264765] input: YSPRINGTECH USB OPTICAL MOUSE as
+/devices/platform/bus@10000000/1f058000.usb/usb1/1-4/1-4:1.0/0003:10C4:8105=
+.0001/input/input0
+[   32.374306] hid-generic 0003:10C4:8105.0001: input,hidraw0: USB HID
+v1.11 Mouse [YSPRINGTECH USB OPTICAL MOUSE] on
+usb-1f058000.usb-4/input0
 
-I don't think this should be an issue in the future as this driver is
-specifically meant for max77759_tcpci device and should only be used
-with max77759 charger (they both exist only in the same package). And
-that the max77759_charger driver does implement the callback. However,
-if you think that regulator_is_enabled() is unreliable, I could track
-the state within the tcpci driver instead of calling
-regulator_is_enabled() and call enable/disable regulator accordingly.
+If ehci-platform loaded before ohci-platform:
 
-Let me know wdyt and I'll update the next revision accordingly.
+[   30.724394] ehci-platform 1f050000.usb: EHCI Host Controller
+[   30.743839] ehci-platform 1f050000.usb: new USB bus registered,
+assigned bus number 1
+[   30.775857] ehci-platform 1f050000.usb: irq 28, io mem 0x1f050000
+[   30.811297] ehci-platform 1f050000.usb: USB 2.0 started, EHCI 1.00
+[   30.829172] hub 1-0:1.0: USB hub found
+[   30.847397] hub 1-0:1.0: 4 ports detected
+[   30.934190] ohci-platform 1f058000.usb: Generic Platform OHCI controller
+[   30.959877] ohci-platform 1f058000.usb: new USB bus registered,
+assigned bus number 2
+[   30.987617] ohci-platform 1f058000.usb: irq 29, io mem 0x1f058000
+[   31.080419] hub 2-0:1.0: USB hub found
+[   31.092038] hub 2-0:1.0: 4 ports detected
+[   31.407288] usb 2-4: new low-speed USB device number 2 using ohci-platfo=
+rm
+[   31.741276] input: YSPRINGTECH USB OPTICAL MOUSE as
+/devices/platform/bus@10000000/1f058000.usb/usb2/2-4/2-4:1.0/0003:10C4:8105=
+.0001/input/input0
+[   31.815422] hid-generic 0003:10C4:8105.0001: input,hidraw0: USB HID
+v1.11 Mouse [YSPRINGTECH USB OPTICAL MOUSE] on
+usb-1f058000.usb-4/input0
 
+"new low-speed USB device number 3 using ohci-platform" only displayed
+once and "usb 1-4: device descriptor read/all, error -62" disappears
+in this case.
 
-BR,
-
-Amit
+So I think we need a softdep between ohci-platform/uhci-platform and
+ehci-platform, which is similar to the PCI case.
 
 >
-> thanks,
+> There are other issues involving companion controllers, connected with
+> hibernation.  You should take a look at commit 6d19c009cc78 ("USB:
+> implement non-tree resume ordering constraints for PCI host
+> controllers"), which was later modified by commit 05768918b9a1 ("USB:
+> improve port transitions when EHCI starts up") and a few others.
 >
+> Also, read through the current code in hcd-pci.c (for_each_companion(),
+> ehci_pre_add(), ehci_post_add(), non_ehci_add(), ehci_remove(), and
+> ehci_wait_for_companions()).  Your non-PCI system will need to implement
+> some sort of equivalent to all these things.
+At least for the device probe, a softdep seems enough.
+
+Huacai
+
+>
+> Alan Stern
 
