@@ -1,198 +1,233 @@
-Return-Path: <linux-usb+bounces-32127-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32128-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9659FD0CEBC
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 05:05:39 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBDF5D0D2E3
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 08:54:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 271733014DCF
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 04:05:32 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3FCBC300CF38
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 07:54:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5302E28003A;
-	Sat, 10 Jan 2026 04:05:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074C62E6CBF;
+	Sat, 10 Jan 2026 07:54:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="orFDyOk1"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="m/E3g4zI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB00027602C
-	for <linux-usb@vger.kernel.org>; Sat, 10 Jan 2026 04:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB152AEE1;
+	Sat, 10 Jan 2026 07:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768017929; cv=none; b=BEsW9ZROe5rnJlyckCZoTFcqbtWKrKnB20b04alkjKzd+RVw1vB9KYEL+l6Dn5qqM8tDPmRlyfibgYCtW0mdk+PWlQXjEXRVUoLqiJm+qOWiPhTp4Y9Jsr0EM2LNu0ctF6mR5DA6/Et5DuGXY6StoBJ49mziwa40Cq++A4FQFvY=
+	t=1768031665; cv=none; b=a5LxK5dIsPhUolIJBTBF+0Z1TxDQjE5Ms5PoDnT512LpL6mKeL2Wkih1kgsbwrUzttle0lmLHbmkIHZxS2JhGXARGkrU5p3n0lJSI/+JoFQzgpRepNXNWPUnkMTDiOyYyc66E95I4fp0xq2s8OJdRPndfOPk6//Q016w4TPLwfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768017929; c=relaxed/simple;
-	bh=oyBxyaESQlE9z4FcjPvxQNUkT0mRyxsawflqvPboayo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mwPKaZ2ck8bVvwI12fLIK6pYkyLkdNj8VXF9/gl8rn4sGPFVcinit0KpicL2SkuZkls9CNEZOIE9PSvPN0XaXUYf+p/yL1WfwJ3NMQh35XlSDLV81lyPKuGjkdOZ2gUQCCUsrFw6sYY2nQ+rwan90fk7m5U+KHgIhLDkdypz0RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=orFDyOk1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859D5C19424
-	for <linux-usb@vger.kernel.org>; Sat, 10 Jan 2026 04:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768017929;
-	bh=oyBxyaESQlE9z4FcjPvxQNUkT0mRyxsawflqvPboayo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=orFDyOk1UBzzYK/ekd8aexI4XK6IenRs9PXdqJUfcK7v1b3/xUjlEH5cbzLBRvusM
-	 PFzKgw+T+F94Ltmcdymj3W8Xt6oBsOvkYVC094cZfCD5s5Sb+GyXZae05apc4NXWaQ
-	 wGkD+axaIcgUz2t+8nZ9bVDkUEsoqxz2zSh/IsGFZPpPNkd6ktxJqVEj3pmPVSlJV+
-	 rqDRIt2s3FHqMdN1Y+RXSOxsjqB95YcvO9q32P1SFqZgelIsDhgIpnc+KMogCT4WsG
-	 aDdbR0NzrM7T5tjX2s3xS+NrJvBzzlNk1auKGjr6ISww4UUHsj16bWcUX9vvObDSui
-	 wAxD7ADSZ5UFg==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-64d0d41404cso7563664a12.0
-        for <linux-usb@vger.kernel.org>; Fri, 09 Jan 2026 20:05:29 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU24E2vA1rLEvj92EVIgCdAGhNk1XxOvRnDiL+Sl4xjfmAtE3PN6xSpMtLodwmweIxVELLGOX3ycn8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytPWSKQ6ncwJb8qxrLhluQMOfbe2DjCViW6w0WwT1VdMvtGjMs
-	54uDzv4Bio2F71Dyme6xrUrTmCPS4fls7cBC8titLDZQffeFF/J+SwRenLrPTjZ9E4kWQo2hEld
-	qa7gGj3khARxsZ6F/fqesfc2WGPqB6MM=
-X-Google-Smtp-Source: AGHT+IE8Fl+yT7jNZTYLKoUlApxaI4gjo5FvC344BEz7mQNcOW7hRfmh1nCSGX2cGkYHv/qgI1i9vtuuCqYnIM1IPBI=
-X-Received: by 2002:a17:907:3d42:b0:b80:46f5:cabe with SMTP id
- a640c23a62f3a-b8444c4d2aemr1258316866b.4.1768017928111; Fri, 09 Jan 2026
- 20:05:28 -0800 (PST)
+	s=arc-20240116; t=1768031665; c=relaxed/simple;
+	bh=xMk1UStvF3aeKgG78SBE8ng/7Edw5S2Hv1nWRUovlmg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bcltNMK6RFimPCcFenIcBvjnvhXGHopKvV20Ihh3BObn1w5zAsJHe8JAoHJxKDJhXIBTkmzOeDycn4C6jnY/uMVlvn9msVLTxib8eOU41CZA2ys+g+g9SMoYFTFr5NRBFBwYyqvJyxrpwZT3an+4EUY1EuqruWT34AwO+yie7pE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=m/E3g4zI; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Tj
+	X2oXdCk+6+6snsqOlEZ+83/82Ro6C20h04M4A5oc0=; b=m/E3g4zI7rRGjNE8dP
+	QEFrNQ2e7SYejkaD5t8EBQ3CYFG8Cga4IR6TSegDK0VdMohyVBmX2g6XBytmoQ0h
+	MnRgaLKJmzUCeM/1yylMYfid44XbR/4VWXJ+Fxp/Ua5gzxNd5K8NRzR3dyMKbf4N
+	R1l67HuXmO6Ni9QizcmdkNiCk=
+Received: from ProDesk-480.. (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wA3eBOJBWJpaIyVEw--.14450S2;
+	Sat, 10 Jan 2026 15:53:49 +0800 (CST)
+From: Andy Yan <andyshrk@163.com>
+To: rdbabiera@google.com
+Cc: badhri@google.com,
+	gregkh@linuxfoundation.org,
+	heikki.krogerus@linux.intel.com,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	andyshrk@163.com,
+	sebastian.reichel@collabora.com
+Subject: Re: [PATCH v2 2/2] usb: typec: altmodes/displayport: do not enter mode if port is the UFP
+Date: Sat, 10 Jan 2026 15:53:42 +0800
+Message-ID: <20260110075345.238333-1-andyshrk@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250923181606.1583584-6-rdbabiera@google.com>
+References: <20250923181606.1583584-6-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2025123049-cadillac-straggler-d2fb@gregkh> <DFBMNYF0U5PK.24YOAUZFZ0ESB@cknow-tech.com>
- <73d472ea-e660-474c-b319-b0e8758406c0@rowland.harvard.edu>
- <CAAhV-H6drj1df3Y4_Z67t4TzJ5n6YiexsEHKTPvi1caNvw5H9A@mail.gmail.com>
- <0c85d288-405f-4aaf-944e-b1d452d0f275@rowland.harvard.edu>
- <CAAhV-H5GdkMg-uzMpDQPGLs+gWNAy6ZOH33VoLqnNyWbRenNDw@mail.gmail.com>
- <34c7edd0-3c0c-4a57-b0ea-71e4cba2ef26@rowland.harvard.edu>
- <CAAhV-H7j=cD9dkaB5bWxNdPtoVR4NUFvFs=n46TaNte1zGqoOA@mail.gmail.com>
- <98e36c6f-f0ee-40d2-be7f-d2ad9f36de07@rowland.harvard.edu>
- <CAAhV-H601B96D9rFrnARho4Lr9A+ah7Cx7eKiPr=epbG17ODHQ@mail.gmail.com> <561129d8-67ff-406c-afe8-73430484bd96@rowland.harvard.edu>
-In-Reply-To: <561129d8-67ff-406c-afe8-73430484bd96@rowland.harvard.edu>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sat, 10 Jan 2026 12:05:19 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H41kwndL+oz2Gcfpe3-MCagaQd2X21gK9kMO2vpw_thhA@mail.gmail.com>
-X-Gm-Features: AZwV_QghiCrKozy6ftSqUa9rEeMafQzFWOvCDRhlJ-mzUd72Krxpo_omrImpt8E
-Message-ID: <CAAhV-H41kwndL+oz2Gcfpe3-MCagaQd2X21gK9kMO2vpw_thhA@mail.gmail.com>
-Subject: Re: [PATCH] USB: OHCI/UHCI: Add soft dependencies on ehci_hcd
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Diederik de Haas <diederik@cknow-tech.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Huacai Chen <chenhuacai@loongson.cn>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org, Shengwen Xiao <atzlinux@sina.com>, 
-	linux-rockchip@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wA3eBOJBWJpaIyVEw--.14450S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3JFy7AryUKry3urW8ZF4xZwb_yoW3Cw48pF
+	WY93Z8Gry7X39xWr42yF1xJayY9FWDJa9ruF9I9w1Sv3WUuF48JFn5K3y8Gry7urW3tFy3
+	Xas0gr1jkFWkC3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR3xhJUUUUU=
+X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/xtbC7g5XtWliBY42AgAA32
 
-On Sun, Jan 4, 2026 at 12:41=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
+>Nothing currently stops the DisplayPort Alt Mode driver from sending
+>Enter Mode if the port is the Data Device. Utilize
+>typec_altmode_get_data_role to prevent mode entry.
+
+>---
+> drivers/usb/typec/altmodes/displayport.c | 4 +++-
+> 1 file changed, 3 insertions(+), 1 deletion(-)
+
+>diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+>index 1dcb77faf85d..8d111ad3b71b 100644
+>--- a/drivers/usb/typec/altmodes/displayport.c
+>+++ b/drivers/usb/typec/altmodes/displayport.c
+>@@ -758,7 +758,9 @@ int dp_altmode_probe(struct typec_altmode *alt)
+> 	struct fwnode_handle *fwnode;
+> 	struct dp_altmode *dp;
+> 
+>-	/* FIXME: Port can only be DFP_U. */
+>+	/* Port can only be DFP_U. */
+>+	if (typec_altmode_get_data_role(alt) != TYPEC_HOST)
+>+		return -EPROTO;
+> 
+> 	/* Make sure we have compatible pin configurations */
+> 	if (!(DP_CAP_PIN_ASSIGN_DFP_D(port->vdo) &
 >
-> On Sat, Jan 03, 2026 at 11:57:47AM +0800, Huacai Chen wrote:
-> > On Sat, Jan 3, 2026 at 11:33=E2=80=AFAM Alan Stern <stern@rowland.harva=
-rd.edu> wrote:
-> > > Since these systems don't use PCI, the question I raised earlier stil=
-l
-> > > needs to be answered: How do they route connections between the ports
-> > > and the two controllers?
-> > >
-> > > There may be some exceptions, but for the most part, the code in
-> > > ehci-hcd was written assuming that only PCI-based controllers will ha=
-ve
-> > > companions.  If you want to make an exception for loongson-2k0500, yo=
-u
-> > > will need to figure out how to get it to work.
-> > Loongson-2K0500 use EHCI/OHCI with platform bus, while
-> > Loongson-2K1000/2000 use EHCI/OHCI with PCI bus. They use the same USB
-> > IP cores, so the route connections are probably the same.
->
-> With PCI we know exactly which companion controller each port is
-> connected to.  Is that true in your situation?
->
-> Or do you have only one companion controller?
->
-> For that matter, how many USB ports do these systems have?  Are some of
-> them USB-1 only or USB-2 only?
->
-> > > Have you tested any of those systems to see how they behave if a USB-=
-1
-> > > device is already plugged in and running when the ehci-hcd driver get=
-s
-> > > loaded?
->
-> You did not answer this question.
-On Loongson-2K0500 (OHCI/EHCI with platform bus).
+I found that after applying this patch, the Rock 5B SBC can no longer
+enter alt mode when connected to a DP monitor via a Type-C hub, the following
+error dmesg can be seen:
+typec_displayport port0-partner.0: probe with driver typec_displayport failed with error -71
 
-If ohci-platform loaded before ehci-platform:
+The TypeC Port on rock5b drive via the PD chip FUSB302
+# cat /sys/kernel/debug/usb/tcpm-4-0022/log 
+[    1.561397] Unable to find pd-revision property or incorrect array size
+[    1.590115] Setting usb_comm capable false
+[    1.590123] Setting voltage/current limit 0 mV 0 mA
+[    1.590129] polarity 0
+[    1.590198] Requesting mux state 0, usb-role 0, orientation 0
+[    1.631710] state change INVALID_STATE -> SNK_UNATTACHED [rev1 NONE_AMS]
+[    1.633129] CC1: 0 -> 0, CC2: 0 -> 0 [state SNK_UNATTACHED, polarity 0, disconnected]
+[    1.645221] 4-0022: registered
+[    1.646189] Setting usb_comm capable false
+[    1.646215] Setting voltage/current limit 0 mV 0 mA
+[    1.646231] polarity 0
+[    1.646237] Requesting mux state 0, usb-role 0, orientation 0
+[    1.662091] cc:=2
+[    1.668000] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev1 NONE_AMS]
+[    1.671183] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
+[    1.672491] pending state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED @ 920 ms [rev1 NONE_AMS]
+[    2.601879] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [delayed 920 ms]
+[    2.602431] Start toggling
+[    2.624387] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+[    2.626056] state change TOGGLING -> SNK_ATTACH_WAIT [rev1 NONE_AMS]
+[    2.629010] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 200 ms [rev1 NONE_AMS]
+[    2.830604] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 200 ms]
+[    2.831984] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev1 NONE_AMS]
+[    2.832941] polarity 1
+[    2.832945] Requesting mux state 1, usb-role 2, orientation 2
+[    2.860029] state change SNK_ATTACHED -> SNK_STARTUP [rev1 NONE_AMS]
+[    2.861402] state change SNK_STARTUP -> SNK_DISCOVERY [rev3 NONE_AMS]
+[    2.861945] Setting voltage/current limit 5000 mV 3000 mA
+[    2.861950] vbus=0 charge:=1
+[    2.862859] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+[    2.869362] pending state change SNK_WAIT_CAPABILITIES -> SNK_SOFT_RESET @ 310 ms [rev3 NONE_AMS]
+[    3.181014] state change SNK_WAIT_CAPABILITIES -> SNK_SOFT_RESET [delayed 310 ms]
+[    3.181580] AMS SOFT_RESET_AMS start
+[    3.183145] state change SNK_SOFT_RESET -> AMS_START [rev3 SOFT_RESET_AMS]
+[    3.184513] state change AMS_START -> SOFT_RESET_SEND [rev3 SOFT_RESET_AMS]
+[    3.185066] PD TX, header: 0x8d
+[    3.193733] PD TX complete, status: 0
+[    3.196440] pending state change SOFT_RESET_SEND -> HARD_RESET_SEND @ 60 ms [rev3 SOFT_RESET_AMS]
+[    3.198922] PD RX, header: 0x1a3 [1]
+[    3.200603] AMS SOFT_RESET_AMS finished
+[    3.202836] state change SOFT_RESET_SEND -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+[    3.207907] pending state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILITIES_TIMEOUT @ 310 ms [rev3 NONE_AMS]
+[    3.208976] PD RX, header: 0x43a1 [1]
+[    3.210464]  PDO 0: type 0, 5000 mV, 2000 mA [RUDE]
+[    3.210467]  PDO 1: type 0, 9000 mV, 2450 mA []
+[    3.210469]  PDO 2: type 0, 15000 mV, 2670 mA []
+[    3.210472]  PDO 3: type 0, 20000 mV, 3000 mA []
+[    3.211607] state change SNK_WAIT_CAPABILITIES -> SNK_NEGOTIATE_CAPABILITIES [rev3 POWER_NEGOTIATION]
+[    3.213865] Setting usb_comm capable true
+[    3.213871] cc=2 cc1=0 cc2=5 vbus=0 vconn=sink polarity=1
+[    3.213877] Requesting PDO 3: 20000 mV, 3000 mA
+[    3.213880] PD TX, header: 0x1282
+[    3.222930] PD TX complete, status: 0
+[    3.225674] pending state change SNK_NEGOTIATE_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev3 POWER_NEGOTIATION]
+[    3.229457] PD RX, header: 0x5a3 [1]
+[    3.232125] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_TRANSITION_SINK [rev3 POWER_NEGOTIATION]
+[    3.234275] Setting standby current 5000 mV @ 500 mA
+[    3.234278] Setting voltage/current limit 5000 mV 500 mA
+[    3.235158] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 500 ms [rev3 POWER_NEGOTIATION]
+[    3.339971] PD RX, header: 0x7a6 [1]
+[    3.341738] Setting voltage/current limit 20000 mV 3000 mA
+[    3.342566] state change SNK_TRANSITION_SINK -> SNK_READY [rev3 POWER_NEGOTIATION]
+[    3.346462] AMS POWER_NEGOTIATION finished
+[    3.352068] AMS DISCOVER_IDENTITY start
+[    3.354952] PD TX, header: 0x148f
+[    3.363951] PD TX complete, status: 0
+[    3.372273] PD RX, header: 0x59af [1]
+[    3.375213] Rx VDM cmd 0xff00a041 type 1 cmd 1 len 5
+[    3.376489] AMS DISCOVER_IDENTITY finished
+[    3.378482] Identity: 1d5c:7102.070a
+[    3.381145] AMS DISCOVER_SVIDS start
+[    3.384002] PD TX, header: 0x168f
+[    3.393019] PD TX complete, status: 0
+[    3.400228] PD RX, header: 0x2baf [1]
+[    3.403143] Rx VDM cmd 0xff00a042 type 1 cmd 2 len 2
+[    3.404418] AMS DISCOVER_SVIDS finished
+[    3.405753] SVID 1: 0xff01
+[    3.408814] AMS DISCOVER_MODES start
+[    3.411666] PD TX, header: 0x188f
+[    3.420681] PD TX complete, status: 0
+[    3.427868] PD RX, header: 0x2daf [1]
+[    3.430784] Rx VDM cmd 0xff01a043 type 1 cmd 3 len 2
+[    3.432193] AMS DISCOVER_MODES finished
+[    3.433811]  Alternate mode 0: SVID 0xff01, VDO 1: 0x00040045
+[    3.468873] AMS DFP_TO_UFP_ENTER_MODE start
+[    3.473347] PD TX, header: 0x1a8f
+[    3.483714] PD TX complete, status: 0
+[    3.490564] PD RX, header: 0x1faf [1]
+[    3.493540] Rx VDM cmd 0xff01a144 type 1 cmd 4 len 1
+[    3.495653] AMS DFP_TO_UFP_ENTER_MODE finished
+[    3.501550] AMS STRUCTURED_VDMS start
+[    3.504410] PD TX, header: 0x2c8f
+[    3.513803] PD TX complete, status: 0
+[    3.520991] PD RX, header: 0x21af [1]
+[    3.523920] Rx VDM cmd 0xff01a150 type 1 cmd 16 len 2
+[    3.526044] AMS STRUCTURED_VDMS finished
+[    3.544870] AMS STRUCTURED_VDMS start
+[    3.547736] PD TX, header: 0x2e8f
+[    3.557132] PD TX complete, status: 0
+[    3.564509] PD RX, header: 0x13af [1]
+[    3.567452] Rx VDM cmd 0xff01a151 type 1 cmd 17 len 1
+[    3.569581] AMS STRUCTURED_VDMS finished
+[    6.927982] PD RX, header: 0x25af [1]
+[    6.931501] Rx VDM cmd 0xff01a106 type 0 cmd 6 len 2
 
-[   30.530103] ohci-platform 1f058000.usb: Generic Platform OHCI controller
-[   30.555362] ohci-platform 1f058000.usb: new USB bus registered,
-assigned bus number 1
-[   30.583586] ohci-platform 1f058000.usb: irq 28, io mem 0x1f058000
-[   30.671500] hub 1-0:1.0: USB hub found
-[   30.687929] hub 1-0:1.0: 4 ports detected
-[   30.798553] Warning! ehci_hcd should always be loaded before
-uhci_hcd and ohci_hcd, not after
-[   31.015178] usb 1-4: new low-speed USB device number 2 using ohci-platfo=
-rm
-[   31.090527] ehci-platform 1f050000.usb: EHCI Host Controller
-[   31.107968] ehci-platform 1f050000.usb: new USB bus registered,
-assigned bus number 2
-[   31.143813] ehci-platform 1f050000.usb: irq 29, io mem 0x1f050000
-[   31.227286] ehci-platform 1f050000.usb: USB 2.0 started, EHCI 1.00
-[   31.248271] usb 1-4: device descriptor read/all, error -62
-[   31.256845] hub 2-0:1.0: USB hub found
-[   31.279310] hub 2-0:1.0: 4 ports detected
-[   31.915149] usb 1-4: new low-speed USB device number 3 using ohci-platfo=
-rm
-[   32.264765] input: YSPRINGTECH USB OPTICAL MOUSE as
-/devices/platform/bus@10000000/1f058000.usb/usb1/1-4/1-4:1.0/0003:10C4:8105=
-.0001/input/input0
-[   32.374306] hid-generic 0003:10C4:8105.0001: input,hidraw0: USB HID
-v1.11 Mouse [YSPRINGTECH USB OPTICAL MOUSE] on
-usb-1f058000.usb-4/input0
+The flow terminates at this point without continuing into alt mode.
 
-If ehci-platform loaded before ohci-platform:
+After reverting this patch, the process can continue and successfully enter alt mode:
 
-[   30.724394] ehci-platform 1f050000.usb: EHCI Host Controller
-[   30.743839] ehci-platform 1f050000.usb: new USB bus registered,
-assigned bus number 1
-[   30.775857] ehci-platform 1f050000.usb: irq 28, io mem 0x1f050000
-[   30.811297] ehci-platform 1f050000.usb: USB 2.0 started, EHCI 1.00
-[   30.829172] hub 1-0:1.0: USB hub found
-[   30.847397] hub 1-0:1.0: 4 ports detected
-[   30.934190] ohci-platform 1f058000.usb: Generic Platform OHCI controller
-[   30.959877] ohci-platform 1f058000.usb: new USB bus registered,
-assigned bus number 2
-[   30.987617] ohci-platform 1f058000.usb: irq 29, io mem 0x1f058000
-[   31.080419] hub 2-0:1.0: USB hub found
-[   31.092038] hub 2-0:1.0: 4 ports detected
-[   31.407288] usb 2-4: new low-speed USB device number 2 using ohci-platfo=
-rm
-[   31.741276] input: YSPRINGTECH USB OPTICAL MOUSE as
-/devices/platform/bus@10000000/1f058000.usb/usb2/2-4/2-4:1.0/0003:10C4:8105=
-.0001/input/input0
-[   31.815422] hid-generic 0003:10C4:8105.0001: input,hidraw0: USB HID
-v1.11 Mouse [YSPRINGTECH USB OPTICAL MOUSE] on
-usb-1f058000.usb-4/input0
+[    3.159202] AMS DFP_TO_UFP_ENTER_MODE start
+[    3.159207] PD TX, header: 0x1a8f
+[    3.167022] PD TX complete, status: 0
+[    3.171317] PD RX, header: 0x1faf [1]
+[    3.171322] Rx VDM cmd 0xff01a144 type 1 cmd 4 len 1
+[    3.171327] AMS DFP_TO_UFP_ENTER_MODE finished
+[    3.171402] AMS STRUCTURED_VDMS start
+[    3.171406] PD TX, header: 0x2c8f
+[    3.179592] PD TX complete, status: 0
+[    3.184266] PD RX, header: 0x21af [1]
+[    3.184271] Rx VDM cmd 0xff01a150 type 1 cmd 16 len 2
+[    3.184277] AMS STRUCTURED_VDMS finished
+[    3.184315] AMS STRUCTURED_VDMS start
+[    3.184319] PD TX, header: 0x2e8f
+[    3.192595] PD TX complete, status: 0
+[    3.196953] PD RX, header: 0x13af [1]
+[    3.196959] Rx VDM cmd 0xff01a151 type 1 cmd 17 len 1
+[    3.196966] AMS STRUCTURED_VDMS finished
+[    6.562035] PD RX, header: 0x25af [1]
+[    6.562044] Rx VDM cmd 0xff01a106 type 0 cmd 6 len 2
+-- 
+2.43.0
 
-"new low-speed USB device number 3 using ohci-platform" only displayed
-once and "usb 1-4: device descriptor read/all, error -62" disappears
-in this case.
-
-So I think we need a softdep between ohci-platform/uhci-platform and
-ehci-platform, which is similar to the PCI case.
-
->
-> There are other issues involving companion controllers, connected with
-> hibernation.  You should take a look at commit 6d19c009cc78 ("USB:
-> implement non-tree resume ordering constraints for PCI host
-> controllers"), which was later modified by commit 05768918b9a1 ("USB:
-> improve port transitions when EHCI starts up") and a few others.
->
-> Also, read through the current code in hcd-pci.c (for_each_companion(),
-> ehci_pre_add(), ehci_post_add(), non_ehci_add(), ehci_remove(), and
-> ehci_wait_for_companions()).  Your non-PCI system will need to implement
-> some sort of equivalent to all these things.
-At least for the device probe, a softdep seems enough.
-
-Huacai
-
->
-> Alan Stern
 
