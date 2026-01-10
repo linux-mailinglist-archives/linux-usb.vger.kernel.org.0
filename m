@@ -1,209 +1,94 @@
-Return-Path: <linux-usb+bounces-32129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEEE4D0D435
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 10:49:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70B7AD0D450
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 10:54:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id EE82E3006719
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 09:49:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B63A8302D525
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 09:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B681E29B8C7;
-	Sat, 10 Jan 2026 09:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAEB82D1936;
+	Sat, 10 Jan 2026 09:54:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XenWBPzR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA8BA21257A;
-	Sat, 10 Jan 2026 09:49:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4513335965;
+	Sat, 10 Jan 2026 09:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768038581; cv=none; b=Nmxeg8NAaHWoJ2y/79tbNHuV5vYxdiRrxcn1bWeGh4sBIMxx1d9ZN3vKHvryM6ThSxyE0IFcDaR60qRsxCMK3FMhZUpWP0ntvloP8C4vXzoWBu4n2WgIEj5/aHwkn2wHpPSw22keBmJxWwEk/zESYxvAlqWplsw2Zie5B/9MUfM=
+	t=1768038854; cv=none; b=JW1nI+ZjbYmB3YNMZF9GIWoCE9nounwIDC7J2YUbZonHIjDhufWJeAzL8wpGwyDifnMMvxvuYlKX+pe2rywFI3vhQVLvOkH9AafUwNF+Golm6x3F3W5FsR2FeJAQMlLWSlaSwXyXGvFJOI1OootV3MCaceegMtyAXwrw3sqBGIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768038581; c=relaxed/simple;
-	bh=qI/jnxA4OmKm2GXJ0DfJAWer0YKvaomasgIPKUG5Pvc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=AEya/OLMQFCaO4dILTv0laVfVC/+eMrUfLv3X9x0gK/6ufmzutjVysS+Rekj+tmq3sZ8uTF/I2K/7h9SkACCxBdl96cSPywMi3J4YZ7iqpFKzZ/ku+0QFKMWdMYPcGiO8771JQVpo+X0uibJhEQpCC+RXSeGFrV7JDIBr1/dkeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [121.236.206.128])
-	by gateway (Coremail) with SMTP id _____8Axz8OnIGJpt1cHAA--.23998S3;
-	Sat, 10 Jan 2026 17:49:27 +0800 (CST)
-Received: from chenhuacai$loongson.cn ( [121.236.206.128] ) by
- ajax-webmail-front1 (Coremail) ; Sat, 10 Jan 2026 17:49:25 +0800
- (GMT+08:00)
-Date: Sat, 10 Jan 2026 17:49:25 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+	s=arc-20240116; t=1768038854; c=relaxed/simple;
+	bh=iSSHMYK2nBDA2gcA+p0KHjr5rlyEyTxUjQ1D+5YiHmk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lCwyTsfINMHuka4UFZvmBPd4dRqLdHB3i3FJ5TENGpc5rylCyxEAX2GmrTSXXCxSThmBAMk5zt2YspxRTJREQSKEJuFMaK0XR4kTUKg3X0QvAQoQLrJ5j/aOB1kbM33IBLklR2M8O2Wasw7CRPUu9l9JqFzk+T0qYoC+LODk/cU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XenWBPzR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 760F2C4CEF1;
+	Sat, 10 Jan 2026 09:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1768038853;
+	bh=iSSHMYK2nBDA2gcA+p0KHjr5rlyEyTxUjQ1D+5YiHmk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XenWBPzRfMeQZnDkVw6u6a/jkSzHR80Fcr/uTNlRXbviCjH658U5jj2HHfLQPXAzN
+	 IIRFYMCs+y8hhc0jxzNOQbGFqDLyZyr4YmhfZvB8peeUguB+KEiJ2ewe/G8A6XmyUF
+	 IkxnjNmhrH6oqU819rYvoO+h8ybr1DbXfnKB+TxI=
+Date: Sat, 10 Jan 2026 10:54:10 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: =?utf-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Alan Stern" <stern@rowland.harvard.edu>
+	Alan Stern <stern@rowland.harvard.edu>
 Subject: Re: [PATCH] USB: HCD: remove logic about which hcd is loaded
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
- 20250609(354f7833) Copyright (c) 2002-2026 www.mailtech.cn loongson
-In-Reply-To: <2026010739-diffuser-shelter-e31c@gregkh>
+Message-ID: <2026011037-kinfolk-serotonin-0b5d@gregkh>
 References: <2026010739-diffuser-shelter-e31c@gregkh>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: d0LBw2Zvb3Rlcl90eHQ9NjU2Nzo2MTg=
-Content-Type: text/plain; charset=UTF-8
+ <5f013d5a.3a686.19ba74f85dc.Coremail.chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <5f013d5a.3a686.19ba74f85dc.Coremail.chenhuacai@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:qMiowJAx_OClIGJpgC4XAA--.4609W
-X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAgEDBmlh6hsAygABs0
-X-Coremail-Antispam: 1Uk129KBj93XoW3GFW3Aw4UAFy5Zr1kWr1kXrc_yoWxZw45pF
-	sxWF4xCrn5JrZ3Wr15A3WDKr18tw1DtryjgFWxC348X3yqk3srJFy8ZFyfXr93XrWkJ3W0
-	yF48urWUAF4kKFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFcxC0VAYjxAxZF
-	0Ew4CEw7xC0wACY4xI67k04243AVC20s07MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-	c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-	CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-	MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
-	4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JwCE64xv
-	F2IEb7IF0Fy7YxBIdaVFxhVjvjDU0xZFpf9x07j0BTOUUUUU=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5f013d5a.3a686.19ba74f85dc.Coremail.chenhuacai@loongson.cn>
 
-CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiR3JlZyBLcm9haC1IYXJ0
-bWFuIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+Cj4g5Y+R6YCB5pe26Ze0OjIwMjYtMDEt
-MDcgMjM6MjU6NDAgKOaYn+acn+S4iSkKPiDmlLbku7bkuro6IGxpbnV4LXVzYkB2Z2VyLmtlcm5l
-bC5vcmcKPiDmioTpgIE6IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcsICJHcmVnIEtyb2Fo
-LUhhcnRtYW4iIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4sICJIdWFjYWkgQ2hlbiIgPGNo
-ZW5odWFjYWlAbG9vbmdzb24uY24+LCAiQWxhbiBTdGVybiIgPHN0ZXJuQHJvd2xhbmQuaGFydmFy
-ZC5lZHU+Cj4g5Li76aKYOiBbUEFUQ0hdIFVTQjogSENEOiByZW1vdmUgbG9naWMgYWJvdXQgd2hp
-Y2ggaGNkIGlzIGxvYWRlZAo+IAo+IEl0IHR1cm5zIG91dCB0aGF0IHdhcm5pbmcgYWJvdXQgd2hp
-Y2ggVVNCIGhvc3QgY29udHJvbGxlciBpcyBsb2FkZWQKPiBiZWZvcmUgYW5vdGhlciBvbmUgZG9l
-c24ndCByZWFsbHkgbWF0dGVyLiAgQWxsIHRoYXQgcmVhbGx5IGlzIG5lZWRlZCBpcwo+IHRoZSBQ
-Q0kgc29mdGRlcCBtb2R1bGUgbG9hZGluZyBsb2dpYywgd2hpY2ggaGFzIGJlZW4gcHJlc2VudCBp
-biB0aGUKPiBrZXJuZWwgZXZlciBzaW5jZSBjb21taXQgMDVjOTJkYTBjNTI0ICgidXNiOiBvaGNp
-L3VoY2kgLSBhZGQgc29mdAo+IGRlcGVuZGVuY2llcyBvbiBlaGNpX3BjaSIpCj4gCj4gU28gcmVt
-b3ZlIHRoZSB3YXJuaW5nIG1lc3NhZ2VzLCB0aGV5IGFyZSBub3QgdXNlZnVsLCBub3QgbmVlZGVk
-LCBhbmQKPiBvbmx5IGNvbmZ1c2UgcGVvcGxlLiAgQXMgY2FuIGJlIHNlZW4gaW4gdGhlIGRpc2N1
-c3Npb24gYXQKPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjUxMjMwMDgwMDE0LjM5MzQ1
-OTAtMS1jaGVuaHVhY2FpQGxvb25nc29uLmNuCj4gCj4gQ2M6IEh1YWNhaSBDaGVuIDxjaGVuaHVh
-Y2FpQGxvb25nc29uLmNuPgo+IFN1Z2dlc3RlZC1ieTogQWxhbiBTdGVybiA8c3Rlcm5Acm93bGFu
-ZC5oYXJ2YXJkLmVkdT4KPiBTaWduZWQtb2ZmLWJ5OiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdr
-aEBsaW51eGZvdW5kYXRpb24ub3JnPgpSZXZpZXdlZC1ieTogSHVhY2FpIENoZW4gPGNoZW5odWFj
-YWlAbG9vbmdzb24uY24+CgpBbmQgaXQgc2hvdWxkIGJlIGJhY2twb3J0ZWQgdG8gc3RhYmxlIGJy
-YW5jaGVzPwoKSHVhY2FpCgo+IC0tLQo+ICBkcml2ZXJzL3VzYi9jb3JlL2hjZC5jICAgICAgICAg
-ICAgfCA0IC0tLS0KPiAgZHJpdmVycy91c2IvZm90ZzIxMC9mb3RnMjEwLWhjZC5jIHwgNiAtLS0t
-LS0KPiAgZHJpdmVycy91c2IvaG9zdC9laGNpLWhjZC5jICAgICAgIHwgOCAtLS0tLS0tLQo+ICBk
-cml2ZXJzL3VzYi9ob3N0L29oY2ktaGNkLmMgICAgICAgfCAzIC0tLQo+ICBkcml2ZXJzL3VzYi9o
-b3N0L3VoY2ktaGNkLmMgICAgICAgfCA1IC0tLS0tCj4gIGluY2x1ZGUvbGludXgvdXNiL2hjZC5o
-ICAgICAgICAgICB8IDYgLS0tLS0tCj4gIDYgZmlsZXMgY2hhbmdlZCwgMzIgZGVsZXRpb25zKC0p
-Cj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NvcmUvaGNkLmMgYi9kcml2ZXJzL3VzYi9j
-b3JlL2hjZC5jCj4gaW5kZXggMjRmZWIwZGUxYzAwLi4yZDk5YTU5ZDlmM2YgMTAwNjQ0Cj4gLS0t
-IGEvZHJpdmVycy91c2IvY29yZS9oY2QuYwo+ICsrKyBiL2RyaXZlcnMvdXNiL2NvcmUvaGNkLmMK
-PiBAQCAtNzcsMTAgKzc3LDYgQEAKPiAgCj4gIC8qLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSovCj4gIAo+IC0v
-KiBLZWVwIHRyYWNrIG9mIHdoaWNoIGhvc3QgY29udHJvbGxlciBkcml2ZXJzIGFyZSBsb2FkZWQg
-Ki8KPiAtdW5zaWduZWQgbG9uZyB1c2JfaGNkc19sb2FkZWQ7Cj4gLUVYUE9SVF9TWU1CT0xfR1BM
-KHVzYl9oY2RzX2xvYWRlZCk7Cj4gLQo+ICAvKiBob3N0IGNvbnRyb2xsZXJzIHdlIG1hbmFnZSAq
-Lwo+ICBERUZJTkVfSURSICh1c2JfYnVzX2lkcik7Cj4gIEVYUE9SVF9TWU1CT0xfR1BMICh1c2Jf
-YnVzX2lkcik7Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2ZvdGcyMTAvZm90ZzIxMC1oY2Qu
-YyBiL2RyaXZlcnMvdXNiL2ZvdGcyMTAvZm90ZzIxMC1oY2QuYwo+IGluZGV4IDY0YzQ5NjVhMTYw
-Zi4uZmJiNWQ1OTBlYWI2IDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvdXNiL2ZvdGcyMTAvZm90ZzIx
-MC1oY2QuYwo+ICsrKyBiL2RyaXZlcnMvdXNiL2ZvdGcyMTAvZm90ZzIxMC1oY2QuYwo+IEBAIC01
-NjI1LDExICs1NjI1LDYgQEAgaW50IF9faW5pdCBmb3RnMjEwX2hjZF9pbml0KHZvaWQpCj4gIAlp
-ZiAodXNiX2Rpc2FibGVkKCkpCj4gIAkJcmV0dXJuIC1FTk9ERVY7Cj4gIAo+IC0Jc2V0X2JpdChV
-U0JfRUhDSV9MT0FERUQsICZ1c2JfaGNkc19sb2FkZWQpOwo+IC0JaWYgKHRlc3RfYml0KFVTQl9V
-SENJX0xPQURFRCwgJnVzYl9oY2RzX2xvYWRlZCkgfHwKPiAtCQkJdGVzdF9iaXQoVVNCX09IQ0lf
-TE9BREVELCAmdXNiX2hjZHNfbG9hZGVkKSkKPiAtCQlwcl93YXJuKCJXYXJuaW5nISBmb3RnMjEw
-X2hjZCBzaG91bGQgYWx3YXlzIGJlIGxvYWRlZCBiZWZvcmUgdWhjaV9oY2QgYW5kIG9oY2lfaGNk
-LCBub3QgYWZ0ZXJcbiIpOwo+IC0KPiAgCXByX2RlYnVnKCIlczogYmxvY2sgc2l6ZXM6IHFoICV6
-ZCBxdGQgJXpkIGl0ZCAlemRcbiIsCj4gIAkJCWhjZF9uYW1lLCBzaXplb2Yoc3RydWN0IGZvdGcy
-MTBfcWgpLAo+ICAJCQlzaXplb2Yoc3RydWN0IGZvdGcyMTBfcXRkKSwKPiBAQCAtNTY0Myw1ICs1
-NjM4LDQgQEAgaW50IF9faW5pdCBmb3RnMjEwX2hjZF9pbml0KHZvaWQpCj4gIHZvaWQgX19leGl0
-IGZvdGcyMTBfaGNkX2NsZWFudXAodm9pZCkKPiAgewo+ICAJZGVidWdmc19yZW1vdmUoZm90ZzIx
-MF9kZWJ1Z19yb290KTsKPiAtCWNsZWFyX2JpdChVU0JfRUhDSV9MT0FERUQsICZ1c2JfaGNkc19s
-b2FkZWQpOwo+ICB9Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1oY2QuYyBi
-L2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1oY2QuYwo+IGluZGV4IDZkMWQxOTBjOTE0ZC4uM2M0NmJi
-MThjN2YzIDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1oY2QuYwo+ICsrKyBi
-L2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1oY2QuYwo+IEBAIC0xMzU0LDEyICsxMzU0LDYgQEAgc3Rh
-dGljIGludCBfX2luaXQgZWhjaV9oY2RfaW5pdCh2b2lkKQo+ICAJaWYgKHVzYl9kaXNhYmxlZCgp
-KQo+ICAJCXJldHVybiAtRU5PREVWOwo+ICAKPiAtCXNldF9iaXQoVVNCX0VIQ0lfTE9BREVELCAm
-dXNiX2hjZHNfbG9hZGVkKTsKPiAtCWlmICh0ZXN0X2JpdChVU0JfVUhDSV9MT0FERUQsICZ1c2Jf
-aGNkc19sb2FkZWQpIHx8Cj4gLQkJCXRlc3RfYml0KFVTQl9PSENJX0xPQURFRCwgJnVzYl9oY2Rz
-X2xvYWRlZCkpCj4gLQkJcHJpbnRrKEtFUk5fV0FSTklORyAiV2FybmluZyEgZWhjaV9oY2Qgc2hv
-dWxkIGFsd2F5cyBiZSBsb2FkZWQiCj4gLQkJCQkiIGJlZm9yZSB1aGNpX2hjZCBhbmQgb2hjaV9o
-Y2QsIG5vdCBhZnRlclxuIik7Cj4gLQo+ICAJcHJfZGVidWcoIiVzOiBibG9jayBzaXplczogcWgg
-JXpkIHF0ZCAlemQgaXRkICV6ZCBzaXRkICV6ZFxuIiwKPiAgCQkgaGNkX25hbWUsCj4gIAkJIHNp
-emVvZihzdHJ1Y3QgZWhjaV9xaCksIHNpemVvZihzdHJ1Y3QgZWhjaV9xdGQpLAo+IEBAIC0xMzkw
-LDcgKzEzODQsNiBAQCBzdGF0aWMgaW50IF9faW5pdCBlaGNpX2hjZF9pbml0KHZvaWQpCj4gIAlk
-ZWJ1Z2ZzX3JlbW92ZShlaGNpX2RlYnVnX3Jvb3QpOwo+ICAJZWhjaV9kZWJ1Z19yb290ID0gTlVM
-TDsKPiAgI2VuZGlmCj4gLQljbGVhcl9iaXQoVVNCX0VIQ0lfTE9BREVELCAmdXNiX2hjZHNfbG9h
-ZGVkKTsKPiAgCXJldHVybiByZXR2YWw7Cj4gIH0KPiAgbW9kdWxlX2luaXQoZWhjaV9oY2RfaW5p
-dCk7Cj4gQEAgLTE0MDQsNiArMTM5Nyw1IEBAIHN0YXRpYyB2b2lkIF9fZXhpdCBlaGNpX2hjZF9j
-bGVhbnVwKHZvaWQpCj4gICNpZmRlZiBDT05GSUdfRFlOQU1JQ19ERUJVRwo+ICAJZGVidWdmc19y
-ZW1vdmUoZWhjaV9kZWJ1Z19yb290KTsKPiAgI2VuZGlmCj4gLQljbGVhcl9iaXQoVVNCX0VIQ0lf
-TE9BREVELCAmdXNiX2hjZHNfbG9hZGVkKTsKPiAgfQo+ICBtb2R1bGVfZXhpdChlaGNpX2hjZF9j
-bGVhbnVwKTsKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC9vaGNpLWhjZC5jIGIvZHJp
-dmVycy91c2IvaG9zdC9vaGNpLWhjZC5jCj4gaW5kZXggOWM3ZjMwMDg2NDZlLi4zMDg0MDkyMmY3
-MjkgMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC9vaGNpLWhjZC5jCj4gKysrIGIvZHJp
-dmVycy91c2IvaG9zdC9vaGNpLWhjZC5jCj4gQEAgLTEyODIsNyArMTI4Miw2IEBAIHN0YXRpYyBp
-bnQgX19pbml0IG9oY2lfaGNkX21vZF9pbml0KHZvaWQpCj4gIAo+ICAJcHJfZGVidWcgKCIlczog
-YmxvY2sgc2l6ZXM6IGVkICV6ZCB0ZCAlemRcbiIsIGhjZF9uYW1lLAo+ICAJCXNpemVvZiAoc3Ry
-dWN0IGVkKSwgc2l6ZW9mIChzdHJ1Y3QgdGQpKTsKPiAtCXNldF9iaXQoVVNCX09IQ0lfTE9BREVE
-LCAmdXNiX2hjZHNfbG9hZGVkKTsKPiAgCj4gIAlvaGNpX2RlYnVnX3Jvb3QgPSBkZWJ1Z2ZzX2Ny
-ZWF0ZV9kaXIoIm9oY2kiLCB1c2JfZGVidWdfcm9vdCk7Cj4gIAo+IEBAIC0xMzMyLDcgKzEzMzEs
-NiBAQCBzdGF0aWMgaW50IF9faW5pdCBvaGNpX2hjZF9tb2RfaW5pdCh2b2lkKQo+ICAJZGVidWdm
-c19yZW1vdmUob2hjaV9kZWJ1Z19yb290KTsKPiAgCW9oY2lfZGVidWdfcm9vdCA9IE5VTEw7Cj4g
-IAo+IC0JY2xlYXJfYml0KFVTQl9PSENJX0xPQURFRCwgJnVzYl9oY2RzX2xvYWRlZCk7Cj4gIAly
-ZXR1cm4gcmV0dmFsOwo+ICB9Cj4gIG1vZHVsZV9pbml0KG9oY2lfaGNkX21vZF9pbml0KTsKPiBA
-QCAtMTM1Miw3ICsxMzUwLDYgQEAgc3RhdGljIHZvaWQgX19leGl0IG9oY2lfaGNkX21vZF9leGl0
-KHZvaWQpCj4gIAlwczNfb2hjaV9kcml2ZXJfdW5yZWdpc3RlcigmUFMzX1NZU1RFTV9CVVNfRFJJ
-VkVSKTsKPiAgI2VuZGlmCj4gIAlkZWJ1Z2ZzX3JlbW92ZShvaGNpX2RlYnVnX3Jvb3QpOwo+IC0J
-Y2xlYXJfYml0KFVTQl9PSENJX0xPQURFRCwgJnVzYl9oY2RzX2xvYWRlZCk7Cj4gIH0KPiAgbW9k
-dWxlX2V4aXQob2hjaV9oY2RfbW9kX2V4aXQpOwo+ICAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91
-c2IvaG9zdC91aGNpLWhjZC5jIGIvZHJpdmVycy91c2IvaG9zdC91aGNpLWhjZC5jCj4gaW5kZXgg
-MTRlNmRmZWYxNmM2Li44YmIxMTEwOWI2NmMgMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy91c2IvaG9z
-dC91aGNpLWhjZC5jCj4gKysrIGIvZHJpdmVycy91c2IvaG9zdC91aGNpLWhjZC5jCj4gQEAgLTg2
-Nyw4ICs4NjcsNiBAQCBzdGF0aWMgaW50IF9faW5pdCB1aGNpX2hjZF9pbml0KHZvaWQpCj4gIAlp
-ZiAodXNiX2Rpc2FibGVkKCkpCj4gIAkJcmV0dXJuIC1FTk9ERVY7Cj4gIAo+IC0Jc2V0X2JpdChV
-U0JfVUhDSV9MT0FERUQsICZ1c2JfaGNkc19sb2FkZWQpOwo+IC0KPiAgI2lmZGVmIENPTkZJR19E
-WU5BTUlDX0RFQlVHCj4gIAllcnJidWYgPSBrbWFsbG9jKEVSUkJVRl9MRU4sIEdGUF9LRVJORUwp
-Owo+ICAJaWYgKCFlcnJidWYpCj4gQEAgLTkxMiw4ICs5MTAsNiBAQCBzdGF0aWMgaW50IF9faW5p
-dCB1aGNpX2hjZF9pbml0KHZvaWQpCj4gIAo+ICBlcnJidWZfZmFpbGVkOgo+ICAjZW5kaWYKPiAt
-Cj4gLQljbGVhcl9iaXQoVVNCX1VIQ0lfTE9BREVELCAmdXNiX2hjZHNfbG9hZGVkKTsKPiAgCXJl
-dHVybiByZXR2YWw7Cj4gIH0KPiAgCj4gQEAgLTkzMCw3ICs5MjYsNiBAQCBzdGF0aWMgdm9pZCBf
-X2V4aXQgdWhjaV9oY2RfY2xlYW51cCh2b2lkKQo+ICAjaWZkZWYgQ09ORklHX0RZTkFNSUNfREVC
-VUcKPiAgCWtmcmVlKGVycmJ1Zik7Cj4gICNlbmRpZgo+IC0JY2xlYXJfYml0KFVTQl9VSENJX0xP
-QURFRCwgJnVzYl9oY2RzX2xvYWRlZCk7Cj4gIH0KPiAgCj4gIG1vZHVsZV9pbml0KHVoY2lfaGNk
-X2luaXQpOwo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3VzYi9oY2QuaCBiL2luY2x1ZGUv
-bGludXgvdXNiL2hjZC5oCj4gaW5kZXggYWM5NWU3Yzg5ZGY1Li4xODFkYjA0NGM0ZDIgMTAwNjQ0
-Cj4gLS0tIGEvaW5jbHVkZS9saW51eC91c2IvaGNkLmgKPiArKysgYi9pbmNsdWRlL2xpbnV4L3Vz
-Yi9oY2QuaAo+IEBAIC03NjAsMTIgKzc2MCw2IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCB1c2Jtb25f
-dXJiX2NvbXBsZXRlKHN0cnVjdCB1c2JfYnVzICpidXMsIHN0cnVjdCB1cmIgKnVyYiwKPiAgICov
-Cj4gIGV4dGVybiBzdHJ1Y3Qgcndfc2VtYXBob3JlIGVoY2lfY2ZfcG9ydF9yZXNldF9yd3NlbTsK
-PiAgCj4gLS8qIEtlZXAgdHJhY2sgb2Ygd2hpY2ggaG9zdCBjb250cm9sbGVyIGRyaXZlcnMgYXJl
-IGxvYWRlZCAqLwo+IC0jZGVmaW5lIFVTQl9VSENJX0xPQURFRAkJMAo+IC0jZGVmaW5lIFVTQl9P
-SENJX0xPQURFRAkJMQo+IC0jZGVmaW5lIFVTQl9FSENJX0xPQURFRAkJMgo+IC1leHRlcm4gdW5z
-aWduZWQgbG9uZyB1c2JfaGNkc19sb2FkZWQ7Cj4gLQo+ICAjZW5kaWYgLyogX19LRVJORUxfXyAq
-Lwo+ICAKPiAgI2VuZGlmIC8qIF9fVVNCX0NPUkVfSENEX0ggKi8KPiAtLSAKPiAyLjUyLjAKDQoN
-CuacrOmCruS7tuWPiuWFtumZhOS7tuWQq+aciem+meiKr+S4reenkeeahOWVhuS4muenmOWvhuS/
-oeaBr++8jOS7hemZkOS6juWPkemAgee7meS4iumdouWcsOWdgOS4reWIl+WHuueahOS4quS6uuaI
-lue+pOe7hOOAguemgeatouS7u+S9leWFtuS7luS6uuS7peS7u+S9leW9ouW8j+S9v+eUqO+8iOWM
-heaLrOS9huS4jemZkOS6juWFqOmDqOaIlumDqOWIhuWcsOazhOmcsuOAgeWkjeWItuaIluaVo+WP
-ke+8ieacrOmCruS7tuWPiuWFtumZhOS7tuS4reeahOS/oeaBr+OAguWmguaenOaCqOmUmeaUtuac
-rOmCruS7tu+8jOivt+aCqOeri+WNs+eUteivneaIlumCruS7tumAmuefpeWPkeS7tuS6uuW5tuWI
-oOmZpOacrOmCruS7tuOAgiANClRoaXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWlu
-IGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBmcm9tIExvb25nc29uIFRlY2hub2xvZ3kgLCB3aGlj
-aCBpcyBpbnRlbmRlZCBvbmx5IGZvciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNz
-IGlzIGxpc3RlZCBhYm92ZS4gQW55IHVzZSBvZiB0aGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGhl
-cmVpbiBpbiBhbnkgd2F5IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3Ig
-cGFydGlhbCBkaXNjbG9zdXJlLCByZXByb2R1Y3Rpb24gb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVy
-c29ucyBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4g
-SWYgeW91IHJlY2VpdmUgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2Vu
-ZGVyIGJ5IHBob25lIG9yIGVtYWlsIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuIA0KDQoNCg==
+On Sat, Jan 10, 2026 at 05:49:25PM +0800, 陈华才 wrote:
+> 
+> 
+> 
+> > -----原始邮件-----
+> > 发件人: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+> > 发送时间:2026-01-07 23:25:40 (星期三)
+> > 收件人: linux-usb@vger.kernel.org
+> > 抄送: linux-kernel@vger.kernel.org, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Huacai Chen" <chenhuacai@loongson.cn>, "Alan Stern" <stern@rowland.harvard.edu>
+> > 主题: [PATCH] USB: HCD: remove logic about which hcd is loaded
+> > 
+> > It turns out that warning about which USB host controller is loaded
+> > before another one doesn't really matter.  All that really is needed is
+> > the PCI softdep module loading logic, which has been present in the
+> > kernel ever since commit 05c92da0c524 ("usb: ohci/uhci - add soft
+> > dependencies on ehci_pci")
+> > 
+> > So remove the warning messages, they are not useful, not needed, and
+> > only confuse people.  As can be seen in the discussion at
+> > https://lore.kernel.org/r/20251230080014.3934590-1-chenhuacai@loongson.cn
+> > 
+> > Cc: Huacai Chen <chenhuacai@loongson.cn>
+> > Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+> 
+> And it should be backported to stable branches?
 
+It doesn't change any behavior, so why would it be needed anywhere else?
+It's just removing a message that people have been ignoring for a very
+very long time :)
+
+thanks,
+
+greg k-h
 
