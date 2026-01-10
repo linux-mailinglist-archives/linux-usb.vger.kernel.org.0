@@ -1,233 +1,209 @@
-Return-Path: <linux-usb+bounces-32128-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32129-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBDF5D0D2E3
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 08:54:35 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEEE4D0D435
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 10:49:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3FCBC300CF38
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 07:54:27 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id EE82E3006719
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jan 2026 09:49:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074C62E6CBF;
-	Sat, 10 Jan 2026 07:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="m/E3g4zI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B681E29B8C7;
+	Sat, 10 Jan 2026 09:49:41 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB152AEE1;
-	Sat, 10 Jan 2026 07:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA8BA21257A;
+	Sat, 10 Jan 2026 09:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768031665; cv=none; b=a5LxK5dIsPhUolIJBTBF+0Z1TxDQjE5Ms5PoDnT512LpL6mKeL2Wkih1kgsbwrUzttle0lmLHbmkIHZxS2JhGXARGkrU5p3n0lJSI/+JoFQzgpRepNXNWPUnkMTDiOyYyc66E95I4fp0xq2s8OJdRPndfOPk6//Q016w4TPLwfE=
+	t=1768038581; cv=none; b=Nmxeg8NAaHWoJ2y/79tbNHuV5vYxdiRrxcn1bWeGh4sBIMxx1d9ZN3vKHvryM6ThSxyE0IFcDaR60qRsxCMK3FMhZUpWP0ntvloP8C4vXzoWBu4n2WgIEj5/aHwkn2wHpPSw22keBmJxWwEk/zESYxvAlqWplsw2Zie5B/9MUfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768031665; c=relaxed/simple;
-	bh=xMk1UStvF3aeKgG78SBE8ng/7Edw5S2Hv1nWRUovlmg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bcltNMK6RFimPCcFenIcBvjnvhXGHopKvV20Ihh3BObn1w5zAsJHe8JAoHJxKDJhXIBTkmzOeDycn4C6jnY/uMVlvn9msVLTxib8eOU41CZA2ys+g+g9SMoYFTFr5NRBFBwYyqvJyxrpwZT3an+4EUY1EuqruWT34AwO+yie7pE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=m/E3g4zI; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Tj
-	X2oXdCk+6+6snsqOlEZ+83/82Ro6C20h04M4A5oc0=; b=m/E3g4zI7rRGjNE8dP
-	QEFrNQ2e7SYejkaD5t8EBQ3CYFG8Cga4IR6TSegDK0VdMohyVBmX2g6XBytmoQ0h
-	MnRgaLKJmzUCeM/1yylMYfid44XbR/4VWXJ+Fxp/Ua5gzxNd5K8NRzR3dyMKbf4N
-	R1l67HuXmO6Ni9QizcmdkNiCk=
-Received: from ProDesk-480.. (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wA3eBOJBWJpaIyVEw--.14450S2;
-	Sat, 10 Jan 2026 15:53:49 +0800 (CST)
-From: Andy Yan <andyshrk@163.com>
-To: rdbabiera@google.com
-Cc: badhri@google.com,
-	gregkh@linuxfoundation.org,
-	heikki.krogerus@linux.intel.com,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	andyshrk@163.com,
-	sebastian.reichel@collabora.com
-Subject: Re: [PATCH v2 2/2] usb: typec: altmodes/displayport: do not enter mode if port is the UFP
-Date: Sat, 10 Jan 2026 15:53:42 +0800
-Message-ID: <20260110075345.238333-1-andyshrk@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250923181606.1583584-6-rdbabiera@google.com>
-References: <20250923181606.1583584-6-rdbabiera@google.com>
+	s=arc-20240116; t=1768038581; c=relaxed/simple;
+	bh=qI/jnxA4OmKm2GXJ0DfJAWer0YKvaomasgIPKUG5Pvc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=AEya/OLMQFCaO4dILTv0laVfVC/+eMrUfLv3X9x0gK/6ufmzutjVysS+Rekj+tmq3sZ8uTF/I2K/7h9SkACCxBdl96cSPywMi3J4YZ7iqpFKzZ/ku+0QFKMWdMYPcGiO8771JQVpo+X0uibJhEQpCC+RXSeGFrV7JDIBr1/dkeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [121.236.206.128])
+	by gateway (Coremail) with SMTP id _____8Axz8OnIGJpt1cHAA--.23998S3;
+	Sat, 10 Jan 2026 17:49:27 +0800 (CST)
+Received: from chenhuacai$loongson.cn ( [121.236.206.128] ) by
+ ajax-webmail-front1 (Coremail) ; Sat, 10 Jan 2026 17:49:25 +0800
+ (GMT+08:00)
+Date: Sat, 10 Jan 2026 17:49:25 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"Alan Stern" <stern@rowland.harvard.edu>
+Subject: Re: [PATCH] USB: HCD: remove logic about which hcd is loaded
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
+ 20250609(354f7833) Copyright (c) 2002-2026 www.mailtech.cn loongson
+In-Reply-To: <2026010739-diffuser-shelter-e31c@gregkh>
+References: <2026010739-diffuser-shelter-e31c@gregkh>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: d0LBw2Zvb3Rlcl90eHQ9NjU2Nzo2MTg=
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wA3eBOJBWJpaIyVEw--.14450S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3JFy7AryUKry3urW8ZF4xZwb_yoW3Cw48pF
-	WY93Z8Gry7X39xWr42yF1xJayY9FWDJa9ruF9I9w1Sv3WUuF48JFn5K3y8Gry7urW3tFy3
-	Xas0gr1jkFWkC3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR3xhJUUUUU=
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/xtbC7g5XtWliBY42AgAA32
+Message-ID: <5f013d5a.3a686.19ba74f85dc.Coremail.chenhuacai@loongson.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:qMiowJAx_OClIGJpgC4XAA--.4609W
+X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAgEDBmlh6hsAygABs0
+X-Coremail-Antispam: 1Uk129KBj93XoW3GFW3Aw4UAFy5Zr1kWr1kXrc_yoWxZw45pF
+	sxWF4xCrn5JrZ3Wr15A3WDKr18tw1DtryjgFWxC348X3yqk3srJFy8ZFyfXr93XrWkJ3W0
+	yF48urWUAF4kKFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFcxC0VAYjxAxZF
+	0Ew4CEw7xC0wACY4xI67k04243AVC20s07MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+	c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+	CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+	MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
+	4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JwCE64xv
+	F2IEb7IF0Fy7YxBIdaVFxhVjvjDU0xZFpf9x07j0BTOUUUUU=
 
->Nothing currently stops the DisplayPort Alt Mode driver from sending
->Enter Mode if the port is the Data Device. Utilize
->typec_altmode_get_data_role to prevent mode entry.
-
->---
-> drivers/usb/typec/altmodes/displayport.c | 4 +++-
-> 1 file changed, 3 insertions(+), 1 deletion(-)
-
->diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
->index 1dcb77faf85d..8d111ad3b71b 100644
->--- a/drivers/usb/typec/altmodes/displayport.c
->+++ b/drivers/usb/typec/altmodes/displayport.c
->@@ -758,7 +758,9 @@ int dp_altmode_probe(struct typec_altmode *alt)
-> 	struct fwnode_handle *fwnode;
-> 	struct dp_altmode *dp;
-> 
->-	/* FIXME: Port can only be DFP_U. */
->+	/* Port can only be DFP_U. */
->+	if (typec_altmode_get_data_role(alt) != TYPEC_HOST)
->+		return -EPROTO;
-> 
-> 	/* Make sure we have compatible pin configurations */
-> 	if (!(DP_CAP_PIN_ASSIGN_DFP_D(port->vdo) &
->
-I found that after applying this patch, the Rock 5B SBC can no longer
-enter alt mode when connected to a DP monitor via a Type-C hub, the following
-error dmesg can be seen:
-typec_displayport port0-partner.0: probe with driver typec_displayport failed with error -71
-
-The TypeC Port on rock5b drive via the PD chip FUSB302
-# cat /sys/kernel/debug/usb/tcpm-4-0022/log 
-[    1.561397] Unable to find pd-revision property or incorrect array size
-[    1.590115] Setting usb_comm capable false
-[    1.590123] Setting voltage/current limit 0 mV 0 mA
-[    1.590129] polarity 0
-[    1.590198] Requesting mux state 0, usb-role 0, orientation 0
-[    1.631710] state change INVALID_STATE -> SNK_UNATTACHED [rev1 NONE_AMS]
-[    1.633129] CC1: 0 -> 0, CC2: 0 -> 0 [state SNK_UNATTACHED, polarity 0, disconnected]
-[    1.645221] 4-0022: registered
-[    1.646189] Setting usb_comm capable false
-[    1.646215] Setting voltage/current limit 0 mV 0 mA
-[    1.646231] polarity 0
-[    1.646237] Requesting mux state 0, usb-role 0, orientation 0
-[    1.662091] cc:=2
-[    1.668000] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev1 NONE_AMS]
-[    1.671183] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
-[    1.672491] pending state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED @ 920 ms [rev1 NONE_AMS]
-[    2.601879] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [delayed 920 ms]
-[    2.602431] Start toggling
-[    2.624387] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-[    2.626056] state change TOGGLING -> SNK_ATTACH_WAIT [rev1 NONE_AMS]
-[    2.629010] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 200 ms [rev1 NONE_AMS]
-[    2.830604] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 200 ms]
-[    2.831984] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev1 NONE_AMS]
-[    2.832941] polarity 1
-[    2.832945] Requesting mux state 1, usb-role 2, orientation 2
-[    2.860029] state change SNK_ATTACHED -> SNK_STARTUP [rev1 NONE_AMS]
-[    2.861402] state change SNK_STARTUP -> SNK_DISCOVERY [rev3 NONE_AMS]
-[    2.861945] Setting voltage/current limit 5000 mV 3000 mA
-[    2.861950] vbus=0 charge:=1
-[    2.862859] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
-[    2.869362] pending state change SNK_WAIT_CAPABILITIES -> SNK_SOFT_RESET @ 310 ms [rev3 NONE_AMS]
-[    3.181014] state change SNK_WAIT_CAPABILITIES -> SNK_SOFT_RESET [delayed 310 ms]
-[    3.181580] AMS SOFT_RESET_AMS start
-[    3.183145] state change SNK_SOFT_RESET -> AMS_START [rev3 SOFT_RESET_AMS]
-[    3.184513] state change AMS_START -> SOFT_RESET_SEND [rev3 SOFT_RESET_AMS]
-[    3.185066] PD TX, header: 0x8d
-[    3.193733] PD TX complete, status: 0
-[    3.196440] pending state change SOFT_RESET_SEND -> HARD_RESET_SEND @ 60 ms [rev3 SOFT_RESET_AMS]
-[    3.198922] PD RX, header: 0x1a3 [1]
-[    3.200603] AMS SOFT_RESET_AMS finished
-[    3.202836] state change SOFT_RESET_SEND -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
-[    3.207907] pending state change SNK_WAIT_CAPABILITIES -> SNK_WAIT_CAPABILITIES_TIMEOUT @ 310 ms [rev3 NONE_AMS]
-[    3.208976] PD RX, header: 0x43a1 [1]
-[    3.210464]  PDO 0: type 0, 5000 mV, 2000 mA [RUDE]
-[    3.210467]  PDO 1: type 0, 9000 mV, 2450 mA []
-[    3.210469]  PDO 2: type 0, 15000 mV, 2670 mA []
-[    3.210472]  PDO 3: type 0, 20000 mV, 3000 mA []
-[    3.211607] state change SNK_WAIT_CAPABILITIES -> SNK_NEGOTIATE_CAPABILITIES [rev3 POWER_NEGOTIATION]
-[    3.213865] Setting usb_comm capable true
-[    3.213871] cc=2 cc1=0 cc2=5 vbus=0 vconn=sink polarity=1
-[    3.213877] Requesting PDO 3: 20000 mV, 3000 mA
-[    3.213880] PD TX, header: 0x1282
-[    3.222930] PD TX complete, status: 0
-[    3.225674] pending state change SNK_NEGOTIATE_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev3 POWER_NEGOTIATION]
-[    3.229457] PD RX, header: 0x5a3 [1]
-[    3.232125] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_TRANSITION_SINK [rev3 POWER_NEGOTIATION]
-[    3.234275] Setting standby current 5000 mV @ 500 mA
-[    3.234278] Setting voltage/current limit 5000 mV 500 mA
-[    3.235158] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 500 ms [rev3 POWER_NEGOTIATION]
-[    3.339971] PD RX, header: 0x7a6 [1]
-[    3.341738] Setting voltage/current limit 20000 mV 3000 mA
-[    3.342566] state change SNK_TRANSITION_SINK -> SNK_READY [rev3 POWER_NEGOTIATION]
-[    3.346462] AMS POWER_NEGOTIATION finished
-[    3.352068] AMS DISCOVER_IDENTITY start
-[    3.354952] PD TX, header: 0x148f
-[    3.363951] PD TX complete, status: 0
-[    3.372273] PD RX, header: 0x59af [1]
-[    3.375213] Rx VDM cmd 0xff00a041 type 1 cmd 1 len 5
-[    3.376489] AMS DISCOVER_IDENTITY finished
-[    3.378482] Identity: 1d5c:7102.070a
-[    3.381145] AMS DISCOVER_SVIDS start
-[    3.384002] PD TX, header: 0x168f
-[    3.393019] PD TX complete, status: 0
-[    3.400228] PD RX, header: 0x2baf [1]
-[    3.403143] Rx VDM cmd 0xff00a042 type 1 cmd 2 len 2
-[    3.404418] AMS DISCOVER_SVIDS finished
-[    3.405753] SVID 1: 0xff01
-[    3.408814] AMS DISCOVER_MODES start
-[    3.411666] PD TX, header: 0x188f
-[    3.420681] PD TX complete, status: 0
-[    3.427868] PD RX, header: 0x2daf [1]
-[    3.430784] Rx VDM cmd 0xff01a043 type 1 cmd 3 len 2
-[    3.432193] AMS DISCOVER_MODES finished
-[    3.433811]  Alternate mode 0: SVID 0xff01, VDO 1: 0x00040045
-[    3.468873] AMS DFP_TO_UFP_ENTER_MODE start
-[    3.473347] PD TX, header: 0x1a8f
-[    3.483714] PD TX complete, status: 0
-[    3.490564] PD RX, header: 0x1faf [1]
-[    3.493540] Rx VDM cmd 0xff01a144 type 1 cmd 4 len 1
-[    3.495653] AMS DFP_TO_UFP_ENTER_MODE finished
-[    3.501550] AMS STRUCTURED_VDMS start
-[    3.504410] PD TX, header: 0x2c8f
-[    3.513803] PD TX complete, status: 0
-[    3.520991] PD RX, header: 0x21af [1]
-[    3.523920] Rx VDM cmd 0xff01a150 type 1 cmd 16 len 2
-[    3.526044] AMS STRUCTURED_VDMS finished
-[    3.544870] AMS STRUCTURED_VDMS start
-[    3.547736] PD TX, header: 0x2e8f
-[    3.557132] PD TX complete, status: 0
-[    3.564509] PD RX, header: 0x13af [1]
-[    3.567452] Rx VDM cmd 0xff01a151 type 1 cmd 17 len 1
-[    3.569581] AMS STRUCTURED_VDMS finished
-[    6.927982] PD RX, header: 0x25af [1]
-[    6.931501] Rx VDM cmd 0xff01a106 type 0 cmd 6 len 2
-
-The flow terminates at this point without continuing into alt mode.
-
-After reverting this patch, the process can continue and successfully enter alt mode:
-
-[    3.159202] AMS DFP_TO_UFP_ENTER_MODE start
-[    3.159207] PD TX, header: 0x1a8f
-[    3.167022] PD TX complete, status: 0
-[    3.171317] PD RX, header: 0x1faf [1]
-[    3.171322] Rx VDM cmd 0xff01a144 type 1 cmd 4 len 1
-[    3.171327] AMS DFP_TO_UFP_ENTER_MODE finished
-[    3.171402] AMS STRUCTURED_VDMS start
-[    3.171406] PD TX, header: 0x2c8f
-[    3.179592] PD TX complete, status: 0
-[    3.184266] PD RX, header: 0x21af [1]
-[    3.184271] Rx VDM cmd 0xff01a150 type 1 cmd 16 len 2
-[    3.184277] AMS STRUCTURED_VDMS finished
-[    3.184315] AMS STRUCTURED_VDMS start
-[    3.184319] PD TX, header: 0x2e8f
-[    3.192595] PD TX complete, status: 0
-[    3.196953] PD RX, header: 0x13af [1]
-[    3.196959] Rx VDM cmd 0xff01a151 type 1 cmd 17 len 1
-[    3.196966] AMS STRUCTURED_VDMS finished
-[    6.562035] PD RX, header: 0x25af [1]
-[    6.562044] Rx VDM cmd 0xff01a106 type 0 cmd 6 len 2
--- 
-2.43.0
+CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiR3JlZyBLcm9haC1IYXJ0
+bWFuIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+Cj4g5Y+R6YCB5pe26Ze0OjIwMjYtMDEt
+MDcgMjM6MjU6NDAgKOaYn+acn+S4iSkKPiDmlLbku7bkuro6IGxpbnV4LXVzYkB2Z2VyLmtlcm5l
+bC5vcmcKPiDmioTpgIE6IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcsICJHcmVnIEtyb2Fo
+LUhhcnRtYW4iIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4sICJIdWFjYWkgQ2hlbiIgPGNo
+ZW5odWFjYWlAbG9vbmdzb24uY24+LCAiQWxhbiBTdGVybiIgPHN0ZXJuQHJvd2xhbmQuaGFydmFy
+ZC5lZHU+Cj4g5Li76aKYOiBbUEFUQ0hdIFVTQjogSENEOiByZW1vdmUgbG9naWMgYWJvdXQgd2hp
+Y2ggaGNkIGlzIGxvYWRlZAo+IAo+IEl0IHR1cm5zIG91dCB0aGF0IHdhcm5pbmcgYWJvdXQgd2hp
+Y2ggVVNCIGhvc3QgY29udHJvbGxlciBpcyBsb2FkZWQKPiBiZWZvcmUgYW5vdGhlciBvbmUgZG9l
+c24ndCByZWFsbHkgbWF0dGVyLiAgQWxsIHRoYXQgcmVhbGx5IGlzIG5lZWRlZCBpcwo+IHRoZSBQ
+Q0kgc29mdGRlcCBtb2R1bGUgbG9hZGluZyBsb2dpYywgd2hpY2ggaGFzIGJlZW4gcHJlc2VudCBp
+biB0aGUKPiBrZXJuZWwgZXZlciBzaW5jZSBjb21taXQgMDVjOTJkYTBjNTI0ICgidXNiOiBvaGNp
+L3VoY2kgLSBhZGQgc29mdAo+IGRlcGVuZGVuY2llcyBvbiBlaGNpX3BjaSIpCj4gCj4gU28gcmVt
+b3ZlIHRoZSB3YXJuaW5nIG1lc3NhZ2VzLCB0aGV5IGFyZSBub3QgdXNlZnVsLCBub3QgbmVlZGVk
+LCBhbmQKPiBvbmx5IGNvbmZ1c2UgcGVvcGxlLiAgQXMgY2FuIGJlIHNlZW4gaW4gdGhlIGRpc2N1
+c3Npb24gYXQKPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjUxMjMwMDgwMDE0LjM5MzQ1
+OTAtMS1jaGVuaHVhY2FpQGxvb25nc29uLmNuCj4gCj4gQ2M6IEh1YWNhaSBDaGVuIDxjaGVuaHVh
+Y2FpQGxvb25nc29uLmNuPgo+IFN1Z2dlc3RlZC1ieTogQWxhbiBTdGVybiA8c3Rlcm5Acm93bGFu
+ZC5oYXJ2YXJkLmVkdT4KPiBTaWduZWQtb2ZmLWJ5OiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdr
+aEBsaW51eGZvdW5kYXRpb24ub3JnPgpSZXZpZXdlZC1ieTogSHVhY2FpIENoZW4gPGNoZW5odWFj
+YWlAbG9vbmdzb24uY24+CgpBbmQgaXQgc2hvdWxkIGJlIGJhY2twb3J0ZWQgdG8gc3RhYmxlIGJy
+YW5jaGVzPwoKSHVhY2FpCgo+IC0tLQo+ICBkcml2ZXJzL3VzYi9jb3JlL2hjZC5jICAgICAgICAg
+ICAgfCA0IC0tLS0KPiAgZHJpdmVycy91c2IvZm90ZzIxMC9mb3RnMjEwLWhjZC5jIHwgNiAtLS0t
+LS0KPiAgZHJpdmVycy91c2IvaG9zdC9laGNpLWhjZC5jICAgICAgIHwgOCAtLS0tLS0tLQo+ICBk
+cml2ZXJzL3VzYi9ob3N0L29oY2ktaGNkLmMgICAgICAgfCAzIC0tLQo+ICBkcml2ZXJzL3VzYi9o
+b3N0L3VoY2ktaGNkLmMgICAgICAgfCA1IC0tLS0tCj4gIGluY2x1ZGUvbGludXgvdXNiL2hjZC5o
+ICAgICAgICAgICB8IDYgLS0tLS0tCj4gIDYgZmlsZXMgY2hhbmdlZCwgMzIgZGVsZXRpb25zKC0p
+Cj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NvcmUvaGNkLmMgYi9kcml2ZXJzL3VzYi9j
+b3JlL2hjZC5jCj4gaW5kZXggMjRmZWIwZGUxYzAwLi4yZDk5YTU5ZDlmM2YgMTAwNjQ0Cj4gLS0t
+IGEvZHJpdmVycy91c2IvY29yZS9oY2QuYwo+ICsrKyBiL2RyaXZlcnMvdXNiL2NvcmUvaGNkLmMK
+PiBAQCAtNzcsMTAgKzc3LDYgQEAKPiAgCj4gIC8qLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSovCj4gIAo+IC0v
+KiBLZWVwIHRyYWNrIG9mIHdoaWNoIGhvc3QgY29udHJvbGxlciBkcml2ZXJzIGFyZSBsb2FkZWQg
+Ki8KPiAtdW5zaWduZWQgbG9uZyB1c2JfaGNkc19sb2FkZWQ7Cj4gLUVYUE9SVF9TWU1CT0xfR1BM
+KHVzYl9oY2RzX2xvYWRlZCk7Cj4gLQo+ICAvKiBob3N0IGNvbnRyb2xsZXJzIHdlIG1hbmFnZSAq
+Lwo+ICBERUZJTkVfSURSICh1c2JfYnVzX2lkcik7Cj4gIEVYUE9SVF9TWU1CT0xfR1BMICh1c2Jf
+YnVzX2lkcik7Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2ZvdGcyMTAvZm90ZzIxMC1oY2Qu
+YyBiL2RyaXZlcnMvdXNiL2ZvdGcyMTAvZm90ZzIxMC1oY2QuYwo+IGluZGV4IDY0YzQ5NjVhMTYw
+Zi4uZmJiNWQ1OTBlYWI2IDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvdXNiL2ZvdGcyMTAvZm90ZzIx
+MC1oY2QuYwo+ICsrKyBiL2RyaXZlcnMvdXNiL2ZvdGcyMTAvZm90ZzIxMC1oY2QuYwo+IEBAIC01
+NjI1LDExICs1NjI1LDYgQEAgaW50IF9faW5pdCBmb3RnMjEwX2hjZF9pbml0KHZvaWQpCj4gIAlp
+ZiAodXNiX2Rpc2FibGVkKCkpCj4gIAkJcmV0dXJuIC1FTk9ERVY7Cj4gIAo+IC0Jc2V0X2JpdChV
+U0JfRUhDSV9MT0FERUQsICZ1c2JfaGNkc19sb2FkZWQpOwo+IC0JaWYgKHRlc3RfYml0KFVTQl9V
+SENJX0xPQURFRCwgJnVzYl9oY2RzX2xvYWRlZCkgfHwKPiAtCQkJdGVzdF9iaXQoVVNCX09IQ0lf
+TE9BREVELCAmdXNiX2hjZHNfbG9hZGVkKSkKPiAtCQlwcl93YXJuKCJXYXJuaW5nISBmb3RnMjEw
+X2hjZCBzaG91bGQgYWx3YXlzIGJlIGxvYWRlZCBiZWZvcmUgdWhjaV9oY2QgYW5kIG9oY2lfaGNk
+LCBub3QgYWZ0ZXJcbiIpOwo+IC0KPiAgCXByX2RlYnVnKCIlczogYmxvY2sgc2l6ZXM6IHFoICV6
+ZCBxdGQgJXpkIGl0ZCAlemRcbiIsCj4gIAkJCWhjZF9uYW1lLCBzaXplb2Yoc3RydWN0IGZvdGcy
+MTBfcWgpLAo+ICAJCQlzaXplb2Yoc3RydWN0IGZvdGcyMTBfcXRkKSwKPiBAQCAtNTY0Myw1ICs1
+NjM4LDQgQEAgaW50IF9faW5pdCBmb3RnMjEwX2hjZF9pbml0KHZvaWQpCj4gIHZvaWQgX19leGl0
+IGZvdGcyMTBfaGNkX2NsZWFudXAodm9pZCkKPiAgewo+ICAJZGVidWdmc19yZW1vdmUoZm90ZzIx
+MF9kZWJ1Z19yb290KTsKPiAtCWNsZWFyX2JpdChVU0JfRUhDSV9MT0FERUQsICZ1c2JfaGNkc19s
+b2FkZWQpOwo+ICB9Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1oY2QuYyBi
+L2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1oY2QuYwo+IGluZGV4IDZkMWQxOTBjOTE0ZC4uM2M0NmJi
+MThjN2YzIDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1oY2QuYwo+ICsrKyBi
+L2RyaXZlcnMvdXNiL2hvc3QvZWhjaS1oY2QuYwo+IEBAIC0xMzU0LDEyICsxMzU0LDYgQEAgc3Rh
+dGljIGludCBfX2luaXQgZWhjaV9oY2RfaW5pdCh2b2lkKQo+ICAJaWYgKHVzYl9kaXNhYmxlZCgp
+KQo+ICAJCXJldHVybiAtRU5PREVWOwo+ICAKPiAtCXNldF9iaXQoVVNCX0VIQ0lfTE9BREVELCAm
+dXNiX2hjZHNfbG9hZGVkKTsKPiAtCWlmICh0ZXN0X2JpdChVU0JfVUhDSV9MT0FERUQsICZ1c2Jf
+aGNkc19sb2FkZWQpIHx8Cj4gLQkJCXRlc3RfYml0KFVTQl9PSENJX0xPQURFRCwgJnVzYl9oY2Rz
+X2xvYWRlZCkpCj4gLQkJcHJpbnRrKEtFUk5fV0FSTklORyAiV2FybmluZyEgZWhjaV9oY2Qgc2hv
+dWxkIGFsd2F5cyBiZSBsb2FkZWQiCj4gLQkJCQkiIGJlZm9yZSB1aGNpX2hjZCBhbmQgb2hjaV9o
+Y2QsIG5vdCBhZnRlclxuIik7Cj4gLQo+ICAJcHJfZGVidWcoIiVzOiBibG9jayBzaXplczogcWgg
+JXpkIHF0ZCAlemQgaXRkICV6ZCBzaXRkICV6ZFxuIiwKPiAgCQkgaGNkX25hbWUsCj4gIAkJIHNp
+emVvZihzdHJ1Y3QgZWhjaV9xaCksIHNpemVvZihzdHJ1Y3QgZWhjaV9xdGQpLAo+IEBAIC0xMzkw
+LDcgKzEzODQsNiBAQCBzdGF0aWMgaW50IF9faW5pdCBlaGNpX2hjZF9pbml0KHZvaWQpCj4gIAlk
+ZWJ1Z2ZzX3JlbW92ZShlaGNpX2RlYnVnX3Jvb3QpOwo+ICAJZWhjaV9kZWJ1Z19yb290ID0gTlVM
+TDsKPiAgI2VuZGlmCj4gLQljbGVhcl9iaXQoVVNCX0VIQ0lfTE9BREVELCAmdXNiX2hjZHNfbG9h
+ZGVkKTsKPiAgCXJldHVybiByZXR2YWw7Cj4gIH0KPiAgbW9kdWxlX2luaXQoZWhjaV9oY2RfaW5p
+dCk7Cj4gQEAgLTE0MDQsNiArMTM5Nyw1IEBAIHN0YXRpYyB2b2lkIF9fZXhpdCBlaGNpX2hjZF9j
+bGVhbnVwKHZvaWQpCj4gICNpZmRlZiBDT05GSUdfRFlOQU1JQ19ERUJVRwo+ICAJZGVidWdmc19y
+ZW1vdmUoZWhjaV9kZWJ1Z19yb290KTsKPiAgI2VuZGlmCj4gLQljbGVhcl9iaXQoVVNCX0VIQ0lf
+TE9BREVELCAmdXNiX2hjZHNfbG9hZGVkKTsKPiAgfQo+ICBtb2R1bGVfZXhpdChlaGNpX2hjZF9j
+bGVhbnVwKTsKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC9vaGNpLWhjZC5jIGIvZHJp
+dmVycy91c2IvaG9zdC9vaGNpLWhjZC5jCj4gaW5kZXggOWM3ZjMwMDg2NDZlLi4zMDg0MDkyMmY3
+MjkgMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC9vaGNpLWhjZC5jCj4gKysrIGIvZHJp
+dmVycy91c2IvaG9zdC9vaGNpLWhjZC5jCj4gQEAgLTEyODIsNyArMTI4Miw2IEBAIHN0YXRpYyBp
+bnQgX19pbml0IG9oY2lfaGNkX21vZF9pbml0KHZvaWQpCj4gIAo+ICAJcHJfZGVidWcgKCIlczog
+YmxvY2sgc2l6ZXM6IGVkICV6ZCB0ZCAlemRcbiIsIGhjZF9uYW1lLAo+ICAJCXNpemVvZiAoc3Ry
+dWN0IGVkKSwgc2l6ZW9mIChzdHJ1Y3QgdGQpKTsKPiAtCXNldF9iaXQoVVNCX09IQ0lfTE9BREVE
+LCAmdXNiX2hjZHNfbG9hZGVkKTsKPiAgCj4gIAlvaGNpX2RlYnVnX3Jvb3QgPSBkZWJ1Z2ZzX2Ny
+ZWF0ZV9kaXIoIm9oY2kiLCB1c2JfZGVidWdfcm9vdCk7Cj4gIAo+IEBAIC0xMzMyLDcgKzEzMzEs
+NiBAQCBzdGF0aWMgaW50IF9faW5pdCBvaGNpX2hjZF9tb2RfaW5pdCh2b2lkKQo+ICAJZGVidWdm
+c19yZW1vdmUob2hjaV9kZWJ1Z19yb290KTsKPiAgCW9oY2lfZGVidWdfcm9vdCA9IE5VTEw7Cj4g
+IAo+IC0JY2xlYXJfYml0KFVTQl9PSENJX0xPQURFRCwgJnVzYl9oY2RzX2xvYWRlZCk7Cj4gIAly
+ZXR1cm4gcmV0dmFsOwo+ICB9Cj4gIG1vZHVsZV9pbml0KG9oY2lfaGNkX21vZF9pbml0KTsKPiBA
+QCAtMTM1Miw3ICsxMzUwLDYgQEAgc3RhdGljIHZvaWQgX19leGl0IG9oY2lfaGNkX21vZF9leGl0
+KHZvaWQpCj4gIAlwczNfb2hjaV9kcml2ZXJfdW5yZWdpc3RlcigmUFMzX1NZU1RFTV9CVVNfRFJJ
+VkVSKTsKPiAgI2VuZGlmCj4gIAlkZWJ1Z2ZzX3JlbW92ZShvaGNpX2RlYnVnX3Jvb3QpOwo+IC0J
+Y2xlYXJfYml0KFVTQl9PSENJX0xPQURFRCwgJnVzYl9oY2RzX2xvYWRlZCk7Cj4gIH0KPiAgbW9k
+dWxlX2V4aXQob2hjaV9oY2RfbW9kX2V4aXQpOwo+ICAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91
+c2IvaG9zdC91aGNpLWhjZC5jIGIvZHJpdmVycy91c2IvaG9zdC91aGNpLWhjZC5jCj4gaW5kZXgg
+MTRlNmRmZWYxNmM2Li44YmIxMTEwOWI2NmMgMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy91c2IvaG9z
+dC91aGNpLWhjZC5jCj4gKysrIGIvZHJpdmVycy91c2IvaG9zdC91aGNpLWhjZC5jCj4gQEAgLTg2
+Nyw4ICs4NjcsNiBAQCBzdGF0aWMgaW50IF9faW5pdCB1aGNpX2hjZF9pbml0KHZvaWQpCj4gIAlp
+ZiAodXNiX2Rpc2FibGVkKCkpCj4gIAkJcmV0dXJuIC1FTk9ERVY7Cj4gIAo+IC0Jc2V0X2JpdChV
+U0JfVUhDSV9MT0FERUQsICZ1c2JfaGNkc19sb2FkZWQpOwo+IC0KPiAgI2lmZGVmIENPTkZJR19E
+WU5BTUlDX0RFQlVHCj4gIAllcnJidWYgPSBrbWFsbG9jKEVSUkJVRl9MRU4sIEdGUF9LRVJORUwp
+Owo+ICAJaWYgKCFlcnJidWYpCj4gQEAgLTkxMiw4ICs5MTAsNiBAQCBzdGF0aWMgaW50IF9faW5p
+dCB1aGNpX2hjZF9pbml0KHZvaWQpCj4gIAo+ICBlcnJidWZfZmFpbGVkOgo+ICAjZW5kaWYKPiAt
+Cj4gLQljbGVhcl9iaXQoVVNCX1VIQ0lfTE9BREVELCAmdXNiX2hjZHNfbG9hZGVkKTsKPiAgCXJl
+dHVybiByZXR2YWw7Cj4gIH0KPiAgCj4gQEAgLTkzMCw3ICs5MjYsNiBAQCBzdGF0aWMgdm9pZCBf
+X2V4aXQgdWhjaV9oY2RfY2xlYW51cCh2b2lkKQo+ICAjaWZkZWYgQ09ORklHX0RZTkFNSUNfREVC
+VUcKPiAgCWtmcmVlKGVycmJ1Zik7Cj4gICNlbmRpZgo+IC0JY2xlYXJfYml0KFVTQl9VSENJX0xP
+QURFRCwgJnVzYl9oY2RzX2xvYWRlZCk7Cj4gIH0KPiAgCj4gIG1vZHVsZV9pbml0KHVoY2lfaGNk
+X2luaXQpOwo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3VzYi9oY2QuaCBiL2luY2x1ZGUv
+bGludXgvdXNiL2hjZC5oCj4gaW5kZXggYWM5NWU3Yzg5ZGY1Li4xODFkYjA0NGM0ZDIgMTAwNjQ0
+Cj4gLS0tIGEvaW5jbHVkZS9saW51eC91c2IvaGNkLmgKPiArKysgYi9pbmNsdWRlL2xpbnV4L3Vz
+Yi9oY2QuaAo+IEBAIC03NjAsMTIgKzc2MCw2IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCB1c2Jtb25f
+dXJiX2NvbXBsZXRlKHN0cnVjdCB1c2JfYnVzICpidXMsIHN0cnVjdCB1cmIgKnVyYiwKPiAgICov
+Cj4gIGV4dGVybiBzdHJ1Y3Qgcndfc2VtYXBob3JlIGVoY2lfY2ZfcG9ydF9yZXNldF9yd3NlbTsK
+PiAgCj4gLS8qIEtlZXAgdHJhY2sgb2Ygd2hpY2ggaG9zdCBjb250cm9sbGVyIGRyaXZlcnMgYXJl
+IGxvYWRlZCAqLwo+IC0jZGVmaW5lIFVTQl9VSENJX0xPQURFRAkJMAo+IC0jZGVmaW5lIFVTQl9P
+SENJX0xPQURFRAkJMQo+IC0jZGVmaW5lIFVTQl9FSENJX0xPQURFRAkJMgo+IC1leHRlcm4gdW5z
+aWduZWQgbG9uZyB1c2JfaGNkc19sb2FkZWQ7Cj4gLQo+ICAjZW5kaWYgLyogX19LRVJORUxfXyAq
+Lwo+ICAKPiAgI2VuZGlmIC8qIF9fVVNCX0NPUkVfSENEX0ggKi8KPiAtLSAKPiAyLjUyLjAKDQoN
+CuacrOmCruS7tuWPiuWFtumZhOS7tuWQq+aciem+meiKr+S4reenkeeahOWVhuS4muenmOWvhuS/
+oeaBr++8jOS7hemZkOS6juWPkemAgee7meS4iumdouWcsOWdgOS4reWIl+WHuueahOS4quS6uuaI
+lue+pOe7hOOAguemgeatouS7u+S9leWFtuS7luS6uuS7peS7u+S9leW9ouW8j+S9v+eUqO+8iOWM
+heaLrOS9huS4jemZkOS6juWFqOmDqOaIlumDqOWIhuWcsOazhOmcsuOAgeWkjeWItuaIluaVo+WP
+ke+8ieacrOmCruS7tuWPiuWFtumZhOS7tuS4reeahOS/oeaBr+OAguWmguaenOaCqOmUmeaUtuac
+rOmCruS7tu+8jOivt+aCqOeri+WNs+eUteivneaIlumCruS7tumAmuefpeWPkeS7tuS6uuW5tuWI
+oOmZpOacrOmCruS7tuOAgiANClRoaXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWlu
+IGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBmcm9tIExvb25nc29uIFRlY2hub2xvZ3kgLCB3aGlj
+aCBpcyBpbnRlbmRlZCBvbmx5IGZvciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNz
+IGlzIGxpc3RlZCBhYm92ZS4gQW55IHVzZSBvZiB0aGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGhl
+cmVpbiBpbiBhbnkgd2F5IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3Ig
+cGFydGlhbCBkaXNjbG9zdXJlLCByZXByb2R1Y3Rpb24gb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVy
+c29ucyBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4g
+SWYgeW91IHJlY2VpdmUgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2Vu
+ZGVyIGJ5IHBob25lIG9yIGVtYWlsIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuIA0KDQoNCg==
 
 
