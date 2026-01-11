@@ -1,135 +1,66 @@
-Return-Path: <linux-usb+bounces-32143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ABD9D0E215
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Jan 2026 08:50:35 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E297D0E90E
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Jan 2026 11:23:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 162DA30124C3
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Jan 2026 07:50:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3F82430049DF
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Jan 2026 10:23:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970992F5311;
-	Sun, 11 Jan 2026 07:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88E43314A4;
+	Sun, 11 Jan 2026 10:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rWVTV5VN"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="af4IkcS0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F70223AE62;
-	Sun, 11 Jan 2026 07:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD632FFF94;
+	Sun, 11 Jan 2026 10:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768117822; cv=none; b=L+LPM3raQQtI/mRSShS4cicJMMoR5rNTHYfHaKh+KiRi3cN5Zvg2vFbPcjOuAX/+fmUmP301QkPwZ4j14MuinmphPt/aUBta8d8qWEnnFsbaSl2BO8R4JzCimWZU+QgXT0cMq/1EZou4M69JZBVy7K8KVBxMaKeCLw+V3BKdSGM=
+	t=1768126997; cv=none; b=GT6nHMXDX0vp2m3jaSvzmJ/Ze/WQWD6PFaatqFqHRNbd9whXrus01EtZJpRBt7mrtGhUzgckOwRr1rMRhS2IC+f71jnWMY10j2vojHxpBG8+MVnrnfpxju1TBvS+dEsJ/1zybvtTxnskfuW4k5CyxB4x1D4q7S28O94FQUGvd9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768117822; c=relaxed/simple;
-	bh=lSl+sxJUkiqRKsklznYNdONe6X730IEWNgyBEI4yIa0=;
+	s=arc-20240116; t=1768126997; c=relaxed/simple;
+	bh=wIo57OR6Mb97q4AGxkYsWCbgAzp85yRtpsrhKCgkrq8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mc1GH8J5IW5AMEuy2GuhmQHAJ2XFvxg/T8nitX42dQpHDfB6eP04P55p0ebBbWNREvaw6qwLqlR2KmcdA0l/GRAyUOOaOGKwYKlAF3Jcsj8H8fubvP+L0wMidswTSd4PymdY778Gx9np/Ft8RcUM4vnaCANtk1o9Xm7s5Zx1YKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rWVTV5VN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F310C4CEF7;
-	Sun, 11 Jan 2026 07:50:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=pu7MM35+NCNig7WKrkJlt8d/fVIKL0oS+cb1KvzydiOnVFe7RazMvV6AFCPFusGi0qRKzm605cd5PcrDIPEr+HLtumslsa9YwUXAXwkA1AR9U31pj2VymOseVJMS1l23CCAmGIuUlB6bT6KfK/czpaF0kY1Up/HnnPYpOgx6NMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=af4IkcS0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BFAC4CEF7;
+	Sun, 11 Jan 2026 10:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1768117821;
-	bh=lSl+sxJUkiqRKsklznYNdONe6X730IEWNgyBEI4yIa0=;
+	s=korg; t=1768126996;
+	bh=wIo57OR6Mb97q4AGxkYsWCbgAzp85yRtpsrhKCgkrq8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rWVTV5VNRfqpLgK8oJAT/KuBY2n+S8KRDR0zDWKVVKiOqxRADvLS1Rg0xGp/SYqWA
-	 lylVDz/IZy0Bpxi90i2AZOvCL8se04ANavM6cWtD+NtUr08mB/lcnoXvzZSPuti8gU
-	 nnfq61IJ2NzJcTDXKNA+HXNAO5J+zFHSvx+5Q1I4=
-Date: Sun, 11 Jan 2026 08:50:18 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: karthikeyan K S <karthiproffesional@gmail.com>
-Cc: hminas@synopsys.com, gregory.herrero@intel.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc2: add missing SLAB_CACHE_DMA flag for
- desc_hsisoc_cache
-Message-ID: <2026011146-diaper-purchase-8933@gregkh>
-References: <CAP_JKPvQj518Y6J0em=fwM0SeLhba8YCoTyHzWoDjq7zph33vw@mail.gmail.com>
+	b=af4IkcS0OHNDoyoN26mvK/VMXVQLJiD04AIPqNAluYK4wU0Yckppe3XAp6pkYwFAi
+	 zInE2RQ/1jfX+JRyC1mMI4EnRt3wFKjlknOvx+vChWN7r+cDp8WTvifHoJv0Krg2Dl
+	 hUDHzkIDCNxrdXWMNpgvsD0qDDFLz67bjtFFqH2g=
+Date: Sun, 11 Jan 2026 11:23:13 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: =?utf-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: Re: [PATCH] USB: HCD: remove logic about which hcd is loaded
+Message-ID: <2026011100--cd5b@gregkh>
+References: <2026010739-diffuser-shelter-e31c@gregkh>
+ <5f013d5a.3a686.19ba74f85dc.Coremail.chenhuacai@loongson.cn>
+ <2026011037-kinfolk-serotonin-0b5d@gregkh>
+ <7e7ef90b.3a68c.19ba761c225.Coremail.chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAP_JKPvQj518Y6J0em=fwM0SeLhba8YCoTyHzWoDjq7zph33vw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7e7ef90b.3a68c.19ba761c225.Coremail.chenhuacai@loongson.cn>
 
-On Sun, Jan 11, 2026 at 01:01:51PM +0530, karthikeyan K S wrote:
-> >From 39cd652d071184e3bab97ba92f6da30152289905 Mon Sep 17 00:00:00 2001
-> From: karthikeyan <karthiproffesional@gmail.com>
-> Date: Sun, 11 Jan 2026 08:36:25 +0200
-> Subject: [PATCH] usb: dwc2: add missing SLAB_CACHE_DMA flag for
->  desc_hsisoc_cache
-> 
-> The desc_hsisoc_cache kmem_cache is used to allocate DMA descriptors
-> for High-Speed isochronous transfers. These descriptors are passed to
-> the hardware via dma_map_single() in dwc2_desc_list_alloc().
-> 
-> The desc_gen_cache, which serves the same purpose for other transfer
-> types, correctly specifies SLAB_CACHE_DMA. However, desc_hsisoc_cache
-> was created without this flag, despite both caches being used
-> identically for DMA descriptor allocation.
-> 
-> Add the missing SLAB_CACHE_DMA flag to desc_hsisoc_cache for
-> consistency and correctness on platforms with DMA zone restrictions.
-> This also protects against future allocations from this cache that
-> might omit GFP_DMA.
-> 
-> Fixes: 3b5fcc9ac2f4 ("usb: dwc2: host: use kmem cache to allocate descriptors")
-> Signed-off-by: karthikeyan <karthiproffesional@gmail.com>
-> ---
->  drivers/usb/dwc2/hcd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-> index 30eb8506617c..556d6ab36930 100644
-> --- a/drivers/usb/dwc2/hcd.c
-> +++ b/drivers/usb/dwc2/hcd.c
-> @@ -5273,7 +5273,7 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
-> 
->                 hsotg->desc_hsisoc_cache = kmem_cache_create("dwc2-hsisoc-desc",
->                                 sizeof(struct dwc2_dma_desc) *
-> -                               MAX_DMA_DESC_NUM_HS_ISOC, 512, 0, NULL);
-> +                               MAX_DMA_DESC_NUM_HS_ISOC, 512,
-> SLAB_CACHE_DMA, NULL);
->                 if (!hsotg->desc_hsisoc_cache) {
->                         dev_err(hsotg->dev,
->                                 "unable to create dwc2 hs isoc desc cache\n");
-> --
-> 2.34.1
-> 
+On Sat, Jan 10, 2026 at 06:09:20PM +0800, 陈华才 wrote:
+> 本邮件及其附件含有龙芯中科的商业秘密信息，仅限于发送给上面地址中列出的个人或群组。禁止任何其他人以任何形式使用（包括但不限于全部或部分地泄露、复制或散发）本邮件及其附件中的信息。如果您错收本邮件，请您立即电话或邮件通知发件人并删除本邮件。 
+> This email and its attachments contain confidential information from Loongson Technology , which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this email in error, please notify the sender by phone or email immediately and delete it. 
 
-
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
-
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file,
-  Documentation/process/submitting-patches.rst for how to do this
-  correctly.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Now deleted.
 
