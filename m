@@ -1,115 +1,119 @@
-Return-Path: <linux-usb+bounces-32148-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32149-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF21FD0EF3B
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Jan 2026 14:07:01 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7D58D0F08A
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Jan 2026 15:05:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8430C3009F05
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Jan 2026 13:06:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 92DA93011F9B
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Jan 2026 14:05:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91B4A33AD9E;
-	Sun, 11 Jan 2026 13:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26D050095B;
+	Sun, 11 Jan 2026 14:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zBb+ZNwF"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="QExsiGGl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B03CDDAB;
-	Sun, 11 Jan 2026 13:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8948433A9D0
+	for <linux-usb@vger.kernel.org>; Sun, 11 Jan 2026 14:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768136815; cv=none; b=u59GqOPjgUCP30RunPhshDTynln5oOKZS/8s3C6Ad7L/1YzncnINErga5egjwzu4+xJRKCskni1d8KvCKyEbvIJuXGdFzfQfteJ+XQU3JvVfC02HSWDWf/H2LPzI1kA+SaJ/lpOddEdTeE2P57fe1rqeD2cU4gzXkhi2sonxFPg=
+	t=1768140299; cv=none; b=csHC+yNuvZdVkr8N2M2vpd5ar0+4VATLkknNL4/POLYueN4SA9F+nFnDZ793RpL14WDnOTgsgGC5fDv65RQWQrCVOC4NaOvEGmkauBrYuxBieFHfkOboFuNYAWIF1fnMxL7Ne4uArLT6lhDXZVF4Z2L37ghaXO5Ebn/qOUh9How=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768136815; c=relaxed/simple;
-	bh=4YmINbsMJGQjkU7KoPYRi//+xFRoGyqm0OtaZaVtAg8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JHeS1FWa/LbRTRW60Uf//5f/lnrJsxHCeIt75bP3DJnJvcuHLp2m343lYdeQ1xdRLaF2O0qT88ftrcdaIUcmPb9yQ66nxMqBgQlo8DTdKmIVRNPHIhgrQcoPIk8L9IRgxBu2efdzQEFOF/9lZ2SzTf5okyBedAqTitxupnsw2uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zBb+ZNwF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57351C4CEF7;
-	Sun, 11 Jan 2026 13:06:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1768136814;
-	bh=4YmINbsMJGQjkU7KoPYRi//+xFRoGyqm0OtaZaVtAg8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zBb+ZNwFyTJ1vwG3FIf5Pp77U7BeetxOSCTpoSQzsc3SU3PIE9aCQpYw/5KwocVkG
-	 Kb+rzN5Niqqvyl0O5sRtQL0rat9tdKGqtfyvgNULFMjTsweycSF0y7TM2NAJtqPbvO
-	 LAMjl1QSauuAVGa/W/ioLyAlDbe1HZN8dux9Wg7I=
-Date: Sun, 11 Jan 2026 14:06:52 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Karthikeyan K S <karthiproffesional@gmail.com>
-Cc: hminas@synopsys.com, gregory.herrero@intel.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc2: add missing SLAB_CACHE_DMA flag for
- desc_hsisoc_cache
-Message-ID: <2026011101-important-hermit-3a31@gregkh>
-References: <20260111123218.15972-1-karthiproffesional@gmail.com>
+	s=arc-20240116; t=1768140299; c=relaxed/simple;
+	bh=btyv13yF1O8eLHTxPRhdfp8TKAEfJvTKBJK1fYmI6Xg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nb3Hgx047uv16cm0NAxxiInA5JEHjIfWkMGv4ylp1U0jh0ZuTJ2gf3poFjOtxK2b2wNDgV8U95bvfk9Q3uBVkpswqqVuQMnA15Qm7vwnp+koA4sM6M2XbevLa7/x5Sjx481yQEpVJrFmRhl66pBvIheO3ZtMVGJywEHWiVl2kAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=QExsiGGl; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b8719ac9af7so19340866b.0
+        for <linux-usb@vger.kernel.org>; Sun, 11 Jan 2026 06:04:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1768140296; x=1768745096; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0XwABaHQba0TZXE5KSskxvkqQOly72ac18mmHR+qtCY=;
+        b=QExsiGGlElrMbdLuVLF3vOqHwCf+WCT61him0YoQoIEWfiO4yNLyd4VPBUAKN40Gej
+         x+S845X0jv6JN0VBlI7arOrMRZmUjNjdywGxqg5AZeDp411nr7Ct3jMkAyw9oGfZ80tp
+         9peF5Nu7BK/4h9jjmebrpbIuSLELKFU7zvnFZqdA2gopeWLxeGHjMxwhymx3RIJ7uMfB
+         hpCmIW4/qAYok/gFj8dEiDrfBxbl4cYeMBaBpOEfsfmWLMvsLKPHH+jcF56wU5GfMxNT
+         Fk83jkyDvYSwRUyk76cF/DEUlxrfU34/Cp8JPQf9+99HmKUb0Ee91SKnRcSXxBM8h+ZI
+         d3oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768140296; x=1768745096;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0XwABaHQba0TZXE5KSskxvkqQOly72ac18mmHR+qtCY=;
+        b=syZNeHjmrQzLqIOyHgCXI2nxdazeWzSMkBXl9SBz2HnPLeKx+17Pdd37XB4y6H45qw
+         lDG2SyCOl7q9zD24zWeRo/T1cUeFZp96ZdjBb1ncKOGngnaKxSHdThbFxHyuWAopdCbh
+         nu3iY3MBxRSfoGbsDhmE/ZidQjQl46E73v5K6sJ/6pQ4tZVP8GxzdZ2c66H8Llm79wED
+         EJk8/ZbuVzfepJu6u7FQ1eeC7xw7rXI/JzzkM+ul//sskFwkpbuOPcI0kkGz4Ke8GHMV
+         bY4Gi7SjEYrrUZs+C4Jgb/mZohkOFIRL6US7T9RlQCo8T+otfreb8ji7BA+CeYtxwH+p
+         RXzg==
+X-Forwarded-Encrypted: i=1; AJvYcCUgqJiwj/+KL0aCgxNNINsV0CeNIfOk7XMGqhC3tVTUl7RhhhiwHlsT6PovpSEt2YFHhIuxgC7mJv8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxRjJIpGuQh/TUA+ntysr8wUDOtvZaTlZsVILM28RI2zX6S5Qf
+	IAQ1mOhU/XelnoohEdCmwpE7NTCtx0yP7LySItoXxEyE6vRSv29Key74S2IeiWg+lyk=
+X-Gm-Gg: AY/fxX5oQGY2q0Hll48LlPKc3NI0HcjB2GlxB06EKVrVeYahSbb+uMwuDWU4HbM9Gkx
+	U1TJadcIwVefrG9ou4Gw8m1+UpIp0CbOUyUaMtPjuKUwKOO7ZzzXCPteFbAutS/sDudeOhPOFkI
+	Z9SXyQ5QAhs1zIrjRR6kKpxKRl/OONDuevFGNcDkjSm1gagKZhbcmwtIyzbX1czhYjVCfyAp20k
+	ovMtgPsoL2YY8CWRiQZDRXwLdit6nQzrOryiXsEgniLqjM/v7hdJZ6jbZiGU3Onloz9jWvsvjeA
+	dU4TO2jlZZDzjcfgwmUjs9j4JXtSzGBKn16acg2Jj29IcRkoK20GbSp/PZVhB8i8xHop2qPJPMs
+	d0PHEVCferZKNu/+tVuN2DGGPVB1uarsofQOofm8Ya1W02vSloDF7EuvgPvOfB3Nc+o2zvnKMqy
+	DX2cdKRLHS3tv60fRQWsKBUmY=
+X-Google-Smtp-Source: AGHT+IFH0IHMLB/e9VMPw+PNQvxklsKe4TmQmjkQDY/3vRiOU9XAUjD+Bmvv1dPy8Ir0WmHAJUU9Lg==
+X-Received: by 2002:a17:907:a08:b0:b07:87f1:fc42 with SMTP id a640c23a62f3a-b8444f488f0mr1766243166b.16.1768140295378;
+        Sun, 11 Jan 2026 06:04:55 -0800 (PST)
+Received: from [10.216.106.246] ([213.233.110.57])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b86f0d6d7c6sm455055266b.42.2026.01.11.06.04.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jan 2026 06:04:54 -0800 (PST)
+Message-ID: <3f82d755-552a-4074-bee4-b2660eb6a979@tuxon.dev>
+Date: Sun, 11 Jan 2026 16:04:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260111123218.15972-1-karthiproffesional@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/15] dt-bindings: usb: Add Microchip LAN969x support
+To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, herbert@gondor.apana.org.au,
+ davem@davemloft.net, vkoul@kernel.org, andi.shyti@kernel.org,
+ lee@kernel.org, andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, linusw@kernel.org, Steen.Hegelund@microchip.com,
+ daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+ olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.org,
+ lars.povlsen@microchip.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Cc: luka.perkov@sartura.hr
+References: <20251229184004.571837-1-robert.marko@sartura.hr>
+ <20251229184004.571837-2-robert.marko@sartura.hr>
+Content-Language: en-US
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20251229184004.571837-2-robert.marko@sartura.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jan 11, 2026 at 12:32:18PM +0000, Karthikeyan K S wrote:
-> The desc_hsisoc_cache kmem_cache is used to allocate DMA descriptors
-> for High-Speed isochronous transfers. These descriptors are passed to
-> the hardware via dma_map_single() in dwc2_desc_list_alloc().
+
+
+On 12/29/25 20:37, Robert Marko wrote:
+> Microchip LAN969x has DWC3 compatible controller, though limited to 2.0(HS)
+> speed, so document it.
 > 
-> The desc_gen_cache, which serves the same purpose for other transfer
-> types, correctly specifies SLAB_CACHE_DMA. However, desc_hsisoc_cache
-> was created without this flag, despite both caches being used
-> identically for DMA descriptor allocation.
-> 
-> Add the missing SLAB_CACHE_DMA flag to desc_hsisoc_cache for
-> consistency and correctness on platforms with DMA zone restrictions.
-> This also protects against future allocations from this cache that
-> might omit GFP_DMA.
-> 
-> Fixes: 3b5fcc9ac2f4 ("usb: dwc2: host: use kmem cache to allocate descriptors")
-> 
-> Signed-off-by: Karthikeyan K S <karthiproffesional@gmail.com>
+> Signed-off-by: Robert Marko<robert.marko@sartura.hr>
 
-Nit, no blank line needed after the Fixes: line and before your s-o-b
-line.
-
-Also, should this go to stable kernels?
-
-But:
-
-> ---
-> v2: Resend with proper formatting (previous was corrupted by email client)
-> ---
->  drivers/usb/dwc2/hcd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-> index 30eb85066..556d6ab36 100644
-> --- a/drivers/usb/dwc2/hcd.c
-> +++ b/drivers/usb/dwc2/hcd.c
-> @@ -5273,7 +5273,7 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
->  
->  		hsotg->desc_hsisoc_cache = kmem_cache_create("dwc2-hsisoc-desc",
->  				sizeof(struct dwc2_dma_desc) *
-> -				MAX_DMA_DESC_NUM_HS_ISOC, 512, 0, NULL);
-> +				MAX_DMA_DESC_NUM_HS_ISOC, 512, SLAB_CACHE_DMA, NULL);
-
-Are you sure this is ok?  You are now taking from a _very_ limited chunk
-of memory for this controller.  What platform is this that requires
-this, and what changed to suddenly need this to be this way?  The driver
-has been working for a very long time without this, and I am loath to
-change this now as it might hit many existing systems that have a very
-limited GFP_DMA memory range that did not expect a new allocation there
-now.
-
-So I would like to find out why this is needed now, all these years
-later.  What caused this to show up at this point in time?
-
-thanks,
-
-greg k-h
+Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 
