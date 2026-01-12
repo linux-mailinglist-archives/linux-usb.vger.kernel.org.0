@@ -1,80 +1,63 @@
-Return-Path: <linux-usb+bounces-32174-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32175-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 822F7D117A5
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 10:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1355ED1181B
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 10:33:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 064B93085592
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 09:21:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A9B193042FFB
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 09:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAFF347BC3;
-	Mon, 12 Jan 2026 09:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A8BE267B92;
+	Mon, 12 Jan 2026 09:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MwFuIlfI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WRHaP/J7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52164320CB6
-	for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 09:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57ED72459E5;
+	Mon, 12 Jan 2026 09:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768209714; cv=none; b=dOzlvi61u28tRg7UYmq5fUbu0KY/wj3BUMMKyYAd8iC7OmjzkRkaDR2kJmyhtSP8im5g75RY+nMNEGktarfCeu37IR7HC3L+hVPlYhTqIRlz8AhDTmUr/UwfXJJUofYh67sJbaE4kvqNdwxMES9elMjMPEGmAtX4usZZmWH+tto=
+	t=1768210226; cv=none; b=fQ1FtBvu8OUjagLzwNh1nPmUoC/BNjV/HWr+MgmLC5Y0VSP4zo8zhmKrX5oRX7IZWX1rFXIHdtg/WEreK9eoZplWRTEqg+QhXbw50Y1QGp4UP1nsgpbMXShIvfCvse2WngHHUo38B85xIitM9AUfIxlyhYM30A9+GDTSLF+6w9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768209714; c=relaxed/simple;
-	bh=0dIJ35y1u4wC75UvXjU9dEt5QBNPKNsBUPSElh6oaXI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=feK/+oLA+9OQihr7NbEzXf8qoDhP5c+TndMqsNtOvv2NEUfNN4jQl90nbQtH8NZjVcCXOklizymI4DopqptW9Xtj+JDrVH7vrdmwVNBz/ORksQsAGwG5KhzbEuyiABJ/9dM5UbPCmaFBLBKiCFZ0JidkOisCAXMFJy2wqrt23eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MwFuIlfI; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42fbc3056afso3463945f8f.2
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 01:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1768209710; x=1768814510; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=AKi1GUUXLVsmpfPYMNd1sIrgONpjrMYrJbrbCSfih+E=;
-        b=MwFuIlfIfsCqtLuTsjfVwztyb/L3ytMCH5eqsNGk2GifQWNgPStEwafaztnW82d6w+
-         umVLQHkurqOLRDlG7TEQ3SYiJlTvVr9SqW+qGPh96GYPiXjg5iOVXmhtfIC/heA5pNdd
-         5ryLx2gcBCUqxkJDOYOkftserR2SRFzxSdCIjqxhTP6PDu22Ows6zo14geVq9amA718T
-         wXmseUkDq0tWsYTh8znOHp2KL7qhmyFrdW4vHYTENyQO5xIwDRZ+sBCnxl501aemE7Rn
-         pjCId4JL4iZw9/+EJNAlrivdvBkh9xnOCoBGhTSZNfDJHHKMMl+gUvbC+4qtnSeR5y2B
-         JmtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768209710; x=1768814510;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AKi1GUUXLVsmpfPYMNd1sIrgONpjrMYrJbrbCSfih+E=;
-        b=WtaUwNAgYJRo8tYNA7Vcm2CKrCEkUG6MkIJdh6ohpYRXyrYGSJQPuaKKBWuINa1Bh6
-         THoemfPPBSF/HqTQhcSrvezght2NHkbFMS1lwsfI56CJkGe6FhY5INbQOkN04KVNv9L/
-         WHXd3dZ2wYUJNBZ+STKws5ZHoujTxc37Nz8ktD03BDp3AfOMJ4KiYFav4ZnZ0vVnn2O4
-         mkQH+JfKnjoq/LP8mNNx3deVEFy9CtdZsOynF0O+3o54yMUKP5Jd75eHAR3NuG+ieqnl
-         d8I4+HHOVDHr2cDOICH/zwUs8zuOsIceXE06XJha4piX5jzRWoGb358YDxgp3X2qQpfp
-         74sA==
-X-Forwarded-Encrypted: i=1; AJvYcCUU6P7hFTCpUcfu2MobrraiX4W6O6NURoct68CRIIUuAhQBZ2WJrIofJZ3s5bBEswVX8f+/Ny60OGk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ3xef0/5iFCI/WyaqmzdXR+lzsJdBHXq7op5lTN8O/rmwhA42
-	sCCJIxXC8yFIBhHacK6VneyaPmLrbKqJO7GvVGCmyPO7XBciupd7a7lUy8BlU7nTg14=
-X-Gm-Gg: AY/fxX7FmbKZ2vTXCDQyi30MF2bvm6HLtDDFrGYABMrIGzTbc8JRMCwLeUM+48yissP
-	mBNdRVu9JhQBOxwaOIRg6C7ycAx6dwoC++NHhiJ7XMVPXIvtvNs5PH2bp81D3HfHtOAxvT81Ic5
-	1hNUGu+McbAlySLEjoQ8G6IOaNYJzT6pyRnsx9M0sNFpuHkQu2fNJ0jqlfj2hqRlXRvo/mxDBqj
-	FVsC458nbwo8SvKzO2GbQBMEp/Z7/YUvCiqmnoA3MtMn1K1qeGe7HKnqz3HloJQ0ltFeX6XFzwm
-	cxZF+94qc8TpfkTogwO2jOqtEbY8GNGmR5lr57gUHK32pKKI6MB/by7oZQ1Z/AeepRAXCzMe9ov
-	h6lybgUyiVAgltoiHdRds46QpqkcaG1kl1GyWKbRqNLlPm/aUBcUnbz4dMrV1OrmtKBeoppQSj7
-	KSWo4wVQXGDv6Xl8iHY+ScxA6VIKsMkb3GyNLPkapit7q7tK9jP4b0Ed4=
-X-Google-Smtp-Source: AGHT+IG2F6xTGx2xN+OUhcE2/musZFFTRmAzUU7EHgMP0/wo//84bXGjZbBeM191WFzmxdspyNwGug==
-X-Received: by 2002:adf:ea46:0:b0:432:dfa8:e1b6 with SMTP id ffacd0b85a97d-432dfa8e228mr6639892f8f.39.1768209710521;
-        Mon, 12 Jan 2026 01:21:50 -0800 (PST)
-Received: from ?IPV6:2001:a61:1384:5201:596d:baf2:9af9:9ecc? ([2001:a61:1384:5201:596d:baf2:9af9:9ecc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ff319sm38167573f8f.43.2026.01.12.01.21.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 01:21:49 -0800 (PST)
-Message-ID: <09934a68-48ec-4031-b42b-babdfea127d8@suse.com>
-Date: Mon, 12 Jan 2026 10:21:49 +0100
+	s=arc-20240116; t=1768210226; c=relaxed/simple;
+	bh=JteT7bp9NnM+L+L0MSMVp8v+mVwyolKCIRgfWYYyYCo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qwmtrFp0WjKO26x0tkSKvIAD6+YTJquXV1cpL2GtdxSwLYlxyrGVlSYPMlIDGULXHyhNhztkGIznqm7mmvsCvaQRqXD80FRdnYJhNuXLwpiBMUsGcuYuElRkJ3oSByooCIz3jkE/aocPYjeoqp7RWlGWRlqMTsShLQIy6edaBLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WRHaP/J7; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768210225; x=1799746225;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JteT7bp9NnM+L+L0MSMVp8v+mVwyolKCIRgfWYYyYCo=;
+  b=WRHaP/J7zyebqVJ93dQiKFc1ggYo9bHIC5bjA3SFL7yz6IuaBejiYZCZ
+   xk0JgOsSRzOYhfaRS4k/y3XOF3u1gNS6DX7oLhLXxnAZFaRmLWwqcMGFM
+   JQ09Xlj6keTCx3VVxV18IcaFODzl+lrtzSISit74GtaJeeAJjlfgmT1fL
+   mzyZVGN5E41QJTxkZITD2WDKBY1e4L6d7jQ5oqYqWThNpSfXYP2gK1gIa
+   ZQ7we7w+33CvN326L3ePyYE7hSaOZ1jucUfPZUOLT3c2WWy9Pml0F+vu3
+   tlcf4Lm1BfgHGmw077H9ALx12jf3DwPKnwG6lQx371uJpQKPNwcH0SAdy
+   g==;
+X-CSE-ConnectionGUID: rZztDY2GTNifZHt7ie6E9g==
+X-CSE-MsgGUID: JSd/5iY8RUej1y2fnxa03w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11668"; a="80846712"
+X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
+   d="scan'208";a="80846712"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 01:30:19 -0800
+X-CSE-ConnectionGUID: os+Au4G7SmWdMyNXOCZ6IQ==
+X-CSE-MsgGUID: E55cIAtxTcGFvy6W0GIEpQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
+   d="scan'208";a="204326040"
+Received: from abityuts-desk.ger.corp.intel.com (HELO [10.245.245.56]) ([10.245.245.56])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 01:30:17 -0800
+Message-ID: <4d714043-bf6c-46f2-b7c5-a41b37d4e0ba@linux.intel.com>
+Date: Mon, 12 Jan 2026 11:30:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,32 +65,52 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Trouble with drivers for Epson Moverio BT-40
-To: natalie roentgen connolly <natalie@natalieee.net>,
- Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-References: <9c4491aa-88d3-4c9a-843c-2f0d471263e0@natalieee.net>
- <ade89a9d-6034-43e6-ba74-778db2f8837c@suse.com>
- <ce3a8714-bce5-4cac-ba80-f3c64e6ff5e9@natalieee.net>
- <b0899011-78bb-4fdd-9e49-3dad6b11a9e6@suse.com>
- <d28d2b86-f016-431a-baa1-57cddc07ac94@natalieee.net>
+Subject: Re: [PATCH] usb: xhci: fix potential divide-by-zero in
+ xhci_urb_enqueue()
+To: Alan Stern <stern@rowland.harvard.edu>, pip-izony <eeodqql09@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>,
+ Reyad Attiyat <reyad.attiyat@gmail.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260110183421.23758-1-eeodqql09@gmail.com>
+ <1d014d1c-66f1-42cd-8890-0cce7e3963c2@rowland.harvard.edu>
 Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <d28d2b86-f016-431a-baa1-57cddc07ac94@natalieee.net>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <1d014d1c-66f1-42cd-8890-0cce7e3963c2@rowland.harvard.edu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
+On 1/11/26 00:08, Alan Stern wrote:
+> On Sat, Jan 10, 2026 at 01:34:21PM -0500, pip-izony wrote:
+>> From: Seungjin Bae <eeodqql09@gmail.com>
+>>
+>> The `xhci_urb_enqueue()` validates Bulk OUT transfers by checking if the
+>> buffer length is a multiple of the packet size. However, it doesn't check
+>> whether the endpoint's `wMaxPacketSize` is zero before using it as a
+>> divisor in a modulo operation.
+>>
+>> If a malicious USB device sends a descriptor with `wMaxPacketSize` set to
+>> 0, it triggers a divide-by-zero exception (kernel panic). This allows an
+>> attacker with physical access to crash the system, leading to a Denial of
+>> Service.
+> 
+> How did you become aware of this problem?
+> 
+>> Fix this by adding a check to ensure `wMaxPacketSize` is greater than 0
+>> before performing the modulo operation.
+> 
+> Not necessary.  This can never happen, because transfers to or from
+> endpoints with wMaxPacketSize set to 0 are rejected in usb_submit_urb()
+> with error code -EMSGSIZE.
+> 
 
-On 17.12.25 01:18, natalie roentgen connolly wrote:
-> That patch seems to work perfectly. No errors were emitted from cdc-acm, and the following was printed to the kernel log as expected:
-> cdc_acm 7-1.2:1.1: ttyACM0: USB ACM device
+Only special embedded high-speed eUSB double isoch bandwidth devices can have
+isoch endpoints with wMaxPacketSize set to zero.
 
-very nice to hear. Sorry for being late, Covid-19
-is bad for regular maintenance work.
-Do you want the fame resulting from me including you
-in "Tested-by:" ?
+This divide by zero case is only an issue for Bulk OUT endpoints, which as Alan
+said, will be rejected by usb_submit_urb()
 
-	Regards
-		Oliver
-
+Thanks
+Mathias
 
