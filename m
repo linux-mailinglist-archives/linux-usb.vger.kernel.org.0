@@ -1,227 +1,125 @@
-Return-Path: <linux-usb+bounces-32201-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32202-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7653CD15171
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 20:37:58 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80F9DD152FE
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 21:20:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE2313048ECB
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 19:37:49 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id F06743009247
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 20:20:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD94E3254B0;
-	Mon, 12 Jan 2026 19:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C3B6329E64;
+	Mon, 12 Jan 2026 20:20:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="30Hqqb/Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B7dU0Rky"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B4832470F
-	for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 19:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97B6224AE8;
+	Mon, 12 Jan 2026 20:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768246666; cv=none; b=TKq+6Rcs5AnadHaEYOC3t2fyThoPK/gaOo8+En9aUaeZ7uXoKAabv1iMmStjqGwGEkAgPEXLMaHB49JHP03tMevV67pMU6QBAyWdrxbC7/Koal43z30CxRl+X2WmgIRyy+F9CcT3LEJp1LYkh+UdB1WqaLT8Q550NV0NO8JbMhE=
+	t=1768249241; cv=none; b=SnWyIihML1mFuZ/rP9e09i9woufmHP4yATJPjbv4uTELJuTw2BQF+L7Y2XG7b3xZsyAJtHZSI4Tv9B9uSR3c4/0+sSgPWiRc2L8j0bs1AwBHnKou1bLwSOS2oYlDCi9T9VHOP1033SMRblN3RTaVSWsyDmTJ3MhCoDV05rX2Cn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768246666; c=relaxed/simple;
-	bh=kCNuLKa3OcBY6DWrPNqUq+zuzLUQGDhG7wkIuXt18dM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U1DOqUnf7rXKiy4vO2kBrHY1JVZyc6oG7L+p627Q6Tg1cFtUFKJaXa/vQGfHlznxe2rHLegJdgneyzjlpv4LEjIyV4V1vis+OwZshaGU4CKEgCOawgxCMqSVj8RQYM2Izd46Be1RkkFLzg18zZgB/8tm7NBm5UtuylxijmqEzfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=30Hqqb/Q; arc=none smtp.client-ip=74.125.82.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2b19939070fso6576995eec.0
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 11:37:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768246663; x=1768851463; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MMKzD4neKMQA/a71hLZaF9K+onAvp6LuTb7/ocIRVF8=;
-        b=30Hqqb/Qg2M/DClti7RHUsO+bjKz5um6j/PP38je7T6hzY+F81eKQdpUUe90FNkYZ9
-         K6NxlxJuym74IBjIuqdT6q5bBk55d042HV7DOfmdi5BxtX8UhsYUagRCVGpdbF+4e/xo
-         wsRwEjty5yIG/FyYbaqul+TVca/ukDii1i7ExgICs9o7I6RribQekPjhJyNx5eZcUSbo
-         cRdBcXSZfQQ+KTyiFN9ACq6VmBunxro3WsuH6vasiw1tC3pBfIhGyPk+qOFaME5eMMvw
-         6Bnwfy8uIqF9++ZkPerBWdrBrLXYBfy0Vc8SPfS8TWv7FYXmbhqFD2bMx4cECL2icqg+
-         XlQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768246663; x=1768851463;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MMKzD4neKMQA/a71hLZaF9K+onAvp6LuTb7/ocIRVF8=;
-        b=bky9bjeu4Cp7Xo80T5m9Ec0Gbu8i6FUyQw4f9OxGpv9EpSJxnWV/pjnRcy2unoiBhI
-         WpgUgBjQ13p0w+WonRy2OT4i4QJbfuxxO9ZqL/KxvAcKhqGrwbGf+H/uoVVkgGIzmr4m
-         zMa450lgA3XZbrClvUYdiJ8vjSNw4NqV8KTqrM4z6UPgz2iH6tuZ/swsTESNe5CmaigU
-         IojaAjOQa+eXnkEclyeVVXxQS0b//7CjwMypbf7bJQngm8p2wpyDTX7FPPmh0dIV8J2S
-         ng/SNS1bcecBm+kfDI272g4uym1d8HwA1enkijqAm37/Whlho2Mjimr6kkHP0BwuhOx5
-         lvUw==
-X-Forwarded-Encrypted: i=1; AJvYcCW08TlP1r2O2YhR34YWQtoJjjbj99r3eLyDayII8TK+wgEd9FFN9kBHTNGE4nJC3LinKYmuS48+yi4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4ZdGmLkPa9qw41mWaatWXG/lzd4q+ojlFjDnfkkSghpnCp6KZ
-	UvA9RkQdfV1sNksVJqfaK8JCvZT01boXMUCdkVFhtehm3ucNn3ED6d5c7J8IZwrpAw==
-X-Gm-Gg: AY/fxX4uskBA/NCirQyREf7FfNSyTdfxk8PPXk65NEyv2TOLU5vv25seVrOMoNe7iqL
-	IRnelqopaKX2Nb8yC3wyRjNFXTJasrr4T8O3hrjka/Bkt8JklOLDLJnl8YoiqYgzuWKma5ZhlZ2
-	lTL4m0WSXKa6MBtwZBz4J6f6KtsLej7iEADtPosjd/kPua+ZMmj9xxBP1Hv0C6ahKgJo4jX4RtJ
-	xBDMyotATaFfMozE9V8QCFMxbOKP7V1asPE0SYVH8+mS1baWsZmiRNQrG+t1y+yhOr6c8tAjGUk
-	GiEqN4o3jKKsPpqgSeqfXU/9A3nnvxJNZncblg4MTMwGvpfI1LLoxC3erLZDVMOG5Fco5ln7GXE
-	uD4bKx6ejxPZy1Sr5N2NNRi9ndRq+zV7LoFqhxreky2K5ccrL3HLTFfPead7qxFAm/CZniwUiiu
-	/pex4icyTciLbFrNDOaKe/qWp0HOjOf1sgdBuOKTUSIhZQOsVU7Zlo9CRJVAqhoAih3EVNJ7YKF
-	7/ljl8Td7ya3w==
-X-Google-Smtp-Source: AGHT+IEmezECFIaAtAhii/tXhYAvteHOsxJwusDFq7+Qy4kltOc3o9BThd5irNt42thvcdsfukrSaA==
-X-Received: by 2002:a05:7301:29a5:b0:2b0:3d03:37db with SMTP id 5a478bee46e88-2b17d2e2b29mr11583342eec.35.1768246663076;
-        Mon, 12 Jan 2026 11:37:43 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:8e84:2c31:d2b4:9c1f? ([2a00:79e0:2e7c:8:8e84:2c31:d2b4:9c1f])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17078d818sm15886663eec.21.2026.01.12.11.37.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 11:37:42 -0800 (PST)
-Message-ID: <bb9b9afa-0bfa-428e-9372-549d9ba8603c@google.com>
-Date: Mon, 12 Jan 2026 11:37:40 -0800
+	s=arc-20240116; t=1768249241; c=relaxed/simple;
+	bh=hgImCKI6sHo18MQkK7hVM8HOcjLUYeplEKC2f9UsKP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pqhKS5nzmcPcUuY+k1jMdAOz/dRRWoTAi8q5TxNbSjndk20/UVQbXhL7Zo0HQLuVc/z8zmrkLUCihOOA37rZQITi8HyuidP9EP/vLOroXjYtT0xSCDixeeIynp0InGJx3U5IPBQ7SoNJ8UMCNKNiJ/fnieSbI773C1wRMrreYEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B7dU0Rky; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 203FCC116D0;
+	Mon, 12 Jan 2026 20:20:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768249241;
+	bh=hgImCKI6sHo18MQkK7hVM8HOcjLUYeplEKC2f9UsKP4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=B7dU0RkydbSACk5/L3mM4qNFpPULDG1+GlswjyTrILwdR/WKKP9k7Z0bLNjP7PTTr
+	 O1lbpn8FkDzcczb6vSQjw/9W1QP1IYWk7jYWs7GBx6xDiUPiq5U2lxOKf1582J0MTq
+	 7+bOnXEhYaD6Q/W1VKn2Xu5hCTx51rqIm2PzvY4Zp0rxRo89LjY/sO3R+GKzdO5+p2
+	 gBe1vs5WfD2CTnSxGzrXNartOhcZgNazJT8oVqMJ1z2ltS0dE1w6ghtG8SV/UUjFX0
+	 0mQ18NOs+cK7jigyaV1aluSVqYs0cueERGX2ogbIMqpkBEo/yrRZ83pqrUu/1tvv3s
+	 g59GR9wT2yCvQ==
+Date: Mon, 12 Jan 2026 14:20:40 -0600
+From: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Pin-yen Lin <treapking@chromium.org>,
+	Matthias Kaehlcke <mka@chromium.org>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: usb: parade,ps5511: Disallow
+ unevaluated properties
+Message-ID: <20260112202040.GA943734-robh@kernel.org>
+References: <20260112090149.69100-3-krzysztof.kozlowski@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] power: supply: max77759: add charger driver
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
- <20251227-max77759-charger-v3-4-54e664f5ca92@google.com>
- <298ca35590d2180fdcf334f94964b6110e17c606.camel@linaro.org>
- <50c29a62-1fdb-4de2-8887-0d551eee5ec0@google.com>
- <255d7726-6758-43ed-b35f-db14726bcc9b@google.com>
- <2869d309358f27652289c40810ca36b2ec155d1d.camel@linaro.org>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <2869d309358f27652289c40810ca36b2ec155d1d.camel@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260112090149.69100-3-krzysztof.kozlowski@oss.qualcomm.com>
 
-Hi Andre',
+On Mon, Jan 12, 2026 at 10:01:50AM +0100, Krzysztof Kozlowski wrote:
+> Review given to v2 [1] of commit fc259b024cb3 ("dt-bindings: usb: Add
+> binding for PS5511 hub controller") asked to use unevaluatedProperties,
+> but this was ignored by the author probably because current dtschema
+> does not allow to use both additionalProperties and
+> unevaluatedProperties.  As an effect, this binding does not end with
+> unevaluatedProperties and allows any properties to be added.
+> 
+> Fix this by reverting the approach suggested at v2 review and using
+> simpler definition of "reg" constraints.
+> 
+> Link: https://lore.kernel.org/r/20250416180023.GB3327258-robh@kernel.org/ [1]
+> Fixes: fc259b024cb3 ("dt-bindings: usb: Add binding for PS5511 hub controller")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/usb/parade,ps5511.yaml       | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/parade,ps5511.yaml b/Documentation/devicetree/bindings/usb/parade,ps5511.yaml
+> index 10d002f09db8..154d779e507a 100644
+> --- a/Documentation/devicetree/bindings/usb/parade,ps5511.yaml
+> +++ b/Documentation/devicetree/bindings/usb/parade,ps5511.yaml
+> @@ -15,6 +15,10 @@ properties:
+>        - usb1da0,5511
+>        - usb1da0,55a1
+>  
+> +  reg:
+> +    minimum: 1
+> +    maximum: 5
+> +
 
-On 1/12/26 5:47 AM, André Draszik wrote:
-> Hi Amit,
->
-> On Tue, 2026-01-06 at 17:14 -0800, Amit Sunil Dhamne wrote:
->> On 1/6/26 3:41 PM, Amit Sunil Dhamne wrote:
->>> Hi Andre',
->>>
->>> On 1/5/26 9:32 AM, André Draszik wrote:
->>>> Hi Amit,
->>>>
->>>> I haven't done a full review, but a few things caught my eye.
->>>>
->>>> On Sat, 2025-12-27 at 00:04 +0000, Amit Sunil Dhamne via B4 Relay wrote:
->>>>> diff --git a/drivers/power/supply/Makefile
->>>>> b/drivers/power/supply/Makefile
->>>>> index 4b79d5abc49a..6af905875ad5 100644
->>>>> --- a/drivers/power/supply/Makefile
->>>>> +++ b/drivers/power/supply/Makefile
->>>>> [...]
->>>>> +
->>>>> +static irqreturn_t irq_handler(int irq, void *data)
->>>>> +{
->>>>> +    struct max77759_charger *chg = data;
->>>>> +    struct device *dev = chg->dev;
->>>>> +    u32 chgint_ok;
->>>>> +    int i;
->>>>> +
->>>>> +    regmap_read(chg->regmap, MAX77759_CHGR_REG_CHG_INT_OK,
->>>>> &chgint_ok);
->>>> You might want to check the return value and return IRQ_NONE if it
->>>> didn't
->>>> work?
->>>>
->>>>> +
->>>>> +    for (i = 0; i < ARRAY_SIZE(irqs); i++) {
->>>>> +        if (irqs[i] == irq)
->>>>> +            break;
->>>>> +    }
->>>>> +
->>>>> +    switch (i) {
->>>>> +    case AICL:
->>>>> +        dev_dbg(dev, "AICL mode: %s",
->>>>> +            str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_AICL));
->>>>> +        break;
->>>>> +    case CHGIN:
->>>>> +        dev_dbg(dev, "CHGIN input valid: %s",
->>>>> +            str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHGIN));
->>>>> +        break;
->>>>> +    case CHG:
->>>>> +        dev_dbg(dev, "CHG status okay/off: %s",
->>>>> +            str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHG));
->>>>> +        break;
->>>>> +    case INLIM:
->>>>> +        dev_dbg(dev, "Current Limit reached: %s",
->>>>> +            str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_INLIM));
->>>>> +        break;
->>>>> +    case BAT_OILO:
->>>>> +        dev_dbg(dev, "Battery over-current threshold crossed");
->>>>> +        break;
->>>>> +    case CHG_STA_CC:
->>>>> +        dev_dbg(dev, "Charger reached CC stage");
->>>>> +        break;
->>>>> +    case CHG_STA_CV:
->>>>> +        dev_dbg(dev, "Charger reached CV stage");
->>>>> +        break;
->>>>> +    case CHG_STA_TO:
->>>>> +        dev_dbg(dev, "Charger reached TO stage");
->>>>> +        break;
->>>>> +    case CHG_STA_DONE:
->>>>> +        dev_dbg(dev, "Charger reached TO stage");
->>>>> +        break;
->>>> Are the above debug messages really all needed?
->> I forgot to respond to this comment in my previous email.
->>
->> I think we can keep AICL, BAT_OILO, INLIM. They're either special
->> conditions (AICL) or faulty conditions (like BAT_OILO) and we can in
->> fact keep them at dev_info level. Rest can be removed and a
->> power_supply_changed() is sufficient.
->>
->> Let me know what you think?
-> I don't think dev_info() in an interrupt handler is appropriate. At
-> least it should be ratelimited.
->
-> If it's something special / unexpected that needs attention, having
-> a dev_dbg() message only will usually not be visible to anybody.
+This 'reg' would be the upstream USB port. We have no idea what its 
+constraints are for the value.
 
-I agree. I can change the prints to dev_info_ratelimited for the stuff 
-we care about.
+>    reset-gpios:
+>      items:
+>        - description: GPIO specifier for RESETB pin.
+> @@ -41,12 +45,6 @@ properties:
+>              minimum: 1
+>              maximum: 5
+>  
+> -additionalProperties:
+> -  properties:
+> -    reg:
+> -      minimum: 1
+> -      maximum: 5
 
+Removing this is wrong. This is defining the number of downstream USB 
+ports for this hub.
 
->
-> Also will the call to power_supply_changed() down below handle the
-> special conditions (e.g. convey to upper levels)? If not, can it be
-> made to do so?
+What's wrong here is 'type: object' is missing, so any property that's 
+not a object passes (no, 'properties' doesn't imply it's an object).
 
-Yes it does, as I can see a call to kobject_uevent() inside 
-power_supply_changed_work(). Also, power_supply_changed() also notifies 
-other subsystems that have registered their notifiers downstream of this 
-power_supply object. So I believe we're good there.
+We should fix dtschema to allow additionalProperties when not a 
+boolean property to coexist with unevaluatedProperties. I'll look into 
+it.
 
-If all the above sounds good, I will proceed with sending the next 
-revision including the fixes  :).
-
-
-BR,
-
-Amit
-
->
-> Cheers,
-> Andre
->
+Rob
 
