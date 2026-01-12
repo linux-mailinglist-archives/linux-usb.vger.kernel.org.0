@@ -1,253 +1,162 @@
-Return-Path: <linux-usb+bounces-32196-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32197-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EF29D1397F
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 16:20:15 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FB2DD13B5E
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 16:35:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 10F833011756
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 15:06:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DF79F30090E1
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 15:34:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68ABB2DD5E2;
-	Mon, 12 Jan 2026 15:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E8E3612E2;
+	Mon, 12 Jan 2026 15:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IC1g49w/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XKIOSV2t"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2382DC77A
-	for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 15:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE983612C6
+	for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 15:34:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768230379; cv=none; b=UE4mAySJX3ddcBENUm34nPI6AM1KFju3GKN/lf7suCz5JErXjHFhCDd+WsxVNI3LxFNzyrJf8hghUWSsbO5DTYuWh/+YRacl4fZSkVc9UgTFL3AhQo3tv7CVcFXPXPmS5C4vGlX3IYlhh6lEVEQokFSwlQ43+dXyHASPIa24ufY=
+	t=1768232087; cv=none; b=UWO/i7UnceFq9Gcovdmy6JwpM9F1jpXjwyhfeOxaFxvcdV+U1mPpbOS5TJDxRlkGihgxvmAPLqbeFX1/v3qpYwqWq8LgzZ4fQKbkiaB1Mp2frHFs3hyT/0p2OdMjy95cTuf+4BiEvgvop3ctzzl2GFBBlAwO+0uDiH13Ojk2dMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768230379; c=relaxed/simple;
-	bh=m3sDGYbP4LAiAlRA4t1gwzx9rw2TEXSCqunZ4l6sYNI=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:References:
-	 From:In-Reply-To; b=twG3MECHmM/lp2gIY/+kafKA+K9rhv1zQOXcE/oCSvtmcqe8M0RCdUmwgRpas6W7FAxQlOuwfF11J1MaZ4sajfDLsGO1CQOPhdd3Wr3+1+yet9lzMQszXvk9H5d6Fg2CSLEbi6atESujTNBY4D2caW+DC8rJ2g6zLFMN5Ya4En0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IC1g49w/; arc=none smtp.client-ip=209.85.128.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-47796a837c7so45083425e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 07:06:17 -0800 (PST)
+	s=arc-20240116; t=1768232087; c=relaxed/simple;
+	bh=s6EznykqrP/F+nG9EBSEEX5NUjzWXxqBqj7KLutlW/4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=GCH9v9hRzfjUUAuMvfIHFakPToEWg8NSEjEkUAhBdi2lEdn30gx9rql9YcPM08i6dqhbzOYRiUCch/vjiQnsckGpcui6rgWnLw9hok0QNdG8foX0dorJJnFusOFsmRuOl7zWTh6mAtE5cCS/UVmupAijZqqsxkuwHwWI5ytCCzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XKIOSV2t; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-47d4029340aso67344885e9.3
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 07:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1768230376; x=1768835176; darn=vger.kernel.org;
-        h=in-reply-to:from:content-language:references:to:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5oVLSKY8KXoL9o1nEkRxlA9lFOUXRreqt0ImO+n3Uis=;
-        b=IC1g49w/6TisoEg/sV+0oTexVCIgtGZ7cts3gce2GiJLAEZulo2NNUdMhQEIrA3jbU
-         GEsP5Jklv0XLBeY8Ea1y1E2jzNldO4qRJcV8LG9O2ACUgPIgbYJzWaWUxu3vX/AmJEXK
-         X0RJHsB4emR8wSHM77d/8X+k2F5a9YBuOOnOrgQTe17MAF9ParT2eAWW9HNkttJtXHyr
-         K5afK33s0s9HEaucREqXxeMudUiiP8ZHPxCwPzkWNsuvWmN+xyDC00TO7+tMuew1YZwp
-         +w3eavu/vNjC0j1B5nHeqNadAV8NpCRW5Ace33XzPnqm7hw7glwLVjEwyb0NbHjLuGR6
-         YxTQ==
+        d=google.com; s=20230601; t=1768232083; x=1768836883; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KEwDDJTfrVrFOxZl4FAKmDVtMP/Lxo1p2Wt2dLR6YMI=;
+        b=XKIOSV2tKPecBYD5a7DwPkTDOgIR3CIz1Vf9j90JmUrV9bwYwhhNWN+Y0uIva/ucCi
+         o9CA4HxtWozUG0qGobGKmBkd6ngvBgC3RvTImtWLe0MszerF1byOY4kv9Avy4I8iqHoV
+         lRQfNqRscDQ7FojnjA54KBv0iZ/tmC0k+fZhvcYzrHgEf8X8Em5O3urhQf7SfB4Mqmq8
+         NMbj4X1Xm8M1WEg7cVBOGA8lFWbwbTUTzOBpJgZKAOwvKArnZQAnXgMeaPbBydSrBe/i
+         HFn4O4ifePRptaBZ9OujOkOMPHI0vLQAZQhBg9HV2p2eP21JBAAM0Ow6aJWjL4jnECoX
+         E34Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768230376; x=1768835176;
-        h=in-reply-to:from:content-language:references:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5oVLSKY8KXoL9o1nEkRxlA9lFOUXRreqt0ImO+n3Uis=;
-        b=rjdQIbCnbh7D8gk+WhJC+0nqUipwmfxLeVHywmiY8FtmLL5WpYekmWyOJyZdhB69tT
-         +QVU7oE2nM9pNZD3IiYtpj6eoxlKJylKGyUr+tEA+QHMoUwFchPslquTQuRzTF7DHCK+
-         HsRb6cqF2m8tDm/3meecBkzf8lIyuOe2mIR5X7UwYYfdxhGS6P6rh6lO4fvtpxcJydJ0
-         ITQTB1jxmBMc9E+p/a3kYqWy02Y1NiR/HZBGRjKJfFBz7MoVEtMB05QFeVnWEpSPmQtX
-         BmhFPR/u+VGxYtqIRYQfFbuE3KCQPV35uo4LpW2LH6TIk6gBO2f4y2jZ5SWPvQtcJYLH
-         2dBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7algMFmePC+DVyRqV6sllwx/0NFwJ5BuRv4/wrhtaYWl2cBm5OKJ2tply4C0wbAOCX950cfOhse0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0NgXZwSL1bCbf9LK6dpCEhkI14IpF487k/vdb8QhORCuuyU61
-	jAvhngmLvytOgsBaGwSl24pdHQVrJixoqk0ppJ9yIBLodrtDUmVcLY1bN6j39+QkUNQ=
-X-Gm-Gg: AY/fxX4Kcrf4dRQi33TzBHiFxt40YMEarDJRXXP6XCIO5xPvs5nzymfDTiG8ozJc4dD
-	81vDkxI5BehVCHqCrnlKsaUpSaBu8AvYkOj+hPY8ciFa/KwkTDUC8OJs03qs4AIH1CPxaZS6Dpc
-	bcQtpU7XK2bZ75es+rvBaCsMp9dcckp1fqZ927LGebg2BUKqVPghwWYBtAEOvb6WXBv6FXDOunk
-	o/Il4fqkpTpuJTWP2b/uk+IDkzJsZqtdPzCyrFF1vhh/pM0zzpmWXqOBOK18SmMT/GUz9uPvbsc
-	Fuc+JL5bF4/JgK5cUs1U2g1mvu3XfWs5jFg0J3LFn/WHaJBZfaLmBeFw0Vh4M65ON6ssMlSpik7
-	dgpBxQ/dN3xGTv8KSRMqtj4KPJce990FTEgXxbsx3uBLG4BRfsEQFFxlIB+NZeWoNm+U3DdkZ+o
-	sxZGyhcC9wiIzjcOsrWslK3Jg67nWb1j2WyG+Ke9ZOTiyVkqMpdYPdX70=
-X-Google-Smtp-Source: AGHT+IEUOcRXJTyyHVFBsIhIVqrCAX0vCU4CanCSSanlmc2WcaLdcAnoXfKE/LAHCL9P0UjtYoRreQ==
-X-Received: by 2002:a05:600c:4752:b0:477:df7:b020 with SMTP id 5b1f17b1804b1-47d84b54c47mr180869745e9.18.1768230376219;
-        Mon, 12 Jan 2026 07:06:16 -0800 (PST)
-Received: from ?IPV6:2001:a61:1384:5201:596d:baf2:9af9:9ecc? ([2001:a61:1384:5201:596d:baf2:9af9:9ecc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f7053f5sm354498565e9.14.2026.01.12.07.06.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 07:06:15 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------XEcuyIL7xgatR37yyvk7tGDd"
-Message-ID: <04184aa1-0a74-4247-b618-0390108558cc@suse.com>
-Date: Mon, 12 Jan 2026 16:06:15 +0100
+        d=1e100.net; s=20230601; t=1768232083; x=1768836883;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KEwDDJTfrVrFOxZl4FAKmDVtMP/Lxo1p2Wt2dLR6YMI=;
+        b=jCHX6TVuABmkfLDEBHcClKfBeuCI4lEaqxkrV3YwEBXVQsGLlAi76oPdJhxnYZdllq
+         xuKrm6LrGMr2ZR3BcFXVXCgNVKN9unuFFII/lfqYzqjJ/g895cQVA3syPTO7SsX8uCMu
+         L01jFNiW4xLiuGYsvk/557a//w7L4jbMqMPQaAeogP8m1f4jI9P0SptirR1IeWFyjgNs
+         Fv5qhejxmg4ac2XUroArjWwNe0/AkA7cLHZEZMYQBf+bQcT/3q0KmMhYpJ/nEUPbbNcJ
+         Nd+qFbBzyrj3mc+YwqGFPP+N0nWK952Dx6KiXInD7RQCZxP8JN04rR+02PEPHObGT52X
+         w/SQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXw2OwmWr7rN0WWPnyhm1lvSIifd44/ownOx5nNYbOFuMLL4feF8+Z9UBRKui7sh/KYUt/xamnBf+g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaVTxrk+F+gU8KDa3sziqJhmnOmtbX1fSkQVbSck6EhaPLbQZ1
+	j95LX+8Nc82uuTSXLXs6W9e2E1k6iecew0CZJGV3Gn/qLtHNGa/IEoqC8Bny6cih2wHS1tGXPVb
+	mzesOh8d/mXtbqqeQUg==
+X-Google-Smtp-Source: AGHT+IF2pkR80bdpFTRy3maBMZNDzCR8VeScBbIruZWtCzdu+/XDr5Lim5Am3othwewKWoKXkQzlZG5TEHYl8kE=
+X-Received: from wmbjp9.prod.google.com ([2002:a05:600c:5589:b0:477:9bcb:dd8b])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:3143:b0:47d:4fbe:e6cc with SMTP id 5b1f17b1804b1-47d84b179f7mr226113455e9.13.1768232083524;
+ Mon, 12 Jan 2026 07:34:43 -0800 (PST)
+Date: Mon, 12 Jan 2026 15:34:42 +0000
+In-Reply-To: <DFII83QY76O0.2PKZ73WCTVGPR@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [usb?] memory leak in es58x_open
-To: syzbot <syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com>,
- gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <6948d6c3.a70a0220.25eec0.0084.GAE@google.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <6948d6c3.a70a0220.25eec0.0084.GAE@google.com>
+Mime-Version: 1.0
+References: <20260107103511.570525-1-dakr@kernel.org> <aV6BHw-Liv0SVAwO@google.com>
+ <DFII83QY76O0.2PKZ73WCTVGPR@kernel.org>
+Message-ID: <aWUUkvdKsRVJqfE2@google.com>
+Subject: Re: [PATCH 0/6] Address race condition with Device::drvdata()
+From: Alice Ryhl <aliceryhl@google.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: gregkh@linuxfoundation.org, rafael@kernel.org, 
+	igor.korotin.linux@gmail.com, ojeda@kernel.org, boqun.feng@gmail.com, 
+	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
+	a.hindborg@kernel.org, tmgross@umich.edu, david.m.ertman@intel.com, 
+	ira.weiny@intel.com, leon@kernel.org, bhelgaas@google.com, 
+	kwilczynski@kernel.org, wsa+renesas@sang-engineering.com, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-This is a multi-part message in MIME format.
---------------XEcuyIL7xgatR37yyvk7tGDd
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Wed, Jan 07, 2026 at 05:40:20PM +0100, Danilo Krummrich wrote:
+> On Wed Jan 7, 2026 at 4:51 PM CET, Alice Ryhl wrote:
+> > If a &Device<Bound> lets you access a given value, then we must not
+> > destroy that value until after the last &Device<Bound> has expired.
+> >
+> > A &Device<Bound> lets you access the driver private data. And a
+> > &Device<Bound> lets you access the contents of a Devres<T>.
+> >
+> > Thus, the last &Device<Bound> must expire before we destroy driver
+> > private data or values inside of Devres<T>. Etc.
+> 
+> Yes, the last &Device<Bound> must expire before we destroy the device private
+> data. This is exactly what is achieved by this patch. The device private data is
+> destroyed after all devres callbacks have been processed, which guarantees that
+> there can't be any contexts left that provide a &Device<Bound>.
+> 
+> As for the values inside of a Devres<T>, this is exactly what I refer to in my
+> paragraph above talking about the unsoundness of the devres cleanup ordering in
+> Rust.
+> 
+> I also mention that I'm already working on a solution and it is in fact pretty
+> close to the solution you propose below, i.e. a generic mechanism to support
+> multiple devres domains (which I also see advantages for in C code).
+> 
+> As mentioned, this will also help with getting the required synchronize_rcu()
+> calls down to exactly one per device unbind.
+> 
+> Technically, we could utilize such a devres domain for dropping the device
+> private data, but there is no need to have a separate domain just for this, we
+> already have a distinct place for dropping and freeing the device private data
+> after the device has been fully unbound, which is much simpler than a separate
+> devres domain.
+> 
+> Now, you may argue we don't need a separate devres domain, and that we could use
+> the non-early devres domain. However, this would have the following implication:
+> 
+> In the destructor of the device private data, drivers could still try to use
+> device resources stored in the device private data through try_access(), which
+> may or may not succeed depending on whether the corresponding Devres<T>
+> containers are part of the device private data initializer or whether they have
+> been allocated separately.
+> 
+> Or in other words it would leave room for drivers to abuse this behavior.
+> 
+> Therefore, the desired order is:
+> 
+>   1. Driver::unbind() (A place for drivers to tear down the device;
+>      registrations are up - unless explicitly revoked by the driver (this is a
+>      semantic choice) - and device resources are accessible.)
+> 
+>   2. devm_early_* (Drop all devres guarded registrations.)
+> 
+>   3. No more &Device<Bound> left.
+> 
+>   4. devm_* (Drop all device resources.)
+> 
+>   5. No more device resources left.
+> 
+>   6. Drop and free device private data. (try_access() will never succeed in the
+>      destructor of the device private data.
 
-#syz test: upstream ea1013c15392
+so your private data is just the first devres resource ;)
 
-On 22.12.25 06:27, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    ea1013c15392 Merge tag 'bpf-fixes' of git://git.kernel.org..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1607bdc2580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d60836e327fd6756
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e8cb6691a7cf68256cb8
-> compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=131add92580000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/5ee91238d53c/disk-ea1013c1.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/b8eb70b8203f/vmlinux-ea1013c1.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/3aed81c1b1c5/bzImage-ea1013c1.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+e8cb6691a7cf68256cb8@syzkaller.appspotmail.com
-> 
-> BUG: memory leak
-> unreferenced object 0xffff88812623e000 (size 512):
->    comm "dhcpcd", pid 5478, jiffies 4294946142
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace (crc 0):
->      kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
->      slab_post_alloc_hook mm/slub.c:4958 [inline]
->      slab_alloc_node mm/slub.c:5263 [inline]
->      __do_kmalloc_node mm/slub.c:5656 [inline]
->      __kmalloc_noprof+0x3e0/0x660 mm/slub.c:5669
->      kmalloc_noprof include/linux/slab.h:961 [inline]
->      hcd_buffer_alloc+0x151/0x190 drivers/usb/core/buffer.c:134
->      usb_alloc_coherent+0x44/0x70 drivers/usb/core/usb.c:1010
->      es58x_alloc_urb+0x4c/0xc0 drivers/net/can/usb/etas_es58x/es58x_core.c:1553
->      es58x_alloc_rx_urbs drivers/net/can/usb/etas_es58x/es58x_core.c:1711 [inline]
->      es58x_open+0x1b3/0x470 drivers/net/can/usb/etas_es58x/es58x_core.c:1785
->      __dev_open+0x1be/0x3c0 net/core/dev.c:1683
->      __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
->      netif_change_flags+0x35/0x90 net/core/dev.c:9797
->      dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
->      devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
->      inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
->      sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
->      sock_ioctl+0x149/0x480 net/socket.c:1375
->      vfs_ioctl fs/ioctl.c:51 [inline]
->      __do_sys_ioctl fs/ioctl.c:597 [inline]
->      __se_sys_ioctl fs/ioctl.c:583 [inline]
->      __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
->      do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->      do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
->      entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888126112200 (size 512):
->    comm "dhcpcd", pid 5478, jiffies 4294946373
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace (crc 0):
->      kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
->      slab_post_alloc_hook mm/slub.c:4958 [inline]
->      slab_alloc_node mm/slub.c:5263 [inline]
->      __do_kmalloc_node mm/slub.c:5656 [inline]
->      __kmalloc_noprof+0x3e0/0x660 mm/slub.c:5669
->      kmalloc_noprof include/linux/slab.h:961 [inline]
->      hcd_buffer_alloc+0x151/0x190 drivers/usb/core/buffer.c:134
->      usb_alloc_coherent+0x44/0x70 drivers/usb/core/usb.c:1010
->      es58x_alloc_urb+0x4c/0xc0 drivers/net/can/usb/etas_es58x/es58x_core.c:1553
->      es58x_alloc_rx_urbs drivers/net/can/usb/etas_es58x/es58x_core.c:1711 [inline]
->      es58x_open+0x1b3/0x470 drivers/net/can/usb/etas_es58x/es58x_core.c:1785
->      __dev_open+0x1be/0x3c0 net/core/dev.c:1683
->      __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
->      netif_change_flags+0x35/0x90 net/core/dev.c:9797
->      dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
->      devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
->      inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
->      sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
->      sock_ioctl+0x149/0x480 net/socket.c:1375
->      vfs_ioctl fs/ioctl.c:51 [inline]
->      __do_sys_ioctl fs/ioctl.c:597 [inline]
->      __se_sys_ioctl fs/ioctl.c:583 [inline]
->      __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
->      do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->      do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
->      entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888126188800 (size 512):
->    comm "dhcpcd", pid 5478, jiffies 4294946404
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace (crc 0):
->      kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
->      slab_post_alloc_hook mm/slub.c:4958 [inline]
->      slab_alloc_node mm/slub.c:5263 [inline]
->      __do_kmalloc_node mm/slub.c:5656 [inline]
->      __kmalloc_noprof+0x3e0/0x660 mm/slub.c:5669
->      kmalloc_noprof include/linux/slab.h:961 [inline]
->      hcd_buffer_alloc+0x151/0x190 drivers/usb/core/buffer.c:134
->      usb_alloc_coherent+0x44/0x70 drivers/usb/core/usb.c:1010
->      es58x_alloc_urb+0x4c/0xc0 drivers/net/can/usb/etas_es58x/es58x_core.c:1553
->      es58x_alloc_rx_urbs drivers/net/can/usb/etas_es58x/es58x_core.c:1711 [inline]
->      es58x_open+0x1b3/0x470 drivers/net/can/usb/etas_es58x/es58x_core.c:1785
->      __dev_open+0x1be/0x3c0 net/core/dev.c:1683
->      __dev_change_flags+0x30c/0x380 net/core/dev.c:9734
->      netif_change_flags+0x35/0x90 net/core/dev.c:9797
->      dev_change_flags+0x64/0xf0 net/core/dev_api.c:68
->      devinet_ioctl+0x5bf/0xd30 net/ipv4/devinet.c:1199
->      inet_ioctl+0x27c/0x2b0 net/ipv4/af_inet.c:1009
->      sock_do_ioctl+0x84/0x1a0 net/socket.c:1254
->      sock_ioctl+0x149/0x480 net/socket.c:1375
->      vfs_ioctl fs/ioctl.c:51 [inline]
->      __do_sys_ioctl fs/ioctl.c:597 [inline]
->      __se_sys_ioctl fs/ioctl.c:583 [inline]
->      __x64_sys_ioctl+0xf4/0x140 fs/ioctl.c:583
->      do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->      do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
->      entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
---------------XEcuyIL7xgatR37yyvk7tGDd
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-net-can-etas_es58x-full-cleanup-in-the-error-case.patch"
-Content-Disposition: attachment;
- filename*0="0001-net-can-etas_es58x-full-cleanup-in-the-error-case.patch"
-Content-Transfer-Encoding: base64
+Ok. I'm worried that when you fix Devres, you have to undo changes you
+made here. But I guess that's not the end of the world (and maybe you
+don't have to).
 
-RnJvbSAyYzcyMzliOGM4NmRmOTFmYWQ4MTYzNjVmNWFlNzk4MDY3MjY3ODBmIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
-PgpEYXRlOiBNb24sIDEyIEphbiAyMDI2IDE2OjAxOjM5ICswMTAwClN1YmplY3Q6IFtQQVRD
-SF0gbmV0OiBjYW46IGV0YXNfZXM1OHg6IGZ1bGwgY2xlYW51cCBpbiB0aGUgZXJyb3IgY2Fz
-ZQoKTWVtb3J5IGFsbG9jYXRpb24gY2FuIGZhaWwgaW4gdGhlIG1pZGRsZS4gSGVuY2UgdGhl
-IGNsZWFudXAKbmVlZHMgdG8gYmUgY2FsbGVkIGluIGV2ZXJ5IGNhc2UuCgpTaWduZWQtb2Zm
-LWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRyaXZlcnMvbmV0
-L2Nhbi91c2IvZXRhc19lczU4eC9lczU4eF9jb3JlLmMgfCAzICsrLQogMSBmaWxlIGNoYW5n
-ZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvbmV0L2Nhbi91c2IvZXRhc19lczU4eC9lczU4eF9jb3JlLmMgYi9kcml2ZXJzL25ldC9j
-YW4vdXNiL2V0YXNfZXM1OHgvZXM1OHhfY29yZS5jCmluZGV4IGY3OTkyMzNjMmI3Mi4uOGE4
-NzY0Mzc0NzEzIDEwMDY0NAotLS0gYS9kcml2ZXJzL25ldC9jYW4vdXNiL2V0YXNfZXM1OHgv
-ZXM1OHhfY29yZS5jCisrKyBiL2RyaXZlcnMvbmV0L2Nhbi91c2IvZXRhc19lczU4eC9lczU4
-eF9jb3JlLmMKQEAgLTE3ODMsOCArMTc4Myw5IEBAIHN0YXRpYyBpbnQgZXM1OHhfb3Blbihz
-dHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2KQogCiAJaWYgKCFlczU4eF9kZXYtPm9wZW5lZF9j
-aGFubmVsX2NudCkgewogCQlyZXQgPSBlczU4eF9hbGxvY19yeF91cmJzKGVzNTh4X2Rldik7
-CisJCS8qIGNhbiBmYWlsIHBhcnRpYWxseSAqLwogCQlpZiAocmV0KQotCQkJcmV0dXJuIHJl
-dDsKKwkJCWdvdG8gZnJlZV91cmJzOwogCiAJCXJldCA9IGVzNTh4X3NldF9yZWFsdGltZV9k
-aWZmX25zKGVzNTh4X2Rldik7CiAJCWlmIChyZXQpCi0tIAoyLjUyLjAKCg==
+Concept SGTM. I have not yet reviewed patches in details, but
 
---------------XEcuyIL7xgatR37yyvk7tGDd--
+Acked-by: Alice Ryhl <aliceryhl@google.com>
+
+Alice
 
