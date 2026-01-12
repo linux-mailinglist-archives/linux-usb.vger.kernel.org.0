@@ -1,196 +1,252 @@
-Return-Path: <linux-usb+bounces-32192-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32193-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B99C4D13837
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 16:12:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65F36D13888
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 16:15:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B42B331318E3
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 14:57:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7EF1C3183EA5
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jan 2026 15:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DF312DB7AE;
-	Mon, 12 Jan 2026 14:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214932EBDFD;
+	Mon, 12 Jan 2026 14:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jA/B745V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZUvuNIb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012031.outbound.protection.outlook.com [40.93.195.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26FC2BDC32;
-	Mon, 12 Jan 2026 14:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.31
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768229849; cv=fail; b=b7vPsS0g8qESdaetVcfIKlWubMhmg4x8F3NH3yXUJ2S8QBl5zaEx7YFWM7VG/ul69ymyYDSDXaSZ9vheMO60uvOJXtipr+QQ1B6EUk+SmpPmew7c5M/xLAOfoJgrdY9Sw52z0Wog4Ivan1vGNWxoOSojXsEHToPIlM7xbj1E9nI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768229849; c=relaxed/simple;
-	bh=6oJGzSzCn3ieSR9ziJTNCQGny7YcULDr7BAteYKJIi8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=c9DB1KzQBAYzP8CSAE36MQBW8ltyKITsd+ZmKbSHH6FK691bgM+0VIzDVF+H+fs4tHDbdnsmF6b8oIGjoIrxC8BvJ84ZVrzsF8ZR1zbIDaxzTCtmFu/zP3bHXt6+ITWJrZPRxHmCpxuvm1PXEZWRm0Dxy5fsXDs/s+9pW8oeFIU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jA/B745V; arc=fail smtp.client-ip=40.93.195.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Hipmq7NOJz7C7XQ5p1FOsUsZL+PcP1NCVj6z//L47QPckFC2clOVc8nLWE0C7PVIuNCBuXHSjKl2iF1PUvcoMUr6XTl8H44Xhp40G2oBAJf0+EuHXhPJYvkup6nLCZQf7AKgQ8ZuQE6XwflscSbYijKP5U7ZOzjcT2cjHdGTIDEKPjMDaSCccFQ5bxRKsZfyz51UIlc2T9RZTy9vx44wg2O2X3Ki53SBByuw8H7lqFvA5MjDWcfhPYoxXZmFZb+E39B9RA0C89Nu0Wcp+ovEzWfu3Su0bAsqSJ7/wzlk5fLDGFv/44VUnfassCpGrO+KLvz4+9/9vf/Vvkh7s52AlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SrJbEp8wW+KLsjZszWTMnzXqfscn8IcCLWrJmzyHy70=;
- b=PBEvlzST9tDLaEsLw4b7PLL1hZGobi8nfstOf3kJ/TBU5487oejBG77/8bmWT4wnPp4kctMsXqnVK748NMV0DakFGh3KOzrcoS64UOnLNLr6CxuAFtqB5Kx3bqIhTOOypm4yUF1eY+ESDeLSdcMwgFJPeNgiTL7s9AjlKSGvso+FsnkC9ka3Jl88IwTMcti3fIXvTcbeSb+/7ubhAgoKVG82cwMJEih2XKbpllEESCh6CHWTopUaidBy4dQkPDG4mfAZDs9updd7uYFNvVtTotpQMYB9XSP9+8+v0GDDzJyfUkbcg31AiP1pZ0XRQ8Al+JJ+SlZa/B4OH6OObFBsCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SrJbEp8wW+KLsjZszWTMnzXqfscn8IcCLWrJmzyHy70=;
- b=jA/B745Vj/g0SQdhktMDLKpEQ+YSu7AIFa2L5itmPqXB2rUEhN+2rGgXPdVra/ay2B+sdHaJixNnm1PCkAr7uul8321REutDDWDycucbSdV33My3b6L38hjpT0Xq28hAY+k+GvtXW9mn60OQx9e+18LjE4Sy3YT5CuKg+9wyXJ3ljr/eu76uRQjgOQOnvSrIZzkF24IS15p2io4E4OYFjFM87M4H2d2fIoizydETwH+41CXkoMOpdpLf/kyKhk7Kw1CR3PEESo60NI7wlW2mSM6LcfwX5i4tP24zM0mnDqKMpvZXnpGdX+wlgBsZgbZVDrXWRQy9BBgAkmaLzWyh8w==
-Received: from SJ0PR13CA0015.namprd13.prod.outlook.com (2603:10b6:a03:2c0::20)
- by DM6PR12MB4282.namprd12.prod.outlook.com (2603:10b6:5:223::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.7; Mon, 12 Jan
- 2026 14:57:22 +0000
-Received: from CO1PEPF000042AB.namprd03.prod.outlook.com
- (2603:10b6:a03:2c0:cafe::ef) by SJ0PR13CA0015.outlook.office365.com
- (2603:10b6:a03:2c0::20) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.4 via Frontend Transport; Mon,
- 12 Jan 2026 14:57:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1PEPF000042AB.mail.protection.outlook.com (10.167.243.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9520.1 via Frontend Transport; Mon, 12 Jan 2026 14:57:22 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 12 Jan
- 2026 06:56:57 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 12 Jan
- 2026 06:56:56 -0800
-Received: from 5b171f0-lcelt.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Mon, 12 Jan 2026 06:56:54 -0800
-From: Wei-Cheng Chen <weichengc@nvidia.com>
-To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, Haotien Hsu <haotienh@nvidia.com>
-CC: <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Wayne Chang <waynec@nvidia.com>, "Wei-Cheng
- Chen" <weichengc@nvidia.com>
-Subject: [PATCH v2] usb: host: xhci-tegra: Use platform_get_irq_optional() for wake IRQs
-Date: Mon, 12 Jan 2026 22:56:53 +0800
-Message-ID: <20260112145653.95691-1-weichengc@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260108102152.241073-1-weichengc@nvidia.com>
-References: <20260108102152.241073-1-weichengc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E392EBB8C;
+	Mon, 12 Jan 2026 14:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768229964; cv=none; b=sKbmp+l9V72ZkVQdpScZf0/CMZ4z1rrdzO1+uIfnW513Y7ws254+ExiPRUiwd7pIfKmJ0M66AjeAY018p418E5T2qZnJekEn/zOpGCcs8QZ8xahUBTMYj1q9D329ZmB11nEUfwOkEeOcSNIT0ad6t9KZGDB0qa8fRuLVKTnDt+E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768229964; c=relaxed/simple;
+	bh=TKAbiPlTUYkhPD8beZCRCcNSrWoNi1fTxw15ZAroquc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YNS9KZfsv8zRe9kRyHwEualP+aLSP+Wdq+8wFQXMSiiFCy43dBdbyjZva89J3FXR7zyP6a24PLh45ykSST6tAq2/8CrmsIdKbZF7R4QSihK7swvd302RGRt3PxSxPitpulAxZK9pLT4JLzRmp2MFdumfoZkT7yazbUL0k+z+Xno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZUvuNIb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9402AC2BC86;
+	Mon, 12 Jan 2026 14:59:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768229964;
+	bh=TKAbiPlTUYkhPD8beZCRCcNSrWoNi1fTxw15ZAroquc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=tZUvuNIbwZ0qOG6PQOuW/NAqSsIiZ2FmmnqLeiaRkt2ujldj6s1U6Cpo1M351I5bn
+	 TrcRcTtyhWUjxGzclHZSYytKww/IrNywJt47nQNPKLrq5Um9hffe/kWEBOz7t/wVWu
+	 8oY5MgEFjsFjiFY8oZZW3QsW6Aatl3EXtEVLoSLwF29lXhZgP8kWI+PHMWLqVwJFN6
+	 036ByX8GqkSCwisMwZF2fJt4rRitTiHl7K2K2qqQp/6hm3rt6R/pMR+vk4mDDyp2K2
+	 zXKyMK5HO0v2KyUhum9kcHpjf8/OumKfgexLAX4VGHtWFRvwzXuks5qKN3p1JPDfNo
+	 rOAvBMUAXg5+A==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Benjamin Tissoires <bentiss@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	jikos@kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.18-5.10] HID: usbhid: paper over wrong bNumDescriptor field
+Date: Mon, 12 Jan 2026 09:58:26 -0500
+Message-ID: <20260112145840.724774-25-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260112145840.724774-1-sashal@kernel.org>
+References: <20260112145840.724774-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.5
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000042AB:EE_|DM6PR12MB4282:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4db78c53-94d6-4c2d-191b-08de51eae3fc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?PFOIcnCOsa7ZnOMMJmeZrkXdhFvkZn8j1KEgdVRo6gSzKyEC0kMcrwhej8oK?=
- =?us-ascii?Q?niMwjDCiKKWhGktn0CtjGGc/n4py1IcoWNgm3dx0kx5sKD+dKcVCFcOoo526?=
- =?us-ascii?Q?nvy8mrHlDd2oyk3AYVr6O9v6d/aoFAXl5i66/7C5PW5yfdWKV2XBqtAjmlMn?=
- =?us-ascii?Q?0klqcSYen93wLBtOWoXWA5ZgpdxdGpTkKwGF9lEH+X8KjCrhU/5blv7cUksZ?=
- =?us-ascii?Q?KSj5fiPMnAej7WMlOp9F5/UifByuqSXE44uXCi16KxNmFL+9W8IQT2Co9LMu?=
- =?us-ascii?Q?1F4XPhbs+WO6emGqNffNj4F9Lrgcr0IkTFUzYS7Oxvp/uxPUt+2vH4gWRoDj?=
- =?us-ascii?Q?wXq+jIFJFnVdAbbPpHK4aWSgwJUJ57mFiHh/Lt9//X3h/vmtGsZGenwOtYIZ?=
- =?us-ascii?Q?rWHed8Euq6bvuSW4QNct7nyLUpzcobvdJZJ/wIVSvlhpTEyqGPGuqVJOvXAX?=
- =?us-ascii?Q?DViH9zc6wGg5+3zatTqe6psSrPL7yRJeWo/p1b4fy9wc0EmbzYE8I6xwJqe4?=
- =?us-ascii?Q?xtRLr2SN3Lmr+R+p8qVtQ17hzxiGSlDA/gEbRcmWSg8BcqxW2xDCovgHW7NV?=
- =?us-ascii?Q?3Cx5oDiAg/eB/uc/HBOplv7zFtDOQJx6bsEGtUFFmykP9qw7gCGwPVX00XWb?=
- =?us-ascii?Q?tnFtJpHaaJTNSnTCjGTC/9w/0DVOJfKakAJl6cxTEHiAp/JAWyNdblX4qvql?=
- =?us-ascii?Q?Iw4I+Ort2dg6IpOcjeWuKraFsGrX6+9caTe8LEWsQjsuinte9N38MN3VxAKh?=
- =?us-ascii?Q?Gw128J2D3hrZK4SQFyve1YWguvDLGltDOckzhIQr7KmWTGg9jNx13V3f0gkI?=
- =?us-ascii?Q?5DldkzZ9H3xYqrt+7gHDfvXaAlU537bhWFk1joBrs1+IxLo+0dPx0Cewseyh?=
- =?us-ascii?Q?7waoe97ag+6KZIbToNeN0/X0mSYFsrSDCOYr5rhs3/Ho528w7lVuoKUCYJw/?=
- =?us-ascii?Q?i1MnQ2CIIF2V6B1ugLn3clJ3DAu2TZXHL0RVawdeGav8hLufuSQP4s+ubIXC?=
- =?us-ascii?Q?6rx03e07UnZrC0tvLcjRcqqgLvJ2otsB6Ly6QO6+mZy8Rf7RzVGrRwknthJ6?=
- =?us-ascii?Q?bAXo0GyuP2+Jv8LZrdrxSKhLZyLQLUNkaVLpe+pTZ5vdBxqL557rRkh4DsjR?=
- =?us-ascii?Q?60AXpPavIRRFaIef1Yvqm66hyearOIgUezCWw92dpMhZNPaiLcl8i4AU8V6c?=
- =?us-ascii?Q?3/uvpijecXsxQQg7geXYKee+0vMAvB8o4FNTKVncmZ+1LQwdZIjc4XlcajkL?=
- =?us-ascii?Q?Q2HBdWA2pcAimHEURuixQOx1lrXVFGmo3d54d0POU4hpVWFaeIWVora+kXrB?=
- =?us-ascii?Q?MPAA93d7L1TCwffRYKPWLuXQwaH0QtJ+eZb0C1B3d+CJL9GbqhCl8Z4iu4Eq?=
- =?us-ascii?Q?MionIDmxdw1vCdAQIyyymx02qnYmHOEhPDoGnCMGOm/q8eIhf2WUXPj2pqge?=
- =?us-ascii?Q?HXz/EwVV6cjn5XEN6zOBO1equypvNK5kXqDyOsjb0pdFA6iQr/ObMKcveh+h?=
- =?us-ascii?Q?Udl5NxhZMqCHBtsw6ad6aej05rSkMyuToPBpwuOtTgwjZS4DmsvWq613V2VA?=
- =?us-ascii?Q?/lnH/ivrNr4lX9koPCw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2026 14:57:22.0943
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4db78c53-94d6-4c2d-191b-08de51eae3fc
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000042AB.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4282
 
-From: Wayne Chang <waynec@nvidia.com>
+From: Benjamin Tissoires <bentiss@kernel.org>
 
-When some wake IRQs are disabled in the device tree, the corresponding
-interrupt entries are removed from DT. In such cases, the driver
-currently calls platform_get_irq(), which returns -ENXIO and logs
-an error like:
+[ Upstream commit f28beb69c51517aec7067dfb2074e7c751542384 ]
 
-  tegra-xusb 3610000.usb: error -ENXIO: IRQ index 2 not found
+Some faulty devices (ZWO EFWmini) have a wrong optional HID class
+descriptor count compared to the provided length.
 
-However, not all wake IRQs are mandatory. The hardware can operate
-normally even if some wake sources are not defined in DT. To avoid this
-false alarm and allow missing wake IRQs gracefully, use
-platform_get_irq_optional() instead of platform_get_irq().
+Given that we plainly ignore those optional descriptor, we can attempt
+to fix the provided number so we do not lock out those devices.
 
-Fixes: 5df186e2ef11 ("usb: xhci: tegra: Support USB wakeup function for Tegra234")
-Cc: stable@vger.kernel.org
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
-Signed-off-by: Wei-Cheng Chen <weichengc@nvidia.com>
-Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-V1 -> V2:
- - Added Reviewed-by and Tested-by tags from Jon Hunter.
- - Added Cc: stable@vger.kernel.org tag to ensure backporting.
----
- drivers/usb/host/xhci-tegra.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 31ccced5125..8b492871d21 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -1563,7 +1563,7 @@ static int tegra_xusb_setup_wakeup(struct platform_device *pdev, struct tegra_xu
- 	for (i = 0; i < tegra->soc->max_num_wakes; i++) {
- 		struct irq_data *data;
+LLM Generated explanations, may be completely bogus:
+
+## Analysis of HID: usbhid: paper over wrong bNumDescriptor field
+
+### 1. COMMIT MESSAGE ANALYSIS
+
+**Subject:** "HID: usbhid: paper over wrong bNumDescriptor field"
+
+The commit message clearly states:
+- Some faulty devices (specifically ZWO EFWmini) report an incorrect
+  `bNumDescriptors` count that doesn't match the actual provided length
+- Since the kernel already ignores optional HID class descriptors, the
+  fix recalculates the correct value
+- The goal is to not "lock out" these devices that have buggy firmware
+
+The phrase "paper over" indicates this is a **hardware workaround** for
+non-compliant devices.
+
+### 2. CODE CHANGE ANALYSIS
+
+**Location:** `drivers/hid/usbhid/hid-core.c` in `usbhid_parse()`
+
+**Before the fix:**
+```c
+if (!hdesc->bNumDescriptors ||
+    hdesc->bLength != sizeof(*hdesc) +
+                      (hdesc->bNumDescriptors - 1) * sizeof(*hcdesc)) {
+    dbg_hid("hid descriptor invalid...");
+    return -EINVAL;  // Device rejected completely
+}
+```
+
+**After the fix:**
+Instead of immediately returning `-EINVAL`, the code now:
+1. Validates minimum length: `hdesc->bLength >= sizeof(*hdesc)`
+2. Recalculates the correct `bNumDescriptors` from the actual length
+3. Logs a warning via `hid_warn()`
+4. Only returns `-EINVAL` if the descriptor is truly too short
+
+**Technical mechanism:** The fix derives what `bNumDescriptors` *should*
+be from `bLength` using: `fixed_opt_descriptors_size / sizeof(*hcdesc) +
+1`. This is mathematically correct since `bLength = sizeof(*hdesc) +
+(bNumDescriptors-1) * sizeof(*hcdesc)`.
+
+### 3. CLASSIFICATION
+
+This is a **hardware quirk/workaround** - one of the explicit exceptions
+allowed in stable trees.
+
+- ZWO EFWmini is a real device (electronic filter wheel for
+  astrophotography)
+- The device has buggy firmware that reports incorrect descriptor
+  metadata
+- The fix enables the hardware to work despite firmware bugs
+
+### 4. SCOPE AND RISK ASSESSMENT
+
+| Metric | Value |
+|--------|-------|
+| Lines changed | ~20 lines |
+| Files touched | 1 |
+| Complexity | Low |
+| Risk | **LOW** |
+
+**Risk analysis:**
+- The fix only triggers in the error path (when descriptor is already
+  detected as invalid)
+- Normal correctly-behaved devices are completely unaffected
+- There's proper validation before applying the fixup
+- The kernel already ignores optional descriptors, so fixing the count
+  is safe
+- Worst case: a truly malformed device passes this check but fails
+  elsewhere (no worse than current behavior for users)
+
+### 5. USER IMPACT
+
+**Affected users:** Users with ZWO EFWmini devices and potentially other
+USB HID devices with similar firmware bugs.
+
+**Impact without fix:** Device completely non-functional - rejected with
+`-EINVAL`.
+
+**Impact with fix:** Device works properly. Warning message logged for
+debugging.
+
+This is HIGH impact for affected users - the difference between working
+hardware and hardware that's completely locked out.
+
+### 6. STABILITY INDICATORS
+
+- **Author:** Benjamin Tissoires - the HID subsystem maintainer
+- **Conservative approach:** Only applies when descriptor is already
+  flagged as invalid
+- **Warning logged:** `hid_warn()` documents when fixup is applied
+- **Proper validation:** Checks `bLength >= sizeof(*hdesc)` before
+  attempting fix
+
+### 7. DEPENDENCY CHECK
+
+- No dependencies on other commits
+- The `usbhid_parse()` function has been in the kernel for many years
+- Self-contained fix that applies cleanly to older kernels
+
+### Summary
+
+**Why this should be backported:**
+
+1. **Hardware quirk exception:** This is explicitly listed as acceptable
+   for stable trees - adding workarounds for devices with buggy firmware
+2. **Fixes real user-impacting bug:** Real devices (ZWO EFWmini) are
+   completely locked out without this fix
+3. **Small and surgical:** ~20 lines in one file, low complexity
+4. **Low risk:** Only affects already-invalid descriptors; well-
+   validated with fallback to original behavior
+5. **No new features:** Just a workaround to handle non-compliant
+   devices
+6. **Maintainer-authored:** Written by the HID subsystem maintainer
+7. **No dependencies:** Self-contained and should apply cleanly
+
+**Risk vs Benefit:**
+- **Risk:** Minimal - worst case is a truly malformed device passes this
+  check but fails later
+- **Benefit:** High - enables working hardware for users with affected
+  devices
+
+This is a textbook example of a hardware quirk fix that belongs in
+stable trees. It enables users with buggy-firmware devices to use their
+hardware without affecting anyone else.
+
+**YES**
+
+ drivers/hid/usbhid/hid-core.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index aac0051a2cf65..758eb21430cda 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -985,6 +985,7 @@ static int usbhid_parse(struct hid_device *hid)
+ 	struct usb_device *dev = interface_to_usbdev (intf);
+ 	struct hid_descriptor *hdesc;
+ 	struct hid_class_descriptor *hcdesc;
++	__u8 fixed_opt_descriptors_size;
+ 	u32 quirks = 0;
+ 	unsigned int rsize = 0;
+ 	char *rdesc;
+@@ -1015,7 +1016,21 @@ static int usbhid_parse(struct hid_device *hid)
+ 			      (hdesc->bNumDescriptors - 1) * sizeof(*hcdesc)) {
+ 		dbg_hid("hid descriptor invalid, bLen=%hhu bNum=%hhu\n",
+ 			hdesc->bLength, hdesc->bNumDescriptors);
+-		return -EINVAL;
++
++		/*
++		 * Some devices may expose a wrong number of descriptors compared
++		 * to the provided length.
++		 * However, we ignore the optional hid class descriptors entirely
++		 * so we can safely recompute the proper field.
++		 */
++		if (hdesc->bLength >= sizeof(*hdesc)) {
++			fixed_opt_descriptors_size = hdesc->bLength - sizeof(*hdesc);
++
++			hid_warn(intf, "fixing wrong optional hid class descriptors count\n");
++			hdesc->bNumDescriptors = fixed_opt_descriptors_size / sizeof(*hcdesc) + 1;
++		} else {
++			return -EINVAL;
++		}
+ 	}
  
--		tegra->wake_irqs[i] = platform_get_irq(pdev, i + WAKE_IRQ_START_INDEX);
-+		tegra->wake_irqs[i] = platform_get_irq_optional(pdev, i + WAKE_IRQ_START_INDEX);
- 		if (tegra->wake_irqs[i] < 0)
- 			break;
- 
+ 	hid->version = le16_to_cpu(hdesc->bcdHID);
 -- 
-2.43.0
+2.51.0
 
 
