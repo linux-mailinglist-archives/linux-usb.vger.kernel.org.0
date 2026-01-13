@@ -1,152 +1,281 @@
-Return-Path: <linux-usb+bounces-32298-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32299-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AB3ED1ADF6
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 19:44:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCAABD1B28A
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 21:10:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 356A1303165A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 18:44:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 508FF301FF76
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 20:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D477734FF5B;
-	Tue, 13 Jan 2026 18:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB93D36C5A6;
+	Tue, 13 Jan 2026 20:09:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rccaUaPu"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="zIz8nYJt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A8134F241;
-	Tue, 13 Jan 2026 18:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFEA36A026
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 20:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768329860; cv=none; b=VDtAvFt/ltWT0OnnWPJxmKAmoTUsnsTVNjf6EDL0e1mmvwAG/xh41OhPTDp0SGmq5ccvVAhNqbmQoXBWEXLJpdM3oD+51HPhnyjjVXzG120HHhsd63bak5dZHDK5ijVa0uBCRn++Zjtva/Wh9ABaJeMDxgDsvAt9z9hMZC7/WMc=
+	t=1768334996; cv=none; b=KVdq1lWTHvcVHBihWaMUc8og24w/c9z0A09FFUu7mueRy6prIBdFrgPHbbBj9omsOlMvAD4KJ4cHLRtnfV8I354ZbCPyI0fGd1PKfabkIWcXrF7lppURGKHsPo3xXk3ScTUXlObjo3xc9PoZTXcYQhRCsk+tnghRmJevphz40Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768329860; c=relaxed/simple;
-	bh=uzTSZMpqizPB88ACwlfcnMgPpC6EPlBzT/GDPAir0a4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tQ2SXDZfHp+I92OLckX52GbJZanLUMxGyj1jneWoTmQxY8FD+XAQpr8J/GCSXmCNSrFzoT44kGlcElI4As3rG9YttD7tCej/wEzwJXvyWSTODkOAEf/XL57TBbYvKd7yvuMyh2oV/+tqgcRHb/4X5Lb/q9FeUGzXRLwYXRSNWzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rccaUaPu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BA75C116C6;
-	Tue, 13 Jan 2026 18:44:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768329860;
-	bh=uzTSZMpqizPB88ACwlfcnMgPpC6EPlBzT/GDPAir0a4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rccaUaPu3QIA+S0MyJhkBwyEu2akuWADp/D6WzygV3pbP0JwfjKSFt3thW29RLBOB
-	 q1FBtHWvZPbY3GYylsFH/n+2jdFkaGA89mBUsPQlJFAdscECPCtCPczYwZ+tU4whwK
-	 ZCLHyf7Se3pWy2++EwGmtRvZk12pxja1bks94CP7gdkheXSVa0/IJ2DyS4jlntAPwB
-	 JfW1lz339lKyGuUPI4lxf3zKXWnYZ8ySFoRqauSr/afA22qBTTWjnFIFFLYmD+J3iQ
-	 iv14V4vR1Ru8/E/QnAW5fKnUZvnwY2sNvWRGQPLq+g90OkTZY80frBXAkK6QI/lORf
-	 oo0rEf2JmhMsg==
-Message-ID: <8cf57879-5fa7-4d23-afb4-6ef99f0ce97a@kernel.org>
-Date: Tue, 13 Jan 2026 12:44:18 -0600
+	s=arc-20240116; t=1768334996; c=relaxed/simple;
+	bh=pyMp5oFQEzQGlgpWodh5m5sUhmJKSJMmcF9EpqTle4o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jyxOb8P2Cg2sXwD0QSBsg2T1Tw+3y4K9Grs+mgK4Tg2AlGmP1gZ8wztAaWh7SyyUiYqiDaae1HRinlgCpF0U8HpauO6Qf1+HaITLZAmaICiB88ccU/a3Z6ibrgwtqli4yE4JVScrHgBpaHvkI5usnwzjfNMjPxfsDwfCMm/QZvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=zIz8nYJt; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b86f212c3b0so31517566b.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 12:09:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1768334991; x=1768939791; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
+        b=zIz8nYJtuj84rCwrR4h2rYUNtQy0kQi3Vs6Pa4eyUFvYBSmR3JdcK91Z5LcbNLJJbd
+         KBv1zpWpctONSZSIZfox4XBRJ3RoOniV3X3ufcycnUMgiQws9qL2iJTLfcYz/6ywcGtF
+         IEbL5rTF894Idp+8ULCgygVGYo7r2T+AndIh1IP7v3vgatT1IQO43J17idGJA2xunR2Y
+         7fJ9k/8LfGQoxc/GCDnq0d/fOOs+esgxOp4GdBC/tXJBsPbMEB8jlL/iIMNJVyMCIozF
+         aMqv/iMccUIy3JOOqaYhzVETvgeYFGAbN22kE3vQ40Dtdd6YFQhBIm6KtULuMQfYbl9n
+         eBaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768334991; x=1768939791;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
+        b=rKZfSnbTfufAZ4gGtRgyqdLyp2MmdYYxa2dKiLxOUuTWuxxi4hnMJ7Rz1mvpgYWB55
+         tT6O6kt/qIemrtF/u1fdjd+KzXI31RkyXi/zMgKKgL9NsrjUCm+0XeSpPsvsz+8Dzlbo
+         MRqX1WY7NnvXypcrlGsyz+reuWdpxgGaJkMpAm6duUnhEyGwP26C8COf1WFc56Mza9GP
+         +pBICtcfy7TBcEQg49WBLN5EnOuDZ2BM7Q6kzehY9Cmk2kIpECeOCZ9NwIYqqtuZiPOC
+         wdLmBUy0CRTq/AV9VYbrv813cxssxGvqOCpe56nfG2c/LMjVmBwSsJPXo5SjN5B1z4po
+         dE6w==
+X-Forwarded-Encrypted: i=1; AJvYcCXRVwnfivn04zwr20Vq72/UHcYjvt+EwDP/d8XSQxP5VJ4a+S4rF6mp9FiD5ZY8jPPU4Nu0ZGkqHVg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhV+Rt7nzH88KDLEfqJL5hPsgYpu54V9lJhq0Xuvzc//GMj8q5
+	/oJUalFvpjxDV/4xwe1mnJ9R+q5RwSYL+/SUg727NTTYPduK1Ycjcv1WXhqkS+1vqdU2y2U/kkO
+	TKbH/9/xk1IEIyRihWYGzx+YxSo/sSOz4PC4qqElO7g==
+X-Gm-Gg: AY/fxX5HXVqVCbJKxX4fb+ulV3D79NXnsYxL80M+qfBFzJHqOexy0O1qxoJ6RIBtjmU
+	c1m2CE5a4RTKMSt6GKCW0nfYOxkMz2WkGHNd0c9szwMua93xEk2LDvr8F1MScYE/ki/jUlM270Z
+	ZuYZq/Po/onAr07XLMzwRJGX2Gp7banFdc2FdbNn84GXvfcQARSW+uCZP8xCSDoJ4jUhNjvlHgC
+	q32QTn7xbuC/Qq7QDVbb6LO8MVebKSlZeQmFsvNbz1PNRw9pYOPewNNRG2I/7Rt/8n48wBIA84C
+	3LX0kx/Bq4UDaqdAjjJKOs9Ra01fnEkao7tC0ejCcUrYCR8EHblRzHFZgU2P
+X-Received: by 2002:a17:907:9483:b0:b87:191f:4fab with SMTP id
+ a640c23a62f3a-b8761d928b1mr18947166b.26.1768334991113; Tue, 13 Jan 2026
+ 12:09:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] thunderbolt: Fix S4 resume incongruities
-To: "Katiyar, Pooja" <pooja.katiyar@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
- linux-kernel@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
- Yehezkel Bernat <YehezkelShB@gmail.com>,
- Pooja Katiyar <pooja.katiyar@intel.com>,
- Rene Sapiens <rene.sapiens@linux.intel.com>
-References: <20260106053749.61440-1-superm1@kernel.org>
- <20260107093353.GO2275908@black.igk.intel.com>
- <158442b3-28c2-4f8c-ba42-0b9c6661c650@kernel.org>
- <20260108114205.GS2275908@black.igk.intel.com>
- <ad8cf89d-a171-4e72-996e-8b09d16f9017@kernel.org>
- <20260109072318.GU2275908@black.igk.intel.com>
- <eb4685e6-04fc-4d21-bd98-2a297c183966@linux.intel.com>
-Content-Language: en-US
-From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-In-Reply-To: <eb4685e6-04fc-4d21-bd98-2a297c183966@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20251229184004.571837-1-robert.marko@sartura.hr>
+ <20251229184004.571837-16-robert.marko@sartura.hr> <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
+In-Reply-To: <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Tue, 13 Jan 2026 21:09:40 +0100
+X-Gm-Features: AZwV_QhCSNrQ25JXSm6moAYHvYjCfUUDQoR1FC1MV_mP0oSiXaM4vWsMWx6MKV0
+Message-ID: <CA+HBbNFYBhtvUxd45O7eP_1JYENxeGZOkA+yUsEdztOSSi9Gdg@mail.gmail.com>
+Subject: Re: [PATCH v4 15/15] arm64: dts: microchip: add EV23X71A board
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
+	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
+	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
+	UNGLinuxDriver@microchip.com, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
+	richard.genoud@bootlin.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	broonie@kernel.org, lars.povlsen@microchip.com, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-usb@vger.kernel.org, luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Jan 11, 2026 at 3:42=E2=80=AFPM claudiu beznea <claudiu.beznea@tuxo=
+n.dev> wrote:
+>
+> Hi, Robert,
+>
+> On 12/29/25 20:37, Robert Marko wrote:
+> > Microchip EV23X71A is an LAN9696 based evaluation board.
+> >
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> > Changes in v2:
+> > * Split from SoC DTSI commit
+> > * Apply DTS coding style
+> > * Enclose array in i2c-mux
+> > * Alphanumericaly sort nodes
+> > * Change management port mode to RGMII-ID
+> >
+> >   arch/arm64/boot/dts/microchip/Makefile        |   1 +
+> >   .../boot/dts/microchip/lan9696-ev23x71a.dts   | 757 +++++++++++++++++=
++
+> >   2 files changed, 758 insertions(+)
+> >   create mode 100644 arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/microchip/Makefile b/arch/arm64/boot/d=
+ts/microchip/Makefile
+> > index c6e0313eea0f..09d16fc1ce9a 100644
+> > --- a/arch/arm64/boot/dts/microchip/Makefile
+> > +++ b/arch/arm64/boot/dts/microchip/Makefile
+> > @@ -1,4 +1,5 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> > +dtb-$(CONFIG_ARCH_LAN969X) +=3D lan9696-ev23x71a.dtb
+> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb125.dtb
+> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb134.dtb sparx5_pcb134_emmc.d=
+tb
+> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb135.dtb sparx5_pcb135_emmc.d=
+tb
+> > diff --git a/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts b/arch/=
+arm64/boot/dts/microchip/lan9696-ev23x71a.dts
+> > new file mode 100644
+> > index 000000000000..435df455b078
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
+>
+> [ ...]
+>
+> > +&gpio {
+> > +     emmc_sd_pins: emmc-sd-pins {
+> > +             /* eMMC_SD - CMD, CLK, D0, D1, D2, D3, D4, D5, D6, D7, RS=
+TN */
+> > +             pins =3D "GPIO_14", "GPIO_15", "GPIO_16", "GPIO_17",
+> > +                    "GPIO_18", "GPIO_19", "GPIO_20", "GPIO_21",
+> > +                    "GPIO_22", "GPIO_23", "GPIO_24";
+> > +             function =3D "emmc_sd";
+> > +     };
+> > +
+> > +     fan_pins: fan-pins {
+> > +             pins =3D "GPIO_25", "GPIO_26";
+> > +             function =3D "fan";
+> > +     };
+> > +
+> > +     fc0_pins: fc0-pins {
+> > +             pins =3D "GPIO_3", "GPIO_4";
+> > +             function =3D "fc";
+> > +     };
+> > +
+> > +     fc2_pins: fc2-pins {
+> > +             pins =3D "GPIO_64", "GPIO_65", "GPIO_66";
+> > +             function =3D "fc";
+> > +     };
+> > +
+> > +     fc3_pins: fc3-pins {
+> > +             pins =3D "GPIO_55", "GPIO_56";
+> > +             function =3D "fc";
+> > +     };
+> > +
+> > +     mdio_pins: mdio-pins {
+> > +             pins =3D "GPIO_9", "GPIO_10";
+> > +             function =3D "miim";
+> > +     };
+> > +
+> > +     mdio_irq_pins: mdio-irq-pins {
+> > +             pins =3D "GPIO_11";
+> > +             function =3D "miim_irq";
+> > +     };
+> > +
+> > +     sgpio_pins: sgpio-pins {
+> > +             /* SCK, D0, D1, LD */
+> > +             pins =3D "GPIO_5", "GPIO_6", "GPIO_7", "GPIO_8";
+> > +             function =3D "sgpio_a";
+> > +     };
+> > +
+> > +     usb_ulpi_pins: usb-ulpi-pins {
+> > +             pins =3D "GPIO_30", "GPIO_31", "GPIO_32", "GPIO_33",
+> > +                    "GPIO_34", "GPIO_35", "GPIO_36", "GPIO_37",
+> > +                    "GPIO_38", "GPIO_39", "GPIO_40", "GPIO_41";
+> > +             function =3D "usb_ulpi";
+> > +     };
+> > +
+> > +     usb_rst_pins: usb-rst-pins {
+> > +             pins =3D "GPIO_12";
+> > +             function =3D "usb2phy_rst";
+> > +     };
+> > +
+> > +     usb_over_pins: usb-over-pins {
+> > +             pins =3D "GPIO_13";
+> > +             function =3D "usb_over_detect";
+> > +     };
+> > +
+> > +     usb_power_pins: usb-power-pins {
+> > +             pins =3D "GPIO_1";
+> > +             function =3D "usb_power";
+> > +     };
+> > +
+> > +     ptp_out_pins: ptp-out-pins {
+> > +             pins =3D "GPIO_58";
+> > +             function =3D "ptpsync_4";
+> > +     };
+>
+> Could you please move this one upper to have all the entries in the gpio
+> container alphanumerically sorted?
+>
+> > +
+> > +     ptp_ext_pins: ptp-ext-pins {
+> > +             pins =3D "GPIO_59";
+> > +             function =3D "ptpsync_5";
+> > +     };
+>
+> Same here.
+
+Sure, I will make sure that pin nodes are alphabetical (I found some
+more that are not) in v5.
+
+>
+> [ ...]
+>
+> > +             port29: port@29 {
+> > +                     reg =3D <29>;
+> > +                     phys =3D <&serdes 11>;
+> > +                     phy-handle =3D <&phy3>;
+> > +                     phy-mode =3D "rgmii-id";
+> > +                     microchip,bandwidth =3D <1000>;
+>
+> There are some questions around this node from Andrew in v1 of this serie=
+s,
+> which I don't see an answer for in any of the following versions. Could y=
+ou
+> please clarify?
+
+Sure, as for the RGMII I switched to rgmii-id so the PHY is adding the dela=
+ys.
+Though, I am not sure if its better to add them via MAC as it can add
+the delays instead of the PHY,
+so I am open to suggestions here.
+
+As for the phys property, yes that is not required here as RGMII ports
+are dedicated, there are no
+SERDES lanes being used for them.
+
+I have updated the bindings to account for this and it will be part of v5.
+
+Regards,
+Robert
+
+>
+> The rest looks good to me.
+>
+> Thank you,
+> Claudiu
+>
 
 
-
-On 1/9/2026 6:42 PM, Katiyar, Pooja wrote:
-> Hi,
-> 
-> On Thu, Jan 8, 2026 at 11:23:18PM -0800, Mika Westerberg wrote:
->> On Thu, Jan 08, 2026 at 01:18:58PM -0600, Mario Limonciello wrote:
->>> On 1/8/26 5:42 AM, Mika Westerberg wrote:
->>>
->>> Let me just share the whole log so you can see the full context.
->>>
->>> https://gist.github.com/superm1/6798fff44d0875b4ed0fe43d0794f81e
->>
->> Thanks!
->>
->> [Side note, you seem to have the link trained at Gen2 (20G) instead of Gen3
->> (40G).]
->>
->> Looking at the dmesg I recalled that there is an internal report about
->> similar issue by Pooja and Rene (Cc'd) and it all boils down to this log
->> entry:
->>
->> [  489.339148] thunderbolt 0000:c6:00.6: 2:13: could not allocate DP tunnel
->>
->> They made a hack patch that works it around, see below. I wonder if you
->> could try that too? If that's the issue (not releasing HopIDs) then we need
->> to figure a way to fix it properly. One suggestion is to release DP
->> resources earlier, and of course doing full reset as done here. I would
->> prefer "smallest" possible change.
->>
->> @Pooja, any updates on your side to this?
-> 
-> Looking at the log "could not allocate DP tunnel", this appears to be
-> similar to kref synchronization issue during S4 resume that we are
-> facing. The problem we have identified is during S4 entry, hibernation
-> image is created first, and then the DP tunnels are freed. This means
-> the hibernation image still contains the tunnels in their active state.
-> However, when resuming from S4, the tunnels are restored from the
-> hibernation image (as active) and then the resume flow reactivates
-> them again, causing kref count mismatch. This leads to HopID allocation
-> conflicts and the "could not allocate DP tunnel" error on next
-> connect/tunnel activation.
-> 
-> The hack patch works around this by preventing double activation via
-> dprx_started flag. You could try this hack to confirm if it's the same
-> issue we're dealing with.
-> 
-> For a proper fix, we are working on a patch which releases the DP resources
-> before saving the hibernation image and creates them again during resume,
-> managing the resources properly. The patch is currently under review and
-> testing and will send shortly.
-> 
-> 
-
-I have confirmation the hack patch does help the issue for us too.
-
-If your patch doesn't work another logical solution could be to destroy 
-all the tunnels as part of the PM freeze callback (not just the DP 
-resources).  Maybe even unify the suspend and freeze codepaths for more 
-opportunities for code reuse?
-
->>
->> diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
->> index 28c1e5c062f3..45f7ee940f10 100644
->> --- a/drivers/thunderbolt/tunnel.c
->> +++ b/drivers/thunderbolt/tunnel.c
->> @@ -1084,6 +1084,9 @@ static void tb_dp_dprx_work(struct work_struct *work)
->>   
->>   static int tb_dp_dprx_start(struct tb_tunnel *tunnel)
->>   {
->> +	if (tunnel->dprx_started)
->> +		return 0;
->> +
->>   	/*
->>   	 * Bump up the reference to keep the tunnel around. It will be
->>   	 * dropped in tb_dp_dprx_stop() once the tunnel is deactivated.
-> 
-> Thanks,
-> Pooja
-
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
