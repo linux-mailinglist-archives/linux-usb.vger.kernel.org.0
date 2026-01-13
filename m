@@ -1,464 +1,441 @@
-Return-Path: <linux-usb+bounces-32214-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32215-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AE72D1697A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 05:07:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCAE8D169A5
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 05:22:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 551AC301AD2E
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 04:07:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 53FC03024881
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 04:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846CF34F481;
-	Tue, 13 Jan 2026 04:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K0B9DCA7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7022734FF76;
+	Tue, 13 Jan 2026 04:22:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f194.google.com (mail-dy1-f194.google.com [74.125.82.194])
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8B32FD1D6
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 04:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD74315D2C
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 04:22:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768277257; cv=none; b=S92s3WH6dH+V5ohW1Xw3tR3QKJcPXOrIE6Fhv2Q/t8RyAPmsiVh8AnqUDO7ZUElAneO3Q4IwOYyo3+lLvCBXVhaaKOxYVsn1WpbDrvo085+NfRfyTBQuf4mSzLDs4+GALrlNYZOHQ6HLQ0wJjOXltVSZXzZR3fvJsf/mCbk1N4Y=
+	t=1768278125; cv=none; b=QUj6Wv5kIdj2AxJ6jehvteUOOU35+anGCo/L0J//bdacJ2S4y32UQhY8AqKRgXYnZ8fEfcJ2D5T4tIIH62kJlsflKgoTg/WDuIhuTC/uEPsqKey87kr4eNRaHY5JIWRJJB73916Ef9VPoR0aMrUuQk6jPYmNxmrHJj+nNJy5JV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768277257; c=relaxed/simple;
-	bh=h+iFRHUyhXQa6VGT9xAuOhQz3LEOOF0xJl6dugW1ojw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=drPKC5iA2NjOYIAhJzg+FhxPFBPXyqTFdUJpgJfYMcPqI34XWDOFPY4zGLeBQJD0mda5E3UsPPBlkPyXZtQUK8L6M7Kb+Sz7C5iqYiW7lX73mFanfrZ3Zh1/mZMAq7hiCZTWdtsr0jCzfySrg1HX03V9YRnrH2kxOMUvqL5u+S4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K0B9DCA7; arc=none smtp.client-ip=74.125.82.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f194.google.com with SMTP id 5a478bee46e88-2b19939070fso7208566eec.0
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 20:07:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768277255; x=1768882055; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lf2GiBrDhJ3d3fFqZYGBsdQPl9857Ibwncbf+eD3xlE=;
-        b=K0B9DCA7TnNMyH+nM0QSLPJeeOcwCdeQeC8ycb2vlctacVru00Kmd8i5M1cqybhxqP
-         1VTCfxV/tPsO1bXz5kv370BSVROeb0W9Fsol1wwJVe8gVDT8et1cc4Ht56mDC8s8KizZ
-         MR4LO3t/iTvDpYd2tY3afFk/tOrURKFKywqv5MKYLRbBZtzCLoTe00GPVUhrx2D4Xj2r
-         dG7p3aKaEcPrNDMkgGvPILQbZGwBAZ8MaS5WdOuDp2yJcJiIb5aAvRKJK4/Fw3iJEAiD
-         je0KYDXwLJEokTrhYh2TgAStsPyCn+3OuxYnB7aTvZN+prw59ah8shaGwiLjx3AMFgoo
-         +iJA==
+	s=arc-20240116; t=1768278125; c=relaxed/simple;
+	bh=owKoWGbK4v2T1S1WN851iVy8u2rd4FsbIcAV9SkWkOg=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=cNE5+26IFCJqUEuIxdh5EYzPxuY+mrbpRwVeEBiNj017dblDrXpQgebcaZ9vHm1x7FD8j6thSjq0IViFBH5bWU7mvHa0DU7l1FeDFUC4O5TeTMqMzmXNFxoA9Eick7l/+CUR8CtY6XIp9WB7oVtGbUAVKi2BkcwS/hRwhjGSdKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-6574475208eso7961353eaf.3
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 20:22:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768277255; x=1768882055;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1768278122; x=1768882922;
+        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Lf2GiBrDhJ3d3fFqZYGBsdQPl9857Ibwncbf+eD3xlE=;
-        b=acNbQFULaVUkX+mwn1Jb0JYw/SjR/1RFxzZ8npKytLdJjranT+YR24zkLpExkO81F+
-         I9kpfim39otcbZnAU4669VnSNK/6m3NwffaTqUy24dVKQ9pqO2+HOree9w+kOb7blQ7K
-         XjRtqMnxhprISmrzz3oAWcxnP52BdGQ7fhDBnTe9Q89YXmaa9yINFFLi0WB+rTEhkT+m
-         nZRD1wNdI8JuGFte2iz1eoT+5lBr/aW4P5QuyxfmYEQndQ4LIpWY60xBUzZPTcxZP9Pl
-         2OigUf50HmwGxij9+8TgBPO0eKpurCAWYTwXumN4H/hrRoQLMZfMbmVx/oKe3N1ahciw
-         xu4g==
-X-Forwarded-Encrypted: i=1; AJvYcCUcKlfY2zEVKHm6WwUQSbugz1NCpJZnwOtjVLx8PvWzPchetN0ajK3EtX1Ey2AucrkJa5lZ5kCwbyA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+QdjoPhKbgj1gqMvkKQjL9OqySsWtNzh9MFFW7c3Ms6tStXm4
-	2nygoCz7DPDYE1kCsFD/WeDnFkelfKN1qG3imcBYvncGI9FCMd4ayXsy
-X-Gm-Gg: AY/fxX77PXoNzULOvVe4Y7J/ob+RGUF8NsiJrYSQkOlNMLPPQaHyxh+ELd4rLosa2+J
-	HpZUPgwBEzmOd2fCbTXvUYiv4Kqkn+kqyogAUYMSwIkopEWfiLD+yvc54KLUxOc8f3ALbK6NZuk
-	Czyis38Gch92ki/QkdmiItSV3otpIshhZhqaY1c5KG3zGYcHnls5Tw95Zi8fWmjUwXl/l9Ewvdr
-	PQHRg+4L/fNDVd8sHZEB8IFeeYcT+iWBx5a6RSmEb27VCTBMdgMl44KCezL141NYLArRXUXH1IL
-	nqA7qIzZxKX0dLhfCEOglUPlpfO5xlvlyRUcrd4XrlxRrQPKfcex3GGO0q7hqh4NGxFADNP/+8n
-	ULG8P/rJIWJ5/J6X2BKCbf8VDxgIYN8vy/VixyAAj9WvxwuAFHRCG+lObXncvHgNWT3HZEKPYII
-	kKShUgX5P9E2vVNhYMMQN2G8nruuBobUtJK+CYHYIf9SZU0gVcBqLHqN0S6eaFBlEOEshrtefBC
-	TwcSM2ahH0c4gzjmGKdOfynm8/c37LPSpzSEHmJpUurdAlgDpen+qWzJAq3ZCLqD3ENj++8fOVA
-	9HDWwkCZOHCz82c=
-X-Google-Smtp-Source: AGHT+IHwzd/z6ogl58mRDQxE2emLhy9y2lPyOrhz1WRpKTCPXCbO4o8Y1Rsg46//Z7nAte4RfXnlBg==
-X-Received: by 2002:a05:693c:3101:b0:2b0:4ae9:efb9 with SMTP id 5a478bee46e88-2b17d30f834mr18932620eec.43.1768277254469;
-        Mon, 12 Jan 2026 20:07:34 -0800 (PST)
-Received: from ethan-latitude5420.. (host-127-28.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.28])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17067327csm16587659eec.7.2026.01.12.20.07.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 20:07:34 -0800 (PST)
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH net-next] net: usb: sr9700: remove code to drive nonexistent MII
-Date: Mon, 12 Jan 2026 20:06:38 -0800
-Message-ID: <20260113040649.54248-1-enelsonmoore@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=wrZ7j63chGTElr7WTElBWNKirosv+uisN+QtjuDzqtw=;
+        b=NO/WQ/nlUN6MC6wqowB7NEyHeAucPnASS/6puYGq2ECy1CbDhDmAq/KkrOaFG+fNVg
+         OyA4x7xLZs3A6qY3VVsj8WXAPW/rhIvRlGmsHvr3zktyrGvzCEVoY4fMVpxdP4qbH+Qa
+         hmYK/XCXLsGhFeblG3WmNKPoIU8CI6sf+jmQLru12GW154NotMXj6PTIhnfhJqnrgZMC
+         6jUgCTxpeirZKjyQszAVGo3splbn3iuPvDUWg65rvHv7wmB/ce9Qxsgt3s4awp3jY0No
+         1D47UEVGNORVNhzt82b68Xzf3AE/bQHbI7UIAxHrRL1MeWttTjvpRIbBmpiJqM8IWUOb
+         pTQw==
+X-Forwarded-Encrypted: i=1; AJvYcCWN3pvQ2R7hrRvk+J5AF691IkPXnRq7EKsDOCjX6jEuRhec0Ew+lM6fa6bR8X/A1uRnbbb07jSWzjs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6SZWP+srKHAecNoWKGF1JRUeDnar7eIVGsnKoQXMq25P6tmLk
+	TXmlQv/InzDbQ7zUv61y7dnFK47mU/rvXvRiiuc686tbg0wNYg0knWNuuAlVyl2npzZkawPBVaQ
+	nSqSsWtgUmqNOECPzH22AAMy2LwJqAYjeZiDcalTvqyzC3iF6IOdHlw1sV+4=
+X-Google-Smtp-Source: AGHT+IGR9eo0r5rMw/mIcsdahjP3eAESdkhIez4ixQJ4B46C6OCsLQ73FEe4PgxLAPrlUjmpUCDMRGq24mKpJO6O0rJ02YCiC3QD
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6820:1501:b0:65f:130c:fd4b with SMTP id
+ 006d021491bc7-65f54ef1d6cmr9739556eaf.10.1768278122293; Mon, 12 Jan 2026
+ 20:22:02 -0800 (PST)
+Date: Mon, 12 Jan 2026 20:22:02 -0800
+In-Reply-To: <20260113031114.4030649-1-coderlogicwei@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6965c86a.050a0220.3be5c5.000e.GAE@google.com>
+Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
+From: syzbot <syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com>
+To: anna-maria@linutronix.de, coderlogicwei@gmail.com, frederic@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This device does not have a MII, even though the driver
-contains code to drive one (because it originated as a copy of the
-dm9601 driver). It also only supports 10Mbps half-duplex
-operation (the DM9601 registers to set the speed/duplex mode
-are read-only). Remove all MII-related code and implement
-sr9700_get_link_ksettings which returns hardcoded correct
-information for the link speed and duplex mode. Also add
-announcement of the link status like many other Ethernet
-drivers have.
+Hello,
 
-Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
----
- drivers/net/usb/sr9700.c | 170 ++++++++++++---------------------------
- drivers/net/usb/sr9700.h |  11 +--
- 2 files changed, 56 insertions(+), 125 deletions(-)
+syzbot tried to test the proposed patch but the build/boot failed:
 
-diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-index 820c4c506979..4c9ad65ea4ca 100644
---- a/drivers/net/usb/sr9700.c
-+++ b/drivers/net/usb/sr9700.c
-@@ -16,7 +16,6 @@
- #include <linux/netdevice.h>
- #include <linux/etherdevice.h>
- #include <linux/ethtool.h>
--#include <linux/mii.h>
- #include <linux/usb.h>
- #include <linux/crc32.h>
- #include <linux/usb/usbnet.h>
-@@ -69,11 +68,11 @@ static void sr_write_reg_async(struct usbnet *dev, u8 reg, u8 value)
- 			       value, reg, NULL, 0);
- }
- 
--static int wait_phy_eeprom_ready(struct usbnet *dev, int phy)
-+static int wait_eeprom_ready(struct usbnet *dev)
- {
- 	int i;
- 
--	for (i = 0; i < SR_SHARE_TIMEOUT; i++) {
-+	for (i = 0; i < SR_EEPROM_TIMEOUT; i++) {
- 		u8 tmp = 0;
- 		int ret;
- 
-@@ -87,38 +86,37 @@ static int wait_phy_eeprom_ready(struct usbnet *dev, int phy)
- 			return 0;
- 	}
- 
--	netdev_err(dev->net, "%s write timed out!\n", phy ? "phy" : "eeprom");
-+	netdev_err(dev->net, "eeprom write timed out!\n");
- 
- 	return -EIO;
- }
- 
--static int sr_share_read_word(struct usbnet *dev, int phy, u8 reg,
--			      __le16 *value)
-+static int sr_read_eeprom_word(struct usbnet *dev, u8 reg, __le16 *value)
- {
- 	int ret;
- 
- 	mutex_lock(&dev->phy_mutex);
- 
--	sr_write_reg(dev, SR_EPAR, phy ? (reg | EPAR_PHY_ADR) : reg);
--	sr_write_reg(dev, SR_EPCR, phy ? (EPCR_EPOS | EPCR_ERPRR) : EPCR_ERPRR);
-+	sr_write_reg(dev, SR_EPAR, reg);
-+	sr_write_reg(dev, SR_EPCR, EPCR_ERPRR);
- 
--	ret = wait_phy_eeprom_ready(dev, phy);
-+	ret = wait_eeprom_ready(dev);
- 	if (ret < 0)
- 		goto out_unlock;
- 
- 	sr_write_reg(dev, SR_EPCR, 0x0);
- 	ret = sr_read(dev, SR_EPDR, 2, value);
- 
--	netdev_dbg(dev->net, "read shared %d 0x%02x returned 0x%04x, %d\n",
--		   phy, reg, *value, ret);
-+	netdev_dbg(dev->net, "read eeprom 0x%02x returned 0x%04x, %d\n",
-+		   reg, *value, ret);
- 
- out_unlock:
- 	mutex_unlock(&dev->phy_mutex);
- 	return ret;
- }
- 
--static int sr_share_write_word(struct usbnet *dev, int phy, u8 reg,
--			       __le16 value)
-+static int __maybe_unused sr_write_eeprom_word(struct usbnet *dev, u8 reg,
-+					       __le16 value)
- {
- 	int ret;
- 
-@@ -128,11 +126,10 @@ static int sr_share_write_word(struct usbnet *dev, int phy, u8 reg,
- 	if (ret < 0)
- 		goto out_unlock;
- 
--	sr_write_reg(dev, SR_EPAR, phy ? (reg | EPAR_PHY_ADR) : reg);
--	sr_write_reg(dev, SR_EPCR, phy ? (EPCR_WEP | EPCR_EPOS | EPCR_ERPRW) :
--		    (EPCR_WEP | EPCR_ERPRW));
-+	sr_write_reg(dev, SR_EPAR, reg);
-+	sr_write_reg(dev, SR_EPCR, EPCR_WEP | EPCR_ERPRW);
- 
--	ret = wait_phy_eeprom_ready(dev, phy);
-+	ret = wait_eeprom_ready(dev);
- 	if (ret < 0)
- 		goto out_unlock;
- 
-@@ -143,11 +140,6 @@ static int sr_share_write_word(struct usbnet *dev, int phy, u8 reg,
- 	return ret;
- }
- 
--static int sr_read_eeprom_word(struct usbnet *dev, u8 offset, void *value)
--{
--	return sr_share_read_word(dev, 0, offset, value);
--}
--
- static int sr9700_get_eeprom_len(struct net_device *netdev)
- {
- 	return SR_EEPROM_LEN;
-@@ -174,80 +166,56 @@ static int sr9700_get_eeprom(struct net_device *netdev,
- 	return ret;
- }
- 
--static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
--{
--	struct usbnet *dev = netdev_priv(netdev);
--	int err, res;
--	__le16 word;
--	int rc = 0;
--
--	if (phy_id) {
--		netdev_dbg(netdev, "Only internal phy supported\n");
--		return 0;
--	}
--
--	/* Access NSR_LINKST bit for link status instead of MII_BMSR */
--	if (loc == MII_BMSR) {
--		u8 value;
--
--		err = sr_read_reg(dev, SR_NSR, &value);
--		if (err < 0)
--			return err;
--
--		if (value & NSR_LINKST)
--			rc = 1;
--	}
--	err = sr_share_read_word(dev, 1, loc, &word);
--	if (err < 0)
--		return err;
--
--	if (rc == 1)
--		res = le16_to_cpu(word) | BMSR_LSTATUS;
--	else
--		res = le16_to_cpu(word) & ~BMSR_LSTATUS;
--
--	netdev_dbg(netdev, "sr_mdio_read() phy_id=0x%02x, loc=0x%02x, returns=0x%04x\n",
--		   phy_id, loc, res);
--
--	return res;
--}
--
--static void sr_mdio_write(struct net_device *netdev, int phy_id, int loc,
--			  int val)
-+static void sr9700_handle_link_change(struct net_device *netdev, bool link)
- {
--	struct usbnet *dev = netdev_priv(netdev);
--	__le16 res = cpu_to_le16(val);
--
--	if (phy_id) {
--		netdev_dbg(netdev, "Only internal phy supported\n");
--		return;
-+	if (netif_carrier_ok(netdev) != link) {
-+		if (link) {
-+			netif_carrier_on(netdev);
-+			netdev_info(netdev, "link up, 10Mbps, half-duplex\n");
-+		} else {
-+			netif_carrier_off(netdev);
-+			netdev_info(netdev, "link down\n");
-+		}
- 	}
--
--	netdev_dbg(netdev, "sr_mdio_write() phy_id=0x%02x, loc=0x%02x, val=0x%04x\n",
--		   phy_id, loc, val);
--
--	sr_share_write_word(dev, 1, loc, res);
- }
- 
- static u32 sr9700_get_link(struct net_device *netdev)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
- 	u8 value = 0;
--	int rc = 0;
-+	u32 link = 0;
- 
--	/* Get the Link Status directly */
- 	sr_read_reg(dev, SR_NSR, &value);
--	if (value & NSR_LINKST)
--		rc = 1;
-+	link = !!(value & NSR_LINKST);
- 
--	return rc;
-+	sr9700_handle_link_change(netdev, link);
-+
-+	return link;
- }
- 
--static int sr9700_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
-+/*
-+ * The device supports only 10Mbps half-duplex operation. It implements the
-+ * DM9601 speed/duplex status registers, but as the values are always the same,
-+ * using them would add unnecessary complexity.
-+ */
-+static int sr9700_get_link_ksettings(struct net_device *dev,
-+				     struct ethtool_link_ksettings *cmd)
- {
--	struct usbnet *dev = netdev_priv(netdev);
-+	ethtool_link_ksettings_zero_link_mode(cmd, supported);
-+	ethtool_link_ksettings_add_link_mode(cmd, supported, 10baseT_Half);
-+	ethtool_link_ksettings_add_link_mode(cmd, supported, TP);
-+
-+	ethtool_link_ksettings_zero_link_mode(cmd, advertising);
-+	ethtool_link_ksettings_add_link_mode(cmd, advertising, 10baseT_Half);
-+	ethtool_link_ksettings_add_link_mode(cmd, advertising, TP);
- 
--	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
-+	cmd->base.speed = SPEED_10;
-+	cmd->base.duplex = DUPLEX_HALF;
-+	cmd->base.port = PORT_TP;
-+	cmd->base.phy_address = 0;
-+	cmd->base.autoneg = AUTONEG_DISABLE;
-+
-+	return 0;
- }
- 
- static const struct ethtool_ops sr9700_ethtool_ops = {
-@@ -257,9 +225,7 @@ static const struct ethtool_ops sr9700_ethtool_ops = {
- 	.set_msglevel	= usbnet_set_msglevel,
- 	.get_eeprom_len	= sr9700_get_eeprom_len,
- 	.get_eeprom	= sr9700_get_eeprom,
--	.nway_reset	= usbnet_nway_reset,
--	.get_link_ksettings	= usbnet_get_link_ksettings_mii,
--	.set_link_ksettings	= usbnet_set_link_ksettings_mii,
-+	.get_link_ksettings	= sr9700_get_link_ksettings,
- };
- 
- static void sr9700_set_multicast(struct net_device *netdev)
-@@ -318,7 +284,6 @@ static const struct net_device_ops sr9700_netdev_ops = {
- 	.ndo_change_mtu		= usbnet_change_mtu,
- 	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_validate_addr	= eth_validate_addr,
--	.ndo_eth_ioctl		= sr9700_ioctl,
- 	.ndo_set_rx_mode	= sr9700_set_multicast,
- 	.ndo_set_mac_address	= sr9700_set_mac_address,
- };
-@@ -326,7 +291,6 @@ static const struct net_device_ops sr9700_netdev_ops = {
- static int sr9700_bind(struct usbnet *dev, struct usb_interface *intf)
- {
- 	struct net_device *netdev;
--	struct mii_if_info *mii;
- 	u8 addr[ETH_ALEN];
- 	int ret;
- 
-@@ -343,13 +307,6 @@ static int sr9700_bind(struct usbnet *dev, struct usb_interface *intf)
- 	/* bulkin buffer is preferably not less than 3K */
- 	dev->rx_urb_size = 3072;
- 
--	mii = &dev->mii;
--	mii->dev = netdev;
--	mii->mdio_read = sr_mdio_read;
--	mii->mdio_write = sr_mdio_write;
--	mii->phy_id_mask = 0x1f;
--	mii->reg_num_mask = 0x1f;
--
- 	sr_write_reg(dev, SR_NCR, NCR_RST);
- 	udelay(20);
- 
-@@ -376,11 +333,6 @@ static int sr9700_bind(struct usbnet *dev, struct usb_interface *intf)
- 	/* receive broadcast packets */
- 	sr9700_set_multicast(netdev);
- 
--	sr_mdio_write(netdev, mii->phy_id, MII_BMCR, BMCR_RESET);
--	sr_mdio_write(netdev, mii->phy_id, MII_ADVERTISE, ADVERTISE_ALL |
--		      ADVERTISE_CSMA | ADVERTISE_PAUSE_CAP);
--	mii_nway_restart(mii);
--
- out:
- 	return ret;
- }
-@@ -484,7 +436,7 @@ static struct sk_buff *sr9700_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
- 
- static void sr9700_status(struct usbnet *dev, struct urb *urb)
- {
--	int link;
-+	bool link;
- 	u8 *buf;
- 
- 	/* format:
-@@ -504,23 +456,7 @@ static void sr9700_status(struct usbnet *dev, struct urb *urb)
- 	buf = urb->transfer_buffer;
- 
- 	link = !!(buf[0] & 0x40);
--	if (netif_carrier_ok(dev->net) != link) {
--		usbnet_link_change(dev, link, 1);
--		netdev_dbg(dev->net, "Link Status is: %d\n", link);
--	}
--}
--
--static int sr9700_link_reset(struct usbnet *dev)
--{
--	struct ethtool_cmd ecmd;
--
--	mii_check_media(&dev->mii, 1, 1);
--	mii_ethtool_gset(&dev->mii, &ecmd);
--
--	netdev_dbg(dev->net, "link_reset() speed: %d duplex: %d\n",
--		   ecmd.speed, ecmd.duplex);
--
--	return 0;
-+	sr9700_handle_link_change(dev->net, link);
- }
- 
- static const struct driver_info sr9700_driver_info = {
-@@ -530,8 +466,6 @@ static const struct driver_info sr9700_driver_info = {
- 	.rx_fixup	= sr9700_rx_fixup,
- 	.tx_fixup	= sr9700_tx_fixup,
- 	.status		= sr9700_status,
--	.link_reset	= sr9700_link_reset,
--	.reset		= sr9700_link_reset,
- };
- 
- static const struct usb_device_id products[] = {
-diff --git a/drivers/net/usb/sr9700.h b/drivers/net/usb/sr9700.h
-index ea2b4de621c8..3212859830dc 100644
---- a/drivers/net/usb/sr9700.h
-+++ b/drivers/net/usb/sr9700.h
-@@ -82,19 +82,16 @@
- #define		FCR_TXPEN		(1 << 5)
- #define		FCR_TXPF		(1 << 6)
- #define		FCR_TXP0		(1 << 7)
--/* Eeprom & Phy Control Reg */
-+/* Eeprom Control Reg */
- #define	SR_EPCR		0x0B
- #define		EPCR_ERRE		(1 << 0)
- #define		EPCR_ERPRW		(1 << 1)
- #define		EPCR_ERPRR		(1 << 2)
--#define		EPCR_EPOS		(1 << 3)
- #define		EPCR_WEP		(1 << 4)
--/* Eeprom & Phy Address Reg */
-+/* Eeprom Address Reg */
- #define	SR_EPAR		0x0C
- #define		EPAR_EROA		(0x3F << 0)
--#define		EPAR_PHY_ADR_MASK	(0x03 << 6)
--#define		EPAR_PHY_ADR		(0x01 << 6)
--/* Eeprom &	Phy Data Reg */
-+/* Eeprom Data Reg */
- #define	SR_EPDR		0x0D	/* 0x0D ~ 0x0E for Data Reg Low & High */
- /* Wakeup Control Reg */
- #define	SR_WCR			0x0F
-@@ -159,7 +156,7 @@
- #define	SR_REQ_WR_REG	(USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE)
- 
- /* parameters */
--#define	SR_SHARE_TIMEOUT	1000
-+#define	SR_EEPROM_TIMEOUT	1000
- #define	SR_EEPROM_LEN		256
- #define	SR_MCAST_SIZE		8
- #define	SR_MCAST_ADDR_FLAG	0x80
--- 
-2.43.0
+:sysadm_r:sysadm_t tcontext=3Dsystem_u:object_r:nsfs_t tclass=3Dfile permis=
+sive=3D1
+[   72.435490][   T30] audit: type=3D1400 audit(1768278064.403:80): avc:  d=
+enied  { open } for  pid=3D5828 comm=3D"syz-executor" path=3D"net:[40265318=
+33]" dev=3D"nsfs" ino=3D4026531833 scontext=3Droot:sysadm_r:sysadm_t tconte=
+xt=3Dsystem_u:object_r:nsfs_t tclass=3Dfile permissive=3D1
+[   72.472115][   T30] audit: type=3D1400 audit(1768278064.423:81): avc:  d=
+enied  { mounton } for  pid=3D5828 comm=3D"syz-executor" path=3D"/" dev=3D"=
+sda1" ino=3D2 scontext=3Droot:sysadm_r:sysadm_t tcontext=3Dsystem_u:object_=
+r:root_t tclass=3Ddir permissive=3D1
+[   72.614307][   T30] audit: type=3D1400 audit(1768278064.723:82): avc:  d=
+enied  { mounton } for  pid=3D5827 comm=3D"syz-executor" path=3D"/root/syzk=
+aller.oRvwjY/syz-tmp" dev=3D"sda1" ino=3D2042 scontext=3Droot:sysadm_r:sysa=
+dm_t tcontext=3Droot:object_r:user_home_t tclass=3Ddir permissive=3D1
+[   72.647781][   T30] audit: type=3D1400 audit(1768278064.723:83): avc:  d=
+enied  { mount } for  pid=3D5827 comm=3D"syz-executor" name=3D"/" dev=3D"tm=
+pfs" ino=3D1 scontext=3Droot:sysadm_r:sysadm_t tcontext=3Dsystem_u:object_r=
+:tmpfs_t tclass=3Dfilesystem permissive=3D1
+[   72.680449][ T5827] soft_limit_in_bytes is deprecated and will be remove=
+d. Please report your usecase to linux-mm@kvack.org if you depend on this f=
+unctionality.
+[   72.710613][   T30] audit: type=3D1400 audit(1768278064.723:84): avc:  d=
+enied  { mounton } for  pid=3D5827 comm=3D"syz-executor" path=3D"/root/syzk=
+aller.oRvwjY/syz-tmp/newroot/dev" dev=3D"tmpfs" ino=3D3 scontext=3Droot:sys=
+adm_r:sysadm_t tcontext=3Droot:object_r:user_tmpfs_t tclass=3Ddir permissiv=
+e=3D1
+[   72.747865][   T30] audit: type=3D1400 audit(1768278064.723:85): avc:  d=
+enied  { mount } for  pid=3D5827 comm=3D"syz-executor" name=3D"/" dev=3D"pr=
+oc" ino=3D1 scontext=3Droot:sysadm_r:sysadm_t tcontext=3Dsystem_u:object_r:=
+proc_t tclass=3Dfilesystem permissive=3D1
+[   72.770404][   T50] wlan0: Created IBSS using preconfigured BSSID 50:50:=
+50:50:50:50
+[   72.778851][   T50] wlan0: Creating new IBSS network, BSSID 50:50:50:50:=
+50:50
+[   72.834660][   T34] wlan1: Created IBSS using preconfigured BSSID 50:50:=
+50:50:50:50
+[   72.843508][   T34] wlan1: Creating new IBSS network, BSSID 50:50:50:50:=
+50:50
+[   73.164131][ T5138] Bluetooth: hci0: unexpected cc 0x0c03 length: 249 > =
+1
+[   73.172297][ T5138] Bluetooth: hci0: unexpected cc 0x1003 length: 249 > =
+9
+[   73.180246][ T5138] Bluetooth: hci0: unexpected cc 0x1001 length: 249 > =
+9
+[   73.196749][ T5138] Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > =
+4
+[   73.204345][ T5138] Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > =
+2
+[   74.264425][ T5845] chnl_net:caif_netlink_parms(): no params data found
+[   74.807351][ T5845] bridge0: port 1(bridge_slave_0) entered blocking sta=
+te
+[   74.821439][ T5845] bridge0: port 1(bridge_slave_0) entered disabled sta=
+te
+[   74.828899][ T5845] bridge_slave_0: entered allmulticast mode
+[   74.836593][ T5845] bridge_slave_0: entered promiscuous mode
+[   74.864560][ T5845] bridge0: port 2(bridge_slave_1) entered blocking sta=
+te
+[   74.871733][ T5845] bridge0: port 2(bridge_slave_1) entered disabled sta=
+te
+[   74.879122][ T5845] bridge_slave_1: entered allmulticast mode
+[   74.886071][ T5845] bridge_slave_1: entered promiscuous mode
+[   74.955828][ T5845] bond0: (slave bond_slave_0): Enslaving as an active =
+interface with an up link
+[   74.987690][ T5845] bond0: (slave bond_slave_1): Enslaving as an active =
+interface with an up link
+[   75.079143][ T5845] team0: Port device team_slave_0 added
+[   75.098503][ T5845] team0: Port device team_slave_1 added
+[   75.204805][ T5845] batman_adv: batadv0: Adding interface: batadv_slave_=
+0
+[   75.211766][ T5845] batman_adv: batadv0: The MTU of interface batadv_sla=
+ve_0 is too small (1500) to handle the transport of batman-adv packets. Pac=
+kets going over this interface will be fragmented on layer2 which could imp=
+act the performance. Setting the MTU to 1532 would solve the problem.
+[   75.239767][ T5845] batman_adv: batadv0: Not using interface batadv_slav=
+e_0 (retrying later): interface not active
+[   75.255335][ T5845] batman_adv: batadv0: Adding interface: batadv_slave_=
+1
+[   75.262370][ T5845] batman_adv: batadv0: The MTU of interface batadv_sla=
+ve_1 is too small (1500) to handle the transport of batman-adv packets. Pac=
+kets going over this interface will be fragmented on layer2 which could imp=
+act the performance. Setting the MTU to 1532 would solve the problem.
+[   75.298894][ T5845] batman_adv: batadv0: Not using interface batadv_slav=
+e_1 (retrying later): interface not active
+[   75.443715][ T5845] hsr_slave_0: entered promiscuous mode
+[   75.449871][ T5845] hsr_slave_1: entered promiscuous mode
+[   75.592860][ T5845] netdevsim netdevsim0 netdevsim0: renamed from eth0
+[   75.608307][ T5845] netdevsim netdevsim0 netdevsim1: renamed from eth1
+[   75.617970][ T5845] netdevsim netdevsim0 netdevsim2: renamed from eth2
+[   75.628160][ T5845] netdevsim netdevsim0 netdevsim3: renamed from eth3
+[   75.708538][ T5845] 8021q: adding VLAN 0 to HW filter on device bond0
+[   75.728539][ T5845] 8021q: adding VLAN 0 to HW filter on device team0
+[   75.742231][   T34] bridge0: port 1(bridge_slave_0) entered blocking sta=
+te
+[   75.749498][   T34] bridge0: port 1(bridge_slave_0) entered forwarding s=
+tate
+[   75.768885][   T50] bridge0: port 2(bridge_slave_1) entered blocking sta=
+te
+[   75.776013][   T50] bridge0: port 2(bridge_slave_1) entered forwarding s=
+tate
+[   75.907923][ T5845] 8021q: adding VLAN 0 to HW filter on device batadv0
+[   75.945758][ T5845] veth0_vlan: entered promiscuous mode
+[   75.957083][ T5845] veth1_vlan: entered promiscuous mode
+[   75.981363][ T5845] veth0_macvtap: entered promiscuous mode
+[   75.990660][ T5845] veth1_macvtap: entered promiscuous mode
+[   76.006870][ T5845] batman_adv: batadv0: Interface activated: batadv_sla=
+ve_0
+[   76.021233][ T5845] batman_adv: batadv0: Interface activated: batadv_sla=
+ve_1
+[   76.035693][   T50] netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 f=
+amily 0 port 6081 - 0
+[   76.046111][   T50] netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 f=
+amily 0 port 6081 - 0
+[   76.056220][   T50] netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 f=
+amily 0 port 6081 - 0
+[   76.065691][   T50] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 f=
+amily 0 port 6081 - 0
+2026/01/13 04:21:08 executed programs: 0
+[   76.180451][   T52] Bluetooth: hci0: unexpected cc 0x0c03 length: 249 > =
+1
+[   76.188555][   T52] Bluetooth: hci0: unexpected cc 0x1003 length: 249 > =
+9
+[   76.196772][   T52] Bluetooth: hci0: unexpected cc 0x1001 length: 249 > =
+9
+[   76.210549][   T52] Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > =
+4
+[   76.220325][   T52] Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > =
+2
+[   76.223744][   T72] netdevsim netdevsim0 netdevsim3 (unregistering): uns=
+et [1, 0] type 2 family 0 port 6081 - 0
+[   76.302193][   T72] netdevsim netdevsim0 netdevsim2 (unregistering): uns=
+et [1, 0] type 2 family 0 port 6081 - 0
+[   76.393644][   T72] netdevsim netdevsim0 netdevsim1 (unregistering): uns=
+et [1, 0] type 2 family 0 port 6081 - 0
+[   76.413627][ T5926] chnl_net:caif_netlink_parms(): no params data found
+[   76.438442][   T72] netdevsim netdevsim0 netdevsim0 (unregistering): uns=
+et [1, 0] type 2 family 0 port 6081 - 0
+[   76.494052][ T5926] bridge0: port 1(bridge_slave_0) entered blocking sta=
+te
+[   76.501225][ T5926] bridge0: port 1(bridge_slave_0) entered disabled sta=
+te
+[   76.508469][ T5926] bridge_slave_0: entered allmulticast mode
+[   76.515622][ T5926] bridge_slave_0: entered promiscuous mode
+[   76.523432][ T5926] bridge0: port 2(bridge_slave_1) entered blocking sta=
+te
+[   76.530728][ T5926] bridge0: port 2(bridge_slave_1) entered disabled sta=
+te
+[   76.538432][ T5926] bridge_slave_1: entered allmulticast mode
+[   76.546031][ T5926] bridge_slave_1: entered promiscuous mode
+[   76.578006][ T5926] bond0: (slave bond_slave_0): Enslaving as an active =
+interface with an up link
+[   76.589208][ T5926] bond0: (slave bond_slave_1): Enslaving as an active =
+interface with an up link
+[   76.615543][ T5926] team0: Port device team_slave_0 added
+[   76.622696][ T5926] team0: Port device team_slave_1 added
+[   76.645027][ T5926] batman_adv: batadv0: Adding interface: batadv_slave_=
+0
+[   76.651985][ T5926] batman_adv: batadv0: The MTU of interface batadv_sla=
+ve_0 is too small (1500) to handle the transport of batman-adv packets. Pac=
+kets going over this interface will be fragmented on layer2 which could imp=
+act the performance. Setting the MTU to 1532 would solve the problem.
+[   76.678290][ T5926] batman_adv: batadv0: Not using interface batadv_slav=
+e_0 (retrying later): interface not active
+[   76.690400][ T5926] batman_adv: batadv0: Adding interface: batadv_slave_=
+1
+[   76.697754][ T5926] batman_adv: batadv0: The MTU of interface batadv_sla=
+ve_1 is too small (1500) to handle the transport of batman-adv packets. Pac=
+kets going over this interface will be fragmented on layer2 which could imp=
+act the performance. Setting the MTU to 1532 would solve the problem.
+[   76.726622][ T5926] batman_adv: batadv0: Not using interface batadv_slav=
+e_1 (retrying later): interface not active
+[   76.762434][ T5926] hsr_slave_0: entered promiscuous mode
+[   76.768716][ T5926] hsr_slave_1: entered promiscuous mode
+[   76.775549][ T5926] debugfs: 'hsr0' already exists in 'hsr'
+[   76.781345][ T5926] Cannot create hsr debugfs directory
+[   78.304272][ T5138] Bluetooth: hci0: command tx timeout
+[   78.996240][   T72] bridge_slave_1: left allmulticast mode
+[   79.002028][   T72] bridge_slave_1: left promiscuous mode
+[   79.009209][   T72] bridge0: port 2(bridge_slave_1) entered disabled sta=
+te
+[   79.021301][   T72] bridge_slave_0: left allmulticast mode
+[   79.027964][   T72] bridge_slave_0: left promiscuous mode
+[   79.034032][   T72] bridge0: port 1(bridge_slave_0) entered disabled sta=
+te
+[   79.289281][   T72] bond0 (unregistering): (slave bond_slave_0): Releasi=
+ng backup interface
+[   79.302958][   T72] bond0 (unregistering): (slave bond_slave_1): Releasi=
+ng backup interface
+[   79.313901][   T72] bond0 (unregistering): Released all slaves
+[   79.411479][   T72] hsr_slave_0: left promiscuous mode
+[   79.418172][   T72] hsr_slave_1: left promiscuous mode
+[   79.424372][   T72] batman_adv: batadv0: Interface deactivated: batadv_s=
+lave_0
+[   79.431764][   T72] batman_adv: batadv0: Removing interface: batadv_slav=
+e_0
+[   79.443151][   T72] batman_adv: batadv0: Interface deactivated: batadv_s=
+lave_1
+[   79.450543][   T72] batman_adv: batadv0: Removing interface: batadv_slav=
+e_1
+[   79.464996][   T72] veth1_macvtap: left promiscuous mode
+[   79.470591][   T72] veth0_macvtap: left promiscuous mode
+[   79.476732][   T72] veth1_vlan: left promiscuous mode
+[   79.482025][   T72] veth0_vlan: left promiscuous mode
+[   79.704321][   T72] team0 (unregistering): Port device team_slave_1 remo=
+ved
+[   79.727145][   T72] team0 (unregistering): Port device team_slave_0 remo=
+ved
+[   80.255625][ T5926] netdevsim netdevsim0 netdevsim0: renamed from eth0
+[   80.269626][ T5926] netdevsim netdevsim0 netdevsim1: renamed from eth1
+[   80.282305][ T5926] netdevsim netdevsim0 netdevsim2: renamed from eth2
+[   80.301156][ T5926] netdevsim netdevsim0 netdevsim3: renamed from eth3
+[   80.379053][ T5926] 8021q: adding VLAN 0 to HW filter on device bond0
+[   80.393475][ T5138] Bluetooth: hci0: command tx timeout
+[   80.396938][ T5926] 8021q: adding VLAN 0 to HW filter on device team0
+[   80.418036][ T3673] bridge0: port 1(bridge_slave_0) entered blocking sta=
+te
+[   80.425216][ T3673] bridge0: port 1(bridge_slave_0) entered forwarding s=
+tate
+[   80.436608][ T3673] bridge0: port 2(bridge_slave_1) entered blocking sta=
+te
+[   80.443785][ T3673] bridge0: port 2(bridge_slave_1) entered forwarding s=
+tate
+[   80.681996][ T5926] 8021q: adding VLAN 0 to HW filter on device batadv0
+[   80.742496][ T5926] veth0_vlan: entered promiscuous mode
+[   80.755265][ T5926] veth1_vlan: entered promiscuous mode
+[   80.789608][ T5926] veth0_macvtap: entered promiscuous mode
+[   80.800489][ T5926] veth1_macvtap: entered promiscuous mode
+[   80.822452][ T5926] batman_adv: batadv0: Interface activated: batadv_sla=
+ve_0
+[   80.838062][ T5926] batman_adv: batadv0: Interface activated: batadv_sla=
+ve_1
+[   80.854331][   T72] netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 f=
+amily 0 port 6081 - 0
+[   80.875850][   T72] netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 f=
+amily 0 port 6081 - 0
+[   80.887437][   T72] netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 f=
+amily 0 port 6081 - 0
+[   80.903437][   T72] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 f=
+amily 0 port 6081 - 0
+[   80.982693][ T1093] wlan0: Created IBSS using preconfigured BSSID 50:50:=
+50:50:50:50
+[   81.002995][ T1093] wlan0: Creating new IBSS network, BSSID 50:50:50:50:=
+50:50
+[   81.039017][ T3673] wlan1: Created IBSS using preconfigured BSSID 50:50:=
+50:50:50:50
+[   81.047802][ T3673] wlan1: Creating new IBSS network, BSSID 50:50:50:50:=
+50:50
+SYZFAIL: failed to recv rpc
+fd=3D3 want=3D4 recv=3D0 n=3D0 (errno 9: Bad file descriptor)
+[   81.437183][   T43] cfg80211: failed to load regulatory.db
+
+
+syzkaller build log:
+go env (err=3D<nil>)
+AR=3D'ar'
+CC=3D'gcc'
+CGO_CFLAGS=3D'-O2 -g'
+CGO_CPPFLAGS=3D''
+CGO_CXXFLAGS=3D'-O2 -g'
+CGO_ENABLED=3D'1'
+CGO_FFLAGS=3D'-O2 -g'
+CGO_LDFLAGS=3D'-O2 -g'
+CXX=3D'g++'
+GCCGO=3D'gccgo'
+GO111MODULE=3D'auto'
+GOAMD64=3D'v1'
+GOARCH=3D'amd64'
+GOAUTH=3D'netrc'
+GOBIN=3D''
+GOCACHE=3D'/syzkaller/.cache/go-build'
+GOCACHEPROG=3D''
+GODEBUG=3D''
+GOENV=3D'/syzkaller/.config/go/env'
+GOEXE=3D''
+GOEXPERIMENT=3D''
+GOFIPS140=3D'off'
+GOFLAGS=3D''
+GOGCCFLAGS=3D'-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=3D0=
+ -ffile-prefix-map=3D/tmp/go-build2779563656=3D/tmp/go-build -gno-record-gc=
+c-switches'
+GOHOSTARCH=3D'amd64'
+GOHOSTOS=3D'linux'
+GOINSECURE=3D''
+GOMOD=3D'/syzkaller/jobs-2/linux/gopath/src/github.com/google/syzkaller/go.=
+mod'
+GOMODCACHE=3D'/syzkaller/jobs-2/linux/gopath/pkg/mod'
+GONOPROXY=3D''
+GONOSUMDB=3D''
+GOOS=3D'linux'
+GOPATH=3D'/syzkaller/jobs-2/linux/gopath'
+GOPRIVATE=3D''
+GOPROXY=3D'https://proxy.golang.org,direct'
+GOROOT=3D'/usr/local/go'
+GOSUMDB=3D'sum.golang.org'
+GOTELEMETRY=3D'local'
+GOTELEMETRYDIR=3D'/syzkaller/.config/go/telemetry'
+GOTMPDIR=3D''
+GOTOOLCHAIN=3D'auto'
+GOTOOLDIR=3D'/usr/local/go/pkg/tool/linux_amd64'
+GOVCS=3D''
+GOVERSION=3D'go1.24.4'
+GOWORK=3D''
+PKG_CONFIG=3D'pkg-config'
+
+git status (err=3D<nil>)
+HEAD detached at d6526ea3e
+nothing to commit, working tree clean
+
+
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+go list -f '{{.Stale}}' -ldflags=3D"-s -w -X github.com/google/syzkaller/pr=
+og.GitRevision=3Dd6526ea3e6ad9081c902859bbb80f9f840377cb4 -X github.com/goo=
+gle/syzkaller/prog.gitRevisionDate=3D20251126-113115"  ./sys/syz-sysgen | g=
+rep -q false || go install -ldflags=3D"-s -w -X github.com/google/syzkaller=
+/prog.GitRevision=3Dd6526ea3e6ad9081c902859bbb80f9f840377cb4 -X github.com/=
+google/syzkaller/prog.gitRevisionDate=3D20251126-113115"  ./sys/syz-sysgen
+make .descriptions
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+bin/syz-sysgen
+touch .descriptions
+GOOS=3Dlinux GOARCH=3Damd64 go build -ldflags=3D"-s -w -X github.com/google=
+/syzkaller/prog.GitRevision=3Dd6526ea3e6ad9081c902859bbb80f9f840377cb4 -X g=
+ithub.com/google/syzkaller/prog.gitRevisionDate=3D20251126-113115"  -o ./bi=
+n/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
+mkdir -p ./bin/linux_amd64
+g++ -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wfr=
+ame-larger-than=3D16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-forma=
+t-overflow -Wno-unused-but-set-variable -Wno-unused-command-line-argument -=
+static-pie -std=3Dc++17 -I. -Iexecutor/_include   -DGOOS_linux=3D1 -DGOARCH=
+_amd64=3D1 \
+	-DHOSTGOOS_linux=3D1 -DGIT_REVISION=3D\"d6526ea3e6ad9081c902859bbb80f9f840=
+377cb4\"
+/usr/bin/ld: /tmp/cchrMEKM.o: in function `Connection::Connect(char const*,=
+ char const*)':
+executor.cc:(.text._ZN10Connection7ConnectEPKcS1_[_ZN10Connection7ConnectEP=
+KcS1_]+0x104): warning: Using 'gethostbyname' in statically linked applicat=
+ions requires at runtime the shared libraries from the glibc version used f=
+or linking
+./tools/check-syzos.sh 2>/dev/null
+
+
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=3D15184052580000
+
+
+Tested on:
+
+commit:         b71e635f Merge tag 'cgroup-for-6.19-rc5-fixes' of git:..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3D1859476832863c4=
+1
+dashboard link: https://syzkaller.appspot.com/bug?extid=3D30b78308ba7e64647=
+ff8
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils=
+ for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=3D153f80525800=
+00
 
 
