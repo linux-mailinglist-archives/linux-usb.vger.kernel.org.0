@@ -1,91 +1,92 @@
-Return-Path: <linux-usb+bounces-32216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32217-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7C82D16D4C
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 07:25:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C2ECD16DDC
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 07:40:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0818C300F665
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 06:25:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BD245301D5AD
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 06:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0AE1369208;
-	Tue, 13 Jan 2026 06:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA90366573;
+	Tue, 13 Jan 2026 06:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SnVYc4KH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QGtT10iG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-dy1-f193.google.com (mail-dy1-f193.google.com [74.125.82.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D4F31691A
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 06:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F3E30DD25
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 06:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768285545; cv=none; b=uampgeQexN0WcvHZbCPgNbvqQtG7yEuOM/0bVLDdONDBLNAxHadOwDszmdwy9Ix09MxalZ0D+tasgIe+TX3N29jiO8A2yaZGjQk2M+28mgDrcNxBOd0StAyZM2iufVY0q0u9o1iTE3qjI6DMTw8RrSOsfcw3oV7v4i5Ql/uFq+E=
+	t=1768286433; cv=none; b=oWEBBBTH55FjM97mXWoNmYY7vg4VMVZOM5x6ikcKEgfxC5By/PrpuRzBqkyoXb5+RGrZlwjPcyNlSgK60hV6JUpagHNivrMeRT26gVRQ4hmQVx/zJ1Z5On330TMNLjCC80qNnm/lDb6GA4/KHiKANR9oY6UpliPusFu6hi4JFlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768285545; c=relaxed/simple;
-	bh=VjDupaAQ+wzxEAB8mGzJ9IwSSNl1qlyOALCrKC5eg6c=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=os+ZP98DjtzxT3wiTVzZA7PBGzd30opMh1a8/aylCjMSbrPXwGXjPwG/iz374FmPG7vn8bzPb3PlHbdsiABPUIyGH/FXgCGF4KGrgsdD1bBCSs+2wDuGPskwYwJtuFp+HGJ43NP7d61O3dRTuPQjQCBa1njHBNKD4EE6a5KaU8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SnVYc4KH; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1768286433; c=relaxed/simple;
+	bh=+Z3tflR0QPv/AtHYde2Bbd0mWjOrz9fOlEL9zrZ6pJA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IpAk6CqH437jx3rsUjKc4/3Y3IDdnlWnPm/kdZoEcU4HTBdxJ3SirAEfFYNXtxBjCweCBj+VDU5TvHBfGY8wy2E3AR/OawMBgrKKJUSZJHxNJJF2DAou4B4lJ99xC9XfqJx8hYxhkivzcK656PoTGyDXoK/B688Ospkqs+8xSq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QGtT10iG; arc=none smtp.client-ip=74.125.82.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a2bff5f774so22617335ad.2
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 22:25:43 -0800 (PST)
+Received: by mail-dy1-f193.google.com with SMTP id 5a478bee46e88-2b04fb5c7a7so6638042eec.1
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 22:40:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768285543; x=1768890343; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uxZQUYi23riXR8D/K/DCBmNlY17inKe4muUD5XAdLL0=;
-        b=SnVYc4KHAaPrOkwouU0wQYxLO9+NF6DVxl4dfNHGa6OUembXEaapeLnS4MXG165+Ie
-         SBhk3JlUr9E/J+L/mgn6mVtq9X0QXUrEnZIbH6FcQCM67UEFFlitMtmZ4Qvnfre4qnwM
-         4SLNzxbft+Kwq64zgDNRTiggVx0n8Dge58fjPPaJo0AZNLGcgLv2eAxBpn762lH9329V
-         Ju8CJFHjyCTism9ayIx+L4u9DqBwsbL7iQVGMvO/JnazCAvh520Yll2+LwxhPgD6Yfcv
-         7I14GBI4vHt2xNVWjbDZN8cBV2MCci70NvCCdms74r1WcqoBeqFlcHwdrh1fvqI7PIFa
-         xa5Q==
+        d=gmail.com; s=20230601; t=1768286431; x=1768891231; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=whUZoFPva/1DPSFs6qyuipXE3Qp8iIeejIqod2xKLLQ=;
+        b=QGtT10iGg83mPq5E6j8L5Ut2OpbR3KjCYOLbtX1bsP6ERkDICTZyq0c1Bt32teoiqu
+         JIwl7sFhcYarGmEcxiYn6EYgByfX1QSqawNWP6FokwiKEJ1DQDCzPGx1WRWm2/hAiopU
+         yQGD7TAyyz6SpESktYIDy8W20XjB6muKkjycbKjYr41GufK2a2oCEm0c++OSbwpbZ4hF
+         I+hVfjdQFKy2Go2tJyGWOULua3xMdpkPtGf0nYZ4Ilh4nnc1fcdxUWUYFVWWkjCNBXVh
+         VT62ZC6aH6cxw7W99Yt0VbU5XT/1RLBrDo52VpeYNnPFcdAE0Ll1RLjwUXIcbRrFQfIj
+         zeOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768285543; x=1768890343;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uxZQUYi23riXR8D/K/DCBmNlY17inKe4muUD5XAdLL0=;
-        b=igile54SRNp2K7LUne1ELEmaIi9DZHJXAQqqvh0PgeYs8mmSMjZOmuXSZTayNbEkA7
-         YK+ujYzNIbpUm6s/K7QoVoLlWFCHzbtEB+jkowpeqWkIni5BGkO4LNlTL8gpMp2aXJCh
-         t/u9BxFIzhIPws2q1wSpG9i7NxY3rejisKe4eaZ8b4pXtOHq4arLnBo5dczCcaf3qCrl
-         YGepTEw2YF4JnIBx6+ZiC/Mw2FhMPkIMzdpFtxG1IgBpgZfXVDz33qCyyGXHKsu4KXK5
-         WSbNF+iJUVKX9RXsIVur5rJtCpR+K2PTHMNlHIILR9ftaN75Thc5ISb1pZ/++S/LjCbx
-         JtTA==
-X-Forwarded-Encrypted: i=1; AJvYcCXlW+sl+EPSjsYlWvLLwB8ZTTVs/aUjO6BJqJ65T7V/jtqxNkFJKlvDypbD6hWCw6vUo5KHKIBqORE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7cG1Yo7zgj8GnUDmYb7tRyNAoiEAK5DXmcWzhgs8lZUGPlatf
-	BYEUIOrXcxmlkf01nLFuNfMLvjc5mkBKrS4XLGhQ+4TJcy0pOmDOwM29nKQtRwquk0103g==
-X-Gm-Gg: AY/fxX7sbwYwc8nYn0zLp8bPNu8ftw7gyMVGMfO4reBejdjf5GRlaPMWJH5NjNYFquU
-	PwwXx1p2MVz6Ta0wQd97mMMs5u22BPv4RDIRUWn03CNQlJ1lKW/5HmfrRCA4KpuZCdMGG0wDJ7E
-	kTnElQGdBM2Fnqgm/mt9aGQ7M0iKKB0L/kQOgxT7g0VCXCC18Jrja5t4+bAXs1BM5aeeAdbHbf/
-	NzVEjNByOsPRsh9bsDe+XcAAt7OxB4uFFFJZteajiq6rX+UWAGU4080Ac1dGM2XMBAc175jjHTC
-	a8pBDVlpcXA1KCxIP2/cAQFYmIEnXZ7sJhDmuwwHDPHnIh1UX68DuAk9jWhTTMJ/hraWept7mG3
-	LsyoQeW4ThOaM5/HK3x0sBw1fMOG62wdIZFj6hKWU98iifwhJCCBQD5ldiegsoZKC+l1QXBw8KD
-	n0WoSh9cZUqA==
-X-Google-Smtp-Source: AGHT+IHGqE3Cj5daEtM7y07pGqV/M8cZPU7jgK0m2MYbTYsuWYIs0kK7N4lTacFI9yiEPdeW7SSCLw==
-X-Received: by 2002:a17:902:ea01:b0:2a0:9424:7dc7 with SMTP id d9443c01a7336-2a3ee4917d2mr148398835ad.4.1768285543265;
-        Mon, 12 Jan 2026 22:25:43 -0800 (PST)
-Received: from MiniPC.. ([47.246.98.222])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e7a3c6fdsm181777245ad.15.2026.01.12.22.25.40
+        d=1e100.net; s=20230601; t=1768286431; x=1768891231;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=whUZoFPva/1DPSFs6qyuipXE3Qp8iIeejIqod2xKLLQ=;
+        b=Kltowarr7gjdxe5DXHrcyfflasHNd3Xh+phsP/v3LI+Ws9Yv5ml+N9PgbgFatCDRvU
+         zHykxkI9nNUdM1lU+PVyaxSS/QmVyFHVQAJO6THFMbewGQNmJHIlJlZ4Y2z1XVsxSzjd
+         5dMZRqVBy8w9nlai2DnjhbgZ6A9CD+E/ShbhS09OFfE4JKhJ1GMFrdoON4RCEKOtYdfv
+         hDQvLt9GeBstFjJa/Ar0TCB/3hE0HhvjIJrjVc1/yLsZFoxpXDZhLECW5s9waZ9eNB1R
+         mlxl0c1QP29KBIwXlKlBw9Fw59l3xLjIHNd48o03TG9fMVE6vxcn5VVxk6ZJnkYJN33V
+         N4Ww==
+X-Forwarded-Encrypted: i=1; AJvYcCVG3IRRBCxV12eWzDNdL5/zHwPRmw9I8ck15poqAZKWmT3kAzrqn8mLoTpyf5+Cug3Qam319LFEhaQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxgve2IkXsuUujUHDbTeQ6TIjC8PoqFBzlhKVsN9aag5AaoumP8
+	3fRWgv2u24qRY28kfUnOxezaVqQweFv4ejXPgFFh2HuoEB+A5XxVVPdF
+X-Gm-Gg: AY/fxX58KofddRwJUbvWmW+3e0muzul7cx7jiMsfN6mW3+VOwC+/5iaRF9EvGgG+k/p
+	UfCFAXT3mePe0aIkkajjHoIxKNm7zax9tUQy5euCqV/a0hyR6U2YwOmRwYm27JAszxJUa4dRMcg
+	H9LGCJ5kQp4/UTLbt9c79Nw+ZL43p7IM9wkFd/GRoJ5JM4Dfq/XBwleymuucVNhwFBQtdBFRrDe
+	kYctqWE1/e9Om6JFZxC5ckvOBToxWbfSrRY3zODZlE4C8711ku7351vC2936KUvNZGCHRTo/poY
+	I0bQNj3P1hAis3jntEWndWtwEONii7sDFZ0zTTKPbz3taFcpNSK67gsbYYeHZoEy3HV1W3XgoIu
+	YrbCjd6Q7CFnR1oMwH7X0Xpb005yJdV5SxvfHMHwPPL/b21r2mMerQqZndG6JQUGtI82ep/nVAp
+	GU9a2wb8soScz45sEqLsf1PosxpuHYyGrKWCDqVv738+h9L/vKjbclUL67alSXLYphgV48VJWtv
+	m60waqAoYkiZNw1sS17eGQRHa48QqOTjXQPeAZrf0QYKupeMDKLq75sL7M3FwYWknTou9nTCFkh
+	T+c9
+X-Google-Smtp-Source: AGHT+IGPO+RR2k2lWqN1OBFQOL1/b6w1FynFekD9M3vfPiG17tDe926KBgpNLC1VR/Gl1O4Os+tcQw==
+X-Received: by 2002:a05:7300:c99:b0:2b0:5342:e00a with SMTP id 5a478bee46e88-2b17d251c0bmr18093494eec.15.1768286430816;
+        Mon, 12 Jan 2026 22:40:30 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17078dd78sm16913729eec.19.2026.01.12.22.40.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 22:25:42 -0800 (PST)
-From: weipeng <coderlogicwei@gmail.com>
-To: syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com
-Cc: anna-maria@linutronix.de,
-	frederic@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	tglx@linutronix.de
-Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
-Date: Tue, 13 Jan 2026 14:25:37 +0800
-Message-Id: <20260113062537.4170377-1-coderlogicwei@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
-References: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
+        Mon, 12 Jan 2026 22:40:30 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Peter Korsgaard <peter@korsgaard.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Liu Junliang <liujunliang_ljl@163.com>
+Subject: [PATCH net-next] net: usb: dm9601: remove broken SR9700 support
+Date: Mon, 12 Jan 2026 22:39:24 -0800
+Message-ID: <20260113063924.74464-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -94,88 +95,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git mater
+The SR9700 chip sends more than one packet in a USB transaction,
+like the DM962x chips can optionally do, but the dm9601 driver does not
+support this mode, and the hardware does not have the DM962x
+MODE_CTL register to disable it, so this driver drops packets on SR9700
+devices. The sr9700 driver correctly handles receiving more than one
+packet per transaction.
 
-diff --git a/drivers/i2c/busses/i2c-tiny-usb.c b/drivers/i2c/busses/i2c-tiny-usb.c
-index 57dfe5f1a7d9..79b7c97514c9 100644
---- a/drivers/i2c/busses/i2c-tiny-usb.c
-+++ b/drivers/i2c/busses/i2c-tiny-usb.c
-@@ -12,6 +12,7 @@
- #include <linux/slab.h>
- #include <linux/string_choices.h>
- #include <linux/types.h>
-+#include <linux/workqueue.h>
+While the dm9601 driver could be improved to handle this, the easiest
+way to fix this issue in the short term is to remove the SR9700 device
+ID from the dm9601 driver so the sr9700 driver is always used. This
+device ID should not have been in more than one driver to begin with.
 
- /* include interfaces to usb layer */
- #include <linux/usb.h>
-@@ -172,6 +173,8 @@ struct i2c_tiny_usb {
- 	struct usb_device *usb_dev; /* the usb device for this device */
- 	struct usb_interface *interface; /* the interface for this device */
- 	struct i2c_adapter adapter; /* i2c related things */
-+	bool disconnected; /* set to true on disconnect */
-+	struct work_struct release_work; /* work struct to release the adapter */
- };
+The "Fixes" commit was chosen so that the patch is automatically
+included in all kernels that have the sr9700 driver, even though the
+issue affects dm9601.
 
- static int usb_read(struct i2c_adapter *adapter, int cmd,
-@@ -184,6 +187,11 @@ static int usb_read(struct i2c_adapter *adapter, int cmd,
- 	if (!dmadata)
- 		return -ENOMEM;
+Fixes: c9b37458e956 ("USB2NET : SR9700 : One chip USB 1.1 USB2NET SR9700Device Driver Support")
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ drivers/net/usb/dm9601.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-+	if (READ_ONCE(dev->disconnected)) {
-+		kfree(dmadata);
-+		return -ENODEV;
-+	}
-+
- 	/* do control transfer */
- 	ret = usb_control_msg(dev->usb_dev, usb_rcvctrlpipe(dev->usb_dev, 0),
- 			       cmd, USB_TYPE_VENDOR | USB_RECIP_INTERFACE |
-@@ -204,6 +212,11 @@ static int usb_write(struct i2c_adapter *adapter, int cmd,
- 	if (!dmadata)
- 		return -ENOMEM;
+diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
+index 8b6d6a1b3c2e..2b4716ccf0c5 100644
+--- a/drivers/net/usb/dm9601.c
++++ b/drivers/net/usb/dm9601.c
+@@ -603,10 +603,6 @@ static const struct usb_device_id products[] = {
+ 	USB_DEVICE(0x0fe6, 0x8101),	/* DM9601 USB to Fast Ethernet Adapter */
+ 	.driver_info = (unsigned long)&dm9601_info,
+ 	 },
+-	{
+-	 USB_DEVICE(0x0fe6, 0x9700),	/* DM9601 USB to Fast Ethernet Adapter */
+-	 .driver_info = (unsigned long)&dm9601_info,
+-	 },
+ 	{
+ 	 USB_DEVICE(0x0a46, 0x9000),	/* DM9000E */
+ 	 .driver_info = (unsigned long)&dm9601_info,
+-- 
+2.43.0
 
-+	if (READ_ONCE(dev->disconnected)) {
-+		kfree(dmadata);
-+		return -ENODEV;
-+	}
-+
- 	/* do control transfer */
- 	ret = usb_control_msg(dev->usb_dev, usb_sndctrlpipe(dev->usb_dev, 0),
- 			       cmd, USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
-@@ -219,6 +232,15 @@ static void i2c_tiny_usb_free(struct i2c_tiny_usb *dev)
- 	kfree(dev);
- }
-
-+static void i2c_tiny_usb_release(struct work_struct *work)
-+{
-+	struct i2c_tiny_usb *dev = container_of(work, struct i2c_tiny_usb,
-+					       release_work);
-+
-+	i2c_del_adapter(&dev->adapter);
-+	i2c_tiny_usb_free(dev);
-+}
-+
- static int i2c_tiny_usb_probe(struct usb_interface *interface,
- 			      const struct usb_device_id *id)
- {
-@@ -268,6 +290,8 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
-
- 	dev->adapter.dev.parent = &dev->interface->dev;
-
-+	INIT_WORK(&dev->release_work, i2c_tiny_usb_release);
-+
- 	/* and finally attach to i2c layer */
- 	i2c_add_adapter(&dev->adapter);
-
-@@ -287,9 +311,9 @@ static void i2c_tiny_usb_disconnect(struct usb_interface *interface)
- {
- 	struct i2c_tiny_usb *dev = usb_get_intfdata(interface);
-
--	i2c_del_adapter(&dev->adapter);
- 	usb_set_intfdata(interface, NULL);
--	i2c_tiny_usb_free(dev);
-+	WRITE_ONCE(dev->disconnected, true);
-+	queue_work(system_long_wq, &dev->release_work);
-
- 	dev_dbg(&interface->dev, "disconnected\n");
- }
 
