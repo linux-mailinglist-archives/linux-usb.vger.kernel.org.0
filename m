@@ -1,142 +1,86 @@
-Return-Path: <linux-usb+bounces-32291-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32292-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B15D1A30A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 17:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6638FD1A31C
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 17:22:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CDF8230E8422
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 16:16:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EF9FE305F337
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 16:18:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97CAF262FC1;
-	Tue, 13 Jan 2026 16:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b="f1N7exyY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EDE2284880;
+	Tue, 13 Jan 2026 16:18:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7601D1494C3
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 16:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EBDEED8
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 16:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768320976; cv=none; b=IzL1l5AWNeGnTCOnsgPR+7ZaItbBmzYDlO99P08FsXFFZmMXGy58jA/uyi3al3x9ByWgaO0oM6TfWfL8IzLCy5/cG0dz8ZAGndQzON88RZlXjFvkEcf1OvPzDAV9R2vk6zWsLJdmyG0HoKXApNIslNr5lhwz+RzLSf2FqfALwR0=
+	t=1768321088; cv=none; b=YS9ArnBxse8TzNCdXtLyQXEH1B7guFpkSoz6XZBkP+iPC0KjPm06oYk4mDA/wr0tNy0bgniT6+7sJHIaEZswX0WMnxVbGg60+IkrpmXvDtR9MUf7eOQWPaNs312ZUw3YkEJGqdkY2ifCDrU32BqJyG6CfLgLn+K/BhF6gjCuYcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768320976; c=relaxed/simple;
-	bh=Ih2wprFj9ebh6n5trquqbqhFyRV4aBHlducm/G84yhE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=JmS6LPm2lrL1NSYEaIMEr4dgbPiYJLaAlRWTQLk1tA/QVd3qZuW/+Xd4TRu2sz+PrsU3kBzrbV8ieGpACRFV1hU2HGFQhPktENkdIvgHn8KpGof4RnwcVoTxCu5pTBJuDe31GO0BpF+algDe3UaHzTRkPEirCdSL0gxyvVpl4ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com; spf=pass smtp.mailfrom=cknow-tech.com; dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b=f1N7exyY; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow-tech.com
+	s=arc-20240116; t=1768321088; c=relaxed/simple;
+	bh=LmwLL/iVS9XoQSlMXyboD9r5eQE9S01TEDc/ODGeNpk=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=QUOpFyhMmFge82SrSper0fC8ZwoOk9eHMDNzVBU5nbh7gQfk0if3QJCR4GI0XiXBfEW+IgQO6baWvKO7N6DADE8lRBjwVmb7Koyam6e2D7J9Gj1rR3WPob6VssVP/N/ske1VnYrAc7a+bYZbindU2rakmxPUYMfX9InDwq/fTp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-65e902a9ce8so14737304eaf.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 08:18:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768321086; x=1768925886;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c6L0XQeaon7eL8GF1a2BoI3VsTUlKfh6i9fMWRkDZKU=;
+        b=d3zeKTBiQ8ty1pBbkZ2BTgkTgnelA7RH9a4CCeLT8wbFmHm3b8JC6OKTmp9w5QampR
+         quGwmtkFk64vgwgPPCHFFTtG9evR3A1joPLzZXz2B5fvrv3tu/41tiu44DrnQnPxdSGJ
+         o0tCE/mfYDGlQ3nSTBQqsmH/xGagn9AbBUjLRB2sOauaKdXSi3KQLoJNND48fwigRGd+
+         dnSbnUWgVszBh2IiA4fpW2esPhPBgFw2p/aRMPyeJSECr7MlQrtlTBIsr6TdpqNBg392
+         d/RPujD6Cxq2ja9LJZ8NOM2P4RscrTc5sJWT2YA90INb7/fK1WteVYX/y3d7HidLj4uA
+         Txjg==
+X-Forwarded-Encrypted: i=1; AJvYcCXOXRs/+/+9y8x3JYjk1AVixw6fS2A73lfn6b7sTdoLe7Zzd8WeJiltk6E5w4XH/iCflHDzQSXCl/M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZp404vvgIYkKjc/0ZtBLp7KxCCHcXU1+/6YXHak2VjHQW8pnt
+	0Zyv/lI8CYkouW88zU/8G2THk2uxhL3ywmP4/gMs4RpsPeJApeuxMLgWUeexKvrj324uoOgLNuV
+	MILGprE8+gsDTUybInl24YRLEOmYv3MdMiMF2BegTv44kPJkdEL6kTC7ufpo=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow-tech.com;
-	s=key1; t=1768320971;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=G/0vSieeJBhG2qqh8FuHToqqUBQ13qnWcsKX9OripvA=;
-	b=f1N7exyYHC0gwKdI3cs107pjDJZN/XVYu3bsLBMn70zVirBaVQqOU/+RQUcTEVTlK3TvS9
-	zAt7qroBHbBnQJkXZoUUug+RzuhPTLMrkEMg0yQn+HEpii4TSnRQfsCeXqePpUZqYWrIco
-	wI5H9Y0GQ4kAh3n1k/w+DFyO55FIFXQOECF8PbQE6Fosv0mIf1CfhPhHI/nS4LEyfc+xvX
-	lBNwUv3LxhCi2qo13Dg8JsfT6r2MxBFoUWjBiCqPSGqa3yYJHRz0iXr01ukztbq2JkSnhu
-	pAK47TU0IxCBSjVzYAEQgQiwLcnFsv2Y3d7O9S7ID2cjaH+siSb41fimNWThtg==
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 13 Jan 2026 17:16:05 +0100
-Message-Id: <DFNLGSUWJA5Z.3OJHVYWST2YFH@cknow-tech.com>
-To: "Alan Stern" <stern@rowland.harvard.edu>
-Cc: "USB mailing list" <linux-usb@vger.kernel.org>,
- <linux-rockchip@lists.infradead.org>
-Subject: Re: Track down EHCI and companion errors on rk3xxx systems
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Diederik de Haas" <diederik@cknow-tech.com>
-References: <073879e4-aea8-4625-bc83-c4b6dd9c9231@rowland.harvard.edu>
- <DFNI1Q9N7GC6.20PN0RG9LRAQF@cknow-tech.com>
- <38365c37-b125-4ffb-8ce7-bd4f3f7596ba@rowland.harvard.edu>
-In-Reply-To: <38365c37-b125-4ffb-8ce7-bd4f3f7596ba@rowland.harvard.edu>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+X-Received: by 2002:a05:6820:8018:b0:65d:1636:5439 with SMTP id
+ 006d021491bc7-660f2d28ef2mr1284293eaf.40.1768321086188; Tue, 13 Jan 2026
+ 08:18:06 -0800 (PST)
+Date: Tue, 13 Jan 2026 08:18:06 -0800
+In-Reply-To: <20260113154748.341096-1-coderlogicwei@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6966703e.050a0220.246a4a.00db.GAE@google.com>
+Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
+From: syzbot <syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com>
+To: anna-maria@linutronix.de, coderlogicwei@gmail.com, frederic@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, oneukum@suse.com, 
+	syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue Jan 13, 2026 at 4:47 PM CET, Alan Stern wrote:
-> On Tue, Jan 13, 2026 at 02:35:21PM +0100, Diederik de Haas wrote:
->> Got my (gtkgreet) login screen and plugged in my keyboard adapter in the
->> *bottom* USB2 port ... and that did NOT work.
->>=20
->> Logged in via SSH and noticed it was indeed not listed in ``lsusb``.
->> Checked ``lsmod`` and ``dmesg | tail`` ... and noticed the kernel *did*
->> notice plugging in the keyboard adapter, so did ``lsusb`` *again* and
->> then it *did* list my keyboard adapter.
->> I did NOT employ my usual 'workaround' by plugging it into a USB3 port.
->>=20
->> So it may be that it would have always worked ... eventually ... if I
->> had just waited long enough?
->> While 'dmesg' seems to suggest it took little over 0.5 seconds, I'm
->> really not that fast ;-P (or that impatient)
->
-> Is this repeatable?
+Hello,
 
-It doesn't happen every time, but it did actually happen another time.
-After that test, I shutdown the device and unplugged the keyboard
-adapter. Then I powered on the device and waited till it had completed
-the boot process.
-Logged in via SSH, retrieved my usual boot process data (what you saw in
-my 'paste' starting with ``uname -a``) and then did ``dmesg -W``.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Then I plugged in my keyboard adapter in the bottom port and noticed it
-didn't work (straight away). This time I waited, pressed various keys on
-my keyboard, turned the keyboard off and on again, pressed some more
-keys ... and after ~20 (or 30?) seconds, my keyboard started to work.
-When I then switched back to my SSH session, I saw dmesg had (then)
-printed messages indicating it saw the adapter plugged in and ``lsusb``
-did see the device.
+Reported-by: syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com
+Tested-by: syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com
 
-But that ~20 seconds is key here. Normally I would conclude that "it
-doesn't work" after (say) >5 seconds of nothing happening.
+Tested on:
 
-> If it is, try doing the following.  After a fresh boot, log in via SSH=20
-> and turn on dynamic debugging for USB:
->
-> 	echo module usbcore =3Dp >/sys/kernel/debug/dynamic_debug/control
->
-> and clear the kernel's log buffer:
->
-> 	dmesg -C
+commit:         b71e635f Merge tag 'cgroup-for-6.19-rc5-fixes' of git:..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14a0a59a580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1859476832863c41
+dashboard link: https://syzkaller.appspot.com/bug?extid=30b78308ba7e64647ff8
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1331f922580000
 
-Would ``dmesg -W`` also work?
-
-> Then plug the keyboard adapter into the non-working bottom USB2 port and=
-=20
-> wait a short time (say, 30 seconds).
->
-> Then get a copy of the dmesg output and post it here.  Also, check to=20
-> see whether the keyboard is working.  In fact, you should check the=20
-> keyboard during that 30-second wait, so you will know just how long the=
-=20
-> delay was before it started working.
-
-Normally my SSH session is displayed on the same monitor as the desktop
-session of the Quartz64-A (I switch between HDMI-1 and HDMI-2 input
-sources of my monitor). This makes doing any kind of precise timing
-activity impossible. I'll try doing the SSH session via my laptop, which
-hopefully allows timings to be closer (but likely still not precise).
-
-> Another thing you can try is to force the necessary module(s) to load=20
-> before plugging in the keyboard adapter.  For now, a simple modprobe=20
-> issued over the SSH connection will do the job.  If this turns out to=20
-> help, you can configure modprobe to load the module(s) automatically at=
-=20
-> boot time.
-
-I was already planning to make it built-in as the chances of me not
-needing USB2 in some way, are quite slim. And they should (hopefully)
-prevent such issues and I'd have a warning less in dmesg.
-
-Cheers,
-  Diederik
+Note: testing is done by a robot and is best-effort only.
 
