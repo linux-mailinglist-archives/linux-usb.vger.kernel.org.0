@@ -1,189 +1,122 @@
-Return-Path: <linux-usb+bounces-32230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2653FD17C71
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 10:52:17 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F51D17C37
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 10:49:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3ADDD3022A9A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 09:47:13 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8870330069A8
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 09:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33368387574;
-	Tue, 13 Jan 2026 09:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED813389477;
+	Tue, 13 Jan 2026 09:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SeDt+e/Q"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EWcMNFQW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158B930F949
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 09:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215F9387574
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 09:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768297631; cv=none; b=BsKwYn+ZSfpmAAniH+BZzeu8t+cwpzZaM1gLj/CcoXKsFcL461T5554X2Y+tbSwUzuVWzcpHesXXEOWGzaqZ+cxA28Bwg8zAfYsJ6kN9Sc+AebIF7ZGKvUiqPW7Vw+BbEzi9NcBG5rXy27YmS6PEXaE2J2HRClfi/mxCyFTw4zA=
+	t=1768297761; cv=none; b=CjtKsbfyOTXtsg8+D5ciYmTj7kglbf3A+Py0KKm17iDlL4MTwqDI08ILx5y0OdfDLMOqvGmkoBWdaD8Uou6HAkfT+etx8lXWEfSTjn/N3Cql2gslhFpZrGC50uxunXOrTslude2l8e6sX+LNzU5kS6ISiQVpINKX4xPcExKhBlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768297631; c=relaxed/simple;
-	bh=2j1NVVDVzyUer7ueF+dbPwze2xv/ZoGZ0AXdbs/w+4g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AW8f07Yx+AHrOWjWu/uNZEojf2xKGvOHK+vXxUvwwAxXfUYyovCFDjnryt7x+fhIFpAgJJbphYvcKVeppV1+M3gAa1RTNKAwN7IBxlRqyKEgf197MfTD5cDw9CIlv5bppGnQIjkE31+rJD2erJHSuq9KuNM5zf2P5FDK+hqgzqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SeDt+e/Q; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-59b6f59c4f5so8082276e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 01:47:09 -0800 (PST)
+	s=arc-20240116; t=1768297761; c=relaxed/simple;
+	bh=rldiau7LJXcOO0Pd+JfsXVEuF+CP8SBS2Jq+Rj28UZU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JTR9O8+TIldPcOf+YsBnlG/MmXo8wG9nTpwBSp6tvDytgdNfknmTExJrdDd6FA1QDp1yPMKtyHeBkx4G60OiQvQLBzbkOSO4XCJKz2QJnhBqrlMM5ZwBIHTO6VBdb+QM6AHNEKsvkoo+iKrK0ObdPOL+4qI8auVv3p57wUIU4Do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EWcMNFQW; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-47d3ba3a4deso42384095e9.2
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 01:49:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768297628; x=1768902428; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iRryjjjXplBwJtxztVvByOat+XNsp7z4Smz1935l/Wk=;
-        b=SeDt+e/QykqvLFyCgyPklnC7t3Zwty2tkKNFhG8XPUf1NweYjcJ6/0NxwVZ7ZQkUdZ
-         JL+Eo7iYwJKFW5J/47IYJwD+TJ0Sl578IT62WhQuFDzSzl33jH00AoOvKbO8mpW0aNQD
-         fCKKXoFHHdS4Sr5b6Yti/foJCTESlhHyHrQzwZNcTguo7Xs+yqXE6PWrYll+7zK5l7z+
-         vSXCkmR80z1gUMql0yMjsz6KBu8/AG6QhGdHQT746n9shOoQF+1GKkMV9IqQ/+8B0vpZ
-         /llIKvbfhL/CLaaCWs5+1xubVHOsYtVPG79c9FL4EnjAzlyO2h0fqGFC3jL1+1DSuYtN
-         c4gQ==
+        d=suse.com; s=google; t=1768297757; x=1768902557; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IkR4LfU8d2LcPG3/noB2c/VdgPhARHyvnvpu09hPr6M=;
+        b=EWcMNFQWokyYQ1jUiWOXeyE8jfBbb6FhKM9F9XRStv1glTWorFRarMFJZPmkKNEO/f
+         EkANhkpLx16EK70m5VKLJR+TNiZN9lx6JqlcZw8ELi01L/csvsTEOBh4zdd/AgTsW7Fe
+         1fN5FHNTqwnOGa6T7xbsbhe+5bFKNdQvT9fnl+C6nZgqIAbQmKCgZ4uB6607HHJOvfzM
+         90Lexj/lYOCeESrOJ59ethuRtgD3pA1fzI6s0EwcSs+scsPiHG4Voa+ftsSuv1KuoixA
+         CjE7s15eWR7mP9Al5b7HvrxAUsnqbgI2dU9aJJLXdSYCyq4cjJKg9WE6BgvEoAC2Wieu
+         MISw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768297628; x=1768902428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iRryjjjXplBwJtxztVvByOat+XNsp7z4Smz1935l/Wk=;
-        b=EghZSTneua8K73/fzIaSeTqhC0ObmkAXay6Hi6gejIoCM0RF4VvA4FbpOMNWv8FbNP
-         HsAKrEVbMlVcdPPBvYLJwPnxLTB7vPppGoSeWYzYwB4aSe0/nRaP+WEgfdfYUEZSiXaK
-         v8zBkmlUP/yQU1GXupP5bsK7gdnfbbrNGWcBd/l1RGaSlUSe1JoB6nOk6TeADh6PKbmM
-         GqtXKmuF4mJTRLna5QCKjUO0u13uFqxgMe+jRzTrswp4XnjAuufTrpmQ83OyGZkHbyEy
-         EhxtHtGnQly6+bO0OedQu2pDs9UreY/jWzrjerpIrnP2UEgcdgKgGBJr4HHV9eP1kGf7
-         /9HA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAZtdmMJMxuw+ra316Ad2wQiXDgny+r93cIUxzPa9q7aevFAf9uOeSz7zsP/hXFJol1F6d6Fl6+m0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDWMxz3LAvJL+TnimKO1l+0sfuv+2I1ImOxy0+r7UVh98pF+zR
-	m/5Coq2W2oKZNDAlqvwguKBHena8DRvKNXf/nkrWe4iql4fSODsHZWhDYKhRA51WcFL8MDo8EWp
-	pGgJiktQYxqJCe6mTGMTO/qo7jgEwfWU=
-X-Gm-Gg: AY/fxX4dZ5zkkFtXWcIG850PNa45xfEZ7Srk/Jg0VSYKltHt2vhCm7cNaG+hV9Ye4qW
-	7KhFefWN8NGpd59eonZ3Nxu6ssDnzOkftJCWCpdX8kLGMBVI3enXTB0/HHeMXpLoIddFNaL/hvx
-	7x17g/+4YodK5JTEtQ54M285day1ekFbM5+gUyTUKjlwnEry93j8EHlIncSii2c3GsZdDjpLkbL
-	lBGTbMvuqgl6XBwHmWCWvBhWkUdEq7bp3OaLwxbYZhnViiaxGS9zEgYlP1MHjpzTgsIu20Z
-X-Google-Smtp-Source: AGHT+IFRl57rhcP0wr03j+wHyjCYMuVRxDTMrdy7fRpFPZ5ok5LP1EvoB+hsF8Z+4MbHIppYwqEclOZujgx0bbZcoR8=
-X-Received: by 2002:a05:6512:3b12:b0:59b:72aa:58e4 with SMTP id
- 2adb3069b0e04-59b72aa5a88mr6520985e87.16.1768297627909; Tue, 13 Jan 2026
- 01:47:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768297757; x=1768902557;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IkR4LfU8d2LcPG3/noB2c/VdgPhARHyvnvpu09hPr6M=;
+        b=GfDNKXuipgo8drcQvKPD/m8w2UoVNM4fG8oIttHiNaqv06DFxyz9xJ/WbqENSiedtu
+         Wj7JMWLSqHBGQ+hSVQxE4P5uoe6eM9yt0AldxF5qABuHsamKXVD8CNwzsK/eEMSaMqbw
+         yBMj0TDN31udcUGX0Hs8U4hDxmsd+jxRDO116CC6v/Z2SSrSLHsB6JslpuGPy0x/Scez
+         hy+pcSw6H5YNfc4W287pjle2gpC+hESU3YWpjhHO//VlN6FRtK7jMmFlg3H2+CbYkevE
+         twfQM1dpWd2GSGtKeXxsE9qmIKK35xGxlOpJVRQNsbXpqZczJSj9AxGB8+3Hra4DpPYY
+         mrkg==
+X-Forwarded-Encrypted: i=1; AJvYcCXfnUFgPz4e4YwQe6yHFzWwoEpxKmvTKC+/im3vAXWGF0OxqsPrgCKDFWyAp9rtSDrgaeX5+LZFlgc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4SCArQ2mE7r2GR9rUvt1bEFkMeTdFmsOIFilXXilDuIUrFrkc
+	sDxEVeCx0z52K4b4gN9kgqawsInWdNOCUkXSHSli1QlblS91Bd92dMW0S2BiBZKolJo=
+X-Gm-Gg: AY/fxX6pEg7fRXPcg6ZhotbTK2e/woReAAN+RD+hfzeyznLXTTTvfiUn4MPba38x60n
+	8NZg1hFFzBEO80MFhb4HuYd3zsPVC3+HHB/3qhxW0FzUvThwAICVDMstQ3ghJzgJ+eKREGRWJ9E
+	CXD7CpDXQsHY1ctz1+GxnjY+qAkkMBJpWqxvdbUSj0KynBgFe5KImHkKXyMHum08suyFHnEMD7j
+	E/i2cqW0VDbO3pLmyGTbJl0VsxEq2pQrENUIDPejNNoD+UFQXG6J1MEOpcNHEfwSbHi2xkSgo2e
+	qcSMGQOAi2ICzSMV+B6SNpzuYwghwV+DXP/yS3irOz5X6rJJva+RYgb+flyr77O8BchJ9QCE582
+	Itj3k57dUCoC4Yx5khV1ZXkxLCIkXbAp5gEf8yFhiuSdOYV2NtBm1+zInV7tZ7DotLGRVVlsaSx
+	GYBbkYpWMA9MU9MbVNWI6b+gatAEUneofTiFR4GatBEdcieu5VGrL2AF0=
+X-Google-Smtp-Source: AGHT+IFljzIApLs6K0urPpIfNVxYXphnQ4IkgtF/Eo8NnIXz1bAxvwl/i9fym1QFfouIdmsnW3s6JQ==
+X-Received: by 2002:a05:600c:820f:b0:477:a978:3a7b with SMTP id 5b1f17b1804b1-47d84b32f09mr213986235e9.22.1768297757438;
+        Tue, 13 Jan 2026 01:49:17 -0800 (PST)
+Received: from ?IPV6:2001:a61:138d:5701:1aab:ab2a:99f8:6c9a? ([2001:a61:138d:5701:1aab:ab2a:99f8:6c9a])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5df90dsm43504596f8f.20.2026.01.13.01.49.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jan 2026 01:49:16 -0800 (PST)
+Message-ID: <30e2487e-5738-46bc-95f7-8d0ba3ba9b1a@suse.com>
+Date: Tue, 13 Jan 2026 10:49:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260111123218.15972-1-karthiproffesional@gmail.com> <2026011101-important-hermit-3a31@gregkh>
-In-Reply-To: <2026011101-important-hermit-3a31@gregkh>
-From: karthikeyan K S <karthiproffesional@gmail.com>
-Date: Tue, 13 Jan 2026 15:16:54 +0530
-X-Gm-Features: AZwV_QhNoiPVBmCmEMe9pGG6kvTb_UmC-jEjGYn1u0CQxkcllNXk8jywN8zr3cs
-Message-ID: <CAP_JKPuve2pHzcMwzApmNHFXHsmKHB2PFKWqBLf0gg0j0KTtmw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: dwc2: add missing SLAB_CACHE_DMA flag for desc_hsisoc_cache
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: hminas@synopsys.com, gregory.herrero@intel.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
+To: weipeng <coderlogicwei@gmail.com>,
+ syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com
+Cc: anna-maria@linutronix.de, frederic@kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+References: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
+ <20260113075210.39425-1-coderlogicwei@gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20260113075210.39425-1-coderlogicwei@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Greg,
+On 13.01.26 08:52, weipeng wrote:
 
-Thanks for the detailed review.
+> @@ -287,9 +311,9 @@ static void i2c_tiny_usb_disconnect(struct usb_interface *interface)
+>   {
+>   	struct i2c_tiny_usb *dev = usb_get_intfdata(interface);
+> 
+> -	i2c_del_adapter(&dev->adapter);
+>   	usb_set_intfdata(interface, NULL);
+> -	i2c_tiny_usb_free(dev);
+> +	WRITE_ONCE(dev->disconnected, true);
+> +	queue_work(system_long_wq, &dev->release_work);
 
-> Are you sure this is ok? You are now taking from a _very_ limited chunk
-> of memory for this controller.
+Hi,
 
-All current allocation sites already pass GFP_DMA, so DMA-zone memory
-is already being consumed today. That said, I fully understand the
-concern about further constraining allocations at the cache level.
+I am sorry, but this fix is looking a bit fishy.
+For once what prevents the driver from being unloaded
+with a work item queued after disconnect() has run?
+How do you make sure that the disconnected flag is ever read?
 
-> What platform is this that requires this, and what changed to suddenly
-> need this to be this way?
+	Regards
+		Oliver
 
-No specific platform requires this, and nothing is broken. I noticed
-this during code review, as desc_gen_cache uses SLAB_CACHE_DMA while
-desc_hsisoc_cache does not, despite both being used for DMA descriptors.
 
-> So I would like to find out why this is needed now, all these years
-> later. What caused this to show up at this point in time?
-
-There is no functional need. The current code works correctly because
-GFP_DMA is always passed at allocation time. This was only a
-consistency cleanup, and using a Fixes tag here was incorrect.
-
-Given that this is long-working code with no real-world issue, I agree
-this change is not justified and I will withdraw the patch and not
-resend it.
-
-> Also, should this go to stable kernels?
-
-No, since no bug is being fixed.
-
-Regards,
-Karthikeyan
-
-On Sun, Jan 11, 2026 at 6:36=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Sun, Jan 11, 2026 at 12:32:18PM +0000, Karthikeyan K S wrote:
-> > The desc_hsisoc_cache kmem_cache is used to allocate DMA descriptors
-> > for High-Speed isochronous transfers. These descriptors are passed to
-> > the hardware via dma_map_single() in dwc2_desc_list_alloc().
-> >
-> > The desc_gen_cache, which serves the same purpose for other transfer
-> > types, correctly specifies SLAB_CACHE_DMA. However, desc_hsisoc_cache
-> > was created without this flag, despite both caches being used
-> > identically for DMA descriptor allocation.
-> >
-> > Add the missing SLAB_CACHE_DMA flag to desc_hsisoc_cache for
-> > consistency and correctness on platforms with DMA zone restrictions.
-> > This also protects against future allocations from this cache that
-> > might omit GFP_DMA.
-> >
-> > Fixes: 3b5fcc9ac2f4 ("usb: dwc2: host: use kmem cache to allocate descr=
-iptors")
-> >
-> > Signed-off-by: Karthikeyan K S <karthiproffesional@gmail.com>
->
-> Nit, no blank line needed after the Fixes: line and before your s-o-b
-> line.
->
-> Also, should this go to stable kernels?
->
-> But:
->
-> > ---
-> > v2: Resend with proper formatting (previous was corrupted by email clie=
-nt)
-> > ---
-> >  drivers/usb/dwc2/hcd.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-> > index 30eb85066..556d6ab36 100644
-> > --- a/drivers/usb/dwc2/hcd.c
-> > +++ b/drivers/usb/dwc2/hcd.c
-> > @@ -5273,7 +5273,7 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
-> >
-> >               hsotg->desc_hsisoc_cache =3D kmem_cache_create("dwc2-hsis=
-oc-desc",
-> >                               sizeof(struct dwc2_dma_desc) *
-> > -                             MAX_DMA_DESC_NUM_HS_ISOC, 512, 0, NULL);
-> > +                             MAX_DMA_DESC_NUM_HS_ISOC, 512, SLAB_CACHE=
-_DMA, NULL);
->
-> Are you sure this is ok?  You are now taking from a _very_ limited chunk
-> of memory for this controller.  What platform is this that requires
-> this, and what changed to suddenly need this to be this way?  The driver
-> has been working for a very long time without this, and I am loath to
-> change this now as it might hit many existing systems that have a very
-> limited GFP_DMA memory range that did not expect a new allocation there
-> now.
->
-> So I would like to find out why this is needed now, all these years
-> later.  What caused this to show up at this point in time?
->
-> thanks,
->
-> greg k-h
 
