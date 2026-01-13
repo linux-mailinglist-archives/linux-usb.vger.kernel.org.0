@@ -1,154 +1,112 @@
-Return-Path: <linux-usb+bounces-32284-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32285-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75871D19ED9
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 16:34:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB10ED19F2D
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 16:37:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 227A4300B371
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:31:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1645C302E330
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:36:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18F613090C5;
-	Tue, 13 Jan 2026 15:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E172BE639;
+	Tue, 13 Jan 2026 15:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XS0BVzMd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcUdJZ4Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9854C283FC3;
-	Tue, 13 Jan 2026 15:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E5330216D
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 15:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768318313; cv=none; b=qWUfTe8E6xglvuUOoIFPj631q8gLRgbqJk2QnZ4m5ddCfWUcenVLVcI1HjXRcOE1EEdAUW0tK1TsLvIUpFIWKd2FQCgkor6+vo0ErNpViFCNb/0vev0dYOsJPjjpr7QqRPF4y9eg2SyzZ2xDsKj0cR4y3KPx0yZjnll0wFP38dE=
+	t=1768318557; cv=none; b=qKV7GHFUL3YKjiYStGaptbCcECMIWI7mbAcsJGRo8bJcp6u+d0JVv8aUO1XXwpa4FIE6scnmw6fON0dXKvn4X0NF/QkszyOtzOmJtu3SEwuXbUI/ju4rXk4NpBHlDCn+VsyTuMHYkXmIFs6hOKjpePcFnx5kWbjRilf1dDIny4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768318313; c=relaxed/simple;
-	bh=c7d5jlgASjxzIxTiQVH1feaKffgW8+1S4PM5q3EL+Ng=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E1JrlDAwkE1eQsAaWUuYWSShZbVkFfDZgVIB5dpn1wPgGUwZ5ao/J41tkdwr6f1xjgwMpb1vMco7g8pTq7veN425kSojHwKVG1SUV7YdvgCLPFJf+iCfDAs3qVci7Z+LcvT9uV/iLFmESPqjaP10TsB4HX/Ova70HWirFSmFpmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XS0BVzMd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F049C116C6;
-	Tue, 13 Jan 2026 15:31:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768318313;
-	bh=c7d5jlgASjxzIxTiQVH1feaKffgW8+1S4PM5q3EL+Ng=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XS0BVzMdX6wwu7jJFI+Wdwj2hnpaDwThBV75hD8X85Duz3CNwf7fp7JHjOtbf6/jx
-	 y6vxuNYBx7dnIIewd+MzRJu5km5LJhhD2J5bbHriW75eKt27VS/1vkAchNpfquybt1
-	 tLK/NhIVazPzjHgIdsb3kXfazz+icFLN76q/9WFWMprIjCfRd75NFUELNxbYbXXZxl
-	 sz4Ai6kdAA7bN+CbjXm3GjM78eTCdqAWv8Rj+uob5B3+Pfe+Vhg5I/Vbz5SE7vaFmj
-	 KkT0HfBC3grnmz0UlSby0lXkT911+M2BvfqUXOjuEknQkf5tC8RlrZJ0ihlTYF8RKH
-	 X6lxleOce0Tfg==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vfgN0-000000003Tx-0cMf;
-	Tue, 13 Jan 2026 16:31:46 +0100
-Date: Tue, 13 Jan 2026 16:31:46 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	david@ixit.cz
-Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
-Message-ID: <aWZlYuFXYd5eAZTT@hovoldconsulting.com>
-References: <aINXS813fmWNJh3A@hovoldconsulting.com>
- <CAFBinCBMTOM-FMgENS-mrnV17HbKzhtPUd44_dDiwnD=+HVMWQ@mail.gmail.com>
- <aIiXyEuPmWU00hFf@hovoldconsulting.com>
- <CAFBinCBZhjs7DGEgxhz54Dg8aW3NX9_LdnoZeUZpm5ohaT_-oQ@mail.gmail.com>
- <aJCoRFe-RFW1MuDk@hovoldconsulting.com>
- <CAFBinCCYsWHsNwi99kFqvLv+xOYtp9u3omhrPdV-hdH+5Cfyew@mail.gmail.com>
- <aK7Y9rRIsGBKRFAO@hovoldconsulting.com>
- <CAFBinCD19CVc0kX-aqa8pw71O2F3Nwy9ght+2TCn9B4PbOCBfw@mail.gmail.com>
- <aS2hxeBR-tptevYd@hovoldconsulting.com>
- <CAFBinCAt1DevnggWJdzBzh3X1Yfb0ScZXYsgkrA1cGrUmfXVwg@mail.gmail.com>
+	s=arc-20240116; t=1768318557; c=relaxed/simple;
+	bh=AQ9zAzyFG0dSMT6/wMrYq8j5UPJc0JMrZi4DfFoVDYA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=QL+hto0UAOAxZheKNKxIBw4fq1Dgy5Ndl4DZWmNrrMmP6BCX3Y0TVPlKbd5nt97jkaLdLYNY5bXSfXSF+iiMpKuQG2Uictn5TzYrXIVSyFXPK5rwtakTSxDLeVNEQNMswlYAeUCVcxsqd/5IEX0+SEIf9iEwulVimHm+hd7HqBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcUdJZ4Q; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2a3e79fe2b8so11386905ad.1
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 07:35:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768318555; x=1768923355; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AQ9zAzyFG0dSMT6/wMrYq8j5UPJc0JMrZi4DfFoVDYA=;
+        b=XcUdJZ4Qz9FsV6UCgvQ1PqaJIdmghzeaUhgJXtUClSqvclet8FJfjfy2O7DTeOXVm6
+         QnucZ2XGXGrsVNJ9LIWT2CtUz4fS0Yl/DjFZdvYjvbsqF6Hfe59u+LUh5Mu+5KJzaIal
+         tCRAX9oruzo/gDJ7rY2EvPj88IsQmC4qI5jJcCWUSlrgE3nuyYLma6w7d6phARcTZAl4
+         xQuftqRhNTgIXA8ZV4kfmBXOpabhEHqcbSzZfpeRTFuFLQpK0BQsjnZ8ATCzLYEipU5r
+         nknTcRs4rcPMiEWOCY+qs2ecxaJHFgjW/7R11DnyX8UEWKeRgrnTEMUzLgnu91hsBo1Q
+         t6Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768318555; x=1768923355;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AQ9zAzyFG0dSMT6/wMrYq8j5UPJc0JMrZi4DfFoVDYA=;
+        b=TCmZ6uE/Ugq0Xt3vlTeI1u60em9XfTMnAOqzJ2e4RnW1i0qK5r6FMl2VVefMG7UNmr
+         c6OlMGOOHdNDRG/zIn556QlkgN+YAJUQf4mMKfOtExDUBQAsmjqiZL0AyH050T6vcRyg
+         atePpJ8J9HL3PUwTJL57qru1FXD/Jd4sLY+baAPP7D+BPJvKJobIzPS1ebQXleb808HQ
+         JglsLsR9glUspj4dljmkJoF6SCEjfOwZId0AG9W5sNdk4U6Aksqa/Lqsrr0P22xT1oLm
+         Kj11PxjrQYOnSRcAVdX5sjUVFbtKsG59zutyzQ63c7EFSt4HoMCEUwTezelpH4WX8Bhy
+         E/zg==
+X-Forwarded-Encrypted: i=1; AJvYcCVQVN3/fyFYX32nsf3UdXG6kXkA14AcfjOp+34mIbQ63H71aRBs1oTasKkaWA78aBEKMsI8upAkLXg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDth0Xuec7bO1mk0rt9Czon35iXfXZa05KmOEMNjF/LtdCJ8sX
+	l+rPIsCfndxsOEAKTJCM89f1q2ZJxq9Tnw6w2rDouVSgSLOwPd/IL6DB
+X-Gm-Gg: AY/fxX7jMxglhcZzdUpAmZpWHyys15AoKxQZTYJPjY7Tg/2mQWn1I0tfGWPTUYVJx2+
+	L7Vew61NQ+NUoltJB+dpLQ28IHYQ+zwxbSBmjjboBTAcRXlYX2BSIWrZ2Eqm//7I9+Oc2DrCnur
+	w9TitS8dA4DHfCyTBzCy50HVRigtOeoGh+HZH9s9hG4TRWW8Ha7vITE1XP5KXaktACH8xiyOQKE
+	ZxaUOVfCbRZkPLFJWYqfXGpewVVxIAkBg4SDsOjMY3otYeiXU/zGxSuv5EcInDhtIm9bsu678Tn
+	+cKfZQdn49yt63rVbdADjPxqXzgZQPlWIUFy3CBSKa4yHMbF37rxOdgEz7DYjdBiBPr58EE0Oo9
+	oPA1E2MG/QeX0BPhZVGYJy6OL8V3UDILY18XPV4j5Rf8UxTXDi6fgvy156qsFuqlXakSLU7X8Xd
+	5hGUVY7KWKKA==
+X-Google-Smtp-Source: AGHT+IEdduxaTmvli8Wo9ac1cgN32GepZHM+hrD5khorWDZkmu1Kz44msC24N5qoMtHv8XBYXhFaTg==
+X-Received: by 2002:a17:902:db08:b0:29a:56a:8b81 with SMTP id d9443c01a7336-2a3ee4e2e1dmr160337775ad.8.1768318555065;
+        Tue, 13 Jan 2026 07:35:55 -0800 (PST)
+Received: from MiniPC.. ([47.246.98.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cb2d93sm206840675ad.63.2026.01.13.07.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jan 2026 07:35:54 -0800 (PST)
+From: weipeng <coderlogicwei@gmail.com>
+To: oneukum@suse.com
+Cc: anna-maria@linutronix.de,
+	coderlogicwei@gmail.com,
+	frederic@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com,
+	tglx@linutronix.de
+Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
+Date: Tue, 13 Jan 2026 23:35:47 +0800
+Message-Id: <20260113153547.335916-1-coderlogicwei@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <30e2487e-5738-46bc-95f7-8d0ba3ba9b1a@suse.com>
+References: <30e2487e-5738-46bc-95f7-8d0ba3ba9b1a@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCAt1DevnggWJdzBzh3X1Yfb0ScZXYsgkrA1cGrUmfXVwg@mail.gmail.com>
 
-On Mon, Dec 15, 2025 at 03:10:29AM +0100, Martin Blumenstingl wrote:
-> On Mon, Dec 1, 2025 at 3:10 PM Johan Hovold <johan@kernel.org> wrote:
+On Tue, 13 Jan 2026 10:49:16, Oliver Neukum wrote:
 
-> > > Unfortunately I don't know how to read the HW flow control state from
-> > > the hardware.
-> > > Do you have any suggestions, how I can test HW flow control (after
-> > > manually enabling it for a port)?
-> >
-> > You can try disabling reading from the device (e.g. never submit the
-> > read urbs) and see if the RTS is deasserted when the buffer fills up.
+> For once what prevents the driver from being unloaded
+> with a work item queued after disconnect() has run?
+> How do you make sure that the disconnected flag is ever read?
 
-> Doing so results in:
-> - lots of UART_LSR_OE
-> - RTS stays LOW (pulled to GND)
-> 
-> UART_LSR_OE increasing seems correct as far as I understand this.
-> RTS being LOW is wrong and I cannot manage to get ch348 to pull it to HIGH.
-> 
-> I did some more research and found that ch348 implements UART_IIR_MSI
-> and provides a fully standard compatible UART_MSR.
-> This is either triggered by a status change on the pins (UART_MSR
-> delta bits and the actual status bits), or by requesting an update
-> using the VEN_R command (UART_MSR status bits only, no delta bits).
-> 
-> In a very simple test-case I've used jumper cables on port #0 of ch348:
-> - RX and TX connected together
-> - CTS and RTS connected together
-> 
-> If I remove the jumper between CTS and RTS I get:
->   ch348 ttyUSB0: got MSR = 0x01 // jumper removed
->   ch348 ttyUSB0: got MSR = 0x11 // jumper connected again
->   ch348 ttyUSB0: got MSR = 0x01 // jumper removed again
-> 
-> So the hardware does register the change.
-> 
-> Earlier I thought I found a fix: I had the values for
-> R_C4_HW_FLOW_CONTROL_OFF and R_C4_HW_FLOW_CONTROL_ON swapped.
-> That however didn't fix it.
-> 
-> My current work can be found here: [0]
-> If you also don't have any further ideas then I'll drop the whole
-> RTS/CTS code for now so the ch348 driver can finally make it into
-> Linux 6.20
+Hi,
 
-Or you can include it and just document the known issue with RTS control
-for port 1. It seems you have everything else working, right?
+Did you say that we can't make sure the usb_read() and usb_write()
+is prevented after the dev->disconnected is set to true?
+It is indeed a problem. I will send a new patch soon.
 
-> > And in the other direction, verify that writes are buffered after you
-> > deassert RTS manually on the other end. That should be easier.
-
-> This seems to work: if I pull CTS up then ch348 stops sending data
-
-So that means hardware flow control (CRTSCTS) is enabled, which could
-prevent manual control of RTS. Which port did you test this on? Or is it
-the same behaviour on all ports (0-3)?
-
-Going back to archives, it seems like you can control RTS on ports 0, 2
-and 3. (And DTR/RTS is not available for ports 4-7).
-
-Hardware flow being enabled on just port 1 may explain the difference
-even if you would expect the device to also deassert RTS in the overflow
-test (unless there are separate bits for controlling auto-rts and
-auto-cts).
-
-> > > In case I can't easily figure it out: would you also accept a driver
-> > > that doesn't support RTS/CTS for its initial version?
-> >
-> > It's good to at least be able to control DTR/RST at open/close (i.e.
-> > implement dtr_rts()) so that you can communicate when the other end
-> > has hw flow enabled. Sound like you're really close to doing so.
-
-> In the meantime I found out why I had trouble with the DTR signal on port 1.
-> It was a user(space) error. I've been using [1] for some of my tests
-> and it has a bug where it would clear c_cflag HUPCL [2], which
-> prevents the kernel from turning DTR off on port close.
-
-Ah, good that you found that.
-
-Johan
+Thanks for review!
 
