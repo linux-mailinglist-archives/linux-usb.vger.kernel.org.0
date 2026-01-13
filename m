@@ -1,134 +1,212 @@
-Return-Path: <linux-usb+bounces-32289-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32290-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45BCFD1A014
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 16:47:41 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F777D1A029
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 16:49:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BB09230060FC
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:47:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D909F3040F06
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:48:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A91642FFFA3;
-	Tue, 13 Jan 2026 15:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 620193033FC;
+	Tue, 13 Jan 2026 15:47:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="FQr1o3V3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CY1k08bi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88C91CAA79
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 15:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CDD2DAFA8
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 15:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768319257; cv=none; b=sG7mvml4j2YJ5c3j/4nvm9Udr/BeVJDdtN75Vw2kkwk+HBuYckXVVKemdbIW5hrH6+U/cekPWmy9DaMCPl47cRnwQeyeO1bQKmyvY2kLPQDkUFb+pevV9jLMspXu/lHP2y5aLzBXuHhRKnh7Pg1d9CaNYNaAhJ+JmUcIFqNPSW0=
+	t=1768319278; cv=none; b=uD9SwnKn6tMFZ2t66nMCoWUBVzkJHFufKx1/8fvxZfrd3czHLcQ6eC0DJgn9//h8EMmjxKtzGe4Jlk2wSNQTB05GYh41oCU3KtjMkOrgaGg0ORy7vtl5l/46MvcbnxUY2749dSI7C613ost0Ptst8hCCT4GkiXnU40yBbRaG12A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768319257; c=relaxed/simple;
-	bh=eQZ9PBbv8200BncF+WzVOXiHLgVVW1qfPJ1wOjwR4Q8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O1vIgY0rlht4FnUOTZ4TTLQY3J8xdFTgk9NgEFL9e1uMejuDQzwQfaxeIsqImtndsBAU/44xXodHx/OwEOC3eki5Mao3q4mc9AYAXvVrO1pK/9Bh++9O0GK9WAATqLSy5VircXbHgurEBW07ib70pKWLrFC2NAYQMly+nrWf14o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=FQr1o3V3; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5014600ad12so1864641cf.2
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 07:47:35 -0800 (PST)
+	s=arc-20240116; t=1768319278; c=relaxed/simple;
+	bh=JGR+5qZg2s+Oqti28ZbazP4lC2mg+1cUsJ7TerYpOjQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=PAhdGHUqjSfTIZxE8Xg++j8HFpsQ4l3GIOnoJZKlikN1+ff+8PE1Tk1Nsfp5q8ksXZRlDpR8sq9FpGonUybxvAxxCyM9g4ZAfzY2TPtwiXVWT5BL8apO60sXGx3R+rU4UtDxsHG6WecPPkKq22m/IM2ifOOxV6fm6qbJdIRTNDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CY1k08bi; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a097cc08d5so18373465ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 07:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1768319255; x=1768924055; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V4E29K8NtthQbL8xaHlQbXgCcFMaQ8I/QIsll/4mAVI=;
-        b=FQr1o3V3GYG4p4qx++bpVUlRJTWV8ZYc9sxMWwdqSPDL/6ha/VN3HAX1xh/TjUo7xr
-         M4yGr4/tJM9rVkL4WoJWcUjGaMZOc1BKGr+/8qwwl2v21tqL6O4gKGnlH9hpRXHNCRyl
-         klaMkli5wWg5TJIAKtPhKY/nZZtTRu93rpYYf+YktxD1CVKRj55YAUrYpvrR19XGen1v
-         sP6sQVxWzAa8ojk8LXMuDvSNSTx9ctRxYAF2u7beseJNEyLnoeaJYcA+1QfmSdnDoumS
-         QByVvsNIaSGGfsBoowEpYndH9v10j8RTr5iZDSApXF3RpqJM9KkPhlf9WdHcGdAIwRDg
-         u3TA==
+        d=gmail.com; s=20230601; t=1768319276; x=1768924076; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wLG7e56KLfl4STV1yAqf2cE5bA5JMQ4NSrfF5cK6YNo=;
+        b=CY1k08biKogu1s5zKHTka3lwIpfTOAocNxhVZ30OGimvLE43EUtJSrftEw+M717BD8
+         rxWaGrQ+OykSvPWhmtzyNc9Q2CuLZwiGvo2kb1owRfB173rdVjPhlK68xdXO/ypNka3S
+         pNWxPDW3GsJuhuR0xTxeA14i1rXpmojIRiYOlEN3VEnFvLc7arl7PkWuOwkp3eDjtjTA
+         klMwXJRJmxa4thgnZjg1l4b6U3KbFO+2gcCkNcdct+GeX65sKIpcZhai488ck00sMSer
+         xpt/hDS4A5+95W/DDpa+s55P5eeMn4odpI5AFUysLU4MeFtpTNomK7RasGgnVYZ+ytdG
+         29eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768319255; x=1768924055;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V4E29K8NtthQbL8xaHlQbXgCcFMaQ8I/QIsll/4mAVI=;
-        b=S5C9k7wcafYwdCDZD6Tc4CpKrfT4HAvxV5Py117gdoF4tn0h18cvcpKJugaf+hN//r
-         umD+IQtOp632c0aVK+XWkXEhET+lpHn71Czx/GLRlkjccD95JNrrI4La1oHOcJoEzhS7
-         bhSJjbOORw1mr4U6GQWr3IAlMOhUudjOSLzwaz5Au+k3sIWuQ5oVkYTuMbEh+92sZWrX
-         ngA9FUccEgKp2Tci6xYZDBbID0+xDCtEsdtm4FrG4CZo1PMCIY8JscD3CN7xP975QQIl
-         EMO69KtGnt4qIQ0I4XZXB+myIFu+piBcEOCykCA4Y2C2zJzDVsJOT8QtwsjhkpIAXF8S
-         sNsw==
-X-Gm-Message-State: AOJu0YzEy5aj6Dj7lxRCCYe9uDa8aW1ULfYKRosb+kG8XaSqo0c10kJ3
-	BP29aRfj0AkUa2M1GLDzwLdCf3hmK+mtokrTfqU7D6Da+zqDSiFJa5e8HbyigMyfkCOR6vTl8dp
-	w4Ps=
-X-Gm-Gg: AY/fxX4SoPgos3+gV9+NjvxdBZnFsUH/ZDquAUpn88vZVOuFF4trwR7CDyqz6Beaurw
-	HJ3b2CELUZRxmRENhx3O+pwKCUQWj/2o2uzjryXNQpdggsnh0XO0iz8C/wj7TUfRDPTih3eTy2N
-	Dwp8oFIfriXfsg3R1RUFpFGDJnyri+hiptdCr3awhsE4TQHlYgFqZKwsUOMGPwtjA9/2dDP8Lpz
-	cJ0nCLIo2QiYVY6N078w87suACgeOqugLWJm5MSv2PufPVNF/oQrNRcGPD5dSJMY8YHu+nOatO5
-	D8tVHNzunZ+/leZz42n/GhiUGuOS2hDgLcOaE7M4ztnle1xm2cgQ8Zc8AhqdaNWtu7+G4HfF456
-	vPX7dwd9NsJv+msp1Xzbn48tUwotYPcAfh4bjPK2peo1gCvsi7gvTTJNZz6Tzp3q2gmYLO5rHdU
-	WAQdBgjO5FAft0
-X-Google-Smtp-Source: AGHT+IFhjbjTMA3UG1+LzK0VTQpsT0ybcHnnkXUDGy3gkqerhp+UUzpz/yX8uxO8J69O4bodtuJvPw==
-X-Received: by 2002:a05:622a:20a:b0:4ee:24e8:c9a1 with SMTP id d75a77b69052e-4ffb499a89cmr245461151cf.44.1768319254559;
-        Tue, 13 Jan 2026 07:47:34 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::7a0a])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ffa8d3d92esm149003291cf.5.2026.01.13.07.47.33
+        d=1e100.net; s=20230601; t=1768319276; x=1768924076;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wLG7e56KLfl4STV1yAqf2cE5bA5JMQ4NSrfF5cK6YNo=;
+        b=VH4H5v/9kj2uLfwoOn/g5xtzBAQjpzDWTp5Urv2YhJ5VKB6ScVXAEggp7X4wXnjec5
+         xnQSla2s8//AwocIMwXVbeOb8YPtXptRox4BH8fM0UH9qVvFqPGdBKbDPApLb4KO22P7
+         RMcxUdFR1n9yYEI3LNpt6ZAPuoyrutpS0XCL1AuxO26cXtDnmIhM5ozsN8t/mMKLHkaw
+         IMxBtGXuVf76bHqmDDBEe8d0U6OgfNCnApAOmA5P2DhKyNDSyYbpXW+54ZoQoOJAmpo0
+         N6QOfFUtjNgxIKuvETr1pUtLYF863lx1jq8VqDfZpksXLjQd0t6WMIYMKVIOQ1tSaU9G
+         oJ4w==
+X-Forwarded-Encrypted: i=1; AJvYcCU1AJr76KZRi96AlPg+1C1U0Mc49VMu2twlA18Wm30XAyvLqE6OLK4ewd5plxWjBFPZWMTjfVarlAk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw069V8jaYYeqUhQyGuMqoRnVaaAouy0hVNRhxaYbtkVfILt3mD
+	uxE51s5qTvROxURFDRt03iz+GXAy1W1MWMB/9OzzRj8dfBfszYm+ze1Z
+X-Gm-Gg: AY/fxX6uXw/1dNGc+iXTyVeWfNtDk7KIPAqLOXkFxc0jrE4ahMkwQ6oHtGsBKDRAUJx
+	K93EEE7KSHB01fDhH4wpL3tSUdUiMqkNoTlOsZuX1SS7trISVtzAHyr2gBkv2+eZPUlVbSwTdzM
+	rAoSl9+t/FvYVhlkQ5CrqEoCprXlXa7yzLj5mEil3cKhsntNpPDH0zJstDOmu7SRny9Q62j390I
+	PZejgtEXuB6xtwJ0eDH6O+jiqnwc6F5DZSXNEE8eniyqKuzJfCYzFSrTYDxENmsz2o/73vxcJ1Z
+	+TC+qHS1A+fzGOlcwKbEGZpNj+Jz8uJz2xL4cQVd7KX2NC3orCbZcK3jTcEVKlqcVru+TRXS0Gh
+	WiElTUN+wDHbYZovfDR2LdEtiL3HImPsLLvUGUXrReBwtjbTUn4Jx2KYuE8juFfUODLcJPUV2od
+	YmZjHZCem7Tg==
+X-Google-Smtp-Source: AGHT+IGkRjFEL6W2YjWNd0yft2/9hiWeqiW+eqseTZoOG4oidzGNAwJjkYPG/10sw7ofC5Xz3yUawg==
+X-Received: by 2002:a05:6a20:c997:b0:35d:3476:d255 with SMTP id adf61e73a8af0-3898fa065a6mr14797074637.4.1768319275979;
+        Tue, 13 Jan 2026 07:47:55 -0800 (PST)
+Received: from MiniPC.. ([47.246.98.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81f44a94e98sm5663498b3a.69.2026.01.13.07.47.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 07:47:34 -0800 (PST)
-Date: Tue, 13 Jan 2026 10:47:31 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Diederik de Haas <diederik@cknow-tech.com>
-Cc: USB mailing list <linux-usb@vger.kernel.org>,
-	linux-rockchip@lists.infradead.org
-Subject: Re: Track down EHCI and companion errors on rk3xxx systems
-Message-ID: <38365c37-b125-4ffb-8ce7-bd4f3f7596ba@rowland.harvard.edu>
-References: <073879e4-aea8-4625-bc83-c4b6dd9c9231@rowland.harvard.edu>
- <DFNI1Q9N7GC6.20PN0RG9LRAQF@cknow-tech.com>
+        Tue, 13 Jan 2026 07:47:55 -0800 (PST)
+From: weipeng <coderlogicwei@gmail.com>
+To: syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com,
+	oneukum@suse.com
+Cc: anna-maria@linutronix.de,
+	frederic@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	tglx@linutronix.de
+Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
+Date: Tue, 13 Jan 2026 23:47:48 +0800
+Message-Id: <20260113154748.341096-1-coderlogicwei@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
+References: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DFNI1Q9N7GC6.20PN0RG9LRAQF@cknow-tech.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 13, 2026 at 02:35:21PM +0100, Diederik de Haas wrote:
-> Got my (gtkgreet) login screen and plugged in my keyboard adapter in the
-> *bottom* USB2 port ... and that did NOT work.
-> 
-> Logged in via SSH and noticed it was indeed not listed in ``lsusb``.
-> Checked ``lsmod`` and ``dmesg | tail`` ... and noticed the kernel *did*
-> notice plugging in the keyboard adapter, so did ``lsusb`` *again* and
-> then it *did* list my keyboard adapter.
-> I did NOT employ my usual 'workaround' by plugging it into a USB3 port.
-> 
-> So it may be that it would have always worked ... eventually ... if I
-> had just waited long enough?
-> While 'dmesg' seems to suggest it took little over 0.5 seconds, I'm
-> really not that fast ;-P (or that impatient)
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
-Is this repeatable?
-
-If it is, try doing the following.  After a fresh boot, log in via SSH 
-and turn on dynamic debugging for USB:
-
-	echo module usbcore =p >/sys/kernel/debug/dynamic_debug/control
-
-and clear the kernel's log buffer:
-
-	dmesg -C
-
-Then plug the keyboard adapter into the non-working bottom USB2 port and 
-wait a short time (say, 30 seconds).
-
-Then get a copy of the dmesg output and post it here.  Also, check to 
-see whether the keyboard is working.  In fact, you should check the 
-keyboard during that 30-second wait, so you will know just how long the 
-delay was before it started working.
-
-Another thing you can try is to force the necessary module(s) to load 
-before plugging in the keyboard adapter.  For now, a simple modprobe 
-issued over the SSH connection will do the job.  If this turns out to 
-help, you can configure modprobe to load the module(s) automatically at 
-boot time.
-
-Alan Stern
+diff --git a/drivers/i2c/busses/i2c-tiny-usb.c b/drivers/i2c/busses/i2c-tiny-usb.c
+index 57dfe5f1a7d9..30679c2b787b 100644
+--- a/drivers/i2c/busses/i2c-tiny-usb.c
++++ b/drivers/i2c/busses/i2c-tiny-usb.c
+@@ -12,6 +12,7 @@
+ #include <linux/slab.h>
+ #include <linux/string_choices.h>
+ #include <linux/types.h>
++#include <linux/workqueue.h>
+ 
+ /* include interfaces to usb layer */
+ #include <linux/usb.h>
+@@ -172,6 +173,9 @@ struct i2c_tiny_usb {
+ 	struct usb_device *usb_dev; /* the usb device for this device */
+ 	struct usb_interface *interface; /* the interface for this device */
+ 	struct i2c_adapter adapter; /* i2c related things */
++	bool disconnected; /* set to true on disconnect */
++	struct work_struct release_work; /* work struct to release the adapter */
++	struct mutex usb_lock; /* lock for usb operations */
+ };
+ 
+ static int usb_read(struct i2c_adapter *adapter, int cmd,
+@@ -184,11 +188,20 @@ static int usb_read(struct i2c_adapter *adapter, int cmd,
+ 	if (!dmadata)
+ 		return -ENOMEM;
+ 
++	mutex_lock(&dev->usb_lock);
++	if (dev->disconnected) {
++		mutex_unlock(&dev->usb_lock);
++		kfree(dmadata);
++		return -ENODEV;
++	}
++
+ 	/* do control transfer */
+ 	ret = usb_control_msg(dev->usb_dev, usb_rcvctrlpipe(dev->usb_dev, 0),
+ 			       cmd, USB_TYPE_VENDOR | USB_RECIP_INTERFACE |
+ 			       USB_DIR_IN, value, index, dmadata, len, 2000);
+ 
++	mutex_unlock(&dev->usb_lock);
++
+ 	memcpy(data, dmadata, len);
+ 	kfree(dmadata);
+ 	return ret;
+@@ -204,11 +217,20 @@ static int usb_write(struct i2c_adapter *adapter, int cmd,
+ 	if (!dmadata)
+ 		return -ENOMEM;
+ 
++	mutex_lock(&dev->usb_lock);
++	if (dev->disconnected) {
++		mutex_unlock(&dev->usb_lock);
++		kfree(dmadata);
++		return -ENODEV;
++	}
++
+ 	/* do control transfer */
+ 	ret = usb_control_msg(dev->usb_dev, usb_sndctrlpipe(dev->usb_dev, 0),
+ 			       cmd, USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
+ 			       value, index, dmadata, len, 2000);
+ 
++	mutex_unlock(&dev->usb_lock);
++
+ 	kfree(dmadata);
+ 	return ret;
+ }
+@@ -219,6 +241,15 @@ static void i2c_tiny_usb_free(struct i2c_tiny_usb *dev)
+ 	kfree(dev);
+ }
+ 
++static void i2c_tiny_usb_release(struct work_struct *work)
++{
++	struct i2c_tiny_usb *dev = container_of(work, struct i2c_tiny_usb,
++					       release_work);
++
++	i2c_del_adapter(&dev->adapter);
++	i2c_tiny_usb_free(dev);
++}
++
+ static int i2c_tiny_usb_probe(struct usb_interface *interface,
+ 			      const struct usb_device_id *id)
+ {
+@@ -239,6 +270,7 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
+ 
+ 	dev->usb_dev = usb_get_dev(interface_to_usbdev(interface));
+ 	dev->interface = interface;
++	mutex_init(&dev->usb_lock);
+ 
+ 	/* save our data pointer in this interface device */
+ 	usb_set_intfdata(interface, dev);
+@@ -268,6 +300,8 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
+ 
+ 	dev->adapter.dev.parent = &dev->interface->dev;
+ 
++	INIT_WORK(&dev->release_work, i2c_tiny_usb_release);
++
+ 	/* and finally attach to i2c layer */
+ 	i2c_add_adapter(&dev->adapter);
+ 
+@@ -287,9 +321,12 @@ static void i2c_tiny_usb_disconnect(struct usb_interface *interface)
+ {
+ 	struct i2c_tiny_usb *dev = usb_get_intfdata(interface);
+ 
+-	i2c_del_adapter(&dev->adapter);
++	mutex_lock(&dev->usb_lock);
+ 	usb_set_intfdata(interface, NULL);
+-	i2c_tiny_usb_free(dev);
++	dev->disconnected = true;
++	mutex_unlock(&dev->usb_lock);
++
++	queue_work(system_long_wq, &dev->release_work);
+ 
+ 	dev_dbg(&interface->dev, "disconnected\n");
+ }
 
