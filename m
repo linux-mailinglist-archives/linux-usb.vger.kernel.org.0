@@ -1,156 +1,109 @@
-Return-Path: <linux-usb+bounces-32268-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32269-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D261D191A4
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 14:30:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95C29D191D7
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 14:35:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 36B5F30173AA
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 13:30:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9760E3018315
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 13:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC92438FF13;
-	Tue, 13 Jan 2026 13:30:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52C8346AFC;
+	Tue, 13 Jan 2026 13:35:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="bouw3uEn"
+	dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b="GM2dxYRg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5554259C9C;
-	Tue, 13 Jan 2026 13:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFFD277016
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 13:35:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768311018; cv=none; b=OB+j/8cbDIanfEEqk35OrVMc+EQeZudNB/0l8ZkogAouMT02K1IldqOm1kQ56ScEMriRTC3cTaVhyZZzJKUO3IFVCCUmmW8RxgG1Wk5ORc7ogtohddgvknSci/8ReWyPRjzXoE4P5RtIH6ZtQ/X4WBpbVUqAd5VyKRHib8/gEr4=
+	t=1768311332; cv=none; b=dOVb7fAahVUXagJ4IRX45nXg1bantkNSrPewpNKZDvBEP4H8IcuOWNI41yoBkh0eX0f/LxGJKjm2+rdh6tVCKFmSL6s7EBwwQl7HK4sug7vnqjfzfp4vkA4pO6PN1JmMoy/ZP0JI9Jc60wsakh0oyxfXtqczX2E/1V5NxX5x4ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768311018; c=relaxed/simple;
-	bh=4Vm+bNr65RTJVIIxCsU16vb3APhKDgGu8wOg6Irr2sg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zyz90iPAgj+tTdkdmwRh4rV0EUpq/1uw1HeHKBH0SCvOOTRUR1bmvQqissNMHzXvqh7gd4yQpP7Nhn2PpxWgKRHKz2px5g3ZskdPMVUMfBkC1GglnPmM0gAm63ZC2CIEaNXl85AHJT+Dv/IRZQjDEYeC3VgL1GCmvRrC+W/deYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=bouw3uEn; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id D16B860020E1;
-	Tue, 13 Jan 2026 13:30:09 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id HXHwJlX5thU1; Tue, 13 Jan 2026 13:30:07 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 07F1F6001428;
-	Tue, 13 Jan 2026 13:30:07 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1768311007;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TwarZgYPrLABi/etu50xEE5OV50XboMHuJPg3X2erGw=;
-	b=bouw3uEnjuFfI0PXt/XNA54iHtwyIC06SUYhoz2Brhv36PBaQEfQl0rm5TRaNdd4YXzAtA
-	HdLegFh8MXdxtSXTiKiPCcWtHymlr3h5kRaeUAswoiIVOkcrjTVjl+bY33dvwMSuVMfn0+
-	4tQjJhHo4MtlnJ0F8PW35Uo5KlrmF2/ArGEM2t/SdNYN8PYfqKFX75Qeb1TYObdTyYIDnk
-	6PRj8/6XbBuML6FK8eNh2OWLp6pZYyfVl61Mt37Ho7mhGP2AVX+Q7oiA78pstwLTDEmMbA
-	e5ANvgIlYXfDh/kFScXhL5ZBsxbBFDyQWA4Px4stjcVCICYvn+cNOhAyJoU1Ug==
-Received: from [192.168.2.110] (unknown [148.63.39.39])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 0443836006F;
-	Tue, 13 Jan 2026 13:30:05 +0000 (WET)
-Message-ID: <dcfe4159-48ad-4b28-ae3a-388e6d0f229a@tecnico.ulisboa.pt>
-Date: Tue, 13 Jan 2026 13:30:02 +0000
+	s=arc-20240116; t=1768311332; c=relaxed/simple;
+	bh=Xu+48D12Ip8cxUcIsq3mQuwCnmB/jj1Cb1xnrNfeWG0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=LWA7zL4AMuDSPwxIJJhktkhgf8NMwEMH2HqBttQpIm6fbPcsU6TdyBzMGtd+ALrmejqAMSSgyMVgPrcUOsw4DS6/AHpSx3/6KX/7uzzGQAy+7ElB75OGR6TBbmf7Ee4Amxw/mLyfQxHR3ejxG4Dg8J60b94n0vYpvvQSHV97qlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com; spf=pass smtp.mailfrom=cknow-tech.com; dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b=GM2dxYRg; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow-tech.com
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] phy: tegra: xusb: Fix USB2 port regulator disable
- logic
-To: Vinod Koul <vkoul@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt>
- <20251204-diogo-tegra_phy-v1-2-51a2016d0be8@tecnico.ulisboa.pt>
- <aUuV2ZYKmM_aYgTv@vaman>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-In-Reply-To: <aUuV2ZYKmM_aYgTv@vaman>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow-tech.com;
+	s=key1; t=1768311325;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CNg4cyT1A0ryDNTVCyPuutdiB+nl1aw6BVDcivrghy0=;
+	b=GM2dxYRgIHXk5rZMhppWsCyjt8xs9WYbjKprfP4glFV4bFYvUA1t/l2gn7RXXWJ6sQNdxE
+	gXf3zXWVi2SQfCzL8Gm9CohcNZ878PPsd5j767Xzp7CbhmzcXTq+lJwOskc1TTo1bLTSw3
+	Ec5/Hm/YnCJ4/t1lxo+DYAkADgs0dNLfKgqV1V7ZsbnB8YHb5YBpr1oIrx8Xy4bQOTSKuu
+	5apfcyVYwKhvAOSSJQ8ee0zqIo2yGOg9RRm1Xk6wfB8F+INOhyGG1JKnZPPYA11m7hLKU5
+	naJUdgDXB3YbX+w7kxx+J+ZhPd8FO3f7huV2AjL0uhH+rORrFsHju8ZEDkTuXA==
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 13 Jan 2026 14:35:21 +0100
+Message-Id: <DFNI1Q9N7GC6.20PN0RG9LRAQF@cknow-tech.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Diederik de Haas" <diederik@cknow-tech.com>
+To: "Alan Stern" <stern@rowland.harvard.edu>
+Cc: "USB mailing list" <linux-usb@vger.kernel.org>,
+ <linux-rockchip@lists.infradead.org>
+Subject: Re: Track down EHCI and companion errors on rk3xxx systems
+References: <073879e4-aea8-4625-bc83-c4b6dd9c9231@rowland.harvard.edu>
+In-Reply-To: <073879e4-aea8-4625-bc83-c4b6dd9c9231@rowland.harvard.edu>
+X-Migadu-Flow: FLOW_OUT
 
+On Sat Jan 3, 2026 at 5:52 PM CET, Alan Stern wrote:
+> On Sat, Jan 03, 2026 at 12:00:13PM +0100, Diederik de Haas wrote:
+>> On Wed Dec 31, 2025 at 7:09 PM CET, Alan Stern wrote:
+>> > I can't say anything specific about your systems without a lot more=20
+>> > information.  However, I suspect that any problems you are running int=
+o=20
+>> > are not related to that warning.
+>>=20
+>> What kind of information do you need?
+>
+> We can start with the output from "lsusb -t" as well as the dmesg log=20
+> from a boot in which something (a USB-2 port, for example) didn't work. =
+=20
+> If the log shows something going wrong when you plugged in a device=20
+> after boot, explain what you did, what happened, and what was wrong.
+>
+> For now, concentrate on just a single system.
 
+I was almost ready to declare 'issue fixed' when I actually did notice
+the issue on a Quartz64-B (RK3566). For 'reasons', that may not be the
+best test subject. Then I was preparing to test some media patches and
+prepared my Quartz64-A (also RK3566), which is usually online 24/7.
 
-On 12/24/25 07:27, Vinod Koul wrote:
-> On 04-12-25, 21:27, Diogo Ivo wrote:
->> The USB2 PHY mode handling on Tegra210 incorrectly relied on
->> regulator_is_enabled() when determining whether the VBUS supply should
->> be disabled during role changes. This is because regulator_is_enabled()
->> reports exactly what is states and not if there is an unbalanced number
->> of calls between regulator_enable() and regulator_disable(). For
->> example, regulator_is_enabled() always reports true on a fixed-regulator
->> with no enable gpio, which is the case on the Pixel C.
->>
->> This then leads to the PHY driver wrongfully calling regulator_disable()
->> when transitioning from USB_ROLE_DEVICE to USB_ROLE_NONE since the driver
->> did not previously call the corresponding regulator_enable().
->>
->> Fix this by keeping track of the current role and updating the logic to
->> disable the regulator only when the previous role was USB_ROLE_HOST.
->>
->> While at it fix a small typo in a comment.
-> 
-> Never mix a patch with something else please. More imp if it is fix
-> which will go to rcX. Please send a different patch for typo
+Plugged in my keyboard adapter in the top USB2 port and that worked.
+Installed some packages to make the graphical environment match that of
+my other test devices and rebooted.
+Got my (gtkgreet) login screen and plugged in my keyboard adapter in the
+*bottom* USB2 port ... and that did NOT work.
 
-Ok, will split for v2.
+Logged in via SSH and noticed it was indeed not listed in ``lsusb``.
+Checked ``lsmod`` and ``dmesg | tail`` ... and noticed the kernel *did*
+notice plugging in the keyboard adapter, so did ``lsusb`` *again* and
+then it *did* list my keyboard adapter.
+I did NOT employ my usual 'workaround' by plugging it into a USB3 port.
 
->> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
->> ---
->>   drivers/phy/tegra/xusb-tegra210.c | 5 +++--
->>   drivers/phy/tegra/xusb.h          | 1 +
->>   2 files changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
->> index 3409924498e9..63ad57d95514 100644
->> --- a/drivers/phy/tegra/xusb-tegra210.c
->> +++ b/drivers/phy/tegra/xusb-tegra210.c
->> @@ -1934,9 +1934,9 @@ static int tegra210_usb2_phy_set_mode(struct phy *phy, enum phy_mode mode,
->>   			/*
->>   			 * When port is peripheral only or role transitions to
->>   			 * USB_ROLE_NONE from USB_ROLE_DEVICE, regulator is not
->> -			 * be enabled.
->> +			 * enabled.
->>   			 */
->> -			if (regulator_is_enabled(port->supply))
->> +			if (port->role == USB_ROLE_HOST)
->>   				regulator_disable(port->supply);
->>   
->>   			tegra210_xusb_padctl_id_override(padctl, false);
->> @@ -1944,6 +1944,7 @@ static int tegra210_usb2_phy_set_mode(struct phy *phy, enum phy_mode mode,
->>   		}
->>   	}
->>   
->> +	port->role = submode;
->>   	mutex_unlock(&padctl->lock);
->>   
->>   	return err;
->> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
->> index d2b5f9565132..273af147dfd3 100644
->> --- a/drivers/phy/tegra/xusb.h
->> +++ b/drivers/phy/tegra/xusb.h
->> @@ -317,6 +317,7 @@ struct tegra_xusb_usb2_port {
->>   	enum usb_dr_mode mode;
->>   	bool internal;
->>   	int usb3_port_fake;
->> +	enum usb_role role;
->>   };
-> 
-> Jonathan can we get some t-b for these two patches
-> 
+So it may be that it would have always worked ... eventually ... if I
+had just waited long enough?
+While 'dmesg' seems to suggest it took little over 0.5 seconds, I'm
+really not that fast ;-P (or that impatient)
+
+Full log:
+https://paste.sr.ht/~diederik/34847f5c6873f1fc8d32eeb79f2bf2ff9dd4570c
+
+Cheers,
+  Diederik
 
