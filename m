@@ -1,85 +1,168 @@
-Return-Path: <linux-usb+bounces-32220-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32221-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5D07D1701C
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 08:28:26 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A79AFD170D6
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 08:41:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0D4F0301F240
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 07:28:10 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id F13793019B83
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 07:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11D7336A017;
-	Tue, 13 Jan 2026 07:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E697F36999A;
+	Tue, 13 Jan 2026 07:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pcRZhtst"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75349369960
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 07:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DA31BC08F;
+	Tue, 13 Jan 2026 07:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768289288; cv=none; b=Tlmye+aoWT+IzErP0z7aqsbLwOCxtOSQW10WOgH9IU2c6TigB3h8fPN3qsUMu4LdTYef9BDsVUGjV6SyHNmJ/jt7Sb1oCty4hjoJqj8JLJANO2hgFGccWAmwkPybCxWj5hnV4FEuJWD+QK4BYKoFhPJ3BgV4H1Krvij4HjqmcIo=
+	t=1768290080; cv=none; b=IFwGAwJ4i9xv98djmMIOBnY8PB36+6xnDtjDknbj99sK9bGe5d5KL9iqBGOSnFlQNL4mqRdEQMx0SMEdwpzLNB0GoeN0AA2Su30PUu4pbV6js7gJUhBw5ALEnEOBRe/6B620vHv260KjxxYlRRRdMROatAloUSPG5jfN8PxLjHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768289288; c=relaxed/simple;
-	bh=/Ux056CZ0FaMR7HHoShFpyBbqOi+bPQtp6Dh3/p8d7Q=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=P4M75+gfLrL2bGjdPzh2w7Q6a67eT78CrtlDK8e2pT0Uv/w8iDz/Oj3KLakRHix9Jb6ahDtz9K5yRTj2fTJzSm7v9fgz6YCSMq0cId/f0u/KypAvbJAphR5aOTetJHHBxg11fH/aSJKmoJIERbPQrq4h1QG+U5qysZG4lKq82cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-7c76977192eso34269666a34.3
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 23:28:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768289286; x=1768894086;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ycbL0oMl9i40WiR4rER3tsf/nDkOQd+2vK/NCzu2HUw=;
-        b=FxI8r63iRDGoPQ/Z+s6fZJ6s0rpMmLbUgN13rkGTyqHhDXVX86CwFTk+GOaO/P58TA
-         e61OKPmxiIZFnnFuZ9KUb6N7+zdALBUDeh+1KTbjViRZibKCQtziPoJnennO/UiOdyLe
-         tMabaUb29Jea3ZiS9u1fhcotiYjx8zcWpqLREzs402NYN+Wlv/y0a1OQALxs8Jptq8xc
-         Y6nUxE6rSnEjVyW48/KIYQLg3f1Yz04SSqFu0YXb4SYbqNHLkR3yLrgFCmKPHm08Lmu7
-         o1ZFGs3kP0yF4mj3ZETPYoUwCWrnIZEs8TRTCDU7Q1EeZ3igweuaM4NNGwa8NtypLNrX
-         s6RQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFVb6Gh+GXRJUAn1srOV/pQQ579y4h3J/xKnDeEY5k5d/jWZD+RS/+2TqSmuCDxwFpmq5lbhqGLPA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMPkqRRnCFEn2KIv5wOVH4afcj0I9wa8ufoCZ0agNbU73eAWkc
-	1axrn5Zx5MV3oKAk1A4/Bf0P1wf/8rWRsuYIF7LJ7KoUVsku19nBCaE7rdfzh+GLVYhayx8Juxo
-	nOlMcEHYb4k+s2aOV2JPonn9c0bTYezUXWq6fxNz9roArfoBB7xtmixDuDdI=
-X-Google-Smtp-Source: AGHT+IGz9T7ayMeFSdUTPebFup/akvO5avdj7vr+v4W/0C0fJ1CqxUtFF2s82TkPAdAb6dxCckogqZXO1blHOi5GBZflRfOztxw0
+	s=arc-20240116; t=1768290080; c=relaxed/simple;
+	bh=81HjT9+8N+O6Gr1++xyqf2PHHjPaLODnq0PKKKCxY30=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z6D3YOeUg+U1a1wj1XtA52dX6lyCdGDuiyjkD2u2gfvYJBMsgYvMMJH4L+0Wo3SNHhh3dd2AzjZcHMfb7/0nw1YCLryvk2V6bJqm8m8zg5qetsoGd6AkKmUJpK4vx5QIZqDS816TyiYvfFXc2v0tpmFMZNZ92TeGeMcMZ9vloEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pcRZhtst; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E5A5C116C6;
+	Tue, 13 Jan 2026 07:41:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768290079;
+	bh=81HjT9+8N+O6Gr1++xyqf2PHHjPaLODnq0PKKKCxY30=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=pcRZhtstZvUuvOptugh4Q3/Fuah9diETRW4laC1ty0aa1mD0ICVe42Hy23qx9SVKd
+	 +UoWycQZgkO8Z5Umj7MS0zO5RfvzagBNHvuMJwaJwG9Dd173SLv4rsDBnvGMdcwgb2
+	 uDGrqhgv0pXFOzFFFCvpDVxPI4NPFBsBZrYLn5TJPMQRT/PZ2pSEyHz8P2rq5m/WEI
+	 8dlaC+aWUIFZnnHjq29a3nrXVCfRyvRC+j+UJrU33+L88cVcjKmAozUJFoexHs+tcY
+	 4EqofYZl+MxlAnPmcW9gDoIw26Q2eKaZRR//0usKTBG1oipcP+7qX9hLKneqioCddT
+	 ECJccb1BK2E8A==
+Message-ID: <90011b58-3c12-45ec-b64f-b3847d9a3e16@kernel.org>
+Date: Tue, 13 Jan 2026 08:41:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:168e:b0:65f:6601:b368 with SMTP id
- 006d021491bc7-65f6601cb39mr7644487eaf.49.1768289286406; Mon, 12 Jan 2026
- 23:28:06 -0800 (PST)
-Date: Mon, 12 Jan 2026 23:28:06 -0800
-In-Reply-To: <20260113062537.4170377-1-coderlogicwei@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6965f406.050a0220.38aacd.0009.GAE@google.com>
-Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
-From: syzbot <syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com>
-To: anna-maria@linutronix.de, coderlogicwei@gmail.com, frederic@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/3] dt-bindings: usb: Add binding for WCH CH334/CH335
+ hub controller
+To: Chaoyi Chen <chaoyi.chen@rock-chips.com>, Chaoyi Chen <kernel@airkyi.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Quentin Schulz <quentin.schulz@cherry.de>, Jonas Karlman <jonas@kwiboo.se>,
+ Hsun Lai <i@chainsx.cn>, John Clark <inindev@gmail.com>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Dragan Simic <dsimic@manjaro.org>,
+ Michael Riesch <michael.riesch@collabora.com>,
+ Peter Robinson <pbrobinson@gmail.com>, Alexey Charkov <alchark@gmail.com>,
+ Shawn Lin <shawn.lin@rock-chips.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Andy Yan <andy.yan@rock-chips.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20260112022823.91-1-kernel@airkyi.com>
+ <20260112022823.91-2-kernel@airkyi.com>
+ <20260112-lively-hallowed-beetle-fc15b2@quoll>
+ <1515a445-576a-4833-a604-c31062f7d3fa@rock-chips.com>
+ <b4eb4ab6-6fde-4c01-8069-470545ffdac4@kernel.org>
+ <568b9e25-bf96-4e78-9af0-4791cbb90a56@rock-chips.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <568b9e25-bf96-4e78-9af0-4791cbb90a56@rock-chips.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On 13/01/2026 04:27, Chaoyi Chen wrote:
+> Hi Krzysztof,
+> 
+> On 1/12/2026 10:28 PM, Krzysztof Kozlowski wrote:
+>> On 12/01/2026 09:59, Chaoyi Chen wrote:
+>>>>> +required:
+>>>>> +  - compatible
+>>>>> +  - reg
+>>>>> +
+>>>>> +additionalProperties: false
+>>>>> +
+>>>>> +examples:
+>>>>> +  - |
+>>>>> +    #include <dt-bindings/gpio/gpio.h>
+>>>>> +    usb {
+>>>>> +        dr_mode = "host";
+>>
+>> One more thing - drop above line.
+>>
+> 
+> Will fix in next version.
+> 
+>>>>> +        #address-cells = <1>;
+>>>>> +        #size-cells = <0>;
+>>>>> +
+>>>>> +        hub: hub@1 {
+>>>>> +            compatible = "usb1a86,8091";
+>>>>> +            reg = <1>;
+>>>>> +            reset-gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
+>>>>
+>>>> Are you sure?
+>>>
+>>> I guess what you're concerned about here is the polarity? 
+>>> If that's the case, then there's no problem.
+>>
+>> Yes, I was wondering whether polarity is set correctly.
+> 
+> Yes, it is active-low, so during normal operation it should be set to high.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+Then it is wrong.
 
-failed to checkout kernel repo git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/mater: failed to run ["git" "fetch" "--force" "f569e972c8e9057ee9c286220c83a480ebf30cc5" "mater"]: exit status 128
+> 
 
 
-Tested on:
-
-commit:         [unknown 
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git mater
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a11e0f726bfb6765
-dashboard link: https://syzkaller.appspot.com/bug?extid=30b78308ba7e64647ff8
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15e7a99a580000
-
+Best regards,
+Krzysztof
 
