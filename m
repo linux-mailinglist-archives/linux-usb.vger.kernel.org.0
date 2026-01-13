@@ -1,109 +1,176 @@
-Return-Path: <linux-usb+bounces-32269-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32270-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C29D191D7
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 14:35:37 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FAC4D19431
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:03:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9760E3018315
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 13:35:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 42B1A306BC50
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 13:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52C8346AFC;
-	Tue, 13 Jan 2026 13:35:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E629939282C;
+	Tue, 13 Jan 2026 13:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b="GM2dxYRg"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="zvfoV53a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFFD277016
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 13:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085D93921F0
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 13:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768311332; cv=none; b=dOVb7fAahVUXagJ4IRX45nXg1bantkNSrPewpNKZDvBEP4H8IcuOWNI41yoBkh0eX0f/LxGJKjm2+rdh6tVCKFmSL6s7EBwwQl7HK4sug7vnqjfzfp4vkA4pO6PN1JmMoy/ZP0JI9Jc60wsakh0oyxfXtqczX2E/1V5NxX5x4ao=
+	t=1768312659; cv=none; b=txmxV+KZfdoPJeojGb151A0dMVq2mxOjQeJQQAr/CJ4AnB8wCTuY4idRjpsnIIkJKnQ1KPWj9eH2BtfqPlge3BJtM4JPYAwxtEJJC3zYD9wTqsNHT+FDBlHuZBz+MG8IkMn1Q9ApB+31+F8Ac9it0hhzx3us6zjkPLcaCCWzWhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768311332; c=relaxed/simple;
-	bh=Xu+48D12Ip8cxUcIsq3mQuwCnmB/jj1Cb1xnrNfeWG0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=LWA7zL4AMuDSPwxIJJhktkhgf8NMwEMH2HqBttQpIm6fbPcsU6TdyBzMGtd+ALrmejqAMSSgyMVgPrcUOsw4DS6/AHpSx3/6KX/7uzzGQAy+7ElB75OGR6TBbmf7Ee4Amxw/mLyfQxHR3ejxG4Dg8J60b94n0vYpvvQSHV97qlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com; spf=pass smtp.mailfrom=cknow-tech.com; dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b=GM2dxYRg; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow-tech.com
+	s=arc-20240116; t=1768312659; c=relaxed/simple;
+	bh=yHQXt2lohILulwRHWO2PwdKgbtksvgC0OIilYDvkikI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U8Vkrrwc2gUZoE3OgN+Ce8Ay7RHdZ0trf9M+lMRBH4Qu/ODj/9pAGFfq+AxOo+/rvk6pklQrb3wgHlDzDnBCMQy734iJhMV8wyIioZelmfN6Sb2yQvnsN2+pDiarIuKkvQ/j1Wn8gGwTtI0TpejjlIG9MqdkNVxj2xogOnOwDE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=zvfoV53a; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-64b9b0b4d5dso15919407a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 05:57:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1768312655; x=1768917455; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZYgsGgBKZshEd3LQPmk39JcNw7m/fhIkjkE+xKR+bec=;
+        b=zvfoV53a8KKlvQ3d1JQNoqsn1R64meaL/N0gvJBVsP07IpubGxx2QfE84x4Z2+kbFb
+         0hLYvrdv4SXvbje0qJL0Ne6nG9Fm0EboVzJAYkZUYQ9YLVSaQzuc2aaTV6Xaw3fXr4u5
+         epRUQ8Rr1fmQuXUGhAgjyFhKoeU5fsg5c9fXZgvqcAaQm3999ZjhMx1Bh0O7IukctDtr
+         cxNCZsPNksEYEPV48GWIxa6MuU7QzPugngj62cv1/mZlpNlETWTREwFO8KHkhEamhwC4
+         prCUxmFrHMkgeYCQCIr0xyrmQWG7B2ZuuAVRPrT+1i5F97N3cJr9JI7d5M8HP9SZcOFn
+         Uf9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768312655; x=1768917455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZYgsGgBKZshEd3LQPmk39JcNw7m/fhIkjkE+xKR+bec=;
+        b=URlqAtgNfIK0FS8l/wEZ57FNiVi8ZJauFS0iPyieCdgL5gwB1U1jQPixAMcxBsjqfX
+         B83150lX3MEnGHD6CjlceV+JeOU2epGQPW9MWWCFAynlprsmbrrQY/NsLJSh35T4I0Qk
+         4fYnoijFMnCVCsFuKzmdivQe3SZUnvFkAT6rsoYdvgB/nm7P9HuVHMCs1rC7gv1uAACk
+         UoPaJ9RAS/+8Mk0EGQjGkEolpFaVWe9ZSwtjRGsU6ux8/9g5jz8c2R/B4JGAbEkmoRLh
+         RBlmO2gwwUx+6nYqRJSHlIQ+6o94D+8sVS29dBPrFPwZfd0s5Vzwz9FzJ6fRk3GNIMEZ
+         3ZUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWf4z5ZGVz+pX9d4pMXmHc4cywbNO2r077TRF6BsEPyFWIGBxn04ZrOB7NOjjmM73Il/bGlNygfu1I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkQbwWtZnMQRhz191nRyMpLyCpeervc2pJjfJGKKAZGaWXwptR
+	HcRMsAN8wLX77AuQYdRdbkSdC70dYVYFVbvSmIxTvwyyxeybQkuFRzXMczIltnXXMd98CzWjrbA
+	Cw0GlCjm/s+YxwwIglb1tVzS93Q4fSzqycygV86JGhQ==
+X-Gm-Gg: AY/fxX6rEpPWjGakRx4BJqHHlJkoOH/kejlci4JTRSOebJaTo6QZPwuBmgb1BhBJuNd
+	Xyk/Z/Dwe71ee01CpyiwCrw7QnYguNohYkPl6uJXa/88rtraDmptElo6N9wJmB5xOUEt4pO+dJ6
+	lk3esBE28Zo5ku4DIiyJd+no419ZM3MjNlP0CJ/8S4TU1aQRxVdCtEqlbWXbpJC/rop69uwRDxa
+	pnlr16zDdckIwmwNbP9uEVmSZbNQdU4MelgPL5j1vjNQL+D9FKSsKbuYpoYel4Lb2s3EnkBx/Ww
+	kcZx/t7ru0qbi3StiY7qLPwSTtaLxRb21k7pPSt6HAyiz3TwBQ==
+X-Google-Smtp-Source: AGHT+IHC69qajNN2R0Oc5VosMApQk8dB2K8/wIPuNuXO4ULHt0+4HajErsuy6Dkjt1+pDa9ixvBw3NRLu/Pa+AU8sC0=
+X-Received: by 2002:a05:6402:1e8c:b0:640:e75a:f95d with SMTP id
+ 4fb4d7f45d1cf-65097dfbd5bmr20646641a12.15.1768312655296; Tue, 13 Jan 2026
+ 05:57:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow-tech.com;
-	s=key1; t=1768311325;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CNg4cyT1A0ryDNTVCyPuutdiB+nl1aw6BVDcivrghy0=;
-	b=GM2dxYRgIHXk5rZMhppWsCyjt8xs9WYbjKprfP4glFV4bFYvUA1t/l2gn7RXXWJ6sQNdxE
-	gXf3zXWVi2SQfCzL8Gm9CohcNZ878PPsd5j767Xzp7CbhmzcXTq+lJwOskc1TTo1bLTSw3
-	Ec5/Hm/YnCJ4/t1lxo+DYAkADgs0dNLfKgqV1V7ZsbnB8YHb5YBpr1oIrx8Xy4bQOTSKuu
-	5apfcyVYwKhvAOSSJQ8ee0zqIo2yGOg9RRm1Xk6wfB8F+INOhyGG1JKnZPPYA11m7hLKU5
-	naJUdgDXB3YbX+w7kxx+J+ZhPd8FO3f7huV2AjL0uhH+rORrFsHju8ZEDkTuXA==
+MIME-Version: 1.0
+References: <20251229184004.571837-1-robert.marko@sartura.hr>
+ <20251229184004.571837-13-robert.marko@sartura.hr> <2cdac084-4924-4ca2-85d6-2e6d9bf284aa@tuxon.dev>
+In-Reply-To: <2cdac084-4924-4ca2-85d6-2e6d9bf284aa@tuxon.dev>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Tue, 13 Jan 2026 14:57:24 +0100
+X-Gm-Features: AZwV_Qh0sAc6Pa2O_93Ow3lA3FmFDgK6_SoYiCOhp74HuwfyLgAjJuCjbp6xbBo
+Message-ID: <CA+HBbNH4q8o-4Jb=hu7JgE4emxFxktFSLHdfY4J6gCDbYTpWUA@mail.gmail.com>
+Subject: Re: [PATCH v4 12/15] arm64: dts: microchip: add LAN969x clock header file
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
+	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
+	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
+	UNGLinuxDriver@microchip.com, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
+	richard.genoud@bootlin.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	broonie@kernel.org, lars.povlsen@microchip.com, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-usb@vger.kernel.org, luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 13 Jan 2026 14:35:21 +0100
-Message-Id: <DFNI1Q9N7GC6.20PN0RG9LRAQF@cknow-tech.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Diederik de Haas" <diederik@cknow-tech.com>
-To: "Alan Stern" <stern@rowland.harvard.edu>
-Cc: "USB mailing list" <linux-usb@vger.kernel.org>,
- <linux-rockchip@lists.infradead.org>
-Subject: Re: Track down EHCI and companion errors on rk3xxx systems
-References: <073879e4-aea8-4625-bc83-c4b6dd9c9231@rowland.harvard.edu>
-In-Reply-To: <073879e4-aea8-4625-bc83-c4b6dd9c9231@rowland.harvard.edu>
-X-Migadu-Flow: FLOW_OUT
 
-On Sat Jan 3, 2026 at 5:52 PM CET, Alan Stern wrote:
-> On Sat, Jan 03, 2026 at 12:00:13PM +0100, Diederik de Haas wrote:
->> On Wed Dec 31, 2025 at 7:09 PM CET, Alan Stern wrote:
->> > I can't say anything specific about your systems without a lot more=20
->> > information.  However, I suspect that any problems you are running int=
-o=20
->> > are not related to that warning.
->>=20
->> What kind of information do you need?
+On Sun, Jan 11, 2026 at 3:42=E2=80=AFPM claudiu beznea <claudiu.beznea@tuxo=
+n.dev> wrote:
 >
-> We can start with the output from "lsusb -t" as well as the dmesg log=20
-> from a boot in which something (a USB-2 port, for example) didn't work. =
-=20
-> If the log shows something going wrong when you plugged in a device=20
-> after boot, explain what you did, what happened, and what was wrong.
 >
-> For now, concentrate on just a single system.
+>
+> On 12/29/25 20:37, Robert Marko wrote:
+> > LAN969x uses hardware clock indexes, so document theses in a header to =
+make
+> > them humanly readable.
+> >
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> > Changes in v4:
+> > * Move clock indexes from dt-bindings to a DTS header
+> >
+> > Changes in v2:
+> > * Rename file to microchip,lan9691.h
+> >
+> >   arch/arm64/boot/dts/microchip/clk-lan9691.h | 24 ++++++++++++++++++++=
++
+> >   1 file changed, 24 insertions(+)
+> >   create mode 100644 arch/arm64/boot/dts/microchip/clk-lan9691.h
+> >
+> > diff --git a/arch/arm64/boot/dts/microchip/clk-lan9691.h b/arch/arm64/b=
+oot/dts/microchip/clk-lan9691.h
+> > new file mode 100644
+> > index 000000000000..f0006a603747
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/microchip/clk-lan9691.h
+> > @@ -0,0 +1,24 @@
+> > +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+>
+> Shouldn't this use the same license as the dtsi including it?
 
-I was almost ready to declare 'issue fixed' when I actually did notice
-the issue on a Quartz64-B (RK3566). For 'reasons', that may not be the
-best test subject. Then I was preparing to test some media patches and
-prepared my Quartz64-A (also RK3566), which is usually online 24/7.
+Yes, its a mistake on my side, will fix it in v5.
 
-Plugged in my keyboard adapter in the top USB2 port and that worked.
-Installed some packages to make the graphical environment match that of
-my other test devices and rebooted.
-Got my (gtkgreet) login screen and plugged in my keyboard adapter in the
-*bottom* USB2 port ... and that did NOT work.
+Regards,
+Robert
+>
+> > +
+> > +#ifndef _DTS_CLK_LAN9691_H
+> > +#define _DTS_CLK_LAN9691_H
+> > +
+> > +#define GCK_ID_QSPI0         0
+> > +#define GCK_ID_QSPI2         1
+> > +#define GCK_ID_SDMMC0                2
+> > +#define GCK_ID_SDMMC1                3
+> > +#define GCK_ID_MCAN0         4
+> > +#define GCK_ID_MCAN1         5
+> > +#define GCK_ID_FLEXCOM0              6
+> > +#define GCK_ID_FLEXCOM1              7
+> > +#define GCK_ID_FLEXCOM2              8
+> > +#define GCK_ID_FLEXCOM3              9
+> > +#define GCK_ID_TIMER         10
+> > +#define GCK_ID_USB_REFCLK    11
+> > +
+> > +/* Gate clocks */
+> > +#define GCK_GATE_USB_DRD     12
+> > +#define GCK_GATE_MCRAMC              13
+> > +#define GCK_GATE_HMATRIX     14
+> > +
+> > +#endif
+>
 
-Logged in via SSH and noticed it was indeed not listed in ``lsusb``.
-Checked ``lsmod`` and ``dmesg | tail`` ... and noticed the kernel *did*
-notice plugging in the keyboard adapter, so did ``lsusb`` *again* and
-then it *did* list my keyboard adapter.
-I did NOT employ my usual 'workaround' by plugging it into a USB3 port.
 
-So it may be that it would have always worked ... eventually ... if I
-had just waited long enough?
-While 'dmesg' seems to suggest it took little over 0.5 seconds, I'm
-really not that fast ;-P (or that impatient)
-
-Full log:
-https://paste.sr.ht/~diederik/34847f5c6873f1fc8d32eeb79f2bf2ff9dd4570c
-
-Cheers,
-  Diederik
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
