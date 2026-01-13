@@ -1,166 +1,149 @@
-Return-Path: <linux-usb+bounces-32274-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32275-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0352ED194D0
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:08:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9ED8D19667
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:21:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7586C30286A3
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 14:06:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 431123028F51
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 14:20:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C217392B83;
-	Tue, 13 Jan 2026 14:06:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A1E2288530;
+	Tue, 13 Jan 2026 14:20:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vMzN+VXU";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1o0pGioy";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vMzN+VXU";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1o0pGioy"
+	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="SpNlV70t"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7745392B79
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 14:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B5B286881;
+	Tue, 13 Jan 2026 14:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768313175; cv=none; b=oxIHLmSwfN0lni0CIn+CRJLUzAVCYEPz1hneoGZnyNC7Sy/MYfZpqKMRBZRkAbTxMidZXojH4pQ/jLl0NlN4vfKZ0InXNyM0xf0qM2d/KBgpnnXZkFAqKsSiZ4VGckcjT2Klbls7Nz893l6F9FOYGlKgrPS29WSlaAuRXG3ezUU=
+	t=1768314041; cv=none; b=dThi5j149Qt3XQEv3s62GwUMR6xd6EiZw1L8b3WaOqkSSc5KX7M3ic+9gXOemxadpJaJg64Vqh6O+HK5ETbau4ASnsGSZKxX6o9LPWds+ViCUFZvepl+vhU7c6cXvuhSNTPB0yJF3w4fKGozq5YprsaFGOl0V0BU+5a+5UmotSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768313175; c=relaxed/simple;
-	bh=1KOTHRI1sXtRFumrhMgxfaVLzSzMTp9okkoEbYM5Cy8=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SDqPALcbV0rHnxMuP50kmLl3QayQ67PAwjmJ93/u4VmqBmSfBGZUNEoT2Lz2HtUSVnKv3le6/Ao6F0APtrd/bCQJpY/AqbS1l4Z9wxMQal1/pfZG3OoB/y8tCfOOav5B1teQ6y7gg2YebCYle1evDgvMs/ZVsr9/vmFr4WfAp20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vMzN+VXU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1o0pGioy; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vMzN+VXU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1o0pGioy; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 257323368C;
-	Tue, 13 Jan 2026 14:06:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1768313172; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	s=arc-20240116; t=1768314041; c=relaxed/simple;
+	bh=XgmtYky/vQ9E76Bok9Zee6YvcNrFlfq07wYTyrlfKQ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ReMEj4KhfD/NOMvnNj6y58A7ZZALesGpVe8DruMpEL98r8xSBVMBmEt4IAI/jhEByfRz+O7S+VdPNIBt0L3k/3nrecvGE7EhfRvV8hMiNqJIadYJUvj1RyKvh36ecufGOUrNkxGs8h6KAjZbXVyQFy6YUoRba0dnGZKSmf2Bgz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=SpNlV70t; arc=none smtp.client-ip=193.136.128.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 5139F6003C03;
+	Tue, 13 Jan 2026 14:20:37 +0000 (WET)
+X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
+Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
+ by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
+ with LMTP id 9-I0FvP7k-o5; Tue, 13 Jan 2026 14:20:34 +0000 (WET)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 3A9A16003C17;
+	Tue, 13 Jan 2026 14:20:34 +0000 (WET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
+	s=mail2; t=1768314034;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=js2STrJwnbaXkULoqXxYqYMpOFLR7hYMJMtWaBHHPu4=;
-	b=vMzN+VXUpjIsbOgsVn/uWlLuphu5n+shXazOgxPzrY/VK9CW5hfNTay9empWMnD58Z60jA
-	6Kmx2wnG25IgjPAV85LRem+cFl7ZkuDXQJSmppwuqtS4Z91Hr3g3coV36HtKsmUSxlv0xJ
-	w/4LhXOd5y8PVuYIpxcMWzw9s9yPh9g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1768313172;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=js2STrJwnbaXkULoqXxYqYMpOFLR7hYMJMtWaBHHPu4=;
-	b=1o0pGioyuKTT0k2V18aCU3tI5HdSt2PQzraoi8Od+1mLzx8oTueIYOfZ76KEfJGLpjlOBD
-	Re+tJCAAFcyGrJCw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1768313172; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=js2STrJwnbaXkULoqXxYqYMpOFLR7hYMJMtWaBHHPu4=;
-	b=vMzN+VXUpjIsbOgsVn/uWlLuphu5n+shXazOgxPzrY/VK9CW5hfNTay9empWMnD58Z60jA
-	6Kmx2wnG25IgjPAV85LRem+cFl7ZkuDXQJSmppwuqtS4Z91Hr3g3coV36HtKsmUSxlv0xJ
-	w/4LhXOd5y8PVuYIpxcMWzw9s9yPh9g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1768313172;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=js2STrJwnbaXkULoqXxYqYMpOFLR7hYMJMtWaBHHPu4=;
-	b=1o0pGioyuKTT0k2V18aCU3tI5HdSt2PQzraoi8Od+1mLzx8oTueIYOfZ76KEfJGLpjlOBD
-	Re+tJCAAFcyGrJCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AF2753EA63;
-	Tue, 13 Jan 2026 14:06:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id t+AkKlNRZmnVNwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Tue, 13 Jan 2026 14:06:11 +0000
-Date: Tue, 13 Jan 2026 15:06:11 +0100
-Message-ID: <87ldi1ppyk.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: syzbot+6db0415d6d5c635f72cb@syzkaller.appspotmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	perex@perex.cz,
-	syzkaller-bugs@googlegroups.com,
-	tiwai@suse.com
-Subject: Re: [PATCH] ALSA: usb-audio: Prevent excessive number of frames
-In-Reply-To: <tencent_9AECE6CD2C7A826D902D696C289724E8120A@qq.com>
-References: <6965a06e.050a0220.38aacd.0004.GAE@google.com>
-	<tencent_9AECE6CD2C7A826D902D696C289724E8120A@qq.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.1 Mule/6.0
+	bh=rtTEO7u089b0r7hQr05Hu+7UDpMKL6cZI20/qSEFFrs=;
+	b=SpNlV70tDLvGsv3x3Ag8L3/ByS87trHOSx91ZCtzendOUhrwPQsi0TkZCwEVNuO3gZXq2Z
+	NK+kwyAE39sWcdvU6G5T2y5HfERW9nro0D4aVMxFZNUBsVPj+1ITsAp+MsPl4k6UEgLG/n
+	+jeB33YNN/WSK2qc4k97aj+APwgzT7ypkJ3fVE+7EmjwgFFD5VzJn0j7YK++BF7ID9WRWS
+	5MRuYHzJl6YzrMACiS9jbqT/gPuQKnkIwtO3AxiCoQpPph92k4HHbiUheYaWfOo/MI4/1v
+	JjqHti0vi45JCB4yadfb9HHjhm2ps3cu1K3JWAfrkP4Hifytk/zEJtT3RK41cQ==
+Received: from [192.168.2.110] (unknown [148.63.39.39])
+	(Authenticated sender: ist187313)
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id C170A360147;
+	Tue, 13 Jan 2026 14:20:33 +0000 (WET)
+Message-ID: <ea4ee289-fb46-44be-b5e6-9d3beca7c0d8@tecnico.ulisboa.pt>
+Date: Tue, 13 Jan 2026 14:20:33 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -1.80
-X-Spamd-Result: default: False [-1.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[6db0415d6d5c635f72cb];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FREEMAIL_TO(0.00)[qq.com];
-	FREEMAIL_ENVRCPT(0.00)[qq.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid]
-X-Spam-Level: 
-X-Spam-Flag: NO
-
-On Tue, 13 Jan 2026 09:29:23 +0100,
-Edward Adam Davis wrote:
-> 
-> In this case, the user constructed the parameters with maxpacksize 40
-> for rate 22050 / pps 1000, and packsize[0] 22 packsize[1] 23. The buffer
-> size for each data URB is maxpacksize * packets, which in this example
-> is 40 * 6 = 240; When the user performs a write operation to send audio
-> data into the ALSA PCM playback stream, the calculated number of frames
-> is packsize[0] * packets = 264, which exceeds the allocated URB buffer
-> size, triggering the out-of-bounds (OOB) issue reported by syzbot [1].
-> 
-> Added a check for the number of single data URB frames when calculating
-> the number of frames to prevent [1].
-> 
-> [1]
-> BUG: KASAN: slab-out-of-bounds in copy_to_urb+0x261/0x460 sound/usb/pcm.c:1487
-> Write of size 264 at addr ffff88804337e800 by task syz.0.17/5506
-> Call Trace:
->  copy_to_urb+0x261/0x460 sound/usb/pcm.c:1487
->  prepare_playback_urb+0x953/0x13d0 sound/usb/pcm.c:1611
->  prepare_outbound_urb+0x377/0xc50 sound/usb/endpoint.c:333
-> 
-> Reported-by: syzbot+6db0415d6d5c635f72cb@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=6db0415d6d5c635f72cb
-> Tested-by: syzbot+6db0415d6d5c635f72cb@syzkaller.appspotmail.com
-> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-
-Applied now.  Thanks.
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/5] arm64: tegra: smaug: Add usb-role-switch support
+To: Jon Hunter <jonathanh@nvidia.com>, Mathias Nyman
+ <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org
+References: <20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt>
+ <20251204-diogo-tegra_phy-v1-5-51a2016d0be8@tecnico.ulisboa.pt>
+ <ea60f024-1f39-483c-87e3-36624bd58d49@nvidia.com>
+Content-Language: en-US
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+In-Reply-To: <ea60f024-1f39-483c-87e3-36624bd58d49@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-Takashi
+
+On 1/12/26 22:03, Jon Hunter wrote:
+> 
+> On 04/12/2025 21:27, Diogo Ivo wrote:
+>> The USB2 port on Smaug is configured for OTG operation but lacked the
+>> required 'usb-role-switch' property, leading to a failed probe and a
+>> non-functioning USB port. Add the property along with setting the default
+>> role to host.
+>>
+>> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+>> ---
+>>   arch/arm64/boot/dts/nvidia/tegra210-smaug.dts | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/ 
+>> arm64/boot/dts/nvidia/tegra210-smaug.dts
+>> index b8d854f90be7..49bf23d6f593 100644
+>> --- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+>> +++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+>> @@ -1809,6 +1809,8 @@ usb2-0 {
+>>                   status = "okay";
+>>                   vbus-supply = <&usbc_vbus>;
+>>                   mode = "otg";
+>> +                usb-role-switch;
+>> +                role-switch-default-mode = "host";
+>>               };
+> 
+> 
+> This change does add the following warning when building with CHECK_DTBS
+> ...
+> 
+> arch/arm64/boot/dts/nvidia/tegra210-smaug.dtb: padctl@7009f000 
+> (nvidia,tegra210-xusb-padctl): ports:usb2-0: 'role-switch-default-mode' 
+> does not match any of the regexes: '^pinctrl-[0-9]+$'
+>      from schema $id: http://devicetree.org/schemas/phy/nvidia,tegra210- 
+> xusb-padctl.yaml
+> 
+> I know that there are many warnings seen for the smaug DTB, but it would
+> be good to ensure we don't add more.
+
+The 'role-switch-default-mode' property is read by the driver to set the
+initial role for the port [0] and is needed in order for the port to work
+when booting so in order to fix the warning this property needs to be added
+to the binding.
+
+As for the other warning ('connector' is a dependency of 'usb-role-switch')
+again I think the binding needs to be adjusted since in the Pixel C the
+connector node should be under the (as for now not present)
+cros-ec-typec node and the usb2-0 is then modeled as a remote-endpoint
+for the full connector. I am currently working on fixing the cros-ec-typec
+driver and already have a working fix for automatic role switching but
+in any case I think the binding is what needs changing. If you agree
+with this then I will add the necessary changes to the DT binding in v2.
+
+Thanks,
+Diogo
+
+[0]: 
+https://elixir.bootlin.com/linux/v6.18.4/source/drivers/phy/tegra/xusb.c#L730
+
+> Cheers
+> Jon
 
