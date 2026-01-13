@@ -1,250 +1,175 @@
-Return-Path: <linux-usb+bounces-32240-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32241-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 084F4D17DB8
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 11:06:39 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC70FD18130
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 11:36:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 109B9305845D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 10:01:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CE6633036B8B
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 10:34:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED7ED38A281;
-	Tue, 13 Jan 2026 10:01:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 374DB28488F;
+	Tue, 13 Jan 2026 10:34:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U4fTUND8"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="b8k4fImZ";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="gOxVKpMW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18485343D6F
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 10:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F2D2BE630
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 10:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768298500; cv=none; b=AY30hGAtxM6tI34f42fFsmx2HMsldya1f1O3EECPb5qJ9WU6Hq5zjG3MKPYCFtk5bdfpUnRtuqkMA9zPztrU2EEkXWijNucXb2pGprbKia4gXt7rcyd2E8x9oooLoXUZQoCT2MVvZksHrh/vPG+igrT7oT8afjmPP0q2tdosZ4w=
+	t=1768300453; cv=none; b=IkXFeUUxZtvE1iNgEVxw28ZBs3MuWxbyC6SypxUw2H6I50qzQf/rPo1zCWFpiqUiewHEiU+FophTZtc4ukZXNYxnLz9T03H2+aTp3DJvClMThf5P5aJFi62x4okoDpkGC8U1YS8wWG6Z+oMPHfcLVN3EmsKKNJ5YBaQ7dZi/N6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768298500; c=relaxed/simple;
-	bh=UaxpiPH1Ry8qxmWaByqCNheQFKNXN/xI1ASgwjeZP3o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nlIy1W8HrJBqpSA5pFbCMjOY4ZVLj/F/r8T3Ej4NHXDze2zoi+C3AD3fJYcYrK8Np5rQdOeuAEx+E3wGQ24KfUn/K7Sp7iKE38AlGOkIkur8hQ+SIVC9gsntOcrN1BW5Bg6HkzaWAfFYTX7cxM6Zs/y1SyX7rrfo+Kvg9mivdNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U4fTUND8; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-81f3fcdb556so1379692b3a.2
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 02:01:39 -0800 (PST)
+	s=arc-20240116; t=1768300453; c=relaxed/simple;
+	bh=3IOpqeuJDd2VvQ1xyKE5Y/yLbTdnCHOyfCmTcMJWgmQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Tyo9B1jnEg1HT6F+EG9KNFpW6CGVhn1xZEbzQsTXoleZxAy6zcZVdqQGDPfX0rKUfhVTuc3dOc1qqYcKrFa7tNKOBto+kGmzCvWHbjikjqypti+NeXFfNGZrGRwyQv7TnkFyZZpQB9FaI+U5NeDNj5XC3t2xwVoIQHJef/KaP0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=b8k4fImZ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=gOxVKpMW; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60D5aw733637257
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 10:34:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=t0DxTF6XpTbcLZF16ugKMHmuEdIMBo7WDZa
+	FbWe1gk0=; b=b8k4fImZu7maRrZnRXZGNpQ26t6txGB/VOSKWoJA5CprTJ4e+UX
+	c7uKOv3/RgFWapSIvCMyM7AT4IT8inkn0g35Xa57Y12FmYlqwFxGnMw7L3+52Szv
+	nfKOZ8ls/Aj5VnpuowVV3OETM8lfdwW5nF8Rk4edcQRaWEwA7FpwPj2CKWXoAvqd
+	DGHz4mLwbBoFNOQchPK5VWt+vvrZD1pltulIv9rz6m/RVfzYl2wXD4749Qdauppz
+	dUzWQi0ouPaZbBvfpmnuhweE+u2dcPBU1eylRvVLrt+CoS4hpaprssELfRU5HnAB
+	lClOi9qmLCKxye5FxQ3Cjpg2tb/WuZe77uQ==
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bng2c0xjf-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 10:34:07 +0000 (GMT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-c52ebdd2d43so2825066a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 02:34:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768298498; x=1768903298; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=UaxpiPH1Ry8qxmWaByqCNheQFKNXN/xI1ASgwjeZP3o=;
-        b=U4fTUND8p5VKyKnDTesbt0UYPT0ODLWdy+QhQu3vANpepXWrv+B1IvYXQGp1ri0v5v
-         5SNLoApJOU5Daa9jkR/cRApPNuIDMjAMeRUo8/w5g//mqZ2wu9cjuWWDUYUGnzMvo0wY
-         SVqP5SICmHub6EFaVXjgIm9NNw8mfZeoC36BqWup99tCdCYxqLGm/85Dk0xRvkjg3Agn
-         utvoGUljVrMFXkasbp8XKXg1v5zQ4J3j8AeEvzNQkGWA7BwkIxm9BKjTqNJXujxbaIC5
-         /f+HoJYh6z4ovl4rKZPGRlIYdQVlGSOgUN7hEYMnwy1p8w8c2PrIiDQEJfPkjo6YDpdk
-         uFAA==
+        d=oss.qualcomm.com; s=google; t=1768300446; x=1768905246; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=t0DxTF6XpTbcLZF16ugKMHmuEdIMBo7WDZaFbWe1gk0=;
+        b=gOxVKpMWyWeLvXxqKLcVoLmnGf+XtXD8nvB7UXEGPmhceIPSh7lEineWXmRg3z2F9G
+         uKIEVPEEW4Z5I8qG0lpWSceHrmVc4gktkXZHcgfCnsmf3JUHutDQTHrsEJkZF3VARi95
+         lXM8WPOAMVjCoqFAJLMHJis2uOxjaJD2xRRpLurp5polGXpJClmoy2wczG933HWe7vsj
+         0tg6TULzLwWplmnrgWARDfgiAXja1IMvJDDntUuywwwigJouZlrlSIOWLs8w3R+s+yvu
+         ZFuaE5m6/PyGcIBNuIA5xyrtAidUh8htvBoAsOFiEB4bplSxNlk38jtnfLK8g9H+6X5s
+         nGSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768298498; x=1768903298;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UaxpiPH1Ry8qxmWaByqCNheQFKNXN/xI1ASgwjeZP3o=;
-        b=PdvXrfgXATBDShFJnl4Fzyd9VxD9VeOoa+w66e4kklOxESbmh99sDSyoSlLS6DIQAY
-         9CrdzJ9XNcyW9pXcuffcLp0Rczen01Xo2Xq/TReosyyprKIkdTlQZOejJ0r1b2EQTQ+k
-         KyuFraF8dtGIYka+eeIRQV1oGXVwToCLju8p8zViGosPABJqn1q3uAr2MhhfoBjBNQGY
-         Swpz/pDmNKarQfzvTsqByqr2scoZ5d3MTRTiIA9fCnqgos0Qc9PFx9nwmrL/EDCHq6rc
-         PTggnoI9LvV4E8kJh5PPoIfGaBlWMusEn5M6Sj0RglaiHDd4XCAiXjIpYAITvqSGbtv+
-         cq7w==
-X-Forwarded-Encrypted: i=1; AJvYcCXebfa4enxNqDL+IYch+uGTIEk4LisM1Q7Y6TAuHVvGoKyUprQVjkFlMKDBaT6ChhrowddWTAKMJdI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRkfiM9fsoCjbTgMMMg6boyvaOPyFJGFY4x50BEkMVEqGs2gkV
-	ejNPA5mi05usJe6PVoxiWqeXvpKTAmCjY+om/lT399tLKdOhu4+goLEWjRwtzImirTw=
-X-Gm-Gg: AY/fxX7LtmPytunCqrwIa9OS1/J8Q8qt/HlE+BWPg/+nRzhEBYHSQ97Xje13VxuPTW/
-	F77weuhS47eUtvczPttALTmlEO3gSrYVIOQdhe27whrHjt6txAhDJF8xeVI4R/P8DJJxa8akdOB
-	hZQ0uop8qgKGf3uTJMuMK3XBwjTDMWDUZl0VAoT1jhRD7311/OG51ak7TsUjA8MfBOz0ya9nFJX
-	LSb3YMhver5OuZ9xmT84JB0XnZcwe2bej2gyy8RlVCaLtiCo7vtB1/Fa/H2N5P+gmzxL56/1W+v
-	VQV2Rg7lx1ajpeuopfck1QhyZWq3N0EhkRLNtvGceNU8K2rpoC3awfqDBUgau+tEuOYj7Nkmduj
-	A8OgXlQM4bfUld13DGUoHEgfe+y1Dn3IXS0KGJmWz/a0QMIkZ7tRqAVG7ENYluNilknIJoWyzqg
-	Hft0hLujIU/ycUlnRPzpjl4KL1m8E=
-X-Google-Smtp-Source: AGHT+IG1jlL2IQl/5c1/qnegoIWk3ju/Uopj0jVtcW5UNJeC+6ZUILWIKDw/vmbu2uSjRd9kgNDnBw==
-X-Received: by 2002:a05:6a20:394a:b0:341:d5f3:f1ac with SMTP id adf61e73a8af0-3898f9f9cb8mr19509318637.41.1768298498309;
-        Tue, 13 Jan 2026 02:01:38 -0800 (PST)
-Received: from draszik.lan ([212.129.80.26])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c3a2f7sm200689675ad.16.2026.01.13.02.01.27
+        d=1e100.net; s=20230601; t=1768300446; x=1768905246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t0DxTF6XpTbcLZF16ugKMHmuEdIMBo7WDZaFbWe1gk0=;
+        b=L0rHSXkAqQhvnGk+jPRE5rPtXLvbNTw5osHj/brYfN3KRdIK7vXe6nn7TqnmoG5UIF
+         qJAJFFFE9tmiCcR5Gbndk8I8RLIAq29aZsRvzfBm5GszzvkkA65BH+jggZAxZk/ABfYR
+         McYzcF95vhDzIFoYEJBuu2QoQCJUFaHn/L9vFjHHOUkh2ybeYENAAomA026wK7Z7sPFC
+         8kTxvf4iJQNR4aaaaOzxvLr/P6msnRAvAC5jHxpQTOUR8luKN01t3glopomIcqlqUtwV
+         Jl5JCxWF/Xy+EgATFk4YH8Y45tZaeC6fT6qPRDUMo0nUNOcK3YxAm6bzaseJQCjPfek/
+         Okow==
+X-Gm-Message-State: AOJu0Yx/Yxi2/3bSV7aWvLzvt2pQIDPpgW7tUwyiSzK9meWgmSb8263c
+	dyWKF+aUovxhMOrT3p1sPvhOI44QbOblkUfcL8FPCfuPSL8bWftC2zermQhR3N5jL7Xl9S6zBCd
+	N8ZDpiKN3nH+1ZYLwbvmUfPR5GylYHT38QzhQD/O00WUtLq9wfKxuY/99OFhts3Y=
+X-Gm-Gg: AY/fxX5rCZEj6CocKuA6V62wmmGWr6+q8FABptkv19elKdoFoI+zZXT00lYYM4eh6HZ
+	Add51rMDhfxWMVmPUm2oPVTxe7YfApERClSDEB9TuUxLIXd/LSmxOmF/Cv3MwHBN9vaHz/fZIIt
+	vNU+sRw1I5an6rPGt1Y+zxie2ZxphqduO/LMKTJTAO1vxu343xOmQ8YWuWVR2084cQvd8heDgr4
+	CXowMnd+tFM6gobvLsuZaj9E4652QlHJshwN4wgOeI0kgoTenFah2qqEX4ubW49S4RB3s0uxQl9
+	100Yp5ffUrLM06ATltDuhf3RLmUdWlJg7FVLarzrgv+p44ruowxLlxhTZXDuyWWCzL74pETO45o
+	SjMlUL7TM9BMGDIzFU5X5LauerNmPyrbrV2rTmw==
+X-Received: by 2002:a05:6a20:9185:b0:366:14af:9bce with SMTP id adf61e73a8af0-3898fa17787mr18881627637.68.1768300446372;
+        Tue, 13 Jan 2026 02:34:06 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFlkCh9JDgXmQMZ3tRhoJmBX8OD0TapeaylQwnoDHrA068OB/cX9ocOe95S4md3bpIYxs90Sg==
+X-Received: by 2002:a05:6a20:9185:b0:366:14af:9bce with SMTP id adf61e73a8af0-3898fa17787mr18881607637.68.1768300445857;
+        Tue, 13 Jan 2026 02:34:05 -0800 (PST)
+Received: from hu-prashk-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cca06b2edsm19769911a12.32.2026.01.13.02.34.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 02:01:37 -0800 (PST)
-Message-ID: <6b37b88e9b7ee57eb1c006916fd995c813ab5e6e.camel@linaro.org>
-Subject: Re: [PATCH v3 4/5] power: supply: max77759: add charger driver
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Amit Sunil Dhamne <amitsd@google.com>, Sebastian Reichel
- <sre@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Lee Jones
- <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Badhri
- Jagan Sridharan	 <badhri@google.com>, Heikki Krogerus
- <heikki.krogerus@linux.intel.com>,  Peter Griffin
- <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Alim
- Akhtar	 <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
- Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Date: Tue, 13 Jan 2026 10:02:06 +0000
-In-Reply-To: <bb9b9afa-0bfa-428e-9372-549d9ba8603c@google.com>
-References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
-	 <20251227-max77759-charger-v3-4-54e664f5ca92@google.com>
-	 <298ca35590d2180fdcf334f94964b6110e17c606.camel@linaro.org>
-	 <50c29a62-1fdb-4de2-8887-0d551eee5ec0@google.com>
-	 <255d7726-6758-43ed-b35f-db14726bcc9b@google.com>
-	 <2869d309358f27652289c40810ca36b2ec155d1d.camel@linaro.org>
-	 <bb9b9afa-0bfa-428e-9372-549d9ba8603c@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-2+build3 
+        Tue, 13 Jan 2026 02:34:05 -0800 (PST)
+From: Prashanth K <prashanth.k@oss.qualcomm.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prashanth K <prashanth.k@oss.qualcomm.com>
+Subject: [PATCH v3 0/3] Add the DWC3 instance name in traces
+Date: Tue, 13 Jan 2026 16:03:57 +0530
+Message-Id: <20260113103400.2347763-1-prashanth.k@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEzMDA4OSBTYWx0ZWRfXwqK7lhOQZkSF
+ WOnRHXOFnuZPltpuiLLdtxSGxfaYxROJbbiFPf80AcrO2fQU/EExafDXOKMvZgGINYyb3ebu3dd
+ EDX1I3CekMXIlds/ANx30IfPtHSeYRHNY5Ld1TQE0O1WFTavCmVMj9WYrOI6E4im0bqs23VVBP+
+ 20wrATh1yvIbcYLvcKxR2GEIJ3Gx5b8j8fb6TPh2UtCM5Z8iszVImyPZbqYwD/AvJc4gVFaw4Ca
+ HoQaoLqPj09QTL17V6GIdDk4H3ivTGXuM+LOxmQY0eyp2vUvXLUVNqI1cSH08gfh0nEBF8pys7k
+ jjIetlzOJAVz8q+nPto9BuHSZrSVSA3FHEm7Iu2GDSPnVmaocis9wFDRyJEUuFG2t0W5YUSzuMI
+ Ahj76eWXOcXPoLEXidoKkmJw9TVpdZ586R2HQJzeWzWNNkEMTqMMWQ0r8SqTz/7w8U+XhhJZeGa
+ NmmtisxQRAd18eF+vbg==
+X-Authority-Analysis: v=2.4 cv=C5TkCAP+ c=1 sm=1 tr=0 ts=69661f9f cx=c_pps
+ a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=WwGGzFOkyck6md8MPd4A:9
+ a=x9snwWr2DeNwDh03kgHS:22
+X-Proofpoint-GUID: 3BCT27X_NhBIXPdv_YsgHQuuGDUcPJlU
+X-Proofpoint-ORIG-GUID: 3BCT27X_NhBIXPdv_YsgHQuuGDUcPJlU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-13_02,2026-01-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 suspectscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 bulkscore=0 impostorscore=0 adultscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
+ definitions=main-2601130089
 
-Hi Amit,
+When multiple DWC3 controllers are being used, trace events from
+different instances get mixed up making debugging difficult as
+there's no way to distinguish which instance generated the trace.
 
-On Mon, 2026-01-12 at 11:37 -0800, Amit Sunil Dhamne wrote:
-> Hi Andre',
->=20
-> On 1/12/26 5:47 AM, Andr=C3=A9 Draszik wrote:
-> > Hi Amit,
-> >=20
-> > On Tue, 2026-01-06 at 17:14 -0800, Amit Sunil Dhamne wrote:
-> > > On 1/6/26 3:41 PM, Amit Sunil Dhamne wrote:
-> > > > Hi Andre',
-> > > >=20
-> > > > On 1/5/26 9:32 AM, Andr=C3=A9 Draszik wrote:
-> > > > > Hi Amit,
-> > > > >=20
-> > > > > I haven't done a full review, but a few things caught my eye.
-> > > > >=20
-> > > > > On Sat, 2025-12-27 at 00:04 +0000, Amit Sunil Dhamne via B4 Relay=
- wrote:
-> > > > > > diff --git a/drivers/power/supply/Makefile
-> > > > > > b/drivers/power/supply/Makefile
-> > > > > > index 4b79d5abc49a..6af905875ad5 100644
-> > > > > > --- a/drivers/power/supply/Makefile
-> > > > > > +++ b/drivers/power/supply/Makefile
-> > > > > > [...]
-> > > > > > +
-> > > > > > +static irqreturn_t irq_handler(int irq, void *data)
-> > > > > > +{
-> > > > > > +=C2=A0=C2=A0=C2=A0 struct max77759_charger *chg =3D data;
-> > > > > > +=C2=A0=C2=A0=C2=A0 struct device *dev =3D chg->dev;
-> > > > > > +=C2=A0=C2=A0=C2=A0 u32 chgint_ok;
-> > > > > > +=C2=A0=C2=A0=C2=A0 int i;
-> > > > > > +
-> > > > > > +=C2=A0=C2=A0=C2=A0 regmap_read(chg->regmap, MAX77759_CHGR_REG_=
-CHG_INT_OK,
-> > > > > > &chgint_ok);
-> > > > > You might want to check the return value and return IRQ_NONE if i=
-t
-> > > > > didn't
-> > > > > work?
-> > > > >=20
-> > > > > > +
-> > > > > > +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < ARRAY_SIZE(irqs); i++) {
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (irqs[i] =3D=3D =
-irq)
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 break;
-> > > > > > +=C2=A0=C2=A0=C2=A0 }
-> > > > > > +
-> > > > > > +=C2=A0=C2=A0=C2=A0 switch (i) {
-> > > > > > +=C2=A0=C2=A0=C2=A0 case AICL:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev, "AICL =
-mode: %s",
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_AICL));
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > > > > +=C2=A0=C2=A0=C2=A0 case CHGIN:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev, "CHGIN=
- input valid: %s",
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHGIN));
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > > > > +=C2=A0=C2=A0=C2=A0 case CHG:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev, "CHG s=
-tatus okay/off: %s",
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHG));
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > > > > +=C2=A0=C2=A0=C2=A0 case INLIM:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev, "Curre=
-nt Limit reached: %s",
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_INLIM));
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > > > > +=C2=A0=C2=A0=C2=A0 case BAT_OILO:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev, "Batte=
-ry over-current threshold crossed");
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > > > > +=C2=A0=C2=A0=C2=A0 case CHG_STA_CC:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev, "Charg=
-er reached CC stage");
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > > > > +=C2=A0=C2=A0=C2=A0 case CHG_STA_CV:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev, "Charg=
-er reached CV stage");
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > > > > +=C2=A0=C2=A0=C2=A0 case CHG_STA_TO:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev, "Charg=
-er reached TO stage");
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > > > > +=C2=A0=C2=A0=C2=A0 case CHG_STA_DONE:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(dev, "Charg=
-er reached TO stage");
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > > > > Are the above debug messages really all needed?
-> > > I forgot to respond to this comment in my previous email.
-> > >=20
-> > > I think we can keep AICL, BAT_OILO, INLIM. They're either special
-> > > conditions (AICL) or faulty conditions (like BAT_OILO) and we can in
-> > > fact keep them at dev_info level. Rest can be removed and a
-> > > power_supply_changed() is sufficient.
-> > >=20
-> > > Let me know what you think?
-> > I don't think dev_info() in an interrupt handler is appropriate. At
-> > least it should be ratelimited.
-> >=20
-> > If it's something special / unexpected that needs attention, having
-> > a dev_dbg() message only will usually not be visible to anybody.
->=20
-> I agree. I can change the prints to dev_info_ratelimited for the stuff=
-=20
-> we care about.
+Hence append the controller register base address into ftrace.
+This needs the following reworks which is addressed using this
+patch series.
 
-If it's an erroneous condition, maybe warn or even err are more appropriate=
-?
+  1. Removal of dep->regs and use dwc->regs everywhere
+  2. Use dwc pointer in all dwc3_readl/writel()
+  3. Adding the base addr in traces.
 
-But then, what is the expectation upon the user observing these messages?
-What can or should they do? Who is going to look at these and can do
-something sensible based on them?
+Changes in v3:
+- Renamed the variable to 'address'.
+- Used u32 instead of string/char[].
+- Link to v2: https://lore.kernel.org/all/20260105115325.1765176-1-prashanth.k@oss.qualcomm.com/
 
-> >=20
-> > Also will the call to power_supply_changed() down below handle the
-> > special conditions (e.g. convey to upper levels)? If not, can it be
-> > made to do so?
->=20
-> Yes it does, as I can see a call to kobject_uevent() inside=20
-> power_supply_changed_work(). Also, power_supply_changed() also notifies=
-=20
-> other subsystems that have registered their notifiers downstream of this=
-=20
-> power_supply object. So I believe we're good there.
+Changes in v2:
+- Avoid using macros for dwc3_readl/writel()
+- Use base address intraces instead of dev name.
+- Split the patch into a series.
+- Link to v1: https://lore.kernel.org/all/20250825114433.3170867-1-prashanth.k@oss.qualcomm.com/
 
-If erroneous conditions are handled by other / upper layers, why print a
-message in this interrupt handler in the first place?
+Prashanth K (3):
+  usb: dwc3: Remove of dep->regs
+  usb: dwc3: Add dwc pointer to dwc3_readl/writel
+  usb: dwc3: Log dwc3 instance name in traces
 
-Also, I just noticed there is a max77705 charger driver. It seems quite
-similar to this one, maybe it can be leveraged / extended?
+ drivers/usb/dwc3/core.c    | 199 +++++++++++++++++++------------------
+ drivers/usb/dwc3/core.h    |  13 +--
+ drivers/usb/dwc3/debugfs.c |  44 ++++----
+ drivers/usb/dwc3/drd.c     |  76 +++++++-------
+ drivers/usb/dwc3/ep0.c     |  22 ++--
+ drivers/usb/dwc3/gadget.c  | 164 +++++++++++++++---------------
+ drivers/usb/dwc3/gadget.h  |   4 +-
+ drivers/usb/dwc3/io.h      |  11 +-
+ drivers/usb/dwc3/trace.h   |  88 ++++++++++------
+ drivers/usb/dwc3/ulpi.c    |  10 +-
+ 10 files changed, 328 insertions(+), 303 deletions(-)
 
+-- 
+2.34.1
 
-Cheers,
-Andre'
 
