@@ -1,128 +1,464 @@
-Return-Path: <linux-usb+bounces-32213-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32214-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADA45D168F9
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 04:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AE72D1697A
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 05:07:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 73B59301B487
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 03:50:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 551AC301AD2E
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 04:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 265BA308F3D;
-	Tue, 13 Jan 2026 03:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846CF34F481;
+	Tue, 13 Jan 2026 04:07:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="ICLXnlUC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K0B9DCA7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m15590.qiye.163.com (mail-m15590.qiye.163.com [101.71.155.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f194.google.com (mail-dy1-f194.google.com [74.125.82.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9459163;
-	Tue, 13 Jan 2026 03:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8B32FD1D6
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 04:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768276252; cv=none; b=tA+shgujkeVZwmfOgJTGUiBR1c0FF24yfHoaipV2IT5O80bs0MLiifyzcVP09SMvRJH5s7BpU8tnWkywdwi8m4wCevvT86Wgl+xta0pMnCd1UOUqg8pNfHJxl9bWvdXte4gZLaiwrKqMovOMz3n5HdJ4c4zL1SOMEBNf6VtUj1o=
+	t=1768277257; cv=none; b=S92s3WH6dH+V5ohW1Xw3tR3QKJcPXOrIE6Fhv2Q/t8RyAPmsiVh8AnqUDO7ZUElAneO3Q4IwOYyo3+lLvCBXVhaaKOxYVsn1WpbDrvo085+NfRfyTBQuf4mSzLDs4+GALrlNYZOHQ6HLQ0wJjOXltVSZXzZR3fvJsf/mCbk1N4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768276252; c=relaxed/simple;
-	bh=+0/2IF5z7o1wcBvsgWG+eBqE4okj4szedjYBDDu8QF0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QfJwHLDnnTg/nrtjwQXQFiAU5SKlMOfNvuPxhe+zCTzzGcUCl0ZZSWC7adJMuzCrw+GG4L+M1KcYCbOYNxSTxRQyNpjBGCnts75pJ/54j/mFcFz71BegdhZv/y/db8EXA/VEWXFH2n+CHmM3tC0REVXflbVF7rCaPd+Fex6hNIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=ICLXnlUC; arc=none smtp.client-ip=101.71.155.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [127.0.0.1] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 306affc4c;
-	Tue, 13 Jan 2026 11:45:35 +0800 (GMT+08:00)
-Message-ID: <b901011c-d062-4a4f-8a2e-9f918eab3838@rock-chips.com>
-Date: Tue, 13 Jan 2026 11:45:30 +0800
+	s=arc-20240116; t=1768277257; c=relaxed/simple;
+	bh=h+iFRHUyhXQa6VGT9xAuOhQz3LEOOF0xJl6dugW1ojw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=drPKC5iA2NjOYIAhJzg+FhxPFBPXyqTFdUJpgJfYMcPqI34XWDOFPY4zGLeBQJD0mda5E3UsPPBlkPyXZtQUK8L6M7Kb+Sz7C5iqYiW7lX73mFanfrZ3Zh1/mZMAq7hiCZTWdtsr0jCzfySrg1HX03V9YRnrH2kxOMUvqL5u+S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K0B9DCA7; arc=none smtp.client-ip=74.125.82.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f194.google.com with SMTP id 5a478bee46e88-2b19939070fso7208566eec.0
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 20:07:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768277255; x=1768882055; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lf2GiBrDhJ3d3fFqZYGBsdQPl9857Ibwncbf+eD3xlE=;
+        b=K0B9DCA7TnNMyH+nM0QSLPJeeOcwCdeQeC8ycb2vlctacVru00Kmd8i5M1cqybhxqP
+         1VTCfxV/tPsO1bXz5kv370BSVROeb0W9Fsol1wwJVe8gVDT8et1cc4Ht56mDC8s8KizZ
+         MR4LO3t/iTvDpYd2tY3afFk/tOrURKFKywqv5MKYLRbBZtzCLoTe00GPVUhrx2D4Xj2r
+         dG7p3aKaEcPrNDMkgGvPILQbZGwBAZ8MaS5WdOuDp2yJcJiIb5aAvRKJK4/Fw3iJEAiD
+         je0KYDXwLJEokTrhYh2TgAStsPyCn+3OuxYnB7aTvZN+prw59ah8shaGwiLjx3AMFgoo
+         +iJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768277255; x=1768882055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lf2GiBrDhJ3d3fFqZYGBsdQPl9857Ibwncbf+eD3xlE=;
+        b=acNbQFULaVUkX+mwn1Jb0JYw/SjR/1RFxzZ8npKytLdJjranT+YR24zkLpExkO81F+
+         I9kpfim39otcbZnAU4669VnSNK/6m3NwffaTqUy24dVKQ9pqO2+HOree9w+kOb7blQ7K
+         XjRtqMnxhprISmrzz3oAWcxnP52BdGQ7fhDBnTe9Q89YXmaa9yINFFLi0WB+rTEhkT+m
+         nZRD1wNdI8JuGFte2iz1eoT+5lBr/aW4P5QuyxfmYEQndQ4LIpWY60xBUzZPTcxZP9Pl
+         2OigUf50HmwGxij9+8TgBPO0eKpurCAWYTwXumN4H/hrRoQLMZfMbmVx/oKe3N1ahciw
+         xu4g==
+X-Forwarded-Encrypted: i=1; AJvYcCUcKlfY2zEVKHm6WwUQSbugz1NCpJZnwOtjVLx8PvWzPchetN0ajK3EtX1Ey2AucrkJa5lZ5kCwbyA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+QdjoPhKbgj1gqMvkKQjL9OqySsWtNzh9MFFW7c3Ms6tStXm4
+	2nygoCz7DPDYE1kCsFD/WeDnFkelfKN1qG3imcBYvncGI9FCMd4ayXsy
+X-Gm-Gg: AY/fxX77PXoNzULOvVe4Y7J/ob+RGUF8NsiJrYSQkOlNMLPPQaHyxh+ELd4rLosa2+J
+	HpZUPgwBEzmOd2fCbTXvUYiv4Kqkn+kqyogAUYMSwIkopEWfiLD+yvc54KLUxOc8f3ALbK6NZuk
+	Czyis38Gch92ki/QkdmiItSV3otpIshhZhqaY1c5KG3zGYcHnls5Tw95Zi8fWmjUwXl/l9Ewvdr
+	PQHRg+4L/fNDVd8sHZEB8IFeeYcT+iWBx5a6RSmEb27VCTBMdgMl44KCezL141NYLArRXUXH1IL
+	nqA7qIzZxKX0dLhfCEOglUPlpfO5xlvlyRUcrd4XrlxRrQPKfcex3GGO0q7hqh4NGxFADNP/+8n
+	ULG8P/rJIWJ5/J6X2BKCbf8VDxgIYN8vy/VixyAAj9WvxwuAFHRCG+lObXncvHgNWT3HZEKPYII
+	kKShUgX5P9E2vVNhYMMQN2G8nruuBobUtJK+CYHYIf9SZU0gVcBqLHqN0S6eaFBlEOEshrtefBC
+	TwcSM2ahH0c4gzjmGKdOfynm8/c37LPSpzSEHmJpUurdAlgDpen+qWzJAq3ZCLqD3ENj++8fOVA
+	9HDWwkCZOHCz82c=
+X-Google-Smtp-Source: AGHT+IHwzd/z6ogl58mRDQxE2emLhy9y2lPyOrhz1WRpKTCPXCbO4o8Y1Rsg46//Z7nAte4RfXnlBg==
+X-Received: by 2002:a05:693c:3101:b0:2b0:4ae9:efb9 with SMTP id 5a478bee46e88-2b17d30f834mr18932620eec.43.1768277254469;
+        Mon, 12 Jan 2026 20:07:34 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-28.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.28])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17067327csm16587659eec.7.2026.01.12.20.07.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jan 2026 20:07:34 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH net-next] net: usb: sr9700: remove code to drive nonexistent MII
+Date: Mon, 12 Jan 2026 20:06:38 -0800
+Message-ID: <20260113040649.54248-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] dt-bindings: usb: Add binding for WCH CH334/CH335
- hub controller
-To: Krzysztof Kozlowski <krzk@kernel.org>, Chaoyi Chen <kernel@airkyi.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Quentin Schulz <quentin.schulz@cherry.de>, Jonas Karlman <jonas@kwiboo.se>,
- Hsun Lai <i@chainsx.cn>, John Clark <inindev@gmail.com>,
- Jimmy Hon <honyuenkwun@gmail.com>, Dragan Simic <dsimic@manjaro.org>,
- Michael Riesch <michael.riesch@collabora.com>,
- Peter Robinson <pbrobinson@gmail.com>, Alexey Charkov <alchark@gmail.com>,
- Shawn Lin <shawn.lin@rock-chips.com>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Andy Yan <andy.yan@rock-chips.com>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20260112022823.91-1-kernel@airkyi.com>
- <20260112022823.91-2-kernel@airkyi.com>
- <20260112-lively-hallowed-beetle-fc15b2@quoll>
- <1515a445-576a-4833-a604-c31062f7d3fa@rock-chips.com>
- <b4eb4ab6-6fde-4c01-8069-470545ffdac4@kernel.org>
- <568b9e25-bf96-4e78-9af0-4791cbb90a56@rock-chips.com>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <568b9e25-bf96-4e78-9af0-4791cbb90a56@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9bb575818903abkunm0fc5f439c0aac
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkoaHlZPGEoaHRlPH0tPGRhWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=ICLXnlUCKdw0l4C5PwjkIWI+IVk7r4/+WwkYTgaVw86rZ636qn6GnsMAlH3m9KDe331gcSkS3TklrGhw8/QrO0k6/hTC3s1bGoI9x213B9d26cr4/F/RDXu76m2tvVwDtwq+Qyw1eBwnYz+/a3EN9/JjCw818hD+5H3XmHoPYvc=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=RLlZk5JLSHjXxq4/+unFmqq6XhZxTOn9ntEjqGDpUTM=;
-	h=date:mime-version:subject:message-id:from;
+Content-Transfer-Encoding: 8bit
 
-On 1/13/2026 11:27 AM, Chaoyi Chen wrote:
-> Hi Krzysztof,
-> 
-> On 1/12/2026 10:28 PM, Krzysztof Kozlowski wrote:
->> On 12/01/2026 09:59, Chaoyi Chen wrote:
->>>>> +required:
->>>>> +  - compatible
->>>>> +  - reg
->>>>> +
->>>>> +additionalProperties: false
->>>>> +
->>>>> +examples:
->>>>> +  - |
->>>>> +    #include <dt-bindings/gpio/gpio.h>
->>>>> +    usb {
->>>>> +        dr_mode = "host";
->>
->> One more thing - drop above line.
->>
-> 
-> Will fix in next version.
-> 
->>>>> +        #address-cells = <1>;
->>>>> +        #size-cells = <0>;
->>>>> +
->>>>> +        hub: hub@1 {
->>>>> +            compatible = "usb1a86,8091";
->>>>> +            reg = <1>;
->>>>> +            reset-gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
->>>>
->>>> Are you sure?
->>>
->>> I guess what you're concerned about here is the polarity? 
->>> If that's the case, then there's no problem.
->>
->> Yes, I was wondering whether polarity is set correctly.
-> 
-> Yes, it is active-low, so during normal operation it should be set to high.
-> 
+This device does not have a MII, even though the driver
+contains code to drive one (because it originated as a copy of the
+dm9601 driver). It also only supports 10Mbps half-duplex
+operation (the DM9601 registers to set the speed/duplex mode
+are read-only). Remove all MII-related code and implement
+sr9700_get_link_ksettings which returns hardcoded correct
+information for the link speed and duplex mode. Also add
+announcement of the link status like many other Ethernet
+drivers have.
 
-Sorry, I didn't consider the driver situation. 
-I will fix it in the next version.
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ drivers/net/usb/sr9700.c | 170 ++++++++++++---------------------------
+ drivers/net/usb/sr9700.h |  11 +--
+ 2 files changed, 56 insertions(+), 125 deletions(-)
 
+diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
+index 820c4c506979..4c9ad65ea4ca 100644
+--- a/drivers/net/usb/sr9700.c
++++ b/drivers/net/usb/sr9700.c
+@@ -16,7 +16,6 @@
+ #include <linux/netdevice.h>
+ #include <linux/etherdevice.h>
+ #include <linux/ethtool.h>
+-#include <linux/mii.h>
+ #include <linux/usb.h>
+ #include <linux/crc32.h>
+ #include <linux/usb/usbnet.h>
+@@ -69,11 +68,11 @@ static void sr_write_reg_async(struct usbnet *dev, u8 reg, u8 value)
+ 			       value, reg, NULL, 0);
+ }
+ 
+-static int wait_phy_eeprom_ready(struct usbnet *dev, int phy)
++static int wait_eeprom_ready(struct usbnet *dev)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < SR_SHARE_TIMEOUT; i++) {
++	for (i = 0; i < SR_EEPROM_TIMEOUT; i++) {
+ 		u8 tmp = 0;
+ 		int ret;
+ 
+@@ -87,38 +86,37 @@ static int wait_phy_eeprom_ready(struct usbnet *dev, int phy)
+ 			return 0;
+ 	}
+ 
+-	netdev_err(dev->net, "%s write timed out!\n", phy ? "phy" : "eeprom");
++	netdev_err(dev->net, "eeprom write timed out!\n");
+ 
+ 	return -EIO;
+ }
+ 
+-static int sr_share_read_word(struct usbnet *dev, int phy, u8 reg,
+-			      __le16 *value)
++static int sr_read_eeprom_word(struct usbnet *dev, u8 reg, __le16 *value)
+ {
+ 	int ret;
+ 
+ 	mutex_lock(&dev->phy_mutex);
+ 
+-	sr_write_reg(dev, SR_EPAR, phy ? (reg | EPAR_PHY_ADR) : reg);
+-	sr_write_reg(dev, SR_EPCR, phy ? (EPCR_EPOS | EPCR_ERPRR) : EPCR_ERPRR);
++	sr_write_reg(dev, SR_EPAR, reg);
++	sr_write_reg(dev, SR_EPCR, EPCR_ERPRR);
+ 
+-	ret = wait_phy_eeprom_ready(dev, phy);
++	ret = wait_eeprom_ready(dev);
+ 	if (ret < 0)
+ 		goto out_unlock;
+ 
+ 	sr_write_reg(dev, SR_EPCR, 0x0);
+ 	ret = sr_read(dev, SR_EPDR, 2, value);
+ 
+-	netdev_dbg(dev->net, "read shared %d 0x%02x returned 0x%04x, %d\n",
+-		   phy, reg, *value, ret);
++	netdev_dbg(dev->net, "read eeprom 0x%02x returned 0x%04x, %d\n",
++		   reg, *value, ret);
+ 
+ out_unlock:
+ 	mutex_unlock(&dev->phy_mutex);
+ 	return ret;
+ }
+ 
+-static int sr_share_write_word(struct usbnet *dev, int phy, u8 reg,
+-			       __le16 value)
++static int __maybe_unused sr_write_eeprom_word(struct usbnet *dev, u8 reg,
++					       __le16 value)
+ {
+ 	int ret;
+ 
+@@ -128,11 +126,10 @@ static int sr_share_write_word(struct usbnet *dev, int phy, u8 reg,
+ 	if (ret < 0)
+ 		goto out_unlock;
+ 
+-	sr_write_reg(dev, SR_EPAR, phy ? (reg | EPAR_PHY_ADR) : reg);
+-	sr_write_reg(dev, SR_EPCR, phy ? (EPCR_WEP | EPCR_EPOS | EPCR_ERPRW) :
+-		    (EPCR_WEP | EPCR_ERPRW));
++	sr_write_reg(dev, SR_EPAR, reg);
++	sr_write_reg(dev, SR_EPCR, EPCR_WEP | EPCR_ERPRW);
+ 
+-	ret = wait_phy_eeprom_ready(dev, phy);
++	ret = wait_eeprom_ready(dev);
+ 	if (ret < 0)
+ 		goto out_unlock;
+ 
+@@ -143,11 +140,6 @@ static int sr_share_write_word(struct usbnet *dev, int phy, u8 reg,
+ 	return ret;
+ }
+ 
+-static int sr_read_eeprom_word(struct usbnet *dev, u8 offset, void *value)
+-{
+-	return sr_share_read_word(dev, 0, offset, value);
+-}
+-
+ static int sr9700_get_eeprom_len(struct net_device *netdev)
+ {
+ 	return SR_EEPROM_LEN;
+@@ -174,80 +166,56 @@ static int sr9700_get_eeprom(struct net_device *netdev,
+ 	return ret;
+ }
+ 
+-static int sr_mdio_read(struct net_device *netdev, int phy_id, int loc)
+-{
+-	struct usbnet *dev = netdev_priv(netdev);
+-	int err, res;
+-	__le16 word;
+-	int rc = 0;
+-
+-	if (phy_id) {
+-		netdev_dbg(netdev, "Only internal phy supported\n");
+-		return 0;
+-	}
+-
+-	/* Access NSR_LINKST bit for link status instead of MII_BMSR */
+-	if (loc == MII_BMSR) {
+-		u8 value;
+-
+-		err = sr_read_reg(dev, SR_NSR, &value);
+-		if (err < 0)
+-			return err;
+-
+-		if (value & NSR_LINKST)
+-			rc = 1;
+-	}
+-	err = sr_share_read_word(dev, 1, loc, &word);
+-	if (err < 0)
+-		return err;
+-
+-	if (rc == 1)
+-		res = le16_to_cpu(word) | BMSR_LSTATUS;
+-	else
+-		res = le16_to_cpu(word) & ~BMSR_LSTATUS;
+-
+-	netdev_dbg(netdev, "sr_mdio_read() phy_id=0x%02x, loc=0x%02x, returns=0x%04x\n",
+-		   phy_id, loc, res);
+-
+-	return res;
+-}
+-
+-static void sr_mdio_write(struct net_device *netdev, int phy_id, int loc,
+-			  int val)
++static void sr9700_handle_link_change(struct net_device *netdev, bool link)
+ {
+-	struct usbnet *dev = netdev_priv(netdev);
+-	__le16 res = cpu_to_le16(val);
+-
+-	if (phy_id) {
+-		netdev_dbg(netdev, "Only internal phy supported\n");
+-		return;
++	if (netif_carrier_ok(netdev) != link) {
++		if (link) {
++			netif_carrier_on(netdev);
++			netdev_info(netdev, "link up, 10Mbps, half-duplex\n");
++		} else {
++			netif_carrier_off(netdev);
++			netdev_info(netdev, "link down\n");
++		}
+ 	}
+-
+-	netdev_dbg(netdev, "sr_mdio_write() phy_id=0x%02x, loc=0x%02x, val=0x%04x\n",
+-		   phy_id, loc, val);
+-
+-	sr_share_write_word(dev, 1, loc, res);
+ }
+ 
+ static u32 sr9700_get_link(struct net_device *netdev)
+ {
+ 	struct usbnet *dev = netdev_priv(netdev);
+ 	u8 value = 0;
+-	int rc = 0;
++	u32 link = 0;
+ 
+-	/* Get the Link Status directly */
+ 	sr_read_reg(dev, SR_NSR, &value);
+-	if (value & NSR_LINKST)
+-		rc = 1;
++	link = !!(value & NSR_LINKST);
+ 
+-	return rc;
++	sr9700_handle_link_change(netdev, link);
++
++	return link;
+ }
+ 
+-static int sr9700_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
++/*
++ * The device supports only 10Mbps half-duplex operation. It implements the
++ * DM9601 speed/duplex status registers, but as the values are always the same,
++ * using them would add unnecessary complexity.
++ */
++static int sr9700_get_link_ksettings(struct net_device *dev,
++				     struct ethtool_link_ksettings *cmd)
+ {
+-	struct usbnet *dev = netdev_priv(netdev);
++	ethtool_link_ksettings_zero_link_mode(cmd, supported);
++	ethtool_link_ksettings_add_link_mode(cmd, supported, 10baseT_Half);
++	ethtool_link_ksettings_add_link_mode(cmd, supported, TP);
++
++	ethtool_link_ksettings_zero_link_mode(cmd, advertising);
++	ethtool_link_ksettings_add_link_mode(cmd, advertising, 10baseT_Half);
++	ethtool_link_ksettings_add_link_mode(cmd, advertising, TP);
+ 
+-	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
++	cmd->base.speed = SPEED_10;
++	cmd->base.duplex = DUPLEX_HALF;
++	cmd->base.port = PORT_TP;
++	cmd->base.phy_address = 0;
++	cmd->base.autoneg = AUTONEG_DISABLE;
++
++	return 0;
+ }
+ 
+ static const struct ethtool_ops sr9700_ethtool_ops = {
+@@ -257,9 +225,7 @@ static const struct ethtool_ops sr9700_ethtool_ops = {
+ 	.set_msglevel	= usbnet_set_msglevel,
+ 	.get_eeprom_len	= sr9700_get_eeprom_len,
+ 	.get_eeprom	= sr9700_get_eeprom,
+-	.nway_reset	= usbnet_nway_reset,
+-	.get_link_ksettings	= usbnet_get_link_ksettings_mii,
+-	.set_link_ksettings	= usbnet_set_link_ksettings_mii,
++	.get_link_ksettings	= sr9700_get_link_ksettings,
+ };
+ 
+ static void sr9700_set_multicast(struct net_device *netdev)
+@@ -318,7 +284,6 @@ static const struct net_device_ops sr9700_netdev_ops = {
+ 	.ndo_change_mtu		= usbnet_change_mtu,
+ 	.ndo_get_stats64	= dev_get_tstats64,
+ 	.ndo_validate_addr	= eth_validate_addr,
+-	.ndo_eth_ioctl		= sr9700_ioctl,
+ 	.ndo_set_rx_mode	= sr9700_set_multicast,
+ 	.ndo_set_mac_address	= sr9700_set_mac_address,
+ };
+@@ -326,7 +291,6 @@ static const struct net_device_ops sr9700_netdev_ops = {
+ static int sr9700_bind(struct usbnet *dev, struct usb_interface *intf)
+ {
+ 	struct net_device *netdev;
+-	struct mii_if_info *mii;
+ 	u8 addr[ETH_ALEN];
+ 	int ret;
+ 
+@@ -343,13 +307,6 @@ static int sr9700_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	/* bulkin buffer is preferably not less than 3K */
+ 	dev->rx_urb_size = 3072;
+ 
+-	mii = &dev->mii;
+-	mii->dev = netdev;
+-	mii->mdio_read = sr_mdio_read;
+-	mii->mdio_write = sr_mdio_write;
+-	mii->phy_id_mask = 0x1f;
+-	mii->reg_num_mask = 0x1f;
+-
+ 	sr_write_reg(dev, SR_NCR, NCR_RST);
+ 	udelay(20);
+ 
+@@ -376,11 +333,6 @@ static int sr9700_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	/* receive broadcast packets */
+ 	sr9700_set_multicast(netdev);
+ 
+-	sr_mdio_write(netdev, mii->phy_id, MII_BMCR, BMCR_RESET);
+-	sr_mdio_write(netdev, mii->phy_id, MII_ADVERTISE, ADVERTISE_ALL |
+-		      ADVERTISE_CSMA | ADVERTISE_PAUSE_CAP);
+-	mii_nway_restart(mii);
+-
+ out:
+ 	return ret;
+ }
+@@ -484,7 +436,7 @@ static struct sk_buff *sr9700_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
+ 
+ static void sr9700_status(struct usbnet *dev, struct urb *urb)
+ {
+-	int link;
++	bool link;
+ 	u8 *buf;
+ 
+ 	/* format:
+@@ -504,23 +456,7 @@ static void sr9700_status(struct usbnet *dev, struct urb *urb)
+ 	buf = urb->transfer_buffer;
+ 
+ 	link = !!(buf[0] & 0x40);
+-	if (netif_carrier_ok(dev->net) != link) {
+-		usbnet_link_change(dev, link, 1);
+-		netdev_dbg(dev->net, "Link Status is: %d\n", link);
+-	}
+-}
+-
+-static int sr9700_link_reset(struct usbnet *dev)
+-{
+-	struct ethtool_cmd ecmd;
+-
+-	mii_check_media(&dev->mii, 1, 1);
+-	mii_ethtool_gset(&dev->mii, &ecmd);
+-
+-	netdev_dbg(dev->net, "link_reset() speed: %d duplex: %d\n",
+-		   ecmd.speed, ecmd.duplex);
+-
+-	return 0;
++	sr9700_handle_link_change(dev->net, link);
+ }
+ 
+ static const struct driver_info sr9700_driver_info = {
+@@ -530,8 +466,6 @@ static const struct driver_info sr9700_driver_info = {
+ 	.rx_fixup	= sr9700_rx_fixup,
+ 	.tx_fixup	= sr9700_tx_fixup,
+ 	.status		= sr9700_status,
+-	.link_reset	= sr9700_link_reset,
+-	.reset		= sr9700_link_reset,
+ };
+ 
+ static const struct usb_device_id products[] = {
+diff --git a/drivers/net/usb/sr9700.h b/drivers/net/usb/sr9700.h
+index ea2b4de621c8..3212859830dc 100644
+--- a/drivers/net/usb/sr9700.h
++++ b/drivers/net/usb/sr9700.h
+@@ -82,19 +82,16 @@
+ #define		FCR_TXPEN		(1 << 5)
+ #define		FCR_TXPF		(1 << 6)
+ #define		FCR_TXP0		(1 << 7)
+-/* Eeprom & Phy Control Reg */
++/* Eeprom Control Reg */
+ #define	SR_EPCR		0x0B
+ #define		EPCR_ERRE		(1 << 0)
+ #define		EPCR_ERPRW		(1 << 1)
+ #define		EPCR_ERPRR		(1 << 2)
+-#define		EPCR_EPOS		(1 << 3)
+ #define		EPCR_WEP		(1 << 4)
+-/* Eeprom & Phy Address Reg */
++/* Eeprom Address Reg */
+ #define	SR_EPAR		0x0C
+ #define		EPAR_EROA		(0x3F << 0)
+-#define		EPAR_PHY_ADR_MASK	(0x03 << 6)
+-#define		EPAR_PHY_ADR		(0x01 << 6)
+-/* Eeprom &	Phy Data Reg */
++/* Eeprom Data Reg */
+ #define	SR_EPDR		0x0D	/* 0x0D ~ 0x0E for Data Reg Low & High */
+ /* Wakeup Control Reg */
+ #define	SR_WCR			0x0F
+@@ -159,7 +156,7 @@
+ #define	SR_REQ_WR_REG	(USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE)
+ 
+ /* parameters */
+-#define	SR_SHARE_TIMEOUT	1000
++#define	SR_EEPROM_TIMEOUT	1000
+ #define	SR_EEPROM_LEN		256
+ #define	SR_MCAST_SIZE		8
+ #define	SR_MCAST_ADDR_FLAG	0x80
 -- 
-Best, 
-Chaoyi
+2.43.0
+
 
