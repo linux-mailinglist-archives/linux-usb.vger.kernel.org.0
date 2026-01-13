@@ -1,347 +1,262 @@
-Return-Path: <linux-usb+bounces-32247-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32248-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48AE2D187C8
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 12:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 64C18D1881F
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 12:35:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D1082300DCAA
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 11:29:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E9EC93016DCF
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 11:35:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0288C2BE7D6;
-	Tue, 13 Jan 2026 11:29:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E383038BDAD;
+	Tue, 13 Jan 2026 11:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MXNhj1XU";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Dbhf3D4z"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aC+m14m5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013001.outbound.protection.outlook.com [40.107.201.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E617D3624CE
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 11:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768303755; cv=none; b=TIznqQDBl07ADpWV97f2V4EfRDX+O9GOCxmXqqRoPYB91pnil7o/lTLEoy/w8RCDQJVllpMeLHemVI5DtKeLGuJb060c/1d1bfS1Mtiaqipcs9pCRFCkX/jYHR4o4dqcUtf6Z9h02R7fcpIRQv29r/j/lr/ow67RWHOF36bc0s8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768303755; c=relaxed/simple;
-	bh=eGZZgccgcpR/JaeVYh+J2xthh+WiSwa0v3WELSPPNM0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RRgvL2PPlojOmWe2Z0gP/DEKiUNbal4cv7c4Epsrw/IXIVGjJ+fpLpM0OqEIoApPlo4Auf93RUHNXK8PiR21fY8fsacVd+0WZP3iAnlITm88vPneW9AC1HwKa9CenVTYIEz9t3n8qnAmVkhuxATPYLPa5zbikdGITPO15el8vcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MXNhj1XU; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Dbhf3D4z; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60D5SlBv3868693
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 11:29:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	vF9l+fb4e/cYG5xTYkEhk0Sjq46FyphuySf0LqafbSY=; b=MXNhj1XUd9fkFqWQ
-	wIcJ20ezuy58f3C/yZJuMhAnTbAV7/aNefHmX0mW1wQjyE//szBQGXrseEkZuyOB
-	m1MIYN+LGKrFLfXZV6CA62Sem6fViVRfOIcFY82JaWDA22QuLXvk32x4tPNn8YCB
-	mlgzbeskuj61oEaFyI5ezY8dTgsCY4TWz01nCflWKdIDCXUxcevkL1sc5VxrJP/I
-	9P1NDkzpaW/jxAn5kDxEVsIGwvs4+K1f5yJ+mXBSdNbS8b+4+9gU803B9LBcOJ3m
-	qfRzYGTV3d+kwmsDR3XIaDM1S8F8zTxP2EhlCFmyUceDafzrvPKMRlq9YRgS2HWA
-	i2PzCw==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bnfxk935j-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 11:29:12 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c5297cfe68so47766285a.0
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 03:29:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768303752; x=1768908552; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vF9l+fb4e/cYG5xTYkEhk0Sjq46FyphuySf0LqafbSY=;
-        b=Dbhf3D4z1VaQSg1IgDkfZVsz4Y6RRZOPktLMJ4/maeEBLmztslIRBHpll3m4AEt7Vc
-         PrdXIoiLDsmh28hOnab+R7TisH2VIQZpIcoc+utXEqCtYyL1lyk5Q/2qlVhhkHBEnu2P
-         Y43uHArwcBELHv3ImExuvrV+3CGV6q3hjFNwsqhYkn1fqd/zfCfoX2GIey/wV2H0EdZv
-         dKmj3KXVoxtd7Tuil8o91TXKldJkJSkYhDFBV8CaclV+GirnvBtSBtgFa7S746hNFWbM
-         tVJ7rEpoavNWK/nWiI+nZM2Ss2FUA4kd3nQjBM5DYCYTQ9Rm1qQuNp2mhQaY/uJG+H7h
-         Pi5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768303752; x=1768908552;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vF9l+fb4e/cYG5xTYkEhk0Sjq46FyphuySf0LqafbSY=;
-        b=rwIiPoeOLmAi38Gzyl5LgibR+IFDAn5JMxjPUedihzSg/pzI9Jjkz5rK3yWfY5jC0y
-         z+qxo+K9szSn+bYRBxmsuK21ljvH9cgkGVVCUXpqbPjJIphR0XIkbXVxmhQlpF06G3HK
-         pjygXMNItMZD8Nw81ioLVJjAbnSPrmK4rqQ7zAKokndPgzzCp+kiesEtOU41g8K+iIE2
-         +tnLPu5ONzuZUYPfjowV0tWBk6a4RAYT0XZxHMgMHZzDd3XeBRmQtX++8FrWmFxkWlOY
-         CgL7Xl0M5MVz/k0h0zT3Aq2z93E2AdBnK3semxM0kDlknnNyoBCRQH6e38kk9bA9RXzh
-         oiNw==
-X-Forwarded-Encrypted: i=1; AJvYcCV7wQV8Fd+rYe3xRCvGRAEFxg+Dr6Bnp/sC7/VaVoWqySMgOjWnsi0LerN7DCT5lAxmS7aQGB7n/LA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3DbT8wRZKRjTPqNazcnJBJ9pqXE3PCvP39wEM5EJjAdUX5seR
-	lWAIq9X7/I7AUtkK5ERPKkVersNJyf9/KL4j4sfBtHy2ekeAR+8obqa05ZHQvG9bztPdB94Wf1o
-	IY+t1Eq/cyU0xtzIxxqSZ7d32MclTO8/mBAa7jBoWYsiXO0kinedgIQeALJBkDWk=
-X-Gm-Gg: AY/fxX48D53njfaD4mTuGBSmbSGEQ0kRqPRd/9NA+8Om8/EiLKD5V1akbQpTS2NO1Un
-	nU5jwgQ7njdfEADlXTORO39V71tGD7oWRihxE2oj09A+RI1vst9hFGzctzjLfjsui1F/Ke9nhHl
-	Cn/CgIF9H08yFbN98e49V9D8jRWTX/fp3AvRQ/wPjpGv6O0dQqqllhNRwasmci64U09iJe7Sexl
-	AVXL67LyCZV57mE8o0GIHszONhCSq5dQLSbtQma2ozXGBf17stwF52FPct2cFEaZh6Ybbc8c9y0
-	ZK2pFmoySn9fDVEQcwl5gA/EdQGcLjEs7U717NOtgYqOuJ78CzinFmsc8g9JIzILNCT9+N0ylFs
-	8LmqeuH2Fyh730iNXDcNuHxqZnTwTJzqgG5X9jteoUaAQ+PNahnrGH5j3UI3VssDvpqRR6RvvuM
-	SiGBxMu27vb1+1IIY2QftfLmE=
-X-Received: by 2002:a05:620a:414f:b0:8b2:f2c5:e7fc with SMTP id af79cd13be357-8c3893757femr2856797285a.7.1768303752105;
-        Tue, 13 Jan 2026 03:29:12 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGpjrF4n+gdyf96X8il7mrinkoUjfQiSc/k+X+vdYSmWzaD8NIKkyhZkIC4RqiENTrPc+Q/8g==
-X-Received: by 2002:a05:620a:414f:b0:8b2:f2c5:e7fc with SMTP id af79cd13be357-8c3893757femr2856793885a.7.1768303751609;
-        Tue, 13 Jan 2026 03:29:11 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b6c634631sm5129949e87.13.2026.01.13.03.29.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 03:29:10 -0800 (PST)
-Date: Tue, 13 Jan 2026 13:29:08 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        J =?utf-8?Q?=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
-        Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Catalin Popescu <catalin.popescu@leica-geosystems.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Pin-yen Lin <treapking@chromium.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] arm64: dts: qcom: lemans-evk: Enable secondary
- USB controller in host mode
-Message-ID: <ftqb2uxp6yk73djyo3psehhqq5wamimtissgfehhziwbkprl4c@phftum3m3sdy>
-References: <20251220063537.3639535-1-swati.agarwal@oss.qualcomm.com>
- <20251220063537.3639535-5-swati.agarwal@oss.qualcomm.com>
- <qy4bp2hz3ivwydsk4sblxpgthz5hw4rn7r3ezaim5wf5fgm4sg@meispnp6wthj>
- <CAHz4bYvVfQke_aUx_mVO2QkCc5yr_1Cn35N6hPi1if=X7iM3+g@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25894283FCD;
+	Tue, 13 Jan 2026 11:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.1
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768304129; cv=fail; b=RD56tsks2UcAvU0ALO9wwRHfSErZ2Y+AGP7Ox76ZFt8DrPr9LUj2A+6hEaPU1cQ9PpTDUbYexmIcpnsnURN23T/dhJdWryp9u2nGHYJEUverNwPX9mrv1+fMGEiYFEBjfik59JYyhN6jet6X0Tmi2e9LXm/Gonn4oCXzNyBIhc8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768304129; c=relaxed/simple;
+	bh=GKLNsLK3Aykzk7eA6+pr5yp/i8g/UgL5kjpshzQgMjA=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=QYgg7lqkQaXMg4GIdLzVHRLmN9FTImobDCWz5YgA4XkQrmOUzb0XNaC5tMW+sbFvEcVh5Alaom3npVfHYnJIHDcIiMvdBxWGSn3jvB2nb5AD4Phs/hZdbnusVMyLw39OMbZlZgTly5VN+J574BU1lblBvIPvEAsUWbPzF2z683w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aC+m14m5; arc=fail smtp.client-ip=40.107.201.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=T8DLe3B+ms73hRDnMtarX5eJPA80lgB/bbPjM3YgdWvh/jzZ/G38uhmupHJ5SAL0g7Ohu29R9CEmMo/1daXSKM8mqFXqDG0Rc2GjG6fWeBtzvK6sRYOwc9CrFOiS8IZZfxyhaiYgUyDroITtO27lc9B2yUp6LR6KuxVTiJbg1hQqzPrHwTWazgAQxr0LA9w9RAj7kV2XsuNrrVram9X0Ycc0HuZ5j/J4B+In/BFqzJ+Pn9LoVFRjtswkctQp94eyvitZ+kiAMQ9wGw4B4X9jTl7w12AplVE71aEopLBKdf5MejXdXrOkxsiCAFjdH6wb5xz2HDAOTprMYzJEoqEmSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oMDWD852+dF9qs/kMu3jAhQuwXlCR4/6K35U724fD2g=;
+ b=aIIjjOw0a2iUZrAAlLnvWDkpAHyO0Nbqwh19zuCdX/Jpr5kePDPZmXWiHjf8HLGbKDxu+3g+H1D6ivdzdh/nCocoEu/CSv0znJNVGZjljghg3FX9Q+Gtc9RZSKARxitvAGXAw29DV9G0C0KqXgQhHFkjHn7LJUF2Ay5P/An+83bUoZSHuyKEA9GF6J/NhmgdVguGuHa6cEhnCP4bq5yX4U8Geymg7TLtl95oKtSmPYoHtoznYTuh+wAOquS9rJohSf3qVlMTn4GO5mpVHkO0xQbqIdrYel3TSV86eofLySZ8LG2QTCSnGtv/rmI7E29elOh10uxn05hu8f+YkIJZpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oMDWD852+dF9qs/kMu3jAhQuwXlCR4/6K35U724fD2g=;
+ b=aC+m14m5qvnKzERIcowSH6kRihjCM4xPYK1pw+fiMfNaDfC5zWHpdmPJaalGkFH3y4iZHMz67KGjIAfQc6RY87h4xqWWc5BWx8Xe90KjUEJsatVuZBuQ2P1i1YJMt8MNh4v8f+bcuH9V3Ja2MI3AbA+9MsAE1Dwr4fVtLggTTLrw0I30vlgd3ODwWv1NduLeOJ2nn+D2gAF/13Ym382mdZ38BFjsA3cwXPpcu8nyXl9JTKeIM75XDxJawneZGMZQ+4elKyIUHjFG0+7tn7wvqPIFSt1Rev9UuL+7rlmUBAFaFOOW632ekcJkj/euGhYkHRHcj98+RgXY3oRVbPjCjQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS2PR12MB9750.namprd12.prod.outlook.com (2603:10b6:8:2b0::12)
+ by SA1PR12MB7224.namprd12.prod.outlook.com (2603:10b6:806:2bb::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.7; Tue, 13 Jan
+ 2026 11:35:22 +0000
+Received: from DS2PR12MB9750.namprd12.prod.outlook.com
+ ([fe80::56a8:d6bf:e24c:b391]) by DS2PR12MB9750.namprd12.prod.outlook.com
+ ([fe80::56a8:d6bf:e24c:b391%5]) with mapi id 15.20.9499.005; Tue, 13 Jan 2026
+ 11:35:22 +0000
+Message-ID: <e9f18b0d-6462-43e7-955f-45337914b321@nvidia.com>
+Date: Tue, 13 Jan 2026 11:35:18 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/5] phy: tegra: xusb: Fix ordering issue when switching
+ roles on USB2 ports
+To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org
+References: <20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt>
+ <20251204-diogo-tegra_phy-v1-3-51a2016d0be8@tecnico.ulisboa.pt>
+From: Jon Hunter <jonathanh@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <20251204-diogo-tegra_phy-v1-3-51a2016d0be8@tecnico.ulisboa.pt>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0PR07CA0027.namprd07.prod.outlook.com
+ (2603:10b6:610:32::32) To DS2PR12MB9750.namprd12.prod.outlook.com
+ (2603:10b6:8:2b0::12)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHz4bYvVfQke_aUx_mVO2QkCc5yr_1Cn35N6hPi1if=X7iM3+g@mail.gmail.com>
-X-Proofpoint-ORIG-GUID: cT57F6lTmYDIvgvJRVcbiIAjd51HgL0O
-X-Proofpoint-GUID: cT57F6lTmYDIvgvJRVcbiIAjd51HgL0O
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEzMDA5NyBTYWx0ZWRfX/a4IUvagZMZ4
- MghN1rMDaFthbrg7ax9auvkIzxzu634fqcVelo3FKC2ozkmE+EnVy+73L2cIAv+NTZIdDWmZCNK
- Bd3AzmZyebLjBGX//Ree8U0+sta8PVlkHp0M9mX1nQlPp/r9Q1F5R/ki4jM4WWbPMKaf55ax6eR
- g0PJcwUfflpgG2QjZH+jelt+vCWj55eK4bkDkKOaJTMkcABhGikw2axrwdeuMGtkR2c+kuHGfxl
- 5Z4rdIP5ttKXMjfwCKxh+mIBcBCV4fcef2zkk69MrMMjsEFRVR36wCSf1SHinvFLWb0UrUzaIYI
- WtPg0Eq9hJi1uqNRTQUvIty4CLVpe5+jq9l72MVukZu5HqsaDGyQYNU3zhuymKMbWJC31EPgo80
- HtpaS1FYC0BwkTc2N1rpALniq4aMhkRQAVKsWN0A+8MnqwP88vVAOyn4x2wbBI0gQPDRQscwtqo
- NHYNWb8miEUS00vum+g==
-X-Authority-Analysis: v=2.4 cv=PvSergM3 c=1 sm=1 tr=0 ts=69662c88 cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=o7B0pVO_YLVwEXfCrecA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-13_02,2026-01-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 phishscore=0 malwarescore=0 lowpriorityscore=0
- adultscore=0 spamscore=0 clxscore=1015 impostorscore=0 suspectscore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2601130097
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS2PR12MB9750:EE_|SA1PR12MB7224:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca79e03b-e4d9-4b1d-2c04-08de5297d693
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OFNQLzJITVRacWlkbDVCcFcyZUdQU0ZBdllzUUFxdlMyM2xCZDBaenpxSGxr?=
+ =?utf-8?B?S0lBUHJjZm5pOVk5OEZrZWw4M04rUCtvWUs3eGRFd2cvd09hcXVmdmIySXlo?=
+ =?utf-8?B?MnZ5NHJpOVprRS9xOXJTdlJ4T0Z4c3hhK1V2NS84dlRvUk9iNU13RXdGbVVj?=
+ =?utf-8?B?Uk1UN00rS3Z4UFZLVkdERFVHRlJNbmlMRXQwM09aM01OZisydGJrMnpDeEF6?=
+ =?utf-8?B?UXN5N0hNNW1Rc0NvTHR4NVoyM0tHMlN6OUVlSFVwSVJaNWVtWHJxV0tQMHV5?=
+ =?utf-8?B?b3ZBd1VFWDN2UEJyK0orc1pMY3ZneDB6TWZueC95MEM2SlFmckE2SVczZkZC?=
+ =?utf-8?B?Yi9DbGREVFl5ZEVjUFYvVEFtb04rNlFuellTeG1qd3pXSCtuaFRLeGtvaXdP?=
+ =?utf-8?B?SlVuUFVyclE2UWlqT25QSFc3cmZCRVRCZW04dmJnNU1mT2t1MkNrSU8vYXdI?=
+ =?utf-8?B?NW5QWm93L2hKcWZHakhIbGxaNDhKaDVKdVRhbmU4WHZkd29jR00rN0ZoUklT?=
+ =?utf-8?B?TWxRUGdFUjBmdy9zY05vaTdsdmdIRWo2K3c1NUhYVm1IaThMVU1Yd0tWSFo0?=
+ =?utf-8?B?cm03QzgyOENjek1GR0N0Qk96MXlvcXY0QUJGcUEwK1d1N2M3ZWdnYTMreUd6?=
+ =?utf-8?B?Q1J4d1YwMHZZQlVla2dLaVVTK2VlSTFHYzVaN011a0IyNCtMOHpHUS93a3Rh?=
+ =?utf-8?B?VTY5SC9uQWQ1SzZCdXhDNHRJbGt6TEJweFhqZ2kwOHpQUXBlWHQzYWxwcnNX?=
+ =?utf-8?B?dDU0RTB3bldZanVSYnk3TEhEakNYSWIxT3IxbVRNMXpIRUhLc09hUk1oejg1?=
+ =?utf-8?B?TW1sL2Eya2dRUkp0SW9XeGJjbFVPTXZyd1ZjSFMydHkyOXVsTXdtclBkb0ZY?=
+ =?utf-8?B?UElOaStmSUhibEhNQmhmMU5tMStNM3Riend5Z3dhNDlUd3R0RFd1V0Y1azNJ?=
+ =?utf-8?B?eXcxOExnbHBvazBDbmtveUFFMGYzWUU2Y3d0MUVRMWJvbzcvbnBwYXpGZ3Rr?=
+ =?utf-8?B?elE4RnhQb1BjQ1dZMEl6U0pITVJQVlByNitHdDlhcmkyL0wzMWs5bXAycnI3?=
+ =?utf-8?B?T044VDhLcDkxSVc4R2RNZFZoOGxSUGJWSThpMUM1TG0yVkowcW1XbWpHQnc2?=
+ =?utf-8?B?RXNMbXpiMU1CcXJRSnk2N3kvTCtmS3NudXEvWnpMbHNaUFYvblNZRTJ6Wmlh?=
+ =?utf-8?B?VVRMNE40NFpEZG5MVmhkZTh4NmVKQ1R6ZFBCYWFVUlQvcWJoOEN2dDNMaTRo?=
+ =?utf-8?B?eVNzUXpNT1dWZFRGTjJ5ZWoyaTJnV3cvdHNTdjJRaStXemVlR2haem5kVW9m?=
+ =?utf-8?B?L1RodzNIQmlMQUh1amRDK2FKMS8wck0rM21YWVB1MldXQkpEeXF6Y0xZQ2JG?=
+ =?utf-8?B?SS82VnBkeHQxNnE2TGt3aWgveFYwaC9YYXVOdFoxZWFoZW4ydGFZcnV6RWVE?=
+ =?utf-8?B?REdyczByb09QQ00yNUdxMjdNa0txWi9UT0R6a3cwSGJOMlFUOGtUUmFwc1N4?=
+ =?utf-8?B?WnN2UlMvdDZiY0g3aHM4NzAwRnllRzNWL2kybEpYYlB1UkVqeDUwVHdnem5s?=
+ =?utf-8?B?cExsbmk1eWl6cmViT01TemNaT3NvRGNVUXV3SzQ1VUE0UExSQ1lOem1wME5x?=
+ =?utf-8?B?YUs0aDRBUlFzT0U1QXBHT1B0L0NPZWhwNWhjcjJ5a2plaXVQVGUrZ1hBV0JQ?=
+ =?utf-8?B?OFZVOWNIZFowa2tXRzJtOUZob0dzSnJJYkozYVp2TnN2ekhFVnNReU1XK3NG?=
+ =?utf-8?B?RWdPUUk0VWhIWjVlemhZdVZkaXVnS2pPRys3bzJNeTF2aGxlbFFIWE9UMXdN?=
+ =?utf-8?B?T243eXV3T2lOVGZRNnJRK2l6ZWRZTHR5VW94eE9uOFY3VkFiazFqODRvOG94?=
+ =?utf-8?B?Z1RTbmZ3ciswcFdZOVJsS3pkT2VtOFVtV2VHdS9XU0dBOEdXOGtpSkpOMDAy?=
+ =?utf-8?B?QUs1eVB3WnVYOXRiOXJpWDlNWTlsRy9JVmxwN2FYNHZXZS9BM3NyUHNOL3c2?=
+ =?utf-8?Q?FQpKOF9J+8Icta4mRntrXUBpfv8zHc=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS2PR12MB9750.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?R095Z2c2NW5GL0JMYStmclByS3FPVi80bThVVlZydDJhdjZaNUpsaWFQTC9t?=
+ =?utf-8?B?OFpwamIvVks1U3FMTVpmRlhydkN3YXN3bnBNb3pTc2VxVmVxeU95d2hlcEtX?=
+ =?utf-8?B?OURZZVNualFVRXdHaUZabEh0dTZ5MFBUOHE4TEVrMEl5ejFXWi9xY0hHV3NC?=
+ =?utf-8?B?aytIM0VwOVlPK3dFK05VdFd5N2szeS9yRUdNRTVSbnR3cWtvVzJ1Tk43MXJx?=
+ =?utf-8?B?TzFaS0FLM3NjNVgzZTk2ZGtiRllXYnpodnRJdmdMa2JsM09HbmdwalE0S1ZN?=
+ =?utf-8?B?WXliVm9PWnZ5endTZk5SWUZXdjZqc1ZQdWhUbVRpdDZlczZRdGZPb0tiRTRi?=
+ =?utf-8?B?cEtFbENmZGVwSU5xWi9MWFFHdjFVL0tOcE5RUllHcFo5MWUyOWdWREhIcFll?=
+ =?utf-8?B?SGRrZitIVG9FLyt2MENKckpvelNmRnpFdTVqdk9xZHVkV3hjRlhuVDZBb0dP?=
+ =?utf-8?B?eVh2emg5YXlVWFlHQkYzTFcyWFNjWjlUNGg2bHRycDMydVRpUzJDZTd1VXBD?=
+ =?utf-8?B?eXlkS0ROYm1uV3YrUFVSRlM3d3pTcEYrWjZnYmEzT2ZxNE5FQng3aUl0Si9U?=
+ =?utf-8?B?aVA3Z1JkQm5iSnIyVzZwOUZtR29pRU05MlJmWHpFZDhBWms0MG4vQ25zK1dP?=
+ =?utf-8?B?NFlkVEt6UW54Sm9hT1NVRFArMEtkbU5YcWF6WFJTeXhEbkU5ZnBYVHUxTVFk?=
+ =?utf-8?B?QS9raUd5cDdLRVF4NVZqaWJibHZzQUU0ZGJnaHVXTFFrYmN2cERZSnVZWFA3?=
+ =?utf-8?B?TjlJUTZKMFMwNkZKK1ZWekNwRlZTaUlsNDh6SDR1OFJPYWZ6c3hBb1VPaVhW?=
+ =?utf-8?B?Nzh5V2xvbGlLMjhNSzRzc20yUkY4Ym00VlJtRjdWeXF4S3cwZ2IwNmxKVkow?=
+ =?utf-8?B?akFLTU5uUitDUkdFczNxQzkxSFlTZDlKSWNWZ2FHanBPbGtlb0hWUmxzZ2hp?=
+ =?utf-8?B?VmNTUEFHQ0gvVytmaFo1Q3dhRVcyUncyUmFHeG43TktkRVFDZzJwTVo1bGIx?=
+ =?utf-8?B?bTlHL1dCU3diY1hRckVhMTRaWkUxdFkvM2l1Y0RTdnM4N2lZcXN3ZkIzSkJ3?=
+ =?utf-8?B?NE90cnZ1WWtUTXRGalJjcC95VDREYlp2NFh2K0pMbUtVa1pOM1hDMVBLYVBh?=
+ =?utf-8?B?dmNEVDVzWmJ1Q0g3TVRvU2ROWEhNK3l2MnNFWjVIWUo2cHU0a3V0WVRCTEZj?=
+ =?utf-8?B?NTAwZlg2WDdtUGFaK08wcHByNHRqcFBEcEpJMlcwTnBmM1A0dWttZkI5NTQy?=
+ =?utf-8?B?V3FZbVBQTmVzSWhhRUwybmVFbjRHVWF1ejlySXdMMHBzR1VPcWZQeW9QVmVl?=
+ =?utf-8?B?L0ZDUGIzY3lsU0dIREJVZGM2NzZvWGt2cmtGeEV4TFVtMk50UHIzeUxjUlRs?=
+ =?utf-8?B?QmMzVUJRYnVBNkdYbUV6a1dvZ2M5RnIvUkhMTStOd1BEeUhnWnBMTjQ0dldq?=
+ =?utf-8?B?OElFM08yb1JwNHdKWDVrQnlucFhhQWtQUUYyZlFyZy9oakdRbFNseDh3NDZW?=
+ =?utf-8?B?aFBGUW1NcG81ME8ydHNad2JkaFZrQ2E2S0lmNkNKUnBuNlliR0pZU2EySmNH?=
+ =?utf-8?B?cEZZdFdEOGhwM0ZNNVQ1VVZhWHNTRGdDbnVwMlR2NURRZzVhMlNYanVGTHFC?=
+ =?utf-8?B?MjBHeFNSQ1YwUmRzb1M2VmJsZlVyY2VBaXdvblVVR3N5MDVBNjJob2xGWEpQ?=
+ =?utf-8?B?TlNhM2Z0anpZR3JtKzV1RlloekpLaXdLOU0rYmVWcFlyRitQR1NJYkp6WWFx?=
+ =?utf-8?B?VWZFRnJPaGgwK2czVktJVW5FMTJ5VEZ3eVFJOGl1TllHTUx6Sjk0M2R3VFhT?=
+ =?utf-8?B?V3dscmZpbmdXeG1qWkFDOUFVZnZPeUFWcE1rWTgxTGJlVlU1WWl0UjRIeUxi?=
+ =?utf-8?B?SWwxdVFkT29pVjJqSmE0cnZhbzVlMldrYUVCS0NhcDVxMkhhTHcvbzdlcUdV?=
+ =?utf-8?B?R0Vwa0VMMm9YaG9rZGNrcXZMTEZUTzV1Mjlia1VJWEM2RTZUL2IrQkc4dXRF?=
+ =?utf-8?B?d2lKNWNTbmpwTklsTHZPU2RBczZvanZ5R213TVVaMnJyZ1g0TW1Vamc0cUtX?=
+ =?utf-8?B?RVA5anMxcjNwc1RjNHpDODRnWk5KUW5FMzhWSmRCSWg3YUliemZTbEYvazVS?=
+ =?utf-8?B?NlRhZ2ZJNk53bDhObldKcGZiS0hFWTJRbmk0Zzh5REVvd2tBNGJzWjZwcmx1?=
+ =?utf-8?B?bldBRGtkaGxodTRVaG1MK2xWbllYZlpPU1YxTXcvWG9rNGtreW9Gb0l4ZzJU?=
+ =?utf-8?B?YSs2Z3VQQTQ2c3R0K28raGFhQW9SNnNHc0Mvdk1BTnRwbUJMN1h4RDdGelZr?=
+ =?utf-8?B?ZGxuMmNOOVhLVUMyNnZmTEhzbXd5Vk1DS254My9zU0F0VlZnNWd5Zz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca79e03b-e4d9-4b1d-2c04-08de5297d693
+X-MS-Exchange-CrossTenant-AuthSource: DS2PR12MB9750.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2026 11:35:22.7757
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rgU1Ag1WYX8xWSaxUpGsJP8TGUhavVSsEAXoWKJXDSKEpQjw9uA7Sm4i+Pd/r8naK4vjlK315fftifr5vVDsLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7224
 
-On Tue, Jan 13, 2026 at 01:32:41PM +0530, Swati Agarwal wrote:
-> On Sat, Dec 20, 2025 at 9:47 PM Dmitry Baryshkov
-> <dmitry.baryshkov@oss.qualcomm.com> wrote:
-> >
-> > On Sat, Dec 20, 2025 at 12:05:37PM +0530, Swati Agarwal wrote:
-> > > Enable secondary USB controller in host mode on lemans EVK Platform.
-> > >
-> > > For secondary USB Typec port, there is a genesys USB HUB GL3590 having 4
-> > > ports sitting in between SOC and HD3SS3220 Type-C port controller and SS
-> > > lines run from the SoC through the hub to the Port controller. Mark the
-> > > second USB controller as host only capable.
-> > >
-> > > Add HD3SS3220 Type-C port controller along with Type-c connector for
-> > > controlling vbus supply.
-> > >
-> > > Signed-off-by: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/lemans-evk.dts | 158 ++++++++++++++++++++++++
-> > >  1 file changed, 158 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/lemans-evk.dts b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-> > > index 70d85b6ba772..d72639479d75 100644
-> > > --- a/arch/arm64/boot/dts/qcom/lemans-evk.dts
-> > > +++ b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-> > > @@ -67,6 +67,47 @@ usb0_con_ss_ep: endpoint {
-> > >               };
-> > >       };
-> > >
-> > > +     connector-1 {
-> > > +             compatible = "usb-c-connector";
-> > > +             label = "USB1-Type-C";
-> > > +             data-role = "host";
-> > > +             power-role = "dual";
-> > > +             try-power-role = "source";
-> > > +
-> > > +             vbus-supply = <&vbus_supply_regulator_1>;
-> > > +
-> > > +             ports {
-> > > +                     #address-cells = <1>;
-> > > +                     #size-cells = <0>;
-> > > +
-> > > +                     port@0 {
-> > > +                             reg = <0>;
-> > > +
-> > > +                             usb1_con_ss_ep: endpoint {
-> > > +                                     remote-endpoint = <&hd3ss3220_1_in_ep>;
-> > > +                             };
-> > > +                     };
-> > > +
-> > > +                     port@1 {
-> > > +                             reg = <1>;
-> > > +
-> > > +                             usb1_hs_in: endpoint {
-> > > +                                     remote-endpoint = <&usb_hub_2_1>;
-> > > +                             };
-> > > +
-> > > +                     };
-> > > +
-> > > +                     port@2 {
-> > > +                             reg = <2>;
-> > > +
-> > > +                             usb1_ss_in: endpoint {
-> > > +                                     remote-endpoint = <&usb_hub_3_1>;
-> > > +                             };
-> > > +
-> > > +                     };
-> > > +             };
-> > > +     };
-> > > +
-> > >       edp0-connector {
-> > >               compatible = "dp-connector";
-> > >               label = "EDP0";
-> > > @@ -140,6 +181,16 @@ vbus_supply_regulator_0: regulator-vbus-supply-0 {
-> > >               enable-active-high;
-> > >       };
-> > >
-> > > +     vbus_supply_regulator_1: regulator-vbus-supply-1 {
-> > > +             compatible = "regulator-fixed";
-> > > +             regulator-name = "vbus_supply_1";
-> > > +             gpio = <&expander1 3 GPIO_ACTIVE_HIGH>;
-> > > +             regulator-min-microvolt = <5000000>;
-> > > +             regulator-max-microvolt = <5000000>;
-> > > +             regulator-boot-on;
-> > > +             enable-active-high;
-> > > +     };
-> > > +
-> > >       vmmc_sdc: regulator-vmmc-sdc {
-> > >               compatible = "regulator-fixed";
-> > >
-> > > @@ -527,6 +578,33 @@ hd3ss3220_0_out_ep: endpoint {
-> > >                       };
-> > >               };
-> > >       };
-> > > +
-> > > +     usb-typec@47 {
-> > > +             compatible = "ti,hd3ss3220";
-> > > +             reg = <0x47>;
-> > > +
-> > > +             interrupts-extended = <&pmm8654au_2_gpios 6 IRQ_TYPE_EDGE_FALLING>;
-> > > +
-> > > +             id-gpios = <&tlmm 51 GPIO_ACTIVE_HIGH>;
-> > > +
-> > > +             pinctrl-0 = <&usb1_id>, <&usb1_intr>;
-> > > +             pinctrl-names = "default";
-> > > +
-> > > +             ports {
-> > > +                     #address-cells = <1>;
-> > > +                     #size-cells = <0>;
-> > > +
-> > > +                     port@0 {
-> > > +                             reg = <0>;
-> > > +
-> > > +                             hd3ss3220_1_in_ep: endpoint {
-> > > +                                     remote-endpoint = <&usb1_con_ss_ep>;
-> > > +                             };
-> > > +                     };
-> > > +
-> > > +             };
-> > > +     };
-> > > +
-> > >  };
-> > >
-> > >  &i2c18 {
-> > > @@ -690,6 +768,14 @@ usb0_intr_state: usb0-intr-state {
-> > >               bias-pull-up;
-> > >               power-source = <0>;
-> > >       };
-> > > +
-> > > +     usb1_intr: usb1-intr-state {
-> > > +             pins = "gpio6";
-> > > +             function = "normal";
-> > > +             input-enable;
-> > > +             bias-pull-up;
-> > > +             power-source = <0>;
-> > > +     };
-> > >  };
-> > >
-> > >  &qup_i2c19_default {
-> > > @@ -849,6 +935,12 @@ usb_id: usb-id-state {
-> > >               function = "gpio";
-> > >               bias-pull-up;
-> > >       };
-> > > +
-> > > +     usb1_id: usb1-id-state {
-> > > +             pins = "gpio51";
-> > > +             function = "gpio";
-> > > +             bias-pull-up;
-> > > +     };
-> > >  };
-> > >
-> > >  &uart10 {
-> > > @@ -903,6 +995,72 @@ &usb_0_qmpphy {
-> > >       status = "okay";
-> > >  };
-> > >
-> > > +&usb_1 {
-> > > +     dr_mode = "host";
-> > > +
-> > > +     #address-cells = <1>;
-> > > +     #size-cells = <0>;
-> > > +
-> > > +     status = "okay";
-> > > +
-> > > +     usb_hub_2_x: hub@1 {
-> > > +             compatible = "usb5e3,610";
-> > > +             reg = <1>;
-> > > +             peer-hub = <&usb_hub_3_x>;
-> > > +             #address-cells = <1>;
-> > > +             #size-cells = <0>;
-> > > +
-> > > +             ports {
-> > > +                     #address-cells = <1>;
-> > > +                     #size-cells = <0>;
-> > > +
-> > > +                     port@1 {
-> > > +                             reg = <1>;
-> > > +
-> > > +                             usb_hub_2_1: endpoint {
-> > > +                                     remote-endpoint = <&usb1_hs_in>;
-> > > +                             };
-> >
-> > Are all other ports disconnected? If so, why do we need a hub?
-> Hi Dmitry,
-> I didn't understand your query, can you give more context to it?
 
-You have described one port of the hub. How are other ports routed? Are
-they connected to outer ports? To some other devices? Unconnected?
+On 04/12/2025 21:27, Diogo Ivo wrote:
+> The current implementation of USB2 role switching on Tegra relies on
+> whichever the previous USB controller driver was using the PHY to first
+> "yield" it back to USB_ROLE_NONE before the next controller configures
+> it for the new role. However, no mechanism to guarantee this ordering
+> was implemented, and currently, in the general case, the configuration
+> functions tegra_xhci_id_work() and tegra_xudc_usb_role_sw_work() end up
+> running in the same order regardless of the transition being HOST->DEVICE
+> or DEVICE->HOST, leading to one of these transitions ending up in a
+> non-working state due to the new configuration being clobbered by the
+> previous controller driver setting USB_ROLE_NONE after the fact.
+> 
+> Fix this by introducing a helper that waits for the USB2 port’s current
+> role to become USB_ROLE_NONE and add it in the configuration functions
+> above before setting the role to either USB_ROLE_HOST or
+> USB_ROLE_DEVICE. The specific parameters of the helper function are
+> choices that seem reasonable in my testing and have no other basis.
+> 
+> This was tested on a Tegra210 platform (Smaug). However, due to the similar
+> approach in Tegra186 it is likely that not only this problem exists there
+> but that this patch also fixes it.
+> 
+> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+> ---
+>   drivers/phy/tegra/xusb.c            | 23 +++++++++++++++++++++++
+>   drivers/usb/gadget/udc/tegra-xudc.c |  4 ++++
+>   drivers/usb/host/xhci-tegra.c       | 15 ++++++++++-----
+>   include/linux/phy/tegra/xusb.h      |  1 +
+>   4 files changed, 38 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+> index c89df95aa6ca..e05c3f2d1421 100644
+> --- a/drivers/phy/tegra/xusb.c
+> +++ b/drivers/phy/tegra/xusb.c
+> @@ -740,6 +740,29 @@ static void tegra_xusb_parse_usb_role_default_mode(struct tegra_xusb_port *port)
+>   	}
+>   }
+>   
+> +bool tegra_xusb_usb2_port_wait_role_none(struct tegra_xusb_padctl *padctl, int index)
+> +{
+> +	struct tegra_xusb_usb2_port *usb2 = tegra_xusb_find_usb2_port(padctl,
+> +								      index);
+> +	int retries = 5;
+> +
+> +	if (!usb2) {
+> +		dev_err(&usb2->base.dev, "no port found for USB2 lane %u\n", index);
+> +		return false;
+> +	}
+> +
+> +	do {
+> +		if (usb2->role == USB_ROLE_NONE)
+> +			return true;
+> +
+> +		usleep_range(50, 60);
+> +	} while (retries--);
+> +
+> +	dev_err(&usb2->base.dev, "timed out waiting for USB_ROLE_NONE");
+> +
+> +	return false;
+> +}
 
+
+This patch is causing the following build error today with -next ...
+
+   MODPOST Module.symvers
+ERROR: modpost: "tegra_xusb_usb2_port_wait_role_none" 
+[drivers/usb/host/xhci-tegra.ko] undefined!
+
+The above function symbol needs to be exported.
+
+Jon
 
 -- 
-With best wishes
-Dmitry
+nvpublic
+
 
