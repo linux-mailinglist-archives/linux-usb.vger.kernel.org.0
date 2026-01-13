@@ -1,209 +1,206 @@
-Return-Path: <linux-usb+bounces-32295-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32296-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9AFBD1AA8E
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 18:35:57 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEBB4D1AC49
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 18:58:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8719930A5656
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 17:34:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3C534300F6B4
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 17:58:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9796536C0D0;
-	Tue, 13 Jan 2026 17:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735BF394461;
+	Tue, 13 Jan 2026 17:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X6Z+xc5m"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WFgqBgri";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="V3G9uTXJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A99334C1F
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 17:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1893393DE4
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 17:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768325643; cv=none; b=NW8m8OMH4MZEFUbYMYw3owT+c7kaT96m/rQoswEYYz+f0w0v6oVh5H01B0EuDUFo8aKotlJlJBJvYMhWRx4z+dDdK4SGCVm+yktzNfUAQCqqqFsyQj23Wt78gU1at6oIIeaDD/fy0ujr4cP2z88V9O1aJ2ftOERZKR3ejspeI1g=
+	t=1768327131; cv=none; b=cQ7lWQVElY1AYQx2iKREHbrk3JgsOIK6AZRID7IwV7HapgwL87z5yidFAD1+z4tfTLzm9Mv3EMpzHdmQ+XQ0MSi8Nz4Vflkl/7llML29bnOXdYF1snubHWGLWhdi7sWOvAn8+ViTIR4JDcKhm9Hz8U3B7o8ha5hWXXflqB/couo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768325643; c=relaxed/simple;
-	bh=eSn6OwD3SrFNXw5tP/h9H/Ii7V8Im22C2P69wloFwSM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Jpg1ylLE6UtKW31iq5kmU8MstwvlbvdkgqG+VU6OBmR4IUwElQQoorv+RwfuWbEU6MKAiDB2oqaCOk1Vexh8vPgKagxFUKwwsyKqVm7Ss16hFRidLTgVF1h3D79JAH33a23FDucZ59d+j+pxqf+2nI2C2vtwaxRKNuB3h4oM6jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X6Z+xc5m; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c026e074373so3655899a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 09:34:01 -0800 (PST)
+	s=arc-20240116; t=1768327131; c=relaxed/simple;
+	bh=9MBbhJG4T3kXZlVz1mX/P0WH4d+hX4QQjrBm5FanL5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mRYwBoflvNQYu0ha0VTUZGL2kkL6a47cfoY5WDPNO7vqrkgFWwV+R9JYkmdqUzwJewKiV2Kn6hVqQZxE17iAChCl6r2SYdA4gJoVADNR8n/Y/gRBGOF2gJ6xUan0jZIdDjEJ51ZIqhFb2dbps1WCb9PafcXSeuaHpsX2yQ2LRBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WFgqBgri; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=V3G9uTXJ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60DH7T1p1120568
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 17:58:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=StbT6RBQviHpD+ivVUm7MVsA
+	Kb8jo1zPIoSdMFEL8Tw=; b=WFgqBgrikHEMVSno/vfAOY/cNNfOSH3ohKq1sbSU
+	yYgrEtofVkiPfxhYAw4qiQ9ExKJz5KSqSwdaaYgpv0rlwI5/Z8vmdBsPFxX7xpiN
+	FIulvCY3dd+xoW/Fp2ux/ja7EnhKQS73FgCM5cAtBtHKPJ7aT93jeLoZxb7eSuA7
+	3GnJyj3Bt10Q2s1DR8Gp/OyXyQ3lyUSiJ2jdtYo8qN7xiMEPlp6QWDzRmU+CqLA5
+	OmGUf39245d3TpFkJs9VBuDfvOAv8nIRmfITeSi0rlQjvlPMcs+cpl0ruwsLq/q+
+	OxVdfIG2GTT1+w/swq93mcyxQVbvO34hPsIWJp1KW7RD8g==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bnt63r5nh-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 17:58:49 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8c52af6855fso78441285a.1
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 09:58:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768325641; x=1768930441; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o9AYRVJbls5kMz4af/phakvFWuIaNCCibN2SZ7D9nuU=;
-        b=X6Z+xc5mtXg0NqS0JuUbt1276ipKGNu0R4ckTAgVXUlKTUMiBwO5lSK2x1UTTsCLDD
-         /QIv8UUd46Dk4FI7bKy0ArpNtGt9/v4UYFj//SRFAZa7iJxZxYVXLIc1/GmFFbT3PNDK
-         Ph9N9Z6jzPIOymVNTKo7AkHkpKN4UWa739o1NArSz3RA+r4bkLo5tpwsw7xRxPgAYEYh
-         /AAj4H8ro7dYitL2oQJTKqd/16r6B25ymhHrrOs0hugGI7QVS0fl+qoytta50+WrkHjG
-         za/cEWO9sds43hlDIoCealBxoDEb+3L9q33ao+CfHkoMSEL005lg5FLzTQZGEubYJ6Fg
-         /hLg==
+        d=oss.qualcomm.com; s=google; t=1768327128; x=1768931928; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=StbT6RBQviHpD+ivVUm7MVsAKb8jo1zPIoSdMFEL8Tw=;
+        b=V3G9uTXJuDV4R85RqakM8iKzbxWn7hZdmAC7QHa8sdgq+Eoi1NyWUsqvMymL3JMn1K
+         ncP2Lsr+cYKTMpnnYwBNcBwNOoBESdcMUJZraJSKxiXRCHB2PuCEWjDDSYL5hHCID6cf
+         ILzrLBLRDPKyjltxxYnTFKqxQRnHkYdIu9Dk4duU/HDcItYMPmixtDngT8YQ+igUzKq0
+         4CZks7VLlkf6QVeakKP/BCAtG25pkjgLRShBoxHlBtYW5OuHg1SG+zugz6si2Sqyh9hn
+         87nFn2+O/jX0+POFowqZq0jw7JdyRflkd/evqr2ewg6v5VXztxiv6TsWYBOPa/groHjc
+         yCHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768325641; x=1768930441;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o9AYRVJbls5kMz4af/phakvFWuIaNCCibN2SZ7D9nuU=;
-        b=TocjpojAgPS+cPA6qVH0cfoEF05ReKlby83Hplx3DodbJ/v8QqkitSlDGE+k24pAEb
-         r7WKTNlbtkyK2DfKg6/FhS2aOduOXvm339t3KTP8Z1tjOjrshMrW7hMn0GJFtB+426l7
-         MNXy9mEbhE3p7wDClTBrv8E4nc5OH9CEx2BR1nhyl3SeO8zIA4iedZGOADC3zg5nggxv
-         NkbyqVBfcwLAUoN0blLdoDABKepjTm9AcscU43hMO+bsUKXe2Lt19nPw6OOt1Kgrl7l7
-         Atstf1Q2rCMMXYpKng05ylbexD+lAn7Smy19xhevzAcAnBn2uXKmQ6/lJ3qKT2+ppHlS
-         RmDg==
-X-Forwarded-Encrypted: i=1; AJvYcCVL2j8spfK9M4E58vtif8Jd6WFnuY4bP4ob2uprw+yn6HCfhrYH9EivjmmLyo5PBgsIze6M2mJITEs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzrs9ZgwGsfitbDgS6BzXCQJ1DmqzSJSM7JjaslWdq7VbN9e0sy
-	/uBj/XKsYS21YMUhi7X6ckK9VXVr6nKzPMin5M4EFn+Fnr/4E1KoxzA=
-X-Gm-Gg: AY/fxX4CtrdxaaHvZU9OZ0p5IubwxQELyKUUwVe8dRcHcJYfBuok/DLiU9H3Ipy4t91
-	JQZVQIqLVsefPTD4Lrj2b9JWpMg+r9yaoLoHJqWxQr02D2XfBtYdBtvgs9grFiqB2jotgW2YS4h
-	O/2mgAjMKLbv4h6j0Rvvwn/1EI4bF9NoZ7j1zYN6DElJCT2nXjlfIjsIwlmJ9XPkUnjLhV7Fm9W
-	1KMXeMzWpsGCwYbwL3f6rgv9600hy2edJgalkWnxBBpPaZCXBNH99Ak27YHTLoCrp7elXh6727k
-	osRXhsieU0GtCn1SySIOynLvpRvJWWnoXdTdYeUWSYMUepVuDFxtmnImpl2EPuyJjNy3QDAeInt
-	RsYTCy7eH1nY87yZDkyGYI+bMte3K++M1Umfpsewb8Dm7lDAVD2AXJ18sJDVsMm49oOpOlvHove
-	+6oS0cAIHkSAx8RTkNOA==
-X-Google-Smtp-Source: AGHT+IFVIOA0i/RAZfOle5Rnk5OR3hAeebkOKtj4cj5B/mfjbUzBpEhX9pRkYTvlm8gfa3/cjIZpdw==
-X-Received: by 2002:a05:6a20:2450:b0:361:3bdb:26df with SMTP id adf61e73a8af0-3898f889453mr21192202637.5.1768325640779;
-        Tue, 13 Jan 2026 09:34:00 -0800 (PST)
-Received: from at.. ([171.61.166.29])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81f66f9cf38sm4568854b3a.53.2026.01.13.09.33.54
+        d=1e100.net; s=20230601; t=1768327128; x=1768931928;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=StbT6RBQviHpD+ivVUm7MVsAKb8jo1zPIoSdMFEL8Tw=;
+        b=rQTMSarj11VIvf9Po5FifgahUdgFZ8EGunXPhsWV4/dlYj3xJloqMAcvLMkZeOD50I
+         pcw5RZGUtDNUf32iBacpsBtr7bdfTwibcMskLRluzEdSi8eF1IxDMOiyMORLJcun/W/h
+         cUfg91bcxCtG/N3wMR4cugcwEnnfD0veLG+z2cWjcZTyvDR5ulNg6/v3kimfmltKaboa
+         vuP3Nr13g/ErQcxyJ/TEQ6aVquy3qY342VKj76AidKZdMeiv8icl9xbdA4H8+OweSZnK
+         5HB/QbucKb6lR+PBCl4VcxeDFz5iRKr5FRgdbdgS6vzaVA8od1oPYeTYx2MQrRIjDMoT
+         v/AA==
+X-Forwarded-Encrypted: i=1; AJvYcCV2WM4HML3zFLi2x/Sl+OQD+G8auxeeUBoFCgGJK1Ib4EI6CCVWS3nuDQtqGshjaHKUyNo9XVRvpUY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzg8iZWSKCF5HbAmsdTyAWSMTtUQEGxasC7UEIz+7Kw2bug0acQ
+	AZdK4SVHA/KqlZSROWL2bFQiazyqydpDatbNgzE6QHkcZPxMlk9KtQIHAGD40wrbvqzDsYU+rSc
+	DE7KjvfSoL5bwlVOstwVh33oOHf4P97i7b14sJ1boPKOCnrg23B44h+7tKMot7HY=
+X-Gm-Gg: AY/fxX62BR7oDgfY2ueLzKWYIRLN/AAiulBCkWyaLdkD7AtVwU5Bbhoz8Qhq09iyCMZ
+	a0nu8EypWbhUbmfxewborcpS4bnu7efpov1D6MFui3MbwqOx/Ctv12lnF6G58fUt0bWhs8a29pe
+	lMCH4PcN9Sdcwj4gRGry9tKGegM5bccOIAtcI1LU4I2houHvbfossb3lY0fHW9W/hbotC+WjhoB
+	hJA/iY8ZCZ2OK65XUfg72wzlDIRecNRtSerdXZDSvBZgbFjtQ+3+l4gpk+GdortfclpCdrqYPLH
+	fDNToPUj8iMl+zfq4DcjwfLK7La1rafWP59u4QceSVxszFisCIO4nYVTDiBDvv7B+evvxLtysdA
+	I1UYZoBNYSPpMReMc9MilP/Epbvhuo/YdRxqgrCCyeGdJDQItXXlqzyrw+IOWS/k3qmIqw5/MuM
+	OIqWANlZUVjjc33dTDH7fGv6w=
+X-Received: by 2002:a05:620a:4101:b0:8b2:d56a:f301 with SMTP id af79cd13be357-8c52fb32b67mr9489085a.14.1768327127903;
+        Tue, 13 Jan 2026 09:58:47 -0800 (PST)
+X-Received: by 2002:a05:620a:4101:b0:8b2:d56a:f301 with SMTP id af79cd13be357-8c52fb32b67mr9485785a.14.1768327127327;
+        Tue, 13 Jan 2026 09:58:47 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b9a425afasm775988e87.30.2026.01.13.09.58.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 09:34:00 -0800 (PST)
-From: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
-To: 
-Cc: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	"Oliver O'Halloran" <oohall@gmail.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Feng Tang <feng.tang@linux.alibaba.com>,
-	linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH RESEND v6] PCI/portdev: Disable AER for Titan Ridge 4C 2018
-Date: Tue, 13 Jan 2026 17:33:41 +0000
-Message-ID: <20260113173351.1417-1-atharvatiwarilinuxdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Tue, 13 Jan 2026 09:58:46 -0800 (PST)
+Date: Tue, 13 Jan 2026 19:58:43 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Abel Vesa <abel.vesa@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+Subject: Re: [PATCH RFT 2/3] arm64: dts: qcom: glymur: Add USB related nodes
+Message-ID: <gkq7vto2dhles6u4blbvzyhlnit55twjbhhnwz3k24smxb7yx4@gnnq2qbpovc4>
+References: <20260113-dts-qcom-glymur-add-usb-support-v1-0-98d6d387df01@oss.qualcomm.com>
+ <20260113-dts-qcom-glymur-add-usb-support-v1-2-98d6d387df01@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260113-dts-qcom-glymur-add-usb-support-v1-2-98d6d387df01@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEzMDE1MCBTYWx0ZWRfX8SZpadFn77eF
+ /OTUsRSXVwIaDPyKqh0e9tJSYh6IlonEc/T9msP3GCx6M2M+tZA0e/aSfzqNmsISiyNLufDqySQ
+ 8qlwH2rI4zB0xsaOqs4ZTw00EXL4qhj4f+B9FIqvYb/u7osA89dHamXIwhQLUCQK2TVBK2kDY1T
+ 1OeJJoKFENN4gCrZUATrStrLwIfuXZh7AccdLL3+jY12IFc4YdOvi0ksqyEKcV/r0UB999Bo0ei
+ /eoA24c613K/wGYBE1+vU/Zcz4cZHcZvyml+7nXTYVzJ5swgZq3445kSFXAXzdRQ/akRaYeES++
+ 9Jy9RhjHIKMXEnsCCPBYQ44GbivSFkwWBw2YbWkfCnfsYGJLtbOYGFJUUzVLrsuSXXUnBUADiJ+
+ 2LQJ/ADljAe74rYmIFw9sJ/I7U+K3vOCOBUXgoAEXI/4mRWiSh0LkApQwekERlg+0uaTIQsN1HN
+ sRPWFIef9mQN10J+JlA==
+X-Proofpoint-ORIG-GUID: Mef2eMm3xxqundwwU8Mxt_AF1Y1_qig7
+X-Proofpoint-GUID: Mef2eMm3xxqundwwU8Mxt_AF1Y1_qig7
+X-Authority-Analysis: v=2.4 cv=EujfbCcA c=1 sm=1 tr=0 ts=696687d9 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=EUspDBNiAAAA:8 a=sYW25ZiEPLqq09AedJsA:9 a=CjuIK1q_8ugA:10
+ a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-13_04,2026-01-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 adultscore=0 bulkscore=0 impostorscore=0 phishscore=0
+ spamscore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
+ definitions=main-2601130150
 
-Disable AER for Intel Titan Ridge 4C 2018
-(used in T2 iMacs, where the warnings appear)
-that generate continuous pcieport warnings. such as:
+On Tue, Jan 13, 2026 at 02:33:05PM +0200, Abel Vesa wrote:
+> From: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+> 
+> The Glymur USB system contains 3 USB type C ports, 1 USB multiport
+> controller and a USB 2.0 only controller. This encompasses 5 SS USB QMP
+> PHYs (3 combo and 2 uni) and 6 M31 eUSB2 PHYs. All controllers are SNPS
+> DWC3 based, so describe them as flattened DWC3 QCOM nodes.
+> 
+> Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+> Co-developed-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+> ---
+>  arch/arm64/boot/dts/qcom/glymur.dtsi | 663 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 658 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/glymur.dtsi b/arch/arm64/boot/dts/qcom/glymur.dtsi
+> index eb042541cfe1..53b8ab7580bd 100644
+> --- a/arch/arm64/boot/dts/qcom/glymur.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/glymur.dtsi
+> @@ -750,11 +750,11 @@ gcc: clock-controller@100000 {
+>  				 <0>,
+>  				 <0>,
+>  				 <0>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> +				 <&usb1_ss0_qmpphy QMP_USB43DP_USB3_PIPE_CLK>,
+> +				 <&usb1_ss1_qmpphy QMP_USB43DP_USB3_PIPE_CLK>,
+> +				 <&usb1_ss2_qmpphy QMP_USB43DP_USB3_PIPE_CLK>,
+> +				 <&usb_mp_qmpphy0 QMP_USB43DP_USB3_PIPE_CLK>,
+> +				 <&usb_mp_qmpphy1 QMP_USB43DP_USB3_PIPE_CLK>,
+>  				 <0>,
+>  				 <0>,
+>  				 <0>,
+> @@ -2224,6 +2224,249 @@ &config_noc SLAVE_QUP_0 QCOM_ICC_TAG_ALWAYS>,
+>  			};
+>  		};
+>  
+> +		usb_mp_hsphy0: phy@fa1000 {
+> +			compatible = "qcom,glymur-m31-eusb2-phy",
+> +				     "qcom,sm8750-m31-eusb2-phy";
+> +
+> +			reg = <0 0x00fa1000 0 0x29c>;
 
-pcieport 0000:00:1c.4: AER: Correctable error message received from 0000:07:00.0
-pcieport 0000:07:00.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
-pcieport 0000:07:00.0:   device [8086:15ea] error status/mask=00000080/00002000
-pcieport 0000:07:00.0:    [ 7] BadDLLP
+Here and everywhere else, 0x0 instead of just 0 in the reg properties.
 
-macOS also disables AER for Thunderbolt devices and controllers in their drivers.
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&tcsr TCSR_USB2_1_CLKREF_EN>;
+> +			clock-names = "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2PHY_HS0_MP_BCR>;
+> +
+> +			status = "disabled";
+> +		};
+> +
 
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220651
-Signed-off-by: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
-
----
-Changes since v5:
-- Used the correct name for DMI check
-- Used DECLARE_PCI_FIXUP_EARLY instead of DECLARE_PCI_FIXUP_FINAL
-  to disable aer, before the aer init function
-Changes since v4:
-- Used lowercase hex letters
-- Used DMI_BOARD_VENDOR instead of DMI_SYS_VENDOR
-Chnages since v3:
-- Fixed Grammer mistakes
-Changes since v2:
-- Transferred logic to arch/x86/pci/fixup.c to only target x86
-- Added DMI quirk to only target Apple Systems
-Changes since v1:
-- Transferred logic to drivers/pci/quicks.c
----
----
- arch/x86/pci/fixup.c       | 12 ++++++++++++
- drivers/pci/pcie/aer.c     |  3 +++
- drivers/pci/pcie/portdrv.c |  2 +-
- include/linux/pci.h        |  1 +
- 4 files changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/pci/fixup.c b/arch/x86/pci/fixup.c
-index 25076a5acd96..402387e41450 100644
---- a/arch/x86/pci/fixup.c
-+++ b/arch/x86/pci/fixup.c
-@@ -1081,3 +1081,15 @@ static void quirk_tuxeo_rp_d3(struct pci_dev *pdev)
- }
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x1502, quirk_tuxeo_rp_d3);
- #endif /* CONFIG_SUSPEND */
-+
-+#ifdef CONFIG_PCIEAER
-+
-+static void quirk_disable_aer(struct pci_dev *pdev)
-+{
-+	if (dmi_match(DMI_BOARD_VENDOR, "Apple Inc."))
-+		pdev->no_aer = 1;
-+}
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ea, quirk_disable_aer);
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15eb, quirk_disable_aer);
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ec, quirk_disable_aer);
-+#endif /* CONFIG_PCIEAER */
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index e0bcaa896803..45604564ce6f 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -389,6 +389,9 @@ void pci_aer_init(struct pci_dev *dev)
- {
- 	int n;
- 
-+	if (dev->no_aer)
-+		return;
-+
- 	dev->aer_cap = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_ERR);
- 	if (!dev->aer_cap)
- 		return;
-diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-index 38a41ccf79b9..ab904a224296 100644
---- a/drivers/pci/pcie/portdrv.c
-+++ b/drivers/pci/pcie/portdrv.c
-@@ -240,7 +240,7 @@ static int get_port_device_capability(struct pci_dev *dev)
- 	if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
-              pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
- 	    dev->aer_cap && pci_aer_available() &&
--	    (pcie_ports_native || host->native_aer))
-+	    (pcie_ports_native || host->native_aer) && !dev->no_aer)
- 		services |= PCIE_PORT_SERVICE_AER;
- #endif
- 
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 864775651c6f..f447f86c6bdf 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -440,6 +440,7 @@ struct pci_dev {
- 	unsigned int	multifunction:1;	/* Multi-function device */
- 
- 	unsigned int	is_busmaster:1;		/* Is busmaster */
-+	unsigned int	no_aer:1;		/* May not use AER */
- 	unsigned int	no_msi:1;		/* May not use MSI */
- 	unsigned int	no_64bit_msi:1;		/* May only use 32-bit MSIs */
- 	unsigned int	block_cfg_access:1;	/* Config space access blocked */
 -- 
-2.43.0
-
+With best wishes
+Dmitry
 
