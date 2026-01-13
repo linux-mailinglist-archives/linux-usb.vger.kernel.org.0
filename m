@@ -1,180 +1,122 @@
-Return-Path: <linux-usb+bounces-32210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32211-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEEE3D1668E
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 04:11:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A65ED167C4
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 04:28:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EE1B030123C1
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 03:11:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5AA8B3027CCF
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 03:28:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82738306490;
-	Tue, 13 Jan 2026 03:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44E223271F9;
+	Tue, 13 Jan 2026 03:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HqIuvTD5"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="j8obcMol"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m49194.qiye.163.com (mail-m49194.qiye.163.com [45.254.49.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD42F2FCC04
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 03:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE15F314B77;
+	Tue, 13 Jan 2026 03:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768273882; cv=none; b=l7kzYuA9AdmknfD4mufx2OJn2VYbTbL2DV3qsZv9Uzp3LEm7z5h42A1kuuA7cczzI7YoZuWPHeL/YTOG3fMbbjG3XsHmejjHJbA4CgXxKeigJ86zy8E0XJKZRZNTrKAUqpSacQwPCX5DCSYopjjzHNtpytFS7HK92HGPx6HXD7g=
+	t=1768274877; cv=none; b=a6/LEBUS4SBxghgv1DpRHLhWzIsg97VNThYicEL3cwHevBH5aFqwh14ko0cjt6gTpoAJSUmsCGlA1BtEyoEBH/SEzeyGKidYGJAmrKZ/uTzmCDX5vq7WSXPlR1SLPSh3MJpwwtViZi5dI4jqlECudgmcWXeiA8JsXzhpHuLti6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768273882; c=relaxed/simple;
-	bh=8mDJ92GgpN/evTKlvApwiXLDeP13ZxWxae6il6IcrZw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FuVxBKTcshfZyPnWM6sV6bqmAKLipF2oc44z6LozOOmAvjyQyQ7x1U2atOFlnXfEVIeEhZsPRuuCUtt6P0sH41ezZScnjQ5um14N/UBIBZPOWaG//L1kw5VQ5H5ZwoSFidBnfn4BWXh370ZgYyKcb2AM88zc7jVkAKt9Q8NTxXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HqIuvTD5; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-29f3018dfc3so18268895ad.0
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jan 2026 19:11:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768273880; x=1768878680; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oIjXaJkCkmkRfBy/0TqKde0rSQ1H4oie1IgBxhUPMVI=;
-        b=HqIuvTD5wLzytKxJMyAWZpV/9sx/E9Lkuvy//4yGWkSh9WYgpidxlQS6p0rTjmsUQf
-         yXWMcKp+ZKswbpfklrP5JVrSz6wB7sAH+j3WdPAPjscDCFXK3gnB5vj6QPbHSkiidecm
-         QlfC4J98FmXYp8ek1YGDR9ffx0gPXA9jcwK1384NqY1jq4W2fNo/O+Z2J7a635oBjrye
-         zwIP3xLxoiO2GIzBA5+dMygqrtrcYC7BBXkHYSjhSGSpxQ5f7wSKVXymAM2Rmh5iZD0R
-         JeEkX1kcGkvqjP53i5dA416yZzaCi0itmjsDR7rM0nAqU0AeGz2NZkECeEeXOQom1zCc
-         y5UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768273880; x=1768878680;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oIjXaJkCkmkRfBy/0TqKde0rSQ1H4oie1IgBxhUPMVI=;
-        b=BY05C+1+5uKSO4v2c1YPCN1ECJUYSV2azcPNgV9xwt1A8t++m0V7Xe3BRWbexDE9rd
-         KIWSPcAISgxIBRpcmaSZHseHPErArSQxm9PrQt/kulMMFQs/mFdYXlNh9DfR7ZF5IFcQ
-         Ly6mNAsI80MVgfS2GVtskLr9sf7x3cGRwhUCyPKFqOJSNmVJju05mL5vZT5hQk4eciVR
-         MW92QaPt3Vvl74vae88CCXMJVh7sCoxg3OEbyP+4dsYnhlddCEuaZqo0q9CPqTiQXFfn
-         lAdhg5WBQTba4yCJioVSUbt7RjN7fYs4GPMtmY5fv61LqW6wkBc7h4Olc/AA3OS2MlSr
-         AbNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1Xfa6eNJ4866AKWPebONgc3XkP0wu6NfoPUxZEeNuxn28k3bqXVP388NGGtIIoC0CitzGXPgYtyk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2YJIabOoE/57zD8/+ztVWAc0FxjzY+96vHbWJr1o0facpBuq4
-	ae8AFj1XUMEzqbBri1PbWHTLY20rQI5AHPX2VBNpsoHu3uAhkogeRk75
-X-Gm-Gg: AY/fxX7OVV+/IzISrDxm6ZhgTJHXl55H5i6rbMleGlMrYndVWgr3fKU+IDm0Hcg2YGF
-	oewR5z5d+rGrb3qoJYRaiWo6x13VvK5FQvCiX+hRWvFM18R+TnwTUPgTAUcMZtKdxefup0oRzN0
-	blyQQVLbuI1Sah1AXbnRd3GlWXuADliaspD3s4K91JRQ2zQnBD4Ka+Qqub95Nf7Cv4fNrDkPEcJ
-	v0j4dKf1tnl56uv7pUne/ATxu5TKVezfQIVk4ju6EvPwvKMH/UmL8WG2kcB/cCcDGKpJPfRxGnW
-	hNjRnmy5nCQftHmIJIyNgX38OkRCckqflCprR7buONbRhkFYtVewP0IJGLd9oyubGJZxTj6TcUl
-	+iHzkT4GeWJAwEGjp/0IeY0SHNmALNtQ7kCKSxK/mBa0I8WVsAHmcHoEQ3sr5aB4V39TwB85Y96
-	tjJ/0sxwO6Qzd7MLh7KT1M
-X-Google-Smtp-Source: AGHT+IEqS4AbOSxnmYh3TjxkquIfOjWZx1435RJ3A5F1JuKlbtfB304zSWmm+STBlOPrMttJrQM4YA==
-X-Received: by 2002:a05:6a20:3d95:b0:35f:aa1b:bbfc with SMTP id adf61e73a8af0-3898f8823eemr13531932637.2.1768273880073;
-        Mon, 12 Jan 2026 19:11:20 -0800 (PST)
-Received: from MiniPC.. ([47.246.98.222])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cc8d29592sm18361498a12.22.2026.01.12.19.11.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 19:11:19 -0800 (PST)
-From: weipeng <coderlogicwei@gmail.com>
-To: syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com
-Cc: anna-maria@linutronix.de,
-	frederic@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	tglx@linutronix.de
-Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
-Date: Tue, 13 Jan 2026 11:11:14 +0800
-Message-Id: <20260113031114.4030649-1-coderlogicwei@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
-References: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
+	s=arc-20240116; t=1768274877; c=relaxed/simple;
+	bh=oDiFkOAJhwhhqlFgPM2tfPbbhucudExPMwp31zh0MVk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LhPxT9LiTsTsnMxAzKo2zzTaNcr2iHM5bEu8c4Ryg8RYXggeou0BEXiw96M7CH1wincC6Xk+WEljioeFt4R77EHy+QJ71svgp4VSljmQpY+eM8uP2bbTdHsjdTRkwZuc8m+CSVFhW9n+rkrQTmX4B27/mVchh05eHQ0b9l28cRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=j8obcMol; arc=none smtp.client-ip=45.254.49.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [127.0.0.1] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 306a5f42e;
+	Tue, 13 Jan 2026 11:27:47 +0800 (GMT+08:00)
+Message-ID: <568b9e25-bf96-4e78-9af0-4791cbb90a56@rock-chips.com>
+Date: Tue, 13 Jan 2026 11:27:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/3] dt-bindings: usb: Add binding for WCH CH334/CH335
+ hub controller
+To: Krzysztof Kozlowski <krzk@kernel.org>, Chaoyi Chen <kernel@airkyi.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Quentin Schulz <quentin.schulz@cherry.de>, Jonas Karlman <jonas@kwiboo.se>,
+ Hsun Lai <i@chainsx.cn>, John Clark <inindev@gmail.com>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Dragan Simic <dsimic@manjaro.org>,
+ Michael Riesch <michael.riesch@collabora.com>,
+ Peter Robinson <pbrobinson@gmail.com>, Alexey Charkov <alchark@gmail.com>,
+ Shawn Lin <shawn.lin@rock-chips.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Andy Yan <andy.yan@rock-chips.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20260112022823.91-1-kernel@airkyi.com>
+ <20260112022823.91-2-kernel@airkyi.com>
+ <20260112-lively-hallowed-beetle-fc15b2@quoll>
+ <1515a445-576a-4833-a604-c31062f7d3fa@rock-chips.com>
+ <b4eb4ab6-6fde-4c01-8069-470545ffdac4@kernel.org>
+Content-Language: en-US
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+In-Reply-To: <b4eb4ab6-6fde-4c01-8069-470545ffdac4@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-HM-Tid: 0a9bb565344303abkunm4f7b74c5bb9b2
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGR5NTFYeGk9CHR1MQktOGElWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=j8obcMol5+AOwJGWd4CkkJSotssuGuB56Xxp96+E1lKmAzQYeIzcaoyDSvz1xiGd3APhWcqSoGnAIz41qphb61NIPnSgVTf3eE3YChEg8vwlEfPzNxR7NfgJZXRLCJjYtimcvheLwMxkY7URpqko6HPO0z0Qs2NWTcqKjvU4DXs=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=kdJ4UgolWe5TG4TnfG60pnogZaazG17AzGYzZPOjrtM=;
+	h=date:mime-version:subject:message-id:from;
 
-#syz test
-diff --git a/drivers/i2c/busses/i2c-tiny-usb.c b/drivers/i2c/busses/i2c-tiny-usb.c
-index 57dfe5f1a7d9..79b7c97514c9 100644
---- a/drivers/i2c/busses/i2c-tiny-usb.c
-+++ b/drivers/i2c/busses/i2c-tiny-usb.c
-@@ -12,6 +12,7 @@
- #include <linux/slab.h>
- #include <linux/string_choices.h>
- #include <linux/types.h>
-+#include <linux/workqueue.h>
+Hi Krzysztof,
 
- /* include interfaces to usb layer */
- #include <linux/usb.h>
-@@ -172,6 +173,8 @@ struct i2c_tiny_usb {
- 	struct usb_device *usb_dev; /* the usb device for this device */
- 	struct usb_interface *interface; /* the interface for this device */
- 	struct i2c_adapter adapter; /* i2c related things */
-+	bool disconnected; /* set to true on disconnect */
-+	struct work_struct release_work; /* work struct to release the adapter */
- };
+On 1/12/2026 10:28 PM, Krzysztof Kozlowski wrote:
+> On 12/01/2026 09:59, Chaoyi Chen wrote:
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - reg
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    #include <dt-bindings/gpio/gpio.h>
+>>>> +    usb {
+>>>> +        dr_mode = "host";
+> 
+> One more thing - drop above line.
+> 
 
- static int usb_read(struct i2c_adapter *adapter, int cmd,
-@@ -184,6 +187,11 @@ static int usb_read(struct i2c_adapter *adapter, int cmd,
- 	if (!dmadata)
- 		return -ENOMEM;
+Will fix in next version.
 
-+	if (READ_ONCE(dev->disconnected)) {
-+		kfree(dmadata);
-+		return -ENODEV;
-+	}
-+
- 	/* do control transfer */
- 	ret = usb_control_msg(dev->usb_dev, usb_rcvctrlpipe(dev->usb_dev, 0),
- 			       cmd, USB_TYPE_VENDOR | USB_RECIP_INTERFACE |
-@@ -204,6 +212,11 @@ static int usb_write(struct i2c_adapter *adapter, int cmd,
- 	if (!dmadata)
- 		return -ENOMEM;
+>>>> +        #address-cells = <1>;
+>>>> +        #size-cells = <0>;
+>>>> +
+>>>> +        hub: hub@1 {
+>>>> +            compatible = "usb1a86,8091";
+>>>> +            reg = <1>;
+>>>> +            reset-gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
+>>>
+>>> Are you sure?
+>>
+>> I guess what you're concerned about here is the polarity? 
+>> If that's the case, then there's no problem.
+> 
+> Yes, I was wondering whether polarity is set correctly.
 
-+	if (READ_ONCE(dev->disconnected)) {
-+		kfree(dmadata);
-+		return -ENODEV;
-+	}
-+
- 	/* do control transfer */
- 	ret = usb_control_msg(dev->usb_dev, usb_sndctrlpipe(dev->usb_dev, 0),
- 			       cmd, USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
-@@ -219,6 +232,15 @@ static void i2c_tiny_usb_free(struct i2c_tiny_usb *dev)
- 	kfree(dev);
- }
+Yes, it is active-low, so during normal operation it should be set to high.
 
-+static void i2c_tiny_usb_release(struct work_struct *work)
-+{
-+	struct i2c_tiny_usb *dev = container_of(work, struct i2c_tiny_usb,
-+					       release_work);
-+
-+	i2c_del_adapter(&dev->adapter);
-+	i2c_tiny_usb_free(dev);
-+}
-+
- static int i2c_tiny_usb_probe(struct usb_interface *interface,
- 			      const struct usb_device_id *id)
- {
-@@ -268,6 +290,8 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
-
- 	dev->adapter.dev.parent = &dev->interface->dev;
-
-+	INIT_WORK(&dev->release_work, i2c_tiny_usb_release);
-+
- 	/* and finally attach to i2c layer */
- 	i2c_add_adapter(&dev->adapter);
-
-@@ -287,9 +311,9 @@ static void i2c_tiny_usb_disconnect(struct usb_interface *interface)
- {
- 	struct i2c_tiny_usb *dev = usb_get_intfdata(interface);
-
--	i2c_del_adapter(&dev->adapter);
- 	usb_set_intfdata(interface, NULL);
--	i2c_tiny_usb_free(dev);
-+	WRITE_ONCE(dev->disconnected, true);
-+	queue_work(system_long_wq, &dev->release_work);
-
- 	dev_dbg(&interface->dev, "disconnected\n");
- }
+-- 
+Best, 
+Chaoyi
 
