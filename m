@@ -1,233 +1,166 @@
-Return-Path: <linux-usb+bounces-32273-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32274-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1E48D194AC
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0352ED194D0
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:08:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9C47B3021E47
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 14:05:46 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7586C30286A3
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 14:06:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D6673933F4;
-	Tue, 13 Jan 2026 14:05:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C217392B83;
+	Tue, 13 Jan 2026 14:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="oRAIoYSs"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vMzN+VXU";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1o0pGioy";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vMzN+VXU";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1o0pGioy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E43392C59;
-	Tue, 13 Jan 2026 14:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7745392B79
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 14:06:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768313123; cv=none; b=Qwltp/ffb3BxkzpdC6mdtaltgMAnoARYh74tV6Gxl/XJwJrvDWz5khy5RnJKTciijVOWqSJbMBSb3GWfNiubU3A1J5iI7L3huXrlNd3MaMucoL13GUdL8k/DPY3ksg+llPmsTCqD8qZ6jFUJ0Z/EnsL57cVf04ZcYNPEdYUSvPU=
+	t=1768313175; cv=none; b=oxIHLmSwfN0lni0CIn+CRJLUzAVCYEPz1hneoGZnyNC7Sy/MYfZpqKMRBZRkAbTxMidZXojH4pQ/jLl0NlN4vfKZ0InXNyM0xf0qM2d/KBgpnnXZkFAqKsSiZ4VGckcjT2Klbls7Nz893l6F9FOYGlKgrPS29WSlaAuRXG3ezUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768313123; c=relaxed/simple;
-	bh=G71ZTVFEhrqDU+KGsLZMvUHvDRdYUm1yNqMiq+c96DA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NMamR7AyHj+ktWFVD0NI2iu17PEaFcb19NQQbuPjSTmILPqKUufZ6EtRa16bl6dhOuMyMMvK8fKTxNuN90jgXX2iPEAATnVtEz9BsmNr5GkMmHbfYAg01Vbr1uB4dlh15fuU9f8PN9RtKzlachWyNnDKIorffo84L6T67FBiUK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=oRAIoYSs; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id C1EEC600140C;
-	Tue, 13 Jan 2026 14:05:18 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id DD9nfRmJoBh4; Tue, 13 Jan 2026 14:05:16 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 3E9986002991;
-	Tue, 13 Jan 2026 14:05:16 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1768313116;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
+	s=arc-20240116; t=1768313175; c=relaxed/simple;
+	bh=1KOTHRI1sXtRFumrhMgxfaVLzSzMTp9okkoEbYM5Cy8=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SDqPALcbV0rHnxMuP50kmLl3QayQ67PAwjmJ93/u4VmqBmSfBGZUNEoT2Lz2HtUSVnKv3le6/Ao6F0APtrd/bCQJpY/AqbS1l4Z9wxMQal1/pfZG3OoB/y8tCfOOav5B1teQ6y7gg2YebCYle1evDgvMs/ZVsr9/vmFr4WfAp20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vMzN+VXU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1o0pGioy; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vMzN+VXU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1o0pGioy; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 257323368C;
+	Tue, 13 Jan 2026 14:06:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1768313172; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=z7n8wksu/3JrjxuLRTNuz4hWvUhYdtUmBvv385ffnm4=;
-	b=oRAIoYSsggSbtT8Ueiu2Wq9NdoWTRI4WhmrIhareLtskg9A0rgMGybNYUWWXIbG/OYP7Do
-	F66//LidT8oTWgQCR5JlFT61WMSnDNil4ZDF0TACJBl5fuvdMpCwFQUKqUK3eqd40Xmy/i
-	CQbKT8lT5u1DvrIqzrjdTCMmCPygdZhWrUytDwps1ilZts3DR5H2rEJmCeFNry2OigE770
-	QoM81tnzPQbb5+3Ik/lOoRZF2VRlW7krpLLN/42OzPptYLcRrHbAUIlr9kMCudrGJt/AD5
-	rFXhDzvTzbGMD3LN6ynFyJhE7eNq49O3NYg/xq3s7h5MJxFz4WapZlfEJ/1foA==
-Received: from [192.168.2.110] (unknown [148.63.39.39])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id D022F36008A;
-	Tue, 13 Jan 2026 14:05:15 +0000 (WET)
-Message-ID: <ae36f759-e889-4371-8c08-b8ffd1b69250@tecnico.ulisboa.pt>
-Date: Tue, 13 Jan 2026 14:05:12 +0000
+	bh=js2STrJwnbaXkULoqXxYqYMpOFLR7hYMJMtWaBHHPu4=;
+	b=vMzN+VXUpjIsbOgsVn/uWlLuphu5n+shXazOgxPzrY/VK9CW5hfNTay9empWMnD58Z60jA
+	6Kmx2wnG25IgjPAV85LRem+cFl7ZkuDXQJSmppwuqtS4Z91Hr3g3coV36HtKsmUSxlv0xJ
+	w/4LhXOd5y8PVuYIpxcMWzw9s9yPh9g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1768313172;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=js2STrJwnbaXkULoqXxYqYMpOFLR7hYMJMtWaBHHPu4=;
+	b=1o0pGioyuKTT0k2V18aCU3tI5HdSt2PQzraoi8Od+1mLzx8oTueIYOfZ76KEfJGLpjlOBD
+	Re+tJCAAFcyGrJCw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1768313172; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=js2STrJwnbaXkULoqXxYqYMpOFLR7hYMJMtWaBHHPu4=;
+	b=vMzN+VXUpjIsbOgsVn/uWlLuphu5n+shXazOgxPzrY/VK9CW5hfNTay9empWMnD58Z60jA
+	6Kmx2wnG25IgjPAV85LRem+cFl7ZkuDXQJSmppwuqtS4Z91Hr3g3coV36HtKsmUSxlv0xJ
+	w/4LhXOd5y8PVuYIpxcMWzw9s9yPh9g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1768313172;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=js2STrJwnbaXkULoqXxYqYMpOFLR7hYMJMtWaBHHPu4=;
+	b=1o0pGioyuKTT0k2V18aCU3tI5HdSt2PQzraoi8Od+1mLzx8oTueIYOfZ76KEfJGLpjlOBD
+	Re+tJCAAFcyGrJCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AF2753EA63;
+	Tue, 13 Jan 2026 14:06:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id t+AkKlNRZmnVNwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Tue, 13 Jan 2026 14:06:11 +0000
+Date: Tue, 13 Jan 2026 15:06:11 +0100
+Message-ID: <87ldi1ppyk.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Edward Adam Davis <eadavis@qq.com>
+Cc: syzbot+6db0415d6d5c635f72cb@syzkaller.appspotmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	perex@perex.cz,
+	syzkaller-bugs@googlegroups.com,
+	tiwai@suse.com
+Subject: Re: [PATCH] ALSA: usb-audio: Prevent excessive number of frames
+In-Reply-To: <tencent_9AECE6CD2C7A826D902D696C289724E8120A@qq.com>
+References: <6965a06e.050a0220.38aacd.0004.GAE@google.com>
+	<tencent_9AECE6CD2C7A826D902D696C289724E8120A@qq.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.1 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] phy: tegra: xusb: Fix ordering issue when switching
- roles on USB2 ports
-To: Jon Hunter <jonathanh@nvidia.com>, Mathias Nyman
- <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org
-References: <20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt>
- <20251204-diogo-tegra_phy-v1-3-51a2016d0be8@tecnico.ulisboa.pt>
- <86cd3ff0-1609-44cb-911c-f0e97652ca1b@nvidia.com>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-In-Reply-To: <86cd3ff0-1609-44cb-911c-f0e97652ca1b@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -1.80
+X-Spamd-Result: default: False [-1.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[6db0415d6d5c635f72cb];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_TO(0.00)[qq.com];
+	FREEMAIL_ENVRCPT(0.00)[qq.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid]
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-
-
-On 1/13/26 11:56, Jon Hunter wrote:
+On Tue, 13 Jan 2026 09:29:23 +0100,
+Edward Adam Davis wrote:
 > 
-> On 04/12/2025 21:27, Diogo Ivo wrote:
->> The current implementation of USB2 role switching on Tegra relies on
->> whichever the previous USB controller driver was using the PHY to first
->> "yield" it back to USB_ROLE_NONE before the next controller configures
->> it for the new role. However, no mechanism to guarantee this ordering
->> was implemented, and currently, in the general case, the configuration
->> functions tegra_xhci_id_work() and tegra_xudc_usb_role_sw_work() end up
->> running in the same order regardless of the transition being HOST->DEVICE
->> or DEVICE->HOST, leading to one of these transitions ending up in a
->> non-working state due to the new configuration being clobbered by the
->> previous controller driver setting USB_ROLE_NONE after the fact.
->>
->> Fix this by introducing a helper that waits for the USB2 port’s current
->> role to become USB_ROLE_NONE and add it in the configuration functions
->> above before setting the role to either USB_ROLE_HOST or
->> USB_ROLE_DEVICE. The specific parameters of the helper function are
->> choices that seem reasonable in my testing and have no other basis.
+> In this case, the user constructed the parameters with maxpacksize 40
+> for rate 22050 / pps 1000, and packsize[0] 22 packsize[1] 23. The buffer
+> size for each data URB is maxpacksize * packets, which in this example
+> is 40 * 6 = 240; When the user performs a write operation to send audio
+> data into the ALSA PCM playback stream, the calculated number of frames
+> is packsize[0] * packets = 264, which exceeds the allocated URB buffer
+> size, triggering the out-of-bounds (OOB) issue reported by syzbot [1].
 > 
-> This is no information here about why 6 * 50/60us is deemed to be 
-> sufficient? May be it is, but a comment would be nice.
+> Added a check for the number of single data URB frames when calculating
+> the number of frames to prevent [1].
 > 
->> This was tested on a Tegra210 platform (Smaug). However, due to the 
->> similar
->> approach in Tegra186 it is likely that not only this problem exists there
->> but that this patch also fixes it.
->>
->> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
->> ---
->>   drivers/phy/tegra/xusb.c            | 23 +++++++++++++++++++++++
->>   drivers/usb/gadget/udc/tegra-xudc.c |  4 ++++
->>   drivers/usb/host/xhci-tegra.c       | 15 ++++++++++-----
->>   include/linux/phy/tegra/xusb.h      |  1 +
->>   4 files changed, 38 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
->> index c89df95aa6ca..e05c3f2d1421 100644
->> --- a/drivers/phy/tegra/xusb.c
->> +++ b/drivers/phy/tegra/xusb.c
->> @@ -740,6 +740,29 @@ static void 
->> tegra_xusb_parse_usb_role_default_mode(struct tegra_xusb_port *port)
->>       }
->>   }
->> +bool tegra_xusb_usb2_port_wait_role_none(struct tegra_xusb_padctl 
->> *padctl, int index)
->> +{
->> +    struct tegra_xusb_usb2_port *usb2 = 
->> tegra_xusb_find_usb2_port(padctl,
->> +                                      index);
->> +    int retries = 5;
->> +
->> +    if (!usb2) {
->> +        dev_err(&usb2->base.dev, "no port found for USB2 lane %u\n", 
->> index);
+> [1]
+> BUG: KASAN: slab-out-of-bounds in copy_to_urb+0x261/0x460 sound/usb/pcm.c:1487
+> Write of size 264 at addr ffff88804337e800 by task syz.0.17/5506
+> Call Trace:
+>  copy_to_urb+0x261/0x460 sound/usb/pcm.c:1487
+>  prepare_playback_urb+0x953/0x13d0 sound/usb/pcm.c:1611
+>  prepare_outbound_urb+0x377/0xc50 sound/usb/endpoint.c:333
 > 
-> This appears to be a bug. If !usb2 then dereference usb2->base anyway.
+> Reported-by: syzbot+6db0415d6d5c635f72cb@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=6db0415d6d5c635f72cb
+> Tested-by: syzbot+6db0415d6d5c635f72cb@syzkaller.appspotmail.com
+> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
 
-It is a bug, will fix in v2.
+Applied now.  Thanks.
 
->> +        return false;
->> +    }
->> +
->> +    do {
->> +        if (usb2->role == USB_ROLE_NONE)
->> +            return true;
->> +
->> +        usleep_range(50, 60);
->> +    } while (retries--);
->> +
->> +    dev_err(&usb2->base.dev, "timed out waiting for USB_ROLE_NONE");
->> +
->> +    return false;
->> +}
->> +
->>   static int tegra_xusb_usb2_port_parse_dt(struct tegra_xusb_usb2_port 
->> *usb2)
->>   {
->>       struct tegra_xusb_port *port = &usb2->base;
->> diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/ 
->> udc/tegra-xudc.c
->> index 0c38fc37b6e6..72d725659e5f 100644
->> --- a/drivers/usb/gadget/udc/tegra-xudc.c
->> +++ b/drivers/usb/gadget/udc/tegra-xudc.c
->> @@ -698,8 +698,12 @@ static void tegra_xudc_restore_port_speed(struct 
->> tegra_xudc *xudc)
->>   static void tegra_xudc_device_mode_on(struct tegra_xudc *xudc)
->>   {
->> +    int port = tegra_xusb_padctl_get_port_number(xudc->curr_utmi_phy);
->>       int err;
->> +    if (!tegra_xusb_usb2_port_wait_role_none(xudc->padctl, port))
->> +        return;
->> +
->>       pm_runtime_get_sync(xudc->dev);
->>       tegra_phy_xusb_utmi_pad_power_on(xudc->curr_utmi_phy);
->> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci- 
->> tegra.c
->> index 9c69fccdc6e8..9944593166a3 100644
->> --- a/drivers/usb/host/xhci-tegra.c
->> +++ b/drivers/usb/host/xhci-tegra.c
->> @@ -1352,18 +1352,23 @@ static void tegra_xhci_id_work(struct 
->> work_struct *work)
->>       struct tegra_xusb_mbox_msg msg;
->>       struct phy *phy = tegra_xusb_get_phy(tegra, "usb2",
->>                               tegra->otg_usb2_port);
->> +    enum usb_role role = USB_ROLE_NONE;
->>       u32 status;
->>       int ret;
->>       dev_dbg(tegra->dev, "host mode %s\n", str_on_off(tegra- 
->> >host_mode));
->> -    mutex_lock(&tegra->lock);
-> 
-> Extra blank line here.
 
-Will fix in v2.
-
->> -    if (tegra->host_mode)
->> -        phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_HOST);
->> -    else
->> -        phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_NONE);
->> +    if (tegra->host_mode) {
->> +        if (!tegra_xusb_usb2_port_wait_role_none(tegra->padctl,
->> +                             tegra->otg_usb2_port))
->> +            return;
->> +        role = USB_ROLE_HOST;
->> +    }
->> +
->> +    mutex_lock(&tegra->lock);
->> +    phy_set_mode_ext(phy, PHY_MODE_USB_OTG, role);
->>       mutex_unlock(&tegra->lock);
-> 
-> I am trying to understand why you opted to implement it this way around 
-> and not add the wait loop after setting to the mode to USB_ROLE_NONE in 
-> the original code all within the context of the mutex?
-
-I did that to minimize the amount of time we wait while holding the
-mutex, as we can now possibly wait a significant amount of time for the
-role switch. Is this an unneccessary optimization?
-
-Thanks,
-Diogo
-
-> Thanks
-> Jon
+Takashi
 
