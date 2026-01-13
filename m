@@ -1,281 +1,128 @@
-Return-Path: <linux-usb+bounces-32299-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32300-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCAABD1B28A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 21:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E4E2FD1B315
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 21:23:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 508FF301FF76
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 20:09:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BE49B305380D
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 20:23:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB93D36C5A6;
-	Tue, 13 Jan 2026 20:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 038443876D4;
+	Tue, 13 Jan 2026 20:23:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="zIz8nYJt"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="T/kmzgRf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFEA36A026
-	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 20:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A0234D3AD
+	for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 20:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768334996; cv=none; b=KVdq1lWTHvcVHBihWaMUc8og24w/c9z0A09FFUu7mueRy6prIBdFrgPHbbBj9omsOlMvAD4KJ4cHLRtnfV8I354ZbCPyI0fGd1PKfabkIWcXrF7lppURGKHsPo3xXk3ScTUXlObjo3xc9PoZTXcYQhRCsk+tnghRmJevphz40Vg=
+	t=1768335799; cv=none; b=e1di5wrcjhtAg1mWm0zl2CW669bj9mYwj8yzM7gi9m/xhF8ycYPbR9p+4G28Wjmv0GSXkChviohuWPfUoUXk33avaca2g8lu8x0+QJHbiN+sqdaGeCejpXAi72PIJqArUeNkaZL6HjrMlT0K6q3zwfDvGZoS2SRMFo7yxQBL49Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768334996; c=relaxed/simple;
-	bh=pyMp5oFQEzQGlgpWodh5m5sUhmJKSJMmcF9EpqTle4o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jyxOb8P2Cg2sXwD0QSBsg2T1Tw+3y4K9Grs+mgK4Tg2AlGmP1gZ8wztAaWh7SyyUiYqiDaae1HRinlgCpF0U8HpauO6Qf1+HaITLZAmaICiB88ccU/a3Z6ibrgwtqli4yE4JVScrHgBpaHvkI5usnwzjfNMjPxfsDwfCMm/QZvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=zIz8nYJt; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b86f212c3b0so31517566b.0
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 12:09:52 -0800 (PST)
+	s=arc-20240116; t=1768335799; c=relaxed/simple;
+	bh=OzuQ6iWjzoYV77KDRUSGerU/496Kc4rlMMYENR9wF3U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FElH8PkPk8ithRppr0gNQHyt3f2AyrYetuwwDEKVsk2q+cXha7fGRhyVJ4/qfmd/tFvp1F1vQHsW4J+l0+2ZAEUq45Gs2DJWpdGsLhee0J0Ug2YTzEj3aOez3aheMJOBptUElpq6yOZtqh++ss4eBzCvawtX+U988dx0VM8c1bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=T/kmzgRf; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso73040275e9.3
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jan 2026 12:23:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1768334991; x=1768939791; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
-        b=zIz8nYJtuj84rCwrR4h2rYUNtQy0kQi3Vs6Pa4eyUFvYBSmR3JdcK91Z5LcbNLJJbd
-         KBv1zpWpctONSZSIZfox4XBRJ3RoOniV3X3ufcycnUMgiQws9qL2iJTLfcYz/6ywcGtF
-         IEbL5rTF894Idp+8ULCgygVGYo7r2T+AndIh1IP7v3vgatT1IQO43J17idGJA2xunR2Y
-         7fJ9k/8LfGQoxc/GCDnq0d/fOOs+esgxOp4GdBC/tXJBsPbMEB8jlL/iIMNJVyMCIozF
-         aMqv/iMccUIy3JOOqaYhzVETvgeYFGAbN22kE3vQ40Dtdd6YFQhBIm6KtULuMQfYbl9n
-         eBaQ==
+        d=suse.com; s=google; t=1768335796; x=1768940596; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K8uUTB1SVA3MIzVmUio8rFNP+sCwhx9nt26BkyDd1XI=;
+        b=T/kmzgRfMOMDkluUzaiTFwReEiFtEAKcouSRkvh1QUjVM+XEN/7qblJIfzbbpiJVew
+         yRkGPLpARu4nfUK6xqeYzRQHKl41tunf4ozmUS6INdvyZntSSFXdq2LewfPiuF7DJ74J
+         Yjou8cX5/7MU8wT1n9CMmBEwiOcLkcENUnoq6csE1ZernVI6IuNPfyimp4JGz5wT1Q7X
+         yvyng8MYTS7slP+8JUZdtmxhAhxfeBseE2ordQemvjpf68avZxjWapUwJhTOlYAXRoiv
+         uTIwkwFcjbYt8yk9SoyGodCrGXnmg56VrRsxOQyjvL0f8CeC9eAZhMGicv97iQ6zlEda
+         +VIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768334991; x=1768939791;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
-        b=rKZfSnbTfufAZ4gGtRgyqdLyp2MmdYYxa2dKiLxOUuTWuxxi4hnMJ7Rz1mvpgYWB55
-         tT6O6kt/qIemrtF/u1fdjd+KzXI31RkyXi/zMgKKgL9NsrjUCm+0XeSpPsvsz+8Dzlbo
-         MRqX1WY7NnvXypcrlGsyz+reuWdpxgGaJkMpAm6duUnhEyGwP26C8COf1WFc56Mza9GP
-         +pBICtcfy7TBcEQg49WBLN5EnOuDZ2BM7Q6kzehY9Cmk2kIpECeOCZ9NwIYqqtuZiPOC
-         wdLmBUy0CRTq/AV9VYbrv813cxssxGvqOCpe56nfG2c/LMjVmBwSsJPXo5SjN5B1z4po
-         dE6w==
-X-Forwarded-Encrypted: i=1; AJvYcCXRVwnfivn04zwr20Vq72/UHcYjvt+EwDP/d8XSQxP5VJ4a+S4rF6mp9FiD5ZY8jPPU4Nu0ZGkqHVg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhV+Rt7nzH88KDLEfqJL5hPsgYpu54V9lJhq0Xuvzc//GMj8q5
-	/oJUalFvpjxDV/4xwe1mnJ9R+q5RwSYL+/SUg727NTTYPduK1Ycjcv1WXhqkS+1vqdU2y2U/kkO
-	TKbH/9/xk1IEIyRihWYGzx+YxSo/sSOz4PC4qqElO7g==
-X-Gm-Gg: AY/fxX5HXVqVCbJKxX4fb+ulV3D79NXnsYxL80M+qfBFzJHqOexy0O1qxoJ6RIBtjmU
-	c1m2CE5a4RTKMSt6GKCW0nfYOxkMz2WkGHNd0c9szwMua93xEk2LDvr8F1MScYE/ki/jUlM270Z
-	ZuYZq/Po/onAr07XLMzwRJGX2Gp7banFdc2FdbNn84GXvfcQARSW+uCZP8xCSDoJ4jUhNjvlHgC
-	q32QTn7xbuC/Qq7QDVbb6LO8MVebKSlZeQmFsvNbz1PNRw9pYOPewNNRG2I/7Rt/8n48wBIA84C
-	3LX0kx/Bq4UDaqdAjjJKOs9Ra01fnEkao7tC0ejCcUrYCR8EHblRzHFZgU2P
-X-Received: by 2002:a17:907:9483:b0:b87:191f:4fab with SMTP id
- a640c23a62f3a-b8761d928b1mr18947166b.26.1768334991113; Tue, 13 Jan 2026
- 12:09:51 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768335796; x=1768940596;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K8uUTB1SVA3MIzVmUio8rFNP+sCwhx9nt26BkyDd1XI=;
+        b=lUx7db/50YJ4+K/UTY4AKZp9C0ooKIkOd+BLC3Ui4gN3eZ0VtpyT+LMZVgjEUZfceS
+         OVqJzQ8PvmrppQWB0AAmkLw3hrmH4G/FukBU5M86GRUHET9GWowKjbH6Tf9qG5spzFmR
+         Aj7q03W740be2xuflTY89iQ9KZReBELKjdfj+2qgzw+qaPWAC3BHBLuCr2SZhCyKC6aw
+         GGvRFreAl6DyM/wfTMDrYae3IEJi6uAXFcA3Tny4bVByO5drIO4z04JymcmXuDAedMbS
+         G0VKvtauWHYTHhvuXtBqzMAp/lyn12jAmNHMWwbEvHlRBgNM9Nz7/WiYa2ZtgZaQJPDa
+         LQag==
+X-Forwarded-Encrypted: i=1; AJvYcCU0oi1iottCnY2dV2Fmg39nVCz41v/v0pgEPb3FPiN+w444XRspfSK5hKfVmkSd/bBjGK/ib7TUy/E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOqeCtI3ulAwTR8mlyvxyls4ToAtjq9IgwWeNQhHsJ7A+z/C+f
+	qhSnxwzfJ/peHGOyH95+OsCNnKGETysGsvO7km3DBDhhmJVslx+pEtSjjbYbbTqJVFMSt92Mxug
+	kK0+rNEI=
+X-Gm-Gg: AY/fxX4N8tWs5i4tg9Zx/Prgi1n4ABXtLwrjHf6QPWfiYWCjrvr+93YTc6N+tcrxwr4
+	SmGnNlFrldgL4nJ4NnZbD3mCLwNohCgYgVFctcdULak7DTtvzH8Kr05bhsyceKB2ch3MJgBi13v
+	U1idLifGsaNI2jpwHcYdrQpLUJwsyLk7BoP/UMXHfpuA1+18nTUT9k4GNOvlxtrE7G0wJkQAb+N
+	jSgRIPu0nUTW8j9pvtigvSwxkCRVih8sXfUom9KHIOwiCHcWXDmG1psq3lHyN01iSQ9Ggid+Zos
+	2AYQLgsnz1y+3LbzdeAVWcoFTVHeqBQj0No5FLcrjDkEL6zsdD+DP5chgNts77Ym9TPXEGpDjx8
+	QDdsBdlPyxNL7za9KlMkccoir3Ybr6FNGM3tnCNIjZjWYDcM5vMAtLN9AXPM5d4nY3R+h5Av17X
+	oyd+gUP0v8gK4JcqFuvwTMDKSkKZjTlEFGDkoJjfrQeo5L7ojZalxYNQo=
+X-Received: by 2002:a05:600c:3acb:b0:477:b734:8c53 with SMTP id 5b1f17b1804b1-47ee33214c4mr3686195e9.12.1768335796432;
+        Tue, 13 Jan 2026 12:23:16 -0800 (PST)
+Received: from ?IPV6:2001:a61:138d:5701:1aab:ab2a:99f8:6c9a? ([2001:a61:138d:5701:1aab:ab2a:99f8:6c9a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47edb26792fsm47371495e9.14.2026.01.13.12.23.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jan 2026 12:23:15 -0800 (PST)
+Message-ID: <a53fa501-dff1-4732-92c1-fab8e66ef886@suse.com>
+Date: Tue, 13 Jan 2026 21:23:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251229184004.571837-1-robert.marko@sartura.hr>
- <20251229184004.571837-16-robert.marko@sartura.hr> <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
-In-Reply-To: <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Tue, 13 Jan 2026 21:09:40 +0100
-X-Gm-Features: AZwV_QhCSNrQ25JXSm6moAYHvYjCfUUDQoR1FC1MV_mP0oSiXaM4vWsMWx6MKV0
-Message-ID: <CA+HBbNFYBhtvUxd45O7eP_1JYENxeGZOkA+yUsEdztOSSi9Gdg@mail.gmail.com>
-Subject: Re: [PATCH v4 15/15] arm64: dts: microchip: add EV23X71A board
-To: claudiu beznea <claudiu.beznea@tuxon.dev>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
-	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
-	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
-	UNGLinuxDriver@microchip.com, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
-	richard.genoud@bootlin.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
-	broonie@kernel.org, lars.povlsen@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
+To: weipeng <coderlogicwei@gmail.com>
+Cc: anna-maria@linutronix.de, frederic@kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+References: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
+ <20260113154748.341096-1-coderlogicwei@gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20260113154748.341096-1-coderlogicwei@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jan 11, 2026 at 3:42=E2=80=AFPM claudiu beznea <claudiu.beznea@tuxo=
-n.dev> wrote:
->
-> Hi, Robert,
->
-> On 12/29/25 20:37, Robert Marko wrote:
-> > Microchip EV23X71A is an LAN9696 based evaluation board.
-> >
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > ---
-> > Changes in v2:
-> > * Split from SoC DTSI commit
-> > * Apply DTS coding style
-> > * Enclose array in i2c-mux
-> > * Alphanumericaly sort nodes
-> > * Change management port mode to RGMII-ID
-> >
-> >   arch/arm64/boot/dts/microchip/Makefile        |   1 +
-> >   .../boot/dts/microchip/lan9696-ev23x71a.dts   | 757 +++++++++++++++++=
-+
-> >   2 files changed, 758 insertions(+)
-> >   create mode 100644 arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
-> >
-> > diff --git a/arch/arm64/boot/dts/microchip/Makefile b/arch/arm64/boot/d=
-ts/microchip/Makefile
-> > index c6e0313eea0f..09d16fc1ce9a 100644
-> > --- a/arch/arm64/boot/dts/microchip/Makefile
-> > +++ b/arch/arm64/boot/dts/microchip/Makefile
-> > @@ -1,4 +1,5 @@
-> >   # SPDX-License-Identifier: GPL-2.0
-> > +dtb-$(CONFIG_ARCH_LAN969X) +=3D lan9696-ev23x71a.dtb
-> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb125.dtb
-> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb134.dtb sparx5_pcb134_emmc.d=
-tb
-> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb135.dtb sparx5_pcb135_emmc.d=
-tb
-> > diff --git a/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts b/arch/=
-arm64/boot/dts/microchip/lan9696-ev23x71a.dts
-> > new file mode 100644
-> > index 000000000000..435df455b078
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
->
-> [ ...]
->
-> > +&gpio {
-> > +     emmc_sd_pins: emmc-sd-pins {
-> > +             /* eMMC_SD - CMD, CLK, D0, D1, D2, D3, D4, D5, D6, D7, RS=
-TN */
-> > +             pins =3D "GPIO_14", "GPIO_15", "GPIO_16", "GPIO_17",
-> > +                    "GPIO_18", "GPIO_19", "GPIO_20", "GPIO_21",
-> > +                    "GPIO_22", "GPIO_23", "GPIO_24";
-> > +             function =3D "emmc_sd";
-> > +     };
-> > +
-> > +     fan_pins: fan-pins {
-> > +             pins =3D "GPIO_25", "GPIO_26";
-> > +             function =3D "fan";
-> > +     };
-> > +
-> > +     fc0_pins: fc0-pins {
-> > +             pins =3D "GPIO_3", "GPIO_4";
-> > +             function =3D "fc";
-> > +     };
-> > +
-> > +     fc2_pins: fc2-pins {
-> > +             pins =3D "GPIO_64", "GPIO_65", "GPIO_66";
-> > +             function =3D "fc";
-> > +     };
-> > +
-> > +     fc3_pins: fc3-pins {
-> > +             pins =3D "GPIO_55", "GPIO_56";
-> > +             function =3D "fc";
-> > +     };
-> > +
-> > +     mdio_pins: mdio-pins {
-> > +             pins =3D "GPIO_9", "GPIO_10";
-> > +             function =3D "miim";
-> > +     };
-> > +
-> > +     mdio_irq_pins: mdio-irq-pins {
-> > +             pins =3D "GPIO_11";
-> > +             function =3D "miim_irq";
-> > +     };
-> > +
-> > +     sgpio_pins: sgpio-pins {
-> > +             /* SCK, D0, D1, LD */
-> > +             pins =3D "GPIO_5", "GPIO_6", "GPIO_7", "GPIO_8";
-> > +             function =3D "sgpio_a";
-> > +     };
-> > +
-> > +     usb_ulpi_pins: usb-ulpi-pins {
-> > +             pins =3D "GPIO_30", "GPIO_31", "GPIO_32", "GPIO_33",
-> > +                    "GPIO_34", "GPIO_35", "GPIO_36", "GPIO_37",
-> > +                    "GPIO_38", "GPIO_39", "GPIO_40", "GPIO_41";
-> > +             function =3D "usb_ulpi";
-> > +     };
-> > +
-> > +     usb_rst_pins: usb-rst-pins {
-> > +             pins =3D "GPIO_12";
-> > +             function =3D "usb2phy_rst";
-> > +     };
-> > +
-> > +     usb_over_pins: usb-over-pins {
-> > +             pins =3D "GPIO_13";
-> > +             function =3D "usb_over_detect";
-> > +     };
-> > +
-> > +     usb_power_pins: usb-power-pins {
-> > +             pins =3D "GPIO_1";
-> > +             function =3D "usb_power";
-> > +     };
-> > +
-> > +     ptp_out_pins: ptp-out-pins {
-> > +             pins =3D "GPIO_58";
-> > +             function =3D "ptpsync_4";
-> > +     };
->
-> Could you please move this one upper to have all the entries in the gpio
-> container alphanumerically sorted?
->
-> > +
-> > +     ptp_ext_pins: ptp-ext-pins {
-> > +             pins =3D "GPIO_59";
-> > +             function =3D "ptpsync_5";
-> > +     };
->
-> Same here.
+Hi,
 
-Sure, I will make sure that pin nodes are alphabetical (I found some
-more that are not) in v5.
+On 13.01.26 16:47, weipeng wrote:
+   
+> @@ -287,9 +321,12 @@ static void i2c_tiny_usb_disconnect(struct usb_interface *interface)
+>   {
+>   	struct i2c_tiny_usb *dev = usb_get_intfdata(interface);
+>   
+> -	i2c_del_adapter(&dev->adapter);
+> +	mutex_lock(&dev->usb_lock);
+>   	usb_set_intfdata(interface, NULL);
+> -	i2c_tiny_usb_free(dev);
+> +	dev->disconnected = true;
+> +	mutex_unlock(&dev->usb_lock);
+> +
+> +	queue_work(system_long_wq, &dev->release_work);
+>   
+>   	dev_dbg(&interface->dev, "disconnected\n");
+>   }
 
->
-> [ ...]
->
-> > +             port29: port@29 {
-> > +                     reg =3D <29>;
-> > +                     phys =3D <&serdes 11>;
-> > +                     phy-handle =3D <&phy3>;
-> > +                     phy-mode =3D "rgmii-id";
-> > +                     microchip,bandwidth =3D <1000>;
->
-> There are some questions around this node from Andrew in v1 of this serie=
-s,
-> which I don't see an answer for in any of the following versions. Could y=
-ou
-> please clarify?
+what prevents the following sequence:
 
-Sure, as for the RGMII I switched to rgmii-id so the PHY is adding the dela=
-ys.
-Though, I am not sure if its better to add them via MAC as it can add
-the delays instead of the PHY,
-so I am open to suggestions here.
+i2c_tiny_usb_disconnect() -> module unload -> i2c_tiny_usb_release()
 
-As for the phys property, yes that is not required here as RGMII ports
-are dedicated, there are no
-SERDES lanes being used for them.
+As far as I can tell, this can happen and you'd execute already
+freed memory.
 
-I have updated the bindings to account for this and it will be part of v5.
+	Regards
+		Oliver
 
-Regards,
-Robert
-
->
-> The rest looks good to me.
->
-> Thank you,
-> Claudiu
->
-
-
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
 
