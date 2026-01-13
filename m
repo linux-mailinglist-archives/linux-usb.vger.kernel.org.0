@@ -1,162 +1,154 @@
-Return-Path: <linux-usb+bounces-32283-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32284-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A009DD19CE1
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 16:18:55 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75871D19ED9
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 16:34:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7DEDC30D6682
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:11:57 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 227A4300B371
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 15:31:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691C23921DE;
-	Tue, 13 Jan 2026 15:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18F613090C5;
+	Tue, 13 Jan 2026 15:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="XhasqdgP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XS0BVzMd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D04279DC8;
-	Tue, 13 Jan 2026 15:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9854C283FC3;
+	Tue, 13 Jan 2026 15:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768317098; cv=none; b=a4Ae+DOaZZAGvkYC9BikMkELWL+dKH11v7QiJW+9e1fnfnPfGxLUZcKahKKbQjxEyJkjEf7N0QDAjVgEFSdovnc1DrA6Ic9YEq6qT7tFrz/9ze8swgKit2Z1h0NWRRnFooDJoMJavr5j71zmDWD504M40qHRUsMea7FJDQ2WUt0=
+	t=1768318313; cv=none; b=qWUfTe8E6xglvuUOoIFPj631q8gLRgbqJk2QnZ4m5ddCfWUcenVLVcI1HjXRcOE1EEdAUW0tK1TsLvIUpFIWKd2FQCgkor6+vo0ErNpViFCNb/0vev0dYOsJPjjpr7QqRPF4y9eg2SyzZ2xDsKj0cR4y3KPx0yZjnll0wFP38dE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768317098; c=relaxed/simple;
-	bh=oYURUZDdfxqaujzRgJFyJvgic5MypRI4QKnO/vJyFxk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H1zQWw/fk5TcJ7lT1It8ETKwwgSURJLq0Mq0BXBFFMMKRQxYZHg1YnJ7519eqqdgLnF8tQi1iph6gzFggUVq/7BeD+Vq9Rg7lIQv3COSdibABXcMEe7DlwwSwDoHVTdUwocOk5yiq1fdXLNWM2bjufNj/HODg+Oasgn7SVUSuyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=XhasqdgP; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 0DA0D600084C;
-	Tue, 13 Jan 2026 15:11:35 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id aulEY0Telgc1; Tue, 13 Jan 2026 15:11:32 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 91B8E6001401;
-	Tue, 13 Jan 2026 15:11:29 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1768317089;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V20ZBD9CJ8yUjiXed4dOqLBy4fH72bgYz4DmEJlM3Y8=;
-	b=XhasqdgPmo06L9jvO+SGzbdwCXghoeYvU2TV+6ad1ux3djoWNiHgZ5DsGKOTSGrlmmRU6e
-	koctDBA09Zpz5ejInp7Z3oCPAdpSUbsKU+tpfCz3ecrgu4zF5YpbBbaN6uBW8fip2tsPrl
-	+kJabVIEi6/1pk57SqHYwHTN/Z81G8CquEnLahApyLauXA3EZJ/izwsDe7NLDEDyBdyHZA
-	CV81OyulP3MRC8lWhLzkvgIOnj1Ux9LEdAy0mYOHlyLCnsNYkss0oZ1sOI2tlNVTEYShPv
-	drio9ynDGPZPIvVIecXHLohKYtPcQ5WdPJ/FOhjo/ctmeRzSVYaHlF8Zlsa6NA==
-Received: from [192.168.2.110] (unknown [148.63.39.39])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 57D68360148;
-	Tue, 13 Jan 2026 15:11:29 +0000 (WET)
-Message-ID: <d2f01fe4-f92a-408a-890c-7e37f7c414c3@tecnico.ulisboa.pt>
-Date: Tue, 13 Jan 2026 15:11:29 +0000
+	s=arc-20240116; t=1768318313; c=relaxed/simple;
+	bh=c7d5jlgASjxzIxTiQVH1feaKffgW8+1S4PM5q3EL+Ng=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E1JrlDAwkE1eQsAaWUuYWSShZbVkFfDZgVIB5dpn1wPgGUwZ5ao/J41tkdwr6f1xjgwMpb1vMco7g8pTq7veN425kSojHwKVG1SUV7YdvgCLPFJf+iCfDAs3qVci7Z+LcvT9uV/iLFmESPqjaP10TsB4HX/Ova70HWirFSmFpmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XS0BVzMd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F049C116C6;
+	Tue, 13 Jan 2026 15:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768318313;
+	bh=c7d5jlgASjxzIxTiQVH1feaKffgW8+1S4PM5q3EL+Ng=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XS0BVzMdX6wwu7jJFI+Wdwj2hnpaDwThBV75hD8X85Duz3CNwf7fp7JHjOtbf6/jx
+	 y6vxuNYBx7dnIIewd+MzRJu5km5LJhhD2J5bbHriW75eKt27VS/1vkAchNpfquybt1
+	 tLK/NhIVazPzjHgIdsb3kXfazz+icFLN76q/9WFWMprIjCfRd75NFUELNxbYbXXZxl
+	 sz4Ai6kdAA7bN+CbjXm3GjM78eTCdqAWv8Rj+uob5B3+Pfe+Vhg5I/Vbz5SE7vaFmj
+	 KkT0HfBC3grnmz0UlSby0lXkT911+M2BvfqUXOjuEknQkf5tC8RlrZJ0ihlTYF8RKH
+	 X6lxleOce0Tfg==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vfgN0-000000003Tx-0cMf;
+	Tue, 13 Jan 2026 16:31:46 +0100
+Date: Tue, 13 Jan 2026 16:31:46 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	david@ixit.cz
+Subject: Re: [PATCH v8 1/2] usb: serial: add support for CH348
+Message-ID: <aWZlYuFXYd5eAZTT@hovoldconsulting.com>
+References: <aINXS813fmWNJh3A@hovoldconsulting.com>
+ <CAFBinCBMTOM-FMgENS-mrnV17HbKzhtPUd44_dDiwnD=+HVMWQ@mail.gmail.com>
+ <aIiXyEuPmWU00hFf@hovoldconsulting.com>
+ <CAFBinCBZhjs7DGEgxhz54Dg8aW3NX9_LdnoZeUZpm5ohaT_-oQ@mail.gmail.com>
+ <aJCoRFe-RFW1MuDk@hovoldconsulting.com>
+ <CAFBinCCYsWHsNwi99kFqvLv+xOYtp9u3omhrPdV-hdH+5Cfyew@mail.gmail.com>
+ <aK7Y9rRIsGBKRFAO@hovoldconsulting.com>
+ <CAFBinCD19CVc0kX-aqa8pw71O2F3Nwy9ght+2TCn9B4PbOCBfw@mail.gmail.com>
+ <aS2hxeBR-tptevYd@hovoldconsulting.com>
+ <CAFBinCAt1DevnggWJdzBzh3X1Yfb0ScZXYsgkrA1cGrUmfXVwg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] arm64: tegra: smaug: Add usb-role-switch support
-To: Jon Hunter <jonathanh@nvidia.com>, Mathias Nyman
- <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org
-References: <20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt>
- <20251204-diogo-tegra_phy-v1-5-51a2016d0be8@tecnico.ulisboa.pt>
- <ea60f024-1f39-483c-87e3-36624bd58d49@nvidia.com>
- <ea4ee289-fb46-44be-b5e6-9d3beca7c0d8@tecnico.ulisboa.pt>
- <42df7bb1-c587-429f-88ac-1e5ffa7c2b3f@nvidia.com>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-In-Reply-To: <42df7bb1-c587-429f-88ac-1e5ffa7c2b3f@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFBinCAt1DevnggWJdzBzh3X1Yfb0ScZXYsgkrA1cGrUmfXVwg@mail.gmail.com>
 
+On Mon, Dec 15, 2025 at 03:10:29AM +0100, Martin Blumenstingl wrote:
+> On Mon, Dec 1, 2025 at 3:10 PM Johan Hovold <johan@kernel.org> wrote:
 
+> > > Unfortunately I don't know how to read the HW flow control state from
+> > > the hardware.
+> > > Do you have any suggestions, how I can test HW flow control (after
+> > > manually enabling it for a port)?
+> >
+> > You can try disabling reading from the device (e.g. never submit the
+> > read urbs) and see if the RTS is deasserted when the buffer fills up.
 
-On 1/13/26 14:49, Jon Hunter wrote:
+> Doing so results in:
+> - lots of UART_LSR_OE
+> - RTS stays LOW (pulled to GND)
 > 
-> On 13/01/2026 14:20, Diogo Ivo wrote:
->>
->>
->> On 1/12/26 22:03, Jon Hunter wrote:
->>>
->>> On 04/12/2025 21:27, Diogo Ivo wrote:
->>>> The USB2 port on Smaug is configured for OTG operation but lacked the
->>>> required 'usb-role-switch' property, leading to a failed probe and a
->>>> non-functioning USB port. Add the property along with setting the 
->>>> default
->>>> role to host.
->>>>
->>>> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
->>>> ---
->>>>   arch/arm64/boot/dts/nvidia/tegra210-smaug.dts | 2 ++
->>>>   1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/ 
->>>> arm64/boot/dts/nvidia/tegra210-smaug.dts
->>>> index b8d854f90be7..49bf23d6f593 100644
->>>> --- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
->>>> +++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
->>>> @@ -1809,6 +1809,8 @@ usb2-0 {
->>>>                   status = "okay";
->>>>                   vbus-supply = <&usbc_vbus>;
->>>>                   mode = "otg";
->>>> +                usb-role-switch;
->>>> +                role-switch-default-mode = "host";
->>>>               };
->>>
->>>
->>> This change does add the following warning when building with CHECK_DTBS
->>> ...
->>>
->>> arch/arm64/boot/dts/nvidia/tegra210-smaug.dtb: padctl@7009f000 
->>> (nvidia,tegra210-xusb-padctl): ports:usb2-0: 'role-switch-default- 
->>> mode' does not match any of the regexes: '^pinctrl-[0-9]+$'
->>>      from schema $id: http://devicetree.org/schemas/phy/ 
->>> nvidia,tegra210- xusb-padctl.yaml
->>>
->>> I know that there are many warnings seen for the smaug DTB, but it would
->>> be good to ensure we don't add more.
->>
->> The 'role-switch-default-mode' property is read by the driver to set the
->> initial role for the port [0] and is needed in order for the port to work
->> when booting so in order to fix the warning this property needs to be 
->> added
->> to the binding.
+> UART_LSR_OE increasing seems correct as far as I understand this.
+> RTS being LOW is wrong and I cannot manage to get ch348 to pull it to HIGH.
 > 
-> Correct.
+> I did some more research and found that ch348 implements UART_IIR_MSI
+> and provides a fully standard compatible UART_MSR.
+> This is either triggered by a status change on the pins (UART_MSR
+> delta bits and the actual status bits), or by requesting an update
+> using the VEN_R command (UART_MSR status bits only, no delta bits).
 > 
->> As for the other warning ('connector' is a dependency of 'usb-role- 
->> switch')
->> again I think the binding needs to be adjusted since in the Pixel C the
->> connector node should be under the (as for now not present)
->> cros-ec-typec node and the usb2-0 is then modeled as a remote-endpoint
->> for the full connector. I am currently working on fixing the cros-ec- 
->> typec
->> driver and already have a working fix for automatic role switching but
->> in any case I think the binding is what needs changing. If you agree
->> with this then I will add the necessary changes to the DT binding in v2.
+> In a very simple test-case I've used jumper cables on port #0 of ch348:
+> - RX and TX connected together
+> - CTS and RTS connected together
 > 
-> Yes in both cases we need fixes to the DT binding that's all.
+> If I remove the jumper between CTS and RTS I get:
+>   ch348 ttyUSB0: got MSR = 0x01 // jumper removed
+>   ch348 ttyUSB0: got MSR = 0x11 // jumper connected again
+>   ch348 ttyUSB0: got MSR = 0x01 // jumper removed again
+> 
+> So the hardware does register the change.
+> 
+> Earlier I thought I found a fix: I had the values for
+> R_C4_HW_FLOW_CONTROL_OFF and R_C4_HW_FLOW_CONTROL_ON swapped.
+> That however didn't fix it.
+> 
+> My current work can be found here: [0]
+> If you also don't have any further ideas then I'll drop the whole
+> RTS/CTS code for now so the ch348 driver can finally make it into
+> Linux 6.20
 
-Perfect, will do for v2.
+Or you can include it and just document the known issue with RTS control
+for port 1. It seems you have everything else working, right?
 
-Diogo
+> > And in the other direction, verify that writes are buffered after you
+> > deassert RTS manually on the other end. That should be easier.
 
-> Jon
-> 
+> This seems to work: if I pull CTS up then ch348 stops sending data
+
+So that means hardware flow control (CRTSCTS) is enabled, which could
+prevent manual control of RTS. Which port did you test this on? Or is it
+the same behaviour on all ports (0-3)?
+
+Going back to archives, it seems like you can control RTS on ports 0, 2
+and 3. (And DTR/RTS is not available for ports 4-7).
+
+Hardware flow being enabled on just port 1 may explain the difference
+even if you would expect the device to also deassert RTS in the overflow
+test (unless there are separate bits for controlling auto-rts and
+auto-cts).
+
+> > > In case I can't easily figure it out: would you also accept a driver
+> > > that doesn't support RTS/CTS for its initial version?
+> >
+> > It's good to at least be able to control DTR/RST at open/close (i.e.
+> > implement dtr_rts()) so that you can communicate when the other end
+> > has hw flow enabled. Sound like you're really close to doing so.
+
+> In the meantime I found out why I had trouble with the DTR signal on port 1.
+> It was a user(space) error. I've been using [1] for some of my tests
+> and it has a bug where it would clear c_cflag HUPCL [2], which
+> prevents the kernel from turning DTR off on port close.
+
+Ah, good that you found that.
+
+Johan
 
