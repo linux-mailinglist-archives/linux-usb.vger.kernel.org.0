@@ -1,93 +1,91 @@
-Return-Path: <linux-usb+bounces-32218-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32219-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D019D16EE5
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 07:59:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B392DD16F89
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 08:19:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 07E993010BD7
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 06:59:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7AA5F3047914
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jan 2026 07:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A2E369975;
-	Tue, 13 Jan 2026 06:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C31FC369997;
+	Tue, 13 Jan 2026 07:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AoQQGfF4"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jvNt3aKI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C2B25F98B;
-	Tue, 13 Jan 2026 06:59:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245B536921D;
+	Tue, 13 Jan 2026 07:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768287540; cv=none; b=cowjO5uXW1SwnXmaKSgeUsFYhTUSDmOJSyAjSOx82R4HmU5KQzr4V3lbOjRygXHLwJVJtxZrcmCxMJT4EbIL5kR9qs8khW5uodCplA45wRieonn3LB1K9Ou3rzXemaFIEexxTIYwBajcl09ktCrsinGDq6ghC1RWRr3XxZF+c9k=
+	t=1768288717; cv=none; b=ShU38bIKBIXcJfqA6siTJKotlTNkPeW/yK31k4/LZCc+qewnrPXNYb63QJovw7ENICpDlqQ9o8FNlIrU1yDgltwi++8MkCismOUoXhMraZ6/huIN1o35LLUMSzR8H3xTrttBaUkuNNSexXjNqRknPIUaU7onVKJIYUxd7mCJA08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768287540; c=relaxed/simple;
-	bh=inkLnSl0ItzeVinaMJYgEU5Xice93U0TjHQH3H3LEVQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aIRCJiJslboM2lSnNZP+e5tQwnUR5dKxvRbMJ5jHRx0eCBeAHH2pqUK4naSNIhkHQtgWgyZrzo8JsSBiZs60XqDrI1bvQJJyFip9WqSttQeuVtChJgIgcu94aMqLjbe9tc7gpAPqePWWyCzh6Cad/22hPREcjnVXLPDL8E5VO08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AoQQGfF4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47842C116C6;
-	Tue, 13 Jan 2026 06:58:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768287540;
-	bh=inkLnSl0ItzeVinaMJYgEU5Xice93U0TjHQH3H3LEVQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AoQQGfF4j3uqXMq5Ca/8b5AJS6i2raNtMWlorWMax9SQ/ivKBH7CYAeX3Y3YU7qrW
-	 5ztSQ9BZX196R9+Bp1UI6sWWXzv+M9reVlVaPGuU/BkDI6QPSt+230EFqo6qenTxdf
-	 1BaNRgPAOrQ8fRdOp8dhu72nDDR2wOaTFz6fgl1TNz6mT/D7+Uiis8LyMcZnCpfkX6
-	 5/HrYQIk0QFXQlffSKJVLWjAS8wgKm1hPDYs75U0hC+MPNz1lvLL63nUxi3Pkbia4P
-	 9opiMHucT3Snny6hmeWTOG8UyCM9Dl3epRvCWoiEc71OLRtceUkmGoxRefAYtuty3X
-	 EW1Znlv0JZFnA==
-Message-ID: <675f32d7-c866-4b66-93bb-0dc6ed53f5f9@kernel.org>
-Date: Tue, 13 Jan 2026 07:58:56 +0100
+	s=arc-20240116; t=1768288717; c=relaxed/simple;
+	bh=sLieaHte/omw2+DC4xCadba9sUkWMLPipRMYXqLNZzU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S7hZ6CC+dFUXT+xmLGeR2OkhLv9a8kueK3Q8PnaD0l202QD2RW1ZCW/EmbdAX+SxKDIN/gAQqd0EqJVT3cGNOT7uQtu/jpQrF34y8nPq5peQMwB74Bynx5Z9gy5DjP/ADzeetHK/cUU1hXjIcWpqVCD0wbQn/rgRNZ3rUGRh0Os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jvNt3aKI; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=uP+Y74TalLXfEB9hiR3xxrSUKP2zJip+z+qoTZsDS6c=; b=jvNt3aKI+6fhpSXldpE64cLkVX
+	Zq9GO717Bx1KImaOfe2wQLxv7WourPRhX93R38fRchrEU95mANzrB9LvDVGUlVfnfcPDxvsNcj3mx
+	GXTsdQjKMADCEko95AeoyjL8Q/nKxNenkfcqXISLAsWPO5qxs5AAbZycF22vwo22UQeH1bFnwHXFo
+	Z9gXcfI+kEisgUVQUrJr7O2zyF3AZkzn1g/DjIoU//ZtjKi5k5RmQ03KeQJFIHQJgkVZHNeWDpFkB
+	H4Mo0k7gfsI8HvGq9tUb3iqTDKJLk4kQ2qbzoDvnxCdRDNwg1PebSBC9mPgDDuagCdzwX1k71ETUk
+	lSM5V0gA==;
+Received: from [50.53.43.113] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vfYfg-00000006dNJ-1teC;
+	Tue, 13 Jan 2026 07:18:32 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Kuen-Han Tsai <khtsai@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: gadget: u_ether: use <linux/hex.h> header file
+Date: Mon, 12 Jan 2026 23:18:31 -0800
+Message-ID: <20260113071831.4158296-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: apple: Ignore USB role switches to the active
- role
-To: Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260109-apple-dwc3-role-switch-v1-1-11623b0f6222@jannau.net>
-Content-Language: en-US
-From: Sven Peter <sven@kernel.org>
-In-Reply-To: <20260109-apple-dwc3-role-switch-v1-1-11623b0f6222@jannau.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 09.01.26 11:13, Janne Grunau wrote:
-> Ignore USB role switches if dwc3-apple is already in the desired state.
-> The USB-C port controller on M2 and M1/M2 Pro/Max/Ultra devices issues
-> additional interrupts which result in USB role switches to the already
-> active role.
-> Ignore these USB role switches to ensure the USB-C port controller and
-> dwc3-apple are always in a consistent state. This matches the behaviour
-> in __dwc3_set_mode() in core.c.
-> Fixes detecting USB 2.0 and 3.x devices on the affected systems. The
-> reset caused by the additional role switch appears to leave the USB
-> devices in a state which prevents detection when the phy and dwc3 is
-> brought back up again.
-> 
-> Fixes: 0ec946d32ef7 ("usb: dwc3: Add Apple Silicon DWC3 glue layer driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
+Since <linux/kernel.h> no longer includes <linux/hex.h>, any users
+of the hex interfaces need to include <linux/hex.h> themselves, so
+add the header file here as needed.
 
-Reviewed-by: Sven Peter <sven@kernel.org>
-Tested-by: Sven Peter <sven@kernel.org> # M1 mac mini and macbook air
+Suggested-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: e065c6a7e46c ("usb: gadget: u_ether: add gether_opts for config caching")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Closes: https://lore.kernel.org/linux-next/2768c835-7ac9-4540-a665-5dd516a80eee@infradead.org/T/#t
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+---
+Cc: Kuen-Han Tsai <khtsai@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
 
+ drivers/usb/gadget/function/u_ether_configfs.h |    1 +
+ 1 file changed, 1 insertion(+)
 
-thanks,
-
-
-Sven
-
+--- linux-next.orig/drivers/usb/gadget/function/u_ether_configfs.h
++++ linux-next/drivers/usb/gadget/function/u_ether_configfs.h
+@@ -14,6 +14,7 @@
+ #define __U_ETHER_CONFIGFS_H
+ 
+ #include <linux/cleanup.h>
++#include <linux/hex.h>
+ #include <linux/if_ether.h>
+ #include <linux/mutex.h>
+ #include <linux/netdevice.h>
 
