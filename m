@@ -1,154 +1,432 @@
-Return-Path: <linux-usb+bounces-32344-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32345-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B6DAD21066
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 20:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F8EAD21112
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 20:41:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 64AE13062E21
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 19:26:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EED1F30124FD
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 19:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F82346798;
-	Wed, 14 Jan 2026 19:26:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 441CD34EEF8;
+	Wed, 14 Jan 2026 19:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="GuV5uCpo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZmBYlfI5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C2D346E5D
-	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 19:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D57434D4F1
+	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 19:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768418780; cv=none; b=hZcaYyT8H2hVnkK1/Imz2HVg3lxfU975bmmd3zwjDbbmkhV/2ws68SJoN2Ql8AB2E7mxllcC5qiY2crL1GhRSlJApsZs3SVrSfFhkVG//clDCQpcXxEWjGwr3I7/oo6iJBZa24celvOTQeTTc7llO310KEtL6sZd1c9IEZVdtG0=
+	t=1768419640; cv=none; b=D8PqPFT404d61Ki5JyYy/3N3B5i2nO1S2lqU2pEx2JUM9i+n2clG3NrEWoXZDq1CnxGcgZLYx3nJ9/IhsA7da3wt/uf2meMO1AQAL9asl05/GAFVzEYj1Vt+f56Nc8SmH5KH2Qtfd4/RJMrPei6ODbet539/jkQy4hLiHRpbCxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768418780; c=relaxed/simple;
-	bh=8PC1e7EiGa8I3htfwIvagJf3HLdJgrLyLQewfkJkM9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PcCWRsIx8TUoFskP+7ORoFgNuoULOai1le8PKUaRgnwknTls2dhCbyo1qVhaH7kpQ6vhNRk43D6Ygr8Ic9iXxmckNY4CQ5o3MrPG6qbQfPZJK0Cpg2K3+JV8IRXchkhzgHxxb0ahNYOEsbmhCBe4JssELwbByxdu+y8rJvIcP4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=GuV5uCpo; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-88fe44cce7eso974566d6.3
-        for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 11:26:18 -0800 (PST)
+	s=arc-20240116; t=1768419640; c=relaxed/simple;
+	bh=ykLH2MgbCvBBlz1nfxnm2nxGWsprbZ68o9/wmnQtSQg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BzW4Ex8XGy9QwuN7nNiFj70GgdlFE2Gd6hKcSxa5UCTFTlldnEm6R/ATXZFNn7o+NLq/Sj8y8SD7Q9lYV9wQPyVrIi67z9hX96Wsw1bnZov2iHD05whuVitZlHZNYnZjV7c1wgMFlULz6WqAYYVT+0mm6o46eXyl98Yp2Hawtww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZmBYlfI5; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4327555464cso101954f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 11:40:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1768418777; x=1769023577; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nxJF7Sbb+sYk7J72rghB/RusXhNAXd0NYCufmfRO6vo=;
-        b=GuV5uCpofoRXag7f2BWBsON5IceWHdwBXXMu/2Nx7SIgSHx6oNOBCg4mphJ64bJTwK
-         lQzib7XSPKm9LTBpkOPZ/e2V9qPNRgO9R6XPCEf+mTnr3HE5G3dD448v2X9H8s0WvaiF
-         N5lx5EaY4OMEAh0FUJU6zrG0dBK3Rwp5vfTXJH9OKvykcKUgYseEiyZfVkZUjFOKagVN
-         JHWfDw72ToHBw9utWJMXsWOfUngeM7JoVJpQ0bgPcfd8k8qJSm+xCFAklPR3SAOE0HYm
-         s31PBwjTr7sQ9TgORqDJ59Xy8QlEf0wKnOIPBZLsP2bBy8/BvxL/W/QptnJkWaFBKHIA
-         PtjQ==
+        d=gmail.com; s=20230601; t=1768419636; x=1769024436; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Scpe9pFl2VETM92or+Eva19ojkvY4Xd+w6SP7ONyFrE=;
+        b=ZmBYlfI51rt514x4jVU2s6nzIWHbuR43vHtcq+biRQMlpYpBCloeOyyme5NmOATh7f
+         4eOGfT8J39lVkXBg5dmDCu5eWCwly3b3pGPU3h0xYnln/hUN5ApbGGKsymxNHETfuzP+
+         mWsRJgCiEtAvCcFwaHx0BjvbCjF92XQs2LYHMCai0ptmbxmzoDuXhx1C533s2ATg8cKp
+         HHJgx3U08ABQEUa8KM4N1CtFO1ZHbdqHE8lXKUc3pftbpmcuvhBs+Qke30KbCHjkDqxd
+         fea20GF4JC05brbPuLg46oIqIN2yN/H5sbgL7QXZ3Q5Ydu6HB8FHZv6Plh4cFUy/owJE
+         5LXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768418777; x=1769023577;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nxJF7Sbb+sYk7J72rghB/RusXhNAXd0NYCufmfRO6vo=;
-        b=hsRvORMHrqB/VokUNhaRjcTW9/X137WQXnSwXSC6X+Q6sh+w1f+xYVaZXx6wQ/Licw
-         mMwPDITIlj191mFsyFvsTi8uzm/E/aN2wyMqwWiq/aeP8xVmKSkx7rL5roq7UvU6AO2E
-         CXM+VLbvSmRTgV6eltuRvuX97sH5AwAOjmbGRb+JTBIn4tBXUUJA/aj8CBPxqBQFNgd4
-         c5gp/XERjVQyYV+aMcFmWyJcHtZR+PAWIsLstpKbujYtDFUQ1AoiKk7B1vdwIqmyP2rE
-         ZcWtByV3YzNHYcnTAnHzcrnSxtztshE9WgDziW71T75qg8Eb4U2qp8uleAzjvxbmQDJA
-         JoqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVNQQF40+UG5iDGbgNfOsNMooOTfQ6qcivq2z/UDmahF/Tqk7pb1RautvrytUrp2K9TKiU7arJu0uk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQEoKIKVDaZuVKheKhM7CUB9BG0XqB7h8U6gS34EbeF1V2/7Bq
-	bDCG84G1IVZy0zBu2/AqzI7GliyYrYhj6jEL4Q8jjE9C1H+JcxnFmLKnUnuahBmKXA==
-X-Gm-Gg: AY/fxX7G7ptoU3+Dva/Yf9r7RbdEaE7HUCX3eOCpvIPIuioG2B2PMh9U9vdQ2pl29cO
-	A8PZyXnJY9AoIOSSgmhN1xHn9XICXjBoI4mT2o/VGhUtIkVr9X8q2JYNyrfAktr6fukOXFZ7sZ7
-	0Ma/i+UEvCTY3H+uPyHFC+NFNW1afd6w6juXB1ROfgg9XukUAaTp/1AD5PGQKN6YKstTaQ0X35/
-	o9zpUuxU+TwvuEA81fKLnSjHrNtWypthTZL007fCIUsKkTs9vq5hVSEmlo3KMQ0UcFQNmprS5f6
-	PQpMBa8ZETKpy9RdpHLPuNE49LNwP/0sXYjuDcIr0Qp3jFSO3wk89eQClJZLQD7HdY4e2tF2l1f
-	oA+ZdocfhctBmSXVyHwZid88hh1AHrxYfsybnOsd5MKyVsfuaqJKN18Tpim4pfaJ8qH7ldGQDGv
-	Umtyf3rji0VlGuPo5blWKQUuTA2kIVPZZcEl1RfWwc1GwP3sw5kkOLAPcFhVaU3hRVQdDaqOH0Z
-	936tSQa
-X-Received: by 2002:ad4:5d6a:0:b0:890:26d5:c1a0 with SMTP id 6a1803df08f44-89274315d22mr52633206d6.13.1768418777231;
-        Wed, 14 Jan 2026 11:26:17 -0800 (PST)
-Received: from rowland.harvard.edu (nat-65-112-8-61.harvard-secure.wrls.harvard.edu. [65.112.8.61])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89077234ca1sm184029396d6.36.2026.01.14.11.26.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 11:26:16 -0800 (PST)
-Date: Wed, 14 Jan 2026 14:26:14 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Ben Greear <greearb@candelatech.com>
-Cc: Hillf Danton <hdanton@sina.com>, LKML <linux-kernel@vger.kernel.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: Deadlock in usb subsystem on shutdown, 6.18.3+
-Message-ID: <2b4c47a5-1a5a-4e94-87d6-152da16a3b9c@rowland.harvard.edu>
-References: <20260114024506.2210-1-hdanton@sina.com>
- <dae8dc09-0e06-446a-b6dd-4c86ec423997@candelatech.com>
- <c52546af-e39e-4096-ad11-9b38bb2d5f7e@rowland.harvard.edu>
- <a721a966-0a4b-cbc4-71ac-a482156ffa48@candelatech.com>
+        d=1e100.net; s=20230601; t=1768419636; x=1769024436;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Scpe9pFl2VETM92or+Eva19ojkvY4Xd+w6SP7ONyFrE=;
+        b=dNLxwpHt2/lKEG3bhqkiCCXQlLt+jeYxBihxvMht9W69B0tAYHCWRjgqumnQNjvzQV
+         29QyK/1CaZA9LiYHAXQ+pvzlpdtkSS3GGCRBvjTJoRxfBAgSDpQ/VpaP9T6cEk9pLLql
+         DP7suar4KtcLhRH/dTOPxpejpa+VmQmUuTTnAbmDHdLMoMIbLog0BxuxSk8en1GpDckN
+         FAzIQ9CIGfcfsFnKQzxzJyrt3OXonPVjJkOtWpjZaIcek0X7nGWwV0YVwlMuKXLs6C7b
+         pLuS62SdMPYTm7DSjsFrlW+FFCZ563znY8Kbkki0ksfynB8lghE7LwOdnoRDPkguINuv
+         I/HA==
+X-Forwarded-Encrypted: i=1; AJvYcCXqf8Ov6ei5ajXy3mBJb+Z8zMQHjY2dzNpd+tlMrcIqS1ZglTKGOo8pkG5w6/f0NOzybk/y4xsHvZM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSMSjynwcPa53IsNE/EP/TJmXI8+30RCqV0i7EzmTEuTN82Ax7
+	jHVfVpe07cE1EJ4eEo/ii8Kkd0UpZhAQqmUQ6QAMI5P5YALZctzdbuUV
+X-Gm-Gg: AY/fxX7jim0O6xxAPPugm+uFlfNJdUaII/gLF23XFlKMT4NvXkqToBCmHvG5T9SScbH
+	PWdgh1K2s1hGEtqDBGMVL1EJ4x5MWDSroCu8rW/j9NiD8L7DK2m5pnJt8S2IVeIpCFF1+vunetf
+	PxkInCqxNJFu/cw8/A7uxuDzZQ07rwo4GezHpIAtRv/UJu66uITjF7QpvitQR0cbX4L9KKBMvJ8
+	pY4WoVKjuM1cuydtkAyYQuHSpDv0GoE1rrWgdhJ2C1EbKpP/k0cDb7a492ph9x38K9B0hDKkrec
+	tgyPsJZxq7rJX4/2j7hZCkULn3RNFAS+pXLxjhp0N36N6EUTj1zokwMZcAVElhE/5AA4rm8ZcKn
+	wxOKffxp617uFT43JuSK3mZi65sopOtvtFtT4qDJ3aFF/ETQU0tjr+X4JaqIOqLfuLpCxVC2DV3
+	0t9uQ6Poc2IKBec72Tv8cL14ogXF5/ScFdAgDJTisoAqBxvbD5S6ETpLG4HkSzK/Zs0DbTKmTwK
+	CnXlw==
+X-Received: by 2002:a5d:5d0a:0:b0:430:fd84:3175 with SMTP id ffacd0b85a97d-4342c535d4cmr5459711f8f.38.1768419635614;
+        Wed, 14 Jan 2026 11:40:35 -0800 (PST)
+Received: from ?IPV6:2a06:5906:2639:e200:7139:7167:2ab3:2206? ([2a06:5906:2639:e200:7139:7167:2ab3:2206])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-434af64a778sm1065645f8f.3.2026.01.14.11.40.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jan 2026 11:40:35 -0800 (PST)
+Message-ID: <ee4a31e1-f375-4c9b-aa1a-b056f40e0d91@gmail.com>
+Date: Wed, 14 Jan 2026 19:40:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a721a966-0a4b-cbc4-71ac-a482156ffa48@candelatech.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/6] rust: driver: introduce a common Driver trait
+To: Danilo Krummrich <dakr@kernel.org>, gregkh@linuxfoundation.org,
+ rafael@kernel.org, ojeda@kernel.org, boqun.feng@gmail.com, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
+ aliceryhl@google.com, tmgross@umich.edu, david.m.ertman@intel.com,
+ ira.weiny@intel.com, leon@kernel.org, bhelgaas@google.com,
+ kwilczynski@kernel.org, wsa+renesas@sang-engineering.com
+Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+References: <20260107103511.570525-1-dakr@kernel.org>
+ <20260107103511.570525-4-dakr@kernel.org>
+Content-Language: en-US
+From: Igor Korotin <igor.korotin.linux@gmail.com>
+In-Reply-To: <20260107103511.570525-4-dakr@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 14, 2026 at 09:51:48AM -0800, Ben Greear wrote:
-> On 1/14/26 07:13, Alan Stern wrote:
-...
-> > > > > task:kworker/4:2     state:D stack:0     pid:1520  tgid:1520  ppid:2      task_flags:0x4288060 flags:0x00080000
-> > > > > Workqueue: events __usb_queue_reset_device
-> > > > > Call Trace:
-> > > > >     <TASK>
-> > > > >     __schedule+0x46b/0x1140
-> > > > >     ? schedule_timeout+0x79/0xf0
-> > > > >     schedule+0x23/0xc0
-> > > > >     usb_kill_urb+0x7b/0xc0
-> > > > >     ? housekeeping_affine+0x30/0x30
-> > > > >     usb_start_wait_urb+0xd6/0x160
-> > > > >     usb_control_msg+0xe2/0x140
-> > > > >     hub_port_init+0x647/0xf70
-> > > > >     usb_reset_and_verify_device+0x191/0x4a0
-> > > > >     ? device_release_driver_internal+0x4a/0x200
-> > > > >     usb_reset_device+0x138/0x280
-> > > > >     __usb_queue_reset_device+0x35/0x50
-> > > > >     process_one_work+0x17e/0x390
-> > > > >     worker_thread+0x2c8/0x3e0
-> > > > >     ? process_one_work+0x390/0x390
-> > > > >     kthread+0xf7/0x1f0
-
-> > Unfortunately, we have no to tell from the log you collected which host
-> > controller driver encountered this problem.  Nor, unless you can
-> > replicate the problem, any way to track down exactly where in that
-> > driver the bug is -- or even any way to tell whether a proposed fix
-> > actually solves the problem.
-> > 
-> > Alan Stern
+On 1/7/2026 10:35 AM, Danilo Krummrich wrote:
+> The Driver trait describes the layout of a specific driver structure,
+> such as `struct pci_driver` or `struct platform_driver`.
 > 
-> The system was in the final stage of shutdown, so all we have in this case is serial
-> console output.  If we set console to more verbose mode, would that provide what
-> you need?
+> In a first step, this replaces the associated type RegType of the
+> RegistrationOps with the Driver::DriverType associated type.
+> 
+> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+> ---
+>   rust/kernel/auxiliary.rs | 18 +++++++++++-------
+>   rust/kernel/driver.rs    | 40 +++++++++++++++++++++++++---------------
+>   rust/kernel/i2c.rs       | 18 +++++++++++-------
+>   rust/kernel/pci.rs       | 18 +++++++++++-------
+>   rust/kernel/platform.rs  | 18 +++++++++++-------
+>   rust/kernel/usb.rs       | 18 +++++++++++-------
+>   6 files changed, 80 insertions(+), 50 deletions(-)
+> 
+> diff --git a/rust/kernel/auxiliary.rs b/rust/kernel/auxiliary.rs
+> index 6931f8a4267f..4636b6f41195 100644
+> --- a/rust/kernel/auxiliary.rs
+> +++ b/rust/kernel/auxiliary.rs
+> @@ -23,13 +23,17 @@
+>   /// An adapter for the registration of auxiliary drivers.
+>   pub struct Adapter<T: Driver>(T);
+>   
+> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
+> +// SAFETY:
+> +// - `bindings::auxiliary_driver` is a C type declared as `repr(C)`.
+> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+> +    type DriverType = bindings::auxiliary_driver;
+> +}
+> +
+> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
+>   // a preceding call to `register` has been successful.
+>   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
+> -    type RegType = bindings::auxiliary_driver;
+> -
+>       unsafe fn register(
+> -        adrv: &Opaque<Self::RegType>,
+> +        adrv: &Opaque<Self::DriverType>,
+>           name: &'static CStr,
+>           module: &'static ThisModule,
+>       ) -> Result {
+> @@ -41,14 +45,14 @@ unsafe fn register(
+>               (*adrv.get()).id_table = T::ID_TABLE.as_ptr();
+>           }
+>   
+> -        // SAFETY: `adrv` is guaranteed to be a valid `RegType`.
+> +        // SAFETY: `adrv` is guaranteed to be a valid `DriverType`.
+>           to_result(unsafe {
+>               bindings::__auxiliary_driver_register(adrv.get(), module.0, name.as_char_ptr())
+>           })
+>       }
+>   
+> -    unsafe fn unregister(adrv: &Opaque<Self::RegType>) {
+> -        // SAFETY: `adrv` is guaranteed to be a valid `RegType`.
+> +    unsafe fn unregister(adrv: &Opaque<Self::DriverType>) {
+> +        // SAFETY: `adrv` is guaranteed to be a valid `DriverType`.
+>           unsafe { bindings::auxiliary_driver_unregister(adrv.get()) }
+>       }
+>   }
+> diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
+> index 649d06468f41..cd1d36c313e1 100644
+> --- a/rust/kernel/driver.rs
+> +++ b/rust/kernel/driver.rs
+> @@ -99,23 +99,33 @@
+>   use core::pin::Pin;
+>   use pin_init::{pin_data, pinned_drop, PinInit};
+>   
+> +/// Trait describing the layout of a specific device driver.
+> +///
+> +/// This trait describes the layout of a specific driver structure, such as `struct pci_driver` or
+> +/// `struct platform_driver`.
+> +///
+> +/// # Safety
+> +///
+> +/// Implementors must guarantee that:
+> +/// - `DriverType` is `repr(C)`.
+> +pub unsafe trait Driver {
+> +    /// The specific driver type embedding a `struct device_driver`.
+> +    type DriverType: Default;
+> +}
+> +
+>   /// The [`RegistrationOps`] trait serves as generic interface for subsystems (e.g., PCI, Platform,
+>   /// Amba, etc.) to provide the corresponding subsystem specific implementation to register /
+> -/// unregister a driver of the particular type (`RegType`).
+> +/// unregister a driver of the particular type (`DriverType`).
+>   ///
+> -/// For instance, the PCI subsystem would set `RegType` to `bindings::pci_driver` and call
+> +/// For instance, the PCI subsystem would set `DriverType` to `bindings::pci_driver` and call
+>   /// `bindings::__pci_register_driver` from `RegistrationOps::register` and
+>   /// `bindings::pci_unregister_driver` from `RegistrationOps::unregister`.
+>   ///
+>   /// # Safety
+>   ///
+> -/// A call to [`RegistrationOps::unregister`] for a given instance of `RegType` is only valid if a
+> -/// preceding call to [`RegistrationOps::register`] has been successful.
+> -pub unsafe trait RegistrationOps {
+> -    /// The type that holds information about the registration. This is typically a struct defined
+> -    /// by the C portion of the kernel.
+> -    type RegType: Default;
+> -
+> +/// A call to [`RegistrationOps::unregister`] for a given instance of `DriverType` is only valid if
+> +/// a preceding call to [`RegistrationOps::register`] has been successful.
+> +pub unsafe trait RegistrationOps: Driver {
+>       /// Registers a driver.
+>       ///
+>       /// # Safety
+> @@ -123,7 +133,7 @@ pub unsafe trait RegistrationOps {
+>       /// On success, `reg` must remain pinned and valid until the matching call to
+>       /// [`RegistrationOps::unregister`].
+>       unsafe fn register(
+> -        reg: &Opaque<Self::RegType>,
+> +        reg: &Opaque<Self::DriverType>,
+>           name: &'static CStr,
+>           module: &'static ThisModule,
+>       ) -> Result;
+> @@ -134,7 +144,7 @@ unsafe fn register(
+>       ///
+>       /// Must only be called after a preceding successful call to [`RegistrationOps::register`] for
+>       /// the same `reg`.
+> -    unsafe fn unregister(reg: &Opaque<Self::RegType>);
+> +    unsafe fn unregister(reg: &Opaque<Self::DriverType>);
+>   }
+>   
+>   /// A [`Registration`] is a generic type that represents the registration of some driver type (e.g.
+> @@ -146,7 +156,7 @@ unsafe fn register(
+>   #[pin_data(PinnedDrop)]
+>   pub struct Registration<T: RegistrationOps> {
+>       #[pin]
+> -    reg: Opaque<T::RegType>,
+> +    reg: Opaque<T::DriverType>,
+>   }
+>   
+>   // SAFETY: `Registration` has no fields or methods accessible via `&Registration`, so it is safe to
+> @@ -161,13 +171,13 @@ impl<T: RegistrationOps> Registration<T> {
+>       /// Creates a new instance of the registration object.
+>       pub fn new(name: &'static CStr, module: &'static ThisModule) -> impl PinInit<Self, Error> {
+>           try_pin_init!(Self {
+> -            reg <- Opaque::try_ffi_init(|ptr: *mut T::RegType| {
+> +            reg <- Opaque::try_ffi_init(|ptr: *mut T::DriverType| {
+>                   // SAFETY: `try_ffi_init` guarantees that `ptr` is valid for write.
+> -                unsafe { ptr.write(T::RegType::default()) };
+> +                unsafe { ptr.write(T::DriverType::default()) };
+>   
+>                   // SAFETY: `try_ffi_init` guarantees that `ptr` is valid for write, and it has
+>                   // just been initialised above, so it's also valid for read.
+> -                let drv = unsafe { &*(ptr as *const Opaque<T::RegType>) };
+> +                let drv = unsafe { &*(ptr as *const Opaque<T::DriverType>) };
+>   
+>                   // SAFETY: `drv` is guaranteed to be pinned until `T::unregister`.
+>                   unsafe { T::register(drv, name, module) }
+> diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
+> index 35b678b78d91..de35961c6903 100644
+> --- a/rust/kernel/i2c.rs
+> +++ b/rust/kernel/i2c.rs
+> @@ -92,13 +92,17 @@ macro_rules! i2c_device_table {
+>   /// An adapter for the registration of I2C drivers.
+>   pub struct Adapter<T: Driver>(T);
+>   
+> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
+> +// SAFETY:
+> +// - `bindings::i2c_driver` is a C type declared as `repr(C)`.
+> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+> +    type DriverType = bindings::i2c_driver;
+> +}
+> +
+> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
+>   // a preceding call to `register` has been successful.
+>   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
+> -    type RegType = bindings::i2c_driver;
+> -
+>       unsafe fn register(
+> -        idrv: &Opaque<Self::RegType>,
+> +        idrv: &Opaque<Self::DriverType>,
+>           name: &'static CStr,
+>           module: &'static ThisModule,
+>       ) -> Result {
+> @@ -133,12 +137,12 @@ unsafe fn register(
+>               (*idrv.get()).driver.acpi_match_table = acpi_table;
+>           }
+>   
+> -        // SAFETY: `idrv` is guaranteed to be a valid `RegType`.
+> +        // SAFETY: `idrv` is guaranteed to be a valid `DriverType`.
+>           to_result(unsafe { bindings::i2c_register_driver(module.0, idrv.get()) })
+>       }
+>   
+> -    unsafe fn unregister(idrv: &Opaque<Self::RegType>) {
+> -        // SAFETY: `idrv` is guaranteed to be a valid `RegType`.
+> +    unsafe fn unregister(idrv: &Opaque<Self::DriverType>) {
+> +        // SAFETY: `idrv` is guaranteed to be a valid `DriverType`.
+>           unsafe { bindings::i2c_del_driver(idrv.get()) }
+>       }
+>   }
+> diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
+> index 82e128431f08..f58ce35d9c60 100644
+> --- a/rust/kernel/pci.rs
+> +++ b/rust/kernel/pci.rs
+> @@ -50,13 +50,17 @@
+>   /// An adapter for the registration of PCI drivers.
+>   pub struct Adapter<T: Driver>(T);
+>   
+> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
+> +// SAFETY:
+> +// - `bindings::pci_driver` is a C type declared as `repr(C)`.
+> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+> +    type DriverType = bindings::pci_driver;
+> +}
+> +
+> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
+>   // a preceding call to `register` has been successful.
+>   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
+> -    type RegType = bindings::pci_driver;
+> -
+>       unsafe fn register(
+> -        pdrv: &Opaque<Self::RegType>,
+> +        pdrv: &Opaque<Self::DriverType>,
+>           name: &'static CStr,
+>           module: &'static ThisModule,
+>       ) -> Result {
+> @@ -68,14 +72,14 @@ unsafe fn register(
+>               (*pdrv.get()).id_table = T::ID_TABLE.as_ptr();
+>           }
+>   
+> -        // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
+> +        // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
+>           to_result(unsafe {
+>               bindings::__pci_register_driver(pdrv.get(), module.0, name.as_char_ptr())
+>           })
+>       }
+>   
+> -    unsafe fn unregister(pdrv: &Opaque<Self::RegType>) {
+> -        // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
+> +    unsafe fn unregister(pdrv: &Opaque<Self::DriverType>) {
+> +        // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
+>           unsafe { bindings::pci_unregister_driver(pdrv.get()) }
+>       }
+>   }
+> diff --git a/rust/kernel/platform.rs b/rust/kernel/platform.rs
+> index ed889f079cab..e48d055fdc8a 100644
+> --- a/rust/kernel/platform.rs
+> +++ b/rust/kernel/platform.rs
+> @@ -26,13 +26,17 @@
+>   /// An adapter for the registration of platform drivers.
+>   pub struct Adapter<T: Driver>(T);
+>   
+> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
+> +// SAFETY:
+> +// - `bindings::platform_driver` is a C type declared as `repr(C)`.
+> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+> +    type DriverType = bindings::platform_driver;
+> +}
+> +
+> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
+>   // a preceding call to `register` has been successful.
+>   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
+> -    type RegType = bindings::platform_driver;
+> -
+>       unsafe fn register(
+> -        pdrv: &Opaque<Self::RegType>,
+> +        pdrv: &Opaque<Self::DriverType>,
+>           name: &'static CStr,
+>           module: &'static ThisModule,
+>       ) -> Result {
+> @@ -55,12 +59,12 @@ unsafe fn register(
+>               (*pdrv.get()).driver.acpi_match_table = acpi_table;
+>           }
+>   
+> -        // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
+> +        // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
+>           to_result(unsafe { bindings::__platform_driver_register(pdrv.get(), module.0) })
+>       }
+>   
+> -    unsafe fn unregister(pdrv: &Opaque<Self::RegType>) {
+> -        // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
+> +    unsafe fn unregister(pdrv: &Opaque<Self::DriverType>) {
+> +        // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
+>           unsafe { bindings::platform_driver_unregister(pdrv.get()) };
+>       }
+>   }
+> diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
+> index d10b65e9fb6a..32f4b2d55dfb 100644
+> --- a/rust/kernel/usb.rs
+> +++ b/rust/kernel/usb.rs
+> @@ -27,13 +27,17 @@
+>   /// An adapter for the registration of USB drivers.
+>   pub struct Adapter<T: Driver>(T);
+>   
+> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
+> +// SAFETY:
+> +// - `bindings::usb_driver` is a C type declared as `repr(C)`.
+> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+> +    type DriverType = bindings::usb_driver;
+> +}
+> +
+> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
+>   // a preceding call to `register` has been successful.
+>   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
+> -    type RegType = bindings::usb_driver;
+> -
+>       unsafe fn register(
+> -        udrv: &Opaque<Self::RegType>,
+> +        udrv: &Opaque<Self::DriverType>,
+>           name: &'static CStr,
+>           module: &'static ThisModule,
+>       ) -> Result {
+> @@ -45,14 +49,14 @@ unsafe fn register(
+>               (*udrv.get()).id_table = T::ID_TABLE.as_ptr();
+>           }
+>   
+> -        // SAFETY: `udrv` is guaranteed to be a valid `RegType`.
+> +        // SAFETY: `udrv` is guaranteed to be a valid `DriverType`.
+>           to_result(unsafe {
+>               bindings::usb_register_driver(udrv.get(), module.0, name.as_char_ptr())
+>           })
+>       }
+>   
+> -    unsafe fn unregister(udrv: &Opaque<Self::RegType>) {
+> -        // SAFETY: `udrv` is guaranteed to be a valid `RegType`.
+> +    unsafe fn unregister(udrv: &Opaque<Self::DriverType>) {
+> +        // SAFETY: `udrv` is guaranteed to be a valid `DriverType`.
+>           unsafe { bindings::usb_deregister(udrv.get()) };
+>       }
+>   }
 
-Maybe; it's hard to tell.  You'd have to enable dynamic debugging for 
-the usbcore module and set the console to show debug-level messages.
+Acked-by: Igor Korotin <igor.korotin.linux@gmail.com>
 
-> Or maybe 'dmesg' from when system boots?
-
-I suspect that nothing from before the start of the shutdown would be 
-useful.
-
-> We can try to reproduce, but need some clues about what to provide to make progress.
-
-The stack dump above shows that a kernel thread get stuck inside of 
-usb_reset_device().  The first thing we would need to know is which 
-device the thread is trying to reset.  Adding a dev_info() line near the 
-start of usb_reset_device() would get us that information and you could 
-capture it in the log.  (Along with that, we'd need to see the output 
-from "lsusb -t".)
-
-Knowing the device, we would know what host controller the device is 
-attached to.  The trick will then be to figure what's going wrong with 
-that host controller's driver.  It won't be easy, especially if the 
-problem only occurs while the system is shutting down.
-
-Alan Stern
+Cheers
+Igor
 
