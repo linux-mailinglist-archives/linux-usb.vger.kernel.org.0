@@ -1,203 +1,205 @@
-Return-Path: <linux-usb+bounces-32334-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32335-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBE39D1F983
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 16:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B8B2D1FAD4
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 16:17:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 374813093B03
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 14:59:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C5EBB3029224
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 15:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B57382522A1;
-	Wed, 14 Jan 2026 14:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C98831961F;
+	Wed, 14 Jan 2026 15:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b="GW4YKCSL"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="M4XkYLRQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6E92F90E0
-	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 14:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAB826CE04
+	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 15:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768402779; cv=none; b=CaT+5v5s17iADONTj356WVH9IJdBwbIMRU8q3B4emAbpFEEyuG3B8Ho0kwnXYShLAmuyZiA5V/1u8QrKtqKFeOdBspPS/Ufu8LnEgQoqPHnjUPJhD6LAAeWuokSt6L1V4Ih1jVrsz/BjkfRew0cRhHStckDzkIUOmf0tK8eBPs4=
+	t=1768403597; cv=none; b=d5pdo2DY10a1a+jU34NErrfHLRsdkz+a7wEvHQQGrRXdI+ve/vQaMajL0fKn+h0obDmJ2QcLV5Nh37zaIhOZo1Cfja4eUm1ePlvd/d8Pk3U2fn6qEI+TRLfc7Vg6kXYSif6899QfXxthY7nWIm8IuSvOnxvk7lrNPPlUbI34v3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768402779; c=relaxed/simple;
-	bh=78Z8Rlr5J7ybqESg0Jaxeg2NEeACwiHDcXQfoR4FqSo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=XLeQV5ygtE2L2Bk+kN5VYUe0T5BuffL2N3ns+VzeonzGAy/+tdldh/K+jj38xgTo95q/ksJjO7JTUYck0nNn2Sn31Gfbcn7SIBvHgViENDerNyqM/OsmBwaOnIo3kDz++egIUiIQ8FbR4UPsR9CNtf0r8dzjSmDH2DAEyhbV7gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com; spf=pass smtp.mailfrom=cknow-tech.com; dkim=pass (2048-bit key) header.d=cknow-tech.com header.i=@cknow-tech.com header.b=GW4YKCSL; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow-tech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow-tech.com
+	s=arc-20240116; t=1768403597; c=relaxed/simple;
+	bh=l5I3AxmbWrCz6ftaPVv03s84QfvGjrS2DoubwY2ukMU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FSJPzOrUERs/uhzejRZVHGKdT+B3DWflUwE+z3mQlMhM2Af5Kgzhnr7SEMrKSku0IF3O1sKZsxfwKJa/0ygxZEzImNaTqUSitx9gdcKGdve99h2yW41Q4FUE9RVi9ZRxe/HEfj2w22OfTcQ34b//HW8YS+hrjuT+iXAB9ATd1BQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=M4XkYLRQ; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4ee1a3ef624so53541121cf.0
+        for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 07:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1768403594; x=1769008394; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4fmV0yuBCdZblsqZVK/Q09iHk02h7bHR/TgEOXsMY9A=;
+        b=M4XkYLRQx5XD6PffCqu2+nU/Li2GkXLfm3YLg3sR7QH7UBSIbfsZNzdNDPm0duwyNU
+         3ew+Xbtg8T+2jKASLxjSSScLwdAWSovKsKvnB8t0ofnZJKNsfCokEX7OrtKRoHY68VeG
+         ZVr6uvHZDVr7osMAElnLAtSECo5fwKpak9JgCoeEh3jbNe0QH2OnWVOme1cOuy8ZwE3k
+         LzAZy31znUsOYqZMsTs5SSUQLv8Dj0QDC6lJYqZZZaZQrUvZo+tnV7xZgSD/UEdLd5Yk
+         kC9oe+ZqEAGPnB/oe91euwZRYxRXDVqmw2YfMmBe66qLnp5IcljC/rUfdjgs1dNDjlFv
+         kXig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768403594; x=1769008394;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4fmV0yuBCdZblsqZVK/Q09iHk02h7bHR/TgEOXsMY9A=;
+        b=Ot5UFMti197OhktVOzlVgI3E4RPFl81oMTnL9g4xNn1fVIUOGmMAd1wx8t1Ffo8olq
+         KRrJM8JttSHVoy7R98SGkRZ4gdT/4cT2e7uFxKjpmyM18QKh7GjfFc62hldJZobCsZN5
+         VKfQMxhR4gI0s2MrDNKpcaHMzTQknzFBjEnv2dpcmEnZ+SCoUloEKoKXfyT/qB/FioVG
+         vLa673hz7e0sWeQwPu/W+6hCgxYKWtcDM4GdetXLDdir/9xDVPMKshRcTphLiQFHUXBg
+         e/3VVYwGD2o0qyTP+le3KlygpjF9ED5j7VPG1OOuhiamy4Awzi+y2kTC+3crHfhDj36J
+         /uMA==
+X-Forwarded-Encrypted: i=1; AJvYcCX9sIgIFZPxel9EaIK7DkAjdXsXv04YtRzZzhYypiFKEeUOp6vQXpPo+nlGlCkay7GwE6qK77DbARo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyB5C/gSdu9GlU1C8LtAWx4r385WFipJIGqo+04GfkvTJa/IeB
+	ZHFRjEeEctlas8vAfNIWXo815nqevU/ctrCh12eyOhLW7ooZkHN65WDjzJsKMsd1JA==
+X-Gm-Gg: AY/fxX4qoVu63NWC5Pki/X9gp/04W8u+TDWvWsr/g7bl2sLJXeDaG0zhdLXP2i9rhdA
+	H2riYr96j7bKI1kz6dCKsBW3NZxtABOojxUZ2f6/tDSywacskt/F/eRDXSNg62i38VD7vaykyay
+	+M3nkK6YdyOTKARx3gq3PRDddxIQ/NlNCCtrjDqMJyQ7CeyLfD3R3pb2iEdBhIyK9rgNMKdFJlk
+	weHGLEppP5ZJEPWTnAuBXZ9gLkZ/11rrAIK1aVJZ1SD53IBA7tGAFJvBkX0KxIQxS08kTBI+Kj8
+	ekwHt0uxp7XM3JQaMx2tlS/1WeDxQc7cSTdo0eX88bsriEdKMzrDDUtd3tKbxu9ryaFa/XTOH9i
+	YQEHkObMNG19fFgGlm3U1gEUI+SQuGs7LE69+kv5qT7aoO0ILVDOhvUE0a9Sa0cVna4lr1pJ4AD
+	svoaazRXp3lvxl4Kr/lQkNHZwVKIofPSjWQZBqxiqZ
+X-Received: by 2002:a05:622a:40cd:b0:4f1:cd0c:80f6 with SMTP id d75a77b69052e-501482643d5mr41298881cf.49.1768403593291;
+        Wed, 14 Jan 2026 07:13:13 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890772682besm179017236d6.50.2026.01.14.07.13.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 07:13:12 -0800 (PST)
+Date: Wed, 14 Jan 2026 10:13:10 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Ben Greear <greearb@candelatech.com>
+Cc: Hillf Danton <hdanton@sina.com>, LKML <linux-kernel@vger.kernel.org>,
+	linux-usb@vger.kernel.org
+Subject: Re: Deadlock in usb subsystem on shutdown, 6.18.3+
+Message-ID: <c52546af-e39e-4096-ad11-9b38bb2d5f7e@rowland.harvard.edu>
+References: <20260114024506.2210-1-hdanton@sina.com>
+ <dae8dc09-0e06-446a-b6dd-4c86ec423997@candelatech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow-tech.com;
-	s=key1; t=1768402771;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FIMxu/hWbq7bQWtXRRovePTYLW/ZHcdUA2i84ufAmXs=;
-	b=GW4YKCSLMT8n/AvWcyi681ac7w29jlRS3SzlqlbSk3ocdEyVQxwVvlAvTO71R3I2Oeq0Pv
-	5zrKZoewevadqxDleVkPZ0d3xZaZu/mauyfC+cLKVWejzpQQeujvisJsPsrtWkrrNOdRIN
-	tzZDrKYg06HisSBpZboYB4PI0bjU1WWYl5DavmmTq2ISNcRIKGXDTla0aR46PFTnAcjH/K
-	Gsu2ztqHErDhBGpD65mg+BXmGFHS34rLaaWJozC/xOr/d6ubILRaYO4cUpJm8YSXjSwB9G
-	UgKg08lIIfEQOXVPac/RTV/7wA7UoIR3EagJl8wz9scLDONmzNg9KqXEzJJUOg==
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 14 Jan 2026 15:59:28 +0100
-Message-Id: <DFOEGOTI1AQ9.175GP7V1VK1XU@cknow-tech.com>
-Cc: "USB mailing list" <linux-usb@vger.kernel.org>,
- <linux-rockchip@lists.infradead.org>
-Subject: Re: Track down EHCI and companion errors on rk3xxx systems
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Diederik de Haas" <diederik@cknow-tech.com>
-To: "Alan Stern" <stern@rowland.harvard.edu>
-References: <073879e4-aea8-4625-bc83-c4b6dd9c9231@rowland.harvard.edu>
- <DFNI1Q9N7GC6.20PN0RG9LRAQF@cknow-tech.com>
- <38365c37-b125-4ffb-8ce7-bd4f3f7596ba@rowland.harvard.edu>
- <DFNLGSUWJA5Z.3OJHVYWST2YFH@cknow-tech.com>
- <b9041d32-1eab-4428-ab2b-769daefdbdcd@rowland.harvard.edu>
- <DFNRUF2LUPH4.1493G2SYERZ7Q@cknow-tech.com>
- <b108b747-cc7c-4537-b9bc-b0862bac71ff@rowland.harvard.edu>
-In-Reply-To: <b108b747-cc7c-4537-b9bc-b0862bac71ff@rowland.harvard.edu>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dae8dc09-0e06-446a-b6dd-4c86ec423997@candelatech.com>
 
-On Wed Jan 14, 2026 at 4:20 AM CET, Alan Stern wrote:
-> On Tue, Jan 13, 2026 at 10:15:59PM +0100, Diederik de Haas wrote:
->> I'm now wondering if there's something wrong with the Quartz64-A ...
->> I already thought that it took way too long before I got a login prompt.
->>=20
->> In my first attempt I noticed I did NOT have the "Warning! ehci_hcd
->> should always be loaded before uhci_hcd and ohci_hcd, not after"
->> It took so long I forgot to keep counting, but most of all I forgot the
->> dynamic debug command, so I tried again ...
+On Wed, Jan 14, 2026 at 06:36:41AM -0800, Ben Greear wrote:
+> On 1/13/26 18:45, Hillf Danton wrote:
+> > On Tue, 13 Jan 2026 16:21:07 -0800 Ben Greear wrote:
+> > > Hello,
+> > > 
+> > > We caught a deadlock that appears to be in the USB code during shutdown.
+> > > We do a lot of reboots and normally all goes well, so I don't think we
+> > > can reliably reproduce the problem.
+> > > 
+> > > INFO: task systemd-shutdow:1 blocked for more than 180 seconds.
+> > >         Tainted: G S         O        6.18.3+ #33
+> > > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> > > task:systemd-shutdow state:D stack:0     pid:1     tgid:1     ppid:0      task_flags:0x400100 flags:0x00080001
+> > > Call Trace:
+> > >    <TASK>
+> > >    __schedule+0x46b/0x1140
+> > >    schedule+0x23/0xc0
+> > >    schedule_preempt_disabled+0x11/0x20
+> > >    __mutex_lock.constprop.0+0x4f7/0x9a0
+> > >    device_shutdown+0xa0/0x220
+> > >    kernel_restart+0x36/0x90
+> > >    __do_sys_reboot+0x127/0x220
+> > >    ? do_writev+0x76/0x110
+> > >    ? do_writev+0x76/0x110
+> > >    do_syscall_64+0x50/0x6d0
+> > >    entry_SYSCALL_64_after_hwframe+0x4b/0x53
+> > > RIP: 0033:0x7fad03531087
+> > > RSP: 002b:00007ffe137cf918 EFLAGS: 00000246 ORIG_RAX: 00000000000000a9
+> > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fad03531087
+> > > RDX: 0000000001234567 RSI: 0000000028121969 RDI: 00000000fee1dead
+> > > RBP: 00007ffe137cfac0 R08: 0000000000000069 R09: 0000000000000000
+> > > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > >    </TASK>
+> > > INFO: task systemd-shutdow:1 is blocked on a mutex likely owned by task kworker/4:1:16648.
+> > 
+> > This explains why the shutdown stalled.
+> > 
+> > > INFO: task kworker/4:2:1520 blocked for more than 360 seconds.
+> > >         Tainted: G S         O        6.18.3+ #33
+> > > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> > > task:kworker/4:2     state:D stack:0     pid:1520  tgid:1520  ppid:2      task_flags:0x4288060 flags:0x00080000
+> > > Workqueue: events __usb_queue_reset_device
+> > > Call Trace:
+> > >    <TASK>
+> > >    __schedule+0x46b/0x1140
+> > >    ? schedule_timeout+0x79/0xf0
+> > >    schedule+0x23/0xc0
+> > >    usb_kill_urb+0x7b/0xc0
+> > >    ? housekeeping_affine+0x30/0x30
+> > >    usb_start_wait_urb+0xd6/0x160
+> > >    usb_control_msg+0xe2/0x140
+> > >    hub_port_init+0x647/0xf70
+> > >    usb_reset_and_verify_device+0x191/0x4a0
+> > >    ? device_release_driver_internal+0x4a/0x200
+> > >    usb_reset_device+0x138/0x280
+> > >    __usb_queue_reset_device+0x35/0x50
+> > >    process_one_work+0x17e/0x390
+> > >    worker_thread+0x2c8/0x3e0
+> > >    ? process_one_work+0x390/0x390
+> > >    kthread+0xf7/0x1f0
+> > >    ? kthreads_online_cpu+0x100/0x100
+> > >    ? kthreads_online_cpu+0x100/0x100
+> > >    ret_from_fork+0x114/0x140
+> > >    ? kthreads_online_cpu+0x100/0x100
+> > >    ret_from_fork_asm+0x11/0x20
+> > >    </TASK>
+> > > INFO: task kworker/4:1:16648 blocked for more than 360 seconds.
+> > >         Tainted: G S         O        6.18.3+ #33
+> > > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> > > task:kworker/4:1     state:D stack:0     pid:16648 tgid:16648 ppid:2      task_flags:0x4288060 flags:0x00080000
+> > > Workqueue: events __usb_queue_reset_device
+> > > Call Trace:
+> > >    <TASK>
+> > >    __schedule+0x46b/0x1140
+> > >    schedule+0x23/0xc0
+> > >    usb_kill_urb+0x7b/0xc0
+> > 
+> > Kworker failed to kill urb within 300 seconds, so we know the underlying usb
+> > hardware failed to response within 300s.
+> > 
+> > That said, the deadlock in the subject line is incorrect, but task hung due
+> > to hardware glitch.
 
-I know it didn't result in the requested dmesg log, but isn't it
-significant I had the problem *without* the warning? IOW: the connection
-(correlation or causation) I thought there was, (possibly) isn't there?
-=20
->> This time I did the dynamic debug command and the above "Warning!" was
->> present. Plugged in the keyboard adapter, started a stopwatch on my
->> phone and monitored the ``dmesg -W`` for any changes ...
->>=20
->> It took slightly more then a MINUTE for anything to appear in dmesg :-O
->>=20
->> ```
->> root@quartz64a:~# dmesg -W
->> [  357.343890] usb usb4: usb wakeup-resume
->> [  357.343970] usb usb4: usb auto-resume
->> [  357.344023] hub 4-0:1.0: hub_resume
->> [  357.344243] usb usb4-port1: status 0501 change 0001
->> [  357.446845] hub 4-0:1.0: state 7 ports 1 chg 0002 evt 0000
->> [  357.447094] usb usb4-port1: status 0501, change 0000, 480 Mb/s
->
-> That's the EHCI controller detecting the new connection.  If this took=20
-> more than a minute to happen then something is wrong with the EHCI=20
-> controller or its associated hardware.  Or possibly with the way the=20
-> computer handles wakeup signals.
+In fact, we do not know whether this was a hardware glitch or a software 
+bug.
 
-This was with a 6.19-rc5 based kernel (with mostly media patches added
-on top) and on a Rock64 (rk3328) I got a whole bunch of these warnings:
+> In the case where hardware is not responding, shouldn't we just consider it
+> dead and move on instead of deadlocking the whole OS?
+> 
+> In this case, the system was un-plugged from a KVM (usb mouse & keyboard)
+> right around time of shutdown, so I guess that would explain why the USB device
+> didn't respond.
 
-WARNING: drivers/gpio/gpiolib.c:3523 at gpiod_get_value+0x64/0x98, CPU#0: s=
-wapper/0/0
+You misunderstand.  What's failing is the USB host controller on the 
+computer, not the attached (or unplugged) USB device.  If the host 
+controller really had a hardware glitch then the host controller driver 
+should have realized it and moved on.  It seems to me at least as likely 
+that the problem is caused by a bug in the host controller driver rather 
+than anything wrong with the hardware.
 
-log of a few of them:
-https://paste.sr.ht/~diederik/154c5023a3a50d77f1da2195e7bb9a96f6a88555
+(Of course, it could be a combination of things going wrong: a glitch in 
+the hardware that the driver wasn't expecting and is unable to cope 
+with.  But even in that case, the proper solution would be to fix the 
+driver since we can't fix the hardware.)
 
-and I suspect (but don't KNOW!) this commit is relevant:
-20cf2aed89ac ("gpio: rockchip: mark the GPIO controller as sleeping")
+Unfortunately, we have no to tell from the log you collected which host 
+controller driver encountered this problem.  Nor, unless you can 
+replicate the problem, any way to track down exactly where in that 
+driver the bug is -- or even any way to tell whether a proposed fix 
+actually solves the problem.
 
-So I'll switch to a 6.19-rc4 based kernel, which is mostly the same,
-but doesn't have that commit.
-
-FWIW: I'd expect to see sth in dmesg within a second of me plugging sth
-in, so I was surprised by you calling '30 secs' a short period.
-
-I'll re-do the test and the addional tests you requested, but right now
-I need to focus on some other things, so may take a few days.
-
-Cheers,
-  Diederik
-
->> [  357.510889] hub 4-0:1.0: port_wait_reset: err =3D -16
->> [  357.510909] usb usb2: usb wakeup-resume
->> [  357.510956] usb usb4-port1: not enabled, trying reset again...
->> [  357.510980] usb usb2: usb auto-resume
->> [  357.586708] hub 2-0:1.0: hub_resume
->> [  357.586936] usb usb2-port1: status 0101 change 0001
->> [  357.690841] hub 2-0:1.0: state 7 ports 1 chg 0002 evt 0000
->> [  357.691090] usb usb2-port1: status 0101, change 0000, 12 Mb/s
->> [  357.714843] usb usb4-port1: not reset yet, waiting 200ms
->> [  357.874717] usb 2-1: new full-speed USB device number 2 using ohci-pl=
-atform
->
-> This usb2 stuff is the OHCI controller reacting to the new connection,=20
-> after the connection was switched from the EHCI controller to OHCI.
->
->> [  357.918838] usb usb4-port1: not reset yet, waiting 200ms
->
-> These messages aren't supposed to occur.  The EHCI controller is=20
-> supposed to realize that there is no device connected to it any more,=20
-> now that the connection has been switched over to the OHCI controller.
->
->> [  358.082679] usb 2-1: ep0 maxpacket =3D 32
->> [  358.087855] usb 2-1: skipped 1 descriptor after interface
->> [  358.087926] usb 2-1: skipped 1 descriptor after interface
->> [  358.089798] usb 2-1: default language 0x0409
->> [  358.093839] usb 2-1: udev 2, busnum 2, minor =3D 129
->> [  358.093904] usb 2-1: New USB device found, idVendor=3D1997, idProduct=
-=3D2433, bcdDevice=3D 1.06
->> [  358.094803] usb 2-1: New USB device strings: Mfr=3D1, Product=3D2, Se=
-rialNumber=3D0
->> [  358.095481] usb 2-1: Product: mini keyboard
->> [  358.095889] usb 2-1: Manufacturer:
->> [  358.097629] usb 2-1: usb_probe_device
->> [  358.097691] usb 2-1: configuration #1 chosen from 1 choice
->> [  358.099335] usb 2-1: adding 2-1:1.0 (config #1, interface 0)
->> [  358.100603] usb 2-1: adding 2-1:1.1 (config #1, interface 1)
->> [  358.101371] hub 2-0:1.0: state 7 ports 1 chg 0000 evt 0002
->> [  358.126129] usb usb4-port1: not reset yet, waiting 200ms
->> [  358.203797] hid: raw HID events driver (C) Jiri Kosina
->> [  358.227055] usbhid 2-1:1.0: usb_probe_interface
->> [  358.227080] usbhid 2-1:1.0: usb_probe_interface - got id
->> [  358.231307] usbhid 2-1:1.1: usb_probe_interface
->> [  358.231331] usbhid 2-1:1.1: usb_probe_interface - got id
->> [  358.236333] usbcore: registered new interface driver usbhid
->> [  358.236850] usbhid: USB HID core driver
->> [  358.267050] input:   mini keyboard as /devices/platform/fd8c0000.usb/=
-usb2/2-1/2-1:1.0/0003:1997:2433.0001/input/input2
->> [  358.326722] usb usb4-port1: not reset yet, waiting 200ms
->> [  358.326992] hub 4-0:1.0: state 7 ports 1 chg 0000 evt 0002
->> [  358.327125] usb usb4-port1: status 0100, change 0001, 12 Mb/s
->
-> And here is where the EHCI controller finally reported that nothing was=
-=20
-> connected.
->
-> It certainly looks like the EHCI controller isn't working right.  Just=20
-> as a test, you can try unloading the ehci-hcd module, together with any=
-=20
-> modules depending on it, before you plug in the keyboard adapter.  It=20
-> would be interesting to see if that makes any difference.
->
-> Another thing to try is to see if disabling EHCI runtime suspend changes=
-=20
-> anything.  To do this, don't remove any modules.  Instead, before=20
-> plugging in the keyboard adapter, do:
->
-> 	echo on >/sys/bus/usb/devices/usb4/power/control
->
-> Alan Stern
->
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip
-
+Alan Stern
 
