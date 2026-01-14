@@ -1,102 +1,102 @@
-Return-Path: <linux-usb+bounces-32323-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32324-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A5F5D1DDE9
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 11:11:39 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA557D1DE9E
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 11:15:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 20E013007F1A
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 10:09:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8A021304A02F
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 10:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE6ED392C5C;
-	Wed, 14 Jan 2026 10:08:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE0F38A9AB;
+	Wed, 14 Jan 2026 10:08:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="GCnxFrLm";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Xyia5pM8"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="jRD6dVEf";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="kuNoOkbH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6951392C29
-	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 10:07:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81F438A723
+	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 10:08:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768385281; cv=none; b=rHRXbuMQc4aCjuJORIRsqQHggfbfNe1Ikg6M7cvFm9Zhm++mdP/BVULY7Sw0vCfKvtc7OFik2JVPg066OdZo433sj2nf0PJTy4UL0EHgQsPsgYFG1cz11JkaeUUkiELmJZzvme/PH4kEu+zZsMmYp52n0rDNs/irIoGnb4ADnSg=
+	t=1768385286; cv=none; b=NE+QeKf0TgDUJhS6r4tCT4XqBO3RCl9ev+SK5oPfX/hoVvCbdSmhQ3eUcPyxq0zdI8ZQBpz9pdL+2wo/P+rSKwOti5moGHO+z/uNYxtYD3uTkex7ohAXM/wEpHP93k4fzWJLPKxpk9H7JocQTxuI/M4jPcPeQWfU6/KhCxOOA00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768385281; c=relaxed/simple;
-	bh=phMaZEdW+xwnGZ/4yeh8Mowv3dTqrpN1TGsy4KysEu8=;
+	s=arc-20240116; t=1768385286; c=relaxed/simple;
+	bh=D+9W4dTwWCD2n+CjX4PWKR6Ex4Ovq4O01BJnZ+Kv60E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NyszISQG3lpK6BiTiyZpRtrkbZHl9kvNlunqGtq4KNRIKRrxOZ6HAcRIGNIDV7aPnuzSkHhbcMNQT8rDoga8EZe8GTiVa/tzGaUaBxjLOHlDm/gaSchg4L/922QYV5LfMQytGXWd+wtQvZU0ql8UAR5VlkYaM3pinx82MDa73es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=GCnxFrLm; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Xyia5pM8; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version; b=UH3auZg3mU4IDCcEllegqBEne4jn9G9Q7/6m726BBxoWIqatF6B3k+UlNJnXSjriy8o/zmpM/5/CfLeJQbLEN8eAbVcDmVymqn/P0EotFKhXcJgkSo9lxpUvU/1YVh0DiAMlhr3L715pc8k6mDoWkaTyHkWtjmoYEKePd9KTuCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=jRD6dVEf; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=kuNoOkbH; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60E7j3nD3270846
-	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 10:07:59 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60E7jHRR2976613
+	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 10:08:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=cdPa96MAj6K
-	cEAgrDqHeO2LCi+XsOMkFPiPYTvWqu9g=; b=GCnxFrLmQh/9UfLZODrAy8FyEM/
-	22hGQehbourkAA9ZPt0SDl4oHpGQTg4G7v2C+dcaGAdbXtdPMVuR5H0IuPd8Tpcg
-	A9ZdL62gjVnf/CTlqP1hDU6lEbL50kq1OuFQ/8RW/F/8jqIi1O5SjpvnSUb6LL33
-	5nwqY9nU6nmDMObw1+WLIt7uJjsyyb5w2znL3hn5nku7vpz754AmWpU99YVJjFRw
-	H2DUVx4sMTmCKu+XSm1BVuveRpLmXWAh4un4vxY1V8JpEE8iOq0gdOQDZlMiqOY7
-	Bi3xQAk/tI4rd2i8nR//hmdq6WiPnd0uwFosx5xE6GMBpagN9SMLzGri+FA==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bns8v3b9c-1
+	:mime-version:references:subject:to; s=qcppdkim1; bh=uf4DXUdfgfu
+	R90EC5K2dgDqOlGSshHVNwx5HlEmBjOM=; b=jRD6dVEf8z2hP0bB7jAjOpa735y
+	SOaq85cMoFSO5ZZmoBQbP06jVBCijzIVabIpJ1jw3E4p7fL7lq/vlZXOl6FYJmKG
+	4p+/nEuMhQ0QQt6D29KtjwvcwBYPxIeEiCFDMuy9mGjzoDjcMwOlCN1sQrNhy+5Q
+	41vHF6ToldzBHAhlg4oYA9ibx+LMn66yeZdqm18U8fg5VCSnO0YM96MyoNo4IbY2
+	v+XwF4GANaKiIJlOmltoZM5NJnNcNUVEB2qHhuCEwvIYzt2R/h/vIcThuexzKB0s
+	5zDmhXDv/m+i0DteLHZf4qwyHiyMvTAwl7k1H6Fj/YPfWDf1QlBjfUBcknQ==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bnt63u7b9-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 10:07:58 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2a58c1c74a3so16256675ad.2
-        for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 02:07:58 -0800 (PST)
+	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 10:08:02 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2a0fe4ade9eso80539925ad.0
+        for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 02:08:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768385278; x=1768990078; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1768385281; x=1768990081; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cdPa96MAj6KcEAgrDqHeO2LCi+XsOMkFPiPYTvWqu9g=;
-        b=Xyia5pM8W2TusvWG7OBQnsPXtHMbc8ygnKnIW81O+7TCsgTPgaMW3XqILDZQ/bOyti
-         /RzLWL55AUECSigIJ52rcIcWgKKcnf+Yh2E9IBI8KI/9XEJ0HPe0jU4FnSiA/DbPQ2MZ
-         W3tRK2V/nmTGkiihSdi8erPJDh08VVjTP2OqIhE0G+rfWO7yPawbaPhVWRIKT7A/QrS4
-         IgFI0VxZeGC0Py0fznAvXqjFYgaWSt9s1ezBsF+PTnZ7STbALc5WQPmKD1laxeGj7GCp
-         uo+eWs4exdbhhUFi2qoRhV5y8GiOWn5q9GPTZb1SGPuNSCpE73EirKFhKDV9F6fppPG0
-         i5tw==
+        bh=uf4DXUdfgfuR90EC5K2dgDqOlGSshHVNwx5HlEmBjOM=;
+        b=kuNoOkbHiXnMXkPKq8dQTfoSf5yQvK4Yunjpy8De8hoHVELRYOPOIF+1laD/am9YEG
+         H3SrkJ1R9ehRiHE8VBaUGYz5o1gF6lYZdsAWmAOwh6Dkee2S/vS+VUl6QRelRbjfhQWL
+         dFDHjv/UcUbaAIRW+7aV5OuQexdbBrbJsnE3nsal/sKn7zMnnwBsYpTNJFWHtSXHJnhH
+         nx67n1ZhULN0x4WMs90dnhJYrUeSXmTzdIWDbsYSMhDmUJPu9SGA0yvcUIKHdcasLqBj
+         UwsK7F7GFch/v/+EAj2nBLNxEAB+iJKY28pClKCkAiifXAUMQnNuzss6mSJDBZkdSppP
+         qYDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768385278; x=1768990078;
+        d=1e100.net; s=20230601; t=1768385281; x=1768990081;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=cdPa96MAj6KcEAgrDqHeO2LCi+XsOMkFPiPYTvWqu9g=;
-        b=DpX02xh4WKJQpYpvdxlzhvVvwerX2TCJHfjHX7NUuAuUfmlBYTcpxL1qKJYq9MbhUw
-         RVO+NiYOzsu6kXQAPIun8ezZC0nogricPhxFySAAmvLBSKpoo5xbGo6qGYkffwtwZY1O
-         WKda48VFFSEHoHKE203Fqbmc9JkNtU23dznolj+mlSUlcS+TOYSuS+JSFBq0Smwz+0Bt
-         ZRUavWohboF2wFCfjyXVveV/QIsOzPfYPi+x1kyCOK51JoQI0l2ig4BmkDNiqCrE8ccL
-         rmItErQnCWsq1haqhVCTL/pc6JeweiAKoRdL6urOINvqT9+cmKwtetaBGs+j0QWXjjlm
-         dRSg==
-X-Gm-Message-State: AOJu0YzbR4sbyZNnfI3a2hdJn5NTI6Yg2GZ6/lLAz4FH37NczDV+nrb5
-	paEm4TfqUMK9Qnsn2dl7pRn1jUE81T94pEnc9y6dnxSale0hfd9FcxlowhJ2x3t0+4g+xHdy5N8
-	u6ZZMgoXepp6u5LxEj+dvJvBpNFNtvVtNF3Eu3AnXwmkrKkx1oV8GKtVhh9Kb5mU=
-X-Gm-Gg: AY/fxX7NXpfrRi5hr8CSE+nxqmwkCHcXhw6LQSBHVjevyNJyUD3p9B4Zh8PRPQb2HOp
-	ijBR3+GNQxWy8OSn5RBVze5n5YnVYWVjlYQP2PMUspSLYDpRwmzhiFG40BFFGSbiJRixFBHxscg
-	FVeSZ86VY4+KLCKyRHwcsvIR4VTGU310onFaOnYsnrrtKZmb/rOavui7XN4lltU2E2EZlJ/kKst
-	VL+6uUAw4P+KQeMTVAstjgvscdtFTUJ9YFUHSDRVND8m37RevtaH3yZL2HQWLoxKRWX2g/9piTS
-	E+Gn57kqRhabvRt7zBaAyRfd7cc11p3UJje02WnR29s7JO6lQ8I040cTaWxQGLXOJGm+HMktyiq
-	lmOcOHJDu0aJpfgPi1eUnEeJn1ptSIJ595eRoHQ==
-X-Received: by 2002:a17:902:d4cd:b0:2a1:1f28:d7ee with SMTP id d9443c01a7336-2a599e5b9fcmr19238955ad.57.1768385277713;
-        Wed, 14 Jan 2026 02:07:57 -0800 (PST)
-X-Received: by 2002:a17:902:d4cd:b0:2a1:1f28:d7ee with SMTP id d9443c01a7336-2a599e5b9fcmr19238675ad.57.1768385277253;
-        Wed, 14 Jan 2026 02:07:57 -0800 (PST)
+        bh=uf4DXUdfgfuR90EC5K2dgDqOlGSshHVNwx5HlEmBjOM=;
+        b=JlcKFwu8ZPNyO2zAekfI81qp9RpFHhmhG0gPyvL5a/OcWMpsu6kjScAUs5LnouESV5
+         vibDHxyg5dRu0IrwdZKh8WyCwAimYnUJzlZfN2A3l5dpXlOjuVUPqKEFiNPDETkNUsjh
+         JmrpXvTfGlAVBXtA7rp+zsPloboTlKksm48kxTORfd0vWI4NEvMcYbxpUydscGqd46fR
+         LCwV6nvwDNX4RpBZbyB5mXRHticEzxOjJsU0ZdB2R3e5j/mWA5rmJ024sKosuqqw7rFD
+         QMSXZRxP/DvFdswQaGaPM/LHu9p0F/W9QQ2ENqbTBatFBFqNO7Ljy0x2k4j3ZS7hSKfz
+         KhZA==
+X-Gm-Message-State: AOJu0Yy8t5HO7M4FYqG2+1zdqkrA37kzq0byUdKDG93sLZsH4cJlK9go
+	ZmkIkHuQwEQm54KLLMgDazXIfnd/86oMMFKUmiCGPUnPS0KZNR4XQg+L8AF9V9txSEFv7oG4794
+	WpnGVwkMKsJfvCYkaCz2+9lXyO1NruugLVgu+UkodUWtAZADZcIJRKJNdpN3B4o4=
+X-Gm-Gg: AY/fxX6fnakZhJyDLrmr8B7SPes/y3JV2tcOJjKHLPLtcN6ttfCNrNxi7cy58hmWZdR
+	D1DXE9go/+LQl71kSkCxFxIu6tcjXwtH7MgPbdvwdh7nYK/zkLGid9zsJqE7Ot2/5mKQj8r76sL
+	OgFhfWt+2MRBkrOH6JVrhi2l6WfOvLYFHcdopgz/0+VCo20G56u+zkGKMCS3GFz+4qcUySWX8Zb
+	f5ojhpcQbZ5vhHx4Gdo/ysdeaI89Upc4biolhGwfriC+DvoK2xsN2q+wnAgLpjZKUEreyM4jqO5
+	qRRPGIw6wXr0vMVUHAa2j8pl0UZS5cqr4cCL4mg9cnXfNF2QPQXgk9ahJg1RiSDrVxDPrqPW9Zj
+	+QDbG4uRTt/5rv9jkgtNc3NpVPmWsih3/F5La/A==
+X-Received: by 2002:a17:903:b0f:b0:2a0:d364:983b with SMTP id d9443c01a7336-2a599e5cb87mr18161275ad.60.1768385280719;
+        Wed, 14 Jan 2026 02:08:00 -0800 (PST)
+X-Received: by 2002:a17:903:b0f:b0:2a0:d364:983b with SMTP id d9443c01a7336-2a599e5cb87mr18160965ad.60.1768385279919;
+        Wed, 14 Jan 2026 02:07:59 -0800 (PST)
 Received: from hu-prashk-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cd3632sm226379975ad.95.2026.01.14.02.07.55
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cd3632sm226379975ad.95.2026.01.14.02.07.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 02:07:56 -0800 (PST)
+        Wed, 14 Jan 2026 02:07:59 -0800 (PST)
 From: Prashanth K <prashanth.k@oss.qualcomm.com>
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Prashanth K <prashanth.k@oss.qualcomm.com>
-Subject: [PATCH v4 1/3] usb: dwc3: Remove of dep->regs
-Date: Wed, 14 Jan 2026 15:37:46 +0530
-Message-Id: <20260114100748.2950103-2-prashanth.k@oss.qualcomm.com>
+Subject: [PATCH v4 2/3] usb: dwc3: Add dwc pointer to dwc3_readl/writel
+Date: Wed, 14 Jan 2026 15:37:47 +0530
+Message-Id: <20260114100748.2950103-3-prashanth.k@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260114100748.2950103-1-prashanth.k@oss.qualcomm.com>
 References: <20260114100748.2950103-1-prashanth.k@oss.qualcomm.com>
@@ -107,167 +107,1728 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=aY5sXBot c=1 sm=1 tr=0 ts=69676afe cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDA4MiBTYWx0ZWRfX8oinLORVcOKy
+ gDZte4TDIrgb7mI8jeCp2mzwYt+0TW1gnaFCHp2ibpkJoC28MO20wGJs24pJIeFixF9kNizV3ya
+ dkUhhMnHsJYOef3HOavSS9LzwWlodXh0D6cJggc+h3VJWKv1nKEdC773/29+kH+W9ITMOg8bwE1
+ IyRTPTxO+4Wj0eu1afKTlYIePnwsobtazhRsc32PNW3kEhgIkcg4QpFRzhQpviFLMW1icPIEVaR
+ VICB8/nU8RGR+m5/f2//mgDEoS1D7J36EoO7kJAAGOjDW/uVpCQ6NlipxZB5Gxixykr26SwbFNM
+ /WUN+Y3/Om5oFg+OsPfHwF764lYQd68FDfIkfWrmUk+8ROn6d4CxFZNEgB20+WnFcSGd+y9WXIF
+ pDJJ6a0iB2euoAna67ANV3mPdTw9wyy5MT2TcK7YnNmIsITV7xxAMs2N1x7MWbcK8nikq8LDV4m
+ joTySqm8vAJ/ej6HZ1w==
+X-Proofpoint-ORIG-GUID: yDWdmBz0bYjsfwcm4FmYIzD6GPp4gSiz
+X-Proofpoint-GUID: yDWdmBz0bYjsfwcm4FmYIzD6GPp4gSiz
+X-Authority-Analysis: v=2.4 cv=EujfbCcA c=1 sm=1 tr=0 ts=69676b02 cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
  a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=jIQo8A4GAAAA:8 a=M8qNcNEInNZZPuFPK7cA:9
- a=uG9DUKGECoFWVXl0Dc02:22
-X-Proofpoint-ORIG-GUID: 7fuUTObU_BKCBLQyBTAGEhSgRscNPzSX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDA4MiBTYWx0ZWRfXwSs5Vg0IhNg8
- FGD5rcTHn2/QF6lOBd2j7NTJVehk/l9pWLV4oQnImJzZu6/7QifmYP1oPnTHQPmmgA0Eatzb4uo
- 5wbQYFPmW4fnG9oevT4GUV54ohzQLvxjKL0h2wtpmD4onYx5/IkZerNA5UMqkhUxmHlxKH5OKa8
- t8HnVPr2bsUXuAxPu9ba4cLNGnXwFODRXVVapOvHyARexXsTJ/GtT65kCCuNHxSkgHJLedpc4A+
- aUeUAo+A+l9+sf0X7BioyKU2/29rRzAxlJTBkUzE3TlIKfAWvzBhqdod/3HuyC/B1t3kNz4805b
- LTRHcwWbWIZwSiy3g8olMhVvwITn3Dfuvi3tSsdWD9/+/u8Sdot8P0DqleNRfjqojw0QOeC+x+z
- dPVGWdpxgFhI+U95gLEWu9Mwu8LY+IECvNWvirfI1VzpEtVKbwmDRk5+M7AU1f0+HY2dZdRRCjQ
- 0hJSdb5czjqez+qd92A==
-X-Proofpoint-GUID: 7fuUTObU_BKCBLQyBTAGEhSgRscNPzSX
+ a=EUspDBNiAAAA:8 a=jIQo8A4GAAAA:8 a=1-JGb9IuH62Of12rmQMA:9
+ a=GvdueXVYPmCkWapjIL-Q:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-14_03,2026-01-09_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 bulkscore=0
- lowpriorityscore=0 clxscore=1015 adultscore=0 phishscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601140082
+ suspectscore=0 adultscore=0 bulkscore=0 impostorscore=0 phishscore=0
+ spamscore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
+ definitions=main-2601140082
 
-Remove dep->regs from struct dwc3_ep and reuse dwc->regs instead.
-Thus eliminating redundant iomem addresses and making register
-access more consistent across the driver.
+Use dwc pointer in dwc3_readl() dwc3_writel() instead of passing
+the dwc->regs. This would help us access the dwc structure and
+log the base address in traces. There's no functional changes in
+this patch, just refactoring existing APIs.
 
 Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
 Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
- drivers/usb/dwc3/core.h    | 10 ++++------
- drivers/usb/dwc3/debugfs.c | 12 ++++--------
- drivers/usb/dwc3/gadget.c  | 12 ++++++------
- drivers/usb/dwc3/gadget.h  |  2 +-
- 4 files changed, 15 insertions(+), 21 deletions(-)
+ drivers/usb/dwc3/core.c    | 194 ++++++++++++++++++-------------------
+ drivers/usb/dwc3/debugfs.c |  32 +++---
+ drivers/usb/dwc3/drd.c     |  76 +++++++--------
+ drivers/usb/dwc3/ep0.c     |  20 ++--
+ drivers/usb/dwc3/gadget.c  | 160 +++++++++++++++---------------
+ drivers/usb/dwc3/gadget.h  |   4 +-
+ drivers/usb/dwc3/io.h      |   7 +-
+ drivers/usb/dwc3/ulpi.c    |  10 +-
+ 8 files changed, 253 insertions(+), 250 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index a5fc92c4ffa3..23188b910528 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -165,10 +165,10 @@
- #define DWC3_DCFG1		0xc740 /* DWC_usb32 only */
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index ec8407972b9d..670a9d4bfff2 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -114,23 +114,23 @@ void dwc3_enable_susphy(struct dwc3 *dwc, bool enable)
+ 	int i;
  
- #define DWC3_DEP_BASE(n)	(0xc800 + ((n) * 0x10))
--#define DWC3_DEPCMDPAR2		0x00
--#define DWC3_DEPCMDPAR1		0x04
--#define DWC3_DEPCMDPAR0		0x08
--#define DWC3_DEPCMD		0x0c
-+#define DWC3_DEPCMDPAR2(n)	(DWC3_DEP_BASE(n) + 0x00)
-+#define DWC3_DEPCMDPAR1(n)	(DWC3_DEP_BASE(n) + 0x04)
-+#define DWC3_DEPCMDPAR0(n)	(DWC3_DEP_BASE(n) + 0x08)
-+#define DWC3_DEPCMD(n)		(DWC3_DEP_BASE(n) + 0x0c)
+ 	for (i = 0; i < dwc->num_usb3_ports; i++) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(i));
++		reg = dwc3_readl(dwc, DWC3_GUSB3PIPECTL(i));
+ 		if (enable && !dwc->dis_u3_susphy_quirk)
+ 			reg |= DWC3_GUSB3PIPECTL_SUSPHY;
+ 		else
+ 			reg &= ~DWC3_GUSB3PIPECTL_SUSPHY;
  
- #define DWC3_DEV_IMOD(n)	(0xca00 + ((n) * 0x4))
- 
-@@ -749,8 +749,6 @@ struct dwc3_ep {
- 	struct list_head	pending_list;
- 	struct list_head	started_list;
- 
--	void __iomem		*regs;
--
- 	struct dwc3_trb		*trb_pool;
- 	dma_addr_t		trb_pool_dma;
- 	struct dwc3		*dwc;
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index d18bf5e32cc8..0b45ff16f575 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -36,23 +36,19 @@
- #define dump_ep_register_set(n)			\
- 	{					\
- 		.name = "DEPCMDPAR2("__stringify(n)")",	\
--		.offset = DWC3_DEP_BASE(n) +	\
--			DWC3_DEPCMDPAR2,	\
-+		.offset = DWC3_DEPCMDPAR2(n),	\
- 	},					\
- 	{					\
- 		.name = "DEPCMDPAR1("__stringify(n)")",	\
--		.offset = DWC3_DEP_BASE(n) +	\
--			DWC3_DEPCMDPAR1,	\
-+		.offset = DWC3_DEPCMDPAR1(n),	\
- 	},					\
- 	{					\
- 		.name = "DEPCMDPAR0("__stringify(n)")",	\
--		.offset = DWC3_DEP_BASE(n) +	\
--			DWC3_DEPCMDPAR0,	\
-+		.offset = DWC3_DEPCMDPAR0(n),	\
- 	},					\
- 	{					\
- 		.name = "DEPCMD("__stringify(n)")",	\
--		.offset = DWC3_DEP_BASE(n) +	\
--			DWC3_DEPCMD,		\
-+		.offset = DWC3_DEPCMD(n),		\
+-		dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(i), reg);
++		dwc3_writel(dwc, DWC3_GUSB3PIPECTL(i), reg);
  	}
  
+ 	for (i = 0; i < dwc->num_usb2_ports; i++) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(i));
++		reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(i));
+ 		if (enable && !dwc->dis_u2_susphy_quirk)
+ 			reg |= DWC3_GUSB2PHYCFG_SUSPHY;
+ 		else
+ 			reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
  
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 8a35a6901db7..ce087cbc4a53 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -320,6 +320,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+-		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
++		dwc3_writel(dwc, DWC3_GUSB2PHYCFG(i), reg);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(dwc3_enable_susphy);
+@@ -140,7 +140,7 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy)
+ 	unsigned int hw_mode;
+ 	u32 reg;
  
- 	int			cmd_status = 0;
- 	int			ret = -EINVAL;
-+	u8			epnum = dep->number;
+-	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++	reg = dwc3_readl(dwc, DWC3_GCTL);
+ 
+ 	 /*
+ 	  * For DRD controllers, GUSB3PIPECTL.SUSPENDENABLE and
+@@ -155,7 +155,7 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy)
+ 
+ 	reg &= ~(DWC3_GCTL_PRTCAPDIR(DWC3_GCTL_PRTCAP_OTG));
+ 	reg |= DWC3_GCTL_PRTCAPDIR(mode);
+-	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
++	dwc3_writel(dwc, DWC3_GCTL, reg);
+ 
+ 	dwc->current_dr_role = mode;
+ 	trace_dwc3_set_prtcap(mode);
+@@ -216,9 +216,9 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 	if (dwc->current_dr_role && ((DWC3_IP_IS(DWC3) ||
+ 			DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
+ 			desired_dr_role != DWC3_GCTL_PRTCAP_OTG)) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++		reg = dwc3_readl(dwc, DWC3_GCTL);
+ 		reg |= DWC3_GCTL_CORESOFTRESET;
+-		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
++		dwc3_writel(dwc, DWC3_GCTL, reg);
+ 
+ 		/*
+ 		 * Wait for internal clocks to synchronized. DWC_usb31 and
+@@ -228,9 +228,9 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 		 */
+ 		msleep(100);
+ 
+-		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++		reg = dwc3_readl(dwc, DWC3_GCTL);
+ 		reg &= ~DWC3_GCTL_CORESOFTRESET;
+-		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
++		dwc3_writel(dwc, DWC3_GCTL, reg);
+ 	}
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+@@ -254,9 +254,9 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 				phy_set_mode(dwc->usb3_generic_phy[i], PHY_MODE_USB_HOST);
+ 
+ 			if (dwc->dis_split_quirk) {
+-				reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
++				reg = dwc3_readl(dwc, DWC3_GUCTL3);
+ 				reg |= DWC3_GUCTL3_SPLITDISABLE;
+-				dwc3_writel(dwc->regs, DWC3_GUCTL3, reg);
++				dwc3_writel(dwc, DWC3_GUCTL3, reg);
+ 			}
+ 		}
+ 		break;
+@@ -306,11 +306,11 @@ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type)
+ 	struct dwc3		*dwc = dep->dwc;
+ 	u32			reg;
+ 
+-	dwc3_writel(dwc->regs, DWC3_GDBGFIFOSPACE,
+-			DWC3_GDBGFIFOSPACE_NUM(dep->number) |
+-			DWC3_GDBGFIFOSPACE_TYPE(type));
++	dwc3_writel(dwc, DWC3_GDBGFIFOSPACE,
++		    DWC3_GDBGFIFOSPACE_NUM(dep->number) |
++		    DWC3_GDBGFIFOSPACE_TYPE(type));
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GDBGFIFOSPACE);
++	reg = dwc3_readl(dwc, DWC3_GDBGFIFOSPACE);
+ 
+ 	return DWC3_GDBGFIFOSPACE_SPACE_AVAILABLE(reg);
+ }
+@@ -332,7 +332,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc)
+ 	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_HOST)
+ 		return 0;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	reg |= DWC3_DCTL_CSFTRST;
+ 	reg &= ~DWC3_DCTL_RUN_STOP;
+ 	dwc3_gadget_dctl_write_safe(dwc, reg);
+@@ -347,7 +347,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc)
+ 		retries = 10;
+ 
+ 	do {
+-		reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++		reg = dwc3_readl(dwc, DWC3_DCTL);
+ 		if (!(reg & DWC3_DCTL_CSFTRST))
+ 			goto done;
+ 
+@@ -387,12 +387,12 @@ static void dwc3_frame_length_adjustment(struct dwc3 *dwc)
+ 	if (dwc->fladj == 0)
+ 		return;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GFLADJ);
++	reg = dwc3_readl(dwc, DWC3_GFLADJ);
+ 	dft = reg & DWC3_GFLADJ_30MHZ_MASK;
+ 	if (dft != dwc->fladj) {
+ 		reg &= ~DWC3_GFLADJ_30MHZ_MASK;
+ 		reg |= DWC3_GFLADJ_30MHZ_SDBND_SEL | dwc->fladj;
+-		dwc3_writel(dwc->regs, DWC3_GFLADJ, reg);
++		dwc3_writel(dwc, DWC3_GFLADJ, reg);
+ 	}
+ }
+ 
+@@ -424,10 +424,10 @@ static void dwc3_ref_clk_period(struct dwc3 *dwc)
+ 		return;
+ 	}
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
++	reg = dwc3_readl(dwc, DWC3_GUCTL);
+ 	reg &= ~DWC3_GUCTL_REFCLKPER_MASK;
+ 	reg |=  FIELD_PREP(DWC3_GUCTL_REFCLKPER_MASK, period);
+-	dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
++	dwc3_writel(dwc, DWC3_GUCTL, reg);
+ 
+ 	if (DWC3_VER_IS_PRIOR(DWC3, 250A))
+ 		return;
+@@ -455,7 +455,7 @@ static void dwc3_ref_clk_period(struct dwc3 *dwc)
+ 	 */
+ 	decr = 480000000 / rate;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GFLADJ);
++	reg = dwc3_readl(dwc, DWC3_GFLADJ);
+ 	reg &= ~DWC3_GFLADJ_REFCLK_FLADJ_MASK
+ 	    &  ~DWC3_GFLADJ_240MHZDECR
+ 	    &  ~DWC3_GFLADJ_240MHZDECR_PLS1;
+@@ -466,7 +466,7 @@ static void dwc3_ref_clk_period(struct dwc3 *dwc)
+ 	if (dwc->gfladj_refclk_lpm_sel)
+ 		reg |=  DWC3_GFLADJ_REFCLK_LPM_SEL;
+ 
+-	dwc3_writel(dwc->regs, DWC3_GFLADJ, reg);
++	dwc3_writel(dwc, DWC3_GFLADJ, reg);
+ }
+ 
+ /**
+@@ -569,16 +569,16 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
+ 
+ 	evt = dwc->ev_buf;
+ 	evt->lpos = 0;
+-	dwc3_writel(dwc->regs, DWC3_GEVNTADRLO(0),
+-			lower_32_bits(evt->dma));
+-	dwc3_writel(dwc->regs, DWC3_GEVNTADRHI(0),
+-			upper_32_bits(evt->dma));
+-	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
+-			DWC3_GEVNTSIZ_SIZE(evt->length));
++	dwc3_writel(dwc, DWC3_GEVNTADRLO(0),
++		    lower_32_bits(evt->dma));
++	dwc3_writel(dwc, DWC3_GEVNTADRHI(0),
++		    upper_32_bits(evt->dma));
++	dwc3_writel(dwc, DWC3_GEVNTSIZ(0),
++		    DWC3_GEVNTSIZ_SIZE(evt->length));
+ 
+ 	/* Clear any stale event */
+-	reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+-	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
++	reg = dwc3_readl(dwc, DWC3_GEVNTCOUNT(0));
++	dwc3_writel(dwc, DWC3_GEVNTCOUNT(0), reg);
+ 	return 0;
+ }
+ 
+@@ -593,7 +593,7 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
+ 	 * Exynos platforms may not be able to access event buffer if the
+ 	 * controller failed to halt on dwc3_core_exit().
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++	reg = dwc3_readl(dwc, DWC3_DSTS);
+ 	if (!(reg & DWC3_DSTS_DEVCTRLHLT))
+ 		return;
+ 
+@@ -601,14 +601,14 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
+ 
+ 	evt->lpos = 0;
+ 
+-	dwc3_writel(dwc->regs, DWC3_GEVNTADRLO(0), 0);
+-	dwc3_writel(dwc->regs, DWC3_GEVNTADRHI(0), 0);
+-	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0), DWC3_GEVNTSIZ_INTMASK
++	dwc3_writel(dwc, DWC3_GEVNTADRLO(0), 0);
++	dwc3_writel(dwc, DWC3_GEVNTADRHI(0), 0);
++	dwc3_writel(dwc, DWC3_GEVNTSIZ(0), DWC3_GEVNTSIZ_INTMASK
+ 			| DWC3_GEVNTSIZ_SIZE(0));
+ 
+ 	/* Clear any stale event */
+-	reg = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+-	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), reg);
++	reg = dwc3_readl(dwc, DWC3_GEVNTCOUNT(0));
++	dwc3_writel(dwc, DWC3_GEVNTCOUNT(0), reg);
+ }
+ 
+ static void dwc3_core_num_eps(struct dwc3 *dwc)
+@@ -622,18 +622,18 @@ static void dwc3_cache_hwparams(struct dwc3 *dwc)
+ {
+ 	struct dwc3_hwparams	*parms = &dwc->hwparams;
+ 
+-	parms->hwparams0 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS0);
+-	parms->hwparams1 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS1);
+-	parms->hwparams2 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS2);
+-	parms->hwparams3 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS3);
+-	parms->hwparams4 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS4);
+-	parms->hwparams5 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS5);
+-	parms->hwparams6 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS6);
+-	parms->hwparams7 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS7);
+-	parms->hwparams8 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS8);
++	parms->hwparams0 = dwc3_readl(dwc, DWC3_GHWPARAMS0);
++	parms->hwparams1 = dwc3_readl(dwc, DWC3_GHWPARAMS1);
++	parms->hwparams2 = dwc3_readl(dwc, DWC3_GHWPARAMS2);
++	parms->hwparams3 = dwc3_readl(dwc, DWC3_GHWPARAMS3);
++	parms->hwparams4 = dwc3_readl(dwc, DWC3_GHWPARAMS4);
++	parms->hwparams5 = dwc3_readl(dwc, DWC3_GHWPARAMS5);
++	parms->hwparams6 = dwc3_readl(dwc, DWC3_GHWPARAMS6);
++	parms->hwparams7 = dwc3_readl(dwc, DWC3_GHWPARAMS7);
++	parms->hwparams8 = dwc3_readl(dwc, DWC3_GHWPARAMS8);
+ 
+ 	if (DWC3_IP_IS(DWC32))
+-		parms->hwparams9 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS9);
++		parms->hwparams9 = dwc3_readl(dwc, DWC3_GHWPARAMS9);
+ }
+ 
+ static void dwc3_config_soc_bus(struct dwc3 *dwc)
+@@ -641,10 +641,10 @@ static void dwc3_config_soc_bus(struct dwc3 *dwc)
+ 	if (dwc->gsbuscfg0_reqinfo != DWC3_GSBUSCFG0_REQINFO_UNSPECIFIED) {
+ 		u32 reg;
+ 
+-		reg = dwc3_readl(dwc->regs, DWC3_GSBUSCFG0);
++		reg = dwc3_readl(dwc, DWC3_GSBUSCFG0);
+ 		reg &= ~DWC3_GSBUSCFG0_REQINFO(~0);
+ 		reg |= DWC3_GSBUSCFG0_REQINFO(dwc->gsbuscfg0_reqinfo);
+-		dwc3_writel(dwc->regs, DWC3_GSBUSCFG0, reg);
++		dwc3_writel(dwc, DWC3_GSBUSCFG0, reg);
+ 	}
+ }
+ 
+@@ -668,7 +668,7 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
+ {
+ 	u32 reg;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(index));
++	reg = dwc3_readl(dwc, DWC3_GUSB3PIPECTL(index));
  
  	/*
- 	 * When operating in USB 2.0 speeds (HS/FS), if GUSB2PHYCFG.ENBLSLPM or
-@@ -355,9 +356,9 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+ 	 * Make sure UX_EXIT_PX is cleared as that causes issues with some
+@@ -706,7 +706,7 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int index)
+ 	if (dwc->dis_del_phy_power_chg_quirk)
+ 		reg &= ~DWC3_GUSB3PIPECTL_DEPOCHANGE;
+ 
+-	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(index), reg);
++	dwc3_writel(dwc, DWC3_GUSB3PIPECTL(index), reg);
+ 
+ 	return 0;
+ }
+@@ -715,7 +715,7 @@ static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
+ {
+ 	u32 reg;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(index));
++	reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(index));
+ 
+ 	/* Select the HS PHY interface */
+ 	switch (DWC3_GHWPARAMS3_HSPHY_IFC(dwc->hwparams.hwparams3)) {
+@@ -727,7 +727,7 @@ static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
+ 		} else if (dwc->hsphy_interface &&
+ 				!strncmp(dwc->hsphy_interface, "ulpi", 4)) {
+ 			reg |= DWC3_GUSB2PHYCFG_ULPI_UTMI;
+-			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(index), reg);
++			dwc3_writel(dwc, DWC3_GUSB2PHYCFG(index), reg);
+ 		} else {
+ 			/* Relying on default value. */
+ 			if (!(reg & DWC3_GUSB2PHYCFG_ULPI_UTMI))
+@@ -777,7 +777,7 @@ static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
+ 	if (dwc->ulpi_ext_vbus_drv)
+ 		reg |= DWC3_GUSB2PHYCFG_ULPIEXTVBUSDRV;
+ 
+-	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(index), reg);
++	dwc3_writel(dwc, DWC3_GUSB2PHYCFG(index), reg);
+ 
+ 	return 0;
+ }
+@@ -991,15 +991,15 @@ static bool dwc3_core_is_valid(struct dwc3 *dwc)
+ {
+ 	u32 reg;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GSNPSID);
++	reg = dwc3_readl(dwc, DWC3_GSNPSID);
+ 	dwc->ip = DWC3_GSNPS_ID(reg);
+ 
+ 	/* This should read as U3 followed by revision number */
+ 	if (DWC3_IP_IS(DWC3)) {
+ 		dwc->revision = reg;
+ 	} else if (DWC3_IP_IS(DWC31) || DWC3_IP_IS(DWC32)) {
+-		dwc->revision = dwc3_readl(dwc->regs, DWC3_VER_NUMBER);
+-		dwc->version_type = dwc3_readl(dwc->regs, DWC3_VER_TYPE);
++		dwc->revision = dwc3_readl(dwc, DWC3_VER_NUMBER);
++		dwc->version_type = dwc3_readl(dwc, DWC3_VER_TYPE);
+ 	} else {
+ 		return false;
+ 	}
+@@ -1013,7 +1013,7 @@ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
+ 	unsigned int hw_mode;
+ 	u32 reg;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++	reg = dwc3_readl(dwc, DWC3_GCTL);
+ 	reg &= ~DWC3_GCTL_SCALEDOWN_MASK;
+ 	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+ 	power_opt = DWC3_GHWPARAMS1_EN_PWROPT(dwc->hwparams.hwparams1);
+@@ -1091,7 +1091,7 @@ static void dwc3_core_setup_global_control(struct dwc3 *dwc)
+ 	if (DWC3_VER_IS_PRIOR(DWC3, 190A))
+ 		reg |= DWC3_GCTL_U2RSTECN;
+ 
+-	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
++	dwc3_writel(dwc, DWC3_GCTL, reg);
+ }
+ 
+ static int dwc3_core_get_phy(struct dwc3 *dwc);
+@@ -1111,7 +1111,7 @@ static void dwc3_set_incr_burst_type(struct dwc3 *dwc)
+ 	int ret;
+ 	int i;
+ 
+-	cfg = dwc3_readl(dwc->regs, DWC3_GSBUSCFG0);
++	cfg = dwc3_readl(dwc, DWC3_GSBUSCFG0);
+ 
+ 	/*
+ 	 * Handle property "snps,incr-burst-type-adjustment".
+@@ -1186,7 +1186,7 @@ static void dwc3_set_incr_burst_type(struct dwc3 *dwc)
+ 		break;
+ 	}
+ 
+-	dwc3_writel(dwc->regs, DWC3_GSBUSCFG0, cfg);
++	dwc3_writel(dwc, DWC3_GSBUSCFG0, cfg);
+ }
+ 
+ static void dwc3_set_power_down_clk_scale(struct dwc3 *dwc)
+@@ -1211,12 +1211,12 @@ static void dwc3_set_power_down_clk_scale(struct dwc3 *dwc)
+ 	 * (3x or more) to be within the requirement.
+ 	 */
+ 	scale = DIV_ROUND_UP(clk_get_rate(dwc->susp_clk), 16000);
+-	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++	reg = dwc3_readl(dwc, DWC3_GCTL);
+ 	if ((reg & DWC3_GCTL_PWRDNSCALE_MASK) < DWC3_GCTL_PWRDNSCALE(scale) ||
+ 	    (reg & DWC3_GCTL_PWRDNSCALE_MASK) > DWC3_GCTL_PWRDNSCALE(scale*3)) {
+ 		reg &= ~(DWC3_GCTL_PWRDNSCALE_MASK);
+ 		reg |= DWC3_GCTL_PWRDNSCALE(scale);
+-		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
++		dwc3_writel(dwc, DWC3_GCTL, reg);
+ 	}
+ }
+ 
+@@ -1239,7 +1239,7 @@ static void dwc3_config_threshold(struct dwc3 *dwc)
+ 		tx_maxburst = dwc->tx_max_burst_prd;
+ 
+ 		if (rx_thr_num && rx_maxburst) {
+-			reg = dwc3_readl(dwc->regs, DWC3_GRXTHRCFG);
++			reg = dwc3_readl(dwc, DWC3_GRXTHRCFG);
+ 			reg |= DWC31_RXTHRNUMPKTSEL_PRD;
+ 
+ 			reg &= ~DWC31_RXTHRNUMPKT_PRD(~0);
+@@ -1248,11 +1248,11 @@ static void dwc3_config_threshold(struct dwc3 *dwc)
+ 			reg &= ~DWC31_MAXRXBURSTSIZE_PRD(~0);
+ 			reg |= DWC31_MAXRXBURSTSIZE_PRD(rx_maxburst);
+ 
+-			dwc3_writel(dwc->regs, DWC3_GRXTHRCFG, reg);
++			dwc3_writel(dwc, DWC3_GRXTHRCFG, reg);
+ 		}
+ 
+ 		if (tx_thr_num && tx_maxburst) {
+-			reg = dwc3_readl(dwc->regs, DWC3_GTXTHRCFG);
++			reg = dwc3_readl(dwc, DWC3_GTXTHRCFG);
+ 			reg |= DWC31_TXTHRNUMPKTSEL_PRD;
+ 
+ 			reg &= ~DWC31_TXTHRNUMPKT_PRD(~0);
+@@ -1261,7 +1261,7 @@ static void dwc3_config_threshold(struct dwc3 *dwc)
+ 			reg &= ~DWC31_MAXTXBURSTSIZE_PRD(~0);
+ 			reg |= DWC31_MAXTXBURSTSIZE_PRD(tx_maxburst);
+ 
+-			dwc3_writel(dwc->regs, DWC3_GTXTHRCFG, reg);
++			dwc3_writel(dwc, DWC3_GTXTHRCFG, reg);
+ 		}
+ 	}
+ 
+@@ -1272,7 +1272,7 @@ static void dwc3_config_threshold(struct dwc3 *dwc)
+ 
+ 	if (DWC3_IP_IS(DWC3)) {
+ 		if (rx_thr_num && rx_maxburst) {
+-			reg = dwc3_readl(dwc->regs, DWC3_GRXTHRCFG);
++			reg = dwc3_readl(dwc, DWC3_GRXTHRCFG);
+ 			reg |= DWC3_GRXTHRCFG_PKTCNTSEL;
+ 
+ 			reg &= ~DWC3_GRXTHRCFG_RXPKTCNT(~0);
+@@ -1281,11 +1281,11 @@ static void dwc3_config_threshold(struct dwc3 *dwc)
+ 			reg &= ~DWC3_GRXTHRCFG_MAXRXBURSTSIZE(~0);
+ 			reg |= DWC3_GRXTHRCFG_MAXRXBURSTSIZE(rx_maxburst);
+ 
+-			dwc3_writel(dwc->regs, DWC3_GRXTHRCFG, reg);
++			dwc3_writel(dwc, DWC3_GRXTHRCFG, reg);
+ 		}
+ 
+ 		if (tx_thr_num && tx_maxburst) {
+-			reg = dwc3_readl(dwc->regs, DWC3_GTXTHRCFG);
++			reg = dwc3_readl(dwc, DWC3_GTXTHRCFG);
+ 			reg |= DWC3_GTXTHRCFG_PKTCNTSEL;
+ 
+ 			reg &= ~DWC3_GTXTHRCFG_TXPKTCNT(~0);
+@@ -1294,11 +1294,11 @@ static void dwc3_config_threshold(struct dwc3 *dwc)
+ 			reg &= ~DWC3_GTXTHRCFG_MAXTXBURSTSIZE(~0);
+ 			reg |= DWC3_GTXTHRCFG_MAXTXBURSTSIZE(tx_maxburst);
+ 
+-			dwc3_writel(dwc->regs, DWC3_GTXTHRCFG, reg);
++			dwc3_writel(dwc, DWC3_GTXTHRCFG, reg);
+ 		}
+ 	} else {
+ 		if (rx_thr_num && rx_maxburst) {
+-			reg = dwc3_readl(dwc->regs, DWC3_GRXTHRCFG);
++			reg = dwc3_readl(dwc, DWC3_GRXTHRCFG);
+ 			reg |= DWC31_GRXTHRCFG_PKTCNTSEL;
+ 
+ 			reg &= ~DWC31_GRXTHRCFG_RXPKTCNT(~0);
+@@ -1307,11 +1307,11 @@ static void dwc3_config_threshold(struct dwc3 *dwc)
+ 			reg &= ~DWC31_GRXTHRCFG_MAXRXBURSTSIZE(~0);
+ 			reg |= DWC31_GRXTHRCFG_MAXRXBURSTSIZE(rx_maxburst);
+ 
+-			dwc3_writel(dwc->regs, DWC3_GRXTHRCFG, reg);
++			dwc3_writel(dwc, DWC3_GRXTHRCFG, reg);
+ 		}
+ 
+ 		if (tx_thr_num && tx_maxburst) {
+-			reg = dwc3_readl(dwc->regs, DWC3_GTXTHRCFG);
++			reg = dwc3_readl(dwc, DWC3_GTXTHRCFG);
+ 			reg |= DWC31_GTXTHRCFG_PKTCNTSEL;
+ 
+ 			reg &= ~DWC31_GTXTHRCFG_TXPKTCNT(~0);
+@@ -1320,7 +1320,7 @@ static void dwc3_config_threshold(struct dwc3 *dwc)
+ 			reg &= ~DWC31_GTXTHRCFG_MAXTXBURSTSIZE(~0);
+ 			reg |= DWC31_GTXTHRCFG_MAXTXBURSTSIZE(tx_maxburst);
+ 
+-			dwc3_writel(dwc->regs, DWC3_GTXTHRCFG, reg);
++			dwc3_writel(dwc, DWC3_GTXTHRCFG, reg);
+ 		}
+ 	}
+ }
+@@ -1343,7 +1343,7 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 	 * Write Linux Version Code to our GUID register so it's easy to figure
+ 	 * out which kernel version a bug was found.
+ 	 */
+-	dwc3_writel(dwc->regs, DWC3_GUID, LINUX_VERSION_CODE);
++	dwc3_writel(dwc, DWC3_GUID, LINUX_VERSION_CODE);
+ 
+ 	ret = dwc3_phy_setup(dwc);
+ 	if (ret)
+@@ -1408,9 +1408,9 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 	 * DWC_usb31 controller.
+ 	 */
+ 	if (DWC3_VER_IS_WITHIN(DWC3, 310A, ANY)) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUCTL2);
++		reg = dwc3_readl(dwc, DWC3_GUCTL2);
+ 		reg |= DWC3_GUCTL2_RST_ACTBITLATER;
+-		dwc3_writel(dwc->regs, DWC3_GUCTL2, reg);
++		dwc3_writel(dwc, DWC3_GUCTL2, reg);
+ 	}
+ 
+ 	/*
+@@ -1423,9 +1423,9 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 	 * setting GUCTL2[19] by default; instead, use GUCTL2[19] = 0.
+ 	 */
+ 	if (DWC3_VER_IS(DWC3, 320A)) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUCTL2);
++		reg = dwc3_readl(dwc, DWC3_GUCTL2);
+ 		reg &= ~DWC3_GUCTL2_LC_TIMER;
+-		dwc3_writel(dwc->regs, DWC3_GUCTL2, reg);
++		dwc3_writel(dwc, DWC3_GUCTL2, reg);
+ 	}
+ 
+ 	/*
+@@ -1438,13 +1438,13 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 	 * legacy ULPI PHYs.
+ 	 */
+ 	if (dwc->resume_hs_terminations) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUCTL1);
++		reg = dwc3_readl(dwc, DWC3_GUCTL1);
+ 		reg |= DWC3_GUCTL1_RESUME_OPMODE_HS_HOST;
+-		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
++		dwc3_writel(dwc, DWC3_GUCTL1, reg);
+ 	}
+ 
+ 	if (!DWC3_VER_IS_PRIOR(DWC3, 250A)) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUCTL1);
++		reg = dwc3_readl(dwc, DWC3_GUCTL1);
+ 
+ 		/*
+ 		 * Enable hardware control of sending remote wakeup
+@@ -1479,7 +1479,7 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 				reg &= ~DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK;
+ 		}
+ 
+-		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
++		dwc3_writel(dwc, DWC3_GUCTL1, reg);
+ 	}
+ 
+ 	dwc3_config_threshold(dwc);
+@@ -1490,9 +1490,9 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 		int i;
+ 
+ 		for (i = 0; i < dwc->num_usb3_ports; i++) {
+-			reg = dwc3_readl(dwc->regs, DWC3_LLUCTL(i));
++			reg = dwc3_readl(dwc, DWC3_LLUCTL(i));
+ 			reg |= DWC3_LLUCTL_FORCE_GEN1;
+-			dwc3_writel(dwc->regs, DWC3_LLUCTL(i), reg);
++			dwc3_writel(dwc, DWC3_LLUCTL(i), reg);
+ 		}
+ 	}
+ 
+@@ -1511,9 +1511,9 @@ int dwc3_core_init(struct dwc3 *dwc)
+ 	 * function is available only from version 1.70a.
+ 	 */
+ 	if (DWC3_VER_IS_WITHIN(DWC31, 170A, 180A)) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
++		reg = dwc3_readl(dwc, DWC3_GUCTL3);
+ 		reg |= DWC3_GUCTL3_USB20_RETRY_DISABLE;
+-		dwc3_writel(dwc->regs, DWC3_GUCTL3, reg);
++		dwc3_writel(dwc, DWC3_GUCTL3, reg);
+ 	}
+ 
+ 	return 0;
+@@ -2437,9 +2437,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+ 	int ret;
+ 
+ 	if (!pm_runtime_suspended(dwc->dev) && !PMSG_IS_AUTO(msg)) {
+-		dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
++		dwc->susphy_state = (dwc3_readl(dwc, DWC3_GUSB2PHYCFG(0)) &
+ 				    DWC3_GUSB2PHYCFG_SUSPHY) ||
+-				    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
++				    (dwc3_readl(dwc, DWC3_GUSB3PIPECTL(0)) &
+ 				    DWC3_GUSB3PIPECTL_SUSPHY);
+ 		/*
+ 		 * TI AM62 platform requires SUSPHY to be
+@@ -2469,10 +2469,10 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+ 		if (dwc->dis_u2_susphy_quirk ||
+ 		    dwc->dis_enblslpm_quirk) {
+ 			for (i = 0; i < dwc->num_usb2_ports; i++) {
+-				reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(i));
++				reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(i));
+ 				reg |=  DWC3_GUSB2PHYCFG_ENBLSLPM |
+ 					DWC3_GUSB2PHYCFG_SUSPHY;
+-				dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
++				dwc3_writel(dwc, DWC3_GUSB2PHYCFG(i), reg);
+ 			}
+ 
+ 			/* Give some time for USB2 PHY to suspend */
+@@ -2532,14 +2532,14 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+ 		}
+ 		/* Restore GUSB2PHYCFG bits that were modified in suspend */
+ 		for (i = 0; i < dwc->num_usb2_ports; i++) {
+-			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(i));
++			reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(i));
+ 			if (dwc->dis_u2_susphy_quirk)
+ 				reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+ 
+ 			if (dwc->dis_enblslpm_quirk)
+ 				reg &= ~DWC3_GUSB2PHYCFG_ENBLSLPM;
+ 
+-			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
++			dwc3_writel(dwc, DWC3_GUSB2PHYCFG(i), reg);
+ 		}
+ 
+ 		for (i = 0; i < dwc->num_usb2_ports; i++)
+@@ -2721,9 +2721,9 @@ void dwc3_pm_complete(struct dwc3 *dwc)
+ 
+ 	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_HOST &&
+ 			dwc->dis_split_quirk) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
++		reg = dwc3_readl(dwc, DWC3_GUCTL3);
+ 		reg |= DWC3_GUCTL3_SPLITDISABLE;
+-		dwc3_writel(dwc->regs, DWC3_GUCTL3, reg);
++		dwc3_writel(dwc, DWC3_GUCTL3, reg);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(dwc3_pm_complete);
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index 0b45ff16f575..ffb1101f55c7 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -296,14 +296,14 @@ static void dwc3_host_lsp(struct seq_file *s)
+ 
+ 	reg = DWC3_GDBGLSPMUX_HOSTSELECT(sel);
+ 
+-	dwc3_writel(dwc->regs, DWC3_GDBGLSPMUX, reg);
+-	val = dwc3_readl(dwc->regs, DWC3_GDBGLSP);
++	dwc3_writel(dwc, DWC3_GDBGLSPMUX, reg);
++	val = dwc3_readl(dwc, DWC3_GDBGLSP);
+ 	seq_printf(s, "GDBGLSP[%d] = 0x%08x\n", sel, val);
+ 
+ 	if (dbc_enabled && sel < 256) {
+ 		reg |= DWC3_GDBGLSPMUX_ENDBC;
+-		dwc3_writel(dwc->regs, DWC3_GDBGLSPMUX, reg);
+-		val = dwc3_readl(dwc->regs, DWC3_GDBGLSP);
++		dwc3_writel(dwc, DWC3_GDBGLSPMUX, reg);
++		val = dwc3_readl(dwc, DWC3_GDBGLSP);
+ 		seq_printf(s, "GDBGLSP_DBC[%d] = 0x%08x\n", sel, val);
+ 	}
+ }
+@@ -316,8 +316,8 @@ static void dwc3_gadget_lsp(struct seq_file *s)
+ 
+ 	for (i = 0; i < 16; i++) {
+ 		reg = DWC3_GDBGLSPMUX_DEVSELECT(i);
+-		dwc3_writel(dwc->regs, DWC3_GDBGLSPMUX, reg);
+-		reg = dwc3_readl(dwc->regs, DWC3_GDBGLSP);
++		dwc3_writel(dwc, DWC3_GDBGLSPMUX, reg);
++		reg = dwc3_readl(dwc, DWC3_GDBGLSP);
+ 		seq_printf(s, "GDBGLSP[%d] = 0x%08x\n", i, reg);
+ 	}
+ }
+@@ -335,7 +335,7 @@ static int dwc3_lsp_show(struct seq_file *s, void *unused)
+ 		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
++	reg = dwc3_readl(dwc, DWC3_GSTS);
+ 	current_mode = DWC3_GSTS_CURMOD(reg);
+ 
+ 	switch (current_mode) {
+@@ -406,7 +406,7 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+ 		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++	reg = dwc3_readl(dwc, DWC3_GCTL);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	mode = DWC3_GCTL_PRTCAP(reg);
+@@ -478,7 +478,7 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
+ 		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	reg &= DWC3_DCTL_TSTCTRL_MASK;
+ 	reg >>= 1;
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+@@ -577,7 +577,7 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
+ 		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
++	reg = dwc3_readl(dwc, DWC3_GSTS);
+ 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
+ 		seq_puts(s, "Not available\n");
+ 		spin_unlock_irqrestore(&dwc->lock, flags);
+@@ -585,7 +585,7 @@ static int dwc3_link_state_show(struct seq_file *s, void *unused)
+ 		return 0;
+ 	}
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++	reg = dwc3_readl(dwc, DWC3_DSTS);
+ 	state = DWC3_DSTS_USBLNKST(reg);
+ 	speed = reg & DWC3_DSTS_CONNECTSPD;
+ 
+@@ -639,14 +639,14 @@ static ssize_t dwc3_link_state_write(struct file *file,
+ 		return ret;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	reg = dwc3_readl(dwc->regs, DWC3_GSTS);
++	reg = dwc3_readl(dwc, DWC3_GSTS);
+ 	if (DWC3_GSTS_CURMOD(reg) != DWC3_GSTS_CURMOD_DEVICE) {
+ 		spin_unlock_irqrestore(&dwc->lock, flags);
+ 		pm_runtime_put_sync(dwc->dev);
+ 		return -EINVAL;
+ 	}
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++	reg = dwc3_readl(dwc, DWC3_DSTS);
+ 	speed = reg & DWC3_DSTS_CONNECTSPD;
+ 
+ 	if (speed < DWC3_DSTS_SUPERSPEED &&
+@@ -942,10 +942,10 @@ static int dwc3_ep_info_register_show(struct seq_file *s, void *unused)
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	reg = DWC3_GDBGLSPMUX_EPSELECT(dep->number);
+-	dwc3_writel(dwc->regs, DWC3_GDBGLSPMUX, reg);
++	dwc3_writel(dwc, DWC3_GDBGLSPMUX, reg);
+ 
+-	lower_32_bits = dwc3_readl(dwc->regs, DWC3_GDBGEPINFO0);
+-	upper_32_bits = dwc3_readl(dwc->regs, DWC3_GDBGEPINFO1);
++	lower_32_bits = dwc3_readl(dwc, DWC3_GDBGEPINFO0);
++	upper_32_bits = dwc3_readl(dwc, DWC3_GDBGEPINFO1);
+ 
+ 	ep_info = ((u64)upper_32_bits << 32) | lower_32_bits;
+ 	seq_printf(s, "0x%016llx\n", ep_info);
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 589bbeb27454..9558862d63d8 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -18,25 +18,25 @@
+ 
+ static void dwc3_otg_disable_events(struct dwc3 *dwc, u32 disable_mask)
+ {
+-	u32 reg = dwc3_readl(dwc->regs, DWC3_OEVTEN);
++	u32 reg = dwc3_readl(dwc, DWC3_OEVTEN);
+ 
+ 	reg &= ~(disable_mask);
+-	dwc3_writel(dwc->regs, DWC3_OEVTEN, reg);
++	dwc3_writel(dwc, DWC3_OEVTEN, reg);
+ }
+ 
+ static void dwc3_otg_enable_events(struct dwc3 *dwc, u32 enable_mask)
+ {
+-	u32 reg = dwc3_readl(dwc->regs, DWC3_OEVTEN);
++	u32 reg = dwc3_readl(dwc, DWC3_OEVTEN);
+ 
+ 	reg |= (enable_mask);
+-	dwc3_writel(dwc->regs, DWC3_OEVTEN, reg);
++	dwc3_writel(dwc, DWC3_OEVTEN, reg);
+ }
+ 
+ static void dwc3_otg_clear_events(struct dwc3 *dwc)
+ {
+-	u32 reg = dwc3_readl(dwc->regs, DWC3_OEVT);
++	u32 reg = dwc3_readl(dwc, DWC3_OEVT);
+ 
+-	dwc3_writel(dwc->regs, DWC3_OEVTEN, reg);
++	dwc3_writel(dwc, DWC3_OEVTEN, reg);
+ }
+ 
+ #define DWC3_OTG_ALL_EVENTS	(DWC3_OEVTEN_XHCIRUNSTPSETEN | \
+@@ -72,18 +72,18 @@ static irqreturn_t dwc3_otg_irq(int irq, void *_dwc)
+ 	struct dwc3 *dwc = _dwc;
+ 	irqreturn_t ret = IRQ_NONE;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_OEVT);
++	reg = dwc3_readl(dwc, DWC3_OEVT);
+ 	if (reg) {
+ 		/* ignore non OTG events, we can't disable them in OEVTEN */
+ 		if (!(reg & DWC3_OTG_ALL_EVENTS)) {
+-			dwc3_writel(dwc->regs, DWC3_OEVT, reg);
++			dwc3_writel(dwc, DWC3_OEVT, reg);
+ 			return IRQ_NONE;
+ 		}
+ 
+ 		if (dwc->current_otg_role == DWC3_OTG_ROLE_HOST &&
+ 		    !(reg & DWC3_OEVT_DEVICEMODE))
+ 			dwc->otg_restart_host = true;
+-		dwc3_writel(dwc->regs, DWC3_OEVT, reg);
++		dwc3_writel(dwc, DWC3_OEVT, reg);
+ 		ret = IRQ_WAKE_THREAD;
+ 	}
+ 
+@@ -100,23 +100,23 @@ static void dwc3_otgregs_init(struct dwc3 *dwc)
+ 	 * the signal outputs sent to the PHY, the OTG FSM logic of the
+ 	 * core and also the resets to the VBUS filters inside the core.
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCFG);
++	reg = dwc3_readl(dwc, DWC3_OCFG);
+ 	reg |= DWC3_OCFG_SFTRSTMASK;
+-	dwc3_writel(dwc->regs, DWC3_OCFG, reg);
++	dwc3_writel(dwc, DWC3_OCFG, reg);
+ 
+ 	/* Disable hibernation for simplicity */
+-	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++	reg = dwc3_readl(dwc, DWC3_GCTL);
+ 	reg &= ~DWC3_GCTL_GBLHIBERNATIONEN;
+-	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
++	dwc3_writel(dwc, DWC3_GCTL, reg);
+ 
+ 	/*
+ 	 * Initialize OTG registers as per
+ 	 * Figure 11-4 OTG Driver Overall Programming Flow
+ 	 */
+ 	/* OCFG.SRPCap = 0, OCFG.HNPCap = 0 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCFG);
++	reg = dwc3_readl(dwc, DWC3_OCFG);
+ 	reg &= ~(DWC3_OCFG_SRPCAP | DWC3_OCFG_HNPCAP);
+-	dwc3_writel(dwc->regs, DWC3_OCFG, reg);
++	dwc3_writel(dwc, DWC3_OCFG, reg);
+ 	/* OEVT = FFFF */
+ 	dwc3_otg_clear_events(dwc);
+ 	/* OEVTEN = 0 */
+@@ -127,11 +127,11 @@ static void dwc3_otgregs_init(struct dwc3 *dwc)
+ 	 * OCTL.PeriMode = 1, OCTL.DevSetHNPEn = 0, OCTL.HstSetHNPEn = 0,
+ 	 * OCTL.HNPReq = 0
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCTL);
++	reg = dwc3_readl(dwc, DWC3_OCTL);
+ 	reg |= DWC3_OCTL_PERIMODE;
+ 	reg &= ~(DWC3_OCTL_DEVSETHNPEN | DWC3_OCTL_HSTSETHNPEN |
+ 		 DWC3_OCTL_HNPREQ);
+-	dwc3_writel(dwc->regs, DWC3_OCTL, reg);
++	dwc3_writel(dwc, DWC3_OCTL, reg);
+ }
+ 
+ static int dwc3_otg_get_irq(struct dwc3 *dwc)
+@@ -175,9 +175,9 @@ void dwc3_otg_init(struct dwc3 *dwc)
+ 	/* GCTL.PrtCapDir=2'b11 */
+ 	dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG, true);
+ 	/* GUSB2PHYCFG0.SusPHY=0 */
+-	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++	reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(0));
+ 	reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+-	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
++	dwc3_writel(dwc, DWC3_GUSB2PHYCFG(0), reg);
+ 
+ 	/* Initialize OTG registers */
+ 	dwc3_otgregs_init(dwc);
+@@ -203,17 +203,17 @@ void dwc3_otg_host_init(struct dwc3 *dwc)
+ 	 * OCTL.PeriMode=0, OCTL.TermSelDLPulse = 0,
+ 	 * OCTL.DevSetHNPEn = 0, OCTL.HstSetHNPEn = 0
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCTL);
++	reg = dwc3_readl(dwc, DWC3_OCTL);
+ 	reg &= ~(DWC3_OCTL_PERIMODE | DWC3_OCTL_TERMSELIDPULSE |
+ 			DWC3_OCTL_DEVSETHNPEN | DWC3_OCTL_HSTSETHNPEN);
+-	dwc3_writel(dwc->regs, DWC3_OCTL, reg);
++	dwc3_writel(dwc, DWC3_OCTL, reg);
+ 
+ 	/*
+ 	 * OCFG.DisPrtPwrCutoff = 0/1
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCFG);
++	reg = dwc3_readl(dwc, DWC3_OCFG);
+ 	reg &= ~DWC3_OCFG_DISPWRCUTTOFF;
+-	dwc3_writel(dwc->regs, DWC3_OCFG, reg);
++	dwc3_writel(dwc, DWC3_OCFG, reg);
+ 
+ 	/*
+ 	 * OCFG.SRPCap = 1, OCFG.HNPCap = GHWPARAMS6.HNP_CAP
+@@ -229,15 +229,15 @@ void dwc3_otg_host_init(struct dwc3 *dwc)
+ 
+ 	/* GUSB2PHYCFG.ULPIAutoRes = 1/0, GUSB2PHYCFG.SusPHY = 1 */
+ 	if (!dwc->dis_u2_susphy_quirk) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++		reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(0));
+ 		reg |= DWC3_GUSB2PHYCFG_SUSPHY;
+-		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
++		dwc3_writel(dwc, DWC3_GUSB2PHYCFG(0), reg);
+ 	}
+ 
+ 	/* Set Port Power to enable VBUS: OCTL.PrtPwrCtl = 1 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCTL);
++	reg = dwc3_readl(dwc, DWC3_OCTL);
+ 	reg |= DWC3_OCTL_PRTPWRCTL;
+-	dwc3_writel(dwc->regs, DWC3_OCTL, reg);
++	dwc3_writel(dwc, DWC3_OCTL, reg);
+ }
+ 
+ /* should be called after Host controller driver is stopped */
+@@ -258,9 +258,9 @@ static void dwc3_otg_host_exit(struct dwc3 *dwc)
+ 	 */
+ 
+ 	/* OCTL.HstSetHNPEn = 0, OCTL.PrtPwrCtl=0 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCTL);
++	reg = dwc3_readl(dwc, DWC3_OCTL);
+ 	reg &= ~(DWC3_OCTL_HSTSETHNPEN | DWC3_OCTL_PRTPWRCTL);
+-	dwc3_writel(dwc->regs, DWC3_OCTL, reg);
++	dwc3_writel(dwc, DWC3_OCTL, reg);
+ }
+ 
+ /* should be called before the gadget controller driver is started */
+@@ -274,27 +274,27 @@ static void dwc3_otg_device_init(struct dwc3 *dwc)
+ 	 * OCFG.HNPCap = GHWPARAMS6.HNP_CAP, OCFG.SRPCap = 1
+ 	 * but we keep them 0 for simple dual-role operation.
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCFG);
++	reg = dwc3_readl(dwc, DWC3_OCFG);
+ 	/* OCFG.OTGSftRstMsk = 0/1 */
+ 	reg |= DWC3_OCFG_SFTRSTMASK;
+-	dwc3_writel(dwc->regs, DWC3_OCFG, reg);
++	dwc3_writel(dwc, DWC3_OCFG, reg);
+ 	/*
+ 	 * OCTL.PeriMode = 1
+ 	 * OCTL.TermSelDLPulse = 0/1, OCTL.HNPReq = 0
+ 	 * OCTL.DevSetHNPEn = 0, OCTL.HstSetHNPEn = 0
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCTL);
++	reg = dwc3_readl(dwc, DWC3_OCTL);
+ 	reg |= DWC3_OCTL_PERIMODE;
+ 	reg &= ~(DWC3_OCTL_TERMSELIDPULSE | DWC3_OCTL_HNPREQ |
+ 			DWC3_OCTL_DEVSETHNPEN | DWC3_OCTL_HSTSETHNPEN);
+-	dwc3_writel(dwc->regs, DWC3_OCTL, reg);
++	dwc3_writel(dwc, DWC3_OCTL, reg);
+ 	/* OEVTEN.OTGBDevSesVldDetEvntEn = 1 */
+ 	dwc3_otg_enable_events(dwc, DWC3_OEVTEN_BDEVSESSVLDDETEN);
+ 	/* GUSB2PHYCFG.ULPIAutoRes = 0, GUSB2PHYCFG0.SusPHY = 1 */
+ 	if (!dwc->dis_u2_susphy_quirk) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++		reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(0));
+ 		reg |= DWC3_GUSB2PHYCFG_SUSPHY;
+-		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
++		dwc3_writel(dwc, DWC3_GUSB2PHYCFG(0), reg);
+ 	}
+ 	/* GCTL.GblHibernationEn = 0. Already 0. */
+ }
+@@ -319,10 +319,10 @@ static void dwc3_otg_device_exit(struct dwc3 *dwc)
+ 				DWC3_OEVTEN_BDEVBHOSTENDEN);
+ 
+ 	/* OCTL.DevSetHNPEn = 0, OCTL.HNPReq = 0, OCTL.PeriMode=1 */
+-	reg = dwc3_readl(dwc->regs, DWC3_OCTL);
++	reg = dwc3_readl(dwc, DWC3_OCTL);
+ 	reg &= ~(DWC3_OCTL_DEVSETHNPEN | DWC3_OCTL_HNPREQ);
+ 	reg |= DWC3_OCTL_PERIMODE;
+-	dwc3_writel(dwc->regs, DWC3_OCTL, reg);
++	dwc3_writel(dwc, DWC3_OCTL, reg);
+ }
+ 
+ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
+@@ -341,7 +341,7 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
+ 		return;
+ 
+ 	if (!ignore_idstatus) {
+-		reg = dwc3_readl(dwc->regs, DWC3_OSTS);
++		reg = dwc3_readl(dwc, DWC3_OSTS);
+ 		id = !!(reg & DWC3_OSTS_CONIDSTS);
+ 
+ 		dwc->desired_otg_role = id ? DWC3_OTG_ROLE_DEVICE :
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index e0bad5708664..a8ff8db610d3 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -361,7 +361,7 @@ static int dwc3_ep0_handle_status(struct dwc3 *dwc,
+ 
+ 		if ((dwc->speed == DWC3_DSTS_SUPERSPEED) ||
+ 		    (dwc->speed == DWC3_DSTS_SUPERSPEED_PLUS)) {
+-			reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++			reg = dwc3_readl(dwc, DWC3_DCTL);
+ 			if (reg & DWC3_DCTL_INITU1ENA)
+ 				usb_status |= 1 << USB_DEV_STAT_U1_ENABLED;
+ 			if (reg & DWC3_DCTL_INITU2ENA)
+@@ -417,12 +417,12 @@ static int dwc3_ep0_handle_u1(struct dwc3 *dwc, enum usb_device_state state,
+ 	if (set && dwc->dis_u1_entry_quirk)
+ 		return -EINVAL;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	if (set)
+ 		reg |= DWC3_DCTL_INITU1ENA;
+ 	else
+ 		reg &= ~DWC3_DCTL_INITU1ENA;
+-	dwc3_writel(dwc->regs, DWC3_DCTL, reg);
++	dwc3_writel(dwc, DWC3_DCTL, reg);
+ 
+ 	return 0;
+ }
+@@ -441,12 +441,12 @@ static int dwc3_ep0_handle_u2(struct dwc3 *dwc, enum usb_device_state state,
+ 	if (set && dwc->dis_u2_entry_quirk)
+ 		return -EINVAL;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	if (set)
+ 		reg |= DWC3_DCTL_INITU2ENA;
+ 	else
+ 		reg &= ~DWC3_DCTL_INITU2ENA;
+-	dwc3_writel(dwc->regs, DWC3_DCTL, reg);
++	dwc3_writel(dwc, DWC3_DCTL, reg);
+ 
+ 	return 0;
+ }
+@@ -612,10 +612,10 @@ static int dwc3_ep0_set_address(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ 		return -EINVAL;
+ 	}
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++	reg = dwc3_readl(dwc, DWC3_DCFG);
+ 	reg &= ~(DWC3_DCFG_DEVADDR_MASK);
+ 	reg |= DWC3_DCFG_DEVADDR(addr);
+-	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++	dwc3_writel(dwc, DWC3_DCFG, reg);
+ 
+ 	if (addr)
+ 		usb_gadget_set_state(dwc->gadget, USB_STATE_ADDRESS);
+@@ -672,12 +672,12 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ 			 * Enable transition to U1/U2 state when
+ 			 * nothing is pending from application.
+ 			 */
+-			reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++			reg = dwc3_readl(dwc, DWC3_DCTL);
+ 			if (!dwc->dis_u1_entry_quirk)
+ 				reg |= DWC3_DCTL_ACCEPTU1ENA;
+ 			if (!dwc->dis_u2_entry_quirk)
+ 				reg |= DWC3_DCTL_ACCEPTU2ENA;
+-			dwc3_writel(dwc->regs, DWC3_DCTL, reg);
++			dwc3_writel(dwc, DWC3_DCTL, reg);
+ 		}
+ 		break;
+ 
+@@ -717,7 +717,7 @@ static void dwc3_ep0_set_sel_cmpl(struct usb_ep *ep, struct usb_request *req)
+ 	dwc->u2sel = le16_to_cpu(timing.u2sel);
+ 	dwc->u2pel = le16_to_cpu(timing.u2pel);
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	if (reg & DWC3_DCTL_INITU2ENA)
+ 		param = dwc->u2pel;
+ 	if (reg & DWC3_DCTL_INITU1ENA)
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index ce087cbc4a53..9355c952c140 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -42,7 +42,7 @@ int dwc3_gadget_set_test_mode(struct dwc3 *dwc, int mode)
+ {
+ 	u32		reg;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
+ 
+ 	switch (mode) {
+@@ -73,7 +73,7 @@ int dwc3_gadget_get_link_state(struct dwc3 *dwc)
+ {
+ 	u32		reg;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++	reg = dwc3_readl(dwc, DWC3_DSTS);
+ 
+ 	return DWC3_DSTS_USBLNKST(reg);
+ }
+@@ -97,7 +97,7 @@ int dwc3_gadget_set_link_state(struct dwc3 *dwc, enum dwc3_link_state state)
+ 	 */
+ 	if (!DWC3_VER_IS_PRIOR(DWC3, 194A)) {
+ 		while (--retries) {
+-			reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++			reg = dwc3_readl(dwc, DWC3_DSTS);
+ 			if (reg & DWC3_DSTS_DCNRD)
+ 				udelay(5);
+ 			else
+@@ -108,15 +108,15 @@ int dwc3_gadget_set_link_state(struct dwc3 *dwc, enum dwc3_link_state state)
+ 			return -ETIMEDOUT;
+ 	}
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	reg &= ~DWC3_DCTL_ULSTCHNGREQ_MASK;
+ 
+ 	/* set no action before sending new link state change */
+-	dwc3_writel(dwc->regs, DWC3_DCTL, reg);
++	dwc3_writel(dwc, DWC3_DCTL, reg);
+ 
+ 	/* set requested state */
+ 	reg |= DWC3_DCTL_ULSTCHNGREQ(state);
+-	dwc3_writel(dwc->regs, DWC3_DCTL, reg);
++	dwc3_writel(dwc, DWC3_DCTL, reg);
+ 
+ 	/*
+ 	 * The following code is racy when called from dwc3_gadget_wakeup,
+@@ -128,7 +128,7 @@ int dwc3_gadget_set_link_state(struct dwc3 *dwc, enum dwc3_link_state state)
+ 	/* wait for a change in DSTS */
+ 	retries = 10000;
+ 	while (--retries) {
+-		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++		reg = dwc3_readl(dwc, DWC3_DSTS);
+ 
+ 		if (DWC3_DSTS_USBLNKST(reg) == state)
+ 			return 0;
+@@ -260,11 +260,11 @@ int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned int cmd,
+ 	int		ret = 0;
+ 	u32		reg;
+ 
+-	dwc3_writel(dwc->regs, DWC3_DGCMDPAR, param);
+-	dwc3_writel(dwc->regs, DWC3_DGCMD, cmd | DWC3_DGCMD_CMDACT);
++	dwc3_writel(dwc, DWC3_DGCMDPAR, param);
++	dwc3_writel(dwc, DWC3_DGCMD, cmd | DWC3_DGCMD_CMDACT);
+ 
+ 	do {
+-		reg = dwc3_readl(dwc->regs, DWC3_DGCMD);
++		reg = dwc3_readl(dwc, DWC3_DGCMD);
+ 		if (!(reg & DWC3_DGCMD_CMDACT)) {
+ 			status = DWC3_DGCMD_STATUS(reg);
+ 			if (status)
+@@ -334,7 +334,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+ 	 */
+ 	if (dwc->gadget->speed <= USB_SPEED_HIGH ||
+ 	    DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_ENDTRANSFER) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++		reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(0));
+ 		if (unlikely(reg & DWC3_GUSB2PHYCFG_SUSPHY)) {
+ 			saved_config |= DWC3_GUSB2PHYCFG_SUSPHY;
+ 			reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+@@ -346,7 +346,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+ 		}
+ 
+ 		if (saved_config)
+-			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
++			dwc3_writel(dwc, DWC3_GUSB2PHYCFG(0), reg);
+ 	}
+ 
+ 	/*
+@@ -356,9 +356,9 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
  	 * improve performance.
  	 */
  	if (DWC3_DEPCMD_CMD(cmd) != DWC3_DEPCMD_UPDATETRANSFER) {
--		dwc3_writel(dep->regs, DWC3_DEPCMDPAR0, params->param0);
--		dwc3_writel(dep->regs, DWC3_DEPCMDPAR1, params->param1);
--		dwc3_writel(dep->regs, DWC3_DEPCMDPAR2, params->param2);
-+		dwc3_writel(dwc->regs, DWC3_DEPCMDPAR0(epnum), params->param0);
-+		dwc3_writel(dwc->regs, DWC3_DEPCMDPAR1(epnum), params->param1);
-+		dwc3_writel(dwc->regs, DWC3_DEPCMDPAR2(epnum), params->param2);
+-		dwc3_writel(dwc->regs, DWC3_DEPCMDPAR0(epnum), params->param0);
+-		dwc3_writel(dwc->regs, DWC3_DEPCMDPAR1(epnum), params->param1);
+-		dwc3_writel(dwc->regs, DWC3_DEPCMDPAR2(epnum), params->param2);
++		dwc3_writel(dwc, DWC3_DEPCMDPAR0(epnum), params->param0);
++		dwc3_writel(dwc, DWC3_DEPCMDPAR1(epnum), params->param1);
++		dwc3_writel(dwc, DWC3_DEPCMDPAR2(epnum), params->param2);
  	}
  
  	/*
-@@ -381,7 +382,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+@@ -382,7 +382,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
  	else
  		cmd |= DWC3_DEPCMD_CMDACT;
  
--	dwc3_writel(dep->regs, DWC3_DEPCMD, cmd);
-+	dwc3_writel(dwc->regs, DWC3_DEPCMD(epnum), cmd);
+-	dwc3_writel(dwc->regs, DWC3_DEPCMD(epnum), cmd);
++	dwc3_writel(dwc, DWC3_DEPCMD(epnum), cmd);
  
  	if (!(cmd & DWC3_DEPCMD_CMDACT) ||
  		(DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_ENDTRANSFER &&
-@@ -391,7 +392,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+@@ -392,7 +392,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
  	}
  
  	do {
--		reg = dwc3_readl(dep->regs, DWC3_DEPCMD);
-+		reg = dwc3_readl(dwc->regs, DWC3_DEPCMD(epnum));
+-		reg = dwc3_readl(dwc->regs, DWC3_DEPCMD(epnum));
++		reg = dwc3_readl(dwc, DWC3_DEPCMD(epnum));
  		if (!(reg & DWC3_DEPCMD_CMDACT)) {
  			cmd_status = DWC3_DEPCMD_STATUS(reg);
  
-@@ -3381,7 +3382,6 @@ static int dwc3_gadget_init_endpoint(struct dwc3 *dwc, u8 epnum)
- 	dep->dwc = dwc;
- 	dep->number = epnum;
- 	dep->direction = direction;
--	dep->regs = dwc->regs + DWC3_DEP_BASE(epnum);
- 	dwc->eps[epnum] = dep;
- 	dep->combo_num = 0;
- 	dep->start_cmd_status = 0;
+@@ -448,9 +448,9 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+ 		mdelay(1);
+ 
+ 	if (saved_config) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++		reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(0));
+ 		reg |= saved_config;
+-		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
++		dwc3_writel(dwc, DWC3_GUSB2PHYCFG(0), reg);
+ 	}
+ 
+ 	return ret;
+@@ -727,7 +727,7 @@ static int dwc3_gadget_calc_ram_depth(struct dwc3 *dwc)
+ 		u32 reg;
+ 
+ 		/* Check if TXFIFOs start at non-zero addr */
+-		reg = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
++		reg = dwc3_readl(dwc, DWC3_GTXFIFOSIZ(0));
+ 		fifo_0_start = DWC3_GTXFIFOSIZ_TXFSTADDR(reg);
+ 
+ 		ram_depth -= (fifo_0_start >> 16);
+@@ -755,7 +755,7 @@ void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
+ 
+ 	/* Read ep0IN related TXFIFO size */
+ 	dep = dwc->eps[1];
+-	size = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
++	size = dwc3_readl(dwc, DWC3_GTXFIFOSIZ(0));
+ 	if (DWC3_IP_IS(DWC3))
+ 		fifo_depth = DWC3_GTXFIFOSIZ_TXFDEP(size);
+ 	else
+@@ -770,10 +770,10 @@ void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
+ 
+ 		/* Don't change TXFRAMNUM on usb31 version */
+ 		size = DWC3_IP_IS(DWC3) ? 0 :
+-			dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1)) &
++			dwc3_readl(dwc, DWC3_GTXFIFOSIZ(num >> 1)) &
+ 				   DWC31_GTXFIFOSIZ_TXFRAMNUM;
+ 
+-		dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(num >> 1), size);
++		dwc3_writel(dwc, DWC3_GTXFIFOSIZ(num >> 1), size);
+ 		dep->flags &= ~DWC3_EP_TXFIFO_RESIZED;
+ 	}
+ 	dwc->num_ep_resized = 0;
+@@ -876,7 +876,7 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+ 	fifo_size++;
+ 
+ 	/* Check if TXFIFOs start at non-zero addr */
+-	tmp = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
++	tmp = dwc3_readl(dwc, DWC3_GTXFIFOSIZ(0));
+ 	fifo_0_start = DWC3_GTXFIFOSIZ_TXFSTADDR(tmp);
+ 
+ 	fifo_size |= (fifo_0_start + (dwc->last_fifo_depth << 16));
+@@ -899,7 +899,7 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+ 		return -ENOMEM;
+ 	}
+ 
+-	dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
++	dwc3_writel(dwc, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
+ 	dep->flags |= DWC3_EP_TXFIFO_RESIZED;
+ 	dwc->num_ep_resized++;
+ 
+@@ -943,9 +943,9 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+ 		dep->type = usb_endpoint_type(desc);
+ 		dep->flags |= DWC3_EP_ENABLED;
+ 
+-		reg = dwc3_readl(dwc->regs, DWC3_DALEPENA);
++		reg = dwc3_readl(dwc, DWC3_DALEPENA);
+ 		reg |= DWC3_DALEPENA_EP(dep->number);
+-		dwc3_writel(dwc->regs, DWC3_DALEPENA, reg);
++		dwc3_writel(dwc, DWC3_DALEPENA, reg);
+ 
+ 		dep->trb_dequeue = 0;
+ 		dep->trb_enqueue = 0;
+@@ -1080,9 +1080,9 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+ 	if (dep->flags & DWC3_EP_STALL)
+ 		__dwc3_gadget_ep_set_halt(dep, 0, false);
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DALEPENA);
++	reg = dwc3_readl(dwc, DWC3_DALEPENA);
+ 	reg &= ~DWC3_DALEPENA_EP(dep->number);
+-	dwc3_writel(dwc->regs, DWC3_DALEPENA, reg);
++	dwc3_writel(dwc, DWC3_DALEPENA, reg);
+ 
+ 	dwc3_remove_requests(dwc, dep, -ESHUTDOWN);
+ 
+@@ -1743,7 +1743,7 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
+ {
+ 	u32			reg;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++	reg = dwc3_readl(dwc, DWC3_DSTS);
+ 	return DWC3_DSTS_SOFFN(reg);
+ }
+ 
+@@ -2351,13 +2351,13 @@ static void dwc3_gadget_enable_linksts_evts(struct dwc3 *dwc, bool set)
+ 	if (DWC3_VER_IS_PRIOR(DWC3, 250A))
+ 		return;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DEVTEN);
++	reg = dwc3_readl(dwc, DWC3_DEVTEN);
+ 	if (set)
+ 		reg |= DWC3_DEVTEN_ULSTCNGEN;
+ 	else
+ 		reg &= ~DWC3_DEVTEN_ULSTCNGEN;
+ 
+-	dwc3_writel(dwc->regs, DWC3_DEVTEN, reg);
++	dwc3_writel(dwc, DWC3_DEVTEN, reg);
+ }
+ 
+ static int dwc3_gadget_get_frame(struct usb_gadget *g)
+@@ -2380,7 +2380,7 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+ 	 *
+ 	 * We can check that via USB Link State bits in DSTS register.
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++	reg = dwc3_readl(dwc, DWC3_DSTS);
+ 
+ 	link_state = DWC3_DSTS_USBLNKST(reg);
+ 
+@@ -2408,9 +2408,9 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+ 	/* Recent versions do this automatically */
+ 	if (DWC3_VER_IS_PRIOR(DWC3, 194A)) {
+ 		/* write zeroes to Link Change Request */
+-		reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++		reg = dwc3_readl(dwc, DWC3_DCTL);
+ 		reg &= ~DWC3_DCTL_ULSTCHNGREQ_MASK;
+-		dwc3_writel(dwc->regs, DWC3_DCTL, reg);
++		dwc3_writel(dwc, DWC3_DCTL, reg);
+ 	}
+ 
+ 	/*
+@@ -2530,7 +2530,7 @@ static void __dwc3_gadget_set_ssp_rate(struct dwc3 *dwc)
+ 	if (ssp_rate == USB_SSP_GEN_UNKNOWN)
+ 		ssp_rate = dwc->max_ssp_rate;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++	reg = dwc3_readl(dwc, DWC3_DCFG);
+ 	reg &= ~DWC3_DCFG_SPEED_MASK;
+ 	reg &= ~DWC3_DCFG_NUMLANES(~0);
+ 
+@@ -2543,7 +2543,7 @@ static void __dwc3_gadget_set_ssp_rate(struct dwc3 *dwc)
+ 	    dwc->max_ssp_rate != USB_SSP_GEN_2x1)
+ 		reg |= DWC3_DCFG_NUMLANES(1);
+ 
+-	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++	dwc3_writel(dwc, DWC3_DCFG, reg);
+ }
+ 
+ static void __dwc3_gadget_set_speed(struct dwc3 *dwc)
+@@ -2561,7 +2561,7 @@ static void __dwc3_gadget_set_speed(struct dwc3 *dwc)
+ 		return;
+ 	}
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++	reg = dwc3_readl(dwc, DWC3_DCFG);
+ 	reg &= ~(DWC3_DCFG_SPEED_MASK);
+ 
+ 	/*
+@@ -2612,7 +2612,7 @@ static void __dwc3_gadget_set_speed(struct dwc3 *dwc)
+ 	    speed < USB_SPEED_SUPER_PLUS)
+ 		reg &= ~DWC3_DCFG_NUMLANES(~0);
+ 
+-	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++	dwc3_writel(dwc, DWC3_DCFG, reg);
+ }
+ 
+ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on)
+@@ -2637,7 +2637,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on)
+ 	 * mentioned in the dwc3 programming guide. It has been tested on an
+ 	 * Exynos platforms.
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++	reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(0));
+ 	if (reg & DWC3_GUSB2PHYCFG_SUSPHY) {
+ 		saved_config |= DWC3_GUSB2PHYCFG_SUSPHY;
+ 		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+@@ -2649,9 +2649,9 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on)
+ 	}
+ 
+ 	if (saved_config)
+-		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
++		dwc3_writel(dwc, DWC3_GUSB2PHYCFG(0), reg);
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	if (is_on) {
+ 		if (DWC3_VER_IS_WITHIN(DWC3, ANY, 187A)) {
+ 			reg &= ~DWC3_DCTL_TRGTULST_MASK;
+@@ -2675,14 +2675,14 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on)
+ 
+ 	do {
+ 		usleep_range(1000, 2000);
+-		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++		reg = dwc3_readl(dwc, DWC3_DSTS);
+ 		reg &= DWC3_DSTS_DEVCTRLHLT;
+ 	} while (--timeout && !(!is_on ^ !reg));
+ 
+ 	if (saved_config) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++		reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(0));
+ 		reg |= saved_config;
+-		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
++		dwc3_writel(dwc, DWC3_GUSB2PHYCFG(0), reg);
+ 	}
+ 
+ 	if (!timeout)
+@@ -2858,13 +2858,13 @@ static void dwc3_gadget_enable_irq(struct dwc3 *dwc)
+ 	if (!DWC3_VER_IS_PRIOR(DWC3, 230A))
+ 		reg |= DWC3_DEVTEN_U3L2L1SUSPEN;
+ 
+-	dwc3_writel(dwc->regs, DWC3_DEVTEN, reg);
++	dwc3_writel(dwc, DWC3_DEVTEN, reg);
+ }
+ 
+ static void dwc3_gadget_disable_irq(struct dwc3 *dwc)
+ {
+ 	/* mask all interrupts */
+-	dwc3_writel(dwc->regs, DWC3_DEVTEN, 0x00);
++	dwc3_writel(dwc, DWC3_DEVTEN, 0x00);
+ }
+ 
+ static irqreturn_t dwc3_interrupt(int irq, void *_dwc);
+@@ -2905,10 +2905,10 @@ static void dwc3_gadget_setup_nump(struct dwc3 *dwc)
+ 	nump = min_t(u32, nump, 16);
+ 
+ 	/* update NumP */
+-	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++	reg = dwc3_readl(dwc, DWC3_DCFG);
+ 	reg &= ~DWC3_DCFG_NUMP_MASK;
+ 	reg |= nump << DWC3_DCFG_NUMP_SHIFT;
+-	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++	dwc3_writel(dwc, DWC3_DCFG, reg);
+ }
+ 
+ static int __dwc3_gadget_start(struct dwc3 *dwc)
+@@ -2922,10 +2922,10 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
+ 	 * the core supports IMOD, disable it.
+ 	 */
+ 	if (dwc->imod_interval) {
+-		dwc3_writel(dwc->regs, DWC3_DEV_IMOD(0), dwc->imod_interval);
+-		dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), DWC3_GEVNTCOUNT_EHB);
++		dwc3_writel(dwc, DWC3_DEV_IMOD(0), dwc->imod_interval);
++		dwc3_writel(dwc, DWC3_GEVNTCOUNT(0), DWC3_GEVNTCOUNT_EHB);
+ 	} else if (dwc3_has_imod(dwc)) {
+-		dwc3_writel(dwc->regs, DWC3_DEV_IMOD(0), 0);
++		dwc3_writel(dwc, DWC3_DEV_IMOD(0), 0);
+ 	}
+ 
+ 	/*
+@@ -2935,13 +2935,13 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
+ 	 * This way, we maximize the chances that we'll be able to get several
+ 	 * bursts of data without going through any sort of endpoint throttling.
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_GRXTHRCFG);
++	reg = dwc3_readl(dwc, DWC3_GRXTHRCFG);
+ 	if (DWC3_IP_IS(DWC3))
+ 		reg &= ~DWC3_GRXTHRCFG_PKTCNTSEL;
+ 	else
+ 		reg &= ~DWC31_GRXTHRCFG_PKTCNTSEL;
+ 
+-	dwc3_writel(dwc->regs, DWC3_GRXTHRCFG, reg);
++	dwc3_writel(dwc, DWC3_GRXTHRCFG, reg);
+ 
+ 	dwc3_gadget_setup_nump(dwc);
+ 
+@@ -2952,15 +2952,15 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
+ 	 * ACK with NumP=0 and PP=0 (for IN direction). This slightly improves
+ 	 * the stream performance.
+ 	 */
+-	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++	reg = dwc3_readl(dwc, DWC3_DCFG);
+ 	reg |= DWC3_DCFG_IGNSTRMPP;
+-	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++	dwc3_writel(dwc, DWC3_DCFG, reg);
+ 
+ 	/* Enable MST by default if the device is capable of MST */
+ 	if (DWC3_MST_CAPABLE(&dwc->hwparams)) {
+-		reg = dwc3_readl(dwc->regs, DWC3_DCFG1);
++		reg = dwc3_readl(dwc, DWC3_DCFG1);
+ 		reg &= ~DWC3_DCFG1_DIS_MST_ENH;
+-		dwc3_writel(dwc->regs, DWC3_DCFG1, reg);
++		dwc3_writel(dwc, DWC3_DCFG1, reg);
+ 	}
+ 
+ 	/* Start with SuperSpeed Default */
+@@ -3240,7 +3240,7 @@ static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
+ 	/* MDWIDTH is represented in bits, we need it in bytes */
+ 	mdwidth /= 8;
+ 
+-	size = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1));
++	size = dwc3_readl(dwc, DWC3_GTXFIFOSIZ(dep->number >> 1));
+ 	if (DWC3_IP_IS(DWC3))
+ 		size = DWC3_GTXFIFOSIZ_TXFDEP(size);
+ 	else
+@@ -3289,7 +3289,7 @@ static int dwc3_gadget_init_out_endpoint(struct dwc3_ep *dep)
+ 	mdwidth /= 8;
+ 
+ 	/* All OUT endpoints share a single RxFIFO space */
+-	size = dwc3_readl(dwc->regs, DWC3_GRXFIFOSIZ(0));
++	size = dwc3_readl(dwc, DWC3_GRXFIFOSIZ(0));
+ 	if (DWC3_IP_IS(DWC3))
+ 		size = DWC3_GRXFIFOSIZ_RXFDEP(size);
+ 	else
+@@ -3742,9 +3742,9 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
+ 				return no_started_trb;
+ 		}
+ 
+-		reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++		reg = dwc3_readl(dwc, DWC3_DCTL);
+ 		reg |= dwc->u1u2;
+-		dwc3_writel(dwc->regs, DWC3_DCTL, reg);
++		dwc3_writel(dwc, DWC3_DCTL, reg);
+ 
+ 		dwc->u1u2 = 0;
+ 	}
+@@ -4074,7 +4074,7 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
+ 
+ 	dwc3_gadget_set_link_state(dwc, DWC3_LINK_STATE_RX_DET);
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	reg &= ~DWC3_DCTL_INITU1ENA;
+ 	reg &= ~DWC3_DCTL_INITU2ENA;
+ 	dwc3_gadget_dctl_write_safe(dwc, reg);
+@@ -4163,7 +4163,7 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+ 	dwc3_stop_active_transfers(dwc);
+ 	dwc->connected = true;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++	reg = dwc3_readl(dwc, DWC3_DCTL);
+ 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
+ 	dwc3_gadget_dctl_write_safe(dwc, reg);
+ 	dwc->test_mode = false;
+@@ -4172,9 +4172,9 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+ 	dwc3_clear_stall_all_ep(dwc);
+ 
+ 	/* Reset device address to zero */
+-	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++	reg = dwc3_readl(dwc, DWC3_DCFG);
+ 	reg &= ~(DWC3_DCFG_DEVADDR_MASK);
+-	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++	dwc3_writel(dwc, DWC3_DCFG, reg);
+ }
+ 
+ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+@@ -4188,7 +4188,7 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 	if (!dwc->softconnect)
+ 		return;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
++	reg = dwc3_readl(dwc, DWC3_DSTS);
+ 	speed = reg & DWC3_DSTS_CONNECTSPD;
+ 	dwc->speed = speed;
+ 
+@@ -4263,11 +4263,11 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 	    !dwc->usb2_gadget_lpm_disable &&
+ 	    (speed != DWC3_DSTS_SUPERSPEED) &&
+ 	    (speed != DWC3_DSTS_SUPERSPEED_PLUS)) {
+-		reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++		reg = dwc3_readl(dwc, DWC3_DCFG);
+ 		reg |= DWC3_DCFG_LPM_CAP;
+-		dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++		dwc3_writel(dwc, DWC3_DCFG, reg);
+ 
+-		reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++		reg = dwc3_readl(dwc, DWC3_DCTL);
+ 		reg &= ~(DWC3_DCTL_HIRD_THRES_MASK | DWC3_DCTL_L1_HIBER_EN);
+ 
+ 		reg |= DWC3_DCTL_HIRD_THRES(dwc->hird_threshold |
+@@ -4290,12 +4290,12 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 		dwc3_gadget_dctl_write_safe(dwc, reg);
+ 	} else {
+ 		if (dwc->usb2_gadget_lpm_disable) {
+-			reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++			reg = dwc3_readl(dwc, DWC3_DCFG);
+ 			reg &= ~DWC3_DCFG_LPM_CAP;
+-			dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++			dwc3_writel(dwc, DWC3_DCFG, reg);
+ 		}
+ 
+-		reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++		reg = dwc3_readl(dwc, DWC3_DCTL);
+ 		reg &= ~DWC3_DCTL_HIRD_THRES_MASK;
+ 		dwc3_gadget_dctl_write_safe(dwc, reg);
+ 	}
+@@ -4401,7 +4401,7 @@ static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
+ 			switch (dwc->link_state) {
+ 			case DWC3_LINK_STATE_U1:
+ 			case DWC3_LINK_STATE_U2:
+-				reg = dwc3_readl(dwc->regs, DWC3_DCTL);
++				reg = dwc3_readl(dwc, DWC3_DCTL);
+ 				u1u2 = reg & (DWC3_DCTL_INITU2ENA
+ 						| DWC3_DCTL_ACCEPTU2ENA
+ 						| DWC3_DCTL_INITU1ENA
+@@ -4558,7 +4558,7 @@ static irqreturn_t dwc3_process_event_buf(struct dwc3_event_buffer *evt)
+ 	ret = IRQ_HANDLED;
+ 
+ 	/* Unmask interrupt */
+-	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
++	dwc3_writel(dwc, DWC3_GEVNTSIZ(0),
+ 		    DWC3_GEVNTSIZ_SIZE(evt->length));
+ 
+ 	evt->flags &= ~DWC3_EVENT_PENDING;
+@@ -4569,8 +4569,8 @@ static irqreturn_t dwc3_process_event_buf(struct dwc3_event_buffer *evt)
+ 	wmb();
+ 
+ 	if (dwc->imod_interval) {
+-		dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), DWC3_GEVNTCOUNT_EHB);
+-		dwc3_writel(dwc->regs, DWC3_DEV_IMOD(0), dwc->imod_interval);
++		dwc3_writel(dwc, DWC3_GEVNTCOUNT(0), DWC3_GEVNTCOUNT_EHB);
++		dwc3_writel(dwc, DWC3_DEV_IMOD(0), dwc->imod_interval);
+ 	}
+ 
+ 	return ret;
+@@ -4619,7 +4619,7 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+ 	if (evt->flags & DWC3_EVENT_PENDING)
+ 		return IRQ_HANDLED;
+ 
+-	count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
++	count = dwc3_readl(dwc, DWC3_GEVNTCOUNT(0));
+ 	count &= DWC3_GEVNTCOUNT_MASK;
+ 	if (!count)
+ 		return IRQ_NONE;
+@@ -4634,7 +4634,7 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+ 	evt->flags |= DWC3_EVENT_PENDING;
+ 
+ 	/* Mask interrupt */
+-	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
++	dwc3_writel(dwc, DWC3_GEVNTSIZ(0),
+ 		    DWC3_GEVNTSIZ_INTMASK | DWC3_GEVNTSIZ_SIZE(evt->length));
+ 
+ 	amount = min(count, evt->length - evt->lpos);
+@@ -4643,7 +4643,7 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+ 	if (amount < count)
+ 		memcpy(evt->cache, evt->buf, count - amount);
+ 
+-	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
++	dwc3_writel(dwc, DWC3_GEVNTCOUNT(0), count);
+ 
+ 	return IRQ_WAKE_THREAD;
+ }
 diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
-index d73e735e4081..c3aa9638b7a5 100644
+index c3aa9638b7a5..45f113b3c146 100644
 --- a/drivers/usb/dwc3/gadget.h
 +++ b/drivers/usb/dwc3/gadget.h
 @@ -132,7 +132,7 @@ static inline void dwc3_gadget_ep_get_transfer_index(struct dwc3_ep *dep)
  {
  	u32			res_id;
  
--	res_id = dwc3_readl(dep->regs, DWC3_DEPCMD);
-+	res_id = dwc3_readl(dep->dwc->regs, DWC3_DEPCMD(dep->number));
+-	res_id = dwc3_readl(dep->dwc->regs, DWC3_DEPCMD(dep->number));
++	res_id = dwc3_readl(dep->dwc, DWC3_DEPCMD(dep->number));
  	dep->resource_index = DWC3_DEPCMD_GET_RSC_IDX(res_id);
  }
  
+@@ -147,7 +147,7 @@ static inline void dwc3_gadget_ep_get_transfer_index(struct dwc3_ep *dep)
+ static inline void dwc3_gadget_dctl_write_safe(struct dwc3 *dwc, u32 value)
+ {
+ 	value &= ~DWC3_DCTL_ULSTCHNGREQ_MASK;
+-	dwc3_writel(dwc->regs, DWC3_DCTL, value);
++	dwc3_writel(dwc, DWC3_DCTL, value);
+ }
+ 
+ #endif /* __DRIVERS_USB_DWC3_GADGET_H */
+diff --git a/drivers/usb/dwc3/io.h b/drivers/usb/dwc3/io.h
+index 1e96ea339d48..7dd0c1e0cf74 100644
+--- a/drivers/usb/dwc3/io.h
++++ b/drivers/usb/dwc3/io.h
+@@ -16,9 +16,10 @@
+ #include "debug.h"
+ #include "core.h"
+ 
+-static inline u32 dwc3_readl(void __iomem *base, u32 offset)
++static inline u32 dwc3_readl(struct dwc3 *dwc, u32 offset)
+ {
+ 	u32 value;
++	void __iomem *base = dwc->regs;
+ 
+ 	/*
+ 	 * We requested the mem region starting from the Globals address
+@@ -37,8 +38,10 @@ static inline u32 dwc3_readl(void __iomem *base, u32 offset)
+ 	return value;
+ }
+ 
+-static inline void dwc3_writel(void __iomem *base, u32 offset, u32 value)
++static inline void dwc3_writel(struct dwc3 *dwc, u32 offset, u32 value)
+ {
++	void __iomem *base = dwc->regs;
++
+ 	/*
+ 	 * We requested the mem region starting from the Globals address
+ 	 * space, see dwc3_probe in core.c.
+diff --git a/drivers/usb/dwc3/ulpi.c b/drivers/usb/dwc3/ulpi.c
+index f23f4c9a557e..57daad15f502 100644
+--- a/drivers/usb/dwc3/ulpi.c
++++ b/drivers/usb/dwc3/ulpi.c
+@@ -33,13 +33,13 @@ static int dwc3_ulpi_busyloop(struct dwc3 *dwc, u8 addr, bool read)
+ 	if (read)
+ 		ns += DWC3_ULPI_BASE_DELAY;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++	reg = dwc3_readl(dwc, DWC3_GUSB2PHYCFG(0));
+ 	if (reg & DWC3_GUSB2PHYCFG_SUSPHY)
+ 		usleep_range(1000, 1200);
+ 
+ 	while (count--) {
+ 		ndelay(ns);
+-		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYACC(0));
++		reg = dwc3_readl(dwc, DWC3_GUSB2PHYACC(0));
+ 		if (reg & DWC3_GUSB2PHYACC_DONE)
+ 			return 0;
+ 		cpu_relax();
+@@ -55,13 +55,13 @@ static int dwc3_ulpi_read(struct device *dev, u8 addr)
+ 	int ret;
+ 
+ 	reg = DWC3_GUSB2PHYACC_NEWREGREQ | DWC3_ULPI_ADDR(addr);
+-	dwc3_writel(dwc->regs, DWC3_GUSB2PHYACC(0), reg);
++	dwc3_writel(dwc, DWC3_GUSB2PHYACC(0), reg);
+ 
+ 	ret = dwc3_ulpi_busyloop(dwc, addr, true);
+ 	if (ret)
+ 		return ret;
+ 
+-	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYACC(0));
++	reg = dwc3_readl(dwc, DWC3_GUSB2PHYACC(0));
+ 
+ 	return DWC3_GUSB2PHYACC_DATA(reg);
+ }
+@@ -73,7 +73,7 @@ static int dwc3_ulpi_write(struct device *dev, u8 addr, u8 val)
+ 
+ 	reg = DWC3_GUSB2PHYACC_NEWREGREQ | DWC3_ULPI_ADDR(addr);
+ 	reg |= DWC3_GUSB2PHYACC_WRITE | val;
+-	dwc3_writel(dwc->regs, DWC3_GUSB2PHYACC(0), reg);
++	dwc3_writel(dwc, DWC3_GUSB2PHYACC(0), reg);
+ 
+ 	return dwc3_ulpi_busyloop(dwc, addr, false);
+ }
 -- 
 2.34.1
 
