@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-32345-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32346-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F8EAD21112
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 20:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 69C71D211A8
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 20:51:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EED1F30124FD
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 19:40:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD5AB3075176
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 19:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 441CD34EEF8;
-	Wed, 14 Jan 2026 19:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C53D34F498;
+	Wed, 14 Jan 2026 19:50:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZmBYlfI5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FhwwjpGQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D57434D4F1
-	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 19:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F30340A49
+	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 19:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768419640; cv=none; b=D8PqPFT404d61Ki5JyYy/3N3B5i2nO1S2lqU2pEx2JUM9i+n2clG3NrEWoXZDq1CnxGcgZLYx3nJ9/IhsA7da3wt/uf2meMO1AQAL9asl05/GAFVzEYj1Vt+f56Nc8SmH5KH2Qtfd4/RJMrPei6ODbet539/jkQy4hLiHRpbCxU=
+	t=1768420254; cv=none; b=UUNJ132p5rxIsmKn93XyrBIBuvWkGa9H76c9Q8zoPDiugbLtMhISRyyth5NrbVkTJGALF5iSFOuojkMCxAWF0+Eg0JNUFTa5P0Ijug1Lwa+lBXcbUDJOS//iOfwTkIcOV/si8Cs9kbEdk8Klwbr/XsP28Cw4MiFvPDxkbCUQ/D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768419640; c=relaxed/simple;
-	bh=ykLH2MgbCvBBlz1nfxnm2nxGWsprbZ68o9/wmnQtSQg=;
+	s=arc-20240116; t=1768420254; c=relaxed/simple;
+	bh=8mHTtru1b4+yfUATw6MSrif/Y0HQtfh84Kq8c5WhyfE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BzW4Ex8XGy9QwuN7nNiFj70GgdlFE2Gd6hKcSxa5UCTFTlldnEm6R/ATXZFNn7o+NLq/Sj8y8SD7Q9lYV9wQPyVrIi67z9hX96Wsw1bnZov2iHD05whuVitZlHZNYnZjV7c1wgMFlULz6WqAYYVT+0mm6o46eXyl98Yp2Hawtww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZmBYlfI5; arc=none smtp.client-ip=209.85.221.47
+	 In-Reply-To:Content-Type; b=qpcsYcGFPg8GnG3DM201O67+KfEMooWGzF1wMFjNhrxFuii7Vy0uwIKnetJJN7pRF0gASoR/fRaAEFw7KkSjnQtSIHqAyKTL4O4b9u/fk8tcYNk6lV4JYCSat7rSgUb51U//5JU5kia3FxnCTXALC1M0QhBys4k5whRfcSTcs0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FhwwjpGQ; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4327555464cso101954f8f.1
-        for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 11:40:37 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47796a837c7so1345455e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 11:50:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768419636; x=1769024436; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768420251; x=1769025051; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Scpe9pFl2VETM92or+Eva19ojkvY4Xd+w6SP7ONyFrE=;
-        b=ZmBYlfI51rt514x4jVU2s6nzIWHbuR43vHtcq+biRQMlpYpBCloeOyyme5NmOATh7f
-         4eOGfT8J39lVkXBg5dmDCu5eWCwly3b3pGPU3h0xYnln/hUN5ApbGGKsymxNHETfuzP+
-         mWsRJgCiEtAvCcFwaHx0BjvbCjF92XQs2LYHMCai0ptmbxmzoDuXhx1C533s2ATg8cKp
-         HHJgx3U08ABQEUa8KM4N1CtFO1ZHbdqHE8lXKUc3pftbpmcuvhBs+Qke30KbCHjkDqxd
-         fea20GF4JC05brbPuLg46oIqIN2yN/H5sbgL7QXZ3Q5Ydu6HB8FHZv6Plh4cFUy/owJE
-         5LXw==
+        bh=le6gqslkb/pdYWHP941oJWvDw7SCegBBL0bv3Ir0ZSE=;
+        b=FhwwjpGQI3pdgkS4Gh1li0gjNu5y6LkxzLFDezH0W0WXvxUO9QPA8gRLfzxqZL1gQ5
+         2DTWFUz6+9zy37IRsjvu6D4ZlaScy+p8fokOq/dSuvOeTH6m6OwY4Tg5V/OTy81QQpQb
+         V2dd1+H+ZZYGYQeO2AJElJ3RAuVnK7m4txJ54Akj6mNQ1eikE2p3p7apIs1vp28HfmiS
+         wmSRakQtovO6FOvKQiW8DNoX3bXkMXvGTG0VACuLZLdvl+3324JxqycDUIOr+CNHF2FB
+         hmJropPofHunYgh4Q6aDtGXLK0fYxHkJCzIa7JExQL47OcOk9jGxKcsSAwbdiRPaYzYr
+         rrTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768419636; x=1769024436;
+        d=1e100.net; s=20230601; t=1768420251; x=1769025051;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Scpe9pFl2VETM92or+Eva19ojkvY4Xd+w6SP7ONyFrE=;
-        b=dNLxwpHt2/lKEG3bhqkiCCXQlLt+jeYxBihxvMht9W69B0tAYHCWRjgqumnQNjvzQV
-         29QyK/1CaZA9LiYHAXQ+pvzlpdtkSS3GGCRBvjTJoRxfBAgSDpQ/VpaP9T6cEk9pLLql
-         DP7suar4KtcLhRH/dTOPxpejpa+VmQmUuTTnAbmDHdLMoMIbLog0BxuxSk8en1GpDckN
-         FAzIQ9CIGfcfsFnKQzxzJyrt3OXonPVjJkOtWpjZaIcek0X7nGWwV0YVwlMuKXLs6C7b
-         pLuS62SdMPYTm7DSjsFrlW+FFCZ563znY8Kbkki0ksfynB8lghE7LwOdnoRDPkguINuv
-         I/HA==
-X-Forwarded-Encrypted: i=1; AJvYcCXqf8Ov6ei5ajXy3mBJb+Z8zMQHjY2dzNpd+tlMrcIqS1ZglTKGOo8pkG5w6/f0NOzybk/y4xsHvZM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSMSjynwcPa53IsNE/EP/TJmXI8+30RCqV0i7EzmTEuTN82Ax7
-	jHVfVpe07cE1EJ4eEo/ii8Kkd0UpZhAQqmUQ6QAMI5P5YALZctzdbuUV
-X-Gm-Gg: AY/fxX7jim0O6xxAPPugm+uFlfNJdUaII/gLF23XFlKMT4NvXkqToBCmHvG5T9SScbH
-	PWdgh1K2s1hGEtqDBGMVL1EJ4x5MWDSroCu8rW/j9NiD8L7DK2m5pnJt8S2IVeIpCFF1+vunetf
-	PxkInCqxNJFu/cw8/A7uxuDzZQ07rwo4GezHpIAtRv/UJu66uITjF7QpvitQR0cbX4L9KKBMvJ8
-	pY4WoVKjuM1cuydtkAyYQuHSpDv0GoE1rrWgdhJ2C1EbKpP/k0cDb7a492ph9x38K9B0hDKkrec
-	tgyPsJZxq7rJX4/2j7hZCkULn3RNFAS+pXLxjhp0N36N6EUTj1zokwMZcAVElhE/5AA4rm8ZcKn
-	wxOKffxp617uFT43JuSK3mZi65sopOtvtFtT4qDJ3aFF/ETQU0tjr+X4JaqIOqLfuLpCxVC2DV3
-	0t9uQ6Poc2IKBec72Tv8cL14ogXF5/ScFdAgDJTisoAqBxvbD5S6ETpLG4HkSzK/Zs0DbTKmTwK
-	CnXlw==
-X-Received: by 2002:a5d:5d0a:0:b0:430:fd84:3175 with SMTP id ffacd0b85a97d-4342c535d4cmr5459711f8f.38.1768419635614;
-        Wed, 14 Jan 2026 11:40:35 -0800 (PST)
+        bh=le6gqslkb/pdYWHP941oJWvDw7SCegBBL0bv3Ir0ZSE=;
+        b=No2kxuy3sugp40GY40bpsjcIhs0xbebqrmserz3tYBEBVegbjTP5ya7t9ymrR/HXP4
+         7fC5T2Kd52aixMbKGIe+4JYNZ/Ue7WChejjoTGoTDNXEdmD0vFxcs3oH+6N6o5HYh/WQ
+         aeMm2saR3UE380N04Nchn9OASZjBffiLBjJNlbwkJdtaOXt91RZMbHSUUGTEI1I/Re/K
+         E8eXTtOLOivbl1Pp73hcZFGyg+E1oaWrt+dX2V/HK44+wAztqfvV7JkPK7KFw3cv6nNr
+         iRJbFQwY/PLHsTiPzC8LIJFJo+u+d4uidsLQC23knYGAA4TAefEvzchVhA7fx7q4vuTE
+         5jwg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTw+GCpcyGWcMZvjGRZDU+urz1kK83Sq/BHwFxQzF5UrTQWYe1rgry8h35dgDyDU5IOF6HH0FFUAo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIiIE5yWxqxKKfuW03bwffTKzCRCv1ZpUNwT3JhNMwmnLSXK/Q
+	TWNPpQgV8VNZAbZxQ1zu3ySfvUULgERz6CLdpHAmOAMoGlrtiCBCdRee
+X-Gm-Gg: AY/fxX6TmNBgP1gkneOHTT6gQh/ukWIIOT1Tzex+qa1t4Np1VsJKr86ECL07ngZtrWH
+	+ddr0NvBshVrY4i/izFVBJZwEQCMBEDGytr4biLLA9C8EKttynsRmfSKPeJ9DTr3bHgJY9nx2sy
+	e1LvR6ANXSlflyYnHc+6E56jr0x5qcJS8EMimh9rZ+LpVCkHjW42hijAQHtTaa3WLg/h9P1ztOj
+	JAHJJh1UZt7BEYva8bihbr4cdUNlz/93/pE6GpBkb+mvIq3e2dLMJ9rX90u6WBwPICLZbUrISk/
+	Bph6W71a3u0Sr/0X8xyXWWbS/nQsthlQ9FdTYQHNM/PujKLUkSOdx8lp1+LhixXuCVEMUDL91K6
+	B2HbFuf/KIMfLcgpRfuZzanFKZiwU7a7myb4h9mSLZW+ywNlUPBUPEz470fsg4n5f3xqC/ybStf
+	chXhO9EMpBmEiZ9n1ZthdPX3tDBzNS69ef/I3PEIl+9f48u1fU4VATv+JfKTdWCdGpVxNGOKZDk
+	uuBg2eQqmQTeKh7
+X-Received: by 2002:a05:600c:3544:b0:479:2f95:5179 with SMTP id 5b1f17b1804b1-47ee335494fmr49144015e9.15.1768420250456;
+        Wed, 14 Jan 2026 11:50:50 -0800 (PST)
 Received: from ?IPV6:2a06:5906:2639:e200:7139:7167:2ab3:2206? ([2a06:5906:2639:e200:7139:7167:2ab3:2206])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-434af64a778sm1065645f8f.3.2026.01.14.11.40.34
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47fd34d93dasm222835e9.2.2026.01.14.11.50.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jan 2026 11:40:35 -0800 (PST)
-Message-ID: <ee4a31e1-f375-4c9b-aa1a-b056f40e0d91@gmail.com>
-Date: Wed, 14 Jan 2026 19:40:34 +0000
+        Wed, 14 Jan 2026 11:50:50 -0800 (PST)
+Message-ID: <e8fac6ba-41fe-4695-bd30-b1e6c3235815@gmail.com>
+Date: Wed, 14 Jan 2026 19:50:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,7 +82,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] rust: driver: introduce a common Driver trait
+Subject: Re: [PATCH 0/6] Address race condition with Device::drvdata()
 To: Danilo Krummrich <dakr@kernel.org>, gregkh@linuxfoundation.org,
  rafael@kernel.org, ojeda@kernel.org, boqun.feng@gmail.com, gary@garyguo.net,
  bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
@@ -93,340 +93,136 @@ Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
  linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
  linux-i2c@vger.kernel.org
 References: <20260107103511.570525-1-dakr@kernel.org>
- <20260107103511.570525-4-dakr@kernel.org>
 Content-Language: en-US
 From: Igor Korotin <igor.korotin.linux@gmail.com>
-In-Reply-To: <20260107103511.570525-4-dakr@kernel.org>
+In-Reply-To: <20260107103511.570525-1-dakr@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/7/2026 10:35 AM, Danilo Krummrich wrote:
-> The Driver trait describes the layout of a specific driver structure,
-> such as `struct pci_driver` or `struct platform_driver`.
+On 1/7/2026 10:34 AM, Danilo Krummrich wrote:
+> Currently, the driver's device private data is allocated and initialized
+> from driver core code called from bus abstractions after the driver's
+> probe() callback returned the corresponding initializer.
 > 
-> In a first step, this replaces the associated type RegType of the
-> RegistrationOps with the Driver::DriverType associated type.
+> Similarly, the driver's device private data is dropped within the
+> remove() callback of bus abstractions after calling the remove()
+> callback of the corresponding driver.
 > 
-> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
-> ---
->   rust/kernel/auxiliary.rs | 18 +++++++++++-------
->   rust/kernel/driver.rs    | 40 +++++++++++++++++++++++++---------------
->   rust/kernel/i2c.rs       | 18 +++++++++++-------
->   rust/kernel/pci.rs       | 18 +++++++++++-------
->   rust/kernel/platform.rs  | 18 +++++++++++-------
->   rust/kernel/usb.rs       | 18 +++++++++++-------
->   6 files changed, 80 insertions(+), 50 deletions(-)
+> However, commit 6f61a2637abe ("rust: device: introduce
+> Device::drvdata()") introduced an accessor for the driver's device
+> private data for a Device<Bound>, i.e. a device that is currently bound
+> to a driver.
 > 
-> diff --git a/rust/kernel/auxiliary.rs b/rust/kernel/auxiliary.rs
-> index 6931f8a4267f..4636b6f41195 100644
-> --- a/rust/kernel/auxiliary.rs
-> +++ b/rust/kernel/auxiliary.rs
-> @@ -23,13 +23,17 @@
->   /// An adapter for the registration of auxiliary drivers.
->   pub struct Adapter<T: Driver>(T);
->   
-> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
-> +// SAFETY:
-> +// - `bindings::auxiliary_driver` is a C type declared as `repr(C)`.
-> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
-> +    type DriverType = bindings::auxiliary_driver;
-> +}
-> +
-> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
->   // a preceding call to `register` has been successful.
->   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-> -    type RegType = bindings::auxiliary_driver;
-> -
->       unsafe fn register(
-> -        adrv: &Opaque<Self::RegType>,
-> +        adrv: &Opaque<Self::DriverType>,
->           name: &'static CStr,
->           module: &'static ThisModule,
->       ) -> Result {
-> @@ -41,14 +45,14 @@ unsafe fn register(
->               (*adrv.get()).id_table = T::ID_TABLE.as_ptr();
->           }
->   
-> -        // SAFETY: `adrv` is guaranteed to be a valid `RegType`.
-> +        // SAFETY: `adrv` is guaranteed to be a valid `DriverType`.
->           to_result(unsafe {
->               bindings::__auxiliary_driver_register(adrv.get(), module.0, name.as_char_ptr())
->           })
->       }
->   
-> -    unsafe fn unregister(adrv: &Opaque<Self::RegType>) {
-> -        // SAFETY: `adrv` is guaranteed to be a valid `RegType`.
-> +    unsafe fn unregister(adrv: &Opaque<Self::DriverType>) {
-> +        // SAFETY: `adrv` is guaranteed to be a valid `DriverType`.
->           unsafe { bindings::auxiliary_driver_unregister(adrv.get()) }
->       }
->   }
-> diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
-> index 649d06468f41..cd1d36c313e1 100644
-> --- a/rust/kernel/driver.rs
-> +++ b/rust/kernel/driver.rs
-> @@ -99,23 +99,33 @@
->   use core::pin::Pin;
->   use pin_init::{pin_data, pinned_drop, PinInit};
->   
-> +/// Trait describing the layout of a specific device driver.
-> +///
-> +/// This trait describes the layout of a specific driver structure, such as `struct pci_driver` or
-> +/// `struct platform_driver`.
-> +///
-> +/// # Safety
-> +///
-> +/// Implementors must guarantee that:
-> +/// - `DriverType` is `repr(C)`.
-> +pub unsafe trait Driver {
-> +    /// The specific driver type embedding a `struct device_driver`.
-> +    type DriverType: Default;
-> +}
-> +
->   /// The [`RegistrationOps`] trait serves as generic interface for subsystems (e.g., PCI, Platform,
->   /// Amba, etc.) to provide the corresponding subsystem specific implementation to register /
-> -/// unregister a driver of the particular type (`RegType`).
-> +/// unregister a driver of the particular type (`DriverType`).
->   ///
-> -/// For instance, the PCI subsystem would set `RegType` to `bindings::pci_driver` and call
-> +/// For instance, the PCI subsystem would set `DriverType` to `bindings::pci_driver` and call
->   /// `bindings::__pci_register_driver` from `RegistrationOps::register` and
->   /// `bindings::pci_unregister_driver` from `RegistrationOps::unregister`.
->   ///
->   /// # Safety
->   ///
-> -/// A call to [`RegistrationOps::unregister`] for a given instance of `RegType` is only valid if a
-> -/// preceding call to [`RegistrationOps::register`] has been successful.
-> -pub unsafe trait RegistrationOps {
-> -    /// The type that holds information about the registration. This is typically a struct defined
-> -    /// by the C portion of the kernel.
-> -    type RegType: Default;
-> -
-> +/// A call to [`RegistrationOps::unregister`] for a given instance of `DriverType` is only valid if
-> +/// a preceding call to [`RegistrationOps::register`] has been successful.
-> +pub unsafe trait RegistrationOps: Driver {
->       /// Registers a driver.
->       ///
->       /// # Safety
-> @@ -123,7 +133,7 @@ pub unsafe trait RegistrationOps {
->       /// On success, `reg` must remain pinned and valid until the matching call to
->       /// [`RegistrationOps::unregister`].
->       unsafe fn register(
-> -        reg: &Opaque<Self::RegType>,
-> +        reg: &Opaque<Self::DriverType>,
->           name: &'static CStr,
->           module: &'static ThisModule,
->       ) -> Result;
-> @@ -134,7 +144,7 @@ unsafe fn register(
->       ///
->       /// Must only be called after a preceding successful call to [`RegistrationOps::register`] for
->       /// the same `reg`.
-> -    unsafe fn unregister(reg: &Opaque<Self::RegType>);
-> +    unsafe fn unregister(reg: &Opaque<Self::DriverType>);
->   }
->   
->   /// A [`Registration`] is a generic type that represents the registration of some driver type (e.g.
-> @@ -146,7 +156,7 @@ unsafe fn register(
->   #[pin_data(PinnedDrop)]
->   pub struct Registration<T: RegistrationOps> {
->       #[pin]
-> -    reg: Opaque<T::RegType>,
-> +    reg: Opaque<T::DriverType>,
->   }
->   
->   // SAFETY: `Registration` has no fields or methods accessible via `&Registration`, so it is safe to
-> @@ -161,13 +171,13 @@ impl<T: RegistrationOps> Registration<T> {
->       /// Creates a new instance of the registration object.
->       pub fn new(name: &'static CStr, module: &'static ThisModule) -> impl PinInit<Self, Error> {
->           try_pin_init!(Self {
-> -            reg <- Opaque::try_ffi_init(|ptr: *mut T::RegType| {
-> +            reg <- Opaque::try_ffi_init(|ptr: *mut T::DriverType| {
->                   // SAFETY: `try_ffi_init` guarantees that `ptr` is valid for write.
-> -                unsafe { ptr.write(T::RegType::default()) };
-> +                unsafe { ptr.write(T::DriverType::default()) };
->   
->                   // SAFETY: `try_ffi_init` guarantees that `ptr` is valid for write, and it has
->                   // just been initialised above, so it's also valid for read.
-> -                let drv = unsafe { &*(ptr as *const Opaque<T::RegType>) };
-> +                let drv = unsafe { &*(ptr as *const Opaque<T::DriverType>) };
->   
->                   // SAFETY: `drv` is guaranteed to be pinned until `T::unregister`.
->                   unsafe { T::register(drv, name, module) }
-> diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
-> index 35b678b78d91..de35961c6903 100644
-> --- a/rust/kernel/i2c.rs
-> +++ b/rust/kernel/i2c.rs
-> @@ -92,13 +92,17 @@ macro_rules! i2c_device_table {
->   /// An adapter for the registration of I2C drivers.
->   pub struct Adapter<T: Driver>(T);
->   
-> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
-> +// SAFETY:
-> +// - `bindings::i2c_driver` is a C type declared as `repr(C)`.
-> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
-> +    type DriverType = bindings::i2c_driver;
-> +}
-> +
-> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
->   // a preceding call to `register` has been successful.
->   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-> -    type RegType = bindings::i2c_driver;
-> -
->       unsafe fn register(
-> -        idrv: &Opaque<Self::RegType>,
-> +        idrv: &Opaque<Self::DriverType>,
->           name: &'static CStr,
->           module: &'static ThisModule,
->       ) -> Result {
-> @@ -133,12 +137,12 @@ unsafe fn register(
->               (*idrv.get()).driver.acpi_match_table = acpi_table;
->           }
->   
-> -        // SAFETY: `idrv` is guaranteed to be a valid `RegType`.
-> +        // SAFETY: `idrv` is guaranteed to be a valid `DriverType`.
->           to_result(unsafe { bindings::i2c_register_driver(module.0, idrv.get()) })
->       }
->   
-> -    unsafe fn unregister(idrv: &Opaque<Self::RegType>) {
-> -        // SAFETY: `idrv` is guaranteed to be a valid `RegType`.
-> +    unsafe fn unregister(idrv: &Opaque<Self::DriverType>) {
-> +        // SAFETY: `idrv` is guaranteed to be a valid `DriverType`.
->           unsafe { bindings::i2c_del_driver(idrv.get()) }
->       }
->   }
-> diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
-> index 82e128431f08..f58ce35d9c60 100644
-> --- a/rust/kernel/pci.rs
-> +++ b/rust/kernel/pci.rs
-> @@ -50,13 +50,17 @@
->   /// An adapter for the registration of PCI drivers.
->   pub struct Adapter<T: Driver>(T);
->   
-> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
-> +// SAFETY:
-> +// - `bindings::pci_driver` is a C type declared as `repr(C)`.
-> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
-> +    type DriverType = bindings::pci_driver;
-> +}
-> +
-> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
->   // a preceding call to `register` has been successful.
->   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-> -    type RegType = bindings::pci_driver;
-> -
->       unsafe fn register(
-> -        pdrv: &Opaque<Self::RegType>,
-> +        pdrv: &Opaque<Self::DriverType>,
->           name: &'static CStr,
->           module: &'static ThisModule,
->       ) -> Result {
-> @@ -68,14 +72,14 @@ unsafe fn register(
->               (*pdrv.get()).id_table = T::ID_TABLE.as_ptr();
->           }
->   
-> -        // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
-> +        // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
->           to_result(unsafe {
->               bindings::__pci_register_driver(pdrv.get(), module.0, name.as_char_ptr())
->           })
->       }
->   
-> -    unsafe fn unregister(pdrv: &Opaque<Self::RegType>) {
-> -        // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
-> +    unsafe fn unregister(pdrv: &Opaque<Self::DriverType>) {
-> +        // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
->           unsafe { bindings::pci_unregister_driver(pdrv.get()) }
->       }
->   }
-> diff --git a/rust/kernel/platform.rs b/rust/kernel/platform.rs
-> index ed889f079cab..e48d055fdc8a 100644
-> --- a/rust/kernel/platform.rs
-> +++ b/rust/kernel/platform.rs
-> @@ -26,13 +26,17 @@
->   /// An adapter for the registration of platform drivers.
->   pub struct Adapter<T: Driver>(T);
->   
-> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
-> +// SAFETY:
-> +// - `bindings::platform_driver` is a C type declared as `repr(C)`.
-> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
-> +    type DriverType = bindings::platform_driver;
-> +}
-> +
-> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
->   // a preceding call to `register` has been successful.
->   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-> -    type RegType = bindings::platform_driver;
-> -
->       unsafe fn register(
-> -        pdrv: &Opaque<Self::RegType>,
-> +        pdrv: &Opaque<Self::DriverType>,
->           name: &'static CStr,
->           module: &'static ThisModule,
->       ) -> Result {
-> @@ -55,12 +59,12 @@ unsafe fn register(
->               (*pdrv.get()).driver.acpi_match_table = acpi_table;
->           }
->   
-> -        // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
-> +        // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
->           to_result(unsafe { bindings::__platform_driver_register(pdrv.get(), module.0) })
->       }
->   
-> -    unsafe fn unregister(pdrv: &Opaque<Self::RegType>) {
-> -        // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
-> +    unsafe fn unregister(pdrv: &Opaque<Self::DriverType>) {
-> +        // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
->           unsafe { bindings::platform_driver_unregister(pdrv.get()) };
->       }
->   }
-> diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
-> index d10b65e9fb6a..32f4b2d55dfb 100644
-> --- a/rust/kernel/usb.rs
-> +++ b/rust/kernel/usb.rs
-> @@ -27,13 +27,17 @@
->   /// An adapter for the registration of USB drivers.
->   pub struct Adapter<T: Driver>(T);
->   
-> -// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
-> +// SAFETY:
-> +// - `bindings::usb_driver` is a C type declared as `repr(C)`.
-> +unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
-> +    type DriverType = bindings::usb_driver;
-> +}
-> +
-> +// SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
->   // a preceding call to `register` has been successful.
->   unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-> -    type RegType = bindings::usb_driver;
-> -
->       unsafe fn register(
-> -        udrv: &Opaque<Self::RegType>,
-> +        udrv: &Opaque<Self::DriverType>,
->           name: &'static CStr,
->           module: &'static ThisModule,
->       ) -> Result {
-> @@ -45,14 +49,14 @@ unsafe fn register(
->               (*udrv.get()).id_table = T::ID_TABLE.as_ptr();
->           }
->   
-> -        // SAFETY: `udrv` is guaranteed to be a valid `RegType`.
-> +        // SAFETY: `udrv` is guaranteed to be a valid `DriverType`.
->           to_result(unsafe {
->               bindings::usb_register_driver(udrv.get(), module.0, name.as_char_ptr())
->           })
->       }
->   
-> -    unsafe fn unregister(udrv: &Opaque<Self::RegType>) {
-> -        // SAFETY: `udrv` is guaranteed to be a valid `RegType`.
-> +    unsafe fn unregister(udrv: &Opaque<Self::DriverType>) {
-> +        // SAFETY: `udrv` is guaranteed to be a valid `DriverType`.
->           unsafe { bindings::usb_deregister(udrv.get()) };
->       }
->   }
+> Obviously, this is in conflict with dropping the driver's device private
+> data in remove(), since a device can not be considered to be fully
+> unbound after remove() has finished:
+> 
+> We also have to consider registrations guarded by devres - such as IRQ
+> or class device registrations - which are torn down after remove() in
+> devres_release_all().
+> 
+> Thus, it can happen that, for instance, a class device or IRQ callback
+> still calls Device::drvdata(), which then runs concurrently to remove()
+> (which sets dev->driver_data to NULL and drops the driver's device
+> private data), before devres_release_all() started to tear down the
+> corresponding registration. This is because devres guarded registrations
+> can, as expected, access the corresponding Device<Bound> that defines
+> their scope.
+> 
+> In C it simply is the driver's responsibility to ensure that its device
+> private data is freed after e.g. an IRQ registration is unregistered.
+> 
+> Typically, C drivers achieve this by allocating their device private data
+> with e.g. devm_kzalloc() before doing anything else, i.e. before e.g.
+> registering an IRQ with devm_request_threaded_irq(), relying on the
+> reverse order cleanup of devres [1].
+> 
+> Technically, we could do something similar in Rust. However, the
+> resulting code would be pretty messy:
+> 
+> In Rust we have to differentiate between allocated but uninitialized
+> memory and initialized memory in the type system. Thus, we would need to
+> somehow keep track of whether the driver's device private data object
+> has been initialized (i.e. probe() was successful and returned a valid
+> initializer for this memory) and conditionally call the destructor of
+> the corresponding object when it is freed.
+> 
+> This is because we'd need to allocate and register the memory of the
+> driver's device private data *before* it is initialized by the
+> initializer returned by the driver's probe() callback, because the
+> driver could already register devres guarded registrations within
+> probe() outside of the driver's device private data initializer.
+> 
+> Luckily there is a much simpler solution: Instead of dropping the
+> driver's device private data at the end of remove(), we just drop it
+> after the device has been fully unbound, i.e. after all devres callbacks
+> have been processed.
+> 
+> For this, we introduce a new post_unbind() callback private to the
+> driver-core, i.e. the callback is neither exposed to drivers, nor to bus
+> abstractions.
+> 
+> This way, the driver-core code can simply continue to conditionally
+> allocate the memory for the driver's device private data when the
+> driver's initializer is returned from probe() - no change needed - and
+> drop it when the driver-core code receives the post_unbind() callback.
+> 
+> --
+> 
+> Dependency wise we need a common Driver trait that describes the layout of a
+> specific driver structure, such as struct pci_driver or struct platform_driver.
+> Additional to this specific driver type (which was previously the associated
+> type RegType of the RegistrationOps) it provides the offset to the embedded
+> struct device_driver and the type of the driver's device private data.
+> 
+> This patch series contains two additional dependencies:
+> 
+>    (1) A fix for i2c::Driver::shutdown() to not free the driver's device
+>        private data at all, which otherwise causes the exact same bug, and
+>        is not necessary in the first place anyways.
+> 
+>    (2) Add the auxiliary::Driver::unbind() callback. Strictly speaking,
+>        this is not a dependency, but without this patch the main fix of this
+>        series leaves the remove() callback of the auxiliary bus
+>        abstraction with either dead code or quite some code removed;
+>        code that we would otherwise add back immediately afterwards.
+> 
+> --
+> 
+> [1] In fact, the cleanup ordering of devres is a separate challenge in
+>      Rust, since it is technically unsound to rely on the driver to pick
+>      the correct order. I am already working on a solution for this;
+>      luckily this also has some synergies with optimizing the required
+>      synchronize_rcu() calls required by the Rust Devres container
+>      structure down to exactly one per driver unbind.
+> 
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git/log/?h=driver/post_unbind
+> 
+> Danilo Krummrich (6):
+>    rust: i2c: do not drop device private data on shutdown()
+>    rust: auxiliary: add Driver::unbind() callback
+>    rust: driver: introduce a common Driver trait
+>    rust: driver: add DEVICE_DRIVER_OFFSET to the Driver trait
+>    rust: driver: add DriverData type to the generic Driver trait
+>    rust: driver: drop device private data post unbind
+> 
+>   drivers/base/dd.c             |  4 ++
+>   include/linux/device/driver.h | 11 +++++
+>   rust/kernel/auxiliary.rs      | 41 +++++++++++++----
+>   rust/kernel/device.rs         | 20 ++++----
+>   rust/kernel/driver.rs         | 86 ++++++++++++++++++++++++++++-------
+>   rust/kernel/i2c.rs            | 31 ++++++++-----
+>   rust/kernel/pci.rs            | 27 +++++++----
+>   rust/kernel/platform.rs       | 27 +++++++----
+>   rust/kernel/usb.rs            | 27 +++++++----
+>   9 files changed, 203 insertions(+), 71 deletions(-)
+> 
+> 
+> base-commit: 8510ef5e3cfbd7d59a16845f85cd0194a8689761
 
-Acked-by: Igor Korotin <igor.korotin.linux@gmail.com>
+For the I2C parts: Acked-by: Igor Korotin <igor.korotin.linux@gmail.com>
 
-Cheers
+Thanks
 Igor
+
 
