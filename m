@@ -1,56 +1,52 @@
-Return-Path: <linux-usb+bounces-32306-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32307-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE430D1BDE8
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 01:50:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F646D1BE10
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 02:02:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DF493302E320
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 00:50:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7031A3022197
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 01:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08A0F223336;
-	Wed, 14 Jan 2026 00:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 916531B6527;
+	Wed, 14 Jan 2026 01:02:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aqqr0e1x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RoL96ATh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B407B67E;
-	Wed, 14 Jan 2026 00:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2298250097D
+	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 01:02:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768351857; cv=none; b=OTb5bKzY0mxFENJPQe9XcbOK2o782hFkROQPOQIaRznovnVYjTTzgbkfX4i+w4mjhSVtuijo1alC2i+F+D4iCuG003CI+jxgo7RIjrTnWwYA1s1DuJ/teLtnkdeEVcXI3YKW13jPxA/EZs51JXMbHjpTSlImX88tq4POpOQGqjY=
+	t=1768352526; cv=none; b=EgYwIGfKWW8LRLJUON7dl4F3RsgyWbkBZceMkCz1kSUIRxv6xCyd34kgwjS+Fn00yglPNtukk0DWb3NvScuyjANch9YW8U4UWC1F7CgELot0WNPa1nlFgFL4tvVA9Idghg1EwCKGeJdLC5vOz192zuI59fmYgcg/sEA/KRjx+o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768351857; c=relaxed/simple;
-	bh=+4hoae6wCkSkzxItSPvkfqfjm0ujTzA0v4ghsxEfF+g=;
+	s=arc-20240116; t=1768352526; c=relaxed/simple;
+	bh=YjncadZVzrqakw9j1SMG3xDaXRFUsIdtHHNQTNl1qS4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XhZ/sby7Rd7YylHMX8dM+zDgqNex09qonjcWIE+P+unj5p3sPrA98q9M7VwmJDc9hZgDm4i1MCR4bSYdmiBqe/mS2ssV7fAGzhPPva0rIfmwZJOiNx+N5p7a5VDwuhnxG7sEBKiPtQSlH64O0rW5YWVx0zqhXjt/JoJLgNxYuqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aqqr0e1x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67236C116C6;
-	Wed, 14 Jan 2026 00:50:55 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nxeb2TVyCZYztsXPYWEQW9MF11CJq3ccyne5uAry3OGZZJJbi1tglLbQ4a1+63FViwMQeFVX6791owVy6351Du3kXrlQRkEdGnKLx0L909PXcDNznuRKW9f/C7dOMK1X3Fwwv/K31BsSkFWplDgW//Ku5cohTkE/zb+12QXjmbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RoL96ATh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8EBC116C6;
+	Wed, 14 Jan 2026 01:02:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768351857;
-	bh=+4hoae6wCkSkzxItSPvkfqfjm0ujTzA0v4ghsxEfF+g=;
+	s=k20201202; t=1768352525;
+	bh=YjncadZVzrqakw9j1SMG3xDaXRFUsIdtHHNQTNl1qS4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Aqqr0e1xICwOF3fuLxxhjPVYLGsxyHEM/JW9DbLtIZwh3nm3diO4PBgjuH01Ze7/h
-	 ptMOH0YCux8hh2JJWA23nH+WrwK+qe2Bqr/INhbUXFsGzk1tyjb1195MsZS7xlhF+N
-	 MG4tcJrU7q6dcNnSBH1xu56kmqEqJjReYygDFph/BNOQnXMT9DMyz5Urfk4/t0HNid
-	 Iw/BnftztMBeCt3Qa1BFsSao91JaeD42u9spmujPfOVitG/PdrCbYQmOdNeCdgIic4
-	 JJfjZ6ZUqQdhhulnaSOftNuuRmOUOWB70AG0UV7TZrsuV49Ms5SJNDf+q32pekT+wH
-	 a6jBTZK5uWPtA==
-Date: Wed, 14 Jan 2026 08:50:52 +0800
+	b=RoL96ATh61zcNlvXfIy7fwgrqQWTT5+ztdNroac/yCSXtWXagIgjg3buBt4zYMD9/
+	 Kb2VPexfoPhBeMwqs/+Nx1EYwudJfbY/ZcDhuPmyEOUl/PBmloYcaua0J+hEgBzUTP
+	 KR/WeEXf/cmy2BDamNePhVi4FxVbH701vaHwn6Hk5aYwQQETUKmFmxzVcZRGakAuIt
+	 HIWHxMqXBqHw78QYmvh8B2E8SY0dp/kp3peeRagaOvDZoddfwNAX4ZLwcH4NsxRGvx
+	 ACcJpdMKh0wVjlxvVe+J3/+c5xysg4klorIiiL6AvgHunyjDe6BPMEFL3enKuqcQe6
+	 8Or+yLraJcAcw==
+Date: Wed, 14 Jan 2026 09:02:02 +0800
 From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com,
-	linux-usb@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	jun.li@nxp.com
-Subject: Re: [PATCH v2] usb: chipidea: ci_hdrc_imx: use "wakeup" suffix for
- wakeup interrupt name
-Message-ID: <20260114005052.GA2295746@nchen-desktop>
-References: <20260112110408.3263954-1-xu.yang_2@nxp.com>
+To: Mario Peter <mario.peter@leica-geosystems.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: chipidea: udc: fix DMA and SG cleanup in
+ _ep_nuke()
+Message-ID: <20260114010202.GB2295746@nchen-desktop>
+References: <20260108165902.795354-1-mario.peter@leica-geosystems.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,58 +55,76 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260112110408.3263954-1-xu.yang_2@nxp.com>
+In-Reply-To: <20260108165902.795354-1-mario.peter@leica-geosystems.com>
 
-On 26-01-12 19:04:08, Xu Yang wrote:
-> Currently the wakeup and controller interrupt name are same. It's not
-> easy to find the correct one in /proc/interrupt at the first glance.
-> Rename the wakeup interrupt name for better distinction.
+On 26-01-08 16:59:02, Mario Peter wrote:
+> The ChipIdea UDC driver can encounter "not page aligned sg buffer"
+> errors when a USB device is reconnected after being disconnected
+> during an active transfer. This occurs because _ep_nuke() returns
+> requests to the gadget layer without properly unmapping DMA buffers
+> or cleaning up scatter-gather bounce buffers.
 > 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> Root cause:
+> When a disconnect happens during a multi-segment DMA transfer, the
+> request's num_mapped_sgs field and sgt.sgl pointer remain set with
+> stale values. The request is returned to the gadget driver with status
+> -ESHUTDOWN but still has active DMA state. If the gadget driver reuses
+> this request on reconnect without reinitializing it, the stale DMA
+> state causes _hardware_enqueue() to skip DMA mapping (seeing non-zero
+> num_mapped_sgs) and attempt to use freed/invalid DMA addresses,
+> leading to alignment errors and potential memory corruption.
+> 
+> The normal completion path via _hardware_dequeue() properly calls
+> usb_gadget_unmap_request_by_dev() and sglist_do_debounce() before
+> returning the request. The _ep_nuke() path must do the same cleanup
+> to ensure requests are returned in a clean, reusable state.
+> 
+> Fix:
+> Add DMA unmapping and bounce buffer cleanup to _ep_nuke() to mirror
+> the cleanup sequence in _hardware_dequeue():
+> - Call usb_gadget_unmap_request_by_dev() if num_mapped_sgs is set
+> - Call sglist_do_debounce() with copy=false if bounce buffer exists
+> 
+> This ensures that when requests are returned due to endpoint shutdown,
+> they don't retain stale DMA mappings. The 'false' parameter to
+> sglist_do_debounce() prevents copying data back (appropriate for
+> shutdown path where transfer was aborted).
+> 
+> Signed-off-by: Mario Peter <mario.peter@leica-geosystems.com>
 
 Acked-by: Peter Chen <peter.chen@kernel.org>
 
 Peter
-> 
 > ---
-> Changs in v2:
->  - check return value
-> ---
->  drivers/usb/chipidea/ci_hdrc_imx.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-> index d4ee9e16332f..56d2ba824a0b 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
-> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-> @@ -385,6 +385,7 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
->  	const struct ci_hdrc_imx_platform_flag *imx_platform_flag;
->  	struct device_node *np = pdev->dev.of_node;
->  	struct device *dev = &pdev->dev;
-> +	const char *irq_name;
->  
->  	imx_platform_flag = of_device_get_match_data(&pdev->dev);
->  
-> @@ -525,10 +526,16 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
->  
->  	data->wakeup_irq = platform_get_irq_optional(pdev, 1);
->  	if (data->wakeup_irq > 0) {
-> +		irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s:wakeup", pdata.name);
-> +		if (!irq_name) {
-> +			dev_err_probe(dev, -ENOMEM, "failed to create irq_name\n");
-> +			goto err_clk;
-> +		}
+> v1: submitted (https://lore.kernel.org/linux-usb/ofw7h7s7jbhzjzbj6fpkzp5m2av25ovlyfp7fdlcvt2dd6x6a5@kx3rnlojdzdy/)
+> v2:
+> * dropped redundant req.num_mapped_sgs check
+> * removed obsolete brackets
+> 
+>  drivers/usb/chipidea/udc.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+> index 64a421ae0f05..c8d931d9d433 100644
+> --- a/drivers/usb/chipidea/udc.c
+> +++ b/drivers/usb/chipidea/udc.c
+> @@ -931,6 +931,13 @@ __acquires(hwep->lock)
+>  		list_del_init(&hwreq->queue);
+>  		hwreq->req.status = -ESHUTDOWN;
+> 
+> +		/* Unmap DMA and clean up bounce buffers before giving back */
+> +		usb_gadget_unmap_request_by_dev(hwep->ci->dev->parent,
+> +					&hwreq->req, hwep->dir);
 > +
->  		ret = devm_request_threaded_irq(dev, data->wakeup_irq,
->  						NULL, ci_wakeup_irq_handler,
->  						IRQF_ONESHOT | IRQF_NO_AUTOEN,
-> -						pdata.name, data);
-> +						irq_name, data);
->  		if (ret)
->  			goto err_clk;
->  	}
-> -- 
-> 2.34.1
+> +		if (hwreq->sgt.sgl)
+> +			sglist_do_debounce(hwreq, false);
+> +
+>  		if (hwreq->req.complete != NULL) {
+>  			spin_unlock(hwep->lock);
+>  			usb_gadget_giveback_request(&hwep->ep, &hwreq->req);
+> --
+> 2.43.0
 > 
 
 -- 
