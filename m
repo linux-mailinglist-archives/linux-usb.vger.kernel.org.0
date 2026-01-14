@@ -1,136 +1,123 @@
-Return-Path: <linux-usb+bounces-32319-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32320-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64BEBD1D236
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 09:35:39 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 070D1D1D410
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 09:51:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 24BB83051EA8
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 08:33:48 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 09C1D300D430
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jan 2026 08:51:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9881237F115;
-	Wed, 14 Jan 2026 08:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560903803CF;
+	Wed, 14 Jan 2026 08:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="H+kCVuP/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3mbw00g"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3848C37E2F8;
-	Wed, 14 Jan 2026 08:33:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D6037F8C9
+	for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 08:51:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768379624; cv=none; b=auR7JTSbwmjpJn6vKAQDEdjQlAFU2+nUVmjwFZx2y+0+oa8ezgHD93CWo3VA3lPk0KF9DoUYI7bpex5UOyiGIguzZzafJra0OEydnQk8buivCc1bVa/eyEtoivs+enOmTc1+cxFAexHTIZDvazbGE31PP5kFQxgn6+nQs8r9L6s=
+	t=1768380694; cv=none; b=VZTgPCtFrtfOpedOQSszGg1kHT2mq3OgVonnJLRSMtin0nBaNlpcE6UFHY4/kNBmV4FvUifbB6JZO3Z3uWUtNqFMhqE91KrBtuyhtt2PEL7OFlRCi+YWiiR1Uec9D19B2ZYR+TRDPclbuJCGoIOw6NOcgLky3hRT4lg7GcDeb/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768379624; c=relaxed/simple;
-	bh=SdOnQlW7B/5BOkOpSkztasF63ONbiG4MViw4r59Jczo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LfSOpaj+dt8/tFxKCMW5MktL5AyHUFu8X97JXBCyAYN76vaxNbQZTJs/+lnkxjYZGWdZj2Hj5eVacK2Lv3xt1PnTaFHOpYeeOHK/oFKTXmwP+T6uqWiavRuHMvN9XLnmICvv8P2ZRblfu4v4MKp8H3RVsb6FII8/scmnLQsorhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=H+kCVuP/; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-152.bb.dnainternet.fi [81.175.209.152])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 824C1316;
-	Wed, 14 Jan 2026 09:33:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1768379592;
-	bh=SdOnQlW7B/5BOkOpSkztasF63ONbiG4MViw4r59Jczo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H+kCVuP/yBibKyA/dCuZin8bNqVedbrccHcitCmBtIhkAQo4g+md+4Ql4RmnvKXpy
-	 fzxQxObiv82SPw09DmFrwzksChAF51H2wNX6kfH6Xs2Lk7DX+x0iQVdcavz2asF1rl
-	 t4cetvj12+RkDoKkuQo4bPg+VfHXpmeqRUGtzrz8=
-Date: Wed, 14 Jan 2026 10:33:17 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Del Regno <angelogioacchino.delregno@collabora.com>,
-	Tianping Fang <tianping.fang@mediatek.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix I2C bus node names in examples
-Message-ID: <20260114083317.GH30544@pendragon.ideasonboard.com>
-References: <20260114081322.53411-2-krzysztof.kozlowski@oss.qualcomm.com>
+	s=arc-20240116; t=1768380694; c=relaxed/simple;
+	bh=OE9GZ1UPGg7x7F49i2t3FY2UpVoS6kq5wHMQbbxduyg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=V2jiVnYE4EF30xHaD8UG9gqGclSVlF6AkJ77TatwiyfS1sDdUKqiYXcE6uk4vHOUD2EUaIXKSIO3YNKv1dDQg/pR7RWnqi4JOkx3Cwfx5K4/8Xjr2eEMW6rKT91L7hHwK/YPJvlMSGxGVXRzsNhwsYmAe59Ji098rpC3+HFXTh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3mbw00g; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7b90db89b09so412790b3a.0
+        for <linux-usb@vger.kernel.org>; Wed, 14 Jan 2026 00:51:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768380691; x=1768985491; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oAEfI6V7TMd6SFDq7Kd7N1hzP70TqG2e4M3DDJvaCMY=;
+        b=R3mbw00gYLLw44nuQc11i1E/7eT9u4cd2W/vxYoNh+xu5XuaS4N+8civsS+orTiATw
+         SIa1c033rU9SUh6DP7s2HgSNuvX4Xnjcr+Jltx66HF18Hh9LljzM9z+s4qhtjwJJHmPX
+         OZgpHQxsi7YYzq5p61n6wTaghmRrhQGX4AN1WZf9fp+UWAVnXAynJWqFfsqrLwErASMn
+         IzezYCvAPHMCtUSj8PN2ZWhyFM/EOgtR+joNA30SMnO2K2GlEk8IB4EbApAcFHYW+zaa
+         3zq94v2UXITZWb0U6D9KqWuIOcwZWhQNO6Ix5yHGBgjiA4QFOSN/rByPOPiWJGAAPXj9
+         aNOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768380691; x=1768985491;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=oAEfI6V7TMd6SFDq7Kd7N1hzP70TqG2e4M3DDJvaCMY=;
+        b=coN2tJmZi1ZxCKkD7z9J2k0ttPIqfVClRFbJOGK3kh186NatfR5qxK6O13GjwrUzVe
+         DGBT1bPtc0aLfWU2owmjvuvrbUm9CJTKdGI7e3wxYI/kOuqquKMdeHaK6cHQGY04xpxj
+         NlOmrgkngJ2OmsREzayUwSUp85hvAuwx3Zem46H0qNvZ3Tl2ASwjXeSDXghKXoHXHQLw
+         DY64/Q4uvC9jGIWcABPnygpZ+lJYCSeNd/n9Xt01ipEqIsebfvHMaboFNjNWK2ZNmtPi
+         RBjgoC1l/Q/ggz2Q/ld6rvM6LfRke1MIGEzsEud4OGPM5uSnhaXMCUDPr4D4EYhlqRyy
+         8Gzw==
+X-Forwarded-Encrypted: i=1; AJvYcCWoG6EqewczrtTB4Ox83EDJ/WDqkI4hQV2aM+Fze6Ijz9H59YDJDcPzloeNGIhuuxrMSR3amY06y3Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBWo6Poj8RK9fGG7UElNmSWxOrafHdwzUyKjSu6+fts9zc5S9r
+	FxVhjyFODnPwq1zxvIgTHDKgQ3gGwUeqGzhNwe7rFvlkNHilgtUnQZY/
+X-Gm-Gg: AY/fxX4E211P5RByFg/DEHnP2vt6J/gDgWZhBBUXk/ir4UPip8a0BBI8ou8d0W/TZ+L
+	9OhdTXN+w7yfk2DblR8MY2+WxOgANy0VFRhbFobGaabYXN4SoMW70gUWjZUeQsShkTUiMIZajj1
+	HuFSN64AdHB0AedhrBdstgyc4AUbLbMC9hoa6dnarFFnKDhJmijNCeQigzm7UNw9LiJKDbO1CqN
+	CCGmru/NSitnGQdJmmLUrTRy8EqTlN3lruI5E/PtOkKB5WN5WLRMKxYhXf5tHPnt8PQGAQkrom6
+	vpDMZfvDjhO6jeoVSk5UEcNCecW/QhoWqWwmkX5IbKVJI+d07B4b7LT+LGzli2ifH4ej2tMsPBC
+	0a/DR3t2ZhubbMKsWt6g7LxujhrHtLER3f49lZ4aOOvx/LmY01L9U07LhaDU9d9XMnaofBOz8Fv
+	vfHXc2PApIWg==
+X-Received: by 2002:a05:6a21:164a:b0:342:8c38:ec2 with SMTP id adf61e73a8af0-38bed0b2884mr1498192637.1.1768380691048;
+        Wed, 14 Jan 2026 00:51:31 -0800 (PST)
+Received: from MiniPC.. ([47.246.98.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819c52fc9bdsm22557474b3a.32.2026.01.14.00.51.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 00:51:30 -0800 (PST)
+From: weipeng <coderlogicwei@gmail.com>
+To: oneukum@suse.com,
+	linux-i2c@vger.kernel.org
+Cc: anna-maria@linutronix.de,
+	coderlogicwei@gmail.com,
+	frederic@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	tglx@linutronix.de
+Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
+Date: Wed, 14 Jan 2026 16:51:25 +0800
+Message-Id: <20260114085125.859740-1-coderlogicwei@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <8bed5082-0aef-4dee-8239-c3e8aba50f9f@suse.com>
+References: <8bed5082-0aef-4dee-8239-c3e8aba50f9f@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260114081322.53411-2-krzysztof.kozlowski@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 14, 2026 at 09:13:23AM +0100, Krzysztof Kozlowski wrote:
-> I2C bus node names are expected to be just "i2c", if there is just one
-> such node in given example.  Replace remaining bad examples with
-> scripted:
-> 
->   git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/i2c[0-9] {/i2c {/'
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Hi,
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+i2c_del_adapter in i2c-core-base.c:
 
-> ---
-> 
-> Like Rob's commit 20a72af11f41 ("dt-bindings: Fix SPI and I2C bus node
-> names in examples"). I checked also for SPI.
-> 
-> Rebased on Rob's tree - can you pick it up directly? Applies also on
-> linux-next, so I do not expect conflicts.
-> ---
->  .../bindings/embedded-controller/lenovo,yoga-c630-ec.yaml       | 2 +-
->  Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml   | 2 +-
->  Documentation/devicetree/bindings/usb/ite,it5205.yaml           | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-c630-ec.yaml b/Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-c630-ec.yaml
-> index a029b38e8dc0..c88fbd6ad940 100644
-> --- a/Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-c630-ec.yaml
-> +++ b/Documentation/devicetree/bindings/embedded-controller/lenovo,yoga-c630-ec.yaml
-> @@ -50,7 +50,7 @@ additionalProperties: false
->  examples:
->    - |+
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c1 {
-> +    i2c {
->          clock-frequency = <400000>;
->  
->          #address-cells = <1>;
-> diff --git a/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml b/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml
-> index a89f740214f7..dffd23ca4839 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml
-> @@ -95,7 +95,7 @@ examples:
->      #include <dt-bindings/gpio/gpio.h>
->      #include <dt-bindings/media/video-interfaces.h>
->  
-> -    i2c0 {
-> +    i2c {
->          #address-cells = <1>;
->          #size-cells = <0>;
->  
-> diff --git a/Documentation/devicetree/bindings/usb/ite,it5205.yaml b/Documentation/devicetree/bindings/usb/ite,it5205.yaml
-> index 889710733de5..045fcb41ac4b 100644
-> --- a/Documentation/devicetree/bindings/usb/ite,it5205.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ite,it5205.yaml
-> @@ -49,7 +49,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/irq.h>
-> -    i2c2 {
-> +    i2c {
->          #address-cells = <1>;
->          #size-cells = <0>;
->  
+> void i2c_del_adapter(struct i2c_adapter *adap)
+> {
+> ...
+> /* wait until all references to the device are gone
+>  *
+>  * FIXME: This is old code and should ideally be replaced by an
+>  * alternative which results in decoupling the lifetime of the struct
+>  * device from the i2c_adapter, like spi or netdev do. Any solution
+>  * should be thoroughly tested with DEBUG_KOBJECT_RELEASE enabled!
+>  */
+> init_completion(&adap->dev_released);
+> device_unregister(&adap->dev);
+> wait_for_completion(&adap->dev_released);
+> ...
+> }
 
--- 
-Regards,
+This issue looks like caused by i2c_del_adapter(). It waits for too long so
+it may cause the hung.
 
-Laurent Pinchart
+Thanks,
+weipeng
 
