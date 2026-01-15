@@ -1,120 +1,123 @@
-Return-Path: <linux-usb+bounces-32388-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32389-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98BF6D2439C
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 12:41:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA466D244D3
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 12:49:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA9D33049C6A
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 11:39:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2F20730F7A5B
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 11:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D503793BF;
-	Thu, 15 Jan 2026 11:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FFB36CDF9;
+	Thu, 15 Jan 2026 11:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="QD02b6F3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC238361657;
-	Thu, 15 Jan 2026 11:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67EED37E307;
+	Thu, 15 Jan 2026 11:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768477183; cv=none; b=QCIlNng7ejdeqdFmh2w7NSk6HxiCiWfDbAGLef+aMcDKukS9abdWlQM7UM53dBZQD8kiMG3f6kX2CiaHaQr8UPtnx8f9ZG+OrTwnLjPi/ccxrSBh2SzhxZ9ToxwqJc0VIbatddlS2kgzLJJguCCwLtqm/NOV/UsUwIuZewAkanQ=
+	t=1768477371; cv=none; b=VJl6cZCYbJebjs34bib8SeyVp/5o7jtrnItIzisk3Ca4c1cqomjFVXTW72jSvmokmbmfqoK96cS5bFu3VXCGYGDthd5LFYevXa+jgosWLhxi1JwUeo1nsm434o0O7VwH2IJLesnm+A2GG1LxactNLuG/TVCgxCcO+R07/7M8eLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768477183; c=relaxed/simple;
-	bh=OUDxttc+TrkS1/SKkfxsCtEnthsYHfMYRd5fFscgGJg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vg98vpKkYZsWHqPcD9LaFyqU0ybtJHFzxNesDj7Ga3sGmnjsm7CTUIVC5AK7wGlNSO6YOJZBpsOnLAZMe6+TTkxUdI8B0Dh267QzusZXsxk3/WnnsmoEZzq9soTSnCF2X5nhfzuXOYDgNFOPoFdkljpb/1zJwzr6ywJoDj7h25w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from duge-virtual-machine (unknown [183.192.221.134])
-	by APP-05 (Coremail) with SMTP id zQCowAB3zhHf0Whp6EcVBQ--.27569S2;
-	Thu, 15 Jan 2026 19:39:13 +0800 (CST)
-Date: Thu, 15 Jan 2026 19:39:11 +0800
-From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: vkoul@kernel.org, linux-usb@vger.kernel.org, conor+dt@kernel.org,
-	krzk+dt@kernel.org, linux-kernel@vger.kernel.org, cyy@cyyself.name,
-	alex@ghiti.fr, pjw@kernel.org, kingxukai@zohomail.com,
-	conor@kernel.org, aou@eecs.berkeley.edu,
-	linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-	neil.armstrong@linaro.org, gaohan@iscas.ac.cn,
-	linux-phy@lists.infradead.org, gregkh@linuxfoundation.org,
-	18771902331@163.com, devicetree@vger.kernel.org,
-	TroyMitchell988@gmail.com
-Subject: Re: [PATCH v2 2/4] dt-bindings: usb: dwc2: Add support for Canaan
- K230 SoC
-Message-ID: <aWjR3zQqgi7ZHUEZ@duge-virtual-machine>
-References: <20260115064223.21926-1-jiayu.riscv@isrc.iscas.ac.cn>
- <20260115064223.21926-3-jiayu.riscv@isrc.iscas.ac.cn>
- <176846580373.38125.3306033410225962520.robh@kernel.org>
+	s=arc-20240116; t=1768477371; c=relaxed/simple;
+	bh=63dl3TNPU5nwdThJj/EBkKixN0LIH7NW8BAMlypNW+k=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=YM2zmB4SDRyEiv7iritD3+6o8xLWf1WNQY61L7P4St80+U+wWCw/8DycZkdi34teaKhakPy9BSg0hqunhEjUPUASmJbz3IS1KKsw3MsAiehswjBPKuvGrNR5Ka1PQARTm2Pb4cOnfweudDV0vYv6vLqfUmCYnLvQKDXsYOMftf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=QD02b6F3; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 60FBgLHS12959073, This message is accepted by code: ctloc85258
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
+	t=1768477341; bh=63dl3TNPU5nwdThJj/EBkKixN0LIH7NW8BAMlypNW+k=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:MIME-Version;
+	b=QD02b6F3HVNB9WkRoVclfsLcaQtCsABc/bdOc+pqMvvChpW3W9t5MUiQQiY8LQUVA
+	 EkNgb0/5TVG5WLFCdHo93emd5/KuQPM7L1FK1GfS+ivHuBkM6A+mMWiPiqvjZZI/36
+	 xC24eDsJM98ryWbUWbD/aPlg2N1vXWfVUf4ksgrIoCDjgAQrUAL7XY+HiTZ4+PczQz
+	 Om06AcZDh6jjFjjeA9f/B6BanQG97Uqwjsw7AYQIunHOOlYPfGZfZOaCSfbJwPjBtQ
+	 mcTV7obWrCB+xFC4kTbgMGvIE4nrB6pdKvUA0aAmgo26kw4I9xavBYuTX3YZbRWEib
+	 An3EvQ9oZBIRg==
+Received: from mail.realtek.com (rtkexhmbs02.realtek.com.tw[172.21.6.41])
+	by rtits2.realtek.com.tw (8.15.2/3.21/5.94) with ESMTPS id 60FBgLHS12959073
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Jan 2026 19:42:21 +0800
+Received: from RTKEXHMBS03.realtek.com.tw (10.21.1.53) by
+ RTKEXHMBS02.realtek.com.tw (172.21.6.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Thu, 15 Jan 2026 19:42:20 +0800
+Received: from RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5]) by
+ RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5%9]) with mapi id
+ 15.02.1748.010; Thu, 15 Jan 2026 19:42:20 +0800
+From: Hayes Wang <hayeswang@realtek.com>
+To: lu lu <insyelu@gmail.com>
+CC: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+        "davem@davemloft.net"
+	<davem@davemloft.net>,
+        nic_swsd <nic_swsd@realtek.com>, "tiwai@suse.de"
+	<tiwai@suse.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] net: usb: r8152: fix transmit queue timeout
+Thread-Topic: [PATCH] net: usb: r8152: fix transmit queue timeout
+Thread-Index: AQHchQGLBs/iMEigv0CwXIii7EgMTLVRErBAgADcLoCAASPVoA==
+Date: Thu, 15 Jan 2026 11:42:20 +0000
+Message-ID: <1b498052994c4ed48de45b5af9a490b6@realtek.com>
+References: <20260114025622.24348-1-insyelu@gmail.com>
+ <3501a6e902654554b61ab5cd89dcb0dd@realtek.com>
+ <CAAPueM4XheTsmb6xd3w5A3zoec-z3ewq=uNpA8tegFbtFWCfaA@mail.gmail.com>
+In-Reply-To: <CAAPueM4XheTsmb6xd3w5A3zoec-z3ewq=uNpA8tegFbtFWCfaA@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <176846580373.38125.3306033410225962520.robh@kernel.org>
-X-CM-TRANSID:zQCowAB3zhHf0Whp6EcVBQ--.27569S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF1UZFW8ArWxGFy3uryUJrb_yoW8WFW8pa
-	y2ka9I9FZ0gFy3J397tr97KFy5Xrs3A3yftr1Ygr9rtF15X3W0q3ySgw4j9F1UWr4rA3W2
-	vrWa934xGrW2yFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4
-	A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
-	MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-	67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvj
-	DU0xZFpf9x07bIBTOUUUUU=
-X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 
-On Thu, Jan 15, 2026 at 02:30:03AM -0600, Rob Herring (Arm) wrote:
-> 
-> On Thu, 15 Jan 2026 14:42:20 +0800, Jiayu Du wrote:
-> > Add 'canaan,k230-usb' compatible string with 'snps,dwc2' as fallback
-> > for the DWC2 IP which is used by Canaan K230.
-> > 
-> > Signed-off-by: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-> > ---
-> >  Documentation/devicetree/bindings/usb/dwc2.yaml | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/canaan,k230-usb-phy.example.dtb: usb-phy@91585000 (canaan,k230-usb-phy): reg: [[0, 2438483968], [0, 1024]] is too long
-> 	from schema $id: http://devicetree.org/schemas/phy/canaan,k230-usb-phy.yaml
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.kernel.org/project/devicetree/patch/20260115064223.21926-3-jiayu.riscv@isrc.iscas.ac.cn
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-I will run the make dt_binding_check, and then fix it in v3.
-
-Regards,
-Jiayu Du
-
+bHUgbHUgPGluc3llbHVAZ21haWwuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgSmFudWFyeSAxNSwg
+MjAyNiA5OjM3IEFNDQpbLi4uXQ0KPiBUbyByZWR1Y2UgdGhlIHBlcmZvcm1hbmNlIGltcGFjdCBv
+biB0aGUgdHhfdGwgdGFza2xldOKAmXMgdHJhbnNtaXQgcGF0aCwNCj4gbmV0aWZfdHJhbnNfdXBk
+YXRlKCkgaGFzIGJlZW4gbW92ZWQgZnJvbSB0aGUgbWFpbiB0cmFuc21pdCBwYXRoIGludG8NCj4g
+d3JpdGVfYnVsa19jYWxsYmFjayAodGhlIFVTQiB0cmFuc2ZlciBjb21wbGV0aW9uIGNhbGxiYWNr
+KS4NCj4gVGhlIG1haW4gY29uc2lkZXJhdGlvbnMgYXJlIGFzIGZvbGxvd3M6DQo+IDEuIFJlZHVj
+ZSBmcmVxdWVudCB0YXNrbGV0IG92ZXJoZWFkDQo+IG5ldGlmX3RyYW5zX3VwZGF0ZSgpIGlzIGlu
+dm9rZWQgZnJlcXVlbnRseSB1bmRlciBoaWdoLXRocm91Z2hwdXQNCj4gY29uZGl0aW9ucy4gQ2Fs
+bGluZyBpdCBkaXJlY3RseSBpbiB0aGUgbWFpbiB0cmFuc21pdCBwYXRoIGNvbnRpbnVvdXNseQ0K
+PiBpbnRyb2R1Y2VzIGEgc21hbGwgYnV0IG5vdGljZWFibGUgQ1BVIG92ZXJoZWFkLCBkZWdyYWRp
+bmcgdGhlDQo+IHNjaGVkdWxpbmcgZWZmaWNpZW5jeSBvZiB0aGUgdHhfdGwgdGFza2xldC4NCj4g
+Mi4gTW92ZSBub24tY3JpdGljYWwgb3BlcmF0aW9ucyBvdXQgb2YgdGhlIGNyaXRpY2FsIHBhdGgN
+Cj4gQnkgZGVmZXJyaW5nIG5ldGlmX3RyYW5zX3VwZGF0ZSgpIHRvIHRoZSBVU0IgY2FsbGJhY2sg
+dGhyZWFk4oCUYW5kDQo+IGVuc3VyaW5nIGl0IGV4ZWN1dGVzIGFmdGVyIHRhc2tsZXRfc2NoZWR1
+bGUoJnRwLT50eF90bCnigJR0aGUgdGltZXN0YW1wDQo+IHVwZGF0ZSBpcyByZW1vdmVkIGZyb20g
+dGhlIGNyaXRpY2FsIHRyYW5zbWl0IHNjaGVkdWxpbmcgcGF0aCwgZnVydGhlcg0KPiByZWR1Y2lu
+ZyB0aGUgYnVyZGVuIG9uIHR4X3RsLg0KDQpFeGN1c2UgbWUsIEkgZG8gbm90IGZ1bGx5IHVuZGVy
+c3RhbmQgdGhlIHJlYXNvbmluZyBhYm92ZS4NCkl0IHNlZW1zIHRoYXQgdGhpcyBjaGFuZ2UgbWVy
+ZWx5IHNoaWZ0cyB0aGUgdGltZSAob3IgZWZmb3J0KSBmcm9tIHR4X3RsIHRvIHRoZSBUWCBjb21w
+bGV0aW9uIGNhbGxiYWNrLg0KDQpXaGlsZSB0aGUgaW50ZW50aW9uIGlzIHRvIG1ha2UgdHhfdGwg
+cnVuIGZhc3RlciwgdGhpcyBhbHNvIGRlbGF5cyB0aGUgY29tcGxldGlvbiBvZiB0aGUgY2FsbGJh
+Y2ssDQp3aGljaCBpbiB0dXJuIG1heSBkZWxheSBib3RoIHRoZSBuZXh0IGNhbGxiYWNrIGV4ZWN1
+dGlvbiBhbmQgdGhlIG5leHQgc2NoZWR1bGluZyBvZiB0eF90bC4NCg0KRnJvbSB0aGlzIHBlcnNw
+ZWN0aXZlLCBpdCBpcyB1bmNsZWFyIHdoYXQgaXMgYWN0dWFsbHkgYmVpbmcgc2F2ZWQuDQoNCkhh
+dmUgeW91IG9ic2VydmVkIGEgbWVhc3VyYWJsZSBkaWZmZXJlbmNlIGJhc2VkIG9uIHRlc3Rpbmc/
+DQoNCklmIHlvdSB3YW50IHRvIHJlZHVjZSB0aGUgZnJlcXVlbmN5IG9mIGNhbGxpbmcgbmV0aWZf
+dHJhbnNfdXBkYXRlKCksDQp5b3UgY291bGQgdHJ5IHNvbWV0aGluZyBsaWtlIHRoZSBmb2xsb3dp
+bmcuIFRoaXMgd2F5LA0KbmV0aWZfdHJhbnNfdXBkYXRlKCkgd291bGQgbm90IGJlIGV4ZWN1dGVk
+IG9uIGV2ZXJ5IHRyYW5zbWlzc2lvbi4NCg0KLS0tIGEvZHJpdmVycy9uZXQvdXNiL3I4MTUyLmMN
+CisrKyBiL2RyaXZlcnMvbmV0L3VzYi9yODE1Mi5jDQpAQCAtMjQzMiw5ICsyNDMyLDEyIEBAIHN0
+YXRpYyBpbnQgcjgxNTJfdHhfYWdnX2ZpbGwoc3RydWN0IHI4MTUyICp0cCwgc3RydWN0IHR4X2Fn
+ZyAqYWdnKQ0KDQogICAgICAgIG5ldGlmX3R4X2xvY2sodHAtPm5ldGRldik7DQoNCi0gICAgICAg
+aWYgKG5ldGlmX3F1ZXVlX3N0b3BwZWQodHAtPm5ldGRldikgJiYNCi0gICAgICAgICAgIHNrYl9x
+dWV1ZV9sZW4oJnRwLT50eF9xdWV1ZSkgPCB0cC0+dHhfcWxlbikNCisgICAgICAgaWYgKG5ldGlm
+X3F1ZXVlX3N0b3BwZWQodHAtPm5ldGRldikpIHsNCisgICAgICAgICAgIGlmIChza2JfcXVldWVf
+bGVuKCZ0cC0+dHhfcXVldWUpIDwgdHAtPnR4X3FsZW4pDQogICAgICAgICAgICAgICAgbmV0aWZf
+d2FrZV9xdWV1ZSh0cC0+bmV0ZGV2KTsNCisgICAgICAgICAgIGVsc2UNCisgICAgICAgICAgICAg
+ICBuZXRpZl90cmFuc191cGRhdGUodHAtPm5ldGRldik7DQorICAgICAgIH0NCg0KICAgICAgICBu
+ZXRpZl90eF91bmxvY2sodHAtPm5ldGRldik7DQoNCkJlc3QgUmVnYXJkcywNCkhheWVzDQoNCg==
 
