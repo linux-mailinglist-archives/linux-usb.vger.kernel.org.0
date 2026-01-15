@@ -1,84 +1,51 @@
-Return-Path: <linux-usb+bounces-32392-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32393-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31FC8D24F83
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 15:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A88E0D24FB0
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 15:36:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE1773060279
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 14:34:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8D1DE301B4B7
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 14:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0959D39E17E;
-	Thu, 15 Jan 2026 14:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dArH3mSv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D2513A1E6C;
+	Thu, 15 Jan 2026 14:35:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913BB35EDD9;
-	Thu, 15 Jan 2026 14:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785AB23EA94;
+	Thu, 15 Jan 2026 14:35:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768487643; cv=none; b=ITHBmdFtymxj7UjjhFRl94QmC0Jph5KqzpffrSeLGE58f3E467hDvTMPXuvufzg7D/wiEJzMA/6AYLNIa7UEOh9xBblrz8VaTiRoSZMnq6+VsNGxfUKhpvaUCVJ3VD7FFr9m/V9ZucMLrRtlD6dq7C/PjsOdQ0L5hI3x2pGzKBo=
+	t=1768487759; cv=none; b=roUS2BrA+RhbgYjTsNGW4SWx/H2cAsVflgJTBNcghrAoMvBSL1lbKYfDjklYpZtz8a0/YhTToj9Mv7jg7U5QeJOlPuyAipjzVazq0t4oEouwpGGdv4s9JgmyAilcsVLshdnbFlaLn1S/gJpdlQSk62BYlMTtDgOQWzgVrrIUCu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768487643; c=relaxed/simple;
-	bh=a6rL4qcf5DwDqWgoWygvY9x8ZHVXbfHwF7TJH69O7gY=;
+	s=arc-20240116; t=1768487759; c=relaxed/simple;
+	bh=+JPCdv1FjP4/AWTrZQX/Bmri1JyVdhDdo20MZLgPe6Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MhIEn/JIhbSN8RVPiTfFsTEYkN5HY7U6/UeziHoud7CRVEmMwr2Ygy5PUlS9oImEyMkI7QmagXzLQHtVS9m1mr3X3wnTnE1g2ZMLQXImPCZEqK6IlYizsrG8aQe/Rng1iJFKnHhi0mUC1e9/H6cKa50+GpOkk5zeXLI/0RipDxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dArH3mSv; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768487642; x=1800023642;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a6rL4qcf5DwDqWgoWygvY9x8ZHVXbfHwF7TJH69O7gY=;
-  b=dArH3mSvw5t3n1DxT03S5rZVbovqdfDD6wMQNNHpnJ+L9Uv2LzO1Y/J5
-   JSFro16189pcSx2IfqRIIatZcg30p2EKeFAI+PBYImUpJYuZmUYClQgq3
-   LGhrFskk+ypp529HXWYXjDVqjWgq+/Ulurc+/vFgo7hgkgF+qbMN+pacT
-   BgrpSZBJ1c4Hkwq8o+x+bV5ax57R+JpUNUI/Es334f88XK2zqZOoKwzid
-   l9r3gilIIqJe9P7nNuGWiWdgFF0MDmSZftergBKIouj2Ovzt5Zbih9JyK
-   77JZl4jpOy1A0kleQOhW+XgCDRtwSfw4/ZuL/SpIBUNetF8TQVB96xTK1
-   A==;
-X-CSE-ConnectionGUID: eBsGfV8aRjyrhd07LBXSGw==
-X-CSE-MsgGUID: lRu623bKSBiSLdlGhl5rQg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="80097346"
-X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="80097346"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 06:34:01 -0800
-X-CSE-ConnectionGUID: BJANDULXSmqkLhFcNqQePw==
-X-CSE-MsgGUID: AABnzRyaQgOluTDZ6hMv+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="205246208"
-Received: from spandruv-mobl5.amr.corp.intel.com (HELO kuha) ([10.124.220.243])
-  by fmviesa008.fm.intel.com with SMTP; 15 Jan 2026 06:33:55 -0800
-Received: by kuha (sSMTP sendmail emulation); Thu, 15 Jan 2026 16:33:32 +0200
-Date: Thu, 15 Jan 2026 16:33:32 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andrei Kuchynski <akuchynski@chromium.org>
-Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Johan Hovold <johan@kernel.org>,
-	Hsin-Te Yuan <yuanhsinte@chromium.org>, Madhu M <madhu.m@intel.com>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>
-Subject: Re: [PATCH v4 4/8] usb: typec: Expose alternate mode priority via
- sysfs
-Message-ID: <aWj6vLt3iHXjuYjz@kuha>
-References: <20260113130536.3068311-1-akuchynski@chromium.org>
- <20260113130536.3068311-5-akuchynski@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R2N2+bW/cfX4m7++CHyTcRs8jxoHRpG5XaEa71NlCCUqBc93uZ/YqqfO7Z8aA876ySm2cv/JyGegJyU1NLvW19XRzrgkbEVdvBZEAuRsU7IXncy3eVlFvQucYuBm9QnAtM9VFNmhwIt7+0gpPAkLAs52jOK+ftboPokIaSyj5z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from duge-virtual-machine (unknown [183.192.221.134])
+	by APP-05 (Coremail) with SMTP id zQCowAAXqw4f+2hpvPUXBQ--.42438S2;
+	Thu, 15 Jan 2026 22:35:13 +0800 (CST)
+Date: Thu, 15 Jan 2026 22:35:11 +0800
+From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+To: Vinod Koul <vkoul@kernel.org>
+Cc: conor@kernel.org, neil.armstrong@linaro.org, gregkh@linuxfoundation.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, 18771902331@163.com, cyy@cyyself.name,
+	TroyMitchell988@gmail.com, kingxukai@zohomail.com,
+	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, gaohan@iscas.ac.cn
+Subject: Re: [PATCH v2 3/4] phy: usb: Add driver for Canaan K230 USB 2.0 PHY
+Message-ID: <aWj7HyeDQU6ytGz3@duge-virtual-machine>
+References: <20260115064223.21926-1-jiayu.riscv@isrc.iscas.ac.cn>
+ <20260115064223.21926-4-jiayu.riscv@isrc.iscas.ac.cn>
+ <aWjYHK1cTj8Dbz2B@vaman>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -87,205 +54,74 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260113130536.3068311-5-akuchynski@chromium.org>
+In-Reply-To: <aWjYHK1cTj8Dbz2B@vaman>
+X-CM-TRANSID:zQCowAAXqw4f+2hpvPUXBQ--.42438S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF45Kry8Jw1UAw1xCrW5GFg_yoW8WFy7pF
+	Z5XF1jqF43Jr97WrWSvF4kGr1Svws5Kw1UCryak3yrWwnIvr4xCayjg3y5Zwn5ZFZ5AFyI
+	9r1jqFyxCFZIkrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
+	MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+	67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+	z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x07bIBTOUUUUU=
+X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 
-Hi Andrei,
-
-Tue, Jan 13, 2026 at 01:05:32PM +0000, Andrei Kuchynski kirjoitti:
-> This patch introduces a priority sysfs attribute to the USB Type-C
-> alternate mode port interface. This new attribute allows user-space to
-> configure the numeric priority of alternate modes managing their preferred
-> order of operation. If a new priority value conflicts with an existing
-> mode's priority, the priorities of the conflicting mode and all subsequent
-> modes are automatically incremented to ensure uniqueness.
+On Thu, Jan 15, 2026 at 05:35:48PM +0530, Vinod Koul wrote:
+> On 15-01-26, 14:42, Jiayu Du wrote:
 > 
-> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> Reviewed-by: Benson Leung <bleung@chromium.org>
-> ---
->  Documentation/ABI/testing/sysfs-class-typec | 11 +++
->  drivers/usb/typec/class.c                   | 90 ++++++++++++++++++++-
->  include/linux/usb/typec_altmode.h           |  1 +
->  3 files changed, 101 insertions(+), 1 deletion(-)
+> > +static struct phy *k230_usb_phy_xlate(struct device *dev,
+> > +				      const struct of_phandle_args *args)
+> > +{
+> > +	struct k230_usb_phy_global *global = dev_get_drvdata(dev);
+> > +	struct k230_usb_phy_instance *phy_inst;
+> > +	struct phy *phy;
+> > +
+> > +	if (args->args[0] >= MAX_PHYS)
+> > +		return ERR_PTR(-EINVAL);
+> > +
+> > +	phy_inst = devm_kzalloc(dev, sizeof(*phy_inst), GFP_KERNEL);
+> > +	if (!phy_inst)
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	phy_inst->global = global;
+> > +	phy_inst->index = args->args[0];
+> > +
+> > +	phy = devm_phy_create(dev, NULL, &k230_usb_phy_ops);
+> > +	if (IS_ERR(phy))
+> > +		return ERR_PTR(PTR_ERR(phy));
+> > +
+> > +	phy_set_drvdata(phy, phy_inst);
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> index 38e101c17a004..737b76828b509 100644
-> --- a/Documentation/ABI/testing/sysfs-class-typec
-> +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -162,6 +162,17 @@ Description:	Lists the supported USB Modes. The default USB mode that is used
->  		- usb3 (USB 3.2)
->  		- usb4 (USB4)
->  
-> +What:		/sys/class/typec/<port>/<alt-mode>/priority
-> +Date:		July 2025
-> +Contact:	Andrei Kuchynski <akuchynski@chromium.org>
-> +Description:
-> +		Displays and allows setting the priority for a specific alternate mode.
-> +		The priority is an integer in the range 0-255. A lower numerical value
-> +		indicates a higher priority (0 is the highest).
-> +		If the new value is already in use by another mode, the priority of the
-> +		conflicting mode and any subsequent modes will be incremented until they
-> +		are all unique.
+> This seems wrong place, why is this not done in the driver probe?
 
-Greg already told you to show the range somehow with this, so the
-total number of (so far known?) alternate modes. Maybe something like
-<index> / <total_num_altmodes> ?
+You are right, creating phy instances in the xlate function is not
+the right place. I will move the allocation and devm_phy_creat to
+the probe phase to create both instances.
 
->  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
->  
->  What:		/sys/class/typec/<port>-partner/accessory_mode
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 0f12d6120511b..1fb5450c0a2f2 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -445,11 +445,88 @@ svid_show(struct device *dev, struct device_attribute *attr, char *buf)
->  }
->  static DEVICE_ATTR_RO(svid);
->  
-> +static int increment_duplicated_priority(struct device *dev, void *data)
-> +{
-> +	if (is_typec_port_altmode(dev)) {
-> +		struct typec_altmode **alt_target = (struct typec_altmode **)data;
-> +		struct typec_altmode *alt = to_typec_altmode(dev);
-> +
-> +		if (alt != *alt_target && alt->priority == (*alt_target)->priority) {
-> +			alt->priority++;
-> +			*alt_target = alt;
-> +			return 1;
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int find_duplicated_priority(struct device *dev, void *data)
-> +{
-> +	if (is_typec_port_altmode(dev)) {
-> +		struct typec_altmode **alt_target = (struct typec_altmode **)data;
-> +		struct typec_altmode *alt = to_typec_altmode(dev);
-> +
-> +		if (alt != *alt_target && alt->priority == (*alt_target)->priority)
-> +			return 1;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int typec_mode_set_priority(struct typec_altmode *alt, const u8 priority)
-> +{
-> +	struct typec_port *port = to_typec_port(alt->dev.parent);
-> +	const u8 old_priority = alt->priority;
-> +	int res = 1;
-> +
-> +	alt->priority = priority;
-> +	while (res) {
-> +		res = device_for_each_child(&port->dev, &alt, find_duplicated_priority);
-> +		if (res) {
-> +			alt->priority++;
-> +			if (alt->priority == 0) {
-> +				alt->priority = old_priority;
-> +				return -EOVERFLOW;
-> +			}
-> +		}
-> +	}
-> +
-> +	res = 1;
-> +	alt->priority = priority;
-> +	while (res)
-> +		res = device_for_each_child(&port->dev, &alt,
-> +				increment_duplicated_priority);
+> > +	global->reg_test_offset[0] = 0x70;
+> > +	global->reg_ctl_offset[0] = 0xb0;
+> > +	global->reg_test_offset[1] = 0x90;
+> > +	global->reg_ctl_offset[1] = 0xb8;
+> 
+> Where are these magic values coming from?
 
-Please align the code properly.
+These offsets are from K230 Technical Reference Manual section 12.6.4.2.
+The TRM is here[1]. I will define them as macros with descriptive names.
 
-> +	return 0;
-> +}
-> +
-> +static ssize_t priority_store(struct device *dev,
-> +			       struct device_attribute *attr,
-> +			       const char *buf, size_t size)
-> +{
-> +	u8 val;
-> +	int err = kstrtou8(buf, 10, &val);
-> +
-> +	if (!err)
-> +		err = typec_mode_set_priority(to_typec_altmode(dev), val);
-> +
-> +	if (!err)
-> +		return size;
-> +	return err;
+Link:
+https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_Technical_Reference_Manual_V0.3.1_20241118.pdf[1]
 
-I know not everybody likes the ternary operator, but I would just
+I will send v2 with these changes soon.
 
-        return err ?: size;
+Regards,
+Jiayu Du
 
-> +}
-> +
-> +static ssize_t priority_show(struct device *dev,
-> +			      struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%u\n", to_typec_altmode(dev)->priority);
-> +}
-> +static DEVICE_ATTR_RW(priority);
-> +
->  static struct attribute *typec_altmode_attrs[] = {
->  	&dev_attr_active.attr,
->  	&dev_attr_mode.attr,
->  	&dev_attr_svid.attr,
->  	&dev_attr_vdo.attr,
-> +	&dev_attr_priority.attr,
->  	NULL
->  };
->  
-> @@ -459,11 +536,15 @@ static umode_t typec_altmode_attr_is_visible(struct kobject *kobj,
->  	struct typec_altmode *adev = to_typec_altmode(kobj_to_dev(kobj));
->  	struct typec_port *port = typec_altmode2port(adev);
->  
-> -	if (attr == &dev_attr_active.attr)
-> +	if (attr == &dev_attr_active.attr) {
->  		if (!is_typec_port(adev->dev.parent)) {
->  			if (!port->mode_control || !adev->ops || !adev->ops->activate)
->  				return 0444;
->  		}
-> +	} else if (attr == &dev_attr_priority.attr) {
-> +		if (!is_typec_port(adev->dev.parent) || !port->mode_control)
-> +			return 0;
-> +	}
->  
->  	return attr->mode;
->  }
-> @@ -2498,6 +2579,7 @@ typec_port_register_altmode(struct typec_port *port,
->  	struct typec_altmode *adev;
->  	struct typec_mux *mux;
->  	struct typec_retimer *retimer;
-> +	int ret;
->  
->  	mux = typec_mux_get(&port->dev);
->  	if (IS_ERR(mux))
-> @@ -2516,6 +2598,12 @@ typec_port_register_altmode(struct typec_port *port,
->  	} else {
->  		to_altmode(adev)->mux = mux;
->  		to_altmode(adev)->retimer = retimer;
-> +
-> +		ret = typec_mode_set_priority(adev, 0);
-> +		if (ret) {
-> +			typec_unregister_altmode(adev);
-> +			return ERR_PTR(ret);
-> +		}
->  	}
->  
->  	return adev;
-> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-> index 9197a4637a938..7e6c02d74b54f 100644
-> --- a/include/linux/usb/typec_altmode.h
-> +++ b/include/linux/usb/typec_altmode.h
-> @@ -36,6 +36,7 @@ struct typec_altmode {
->  	int				mode;
->  	u32				vdo;
->  	unsigned int			active:1;
-> +	u8				priority;
->  
->  	char				*desc;
->  	const struct typec_altmode_ops	*ops;
-
-thanks,
-
--- 
-heikki
 
