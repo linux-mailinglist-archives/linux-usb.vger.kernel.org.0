@@ -1,128 +1,94 @@
-Return-Path: <linux-usb+bounces-32410-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32411-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4C56D29315
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 00:10:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C1FDD2947B
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 00:38:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5831A3065A99
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 23:10:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F29C930402A3
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 23:38:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EA60330301;
-	Thu, 15 Jan 2026 23:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8E44330B34;
+	Thu, 15 Jan 2026 23:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MWKYmyNs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E0k4dXr3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DEE221F0C;
-	Thu, 15 Jan 2026 23:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB7E30B507
+	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 23:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768518647; cv=none; b=toByz2odJYvc9Xm15cgKVVUrrDjTKYltqkbIX59SM9qvLmw+uq2YjeXxmZbvVQaF6wRLeMXhSS8RZF4usJP7mRv2Nx0p0amaNaFB++pMdAQblDFTkjcUrbPlvpy7eTds+stsXw0ZQQ0B1MPSZrPSEw3AJvH0Ms5j16xFHF0kPoI=
+	t=1768520299; cv=none; b=sXJ+s2KFGl0Po/h0cHvDahiiOFKj5oe8+pt7vS2ddbiNQfos9aWI08KJ7unIkrffqZNPQI7J1htMGKxiAQhLF+D2R9aMnDlIptqGHanGK0iFUKW6Kru2Plmz2GkqBOxlO53SC7iZSCIvYHsnILIwXW9+kSjAinHkryPbAUpwLYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768518647; c=relaxed/simple;
-	bh=QJV6qF/B9JS8s459sD+RsIzuE5M6Vu3GHT9YKChQUvc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s2/XyOEiQnMHBMCWoJDsWsYcup5lkkd74B1uZBHUUOz1naLr5yQmAopfIcD45URhQciVEW8x51M2vMw8ONFWz8cz92t1DgqnRfenk0pWhvto9rX8P++TMAOXeHKmYDwLbPtX+G1o4mE8HWTrQoOFjBemu9pjVA9zJc3pOpHJ0VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MWKYmyNs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BCC9C116D0;
-	Thu, 15 Jan 2026 23:10:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768518647;
-	bh=QJV6qF/B9JS8s459sD+RsIzuE5M6Vu3GHT9YKChQUvc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MWKYmyNsaFGECkB6eM5adijukFFa8E+mSN7J+Yqq0CdRZEwP6dBdgq2SfpmihUT6c
-	 piwLNvcfEndZTGAJglorMOs/NBFqvpnRwl2FRJLfcEmQ7nYWGh61J80QWKuhW4UeVY
-	 VDphRId0s72FsAi/J9Ink1JbAWEtl4ZgjFRTVIryrFLH1ZWNyhjQFIGQE0+S0xfomz
-	 Clf9Q9Oh1hzZX9zVHyWYouYyTgLhwas8psO2LJbQ7PrPlJw5p23lCSqBszQvrSworC
-	 UuW4Y2/hiRZ3MFClm9e46yXZ5iXVP6gARJoNtQiIDUQU4k5PzuXNcZArIUJ+185o2C
-	 trUQbblqkEfsQ==
-Date: Thu, 15 Jan 2026 17:10:44 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-Cc: konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
-	abel.vesa@linaro.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] dt-bindings: soc: qcom: qcom,pmic-glink: Add
- Kaanapali and Glymur compatibles
-Message-ID: <ph7gjuffgbxbn3k4oubdqsrogf4apxe3leowxdcu3l4wejownh@lx4s7zdah3u6>
-References: <20260114211759.2740309-1-anjelique.melendez@oss.qualcomm.com>
- <20260114211759.2740309-3-anjelique.melendez@oss.qualcomm.com>
+	s=arc-20240116; t=1768520299; c=relaxed/simple;
+	bh=BXIKmWMhOqHMab74qmmzQ+0yFxg9gbnrAX+iB91l4xQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Pq7tjzE9mZ9eTmbzWiTPo1Ef8dY7adOtNbZCePiLx16KGOqSPvbZkQbYLolEwwmKLNko2JF5Y08GwWnJNDxh/vrcSFr/mcyPrq/SgH7hGm5xqZU4K33/MLfytRliQAWrC9SiG4uvgTAEeIWkwbTMzTinTfO80qHkLlf0XzZsqOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E0k4dXr3; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768520297; x=1800056297;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BXIKmWMhOqHMab74qmmzQ+0yFxg9gbnrAX+iB91l4xQ=;
+  b=E0k4dXr3F/SXVTR+WfhFaDU8gvkL6J8XQdt4GqpfNkuLhoB641j8D4nn
+   mOAZuV6Bmkhhz5i/4N2/9K2tb2tPOLgzEK17FUC9XZjgEzFWpQBwZStny
+   /cHORLCjam9AhuSKfE+yXYC5dtL1yV+7EE4+PVumvU/zh6plKPg1an/+Q
+   53mcTYw+sp3K8/c77Gbr2FZc2rzfFz+29f3gCO/8v029ymWNwmPAc2izt
+   HUhlvuVnD/hymI384o90fg8f+Z1WTcE3oAmCjdSAU7LfeTE65+knKfGq3
+   moDsYAifkZYcU49dpjuAzbqHwnyySsrKY9hloAdEQ+whR2QfBhxyqeGio
+   A==;
+X-CSE-ConnectionGUID: EkK1hQ9sTZ+ZFBMUeD8CHA==
+X-CSE-MsgGUID: 00FSNyf9TfqMRPoeUu9qYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="69891640"
+X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
+   d="scan'208";a="69891640"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 15:38:17 -0800
+X-CSE-ConnectionGUID: sLVCbzgeQYydYUGzHcWgyQ==
+X-CSE-MsgGUID: MUdUdzlGQweFo+6q26eaNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
+   d="scan'208";a="236336655"
+Received: from dalessan-mobl3.ger.corp.intel.com (HELO mnyman-desk.home) ([10.245.245.7])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 15:38:16 -0800
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/1] xhci fixes for usb-linus
+Date: Fri, 16 Jan 2026 01:37:57 +0200
+Message-ID: <20260115233758.364097-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260114211759.2740309-3-anjelique.melendez@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 14, 2026 at 01:17:57PM -0800, Anjelique Melendez wrote:
-> Document the Kaanpali compatible string to have fallback on SM8550.
-> Document the Glymur compatible string to have fallback on X1E80100.
-> 
-> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-> ---
->  .../devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml       | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> index 012c5661115d..13503ae79a8d 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> @@ -38,12 +38,18 @@ properties:
->            - const: qcom,pmic-glink
->        - items:
->            - enum:
-> +              - qcom,kaanapali-pmic-glink
->                - qcom,milos-pmic-glink
->                - qcom,sm8650-pmic-glink
->                - qcom,sm8750-pmic-glink
->                - qcom,x1e80100-pmic-glink
->            - const: qcom,sm8550-pmic-glink
->            - const: qcom,pmic-glink
+Hi Greg
 
-I'm sorry, Anjelique, taking another look at this I forgot about the
-soccp-angle of the problem when we spoke.
+One patch for usb-linus that fixes the audio sideband crash Lianqin
+recently found during suspend/resume testing
 
-Imagine when we add the next platform, using soccp and the other
-properties of the Kaanapali pmic-glink solution.
+Thanks
+Mathias
 
-This would require us to go:
+Mathias Nyman (1):
+  xhci: sideband: don't dereference freed ring when removing sideband
+    endpoint
 
-compatible = "qcom,nextgen-pmic-glink", "qcom,kaanapali-pmic-glink", "qcom,sm8550-pmic-glink", "qcom,pmic-glink";
+ drivers/usb/host/xhci-sideband.c |  1 -
+ drivers/usb/host/xhci.c          | 15 ++++++++++++---
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-Because qcom,nextgen-pmic-glink isn't fully compatible with
-qcom,sm8550-pmic-glink - as we see in pmic_glink.c.
+-- 
+2.43.0
 
-> +      - items:
-> +          - enum:
-> +              - qcom,glymur-pmic-glink
-> +          - const: qcom,x1e80100-pmic-glink
-> +          - const: qcom,pmic-glink
-
-And the same goes here.
-
-
-So, while both of these are almost compatible with the previous mobile
-and compute target, respectively, they aren't actually compatible.
-
-
-The commit message of this commit needs to spell out how the features
-differ in these two new targets in order for anyone to be able to say
-whether this patch is makes sense or not.
-
-Regards,
-Bjorn
-
->  
->    '#address-cells':
->      const: 1
-> -- 
-> 2.34.1
-> 
 
