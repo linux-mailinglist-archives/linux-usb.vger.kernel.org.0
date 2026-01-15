@@ -1,75 +1,58 @@
-Return-Path: <linux-usb+bounces-32407-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32408-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7F9BD2896E
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 22:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E3A9D28B6D
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 22:26:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D2E3D30213F6
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 21:03:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 74C6830BDA62
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 21:26:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EFB8320CAD;
-	Thu, 15 Jan 2026 21:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D68B32861F;
+	Thu, 15 Jan 2026 21:26:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P8FyGfph"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nJyAHnVl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCB32C08AB
-	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 21:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25099322B72;
+	Thu, 15 Jan 2026 21:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768510999; cv=none; b=un7pPxAy/jFZufxi3QPqEU/TWf807w29f0R9BRYEg/G8QZ8U2n/5p2LYjCUxj3SvWALXyn6mDlORoGnxWtCSUrcY6cxJSaNxrsqug2la195DjOzr+m4Pz0r4u14WYeCyyRFoyWG4Ry9tzjeatvGqiLkHeXAIVwWISGIJHppbVfE=
+	t=1768512377; cv=none; b=genQyl0/jLPG8A6xzb2A6qVkOrtEWJElvhSWcwxVP+LJd8xeQ2GU8Wa+x6mdNedIyqtPQfOD0Lg1JUOygbRHJ//72wELc4Cnd3qcZ6l2PQRCj3IKxcWVINs8gBChsm/ge+RWydkv9KA+SleCCIvCfyi0P6G+5zAShpoyM2N6nfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768510999; c=relaxed/simple;
-	bh=urb+EOFiCz5HexwbmH0CRi3fADfmhtCrzamd2i7EuOQ=;
+	s=arc-20240116; t=1768512377; c=relaxed/simple;
+	bh=LjEeRLtspIw+x2RORFQirX0OW4sGtXmdp1zlvKu6y5k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iSJALBL6H5Q92RsmwGegwZa5l3se5i8YqMJpUElI+a2JCN6tQ1ZTH5byDl64wQ7eH3QTX2P1X+yCX5A5f6g3EvvdjfLx7K5gQFulBIIcDuJSM+2FTQMOgQUHJKadURAEhOQUCrBRgdXEIhMRENGap/yZiTd2UurWkBMIucwAx28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P8FyGfph; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768510999; x=1800046999;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=urb+EOFiCz5HexwbmH0CRi3fADfmhtCrzamd2i7EuOQ=;
-  b=P8FyGfphR7jVhFTX66Op2khAQwGtwIqQjhzs8Mxg8Grge+CrRlX1eseI
-   dbhrubC5k9ShLCLj+HkSfNX+ShmgLZw25btLzDRqo7bbCtitgVWQBKvU+
-   7ianjPqm3xH6W0C1s7+RujmIQ00lBo7d2lBiNuSJ11NL3l7GEXGz7OtRn
-   UZ/NUjINcagQoHkWZGgRvyDuNxF0FPlw1Um5S3elXl6Yxo0NHQ+vtrfgA
-   UchUKgsikQzgL5drGqNJXGDcMeIgaRH1Bynb7eIv8V8RAygRgXDY3n0vk
-   EMdrpofd4EQlowL+OpSafpbnRVTNtxK89mVU/uUnv95lXyIDglr7oBTgH
-   A==;
-X-CSE-ConnectionGUID: 2VOaGTLeSImdgOfbdRGczw==
-X-CSE-MsgGUID: qKTUkMZqSAKrOSWZPFEyMw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="69725161"
-X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="69725161"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 13:03:18 -0800
-X-CSE-ConnectionGUID: pN/GGFWUSFuSxZBvDkRZ6g==
-X-CSE-MsgGUID: g0lLf2KTSHqL2lbZPwKWOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="205113351"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 15 Jan 2026 13:03:16 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vgUUr-00000000Jzo-0eid;
-	Thu, 15 Jan 2026 21:03:13 +0000
-Date: Fri, 16 Jan 2026 05:02:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: raoxu <raoxu@uniontech.com>, mathias.nyman@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	michal.pecio@gmail.com, niklas.neronin@linux.intel.com,
-	raoxu@uniontech.com, zhanjun@uniontech.com, kenny@panix.com
-Subject: Re: [PATCH v7] usb:xhci:route device to secondary interrupters
-Message-ID: <202601160403.qyf0XUkV-lkp@intel.com>
-References: <097C424DFD34E837+20260115082608.743707-1-raoxu@uniontech.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=G3yd43XlHrNY3wgWWC9DFXXNU+/pEla9+WxMK/U6IbZzlxf6rSiD4p1xq6d7ZNrLgOJ4vr8MtDAmpBnqJrBwXO5coAnHtjvkvhCFnRg3C+wfQkoRrmOIHeyy+alSJ8D+wFGIjLVRC6xdbVzHYMRRQgz6nRygHLmsWl2uOYtYyv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nJyAHnVl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5F60C116D0;
+	Thu, 15 Jan 2026 21:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768512376;
+	bh=LjEeRLtspIw+x2RORFQirX0OW4sGtXmdp1zlvKu6y5k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nJyAHnVlCBE8ClWTSVictKAgaLSOrXvktzgX1ATwsMBlY0KWsSz3UXMifJMgT7U+b
+	 KjnfZwRJ1MKAMuXi82absoYo9LPGfZ4vN8Fhto2i6t6T8bODqIxcA9GzSTA5nKkZmd
+	 w0kIAVz9HvcDkxB3UNygJXIX5L0UmN3mJzjNe8rO+a0MZPoxtpBh2xPKVhvBv0qoxw
+	 xjCc1rFXfbJCpQzFuIodT+iXMHcSTwYPlvwCOlQzOlB3IAbp7XJHvXBR1AsS52sduR
+	 i1PvK7jRQupB+DVeAdYKp1jTiUxgFnXdmC0eSQGqTb58wwzkp7oPPehjvA1IEEKMt8
+	 lQ+VghcXmHrBA==
+Date: Thu, 15 Jan 2026 15:26:14 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>, 
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, abel.vesa@linaro.org, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] usb: typec: ucsi: ucsi_glink: Add support for
+ X1E80100 compatible string
+Message-ID: <cjw5s6a65ldtr7xczlhr6uxiqwoy5dchtc2kzj3xtruxalg6ri@nxuzan2lkpo3>
+References: <20260114211759.2740309-1-anjelique.melendez@oss.qualcomm.com>
+ <20260114211759.2740309-4-anjelique.melendez@oss.qualcomm.com>
+ <20260115-annoying-ludicrous-hummingbird-c7cefe@quoll>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,36 +61,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <097C424DFD34E837+20260115082608.743707-1-raoxu@uniontech.com>
+In-Reply-To: <20260115-annoying-ludicrous-hummingbird-c7cefe@quoll>
 
-Hi raoxu,
+On Thu, Jan 15, 2026 at 10:14:55AM +0100, Krzysztof Kozlowski wrote:
+> On Wed, Jan 14, 2026 at 01:17:58PM -0800, Anjelique Melendez wrote:
+> > Add support for the X1E80100 compatible string which needs UCSI_DELAY_DEVICE_PDOS quirk.
+> 
+> Please wrap commit message according to Linux coding style / submission
+> process (neither too early nor over the limit):
+> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+> 
+> 
+> > 
+> > Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+> > ---
+> >  drivers/usb/typec/ucsi/ucsi_glink.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> > index 11b3e24e34e2..e700c6a58a46 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> > @@ -379,6 +379,7 @@ static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
+> >  	{ .compatible = "qcom,sm8350-pmic-glink", .data = &quirk_sc8180x, },
+> >  	{ .compatible = "qcom,sm8450-pmic-glink", .data = &quirk_sm8450, },
+> >  	{ .compatible = "qcom,sm8550-pmic-glink", .data = &quirk_sm8450, },
+> > +	{ .compatible = "qcom,x1e80100-pmic-glink", .data = &quirk_sm8450, },
+> 
+> So is it compatible with sm8550 or not? Based on this commit it would
+> be, so you need to clarify here why you decided not to make them
+> compatible.
+> 
 
-kernel test robot noticed the following build errors:
+pmic_glink is pretty much a MFD, for this child they are compatible, but
+the MFD as a whole isn't.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.19-rc5 next-20260115]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+With the current model of naming compatible data objects by the platform
+that happens to be first, this is what we get.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/raoxu/usb-xhci-route-device-to-secondary-interrupters/20260115-162956
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/097C424DFD34E837%2B20260115082608.743707-1-raoxu%40uniontech.com
-patch subject: [PATCH v7] usb:xhci:route device to secondary interrupters
-config: loongarch-randconfig-002-20260115 (https://download.01.org/0day-ci/archive/20260116/202601160403.qyf0XUkV-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601160403.qyf0XUkV-lkp@intel.com/reproduce)
+I find that it would be better to name the quirk objects based on what
+their actual impact, something I talked with Anjelique about introducing
+recently.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601160403.qyf0XUkV-lkp@intel.com/
+Regards,
+Bjorn
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "xhci_msix_set_handler_data" [drivers/usb/host/xhci-hcd.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Best regards,
+> Krzysztof
+> 
 
