@@ -1,90 +1,113 @@
-Return-Path: <linux-usb+bounces-32406-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32407-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68F2BD28628
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 21:23:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7F9BD2896E
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 22:03:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A41D730101EE
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 20:23:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D2E3D30213F6
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 21:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9BC93242BD;
-	Thu, 15 Jan 2026 20:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EFB8320CAD;
+	Thu, 15 Jan 2026 21:03:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="adCsGLOU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P8FyGfph"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB3D322C6D
-	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 20:22:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCB32C08AB
+	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 21:03:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768508579; cv=none; b=D0xarMUF16aV0EkXLmpkDjmSmYKz8TLF/5lT6/VDt60J3fWBFN6LKnNAHLW5Pf75fAjxsQ2oRvaXcy7lIXNaE32LVJ4OV9pg1vhK8LShb8QDw1Fw96LNZkaYhyNhXv+NWSMh1d2P5rtmL5z8Tl0H7rDpVvSVGTdN1CxFAx6bIvc=
+	t=1768510999; cv=none; b=un7pPxAy/jFZufxi3QPqEU/TWf807w29f0R9BRYEg/G8QZ8U2n/5p2LYjCUxj3SvWALXyn6mDlORoGnxWtCSUrcY6cxJSaNxrsqug2la195DjOzr+m4Pz0r4u14WYeCyyRFoyWG4Ry9tzjeatvGqiLkHeXAIVwWISGIJHppbVfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768508579; c=relaxed/simple;
-	bh=UUZwAZQ5SIRk7HwpqbQbu52XUjCo5nXpivnmi1owl70=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=a1m3vKQgSnm9NYJWHu51huUzVs1ZSsK4hAxDzZEWdk+0jn0B+MWV83Zq2Ig1/B1aj9xrLwrtpsN+sewvGyNy5aMKFjoHV6EiE73zLe9Bb6m2kyKgtU85ylXSoORFYVp68stLbWEW9uGNBcOeblC/74VQaYBoaS9NudchfH9j1RY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=adCsGLOU; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
-DKIM-Signature: a=rsa-sha256; b=adCsGLOUHGcd88y+F8KiixXJFt97B23g6F4t6HzgGf0SpUdUlqiKJyf4P90reWsQ+sWTJ69624iHaxGDztFdexJ3kWohVBt1cxWDQ0t1tRPtMBv66HOZn2bTpWFNXMiC338UxvWDDElrnOemx4Ih9kx4D6A92zmH/eA/AUIueExlh7wpCE4M9nqwbn2AasDmIg7ROVy7w5Prj8xq6IMFeYtyQQE9LwqRap/uIV5GZV8YXmckpeCaC+uqESE9fENi95uOvyQhoWxnEuEoOQlKcomMkDFWMfCdV7NaYtnbv8i2MmJT8YZW74Be1VFdzonrq2RLy+ToHM0/GKkHXRM+UQ==; s=purelymail3; d=purelymail.com; v=1; bh=UUZwAZQ5SIRk7HwpqbQbu52XUjCo5nXpivnmi1owl70=; h=Feedback-ID:Received:Received:From:To:Subject:Date;
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: linux-usb@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1724870722;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Thu, 15 Jan 2026 20:22:45 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
-	(envelope-from <peter@korsgaard.com>)
-	id 1vgTrg-000000091vt-1D1a;
-	Thu, 15 Jan 2026 21:22:44 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Simon Horman <horms@kernel.org>
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,  netdev@vger.kernel.org,
-  linux-usb@vger.kernel.org,  Andrew Lunn <andrew+netdev@lunn.ch>,  "David
- S. Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,
-  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next] net: usb: sr9700: fix byte numbering in comments
-In-Reply-To: <aWklu0EwMbINC6T0@horms.kernel.org> (Simon Horman's message of
-	"Thu, 15 Jan 2026 17:36:59 +0000")
-References: <20260113075327.85435-1-enelsonmoore@gmail.com>
-	<aWklu0EwMbINC6T0@horms.kernel.org>
-Date: Thu, 15 Jan 2026 21:22:44 +0100
-Message-ID: <87jyxiy6az.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1768510999; c=relaxed/simple;
+	bh=urb+EOFiCz5HexwbmH0CRi3fADfmhtCrzamd2i7EuOQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iSJALBL6H5Q92RsmwGegwZa5l3se5i8YqMJpUElI+a2JCN6tQ1ZTH5byDl64wQ7eH3QTX2P1X+yCX5A5f6g3EvvdjfLx7K5gQFulBIIcDuJSM+2FTQMOgQUHJKadURAEhOQUCrBRgdXEIhMRENGap/yZiTd2UurWkBMIucwAx28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P8FyGfph; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768510999; x=1800046999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=urb+EOFiCz5HexwbmH0CRi3fADfmhtCrzamd2i7EuOQ=;
+  b=P8FyGfphR7jVhFTX66Op2khAQwGtwIqQjhzs8Mxg8Grge+CrRlX1eseI
+   dbhrubC5k9ShLCLj+HkSfNX+ShmgLZw25btLzDRqo7bbCtitgVWQBKvU+
+   7ianjPqm3xH6W0C1s7+RujmIQ00lBo7d2lBiNuSJ11NL3l7GEXGz7OtRn
+   UZ/NUjINcagQoHkWZGgRvyDuNxF0FPlw1Um5S3elXl6Yxo0NHQ+vtrfgA
+   UchUKgsikQzgL5drGqNJXGDcMeIgaRH1Bynb7eIv8V8RAygRgXDY3n0vk
+   EMdrpofd4EQlowL+OpSafpbnRVTNtxK89mVU/uUnv95lXyIDglr7oBTgH
+   A==;
+X-CSE-ConnectionGUID: 2VOaGTLeSImdgOfbdRGczw==
+X-CSE-MsgGUID: qKTUkMZqSAKrOSWZPFEyMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="69725161"
+X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
+   d="scan'208";a="69725161"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 13:03:18 -0800
+X-CSE-ConnectionGUID: pN/GGFWUSFuSxZBvDkRZ6g==
+X-CSE-MsgGUID: g0lLf2KTSHqL2lbZPwKWOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
+   d="scan'208";a="205113351"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 15 Jan 2026 13:03:16 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgUUr-00000000Jzo-0eid;
+	Thu, 15 Jan 2026 21:03:13 +0000
+Date: Fri, 16 Jan 2026 05:02:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: raoxu <raoxu@uniontech.com>, mathias.nyman@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	michal.pecio@gmail.com, niklas.neronin@linux.intel.com,
+	raoxu@uniontech.com, zhanjun@uniontech.com, kenny@panix.com
+Subject: Re: [PATCH v7] usb:xhci:route device to secondary interrupters
+Message-ID: <202601160403.qyf0XUkV-lkp@intel.com>
+References: <097C424DFD34E837+20260115082608.743707-1-raoxu@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <097C424DFD34E837+20260115082608.743707-1-raoxu@uniontech.com>
 
->>>>> "Simon" == Simon Horman <horms@kernel.org> writes:
+Hi raoxu,
 
- > On Mon, Jan 12, 2026 at 11:53:21PM -0800, Ethan Nelson-Moore wrote:
- >> The comments describing the RX/TX headers and status response use
- >> a combination of 0- and 1-based indexing, leading to confusion. Correct
- >> the numbering and make it consistent. Also fix a typo "pm" for "pn".
- >> 
- >> This issue also existed in dm9601 and was fixed in commit 61189c78bda8
- >> ("dm9601: trivial comment fixes").
- >> 
- >> Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+kernel test robot noticed the following build errors:
 
- > Thanks,
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.19-rc5 next-20260115]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- > I agree this is consistent with the cited commit.
+url:    https://github.com/intel-lab-lkp/linux/commits/raoxu/usb-xhci-route-device-to-secondary-interrupters/20260115-162956
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/097C424DFD34E837%2B20260115082608.743707-1-raoxu%40uniontech.com
+patch subject: [PATCH v7] usb:xhci:route device to secondary interrupters
+config: loongarch-randconfig-002-20260115 (https://download.01.org/0day-ci/archive/20260116/202601160403.qyf0XUkV-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601160403.qyf0XUkV-lkp@intel.com/reproduce)
 
- > Reviewed-by: Simon Horman <horms@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601160403.qyf0XUkV-lkp@intel.com/
 
- > Context left below for the benefit of Peter who I've added to the CC list.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Heh, old stuff ;)
-
-Acked-by: Peter Korsgaard <peter@korsgaard.com>
+>> ERROR: modpost: "xhci_msix_set_handler_data" [drivers/usb/host/xhci-hcd.ko] undefined!
 
 -- 
-Bye, Peter Korsgaard
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
