@@ -1,123 +1,123 @@
-Return-Path: <linux-usb+bounces-32389-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32390-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA466D244D3
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 12:49:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEE3DD2461D
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 13:06:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2F20730F7A5B
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 11:43:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1B5E230393C5
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 12:05:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FFB36CDF9;
-	Thu, 15 Jan 2026 11:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036643939A4;
+	Thu, 15 Jan 2026 12:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="QD02b6F3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UEkSErFN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67EED37E307;
-	Thu, 15 Jan 2026 11:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA0C318BA1;
+	Thu, 15 Jan 2026 12:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768477371; cv=none; b=VJl6cZCYbJebjs34bib8SeyVp/5o7jtrnItIzisk3Ca4c1cqomjFVXTW72jSvmokmbmfqoK96cS5bFu3VXCGYGDthd5LFYevXa+jgosWLhxi1JwUeo1nsm434o0O7VwH2IJLesnm+A2GG1LxactNLuG/TVCgxCcO+R07/7M8eLE=
+	t=1768478752; cv=none; b=MZmQ4J5wWtPJWy7VNgNRTAemXlPROOv9gZwX1HHbcXVTNFovGOb4hEnUQf6mxOHsWPzuTEZ0nDjBeMxURwgFq6lWGw/WRNbyUKQGZf2S3pwadkhWXaGhKmb0vQGUKgf4ZudP6K3Y2BPkoVEjxoF38Fr0tbuSXuLJOcYByPi5xRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768477371; c=relaxed/simple;
-	bh=63dl3TNPU5nwdThJj/EBkKixN0LIH7NW8BAMlypNW+k=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=YM2zmB4SDRyEiv7iritD3+6o8xLWf1WNQY61L7P4St80+U+wWCw/8DycZkdi34teaKhakPy9BSg0hqunhEjUPUASmJbz3IS1KKsw3MsAiehswjBPKuvGrNR5Ka1PQARTm2Pb4cOnfweudDV0vYv6vLqfUmCYnLvQKDXsYOMftf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=QD02b6F3; arc=none smtp.client-ip=211.75.126.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
-X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 60FBgLHS12959073, This message is accepted by code: ctloc85258
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
-	t=1768477341; bh=63dl3TNPU5nwdThJj/EBkKixN0LIH7NW8BAMlypNW+k=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:MIME-Version;
-	b=QD02b6F3HVNB9WkRoVclfsLcaQtCsABc/bdOc+pqMvvChpW3W9t5MUiQQiY8LQUVA
-	 EkNgb0/5TVG5WLFCdHo93emd5/KuQPM7L1FK1GfS+ivHuBkM6A+mMWiPiqvjZZI/36
-	 xC24eDsJM98ryWbUWbD/aPlg2N1vXWfVUf4ksgrIoCDjgAQrUAL7XY+HiTZ4+PczQz
-	 Om06AcZDh6jjFjjeA9f/B6BanQG97Uqwjsw7AYQIunHOOlYPfGZfZOaCSfbJwPjBtQ
-	 mcTV7obWrCB+xFC4kTbgMGvIE4nrB6pdKvUA0aAmgo26kw4I9xavBYuTX3YZbRWEib
-	 An3EvQ9oZBIRg==
-Received: from mail.realtek.com (rtkexhmbs02.realtek.com.tw[172.21.6.41])
-	by rtits2.realtek.com.tw (8.15.2/3.21/5.94) with ESMTPS id 60FBgLHS12959073
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Jan 2026 19:42:21 +0800
-Received: from RTKEXHMBS03.realtek.com.tw (10.21.1.53) by
- RTKEXHMBS02.realtek.com.tw (172.21.6.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Thu, 15 Jan 2026 19:42:20 +0800
-Received: from RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5]) by
- RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5%9]) with mapi id
- 15.02.1748.010; Thu, 15 Jan 2026 19:42:20 +0800
-From: Hayes Wang <hayeswang@realtek.com>
-To: lu lu <insyelu@gmail.com>
-CC: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-        "davem@davemloft.net"
-	<davem@davemloft.net>,
-        nic_swsd <nic_swsd@realtek.com>, "tiwai@suse.de"
-	<tiwai@suse.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] net: usb: r8152: fix transmit queue timeout
-Thread-Topic: [PATCH] net: usb: r8152: fix transmit queue timeout
-Thread-Index: AQHchQGLBs/iMEigv0CwXIii7EgMTLVRErBAgADcLoCAASPVoA==
-Date: Thu, 15 Jan 2026 11:42:20 +0000
-Message-ID: <1b498052994c4ed48de45b5af9a490b6@realtek.com>
-References: <20260114025622.24348-1-insyelu@gmail.com>
- <3501a6e902654554b61ab5cd89dcb0dd@realtek.com>
- <CAAPueM4XheTsmb6xd3w5A3zoec-z3ewq=uNpA8tegFbtFWCfaA@mail.gmail.com>
-In-Reply-To: <CAAPueM4XheTsmb6xd3w5A3zoec-z3ewq=uNpA8tegFbtFWCfaA@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1768478752; c=relaxed/simple;
+	bh=gyEcUiyPUyExWka3HAxwmztaJczxw+a1BT05wunTPkU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RIaZfhQ7Dkysnq/6zxkWAAmoucGSFy/FcO3H1kGFDga4DlCktB0TcnqxjG79C+3kNCJD1sKXoVyDkwX5eEey62NdUSUk2YAj7xhTlsVcg8n+V/PmEPSqH/tanFrCW6Jajzdok5bgbjexHl8oS1VthBYrNza03PTZ0v/sHU5PKEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UEkSErFN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96987C116D0;
+	Thu, 15 Jan 2026 12:05:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768478752;
+	bh=gyEcUiyPUyExWka3HAxwmztaJczxw+a1BT05wunTPkU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UEkSErFNcunZoacCd9uro5tSYp9gBbvzRrbtzj+hB1FU9Srw2ig44fCLEcDduLYNm
+	 HF3igZ69i5imQEaAjZPfl3/3onhQWzn8qyJNdd50Z821iJ7BKC/fhmRr8a9m+vA+Og
+	 ocfbCmuIFwdk81Qn+TjlkHxexg2n3Sp1Eqq3ssZSAV8JgbXxLhojez3UHFWbGzhswN
+	 mzvTq+qBU79Muu6k2YfzqyQS8ZjbqWC5kec2c6WPX1dZ3X1LGDNOkB9F3LvYD1CHZY
+	 1CHueLYlmiUG4ty5Xw2FQ/lX+Io/DhIYt5iDKf+UYMlhyNm0lPlcU80G7ku+OeDadt
+	 aGHrxrReyrmEA==
+Date: Thu, 15 Jan 2026 17:35:48 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+Cc: conor@kernel.org, neil.armstrong@linaro.org, gregkh@linuxfoundation.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, 18771902331@163.com, cyy@cyyself.name,
+	TroyMitchell988@gmail.com, kingxukai@zohomail.com,
+	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, gaohan@iscas.ac.cn
+Subject: Re: [PATCH v2 3/4] phy: usb: Add driver for Canaan K230 USB 2.0 PHY
+Message-ID: <aWjYHK1cTj8Dbz2B@vaman>
+References: <20260115064223.21926-1-jiayu.riscv@isrc.iscas.ac.cn>
+ <20260115064223.21926-4-jiayu.riscv@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260115064223.21926-4-jiayu.riscv@isrc.iscas.ac.cn>
 
-bHUgbHUgPGluc3llbHVAZ21haWwuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgSmFudWFyeSAxNSwg
-MjAyNiA5OjM3IEFNDQpbLi4uXQ0KPiBUbyByZWR1Y2UgdGhlIHBlcmZvcm1hbmNlIGltcGFjdCBv
-biB0aGUgdHhfdGwgdGFza2xldOKAmXMgdHJhbnNtaXQgcGF0aCwNCj4gbmV0aWZfdHJhbnNfdXBk
-YXRlKCkgaGFzIGJlZW4gbW92ZWQgZnJvbSB0aGUgbWFpbiB0cmFuc21pdCBwYXRoIGludG8NCj4g
-d3JpdGVfYnVsa19jYWxsYmFjayAodGhlIFVTQiB0cmFuc2ZlciBjb21wbGV0aW9uIGNhbGxiYWNr
-KS4NCj4gVGhlIG1haW4gY29uc2lkZXJhdGlvbnMgYXJlIGFzIGZvbGxvd3M6DQo+IDEuIFJlZHVj
-ZSBmcmVxdWVudCB0YXNrbGV0IG92ZXJoZWFkDQo+IG5ldGlmX3RyYW5zX3VwZGF0ZSgpIGlzIGlu
-dm9rZWQgZnJlcXVlbnRseSB1bmRlciBoaWdoLXRocm91Z2hwdXQNCj4gY29uZGl0aW9ucy4gQ2Fs
-bGluZyBpdCBkaXJlY3RseSBpbiB0aGUgbWFpbiB0cmFuc21pdCBwYXRoIGNvbnRpbnVvdXNseQ0K
-PiBpbnRyb2R1Y2VzIGEgc21hbGwgYnV0IG5vdGljZWFibGUgQ1BVIG92ZXJoZWFkLCBkZWdyYWRp
-bmcgdGhlDQo+IHNjaGVkdWxpbmcgZWZmaWNpZW5jeSBvZiB0aGUgdHhfdGwgdGFza2xldC4NCj4g
-Mi4gTW92ZSBub24tY3JpdGljYWwgb3BlcmF0aW9ucyBvdXQgb2YgdGhlIGNyaXRpY2FsIHBhdGgN
-Cj4gQnkgZGVmZXJyaW5nIG5ldGlmX3RyYW5zX3VwZGF0ZSgpIHRvIHRoZSBVU0IgY2FsbGJhY2sg
-dGhyZWFk4oCUYW5kDQo+IGVuc3VyaW5nIGl0IGV4ZWN1dGVzIGFmdGVyIHRhc2tsZXRfc2NoZWR1
-bGUoJnRwLT50eF90bCnigJR0aGUgdGltZXN0YW1wDQo+IHVwZGF0ZSBpcyByZW1vdmVkIGZyb20g
-dGhlIGNyaXRpY2FsIHRyYW5zbWl0IHNjaGVkdWxpbmcgcGF0aCwgZnVydGhlcg0KPiByZWR1Y2lu
-ZyB0aGUgYnVyZGVuIG9uIHR4X3RsLg0KDQpFeGN1c2UgbWUsIEkgZG8gbm90IGZ1bGx5IHVuZGVy
-c3RhbmQgdGhlIHJlYXNvbmluZyBhYm92ZS4NCkl0IHNlZW1zIHRoYXQgdGhpcyBjaGFuZ2UgbWVy
-ZWx5IHNoaWZ0cyB0aGUgdGltZSAob3IgZWZmb3J0KSBmcm9tIHR4X3RsIHRvIHRoZSBUWCBjb21w
-bGV0aW9uIGNhbGxiYWNrLg0KDQpXaGlsZSB0aGUgaW50ZW50aW9uIGlzIHRvIG1ha2UgdHhfdGwg
-cnVuIGZhc3RlciwgdGhpcyBhbHNvIGRlbGF5cyB0aGUgY29tcGxldGlvbiBvZiB0aGUgY2FsbGJh
-Y2ssDQp3aGljaCBpbiB0dXJuIG1heSBkZWxheSBib3RoIHRoZSBuZXh0IGNhbGxiYWNrIGV4ZWN1
-dGlvbiBhbmQgdGhlIG5leHQgc2NoZWR1bGluZyBvZiB0eF90bC4NCg0KRnJvbSB0aGlzIHBlcnNw
-ZWN0aXZlLCBpdCBpcyB1bmNsZWFyIHdoYXQgaXMgYWN0dWFsbHkgYmVpbmcgc2F2ZWQuDQoNCkhh
-dmUgeW91IG9ic2VydmVkIGEgbWVhc3VyYWJsZSBkaWZmZXJlbmNlIGJhc2VkIG9uIHRlc3Rpbmc/
-DQoNCklmIHlvdSB3YW50IHRvIHJlZHVjZSB0aGUgZnJlcXVlbmN5IG9mIGNhbGxpbmcgbmV0aWZf
-dHJhbnNfdXBkYXRlKCksDQp5b3UgY291bGQgdHJ5IHNvbWV0aGluZyBsaWtlIHRoZSBmb2xsb3dp
-bmcuIFRoaXMgd2F5LA0KbmV0aWZfdHJhbnNfdXBkYXRlKCkgd291bGQgbm90IGJlIGV4ZWN1dGVk
-IG9uIGV2ZXJ5IHRyYW5zbWlzc2lvbi4NCg0KLS0tIGEvZHJpdmVycy9uZXQvdXNiL3I4MTUyLmMN
-CisrKyBiL2RyaXZlcnMvbmV0L3VzYi9yODE1Mi5jDQpAQCAtMjQzMiw5ICsyNDMyLDEyIEBAIHN0
-YXRpYyBpbnQgcjgxNTJfdHhfYWdnX2ZpbGwoc3RydWN0IHI4MTUyICp0cCwgc3RydWN0IHR4X2Fn
-ZyAqYWdnKQ0KDQogICAgICAgIG5ldGlmX3R4X2xvY2sodHAtPm5ldGRldik7DQoNCi0gICAgICAg
-aWYgKG5ldGlmX3F1ZXVlX3N0b3BwZWQodHAtPm5ldGRldikgJiYNCi0gICAgICAgICAgIHNrYl9x
-dWV1ZV9sZW4oJnRwLT50eF9xdWV1ZSkgPCB0cC0+dHhfcWxlbikNCisgICAgICAgaWYgKG5ldGlm
-X3F1ZXVlX3N0b3BwZWQodHAtPm5ldGRldikpIHsNCisgICAgICAgICAgIGlmIChza2JfcXVldWVf
-bGVuKCZ0cC0+dHhfcXVldWUpIDwgdHAtPnR4X3FsZW4pDQogICAgICAgICAgICAgICAgbmV0aWZf
-d2FrZV9xdWV1ZSh0cC0+bmV0ZGV2KTsNCisgICAgICAgICAgIGVsc2UNCisgICAgICAgICAgICAg
-ICBuZXRpZl90cmFuc191cGRhdGUodHAtPm5ldGRldik7DQorICAgICAgIH0NCg0KICAgICAgICBu
-ZXRpZl90eF91bmxvY2sodHAtPm5ldGRldik7DQoNCkJlc3QgUmVnYXJkcywNCkhheWVzDQoNCg==
+On 15-01-26, 14:42, Jiayu Du wrote:
+
+> +static struct phy *k230_usb_phy_xlate(struct device *dev,
+> +				      const struct of_phandle_args *args)
+> +{
+> +	struct k230_usb_phy_global *global = dev_get_drvdata(dev);
+> +	struct k230_usb_phy_instance *phy_inst;
+> +	struct phy *phy;
+> +
+> +	if (args->args[0] >= MAX_PHYS)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	phy_inst = devm_kzalloc(dev, sizeof(*phy_inst), GFP_KERNEL);
+> +	if (!phy_inst)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	phy_inst->global = global;
+> +	phy_inst->index = args->args[0];
+> +
+> +	phy = devm_phy_create(dev, NULL, &k230_usb_phy_ops);
+> +	if (IS_ERR(phy))
+> +		return ERR_PTR(PTR_ERR(phy));
+> +
+> +	phy_set_drvdata(phy, phy_inst);
+
+This seems wrong place, why is this not done in the driver probe?
+
+> +
+> +	return phy;
+> +}
+> +
+> +static int k230_usb_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct k230_usb_phy_global *global;
+> +	struct device *dev = &pdev->dev;
+> +	struct phy_provider *provider;
+> +
+> +	global = devm_kzalloc(dev, sizeof(*global), GFP_KERNEL);
+> +	if (!global)
+> +		return -ENOMEM;
+> +	dev_set_drvdata(dev, global);
+> +
+> +	global->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(global->base))
+> +		return dev_err_probe(dev, PTR_ERR(global->base),
+> +				     "ioremap failed\n");
+> +
+> +	global->reg_test_offset[0] = 0x70;
+> +	global->reg_ctl_offset[0] = 0xb0;
+> +	global->reg_test_offset[1] = 0x90;
+> +	global->reg_ctl_offset[1] = 0xb8;
+
+Where are these magic values coming from?
+
+-- 
+~Vinod
 
