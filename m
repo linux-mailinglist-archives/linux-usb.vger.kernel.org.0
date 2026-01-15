@@ -1,125 +1,201 @@
-Return-Path: <linux-usb+bounces-32367-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32368-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 737F9D224F1
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 04:34:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F95D22910
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 07:33:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4A593303A940
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 03:33:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E6D9B3045CD1
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 06:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306D229C33F;
-	Thu, 15 Jan 2026 03:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FBB92236EB;
+	Thu, 15 Jan 2026 06:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="U0cXoqZ2"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VygM8QSB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A86220DD72;
-	Thu, 15 Jan 2026 03:33:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940F610785;
+	Thu, 15 Jan 2026 06:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768448032; cv=none; b=VVLRzuXqnNf3z4PRwSZNZIvLnySHGbEDN9W4q3D4icvSa0veP08IpugKYnEcJSb0w+HPky1aQLPkcCYrlxMamF/Yfke7nScUVj7fdzkjuIEWp2TadK2237sgqAq47Si/UBaWn4gJiIVfKC+FYGp/g1FnBflBsfbAEWQjKe4eUG8=
+	t=1768458730; cv=none; b=KzgSBjL4SF3yeal3SEfU2EL/kI47r81LdrWgLg0niT6VSL2H0GwvcP1xpto4GpslACP5y29WxRKyk1rTC5/By0TltV+R2jVhtsZ1F9JKNXZ05Vf8JdXkX6bt70TRyIxcAdr3aHtprVe3CyomLTPalhpsGlU1VcDapLVBcQaM1SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768448032; c=relaxed/simple;
-	bh=up5K7Boo60OzwOjvBYELbUwDJLSL+x0WLhJUdvwbpE8=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=KEe05Vb+iyVA1oPo1cHS10dYpYkNvI090O4WINdaRxryx2RF06m2Kv5pQXRt9PnVavhHO/uoo4bvrH47re436XH2zpn0CANSK1AxPdqic5ELQDIoINBk096IaVIgZho2v7937OJ8XHocGzyUq67DBbVooeCJ2ACmoJ5RMHwwDdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=U0cXoqZ2; arc=none smtp.client-ip=203.205.221.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1768448021;
-	bh=vQceNp5tA76YGUrM80IHs42wRc7g60NkKfInoNzH61o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=U0cXoqZ2IsE2YZnm16uRroy8AkrsPmlrGogy3rdeqsHuIVRRmQ3gWerhYMufyjCJl
-	 oOM8SMj4d0K6YE9n6OgrlfoN8SsYiyQpdsK7jX7oaQ3/8gO0NgmxKwy4B8cHRJavAD
-	 Dt9DhMMCGXYYNNY8NPve1luILoLpWxii4NHhgaLE=
-Received: from localhost.localdomain ([116.128.244.169])
-	by newxmesmtplogicsvrsza56-0.qq.com (NewEsmtp) with SMTP
-	id 8168EC6A; Thu, 15 Jan 2026 11:32:22 +0800
-X-QQ-mid: xmsmtpt1768447942t8pnwbo1q
-Message-ID: <tencent_A6F79CBEAB47840EB720951FA48D97CD4906@qq.com>
-X-QQ-XMAILINFO: OIJV+wUmQOUAfP3D3mpyPpYl1EeucrrLq4Ie7Jn/xC3/uVB2XvyU6exrz8ebMq
-	 JWA7bV13eDU2WnePb1ZeYZuCnBUpdm2PboAk44cFutPEBTF5nxE1k6TOyJux+7TfBmH8STtlEHpj
-	 3Ekq1EOmxRBn4b6nPrYKrjex5Sdkgg4aQNaN45MLsAPxbvGJ829+sHG9Ew3h4uYp8U34hWZBdQoY
-	 7yWDLVgleBqqJl9aSHqIXwyYOhwgcsnt/CJZvYk0ZelkqSBayjbjb2q92ECobbOA2nAdzIK7DzeI
-	 glk3pej3eby92eVfagpDN8DYzn0nbdgEExqv54tILdpTQURogia5CzYMHintwwAL8wT7SS921hyT
-	 RosOXkF38KhPELg64wjDpGQ9niNydIMyWQ68XBC80jFAMcoZWw5yW2UFMg7bb3IrJueYr/O69ekD
-	 5p759qpnzS0DJ8Mt6d0w2ohR/JBM9YfAOpRQUtZIHuKLLWrMsbpO0174zpm4taO7ZZPPPU07bsJx
-	 neKG8zzsPe5o0Hkh4sFLuNoWAJeN/yEuKCiTan+GYWDR+BzPcnUwI0xgcUoVwPTc7+uHs9Ih4QMU
-	 3XRWAhVrycIkEF+Cd3j6xo9RhYoaUO1aEqJ/8p5KaHqKhsN1xT4Ocx8OQB0dWBPB8qkzur1lNBJ3
-	 lY0ryhuSkHJNqaaUwaUSAwZZ3GCfYHh4vFSvWS/iTmgUl/JnXtFNQJQWB0wm+6Oz0vMKMPw060Hl
-	 IPxpRIainbCbg5MIb6eAEd9YMQfY6YhJ9eek0tjduq1az5pKYy4/dZR7IpyRxUNLxFptNVSusaNS
-	 N/fat2T7sjGBweabwAvgmsSeffyydzFFP4I57uBG3iD9EhqVenQLz34RWgPS2eQU+7CqYbqOKQJH
-	 LgyEZiPlvRh5z/I+u6q77TKz5e3wRAth5SvGr2nAHFyBi7kHAUlDhJ224ChwBJq69V6ajP5J1w+I
-	 JbZFMnfMB+y78B60uHCcINVomAfhAR9HTCuBqejpK0XhhnkS1REXl0jFK57x2ZIcq5rO4jcVPWMb
-	 x3wz6K7MAy1aeEb9X0
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
-From: xiaopeitux@foxmail.com
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Pei Xiao <xiaopei01@kylinos.cn>,
-	Salvatore Bonaccorso <carnil@debian.org>
-Subject: [RFC] usb: typec: ucsi: Fix array index out-of-bounds in altmode registration
-Date: Thu, 15 Jan 2026 11:32:01 +0800
-X-OQ-MSGID: <0c998048e92cd60f5edc32812bf3238d429c52cf.1768447807.git.xiaopei01@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <176840984804.2144647.10736984532804520381@eldamar.lan>
-References: <176840984804.2144647.10736984532804520381@eldamar.lan>
+	s=arc-20240116; t=1768458730; c=relaxed/simple;
+	bh=3y60AYF0aCXRC5WdJ0SjO3RCZQIbZnyQ61gy+12AcHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GdrK6YSpRfKRQ1bx/xzp2mQZF05r1L1Qv5EwS9oStJRzuCfJp+pclXqqeiciAQ//GzeON+/ir9k7lyZQdRJF4JBWvncUibpurvwT2GTOa7m7oXVPl++lW5ICzPdEvOY2/N1rxjWwvNqaB5uT76iUEcc1UNxZdeYe7eRSJjcGF6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VygM8QSB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BFAC116D0;
+	Thu, 15 Jan 2026 06:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1768458730;
+	bh=3y60AYF0aCXRC5WdJ0SjO3RCZQIbZnyQ61gy+12AcHc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VygM8QSBYtIFqXL6NV/pEroEeGxFEWmCUab1aJUWb+CX599wLTqipXiJKs3d38K9y
+	 cifMUXOOS7Jfu9CqT9Uf56jLzxL3qFdrbi2TjOoUft3Hjz/ezJvEjubEXtGZcr3Blo
+	 ShEgMZFAzLMF2Sf5ZI2JAM9wxG2ct3luLstZZEn8=
+Date: Thu, 15 Jan 2026 07:32:04 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: =?utf-8?B?6b2Q5p+v5a6H?= <qikeyu2017@gmail.com>
+Cc: heikki.krogerus@linux.intel.com, andersson@kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: mux: fix NULL pointer dereference in
+ {typec_switch,mux}_put
+Message-ID: <2026011541-froth-cabdriver-a214@gregkh>
+References: <CALEuBan7V-YVTyLif29E0hZx9nacbxJG1xSL6DspxEctDbdtLg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALEuBan7V-YVTyLif29E0hZx9nacbxJG1xSL6DspxEctDbdtLg@mail.gmail.com>
 
-From: Pei Xiao <xiaopei01@kylinos.cn>
+On Thu, Jan 15, 2026 at 02:56:24AM +0800, 齐柯宇 wrote:
+> This fix was discovered through static code analysis.
+> 
+> In typec_switch_put() and typec_mux_put(), the code directly dereferences
+> sw_dev->dev.parent->driver->owner without checking if 'driver' is NULL.
+> This can lead to a NULL pointer dereference kernel crash.
+> 
+> [Call Chain Analysis]
+> The vulnerable functions are called through the following paths:
+> 
+>   Acquisition path (fwnode_typec_switch_get):
+>     typec_port_register()           [class.c]
+>       -> typec_switch_get()         [typec_mux.h]
+>         -> fwnode_typec_switch_get() [mux.c]
+>           -> class_find_device()    (gets device reference)
+>           -> try_module_get(sw_devs[i]->dev.parent->driver->owner)
+>           -> stores to sw->sw_devs[i]
+> 
+>   Release path (typec_switch_put):
+>     typec_release()                 [class.c]
+>       -> typec_switch_put()         [mux.c]
+>         -> module_put(sw_dev->dev.parent->driver->owner)  <- BUG!
+>         -> put_device(&sw_dev->dev)
+> 
+>   Registration path (typec_switch_register):
+>     I2C/Platform driver probe()
+>       -> typec_switch_register(dev, &sw_desc) [mux.c]
+>         -> sw_dev->dev.parent = parent  (sets parent device)
+>         -> device_add(&sw_dev->dev)
+> 
+> [Data Flow Analysis]
+> The critical data flow is:
+> 
+>   sw_dev->dev.parent:
+>     - Set by typec_switch_register() from the 'parent' parameter
+>     - Typically an I2C or Platform device (e.g., &client->dev)
+> 
+>   sw_dev->dev.parent->driver:
+>     - Managed by kernel driver model (drivers/base/dd.c)
+>     - Set to driver pointer when driver binds (really_probe)
+>     - Set to NULL when driver unbinds (__device_release_driver)
+> 
+> [Race Condition Scenario]
+> The vulnerability can be triggered by the following race condition:
+> 
+>   Thread A (normal operation)        Thread B (attacker/event)
+>   ----------------------------       -------------------------
+>   T1: typec_port_register()
+>   T2: fwnode_typec_switch_get()
+>   T3: try_module_get(parent->driver->owner)
+>   T4: store sw_devs[i]
+>       ...
+>                                      T5: echo <dev> > unbind
+>                                      T6: device_driver_detach()
+>                                      T7: parent->driver = NULL
+>   T8: typec_switch_put(sw)
+>   T9: module_put(parent->driver->owner)
+>       -> NULL pointer dereference!
+> 
+> [User-Triggerable Paths]
+> Users can trigger this vulnerability through:
+> 
+>   1. sysfs unbind interface (requires root):
+>      # echo "<device>" > /sys/bus/i2c/drivers/<driver>/unbind
+> 
+>   2. Module unloading (requires root):
+>      # rmmod <switch_driver_module>
+> 
+>   3. USB Type-C hot-unplug (physical access):
+>      Physically removing the USB-C device or its parent device
+> 
+> How to fix:
+> Add NULL checks for both 'parent' and 'parent->driver' before calling
+> module_put() in typec_switch_put() and typec_mux_put().
+> 
+> Fixes: 71793b579ba68 ("usb: typec: mux: Allow multiple mux_devs per mux")
+> Signed-off-by: Kery Qi <qikeyu2017@gmail.com>
+> ---
+>  drivers/usb/typec/mux.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+> index 182c902c42f6..6ed8bb999ee0 100644
+> --- a/drivers/usb/typec/mux.c
+> +++ b/drivers/usb/typec/mux.c
+> @@ -134,7 +134,8 @@ void typec_switch_put(struct typec_switch *sw)
+>   for (i = 0; i < sw->num_sw_devs; i++) {
+>     sw_dev = sw->sw_devs[i];
+> 
+> -   module_put(sw_dev->dev.parent->driver->owner);
+> +   if (sw_dev->dev.parent && sw_dev->dev.parent->driver)
+> +     module_put(sw_dev->dev.parent->driver->owner);
+>     put_device(&sw_dev->dev);
+>   }
+>   kfree(sw);
+> @@ -358,7 +359,8 @@ void typec_mux_put(struct typec_mux *mux)
+> 
+>   for (i = 0; i < mux->num_mux_devs; i++) {
+>     mux_dev = mux->mux_devs[i];
+> -   module_put(mux_dev->dev.parent->driver->owner);
+> +   if (mux_dev->dev.parent && mux_dev->dev.parent->driver)
+> +     module_put(mux_dev->dev.parent->driver->owner);
+>     put_device(&mux_dev->dev);
+>   }
+>   kfree(mux);
+> -- 
+> 2.34.1
+> 
 
-Add boundary check to prevent array index out-of-bounds when PPM returns
-more alternate modes than expected.
+Hi,
 
-log:
-UBSAN: array-index-out-of-bounds in /build/reproducible-path/linux-6.17.13/drivers/usb/typec/ucsi/ucsi.c:609:18
-index 2 is out of range for type 'ucsi_altmode [2]'
-CPU: 10 UID: 0 PID: 275 Comm: kworker/10:1 Not tainted 6.17.13+deb14-amd64 #1 PREEMPT(lazy)  Debian 6.17.13-1
-Hardware name: LENOVO 83J3/LNVNB161216, BIOS PYCN30WW 11/17/2025
-Workqueue: events_long ucsi_init_work [typec_ucsi]
-Call Trace:
-<TASK>
-dump_stack_lvl+0x5d/0x80
-ubsan_epilogue+0x5/0x2b
-__ubsan_handle_out_of_bounds.cold+0x54/0x59
-ucsi_register_altmodes+0x233/0x250 [typec_ucsi]
-ucsi_check_altmodes+0x1b/0xa0 [typec_ucsi]
-ucsi_init_work+0x919/0x9b0 [typec_ucsi]
-process_one_work+0x192/0x350
-worker_thread+0x25a/0x3a0
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Reported-by: Salvatore Bonaccorso <carnil@debian.org>
-Closes: https://lore.kernel.org/lkml/176840984804.2144647.10736984532804520381@eldamar.lan
-Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
----
- drivers/usb/typec/ucsi/ucsi.c | 2 ++
- 1 file changed, 2 insertions(+)
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index a7b388dc7fa0..00575a8720cc 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -599,6 +599,8 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
- 		 * incremented.
- 		 */
- 		num = len / sizeof(alt[0]);
-+		if (num > ARRAY_SIZE(alt))
-+			num = ARRAY_SIZE(alt);
- 		i += num;
- 
- 		for (j = 0; j < num; j++) {
--- 
-2.25.1
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/process/email-clients.rst in order to fix this.
 
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
