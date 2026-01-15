@@ -1,95 +1,94 @@
-Return-Path: <linux-usb+bounces-32381-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32382-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97FDCD23611
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 10:15:03 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60B35D2361D
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 10:15:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7932F30312D8
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 09:15:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D67C43006E2A
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 09:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8A9E3559F0;
-	Thu, 15 Jan 2026 09:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139FE3563C2;
+	Thu, 15 Jan 2026 09:15:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZO9e6+QY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ledzokGY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0A135581D;
-	Thu, 15 Jan 2026 09:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD547355036
+	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 09:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768468497; cv=none; b=bJ7RubCXWXpc4+usHToIlTHVLxAKuShRMfOyFMD0MXCyLJuVlrMk9PYwDgNYsK0dOwfN9eluPm4YLCQUoWx2WiILMq4fy3h4ggYWEkfYZXDPdL9dai2UgKoJ0jVW5sSymOZCNuXXIiXiT/XpsKdX4viD5nVUxEN/wGndbYXytJE=
+	t=1768468523; cv=none; b=qHzKberC77288lTJs28VmjjYmj6veI11JynIkp1HYJSudxLs8ZBLSMAMUd0gP96Fz6iAW2RIizXEGA2H2yxqgVsfUuze9t11HaNbbOlxIpgQY24Bw9sP7Z2XRsYPas9mOosw36XmEqJ/HL3AQ4db/59OdlSQBy8qdTcVLLvlaAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768468497; c=relaxed/simple;
-	bh=c2mH3DKf+6PX1dSBvPUM4JjqEZd6/UYW4yAWXyHDL1E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YsPA4eJ0FKmAhVlyXxX6w3LiKiOczPcmo9/Cf4OxdO55ZJdypWaQDw1aDpakr+hEnUjobZNS4O1QYRN++YF/T2lqcTrhJqes9XvS4klId2lgVgoQjxXCQvjwf+Hofni6d1vaufWL3UKPaoypP7UGrIAi7A4x5d9oZQYXgyc9H8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZO9e6+QY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E41A0C19423;
-	Thu, 15 Jan 2026 09:14:56 +0000 (UTC)
+	s=arc-20240116; t=1768468523; c=relaxed/simple;
+	bh=ovAcWzyhlARqnTWUm5Dr5TcQ5wgWUyhHOXQz8CsZMtk=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gvQhFBLft4+1K44DSJe01GTvdDCXZ2LXMC4o6k5HYDR8lLbRjH33tJwpTVW26I/VssJfYqXGmRsZpsIAQ3Xhi5kgWbhUiWz7AG9hlzFefvx/UM0GTIGI2LDRMrBN3dH5jF36xSP6tUrxxJPhI+4qWczwkbb0iHW8QFfS8fwBKHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ledzokGY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2AFA5C116D0
+	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 09:15:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768468497;
-	bh=c2mH3DKf+6PX1dSBvPUM4JjqEZd6/UYW4yAWXyHDL1E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZO9e6+QYzQcXf3fru/svCaVXD35VGqvJDxnlV0Y7dqfwXaLkbG7YEyeRmB6z7F0/G
-	 iWT2G0QXYik0D/+WqyTEFjw/oWHSBWPA8VADwQ6mwz8pMbMVTCIZs5h8coW4k949eZ
-	 6uN4aMqny7oYlegsmD+RxARYqIYPfjR1GauBSOJyD+czJ04407tax5ii8vtatv0V34
-	 JuVF7NNKe6NZByemYzqYLaPBA2k/CfUEQit4n66AF1lpclQB+fWVbtz9M1RMN2HYVI
-	 gX5r/k5/fq0P0wc4CGEIzjJUAQHtgxb0AgeUXiDOAnEErA+4j+5L5nCw5eftxWb1ak
-	 KgjF8IHNJ1RGg==
-Date: Thu, 15 Jan 2026 10:14:55 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org, abel.vesa@linaro.org, linux-arm-msm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] usb: typec: ucsi: ucsi_glink: Add support for
- X1E80100 compatible string
-Message-ID: <20260115-annoying-ludicrous-hummingbird-c7cefe@quoll>
-References: <20260114211759.2740309-1-anjelique.melendez@oss.qualcomm.com>
- <20260114211759.2740309-4-anjelique.melendez@oss.qualcomm.com>
+	s=k20201202; t=1768468523;
+	bh=ovAcWzyhlARqnTWUm5Dr5TcQ5wgWUyhHOXQz8CsZMtk=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ledzokGY7yaFwctbli4l4LGI5hOMhN70eEKw+YzodWQuHZ1GdxVtNYNWKy8ETwKqf
+	 RKeqsIKGa0RHv+JQ2YLJRxqQUq3D/DkNdugLTFjtXiy1WyfchQuinbrQWUiXwdcmET
+	 Atx6fTKtmEpUfPDEAzFRt5jJ8cYxRjz/iWG1J9XJ3KkFkhE0VpV2xEK6hVMwulbYcx
+	 32AIiHO/tETTBtv6hketu+kCPr8a3S6NxhJbdJSUZfEi6zCGNRn/liFcvAG/x3Ubb/
+	 kyh8UtEpXFofi+SYv8k5M2s2NbWflH/iGalLI5MY0PGkq++dYiMCxCdlHIupaWfYp7
+	 etX8jdRw+UGGQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 19354C3279F; Thu, 15 Jan 2026 09:15:23 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 220981] Potential data race in
+ drivers/usb/class/cdc-wdm.c::wdm_read
+Date: Thu, 15 Jan 2026 09:15:22 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: franci.vi@tiscali.it
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-220981-208809-EqFeziweQm@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220981-208809@https.bugzilla.kernel.org/>
+References: <bug-220981-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260114211759.2740309-4-anjelique.melendez@oss.qualcomm.com>
 
-On Wed, Jan 14, 2026 at 01:17:58PM -0800, Anjelique Melendez wrote:
-> Add support for the X1E80100 compatible string which needs UCSI_DELAY_DEVICE_PDOS quirk.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220981
 
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+--- Comment #2 from Francesco Vincenti (franci.vi@tiscali.it) ---
+Hello Oliver,
+thanks for your fast answer. Looking better at the code, the presence of
+identical spin-lock in both contexts, producer-only-appends discipline,
+re-verification of desc->length under the lock prevents data corruption.
 
+Best Regards,
+Francesco
 
-> 
-> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index 11b3e24e34e2..e700c6a58a46 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -379,6 +379,7 @@ static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
->  	{ .compatible = "qcom,sm8350-pmic-glink", .data = &quirk_sc8180x, },
->  	{ .compatible = "qcom,sm8450-pmic-glink", .data = &quirk_sm8450, },
->  	{ .compatible = "qcom,sm8550-pmic-glink", .data = &quirk_sm8450, },
-> +	{ .compatible = "qcom,x1e80100-pmic-glink", .data = &quirk_sm8450, },
+--=20
+You may reply to this email to add a comment.
 
-So is it compatible with sm8550 or not? Based on this commit it would
-be, so you need to clarify here why you decided not to make them
-compatible.
-
-Best regards,
-Krzysztof
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
