@@ -1,234 +1,120 @@
-Return-Path: <linux-usb+bounces-32387-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32388-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1916BD2411E
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 12:08:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98BF6D2439C
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 12:41:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8C14A3061625
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 11:06:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DA9D33049C6A
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 11:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 391F932E729;
-	Thu, 15 Jan 2026 11:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="b+J09Vjs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D503793BF;
+	Thu, 15 Jan 2026 11:39:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A6E32D7DA;
-	Thu, 15 Jan 2026 11:06:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC238361657;
+	Thu, 15 Jan 2026 11:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768475192; cv=none; b=jsRYpo3sL9FzKik17Daj5/IRuTqid6XEZ8Ftya5AgkpUA7LdZn2MrvbtSSge6iw5UtU4e1wnplGXid2TcOXEEPmWqd4hzh8+EDfuLcMSEeqC4iIzopOBNAbDhcBf43vwblFAMJNv6+dil9XDEXp2phqyy74N9efWTldStkfbHaY=
+	t=1768477183; cv=none; b=QCIlNng7ejdeqdFmh2w7NSk6HxiCiWfDbAGLef+aMcDKukS9abdWlQM7UM53dBZQD8kiMG3f6kX2CiaHaQr8UPtnx8f9ZG+OrTwnLjPi/ccxrSBh2SzhxZ9ToxwqJc0VIbatddlS2kgzLJJguCCwLtqm/NOV/UsUwIuZewAkanQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768475192; c=relaxed/simple;
-	bh=Ul2TF/8o1OLe8v+ULUDWAEJ4QJN850MK5M7ehwdg5mo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u1hLMdo1+D/XEt2tazOB1j5idE3COG9mxfSJJy54PT9OtLGuKwKhfrrVdIa2mV9KjvFsXC/19fMAw4HtKZCpXcirReswBITSG7Yq3b4A9+xxpW/e/1R56f6RInVpyE6Vte5hjTyBOQ/lRNORNd6A8onwB6cvCfxW/K1rP0KQPy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=b+J09Vjs; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 0369B60020FD;
-	Thu, 15 Jan 2026 11:06:18 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with UTF8LMTP id 708zXKDTNJBG; Thu, 15 Jan 2026 11:06:15 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id EA90D60029B2;
-	Thu, 15 Jan 2026 11:06:14 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1768475175;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jEQcNg981IwiLpKhWNHJ64lUwtWIg3yqQPnV2crKiTw=;
-	b=b+J09VjsYwCjEwN2kOXDoiFG4PNEOB/cVc/kUNFA9+7MU9kwP/Y6tKTvMOPltkeWAVo0aq
-	orJDLu9g+MYTWnXNHvKcp+HIcqy70+NmDL0O3VEth7PT3K3weUXTNgz6zNjVoHXHHSXvc/
-	21dAttnnoMLJwKRWcAq7ohcSlnRSQPevBLzpPOrNdQbkQQ7i8AlBXn7Ljjx1b7M6/DQ6rc
-	6gnABopFYkwKRbUQ21rfACwzjP7lH4f6IGdIbfWIceT1VogxiHrcyyiTpWsXb48J6WBUgO
-	OkoccAlf97+ORIqOgBPg8Jm3eOVtlAJHtQ/s2QuNg7HxDPlCvSTqxSWrxaUpwA==
-Received: from [IPV6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde] (unknown [IPv6:2001:8a0:57db:f00:3ee2:38aa:e2c9:7dde])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id D99A5360030;
-	Thu, 15 Jan 2026 11:06:12 +0000 (WET)
-Message-ID: <64c02ad1-9aac-488b-a846-fcb59ffd3f54@tecnico.ulisboa.pt>
-Date: Thu, 15 Jan 2026 11:06:11 +0000
+	s=arc-20240116; t=1768477183; c=relaxed/simple;
+	bh=OUDxttc+TrkS1/SKkfxsCtEnthsYHfMYRd5fFscgGJg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vg98vpKkYZsWHqPcD9LaFyqU0ybtJHFzxNesDj7Ga3sGmnjsm7CTUIVC5AK7wGlNSO6YOJZBpsOnLAZMe6+TTkxUdI8B0Dh267QzusZXsxk3/WnnsmoEZzq9soTSnCF2X5nhfzuXOYDgNFOPoFdkljpb/1zJwzr6ywJoDj7h25w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from duge-virtual-machine (unknown [183.192.221.134])
+	by APP-05 (Coremail) with SMTP id zQCowAB3zhHf0Whp6EcVBQ--.27569S2;
+	Thu, 15 Jan 2026 19:39:13 +0800 (CST)
+Date: Thu, 15 Jan 2026 19:39:11 +0800
+From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: vkoul@kernel.org, linux-usb@vger.kernel.org, conor+dt@kernel.org,
+	krzk+dt@kernel.org, linux-kernel@vger.kernel.org, cyy@cyyself.name,
+	alex@ghiti.fr, pjw@kernel.org, kingxukai@zohomail.com,
+	conor@kernel.org, aou@eecs.berkeley.edu,
+	linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+	neil.armstrong@linaro.org, gaohan@iscas.ac.cn,
+	linux-phy@lists.infradead.org, gregkh@linuxfoundation.org,
+	18771902331@163.com, devicetree@vger.kernel.org,
+	TroyMitchell988@gmail.com
+Subject: Re: [PATCH v2 2/4] dt-bindings: usb: dwc2: Add support for Canaan
+ K230 SoC
+Message-ID: <aWjR3zQqgi7ZHUEZ@duge-virtual-machine>
+References: <20260115064223.21926-1-jiayu.riscv@isrc.iscas.ac.cn>
+ <20260115064223.21926-3-jiayu.riscv@isrc.iscas.ac.cn>
+ <176846580373.38125.3306033410225962520.robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] phy: tegra: xusb: Fix ordering issue when switching
- roles on USB2 ports
-To: Jon Hunter <jonathanh@nvidia.com>, Mathias Nyman
- <mathias.nyman@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thierry Reding <thierry.reding@gmail.com>, JC Kuo <jckuo@nvidia.com>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org
-References: <20251204-diogo-tegra_phy-v1-0-51a2016d0be8@tecnico.ulisboa.pt>
- <20251204-diogo-tegra_phy-v1-3-51a2016d0be8@tecnico.ulisboa.pt>
- <86cd3ff0-1609-44cb-911c-f0e97652ca1b@nvidia.com>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-In-Reply-To: <86cd3ff0-1609-44cb-911c-f0e97652ca1b@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <176846580373.38125.3306033410225962520.robh@kernel.org>
+X-CM-TRANSID:zQCowAB3zhHf0Whp6EcVBQ--.27569S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF1UZFW8ArWxGFy3uryUJrb_yoW8WFW8pa
+	y2ka9I9FZ0gFy3J397tr97KFy5Xrs3A3yftr1Ygr9rtF15X3W0q3ySgw4j9F1UWr4rA3W2
+	vrWa934xGrW2yFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
+	MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+	67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x07bIBTOUUUUU=
+X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 
-Hi Jonathan,
+On Thu, Jan 15, 2026 at 02:30:03AM -0600, Rob Herring (Arm) wrote:
+> 
+> On Thu, 15 Jan 2026 14:42:20 +0800, Jiayu Du wrote:
+> > Add 'canaan,k230-usb' compatible string with 'snps,dwc2' as fallback
+> > for the DWC2 IP which is used by Canaan K230.
+> > 
+> > Signed-off-by: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+> > ---
+> >  Documentation/devicetree/bindings/usb/dwc2.yaml | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/canaan,k230-usb-phy.example.dtb: usb-phy@91585000 (canaan,k230-usb-phy): reg: [[0, 2438483968], [0, 1024]] is too long
+> 	from schema $id: http://devicetree.org/schemas/phy/canaan,k230-usb-phy.yaml
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.kernel.org/project/devicetree/patch/20260115064223.21926-3-jiayu.riscv@isrc.iscas.ac.cn
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+I will run the make dt_binding_check, and then fix it in v3.
 
-On 1/13/26 11:56, Jon Hunter wrote:
-> 
-> On 04/12/2025 21:27, Diogo Ivo wrote:
->> The current implementation of USB2 role switching on Tegra relies on
->> whichever the previous USB controller driver was using the PHY to first
->> "yield" it back to USB_ROLE_NONE before the next controller configures
->> it for the new role. However, no mechanism to guarantee this ordering
->> was implemented, and currently, in the general case, the configuration
->> functions tegra_xhci_id_work() and tegra_xudc_usb_role_sw_work() end up
->> running in the same order regardless of the transition being HOST->DEVICE
->> or DEVICE->HOST, leading to one of these transitions ending up in a
->> non-working state due to the new configuration being clobbered by the
->> previous controller driver setting USB_ROLE_NONE after the fact.
->>
->> Fix this by introducing a helper that waits for the USB2 port’s current
->> role to become USB_ROLE_NONE and add it in the configuration functions
->> above before setting the role to either USB_ROLE_HOST or
->> USB_ROLE_DEVICE. The specific parameters of the helper function are
->> choices that seem reasonable in my testing and have no other basis.
-> 
-> This is no information here about why 6 * 50/60us is deemed to be 
-> sufficient? May be it is, but a comment would be nice.
+Regards,
+Jiayu Du
 
-I missed this review comment and I'm not sure what you mean here. Do you
-want me to comment on the commit message on how I chose these
-parameters? If so it's as stated in the current message, I simply tested
-with these parameters and it worked and I really have no better basis
-for choosing them. If you mean adding a comment in the code I can do
-that for v2.
-
-Thanks,
-Diogo
-
->> This was tested on a Tegra210 platform (Smaug). However, due to the 
->> similar
->> approach in Tegra186 it is likely that not only this problem exists there
->> but that this patch also fixes it.
->>
->> Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
->> ---
->>   drivers/phy/tegra/xusb.c            | 23 +++++++++++++++++++++++
->>   drivers/usb/gadget/udc/tegra-xudc.c |  4 ++++
->>   drivers/usb/host/xhci-tegra.c       | 15 ++++++++++-----
->>   include/linux/phy/tegra/xusb.h      |  1 +
->>   4 files changed, 38 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
->> index c89df95aa6ca..e05c3f2d1421 100644
->> --- a/drivers/phy/tegra/xusb.c
->> +++ b/drivers/phy/tegra/xusb.c
->> @@ -740,6 +740,29 @@ static void 
->> tegra_xusb_parse_usb_role_default_mode(struct tegra_xusb_port *port)
->>       }
->>   }
->> +bool tegra_xusb_usb2_port_wait_role_none(struct tegra_xusb_padctl 
->> *padctl, int index)
->> +{
->> +    struct tegra_xusb_usb2_port *usb2 = 
->> tegra_xusb_find_usb2_port(padctl,
->> +                                      index);
->> +    int retries = 5;
->> +
->> +    if (!usb2) {
->> +        dev_err(&usb2->base.dev, "no port found for USB2 lane %u\n", 
->> index);
-> 
-> This appears to be a bug. If !usb2 then dereference usb2->base anyway.
-> 
-> 
->> +        return false;
->> +    }
->> +
->> +    do {
->> +        if (usb2->role == USB_ROLE_NONE)
->> +            return true;
->> +
->> +        usleep_range(50, 60);
->> +    } while (retries--);
->> +
->> +    dev_err(&usb2->base.dev, "timed out waiting for USB_ROLE_NONE");
->> +
->> +    return false;
->> +}
->> +
->>   static int tegra_xusb_usb2_port_parse_dt(struct tegra_xusb_usb2_port 
->> *usb2)
->>   {
->>       struct tegra_xusb_port *port = &usb2->base;
->> diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/ 
->> udc/tegra-xudc.c
->> index 0c38fc37b6e6..72d725659e5f 100644
->> --- a/drivers/usb/gadget/udc/tegra-xudc.c
->> +++ b/drivers/usb/gadget/udc/tegra-xudc.c
->> @@ -698,8 +698,12 @@ static void tegra_xudc_restore_port_speed(struct 
->> tegra_xudc *xudc)
->>   static void tegra_xudc_device_mode_on(struct tegra_xudc *xudc)
->>   {
->> +    int port = tegra_xusb_padctl_get_port_number(xudc->curr_utmi_phy);
->>       int err;
->> +    if (!tegra_xusb_usb2_port_wait_role_none(xudc->padctl, port))
->> +        return;
->> +
->>       pm_runtime_get_sync(xudc->dev);
->>       tegra_phy_xusb_utmi_pad_power_on(xudc->curr_utmi_phy);
->> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci- 
->> tegra.c
->> index 9c69fccdc6e8..9944593166a3 100644
->> --- a/drivers/usb/host/xhci-tegra.c
->> +++ b/drivers/usb/host/xhci-tegra.c
->> @@ -1352,18 +1352,23 @@ static void tegra_xhci_id_work(struct 
->> work_struct *work)
->>       struct tegra_xusb_mbox_msg msg;
->>       struct phy *phy = tegra_xusb_get_phy(tegra, "usb2",
->>                               tegra->otg_usb2_port);
->> +    enum usb_role role = USB_ROLE_NONE;
->>       u32 status;
->>       int ret;
->>       dev_dbg(tegra->dev, "host mode %s\n", str_on_off(tegra- 
->> >host_mode));
->> -    mutex_lock(&tegra->lock);
-> 
-> Extra blank line here.
-> 
->> -    if (tegra->host_mode)
->> -        phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_HOST);
->> -    else
->> -        phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_NONE);
->> +    if (tegra->host_mode) {
->> +        if (!tegra_xusb_usb2_port_wait_role_none(tegra->padctl,
->> +                             tegra->otg_usb2_port))
->> +            return;
->> +        role = USB_ROLE_HOST;
->> +    }
->> +
->> +    mutex_lock(&tegra->lock);
->> +    phy_set_mode_ext(phy, PHY_MODE_USB_OTG, role);
->>       mutex_unlock(&tegra->lock);
-> 
-> I am trying to understand why you opted to implement it this way around 
-> and not add the wait loop after setting to the mode to USB_ROLE_NONE in 
-> the original code all within the context of the mutex?
-> 
-> Thanks
-> Jon
-> 
 
