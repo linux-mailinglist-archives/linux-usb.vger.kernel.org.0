@@ -1,127 +1,190 @@
-Return-Path: <linux-usb+bounces-32393-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32394-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A88E0D24FB0
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 15:36:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB7EBD25175
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 15:54:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8D1DE301B4B7
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 14:36:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 544FC3028DA9
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 14:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D2513A1E6C;
-	Thu, 15 Jan 2026 14:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A452D350A03;
+	Thu, 15 Jan 2026 14:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xrENCad4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785AB23EA94;
-	Thu, 15 Jan 2026 14:35:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF3527E076
+	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 14:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768487759; cv=none; b=roUS2BrA+RhbgYjTsNGW4SWx/H2cAsVflgJTBNcghrAoMvBSL1lbKYfDjklYpZtz8a0/YhTToj9Mv7jg7U5QeJOlPuyAipjzVazq0t4oEouwpGGdv4s9JgmyAilcsVLshdnbFlaLn1S/gJpdlQSk62BYlMTtDgOQWzgVrrIUCu8=
+	t=1768488750; cv=none; b=In7h/8K1M4yktK79LhiZcC3JUphCfOa4USqpWVrqg7em1T6+ar97n8UNf1ar6h9eT1oGAzEYPO2s/vJxuSNtM9qRwYOV3ZYOQCe38V+FK26WxIJA0myCJL5ggQOZGOIn2SkVuhc/sOylMyfBUxybDOWJHFAb7UBQyzSzLgeYC5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768487759; c=relaxed/simple;
-	bh=+JPCdv1FjP4/AWTrZQX/Bmri1JyVdhDdo20MZLgPe6Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R2N2+bW/cfX4m7++CHyTcRs8jxoHRpG5XaEa71NlCCUqBc93uZ/YqqfO7Z8aA876ySm2cv/JyGegJyU1NLvW19XRzrgkbEVdvBZEAuRsU7IXncy3eVlFvQucYuBm9QnAtM9VFNmhwIt7+0gpPAkLAs52jOK+ftboPokIaSyj5z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from duge-virtual-machine (unknown [183.192.221.134])
-	by APP-05 (Coremail) with SMTP id zQCowAAXqw4f+2hpvPUXBQ--.42438S2;
-	Thu, 15 Jan 2026 22:35:13 +0800 (CST)
-Date: Thu, 15 Jan 2026 22:35:11 +0800
-From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-To: Vinod Koul <vkoul@kernel.org>
-Cc: conor@kernel.org, neil.armstrong@linaro.org, gregkh@linuxfoundation.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	alex@ghiti.fr, 18771902331@163.com, cyy@cyyself.name,
-	TroyMitchell988@gmail.com, kingxukai@zohomail.com,
-	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, gaohan@iscas.ac.cn
-Subject: Re: [PATCH v2 3/4] phy: usb: Add driver for Canaan K230 USB 2.0 PHY
-Message-ID: <aWj7HyeDQU6ytGz3@duge-virtual-machine>
-References: <20260115064223.21926-1-jiayu.riscv@isrc.iscas.ac.cn>
- <20260115064223.21926-4-jiayu.riscv@isrc.iscas.ac.cn>
- <aWjYHK1cTj8Dbz2B@vaman>
+	s=arc-20240116; t=1768488750; c=relaxed/simple;
+	bh=3mGTmt7q51USQSWbL7vHggUS96PKjkh7P6USlUtbMsE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZHycbRusBKC1or4MgY6M+++OycPUzJ+PDaXy00Wm4tVAtIKGUI055cuH2XUD64aOj2Kb6JgbizT89DFCRitO2EHprGaGhHETaZZlB1oKEtzDT+Z1w8D1Uscz+aKkPkitE621guqn3vW46JvvZSn06rqr2mpS6JUs1k9kk0KOwRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xrENCad4; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768488745;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cl/D6Y5XRR/X0rVkaamOrKMkHf4HUkXbmNOec8DxBHw=;
+	b=xrENCad4vW3ND5AXKrKq00Hm/S2mXOTqE3I5/NOiiGCGlsmgflNe55U+hMK51pjBwGf/gT
+	v1ZTeg4J6zWWOIf+ZDeO8fV8R2vMNWtn7VaBd9Y89Y90FFibiglAttnkl79Aa1Nv4dhtjv
+	ABZjA8gRuKfqnOQx4nXtRZbiwCGINQE=
+From: Sean Anderson <sean.anderson@linux.dev>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	linux-usb@vger.kernel.org
+Cc: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+	Neal Frager <neal.frager@amd.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Michal Simek <michal.simek@amd.com>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sean Anderson <sean.anderson@linux.dev>
+Subject: [PATCH v2] usb: dwc3: Always deassert xilinx resets
+Date: Thu, 15 Jan 2026 09:51:53 -0500
+Message-Id: <20260115145153.3332570-1-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aWjYHK1cTj8Dbz2B@vaman>
-X-CM-TRANSID:zQCowAAXqw4f+2hpvPUXBQ--.42438S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF45Kry8Jw1UAw1xCrW5GFg_yoW8WFy7pF
-	Z5XF1jqF43Jr97WrWSvF4kGr1Svws5Kw1UCryak3yrWwnIvr4xCayjg3y5Zwn5ZFZ5AFyI
-	9r1jqFyxCFZIkrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4
-	A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
-	MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-	67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvj
-	DU0xZFpf9x07bIBTOUUUUU=
-X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jan 15, 2026 at 05:35:48PM +0530, Vinod Koul wrote:
-> On 15-01-26, 14:42, Jiayu Du wrote:
-> 
-> > +static struct phy *k230_usb_phy_xlate(struct device *dev,
-> > +				      const struct of_phandle_args *args)
-> > +{
-> > +	struct k230_usb_phy_global *global = dev_get_drvdata(dev);
-> > +	struct k230_usb_phy_instance *phy_inst;
-> > +	struct phy *phy;
-> > +
-> > +	if (args->args[0] >= MAX_PHYS)
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	phy_inst = devm_kzalloc(dev, sizeof(*phy_inst), GFP_KERNEL);
-> > +	if (!phy_inst)
-> > +		return ERR_PTR(-ENOMEM);
-> > +
-> > +	phy_inst->global = global;
-> > +	phy_inst->index = args->args[0];
-> > +
-> > +	phy = devm_phy_create(dev, NULL, &k230_usb_phy_ops);
-> > +	if (IS_ERR(phy))
-> > +		return ERR_PTR(PTR_ERR(phy));
-> > +
-> > +	phy_set_drvdata(phy, phy_inst);
-> 
-> This seems wrong place, why is this not done in the driver probe?
+I am working on moving serdes initialization to the phy (and consumer)
+drivers to improve flexibility and boot times (depending on configuration).
+Currently, core resets are released in the bootloader by init_serdes() in
+psu_init_gpl.c. In order to remove init_serdes, we need to handle the case
+where the bootloader never released the core resets. If we don't have a
+usb3 phy we don't need to assert the core resets, but deassert them anyway
+to handle this case.
 
-You are right, creating phy instances in the xlate function is not
-the right place. I will move the allocation and devm_phy_creat to
-the probe phase to create both instances.
+We could assert all resets every boot, but I believe the existing procedure
+is an optimization to reduce boot time when the bootloader has already
+initialized USB. So this patch preserves the separate code paths.
 
-> > +	global->reg_test_offset[0] = 0x70;
-> > +	global->reg_ctl_offset[0] = 0xb0;
-> > +	global->reg_test_offset[1] = 0x90;
-> > +	global->reg_ctl_offset[1] = 0xb8;
-> 
-> Where are these magic values coming from?
+Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
 
-These offsets are from K230 Technical Reference Manual section 12.6.4.2.
-The TRM is here[1]. I will define them as macros with descriptive names.
+Changes in v2:
+- Update commit message
 
-Link:
-https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_Technical_Reference_Manual_V0.3.1_20241118.pdf[1]
+ drivers/usb/dwc3/dwc3-xilinx.c | 67 ++++++++++++++++------------------
+ 1 file changed, 32 insertions(+), 35 deletions(-)
 
-I will send v2 with these changes soon.
-
-Regards,
-Jiayu Du
+diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
+index 0a8c47876ff9..f41b0da5e89d 100644
+--- a/drivers/usb/dwc3/dwc3-xilinx.c
++++ b/drivers/usb/dwc3/dwc3-xilinx.c
+@@ -132,21 +132,6 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+ 		goto err;
+ 	}
+ 
+-	/*
+-	 * The following core resets are not required unless a USB3 PHY
+-	 * is used, and the subsequent register settings are not required
+-	 * unless a core reset is performed (they should be set properly
+-	 * by the first-stage boot loader, but may be reverted by a core
+-	 * reset). They may also break the configuration if USB3 is actually
+-	 * in use but the usb3-phy entry is missing from the device tree.
+-	 * Therefore, skip these operations in this case.
+-	 */
+-	if (!priv_data->usb3_phy) {
+-		/* Deselect the PIPE Clock Select bit in FPD PIPE Clock register */
+-		writel(PIPE_CLK_DESELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
+-		goto skip_usb3_phy;
+-	}
+-
+ 	crst = devm_reset_control_get_exclusive(dev, "usb_crst");
+ 	if (IS_ERR(crst)) {
+ 		ret = PTR_ERR(crst);
+@@ -171,22 +156,31 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+ 		goto err;
+ 	}
+ 
+-	ret = reset_control_assert(crst);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to assert core reset\n");
+-		goto err;
+-	}
++	/*
++	 * Asserting the core resets is not required unless a USB3 PHY is used.
++	 * They may also break the configuration if USB3 is actually in use but
++	 * the usb3-phy entry is missing from the device tree. Therefore, skip
++	 * a full reset cycle and just deassert the resets if the phy is
++	 * absent.
++	 */
++	if (priv_data->usb3_phy) {
++		ret = reset_control_assert(crst);
++		if (ret < 0) {
++			dev_err(dev, "Failed to assert core reset\n");
++			goto err;
++		}
+ 
+-	ret = reset_control_assert(hibrst);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to assert hibernation reset\n");
+-		goto err;
+-	}
++		ret = reset_control_assert(hibrst);
++		if (ret < 0) {
++			dev_err(dev, "Failed to assert hibernation reset\n");
++			goto err;
++		}
+ 
+-	ret = reset_control_assert(apbrst);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to assert APB reset\n");
+-		goto err;
++		ret = reset_control_assert(apbrst);
++		if (ret < 0) {
++			dev_err(dev, "Failed to assert APB reset\n");
++			goto err;
++		}
+ 	}
+ 
+ 	ret = phy_init(priv_data->usb3_phy);
+@@ -201,11 +195,15 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+ 		goto err;
+ 	}
+ 
+-	/* Set PIPE Power Present signal in FPD Power Present Register*/
+-	writel(FPD_POWER_PRSNT_OPTION, priv_data->regs + XLNX_USB_FPD_POWER_PRSNT);
+-
+-	/* Set the PIPE Clock Select bit in FPD PIPE Clock register */
+-	writel(PIPE_CLK_SELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
++	if (priv_data->usb3_phy) {
++		/* Set PIPE Power Present signal in FPD Power Present Register*/
++		writel(FPD_POWER_PRSNT_OPTION, priv_data->regs + XLNX_USB_FPD_POWER_PRSNT);
++		/* Set the PIPE Clock Select bit in FPD PIPE Clock register */
++		writel(PIPE_CLK_SELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
++	} else {
++		/* Deselect the PIPE Clock Select bit in FPD PIPE Clock register */
++		writel(PIPE_CLK_DESELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
++	}
+ 
+ 	ret = reset_control_deassert(crst);
+ 	if (ret < 0) {
+@@ -225,7 +223,6 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+ 		goto err;
+ 	}
+ 
+-skip_usb3_phy:
+ 	/* ulpi reset via gpio-modepin or gpio-framework driver */
+ 	reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+ 	if (IS_ERR(reset_gpio)) {
+-- 
+2.35.1.1320.gc452695387.dirty
 
 
