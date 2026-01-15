@@ -1,235 +1,291 @@
-Return-Path: <linux-usb+bounces-32391-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32392-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52274D24AF2
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 14:12:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31FC8D24F83
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 15:35:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6557B30242BA
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 13:12:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CE1773060279
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 14:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1F9039E6E5;
-	Thu, 15 Jan 2026 13:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0959D39E17E;
+	Thu, 15 Jan 2026 14:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=phytec.de header.i=@phytec.de header.b="uP8MgRQG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dArH3mSv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11020099.outbound.protection.outlook.com [52.101.84.99])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3465A39E195;
-	Thu, 15 Jan 2026 13:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.99
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768482724; cv=fail; b=akh5CzY6pRPetXAAymNkUaZ1xpN+PfiLoM0o0jd9nt4fR6nRWa4nm+mhBXqTDQc1TNgMTX9BJslVH64NYJkjuowzha8c4v4f3mzRQmhxEOUyRIf9EZDC3Zz2okRDuFj1Q/rMke6TmHKyjPb2hG5v9sdahW9Vvhx7OMOHaolNZcM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768482724; c=relaxed/simple;
-	bh=owgj0rpb5BuCBcSkpRslzZvceTraG1o3lgJOnfWEIQc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=gx+sEluJSXoVJ9kzPH3aWcbt5XL8ea9gdka/GDk+QElMuhNHM0wDyHjUqxoDkMRYTFNAXURwlhRt0sc9s/msr+ZZz+BtUiw17eiw9w3YrJZ8UY2s/fGdS1R18S10B6N364RZguAWdGECqw3EpIkjuaVz9oXcjuMqEJ2XFkY4lnY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=phytec.de; spf=pass smtp.mailfrom=phytec.de; dkim=pass (2048-bit key) header.d=phytec.de header.i=@phytec.de header.b=uP8MgRQG; arc=fail smtp.client-ip=52.101.84.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=phytec.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytec.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hoi7FcCtWD/62SAn6agp43GQZMqzYLEW0WkVDZ3TplAOzOU/6YBZJDkQ5Uf1UK4h5ZfimiGOvN3otitTXVKY7lhZEZAo9elQqkHiW7zflu8JJuyNu2EVAQUuBCwdPync4EXcfXvvEeo+iOTG3V6IcMJjmCg2nj74ugZBu7xCiuEJ/VWePvoeCTT7E8lD4jEzOGPHYuaN69l9drBxhLhd/70KNMVbbj3f1Dq0E89o0R+e2JZ1IZuNJN5JnyOa0aBsPsnH5R4iA8wec8yXSJbiOWE/eG6mCAM8AYbzyBelAEgm98qvwZtksdJSFyKqyGDtrOIHoAakinAMcErJuqvKAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vBNVgZk811ij/ynvduZQfcJuht5KydMcgG9bIO1ZBJU=;
- b=IjFbFc15Jvh8iuwB2AfuDljowa2GxBoCQNSoHCJX75rHfjzJSr8mGHZwQH+/vrRqxQ8VTQEmK7IWJQ/miP+jerrN6g6AJXghQ7AWdzBb4aZ6KXDYrHRRgvtpVG3XdJOJ9ICV69ZMedKFv2sXhiHgIRJlqWOshQLm9zo6LWUdcmAg9A4m3v1adFxPzB0m+mU8VhrpyE3FDeIqTCwwIl/mogHQ8NrW2M9lTFA99o1bdhIqLilNFoZFAVJqwKsbzwGYTsdxtY0OXcRATe/t2QlmB60Mj8Rg8CHpsQOzr2C9XsosrGicULt5m+YjsqEfxbBbCQxY1uTCLmOAo8mEkmeO4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 91.26.50.189) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=phytec.de;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=phytec.de; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=phytec.de;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vBNVgZk811ij/ynvduZQfcJuht5KydMcgG9bIO1ZBJU=;
- b=uP8MgRQG2zW6b252ebGLFIUidGhd1XSd3bvWUFEH+9mKJwER7BiHkF9whfsZxlsxv6FohdsyRKxPj3hMgrVItiGgxxzmDVFm27Xvni3wlHSlHeUkNn+WWw/tnhUeQ9Xq0k9qXrTAQ02QNRtQlgGoVDWC4ncx97thMpPEFjW331YKDLP0q+XtiGXdZuRLM11GN4fZSlig7ocbU4dm/t+WAiNGoFkQfRPAxHApZwq6ITOC5FqBVwFXr/D02NxelyiaCuTOLYG9iWKHUCgnahYRys831a8FqPsgAvoFwglQiWUxG+0Pbe2h9J9d5FCMMWRH0wMndr/usHyAC4NRGLGQdg==
-Received: from DUZPR01CA0110.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4bb::7) by DB8P195MB0616.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:10:15e::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.6; Thu, 15 Jan
- 2026 13:11:56 +0000
-Received: from DU6PEPF00009523.eurprd02.prod.outlook.com
- (2603:10a6:10:4bb:cafe::1a) by DUZPR01CA0110.outlook.office365.com
- (2603:10a6:10:4bb::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.6 via Frontend Transport; Thu,
- 15 Jan 2026 13:12:04 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is 91.26.50.189)
- smtp.mailfrom=phytec.de; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=phytec.de;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- phytec.de discourages use of 91.26.50.189 as permitted sender)
-Received: from Postix.phytec.de (91.26.50.189) by
- DU6PEPF00009523.mail.protection.outlook.com (10.167.8.4) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9520.1 via Frontend Transport; Thu, 15 Jan 2026 13:11:56 +0000
-Received: from llp-jremmet.phytec.de (172.25.39.81) by Postix.phytec.de
- (172.25.0.11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.35; Thu, 15 Jan
- 2026 14:11:55 +0100
-From: Jan Remmet <j.remmet@phytec.de>
-Date: Thu, 15 Jan 2026 14:11:21 +0100
-Subject: [PATCH] usb: typec: hd3ss3220: Enable VBUS based on role state
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913BB35EDD9;
+	Thu, 15 Jan 2026 14:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768487643; cv=none; b=ITHBmdFtymxj7UjjhFRl94QmC0Jph5KqzpffrSeLGE58f3E467hDvTMPXuvufzg7D/wiEJzMA/6AYLNIa7UEOh9xBblrz8VaTiRoSZMnq6+VsNGxfUKhpvaUCVJ3VD7FFr9m/V9ZucMLrRtlD6dq7C/PjsOdQ0L5hI3x2pGzKBo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768487643; c=relaxed/simple;
+	bh=a6rL4qcf5DwDqWgoWygvY9x8ZHVXbfHwF7TJH69O7gY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MhIEn/JIhbSN8RVPiTfFsTEYkN5HY7U6/UeziHoud7CRVEmMwr2Ygy5PUlS9oImEyMkI7QmagXzLQHtVS9m1mr3X3wnTnE1g2ZMLQXImPCZEqK6IlYizsrG8aQe/Rng1iJFKnHhi0mUC1e9/H6cKa50+GpOkk5zeXLI/0RipDxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dArH3mSv; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768487642; x=1800023642;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=a6rL4qcf5DwDqWgoWygvY9x8ZHVXbfHwF7TJH69O7gY=;
+  b=dArH3mSvw5t3n1DxT03S5rZVbovqdfDD6wMQNNHpnJ+L9Uv2LzO1Y/J5
+   JSFro16189pcSx2IfqRIIatZcg30p2EKeFAI+PBYImUpJYuZmUYClQgq3
+   LGhrFskk+ypp529HXWYXjDVqjWgq+/Ulurc+/vFgo7hgkgF+qbMN+pacT
+   BgrpSZBJ1c4Hkwq8o+x+bV5ax57R+JpUNUI/Es334f88XK2zqZOoKwzid
+   l9r3gilIIqJe9P7nNuGWiWdgFF0MDmSZftergBKIouj2Ovzt5Zbih9JyK
+   77JZl4jpOy1A0kleQOhW+XgCDRtwSfw4/ZuL/SpIBUNetF8TQVB96xTK1
+   A==;
+X-CSE-ConnectionGUID: eBsGfV8aRjyrhd07LBXSGw==
+X-CSE-MsgGUID: lRu623bKSBiSLdlGhl5rQg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="80097346"
+X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
+   d="scan'208";a="80097346"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 06:34:01 -0800
+X-CSE-ConnectionGUID: BJANDULXSmqkLhFcNqQePw==
+X-CSE-MsgGUID: AABnzRyaQgOluTDZ6hMv+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
+   d="scan'208";a="205246208"
+Received: from spandruv-mobl5.amr.corp.intel.com (HELO kuha) ([10.124.220.243])
+  by fmviesa008.fm.intel.com with SMTP; 15 Jan 2026 06:33:55 -0800
+Received: by kuha (sSMTP sendmail emulation); Thu, 15 Jan 2026 16:33:32 +0200
+Date: Thu, 15 Jan 2026 16:33:32 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andrei Kuchynski <akuchynski@chromium.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Pooja Katiyar <pooja.katiyar@intel.com>,
+	Johan Hovold <johan@kernel.org>,
+	Hsin-Te Yuan <yuanhsinte@chromium.org>, Madhu M <madhu.m@intel.com>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>
+Subject: Re: [PATCH v4 4/8] usb: typec: Expose alternate mode priority via
+ sysfs
+Message-ID: <aWj6vLt3iHXjuYjz@kuha>
+References: <20260113130536.3068311-1-akuchynski@chromium.org>
+ <20260113130536.3068311-5-akuchynski@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260115-wip-jremmet-hd3ss3220_vbus-v1-1-b7d9adfbe346@phytec.de>
-X-B4-Tracking: v=1; b=H4sIAHjnaGkC/x3MSwqDMBAA0KvIrDuQTPzUXkWKaBx1Cn7IVFsQ7
- 25w+TbvAOUgrPBKDgi8i8oyR9hHAn5s5oFRumggQ7mxNsOfrPgJPE38xbFzqo7I1Hu7KRaO+iJ
- 9lmnjPcRgDdzL/86r93le9NR+b2wAAAA=
-X-Change-ID: 20260115-wip-jremmet-hd3ss3220_vbus-732f74894acc
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Krishna Kurapati
-	<krishna.kurapati@oss.qualcomm.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<upstream@lists.phytec.de>
-X-Mailer: b4 0.14.2
-X-ClientProxiedBy: Postix.phytec.de (172.25.0.11) To Postix.phytec.de
- (172.25.0.11)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU6PEPF00009523:EE_|DB8P195MB0616:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc454845-280d-43f1-f1a9-08de5437a8ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bmxIc1VCelhCUVA0UXVlbUgzSCtXcHNzbzZPNjZ4b0k2ZnpnWUpuWVZwYVUv?=
- =?utf-8?B?NFBvRElMRHBpMDhTRkRzOXgybTh2QjI0anIzU3MvNzBxcDkrWFhRZkdVRGI2?=
- =?utf-8?B?cGdnSURRK09FN2NvSDl2VS9kVVVHdE80aFdqYXVJa0RPYy80Z3k0MDNhcTNS?=
- =?utf-8?B?NmRteHVYU1FFT0NHbzFGZDVOeGVGUFlBQzNxbDdPS0pHL3NqWXZySDh4Q2RH?=
- =?utf-8?B?bGRydlNMdlU5SVZqQUpTa2xHSHB0ZW8wSlBONzE5MjU5aktmRkdHd2dnb0Qw?=
- =?utf-8?B?RXR1WU9XWUdXYSt1VFNsRG9tQ0orOGNTVzh1S1FPcjJyaGVVWEprcWM4aGR3?=
- =?utf-8?B?R0RXd2tKUmlCQ29jbnFuZDk1QkcrNUhQYU5hTWtRbVRDRW9YajdHd1EzcENB?=
- =?utf-8?B?b1lET0lrWHM2MXg2WjQwQUxLWlRuR2d3ZDRmQ3BJa2JwYmFsQlVXSUtOZ0xT?=
- =?utf-8?B?UjZmT09ib3dxaEdJc0hBSlBzSVJoZU8wdFRvZ1c5VnhQdktDN2daQ0lXQiti?=
- =?utf-8?B?Rk5IcjhISjVROFc3a29nTWVNWnNsZjRBUEFLS0hNRnBFdkFoeWFLSmtUdGhh?=
- =?utf-8?B?N2NZZWlqZjVnRFhtYmk4a0t1TGNHcmZERlgyc3M5dENueUI1d1RRU1dzbnlk?=
- =?utf-8?B?Z2FsRE1BY0YzQnlrTG9DTG90SEpCTGRvUnVSdWpGL2t6eERwc25PMWVURDZy?=
- =?utf-8?B?cFFkSGlXbXJ2YUFHeXp0Um43YUJibGdsdHl0dXArNFltTS84UUd6cGlsVjRR?=
- =?utf-8?B?dFRYUW5WNnlTTFVXeTVReENGaTMxdXNtSEtsWW9QSDNrTWZya2wrM1NVZGFF?=
- =?utf-8?B?TFpqejhGUlFPbGttZ2dVcFMrQXpzbVl1bktEcWFQdGd5ajVkYUVJVmlzNkp3?=
- =?utf-8?B?b0w1WmFnMTB0Y2VOWkc1Nmp6cFRoZW9wdFlkMk9iYjZMR2FZQjkyZHR0RThs?=
- =?utf-8?B?WEJsWE5sb1FZUEdOcUVUYzJBUldMelAxdlRaNEtVNFc3T2lMeGsxVi8wd2Fh?=
- =?utf-8?B?Yis4cHdxWEt6SFU1dE9pSlZycmZXWkE0V0xVNnlwMDFNSk8ya29CY1pZVDNi?=
- =?utf-8?B?S0xaTVFJQS9IL2duVnhLQ0ZWb0FDbU0wb2REQ3NIdHg0WmxMdUcrbkRhK1l4?=
- =?utf-8?B?QUNqTjIxK1lpaHkrcmV1RDhrOEFyeGtXbVk3QkVvKzR2TEpIcm53L1dkQ1Ni?=
- =?utf-8?B?YmJTRlBHdTJ0ZXRlM0t3NW10emEzWXNSM3VhTGhTZVZsckVsN0t5aStEdGtH?=
- =?utf-8?B?TGhucmlGUjF2M2lCWTl5KzN2QXY2U3JNQTgvbkVUQ1FvYk1Sa0xwU3FCeG5Q?=
- =?utf-8?B?TGl4NG1VVUlKaUJwdFNOL051eFlFc2RJOUJ4eEFnVTNjdUxoSXMwYTlNRnF5?=
- =?utf-8?B?c3hnNC9FZnpxbk4xSnRJT1hnUHhkd05hTTMxazdkWWJ2WTJnbWYzcDNvTjZH?=
- =?utf-8?B?QkNVODJHWjdUU2lITlMxVEdSZWFXTmgvV0ZzaERwRkdTaWVUN2pHazhjeFph?=
- =?utf-8?B?cXNDR2VyZWk3Z252REFHUDAzMTJTdnFicTZnQWgrT2pydUxCWitXU21pMXFj?=
- =?utf-8?B?TUxQRkN6c2E5ZE1yb3NPQjVkdUpOQVQzNjhwUFp2TVl4QldjQVZZbmp4N1dN?=
- =?utf-8?B?Tmt1RHErUGE1K3pVcFRLRExWeE9XZkl2blM5SE4wWm1xTXlQalQ4U2ozREl5?=
- =?utf-8?B?Z0JRaFplUGVhVktBL2daM2ZVUWdWT1dmNm5BTkwzWkRBZmQycTNDTkU5ZzV2?=
- =?utf-8?B?czhaanlHVjVJQ3pLWEo2V1JTYmI0NDd4VU9oZ096QUtxWTl5VjIweGdwS2ND?=
- =?utf-8?B?VzRDZnBnVlBxR3ZiQnYwWjFsM1NURDM1ZEp1bTJoZllRN0tSTjFIcUF5blF1?=
- =?utf-8?B?Tjk2K05JZjBTRzdxZ1VIZXdjcm1uVVhOTEEvVHgzbDVEOGp1NHZybDBwV3d6?=
- =?utf-8?B?bVhlQXlCSW9uRll0QVFiRVpVa1pCNlVnQ01Cd1V0T3RoVEhRa00vd3NBbFhm?=
- =?utf-8?B?aGgycVlHK2diUVlXTWZHZWlwZXhMTXdIZzFFeGpPZ3U4WWNHbU9VUmVYeXZz?=
- =?utf-8?B?c3A3UG9iYnVjYzdMczNTeFpadnBZNmdZKy8zTUhLWDFiMXJsVUJLVmtYRTJS?=
- =?utf-8?B?dWorMmZKbElTNEJmUWhmN29zeHRDVGpYTlhEeWJNOGtRYXdYbUV5UytRV2Rq?=
- =?utf-8?B?WXNTQVV0MnVnR2tueVU3NjJzZUVYaTlIN3ZyWFYxcDBTM1pjVFIySTk3aU9B?=
- =?utf-8?B?WWVwUW1ERVJKYlFISkJEcGFvRVF3PT0=?=
-X-Forefront-Antispam-Report:
-	CIP:91.26.50.189;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:Postix.phytec.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1102;
-X-OriginatorOrg: phytec.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2026 13:11:56.6365
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc454845-280d-43f1-f1a9-08de5437a8ea
-X-MS-Exchange-CrossTenant-Id: e609157c-80e2-446d-9be3-9c99c2399d29
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e609157c-80e2-446d-9be3-9c99c2399d29;Ip=[91.26.50.189];Helo=[Postix.phytec.de]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU6PEPF00009523.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P195MB0616
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260113130536.3068311-5-akuchynski@chromium.org>
 
-For systems where the ID pin isn't available as gpio use the ATTACHED_STATE
-register instead to control vbus.
+Hi Andrei,
 
-From the datasheet:
-"This is an additional method to communicate attach other
-than the ID pin. These bits can be read by the application to
-determine what was attached."
+Tue, Jan 13, 2026 at 01:05:32PM +0000, Andrei Kuchynski kirjoitti:
+> This patch introduces a priority sysfs attribute to the USB Type-C
+> alternate mode port interface. This new attribute allows user-space to
+> configure the numeric priority of alternate modes managing their preferred
+> order of operation. If a new priority value conflicts with an existing
+> mode's priority, the priorities of the conflicting mode and all subsequent
+> modes are automatically incremented to ensure uniqueness.
+> 
+> Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+> Reviewed-by: Benson Leung <bleung@chromium.org>
+> ---
+>  Documentation/ABI/testing/sysfs-class-typec | 11 +++
+>  drivers/usb/typec/class.c                   | 90 ++++++++++++++++++++-
+>  include/linux/usb/typec_altmode.h           |  1 +
+>  3 files changed, 101 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> index 38e101c17a004..737b76828b509 100644
+> --- a/Documentation/ABI/testing/sysfs-class-typec
+> +++ b/Documentation/ABI/testing/sysfs-class-typec
+> @@ -162,6 +162,17 @@ Description:	Lists the supported USB Modes. The default USB mode that is used
+>  		- usb3 (USB 3.2)
+>  		- usb4 (USB4)
+>  
+> +What:		/sys/class/typec/<port>/<alt-mode>/priority
+> +Date:		July 2025
+> +Contact:	Andrei Kuchynski <akuchynski@chromium.org>
+> +Description:
+> +		Displays and allows setting the priority for a specific alternate mode.
+> +		The priority is an integer in the range 0-255. A lower numerical value
+> +		indicates a higher priority (0 is the highest).
+> +		If the new value is already in use by another mode, the priority of the
+> +		conflicting mode and any subsequent modes will be incremented until they
+> +		are all unique.
 
-Use this method if id-gpios property is not set, but the connector node
-has vbus-supply defined.
+Greg already told you to show the range somehow with this, so the
+total number of (so far known?) alternate modes. Maybe something like
+<index> / <total_num_altmodes> ?
 
-Signed-off-by: Jan Remmet <j.remmet@phytec.de>
----
- drivers/usb/typec/hd3ss3220.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+>  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
+>  
+>  What:		/sys/class/typec/<port>-partner/accessory_mode
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 0f12d6120511b..1fb5450c0a2f2 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -445,11 +445,88 @@ svid_show(struct device *dev, struct device_attribute *attr, char *buf)
+>  }
+>  static DEVICE_ATTR_RO(svid);
+>  
+> +static int increment_duplicated_priority(struct device *dev, void *data)
+> +{
+> +	if (is_typec_port_altmode(dev)) {
+> +		struct typec_altmode **alt_target = (struct typec_altmode **)data;
+> +		struct typec_altmode *alt = to_typec_altmode(dev);
+> +
+> +		if (alt != *alt_target && alt->priority == (*alt_target)->priority) {
+> +			alt->priority++;
+> +			*alt_target = alt;
+> +			return 1;
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int find_duplicated_priority(struct device *dev, void *data)
+> +{
+> +	if (is_typec_port_altmode(dev)) {
+> +		struct typec_altmode **alt_target = (struct typec_altmode **)data;
+> +		struct typec_altmode *alt = to_typec_altmode(dev);
+> +
+> +		if (alt != *alt_target && alt->priority == (*alt_target)->priority)
+> +			return 1;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int typec_mode_set_priority(struct typec_altmode *alt, const u8 priority)
+> +{
+> +	struct typec_port *port = to_typec_port(alt->dev.parent);
+> +	const u8 old_priority = alt->priority;
+> +	int res = 1;
+> +
+> +	alt->priority = priority;
+> +	while (res) {
+> +		res = device_for_each_child(&port->dev, &alt, find_duplicated_priority);
+> +		if (res) {
+> +			alt->priority++;
+> +			if (alt->priority == 0) {
+> +				alt->priority = old_priority;
+> +				return -EOVERFLOW;
+> +			}
+> +		}
+> +	}
+> +
+> +	res = 1;
+> +	alt->priority = priority;
+> +	while (res)
+> +		res = device_for_each_child(&port->dev, &alt,
+> +				increment_duplicated_priority);
 
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index 3876f4faead679e6c04062ab2bcf2ae928913a0a..a7c54aa8635f70d6979d98c95f80d4dac277fef2 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -204,6 +204,20 @@ static const struct typec_operations hd3ss3220_ops = {
- 	.port_type_set = hd3ss3220_port_type_set,
- };
- 
-+static void hd3ss3220_regulator_control(struct hd3ss3220 *hd3ss3220, bool on)
-+{
-+	int ret;
-+
-+	if (on)
-+		ret = regulator_enable(hd3ss3220->vbus);
-+	else
-+		ret = regulator_disable(hd3ss3220->vbus);
-+
-+	if (ret)
-+		dev_err(hd3ss3220->dev,
-+			"vbus regulator %s failed: %d\n", on ? "disable" : "enable", ret);
-+}
-+
- static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
- {
- 	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
-@@ -221,6 +235,9 @@ static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
- 		break;
- 	}
- 
-+	if (hd3ss3220->vbus && !hd3ss3220->id_gpiod)
-+		hd3ss3220_regulator_control(hd3ss3220, role_state == USB_ROLE_HOST);
-+
- 	hd3ss3220->role_state = role_state;
- }
- 
-@@ -330,18 +347,10 @@ static const struct regmap_config config = {
- static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id)
- {
- 	struct hd3ss3220 *hd3ss3220 = dev_id;
--	int ret;
- 	int id;
- 
- 	id = gpiod_get_value_cansleep(hd3ss3220->id_gpiod);
--	if (!id)
--		ret = regulator_enable(hd3ss3220->vbus);
--	else
--		ret = regulator_disable(hd3ss3220->vbus);
--
--	if (ret)
--		dev_err(hd3ss3220->dev,
--			"vbus regulator %s failed: %d\n", id ? "disable" : "enable", ret);
-+	hd3ss3220_regulator_control(hd3ss3220, !id);
- 
- 	return IRQ_HANDLED;
- }
+Please align the code properly.
 
----
-base-commit: 944aacb68baf7624ab8d277d0ebf07f025ca137c
-change-id: 20260115-wip-jremmet-hd3ss3220_vbus-732f74894acc
+> +	return 0;
+> +}
+> +
+> +static ssize_t priority_store(struct device *dev,
+> +			       struct device_attribute *attr,
+> +			       const char *buf, size_t size)
+> +{
+> +	u8 val;
+> +	int err = kstrtou8(buf, 10, &val);
+> +
+> +	if (!err)
+> +		err = typec_mode_set_priority(to_typec_altmode(dev), val);
+> +
+> +	if (!err)
+> +		return size;
+> +	return err;
 
-Best regards,
+I know not everybody likes the ternary operator, but I would just
+
+        return err ?: size;
+
+> +}
+> +
+> +static ssize_t priority_show(struct device *dev,
+> +			      struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%u\n", to_typec_altmode(dev)->priority);
+> +}
+> +static DEVICE_ATTR_RW(priority);
+> +
+>  static struct attribute *typec_altmode_attrs[] = {
+>  	&dev_attr_active.attr,
+>  	&dev_attr_mode.attr,
+>  	&dev_attr_svid.attr,
+>  	&dev_attr_vdo.attr,
+> +	&dev_attr_priority.attr,
+>  	NULL
+>  };
+>  
+> @@ -459,11 +536,15 @@ static umode_t typec_altmode_attr_is_visible(struct kobject *kobj,
+>  	struct typec_altmode *adev = to_typec_altmode(kobj_to_dev(kobj));
+>  	struct typec_port *port = typec_altmode2port(adev);
+>  
+> -	if (attr == &dev_attr_active.attr)
+> +	if (attr == &dev_attr_active.attr) {
+>  		if (!is_typec_port(adev->dev.parent)) {
+>  			if (!port->mode_control || !adev->ops || !adev->ops->activate)
+>  				return 0444;
+>  		}
+> +	} else if (attr == &dev_attr_priority.attr) {
+> +		if (!is_typec_port(adev->dev.parent) || !port->mode_control)
+> +			return 0;
+> +	}
+>  
+>  	return attr->mode;
+>  }
+> @@ -2498,6 +2579,7 @@ typec_port_register_altmode(struct typec_port *port,
+>  	struct typec_altmode *adev;
+>  	struct typec_mux *mux;
+>  	struct typec_retimer *retimer;
+> +	int ret;
+>  
+>  	mux = typec_mux_get(&port->dev);
+>  	if (IS_ERR(mux))
+> @@ -2516,6 +2598,12 @@ typec_port_register_altmode(struct typec_port *port,
+>  	} else {
+>  		to_altmode(adev)->mux = mux;
+>  		to_altmode(adev)->retimer = retimer;
+> +
+> +		ret = typec_mode_set_priority(adev, 0);
+> +		if (ret) {
+> +			typec_unregister_altmode(adev);
+> +			return ERR_PTR(ret);
+> +		}
+>  	}
+>  
+>  	return adev;
+> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+> index 9197a4637a938..7e6c02d74b54f 100644
+> --- a/include/linux/usb/typec_altmode.h
+> +++ b/include/linux/usb/typec_altmode.h
+> @@ -36,6 +36,7 @@ struct typec_altmode {
+>  	int				mode;
+>  	u32				vdo;
+>  	unsigned int			active:1;
+> +	u8				priority;
+>  
+>  	char				*desc;
+>  	const struct typec_altmode_ops	*ops;
+
+thanks,
+
 -- 
-Jan Remmet <j.remmet@phytec.de>
-
+heikki
 
