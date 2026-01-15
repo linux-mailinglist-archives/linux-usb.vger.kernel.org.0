@@ -1,61 +1,59 @@
-Return-Path: <linux-usb+bounces-32401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32402-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76847D27C8A
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 19:51:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CC9FD27EE2
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 20:06:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 55FD03010536
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 18:51:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5DA86313DB22
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 18:56:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865D73C00B7;
-	Thu, 15 Jan 2026 18:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 168723D1CAA;
+	Thu, 15 Jan 2026 18:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bVH/RzFR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RVD1cCd4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF422D9488;
-	Thu, 15 Jan 2026 18:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5713B530D;
+	Thu, 15 Jan 2026 18:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768503082; cv=none; b=pFHp0qfcU3TJdd7PUBifFfDm/lUWErpTmp0L81720uxeMasawFY/tmYicgd34DTlT0+S6fKkRfHDxCD3pzusAfTBYhZH/ZVuLIm44hbqKHKcC+AqZCeXeYxi6eHSYBLl0hYVMG5tEwtwXCRvq1lnUYl6boIhQJ0LjeYpj+9gMA0=
+	t=1768503386; cv=none; b=CB5TDN/aHkbDJSWmm2mZjR3vKr6T4+A7BeBnPj/vAWAEn55bZpWEVa2rMBG+0JTXmKEl+gvq2Nt12qPTPOCaaEfxPE+mmAOtlJV9+NWp9g66mdS9dyfEjC5D2s5dUPIZcGoWlrXW9zez5+yg1wcufTwH+PVOvE7WGxBj1Z+9IeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768503082; c=relaxed/simple;
-	bh=3IRRuMLcwmSQPo2/U6GNGdpGU5CpG4IMSKqJ5xKFAgA=;
+	s=arc-20240116; t=1768503386; c=relaxed/simple;
+	bh=vBf0JsV6SssEAFVKDfTmL6XYzcy1PrASWotaLv5u8JU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rUMmJQGa8OWGRn1jnrO6Ons/J7CCX31tmCNqgnPTg5cuiWnpqtno8o8fHJbojhg6jKcEiBArvRPvWVy+vGoBBQONKNJzWzSTkA0HCkmmCxF19ZOc68a9tKv+yQCO2XHshTuJSzKh6dYH6G5+l/AK8fpxMS1Xz37djACGxU+xISU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bVH/RzFR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60978C116D0;
-	Thu, 15 Jan 2026 18:51:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=B+cfR4LjcIkrDdKp3ZKcs8u+H6dSK4RjKyTfM7sbFtdTQv3MfzHmy38mSGBO4AhhWe1NrrXCrFHCM/Qsys2ls95xB9dJRXq7DxnajkvGWvvP5eIHbAptTGH7hSp8ULMkIXvb19bvCogyH1sW0D8eiJm7nalybpHa6mHsrCp/giA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RVD1cCd4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF0BBC116D0;
+	Thu, 15 Jan 2026 18:56:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768503081;
-	bh=3IRRuMLcwmSQPo2/U6GNGdpGU5CpG4IMSKqJ5xKFAgA=;
+	s=k20201202; t=1768503386;
+	bh=vBf0JsV6SssEAFVKDfTmL6XYzcy1PrASWotaLv5u8JU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bVH/RzFRqIJleuYmCNX4D1CBJYCcTYyWkKcBeQyGBgEDuwRUqcew7B+IKHCmGAYCO
-	 T6KrUHx8bZjw185ibpOy3wrRj3UJEtilOf0lyKLZqaZrQhUD3P4BsQJs4oiJa9YKCQ
-	 FBGW87NduOf84+1f2hpLLQcBgqXk78m1YGyLrItCf2JdzpCLraVnRkxfyvZB9umc5Y
-	 5LITT5I656q3xd7+B0HtOemMyu0hUNG6A97lHHbqTDpPjqmfJVuEZ3/BtZqSz1dr+O
-	 TkXKd/do+s1Xv9sMryLB4jCFdPPIG0/0OVato9nJaIm/OkAz4Zkra1Vgw+hIyp7Vix
-	 HXFf5S5ZT6wpA==
-Date: Thu, 15 Jan 2026 12:51:20 -0600
+	b=RVD1cCd4U03YZGWql2QzFw7wQITcAlUGQYPQxiJUOCCXSaNln+3BpkftguUH5A9Yd
+	 jEe5gdmkMa1fjADwlJ9hkYZtqNKlrvDY4gKkjGoa1wh0C5Jefd4W8UGZX8BorINaGo
+	 3Y34sO6Uc8IXQg371drJhHzZUFow9/0P7tH8NXuk5bl8UWYKGuFQPGIGPGHDSelTtR
+	 aOeZRHSuz+l3pKvtVJiXcdNwCcONOAghse2cVJdwM2R6KLxEQ8NEQLuyFgBJKQYkAx
+	 Uu1Om4/T6GH2xNjYotMIjgW/POHT8jxKyX2TDRgoj6EPYdbZ38PE9cULqXvtGrx7M+
+	 i5PpYXgHoLCvQ==
+Date: Thu, 15 Jan 2026 12:56:25 -0600
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>
-Cc: Pankaj Patil <pankaj.patil@oss.qualcomm.com>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	Konrad Dybcio <konradybcio@kernel.org>,
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Del Regno <angelogioacchino.delregno@collabora.com>,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Tianping Fang <tianping.fang@mediatek.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: [PATCH RFT 1/3] dt-bindings: usb: qcom,dwc3: Allow high-speed
- interrupt on Glymur, Hamoa and Milos
-Message-ID: <176850308003.1000412.4463724450003565860.robh@kernel.org>
-References: <20260113-dts-qcom-glymur-add-usb-support-v1-0-98d6d387df01@oss.qualcomm.com>
- <20260113-dts-qcom-glymur-add-usb-support-v1-1-98d6d387df01@oss.qualcomm.com>
+	Bjorn Andersson <andersson@kernel.org>, linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: Fix I2C bus node names in examples
+Message-ID: <176850338451.1006318.4420022691055686967.robh@kernel.org>
+References: <20260114081322.53411-2-krzysztof.kozlowski@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,21 +62,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260113-dts-qcom-glymur-add-usb-support-v1-1-98d6d387df01@oss.qualcomm.com>
+In-Reply-To: <20260114081322.53411-2-krzysztof.kozlowski@oss.qualcomm.com>
 
 
-On Tue, 13 Jan 2026 14:33:04 +0200, Abel Vesa wrote:
-> Some of the controllers found of these platforms can be tied up to a
-> single high-speed PHY, basically rendering them as USB 2.0 controllers.
-> So in this case, the interrupt to the Synopsys DesignWare Core is coming
-> from the high-speed PHY, so allow the interrupt to reflect that.
+On Wed, 14 Jan 2026 09:13:23 +0100, Krzysztof Kozlowski wrote:
+> I2C bus node names are expected to be just "i2c", if there is just one
+> such node in given example.  Replace remaining bad examples with
+> scripted:
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+>   git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/i2c[0-9] {/i2c {/'
+> 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> 
 > ---
->  Documentation/devicetree/bindings/usb/qcom,snps-dwc3.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Like Rob's commit 20a72af11f41 ("dt-bindings: Fix SPI and I2C bus node
+> names in examples"). I checked also for SPI.
+> 
+> Rebased on Rob's tree - can you pick it up directly? Applies also on
+> linux-next, so I do not expect conflicts.
+> ---
+>  .../bindings/embedded-controller/lenovo,yoga-c630-ec.yaml       | 2 +-
+>  Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml   | 2 +-
+>  Documentation/devicetree/bindings/usb/ite,it5205.yaml           | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 > 
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Applied, thanks!
 
 
