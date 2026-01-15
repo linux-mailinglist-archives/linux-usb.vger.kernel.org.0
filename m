@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-32382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32383-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60B35D2361D
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 10:15:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1F72D23626
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 10:15:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D67C43006E2A
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 09:15:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B3600302E85F
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 09:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139FE3563C2;
-	Thu, 15 Jan 2026 09:15:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49570357A33;
+	Thu, 15 Jan 2026 09:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ledzokGY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jajGfa7C"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD547355036
-	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 09:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54529357A24
+	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 09:15:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768468523; cv=none; b=qHzKberC77288lTJs28VmjjYmj6veI11JynIkp1HYJSudxLs8ZBLSMAMUd0gP96Fz6iAW2RIizXEGA2H2yxqgVsfUuze9t11HaNbbOlxIpgQY24Bw9sP7Z2XRsYPas9mOosw36XmEqJ/HL3AQ4db/59OdlSQBy8qdTcVLLvlaAo=
+	t=1768468547; cv=none; b=t9m5s9fSxHhO1cKAaYKAWAEvHD+1M2y20BAfQTWs0aJycz8g5p5tP68o7yKuxk14F6AvDMJ2kvJ7u8lb0SNRB69WIXnUl4FHJDeRCRF5+DIJiosuzPAzFa6CAhu/wq7QkxPVaspO6hPkwBWcSZ0IaFSHw9VF07l39byygT07OFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768468523; c=relaxed/simple;
-	bh=ovAcWzyhlARqnTWUm5Dr5TcQ5wgWUyhHOXQz8CsZMtk=;
+	s=arc-20240116; t=1768468547; c=relaxed/simple;
+	bh=aFNa0lN/qK5c0zuKk5K/zcrIGmA+4F+n9UmPHzZXWTk=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gvQhFBLft4+1K44DSJe01GTvdDCXZ2LXMC4o6k5HYDR8lLbRjH33tJwpTVW26I/VssJfYqXGmRsZpsIAQ3Xhi5kgWbhUiWz7AG9hlzFefvx/UM0GTIGI2LDRMrBN3dH5jF36xSP6tUrxxJPhI+4qWczwkbb0iHW8QFfS8fwBKHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ledzokGY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2AFA5C116D0
-	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 09:15:23 +0000 (UTC)
+	 Content-Type:MIME-Version; b=NOyhFeX8ZR1K0Y37g6AzsS9YVaJH2iBeICaWW9D+pkpViGlglEMr6e8yyKSpx+4mge139oZhS6IP5CXOgopv4WTgA7MrQjB4lAdgF2+AiYL+mqBCRUNKmAPuaLa7O3jIwuHk4j0AVTSGjFVgFTHs+NIGi9W6W+E0/g7rK33fKjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jajGfa7C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 084C2C116D0
+	for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 09:15:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768468523;
-	bh=ovAcWzyhlARqnTWUm5Dr5TcQ5wgWUyhHOXQz8CsZMtk=;
+	s=k20201202; t=1768468547;
+	bh=aFNa0lN/qK5c0zuKk5K/zcrIGmA+4F+n9UmPHzZXWTk=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ledzokGY7yaFwctbli4l4LGI5hOMhN70eEKw+YzodWQuHZ1GdxVtNYNWKy8ETwKqf
-	 RKeqsIKGa0RHv+JQ2YLJRxqQUq3D/DkNdugLTFjtXiy1WyfchQuinbrQWUiXwdcmET
-	 Atx6fTKtmEpUfPDEAzFRt5jJ8cYxRjz/iWG1J9XJ3KkFkhE0VpV2xEK6hVMwulbYcx
-	 32AIiHO/tETTBtv6hketu+kCPr8a3S6NxhJbdJSUZfEi6zCGNRn/liFcvAG/x3Ubb/
-	 kyh8UtEpXFofi+SYv8k5M2s2NbWflH/iGalLI5MY0PGkq++dYiMCxCdlHIupaWfYp7
-	 etX8jdRw+UGGQ==
+	b=jajGfa7CQsrUBDbkIy4VNniI6SQ5GKYhyNOfPwa3vvvVioN1rHuMj8WH6xdLkD/Ad
+	 /eE1U9af9Uwp6o1CiPEKuZjLk8Mj8X6NQXQ3tD6FjoFrz/oy/4sg40se9wxy8H8/my
+	 asZ/DYvRsU0fHUcFAc46Xm8VVMWafGpv9v52F24mjZRWv7Y6pzgFlFqCUXDM98o6vX
+	 V3GHyR7La+Ly/D+ZH3Ogzl+wqdp4Ta5WrtWR1AuIkKs5MIEjBYFC4klMA2LoJYu6mW
+	 5yu7wk2Mq9hxBgx4gpFZzuI1LMvCNlB/sXMtI3yGsCClGLADuuIdy78sExuO1x192A
+	 V4xJyZLyEE1Ag==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 19354C3279F; Thu, 15 Jan 2026 09:15:23 +0000 (UTC)
+	id 02565C433E1; Thu, 15 Jan 2026 09:15:47 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 220981] Potential data race in
  drivers/usb/class/cdc-wdm.c::wdm_read
-Date: Thu, 15 Jan 2026 09:15:22 +0000
+Date: Thu, 15 Jan 2026 09:15:46 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -55,13 +55,13 @@ X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: low
 X-Bugzilla-Who: franci.vi@tiscali.it
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: ANSWERED
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220981-208809-EqFeziweQm@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-220981-208809-u9hcNejhPv@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220981-208809@https.bugzilla.kernel.org/>
 References: <bug-220981-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -77,14 +77,12 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220981
 
---- Comment #2 from Francesco Vincenti (franci.vi@tiscali.it) ---
-Hello Oliver,
-thanks for your fast answer. Looking better at the code, the presence of
-identical spin-lock in both contexts, producer-only-appends discipline,
-re-verification of desc->length under the lock prevents data corruption.
+Francesco Vincenti (franci.vi@tiscali.it) changed:
 
-Best Regards,
-Francesco
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |ANSWERED
 
 --=20
 You may reply to this email to add a comment.
