@@ -1,98 +1,123 @@
-Return-Path: <linux-usb+bounces-32372-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32373-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80B9BD2294F
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 07:37:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 644F2D229B2
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 07:45:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 81EE9302A79F
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 06:37:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 618D130B291C
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 06:43:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01002BD5B4;
-	Thu, 15 Jan 2026 06:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iIIWBNw6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4402DE6F8;
+	Thu, 15 Jan 2026 06:43:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D1726CE3B;
-	Thu, 15 Jan 2026 06:37:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5CB2DCC01;
+	Thu, 15 Jan 2026 06:43:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768459064; cv=none; b=rPoqxCZYvXfiaggHhkJRBwkFhKoB8nUHgANEQKvw2tNCZKlzsCVYtoLA6DGNy3VdCj7Ydu2S5kAyP9FgP6SPuoKzKOaKA9OqsmMgaax7Sna66cHDkcEl2pY5plhvdZJZUP0PpLczD49ChFHNJw4XoD/aaO/q3SPvZQWCBwrnfVs=
+	t=1768459404; cv=none; b=Ec1QtQGgMWBnjdIV82aiXLOIysO5qyML7v9MrxiBSqoe55A6NwtWr+E2PoOjVhZbzT9tOWv9TUWXPDXEqvDahVJRd1KkI7IbEqqx3FXMvxeoRkPjUNkw7wCrQLjXe9F87cD4uRCCWdR0j/1PygfrmyhypLMXuIQFtQIeP/iX9+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768459064; c=relaxed/simple;
-	bh=g8h+mDLIeaHWeRGg9MmTMyQ8bjGfBC1NPLs0RKDF690=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mkXJeq0zSfomktWVKfMV1xO5qLu1kly0yx9naM5t6khfLmX+kFbkoi63vp3kt9G7GdR2nET5HNjeAkR3dokoNvc2ooSeRKyPrNT8kT5edmnwNobeGMXNr+RBBTVdPBgAm2Wb2zkKqYx6vK1dx4chHyfsJyFW3N8pesYAVSbLKeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iIIWBNw6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6084DC116D0;
-	Thu, 15 Jan 2026 06:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1768459063;
-	bh=g8h+mDLIeaHWeRGg9MmTMyQ8bjGfBC1NPLs0RKDF690=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iIIWBNw6o+d5snvVRhnE+xQxm8iw4di1A/uuxJiGx4zNCSNuD/hrg9WVRDCkYN+Lh
-	 WfURJGEnm7SKiYH14lwPIJnVrUJVWH7GG97SyfBr5kVA2F3Yhc+cqubcGg7e9VVhAs
-	 vOroTUHEUAe49xHcnDe798ER68OxUqq/6NoYfRbs=
-Date: Thu, 15 Jan 2026 07:37:38 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Prashanth K <prashanth.k@oss.qualcomm.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 3/3] usb: dwc3: Log dwc3 address in traces
-Message-ID: <2026011500-safehouse-alphabet-3056@gregkh>
-References: <20260114100748.2950103-1-prashanth.k@oss.qualcomm.com>
- <20260114100748.2950103-4-prashanth.k@oss.qualcomm.com>
- <2026011400-monthly-commend-f89b@gregkh>
- <20260114225441.rn3affmwuhfl2z7x@synopsys.com>
- <20260114235357.zueeylekf4lfdq4g@synopsys.com>
+	s=arc-20240116; t=1768459404; c=relaxed/simple;
+	bh=v5DVjNpWFvMs1uFksN9gABkoUDK+Qxmr+oVT7aqAsUw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OeJ7INAJ6JxemSCF/kVCuGmnEHeLGLX4UBN/xbl2400Hni65Wt3KR9N0vuAMad6w9cK06LMMnR8eYA6Z+0W0KHZ4V2Gc3508t+7vRAdJpcmUM9Zse9FRf2X+qLBtRMn9MESJy1p/Oz8GnVobW+7VguzSzCS6F0J5DaTp5cF/4TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from duge-virtual-machine (unknown [223.160.207.69])
+	by APP-01 (Coremail) with SMTP id qwCowAAn0GtWjGhpw5fDBA--.30809S2;
+	Thu, 15 Jan 2026 14:42:32 +0800 (CST)
+From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+To: conor@kernel.org
+Cc: vkoul@kernel.org,
+	neil.armstrong@linaro.org,
+	gregkh@linuxfoundation.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	jiayu.riscv@isrc.iscas.ac.cn,
+	18771902331@163.com,
+	cyy@cyyself.name,
+	TroyMitchell988@gmail.com,
+	kingxukai@zohomail.com,
+	linux-phy@lists.infradead.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	gaohan@iscas.ac.cn
+Subject: [PATCH v2 0/4] Add USB support for Canaan K230
+Date: Thu, 15 Jan 2026 14:42:18 +0800
+Message-ID: <20260115064223.21926-1-jiayu.riscv@isrc.iscas.ac.cn>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260114235357.zueeylekf4lfdq4g@synopsys.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qwCowAAn0GtWjGhpw5fDBA--.30809S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1UZryxGw18Jr1xJFyrZwb_yoW8XFy7pa
+	y2kFWa9FsrtFWaqF4ftw4UCry3XFn7Jry3Gryaq3sxXF48AFyUZ3Z3ZFy5ZryUGF4Dury2
+	vFsYkFyxGFyUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
+	WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
+	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+	zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+	nIWIevJa73UjIFyTuYvjTR_OzsDUUUU
+X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 
-On Wed, Jan 14, 2026 at 11:54:03PM +0000, Thinh Nguyen wrote:
-> On Wed, Jan 14, 2026, Thinh Nguyen wrote:
-> > On Wed, Jan 14, 2026, Greg Kroah-Hartman wrote:
-> > > On Wed, Jan 14, 2026 at 03:37:48PM +0530, Prashanth K wrote:
-> > > > + * @address: Cached lower 32-bit base address to be used for logging.
-> > > 
-> > > Why are 32bits enough / ok?  Why not use the full 64 that you really
-> > > have?  What happens if you have 2 devices with just the upper 32 bits
-> > > different?
-> > > 
-> > > This is a resource value, so why not use the proper type for it?
-> > > 
-> > 
-> > This is only intented to be used for logging, so I suggested to use u32.
-> > I want to avoid treating this struct member as a phys_addr_t where it
-> > may be misused.
-> > 
-> > As for the reason to capture only the lower 32-bit, it's just base on
-> > what I've seen so far. That I have not seen designs where the 2 or more
-> > instances are placed that far apart and share the same lower 32-bit.
-> > It's a bit nicer to shorten the address print at the start of a
-> > tracepoint. But if it's insufficient, there's no problem with using
-> > 64-bit.
-> > 
-> 
-> Or we can just remove this and print the address from
-> dwc->xhci_resources[0].start.
+Add support for the USB PHY and DWC2 IP which is used by Canaan K230,
+and made relevant changes to the DTS.
 
-I thought I asked for that a few revisions ago :)
+This series is based on the initial 100ask K230 DshanPi series [1] which
+is based on the clock and pinctrl series. Check the details in the link.
 
-I'd prefer that, instead of saving off a value that you can look up if
-you need it.
+Link: https://lore.kernel.org/all/20260115060801.16819-1-jiayu.riscv@isrc.iscas.ac.cn/ [1]
 
-thanks,
+Changes in v2:
+- Fold the child into the parent in dtsi.
+- Define one usbphy with phy-cells=1.
+- Delete the clock of the usbphy as it is not needed.
+- Link to v1: https://lore.kernel.org/all/20251230023725.15966-1-jiayu.riscv@isrc.iscas.ac.cn/
 
-greg k-h
+Jiayu Du (4):
+  dt-bindings: phy: Add Canaan K230 USB PHY
+  dt-bindings: usb: dwc2: Add support for Canaan K230 SoC
+  phy: usb: Add driver for Canaan K230 USB 2.0 PHY
+  riscv: dts: canaan: Add syscon and USB nodes for K230
+
+ .../bindings/phy/canaan,k230-usb-phy.yaml     |  35 +++
+ .../devicetree/bindings/usb/dwc2.yaml         |   3 +
+ .../boot/dts/canaan/k230-canmv-dshanpi.dts    |  17 ++
+ arch/riscv/boot/dts/canaan/k230.dtsi          |  35 +++
+ drivers/phy/Kconfig                           |   1 +
+ drivers/phy/Makefile                          |   1 +
+ drivers/phy/canaan/Kconfig                    |  14 +
+ drivers/phy/canaan/Makefile                   |   2 +
+ drivers/phy/canaan/phy-k230-usb.c             | 271 ++++++++++++++++++
+ 9 files changed, 379 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/canaan,k230-usb-phy.yaml
+ create mode 100644 drivers/phy/canaan/Kconfig
+ create mode 100644 drivers/phy/canaan/Makefile
+ create mode 100644 drivers/phy/canaan/phy-k230-usb.c
+
+-- 
+2.52.0
+
 
