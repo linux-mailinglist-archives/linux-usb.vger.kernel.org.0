@@ -1,150 +1,176 @@
-Return-Path: <linux-usb+bounces-32444-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32433-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C4BFD38ADE
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Jan 2026 01:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 307D1D389B3
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Jan 2026 00:21:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A350E304A7E4
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Jan 2026 00:49:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD8F7306767D
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 23:21:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D223BBF0;
-	Sat, 17 Jan 2026 00:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 504F2315769;
+	Fri, 16 Jan 2026 23:21:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cxBlzFEd"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="m710OcfS";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="DG9ADfLN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF841E4BE
-	for <linux-usb@vger.kernel.org>; Sat, 17 Jan 2026 00:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DCEB665
+	for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 23:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768610950; cv=none; b=F3NHmdpY9W0vodhg4qmtjsBwSjW/TB73hcofy9QRjsRPNT4E6Lv9VyXkFtQdYafmFnAk++1bWSw+ffKA7BaybwtZkxLSRW1Va1EN42Im4VyU1JC/gUAnjRNa4lwcNvLpW36dhOjzB4UMyyx9FHq687GD7l5GvcErLyAx7YeUqGQ=
+	t=1768605670; cv=none; b=g069j1JyCHBBE4lUTkQsfShk6OY5yzSfvzV1/r0fJ+KF/rl/HLbAfBqHulir3JVkLQnA5l1wDwZN+T5XzFV9DGW7gYdV82IECM03tHXaQYDTx64QeLhz9qJ6qtfHiKFjrvKu1pWBf/8r2PCic6e71adpSpSOhfPFvVdEQRY9jNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768610950; c=relaxed/simple;
-	bh=ftXEYn+NQ1SnIwHJGtXDc7X4HarWN6Q5+so4Xq8sTA8=;
-	h=Date:From:To:Cc:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oCaT2ps7mvhNVPdcPKqJjfghtUEH4sfAcFcCgJTTKrknjFHOnZH/0LTFg+ySysHKCOsfZ8fyvKKIz4uwD6ncrfYREoPajPCX4eSyM1GhzV06LUCxlYgZrE/gMYpkMp8NBnNgzKzMv2Rf5uP+YVNGN/I7ZHN3NxMCrViIBOZkqSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cxBlzFEd; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-383122fbc9bso20785941fa.1
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 16:49:08 -0800 (PST)
+	s=arc-20240116; t=1768605670; c=relaxed/simple;
+	bh=iQQKTJXh4jVViiDh1uBxCyJh5+dwGFy8mlbi+GK47q4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=bl1Ne99ngqbmvRSTgrMdWEUKZRtUwQXvoovv1iON8XW+wZ1MyOyBFbB30O311nTlUPaLMVOvmGfClwh7ZvE7VDwDuuSHYjBf/Ow/jjmq+osiCI12Uu4gmYcxn7cqBLRuxhngv42ovqFDPHU6+0FZkE1pIJ04icY99RPi5NxJMto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=m710OcfS; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=DG9ADfLN; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60GNEAU32134984
+	for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 23:21:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=RT/RfM1KoDrJ7wIYu4iXct
+	kP9u3nbJNWzJOBhFkshN4=; b=m710OcfSVBZz5EvSstbrvtLcCCdWD4/aOcn2WK
+	I07Y59XrYAZUQuR+HQnB3gxvgCHDbpMY/mCAPc1ebfqqMJy0PKcai1VnlLy+vrx3
+	NrOLdHMNJv2k6sPhjqIPL9+L9rgwJ6vwjtX5rM/4eP8lqmow7aOlYL25IweHVEwV
+	tKAGIIM1kDIpoQuBxJu+mdIdcNg+R3DU4vjtz2wtwfIrpUOLoInvxoCF6X+6CO6A
+	z/uB4EviuLq7rs04b23+m3VyFIV2t9JEPoIrAQylXfbuojFtlFZTD+LYHETj8PUQ
+	gitFbYdYdIT2plNQ2DuEQWf6fprhuuRbMh3Wqn7oTcICJjGQ==
+Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bqveh8bku-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 23:21:08 +0000 (GMT)
+Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-122008d48e5so4736445c88.1
+        for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 15:21:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768610947; x=1769215747; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Okf3U9QDNGb4UYL7N7Vkacook/dnzzX77oUe7PD87XI=;
-        b=cxBlzFEdIquz5OZ+1anxxKB2sRdoEyZFX5nYNLLg5S649dri/Bx6iCL/gSdX0tGtlY
-         hYKOpjXHatMESQHMyYURy3rm2R/TqiU5DpTJo34SFHJYziC85/1tuT6qXnHsofXJX7Mx
-         1FvwiGx6z/6+qjVvbEpM6kauPNDaOyhL58AfVKVd//fOs7+rHcSHrmMTtt3StMRTV/Zv
-         2eBWw7AxblhBBI2fandgUgcWtkcy27i72+lIGrIAFHS1C8IL6vrS5H0WuxPpq/L7W6GE
-         h5h95vyPIuAMKIzHCHFyKqZIXquC7htdTggPqOBOqek+gVrhdMJGH3/hG0jHtufaA6Ge
-         ixzA==
+        d=oss.qualcomm.com; s=google; t=1768605668; x=1769210468; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RT/RfM1KoDrJ7wIYu4iXctkP9u3nbJNWzJOBhFkshN4=;
+        b=DG9ADfLNM+xqI2MU8GUZSuXrXJ2BbOYEle5Kff5lVcFjXInFxFzgOuSCtuSTWjyowc
+         hJyaYKjOY5jvuRAeUp+HiPxwUrK+Rm3n6S4Rpxc1H/TePPqnOuHfQhzFN0wOORo91YZu
+         H4yxIwY4zNYj2XA8CPqBNuZf2pIfali0TzykClTgg8w076RGJ64Z5/PkCzSWYO7vc+0y
+         66AbgBbFEXfylwCCqMuYUcrBL/CafuHzu/1Dq93T7uMRAI8kFXnkm3vtJhLHuaVnmUkL
+         g9/WygqVBM2mGz0mF9nYbtY7QDVULfMh16NFCfawIiN3UgymgiIEGSLvHUFVnsSdeBVd
+         SrqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768610947; x=1769215747;
-        h=content-disposition:mime-version:message-id:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Okf3U9QDNGb4UYL7N7Vkacook/dnzzX77oUe7PD87XI=;
-        b=Kvtl9WdoGgKA16+U9FCodKVTMLhRpU7WdGlyU2qVt3SUj0rBD+4pRFf4kOexfq3VlP
-         wJQCulQotneNxWDrmYZMjHMsZM9cDqaN4jUODgFK0W2Bv9a8kVBNkvrf/H3OcS+xgHrT
-         gi7yUQXAH4lO97PDTyf0Lcg7AoBMlyc64HOV2GPuMNd7LA5cB/2TrraLzavv8rOnzbU6
-         KcLzubdy0WlMaBHEhp91QeoDcefVcEF8SUwypj6PgjzE3uw4fUmKr3j1eQC7H4vLp1bn
-         vrsrPfaJ3d+aj5P9pybVdYjotIxqcv7irDWTPjTLJz87b07iGJMwu2BsRMgiDv7/zbjN
-         cneQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWh9NMkKjFvZ/c5o9Q+1hHN3i7u5aM+4IZaHFw57UcTDkR+4aOMsI6t/fQmKsVYvS6FiD0NwMgOzDc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwveOqPkh1nlpP9LKosG7BhjYYABQzTTVW3cuPGtfY3Ylbeopez
-	AsqVNNPJLIe+G5X2Poq2SRwbxHtQonnv2cBiqW79ZWwoSqilp+cz3B7ml8Ibg+h0
-X-Gm-Gg: AY/fxX5btwwTI3Gr3ZnEKHVa/ZvX7Ic5XEjAhCPEYxw5zaKI5gbXEBgQ4BHbYVPMFSv
-	LXZQVT6lCZSMapL5vpJlNsFcad6myammxoLSYFxL9rqYrFIOb0wfJ227c6f4Enf9JjwzjJTRgfH
-	e6bW4UGBtmF6K94ReBsEIMfVrwltLbWMyESF8TW7bl1kQ9+49QoPDq0AxpSqixr0mUOfStiS2U6
-	pMIdSisNMoGnsnJfSKDQ4jm4IXijTYQbmwUjBscaet/c1xniIcmobYCWOK12oeGCWPzo2lwe3Ng
-	SJiSRXS+yPd6gtBAKuQjoJzo9r+TSHX0UKgyUlYC9AMVHfoAMRpmxhEeSDs/L2A1EA/9YlLGMej
-	fgEJLIPKL8fJnd5/z6sw9kBbkMfMmRGaZbmHrhuPgYsvl7bZ5xHIPzteH3vdD8HYnWPSoxYcpDq
-	IIdsxixuR+2hADMFx6I1OjEMKh17b9MqGGOdy29bfZa+jj
-X-Received: by 2002:a05:6000:1a87:b0:431:c73:48a8 with SMTP id ffacd0b85a97d-43569bc4a06mr6593543f8f.29.1768604753879;
-        Fri, 16 Jan 2026 15:05:53 -0800 (PST)
-Received: from eldamar.lan (c-82-192-244-13.customer.ggaweb.ch. [82.192.244.13])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43569926648sm8083339f8f.10.2026.01.16.15.05.52
+        d=1e100.net; s=20230601; t=1768605668; x=1769210468;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RT/RfM1KoDrJ7wIYu4iXctkP9u3nbJNWzJOBhFkshN4=;
+        b=Nn78O4SmvmSfxZPJH05umCqQidBiSFveMQNphP7OxDSyc2jFCjOLy6nyIN42TrnhS3
+         Rb0AWTSGqIleK90kjHe7l4xsFBlHnwRY7VpGS1xthv4mgImUrBGZd6v+G6kGPbJcKZyL
+         McAG+VWoVpoaj8TKTOjt4wE7vUsLph4JMRhfH+Mw7ndEnR7S+Da4sn40E38mKEo+FNpd
+         AVyz8RDwZ3OS8xxofsmbi1fw5w2gTrbIwMXbHsOhD7UgDBURaNT0HEi6NaJdKKOjT6LP
+         tawrgTBq8AKY6PlyIHNW029ifAfNbGwPrtrZGVEH1fPZjqr8VxiUIuMtbhtG2uaxBQ76
+         x8SA==
+X-Forwarded-Encrypted: i=1; AJvYcCX2c3XKQLgqjiMkAD69K1NZNtv7Vjqk4vEnoF4E4bkh38UchYhzkOtvyvdvnp0xrxl7OhkYwnSBBY0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxdYAxsaXA7ALoavUZtHmgBcii7g5iKcRVwF00FlRHlZ2zJPcM
+	b+v8RIsa7CEx4DVh/JtW5ranfDkK2MlYuktWsa35dIKexg54MfXX0KbIaS+v9IjI/Sc+T/cifnH
+	zQE58NlnrzqNnfigPrpsbyZzp73kyd+apqLn6mrHM5i+MLBSzJT0VT/k+8UhYQyo=
+X-Gm-Gg: AY/fxX6OnCWRDE3LtBn9WbWtBCGxemur9XPtFGycGa1/SsAGhFz1ue0eqGuAZGcMxZZ
+	UzpWx2w08tBZInY3xEfIbiK/UeBqWZB+dIpgU9f/lq9gXNLYze4wXfg36B2NDKzDN2UOFobg91H
+	7UsTHklDXpyBPR9THSJsQY94arjodbunTRspQVKGreLz9aMQvo42Kz3+Z3/EQBQZSZmWf3rNk7U
+	+F1+SihmlYFK0Py2WtQKni4C9G8eVwjV7NUXsDSbIZ1wyvZkSvldFiLI0yUYNY1mOLQHAJyXavK
+	6JMGjpZEtRygGlwIZ17tBIuINvGV5dAo42b7A1aVw9kOjNbN/XN2tGhRWv8xpCXY6wdgtQih0ch
+	hu+aodREJGavNtEH06TfEhkTKzwr7md/ol+3HDwOV7vfs12L13TQCb6aPK0GrXbU=
+X-Received: by 2002:a05:7022:6084:b0:11e:528:4185 with SMTP id a92af1059eb24-1244a782eb1mr3946255c88.38.1768605667958;
+        Fri, 16 Jan 2026 15:21:07 -0800 (PST)
+X-Received: by 2002:a05:7022:6084:b0:11e:528:4185 with SMTP id a92af1059eb24-1244a782eb1mr3946241c88.38.1768605667432;
+        Fri, 16 Jan 2026 15:21:07 -0800 (PST)
+Received: from hu-eserrao-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1244af10e21sm4611267c88.16.2026.01.16.15.21.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jan 2026 15:05:52 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-	id 531A5BE2EE7; Sat, 17 Jan 2026 00:05:51 +0100 (CET)
-Date: Sat, 17 Jan 2026 00:05:51 +0100
-From: Salvatore Bonaccorso <carnil@debian.org>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: xiaopeitux@foxmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Pei Xiao <xiaopei01@kylinos.cn>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, pdormeau@free.fr
-Message-ID: <aWrET0wfgHNGd2cT@eldamar.lan>
+        Fri, 16 Jan 2026 15:21:06 -0800 (PST)
+From: Elson Serrao <elson.serrao@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/9] Improve Qualcomm EUD driver and platform support
+Date: Fri, 16 Jan 2026 15:20:57 -0800
+Message-Id: <20260116232106.2234978-1-elson.serrao@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE2MDE3NSBTYWx0ZWRfX2LjaO7DVxSWW
+ BXlCdtYt1FUU1o7C5NG93aVwT+kExXq6Y1zE2LmcscNu29zmPa0Dq8RP2dNJQRdBBNexbf//fsP
+ +d1+K/RhNakA3s9ftjVcUgZidkVEWKG+DTShQquwaydUmaXPrP/AnwLCxEjVlfHLmqV17c+j7y9
+ Vv578o8fblSmY/VIRZQiyH+1AGygpVsBou0EGU/uk+amJOu1IR0OGw1nUIEzZMgz8GpxR1vtrrJ
+ aTGdigsFv2Hj1ytMNu7NaBaR+Qp59+1vRlAQ75nXipKGegbZTtqtfAHDEh1IVNGID3oafwXq1Fg
+ aF86T1dHpyUjmmB9eCjOhzo16vnNbuqEPamw0AAcT2xgrYDu8Nf9nP0XcckLytccrHto57XgZox
+ g5cChLFF4W1utaZ5SmSICrnGxxtgmSMX43rSMvokMF4kwvTY9KVruwCX8UB12ehBjn4azCIan1I
+ PMxTY9Yp44vINgrgsmg==
+X-Proofpoint-ORIG-GUID: AlWSBYj3nQKd0J1t3h9cVrlX5GTl5ckb
+X-Proofpoint-GUID: AlWSBYj3nQKd0J1t3h9cVrlX5GTl5ckb
+X-Authority-Analysis: v=2.4 cv=ePgeTXp1 c=1 sm=1 tr=0 ts=696ac7e4 cx=c_pps
+ a=kVLUcbK0zfr7ocalXnG1qA==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8
+ a=gxp_OhC1Z7o2wZrAEi8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=LnhvVPq8fVUA:10 a=vr4QvYf-bLy2KjpDp97w:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-16_08,2026-01-15_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1011 phishscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 priorityscore=1501 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601160175
 
-Bcc: 
-Subject: Re: [RFC] usb: typec: ucsi: Fix array index out-of-bounds in altmode
- registration
-Reply-To: 
-In-Reply-To: <2026011617-phantom-diploma-cd79@gregkh>
+The Embedded USB Debugger (EUD) is a High-Speed USB on-chip hub that
+provides debug and trace capabilities on Qualcomm platforms. The current
+EUD driver, however, lacks essential hardware resources such as PHY
+references and support for multi-port configurations. This series
+addresses those gaps and introduces the necessary device tree updates
+to enable testing and validation of the enhanced functionality.
 
-Hi Greg, hi Heikki
+This work builds upon an earlier EUD driver submission:
+https://lore.kernel.org/all/20240730222439.3469-1-quic_eserrao@quicinc.com/
+and extends it with support for multi-port use cases and proper handling
+of EUD operation across different USB roles.
 
-On Fri, Jan 16, 2026 at 12:22:42PM +0100, Greg KH wrote:
-> On Thu, Jan 15, 2026 at 11:32:01AM +0800, xiaopeitux@foxmail.com wrote:
-> > From: Pei Xiao <xiaopei01@kylinos.cn>
-> > 
-> > Add boundary check to prevent array index out-of-bounds when PPM returns
-> > more alternate modes than expected.
-> > 
-> > log:
-> > UBSAN: array-index-out-of-bounds in /build/reproducible-path/linux-6.17.13/drivers/usb/typec/ucsi/ucsi.c:609:18
-> > index 2 is out of range for type 'ucsi_altmode [2]'
-> > CPU: 10 UID: 0 PID: 275 Comm: kworker/10:1 Not tainted 6.17.13+deb14-amd64 #1 PREEMPT(lazy)  Debian 6.17.13-1
-> > Hardware name: LENOVO 83J3/LNVNB161216, BIOS PYCN30WW 11/17/2025
-> > Workqueue: events_long ucsi_init_work [typec_ucsi]
-> > Call Trace:
-> > <TASK>
-> > dump_stack_lvl+0x5d/0x80
-> > ubsan_epilogue+0x5/0x2b
-> > __ubsan_handle_out_of_bounds.cold+0x54/0x59
-> > ucsi_register_altmodes+0x233/0x250 [typec_ucsi]
-> > ucsi_check_altmodes+0x1b/0xa0 [typec_ucsi]
-> > ucsi_init_work+0x919/0x9b0 [typec_ucsi]
-> > process_one_work+0x192/0x350
-> > worker_thread+0x25a/0x3a0
-> > 
-> > Reported-by: Salvatore Bonaccorso <carnil@debian.org>
-> > Closes: https://lore.kernel.org/lkml/176840984804.2144647.10736984532804520381@eldamar.lan
-> > Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > index a7b388dc7fa0..00575a8720cc 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -599,6 +599,8 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
-> >  		 * incremented.
-> >  		 */
-> >  		num = len / sizeof(alt[0]);
-> > +		if (num > ARRAY_SIZE(alt))
-> > +			num = ARRAY_SIZE(alt);
-> 
-> As Heikki said, this is a broken hardware device, please fix that
-> instead as it will not work with any other operating system either :)
+The series has been validated on the Qualcomm Dragonwing Q6 platform
+(RB3 Gen2 board), confirming successful OpenOCD connectivity to the EUD
+interface. For detailed usage instructions, refer to Qualcomm’s Linux
+kernel debugging guide:
+https://docs.qualcomm.com/bundle/publicresource/topics/80-70020-12/debugging_linux_kernel.html#debug-using-openocd
 
-Thanks a lot for looking into it. Pascal, can you pleas report this
-issue then to the vendor as it is a firmware bug?
+Elson Serrao (9):
+  dt-bindings: soc: qcom: eud: Restructure to model multi-path hardware
+  usb: misc: qcom_eud: add sysfs attribute for port selection
+  usb: misc: qcom_eud: add per-path High-Speed PHY control
+  usb: misc: qcom_eud: add per-path role switch support
+  usb: misc: qcom_eud: improve enable_store API
+  usb: misc: qcom_eud: add host mode coordination
+  usb: misc: qcom_eud: fix virtual attach/detach event handling
+  arm64: dts: qcom: kodiak: Align EUD node with binding
+  arm64: dts: qcom: qcs6490-rb3gen2: Enable EUD debug functionality
 
-Regards,
-Salvatore
+ Documentation/ABI/testing/sysfs-driver-eud    |  16 +
+ .../bindings/soc/qcom/qcom,eud.yaml           |  97 +++--
+ arch/arm64/boot/dts/qcom/kodiak.dtsi          |  33 +-
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  |  20 +-
+ drivers/usb/misc/qcom_eud.c                   | 365 +++++++++++++++++-
+ 5 files changed, 474 insertions(+), 57 deletions(-)
+
+-- 
+2.34.1
+
 
