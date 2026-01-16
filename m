@@ -1,126 +1,98 @@
-Return-Path: <linux-usb+bounces-32425-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32426-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00E67D2EF09
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 10:44:48 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6163D2F71C
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 11:19:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B64A53020686
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 09:42:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id BD03030116DB
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 10:19:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DBCF357A41;
-	Fri, 16 Jan 2026 09:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D83328260;
+	Fri, 16 Jan 2026 10:19:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nL9DuZxM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cw7ULLq0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E25313293
-	for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 09:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50841E0DE8;
+	Fri, 16 Jan 2026 10:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768556543; cv=none; b=ZQYltT5bVaB3saaTh6X9nsYBh4I9YMiR+vVqeD1F5IlEDib45IGqHU7ZxCYo31ODcn72xRxHCL2qJXhPdJZui2dA5TSKJDA8wPFMxD/vRUSrWtFHw5m5PihmPrZm2f5iA1TIPlH+uiSfZokzaN+skuU5pj0xDbaE0C2WQC3PG9M=
+	t=1768558778; cv=none; b=TE5qxcVZdk7zSU3R6vst1lcdJGXR/PRH7d/WXhY9lWDZBsJpog6dcVqvS1/p3TFB1V9eIe33GWtkyNKMOnpvx5y1kTHxv+t8PnTo217AgJIxqfsBfYLMwwSSrJlBenuUAlPkdhSXDR3HoneNSwg8507oQQ8qsGPD3bYsRNICejY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768556543; c=relaxed/simple;
-	bh=F1JGbhnXTCh8WsppYytEc04Kjpu6gQPNMm+53n0Vzlo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R2frctxg/j+Wxb8Jp7knYnlGqqvusqFFZa3DXgM+emTOYriygGiEA0hWMIp6DCyhDHHkYIz4KHvxa2XeKdWywB6GIXDfDq21qTlVMY6IfxO4dALu/n0ASxXPcw9BO1wKMBTtLW1YxBGe72XvW+XenmK5oX/bVbZPjVAyugFdZ5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nL9DuZxM; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768556542; x=1800092542;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=F1JGbhnXTCh8WsppYytEc04Kjpu6gQPNMm+53n0Vzlo=;
-  b=nL9DuZxMehBCZh/AvVmD/YhqptNsbur5Td1rLTVSZF96abDeyOF980eS
-   EHqWN+XhprZEOBYmV1n3obUhrkKd2aX1kLtelWzvqRi25dKiesIOeB9jv
-   vzLL4CTY96YA5CDdh4aW1v2R59qiD6+LqD0cdq8L5gq7m5VSkxt89RbeL
-   4RdVISuK0g4we07p3vc6Q4Z8A3KhYBdoGv/ECYRVHfsImLSMNUVxqG3fE
-   4MAXjwPnPBIdSosPSNEvayk6fIJ/7DgEhg8O2Lzl2SR86tzAawtL4CRT6
-   +qaJowncuxjo212HmECQhrOZlrcL35RxcQPmHBEV71AHHbh4zOO0eiQnv
-   Q==;
-X-CSE-ConnectionGUID: 0TTQkm6CTumMwx/IPx+ZRw==
-X-CSE-MsgGUID: ewganGz7RJqCiNqVKwgtYQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="81318369"
-X-IronPort-AV: E=Sophos;i="6.21,230,1763452800"; 
-   d="scan'208";a="81318369"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 01:42:21 -0800
-X-CSE-ConnectionGUID: nArW9w1TQ8O8ZxdgEuXS4Q==
-X-CSE-MsgGUID: CzIA/xq/Svax3qjIl5IifA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,230,1763452800"; 
-   d="scan'208";a="205480759"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO [10.245.245.142]) ([10.245.245.142])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 01:42:19 -0800
-Message-ID: <6ca710b6-5abf-4d01-a27a-21c22e6cec87@linux.intel.com>
-Date: Fri, 16 Jan 2026 11:42:17 +0200
+	s=arc-20240116; t=1768558778; c=relaxed/simple;
+	bh=F87RsPoWr/pYEzbtWKws6LhcryLOBXf4XlFgfTMkDho=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uYXXVY1mOsnG5Nrb0QJKoTkBRUDm4/j0ytJRgoiZbO4Chn9PCnPBgzaLaQgam85udu87PNqRT2PoimXReTocL7bVNvJzUsjuk2oEDIXcA5xiY/aEaE8gBLvUVNYgiTJZ7WqutjgukhVrDEROTe3T4+inQ2rb+GUaBzaRtZMnQzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cw7ULLq0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBF9C116C6;
+	Fri, 16 Jan 2026 10:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768558778;
+	bh=F87RsPoWr/pYEzbtWKws6LhcryLOBXf4XlFgfTMkDho=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Cw7ULLq0Z7to/f/nymQWNVd+TC9bGZZYf/J5siU/CCCEIi7Fl3SW0On3Hgp0Lwas9
+	 SKPX+pAt9HS3wbBFJ1GsIJX4wS6QeT88rGSw5ggsvAQ1khHvluXk/TA5J8gOo4MGRO
+	 xez9hndvnpHXuf9TAubUnM1nsmE8snO4Xl8Grdp3LI7Q36vTQSE0bOd1bFtEmV1vUy
+	 fOYQ2sq6cNyLnr0Vp/j0J/OYg+RjghCfrw5Es4mRpvlHknlb+MD33DGAw4z6vu8eDM
+	 +duO2WiCY2X1OemZCk96O0rhvRrj9lU6rySUt+ztJx9/vK5KeM8WxgrGDgg43Cmx2i
+	 ls94HGHb6Ak9g==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vggvW-0000000063V-286l;
+	Fri, 16 Jan 2026 11:19:34 +0100
+Date: Fri, 16 Jan 2026 11:19:34 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB serial fixes for 6.19-rc6
+Message-ID: <aWoQtivAkG0Dt2pn@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8] usb:xhci:route device to secondary interrupters
-To: raoxu <raoxu@uniontech.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- michal.pecio@gmail.com, niklas.neronin@linux.intel.com,
- zhanjun@uniontech.com, kenny@panix.com
-References: <E0F2AF44A50D04EB+20260116054611.4086487-1-raoxu@uniontech.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <E0F2AF44A50D04EB+20260116054611.4086487-1-raoxu@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi
+The following changes since commit f8f9c1f4d0c7a64600e2ca312dec824a0bc2f1da:
 
-Thanks for the new revised version
+  Linux 6.19-rc3 (2025-12-28 13:24:26 -0800)
 
-On 1/16/26 07:46, raoxu wrote:
-> From: Xu Rao <raoxu@uniontech.com>
-> 
-> Some xHCI hosts expose multiple MSI/MSI-X vectors, but the driver
-> currently routes all transfer completions through interrupter 0.
-> This can lead to unnecessary contention on the primary event ring
-> and IRQ vector.
-> 
-> Create a small set of secondary interrupters in xhci_mem_init().
-> Cap the number in software (MAX_SECONDARY_INTRNUM, default 4).
-> If any secondary allocation fails, roll back and keep using
-> interrupter 0 only.
-> 
-> Unify primary and secondary handling on xhci->interrupters[].
-> Use the same paths for enable/disable and teardown.
-> Keep behavior consistent across run/stop/resume.
-> 
-> Route transfers per USB device (slot).
-> Add vdev->interrupter in struct xhci_virt_device.
-> Pick the default interrupter at device alloc time.
-> Program TRB_INTR_TARGET() from vdev->interrupter->intr_num for
-> bulk/ctrl/isoc/intr, so completions land on the selected event ring.
-> 
-> Route MSI/MSI-X IRQs to the right interrupter in xhci_msi_irq().
-> Store the struct xhci_interrupter pointer in irq handler_data.
-> Map vectors by index (0..N) to xhci->interrupters[].
-> Keep STS_EINT handling restricted to interrupter 0.
-> Spread MSI-X vectors with irq_set_affinity() and re-apply on resume.
+are available in the Git repository at:
 
-Is spreading out the vectors somthing that we need to do manually,
-and re-apply on resume?
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.19-rc6
 
-I haven't looked into the affinity internals but would it be enough
-to just add the PCI_IRQ_AFFINITY flag when calling  pci_alloc_irq_vectors()?
+for you to fetch changes up to cd644b805da8a253198718741bf363c4c58862ff:
 
-linux/interrupt-h also states that irq_set_affinity_hint() used here
-is deprecated
+  USB: serial: f81232: fix incomplete serial port generation (2026-01-13 15:59:07 +0100)
 
-Thanks
-Mathias
+----------------------------------------------------------------
+USB serial fix for 6.19-rc6
 
+Here's a fix for an f81232 enumeration issue that could prevent some
+ports from being enabled (e.g. during driver rebind).
 
+Included are also some new device ids.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Ethan Nelson-Moore (1):
+      USB: serial: ftdi_sio: add support for PICAXE AXE027 cable
+
+Ji-Ze Hong (Peter Hong) (1):
+      USB: serial: f81232: fix incomplete serial port generation
+
+Ulrich Mohr (1):
+      USB: serial: option: add Telit LE910 MBIM composition
+
+ drivers/usb/serial/f81232.c       | 77 ++++++++++++++++++++++++---------------
+ drivers/usb/serial/ftdi_sio.c     |  1 +
+ drivers/usb/serial/ftdi_sio_ids.h |  2 +
+ drivers/usb/serial/option.c       |  1 +
+ 4 files changed, 51 insertions(+), 30 deletions(-)
 
