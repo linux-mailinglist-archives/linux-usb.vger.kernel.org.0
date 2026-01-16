@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-32418-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32419-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50938D2B091
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 04:55:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E14A5D2B065
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 04:54:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F3A05309A6E1
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 03:53:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7D408304E5F5
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 03:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28FDA343D76;
-	Fri, 16 Jan 2026 03:53:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DB3F3446D2;
+	Fri, 16 Jan 2026 03:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sX+CVuSa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DpvOPjKL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67182857FC;
-	Fri, 16 Jan 2026 03:53:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6452857FC;
+	Fri, 16 Jan 2026 03:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768535630; cv=none; b=dvG4KM76nAqbK4Pe2MREf1uFtkRPpWd7wnle3id+ZgW00AFMH+dBAS96y8PlEOXAKPewOdIVABT0Ni1k7FRx1JVpoJGkt0kGNp+L2gzKaf7mQjaaol8p5xKjkQpuSLQNFpqMADUZFZRmhuuN2Uy1lZem8Dyng8ZR2jxn4hTxR8o=
+	t=1768535633; cv=none; b=eTSvanfU9tutKcwOY0gW0wfYXXfoz1P97PfFiqKSQiv8xox7v3r4PzF59oA8vlXfqcSTpQmssocJvuHIw9utO+3b2ez+hxtBBXE8WqGvf///YJVmGZQUDEX8Im17H9m2+Q3wlSzrSamgRaRS4RMVVvUewXlXnvdGzB1+l0EXxx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768535630; c=relaxed/simple;
-	bh=n9HfYfDKSIL1G1wKC7BWOhpGCpE/VtqAkip4v0R/drc=;
+	s=arc-20240116; t=1768535633; c=relaxed/simple;
+	bh=fcULW8yshL4lWkFyY9KfLsxw7N73/Vl7asBiwFY65zk=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WVORdpnLi6WNkvqv633yxsiAY6/l+OraP9Ss1SJowesbNWH0/rzfQdvpeaFkiuLXcHSUYKRNGjV27d8sq/UDIM0GxabPD4I+OPt2ey8xZG/Xd+OLVQ51cmY8naM1DcOQyVUCOe0Bthco1tx/I6UuZ+JxQbLfXmS55MgqnDovOJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sX+CVuSa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550B4C16AAE;
-	Fri, 16 Jan 2026 03:53:46 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=C6vSj1VCprx0I/soPqTmt5yn8NQhZ1OctvkdfmxK4H+hcZw4/XH1hvfWwU//Q5yYjYrdjkKBkqfsg5XSaHuYO7JtzVKBXAKIjFWS7JbyaIPnYCm1PBA2x77Qq9T5DhIbDsxS9NFsfUiSJ0LAZk3gjz1vZGflqk9dTrmg11oE9rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DpvOPjKL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56669C116C6;
+	Fri, 16 Jan 2026 03:53:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768535626;
-	bh=n9HfYfDKSIL1G1wKC7BWOhpGCpE/VtqAkip4v0R/drc=;
+	s=k20201202; t=1768535633;
+	bh=fcULW8yshL4lWkFyY9KfLsxw7N73/Vl7asBiwFY65zk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=sX+CVuSa06qONu6y1krcT3EZEH9s9b6kHdH6fLbJZcZUF6e5BPT8jOic5lcN6Yu2j
-	 hG9c3DEjSTTsicuRO4LGkXL3I7O5REBs1bmKcvmMLYiJ5LnAPLGA70EcZ/P6MnubKG
-	 01rjCPhS6u150qkT3r3b70cXynxx87cBjr2bkt0CH9prsauJT5AlwfPB9GBTW/J3y5
-	 SBRySamJXxNxyM6c3r5cNzYvY6KHHr15XPAmCCmMb95y1UtVJzoSvLsJXP3m0CuR3d
-	 wfdvADfIIzInMbNG+nOa/6p2dUhMctHBlkwTF+pdCPsLW23Jo/feqLvev5vyEPxfWR
-	 71rqiZg8+IckA==
+	b=DpvOPjKLEQdSpdqB0ODjfToXwhI1Nc1Bikk1iYN3jdasCBh9Yeaem2tcX7J4JMV2e
+	 4WXN0aCZW2OBi5cS5Fi34Cs2xJZVAHJ9P6/JNGVGWhMe2ZPz90ZsdM9iyNC/Tc/40t
+	 ptb8ck3DZ1c0FYzNgKsjVg/vk8sLdgYAQrcRIl5TrwE4gCV40vyOTlR0AxQNuflOb4
+	 9bqEz+ebzHXqnMXVp/dpjZK6H7PFFHTzW4Gt8yo4iAiPHk3bJL2Axv1Cjulw370dzn
+	 JKJ4DSpunaEPmjRU/OPEL0IC6/5d5r1fs4Yw9oM/KeITKnyaRKgXSDewuvgk65Dbvt
+	 h1kJLyrwIuRhw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 78969380AA4C;
-	Fri, 16 Jan 2026 03:50:19 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 786CB380AA4C;
+	Fri, 16 Jan 2026 03:50:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -50,42 +50,35 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] usbnet: fix crash due to missing BQL accounting after
- resume
+Subject: Re: [PATCH net-next] net: usb: sr9700: fix byte numbering in comments
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <176853541802.73880.8707530298339054626.git-patchwork-notify@kernel.org>
-Date: Fri, 16 Jan 2026 03:50:18 +0000
-References: <20260113075139.6735-1-simon.schippers@tu-dortmund.de>
-In-Reply-To: <20260113075139.6735-1-simon.schippers@tu-dortmund.de>
-To: Simon Schippers <simon.schippers@tu-dortmund.de>
-Cc: oneukum@suse.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, dnlplm@gmail.com,
- netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, yung-chuan.liao@linux.intel.com
+ <176853542503.73880.9350290605838337341.git-patchwork-notify@kernel.org>
+Date: Fri, 16 Jan 2026 03:50:25 +0000
+References: <20260113075327.85435-1-enelsonmoore@gmail.com>
+In-Reply-To: <20260113075327.85435-1-enelsonmoore@gmail.com>
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
 
 Hello:
 
-This patch was applied to netdev/net.git (main)
+This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue, 13 Jan 2026 08:51:38 +0100 you wrote:
-> In commit 7ff14c52049e ("usbnet: Add support for Byte Queue Limits
-> (BQL)"), it was missed that usbnet_resume() may enqueue SKBs using
-> __skb_queue_tail() without reporting them to BQL. As a result, the next
-> call to netdev_completed_queue() triggers a BUG_ON() in dql_completed(),
-> since the SKBs queued during resume were never accounted for.
+On Mon, 12 Jan 2026 23:53:21 -0800 you wrote:
+> The comments describing the RX/TX headers and status response use
+> a combination of 0- and 1-based indexing, leading to confusion. Correct
+> the numbering and make it consistent. Also fix a typo "pm" for "pn".
 > 
-> This patch fixes the issue by adding a corresponding netdev_sent_queue()
-> call in usbnet_resume() when SKBs are queued after suspend. Because
-> dev->txq.lock is held at this point, no concurrent calls to
-> netdev_sent_queue() from usbnet_start_xmit() can occur.
+> This issue also existed in dm9601 and was fixed in commit 61189c78bda8
+> ("dm9601: trivial comment fixes").
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] usbnet: fix crash due to missing BQL accounting after resume
-    https://git.kernel.org/netdev/net/c/c4efd7a770c5
+  - [net-next] net: usb: sr9700: fix byte numbering in comments
+    https://git.kernel.org/netdev/net-next/c/acbe4a141e89
 
 You are awesome, thank you!
 -- 
