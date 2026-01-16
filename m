@@ -1,64 +1,52 @@
-Return-Path: <linux-usb+bounces-32428-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32429-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97D78D30495
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 12:21:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D5DFD305E9
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 12:28:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 79C8B3004622
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 11:21:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4B9453139D93
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 11:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C8D374176;
-	Fri, 16 Jan 2026 11:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B39378D68;
+	Fri, 16 Jan 2026 11:22:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HhlGg6RM"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QmQygYmH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5B036D51F;
-	Fri, 16 Jan 2026 11:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B15632860B;
+	Fri, 16 Jan 2026 11:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768562501; cv=none; b=Ttq2DAMODV0BDTd8+Hie3s/wswsMeYUhfYsHFiuROZvUUXQdj1TgZRHOj1sIRhVmmXpf/F8uT6PrmZNKDYu63AaCux28qxQeiBJdHoUExrlXZl65OWl24nn5lTW2DB9FzMICkbZVm0OZLJdDQ73FpyYsu/I3ObCxhN18fcMK7Oo=
+	t=1768562566; cv=none; b=O7vgXJDNSeMpofFtHlap4w/nwOy2Oo47WhB66UpBlqmQRb0UwSvN9EiqFYvNkaJDeDeA+7CZl07DkTYpyUE+FQHyMW8xReVUEFipOH+WTJR1LpZiNMeYo9yOb1ijEWd5RA5kYTLa1NbX+OuXpuZbvJV/5NJEVDSUzgB/a/j/CiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768562501; c=relaxed/simple;
-	bh=uzmgy23XlDPZ47f+gzIkOgAH7PZE9VKM/yt+dTRX+qY=;
+	s=arc-20240116; t=1768562566; c=relaxed/simple;
+	bh=6Ujq4Addrw0XCnNAiiK6Ccj72MAnyreFhw5bWByKon4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VlXsSxGN2TDf04QqWnN01xcSkPx1NmEpKIkxoeAyflprN2oPdvJOdRIABZuPWEA1QZK7FnkG8PRtJj5eHJ1A3etSZ5KZGbDgmpA0c7gokO017VR9lgKHXac8m2GJpH8UHKLzrpMCNkWm2jxoIimlorC6U/8eh2nSH742dWEpSwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HhlGg6RM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0198CC116C6;
-	Fri, 16 Jan 2026 11:21:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hys/ZkgS1qXvtBAU4y6ewJTg8HCwl3v+Zky1O2uWbkGa5Xdy7e/FvZkmazzMqTth783h2Dcw4xbLRg1KiSLU88pB5IWtNQmP99d3eAAZLSwnBUr2WJT7iqYxAhWHGKJYkDrb8rsZbQEbsytI1Tn2jN1whhkvfMXJfqsR+jFXS+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QmQygYmH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E96C116C6;
+	Fri, 16 Jan 2026 11:22:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1768562500;
-	bh=uzmgy23XlDPZ47f+gzIkOgAH7PZE9VKM/yt+dTRX+qY=;
+	s=korg; t=1768562565;
+	bh=6Ujq4Addrw0XCnNAiiK6Ccj72MAnyreFhw5bWByKon4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HhlGg6RM1asu68X7YXKJNhD13gK6KljJJRHtw/TJWcisMfBjXyFX50bi4pqkhp4zZ
-	 QD12jE25fACmx+8mLLnbWY/sJ3MH5WOa91Ricr1Te5Qcf6bDiSX1xdXkVD50X2G7VZ
-	 wHZdQqV2J8cakMKb8/tT7j42GfJIw/Jd2Oq210tA=
-Date: Fri, 16 Jan 2026 12:21:37 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Andrei Kuchynski <akuchynski@chromium.org>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Johan Hovold <johan@kernel.org>,
-	Hsin-Te Yuan <yuanhsinte@chromium.org>, Madhu M <madhu.m@intel.com>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>
-Subject: Re: [PATCH v4 4/8] usb: typec: Expose alternate mode priority via
- sysfs
-Message-ID: <2026011625-demanding-gap-8815@gregkh>
-References: <20260113130536.3068311-1-akuchynski@chromium.org>
- <20260113130536.3068311-5-akuchynski@chromium.org>
- <aWj6vLt3iHXjuYjz@kuha>
+	b=QmQygYmHPzBMBjPms9Rc5MUKXFdo1ES0BrLEMouqky+uTK53tMcTdcmVeyeb16+6u
+	 0/98HODgbDGGDvEj3qaqU7p62jdDDZ4ItDONe+lG6MX5zOiZ6oc8yH1V6xu4d19TdF
+	 TXzz2yDS6YVz97Y13h1SY6/QZgoiLLnvyS/Mw6qk=
+Date: Fri, 16 Jan 2026 12:22:42 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: xiaopeitux@foxmail.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Pei Xiao <xiaopei01@kylinos.cn>,
+	Salvatore Bonaccorso <carnil@debian.org>
+Subject: Re: [RFC] usb: typec: ucsi: Fix array index out-of-bounds in altmode
+ registration
+Message-ID: <2026011617-phantom-diploma-cd79@gregkh>
+References: <176840984804.2144647.10736984532804520381@eldamar.lan>
+ <tencent_A6F79CBEAB47840EB720951FA48D97CD4906@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,136 +55,51 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aWj6vLt3iHXjuYjz@kuha>
+In-Reply-To: <tencent_A6F79CBEAB47840EB720951FA48D97CD4906@qq.com>
 
-On Thu, Jan 15, 2026 at 04:33:32PM +0200, Heikki Krogerus wrote:
-> Hi Andrei,
+On Thu, Jan 15, 2026 at 11:32:01AM +0800, xiaopeitux@foxmail.com wrote:
+> From: Pei Xiao <xiaopei01@kylinos.cn>
 > 
-> Tue, Jan 13, 2026 at 01:05:32PM +0000, Andrei Kuchynski kirjoitti:
-> > This patch introduces a priority sysfs attribute to the USB Type-C
-> > alternate mode port interface. This new attribute allows user-space to
-> > configure the numeric priority of alternate modes managing their preferred
-> > order of operation. If a new priority value conflicts with an existing
-> > mode's priority, the priorities of the conflicting mode and all subsequent
-> > modes are automatically incremented to ensure uniqueness.
-> > 
-> > Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
-> > Reviewed-by: Benson Leung <bleung@chromium.org>
-> > ---
-> >  Documentation/ABI/testing/sysfs-class-typec | 11 +++
-> >  drivers/usb/typec/class.c                   | 90 ++++++++++++++++++++-
-> >  include/linux/usb/typec_altmode.h           |  1 +
-> >  3 files changed, 101 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> > index 38e101c17a004..737b76828b509 100644
-> > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > @@ -162,6 +162,17 @@ Description:	Lists the supported USB Modes. The default USB mode that is used
-> >  		- usb3 (USB 3.2)
-> >  		- usb4 (USB4)
-> >  
-> > +What:		/sys/class/typec/<port>/<alt-mode>/priority
-> > +Date:		July 2025
-> > +Contact:	Andrei Kuchynski <akuchynski@chromium.org>
-> > +Description:
-> > +		Displays and allows setting the priority for a specific alternate mode.
-> > +		The priority is an integer in the range 0-255. A lower numerical value
-> > +		indicates a higher priority (0 is the highest).
-> > +		If the new value is already in use by another mode, the priority of the
-> > +		conflicting mode and any subsequent modes will be incremented until they
-> > +		are all unique.
+> Add boundary check to prevent array index out-of-bounds when PPM returns
+> more alternate modes than expected.
 > 
-> Greg already told you to show the range somehow with this, so the
-> total number of (so far known?) alternate modes. Maybe something like
-> <index> / <total_num_altmodes> ?
+> log:
+> UBSAN: array-index-out-of-bounds in /build/reproducible-path/linux-6.17.13/drivers/usb/typec/ucsi/ucsi.c:609:18
+> index 2 is out of range for type 'ucsi_altmode [2]'
+> CPU: 10 UID: 0 PID: 275 Comm: kworker/10:1 Not tainted 6.17.13+deb14-amd64 #1 PREEMPT(lazy)  Debian 6.17.13-1
+> Hardware name: LENOVO 83J3/LNVNB161216, BIOS PYCN30WW 11/17/2025
+> Workqueue: events_long ucsi_init_work [typec_ucsi]
+> Call Trace:
+> <TASK>
+> dump_stack_lvl+0x5d/0x80
+> ubsan_epilogue+0x5/0x2b
+> __ubsan_handle_out_of_bounds.cold+0x54/0x59
+> ucsi_register_altmodes+0x233/0x250 [typec_ucsi]
+> ucsi_check_altmodes+0x1b/0xa0 [typec_ucsi]
+> ucsi_init_work+0x919/0x9b0 [typec_ucsi]
+> process_one_work+0x192/0x350
+> worker_thread+0x25a/0x3a0
 > 
-> >  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
-> >  
-> >  What:		/sys/class/typec/<port>-partner/accessory_mode
-> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> > index 0f12d6120511b..1fb5450c0a2f2 100644
-> > --- a/drivers/usb/typec/class.c
-> > +++ b/drivers/usb/typec/class.c
-> > @@ -445,11 +445,88 @@ svid_show(struct device *dev, struct device_attribute *attr, char *buf)
-> >  }
-> >  static DEVICE_ATTR_RO(svid);
-> >  
-> > +static int increment_duplicated_priority(struct device *dev, void *data)
-> > +{
-> > +	if (is_typec_port_altmode(dev)) {
-> > +		struct typec_altmode **alt_target = (struct typec_altmode **)data;
-> > +		struct typec_altmode *alt = to_typec_altmode(dev);
-> > +
-> > +		if (alt != *alt_target && alt->priority == (*alt_target)->priority) {
-> > +			alt->priority++;
-> > +			*alt_target = alt;
-> > +			return 1;
-> > +		}
-> > +	}
-> > +	return 0;
-> > +}
-> > +
-> > +static int find_duplicated_priority(struct device *dev, void *data)
-> > +{
-> > +	if (is_typec_port_altmode(dev)) {
-> > +		struct typec_altmode **alt_target = (struct typec_altmode **)data;
-> > +		struct typec_altmode *alt = to_typec_altmode(dev);
-> > +
-> > +		if (alt != *alt_target && alt->priority == (*alt_target)->priority)
-> > +			return 1;
-> > +	}
-> > +	return 0;
-> > +}
-> > +
-> > +static int typec_mode_set_priority(struct typec_altmode *alt, const u8 priority)
-> > +{
-> > +	struct typec_port *port = to_typec_port(alt->dev.parent);
-> > +	const u8 old_priority = alt->priority;
-> > +	int res = 1;
-> > +
-> > +	alt->priority = priority;
-> > +	while (res) {
-> > +		res = device_for_each_child(&port->dev, &alt, find_duplicated_priority);
-> > +		if (res) {
-> > +			alt->priority++;
-> > +			if (alt->priority == 0) {
-> > +				alt->priority = old_priority;
-> > +				return -EOVERFLOW;
-> > +			}
-> > +		}
-> > +	}
-> > +
-> > +	res = 1;
-> > +	alt->priority = priority;
-> > +	while (res)
-> > +		res = device_for_each_child(&port->dev, &alt,
-> > +				increment_duplicated_priority);
+> Reported-by: Salvatore Bonaccorso <carnil@debian.org>
+> Closes: https://lore.kernel.org/lkml/176840984804.2144647.10736984532804520381@eldamar.lan
+> Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Please align the code properly.
-> 
-> > +	return 0;
-> > +}
-> > +
-> > +static ssize_t priority_store(struct device *dev,
-> > +			       struct device_attribute *attr,
-> > +			       const char *buf, size_t size)
-> > +{
-> > +	u8 val;
-> > +	int err = kstrtou8(buf, 10, &val);
-> > +
-> > +	if (!err)
-> > +		err = typec_mode_set_priority(to_typec_altmode(dev), val);
-> > +
-> > +	if (!err)
-> > +		return size;
-> > +	return err;
-> 
-> I know not everybody likes the ternary operator, but I would just
-> 
->         return err ?: size;
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index a7b388dc7fa0..00575a8720cc 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -599,6 +599,8 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
+>  		 * incremented.
+>  		 */
+>  		num = len / sizeof(alt[0]);
+> +		if (num > ARRAY_SIZE(alt))
+> +			num = ARRAY_SIZE(alt);
 
-I hate it, so this is fine as is :)
+As Heikki said, this is a broken hardware device, please fix that
+instead as it will not work with any other operating system either :)
 
 thanks,
 
