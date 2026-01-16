@@ -1,164 +1,86 @@
-Return-Path: <linux-usb+bounces-32412-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32413-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89035D29481
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 00:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ED86D29677
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 01:24:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EC733308E4F8
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jan 2026 23:38:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0ECE930456B1
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 00:23:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB6632ED5C;
-	Thu, 15 Jan 2026 23:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF422F5A35;
+	Fri, 16 Jan 2026 00:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LDDanD02"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VEK90QXs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E3B30F527;
-	Thu, 15 Jan 2026 23:38:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F01155757;
+	Fri, 16 Jan 2026 00:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768520300; cv=none; b=I1SvcZwOId02X2hXct9iaIEy5lf4obDhhfEJ99dz+UPTDOVIR4W4azi7AXPhUEvVuDbPjad2lMvp2cgMA+VTD1QvfGrDaNd2GnsJ9tOt+f9Y+jBF8nHsGTm4U6wq3T+gbVXSCCqWA/7oc/yEZF+vn6l3/WC3SOEs57mmC2iSJ0s=
+	t=1768523025; cv=none; b=llgCqkonW3ao8ogf1Oo+EwGwcbfj2dEshmaUYalgGteDJMUjj5dXFHW9WUILQGl5DmNVjbDBtpNk+onRiLdSWHzULcx2GBxn34bjWvYfwuJjFff2LtqQG3qZs3S6IjXPzyHrFlKGYIeOlkMPgYFyPcx+IJIITC5vfVS6n4LJQms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768520300; c=relaxed/simple;
-	bh=bw5uexDVeCOajjm+Os8eRFDxt4Zovndc6OKkwrfX5H8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DCGZsfCcj1ZG5YHs3WPiTXDENXSMfFNLVRXvfwke1z0QzLdiFGC3zV6y5FyvMZkrrLzfKq0QK8ND7Zay/28IEnsNCOMPfTFzIkUVliKH+metjYUH54kMjEUNDEFKJ6GqqbFNbKFP2Q8efRTwbQJEdmGPnI2dITD5DSw9sck2/40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LDDanD02; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768520298; x=1800056298;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bw5uexDVeCOajjm+Os8eRFDxt4Zovndc6OKkwrfX5H8=;
-  b=LDDanD02Rje1TrQ528AXcRw1Cm1IvHb75dAomLSAQ/5p7Zy9x90T62Mu
-   f3T5zae5FDdCvJBbkEMrMKO5WymDUWrHCgQ6UsnwUas6wlOAY2zxipQEU
-   lOJEUTFYGekRUCXegxm5ijYJiw0AVAXhFmTn3lenO/aeGgq+i5mypbazp
-   HMYUph+8Py/Gr8A085fy5195WF1Lrsscyp5/p49MKKtdzeDyaW57b46iB
-   Uj46W+KXdgBaumkc+/0UN/AsZ3DtfiNmTdNjURGhsf5z1QRElv8CRiwi5
-   GW9usWEWDx42qYA1b+B+7Tx7eBwnEeKuc1Yg+cGV19tb8Dbq3FKJwJMK3
-   g==;
-X-CSE-ConnectionGUID: WCoo2VmBT4Of+BStQcNutQ==
-X-CSE-MsgGUID: ejb8JEG4SeOPnIKkBZqzPQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="69891646"
-X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="69891646"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 15:38:18 -0800
-X-CSE-ConnectionGUID: 0FceZhURSseOA7sX4i9L9A==
-X-CSE-MsgGUID: LWtCRYJ2SkmZPnnc5A8eyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="236336663"
-Received: from dalessan-mobl3.ger.corp.intel.com (HELO mnyman-desk.home) ([10.245.245.7])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 15:38:17 -0800
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	=?UTF-8?q?=E8=83=A1=E8=BF=9E=E5=8B=A4?= <hulianqin@vivo.com>,
-	stable@vger.kernel.org
-Subject: [PATCH 1/1] xhci: sideband: don't dereference freed ring when removing sideband endpoint
-Date: Fri, 16 Jan 2026 01:37:58 +0200
-Message-ID: <20260115233758.364097-2-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260115233758.364097-1-mathias.nyman@linux.intel.com>
-References: <20260115233758.364097-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1768523025; c=relaxed/simple;
+	bh=gRr6r85Dw9DNmNU3LbuuzoPVN962amU36uxrHqZxdOY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=ac5Qxs4/TnB+x3//gBzHmbNlBAVNXx08WsqUSDY+kLFIk41XkiWDN3Qjkr192cWM/+dRcEpCRjQprIXNeIVGv5l+A7v0WN3vHIuLSg1vUHTIJNmtu9Jl1L1CkTEgtMOuupXQWs9rzI1f2hPwY/4YmW8tAMSRz2nVG0kngdaNZoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VEK90QXs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0EFC116D0;
+	Fri, 16 Jan 2026 00:23:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768523024;
+	bh=gRr6r85Dw9DNmNU3LbuuzoPVN962amU36uxrHqZxdOY=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=VEK90QXsVwStggroWyCYy8XdGKFUHHY29zS8oNRAxJENn9j+ejZ4RlCE7hAnC8UoR
+	 oKgQ1Atuphj+b4YiaH1xpHALuyP4DF7W9hEgWLfaMDw/GQAYGGJTzx7VH061l2Z8Hd
+	 jLBTo/Wuaxz3KQDFPWLibZWKvK8YZR9flUMLnScmMSg2aZFRMNbc/daoWYywZOX4wc
+	 3LWuw+UI+fmk+8GfkUHe8Fx23hHvB9cfsK/zDhOFnFfRGQSYk7JPaLPg0a+u9ON9K3
+	 UUJ36nX9LE4F2dhxovyOP29Ayq9kF+LOd82L2za8nqC7A3bbOU4m6SMnFaJYsnDmC+
+	 qpVlF8lSO9gcA==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Fri, 16 Jan 2026 01:23:38 +0100
+Message-Id: <DFPL36VGXC4U.2VIGN6HU8DQDJ@kernel.org>
+Subject: Re: [PATCH 0/6] Address race condition with Device::drvdata()
+Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <linux-pci@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+ <linux-i2c@vger.kernel.org>
+To: <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+ <igor.korotin.linux@gmail.com>, <ojeda@kernel.org>, <boqun.feng@gmail.com>,
+ <gary@garyguo.net>, <bjorn3_gh@protonmail.com>, <lossin@kernel.org>,
+ <a.hindborg@kernel.org>, <aliceryhl@google.com>, <tmgross@umich.edu>,
+ <david.m.ertman@intel.com>, <ira.weiny@intel.com>, <leon@kernel.org>,
+ <bhelgaas@google.com>, <kwilczynski@kernel.org>,
+ <wsa+renesas@sang-engineering.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260107103511.570525-1-dakr@kernel.org>
+In-Reply-To: <20260107103511.570525-1-dakr@kernel.org>
 
-xhci_sideband_remove_endpoint() incorrecly assumes that the endpoint is
-running and has a valid transfer ring.
+On Wed Jan 7, 2026 at 11:34 AM CET, Danilo Krummrich wrote:
+> Danilo Krummrich (6):
+>   rust: i2c: do not drop device private data on shutdown()
+>   rust: auxiliary: add Driver::unbind() callback
+>   rust: driver: introduce a common Driver trait
 
-Lianqin reported a crash during suspend/wake-up stress testing, and
-found the cause to be dereferencing a non-existing transfer ring
-'ep->ring' during xhci_sideband_remove_endpoint().
+    [ Rename driver::Driver to driver::DriverLayout, as it represents the
+      layout of a driver structure rather than the driver structure itself.
+      - Danilo ]
 
-The endpoint and its ring may be in unknown state if this function
-is called after xHCI was reinitialized in resume (lost power), or if
-device is being re-enumerated, disconnected or endpoint already dropped.
+>   rust: driver: add DEVICE_DRIVER_OFFSET to the Driver trait
+>   rust: driver: add DriverData type to the generic Driver trait
+>   rust: driver: drop device private data post unbind
 
-Fix this by both removing unnecessary ring access, and by checking
-ep->ring exists before dereferencing it. Also make sure endpoint is
-running before attempting to stop it.
+    [ Remove #ifdef CONFIG_RUST, rename post_unbind() to post_unbind_rust()=
+.
+     - Danilo]
 
-Remove the xhci_initialize_ring_info() call during sideband endpoint
-removal as is it only initializes ring structure enqueue, dequeue and
-cycle state values to their starting values without changing actual
-hardware enqueue, dequeue and cycle state. Leaving them out of sync
-is worse than leaving it as it is. The endpoint will get freed in after
-this in most usecases.
-
-If the (audio) class driver want's to reuse the endpoint after offload
-then it is up to the class driver to ensure endpoint is properly set up.
-
-Reported-by: 胡连勤 <hulianqin@vivo.com>
-Closes: https://lore.kernel.org/linux-usb/TYUPR06MB6217B105B059A7730C4F6EC8D2B9A@TYUPR06MB6217.apcprd06.prod.outlook.com/
-Tested-by: 胡连勤 <hulianqin@vivo.com>
-Fixes: de66754e9f80 ("xhci: sideband: add initial api to register a secondary interrupter entity")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-sideband.c |  1 -
- drivers/usb/host/xhci.c          | 15 ++++++++++++---
- 2 files changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
-index a85f62a73313..2bd77255032b 100644
---- a/drivers/usb/host/xhci-sideband.c
-+++ b/drivers/usb/host/xhci-sideband.c
-@@ -210,7 +210,6 @@ xhci_sideband_remove_endpoint(struct xhci_sideband *sb,
- 		return -ENODEV;
- 
- 	__xhci_sideband_remove_endpoint(sb, ep);
--	xhci_initialize_ring_info(ep->ring);
- 
- 	return 0;
- }
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 02c9bfe21ae2..b3ba16b9718c 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -2898,16 +2898,25 @@ int xhci_stop_endpoint_sync(struct xhci_hcd *xhci, struct xhci_virt_ep *ep, int
- 			    gfp_t gfp_flags)
- {
- 	struct xhci_command *command;
-+	struct xhci_ep_ctx *ep_ctx;
- 	unsigned long flags;
--	int ret;
-+	int ret = -ENODEV;
- 
- 	command = xhci_alloc_command(xhci, true, gfp_flags);
- 	if (!command)
- 		return -ENOMEM;
- 
- 	spin_lock_irqsave(&xhci->lock, flags);
--	ret = xhci_queue_stop_endpoint(xhci, command, ep->vdev->slot_id,
--				       ep->ep_index, suspend);
-+
-+	/* make sure endpoint exists and is running before stopping it */
-+	if (ep->ring) {
-+		ep_ctx = xhci_get_ep_ctx(xhci, ep->vdev->out_ctx, ep->ep_index);
-+		if (GET_EP_CTX_STATE(ep_ctx) == EP_STATE_RUNNING)
-+			ret = xhci_queue_stop_endpoint(xhci, command,
-+						       ep->vdev->slot_id,
-+						       ep->ep_index, suspend);
-+	}
-+
- 	if (ret < 0) {
- 		spin_unlock_irqrestore(&xhci->lock, flags);
- 		goto out;
--- 
-2.43.0
-
+Applied to driver-core-linus, thanks!
 
