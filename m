@@ -1,99 +1,63 @@
-Return-Path: <linux-usb+bounces-32424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32425-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BA77D2DA36
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 09:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 00E67D2EF09
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 10:44:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 06E7130F6EEF
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 07:58:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B64A53020686
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jan 2026 09:42:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C37F2DA75A;
-	Fri, 16 Jan 2026 07:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DBCF357A41;
+	Fri, 16 Jan 2026 09:42:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Vo7jC+PK";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="bFzCOygE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nL9DuZxM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA3921FF47
-	for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 07:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E25313293
+	for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 09:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768550309; cv=none; b=CQC7GbSNhw2E4eUEen3QiDKX04U24FhbHGPc/BNRjkEufuPCn6PK2it7Pq1o5/KR5mbPnMDsGYO4nq/S/kdwYMkU7jchwqvVd6F1BprN64i9ppKMBhn+6e5GTrtTr/tQueDnkEeV41EUuTWEGH5IEypfkysT574pGIywJpHnac0=
+	t=1768556543; cv=none; b=ZQYltT5bVaB3saaTh6X9nsYBh4I9YMiR+vVqeD1F5IlEDib45IGqHU7ZxCYo31ODcn72xRxHCL2qJXhPdJZui2dA5TSKJDA8wPFMxD/vRUSrWtFHw5m5PihmPrZm2f5iA1TIPlH+uiSfZokzaN+skuU5pj0xDbaE0C2WQC3PG9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768550309; c=relaxed/simple;
-	bh=XVs9uOGoh3kHklzB2DXHZeFDPDnzC+MAb6PudaaHgio=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KabWynT4luwGjfkbwY1qYC4eP7EW4bMRQzI2xrGYqMdyVJiHdWN/i7cFvnrJkyF4UpQmSjjuHen4iWPBIERFbF5BELrcCXuQuQJLlhkHa+AsY0gVvnO0MurYQTV0UekJstxXDbyupXM5F3hjGwQIFkn6eEW8/MKuN8Q8daTXFT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Vo7jC+PK; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=bFzCOygE; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60FMgETk4015681
-	for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 07:58:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	wyXN+iT+tYR+hDVnUAWsufHGX48hHBiyiWhhpL8bftw=; b=Vo7jC+PK3iqlJnbu
-	xY3zDoQ685OS2Bz76kQQhKoXJmR9HBQvhHqhkrwdCkY3WuXLCtf+RrdYB6kN3CFN
-	g6keMW+olYboGdSMuNCEAvLalPg44Zil2LUkxkP2s7EzMFOZiUImAurxMbEP1m4l
-	ovH7LtjbkVoyikmbHPvSEdZ+eYA2+iE52vS8yTNyV/qP85O+b67vJZ7He/x0EQXR
-	xgBiJ90of32Dx+gYzjZdWDSvlahoyLpZt4aUk+Xxrj+XP8pHUEFM8jPC2+nWuNnQ
-	C/xXSKkZKt0q6FmC4txymC0ZtgNFKpW/ZgkkIrN/+3paCpcYDMm1mHmEe1Yn243L
-	vGtiQA==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bq98y99kr-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Fri, 16 Jan 2026 07:58:26 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c53919fbfcso447298285a.2
-        for <linux-usb@vger.kernel.org>; Thu, 15 Jan 2026 23:58:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768550306; x=1769155106; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=wyXN+iT+tYR+hDVnUAWsufHGX48hHBiyiWhhpL8bftw=;
-        b=bFzCOygETaXoATAi6nclk9h5vkGqFhdxwXW9Bkofcnd322s/BzGj1XwDRRsMKzFgMJ
-         JPg4Xy/ejtPT+1ibSIoAs8BkQzJ2qQFGYVtE5ppUakVPmrxIThpD6shkYMqdbloZ7Bru
-         mrxpWt09Z/uUMNyJZaWkWtNcWYaKe5PIl6VY94ZWHFj3JCXO3Ger6rISvS+vWZIGCRs5
-         5b+hRNWdWM66QBMPeaWvG15TydAQ1BtyxbEVJHdsCzjHUUIj+BIhPzL/DFLrNiESKpfn
-         /Rs/XWSzybdaokv7ePq/+++F6hHWaS+An861im7PULNueVXTKA+hhDUaijBZQ8ODwfq/
-         n9CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768550306; x=1769155106;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wyXN+iT+tYR+hDVnUAWsufHGX48hHBiyiWhhpL8bftw=;
-        b=qay0lxig6GUlwXjTKWiFLm9hP3jvApZ0wRyD4+vSwbm3KRmWiOuW9XzA6IHDP01u+D
-         vYXe4N28xDObxFBkroDGTQbMtHWOnAHxpZX4W6NT6KzpFir3A/+6UvjUp0yhrcsW0IuH
-         jkiKBXaeos7IEhuD2taOgbukTEZW2vqZyBCvbX77Q64mJZD4aCPpU7L3bFOZ03AQ4Eaa
-         tjp7Pd/ZeXJ/pL4HkkcrI41Z9kXVkWtIOzOLOJDNLqeAAOFG9xBNy2iwoRK6SeKbuI9o
-         yAY/V26P4u3X+HdYkE1E4jd0AXYgFj+b7FmnKSIoVeuC4bRYeyr82pvmtWvJg41l78O5
-         g/sg==
-X-Forwarded-Encrypted: i=1; AJvYcCURUTWEIAcOMPbl6gmr+ARfClMASY5D3SohLIy17tLfK5DVMywZhqB/ZQcCifKzgg+GmybeRgsRf/c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweAPlP1FCvt1aaMEM3Lb22I7lVrsl4kWtwmsCGwRNMp9CapTXB
-	FdkSaDF1oD4FbLLj8uGrsFPCd8GfwvynSb08gjAVp9v+4NqBbCIzYjTw2jfE1V6MaTZpGuS6yTz
-	G3KqHPi33qBjY2BFVLHFb/XBzzUpysfxKZ3kgfcJLPmvLnNhb4icD1T6noE1KVqw975SC/v0=
-X-Gm-Gg: AY/fxX7l8pTPnpflZX50RPpNCeKGZvpnyWDs6xmM5jYctuGFBlwSEapIpmof+54A8mc
-	sbeItlt0GCcD7tDwMvEQUaszR6AsjfheN9c6bBlRkJlBlhYmEQM+wZN7PfbqtXxoxj6IX2RCB3O
-	sGKfbEJ5sKwi4pYAwj0xSQfPFSdpAgUO1O0jw/GcCKLCKSIN3g8eT8j4Xi14DapGghrI4kfS/9q
-	ysXNKfw64v2BUCGVX8jy5gvbi5edOK4fhGwbnLyyrl7MU6BQIa4CkqkYjArKE5y3NEyj17if/e3
-	/hI7jzFspnIVIDhucgJjf5FiGPdeTtbemDm5Nbrjjhr5o9NbCTkqzMF1dlXfSNWNLSMooed6EzB
-	IkCOu0r9M3eiGzXPnX3D61qpN6cHSNDuEq5xNpw==
-X-Received: by 2002:a05:620a:31a0:b0:8b2:e6b1:a9a6 with SMTP id af79cd13be357-8c6a66c833dmr286096385a.17.1768550305950;
-        Thu, 15 Jan 2026 23:58:25 -0800 (PST)
-X-Received: by 2002:a05:620a:31a0:b0:8b2:e6b1:a9a6 with SMTP id af79cd13be357-8c6a66c833dmr286095685a.17.1768550305516;
-        Thu, 15 Jan 2026 23:58:25 -0800 (PST)
-Received: from [192.168.1.29] ([178.197.218.229])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65452cdb01csm1679452a12.8.2026.01.15.23.58.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jan 2026 23:58:24 -0800 (PST)
-Message-ID: <49d6f8af-6a01-4611-854b-d1e0ce567929@oss.qualcomm.com>
-Date: Fri, 16 Jan 2026 08:58:22 +0100
+	s=arc-20240116; t=1768556543; c=relaxed/simple;
+	bh=F1JGbhnXTCh8WsppYytEc04Kjpu6gQPNMm+53n0Vzlo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R2frctxg/j+Wxb8Jp7knYnlGqqvusqFFZa3DXgM+emTOYriygGiEA0hWMIp6DCyhDHHkYIz4KHvxa2XeKdWywB6GIXDfDq21qTlVMY6IfxO4dALu/n0ASxXPcw9BO1wKMBTtLW1YxBGe72XvW+XenmK5oX/bVbZPjVAyugFdZ5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nL9DuZxM; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768556542; x=1800092542;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=F1JGbhnXTCh8WsppYytEc04Kjpu6gQPNMm+53n0Vzlo=;
+  b=nL9DuZxMehBCZh/AvVmD/YhqptNsbur5Td1rLTVSZF96abDeyOF980eS
+   EHqWN+XhprZEOBYmV1n3obUhrkKd2aX1kLtelWzvqRi25dKiesIOeB9jv
+   vzLL4CTY96YA5CDdh4aW1v2R59qiD6+LqD0cdq8L5gq7m5VSkxt89RbeL
+   4RdVISuK0g4we07p3vc6Q4Z8A3KhYBdoGv/ECYRVHfsImLSMNUVxqG3fE
+   4MAXjwPnPBIdSosPSNEvayk6fIJ/7DgEhg8O2Lzl2SR86tzAawtL4CRT6
+   +qaJowncuxjo212HmECQhrOZlrcL35RxcQPmHBEV71AHHbh4zOO0eiQnv
+   Q==;
+X-CSE-ConnectionGUID: 0TTQkm6CTumMwx/IPx+ZRw==
+X-CSE-MsgGUID: ewganGz7RJqCiNqVKwgtYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="81318369"
+X-IronPort-AV: E=Sophos;i="6.21,230,1763452800"; 
+   d="scan'208";a="81318369"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 01:42:21 -0800
+X-CSE-ConnectionGUID: nArW9w1TQ8O8ZxdgEuXS4Q==
+X-CSE-MsgGUID: CzIA/xq/Svax3qjIl5IifA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,230,1763452800"; 
+   d="scan'208";a="205480759"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO [10.245.245.142]) ([10.245.245.142])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 01:42:19 -0800
+Message-ID: <6ca710b6-5abf-4d01-a27a-21c22e6cec87@linux.intel.com>
+Date: Fri, 16 Jan 2026 11:42:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -101,109 +65,62 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: usb: parade,ps5511: Disallow unevaluated
- properties
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20260112090149.69100-3-krzysztof.kozlowski@oss.qualcomm.com>
- <20260112202040.GA943734-robh@kernel.org>
- <0d04b5c6-4e4a-41c0-ba14-09c95a6df235@oss.qualcomm.com>
+Subject: Re: [PATCH v8] usb:xhci:route device to secondary interrupters
+To: raoxu <raoxu@uniontech.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ michal.pecio@gmail.com, niklas.neronin@linux.intel.com,
+ zhanjun@uniontech.com, kenny@panix.com
+References: <E0F2AF44A50D04EB+20260116054611.4086487-1-raoxu@uniontech.com>
 Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@oss.qualcomm.com; keydata=
- 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
- cwzYbmi/Et7T2+47PN9NZAOyb771QoVr8A==
-In-Reply-To: <0d04b5c6-4e4a-41c0-ba14-09c95a6df235@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <E0F2AF44A50D04EB+20260116054611.4086487-1-raoxu@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=FscIPmrq c=1 sm=1 tr=0 ts=6969efa2 cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=Eb9f15NH/cHKzfGOmZSO4Q==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=cGCFXuo4JwDHnhW9cKYA:9 a=QEXdDO2ut3YA:10
- a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-ORIG-GUID: DPZMA5GWke4GyYHiWJtvx1b4BWVtSE1V
-X-Proofpoint-GUID: DPZMA5GWke4GyYHiWJtvx1b4BWVtSE1V
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE2MDA1OSBTYWx0ZWRfX98R/+1TglnbP
- aYkFaGvHWTgoRuyrK7ZDqI19flPOGmjGXWSj94S8H2zAfcrHlpugAvTre9eLg9Q5bxJbIrtzJoy
- 4atdU668eEYj7VQZk8ToRbVgeBpY/TzsRjt0VNG9caP6fVCdz3Au4cCZgiPJea9oQDKtuzteeJH
- Bpz8biBuXmjMcmwyRCg0D91ACz7ShILa2mtKN2y/hwawySzqUn1MMGc9pLrxbv9QHz9sV3iw3lu
- C2jIskwWQy72hdWC+5bRXFD2rjhxMnopZUpwZCNPDglccWHOQf9do6o+2OP5ZesB81rgfLi2Vxe
- 1Fz/JJZHqLCd79lT6T5yqK/fs4meCexNvvcx+oLOh8ueu9ljW2HUeftl8WZUKUExCzKkg+eUTrs
- pnTqX0PfGeDruy1s1DzLH2D6zaSjUM0XeigQWN9URUi60p1itW+P2g8aw7BkgSaYuzWNWOv6C52
- 3/PBAdQpqJV9W27WH7A==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-16_02,2026-01-15_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
- clxscore=1015 impostorscore=0 suspectscore=0 bulkscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601160059
 
-On 16/01/2026 08:55, Krzysztof Kozlowski wrote:
->>
->> Removing this is wrong. This is defining the number of downstream USB 
->> ports for this hub.
->>
->> What's wrong here is 'type: object' is missing, so any property that's 
->> not a object passes (no, 'properties' doesn't imply it's an object).
->>
->> We should fix dtschema to allow additionalProperties when not a 
->> boolean property to coexist with unevaluatedProperties. I'll look into 
->> it.
+Hi
+
+Thanks for the new revised version
+
+On 1/16/26 07:46, raoxu wrote:
+> From: Xu Rao <raoxu@uniontech.com>
 > 
-> I see your commit. I will send v2 of this.
+> Some xHCI hosts expose multiple MSI/MSI-X vectors, but the driver
+> currently routes all transfer completions through interrupter 0.
+> This can lead to unnecessary contention on the primary event ring
+> and IRQ vector.
+> 
+> Create a small set of secondary interrupters in xhci_mem_init().
+> Cap the number in software (MAX_SECONDARY_INTRNUM, default 4).
+> If any secondary allocation fails, roll back and keep using
+> interrupter 0 only.
+> 
+> Unify primary and secondary handling on xhci->interrupters[].
+> Use the same paths for enable/disable and teardown.
+> Keep behavior consistent across run/stop/resume.
+> 
+> Route transfers per USB device (slot).
+> Add vdev->interrupter in struct xhci_virt_device.
+> Pick the default interrupter at device alloc time.
+> Program TRB_INTR_TARGET() from vdev->interrupter->intr_num for
+> bulk/ctrl/isoc/intr, so completions land on the selected event ring.
+> 
+> Route MSI/MSI-X IRQs to the right interrupter in xhci_msi_irq().
+> Store the struct xhci_interrupter pointer in irq handler_data.
+> Map vectors by index (0..N) to xhci->interrupters[].
+> Keep STS_EINT handling restricted to interrupter 0.
+> Spread MSI-X vectors with irq_set_affinity() and re-apply on resume.
 
-Ah no, that commit from 13th Jan was for interrupts. So later then :)
+Is spreading out the vectors somthing that we need to do manually,
+and re-apply on resume?
 
-Best regards,
-Krzysztof
+I haven't looked into the affinity internals but would it be enough
+to just add the PCI_IRQ_AFFINITY flag when calling  pci_alloc_irq_vectors()?
+
+linux/interrupt-h also states that irq_set_affinity_hint() used here
+is deprecated
+
+Thanks
+Mathias
+
+
 
