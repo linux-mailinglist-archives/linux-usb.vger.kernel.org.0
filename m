@@ -1,128 +1,113 @@
-Return-Path: <linux-usb+bounces-32448-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32449-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C5A8D38D76
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Jan 2026 10:46:43 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C001D38D8A
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Jan 2026 10:58:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4392330215F5
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Jan 2026 09:46:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 40A74301F7C0
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Jan 2026 09:57:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6645334690;
-	Sat, 17 Jan 2026 09:46:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 068A633508E;
+	Sat, 17 Jan 2026 09:57:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bWkvCtQ5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZDJNm6SQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4608E7260D
-	for <linux-usb@vger.kernel.org>; Sat, 17 Jan 2026 09:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4D32D238F
+	for <linux-usb@vger.kernel.org>; Sat, 17 Jan 2026 09:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768643199; cv=none; b=k0zP+lhR3Z7uHTmTeJcxiTiFBeonnjw84o3Gnke6rw5CXDAfqx91xa2e/OV4cz89MRPKkfvdNArD+TaYGKsmvGyqR8jECt4LaXu5gg6QBsLI7lsOQ6nOR/lc68lZh8NoJxoKFYLkxKS1dDZr1xyJvtsYc45+v0zaC4uWv0FijVA=
+	t=1768643876; cv=none; b=ehat6Xf0qPo2wvywHK4dejVAnCW8+MLL/EV8TnzeXNLmbBwEQERl3djveypeIl7nNphwO1m8/tVx4rwm8ma2wCYsfvKd88JFWQaZ8rwlVNBBWXuQQeOioOPNqkDwo7ozEO3+OTU4V15aF0GfLvbG7ChKzT0N2waFjWCTRBdb1+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768643199; c=relaxed/simple;
-	bh=dzuCEr++dzV7RGNmwdbO18PEnRRvlr6DRE7R+PtL5fE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kNjpizI2F9Eff9TDCMXE3Hbw7KulbVkZ8bGhwfdA5f0ARxXV+u9UivMLG6kfJlaLaaAdugKwYwbCfYPccWIZV3GKkzCipHwdCWcFozfE6fJ16S5/bEPEBwln7CVQXRYMk1RyAGZTvF0WuQ867lsG7lEj+NEiAgQzRN7vgnt3zeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bWkvCtQ5; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-81f46b5e2ccso1597017b3a.0
-        for <linux-usb@vger.kernel.org>; Sat, 17 Jan 2026 01:46:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768643197; x=1769247997; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XdRImgnlzumkwpGPWq3zB030HsmNVz+cDIu4+32/ft0=;
-        b=bWkvCtQ5CCXza9jRk/LsSnKU0CUkDASpkMA4/s7W5pmuWUZQOyIc7G51lzsRFGWGFR
-         eV+lkQUFA+96z8W012i/jp1woeHmebKSPLXCR147Mm1Ky6V7P0VqlZfh0iKDlM9drfC3
-         LAT6htDHHCKP5ZnLbzbsCi0RQT4B6jcizgR6ABHz0HjvmtL0BYBJFqxZKJo80nNTxZdD
-         XUg9/pBRP252AcAewqlzAUtByEY0I+4ewRg1a/39C3f7hKe001tgu5MqVtkl32PR56pI
-         XNPW9L1mpHism8H2y5tYxLXwapa6ikrsI5XCQxB+Um77Y+GkMuXceRz7l4jyURL9LihP
-         VhFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768643197; x=1769247997;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XdRImgnlzumkwpGPWq3zB030HsmNVz+cDIu4+32/ft0=;
-        b=Nz/+ukPRSf2PHHcV1d9f4Sp/TIhTMyjnsMw9BeFNyfy1dsA+ac/VxsKXXLivsuumxB
-         FToVg+nN6ucf9eizmSmqrcVkgkY8M72lCDVwfa8lW6jx8tHV2P73QN0qJn0HmA9DSy0w
-         TDfSHM/eVkUtwMuMq3aR6TMSPe924w+/4fyUWADSriItAwwRjpA3dausb8tECwyC6++G
-         btQVacmOAS9D6MAObe+HA9iNdxGRxEMmrknFVkCDodw5a+XiFJlNz6V1XGF7eGpiylmY
-         VBdWfuBQ8w8Atqw3SYtbi3ALc3wr6137hLtGkQn0SsfDkeNwCmqE8CxW5l2z62GyIKu7
-         kbKw==
-X-Gm-Message-State: AOJu0Yz7UP378nxlDtvLhWUgPGNBjP8B09VQZFfWwIG6LX9LrnT6MR7r
-	XHdyvt0HX7XQWJGXLOPxURfhHjtBRsa68i2VueVgqlvu6at1X5RhYU1w
-X-Gm-Gg: AY/fxX62/0V/S29MeSNLSgCLV9jKTO4YO5OqwBZRttRxBnSgL69p3RLjn0sk7ZmvQoy
-	1QQbb+9FJzRdq3QFXgEbx2+EcqzUMdgu8BXd2vr8SjOYMe2qyFrJyBkm3tCASAjeTf6dhOtr9QW
-	T7PsNhOx4Xj7Vzpbdb7HOaG+2e/gF6EyMtwasMF2nAiV2LI3iHTW8F6NUbaEBmedzM53SrtWj5G
-	pTTSBJzOZFTsMV8RhpX1WM2V143fVEmhClysNxOf98T8nXbLOhfbQITLIyiSkXBWLn58mS+1+QF
-	iiEb3kfgAHjWnIYe36SxqJtUOUGhFgPg7s4RR0DXLqyfpMOnfwK0A9cNuTWQ4swVbApkgpfEC0D
-	XyK3BErIzkh8NiFZf1GzmQHuCtDgFNEfEfKJT0D56X2TPXcILKN/F4iQ8u1Sm+1UlmhLvYL0YYZ
-	em8Hfs05vVO92cHTDjndB7ZqMjPrVxxwyuRCDKyCNhPofW9fkcDyD+hMnfJCstd9AFqk1gRFMki
-	udl20nZC9QPO+q3BhiqjyyU48wPsB0kUx+eFvwJUv7sdno=
-X-Received: by 2002:a05:6a00:14c5:b0:81f:3d32:fe58 with SMTP id d2e1a72fcca58-81fa01ec336mr5335959b3a.35.1768643197568;
-        Sat, 17 Jan 2026 01:46:37 -0800 (PST)
-Received: from c8971f1abf06.ap-southeast-2.compute.internal (ec2-54-252-206-51.ap-southeast-2.compute.amazonaws.com. [54.252.206.51])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81fa12b3165sm4063839b3a.60.2026.01.17.01.46.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jan 2026 01:46:37 -0800 (PST)
-From: Weigang He <geoffreyhe2@gmail.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Weigang He <geoffreyhe2@gmail.com>
-Subject: [PATCH] usb: xhci: fix missing null termination after copy_from_user()
-Date: Sat, 17 Jan 2026 09:46:31 +0000
-Message-Id: <20260117094631.504232-1-geoffreyhe2@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1768643876; c=relaxed/simple;
+	bh=9d33CAOA2jberSNN424IucCTRv3DdHzTTiegCnuP0LY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UYY2qQE2pKD/+kveV8nADa4EgFWhBMJKgWAD7CT3Um4KnBXwekWhdOMuAWLSLJFfhvOal0bvaKwRXTqg9D/Y1iZyoBNdO8vZHnYJPb7hi/jeCNr8pTgNV2fYaVFRSIUdZF92ZRXI8mTUhTXonLllAFaysfVoWOx09UqfkAVF090=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZDJNm6SQ; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768643875; x=1800179875;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9d33CAOA2jberSNN424IucCTRv3DdHzTTiegCnuP0LY=;
+  b=ZDJNm6SQ4s/Jg/9Pv5O6GAHyJA/RuihX1YKrZfJMrN1CFMpslSCL87xy
+   GC2XwK3DjGgXySF7DNWUllzKFPg/smfhurKCyKttFbRQz1Ew0LP+FtV+t
+   zeLsyi3JAmmJTvg4y9kAIU1GtCrc6HlxE+6ccxzFSKuht0Mzgfx5sgYQI
+   Fug5g/X1yi7mbYrpJMlH6M1bhyftaRI66nVVQJ0NQqezL1/yxi87Jr0qr
+   pydoOrKWbfZVmiSID8UnL91GKtojM80YyrEOHupc50ot2GkoMrby+T8HX
+   GGNkpuZ5vLAp/v8+SpEiGi9/RpsKBKEUwbVs9tF/yOTv7L4wTVwhsdSA8
+   A==;
+X-CSE-ConnectionGUID: I6tICzCSQZildF42zumyCQ==
+X-CSE-MsgGUID: z4OTNFpeTzuelfaZXjOTyQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="69675349"
+X-IronPort-AV: E=Sophos;i="6.21,233,1763452800"; 
+   d="scan'208";a="69675349"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2026 01:57:52 -0800
+X-CSE-ConnectionGUID: pRsc6wiBRfm6q9vZYzzaLA==
+X-CSE-MsgGUID: 6l+sN7kfQzqgb7/qDT0Ing==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,233,1763452800"; 
+   d="scan'208";a="205724829"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 17 Jan 2026 01:57:49 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vh33z-00000000Lk0-25zJ;
+	Sat, 17 Jan 2026 09:57:47 +0000
+Date: Sat, 17 Jan 2026 17:57:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: raoxu <raoxu@uniontech.com>, mathias.nyman@linux.intel.com
+Cc: oe-kbuild-all@lists.linux.dev, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, michal.pecio@gmail.com,
+	niklas.neronin@linux.intel.com, raoxu@uniontech.com,
+	zhanjun@uniontech.com, kenny@panix.com
+Subject: Re: [PATCH v8] usb:xhci:route device to secondary interrupters
+Message-ID: <202601171743.omq3DpnM-lkp@intel.com>
+References: <E0F2AF44A50D04EB+20260116054611.4086487-1-raoxu@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E0F2AF44A50D04EB+20260116054611.4086487-1-raoxu@uniontech.com>
 
-The buffer 'buf' is filled by copy_from_user() but is not properly
-null-terminated before being used with strncmp(). If userspace provides
-fewer than 10 bytes, strncmp() may read beyond the copied data into
-uninitialized stack memory.
+Hi raoxu,
 
-Add explicit null termination after copy_from_user() to ensure the
-buffer is always a valid C string before string operations.
+kernel test robot noticed the following build errors:
 
-Fixes: 87a03802184c ("xhci: debugfs: add debugfs interface to enable compliance mode for a port")
-Cc: stable@vger.kernel.org
-Signed-off-by: Weigang He <geoffreyhe2@gmail.com>
----
- drivers/usb/host/xhci-debugfs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.19-rc5 next-20260116]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-index c1eb1036ede95..1e2350de77775 100644
---- a/drivers/usb/host/xhci-debugfs.c
-+++ b/drivers/usb/host/xhci-debugfs.c
-@@ -347,11 +347,13 @@ static ssize_t xhci_port_write(struct file *file,  const char __user *ubuf,
- 	struct xhci_port	*port = s->private;
- 	struct xhci_hcd		*xhci = hcd_to_xhci(port->rhub->hcd);
- 	char                    buf[32];
-+	size_t			len = min_t(size_t, sizeof(buf) - 1, count);
- 	u32			portsc;
- 	unsigned long		flags;
- 
--	if (copy_from_user(&buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
-+	if (copy_from_user(&buf, ubuf, len))
- 		return -EFAULT;
-+	buf[len] = '\0';
- 
- 	if (!strncmp(buf, "compliance", 10)) {
- 		/* If CTC is clear, compliance is enabled by default */
+url:    https://github.com/intel-lab-lkp/linux/commits/raoxu/usb-xhci-route-device-to-secondary-interrupters/20260116-134911
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/E0F2AF44A50D04EB%2B20260116054611.4086487-1-raoxu%40uniontech.com
+patch subject: [PATCH v8] usb:xhci:route device to secondary interrupters
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20260117/202601171743.omq3DpnM-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601171743.omq3DpnM-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601171743.omq3DpnM-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "xhci_msix_set_handler_data" [drivers/usb/host/xhci-pci.ko] undefined!
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
