@@ -1,125 +1,113 @@
-Return-Path: <linux-usb+bounces-32462-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32463-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC600D39C5C
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 03:28:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C8EFD39C9A
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 03:52:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0361330078A5
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 02:28:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BA1F5300B292
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 02:52:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52E6224469E;
-	Mon, 19 Jan 2026 02:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1AD224AF0;
+	Mon, 19 Jan 2026 02:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cNSe2uln"
+	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="t8BI+PZC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BD68632B
-	for <linux-usb@vger.kernel.org>; Mon, 19 Jan 2026 02:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FB71A316E;
+	Mon, 19 Jan 2026 02:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768789692; cv=none; b=GaW+4QHGIijjskU7GD2jUtuotamjvAqVrsSIZP2zDtDEGxjVu4DO0MLb10wvzk/aTogolZ9f4OfU2ILWFJUEM92iI+Xx2qZM9S9zYPwjAlVCFIBXPgEjYxNNCKd2RVsW7xciD7XlbuGtSYqPcwO03uVXVVwtAqikgu7eLaghDEk=
+	t=1768791121; cv=none; b=k1D0NQttXn1UrCxneKQ/xtnaSp+YE3heZtZ3erClmPH5DkFUXQqvM4q/N/uUn7jvt277uqhK9WxMFD5NXeiNUlNHDQmo2xIei0/jZrFh32nu7gn3Bfcevm+PhjPVz7SemMC/ifgFYl/i++LVrBIFuMpzToQmcAgV8wNpdFhJFcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768789692; c=relaxed/simple;
-	bh=9w14KZHWbtXQ4bZuOIO1KWG6UqHqkSJxbWGAEo86CBA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ORrHWUlG/X8KzSPrAUVEwonjNUsFuLZV+O7dIUJwyYEt9Rgqfz8a06gj3jShlg0rpKWLCabLoHS8ANUoQSC0y1AA4Luf2s8ESMj/QIVuIxfV+gmuXi9HUOsjtmVlX8cz4InN5thd/Rq6WINWre68r93RW7ieDJatJWQdhrtceD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cNSe2uln; arc=none smtp.client-ip=209.85.216.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-34c2f335681so1958559a91.1
-        for <linux-usb@vger.kernel.org>; Sun, 18 Jan 2026 18:28:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768789691; x=1769394491; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tnggbONwgIdaiaOJGG3BcWc+1OF/p9b8lGQ6zKeztQI=;
-        b=cNSe2ulnUI2AqIPHOnCV5vwsSAEslFP1jgPBUdVwwXIKxu5rsO9SATra8Sywu9P6hJ
-         LdmBr2EFPJQp0rIRhyoaG9/LCzZfXdhBTS/3pzvAw/ideiyONMv3YpRqxQ/zWWA67uYN
-         JfARbd1X67/Dt4BPT1H0hSGW9ldUReuW7WYHCW6uSU2bw1BjW2iPN/Aj/ynU91kyxGx3
-         Bh9o09zZjNQyh2/reH7oFrThXgxg+9w/jTLecmnDGMbWRR/JRdmMiG7l/IV1MfQ/a9yg
-         DK6ukjCx1ygUjndNX2b6tcpR3/RmQnBdsyW09y0LkV/UKoFSiZ4qK3FpVpK4PKhKuLlD
-         plOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768789691; x=1769394491;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tnggbONwgIdaiaOJGG3BcWc+1OF/p9b8lGQ6zKeztQI=;
-        b=ogONhf6Um+kTZe4n53x6Az596rHrbdR7XcMnwq660LYj2aRaG4BtWbx5k30EQdOPiy
-         u5Lb/Ru6IzFTR2AACod1J0hNmcP+JRZP4dkAL3RVALn2VovYpWOGx2/L2yBHCt2BKuuu
-         EUuxDq0VWt7zMWK9bXUMER8sYhOl/+YQHLreoPJZSl7dfM65xMBMUnBtYvyZ03x+DqNA
-         gdQ5v1/zTW6LA9WngpfujtctF+aYMaYAthWmUR6fufY+JOMwufS7F4/y3i4GeC5jkyNX
-         cAH3ANXojonAOA2qB7xnBNQE82yfCBmZII5W+SXCILx9I9hpPX4uoMUiXSMgOFEfpUho
-         u4+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXyamCOdm/oYeg1spJ/ucDkR0LZIpQ/gU8gXYJlb89a3RqNa2DRxdPcMh3BrcbrPkRnq21zMaRp67s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoMl9O0EpRAIyamWK3nLd9ABdfGehhmayb+OuSdnijSK4YVXmg
-	hoOy/5snWOlrukSmKREFVp0YpoK3iEOfuhboI38vLMXMVw99kwajkYaf
-X-Gm-Gg: AY/fxX6LZbqNaRS7hxpCpuobTM38dID+rfK3VxYyXySknl3OrXAPpBDLgwHWezD68Mj
-	H1XMtgGW5a5bAzBNyRiy+NsMIdkzlDf2QnCxKASL94iyPpuvy17Z1C0Rm7ktHjQw4v3eGfnZnJI
-	3aKD1IfbhXmZJRMFtCYHhc8v9UjmAQ3lDo7AwkNiks3oq4X6wh75ELO91J+ffonXD6foGBBqIVl
-	wHIk+TqfXkk4tVOs3FS2hWeg+pW3amViYF/AqeAHXOooeh9iJU6uT8yAmmMyQxrqhBup0fYeZui
-	ICezkATmaSKQ0B4PmUhH4+EkofOpmIgSXij+yKIl17GI6iSDqDDla0yYkX71u8kMM5TKNqdvbIT
-	onTh5k4AR1pGEAco0MbKEhWZ+4K/jweN0Qg7KQ7oVcRbCZ5ssYO1GWVvRdfx9O7QsEBTdT4aoMS
-	Y2weNZKu70HNC/TMXy
-X-Received: by 2002:a17:90b:5245:b0:340:9cf1:54d0 with SMTP id 98e67ed59e1d1-3527315bad7mr7512269a91.1.1768789691050;
-        Sun, 18 Jan 2026 18:28:11 -0800 (PST)
-Received: from insyelu ([39.144.137.178])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35273277f68sm3811876a91.0.2026.01.18.18.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jan 2026 18:28:10 -0800 (PST)
-From: insyelu <insyelu@gmail.com>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	nic_swsd@realtek.com,
-	tiwai@suse.de
-Cc: hayeswang@realtek.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	insyelu <insyelu@gmail.com>
-Subject: [PATCH v2] net: usb: r8152: fix transmit queue timeout
-Date: Mon, 19 Jan 2026 10:28:02 +0800
-Message-Id: <20260119022802.3705-1-insyelu@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1768791121; c=relaxed/simple;
+	bh=K6KfJaaiSgAOm7E/gs+hobmXhUl7J70D6NJcX3cYIP0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=EEj+fh12WIvRvRhAGAfqPGsAHQSZmaN12nwtV/g/t+N5gLE89GxN+uFCPqyaPjmOS17Gg/zX7vEBs6xiHybxG3klCQtmoChUyh3KS0j6+M2LE3qESuCkuX1Zs2QVX1rQogssQGHsNIRj/U08/+m5AaCN8SB2+HqvWO9+yanfcgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=t8BI+PZC; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 60J2pYY712135983, This message is accepted by code: ctloc85258
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
+	t=1768791094; bh=K6KfJaaiSgAOm7E/gs+hobmXhUl7J70D6NJcX3cYIP0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:MIME-Version;
+	b=t8BI+PZC9N8+qDXuC8GWMYX5vgwQAGaOfQOotLwZBHtp1NF187CpeACUjPrQwqU1h
+	 BM09Dhwx1zhhnjEGkCK9bltBQo6ol2j68xwC3xSJyQFzp2f8BRwjsId3IELUOU5n5n
+	 y9UgLVqHCwd9QVsG/snW1wYICvAq+wNFCgHXQunjy1HUgcjNESpfYIjY3ABb+TJAQX
+	 vGW+v0DoNi7JWwuDh4Ckk5J9kBAUqYBhQME+4rojbwULoo7XorS2x6TQb0xGPZ/zd9
+	 /Ru3eGO5KlpwqS8uECSXjp8SopkNDp6CtN+T0QAplwRNYuxl21Zs2XWx33TK+r0bnv
+	 L7et+IHX8MPeQ==
+Received: from mail.realtek.com (rtkexhmbs02.realtek.com.tw[172.21.6.41])
+	by rtits2.realtek.com.tw (8.15.2/3.21/5.94) with ESMTPS id 60J2pYY712135983
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Jan 2026 10:51:34 +0800
+Received: from RTKEXHMBS06.realtek.com.tw (10.21.1.56) by
+ RTKEXHMBS02.realtek.com.tw (172.21.6.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Mon, 19 Jan 2026 10:51:33 +0800
+Received: from RTKEXHMBS03.realtek.com.tw (10.21.1.53) by
+ RTKEXHMBS06.realtek.com.tw (10.21.1.56) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Mon, 19 Jan 2026 10:51:32 +0800
+Received: from RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5]) by
+ RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5%9]) with mapi id
+ 15.02.1748.010; Mon, 19 Jan 2026 10:51:32 +0800
+From: Hayes Wang <hayeswang@realtek.com>
+To: lu lu <insyelu@gmail.com>
+CC: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+        "davem@davemloft.net"
+	<davem@davemloft.net>,
+        nic_swsd <nic_swsd@realtek.com>, "tiwai@suse.de"
+	<tiwai@suse.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] net: usb: r8152: fix transmit queue timeout
+Thread-Topic: [PATCH] net: usb: r8152: fix transmit queue timeout
+Thread-Index: AQHchQGLBs/iMEigv0CwXIii7EgMTLVRErBAgADcLoCAASPVoIAAd9qAgACSjYD//8agAIAE7krA
+Date: Mon, 19 Jan 2026 02:51:31 +0000
+Message-ID: <ae7e8fc22fcf415d9eb5e4d36ed74231@realtek.com>
+References: <20260114025622.24348-1-insyelu@gmail.com>
+ <3501a6e902654554b61ab5cd89dcb0dd@realtek.com>
+ <CAAPueM4XheTsmb6xd3w5A3zoec-z3ewq=uNpA8tegFbtFWCfaA@mail.gmail.com>
+ <1b498052994c4ed48de45b5af9a490b6@realtek.com>
+ <CAAPueM65Y4zEb4UidMR-6UtCZVWYs+A7cHzYbBgJMmAZ2iLy5Q@mail.gmail.com>
+ <f3fe05ea76794cd09774cd69e85623d8@realtek.com>
+ <CAAPueM57HHjvyCtBf5TEy2rn6+1ab7_aeSpJ0Kv4xUYt+SfFtg@mail.gmail.com>
+In-Reply-To: <CAAPueM57HHjvyCtBf5TEy2rn6+1ab7_aeSpJ0Kv4xUYt+SfFtg@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-When the TX queue length reaches the threshold, the netdev watchdog
-immediately detects a TX queue timeout.
-
-This patch updates the trans_start timestamp of the transmit queue
-on every asynchronous USB URB submission along the transmit path,
-ensuring that the network watchdog accurately reflects ongoing
-transmission activity.
-
-Signed-off-by: insyelu <insyelu@gmail.com>
----
-v2: Update the transmit timestamp when submitting the USB URB.
----
- drivers/net/usb/r8152.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index fa5192583860..880b59ed5422 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -2449,6 +2449,8 @@ static int r8152_tx_agg_fill(struct r8152 *tp, struct tx_agg *agg)
- 	ret = usb_submit_urb(agg->urb, GFP_ATOMIC);
- 	if (ret < 0)
- 		usb_autopm_put_interface_async(tp->intf);
-+	else
-+		netif_trans_update(tp->netdev);
- 
- out_tx_fill:
- 	return ret;
--- 
-2.34.1
-
+T3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IGx1IGx1IDxpbnN5ZWx1QGdtYWlsLmNvbT4N
+ClsuLi5dDQo+IGlmIChuZXRpZl9xdWV1ZV9zdG9wcGVkKHRwLT5uZXRkZXYpKSB7DQo+ICAgICBp
+ZiAoc2tiX3F1ZXVlX2xlbigmdHAtPnR4X3F1ZXVlKSA8IHRwLT50eF9xbGVuKQ0KPiAgICAgICAg
+IG5ldGlmX3dha2VfcXVldWUodHAtPm5ldGRldik7DQo+ICAgICBlbHNlDQo+ICAgICAgICAgbmV0
+aWZfdHJhbnNfdXBkYXRlKHRwLT5uZXRkZXYpOw0KPiB9DQo+IFRoZSBmaXJzdCB0aW1lIHhtaXQg
+c3RvcHMgdGhlIHRyYW5zbWl0IHF1ZXVlLCB0aGUgcXVldWUgaXMgbm90IGZ1bGwsDQo+IGFuZCBp
+dCBpcyBzdWNjZXNzZnVsbHkgd29rZW4gdXAgYWZ0ZXJ3YXJkIOKAlCBPSy4NCj4gVGhlIHNlY29u
+ZCB0aW1lIHhtaXQgc3RvcHMgdGhlIHRyYW5zbWl0IHF1ZXVlLCB0aGUgbmV0d29yayB3YXRjaGRv
+Zw0KPiB0aW1lcyBvdXQgaW1tZWRpYXRlbHkgYmVjYXVzZSB0aGUgdHJhbnNtaXQgdGltZXN0YW1w
+IHdhcyBub3QgcmVmcmVzaGVkDQo+IHdoZW4gdGhlIHF1ZXVlIHdhcyBsYXN0IHJlc3VtZWQg4oCU
+IEZBSUwuDQo+IFRoaXMgc2NlbmFyaW8gaXMgbG9naWNhbGx5IHBvc3NpYmxlLg0KDQpUaGlzIHNp
+dHVhdGlvbiBzaG91bGQgbm90IGhhcHBlbiwgYmVjYXVzZSB0cmFuc19zdGFydCBpcyBhbHNvIHVw
+ZGF0ZWQgd2hlbiB0aGUgZHJpdmVyIHN0b3BzIHRoZSBUWCBxdWV1ZS4NCg0KaHR0cHM6Ly9lbGl4
+aXIuYm9vdGxpbi5jb20vbGludXgvdjYuMTguNi9zb3VyY2UvaW5jbHVkZS9saW51eC9uZXRkZXZp
+Y2UuaCNMMzYyOQ0KDQpBIFRYIHRpbWVvdXQgb2NjdXJzIG9ubHkgaWYgdGhlIFRYIHF1ZXVlIGhh
+cyBiZWVuIHN0b3BwZWQgZm9yIGxvbmdlciB0aGFuIFJUTDgxNTJfVFhfVElNRU9VVC4NCkl0IHNo
+b3VsZCBub3Qgb2NjdXIgaW1tZWRpYXRlbHkgd2hlbiB0aGUgZHJpdmVyIHN0b3BzIHRoZSBUWCBx
+dWV1ZS4NCg0KVGhlcmVmb3JlLCB3aGF0IG5lZWRzIHRvIGJlIGRvbmUgaXMgdG8gdXBkYXRlIHRo
+ZSB0aW1lc3RhbXAgd2hlbiB0aGUgVFggcXVldWUgaXMgc3RvcHBlZC4NClVwZGF0aW5nIHRyYW5z
+X3N0YXJ0IHdoaWxlIHRoZSBUWCBxdWV1ZSBpcyBub3Qgc3RvcHBlZCBpcyB1c2VsZXNzLg0KDQpC
+ZXN0IFJlZ2FyZHMsDQpIYXllcw0KDQo=
 
