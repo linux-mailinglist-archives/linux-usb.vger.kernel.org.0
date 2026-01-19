@@ -1,112 +1,192 @@
-Return-Path: <linux-usb+bounces-32501-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32502-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97BD4D3A90F
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 13:36:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CE8FD3AA16
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 14:18:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2C2A430D62FC
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 12:34:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E8B2D307CEB6
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 13:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB4635B14D;
-	Mon, 19 Jan 2026 12:34:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24FA3368274;
+	Mon, 19 Jan 2026 13:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="N9QaNvM9"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WzNr7Ihm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C9A35B140;
-	Mon, 19 Jan 2026 12:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7E4358D1B
+	for <linux-usb@vger.kernel.org>; Mon, 19 Jan 2026 13:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768826079; cv=none; b=brSAoCc/N5YufctjbsJaGGLyvNQmKivj8DkeZ/ij31Yny8KSJgrtcySaHoFga4duSdm+3/Hug8G7vlid97p8q3LKH+xqP4v7wbAsDR1zf7mbI/1MuPxhxRZiSzowmHCZ8xVi4heBNn4xsnk4IGiSN8bvknSwflsDGCeJGisvHNY=
+	t=1768828722; cv=none; b=RGSt4vjyVwSTO2C9R72o84/mkPFfBaF7NUFPv9JV4pCirdrDfGuoii4eM7q0mqedkK2EAdPefd3Vsvi+Dl7jxWkSyMB4JMRjVhOAG0sqVtGtcjyldA5rvF2e7NzkhDsYzcgv96rA2qLoEaPhijAzXY2PaGkJEfAwEnfEdVPWDN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768826079; c=relaxed/simple;
-	bh=XFlK9F8mCmxc52EP9cPh0kMubVtKS5FFg+3+IrJ8Bt0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Y5m/sQBn0/WTv8yvB5+wxWsCLlOX5TaCO47oIqb4U3mgqcPeIkZt2GnkUZVwh7YqJTEevWU6bwYqV5OY/lnB9rEZYwY+7/b28lpsfOksXtS7fijjbvHYlO0nzkA8XEhtBlf7pV+swkD5t+Gd0yfBTPa7WBMM1VasDlBkplfT3Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=N9QaNvM9; arc=none smtp.client-ip=211.75.126.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
-X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 60JCYFEk82926860, This message is accepted by code: ctloc85258
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
-	t=1768826055; bh=XFlK9F8mCmxc52EP9cPh0kMubVtKS5FFg+3+IrJ8Bt0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:MIME-Version;
-	b=N9QaNvM99G/xV+3Rfkf7KlboCZK73jseCGlXw6XWVOiaRCIg+HrDwLuC/akvlXmAE
-	 qiXKGvI/p9gml1Ks+9DwaY8WlYu4CotWxa+hUD1RZ9IsMRqCv1fStXQFr10tiHC7I9
-	 4rIqpv21NGqSK6jprgCTFX7Y7f/czUOQ7SXQbeq1EWuxiMwTX0AX85w+oU2qlLQNk7
-	 2zRpTOZQu6/1f9slgVGsnpXp02ABkih0GPCwpU9Y8i433jzUYvebq+KGNQ5lvDqP3K
-	 sI06GycoT7wZaaJmKdVG14oeWdmyzkUU3+uh8wU2uPBVWlDjq0oYSaTsJmx+pv6teY
-	 GR9GwmCvfx8yw==
-Received: from mail.realtek.com (rtkexhmbs04.realtek.com.tw[10.21.1.54])
-	by rtits2.realtek.com.tw (8.15.2/3.21/5.94) with ESMTPS id 60JCYFEk82926860
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 19 Jan 2026 20:34:15 +0800
-Received: from RTKEXHMBS05.realtek.com.tw (10.21.1.55) by
- RTKEXHMBS04.realtek.com.tw (10.21.1.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Mon, 19 Jan 2026 20:34:16 +0800
-Received: from RTKEXHMBS03.realtek.com.tw (10.21.1.53) by
- RTKEXHMBS05.realtek.com.tw (10.21.1.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Mon, 19 Jan 2026 20:34:15 +0800
-Received: from RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5]) by
- RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5%9]) with mapi id
- 15.02.1748.010; Mon, 19 Jan 2026 20:34:15 +0800
-From: Hayes Wang <hayeswang@realtek.com>
-To: lu lu <insyelu@gmail.com>
-CC: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-        "davem@davemloft.net"
-	<davem@davemloft.net>,
-        nic_swsd <nic_swsd@realtek.com>, "tiwai@suse.de"
-	<tiwai@suse.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] net: usb: r8152: fix transmit queue timeout
-Thread-Topic: [PATCH] net: usb: r8152: fix transmit queue timeout
-Thread-Index: AQHchQGLBs/iMEigv0CwXIii7EgMTLVRErBAgADcLoCAASPVoIAAd9qAgACSjYD//8agAIAE7krA//+/4oCAAOJ1wA==
-Date: Mon, 19 Jan 2026 12:34:15 +0000
-Message-ID: <cd80f6df5c184549a3705efa61d40d58@realtek.com>
-References: <20260114025622.24348-1-insyelu@gmail.com>
- <3501a6e902654554b61ab5cd89dcb0dd@realtek.com>
- <CAAPueM4XheTsmb6xd3w5A3zoec-z3ewq=uNpA8tegFbtFWCfaA@mail.gmail.com>
- <1b498052994c4ed48de45b5af9a490b6@realtek.com>
- <CAAPueM65Y4zEb4UidMR-6UtCZVWYs+A7cHzYbBgJMmAZ2iLy5Q@mail.gmail.com>
- <f3fe05ea76794cd09774cd69e85623d8@realtek.com>
- <CAAPueM57HHjvyCtBf5TEy2rn6+1ab7_aeSpJ0Kv4xUYt+SfFtg@mail.gmail.com>
- <ae7e8fc22fcf415d9eb5e4d36ed74231@realtek.com>
- <CAAPueM6_GQLcqz+xxKVDOaUZZrDNOnYB_tQ2gaxrUKnDQSZ9cg@mail.gmail.com>
-In-Reply-To: <CAAPueM6_GQLcqz+xxKVDOaUZZrDNOnYB_tQ2gaxrUKnDQSZ9cg@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1768828722; c=relaxed/simple;
+	bh=mMG+Hn8BawRbQWK4kLNveOLJbx1FyWTF834qhx1Dno0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LAVcNYQIccwAlXpLbIHkGX+a3csEs1ptgniPxDGPIy3zhhRVCdnR7wG+ftN/JUIjHYDp5eeoRM+5qbUF2HvBwlcXja+doldzM7z0+wb55NSSmXrWLhpvhITWBt2eJ4fivaOqMdIGf/ElRE92DJ2FVTLSk3aAWnFVYyZWa8vBLsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WzNr7Ihm; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b86f69bbe60so654580966b.1
+        for <linux-usb@vger.kernel.org>; Mon, 19 Jan 2026 05:18:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1768828719; x=1769433519; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iRNnwiYKOAp913PL4zbruan81hvYhlt0XTNkvMtBRB0=;
+        b=WzNr7IhmcQK5+McPG6RHnx/pdx7R06tY9VxXUo24DDix2KaYqVecSJ1RFTCu96nPTr
+         9LuaqIR6pPaabX2MF1uJ1kDx3eWSYKIVRrpvfq01rv8WYoOWtOX1sU2GkIFC0WWnjFUL
+         0+2ASMxd1IaRc1woO4tAOdjoy03sDtEpk9gpU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768828719; x=1769433519;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iRNnwiYKOAp913PL4zbruan81hvYhlt0XTNkvMtBRB0=;
+        b=DmE8jpLyCgpspBGpStdUdwHZGS3ie/6eMw7AwCdmtA/BoRN0vztgWduSIWvKqxtjI0
+         Hd6D7r66RA9zu4R+3QCJWWcL0Rt8Uw6AiqL2EN+r1N1I2jxG/L//wUD5gRmzrRN50x9l
+         h+01SYGEnhexmtwHL3p4mp3Y7bgkkK9Sdt3IArb02ajMVQ51bdw8rp52EBTO0uiM2bUJ
+         ehP0kKXSMkEI1AeAcS/lip3TzBHWL5HrhjwI24FGaVw1C9CuyndI8RJ75kDtG9KpEmS8
+         T/3pL3ZE6Jw/Q2Vc0jt5OWLdPVZq52ChdDILvmqLHx7igqIrcJaXsYzX1BoKztF37Rw0
+         Dbiw==
+X-Forwarded-Encrypted: i=1; AJvYcCVeIv4n3dRnQXseeadhrMqhqaNA2Uz00x8Zd226Ia79nEdNp5YKcPulYwfuPRt5YTyo8ANckU/nxuw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywuh0iggei6UIe2bJQ6vDJHerS3JNTqAo4C7XFrzo4bwvQXNgN5
+	NB8fb7WxNPAzVXy8141XVUwKE2VS81cop83iYZDobUYcBoovFdFRDgqnzwkHcQrfVg==
+X-Gm-Gg: AY/fxX6AZFkubj9tXBZYqi+WYd2VnlDzFD4cCRZHl9zOtc/NXJA7OK1GiCNjRk3zZuy
+	5hTjO51/vdnj+CoiuS1Ad+uJi4X64isxLhzTJSJs2JbFx4wT9w20lglRz8lcXHkdGhDeJZy1pw/
+	YYByCe5i1cBcWkeDkmQSOS5o9qwRErJstr9CAiyW6BpM+rq8upybRc1O7Ksdt+G/tSPVx3kSeVh
+	/3Mq6VFIcGrFfKdlDPpRavdvdW8dGyzXeqZQkrlMo8z9p/MwEs0ru8oEX/xzszkaAoJTq3L5QUI
+	mUeT2H+pj7GwvqHVmCHuYfY8wggf6vqdlIDQYtTVJRKJvk/dOvfOUE5b+49SWiJeil/6eihd/J8
+	92OW075L4Qf2I2pw8OE8mV/vnA8dVeKIY6mnGBV+Yy0Wa6LUyVGQjcLkPbOJR1Zh++VaBfYnp4m
+	tLhdtmrLnoeSR4vyFFALuJh77w4y0Xa6BDhKDz/i5kSsehMRRf8nrnNs4q7Qs7qYmcFZTbHMrfK
+	THbzcmR
+X-Received: by 2002:a17:906:f5a2:b0:b87:b87:cdbf with SMTP id a640c23a62f3a-b8796b85d1bmr942630166b.53.1768828719421;
+        Mon, 19 Jan 2026 05:18:39 -0800 (PST)
+Received: from akuchynski.c.googlers.com.com (150.230.32.34.bc.googleusercontent.com. [34.32.230.150])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b87959c9a14sm1078801866b.45.2026.01.19.05.18.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jan 2026 05:18:38 -0800 (PST)
+From: Andrei Kuchynski <akuchynski@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
+	Pooja Katiyar <pooja.katiyar@intel.com>,
+	Johan Hovold <johan@kernel.org>,
+	Hsin-Te Yuan <yuanhsinte@chromium.org>,
+	Madhu M <madhu.m@intel.com>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	Andrei Kuchynski <akuchynski@chromium.org>
+Subject: [PATCH v5 0/7] USB Type-C mode selection
+Date: Mon, 19 Jan 2026 13:18:17 +0000
+Message-ID: <20260119131824.2529334-1-akuchynski@chromium.org>
+X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-bHUgbHUgPGluc3llbHVAZ21haWwuY29tPg0KPiBTZW50OiBNb25kYXksIEphbnVhcnkgMTksIDIw
-MjYgMjo1OCBQTQ0KWy4uLl0NCj4gPiBUaGVyZWZvcmUsIHdoYXQgbmVlZHMgdG8gYmUgZG9uZSBp
-cyB0byB1cGRhdGUgdGhlIHRpbWVzdGFtcCB3aGVuIHRoZSBUWCBxdWV1ZSBpcyBzdG9wcGVkLg0K
-PiA+IFVwZGF0aW5nIHRyYW5zX3N0YXJ0IHdoaWxlIHRoZSBUWCBxdWV1ZSBpcyBub3Qgc3RvcHBl
-ZCBpcyB1c2VsZXNzLg0KPiBpZiAobmV0aWZfcXVldWVfc3RvcHBlZCh0cC0+bmV0ZGV2KSkgew0K
-PiAgICAgaWYgKHNrYl9xdWV1ZV9sZW4oJnRwLT50eF9xdWV1ZSkgPCB0cC0+dHhfcWxlbikNCj4g
-ICAgICAgICBuZXRpZl93YWtlX3F1ZXVlKHRwLT5uZXRkZXYpOw0KPiAgICAgZWxzZQ0KPiAgICAg
-ICAgIG5ldGlmX3RyYW5zX3VwZGF0ZSh0cC0+bmV0ZGV2KTsNCj4gfQ0KPiBUaGlzIGNoYW5nZSBj
-b250aW51b3VzbHkgdXBkYXRlcyB0aGUgdHJhbnNfc3RhcnQgdmFsdWUsIGV2ZW4gd2hlbiB0aGUN
-Cj4gVFggcXVldWUgaGFzIGJlZW4gc3RvcHBlZCBhbmQgaXRzIGxlbmd0aCBleGNlZWRzIHRoZSB0
-aHJlc2hvbGQuDQo+IFRoaXMgbWF5IHByZXZlbnQgdGhlIHdhdGNoZG9nIHRpbWVyIGZyb20gZXZl
-ciB0aW1pbmcgb3V0LCB0aGVyZWJ5DQo+IG1hc2tpbmcgcG90ZW50aWFsIHRyYW5zbWlzc2lvbiBz
-dGFsbCBpc3N1ZXMuDQo+IA0KPiBUaGUgdGltZXN0YW1wIHNob3VsZCBiZSB1cGRhdGVkIG9ubHkg
-dXBvbiBzdWNjZXNzZnVsIFVSQiBzdWJtaXNzaW9uIHRvDQo+IGFjY3VyYXRlbHkgcmVmbGVjdCB0
-aGF0IHRoZSB0cmFuc3BvcnQgbGF5ZXIgaXMgc3RpbGwgb3BlcmF0aW9uYWwuDQoNCkFsdGhvdWdo
-IEkgdGhpbmsgYSBVUkIgZXJyb3IgYW5kIGEgdHJhbnNtaXNzaW9uIHN0YWxsIGFyZSBkaWZmZXJl
-bnQsDQpJIGFtIGZpbmUgd2l0aCB0aGUgc2ltcGxlciBhcHByb2FjaCBpbiB2Mi4NCg0KQmVzdCBS
-ZWdhcmRzLA0KSGF5ZXMNCg0K
+This patch series introduces functionality to the USB Type-C Alternate Mode
+negotiation process by implementing a priority-based selection mechanism.
+
+Currently, DisplayPort and Thunderbolt drivers initiate a mode entry
+separately within their respective probe functions. The Power Delivery
+Controller (PDC) retains the ability to activate either USB4 mode or
+Alternate Modes based on its internal policy.
+The mode selection mechanism disables Alternate Modes to be entered by
+their respective drivers and the PDC. Instead, a priority-ordered approach
+is used to activate the most desirable mode.
+
+A new `priority` field is added to the `typec_altmode` structure to store
+a numerical priority value, with all priorities being unique.
+If the port driver supports the mode selection feature, it must set the
+`mode_selection` boolean field within the `typec_altmode` structure. This
+indicates to the alternate mode drivers that they are not to activate the
+altmode separately.
+
+The mode selection process is managed by three API functions:
+- `typec_mode_selection_start`
+- `typec_altmode_state_update`
+- `typec_mode_selection_delete`
+
+When a partner device is connected, the `typec_mode_selection_start`
+function executes the following steps:
+- It compiles a priority-ordered list of Alternate Modes that are mutually
+supported by both the port and the partner.
+- A dedicated mode selection task is subsequently initiated on the Work
+Queue.
+- This task attempts to activate a mode by starting with the
+highest-priority altmode on the list. Alternate modes are identified with
+their SVIDs. Activation/Deactivation performed via `activate` typec_altmode
+operation. The process stops as soon as a mode is successfully entered.
+Otherwise, after a timeout or if an error occurs, the next alternative mode
+will be activated.
+
+The `typec_altmode_state_update` function is invoked by the port driver to
+communicate the current mode of the Type-C connector.
+
+The `typec_mode_selection_delete` function is responsible for stopping the
+currently running mode selection process and releasing all associated
+system resources.
+
+Mode selection is initiated only once during partner registration, and only
+if the port driver provides support for this feature. Subsequent
+mode-switching activities can be managed via existing sysfs entries. Any
+modifications to altmode priorities are relevant only to future
+connections.
+
+This series was tested on an Android OS device with kernel 6.19.0-rc4,
+PDC: TI TPS6699, Realtek RTS5453.
+
+Changes in V5:
+- Use the no_mode_control field instead of
+  con->ucsi->cap.features & UCSI_CAP_ALT_MODE_OVERRIDE
+- Squash previous V4 patches 3/8 and 7/8 into a single patch
+- Adopt guard(mutex)(&sel->lock) in mode_selection_work_fn()
+- Use dev_err instead of dev_dbg, remove the error message when exiting
+  the mode
+- Update typec_altmode_state_update() to only reschedule the 
+  mode_selection_work_fn task if it was successfully cancelled 
+- Clean up code style and alignment issues
+
+Andrei Kuchynski (7):
+  usb: typec: Add mode_control field to port property
+  platform/chrome: cros_ec_typec: Set no_mode_control flag
+  usb: typec: Expose alternate mode priority via sysfs
+  usb: typec: Implement mode selection
+  usb: typec: Introduce mode_selection bit
+  usb: typec: ucsi: Support mode selection to activate altmodes
+  usb: typec: ucsi: Enforce mode selection for cros_ec_ucsi
+
+ Documentation/ABI/testing/sysfs-class-typec |  11 +
+ drivers/platform/chrome/cros_ec_typec.c     |   1 +
+ drivers/usb/typec/Makefile                  |   2 +-
+ drivers/usb/typec/altmodes/displayport.c    |   6 +-
+ drivers/usb/typec/altmodes/thunderbolt.c    |   2 +-
+ drivers/usb/typec/class.c                   | 100 ++++++-
+ drivers/usb/typec/class.h                   |   3 +
+ drivers/usb/typec/mode_selection.c          | 283 ++++++++++++++++++++
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c       |  22 ++
+ drivers/usb/typec/ucsi/ucsi.c               |  12 +
+ drivers/usb/typec/ucsi/ucsi.h               |   4 +
+ include/linux/usb/typec.h                   |   3 +
+ include/linux/usb/typec_altmode.h           |  42 +++
+ 13 files changed, 483 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/usb/typec/mode_selection.c
+
+-- 
+2.52.0.457.g6b5491de43-goog
+
 
