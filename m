@@ -1,176 +1,166 @@
-Return-Path: <linux-usb+bounces-32509-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32510-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F351D3AA22
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 14:19:59 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE281D3AA2A
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 14:20:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A073F302E300
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 13:19:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D762130230DF
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 13:20:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6732336827A;
-	Mon, 19 Jan 2026 13:19:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4644368294;
+	Mon, 19 Jan 2026 13:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bIGmewBI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dkgQGD11"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D77358D1B
-	for <linux-usb@vger.kernel.org>; Mon, 19 Jan 2026 13:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1FE36827A;
+	Mon, 19 Jan 2026 13:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768828760; cv=none; b=YkCZflVIdG4zXTyKtDXu0EQV9bkSW20x+bI/19OMuxYre07ColZ1s9gFlDlqK5YiXZAwpCy6joL+fcjzdnqYhuj9tUMwMcy2rC+aVIkbq/BRQPCqAwkT8uhWjMa+B/pUal0hXD0qHkqr3dPXDX6EM3TprXyKWNLV9AAYj9tfvbo=
+	t=1768828807; cv=none; b=GDl95/EkwdDiczUGJi91NUE97m1/i5oy1q5xb4TrtuZi3w47a7RtVJN2To0EsSi6uEpykg4XhZlSf8daAphdgXKMp3BpVBW5cZ5wEWLRCxc58lm0d0WE737EwCwqx7CuYJzbMBEV8Wbp8GB7cm+kWb71NkRAscNto1n2e222N1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768828760; c=relaxed/simple;
-	bh=zFB/wu9zF/WPehhEPtbWl8UOJvP9spgPqLlItDsGdnM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qjMgQlgVhq9xjkuwIjaPqyd2STTbJ9wSM/Hw+QUm2sEZd3d+HH18i6p1Aq/6Aaba0JUMlfu+MtlFGTFCwBW5b7kfeJauaIby3lbpgNWse7Ths2w+rUw71a3mUseobIt5oJLdn9/cehau9mQzNBJR/UaHUD+xGcDhsi2+4sXqpn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bIGmewBI; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b86ed375d37so562717866b.3
-        for <linux-usb@vger.kernel.org>; Mon, 19 Jan 2026 05:19:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1768828737; x=1769433537; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Jj9JdVBqHdqB0HXN619HZiSF0v0HIUhhUTLIyvICbg=;
-        b=bIGmewBIoAq+cT0Qhjb/uS492Db3u8Tp0aySa1K31MSvBb2Hh2KY+jm0afvZKLOvZL
-         RCzWUzRFhtYiuamP+bLmf9+DpEZS68T31VQQdHgC3OF0+bG2yY2NI/lD5TrP3XPN05ju
-         pJL+o+T03+h+9EjDNwqPIobfBvMAazWmaXELM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768828737; x=1769433537;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4Jj9JdVBqHdqB0HXN619HZiSF0v0HIUhhUTLIyvICbg=;
-        b=tnYaOS0HBwMTjxmqFoXEQE/ggqLNWB0HNHX+6GvzxdwttxCAQDhg6EUT+JsU7cP//7
-         P9zMxTeXGWChgA/jjF3H5cYG3oaX37Xii7QYtyU5WhSj6+TxSc0PXmxFuRdFP5o19Zwh
-         If43o/Jmy1O8ULi76Z4UO0RgENpLrY7EJ6LxVtOHd/Gxbs6p58W4zJqHr5wrHSKuQU7d
-         oEY6VkmzzZWj9BHyJkZGaJ94feBM8+nES2ohSUcuKV8njQh63aUWCWtOa97AX2b4c9no
-         bEyE4hqzf2eTXDGFtXP1gGIlg4CpaWHT4c/9iHKvLmjeyQD8VN0sgBD8ffjM/Lnz4/ww
-         /EUw==
-X-Forwarded-Encrypted: i=1; AJvYcCWUTSH9m90em/Q4vLfzaCoI0i77HosQfOqOHGdMtt+j/TB5+zZ1Z70D3pNf9jQIdqrnVUMH6IkbXF0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxzvhLPUin1f/e83jPDqaD1hqts6pKzjFpUmIkc0c3UhqfGGmG
-	2y1V00D9oPInvzBf/sKPwt6335jLWdqOec3wP1EKudPRTgxogR8CbBD42eT0kCyFAw==
-X-Gm-Gg: AY/fxX47zuCiw3rkBMhlVYvBnUwi+0IQQ8AP6B2NE97yUyghSbsifMP8xOXNX/1ceJQ
-	unbDb+eKeUCxCDaBq3bQ4rsUDUOp3GDPQ67Z/IGGQp7YmK1spbtEvp2jcfMJW/aLy25vc4MKmo9
-	UaIH7SSyVvlKot33v+qR4qydV9GvMvn9XVO2vuyYC0H+mGDo4/tbPujL+72e1FMvEe6UEFsbzQK
-	eKHsVHu5zafdY/a3okc8YOzLCL912vDIc7/NxYrKL6wQNjWrEkMia/dceNJu8JCEsrt++yPxN9B
-	yOhHM2koZzkDY7R/e0qVvuxhMb3Ohegu6n0pj6gTiPzxroCx28s1xSXDDrY4pVvSotWvvh8TRxJ
-	JmYqGKOcL0werid4FY3pLlMdY9b+eOeBNP2mnQAM7iYZzRkGT6rMfvQwngEGD6EXH7htjmu2pmY
-	r5mUGOdatrvbx9gHDXyDCnPRHDu7uwCsEkTagqtoTQjCa4cuX+YGWXpOOs6+R7euQkgRZ+SP/5T
-	KhfR8pn
-X-Received: by 2002:a17:907:8692:b0:b87:6ce:1269 with SMTP id a640c23a62f3a-b8792de8e4cmr919137966b.19.1768828737282;
-        Mon, 19 Jan 2026 05:18:57 -0800 (PST)
-Received: from akuchynski.c.googlers.com.com (150.230.32.34.bc.googleusercontent.com. [34.32.230.150])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b87959c9a14sm1078801866b.45.2026.01.19.05.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jan 2026 05:18:56 -0800 (PST)
-From: Andrei Kuchynski <akuchynski@chromium.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
-	Pooja Katiyar <pooja.katiyar@intel.com>,
-	Johan Hovold <johan@kernel.org>,
-	Hsin-Te Yuan <yuanhsinte@chromium.org>,
-	Madhu M <madhu.m@intel.com>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	Andrei Kuchynski <akuchynski@chromium.org>
-Subject: [PATCH v5 7/7] usb: typec: ucsi: Enforce mode selection for cros_ec_ucsi
-Date: Mon, 19 Jan 2026 13:18:24 +0000
-Message-ID: <20260119131824.2529334-8-akuchynski@chromium.org>
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-In-Reply-To: <20260119131824.2529334-1-akuchynski@chromium.org>
-References: <20260119131824.2529334-1-akuchynski@chromium.org>
+	s=arc-20240116; t=1768828807; c=relaxed/simple;
+	bh=8Pwk2mM320rXW7LXWm74rtn0AAucQRE+DgHKgITPUpk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cFFtR+j4ZSdig7wkaY7FUHfn95+HRwKhnOecCyz3mGqJHji/Smysfd/MMX5XB1Q+CgopS1VRCM4LGRDEYRN9x7d4T7vZA/rvSphYFFToCNm8oXCjnTsNTbqxDdrjfYYHpUhtAxAJmg0yFnl/1FXdmAvA0e9dXf9j4DLg0c4O5XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dkgQGD11; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768828807; x=1800364807;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8Pwk2mM320rXW7LXWm74rtn0AAucQRE+DgHKgITPUpk=;
+  b=dkgQGD114NcqgB52Hy8JYO+DpW55eKMy6UiUEAxsjQ0ZmX8NpyiiHdtB
+   YlDGYwh1oD0JUwWdy7lPqkuxa1vOsxoziWzvjdUJPEQuzdXACTH0vq+w0
+   QxVhE+pui5kEmhiUE37OwGhzrYUmeeZqCk+1Pu5cCa1rNV0JJu0RTrjHl
+   BNT5iVHDSFoAddv7ECI5q1HOhD/QrrN97B+djjqoh29og1IZPLbLN/Z0y
+   03Liy224DkKWYbVpX2e/MSempil3FzkWgcXxom6lyiFhqMi8BwtM6twsO
+   IeBYnlqCHVk3Z3gmh+cWbyumoJ27TOkjYBQCFvtMs/TFvp8WrpstYKsk3
+   Q==;
+X-CSE-ConnectionGUID: mwQ8AhGiRxWmk13JklGYFQ==
+X-CSE-MsgGUID: gMY5WIS1QyaRrTJZpf06Xw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="70087874"
+X-IronPort-AV: E=Sophos;i="6.21,238,1763452800"; 
+   d="scan'208";a="70087874"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2026 05:20:06 -0800
+X-CSE-ConnectionGUID: YWEdYMHjS1+2wl1wtxgalg==
+X-CSE-MsgGUID: G6wSFACJR/6T3MZn6iaupQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,238,1763452800"; 
+   d="scan'208";a="236545217"
+Received: from bkammerd-mobl.amr.corp.intel.com (HELO kuha) ([10.124.221.165])
+  by orviesa002.jf.intel.com with SMTP; 19 Jan 2026 05:20:03 -0800
+Received: by kuha (sSMTP sendmail emulation); Mon, 19 Jan 2026 15:19:38 +0200
+Date: Mon, 19 Jan 2026 15:19:38 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Jan Remmet <j.remmet@phytec.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	upstream@lists.phytec.de
+Subject: Re: [PATCH] usb: typec: hd3ss3220: Enable VBUS based on role state
+Message-ID: <aW4vauth0USYYy5x@kuha>
+References: <20260115-wip-jremmet-hd3ss3220_vbus-v1-1-b7d9adfbe346@phytec.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260115-wip-jremmet-hd3ss3220_vbus-v1-1-b7d9adfbe346@phytec.de>
 
-The mode selection sequence is initiated by the driver after all partner
-alternate modes have been successfully registered.
-When a partner is disconnected, the driver also stops the mode selection
-process and releases resources via `typec_mode_selection_delete`.
+Thu, Jan 15, 2026 at 02:11:21PM +0100, Jan Remmet kirjoitti:
+> For systems where the ID pin isn't available as gpio use the ATTACHED_STATE
+> register instead to control vbus.
+> 
+> >From the datasheet:
+> "This is an additional method to communicate attach other
+> than the ID pin. These bits can be read by the application to
+> determine what was attached."
+> 
+> Use this method if id-gpios property is not set, but the connector node
+> has vbus-supply defined.
+> 
+> Signed-off-by: Jan Remmet <j.remmet@phytec.de>
 
-Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
----
-Changes in V5:
-- Use the no_mode_control field instead of
-  con->ucsi->cap.features & UCSI_CAP_ALT_MODE_OVERRIDE
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
- drivers/usb/typec/ucsi/cros_ec_ucsi.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+> ---
+>  drivers/usb/typec/hd3ss3220.c | 27 ++++++++++++++++++---------
+>  1 file changed, 18 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+> index 3876f4faead679e6c04062ab2bcf2ae928913a0a..a7c54aa8635f70d6979d98c95f80d4dac277fef2 100644
+> --- a/drivers/usb/typec/hd3ss3220.c
+> +++ b/drivers/usb/typec/hd3ss3220.c
+> @@ -204,6 +204,20 @@ static const struct typec_operations hd3ss3220_ops = {
+>  	.port_type_set = hd3ss3220_port_type_set,
+>  };
+>  
+> +static void hd3ss3220_regulator_control(struct hd3ss3220 *hd3ss3220, bool on)
+> +{
+> +	int ret;
+> +
+> +	if (on)
+> +		ret = regulator_enable(hd3ss3220->vbus);
+> +	else
+> +		ret = regulator_disable(hd3ss3220->vbus);
+> +
+> +	if (ret)
+> +		dev_err(hd3ss3220->dev,
+> +			"vbus regulator %s failed: %d\n", on ? "disable" : "enable", ret);
+> +}
+> +
+>  static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
+>  {
+>  	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
+> @@ -221,6 +235,9 @@ static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
+>  		break;
+>  	}
+>  
+> +	if (hd3ss3220->vbus && !hd3ss3220->id_gpiod)
+> +		hd3ss3220_regulator_control(hd3ss3220, role_state == USB_ROLE_HOST);
+> +
+>  	hd3ss3220->role_state = role_state;
+>  }
+>  
+> @@ -330,18 +347,10 @@ static const struct regmap_config config = {
+>  static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id)
+>  {
+>  	struct hd3ss3220 *hd3ss3220 = dev_id;
+> -	int ret;
+>  	int id;
+>  
+>  	id = gpiod_get_value_cansleep(hd3ss3220->id_gpiod);
+> -	if (!id)
+> -		ret = regulator_enable(hd3ss3220->vbus);
+> -	else
+> -		ret = regulator_disable(hd3ss3220->vbus);
+> -
+> -	if (ret)
+> -		dev_err(hd3ss3220->dev,
+> -			"vbus regulator %s failed: %d\n", id ? "disable" : "enable", ret);
+> +	hd3ss3220_regulator_control(hd3ss3220, !id);
+>  
+>  	return IRQ_HANDLED;
+>  }
+> 
+> ---
+> base-commit: 944aacb68baf7624ab8d277d0ebf07f025ca137c
+> change-id: 20260115-wip-jremmet-hd3ss3220_vbus-732f74894acc
+> 
+> Best regards,
+> -- 
+> Jan Remmet <j.remmet@phytec.de>
 
-diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-index eed2a7d0ebc63..6bca2dce211cd 100644
---- a/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-+++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-@@ -16,6 +16,7 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/wait.h>
-+#include <linux/usb/typec_altmode.h>
- 
- #include "ucsi.h"
- 
-@@ -33,6 +34,11 @@
- /* Number of times to attempt recovery from a write timeout before giving up. */
- #define WRITE_TMO_CTR_MAX	5
- 
-+/* Delay between mode entry/exit attempts, ms */
-+static const unsigned int mode_selection_delay = 1000;
-+/* Timeout for a mode entry attempt, ms */
-+static const unsigned int mode_selection_timeout = 4000;
-+
- struct cros_ucsi_data {
- 	struct device *dev;
- 	struct ucsi *ucsi;
-@@ -134,6 +140,20 @@ static int cros_ucsi_sync_control(struct ucsi *ucsi, u64 cmd, u32 *cci,
- 	return ret;
- }
- 
-+static void cros_ucsi_add_partner_altmodes(struct ucsi_connector *con)
-+{
-+	if (!con->typec_cap.no_mode_control)
-+		typec_mode_selection_start(con->partner,
-+					   mode_selection_delay,
-+					   mode_selection_timeout);
-+}
-+
-+static void cros_ucsi_remove_partner_altmodes(struct ucsi_connector *con)
-+{
-+	if (!con->typec_cap.no_mode_control)
-+		typec_mode_selection_delete(con->partner);
-+}
-+
- static const struct ucsi_operations cros_ucsi_ops = {
- 	.read_version = cros_ucsi_read_version,
- 	.read_cci = cros_ucsi_read_cci,
-@@ -141,6 +161,8 @@ static const struct ucsi_operations cros_ucsi_ops = {
- 	.read_message_in = cros_ucsi_read_message_in,
- 	.async_control = cros_ucsi_async_control,
- 	.sync_control = cros_ucsi_sync_control,
-+	.add_partner_altmodes = cros_ucsi_add_partner_altmodes,
-+	.remove_partner_altmodes = cros_ucsi_remove_partner_altmodes,
- };
- 
- static void cros_ucsi_work(struct work_struct *work)
 -- 
-2.52.0.457.g6b5491de43-goog
-
+heikki
 
