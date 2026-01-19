@@ -1,114 +1,112 @@
-Return-Path: <linux-usb+bounces-32500-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32501-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFC19D3A67A
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 12:13:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97BD4D3A90F
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 13:36:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0270B310C25E
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 11:08:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2C2A430D62FC
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 12:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5653B3590DA;
-	Mon, 19 Jan 2026 11:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB4635B14D;
+	Mon, 19 Jan 2026 12:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="p3yEnQmj"
+	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="N9QaNvM9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C5B34887E;
-	Mon, 19 Jan 2026 11:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C9A35B140;
+	Mon, 19 Jan 2026 12:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768820929; cv=none; b=JITSfvpG+t14L29gjTZHiy84KzcC7ZwMrMUbuiPvg2lP61eAdIHlIuVzeYKZahlUtnNuJvbm3L1RyA7cLPQ7WnyncovKIdFCLXEfZ8mWogBafNEo3ENNMy3sRorrXeD1qisA8q8DriF+HjUhbxVU2Ml5CPc7t/77P4ntikElPTc=
+	t=1768826079; cv=none; b=brSAoCc/N5YufctjbsJaGGLyvNQmKivj8DkeZ/ij31Yny8KSJgrtcySaHoFga4duSdm+3/Hug8G7vlid97p8q3LKH+xqP4v7wbAsDR1zf7mbI/1MuPxhxRZiSzowmHCZ8xVi4heBNn4xsnk4IGiSN8bvknSwflsDGCeJGisvHNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768820929; c=relaxed/simple;
-	bh=a0/dBucYCMtw/vJNauyS1URQXYb+zlBypyLeR6yoTVI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=J6xn65uAPkJ13hr2YneLpLzPwgvUyhQyYkLgvAy9vU4/rOAyFJWJDkpVgGgISI61ZK39BC7R2HyJI3f0tFwCzr6rKURVfktP6snubxM+bazm1CAkXpKEK5xW56oaOBT68rI60pNuItO6sNd9KaIsdPZDiPvsyohCH+cVLa3tt6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=p3yEnQmj; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id D21CE1A2949;
-	Mon, 19 Jan 2026 11:08:45 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 8E04A60731;
-	Mon, 19 Jan 2026 11:08:45 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 97D1E10B69897;
-	Mon, 19 Jan 2026 12:08:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1768820924; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=SaIzhehnPkbVpEfQQQ/RN2VRw7j9yZq/GRMnWoV7h4Y=;
-	b=p3yEnQmjitO1+Cg+VsH0cQa38mXKu/02UZcrSkn5xu0gobhMeJqn4NTEPxqLmdXECWF/Lf
-	2dLIodnmFQentyhpNn9Jn3lJYs+EIIOs4UTAuPmwx52fz7jMMUqtOtQfOjmPJMEl0mQvY8
-	KgTlWzkKh6WTIgBQR1TPT1bpn9xxe5Q9MVJ8/OOGY6Dnnd7jRizoIkGmieS70Lon8Jp+J5
-	MjPx3hWXDvUlkjTGBPDjbTX+qoNTAxYhONFDQzQp8TYisPL3SM7jsNpi+6vrTVS2zq/3PV
-	rBsBSgMdOISL8CsU2E/0Y76fmYo+xt7sc8MkeyyMacaXtM6A5Y56Yenb25pv0g==
+	s=arc-20240116; t=1768826079; c=relaxed/simple;
+	bh=XFlK9F8mCmxc52EP9cPh0kMubVtKS5FFg+3+IrJ8Bt0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Y5m/sQBn0/WTv8yvB5+wxWsCLlOX5TaCO47oIqb4U3mgqcPeIkZt2GnkUZVwh7YqJTEevWU6bwYqV5OY/lnB9rEZYwY+7/b28lpsfOksXtS7fijjbvHYlO0nzkA8XEhtBlf7pV+swkD5t+Gd0yfBTPa7WBMM1VasDlBkplfT3Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=N9QaNvM9; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 60JCYFEk82926860, This message is accepted by code: ctloc85258
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
+	t=1768826055; bh=XFlK9F8mCmxc52EP9cPh0kMubVtKS5FFg+3+IrJ8Bt0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:MIME-Version;
+	b=N9QaNvM99G/xV+3Rfkf7KlboCZK73jseCGlXw6XWVOiaRCIg+HrDwLuC/akvlXmAE
+	 qiXKGvI/p9gml1Ks+9DwaY8WlYu4CotWxa+hUD1RZ9IsMRqCv1fStXQFr10tiHC7I9
+	 4rIqpv21NGqSK6jprgCTFX7Y7f/czUOQ7SXQbeq1EWuxiMwTX0AX85w+oU2qlLQNk7
+	 2zRpTOZQu6/1f9slgVGsnpXp02ABkih0GPCwpU9Y8i433jzUYvebq+KGNQ5lvDqP3K
+	 sI06GycoT7wZaaJmKdVG14oeWdmyzkUU3+uh8wU2uPBVWlDjq0oYSaTsJmx+pv6teY
+	 GR9GwmCvfx8yw==
+Received: from mail.realtek.com (rtkexhmbs04.realtek.com.tw[10.21.1.54])
+	by rtits2.realtek.com.tw (8.15.2/3.21/5.94) with ESMTPS id 60JCYFEk82926860
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Jan 2026 20:34:15 +0800
+Received: from RTKEXHMBS05.realtek.com.tw (10.21.1.55) by
+ RTKEXHMBS04.realtek.com.tw (10.21.1.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Mon, 19 Jan 2026 20:34:16 +0800
+Received: from RTKEXHMBS03.realtek.com.tw (10.21.1.53) by
+ RTKEXHMBS05.realtek.com.tw (10.21.1.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Mon, 19 Jan 2026 20:34:15 +0800
+Received: from RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5]) by
+ RTKEXHMBS03.realtek.com.tw ([fe80::8bac:ef80:dea8:91d5%9]) with mapi id
+ 15.02.1748.010; Mon, 19 Jan 2026 20:34:15 +0800
+From: Hayes Wang <hayeswang@realtek.com>
+To: lu lu <insyelu@gmail.com>
+CC: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+        "davem@davemloft.net"
+	<davem@davemloft.net>,
+        nic_swsd <nic_swsd@realtek.com>, "tiwai@suse.de"
+	<tiwai@suse.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] net: usb: r8152: fix transmit queue timeout
+Thread-Topic: [PATCH] net: usb: r8152: fix transmit queue timeout
+Thread-Index: AQHchQGLBs/iMEigv0CwXIii7EgMTLVRErBAgADcLoCAASPVoIAAd9qAgACSjYD//8agAIAE7krA//+/4oCAAOJ1wA==
+Date: Mon, 19 Jan 2026 12:34:15 +0000
+Message-ID: <cd80f6df5c184549a3705efa61d40d58@realtek.com>
+References: <20260114025622.24348-1-insyelu@gmail.com>
+ <3501a6e902654554b61ab5cd89dcb0dd@realtek.com>
+ <CAAPueM4XheTsmb6xd3w5A3zoec-z3ewq=uNpA8tegFbtFWCfaA@mail.gmail.com>
+ <1b498052994c4ed48de45b5af9a490b6@realtek.com>
+ <CAAPueM65Y4zEb4UidMR-6UtCZVWYs+A7cHzYbBgJMmAZ2iLy5Q@mail.gmail.com>
+ <f3fe05ea76794cd09774cd69e85623d8@realtek.com>
+ <CAAPueM57HHjvyCtBf5TEy2rn6+1ab7_aeSpJ0Kv4xUYt+SfFtg@mail.gmail.com>
+ <ae7e8fc22fcf415d9eb5e4d36ed74231@realtek.com>
+ <CAAPueM6_GQLcqz+xxKVDOaUZZrDNOnYB_tQ2gaxrUKnDQSZ9cg@mail.gmail.com>
+In-Reply-To: <CAAPueM6_GQLcqz+xxKVDOaUZZrDNOnYB_tQ2gaxrUKnDQSZ9cg@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Jan 2026 12:08:40 +0100
-Message-Id: <DFSIOP130201.PFP7SFMSZYFA@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH] usb: cdns3: host: Add null check for host_device before
- accessing its members
-Cc: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
- <linux-usb@vger.kernel.org>, <rogerq@kernel.org>, <u-kumar1@ti.com>,
- <p-mantena@ti.com>, <theo.lebrun@bootlin.com>
-To: "Abhash Kumar Jha" <a-kumar2@ti.com>, <gregkh@linuxfoundation.org>,
- <pawell@cadence.com>, <peter.chen@kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260119082242.1922599-1-a-kumar2@ti.com>
-In-Reply-To: <20260119082242.1922599-1-a-kumar2@ti.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
 
-Hello Abhash,
-
-On Mon Jan 19, 2026 at 9:22 AM CET, Abhash Kumar Jha wrote:
-> In cases when the xhci device is not populated, we see a nullptr
-> exception when resuming.
->
-> Add a nullptr check for the host_dev before accessing its private data.
->
-> Fixes: 3a85c1011540 ("usb: host: cdns3: forward lost power information to=
- xhci")
-> Signed-off-by: Abhash Kumar Jha <a-kumar2@ti.com>
-> ---
->  drivers/usb/cdns3/host.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-> index f0df114c2b53b..8cc7fc1de6193 100644
-> --- a/drivers/usb/cdns3/host.c
-> +++ b/drivers/usb/cdns3/host.c
-> @@ -141,9 +141,12 @@ static void cdns_host_exit(struct cdns *cdns)
->  static int cdns_host_resume(struct cdns *cdns, bool power_lost)
->  {
->  	struct usb_hcd *hcd =3D platform_get_drvdata(cdns->host_dev);
-> -	struct xhci_plat_priv *priv =3D hcd_to_xhci_priv(hcd);
-> +	struct xhci_plat_priv *priv;
-> =20
-> -	priv->power_lost =3D power_lost;
-> +	if (hcd) {
-> +		priv =3D hcd_to_xhci_priv(hcd);
-> +		priv->power_lost =3D power_lost;
-> +	}
-
-I am not seeing a codepath making it possible for drvdata to be NULL.
-Can you point it out? What HW, what config, etc.
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+bHUgbHUgPGluc3llbHVAZ21haWwuY29tPg0KPiBTZW50OiBNb25kYXksIEphbnVhcnkgMTksIDIw
+MjYgMjo1OCBQTQ0KWy4uLl0NCj4gPiBUaGVyZWZvcmUsIHdoYXQgbmVlZHMgdG8gYmUgZG9uZSBp
+cyB0byB1cGRhdGUgdGhlIHRpbWVzdGFtcCB3aGVuIHRoZSBUWCBxdWV1ZSBpcyBzdG9wcGVkLg0K
+PiA+IFVwZGF0aW5nIHRyYW5zX3N0YXJ0IHdoaWxlIHRoZSBUWCBxdWV1ZSBpcyBub3Qgc3RvcHBl
+ZCBpcyB1c2VsZXNzLg0KPiBpZiAobmV0aWZfcXVldWVfc3RvcHBlZCh0cC0+bmV0ZGV2KSkgew0K
+PiAgICAgaWYgKHNrYl9xdWV1ZV9sZW4oJnRwLT50eF9xdWV1ZSkgPCB0cC0+dHhfcWxlbikNCj4g
+ICAgICAgICBuZXRpZl93YWtlX3F1ZXVlKHRwLT5uZXRkZXYpOw0KPiAgICAgZWxzZQ0KPiAgICAg
+ICAgIG5ldGlmX3RyYW5zX3VwZGF0ZSh0cC0+bmV0ZGV2KTsNCj4gfQ0KPiBUaGlzIGNoYW5nZSBj
+b250aW51b3VzbHkgdXBkYXRlcyB0aGUgdHJhbnNfc3RhcnQgdmFsdWUsIGV2ZW4gd2hlbiB0aGUN
+Cj4gVFggcXVldWUgaGFzIGJlZW4gc3RvcHBlZCBhbmQgaXRzIGxlbmd0aCBleGNlZWRzIHRoZSB0
+aHJlc2hvbGQuDQo+IFRoaXMgbWF5IHByZXZlbnQgdGhlIHdhdGNoZG9nIHRpbWVyIGZyb20gZXZl
+ciB0aW1pbmcgb3V0LCB0aGVyZWJ5DQo+IG1hc2tpbmcgcG90ZW50aWFsIHRyYW5zbWlzc2lvbiBz
+dGFsbCBpc3N1ZXMuDQo+IA0KPiBUaGUgdGltZXN0YW1wIHNob3VsZCBiZSB1cGRhdGVkIG9ubHkg
+dXBvbiBzdWNjZXNzZnVsIFVSQiBzdWJtaXNzaW9uIHRvDQo+IGFjY3VyYXRlbHkgcmVmbGVjdCB0
+aGF0IHRoZSB0cmFuc3BvcnQgbGF5ZXIgaXMgc3RpbGwgb3BlcmF0aW9uYWwuDQoNCkFsdGhvdWdo
+IEkgdGhpbmsgYSBVUkIgZXJyb3IgYW5kIGEgdHJhbnNtaXNzaW9uIHN0YWxsIGFyZSBkaWZmZXJl
+bnQsDQpJIGFtIGZpbmUgd2l0aCB0aGUgc2ltcGxlciBhcHByb2FjaCBpbiB2Mi4NCg0KQmVzdCBS
+ZWdhcmRzLA0KSGF5ZXMNCg0K
 
