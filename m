@@ -1,80 +1,172 @@
-Return-Path: <linux-usb+bounces-32521-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32522-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6671D3BEF8
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 07:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C009D3C071
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 08:30:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5D7AE36093D
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 06:07:08 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 76EBB4073AE
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 07:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D659369984;
-	Tue, 20 Jan 2026 06:07:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B54B399A6C;
+	Tue, 20 Jan 2026 07:20:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DwZ0pvo9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mkROSJIj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA5932B989;
-	Tue, 20 Jan 2026 06:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF09E33A6E8;
+	Tue, 20 Jan 2026 07:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768889219; cv=none; b=AUmEcPyuhr877++k/29XJYjNSKVg83w6S8XxzdhL+rDaZlXQ7KiH+oa27M7DkYVzVS4YyjVnGz6ukefB3UvHAxdaYAPfuBnk6R4iDPMmfa8PJyGeJALQVMz/9YPYaC8SBVbpSZmJmIz9rVXbfguGCkv60yJ0R8ev9g6lYZiUNG0=
+	t=1768893632; cv=none; b=Y1ZUJOi9CfREWZgNKrYfWSnu9s5JhVX3rJ03tXEQuMZXptLaQLKVdu17T19+f677SUXIUkI4cmdaWtq6QEkMS3WeHhW8P1E7rSU7Vnm65HRJ/McQzRkJqf7YQTXYedGbPOYJNcYiJ4U8hsB+eOXuG00MzO1gRFZRwkjXDxgEI1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768889219; c=relaxed/simple;
-	bh=AW+aE37obwp3A1GgOzZiGMpco2DQYMgZHyi0+bPmQMI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gus+h6MXmWlwVKX3MZsiEr0p7U0d7nX4unC00bc0FRvhuqZUtTVYjq0jsQ0JKJADec/5MbTT39qtkwGDEeM7NsyeIT1g8H2ZjvKkXgJt/llhaMas0+1cNR7TqogIEpZyiNQWgT+UYGv9xXm+uWajf10eW9v+jLAysabb1ntDUpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DwZ0pvo9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1294AC16AAE;
-	Tue, 20 Jan 2026 06:06:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1768889218;
-	bh=AW+aE37obwp3A1GgOzZiGMpco2DQYMgZHyi0+bPmQMI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DwZ0pvo9Z+DCbBKCfNMiyZb4T0yM/92bF2Ntf8mksTHGF3Rt0ZT992h+lyt6ArZAQ
-	 sVzeeGLYB5FPRwYnj6ZNdQg298QDZIpi7kwFnNrNb3oopmCv6lkVzRhO3RxRK1t14J
-	 abPnz2sSdINM+4oXf2ObJXG7VP2FOud9ER9j2oaE=
-Date: Tue, 20 Jan 2026 07:06:54 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-Cc: vkoul@kernel.org, conor@kernel.org, neil.armstrong@linaro.org,
-	robh@kernel.org, krzk+dt@kernel.org, pjw@kernel.org,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] Add USB support for Canaan K230
-Message-ID: <2026012036-refuse-reply-a363@gregkh>
-References: <20260119093836.316007-1-jiayu.riscv@isrc.iscas.ac.cn>
- <aW5WyizgDyQJaKLQ@duge-virtual-machine>
+	s=arc-20240116; t=1768893632; c=relaxed/simple;
+	bh=vGl+Qlh1JJx7DD0yHUg0mIjfegHURXiJvMHh+UuyXII=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ltvhSgYegJUxngSTYFuiGoRvPuq/LWkTWrmogLAC6LvXKJNZYPXaBSJ6miH526XYK8jGEtHT34kWj7Z1Tn6SFcbgmgju4om97y7dhEUPQThxvHUXTb8G/rMUncB2v3MiCYCOyo1vX80rHNKHGqLq068W0s5MtxjOiFIGuVi27GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mkROSJIj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FC0C16AAE;
+	Tue, 20 Jan 2026 07:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768893629;
+	bh=vGl+Qlh1JJx7DD0yHUg0mIjfegHURXiJvMHh+UuyXII=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mkROSJIjoSszKpeBE5XvIgb+wWA199Tv5c+6Hee51NV13k9WIOOMg2E9JYZaIOcUj
+	 7QbDxzYbhmRw9dUM4nBblmqTSbVZ7AJ8EmKooMphfsDts2sOsHnsMMHxa+EmwiSg4B
+	 EqXH/VwSAJ/Ns1vGT52RRApCRI0IpSmJ1gMliwjcb0Pmv/h8euvj/7+vEB5/MJ/UCv
+	 EJV+aLyMIt3Oy93LiujnXWke9j2qTm4cRL3idet3DKV9BN+8qG/naxvaGzQsMjeI5/
+	 R08JotrLT/RvSd90iT1kHTNTclkozmFGkWG+nOswjohRW/ebWpxCE+KAUlxZLsFGau
+	 id2ECx4GbJc3g==
+Message-ID: <4d6ffe96-2113-42fd-97e5-42247f073aef@kernel.org>
+Date: Tue, 20 Jan 2026 08:20:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aW5WyizgDyQJaKLQ@duge-virtual-machine>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/9] dt-bindings: soc: qcom: eud: Restructure to model
+ multi-path hardware
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Elson Serrao <elson.serrao@oss.qualcomm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260116232106.2234978-1-elson.serrao@oss.qualcomm.com>
+ <20260116232106.2234978-2-elson.serrao@oss.qualcomm.com>
+ <20260117-courageous-chamois-of-focus-20d5d5@quoll>
+ <sfazro75vspadpe4wco7zvlalcy2wbrbdjx2wn7lyonjgw22sf@z73u67pinusx>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <sfazro75vspadpe4wco7zvlalcy2wbrbdjx2wn7lyonjgw22sf@z73u67pinusx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jan 20, 2026 at 12:07:38AM +0800, Jiayu Du wrote:
-> On Mon, Jan 19, 2026 at 05:38:31PM +0800, Jiayu Du wrote:
+On 19/01/2026 20:58, Bjorn Andersson wrote:
+> On Sat, Jan 17, 2026 at 12:57:58PM +0100, Krzysztof Kozlowski wrote:
+>> On Fri, Jan 16, 2026 at 03:20:58PM -0800, Elson Serrao wrote:
+>>> The Qualcomm Embedded USB Debugger (EUD) hardware can intercept up to
+>>> two independent High-Speed UTMI data paths, depending on the SoC
+>>> configuration. Each path operates independently with:
+>>>
+>>> - Dedicated PHY interface
+>>> - Distinct USB connector and controller associations
+>>> - Role dependent routing
+>>>
+>>> Model these hardware paths as separate eud-path nodes to accurately
+>>> represent the physical topology and add below per-path properties:
+>>>
+>>> phys: EUD exposes a High-Speed debug hub that relies on HS-PHY for its
+>>> operation. This property references the HS-PHY associated with the UTMI
+>>> path.
+>>>
+>>> usb-role-switch: Indicates that the USB port on this UTMI path supports
+>>> role switching. In device role, debug mode inserts the EUD hub into the
+>>> UTMI path. In host role, the EUD hub is bypassed and UTMI traffic flows
+>>> directly between the PHY and the USB controller.
+>>>
+>>> This change breaks backwards compatibility, but the previous binding
+>>> omitted critical resources like PHY and did not describe per-path
+>>> topology. Without these modifications EUD cannot be guaranteed to
+>>> function.
+>>
+>> It was working for 3 years, so your guarantees are just imprecise. FUD
+>> is not an argument.
+>>
+>> Qualcomm task at 2022 was to post complete bindings. These were posted
+>> and accepted. Three years later you say that previous posting was
+>> bollocks and this cannot even work?
+>>
 > 
-> This is series is the RESEND of the series here[1]. I resend it
-> because I mistakenly sent the wrong USBPHY driver code.
+> That is correct. The description of the hardware that was provided when
+> this was upstreamed and the binding that was accepted based on this
+> description is wrong.
 > 
-> Link: https://lore.kernel.org/all/20260119093836.316007-1-jiayu.riscv@isrc.iscas.ac.cn/ [1]
-> ]
+> There's absolutely a value in maintainting backwards compatibility in
+> general, but is this one of those cases?
 > 
+>> Nah, take responsibility of what you did in the past.
+>>
+> 
+> In my view the responsible thing is to accept that we got it wrong and
+> make sure EUD is enabled end-to-end so people can actually use it.
 
-I have no idea which is which anymore, sorry.  Please send out a v4 so
-we know which to look at.
+I would expect to see what is not working. This is in mainline for three
+years, so the assumption is that it was working for these three years.
+If it wasn't, this should be described and "cannot be guaranteed to
+function" is just imprecise.
 
-confused,
-
-greg k-h
+Best regards,
+Krzysztof
 
