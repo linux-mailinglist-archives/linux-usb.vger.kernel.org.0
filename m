@@ -1,190 +1,174 @@
-Return-Path: <linux-usb+bounces-32553-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32554-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kFK9IzTtb2m+UQAAu9opvQ
-	(envelope-from <linux-usb+bounces-32553-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 22:01:40 +0100
+	id kON/EQLqb2m+UQAAu9opvQ
+	(envelope-from <linux-usb+bounces-32554-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 21:48:02 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2049A4BE81
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 22:01:40 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A594BBA0
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 21:48:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 06C258E341A
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 19:50:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 58E8F8C70E2
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 20:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6131838B990;
-	Tue, 20 Jan 2026 19:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188493A7832;
+	Tue, 20 Jan 2026 20:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bwzEiHNM"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="JWd1fV4C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f98.google.com (mail-oa1-f98.google.com [209.85.160.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25FE399A66;
-	Tue, 20 Jan 2026 19:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE843A783A
+	for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 20:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768938581; cv=none; b=AtNPGC38V/9Lragfgg0KkemVqAA2yprAx87KqNg+3e8fJ5cYz37y0ENoDmBAbaXUYVlG0XtBEb9oB5OVPo0NWQ3lbJnvJhCi+41E0YIeogh0l8lTLI/0R2agXYyE6dCchcfPxOm7+AkkIYzQqt36JgxTcP3jyX4ukME+zww3ouE=
+	t=1768939688; cv=none; b=AUJ8SWm6a/tmYv2u8othljkSDxRlRe+kOhfOeXtTJ2yBK5kZBhBCy2OO+bBTKFDJsiYTxM3igvTKp2Hs4Tnh65llm7rLuN2EARG77bHI3dGfO4qDyXyfyQlmWMQSgsNCkNABkgmqcZTSq5oXiBZL4WO/x371T7x5dpdOf8bQoG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768938581; c=relaxed/simple;
-	bh=kQ5wPQq2/U4blH4aBlsWKFYKSlrG3CZQkf90M+nd7o8=;
-	h=From:Date:Content-Type:MIME-Version:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=SG7y2LJSpHeTNzb9c5PYLhYAlteXmNF/afso5nJjgUGJMVYXTlqhXzjuHUxshrebkt1fCJ5xjBxfgRgge7INYqTT8n5rwIyY9MrKpF+Mtq9CTaLqVDIdH+3+KgBmigzLdKyNXK0KF8eEy0T4wEveHr/nVWBSqsnLFhMGoa81m2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bwzEiHNM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486B3C16AAE;
-	Tue, 20 Jan 2026 19:49:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768938581;
-	bh=kQ5wPQq2/U4blH4aBlsWKFYKSlrG3CZQkf90M+nd7o8=;
-	h=From:Date:Cc:To:In-Reply-To:References:Subject:From;
-	b=bwzEiHNM61qLDewc2y5slgZLis4CQNCpYmQ7SOnkjdqx+r5jZMru3mLaxpGbWxaiq
-	 3uC8ijwgzb1qp+FIEVdQW0hFZ4ByXEpUgJ7H6IN6F6BsJcV5PpSS9sDrVuh0NsWSZz
-	 bHZfTf7cecBhEaJ7mWUSEdJYDbicveNlaz4WE3hXjgsjtS8LRScPp2AtiOMeI0jGnR
-	 tmEOLBqXA/1SHuqvVS9+B1oEIMLLxWi6JAqBtMgxl21BlkzizwOtV3rBV39hanGVGi
-	 epca1iK2R2GqzRADGCthNK1SJ7LP7KYJf3cXbeoxamJIcfmUv5Uy55hi8hJTaSqO5q
-	 oK2ks800Ryjhg==
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 20 Jan 2026 13:49:40 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1768939688; c=relaxed/simple;
+	bh=ruynx7Fm6vHeQECMahipIQdtTrgD5C5jyfxQBK1r1Gg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BHjIMcu/BOnTuSWkOVwFko0KJOHca3V0EhJGUBRVuTdIfTvnXISO/Ss3rEp14YXkR6JmYl2RGzhQ56hafvaTtBs4PN5hwLnfRl7rlDPOz7QQ23RmzSnZ2s8jp6zB90wXwKGWbwAypb7WDvAlqH+sxD7E5Dk3FiZUwLRtubG6GPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=JWd1fV4C; arc=none smtp.client-ip=209.85.160.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-oa1-f98.google.com with SMTP id 586e51a60fabf-40444c41a70so2925050fac.1
+        for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 12:08:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768939684; x=1769544484;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1xguDCeFtlZRf90K3LbKC2UX9kSbpACBGQdqJf2Th68=;
+        b=tTM4BkbUFabPrQ1M/b7JbIiFc49i+y9kf/ZwGmoLGEdnXkKwKgJZzKajpmKSRIrP84
+         zj/geAtA5hM+Vhrsa31mneoOvB9pTKwEHTgoeROXDRG15IxgPHX58j3zaWOZCZXoCeYI
+         ywSI98VvZtso7qxhkzpS4x+NXlwJke9RsvpdW7uW7Xsfos3CYYatbo6bd9uOzEyft/or
+         gMUSaStnBgA+UkEQHuZJUyW+olDr3o1tuv3DokXpzMmp1gvC95VL3FZyrfuXGqmXK2an
+         W5+YpY1fj5Jv0cGWLmT6d2H/ZUEMINNwdIVp+NHbezyAsXuD2rDA3MsTEE3y7kpIvx3E
+         8htw==
+X-Gm-Message-State: AOJu0YzG1A6JaAWRBY11n7cxpbpzFlY1NBhvR+JdhVRt4fysj7JALr2a
+	zpkCE/O90CVj6wJTAj6DuVVJ+gbGUN8MReP3Uf2iGDxlcizdXSeOsYJilJ/wSWOBwvrAoPtICHq
+	tKHgg0+XaHXC7tRizgU3BQ23QtAk8acxR5NlIRocSdPkciA8FRGCrtrw/xIjVOOSmE8NIATd4T1
+	bOQDUyNWImOh18qlgCdeyayftSHGOXQ/iqJ67pGAMJpC99AEH6PY6c2eGgRrYwR5sW6nKTOtRXL
+	hszXwXE0XCw0g==
+X-Gm-Gg: AY/fxX6IyBt4sDsR8ze+9bfjloyzSuS+QXOG8c2fU8O0IQcD1KumSwUAEk93YY1Hp3d
+	r73Tg9e7EzpPR+MLc8NO+ZUTQ0X1z+eUa0JxIzaplFKE6D7d6W8MVE5G0KXrkRvqc9g6Cq4q2dJ
+	oC7bqC0blPv6fcwOW8ttMZHrjdXCbRL+xWGCp0EDrKSEHWyCHSZW74wOXDTZTBRX9JxBDAGMMoV
+	G1GEpOFn4TEhyLzbawMYqLC4NSWqMVuGyw1p+0F+RPueMLhFxE31vBPll8B1LqQY/yWV3Lu6ZcS
+	zfWoyA5LQHHeny68H+5a9+wxHrX2avU1cJH2g1txFsLyrnBRpW9b3RYdz0DQedk0FpINUgyEfqE
+	iWVdZNHxFW0JSNbl699h7dtv5BHkuiAeTePKkY1RilFhtm4SRRt1HB1balxY6DPZToN+zKt3sew
+	+v9IZN1L3MOl3hPoQZ584b65ItG8z//X3JeVy0Vf1JYvA=
+X-Received: by 2002:a05:6870:d182:b0:404:4166:ff59 with SMTP id 586e51a60fabf-4044c4f8d96mr6795121fac.43.1768939684058;
+        Tue, 20 Jan 2026 12:08:04 -0800 (PST)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-72.dlp.protect.broadcom.com. [144.49.247.72])
+        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-4044bb0a667sm1534050fac.1.2026.01.20.12.08.03
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 20 Jan 2026 12:08:04 -0800 (PST)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-5013c19b92dso155481151cf.2
+        for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 12:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1768939683; x=1769544483; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1xguDCeFtlZRf90K3LbKC2UX9kSbpACBGQdqJf2Th68=;
+        b=JWd1fV4C/vP2yr+i6mVXSwl7kdFq+bAJ9DcqpyO8vzIUuW0mcsvq6JyN8/pRm/GQK4
+         VZd9NzVcLqN5D1yAutz1paFE6xJjGHLkAiJ54RscENMmCwvW5c9sSahjJ3EuRlCj4g3v
+         0KnnE3Zn1MJUhE2D9vpSEXuSpFtftMlWtUrwM=
+X-Received: by 2002:a05:622a:243:b0:4f1:dfc8:50b with SMTP id d75a77b69052e-502a17c706amr234245591cf.76.1768939682659;
+        Tue, 20 Jan 2026 12:08:02 -0800 (PST)
+X-Received: by 2002:a05:622a:243:b0:4f1:dfc8:50b with SMTP id d75a77b69052e-502a17c706amr234245151cf.76.1768939681965;
+        Tue, 20 Jan 2026 12:08:01 -0800 (PST)
+Received: from stbsdo-bld-1.sdg.broadcom.net ([192.19.161.248])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502a1d6e67csm96221571cf.7.2026.01.20.12.08.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jan 2026 12:08:01 -0800 (PST)
+From: Justin Chen <justin.chen@broadcom.com>
+To: linux-usb@vger.kernel.org
+Cc: swboyd@chromium.org,
+	chunfeng.yun@mediatek.com,
+	f.fainelli@gmail.com,
+	balbi@kernel.org,
+	gregkh@linuxfoundation.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	alcooperx@gmail.com,
+	Justin Chen <justin.chen@broadcom.com>
+Subject: [PATCH] usb: bdc: fix sleep during atomic
+Date: Tue, 20 Jan 2026 12:07:54 -0800
+Message-Id: <20260120200754.2488765-1-justin.chen@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Cc: Pin-yen Lin <treapking@chromium.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Matthias Kaehlcke <mka@chromium.org>, Icenowy Zheng <uwu@icenowy.me>, 
- linux-arm-msm@vger.kernel.org, 
- =?utf-8?q?J_=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
- Jens Glathe <jens.glathe@oldschoolsolutions.biz>, 
- Mike Looijmans <mike.looijmans@topic.nl>, devicetree@vger.kernel.org, 
- Catalin Popescu <catalin.popescu@leica-geosystems.com>, 
- Konrad Dybcio <konradybcio@kernel.org>, Stephen Boyd <swboyd@chromium.org>, 
- Chaoyi Chen <chaoyi.chen@rock-chips.com>
-To: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
-In-Reply-To: <20260120103312.2174727-1-swati.agarwal@oss.qualcomm.com>
-References: <20260120103312.2174727-1-swati.agarwal@oss.qualcomm.com>
-Message-Id: <176893840697.630984.16476349580844756180.robh@kernel.org>
-Subject: Re: [PATCH v4 0/4] Enable secondary USB controller in host mode
-X-Spamd-Result: default: False [0.54 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+X-Spamd-Result: default: False [1.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32553-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
+	DMARC_POLICY_ALLOW(0.00)[broadcom.com,reject];
+	TAGGED_FROM(0.00)[bounces-32554-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[chromium.org,mediatek.com,gmail.com,kernel.org,linuxfoundation.org,broadcom.com];
+	DKIM_TRACE(0.00)[broadcom.com:+];
+	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
 	TO_DN_SOME(0.00)[];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
+	FROM_NEQ_ENVFROM(0.00)[justin.chen@broadcom.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,broadcom.com:email,broadcom.com:dkim,broadcom.com:mid];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,0.0.0.1:email,devicetree.org:url,qualcomm.com:email,0.0.0.47:email]
-X-Rspamd-Queue-Id: 2049A4BE81
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 17A594BBA0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+bdc_run() can be ran during atomic context leading to a sleep during
+atomic warning. Fix this by replacing read_poll_timeout() with
+read_poll_timeout_atomic().
 
-On Tue, 20 Jan 2026 16:03:08 +0530, Swati Agarwal wrote:
-> Enable secondary USB controller in host mode on lemans EVK platforms.
-> 
-> Changes in v4:
-> Updated power supply property for hub.
-> Updated details for all 4 ports of hub.
-> 
-> Changes in v3:
-> Updated binding properties for genesys hub.
-> 
-> Changes in v2:
-> Add Genesys Logic GL3590 hub support.
-> Rename hd3ss3220_ instance for primary port controller.
-> 
-> Link to v3:
-> https://lore.kernel.org/all/20251220063537.3639535-1-swati.agarwal@oss.qualcomm.com/
-> 
-> Link to v2:
-> https://lore.kernel.org/all/20251216120749.94007-1-swati.agarwal@oss.qualcomm.com/
-> 
-> Link to v1:
-> https://lore.kernel.org/all/20251203-swati-v1-1-250efcb4e6a7@oss.qualcomm.com/
-> 
-> Swati Agarwal (4):
->   dt-bindings: usb: Add binding for Genesys Logic GL3590 hub
->   usb: misc: onboard_usb_hub: Add Genesys Logic GL3590 hub support
->   arm64: dts: qcom: lemans-evk: Rename hd3ss3220_ instance for primary
->     port controller
->   arm64: dts: qcom: lemans-evk: Enable secondary USB controller in host
->     mode
-> 
->  .../bindings/usb/genesys,gl850g.yaml          |  17 ++
->  arch/arm64/boot/dts/qcom/lemans-evk.dts       | 217 +++++++++++++++++-
->  drivers/usb/misc/onboard_usb_dev.c            |   1 +
->  drivers/usb/misc/onboard_usb_dev.h            |   8 +
->  4 files changed, 239 insertions(+), 4 deletions(-)
-> 
-> --
-> 2.34.1
-> 
-> 
-> 
+Fixes: 75ae051efc9b ("usb: gadget: bdc: use readl_poll_timeout() to simplify code")
+Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+---
+ drivers/usb/gadget/udc/bdc/bdc_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-This patch series was applied (using b4) to base:
- Base: attempting to guess base-commit...
- Base: tags/next-20260120 (exact match)
- Base: tags/next-20260120 (use --merge-base to override)
-
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
-
-
-Warnings in base: 209
-Warnings after series: 211
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/qcom/' for 20260120103312.2174727-1-swati.agarwal@oss.qualcomm.com:
-
-arch/arm64/boot/dts/qcom/lemans-evk.dtb: usb-typec@47 (ti,hd3ss3220): ports: 'port@1' is a required property
-	from schema $id: http://devicetree.org/schemas/usb/ti,hd3ss3220.yaml
-
-
-
-
+diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
+index 5c3d8b64c0e7..f47aac078f6b 100644
+--- a/drivers/usb/gadget/udc/bdc/bdc_core.c
++++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+@@ -35,8 +35,8 @@ static int poll_oip(struct bdc *bdc, u32 usec)
+ 	u32 status;
+ 	int ret;
+ 
+-	ret = readl_poll_timeout(bdc->regs + BDC_BDCSC, status,
+-				 (BDC_CSTS(status) != BDC_OIP), 10, usec);
++	ret = readl_poll_timeout_atomic(bdc->regs + BDC_BDCSC, status,
++					(BDC_CSTS(status) != BDC_OIP), 10, usec);
+ 	if (ret)
+ 		dev_err(bdc->dev, "operation timedout BDCSC: 0x%08x\n", status);
+ 	else
+-- 
+2.34.1
 
 
