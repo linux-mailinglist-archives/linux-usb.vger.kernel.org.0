@@ -1,100 +1,106 @@
-Return-Path: <linux-usb+bounces-32555-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32556-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6MChFNvxb2m+UQAAu9opvQ
-	(envelope-from <linux-usb+bounces-32555-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 22:21:31 +0100
+	id SCbwI9kIcGlyUwAAu9opvQ
+	(envelope-from <linux-usb+bounces-32556-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 23:59:37 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5F964C264
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 22:21:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B2284D625
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 23:59:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D5EF0A87FAC
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 20:11:12 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4D4056AEDEE
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 22:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D953A89AC;
-	Tue, 20 Jan 2026 20:10:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BEBC33C1B7;
+	Tue, 20 Jan 2026 22:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="U8G/F9a7"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RrsU96/g";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="EOa+OJwz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f228.google.com (mail-pl1-f228.google.com [209.85.214.228])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE593A7F4B
-	for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 20:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1ED8392C3A
+	for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 22:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768939852; cv=none; b=J8HS9Azq0uOrj1To4f7iAEP6Lg+wAqBrwsoOf12qiv2Gw44jr0GrQ8yhnYxH+Ik2Fmqjn7+vZUDRlY0wKcrvkvn3/jK6qQn8YtbCk7VjucHqsJI25TTFe284beMiK8cFEiAUj5zodYhCnRUc05hjojbGP9B8ODAdtoby3xeSXeo=
+	t=1768947385; cv=none; b=Y0X/KfZESbKDbq7bGKhCS2Gat9xnAakFanNUIIhCkUcPeoDXBpBUAQTBBM32MVt7azJacPr3xEx+KyfKHY2p6gKor1L6b+7zjSn+uENDug17MhsvIWW/84GLlmEAtaNoldnSymycqK0SGI1h1ZK/Ow99+qg9NLOhPMZU2WBR7yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768939852; c=relaxed/simple;
-	bh=qeRhtAuetfvWCw7JITmcL5/TB7s+YEEcghBWKPAAVrw=;
+	s=arc-20240116; t=1768947385; c=relaxed/simple;
+	bh=aIF2sq1G+SBDQ2SeQKoKfuTkG90GCyflJtqsoFKJ/Pc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TWzIxVpUsKjWTVK7rz0WR9PJJsHVEGA1BklqCBG/HDmaWdkBPs4O5whIaQoHrKI4lHhWiA44byxE6F0vHY5XtE/kwm+r9xXydQ1df4yxVGEMQEOkctVcJOHLVf2F9/65pSsgLJQXV4XfIU7aEEfI1dZ8OQbp+vkuet1Vh2G2DgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=U8G/F9a7; arc=none smtp.client-ip=209.85.214.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pl1-f228.google.com with SMTP id d9443c01a7336-2a0c09bb78cso1554815ad.0
-        for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 12:10:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768939848; x=1769544648;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bSkchG3K5RYKWcee9TMscdzqq+UI8fkJoSNx++VuHlU=;
-        b=nFwvU0TH0kNG3Hw6mNDsWW8py7AqkdfrbUonxXu60QiwHHXt2XEKMj0TT6R4d41iOr
-         pbHaBd6UWRwPRGG83aJ0qksqkaHeRlQ5KvMhfQx08dj4X7e2X4lw+re3aRnwfur3o5NO
-         zfRcbe7RxM6cEr54JCEdj+nhK7nm5yMObN4CLXBrJ1n6hjkaoaaTp6DHt4YnXEXWKNsM
-         R7FVLrJHQbQZkuaW0JJPQheUk3YxhDKGHFi7P72vVxhgFfal0hBz9DCHy4JMqxDdCI8i
-         1oJZ8dilMYBaGZ8Jhu0HMQ6db7Wp8KjjbxiC8yVGqcDR0vwfk09lH0+oqF6PHdOsLA9m
-         I1YA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+IhhsjyLH1/epHbevpWWYMdqbSsCo7+gDT8E7Hvf+2YPbxFy0BQSI8kaX1zI6533GYrKjdbtQOvE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9aqDh84ccp39gxNnqL8g/AAtWhIMSPJ7eMqyq7nRGp7oW+H9y
-	QMG4RAhxmuxCRJZ7NqBbzLr0qEpqO30Zh2aqGaL/2cS5C58LVsluL7SxvHDcEsnwKHh/vcEv9dc
-	broGKv5wpfaks7gGNYFuPuDXKqYGydeDdVd3Ah4tsbGjwUlB6Q16TeT+za19W+7gn1gb6lR6sH3
-	FzKYeP9naDC+WFC6DkWzywVAWn7Lf8NfAGwX7uoV+vRx6SDQYcQ7QmUrfC6aRA3mzMuAfCNT7t5
-	Ep8cLX2mp0ttFvoLpA7
-X-Gm-Gg: AZuq6aK/FQrcnYTkO9Gq/OJs4CsZx+thQkXjECYVIgtBunjsbj6iJIXcc3XtQV2BNjs
-	yupashbSd4XE8j/0eWTMDbQZRJjj68suR35h6CDGqv8WXWtjgiZAAMqUWOjhKcgjxCrMWfoiKaU
-	r2SmQ/50RfJTV1Ccg1spue0SWsuORWy0/GlFo8Uac42qbfwzAyjk8E8sh1vyGvF5Y+W9DScrhrq
-	ow1FNRjuhAjTVV8gMZigGjuVv/ad4Wlmcll8vBBFaIurUDASLEhfIrYDExTCvUjtbiH3I7lFsse
-	0LpCpB5BHSFCUYB4Qf3OnGd/aEuqMvq71ygbdVknuW/biJbL6QzHoFotGcSHmDpXBa3smNzLHQi
-	8M4BS7IM+leXKNtdrm21rQOnWo+NOa/TVKGOOkFZIG/ZWEVwU2jhf4mhrfZ8CLW1bL2LDpvQ+t3
-	k9rQ5bgS6O0AVZzHlyAdOVlh0JplRm+ttgcrjxSlj8cRZL9UE=
-X-Received: by 2002:a17:902:f745:b0:2a7:9163:8e60 with SMTP id d9443c01a7336-2a7916393a6mr6946525ad.23.1768939848104;
-        Tue, 20 Jan 2026 12:10:48 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-2.dlp.protect.broadcom.com. [144.49.247.2])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2a71919672dsm20699205ad.40.2026.01.20.12.10.47
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Jan 2026 12:10:48 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8c6a289856eso102556685a.0
-        for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 12:10:47 -0800 (PST)
+	 In-Reply-To:Content-Type; b=F5owSXx+M+jqNUa+zXiPq2c59e9tt94qY9HMvxK3qfftDhQqSGR6GUNBm5ecxuS9UQW6rqyo/O3H/O2+MkWMX439mO3j6cKp/Z+SIoylDqLFOpqF67nTGsPFEPBvLhmUQJ9O8ghyi9vfCq8mXrEfMU+C0iFKHgMecvJVUQYGzlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RrsU96/g; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=EOa+OJwz; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60KL81DS877870
+	for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 22:16:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	898n42PZbM7sQ/Hguy4+gqUdwRDFS04P1ZHCu2BuyGo=; b=RrsU96/gWhayivnM
+	deUFLchEkp/oMi33gFSkMcPPBQNFuj1Mqb+fCywK86Drb25SkcfsxppkJ78OcDg/
+	qUQsoJujFU7ikn2UrCahsehW8CBxIvtUUEeF/q5kuF8Cyh7ijgDGY+nrQgDFvofr
+	Pr1D1gSFJ4Ac6NcV5WnwqbEJTW3bbwgOfgiRb2Vt00LlQCkqRuqPkP2LOkd/6i82
+	xuKirjvA1DpRSbCELevPqPDLG5s7+RHDn68YGFJ+9GLEscvs1pbMWLoKWUYLwbvS
+	Tpa952jkJwOfjyvsSD0+n4MfX7KE7lHVK+xqlklLkhGLEhs0C62PhiEXxzOe5e1V
+	zifyOg==
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bta42hu0a-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 22:16:21 +0000 (GMT)
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-2b0531e07e3so5442220eec.1
+        for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 14:16:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1768939847; x=1769544647; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=bSkchG3K5RYKWcee9TMscdzqq+UI8fkJoSNx++VuHlU=;
-        b=U8G/F9a7GlaMMkL2kDfBjVvJBlo2Qrnad+7LAl6qsXCWZZQJosp9y9FGHdEQ1AIqci
-         O2bo0fteo2yzBao47yckjrEamcBupZLHSGTHsqy25JcYSVVA7cgikcsM8Lhmydzajka+
-         9L9Lgo1ARHD9AgLTgU0VjT6NV/a80ETMq4Row=
-X-Forwarded-Encrypted: i=1; AJvYcCXloFeBxZnD8Q3kedl1bB3Zf93J2zzOr2T0XNLRV5byR88fMvsitbI3fyZdUkiHaF1shmwYoNLjMz8=@vger.kernel.org
-X-Received: by 2002:a05:620a:1911:b0:8c5:33da:219f with SMTP id af79cd13be357-8c6a651dc32mr2067960685a.43.1768939846853;
-        Tue, 20 Jan 2026 12:10:46 -0800 (PST)
-X-Received: by 2002:a05:620a:1911:b0:8c5:33da:219f with SMTP id af79cd13be357-8c6a651dc32mr2067958185a.43.1768939846429;
-        Tue, 20 Jan 2026 12:10:46 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c6a71d5b93sm1089721085a.23.2026.01.20.12.10.44
+        d=oss.qualcomm.com; s=google; t=1768947380; x=1769552180; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=898n42PZbM7sQ/Hguy4+gqUdwRDFS04P1ZHCu2BuyGo=;
+        b=EOa+OJwzKeXjgcsw/Yu/29pcJXzM5v+G7o2KmuW70Gd4SQkVNZMU+oI7XfRZtVZetj
+         vAk6xlu0Qx+WcVOHGh7zN8WLWxYT2IhJv8bmAvlPYxN/QinwBhrpBAwK1hbxHpUjOI06
+         nSYLYeQe5tZjW1GCocV+v8jNJsvYa0oorKPOR9KzmiS5XGQM3ezp7l6rQv42l2jeDQsQ
+         falkhXHOE1qdVf59Y/gngBzyWepD2akNDxO9pc4rjq3w+tGOf4e1Bs3YG1HO0D0V5MFa
+         IeSTsSE0ERASQpasWZEzeQVWyFsN93ok0Q+utFYJHfxm5WhJVRjzZvlqqSXm0L6xzq+k
+         cQyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768947380; x=1769552180;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=898n42PZbM7sQ/Hguy4+gqUdwRDFS04P1ZHCu2BuyGo=;
+        b=f9jmxinOnHGg4VNXNW/csg/YuUX7WyL1ibecA6VBBkkt5br/dMTmTeewHxzB4pieyt
+         M+mjVmfN0+sYHyiiU0eCZEhTRXCeOQekJY1vhalIY3j90/fWZCsT8O7up9x0kWhjiiqe
+         jFiqnQmCqVoaM4GLFRpWXSyPLRtJIZGk78LMwMLH2nQD4d1rcY96evny1iVXXe0RNtVP
+         FPbaOZJLu2SWO1clLP2D8jBvcyafQ6whlBpUmgX2Uj63w92AffPdxFlPu/2Y5b8IaRnK
+         aR2sf1ezR/NI7QXZkcQAa+5POOu3cqNR/JEQ1+6wl8GibK7h9TWQK1+OC3sWT3yJpy9h
+         VJ6w==
+X-Forwarded-Encrypted: i=1; AJvYcCWhHf15EaYwbrjhT7bZerYGPy3xKp3a003WQDwAPBvoBYu5ZSIOSmSIIOP94+y2KNaekRLyB6ZDXfQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFLpMN1mNrJhb4Mkqhtuq9p3szn2qw317VIw7JJli238T75rFJ
+	tOU4UlrKrLtAd2eAph5tiHoEKHmqfVqGNGsQ/iD79MwFShz2mYKJQ2VS7gOmAfwFfTsVdVjePgN
+	mTN0RmkgAbOnn4aQuP0s3iG+P+jhzYM53uMi62xnCU6AnaEgknYgcUs6PYDUSKpA=
+X-Gm-Gg: AZuq6aICyhHWga/95RSLHJgSVpKApH52P9CEOtsghkAuywIz77dBDeMH4px7mYRypcx
+	3HYq2Vx11VmTOvwq0qSf9vpWlCJuJu13xsJUq15uACLYvmeUC2/RfHUDSkzqWibgh0seP2NHQ78
+	eCAdj+ukiIwwK7fOtlTnN/Z2cyDFbWs3OyKhr7g9kqDTfqHwjM/wEKoo5ua2hyFJRgEyyVg0foA
+	4PQqr9bVCBOQC4ZknxFO4IkSJt+tAki/x5BUzJh1YQ48HzKLfYFU2KTJ1FnaLSS+uFgC5+oaQSf
+	U1oZf1sw93pFWmxofWwwHu46glE1I1s4qjmuVvbvzX2PjVbVVTvZpdo14h9alibwBv8FuG1Ptzs
+	XHpU+nlqajQYMwICiG1SOgu7XrRSd/YpKq+uvCVJk+jbQxvc+tYq+ASaMvTKDVmQbjTA=
+X-Received: by 2002:a05:7300:1489:b0:2a4:7b58:1a25 with SMTP id 5a478bee46e88-2b6fd7905c1mr2372029eec.27.1768947380254;
+        Tue, 20 Jan 2026 14:16:20 -0800 (PST)
+X-Received: by 2002:a05:7300:1489:b0:2a4:7b58:1a25 with SMTP id 5a478bee46e88-2b6fd7905c1mr2372005eec.27.1768947379600;
+        Tue, 20 Jan 2026 14:16:19 -0800 (PST)
+Received: from [10.71.113.255] (i-global254.qualcomm.com. [199.106.103.254])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b70d7f729bsm1680791eec.16.2026.01.20.14.16.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 12:10:45 -0800 (PST)
-Message-ID: <947c20fe-5def-4c2e-acff-5da76bde3f9e@broadcom.com>
-Date: Tue, 20 Jan 2026 12:10:44 -0800
+        Tue, 20 Jan 2026 14:16:18 -0800 (PST)
+Message-ID: <5cec9127-bdc5-49d7-80e1-2ae26f81163c@oss.qualcomm.com>
+Date: Tue, 20 Jan 2026 14:16:17 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -102,91 +108,176 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: bdc: fix sleep during atomic
-To: Justin Chen <justin.chen@broadcom.com>, linux-usb@vger.kernel.org
-Cc: swboyd@chromium.org, chunfeng.yun@mediatek.com, balbi@kernel.org,
- gregkh@linuxfoundation.org, bcm-kernel-feedback-list@broadcom.com,
- alcooperx@gmail.com
-References: <20260120200754.2488765-1-justin.chen@broadcom.com>
-Content-Language: en-US, fr-FR
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20260120200754.2488765-1-justin.chen@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-X-Spamd-Result: default: False [-1.96 / 15.00];
+Subject: Re: [PATCH 1/9] dt-bindings: soc: qcom: eud: Restructure to model
+ multi-path hardware
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260116232106.2234978-1-elson.serrao@oss.qualcomm.com>
+ <20260116232106.2234978-2-elson.serrao@oss.qualcomm.com>
+ <20260117-courageous-chamois-of-focus-20d5d5@quoll>
+ <sfazro75vspadpe4wco7zvlalcy2wbrbdjx2wn7lyonjgw22sf@z73u67pinusx>
+ <4d6ffe96-2113-42fd-97e5-42247f073aef@kernel.org>
+Content-Language: en-US
+From: Elson Serrao <elson.serrao@oss.qualcomm.com>
+In-Reply-To: <4d6ffe96-2113-42fd-97e5-42247f073aef@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIwMDE4NSBTYWx0ZWRfXzyMRqVu4fPaL
+ RZCDhSglxCQEQtB7Wdr1aiMyBvvEjB/Ss8UStoFhNq6tIGmLyuoPz+Pz7oC3qB5sdulnNEsn2Sc
+ l8pMq7tVQkSKK+x3craEuh1OhZibyn6OYGCcRBrNcnB4W4gRVUAo8/Iw0sBPkqWvFJrLXqmkFcB
+ Gnu8B3XbeOz/aM3WgN2Ubs8xN9tAQFkKHHawPEzQktWRC+7T/gEHnnmw6zlDbjqu94SjZKoN1TY
+ hvrZely6Kz/gyCK6ApfrasioiNImJnswjvQJmurf0VzOkZOl/9qiD7ybr2wYWvUFNwGrOwEtkCJ
+ +8ZVRnkyHPtzRBlvWr7rNghL8iahK6VHrtYXa8g+PCKpUqyFzxNvzW/ZkaTb9g9+kO+FAegav5H
+ gXWe46rfQ9KBMvOR7gJkMI4YOs8FL/NCCaX4wlObGGBU8z/zKGienHf3aqKeFIoQf/Jm7wIC6Vl
+ ma/LMV2M8YXTg6wqk+g==
+X-Proofpoint-GUID: N73vXPopr7nxo83kuZ1xnfztZkyWNx5s
+X-Proofpoint-ORIG-GUID: N73vXPopr7nxo83kuZ1xnfztZkyWNx5s
+X-Authority-Analysis: v=2.4 cv=JeSxbEKV c=1 sm=1 tr=0 ts=696ffeb5 cx=c_pps
+ a=cFYjgdjTJScbgFmBucgdfQ==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=esL1I7lv05GZoeN1qSMA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=scEy_gLbYbu1JhEsrz4S:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-20_06,2026-01-20_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 adultscore=0 spamscore=0 phishscore=0 clxscore=1015
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2601200185
+X-Spamd-Result: default: False [-0.46 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_POLICY_ALLOW(0.00)[broadcom.com,reject];
-	DKIM_TRACE(0.00)[broadcom.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[chromium.org,mediatek.com,kernel.org,linuxfoundation.org,broadcom.com,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-32555-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[qualcomm.com,reject];
+	TAGGED_FROM(0.00)[bounces-32556-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,broadcom.com:email,broadcom.com:dkim,broadcom.com:mid];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[florian.fainelli@broadcom.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[elson.serrao@oss.qualcomm.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
 	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: B5F964C264
+X-Rspamd-Queue-Id: 5B2284D625
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 1/20/26 12:07, Justin Chen wrote:
-> bdc_run() can be ran during atomic context leading to a sleep during
-> atomic warning. Fix this by replacing read_poll_timeout() with
-> read_poll_timeout_atomic().
+
+
+On 1/19/2026 11:20 PM, Krzysztof Kozlowski wrote:
+> On 19/01/2026 20:58, Bjorn Andersson wrote:
+>> On Sat, Jan 17, 2026 at 12:57:58PM +0100, Krzysztof Kozlowski wrote:
+>>> On Fri, Jan 16, 2026 at 03:20:58PM -0800, Elson Serrao wrote:
+>>>> The Qualcomm Embedded USB Debugger (EUD) hardware can intercept up to
+>>>> two independent High-Speed UTMI data paths, depending on the SoC
+>>>> configuration. Each path operates independently with:
+>>>>
+>>>> - Dedicated PHY interface
+>>>> - Distinct USB connector and controller associations
+>>>> - Role dependent routing
+>>>>
+>>>> Model these hardware paths as separate eud-path nodes to accurately
+>>>> represent the physical topology and add below per-path properties:
+>>>>
+>>>> phys: EUD exposes a High-Speed debug hub that relies on HS-PHY for its
+>>>> operation. This property references the HS-PHY associated with the UTMI
+>>>> path.
+>>>>
+>>>> usb-role-switch: Indicates that the USB port on this UTMI path supports
+>>>> role switching. In device role, debug mode inserts the EUD hub into the
+>>>> UTMI path. In host role, the EUD hub is bypassed and UTMI traffic flows
+>>>> directly between the PHY and the USB controller.
+>>>>
+>>>> This change breaks backwards compatibility, but the previous binding
+>>>> omitted critical resources like PHY and did not describe per-path
+>>>> topology. Without these modifications EUD cannot be guaranteed to
+>>>> function.
+>>>
+>>> It was working for 3 years, so your guarantees are just imprecise. FUD
+>>> is not an argument.
+>>>
+>>> Qualcomm task at 2022 was to post complete bindings. These were posted
+>>> and accepted. Three years later you say that previous posting was
+>>> bollocks and this cannot even work?
+>>>
+>>
+>> That is correct. The description of the hardware that was provided when
+>> this was upstreamed and the binding that was accepted based on this
+>> description is wrong.
+>>
+>> There's absolutely a value in maintainting backwards compatibility in
+>> general, but is this one of those cases?
+>>
+>>> Nah, take responsibility of what you did in the past.
+>>>
+>>
+>> In my view the responsible thing is to accept that we got it wrong and
+>> make sure EUD is enabled end-to-end so people can actually use it.
 > 
-> Fixes: 75ae051efc9b ("usb: gadget: bdc: use readl_poll_timeout() to simplify code")
-> Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+> I would expect to see what is not working. This is in mainline for three
+> years, so the assumption is that it was working for these three years.
+> If it wasn't, this should be described and "cannot be guaranteed to
+> function" is just imprecise.
+> 
+Thanks, Bjorn and Krzysztof, for the feedback.
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+Let me clarify what I meant by “cannot be guaranteed to work”, as I agree
+the phrasing can be improved to more precisely convey the intent.
 
+The concern is not that EUD did not or could not work historically.
+Rather, the issue is that the hardware description provided by the
+binding does not explicitly describe ownership and control of hardware
+resources that EUD depends on. As a result, correctness of EUD operation
+relies on behavior outside of what is expressed in the description.
+
+Concretely, the binding does not reference the HS-PHY. In practice,
+EUD may function because the USB controller (e.g. DWC3) keeps the
+PHY powered and configured.
+
+However, this relationship is not described as a contract in the
+binding. The USB controller may legitimately relinquish PHY control as
+part of its own power-management or low-power transitions. The EUD
+hardware is capable of operating independently, but doing so requires
+EUD to have explicit control of the PHY.
+
+The hardware specification lists the PHY as a required resource of the
+EUD debug hub. Not modeling it in the binding therefore leaves the
+description incomplete, because EUD resource requirements are being met
+implicitly through another hardware block (USB controller) rather than
+being described directly.
+
+In addition, the hardware can expose multiple UTMI paths (dual-port
+EUD), which the current binding cannot represent.
+
+The intent of this patch is therefore to correct and tighten the
+binding so that the hardware resources and topology EUD depends on are
+explicitly modeled, rather than relying on side effects of USB controller.
+
+I will update the backwards compatibility justification accordingly.
+
+Thanks
+Elson
 
