@@ -1,128 +1,125 @@
-Return-Path: <linux-usb+bounces-32518-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32519-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 905F7D3BAE8
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 23:31:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A4D8D3BD60
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 03:00:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 343FF302C9FE
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jan 2026 22:31:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ED828302C218
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jan 2026 02:00:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CAA52F6168;
-	Mon, 19 Jan 2026 22:31:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B0C26B0B3;
+	Tue, 20 Jan 2026 02:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="oGfcNWI+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yo1ANFQn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07FC271456;
-	Mon, 19 Jan 2026 22:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F299226059D
+	for <linux-usb@vger.kernel.org>; Tue, 20 Jan 2026 02:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768861897; cv=none; b=lV/Hm42CRm5D4K07ISIn4vgNHZKe+C1H47l5N8ZxZoE1c9kPX1smUiKPyL/IG7gROaqkmNLnUKneZSGDlmmG5gleCU4BPeqoRWv2IIdsXc5YL2/mDFoSZzmW9nCFwky0xoaL0F+Y8K0puo59yXc31gYTMTbeVmAYjm2NOaaRzCg=
+	t=1768874405; cv=none; b=TJlXV5EPmIwz/CDa24/cJ8ZLuMTpaoycn6/JqZ5wGoTM2ykMbgYc5pZYhjWuUHCqDll7nDsjD3NNwI/cOa0J++SYGrv/hTdhEv3VV5NH+tqL4C/0dNQ2PRJwxVeKG03G2kHKezgb3LqGo7tqVfnatvazNJk2W9Utu6VGqlEC5JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768861897; c=relaxed/simple;
-	bh=WjOKhWuvw4vGG+LRF6yQr8By3VhxyfCckeWzNgP5pqI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aBYbXNABscHp6Tyrv6zw8blIq5Gbse05mjG6j9PZEluOBk98dF3RjXQG2dpNo3ciLYKTvjS1Qe0zV1sTme5QkL4zPWiyMJsPRComzO7oca4QB2rIDpBlF1PtBjX/BTsoBL1PthQtB6W4dSjCTr8WkIPRmSrWyfgC5cVTjiYl1XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=oGfcNWI+; arc=none smtp.client-ip=166.84.1.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
-	(No client certificate requested)
-	by l2mail1.panix.com (Postfix) with ESMTPS id 4dw4Vc149KzDQF;
-	Mon, 19 Jan 2026 17:14:00 -0500 (EST)
-Received: from [10.50.4.47] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4dw4VR4JwWz41h6;
-	Mon, 19 Jan 2026 17:13:51 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1768860832; bh=WjOKhWuvw4vGG+LRF6yQr8By3VhxyfCckeWzNgP5pqI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=oGfcNWI+7bD/5fUmhx4YFsAREDIaCVSC2I363dsRJPYrpypiYP4620jnWRXxJSBad
-	 EnDjdjZgUb1u24Z007LAt+de2lM+09K69CQXkXpHIbpj222/Wsvk/tNRFmH960jH3y
-	 3D52TbhlxB+bt80SerJvxeN1jm4UQez5Goy1NhEQ=
-Message-ID: <e821e8a1-8256-4f80-ab30-95f066d25946@panix.com>
-Date: Mon, 19 Jan 2026 14:13:50 -0800
+	s=arc-20240116; t=1768874405; c=relaxed/simple;
+	bh=rA4jn33vZY454aEHCpZgQgk3ckOe5SHUWCFHGgE003w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NJ5wOGaecns5g2I1vTQ83nioUUHOzkYocRiLFJFaU8+GPW8isteN9gaqfUDdtLNPGgoVdmI7ycW3Nvy1OH+obadixijlae+fqyy8lmF0XDW6g8e4+7L9c1qmiFTZJLZgbATzD1wUjvQWo1QLNJE4PxZ3oGGMb3ryX19Ra/fA7vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yo1ANFQn; arc=none smtp.client-ip=209.85.216.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-34f0bc64a27so2163484a91.1
+        for <linux-usb@vger.kernel.org>; Mon, 19 Jan 2026 18:00:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768874403; x=1769479203; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m2tWDW2nXGL6Hs/Iie8O4LsIJWjCPEnqBn9C1IoyWz4=;
+        b=Yo1ANFQnYNuJ/x21KukehQn4psvpFDBOV+dVtviwS4cEldoQve21L0CLLIVsIQDafO
+         nE5i2Sntkzr5MF1MxJnHEwscHo6fhvxVoxG+9ie59LTYddtanCrQ9TFuTec8TgNYcUfe
+         3sTbUq1X0Uee1wP2PART9aC62iEjoJ8ZbHdiQfq0DVeIpqPGVn3+iLSgNoGjasqhl8em
+         IFSAksNQQMZoOI2mawtKRp7Uc9NnvidVhFzUXEWhnT4+6PusbCN+5OYfnLzBTgTKnjSj
+         ydGUhy2uaTgRUszOeRrLqZaovjyHnUoWMgA6LOOivvd5t0feewYnD2ZW9a3ylApHYCkC
+         emsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768874403; x=1769479203;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m2tWDW2nXGL6Hs/Iie8O4LsIJWjCPEnqBn9C1IoyWz4=;
+        b=MjAaqKA2pkbCEqgxJoxEy87ngWJiPabBTG8RlwxD5ikMs3CR8sPEQqajGgeg8XoAOo
+         50eG7rucU+LuwaoTvcuiA5W+6EKluj8li3xOt1RByzr9OQoevwl0q7VJlHVpvvchWD9G
+         n3fG5ZOlinlNADT6FL/wCSBsMGDYMXK8JYVPLWunRXeL24xvhiWHQVM/xy+AnmxeniyU
+         Gz3X6prH+N3aJZRZ4/yV7ZId56dI5IzCuaLGmZ54zsCwm8KRnK/BKHq//vXiKDntANAd
+         XbZKw9PQ0ZtL/fyFIISizM2kkNPuyt9HrcUdSktQ9jr+JpYfrivk34/z/3IHz3eRzTsh
+         7Q2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVo74dyTsv1QwHRBGkIlzLrPD7EwA2H+Z5w/JENzqxAmZ4ZlU3KXzYQvuGCviGATrSHPghN7VDx6Wc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDTk3o0SwDwmlkr0DUEl1sHh9TH53BLghtnz5evxUzpGCB0xJb
+	rOPEz64Ys+6nAOtRVkxsHRRMmuQAvopB4L262FeuSvp/zOBnamf0IB8g
+X-Gm-Gg: AZuq6aL/vGJMbwqMhcLjXfiDnzkn5ue0S1pCaHriiyU0WIooHrSsKQcMQadbNcSzZwM
+	WNOemhe58tRZRtc1hSg+Q2XE+BU+DTEUZhjJ2oawQtEq7A6nVlsjUfscKHd7YHKgh7whQU34kae
+	Fi1JUWYXK9em6NEciyEBB8z0S7LNK3ZmcgLmMHhwUxMMuEFMkTBH39RpBoXkgmQdbNfi2CJc/dR
+	QDcAeQw3QaVgXVp18UToB7/aRxhlneM9Vp7eSDrpAPNgP0AzUFXMnzRpQW5pr8QmeUbXhZpvtP6
+	rqfXJL2/xNq1ErA9hpzq4deF/PZtEtk4gL+SMT/9QFJI/CDBOBKpSP2UFU02dSOk2zq5rZbdgh5
+	GbRDA3IbNjmBbAfpXc3xamidUSEgkgsdBmWNMJLahWhZ/nWP0RdoQzUXjQ7pSnKXH0YVA5zvEJC
+	VVFZctnxf5i+wSdcDwRprKQHXRdgQ=
+X-Received: by 2002:a17:90b:1c87:b0:341:88ba:bdd9 with SMTP id 98e67ed59e1d1-3527325d1a2mr9413905a91.25.1768874403233;
+        Mon, 19 Jan 2026 18:00:03 -0800 (PST)
+Received: from insyelu ([111.55.145.213])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-352678c6a10sm12725180a91.15.2026.01.19.17.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jan 2026 18:00:02 -0800 (PST)
+From: Mingj Ye <insyelu@gmail.com>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	nic_swsd@realtek.com,
+	tiwai@suse.de
+Cc: hayeswang@realtek.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mingj Ye <insyelu@gmail.com>
+Subject: [PATCH v2] net: usb: r8152: fix transmit queue timeout
+Date: Tue, 20 Jan 2026 09:59:49 +0800
+Message-Id: <20260120015949.84996-1-insyelu@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] thunderbolt: Fix S4 resume incongruities
-To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>,
- "Katiyar, Pooja" <pooja.katiyar@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
- linux-kernel@vger.kernel.org, Andreas Noever <andreas.noever@gmail.com>,
- Yehezkel Bernat <YehezkelShB@gmail.com>,
- Pooja Katiyar <pooja.katiyar@intel.com>,
- Rene Sapiens <rene.sapiens@linux.intel.com>, Kenneth C <kenny@panix.com>
-References: <20260106053749.61440-1-superm1@kernel.org>
- <20260107093353.GO2275908@black.igk.intel.com>
- <158442b3-28c2-4f8c-ba42-0b9c6661c650@kernel.org>
- <20260108114205.GS2275908@black.igk.intel.com>
- <ad8cf89d-a171-4e72-996e-8b09d16f9017@kernel.org>
- <20260109072318.GU2275908@black.igk.intel.com>
- <eb4685e6-04fc-4d21-bd98-2a297c183966@linux.intel.com>
- <8cf57879-5fa7-4d23-afb4-6ef99f0ce97a@kernel.org>
- <5834100b-788c-4520-9b70-f462f65149ca@linux.intel.com>
- <6438b5a3-a0f4-4c7d-9f56-59cdf7f5148f@kernel.org>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <6438b5a3-a0f4-4c7d-9f56-59cdf7f5148f@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+When the TX queue length reaches the threshold, the netdev watchdog
+immediately detects a TX queue timeout.
 
-On 1/19/26 11:59, Mario Limonciello (AMD) (kernel.org) wrote:
+This patch updates the trans_start timestamp of the transmit queue
+on every asynchronous USB URB submission along the transmit path,
+ensuring that the network watchdog accurately reflects ongoing
+transmission activity.
 
-> On 1/17/2026 10:57 AM, Katiyar, Pooja wrote:
-> 
->>> I have confirmation the hack patch does help the issue for us too.
->>>
->>> If your patch doesn't work another logical solution could be to destroy
->>> all the tunnels as part of the PM freeze callback (not just the DP
->>> resources).  Maybe even unify the suspend and freeze codepaths for more
->>> opportunities for code reuse?
->>>
->>
->> Thanks for confirming the hack patch helps!
->>
->> We are actually working on a solution that releases the DP resources and
->> suspends the switch as part of the freeze sequence. This way the 
->> hibernation
->> image that is stored doesn't contain any active tunnels, and during 
->> resume
->> we get a DP hotplug notification for a new tunnel, similar to S5. So far
->> this patch is working fine but is under review.
->>
-> 
-> Thanks.  If you want early testing from us too before you're ready to 
-> post publicly feel free to ping it offline to me too.
+Signed-off-by: Mingj Ye <insyelu@gmail.com>
+---
+v2: Update the transmit timestamp when submitting the USB URB.
+---
+ drivers/net/usb/r8152.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I'd like to get a CC: on that, too.
-
-I've been testing that hack patch and will test further later tonight.
-
-The issue I'm trying to chase down (and not sure if any of this will 
-help with this, I wonder if it's really BIOS/EC related) is often times 
-that after a suspend (or hibernate, but I use "suspend then hibernate", 
-which I think does both and chooses which to use upon resume) and then 
-connect to a different dock (or setup) from the one I'd suspended with, 
-sometimes I have to unplug/replug my TB cable, otherwise I either get no 
-recognition of my new display setup (and sometimes TB devices) or it'll 
-try and use the same monitor resolution of the previously-connected 
-monitor (as if the TB subsystem doesn't recognize things have changed).
-
--Kenny
-
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index fa5192583860..880b59ed5422 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -2449,6 +2449,8 @@ static int r8152_tx_agg_fill(struct r8152 *tp, struct tx_agg *agg)
+ 	ret = usb_submit_urb(agg->urb, GFP_ATOMIC);
+ 	if (ret < 0)
+ 		usb_autopm_put_interface_async(tp->intf);
++	else
++		netif_trans_update(tp->netdev);
+ 
+ out_tx_fill:
+ 	return ret;
 -- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+2.34.1
 
 
