@@ -1,165 +1,175 @@
-Return-Path: <linux-usb+bounces-32605-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32606-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MEFbFbI/cWnKfQAAu9opvQ
-	(envelope-from <linux-usb+bounces-32605-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 22:05:54 +0100
+	id MEzHG8Y8cWnKfQAAu9opvQ
+	(envelope-from <linux-usb+bounces-32606-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 21:53:26 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE0295DC83
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 22:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D3095DA4C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 21:53:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 30A1C50E6E1
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 20:38:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 96FBBB47FE7
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 20:40:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0823F0765;
-	Wed, 21 Jan 2026 20:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31A22410D17;
+	Wed, 21 Jan 2026 20:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CE2/R3+H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EVVJbuxn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2F03E9F7A
-	for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 20:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59CEF40F8C6
+	for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 20:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769027926; cv=none; b=Kem2EctGFfPwjnW0dLHlTA64fQG3z0oo92oQrD8i4bFirOTTS74eMg3yi+t0NmOj4y9yVuZxm3u09dRDJ+9Pdjubbq+kHQbue4WsBkuiOpASfsbas0y+smn89x8KvEmNgXJAuTXp9w89/DJBT3yGMKYbNcf8zkhXT99g8yVvTsk=
+	t=1769028012; cv=none; b=pINbeWfeXASbP2axLG5daVYEDN0gOIp9/5B86voZFShYKmecLMrMITu3o9xoF215p95npMvhEtLD04urWDFyTY1D0Pan/xYDNklPyeYtXJr9vwrB3cKjvTBJTEL/u1t9vahrKr3ppcwt3V95+WvAtCprCtslnPVmu164rfy0coI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769027926; c=relaxed/simple;
-	bh=2RKckPP5ngNyoE4+uH2QyzCEd/ggvt9mkG1KPdRphWI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pY0Rfgtaa/jDQSRS+2h7oDGTE8oNRtWJtKh6QPQuF79rYBVUwQFVtyrKjzKkvoQix9gCB2sfzFmPy7lHTTDM4jF0TKjLcKt4nbkymsmvm0yBdfZe0grQ2xS6j7+VpbizVwUCCWx1Nc4rQYwUzS/zlPCswL7W7mkOMBH418RT4r0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CE2/R3+H; arc=none smtp.client-ip=209.85.167.52
+	s=arc-20240116; t=1769028012; c=relaxed/simple;
+	bh=V2zWVys+PtkXckOdQvGark86ZIH7sM9/WDKxGNnhPJY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rEx9RxZTy4YLuRHRbPkmTpsEHjKsdiqAiV74FtlqxQiXv7DvQWB5WLAcq7IqKgaC6eVvoGb6r3R1WmVRlsevbc1ev+JTd3wEX/7z0ma2/iGeceGCz6YI7JXPE5TFhmd8pVaJw8Yph5JgmWJALbqDOdY2AprLzyVY56bcRpT+wYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EVVJbuxn; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59b77f2e43aso1837111e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 12:38:44 -0800 (PST)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-81f39438187so203328b3a.2
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 12:40:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769027923; x=1769632723; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=519MuNYkMTKdDB+LqzWyS62gm9pjLZ7z4kHuairXCLQ=;
-        b=CE2/R3+HJR539/kg9vK4DLawey+vf6ymapjtDBO4nDK0RomB/I2h4qPraBNaVgJZ8i
-         cZ1QCqMmKIdN8KsVugDFpg8peE/3qJkvRNPH7p6T/PgUcfrCRbxn88JdWMTc7aDug3+r
-         1lJENIXxZooQiMcX6iwmxfLxPdNrG2CuFJj6j4h99YNBpp7KCh5UwGkCBsnP0ZriV0Wt
-         XfiHXONT/6pNvcIOZ+tvtz24xLrpBAdJ/WDU2dBLBo8R0cRYS7nRT2/bO7oMfMiGkJRP
-         YfCxS0wEnrUZFYfGbtDZuHDbjupJf7BLq1+9DguPwKhhdsL/8qChkYfjGBxw27T4XTc4
-         MMLg==
+        d=gmail.com; s=20230601; t=1769028008; x=1769632808; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JrCFsj8n1PTzjRt8oNof1XPee5TPhQFTql5gKP4FrlQ=;
+        b=EVVJbuxn2AoHWKDHkC8jH94dVr2SP59YuRt5Sh1TVeIjqiBijCcEbyWIe4O8pxV/E2
+         xzBKszMJDhFKtaHd5u+JqVLORELxUWCmrHUoMxHKjp0yii3rYH437VdRfyg5tnH4Afmx
+         +4NDRGOW5vD4MmGETLUHYk6iUeLe+PPAhdmdOHYvI//6IWmzxiSQAknsIemUIs3Gw5cx
+         5478eUUaiHHpuzVihuY0YidjYd366TNKy8dHE6r214cam2uOUQtCHKPblo/SQQ4oJqEk
+         GyeZ0K9e2uSHi/sSORCt9l6CBbGDrNpyyQNq8/GL72N5Yxjt0lqriBWuQJ+oCH9TCrQ6
+         5oNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769027923; x=1769632723;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=519MuNYkMTKdDB+LqzWyS62gm9pjLZ7z4kHuairXCLQ=;
-        b=rM6yfIudIwy0XdlEhlqSaNTmrmMkVuXddLEUkzQOtNnc6g/DB4Sgdn2GOP/MVzJcFy
-         45DGQusXNVV3Hp9chRojpirDbONWwO8HhUbh4Hz8sLXtxEHf9maE9Lo+TBmJd7wVJTu1
-         rao2eUxy9pm/5y6AjM0FIWKlqxc6BSDlUx1DSMcnuAN8TP2LwxEWbjb3lCZCl+7KB70+
-         VoXNQJCAIClPuCkZsWrQAErSAcVRyv5/1KDLglonPlt8s8QxKT0SAWEyj692D3Y3uFyc
-         yhJomXazxPQv6ioHc/Iu5LeWUo9CkxDWXVHRoVk9+/7GJZbhyyqs3fSAVGgixT2B5XbJ
-         N/ig==
-X-Gm-Message-State: AOJu0YxZAB7QDB4wN174HNY4A31RguhvTv5kKeyduAEcK8z0Pfdtk8np
-	jxfXbYq1EJEKJ4EngnxgDbEFonh/oRDCdSP8flc41hFGobLil9ao2zeM
-X-Gm-Gg: AZuq6aKEH7M5GyDYWK8uv2rKlpmx6xehS3rU5ppQSKeU+bex2bH8AmvHoOucjrk4wJW
-	Qb0ImKVkL0VZbxLRkhbc4CsnGnqN9D0s8/gYCyYmEauUfV2ktvp+D13olQxAce6mKWJyPhL7QOm
-	3j6L3ZKczIn39+wX+Ng0AIFazPWaC2pB67Ov26Gurh0BxcmimSaRd/3kZY6R7LBnsJ6rn+qmXrD
-	kAfWopSMMI1PAa1geHLx0TkHsSwGrnwyYWi1FU3tySCpX6om1SpZkHi3xoRsQL2q5ndyf5XNqeT
-	xp+D/z7IcLSZgiZCHuuYu3//SO8mnIef1Fi27T8tU6wxP1yys41WiLLd4YpdMOfOMuvlhMvtJAO
-	qC7rFbq9PAwL5nwYFz0VGF6oIPhmURPL23EWJUq246xl8dr1Eo4IRcw6cIgZlKlkzrBLnrRqjgM
-	L32uz3imeSK1vsLTA7XW5fe5lcnlbE/URc87B0i6JVU0M3ikYsTIPP9fivZoVkmYbrNx6iCw==
-X-Received: by 2002:a05:6512:1c5:b0:59b:9c8a:d8bd with SMTP id 2adb3069b0e04-59dd7be09ecmr143195e87.6.1769027922389;
-        Wed, 21 Jan 2026 12:38:42 -0800 (PST)
-Received: from ?IPV6:2a00:1fa0:427d:cc56:f2e6:a773:dc06:ac10? ([2a00:1fa0:427d:cc56:f2e6:a773:dc06:ac10])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59ddd446adbsm343e87.100.2026.01.21.12.38.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jan 2026 12:38:41 -0800 (PST)
-Message-ID: <aef9a040-aa24-40f2-83ae-44d2c74dc759@gmail.com>
-Date: Wed, 21 Jan 2026 23:38:39 +0300
+        d=1e100.net; s=20230601; t=1769028008; x=1769632808;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JrCFsj8n1PTzjRt8oNof1XPee5TPhQFTql5gKP4FrlQ=;
+        b=JJ/cWKiJW8NC+RiMnfpIK2BS7qH/Texn3y/i8X7NJezg9Xin7AMMQV6PyU7DcIlRHs
+         3ev2Tu4djS0o6zfX3cJWSMbJkEJIPbfEI2HGNWlgarJczoA/xJB1zQDX1mlCOH9xucxD
+         niXS8U17ZUTeJD+U/40cWcEmSqZyKJur8ZBeEw6rS+W5FyOQXNJOinktICtk6ql28doz
+         9poT8m76KDN9+UST1snVPoB+ALcnu8N0GHfgBTmx1Jk4pqhJkD1bcBcAIqJXazetA/ep
+         gyQQJT/zFb3FffsGxjdoD1Qn4JQUnv/Guu738TOJAohP9XpWi8c7WF2Duge4TTclE566
+         k6MA==
+X-Forwarded-Encrypted: i=1; AJvYcCW2fu/DIgYH8iRIELHD4S3+aEpjmSLD4GCwum7QYXPd8uORsZIPNfM6270fqsfGN0/mEXuOpSm7YIc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZy9Bytn+Y8Okv1gjE5LeckIukZWDTfm2u779/78EBtZApqOTm
+	RwycYe38FSss9H+rtZffZKUpPlasKVmdgHWZjebqrMrq3WDeCgQA4dk=
+X-Gm-Gg: AZuq6aKIrA0UYNqiT7tBvhDCBNat52NESM2kM8/QgkJd0wcDLc5sgTCSnLx/XF0hM0V
+	isufeLRxNP6U9WQH0Tmm2O5x/MoZXOw83/dhY+pR/e2fAq+2Yx6txh8kKZsQGusZbPHno8g3Au2
+	gDu5HA3UwtuB450EDFchOpq3odwgq4ugSDS2nZRFnRZX3DAs+oZTtScvw4LEKw0WpAWz08vqbd7
+	WsGV9yom81MBAONjMz1k7ITZFZuprqZEX2iVckLcMA3FsutG7z1YRDxo3oywOkPNEx09vhwvSRj
+	wc0NiI4H2rJ6aBEr2scjoaaCdSaPqOQxB+x3wDx8dkUSoz9YKWuruBd4r1Xf0uoKosTneAL4QXM
+	4otlS02/Wz+M9fv1+T537qCY6XOi21jMKe9ZN53EYSPLvoooNEWIcLpSODWX+G9YeEIPBEYcdtM
+	e3nycrG1S+4URZ2to=
+X-Received: by 2002:a05:6a00:27a3:b0:821:81ef:5de8 with SMTP id d2e1a72fcca58-82181ef6aa9mr1177615b3a.12.1769028008057;
+        Wed, 21 Jan 2026 12:40:08 -0800 (PST)
+Received: from DESKTOP-BKIPFGN ([38.76.140.13])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81fa12787e6sm15734799b3a.37.2026.01.21.12.40.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jan 2026 12:40:07 -0800 (PST)
+From: Kery Qi <qikeyu2017@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: balbi@kernel.org,
+	jaswinder.singh@linaro.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kery Qi <qikeyu2017@gmail.com>
+Subject: [PATCH] USB: gadget: validate endpoint index for max3420 udc
+Date: Thu, 22 Jan 2026 04:39:45 +0800
+Message-ID: <20260121203944.1898-2-qikeyu2017@gmail.com>
+X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usbip: Reduce CONNRESET message noise in dmesg from stub
-To: Shuah Khan <skhan@linuxfoundation.org>, valentina.manea.m@gmail.com,
- shuah@kernel.org, i@zenithal.me, gregkh@linuxfoundation.org,
- ignacio@hernandez-ros.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260121163721.11933-1-skhan@linuxfoundation.org>
-Content-Language: en-US
-From: Sergey Shtylyov <sergei.shtylyov@gmail.com>
-In-Reply-To: <20260121163721.11933-1-skhan@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.46 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32605-lists,linux-usb=lfdr.de];
-	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[linuxfoundation.org,gmail.com,kernel.org,zenithal.me,hernandez-ros.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
+	TAGGED_FROM(0.00)[bounces-32606-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,linaro.org,vger.kernel.org,gmail.com];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sergeishtylyov@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
+	RCVD_COUNT_FIVE(0.00)[5];
+	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
+	FROM_NEQ_ENVFROM(0.00)[qikeyu2017@gmail.com,linux-usb@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: AE0295DC83
+X-Rspamd-Queue-Id: 1D3095DA4C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 1/21/26 7:37 PM, Shuah Khan wrote:
+The max3420_getstatus() and max3420_set_clear_feature() functions use
+the endpoint index from USB setup packet's wIndex field to access the
+endpoint array. The index is masked with USB_ENDPOINT_NUMBER_MASK (0x0f),
+which allows values 0-15, but the endpoint array (udc->ep) only has
+MAX3420_MAX_EPS (4) elements.
 
-> stub_complete() prints informational messages for each urb unlink
-> filling dmesg. Change the message to dev_dbg() similar to vhci
-> reports the CONNRESET condition.
-> 
-> Reported-by: Ignacio Hernandez-Ros <ignacio@hernandez-ros.com>
-> Closes: https://lore.kernel.org/all/0101019b92e81c20-09906fb4-d5e8-40a6-9192-ab693eef4179-000000@us-west-2.amazonses.com/
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->  drivers/usb/usbip/stub_tx.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/usbip/stub_tx.c b/drivers/usb/usbip/stub_tx.c
-> index 55919c3762ba..4cae452bfadb 100644
-> --- a/drivers/usb/usbip/stub_tx.c
-> +++ b/drivers/usb/usbip/stub_tx.c
-> @@ -55,7 +55,7 @@ void stub_complete(struct urb *urb)
->  			 "stopped by a call to usb_kill_urb() because of cleaning up a virtual connection\n");
->  		return;
->  	case -ECONNRESET:
-> -		dev_info(&urb->dev->dev,
-> +		dev_dbg(&urb->dev->dev,
->  			 "unlinked by a call to usb_unlink_urb()\n");
+A malicious USB host can send a specially crafted control request with
+an invalid endpoint index (>= 4) to trigger an out-of-bounds array access,
+potentially leading to information disclosure or kernel memory corruption.
 
-   Please re-align this line for it to start under & again.
+Add validation to ensure the endpoint index is within bounds before
+accessing the endpoint array.
 
-[...]
+Fixes: 48ba02b2e2b1a ("usb: gadget: add udc driver for max3420")
+Signed-off-by: Kery Qi <qikeyu2017@gmail.com>
+---
+ drivers/usb/gadget/udc/max3420_udc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-MBR, Sergey
+diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
+index 7349ea774adf..9d183a986380 100644
+--- a/drivers/usb/gadget/udc/max3420_udc.c
++++ b/drivers/usb/gadget/udc/max3420_udc.c
+@@ -548,6 +548,9 @@ static void max3420_getstatus(struct max3420_udc *udc)
+ 			goto stall;
+ 		break;
+ 	case USB_RECIP_ENDPOINT:
++		if ((udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK)
++				>= MAX3420_MAX_EPS)
++			goto stall;
+ 		ep = &udc->ep[udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK];
+ 		if (udc->setup.wIndex & USB_DIR_IN) {
+ 			if (!ep->ep_usb.caps.dir_in)
+@@ -596,6 +599,8 @@ static void max3420_set_clear_feature(struct max3420_udc *udc)
+ 			break;
+ 
+ 		id = udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK;
++		if (id >= MAX3420_MAX_EPS)
++			break;
+ 		ep = &udc->ep[id];
+ 
+ 		spin_lock_irqsave(&ep->lock, flags);
+-- 
+2.34.1
 
 
