@@ -1,117 +1,130 @@
-Return-Path: <linux-usb+bounces-32569-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32570-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qBzAFhs6cGmgXAAAu9opvQ
-	(envelope-from <linux-usb+bounces-32569-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 03:29:47 +0100
+	id qONtBgI+cGnXXAAAu9opvQ
+	(envelope-from <linux-usb+bounces-32570-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 03:46:26 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 124094FC80
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 03:29:47 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71AB54FFF4
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 03:46:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DE82A782489
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 02:28:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DEE8596F78B
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 02:43:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF3A8340D84;
-	Wed, 21 Jan 2026 02:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD3F935293C;
+	Wed, 21 Jan 2026 02:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYYrENlP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tkc5puMY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D92F18DB37;
-	Wed, 21 Jan 2026 02:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E84350281;
+	Wed, 21 Jan 2026 02:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768962514; cv=none; b=dFBz4qrpaiODr9GP9VnU6YyHB4oG2t8gGkRlAzxnyO3zb6wnR0NeFP/6Tr6+REnKDQSBAUoZxbTqwE6hX/3X1o/zWQNJBd9HXi875fMYUEt6NSg2Wc3zI4ETgTi1ocPiS4fAkqBuAxM5BNnUNAA/dK00IAMkgJOPo+QhvELs+iM=
+	t=1768963239; cv=none; b=QdPOCltBrQo+A7sxSx5AijqFYeROTVCvBAkjSEac1TgSF5NGc4/I5NjEAk7TtqVZNP4LVJyKcMduGPoJX8zV83p5t+OMHIOnMjRTla6bdVxFDDXylYVGRjZgh2uTLrHMFzIuSkA9G3s5fXvY1Q9xpulaItj6aokOsklm3DTsaDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768962514; c=relaxed/simple;
-	bh=vTfHbIosBhIGcDNmkGqJUvupsZF9T0Fme6/vw/4XXAs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hemivUq43U3HcoayxAPw9thDoauSMA8Zsx232enziqUXJZ4YjRZiTFAdfQh50vt81MDtz04CxQ1De4rJR5fuMpQ7+CU/zmat47wlZKIITnIj9d4tLREInJTNv7bqpn4zUjX3w5ez6JoVrdFmajdctWQTGks40+n9hUWJoR28E+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYYrENlP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 375E9C16AAE;
-	Wed, 21 Jan 2026 02:28:33 +0000 (UTC)
+	s=arc-20240116; t=1768963239; c=relaxed/simple;
+	bh=EnxmJpB0NNpUFsPj1aBMHwqtF7MLvVsZNzqIxPdxnHs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Kp4sfw2eRKJHpQP2+MElFJdkZ9sQvOvGIK1GFqKUDNc5xv434HrrFkIB8IZdMvY0SIv4i3M65Lrg9ojmIz/yc2IhvfQBMAs7uEPFyGN/jE8AB38N58bGueTEcIVeb1Pp9vx3+OTO7cy0QmAsMhZECKk339jnXjaU1DdgDmfGFNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tkc5puMY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3983AC19423;
+	Wed, 21 Jan 2026 02:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768962513;
-	bh=vTfHbIosBhIGcDNmkGqJUvupsZF9T0Fme6/vw/4XXAs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iYYrENlPoZw3+rWmuqEqKg3k92ScVBL9NUArHLatSJfJ2Rts34vSjz6BJLk8mKNhr
-	 UjtlfZJru2wmiUqOX+GMicfkptrMAqcZrgKzFNCdV32cru9yiQ6gyBkDSjd6iyw9bY
-	 ScyFDeFT1Zmffj0eW03A/HH/uSXbjRqkAeJLwI3WX/UUNqji6ZH8G3l6ycpX9Ht/+f
-	 BjU9JHen9x06nMGkp2NajcdCKjZFBv+qEer+wjmh2RDH1MiC7JNR8CQ7WRm3TNULWR
-	 lTro1tYK2GBKdJaAtoicxrWLqB1ycBJlI8zLIDpTHJBMU7/XoLwg21k3R34Wo6B5xx
-	 u+NgWJ+ckIUcw==
-Date: Tue, 20 Jan 2026 20:28:32 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-Cc: conor@kernel.org, alex@ghiti.fr, gregkh@linuxfoundation.org,
-	vkoul@kernel.org, linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-riscv@lists.infradead.org,
-	palmer@dabbelt.com, pjw@kernel.org, krzk+dt@kernel.org,
-	linux-usb@vger.kernel.org, aou@eecs.berkeley.edu,
-	neil.armstrong@linaro.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] dt-bindings: phy: Add Canaan K230 USB PHY
-Message-ID: <176896251125.1833421.13897211513814377916.robh@kernel.org>
-References: <20260120143243.71937-1-jiayu.riscv@isrc.iscas.ac.cn>
- <20260120143243.71937-2-jiayu.riscv@isrc.iscas.ac.cn>
+	s=k20201202; t=1768963239;
+	bh=EnxmJpB0NNpUFsPj1aBMHwqtF7MLvVsZNzqIxPdxnHs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=tkc5puMYIZjgRzpKl3bQBzZC9fQk7SsejO9P2ojofZLMZSvmEw9JnxqD5ud03WCk2
+	 EVYpjKkMZguUjN+jt21GSw32kO1Wl4jJLapYrJAZY0mWEMm4cTeozOhuoXYsJxmOxJ
+	 UNC86Fwkg5gTl6mVtntLFY88qknKtuBJnzKJ6XdVNw6JKlTZHOKkRCZMuThwpWJ5c9
+	 ZGiypji31+BnOBBU6Xy29gMSlMaekjP7BhtN7K5DVfm+4ieUC1itRAz4+U0AgGxiUi
+	 19BcpjwSoYUwp9gIPGaIvQUO828rPRI1PHyLE4ujBRJx0M+Nt8UnlmYPcpmdij8GxL
+	 uc9WTfy+KVM4g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C8CCF380820D;
+	Wed, 21 Jan 2026 02:40:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260120143243.71937-2-jiayu.riscv@isrc.iscas.ac.cn>
-X-Spamd-Result: default: False [0.54 / 15.00];
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] net: usb: r8152: fix transmit queue timeout
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176896323659.699622.12478505738537738657.git-patchwork-notify@kernel.org>
+Date: Wed, 21 Jan 2026 02:40:36 +0000
+References: <20260120015949.84996-1-insyelu@gmail.com>
+In-Reply-To: <20260120015949.84996-1-insyelu@gmail.com>
+To: Mingj Ye <insyelu@gmail.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, nic_swsd@realtek.com,
+ tiwai@suse.de, hayeswang@realtek.com, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spamd-Result: default: False [-0.46 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32569-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	TAGGED_FROM(0.00)[bounces-32570-lists,linux-usb=lfdr.de,netdevbpf];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-usb@vger.kernel.org];
+	FROM_NO_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:email,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: 124094FC80
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: 71AB54FFF4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hello:
 
-On Tue, 20 Jan 2026 22:32:40 +0800, Jiayu Du wrote:
-> K230 SoC USB PHY requires configuring registers for control and
-> configuration. Add USB phy bindings for K230 SoC.
-> 
-> Signed-off-by: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-> ---
->  .../bindings/phy/canaan,k230-usb-phy.yaml     | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/canaan,k230-usb-phy.yaml
-> 
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+On Tue, 20 Jan 2026 09:59:49 +0800 you wrote:
+> When the TX queue length reaches the threshold, the netdev watchdog
+> immediately detects a TX queue timeout.
+> 
+> This patch updates the trans_start timestamp of the transmit queue
+> on every asynchronous USB URB submission along the transmit path,
+> ensuring that the network watchdog accurately reflects ongoing
+> transmission activity.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] net: usb: r8152: fix transmit queue timeout
+    https://git.kernel.org/netdev/net-next/c/833dcd75d54f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
