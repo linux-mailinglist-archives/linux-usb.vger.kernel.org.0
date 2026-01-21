@@ -1,359 +1,247 @@
-Return-Path: <linux-usb+bounces-32577-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32578-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WMDJDjZ7cGktYAAAu9opvQ
-	(envelope-from <linux-usb+bounces-32577-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 08:07:34 +0100
+	id 6K2yKkZ+cGktYAAAu9opvQ
+	(envelope-from <linux-usb+bounces-32578-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 08:20:38 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D95C55296C
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 08:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5181652BC0
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 08:20:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2689F4E1E57
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 07:07:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BC65F5005B0
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 07:20:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AFE04418D5;
-	Wed, 21 Jan 2026 07:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FA1426EC5;
+	Wed, 21 Jan 2026 07:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AQAfKaGx"
+	dkim=pass (1024-bit key) header.d=hernandez-ros.com header.i=@hernandez-ros.com header.b="nMhBeOx0";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="ktC2YAGt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from a27-23.smtp-out.us-west-2.amazonses.com (a27-23.smtp-out.us-west-2.amazonses.com [54.240.27.23])
+	(using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A4D3557EE;
-	Wed, 21 Jan 2026 07:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA5437A488
+	for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 07:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.27.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768979233; cv=none; b=mPKgbBPioQ2QJiN3RUYgSgGjz9OcF9Ho3DwvmkuvpNqOGdGxxS8lfpSxyIKl7LIVG65whel0MflqoVHOu2A0zsKsDWphG2cX8aS7VjXpXb+TIOmNZArGBncWP1uu74qg1654aW/zCfVfcq9LuFWDa75CbxFis+Y/F+tZZFoBS88=
+	t=1768980004; cv=none; b=LsSd+sE/GeUusOPw0DJH6C/bYqwA5PaaeFkwfXgz+QPDi/76u/a/05Y+34WKfpdUwoii9EQd8maW1wm3A5xckw5j/22knGjMA4VGO/CJsHD3uek/WLecV4RXBxAIW03vrtGYmBaJSa3qj28rvsTsvoJncUqgr5pe/v/X1n2l7PE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768979233; c=relaxed/simple;
-	bh=D/qLyHaqemYuzX/6TqYrPD10JkyadCvZeTQHZMRgjjM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kqd/pyyZ24KEky2Ys+4HGg3yeXmO5NWeldPOc8EtG9ngU1E3MeOo2n6waxS5H3WGLUYGEfoUiBhXgmEfeHYJt3leOOftRWaVwMD63ci8b1ZbXYOx2i1McZS2QQmjJHHOSAVQhs35dCElXL+tfc9j2ATz4DiE08E9q05jYLwsrJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AQAfKaGx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00CB8C116D0;
-	Wed, 21 Jan 2026 07:07:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768979231;
-	bh=D/qLyHaqemYuzX/6TqYrPD10JkyadCvZeTQHZMRgjjM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AQAfKaGx2l7So5vR6Sb/9yAdfiXnVwSwF7BVyCPT5Gl8dlA4guXULV9JwgaAi+XZu
-	 cZbwYCiY2CzQog11d8mqnHB8RefvzDr8V1Rr2XWCRZqAI5JQT9K+hLMT62h2TbTANq
-	 cuK5tk6kEyswVLuJ0nKOBmSolo5nSHyZeq6hY9DXx/ROoQ6n0tYrgRQo2gpwpLtjbp
-	 vtpSyfmx6vyN5zynOP4RcK4CR6snVv6/eSa4Svpv85wX454t0zUGWjcmESxBxXUoiX
-	 QjQrec+8G9xkT8Ptv0B5PZcDftAh4NcpIzUMNLKg2ulrtNpVu4pJQKsqyC7bU/Dmjl
-	 0jORLJgIQmepw==
-Date: Wed, 21 Jan 2026 12:37:06 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-Cc: gregkh@linuxfoundation.org, conor@kernel.org, neil.armstrong@linaro.org,
-	robh@kernel.org, krzk+dt@kernel.org, pjw@kernel.org,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] phy: usb: Add driver for Canaan K230 USB 2.0 PHY
-Message-ID: <aXB7GqQaxtgKReVa@vaman>
-References: <20260120143243.71937-1-jiayu.riscv@isrc.iscas.ac.cn>
- <20260120143243.71937-4-jiayu.riscv@isrc.iscas.ac.cn>
+	s=arc-20240116; t=1768980004; c=relaxed/simple;
+	bh=Ni7P9r6fDGEOJxp5iFEKIJVxoSos67RRAb5i6vtcZIU=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-ID:References:To; b=OKi1PFs3ppK548uTkcazgkHZpUsHjV8IfpvnzQahwOjfvXzPeiTjsv5UiBbz8nlsr+5Gc5BXBug8SFTQ+40MOgciWR9qAFtinofyGisuudaLXa29w5cvvNkQaiUqB2xPfAHpEoGR8UOPDk3M8bjL89wNrMroQlQPD0BGe161HcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hernandez-ros.com; spf=pass smtp.mailfrom=us-west-2.amazonses.com; dkim=pass (1024-bit key) header.d=hernandez-ros.com header.i=@hernandez-ros.com header.b=nMhBeOx0; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=ktC2YAGt; arc=none smtp.client-ip=54.240.27.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hernandez-ros.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=us-west-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=4vmhj3boyfilqttfply4nxrhvlvpcgyy; d=hernandez-ros.com;
+	t=1768979997;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:Content-Transfer-Encoding:Message-Id:References:To;
+	bh=Ni7P9r6fDGEOJxp5iFEKIJVxoSos67RRAb5i6vtcZIU=;
+	b=nMhBeOx0XtcHXL79hIpvIupYo1Ic+ivl53cYr2A0qkJaEcfZE5NAUj+Tl5d4kBuN
+	Qa0e+NHtlc6d2p7aBNjKT/VOIj9/yK21hF1ctK/k4Vp6KJwbZZOP7nZSXHWDvLnaLLD
+	aX04pb2eMClc0cpGIC9vcEWlCX+txNp4x5xv445k=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1768979997;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:Content-Transfer-Encoding:Message-Id:References:To:Feedback-ID;
+	bh=Ni7P9r6fDGEOJxp5iFEKIJVxoSos67RRAb5i6vtcZIU=;
+	b=ktC2YAGtZoIldnN/ZAsUK39keNIKqc0zeB3Gd4lXvK8cme3OvMTpl6ZBxxh6McBn
+	mSCTXJuEXgU9CkcDI6+tMOy0kZsqxq+XLCiFpCz8e6scbPHt4JbrRy52Fb3lAoqz82e
+	AV1xq7JZwQvClK1vgyJ2Zvr2x5OtaKwR/zaaO0is=
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260120143243.71937-4-jiayu.riscv@isrc.iscas.ac.cn>
-X-Spamd-Result: default: False [0.04 / 15.00];
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.300.41.1.7\))
+Subject: Re: USB/IP bug report - dmesg filled with to usb_unlink_urb() when
+ using two instances of same device
+From: =?utf-8?Q?Ignacio_Hern=C3=A1ndez-Ros?= <ignacio@hernandez-ros.com>
+In-Reply-To: <a56209d4-13d5-40cb-b759-f9c7870fb842@kernel.org>
+Date: Wed, 21 Jan 2026 07:19:56 +0000
+Cc: valentina.manea.m@gmail.com, linux-usb@vger.kernel.org, i@zenithal.me
+Content-Transfer-Encoding: quoted-printable
+Message-ID: <0101019bdf6ca137-60344502-51d2-4767-a34b-6a7cf1bfdf4a-000000@us-west-2.amazonses.com>
+References: <0101019b92e81c20-09906fb4-d5e8-40a6-9192-ab693eef4179-000000@us-west-2.amazonses.com>
+ <c4559ccc-d4d4-4971-bc28-b02d80e57594@linuxfoundation.org>
+ <0101019b97e8a815-bb84ea95-adbb-493e-b94a-dfe4afb55f60-000000@us-west-2.amazonses.com>
+ <1b1ed320-eb7b-4b93-a1f1-84ae651abd17@kernel.org>
+ <0101019ba7838344-f64c50aa-ea38-498a-9196-1467688fe7d7-000000@us-west-2.amazonses.com>
+ <d9d2c4e6-43ae-48d7-88ee-4288e6f16907@kernel.org>
+ <0101019bc32d3017-88891fcf-4b22-45d8-b8e4-c18a30dbbe15-000000@us-west-2.amazonses.com>
+ <63f2d81c-79ce-4568-99fa-c47da98afd78@kernel.org>
+ <a56209d4-13d5-40cb-b759-f9c7870fb842@kernel.org>
+To: Shuah <shuah@kernel.org>
+X-Mailer: Apple Mail (2.3864.300.41.1.7)
+Feedback-ID: ::1.us-west-2.HjGwZwg5MFiEpu6H35PNuAp1STds0CnEvbYH/ASzZjo=:AmazonSES
+X-SES-Outgoing: 2026.01.21-54.240.27.23
+X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[hernandez-ros.com:s=4vmhj3boyfilqttfply4nxrhvlvpcgyy,amazonses.com:s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32577-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[hernandez-ros.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-32578-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[hernandez-ros.com:+,amazonses.com:+];
 	TO_DN_SOME(0.00)[];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[vkoul@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	FROM_NEQ_ENVFROM(0.00)[ignacio@hernandez-ros.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,zenithal.me];
+	R_SPF_SOFTFAIL(0.00)[~all];
 	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: D95C55296C
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_THREE(0.00)[4];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amazonses.com:dkim,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,us-west-2.amazonses.com:mid,nut:email,z2mqtt:email]
+X-Rspamd-Queue-Id: 5181652BC0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 20-01-26, 22:32, Jiayu Du wrote:
-> Add driver for the USB 2.0 PHY in Canaan K230 SoC, which supports PHY
-> initialization and power management.
-> 
-> Add Kconfig/Makefile under drivers/phy/canaan/.
-> 
-> Signed-off-by: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-> ---
->  drivers/phy/Kconfig               |   1 +
->  drivers/phy/Makefile              |   1 +
->  drivers/phy/canaan/Kconfig        |  14 ++
->  drivers/phy/canaan/Makefile       |   2 +
->  drivers/phy/canaan/phy-k230-usb.c | 283 ++++++++++++++++++++++++++++++
->  5 files changed, 301 insertions(+)
->  create mode 100644 drivers/phy/canaan/Kconfig
->  create mode 100644 drivers/phy/canaan/Makefile
->  create mode 100644 drivers/phy/canaan/phy-k230-usb.c
-> 
-> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-> index 142e7b0ef2ef..e37bcceef65a 100644
-> --- a/drivers/phy/Kconfig
-> +++ b/drivers/phy/Kconfig
-> @@ -150,6 +150,7 @@ source "drivers/phy/amlogic/Kconfig"
->  source "drivers/phy/apple/Kconfig"
->  source "drivers/phy/broadcom/Kconfig"
->  source "drivers/phy/cadence/Kconfig"
-> +source "drivers/phy/canaan/Kconfig"
->  source "drivers/phy/freescale/Kconfig"
->  source "drivers/phy/hisilicon/Kconfig"
->  source "drivers/phy/ingenic/Kconfig"
-> diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-> index dcbb060c8207..8cef0a447986 100644
-> --- a/drivers/phy/Makefile
-> +++ b/drivers/phy/Makefile
-> @@ -22,6 +22,7 @@ obj-y					+= allwinner/	\
->  					   apple/	\
->  					   broadcom/	\
->  					   cadence/	\
-> +					   canaan/	\
->  					   freescale/	\
->  					   hisilicon/	\
->  					   ingenic/	\
-> diff --git a/drivers/phy/canaan/Kconfig b/drivers/phy/canaan/Kconfig
-> new file mode 100644
-> index 000000000000..1ff8831846d5
-> --- /dev/null
-> +++ b/drivers/phy/canaan/Kconfig
-> @@ -0,0 +1,14 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# Phy drivers for Canaan platforms
-> +#
-> +config PHY_CANAAN_USB
-> +	tristate "Canaan USB2 PHY Driver"
-> +	depends on (ARCH_CANAAN || COMPILE_TEST) && OF
-> +	select GENERIC_PHY
-> +	help
-> +	Enable this driver to support the USB 2.0 PHY controller
-> +	on Canaan K230 RISC-V SoCs. This PHY controller
-> +	provides physical layer functionality for USB 2.0 devices.
-> +	If you have a Canaan K230 board and need USB 2.0 support,
-> +	say Y or M here.
-> diff --git a/drivers/phy/canaan/Makefile b/drivers/phy/canaan/Makefile
-> new file mode 100644
-> index 000000000000..d73857ba284e
-> --- /dev/null
-> +++ b/drivers/phy/canaan/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +obj-$(CONFIG_PHY_CANAAN_USB)		+= phy-k230-usb.o
-> diff --git a/drivers/phy/canaan/phy-k230-usb.c b/drivers/phy/canaan/phy-k230-usb.c
-> new file mode 100644
-> index 000000000000..350950563f60
-> --- /dev/null
-> +++ b/drivers/phy/canaan/phy-k230-usb.c
-> @@ -0,0 +1,283 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Canaan usb PHY driver
-> + *
-> + * Copyright (C) 2025 Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
 
-2026 now!
+> Is there a way you can enable usbip debug and send me the dmesg?
 
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/io.h>
-> +#include <linux/of_address.h>
-> +#include <linux/phy/phy.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define MAX_PHYS		2
-> +
-> +/* Register offsets within the HiSysConfig system controller */
-> +#define K230_USB0_TEST_REG_BASE     0x70
-> +#define K230_USB0_CTL_REG_BASE      0xb0
-> +#define K230_USB1_TEST_REG_BASE     0x90
-> +#define K230_USB1_CTL_REG_BASE      0xb8
-> +
-> +/* Relative offsets within each PHY's control/test block */
-> +#define CTL0_OFFSET		0x00
-> +#define CTL1_OFFSET		0x04
-> +#define TEST_CTL3_OFFSET	0x0c
-> +
-> +/* Bit definitions for TEST_CTL3 */
-> +#define USB_IDPULLUP0		BIT(4)
-> +#define USB_DMPULLDOWN0		BIT(8)
-> +#define USB_DPPULLDOWN0		BIT(9)
-> +
-> +/* USB control register 0 in HiSysConfig system controller */
-> +/* PLL Integral Path Tune */
-> +#define USB_CTL0_PLLITUNE_MASK		GENMASK(23, 22)
-> +
-> +/* PLL Proportional Path Tune */
-> +#define USB_CTL0_PLLPTUNE_MASK		GENMASK(21, 18)
-> +
-> +/* PLL Bandwidth Adjustment */
-> +#define USB_CTL0_PLLBTUNE_MASK		GENMASK(17, 17)
-> +
-> +/* VReg18 Bypass Control */
-> +#define USB_CTL0_VREGBYPASS_MASK	GENMASK(16, 16)
-> +
-> +/* Retention Mode Enable */
-> +#define USB_CTL0_RETENABLEN_MASK	GENMASK(15, 15)
-> +
-> +/* Reserved Request Input */
-> +#define USB_CTL0_RESREQIN_MASK		GENMASK(14, 14)
-> +
-> +/* External VBUS Valid Select */
-> +#define USB_CTL0_VBUSVLDEXTSEL0_MASK	GENMASK(13, 13)
-> +
-> +/* OTG Block Disable Control */
-> +#define USB_CTL0_OTGDISABLE0_MASK	GENMASK(12, 12)
-> +
-> +/* Drive VBUS Enable */
-> +#define USB_CTL0_DRVVBUS0_MASK		GENMASK(11, 11)
-> +
-> +/* Autoresume Mode Enable */
-> +#define USB_CTL0_AUTORSMENB0_MASK	GENMASK(10, 10)
-> +
-> +/* HS Transceiver Asynchronous Control */
-> +#define USB_CTL0_HSXCVREXTCTL0_MASK	GENMASK(9, 9)
-> +
-> +/* USB 1.1 Transmit Data */
-> +#define USB_CTL0_FSDATAEXT0_MASK	GENMASK(8, 8)
-> +
-> +/* USB 1.1 SE0 Generation */
-> +#define USB_CTL0_FSSE0EXT0_MASK		GENMASK(7, 7)
-> +
-> +/* USB 1.1 Data Enable */
-> +#define USB_CTL0_TXENABLEN0_MASK	GENMASK(6, 6)
-> +
-> +/* Disconnect Threshold */
-> +#define USB_CTL0_COMPDISTUNE0_MASK	GENMASK(5, 3)
-> +
-> +/* Squelch Threshold */
-> +#define USB_CTL0_SQRXTUNE0_MASK		GENMASK(2, 0)
-> +
-> +/* USB control register 1 in HiSysConfig system controller */
-> +/* Data Detect Voltage */
-> +#define USB_CTL1_VDATREFTUNE0_MASK	GENMASK(23, 22)
-> +
-> +/* VBUS Valid Threshold */
-> +#define USB_CTL1_OTGTUNE0_MASK		GENMASK(21, 19)
-> +
-> +/* Transmitter High-Speed Crossover */
-> +#define USB_CTL1_TXHSXVTUNE0_MASK	GENMASK(18, 17)
-> +
-> +/* FS/LS Source Impedance */
-> +#define USB_CTL1_TXFSLSTUNE0_MASK	GENMASK(16, 13)
-> +
-> +/* HS DC Voltage Level */
-> +#define USB_CTL1_TXVREFTUNE0_MASK	GENMASK(12, 9)
-> +
-> +/* HS Transmitter Rise/Fall Time */
-> +#define USB_CTL1_TXRISETUNE0_MASK	GENMASK(8, 7)
-> +
-> +/* USB Source Impedance */
-> +#define USB_CTL1_TXRESTUNE0_MASK	GENMASK(6, 5)
-> +
-> +/* HS Transmitter Pre-Emphasis Current Control */
-> +#define USB_CTL1_TXPREEMPAMPTUNE0_MASK	GENMASK(4, 3)
-> +
-> +/* HS Transmitter Pre-Emphasis Duration Control */
-> +#define USB_CTL1_TXPREEMPPULSETUNE0_MASK	GENMASK(2, 2)
-> +
-> +/* charging detection */
-> +#define USB_CTL1_CHRGSRCPUENB0_MASK	GENMASK(1, 0)
-> +
-> +#define K230_PHY_CTL0_VAL \
-> +( \
-> +	FIELD_PREP(USB_CTL0_PLLITUNE_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL0_PLLPTUNE_MASK, 0xc) | \
-> +	FIELD_PREP(USB_CTL0_PLLBTUNE_MASK, 0x1) | \
-> +	FIELD_PREP(USB_CTL0_VREGBYPASS_MASK, 0x1) | \
-> +	FIELD_PREP(USB_CTL0_RETENABLEN_MASK, 0x1) | \
-> +	FIELD_PREP(USB_CTL0_RESREQIN_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL0_VBUSVLDEXTSEL0_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL0_OTGDISABLE0_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL0_DRVVBUS0_MASK, 0x1) | \
-> +	FIELD_PREP(USB_CTL0_AUTORSMENB0_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL0_HSXCVREXTCTL0_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL0_FSDATAEXT0_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL0_FSSE0EXT0_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL0_TXENABLEN0_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL0_COMPDISTUNE0_MASK, 0x3) | \
-> +	FIELD_PREP(USB_CTL0_SQRXTUNE0_MASK, 0x3) \
-> +)
-> +
-> +#define K230_PHY_CTL1_VAL \
-> +( \
-> +	FIELD_PREP(USB_CTL1_VDATREFTUNE0_MASK, 0x1) | \
-> +	FIELD_PREP(USB_CTL1_OTGTUNE0_MASK, 0x3) | \
-> +	FIELD_PREP(USB_CTL1_TXHSXVTUNE0_MASK, 0x3) | \
-> +	FIELD_PREP(USB_CTL1_TXFSLSTUNE0_MASK, 0x3) | \
-> +	FIELD_PREP(USB_CTL1_TXVREFTUNE0_MASK, 0x3) | \
-> +	FIELD_PREP(USB_CTL1_TXRISETUNE0_MASK, 0x1) | \
-> +	FIELD_PREP(USB_CTL1_TXRESTUNE0_MASK, 0x1) | \
-> +	FIELD_PREP(USB_CTL1_TXPREEMPAMPTUNE0_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL1_TXPREEMPPULSETUNE0_MASK, 0x0) | \
-> +	FIELD_PREP(USB_CTL1_CHRGSRCPUENB0_MASK, 0x0) \
-> +)
-> +
-> +struct k230_usb_phy_instance {
-> +	struct k230_usb_phy_global *global;
-> +	struct phy *phy;
-> +	u32 test_offset;
-> +	u32 ctl_offset;
-> +	int index;
-> +};
-> +
-> +struct k230_usb_phy_global {
-> +	struct k230_usb_phy_instance phys[MAX_PHYS];
-> +	void __iomem *base;
-> +};
-> +
-> +static int k230_usb_phy_power_on(struct phy *phy)
-> +{
-> +	struct k230_usb_phy_instance *inst = phy_get_drvdata(phy);
-> +	struct k230_usb_phy_global *global = inst->global;
-> +	void __iomem *base = global->base;
-> +	u32 val;
+=C2=BFHow can I add debug information for usbip-host kernel module?
 
-blank line here please
+All I can find on the internet is this page:
+https://www.kernel.org/doc/readme/tools-usb-usbip-README
 
-> +	/* Apply recommended settings */
-> +	writel(K230_PHY_CTL0_VAL, base + inst->ctl_offset + CTL0_OFFSET);
-> +	writel(K230_PHY_CTL1_VAL, base + inst->ctl_offset + CTL1_OFFSET);
-> +
-> +    /* Configure test register (pull-ups/pull-downs) */
+That points to: http://usbip.wiki.sourceforge.net/how-to-debug-usbip =
+which is not found.
 
-wrong alignment above, pls fix it
+Best
+Ignacio
 
--- 
-~Vinod
+
+> El 21 ene 2026, a las 0:33, Shuah <shuah@kernel.org> escribi=C3=B3:
+>=20
+> On 1/15/26 15:38, Shuah wrote:
+>> On 1/15/26 12:41, Ignacio Hern=C3=A1ndez-Ros wrote:
+>>> Hi, find below the answers to your questions:
+>>>=20
+>>>> You are able to attach the devices from "nut" - the problem starts
+>>>> after attaching?
+>>>=20
+>>> The problem starts after attaching the second device. Not after =
+attaching the first device.
+>>>=20
+>>>> What does "nut" run - what are kernel versions on usbip host and =
+clients?
+>>>>=20
+>>>=20
+>>> =E2=80=9Cnut=E2=80=9D runs a service that monitors the UPS devices. =
+But the issue shall not be related with how =E2=80=9Cnut=E2=80=9D uses =
+the device as no issues are present when it is only working with one of =
+the two UPS devices attached.
+>>>=20
+>>> root@nut:~# uname -a
+>>> Linux nut 6.12.57+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian =
+6.12.57-1 (2025-11-05) x86_64 GNU/Linux
+>>>=20
+>>> root@oraculo:~# uname -a
+>>> Linux oraculo 6.12.47+rpt-rpi-v8 #1 SMP PREEMPT Debian =
+1:6.12.47-1+rpt1 (2025-09-16) aarch64 GNU/Linux
+>>>=20
+>>> root@z2mqtt:~# uname -a
+>>> Linux z2mqtt 6.12.57+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian =
+6.12.57-1 (2025-11-05) x86_64 GNU/Linux
+>>>=20
+>>> note, z2mqtt is using the Zigbee dongle. but that device is not =
+raising issues.
+>>>=20
+>>>> Can you detach these devices cleanly?
+>>>=20
+>>>=20
+>>> Yes, while on =E2=80=9Cnut=E2=80=9D I can do:
+>>>=20
+>>> root@nut:~# usbip port
+>>> Imported USB devices
+>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>> Port 00: <Port in Use> at Full Speed(12Mbps)
+>>>         MGE UPS Systems : UPS (0463:ffff)
+>>>         9-1 -> usbip://oraculo:3240/1-1.4
+>>>             -> remote bus/dev 001/005
+>>> Port 01: <Port in Use> at Full Speed(12Mbps)
+>>>         MGE UPS Systems : UPS (0463:ffff)
+>>>         9-2 -> usbip://oraculo:3240/1-1.2
+>>>             -> remote bus/dev 001/003
+>>> root@nut:~# usbip detach -p 00
+>>> usbip: info: Port 0 is now detached!
+>>>=20
+>>> root@nut:~# usbip list -r oraculo
+>>> Exportable USB devices
+>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>>   - oraculo
+>>>        1-1.4: MGE UPS Systems : UPS (0463:ffff)
+>>>             : =
+/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00=
+.0/usb1/1-1/1-1.4
+>>>             : (Defined at Interface level) (00/00/00)
+>>>             :  0 - Human Interface Device / No Subclass / None =
+(03/00/00)
+>>>=20
+>>> root@nut:~# usbip attach -r oraculo -b 1-1.4
+>>> root@nut:~# usbip port
+>>> Imported USB devices
+>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>> Port 00: <Port in Use> at Full Speed(12Mbps)
+>>>         MGE UPS Systems : UPS (0463:ffff)
+>>>         9-1 -> usbip://oraculo:3240/1-1.4
+>>>             -> remote bus/dev 001/005
+>>> Port 01: <Port in Use> at Full Speed(12Mbps)
+>>>         MGE UPS Systems : UPS (0463:ffff)
+>>>         9-2 -> usbip://oraculo:3240/1-1.2
+>>>             -> remote bus/dev 001/003
+>>> root@nut:~#
+>>>=20
+>>> All clean and without issues.
+>>>=20
+>>> The only one issue is dmesg continuous messages:
+>>>=20
+>>> [45519.289798] usbip-host 1-1.4: unlinked by a call to =
+usb_unlink_urb()
+>>> [45521.204620] usbip-host 1-1.2: unlinked by a call to =
+usb_unlink_urb()
+>>> [45521.291393] usbip-host 1-1.4: unlinked by a call to =
+usb_unlink_urb()
+>>> [45523.205811] usbip-host 1-1.2: unlinked by a call to =
+usb_unlink_urb()
+>>> [45523.292681] usbip-host 1-1.4: unlinked by a call to =
+usb_unlink_urb()
+>>> [45525.207094] usbip-host 1-1.2: unlinked by a call to =
+usb_unlink_urb()
+>>> [45525.293907] usbip-host 1-1.4: unlinked by a call to =
+usb_unlink_urb()
+>>> [45527.208240] usbip-host 1-1.2: unlinked by a call to =
+usb_unlink_urb()
+>>> [45527.295310] usbip-host 1-1.4: unlinked by a call to =
+usb_unlink_urb()
+>>>=20
+>> Okay the only problem is these messages - these messages are
+>> informational and there aren't reporting errors. These should
+>> have been debug only - I will submit a fix to change the level
+>> of these messages similar to how stub_rx and vhci_tx/rx handle
+>> this condition.
+>=20
+> Is there a way you can enable usbip debug and send me the dmesg?
+> On one hand the message itself isn't error, however it will be
+> good to understand why so many urbs are being unlinked.
+>=20
+> thanks,
+> -- Shuah
+
+
 
