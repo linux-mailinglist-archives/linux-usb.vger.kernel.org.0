@@ -1,156 +1,159 @@
-Return-Path: <linux-usb+bounces-32598-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32601-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ePBXDbAOcWlEcgAAu9opvQ
-	(envelope-from <linux-usb+bounces-32598-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 18:36:48 +0100
+	id gCfdAmEbcWmodQAAu9opvQ
+	(envelope-from <linux-usb+bounces-32601-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 19:30:57 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E74425AA17
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 18:36:47 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7138A5B4A6
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 19:30:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1083176B56F
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 16:48:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0D898AEF3C5
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 17:10:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863C547DD44;
-	Wed, 21 Jan 2026 16:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QG0U62PW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31CF3563F4;
+	Wed, 21 Jan 2026 16:57:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146F4314A95
-	for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 16:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E60314B7C
+	for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 16:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769013447; cv=none; b=traHaa32bdZSmxQWij/p27olNFVJDH43mMf8HbP2JRN37rXwo3n45ZTgOhF8kVSXhN68/ekfTLGzxrv7wHTjbfGqC8VhB5sDu7NWJtsGjLbyMwEu6wJnk3KkglQpUdd3bfsS5d9c/mB3VLHhM4h3P7NWE+pYheO3d9mzXFFDEyM=
+	t=1769014624; cv=none; b=p4cNg2LkJW7glgzvYbXZ+4v2l9UMOa3c5mF1bktQfMHjieDB2clO/f4RLIKaZQjS2UyCk5oN9fkeDB2PEjcWZ8KfdOGtPEAcrnxu4kLn0pFnJ0lF1T2GmW1ehw/6Pf7TNTo05ochwx0oDDUnhcuqreSmudpF2WoSgyQn3StQH8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769013447; c=relaxed/simple;
-	bh=ORLqTIWPIiuat4QwAVPOZnmfmYJ6ZMYHUtl8Rmgnqow=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LEzx/GLqErlbrhuS3G4GNx21F5QAmD/6tS78Hjb2KeMqJEe63FVmWAd10TtPcs7BDjx91l8LLm+iF4Q4vHn8sx72+TOpL+97e/tLCSRduSDmyAbplEeij9pQijv5xhV1bqXE0/jhZMcJxyN+Ghh6WuLEV3nNFEmY7Qi3AHtRUSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QG0U62PW; arc=none smtp.client-ip=209.85.167.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-45c8984fac8so21429b6e.3
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 08:37:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1769013444; x=1769618244; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=N4lAhXN1HmnaRMb9l7lSPcYI4Yng0ZWppyulkwxG0+k=;
-        b=QG0U62PWou++RfoIQtB+2zUV7C0ybnOyT3T/Z8sTqdSJtdrTHXqKGUSGIVRGCKzhRJ
-         OoDuCySjxC/Q0wH85x17QUiuwNawsUIDjPPnyQvuuh3LstXqVSnJDVi0JbRUhhLkZ2pi
-         HXEG5PRsW7ED10n1leC6vPfNerc8kr3o4+CZs=
+	s=arc-20240116; t=1769014624; c=relaxed/simple;
+	bh=Z7VKEEbh/Mgf1KxHQovLwFtrWR4g8Q6l3XL5VtPDtHU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aN/dvVUlJfrTfO90GzxkO6MHL2HA+VXec0TtPaI5Js4/kDM55a49JH49HnazHo1fz96jaD+E4gYtBkUoqh6/PK4ZUIxrGIDloNxdgl+pqTz3vZmrng6AKpdTxthZ+n6LUyZynldq0nTSilHsPWz9fJO/8rk8afG/HPdFIsgIVaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3530e7b3dc2so77919a91.3
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 08:57:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769013444; x=1769618244;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1769014622; x=1769619422;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N4lAhXN1HmnaRMb9l7lSPcYI4Yng0ZWppyulkwxG0+k=;
-        b=lLkE6TchOvPGW2Z3SMKCqMhi3TW0JwLVXNGaMkiT0hm4Adq3lmY+QVBehlHPAha2dF
-         lztNeYanhtpN53/Y/7X38pZVo8h9We58zj5/HlbUwq+OVNliNlxbRuNtvWNW1NKvkjIG
-         +ebqZz1aDZmdymRSnfJz8MUGZtPEU6iY2K4tDqBj/OmdFFGrmiIyEr6QqFD9VgQ9fpPV
-         owlgd9w2/N3RjLOLb/2gomXSZVrYZxmT8vOU+pJ84kNbyasQC7V1O8M0FZ3PwytilmEl
-         +3yVkIctVtgwkmluxN28/MWPlhZkBcd/5p6DpFhkGwdnqBqr1dHnv1Mrf2eEbLLSoa40
-         aFlw==
-X-Forwarded-Encrypted: i=1; AJvYcCV77d+5WYOBtLZaIUlO1iaAh0RIdHHiKHMbbcfTEc7gmEuEekkkE8ZSuEMStDTgePGQqPSj6C6oJ/o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxceteg7ggC91hX2ttbNq46NNcARupOP5u3Q+ZufxO7he+pPBpf
-	illVQwnxtk+0i023XCpaAuFLVZqZHKeI/iwDJkJU9xJINsaZD4iho7B+tW1LNYV5zoQ=
-X-Gm-Gg: AZuq6aKMoIvny7wsf1JfHQeB7/S5G8W+4qODKefezD6eqFClsgJuMmoMIiMPGAIlJsZ
-	RlQNqzbLYskwh2zHUt4NJP7EC30yQFOTwsYcHhV1CcrxiEYtEkwmbC62X/r3ZDlB80hvIy8sxaI
-	YEz+MWPt+lsylI4EgEvNMnBQQuKsHYOD8/SYiX5devbm0kXQWYAlQbjTJYnswXb52HpShj3C7TF
-	H1sikNdg8a9I0Zw8Ma77BjbSVJoE0tXsMZtbD7rUPUmXh/STK4TS2849YU+GFddBxAyyd31tGdg
-	C+PTjKQu0OO+ArRZq28+0hWvptD6Kz2lotbrbqVBZyJ8maMIRpAyN2conVggOK0ZrJQiExk7w6F
-	QuwIVaj6zvTI2XZdMH55DuEuizNjdHzWGCRGUPITeoD14Zo1n/2fuoqAaMPbyuhTd1EBpyxJs4A
-	t4brxu6Id7/8Afl7MS1dE1UqRcOXr3xLoGCZXb
-X-Received: by 2002:a05:6808:2507:b0:450:bcc7:18ea with SMTP id 5614622812f47-45c9c01ec83mr6437125b6e.29.1769013443911;
-        Wed, 21 Jan 2026 08:37:23 -0800 (PST)
-Received: from shuah-framework.internal ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-45c9e03e924sm8441674b6e.19.2026.01.21.08.37.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jan 2026 08:37:23 -0800 (PST)
-From: Shuah Khan <skhan@linuxfoundation.org>
-To: valentina.manea.m@gmail.com,
-	shuah@kernel.org,
-	i@zenithal.me,
-	gregkh@linuxfoundation.org,
-	ignacio@hernandez-ros.com
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usbip: Reduce CONNRESET message noise in dmesg from stub
-Date: Wed, 21 Jan 2026 09:37:19 -0700
-Message-ID: <20260121163721.11933-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.51.0
+        bh=qfo6ycbyZBbclnkJIZoIDjxzdLcGep03l3zua5CmEAY=;
+        b=OojLIGw1yybQZFoj//GWzT8Lv94cDY1fTnXq6pz1qRIuDICRlHJ0qmwAUYbDmbHMQJ
+         cW4AtushzEgLppMWuozPtbtJ4zVZr1nLJch9aQpqmnwOdf2J1lLkijA7kwsqt9IBmt18
+         6N81iVGlraFwpNcAlFdZ8FU9G59cd4JqsJVvN2oJzkx45wbGzX6SDsX936ctmz+AC8Av
+         hosc4zzXyxpfPyuulJIhbFXOMCtmycA+MSWftnKXJehNS/ygiND/LswrDdhJKfkIA+jj
+         3w21UkOuZypVwe9TM6t9HvOrh4M/tgPB0/h18qrLkHQ1+o+bx2haIF+k44f1ZOW7eIri
+         jA2A==
+X-Forwarded-Encrypted: i=1; AJvYcCVxqANOLnI/3Rvi64ij4XjjvL4RUqj1zYTFvU1lJ9N7Lv9u/sdSs8DjKbOYDmxSQRm5ymZ6frfKvR8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx467JB6+4zurffJJULbwLrns3FBk3AUXMb2IG/YS0mEp3kYZzd
+	sgZ5YC9Hz8iFJstiLQTmH2XWUYO/ktsZb7kVcurA0qTlCGQnPm9kR2vg8URlMJ4U
+X-Gm-Gg: AZuq6aIt6YiN+7e3nnT6fDmdCqw1X1hoV4I/3ehTppYb1+Ewipk16owv1qkEUZpyBse
+	+8Yq29WtDczubWOkBoZLiyN6QFA0e8QGUeAFw3YTWXa7NcMR5FMeOnrXujI+fzA4AlZH3shB1Gq
+	xVeKX+nhif7Sq6+dWLsYcCPfTSD/txASLjdYh8NXgT8ZO5hySNV2J9jDV7WcWrAd8sHwr4gmL3W
+	sN2T0B+8MMuOxMjkhXcxeicX1/zYmKDfkEDoWGAGNXWem7G3banqFnv8bJGkE0mbeEO4YwfPDcE
+	072wQiKN4Vos6FxGD8KG3uBPdzvVvD6SFelylD2soEvUOLozJCfne9Lv39o/BStId0LWaJX+IKC
+	qsnS2D+0gbUu6NU7feKu/eJ3z+zDgcIGEAdZGIouLpghcx5K8TrIuu/3jpbq2aq2alkckqlyuYz
+	NYRXShC9PLwcAyWp/Rp0x2P0BRnblIC36uVLX4e69bYRInbbcYWxNXaM6Ob+WjeQE=
+X-Received: by 2002:a17:90b:3e4e:b0:340:d81d:7874 with SMTP id 98e67ed59e1d1-352c40a9cf1mr5632202a91.26.1769014621709;
+        Wed, 21 Jan 2026 08:57:01 -0800 (PST)
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com. [209.85.210.172])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35335205a2fsm37532a91.2.2026.01.21.08.57.01
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jan 2026 08:57:01 -0800 (PST)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-81f5381d168so85647b3a.2
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 08:57:01 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV5EBNa1nyPBMs1fvUSHFW08aFcg9TGagjWJLFLm2tIyyFHd6od2ZUY7B4qvUXlNULssSz/ajshIoA=@vger.kernel.org
+X-Received: by 2002:a05:6102:162b:b0:5ef:b3b7:6e3f with SMTP id
+ ada2fe7eead31-5f50aaa8a2fmr1678275137.3.1769014232636; Wed, 21 Jan 2026
+ 08:50:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [1.04 / 15.00];
+References: <20251212193721.740055-1-david.laight.linux@gmail.com> <20251212193721.740055-4-david.laight.linux@gmail.com>
+In-Reply-To: <20251212193721.740055-4-david.laight.linux@gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 21 Jan 2026 17:50:21 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV3WAxshZL9gw4+NeovX-9FjUZrk+coUAA7+=y6GmPECA@mail.gmail.com>
+X-Gm-Features: AZwV_QiqIMwt_a12kTPgIHFmNfmJbn0zP9R9-I36H0fdo0DzJDyqVo7w364KYOw
+Message-ID: <CAMuHMdV3WAxshZL9gw4+NeovX-9FjUZrk+coUAA7+=y6GmPECA@mail.gmail.com>
+Subject: Re: [PATCH v2 03/16] bitmap: Use FIELD_PREP() in expansion of FIELD_PREP_WM16()
+To: david.laight.linux@gmail.com
+Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Crt Mori <cmo@melexis.com>, 
+	Richard Genoud <richard.genoud@bootlin.com>, Andy Shevchenko <andriy.shevchenko@intel.com>, 
+	Luo Jie <quic_luoj@quicinc.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
+	"David S . Miller" <davem@davemloft.net>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Andreas Noever <andreas.noever@gmail.com>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
+	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [0.24 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_POLICY_ALLOW(0.00)[linuxfoundation.org,none];
+	TAGGED_FROM(0.00)[bounces-32601-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32598-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org,zenithal.me,linuxfoundation.org,hernandez-ros.com];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[skhan@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DMARC_NA(0.00)[linux-m68k.org];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	FREEMAIL_CC(0.00)[gmail.com,rasmusvillemoes.dk,vger.kernel.org,bootlin.com,huawei.com,melexis.com,intel.com,quicinc.com,infradead.org,kernel.org,davemloft.net,linux.intel.com,collabora.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,linuxfoundation.org:dkim,linuxfoundation.org:mid,hernandez-ros.com:email,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: E74425AA17
+	R_DKIM_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,glider.be:email]
+X-Rspamd-Queue-Id: 7138A5B4A6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-stub_complete() prints informational messages for each urb unlink
-filling dmesg. Change the message to dev_dbg() similar to vhci
-reports the CONNRESET condition.
+On Fri, 12 Dec 2025 at 20:38, <david.laight.linux@gmail.com> wrote:
+> From: David Laight <david.laight.linux@gmail.com>
+>
+> Instead of directly expanding __BF_FIELD_CHECK() (which really ought
+> not be used outside bitfield) and open-coding the generation of the
+> masked value, just call FIELD_PREP() and add an extra check for
+> the mask being at most 16 bits.
+> The extra check is added after calling FIELD_PREP() to get a sane
+> error message if 'mask' isn't constant.
+>
+> Remove the leading _ from the formal parameter names.
+> Prefix the local variables with _wm16_ to hopefully make them
+> unique.
+>
+> Signed-off-by: David Laight <david.laight.linux@gmail.com>
 
-Reported-by: Ignacio Hernandez-Ros <ignacio@hernandez-ros.com>
-Closes: https://lore.kernel.org/all/0101019b92e81c20-09906fb4-d5e8-40a6-9192-ab693eef4179-000000@us-west-2.amazonses.com/
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- drivers/usb/usbip/stub_tx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/drivers/usb/usbip/stub_tx.c b/drivers/usb/usbip/stub_tx.c
-index 55919c3762ba..4cae452bfadb 100644
---- a/drivers/usb/usbip/stub_tx.c
-+++ b/drivers/usb/usbip/stub_tx.c
-@@ -55,7 +55,7 @@ void stub_complete(struct urb *urb)
- 			 "stopped by a call to usb_kill_urb() because of cleaning up a virtual connection\n");
- 		return;
- 	case -ECONNRESET:
--		dev_info(&urb->dev->dev,
-+		dev_dbg(&urb->dev->dev,
- 			 "unlinked by a call to usb_unlink_urb()\n");
- 		break;
- 	case -EPIPE:
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.51.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
