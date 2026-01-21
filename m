@@ -1,127 +1,111 @@
-Return-Path: <linux-usb+bounces-32584-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32585-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qJHGMdHfcGnCaQAAu9opvQ
-	(envelope-from <linux-usb+bounces-32584-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 15:16:49 +0100
+	id EAwNCSfhcGnCaQAAu9opvQ
+	(envelope-from <linux-usb+bounces-32585-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 15:22:31 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4B965842A
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 15:16:48 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD8AC5857D
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 15:22:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CF755A08521
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 14:01:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 52D1372E5F0
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 14:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDBF4963C2;
-	Wed, 21 Jan 2026 13:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3798B47B42D;
+	Wed, 21 Jan 2026 14:11:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FEC48123F;
-	Wed, 21 Jan 2026 13:55:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9A43587C4;
+	Wed, 21 Jan 2026 14:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769003731; cv=none; b=DEYRh0QV5k+artfs39b63epDvodoXa2pplCrRK8IQe0gwM5Bs0dtcQgZh8yWpbUopzEqSgrRl9UuPxDKhBw28zPiS7CUWBZW551sCan0ddROEEv+L6w8PQNstIaCW1mOsWLcl+GzjpLspxDVyAxQMjWbDsH9I12QfdF5xIXoCyE=
+	t=1769004691; cv=none; b=k7D9ynhvqlLjEQu7ZaQh+WstmIFYIks64eSPT4f/i/KkQBc7mqYX+33ZZFUOpigzEkNjpaSLJwIi/GmlfK1Ie4Y71Jn31zP0SB4R315CGEgTFO0JnhuRPuofPAZtjndOTv5Fy2c5RDgQ+/D7dJLQX3OeqNpAMSOjpuptyowFF34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769003731; c=relaxed/simple;
-	bh=zQ788XQEfllG3nQ/GgyLRlAAXrNCGe6TAOHctPZutlg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ON+xcbbZtCP6c01C/3Ft1q0oBYZTrhyBQGl4EiLGKbF3eDN3SYNx7ZRW1/pGr+q6/Kb4eoczrP49sA7z8YUOMdQB6pHkDlkMLBVMX2PgWQFVxam9chqed3/M+4JIEsk95iMFQoodlCjGxgqVSLiIXnron8HkHi2x2aAepCCvY+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from duge-virtual-machine (unknown [183.192.221.134])
-	by APP-03 (Coremail) with SMTP id rQCowAAXOuG+2nBp3sIgBg--.24067S2;
-	Wed, 21 Jan 2026 21:55:12 +0800 (CST)
-Date: Wed, 21 Jan 2026 21:55:10 +0800
-From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-To: Vinod Koul <vkoul@kernel.org>
-Cc: gregkh@linuxfoundation.org, conor@kernel.org, neil.armstrong@linaro.org,
-	robh@kernel.org, krzk+dt@kernel.org, pjw@kernel.org,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] phy: usb: Add driver for Canaan K230 USB 2.0 PHY
-Message-ID: <aXDavrU8ATmUyWHE@duge-virtual-machine>
-References: <20260120143243.71937-1-jiayu.riscv@isrc.iscas.ac.cn>
- <20260120143243.71937-4-jiayu.riscv@isrc.iscas.ac.cn>
- <aXB7GqQaxtgKReVa@vaman>
+	s=arc-20240116; t=1769004691; c=relaxed/simple;
+	bh=jW77EJdDL6t+ci7yWGFy5IMcOo26zYw0YA+cOJ5lFZs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HhIjnlgCYZGXyk2/n0P474aRjH0JirleAwiMj7cAE5Weu8Cruy0EuzhBkQHCQFnS3eKIJSwxSsw9L5AZTdgNAdzL7ie24Mn3RGUg7Aj7QwlxCslpKYD7PzEmGxP4ajomHEFrzd1lcsG2OekgakvdbkIWeOG2L2rVpmcudGo9Y0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA0CC4CEF1;
+	Wed, 21 Jan 2026 14:11:29 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/4] usb: phy: generic: Miscellaneous improvements
+Date: Wed, 21 Jan 2026 15:11:19 +0100
+Message-ID: <cover.1769004444.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aXB7GqQaxtgKReVa@vaman>
-X-CM-TRANSID:rQCowAAXOuG+2nBp3sIgBg--.24067S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY67k0a2IF6w1UM7kC6x804xWl14x267AK
-	xVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
-	A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j
-	6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr
-	0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv
-	0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z2
-	80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF
-	7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxAqzxv26xkF7I0En4kS14v26r1q6r43Mx
-	C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
-	wI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
-	vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
-	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-	W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8489tUUUUU==
-X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
-X-Spamd-Result: default: False [0.74 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.76 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
+	R_MISSING_CHARSET(0.50)[];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_NA(0.00)[iscas.ac.cn];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32584-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jiayu.riscv@isrc.iscas.ac.cn,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-32585-lists,linux-usb=lfdr.de,renesas];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[glider.be];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,renesas];
+	FROM_NEQ_ENVFROM(0.00)[geert@glider.be,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
 	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: A4B965842A
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,glider.be:mid]
+X-Rspamd-Queue-Id: CD8AC5857D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Jan 21, 2026 at 12:37:06PM +0530, Vinod Koul wrote:
-> On 20-01-26, 22:32, Jiayu Du wrote:
-> > + * Copyright (C) 2025 Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-> 
-> 2026 now!
-> 
-...
-> > +	void __iomem *base = global->base;
-> > +	u32 val;
-> 
-> blank line here please
-> 
-...
-> > +    /* Configure test register (pull-ups/pull-downs) */
-> 
-> wrong alignment above, pls fix it
+	Hi Greg,
 
-Thanks for pointing out these issues. I will fix them in v5.
+This patch series contains a few improvements for the generic USB PHY
+driver.  it has been tested on a Renesas Ebisu-4D board with R-Car E3.
 
+Thanks for your comments!
+
+Geert Uytterhoeven (4):
+  usb: phy: generic: Always use dev in usb_phy_generic_probe()
+  usb: phy: generic: Convert to devm_clk_get_optional()
+  usb: phy: generic: Convert to dev_err_probe()
+  usb: phy: generic: Convert to device property API
+
+ drivers/usb/phy/phy-generic.c | 74 ++++++++++++-----------------------
+ 1 file changed, 26 insertions(+), 48 deletions(-)
+
+-- 
+2.43.0
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
