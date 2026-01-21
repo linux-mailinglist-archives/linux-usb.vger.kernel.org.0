@@ -1,48 +1,51 @@
-Return-Path: <linux-usb+bounces-32585-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32586-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EAwNCSfhcGnCaQAAu9opvQ
-	(envelope-from <linux-usb+bounces-32585-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 15:22:31 +0100
+	id cADEG5DpcGk+awAAu9opvQ
+	(envelope-from <linux-usb+bounces-32586-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 15:58:24 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD8AC5857D
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 15:22:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09F4058D8D
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 15:58:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 52D1372E5F0
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 14:15:08 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8741646B832
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 14:15:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3798B47B42D;
-	Wed, 21 Jan 2026 14:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907B03DA7E8;
+	Wed, 21 Jan 2026 14:11:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9A43587C4;
-	Wed, 21 Jan 2026 14:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2887C481648;
+	Wed, 21 Jan 2026 14:11:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769004691; cv=none; b=k7D9ynhvqlLjEQu7ZaQh+WstmIFYIks64eSPT4f/i/KkQBc7mqYX+33ZZFUOpigzEkNjpaSLJwIi/GmlfK1Ie4Y71Jn31zP0SB4R315CGEgTFO0JnhuRPuofPAZtjndOTv5Fy2c5RDgQ+/D7dJLQX3OeqNpAMSOjpuptyowFF34=
+	t=1769004694; cv=none; b=As3/dl2R8FnH1ykrqoBt/Q5LuWblwiDA9GVYE1HvAZhYxeGe6RGwpCA4S4M7ej39koqAIaNUiVwJ4RH4sexdQPWVxO/2HoVQizem5FxQoxIkiaE83Bt80mI3s6XJOykcONf29QOndIg3Ss3KORs3pJ0X0ikIgoemXHoVnp/BTxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769004691; c=relaxed/simple;
-	bh=jW77EJdDL6t+ci7yWGFy5IMcOo26zYw0YA+cOJ5lFZs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HhIjnlgCYZGXyk2/n0P474aRjH0JirleAwiMj7cAE5Weu8Cruy0EuzhBkQHCQFnS3eKIJSwxSsw9L5AZTdgNAdzL7ie24Mn3RGUg7Aj7QwlxCslpKYD7PzEmGxP4ajomHEFrzd1lcsG2OekgakvdbkIWeOG2L2rVpmcudGo9Y0Q=
+	s=arc-20240116; t=1769004694; c=relaxed/simple;
+	bh=bTMo10SlkojFeqNM7uZ/l/Lwpv6fap2MUX1NzsAplUE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KJZCV8Ch0CSHtXYDvMyUnOBqkuC6eubJi9CRl36q470vnxXLzCBPKvNuVaWNJiEI4uJ7I6qwZZRn7WmatQ9NdZGR8E1mxoQIGGXVvLNey/ycErHNt2S4rkOEMGrQ39n2d1d0BMmdvtZ/dIEFbM1aPF499xFRhYAtCMMnvvKiDMw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA0CC4CEF1;
-	Wed, 21 Jan 2026 14:11:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B05C116D0;
+	Wed, 21 Jan 2026 14:11:31 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 0/4] usb: phy: generic: Miscellaneous improvements
-Date: Wed, 21 Jan 2026 15:11:19 +0100
-Message-ID: <cover.1769004444.git.geert+renesas@glider.be>
+Subject: [PATCH 1/4] usb: phy: generic: Always use dev in usb_phy_generic_probe()
+Date: Wed, 21 Jan 2026 15:11:20 +0100
+Message-ID: <df4ce4bac088f0a4703dd8a3d1255b9072c0b8c6.1769004444.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1769004444.git.geert+renesas@glider.be>
+References: <cover.1769004444.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,14 +60,14 @@ X-Spamd-Result: default: False [-0.76 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-32585-lists,linux-usb=lfdr.de,renesas];
+	TAGGED_FROM(0.00)[bounces-32586-lists,linux-usb=lfdr.de,renesas];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[glider.be];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,renesas];
 	FROM_NEQ_ENVFROM(0.00)[geert@glider.be,linux-usb@vger.kernel.org];
@@ -74,38 +77,58 @@ X-Spamd-Result: default: False [-0.76 / 15.00];
 	R_DKIM_NA(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,glider.be:mid]
-X-Rspamd-Queue-Id: CD8AC5857D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: 09F4058D8D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-	Hi Greg,
+usb_phy_generic_probe() already has a "dev" variable that serves as a
+shorthand for "&pdev->dev".  Use it where appropriate, to shorten the
+code.
 
-This patch series contains a few improvements for the generic USB PHY
-driver.  it has been tested on a Renesas Ebisu-4D board with R-Car E3.
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/usb/phy/phy-generic.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Thanks for your comments!
-
-Geert Uytterhoeven (4):
-  usb: phy: generic: Always use dev in usb_phy_generic_probe()
-  usb: phy: generic: Convert to devm_clk_get_optional()
-  usb: phy: generic: Convert to dev_err_probe()
-  usb: phy: generic: Convert to device property API
-
- drivers/usb/phy/phy-generic.c | 74 ++++++++++++-----------------------
- 1 file changed, 26 insertions(+), 48 deletions(-)
-
+diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.c
+index 8423be59ec0ffbe8..13bd16668932dc90 100644
+--- a/drivers/usb/phy/phy-generic.c
++++ b/drivers/usb/phy/phy-generic.c
+@@ -294,13 +294,13 @@ static int usb_phy_generic_probe(struct platform_device *pdev)
+ 	if (err)
+ 		return err;
+ 	if (nop->gpiod_vbus) {
+-		err = devm_request_threaded_irq(&pdev->dev,
++		err = devm_request_threaded_irq(dev,
+ 						gpiod_to_irq(nop->gpiod_vbus),
+ 						NULL, nop_gpio_vbus_thread,
+ 						VBUS_IRQ_FLAGS, "vbus_detect",
+ 						nop);
+ 		if (err) {
+-			dev_err(&pdev->dev, "can't request irq %i, err: %d\n",
++			dev_err(dev, "can't request irq %i, err: %d\n",
+ 				gpiod_to_irq(nop->gpiod_vbus), err);
+ 			return err;
+ 		}
+@@ -313,14 +313,13 @@ static int usb_phy_generic_probe(struct platform_device *pdev)
+ 
+ 	err = usb_add_phy_dev(&nop->phy);
+ 	if (err) {
+-		dev_err(&pdev->dev, "can't register transceiver, err: %d\n",
+-			err);
++		dev_err(dev, "can't register transceiver, err: %d\n", err);
+ 		return err;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, nop);
+ 
+-	device_set_wakeup_capable(&pdev->dev,
++	device_set_wakeup_capable(dev,
+ 				  of_property_read_bool(dn, "wakeup-source"));
+ 
+ 	return 0;
 -- 
 2.43.0
 
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
 
