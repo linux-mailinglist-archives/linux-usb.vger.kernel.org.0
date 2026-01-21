@@ -1,131 +1,156 @@
-Return-Path: <linux-usb+bounces-32597-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32598-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OPmGC+cCcWmgbAAAu9opvQ
-	(envelope-from <linux-usb+bounces-32597-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 17:46:31 +0100
+	id ePBXDbAOcWlEcgAAu9opvQ
+	(envelope-from <linux-usb+bounces-32598-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 18:36:48 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A59C5A17F
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 17:46:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E74425AA17
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 18:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AB4DDA6F4E6
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 16:30:09 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1083176B56F
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 16:48:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9983F23D5;
-	Wed, 21 Jan 2026 16:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863C547DD44;
+	Wed, 21 Jan 2026 16:37:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NdOIkDlu"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QG0U62PW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C488633BBD1;
-	Wed, 21 Jan 2026 16:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146F4314A95
+	for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 16:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769012594; cv=none; b=KHIjtYTqLyXChemhpX8NiW98PpsB7NbbjG+2CrMrZDH0xtUBm+AwMAQoRVkipHPls09xt4ERL0SuFme1x8zWDoeJ6dbeC//pJjJ0etxoaRIE/97bogotvXucjGjPXBV4ied+fNwxBsHvnKJBYH5uh++JurrJxGhjRsfMxUGBvpQ=
+	t=1769013447; cv=none; b=traHaa32bdZSmxQWij/p27olNFVJDH43mMf8HbP2JRN37rXwo3n45ZTgOhF8kVSXhN68/ekfTLGzxrv7wHTjbfGqC8VhB5sDu7NWJtsGjLbyMwEu6wJnk3KkglQpUdd3bfsS5d9c/mB3VLHhM4h3P7NWE+pYheO3d9mzXFFDEyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769012594; c=relaxed/simple;
-	bh=C1zRnR4f/4ELo3Ee9QMbthpA+I4TkhRIPNNFP8kChbk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lx/HQY1u5BGFiHarOPZ9p8gATlWFFA6NtrEjCkCTOIjyXdsVmEo1DktyFy4CE46E85F4FbjgvhbA7v+q1XHWx2k4554oBBKjPibISn2oA/0L2l40wXYD3GBu48TM4uKgmXmrnSaL2jj1PVfzthkbJbUqaJBgwiZqmC7LBopYyJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NdOIkDlu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31057C4CEF1;
-	Wed, 21 Jan 2026 16:23:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769012593;
-	bh=C1zRnR4f/4ELo3Ee9QMbthpA+I4TkhRIPNNFP8kChbk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NdOIkDluosG/WVQECA6YjymaU+ptEIKqOKt9//sH3+r+Iyb0juaaepfh/j2XFpVq2
-	 u5cv3qjZcxi5g3TOp0E0qSopSkcVDMg0qT64IDHZARQ49n/kRlIDnZXS8KKUYNzA1g
-	 TbOBiPFaZ29xo4gY+uYuQg91THPTXambdO4R0CXeQBSec+dNA4phOSjO67asydG1tc
-	 b3THq7cMXXtOAEwkszvdxIgRAnyLNJNuj8A/jOWMylLiE3hR/dsdkp3GT90wxv2Hro
-	 qL43iEbgl6llwsEa2rn9Mue0eyuLm0wvFZ5+h8cNcxYw+i02xSHFl8tzdKfIXzKIBC
-	 DEyMliklyv2fw==
-Date: Wed, 21 Jan 2026 10:23:12 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Simona Vetter <simona@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, Xin Ji <xji@analogixsemi.com>,
-	linux-usb@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: drm/bridge: anx7625: describe Type-C
- connector
-Message-ID: <176901259157.3406253.14023079021907994492.robh@kernel.org>
-References: <20260121-anx7625-typec-v2-0-d14f31256a17@oss.qualcomm.com>
- <20260121-anx7625-typec-v2-1-d14f31256a17@oss.qualcomm.com>
+	s=arc-20240116; t=1769013447; c=relaxed/simple;
+	bh=ORLqTIWPIiuat4QwAVPOZnmfmYJ6ZMYHUtl8Rmgnqow=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LEzx/GLqErlbrhuS3G4GNx21F5QAmD/6tS78Hjb2KeMqJEe63FVmWAd10TtPcs7BDjx91l8LLm+iF4Q4vHn8sx72+TOpL+97e/tLCSRduSDmyAbplEeij9pQijv5xhV1bqXE0/jhZMcJxyN+Ghh6WuLEV3nNFEmY7Qi3AHtRUSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QG0U62PW; arc=none smtp.client-ip=209.85.167.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-45c8984fac8so21429b6e.3
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jan 2026 08:37:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1769013444; x=1769618244; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N4lAhXN1HmnaRMb9l7lSPcYI4Yng0ZWppyulkwxG0+k=;
+        b=QG0U62PWou++RfoIQtB+2zUV7C0ybnOyT3T/Z8sTqdSJtdrTHXqKGUSGIVRGCKzhRJ
+         OoDuCySjxC/Q0wH85x17QUiuwNawsUIDjPPnyQvuuh3LstXqVSnJDVi0JbRUhhLkZ2pi
+         HXEG5PRsW7ED10n1leC6vPfNerc8kr3o4+CZs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769013444; x=1769618244;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N4lAhXN1HmnaRMb9l7lSPcYI4Yng0ZWppyulkwxG0+k=;
+        b=lLkE6TchOvPGW2Z3SMKCqMhi3TW0JwLVXNGaMkiT0hm4Adq3lmY+QVBehlHPAha2dF
+         lztNeYanhtpN53/Y/7X38pZVo8h9We58zj5/HlbUwq+OVNliNlxbRuNtvWNW1NKvkjIG
+         +ebqZz1aDZmdymRSnfJz8MUGZtPEU6iY2K4tDqBj/OmdFFGrmiIyEr6QqFD9VgQ9fpPV
+         owlgd9w2/N3RjLOLb/2gomXSZVrYZxmT8vOU+pJ84kNbyasQC7V1O8M0FZ3PwytilmEl
+         +3yVkIctVtgwkmluxN28/MWPlhZkBcd/5p6DpFhkGwdnqBqr1dHnv1Mrf2eEbLLSoa40
+         aFlw==
+X-Forwarded-Encrypted: i=1; AJvYcCV77d+5WYOBtLZaIUlO1iaAh0RIdHHiKHMbbcfTEc7gmEuEekkkE8ZSuEMStDTgePGQqPSj6C6oJ/o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxceteg7ggC91hX2ttbNq46NNcARupOP5u3Q+ZufxO7he+pPBpf
+	illVQwnxtk+0i023XCpaAuFLVZqZHKeI/iwDJkJU9xJINsaZD4iho7B+tW1LNYV5zoQ=
+X-Gm-Gg: AZuq6aKMoIvny7wsf1JfHQeB7/S5G8W+4qODKefezD6eqFClsgJuMmoMIiMPGAIlJsZ
+	RlQNqzbLYskwh2zHUt4NJP7EC30yQFOTwsYcHhV1CcrxiEYtEkwmbC62X/r3ZDlB80hvIy8sxaI
+	YEz+MWPt+lsylI4EgEvNMnBQQuKsHYOD8/SYiX5devbm0kXQWYAlQbjTJYnswXb52HpShj3C7TF
+	H1sikNdg8a9I0Zw8Ma77BjbSVJoE0tXsMZtbD7rUPUmXh/STK4TS2849YU+GFddBxAyyd31tGdg
+	C+PTjKQu0OO+ArRZq28+0hWvptD6Kz2lotbrbqVBZyJ8maMIRpAyN2conVggOK0ZrJQiExk7w6F
+	QuwIVaj6zvTI2XZdMH55DuEuizNjdHzWGCRGUPITeoD14Zo1n/2fuoqAaMPbyuhTd1EBpyxJs4A
+	t4brxu6Id7/8Afl7MS1dE1UqRcOXr3xLoGCZXb
+X-Received: by 2002:a05:6808:2507:b0:450:bcc7:18ea with SMTP id 5614622812f47-45c9c01ec83mr6437125b6e.29.1769013443911;
+        Wed, 21 Jan 2026 08:37:23 -0800 (PST)
+Received: from shuah-framework.internal ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-45c9e03e924sm8441674b6e.19.2026.01.21.08.37.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jan 2026 08:37:23 -0800 (PST)
+From: Shuah Khan <skhan@linuxfoundation.org>
+To: valentina.manea.m@gmail.com,
+	shuah@kernel.org,
+	i@zenithal.me,
+	gregkh@linuxfoundation.org,
+	ignacio@hernandez-ros.com
+Cc: Shuah Khan <skhan@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usbip: Reduce CONNRESET message noise in dmesg from stub
+Date: Wed, 21 Jan 2026 09:37:19 -0700
+Message-ID: <20260121163721.11933-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260121-anx7625-typec-v2-1-d14f31256a17@oss.qualcomm.com>
-X-Spamd-Result: default: False [0.54 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [1.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32597-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,ffwll.ch,suse.de,kernel.org,ideasonboard.com,gmail.com,lists.freedesktop.org,vger.kernel.org,analogixsemi.com,linaro.org,linux.intel.com,kwiboo.se,intel.com];
-	RCPT_COUNT_TWELVE(0.00)[22];
 	MIME_TRACE(0.00)[0:+];
+	DMARC_POLICY_ALLOW(0.00)[linuxfoundation.org,none];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32598-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org,zenithal.me,linuxfoundation.org,hernandez-ros.com];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[skhan@linuxfoundation.org,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,0.0.0.1:email,qualcomm.com:email]
-X-Rspamd-Queue-Id: 8A59C5A17F
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,linuxfoundation.org:dkim,linuxfoundation.org:mid,hernandez-ros.com:email,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: E74425AA17
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+stub_complete() prints informational messages for each urb unlink
+filling dmesg. Change the message to dev_dbg() similar to vhci
+reports the CONNRESET condition.
 
-On Wed, 21 Jan 2026 12:15:45 +0200, Dmitry Baryshkov wrote:
-> ANX7625 can be used to mux converted video stream with the USB signals
-> on a Type-C connector. Describe the optional connector subnode, make it
-> exclusive with the AUX bus and port@1 as it is impossible to have both
-> eDP panel and USB-C connector.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> ---
->  .../bindings/display/bridge/analogix,anx7625.yaml  | 98 +++++++++++++++++++++-
->  1 file changed, 97 insertions(+), 1 deletion(-)
-> 
+Reported-by: Ignacio Hernandez-Ros <ignacio@hernandez-ros.com>
+Closes: https://lore.kernel.org/all/0101019b92e81c20-09906fb4-d5e8-40a6-9192-ab693eef4179-000000@us-west-2.amazonses.com/
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ drivers/usb/usbip/stub_tx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+diff --git a/drivers/usb/usbip/stub_tx.c b/drivers/usb/usbip/stub_tx.c
+index 55919c3762ba..4cae452bfadb 100644
+--- a/drivers/usb/usbip/stub_tx.c
++++ b/drivers/usb/usbip/stub_tx.c
+@@ -55,7 +55,7 @@ void stub_complete(struct urb *urb)
+ 			 "stopped by a call to usb_kill_urb() because of cleaning up a virtual connection\n");
+ 		return;
+ 	case -ECONNRESET:
+-		dev_info(&urb->dev->dev,
++		dev_dbg(&urb->dev->dev,
+ 			 "unlinked by a call to usb_unlink_urb()\n");
+ 		break;
+ 	case -EPIPE:
+-- 
+2.51.0
 
 
