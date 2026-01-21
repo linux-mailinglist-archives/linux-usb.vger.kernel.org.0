@@ -1,75 +1,64 @@
-Return-Path: <linux-usb+bounces-32568-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32569-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aJEqHUw5cGmgXAAAu9opvQ
-	(envelope-from <linux-usb+bounces-32568-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 03:26:20 +0100
+	id qBzAFhs6cGmgXAAAu9opvQ
+	(envelope-from <linux-usb+bounces-32569-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 03:29:47 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27E1D4FBF4
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 03:26:20 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 124094FC80
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 03:29:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CC64ABC054E
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 02:25:19 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DE82A782489
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jan 2026 02:28:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2456833DEC2;
-	Wed, 21 Jan 2026 02:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF3A8340D84;
+	Wed, 21 Jan 2026 02:28:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e0IkePLl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYYrENlP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAEF2DC321;
-	Wed, 21 Jan 2026 02:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D92F18DB37;
+	Wed, 21 Jan 2026 02:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768962290; cv=none; b=XBv99Uov1UIEkplnC36yHKz9JhPT4i4NhhNvweFOZlvOE1fksI8V3Ccc23D4dgtSQknRRdBX9mEw0k1cHl7tApY0gT2enVPIQKQQGnZsKwikKyVROYiGz3se3wL3TwW9me8w1IoLAz12nZYM/dMCPvG6Ubzv7lSBnGTKBMhiHOE=
+	t=1768962514; cv=none; b=dFBz4qrpaiODr9GP9VnU6YyHB4oG2t8gGkRlAzxnyO3zb6wnR0NeFP/6Tr6+REnKDQSBAUoZxbTqwE6hX/3X1o/zWQNJBd9HXi875fMYUEt6NSg2Wc3zI4ETgTi1ocPiS4fAkqBuAxM5BNnUNAA/dK00IAMkgJOPo+QhvELs+iM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768962290; c=relaxed/simple;
-	bh=JRDYILHwOsjCdsZ2mQzG5u1ZDZRnQxOez+lzXqMzsDQ=;
+	s=arc-20240116; t=1768962514; c=relaxed/simple;
+	bh=vTfHbIosBhIGcDNmkGqJUvupsZF9T0Fme6/vw/4XXAs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qXWi75nBwuMoXmNXFjS9aw8ZMmNg8hoL1Vfixl8Qb9s7TlBVSrWht5gntXxvraDuoQPD2Q2rkHBjp4g6q96AIhQz8hNZ55jROGdACntuBxPmlfWZv/WCEfSo2cn3sVLErPJEVMJKrJpuEabpqRjjLxTCE7CVVLIQC45H/G0VsLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e0IkePLl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01519C16AAE;
-	Wed, 21 Jan 2026 02:24:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hemivUq43U3HcoayxAPw9thDoauSMA8Zsx232enziqUXJZ4YjRZiTFAdfQh50vt81MDtz04CxQ1De4rJR5fuMpQ7+CU/zmat47wlZKIITnIj9d4tLREInJTNv7bqpn4zUjX3w5ez6JoVrdFmajdctWQTGks40+n9hUWJoR28E+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYYrENlP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 375E9C16AAE;
+	Wed, 21 Jan 2026 02:28:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768962290;
-	bh=JRDYILHwOsjCdsZ2mQzG5u1ZDZRnQxOez+lzXqMzsDQ=;
+	s=k20201202; t=1768962513;
+	bh=vTfHbIosBhIGcDNmkGqJUvupsZF9T0Fme6/vw/4XXAs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e0IkePLlGxCppGZ3uOZN0hjYWm7Ohozz2QBO69cd6Ur2KOvb1zMJAF4GBeULbbrKm
-	 2J0nS4u74Ar6f/N/9fGG8ozuM8jL0fwq65xiukxM+ov/A/4zVANY7NnRPuxQS+WQQl
-	 UkEqOu8wdgnln4hzRDhIZE5gOl0KOsf3TTDJhNZaxP/SiA3p/r7SqUtQ90QVptuHLg
-	 RXhaLKzKLRpYj0jmat8dg3QpCQhchlTmTV3fziX/sb0tBFaOZXofJj9fjl3GxtUBVq
-	 mzjVn1371bfvVC49RLRRn97x9L2rVSaJaJhAA0lxBjI5sGn5Fve5Dra6HObsmn3AEK
-	 PNlWQBEItUxWA==
-Date: Tue, 20 Jan 2026 20:24:49 -0600
-From: Rob Herring <robh@kernel.org>
-To: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
-	Matthias Kaehlcke <mka@chromium.org>,
-	Mike Looijmans <mike.looijmans@topic.nl>,
-	Stephen Boyd <swboyd@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
-	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
-	J =?iso-8859-1?Q?=2E_Neusch=E4fer?= <j.ne@posteo.net>,
-	Pin-yen Lin <treapking@chromium.org>,
-	Catalin Popescu <catalin.popescu@leica-geosystems.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] dt-bindings: usb: Add binding for Genesys Logic
- GL3590 hub
-Message-ID: <20260121022449.GA1804139-robh@kernel.org>
-References: <20260120103312.2174727-1-swati.agarwal@oss.qualcomm.com>
- <20260120103312.2174727-2-swati.agarwal@oss.qualcomm.com>
+	b=iYYrENlPoZw3+rWmuqEqKg3k92ScVBL9NUArHLatSJfJ2Rts34vSjz6BJLk8mKNhr
+	 UjtlfZJru2wmiUqOX+GMicfkptrMAqcZrgKzFNCdV32cru9yiQ6gyBkDSjd6iyw9bY
+	 ScyFDeFT1Zmffj0eW03A/HH/uSXbjRqkAeJLwI3WX/UUNqji6ZH8G3l6ycpX9Ht/+f
+	 BjU9JHen9x06nMGkp2NajcdCKjZFBv+qEer+wjmh2RDH1MiC7JNR8CQ7WRm3TNULWR
+	 lTro1tYK2GBKdJaAtoicxrWLqB1ycBJlI8zLIDpTHJBMU7/XoLwg21k3R34Wo6B5xx
+	 u+NgWJ+ckIUcw==
+Date: Tue, 20 Jan 2026 20:28:32 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+Cc: conor@kernel.org, alex@ghiti.fr, gregkh@linuxfoundation.org,
+	vkoul@kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-riscv@lists.infradead.org,
+	palmer@dabbelt.com, pjw@kernel.org, krzk+dt@kernel.org,
+	linux-usb@vger.kernel.org, aou@eecs.berkeley.edu,
+	neil.armstrong@linaro.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] dt-bindings: phy: Add Canaan K230 USB PHY
+Message-ID: <176896251125.1833421.13897211513814377916.robh@kernel.org>
+References: <20260120143243.71937-1-jiayu.riscv@isrc.iscas.ac.cn>
+ <20260120143243.71937-2-jiayu.riscv@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,7 +67,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260120103312.2174727-2-swati.agarwal@oss.qualcomm.com>
+In-Reply-To: <20260120143243.71937-2-jiayu.riscv@isrc.iscas.ac.cn>
 X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
@@ -89,12 +78,12 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32568-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-32569-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
@@ -103,64 +92,26 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: 27E1D4FBF4
+	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:email,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: 124094FC80
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Jan 20, 2026 at 04:03:09PM +0530, Swati Agarwal wrote:
-> Add the binding for the USB3.2 Genesys Logic GL3590 hub.
-> GL3590 hub requires 1.2V and 3.3V supplies for operation.
+
+On Tue, 20 Jan 2026 22:32:40 +0800, Jiayu Du wrote:
+> K230 SoC USB PHY requires configuring registers for control and
+> configuration. Add USB phy bindings for K230 SoC.
 > 
-> Signed-off-by: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+> Signed-off-by: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
 > ---
->  .../devicetree/bindings/usb/genesys,gl850g.yaml | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+>  .../bindings/phy/canaan,k230-usb-phy.yaml     | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/canaan,k230-usb-phy.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> index 9a94b2a74a1e..a4a359000ca1 100644
-> --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> @@ -15,6 +15,7 @@ properties:
->        - usb5e3,608
->        - usb5e3,610
->        - usb5e3,620
-> +      - usb5e3,625
->        - usb5e3,626
->  
->    reg: true
-> @@ -26,6 +27,10 @@ properties:
->      description:
->        The regulator that provides 3.3V or 5.0V core power to the hub.
->  
-> +  vdd12-supply:
-> +    description:
-> +      The regulator that provides 1.2V power to the hub.
-> +
->    peer-hub: true
->  
->    ports:
-> @@ -69,6 +74,18 @@ allOf:
->          peer-hub: true
->          vdd-supply: true
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - usb5e3,625
-> +    then:
-> +      properties:
-> +        peer-hub: true
-> +        vdd-supply: true
-> +        vdd12-supply: true
 
-true is the default, so this does nothing. It's all the existing 
-compatibles that should disallow vdd12-supply.
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Rob
 
