@@ -1,304 +1,229 @@
-Return-Path: <linux-usb+bounces-32614-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32615-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0AZ4LtvncWkONAAAu9opvQ
-	(envelope-from <linux-usb+bounces-32614-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 10:03:23 +0100
+	id iDAzDzTvcWlKZwAAu9opvQ
+	(envelope-from <linux-usb+bounces-32615-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 10:34:44 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BCF36428B
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 10:03:23 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1A5E64994
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 10:34:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B8AD55E64D1
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 08:55:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7B63F8260E7
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 09:29:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A088347DD51;
-	Thu, 22 Jan 2026 08:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E063563F7;
+	Thu, 22 Jan 2026 09:29:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WHQmGr1W";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="VutWJXiX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f205.google.com (mail-oi1-f205.google.com [209.85.167.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F663EF0B0
-	for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 08:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238C139E171
+	for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 09:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769072014; cv=none; b=q1owSwhRtujdXd4RVBcBJYwg33gJHxeCQjHLVD+NLU2E6v/3uQO5SUP1stF4rZNEFw8TppSRlSZ0mIwvXBl0VARpnxKondbjR+8wZViIMNJyNglS/y5UCjj6uqHVgdMfljNys4+/1bzJWQ8JHytc8nCxU5a61F5PNiknJU1w+LE=
+	t=1769074150; cv=none; b=TLFZz6oS0UYyI2YlMGQCJh6jHAUoLjtIWsNivqk61Jema+ozo4kXRX2u5rHb7V4goJZEnTLSV/MIREVZAN4bjgqqXQBISBxwt+aNSGV0zby4BH+Lt3MVoXRZYI5IShX/jTKBhbyWCt60LkGhGhHtsEnZODBBIby2S4+6ctu1pIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769072014; c=relaxed/simple;
-	bh=UTDZk7ZvLY5cFz80JynOFk++a558mvAGF+m1Y0bIDpw=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=ZSJh/gcFAqF0p5VTs4RWTxGiDSsa3Z0AQU4CxQ8lv5x49KRIw7JSrCmY6q+xlQ2o7zPVm0Z1E+bKtwyUcTCElefSjMah8AL7BfZo6HRwXWTJooP7DSC/YL+KujTaMYbyKCSgtdKIUpjs477U73RTWUZso+Fhs/GWzGvkSNUJ+aA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f205.google.com with SMTP id 5614622812f47-45c9f618811so4026574b6e.0
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 00:53:32 -0800 (PST)
+	s=arc-20240116; t=1769074150; c=relaxed/simple;
+	bh=l726UvUudfj4lAVHQRk7doXHqWF8GgYbHwQGE0X0cTA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k5Ld/BxhPHkmRVoY477MGpmIY/HmCCD0XXav6EytAo7O5amgfZmwI2nz7kJ0IeRuc5VqcGxldSShp822xoQjLj4W1HbN6QXzg8Jxif2WRF3jeg45BURk2H6KYSu6/6mK5twDLwOQrSZ6Xy76uMGhvPgF81SIZTGhED5zR/8K9YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WHQmGr1W; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=VutWJXiX; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60M7153v483784
+	for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 09:29:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=dGvF6SHJr0bMIa867tDAlm4sNqFsBGdAC8D
+	s11+ZVUw=; b=WHQmGr1WG5K+xBf0MgBW5deHnfOntjJC3q5ZRAf90oMUsj1YWu5
+	8A0Yt6eNFs8R6gkgA22LggJE/f59J4c0SbloftUDDWnHYy5S7q0NyvRK6rRGjPmA
+	AfPoqcC2cdvDROIrMWslP6zOAZ5XEfeHLk5jCmRhhDgn281TtRxGackCDitCNEiV
+	UXTtY1hQ8DJJ3ctENa0TVznBSC+8MAsuK5RXn7OFsr9iucAoOT2jWg/SnXqPhwA9
+	8I6cx7/ZB7bqinZZH+02U5bEH1OdEcHmNvNrzRnOpdUDgp+CRt3yxvGdWr2FG6wk
+	j5L+dkCI3eKuHhzYCRqr7TH5KvrKwBXgnrw==
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bu6pj1w0c-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 09:29:03 +0000 (GMT)
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-c613929d317so450604a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 01:29:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1769074143; x=1769678943; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dGvF6SHJr0bMIa867tDAlm4sNqFsBGdAC8Ds11+ZVUw=;
+        b=VutWJXiXwoVOzEooLK8gKZb+TlkPSkQ6+uXdvR16zXxNzwc5901k5IcIXdrfeDKLUl
+         Jc+aPx3efvObNas2YfaYkvb14Ll0kTRn5JhjrHsiGZz22S8SuTuSF8CFTyB5AnDav6kh
+         IuNf7YRq/dBGcCNTgMlZfJ8gvMdg3/e2Rr1B5brEepytzdGzMF4cLB9AvseEEcUXWPyL
+         2H5tSP59HTChRX4pfdEwUc8PkAnowOw38dXIvPxzD09Vk6f44ZbW7Plsr0QC9dhxPP0P
+         7D48NhTSXPrDymJcfAmPwoHMfm2Hp1mqIW2AScaqQUmcfpKIaNCBEN1VvJMseLbttseq
+         CHzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769072011; x=1769676811;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PCEPG624hjG44ajr4KRdg/TDTcq4sVGy6ScMHuZ3R+4=;
-        b=Gdsz5bDFNzSd8dTRspEaW0eTbSazEOd8A4XhMv4tt1GPgAqBHWQXUuPMKc/brtOCs0
-         fNuSMEVNzvg1VfkVvjcVKYqFJxYa+8lBCWkqeq6EH/t4H3LA96LuhcR3Yqq6llfpbs9k
-         +bonKVB/wuDG0Kd5nM+mv7nxBzT/YOzkPPYtHxPEkCxGxko9ikVnxJPTlMEZHPMVckaT
-         1nwSVj+yOUJOEXOsmZ7qyq7GMbfxaY+SeBNjOQWfSNvkboywKnZ2W76l1ghqA2MQZjnf
-         cghyBEz+4X/rSQzcR5Se250bwORQyt3swBYZM2G1bxiNVO6dRx2yyZhbX2AOGwCXIll7
-         avoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXhr/qyk18vmseUEMF6TkGFpRfJZNJfatetRDYAh8BLsDM2VlSkwetzP/Zp2Bhfmkx8jYq4wOYWmac=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2ESU0F3O7mC0HDOACmiyHIW1rQ7sI/NiOdq9+ULvZ8245GxXe
-	dEfIge/GOPlP+YOx31T1Yq5NjU+ylzZRNdxwOLjpFBIXl4X2Je/4P1EugbFnoHmLT/FQholYlit
-	wh9JgvcNSlpvqvrHQBkJslzvuyOv7/zojZjfUzdqqjk0s3Z4kaDxg7anR9Co=
+        d=1e100.net; s=20230601; t=1769074143; x=1769678943;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dGvF6SHJr0bMIa867tDAlm4sNqFsBGdAC8Ds11+ZVUw=;
+        b=lheGmLan76iieDopRIorDtOUj9TOlAin3rBRM8+62pAP4Ypn5BA7zeCJosesrZ1ytx
+         fXMkwKay2lEzGn5dr8z6saDqNbOccOrgjEOEqnMoahfYQmFlG6Dm/+auguqlokyUPnE9
+         vf4Ui0GGGh+nxCAAEabItCyLCk4FjBnYZWIz4zYkRsjnoog+rQL0/r0840Kh3U2dvzf6
+         E5pgSEKCbmAZff4GqoE7PVw6hVzJ/U1Ua9XF8BnLqgwjzrXc1KFc3BsdcNQKbOy/XWIK
+         e5eGA00XGqxF5to07q973nKl00iQUfigQ6Vd9Mey89fJd6WeKZ0+yovIl61wY2V3WFN6
+         Fx9Q==
+X-Gm-Message-State: AOJu0YxeRfkTFRbvTKqeq2L4E2teoPYSKbLJhFiKOqDEKnTcdxzBJDtv
+	73GvJnRSZfdQwMbeA+hV1R7hxX+ywcIAqts0QO//Dro9Dz7/dg58blARsArgBPMkMTgDm6NQm0u
+	Vi+eAXZCwjg+bMh6uNat+a9kfygChErNes6Yzxt6tFEYGPcgtJh/14AfY7DqLt4w=
+X-Gm-Gg: AZuq6aK2NVgu4FefKRYMqqhrNHvDy9Rbz4mmg2QjZQzTePWlcQIJxF09A79RJciC3k/
+	iz+zu39p3R+UZH5JDGIQsAN0J0txNDgxwg1AQwP2S9r5GjSc+ce3JmmJbqQ+tPlO5Wo/iY7lgUs
+	cH/QiZmDEiZsEZ26DRSZ7tNttKF9mooDF/yGry0DJQlkbcUg0abipLjYChNykREsvYlyy5/Xy/4
+	HqnpAN1Lr1+2ILdV8+vJOah5e/zaiG814km7ZrWBn3an6IhAnwFObHp5Cr8K3TUvyWuNqSjcpTB
+	qPXCLCi3co+ezO+R2ZKTaDt735CXmVXRtqgHTJPDI5r0ITNrQ9FBcibAliqcbTVerGMZSsRzgUv
+	vVfSTSglFZkEob0kksvYzGokOXNOHdkv2VVphbVmoBxM=
+X-Received: by 2002:a05:6a21:b93:b0:34f:241f:aa1e with SMTP id adf61e73a8af0-38e45d53373mr7897320637.31.1769074142684;
+        Thu, 22 Jan 2026 01:29:02 -0800 (PST)
+X-Received: by 2002:a05:6a21:b93:b0:34f:241f:aa1e with SMTP id adf61e73a8af0-38e45d53373mr7897291637.31.1769074142150;
+        Thu, 22 Jan 2026 01:29:02 -0800 (PST)
+Received: from hu-swatagar-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c5edf355ca7sm17395247a12.27.2026.01.22.01.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jan 2026 01:29:01 -0800 (PST)
+From: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+        Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+        =?UTF-8?q?J=20=2E=20Neusch=C3=A4fer?= <j.ne@posteo.net>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Catalin Popescu <catalin.popescu@leica-geosystems.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+Subject: [PATCH v5 0/4] Enable secondary USB controller in host mode
+Date: Thu, 22 Jan 2026 14:58:48 +0530
+Message-Id: <20260122092852.887624-1-swati.agarwal@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:1629:b0:662:c7bf:e0e0 with SMTP id
- 006d021491bc7-662c7bfe2eemr176762eaf.2.1769072011288; Thu, 22 Jan 2026
- 00:53:31 -0800 (PST)
-Date: Thu, 22 Jan 2026 00:53:31 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6971e58b.a00a0220.3ad28e.9c56.GAE@google.com>
-Subject: [syzbot] [media?] KASAN: slab-use-after-free Read in em28xx_unregister_media_device
-From: syzbot <syzbot+07b93bb3189febcab189@syzkaller.appspotmail.com>
-To: laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-usb@vger.kernel.org, mchehab@kernel.org, 
-	sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=D8pK6/Rj c=1 sm=1 tr=0 ts=6971eddf cx=c_pps
+ a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=PaSnYlJwPn2ZfU4Ri74A:9
+ a=3WC7DwWrALyhR5TkjVHa:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDA2NCBTYWx0ZWRfX3rEaSGiLc12v
+ SUaId0Bx7KW1ApoGmFo4Z1fRgZjU+m3ywt2EDX+Q2FNFAe+oQaCxQB9U7bqnvuzUjPUMi8MvA0f
+ FRFXo3vPt8XOGVqocVdNfH0nP64ZPPr0kW+l5g02+yKq3r9fw5u78nOYFE2trzvjJ/OWWcNn8xG
+ Ree0ZLGDqwa8khn0ikKimZ6mmqLtNF3YUg/8wPbsybv5QTuoSZB1nrjH0mpg0Lcagi2gTlCRLij
+ 3nY8xTlhoIRLUwH6o9yzTlnzlooUKgT757C2AvYGiyweRyzq/ERarCNicEbMf4zd8OFNZuv9wtK
+ Nk6dKre4tCOEQ9T1K+xVWkEB+2AUYvMYeH1ZtnI6RKGQLQZwWZ+bq71GlYfZsmFw27c7qx43fJC
+ 3e2sq9aHwz1AHCyzxVnAy7ge76gTnq8pocg6/FS8tzosQfwrs33PBtZBfcfV1Jz/N8IHin9I/9c
+ 8gaPDNz69NSDLYUefZA==
+X-Proofpoint-ORIG-GUID: nOB09Jh0Xw5jjsfRT5DjMMSNNUiB46OY
+X-Proofpoint-GUID: nOB09Jh0Xw5jjsfRT5DjMMSNNUiB46OY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-21_04,2026-01-20_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 malwarescore=0 adultscore=0 phishscore=0 impostorscore=0
+ priorityscore=1501 clxscore=1015 spamscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2601220064
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [1.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=a04e768f944f1aa0];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : No valid SPF, No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32614-lists,linux-usb=lfdr.de,07b93bb3189febcab189];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32615-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	SUBJECT_HAS_QUESTION(0.00)[];
-	REDIRECTOR_URL(0.00)[goo.gl];
-	TAGGED_RCPT(0.00)[linux-usb];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,qualcomm.com:dkim,dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns];
 	MIME_TRACE(0.00)[0:+];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	R_DKIM_NA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[storage.googleapis.com:url,ams.mirrors.kernel.org:helo,ams.mirrors.kernel.org:rdns,syzkaller.appspot.com:url,googlegroups.com:email]
-X-Rspamd-Queue-Id: 5BCF36428B
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	FROM_NEQ_ENVFROM(0.00)[swati.agarwal@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	R_SPF_SOFTFAIL(0.00)[~all];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	DMARC_POLICY_ALLOW(0.00)[qualcomm.com,reject];
+	PRECEDENCE_BULK(0.00)[];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: A1A5E64994
 X-Rspamd-Action: no action
 
-Hello,
+Enable secondary USB controller in host mode on lemans EVK platforms.
 
-syzbot found the following issue on:
+Changes in v5:
+Updated comment description in DT.
+Updated vdd-supply status for other hubs in bindings.
 
-HEAD commit:    5ac87cd859ec Merge 6.19-rc6 usb-next
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=140e73fa580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a04e768f944f1aa0
-dashboard link: https://syzkaller.appspot.com/bug?extid=07b93bb3189febcab189
-compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+Changes in v4:
+Updated power supply property for hub.
+Updated details for all 4 ports of hub.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Changes in v3:
+Updated binding properties for genesys hub.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b927a84e0088/disk-5ac87cd8.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b8131bd9dbee/vmlinux-5ac87cd8.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/24fc40a81925/bzImage-5ac87cd8.xz
+Changes in v2:
+Add Genesys Logic GL3590 hub support.
+Rename hd3ss3220_ instance for primary port controller.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+07b93bb3189febcab189@syzkaller.appspotmail.com
+Link to v4:
+https://lore.kernel.org/all/20260120103312.2174727-1-swati.agarwal@oss.qualcomm.com/
 
-em28xx 8-1:0.132: Closing input extension
-==================================================================
-BUG: KASAN: slab-use-after-free in media_device_unregister drivers/media/mc/mc-device.c:804 [inline]
-BUG: KASAN: slab-use-after-free in media_device_unregister+0x565/0x5e0 drivers/media/mc/mc-device.c:782
-Read of size 8 at addr ffff88813572c210 by task kworker/1:6/5730
+Link to v3:
+https://lore.kernel.org/all/20251220063537.3639535-1-swati.agarwal@oss.qualcomm.com/
 
-CPU: 1 UID: 0 PID: 5730 Comm: kworker/1:6 Not tainted syzkaller #0 PREEMPT(voluntary) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:378 [inline]
- print_report+0x156/0x4c9 mm/kasan/report.c:482
- kasan_report+0xdf/0x1a0 mm/kasan/report.c:595
- media_device_unregister drivers/media/mc/mc-device.c:804 [inline]
- media_device_unregister+0x565/0x5e0 drivers/media/mc/mc-device.c:782
- em28xx_unregister_media_device+0x4e/0xe0 drivers/media/usb/em28xx/em28xx-cards.c:3511
- em28xx_release_resources+0x79/0x1b0 drivers/media/usb/em28xx/em28xx-cards.c:3532
- em28xx_usb_disconnect.cold+0x17d/0x253 drivers/media/usb/em28xx/em28xx-cards.c:4201
- usb_unbind_interface+0x1dd/0x9e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:571 [inline]
- device_remove+0x12a/0x180 drivers/base/dd.c:563
- __device_release_driver drivers/base/dd.c:1282 [inline]
- device_release_driver_internal+0x42e/0x600 drivers/base/dd.c:1305
- bus_remove_device+0x22f/0x440 drivers/base/bus.c:616
- device_del+0x376/0x9b0 drivers/base/core.c:3878
- usb_disable_device+0x367/0x810 drivers/usb/core/message.c:1418
- usb_disconnect+0x2e2/0x9a0 drivers/usb/core/hub.c:2345
- hub_port_connect drivers/usb/core/hub.c:5407 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
- port_event drivers/usb/core/hub.c:5871 [inline]
- hub_event+0x1d0c/0x4af0 drivers/usb/core/hub.c:5953
- process_one_work+0x9c2/0x1840 kernel/workqueue.c:3257
- process_scheduled_works kernel/workqueue.c:3340 [inline]
- worker_thread+0x5da/0xe40 kernel/workqueue.c:3421
- kthread+0x3b3/0x730 kernel/kthread.c:463
- ret_from_fork+0x6c3/0xa20 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
- </TASK>
+Link to v2:
+https://lore.kernel.org/all/20251216120749.94007-1-swati.agarwal@oss.qualcomm.com/
 
-Allocated by task 11958:
- kasan_save_stack+0x30/0x50 mm/kasan/common.c:57
- kasan_save_track+0x14/0x30 mm/kasan/common.c:78
- poison_kmalloc_redzone mm/kasan/common.c:398 [inline]
- __kasan_kmalloc+0x8f/0xa0 mm/kasan/common.c:415
- kmalloc_noprof include/linux/slab.h:957 [inline]
- kzalloc_noprof include/linux/slab.h:1094 [inline]
- em28xx_v4l2_init.cold+0x94/0x3503 drivers/media/usb/em28xx/em28xx-video.c:2532
- em28xx_init_extension+0x13a/0x200 drivers/media/usb/em28xx/em28xx-core.c:1117
- request_module_async+0x61/0x80 drivers/media/usb/em28xx/em28xx-cards.c:3457
- process_one_work+0x9c2/0x1840 kernel/workqueue.c:3257
- process_scheduled_works kernel/workqueue.c:3340 [inline]
- worker_thread+0x5da/0xe40 kernel/workqueue.c:3421
- kthread+0x3b3/0x730 kernel/kthread.c:463
- ret_from_fork+0x6c3/0xa20 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+Link to v1:
+https://lore.kernel.org/all/20251203-swati-v1-1-250efcb4e6a7@oss.qualcomm.com/
 
-Freed by task 11958:
- kasan_save_stack+0x30/0x50 mm/kasan/common.c:57
- kasan_save_track+0x14/0x30 mm/kasan/common.c:78
- kasan_save_free_info+0x3b/0x70 mm/kasan/generic.c:584
- poison_slab_object mm/kasan/common.c:253 [inline]
- __kasan_slab_free+0x43/0x70 mm/kasan/common.c:285
- kasan_slab_free include/linux/kasan.h:235 [inline]
- slab_free_hook mm/slub.c:2540 [inline]
- slab_free mm/slub.c:6670 [inline]
- kfree+0x1ad/0x630 mm/slub.c:6878
- kref_put.isra.0+0x56/0x90 include/linux/kref.h:65
- em28xx_v4l2_init.cold+0x280/0x3503 drivers/media/usb/em28xx/em28xx-video.c:2901
- em28xx_init_extension+0x13a/0x200 drivers/media/usb/em28xx/em28xx-core.c:1117
- request_module_async+0x61/0x80 drivers/media/usb/em28xx/em28xx-cards.c:3457
- process_one_work+0x9c2/0x1840 kernel/workqueue.c:3257
- process_scheduled_works kernel/workqueue.c:3340 [inline]
- worker_thread+0x5da/0xe40 kernel/workqueue.c:3421
- kthread+0x3b3/0x730 kernel/kthread.c:463
- ret_from_fork+0x6c3/0xa20 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+Swati Agarwal (4):
+  dt-bindings: usb: Add binding for Genesys Logic GL3590 hub
+  usb: misc: onboard_usb_hub: Add Genesys Logic GL3590 hub support
+  arm64: dts: qcom: lemans-evk: Rename hd3ss3220_ instance for primary
+    port controller
+  arm64: dts: qcom: lemans-evk: Enable secondary USB controller in host
+    mode
 
-The buggy address belongs to the object at ffff88813572c000
- which belongs to the cache kmalloc-8k of size 8192
-The buggy address is located 528 bytes inside of
- freed 8192-byte region [ffff88813572c000, ffff88813572e000)
+ .../bindings/usb/genesys,gl850g.yaml          |  19 ++
+ arch/arm64/boot/dts/qcom/lemans-evk.dts       | 216 +++++++++++++++++-
+ drivers/usb/misc/onboard_usb_dev.c            |   1 +
+ drivers/usb/misc/onboard_usb_dev.h            |   8 +
+ 4 files changed, 240 insertions(+), 4 deletions(-)
 
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x135728
-head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-flags: 0x200000000000040(head|node=0|zone=2)
-page_type: f5(slab)
-raw: 0200000000000040 ffff888100042280 ffffea00046dc600 dead000000000002
-raw: 0000000000000000 0000000080020002 00000000f5000000 0000000000000000
-head: 0200000000000040 ffff888100042280 ffffea00046dc600 dead000000000002
-head: 0000000000000000 0000000080020002 00000000f5000000 0000000000000000
-head: 0200000000000003 ffffea0004d5ca01 00000000ffffffff 00000000ffffffff
-head: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000008
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1122, tgid 1122 (kworker/1:2), ts 1154723928347, free_ts 1154474178179
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x1e1/0x250 mm/page_alloc.c:1884
- prep_new_page mm/page_alloc.c:1892 [inline]
- get_page_from_freelist+0xd57/0x3b20 mm/page_alloc.c:3945
- __alloc_frozen_pages_noprof+0x269/0x2230 mm/page_alloc.c:5240
- alloc_pages_mpol+0xe8/0x410 mm/mempolicy.c:2486
- alloc_slab_page mm/slub.c:3075 [inline]
- allocate_slab mm/slub.c:3248 [inline]
- new_slab+0x2c4/0x440 mm/slub.c:3302
- ___slab_alloc+0xda3/0x1ca0 mm/slub.c:4656
- __slab_alloc.isra.0+0x63/0x110 mm/slub.c:4779
- __slab_alloc_node mm/slub.c:4855 [inline]
- slab_alloc_node mm/slub.c:5251 [inline]
- __do_kmalloc_node mm/slub.c:5656 [inline]
- __kmalloc_noprof+0x5c3/0x990 mm/slub.c:5669
- kmalloc_noprof include/linux/slab.h:961 [inline]
- hcd_buffer_alloc+0x1f5/0x290 drivers/usb/core/buffer.c:134
- usb_alloc_coherent+0x5f/0xa0 drivers/usb/core/usb.c:1010
- hdpvr_alloc_buffers+0x12e/0x650 drivers/media/usb/hdpvr/hdpvr-video.c:162
- hdpvr_probe.cold+0x929/0x12fe drivers/media/usb/hdpvr/hdpvr-core.c:350
- usb_probe_interface+0x303/0x8f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:581 [inline]
- really_probe+0x241/0xa60 drivers/base/dd.c:659
- __driver_probe_device+0x1de/0x400 drivers/base/dd.c:801
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:831
-page last free pid 2860 tgid 2860 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1433 [inline]
- __free_frozen_pages+0x7d1/0x1010 mm/page_alloc.c:2973
- discard_slab mm/slub.c:3346 [inline]
- __put_partials+0x127/0x160 mm/slub.c:3886
- qlink_free mm/kasan/quarantine.c:163 [inline]
- qlist_free_all+0x47/0xe0 mm/kasan/quarantine.c:179
- kasan_quarantine_reduce+0x1a0/0x1f0 mm/kasan/quarantine.c:286
- __kasan_slab_alloc+0x4e/0x70 mm/kasan/common.c:350
- kasan_slab_alloc include/linux/kasan.h:253 [inline]
- slab_post_alloc_hook mm/slub.c:4953 [inline]
- slab_alloc_node mm/slub.c:5263 [inline]
- kmem_cache_alloc_node_noprof+0x292/0x7d0 mm/slub.c:5315
- __alloc_skb+0x156/0x410 net/core/skbuff.c:679
- alloc_skb include/linux/skbuff.h:1383 [inline]
- netlink_alloc_large_skb+0x69/0x150 net/netlink/af_netlink.c:1184
- netlink_sendmsg+0x680/0xda0 net/netlink/af_netlink.c:1869
- sock_sendmsg_nosec net/socket.c:727 [inline]
- __sock_sendmsg net/socket.c:742 [inline]
- ____sys_sendmsg+0xa54/0xc30 net/socket.c:2592
- ___sys_sendmsg+0x190/0x1e0 net/socket.c:2646
- __sys_sendmsg+0x170/0x220 net/socket.c:2678
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xc9/0x570 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
+-- 
+2.34.1
 
-Memory state around the buggy address:
- ffff88813572c100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88813572c180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88813572c200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                         ^
- ffff88813572c280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88813572c300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
