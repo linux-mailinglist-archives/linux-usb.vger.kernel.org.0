@@ -1,186 +1,173 @@
-Return-Path: <linux-usb+bounces-32636-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32637-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uDa6Bl1UcmnpfAAAu9opvQ
-	(envelope-from <linux-usb+bounces-32636-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 17:46:21 +0100
+	id +LuoG0BhcmnfjQAAu9opvQ
+	(envelope-from <linux-usb+bounces-32637-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 18:41:20 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FE5E6A386
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 17:46:20 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71FC86B87F
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 18:41:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6635931FFDCC
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 16:36:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B2B6830F976D
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jan 2026 17:28:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACBD54DC546;
-	Thu, 22 Jan 2026 16:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97DA3DA2F0;
+	Thu, 22 Jan 2026 17:07:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kCIKhS7+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdKExb2s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0304A5AED
-	for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 16:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769098695; cv=pass; b=n4ethri2u/VQ4y0ldBiRv40dIPoVl3QE3RteKBgRNcuoKUd7n9i0unv5496DQadvBa9BdKlyOvnI+5Gvj27uCniJ8MlJ0VOj7pMsgFcLRWArPpz0NJdJCwB0FoinYq/5ep3yi/QcIOTG4F+PDhcRYCJTcV6JLtK+h/k1o0vYpT0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769098695; c=relaxed/simple;
-	bh=ZgqBjrkfkOYhFn67ndZoGr9l9YqTB28pM1ctWdj1+9k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YVA7pIB0btu1G72UTJr+bRcJ2cBZ7HPdqeLG2zIy3sI3MobCUNL3JsV95tA9P03t/6NXuO/PsR/rb5Ov/oCmA6JlLRBh3HoGZ4lLfI8NqSj3N89KOWVGx6q9G6A0SQPai0eEwszLySCnROYtLA6mGzpzolVDxBPdzEde9w2u8cA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kCIKhS7+; arc=pass smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4327790c4e9so786968f8f.2
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 08:18:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769098683; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QsVdhUbxmyGZWw8mkAYhCXnQs25UolJ45VkDUoxea/udXyDOZIx4LQO4F2I/kn0X+O
-         U+jxuakCBAL7TL1haw/0lTERM+f1YBVLC3qq8NNOsAgDjdaFxk392nCnLw7D53c/bPiJ
-         8zKwL4UgJKwM70jMfiGVVS4VyRtpNtB21gf5AOJe2rarbTJgsoNt95LXnP2Goy1k+w8u
-         x1fnaMbh/DbT6fABJ/e9fBu4At/cQEIfl1AHkp2J+MS2BYDtCjEy5FOnWPAYlEXa5dau
-         qIhOmzh2r3e4efPvtZuXi8bJBFynLAGToEJnv3m6xI8etpsowBvy8Mik90CmnrNX73tu
-         /fGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZgqBjrkfkOYhFn67ndZoGr9l9YqTB28pM1ctWdj1+9k=;
-        fh=MRxiINe9WavUm4+lIs2VmEg5S8YMzRjZEdfBBfuVJOU=;
-        b=M1iLr4f5avxTSo0HZGReqdshl9M0xmCRkKgNbWwKSDA2qI7agZ5oW7qWLnJkADG6x4
-         IsMRKUPbAojfsx051RL5HMzIDUI1eFxDIw0BC7dN69wbq/d4Cr4CkijZ8UJR5OLjHX0m
-         +xovKkSevSUw19d99IFS+73wxUeGM8vc8Bh0PkKzIUfp1azx2hQtwmEMitABl1JXxfA4
-         MtcJS+J0JSeNcwKItPumP62R3HMmde3t9lxYR3G7zlBuOo4WgkfKB8MDEiA5xQXfszPZ
-         SRHw2gCa81ERSLFim/aYjJwjn7ivblTknf4dXZhtvf5N2maGrtrDjMqaGXvoRdIWs7si
-         NVBg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769098683; x=1769703483; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZgqBjrkfkOYhFn67ndZoGr9l9YqTB28pM1ctWdj1+9k=;
-        b=kCIKhS7+aHqOI89jcXKBCXXr3IFsRkT1kGV/35LQgZE4c+w0VO+z7HNRvl9ssa9/Tu
-         Wm0rX7hFWvOa8eOqfHLFuuieyDoTzPWMpxtfMQSZCwwcHh0/N29D27qdkrBK5VyakXa3
-         TlYGzxF04hBu9dPlNlZ7+8y5GVLrXiXYza5+NGOJwKOOyntJQ/rbukFIEK1C4ehjH3TS
-         u0xXidXG8m7nj4R4QJRgKdtk+WH6wAWwwPH2O0Zivdekj6I+oBLTQHGTqFICt/GyrlaP
-         m6SULOh3UT58nW3ToYJEnGP8QEc+dOOPD+PC+M7BcREgnMVbdkiowO2/vefLIThcttvY
-         J6XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769098683; x=1769703483;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZgqBjrkfkOYhFn67ndZoGr9l9YqTB28pM1ctWdj1+9k=;
-        b=tENFjsovJA8hw9tk26VAmILO60IX1f8vZ5L/UZGMAV+P549+E3fSbxOMrtAY8IXhIS
-         5YAYDOzQgujeeSgqUvonQQE30FnET8Wnr1OeaQ+VRkjg7RAfTH5fnQgVT0/bmL9tY4GE
-         lz3PNvNMiV7FVN8bO1sI5uQ9+aP1T0MB4eNjaL/JkETSr8tZLesFo6szg2Ap9/zwblKJ
-         babihr5VugbZi+J9C4OgnxvoDGxkyxxsgRZencdV4e/pGd6WuPkEBKk/9IqZ+IxCUNgz
-         +F8kTMOAlcQSt0ziHLlOik3mxTdnaEsynndzlfgV6NgVff0D8d832eaIBCY0XKvCzps+
-         sdJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUY6PB0UsStMfmP0TnS579QHDNy4KogMMpNO/ksBUnU/d14WEuTZnCFf0Tn2dacIkWAdJSI9NJ0bUw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBKBTCnu6GnjHLhz3buBoBYQa4BL3tlQWW5ZfrW8q5rjIYH1v7
-	7abuNcyW+4ukfIL+UAJPkfR6I7mgrm5LsZGnctPOCwi5xgbYV+ISIfExwPpGgtZZsDLaedHUsmX
-	j+HR8DIOOShytIuEugcswPFcCqM/YkMQ=
-X-Gm-Gg: AZuq6aKsetGtuvOlmuboH73nUy2IbIREmhBE2y5cR/kAwPPcW1D7pnpTbqxdu8L1XwC
-	5S95xK4OtWyYYSuYfjrG8a6snVCUWJKMwrMsmiwwwXiTCXa9VAQz8F1HzMjb+wxa1WyYGmTqTjf
-	eF1+VFJrxufwgxxfXBbmcPcWPfQ6uM6Omp+9GiXbRx3maCRKJM6wkWW0QkULEHRHKbv2Tc/vPKR
-	zzzleuCktyLqDYRf6LYEykw+HG1Ea6WEkDKqR+ZXoY8tnC5v8aR+DzjI3n2CUBOjFfCB3qx
-X-Received: by 2002:a5d:5f93:0:b0:435:91b8:e01b with SMTP id
- ffacd0b85a97d-435b1607c6emr115009f8f.45.1769098683075; Thu, 22 Jan 2026
- 08:18:03 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A601395731;
+	Thu, 22 Jan 2026 17:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769101613; cv=none; b=RqDtlEhamefCAgJ191Xra1ZbUmeSi8TsulFWWBQwGAOn5DV58KVluHsFXUpfTpqGDywD3P8Kfj9u/rIGdc9TAaH1GtsJL8YslwbRFboP0CGoi6r68ya57ejKNgfHC1031CjRMx2jkGgUFzk3PAi6haSdjGFXDn9djiUlTw/+5oA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769101613; c=relaxed/simple;
+	bh=riDE5Q5BDE4FI/xKxhVniW2Qhd4SP6QksPMOACfu2/M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eIdc2sIjuXVp3279iw5s3f7IPJ1t3RECCiqLF+IRq8R33C6FtxrP3sqIrvSLo6D1y49SGs0XK3BdCKbpvKh/Nx8s9xx5PvigSN/Q2bfyBhqIbOTi/2KO28JuNyV3FTY1zeUkmxaEMTsd+DZhTG/PSEZG5skDmZPnw2nQu14LOas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hdKExb2s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67534C116C6;
+	Thu, 22 Jan 2026 17:06:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769101612;
+	bh=riDE5Q5BDE4FI/xKxhVniW2Qhd4SP6QksPMOACfu2/M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hdKExb2sEIKcJjvZGqffcSS2/X1AbgL8H287wRZVxqjkqCCbFN1zOCtIIEQbe5wIb
+	 4k7gBZsR10FwWyAWuMxTfoKU+/bTstVr8Lz+O6adTPPZcd0J3wZ0grO7m0ViRY4avz
+	 UvBap2V2rT1pkXTDA6WCvjM/Fr4sZ7AVhHM+hj1wlZtpTNh4zWhGkySOAKGJbpc13T
+	 SFTgMAAqdot1fp++cyL8dV9y/2yN7As4npdSyjcwh1b81uTGyUlCVFuNh75Df/kuIM
+	 DxohTvbNOtq4sTCMi6H51wwLtpbw4iqICx2x89XzacTd1mUd7HKWrKvR7aZx/FPVCB
+	 ZZFDPfqpcTN8w==
+Date: Thu, 22 Jan 2026 11:06:51 -0600
+From: Rob Herring <robh@kernel.org>
+To: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Mike Looijmans <mike.looijmans@topic.nl>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+	Chaoyi Chen <chaoyi.chen@rock-chips.com>,
+	J =?iso-8859-1?Q?=2E_Neusch=E4fer?= <j.ne@posteo.net>,
+	Pin-yen Lin <treapking@chromium.org>,
+	Catalin Popescu <catalin.popescu@leica-geosystems.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] dt-bindings: usb: Add binding for Genesys Logic
+ GL3590 hub
+Message-ID: <20260122170651.GA2632938-robh@kernel.org>
+References: <20260122092852.887624-1-swati.agarwal@oss.qualcomm.com>
+ <20260122092852.887624-2-swati.agarwal@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260122151746.7745-1-clamor95@gmail.com> <20260122151746.7745-2-clamor95@gmail.com>
- <fa42a103-3b71-4151-b44d-573452847f6e@gmail.com>
-In-Reply-To: <fa42a103-3b71-4151-b44d-573452847f6e@gmail.com>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Thu, 22 Jan 2026 18:17:51 +0200
-X-Gm-Features: AZwV_QhHA2uy9Ldl3xAOyKL0jH8x1S78cBP7YqfWjbQwKB6nsAbfuVqdZ-A2M18
-Message-ID: <CAPVz0n2xcnvus_u4dYDGL0VcgkWfVOJF7=hKuMPrjsE4UZTNLQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] usb: csc-acm: add Infineon/Comneon modem support (1519:0020)
-To: Lars Melin <larsm17@gmail.com>
-Cc: Oliver Neukum <oneukum@suse.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260122092852.887624-2-swati.agarwal@oss.qualcomm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32637-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-32636-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8FE5E6A386
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,qualcomm.com:email]
+X-Rspamd-Queue-Id: 71FC86B87F
 X-Rspamd-Action: no action
 
-=D1=87=D1=82, 22 =D1=81=D1=96=D1=87. 2026=E2=80=AF=D1=80. =D0=BE 17:58 Lars=
- Melin <larsm17@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On 2026-01-22 22:17, Svyatoslav Ryhel wrote:
-> > Add support for Infineon/Comneon XMM626X modem that used in many Tegra3=
-0
-> > devices with GSM capablities like LG Optimus 4X (P880) and Vu (P895).
-> >
-> > The Vendor Id is 0x1519
-> > The Product ID is 0x0020
-> >
-> > Output of lsusb:
-> > Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
-> >
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
->
-> Hi,
-> please include a full lsusb output, ie lsusb -vd 1519:0020 so we can
-> verify that union descriptors are missing.
-> (I have seen a full lsusb output where they are included.)
->
-Hello there! Sure, here is what I get if I use lsusb -vd 1519:0020
+On Thu, Jan 22, 2026 at 02:58:49PM +0530, Swati Agarwal wrote:
+> Add the binding for the USB3.2 Genesys Logic GL3590 hub.
+> GL3590 hub requires 1.2V and 3.3V supplies for operation.
+> 
+> Signed-off-by: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+> ---
+>  .../bindings/usb/genesys,gl850g.yaml          | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> index 9a94b2a74a1e..6ab13785e832 100644
+> --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> @@ -15,6 +15,7 @@ properties:
+>        - usb5e3,608
+>        - usb5e3,610
+>        - usb5e3,620
+> +      - usb5e3,625
+>        - usb5e3,626
+>  
+>    reg: true
+> @@ -26,6 +27,10 @@ properties:
+>      description:
+>        The regulator that provides 3.3V or 5.0V core power to the hub.
+>  
+> +  vdd12-supply:
+> +    description:
+> +      The regulator that provides 1.2V power to the hub.
+> +
+>    peer-hub: true
+>  
+>    ports:
+> @@ -56,6 +61,7 @@ allOf:
+>        properties:
+>          peer-hub: false
+>          vdd-supply: false
+> +        vdd12-supply: false
+>  
+>    - if:
+>        properties:
+> @@ -68,6 +74,19 @@ allOf:
+>        properties:
+>          peer-hub: true
+>          vdd-supply: true
+> +        vdd12-supply: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - usb5e3,625
+> +    then:
+> +      properties:
+> +        peer-hub: true
+> +        vdd-supply: true
+> +        vdd12-supply: true
 
-lg-p895:~$ lsusb
-Bus 001 Device 001: ID 1d6b:0002 Linux 6.16.0+ ehci_hcd EHCI Host Controlle=
-r
-Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
-lg-p895:~$ lsusb -vd 1519:0020
-Bus 001 Device 001: ID 1d6b:0002 Linux 6.16.0+ ehci_hcd EHCI Host Controlle=
-r
-Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
-lg-p895:~$ lsusb -vd 1519:0020
-Bus 001 Device 001: ID 1d6b:0002 Linux 6.16.0+ ehci_hcd EHCI Host Controlle=
-r
-Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
+Comment on v4 still applies. All the 'true' lines are pointless.
 
-regular lsusb is added for reference.
-
->
-> thanks
-> Lars
+Rob
 
