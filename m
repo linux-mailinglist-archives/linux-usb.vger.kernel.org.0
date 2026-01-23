@@ -1,260 +1,260 @@
-Return-Path: <linux-usb+bounces-32640-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32641-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uKlOOzLXcmlhpwAAu9opvQ
-	(envelope-from <linux-usb+bounces-32640-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 03:04:35 +0100
+	id kMpuGOEdc2ngsQAAu9opvQ
+	(envelope-from <linux-usb+bounces-32641-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 08:06:09 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 682A26F6EE
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 03:04:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A698171665
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 08:06:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7F24F30086D6
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 02:04:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D6705302A050
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 07:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA9E9346E75;
-	Fri, 23 Jan 2026 02:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4566733F38B;
+	Fri, 23 Jan 2026 07:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hLufnBos"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g+syrcdD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-dl1-f68.google.com (mail-dl1-f68.google.com [74.125.82.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD223346E56
-	for <linux-usb@vger.kernel.org>; Fri, 23 Jan 2026 02:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8377A32F74F
+	for <linux-usb@vger.kernel.org>; Fri, 23 Jan 2026 07:00:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769133867; cv=none; b=AmAIPVrovYmzFrn93Q2F0YjWww7zah2KKsyPgc63yPg0AIC9kGv8swO+4Q5+yz7vv0+q/wa5482+RhqxseNV92FR9cdu8lcB9d8hdt5LW4hgTzLkpH7sYVSvS/TXVHvfnuhW/nPyJfw9I/9VvL3OzNdewgw2iSdWPpq1E3eVe2s=
+	t=1769151661; cv=none; b=ptqwsihMMS1LwRQ6wgWWrgOY8JgIR1W9IlSFbuSZAukrPMPxiJg+i51wlrcB6u5Juv9TY2vnrwsOygrT9j/KUUCnNSeIUCHGj3Slj6lXsuZtfquUEKfa1d3BNoDumzNZdTIJKPaBeETKn1s7yUwA9XIJgOl107qAKia04KNvXtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769133867; c=relaxed/simple;
-	bh=4M6vU7yGIghImyo7XIcl4YGBOdNNEvQRe7+qak6vEbo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qSHu6NCRzcZfK8e+by0qLOJSWttPS807pBOTJessx1XyPCvhcPLmnZProVWXb0SwNGTEy0YIfWPTtyx/HIAda4JBuMEmBxMmESfM27BepKtt2Aaw/HgyYdHjaJSYExIZfSMb2MihdIQ2AOzq8D4nlfh0DKFIOCAJFe4JCL5CzU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hLufnBos; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
+	s=arc-20240116; t=1769151661; c=relaxed/simple;
+	bh=pTvK1Ud2AQSq+kngrcLZfGqilvW+N3NLkcbJ+VzW5FY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZB/ctf/2q+VsV3VK9thnfuVFUPWZaCi882Sh3qJ40yzeG3730O+/onZ2XwNSIFNn1hqKlsc/AghUMf1t+syLrJCEyFknrAOLnqcUMBHLN9wxwLFW1wmlpQ2NO0W/URKTeK/0iDBQhv4CfIoXlUsQPVNQmwzK/L5uiBm6XUYKsgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g+syrcdD; arc=none smtp.client-ip=74.125.82.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47ee9817a35so13352405e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 18:04:22 -0800 (PST)
+Received: by mail-dl1-f68.google.com with SMTP id a92af1059eb24-1233c155a42so2649917c88.1
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 23:00:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769133860; x=1769738660; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:sender:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aPyvn4zidjCY33YDEVVo6RlRxk+3FjdxBJwdf65ZzFs=;
-        b=hLufnBos5f0E/bufjNQ1nyLL3Xbzim9kvGQ7Bsy5Cj/giRKHhgx4SyyjtHGg6gZvCu
-         BuLTPts7w/4IPEi+KvfNYqHWTgDUphUem0O8sLYVofVwUUXBiwUZdIT/6uptI0ZB9jO6
-         7OI5+W7sHh6bxuCev0lCR0i8vskA9tyL4teH63bpVGf6+hxqffViDWmStz68n07his6w
-         EbGT8gkPovbDxDRncU8mdiut3MM8W1nIeGLA7wmMwJnQ6Ax6uAmdNx5PZuraYGQMERhN
-         MSHgc6zCLJ/fV2CskoPBFAtHZMK+57fg/F/zABXdQtu1x4i5awzBYxPvn6M/jFEkAUfG
-         65ow==
+        d=gmail.com; s=20230601; t=1769151655; x=1769756455; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w71v06CmCz9lwXzUHMcZAQbNs0uiKvgExrKC9KJWhR0=;
+        b=g+syrcdD+2VUkQNHHAGgSZM53srD2BGeabfGsDajhFpU37qka5wCwkTWqDqj3yR7v0
+         5csJuIQJoDvm42p4ZTS7CJGXETOlGKiHO9MzdUzkRjGICpFWyHtlA75Z8XhP4Ktatj2X
+         BSee0Y8X6VJjV+5S+37r4lHzEUsMVVxtRuT/uo/wyKBeiGRD8+Z8aGADlKOFSOOPwpWx
+         bO9rg9WYXKdteKqABYC5khISChlAoGnjWJWVqvuRueu4W8JqwuLNC6PzkoiamOOm+2sr
+         NqfpdEd7PCbQHKMlKyooMRO7I1bICa7Pdzy0rUspKmd4RtA2HdWvAw4vmouxRDjVE7Lu
+         rKAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769133860; x=1769738660;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aPyvn4zidjCY33YDEVVo6RlRxk+3FjdxBJwdf65ZzFs=;
-        b=Va8reWeuOf7Hjzeq9SGabBDcm7vqYhKCf6hOpjF5WMs4sBNRH+zLLbUVJmOk4ygFsv
-         i5cWC55ER9f43ms9nCDm1nLZWK3Ci3VvYbikZz1Ncnsw4571vyLDG/8k8MhhyIjguhz7
-         GTaTmd7kaCbY6eaAeGq8qVKESCjC3WqutFA2u63b16h7sHqwkqRrWpWGHC/LhZRBCa1I
-         ioUbDcHMJ5LLeOSfCFrU26Hw44X+vOg3WamUv2+jFt+TTdR/0gysznff1t+PhhetGZdf
-         JmO0eRT4Q0xzoqTz/DzzUv5IJyjk/qKx0lg13AWSFK+aolayKlKy2bHuQui0z4v4gdZx
-         wksQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjc9PzThkBgEhT3t8WAdwq/6IXh19H/K8luwnqSKO4yCCo3julhrt3cboxebambzGG9wOZmBlc5ik=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnzRrjtk6DxwceY/l3F7IDAd2pdDy1rQiARfkWGeYNji6h6oOq
-	Zskg6Mfw/cPcQhE2+ARP/ZqdqbD71mn8MlPJS5Z+rQMl2UKcBGELSdSe
-X-Gm-Gg: AZuq6aKfR7LILpT7o7dLSDt5VQ2Q8sCp4wi1Pm57Ch66Of7Z7NQN10yWeKqGxeU/wbs
-	mdr7Yh+V4xHs70HG1XDeJ4Y2emXW8Woxb+VffX+88HqPuVpivcw/wn8zwECcuIZTd4DueEHC5a4
-	Kwd/ESHFq/XzN8z+WXitoLk1ddfHzeaYmIVTyOboMGwcp6bQXxP0cmo5gsJAjlohfyVXDPI1g68
-	KP5bsCpWXRQCpP6LSVKBPR4WuNSm+vlY+6EZ91DIIQ1ZCXZdy/qFgORqhMKkgXCK2qjtwB5KcCl
-	UaotBukJZMFnlJ4K6DR7bSCz09nuww+xb24Kek1txVclPIAdrAQe2egnHwLJEdidh7zyu1DM6tV
-	a7B/L5SSUcOBuuA5XO+sAwiFiWG3Dshuvu/Y5peYVm0Yqvq3TqhgXYEQU3NFj8LLGWyWN1K6mt+
-	8S34t+
-X-Received: by 2002:a05:600c:3e05:b0:47e:e20e:bbbf with SMTP id 5b1f17b1804b1-4804c9af18cmr26202045e9.24.1769133859669;
-        Thu, 22 Jan 2026 18:04:19 -0800 (PST)
-Received: from localhost ([2001:67c:1562:8007::aac:4468])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1c246ecsm3034233f8f.10.2026.01.22.18.04.15
+        d=1e100.net; s=20230601; t=1769151655; x=1769756455;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w71v06CmCz9lwXzUHMcZAQbNs0uiKvgExrKC9KJWhR0=;
+        b=vb2j4uRqZeGtgm6EIIqY569RiAaU0R4S03p1J1YHtZEcOES16VZwKAAcP5DM00poQs
+         tw56G/bvOq53H3M6fIlgrcs/ga6ElOadj0U+U7Pa06DbzDvalBvCSO2cWx+6DV+OVN1o
+         Wdyy79oPT5OUY+oS7Lb7TN2kdMDIe3TiEEBgIYbCelYvA9kiaZ2byE86s0IFGLcrDJ7h
+         CObyKFRWHMYGhQb8e+mOEfVn8Bsjt39AuZVLiTF5agvrPmzG90+0fVddPbJzM8fVVjDK
+         k0PxdHE0FB0p1O6oKL5J16oT2/oQ6iQNjfuoSeOscKST4DIVlX01gJdO3YEf0vw625Kv
+         8fuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5hZej7/h85B3wifDqqDqiCNb2ZiEdyCvkdv3wcLWGWC1NrRrqKfnyy80rSeI39fleWmpyT/0uKQc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxySiEP4wWBkNn0VaItdwpCDbR/7EG3TxZ6ONMDYxxEmQm05CT6
+	EjJo5VXac7z50oyc5e2qNHPt3JAF16ux5dSaiJZK/jsKjih8GD6zImos
+X-Gm-Gg: AZuq6aLsoDSN5NqM5XPMQxJc2ucP6VLjq06WWV2nlSZYjCPAq7oF/TM7TAJXCavqa5d
+	j9l5yBE8FAGh2LX5xWmOgJIvdg4W564nSHx/0szvWLLm8PkS6jUBt+tnaYk2zl/mn9+SXfa626y
+	2BD9l4NEPWrD7jyKE5aX4ydX/3htcSzuc+fkI614Pe0dRjoD9t1siIkWE9vdt7vtH0NtBf1dDzW
+	1FJpErXNZpioFt8xA4y0b2LIgflm4GxXgEZ4GXg88H2ZblLQ9FNEtnVbh87zptdH5RNadXblvtN
+	qohNOfeWFBIDtdbKPrjrq95IMuUd3Hy9yzMEiTt/fmxeDpwPoAKObet5XXEoIx/pWmmGAwXO8Og
+	r/qNMufvqNT9hti3Zkmd4hD2ZW79A9pwxBwy5cSjGRO2r9SlxjA+t6fGw68OStUKNbidIOZj8tD
+	5GPgIJvtZduWNg6kiEizSsppH1QXUWTKU9DM0mxqKP8LzoOa3+rMPIemAM2KdgewvZzEyX17d70
+	2vMViBfWRKdeaYF24zGvH8Pp9UGVLQCzb0ePUdMCommgiHv02ay03fTuDg+bpkPlfPqtta5TUxX
+	rXTO
+X-Received: by 2002:a05:7022:78f:b0:119:e56b:98c1 with SMTP id a92af1059eb24-1247dc0a63bmr805456c88.40.1769151654530;
+        Thu, 22 Jan 2026 23:00:54 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1247d91c541sm2730485c88.7.2026.01.22.23.00.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 18:04:17 -0800 (PST)
-Sender: AceLan Kao <acelan@gmail.com>
-Date: Fri, 23 Jan 2026 10:04:11 +0800
-From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Andreas Noever <andreas.noever@gmail.com>, 
-	Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Fix PCIe device enumeration with delayed
- rescan
-Message-ID: <aXLM5vk0gDNjLPyY@acelan-Precision-5480>
-Mail-Followup-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, Andreas Noever <andreas.noever@gmail.com>, 
-	Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260121052744.233517-1-acelan.kao@canonical.com>
- <20260121060142.GJ2275908@black.igk.intel.com>
+        Thu, 22 Jan 2026 23:00:54 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Peter Korsgaard <peter@korsgaard.com>
+Subject: [PATCH net-next] net: usb: sr9700: remove code to drive nonexistent multicast filter
+Date: Thu, 22 Jan 2026 22:58:32 -0800
+Message-ID: <20260123065842.53669-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260121060142.GJ2275908@black.igk.intel.com>
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	DMARC_POLICY_REJECT(2.00)[canonical.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),reject];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32640-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,korsgaard.com];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-32641-lists,linux-usb=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[acelan.kao@canonical.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-0.997];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[canonical.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 682A26F6EE
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A698171665
 X-Rspamd-Action: no action
 
-On Wed, Jan 21, 2026 at 07:01:42AM +0100, Mika Westerberg wrote:
-> Hi,
->
-> On Wed, Jan 21, 2026 at 01:27:44PM +0800, Chia-Lin Kao (AceLan) wrote:
-> > PCIe devices behind Thunderbolt tunnels may fail to enumerate when
-> > spurious hotplug events prevent pciehp from detecting link-up.
-> >
-> > Root cause:
-> >
-> > Spurious unplug events occur immediately after tunnel activation:
-> >
-> >   [  932.438] thunderbolt: acking hot unplug event on 702:2
-> >   [  932.852] thunderbolt: PCIe Up path activation complete
-> >   [  932.855] thunderbolt: hotplug event for upstream port 702:2
-> >             (unplug: 0)
-> >   [  932.855] thunderbolt: hotplug event for upstream port 702:2
-> >             (unplug: 1)
-> >
-> > These events disrupt pciehp timing, causing device enumeration to fail
-> > ~70% of the time on affected hardware. Manual PCI rescan succeeds,
-> > proving devices are present and functional on the bus.
->
-> Thanks for the report!
->
-> They are likely TB3 xHCI "plug" events or so but they should not affect
-> anything really.
->
-> It may be that there is something in the TB3 compatibility side that we are
-> not doing which needs to be investigated.
->
-> From your merged.out.bad:
->
-> CM does xHCI connect here:
->
-> [  152.905840] [182] thunderbolt 0000:c7:00.6: 702: xHCI connect request
-> [  152.906865] [182] thunderbolt 0000:c7:00.6: hotplug event for upstream port 702:2 (unplug: 0)
-> [  152.906869] [182] thunderbolt 0000:c7:00.6: 2:8: got plug event for connected port, ignoring
-> [  152.906872] [182] thunderbolt 0000:c7:00.6: hotplug event for upstream port 702:2 (unplug: 1)
-> [  152.906875] [182] thunderbolt 0000:c7:00.6: 2:8: got unplug event for disconnected port, ignoring
->
-> [  192.931373] [49] thunderbolt 0000:c7:00.6: acking hot unplug event on 2:7
->
-> Can you comment out call to tb_switch_xhci_connect() and see if that
-> changes anything?
-Here is what I modified, and the problem becomes a little bit complicated.
+Several registers referenced in this driver's source code do not
+actually exist (they are not writable and read as zero in my testing).
+They exist in this driver because it originated as a copy of the dm9601
+driver. Notably, these include the multicast filter registers - this
+causes the driver to not support multicast packets correctly. Remove
+the multicast filter code and instead set the chip to receive all
+multicast filter packets when any multicast addresses are in the list.
+Also take the opportunity to remove definitions for a few other
+nonexistent registers, and a couple pointless comments.
 
-I did the following steps(1~5) and captured the tbtrace log at step 5.
-https://people.canonical.com/~acelan/bugs/tbt_storage/merged.out.remove_tb_switch_xhci_connect.out
-1. Plugged one tbt storage on the Dock and connected the dock to the
-machine
-2. Boot the machine up, and it recognizes the tbt storage
-3. Plugged the second tbt storage on the dock, and it also can be
-recognized(it was always failed in this step)
-4. Unplugged the first and second tbt storage from the dock, and then
-re-plugged the first tbt storage on the dock, and it can be recognized
-5. Re-plugged the second tbt storage on the dock, and it fails.
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ drivers/net/usb/sr9700.c | 26 ++++----------------------
+ drivers/net/usb/sr9700.h | 19 +++----------------
+ 2 files changed, 7 insertions(+), 38 deletions(-)
 
-(continue doing the following tests)
-a. When the issue happens, re-plugging the second tbt storage doesn't
-work.
-b. Plugged both tbt storages on the dock, and then re-plugged the dock to
-the machine, both tbt storages can be recognized.
-	b.1 In this case, it works when re-plugging the first or the
-	    second tbt storage on the dock(there is always one tbt storage
-	    still connected to the dock)
-	b.2 Removed both tbt storages from the dock, and then
-	    re-plugged them one by one, and the second tbt storage can't be
-	    recognized.
-c. Plugged one tbt storage on the dock, and then re-connected the dock to
-	the machine, the tbt storage can be recognized.
-	c.1 Plugged the second tbt storage on the dock, and the second tbt
-	    storage can be recognized.
-	c.2 Re-plugged the first or the second tbt storage on the
-	    dock, both tbt storages can be recognized.
-	c.3 Removed both tbt storages from the dock, and then
-	    re-plugged them one by one, and the second tbt storage can't be
-	    recognized.(same as b.2)
+diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
+index 9c7cd0db1768..19c36b0d441c 100644
+--- a/drivers/net/usb/sr9700.c
++++ b/drivers/net/usb/sr9700.c
+@@ -17,7 +17,6 @@
+ #include <linux/etherdevice.h>
+ #include <linux/ethtool.h>
+ #include <linux/usb.h>
+-#include <linux/crc32.h>
+ #include <linux/usb/usbnet.h>
+ 
+ #include "sr9700.h"
+@@ -231,31 +230,14 @@ static const struct ethtool_ops sr9700_ethtool_ops = {
+ static void sr9700_set_multicast(struct net_device *netdev)
+ {
+ 	struct usbnet *dev = netdev_priv(netdev);
+-	/* We use the 20 byte dev->data for our 8 byte filter buffer
+-	 * to avoid allocating memory that is tricky to free later
+-	 */
+-	u8 *hashes = (u8 *)&dev->data;
+-	/* rx_ctl setting : enable, disable_long, disable_crc */
+ 	u8 rx_ctl = RCR_RXEN | RCR_DIS_CRC | RCR_DIS_LONG;
+ 
+-	memset(hashes, 0x00, SR_MCAST_SIZE);
+-	/* broadcast address */
+-	hashes[SR_MCAST_SIZE - 1] |= SR_MCAST_ADDR_FLAG;
+-	if (netdev->flags & IFF_PROMISC) {
++	if (netdev->flags & IFF_PROMISC)
+ 		rx_ctl |= RCR_PRMSC;
+-	} else if (netdev->flags & IFF_ALLMULTI ||
+-		   netdev_mc_count(netdev) > SR_MCAST_MAX) {
+-		rx_ctl |= RCR_RUNT;
+-	} else if (!netdev_mc_empty(netdev)) {
+-		struct netdev_hw_addr *ha;
+-
+-		netdev_for_each_mc_addr(ha, netdev) {
+-			u32 crc = ether_crc(ETH_ALEN, ha->addr) >> 26;
+-			hashes[crc >> 3] |= 1 << (crc & 0x7);
+-		}
+-	}
++	else if (netdev->flags & IFF_ALLMULTI || netdev_mc_count(netdev) > 0)
++		/* The chip has no multicast filter */
++		rx_ctl |= RCR_ALL;
+ 
+-	sr_write_async(dev, SR_MAR, SR_MCAST_SIZE, hashes);
+ 	sr_write_reg_async(dev, SR_RCR, rx_ctl);
+ }
+ 
+diff --git a/drivers/net/usb/sr9700.h b/drivers/net/usb/sr9700.h
+index 3212859830dc..51c696108d80 100644
+--- a/drivers/net/usb/sr9700.h
++++ b/drivers/net/usb/sr9700.h
+@@ -8,8 +8,6 @@
+ #ifndef _SR9700_H
+ #define	_SR9700_H
+ 
+-/* sr9700 spec. register table on Linux platform */
+-
+ /* Network Control Reg */
+ #define	SR_NCR			0x00
+ #define		NCR_RST			(1 << 0)
+@@ -101,9 +99,7 @@
+ #define		WCR_LINKEN		(1 << 5)
+ /* Physical Address Reg */
+ #define	SR_PAR			0x10	/* 0x10 ~ 0x15 6 bytes for PAR */
+-/* Multicast Address Reg */
+-#define	SR_MAR			0x16	/* 0x16 ~ 0x1D 8 bytes for MAR */
+-/* 0x1e unused */
++/* 0x16 --> 0x1E unused */
+ /* Phy Reset Reg */
+ #define	SR_PRR			0x1F
+ #define		PRR_PHY_RST		(1 << 0)
+@@ -123,10 +119,7 @@
+ #define	SR_RRPAL		0x26
+ /* Rx sdram Read Pointer Address High */
+ #define	SR_RRPAH		0x27
+-/* Vendor ID register */
+-#define	SR_VID			0x28	/* 0x28 ~ 0x29 2 bytes for VID */
+-/* Product ID register */
+-#define	SR_PID			0x2A	/* 0x2A ~ 0x2B 2 bytes for PID */
++/* 0x28 --> 0x2B unused */
+ /* CHIP Revision register */
+ #define	SR_CHIPR		0x2C
+ /* 0x2D --> 0xEF unused */
+@@ -143,10 +136,7 @@
+ #define		TXC_USBS_EP1RDY		(1 << 5)
+ #define		TXC_USBS_SUSFLAG	(1 << 6)
+ #define		TXC_USBS_RXFAULT	(1 << 7)
+-/* USB Control register */
+-#define	SR_USBC			0xF4
+-#define		USBC_EP3NAK		(1 << 4)
+-#define		USBC_EP3ACK		(1 << 5)
++/* 0xF4 --> 0xFF unused */
+ 
+ /* Register access commands and flags */
+ #define	SR_RD_REGS		0x00
+@@ -158,9 +148,6 @@
+ /* parameters */
+ #define	SR_EEPROM_TIMEOUT	1000
+ #define	SR_EEPROM_LEN		256
+-#define	SR_MCAST_SIZE		8
+-#define	SR_MCAST_ADDR_FLAG	0x80
+-#define	SR_MCAST_MAX		64
+ #define	SR_TX_OVERHEAD		2	/* 2bytes header */
+ #define	SR_RX_OVERHEAD		7	/* 3bytes header + 4crc tail */
+ 
+-- 
+2.43.0
 
-The issue could be reproduced when connecting the second tbt storage
-to the dock.
-1. Connect the dock to the machine with any tbt storage
-2. Or remove all tbt storages from the dock if the dock is connected
-3. And then plugged tbt storages one by one, and the second one won't be
-   recognized.
-
-rescan finds the missing tbt storage, but it works only one time. Need
-to rescan again when re-plugging the first or the second tbt storage.
-   echo 1 | sudo tee /sys/bus/pci/rescan
-
-BTW, when the second tbt storage can't be recognized, unplug the first tbt
-storage from the dock and the second tbt storage can be recognized.
-And then re-plugged the first tbt storage on the dock, it can't be
-recognized. The behavior just looks like it's the second tbt storage.
-
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 4f5f1dfc0fbf..be7ff82a3846 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -2503,8 +2503,8 @@ static void tb_handle_hotplug(struct work_struct *work)
-        } else if (port->remote) {
-                tb_port_dbg(port, "got plug event for connected port, ignoring\n");
-        } else if (!port->port && sw->authorized) {
--               tb_sw_dbg(sw, "xHCI connect request\n");
--               tb_switch_xhci_connect(sw);
-+               tb_sw_dbg(sw, "DEBUG: Comment out xHCI connect request\n");
-+               //tb_switch_xhci_connect(sw);
-        } else {
-                if (tb_port_is_null(port)) {
-                        tb_port_dbg(port, "hotplug: scanning\n");
-
->
-> > Solution:
-> >
-> > Schedule delayed work (300ms) after tunnel activation to:
-> > 1. Check if pciehp successfully enumerated devices (device count increased)
-> > 2. If not, trigger pci_rescan_bus() to discover devices manually
-> > 3. Log results for observability
-> >
-> > The delayed work approach is non-blocking and only rescans when actually
-> > needed, avoiding overhead on systems where pciehp works correctly.
->
-> There is no way we are going to call PCI functions from the tb.c.
 
