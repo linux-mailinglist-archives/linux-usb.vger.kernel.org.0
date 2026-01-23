@@ -1,250 +1,113 @@
-Return-Path: <linux-usb+bounces-32658-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32659-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eG8oDrKwc2nOxwAAu9opvQ
-	(envelope-from <linux-usb+bounces-32658-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 18:32:34 +0100
+	id iAHrA/jNc2kCywAAu9opvQ
+	(envelope-from <linux-usb+bounces-32659-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 20:37:28 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB17B790C8
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 18:32:33 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4BC57A36C
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 20:37:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1D1883045013
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 17:32:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E759E304032B
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 19:36:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79771246783;
-	Fri, 23 Jan 2026 17:32:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 859412D6E62;
+	Fri, 23 Jan 2026 19:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lr+iIcxg"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="DOiOvcO4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010064.outbound.protection.outlook.com [52.101.46.64])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D913EBF00;
-	Fri, 23 Jan 2026 17:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769189525; cv=fail; b=RVY2sEOwUSulOQfjYdNGOSugqHcpvWILcnHzrSLHoRKi2U9+s2jN69V5uTm484Hl+qyzh3ImWu3aXZ2mts1D9L4yM832tSozH5wsYiLdpL77/tCb8Lsh1Li/BNLw4uROr+BN3Z45AfvUnp2BAtetQgGZIN6qkdA6WSTre9wakKo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769189525; c=relaxed/simple;
-	bh=HZHqws/RbMR4E6+n+z1z2jI2EHrkiydp8HRIZQwNeNo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rhqFkpXSZNijw5Xn282Yx4bU0KLUID2dETCEJ9UuCkrV4zL0qrh7eJN07jGnAYq/4wqTGdclWuYtN8+GQBT26HV414zpRqErzEREf5rmQ2/Y2wIlkqYEJvzrJVhLW4zdeJWMEbCoADx7u5LiulGZmQ9WX/nwvhjKQIcfnkTRa+E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=lr+iIcxg; arc=fail smtp.client-ip=52.101.46.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=J7up0t1bgDj+ms4VmuW8byx1Tbs4g2UUJQQBzvAZDrtD4qw6VBEAmo44Zlu8P+7RSKMcJkECqH0LXZwXfCiN0I2jXLOo3MPOyOSHH7Zq5yrowYdngynV+Ha9iUi6k5eYv+tUTxD4uNC3ZtkXAle081GjROOtFvPZaMMTK3V8O2mYyLcj2PFVLDkC9S7m5cu8nxjMlg9MN4aWCYKQ/OBmthyy8x0ZlBFWvpgnU3MrxhjMcbi0GDiyVlsd5XrZhxL62ESmaWClMb+UrvT5LOn/IbpZkADPGTZk5OdCXB5LFGqc/jzSmcbZEeZ2rjl8vUjJqqC7MdeHZNQhuwMzIeJMXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H35GJQkbWnFOZwBlgucIiBWstBlZN9gMLFGnm9aApnI=;
- b=USFsnwBps9LAQmPeHpzgoznCAELBcvBubTySfJ5SrWXy/vuexWkX5ttbbZY0KzoFzUm6W25buQjJvWuRzcZ0NKU6K+CYWK62SC6zoT9+A88mZnoLk73CmCJWQFFwVZycsUBy0UBILOgU3/N5GvD4Zuc2nenSqHXoCoBHaFOpxYGGb+cEcrbFOaVlNPIqmcnneIm1dDa95eOSo975/aL0ItbU5dFoJMFLG1XQmuKSVxC7q9d2xMUhbSMFqdTIuJaLIF8O8XrbaXhS3u3tZnHCQXGT7U5UbZBvELCdiHR/wI/DvNq0TxLTylIYa87ne4tRQkdRrBC2fdKiKk0FS7rbSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H35GJQkbWnFOZwBlgucIiBWstBlZN9gMLFGnm9aApnI=;
- b=lr+iIcxgbJKf/3hL/J7nkoT6sdcCSQR7eW/OyxT6GCc5xWt5txoeLuNjtkT3nH+46jLZxMHSVmqFNviVQfZUPOxOSZBxFKAOumuwNJu/lOg6Es+7R2xTCQB38d7sXR6zKiVGCt4nONvdV0/Po+/egWq84NMjWJsV8gf9A7l50bGdyUkVl6i4Dc1IMoPiZH2XhRU5oIWbegzlzZe3bymsYnHFc8CDqPaLWer6dKOzrMMwG12HY5j7+O1dNVDo7q8Bjrg0sYgQIIxSzDc5Sgwqlm6vhEMdJSwLS8nkCMy17lZaBqhg+6xSgSxc6ruGEhxbXnBQ1pmVRa3zpV5SmBGknw==
-Received: from PH7P220CA0005.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:326::22)
- by DS0PR12MB8456.namprd12.prod.outlook.com (2603:10b6:8:161::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.11; Fri, 23 Jan
- 2026 17:31:57 +0000
-Received: from SA2PEPF000015CA.namprd03.prod.outlook.com
- (2603:10b6:510:326:cafe::31) by PH7P220CA0005.outlook.office365.com
- (2603:10b6:510:326::22) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.11 via Frontend Transport; Fri,
- 23 Jan 2026 17:31:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- SA2PEPF000015CA.mail.protection.outlook.com (10.167.241.200) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9564.3 via Frontend Transport; Fri, 23 Jan 2026 17:31:55 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 23 Jan
- 2026 09:31:26 -0800
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Fri, 23 Jan 2026 09:31:25 -0800
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (10.126.190.182) with Microsoft SMTP Server id 15.2.2562.20
- via Frontend Transport; Fri, 23 Jan 2026 09:31:24 -0800
-From: Wayne Chang <waynec@nvidia.com>
-To: <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-	<jonathanh@nvidia.com>
-CC: <waynec@nvidia.com>, <haotienh@nvidia.com>, <linux-usb@vger.kernel.org>,
-	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<stable@vger.kernel.org>
-Subject: [PATCH V4 1/1] usb: gadget: tegra-xudc: Add handling for BLCG_COREPLL_PWRDN
-Date: Sat, 24 Jan 2026 01:31:21 +0800
-Message-ID: <20260123173121.4093902-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E302D249E;
+	Fri, 23 Jan 2026 19:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769196945; cv=none; b=cHnfoEo7PiCOwLk0+Nr5yOBV4dQl/lnd4ZhBWMoH15ImeGKB+uBkpouyJinhfc5SpisUY8vXfUuvgM7QBvdgAVPA1EyWowv2SIFCxLbilQ4IcLPBMuqYhfax2eQDKdrzIoXYf9A1eLt50At7JkaXwzGsIiefTbwbfVMpMM56nRA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769196945; c=relaxed/simple;
+	bh=meKOjVZZ9dwSHarbTeQEmq9FKIEjKTRIj0vYgs6ZiaM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J3fCyE8xDrXuDT/0SQ4dAjW+SSkLS57vX+Q0cBoo4F3zva98M2Oc1T7grwEs3O1chDNZjQaf/bM6zcUvOtvDlHYtqJuG5mALExw7X4By8tiafAcJOnAcVJ/jeyMcSaSntX73TRGFpLkemt0jwmvQ3cgzvCiy4rVUKKBJdoTYLCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=DOiOvcO4; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=25nCw+68nHZlmTNCLEUI5W7nESEF803EIPLazWLHuC4=; b=DOiOvcO42IoJp6A4Z8uIl/n1A+
+	pSd0Yp0VFU1/PzpUEtbSPohkt2b9GQYr8a2ggBCCdFGBODSl5iOyGRSuKLgYEo/rDPNOU45mzfQUe
+	dAzfhee0UYvz4I2AMp0wqVZeo6Qplvd5Nm4VQTpHW0ZkVxnxK2k2qwNaJe/xw5OStGQk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vjMwV-004JLK-EV; Fri, 23 Jan 2026 20:35:39 +0100
+Date: Fri, 23 Jan 2026 20:35:39 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Peter Korsgaard <peter@korsgaard.com>,
+	Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH net-next] net: usb: sr9700: use ETH_ALEN instead of magic
+ number
+Message-ID: <ab732666-bd4b-474e-8180-0039f7d61683@lunn.ch>
+References: <20260123070645.56434-1-enelsonmoore@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF000015CA:EE_|DS0PR12MB8456:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0a6e8135-900e-4422-ac58-08de5aa54e19
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?lLk/ntkgce9PNLt861gL9+4q3XOIO226nXSk2Kld9DmUSBxTvgZAhntNtZVj?=
- =?us-ascii?Q?ZxwEewa9NSet7Gj/Lwe2YUvrrmDjCIe92dKYKGydMn9HvN8ofJiQwMY3mae6?=
- =?us-ascii?Q?SW4uDpgQns7S6Zr/5wgKZIfeVBc7a3Hs9ZTwwKUqmtSVDO7qbLqoWJ73/s9+?=
- =?us-ascii?Q?Iiq6pTNbvjtWVMb2QZXrPnVV67pghGkIjAT01i4sSh9OIEwfAuwBReAExsOZ?=
- =?us-ascii?Q?6zPyBzEoA2ReXODY5xWuLfEAVj94AwQZ6pm3aMTDDhuAIEF/Hnt5oRL86qBd?=
- =?us-ascii?Q?2YXHDT3JjF9xvksGSmcCaKRRQFCVYND2KvugE/aQ+7oLu/REDznzYCk6+wlk?=
- =?us-ascii?Q?469hkVAx6Z1c+pGpp/rXJUDELLYypI0J7CYwNvn1GkZU6qDbHDO9DoQ0xA68?=
- =?us-ascii?Q?EURZCoNnOiHtq/yfvSbH2FZagCyAlTj8vempkVIboobDrlsK/418Mia4mj9F?=
- =?us-ascii?Q?jFXlQqUpsDMR0lH3rIsUumkoF4JRz9KZEg0/nHHxuZLhkxj/hY7UlF3dbgY5?=
- =?us-ascii?Q?F/GwIm/RnpFD5yAF3gMADnJu16bnfce5n+tMX5yYF1UcsjqwOr6PKy3+j+iQ?=
- =?us-ascii?Q?PSowT4nR+2EsO69Xq+n5c5KjWHc/utk9JQIGmly/JbLcPvfO48JRGKoHFIr+?=
- =?us-ascii?Q?2L2wOqSn9d3iePoAQT1VROZr52bkiXfoHrUZZyVrfPoFl3ruVj3lxt/cpker?=
- =?us-ascii?Q?/bUha3QojsJakYgKIAQn6UbrhhYctRhCBEJfLn7VW/xpI4V2gqBg05SYbrTH?=
- =?us-ascii?Q?kTyaMeseoMcd8+0Ro4j4WnZBW9pO7Z8m49uUPN783s5JRfWEFqQ+JgeYzSQY?=
- =?us-ascii?Q?A+C45jy+rMDKDuneIYWsDo3tuJsROCbJJSIoUaP4/KDjJiyMiuTIx2NEXcpm?=
- =?us-ascii?Q?FKLb5HOvxuwQ/hjxFOk/SGyA2ek2NJc5webTtCA2WGH/9yus35ew1d439dh4?=
- =?us-ascii?Q?XBWqIMZpYHzGQBK1NhtjgMNABVsWYRvddFOeRXHBDrqzPnNkSFhk56X2ygrr?=
- =?us-ascii?Q?GztQd/xele/Wl3Hc0bKuPxlaM/uHHqEHH/PNcY+QP79flf5jT6ftO+DekU9K?=
- =?us-ascii?Q?2omjxnO2esEZdYDgONlni0tAV/b3rsIeWVyhHLJf347nI6vonC6x/uzS8FC0?=
- =?us-ascii?Q?/9swSfTttL8n2h31PyXK8U/fyiIcqfUovmCXNwgjNa7vTnHqXXlcE9ZVT5hF?=
- =?us-ascii?Q?BEHSq8QmXVxcKQ5x50BoOavoAAgN8PRpVyiLNwOvJSJfLHaAStO83qRRs9fh?=
- =?us-ascii?Q?1cKgDMKoqIc0z2Z+ZwCzSirYhgS++b7MB/m2UpHeA57L0lcCN6qw1mymzrGB?=
- =?us-ascii?Q?UGWIV7zrLA9QB9tDzlBCOaFd981hFtMLWT08SYNe4aPK0X+xn99pfwvBX8K7?=
- =?us-ascii?Q?oaFr0ZRgEaVF5U6c0pUpS9STr86v8jKjeDKObRxK0aPw723uBiZrmfqczKzj?=
- =?us-ascii?Q?CLAj3UMx80oGqhsUmMZTza0/DV5MMfemNl+Q6VbBDkinxt/ZH6sNI1YT4En/?=
- =?us-ascii?Q?xYYxOzmhksEtZUf0E586p8Kr6YCTfxknpA8by+RPdGiTRoa+jukAnYxCmTPo?=
- =?us-ascii?Q?sWumNeyHRavLOk++fPEpTPG7fc8rczsyNlEbqdf4VaC5GM1D9LUPdG2rMiSS?=
- =?us-ascii?Q?xQZVuZ41cSDgNPjs5+pi3YhusIB2xPqhyMImSFpQmKILr27eToSn5L/KOZNH?=
- =?us-ascii?Q?omUB3A=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2026 17:31:55.8264
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a6e8135-900e-4422-ac58-08de5aa54e19
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF000015CA.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8456
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260123070645.56434-1-enelsonmoore@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[nvidia.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[Nvidia.com:+];
-	FREEMAIL_TO(0.00)[linuxfoundation.org,gmail.com,nvidia.com];
-	TAGGED_FROM(0.00)[bounces-32658-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[Nvidia.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nvidia.com:mid,nvidia.com:email];
-	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[waynec@nvidia.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-32659-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-0.998];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: AB17B790C8
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[lunn.ch:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.996];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lunn.ch:email,lunn.ch:dkim,lunn.ch:mid]
+X-Rspamd-Queue-Id: B4BC57A36C
 X-Rspamd-Action: no action
 
-From: Haotien Hsu <haotienh@nvidia.com>
+On Thu, Jan 22, 2026 at 11:06:39PM -0800, Ethan Nelson-Moore wrote:
+> The driver hardcodes the number 6 as the number of bytes to write to
+> the SR_PAR register, which stores the MAC address. Use ETH_ALEN instead
+> to make the code clearer.
+> 
+> Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 
-The COREPLL_PWRDN bit in the BLCG register must be set when the XUSB
-device controller is powergated and cleared when it is unpowergated.
-If this bit is not explicitly controlled, the core PLL may remain in an
-incorrect power state across suspend/resume or ELPG transitions.
-Therefore, update the driver to explicitly control this bit during
-powergate transitions.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
-Cc: stable@vger.kernel.org
-Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
- drivers/usb/gadget/udc/tegra-xudc.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 9d2007f448c0..7f7251c10e95 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -3392,17 +3392,18 @@ static void tegra_xudc_device_params_init(struct tegra_xudc *xudc)
- {
- 	u32 val, imod;
- 
-+	val = xudc_readl(xudc, BLCG);
- 	if (xudc->soc->has_ipfs) {
--		val = xudc_readl(xudc, BLCG);
- 		val |= BLCG_ALL;
- 		val &= ~(BLCG_DFPCI | BLCG_UFPCI | BLCG_FE |
- 				BLCG_COREPLL_PWRDN);
- 		val |= BLCG_IOPLL_0_PWRDN;
- 		val |= BLCG_IOPLL_1_PWRDN;
- 		val |= BLCG_IOPLL_2_PWRDN;
--
--		xudc_writel(xudc, val, BLCG);
-+	} else {
-+		val &= ~BLCG_COREPLL_PWRDN;
- 	}
-+	xudc_writel(xudc, val, BLCG);
- 
- 	if (xudc->soc->port_speed_quirk)
- 		tegra_xudc_limit_port_speed(xudc);
-@@ -3953,6 +3954,7 @@ static void tegra_xudc_remove(struct platform_device *pdev)
- static int __maybe_unused tegra_xudc_powergate(struct tegra_xudc *xudc)
- {
- 	unsigned long flags;
-+	u32 val;
- 
- 	dev_dbg(xudc->dev, "entering ELPG\n");
- 
-@@ -3965,6 +3967,10 @@ static int __maybe_unused tegra_xudc_powergate(struct tegra_xudc *xudc)
- 
- 	spin_unlock_irqrestore(&xudc->lock, flags);
- 
-+	val = xudc_readl(xudc, BLCG);
-+	val |= BLCG_COREPLL_PWRDN;
-+	xudc_writel(xudc, val, BLCG);
-+
- 	clk_bulk_disable_unprepare(xudc->soc->num_clks, xudc->clks);
- 
- 	regulator_bulk_disable(xudc->soc->num_supplies, xudc->supplies);
--- 
-2.25.1
-
+    Andrew
 
