@@ -1,569 +1,260 @@
-Return-Path: <linux-usb+bounces-32639-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32640-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4J7sG/K7cmn6owAAu9opvQ
-	(envelope-from <linux-usb+bounces-32639-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 01:08:18 +0100
+	id uKlOOzLXcmlhpwAAu9opvQ
+	(envelope-from <linux-usb+bounces-32640-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 03:04:35 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A66F6EB1A
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 01:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 682A26F6EE
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 03:04:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E8199300A8F2
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 00:08:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7F24F30086D6
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jan 2026 02:04:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 349AE2D839F;
-	Fri, 23 Jan 2026 00:08:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA9E9346E75;
+	Fri, 23 Jan 2026 02:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1ZWFadu3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hLufnBos"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5292D6E53
-	for <linux-usb@vger.kernel.org>; Fri, 23 Jan 2026 00:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD223346E56
+	for <linux-usb@vger.kernel.org>; Fri, 23 Jan 2026 02:04:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769126883; cv=none; b=ZuYNM9iJAEjzETXUkL8PvJFKmr45TeZcxJjQxIIKRa0Jl4hJN5HarOtvUYPDczKTnnhVWjtnROPjd1hT6rrj7WfR5hvfsIWJLpOu/c79Pp4/1j9pZ8MtCb7+m/UjW6rzRS8il+DZhdEj/MGXRYJwZvnqP5r2P12TEv75a5HnpJk=
+	t=1769133867; cv=none; b=AmAIPVrovYmzFrn93Q2F0YjWww7zah2KKsyPgc63yPg0AIC9kGv8swO+4Q5+yz7vv0+q/wa5482+RhqxseNV92FR9cdu8lcB9d8hdt5LW4hgTzLkpH7sYVSvS/TXVHvfnuhW/nPyJfw9I/9VvL3OzNdewgw2iSdWPpq1E3eVe2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769126883; c=relaxed/simple;
-	bh=R3BCKPmjb7og2Smy6/sVRhbEZJeVHIQu6eqL8it4JsI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DGjNodaa17MyQXHqVZXsaGO3uPcjL3RhbNbBDNhm+Gg5UiL/IF8qRNW17BYPJ0vjjuUXH1kXb+5+d0/0PHJQDR66e7br+tPJUkHK1aqtPaT/deRWLyuwckPjA6EI2tTljwBsqHipy2kyQMA8KKme9SkECRKsS91frhPzKza5aoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1ZWFadu3; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2b720bb90d0so1485600eec.0
-        for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 16:07:54 -0800 (PST)
+	s=arc-20240116; t=1769133867; c=relaxed/simple;
+	bh=4M6vU7yGIghImyo7XIcl4YGBOdNNEvQRe7+qak6vEbo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qSHu6NCRzcZfK8e+by0qLOJSWttPS807pBOTJessx1XyPCvhcPLmnZProVWXb0SwNGTEy0YIfWPTtyx/HIAda4JBuMEmBxMmESfM27BepKtt2Aaw/HgyYdHjaJSYExIZfSMb2MihdIQ2AOzq8D4nlfh0DKFIOCAJFe4JCL5CzU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hLufnBos; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47ee9817a35so13352405e9.1
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jan 2026 18:04:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769126871; x=1769731671; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+tE7mr/0V0L9NQ2SZe3k6ZclwJcnVA7mLebR3n7wOnU=;
-        b=1ZWFadu3YiUKXa7xCKrBGuL3uXtFEONapppDKJ7/DaFU/MDI2/Q/nzpPrBnlPvbeVG
-         lVL+rT6VNFH6cAM8krObMLkZO08UhKXVGAhQjN/c0zbqyj4WVO5iwXgxGT6KyZEFOyKK
-         5ry2V0GxiqCytdWe/cpg7+AjBLXw140txJHn4xVEC8B52zRYbLd8+NxV/miW34eNGhsH
-         xj44KQDgcxKKBtskUzsWdHaZuSScuer5xyK3CA8BXkXaWjLtMKziY2eeWvrFtAn5fH5n
-         2M07BkgFrPbV/wcLkVlBAxLZZOUrjn2c6Ot+bHryXJfbWckNi8UmwiE7uUwI9q99QG+W
-         +jIA==
+        d=gmail.com; s=20230601; t=1769133860; x=1769738660; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:sender:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aPyvn4zidjCY33YDEVVo6RlRxk+3FjdxBJwdf65ZzFs=;
+        b=hLufnBos5f0E/bufjNQ1nyLL3Xbzim9kvGQ7Bsy5Cj/giRKHhgx4SyyjtHGg6gZvCu
+         BuLTPts7w/4IPEi+KvfNYqHWTgDUphUem0O8sLYVofVwUUXBiwUZdIT/6uptI0ZB9jO6
+         7OI5+W7sHh6bxuCev0lCR0i8vskA9tyL4teH63bpVGf6+hxqffViDWmStz68n07his6w
+         EbGT8gkPovbDxDRncU8mdiut3MM8W1nIeGLA7wmMwJnQ6Ax6uAmdNx5PZuraYGQMERhN
+         MSHgc6zCLJ/fV2CskoPBFAtHZMK+57fg/F/zABXdQtu1x4i5awzBYxPvn6M/jFEkAUfG
+         65ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769126871; x=1769731671;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+tE7mr/0V0L9NQ2SZe3k6ZclwJcnVA7mLebR3n7wOnU=;
-        b=njig5Vr1z0HAJd5NF4VePcFaAUVftVP8qiUXg76iA3ch+x+WneHoA4sk6SbWz+vT1L
-         45/U93ocL35dXba4lW+MXUPlWOvtUq2SNPamVOF3HfSu5xis893gD+7LqRHdv77o3nML
-         BwiEVr3ZascafcyZbaNIhHg2yS0fqPQdl4lpN/1UXYJTxZt0X8fZ0dmGL9PwwBtnY/k3
-         wRMAJBpL8qyS5f2ud2WUttKKzu2wcIrNwlF+wwclRv5N0C+T3mBOL2xCGzGoUlWcf0Hs
-         jyPqqkmkEpxSiwrktUskQFNyXVZtG6RLhQD/gNwXXFP2sBJTkkZqVDbS+v47j51pIJHk
-         JAlA==
-X-Forwarded-Encrypted: i=1; AJvYcCXLI8F7/YqDSDC/NDRXugwJekyQVI4mmSHphxR1Nvd1q9fg7g/ad/Ec0HpYyEIlFrC3TVMXfAypN90=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgP010/ERHyN8cpAjQIBpmSWN1tzvRCH/R19EthDmqECWbhX/i
-	MaHD1Slk95gWIuYsief8AQCdNdu9OA+2Le6PD98WdjCc/OZKSG52Kdt6wZvB2h6S9Q==
-X-Gm-Gg: AZuq6aIHxpkzL7hQeVlISLh/zwrBclvVU8WAXQdjboYwWdbYbB7pcIVwzT/6YsIsj6e
-	rspT2TIyydQosBpo6pKT+mVzFfe8npZqzJB+4KpLmOM1S5sYgiKmORxypdmgoiU87W7+1oAUpgG
-	QNzHVBaBYuMEhHdo6JbnVCVqM2vALrCtg7i/A/5uNGnbtW4z0h1V9VPI0AuJ2lVm5CbW0jQNfZ1
-	tJyHx77thamijdz/EQJuclzLGemSOX1pnvn27ABmxjQV+3jfQC1NmhiXrOn7xJK/7pEgZsf7ml5
-	K+WKrE9OgmPnn9rAJfnFZ9Guf1oHqIfzqTiVV1FNfUU2rYvKw/p74DaKWx4nOddw5Jvj15xIgIG
-	gcp7Rk52ij8qQHVgEK09sDot1ry1cYtFJnGhBnmTeOdT/cFIbm1NI7sD7bGRrDV2qgKnja3S/FQ
-	EHSrwBfSXBdjwrSirmlI0NNF5yCpjf/pB9rDBTEo22R/HQsklLpCsEFr5JQIZiQfLG5qaLgDdhf
-	H+93QpQuQdAyw==
-X-Received: by 2002:a05:7300:bc86:b0:2b7:1abc:a6eb with SMTP id 5a478bee46e88-2b73995a52cmr598828eec.7.1769126870306;
-        Thu, 22 Jan 2026 16:07:50 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:7fdc:abb8:fa2e:d750? ([2a00:79e0:2e7c:8:7fdc:abb8:fa2e:d750])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73a692222sm1153673eec.6.2026.01.22.16.07.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jan 2026 16:07:49 -0800 (PST)
-Message-ID: <bf3bd5f7-28e1-4fe3-afca-34f12b2cede8@google.com>
-Date: Thu, 22 Jan 2026 16:07:47 -0800
+        d=1e100.net; s=20230601; t=1769133860; x=1769738660;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPyvn4zidjCY33YDEVVo6RlRxk+3FjdxBJwdf65ZzFs=;
+        b=Va8reWeuOf7Hjzeq9SGabBDcm7vqYhKCf6hOpjF5WMs4sBNRH+zLLbUVJmOk4ygFsv
+         i5cWC55ER9f43ms9nCDm1nLZWK3Ci3VvYbikZz1Ncnsw4571vyLDG/8k8MhhyIjguhz7
+         GTaTmd7kaCbY6eaAeGq8qVKESCjC3WqutFA2u63b16h7sHqwkqRrWpWGHC/LhZRBCa1I
+         ioUbDcHMJ5LLeOSfCFrU26Hw44X+vOg3WamUv2+jFt+TTdR/0gysznff1t+PhhetGZdf
+         JmO0eRT4Q0xzoqTz/DzzUv5IJyjk/qKx0lg13AWSFK+aolayKlKy2bHuQui0z4v4gdZx
+         wksQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWjc9PzThkBgEhT3t8WAdwq/6IXh19H/K8luwnqSKO4yCCo3julhrt3cboxebambzGG9wOZmBlc5ik=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnzRrjtk6DxwceY/l3F7IDAd2pdDy1rQiARfkWGeYNji6h6oOq
+	Zskg6Mfw/cPcQhE2+ARP/ZqdqbD71mn8MlPJS5Z+rQMl2UKcBGELSdSe
+X-Gm-Gg: AZuq6aKfR7LILpT7o7dLSDt5VQ2Q8sCp4wi1Pm57Ch66Of7Z7NQN10yWeKqGxeU/wbs
+	mdr7Yh+V4xHs70HG1XDeJ4Y2emXW8Woxb+VffX+88HqPuVpivcw/wn8zwECcuIZTd4DueEHC5a4
+	Kwd/ESHFq/XzN8z+WXitoLk1ddfHzeaYmIVTyOboMGwcp6bQXxP0cmo5gsJAjlohfyVXDPI1g68
+	KP5bsCpWXRQCpP6LSVKBPR4WuNSm+vlY+6EZ91DIIQ1ZCXZdy/qFgORqhMKkgXCK2qjtwB5KcCl
+	UaotBukJZMFnlJ4K6DR7bSCz09nuww+xb24Kek1txVclPIAdrAQe2egnHwLJEdidh7zyu1DM6tV
+	a7B/L5SSUcOBuuA5XO+sAwiFiWG3Dshuvu/Y5peYVm0Yqvq3TqhgXYEQU3NFj8LLGWyWN1K6mt+
+	8S34t+
+X-Received: by 2002:a05:600c:3e05:b0:47e:e20e:bbbf with SMTP id 5b1f17b1804b1-4804c9af18cmr26202045e9.24.1769133859669;
+        Thu, 22 Jan 2026 18:04:19 -0800 (PST)
+Received: from localhost ([2001:67c:1562:8007::aac:4468])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1c246ecsm3034233f8f.10.2026.01.22.18.04.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jan 2026 18:04:17 -0800 (PST)
+Sender: AceLan Kao <acelan@gmail.com>
+Date: Fri, 23 Jan 2026 10:04:11 +0800
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Andreas Noever <andreas.noever@gmail.com>, 
+	Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Fix PCIe device enumeration with delayed
+ rescan
+Message-ID: <aXLM5vk0gDNjLPyY@acelan-Precision-5480>
+Mail-Followup-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Andreas Noever <andreas.noever@gmail.com>, 
+	Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat <YehezkelShB@gmail.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260121052744.233517-1-acelan.kao@canonical.com>
+ <20260121060142.GJ2275908@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/5] power: supply: max77759: add charger driver
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20260121-max77759-charger-v4-0-694234c8ded1@google.com>
- <20260121-max77759-charger-v4-4-694234c8ded1@google.com>
- <71d816c5ed4ee2d13ec63b8fd4acd49f4e418284.camel@linaro.org>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <71d816c5ed4ee2d13ec63b8fd4acd49f4e418284.camel@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260121060142.GJ2275908@black.igk.intel.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	DMARC_POLICY_REJECT(2.00)[canonical.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),reject];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	MID_RHS_NOT_FQDN(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-32640-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32639-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[google.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[acelan.kao@canonical.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
+	NEURAL_HAM(-0.00)[-0.997];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dowhile0.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0A66F6EB1A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[canonical.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 682A26F6EE
 X-Rspamd-Action: no action
 
-Hi Andre',
-
-On 1/22/26 4:47 AM, André Draszik wrote:
-> Hi Amit,
+On Wed, Jan 21, 2026 at 07:01:42AM +0100, Mika Westerberg wrote:
+> Hi,
 >
-> Thanks for your patches, just a few minor comments below.
-
-Thanks for your feedback!
-
-
+> On Wed, Jan 21, 2026 at 01:27:44PM +0800, Chia-Lin Kao (AceLan) wrote:
+> > PCIe devices behind Thunderbolt tunnels may fail to enumerate when
+> > spurious hotplug events prevent pciehp from detecting link-up.
+> >
+> > Root cause:
+> >
+> > Spurious unplug events occur immediately after tunnel activation:
+> >
+> >   [  932.438] thunderbolt: acking hot unplug event on 702:2
+> >   [  932.852] thunderbolt: PCIe Up path activation complete
+> >   [  932.855] thunderbolt: hotplug event for upstream port 702:2
+> >             (unplug: 0)
+> >   [  932.855] thunderbolt: hotplug event for upstream port 702:2
+> >             (unplug: 1)
+> >
+> > These events disrupt pciehp timing, causing device enumeration to fail
+> > ~70% of the time on affected hardware. Manual PCI rescan succeeds,
+> > proving devices are present and functional on the bus.
 >
-> On Wed, 2026-01-21 at 00:59 +0000, Amit Sunil Dhamne via B4 Relay wrote:
->> From: Amit Sunil Dhamne <amitsd@google.com>
->>
->> Add support for MAX77759 battery charger driver. This is a 4A 1-Cell
->> Li+/LiPoly dual input switch mode charger. While the device can support
->> USB & wireless charger inputs, this implementation only supports USB
->> input. This implementation supports both buck and boost modes.
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> ---
->>   MAINTAINERS                             |   6 +
->>   drivers/power/supply/Kconfig            |  11 +
->>   drivers/power/supply/Makefile           |   1 +
->>   drivers/power/supply/max77759_charger.c | 737 ++++++++++++++++++++++++++++++++
->>   4 files changed, 755 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 0d044a58cbfe0f2b97f3682a86708e1ece108e9f..38354964a85c34611b1b54e20651b360f3b9c11e 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -15546,6 +15546,12 @@ F:	drivers/mfd/max77759.c
->>   F:	drivers/nvmem/max77759-nvmem.c
->>   F:	include/linux/mfd/max77759.h
->>   
->> +MAXIM MAX77759 BATTERY CHARGER DRIVER
->> +M:	Amit Sunil Dhamne <amitsd@google.com>
->> +L:	linux-kernel@vger.kernel.org
->> +S:	Maintained
->> +F:	drivers/power/supply/max77759_charger.c
->> +
->>   MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
->>   M:	Javier Martinez Canillas <javier@dowhile0.org>
->>   L:	linux-kernel@vger.kernel.org
->> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
->> index 92f9f7aae92f249aa165e68dbcd4cebb569286ea..3a2cdb95c98e44324151ac2b86d740ae2923ee77 100644
->> --- a/drivers/power/supply/Kconfig
->> +++ b/drivers/power/supply/Kconfig
->> @@ -631,6 +631,17 @@ config CHARGER_MAX77705
->>   	help
->>   	  Say Y to enable support for the Maxim MAX77705 battery charger.
->>   
->> +config CHARGER_MAX77759
->> +	tristate "Maxim MAX77759 battery charger driver"
->> +	depends on MFD_MAX77759 && REGULATOR
->> +	default MFD_MAX77759
->> +	help
->> +	  Say M or Y here to enable the MAX77759 battery charger. MAX77759
->> +	  charger is a function of the MAX77759 PMIC. This is a dual input
->> +	  switch-mode charger. This driver supports buck and OTG boost modes.
->> +
->> +	  If built as a module, it will be called max77759_charger.
->> +
->>   config CHARGER_MAX77976
->>   	tristate "Maxim MAX77976 battery charger driver"
->>   	depends on I2C
->> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
->> index 4b79d5abc49a7fd1e37a26d0c89f94d9fe3a916f..6af905875ad5e3b393a7030405355b9a975870f6 100644
->> --- a/drivers/power/supply/Makefile
->> +++ b/drivers/power/supply/Makefile
->> @@ -128,3 +128,4 @@ obj-$(CONFIG_CHARGER_SURFACE)	+= surface_charger.o
->>   obj-$(CONFIG_BATTERY_UG3105)	+= ug3105_battery.o
->>   obj-$(CONFIG_CHARGER_QCOM_SMB2)	+= qcom_smbx.o
->>   obj-$(CONFIG_FUEL_GAUGE_MM8013)	+= mm8013.o
->> +obj-$(CONFIG_CHARGER_MAX77759)	+= max77759_charger.o
->> diff --git a/drivers/power/supply/max77759_charger.c b/drivers/power/supply/max77759_charger.c
->> new file mode 100644
->> index 0000000000000000000000000000000000000000..34b5ea0967eb7b4716e81ee1a55227ac872493b0
->> --- /dev/null
->> +++ b/drivers/power/supply/max77759_charger.c
->> @@ -0,0 +1,737 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * max77759_charger.c - Battery charger driver for MAX77759 charger device.
->> + *
->> + * Copyright 2025 Google LLC.
->> + */
->> +
->> +#include <linux/bitfield.h>
->> +#include <linux/cleanup.h>
->> +#include <linux/device.h>
->> +#include <linux/devm-helpers.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/irq.h>
->> +#include <linux/math64.h>
->> +#include <linux/mfd/max77759.h>
->> +#include <linux/module.h>
->> +#include <linux/mod_devicetable.h>
->> +#include <linux/mutex.h>
->> +#include <linux/of.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/power_supply.h>
->> +#include <linux/regmap.h>
->> +#include <linux/regulator/driver.h>
->> +#include <linux/string_choices.h>
->> +
->> +/* Default values for Fast Charge Current & Float Voltage */
->> +#define CHG_CC_DEFAULT_UA			2266770
->> +#define CHG_FV_DEFAULT_MV			4300
->> +
->> +#define FOREACH_IRQ(S)			\
->> +	S(AICL),			\
->> +	S(CHGIN),			\
->> +	S(CHG),				\
->> +	S(INLIM),			\
->> +	S(BAT_OILO),			\
->> +	S(CHG_STA_CC),			\
->> +	S(CHG_STA_CV),			\
->> +	S(CHG_STA_TO),			\
->> +	S(CHG_STA_DONE)
->> +
->> +#define GENERATE_ENUM(e)		e
->> +#define GENERATE_STRING(s)		#s
->> +
->> +enum {
->> +	FOREACH_IRQ(GENERATE_ENUM)
->> +};
->> +
->> +static const char *const chgr_irqs_str[] = {
->> +	FOREACH_IRQ(GENERATE_STRING)
->> +};
->> +
->> +#define NUM_IRQS			ARRAY_SIZE(chgr_irqs_str)
->> +
->> +struct max77759_charger {
->> +	struct device *dev;
->> +	struct regmap *regmap;
->> +	struct power_supply *psy;
->> +	struct regulator_dev *chgin_otg_rdev;
->> +	struct notifier_block nb;
->> +	struct power_supply *tcpm_psy;
->> +	struct work_struct psy_work;
->> +	int irqs[NUM_IRQS];
->> +	struct mutex lock; /* protects the state below */
->> +	enum max77759_chgr_mode mode;
->> +};
->> +
->> +static inline int regval_to_val(int reg, int reg_offset, int step, int minval)
->> +{
->> +	return ((reg - reg_offset) * step) + minval;
->> +}
->> +
->> +static inline int val_to_regval(int val, int minval, int step, int reg_offset)
->> +{
->> +	s64 dividend;
->> +
->> +	if (unlikely(step == 0))
->> +		return reg_offset;
-> Does it really make an impact on performance to specify unlikely? Also, I seem to
-> remember that the if branch is treated as unlikely anyway, but can't find any hard
-> evidence on that right now.
+> Thanks for the report!
+>
+> They are likely TB3 xHCI "plug" events or so but they should not affect
+> anything really.
+>
+> It may be that there is something in the TB3 compatibility side that we are
+> not doing which needs to be investigated.
+>
+> From your merged.out.bad:
+>
+> CM does xHCI connect here:
+>
+> [  152.905840] [182] thunderbolt 0000:c7:00.6: 702: xHCI connect request
+> [  152.906865] [182] thunderbolt 0000:c7:00.6: hotplug event for upstream port 702:2 (unplug: 0)
+> [  152.906869] [182] thunderbolt 0000:c7:00.6: 2:8: got plug event for connected port, ignoring
+> [  152.906872] [182] thunderbolt 0000:c7:00.6: hotplug event for upstream port 702:2 (unplug: 1)
+> [  152.906875] [182] thunderbolt 0000:c7:00.6: 2:8: got unplug event for disconnected port, ignoring
+>
+> [  192.931373] [49] thunderbolt 0000:c7:00.6: acking hot unplug event on 2:7
+>
+> Can you comment out call to tb_switch_xhci_connect() and see if that
+> changes anything?
+Here is what I modified, and the problem becomes a little bit complicated.
 
-I was hoping it's performance improving even if negligible, though I 
-don't have evidence to support either arguments. In any case, I kept it 
-for readability.
+I did the following steps(1~5) and captured the tbtrace log at step 5.
+https://people.canonical.com/~acelan/bugs/tbt_storage/merged.out.remove_tb_switch_xhci_connect.out
+1. Plugged one tbt storage on the Dock and connected the dock to the
+machine
+2. Boot the machine up, and it recognizes the tbt storage
+3. Plugged the second tbt storage on the dock, and it also can be
+recognized(it was always failed in this step)
+4. Unplugged the first and second tbt storage from the dock, and then
+re-plugged the first tbt storage on the dock, and it can be recognized
+5. Re-plugged the second tbt storage on the dock, and it fails.
 
+(continue doing the following tests)
+a. When the issue happens, re-plugging the second tbt storage doesn't
+work.
+b. Plugged both tbt storages on the dock, and then re-plugged the dock to
+the machine, both tbt storages can be recognized.
+	b.1 In this case, it works when re-plugging the first or the
+	    second tbt storage on the dock(there is always one tbt storage
+	    still connected to the dock)
+	b.2 Removed both tbt storages from the dock, and then
+	    re-plugged them one by one, and the second tbt storage can't be
+	    recognized.
+c. Plugged one tbt storage on the dock, and then re-connected the dock to
+	the machine, the tbt storage can be recognized.
+	c.1 Plugged the second tbt storage on the dock, and the second tbt
+	    storage can be recognized.
+	c.2 Re-plugged the first or the second tbt storage on the
+	    dock, both tbt storages can be recognized.
+	c.3 Removed both tbt storages from the dock, and then
+	    re-plugged them one by one, and the second tbt storage can't be
+	    recognized.(same as b.2)
+
+The issue could be reproduced when connecting the second tbt storage
+to the dock.
+1. Connect the dock to the machine with any tbt storage
+2. Or remove all tbt storages from the dock if the dock is connected
+3. And then plugged tbt storages one by one, and the second one won't be
+   recognized.
+
+rescan finds the missing tbt storage, but it works only one time. Need
+to rescan again when re-plugging the first or the second tbt storage.
+   echo 1 | sudo tee /sys/bus/pci/rescan
+
+BTW, when the second tbt storage can't be recognized, unplug the first tbt
+storage from the dock and the second tbt storage can be recognized.
+And then re-plugged the first tbt storage on the dock, it can't be
+recognized. The behavior just looks like it's the second tbt storage.
+
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 4f5f1dfc0fbf..be7ff82a3846 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -2503,8 +2503,8 @@ static void tb_handle_hotplug(struct work_struct *work)
+        } else if (port->remote) {
+                tb_port_dbg(port, "got plug event for connected port, ignoring\n");
+        } else if (!port->port && sw->authorized) {
+-               tb_sw_dbg(sw, "xHCI connect request\n");
+-               tb_switch_xhci_connect(sw);
++               tb_sw_dbg(sw, "DEBUG: Comment out xHCI connect request\n");
++               //tb_switch_xhci_connect(sw);
+        } else {
+                if (tb_port_is_null(port)) {
+                        tb_port_dbg(port, "hotplug: scanning\n");
 
 >
->> +
->> +	dividend = (s64)val - minval;
->> +	return DIV_S64_ROUND_CLOSEST(dividend, step) + reg_offset;
->> +}
-> For these two functions above, have you considered using the APIs from
-> include/linux/linear_range.h instead of duplicating in this driver? The
-> implementations of the above match linear_range_get_value() and
-> linear_range_get_selector_low() quite nicely.
-
-I think it looks useful, will check it out.
-
-
->> +
->> +static inline int unlock_prot_regs(struct max77759_charger *chg, bool unlock)
->> +{
->> +	return regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_06,
->> +				  MAX77759_CHGR_REG_CHG_CNFG_06_CHGPROT, unlock
->> +				  ? MAX77759_CHGR_REG_CHG_CNFG_06_CHGPROT : 0);
->> +}
->> +
-> [...]
+> > Solution:
+> >
+> > Schedule delayed work (300ms) after tunnel activation to:
+> > 1. Check if pciehp successfully enumerated devices (device count increased)
+> > 2. If not, trigger pci_rescan_bus() to discover devices manually
+> > 3. Log results for observability
+> >
+> > The delayed work approach is non-blocking and only rescans when actually
+> > needed, avoiding overhead on systems where pciehp works correctly.
 >
->> +static irqreturn_t irq_handler(int irq, void *data)
->> +{
->> +	struct max77759_charger *chg = data;
->> +	struct device *dev = chg->dev;
->> +	int i;
->> +
->> +	for (i = 0; i < NUM_IRQS && chg->irqs[i] != irq; i++)
->> +		;
->> +
->> +	if (i == NUM_IRQS) {
->> +		dev_err(dev, "Unable to handle irq=%d", irq);
->> +		return IRQ_NONE;
->> +	} else if (i == BAT_OILO) {
->> +		dev_warn(dev, "Battery over-current threshold crossed");
->> +	}
-> Generally, no 'else' is required after return.
-
-I will refactor it in the next rev.
-
-
->> +
->> +	power_supply_changed(chg->psy);
->> +	return IRQ_HANDLED;
->> +}
->> +
-> [...]
->
->> +static void psy_work_item(struct work_struct *work)
->> +{
->> +	struct max77759_charger *chg =
->> +		container_of(work, struct max77759_charger, psy_work);
->> +	union power_supply_propval current_limit, online;
->> +	int ret;
->> +
->> +	ret = power_supply_get_property(chg->tcpm_psy,
->> +					POWER_SUPPLY_PROP_CURRENT_MAX,
->> +					&current_limit);
->> +	if (ret) {
->> +		dev_err(chg->dev,
->> +			"Failed to get CURRENT_MAX psy property, ret=%d",
->> +			ret);
->> +		return;
->> +	}
->> +
->> +	ret = power_supply_get_property(chg->tcpm_psy, POWER_SUPPLY_PROP_ONLINE,
->> +					&online);
->> +	if (ret) {
->> +		dev_err(chg->dev,
->> +			"Failed to get ONLINE psy property, ret=%d",
->> +			ret);
->> +		return;
->> +	}
->> +
->> +	if (online.intval && current_limit.intval) {
->> +		ret = set_input_current_limit(chg, current_limit.intval);
->> +		if (ret)
->> +			dev_err(chg->dev,
->> +				"Unable to set current limit, ret=%d", ret);
->> +
->> +		charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
->> +	} else {
->> +		charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
->> +	}
-> For all the possible errors in this function, should the driver try a bit
-> harder, even if unlikely to occur?
-
-Maybe we can do this:
-
-On failure of either of the power_supply_get_property() calls or 
-set_input_current_limit(), we should first turn off the charger (as 
-that's the safest choice) and reschedule this work for a certain number 
-of times (maybe 3). Obviously, if we recover from this state, we reset 
-the error limit and don't reschedule this work anymore. Do you concur?
-
-
-> What if the current limit needed to be
-> reduced, e.g. due to thermal or any other reasons?
-
-This specific piece of code is for setting current limit that is driven 
-by USB Type-C subsystem. If the Type-C subsystem re-negotiates a PD 
-contract this piece of code will re-run as this subsystem will be 
-re-notified by TCPM. For cases where we need to cap the current limit 
-due to thermal management, that's a hardware driven feature. It is 
-enabled by enabling JEITA management. That's not in the scope atm.
-
-
->
-> Could rescheduling the work be something to consider?
->
-Responded in the previous comment..
-
-
->> +}
->> +
->> +static int psy_changed(struct notifier_block *nb, unsigned long evt, void *data)
->> +{
->> +	struct max77759_charger *chg = container_of(nb, struct max77759_charger,
->> +						    nb);
->> +	const char *psy_name = "tcpm-source";
-> This can be static const char.
-
-Will fix it.
-
-
->
->> +	struct power_supply *psy = data;
->> +
->> +	if (!strnstr(psy->desc->name, psy_name, strlen(psy_name)) ||
->> +	    evt != PSY_EVENT_PROP_CHANGED)
->> +		return NOTIFY_OK;
->> +
->> +	chg->tcpm_psy = psy;
->> +	schedule_work(&chg->psy_work);
->> +
->> +	return NOTIFY_OK;
->> +}
->> +
->> +static void max_tcpci_unregister_psy_notifier(void *nb)
->> +{
->> +	power_supply_unreg_notifier(nb);
->> +}
->> +
->> +static int max77759_charger_probe(struct platform_device *pdev)
->> +{
->> +	struct regulator_config chgin_otg_reg_cfg;
->> +	struct power_supply_config psy_cfg;
->> +	struct device *dev = &pdev->dev;
->> +	struct max77759_charger *chg;
->> +	int ret;
->> +
->> +	device_set_of_node_from_dev(dev, dev->parent);
->> +	chg = devm_kzalloc(dev, sizeof(*chg), GFP_KERNEL);
->> +	if (!chg)
->> +		return -ENOMEM;
->> +
->> +	platform_set_drvdata(pdev, chg);
->> +	chg->dev = dev;
->> +	chg->regmap = dev_get_regmap(dev->parent, "charger");
->> +	if (!chg->regmap)
->> +		return dev_err_probe(dev, -ENODEV, "Missing regmap");
->> +
->> +	ret = devm_mutex_init(dev, &chg->lock);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret, "Failed to initialize lock");
->> +
->> +	psy_cfg.fwnode = dev_fwnode(dev);
->> +	psy_cfg.drv_data = chg;
->> +	chg->psy = devm_power_supply_register(dev, &max77759_charger_desc,
->> +					      &psy_cfg);
->> +	if (IS_ERR(chg->psy))
->> +		return dev_err_probe(dev, -EPROBE_DEFER,
->> +				     "Failed to register psy, ret=%ld",
->> +				     PTR_ERR(chg->psy));
->> +
->> +	ret = max77759_charger_init(chg);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret,
->> +				     "Failed to initialize max77759 charger");
->> +
->> +	chgin_otg_reg_cfg.dev = dev;
->> +	chgin_otg_reg_cfg.driver_data = chg;
->> +	chgin_otg_reg_cfg.of_node = dev_of_node(dev);
->> +	chg->chgin_otg_rdev = devm_regulator_register(dev, &chgin_otg_reg_desc,
->> +						      &chgin_otg_reg_cfg);
->> +	if (IS_ERR(chg->chgin_otg_rdev))
->> +		return dev_err_probe(dev, PTR_ERR(chg->chgin_otg_rdev),
->> +				     "Failed to register chgin otg regulator");
->> +
->> +	ret = devm_work_autocancel(dev, &chg->psy_work, psy_work_item);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret, "Failed to initialize psy work");
->> +
->> +	chg->nb.notifier_call = psy_changed;
->> +	ret = power_supply_reg_notifier(&chg->nb);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret,
->> +				     "Unable to register psy notifier");
->> +
->> +	ret = devm_add_action_or_reset(dev, max_tcpci_unregister_psy_notifier,
->> +				       &chg->nb);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret,
->> +				     "Failed to add devm action to unregister psy notifier");
->> +
->> +	return max77759_init_irqhandler(chg);
->> +}
->> +
->> +static const struct platform_device_id max77759_charger_id[] = {
->> +	{"max77759-charger",},
-> Minor formatting nit - I believe common practice is to use named initializers:
->
-> +	{ .compatible = "max77759-charger", },
-
-Will fix.
-
-
->
->> +	{ }
->> +};
->> +MODULE_DEVICE_TABLE(platform, max77759_charger_id);
->> +
->> +static struct platform_driver max77759_charger_driver = {
->> +	.driver = {
->> +		.name = "max77759-charger",
-> Can it be async, or are there issues with that?
->
->                  .probe_type = PROBE_PREFER_ASYNCHRONOUS,
-
-I don't think adding this should be an issue as this driver has very few 
-dependencies. I will test it and add this in my next revision.
-
-
->
-> Thanks again Amit!
-
-You're welcome!
-
-
-BR,
-
-Amit
-
->
-> Cheers,
-> Andre'
->
->> +	},
->> +	.probe = max77759_charger_probe,
->> +	.id_table = max77759_charger_id,
->> +};
->> +module_platform_driver(max77759_charger_driver);
->> +
->> +MODULE_AUTHOR("Amit Sunil Dhamne <amitsd@google.com>");
->> +MODULE_DESCRIPTION("Maxim MAX77759 charger driver");
->> +MODULE_LICENSE("GPL");
+> There is no way we are going to call PCI functions from the tb.c.
 
