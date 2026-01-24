@@ -1,126 +1,124 @@
-Return-Path: <linux-usb+bounces-32675-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32676-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EKKbAsD9dGk7/wAAu9opvQ
-	(envelope-from <linux-usb+bounces-32675-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 18:13:36 +0100
+	id mCBDOxQUdWlPAgEAu9opvQ
+	(envelope-from <linux-usb+bounces-32676-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 19:48:52 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68DA07E416
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 18:13:35 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A35D7E8A8
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 19:48:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5B0A6300D9CD
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 17:13:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 118A0300681F
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 18:48:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B47A21D3D6;
-	Sat, 24 Jan 2026 17:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFCB220F3E;
+	Sat, 24 Jan 2026 18:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hernandez-ros.com header.i=@hernandez-ros.com header.b="Le70g2oC";
-	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="b/j1bw7u"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="0ZsJ2cVK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from a27-45.smtp-out.us-west-2.amazonses.com (a27-45.smtp-out.us-west-2.amazonses.com [54.240.27.45])
-	(using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB52173
-	for <linux-usb@vger.kernel.org>; Sat, 24 Jan 2026 17:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.27.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15352B9B9;
+	Sat, 24 Jan 2026 18:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769274809; cv=none; b=JicFBYCIAqW+ohFjuxQ9Lz3zNjWlGS3Ib0/NGFTIHk5uDafE08L7J3aWSeoPoYGh6m1saj/jO6vhB5ZABIiglP19rtmbLg0djwvNRiPGQO+dwpADCVeNhWw6B/TXbb6RTb4iLVbEwjtQep1yPR7W9bwdLvcPTGYQYu3XhKrzHtY=
+	t=1769280526; cv=none; b=Ja82ztL5SC+U8NM8D4+GoELVOsmuCW4yjt94jW9sCg3ZEXkCy6/EzL9EueXQOnvn6GofZWEtAtq2hzutU9cVhLGBR7tp/tI7jKFapmduLhh7D6GbZY8QtUorfhEUBBlI03Afu7C2y93hinVBI3RJlY2++wZ9HUgnZ3TL5i9Rsug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769274809; c=relaxed/simple;
-	bh=v5RyRvfN0M2eqt7l7eGpWmcdJ+jwR5OE6pbTVeqbNCQ=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-ID:References:To; b=hdni7hO3x95I74Y6LpS50tQS21cPX3HxSAxsNUmIfneyTDECfYf8d9UOu/Fo9B+cQeGUQdWUb9g2sfNp5VEgV2E4oINYhuZuO3Pbrl7/P9pE2JQ+Nxxo1JRZ5ZbLnmQ2vUmtrnzI/dg57KSJ2NUXEUspfuKVUN9M5N0ijWCqW5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hernandez-ros.com; spf=pass smtp.mailfrom=us-west-2.amazonses.com; dkim=pass (1024-bit key) header.d=hernandez-ros.com header.i=@hernandez-ros.com header.b=Le70g2oC; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=b/j1bw7u; arc=none smtp.client-ip=54.240.27.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hernandez-ros.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=us-west-2.amazonses.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=4vmhj3boyfilqttfply4nxrhvlvpcgyy; d=hernandez-ros.com;
-	t=1769274808;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:Content-Transfer-Encoding:Message-Id:References:To;
-	bh=v5RyRvfN0M2eqt7l7eGpWmcdJ+jwR5OE6pbTVeqbNCQ=;
-	b=Le70g2oCYUiHgpLqhIOceNF/ufeMp8OTYHQ2iMt7NwMgbgSxA4WALCY5Zv9sCFtt
-	6raXm2vfo3EiJwPufF8OXiiRIiOYSuYeCfB52pwHM9JdUKlSpEIbYwHgXQKcrYnPVlI
-	1aG94UUXe0OrrhEcZDevisTBAx/ABUK48z1TCIvI=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1769274808;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:Content-Transfer-Encoding:Message-Id:References:To:Feedback-ID;
-	bh=v5RyRvfN0M2eqt7l7eGpWmcdJ+jwR5OE6pbTVeqbNCQ=;
-	b=b/j1bw7uPv8zxEH6UtUBO1NL4ABPTq231lXSkMaWoEPyT1iuy5N7fDZ+2WTDS/wH
-	q2qeEDiowUCyvzYGZYfG16lTi8GqTIJzLq7JZ+cFLKuz6QNi9PKRIvQQxuPt1LE3pyt
-	qoZ6PeuwJ9OLmSfkyTufJW+kL2xvS1uIV4c6r3S0=
-Content-Type: text/plain;
-	charset=us-ascii
+	s=arc-20240116; t=1769280526; c=relaxed/simple;
+	bh=o8QaVJXY5vRVE5mPXnXAAUBBifC+oh4SSOlXEgwugZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V+ZE3eLYpc978cDBeFbqcSW2Ocq0Y5k2oDO2kOnlSIiMqVSQ3mKlUV0q+jZBnPdAmGBYQs8Gp+GZ6IXlo5KbpcdIFBZy9E+z6gky+ZRq7HTxEJ5XHcgWgVj/8O0hOfhXjZ3rK5kOJH77ZLN1Zt/KpDSsJ1NIoU7ZBR9i9GT3zZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=0ZsJ2cVK; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=cxyAB1LDOJ85fvLjDomFFnmTJLiY62zgFSyj0HWmz58=; b=0ZsJ2cVKsoculXpqGFnnYmcf1h
+	WIf4ud531Ibco4GXRD7ve3vJroLMqfk4fHy7InCIughhd5Z26yUfY7PacRNaOCCLT/mJ5V9JsxdAV
+	2DYG7FQ0x9hYWb0L9CziVccyAQsZzz0pbBZsUJzce6mpjc74zR8vwaAqjMiDgXMsR334=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vjiga-004VBi-Cx; Sat, 24 Jan 2026 19:48:40 +0100
+Date: Sat, 24 Jan 2026 19:48:40 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Peter Korsgaard <peter@korsgaard.com>,
+	Steve Glendinning <steve.glendinning@shawell.net>,
+	Oliver Neukum <oneukum@suse.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Max Schulze <max.schulze@online.de>,
+	Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Subject: Re: [PATCH net-next] net: usb: introduce usbnet_mii_ioctl helper
+ function
+Message-ID: <8d17a810-9e74-4ef1-8fa7-3267a8678b40@lunn.ch>
+References: <20260124080136.75619-1-enelsonmoore@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.300.41.1.7\))
-Subject: Re: USB/IP bug report - dmesg filled with to usb_unlink_urb() when
- using two instances of same device
-From: =?utf-8?Q?Ignacio_Hern=C3=A1ndez-Ros?= <ignacio@hernandez-ros.com>
-In-Reply-To: <7f22aca9-baa4-4438-b568-2b197f971739@kernel.org>
-Date: Sat, 24 Jan 2026 17:13:28 +0000
-Cc: valentina.manea.m@gmail.com, linux-usb@vger.kernel.org, i@zenithal.me
-Content-Transfer-Encoding: 7bit
-Message-ID: <0101019bf0ff17d4-3afd0632-19b1-4aaf-8aed-b82ef457ece1-000000@us-west-2.amazonses.com>
-References: <0101019b92e81c20-09906fb4-d5e8-40a6-9192-ab693eef4179-000000@us-west-2.amazonses.com>
- <c4559ccc-d4d4-4971-bc28-b02d80e57594@linuxfoundation.org>
- <0101019b97e8a815-bb84ea95-adbb-493e-b94a-dfe4afb55f60-000000@us-west-2.amazonses.com>
- <1b1ed320-eb7b-4b93-a1f1-84ae651abd17@kernel.org>
- <0101019ba7838344-f64c50aa-ea38-498a-9196-1467688fe7d7-000000@us-west-2.amazonses.com>
- <d9d2c4e6-43ae-48d7-88ee-4288e6f16907@kernel.org>
- <0101019bc32d3017-88891fcf-4b22-45d8-b8e4-c18a30dbbe15-000000@us-west-2.amazonses.com>
- <63f2d81c-79ce-4568-99fa-c47da98afd78@kernel.org>
- <a56209d4-13d5-40cb-b759-f9c7870fb842@kernel.org>
- <0101019bdf6ca137-60344502-51d2-4767-a34b-6a7cf1bfdf4a-000000@us-west-2.amazonses.com>
- <7f22aca9-baa4-4438-b568-2b197f971739@kernel.org>
-To: Shuah <shuah@kernel.org>
-X-Mailer: Apple Mail (2.3864.300.41.1.7)
-Feedback-ID: ::1.us-west-2.HjGwZwg5MFiEpu6H35PNuAp1STds0CnEvbYH/ASzZjo=:AmazonSES
-X-SES-Outgoing: 2026.01.24-54.240.27.45
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260124080136.75619-1-enelsonmoore@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	R_DKIM_ALLOW(-0.20)[hernandez-ros.com:s=4vmhj3boyfilqttfply4nxrhvlvpcgyy,amazonses.com:s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
+	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[hernandez-ros.com];
-	TAGGED_FROM(0.00)[bounces-32675-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-32676-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[hernandez-ros.com:+,amazonses.com:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ignacio@hernandez-ros.com,linux-usb@vger.kernel.org];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,zenithal.me];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,amazonses.com:dkim,us-west-2.amazonses.com:mid]
-X-Rspamd-Queue-Id: 68DA07E416
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[lunn.ch:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lunn.ch:mid,lunn.ch:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8A35D7E8A8
 X-Rspamd-Action: no action
 
-Hi
+>  static int smsc75xx_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
+>  {
+> -	struct usbnet *dev = netdev_priv(netdev);
+> -
+>  	if (!netif_running(netdev))
+>  		return -EINVAL;
+>  
+> -	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
+> +	return usbnet_mii_ioctl(netdev, rq, cmd);
+>  }
 
-> Is there a way you can enable usbip debug and send me the dmesg?
-> 
-> -- Shuah
+You are doing the same as phy_do_ioctl(), but for the old mii
+code. However, we also have phy_do_ioctl_running(). It might make
+sense to add usbnet_mii_ioctl_running()?
 
-Done. You can access the dmesg with DEBUG information from here: 
-https://reportingstandard.com/dmesg-log.txt
-
-Ignacio
-
+	Andrew
 
