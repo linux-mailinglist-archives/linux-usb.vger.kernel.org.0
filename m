@@ -1,345 +1,287 @@
-Return-Path: <linux-usb+bounces-32664-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32665-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sBJxA19EdGlr4AAAu9opvQ
-	(envelope-from <linux-usb+bounces-32664-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 05:02:39 +0100
+	id MFVKOntGdGnX4AAAu9opvQ
+	(envelope-from <linux-usb+bounces-32665-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 05:11:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D0D57C6E9
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 05:02:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35A677C719
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 05:11:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7D78330162B6
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 04:02:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A0999301442B
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 04:11:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 168F3217F33;
-	Sat, 24 Jan 2026 04:02:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZKQBJOB9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBB8025771;
+	Sat, 24 Jan 2026 04:11:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dl1-f65.google.com (mail-dl1-f65.google.com [74.125.82.65])
+Received: from mail-oo1-f77.google.com (mail-oo1-f77.google.com [209.85.161.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C826145355
-	for <linux-usb@vger.kernel.org>; Sat, 24 Jan 2026 04:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B432F2AF1B
+	for <linux-usb@vger.kernel.org>; Sat, 24 Jan 2026 04:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769227353; cv=none; b=FvhvC16LK49vwnzzOKXJful3fSed7D/33m2kbmdsSAh8jQ4oz4dO2PhT17jJtfNVdOHfrUKXSbz17xCnCiyL7QfNC7folaH7pZD42FXOsMjrMdodywMtPT6+RlezYK0sWeRr2MGVjZVNqvozEilr513UnzLBUM829BVzM44zg3A=
+	t=1769227895; cv=none; b=C8ERItJWtF4g3Ca2BTmgPA6ge+4/8FzR8cYDiKR9gfklCO5VGNQgM0OE1UkX0t5+V+8tk1wtXpy7ZL5xLxLPzo1Xj46R4Z+7R3e9VlUdd05VRQ8R4NMZmLIwBJ2X5lVPNUN9X7dIAvCZq3xi4ld8Ui7ybkpR3fl7Y4GwbGPPIeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769227353; c=relaxed/simple;
-	bh=P9geLVe2oVR/Qa6smGpSjq/B5PdqKKd1wee8T0D5LfE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pv1K/Au8b5+muP52VhTTeH/4Qgj7GhUEnhxDk9MO5qSdeZHaYTyfoLBHr1Tr8/DEkwc0XUE8LPgo9l6CLkqFpqOoS3J5wzROhKPJS1o+tOGyoYMyQnN4f4P2/+I66e529LBED8WrRGAffsx9wd6iuJlcwLel5kWlP4nxbCxJTVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZKQBJOB9; arc=none smtp.client-ip=74.125.82.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f65.google.com with SMTP id a92af1059eb24-1233bb90317so3289544c88.1
-        for <linux-usb@vger.kernel.org>; Fri, 23 Jan 2026 20:02:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769227351; x=1769832151; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o0OclSgaj9t5CvY0OtymbJspgBfc1tXWGj5iaVy0RbU=;
-        b=ZKQBJOB9LDcghISbsiq0EimC+EQAB86PMkr/t8rcib1Pzx/pEfzI+oKh4ZVdCQTK3r
-         pw9/AWyzPPeqbf+FSai3PYPXtXbc47rWWXfz/cGgTqMpTE75NxasxsfWWYkUN7MY6+gy
-         SD+jrebcnpWItPl104SPfbCq+4IjP3AgwG9FuAI3I6L0phxV6QVs7h9mrPsfDSJv5tW/
-         uX1k+1njs+94wHJ0seMvY2EuHpfzp4TnKj83+nowVtOZL6rjXsixEZ11H6zzXx/wL8P0
-         b0YtrlO8XQ/yV4fsA14mWD8gipkn0hlB3BKhVVl4ST42JOJNqYEXTo/laugYmb53Le8M
-         qqSw==
+	s=arc-20240116; t=1769227895; c=relaxed/simple;
+	bh=AogT48jOEJimrMGNVhJmVsrfrH8qGpLSAuWUxnvbXJw=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=pG6rAEV5KPb4fqhTc6KGJEEVPCmlyrH9NjOfk/BWaBgrrBBGZTZ2QuENHkELT+0oL9FMv6A1LI284xzBrgfp+Qy45MbLaDcDQ+43QwCNrIK2lVxc7Nf9p0yDXiaYanUdNwa37TI6ZCc9Fugv/91Rih47/ldRTZR0GY/EJp3gw4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f77.google.com with SMTP id 006d021491bc7-661094d05b7so3860293eaf.1
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jan 2026 20:11:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769227351; x=1769832151;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o0OclSgaj9t5CvY0OtymbJspgBfc1tXWGj5iaVy0RbU=;
-        b=UG7SEAYD30VihlOseVW3VT1US3EYF/NCDZHDVJXBV5riqLPjjSDQybW1gdKp7a2bze
-         R+CPs8eGiA4U35wTqqSbzCghOTxexLcWLI5jeggW1ufJJiLX7V4aFBNzdGFx10FxtyJz
-         R1AuiDuM03ZsrofOMcOxII014PMuw4A4OQxO3OUu4Jy1fF66ZWUitncHGXb6R77X3+XJ
-         6qehIMWiCwtdJgfk97D0hcxhNDZSVZvJlqexgUFwEbHwWfutW2bbID6Pk2YQc23F8E9T
-         isEuJEpg4h5BwfrFse9bbovK9eVj5ZDRfNXAAu26c2Y8V84WUaaz8ElWcaFzCra3Z34F
-         iZuw==
-X-Forwarded-Encrypted: i=1; AJvYcCVaF3tY2RxZCCJpSSNjDdO0oIf4ixT+C7qKdgHLIC7zN2zQkYYOXplwzxycUM3aFch5dESQJoFj/P8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYy2tjUB4rWpCTo25D2vmsAhjhYHB4l6ZChuQ1EyJp71gHQtgw
-	8Pb/KUvVX2PvfV1aPfKNa9VZ4DCDSQiv9mIIXMLchSG9ujQt0cOJEv9L
-X-Gm-Gg: AZuq6aJdqEy9OkfbeID9PU4MyKVxNGEsQQYyYRgICccdT27HrH0FHyni00glAsbK3hv
-	8BXNDsoh1sjCfznyvM9n902RgekSEoVn6DjphwBM036Il3kZOrAJD5JLFKmMbb3/t7ZkBnwIwvd
-	xrbwUPKHIm+EMc6DOGbn+fs1Mtjfrh9WRoYGMPiRg6fQeObTJOGFp6wc1gQjwqkSY+g6nOPX2n9
-	K/UHP+A59DUGCGWO2nIZCnFwg9Otir2PqptX7b0CQRMau5j7XZ1h7BgIucIA5Yi3zBDzKJCuR8k
-	FxGszgvIuZ4N4SKRw2giqR0zQ4sjxMzn1opaCJzXIFMOV33HtyCdUspTII2EzVz+HCiyEd/8z4f
-	ZrH9vJpsJQLPshC9QF+C2Ybhsr+jOqNzHl7cHHIwNG4RtjVP1/eK6Sw4iCCe5v4mz+97PcdKo/q
-	Dpt75f1JIjuMTqE7hXpLjrOKlZ+trfeN2P5eIJMIoWR8Jta9i/ES6mXMOen65lJv8S3BkPLwTFx
-	FgVu40nUk09OwkBEPAY0RFzdvhytD9K/E9BpQiL1jSXcg/BhQFfvFV+ehjgtDgr/TZq4NtAgIFo
-	GP7t
-X-Received: by 2002:a05:693c:23c9:b0:2b6:aae8:6dc5 with SMTP id 5a478bee46e88-2b739830410mr2149484eec.19.1769227351249;
-        Fri, 23 Jan 2026 20:02:31 -0800 (PST)
-Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73aa08964sm5533779eec.28.2026.01.23.20.02.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jan 2026 20:02:30 -0800 (PST)
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH net-next] net: usb: sr9700: clarify code using BIT and GENMASK macros
-Date: Fri, 23 Jan 2026 20:02:20 -0800
-Message-ID: <20260124040226.34390-1-enelsonmoore@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1769227892; x=1769832692;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nsT63nLQm2Jr6krI7kAWzNYUHErBII77jzazaIWNoJM=;
+        b=TBW9zaCc3C6XI2dqpYTJB8uby9Cs13YpW/p+Kes+hDiRD30lvRriPjgtX898v+/IW3
+         89ddn3KayLJ3QLo8imIMqRRxJTcY53AfnIFGqhE0XPy7VCuQbzHcFa5zzGKu5Gik4h36
+         CR2yO61/JwggQgBpmdXupnWib2CElWmaWtasWiAywciHGL6GHO+VvsewPFkm776I7U0t
+         +RxLfSS1fLREgkKEEpAL5XiH3vwpb/NwVitTD2adHLPf6nk8XKJiJCgxp5UB+d2Kzcaj
+         8VD5WIR0H4SuyndmBKxbLAdW/Za0aecUYt9xBct6eRnh9HyscGUwmUnqmENeROnJXAnn
+         61zQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXKS+gah0AUUr5u07CdKeknd40WJ713bsr8r1ULZMtqSw6biAqdaSttYk0HcsaxhCiYwauLX7uPKbA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp4iXZ1mmJv+6YLs8JyUjflUTB75L9kLP0x5NztXTm8MX1YsPl
+	ToAfgx4BLb0u8m9uUDdoKSXEtx0z3MX91AVpo5wxhhAD/B30+Buu7BRY9hJEzM/0n6PneZ7RKTJ
+	A+F+ZKnLqNByJM1X1VTngTr1dfwzBb2XKSo4u+sulPq+uqiq8gJbW2MrU5Hw=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6820:2911:b0:65f:19:9621 with SMTP id
+ 006d021491bc7-662cab02016mr2478641eaf.25.1769227892734; Fri, 23 Jan 2026
+ 20:11:32 -0800 (PST)
+Date: Fri, 23 Jan 2026 20:11:32 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69744674.a00a0220.33ccc7.0000.GAE@google.com>
+Subject: [syzbot] [lsm?] [input?] [usb?] memory leak in prepare_creds (6)
+From: syzbot <syzbot+dd3b43aa0204089217ee@syzkaller.appspotmail.com>
+To: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org, 
+	paul@paul-moore.com, sergeh@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=9d7d0fbecb37bff8];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32664-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-32665-lists,linux-usb=lfdr.de,dd3b43aa0204089217ee];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
+	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6D0D57C6E9
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[goo.gl:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,storage.googleapis.com:url,appspotmail.com:email]
+X-Rspamd-Queue-Id: 35A677C719
 X-Rspamd-Action: no action
 
-The sr9700 driver contains many hardcoded bit shifts and masks. Make
-the code clearer and adhere to the kernel code style by replacing them
-with the equivalent BIT and GENMASK macros. Also take the opportunity
-to align some indentation.
+Hello,
 
-To avoid merge conflicts, code which is removed by other pending
-patches is not modified.
+syzbot found the following issue on:
 
-Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+HEAD commit:    6c790212c588 Merge tag 'devicetree-fixes-for-6.19-3' of gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16019d22580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9d7d0fbecb37bff8
+dashboard link: https://syzkaller.appspot.com/bug?extid=dd3b43aa0204089217ee
+compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=117a579a580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=118ef852580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1ceba1c1c7bd/disk-6c790212.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d83b71fd8384/vmlinux-6c790212.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/07ef6040f444/bzImage-6c790212.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dd3b43aa0204089217ee@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff888108b89480 (size 184):
+  comm "syz-executor", pid 5994, jiffies 4294943386
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace (crc 369454a7):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4958 [inline]
+    slab_alloc_node mm/slub.c:5263 [inline]
+    kmem_cache_alloc_noprof+0x412/0x580 mm/slub.c:5270
+    prepare_creds+0x22/0x600 kernel/cred.c:185
+    copy_creds+0x44/0x290 kernel/cred.c:286
+    copy_process+0x7a7/0x2870 kernel/fork.c:2086
+    kernel_clone+0xac/0x6e0 kernel/fork.c:2651
+    __do_sys_clone+0x7f/0xb0 kernel/fork.c:2792
+    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
+    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+BUG: memory leak
+unreferenced object 0xffff8881032ee1a0 (size 32):
+  comm "syz-executor", pid 5994, jiffies 4294943386
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    f8 52 86 00 81 88 ff ff 00 00 00 00 00 00 00 00  .R..............
+  backtrace (crc 336e1c5f):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4958 [inline]
+    slab_alloc_node mm/slub.c:5263 [inline]
+    __do_kmalloc_node mm/slub.c:5656 [inline]
+    __kmalloc_noprof+0x465/0x680 mm/slub.c:5669
+    kmalloc_noprof include/linux/slab.h:961 [inline]
+    kzalloc_noprof include/linux/slab.h:1094 [inline]
+    lsm_blob_alloc+0x4d/0x80 security/security.c:192
+    lsm_cred_alloc security/security.c:209 [inline]
+    security_prepare_creds+0x2d/0x290 security/security.c:2763
+    prepare_creds+0x395/0x600 kernel/cred.c:215
+    copy_creds+0x44/0x290 kernel/cred.c:286
+    copy_process+0x7a7/0x2870 kernel/fork.c:2086
+    kernel_clone+0xac/0x6e0 kernel/fork.c:2651
+    __do_sys_clone+0x7f/0xb0 kernel/fork.c:2792
+    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
+    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+BUG: memory leak
+unreferenced object 0xffff888108b89540 (size 184):
+  comm "syz-executor", pid 5994, jiffies 4294943447
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace (crc 17b2a574):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4958 [inline]
+    slab_alloc_node mm/slub.c:5263 [inline]
+    kmem_cache_alloc_noprof+0x412/0x580 mm/slub.c:5270
+    prepare_creds+0x22/0x600 kernel/cred.c:185
+    copy_creds+0x44/0x290 kernel/cred.c:286
+    copy_process+0x7a7/0x2870 kernel/fork.c:2086
+    kernel_clone+0xac/0x6e0 kernel/fork.c:2651
+    __do_sys_clone+0x7f/0xb0 kernel/fork.c:2792
+    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
+    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+BUG: memory leak
+unreferenced object 0xffff8881032eee80 (size 32):
+  comm "syz-executor", pid 5994, jiffies 4294943447
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    f8 52 86 00 81 88 ff ff 00 00 00 00 00 00 00 00  .R..............
+  backtrace (crc 336e1c5f):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4958 [inline]
+    slab_alloc_node mm/slub.c:5263 [inline]
+    __do_kmalloc_node mm/slub.c:5656 [inline]
+    __kmalloc_noprof+0x465/0x680 mm/slub.c:5669
+    kmalloc_noprof include/linux/slab.h:961 [inline]
+    kzalloc_noprof include/linux/slab.h:1094 [inline]
+    lsm_blob_alloc+0x4d/0x80 security/security.c:192
+    lsm_cred_alloc security/security.c:209 [inline]
+    security_prepare_creds+0x2d/0x290 security/security.c:2763
+    prepare_creds+0x395/0x600 kernel/cred.c:215
+    copy_creds+0x44/0x290 kernel/cred.c:286
+    copy_process+0x7a7/0x2870 kernel/fork.c:2086
+    kernel_clone+0xac/0x6e0 kernel/fork.c:2651
+    __do_sys_clone+0x7f/0xb0 kernel/fork.c:2792
+    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
+    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+BUG: memory leak
+unreferenced object 0xffff888109bf16c0 (size 184):
+  comm "syz-executor", pid 5994, jiffies 4294943507
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace (crc a1f2f9ed):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4958 [inline]
+    slab_alloc_node mm/slub.c:5263 [inline]
+    kmem_cache_alloc_noprof+0x412/0x580 mm/slub.c:5270
+    prepare_creds+0x22/0x600 kernel/cred.c:185
+    copy_creds+0x44/0x290 kernel/cred.c:286
+    copy_process+0x7a7/0x2870 kernel/fork.c:2086
+    kernel_clone+0xac/0x6e0 kernel/fork.c:2651
+    __do_sys_clone+0x7f/0xb0 kernel/fork.c:2792
+    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
+    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+BUG: memory leak
+unreferenced object 0xffff888109151e00 (size 32):
+  comm "syz-executor", pid 5994, jiffies 4294943507
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    f8 52 86 00 81 88 ff ff 00 00 00 00 00 00 00 00  .R..............
+  backtrace (crc 336e1c5f):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4958 [inline]
+    slab_alloc_node mm/slub.c:5263 [inline]
+    __do_kmalloc_node mm/slub.c:5656 [inline]
+    __kmalloc_noprof+0x465/0x680 mm/slub.c:5669
+    kmalloc_noprof include/linux/slab.h:961 [inline]
+    kzalloc_noprof include/linux/slab.h:1094 [inline]
+    lsm_blob_alloc+0x4d/0x80 security/security.c:192
+    lsm_cred_alloc security/security.c:209 [inline]
+    security_prepare_creds+0x2d/0x290 security/security.c:2763
+    prepare_creds+0x395/0x600 kernel/cred.c:215
+    copy_creds+0x44/0x290 kernel/cred.c:286
+    copy_process+0x7a7/0x2870 kernel/fork.c:2086
+    kernel_clone+0xac/0x6e0 kernel/fork.c:2651
+    __do_sys_clone+0x7f/0xb0 kernel/fork.c:2792
+    do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+    do_syscall_64+0xa4/0xf80 arch/x86/entry/syscall_64.c:94
+    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
+
+
 ---
- drivers/net/usb/sr9700.h | 144 +++++++++++++++++++--------------------
- 1 file changed, 72 insertions(+), 72 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/usb/sr9700.h b/drivers/net/usb/sr9700.h
-index 3212859830dc..71a9d2335126 100644
---- a/drivers/net/usb/sr9700.h
-+++ b/drivers/net/usb/sr9700.h
-@@ -12,93 +12,93 @@
- 
- /* Network Control Reg */
- #define	SR_NCR			0x00
--#define		NCR_RST			(1 << 0)
--#define		NCR_LBK			(3 << 1)
--#define		NCR_FDX			(1 << 3)
--#define		NCR_WAKEEN		(1 << 6)
-+#define		NCR_RST			BIT(0)
-+#define		NCR_LBK			GENMASK(2, 1)
-+#define		NCR_FDX			BIT(3)
-+#define		NCR_WAKEEN		BIT(6)
- /* Network Status Reg */
- #define	SR_NSR			0x01
--#define		NSR_RXRDY		(1 << 0)
--#define		NSR_RXOV		(1 << 1)
--#define		NSR_TX1END		(1 << 2)
--#define		NSR_TX2END		(1 << 3)
--#define		NSR_TXFULL		(1 << 4)
--#define		NSR_WAKEST		(1 << 5)
--#define		NSR_LINKST		(1 << 6)
--#define		NSR_SPEED		(1 << 7)
-+#define		NSR_RXRDY		BIT(0)
-+#define		NSR_RXOV		BIT(1)
-+#define		NSR_TX1END		BIT(2)
-+#define		NSR_TX2END		BIT(3)
-+#define		NSR_TXFULL		BIT(4)
-+#define		NSR_WAKEST		BIT(5)
-+#define		NSR_LINKST		BIT(6)
-+#define		NSR_SPEED		BIT(7)
- /* Tx Control Reg */
- #define	SR_TCR			0x02
--#define		TCR_CRC_DIS		(1 << 1)
--#define		TCR_PAD_DIS		(1 << 2)
--#define		TCR_LC_CARE		(1 << 3)
--#define		TCR_CRS_CARE	(1 << 4)
--#define		TCR_EXCECM		(1 << 5)
--#define		TCR_LF_EN		(1 << 6)
-+#define		TCR_CRC_DIS		BIT(1)
-+#define		TCR_PAD_DIS		BIT(2)
-+#define		TCR_LC_CARE		BIT(3)
-+#define		TCR_CRS_CARE		BIT(4)
-+#define		TCR_EXCECM		BIT(5)
-+#define		TCR_LF_EN		BIT(6)
- /* Tx Status Reg for Packet Index 1 */
- #define	SR_TSR1		0x03
--#define		TSR1_EC			(1 << 2)
--#define		TSR1_COL		(1 << 3)
--#define		TSR1_LC			(1 << 4)
--#define		TSR1_NC			(1 << 5)
--#define		TSR1_LOC		(1 << 6)
--#define		TSR1_TLF		(1 << 7)
-+#define		TSR1_EC			BIT(2)
-+#define		TSR1_COL		BIT(3)
-+#define		TSR1_LC			BIT(4)
-+#define		TSR1_NC			BIT(5)
-+#define		TSR1_LOC		BIT(6)
-+#define		TSR1_TLF		BIT(7)
- /* Tx Status Reg for Packet Index 2 */
- #define	SR_TSR2		0x04
--#define		TSR2_EC			(1 << 2)
--#define		TSR2_COL		(1 << 3)
--#define		TSR2_LC			(1 << 4)
--#define		TSR2_NC			(1 << 5)
--#define		TSR2_LOC		(1 << 6)
--#define		TSR2_TLF		(1 << 7)
-+#define		TSR2_EC			BIT(2)
-+#define		TSR2_COL		BIT(3)
-+#define		TSR2_LC			BIT(4)
-+#define		TSR2_NC			BIT(5)
-+#define		TSR2_LOC		BIT(6)
-+#define		TSR2_TLF		BIT(7)
- /* Rx Control Reg*/
- #define	SR_RCR			0x05
--#define		RCR_RXEN		(1 << 0)
--#define		RCR_PRMSC		(1 << 1)
--#define		RCR_RUNT		(1 << 2)
--#define		RCR_ALL			(1 << 3)
--#define		RCR_DIS_CRC		(1 << 4)
--#define		RCR_DIS_LONG	(1 << 5)
-+#define		RCR_RXEN		BIT(0)
-+#define		RCR_PRMSC		BIT(1)
-+#define		RCR_RUNT		BIT(2)
-+#define		RCR_ALL			BIT(3)
-+#define		RCR_DIS_CRC		BIT(4)
-+#define		RCR_DIS_LONG		BIT(5)
- /* Rx Status Reg */
- #define	SR_RSR			0x06
--#define		RSR_AE			(1 << 2)
--#define		RSR_MF			(1 << 6)
--#define		RSR_RF			(1 << 7)
-+#define		RSR_AE			BIT(2)
-+#define		RSR_MF			BIT(6)
-+#define		RSR_RF			BIT(7)
- /* Rx Overflow Counter Reg */
--#define	SR_ROCR		0x07
--#define		ROCR_ROC		(0x7F << 0)
--#define		ROCR_RXFU		(1 << 7)
-+#define	SR_ROCR			0x07
-+#define		ROCR_ROC		GENMASK(6, 0)
-+#define		ROCR_RXFU		BIT(7)
- /* Back Pressure Threshold Reg */
--#define	SR_BPTR		0x08
--#define		BPTR_JPT		(0x0F << 0)
--#define		BPTR_BPHW		(0x0F << 4)
-+#define	SR_BPTR			0x08
-+#define		BPTR_JPT		GENMASK(3, 0)
-+#define		BPTR_BPHW		GENMASK(7, 4)
- /* Flow Control Threshold Reg */
--#define	SR_FCTR		0x09
--#define		FCTR_LWOT		(0x0F << 0)
--#define		FCTR_HWOT		(0x0F << 4)
-+#define	SR_FCTR			0x09
-+#define		FCTR_LWOT		GENMASK(3, 0)
-+#define		FCTR_HWOT		GENMASK(7, 4)
- /* rx/tx Flow Control Reg */
- #define	SR_FCR			0x0A
--#define		FCR_FLCE		(1 << 0)
--#define		FCR_BKPA		(1 << 4)
--#define		FCR_TXPEN		(1 << 5)
--#define		FCR_TXPF		(1 << 6)
--#define		FCR_TXP0		(1 << 7)
-+#define		FCR_FLCE		BIT(0)
-+#define		FCR_BKPA		BIT(4)
-+#define		FCR_TXPEN		BIT(5)
-+#define		FCR_TXPF		BIT(6)
-+#define		FCR_TXP0		BIT(7)
- /* Eeprom Control Reg */
--#define	SR_EPCR		0x0B
--#define		EPCR_ERRE		(1 << 0)
--#define		EPCR_ERPRW		(1 << 1)
--#define		EPCR_ERPRR		(1 << 2)
--#define		EPCR_WEP		(1 << 4)
-+#define	SR_EPCR			0x0B
-+#define		EPCR_ERRE		BIT(0)
-+#define		EPCR_ERPRW		BIT(1)
-+#define		EPCR_ERPRR		BIT(2)
-+#define		EPCR_WEP		BIT(4)
- /* Eeprom Address Reg */
--#define	SR_EPAR		0x0C
--#define		EPAR_EROA		(0x3F << 0)
-+#define	SR_EPAR			0x0C
-+#define		EPAR_EROA		GENMASK(5, 0)
- /* Eeprom Data Reg */
- #define	SR_EPDR		0x0D	/* 0x0D ~ 0x0E for Data Reg Low & High */
- /* Wakeup Control Reg */
- #define	SR_WCR			0x0F
--#define		WCR_MAGICST		(1 << 0)
--#define		WCR_LINKST		(1 << 2)
--#define		WCR_MAGICEN		(1 << 3)
--#define		WCR_LINKEN		(1 << 5)
-+#define		WCR_MAGICST		BIT(0)
-+#define		WCR_LINKST		BIT(2)
-+#define		WCR_MAGICEN		BIT(3)
-+#define		WCR_LINKEN		BIT(5)
- /* Physical Address Reg */
- #define	SR_PAR			0x10	/* 0x10 ~ 0x15 6 bytes for PAR */
- /* Multicast Address Reg */
-@@ -106,7 +106,7 @@
- /* 0x1e unused */
- /* Phy Reset Reg */
- #define	SR_PRR			0x1F
--#define		PRR_PHY_RST		(1 << 0)
-+#define		PRR_PHY_RST		BIT(0)
- /* Tx sdram Write Pointer Address Low */
- #define	SR_TWPAL		0x20
- /* Tx sdram Write Pointer Address High */
-@@ -132,17 +132,17 @@
- /* 0x2D --> 0xEF unused */
- /* USB Device Address */
- #define	SR_USBDA		0xF0
--#define		USBDA_USBFA		(0x7F << 0)
-+#define		USBDA_USBFA		GENMASK(6, 0)
- /* RX packet Counter Reg */
- #define	SR_RXC			0xF1
- /* Tx packet Counter & USB Status Reg */
- #define	SR_TXC_USBS		0xF2
--#define		TXC_USBS_TXC0		(1 << 0)
--#define		TXC_USBS_TXC1		(1 << 1)
--#define		TXC_USBS_TXC2		(1 << 2)
--#define		TXC_USBS_EP1RDY		(1 << 5)
--#define		TXC_USBS_SUSFLAG	(1 << 6)
--#define		TXC_USBS_RXFAULT	(1 << 7)
-+#define		TXC_USBS_TXC0		BIT(0)
-+#define		TXC_USBS_TXC1		BIT(1)
-+#define		TXC_USBS_TXC2		BIT(2)
-+#define		TXC_USBS_EP1RDY		BIT(5)
-+#define		TXC_USBS_SUSFLAG	BIT(6)
-+#define		TXC_USBS_RXFAULT	BIT(7)
- /* USB Control register */
- #define	SR_USBC			0xF4
- #define		USBC_EP3NAK		(1 << 4)
--- 
-2.43.0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
