@@ -1,81 +1,81 @@
-Return-Path: <linux-usb+bounces-32663-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32664-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4CUtGCM7dGlt3gAAu9opvQ
-	(envelope-from <linux-usb+bounces-32663-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 04:23:15 +0100
+	id sBJxA19EdGlr4AAAu9opvQ
+	(envelope-from <linux-usb+bounces-32664-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 05:02:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3B077C4BE
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 04:23:14 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D0D57C6E9
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 05:02:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 26CCB301BCD4
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 03:23:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7D78330162B6
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jan 2026 04:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30BAB25785D;
-	Sat, 24 Jan 2026 03:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 168F3217F33;
+	Sat, 24 Jan 2026 04:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y8aFMEDY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZKQBJOB9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dy1-f193.google.com (mail-dy1-f193.google.com [74.125.82.193])
+Received: from mail-dl1-f65.google.com (mail-dl1-f65.google.com [74.125.82.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDE1150997
-	for <linux-usb@vger.kernel.org>; Sat, 24 Jan 2026 03:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C826145355
+	for <linux-usb@vger.kernel.org>; Sat, 24 Jan 2026 04:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769224979; cv=none; b=qb0EaBlLy0J6Vvw2uONxzQhylWEBWLqLWs/FINjIWgrdC+It3Fb0p1l4uJ78DD/8XZtmAjxBpR6OTv2GicCJh+qizWmSzS91utAEst+5BPlxk9NCaCnI7NSS20Bde8NzLGLV9/hOR2isGKIeaTIHt5tUUxvv27HyTlNaLXz3BIQ=
+	t=1769227353; cv=none; b=FvhvC16LK49vwnzzOKXJful3fSed7D/33m2kbmdsSAh8jQ4oz4dO2PhT17jJtfNVdOHfrUKXSbz17xCnCiyL7QfNC7folaH7pZD42FXOsMjrMdodywMtPT6+RlezYK0sWeRr2MGVjZVNqvozEilr513UnzLBUM829BVzM44zg3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769224979; c=relaxed/simple;
-	bh=hz4PGhjGMavgsH90Kj08u7Yi8vVczpJyk4hknyVJULA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nWb0jOgqGLry2QiRTuZGpo6fwsYeOugJJzMlPddG5juBO96k2ZIJA8BtxCJmybKu0kDhY5NRh6cQiYlbfGTeVd/8oNrVfge1FLbhavcFboHFdLdhb5rKlDJ2p9mm68Sd1zQHCPl/vMy22EKM1QN+QVIQsUyuQVfVfJrdtLffo44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y8aFMEDY; arc=none smtp.client-ip=74.125.82.193
+	s=arc-20240116; t=1769227353; c=relaxed/simple;
+	bh=P9geLVe2oVR/Qa6smGpSjq/B5PdqKKd1wee8T0D5LfE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pv1K/Au8b5+muP52VhTTeH/4Qgj7GhUEnhxDk9MO5qSdeZHaYTyfoLBHr1Tr8/DEkwc0XUE8LPgo9l6CLkqFpqOoS3J5wzROhKPJS1o+tOGyoYMyQnN4f4P2/+I66e529LBED8WrRGAffsx9wd6iuJlcwLel5kWlP4nxbCxJTVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZKQBJOB9; arc=none smtp.client-ip=74.125.82.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f193.google.com with SMTP id 5a478bee46e88-2ae2eb49b4bso6871408eec.0
-        for <linux-usb@vger.kernel.org>; Fri, 23 Jan 2026 19:22:58 -0800 (PST)
+Received: by mail-dl1-f65.google.com with SMTP id a92af1059eb24-1233bb90317so3289544c88.1
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jan 2026 20:02:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769224977; x=1769829777; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769227351; x=1769832151; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0oLk/yYsqWZDJCvnFpurWUS1lV8pRnDLAfMkKbWKpcg=;
-        b=Y8aFMEDYbS2wDmWh5V+zSffScbHVSqLMOpK62THbXl33W/l5xc0gfupn/m+wvQ+ug/
-         Nmh9ZQDovO0C33aRziv2NoBxTUfl42leOqihecS36EWRfmzM6zS40XOcbUOUdxdEE7I+
-         Pq1wuj2NJy5YkVzP9ytuuJp2b7V1UEPy75vd5Aifio/cAwDGCvjmvsPvaSOxj/un+Ueb
-         kESGhuRqSToT5Y+EZwSj73WguRTHeoKCIR4qz7EBfQMK5wRGr2EVADZpI1tZIdjyolZC
-         QePs/m13aglKIqbY8w5xT0ofrWxn29/cUFvcxDgrVhvt7bTKYY14j32ICRASHB4mequ4
-         Ddmg==
+        bh=o0OclSgaj9t5CvY0OtymbJspgBfc1tXWGj5iaVy0RbU=;
+        b=ZKQBJOB9LDcghISbsiq0EimC+EQAB86PMkr/t8rcib1Pzx/pEfzI+oKh4ZVdCQTK3r
+         pw9/AWyzPPeqbf+FSai3PYPXtXbc47rWWXfz/cGgTqMpTE75NxasxsfWWYkUN7MY6+gy
+         SD+jrebcnpWItPl104SPfbCq+4IjP3AgwG9FuAI3I6L0phxV6QVs7h9mrPsfDSJv5tW/
+         uX1k+1njs+94wHJ0seMvY2EuHpfzp4TnKj83+nowVtOZL6rjXsixEZ11H6zzXx/wL8P0
+         b0YtrlO8XQ/yV4fsA14mWD8gipkn0hlB3BKhVVl4ST42JOJNqYEXTo/laugYmb53Le8M
+         qqSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769224977; x=1769829777;
+        d=1e100.net; s=20230601; t=1769227351; x=1769832151;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0oLk/yYsqWZDJCvnFpurWUS1lV8pRnDLAfMkKbWKpcg=;
-        b=dyy2czPi9qTr3jiNOLpPuMLgxh/ObBUfPwbE2C/vNnW3QQ9IX7V+7LgpAWGDS5zXd9
-         AYpNwTVq8jF6DuljUdCLxkg+SvPPRV67NKvHtFj06UlkDCQkQ7yuVTrJ0BaUN3oEjwED
-         nkbLL7w+qQNEAWIQzTbcCeyfPpmOSq3Q9vq4+o5TIjuzTeNIuFi/8ww7mMlhY2GmZ3zI
-         2g4GsGqyyAwUJgBuITAw1VwmEtfA+ZIIagY+33jEiITRQ1uvP04RwJss3RHCqN0MSKFp
-         2JQoSPqNclbekWIyukTzpJcfPgcH3B6pOQrg1phyGOtJXJIxPKP7bB97f+i3XLWuZi15
-         ELGA==
-X-Forwarded-Encrypted: i=1; AJvYcCURkvlkpvlwkPIhUNy2tP4tEQizzR7x2ECSnTYBaNZFvNGRnRLX15rErW5P/pJ7JCoKqshggZCvTFc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxS5vhw+DjReD95W8LxECgXinFtH+o68rX35UjRtqDbqVDgJyNI
-	TfgVqSlm+7VkZU2gBsOTpZfU2U4tAXnYhgca77VdrV7Mk14YEHG2Wyqd
-X-Gm-Gg: AZuq6aKgJV7T959vkO043lFFC4vdxGHjYhZWSkZGeHFUAsM1MWnfNh5tEfaXBwUvmkz
-	JnA3araGlwtvru3eMnUyo+v19mjpmWUR9rCj7Z9RpUxJ51UOpFAMuwD49JCLev2DW5iXdY2qdkg
-	I88/Y32FYsQP3bhvlYLZ4E0UblZuGwn8bH8wZ89Ldfq0WfwzRXVmndk1XiS7xzXGWvQafSNV5I1
-	IpdOOQGB9+L/oU9STt+BcQjy0G5b2MLGxnvdzfvtSPCYz2hRfMkRK0ESFjT10dX1nKvKSAVBS60
-	im1/wd89oZlA/c5BWhGuc0zFwAKGGyHPLZUZQM7jym8SfiBpJyR31bXN8OThGnkYxMNHJ1ua7AJ
-	yXSEdtpI/B0TvQch5FUgmBC8JYa+0chkiZ0J188gYTw/DAMjCdfduf1JRV+ajsVcDBna0SoHs+z
-	7BPYY7sNOfu3zWlkYv35r5nWechXXyBqxtHGi3d77u+Th/xd4vIrGN3vKq7Uxvpe4sTyfXYQo4T
-	iDmjAko8C7/9Rs3+8jcNr0a8S2QkUF1kZlujGb97KfBPSwu+tSzfy7vPuUE4bOqlnp7nfebcYS1
-	0jBb
-X-Received: by 2002:a05:7301:fa87:b0:2ae:5b01:bfa5 with SMTP id 5a478bee46e88-2b739bb249emr2963832eec.32.1769224977502;
-        Fri, 23 Jan 2026 19:22:57 -0800 (PST)
+        bh=o0OclSgaj9t5CvY0OtymbJspgBfc1tXWGj5iaVy0RbU=;
+        b=UG7SEAYD30VihlOseVW3VT1US3EYF/NCDZHDVJXBV5riqLPjjSDQybW1gdKp7a2bze
+         R+CPs8eGiA4U35wTqqSbzCghOTxexLcWLI5jeggW1ufJJiLX7V4aFBNzdGFx10FxtyJz
+         R1AuiDuM03ZsrofOMcOxII014PMuw4A4OQxO3OUu4Jy1fF66ZWUitncHGXb6R77X3+XJ
+         6qehIMWiCwtdJgfk97D0hcxhNDZSVZvJlqexgUFwEbHwWfutW2bbID6Pk2YQc23F8E9T
+         isEuJEpg4h5BwfrFse9bbovK9eVj5ZDRfNXAAu26c2Y8V84WUaaz8ElWcaFzCra3Z34F
+         iZuw==
+X-Forwarded-Encrypted: i=1; AJvYcCVaF3tY2RxZCCJpSSNjDdO0oIf4ixT+C7qKdgHLIC7zN2zQkYYOXplwzxycUM3aFch5dESQJoFj/P8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYy2tjUB4rWpCTo25D2vmsAhjhYHB4l6ZChuQ1EyJp71gHQtgw
+	8Pb/KUvVX2PvfV1aPfKNa9VZ4DCDSQiv9mIIXMLchSG9ujQt0cOJEv9L
+X-Gm-Gg: AZuq6aJdqEy9OkfbeID9PU4MyKVxNGEsQQYyYRgICccdT27HrH0FHyni00glAsbK3hv
+	8BXNDsoh1sjCfznyvM9n902RgekSEoVn6DjphwBM036Il3kZOrAJD5JLFKmMbb3/t7ZkBnwIwvd
+	xrbwUPKHIm+EMc6DOGbn+fs1Mtjfrh9WRoYGMPiRg6fQeObTJOGFp6wc1gQjwqkSY+g6nOPX2n9
+	K/UHP+A59DUGCGWO2nIZCnFwg9Otir2PqptX7b0CQRMau5j7XZ1h7BgIucIA5Yi3zBDzKJCuR8k
+	FxGszgvIuZ4N4SKRw2giqR0zQ4sjxMzn1opaCJzXIFMOV33HtyCdUspTII2EzVz+HCiyEd/8z4f
+	ZrH9vJpsJQLPshC9QF+C2Ybhsr+jOqNzHl7cHHIwNG4RtjVP1/eK6Sw4iCCe5v4mz+97PcdKo/q
+	Dpt75f1JIjuMTqE7hXpLjrOKlZ+trfeN2P5eIJMIoWR8Jta9i/ES6mXMOen65lJv8S3BkPLwTFx
+	FgVu40nUk09OwkBEPAY0RFzdvhytD9K/E9BpQiL1jSXcg/BhQFfvFV+ehjgtDgr/TZq4NtAgIFo
+	GP7t
+X-Received: by 2002:a05:693c:23c9:b0:2b6:aae8:6dc5 with SMTP id 5a478bee46e88-2b739830410mr2149484eec.19.1769227351249;
+        Fri, 23 Jan 2026 20:02:31 -0800 (PST)
 Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73aa03fd0sm5540278eec.23.2026.01.23.19.22.56
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73aa08964sm5533779eec.28.2026.01.23.20.02.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jan 2026 19:22:57 -0800 (PST)
+        Fri, 23 Jan 2026 20:02:30 -0800 (PST)
 From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-usb@vger.kernel.org
@@ -84,12 +84,10 @@ Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Peter Korsgaard <peter@korsgaard.com>,
-	Simon Horman <horms@kernel.org>
-Subject: [PATCH net-next] net: usb: sr9700: replace magic numbers with register bit macros
-Date: Fri, 23 Jan 2026 19:22:43 -0800
-Message-ID: <20260124032248.26807-1-enelsonmoore@gmail.com>
+	Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH net-next] net: usb: sr9700: clarify code using BIT and GENMASK macros
+Date: Fri, 23 Jan 2026 20:02:20 -0800
+Message-ID: <20260124040226.34390-1-enelsonmoore@gmail.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -105,69 +103,242 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,korsgaard.com];
+	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32663-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-32664-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: F3B077C4BE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6D0D57C6E9
 X-Rspamd-Action: no action
 
-The first byte of the Rx frame is a copy of the Rx status register, so
-0x40 corresponds to RSR_MF (meaning the frame is multicast). Replace
-0x40 with RSR_MF for clarity. (All other bits of the RSR indicate
-errors. The fact that the driver ignores these errors will be fixed by
-a later patch.)
+The sr9700 driver contains many hardcoded bit shifts and masks. Make
+the code clearer and adhere to the kernel code style by replacing them
+with the equivalent BIT and GENMASK macros. Also take the opportunity
+to align some indentation.
 
-The first byte of the status URB is a copy of the NSR, so 0x40
-corresponds to NSR_LINKST. Replace 0x40 with NSR_LINKST for clarity.
+To avoid merge conflicts, code which is removed by other pending
+patches is not modified.
 
 Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 ---
- drivers/net/usb/sr9700.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/usb/sr9700.h | 144 +++++++++++++++++++--------------------
+ 1 file changed, 72 insertions(+), 72 deletions(-)
 
-diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-index 9c7cd0db1768..8ffd2391e6d7 100644
---- a/drivers/net/usb/sr9700.c
-+++ b/drivers/net/usb/sr9700.c
-@@ -366,7 +366,7 @@ static int sr9700_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+diff --git a/drivers/net/usb/sr9700.h b/drivers/net/usb/sr9700.h
+index 3212859830dc..71a9d2335126 100644
+--- a/drivers/net/usb/sr9700.h
++++ b/drivers/net/usb/sr9700.h
+@@ -12,93 +12,93 @@
  
- 	/* one skb may contains multiple packets */
- 	while (skb->len > SR_RX_OVERHEAD) {
--		if (skb->data[0] != 0x40)
-+		if (skb->data[0] != RSR_MF)
- 			return 0;
- 
- 		/* ignore the CRC length */
-@@ -455,7 +455,7 @@ static void sr9700_status(struct usbnet *dev, struct urb *urb)
- 
- 	buf = urb->transfer_buffer;
- 
--	link = !!(buf[0] & 0x40);
-+	link = !!(buf[0] & NSR_LINKST);
- 	sr9700_handle_link_change(dev->net, link);
- }
- 
+ /* Network Control Reg */
+ #define	SR_NCR			0x00
+-#define		NCR_RST			(1 << 0)
+-#define		NCR_LBK			(3 << 1)
+-#define		NCR_FDX			(1 << 3)
+-#define		NCR_WAKEEN		(1 << 6)
++#define		NCR_RST			BIT(0)
++#define		NCR_LBK			GENMASK(2, 1)
++#define		NCR_FDX			BIT(3)
++#define		NCR_WAKEEN		BIT(6)
+ /* Network Status Reg */
+ #define	SR_NSR			0x01
+-#define		NSR_RXRDY		(1 << 0)
+-#define		NSR_RXOV		(1 << 1)
+-#define		NSR_TX1END		(1 << 2)
+-#define		NSR_TX2END		(1 << 3)
+-#define		NSR_TXFULL		(1 << 4)
+-#define		NSR_WAKEST		(1 << 5)
+-#define		NSR_LINKST		(1 << 6)
+-#define		NSR_SPEED		(1 << 7)
++#define		NSR_RXRDY		BIT(0)
++#define		NSR_RXOV		BIT(1)
++#define		NSR_TX1END		BIT(2)
++#define		NSR_TX2END		BIT(3)
++#define		NSR_TXFULL		BIT(4)
++#define		NSR_WAKEST		BIT(5)
++#define		NSR_LINKST		BIT(6)
++#define		NSR_SPEED		BIT(7)
+ /* Tx Control Reg */
+ #define	SR_TCR			0x02
+-#define		TCR_CRC_DIS		(1 << 1)
+-#define		TCR_PAD_DIS		(1 << 2)
+-#define		TCR_LC_CARE		(1 << 3)
+-#define		TCR_CRS_CARE	(1 << 4)
+-#define		TCR_EXCECM		(1 << 5)
+-#define		TCR_LF_EN		(1 << 6)
++#define		TCR_CRC_DIS		BIT(1)
++#define		TCR_PAD_DIS		BIT(2)
++#define		TCR_LC_CARE		BIT(3)
++#define		TCR_CRS_CARE		BIT(4)
++#define		TCR_EXCECM		BIT(5)
++#define		TCR_LF_EN		BIT(6)
+ /* Tx Status Reg for Packet Index 1 */
+ #define	SR_TSR1		0x03
+-#define		TSR1_EC			(1 << 2)
+-#define		TSR1_COL		(1 << 3)
+-#define		TSR1_LC			(1 << 4)
+-#define		TSR1_NC			(1 << 5)
+-#define		TSR1_LOC		(1 << 6)
+-#define		TSR1_TLF		(1 << 7)
++#define		TSR1_EC			BIT(2)
++#define		TSR1_COL		BIT(3)
++#define		TSR1_LC			BIT(4)
++#define		TSR1_NC			BIT(5)
++#define		TSR1_LOC		BIT(6)
++#define		TSR1_TLF		BIT(7)
+ /* Tx Status Reg for Packet Index 2 */
+ #define	SR_TSR2		0x04
+-#define		TSR2_EC			(1 << 2)
+-#define		TSR2_COL		(1 << 3)
+-#define		TSR2_LC			(1 << 4)
+-#define		TSR2_NC			(1 << 5)
+-#define		TSR2_LOC		(1 << 6)
+-#define		TSR2_TLF		(1 << 7)
++#define		TSR2_EC			BIT(2)
++#define		TSR2_COL		BIT(3)
++#define		TSR2_LC			BIT(4)
++#define		TSR2_NC			BIT(5)
++#define		TSR2_LOC		BIT(6)
++#define		TSR2_TLF		BIT(7)
+ /* Rx Control Reg*/
+ #define	SR_RCR			0x05
+-#define		RCR_RXEN		(1 << 0)
+-#define		RCR_PRMSC		(1 << 1)
+-#define		RCR_RUNT		(1 << 2)
+-#define		RCR_ALL			(1 << 3)
+-#define		RCR_DIS_CRC		(1 << 4)
+-#define		RCR_DIS_LONG	(1 << 5)
++#define		RCR_RXEN		BIT(0)
++#define		RCR_PRMSC		BIT(1)
++#define		RCR_RUNT		BIT(2)
++#define		RCR_ALL			BIT(3)
++#define		RCR_DIS_CRC		BIT(4)
++#define		RCR_DIS_LONG		BIT(5)
+ /* Rx Status Reg */
+ #define	SR_RSR			0x06
+-#define		RSR_AE			(1 << 2)
+-#define		RSR_MF			(1 << 6)
+-#define		RSR_RF			(1 << 7)
++#define		RSR_AE			BIT(2)
++#define		RSR_MF			BIT(6)
++#define		RSR_RF			BIT(7)
+ /* Rx Overflow Counter Reg */
+-#define	SR_ROCR		0x07
+-#define		ROCR_ROC		(0x7F << 0)
+-#define		ROCR_RXFU		(1 << 7)
++#define	SR_ROCR			0x07
++#define		ROCR_ROC		GENMASK(6, 0)
++#define		ROCR_RXFU		BIT(7)
+ /* Back Pressure Threshold Reg */
+-#define	SR_BPTR		0x08
+-#define		BPTR_JPT		(0x0F << 0)
+-#define		BPTR_BPHW		(0x0F << 4)
++#define	SR_BPTR			0x08
++#define		BPTR_JPT		GENMASK(3, 0)
++#define		BPTR_BPHW		GENMASK(7, 4)
+ /* Flow Control Threshold Reg */
+-#define	SR_FCTR		0x09
+-#define		FCTR_LWOT		(0x0F << 0)
+-#define		FCTR_HWOT		(0x0F << 4)
++#define	SR_FCTR			0x09
++#define		FCTR_LWOT		GENMASK(3, 0)
++#define		FCTR_HWOT		GENMASK(7, 4)
+ /* rx/tx Flow Control Reg */
+ #define	SR_FCR			0x0A
+-#define		FCR_FLCE		(1 << 0)
+-#define		FCR_BKPA		(1 << 4)
+-#define		FCR_TXPEN		(1 << 5)
+-#define		FCR_TXPF		(1 << 6)
+-#define		FCR_TXP0		(1 << 7)
++#define		FCR_FLCE		BIT(0)
++#define		FCR_BKPA		BIT(4)
++#define		FCR_TXPEN		BIT(5)
++#define		FCR_TXPF		BIT(6)
++#define		FCR_TXP0		BIT(7)
+ /* Eeprom Control Reg */
+-#define	SR_EPCR		0x0B
+-#define		EPCR_ERRE		(1 << 0)
+-#define		EPCR_ERPRW		(1 << 1)
+-#define		EPCR_ERPRR		(1 << 2)
+-#define		EPCR_WEP		(1 << 4)
++#define	SR_EPCR			0x0B
++#define		EPCR_ERRE		BIT(0)
++#define		EPCR_ERPRW		BIT(1)
++#define		EPCR_ERPRR		BIT(2)
++#define		EPCR_WEP		BIT(4)
+ /* Eeprom Address Reg */
+-#define	SR_EPAR		0x0C
+-#define		EPAR_EROA		(0x3F << 0)
++#define	SR_EPAR			0x0C
++#define		EPAR_EROA		GENMASK(5, 0)
+ /* Eeprom Data Reg */
+ #define	SR_EPDR		0x0D	/* 0x0D ~ 0x0E for Data Reg Low & High */
+ /* Wakeup Control Reg */
+ #define	SR_WCR			0x0F
+-#define		WCR_MAGICST		(1 << 0)
+-#define		WCR_LINKST		(1 << 2)
+-#define		WCR_MAGICEN		(1 << 3)
+-#define		WCR_LINKEN		(1 << 5)
++#define		WCR_MAGICST		BIT(0)
++#define		WCR_LINKST		BIT(2)
++#define		WCR_MAGICEN		BIT(3)
++#define		WCR_LINKEN		BIT(5)
+ /* Physical Address Reg */
+ #define	SR_PAR			0x10	/* 0x10 ~ 0x15 6 bytes for PAR */
+ /* Multicast Address Reg */
+@@ -106,7 +106,7 @@
+ /* 0x1e unused */
+ /* Phy Reset Reg */
+ #define	SR_PRR			0x1F
+-#define		PRR_PHY_RST		(1 << 0)
++#define		PRR_PHY_RST		BIT(0)
+ /* Tx sdram Write Pointer Address Low */
+ #define	SR_TWPAL		0x20
+ /* Tx sdram Write Pointer Address High */
+@@ -132,17 +132,17 @@
+ /* 0x2D --> 0xEF unused */
+ /* USB Device Address */
+ #define	SR_USBDA		0xF0
+-#define		USBDA_USBFA		(0x7F << 0)
++#define		USBDA_USBFA		GENMASK(6, 0)
+ /* RX packet Counter Reg */
+ #define	SR_RXC			0xF1
+ /* Tx packet Counter & USB Status Reg */
+ #define	SR_TXC_USBS		0xF2
+-#define		TXC_USBS_TXC0		(1 << 0)
+-#define		TXC_USBS_TXC1		(1 << 1)
+-#define		TXC_USBS_TXC2		(1 << 2)
+-#define		TXC_USBS_EP1RDY		(1 << 5)
+-#define		TXC_USBS_SUSFLAG	(1 << 6)
+-#define		TXC_USBS_RXFAULT	(1 << 7)
++#define		TXC_USBS_TXC0		BIT(0)
++#define		TXC_USBS_TXC1		BIT(1)
++#define		TXC_USBS_TXC2		BIT(2)
++#define		TXC_USBS_EP1RDY		BIT(5)
++#define		TXC_USBS_SUSFLAG	BIT(6)
++#define		TXC_USBS_RXFAULT	BIT(7)
+ /* USB Control register */
+ #define	SR_USBC			0xF4
+ #define		USBC_EP3NAK		(1 << 4)
 -- 
 2.43.0
 
