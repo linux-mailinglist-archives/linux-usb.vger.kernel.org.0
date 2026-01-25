@@ -1,113 +1,139 @@
-Return-Path: <linux-usb+bounces-32690-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32691-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SBo/LPjddWkvJQEAu9opvQ
-	(envelope-from <linux-usb+bounces-32690-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 10:10:16 +0100
+	id cLvMEUQ8dmngNwEAu9opvQ
+	(envelope-from <linux-usb+bounces-32691-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 16:52:36 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E0CD800EF
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 10:10:16 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA7D08151B
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 16:52:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0D101300CE65
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 09:10:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 32B6930013B6
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 15:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A139F316193;
-	Sun, 25 Jan 2026 09:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E5C325701;
+	Sun, 25 Jan 2026 15:52:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="k3F046B2"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="PRW8ylLj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61413318144
-	for <linux-usb@vger.kernel.org>; Sun, 25 Jan 2026 09:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2623D994;
+	Sun, 25 Jan 2026 15:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769332201; cv=none; b=NnKSy3Dh8cZnbrV9wQ6WLlwWNjO/G2i9yPLwhHo0zUDt50VolfZdWCie82aHbC2S1To1S/Y7zl9jwQCNkEKMpHsddQdXxhIfQWp8lfywtjEKgZGEwZbwUsL0iNVDSb29MRdraHQ5DpcbGLJthlMOH3IHvRlcyjlXg0EZTMuDNJw=
+	t=1769356347; cv=none; b=TljIDSqEkVa+LldFHC694cTSaFLXoK0hsZkTb2ieMa/1YQTS7nbDUP/hrPUYAdomD93UuqP3G4hNOzantuZBMy17yr3lJ7DlFpBeRbnpgVIKeq4ZZ2zNEIxtk52Q5RybdPHGvkNZJ5tWOmPxgRvR9RiqeUzuyg6kk4qeVsCSDig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769332201; c=relaxed/simple;
-	bh=6DFB/4DZdu+vzJMMuVQ3AYyidak8c+sKX2MfEdUGaUY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=VcGoUaTG7YAcmYqWqASdqJdzjveqHhXvT4muG90BrJoj6yKfAd2ndaIE7rD4w2oLIvVQuPR/SMK7FCWYFw/u+QY2P9jt6qI1TKSK+9+W+OWRbQnN6dnI84/jfYBHADeo426cax4jaHsMe8JcqBxLc/ew5jdKYHddHW5//ZSsK/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=k3F046B2; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
-DKIM-Signature: a=rsa-sha256; b=k3F046B2jly3ht8gdu3gQWKV0Tmlfhw+c+SyOeSuM8FFjGShd3bVmvEVJBjY1Gb8oIhNlvzjAn9+kymlATHTFj+CGgAXWAlCFugVp0zRWdyVGC4Z0ZKcnfkLYgH44zL03yVfLW0LZW0yx24Ur6ryIyiyvhT8HssuZ8mEpelBlOCewDAZPrZLyHRdjBm9+0yeImjShMKYBAqVHdLtlis9MxQC656O7apTKXOc49zUhgocuTDCVrLKrWfdw21aR++E6yUgjjWKr7Lg5itUyJ6bw86kuahBpvhQJti4u2J7MjOJv6hIPaM+KwZJRz4Bfjm/mG1tpOyhL+L22WN4x2Pzjw==; s=purelymail1; d=purelymail.com; v=1; bh=6DFB/4DZdu+vzJMMuVQ3AYyidak8c+sKX2MfEdUGaUY=; h=Feedback-ID:Received:Received:From:To:Subject:Date;
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: linux-usb@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 455626500;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Sun, 25 Jan 2026 09:09:48 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
-	(envelope-from <peter@korsgaard.com>)
-	id 1vjw7s-00000001tiG-2fwx;
-	Sun, 25 Jan 2026 10:09:44 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+	s=arc-20240116; t=1769356347; c=relaxed/simple;
+	bh=D33rqpyLTFodzdQ1dhJ+xXv0QwjFVoFFH+qj+aLzPV0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P0LyR3YBIF8OMNBrg+9n0so4jxPdv8UVFp5hHAqnoeNtVpQUjxcL3sAU2dRUFEMALxPxvJsWnItMeMLVptr+mB6vAwh11Pnh0vgYE2mKdSeSSHO+ygF7IyrgG0E09IpQrl4+TjW/rcZs778Nx3CyeoAKzUwB2CN4JJVlemUJLoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=PRW8ylLj; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=PjVVGGDzGJQg82HdwI3cCgNHZMB2P+MQX3RCeVSgvs8=; b=PRW8ylLjfCMycHvlq2GxlY0E4q
+	agdG9qdhoxJZLUUXXb7wwomAtyOXE2U+4KV6vzwsAF0kQOWhliAe2lvPiDviO9/CbyEKJmDYObsoV
+	zelwWS+vwrPNyplXNJJMUH3Pbbe1/ZOBtMkUDGSRZZ3t6dbOROFL81tuls0f8algsm+o=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vk2PP-004cSM-EV; Sun, 25 Jan 2026 16:52:15 +0100
+Date: Sun, 25 Jan 2026 16:52:15 +0100
+From: Andrew Lunn <andrew@lunn.ch>
 To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Cc: netdev@vger.kernel.org,  linux-usb@vger.kernel.org,  Andrew Lunn
- <andrew+netdev@lunn.ch>,  "David S. Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
- Abeni <pabeni@redhat.com>,  Oleksij Rempel <o.rempel@pengutronix.de>,  Max
- Schulze <max.schulze@online.de>,  Krzysztof =?utf-8?Q?Ha=C5=82asa?=
- <khalasa@piap.pl>
-Subject: Re: [PATCH net-next] net: usb: replace unnecessary get_link
- functions with usbnet_get_link
-In-Reply-To: <20260124082217.82351-1-enelsonmoore@gmail.com> (Ethan
-	Nelson-Moore's message of "Sat, 24 Jan 2026 00:22:06 -0800")
-References: <20260124082217.82351-1-enelsonmoore@gmail.com>
-Date: Sun, 25 Jan 2026 10:09:44 +0100
-Message-ID: <87cy2ym52f.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Peter Korsgaard <peter@korsgaard.com>,
+	Petko Manolov <petkan@nucleusys.com>,
+	Steve Glendinning <steve.glendinning@shawell.net>,
+	UNGLinuxDriver@microchip.com,
+	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+	Oliver Neukum <oneukum@suse.com>,
+	Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+	Deepanshu Kartikey <kartikey406@gmail.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Max Schulze <max.schulze@online.de>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Kees Cook <kees@kernel.org>, Eric Biggers <ebiggers@google.com>
+Subject: Re: [PATCH v2 net-next] net: usb: remove unnecessary get_drvinfo
+ code and driver versions
+Message-ID: <9d03bd34-1c35-4cde-b29c-08e5387139ba@lunn.ch>
+References: <20260124102042.112101-1-enelsonmoore@gmail.com>
+ <aXTHhI710LK1EsTG@smile.fi.intel.com>
+ <CADkSEUjwCmowmo_AwZ7TNS2gDt0CLz6buvfjjXz7BrLfuokM4Q@mail.gmail.com>
+ <e91dfc01-373d-4d3e-9dd4-9fb3be92f756@lunn.ch>
+ <CADkSEUhf5Dpy=yFNQBksEhKjwj-+n07ujADmVHFUv0go5pYbhQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADkSEUhf5Dpy=yFNQBksEhKjwj-+n07ujADmVHFUv0go5pYbhQ@mail.gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[purelymail.com:s=purelymail1];
+	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
+	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[korsgaard.com];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-32691-lists,linux-usb=lfdr.de];
 	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32690-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[24];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[peter@korsgaard.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[purelymail.com:+];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[lunn.ch:+];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 1E0CD800EF
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[linux.intel.com,vger.kernel.org,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,korsgaard.com,nucleusys.com,shawell.net,microchip.com,fintech.ru,suse.com,piap.pl,gmail.com,pengutronix.de,online.de];
+	MID_RHS_MATCH_FROM(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lunn.ch:mid,lunn.ch:dkim]
+X-Rspamd-Queue-Id: DA7D08151B
 X-Rspamd-Action: no action
 
->>>>> "Ethan" == Ethan Nelson-Moore <enelsonmoore@gmail.com> writes:
+> > We prefer lots of small patches, they are easier to find time to
+> > review. Combing patches is generally the wrong things to do.
+> This is also helpful to know; thanks. I had assumed the opposite was
+> preferred (if the combined patch was fairly small) to reduce the
+> amount of mailing list traffic.
 
- > usbnet_get_link calls mii_link_ok if the device has a MII defined in
- > its usbnet struct and no check_connect function defined there. This is
- > true of these drivers, so their custom get_link functions which call
- > mii_link_ok are useless. Remove them in favor of usbnet_get_link.
+mutt(1) can show and delete emails faster than i can scan the subject
+lines for keywords to see if they are interesting. So the absolute
+number of emails does not matter.
 
- > Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+For most reviewers, it is not an 9 to 5 job. Reviews get fitted in
+between other tasks, maybe while waiting for a build to complete,
+drinking coffee, etc. Small patches which can be quickly reviewed are
+more likely to get looked at. Big patches will get deferred, and maybe
+deferred again and again.
 
-Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
+So if you want your patches reviewed and merged quickly, make then
+small, good commit messages, obviously correct, and quick to review.
 
--- 
-Bye, Peter Korsgaard
+       Andrew
 
