@@ -1,173 +1,151 @@
-Return-Path: <linux-usb+bounces-32685-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32686-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2EikNVCUdWnOGQEAu9opvQ
-	(envelope-from <linux-usb+bounces-32685-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 04:56:00 +0100
+	id iOsuHMrVdWn0IwEAu9opvQ
+	(envelope-from <linux-usb+bounces-32686-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 09:35:22 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F5567FB5C
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 04:56:00 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BF2480043
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 09:35:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 31153300E3EC
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 03:55:47 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BABFD3001FC6
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jan 2026 08:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6239620ADD6;
-	Sun, 25 Jan 2026 03:55:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BB031771E;
+	Sun, 25 Jan 2026 08:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="j+2xjZh3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DXW3hwS2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f194.google.com (mail-dy1-f194.google.com [74.125.82.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C9D335BA
-	for <linux-usb@vger.kernel.org>; Sun, 25 Jan 2026 03:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1ED1A304A
+	for <linux-usb@vger.kernel.org>; Sun, 25 Jan 2026 08:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769313343; cv=none; b=iCsTLS53pS3K4T5sBY1JnYVCGHqGxpVH6k4ApLhz8UW6wEBsPhhZqLt55a+ghbHnf0UR1b6aE5tiZFQkFHhc28mAE1r3v+jC+Gq/jSGAX2gKATFBn7UUteKHjET1XhmY9OZRBwHJi7vnjYfdmljvcJOqhoMCDeyTgGX3hLSEwhg=
+	t=1769330120; cv=none; b=TdNhrj4peqOP2yp32oRTSWMPCv4ZhWKOsVOCzC+cuBULZLt4DrKALkcnYXp+MLpDrrSrsKQ+thpzRa00V8qAOihVx3UFOyVZS5QTBMkkV5WkzRPnpvJtpe90V2EIs5q61NImgpdDljpKk2WNxbPiZyi5afY7gle1I6iE83o9uZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769313343; c=relaxed/simple;
-	bh=2EK/99tnhoJPwZWykPvIRo9yQdf+uh7siJxUbxl8sL4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cNL4bqBrdTO2aOHfSIESLGMgM0GWf3rO37UAUDfszu5aV2eXqCFq4v5DAkWr559bfzcDpU+6CC+M/7o0sZBFitfoS1uKSCsKnsAw7kMooE2AOpcLB7GWvSi+mmI5kv4vOJ0O0bClNlOvb5DtgryxTGVh2I4zBftXH5FgetaOawA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=j+2xjZh3; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
-	Content-Type; bh=HEQoTVx2pH3/SgY9C1Cshp2d6Hp+K0/Moy6fj6JTPyo=;
-	b=j+2xjZh3wv7BYIXIaU8qNjM44fHiJQ6yImn1Zzk+jT2xAG8S9UV7hTuBh/TuoG
-	6X84rCWIm+oeYCXAPg9dDGzKojZwEfhIOzBugGhSj0D2bQIxlvMs3FpPzp1PJuvr
-	P98M5pir82Z5U2mg5yqUH+ceyySDDZwFwurlWYXA6+QSo=
-Received: from ProDesk-480.. (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wDXGRURlHVpAv2qHQ--.33551S2;
-	Sun, 25 Jan 2026 11:55:01 +0800 (CST)
-From: Andy Yan <andyshrk@163.com>
-To: heikki.krogerus@linux.intel.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux@roeck-us.net
-Subject: Re: [PATCH 2/15] usb: typec: Add parameter for the VDO to typec_altmode_enter()
-Date: Sun, 25 Jan 2026 11:54:22 +0800
-Message-ID: <20260125035457.354349-1-andyshrk@163.com>
+	s=arc-20240116; t=1769330120; c=relaxed/simple;
+	bh=nptkR/F3z/bZnGUFQjrT1hdRyKnPvglcmVwbtmg/si4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PI0I0xSExU1AsWcdEU5AbgYIXry4JiQa0dPuSG7a13Fqpm9p1dC6QWBQq8As0NpSR1X7RTzEF7drK7p9DgVi6V8qNXDhoInGaM5DgUO5O86Dl5Rb/YE2VAZTAuiFKlJy9vR4Bv1Dci/roxrAITqJ4xO8rVIPJ5xm1ufh2WKSyzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DXW3hwS2; arc=none smtp.client-ip=74.125.82.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f194.google.com with SMTP id 5a478bee46e88-2b6b0500e06so4503691eec.1
+        for <linux-usb@vger.kernel.org>; Sun, 25 Jan 2026 00:35:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769330118; x=1769934918; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dYChDDJqwd3nSz4SLjzCMME+PV2qfla0x9dNDwR4fTk=;
+        b=DXW3hwS2+1xPmd/Q5JhsQXeNOnsMuomB7vM/hgquIpTetmz1m82Whempcx7WNDzxcM
+         k0zurP7al1uEGitDG6zrSMmQduwOzWZjMEpOIc7HXJqewTv/dxbzy5qA5VhcTiTYLxXp
+         +MVTKIzvNtvcF7S7COZYY6y+5PVEvGEFkPaWFBFxk/xR+/CLjq7F9veu89PRzC6bI4zO
+         sO8eKAtP76k3xEJNNpMyw72FlFYONb7svVTlJUNz3rxoZAPtaZaJKGOu/gtCz4E0XOiP
+         ngZUWxIXVl+rLyQvRc2hiOLCfeQyK04Tk8/ZqV+ED6UrNIybXGKIIR7AjXAFXPm37PZX
+         E7fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769330118; x=1769934918;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dYChDDJqwd3nSz4SLjzCMME+PV2qfla0x9dNDwR4fTk=;
+        b=JjRCUDFgScLbdiTt2VJ0sCn2FAG0AYZ/jLY+VjH7osv1eGsi43aWxUjoxhcRRogXgU
+         MpQPDD8sPQh8Br/puVtbmSfFif+7A9+05ZO0HtYL3TZi7KRGdtFkyDS/ojvWHmnUSVv9
+         GvTYklvYWa3NAv3ArREt1Wb+1iuLgkjI2xUuzOp5P30wshlVd1UcTE22RfiywdKQRVY0
+         pdnZavHnXbaci9MmYd1owowgjlr/HfxVt3kXaQzgts2oAIUyBaXFH6rWyEGhpJ9Po5hI
+         n8x3OTluH5mF4rh8kcoqsFnaBVXRZYEPYJcwUtfu6KJJ8Cm7P7l92IMNEMlpjvi4iV2G
+         leUg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAbKI2IqWnDIv0n4y/ST/2+D8QRgpOBhEvcEgGfSzeSgQbCWwjly+NGXKVde2KuW7S7kswHP29qx4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFcVvPnoCdtymPtCS245XFYICPupWeMhMb68XBv/Xx4UFSTHc8
+	0TO914KGgjPVIjV80pnB+AEdzbsotcr+BrSw1Od9xSOS0DdkOiOvZQYd
+X-Gm-Gg: AZuq6aKjmpfQb7fxLDc217nSKLeXigWdUGu0W3eHp+1sLXOSKmwZT6t35I7CgnUX/bN
+	mwUIO0EmVVCYraBg+/ZYOetCGZ9yHRQnRp4zohx+bjoi+QR+HgemXGJJo2k3V8atpbHNAyavf5b
+	1FIgkvDGrT5yl4WiMx3IIgeoOj+PscapGO+WTl9IhmCOeEAGn42JgT/NpUAt064sDIGvkmtdLCg
+	gE3z+7o7uGPdEDge/IpUidswBQl5dndcN0J6FCeIZJsl4uVxlOIpHMPY/UJ3Gd6Cl74NHMBrQkt
+	WFaVtkQBmymvjnxjnc7kDpjH4WnNgPNmJTkvdmCUO5ie7asPHquJ1IpFXdHZMQxs968+anSpdHG
+	jA1h84J49fWYprHLjyH2lopZTU/T01kE6q4ewRvGzk8mF2VbPwLQW6QsaN84uLB6fPocKuPZBjF
+	EXMgOElAkfUk9B7xNrTPAk91TjyaJKG8+xdMww0mY3znv559+7nLJSSB+sycAKpmwEnlxbvRO3s
+	8ANQHEp41A0ORagyX8BSHFHNFfGOjvIcbVLsYfQU+Rmikv1mvbmuuNxCI5NqaQtD2UKqck01+ig
+	I6ce
+X-Received: by 2002:a05:7300:2211:b0:2b7:2263:3d3c with SMTP id 5a478bee46e88-2b7644f99ccmr342032eec.24.1769330117511;
+        Sun, 25 Jan 2026 00:35:17 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7410615c0sm7994977eec.0.2026.01.25.00.35.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jan 2026 00:35:17 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Petko Manolov <petkan@nucleusys.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH net-next 0/3] net: usb: adhere to style by removing typedefs
+Date: Sun, 25 Jan 2026 00:34:54 -0800
+Message-ID: <20260125083501.34513-1-enelsonmoore@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20191230142611.24921-3-heikki.krogerus@linux.intel.com>
-References: <20191230142611.24921-3-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=all
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDXGRURlHVpAv2qHQ--.33551S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxU54SrUUUUU
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/xtbC7hXhQGl1lBUKaAAA3l
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[gmail.com,nucleusys.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andyshrk@163.com,linux-usb@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-32685-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[163.com];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_NONE(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32686-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[163.com:+]
-X-Rspamd-Queue-Id: 1F5567FB5C
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 5BF2480043
 X-Rspamd-Action: no action
 
-Hello Heikki:
+It violates kernel code style guidelines to define typedefs for
+non-opaque types. Update the USB network drivers to conform to these
+guidelines by expanding such typedefs in their code. Also make small
+style improvements to code modified in the process.
 
->Enter Mode Command may contain one VDO.
+Ethan Nelson-Moore (3):
+  net: usb: rtl8150: remove rtl8150_t typedef for struct rtl8150
+  net: usb: pegasus: remove pegasus_t typedef for struct pegasus
+  net: usb: kaweth: remove eth_addr_t typedef and bcast_addr definition
 
->Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->---
-> drivers/usb/typec/altmodes/displayport.c | 5 +++--
-> drivers/usb/typec/bus.c                  | 8 +++++---
-> drivers/usb/typec/tcpm/tcpm.c            | 6 +++---
-> drivers/usb/typec/ucsi/displayport.c     | 2 +-
-> include/linux/usb/typec_altmode.h        | 4 ++--
-> 5 files changed, 14 insertions(+), 11 deletions(-)
+ drivers/net/usb/kaweth.c  | 11 ++---
+ drivers/net/usb/pegasus.c | 92 +++++++++++++++++++--------------------
+ drivers/net/usb/pegasus.h |  4 +-
+ drivers/net/usb/rtl8150.c | 68 ++++++++++++++---------------
+ 4 files changed, 84 insertions(+), 91 deletions(-)
 
->diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
->index 4092248a5936..0edfb89e04a8 100644
->--- a/drivers/usb/typec/altmodes/displayport.c
->+++ b/drivers/usb/typec/altmodes/displayport.c
->@@ -188,7 +188,7 @@ static void dp_altmode_work(struct work_struct *work)
-> 
-> 	switch (dp->state) {
-> 	case DP_STATE_ENTER:
->-		ret = typec_altmode_enter(dp->alt);
->+		ret = typec_altmode_enter(dp->alt, NULL);
- 		if (ret)
- 			dev_err(&dp->alt->dev, "failed to enter mode\n");
- 		break;
-.......
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 56fc356bc55c..f3087ef8265c 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1475,16 +1475,16 @@ static int tcpm_validate_caps(struct tcpm_port *port, const u32 *pdo,
->  	return 0;
->  }
->  
-> -static int tcpm_altmode_enter(struct typec_altmode *altmode)
-> +static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
->  {
->  	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
->  	u32 header;
->  
->  	mutex_lock(&port->lock);
-> -	header = VDO(altmode->svid, 1, CMD_ENTER_MODE);
-> +	header = VDO(altmode->svid, vdo ? 2 : 1, CMD_ENTER_MODE);
->  	header |= VDO_OPOS(altmode->mode);
-
-Sorry to bother you. I happened to come across this piece of code and
-I'm not quite clear about this part: vdo ? 2 : 1
-
-According to the definition of the VDO macro(pd_vdo.h), the type here is
-only 1 bit wide, located at bit 15. If the type value is set to 2 here,
-wouldn’t that overwrite bit 16?
-
-/*
- * VDM header
- * ----------
- * <31:16>  :: SVID
- * <15>     :: VDM type ( 1b == structured, 0b == unstructured )
- * <14:13>  :: Structured VDM version
- * <12:11>  :: reserved
- * <10:8>   :: object position (1-7 valid ... used for enter/exit mode only)
- * <7:6>    :: command type (SVDM only?)
- * <5>      :: reserved (SVDM), command type (UVDM)
- * <4:0>    :: command
- */
-#define VDO(vid, type, ver, custom)			\
-	(((vid) << 16) |				\
-	 ((type) << 15) |				\
-	 ((ver) << 13) |				\
-	 ((custom) & 0x7FFF))
-
-
->-	tcpm_queue_vdm(port, header, NULL, 0);
->+	tcpm_queue_vdm(port, header, vdo, vdo ? 1 : 0);
-> 	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
+-- 
+2.43.0
 
 
