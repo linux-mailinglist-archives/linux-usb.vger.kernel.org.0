@@ -1,641 +1,116 @@
-Return-Path: <linux-usb+bounces-32708-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32709-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SSMfNvMsd2kedAEAu9opvQ
-	(envelope-from <linux-usb+bounces-32708-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 09:59:31 +0100
+	id aGkSMNQud2lVdAEAu9opvQ
+	(envelope-from <linux-usb+bounces-32709-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 10:07:32 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41B5C85AF7
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 09:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6446C85CA4
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 10:07:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 84FA4300BDA4
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 08:59:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1E124301950B
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 09:05:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E52B313538;
-	Mon, 26 Jan 2026 08:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8ED3033F0;
+	Mon, 26 Jan 2026 09:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="io4I9StK"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OXlRWAcZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB972F6907
-	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 08:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5D4275AF5;
+	Mon, 26 Jan 2026 09:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769417957; cv=none; b=YJptaAaE3weLc5IEdTEKs0n3AqfHI/RMPSD9Gu7gXibobdTT7GmbED1LQo0XlJQz/sYFvI1rWwCanquCbrL6o7DZbbPz3EGcEEtiY6CrdvVG4xFhDQkkFauSkLspFoQyMUg0DetE+/yqwkxY2LF0VR1/9IU00M5cDyg88Pcdtbo=
+	t=1769418333; cv=none; b=nFqMG1OO9wbALUhC0FDG73QuHBFGa+hhzCX/Sa6E/HY86Esrh4R9Co/dm24Qu/5pr/l5SUO+FqCluiFtnLVfN8BI9wqJDKWN6JQ5i+pwg/17OP7Wm44lpn8fYwXRpptr1SFUFxWwvXKySHGI5Ajf44xTn6wYAilR48YT8DvUKEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769417957; c=relaxed/simple;
-	bh=yAAWPWnsFLoG6kK73d8V/dYYoVlB8NUyB5EdOO3+6/U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tE+ptjILEDmfg5fA31LSj32eMoNpw8Id075xXIoPXOkcernPmVKheHZWNw6+F4kUkkmXn/1UkNec7UaPdn9qvFKfxNbpo5HXokt7QMiB+jLdaEZ6a7Q0gPWU3qLuk/83E6wEV8yth80D/3P7lMKW/67tCxbA0xwIS82tZaWR2UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=io4I9StK; arc=none smtp.client-ip=54.92.39.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1769417917;
-	bh=AD8+cZJ3qt8ZlxoSvCH7MU1gDGkNsqzZUu3EPP2aTFE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=io4I9StKxBZmuSZAqR+NYPIMuLEwbX3suH2FluvLPwbNs0do808ChjZMpgUc2fGAp
-	 5m7WCfrszhNjplIXBHNJhleTfhZPWurKJzTKcboR2E+wwPolAMjDQc32gLl9OydFYM
-	 Gzgk1TDg7lC5/9u27QTjIfHV6RvsxfYMwljC8G9k=
-X-QQ-mid: zesmtpip4t1769417911tf2af1d80
-X-QQ-Originating-IP: OBQMvuDkyutiSjHr1DjP+AykqWf8FLjmEV5L0WUbGp4=
-Received: from uos-PC ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 26 Jan 2026 16:58:30 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 12041989328782001377
-EX-QQ-RecipientCnt: 8
-From: raoxu <raoxu@uniontech.com>
-To: raoxu@uniontech.com
-Cc: gregkh@linuxfoundation.org,
-	kenny@panix.com,
-	linux-usb@vger.kernel.org,
-	mathias.nyman@linux.intel.com,
-	michal.pecio@gmail.com,
-	niklas.neronin@linux.intel.com,
-	zhanjun@uniontech.com
-Subject: [PATCH v10 2/2] usb: xhci: enable secondary interrupters and route
-Date: Mon, 26 Jan 2026 16:58:28 +0800
-Message-ID: <1FCECDEA86461C52+20260126085828.803972-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <B08F9D33F619A2D3+20260126085523.799849-1-raoxu@uniontech.com>
-References: <B08F9D33F619A2D3+20260126085523.799849-1-raoxu@uniontech.com>
+	s=arc-20240116; t=1769418333; c=relaxed/simple;
+	bh=VHz9W0fjyHimdzVhxxvXRGwkw4JsNNyhLomtkY3aMuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ItDoMCPmqCU0GAeK/WrmbACb6+jqiV+RthSWRDi7dRYrVmWe72JnBruggxBZGpnTtA5qdkMDJ73uVkfmK4EbDyQ3p9gP172u5j2qr32sS/rbrhQPH+cvCtfBKz0io9QM+c8LTg5VJl02aBZe7n6y193itRQ2farjH1d5yknOUsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OXlRWAcZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE133C116C6;
+	Mon, 26 Jan 2026 09:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1769418333;
+	bh=VHz9W0fjyHimdzVhxxvXRGwkw4JsNNyhLomtkY3aMuY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OXlRWAcZ4DeZvqVc7opRcEEKlXvtG8DI7EZAsWq8hLXi3Exz5V+GGQLA+fnVUMVaR
+	 mCI13cKNC3Rl4e1zKGNDQNtVkayKK1ZzG09UeypvJVQ/AvCMnMlWPdhZcvW8Qxy192
+	 X52IuhKkl/IoBn7HIh2PX5npWbbv63NL03jWNaf4=
+Date: Mon, 26 Jan 2026 10:05:29 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jan Remmet <J.Remmet@phytec.de>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"upstream@lists.phytec.de" <upstream@lists.phytec.de>
+Subject: Re: [PATCH v2] usb: typec: hd3ss3220: Enable VBUS based on role state
+Message-ID: <2026012641-material-guiding-444d@gregkh>
+References: <20260123-wip-jremmet-hd3ss3220_vbus-v2-1-bcad313ce92b@phytec.de>
+ <2026012343-rockfish-candle-d3d9@gregkh>
+ <4d1e6908-daa2-4322-8c00-055b4c1022bc@phytec.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: Nsu4NGh/CkI6HZdBj1dyvlKZEGam66LOQXsn6y5P5cRu00HECpU+mkvK
-	9Y8sazFDkVymS1ifzFQfbXqNr+U82Ms4doQ9AEgbFHlBpTTjn9rOsKOV22O2yV5JknjS4BU
-	O81Nm5jM/QLOxKnZwfqPqOj0vw5vs4txGO53hiOf+e8nRjTjONWjY77opB/XV+bqc57HJw1
-	F8hII0sH8kL1xVOXNI5kRbuKAt6A1jb2A1s9hl9X36EVsPLqzrk+mF+TnarFSaKxBaj/ZQV
-	+PEYpnDxUujmKMnrtwYHtoBTawVvuP3mjMMEXZpsbANhCmzt2ZP68VvD8MVPCKS8g+etfwS
-	VZotwk9QtGzUcTUQgJZC8Q0txAegmJ16BHjGYF2qt7QVADZPD9G1nnmhsUtomw+76TOgCPS
-	kAKQ/rQBu0CqY7L2MtdURQzfmDNwiVYYXno4PcOwqJ0LIVa50Eg/N5j6sieDkMRkPkrv+py
-	BoeO+VQCqTpLp7qvxFiWi3YARhAtzhVciSaqcR99wq/0t8SZJdriO2E7PSU1tKBoT2Ky3wy
-	ASXktXCyUWhEk7HVbYLGxQ+8BnZxpkyIY3PkYgs+aT9MNKEtJ22wbeHf166BRACw1UxJCpN
-	joIjV3HTaOM5hn7Q8nW6V3WIU0FSt5Q92vBlFkGF0epZp9cI7jASgzzhbXNZ/ggGaO7mPBP
-	y49QnS/K4vQzA+KlMZC0gxwVFfXAxktFlw87QcGQ4kbfPbM4AL2wMrnlKw40y1L17CKG4gn
-	gXPMZ3PJMHq7AemWmyDWIx29pHW46JnlnA5vcDMCEsTsHWzGFKChbpCNbcW+NUO2b83KfNF
-	JJ8RyCtjiENjTYw/m3nI1xjNufRA5MqvxMbomn6BhiiioylVnNM8ZOXHNCRbx0lK7ef9WJR
-	JSCi+R/XOabxc/va9TYMq0NPL1XYDk0A5NDhbhdRUpa9Fzf5OoDrxlCru3cOuGq3RMgfTLm
-	dDR+BoIOKXknTRioJkI5UI6irBhSkC8mFbYcSa5FUIqj/c1IeYKH6s2PyJWYhYcAnZWY5iq
-	retXS0l1BGz9X74inDqLvKbapg+tViVcDsLtE80GZ2E9iNtDL55t7nc/Q+In+NbQ5kxez3T
-	JBZok/kswOi
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d1e6908-daa2-4322-8c00-055b4c1022bc@phytec.de>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,panix.com,vger.kernel.org,linux.intel.com,gmail.com,uniontech.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-32708-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[uniontech.com:+];
-	NEURAL_HAM(-0.00)[-0.990];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32709-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 41B5C85AF7
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6]
+X-Rspamd-Queue-Id: 6446C85CA4
 X-Rspamd-Action: no action
 
-Some xHCI hosts expose multiple MSI/MSI-X vectors and support multiple
-interrupters with independent event rings, but Linux commonly routes all
-transfer completions through interrupter 0.
+On Mon, Jan 26, 2026 at 08:04:58AM +0000, Jan Remmet wrote:
+> Am 23.01.26 um 17:19 schrieb Greg Kroah-Hartman:
+> > Does not apply against my tree, what did you make it against?  Can you
+> > redo this against linux-next and resend?
+> 
+> This is strange. I created it against 944aacb68baf (something after 
+> v6.19-rc5). I can cleanly rebase it to next-20260123 without changes.
+> Do I miss something?
 
-Allocate a small capped set of secondary interrupters in xhci_mem_init()
-(MAX_SECONDARY_INTRNUM, default 4) and request up to the matching number
-of IRQ vectors (bounded by what PCI core provides).  Dispatch each vector
-to its interrupter via the per-vector irq_ctx.
+Probably other changes to this file since then?  linux-next will include
+the USB development tree that has the work of everyone else in it that
+will go into the next release.
 
-Route transfers per USB device (slot) by assigning vdev->interrupter at
-device allocation time and programming the interrupter target (slot
-context + TRB_INTR_TARGET) from that selection, so completions land on the
-selected event ring.  Drain a slot's secondary event ring at selected
-command completion boundaries to reduce late-event artifacts when teardown
-happens on interrupter 0.
+Try rebasing and see what happens :)
 
-Signed-off-by: raoxu <raoxu@uniontech.com>
+thanks,
 
----
- drivers/usb/host/xhci-mem.c  |  35 +++++++-
- drivers/usb/host/xhci-pci.c  |  35 +++++---
- drivers/usb/host/xhci-ring.c | 151 ++++++++++++++++++++++++++++-------
- drivers/usb/host/xhci.c      |  14 ++++
- drivers/usb/host/xhci.h      |  10 +++
- 5 files changed, 207 insertions(+), 38 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 524c58a149d3..e65f84bc1c8f 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1197,6 +1197,15 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
-
- 	ep0_ctx->tx_info = cpu_to_le32(EP_AVG_TRB_LENGTH(8));
-
-+	/* Match Slot Context interrupter target to vdev->interrupter. */
-+	if (dev->interrupter) {
-+		u32 tt = le32_to_cpu(slot_ctx->tt_info);
-+
-+		tt &= ~SLOT_INTR_TARGET_MASK;
-+		tt |= SLOT_INTR_TARGET(dev->interrupter->intr_num);
-+		slot_ctx->tt_info = cpu_to_le32(tt);
-+	}
-+
- 	trace_xhci_setup_addressable_virt_device(dev);
-
- 	/* Steps 7 and 8 were done in xhci_alloc_virt_device() */
-@@ -2402,7 +2411,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- {
- 	struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
- 	dma_addr_t	dma;
--	unsigned int    i;
-+	unsigned int	secondary_intr_num;
-+	int		i;
-
- 	/*
- 	 * xHCI section 5.4.6 - Device Context array must be
-@@ -2496,9 +2506,30 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	if (!xhci->interrupters[0])
- 		goto fail;
-
--	/* Since only the main interrupt is used, secondary_irqs_alloc is set to 0. */
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+			"Allocating secondary event ring");
- 	xhci->secondary_irqs_alloc = 0;
-
-+	if (xhci->max_interrupters > 1)
-+		secondary_intr_num = min_t(unsigned int,
-+				xhci->max_interrupters - 1,
-+				(unsigned int)MAX_SECONDARY_INTRNUM);
-+
-+	for (i = 1; i <= secondary_intr_num; i++) {
-+		if (xhci->interrupters[i])
-+			continue;
-+		xhci->interrupters[i] = xhci_alloc_interrupter(xhci, i, flags);
-+		if (!xhci->interrupters[i]) {
-+			while (--i >= 1) {
-+				xhci_free_interrupter(xhci, xhci->interrupters[i]);
-+				xhci->interrupters[i] = NULL;
-+			}
-+			xhci->secondary_irqs_alloc = 0;
-+			break;
-+		}
-+		xhci->secondary_irqs_alloc++;
-+	}
-+
- 	/*
- 	 * Initialize all allocated interrupters here.
- 	 * Use allocated count as loop bound to avoid touching non-allocated
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index b3efd6d8fd9c..4ff3e29070b1 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -150,6 +150,8 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
- 	struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
- 	int ret;
-+	unsigned int irqs_num;
-+	int i;
- 	struct xhci_irq_ctx *ctx;
-
- 	/*
-@@ -173,7 +175,7 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
-
- 	/* TODO: Check with MSI Soc for sysdev */
- 	xhci->nvecs = pci_alloc_irq_vectors(pdev, 1, xhci->nvecs,
--					    PCI_IRQ_MSIX | PCI_IRQ_MSI);
-+					    PCI_IRQ_MSIX | PCI_IRQ_MSI | PCI_IRQ_AFFINITY);
- 	if (xhci->nvecs < 0) {
- 		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			       "failed to allocate IRQ vectors");
-@@ -183,14 +185,30 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
- 	memset(xhci->irq_ctx, 0, sizeof(xhci->irq_ctx));
- 	xhci->irqs_enabled = 0;
-
--	ctx = &xhci->irq_ctx[0];
--	ctx->hcd = hcd;
--	ctx->intr_num = 0;
--	ret = request_irq(pci_irq_vector(pdev, 0), xhci_msi_irq, 0, "xhci_hcd", ctx);
--	if (ret)
--		goto free_irq_vectors;
-+	/*
-+	 * Request up to 1 + secondary_irqs_alloc vectors (vector 0 + secondary),
-+	 * limited by what PCI core actually allocated.
-+	 */
-+	irqs_num = min_t(unsigned int,
-+		     (unsigned int)xhci->nvecs,
-+		     (unsigned int)(1 + xhci->secondary_irqs_alloc));
-+
-+	for (i = 0; i < irqs_num; i++) {
-+		ctx = &xhci->irq_ctx[i];
-+		ctx->hcd = hcd;
-+		ctx->intr_num = i;
-+		ret = request_irq(pci_irq_vector(pdev, i), xhci_msi_irq, 0,
-+				  "xhci_hcd", ctx);
-+		if (ret) {
-+			while (--i >= 0)
-+				free_irq(pci_irq_vector(pdev, i), &xhci->irq_ctx[i]);
-+			xhci->irqs_enabled = 0;
-+			memset(xhci->irq_ctx, 0, sizeof(xhci->irq_ctx));
-+			goto free_irq_vectors;
-+		}
-+		xhci->irqs_enabled++;
-+	}
-
--	xhci->irqs_enabled = 1;
- 	hcd->msi_enabled = 1;
- 	hcd->msix_enabled = pdev->msix_enabled;
- 	return 0;
-@@ -198,7 +216,6 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
- free_irq_vectors:
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "disable %s interrupt",
- 		       pdev->msix_enabled ? "MSI-X" : "MSI");
--	xhci->irqs_enabled = 0;
- 	pci_free_irq_vectors(pdev);
-
- legacy_irq:
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 3ea134c07c5f..f16339f47ed4 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -64,6 +64,9 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 			 u32 field1, u32 field2,
- 			 u32 field3, u32 field4, bool command_must_succeed);
-
-+static void xhci_handle_slot_secondary_events(struct xhci_hcd *xhci,
-+		union xhci_trb *cmd_trb);
-+
- /*
-  * Returns zero if the TRB isn't in this segment, otherwise it returns the DMA
-  * address of the TRB.
-@@ -1859,6 +1862,9 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
- 		}
- 	}
-
-+	/* Handle slot secondary events before command-specific teardown logic */
-+	xhci_handle_slot_secondary_events(xhci, cmd_trb);
-+
- 	cmd_type = TRB_FIELD_TO_TYPE(le32_to_cpu(cmd_trb->generic.field[3]));
- 	switch (cmd_type) {
- 	case TRB_ENABLE_SLOT:
-@@ -3138,6 +3144,72 @@ static int xhci_handle_events(struct xhci_hcd *xhci, struct xhci_interrupter *ir
- 	return 0;
- }
-
-+/*
-+ * Handle a slot's secondary event ring at command completion boundaries.
-+ *
-+ * With secondary interrupters, transfer events may lag behind command
-+ * completions (handled on interrupter 0). Commands that stop/reset/disable
-+ * endpoints/slots can reclaim TD state before those transfer events are
-+ * processed, leading to "Spurious event dma" reports. Call this from
-+ * handle_cmd_completion() before command-specific completion handling.
-+ */
-+static void xhci_handle_slot_secondary_events(struct xhci_hcd *xhci,
-+		union xhci_trb *cmd_trb)
-+{
-+	u32 field3, cmd_type, slot_id;
-+	struct xhci_virt_device *vdev;
-+	struct xhci_interrupter *sec_ir;
-+	unsigned int intr;
-+
-+	/* No secondary routing -> nothing to do */
-+	if (xhci->irqs_enabled <= 1)
-+		return;
-+
-+	field3   = le32_to_cpu(cmd_trb->generic.field[3]);
-+	cmd_type = TRB_FIELD_TO_TYPE(field3);
-+	slot_id  = TRB_TO_SLOT_ID(field3);
-+
-+	if (!slot_id)
-+		return;
-+
-+	/*
-+	 * Handle only for commands that can stop/reset/disable endpoints/slots
-+	 * and/or cause the driver to reclaim TD ownership.
-+	 */
-+	switch (cmd_type) {
-+	case TRB_STOP_RING:
-+	case TRB_SET_DEQ:
-+	case TRB_RESET_EP:
-+	case TRB_RESET_DEV:
-+	case TRB_DISABLE_SLOT:
-+		break;
-+	case TRB_CONFIG_EP:
-+		/* Only needed for deconfigure (drop endpoints) */
-+		if (!(field3 & TRB_DC))
-+			return;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	vdev = xhci->devs[slot_id];
-+	if (!vdev)
-+		return;
-+
-+	intr = vdev->interrupter->intr_num;
-+	if (!intr)
-+		return; /* slot is on primary interrupter */
-+
-+	sec_ir = xhci->interrupters[intr];
-+	if (!sec_ir || !sec_ir->event_ring)
-+		return;
-+
-+	lockdep_assert_held(&xhci->lock);
-+
-+	/* Handle pending events normally to complete URB/TD bookkeeping. */
-+	xhci_handle_events(xhci, sec_ir, false);
-+}
-+
- /*
-  * Move the event ring dequeue pointer to skip events kept in the secondary
-  * event ring.  This is used to ensure that pending events in the ring are
-@@ -3169,14 +3241,8 @@ void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
- 	xhci_handle_events(xhci, ir, true);
- }
-
--/*
-- * xHCI spec says we can get an interrupt, and if the HC has an error condition,
-- * we might get bad data out of the event ring.  Section 4.10.2.7 has a list of
-- * indicators of an event TRB error, but we check the status *first* to be safe.
-- */
--irqreturn_t xhci_irq(struct usb_hcd *hcd)
-+static irqreturn_t xhci_irq_ir(struct xhci_hcd *xhci, struct xhci_interrupter *ir)
- {
--	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
- 	irqreturn_t ret = IRQ_HANDLED;
- 	u32 status;
-
-@@ -3188,7 +3254,11 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 		goto out;
- 	}
-
--	if (!(status & STS_EINT)) {
-+	/*
-+	 * STS_EINT is only meaningful for the primary interrupter (0).
-+	 * Secondary vectors may interrupt without STS_EINT set.
-+	 */
-+	if (ir->intr_num == 0 && !(status & STS_EINT)) {
- 		ret = IRQ_NONE;
- 		goto out;
- 	}
-@@ -3204,30 +3274,52 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 		goto out;
- 	}
-
--	/*
--	 * Clear the op reg interrupt status first,
--	 * so we can receive interrupts from other MSI-X interrupters.
--	 * Write 1 to clear the interrupt status.
--	 */
--	status |= STS_EINT;
--	writel(status, &xhci->op_regs->status);
-+	if (ir->intr_num == 0) {
-+		/*
-+		 * Clear the op reg interrupt status first,
-+		 * so we can receive interrupts from other MSI-X interrupters.
-+		 * Write 1 to clear the interrupt status.
-+		 */
-+		status |= STS_EINT;
-+		writel(status, &xhci->op_regs->status);
-+	}
-
--	/* This is the handler of the primary interrupter */
--	xhci_handle_events(xhci, xhci->interrupters[0], false);
-+	/* Handle events for this interrupter. */
-+	xhci_handle_events(xhci, ir, false);
- out:
- 	spin_unlock(&xhci->lock);
-
- 	return ret;
- }
-
-+/*
-+ * xHCI spec says we can get an interrupt, and if the HC has an error condition,
-+ * we might get bad data out of the event ring.  Section 4.10.2.7 has a list of
-+ * indicators of an event TRB error, but we check the status *first* to be safe.
-+ */
-+irqreturn_t xhci_irq(struct usb_hcd *hcd)
-+{
-+	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+
-+	return xhci_irq_ir(xhci, xhci->interrupters[0]);
-+}
-+
- irqreturn_t xhci_msi_irq(int irq, void *data)
- {
- 	struct xhci_irq_ctx *ctx = data;
-+	struct xhci_hcd *xhci;
-+	struct xhci_interrupter *ir;
-
--	/* For now only vector 0 is requested; keep behavior unchanged. */
-+	/* All MSI/MSI-X vectors use ctx (dev_id) to select interrupter.*/
- 	if (!ctx || !ctx->hcd)
- 		return IRQ_NONE;
--	return xhci_irq(ctx->hcd);
-+
-+	xhci = hcd_to_xhci(ctx->hcd);
-+	ir = xhci->interrupters[ctx->intr_num];
-+	if (!ir)
-+		return IRQ_NONE;
-+
-+	return xhci_irq_ir(xhci, ir);
- }
- EXPORT_SYMBOL_GPL(xhci_msi_irq);
-
-@@ -3629,6 +3721,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	int sent_len, ret;
- 	u32 field, length_field, remainder;
- 	u64 addr, send_addr;
-+	struct xhci_interrupter *ir;
-
- 	ring = xhci_urb_to_transfer_ring(xhci, urb);
- 	if (!ring)
-@@ -3669,6 +3762,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	start_trb = &ring->enqueue->generic;
- 	start_cycle = ring->cycle_state;
- 	send_addr = addr;
-+	ir = xhci->devs[slot_id]->interrupter;
-
- 	/* Queue the TRBs, even if they are zero-length */
- 	for (enqd_len = 0; first_trb || enqd_len < full_len;
-@@ -3729,7 +3823,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
-
- 		length_field = TRB_LEN(trb_buff_len) |
- 			TRB_TD_SIZE(remainder) |
--			TRB_INTR_TARGET(0);
-+			TRB_INTR_TARGET(ir->intr_num);
-
- 		queue_trb(xhci, ring, more_trbs_coming | need_zero_pkt,
- 				lower_32_bits(send_addr),
-@@ -3761,7 +3855,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 		urb_priv->td[1].end_trb = ring->enqueue;
- 		urb_priv->td[1].end_seg = ring->enq_seg;
- 		field = TRB_TYPE(TRB_NORMAL) | ring->cycle_state | TRB_IOC;
--		queue_trb(xhci, ring, 0, 0, 0, TRB_INTR_TARGET(0), field);
-+		queue_trb(xhci, ring, 0, 0, 0, TRB_INTR_TARGET(ir->intr_num), field);
- 	}
-
- 	check_trb_math(urb, enqd_len);
-@@ -3783,6 +3877,9 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	u32 field;
- 	struct urb_priv *urb_priv;
- 	struct xhci_td *td;
-+	struct xhci_interrupter *ir;
-+
-+	ir = xhci->devs[slot_id]->interrupter;
-
- 	ep_ring = xhci_urb_to_transfer_ring(xhci, urb);
- 	if (!ep_ring)
-@@ -3805,7 +3902,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 		if (last_trb_on_seg(ep_ring->enq_seg, ep_ring->enqueue + 1)) {
- 			field = TRB_TYPE(TRB_TR_NOOP) | ep_ring->cycle_state;
- 			queue_trb(xhci, ep_ring, false, 0, 0,
--					TRB_INTR_TARGET(0), field);
-+					TRB_INTR_TARGET(ir->intr_num), field);
- 		}
- 	}
-
-@@ -3856,7 +3953,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	queue_trb(xhci, ep_ring, true,
- 		  setup->bRequestType | setup->bRequest << 8 | le16_to_cpu(setup->wValue) << 16,
- 		  le16_to_cpu(setup->wIndex) | le16_to_cpu(setup->wLength) << 16,
--		  TRB_LEN(8) | TRB_INTR_TARGET(0),
-+		  TRB_LEN(8) | TRB_INTR_TARGET(ir->intr_num),
- 		  /* Immediate data in pointer */
- 		  field);
-
-@@ -3886,7 +3983,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 				urb, 1);
- 		length_field = TRB_LEN(urb->transfer_buffer_length) |
- 				TRB_TD_SIZE(remainder) |
--				TRB_INTR_TARGET(0);
-+				TRB_INTR_TARGET(ir->intr_num);
- 		if (setup->bRequestType & USB_DIR_IN)
- 			field |= TRB_DIR_IN;
- 		queue_trb(xhci, ep_ring, true,
-@@ -3909,7 +4006,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	queue_trb(xhci, ep_ring, false,
- 			0,
- 			0,
--			TRB_INTR_TARGET(0),
-+			TRB_INTR_TARGET(ir->intr_num),
- 			/* Event on completion */
- 			field | TRB_IOC | TRB_TYPE(TRB_STATUS) | ep_ring->cycle_state);
-
-@@ -4099,7 +4196,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
-
- 	xep = &xhci->devs[slot_id]->eps[ep_index];
- 	ep_ring = xhci->devs[slot_id]->eps[ep_index].ring;
--	ir = xhci->interrupters[0];
-+	ir = xhci->devs[slot_id]->interrupter;
-
- 	num_tds = urb->number_of_packets;
- 	if (num_tds < 1) {
-@@ -4200,7 +4297,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 						   urb, more_trbs_coming);
-
- 			length_field = TRB_LEN(trb_buff_len) |
--				TRB_INTR_TARGET(0);
-+				TRB_INTR_TARGET(ir->intr_num);
-
- 			/* xhci 1.1 with ETE uses TD Size field for TBC */
- 			if (first_trb && xep->use_extended_tbc)
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index cbf96cb51583..96934a29e39b 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4123,6 +4123,7 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
- 		virt_dev->eps[i].ep_state &= ~EP_STOP_CMD_PENDING;
- 	virt_dev->udev = NULL;
- 	xhci_disable_slot(xhci, udev->slot_id);
-+	virt_dev->interrupter = NULL;
-
- 	spin_lock_irqsave(&xhci->lock, flags);
- 	xhci_free_virt_device(xhci, virt_dev, udev->slot_id);
-@@ -4219,6 +4220,7 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
- 	unsigned long flags;
- 	int ret, slot_id;
- 	struct xhci_command *command;
-+	unsigned int sec_irqs, intr_num;
-
- 	command = xhci_alloc_command(xhci, true, GFP_KERNEL);
- 	if (!command)
-@@ -4275,6 +4277,18 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
-
- 	udev->slot_id = slot_id;
-
-+	/*
-+	 * Spread devices across IRQ-backed secondary interrupters [1..].
-+	 * If only vector 0 is enabled, default to interrupter 0.
-+	 */
-+	sec_irqs = (xhci->irqs_enabled > 1) ? (xhci->irqs_enabled - 1) : 0;
-+	if (sec_irqs) {
-+		intr_num = slot_id % sec_irqs;
-+		vdev->interrupter = xhci->interrupters[intr_num + 1];
-+	} else {
-+		vdev->interrupter = xhci->interrupters[0];
-+	}
-+
- 	xhci_debugfs_create_slot(xhci, slot_id);
-
- 	/*
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 7707fd7564c5..b30ace66ff62 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -408,6 +408,11 @@ struct xhci_slot_ctx {
- #define SLOT_STATE_ADDRESSED	2
- #define SLOT_STATE_CONFIGURED	3
-
-+/* Interrupter Target - tt_info[31:22] (xHCI Slot Context) */
-+#define SLOT_INTR_TARGET_SHIFT 22
-+#define SLOT_INTR_TARGET_MASK  (0x3ffU << SLOT_INTR_TARGET_SHIFT)
-+#define SLOT_INTR_TARGET(p)    (((p) & 0x3ffU) << SLOT_INTR_TARGET_SHIFT)
-+
- /**
-  * struct xhci_ep_ctx
-  * @ep_info:	endpoint state, streams, mult, and interval information.
-@@ -767,6 +772,11 @@ struct xhci_virt_device {
- 	void				*debugfs_private;
- 	/* set if this endpoint is controlled via sideband access*/
- 	struct xhci_sideband	*sideband;
-+	/*
-+	 * Default transfer-event interrupter for this USB device.
-+	 * Queueing code programs TRB_INTR_TARGET() from vdev->interrupter.
-+	 */
-+	struct xhci_interrupter *interrupter;
- };
-
- /*
---
-2.50.1
-
+greg k-h
 
