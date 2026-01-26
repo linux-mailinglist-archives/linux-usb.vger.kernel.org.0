@@ -1,273 +1,288 @@
-Return-Path: <linux-usb+bounces-32739-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32740-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CE9JKMCGd2m9hgEAu9opvQ
-	(envelope-from <linux-usb+bounces-32739-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 16:22:40 +0100
+	id OLW6IPqQd2m9hgEAu9opvQ
+	(envelope-from <linux-usb+bounces-32740-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 17:06:18 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B24F68A129
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 16:22:39 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D964C8A79E
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 17:06:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 547DB300B280
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 15:22:14 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 89FF2301A7F0
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 16:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C45F833EAEC;
-	Mon, 26 Jan 2026 15:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 558592D593E;
+	Mon, 26 Jan 2026 16:06:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=phytec.de header.i=@phytec.de header.b="pVUeVCAU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KMXyhFyu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11020087.outbound.protection.outlook.com [52.101.84.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EB633C1BD;
-	Mon, 26 Jan 2026 15:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769440928; cv=fail; b=uku6BuKr8tEGUPTC0Ti9bJCIPszuRRBL5BMhAvEZU7dTJiSrKpy6OMu+ws6HAZPfqZGQM1t8hQ/lpCmRVjS+6Yn9+KJuMAz8F9LyC/jJfv3nA1AwYIodwWI7xHAmT5cwTPTor4NWc54lyPzgPQRBPP/FakyJ+vIHt+hjbsZY/zE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769440928; c=relaxed/simple;
-	bh=Cf0G4K3NZkOKfzgyfaSajvk70Dz19i3N+dSBs7OnZyo=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=BXm1e65uOS3/hYEKdWR7+EbgAxHEJ2ZMnH3f8piSgsTz4zngBCzv+rOb9L5aJFFbUBr8h5TIi9IVkuH2SIHUlcuFrNLrFaVhAIyAcpnINmVngDoT0pOUd1LCAB0wx6F1EiQnGxmd3gNErZA1pO+q2qWWukAThbql8RjFp5fQq/w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=phytec.de; spf=pass smtp.mailfrom=phytec.de; dkim=pass (2048-bit key) header.d=phytec.de header.i=@phytec.de header.b=pVUeVCAU; arc=fail smtp.client-ip=52.101.84.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=phytec.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytec.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H/SZyJX+Z7RNJ+O23cp5jhyHlUa7jdQFLlcU8X8Bo+w0s/qgW7Rh01a/cd0Tt10LwQI4SpF2OWi9wzd3t8LI6GZZoGYe+SlkTmmbX8UkcTD3Gy5ik426FARP5hAG8kUo3gCQLxlLKUkBoRQEk6pFsDTRMtLW1ndbcMXTmjQHwbTNsbkq98H2pwR5tVFKEQhhctxavmtJ31fHNvRPcqjIRGWh9DyK/qomtSnfE4BK3RuGGGE+jEQOTpbaXJG0LkQNC2Lp3lYbX9cTpgxz8LZD0gyvjdJgM7lP/u2voJZ6M1ds1otsl+4Da3DYEazSCXGSft8mvvKWKskuZo4Jwr8qFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Cf0G4K3NZkOKfzgyfaSajvk70Dz19i3N+dSBs7OnZyo=;
- b=a/zl7M8rx3TbuWygjwEViit2leKmd/T0MCsBC3NC35bXYLRhO34D9637ywQuVff/h6cbPVruH8C9SAz22WWYPDRJMEoc110MFrWlg5lMDBlDQTwK2NNzPQmpNFns4j8XQPGLSC2e6qisuit6yCgnRLQl1zEoq5VIWBj3FLJH9+f7L7l0vGldUcdJnQjwg0Uadrx1l8GlmGTSXQrs/ZLeRrmfTgFBk1Ao2IRU3SQYf79vc1BtLu82vfBmhWA5HZogBB+v8i1Cr5gv7rxmsqsO53gL0uDMZ7+83dLUoBE+QYN0a2i1/QNcvvqESaVwZ3WLsM4frdg/7O5IYy65JUPz9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=phytec.de; dmarc=pass action=none header.from=phytec.de;
- dkim=pass header.d=phytec.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=phytec.de;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Cf0G4K3NZkOKfzgyfaSajvk70Dz19i3N+dSBs7OnZyo=;
- b=pVUeVCAU3/zm30H/Gqve+HESg2hudCOvQylDvAxjsTVV1yMwOooehQXRPom2To7YQMU6t0GEE+88t/NW7W8NlBe6EW6EREQFLlkzfCZmAez9vXJmJ69wHpIOKBcPGBhN0vshK61Q4NqgQryPxc1ZoT6PbMN+o3CiqRQKwnz8VAaBS0w45vJeUrkP89Y96IcU9eHunGJySAfbdbtyvMXmM+MbBUJ2Ms1Pks83yAhhiYBDeeoTknNGLd/TF5MMtZVBZYPH400+7akQGiKkJr/9Mmv6XyfGgBOyk4CzbE6FgX31Z3RInJo9SqUdiOomMcdEZ2L7ITr5W28KNc+JICylWA==
-Received: from DU0P195MB2325.EURP195.PROD.OUTLOOK.COM (2603:10a6:10:425::22)
- by DU0P195MB2253.EURP195.PROD.OUTLOOK.COM (2603:10a6:10:419::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.15; Mon, 26 Jan
- 2026 15:22:01 +0000
-Received: from DU0P195MB2325.EURP195.PROD.OUTLOOK.COM
- ([fe80::a5a9:5513:e1a:f50f]) by DU0P195MB2325.EURP195.PROD.OUTLOOK.COM
- ([fe80::a5a9:5513:e1a:f50f%6]) with mapi id 15.20.9542.010; Mon, 26 Jan 2026
- 15:22:01 +0000
-From: Jan Remmet <J.Remmet@phytec.de>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krishna Kurapati
-	<krishna.kurapati@oss.qualcomm.com>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "upstream@lists.phytec.de"
-	<upstream@lists.phytec.de>
-Subject: Re: [PATCH] usb: typec: hd3ss3220: Check if regulator needs to be
- switched
-Thread-Topic: [PATCH] usb: typec: hd3ss3220: Check if regulator needs to be
- switched
-Thread-Index: AQHcjtC7nuacumOGTkiDqR7gmT+FWLVkkWeA
-Date: Mon, 26 Jan 2026 15:22:01 +0000
-Message-ID: <1c36ebc4-9a37-4e88-a39f-e6472c0df11b@phytec.de>
-References:
- <20260126-wip-jremmet-hd3ss3220_vbus_split-v1-1-b2f946f1a4ae@phytec.de>
- <aXd7EN9KAmtEHODq@kuha>
-In-Reply-To: <aXd7EN9KAmtEHODq@kuha>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=phytec.de;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0P195MB2325:EE_|DU0P195MB2253:EE_
-x-ms-office365-filtering-correlation-id: 9175f1c0-681d-4d25-6939-08de5ceea7a3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700021;
-x-microsoft-antispam-message-info:
- =?utf-8?B?UWdrUkFNUzd4WnhnUmZlTTN1OW5mcmNIRldJOG5abkhNZTEzaDRDOHZmbWJW?=
- =?utf-8?B?M3RFLzJBdVpiVFkvL0lBNEJ6b2RhU0txU05iOHorMVlVTlovNTNZYTRtQnho?=
- =?utf-8?B?dTNwNThsT2o2S2crdVNoaE80dEFYOU95VTUxOXFqK0JXaHZrMnZNUHIxdzh6?=
- =?utf-8?B?azFkSGtLNnh2OEFUNUkyV2pCMlN6K1U1aURneFU3aU83b04vSVhna2hMcGJ0?=
- =?utf-8?B?N1pHK21iTzJXb1grcG8rZWhiUFFCcXZYT0VYZ2FOR2hoMWp5Rzdwck5jcnBL?=
- =?utf-8?B?d1BMNXVJNkkrOU1UeWZzMHlVUVk1NXAvWFUxaXNmTm9INjRoVkRpVFgzNnpl?=
- =?utf-8?B?YXRibGVVdStpS1VQdVBUZ0w1VmRZdmMrRjFacTE5TFN3dllLZEh1VjI2V1h6?=
- =?utf-8?B?UlY1ekd6WUlsVXVCTFVFVjJIWFA4R1lHSnhmQUY0ZmRwaUU1VmtXbGFLY29y?=
- =?utf-8?B?bHR4QzZNUW1YbDhiQUlTbTRERHVYSjBJNWtiVXRlSGtrZGEwaWVmdUY4bGRj?=
- =?utf-8?B?YjczS3Z3OXVLRUxpK0tWVGtrRWdQLzJPME9DVTJobUsrdWdQOEx2Y1lQSVMy?=
- =?utf-8?B?Rm8rb3NMWHpsTFhoaDFmd1QrcThBLythcld5dGNjK3BRUS9oalM1MXZiQ2hR?=
- =?utf-8?B?NUpUTTJjVXh1NDNMSVoxczNoRXppUlkyYUExT0ZtbGp6U21FVkVOeTZXdzg0?=
- =?utf-8?B?WjdlWVRMUGZyMHAvdW5EWDQva3BXRVNUWGFWWmNsSVNxcEFhKzl0NjlzUGRm?=
- =?utf-8?B?V0xkRERQODZrZ250SFVUaUFRaU5IbGVQUVhjc3NySE1DNmY3cWI2cWEwSjUv?=
- =?utf-8?B?RlZRWVVFNDI1VEVDdzJJbEtUNDRNTjZNR0xIQ3Q0TXY3QkdObE53THFOM3c4?=
- =?utf-8?B?UHdnVnIvUmZVMGZVWlU3YjBXTXlJeDU3VE14N3ZBVDZmY1NMbE9XM01BM3NL?=
- =?utf-8?B?alhBS0xCQXZya3Zjb3JaU3ppNGRpZ3VxMGI1bkFhVjVIdk5RSUJqVm9ra0dC?=
- =?utf-8?B?Y0IxU0J4ZVBPbTVKbXZQQ0ZDdlh5RjVSVjA4RVZJUTZRMEpuWVY3VWpWcnN4?=
- =?utf-8?B?cnhyM3llRGs2bWE3em5KOHd2ek9vOG95U0lGMVZCWDlCL2tvTG50dlFPTXdU?=
- =?utf-8?B?VjBkNERoRVJ4OCtVK3gyUEtZYi9lR2pMZnJ1SG1uMVp3eWxWSDNMWkI2UGd6?=
- =?utf-8?B?aWpibVRpWmVzYTBBMjdNMU1QQW9uMEMxTkxKN1NsOVc2cDZPS3d1SVpFam5n?=
- =?utf-8?B?VmJIRzJtdFNZalRWNlJtVkZGQXlCK1AvcFAvR1J0TE1QbmIxdTVtTXVPMC9q?=
- =?utf-8?B?aHMydGRGNXpUUW9KTGl6c0pYQi9nOHZjcUs2UDZvVzZHVDU4MEt2WEdIMjhD?=
- =?utf-8?B?TW04RXRlZCtCdWpZdlZaSlBjVno5a01BUkduTXV1MFlFMFg0TXBKZ2EyMmJW?=
- =?utf-8?B?MTV0M0xHZklZaDBuYUhlM3BUdml3bHBiUEY5Z3BZTDZ2bmprc0cweVhESDRH?=
- =?utf-8?B?aFVZYkxPb2dhd3kwU3hTd28xOWFldW1zV1F4d3FSN1p3Rkp6QWRWQktua01v?=
- =?utf-8?B?Z21uek9Ba0IzNWlPazA4akZiSHdkYnhrSTFnS3BmTVNnMXlURUdPdGJXZy9N?=
- =?utf-8?B?NlAzWnN5UklkVUNGQ1djY2k3UE4yNmpFdG5weC92NExvRlhBQ1dwQm5Oc1Vl?=
- =?utf-8?B?YkFKVkI0U0VtTGpPaWRKQzgxUnFJMTZNR0RwK1JEUlRTdGNCTVNHR0FoVnAr?=
- =?utf-8?B?VTJ2RGhnRnU3ZUJaZXpPU25HL1BSYWx5aVdrZyt4RlhCRHF6ZDAxSnNJZnhG?=
- =?utf-8?B?Zlp4N1VqQVRzb09EbzB2TUF3VjhEMWVWaDZibW1hMXN1TVVsR21UdGtCYWdR?=
- =?utf-8?B?RVlRVHNpQ08vOElwZEVkUGdPeWlkOVJHR09aVVRvTnpwa0RsT3B4ZGJmNngr?=
- =?utf-8?B?bHdTS294cFh0cmhGWVlnTnBwcUJTaEhFQzd6L1Y3NXZJQWRvUFN4SjJXeGd2?=
- =?utf-8?B?c3hnOHp6TWdTZUtUbkNWQXo3YmNZMmlEOG80WEp5bmFtdU1YSXNadFZISERo?=
- =?utf-8?B?UDl2NysrcjJ0d3dWZ1VVTlNKMXk3MEw1OGN5eVVjdFcwYVUvSGF6LzhOT3pI?=
- =?utf-8?Q?qryRzD2TtH0JmDJV65OIbIwTJ?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0P195MB2325.EURP195.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?UFJkSmluaDJKeTN3QkxOeHpKQlZOUnA0bURqVTBzMzJCeDdyOUkvSG1vL0dz?=
- =?utf-8?B?UmxHL1BhbCtwMlh5S0tJMHV5K1VSSnNBME0zSjlMaUtBYzhzcGdzQnRQSGo2?=
- =?utf-8?B?T1M1V0xKTVY0c0FmYXBQcFcwWFVJSmZ2VDlSOUtuQ3AxRHovblF4WFgzR1Y5?=
- =?utf-8?B?cGVqcjhuZGtORjFxbHhMUjlTRFg3WjRzbjhUZ0hOQ255M2JZVngrSy9tanM2?=
- =?utf-8?B?TmVTbDZ0L2llZVhXSDlIR3B2WDVSY2VuM0RhNWswL2ZTTW1MdEVjRW1QaThy?=
- =?utf-8?B?ZWo1R3RrQ3NvSU1pVUR0djBxNThXYWR1bnl2b1B2R1dDelJlS3o5M1hZQ0t6?=
- =?utf-8?B?QVE1eFd2blZhdHdIUU9Qdnl0VDRxL2ZFQ2ZtVFQ5MTkwZ0g1c2lDRlZpYWtl?=
- =?utf-8?B?TzU3Z1JUREhjNUl1dG9UWGk1Q0F0a3l4Y1hNRHhUUTV6dmVHN2o0Sm5OSFdy?=
- =?utf-8?B?N1hBUVhXam5rcnhBOVRZSkZEMVREMmdQTWNNN3JhRVdUTi9rSVJua3ZBQTdQ?=
- =?utf-8?B?RG9teGI2VVhpLytZU3Z6c0swd1JaNzdtV3pFM0ZzT08vdFJDMjF6SFFnWmdY?=
- =?utf-8?B?eCswcDBYOTN0Tk12aGFFOU5VRGFFeFp1N1VFR3Y0TEw4YXByMk9SSmdaSmxk?=
- =?utf-8?B?T0dVa3J1MVJQUktTRmJGbTNlaWlRZU5BVFFteXNnRXdQdHE1aVV6Y3dxazUx?=
- =?utf-8?B?N1IyaDNSL3JGS0RuUC95R2NDTjVVMllSazdLN0NXd2I0NXQ0Z1pvU2FPTlUw?=
- =?utf-8?B?VlIwak1PNGd0Ty9HM3RCbXN1K2J4MlNsMFppNG1yeHk2em9tNEVZNjdJd3Rp?=
- =?utf-8?B?K1FvZ2l4bHZUWEt2ZTFmdlFOb05IdTdLeXZZNlBtaTNDN3YwOHg2SnpoeEE2?=
- =?utf-8?B?Ymt0dldybVB6K094d2RaQW5RZGNyRGZWanJDTEJaemM4MUtLbk45OS83SDll?=
- =?utf-8?B?NFVheWRVdUVCMUZlUEpsU1oxZzZZMjBFVlRYVmJSQ2JJYUdyMm9EdW43TnAz?=
- =?utf-8?B?NjFYcDBSb1NEdzVaOTdqZWEyejFhSkV3VmtJUGw0S0dCVmttMHc0M3docTZY?=
- =?utf-8?B?QmducERKQ3RhMHpneTZUM0NSWUwxWGFCZGp5a3dieVdWZ09QWk95dkt6akF6?=
- =?utf-8?B?UWlqejBjRVFpUmlFc1VvS0JZNFFrMjhJY0FMQ0lCMlNIbUl1aXhPWFM5L2VD?=
- =?utf-8?B?T2lOaE9Yc2ZzdVJlU28vVm91clBzWWZhODBXRVlOa3FOV21EMDRsNFBhSk4r?=
- =?utf-8?B?a0U5RlNBU0R2U0ZaMnRrZ0d2SG5vaEtRWjU2RWhWWjdzbnMzUVVwaXhoaG9m?=
- =?utf-8?B?Rzdsb3ExV2ZpSEkrWWdmWUFBd3JQYkhlbmNKUTZYaFllWVU3OUplVEVCZW95?=
- =?utf-8?B?SnFlaTAvVGFRMFJRRlpNN3hIcjBrdkh4REpveElsOUlGMHlFeitocGRZMlZV?=
- =?utf-8?B?SXBaZEwxZ09tOGt1TkEwekJMMGlTWmVzeFhnMFA5clp0K2ZIQjdhNFVCZlhF?=
- =?utf-8?B?S1lYZldxbjlheWhXRVdYbHpQMlFCanIrTUFrd2ZJU3hWQ2I4c3BFYUhramFC?=
- =?utf-8?B?ZXp5Lzc2MVY4RzRlYS94L0tPeUQ0RVhEUGtmdXg4U3BObkVLb2hHamtYR0U1?=
- =?utf-8?B?M1hwMXJ1cFJBT3pWZlI1alhqMEo5R0prMzRtdEl1YmIxVzFwalJMYUFmQWtu?=
- =?utf-8?B?b21NSjNZRDhMamxLOTNwUkV5U3c3eVFMR3AzZ0tJdmhDOTJuaVVJVjFSeHYw?=
- =?utf-8?B?Vjg1Yk1PUXVJOFg3NEZzZ1RKNWZmSlVBWWJudUdhOWVDRUNSbHdIZEo5QVUx?=
- =?utf-8?B?d2prUldmOEFKTyt1RklvQlZOUldaV3owLy9JOEl0SWRkVXhZRlU4MFdmN3lt?=
- =?utf-8?B?aTlaRHZZY3Q1dTZ2Zi9yd1h3aFlSMDBFaUJsK21uOHJOVG9wYnpWUDNZdUJI?=
- =?utf-8?B?emFKS2ExM2ZVRzNJdlVWOVgxbCtUc2hCczB5NGswYXZOYUd0aXpLN29ZZFI4?=
- =?utf-8?B?N1JTa3NkWHJUZU9lZzNOakg4TXhFNmEzTlhnUU0rS0FoWm13QjEwM01mem5V?=
- =?utf-8?B?NFpTSFJyUGJZOTlnYUxtVnhsNlNJSFNKTHZCeGFubk9jb0Z3SVhld25tb2p3?=
- =?utf-8?B?eTdLUVh5TzNWU2VNdXduMXFkeEkxY1k2TkpiZTFRMHpnNVZGVEY5SkVGQmhR?=
- =?utf-8?B?YVNpd3c2VlEwcmpPbHpHczJ6SkxHeHN6L3pIWlhyVGxqdXMzT3FyU290ak8w?=
- =?utf-8?B?YXV5Yll6dVNOUlZ1WHNtSW9iZmk3bUhnM1BnelRZSGRVdW9wa1lIeHkvWXcx?=
- =?utf-8?B?M3l1MXJCcGw5M3BkNlowanBKbk9kdHFEemlQbDdjVkZCYWJsMGZ4Zz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5CE59CAAD3CCAF4F9450E4BCB4B54C3B@EURP195.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57E02C3260;
+	Mon, 26 Jan 2026 16:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769443571; cv=none; b=FewzTomqjWZLlBfh4mrcOCD/ayK29xNojtFrDwDzwtSDdMtgtOX6kcdPk7bEdPUFYxDbLhGaG3heukG9mxEFTpibixCrORtQ3LfzYrKi3OU5P4yROm0SpzA/j3f69VRNqoEA4Ay9cUWUfJvJY0Vw696R1qUGXQx3/H8IRiX0OGQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769443571; c=relaxed/simple;
+	bh=IKZjpeboVi1KaXGr1fV+IuQZSXvW1+LrsCscH7Aa58A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KnWRhthG8vkEXocmXvPvMgD1R1kyHNwaC6uy2ZZ/Z2ByqhcHih3aPv9ACOaKQ0qDoE986r5brDqjLF4YDukjTqx2zXYWP55pUPvfpUoLfJJ33hFs+ei13lk36rhxYbkmqcV9R4kqp+9bAG4lElJWHmP6xbSja8snqOwu2eF/clo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KMXyhFyu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47346C116C6;
+	Mon, 26 Jan 2026 16:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769443571;
+	bh=IKZjpeboVi1KaXGr1fV+IuQZSXvW1+LrsCscH7Aa58A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KMXyhFyujiTBLbkl7cD1umWTOJCNuJf9d/Mp0pxal/pbsdZJF8e67F4PGtpsXNqmk
+	 q8vy8Vgel6mX2RYXCOlgnBQQP8m4gwS5K4l6H3fdwK5i4eyM5K1tVQy79MIYx2Jv9O
+	 zs8yx1o5P5M/VJcFkEqef0HhZY0SdpAwZBc+Xt0nEC1ncbdNHpcifgBiyEKWOxj/eM
+	 oAi28n2cPUihj6K+Q5zMScQ7N36ntjFzTWl1JXmwe7NuAVqAVojCv7PoYfLa1vtMoi
+	 4WtDiS91UeF4ZtDKn6Tv2h4pS+c71ZBS7GjduX0nZQkVORqMx9rfsEDc/EedAPDN/Q
+	 KGzAJJbfdBz4Q==
+Date: Mon, 26 Jan 2026 10:06:10 -0600
+From: Rob Herring <robh@kernel.org>
+To: Charan Pedumuru <charan.pedumuru@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@ti.com>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: usb: ti,omap4-musb: convert to DT schema
+Message-ID: <20260126160610.GA2471873-robh@kernel.org>
+References: <20260126-ti-usb-v1-0-2855c129eb6d@gmail.com>
+ <20260126-ti-usb-v1-1-2855c129eb6d@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: phytec.de
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0P195MB2325.EURP195.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9175f1c0-681d-4d25-6939-08de5ceea7a3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2026 15:22:01.7119
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e609157c-80e2-446d-9be3-9c99c2399d29
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kWLsA+0NtsjX17PGsiBTseMJuVlpr0LfKr8iwyCsGr6OyKg84c4q3ZuuXQvLjGytrgybnKbL5HQWdGUTqT3P7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0P195MB2253
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260126-ti-usb-v1-1-2855c129eb6d@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.06 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[phytec.de,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[phytec.de:s=selector2];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32739-lists,linux-usb=lfdr.de];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
+	URIBL_MULTI_FAIL(0.00)[ti.com:server fail,tor.lore.kernel.org:server fail,4a0ab000:server fail,devicetree.org:server fail];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-32740-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[J.Remmet@phytec.de,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[phytec.de:+];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pyhtec.de:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: B24F68A129
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ti.com:email,devicetree.org:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D964C8A79E
 X-Rspamd-Action: no action
 
-QW0gMjYuMDEuMjYgdW0gMTU6MzIgc2NocmllYiBIZWlra2kgS3JvZ2VydXM6DQo+IE1vbiwgSmFu
-IDI2LCAyMDI2IGF0IDAxOjA2OjM2UE0gKzAxMDAsIEphbiBSZW1tZXQga2lyam9pdHRpOg0KPj4g
-Q2hlY2sgcmVndWxhdG9yIHN0YXRlIGFzIHBlcmlwaGVyYWwgYW5kIGRldGFjaCBjYW4gZGlzYWJs
-ZSB2YnVzLg0KPj4gV2l0aG91dCB0aGlzIGNoZWNrIHdlIHdpbGwgdHJ5IHRvIGRpc2FibGUgdGhl
-IHJlZ3VsYXRvciB0d2ljZSBpZg0KPj4gd2UgZGlzY29ubmVjdCBob3N0IGFuZCB0aGVuIGNvbm5l
-Y3QgYXMgZGV2aWNlLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEphbiBSZW1tZXQgPGoucmVtbWV0
-QHBoeXRlYy5kZT4NCj4+IC0tLQ0KPj4gVGhpcyBpcyBhIGZpeHVwIGZyb20NCj4+IC0gTGluayB0
-byB2MTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDI2MDExNS13aXAtanJlbW1ldC1oZDNz
-czMyMjBfdmJ1cy12MS0xLWI3ZDlhZGZiZTM0NkBwaHl0ZWMuZGUNCj4+IFRvDQo+PiAtIExpbmsg
-dG8gdjI6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyNjAxMjMtd2lwLWpyZW1tZXQtaGQz
-c3MzMjIwX3ZidXMtdjItMS1iY2FkMzEzY2U5MmJAcGh5dGVjLmRlDQo+IA0KPiBJIGRvbid0IHVu
-ZGVyc3RhbmQgdGhhdCwgYnV0IEkgdGhpbmsgeW91IGFyZSBmaXhpbmcgYSBjb21taXQgaW4gR3Jl
-ZydzDQo+IHRyZWUsIHJpZ2h0Pw0KWWVzDQo+IA0KPiBJZiB0aGF0J3MgdGhlIGNhc2UsIHRoZW4g
-eW91IG5lZWQgdGhlIEZpeGVzIHRhZy4NCg0KU29ycnksIEknbSBub3QgZmFtaWxhciB3aXRoIHRo
-ZSB3b3JrZmxvdyBoZXJlLiBTaG91bGQgaXQgYmUgYSAiLS1maXh1cCIgDQpnaXQgY29tbWl0IGFn
-YWluc3QgdGhlIHVzYi1uZXh0IGNvbW1pdCBpZD8NCg0KT3INCkZpeGVzOiA3ZTcwMjU4MTE1Nzkg
-KCJ1c2I6IHR5cGVjOiBoZDNzczMyMjA6IENoZWNrIGlmIHJlZ3VsYXRvciBuZWVkcyB0byANCmJl
-IHN3aXRjaGVkIikNCg0KSW4gdGhlIGNvbW1pdCBtZXNzYWdlIChhZ2FpbiB3aXRoIGNvbW1pdCBz
-aGEgZnJvbSBHcmVnJ3MgdXNiLW5leHQNCg0KSmFuDQoNCj4gDQo+IHRoYW5rcywNCj4gDQo+PiAt
-LS0NCj4+ICAgZHJpdmVycy91c2IvdHlwZWMvaGQzc3MzMjIwLmMgfCAzICsrKw0KPj4gICAxIGZp
-bGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-dXNiL3R5cGVjL2hkM3NzMzIyMC5jIGIvZHJpdmVycy91c2IvdHlwZWMvaGQzc3MzMjIwLmMNCj4+
-IGluZGV4IGE3YzU0YWE4NjM1ZjcwZDY5NzlkOThjOTVmODBkNGRhYzI3N2ZlZjIuLjNlMzliODAw
-ZTZiNWY0ZDBjYmJhOTU3YzBkZDY2YzE4Zjc4MWZmMzggMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJz
-L3VzYi90eXBlYy9oZDNzczMyMjAuYw0KPj4gKysrIGIvZHJpdmVycy91c2IvdHlwZWMvaGQzc3Mz
-MjIwLmMNCj4+IEBAIC0yMDgsNiArMjA4LDkgQEAgc3RhdGljIHZvaWQgaGQzc3MzMjIwX3JlZ3Vs
-YXRvcl9jb250cm9sKHN0cnVjdCBoZDNzczMyMjAgKmhkM3NzMzIyMCwgYm9vbCBvbikNCj4+ICAg
-ew0KPj4gICAJaW50IHJldDsNCj4+ICAgDQo+PiArCWlmIChyZWd1bGF0b3JfaXNfZW5hYmxlZCho
-ZDNzczMyMjAtPnZidXMpID09IG9uKQ0KPj4gKwkJcmV0dXJuOw0KPj4gKw0KPj4gICAJaWYgKG9u
-KQ0KPj4gICAJCXJldCA9IHJlZ3VsYXRvcl9lbmFibGUoaGQzc3MzMjIwLT52YnVzKTsNCj4+ICAg
-CWVsc2UNCj4+DQo+PiAtLS0NCj4+IGJhc2UtY29tbWl0OiA4YWNjMzc5YjY2NGVjOTg3ZGNjN2Vj
-YTI1YTVmNWM0YTlhNGViOWM0DQo+PiBjaGFuZ2UtaWQ6IDIwMjYwMTI2LXdpcC1qcmVtbWV0LWhk
-M3NzMzIyMF92YnVzX3NwbGl0LTk0NjgwMjQ3OWU4OQ0KPj4NCj4+IEJlc3QgcmVnYXJkcywNCj4+
-IC0tIA0KPj4gSmFuIFJlbW1ldCA8ai5yZW1tZXRAcGh5dGVjLmRlPg0KPiANCg0KDQotLSANCk1p
-dCBmcmV1bmRsaWNoZW4gR3LDvMOfZW4gLyBiZXN0IHJlZ2FyZHMNCkphbiBSZW1tZXQNCg0KLSBT
-b2Z0d2FyZSBEZXZlbG9wbWVudCAtDQpQSFlURUMgTWVzc3RlY2huaWsgR21iSA0KQmFyY2Vsb25h
-LUFsbGVlIDENCjU1MTI5IE1haW56DQpHZXJtYW55DQpUZWwuOiArNDkgKDApNjEzMSA5MjIxLTUz
-DQpNYWlsOiBqLnJlbW1ldEBweWh0ZWMuZGUNCldlYjogd3d3LnBoeXRlYy5kZQ0KDQpTaWUgZmlu
-ZGVuIHVucyBhdWNoIGF1ZjogRmFjZWJvb2ssIExpbmtlZEluLCBYaW5nLCBZb3VUdWJlDQoNClBI
-WVRFQyBNZXNzdGVjaG5payBHbWJIIHwgQmFyY2Vsb25hLUFsbGVlIDEgfCA1NTEyOSBNYWlueiwg
-R2VybWFueQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IERpcGwuLUluZy4gTWljaGFlbCBNaXRlemtpLCBE
-aXBsLi1JbmcuIEJvZG8gSHViZXIsIA0KRGlwbC4tSW5nLiAoRkgpIE1hcmN1cyBMaWNrZXMgfCBI
-YW5kZWxzcmVnaXN0ZXIgTWFpbnogSFJCIDQ2NTYgfCANCkZpbmFuemFtdCBNYWlueiB8IFN0Li1O
-ci46IDI2LzY2NS8wMDYwOCwgVVN0LUlEOiBERSAxNDkwNTk4NTUNClRoaXMgRS1NYWlsIG1heSBj
-b250YWluIGNvbmZpZGVudGlhbCBvciBwcml2aWxlZ2VkIGluZm9ybWF0aW9uLiBJZiB5b3UgDQph
-cmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQgKG9yIGhhdmUgcmVjZWl2ZWQgdGhpcyBFLU1h
-aWwgaW4gZXJyb3IpIA0KcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGltbWVkaWF0ZWx5IGFuZCBk
-ZXN0cm95IHRoaXMgRS1NYWlsLiBBbnkgDQp1bmF1dGhvcml6ZWQgY29weWluZywgZGlzY2xvc3Vy
-ZSBvciBkaXN0cmlidXRpb24gb2YgdGhlIG1hdGVyaWFsIGluIHRoaXMgDQpFLU1haWwgaXMgc3Ry
-aWN0bHkgZm9yYmlkZGVuLg0K
+On Mon, Jan 26, 2026 at 01:22:04PM +0000, Charan Pedumuru wrote:
+> Convert OMAP MUSB USB OTG Controller binding to DT schema.
+> Changes during conversion:
+> - Introduce new compatible string patterns "am35x_otg_hs" and "usb_otg_hs"
+>   to properly match existing nodes already defined in the DT sources.
+> - Include "interrupts" and "interrupt-names" properties in the YAML, as
+>   they are used by many in-tree DTS files.
+> - Extend the "power" property to allow the value 150 (in addition to
+>   existing values), since this is present in several in-tree DTS examples.
+> 
+> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
+> ---
+>  .../devicetree/bindings/usb/ti,omap4-musb.yaml     | 133 +++++++++++++++++++++
+>  1 file changed, 133 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/ti,omap4-musb.yaml b/Documentation/devicetree/bindings/usb/ti,omap4-musb.yaml
+> new file mode 100644
+> index 000000000000..16e95fe4c38d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ti,omap4-musb.yaml
+> @@ -0,0 +1,133 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/ti,omap4-musb.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments OMAP MUSB USB OTG Controller
+> +
+> +maintainers:
+> +  - Felipe Balbi <balbi@ti.com
+
+Missing '>'
+
+> +
+> +description:
+> +  Texas Instruments glue layer for the Mentor Graphics MUSB OTG controller.
+> +  Handles SoC-specific integration including PHY interface bridging(ULPI/
+> +  UTMI), interrupt aggregation, DMA engine coordination (internal/
+> +  external), VBUS/session control via control module mailbox, and
+> +  clock/reset management. Provides fixed hardware configuration parameters
+> +  to the generic MUSB core driver.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^(am35x_otg_hs|usb_otg_hs|usb)@[0-9a-f]+$"
+
+Again, do not document non-standard names. That's anything not in the DT 
+spec.
+
+> +
+> +  compatible:
+> +    enum:
+> +      - ti,omap3-musb
+> +      - ti,omap4-musb
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ti,hwmods:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      Specifies the name of the TI PRCM (Power, Reset and Clock Management)
+> +      hardware module that must be enabled (powered and clocked) for this
+> +      device node to operate. The value "usb_otg_hs" refers to the USB
+> +      On-The-Go High-Speed controller IP block.
+> +    const: usb_otg_hs
+
+deprecated: true
+
+(I think we want that everywhere?)
+
+Actually, looks like only omap2430 sets this, but that's not covered by 
+this schema. Unless you need to add "ti,omap2-musb"?
+
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      enum: [mc, dma]
+
+I would assume only 'dma' is optional? Does this work?:
+
+items:
+  - const: mc
+  - const: dma
+
+> +
+> +  multipoint:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Indicates the MUSB controller supports multipoint. This is a MUSB
+> +      configuration-specific setting.
+> +    const: 1
+> +
+> +  num-eps:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Specifies the number of endpoints. This is a MUSB configuration
+> +      specific setting.
+> +    const: 16
+> +
+> +  ram-bits:
+> +    description:
+> +      Specifies the RAM address size.
+> +    const: 12
+> +
+> +  interface-type:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Describes the type of interface between the controller and the PHY.
+> +      0 for ULPI, 1 for UTMI.
+> +    enum: [0, 1]
+> +
+> +  mode:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: 1 for HOST, 2 for PERIPHERAL, 3 for OTG.
+> +    enum: [1, 2, 3]
+> +
+> +  power:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Signifies the controller can supply up to 100mA when operating
+> +      in host mode.
+> +    enum: [50, 150]
+
+Which value corresponds to 100mA?
+
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  phy-names:
+> +    const: usb2-phy
+> +
+> +  usb-phy:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: Phandle for the PHY device.
+> +    deprecated: true
+> +
+> +  ctrl-module:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle of the control module this glue uses to write to mailbox.
+> +
+> +required:
+> +  - reg
+> +  - compatible
+> +  - interrupts
+> +  - interrupt-names
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    usb_otg_hs@4a0ab000 {
+
+usb@...
+
+> +        compatible = "ti,omap4-musb";
+> +        reg = <0x4a0ab000 0x1000>;
+> +        interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>;
+> +        interrupt-names = "mc", "dma";
+> +        ti,hwmods = "usb_otg_hs";
+> +        multipoint = <1>;
+> +        num-eps = <16>;
+> +        ram-bits = <12>;
+> +        ctrl-module = <&omap_control_usb>;
+> +        phys = <&usb2_phy>;
+> +        phy-names = "usb2-phy";
+> +        interface-type = <1>;
+> +        mode = <3>;
+> +        power = <50>;
+> +    };
+> +...
+> 
+> -- 
+> 2.52.0
+> 
 
