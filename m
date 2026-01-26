@@ -1,351 +1,122 @@
-Return-Path: <linux-usb+bounces-32725-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32726-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aI1HOzBrd2nCfQEAu9opvQ
-	(envelope-from <linux-usb+bounces-32725-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 14:25:04 +0100
+	id QGwNFG5wd2m8gAEAu9opvQ
+	(envelope-from <linux-usb+bounces-32726-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 14:47:26 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9328588CA1
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 14:24:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F83989106
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 14:47:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 508E930747A2
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 13:22:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 16A42304B4CE
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 13:42:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C427C338594;
-	Mon, 26 Jan 2026 13:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AEAB33AD90;
+	Mon, 26 Jan 2026 13:42:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eUpOoAR+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MVY7QuR9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E863019D9
-	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 13:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EF933A9D6;
+	Mon, 26 Jan 2026 13:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769433739; cv=none; b=c1CqAw7xWVv9vHFKXSiTrVnIEQ1KxwfyjMJgd6Mj3V7czbBHk88AjyPw89M+mqN1wL8lS0vbie2iC9yH2mJHRN7wJqmWju2ITXXK3t4uHiZ4kHeEvWJw/xW9NVStbDAkWdxOy6uF/ZkT+w4Qv5wbdoYzOQ/E99xi/TgUySQAecM=
+	t=1769434954; cv=none; b=Yl9K5HwXZIeLFCFotzNuJCswX16o4UpOpr9up+Pjx9iQ9MK3RX9ejn4Az4CZ+IYO6TbujWjcmA47bMQrncPCr7l7m15qdh+knPRJalPUpE98qrqtKepBVG+3G11Ca7d477DZikCZir2dWfI/B+8DL1dQEEEg0oXQY1jyvppQmd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769433739; c=relaxed/simple;
-	bh=hV0HFkDk7Y0DrpEXXZZld7ePFqj1GfpzDnGLxSrxS/o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bVoD4uTTA3tSZCeu5X8zt6W19xqBgK29rsCcLkY/hpXgQ69Rw6eZx5rVAAG/Tx6rz9spKICL9nv8FCUdEmfp5XuaQZXAT5RZnvZZAvmWw83HEJ8eijTflaUFi+vWaYERlWLFJAcPZxS0wIEntF7Dh6OCAuKMIReDEK2JxjtP0og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eUpOoAR+; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c06cb8004e8so1644059a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 05:22:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769433737; x=1770038537; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pcbMiQsJB40EYOu8uLFm79D1kLu7v22jBDTwBj1l4qQ=;
-        b=eUpOoAR+lRrFF0Sdjz012B37lC9FTBFXrf8ZsQrF/Zka/IJaY30UuNzuc6nn1mmQyU
-         ojlcpeiplTLvT0fbSfYztCgWb/eg7l0YukHqtctgZypWsoGFox0KX4bTT33tyZReQb7w
-         v9ZGPrRNSeZ6FwkAO1t6wDM+3olb5xwl9QOfeX4aGCNTER5xtsggAywKSbB21ZKjjdqr
-         rRAc/qzcoNBmY6ovlT3aX5C5nuZ1AEnRKI2TUXWiyoQnf5p+D232lv/9AsVwuXQOZ8r9
-         5Qjun1ghoWmLXmaB92l40i6msO/9gOAWi98/dbmC9q207FDxPtnwxcQGXn7L+WF3AHJd
-         ylxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769433737; x=1770038537;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pcbMiQsJB40EYOu8uLFm79D1kLu7v22jBDTwBj1l4qQ=;
-        b=EgohpyXZWvIRp03cbYwLOt3SdGnP3YQxkkkli9ch0kGqck6yZGoY+odgEwkwnzfHR8
-         gJ8IPpoDjF88tQxSqjRV4I0ZjeZTTD8HLegBtZv659HYd/rtywLJT5ZmpMsO8qnSzL5i
-         yGTQyQg/OBBv91t23dWhNDk/UOMhdr6qwTqgH4IKC17SamXlZOR7NRFV8V1ceoKnLlkj
-         7NbDIto/F8yNYvFNYfkEjuzCN/U8SHyCTYbKKs4KOPvwTtgy7ubbUzIvuAEAOKJb5W8r
-         x7EHCS1D3wnFuhnIT+/5Y1/TY7R7Wo6AWPlJm5ILOoc9H4R0uwrS/D5EACHufhrdQP0k
-         IYtA==
-X-Gm-Message-State: AOJu0YwH/hKjCTK1OUXOhJcsYpJd63SPp5rbiVBzdB3C8lYEknkSQRtQ
-	2ZvesS4/omG39cHaGDfZQAls/DPtiP/dST1Y8pzYzDL34NdOGZj39qGQlNftpg==
-X-Gm-Gg: AZuq6aIi8ewgtxbXI/4n8Ra/KYQp21eBVQeE6TD8MYimq7AFG95x23W2kPsiTd9IHaX
-	cE3iXyQdlcsEtlF1pSsJcGoBygomonMQLMf8Z4m8rvO067fXWtSopMwQG6eVyakYmUFx+4eb6WG
-	/Rmy+jRvpl3bF7/fyXM+R3bqQaKZ1jfNYYoErwpxXsFGoK7zjzg/QYMzuDOaLIUlbPffYlPzV3s
-	516zqrd8XxptGQNLm+ANJyNPWx7KHqkHa8AVT6xFMnxM6U4LnrFIaIvqlR9kPL+MoF2JGYCfNnB
-	s2zoXY1u0m/LR+2zdygKVC9mmlSZrrJCwN2oXO0V51NvSwyOUPGWsgAg8bwO9iiEMz/GZiZPf2Q
-	v+pwR/LJ4qopNiPTIXeDNMt3bTCTXcsQ/rPZ62USutU6HCZMF6UXjqNckkzEx6As24snmNeYiPb
-	g6GfVgqJ4U6Xz94NN1tlFTSXPdYKStc80xEw==
-X-Received: by 2002:a17:903:2343:b0:294:def6:5961 with SMTP id d9443c01a7336-2a84530eab4mr44260565ad.45.1769433736653;
-        Mon, 26 Jan 2026 05:22:16 -0800 (PST)
-Received: from Black-Pearl.localdomain ([115.99.251.203])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-2a802daa65fsm90602575ad.12.2026.01.26.05.22.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jan 2026 05:22:16 -0800 (PST)
-From: Charan Pedumuru <charan.pedumuru@gmail.com>
-Date: Mon, 26 Jan 2026 13:22:05 +0000
-Subject: [PATCH 2/2] dt-bindings: usb: ti,dwc3: convert to DT schema
+	s=arc-20240116; t=1769434954; c=relaxed/simple;
+	bh=jYwExo7rfIbCoeFjaHZI7UEh+OE6XcOeAoCk3DyxBUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n+CYImKs09TV0pPdbrgeaZV7zyzmy45gkMg3la4jKnHmKWlKLcP6XaLo4ATNkY4OJqQJVg2xEr8/lOHWB1KNGC66EyOfk7nVBgi7YhFFOMe9Tbuig4PWBAor/mj0pzKwezAy/2EoDFU5SgFmEOZp/VVkrxr9Z5tO4ql+0DMRego=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MVY7QuR9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9104AC116C6;
+	Mon, 26 Jan 2026 13:42:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769434954;
+	bh=jYwExo7rfIbCoeFjaHZI7UEh+OE6XcOeAoCk3DyxBUU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MVY7QuR9EDtIUAYBGw60Z6l+yRWSFK3bjwwtXX9NqsrKPjgGRZwqHuCnOIXWfmgA7
+	 WPNJ6drel+xni2qyhRRrMisWnNc2TUQiYP36aPugZow4gCzfee+DOEf52rGH/V55N6
+	 Ay9dvBJtweYlTwISHmZa6R11SdLyQWtOnBbPh8+1aTiOBYzhZhtSdT9SMzqV3jOGLG
+	 5ZrB3HMnVkh4A2Jos2JvrmPh4QWomHxg28bH7m0FSop9sv5d7hrBYxY7iqwimmMfkS
+	 YgihTsL0iCvppFBmjvr6igWcogOUgzG8ZaMMbJd7KteaZmIS5AoV1EjteGNlM5ALwk
+	 RhMpXmXXUsVHg==
+Date: Mon, 26 Jan 2026 13:42:30 +0000
+From: Simon Horman <horms@kernel.org>
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Peter Korsgaard <peter@korsgaard.com>
+Subject: Re: [PATCH net-next] net: usb: sr9700: remove code to drive
+ nonexistent multicast filter
+Message-ID: <aXdvRs1hAC5E4Dex@horms.kernel.org>
+References: <20260123065842.53669-1-enelsonmoore@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260126-ti-usb-v1-2-2855c129eb6d@gmail.com>
-References: <20260126-ti-usb-v1-0-2855c129eb6d@gmail.com>
-In-Reply-To: <20260126-ti-usb-v1-0-2855c129eb6d@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@ti.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Charan Pedumuru <charan.pedumuru@gmail.com>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260123065842.53669-1-enelsonmoore@gmail.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-32726-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	URIBL_MULTI_FAIL(0.00)[sea.lore.kernel.org:query timed out];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32725-lists,linux-usb=lfdr.de];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[charanpedumuru@gmail.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[horms@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ti.com:email,0.0.39.16:email,devicetree.org:url,0.0.0.0:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,4a0ab000:email]
-X-Rspamd-Queue-Id: 9328588CA1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,horms.kernel.org:mid]
+X-Rspamd-Queue-Id: 7F83989106
 X-Rspamd-Action: no action
 
-Convert OMAP DWC3 USB Glue Layer binding to DT schema.
-Changes during conversion:
-- Introduce a new compatible string pattern "omap_dwc3" to match nodes
-  already present in existing device tree sources.
+On Thu, Jan 22, 2026 at 10:58:32PM -0800, Ethan Nelson-Moore wrote:
+> Several registers referenced in this driver's source code do not
+> actually exist (they are not writable and read as zero in my testing).
+> They exist in this driver because it originated as a copy of the dm9601
+> driver. Notably, these include the multicast filter registers - this
+> causes the driver to not support multicast packets correctly. Remove
+> the multicast filter code and instead set the chip to receive all
+> multicast filter packets when any multicast addresses are in the list.
+> Also take the opportunity to remove definitions for a few other
+> nonexistent registers, and a couple pointless comments.
+> 
+> Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 
-Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
----
- Documentation/devicetree/bindings/usb/omap-usb.txt |  80 ---------------
- Documentation/devicetree/bindings/usb/ti,dwc3.yaml | 112 +++++++++++++++++++++
- 2 files changed, 112 insertions(+), 80 deletions(-)
+I would slightly lean towards splitting this patch up,
+say one for the multicast changes and removal of related #defines,
+and another for the remainder of the #define clean-up.
 
-diff --git a/Documentation/devicetree/bindings/usb/omap-usb.txt b/Documentation/devicetree/bindings/usb/omap-usb.txt
-deleted file mode 100644
-index f0dbc5ae45ae..000000000000
---- a/Documentation/devicetree/bindings/usb/omap-usb.txt
-+++ /dev/null
-@@ -1,80 +0,0 @@
--OMAP GLUE AND OTHER OMAP SPECIFIC COMPONENTS
--
--OMAP MUSB GLUE
-- - compatible : Should be "ti,omap4-musb" or "ti,omap3-musb"
-- - ti,hwmods : must be "usb_otg_hs"
-- - multipoint : Should be "1" indicating the musb controller supports
--   multipoint. This is a MUSB configuration-specific setting.
-- - num-eps : Specifies the number of endpoints. This is also a
--   MUSB configuration-specific setting. Should be set to "16"
-- - ram-bits : Specifies the ram address size. Should be set to "12"
-- - interface-type : This is a board specific setting to describe the type of
--   interface between the controller and the phy. It should be "0" or "1"
--   specifying ULPI and UTMI respectively.
-- - mode : Should be "3" to represent OTG. "1" signifies HOST and "2"
--   represents PERIPHERAL.
-- - power : Should be "50". This signifies the controller can supply up to
--   100mA when operating in host mode.
-- - usb-phy : the phandle for the PHY device
-- - phys : the phandle for the PHY device (used by generic PHY framework)
-- - phy-names : the names of the PHY corresponding to the PHYs present in the
--   *phy* phandle.
--
--Optional properties:
-- - ctrl-module : phandle of the control module this glue uses to write to
--   mailbox
--
--SOC specific device node entry
--usb_otg_hs: usb_otg_hs@4a0ab000 {
--	compatible = "ti,omap4-musb";
--	ti,hwmods = "usb_otg_hs";
--	multipoint = <1>;
--	num-eps = <16>;
--	ram-bits = <12>;
--	ctrl-module = <&omap_control_usb>;
--	phys = <&usb2_phy>;
--	phy-names = "usb2-phy";
--};
--
--Board specific device node entry
--&usb_otg_hs {
--	interface-type = <1>;
--	mode = <3>;
--	power = <50>;
--};
--
--OMAP DWC3 GLUE
-- - compatible : Should be
--	* "ti,dwc3" for OMAP5 and DRA7
--	* "ti,am437x-dwc3" for AM437x
-- - ti,hwmods : Should be "usb_otg_ss"
-- - reg : Address and length of the register set for the device.
-- - interrupts : The irq number of this device that is used to interrupt the
--   MPU
-- - #address-cells, #size-cells : Must be present if the device has sub-nodes
-- - utmi-mode : controls the source of UTMI/PIPE status for VBUS and OTG ID.
--   It should be set to "1" for HW mode and "2" for SW mode.
-- - ranges: the child address space are mapped 1:1 onto the parent address space
--
--Optional Properties:
-- - extcon : phandle for the extcon device omap dwc3 uses to detect
--   connect/disconnect events.
-- - vbus-supply : phandle to the regulator device tree node if needed.
--
--Sub-nodes:
--The dwc3 core should be added as subnode to omap dwc3 glue.
--- dwc3 :
--   The binding details of dwc3 can be found in:
--   Documentation/devicetree/bindings/usb/snps,dwc3.yaml
--
--omap_dwc3 {
--	compatible = "ti,dwc3";
--	ti,hwmods = "usb_otg_ss";
--	reg = <0x4a020000 0x1ff>;
--	interrupts = <0 93 4>;
--	#address-cells = <1>;
--	#size-cells = <1>;
--	utmi-mode = <2>;
--	ranges;
--};
--
-diff --git a/Documentation/devicetree/bindings/usb/ti,dwc3.yaml b/Documentation/devicetree/bindings/usb/ti,dwc3.yaml
-new file mode 100644
-index 000000000000..859da4b1f207
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/ti,dwc3.yaml
-@@ -0,0 +1,112 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/ti,dwc3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments OMAP DWC3 USB Glue Layer
-+
-+maintainers:
-+  - Felipe Balbi <balbi@ti.com>
-+
-+description:
-+  Texas Instruments glue layer for Synopsys DesignWare USB3 (DWC3)
-+  controller on OMAP and AM43xx SoCs. Manages SoC-specific integration
-+  including register mapping, interrupt routing, UTMI/PIPE interface mode
-+  selection (HW/SW), and child DWC3 core instantiation via address space
-+  translation. Supports both legacy single-instance and multi-instance
-+  (numbered) configurations.
-+
-+properties:
-+  $nodename:
-+    pattern: "^omap_dwc3(_[0-9]+)?@.*$"
-+
-+  compatible:
-+    enum:
-+      - ti,dwc3
-+      - ti,am437x-dwc3
-+
-+  ti,hwmods:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description:
-+      TI PRCM hardware module name that must be enabled (powered and
-+      clocked) for this node. "usb_otg_ss" refers to the SuperSpeed
-+      (USB3 + USB2 OTG) controller wrapper/glue layer found in OMAP5,
-+      DRA7, AM57x, and similar TI SoCs using DWC3.
-+    const: usb_otg_ss
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  utmi-mode:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Controls the source of UTMI/PIPE status for VBUS and OTG ID.
-+      1 for HW mode, 2 for SW mode.
-+    enum: [1, 2]
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+  ranges: true
-+
-+  extcon:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle for the extcon device used to detect connect/
-+      disconnect events.
-+
-+  vbus-supply:
-+    description: Phandle to the regulator device tree node if needed.
-+
-+patternProperties:
-+  "^usb@[0-9a-f]+$":
-+    type: object
-+    $ref: snps,dwc3.yaml#
-+    unevaluatedProperties: false
-+
-+required:
-+  - reg
-+  - compatible
-+  - interrupts
-+  - "#address-cells"
-+  - "#size-cells"
-+  - utmi-mode
-+  - ranges
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    omap_dwc3_1@0 {
-+        compatible = "ti,dwc3";
-+        reg = <0x0 0x10000>;
-+        interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        utmi-mode = <2>;
-+        ranges = <0 0 0x20000>;
-+
-+        usb@10000 {
-+            compatible = "snps,dwc3";
-+            reg = <0x10000 0x17000>;
-+            interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-+            interrupt-names = "peripheral", "host", "otg";
-+            phys = <&usb2_phy1>, <&usb3_phy1>;
-+            phy-names = "usb2-phy", "usb3-phy";
-+            maximum-speed = "super-speed";
-+            dr_mode = "otg";
-+            snps,dis_u3_susphy_quirk;
-+            snps,dis_u2_susphy_quirk;
-+        };
-+    };
-+...
+But that notwithstanding this looks good to me.
 
--- 
-2.52.0
-
+Reviewed-by: Simon Horman <horms@kernel.org>
 
