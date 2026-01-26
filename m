@@ -1,274 +1,517 @@
-Return-Path: <linux-usb+bounces-32736-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32737-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UPUTMx1/d2m9hgEAu9opvQ
-	(envelope-from <linux-usb+bounces-32736-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 15:50:05 +0100
+	id IJB3FPSAd2m9hgEAu9opvQ
+	(envelope-from <linux-usb+bounces-32737-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 15:57:56 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2924289B97
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 15:50:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CB1289D50
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 15:57:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9E3CA30166CA
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 14:50:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 15E92305C288
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 14:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C751C313550;
-	Mon, 26 Jan 2026 14:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4536533066B;
+	Mon, 26 Jan 2026 14:55:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UsKv2MUd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FkW3qkxN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F3F30E0E5
-	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 14:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769439000; cv=none; b=hrCCy5NP7TtrwhP81jGjIwNHVkSHWRIIrIJz8KImbobcQZX0Z+LPtlil/+zueQRabBdxim8P8D4plzWdzA8cD5gjzpV58vV06wiuKGB7X3v1FNnGiXo85m/lDM+Xo4d2AknE/rVxB+Ja8D8eDh3tn5iPPy96sgFXnndPBArSz/s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769439000; c=relaxed/simple;
-	bh=U/bi4GQBZ8XFonhoMZG/nx0/UOKCcUDC6iSkEVpfXWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EV/JPuUFTKaNSJ2iHz+ebTWksSaqs0aNhqWlHOB3pBP0gijX783moqMHGXExC3Dr1YZLCjbLXTn+v4C8bnDumlLTG7ju2byj+YS/G2ECK9elSO9VhFFenRP4PlMJvGJpweqHOPHcGBCBFKt0jEhNlszQQyPV9L/0I2ppZdns3Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UsKv2MUd; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769438999; x=1800974999;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U/bi4GQBZ8XFonhoMZG/nx0/UOKCcUDC6iSkEVpfXWw=;
-  b=UsKv2MUdy0JrosttOqvRUmmk0xrKpApB4DI69pIVwcT+3PtxH3Ruo5Ua
-   /eRkgCBkEwz/T99nUE130rkjw+g+E9WdwX6qUz3VIbxjgTVJd+XMpWEz3
-   +8vpOLw4/zTD/1/Ys1ohA+Xv8Y0zbQGGZwfLq77zOB8kkyI0gSgyaSXnT
-   zoekXXrRj2vI2x/SFXlzBpfiHSIGf/R5PBBsWOvGHG5v7HWCETXqcVPpq
-   LjL6+irlKraL+UunEZYubDcSqcErJF1l6OTfgL0PAkrPVlDG9fbmJ6PmW
-   O4pjUGDol9qEJ0sxdDS2bpcXhmh9gV8UbTctbjBVh/AgZXGHzYG0BvZ7X
-   w==;
-X-CSE-ConnectionGUID: CApbDnuNQja2UudzDJPoYw==
-X-CSE-MsgGUID: gIYY+lpCQrC4o5B0i4t2Og==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="81334808"
-X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
-   d="scan'208";a="81334808"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 06:49:58 -0800
-X-CSE-ConnectionGUID: G8PsNTRnRCeEoqEXEuacvA==
-X-CSE-MsgGUID: Pe+7CoAYQpuqF2KYOmpdaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
-   d="scan'208";a="207720977"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 26 Jan 2026 06:49:55 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vkNua-00000000XPK-2l9W;
-	Mon, 26 Jan 2026 14:49:52 +0000
-Date: Mon, 26 Jan 2026 22:49:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: raoxu <raoxu@uniontech.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, kenny@panix.com,
-	linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
-	michal.pecio@gmail.com, niklas.neronin@linux.intel.com,
-	zhanjun@uniontech.com
-Subject: Re: [PATCH v10 2/2] usb: xhci: enable secondary interrupters and
- route
-Message-ID: <202601262208.UybEjc9X-lkp@intel.com>
-References: <1FCECDEA86461C52+20260126085828.803972-1-raoxu@uniontech.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D71123EAB3
+	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 14:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769439357; cv=pass; b=NaKEDphpbR+RG++p1ELUCnIbW6tQoGRoanhk3OnMfA1a2ALLE7J5r7H9HHLJAPxGDLwV2n2XeSfoTYhjb+1403SRP/t/0VR3/l1IdaHhz+5S+p1mnmKU8R7OVYcYfFKgzr/iW23K7vB2i7LTwAA2PgnhaIFPCfRuVJ9zBw+Z+pQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769439357; c=relaxed/simple;
+	bh=M9I1p+rBce42Yv+YjED5qGsG6rMz6Ur5cwnHKE5cYIk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E6E1oC3gevNKD53XOduK+QcsfLRSCaKhEbYp3hPrcAkvovBy9aE3vhmB+Zz/cYc+75zq/00vFt8q0eq6btIVqmQKLei5DRr9HQprYb5U5v18USVWIl2SZToTDUtSZfVbD/w4F3kkgZX36vUutcx5GdyI1SP6iUNaZRqQ0vbxYZ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FkW3qkxN; arc=pass smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43591b55727so4448573f8f.3
+        for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 06:55:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769439355; cv=none;
+        d=google.com; s=arc-20240605;
+        b=L+am0Dc++n3FQusVaJqaB8bGNOToDWgCGYZ3lTFlxjuCPAx7YPV6PZhGBD6hdSJYI2
+         65LB9AabVy33GwiznnBnYlxEHiVxDMv5QoUtYD2eB+LQgVLPDUHrRcqi1R1hCuSiIe5w
+         6IkSmoAYzPqdowDT70HzWHsOFEHaEWNHBn2yW0nn68Wj/HAsLGS1VioAXv4dvaG9A/Ux
+         f72GWQhrdcEZZTJaC1JVTCKyvwk909etzx1/HfHDrzJZusSuNM57jJGkg8FcBFBE8PXI
+         hLolecGZlDM9fmtAfDoPXN0sj7lYzE/4ppnDEVj2cq22MA1kzm0DSgQn5z3gB9Q9UhA5
+         /gLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=zLpDa3RKoQqqcNKVCb5qj7ioqvXy5yNuyOoHA/fI8RU=;
+        fh=LAQN3G46ME4NuLBv03AhE58TqRX8j7BQ10sSsA4SNbk=;
+        b=lQ4Z6zLzKsWc+QSc17qtYMBHUy+fkaYtKiWCavYDpAn2vEb2QYiI9mDw/6e/tsw0SG
+         rMKIoHYzdUorqCy5YoLAZs2+VsTFdeN1kiRmFaO7HDBM8FyWLvBKq1W6q8fETaHnuJiq
+         jF/vCJajLSCA9xfnF2N8TIJ8q0BBX+JkvOCz6Tto+hPpimPYJvVncA0+ZVyx4MRrTVVQ
+         PSaiOe+FtMKwcqbX0knFRTRFfwiCLngTVwhp8F1BLFx0wtTdCu1Y0de4lkY5k/KlTOB3
+         0CdB53gXUv65rBdRxKV/pOzEJHOI33vAXFQ5CvBqwf2xyLYle3mCN6IoDAA9P0s9YlPb
+         XOTg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769439355; x=1770044155; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zLpDa3RKoQqqcNKVCb5qj7ioqvXy5yNuyOoHA/fI8RU=;
+        b=FkW3qkxNIA7YQgNvbWl4Y/ar3QB5ihVmFQI6zwFSI0DKhUAh+WNjASHEv0/EFqMlB0
+         kyh4tniAl5fgLj+w1f/nD6KEzdr2QLkRUrzZtv8LHf030Pqv8Y3UfBS08lAD9bp6JJeG
+         yl7QbJuapqSDXw/l+e7XQ3ZkfbltPkZpkklRrljc0/A2HuXcs/235jlMYWS9hbqhv5nJ
+         n9l/nUJngtpeaeKytI61geYMJks/2nv2mfxagodHDj1arjoHyAPj58NfTIwO/QOXspka
+         enZXId866G7BywZduBU72Ljs3kW7+sKHoor11OAbGItebO5IXBjIBJGbQ3fjxDelReor
+         lr8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769439355; x=1770044155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zLpDa3RKoQqqcNKVCb5qj7ioqvXy5yNuyOoHA/fI8RU=;
+        b=ckf7rBzsCZ2JAmRVoEXkGJc6epOyALRJen17KknwtFQDF08b4U+YlDZMqvzDVyI3wl
+         UZQeBbk4sxh5//B0RIVOvGhLOmBkK64Pt6yXQou2Vnbe0zhukpSn+9kFsQYFuQXk+Hlt
+         fvDZQ8rqGx4EnMDJ8Oz4gvPkWTg1Qoo0yG3oXI3tOdOuAofM0o75rK1Z8WSM4QdeEQ8N
+         jAAiwNSc6PD+P8NzKZK3uTlWg8p0sG8LiDiTHpBKc4wHiGoBX3AeckHITHqInkTabg/f
+         FGRtLtJMIsDciNpSWnV9165i9DqSMGyiYKvFRnAG6G7m1ZO3FrTL9dVBQ8JRH2PitIkG
+         vB2g==
+X-Forwarded-Encrypted: i=1; AJvYcCVW3iYy0wt/23jwhWb7SkGf9FmOnG/lTLDYJrV6oFGq0SmCPFxSxYgxeRBbMYk7WbwY/+WpHCLqmaE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPqg74tchQY/ZHZp20gczvTa9BnLSZly7JkJ63KFkr2psNCHKp
+	GKJoO7Fqr7MnyXO2SkjnGCZKJ8VusgukSeiuza0fu6zi3E30Rl8FocHN+YYHCMvx5X6pnOJaRRX
+	MV5mYvN48EAzZXlVog2Kv9iqVVqQ7DEw=
+X-Gm-Gg: AZuq6aLSZkiG9KrEN65d+IcOvJ2Ms8hAOd24MGulRBFZ8Xf5kf9ZS3bs9noBK8+GSoq
+	K/O130ituwha0MRJYVGTvhisjwLpDAAxhriRIkrOq7NF+5jWQ9s6MzcrghMF61zIBW/8+NdNWWM
+	jdYV3dkLLDD1XrFVEmc0DxN7wsrguMUrgAmHWE3DNZDfRMd+EumgFZBmX0vSkRT8PUUUsAXEMGC
+	Nvxpygto0QvD4UirdOaMJnZ5ASLjF6YXDMEO9gQmakf7XzyLYwXntFIWQbNPJB1GWK0axWv
+X-Received: by 2002:a5d:5848:0:b0:435:953e:589c with SMTP id
+ ffacd0b85a97d-435ca1ad8bemr6786606f8f.34.1769439354419; Mon, 26 Jan 2026
+ 06:55:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1FCECDEA86461C52+20260126085828.803972-1-raoxu@uniontech.com>
+References: <20260122151746.7745-1-clamor95@gmail.com> <20260122151746.7745-2-clamor95@gmail.com>
+ <fa42a103-3b71-4151-b44d-573452847f6e@gmail.com> <CAPVz0n2xcnvus_u4dYDGL0VcgkWfVOJF7=hKuMPrjsE4UZTNLQ@mail.gmail.com>
+ <8a7ed9d1-c667-418a-a72a-d8d24ed0f9f8@gmail.com>
+In-Reply-To: <8a7ed9d1-c667-418a-a72a-d8d24ed0f9f8@gmail.com>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Mon, 26 Jan 2026 16:55:41 +0200
+X-Gm-Features: AZwV_Qjt7ytLlqLoyqh4VoRQZQ7fXryv9fPBADVTJaT61ueFsliSWYA5PzaV3As
+Message-ID: <CAPVz0n1x9gWC0XzC0VQ=syT3LAm_5xof-_T5=8TzKapBQheVjw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] usb: csc-acm: add Infineon/Comneon modem support (1519:0020)
+To: Lars Melin <larsm17@gmail.com>
+Cc: Oliver Neukum <oneukum@suse.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[lists.linux.dev,linuxfoundation.org,panix.com,vger.kernel.org,linux.intel.com,gmail.com,uniontech.com];
-	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32736-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32737-lists,linux-usb=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_TO(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,git-scm.com:url,intel.com:email,intel.com:dkim,intel.com:mid]
-X-Rspamd-Queue-Id: 2924289B97
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 9CB1289D50
 X-Rspamd-Action: no action
 
-Hi raoxu,
+=D0=BF=D0=BD, 26 =D1=81=D1=96=D1=87. 2026=E2=80=AF=D1=80. =D0=BE 15:51 Lars=
+ Melin <larsm17@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On 2026-01-22 23:17, Svyatoslav Ryhel wrote:
+> > =D1=87=D1=82, 22 =D1=81=D1=96=D1=87. 2026=E2=80=AF=D1=80. =D0=BE 17:58 =
+Lars Melin <larsm17@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
+> >>
+> >> On 2026-01-22 22:17, Svyatoslav Ryhel wrote:
+> >>> Add support for Infineon/Comneon XMM626X modem that used in many Tegr=
+a30
+> >>> devices with GSM capablities like LG Optimus 4X (P880) and Vu (P895).
+> >>>
+> >>> The Vendor Id is 0x1519
+> >>> The Product ID is 0x0020
+> >>>
+> >>> Output of lsusb:
+> >>> Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
+> >>>
+> >>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> >>
+> >> Hi,
+> >> please include a full lsusb output, ie lsusb -vd 1519:0020 so we can
+> >> verify that union descriptors are missing.
+> >> (I have seen a full lsusb output where they are included.)
+> >>
+> > Hello there! Sure, here is what I get if I use lsusb -vd 1519:0020
+> >
+> > lg-p895:~$ lsusb
+> > Bus 001 Device 001: ID 1d6b:0002 Linux 6.16.0+ ehci_hcd EHCI Host Contr=
+oller
+> > Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
+> > lg-p895:~$ lsusb -vd 1519:0020
+> > Bus 001 Device 001: ID 1d6b:0002 Linux 6.16.0+ ehci_hcd EHCI Host Contr=
+oller
+> > Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
+> > lg-p895:~$ lsusb -vd 1519:0020
+> > Bus 001 Device 001: ID 1d6b:0002 Linux 6.16.0+ ehci_hcd EHCI Host Contr=
+oller
+> > Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
+> >
+> > regular lsusb is added for reference.
+>
+>
+> You are using a stripped down version of lsusb which doesn't give a
+> verbose output, please install the full version and try again.
+> If you don't have the full lsusb, how do you then know that your
+> device has a faulty union descriptor?
+> The full lsusb listing that I have for 1519:0020 has a correct
+> union descriptor so doesn't need a quirk.
+>
 
-kernel test robot noticed the following build warnings:
+Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
+Couldn't open device, some information will be missing
+Negotiated speed: High Speed (480Mbps)
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            2 [unknown]
+  bDeviceSubClass         0 [unknown]
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1519 Comneon
+  idProduct          0x0020 HSIC Device
+  bcdDevice           12.74
+  iManufacturer           1 Comneon
+  iProduct                2 HSIC Device
+  iSerial                 3 0123456789
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0111
+    bNumInterfaces          8
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower              100mA
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         0
+      bInterfaceCount         2
+      bFunctionClass          2 [unknown]
+      bFunctionSubClass       2 [unknown]
+      bFunctionProtocol       1
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 [unknown]
+      bInterfaceSubClass      2 [unknown]
+      bInterfaceProtocol      1
+      iInterface              4
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        0
+        bSlaveInterface         1
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          1
+      CDC ACM:
+        bmCapabilities       0x07
+          sends break
+          line coding and serial state
+          get/set/clear comm features
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               4
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 [unknown]
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface              5
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         2
+      bInterfaceCount         2
+      bFunctionClass          2 [unknown]
+      bFunctionSubClass       2 [unknown]
+      bFunctionProtocol       1
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 [unknown]
+      bInterfaceSubClass      2 [unknown]
+      bInterfaceProtocol      1
+      iInterface              6
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        2
+        bSlaveInterface         3
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          3
+      CDC ACM:
+        bmCapabilities       0x07
+          sends break
+          line coding and serial state
+          get/set/clear comm features
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x86  EP 6 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               4
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 [unknown]
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface              7
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         4
+      bInterfaceCount         2
+      bFunctionClass          2 [unknown]
+      bFunctionSubClass       2 [unknown]
+      bFunctionProtocol       1
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        4
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 [unknown]
+      bInterfaceSubClass      2 [unknown]
+      bInterfaceProtocol      1
+      iInterface              8
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        4
+        bSlaveInterface         5
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          5
+      CDC ACM:
+        bmCapabilities       0x07
+          sends break
+          line coding and serial state
+          get/set/clear comm features
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               4
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        5
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 [unknown]
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface              9
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         6
+      bInterfaceCount         2
+      bFunctionClass          2 [unknown]
+      bFunctionSubClass       2 [unknown]
+      bFunctionProtocol       1
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        6
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 [unknown]
+      bInterfaceSubClass      2 [unknown]
+      bInterfaceProtocol      1
+      iInterface             10
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        6
+        bSlaveInterface         7
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          7
+      CDC ACM:
+        bmCapabilities       0x07
+          sends break
+          line coding and serial state
+          get/set/clear comm features
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x88  EP 8 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               4
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        7
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 [unknown]
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface             11
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.19-rc7 next-20260123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/raoxu/usb-xhci-refactor-IRQ-interrupter-plumbing-for/20260126-170049
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/1FCECDEA86461C52%2B20260126085828.803972-1-raoxu%40uniontech.com
-patch subject: [PATCH v10 2/2] usb: xhci: enable secondary interrupters and route
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20260126/202601262208.UybEjc9X-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260126/202601262208.UybEjc9X-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601262208.UybEjc9X-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/host/xhci-mem.c:2513:6: warning: variable 'secondary_intr_num' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    2513 |         if (xhci->max_interrupters > 1)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:2518:19: note: uninitialized use occurs here
-    2518 |         for (i = 1; i <= secondary_intr_num; i++) {
-         |                          ^~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:2513:2: note: remove the 'if' if its condition is always true
-    2513 |         if (xhci->max_interrupters > 1)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2514 |                 secondary_intr_num = min_t(unsigned int,
-   drivers/usb/host/xhci-mem.c:2414:33: note: initialize the variable 'secondary_intr_num' to silence this warning
-    2414 |         unsigned int    secondary_intr_num;
-         |                                           ^
-         |                                            = 0
-   1 warning generated.
-
-
-vim +2513 drivers/usb/host/xhci-mem.c
-
-  2409	
-  2410	int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
-  2411	{
-  2412		struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
-  2413		dma_addr_t	dma;
-  2414		unsigned int	secondary_intr_num;
-  2415		int		i;
-  2416	
-  2417		/*
-  2418		 * xHCI section 5.4.6 - Device Context array must be
-  2419		 * "physically contiguous and 64-byte (cache line) aligned".
-  2420		 */
-  2421		xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa), &dma, flags);
-  2422		if (!xhci->dcbaa)
-  2423			goto fail;
-  2424	
-  2425		xhci->dcbaa->dma = dma;
-  2426		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-  2427			       "Device context base array address = 0x%pad (DMA), %p (virt)",
-  2428			       &xhci->dcbaa->dma, xhci->dcbaa);
-  2429	
-  2430		/*
-  2431		 * Initialize the ring segment pool.  The ring must be a contiguous
-  2432		 * structure comprised of TRBs.  The TRBs must be 16 byte aligned,
-  2433		 * however, the command ring segment needs 64-byte aligned segments
-  2434		 * and our use of dma addresses in the trb_address_map radix tree needs
-  2435		 * TRB_SEGMENT_SIZE alignment, so we pick the greater alignment need.
-  2436		 */
-  2437		if (xhci->quirks & XHCI_TRB_OVERFETCH)
-  2438			/* Buggy HC prefetches beyond segment bounds - allocate dummy space at the end */
-  2439			xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
-  2440					TRB_SEGMENT_SIZE * 2, TRB_SEGMENT_SIZE * 2, xhci->page_size * 2);
-  2441		else
-  2442			xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
-  2443					TRB_SEGMENT_SIZE, TRB_SEGMENT_SIZE, xhci->page_size);
-  2444		if (!xhci->segment_pool)
-  2445			goto fail;
-  2446	
-  2447		/* See Table 46 and Note on Figure 55 */
-  2448		xhci->device_pool = dma_pool_create("xHCI input/output contexts", dev, 2112, 64,
-  2449						    xhci->page_size);
-  2450		if (!xhci->device_pool)
-  2451			goto fail;
-  2452	
-  2453		/*
-  2454		 * Linear stream context arrays don't have any boundary restrictions,
-  2455		 * and only need to be 16-byte aligned.
-  2456		 */
-  2457		xhci->small_streams_pool = dma_pool_create("xHCI 256 byte stream ctx arrays",
-  2458							   dev, SMALL_STREAM_ARRAY_SIZE, 16, 0);
-  2459		if (!xhci->small_streams_pool)
-  2460			goto fail;
-  2461	
-  2462		/*
-  2463		 * Any stream context array bigger than MEDIUM_STREAM_ARRAY_SIZE will be
-  2464		 * allocated with dma_alloc_coherent().
-  2465		 */
-  2466	
-  2467		xhci->medium_streams_pool = dma_pool_create("xHCI 1KB stream ctx arrays",
-  2468							    dev, MEDIUM_STREAM_ARRAY_SIZE, 16, 0);
-  2469		if (!xhci->medium_streams_pool)
-  2470			goto fail;
-  2471	
-  2472		/*
-  2473		 * refer to xhci rev1_2 protocol 5.3.3 max ports is 255.
-  2474		 * refer to xhci rev1_2 protocol 6.4.3.14 port bandwidth buffer need
-  2475		 * to be 16-byte aligned.
-  2476		 */
-  2477		xhci->port_bw_pool = dma_pool_create("xHCI 256 port bw ctx arrays",
-  2478						     dev, GET_PORT_BW_ARRAY_SIZE, 16, 0);
-  2479		if (!xhci->port_bw_pool)
-  2480			goto fail;
-  2481	
-  2482		/* Set up the command ring to have one segments for now. */
-  2483		xhci->cmd_ring = xhci_ring_alloc(xhci, 1, TYPE_COMMAND, 0, flags);
-  2484		if (!xhci->cmd_ring)
-  2485			goto fail;
-  2486	
-  2487		xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocated command ring at %p", xhci->cmd_ring);
-  2488		xhci_dbg_trace(xhci, trace_xhci_dbg_init, "First segment DMA is 0x%pad",
-  2489			       &xhci->cmd_ring->first_seg->dma);
-  2490	
-  2491		/*
-  2492		 * Reserve one command ring TRB for disabling LPM.
-  2493		 * Since the USB core grabs the shared usb_bus bandwidth mutex before
-  2494		 * disabling LPM, we only need to reserve one TRB for all devices.
-  2495		 */
-  2496		xhci->cmd_ring_reserved_trbs++;
-  2497	
-  2498		/* Allocate and set up primary interrupter 0 with an event ring. */
-  2499		xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocating primary event ring");
-  2500		xhci->interrupters = kcalloc_node(xhci->max_interrupters, sizeof(*xhci->interrupters),
-  2501						  flags, dev_to_node(dev));
-  2502		if (!xhci->interrupters)
-  2503			goto fail;
-  2504	
-  2505		xhci->interrupters[0] = xhci_alloc_interrupter(xhci, 0, flags);
-  2506		if (!xhci->interrupters[0])
-  2507			goto fail;
-  2508	
-  2509		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-  2510				"Allocating secondary event ring");
-  2511		xhci->secondary_irqs_alloc = 0;
-  2512	
-> 2513		if (xhci->max_interrupters > 1)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> thanks
+> Lars
 
