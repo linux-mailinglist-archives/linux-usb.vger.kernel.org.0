@@ -1,181 +1,162 @@
-Return-Path: <linux-usb+bounces-32701-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32703-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ehauJdP+dmnzaAEAu9opvQ
-	(envelope-from <linux-usb+bounces-32701-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 06:42:43 +0100
+	id SNapI40Sd2k5bwEAu9opvQ
+	(envelope-from <linux-usb+bounces-32703-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 08:06:53 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E938D8431F
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 06:42:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ABE484AE3
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 08:06:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CBBFF300CC28
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 05:42:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C0EB4300D94B
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 07:06:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF79D2367BA;
-	Mon, 26 Jan 2026 05:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC4428B40E;
+	Mon, 26 Jan 2026 07:06:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mLPgvQFq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObDE7EkE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f194.google.com (mail-dy1-f194.google.com [74.125.82.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B35225775;
-	Mon, 26 Jan 2026 05:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C181D28850E
+	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 07:06:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769406156; cv=none; b=l/P19GrN7TXHhYp0viAeUzdx0I9xhAwQFV1uR2qRUUHcX6yTPD5F3skgcc75LYenQFw2xp0KcUoEu8aiYREBEMNhFtNRMKFFAFtBoQeh+bbXTQrIvTNGiSrl5M3c573s5/O9ZKCu09CSKoZdnxqNk3lPfkbNG7GuSUibHZhbo60=
+	t=1769411189; cv=none; b=so4Ed7Pi1i/cbMvhPv2AYqsbVAhMrDKORfjdpPT5LBVroE8kRqsdxBNgbcI211vN2o3ESnsGDVrBz5UDwiogiiAJew3tuZBMmWlYGP5kkQhnsgwfAiNq0BR6gAJ3fXBUc6uxTeo0KWwfOaZT34+vqk2P87SQ610BBxgqPO2CXWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769406156; c=relaxed/simple;
-	bh=w/y/7LzTdp7De6/fizDihNCiD2Z9EovoStWUvzY96HE=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OvNuZrY8S7vDHuMT5Htpn/ujI1cv9e1/0iu2HffxZmBgLN1/bg6gYTDUNmYtMULgM4TEiL8Qb/80dcGZN4/RufU7E9JNCP2ZYMZf+WQtgp4fd8V8C/OYuQn19xSSMnvhhu5/IZ7CiIWVsyyC/dK2hhtXziVUdX6liAw8blQMSnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mLPgvQFq; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769406155; x=1800942155;
-  h=date:from:to:subject:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to;
-  bh=w/y/7LzTdp7De6/fizDihNCiD2Z9EovoStWUvzY96HE=;
-  b=mLPgvQFqJFS9q/6UzW8Q7DX9noXvrPIIwJ3i25cMTcijDGMWvzmGfy2V
-   3lp9lUzV4u6LRqE5h/c0Jqj8G5B9zGiUb0Ny10tvdpppFzbCG43DjxIMy
-   Gxu7hwSB7jCw5lIGdZ3TvhpswNkEWkVXxFxsIzBr6SxQWgQ1uNEnZ88mS
-   nXUEUcFH/VVxoDYEKN5c/rrZvneuGGC+ZCqfG7in26pg0t+1enNz5+W7B
-   U4wkbKGAd51PDSSkP5+dWQXZGRuFgpopgcnThvaMkL5gBY1ruVMq6k40V
-   erh4VfsfLfNredmD3Q8WwSQ7I8DGQw7AcSYR01NHKgiVZsvEWkf3EHRk6
-   g==;
-X-CSE-ConnectionGUID: Wc7Le5WnR0W5cM6FigyjrA==
-X-CSE-MsgGUID: aLvzxXGHSDGfNWaKLMxIyw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="81691624"
-X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
-   d="scan'208";a="81691624"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 21:42:35 -0800
-X-CSE-ConnectionGUID: FKN/lDYtRuSVdBegmDqJdg==
-X-CSE-MsgGUID: gPKOyvQnSp2f04iBuuJJ9g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
-   d="scan'208";a="211691993"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa003.jf.intel.com with ESMTP; 25 Jan 2026 21:42:33 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 8D8AA95; Mon, 26 Jan 2026 06:42:31 +0100 (CET)
-Date: Mon, 26 Jan 2026 06:42:31 +0100
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Fix PCIe device enumeration with delayed
- rescan
-Message-ID: <20260126054231.GR2275908@black.igk.intel.com>
-References: <20260121052744.233517-1-acelan.kao@canonical.com>
- <20260121060142.GJ2275908@black.igk.intel.com>
- <aXLM5vk0gDNjLPyY@acelan-Precision-5480>
- <20260123120112.GQ2275908@black.igk.intel.com>
- <aXbTfLUJ-lEfNzgX@acelan-Precision-5480>
+	s=arc-20240116; t=1769411189; c=relaxed/simple;
+	bh=BrGYfbKjFcWVBNtR1VCrwZ1sP+nBA2htFvw/QqIZpRI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZA8K0yWQATEmZ5+wGCFEg0PziLvRahNdI+r6/QlRIsa5v8xBA60n16AinSUVgV5CALUSEvtMDx/lM2lALcpjhGay/5qPWM63zgrzeXdcX0/HaBUCPHKsZ/bYrd8vGA6jZASB/QFko6FJ8SRhZw/CuVLpBjsHdJdpRoNzXPMH5z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObDE7EkE; arc=none smtp.client-ip=74.125.82.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f194.google.com with SMTP id 5a478bee46e88-2b7381d2d95so1517103eec.0
+        for <linux-usb@vger.kernel.org>; Sun, 25 Jan 2026 23:06:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769411187; x=1770015987; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZnNSYAsSgZZKBbd6EX4AMUvPpqA2jWI9KkqGPjFXPC0=;
+        b=ObDE7EkEzZCzM4l2WEmjfE/rIA9vOK9qUHkbpah/DiS7vwQ2W5ngVeG8SeLhGUwJBK
+         C4xPHzWCNmgo9mU6KT9Ulkrsri/k2vqZq2SXI6BReyZba43OvSuSU5PHZmJ6g4z4b3+d
+         zY+/JJfWYw+SrRnyDXiCkjswXIZDD+IR0clEjddTHWGqynUX1TEB81abhhQJuSdwFxBg
+         /Zlr5H9MQa9ehv8hlMLP2rUHYWupuMnepV8KSF4G2YNpEoWOCz1M7a8ysZvYW0hs/u7w
+         U8LXv6gpKHyM2FEUFwBNOOkvwpftyfb+5GxhJFXcL4yWqc7NHyaU0quhW71fyD9Es+nk
+         hD3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769411187; x=1770015987;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZnNSYAsSgZZKBbd6EX4AMUvPpqA2jWI9KkqGPjFXPC0=;
+        b=hl0YxxlO3El/z/38vTJEKXCUqPHKz3qRuaZkIBTevHEYdsXfkJWjZ3WXVydMi1lJtm
+         Z/F7ly5/lApezeh5A6zVoPL4W8FcUSEdwVnpGyrOdcYjJaFtqhrkLBagJ96A+U++xa+B
+         /jbe1+bDNd+M7V+E015lI+xJGn6Ehc7Gqkce7ISzew2DtM3z3WgIh4HNM3Cgc8LWV9Lb
+         jhfr5liDsctkdI/mwkUpPFQ/2pjDdhfG7gCoOMzaJlmd+RAHS55paSLBL90Tu5I3KFPx
+         +SjnIT68XfI7aLAatqFdKX1y0wG8HDM8T9hKjTZSV71jQxdz0sfTkwgWFK3ap4TuCsZ8
+         +vmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXjOc7kP8TtlQguLnofAsNFY6Mub6QPGBNRPEr8nVk6wRE+RwLVPB2U7VZypMzkx2Vzl2sLVUzRiVM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPQjXXykiTIruUzDimicyevBCj3oPFWym5pdlqe1BqnItdCd2R
+	TWgbxO+jYSVABsynz8Ek+OxdBjosPfictuJ+DxVKskYNxmUGYAS6y1P6
+X-Gm-Gg: AZuq6aITulz9IOngjPit3tbOck1OubjRRRiyNtZvJ0OgUwj6+1T+hlELwAGcbzCguOS
+	4UOXQqCrbERrZbI4cwNetPJgCOkbq8El3+MTuB3eTYTWd7rhTNuumld1BqizgWqf/a/yoHlc3YM
+	QhFvCrGYuDd6QWIis1m7keKHnWVDZnm69ovALq4Q2ng1is5QxC7uwbcLpIoWONAjbFs4HybU/YJ
+	k96rUtiOpxuTqQVAto7p7fAAg5G+Lbcl4I/N3L4ntp27iilObKH7+vnp5NWOpewY+evsuSXlfSx
+	EU9B1+xMXStUcph6KoYKHvQc189SnikG/ptFPv9KPqe+K0PYRMwB8hQWmPf5qZV5eYPuDpNleKy
+	1xUa8gfunbcYlU0jqrMhMetM5UnTIbl9FJIeqQ/tRM+8dyp4C9qe5+Zn1NZAWkBfqZ42nZb29ME
+	649BsLbrgSMQgsSDwQt1B+0S2UQj2mR2XP9SGvtlP2lEEj7qE0XWe6vlyy8LjvJ25aSDCH5Qv7m
+	m4ePuoNsNrYAkQ7F+QbhaXkFdEpwYZEQDR77OV2i565/oa7Mi32JMUvkrFHMImTpbdJZfY8nqRz
+	yL90/XMz
+X-Received: by 2002:a05:7300:d511:b0:2ae:556b:76f2 with SMTP id 5a478bee46e88-2b7638a7f04mr1772945eec.6.1769411186616;
+        Sun, 25 Jan 2026 23:06:26 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1247d91c52bsm18021503c88.6.2026.01.25.23.06.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jan 2026 23:06:26 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH net-next] net: usb: int51x1: remove unused includes
+Date: Sun, 25 Jan 2026 23:06:13 -0800
+Message-ID: <20260126070618.53758-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aXbTfLUJ-lEfNzgX@acelan-Precision-5480>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32701-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[canonical.com,gmail.com,kernel.org,vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32703-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[6];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,black.igk.intel.com:mid]
-X-Rspamd-Queue-Id: E938D8431F
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0ABE484AE3
 X-Rspamd-Action: no action
 
-On Mon, Jan 26, 2026 at 11:30:47AM +0800, Chia-Lin Kao (AceLan) wrote:
-> Hi,
-> On Fri, Jan 23, 2026 at 01:01:12PM +0100, Mika Westerberg wrote:
-> > Hi,
-> >
-> > On Fri, Jan 23, 2026 at 10:04:11AM +0800, Chia-Lin Kao (AceLan) wrote:
-> > > > Can you comment out call to tb_switch_xhci_connect() and see if that
-> > > > changes anything?
-> > >
-> > > Here is what I modified, and the problem becomes a little bit complicated.
-> >
-> > Okay I see it did not change anything (well this is kind of what I
-> > expected). Thanks for trying.
-> >
-> > I see in your log that the PCIe tunnel is established just fine. It's just
-> > that there is no PCIe hotplug happening or it is happening but the PCIe
-> > Downstream Port is not waking up.
-> >
-> > I figured you have following USB4/TB topology, right?
-> >
-> >   AMD Host <-> GR Hub <-> TB3 Hub
-> >                   ^
-> >                   |
-> >                 TB3 Hub
-> Should be more like this
->   AMD Host <-> Dell TB4 Dock <-> OWC Envoy Express (1-502)
->                              \
->                               <-> OWC Envoy Express (1-702)
-> or
->   AMD Host (1-0, domain1)
->       |
->       └─ Port 2 ──→ Dell Thunderbolt 4 Dock (1-2)
->                       ├─ Port 5 ──→ OWC Envoy Express (1-502)
->                       └─ Port 7 ──→ OWC Envoy Express (1-702)
+Most of the headers the int51x1 driver includes are not actually used.
+Remove these unused includes.
 
-Okay so the same ;-)
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ drivers/net/usb/int51x1.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-> > What if you run 'lspci' after the issue reproduces? Does that bring the
-> > missing PCIe devices? I suspect that this is due to older TB3 devices that
-> > they may need bit more time to get the PCIe link (going over the tunnel) up
-> > and running.
-> lspci doesn't bring back the missing tbt storage.
+diff --git a/drivers/net/usb/int51x1.c b/drivers/net/usb/int51x1.c
+index 6fde41550de1..317ae365277f 100644
+--- a/drivers/net/usb/int51x1.c
++++ b/drivers/net/usb/int51x1.c
+@@ -13,13 +13,8 @@
+  */
+ 
+ #include <linux/module.h>
+-#include <linux/ctype.h>
+ #include <linux/netdevice.h>
+ #include <linux/etherdevice.h>
+-#include <linux/ethtool.h>
+-#include <linux/slab.h>
+-#include <linux/mii.h>
+-#include <linux/usb.h>
+ #include <linux/usb/usbnet.h>
+ 
+ #define INT51X1_VENDOR_ID	0x09e1
+-- 
+2.43.0
 
-Forgot to mention that let it (the whole topology) enter runtime suspend
-before you run lspci.
-
-> It's not about the timing issue, you can't get the tbt storage works
-> with multiple re-plug. And after rescan, you can always get the tbt storage
-> work after replug.
-> 
-> And reproduce the issue again by unplugging the 2 tbt storages, and
-> then plugging them back in one by one. The second one will not be
-> recognized. There is a hotplug event, but it just stops somewhere
-> in the middle.
-
-You mean the first one always works?
-
-What if you connect them directly to the host, one by one?
 
