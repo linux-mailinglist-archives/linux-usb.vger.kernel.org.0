@@ -1,251 +1,274 @@
-Return-Path: <linux-usb+bounces-32735-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32736-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yBKHG/B9d2m9hgEAu9opvQ
-	(envelope-from <linux-usb+bounces-32735-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 15:45:04 +0100
+	id UPUTMx1/d2m9hgEAu9opvQ
+	(envelope-from <linux-usb+bounces-32736-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 15:50:05 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE79B89AE6
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 15:45:03 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2924289B97
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 15:50:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B4CEE3016271
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 14:44:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9E3CA30166CA
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 14:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0454F279907;
-	Mon, 26 Jan 2026 14:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C751C313550;
+	Mon, 26 Jan 2026 14:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DOuiefEh";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ePKKzfd+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UsKv2MUd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6004327815D
-	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 14:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F3F30E0E5
+	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 14:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769438693; cv=none; b=V5mDO/OuzXpjU58N41L78fW/2U9rN0GQ1HN/EoaG0HXAk0yqXezZDbVdqaMK1x3aHsOKTMrvswP0syia9J7e2HIr0jnhqed62jpwEILSGXYg/7P9oZV6q2LMtSPOjX12wsp8tYsKr714b7hxIr2TEorXu66nmkgGYLSDhwGVLjE=
+	t=1769439000; cv=none; b=hrCCy5NP7TtrwhP81jGjIwNHVkSHWRIIrIJz8KImbobcQZX0Z+LPtlil/+zueQRabBdxim8P8D4plzWdzA8cD5gjzpV58vV06wiuKGB7X3v1FNnGiXo85m/lDM+Xo4d2AknE/rVxB+Ja8D8eDh3tn5iPPy96sgFXnndPBArSz/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769438693; c=relaxed/simple;
-	bh=GP7PmySZu/+TZ+vSZUM4nmTzVvZnKwy0kC00wxVH4BU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=baBdHtyUxqy7/DE4Z1M3Yk4zwMvgIarxXtl3KMtqP+a8ubQWYCy2lVLr9FidN6ZtV85CGp4wjFdxCZv1duIx3pFJI4I6s5ao7Hm2mNv1w7V9avzDc2C70JSjNaxRTlcGSwMuniAxKS52e5P0fB6h8y0g7o4DfrAe0CtZUk2qgEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DOuiefEh; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ePKKzfd+; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60Q90Xis899362
-	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 14:44:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ApTr57Y0vLLo1N1yQrHIjnvTHUoSt+xQRfNJVnUPykM=; b=DOuiefEhfL8uj7wz
-	8Z3bwdWYhRF3YqHWN8XG9U6OeauL0vpZlTz8Im9pjNWxBCE7R/CGHa/vgOlmH6wb
-	Qrpb4Ne8X50xPZggW52zpLvUpHfFvLUYl7KYfdAs+geRYyDgn88gfqcW7vR+MRut
-	/Z2/QEKHNqZxb0LcMmdPfK0ZjcyFPOiJK9v1gKA/PECBzFf6HcCOAyeKKHkXUNMJ
-	bUs0TAo5VN1vmkVlMkEM7V9cqR/0GAIGPWvZjMxvdJVAZBcHq1DRTnm5yBZNLRdu
-	kaRZY//+AaxrBT/5xARL5m3rlxc8ZLK3bkFNHLE92eE5uX8ye26HS4zg3tFfMFQm
-	r1nAkQ==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bvq9f4sxg-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 14:44:51 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-501423e1faaso11524181cf.0
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 06:44:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769438691; x=1770043491; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ApTr57Y0vLLo1N1yQrHIjnvTHUoSt+xQRfNJVnUPykM=;
-        b=ePKKzfd+Tq9OsGTpY9svTSSbBc60HVGnklokQD7MDZxQv1O6TCLWMRbeURWCQgK2YI
-         kzLAxI5dR0t5VyMTn8ygNOR4pa7IKkkm5e1FoXJCYOelOsDZw7dhZIkENEKuCaVLLyEY
-         I4taV7XU7AQR3r4wZX5JNo+9pyDytFwMnptPs+5/Uzvln6+UuYDoLhzNzCAh4a5k2lR0
-         uAfMDnpdlms7BdIGAUJ64Wy8mKj9AXWvIsUUs+7uZPqn+PIrJhdNfvlRWXnZychhSBeH
-         nuCZ+7x/xhWt2Y7dWSZPpRBWYAHu6sBAcXUSN6phVe/5lJDFpBqWoOvS/KXRLZ0+SJId
-         9dlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769438691; x=1770043491;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ApTr57Y0vLLo1N1yQrHIjnvTHUoSt+xQRfNJVnUPykM=;
-        b=W4Ga4Ricr5V+LpA49Jh7j48BcttTy3IrCYuLwlgjz0q7Mjjr3HHJZlo51GX3YnFmS5
-         2NgpJbaLNagg5TeYN8D2Takab9m0BBVkwE69zO8Sdybm5ia0l5u+OGEAjwuGKui3PNYn
-         Z/fSpuG1Y01WkVOjB2KjHGpLgbFy9VXsv9sjlTl++om6bLy9zSJgP5JR5jGZ54Pkw8Zi
-         77zagEaOOVbfq2zw5Zwt5yTvN4Cw+Rckq0MvJNgZk/KaV5Sn5eRwVQ3UYNVudX4cBibk
-         aB7aF9Hqh257Q6+VnA5f0COMR3f8FfmLfjkl9Pxav8UNPyDpbQUkmLWc/cfk9uGYlyXL
-         M9ZA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHOxZRZG2r+lbnUmaxvuj5rzPaU4f5/VyV+8IvhFH/M2aJwW3nN0z8XQNuROLd2ZgN94MdhpIqcxE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfOczY/5g4Us8fYNphyXWsRpxVAl4bP8lISaAJ+NwDkVg0Mv7D
-	WjSaH28V4BmS+6+IAGl0xH39PbzLcGnR2QCEESpPf3BCJOs4M1RJEGTXMP1j7+3+9xMaDMnpbnL
-	jxnPuivwtFgazHXV3WVRX5H20wHwgRyAFoBWN+KApdJZozymMVkF9cwX0rNczfRQ=
-X-Gm-Gg: AZuq6aJRxpciFe+q0XG5SndJxK3gwZPXlBMxXK10u4fyVSJ+gSUVs6OYz+4QhO9aYyO
-	Gq6NRNy41JfTFDqtyB6dTdsMxU6DxUSUKM1qFS+UbVLzskmkkPXz1BzWAwIxnJUimOSBi6C0fRs
-	P2WhSqNqR0LwXG9ThqRYsbfCiFYDomDIO1CKGM6pyHh6/8NyP1cqYuDgxGyHZcntUXKE2jPzRNP
-	j7e3I4NDWlYj6e/OZWdpOKHbbt8yON+NfAvgw1zaMLFHE6F4uOE5TTPZ3TH99KP20BH3hpBqM7n
-	6S3gcm7tVdXU0SjtYNk89trF1ciuLPWyfP+uGsTlN4m0CgZ/v28Vdg0lMWDZwTxM3A2ffCwVeJG
-	j1JUec3L6O2Ohbjq97SJvjPFZ0jFXtl4iNO3pZUZtX1lfo96SmGNimCJHHpXVLGwehVc=
-X-Received: by 2002:ac8:5814:0:b0:4e0:b24a:6577 with SMTP id d75a77b69052e-50314b66890mr46542571cf.2.1769438690107;
-        Mon, 26 Jan 2026 06:44:50 -0800 (PST)
-X-Received: by 2002:ac8:5814:0:b0:4e0:b24a:6577 with SMTP id d75a77b69052e-50314b66890mr46542211cf.2.1769438689603;
-        Mon, 26 Jan 2026 06:44:49 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6584b948670sm5141354a12.25.2026.01.26.06.44.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jan 2026 06:44:48 -0800 (PST)
-Message-ID: <cb08a156-d905-419f-88f1-77bd136c823f@oss.qualcomm.com>
-Date: Mon, 26 Jan 2026 15:44:45 +0100
+	s=arc-20240116; t=1769439000; c=relaxed/simple;
+	bh=U/bi4GQBZ8XFonhoMZG/nx0/UOKCcUDC6iSkEVpfXWw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EV/JPuUFTKaNSJ2iHz+ebTWksSaqs0aNhqWlHOB3pBP0gijX783moqMHGXExC3Dr1YZLCjbLXTn+v4C8bnDumlLTG7ju2byj+YS/G2ECK9elSO9VhFFenRP4PlMJvGJpweqHOPHcGBCBFKt0jEhNlszQQyPV9L/0I2ppZdns3Ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UsKv2MUd; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769438999; x=1800974999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U/bi4GQBZ8XFonhoMZG/nx0/UOKCcUDC6iSkEVpfXWw=;
+  b=UsKv2MUdy0JrosttOqvRUmmk0xrKpApB4DI69pIVwcT+3PtxH3Ruo5Ua
+   /eRkgCBkEwz/T99nUE130rkjw+g+E9WdwX6qUz3VIbxjgTVJd+XMpWEz3
+   +8vpOLw4/zTD/1/Ys1ohA+Xv8Y0zbQGGZwfLq77zOB8kkyI0gSgyaSXnT
+   zoekXXrRj2vI2x/SFXlzBpfiHSIGf/R5PBBsWOvGHG5v7HWCETXqcVPpq
+   LjL6+irlKraL+UunEZYubDcSqcErJF1l6OTfgL0PAkrPVlDG9fbmJ6PmW
+   O4pjUGDol9qEJ0sxdDS2bpcXhmh9gV8UbTctbjBVh/AgZXGHzYG0BvZ7X
+   w==;
+X-CSE-ConnectionGUID: CApbDnuNQja2UudzDJPoYw==
+X-CSE-MsgGUID: gIYY+lpCQrC4o5B0i4t2Og==
+X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="81334808"
+X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
+   d="scan'208";a="81334808"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 06:49:58 -0800
+X-CSE-ConnectionGUID: G8PsNTRnRCeEoqEXEuacvA==
+X-CSE-MsgGUID: Pe+7CoAYQpuqF2KYOmpdaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
+   d="scan'208";a="207720977"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 26 Jan 2026 06:49:55 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vkNua-00000000XPK-2l9W;
+	Mon, 26 Jan 2026 14:49:52 +0000
+Date: Mon, 26 Jan 2026 22:49:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: raoxu <raoxu@uniontech.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	gregkh@linuxfoundation.org, kenny@panix.com,
+	linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
+	michal.pecio@gmail.com, niklas.neronin@linux.intel.com,
+	zhanjun@uniontech.com
+Subject: Re: [PATCH v10 2/2] usb: xhci: enable secondary interrupters and
+ route
+Message-ID: <202601262208.UybEjc9X-lkp@intel.com>
+References: <1FCECDEA86461C52+20260126085828.803972-1-raoxu@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFT 2/3] arm64: dts: qcom: glymur: Add USB related nodes
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-References: <20260113-dts-qcom-glymur-add-usb-support-v1-0-98d6d387df01@oss.qualcomm.com>
- <20260113-dts-qcom-glymur-add-usb-support-v1-2-98d6d387df01@oss.qualcomm.com>
- <01de4054-eebf-4ef3-ad74-c806b208a848@oss.qualcomm.com>
- <wh4qsgwl6drye2d227mv22pxz57cikp6ogabklo6fvlzljqafp@sgps7d52yp2d>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <wh4qsgwl6drye2d227mv22pxz57cikp6ogabklo6fvlzljqafp@sgps7d52yp2d>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=YLGSCBGx c=1 sm=1 tr=0 ts=69777de3 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=qn_fkN7zqQ4dxzFuYcEA:9
- a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-GUID: Arm2zRWCskyuaBqnDL49utlCP4nT0J8T
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI2MDEyNiBTYWx0ZWRfX3XX118bSQOrj
- t9c5Vig1TpeE6hWUBPQ95qCXZmdkTjp7vzwVi7dXjaR6oTblSQxGixEbpdZ8Wcx+UGZWnphiI8n
- pWJUb0N1qvbdMR4W/IF6gEpjS9MZkFD+UL2zb/IMwXNLOPPdk4LGHS3T7fgyxEeZTTpS/DRFGca
- MyOWre9vOWODCYs5X9Y6Y/flI4x9dm1r3G0Eiu8q7FnG8yUOrZz80bzykuma1a+bvgrwSKoweml
- Web6SdS8j/gvZwTgXMVp0PfObgeQV1T8O0qihZ9lJN6QkCCEm3c1kR0b2OITUlLci8LqTgCWMVY
- 5TxR9IVRS76wZWa0WaMEhd3/JmdOdHL5BKOjHZu2gbR8MnIy+HbB4ztN7Dg64Ei9e8kSE6SXv3q
- 7hEhF8KMKoHCGBOYgN0yTT09gS0kRIn21cL2znHcLPOfsLQf/n67aQY2S0AGpDAe6uXe1BhAZSh
- Kq9As0gaBZdvKqzC0uA==
-X-Proofpoint-ORIG-GUID: Arm2zRWCskyuaBqnDL49utlCP4nT0J8T
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-26_03,2026-01-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 suspectscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 impostorscore=0 phishscore=0 spamscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601260126
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1FCECDEA86461C52+20260126085828.803972-1-raoxu@uniontech.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32735-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,fd3000:email,qualcomm.com:email,qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,fa2000:email];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[lists.linux.dev,linuxfoundation.org,panix.com,vger.kernel.org,linux.intel.com,gmail.com,uniontech.com];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32736-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: DE79B89AE6
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,git-scm.com:url,intel.com:email,intel.com:dkim,intel.com:mid]
+X-Rspamd-Queue-Id: 2924289B97
 X-Rspamd-Action: no action
 
-On 1/26/26 3:31 PM, Abel Vesa wrote:
-> On 26-01-13 14:13:32, Konrad Dybcio wrote:
->> On 1/13/26 1:33 PM, Abel Vesa wrote:
->>> From: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
->>>
->>> The Glymur USB system contains 3 USB type C ports, 1 USB multiport
->>> controller and a USB 2.0 only controller. This encompasses 5 SS USB QMP
->>> PHYs (3 combo and 2 uni) and 6 M31 eUSB2 PHYs. All controllers are SNPS
->>> DWC3 based, so describe them as flattened DWC3 QCOM nodes.
->>>
->>> Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
->>> Co-developed-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
->>> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
->>> ---
->>
->> [...]
->>
->>>  
->>> +		usb_mp_hsphy0: phy@fa1000 {
->>> +			compatible = "qcom,glymur-m31-eusb2-phy",
->>> +				     "qcom,sm8750-m31-eusb2-phy";
->>> +
->>> +			reg = <0 0x00fa1000 0 0x29c>;
->>> +			#phy-cells = <0>;
->>> +
->>> +			clocks = <&tcsr TCSR_USB2_1_CLKREF_EN>;
->>> +			clock-names = "ref";
->>> +
->>> +			resets = <&gcc GCC_QUSB2PHY_HS0_MP_BCR>;
->>> +
->>> +			status = "disabled";
->>> +		};
->>> +
->>> +		usb_mp_hsphy1: phy@fa2000  {
->>> +			compatible = "qcom,glymur-m31-eusb2-phy",
->>> +				     "qcom,sm8750-m31-eusb2-phy";
->>> +
->>> +			reg = <0 0x00fa2000 0 0x29c>;
->>> +			#phy-cells = <0>;
->>> +
->>> +			clocks = <&tcsr TCSR_USB2_2_CLKREF_EN>;
->>> +			clock-names = "ref";
->>> +
->>> +			resets = <&gcc GCC_QUSB2PHY_HS1_MP_BCR>;
->>> +
->>> +			status = "disabled";
->>> +		};
->>
->>
->> [...]
->>
->>> +		usb1_ss0_hsphy: phy@fd3000 {
->>
->> Let's not repeat the mess introduced in hamoa..
->>
->> Perhaps let's fall back to usb_0 etc.?
-> 
-> Sure. So then:
-> 
-> USB SS[0-2]              -> usb_[0-2]
-> USB MP                   -> usb_mp
-> USB 2.0 (USB20S in docs) -> ?
+Hi raoxu,
 
-usb_hs
+kernel test robot noticed the following build warnings:
 
-Konrad
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.19-rc7 next-20260123]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/raoxu/usb-xhci-refactor-IRQ-interrupter-plumbing-for/20260126-170049
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/1FCECDEA86461C52%2B20260126085828.803972-1-raoxu%40uniontech.com
+patch subject: [PATCH v10 2/2] usb: xhci: enable secondary interrupters and route
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20260126/202601262208.UybEjc9X-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260126/202601262208.UybEjc9X-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601262208.UybEjc9X-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/host/xhci-mem.c:2513:6: warning: variable 'secondary_intr_num' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2513 |         if (xhci->max_interrupters > 1)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-mem.c:2518:19: note: uninitialized use occurs here
+    2518 |         for (i = 1; i <= secondary_intr_num; i++) {
+         |                          ^~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-mem.c:2513:2: note: remove the 'if' if its condition is always true
+    2513 |         if (xhci->max_interrupters > 1)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2514 |                 secondary_intr_num = min_t(unsigned int,
+   drivers/usb/host/xhci-mem.c:2414:33: note: initialize the variable 'secondary_intr_num' to silence this warning
+    2414 |         unsigned int    secondary_intr_num;
+         |                                           ^
+         |                                            = 0
+   1 warning generated.
+
+
+vim +2513 drivers/usb/host/xhci-mem.c
+
+  2409	
+  2410	int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+  2411	{
+  2412		struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
+  2413		dma_addr_t	dma;
+  2414		unsigned int	secondary_intr_num;
+  2415		int		i;
+  2416	
+  2417		/*
+  2418		 * xHCI section 5.4.6 - Device Context array must be
+  2419		 * "physically contiguous and 64-byte (cache line) aligned".
+  2420		 */
+  2421		xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa), &dma, flags);
+  2422		if (!xhci->dcbaa)
+  2423			goto fail;
+  2424	
+  2425		xhci->dcbaa->dma = dma;
+  2426		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+  2427			       "Device context base array address = 0x%pad (DMA), %p (virt)",
+  2428			       &xhci->dcbaa->dma, xhci->dcbaa);
+  2429	
+  2430		/*
+  2431		 * Initialize the ring segment pool.  The ring must be a contiguous
+  2432		 * structure comprised of TRBs.  The TRBs must be 16 byte aligned,
+  2433		 * however, the command ring segment needs 64-byte aligned segments
+  2434		 * and our use of dma addresses in the trb_address_map radix tree needs
+  2435		 * TRB_SEGMENT_SIZE alignment, so we pick the greater alignment need.
+  2436		 */
+  2437		if (xhci->quirks & XHCI_TRB_OVERFETCH)
+  2438			/* Buggy HC prefetches beyond segment bounds - allocate dummy space at the end */
+  2439			xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
+  2440					TRB_SEGMENT_SIZE * 2, TRB_SEGMENT_SIZE * 2, xhci->page_size * 2);
+  2441		else
+  2442			xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
+  2443					TRB_SEGMENT_SIZE, TRB_SEGMENT_SIZE, xhci->page_size);
+  2444		if (!xhci->segment_pool)
+  2445			goto fail;
+  2446	
+  2447		/* See Table 46 and Note on Figure 55 */
+  2448		xhci->device_pool = dma_pool_create("xHCI input/output contexts", dev, 2112, 64,
+  2449						    xhci->page_size);
+  2450		if (!xhci->device_pool)
+  2451			goto fail;
+  2452	
+  2453		/*
+  2454		 * Linear stream context arrays don't have any boundary restrictions,
+  2455		 * and only need to be 16-byte aligned.
+  2456		 */
+  2457		xhci->small_streams_pool = dma_pool_create("xHCI 256 byte stream ctx arrays",
+  2458							   dev, SMALL_STREAM_ARRAY_SIZE, 16, 0);
+  2459		if (!xhci->small_streams_pool)
+  2460			goto fail;
+  2461	
+  2462		/*
+  2463		 * Any stream context array bigger than MEDIUM_STREAM_ARRAY_SIZE will be
+  2464		 * allocated with dma_alloc_coherent().
+  2465		 */
+  2466	
+  2467		xhci->medium_streams_pool = dma_pool_create("xHCI 1KB stream ctx arrays",
+  2468							    dev, MEDIUM_STREAM_ARRAY_SIZE, 16, 0);
+  2469		if (!xhci->medium_streams_pool)
+  2470			goto fail;
+  2471	
+  2472		/*
+  2473		 * refer to xhci rev1_2 protocol 5.3.3 max ports is 255.
+  2474		 * refer to xhci rev1_2 protocol 6.4.3.14 port bandwidth buffer need
+  2475		 * to be 16-byte aligned.
+  2476		 */
+  2477		xhci->port_bw_pool = dma_pool_create("xHCI 256 port bw ctx arrays",
+  2478						     dev, GET_PORT_BW_ARRAY_SIZE, 16, 0);
+  2479		if (!xhci->port_bw_pool)
+  2480			goto fail;
+  2481	
+  2482		/* Set up the command ring to have one segments for now. */
+  2483		xhci->cmd_ring = xhci_ring_alloc(xhci, 1, TYPE_COMMAND, 0, flags);
+  2484		if (!xhci->cmd_ring)
+  2485			goto fail;
+  2486	
+  2487		xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocated command ring at %p", xhci->cmd_ring);
+  2488		xhci_dbg_trace(xhci, trace_xhci_dbg_init, "First segment DMA is 0x%pad",
+  2489			       &xhci->cmd_ring->first_seg->dma);
+  2490	
+  2491		/*
+  2492		 * Reserve one command ring TRB for disabling LPM.
+  2493		 * Since the USB core grabs the shared usb_bus bandwidth mutex before
+  2494		 * disabling LPM, we only need to reserve one TRB for all devices.
+  2495		 */
+  2496		xhci->cmd_ring_reserved_trbs++;
+  2497	
+  2498		/* Allocate and set up primary interrupter 0 with an event ring. */
+  2499		xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocating primary event ring");
+  2500		xhci->interrupters = kcalloc_node(xhci->max_interrupters, sizeof(*xhci->interrupters),
+  2501						  flags, dev_to_node(dev));
+  2502		if (!xhci->interrupters)
+  2503			goto fail;
+  2504	
+  2505		xhci->interrupters[0] = xhci_alloc_interrupter(xhci, 0, flags);
+  2506		if (!xhci->interrupters[0])
+  2507			goto fail;
+  2508	
+  2509		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+  2510				"Allocating secondary event ring");
+  2511		xhci->secondary_irqs_alloc = 0;
+  2512	
+> 2513		if (xhci->max_interrupters > 1)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
