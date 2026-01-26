@@ -1,233 +1,374 @@
-Return-Path: <linux-usb+bounces-32699-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32698-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iBdMD6vvdmn5ZAEAu9opvQ
-	(envelope-from <linux-usb+bounces-32699-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 05:38:03 +0100
+	id Nw/0JezkdmkCYgEAu9opvQ
+	(envelope-from <linux-usb+bounces-32698-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 04:52:12 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B5CF83EB6
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 05:38:02 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E024F83BFD
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 04:52:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E0718300820D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 04:37:53 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5A58E3006B08
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 03:52:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFF630C613;
-	Mon, 26 Jan 2026 04:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BADD42EE617;
+	Mon, 26 Jan 2026 03:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="VJjllPb6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZXJISlV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m9385.xmail.ntesmail.com (mail-m9385.xmail.ntesmail.com [103.126.93.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f67.google.com (mail-dl1-f67.google.com [74.125.82.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7876E295511;
-	Mon, 26 Jan 2026 04:37:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.126.93.85
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57C21E00B4
+	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 03:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769402272; cv=none; b=VboQkq09/DYOJZZm85P1iMaGj9f/0c4ifjU4Tci+P68G/9ewlT9NmRcKs9zMCFizFoBweEeiPk/1dhHU0ZaP4tgqERNU/1aUe+b7NevpkSlwnTHOWmBuG0Z2rA2sxBj7E7AhpGsqXLaMMaDhh6esPpCQ620a+2MqA4+1c4Uq20w=
+	t=1769399527; cv=none; b=c6ooizWHzXttH8KoqoIvUqWZP2Dbmt539t7jhFixs68d5gC3C3MunS06wYhdaGHRvILielqMbb5oUApfDIpcd1EJqVfb5bRB+rxGGZxgBC+f6tr1fmyIY0r1QZokM3ihQQWIRNjEX/GfMQsBU20UC94dlOVQ4RQxgVzdIQBrNGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769402272; c=relaxed/simple;
-	bh=KxdiUG9egsJV9lthQx3mXfwgqlVy2KJKmtGhOzpcP3U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EOSHCVRScrjetAQF48zZtFh1Y5+5BdS3rCEmz63p4vBK48WwBM5rhck7OJhRHia7LR3NGMjGvLYPkdXCEwEizB81anXFINLaEcNNIYS9emWvhtapr8Tbax3nG18Oml29gx4XE2DUFZlCdsBK7Bkp84InvxEPLzyEvvH4kAGP8U4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=VJjllPb6; arc=none smtp.client-ip=103.126.93.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.51] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 31ed5cbf8;
-	Mon, 26 Jan 2026 11:22:06 +0800 (GMT+08:00)
-Message-ID: <e1b172bd-443f-40a5-9d9e-9e575b0b551e@rock-chips.com>
-Date: Mon, 26 Jan 2026 11:22:04 +0800
+	s=arc-20240116; t=1769399527; c=relaxed/simple;
+	bh=crXu8pNugPi6rfhLeI9b0Q0hjuUojYgkupq319fBZWM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dGaytS4wr63jFB8Xmf2/HwzaXynTyHnCq6Mk9XQqBy8ZYlIGFeaLH5S3+yGdJ9/nWo+w+dSmmtYKu+3XjdPSlA8iyUT9xQCY3zsuTw+TuWyUBe+r3UWGCt4RKpvnGtUNsMvPjeACkctt0DpgoFXxAGBY/IrIztF+Z5GbhUMVNvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZXJISlV; arc=none smtp.client-ip=74.125.82.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dl1-f67.google.com with SMTP id a92af1059eb24-1233702afd3so5518087c88.0
+        for <linux-usb@vger.kernel.org>; Sun, 25 Jan 2026 19:52:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769399525; x=1770004325; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=caeWPoflpwgw9gZh9BqEw370JT4+JO+63LYKAcE0IoE=;
+        b=lZXJISlV9ZZS8PxXeEIVqS/0UmHYTW5W788Sx2K83onlqFoG33TP4k3jGJg74mvxDW
+         rAjFfxjlSBV7I5J60kv9JrYexrnetmQyaAGpgtHNVc7JJRn7edwyhTvjElMMPVivLVtN
+         MGnBgIUstBK42iMBYgyRUJXo+ChKYL+q1xbbXrPih5CS1Zow6+GOqVZBceBZcWpnHRdl
+         6HGLUfkJgKoTdKMhismPx448tcZelzFS2gjBsgFaRFRP3aNf97QLWnHXsYjZVs7pJ7/D
+         Dea2JZzOSh9owsX+ohySOH8Swt19390HsXZH3wRo8fuyhPClLjYBerTKjpw41xLQ7hQu
+         ZTlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769399525; x=1770004325;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=caeWPoflpwgw9gZh9BqEw370JT4+JO+63LYKAcE0IoE=;
+        b=b2clmGjgnzzEUvC5xchg8afpTzMvPMEx7ve9xTfZlKUhm+2jzmchAoPcVUzXTdJliW
+         2dx5aTeNgV0K5DVboWZ8YMhqUCQmvbeTiy7BEECZZOSXY/FgbaqN/B87Tv+SALWObGUQ
+         Z7XktGz8d2jCW8HTEchWtJ0EuwYHp0Q8rp5fNFBzuCLzhKsjcpUcNBqKgMVpxYHCaIiU
+         5OesitOqHOw2gmk5h1iwVjuYSyfrQRsoFHEp9pVNg66Q9YyhxXpNOElz6DQ/EAw5TcLr
+         XaPyKmfqzjT2Y90PuJhdTQjGX0Hd2PTUFFAaweXWZz1JmyFVr92XIbBRniw/1AixJ2Hs
+         pONw==
+X-Forwarded-Encrypted: i=1; AJvYcCUMdFkxkOTcaT6T40KSNpukGJK5eDllaT7y7hE21DM/zGCKtvGkIHD39jV7YEeSnCdqZlzTZeJlW/M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrCBFbffH4ZuBvB30oPai9YSaTeAttSlZOzpt8BiTE0Mxn4AxC
+	blF8nhb5OF+DA7qCtDwStqVI663NkHjYC2dKMdxwsGovQevFY0eWdauv
+X-Gm-Gg: AZuq6aIdRSxKnKehWo7A0pNIENhcQ1gQcvSkAp5MCKX5QMHpFcROh9vdguG2h+t1Hck
+	hwjHZFBjXaBh7tTZfuj5GEe3W8iW3a8xC5JvCryPL4jHHbkuvjBSt/kGeOsX9VpRZM0PpqdQs/m
+	Zs7MSVLl6b9tn+ozh/I6Tf8nETK7rpk6mkP4RFZ1H0Q07rSYCL3ykBmuk+BRIO9PLoTzZ5QSQgV
+	SQhJSALwcV335a65Z8wzO+0FcrbDJRjp4G8JMQRSRp7ZKJi6UVqfAiymx0+pb24rcCrqT42fyTm
+	f9M1OFZIiyi0UfvFQp6e0nLBAByt/azaoj87NkqRFLWlHw0itMwQPDsuaUgirEfvUIk5meIXSJo
+	a4gFoNsoilAhKHd0J9fWiixd1f6zAN2oAnCZcOJP/O5G3Xby4CaP3xvX2tzL0PQU9bv5tuWfNDR
+	2RP2xuMT2UcDj2OPVB94K/WV02+vfallWhsolqUSzYi1imZN8QWuFfBHsDYONsg/caxAcQHbDKS
+	iKu+I8KDMf1I3qKiDJwJGCa50iCmD6oBQfBcPmSpGIawwDumSP+gA/SYYcbtieS4/VjU2xn3DmL
+	W3kyPglq
+X-Received: by 2002:a05:7022:2389:b0:11e:528:4185 with SMTP id a92af1059eb24-1248ec8d84cmr1896642c88.38.1769399524773;
+        Sun, 25 Jan 2026 19:52:04 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-22.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.22])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1247d997f7bsm17422718c88.11.2026.01.25.19.52.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jan 2026 19:52:04 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+	UNGLinuxDriver@microchip.com,
+	Petko Manolov <petkan@nucleusys.com>,
+	Oliver Neukum <oneukum@suse.com>,
+	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+	=?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+	Deepanshu Kartikey <kartikey406@gmail.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Foster Snowhill <forst@pen.gy>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Eric Biggers <ebiggers@google.com>
+Subject: [PATCH net-next] net: usb: switch to two-argument strscpy
+Date: Sun, 25 Jan 2026 19:50:15 -0800
+Message-ID: <20260126035052.31216-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 0/9] Add Type-C DP support for RK3399 EVB IND board
-To: Hugh Cole-Baker <sigmaris@gmail.com>
-Cc: Chaoyi Chen <kernel@airkyi.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Chen <hzpeterchen@gmail.com>, Luca Ceresoli
- <luca.ceresoli@bootlin.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20260119073100.143-1-kernel@airkyi.com>
- <c9dd365b-ad8f-410e-96f8-f914f03634b2@gmail.com>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <c9dd365b-ad8f-410e-96f8-f914f03634b2@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9bf852ab9103abkunm5b6bca956138b8
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGR4eTVZNSU4aHhgaSR9OQktWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE
-	5VSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=VJjllPb6UrdOVvskGBEx5XXVF18/enOJ6dktrusjWEltCBQ2HBc40/45+3muptxFTNRsh5zWw83F/nrsw+EUOzPjFV7cp1ky0Z9ohtxvTtYRy1/DzherP7nIjaITF7eNsDSUzzlqDuN3e0AVdcnZhQslauskZ8mzWFvL6L2x/eY=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=pb2Tq6er4BO41TvKoQ35Jkzeqoj8YX2rwjW5soWNUEk=;
-	h=date:mime-version:subject:message-id:from;
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rock-chips.com,none];
-	R_DKIM_ALLOW(-0.20)[rock-chips.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32699-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[40];
+	FREEMAIL_CC(0.00)[gmail.com,linux.intel.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,microchip.com,nucleusys.com,suse.com,fintech.ru,piap.pl,pen.gy];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[rock-chips.com:+];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chaoyi.chen@rock-chips.com,linux-usb@vger.kernel.org];
-	FREEMAIL_CC(0.00)[airkyi.com,linux.intel.com,linuxfoundation.org,oss.qualcomm.com,gmail.com,bootlin.com,kernel.org,sntech.de,rock-chips.com,intel.com,linaro.org,ideasonboard.com,kwiboo.se,suse.de,ffwll.ch,google.com,manjaro.org,cknow.org,vger.kernel.org,lists.infradead.org,lists.freedesktop.org];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	TAGGED_FROM(0.00)[bounces-32698-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rock-chips.com:email,rock-chips.com:dkim,rock-chips.com:mid]
-X-Rspamd-Queue-Id: 7B5CF83EB6
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E024F83BFD
 X-Rspamd-Action: no action
 
-Hello,
+All instances of strscpy in the USB network drivers use the size of the
+destination. If given only two arguments, strscpy will automatically
+use the size of the destination. Make the code more concise by
+switching to the two-argument form of strscpy.
 
-On 1/26/2026 3:42 AM, Hugh Cole-Baker wrote:
-> On 19/01/2026 07:30, Chaoyi Chen wrote:
->> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>
->> This series focuses on adding Type-C DP support for USBDP PHY and DP
->> driver. The USBDP PHY and DP will perceive the changes in cable status
->> based on the USB PD and Type-C state machines provided by TCPM. Before
->> this, the USBDP PHY and DP controller of RK3399 sensed cable state
->> changes through extcon, and devices such as the RK3399 Gru-Chromebook
->> rely on them. This series should not break them.
->>
->> ====
->> 1. DisplayPort HPD status notify
->>
->> Before v7, I implemented a variety of DP HPD status notify. However,
->> they all had various problems and it was difficult to become a generic
->> solution.
->>
->> Under the guidance of Heikki and Dmitry, a decoupled notification
->> method between the TypeC and DRM subsystems was introduced in v7.
->> First, a notification is sent when TypeC registers a new altmode.
->> Then, a generic DP AUX HPD bridge is implemented on the DRM side.
->>
->> During v7-v10, we added a new notifier in typec to notify the altmode
->> device register event. With the help of Greg and Heikki, we implemented
->> the reuse of notifiers for the type bus itself in patch1 of v11.
->>
->> The USB subsystem related parts have already been merged into the
->> usb-next branch in v13 [0][1]. Therefore, this series no longer includes
->> these patches starting from v14. Thanks to Greg and Heikki!
->>
->> [0]: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=67ab45426215c7fdccb65aecd4cac15bbe4dfcbb
->> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=4dee13db29de6dd869af9b3827e1ff569644e838
->>
->> That makes it redundant for each Type-C controller driver to implement
->> a similar DP AUX HPD bridge in embedded scenarios.
->>
->> ====
->> 2. Altmode switching and orientation switching for USBDP PHY
->>
->> For USB Type-C interfaces, an external Type-C controller chip assists
->> by detecting cable attachment, determining plug orientation, and
->> reporting USB PD message. The USB/DP combo PHY supports software
->> configurable pin mapping and DisplayPort lane assignment. Based on
->> these message, the combo PHY can perform both altmode switching and
->> orientation switching via software.
->>
->> The RK3399 EVB IND board has a Type-C interface DisplayPort. It use
->> fusb302 chip as Type-C controller. The connection diagram is shown below:
->>
->> fusb302 chip +---> USB2.0 PHY ----> DWC3 USB controller
->>              |
->>              +---> USB/DP PHY0 +--> CDN-DP controller
->>                                |
->>                                +--> DWC3 USB controller
->>
->> ====
->> 3. Multiple bridge model for RK3399 CDN-DP
->>
->> The RK3399 has two USB/DP combo PHY and one CDN-DP controller. And
->> the CDN-DP can be switched to output to one of the PHYs.
->>
->> USB/DP PHY0 ---+
->>                | <----> CDN-DP controller
->> USB/DP PHY1 ---+
->>
->> In previous versions, if both PHY ports were connected to DP,
->> the CDN-DP driver would select the first PHY port for output.
->>
->> On Dmitry's suggestion, we introduced a multi-bridge model to support
->> flexible selection of the output PHY port. For each PHY port, a
->> separate encoder and bridge are registered.
->>
->> The change is based on the DRM AUX HPD bridge, rather than the
->> extcon approach. This requires the DT to correctly describe the
->> connections between the first bridge in bridge chain and DP
->> controller. And Once the first bridge is obtained, we can get the
->> last bridge corresponding to the USB-C connector, and then set the
->> DRM connector's fwnode to the corresponding one to enable HPD
->> notification.
-> 
-> With a similar dts patch [1] on top of this series I tested a type-C to
-> DP adapter/cable for display output on the ROCKPro64 board, which also
-> pairs a FUSB302 with RK3399. Booting it up with the cable plugged in
-> works, as does hotplugging the cable after booting in both orientations.
-> The correct mode for the display is detected. I wasn't able to test
-> audio, only video output, as this display doesn't have speakers.
-> 
-> I did once, after unplugging and reconnecting the cable a few times,
-> see it get into a state where it didn't detect the attached display.
-> Logs from that unplug/reconnect attempt are here [2] if of interest.
-> Nevertheless, hotplug seems to work the majority of the time, so
-> 
-> Tested-by: Hugh Cole-Baker <sigmaris@gmail.com>
-> 
-> [1]: https://github.com/sigmaris/linux/commit/91724088b19bee7d248946442a801423e8cd0634
-> [2]: https://gist.github.com/sigmaris/fa107384a7492583ceee1c2962f5030a
->
+Also add a blank line after a variable declaration in catc.c to adhere
+to kernel code style, since the surrounding code is being touched.
 
-Thank you for the test. I also have the same board, and I will
-try it later :)
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ drivers/net/usb/aqc111.c      |  2 +-
+ drivers/net/usb/asix_common.c |  4 ++--
+ drivers/net/usb/catc.c        |  5 +++--
+ drivers/net/usb/ipheth.c      |  2 +-
+ drivers/net/usb/lan78xx.c     |  2 +-
+ drivers/net/usb/pegasus.c     |  2 +-
+ drivers/net/usb/r8152.c       |  9 ++++-----
+ drivers/net/usb/rtl8150.c     |  4 ++--
+ drivers/net/usb/sierra_net.c  |  4 ++--
+ drivers/net/usb/sr9800.c      |  4 ++--
+ drivers/net/usb/usbnet.c      | 13 ++++++-------
+ 11 files changed, 25 insertions(+), 26 deletions(-)
 
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index 9201ee10a13f..71394cf2f450 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -207,7 +207,7 @@ static void aqc111_get_drvinfo(struct net_device *net,
+ 
+ 	/* Inherit standard device info */
+ 	usbnet_get_drvinfo(net, info);
+-	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
++	strscpy(info->driver, DRIVER_NAME);
+ 	snprintf(info->fw_version, sizeof(info->fw_version), "%u.%u.%u",
+ 		 aqc111_data->fw_ver.major,
+ 		 aqc111_data->fw_ver.minor,
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index 6ab3486072cb..48a09be6801e 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -735,8 +735,8 @@ void asix_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *info)
+ {
+ 	/* Inherit standard device info */
+ 	usbnet_get_drvinfo(net, info);
+-	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, DRIVER_NAME);
++	strscpy(info->version, DRIVER_VERSION);
+ }
+ 
+ int asix_set_mac_address(struct net_device *net, void *p)
+diff --git a/drivers/net/usb/catc.c b/drivers/net/usb/catc.c
+index 6759388692f8..05a5bd632582 100644
+--- a/drivers/net/usb/catc.c
++++ b/drivers/net/usb/catc.c
+@@ -672,8 +672,9 @@ static void catc_get_drvinfo(struct net_device *dev,
+ 			     struct ethtool_drvinfo *info)
+ {
+ 	struct catc *catc = netdev_priv(dev);
+-	strscpy(info->driver, driver_name, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
++
++	strscpy(info->driver, driver_name);
++	strscpy(info->version, DRIVER_VERSION);
+ 	usb_make_path(catc->usbdev, info->bus_info, sizeof(info->bus_info));
+ }
+ 
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index a19789b57190..a2d45aff93b6 100644
+--- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -586,7 +586,7 @@ static int ipheth_probe(struct usb_interface *intf,
+ 
+ 	netdev->netdev_ops = &ipheth_netdev_ops;
+ 	netdev->watchdog_timeo = IPHETH_TX_TIMEOUT;
+-	strscpy(netdev->name, "eth%d", sizeof(netdev->name));
++	strscpy(netdev->name, "eth%d");
+ 
+ 	dev = netdev_priv(netdev);
+ 	dev->udev = udev;
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index 00397a807393..2f31ebf25732 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -1811,7 +1811,7 @@ static void lan78xx_get_drvinfo(struct net_device *net,
+ {
+ 	struct lan78xx_net *dev = netdev_priv(net);
+ 
+-	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
++	strscpy(info->driver, DRIVER_NAME);
+ 	usb_make_path(dev->udev, info->bus_info, sizeof(info->bus_info));
+ }
+ 
+diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+index c514483134f0..dfcf42bdbf5f 100644
+--- a/drivers/net/usb/pegasus.c
++++ b/drivers/net/usb/pegasus.c
+@@ -896,7 +896,7 @@ static void pegasus_get_drvinfo(struct net_device *dev,
+ {
+ 	pegasus_t *pegasus = netdev_priv(dev);
+ 
+-	strscpy(info->driver, driver_name, sizeof(info->driver));
++	strscpy(info->driver, driver_name);
+ 	usb_make_path(pegasus->usb, info->bus_info, sizeof(info->bus_info));
+ }
+ 
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 880b59ed5422..ef13b7663890 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -5256,7 +5256,7 @@ static void rtl8152_apply_firmware(struct r8152 *tp, bool power_cut)
+ 		rtl_fw->post_fw(tp);
+ 
+ 	rtl_reset_ocp_base(tp);
+-	strscpy(rtl_fw->version, fw_hdr->version, RTL_VER_SIZE);
++	strscpy(rtl_fw->version, fw_hdr->version);
+ 	dev_dbg(&tp->intf->dev, "load %s successfully\n", rtl_fw->version);
+ }
+ 
+@@ -8755,12 +8755,11 @@ static void rtl8152_get_drvinfo(struct net_device *netdev,
+ {
+ 	struct r8152 *tp = netdev_priv(netdev);
+ 
+-	strscpy(info->driver, MODULENAME, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, MODULENAME);
++	strscpy(info->version, DRIVER_VERSION);
+ 	usb_make_path(tp->udev, info->bus_info, sizeof(info->bus_info));
+ 	if (!IS_ERR_OR_NULL(tp->rtl_fw.fw))
+-		strscpy(info->fw_version, tp->rtl_fw.version,
+-			sizeof(info->fw_version));
++		strscpy(info->fw_version, tp->rtl_fw.version);
+ }
+ 
+ static
+diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+index e40b0669d9f4..04b16181d992 100644
+--- a/drivers/net/usb/rtl8150.c
++++ b/drivers/net/usb/rtl8150.c
+@@ -784,8 +784,8 @@ static void rtl8150_get_drvinfo(struct net_device *netdev, struct ethtool_drvinf
+ {
+ 	rtl8150_t *dev = netdev_priv(netdev);
+ 
+-	strscpy(info->driver, driver_name, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, driver_name);
++	strscpy(info->version, DRIVER_VERSION);
+ 	usb_make_path(dev->udev, info->bus_info, sizeof(info->bus_info));
+ }
+ 
+diff --git a/drivers/net/usb/sierra_net.c b/drivers/net/usb/sierra_net.c
+index 36c73db44f77..d8f5d8ac697c 100644
+--- a/drivers/net/usb/sierra_net.c
++++ b/drivers/net/usb/sierra_net.c
+@@ -612,8 +612,8 @@ static void sierra_net_get_drvinfo(struct net_device *net,
+ {
+ 	/* Inherit standard device info */
+ 	usbnet_get_drvinfo(net, info);
+-	strscpy(info->driver, driver_name, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, driver_name);
++	strscpy(info->version, DRIVER_VERSION);
+ }
+ 
+ static u32 sierra_net_get_link(struct net_device *net)
+diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
+index 57947a5590cc..84fe53d1a721 100644
+--- a/drivers/net/usb/sr9800.c
++++ b/drivers/net/usb/sr9800.c
+@@ -474,8 +474,8 @@ static void sr_get_drvinfo(struct net_device *net,
+ {
+ 	/* Inherit standard device info */
+ 	usbnet_get_drvinfo(net, info);
+-	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, DRIVER_NAME);
++	strscpy(info->version, DRIVER_VERSION);
+ }
+ 
+ static u32 sr_get_link(struct net_device *net)
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 9280ef544bbb..c5ab449469c4 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1089,9 +1089,8 @@ void usbnet_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *info)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+ 
+-	strscpy(info->driver, dev->driver_name, sizeof(info->driver));
+-	strscpy(info->fw_version, dev->driver_info->description,
+-		sizeof(info->fw_version));
++	strscpy(info->driver, dev->driver_name);
++	strscpy(info->fw_version, dev->driver_info->description);
+ 	usb_make_path(dev->udev, info->bus_info, sizeof(info->bus_info));
+ }
+ EXPORT_SYMBOL_GPL(usbnet_get_drvinfo);
+@@ -1783,7 +1782,7 @@ usbnet_probe(struct usb_interface *udev, const struct usb_device_id *prod)
+ 	dev->interrupt_count = 0;
+ 
+ 	dev->net = net;
+-	strscpy(net->name, "usb%d", sizeof(net->name));
++	strscpy(net->name, "usb%d");
+ 
+ 	/* rx and tx sides can use different message sizes;
+ 	 * bind() should set rx_urb_size in that case.
+@@ -1809,13 +1808,13 @@ usbnet_probe(struct usb_interface *udev, const struct usb_device_id *prod)
+ 		 */
+ 		if ((dev->driver_info->flags & FLAG_ETHER) != 0 &&
+ 		    !usbnet_needs_usb_name_format(dev, net))
+-			strscpy(net->name, "eth%d", sizeof(net->name));
++			strscpy(net->name, "eth%d");
+ 		/* WLAN devices should always be named "wlan%d" */
+ 		if ((dev->driver_info->flags & FLAG_WLAN) != 0)
+-			strscpy(net->name, "wlan%d", sizeof(net->name));
++			strscpy(net->name, "wlan%d");
+ 		/* WWAN devices should always be named "wwan%d" */
+ 		if ((dev->driver_info->flags & FLAG_WWAN) != 0)
+-			strscpy(net->name, "wwan%d", sizeof(net->name));
++			strscpy(net->name, "wwan%d");
+ 
+ 		/* devices that cannot do ARP */
+ 		if ((dev->driver_info->flags & FLAG_NOARP) != 0)
 -- 
-Best, 
-Chaoyi
+2.43.0
+
 
