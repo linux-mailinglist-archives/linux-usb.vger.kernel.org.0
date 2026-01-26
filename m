@@ -1,246 +1,199 @@
-Return-Path: <linux-usb+bounces-32702-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32700-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cDnIODsId2lGawEAu9opvQ
-	(envelope-from <linux-usb+bounces-32702-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 07:22:51 +0100
+	id wGOBFOP2dmkvZwEAu9opvQ
+	(envelope-from <linux-usb+bounces-32700-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 06:08:51 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BA978474D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 07:22:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1DDA8421C
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 06:08:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 220543005D14
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 06:21:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4831A300EF9E
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 05:08:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9025C26F46F;
-	Mon, 26 Jan 2026 06:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD4E2224AEF;
+	Mon, 26 Jan 2026 05:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c01LnzpM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k9kfJBC+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vk1-f193.google.com (mail-vk1-f193.google.com [209.85.221.193])
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD19923AE87
-	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 06:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.193
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769408494; cv=none; b=UF8OpVC5SFNOVbHGIceQOXryKp1RtP8HqE+lI6CzuqQqM6AcW3bPXkk28EQ9MOUik4APU5I0/YSTrSXvegeXTuN5jg4BPs4rvxXE8FiLZBHeuwuDbhGLQunX0JRFRXBdoc2rsTFy9KxjtwFuTxlleFc2celOxfSbh4YchTo+12E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769408494; c=relaxed/simple;
-	bh=MwLSOA3uQCNtmf71JgeF5X8NEQ2zmM0uL2ZVH33yHVI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i29Br/vy1+j5qor/90KmD0mBai3TZQA3oiKe8jcSpWXgD5S3jYjKMS1xpPQpuomEMFm77I04dgL9a39BF5/8P1xv1yZjiN4+F5CfhEHEBn8NYXmXhwv7qcGip5m9hpB3e37x5Yz1PhhcIuc7k42yNUyfFW3HTrCWyoMX6tRpI6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c01LnzpM; arc=none smtp.client-ip=209.85.221.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570F52253AB
+	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 05:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769404101; cv=pass; b=sdrpgK6TyBaUq7GhTknd60nY9H76/yY5K+JRaITzUxgDgozSoiAQ/ZsDU4hO3x8s7upM3/m/aSmF8im9P/GoYGxL/9JY//rOwaryLHfUds1LW5EEeMup5CEQ7a+hDGzwBOxqomQAPpQPfHUvQGHnWLHQpa2NhUqUW/9BufKFUlM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769404101; c=relaxed/simple;
+	bh=ZBsVD6kxKzurT7H7DtCLfcoGufza6/gI7cdcVlj4q0M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FCMcHDxUuHya2oRNvS3gWURscMwGHN7+Zq7lHo8RNBwZotIKGSxq0LkC3zbEZblwZW90vkhQd3pUd1lQzUA9OCh1cQp1dRJUI1qydovtOIaxiskmwbrAiNGP3ZxYWq11mYbWClx6aaVIjYSI6lHMf2RYWqwlMnBf2yAhZW7pqAw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k9kfJBC+; arc=pass smtp.client-ip=74.125.82.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f193.google.com with SMTP id 71dfb90a1353d-563610de035so4016869e0c.0
-        for <linux-usb@vger.kernel.org>; Sun, 25 Jan 2026 22:21:32 -0800 (PST)
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2b6a868ad45so434177eec.0
+        for <linux-usb@vger.kernel.org>; Sun, 25 Jan 2026 21:08:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769404098; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QaFI7Ra0dqpGi40AcLhB096uk6nXZ7zCKVEs+By0Nelqbnj3wbSEHeXWa0zLcoK5Z1
+         kNKiqdani6pOcL5lYIqAQRnH9t/hAioQC4TS66Lm/U3jOW7qWInSE0kDgtpJq+/RRl+p
+         EJniKKzEOR1tKINsSWg1D6X48Y/YXycDAtYX9oRrT0r27CKmVyFqbDtvPXH2Tyoid4Bt
+         cN38cy5OtWUGHdeEp1owO1zf6/DB8nZwcxIG6P8nJ+xSrdEvO7KGw96HmUyjkT/t9W8A
+         TO3WHw6mvM7fsKkvbEyUUGsF7Z2WgnaoijEofgwyPwY4rPq9KFkPX3k07hfQjH6S49n/
+         jNCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bsbA3S4vvXnWg6PVwhDAv4/t5NunrqZ0yk7Z9wsyNZU=;
+        fh=cTeHPUnIe6l0DZ/7O6gQih6GWYV+G4b4+9Gby7Ewyso=;
+        b=hznkdEgGx2trCHQnQnQJYSHc3U9ZGkV1zXrL/xdePDAPTPujGkXO3u4YisCD0gf2v2
+         6qF48Famv6hGAOkCQRfVLNO9gmwK6FETVL8T6V3gLQeDm//mOZfI8sORIaCz/eDmwqax
+         vYgDLhkLc4L/fhBvuv7IEtkMSfIeyR9arqHTXUzwnShLW4R69P5NF+Pwz8ja82cLHHFo
+         8BOg66EJJrKq0QV9gWksVuMgclYkwt1M3o4CnEe3liQvaVLMk6UYC80+V3q9ST/hipmx
+         Jy7n70HAbZI7XTo7pvaJIVnXH9YtzUdRbmpZS/Hzg8MRq+bMFoa0E8hY7pWhEjCUBWMG
+         a3RQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769408491; x=1770013291; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DQBy6DRxXy5h5AscbNfB5n+HhsWUMKIsOSrmArTqC34=;
-        b=c01LnzpMN8uKxZPsSBBFT9/kfYFUsRTOFAelUfRorqAaDVyGP9AU7sJcaPlkpQUggo
-         AmVbdj5PfSDWTkiI6J0OEfK7z7NwzzBc7+jkhR5TcRjc8myNNG1NMnCyjH67j06pkfsH
-         UaxTU8eqs/6nLukWXt6V7VnUqoYFWWaZUtTJEeTxagEqYWuCfzw2jaqnK3h1/wIaHNdm
-         z9a4fnNOV1ueJcTlg2zrGz3W2RGns43MlSPJKFOWFm4j7s8APRlT9TSA2Nb6vRXy1bad
-         TYttYNakXwdwdOFfKDIKCKTvFbpEaVd6C5avxyNj0fka7Jex2Rn7l9PBTN0wEOqnj07Z
-         g6fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769408491; x=1770013291;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1769404098; x=1770008898; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DQBy6DRxXy5h5AscbNfB5n+HhsWUMKIsOSrmArTqC34=;
-        b=X875nbMm0Te8BGhg7JlpeyW27UCRmgZAPZ71/1tDk0FiEhdi7hGjOxuRG6/BxQFKMC
-         djueTYKdN8D9Ja2YYOoXIXJMysbSvgmbh6UVTq+ieYTzU1Cbj1LWG/6DfhmEJdPQTG/Y
-         ZDtj4sisVGXJD0vu5c+20higDZlszgs01IVOhOX3xmfpKO9lGe6oteTgUEit8w048Umb
-         4ZyozZKdBrLdAiyNvW4A8vWVEzzUJpnNxTP0eytwbmqLQ6Z6jmFNcCM8Z30AEOiKgN/F
-         WbOflXlvDoF3su8ITVCu92mDRdiXGm7SyTl/8uVBxcSgVHjC3HlJs9FHR8WX9XU9ia1V
-         Ef5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWcWqmQvZ6Nzu65mXgN25fvh1ugLtkCL3hc0yZLv86JpW0/ArrXgtEGYaOXPmfhbKySwaW5MtAVZsc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCED0Gg0jhv+jBO+nnj7s86WrQuf/5MOVglGVyBRsllIwMe/G7
-	IYR3JM9FFS1S1d4Qp/054OiNcHGB175PxkW+G5oux+eAShqHVTWP5JAk0cbXax/Z
-X-Gm-Gg: AZuq6aIJ+0kym5UnA+Myu+XoOlr1TQpr/hxbW9GHcgwcD1wfmp4hv+BkxGcZ1511TBa
-	egss2dST6tvryNVjmgw5nBPcbwENmSEiXZb30dFfFbZQfMRY2j/fof2LmI3hs4FMg7bDKJYotJ/
-	eI+F3wMqnOuk+C30WwdZ/qRGa5cSgind+LkVPv0gl0gC1ukLXxfPpEWICK3l83bHQGBMvsv3Ta5
-	9NCEzIEPwtlSUfzDWKV+NWFV7oo0aLDFJmasW2diZIO52Zh/9GULzUZybMOgYCRReNXmvRnaXns
-	qMc7lkS9s9SOB982Ba06t4SHbOaiLZ9SKlUmrdb3Z3Q3nOP6b7EuDDl1p+TRrqvuQSM3CWeUCO5
-	FhYjTzqbAx1ntLi+FDERXAW7ehecSxbGLqNFo59W7JJhms9SimIPQUeyaeeS7MPLfzwNfjsdhpq
-	8op1ohKkyRM25SKhNC6eMhoCgUKxyRrIV2sUtgRUzXUYWRUmq7we30BqkbKs8gUoX0BoxJWHSx0
-	UULjReo3WDQzSWJHCiaW7ZJe5hWw+NCX8mNB5yEE49fdq43M/7dQAYoO/ZhVqenY0VU6vSiMVS/
-	uJ3E+Ys8
-X-Received: by 2002:a05:7301:1691:b0:2ae:5e6b:dc41 with SMTP id 5a478bee46e88-2b7643426cemr1437848eec.14.1769402493623;
-        Sun, 25 Jan 2026 20:41:33 -0800 (PST)
-Received: from ethan-latitude5420.. (host-127-22.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.22])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73a9e1c52sm11728841eec.16.2026.01.25.20.41.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jan 2026 20:41:33 -0800 (PST)
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Eric Biggers <ebiggers@google.com>
-Subject: [PATCH net-next] net: usb: int51x1: use usbnet_cdc_update_filter
-Date: Sun, 25 Jan 2026 20:40:39 -0800
-Message-ID: <20260126044049.40359-1-enelsonmoore@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=bsbA3S4vvXnWg6PVwhDAv4/t5NunrqZ0yk7Z9wsyNZU=;
+        b=k9kfJBC+ldCHGEir2hpwOAhElO6egoRCIxzj0IKfTEqmro2/yY4nV/+ZWVpPnASaL2
+         +mKMYxEvPEWQ3mA0MifDdWsjJxAV9WDFd60bga1tQmEuwjCMbcYXGnmdKnOy0gkl2ch2
+         Mwj8Ks7ue/Tv0fi0t1I2FGHTzLLGzLT7EpWkOR1/bqd5u34W9Lgxxo6NypTHOKYsnB2Z
+         KCh6L7ducVKh/8PXfUb+iHCyyPnIdAB5ON83DnVEVnBfpqvtvEurIJrSHBLvIkSub/iU
+         dCIDy2cliqsDj+61/J2ss/bUZVs3zCGOy2Q26lc2sW5MOSWlOjMrzV8iWQUqiUi0YrGB
+         4lrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769404098; x=1770008898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bsbA3S4vvXnWg6PVwhDAv4/t5NunrqZ0yk7Z9wsyNZU=;
+        b=ao1V83P5f+ry1+OJjnie2cCTilXaF8UewGYZou/Q7v2CxEBd0CD1DuX2i5IsAXnMUi
+         kVPz8YGFWvDYYxneUc7fempq1lgnDCuUti1KlUfY5bUNOQhfLUDvqjQTTdHWthMomUfv
+         1ppwWG325R5vdW5+xJTZJwOVUIt2y3I9qVFTEsJaTwij9Pgow1XkMr6WKZlUATvCF629
+         UliqgX2t9lmoHDSK6uDLRAWVNBZdVZ+1BrmAJvu1k5P24dHeKAE/AbDeEO4FKYV7BKkC
+         GPG920+2jKEWELyWjoPxNSslc5Y0uHAFaUCQ2RHFxkw73fGGJoKsNPyLzHCgNQBR2Om1
+         7oPg==
+X-Forwarded-Encrypted: i=1; AJvYcCUABdTNbDghAkbbWE2TjQKf8RtYcgnFwmrpi4oi2lnc6OULxtFlaAP8MAHRYkAnAN5A6aW8ytievAs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOE/TUpCeAeRyJZbc8SrJYYVJSJLM7mGvWo7hh64viukHpfYe+
+	OgXZG7vXsuoMnMeEWPko2a/rO8OE1ZREX4ON+Rv6fqgbS0LEuqAgmY4G6vmQX8+JivzVyFiRJNP
+	vUzxk7k5aeSoIqio7uOJHDzwU8yfsSVQ=
+X-Gm-Gg: AZuq6aIoJZnRg0eQwH9MJD4j6cAQ/YVcVlg/AOm+v+Hk4saiEZVst1So3w1ylkAup36
+	hEMlRWBOevqI6JolwG4qEd+wmTNDb+w2KsyRNfgSrLQlqm/JkV6jg4WyuSx803wJmKrtdo66toW
+	V4c0VDZxWnFGPgD/ox+ww8nI2snbmFHV+fPRwbLU/aauYIi2a59+ggnv7gDdx7+/FULYjuljusR
+	73BBLRhcxXWlszyEZ6RkjkWjohDXvbpWvgZxkeNHSFlLjuvc6jat92rXWPuI+xtf2TvZf5dJAfa
+	eqK7HXXk9q5pFXf14Bwj2m9ZjQwrepuD2k6g6cICSgVcYHZPl086a+RgtnWT9BizOCCBVzI11KF
+	NobbvLZxRAYYN
+X-Received: by 2002:a05:7301:3d10:b0:2ae:5b8c:324a with SMTP id
+ 5a478bee46e88-2b7644f41dbmr855051eec.4.1769404098278; Sun, 25 Jan 2026
+ 21:08:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
+In-Reply-To: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 26 Jan 2026 06:08:03 +0100
+X-Gm-Features: AZwV_QjC45jcqbNpvCzRgWaUDtcYZvulw1uksmCYv_NCU9WJD69mYzMDZ_yhpJo
+Message-ID: <CANiq72m4hBinKM4jRrkpZ5nM_wraQ8FMsYtjgKRkNDmK5sS8dw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/27] Allow inlining C helpers into Rust when using LTO
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	Peter Zijlstra <peterz@infradead.org>, Elle Rhumsaa <elle@weathered-steel.dev>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, linux-block@vger.kernel.org, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org, 
+	Benno Lossin <lossin@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Paul Moore <paul@paul-moore.com>, 
+	Serge Hallyn <sergeh@kernel.org>, linux-security-module@vger.kernel.org, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Andrew Ballance <andrewjballance@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, maple-tree@lists.infradead.org, 
+	linux-mm@kvack.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, Vitaly Wool <vitaly.wool@konsulko.se>, 
+	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Michal Wilczynski <m.wilczynski@samsung.com>, 
+	linux-pwm@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org, 
+	Will Deacon <will@kernel.org>, Fiona Behrens <me@kloenk.dev>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, Ingo Molnar <mingo@redhat.com>, 
+	Waiman Long <longman@redhat.com>, Mitchell Levy <levymitchell0@gmail.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Lyude Paul <lyude@redhat.com>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, John Stultz <jstultz@google.com>, linux-usb@vger.kernel.org, 
+	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Matthew Wilcox <willy@infradead.org>, Tamir Duberstein <tamird@gmail.com>, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,pengutronix.de,armlinux.org.uk];
+	TAGGED_FROM(0.00)[bounces-32700-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32702-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,garyguo.net,infradead.org,weathered-steel.dev,kernel.org,baylibre.com,linutronix.de,paul-moore.com,akamai.com,goodmis.org,linux-foundation.org,oracle.com,lists.infradead.org,kvack.org,konsulko.se,collabora.com,samsung.com,kloenk.dev,linuxfoundation.org,suse.cz,gentwo.org,google.com,redhat.com];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	RCPT_COUNT_GT_50(0.00)[58];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[miguelojedasandonis@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev,kernel];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4BA978474D
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C1DDA8421C
 X-Rspamd-Action: no action
 
-The int51x1 driver uses the same requests as USB CDC to handle packet
-filtering, but provides its own definitions and function to handle it.
-The chip datasheet says the requests are CDC compliant. Replace this
-unnecessary code with a reference to usbnet_cdc_update_filter.
+On Mon, Jan 5, 2026 at 1:42=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> wr=
+ote:
+>
+>       rust: bug: add __rust_helper to helpers
+>       rust: err: add __rust_helper to helpers
+>       rust: maple_tree: add __rust_helper to helpers
+>       rust: mm: add __rust_helper to helpers
+>       rust: of: add __rust_helper to helpers
+>       rust: rbtree: add __rust_helper to helpers
+>       rust: slab: add __rust_helper to helpers
+>       rust: uaccess: add __rust_helper to helpers
+>       rust: workqueue: add __rust_helper to helpers
 
-Also fix the broken datasheet link and remove an empty comment.
+Applied these to `rust-next` -- thanks everyone!
 
-Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
----
- drivers/net/usb/Kconfig   |  1 +
- drivers/net/usb/int51x1.c | 39 +++------------------------------------
- 2 files changed, 4 insertions(+), 36 deletions(-)
+If someone did not intend for me to take it even if the Acked-by is
+there (e.g. perhaps Andrew wanted to pick those nevertheless?), then
+please shout.
 
-diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
-index 856e648d804e..d050adfe860a 100644
---- a/drivers/net/usb/Kconfig
-+++ b/drivers/net/usb/Kconfig
-@@ -564,6 +564,7 @@ config USB_HSO
- config USB_NET_INT51X1
- 	tristate "Intellon PLC based usb adapter"
- 	depends on USB_USBNET
-+	select USB_NET_CDCETHER
- 	help
- 	  Choose this option if you're using a 14Mb USB-based PLC
- 	  (Powerline Communications) solution with an Intellon
-diff --git a/drivers/net/usb/int51x1.c b/drivers/net/usb/int51x1.c
-index 6fde41550de1..87bd6be1fcb6 100644
---- a/drivers/net/usb/int51x1.c
-+++ b/drivers/net/usb/int51x1.c
-@@ -4,14 +4,11 @@
-  *
-  * Intellon usb PLC (Powerline Communications) usb net driver
-  *
-- * http://www.tandel.be/downloads/INT51X1_Datasheet.pdf
-+ * https://web.archive.org/web/20101025091240id_/http://www.tandel.be/downloads/INT51X1_Datasheet.pdf
-  *
-  * Based on the work of Jan 'RedBully' Seiffert
-  */
- 
--/*
-- */
--
- #include <linux/module.h>
- #include <linux/ctype.h>
- #include <linux/netdevice.h>
-@@ -27,14 +24,6 @@
- 
- #define INT51X1_HEADER_SIZE	2	/* 2 byte header */
- 
--#define PACKET_TYPE_PROMISCUOUS		(1 << 0)
--#define PACKET_TYPE_ALL_MULTICAST	(1 << 1) /* no filter */
--#define PACKET_TYPE_DIRECTED		(1 << 2)
--#define PACKET_TYPE_BROADCAST		(1 << 3)
--#define PACKET_TYPE_MULTICAST		(1 << 4) /* filtered */
--
--#define SET_ETHERNET_PACKET_FILTER	0x43
--
- static int int51x1_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- {
- 	int len;
-@@ -104,29 +93,6 @@ static struct sk_buff *int51x1_tx_fixup(struct usbnet *dev,
- 	return skb;
- }
- 
--static void int51x1_set_multicast(struct net_device *netdev)
--{
--	struct usbnet *dev = netdev_priv(netdev);
--	u16 filter = PACKET_TYPE_DIRECTED | PACKET_TYPE_BROADCAST;
--
--	if (netdev->flags & IFF_PROMISC) {
--		/* do not expect to see traffic of other PLCs */
--		filter |= PACKET_TYPE_PROMISCUOUS;
--		netdev_info(dev->net, "promiscuous mode enabled\n");
--	} else if (!netdev_mc_empty(netdev) ||
--		  (netdev->flags & IFF_ALLMULTI)) {
--		filter |= PACKET_TYPE_ALL_MULTICAST;
--		netdev_dbg(dev->net, "receive all multicast enabled\n");
--	} else {
--		/* ~PROMISCUOUS, ~MULTICAST */
--		netdev_dbg(dev->net, "receive own packets only\n");
--	}
--
--	usbnet_write_cmd_async(dev, SET_ETHERNET_PACKET_FILTER,
--			       USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
--			       filter, 0, NULL, 0);
--}
--
- static const struct net_device_ops int51x1_netdev_ops = {
- 	.ndo_open		= usbnet_open,
- 	.ndo_stop		= usbnet_stop,
-@@ -136,7 +102,7 @@ static const struct net_device_ops int51x1_netdev_ops = {
- 	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address	= eth_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
--	.ndo_set_rx_mode	= int51x1_set_multicast,
-+	.ndo_set_rx_mode	= usbnet_set_rx_mode,
- };
- 
- static int int51x1_bind(struct usbnet *dev, struct usb_interface *intf)
-@@ -158,6 +124,7 @@ static const struct driver_info int51x1_info = {
- 	.bind        = int51x1_bind,
- 	.rx_fixup    = int51x1_rx_fixup,
- 	.tx_fixup    = int51x1_tx_fixup,
-+	.set_rx_mode = usbnet_cdc_update_filter,
- 	.in          = 1,
- 	.out         = 2,
- 	.flags       = FLAG_ETHER,
--- 
-2.43.0
+With this, and if I didn't miss any message (plus looking at
+linux-next where I see Greg picked usb), then only clk and jump_label
+remain (plus any new incoming one).
 
+Let's see if we can get them done next cycle then.
+
+Cheers,
+Miguel
 
