@@ -1,202 +1,218 @@
-Return-Path: <linux-usb+bounces-32748-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32750-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KFmJO5Tkd2k9mQEAu9opvQ
-	(envelope-from <linux-usb+bounces-32748-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 23:03:00 +0100
+	id uBSECQv7d2nlmwEAu9opvQ
+	(envelope-from <linux-usb+bounces-32750-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 00:38:51 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81F508DCC6
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 23:03:00 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A327B8E3B0
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 00:38:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 28BAD302CD2A
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 22:02:44 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C56D0300C0E1
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 23:38:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E1EF2DF151;
-	Mon, 26 Jan 2026 22:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5588F30FF1C;
+	Mon, 26 Jan 2026 23:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SeUWIERu"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="e/gI25H8";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="KcAPsfXZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1592D3002D6
-	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 22:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C932DC357
+	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 23:38:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769464960; cv=none; b=fkkCIg5HREcXa6U5mtUbuq6hYSGdmQc9nhkQV7j8MfSA4AWM+Gllq2p2njE7s2kr/NxM9EyZjWrXyPN1f7pIIuNjXj4wAwQqmy3Wthr3SOuXmm4pI0KrXU3OAhSXUJXRMH9dCtrb8VQVEZj9cW7shDQK4D/hYG/MZW5dXyLkFCA=
+	t=1769470717; cv=none; b=cMfA17jDfUxi2gL80bL65/a0NkHyBbH66bMxa9l/iuzXfKtVQoabgABjtzs2DDGaqDM6k0ZqOC77rWFC48PctHwplVPhDWqXQZGPFa+3f/DljQAXdTKuZ4Hrkcv7JJFeYhv7OEtVsy+ihyghopuCgSdrV0zoXFh5PNTHz89zNL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769464960; c=relaxed/simple;
-	bh=iH3lkHgtWBYYmaF68KXP93FDCUBST90as0m4XRGr6GQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sbzQowA6CKxTXVk2sigZ662cLJIr2kI+jUpqNevi/uhRRNqHSlEZY+rkIWHdUBbPFG27R19RVw8b6AiGaPeuE/fOxhJM/pAuWPFujNsNsr2DxQ3knyqdDJTJlSyWCRTb6rmrJUOVJHvVsGWmEYThvML4O2rqIDuzhFKuZvhr85U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SeUWIERu; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769464956; x=1801000956;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=iH3lkHgtWBYYmaF68KXP93FDCUBST90as0m4XRGr6GQ=;
-  b=SeUWIERuCNSJfXwbD3r5cy2XnshXukxDGR210CzjjbuuAZxa41SWn/Bi
-   VCTWy7mS8f7y3t6/2KjwHiRa7umt+hYAJ1WoySnlxta8Bh5BG0aB4puCO
-   uHMIQYGZED46e5Ap9KN0eAbBcu8O74gjkqvSUZh7bCQjZoeKg9lRy0UFc
-   6j0TQQClOoxi84luFqu8Dw+1atSh5iy7CygeqxDhVWV2Nrq8sHiUJkEpC
-   oXmN57v4G9g3AIMd9eaTtZNHCUbQI/j42TnjjyPPEfAc1FThAuKmtSbl8
-   Q7wXmprQ+U2LM93y4BAXexAG5lgyn1OCow4xo1N2Po9QKICaHa6Ks3O7N
-   A==;
-X-CSE-ConnectionGUID: of1hx3IQRtqZlZCZYZmjHg==
-X-CSE-MsgGUID: wTmUgK/7Rp2K7+hdnLGB1g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="82019780"
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="82019780"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 14:02:35 -0800
-X-CSE-ConnectionGUID: rB9McJlFS66b5Ss1eSoJ1A==
-X-CSE-MsgGUID: vjovlaMfTCqe9Jvyaj9qng==
-X-ExtLoop1: 1
-Received: from cdjpc409-it.jer.intel.com ([10.12.50.120])
-  by fmviesa003.fm.intel.com with ESMTP; 26 Jan 2026 14:02:33 -0800
-From: Gil Fine <gil.fine@linux.intel.com>
-To: andreas.noever@gmail.com,
-	mika.westerberg@linux.intel.com,
-	YehezkelShB@gmail.com
-Cc: gil.fine@intel.com,
-	linux-usb@vger.kernel.org,
-	lukas@wunner.de,
-	Gil Fine <gil.fine@linux.intel.com>
-Subject: [PATCH 5/5] thunderbolt: Increase Notification Timeout to 255 ms for USB4 routers
-Date: Tue, 27 Jan 2026 00:06:06 +0200
-Message-ID: <20260126220606.3476657-6-gil.fine@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260126220606.3476657-1-gil.fine@linux.intel.com>
-References: <20260126220606.3476657-1-gil.fine@linux.intel.com>
+	s=arc-20240116; t=1769470717; c=relaxed/simple;
+	bh=akNftRbJ5E2gGyqkSyObc2C1zNjFMSE1YjArvdXAPVM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=G8dC58MZ1fXiYBkkhNIor+JJngIlbK45hm4U5E9weDOloA6noL3hHtF+z9S2V72DLDSHeVSKjrgH7ztMvcgKvpGMAncekPgEUFXVUvhV5/S86OKYP7BYS1GnbXC6a9mzWFN0OQZnPaffYKyQgJYjrtmmhlIkAHHF+UTerhLPZFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=e/gI25H8; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=KcAPsfXZ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60QKgBXa2733066
+	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 23:38:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=YQ/XMWG1rCwru5SUXobxjv
+	1J94W2NudtyEbgjI4rQUg=; b=e/gI25H8njBnDaaSiMHFzH7kTkvjVfBUOUtDrB
+	6ps6Dlacx2FFshNFknk3bGmvQV9hK7CU6Ekamb7TvS1vpAEz27S4CdoLxe6QXD1k
+	NzG3EKVGslKbdMRjDz8V5Dntn1lS3eY8xYpkaR4pUyHVvie1MbIX+M05rxXJuM4/
+	kuq7eUXmpH+2Ukv3VQwEjGhxsJ7YcUNfuGDsAhM6OWtms0f24VpaBaIltsKoS8ic
+	6SMnpvcvLyU65UTyF9SNbatGVbZVRKDSS+2UfyeHs9NyQGF5PcmB/nRgFCXxt+Xr
+	xGo8nFa0/+rrYUIZjjmCxaGvH0Y5N4/0E5JAyFLFd4t7k+TQ==
+Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bxdv08qny-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 23:38:33 +0000 (GMT)
+Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-12338d13f2cso6030086c88.1
+        for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 15:38:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1769470713; x=1770075513; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YQ/XMWG1rCwru5SUXobxjv1J94W2NudtyEbgjI4rQUg=;
+        b=KcAPsfXZM/auORixLqXItJm1ajckKFbGRiZxdrJHrzw2/1AgcJpzKtHjxOfybI6YTy
+         PMS5LfIhIDXZaTJDvkofuAEdoAEvsdqG7LZBvgm4wZOITBe9EJI7i/WRpX5YVx4xXy6U
+         ouPugcC3JqiNAiN3eyiYflsCAesLcomUCKhAsA9c1CuHd/wcEIcsRZIy/65S5kFamYU/
+         pc0RjMJxu23HmsQHE84BuhYBzjGki1xk8kDUXpD3E002/D2Tcx1tTA98lu+/cKQHWZxK
+         gVoGU8hLNg9qF+CfRkD8No+zTpXsXGKI6KYPb/LIotj3FzATf9nuveuZ/n1ctp0cKYsj
+         axXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769470713; x=1770075513;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YQ/XMWG1rCwru5SUXobxjv1J94W2NudtyEbgjI4rQUg=;
+        b=Bizh43fFqXxvEFjSu3bloAeAni/Y8fpkVkanifu5EBXT8JY+Z41BY5/wTAC75goCLf
+         LH+oxii7E/iPw5wnd7SCqQwyixBtv5Ll94p487zMcNaQ6Ifb8C4+PJ0GR8oPl3w01cxs
+         7T7hfkfmH1suHmqTpWhHXDdnAf4OBd3oFfnfBjmh1avo2y4mEqCkeJoyPR9w0gznJ/G3
+         znIIZj5oDtr67KX3tvUbXTjGDjl3XvUh/+QbCexmgLHGlaen2AtJq/GMahwGuJsh7Kub
+         UkQOrt297upFpxu6VikUkWOSATRVKfivQsxdpsXpUFl25m4iap2LQEDHBD2Bxb4VqzYL
+         0aUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUnv1v/WnJGPgQv12fbeuk5F1C+5OGHAORjaK9Zdm6GRoA0v00+J/4PsuGaAgSricW5zG5x7F173tM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAL2kQOBY8qqPtp6oewlcFiovGbrsaWtE5vKZoYPrZQ0Y3B56o
+	NC8/gKAC35JdEi7IcoMtsZXYpI9i82bM+WqsRFPN/fjpi9ZA5AqFYVstTQyd+fV8stbmG2qRBsU
+	QadEwalzF0h5grndebOW4dZR9DDUki0ki9qR5SM7qzpQQ43izmCiZrtQnsfBeT7Q=
+X-Gm-Gg: AZuq6aKa3utQrfnwIZrOOxDEsrA8Tgxe5tA2YH0JxUX5R5p99im8dayvvIBmig/ZV+B
+	jvGCIyUEfSY5vUQCrxXR84N0SW10pJNVaMlTZyerUi06YMVzS+Q4BMTaweqP4z0VgNqsYr3tZDX
+	DikM0n8ntMBwA6/mC5jS9jC6s6eE+hF9epOZawfRdg/KH6zqGToL+HD19A2FxbpA3+35NZ+Bo2O
+	T6mIe4gURwoj0MlS6msprFNuaiGVl1PqaWNbpj81jzqEP2ng0uBLHyQ9UOVLXKt7Vjv4cvPGxAM
+	oRLirraltT8q2nPigLkApQR36mHKLsE/ftp+KVeGD2Pd00FxexFh+ti4Ku2nsZhbdJTKSr0nSTo
+	1JEWyvrM3/DZfyI6H0RKARWXvrNOdO2hkQ8szJpEhnG3gVZTeIMlDB4MewVizDZo=
+X-Received: by 2002:a05:7022:4399:b0:11b:9386:8265 with SMTP id a92af1059eb24-1248ec73b0dmr3411962c88.42.1769470712687;
+        Mon, 26 Jan 2026 15:38:32 -0800 (PST)
+X-Received: by 2002:a05:7022:4399:b0:11b:9386:8265 with SMTP id a92af1059eb24-1248ec73b0dmr3411948c88.42.1769470712102;
+        Mon, 26 Jan 2026 15:38:32 -0800 (PST)
+Received: from hu-eserrao-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1247d90ce0dsm19948967c88.4.2026.01.26.15.38.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jan 2026 15:38:31 -0800 (PST)
+From: Elson Serrao <elson.serrao@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/9] Improve Qualcomm EUD driver and platform support
+Date: Mon, 26 Jan 2026 15:38:21 -0800
+Message-Id: <20260126233830.2193816-1-elson.serrao@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: TqDxsvTNxZSGhJ4AhhAELznp9F9-2EyG
+X-Authority-Analysis: v=2.4 cv=SvedKfO0 c=1 sm=1 tr=0 ts=6977faf9 cx=c_pps
+ a=JYo30EpNSr/tUYqK9jHPoA==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8
+ a=AzGkZF0M6A1vzCAPr_4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=LnhvVPq8fVUA:10 a=Fk4IpSoW4aLDllm1B1p-:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: TqDxsvTNxZSGhJ4AhhAELznp9F9-2EyG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI2MDIwMiBTYWx0ZWRfX6Nf3JdpORFnz
+ 9nsJc3gxWy1D0Ea9+wd4iWlB0i+mJZAg8QxO/sf4mGcLluBL1SahDpn2KwOSJ7bBGkbS5cvoJX4
+ yp2PStffTmF6SE/ouu5s9LQjtDswZe6+AbtkimiXZ1tGEvis8ex4Vf03D14j1FgAnadA2w3/TYI
+ hn0uWRw3IxmB4BdO8tHDPQPzxzelmCNdzsLfrlNKEuQV81lnuGVPFj8JHRtrhc1cXKdF47Gbx72
+ Wp0WxpsIP/J4Of3w4B8DOhMtBa+i/ikFUinjM+BBRBsNI/Jn/vFHEFubAl/3MQCsDr3+RzdrV5e
+ BJ8GQhVlwywPixGmB0HDa/6VPkuXS/w0V3FpI4cxauvzDnmuyEdIRcR7P2IY1C0FgUhjaKgImiK
+ xokwKFj83vrHKdwTJ8mMyJOqxTE5ciQsRkiMIBP84yN0vDAmq7lJrlMYieM8RykBTzkNoLvadr6
+ AtTEXtt9djuiRdfaphQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-26_04,2026-01-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 adultscore=0 clxscore=1015 suspectscore=0 impostorscore=0
+ spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601260202
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	TAGGED_FROM(0.00)[bounces-32750-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,linux.intel.com];
-	TAGGED_FROM(0.00)[bounces-32748-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,qualcomm.com:url,qualcomm.com:dkim];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gil.fine@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[elson.serrao@oss.qualcomm.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.intel.com:mid]
-X-Rspamd-Queue-Id: 81F508DCC6
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: A327B8E3B0
 X-Rspamd-Action: no action
 
-Currently we set the Notification Timeout field in ROUTER_CS_4 for USB4
-routers to 10 ms, which is unnecessarily short and may cause unnecessary
-retransmissions of Hot Plug packets by the router in case of slow
-software response.
+The Embedded USB Debugger (EUD) is a High-Speed USB on-chip hub that
+provides debug and trace capabilities on Qualcomm platforms. The current
+EUD driver, however, lacks essential hardware resources such as PHY
+references and support for multi-port configurations. This series
+addresses those gaps and introduces the necessary device tree updates
+to enable testing and validation of the enhanced functionality.
 
-Change Notification Timeout for USB4 routers to use 255 ms, aligning
-their behavior with Thunderbolt 3 and providing adequate time for
-software to process Hot Plug Events.
+This work builds upon an earlier EUD driver submission:
+https://lore.kernel.org/all/20240730222439.3469-1-quic_eserrao@quicinc.com/
+and extends it with support for multi-port use cases and proper handling
+of EUD operation across different USB roles.
 
-While there, also fix the comment describing the Notification Timeout
-field to match the USB4 specification.
+The series has been validated on the Qualcomm Dragonwing Q6 platform
+(RB3 Gen2 board), confirming successful OpenOCD connectivity to the EUD
+interface. For detailed usage instructions, refer to Qualcomm’s Linux
+kernel debugging guide:
+https://docs.qualcomm.com/bundle/publicresource/topics/80-70020-12/debugging_linux_kernel.html#debug-using-openocd
 
-Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
 ---
- drivers/thunderbolt/switch.c  | 13 +++----------
- drivers/thunderbolt/tb_regs.h |  3 +--
- 2 files changed, 4 insertions(+), 12 deletions(-)
+Changes in v2:
+- Improved commit message of patch 0001 and 0003 with historical context
+  on why EUD worked without PHY references on single-path systems.
+  Expanded the usb-role-switch property description in the bindings file.
+- Link to v1: https://lore.kernel.org/all/20260116232106.2234978-1-elson.serrao@oss.qualcomm.com/
+---
 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 11e8c1dd3090..7962a7e9d4b3 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -1742,8 +1742,6 @@ int tb_switch_wait_for_bit(struct tb_switch *sw, u32 offset, u32 bit,
- /*
-  * tb_plug_events_active() - enable/disable plug events on a switch
-  *
-- * Also configures a sane plug_events_delay of 255ms.
-- *
-  * Return: %0 on success, negative errno otherwise.
-  */
- static int tb_plug_events_active(struct tb_switch *sw, bool active)
-@@ -1754,11 +1752,6 @@ static int tb_plug_events_active(struct tb_switch *sw, bool active)
- 	if (tb_switch_is_icm(sw) || tb_switch_is_usb4(sw))
- 		return 0;
- 
--	sw->config.plug_events_delay = 0xff;
--	res = tb_sw_write(sw, ((u32 *) &sw->config) + 4, TB_CFG_SWITCH, 4, 1);
--	if (res)
--		return res;
--
- 	res = tb_sw_read(sw, &data, TB_CFG_SWITCH, sw->cap_plug_events + 1, 1);
- 	if (res)
- 		return res;
-@@ -2620,7 +2613,8 @@ int tb_switch_configure(struct tb_switch *sw)
- 	       tb_route_length(route), sw->config.upstream_port_number);
- 
- 	sw->config.enabled = 1;
--
-+	/* Set Notification Timeout to 255 ms for all routers */
-+	sw->config.plug_events_delay = 0xff;
- 	if (tb_switch_is_usb4(sw)) {
- 		/*
- 		 * For USB4 devices, we need to program the CM version
-@@ -2632,7 +2626,6 @@ int tb_switch_configure(struct tb_switch *sw)
- 			sw->config.cmuv = ROUTER_CS_4_CMUV_V1;
- 		else
- 			sw->config.cmuv = ROUTER_CS_4_CMUV_V2;
--		sw->config.plug_events_delay = 0xa;
- 
- 		/* Enumerate the switch */
- 		ret = tb_sw_write(sw, (u32 *)&sw->config + 1, TB_CFG_SWITCH,
-@@ -2658,7 +2651,7 @@ int tb_switch_configure(struct tb_switch *sw)
- 
- 		/* Enumerate the switch */
- 		ret = tb_sw_write(sw, (u32 *)&sw->config + 1, TB_CFG_SWITCH,
--				  ROUTER_CS_1, 3);
-+				  ROUTER_CS_1, 4);
- 	}
- 	if (ret)
- 		return ret;
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index 7e65bc9bcb12..f8a84e07969f 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -182,8 +182,7 @@ struct tb_regs_switch_header {
- 	/* DWORD 4 */
- 	u32 plug_events_delay:8; /*
- 				  * RW, pause between plug events in
--				  * milliseconds. Writing 0x00 is interpreted
--				  * as 255ms.
-+				  * milliseconds.
- 				  */
- 	u32 cmuv:8;
- 	u32 __unknown4:8;
+Elson Serrao (9):
+  dt-bindings: soc: qcom: eud: Restructure to model multi-path hardware
+  usb: misc: qcom_eud: add sysfs attribute for port selection
+  usb: misc: qcom_eud: add per-path High-Speed PHY control
+  usb: misc: qcom_eud: add per-path role switch support
+  usb: misc: qcom_eud: improve enable_store API
+  usb: misc: qcom_eud: add host mode coordination
+  usb: misc: qcom_eud: fix virtual attach/detach event handling
+  arm64: dts: qcom: kodiak: Align EUD node with binding
+  arm64: dts: qcom: qcs6490-rb3gen2: Enable EUD debug functionality
+
+ Documentation/ABI/testing/sysfs-driver-eud    |  16 +
+ .../bindings/soc/qcom/qcom,eud.yaml           | 100 +++--
+ arch/arm64/boot/dts/qcom/kodiak.dtsi          |  33 +-
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  |  20 +-
+ drivers/usb/misc/qcom_eud.c                   | 365 +++++++++++++++++-
+ 5 files changed, 477 insertions(+), 57 deletions(-)
+
 -- 
-2.43.0
-
+2.34.1
 
