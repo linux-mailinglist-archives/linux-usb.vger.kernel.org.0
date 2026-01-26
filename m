@@ -1,67 +1,67 @@
-Return-Path: <linux-usb+bounces-32716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32717-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aPimAmA3d2nhdAEAu9opvQ
-	(envelope-from <linux-usb+bounces-32716-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 10:44:00 +0100
+	id gDDiNdM9d2mMdQEAu9opvQ
+	(envelope-from <linux-usb+bounces-32717-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 11:11:31 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F8558624E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 10:43:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D81686796
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 11:11:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8BBA53008A50
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 09:43:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 227DD300EF9B
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jan 2026 10:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F16C432AADC;
-	Mon, 26 Jan 2026 09:43:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C71332E751;
+	Mon, 26 Jan 2026 10:08:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J0EP/Lbf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PrkgaYtH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A187329385;
-	Mon, 26 Jan 2026 09:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA56313547;
+	Mon, 26 Jan 2026 10:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769420614; cv=none; b=lq4hFvRaELzb1O+3nZSkoaJ/6SY2+YZ+FdVV1hYLieEroS3+CCfASLx/nslO7srytqfYwGHaByxD67YJyavyo2gIRQKFswbommTATFzX0tyEtaU2l8nHA3o1Ii61qQaoNfQz+tXljXcVDegSstPU/MThcov9AA22tTIehFZMue8=
+	t=1769422079; cv=none; b=MeabeXBGPVTVSLm0RlvL4zZnrHUHj9QKC9Pw7uP6sEt3NRcKcB7e6ytoB5y8fbPQ3CGHMW0BYtU9q8QXQkAvkMaNpwfRkVsH++NZaXI6+REPu5vsJg3dhfrwIqSsNRBtKBDygp3SFc5h0GLeRltucvb0lEtuhmkoFEdnOOf0Ryg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769420614; c=relaxed/simple;
-	bh=9mXg2jTfgyWBybaitGS2vBDWPLyKiB7GX8JOHssgPnA=;
+	s=arc-20240116; t=1769422079; c=relaxed/simple;
+	bh=i53QC34mmVK2ZaeyBA2qjvIBa8TfbY7lumbUxES+2GY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CHdfawhUwxMG31DzAbvlg5yrECzCPO3EOYE3Cvtn2F62ZjzTt/DD2HlqD6xoCWemiutcKMzIowjRT6zeuc5U3CBDzqztk+ZbyCNa/f/els9GOtoWnaMw2ZIW03cnZe7mik8c4nFGJmNXizlgvL1PTQampJfaSpxK3DDn3WWwoYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J0EP/Lbf; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=X8hGkcED5Na61z7MVtD4X6jIL4r1RN12RE4opK1FvVwSgU1JFJFLTwx4EtFDxiKlRqkJfCR40k8xqojn1LEA7sWr3idQC5pA5naYqLwzuKD/qitUxKWnKutvXa6jktLvvv8gcG7EHx2pVfpWvBIXyKuFw366zV9oTSeWFVixnBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PrkgaYtH; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769420613; x=1800956613;
+  t=1769422078; x=1800958078;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=9mXg2jTfgyWBybaitGS2vBDWPLyKiB7GX8JOHssgPnA=;
-  b=J0EP/Lbf/S3j4a2CyRNWeqiswr7TjUPfk/RdC8+sjgEtIPUQQyYKyk1b
-   FJ4mdvvDLfcvDtqNgwl7gU8gidI0nfbV78FysaLmcgH9YaCDjZNK6OfYq
-   Q7GfFCWFULUv3TFO4M5ltt9Uz7XX7EHtWEPR3zPFJs9dv/AKKg5p1Jsg+
-   DVtKW0yIJidF9cKtFSRk9MwCjPVFHFNUe/d4hv2fQtJGYyiQhBVbldJ1Z
-   amE8Su4MTpK/5OuFQslJeQ88NvDExA3f1pQYs1Ht6lnvVaD2raoCdvkzk
-   07ag6jKYTO6WV+alYuSGc+zfQW+VaJBvBV++zpXB1uAi9VyvTvLIKV64k
-   Q==;
-X-CSE-ConnectionGUID: nlanYt68QIGnbtsFOlax8g==
-X-CSE-MsgGUID: k1obXmj+Q7iXP7tBizIE5Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="70310416"
+   mime-version:in-reply-to;
+  bh=i53QC34mmVK2ZaeyBA2qjvIBa8TfbY7lumbUxES+2GY=;
+  b=PrkgaYtH6PQGDzpIO2enA6MjrU6fOl2ZY36ttdjopARAxOJuR31mR19N
+   tBSm0R4TrXMnxPzkJ9NT14FtZnvutoiwQEfAE9Wcbhb3O2LoQF3F4vK3e
+   nGsOKFONUj7iAu2ft3+x88vCHEsL3Drq8cCxORiqpeBLDwddjQzP162BN
+   1micg6C/BDxBNLdn9qOugeGQ9spqpHMT8P2zyOo26gs+MOMRMwnQzhhxr
+   J9DSTqc+l6LMvvkwSDCqCQulY5xRlHsJlcIkLBCAfLVsSuH0Ac2D/m7az
+   6xqCHpyD7jOVFVV373krp+rbaFeVlQQ/OxbPCiJAeP8TCdhi/a+VG94er
+   w==;
+X-CSE-ConnectionGUID: TZu679eeQ7+XGXWI3eMppw==
+X-CSE-MsgGUID: GvXtyQoKSGKTTnfPD/65IA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="70755953"
 X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
-   d="scan'208";a="70310416"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 01:43:33 -0800
-X-CSE-ConnectionGUID: ElrawaLISRCec0tEz+c6Cg==
-X-CSE-MsgGUID: yHTjrlRXTsCZ1JfGA7k2+w==
+   d="scan'208";a="70755953"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 02:07:57 -0800
+X-CSE-ConnectionGUID: 0APbs0HMRe24HbNouuz9Lw==
+X-CSE-MsgGUID: Yk+1LMP8Ruagh5YFaJaDpA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
-   d="scan'208";a="208068190"
+   d="scan'208";a="207529230"
 Received: from smoticic-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.122])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 01:43:27 -0800
-Date: Mon, 26 Jan 2026 11:43:25 +0200
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 02:07:53 -0800
+Date: Mon, 26 Jan 2026 12:07:50 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -69,35 +69,29 @@ Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Peter Korsgaard <peter@korsgaard.com>,
-	Petko Manolov <petkan@nucleusys.com>,
-	Steve Glendinning <steve.glendinning@shawell.net>,
-	UNGLinuxDriver@microchip.com,
-	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+	Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+	UNGLinuxDriver@microchip.com, Petko Manolov <petkan@nucleusys.com>,
 	Oliver Neukum <oneukum@suse.com>,
+	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
 	Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
 	Deepanshu Kartikey <kartikey406@gmail.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Max Schulze <max.schulze@online.de>,
 	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+	Foster Snowhill <forst@pen.gy>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Kees Cook <kees@kernel.org>, Eric Biggers <ebiggers@google.com>
-Subject: Re: [PATCH v2 net-next] net: usb: remove unnecessary get_drvinfo
- code and driver versions
-Message-ID: <aXc3PUbofartuTS-@smile.fi.intel.com>
-References: <20260124102042.112101-1-enelsonmoore@gmail.com>
- <aXTHhI710LK1EsTG@smile.fi.intel.com>
- <CADkSEUjwCmowmo_AwZ7TNS2gDt0CLz6buvfjjXz7BrLfuokM4Q@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: usb: switch to two-argument strscpy
+Message-ID: <aXc89lDpfHQFVX-7@smile.fi.intel.com>
+References: <20260126035052.31216-1-enelsonmoore@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADkSEUjwCmowmo_AwZ7TNS2gDt0CLz6buvfjjXz7BrLfuokM4Q@mail.gmail.com>
+In-Reply-To: <20260126035052.31216-1-enelsonmoore@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Server: lfdr
@@ -105,50 +99,48 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	URIBL_MULTI_FAIL(0.00)[intel.com:server fail,smile.fi.intel.com:server fail,sea.lore.kernel.org:server fail];
-	RCPT_COUNT_TWELVE(0.00)[23];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,microchip.com,nucleusys.com,suse.com,fintech.ru,piap.pl,gmail.com,pen.gy];
+	TAGGED_FROM(0.00)[bounces-32717-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	HAS_ORG_HEADER(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32716-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,korsgaard.com,nucleusys.com,shawell.net,microchip.com,fintech.ru,suse.com,piap.pl,gmail.com,pengutronix.de,online.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,smile.fi.intel.com:mid]
-X-Rspamd-Queue-Id: 4F8558624E
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,smile.fi.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3D81686796
 X-Rspamd-Action: no action
 
-On Sat, Jan 24, 2026 at 01:11:06PM -0800, Ethan Nelson-Moore wrote:
-> On Sat, Jan 24, 2026 at 5:22 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > There are three problems with this version:
-> > 1) you haven't taken my tag, why?
-> > 2) there is no changelog to understand what's going on;
-> > 3) the v2 was sent too quickly (usually should be 24h+ between the versions).
+On Sun, Jan 25, 2026 at 07:50:15PM -0800, Ethan Nelson-Moore wrote:
+> All instances of strscpy in the USB network drivers use the size of the
+> destination. If given only two arguments, strscpy will automatically
+> use the size of the destination. Make the code more concise by
+> switching to the two-argument form of strscpy.
 > 
-> Sorry about that. The only change is that I had overlooked smsc[79]5xx
-> in the original patch because they had a version definition but didn't
-> use it in get_drvinfo. I will follow these procedures even for trivial
-> changes in the future.
+> Also add a blank line after a variable declaration in catc.c to adhere
+> to kernel code style, since the surrounding code is being touched.
 
-So, it sounds like v3 will be seen soon?
+It should go after your patch that drops some of the strscpy():s.
+Hence make a v3 as a series of two patches.
+
+Code wise this LGTM, thanks for doing this.
 
 -- 
 With Best Regards,
