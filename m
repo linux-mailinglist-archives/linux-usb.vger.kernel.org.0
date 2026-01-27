@@ -1,211 +1,151 @@
-Return-Path: <linux-usb+bounces-32782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32783-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oJKdOS97eGnBqAEAu9opvQ
-	(envelope-from <linux-usb+bounces-32782-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 09:45:35 +0100
+	id mJAxLX2EeGmqqgEAu9opvQ
+	(envelope-from <linux-usb+bounces-32783-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 10:25:17 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6188891381
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 09:45:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B9F791A8E
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 10:25:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9DB0A3040016
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 08:45:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD51B3017C09
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 09:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87472D1911;
-	Tue, 27 Jan 2026 08:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17FBA2DA76A;
+	Tue, 27 Jan 2026 09:24:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DVKPzqhG"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="L8oO2AK7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2222D5C83;
-	Tue, 27 Jan 2026 08:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6072D9787
+	for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 09:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769503520; cv=none; b=PDt/iOwr7o61hxLZvAEx+8QOyd/K40r3ellJsrfnYYcgkCqa+BT5nPkxx522JB0P0Gc4PVdG83dCixQHc4xYeyhBhGiEi0hdGiGRE4dF2Kd7girJp+k+oeMTFuIPbQM4zopBLAkjZg0ZWSBbaOkS/HLlqqS4DhAE2X6yBwJMjXw=
+	t=1769505840; cv=none; b=KOkwTgICjnCZy/gEW4IUPfK5Xu2pAVxHjnaXAOXoeKtV1R5M3OgozPbCeo7EdKqV1a27f9gQN6CK7hM1ekUfKL8/oNDKOV0LOTcYBxJhNr3lte8SPK6kgVPZPZFDRQIroOeZh8AS7MNHWZLd3AEbvA0tapFHRlK9lqNVSf/Bc00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769503520; c=relaxed/simple;
-	bh=60J634UhmY24dez+WmmzPFx21iDa/73f6c3mbPY7XpY=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QUyAsxgQzgV1egNxzIghausdHuHXD+xsOw88x70OlW4k07nKvvAsD89He7NyrYPKLfUH25pzlNE2mITQ7KG7ngpRoMoXwO51yj+EJyg2xIuJ1JsSJvMz8PGrHUkU+3u5rirt1xOyLGRdrNzm6/Ay26P78UvSSGzlA6+snkVjaPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DVKPzqhG; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769503519; x=1801039519;
-  h=date:from:to:subject:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to;
-  bh=60J634UhmY24dez+WmmzPFx21iDa/73f6c3mbPY7XpY=;
-  b=DVKPzqhGm15oPv77M0WSXoaCX/RerDq0/MDTxCtYjdzcxt6PI1A9qa4W
-   ReHNOVm7TN9hoLX1VnIhHXclGNxhvutxzY8ATSRCJzvjqR2LlYbFMA3/U
-   0KeUIORGfVbazUfUqBbfLNK//KIkXh4QgDRV0/rODxPQxY3n+ouvOh2TK
-   0zhcugBGWTFc0DoWjWtCa0vul7bGi9S4fwc3j8BXLyjyU0Fk8oxPWmI/l
-   BMooLHcUoBu+sd+ivOA5gn5tzL5ztEmrS4ZJrx5J50GL9yQ3y/GXm1uY3
-   b6IOVzPCe0MtlhFXbZ7IN6PeYxjOYPOgjebd11CvVP94/Xv+MAJitETqh
-   w==;
-X-CSE-ConnectionGUID: 8+PVzwkVTU2gk60qIMdVFg==
-X-CSE-MsgGUID: 3ICzch5XRg2yW7gKGItzaw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="70751359"
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="70751359"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 00:45:16 -0800
-X-CSE-ConnectionGUID: Bj6NYPmHQ+CvzViOzyBt3Q==
-X-CSE-MsgGUID: BG2BPSHASW69E/CGpSFTLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="207720031"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa009.jf.intel.com with ESMTP; 27 Jan 2026 00:45:14 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 1042B98; Tue, 27 Jan 2026 09:45:13 +0100 (CET)
-Date: Tue, 27 Jan 2026 09:45:13 +0100
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Mika Westerberg <westeri@kernel.org>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Fix PCIe device enumeration with delayed
- rescan
-Message-ID: <20260127084513.GC2275908@black.igk.intel.com>
-References: <20260121052744.233517-1-acelan.kao@canonical.com>
- <20260121060142.GJ2275908@black.igk.intel.com>
- <aXLM5vk0gDNjLPyY@acelan-Precision-5480>
- <20260123120112.GQ2275908@black.igk.intel.com>
- <aXbTfLUJ-lEfNzgX@acelan-Precision-5480>
- <20260126054231.GR2275908@black.igk.intel.com>
- <aXcWNw9Qfo5L9WVi@acelan-Precision-5480>
- <20260126115654.GS2275908@black.igk.intel.com>
- <aXg1eBudRAaCZpmR@acelan-Precision-5480>
+	s=arc-20240116; t=1769505840; c=relaxed/simple;
+	bh=1/iUH8Y51lHdcNvj4qwjV0K0QoMu7X33Yn+rwXhA858=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A3LDQAX4QE72y6jaJOcB5KlsMA/lXhMWZg4DyWSt5Ad7+3BzLCxnnx+MByTPuoOc9Y4P7nGx52V/ZsvJA8y3eI9zNVB8HNgFafbFhMZcIr8mw+05enlOQOE03E0qybsoo+wmbW9zLKQo1s3mOHqBg/2TNoL8hE9Q4YHIsuAlPaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=L8oO2AK7; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48049955f7fso46654265e9.0
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 01:23:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1769505837; x=1770110637; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1rymuFbvBBtXY/nydGoduhBnxQ6RXb+ltZKTsRxuPdI=;
+        b=L8oO2AK7oGrkxWF+I/gEO44Rm/U7Zui59Gy9tJTOt21nK8l4XoRvQTmDzLe3K0zkHj
+         y7AC6XwBGX9jQP5IFnBoRpaewQY33f/+3y/WIdPwjrnslfeE88Y9b81ABKDNxdG0ZH7K
+         vKR97tLK1RzCTZCACIZ9Jz5w7s9ivKFlKyTTSQh3OjJ8MqdfBQ8RNoMoLNq3KfBQHhqf
+         2oM6ISSA77XC3j1pwwDVzr6Nz3mDWPYhRdySklgl/zlnGC7fLW6/+ZWCuz0IrMU3eRWC
+         7HJg6QhX92fFTGQZb1AV/I70IA6H74EXV0fve584O647drOiF34covmuVRVB6GArWa8n
+         E4QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769505837; x=1770110637;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1rymuFbvBBtXY/nydGoduhBnxQ6RXb+ltZKTsRxuPdI=;
+        b=ddvHBPCvmudeR7iRXa/K9PdhkqSNuWyWW1zUEX3Lxh+FGIBgN/l0doIZRy49r9vMvR
+         60BQx/2KkHUlBN1ujlh2IfKcJkjHdoXBTnieoszEuNxj4dwA11zFx5plG1W8J1prF7qU
+         HVCyCjffTiSyxukWf2nP3D/EN9BnqrN/nEKyctzfGugK1BztdnAEKzMhxisjQh2rd2k7
+         ZOW+o4RTOe1Kr4FlSJ6LajktU2qGpFFsvnOpcShqXxurxVxjhA4/Hajfir+ousIV2+xz
+         zQSbo2k+uhLg0ibe92B3au7goCvLMUvEUQsRqBwb+CkzOCYYSFMB7uhv6QrqU9PIE6MQ
+         gbhA==
+X-Forwarded-Encrypted: i=1; AJvYcCV8p0m6piGod3k4w/BXmVvkI07DH1bEVFsDE2NOG6DhfOz2OUi+9LKiMmsra31S3Gum/ra/tyCjxT0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsS9fQ6xOhQxArWbvTiqhM0sVKYbsIOvODNwalb5/vKs6yEyfd
+	ZoAvM596oaS7YhZDfGKGe2PZqzwsNI/vHVi9gtqMCxf8GCq6PTkR49I/uVs4G+Nk6C0=
+X-Gm-Gg: AZuq6aKZcs+NeM/4NlncWlt0Io16iuRvANDWfcFjQENqBMtgfVU2eriXPGaFQKUeGwv
+	za9iROD1d/C0zNjRrKLVeOp1GjD1fLVHu5Z6rmcK+rFdby9SXRK3n2/pTyUdLVIIb1+JeQUXT7i
+	beJV5wWuOLbCau5ii3LBPxKtC0BLG01DQvlf4gcVSNVMvzI6mfpzz9kXB/eCQ6fYaMf397ldkY0
+	glRsP0VOsJHvHIj8x9A+ufdSaKX5sEIXv543T2BQHghFLxLKzU9VnmDm6wt24K3GuzzsJfKw3Xz
+	Phx3TjiZouCi7gJSP0NlZyIKJ4T0xUQE+nYf0qnUUX21RPYB1wV9VPVnvvOruDPDq+tbGXJUA0u
+	WLMQVKio26iSHurg11tjM+0EM/yfqDIvOxrPqZ2CTOQkZH1l8xXP837OnvUokA3sJuoA8yKKqxc
+	v/Wrmfz0iNBaStvFlRArvH1fkqda96/As55jvQCtbDNkVHUB+h+u9yo5E=
+X-Received: by 2002:a05:600c:4746:b0:47e:e9c9:23bc with SMTP id 5b1f17b1804b1-48069c5547amr12943825e9.30.1769505837492;
+        Tue, 27 Jan 2026 01:23:57 -0800 (PST)
+Received: from ?IPV6:2001:a61:1310:7401:36c8:bb62:3315:2c36? ([2001:a61:1310:7401:36c8:bb62:3315:2c36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1c24bedsm35318025f8f.17.2026.01.27.01.23.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jan 2026 01:23:57 -0800 (PST)
+Message-ID: <314effcc-5bf2-47c5-9757-aafd5b47fe65@suse.com>
+Date: Tue, 27 Jan 2026 10:23:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aXg1eBudRAaCZpmR@acelan-Precision-5480>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 3/3] net: usb: kaweth: remove eth_addr_t typedef
+ and bcast_addr definition
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+References: <20260125083501.34513-1-enelsonmoore@gmail.com>
+ <20260125083501.34513-4-enelsonmoore@gmail.com>
+ <9239ddef-c197-4fbd-8e88-691766bda3e2@suse.com>
+ <CADkSEUjgRrC9eAQYOkaErd7wyXKkUs7+dG+Q1jz7VbqF+zxwuw@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CADkSEUjgRrC9eAQYOkaErd7wyXKkUs7+dG+Q1jz7VbqF+zxwuw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32782-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[canonical.com,gmail.com,kernel.org,vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-32783-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,canonical.com:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,black.igk.intel.com:mid]
-X-Rspamd-Queue-Id: 6188891381
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 5B9F791A8E
 X-Rspamd-Action: no action
 
-On Tue, Jan 27, 2026 at 01:04:20PM +0800, Chia-Lin Kao (AceLan) wrote:
-> On Mon, Jan 26, 2026 at 12:56:54PM +0100, Mika Westerberg wrote:
-> > On Mon, Jan 26, 2026 at 03:48:48PM +0800, Chia-Lin Kao (AceLan) wrote:
-> > > On Mon, Jan 26, 2026 at 06:42:31AM +0100, Mika Westerberg wrote:
-> > > > On Mon, Jan 26, 2026 at 11:30:47AM +0800, Chia-Lin Kao (AceLan) wrote:
-> > > > > Hi,
-> > > > > On Fri, Jan 23, 2026 at 01:01:12PM +0100, Mika Westerberg wrote:
-> > > > > > Hi,
-> > > > > >
-> > > > > > On Fri, Jan 23, 2026 at 10:04:11AM +0800, Chia-Lin Kao (AceLan) wrote:
-> > > > > > > > Can you comment out call to tb_switch_xhci_connect() and see if that
-> > > > > > > > changes anything?
-> > > > > > >
-> > > > > > > Here is what I modified, and the problem becomes a little bit complicated.
-> > > > > >
-> > > > > > Okay I see it did not change anything (well this is kind of what I
-> > > > > > expected). Thanks for trying.
-> > > > > >
-> > > > > > I see in your log that the PCIe tunnel is established just fine. It's just
-> > > > > > that there is no PCIe hotplug happening or it is happening but the PCIe
-> > > > > > Downstream Port is not waking up.
-> > > > > >
-> > > > > > I figured you have following USB4/TB topology, right?
-> > > > > >
-> > > > > >   AMD Host <-> GR Hub <-> TB3 Hub
-> > > > > >                   ^
-> > > > > >                   |
-> > > > > >                 TB3 Hub
-> > > > > Should be more like this
-> > > > >   AMD Host <-> Dell TB4 Dock <-> OWC Envoy Express (1-502)
-> > > > >                              \
-> > > > >                               <-> OWC Envoy Express (1-702)
-> > > > > or
-> > > > >   AMD Host (1-0, domain1)
-> > > > >       |
-> > > > >       └─ Port 2 ──→ Dell Thunderbolt 4 Dock (1-2)
-> > > > >                       ├─ Port 5 ──→ OWC Envoy Express (1-502)
-> > > > >                       └─ Port 7 ──→ OWC Envoy Express (1-702)
-> > > >
-> > > > Okay so the same ;-)
-> > > >
-> > > > > > What if you run 'lspci' after the issue reproduces? Does that bring the
-> > > > > > missing PCIe devices? I suspect that this is due to older TB3 devices that
-> > > > > > they may need bit more time to get the PCIe link (going over the tunnel) up
-> > > > > > and running.
-> > > > > lspci doesn't bring back the missing tbt storage.
-> > > >
-> > > > Forgot to mention that let it (the whole topology) enter runtime suspend
-> > > > before you run lspci.
-> > >
-> > > https://people.canonical.com/~acelan/bugs/tbt_storage/dmesg_lspci.log
-> > >
-> > > The behavior is strange, the following 3 devices keep entering D3cold and then comes back
-> > > to D0 quickly. So, I'm not sure if the lspci do the actions you want.
-> >
-> > Yes. I should have mentioned so the lspci is there exactly to trigger
-> > runtime resume of the topology. I was hoping the PCIe links get
-> > re-established properly then.
-> >
-> > Can you do so that you:
-> >
-> > 1. Plug in the dock.
-> > 2. Plug in the other storage to the dock.
-> > 3. Block runtime PM from the PCIe Downstream Port that should lead to the
-> >    second storage device PCIe Upstream Port
-> >
-> >  # echo on > /sys/bus/pci/devices/DEVICE/power/control
-> >
-> > 4. Connect the second storage device and enable PCIe tunnel.
-> >
-> > Does that make it work each time?
-> Yes, follow the steps makes it work.
-> 
->    echo on | sudo tee /sys/bus/pci/devices/*/*/power/control
-> 
-> Re-plug the dock, need to disable the runpm again.
+On 27.01.26 05:38, Ethan Nelson-Moore wrote:
 
-But can you just block it from the PCIe Downstream Port that leads to the
-"non-working" storage before you enable PCIe tunnel? Not for all the
-devices.
+> Hope that helps you get a sense of how much these drivers are being used.
 
-(let me know if you want help locating the correct device).
+Hi,
 
-Does it still work?
+yes I am aware of this. Yet there is no point in breaking
+existing setups. I would prefer this driver to get only
+clear fixes and adaptions to changes in API that are absolutely
+necessary.
+
+	Regards
+		Oliver
+
 
