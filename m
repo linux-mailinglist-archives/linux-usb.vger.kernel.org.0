@@ -1,259 +1,348 @@
-Return-Path: <linux-usb+bounces-32821-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32828-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wEPrH4DaeGmwtgEAu9opvQ
-	(envelope-from <linux-usb+bounces-32821-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:32:16 +0100
+	id WAkgEMzeeGkCtwEAu9opvQ
+	(envelope-from <linux-usb+bounces-32828-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:50:36 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7F4396C45
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:32:15 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9EE99718A
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:50:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6404830195AB
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 15:16:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D765131221B7
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 15:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8FED364057;
-	Tue, 27 Jan 2026 15:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63ECD364E89;
+	Tue, 27 Jan 2026 15:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="i3t8NFHO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QGP4ffXF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B00535D5E0;
-	Tue, 27 Jan 2026 15:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F7E361DDD
+	for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 15:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769526746; cv=none; b=lCVrjZ2S4AJ/jVgr/DBmcNLim5xSEhEpJ6JKSzY5IsXFdF9+xsO5uscGW4wx6nHIZk7KK0QSWjH04UTot8SSNYfkVjewIzNMOeNHS9jvB4vY/Wu2cpbJhIY9rIHEFIoy1DZ9Y1BhPvEr6VMxklXCv8u5sGLFeYAdL3ceG/y2FOU=
+	t=1769527601; cv=none; b=PdzNA4H2Oc16jM19Vzo/TMWe2Mou8NOxi7Vgg5sLfhh1+TmRji2HNBE62lZRyT4bGeAuofFQComWDD7vI8zjzg4/KW3OVzdI6eSbwWH3+YiN4FvcehFdYPUsbgFOh53BkfVnIO1pzvnzUKAJk3EtPuFbDXy22Hj1Ob5PLdQC1yE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769526746; c=relaxed/simple;
-	bh=xJHxYT+TadYewpoKOTjiaran92WN2DeuJBljdTuOCy4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EEv63y79tYKvE85gA5QW6gX/nJ6t4sG0ftSymx/XSynaY7dZfgKi8QRsIjjFwyPsudmzxRmqenU6BFzVTB61/Eq+iQjaFnXfjKGVdN/0rQ6lFkf2Kt+sOuXsX0e3vcewFiyJBJE4D9Dy/37tguMChCzKYcnm5uvzB3FnM1vsYY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=i3t8NFHO; arc=none smtp.client-ip=193.136.128.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id E152F6002307;
-	Tue, 27 Jan 2026 15:12:12 +0000 (WET)
-X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
-Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
- by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id bTCuZ5QEIXsH; Tue, 27 Jan 2026 15:12:10 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id D6DFE6000257;
-	Tue, 27 Jan 2026 15:12:09 +0000 (WET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
-	s=mail2; t=1769526729;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bZcC7nVQPcaOVfYrZtm+vknrQUeM733TEL9ACJo10WQ=;
-	b=i3t8NFHOtmH/eAyaSjIfAFwqblPVHBbcBsCy7WEwCTlp9jNJ6X/IQuMKuiZ+S7KjI5zfYS
-	GNFV/MnGGz39XEwTZggQy1rN8DhRc1ttTIyQcJ3Iut3WnNhrREOn4ZWVF81EFfhIGr/Ewq
-	B+FFDTYC9W445sZkkcQ4SCo0OwV38BSF6pfCEroVOiHhFKwWJCJA2x7PB+YYsRa4mEVTrJ
-	XAGVTFWfedWHq8GC3MY/O61+Mlzt7JqW24dzUI9XEZnGJGtCrumjfE8qdDbpAyVnFrT1LG
-	RbNc1gFBQNE9XGBqoWEA+RHA2pyGH2XOzS3nwvYZn4w5EeHqMiY/N14Xmj8lxA==
-Received: from [192.168.2.110] (unknown [148.63.39.39])
-	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 8711E3600A6;
-	Tue, 27 Jan 2026 15:12:09 +0000 (WET)
-From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-Date: Tue, 27 Jan 2026 15:11:52 +0000
-Subject: [PATCH v2 6/6] phy: tegra: xusb: Move T186 .set_mode() to common
- implementation
+	s=arc-20240116; t=1769527601; c=relaxed/simple;
+	bh=vx3jLTsBw4rxu7hoSeZBPfSAXJs751JIn0jAWWF5Xbs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Db0N3tKoM1jj6JO+uysZhmuhXar2wp3V1Wgn/z6uXRynu4OrkxGTynd4EPkryyxsqUIH9o6EmQWjIjtXvaz8t8K3QN1Koljm0zK71JOCnyHAUrscPijDkS7ZPLZ32O/A8ClQRO2r929BdtBSW+UUBqbvuS9MMg8oI5EFlxmr59w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QGP4ffXF; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a09a3bd9c5so42654605ad.3
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 07:26:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769527599; x=1770132399; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M/fsCYTkIXDItTcE/n6muZz7y6GpmWCERYqeftONhwg=;
+        b=QGP4ffXFHYsQg3cvB0lFgrynOjqO413hWZG7svBN6ys0WSKS5O9r1+eOhhxNc6eYVT
+         vI+x1rHcenB6SMnKYfePU2+mVHaA88dAHf5tpIKpAoGpVq6joM0sDVeeL3l36983x+sF
+         FQp7mDPHg1b3NU4jhQNl1zKBy0izeeanmPhEl0qdroxWyTsORsOq69xmXa8Yjq6koIxV
+         Z0WCZbkvUHjQ4qz8xvc0KUh24fwlZ1YK/2UW/Og1wso0U70DWxmQs9uSbTBvc/UjJLs2
+         CNcN6GPNbCA+OCtiAf4E4CbfZ3hPDqkh1BUBM6126zZcgrtSYWeV7bwhushMLKPRfTCI
+         RiUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769527599; x=1770132399;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M/fsCYTkIXDItTcE/n6muZz7y6GpmWCERYqeftONhwg=;
+        b=VvZ2yO32XA1Clm4Ve2rI20pM8T0J0grTkTWZ2QaOKd059RTNJ0z/f+7aCN8wSod75c
+         7M4xicE3uSAM/P5yc34gaAoXoDpj0gCHk1mlrfaeidbBdYNpb1DfrBAKII8+Zdx50DAg
+         VKTW2buROcD8flR7qYfa4YBlX7BCbW4ALJECUG1li0WKuqC6zjdXlBohUFc2n/Vx+lgT
+         BBvz1sijh7Uc7pR/JajYmi7aKz1bPQuYdA2/G9cDzfWcGNamwYpVTCRD+Gnime8JGmEL
+         4A2uTFukaO9pjJ3TK+niGuig67AlzoJLm57NRZISt414wwI8clxHaF9+sesE1gYGfZBU
+         1A6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWWJod+7JwdELOHZpsAIGPmvlIAs0lJcHwapxsVsMU2QR43x6qYaoAz49PUjJ1NhOXQ7PANHRSt5gw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywfncmjvgv5TVfI3NyFbSwwtIOcOwvq/3D3zDLM6fhvd7TcUFWQ
+	KT221FkMCKkzyz+miC6/yluj0/lFMMswp8MusaGbLLtqBCUnxajF7GF2
+X-Gm-Gg: AZuq6aJIROOOZ04qSffhypjvwSYKevVIyXpp2rLo1FRXRtTCnfLCOqKo5kkJUWdiP0T
+	niQVIrs2tbMR05ln8VzBplwUGewZ+KplfjsM5FypQQR39veJl2MEi7QEdrmARWYys6jb2g/Mvxl
+	/0hiMes7RYqe/4YoVwGhDqm9w2fEZTqd2+Lou9VSvIeiuPZELgfpCdfPEL0nh+j7+Pmv0frv5oJ
+	TcBc9lkCMbz6FhnGqoLl4rHu/wlvmP5jIiPJIGq0ACvFlHzgnICRHM9vxZkqNBIqzi86cNCnIb7
+	a/H8+2jgVn8weqmI8fUWLV3Px/nNCh0qKRgq/nsKgwjKTx66Z+eQlhcBtVxqq73c0mkus/zYKCE
+	M5gOI1KgOOZqPqhJjsBl+T4Ig07xbPe5yDDkDNXWlCJc0T69Cg6qzDgbq4rY54pw48YHrfKoWFg
+	vOgpCIwKVoK/VqwOXsHo7DP56WizwLJa5tEZE=
+X-Received: by 2002:a17:903:2cf:b0:295:1e50:e7cb with SMTP id d9443c01a7336-2a870d7446cmr22169425ad.23.1769527599292;
+        Tue, 27 Jan 2026 07:26:39 -0800 (PST)
+Received: from [192.168.1.5] ([115.99.251.203])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a802fdd70asm123437515ad.92.2026.01.27.07.26.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jan 2026 07:26:38 -0800 (PST)
+Message-ID: <e1b2b86f-6762-4b6b-bcb9-f8c7349e8077@gmail.com>
+Date: Tue, 27 Jan 2026 20:56:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: usb: ti,omap4-musb: convert to DT schema
+To: Rob Herring <robh@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Felipe Balbi <balbi@ti.com>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260126-ti-usb-v1-0-2855c129eb6d@gmail.com>
+ <20260126-ti-usb-v1-1-2855c129eb6d@gmail.com>
+ <20260126160610.GA2471873-robh@kernel.org>
+Content-Language: en-US
+From: Charan Pedumuru <charan.pedumuru@gmail.com>
+In-Reply-To: <20260126160610.GA2471873-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260127-diogo-tegra_phy-v2-6-787b9eed3ed5@tecnico.ulisboa.pt>
-References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
-In-Reply-To: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
-To: Mathias Nyman <mathias.nyman@intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>, 
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>
-Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
- devicetree@vger.kernel.org, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769526726; l=4050;
- i=diogo.ivo@tecnico.ulisboa.pt; s=20240529; h=from:subject:message-id;
- bh=xJHxYT+TadYewpoKOTjiaran92WN2DeuJBljdTuOCy4=;
- b=gaXGWJCSZfLtbD9smDMa7VQ2DugogGFT2gb4MjcM5WKZvEh96PE0vSbkt8/rnsGicaYnaDmwo
- i+3AaC7EUlrCCSYfmE13tj6KQbGjysGrDqpcx4hAp/S8sTOHnXmZi0F
-X-Developer-Key: i=diogo.ivo@tecnico.ulisboa.pt; a=ed25519;
- pk=BRGXhMh1q5KDlZ9y2B8SodFFY8FGupal+NMtJPwRpUQ=
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[tecnico.ulisboa.pt,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[tecnico.ulisboa.pt:s=mail2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32821-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[intel.com,linuxfoundation.org,gmail.com,nvidia.com,kernel.org,linaro.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,tecnico.ulisboa.pt:mid,tecnico.ulisboa.pt:dkim,ulisboa.pt:email];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[diogo.ivo@tecnico.ulisboa.pt,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[tecnico.ulisboa.pt:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32828-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[charanpedumuru@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: C7F4396C45
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[devicetree.org:url,ti.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,4a0ab000:email]
+X-Rspamd-Queue-Id: D9EE99718A
 X-Rspamd-Action: no action
 
-Move the Tegra186 PHY .set_mode() callback to a common implementation.
-In order to do this first revert cefc1caee9dd.
 
-Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
----
-v1->v2:
-- New patch
----
- drivers/phy/tegra/xusb-tegra186.c | 73 ++++++---------------------------------
- 1 file changed, 10 insertions(+), 63 deletions(-)
 
-diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
-index bec9616c4a2e..bf678829245d 100644
---- a/drivers/phy/tegra/xusb-tegra186.c
-+++ b/drivers/phy/tegra/xusb-tegra186.c
-@@ -786,15 +786,13 @@ static int tegra186_xusb_padctl_vbus_override(struct tegra_xusb_padctl *padctl,
- }
- 
- static int tegra186_xusb_padctl_id_override(struct tegra_xusb_padctl *padctl,
--					    struct tegra_xusb_usb2_port *port, bool status)
-+					    bool status)
- {
--	u32 value, id_override;
--	int err = 0;
-+	u32 value;
- 
- 	dev_dbg(padctl->dev, "%s id override\n", status ? "set" : "clear");
- 
- 	value = padctl_readl(padctl, USB2_VBUS_ID);
--	id_override = value & ID_OVERRIDE(~0);
- 
- 	if (status) {
- 		if (value & VBUS_OVERRIDE) {
-@@ -805,68 +803,16 @@ static int tegra186_xusb_padctl_id_override(struct tegra_xusb_padctl *padctl,
- 			value = padctl_readl(padctl, USB2_VBUS_ID);
- 		}
- 
--		if (id_override != ID_OVERRIDE_GROUNDED) {
--			value &= ~ID_OVERRIDE(~0);
--			value |= ID_OVERRIDE_GROUNDED;
--			padctl_writel(padctl, value, USB2_VBUS_ID);
--
--			err = regulator_enable(port->supply);
--			if (err) {
--				dev_err(padctl->dev, "Failed to enable regulator: %d\n", err);
--				return err;
--			}
--		}
-+		value &= ~ID_OVERRIDE(~0);
-+		value |= ID_OVERRIDE_GROUNDED;
- 	} else {
--		if (id_override == ID_OVERRIDE_GROUNDED) {
--			/*
--			 * The regulator is disabled only when the role transitions
--			 * from USB_ROLE_HOST to USB_ROLE_NONE.
--			 */
--			err = regulator_disable(port->supply);
--			if (err) {
--				dev_err(padctl->dev, "Failed to disable regulator: %d\n", err);
--				return err;
--			}
--
--			value &= ~ID_OVERRIDE(~0);
--			value |= ID_OVERRIDE_FLOATING;
--			padctl_writel(padctl, value, USB2_VBUS_ID);
--		}
-+		value &= ~ID_OVERRIDE(~0);
-+		value |= ID_OVERRIDE_FLOATING;
- 	}
- 
--	return 0;
--}
--
--static int tegra186_utmi_phy_set_mode(struct phy *phy, enum phy_mode mode,
--				      int submode)
--{
--	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
--	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
--	struct tegra_xusb_usb2_port *port = tegra_xusb_find_usb2_port(padctl,
--								lane->index);
--	int err = 0;
--
--	mutex_lock(&padctl->lock);
-+	padctl_writel(padctl, value, USB2_VBUS_ID);
- 
--	dev_dbg(&port->base.dev, "%s: mode %d", __func__, mode);
--
--	if (mode == PHY_MODE_USB_OTG) {
--		if (submode == USB_ROLE_HOST) {
--			err = tegra186_xusb_padctl_id_override(padctl, port, true);
--			if (err)
--				goto out;
--		} else if (submode == USB_ROLE_DEVICE) {
--			tegra186_xusb_padctl_vbus_override(padctl, true);
--		} else if (submode == USB_ROLE_NONE) {
--			err = tegra186_xusb_padctl_id_override(padctl, port, false);
--			if (err)
--				goto out;
--			tegra186_xusb_padctl_vbus_override(padctl, false);
--		}
--	}
--out:
--	mutex_unlock(&padctl->lock);
--	return err;
-+	return 0;
- }
- 
- static int tegra186_utmi_phy_power_on(struct phy *phy)
-@@ -1017,7 +963,7 @@ static const struct phy_ops utmi_phy_ops = {
- 	.exit = tegra186_utmi_phy_exit,
- 	.power_on = tegra186_utmi_phy_power_on,
- 	.power_off = tegra186_utmi_phy_power_off,
--	.set_mode = tegra186_utmi_phy_set_mode,
-+	.set_mode = tegra_xusb_usb2_phy_set_mode,
- 	.owner = THIS_MODULE,
- };
- 
-@@ -1578,6 +1524,7 @@ static const struct tegra_xusb_padctl_ops tegra186_xusb_padctl_ops = {
- 	.suspend_noirq = tegra186_xusb_padctl_suspend_noirq,
- 	.resume_noirq = tegra186_xusb_padctl_resume_noirq,
- 	.vbus_override = tegra186_xusb_padctl_vbus_override,
-+	.id_override = tegra186_xusb_padctl_id_override,
- 	.utmi_pad_power_on = tegra186_utmi_pad_power_on,
- 	.utmi_pad_power_down = tegra186_utmi_pad_power_down,
- };
+On 26-01-2026 21:36, Rob Herring wrote:
+> On Mon, Jan 26, 2026 at 01:22:04PM +0000, Charan Pedumuru wrote:
+>> Convert OMAP MUSB USB OTG Controller binding to DT schema.
+>> Changes during conversion:
+>> - Introduce new compatible string patterns "am35x_otg_hs" and "usb_otg_hs"
+>>   to properly match existing nodes already defined in the DT sources.
+>> - Include "interrupts" and "interrupt-names" properties in the YAML, as
+>>   they are used by many in-tree DTS files.
+>> - Extend the "power" property to allow the value 150 (in addition to
+>>   existing values), since this is present in several in-tree DTS examples.
+>>
+>> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
+>> ---
+>>  .../devicetree/bindings/usb/ti,omap4-musb.yaml     | 133 +++++++++++++++++++++
+>>  1 file changed, 133 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/ti,omap4-musb.yaml b/Documentation/devicetree/bindings/usb/ti,omap4-musb.yaml
+>> new file mode 100644
+>> index 000000000000..16e95fe4c38d
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/usb/ti,omap4-musb.yaml
+>> @@ -0,0 +1,133 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/usb/ti,omap4-musb.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Texas Instruments OMAP MUSB USB OTG Controller
+>> +
+>> +maintainers:
+>> +  - Felipe Balbi <balbi@ti.com
+> 
+> Missing '>'
+
+Yeah, I missed it, will add in the next rev.
+
+> 
+>> +
+>> +description:
+>> +  Texas Instruments glue layer for the Mentor Graphics MUSB OTG controller.
+>> +  Handles SoC-specific integration including PHY interface bridging(ULPI/
+>> +  UTMI), interrupt aggregation, DMA engine coordination (internal/
+>> +  external), VBUS/session control via control module mailbox, and
+>> +  clock/reset management. Provides fixed hardware configuration parameters
+>> +  to the generic MUSB core driver.
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    pattern: "^(am35x_otg_hs|usb_otg_hs|usb)@[0-9a-f]+$"
+> 
+> Again, do not document non-standard names. That's anything not in the DT 
+> spec.
+
+Sure, I will remove pattern entirely.
+
+> 
+>> +
+>> +  compatible:
+>> +    enum:
+>> +      - ti,omap3-musb
+>> +      - ti,omap4-musb
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  ti,hwmods:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    description:
+>> +      Specifies the name of the TI PRCM (Power, Reset and Clock Management)
+>> +      hardware module that must be enabled (powered and clocked) for this
+>> +      device node to operate. The value "usb_otg_hs" refers to the USB
+>> +      On-The-Go High-Speed controller IP block.
+>> +    const: usb_otg_hs
+> 
+> deprecated: true
+> 
+> (I think we want that everywhere?)
+> 
+> Actually, looks like only omap2430 sets this, but that's not covered by 
+> this schema. Unless you need to add "ti,omap2-musb"?
+
+Okay, in that case I will drop the property.
+
+> 
+>> +
+>> +  interrupts:
+>> +    minItems: 1
+>> +    maxItems: 2
+>> +
+>> +  interrupt-names:
+>> +    minItems: 1
+>> +    maxItems: 2
+>> +    items:
+>> +      enum: [mc, dma]
+> 
+> I would assume only 'dma' is optional? Does this work?:
+> 
+> items:
+>   - const: mc
+>   - const: dma
+
+Yes, this works.
+
+> 
+>> +
+>> +  multipoint:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Indicates the MUSB controller supports multipoint. This is a MUSB
+>> +      configuration-specific setting.
+>> +    const: 1
+>> +
+>> +  num-eps:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Specifies the number of endpoints. This is a MUSB configuration
+>> +      specific setting.
+>> +    const: 16
+>> +
+>> +  ram-bits:
+>> +    description:
+>> +      Specifies the RAM address size.
+>> +    const: 12
+>> +
+>> +  interface-type:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Describes the type of interface between the controller and the PHY.
+>> +      0 for ULPI, 1 for UTMI.
+>> +    enum: [0, 1]
+>> +
+>> +  mode:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: 1 for HOST, 2 for PERIPHERAL, 3 for OTG.
+>> +    enum: [1, 2, 3]
+>> +
+>> +  power:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Signifies the controller can supply up to 100mA when operating
+>> +      in host mode.
+>> +    enum: [50, 150]
+> 
+> Which value corresponds to 100mA?
+
+50 corresponds to 100mA, I will add it to the description.
+
+> 
+>> +
+>> +  phys:
+>> +    maxItems: 1
+>> +
+>> +  phy-names:
+>> +    const: usb2-phy
+>> +
+>> +  usb-phy:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    description: Phandle for the PHY device.
+>> +    deprecated: true
+>> +
+>> +  ctrl-module:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description:
+>> +      Phandle of the control module this glue uses to write to mailbox.
+>> +
+>> +required:
+>> +  - reg
+>> +  - compatible
+>> +  - interrupts
+>> +  - interrupt-names
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    usb_otg_hs@4a0ab000 {
+> 
+> usb@...
+
+Okay.
+
+> 
+>> +        compatible = "ti,omap4-musb";
+>> +        reg = <0x4a0ab000 0x1000>;
+>> +        interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>,
+>> +                     <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>;
+>> +        interrupt-names = "mc", "dma";
+>> +        ti,hwmods = "usb_otg_hs";
+>> +        multipoint = <1>;
+>> +        num-eps = <16>;
+>> +        ram-bits = <12>;
+>> +        ctrl-module = <&omap_control_usb>;
+>> +        phys = <&usb2_phy>;
+>> +        phy-names = "usb2-phy";
+>> +        interface-type = <1>;
+>> +        mode = <3>;
+>> +        power = <50>;
+>> +    };
+>> +...
+>>
+>> -- 
+>> 2.52.0
+>>
 
 -- 
-2.52.0
+Best Regards,
+Charan.
 
 
