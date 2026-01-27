@@ -1,60 +1,56 @@
-Return-Path: <linux-usb+bounces-32811-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32812-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yPx+FhTLeGmNtQEAu9opvQ
-	(envelope-from <linux-usb+bounces-32811-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 15:26:28 +0100
+	id 6GTyEGPLeGmNtQEAu9opvQ
+	(envelope-from <linux-usb+bounces-32812-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 15:27:47 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A779599E
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 15:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 95EED95A0C
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 15:27:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0F09F308690A
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 14:21:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B2D363019916
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 14:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B356357A26;
-	Tue, 27 Jan 2026 14:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A113570B4;
+	Tue, 27 Jan 2026 14:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Bj1Di1J7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lb46GpRY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8436F29CB52;
-	Tue, 27 Jan 2026 14:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4063E205E25;
+	Tue, 27 Jan 2026 14:22:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769523673; cv=none; b=SxfgvV3uPandO+6hHXQvaCzVYLHmYJk8h0jo3Y5UFRYB76Dg6lhbkg+HgACtD1dOMiNVDUbR+sqJwh7ibNQ+NTSQQVeP30O3kd6qejJrJ55vxxIibzuyDJPrmDa/Yn12ZglxQG+NeT9L1DA2gELvdC6h+0akUcO33fXAUBXgzW0=
+	t=1769523774; cv=none; b=SgrSMlskh63jPmvMz9iBL40EB60/x4ijr6QwM82xrKg1Ng3ee4JYue3LEiC/LsocXh4h21WbwoMa+RGlqOcqpqKfjB56hV/36+4+mHaRkq8Dmg2v3guicVKX/bxZ5lFl/RQUWLOhH6qlzifJOVFUJ6dygIDG/o/tCD8UIV3T0EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769523673; c=relaxed/simple;
-	bh=wBeGSjwY8U0HhnZh/gML77jeYXE+uMuupIvLoDqkjjI=;
+	s=arc-20240116; t=1769523774; c=relaxed/simple;
+	bh=dpjU6mJDBtum2+5zlVCW9Efk6cyaxO8GOg2RoRovxZk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=igCdb5nKdoaIdT65xX6UTe1T3glac0RH3dUtojvgRwCpblvD8RiG4qGRYwbJLHQ0XtTBBVCQ4p9FNABbQ4MGaRROKIAHx/0CD4i1/jHqQzTqaQzcmTOJ2HLx3LUFjH7PdAeI3MnYVue5v0xeVMokLdcWI1T3W7AfvVYv7+mk2FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Bj1Di1J7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9628C116C6;
-	Tue, 27 Jan 2026 14:21:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gy88vlBaGTwmzkd9SHmi37CPJqBMxNkxuyCi6Ff3yTDkFB4DuW19r54y7AAtQZNoiSOR3f5E+GWo7qmMxOE6Z/EcYx2BGP13ZUzLZ7mNKc//f87i5XtURxFIj/rViTRyjcBQY8DyXgeD19eiKGJ4UX5AXuQI7flMOKgs5n05lb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lb46GpRY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A5AC116C6;
+	Tue, 27 Jan 2026 14:22:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1769523673;
-	bh=wBeGSjwY8U0HhnZh/gML77jeYXE+uMuupIvLoDqkjjI=;
+	s=korg; t=1769523773;
+	bh=dpjU6mJDBtum2+5zlVCW9Efk6cyaxO8GOg2RoRovxZk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Bj1Di1J7auP2frDfyvDpEAlI8IpaRNgW4TuVLc6327snNcs7KYz71Z7U0qb+WFJx3
-	 eEvDwPDnNPBiMEjz186PeD3sXa0Q6i8uS8RiacMNMcjH5MwaAnw2IKeNMHxRh+ynjW
-	 YxolZ5Mp1/gK/iAHIRYo9FwQXq1tWVoSzia141Qk=
-Date: Tue, 27 Jan 2026 15:21:10 +0100
+	b=lb46GpRYr7b81Jr15wtvcXJQ5u5Q6KFXDgbrthXgufDQFVCptjtqJgfpGJyIqQhM6
+	 cqw3tjtBGBPjY9Tfpfgp3sqs/q8bnkX1opxKnYTbTDGhOpuP0K5ejmsGRKsi7EeS9d
+	 ar+GebNthJMv8n0Sm2/WEEmlWDSeM8Q/P6XFZNBQ=
+Date: Tue, 27 Jan 2026 15:22:50 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Jan Remmet <J.Remmet@phytec.de>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"upstream@lists.phytec.de" <upstream@lists.phytec.de>
-Subject: Re: [PATCH] usb: typec: hd3ss3220: Check if regulator needs to be
- switched
-Message-ID: <2026012754-trump-coziness-cda1@gregkh>
-References: <20260126-wip-jremmet-hd3ss3220_vbus_split-v1-1-b2f946f1a4ae@phytec.de>
- <aXd7EN9KAmtEHODq@kuha>
- <1c36ebc4-9a37-4e88-a39f-e6472c0df11b@phytec.de>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Jisheng Zhang <jszhang@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] usb: gadget: Add a prefix to log messages
+Message-ID: <2026012744-disfigure-plural-5699@gregkh>
+References: <20260123142221.14285-1-jszhang@kernel.org>
+ <2026012339-landmine-risk-5c9c@gregkh>
+ <04929f5f-8760-45f1-999a-c48e8dea6876@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,28 +59,27 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1c36ebc4-9a37-4e88-a39f-e6472c0df11b@phytec.de>
+In-Reply-To: <04929f5f-8760-45f1-999a-c48e8dea6876@rowland.harvard.edu>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [2.34 / 15.00];
 	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
 	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32812-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-32811-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
@@ -92,41 +87,46 @@ X-Spamd-Result: default: False [2.34 / 15.00];
 	TAGGED_RCPT(0.00)[linux-usb];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim]
-X-Rspamd-Queue-Id: A5A779599E
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 95EED95A0C
 X-Rspamd-Action: no action
 
-On Mon, Jan 26, 2026 at 03:22:01PM +0000, Jan Remmet wrote:
-> Am 26.01.26 um 15:32 schrieb Heikki Krogerus:
-> > Mon, Jan 26, 2026 at 01:06:36PM +0100, Jan Remmet kirjoitti:
-> >> Check regulator state as peripheral and detach can disable vbus.
-> >> Without this check we will try to disable the regulator twice if
-> >> we disconnect host and then connect as device.
-> >>
-> >> Signed-off-by: Jan Remmet <j.remmet@phytec.de>
-> >> ---
-> >> This is a fixup from
-> >> - Link to v1: https://lore.kernel.org/r/20260115-wip-jremmet-hd3ss3220_vbus-v1-1-b7d9adfbe346@phytec.de
-> >> To
-> >> - Link to v2: https://lore.kernel.org/r/20260123-wip-jremmet-hd3ss3220_vbus-v2-1-bcad313ce92b@phytec.de
+On Fri, Jan 23, 2026 at 11:18:29AM -0500, Alan Stern wrote:
+> On Fri, Jan 23, 2026 at 03:52:11PM +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Jan 23, 2026 at 10:22:18PM +0800, Jisheng Zhang wrote:
+> > > I met some log as below:
+> > > [  581.262476] read descriptors
+> > > [  581.265558] bcdVersion must be 0x0100, stored in Little Endian order...
+> > > 
+> > > To be honest, if I'm not familiar with the usb gadget framework, I dunno
+> > > which component is complaining. Add a prefix to log messages, so the
+> > > above messages will be look as below:
+> > > 
+> > > [  581.262476] usb_f_fs: read descriptors
+> > > [  581.265558] usb_f_fs: bcdVersion must be 0x0100, stored in Little Endian order...
+> > > 
+> > > Then solve similar issues for f_mass_storage and f_tcm.
 > > 
-> > I don't understand that, but I think you are fixing a commit in Greg's
-> > tree, right?
-> Yes
-> > 
-> > If that's the case, then you need the Fixes tag.
+> > These should all be using the dev_info() and like calls, not pr_*(), and
+> > if that happens, then you will get the correct prefix.  Can you make
+> > that change instead?
 > 
-> Sorry, I'm not familar with the workflow here. Should it be a "--fixup" 
-> git commit against the usb-next commit id?
+> Unfortunately, the composite gadget driver doesn't create sub-devices of 
+> the gadget for the various function drivers to bind to.  The only device 
+> available is the gadget itself, and its driver's name is just 
+> "composite".  Therefore dev_info() and others will not show the 
+> particular function driver, which is what Jisheng wants to see.
 > 
-> Or
-> Fixes: 7e7025811579 ("usb: typec: hd3ss3220: Check if regulator needs to 
-> be switched")
-> 
-> In the commit message (again with commit sha from Greg's usb-next
+> Also, some of the calls affected by these changes occur at module 
+> initialization time, before anything has been bound.  They don't yet 
+> have any device to refer to.
 
-This one, Fixes: is the correct way to do it.
+For things that happen before a device, sure, pr_() is ok (but really
+should be quiet unless it's for debugging stuff.)  The other ones should
+have or get a device pointer eventually.  Using dev_info() AND the
+function driver name is the best way forward here, that way you know
+exactly what device it is referring to.
 
 thanks,
 
