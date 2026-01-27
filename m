@@ -1,240 +1,164 @@
-Return-Path: <linux-usb+bounces-32801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32795-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2EN0EPaseGlasAEAu9opvQ
-	(envelope-from <linux-usb+bounces-32801-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 13:17:58 +0100
+	id 8IF/Ns2ZeGk9rQEAu9opvQ
+	(envelope-from <linux-usb+bounces-32795-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 11:56:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A870A9429A
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 13:17:57 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14383933D1
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 11:56:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1A6B130054FF
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 12:17:57 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8B307300443B
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 10:56:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1027B3469F2;
-	Tue, 27 Jan 2026 12:17:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D3ED344D98;
+	Tue, 27 Jan 2026 10:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="VUGzRSEE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dl1-f66.google.com (mail-dl1-f66.google.com [74.125.82.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E23A1F4181
-	for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 12:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70AE278E63
+	for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 10:56:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769516274; cv=none; b=KbJEpEMhpjLeKpRaf+PzAYIikNpLU232izB7YaWEAgrYHb2kho3O/2oUa4LM/JV49/tLScF6QqOBdALzap6ar+3C2Ouf27NDz8FekctdhGQ79Zyv2TAONIiQ17Bns9dvKYncVTe/GRbhcxAxm+wJ1ZTxNl38wshsk7wivGs7b14=
+	t=1769511366; cv=none; b=CUc9A12XR3Hb4CEcLLtGme9u40xy9KZZDCaKR1EgvsV0Fw5OIF1Q8R9oMpa7RRAFfz9UiwfUvGPED6PBXCx949S5Z9OgJlcWYNLsMpuiLoqgGMTqKnRoXQx74CFf7HeLbkNLc8xzTeUFv0uiIFX1Cj5Q2LuY/taVPjuO3qM2s6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769516274; c=relaxed/simple;
-	bh=VR7NKRn1EzgAvvzhExxtxmFQMZZBrouxWpYgT74wAco=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Jn11a4aZBgENFsPKG/mAAUDVyBotDZ+kJJ8WulRbhu9r2PGKaMsEHiXZILfthjNhpsCl5joNhiiANte5lfLvjKcdW0U3CxISbdfhVq+ZVbfxQJD58DU4wjpFY4r0mEZUtxKFxZfX/8KgWc3VhSkmEw9fUdSUTsySLWNiaVUaUL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.82.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f66.google.com with SMTP id a92af1059eb24-12331482b8fso3323016c88.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 04:17:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769516273; x=1770121073;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h95kKSGuxlIi6DsiBy3i3OTVnWNnI1FQj5Fv8XU8C14=;
-        b=wZ6/l6e+iDlw7tH1DFZVyEWJoItNem6qVbse79wxosjOItNTJ7GFq2Lpw4aymGyIrK
-         kMbNeAGHsglDW/2CwZBoT83YuS5Ga3+5aOxBkM7faE93CbZFrZy6A6lFzwrsmpRFPPOL
-         cphUZclR2ul2bYRRa/S8M99sedoRmAp9njeNbVoWWNlHPPNLdpc2vrhYinQNOLZsPq+b
-         OnVv00nefBrtYGFcylfaNG1NyO8H86eaqKBCb1HgZzWn/gO5eThynRpHV17vyAIoW3Y9
-         U/MfNu2o622a/8nFb8v0vkjdE3obOMwR+gsl5doOJBb0vaaXdPGIuLv+ZqkrFyU7DpXN
-         sipw==
-X-Forwarded-Encrypted: i=1; AJvYcCUaj7fmEGlbEYywITXZJPAc1GMb0DEEKgxuTCYhcqC5W+zJDmvMy7r8IOBmhJk51QMA7awhQJNOzRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDzglDyWUDV9pSNqxJSlFzeTw6T63h6PesC4Z5kMfWr87RV0Bh
-	zF9FjvPHgifddWvnf2sjqmYCkcx3FUqlDCrZmmkSoZwqCSMsIhWvWHeuNUIwbzwy
-X-Gm-Gg: AZuq6aJEMHPnv+1aZSdnfc3N730SwToyinZCDItgX31/wl3t5mDyEGXhf1uXvhyfARG
-	IGVw142VMgmelu2iCzCUjNnoZKhe76Fk9jqchEivTIpO66U0EAVzvnOEGHy1lxvTnEb7g45eoHi
-	qjArsSE6h+WN853datMeP0dgHjPh4RvFvdJspJuR88IWtDaL6qV41V8J+smTKvfu/RcWe54bVlr
-	lFY8j6gubpgzEiqKjLpJl+pVbNyBqwAgXgJy65YhOI27SD57fjp9E34/HNH5vMueEd5IUMTX942
-	6FBCEBA2IsmdhWWgXB5QxaAoZ+t3YkejjmHpIj2yPuWXEO7W8y0tRH7CO51iALlHx30ubN5MmDN
-	E0nIhnGR0ylBm+dRCH1nXANY4hg3E4KsMKFz4hzMCaxEQ6r1P/MS4rrinBUCdCtJ+OwdHSDPxxE
-	vU143l9CSpgjW9sGZs9UiPelO5pFK7oMDwfnWVQhLYQhe81m42sBpBm4cY9po=
-X-Received: by 2002:a05:6122:319b:b0:566:354d:9f4a with SMTP id 71dfb90a1353d-5667949f0c8mr440970e0c.1.1769509271438;
-        Tue, 27 Jan 2026 02:21:11 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-9482e2ab629sm2286816241.1.2026.01.27.02.21.10
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jan 2026 02:21:11 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-941063da73eso3072953241.3
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 02:21:10 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVkMRvVik56RY7TsWBomceFB1x2oZw+DRolAnyKSAOvYT47mdob1TqvHdy4DV/r/UP8mi/vc67YWXQ=@vger.kernel.org
-X-Received: by 2002:a05:6102:32c4:b0:5db:ca9e:b57d with SMTP id
- ada2fe7eead31-5f72368a7cbmr661077137.19.1769509270640; Tue, 27 Jan 2026
- 02:21:10 -0800 (PST)
+	s=arc-20240116; t=1769511366; c=relaxed/simple;
+	bh=2WTtsp6tRtLH8sv3ozSHBRHTD3nUy0RjoCrUDtlHFss=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cHRJQA4dFZGLVKYD1SFvEmz/pzHpVbhfqU0vrOUTdqCUWWtK0VDR8WhRGBm9DfBg8BKCyBSlN2hN7JhDV6zaCB4cd4zzp3PF87BOkIJCKSFqB6ZPRoDwUHOp9svW2JHsfISkAAHwiFv4BVFkwkZCAxIF6GCQKzTfamCSGfsn3jI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=VUGzRSEE; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1769511330;
+	bh=2WTtsp6tRtLH8sv3ozSHBRHTD3nUy0RjoCrUDtlHFss=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=VUGzRSEE4Ip0BdvmQWRZe3n9N33zfqjN9J5fwv7faUz5kOvcRM4IE/UHGSzN8HyPm
+	 hRdlorMcCrfphAgGczPndCnI24zeWzOD6S2gG7eN4o2Dx9CE+spsRNGqsppJmYTmAS
+	 BUhP6iolebXhE8a4dp0q0bwyfsqU6wbYn0W3V4Qw=
+X-QQ-mid: zesmtpip3t1769511323t79a9b861
+X-QQ-Originating-IP: guhlO2vJa0JqS6+d/3g0D9BYP/n4qFh7Ec8cDC3I70M=
+Received: from uos-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 27 Jan 2026 18:55:22 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 13224395584093145331
+EX-QQ-RecipientCnt: 8
+From: raoxu <raoxu@uniontech.com>
+To: gregkh@linuxfoundation.org
+Cc: kenny@panix.com,
+	linux-usb@vger.kernel.org,
+	mathias.nyman@linux.intel.com,
+	michal.pecio@gmail.com,
+	niklas.neronin@linux.intel.com,
+	raoxu@uniontech.com,
+	zhanjun@uniontech.com
+Subject: Re: [PATCH v11 2/2] usb: xhci: enable secondary interrupters and route transfers per slot
+Date: Tue, 27 Jan 2026 18:55:22 +0800
+Message-ID: <B1C5B74BDE1826C9+20260127105522.3628982-1-raoxu@uniontech.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <2026012754-ferocity-operator-e3b2@gregkh>
+References: <2026012754-ferocity-operator-e3b2@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-0-c55ec1b5d8bf@linaro.org>
- <20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-1-c55ec1b5d8bf@linaro.org>
-In-Reply-To: <20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-1-c55ec1b5d8bf@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 27 Jan 2026 11:20:59 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU9HcK3xX=itqe2di1HS1SJvV6=ySqKyrtj7Yr1yXyuqQ@mail.gmail.com>
-X-Gm-Features: AZwV_QgWv7FB_90Ca_fAZmW1VQjnUFaVdHL_S5QmJWKKvUrnnNh7whB0F4bfOtQ
-Message-ID: <CAMuHMdU9HcK3xX=itqe2di1HS1SJvV6=ySqKyrtj7Yr1yXyuqQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] dt-bindings: usb: document the Renesas
- UPD720201/UPD720202 USB 3.0 xHCI Host Controller
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Rob Clark <robin.clark@oss.qualcomm.com>, 
-	Dmitry Baryshkov <lumag@kernel.org>, Abhinav Kumar <abhinav.kumar@linux.dev>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: NwakYKAl7PbLJXUQXLNB76rVcM7sqcGRHL4qmPXXtN2uvoAwkII3tM1A
+	DrPC3YyJjma+4UxnVcxadGS7u8XtPxHGbfA5Z2+rhNP5bccneXiMmG+uU5IowrrcX8LZZBy
+	rnyXi/0c1vLO+cvQ2j2vMqPmjurkz2LTAcmgHxSw2VDWNYvKAemJmnKbL/2rRnbVzFuiPCW
+	HzmFjSEaZr26HVdg2QMTg3tDGtxS+HAiTq/uNMcvIJcyiWvkEbgc2XRyk1QbfNpaxFYsGZl
+	Jv6zSMyD5NsX1VqPLEdJaqoOHWagEnm1qa/piYuAbdvzK5Keuvn6nQoY+4e7VU2cd6hl0qC
+	V8Vhy0BjjQN6XNpEEf90Ot7DgtNo3HgLNQLiND+XD2lpwVJVG/r1HHmTuBVuxjYqFpcHorH
+	TC/GGPWkwe39LILWrtKg51mZo9Z2eLgp3s6X9/Y/wlze89ijLbvQ5SAs166+uGY4lwBFbeE
+	PPymSgGyGUFDIm6oDam2ojzutvljRU4MTFMUhpopnR8bT1Nb6KE27GZKyn6kOM3juqgrhlx
+	6QJvAqEzSwJq5DABcUEkAAJxkWH98+yEGenTt8CrbqKthZPw+8Skps8jCvywTNUU3uTv0eb
+	mbN+5tJ5SnY+7zTNrDRqQVL3LFFmI5MuzQ62dxl8Ntru0PB2Z/bDmIhI4Ee5oB/oDAsGkVf
+	7/x1o5xpK9G9w7FJVbgkdgDag89k2fxpeGdZkSxQuHyYi17hDXEUi+KoxaWIWZh4ttoK3b5
+	7BN+rBpxaZBddyb+TMrp2VQnzwCtkWmBViPNUqkfsdYgtuLsJ3dNN0nRL2ZLZWRjSzLZjlD
+	EY/GnGo3bF1ZoT0C7fTmCJ0tLKDC598VtmfGwZhAoHOzNFkO7xNRmfTTOafAg/xgQzAHUl8
+	tor1BpWMOBoZZNrsF8upWqCs4SwnA5RVd4GbBUbnrUfPtCpYLbjIBb5kIep818FikOZctWl
+	0X31II2KTSQO4xrXV9HmpTvv/Z4w07EHDj1mJclEYKNncAedd5IJCyNcCDlH1J8Zrd0u02J
+	0z1i1WXbBKlBqbj2miiEO4fzwhu2sa8A/Ermo/Tfs2/kyJyBLCTBZkZyBzwYOjYpJWt7XPV
+	J2F4zuXF3LK8sMXTIAFp2Ioob/6PG5LWE6xCctO38tx7TVPV2PG1CjgY6fgvF7uBw==
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-RECHKSPAM: 0
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,oss.qualcomm.com,linux.dev,gmail.com,poorly.run,somainline.org,ffwll.ch,linuxfoundation.org,glider.be,google.com,vger.kernel.org,lists.freedesktop.org];
-	TAGGED_FROM(0.00)[bounces-32801-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
+	TAGGED_FROM(0.00)[bounces-32795-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[panix.com,vger.kernel.org,linux.intel.com,gmail.com,uniontech.com];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.997];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	R_DKIM_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linaro.org:email,devicetree.org:url,mail.gmail.com:mid,0.0.0.0:email,linux-m68k.org:email]
-X-Rspamd-Queue-Id: A870A9429A
+	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	NEURAL_HAM(-0.00)[-0.990];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 14383933D1
 X-Rspamd-Action: no action
 
-Hi Neil,
+Hi greg,
 
-On Tue, 27 Jan 2026 at 10:57, Neil Armstrong <neil.armstrong@linaro.org> wrote:
-> Document the Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller,
-> which connects over PCIe and requires specific power supplies to
+Thanks for the review. Below is why I believe enabling secondary
+interrupters is justified.
 
-Here: "requires"...
+Legitimacy
+Most modern xHCI controllers report Max Interrupters > 1 and expose
+multiple MSI/MSI-X vectors. Each interrupter has its own event ring,
+ERST and IMAN/IMOD. This series only enables what HW advertises and what
+PCI allocates, bounded by a small software cap, with a clean fallback to
+vector 0.
 
-> start up.
->
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/usb/renesas,upd720201-pci.yaml        | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/usb/renesas,upd720201-pci.yaml b/Documentation/devicetree/bindings/usb/renesas,upd720201-pci.yaml
-> new file mode 100644
-> index 000000000000..df3cdcf44747
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/renesas,upd720201-pci.yaml
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/renesas,upd720201-pci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: UPD720201/UPD720202 USB 3.0 xHCI Host Controller (PCIe)
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +
-> +description:
-> +  UPD720201 USB 3.0 xHCI Host Controller via PCIe x1 Gen2 interface.
-> +  The UPD720202 up to two downstream ports, while UPD720201 supports up to
-> +  four downstream USB 3.0 rev1.0 ports.
-> +
-> +properties:
-> +  compatible:
-> +    const: pci1912,0014
+Why it still matters
+Even if USB link latency is high, the IRQ/event path is still a CPU-side
+serialization point today: all completions funnel into one event ring and
+one handler under the global xhci->lock. Under mixed workloads (e.g. isoc
+video + periodic audio/bulk), unrelated devices can queue behind the same
+lock/handler and increase jitter/tail latency.
 
-Just wondering: how does having a new driver
-drivers/pci/pwrctrl/pci-pwrctrl-upd720201.c matching against this
-compatible play well with normal PCI discovery and probing of
-drivers/usb/host/xhci-pci-renesas.c?
+Sideband reference
+Upstream xhci-sideband work has already exercised and validated the
+multi-interrupter/event-ring plumbing in the core driver. Using secondary
+interrupters is therefore a proven in-tree mechanism, not an experimental
+path unique to this series.
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  avdd33-supply:
-> +    description: +3.3 V power supply for analog circuit
-> +
-> +  vdd10-supply:
-> +    description: +1.05 V power supply
-> +
-> +  vdd33-supply:
-> +    description: +3.3 V power supply
-> +
-> +required:
-> +  - compatible
-> +  - reg
+Why v11 may benchmark flat
+v11 still takes the global xhci->lock in the IRQ/event path, so it does
+not claim true parallel event processing yet. The goal is to make
+multi-vector routing and lifecycle correctness solid (request/free/sync,
+run/stop/resume, quiesce/teardown) and establish per-slot routing. This
+is the required groundwork for a follow-up to reduce lock scope so
+different devices' completions do not wait on the same lock.
 
-... but no power supplies are listed here? ...
+thanks,
 
-> +
-> +allOf:
-> +  - $ref: usb-xhci.yaml
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pcie@0 {
-> +        reg = <0x0 0x1000>;
-> +        ranges = <0x02000000 0x0 0x100000 0x10000000 0x0 0x0>;
-> +        #address-cells = <3>;
-> +        #size-cells = <2>;
-> +        device_type = "pci";
-> +
-> +        usb@0 {
-
-The actual DTS uses "usb-controller".
-
-> +            compatible = "pci1912,0014";
-> +            reg = <0x0 0x0 0x0 0x0 0x0>;
-
-... also not in the example?
-
-> +        };
-> +    };
->
-> --
-> 2.34.1
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Xu Rao
 
