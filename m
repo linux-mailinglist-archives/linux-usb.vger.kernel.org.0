@@ -1,84 +1,84 @@
-Return-Path: <linux-usb+bounces-32760-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32761-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2JS9DCYQeGnqngEAu9opvQ
-	(envelope-from <linux-usb+bounces-32760-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 02:08:54 +0100
+	id vofKGP4QeGnyngEAu9opvQ
+	(envelope-from <linux-usb+bounces-32761-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 02:12:30 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CCFC8EA00
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 02:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB9EC8EA1B
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 02:12:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2321A3025D2B
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 01:08:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 011F8300F9D9
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 01:12:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A77121D3CA;
-	Tue, 27 Jan 2026 01:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 950AE2253EF;
+	Tue, 27 Jan 2026 01:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YSOrMhnw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MagFvMW2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD18207A20
-	for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 01:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57CB221FB6
+	for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 01:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769476091; cv=none; b=AwDkP2MjAyrANV4X8Cx8FMYx7yRu7Vp2jDT/amiH87C82txxoTjcqom3lCBctSOBmcn3ds9xgHaKCg+M8Dg0z5VLwpdrXpwJQHJc4zEGn9cfsjszwSeDt0tts7BOhBu2FSOGPxCzkCLGxn1HdYa0/Qsbi+gz6aI+c/7vHa0WWMo=
+	t=1769476342; cv=none; b=VhWbBoGf9WIKrv6j9LM16Z0z5OsfQg7B1latOfjsFi1VWBze/bRvGUpYWzFJdOWkrkNog0zmlsfRpluqvVBZrTvP0gT/DYovf+MT6jGz/7NJiERN73vmK6/mrl8bKfVGCjGATSmtOWvQxzrRxaVRlUK6EK8lDM6byRxHehi4pmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769476091; c=relaxed/simple;
-	bh=kTC8SpEnQvbvmgYcHhwJO/QuVdlOgR21+GrsFAyhgvM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=neFrVW6X6+4dnFN0JeGhxQDo6HilB5zGoooOfA08eqnRG4xnEgyeEZuU1Pb641UiXvixmtLa12zH+1e6dAoR7a5h+7Vam0AmFXjxihn9kAftpxVFslimwGGfno52Dq443+5jSTz58ahBnL3XoYQ2/mEL29cuPuhsra3tdr1gCbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YSOrMhnw; arc=none smtp.client-ip=74.125.82.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-1233b953bebso12808626c88.1
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 17:08:08 -0800 (PST)
+	s=arc-20240116; t=1769476342; c=relaxed/simple;
+	bh=dJZYkXLww1VVjmgCTGY4U2deQ2roIk/KnWbJvfQspKc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FDgDdEHuX0hBdUKB3kfHGnfCrIgSqwLtVizL6Eem1c+O2+jpLaLqT+gpsgwQQJZ5FVPr3b2MwByyh2jdBKmwvKN/yxokeu9Cswdlm5Nqeg4azYHlzTphvlT9iTNx/J1kg8XzDhYM2EaaUb3kh6WgfTygP1tHObagwFieEKZCFNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MagFvMW2; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a097cc08d5so12684245ad.0
+        for <linux-usb@vger.kernel.org>; Mon, 26 Jan 2026 17:12:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769476088; x=1770080888; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NuNdTfBRKHbZs0pq9qEm16VabkampCsi8zuWM9+u4LA=;
-        b=YSOrMhnw4E/BMO/EfyPvtiWjYKOormU/OGz9KOUfIljwdqArjfVmepH1wYXTmhvqzK
-         QGKAiPmNdeswBnYxsGFy/os+cNnzSXIzUqtWDeoFqFV3fqpVjgOuvGZTlWgW70+41GtQ
-         UulE/eEZGSINWSqN+dzjgKhsGQX1WCQ94KpdY3+FUZWU4xtrhECii/xgD4YdZJJ8+fMU
-         jB6guD0AodBjKhbL0D6DEkN2vRLqg3sA8/3CWU6bOlthzWYTLteR9MmnGeKiYWETvmLq
-         FwKyHLTiwqLPDyyulXS+vibPzK9WkCsEpkpDVJuX+pP0l8gE4cAzHwXthzvdQ3foWJzH
-         TC4w==
+        d=gmail.com; s=20230601; t=1769476340; x=1770081140; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jSwU+Ks+JulPZbOfkes69hc/O2U1jcNe9cfjRlOkhrY=;
+        b=MagFvMW2j1NUHhswa49J2kYKmprFaRdWmDceVMtHXzCX+c4ZLi6/AeFgFSgRYh/uL7
+         nhm4FPTQjTqVXExx7jKrc1+zPGQPT615EJJISK3gfomBP2kVhORnKnpAp6QMFiuafKro
+         pQJkUY7sKInmGU6UrzUlBiQGVcW52su8SIn36zzagJfO9iRJXUdcU3C0qk6pOiXfpLqV
+         7pwHEUEMRLB/2Pg5WHRLrS+a8gpGi2lFNopHt2BU5Jq18H7F4NNy4uCEpqSruonUj+sc
+         I2g8igWNEZeeYYBOU+Sla6Ifcq2zzkhFuwToJ01rQNKqD/98TQGVCq2lK+TeKFTPMf+5
+         rPvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769476088; x=1770080888;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NuNdTfBRKHbZs0pq9qEm16VabkampCsi8zuWM9+u4LA=;
-        b=IkdkVbrZGUidM6NsAjkSVkgalMmGZ7K//mn4r57aN+WBQ8vexQN22mFRWvEcwOVKp4
-         /t9NgKPaD0KzxhTej67eaqOz8nNbqjZxJmob5dGH9PO373dNFoxxqcDfcAFZX2dj3w3F
-         alNCPLH2e6IoMLQF3Wrc4WVd74iEoHQguKOLJqFeuPueY110ZBE0dRZcHOoC2Wr2zycP
-         yMwzhRP3oVFRgnMP4uLh02uaWHNUF6qxl4rboNmcRK1yJsrR+W6Vo1Fr5/ESV3311i6o
-         xtcHHgM+tRkmfZ1PAh4M9BiUDlpoVEnZcMlVtN7ojoKZ6+VQR+ReibhRUmyNmTuXjDal
-         OYuA==
-X-Forwarded-Encrypted: i=1; AJvYcCVPCV3wGeKeRQEs679ycmRlIy8mUFitxudSEnd0558J/Um3uyuJ+AApGjnCiClQy0GG1tRX4D0zvAc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyK2sfzas9GjbRk3uZWmqIByspNj2wHBOTRmtKnentys+x7AMB+
-	sVRwX8AFg1scDB/VUk1eTcz4gG1Rr9bPijANRqNZjhPizCBdhtj/bR5GEjo1nHW+WQ==
-X-Gm-Gg: AZuq6aKb9po/wqpVDFH5/Y02cHsHZjZ4/gi1S2ZWRJlmRZt5kFqn5Mjfd8W1dRzJVyh
-	lMdOnkGZuUOl71ftfkIoiwoxQ8YTI/t+Gx4Z/cm9iTaV1D5jK4vqWYhkyVfUNh3G1Fzpw+SbB93
-	cDz0fTmqus4apSdcTmKndJKLGrPqI9rW5ezqRcvTngBYTInJj7lmB571q4SAUGUm4D0CR9YBo6f
-	Ew877mhg2YhMhzW7rJOpph1yMYYHTxRTItVYwM0GBxP9A3FQwFjczb0knxsxBsWzhpVmC7NYyZ4
-	KtKVRUom6MEkdAMkJWTqw2wzpZ+w4SvphnlWmJe8XDb8o6ir3N0+xEK8rtZo+3Ap7RgONXFGOE6
-	KNr7utOIclXJV18/QlMA2iV3MRtY9DWhTBtoKNwSWuHhqFcwlmMUAwU7qhwVUcsBc2cs6JmIm95
-	YmfGkSBoA7Po0fQWDm+iaARD5r0ETdNC4RX3xtH0wUUq96BeJDkpjBUrUeRtCgKx/VbE1c+U/xy
-	G1PgPPRWC+fcA==
-X-Received: by 2002:a05:7022:2485:b0:119:e56b:c73d with SMTP id a92af1059eb24-124a006801fmr22088c88.2.1769476087269;
-        Mon, 26 Jan 2026 17:08:07 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:8902:a6ab:edb7:522b? ([2a00:79e0:2e7c:8:8902:a6ab:edb7:522b])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1247d91c52bsm22164484c88.6.2026.01.26.17.08.05
+        d=1e100.net; s=20230601; t=1769476340; x=1770081140;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jSwU+Ks+JulPZbOfkes69hc/O2U1jcNe9cfjRlOkhrY=;
+        b=f0OgECkI6wb2cOrx21pavILBs7VROUtpk1uffJR2nP6IWgZ6DHMgGUgbDe1yioe9Zj
+         hYqhvK5aLBdq+dChVCiVJRhh2d7EZgylfnr+CiDhnQB8DzemUP7juZ5s77exisrxLJyt
+         irEq+uBiUDSMFmlJRlMnDhciT5d4r15mI61ugd7CPxDUVx9NjCVPPJuJUWzyGf0u3kT6
+         XJWYgINQ1sCbQIEWi8lLEQc8oq8xuYHocqdlO/o78d5k7GbZ1E6pRgyf0UbplxRW9IKy
+         jECMm56zZ0UFONMcaCzpBVgMIN9PDmIdHftVyPpI8mhltE/Citmjt0lRoMXD/brNJY8W
+         2C3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVpIPO/O0Y3NVwmam8xkVDPnFiUaQ78NInqlqHf4Z+1qALmRKF924Zz6POHwOmi7WqHwUNDiOhu8TA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxLQDdnoK+FXtlGYtritWwz/o9zOv/DVxUL1sJGKTWDFmrhNRy
+	ByTcx+GAJt7xSaPnR9BfrRcetC38nNzkPetNE18wUHbbA1yn5oaCM9m/
+X-Gm-Gg: AZuq6aLoYhixVQ2ut6fYkiULGpvGxTDDtM85GlwPfkTIBzaUnPuaXtUDPZ/aEFLQgiQ
+	Dq7ut7leA4lcBcoj0Kj4hVXwnAPH6ERCvIxkS6Vq+YS5Prq7TEu6IhOC/PEgKkA/GZ5aekFINvO
+	9UF+dgqH5DoxGRWJaCWJSF7ueo9saGubHNSBQa9G1Jzb8A5SJRTBTSFDHTmWuJyG1iHczyLK4jN
+	XzDBfdBNLccAALG6MJfSUME0rndhbU2y4LQATqVrS8Pgc/xW6W++ka2yRl+wAgV10O2s3GW8TvQ
+	PmgOEWF7mlW88spGvTqtpDlevFflazFR8yk5IgrBir/H8XihvJfu9JpD+q5SAQSWiJlIFAgrBBL
+	dQUJQz4lejEmcfjB1u9u7iCX2BBN/PmdZqLM+ngIXxLkc0DZHCuk4mdE8W30m2xQ4fpkY5gVmud
+	iuYiztQ8R4j1293RI/dWYo
+X-Received: by 2002:a17:903:458d:b0:2a0:b7cd:d9c6 with SMTP id d9443c01a7336-2a870de2404mr229435ad.6.1769476339939;
+        Mon, 26 Jan 2026 17:12:19 -0800 (PST)
+Received: from [192.168.1.7] ([159.192.80.104])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-2a802f97ba6sm100426775ad.50.2026.01.26.17.12.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jan 2026 17:08:06 -0800 (PST)
-Message-ID: <ff8d1c62-3bb3-4026-b69e-db26e939aa28@google.com>
-Date: Mon, 26 Jan 2026 17:08:04 -0800
+        Mon, 26 Jan 2026 17:12:19 -0800 (PST)
+Message-ID: <8794178c-0522-4532-b21e-3904f90619f6@gmail.com>
+Date: Tue, 27 Jan 2026 08:12:15 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,372 +86,380 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/5] power: supply: max77759: add charger driver
-From: Amit Sunil Dhamne <amitsd@google.com>
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20260121-max77759-charger-v4-0-694234c8ded1@google.com>
- <20260121-max77759-charger-v4-4-694234c8ded1@google.com>
- <71d816c5ed4ee2d13ec63b8fd4acd49f4e418284.camel@linaro.org>
- <bf3bd5f7-28e1-4fe3-afca-34f12b2cede8@google.com>
+Subject: Re: [PATCH v1 1/1] usb: csc-acm: add Infineon/Comneon modem support
+ (1519:0020)
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Oliver Neukum <oneukum@suse.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260122151746.7745-1-clamor95@gmail.com>
+ <20260122151746.7745-2-clamor95@gmail.com>
+ <fa42a103-3b71-4151-b44d-573452847f6e@gmail.com>
+ <CAPVz0n2xcnvus_u4dYDGL0VcgkWfVOJF7=hKuMPrjsE4UZTNLQ@mail.gmail.com>
+ <8a7ed9d1-c667-418a-a72a-d8d24ed0f9f8@gmail.com>
+ <CAPVz0n1x9gWC0XzC0VQ=syT3LAm_5xof-_T5=8TzKapBQheVjw@mail.gmail.com>
 Content-Language: en-US
-In-Reply-To: <bf3bd5f7-28e1-4fe3-afca-34f12b2cede8@google.com>
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <CAPVz0n1x9gWC0XzC0VQ=syT3LAm_5xof-_T5=8TzKapBQheVjw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32760-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[google.com:+];
+	TAGGED_FROM(0.00)[bounces-32761-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[larsm17@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,dowhile0.org:email]
-X-Rspamd-Queue-Id: 9CCFC8EA00
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: AB9EC8EA1B
 X-Rspamd-Action: no action
 
-Hi Andre',
+On 2026-01-26 21:55, Svyatoslav Ryhel wrote:
+/snip
+> 
+> Bus 001 Device 002: ID 1519:0020 Comneon HSIC Device
+> Couldn't open device, some information will be missing
+> Negotiated speed: High Speed (480Mbps)
+> Device Descriptor:
+>    bLength                18
+>    bDescriptorType         1
+>    bcdUSB               2.00
+>    bDeviceClass            2 [unknown]
+>    bDeviceSubClass         0 [unknown]
+>    bDeviceProtocol         0
+>    bMaxPacketSize0        64
+>    idVendor           0x1519 Comneon
+>    idProduct          0x0020 HSIC Device
+>    bcdDevice           12.74
+>    iManufacturer           1 Comneon
+>    iProduct                2 HSIC Device
+>    iSerial                 3 0123456789
+>    bNumConfigurations      1
+>    Configuration Descriptor:
+>      bLength                 9
+>      bDescriptorType         2
+>      wTotalLength       0x0111
+>      bNumInterfaces          8
+>      bConfigurationValue     1
+>      iConfiguration          0
+>      bmAttributes         0xc0
+>        Self Powered
+>      MaxPower              100mA
+>      Interface Association:
+>        bLength                 8
+>        bDescriptorType        11
+>        bFirstInterface         0
+>        bInterfaceCount         2
+>        bFunctionClass          2 [unknown]
+>        bFunctionSubClass       2 [unknown]
+>        bFunctionProtocol       1
+>        iFunction               0
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        0
+>        bAlternateSetting       0
+>        bNumEndpoints           1
+>        bInterfaceClass         2 [unknown]
+>        bInterfaceSubClass      2 [unknown]
+>        bInterfaceProtocol      1
+>        iInterface              4
+>        CDC Header:
+>          bcdCDC               1.10
+>        CDC Union:
+>          bMasterInterface        0
+>          bSlaveInterface         1
+>        CDC Call Management:
+>          bmCapabilities       0x00
+>          bDataInterface          1
+>        CDC ACM:
+>          bmCapabilities       0x07
+>            sends break
+>            line coding and serial state
+>            get/set/clear comm features
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x85  EP 5 IN
+>          bmAttributes            3
+>            Transfer Type            Interrupt
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0040  1x 64 bytes
+>          bInterval               4
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        1
+>        bAlternateSetting       0
+>        bNumEndpoints           2
+>        bInterfaceClass        10 [unknown]
+>        bInterfaceSubClass      0 [unknown]
+>        bInterfaceProtocol      0
+>        iInterface              5
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x81  EP 1 IN
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x01  EP 1 OUT
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+>      Interface Association:
+>        bLength                 8
+>        bDescriptorType        11
+>        bFirstInterface         2
+>        bInterfaceCount         2
+>        bFunctionClass          2 [unknown]
+>        bFunctionSubClass       2 [unknown]
+>        bFunctionProtocol       1
+>        iFunction               0
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        2
+>        bAlternateSetting       0
+>        bNumEndpoints           1
+>        bInterfaceClass         2 [unknown]
+>        bInterfaceSubClass      2 [unknown]
+>        bInterfaceProtocol      1
+>        iInterface              6
+>        CDC Header:
+>          bcdCDC               1.10
+>        CDC Union:
+>          bMasterInterface        2
+>          bSlaveInterface         3
+>        CDC Call Management:
+>          bmCapabilities       0x00
+>          bDataInterface          3
+>        CDC ACM:
+>          bmCapabilities       0x07
+>            sends break
+>            line coding and serial state
+>            get/set/clear comm features
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x86  EP 6 IN
+>          bmAttributes            3
+>            Transfer Type            Interrupt
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0040  1x 64 bytes
+>          bInterval               4
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        3
+>        bAlternateSetting       0
+>        bNumEndpoints           2
+>        bInterfaceClass        10 [unknown]
+>        bInterfaceSubClass      0 [unknown]
+>        bInterfaceProtocol      0
+>        iInterface              7
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x82  EP 2 IN
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x02  EP 2 OUT
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+>      Interface Association:
+>        bLength                 8
+>        bDescriptorType        11
+>        bFirstInterface         4
+>        bInterfaceCount         2
+>        bFunctionClass          2 [unknown]
+>        bFunctionSubClass       2 [unknown]
+>        bFunctionProtocol       1
+>        iFunction               0
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        4
+>        bAlternateSetting       0
+>        bNumEndpoints           1
+>        bInterfaceClass         2 [unknown]
+>        bInterfaceSubClass      2 [unknown]
+>        bInterfaceProtocol      1
+>        iInterface              8
+>        CDC Header:
+>          bcdCDC               1.10
+>        CDC Union:
+>          bMasterInterface        4
+>          bSlaveInterface         5
+>        CDC Call Management:
+>          bmCapabilities       0x00
+>          bDataInterface          5
+>        CDC ACM:
+>          bmCapabilities       0x07
+>            sends break
+>            line coding and serial state
+>            get/set/clear comm features
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x87  EP 7 IN
+>          bmAttributes            3
+>            Transfer Type            Interrupt
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0040  1x 64 bytes
+>          bInterval               4
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        5
+>        bAlternateSetting       0
+>        bNumEndpoints           2
+>        bInterfaceClass        10 [unknown]
+>        bInterfaceSubClass      0 [unknown]
+>        bInterfaceProtocol      0
+>        iInterface              9
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x83  EP 3 IN
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x03  EP 3 OUT
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+>      Interface Association:
+>        bLength                 8
+>        bDescriptorType        11
+>        bFirstInterface         6
+>        bInterfaceCount         2
+>        bFunctionClass          2 [unknown]
+>        bFunctionSubClass       2 [unknown]
+>        bFunctionProtocol       1
+>        iFunction               0
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        6
+>        bAlternateSetting       0
+>        bNumEndpoints           1
+>        bInterfaceClass         2 [unknown]
+>        bInterfaceSubClass      2 [unknown]
+>        bInterfaceProtocol      1
+>        iInterface             10
+>        CDC Header:
+>          bcdCDC               1.10
+>        CDC Union:
+>          bMasterInterface        6
+>          bSlaveInterface         7
+>        CDC Call Management:
+>          bmCapabilities       0x00
+>          bDataInterface          7
+>        CDC ACM:
+>          bmCapabilities       0x07
+>            sends break
+>            line coding and serial state
+>            get/set/clear comm features
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x88  EP 8 IN
+>          bmAttributes            3
+>            Transfer Type            Interrupt
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0040  1x 64 bytes
+>          bInterval               4
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        7
+>        bAlternateSetting       0
+>        bNumEndpoints           2
+>        bInterfaceClass        10 [unknown]
+>        bInterfaceSubClass      0 [unknown]
+>        bInterfaceProtocol      0
+>        iInterface             11
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x84  EP 4 IN
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x04  EP 4 OUT
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+> 
+Hi,
 
-On 1/22/26 4:07 PM, Amit Sunil Dhamne wrote:
-> Hi Andre',
->
-> On 1/22/26 4:47 AM, André Draszik wrote:
->> Hi Amit,
->>
->> Thanks for your patches, just a few minor comments below.
->
-> Thanks for your feedback!
->
->
->>
->> On Wed, 2026-01-21 at 00:59 +0000, Amit Sunil Dhamne via B4 Relay wrote:
->>> From: Amit Sunil Dhamne <amitsd@google.com>
->>>
->>> Add support for MAX77759 battery charger driver. This is a 4A 1-Cell
->>> Li+/LiPoly dual input switch mode charger. While the device can support
->>> USB & wireless charger inputs, this implementation only supports USB
->>> input. This implementation supports both buck and boost modes.
->>>
->>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->>> ---
->>>   MAINTAINERS                             |   6 +
->>>   drivers/power/supply/Kconfig            |  11 +
->>>   drivers/power/supply/Makefile           |   1 +
->>>   drivers/power/supply/max77759_charger.c | 737 
->>> ++++++++++++++++++++++++++++++++
->>>   4 files changed, 755 insertions(+)
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index 
->>> 0d044a58cbfe0f2b97f3682a86708e1ece108e9f..38354964a85c34611b1b54e20651b360f3b9c11e 
->>> 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -15546,6 +15546,12 @@ F:    drivers/mfd/max77759.c
->>>   F:    drivers/nvmem/max77759-nvmem.c
->>>   F:    include/linux/mfd/max77759.h
->>>   +MAXIM MAX77759 BATTERY CHARGER DRIVER
->>> +M:    Amit Sunil Dhamne <amitsd@google.com>
->>> +L:    linux-kernel@vger.kernel.org
->>> +S:    Maintained
->>> +F:    drivers/power/supply/max77759_charger.c
->>> +
->>>   MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
->>>   M:    Javier Martinez Canillas <javier@dowhile0.org>
->>>   L:    linux-kernel@vger.kernel.org
->>> diff --git a/drivers/power/supply/Kconfig 
->>> b/drivers/power/supply/Kconfig
->>> index 
->>> 92f9f7aae92f249aa165e68dbcd4cebb569286ea..3a2cdb95c98e44324151ac2b86d740ae2923ee77 
->>> 100644
->>> --- a/drivers/power/supply/Kconfig
->>> +++ b/drivers/power/supply/Kconfig
->>> @@ -631,6 +631,17 @@ config CHARGER_MAX77705
->>>       help
->>>         Say Y to enable support for the Maxim MAX77705 battery charger.
->>>   +config CHARGER_MAX77759
->>> +    tristate "Maxim MAX77759 battery charger driver"
->>> +    depends on MFD_MAX77759 && REGULATOR
->>> +    default MFD_MAX77759
->>> +    help
->>> +      Say M or Y here to enable the MAX77759 battery charger. MAX77759
->>> +      charger is a function of the MAX77759 PMIC. This is a dual input
->>> +      switch-mode charger. This driver supports buck and OTG boost 
->>> modes.
->>> +
->>> +      If built as a module, it will be called max77759_charger.
->>> +
->>>   config CHARGER_MAX77976
->>>       tristate "Maxim MAX77976 battery charger driver"
->>>       depends on I2C
->>> diff --git a/drivers/power/supply/Makefile 
->>> b/drivers/power/supply/Makefile
->>> index 
->>> 4b79d5abc49a7fd1e37a26d0c89f94d9fe3a916f..6af905875ad5e3b393a7030405355b9a975870f6 
->>> 100644
->>> --- a/drivers/power/supply/Makefile
->>> +++ b/drivers/power/supply/Makefile
->>> @@ -128,3 +128,4 @@ obj-$(CONFIG_CHARGER_SURFACE)    += 
->>> surface_charger.o
->>>   obj-$(CONFIG_BATTERY_UG3105)    += ug3105_battery.o
->>>   obj-$(CONFIG_CHARGER_QCOM_SMB2)    += qcom_smbx.o
->>>   obj-$(CONFIG_FUEL_GAUGE_MM8013)    += mm8013.o
->>> +obj-$(CONFIG_CHARGER_MAX77759)    += max77759_charger.o
->>> diff --git a/drivers/power/supply/max77759_charger.c 
->>> b/drivers/power/supply/max77759_charger.c
->>> new file mode 100644
->>> index 
->>> 0000000000000000000000000000000000000000..34b5ea0967eb7b4716e81ee1a55227ac872493b0
->>> --- /dev/null
->>> +++ b/drivers/power/supply/max77759_charger.c
->>> @@ -0,0 +1,737 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * max77759_charger.c - Battery charger driver for MAX77759 charger 
->>> device.
->>> + *
->>> + * Copyright 2025 Google LLC.
->>> + */
->>> +
->>> +#include <linux/bitfield.h>
->>> +#include <linux/cleanup.h>
->>> +#include <linux/device.h>
->>> +#include <linux/devm-helpers.h>
->>> +#include <linux/interrupt.h>
->>> +#include <linux/irq.h>
->>> +#include <linux/math64.h>
->>> +#include <linux/mfd/max77759.h>
->>> +#include <linux/module.h>
->>> +#include <linux/mod_devicetable.h>
->>> +#include <linux/mutex.h>
->>> +#include <linux/of.h>
->>> +#include <linux/platform_device.h>
->>> +#include <linux/power_supply.h>
->>> +#include <linux/regmap.h>
->>> +#include <linux/regulator/driver.h>
->>> +#include <linux/string_choices.h>
->>> +
->>> +/* Default values for Fast Charge Current & Float Voltage */
->>> +#define CHG_CC_DEFAULT_UA            2266770
->>> +#define CHG_FV_DEFAULT_MV            4300
->>> +
->>> +#define FOREACH_IRQ(S)            \
->>> +    S(AICL),            \
->>> +    S(CHGIN),            \
->>> +    S(CHG),                \
->>> +    S(INLIM),            \
->>> +    S(BAT_OILO),            \
->>> +    S(CHG_STA_CC),            \
->>> +    S(CHG_STA_CV),            \
->>> +    S(CHG_STA_TO),            \
->>> +    S(CHG_STA_DONE)
->>> +
->>> +#define GENERATE_ENUM(e)        e
->>> +#define GENERATE_STRING(s)        #s
->>> +
->>> +enum {
->>> +    FOREACH_IRQ(GENERATE_ENUM)
->>> +};
->>> +
->>> +static const char *const chgr_irqs_str[] = {
->>> +    FOREACH_IRQ(GENERATE_STRING)
->>> +};
->>> +
->>> +#define NUM_IRQS            ARRAY_SIZE(chgr_irqs_str)
->>> +
->>> +struct max77759_charger {
->>> +    struct device *dev;
->>> +    struct regmap *regmap;
->>> +    struct power_supply *psy;
->>> +    struct regulator_dev *chgin_otg_rdev;
->>> +    struct notifier_block nb;
->>> +    struct power_supply *tcpm_psy;
->>> +    struct work_struct psy_work;
->>> +    int irqs[NUM_IRQS];
->>> +    struct mutex lock; /* protects the state below */
->>> +    enum max77759_chgr_mode mode;
->>> +};
->>> +
->>> +static inline int regval_to_val(int reg, int reg_offset, int step, 
->>> int minval)
->>> +{
->>> +    return ((reg - reg_offset) * step) + minval;
->>> +}
->>> +
->>> +static inline int val_to_regval(int val, int minval, int step, int 
->>> reg_offset)
->>> +{
->>> +    s64 dividend;
->>> +
->>> +    if (unlikely(step == 0))
->>> +        return reg_offset;
->> Does it really make an impact on performance to specify unlikely? 
->> Also, I seem to
->> remember that the if branch is treated as unlikely anyway, but can't 
->> find any hard
->> evidence on that right now.
->
-> I was hoping it's performance improving even if negligible, though I 
-> don't have evidence to support either arguments. In any case, I kept 
-> it for readability.
->
->
->>
->>> +
->>> +    dividend = (s64)val - minval;
->>> +    return DIV_S64_ROUND_CLOSEST(dividend, step) + reg_offset;
->>> +}
->> For these two functions above, have you considered using the APIs from
->> include/linux/linear_range.h instead of duplicating in this driver? The
->> implementations of the above match linear_range_get_value() and
->> linear_range_get_selector_low() quite nicely.
->
-> I think it looks useful, will check it out.
->
->
->>> +
->>> +static inline int unlock_prot_regs(struct max77759_charger *chg, 
->>> bool unlock)
->>> +{
->>> +    return regmap_update_bits(chg->regmap, 
->>> MAX77759_CHGR_REG_CHG_CNFG_06,
->>> +                  MAX77759_CHGR_REG_CHG_CNFG_06_CHGPROT, unlock
->>> +                  ? MAX77759_CHGR_REG_CHG_CNFG_06_CHGPROT : 0);
->>> +}
->>> +
->> [...]
->>
->>> +static irqreturn_t irq_handler(int irq, void *data)
->>> +{
->>> +    struct max77759_charger *chg = data;
->>> +    struct device *dev = chg->dev;
->>> +    int i;
->>> +
->>> +    for (i = 0; i < NUM_IRQS && chg->irqs[i] != irq; i++)
->>> +        ;
->>> +
->>> +    if (i == NUM_IRQS) {
->>> +        dev_err(dev, "Unable to handle irq=%d", irq);
->>> +        return IRQ_NONE;
->>> +    } else if (i == BAT_OILO) {
->>> +        dev_warn(dev, "Battery over-current threshold crossed");
->>> +    }
->> Generally, no 'else' is required after return.
->
-> I will refactor it in the next rev.
->
->
->>> +
->>> +    power_supply_changed(chg->psy);
->>> +    return IRQ_HANDLED;
->>> +}
->>> +
->> [...]
->>
->>> +static void psy_work_item(struct work_struct *work)
->>> +{
->>> +    struct max77759_charger *chg =
->>> +        container_of(work, struct max77759_charger, psy_work);
->>> +    union power_supply_propval current_limit, online;
->>> +    int ret;
->>> +
->>> +    ret = power_supply_get_property(chg->tcpm_psy,
->>> +                    POWER_SUPPLY_PROP_CURRENT_MAX,
->>> +                    &current_limit);
->>> +    if (ret) {
->>> +        dev_err(chg->dev,
->>> +            "Failed to get CURRENT_MAX psy property, ret=%d",
->>> +            ret);
->>> +        return;
->>> +    }
->>> +
->>> +    ret = power_supply_get_property(chg->tcpm_psy, 
->>> POWER_SUPPLY_PROP_ONLINE,
->>> +                    &online);
->>> +    if (ret) {
->>> +        dev_err(chg->dev,
->>> +            "Failed to get ONLINE psy property, ret=%d",
->>> +            ret);
->>> +        return;
->>> +    }
->>> +
->>> +    if (online.intval && current_limit.intval) {
->>> +        ret = set_input_current_limit(chg, current_limit.intval);
->>> +        if (ret)
->>> +            dev_err(chg->dev,
->>> +                "Unable to set current limit, ret=%d", ret);
->>> +
->>> +        charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
->>> +    } else {
->>> +        charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
->>> +    }
->> For all the possible errors in this function, should the driver try a 
->> bit
->> harder, even if unlikely to occur?
->
-> Maybe we can do this:
->
-> On failure of either of the power_supply_get_property() calls or 
-> set_input_current_limit(), we should first turn off the charger (as 
-> that's the safest choice) and reschedule this work for a certain 
-> number of times (maybe 3). Obviously, if we recover from this state, 
-> we reset the error limit and don't reschedule this work anymore. Do 
-> you concur?
->
->
->> What if the current limit needed to be
->> reduced, e.g. due to thermal or any other reasons?
->
-> This specific piece of code is for setting current limit that is 
-> driven by USB Type-C subsystem. If the Type-C subsystem re-negotiates 
-> a PD contract this piece of code will re-run as this subsystem will be 
-> re-notified by TCPM. For cases where we need to cap the current limit 
-> due to thermal management, that's a hardware driven feature. It is 
-> enabled by enabling JEITA management. That's not in the scope atm.
->
->
->>
->> Could rescheduling the work be something to consider?
->>
-> Responded in the previous comment.. 
+I can't see anything wrong with the union descriptor in your listing. 
+What is your reason for adding this device to cdc-acm?
 
-
-Following up on this comment, in case you missed it :)
-
-
-Thanks,
-
-Amit
-
+thanks
+Lars
 
