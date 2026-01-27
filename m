@@ -1,233 +1,377 @@
-Return-Path: <linux-usb+bounces-32817-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32818-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wCKsIPvSeGmNtQEAu9opvQ
-	(envelope-from <linux-usb+bounces-32817-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:00:11 +0100
+	id 6IKqMG/VeGmNtQEAu9opvQ
+	(envelope-from <linux-usb+bounces-32818-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:10:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3967D9632A
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:00:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DCBC96611
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:10:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B280A304BC07
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 14:46:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0C30F30305D3
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 15:04:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80D0E35B63F;
-	Tue, 27 Jan 2026 14:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A5A35D615;
+	Tue, 27 Jan 2026 15:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=phytec.de header.i=@phytec.de header.b="gf8JuuEJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eu4jX37C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11020117.outbound.protection.outlook.com [52.101.84.117])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C188035D617;
-	Tue, 27 Jan 2026 14:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.117
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769524953; cv=fail; b=cQ3/AYAcS0k1iMEhdNxaKBB19Zp0WTI31hBozACA7oWcGT/7+7cv4IwRSi4nHMwItKZrXio2PcERDO09xvV/Uq+/hNOjjVnQwA7Auf66iVBjxr22oXbsR7bpfeV7vTspd0Z46x21uYOxyE+Nyjbb50ZX9J2WwfVL1TkILjPw5wg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769524953; c=relaxed/simple;
-	bh=bsywDA+dnJVor/97ZSVFxQt6+vMKK55EHUerSULjiRE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=RCdCJTFS36LYZH0kFv6+CB8TuZE4iiM8+X04wpYVvXctGf0EfEcvRAUzVOvJBONs7rDwls6i8x/CTGmn4grZx95TV3bJXxz+lZngvpikKtWaTuaAMxq5K3kmyt6VdhEYQQ7QaUiy+ImeYz1ZW3gGhk3EGGbs5dJpme6zTVsLh+I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=phytec.de; spf=pass smtp.mailfrom=phytec.de; dkim=pass (2048-bit key) header.d=phytec.de header.i=@phytec.de header.b=gf8JuuEJ; arc=fail smtp.client-ip=52.101.84.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=phytec.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytec.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QRUIPciRqDqT599UkcoCP33Yy+XIkWrA28ARz2SYQKRaX3QMV/u6LG6tSC0xkcraBs8dC+Sboz3f80ZLFr8vEj/7PAYe/hJSjjSzs/t+alTwCbLQ++YW6W1bs05CXqd1FEXJoaER1BO5/NHyYm6+W3LVzmud8T2yctGgNYFbhbcYe8hbzLp1sq7RxDuPSsY24tYtiIEKEbRtVQa4AWtCR33f6a6RYjswXXfnkphw4y2alKnKKsRkTtAACFViCbsLUDsGWMot7iSmjEAxS9daaKC9ygNt6el55uC+HfVU3u8GaGKxVLrV2EUQGzBu713dzsWkeJgLs6nK2Xweznvu3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CB8YqtQ4khvmEpPN5Bw/SZBTI6NI9Pgn91PpG4cxajw=;
- b=ql5UQ0oCdNAdYKF+zGHj18CBw/Q15mS5oQGLcTBinANWBg//a+ZFrKYUdgKslMcsY13ODgR5I2pYdW75KyG31fTmFhcfkF05osW7XiCDJ7UFnDaUCUGXJPHBZt00NDpPRkYuru5sA5pTngXaXC0tDGQnFVkzFuexpcoE9n656GDAJ/AySjF5XiwAoa8JMuEalRgeTdExCaFuxBcSKhF78vAroaUofpGI2db3CqQ1thVQBMu5SYdqGWv44vto2ZCNDsE3zTIkvMmiTVH4IB0sV8r4CYTz86TAyk08gbLAYs3nNC4L8TE01Wo39Ptf7+Pf36V4KH6kFBl24r9k9ZrtdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 91.26.50.189) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=phytec.de;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=phytec.de; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=phytec.de;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CB8YqtQ4khvmEpPN5Bw/SZBTI6NI9Pgn91PpG4cxajw=;
- b=gf8JuuEJgJixiwCIAGILpMnVV68V/m9A4Gu7vErxVj1p6FdR3zb6P1OT3NqkoxfQ/06NhpG3BTXpsv+tapKTpM8tz7v4hdbDVMM//LdLtKs9QrvdhWS18/jiJbt25Y+99MqpPQuGi6Bu7lYEyRWoNpVnZMTwkJeKCDJQZ2q62QNWgzDvPz6nqk+S2xcn/NO2oxSHIgGyqPkm3OOb1AbAtlegypTO3u9MIS0YuaD4EWUBbLuBXVRbFLvsRdx4NHqFyrRxeb82wYiiN76rZOZaLHR3+YWvqksALUqfqpcgE5YxFwTSHBJ3SFi2AUJtw87WyEbVobdPZlp28VZWUBuqjQ==
-Received: from CWLP265CA0435.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1d7::8)
- by DB9P195MB1419.EURP195.PROD.OUTLOOK.COM (2603:10a6:10:327::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.15; Tue, 27 Jan
- 2026 14:42:24 +0000
-Received: from AM2PEPF0001C712.eurprd05.prod.outlook.com
- (2603:10a6:400:1d7:cafe::85) by CWLP265CA0435.outlook.office365.com
- (2603:10a6:400:1d7::8) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.16 via Frontend Transport; Tue,
- 27 Jan 2026 14:42:25 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is 91.26.50.189)
- smtp.mailfrom=phytec.de; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=phytec.de;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- phytec.de discourages use of 91.26.50.189 as permitted sender)
-Received: from Postix.phytec.de (91.26.50.189) by
- AM2PEPF0001C712.mail.protection.outlook.com (10.167.16.182) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9564.3 via Frontend Transport; Tue, 27 Jan 2026 14:42:24 +0000
-Received: from llp-jremmet.phytec.de (172.25.39.81) by Postix.phytec.de
- (172.25.0.11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.35; Tue, 27 Jan
- 2026 15:42:23 +0100
-From: Jan Remmet <j.remmet@phytec.de>
-Date: Tue, 27 Jan 2026 15:42:15 +0100
-Subject: [PATCH v2] usb: typec: hd3ss3220: Check if regulator needs to be
- switched
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C3235DCE7
+	for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 15:04:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769526249; cv=none; b=SFMfrlDjH+9QVY5Clz7/lD3pIh5/LeI+IoEFe4kUr22kGQcu7CsPpRRVypkFl52fqxWbUD2HNVAT2GHRBZYoeVcM9GjXWc5//U6H8gTod7jHO8hOw/Kf6TRq4wA8VhiMQm5r1J+aof30W0xHihgtINKu+MMvvWxUaMgAj6X23Dg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769526249; c=relaxed/simple;
+	bh=2oYYDYAvm4jTAaky3FQraxx496L7hwtdllCzqgHnnGE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VeAa2gpdXttHn3hDAk0aXfWGgRE38YFomAdUsRiTLsavzhjYTU6Y0LpfJFag9EYBMafYklNEHd4/rWdthk4Hp6UL9kHp8L3IQ99jyYSOLygKFXu3QuwjQbk+HnNu1OxH05TtqlJcQHqbv+n+ovB3ZdLWKoOhTPzbj66Wdl4W24E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Eu4jX37C; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c622ce9a33bso1825420a12.2
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jan 2026 07:04:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769526247; x=1770131047; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ph6GwNlod+IS+C8k9beoEWeYzHPUGffF1N1gSwv1l98=;
+        b=Eu4jX37CyCQCa/yNytVuptcAAQpbp1KaIYE0d+tgs9YiGn1QA9GJ6aMGYX/doWddkA
+         ggG8/3ke5LFL2dbVT8hLY+nVW8AfJCwFg8qfuSYir9yKSurNsafdBr0uMXIUa8sJalRA
+         GSGvhA6M+eKhOw9bL/D4rS4XHBKNxCqeB0WJu8f3GxW7VRPFpa9+qlozwG0ICACGxSYz
+         AVjx+/9Jn/42DvqQDCuY/6BpaglSIdbpuGLiH9PlEAz4GEW29vQ33FEWqUonPNA+2QiG
+         2huiSIuqz5QWJJ4KQ3fHE//w0nZNt1OadoBc5b0FWGHl5smonefJgYRFjE3a8hlASA+G
+         T4DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769526247; x=1770131047;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ph6GwNlod+IS+C8k9beoEWeYzHPUGffF1N1gSwv1l98=;
+        b=rOwi4caICWEtfgmd3z6ik9VyoiZdqiZg0Cclb43hCsKPSlerp+V8xOKr5m0lBbDH9F
+         lUceWUb+Yp1uzVocf9cBTNTLJI6HKyZdVSgtWf35R2kNilXtNdxzYitNL5dkOjOnO7sa
+         /Ngy+Q5wHIaP5asbRGWcfRjOcd08oW0UL2fCGvNKo9G0Jbhfs4iOR1L+EPkCnpui8PaH
+         o2ZpWjeboPClZArYYaOP5b02O3ppth3G+UeYzBwhyCI77GjYk9+rCBGXwj754Uv6HPSl
+         4Ae6SfhgDwJvyebHlE4o9H0Dlh4VvsTRlBOjU8OLgy+e+epjdB94mLDhUPROz0Cl6cHG
+         UMIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWm8yaaEViJmAawOtIQ3iiWpAlFtbY9Vbbz7NMaibx2MsCTsRNvMMGKLkmR7bsQXr2jMWELQCDPyPk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx820u1ttOf2Wbj/5SywIkgaIBxN8gA0QCGdsEb6/A+quiEU3Z8
+	u/istxOJ9p23QnwwjiqUlBiKCTmtdQiPP11vHZXejCy72LaRFH1ohGCn
+X-Gm-Gg: AZuq6aKUPczqX6MyGuLvURjSgi9OXtwYKryZ/6vfF6W/JRZQWgptlOwueWk2dZXmNUy
+	ySbFLNgTp4+BQy+jvFdabjmxaIkusn4+D4qw6f/IBBe61+cFqBokgqHbJzwk2rogXJ6w5HQ3opv
+	W5PdSb+BoMUkr4b8/6oe/RM9tWp+pG7Ypch2CAPxbQWSy4VcomgrCeetGHlQbywzxgPTguv6KDc
+	OjwzYhWE9YELwvbYUgXUpNfU3HMOHyzRsNNbs29V/PSn61IdpSWDqE1ta7gUrUTqt7zZMqOTxTh
+	rtPt6PpAggcc3GJ9ouANqxN5kl1Rj6BuAENQUtGLJnMhLRP/jAN85YQyZV7U/b9DR6QrAj0eWtM
+	PZ1BFCAwfSxq+gR5hVL46YTlvI8N99Sas2sHJrcJ1+A4KfmcawhBYURdyr6aHJd6r3QME20Q1nd
+	Oq75kwz0P7kqfjiDzAEauuzjfdmieb4qyr/d4=
+X-Received: by 2002:a17:90b:1d02:b0:34a:e9b:26b1 with SMTP id 98e67ed59e1d1-353fed9900fmr2036177a91.26.1769526246430;
+        Tue, 27 Jan 2026 07:04:06 -0800 (PST)
+Received: from [192.168.1.5] ([115.99.251.203])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-353f5f96293sm2952869a91.0.2026.01.27.07.04.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jan 2026 07:04:06 -0800 (PST)
+Message-ID: <a8c5e85c-6f42-4a5a-8dab-fe43728e8009@gmail.com>
+Date: Tue, 27 Jan 2026 20:34:00 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] dt-bindings: usb: ti,dwc3: convert to DT schema
+To: Rob Herring <robh@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Felipe Balbi <balbi@ti.com>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260126-ti-usb-v1-0-2855c129eb6d@gmail.com>
+ <20260126-ti-usb-v1-2-2855c129eb6d@gmail.com>
+ <20260126160835.GA2502193-robh@kernel.org>
+Content-Language: en-US
+From: Charan Pedumuru <charan.pedumuru@gmail.com>
+In-Reply-To: <20260126160835.GA2502193-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <20260127-wip-jremmet-hd3ss3220_vbus_split-v2-1-f615d4e88634@phytec.de>
-X-B4-Tracking: v=1; b=H4sIAMbOeGkC/5WOyw6CMBBFf8V0bQ0dCIIr/8MQwmOwYwRqp1QJ4
- d+tuHDt8pzFPXcRjJaQxWm3CIuemMYhAOx3otHVcEVJbWABEaSRglQ+ycibxb5HJ3UbM8cAUen
- riUs2d3IyT9IsguSYY5aLMGMsdvTaEpfiyxYfUyi5n9TEbrTzdsOrj/2j6JVUsoYulDtVJRWej
- Z4dNocWRbGu6xtAcGHm5QAAAA==
-X-Change-ID: 20260126-wip-jremmet-hd3ss3220_vbus_split-946802479e89
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Krishna Kurapati
-	<krishna.kurapati@oss.qualcomm.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<upstream@lists.phytec.de>
-X-Mailer: b4 0.14.2
-X-ClientProxiedBy: Postix.phytec.de (172.25.0.11) To Postix.phytec.de
- (172.25.0.11)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM2PEPF0001C712:EE_|DB9P195MB1419:EE_
-X-MS-Office365-Filtering-Correlation-Id: 641fca1e-aea3-4406-9cb0-08de5db248f8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|376014|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?eUh3elh2KzdtY000NUx3UG95K01XakJLL0RPV3BZdXpKZE5heDNzL2tnK1JV?=
- =?utf-8?B?cHBLakVJRUJGR3FEZnNzZmtpcm5ZOG43aWJCYkRLSXFleVgvdnlwV3FGanlq?=
- =?utf-8?B?cHhOdHdiK3ltSXhyeW5JdGN0eFBSZXF1QUVNUm43a0VmNXJpdHo0OHdLaUVj?=
- =?utf-8?B?Z28vaENYWEVIUXNCb3Y0WGVPL3p5OGV6akgxa3kzMEE3S01taFpJN3N5Y3BM?=
- =?utf-8?B?NFRaQ25NUDF3R2VvcHN6TFlJUUlDbnU1ek9FOHJUUGZvdkQwU050U1I1ekN5?=
- =?utf-8?B?eTNCUzhSMGVtMXBSNy9XQ01SbkUvTEFiTXYrR1U3Y3ZNSCtUcGRia2dUQVpr?=
- =?utf-8?B?ZHhHVlJuQVR3aXVDM21oYXE3dnhueXlVVGF5cXdvaGRXUjF4UjhIS1c4RXlE?=
- =?utf-8?B?VmFwSUhWVDJMWU04MUNxUFp2V1RQWmRZY1JiZ211MmFLUkpCTFBLRXFRUVlY?=
- =?utf-8?B?Zjl4TEtwdlVqTXBRcm4rbHlDUVp3NE4rbVF0SEZBTUhYYXIvZFpidEkrQy9R?=
- =?utf-8?B?SzQrcnpBMUJ3WHdHMis5UnhnbW9YWXhZK1RVUlpOOVlRTjBvOEt3Z3N5L1Jz?=
- =?utf-8?B?aG5jcnJuU0lidG5ReTJDR2lZOE9WU0I4TkdNWDJ1eXpvRHFNSkIzc2VJOUk1?=
- =?utf-8?B?WWRtbFFGUFlIdlBiYzU0UHRqeGJ0RDl2VkNKTkdZM2V5bWZQNm5QS2hwQlhI?=
- =?utf-8?B?UUhRV2Z2UDQxNkFPeVJYeEhzWTZvUzliRWd5bFNjb2prQk5kVzIvZWpscjVl?=
- =?utf-8?B?WnRDZ2FaaWtwbk9ZSE5aQ09Qak5lUmVxY1BDVk4rREZldjl5VG9QT0ExUGFR?=
- =?utf-8?B?R254V3dIOVh0QmJiS3V4SnJYVVY5Mlg4MGFaTjZja2VqRTVLVHFZdmNiak9h?=
- =?utf-8?B?Q21HMG9hcmpPUlpmWXcwUS9TRm80VUVkSFVuWGRxSDFUWmo5TDRIczdnMjQw?=
- =?utf-8?B?TmJPMzVGMDdKN3h5cTdqbWxvbTJid0NHVFFLTkRmZ3ZxMmJLMFdGSlAxT204?=
- =?utf-8?B?NzBDTDgwMjNKM3NsdU5rK2V5V1VWQnFLN0I5V2w3VWx5ZDlTcFpiWDViRDZ5?=
- =?utf-8?B?ditlZDJUeHpYU3dDNU1hbzhPcXdScERlV1o4UjF5ZEdhbFJuK3hGL3c1Uk5i?=
- =?utf-8?B?MTNyQ1Z2d2Z1R1BKTGV4a3dTNlBaRVBVQ3hqR0ZjL1RJYSt3czZoZzl3ZVJp?=
- =?utf-8?B?aXhPMFdzK3Jhd0orOStVbHJWaEExMGc5VnNhNU1XcFV6cTJUeVByUkh0ZGV4?=
- =?utf-8?B?YmYvQWNzelVRL1NxZG5ZUnUwbzl5ellOUFJtSWtBRWhzcU9KVXd3MHRMTjJs?=
- =?utf-8?B?eU11RENkN1hTTnhrWmZCU2U1WWZ3dEV6Y3poMHlxcFE4VEZlL3B0V3JpbnNO?=
- =?utf-8?B?OHNyeUtOMFpYS014eVh3SFhiVThKOWR6QjdKRjBBUU9VcmozUVliekZtNDR5?=
- =?utf-8?B?OHFTemVRUjBYaHZWOG1hRzNkbXRvVEZUc1Ywc2RlSENYaC9mZ2lyZzdqcHI5?=
- =?utf-8?B?K25zeFJncFVFN1VmU3BmN2J5UE5mdngvRVI2WFRUNzBiaCtHZjhycmw4UTJR?=
- =?utf-8?B?SVdLaWRUNlU1ZGY3MlJJRmdHRFpMT0lGM1hSblpqSzQyeUhtQ1dYYUk2UVpo?=
- =?utf-8?B?a2RGL1pmY2RYbUcxNkx5a0Y2RXE2eEM5dFY0S3I1aUdMSVBrQUluZ2xWNWVK?=
- =?utf-8?B?K0VzYkRZelNjc3E0cDN0Q2NxRVhHb2FjcHQ2SHVYT0V3Z2lqUy9jNnpxYlk2?=
- =?utf-8?B?b2pZVW8wWmNKMU9uK3lUOUx3TXMrSVFIdW94UGQvbGF5bWwweG5za1hjWGVt?=
- =?utf-8?B?dGNNMFdUT3RPY2ErM3c1Rk1HdkxId0VoVk1na1RNMlNPa1QyQ1ZYK3ZCWHZt?=
- =?utf-8?B?SG1xa2hnWEt3aHJzN0JHMU00dVp1UzFlUEYzVWNDS1dyblVLUVJza1ZFbkRu?=
- =?utf-8?B?ZXRwZ3VjREM3djFNdVNBMHB5ek9UOGJJckxaWjNxOWtDancxdXhZSVh4K2ty?=
- =?utf-8?B?T3NlMjh2aTRRTU9wdUZSd3QreXpQald5VEdhVUdsM1ZmbU9BWUlQZ21NOWln?=
- =?utf-8?B?bllHNnRiNTY4anFhWDFGYitkMjE0eTZZQUM2a2xOVDEvNlB5ZEk1Q3BEbUNZ?=
- =?utf-8?B?czY0ZTFHOHFray8vSFZPN2RueFRLdXpjd2IzaWhmOGhRV1pDSkVpNHpVdGxQ?=
- =?utf-8?B?VlJrNUNVY0JrYWVxbVQzUkhPUkpTc05qN0RRRGZmT01iNjlia3FDeGNKazFs?=
- =?utf-8?B?TmpNYUFGR3p0MDBMejhBS2t5Vm5nPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:91.26.50.189;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:Postix.phytec.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014)(13003099007);DIR:OUT;SFP:1102;
-X-OriginatorOrg: phytec.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2026 14:42:24.2561
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 641fca1e-aea3-4406-9cb0-08de5db248f8
-X-MS-Exchange-CrossTenant-Id: e609157c-80e2-446d-9be3-9c99c2399d29
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e609157c-80e2-446d-9be3-9c99c2399d29;Ip=[91.26.50.189];Helo=[Postix.phytec.de]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM2PEPF0001C712.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P195MB1419
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[phytec.de,quarantine];
-	R_DKIM_ALLOW(-0.20)[phytec.de:s=selector2];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32817-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[phytec.de:email,phytec.de:dkim,phytec.de:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[phytec.de:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FROM_NEQ_ENVFROM(0.00)[j.remmet@phytec.de,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-32818-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[charanpedumuru@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_PROHIBIT(0.00)[0.0.39.16:email];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 3967D9632A
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,devicetree.org:url]
+X-Rspamd-Queue-Id: 1DCBC96611
 X-Rspamd-Action: no action
 
-Check regulator state as peripheral and detach can disable vbus.
-Without this check we will try to disable the regulator twice if
-we disconnect host and then connect as device.
 
-Fixes: 7e7025811579 ("usb: typec: hd3ss3220: Check if regulator needs to be switched")
 
-Signed-off-by: Jan Remmet <j.remmet@phytec.de>
----
-This is a fixup from
-- Link to v1: https://lore.kernel.org/r/20260115-wip-jremmet-hd3ss3220_vbus-v1-1-b7d9adfbe346@phytec.de
-To
-- Link to v2: https://lore.kernel.org/r/20260123-wip-jremmet-hd3ss3220_vbus-v2-1-bcad313ce92b@phytec.de
----
-Changes in v2:
-- added Fixes tag for the patch applied on usb-next
-- Link to v1: https://lore.kernel.org/r/20260126-wip-jremmet-hd3ss3220_vbus_split-v1-1-b2f946f1a4ae@phytec.de
----
- drivers/usb/typec/hd3ss3220.c | 3 +++
- 1 file changed, 3 insertions(+)
+On 26-01-2026 21:38, Rob Herring wrote:
+> On Mon, Jan 26, 2026 at 01:22:05PM +0000, Charan Pedumuru wrote:
+>> Convert OMAP DWC3 USB Glue Layer binding to DT schema.
+>> Changes during conversion:
+>> - Introduce a new compatible string pattern "omap_dwc3" to match nodes
+>>   already present in existing device tree sources.
+>>
+>> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
+>> ---
+>>  Documentation/devicetree/bindings/usb/omap-usb.txt |  80 ---------------
+>>  Documentation/devicetree/bindings/usb/ti,dwc3.yaml | 112 +++++++++++++++++++++
+>>  2 files changed, 112 insertions(+), 80 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/omap-usb.txt b/Documentation/devicetree/bindings/usb/omap-usb.txt
+>> deleted file mode 100644
+>> index f0dbc5ae45ae..000000000000
+>> --- a/Documentation/devicetree/bindings/usb/omap-usb.txt
+>> +++ /dev/null
+>> @@ -1,80 +0,0 @@
+>> -OMAP GLUE AND OTHER OMAP SPECIFIC COMPONENTS
+>> -
+>> -OMAP MUSB GLUE
+>> - - compatible : Should be "ti,omap4-musb" or "ti,omap3-musb"
+>> - - ti,hwmods : must be "usb_otg_hs"
+>> - - multipoint : Should be "1" indicating the musb controller supports
+>> -   multipoint. This is a MUSB configuration-specific setting.
+>> - - num-eps : Specifies the number of endpoints. This is also a
+>> -   MUSB configuration-specific setting. Should be set to "16"
+>> - - ram-bits : Specifies the ram address size. Should be set to "12"
+>> - - interface-type : This is a board specific setting to describe the type of
+>> -   interface between the controller and the phy. It should be "0" or "1"
+>> -   specifying ULPI and UTMI respectively.
+>> - - mode : Should be "3" to represent OTG. "1" signifies HOST and "2"
+>> -   represents PERIPHERAL.
+>> - - power : Should be "50". This signifies the controller can supply up to
+>> -   100mA when operating in host mode.
+>> - - usb-phy : the phandle for the PHY device
+>> - - phys : the phandle for the PHY device (used by generic PHY framework)
+>> - - phy-names : the names of the PHY corresponding to the PHYs present in the
+>> -   *phy* phandle.
+>> -
+>> -Optional properties:
+>> - - ctrl-module : phandle of the control module this glue uses to write to
+>> -   mailbox
+>> -
+>> -SOC specific device node entry
+>> -usb_otg_hs: usb_otg_hs@4a0ab000 {
+>> -	compatible = "ti,omap4-musb";
+>> -	ti,hwmods = "usb_otg_hs";
+>> -	multipoint = <1>;
+>> -	num-eps = <16>;
+>> -	ram-bits = <12>;
+>> -	ctrl-module = <&omap_control_usb>;
+>> -	phys = <&usb2_phy>;
+>> -	phy-names = "usb2-phy";
+>> -};
+>> -
+>> -Board specific device node entry
+>> -&usb_otg_hs {
+>> -	interface-type = <1>;
+>> -	mode = <3>;
+>> -	power = <50>;
+>> -};
+>> -
+>> -OMAP DWC3 GLUE
+>> - - compatible : Should be
+>> -	* "ti,dwc3" for OMAP5 and DRA7
+>> -	* "ti,am437x-dwc3" for AM437x
+>> - - ti,hwmods : Should be "usb_otg_ss"
+>> - - reg : Address and length of the register set for the device.
+>> - - interrupts : The irq number of this device that is used to interrupt the
+>> -   MPU
+>> - - #address-cells, #size-cells : Must be present if the device has sub-nodes
+>> - - utmi-mode : controls the source of UTMI/PIPE status for VBUS and OTG ID.
+>> -   It should be set to "1" for HW mode and "2" for SW mode.
+>> - - ranges: the child address space are mapped 1:1 onto the parent address space
+>> -
+>> -Optional Properties:
+>> - - extcon : phandle for the extcon device omap dwc3 uses to detect
+>> -   connect/disconnect events.
+>> - - vbus-supply : phandle to the regulator device tree node if needed.
+>> -
+>> -Sub-nodes:
+>> -The dwc3 core should be added as subnode to omap dwc3 glue.
+>> -- dwc3 :
+>> -   The binding details of dwc3 can be found in:
+>> -   Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> -
+>> -omap_dwc3 {
+>> -	compatible = "ti,dwc3";
+>> -	ti,hwmods = "usb_otg_ss";
+>> -	reg = <0x4a020000 0x1ff>;
+>> -	interrupts = <0 93 4>;
+>> -	#address-cells = <1>;
+>> -	#size-cells = <1>;
+>> -	utmi-mode = <2>;
+>> -	ranges;
+>> -};
+>> -
+>> diff --git a/Documentation/devicetree/bindings/usb/ti,dwc3.yaml b/Documentation/devicetree/bindings/usb/ti,dwc3.yaml
+>> new file mode 100644
+>> index 000000000000..859da4b1f207
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/usb/ti,dwc3.yaml
+>> @@ -0,0 +1,112 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/usb/ti,dwc3.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Texas Instruments OMAP DWC3 USB Glue Layer
+>> +
+>> +maintainers:
+>> +  - Felipe Balbi <balbi@ti.com>
+>> +
+>> +description:
+>> +  Texas Instruments glue layer for Synopsys DesignWare USB3 (DWC3)
+>> +  controller on OMAP and AM43xx SoCs. Manages SoC-specific integration
+>> +  including register mapping, interrupt routing, UTMI/PIPE interface mode
+>> +  selection (HW/SW), and child DWC3 core instantiation via address space
+>> +  translation. Supports both legacy single-instance and multi-instance
+>> +  (numbered) configurations.
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    pattern: "^omap_dwc3(_[0-9]+)?@.*$"
+> 
+> Drop.
 
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index a7c54aa8635f70d6979d98c95f80d4dac277fef2..3e39b800e6b5f4d0cbba957c0dd66c18f781ff38 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -208,6 +208,9 @@ static void hd3ss3220_regulator_control(struct hd3ss3220 *hd3ss3220, bool on)
- {
- 	int ret;
- 
-+	if (regulator_is_enabled(hd3ss3220->vbus) == on)
-+		return;
-+
- 	if (on)
- 		ret = regulator_enable(hd3ss3220->vbus);
- 	else
+Sure.
 
----
-base-commit: 8acc379b664ec987dcc7eca25a5f5c4a9a4eb9c4
-change-id: 20260126-wip-jremmet-hd3ss3220_vbus_split-946802479e89
+> 
+>> +
+>> +  compatible:
+>> +    enum:
+>> +      - ti,dwc3
+>> +      - ti,am437x-dwc3
+>> +
+>> +  ti,hwmods:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    description:
+>> +      TI PRCM hardware module name that must be enabled (powered and
+>> +      clocked) for this node. "usb_otg_ss" refers to the SuperSpeed
+>> +      (USB3 + USB2 OTG) controller wrapper/glue layer found in OMAP5,
+>> +      DRA7, AM57x, and similar TI SoCs using DWC3.
+>> +    const: usb_otg_ss
+> 
+> Drop. Not used anywhere.
 
-Best regards,
+Okay.
+
+> 
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  utmi-mode:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Controls the source of UTMI/PIPE status for VBUS and OTG ID.
+>> +      1 for HW mode, 2 for SW mode.
+>> +    enum: [1, 2]
+>> +
+>> +  "#address-cells":
+>> +    const: 1
+>> +
+>> +  "#size-cells":
+>> +    const: 1
+>> +
+>> +  ranges: true
+>> +
+>> +  extcon:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description:
+>> +      Phandle for the extcon device used to detect connect/
+>> +      disconnect events.
+>> +
+>> +  vbus-supply:
+>> +    description: Phandle to the regulator device tree node if needed.
+>> +
+>> +patternProperties:
+>> +  "^usb@[0-9a-f]+$":
+>> +    type: object
+>> +    $ref: snps,dwc3.yaml#
+>> +    unevaluatedProperties: false
+>> +
+>> +required:
+>> +  - reg
+>> +  - compatible
+>> +  - interrupts
+>> +  - "#address-cells"
+>> +  - "#size-cells"
+>> +  - utmi-mode
+>> +  - ranges
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    omap_dwc3_1@0 {
+>> +        compatible = "ti,dwc3";
+>> +        reg = <0x0 0x10000>;
+>> +        interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+>> +        #address-cells = <1>;
+>> +        #size-cells = <1>;
+>> +        utmi-mode = <2>;
+>> +        ranges = <0 0 0x20000>;
+>> +
+>> +        usb@10000 {
+>> +            compatible = "snps,dwc3";
+>> +            reg = <0x10000 0x17000>;
+>> +            interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
+>> +                         <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
+>> +                         <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+>> +            interrupt-names = "peripheral", "host", "otg";
+>> +            phys = <&usb2_phy1>, <&usb3_phy1>;
+>> +            phy-names = "usb2-phy", "usb3-phy";
+>> +            maximum-speed = "super-speed";
+>> +            dr_mode = "otg";
+>> +            snps,dis_u3_susphy_quirk;
+>> +            snps,dis_u2_susphy_quirk;
+>> +        };
+>> +    };
+>> +...
+>>
+>> -- 
+>> 2.52.0
+>>
+
 -- 
-Jan Remmet <j.remmet@phytec.de>
+Best Regards,
+Charan.
 
 
