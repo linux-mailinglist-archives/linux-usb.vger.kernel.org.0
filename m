@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-32827-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32825-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MGkSJ9vdeGnytgEAu9opvQ
-	(envelope-from <linux-usb+bounces-32827-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:46:35 +0100
+	id IAhLLYfdeGnytgEAu9opvQ
+	(envelope-from <linux-usb+bounces-32825-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:45:11 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C0DF97066
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:46:35 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33BFF96FCF
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 16:45:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 10F1B305C8C0
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 15:25:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3B4AB316DE7D
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jan 2026 15:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4506C36074C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4682E361DD7;
 	Tue, 27 Jan 2026 15:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="lvOoVZrj"
+	dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b="CNBbIwBk"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp1.tecnico.ulisboa.pt (smtp1.tecnico.ulisboa.pt [193.136.128.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B13435FF75;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCF735CBCA;
 	Tue, 27 Jan 2026 15:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.136.128.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769527314; cv=none; b=aQQuf+P2lAiCRC+tMOar8uenjx2TTJb8gaepYqpam1Gt9Z5jJCYp5ezwP6XMGfeoyJFR4ehRHMaFU3b/6r1csA0ej/hSLZ35cVTb6ixqfPBwy9+dWT7cCYQVIFK4o5E2Pn8Z/LEsHCbRLHVm3x5Upe36L88byI1HNI6dPh4bIhk=
+	t=1769527312; cv=none; b=VADZUgXS+DO4iOt47EzZs558y6zufHQgN/QHk5Re41WCSdGHuI8HtDK4aoyeyiZjBXtVz0Q3MhGKDvlEnbk+5S1OYrCbZ4J48LYVxhicc26qSH4YlWBGDLJSTJ3jqy/KMJ1jhTKhqGvzZIriNo8qwpObq80SfwpuA8ZEEm3FrEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769527314; c=relaxed/simple;
-	bh=crMkHAz58/P3KOZ7XNFwuRiIVyBlBe6XUwar7XMSc+Y=;
+	s=arc-20240116; t=1769527312; c=relaxed/simple;
+	bh=tPxLgImUSfLaPO0hTIiojepsSdUOwrfSQUsTniiVYsM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QRlEK9dthulE53Wdhdo/aZbAQx0ijWHH3W1IHZIKQz+WZqInXOOtKIZ3VpJFfGJqoh92UrxZ2Apobf8gXUDsiWO+emc4ZENfyYkjfuPXcMA0GYm/++28RGYgOhJCaxsYsx2GDFefqiLuOdhyRvVh5Kfhs4Xez/Pioc9dPUY44rQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=lvOoVZrj; arc=none smtp.client-ip=193.136.128.21
+	 In-Reply-To:To:Cc; b=iwgYO+NSqKBVPL+dR3RVhEAJD9ml8/0UVT2ZdSd2X3+LittwoumIDCQd634grmGHsvS7z6QDJE87jQA7ffKtZba6R8c3WM0ByH4vk7DtgjputsgI+LPMrFf6F+rOctPrt/K6PsmgZyq9ToUAWfK7/79SPNEk58yu+FEiZIWvr/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt; spf=pass smtp.mailfrom=tecnico.ulisboa.pt; dkim=pass (2048-bit key) header.d=tecnico.ulisboa.pt header.i=@tecnico.ulisboa.pt header.b=CNBbIwBk; arc=none smtp.client-ip=193.136.128.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tecnico.ulisboa.pt
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tecnico.ulisboa.pt
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 51F8060020E2;
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTP id 5DB75600086A;
 	Tue, 27 Jan 2026 15:12:11 +0000 (WET)
 X-Virus-Scanned: by amavis-2.13.0 (20230106) (Debian) at tecnico.ulisboa.pt
 Received: from smtp1.tecnico.ulisboa.pt ([127.0.0.1])
  by localhost (smtp1.tecnico.ulisboa.pt [127.0.0.1]) (amavis, port 10025)
- with LMTP id NtwtBI58voT3; Tue, 27 Jan 2026 15:12:09 +0000 (WET)
-Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [IPv6:2001:690:2100:1::b3dd:b9ac])
-	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id 5F06A6002306;
+ with LMTP id lWw2rW8RwuwY; Tue, 27 Jan 2026 15:12:09 +0000 (WET)
+Received: from mail1.tecnico.ulisboa.pt (mail1.ist.utl.pt [193.136.128.10])
+	by smtp1.tecnico.ulisboa.pt (Postfix) with ESMTPS id ABE236002307;
 	Tue, 27 Jan 2026 15:12:08 +0000 (WET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
 	s=mail2; t=1769526728;
@@ -50,20 +50,20 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tecnico.ulisboa.pt;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=eTz8SZs3WThSgHMDMFip4KxZygxWXRhKo2bE8wjby9M=;
-	b=lvOoVZrj0+6FrLhJHDM2DCVQdOUFJecK92LjorU7ifI+C0Mvd0QAe2lSbJamX6DpABkwnB
-	gbL6Ntj1u5yS2ARSWGI9BXNh4fqC65hDYBgXozHLf4PQIQKSHee1uyR4HHi0hbncckaMVT
-	nQtaa6bpIPi5bnP7MoA2rJw6HlCG3GyyLUrjhnkg6YXlkMgknZZ/i+0d1s6Nk3IbgTgtlu
-	GLDmjUYyjNwukfamwS42LYnMdq9XS4DxQzXpEpejaK+JOR/V6/ydWxmhDNYm+VHEj0U9fh
-	Ajlt12WJYSEpilTC/z2ptnL1xOraHu1vAx/+imF23NrQH7LJWytE+ovwtpy5JQ==
+	bh=V0ixqb1WmQNGUgreQanqk1a+bFFp4h/i7hFLQvfziag=;
+	b=CNBbIwBkCSTZbT4CWZdM+DSeMHTH1ylUgotr24CkI9OfQDo7P8woRbtOVCMKcMhihTYR0t
+	DnIvtnzoa59ivt8UzQhGJj+H+7XSPePszgZSFFwEUGu18G/acDw5NPPjFquLr4uyABWT8A
+	2pvJ4ZScImp5XJc9kv7HL1Q6iFJcKsa888VKEkI5k6DsMt+/2u53ajsihZupsjyrO/8ynZ
+	2jZhwmD8wV+ks0wwRlK3ILVUWzbB6z2qr5w4Q5H6tOZ4m8lJbWJs+eP1gogJCNP32d8+aT
+	iTRiisQp2+vnaMxicF9005WfDJ2WrauyZsml6nAE5Cy9PqgZ22midOLfCIweyw==
 Received: from [192.168.2.110] (unknown [148.63.39.39])
 	(Authenticated sender: ist187313)
-	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 083073600DD;
+	by mail1.tecnico.ulisboa.pt (Postfix) with ESMTPSA id 586353600FC;
 	Tue, 27 Jan 2026 15:12:08 +0000 (WET)
 From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
-Date: Tue, 27 Jan 2026 15:11:47 +0000
-Subject: [PATCH v2 1/6] phy: tegra: xusb: Fix USB2 port regulator disable
- logic
+Date: Tue, 27 Jan 2026 15:11:48 +0000
+Subject: [PATCH v2 2/6] usb: xhci: tegra: Remove redundant mutex when
+ setting phy mode
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260127-diogo-tegra_phy-v2-1-787b9eed3ed5@tecnico.ulisboa.pt>
+Message-Id: <20260127-diogo-tegra_phy-v2-2-787b9eed3ed5@tecnico.ulisboa.pt>
 References: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
 In-Reply-To: <20260127-diogo-tegra_phy-v2-0-787b9eed3ed5@tecnico.ulisboa.pt>
 To: Mathias Nyman <mathias.nyman@intel.com>, 
@@ -85,14 +85,13 @@ To: Mathias Nyman <mathias.nyman@intel.com>,
  Neil Armstrong <neil.armstrong@linaro.org>
 Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
- devicetree@vger.kernel.org, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>, 
- stable@vger.kernel.org
+ devicetree@vger.kernel.org, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769526725; l=2198;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769526725; l=1033;
  i=diogo.ivo@tecnico.ulisboa.pt; s=20240529; h=from:subject:message-id;
- bh=crMkHAz58/P3KOZ7XNFwuRiIVyBlBe6XUwar7XMSc+Y=;
- b=DghMWBQc0iCO8oYZES6tibmHzkTLhvT406Glm+R0oVLioUVqxkG6rBc679D0IDjGc5WrdexYC
- bYwXH4zUn/iAVj84vqWFRScSiXuXt1FSmXjdmkqxLbjI4rw83VqWkXr
+ bh=tPxLgImUSfLaPO0hTIiojepsSdUOwrfSQUsTniiVYsM=;
+ b=aaqsA3rbn08ZXBt45VmehvpQaYP+AdUvjAwXu//GfD98G9fWXZi5Z+r+bS6F+oCyZKHlHf3l6
+ 0amw7mlT1pPDbSPq6fAIxwDEDeCDafVvh0VFU/BPG10byRsmRFvz3tg
 X-Developer-Key: i=diogo.ivo@tecnico.ulisboa.pt; a=ed25519;
  pk=BRGXhMh1q5KDlZ9y2B8SodFFY8FGupal+NMtJPwRpUQ=
 X-Rspamd-Server: lfdr
@@ -100,20 +99,20 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[tecnico.ulisboa.pt,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[tecnico.ulisboa.pt:s=mail2];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32827-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-32825-lists,linux-usb=lfdr.de];
 	FREEMAIL_TO(0.00)[intel.com,linuxfoundation.org,gmail.com,nvidia.com,kernel.org,linaro.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ulisboa.pt:email,tecnico.ulisboa.pt:mid,tecnico.ulisboa.pt:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tecnico.ulisboa.pt:mid,tecnico.ulisboa.pt:dkim,ulisboa.pt:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[diogo.ivo@tecnico.ulisboa.pt,linux-usb@vger.kernel.org];
@@ -125,66 +124,41 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 4C0DF97066
+X-Rspamd-Queue-Id: 33BFF96FCF
 X-Rspamd-Action: no action
 
-The USB2 PHY mode handling on Tegra210 incorrectly relied on
-regulator_is_enabled() when determining whether the VBUS supply should
-be disabled during role changes. This is because regulator_is_enabled()
-reports exactly what is states and not if there is an unbalanced number
-of calls between regulator_enable() and regulator_disable(). For
-example, regulator_is_enabled() always reports true on a fixed-regulator
-with no enable gpio, which is the case on the Pixel C.
+As the PHY subsystem already synchronizes concurrent accesses to a PHY
+instance with a core-internal mutex remove the driver specific mutex
+synchronization.
 
-This then leads to the PHY driver wrongfully calling regulator_disable()
-when transitioning from USB_ROLE_DEVICE to USB_ROLE_NONE since the driver
-did not previously call the corresponding regulator_enable().
-
-Fix this by keeping track of the current role and updating the logic to
-disable the regulator only when the previous role was USB_ROLE_HOST.
-
-Cc: stable@vger.kernel.org
 Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
 ---
 v1->v2:
-- Do not fix typo in comment
+- New patch
 ---
- drivers/phy/tegra/xusb-tegra210.c | 4 +++-
- drivers/phy/tegra/xusb.h          | 1 +
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci-tegra.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
-index 3409924498e9..3abdf0182d67 100644
---- a/drivers/phy/tegra/xusb-tegra210.c
-+++ b/drivers/phy/tegra/xusb-tegra210.c
-@@ -1936,12 +1936,14 @@ static int tegra210_usb2_phy_set_mode(struct phy *phy, enum phy_mode mode,
- 			 * USB_ROLE_NONE from USB_ROLE_DEVICE, regulator is not
- 			 * be enabled.
- 			 */
--			if (regulator_is_enabled(port->supply))
-+			if (port->role == USB_ROLE_HOST)
- 				regulator_disable(port->supply);
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 8b492871d21d..927861ca14f2 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1357,15 +1357,11 @@ static void tegra_xhci_id_work(struct work_struct *work)
  
- 			tegra210_xusb_padctl_id_override(padctl, false);
- 			tegra210_xusb_padctl_vbus_override(padctl, false);
- 		}
-+
-+		port->role = submode;
- 	}
+ 	dev_dbg(tegra->dev, "host mode %s\n", str_on_off(tegra->host_mode));
  
- 	mutex_unlock(&padctl->lock);
-diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
-index d2b5f9565132..273af147dfd3 100644
---- a/drivers/phy/tegra/xusb.h
-+++ b/drivers/phy/tegra/xusb.h
-@@ -317,6 +317,7 @@ struct tegra_xusb_usb2_port {
- 	enum usb_dr_mode mode;
- 	bool internal;
- 	int usb3_port_fake;
-+	enum usb_role role;
- };
+-	mutex_lock(&tegra->lock);
+-
+ 	if (tegra->host_mode)
+ 		phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_HOST);
+ 	else
+ 		phy_set_mode_ext(phy, PHY_MODE_USB_OTG, USB_ROLE_NONE);
  
- static inline struct tegra_xusb_usb2_port *
+-	mutex_unlock(&tegra->lock);
+-
+ 	tegra->otg_usb3_port = tegra_xusb_padctl_get_usb3_companion(tegra->padctl,
+ 								    tegra->otg_usb2_port);
+ 
 
 -- 
 2.52.0
