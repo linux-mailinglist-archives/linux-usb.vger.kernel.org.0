@@ -1,126 +1,133 @@
-Return-Path: <linux-usb+bounces-32866-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32867-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iHu+FYfOeWnezgEAu9opvQ
-	(envelope-from <linux-usb+bounces-32866-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 09:53:27 +0100
+	id KJW2HajPeWnezgEAu9opvQ
+	(envelope-from <linux-usb+bounces-32867-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 09:58:16 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 855779E798
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 09:53:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0244F9E85F
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 09:58:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 58A2B3001CF2
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 08:53:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BE7C5304D263
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 08:54:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1AF733A9E5;
-	Wed, 28 Jan 2026 08:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD8633ADB4;
+	Wed, 28 Jan 2026 08:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IiNsTsjt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [207.226.244.123])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D011B33A010;
-	Wed, 28 Jan 2026 08:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.226.244.123
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872F229A1;
+	Wed, 28 Jan 2026 08:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769590398; cv=none; b=ddzwWCSWmquKOqkwny4SwNG1+Uf6ODG0NwaMnTeAOGlviKZfO20FZOlsOfVe3XEsyKBEIGdqbBAullxPW9zVGpha4HARUywgXU7xDHZJH7BHU/1KkNC1pQOdMU6v+2MB8ub6RH5ivxAUHC+XdPuxAnYuNuJJgr91kqC+jgD6Dak=
+	t=1769590442; cv=none; b=pqODf9Fr+XwzPgBCc/en9dsuZEdm0QnSwto1QI4kDdobsk3omjigA08sbGWdyv0VTcclu39tehcynIdyFJHYeKOPWpVynZPQMq/DZ5ls3gNpmBUDMGDnbmhDZGGs7CS9HlQ94OlLcKvRhfz51hf9gWlbQ0Kriw4cvOj16x0jbbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769590398; c=relaxed/simple;
-	bh=nqya7HmjXRTW2Wa6RrtWPvRO5Pru8QQ4ujdihrZEZdQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TdR1qocPvgpSt2ZuDFWkqvlv4ED94ZX3InKzwZ70GytW7KRMDI+MsdXMNVhO5DOIUbewr/A1CKTSfJ/q+7pbPYwoItoa668ThSpElhVgOzJkiQ6X+f2oPb2JJs4kehMl6VEWjuALWJSXxHrMlk6sNB6newekwW81wgp6tzxMi/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=207.226.244.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
-X-CSE-ConnectionGUID: smIM7s5rT5yx01wzP5E4QQ==
-X-CSE-MsgGUID: cLFvDrq7TMqRf+6WTGRpsg==
-X-IronPort-AV: E=Sophos;i="6.21,258,1763395200"; 
-   d="scan'208";a="165548015"
-Date: Wed, 28 Jan 2026 16:53:10 +0800
-From: Dayu Jiang <jiangdayu@xiaomi.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Longfang Liu
-	<liulongfang@huawei.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, yudongbin <yudongbin@xiaomi.com>, guhuinan
-	<guhuinan@xiaomi.com>, chenyu45 <chenyu45@xiaomi.com>, mahongwei3
-	<mahongwei3@xiaomi.com>, Dayu Jiang <jiangdayu@xiaomi.com>
-Subject: Re: [PATCH] usb: xhci: add xhci_halt() for HCE Handling
-Message-ID: <aXnOdjEJWXwnfi0+@oa-jiangdayu.localdomain>
-References: <20260127110422.306711-1-jiangdayu@xiaomi.com>
- <fbc1efce-8108-4e36-ad12-983be16c835e@linux.intel.com>
+	s=arc-20240116; t=1769590442; c=relaxed/simple;
+	bh=sp8ZzgKfLYBf6n5dvtaPV7JJtZoVmZtARJEfnOlvgnA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R6ZvZr/5mQrosxadFsrLddvF4Vd1H49DEwSoGAr7XYrgEqQnyUbvBpkGWsWfYDxqvrTCXEyU1qUSyIV3vKOpz2WEFSHu0rgrgl56Zuy9kQvOHDqtKpnSBUXhya0AJ9MwrFCtCxl3JAeBBcHacgTynSBnpZh7F1Rf8v61DV6Q68o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IiNsTsjt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B35C4CEF1;
+	Wed, 28 Jan 2026 08:54:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1769590442;
+	bh=sp8ZzgKfLYBf6n5dvtaPV7JJtZoVmZtARJEfnOlvgnA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IiNsTsjt7/JJEy7yHNve/JooAIlH0pnM87ZGvmgdHepEWko5EVz56NLPJSRbmXI8w
+	 sxKEPaOCpGXqDtQ0OHpQYWN7Mt9VjqvMvARm+eLYaHLPTNohEerYQif5fI9Qezgjy+
+	 G4XDfI/hst0WjbqQ1xzHMsJI6EzUETgPfOt5Yvr0=
+Date: Wed, 28 Jan 2026 09:53:58 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Samuel Wu <wusamuel@google.com>, linux-fsdevel@vger.kernel.org,
+	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
+	miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org,
+	linux-mm@kvack.org, linux-efi@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev, kees@kernel.org, rostedt@goodmis.org,
+	linux-usb@vger.kernel.org, paul@paul-moore.com,
+	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
+	john.johansen@canonical.com, selinux@vger.kernel.org,
+	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <2026012812-jurist-whoops-0ef5@gregkh>
+References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+ <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh>
+ <CAHk-=whME4fu2Gn+W7MPiFHqwn51VByhpttf-wHdhAqQAQXpqw@mail.gmail.com>
+ <20260127201454.GQ3183987@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="gbk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fbc1efce-8108-4e36-ad12-983be16c835e@linux.intel.com>
-X-ClientProxiedBy: BJ-MBX02.mioffice.cn (10.237.8.122) To BJ-MBX03.mioffice.cn
- (10.237.8.123)
+In-Reply-To: <20260127201454.GQ3183987@ZenIV>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[xiaomi.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,oa-jiangdayu.localdomain:mid];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[3];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	FROM_NEQ_ENVFROM(0.00)[jiangdayu@xiaomi.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32866-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: 855779E798
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32867-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,linuxfoundation.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0244F9E85F
 X-Rspamd-Action: no action
 
-On Tue, Jan 27, 2026 at 02:25:19PM +0200, Mathias Nyman wrote:
-> Hi
-> 
-> On 1/27/26 13:04, jiangdayu wrote:
-> > When the xHCI controller reports a Host Controller Error (HCE) status
-> > in the interrupt handler, the driver currently only logs a warning and
-> > continues execution. However, a Host Controller Error indicates a
-> > critical hardware failure that requires the controller to be halted.
+On Tue, Jan 27, 2026 at 08:14:54PM +0000, Al Viro wrote:
+> On Tue, Jan 27, 2026 at 10:39:04AM -0800, Linus Torvalds wrote:
+> > On Mon, 26 Jan 2026 at 23:42, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > Note that I had to revert commit e5bf5ee26663 ("functionfs: fix the
+> > > open/removal races") from the stable backports, as it was causing issues
+> > > on the pixel devices it got backported to.  So perhaps look there?
 > > 
+> > Hmm. That commit is obviously still upstream, do we understand why it
+> > caused problems in the backports?
 > 
-> The host should cease all activity when it sets the HCE bit.
+> This is all I've seen:
 > 
-> See xHCI spec 4.24.1 'Internal Errors':
-> "When the HCE flag is set to ¡®1¡¯ the xHC shall cease all activity.
->  Software response to the assertion of HCE is to reset the
->  xHC (HCRST = ¡®1¡¯) and reinitialize it."
+> | It has been reported to cause test problems in Android devices.  As the
+> | other functionfs changes were not also backported at the same time,
+> | something is out of sync.  So just revert this one for now and it can
+> | come back in the future as a patch series if it is tested.
 > 
-> Same is true for "Host system error" HSE (STS_FATAL), not sure
-> why we halt it manually in that case.
-> 
-> > Add xhci_halt(xhci) call after the HCE warning to properly halt the
-> > controller when this error condition is detected. This ensures the
-> > controller is in a consistent state and prevents further operations
-> > on a failed hardware. Additionally, if there are still unhandled
-> > interrupts at this point, it may cause interrupt storm.
-> 
-> Is this something that has been seen on real word hardware?
-> If yes, and halting the host helped ,then this fix is ok by me.
-> At least until a proper host reset solution is implemented.
-Yes, the HCE issue (and subsequent interrupt storm) has been consistently 
-observed on production Android devices during UASP device plug/unplug 
-operations. Adding xhci_halt() effectively resolves the system-level interrupt 
-storm issue caused by HCE.
-> 
-> Thanks
-> Mathias
-> 
+> My apologies for not following up on that one; Greg, could you give some
+> references to those reports?
+
+Sorry, all I got was a "this commit caused devices to fail" and was
+found from bisection, on the 6.18.y tree.  Samuel has much more
+information as to exactly what is happening here as he can see the test
+results properly, I'll let him work through this, thanks!
+
+greg k-h
 
