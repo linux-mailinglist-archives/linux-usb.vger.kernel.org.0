@@ -1,202 +1,203 @@
-Return-Path: <linux-usb+bounces-32884-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32885-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8ARtORgMemlo2AEAu9opvQ
-	(envelope-from <linux-usb+bounces-32884-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 14:16:08 +0100
+	id CAXHHJkRemnH2AEAu9opvQ
+	(envelope-from <linux-usb+bounces-32885-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 14:39:37 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90685A1E1C
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 14:16:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98308A23B5
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 14:39:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4253C301FFB2
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 13:16:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 778C0300794A
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 13:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDE90223DE7;
-	Wed, 28 Jan 2026 13:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84C15352F8D;
+	Wed, 28 Jan 2026 13:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cM/m9oyE"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="OJdiO8p/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA83125A9
-	for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 13:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE77722541C
+	for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 13:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769606160; cv=none; b=rIxSU0dAp2fxt8xk9+DtkFhDVn6aNIFWfoWI6BYlgVJfCrlDoeKFmfF6B+98rXSZLK/Wv37IUvKC8kazh0RdHkq7YdvTBMzupCdwikOU7cBksupeGcSzP0FS/mWEkST6A/cUqtHDx8o9OcRPy76j9lH/M1Eh4nQ8FmfsX9EwQXo=
+	t=1769607574; cv=none; b=pTqgK/4urisKmDabuFyDPa8qQUCbaDL9C4+5Cqz7Aa1OxA/5dB/F0ErkhrIkLYn0m/d9w4hgq84O+tkhyYWVZssADj+Ipk3KoSp7Imv4RU+7+4UwUrCcUPvkj5NZZ4GfJcmpbY4SUPlNpX5VJ3UN2zodJ6ngeymok3tDZS8PZg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769606160; c=relaxed/simple;
-	bh=haXiLR6iNBXJp0LN7677HOYkluK9cp1gfOmAJ02f9AE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D9+NqsvJ91IjUEC+/HW6CJdT2VA7FMGqQP5FHPHuXz+FSdg/v9sm3TD/Gq9SLKqUAPsu3SVEf+5+Tv8fNG1yPHtdKfjzgXRUtgyi3QP7C5s8yAhT7w5ezA76FNOMaf8HYA+AYKFdpAc81Et8gWVriFf1BkbNhC9Xc2XQMcVCPU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cM/m9oyE; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769606159; x=1801142159;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=haXiLR6iNBXJp0LN7677HOYkluK9cp1gfOmAJ02f9AE=;
-  b=cM/m9oyEXD/UDtj9kOJtw/DOl/H2aazRbCx2SBptfnEz1iTIQY5/2HgF
-   JTjSNnVfh40aacAJk1ObxFNP07IWFoaehaINQfh/+aZle3GfEeWiaZhID
-   39VU5EwJCIQGVDz46NOD0wypXGAPZg70h4vDF7aJqawyCJUqyvlR8r1uq
-   magk+Bw5XrOPWIZclNop9he2IlgwsRT9LBsFMFfVFzEpZdAy/5vLk3Bwv
-   ukfcUZ7TpsXyDPj+ZjUxFH1pl/4Y/Hv3zPbdxN9hrnFsR44nj/w9orzzz
-   YQdRy7xTdh1ie3rgeHJKOuDDiiFOdcIeBGHbpHepTBtVR+rAQUH1uFnFY
-   g==;
-X-CSE-ConnectionGUID: TqcEN7HZQuO6oriN4VJebA==
-X-CSE-MsgGUID: yUwRZOxGROOwyOqH1miUhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="82183772"
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="82183772"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 05:15:58 -0800
-X-CSE-ConnectionGUID: JSaXVFjxSNGigjllZD3XVg==
-X-CSE-MsgGUID: 59qGEPU/QEeXTSBKqXztDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="208279723"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa008.jf.intel.com with ESMTP; 28 Jan 2026 05:15:57 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1058)
-	id 2CF469B; Wed, 28 Jan 2026 14:15:56 +0100 (CET)
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
-To: mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org,
-	raoxu@uniontech.com,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 2/2] usb: xhci: add interrupter type
-Date: Wed, 28 Jan 2026 14:15:04 +0100
-Message-ID: <20260128131504.124322-3-niklas.neronin@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260128131504.124322-1-niklas.neronin@linux.intel.com>
-References: <20260128131504.124322-1-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1769607574; c=relaxed/simple;
+	bh=MruptA1sJlpcscJGti6hPBNhrQObFvGzSp9oVldQWMM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W2WVX0jMdEc2esdi5SylAIYZEGleVFz8p0NnHiYnkcIN3wxArAevp2phywSsXivlOFiWDekdsxjg3luuLcKEIizGYO6RvIacoWg492dcI85oxmE4mA0pbEC/rr5SABcvilxBCM+7Lx73dKNjw4CrE1lF4enq2sxfd+ZpEbQSN7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=OJdiO8p/; arc=none smtp.client-ip=166.84.1.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
+	(No client certificate requested)
+	by l2mail1.panix.com (Postfix) with ESMTPS id 4f1NCg6jsLzDQM
+	for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 08:19:27 -0500 (EST)
+Received: from [10.50.4.47] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4f1NCX4gpsz4trj;
+	Wed, 28 Jan 2026 08:19:20 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1769606361; bh=MruptA1sJlpcscJGti6hPBNhrQObFvGzSp9oVldQWMM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=OJdiO8p/zQr1otu/x22wYAc/xFpVRBLvO6VLnFXj8fQ5LkYSXCRT73gL7Tot/mFs4
+	 4UyQ+ql083QZ8cIrQO8l9ERcownJ3Uj9iFsWQu/Cw7canpuAyWgOASonriOH9leLzZ
+	 DSkMUlg/8LBn3BPDXqcw8glofJ06wMHzgsKQ34eA=
+Message-ID: <892f837a-0784-4e6b-bec3-9d37397422a0@panix.com>
+Date: Wed, 28 Jan 2026 05:19:20 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 0/2] usb: xhci: route device to secondary interrupters
+To: raoxu <raoxu@uniontech.com>, mathias.nyman@linux.intel.com
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ michal.pecio@gmail.com, niklas.neronin@linux.intel.com, zhanjun@uniontech.com
+References: <D51D214ACD887BE9+20260127023446.2140220-1-raoxu@uniontech.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <D51D214ACD887BE9+20260127023446.2140220-1-raoxu@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[panix.com,none];
+	R_DKIM_ALLOW(-0.20)[panix.com:s=panix];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com,linux.intel.com,uniontech.com];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32884-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[6];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[panix.com:+];
+	TAGGED_FROM(0.00)[bounces-32885-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[niklas.neronin@linux.intel.com,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[4];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 90685A1E1C
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kenny@panix.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:email,panix.com:email,panix.com:dkim,panix.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 98308A23B5
 X-Rspamd-Action: no action
 
-xhci-sideband creates a secondary interrupter without an associated IRQ.
-Such interrupters are non-operational and cannot enabled or disabled.
 
-Add a type field to struct 'xhci_interrupter' to distinguish
-non-operational interrupters. When the type is set to 'INTR_NOOP',
-the interrupter enable/disable helpers become no-ops.
 
-This allows callers to iterate over all allocated interrupters without
-special-casing, while ensuring that actions are applied only to
-operational interrupters. It also provides a simple extension point
-for adding additional interrupter types in the future.
+On 1/26/26 18:34, raoxu wrote:
+> From: Xu Rao <raoxu@uniontech.com>
+> 
+> This series is split into two steps: patch 1/2 refactors xHCI IRQ and
+> interrupter handling to make multi-vector operation possible without
+> changing behavior; patch 2/2 then enables a small capped set of secondary
+> interrupters/vectors and routes transfer completions per device (slot) to
+> reduce contention on interrupter 0.
+> 
+> This is not about increasing USB link throughput, but about avoiding a
+> driver-imposed single hot spot. On hosts that already provide multiple
+> MSI/MSI-X vectors and independent event rings, routing all completions
+> through interrupter 0 creates unnecessary contention (serialized event
+> handling/locks and coupled moderation), increasing CPU cost and tail
+> latency under many active devices/endpoints. Using secondary interrupters
+> simply matches the hardware's design, similar in spirit to merged
+> xHCI-sideband work: exploit available parallel paths rather than
+> funneling all events through one.
+> 
+> Xu Rao (2):
+>    usb: xhci: refactor IRQ/interrupter plumbing for multi-vector support
+>    usb: xhci: enable secondary interrupters and route transfers per slot
+> 
+> Signed-off-by: Xu Rao <raoxu@uniontech.com>
 
-Operational interrupters remain the default; no-op interrupters are the
-exception.
+Tested-By: Kenneth R. Crudup <kenny@panix.com>
 
-No functional changes are introduced; behavior remains the same.
+> ---
+> Changelog:
+> v1 -> v2:
+>    - Bind interrupters to endpoints at enable time instead of selecting
+>      per transfer.
+>    - Store the selected interrupter in struct xhci_virt_ep and program
+>      TRB_INTR_TARGET() from the bound interrupter.
+>    - Use a single IRQ handler for both primary and secondary vectors,
+>      with STS_EINT handling restricted to interrupter 0.
+>    - Keep a common dev_id for IRQ registration to match the existing
+>      xhci_cleanup_msix() teardown constraints and avoid dev_id
+>      lifetime issues.
+>    - Clarify secondary interrupter teardown to avoid double-free or
+>      use-after-free during xHCI removal.
+> v2 -> v3:
+>    - modify commit information
+> v3 -> v4:
+>    - Bind interrupters per USB device (slot) via struct xhci_virt_device,
+>      program TRB_INTR_TARGET() from vdev->interrupter for bulk/ctrl/isoc.
+>    - Drop xfer_interrupters and unify on xhci->interrupters[] for both
+>      primary and secondary event rings and IRQ routing.
+>    - Allocate secondary interrupters in xhci_mem_init; on any allocation
+>      failure, rollback and continue with primary interrupter only.
+>    - Cap secondary interrupter creation with MAX_SECONDARY_INTRNUM,
+>      defaulting to 4.
+>    - Route xhci_msi_irq by irq handler_data token (intr_num + 1) to keep
+>      correct interrupter selection across resume/power_lost.
+>    - Apply MSI-X affinity hints for secondary vectors.
+> v4 -> v5:
+>    - Fix min() signedness build error reported by 0day CI.
+>    - Rebase onto v6.19-rc2.
+> v5 -> v6:
+>    - Route secondary MSI/MSI-X IRQs by storing struct xhci_interrupter in
+>      irq handler_data, instead of using an (intr_num + 1) token mapping.
+>    - Program Slot Context Interrupter Target (tt_info[31:22]) from
+>      vdev->interrupter to keep slot default routing aligned with TRB
+>      TRB_INTR_TARGET() selection.
+> v6 -> v7:
+>    - Add xhci_quiesce_interrupter() and use it for secondary
+>      interrupters in xhci_stop() and the power_lost path of xhci_resume(),
+>      ensuring IMAN.IP (RW1C) and ERDP.EHB are properly cleared.
+> v7 -> v8:
+>    - Sync secondary MSI/MSI-X vectors in xhci_msix_sync_irqs() with
+>      synchronize_irq().
+>    - Fix build errors by adding missing header includes for the IRQ helper APIs.
+> v8 -> v9:
+>    - Use PCI_IRQ_AFFINITY to let PCI core spread MSI/MSI-X vectors across CPUs.
+>    - Route each MSI/MSI-X vector to its interrupter via per-vector irq_ctx dev_id.
+>    - Fix modpost error: xhci_msix_set_handler_data undefined (0-day CI).
+>      https://lore.kernel.org/oe-kbuild-all/202601171743.omq3DpnM-lkp@intel.com/
+>    - Rebase onto v6.19-rc6.
+> v9 -> v10:
+>    - refactor IRQ/interrupter plumbing for multi-vector support.
+>    - add xhci_handle_slot_secondary_events to handle secondary event ring.
+> v10 -> v11:
+>    - Fix build warnings:-Wsometimes-uninitialized.
+>      Closes: https://lore.kernel.org/oe-kbuild-all/202601262208.UybEjc9X-lkp@intel.com/
+> ---
+>   drivers/usb/host/xhci-mem.c  |  48 +++++++++++
+>   drivers/usb/host/xhci-pci.c  |  57 ++++++++++---
+>   drivers/usb/host/xhci-ring.c | 156 +++++++++++++++++++++++++++++------
+>   drivers/usb/host/xhci.c      |  37 ++++++---
+>   drivers/usb/host/xhci.h      |  26 +++++-
+>   5 files changed, 274 insertions(+), 50 deletions(-)
+> ---
+> 
 
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
----
- drivers/usb/host/xhci-sideband.c | 1 +
- drivers/usb/host/xhci.c          | 6 ++++++
- drivers/usb/host/xhci.h          | 8 ++++++++
- 3 files changed, 15 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
-index 2bd77255032b..21ee4e96bc70 100644
---- a/drivers/usb/host/xhci-sideband.c
-+++ b/drivers/usb/host/xhci-sideband.c
-@@ -352,6 +352,7 @@ xhci_sideband_create_interrupter(struct xhci_sideband *sb, int num_seg,
- 	ret = usb_offload_get(udev);
- 
- 	sb->ir->ip_autoclear = ip_autoclear;
-+	sb->ir->type = INTR_NOOP;
- 
- 	return ret;
- }
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index fcf8b486b0e0..c4e0c1cfb94e 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -314,6 +314,9 @@ int xhci_enable_interrupter(struct xhci_interrupter *ir)
- {
- 	u32 iman;
- 
-+	if (ir->type == INTR_NOOP)
-+		return 0;
-+
- 	if (!ir || !ir->ir_set)
- 		return -EINVAL;
- 
-@@ -331,6 +334,9 @@ int xhci_disable_interrupter(struct xhci_hcd *xhci, struct xhci_interrupter *ir)
- {
- 	u32 iman;
- 
-+	if (ir->type == INTR_NOOP)
-+		return 0;
-+
- 	if (!ir || !ir->ir_set)
- 		return -EINVAL;
- 
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 2b0796f6d00e..59840d613e94 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1443,6 +1443,13 @@ struct xhci_bus_state {
- 	unsigned long		resuming_ports;
- };
- 
-+enum interrupter_type {
-+	/* Normal interrupter, e.g. Primary */
-+	INTR_DEFAULT = 0,
-+	/* Non-operational, e.g. xhci-sideband */
-+	INTR_NOOP,
-+};
-+
- struct xhci_interrupter {
- 	struct xhci_ring	*event_ring;
- 	struct xhci_erst	erst;
-@@ -1450,6 +1457,7 @@ struct xhci_interrupter {
- 	unsigned int		intr_num;
- 	bool			ip_autoclear;
- 	u32			isoc_bei_interval;
-+	enum interrupter_type	type;
- 	/* For interrupter registers save and restore over suspend/resume */
- 	u32	s3_iman;
- 	u32	s3_imod;
 -- 
-2.50.1
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
 
