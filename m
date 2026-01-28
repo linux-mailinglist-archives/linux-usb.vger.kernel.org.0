@@ -1,203 +1,135 @@
-Return-Path: <linux-usb+bounces-32885-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32886-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CAXHHJkRemnH2AEAu9opvQ
-	(envelope-from <linux-usb+bounces-32885-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 14:39:37 +0100
+	id +PihF3IcemlS2QEAu9opvQ
+	(envelope-from <linux-usb+bounces-32886-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 15:25:54 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98308A23B5
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 14:39:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3931A2BC8
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 15:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 778C0300794A
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 13:39:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 982EA30AE463
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 14:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84C15352F8D;
-	Wed, 28 Jan 2026 13:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2051A2FB977;
+	Wed, 28 Jan 2026 14:18:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="OJdiO8p/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KH17X98d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE77722541C
-	for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 13:39:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C764270EDF
+	for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 14:18:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769607574; cv=none; b=pTqgK/4urisKmDabuFyDPa8qQUCbaDL9C4+5Cqz7Aa1OxA/5dB/F0ErkhrIkLYn0m/d9w4hgq84O+tkhyYWVZssADj+Ipk3KoSp7Imv4RU+7+4UwUrCcUPvkj5NZZ4GfJcmpbY4SUPlNpX5VJ3UN2zodJ6ngeymok3tDZS8PZg8=
+	t=1769609929; cv=none; b=SRsGJXIeaCDo9GxKV89qIqzzua10DCUJpwKAVOlA8S5xP+bai+o1r/wbk14sDOzF2aynIaYcyFhXWj6o0I73siXJcwcTqhsn/kEG/CnifliU+6ScGLPP47q8UBR6WEAImVA3dax2ouaRwl46F4MXNuh6mmJAysieb149Kl+I13M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769607574; c=relaxed/simple;
-	bh=MruptA1sJlpcscJGti6hPBNhrQObFvGzSp9oVldQWMM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W2WVX0jMdEc2esdi5SylAIYZEGleVFz8p0NnHiYnkcIN3wxArAevp2phywSsXivlOFiWDekdsxjg3luuLcKEIizGYO6RvIacoWg492dcI85oxmE4mA0pbEC/rr5SABcvilxBCM+7Lx73dKNjw4CrE1lF4enq2sxfd+ZpEbQSN7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=OJdiO8p/; arc=none smtp.client-ip=166.84.1.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
-	(No client certificate requested)
-	by l2mail1.panix.com (Postfix) with ESMTPS id 4f1NCg6jsLzDQM
-	for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 08:19:27 -0500 (EST)
-Received: from [10.50.4.47] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4f1NCX4gpsz4trj;
-	Wed, 28 Jan 2026 08:19:20 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1769606361; bh=MruptA1sJlpcscJGti6hPBNhrQObFvGzSp9oVldQWMM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=OJdiO8p/zQr1otu/x22wYAc/xFpVRBLvO6VLnFXj8fQ5LkYSXCRT73gL7Tot/mFs4
-	 4UyQ+ql083QZ8cIrQO8l9ERcownJ3Uj9iFsWQu/Cw7canpuAyWgOASonriOH9leLzZ
-	 DSkMUlg/8LBn3BPDXqcw8glofJ06wMHzgsKQ34eA=
-Message-ID: <892f837a-0784-4e6b-bec3-9d37397422a0@panix.com>
-Date: Wed, 28 Jan 2026 05:19:20 -0800
+	s=arc-20240116; t=1769609929; c=relaxed/simple;
+	bh=zcLdBNJPU30hI8np4zBZEgvT73lBUyKoZki1nX24I48=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=udGMjvNAB4COTI5O0x2QzQ1MU0GRAudRqkhWM4l0Dri+TwkE6orY9/vFSOTxtqxhUZt8M8x3uSRSybwTgvS92W/8OQAyh3aXLhUdUGQ7q4/jR7NyMqcp2n5+yIyQEWwNxZhP4cu+DAbvTYCAusi/RNFA4lZFbIY22PCknyX+g14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KH17X98d; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-82311f4070cso587280b3a.0
+        for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 06:18:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769609926; x=1770214726; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zcLdBNJPU30hI8np4zBZEgvT73lBUyKoZki1nX24I48=;
+        b=KH17X98dTAMwcNxYcvd3itByeYWUwVOXNu05hi+eE8Vw9sWBIXfAt3wXVbotaOYvlj
+         x7WPdRngmXOFjInUicDd9vgAls3FKwb43ZG4RcEOzktDkkqJNryyRFZFKd7/OOwHwz9X
+         wEqAfZb19YSE0m4YZJCmxW9NtgBa1/6arsW7CSWz9FZONV5CdNMatotEIncN6qQjvhBP
+         Tzl5flI72HLCk11fCHv2r5Qsq1S4FRUcRMWg5iKlIsQtJ6ZHtA/Eme6xsKMJR4iglOdY
+         9TV2D+K7ZKja59+1jEvyWjONpzCF4ZqR/nX33Yfk6+yxdXV3ibTvFf6x7DnEWS3CVo4c
+         v8BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769609926; x=1770214726;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zcLdBNJPU30hI8np4zBZEgvT73lBUyKoZki1nX24I48=;
+        b=r9Gjwd6fLdKsati0v+FNdOkjM/raBoVMKh9Z1U+8OBVXZ2shcdHPERtzc7/H2AUDVT
+         rFPnkYqVKzB9PAru1ZhHQzsr5xDJGZFkNT/SUv820zkwjaDgqnjMuDdQ8lvWj8dB86yK
+         bhYVAoVWbUJ2V36ANLCWcAqmsM/G6VPYOruA4Il9vA7mThNS6vWV6NisfYj8DUj3+WCA
+         fY+4f43/dpK1F2JeOLgxja62ov/I8+ECmmX8FqO/bSz8zAQGrFH5jetSY7/uANBrsHn1
+         Zsil9dyZSl4VOCljlC1DguDNS2uMRzT//gjq/QvP7TZPcL079yvG/tQLwi+WTCS0KKrE
+         xDBA==
+X-Forwarded-Encrypted: i=1; AJvYcCVZht3h6CEKnAxAGuDs0p9aDpkJlNCLdwYNUA7sts6A0z0RGekNf8/cR3xNIa6RlM2oGqH4WUObqqc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWGIy2W6PztCBqa8f1Wu2Cx6NwmMp0TXpc4msDirwSmkKpC+V8
+	AqMsL+80jrhzmLaUEUyTpgqnIjSSN7x2Dd6MSbja4kKDZ9Si5qeKCFWD
+X-Gm-Gg: AZuq6aJ0dvyu+RS1PA3BXGOq6hPlTzWEaOomXlRBVsJLFkOUk9j2CQbHziBvfgUXT35
+	Q2RyjNXxwXbITrZ8pBmDi9xdg9JEYbKT3xuQ9160RdA5UuyAEPBuB9n1Vv44JBz1N7dEUnwJr+Q
+	lDKPr2GhReA+sA2YyUhRcMCOOjHrB7x5HghV7LWq9MRd1z6HqTexAQZCewgjO1fsVYONB82lbYL
+	ypzChGzHpTV70b6d7cs2dSPiH4R7Zz8uqNwmFhbk5mShiDJYiqe3rSbk6AoNzEk9q98YCuN5adC
+	1TvtwqY9fXV5b8okimm9JV12GjbxAzqfv+6Hoabr38aHGCifNBFkPuF06aqyO+L9oPW49frvhFJ
+	evlu+6/FlrFDMJoLE8gdL+C3Xjhoytoo6FLOJH/457r2+OhK7c0FeULkxYzOYj2mEpT7nohNKGp
+	KQnnlf3NtMe+pR8cQbwQQCjd6ifnPnnI1tft5pRQ==
+X-Received: by 2002:a05:6a00:3a1d:b0:81f:ac1c:709e with SMTP id d2e1a72fcca58-8236a43992fmr5020759b3a.31.1769609926222;
+        Wed, 28 Jan 2026 06:18:46 -0800 (PST)
+Received: from name2965-Precision-7820-Tower.. ([121.185.186.233])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379bfd7a2sm2793084b3a.39.2026.01.28.06.18.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jan 2026 06:18:45 -0800 (PST)
+From: Jeongjun Park <aha310510@gmail.com>
+To: syzbot+c63f59479d561970dc2b@syzkaller.appspotmail.com
+Cc: gregkh@linuxfoundation.org,
+	johan@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] general protection fault in qt2_read_bulk_callback (2)
+Date: Wed, 28 Jan 2026 23:18:41 +0900
+Message-Id: <20260128141841.50281-1-aha310510@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <69795995.050a0220.c9109.0028.GAE@google.com>
+References: <69795995.050a0220.c9109.0028.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 0/2] usb: xhci: route device to secondary interrupters
-To: raoxu <raoxu@uniontech.com>, mathias.nyman@linux.intel.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- michal.pecio@gmail.com, niklas.neronin@linux.intel.com, zhanjun@uniontech.com
-References: <D51D214ACD887BE9+20260127023446.2140220-1-raoxu@uniontech.com>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <D51D214ACD887BE9+20260127023446.2140220-1-raoxu@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[panix.com,none];
-	R_DKIM_ALLOW(-0.20)[panix.com:s=panix];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,gmail.com,linux.intel.com,uniontech.com];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[panix.com:+];
-	TAGGED_FROM(0.00)[bounces-32885-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32886-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TO_DN_NONE(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[aha310510@gmail.com,linux-usb@vger.kernel.org];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kenny@panix.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-usb,c63f59479d561970dc2b];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:email,panix.com:email,panix.com:dkim,panix.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 98308A23B5
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: F3931A2BC8
 X-Rspamd-Action: no action
 
-
-
-On 1/26/26 18:34, raoxu wrote:
-> From: Xu Rao <raoxu@uniontech.com>
-> 
-> This series is split into two steps: patch 1/2 refactors xHCI IRQ and
-> interrupter handling to make multi-vector operation possible without
-> changing behavior; patch 2/2 then enables a small capped set of secondary
-> interrupters/vectors and routes transfer completions per device (slot) to
-> reduce contention on interrupter 0.
-> 
-> This is not about increasing USB link throughput, but about avoiding a
-> driver-imposed single hot spot. On hosts that already provide multiple
-> MSI/MSI-X vectors and independent event rings, routing all completions
-> through interrupter 0 creates unnecessary contention (serialized event
-> handling/locks and coupled moderation), increasing CPU cost and tail
-> latency under many active devices/endpoints. Using secondary interrupters
-> simply matches the hardware's design, similar in spirit to merged
-> xHCI-sideband work: exploit available parallel paths rather than
-> funneling all events through one.
-> 
-> Xu Rao (2):
->    usb: xhci: refactor IRQ/interrupter plumbing for multi-vector support
->    usb: xhci: enable secondary interrupters and route transfers per slot
-> 
-> Signed-off-by: Xu Rao <raoxu@uniontech.com>
-
-Tested-By: Kenneth R. Crudup <kenny@panix.com>
-
-> ---
-> Changelog:
-> v1 -> v2:
->    - Bind interrupters to endpoints at enable time instead of selecting
->      per transfer.
->    - Store the selected interrupter in struct xhci_virt_ep and program
->      TRB_INTR_TARGET() from the bound interrupter.
->    - Use a single IRQ handler for both primary and secondary vectors,
->      with STS_EINT handling restricted to interrupter 0.
->    - Keep a common dev_id for IRQ registration to match the existing
->      xhci_cleanup_msix() teardown constraints and avoid dev_id
->      lifetime issues.
->    - Clarify secondary interrupter teardown to avoid double-free or
->      use-after-free during xHCI removal.
-> v2 -> v3:
->    - modify commit information
-> v3 -> v4:
->    - Bind interrupters per USB device (slot) via struct xhci_virt_device,
->      program TRB_INTR_TARGET() from vdev->interrupter for bulk/ctrl/isoc.
->    - Drop xfer_interrupters and unify on xhci->interrupters[] for both
->      primary and secondary event rings and IRQ routing.
->    - Allocate secondary interrupters in xhci_mem_init; on any allocation
->      failure, rollback and continue with primary interrupter only.
->    - Cap secondary interrupter creation with MAX_SECONDARY_INTRNUM,
->      defaulting to 4.
->    - Route xhci_msi_irq by irq handler_data token (intr_num + 1) to keep
->      correct interrupter selection across resume/power_lost.
->    - Apply MSI-X affinity hints for secondary vectors.
-> v4 -> v5:
->    - Fix min() signedness build error reported by 0day CI.
->    - Rebase onto v6.19-rc2.
-> v5 -> v6:
->    - Route secondary MSI/MSI-X IRQs by storing struct xhci_interrupter in
->      irq handler_data, instead of using an (intr_num + 1) token mapping.
->    - Program Slot Context Interrupter Target (tt_info[31:22]) from
->      vdev->interrupter to keep slot default routing aligned with TRB
->      TRB_INTR_TARGET() selection.
-> v6 -> v7:
->    - Add xhci_quiesce_interrupter() and use it for secondary
->      interrupters in xhci_stop() and the power_lost path of xhci_resume(),
->      ensuring IMAN.IP (RW1C) and ERDP.EHB are properly cleared.
-> v7 -> v8:
->    - Sync secondary MSI/MSI-X vectors in xhci_msix_sync_irqs() with
->      synchronize_irq().
->    - Fix build errors by adding missing header includes for the IRQ helper APIs.
-> v8 -> v9:
->    - Use PCI_IRQ_AFFINITY to let PCI core spread MSI/MSI-X vectors across CPUs.
->    - Route each MSI/MSI-X vector to its interrupter via per-vector irq_ctx dev_id.
->    - Fix modpost error: xhci_msix_set_handler_data undefined (0-day CI).
->      https://lore.kernel.org/oe-kbuild-all/202601171743.omq3DpnM-lkp@intel.com/
->    - Rebase onto v6.19-rc6.
-> v9 -> v10:
->    - refactor IRQ/interrupter plumbing for multi-vector support.
->    - add xhci_handle_slot_secondary_events to handle secondary event ring.
-> v10 -> v11:
->    - Fix build warnings:-Wsometimes-uninitialized.
->      Closes: https://lore.kernel.org/oe-kbuild-all/202601262208.UybEjc9X-lkp@intel.com/
-> ---
->   drivers/usb/host/xhci-mem.c  |  48 +++++++++++
->   drivers/usb/host/xhci-pci.c  |  57 ++++++++++---
->   drivers/usb/host/xhci-ring.c | 156 +++++++++++++++++++++++++++++------
->   drivers/usb/host/xhci.c      |  37 ++++++---
->   drivers/usb/host/xhci.h      |  26 +++++-
->   5 files changed, 274 insertions(+), 50 deletions(-)
-> ---
-> 
-
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+#syz test git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-next
 
 
