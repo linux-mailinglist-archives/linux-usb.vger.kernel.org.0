@@ -1,281 +1,158 @@
-Return-Path: <linux-usb+bounces-32863-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32864-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YCpJDu3NeWnEzgEAu9opvQ
-	(envelope-from <linux-usb+bounces-32863-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 09:50:53 +0100
+	id IBzWOMbOeWnezgEAu9opvQ
+	(envelope-from <linux-usb+bounces-32864-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 09:54:30 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B059D9E6F0
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 09:50:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72CE09E7C1
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 09:54:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1A40A30429B1
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 08:47:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 25143307340C
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jan 2026 08:50:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A67233A9E1;
-	Wed, 28 Jan 2026 08:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAV7Gp9z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64C2633A6F7;
+	Wed, 28 Jan 2026 08:50:19 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8F3338F35
-	for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 08:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C11A337BBB;
+	Wed, 28 Jan 2026 08:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769590043; cv=none; b=FBmJICYzic3HN386ex075qqoBkj342ifmiGQJ//6dVExLr6FkY6UukuSRZ7AL+UTd/n10ImN+n0SL/grw5FOLZ79oRgETb6JXP5pcVqoeD8ErBusJUOt96zlNNnNLeC0Ms3FeGKtUiY335rG0Y8Wbbp7sTpqZMz/91nIWrC+6ho=
+	t=1769590218; cv=none; b=d7CbkUON+6SXtb6egoJA4g8UWY11zuANIKJQbJ5i4wvoSgLRGhqSaC93nUmo2V8xk7o5/dPlcUxQWMIPy+xM/vATCWqfAZ25RKFX0sonqShoHQl3mbRuDtP7kEqRe1AdQpZjgMlB+krgB/WO+R/eTWH5I+gTueUKtS+R9c1YyZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769590043; c=relaxed/simple;
-	bh=khrPDqCGTN5tnjPlkTiyZMZqvVOJ9sgSO4C4yr0b8Jo=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XUpDeaQSQAbYHt5+JTHnGkCS1Tjn8/3montxmrJhR5YALB5ueEiomAcNsxjZcl/Si+8e8C+64hkUa9sPWtuAmSjtbXDY/S/onPmKpXSGHYvu1vhoYnbXoCm3reCp4mTncalZekfJ7CqoH+PNljC1h3GlkciwrDq2VJwMGNTtn+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAV7Gp9z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817FDC16AAE
-	for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 08:47:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769590043;
-	bh=khrPDqCGTN5tnjPlkTiyZMZqvVOJ9sgSO4C4yr0b8Jo=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=aAV7Gp9zgZdRc7KJh8R8OOeLontofODPP9Ox37X1U4RRytrMXtyFwpHI2uCafsA6O
-	 N4M8SxdUBGEB6GG6wq9mldtPbeI3mWQ5Xhs5LSn4NPXoBCiQuI+RRzQ33rHJwB7ZJ9
-	 mG4MR1ghW1OsEQjStQ9BdK9fclJC7XbBn5Txfz8ZbZwRzM5jv+29aGAdeRRy68ORsq
-	 x22q+CT4ibKqsnVx4xg+c4tPQ/QgrPb4BYkxFqRLxsmkiF8rrDxZcNpUpZM9jwkGXe
-	 IlOgm6h98tLMgRQTmXJUJkYGOrC9P3V5At5uPhTMiH878BkQMhVSuBuu7c+scobBaC
-	 dDFw0NJqx1RVA==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-59b6c13b68dso590949e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 00:47:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW+JxzCDNuQifimVCAc8LQDpwU5LJ0QM5KUdu7yOSrLCxq+rL2QwtKtmcnlOrHDYJvogIWWSiInu8M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHmUOXvkNJOZ4I99ytpSxK0iEBo2l77AapUNjuPHYVGeNmnUqC
-	EzQMP9d5xXYAsyhhpAfXHXpAY0zMyXMDpuK/XsB2u9GeFtLQR6Da4YjB5XfNIJcX2ReZSnC05GG
-	qjC67WV+tmsTP3+im1GCnfCGq2a8mShLYXoCIJee3WQ==
-X-Received: by 2002:ac2:464c:0:b0:59e:6f4:d224 with SMTP id
- 2adb3069b0e04-59e06f4d2demr780740e87.26.1769590041709; Wed, 28 Jan 2026
- 00:47:21 -0800 (PST)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 28 Jan 2026 00:47:19 -0800
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 28 Jan 2026 00:47:19 -0800
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-2-c55ec1b5d8bf@linaro.org>
+	s=arc-20240116; t=1769590218; c=relaxed/simple;
+	bh=/mLSsHaATrYXpFqr6lqZG4zeOGqVm7/GyaO2nLSICuE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WjBcaKhyAzcUo0jcS+NoZdb9t/o6OoHKoCVje12oDlrgb1tOljvFgIXRDqtLvNKXPlfjc7F8xwAbewq/uvknXIn3xJzGbQYB60Un1R1QupYWYc5LqNDdqnYL7QOPVKWfJEstk4OOpKoXWV9TRqxpEFSNTo6CKqQ3/xlz3EDIKms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: u2LN01oKSROEb9kvQl+igg==
+X-CSE-MsgGUID: gks814oVSg6uzIONpp8tsQ==
+X-IronPort-AV: E=Sophos;i="6.21,258,1763395200"; 
+   d="scan'208";a="139512834"
+Date: Wed, 28 Jan 2026 16:48:49 +0800
+From: Dayu Jiang <jiangdayu@xiaomi.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Mathias Nyman <mathias.nyman@intel.com>, Longfang Liu
+	<liulongfang@huawei.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, yudongbin <yudongbin@xiaomi.com>, guhuinan
+	<guhuinan@xiaomi.com>, chenyu45 <chenyu45@xiaomi.com>, mahongwei3
+	<mahongwei3@xiaomi.com>
+Subject: Re: [PATCH] usb: xhci: add xhci_halt() for HCE Handling
+Message-ID: <aXnNcQa5Ooq2wIX2@oa-jiangdayu.localdomain>
+References: <20260127110422.306711-1-jiangdayu@xiaomi.com>
+ <2026012708-liability-sincere-5ed4@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-0-c55ec1b5d8bf@linaro.org>
- <20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-2-c55ec1b5d8bf@linaro.org>
-Date: Wed, 28 Jan 2026 00:47:19 -0800
-X-Gmail-Original-Message-ID: <CAMRc=MfOjd0RzAma+NgCVZvvaar+Wwe+jH6dYxzJ02h4GEBJdw@mail.gmail.com>
-X-Gm-Features: AZwV_QhXUdGdxJQ8EWE3IEaSkM8UzBdAeGOMqY6dnujEk2icHg1EteXYkrLHpqM
-Message-ID: <CAMRc=MfOjd0RzAma+NgCVZvvaar+Wwe+jH6dYxzJ02h4GEBJdw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] pci: pwrctrl: add PCI pwrctrl driver for the
- UPD720201/UPD720202 USB 3.0 xHCI Host Controller
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Rob Clark <robin.clark@oss.qualcomm.com>, 
-	Dmitry Baryshkov <lumag@kernel.org>, Abhinav Kumar <abhinav.kumar@linux.dev>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="gbk"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2026012708-liability-sincere-5ed4@gregkh>
+X-ClientProxiedBy: BJ-MBX07.mioffice.cn (10.237.8.127) To BJ-MBX03.mioffice.cn
+ (10.237.8.123)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[xiaomi.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32863-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,oss.qualcomm.com,linux.dev,gmail.com,poorly.run,somainline.org,ffwll.ch,linuxfoundation.org,glider.be,google.com,vger.kernel.org,lists.freedesktop.org];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:email,mail.gmail.com:mid];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oa-jiangdayu.localdomain:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,xiaomi.com:email];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: B059D9E6F0
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jiangdayu@xiaomi.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32864-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
+X-Rspamd-Queue-Id: 72CE09E7C1
 X-Rspamd-Action: no action
 
-On Tue, 27 Jan 2026 10:57:29 +0100, Neil Armstrong
-<neil.armstrong@linaro.org> said:
-> Add support fo the Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller
-> power control which connects over PCIe and requires specific power supplies
-> to start up.
->
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/pci/pwrctrl/Kconfig                 | 10 ++++
->  drivers/pci/pwrctrl/Makefile                |  2 +
->  drivers/pci/pwrctrl/pci-pwrctrl-upd720201.c | 88 +++++++++++++++++++++++++++++
->  3 files changed, 100 insertions(+)
->
-> diff --git a/drivers/pci/pwrctrl/Kconfig b/drivers/pci/pwrctrl/Kconfig
-> index e0f999f299bb..5a94e60d0d3e 100644
-> --- a/drivers/pci/pwrctrl/Kconfig
-> +++ b/drivers/pci/pwrctrl/Kconfig
-> @@ -11,6 +11,16 @@ config PCI_PWRCTRL_PWRSEQ
->  	select POWER_SEQUENCING
->  	select PCI_PWRCTRL
->
-> +config PCI_PWRCTRL_UPD720201
-> +	tristate "PCI Power Control driver for the UPD720201 USB3 Host Controller"
-> +	select PCI_PWRCTRL
-> +	help
-> +	  Say Y here to enable the PCI Power Control driver of the UPD720201
-> +	  USB3 Host Controller.
-> +
-> +	  The voltage regulators powering the rails of the PCI slots
-> +	  are expected to be defined in the devicetree node of the PCI device.
-> +
->  config PCI_PWRCTRL_SLOT
->  	tristate "PCI Power Control driver for PCI slots"
->  	select PCI_PWRCTRL
-> diff --git a/drivers/pci/pwrctrl/Makefile b/drivers/pci/pwrctrl/Makefile
-> index 13b02282106c..a99f85de8a3d 100644
-> --- a/drivers/pci/pwrctrl/Makefile
-> +++ b/drivers/pci/pwrctrl/Makefile
-> @@ -5,6 +5,8 @@ pci-pwrctrl-core-y			:= core.o
->
->  obj-$(CONFIG_PCI_PWRCTRL_PWRSEQ)	+= pci-pwrctrl-pwrseq.o
->
-> +obj-$(CONFIG_PCI_PWRCTRL_UPD720201)	+= pci-pwrctrl-upd720201.o
-> +
->  obj-$(CONFIG_PCI_PWRCTRL_SLOT)		+= pci-pwrctrl-slot.o
->  pci-pwrctrl-slot-y			:= slot.o
->
-> diff --git a/drivers/pci/pwrctrl/pci-pwrctrl-upd720201.c b/drivers/pci/pwrctrl/pci-pwrctrl-upd720201.c
-> new file mode 100644
-> index 000000000000..db96bbb69c21
-> --- /dev/null
-> +++ b/drivers/pci/pwrctrl/pci-pwrctrl-upd720201.c
-> @@ -0,0 +1,88 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Based on upd720201.c:
-> + * Copyright (C) 2024 Linaro Ltd.
-> + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/pci-pwrctrl.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/slab.h>
-> +
-> +struct pci_pwrctrl_upd720201_data {
-> +	struct pci_pwrctrl ctx;
-> +	struct regulator_bulk_data *supplies;
-> +	int num_supplies;
-> +};
-> +
-> +static void devm_pci_pwrctrl_upd720201_power_off(void *data)
-> +{
-> +	struct pci_pwrctrl_upd720201_data *upd720201 = data;
-> +
-> +	regulator_bulk_disable(upd720201->num_supplies, upd720201->supplies);
-> +	regulator_bulk_free(upd720201->num_supplies, upd720201->supplies);
-> +}
-> +
-> +static int pci_pwrctrl_upd720201_probe(struct platform_device *pdev)
-> +{
-> +	struct pci_pwrctrl_upd720201_data *upd720201;
-> +	struct device *dev = &pdev->dev;
-> +	int ret;
-> +
-> +	upd720201 = devm_kzalloc(dev, sizeof(*upd720201), GFP_KERNEL);
-> +	if (!upd720201)
-> +		return -ENOMEM;
-> +
-> +	ret = of_regulator_bulk_get_all(dev, dev_of_node(dev),
-> +					&upd720201->supplies);
-> +	if (ret < 0) {
-> +		dev_err_probe(dev, ret, "Failed to get upd720201 regulators\n");
+On Tue, Jan 27, 2026 at 12:22:40PM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Jan 27, 2026 at 07:04:22PM +0800, jiangdayu wrote:
+> > When the xHCI controller reports a Host Controller Error (HCE) status
+> > in the interrupt handler, the driver currently only logs a warning and
+> > continues execution. However, a Host Controller Error indicates a
+> > critical hardware failure that requires the controller to be halted.
+> > 
+> > Add xhci_halt(xhci) call after the HCE warning to properly halt the
+> > controller when this error condition is detected. This ensures the
+> > controller is in a consistent state and prevents further operations
+> > on a failed hardware. Additionally, if there are still unhandled
+> > interrupts at this point, it may cause interrupt storm.
+> > 
+> > The change is made in xhci_irq() function where STS_HCE status is
+> > checked, mirroring the existing error handling pattern used for
+> > STS_FATAL errors.
+> > 
+> > Fixes: 2a25e66d676df ("xhci: print warning when HCE was set")
+> > Signed-off-by: jiangdayu <jiangdayu@xiaomi.com>
+> 
+> We need a full name, not an email alias, sorry.
+Sorry for the confusion, I will use my full legal name (instead of the 
+email alias) in the Signed-off-by line in the revised patch.  
+> 
+> And this isn't really "fixing" that commit, there's nothing wrong with
+> it as-is.  This is adding new functionality to the code.
+I initially used the Fixes tag because the original commit only logged
+a warning for HCE with no further action, this incomplete handling 
+risks interrupt storms on the SoC (since the interrupt isn¡¯t cleared). 
+That¡¯s a robustness gap I wanted to fix with this patch.
+> 
+> > ---
+> >  drivers/usb/host/xhci-ring.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> > index 9315ba18310d..1cbefee3c4ca 100644
+> > --- a/drivers/usb/host/xhci-ring.c
+> > +++ b/drivers/usb/host/xhci-ring.c
+> > @@ -3195,6 +3195,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+> >  
+> >  	if (status & STS_HCE) {
+> >  		xhci_warn(xhci, "WARNING: Host Controller Error\n");
+> > +		xhci_halt(xhci);
+> 
+> What is going to start things back up again?  And as you are calling
+> this function, why is the warning message needed anymore?  The
+> tracepoint information will give you that message now, right?
+When HCE is triggered, it indicates a critical hardware failure. 
+Aligning with the handling of HSE (STS_FATAL) by adding 
+xhci_halt() here is more reasonable: without xhci_halt(), the 
+USB controller may fall into an unpredictable and unstable state, 
+which could exacerbate system issues.  
 
-dev_err_probe()?
-
-> +		return ret;
-> +	}
-> +
-> +	upd720201->num_supplies = ret;
-> +	ret = regulator_bulk_enable(upd720201->num_supplies, upd720201->supplies);
-> +	if (ret < 0) {
-> +		dev_err_probe(dev, ret, "Failed to enable upd720201 regulators\n");
-> +		regulator_bulk_free(upd720201->num_supplies, upd720201->supplies);
-> +		return ret;
-
-Save a line by returning dev_err_probe() here?
-
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(dev, devm_pci_pwrctrl_upd720201_power_off,
-> +				       upd720201);
-> +	if (ret)
-> +		return ret;
-> +
-> +	pci_pwrctrl_init(&upd720201->ctx, dev);
-> +
-> +	ret = devm_pci_pwrctrl_device_set_ready(dev, &upd720201->ctx);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to register pwrctrl driver\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id pci_pwrctrl_upd720201_of_match[] = {
-> +	{
-> +		.compatible = "pci1912,0014",
-> +	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, pci_pwrctrl_upd720201_of_match);
-> +
-> +static struct platform_driver pci_pwrctrl_upd720201_driver = {
-> +	.driver = {
-> +		.name = "pci-pwrctrl-upd720201",
-> +		.of_match_table = pci_pwrctrl_upd720201_of_match,
-> +	},
-> +	.probe = pci_pwrctrl_upd720201_probe,
-> +};
-> +module_platform_driver(pci_pwrctrl_upd720201_driver);
-> +
-> +MODULE_AUTHOR("Neil Armstrong <neil.armstrong@linaro.org>");
-> +MODULE_DESCRIPTION("PCI Power Control driver for UPD720201 USB3 Host Controller");
-> +MODULE_LICENSE("GPL");
->
-> --
-> 2.34.1
->
->
-
-Just nits with dev_err_probe(). With these LGTM.
-
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-
-Bartosz
+Retaining the warning message is necessary because it is directly 
+visible in dmesg, whereas tracepoint information requires explicitly 
+enabling xHCI tracepoints. Additionally, if xhci_halt() is called in 
+xhci_irq() without the warning log, it would be impossible to 
+distinguish whether the halt was triggered by HCE or HSE.
+> 
+> And is this just papering over a hardware bug?  Should this really be
+> happening for any normal system?
+Yes, this issue has been reproducible on real-world hardware: HCE is 
+triggered in UAS Storage Device plug/unplug scenarios on Android 
+devices, which enters this error branch and causes an interrupt storm, 
+leading to severe system-level faults.
+> 
+> thanks,
+> 
+> greg k-h
 
