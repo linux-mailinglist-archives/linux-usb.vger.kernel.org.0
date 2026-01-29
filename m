@@ -1,177 +1,232 @@
-Return-Path: <linux-usb+bounces-32910-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32911-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IAIkCipte2mMEgIAu9opvQ
-	(envelope-from <linux-usb+bounces-32910-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 15:22:34 +0100
+	id IIVFLvpve2mMEgIAu9opvQ
+	(envelope-from <linux-usb+bounces-32911-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 15:34:34 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9144BB0DF3
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 15:22:33 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50025B103B
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 15:34:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6F10B3011A76
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 14:22:32 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 51B243006135
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 14:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E4C7288515;
-	Thu, 29 Jan 2026 14:22:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0678729A9E9;
+	Thu, 29 Jan 2026 14:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lFzBJAGx"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gA/8R/Ec"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D83A1C3C08
-	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 14:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2372C2528FD
+	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 14:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769696550; cv=none; b=V287Mjr8Cxl/vZNTvFcc8fS5LEBCzb/X+6L9xWKTgNu5ey5GqmW9YWx2WT7DPa+ypSI4pBfsxMLcLI8AHp9HWObXuI0uN5pz/N24NGz97hcvRWVyB3EArwQ0nL3pFEDDjLqlhq/UWSzrMaiNzSRZbz++RKjhaIf0+lVuqrIR2U8=
+	t=1769697271; cv=none; b=WEuLmvryx3StSBiJ0WPLc/WPaI8ttZwLjQ2YZT5zodT+8Gvg3HnAfYqMy7h6ff++R5BcMQpMoJxqJibDnDb29NYJwT1BVbFMH91G7dbUOs0Gq1V52GCeftEc99z7LGmMWJIvJ0+8cEV3LwLfc6GeTOn0d+yscG6tmbwtw2UjX+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769696550; c=relaxed/simple;
-	bh=WXqGeokpjn0gwQUxTdpATEwlD2d4jPGvvQC91tt7onI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jNbofZO6Noc/y1qqfmf0r7c4kfChtV5npPgxDkp98NzTed5/v3ozV68ZA0do44X6EWCw9uaBcxstORAMCCSalVWAHn/zfX+MvSkWwyq7aCyc48lHJu3BluCQnM6XpbgWrlaj/jrlJcjGiI3xMxRxmGBv9C65VCBb44ayOYudO3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lFzBJAGx; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-59de77e2e30so1264531e87.2
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 06:22:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769696547; x=1770301347; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WXqGeokpjn0gwQUxTdpATEwlD2d4jPGvvQC91tt7onI=;
-        b=lFzBJAGxQAzQlPVUzyFgHHzdW+g8YXRHYX2MOqFBoNo/mhXwT55qvlMc9DLaJe7B1o
-         jrZ3W155tpmh0HT6cAyIoPPFVB99shZbj95ethrGAApyo4k8S+nQta9TiFEgCM0Y/aCq
-         Pu+ZN1we2HVzaZlbLlAnddiDa7PsiKhMRQpMbnzEsDwiaZQ5nyKv8b8hUR0hneFXdo2w
-         UoqdbirUkqGvsYRl2g3pGQzOJoX/NOEnQZ/XzHMgcUgWQ41zp6hDY81VyrUkMfpf6bWK
-         qiQyh+M30+A1zgopkRIiS5MwaxL1HjlVnMxQmv1qEBfzFYQ/pxtCrKI4oHA7acY1FBkP
-         ZL0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769696547; x=1770301347;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WXqGeokpjn0gwQUxTdpATEwlD2d4jPGvvQC91tt7onI=;
-        b=Vix83BkoMMQ/CPmiJCEAJNlhETslffuO4yWXB4mgo8SrdArghoBKlZomqAjpGkXQ4z
-         qXOsFN0ArVtmTiva48eDRUbuDr2EoyKKMWXTjhX0clfzfR77XaypcYUY+y+A7uNroR4Y
-         HjtaJrK046gqHylRFxxsZCGVS26avVaa9nXOnjsg1f9KPgj59DuOwYXPC5VXQQVFcKFY
-         EGYT8rjMu9UnPbzUUb4BC3wySJx8v88q0ddk2wNo+2Bt8EHnlI/xxqVFRdXw5HQs44c+
-         vPvJwENQqEfhKtlutErCQQxbVlxgzNJyVzEYNNE9aDzYMnShR/cOZCgNpmY4OrHKFyFX
-         o09A==
-X-Forwarded-Encrypted: i=1; AJvYcCVKxvG7Krk9CW/4JZNuRuDKutgvl+bgRaCG2WdWgbJ+W5cz0R5B6lfVY0XkdU5Qyg3/ycIW6rkBSiI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzV2TqhtXGXmTiZUze5EUG723H803r/qsiVM5DiqgHw2ygllM8
-	qhrRCEVVs75EZZD/npo29xGzg3Mzkdqfx8B6YmbDKe3yBG9OfUyWdIJib4yZlw==
-X-Gm-Gg: AZuq6aJf0kyL9xnr0xUUL9iCZ9C1FGfX0ZrcVsSjmtksjL9rIo8xzKCEz2Bnl9/QJe/
-	be9yddOAKm84fRPW7fFmKtgBTUpQlX69xWXixvqHVi5R+yzMA3ERzVxsvUy8cePSckD1BCT5lAO
-	6bW6EjCoT0sC7Fb8/KUvOfglnrwnXY56cTF/tXM4LaOsoRydOFaNmrOmXsHkE4xK7sMYSIdcI/A
-	k4llavyiiMZJG/QqrjdQNQ2Ov1ks1A6BZFlrDozZd6foleeCQwXDmNrtx2H+XtoFz8fuBFMQS46
-	60aWl6d36WySPF7+g+45nzKcGsu0RAL97GTO+5jdX+t6uUWRK73l/kntxjjZ60Ej4b7t0tMdUuy
-	PCaBtOgyfjFWENme80tgR0GZ8xipz+dRrIo72XLuQsYBzmYyYDmeCklJEqanQg4mwMksTzS+cOC
-	TV6hHaZ6npJL4pV0OgxKwU+gtOUjMhU/z1LQ==
-X-Received: by 2002:a05:6512:1282:b0:59e:3cd:f1dd with SMTP id 2adb3069b0e04-59e0401a884mr3549551e87.18.1769696547176;
-        Thu, 29 Jan 2026 06:22:27 -0800 (PST)
-Received: from foxbook (bgw148.neoplus.adsl.tpnet.pl. [83.28.86.148])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e074b2d89sm1147543e87.49.2026.01.29.06.22.26
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 29 Jan 2026 06:22:26 -0800 (PST)
-Date: Thu, 29 Jan 2026 15:22:22 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: raoxu <raoxu@uniontech.com>
-Cc: gregkh@linuxfoundation.org, kenny@panix.com, linux-usb@vger.kernel.org,
- mathias.nyman@linux.intel.com, niklas.neronin@linux.intel.com,
- zhanjun@uniontech.com
-Subject: Re: [PATCH v11 2/2] usb: xhci: enable secondary interrupters and
- route transfers per slot
-Message-ID: <20260129152222.79c1252b.michal.pecio@gmail.com>
-In-Reply-To: <ED3E9F8EEA089A35+20260128080939.1145420-1-raoxu@uniontech.com>
-References: <2026012754-ferocity-operator-e3b2@gregkh>
-	<ED3E9F8EEA089A35+20260128080939.1145420-1-raoxu@uniontech.com>
+	s=arc-20240116; t=1769697271; c=relaxed/simple;
+	bh=jH7+xDrElxwFqZqZ4Qz2PwSv6DL98FW+OAgH61RKoSw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ChJdku8tPYryAw4ebnVyj1QSzM3ERtToTAEb7C49R0q9yYH5odeWRe7Ox4uMTVrbcOQ9y+q2KhfVKzElLnx6KuQ1LOYf1AlE9utnucwTYVWqq6XiioUf4YWt76WVY3V1bFReaZB/YtG/R8ZSNGgDTt3J0TX9Cs+Ln3E1jpMRAoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gA/8R/Ec; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 9EE041A2AF7
+	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 14:34:26 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6AF90606FD;
+	Thu, 29 Jan 2026 14:34:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1BE85119A868D;
+	Thu, 29 Jan 2026 15:34:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1769697265; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=d47mfWDfhwVOcY0sEOqFBeuehMSYc5UT+oKMWz/KtZk=;
+	b=gA/8R/EcrIX++41cvrqp/HOTBjT97sS8ThTK0zE6yO46QKe9D9mjwcapsEAc1w9yvMAl2B
+	C2uYG8LPXLVZjwMCHEft87k5BNPv3d++ziJXieQR+UsHaeU22YtmQ0VVAaAk8fo+o4R5Dq
+	u2BhQIRnSIIjFsopSe7O9vs8ACZ8KxMAv+1XOEJvCviLlPXDvPZei88M1qOIH4nXoWEKIt
+	Wedu41nhfGhpBy4Cfd7377shdp8vYT4c/Q5QOlOmoydIV1ITSwJCASogCENrbVaqYqQrUr
+	jvSlhtEZ7fq3CGGV6uPQqTaDNFkVR3JQiszzOI0GTYgjQ8jtX3J4Y5YZhMucFg==
+Message-ID: <8743fec1-301d-46e1-89bf-7952c73faa86@bootlin.com>
+Date: Thu, 29 Jan 2026 15:34:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: cdns3: host: Add null check for host_device before
+ accessing its members
+To: Abhash Kumar Jha <a-kumar2@ti.com>, gregkh@linuxfoundation.org,
+ pawell@cadence.com, peter.chen@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, rogerq@kernel.org, u-kumar1@ti.com,
+ p-mantena@ti.com, theo.lebrun@bootlin.com,
+ Gregory CLEMENT <gregory.clement@bootlin.com>
+References: <20260119082242.1922599-1-a-kumar2@ti.com>
+Content-Language: en-US
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <20260119082242.1922599-1-a-kumar2@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-32910-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	URIBL_MULTI_FAIL(0.00)[sto.lore.kernel.org:server fail,bootlin.com:server fail];
+	TAGGED_FROM(0.00)[bounces-32911-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[thomas.richard@bootlin.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9144BB0DF3
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 50025B103B
 X-Rspamd-Action: no action
 
-On Wed, 28 Jan 2026 16:09:39 +0800, raoxu wrote:
-> By "hot spot" I do not mean a CPU cache problem. I mean a
-> software-side serialization point: all devices share a single event
-> ring and a single IRQ handler which processes completions under the
-> global xhci->lock. That centralizes the work into one place
-> regardless of cache locality.
-> [...]
-> Even if USB link latency is high, the IRQ/event path is still a
-> CPU-side serialization point: all completions land in one event ring
-> and are drained by one handler under xhci->lock. Under mixed
-> workloads (e.g. isoc video plus periodic audio/bulk), events from
-> unrelated devices can queue behind the same lock/handler and increase
-> jitter/tail latency, even if the bus is not saturated.
+Hello,
 
-But this patch doesn't address such contetion. It's still one big lock
-per xHCI chip and a few CPUs take turns to do all work sequentially.
+On 1/19/26 9:22 AM, Abhash Kumar Jha wrote:
+> In cases when the xhci device is not populated, we see a nullptr
+> exception when resuming.
+> 
+> Add a nullptr check for the host_dev before accessing its private data.
+> 
 
-I find Greg's counterargument convincing. This change seems to only
-harm xhci_hcd performance, and if your bottleneck truly were in this
-driver, it's hard to imagine how anything could improve.
+I was able to reproduce Abhash's issue on J784s4 and J7200 EVM board
+with 6.19-rc7 kernel.
 
-I suspect it's somewhere else, and considering the results you report,
-quite likely in URB completion handlers. They used to be called from
-this IRQ handler, but nowadays it's delegated to USB core.
+Unable to handle kernel NULL pointer dereference at virtual address
+0000000000000208
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+  CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+  GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=00000008856e6000
+[0000000000000208] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 0000000096000004 [#1]  SMP
+Modules linked in:
+CPU: 0 UID: 0 PID: 146 Comm: sh Not tainted
+6.19.0-rc7-00013-g6e64f4aabfae-dirty #135 PREEMPT
+Hardware name: Texas Instruments J7200 EVM (DT)
+pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : usb_hcd_is_primary_hcd+0x0/0x1c
+lr : cdns_host_resume+0x24/0x5c
+sp : ffff800084fc39d0
+x29: ffff800084fc39d0 x28: ffff8000840ac098 x27: ffff8000842e6ee0
+x26: 0000000000000000 x25: ffff800084247958 x24: ffff80008427d000
+x23: 000000048f2f5605 x22: ffff000801937218 x21: 0000000000000010
+x20: 0000000000000001 x19: 0000000000000000 x18: 0000000000000006
+x17: 0000000000000000 x16: 0000000000000000 x15: ffff800084fc3390
+x14: 0000000000000000 x13: 383331203a74696e x12: 695f74736f685f73
+x11: ffff800083c48828 x10: 0000000000000018 x9 : ffff800083c48828
+x8 : 00000000000006aa x7 : ffff800083ca0828 x6 : 00000000fffff000
+x5 : 0000000000017fe8 x4 : ffff000801935dc0 x3 : 0000000000000000
+x2 : ffff800080e3b388 x1 : 0000000000000001 x0 : 0000000000000000
+Call trace:
+ usb_hcd_is_primary_hcd+0x0/0x1c (P)
+ cdns_resume+0x6c/0xbc
+ cdns3_controller_resume.isra.0+0xe8/0x17c
+ cdns3_plat_resume+0x18/0x24
+ platform_pm_resume+0x2c/0x68
+ dpm_run_callback+0x90/0x248
+ device_resume+0x100/0x24c
+ dpm_resume+0x190/0x2ec
+ dpm_resume_end+0x18/0x34
+ suspend_devices_and_enter+0x2b0/0xa44
+ pm_suspend+0x16c/0x5fc
+ state_store+0x80/0xec
+ kobj_attr_store+0x18/0x2c
+ sysfs_kf_write+0x7c/0x94
+ kernfs_fop_write_iter+0x130/0x1dc
+ vfs_write+0x240/0x370
+ ksys_write+0x70/0x108
+ __arm64_sys_write+0x1c/0x28
+ invoke_syscall+0x48/0x10c
+ el0_svc_common.constprop.0+0x40/0xe0
+ do_el0_svc+0x1c/0x28
+ el0_svc+0x34/0x108
+ el0t_64_sync_handler+0xa0/0xe4
+ el0t_64_sync+0x198/0x19c
+Code: 52800003 f9407ca5 d63f00a0 17ffffe4 (f9410401)
+---[ end trace 0000000000000000 ]---
 
-Core uses BH workqueues. AFAIU this means completions run later on the
-same CPU which handled the IRQ. So if you spread IRQs, you also spread
-completions. It's easy to see how this could increase throughput or
-remedy latency spikes caused by sluggish class drivers, because unlike
-this IRQ, completions can usually run in parallel on multiple CPUs.
+So I investigated and I identified two distinct issues.
 
-If that's the real problem here then no xHCI driver surgery should be
-necessary to work around it, only updating the core.
+1- First issue is hardware / board related issue, for an unknown reason
+VBUS change after a suspend-to-ram or suspend-to-idle which triggers a
+mode change of the controller (from idle to host). This issue shall be
+fixed but it is not the right place for such a discussion.
 
-> the upstream xhci-sideband work has already exercised and validated
-> the core multi-interrupter/event-ring plumbing in the driver. So
-> using additional interrupters is a proven in-tree mechanism, not an
-> experimental path unique to this series.
+2- Second issue is: switching from idle to host mode during resume
+causes a NULL pointer dereference. I think it is a valid use case so it
+should be fixed.
 
-I'm afraid the only driver functionality exercised by xhci-sideband is
-allocation and freeing of extra event rings. Handling those rings in SW
-and solving race conditions is new, as is having no way to tell which
-order some events were generated in when things go wrong.
+During resume cdns3 detects that the real role changed [1]. In this case
+it switches to its new role [2]. Behind the scene, it runs the stop()
+operation of the former role [3][4], and then run the start() operation
+of the new role [5][6].
 
-Regards,
-Michal
+In host mode, the start() operation creates a xhci-hcd device [7]. But
+as we are in the resume path, the probe() of this xhci-hcd device is not
+run. Later in the resume sequence of cdns3 driver we call the resume()
+operation [8] of the current role (which is host right now). But in the
+host resume operation we assume the xhci-hcd device has been probed
+which is not true in this case, so we try to use an uninitialized
+pointer which causes a NULL pointer dereference.
+
+I think we can skip the resume() operation in case the role changed
+during resume as we already did the start() operation for the new role.
+Then resume ends successfully, and xhci-hcd device is probed after.
+
+I will send a patch.
+
+[1]
+https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L534
+[2]
+https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L536
+[3]
+https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L316
+[4]
+https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L66
+[5]
+https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L320
+[6]
+https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L47
+[7]
+https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/host.c#L69
+[8]
+https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L555
+
+Best Regards,
+Thomas
 
