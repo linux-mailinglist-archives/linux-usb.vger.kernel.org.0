@@ -1,202 +1,232 @@
-Return-Path: <linux-usb+bounces-32913-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32914-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MO4wBqKqe2m8HgIAu9opvQ
-	(envelope-from <linux-usb+bounces-32913-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 19:44:50 +0100
+	id 8OsgNV24e2k0IAIAu9opvQ
+	(envelope-from <linux-usb+bounces-32914-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 20:43:25 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E9CDB3B03
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 19:44:49 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 191E9B4107
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 20:43:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D0A62302000D
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 18:44:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 49FA73002D20
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 19:43:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B852FBDE6;
-	Thu, 29 Jan 2026 18:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F533271EB;
+	Thu, 29 Jan 2026 19:43:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WwrR5LLe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f79.google.com (mail-oo1-f79.google.com [209.85.161.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BCE296BC1
-	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 18:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC58D2D8796
+	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 19:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769712273; cv=none; b=OwB6ILf3B2FE3srAtowzBA30GkNjru9Kzc6RGKxycGXuSJw+jdCkcJY1hVkRzCFYF9GWUzFnuccTLePVN3p3p5qd4cBuVkjbTHgEmLVKKgIdxvY988gBjQiWE0fWLrtB2pIhYLgY8Aj5V4eMbYGOiZAYwPpBkU1MYiVuIrLGSxM=
+	t=1769715799; cv=none; b=rSwVLF3FwhUalMMaxYYgD7m5UE04ZhXz4Wgwjsm6Sod5YxbeNCH5MOM189VY0ubmnZpueTghtwobN+DwNTFJwocrWmggPkds/8RcK/o2VEZbgpdiOgeDiKWYXRzx8PK9+uG1ufriMosPsVDo5NJss+Yxco/Sp7VVb024IPpOW1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769712273; c=relaxed/simple;
-	bh=bWZcG3PhHWyEILrgRKgek4RXtox4Z9NBBlfHZDqy/YE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=WoXaYAo79OGTvFEQwBYO4T7Vruv6izb4pAghB9iXvbvXQcUmcTSz5Hg2YJg5NdkOu4eaYr6mTFx26us3VlqLSTM0I8kGjWOroyTQ3XibZpVMyDDIZqwzw9lhJTOAHsYugRSCTatMlQG/DE1CmilT5SXaxZKe7deoWeD6SyWKB/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f79.google.com with SMTP id 006d021491bc7-66308f16ea1so2737611eaf.2
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 10:44:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769712271; x=1770317071;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FDgL1MYSweSbEh3ZjY29CfIHSUPIEI6ynbuw1xTqXA0=;
-        b=FuZp6pj2ckJohVJxWVk5fFvHYqM3c9gdw+T+JeSZh8SzjLfWpBXOJrpmQCOKBCBpQv
-         zdfn4h+ZA1WeT7z/swMtGvf12oHDCq9AFGMAYGrpQBrSzvrBPhIAOUG0XyAytuvaN4oo
-         1pIIxlWZ7atgqWCPu52TZH6ALsOSkDXu2BdGoV8ryaF4HIT17TTJPUEYQnCYOHy2tkMw
-         u2IsPkrJ2mEw5R9p7lCuO0h/3M0OBtzfNgQNmX2kc0EtzKKTr/JtI1vD+WvixGdvWx8f
-         R1kbW2P3hCCQVuRgV5A4f+O+LMhR1xy5kDN6WKz/wZw2H7ZsHPpiOmlCI93i8UjFpPCU
-         3Eig==
-X-Forwarded-Encrypted: i=1; AJvYcCWIa5x52C5nsNG5KvB6bnmFELj+j/adcBIGQj+nS87ovde3n1bHmJ3lt3BceWuN8Xs09C/YNXp2fVE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya+XNkzeK51eUDXallzAiWZQFwZz1UfI5Sa8SK2U8FEIG+gZy0
-	gfJGSl1vtlbngZlx7TEKH8tYAVnXrDMK77dsrrwbaHn4leENA8CAmCv6vX7SRfvkgfc18xGo3lX
-	6uB2Pv0GQr4P2Cs5vVkgUJ+WnN7vqVtt7TYnmWE124tpZDCHEH1cM3nwA/DA=
+	s=arc-20240116; t=1769715799; c=relaxed/simple;
+	bh=bkzeVnFgQp0oYJiIAx4Xv8zsNX5Dod8IOeYP4cJ73cg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hHkcg3p4T0l4hmKeZFMVcJ3wAaBWq+AwBh4Lv8IjCNUlbe/WNQsVeh6Aj7Vtm17r6eZl8Eyf3kAT17akziZQczcQYOt5pH/7EGQxpbf1YjRH+YlQIlmCfMAF2Tg6M6x8gmGRkyna4+PKWWfu/QbF9BP63ssL88kOfSHsm0GYp2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WwrR5LLe; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769715798; x=1801251798;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bkzeVnFgQp0oYJiIAx4Xv8zsNX5Dod8IOeYP4cJ73cg=;
+  b=WwrR5LLeSV7HHli0qdkZmoLR0c8RiJcrVlXixCpSX5Jz6ujDq7fRvSMP
+   8DuAk70n7k/i1jBE+SroUmHYDbO2EZw+TS6WmEJAf43JrSEuheUgnj6Ep
+   ExwYVAiSlnVwFe5EvYe49Zkx+hax5GVTQ6dtmdeW2wIYICUFd+DB4CET0
+   A6sRG5xwKlMVrojxheoljV8G7HIlLOd2oqOYcZP02utPg/vDxmCGCq0mw
+   aAL9DYASKw7wmVnhT7Qaordk/tTS0idrQQXM7ekiRY65Dnw7DF5hN38AM
+   4Pyr8IOz0WfJvogVcqMuI4i6KA4fCUV/GF5CObQR7vjofkfCnD4kHhWoM
+   w==;
+X-CSE-ConnectionGUID: 0oVK4XyHR2WQe/T1CKjGDQ==
+X-CSE-MsgGUID: mKoiVN3VR2WIxHpmgtT1Zw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="74593493"
+X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
+   d="scan'208";a="74593493"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 11:43:18 -0800
+X-CSE-ConnectionGUID: OWThwot1QFGGVdTWICYA/g==
+X-CSE-MsgGUID: YfzLHbOMTbmKP7E4pDl4Ig==
+X-ExtLoop1: 1
+Received: from dalessan-mobl3.ger.corp.intel.com (HELO [10.245.245.206]) ([10.245.245.206])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 11:43:15 -0800
+Message-ID: <5de1da4b-d8aa-4180-a269-79fd544c2e8c@linux.intel.com>
+Date: Thu, 29 Jan 2026 21:43:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:22a9:b0:663:e8d:cf8 with SMTP id
- 006d021491bc7-6630f04f928mr241287eaf.35.1769712271028; Thu, 29 Jan 2026
- 10:44:31 -0800 (PST)
-Date: Thu, 29 Jan 2026 10:44:31 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <697baa8f.a70a0220.9914.001f.GAE@google.com>
-Subject: [syzbot] [input?] [usb?] WARNING in asus_remove
-From: syzbot <syzbot+13f8286fa2de04a7cd48@syzkaller.appspotmail.com>
-To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 2/2] usb: xhci: enable secondary interrupters and
+ route transfers per slot
+To: Michal Pecio <michal.pecio@gmail.com>, raoxu <raoxu@uniontech.com>
+Cc: gregkh@linuxfoundation.org, kenny@panix.com, linux-usb@vger.kernel.org,
+ niklas.neronin@linux.intel.com, zhanjun@uniontech.com
+References: <2026012754-ferocity-operator-e3b2@gregkh>
+ <ED3E9F8EEA089A35+20260128080939.1145420-1-raoxu@uniontech.com>
+ <20260129152222.79c1252b.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20260129152222.79c1252b.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.36 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=750532df2c47a03];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-32913-lists,linux-usb=lfdr.de,13f8286fa2de04a7cd48];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	SUBJECT_HAS_QUESTION(0.00)[];
-	REDIRECTOR_URL(0.00)[goo.gl];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com,uniontech.com];
+	TAGGED_FROM(0.00)[bounces-32914-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,goo.gl:url,storage.googleapis.com:url,syzkaller.appspot.com:url,googlegroups.com:email]
-X-Rspamd-Queue-Id: 6E9CDB3B03
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 191E9B4107
 X-Rspamd-Action: no action
 
-Hello,
+On 1/29/26 16:22, Michal Pecio wrote:
+> On Wed, 28 Jan 2026 16:09:39 +0800, raoxu wrote:
+>> By "hot spot" I do not mean a CPU cache problem. I mean a
+>> software-side serialization point: all devices share a single event
+>> ring and a single IRQ handler which processes completions under the
+>> global xhci->lock. That centralizes the work into one place
+>> regardless of cache locality.
+>> [...]
+>> Even if USB link latency is high, the IRQ/event path is still a
+>> CPU-side serialization point: all completions land in one event ring
+>> and are drained by one handler under xhci->lock. Under mixed
+>> workloads (e.g. isoc video plus periodic audio/bulk), events from
+>> unrelated devices can queue behind the same lock/handler and increase
+>> jitter/tail latency, even if the bus is not saturated.
+> 
+> But this patch doesn't address such contetion. It's still one big lock
+> per xHCI chip and a few CPUs take turns to do all work sequentially.
+> 
+> I find Greg's counterargument convincing. This change seems to only
+> harm xhci_hcd performance, and if your bottleneck truly were in this
+> driver, it's hard to imagine how anything could improve.
 
-syzbot found the following issue on:
+We would need more fine-grained xhci locking, and dynamically on-demand
+created and removed secondary interrupters to get any real performance
+benefit here.
 
-HEAD commit:    3f24e4edcd1b Add linux-next specific files for 20260128
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12f4b694580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=750532df2c47a03
-dashboard link: https://syzkaller.appspot.com/bug?extid=13f8286fa2de04a7cd48
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1188e9b2580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1526fd8a580000
+I'm have another, virtualization and VTIO related interest in seeing this
+working.
+Having a per-device interrupter is one step forward in implementing
+xHCI section 8 virtualization, allowing xHIC to pass a usb device over from
+VM host to a VM guest
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ce84e32318c2/disk-3f24e4ed.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7eafc98224fb/vmlinux-3f24e4ed.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b186eb6f05d2/bzImage-3f24e4ed.xz
+> 
+> I suspect it's somewhere else, and considering the results you report,
+> quite likely in URB completion handlers. They used to be called from
+> this IRQ handler, but nowadays it's delegated to USB core.
+> 
+> Core uses BH workqueues. AFAIU this means completions run later on the
+> same CPU which handled the IRQ. So if you spread IRQs, you also spread
+> completions. It's easy to see how this could increase throughput or
+> remedy latency spikes caused by sluggish class drivers, because unlike
+> this IRQ, completions can usually run in parallel on multiple CPUs.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+13f8286fa2de04a7cd48@syzkaller.appspotmail.com
+Sounds plausible. Let me see if I understood this correctly.
 
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-asus 0003:0B05:19B6.0001: hidraw0: USB HID v0.00 Device [HID 0b05:19b6] on usb-dummy_hcd.0-1/input0
-usb 1-1: USB disconnect, device number 2
-------------[ cut here ]------------
-!work->func
-WARNING: kernel/workqueue.c:4292 at __flush_work+0xb43/0xc50 kernel/workqueue.c:4292, CPU#1: kworker/1:1/29
-Modules linked in:
-CPU: 1 UID: 0 PID: 29 Comm: kworker/1:1 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/24/2026
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:__flush_work+0xb43/0xc50 kernel/workqueue.c:4292
-Code: 75 54 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc cc e8 5c 87 37 00 90 0f 0b 90 e9 7c ff ff ff e8 4e 87 37 00 90 <0f> 0b 90 31 c0 48 bb f8 f8 f8 f8 f8 f8 f8 f8 e9 64 ff ff ff e8 34
-RSP: 0018:ffffc90000a47080 EFLAGS: 00010293
-RAX: ffffffff818da1c2 RBX: 1ffff1100b3dc19c RCX: ffff88801e2f8000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffff888059ee0cc8
-RBP: ffffc90000a47238 R08: ffffffff90324cb7 R09: 1ffffffff2064996
-R10: dffffc0000000000 R11: fffffbfff2064997 R12: dffffc0000000000
-R13: ffff888059ee0ce0 R14: 1ffff92000148e18 R15: ffff888059ee0cc8
-FS:  0000000000000000(0000) GS:ffff88812515a000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe2dd70d64 CR3: 0000000077d5a000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- __cancel_work_sync+0xbe/0x110 kernel/workqueue.c:4451
- asus_remove+0x143/0x180 drivers/hid/hid-asus.c:1347
- hid_device_remove+0x228/0x370 drivers/hid/hid-core.c:-1
- device_remove drivers/base/dd.c:571 [inline]
- __device_release_driver drivers/base/dd.c:1284 [inline]
- device_release_driver_internal+0x46f/0x860 drivers/base/dd.c:1307
- bus_remove_device+0x34d/0x440 drivers/base/bus.c:616
- device_del+0x527/0x8f0 drivers/base/core.c:3878
- hid_remove_device drivers/hid/hid-core.c:3008 [inline]
- hid_destroy_device+0x6b/0x1b0 drivers/hid/hid-core.c:3030
- usbhid_disconnect+0x9f/0xc0 drivers/hid/usbhid/hid-core.c:1477
- usb_unbind_interface+0x26e/0x910 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:573 [inline]
- __device_release_driver drivers/base/dd.c:1284 [inline]
- device_release_driver_internal+0x4d9/0x860 drivers/base/dd.c:1307
- bus_remove_device+0x34d/0x440 drivers/base/bus.c:616
- device_del+0x527/0x8f0 drivers/base/core.c:3878
- usb_disable_device+0x3d4/0x8d0 drivers/usb/core/message.c:1418
- usb_disconnect+0x32f/0x990 drivers/usb/core/hub.c:2345
- hub_port_connect drivers/usb/core/hub.c:5407 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
- port_event drivers/usb/core/hub.c:5871 [inline]
- hub_event+0x1cc9/0x4f30 drivers/usb/core/hub.c:5953
- process_one_work+0x949/0x15a0 kernel/workqueue.c:3279
- process_scheduled_works kernel/workqueue.c:3362 [inline]
- worker_thread+0xb46/0x1140 kernel/workqueue.c:3443
- kthread+0x388/0x470 kernel/kthread.c:467
- ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
+When xhci only has one interrupt it will process all transfer events from
+all  devices in the interrupt handler in one go, with xhci->lock held for
+a fairly long time.
+During this processing the interrupt handler calls usb core to queue all
+URB completions on the system_bh_wq (BH workqueue) on that same CPU.
 
+This workqueue only stars processing URBs in softirq context, which
+is _after_ completing xhci interrupt handler.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+With several interrupts on different CPUs there will be fewer events to
+handle per interrupt handler in one go with xhci->lock held.
+There will also be several BH workqueues, one per CPU? which can start
+earlier and have fewer URB completions per workqueue.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+As a downside we will have several CPUs spinning in interupt context,
+waiting for their turn to get the xhci->lock and handle the interrupt.
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+So we get a bit shorter URB completion latency traded for hogging more
+overall system resources
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+> 
+> If that's the real problem here then no xHCI driver surgery should be
+> necessary to work around it, only updating the core.
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Could be worth trying to reduce xHCI interrupt moderation interval.
+A xHC interrupter can't trigger a new interrupr until 40 microseconds has
+passed since previous interrupt completed (EHB bit cleared).
+This might cause some tranfer event build up and thus latency.
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+Xu Rao, can I ask you you run the same test as before with only primary
+interrupter with interrupt moderation the change below?
 
-If you want to undo deduplication, reply with:
-#syz undup
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 585b2f3117b0..9a2a4d17ed68 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -573,7 +573,7 @@ static int xhci_pci_setup(struct usb_hcd *hcd)
+  	xhci = hcd_to_xhci(hcd);
+  
+  	/* imod_interval is the interrupt moderation value in nanoseconds. */
+-	xhci->imod_interval = 40000;
++	xhci->imod_interval = 10000;
+  
+  	retval = xhci_gen_setup(hcd, xhci_pci_quirks);
+  	if (retval)
+
+> 
+>> the upstream xhci-sideband work has already exercised and validated
+>> the core multi-interrupter/event-ring plumbing in the driver. So
+>> using additional interrupters is a proven in-tree mechanism, not an
+>> experimental path unique to this series.
+> 
+> I'm afraid the only driver functionality exercised by xhci-sideband is
+> allocation and freeing of extra event rings. Handling those rings in SW
+> and solving race conditions is new, as is having no way to tell which
+> order some events were generated in when things go wrong.
+
+Agree, commands like 'stop endpoint' would trigger a transfer event on one cpu
+and the command completion on another. PATCH V12 2/2 attempts to resolve
+this by handling transfer events on the other interrupter before handling
+specific command completions. This will get complicated and messy,
+especially if we implement more fine-grained xhci locking.
+
+The reward is too small compared to the risk of turning USB (more) unreliable.
+
+Maybe we could add support for several interrupters but just use the
+primary one as default.
+Brave developers and testers could enable more interrupters via Kconfig,
+debugfs, sysfs, or some other way.
+
+Thanks
+Mathias
 
