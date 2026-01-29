@@ -1,232 +1,252 @@
-Return-Path: <linux-usb+bounces-32911-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32912-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IIVFLvpve2mMEgIAu9opvQ
-	(envelope-from <linux-usb+bounces-32911-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 15:34:34 +0100
+	id qBFaD9qQe2nOGAIAu9opvQ
+	(envelope-from <linux-usb+bounces-32912-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 17:54:50 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50025B103B
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 15:34:34 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A73E7B27CC
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 17:54:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 51B243006135
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 14:34:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B70EA30120E6
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 16:54:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0678729A9E9;
-	Thu, 29 Jan 2026 14:34:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF249346766;
+	Thu, 29 Jan 2026 16:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gA/8R/Ec"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="wWgbmUMk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010005.outbound.protection.outlook.com [52.101.228.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2372C2528FD
-	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 14:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769697271; cv=none; b=WEuLmvryx3StSBiJ0WPLc/WPaI8ttZwLjQ2YZT5zodT+8Gvg3HnAfYqMy7h6ff++R5BcMQpMoJxqJibDnDb29NYJwT1BVbFMH91G7dbUOs0Gq1V52GCeftEc99z7LGmMWJIvJ0+8cEV3LwLfc6GeTOn0d+yscG6tmbwtw2UjX+4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769697271; c=relaxed/simple;
-	bh=jH7+xDrElxwFqZqZ4Qz2PwSv6DL98FW+OAgH61RKoSw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ChJdku8tPYryAw4ebnVyj1QSzM3ERtToTAEb7C49R0q9yYH5odeWRe7Ox4uMTVrbcOQ9y+q2KhfVKzElLnx6KuQ1LOYf1AlE9utnucwTYVWqq6XiioUf4YWt76WVY3V1bFReaZB/YtG/R8ZSNGgDTt3J0TX9Cs+Ln3E1jpMRAoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gA/8R/Ec; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 9EE041A2AF7
-	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 14:34:26 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6AF90606FD;
-	Thu, 29 Jan 2026 14:34:26 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1BE85119A868D;
-	Thu, 29 Jan 2026 15:34:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1769697265; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=d47mfWDfhwVOcY0sEOqFBeuehMSYc5UT+oKMWz/KtZk=;
-	b=gA/8R/EcrIX++41cvrqp/HOTBjT97sS8ThTK0zE6yO46QKe9D9mjwcapsEAc1w9yvMAl2B
-	C2uYG8LPXLVZjwMCHEft87k5BNPv3d++ziJXieQR+UsHaeU22YtmQ0VVAaAk8fo+o4R5Dq
-	u2BhQIRnSIIjFsopSe7O9vs8ACZ8KxMAv+1XOEJvCviLlPXDvPZei88M1qOIH4nXoWEKIt
-	Wedu41nhfGhpBy4Cfd7377shdp8vYT4c/Q5QOlOmoydIV1ITSwJCASogCENrbVaqYqQrUr
-	jvSlhtEZ7fq3CGGV6uPQqTaDNFkVR3JQiszzOI0GTYgjQ8jtX3J4Y5YZhMucFg==
-Message-ID: <8743fec1-301d-46e1-89bf-7952c73faa86@bootlin.com>
-Date: Thu, 29 Jan 2026 15:34:18 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370F9345CBD;
+	Thu, 29 Jan 2026 16:54:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.5
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769705683; cv=fail; b=t7wFS8BzfKip9xxaK3Bu/bG5luiXq7SRzNtI1YQbZ1l/9ovmoYYCA41L2XVmcKzk44DR6Sp679kBLqMPIiUhERkbNTcTy6Nw+iweKUO4Nl6VzXZEO5WzQdg432CAvvk0dwLanPCXORtVqbc0Ioo+2AcYFjPZ9NDM0ZmHYIi+1NI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769705683; c=relaxed/simple;
+	bh=1YroSZtZ9ij+bi/FQysZlJxEEMKjX6GrLVf26ujZpB8=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=nsnoHdr+nOrm9P47Eq518/cOfP4Bx9SbMlIgr93Xg8bIjKGyw9xEnJMBCRGp3d9ox/gB0l21k5ZQ4kW4KAwTo6pE4guf3Crq3QxCP2xLrYDLzCpIzwM6i87/Z3+UlHge6KPjq24uTjYTQhkGnN2v9DlLTjQpi2hGgKoQ/Fn/Sbc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=wWgbmUMk; arc=fail smtp.client-ip=52.101.228.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b94oSNdUxcx85AvNo5/cbRE0VXfNcl4zMToc1wJSxA3VyAvFAE/5QxAOt/sgZRtCAjSYvjkWxr4RWR2/Xz+W1yJA8KhRAa+MiEAmJQHF3LFDZvnzcGKjVEg2qTUJA3Ac1KCAIBMnV43B2Dwa2iDXh10qOJlsXic+AK2DVEPLQ9JEm52L2Mk8xxalbPNC8CVcf6O1oCNyiaMcNQYK2Vbr8wjCE/4vPAdLIaTXWnC0/gGvguUOACWMOtAwc46bw6wUwncs7Q/F2pUnmJNRtUWHDIP6YvZIYFqBs2OJ7XIN9rFHKRnHZxE4JOcHpjxN861//Hr+Br2GV//jrsCtuGz3XQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A+Bn7lOdE2VqOsFw4NWACwg/1gAik/Iw7OoxrNGFAXY=;
+ b=pd1mH83pP1nudJCtoamXfEe0Y0AUWMNNHoorneie2P7s9zEKVQt4VAQSlB0M5G3LX+C/GFS4GeI8CwbeAReIgHWYvizQ5Ox6J/hnh28VjzHxnSEnL3bYyjnLB5pZvOsRwSAuQKN7TY7cRboGsjLyqdXTsTLNtMS7raM1bgPxHEVrPBRWbJQgDTeZEvAdlvYuj1AyuhJhQb5lRKbdqGN2wMs3thqaaVbWxcQwtGCXDNvZHbN485erc0+oCztpbUz/nXsAOh563dC3Hy2kvEA7p4JXu0PpYFDwDXuUyd2dltKtFEPfC59QTA3yj+uwvmMMcTAMNb6pyZ9CvP+6rIfdSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A+Bn7lOdE2VqOsFw4NWACwg/1gAik/Iw7OoxrNGFAXY=;
+ b=wWgbmUMkKbxkgIPomGjtCo2bCr223KvRHnThkqcrd+7mFECgEB+v9OrzvDmczlKwGDleWIydR/nhkl8erm5dZOYfvsHxJ373F9sR++piZovXy/YCua8gerI/w56kE1CN73EhIP2Upjz3RTR9naTc8ClRUPZb/v8byGjdDH/8gdQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+Received: from TYCPR01MB11947.jpnprd01.prod.outlook.com (2603:1096:400:3e1::6)
+ by OSCPR01MB13517.jpnprd01.prod.outlook.com (2603:1096:604:332::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.7; Thu, 29 Jan
+ 2026 16:54:38 +0000
+Received: from TYCPR01MB11947.jpnprd01.prod.outlook.com
+ ([fe80::33f1:f7cd:46be:e4d8]) by TYCPR01MB11947.jpnprd01.prod.outlook.com
+ ([fe80::33f1:f7cd:46be:e4d8%5]) with mapi id 15.20.9564.010; Thu, 29 Jan 2026
+ 16:54:38 +0000
+From: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
+To: tomm.merciai@gmail.com
+Cc: linux-renesas-soc@vger.kernel.org,
+	biju.das.jz@bp.renesas.com,
+	Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v7] dt-bindings: usb: renesas,usbhs: Add RZ/G3E SoC support
+Date: Thu, 29 Jan 2026 17:54:05 +0100
+Message-ID: <20260129165412.557643-1-tommaso.merciai.xr@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: FR4P281CA0323.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:eb::6) To TYCPR01MB11947.jpnprd01.prod.outlook.com
+ (2603:1096:400:3e1::6)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: cdns3: host: Add null check for host_device before
- accessing its members
-To: Abhash Kumar Jha <a-kumar2@ti.com>, gregkh@linuxfoundation.org,
- pawell@cadence.com, peter.chen@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, rogerq@kernel.org, u-kumar1@ti.com,
- p-mantena@ti.com, theo.lebrun@bootlin.com,
- Gregory CLEMENT <gregory.clement@bootlin.com>
-References: <20260119082242.1922599-1-a-kumar2@ti.com>
-Content-Language: en-US
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <20260119082242.1922599-1-a-kumar2@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCPR01MB11947:EE_|OSCPR01MB13517:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ddbbea9-e260-4fc8-9968-08de5f571711
+X-LD-Processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|7416014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?wbsVTuhM9ny0+lz3DAXO4zwPnPLRjYijKZTGunP6iwGZKkC3QBt+Bg51q/sg?=
+ =?us-ascii?Q?Q8ayW2YMIPJzUa9wWdO3PNypYnv6CuEuT17bgYUtMP0m1gthybrWSTt4JJPs?=
+ =?us-ascii?Q?6eT2dAs77xyAzpg/6LrF2OwNhUcWqQXgC3Gh964jkky0oFf1ZCYOLugZBGY6?=
+ =?us-ascii?Q?lp5GstiGhQc23Yjn/q6o4iRXpplzgzO/eco8DWCA3vQuOSEpN8s+ijYp4CTC?=
+ =?us-ascii?Q?H4jDHSDeN7GXKF5YmXaLNNMRrGpqjLdRh2uygo7dxI1ubw1JMaUPCLIKwBPo?=
+ =?us-ascii?Q?wtEmd5fW7VyC4t27y/4nIcB4fljMfmOObU6J/l5hyyEWyih+rYCPvUjMEw5u?=
+ =?us-ascii?Q?JfhdYi2N8uvFjk9ZgkiaSMG82dXVdvTUhrrvzTC0dm/wju9Zvc/GTv6tGXr/?=
+ =?us-ascii?Q?zNpIJsJspFrgRcBaLtyWg1G/IKDQJ0Rkh3sedaVzAUrRkRFhuWWLWVuNOqks?=
+ =?us-ascii?Q?Zc5C5CEQiMgm7fv+SviNuHngsY3sgwCiyATAmrTaW5y++0nZ43fB6buYMmuA?=
+ =?us-ascii?Q?HTzJyKZK7XbXIDdt8RALf/eMxn7fhlO16N6pR3jtqttmhRT9/R7UBpjXaLf/?=
+ =?us-ascii?Q?vclaK5jQ28mHonWaeW541gbQtIIiARoqX7nF8kN/BlqMC9AEX6lK1hzUlmN3?=
+ =?us-ascii?Q?80E5gASBqrjOctxa0B1mMY2HUI2wMMhZ4/6vs20YDsD0TG3NPV1EjKcsDeza?=
+ =?us-ascii?Q?r+QIgVr8xAffGBq31ccRBjviRe7i+JMT6beyPamu6gaBwsQxQ8gDGEbR6suQ?=
+ =?us-ascii?Q?w+hh8gfnNWaFBKmVW0u+Ct/p0r0jERWI+KnyXyOTs4FamWK0zKvMXPikb5pH?=
+ =?us-ascii?Q?Y8tqgIiIA9r7bAw/qbs7jBetgi8/J66ZbHhB0AEsj4iK61M9x/sxJLNOsKaf?=
+ =?us-ascii?Q?vcmD+WNCkXZmoxo88Af1yWxHZZ4IdN9rcix3CKnOtlspFUzrrm7kZ+oca5TI?=
+ =?us-ascii?Q?kR3xGgK4aLUsbiRD0wANkWDjfz1XnD4qnED9ArDi5pENnP3RJf/d8eeQZm6h?=
+ =?us-ascii?Q?vGeYnO8o2tKIjeLYgarbbdRLGN3UbPNf2+6NpBmWm+vXK8W0Ll3CmU67p6ah?=
+ =?us-ascii?Q?z3T6QWjyTzij8mrdA0zeW+u5OfU81djaEfofl24UlTbTMzoHgf1uumb6p3sT?=
+ =?us-ascii?Q?NVq9F2SDZxg/nOEqncIXvp5yTthbufr93PiQD3NyOSZmvHHzl3+XNvqduyMT?=
+ =?us-ascii?Q?KuZUXmT5S9zeg5ZFd8BiQJEEl9mD4ROaPKdbKMJsnCK0hpZDdta8T3krOfkY?=
+ =?us-ascii?Q?b8j3gfRAacMRJgpxQ50/g2KU9PYQ07XcrqcPWjDPwaL8xzfNHtfIuNTvCNHn?=
+ =?us-ascii?Q?4V8ULjej4PbUqDp2xlhxWsHvpwOTbP4z9DuoLOnN3mkwAGuxumeieUOeXKK4?=
+ =?us-ascii?Q?x/zKOGTugGQB9GoSPG0IGXM7zopRkIqvvi6CJaVtDL2faGajuHDvyDvcy8Kh?=
+ =?us-ascii?Q?7unQ4bd7JoNyLI2dHiiQkCPAa6d3GLCUpgwojAqB4r+CWj4QOANutvYQz+KC?=
+ =?us-ascii?Q?eR9xxaIPvCsnnNvn1SDyEBjifwS5gn/6pQ2NdfPhd6Gxq+OSsLzrxJUTRmH2?=
+ =?us-ascii?Q?zHgiNhDsocgI8mAIOciku/1zgOwA/U1np+m+7BlItR9ucpx5HI/1OmmxHp8l?=
+ =?us-ascii?Q?u8suLr6Kw/++nlsBuxJefkQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11947.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(7416014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?pHQ2bfcyAukO094WqNCcpLJlKehpm7gYAwtgTXktDgewihQRj9V3Z4wGfWTb?=
+ =?us-ascii?Q?L+gO8u6NNTR4eqv1Qxd12oCha8IbggzSVXA82VmJJVRVGceYpSojHSQ75TsI?=
+ =?us-ascii?Q?bdblqmh/zPJxCK35WhG8egX3ttzxqJOktOXQwUTx5SEPXIcMz5nRVpYt+Nci?=
+ =?us-ascii?Q?Gx9YJB7GYd2Xhk82tLNst9VFM1Cu1Jv3qmDY5PQ5PtPPcHPIlg6J5fSLP+9Y?=
+ =?us-ascii?Q?o/Tt5+T4F/mH/aYdqj8rs7HzAihwJ3LPGaLUwzxxQz18MB7FlkFmZST8ONtn?=
+ =?us-ascii?Q?xUSQxSj6FKs7e2Ey2Lcr0EzglJEvXNW4oLe//HKLwXH3U22ErQ4vyqoP6//K?=
+ =?us-ascii?Q?9AxwviZk2XgtIgBhhS8h9xVj6mKooM1S/9fa/VkGU/MkaUAWwzJXetgn4pPV?=
+ =?us-ascii?Q?e21bLv4qTleV6CY/CatSOV+OKAlzdBhnXZCT40xqV3D8xnpzRMM3mqe3P7nU?=
+ =?us-ascii?Q?JXn9Hns+eL9XeFzPt9p9Mbx2c206omVW+sw8fsMNw4p3l7QBG6ZvgcrRUXy7?=
+ =?us-ascii?Q?0S/9rAVbrq0mC6jIJ/WfNGqobgWbcCMJNC7jti3vx1wCBOWywUH4fojZgl5a?=
+ =?us-ascii?Q?hxmRQs7kcjSBkNvuqVhdM/Lg7g7sO8y3GC3mbfV1okF+JpWL7gRFNWE2bAT2?=
+ =?us-ascii?Q?WWX4MzDZtRIs9k48zoV7SL1HsoAKfFtGiM2AqVTugKG224zupujzuysHpPZj?=
+ =?us-ascii?Q?HHJkmkYw7iGSvxM3PffEfvX0bUN5K+dJIluTnXVsopxUjAR69tf42WcTXS8v?=
+ =?us-ascii?Q?++t3D3atE0ETd/N9Y602yU6gVoTKu28v9gsUaPNZouYogN7bjuQoBwGsRbgM?=
+ =?us-ascii?Q?rVC4HmKZuHQilW0rjGNfm7MoTJ+tujjAjpRbuHCEhFV7kysXGQvxKwouKm8u?=
+ =?us-ascii?Q?eHowRtSnTXaYQEOA/K5FOaLuZLgMQJ8hNMFRA4qSVUbATXRvC3gVkPUL7mAl?=
+ =?us-ascii?Q?CNXySwgztVGHNvcE1x2yOyn93FTU67wyp8+MMVZms1UMDbXQ3iaNRve6lfMG?=
+ =?us-ascii?Q?pIv+NiFnsLHyfjpVGKxclHF6W8xTWuhKKEJCJANhZ7BFpP77Mu1Fsty+OJMj?=
+ =?us-ascii?Q?aJbEUDME1TP3Ri4Jc0/Iyu4nooLnYLL1UfD38OljEmZThSRQ2+Vt5c/dSALp?=
+ =?us-ascii?Q?f1CR+8XUng8obGrzwLtAT8GgfHein7HQCJi84V8pfrl/fWG8LqZe+XV68Olu?=
+ =?us-ascii?Q?Gz2LojiF3WRpm99osmKQ8toBFdI2ke4o1pDX2wPTgYo+zsw9D7Dnfx8+gDbm?=
+ =?us-ascii?Q?s9+VhUxwp/SVKtjZKlCvAhNXHTIxb7dk4VtCnT/fFeIf/NzOZ8CoicoJmBfP?=
+ =?us-ascii?Q?4p9xkr3UdI/ZhsraiZfkUmz0D+wmDYoKW1IrfUzMoWQTLY5oFV+7AnfNMABV?=
+ =?us-ascii?Q?gTNpIso47H2UIcfWNNgaG+zQ8Aq9L9VXPk3Nw0VDDIgNIFqZx60iHqsTUbxd?=
+ =?us-ascii?Q?I+TECLsXUAYWv7JwCRQ0yV07MPN7gzWxT+shWTJuskfSPqphmh4E3loWVKmk?=
+ =?us-ascii?Q?ecLe7GTA9irADIQhkdjw/q5dEoQma7v1nMKp/DZtkI80s/qQo2h5FJnrGuk/?=
+ =?us-ascii?Q?E/dp9FAXlKIpBb6DWmRuBLCSqo6z2JYYOnnjWqngZ/J43TM90kQukId+q4jI?=
+ =?us-ascii?Q?3jnlHRWBHjVDJ2ZgB1Yfu5YjmlCe3U0DNWtEfy3CanpYmV35PmQzoHOKrN5s?=
+ =?us-ascii?Q?SJFOgN1mRy9uyCFwM8BbsogxsMTU1YqMWu1FWORwj9foUTtkJf8L9I7tXPtB?=
+ =?us-ascii?Q?mJt83bX1mbzO749s3EubgEs/bQSRxNxc129rTy5K8wKYZ5M70enq?=
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ddbbea9-e260-4fc8-9968-08de5f571711
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB11947.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2026 16:54:38.7884
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U9FtQsJzDUqUP6jU1nw7Tc1dC772rE3O3lGLfvftQT189vL8C1BtKmxAriZARMiTJn2bMO60juTiKWPYMssQKXvXuUDzUF7IaaMxQlWvMjnTGziqVvbw3cV7G18pUPEe
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSCPR01MB13517
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+X-Spamd-Result: default: False [2.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[renesas.com,none];
+	R_DKIM_ALLOW(-0.20)[bp.renesas.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	URIBL_MULTI_FAIL(0.00)[sto.lore.kernel.org:server fail,bootlin.com:server fail];
-	TAGGED_FROM(0.00)[bounces-32911-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32912-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thomas.richard@bootlin.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_NEQ_ENVFROM(0.00)[tommaso.merciai.xr@bp.renesas.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,bp.renesas.com,linuxfoundation.org,kernel.org,glider.be,gmail.com,renesas.com,microchip.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 50025B103B
+	PRECEDENCE_BULK(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DKIM_TRACE(0.00)[bp.renesas.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: A73E7B27CC
 X-Rspamd-Action: no action
 
-Hello,
+Document the Renesas USBHS controller found on the Renesas RZ/G3E SoC.
+The USBHS block on RZ/G3E is functionally identical to the one found
+on the RZ/G2L family, so no driver changes are needed. The existing
+"renesas,rzg2l-usbhs" fallback compatible will continue to be used for
+handling this IP.
 
-On 1/19/26 9:22 AM, Abhash Kumar Jha wrote:
-> In cases when the xhci device is not populated, we see a nullptr
-> exception when resuming.
-> 
-> Add a nullptr check for the host_dev before accessing its private data.
-> 
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
+---
+v6->v7:
+ - Rebased on top of next-20260128
 
-I was able to reproduce Abhash's issue on J784s4 and J7200 EVM board
-with 6.19-rc7 kernel.
+v5->v6:
+ - No changes
 
-Unable to handle kernel NULL pointer dereference at virtual address
-0000000000000208
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-  CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-  GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=00000008856e6000
-[0000000000000208] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 0000000096000004 [#1]  SMP
-Modules linked in:
-CPU: 0 UID: 0 PID: 146 Comm: sh Not tainted
-6.19.0-rc7-00013-g6e64f4aabfae-dirty #135 PREEMPT
-Hardware name: Texas Instruments J7200 EVM (DT)
-pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : usb_hcd_is_primary_hcd+0x0/0x1c
-lr : cdns_host_resume+0x24/0x5c
-sp : ffff800084fc39d0
-x29: ffff800084fc39d0 x28: ffff8000840ac098 x27: ffff8000842e6ee0
-x26: 0000000000000000 x25: ffff800084247958 x24: ffff80008427d000
-x23: 000000048f2f5605 x22: ffff000801937218 x21: 0000000000000010
-x20: 0000000000000001 x19: 0000000000000000 x18: 0000000000000006
-x17: 0000000000000000 x16: 0000000000000000 x15: ffff800084fc3390
-x14: 0000000000000000 x13: 383331203a74696e x12: 695f74736f685f73
-x11: ffff800083c48828 x10: 0000000000000018 x9 : ffff800083c48828
-x8 : 00000000000006aa x7 : ffff800083ca0828 x6 : 00000000fffff000
-x5 : 0000000000017fe8 x4 : ffff000801935dc0 x3 : 0000000000000000
-x2 : ffff800080e3b388 x1 : 0000000000000001 x0 : 0000000000000000
-Call trace:
- usb_hcd_is_primary_hcd+0x0/0x1c (P)
- cdns_resume+0x6c/0xbc
- cdns3_controller_resume.isra.0+0xe8/0x17c
- cdns3_plat_resume+0x18/0x24
- platform_pm_resume+0x2c/0x68
- dpm_run_callback+0x90/0x248
- device_resume+0x100/0x24c
- dpm_resume+0x190/0x2ec
- dpm_resume_end+0x18/0x34
- suspend_devices_and_enter+0x2b0/0xa44
- pm_suspend+0x16c/0x5fc
- state_store+0x80/0xec
- kobj_attr_store+0x18/0x2c
- sysfs_kf_write+0x7c/0x94
- kernfs_fop_write_iter+0x130/0x1dc
- vfs_write+0x240/0x370
- ksys_write+0x70/0x108
- __arm64_sys_write+0x1c/0x28
- invoke_syscall+0x48/0x10c
- el0_svc_common.constprop.0+0x40/0xe0
- do_el0_svc+0x1c/0x28
- el0_svc+0x34/0x108
- el0t_64_sync_handler+0xa0/0xe4
- el0t_64_sync+0x198/0x19c
-Code: 52800003 f9407ca5 d63f00a0 17ffffe4 (f9410401)
----[ end trace 0000000000000000 ]---
+v4->v5:
+ - No changes
 
-So I investigated and I identified two distinct issues.
+v3->v4:
+ - No changes
 
-1- First issue is hardware / board related issue, for an unknown reason
-VBUS change after a suspend-to-ram or suspend-to-idle which triggers a
-mode change of the controller (from idle to host). This issue shall be
-fixed but it is not the right place for such a discussion.
+v2->v3:
+ - No changes
 
-2- Second issue is: switching from idle to host mode during resume
-causes a NULL pointer dereference. I think it is a valid use case so it
-should be fixed.
+v1->v2:
+ - Collected CDooley tag
 
-During resume cdns3 detects that the real role changed [1]. In this case
-it switches to its new role [2]. Behind the scene, it runs the stop()
-operation of the former role [3][4], and then run the start() operation
-of the new role [5][6].
+ Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-In host mode, the start() operation creates a xhci-hcd device [7]. But
-as we are in the resume path, the probe() of this xhci-hcd device is not
-run. Later in the resume sequence of cdns3 driver we call the resume()
-operation [8] of the current role (which is host right now). But in the
-host resume operation we assume the xhci-hcd device has been probed
-which is not true in this case, so we try to use an uninitialized
-pointer which causes a NULL pointer dereference.
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+index 0b8b90dd1951..dc74e70f1b92 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+@@ -27,6 +27,7 @@ properties:
+               - renesas,usbhs-r9a07g044 # RZ/G2{L,LC}
+               - renesas,usbhs-r9a07g054 # RZ/V2L
+               - renesas,usbhs-r9a08g045 # RZ/G3S
++              - renesas,usbhs-r9a09g047 # RZ/G3E
+               - renesas,usbhs-r9a09g056 # RZ/V2N
+               - renesas,usbhs-r9a09g057 # RZ/V2H(P)
+           - const: renesas,rzg2l-usbhs
+-- 
+2.43.0
 
-I think we can skip the resume() operation in case the role changed
-during resume as we already did the start() operation for the new role.
-Then resume ends successfully, and xhci-hcd device is probed after.
-
-I will send a patch.
-
-[1]
-https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L534
-[2]
-https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L536
-[3]
-https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L316
-[4]
-https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L66
-[5]
-https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L320
-[6]
-https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L47
-[7]
-https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/host.c#L69
-[8]
-https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/usb/cdns3/core.c#L555
-
-Best Regards,
-Thomas
 
