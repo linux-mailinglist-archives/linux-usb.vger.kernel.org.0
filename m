@@ -1,229 +1,137 @@
-Return-Path: <linux-usb+bounces-32895-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32896-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MO58I+7PemnU+gEAu9opvQ
-	(envelope-from <linux-usb+bounces-32895-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 04:11:42 +0100
+	id mOfxFV/SemlX+wEAu9opvQ
+	(envelope-from <linux-usb+bounces-32896-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 04:22:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0982BAB5AC
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 04:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 19243AB688
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 04:22:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E652C301D309
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 03:11:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5D4763022900
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 03:22:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7769F3587D1;
-	Thu, 29 Jan 2026 03:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321DE29D293;
+	Thu, 29 Jan 2026 03:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kNWAnEmJ"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="eifTeQz9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB748318B91
-	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 03:11:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9C935293C;
+	Thu, 29 Jan 2026 03:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769656299; cv=none; b=WmBdkokp/M6M8aYSXxbyhyEbX64OgcRZTJ4W4UnElvCpPmICChMkU/+r34eRaUgU0rmnsVsbCTCuDY7l4aBAdE5ZumbSjff+YIRUH/avyw2bWp6KsghFGGJazQF47grHs4DAsj22RIQhw2m2Ex1o0Y8kuQG7QZSrMR1FC7Hv0kI=
+	t=1769656914; cv=none; b=itfCAgUc0UDa/g6N/c4aAecMtPvcWbxKdVMD7hGNgJ1iUVJAfeM7uoZ24I1fqJjMy5yfF3TR0i7BUdswstRX4xQn9VoVUIE618F7+f7yQOpor3zy53RCywd6STAt8qxtj84CsK0uOw38MgsbkM/F9NGl3MGOvSb4D34Nh0gNA/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769656299; c=relaxed/simple;
-	bh=ji+mYPFRCqdMnMluhdPnzHWfS6NeTlfDWXmEfqSErag=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qGGDIlRzmCbXFKbCsz8C++2e0lJkspu9f0p7xwZSFvFKg0hh3bkFCl7VsOVqkpnqul+qBCBxU3IIO3W3TAE1hD+5f8uY91qf7/Egl0jxKEUOadmN+20RV2+Zxhw+yOyRa7jRViYaw13HY5QsVeSXhM3ZP9NMTbNz+D0rE4Tiefw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kNWAnEmJ; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-81e8a9d521dso233263b3a.2
-        for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 19:11:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1769656297; x=1770261097; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JWJWtMvK3cJ/FZi3+gRtm63An6XKMQkwUbbJsEmUhfg=;
-        b=kNWAnEmJ2ETKf3i+YJAeUn7dcr8mETIzYmD2Xdta2jCVAZdlhiVZhXrJsz3XolNGB0
-         u6/MYaDDG5iOXupVPX7gBjVa52XTnnO+Mdrb4IkiuSXIR24lL8UNZQ7x7v8EruLDvbUH
-         m0tYzEToULHFceaiw7ORoeAUN8q5YNLqeR8gw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769656297; x=1770261097;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JWJWtMvK3cJ/FZi3+gRtm63An6XKMQkwUbbJsEmUhfg=;
-        b=Edseh+uwzxuzZ6N0Nx6u5iKjuZgNqCwMG2gdXyaEJK7HF5WMpVKxQgwnXmyup1YiNs
-         Nd32mEC5fXd9x+XnoXdQLUEpq5pyMsa+8/azSjqSXWc3dx4/2XZGJaJillR3i+a+1cGq
-         EenWFuW4FQGY7rggO6oRN9mgT8ZZx0zDtyYj6yo/fzaxsy2Axi48xl9DB2iq4ImiYSM1
-         PfoiproXHkuC7JZu0tgj1GzLv0afrZ9f1r30OZEc0TzQErtUVYKWXNa3wshQzrfjjElf
-         N0844yv1h4zB3hE//wK9+Wv0XaPmxVRWt/L2SiPs0GlIzRHjgYEs8KxalNOE2cmNikXa
-         /6RA==
-X-Forwarded-Encrypted: i=1; AJvYcCVgczVlQ/gntS5vYY/UQT1jniI7wWUjUujO/75B4cwXEhTOH+p2x7EPQ3Uqav/ZkQDH3/q+zxJs6dk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeuBNGfKrlgPyCfS8Cd6bCMJ3xG4C7/5ha08zq7tf0fzPZxFIl
-	Pj0w6t9VBQFjecD52g5voBykgC+gECBdpeXg4Li6OlHaubgTkraI7bPmy+qaCoKMlA==
-X-Gm-Gg: AZuq6aIVL6LTs5/hWDP9p6Y+fO4iiFb0c6ZOZB52mOA7QcUhd/AqPECAjq4RsilDbrM
-	fPL9Sw/0/rFEva2mgVYuqeaV6XmjviwxhudfQ2TfJmSX+EtzqZSf+2/aCs+CCZ7D2VVa2A5nOuf
-	psnyZcN7iPxITuUzhL1ViDD7aWJKnMWZS+Lhx+OUVHV0w5me/huxF6166tdk79bfe4xvijQ0bLH
-	tOm6mB55LTpWJv9xLxe2mZIzfANOHVDmQtJ8205w9MbrJN4SDTk2rvmiYo3IaHGnahIGvqVOYfO
-	qpPyh+NCSBOuZkliUUnTXrUG8p1zzxRV8dxIRx0PfzCf/lWuye4z77NU9k0z6frVZi72HdCttLy
-	TV0dRbcXzKOq9egsoU7UIKal5cjvL9cNwQ35g0C3Hl54hVx1WnwWlluWQRy8TtdL9znHU7c3CWN
-	nklrzZOUeoL72cu3fUcluMcLS+6+BJ92qcsNAMtBbqJ6G/VJZx4ELqYJb4TBmvT+rOQP/VAOTi
-X-Received: by 2002:a05:6a00:244e:b0:81d:d666:72e1 with SMTP id d2e1a72fcca58-8236914777amr6825599b3a.10.1769656297157;
-        Wed, 28 Jan 2026 19:11:37 -0800 (PST)
-Received: from tigerii.tok.corp.google.com ([2a00:79e0:2031:6:356d:f98:467f:7e27])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379b1ee89sm3898394b3a.14.2026.01.28.19.11.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 19:11:36 -0800 (PST)
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: Douglas Anderson <dianders@chromium.org>,
-	Tomasz Figa <tfiga@chromium.org>,
-	George-Daniel Matei <danielgeorgem@chromium.org>,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv2] net: usb: r8152: fix resume reset deadlock
-Date: Thu, 29 Jan 2026 12:10:30 +0900
-Message-ID: <20260129031106.3805887-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.53.0.rc1.217.geba53bf80e-goog
+	s=arc-20240116; t=1769656914; c=relaxed/simple;
+	bh=h2+N60GFIxy4GfrJ4czr9PMcmHEhojycurGHNf+1bLY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=be7oPxAUucRSbbe0UpK+GntJN6FuSqY24fC2OdqCJFITUXf1hwZHM0GCe/T0yxYKbVOsaFA0flHRoX3enE09FbLDCzIC6eLaxABIRD/qVuH0WPYI1sVNWOt1u5W9Nbizu/vK4eB15hc+XC1Xb7HG/oyZq0OI0NaqEoag3At88v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=eifTeQz9; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=BGsU9GobbaGgoU5iMsb2Tj/ECBvPozp242GaUSp9zUU=; b=eifTeQz9MUGgKqDQsKzmHBzB2j
+	+CtwHru4Xvc8D5sL9AdjDiqJWwNUFLA4+enSb3HA8EGGjQ/KpTmT7gakB7E0zhfXtSQ15zpP5lBBg
+	e6odg/oBWcZoX5HZCZc2eYHerpWACeqgAgw7ymX0/SYyrZbo9XVT/WadmSYd1IjR3qee35vapbO3p
+	gJkrrQD+C4GjLabtBWnvoQ+eYIrU3CzT0XUAwBsyq/vYVwiKdr0hgb0eOuEsdsjQ5NMnVRQwtSI9G
+	c+nAwH3W7Gnm3mac+MbhcepOrQ8lFKBi3dX17MkNJavZ/NQqs1fFtM/bhJVq1XDSm3DzyYjCgs6Ro
+	NcMMDueg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1vlId5-0000000HVLd-0y2U;
+	Thu, 29 Jan 2026 03:23:35 +0000
+Date: Thu, 29 Jan 2026 03:23:35 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Samuel Wu <wusamuel@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <20260129032335.GT3183987@ZenIV>
+References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+ <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh>
+ <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
+ <20260128045954.GS3183987@ZenIV>
+ <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[zeniv.linux.org.uk,none];
+	R_DKIM_ALLOW(-0.20)[linux.org.uk:s=zeniv-20220401];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32895-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[chromium.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[senozhatsky@chromium.org,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-32896-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[viro@zeniv.linux.org.uk,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.org.uk:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chromium.org:email,chromium.org:dkim,chromium.org:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0982BAB5AC
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.org.uk:email,linux.org.uk:dkim]
+X-Rspamd-Queue-Id: 19243AB688
 X-Rspamd-Action: no action
 
-rtl8152 can trigger device reset during reset which
-potentially can result in a deadlock:
+On Wed, Jan 28, 2026 at 04:58:57PM -0800, Samuel Wu wrote:
+> On Tue, Jan 27, 2026 at 8:58 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> 
+> > Very interesting...  Does 1544775687f0 (parent of e5bf5ee26663)
+> > demonstrate that behaviour?
+> 
+> Reverting only 1544775687f0 (functionfs: need to cancel ->reset_work
+> in ->kill_sb()) does not fix the issue. With 6.19-rc7 as baseline, the
+> simplest working recipe at the moment is with 6ca67378d0e7,
+> c7747fafaba0, and e5bf5ee26663 reverted.
 
- **** DPM device timeout after 10 seconds; 15 seconds until panic ****
- Call Trace:
- <TASK>
- schedule+0x483/0x1370
- schedule_preempt_disabled+0x15/0x30
- __mutex_lock_common+0x1fd/0x470
- __rtl8152_set_mac_address+0x80/0x1f0
- dev_set_mac_address+0x7f/0x150
- rtl8152_post_reset+0x72/0x150
- usb_reset_device+0x1d0/0x220
- rtl8152_resume+0x99/0xc0
- usb_resume_interface+0x3e/0xc0
- usb_resume_both+0x104/0x150
- usb_resume+0x22/0x110
+Sorry, I hadn't been clear enough: if you do
+git switch --detach 1544775687f0 
+and build the resulting tree, does the breakage reproduce?  What I want
+to do is to split e5bf5ee26663 into smaller steps and see which one
+introduces the breakage, but the starting point would be verify that
+there's no breakage prior to that.
 
-The problem is that rtl8152 resume calls reset under
-tp->control mutex while reset basically re-enters rtl8152
-and attempts to acquire the same tp->control lock once
-again.
 
-Reset INACCESSIBLE device outside of tp->control mutex
-scope to avoid recursive mutex_lock() deadlock.
-
-Fixes: 4933b066fefb ("r8152: If inaccessible at resume time, issue a reset")
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
-
-v1 -> v2:
-- incorporated review feedback from Doug
-
- drivers/net/usb/r8152.c | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 30f937527cd2..5e556e26c682 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -8538,19 +8538,6 @@ static int rtl8152_system_resume(struct r8152 *tp)
- 		usb_submit_urb(tp->intr_urb, GFP_NOIO);
- 	}
- 
--	/* If the device is RTL8152_INACCESSIBLE here then we should do a
--	 * reset. This is important because the usb_lock_device_for_reset()
--	 * that happens as a result of usb_queue_reset_device() will silently
--	 * fail if the device was suspended or if too much time passed.
--	 *
--	 * NOTE: The device is locked here so we can directly do the reset.
--	 * We don't need usb_lock_device_for_reset() because that's just a
--	 * wrapper over device_lock() and device_resume() (which calls us)
--	 * does that for us.
--	 */
--	if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
--		usb_reset_device(tp->udev);
--
- 	return 0;
- }
- 
-@@ -8661,19 +8648,33 @@ static int rtl8152_suspend(struct usb_interface *intf, pm_message_t message)
- static int rtl8152_resume(struct usb_interface *intf)
- {
- 	struct r8152 *tp = usb_get_intfdata(intf);
-+	bool runtime_resume = test_bit(SELECTIVE_SUSPEND, &tp->flags);
- 	int ret;
- 
- 	mutex_lock(&tp->control);
- 
- 	rtl_reset_ocp_base(tp);
- 
--	if (test_bit(SELECTIVE_SUSPEND, &tp->flags))
-+	if (runtime_resume)
- 		ret = rtl8152_runtime_resume(tp);
- 	else
- 		ret = rtl8152_system_resume(tp);
- 
- 	mutex_unlock(&tp->control);
- 
-+	/* If the device is RTL8152_INACCESSIBLE here then we should do a
-+	 * reset. This is important because the usb_lock_device_for_reset()
-+	 * that happens as a result of usb_queue_reset_device() will silently
-+	 * fail if the device was suspended or if too much time passed.
-+	 *
-+	 * NOTE: The device is locked here so we can directly do the reset.
-+	 * We don't need usb_lock_device_for_reset() because that's just a
-+	 * wrapper over device_lock() and device_resume() (which calls us)
-+	 * does that for us.
-+	 */
-+	if (!runtime_resume && test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-+		usb_reset_device(tp->udev);
-+
- 	return ret;
- }
- 
--- 
-2.53.0.rc1.217.geba53bf80e-goog
-
+PS: v6.19-rc7 contains fc45aee66223 ("get rid of kill_litter_super()"),
+and reverting 6ca67378d0e7 ("convert functionfs") would reintroduce
+the call of that function in ffs_fs_kill_sb(), so the resulting tree
+won't even build on any configs with functionfs enabledd; are you sure
+that you'd been testing v6.19-rc7 + reverts of just these 3 commits?
 
