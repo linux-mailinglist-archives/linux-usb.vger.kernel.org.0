@@ -1,308 +1,613 @@
-Return-Path: <linux-usb+bounces-32898-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32900-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uPlHM1PcemlE/AEAu9opvQ
-	(envelope-from <linux-usb+bounces-32898-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 05:04:35 +0100
+	id +C4cF879emmHAQIAu9opvQ
+	(envelope-from <linux-usb+bounces-32900-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 07:27:26 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34411AB985
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 05:04:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB828AC33A
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 07:27:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3E8A03008C83
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 04:04:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 050B0302802D
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 06:26:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94253273D8D;
-	Thu, 29 Jan 2026 04:04:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010743587D1;
+	Thu, 29 Jan 2026 06:26:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ctNmNQBt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+g3kwub"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-oa1-f65.google.com (mail-oa1-f65.google.com [209.85.160.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B002C11EF
-	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 04:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769659451; cv=pass; b=PrwDdcTlgQ6gpUpwzcKH/0UdxMJqMTnZnNiEfSJY2gZMoevnG+Gj/4zMj1rpTZ2WU9GXi6tZq4FtaaZS3DD7EpsU7uRnf3T8uJBedV1QLbfAMvIvpKdyIPCdlH0lKFCqITRAHm3zj4alQRolWAQDpGxQ+sIRoz5e98BVSmHh+v8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769659451; c=relaxed/simple;
-	bh=R75KpgPT2svi5yuefu1FJ+5zC76yTcT1WCQs9LHGTVA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tovjra6jJQQHl5kO6vzZ+DLCcoUvOu7dRzydkmuC8lFta9o8shuY7S8gbn7QBbpx9GbLMQYyNQtz9gs0+V9BLB2NqNTnZQ0ObKmESOk5A0MtwUyiujMJFSY86KehU63OZDgA7lTUGcoU8beOnHOP3/g74ATY+h0EAFDVae+MFiA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ctNmNQBt; arc=pass smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47a95a96d42so25145e9.1
-        for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 20:04:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769659445; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Xh9/dWyH9j1H9UuUoJiiWshmDmKIZyqNkVpWXXhGc4k4wwugpGlWkPHuEQzYTA2iyN
-         C4tGe2NCSCAlZm66yqSrdtuOMDBKF2vB6uAOVVWnzLUrCgsPudU01cLVSED8FnakJlw1
-         IaJaIEDjtyQA+BscPi+65+9TYGw+mM6O4w+OM48K1LsQOvawTojA05n4JZ/XUlHT0Zof
-         xV0j/coPZKD4Fz3EEnOuKZkhGK+dbHzGiDIys47ymBWELN8F24ti27SdZK9JTxaNM4vx
-         PPzIwFBXeakdX2tOP6adV8ljHylr5ucUPsE9GCzJzi3T1ovTLfAt2/vW7Ie0StfEL740
-         qSfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WsGxxEybDOlow6ycYq74FgbGsjTuD8K6q1LcRz+02HA=;
-        fh=srCnbwOC6G8SBFrC8C1aorU71olOL57MuOD5k4JT1uk=;
-        b=fYjGWIA0qthNdH7IXfSiVlAREHMThzbg6eX3LSLfl5rx8ji6aqsTcX4gCAZdOBNQNa
-         5l9d68m2jYfuXJMLzjMh5h90Jg+daTf5OCZgjp0taz7R/Icl8m6GQD+0zfsOVfm/CFSl
-         2bU5ZJDUIA08Y/wljEL3I5OE42W7W9gCeA4T4StRRWQpM0Dl8y3IiNaAVxGLWbvwNGuf
-         C90t5jxZZb4AdE/yTihy2t9LvWrA6Y0Xaxs88OTQtJEeh8RW2gxwex6+jU2hlnIRedxx
-         iI//Md+y0lwYPz2+Segg0WccQtz3vRkhy4sBqqEpFer0nAUtzUiUvebnfbW2c9ymncsy
-         WtAg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8A93793A4
+	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 06:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.65
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769668011; cv=none; b=BsxQzcMO8dwvlPigyRUatrGg20tN8qnBQt5eAM676TtAWp/s+07CoSSRYmf5Xw6cSpfTDGYhAZwJLar0dhTBTA76aNa6x8dMjMow0CTVhTlNV1Lfftsc+GoSqmzSvLUfAlk+XmBU2wGQSjOhLdtWv0vvbgDnnL8Z4KhRqtVp/6M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769668011; c=relaxed/simple;
+	bh=PhWQWuNHpjWIHj6wY5nSHrhoUrx5ijR01V6xXwNaxuQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LTcsG6BxuDPw4TwgCgjMbSNnlJ8v8GX89B+gs3ZK/uOKQ2zhS1j8DeJQdLWtbIN6A0fyRrW745nxJ682UIyHnGluRlDpYhcS6dIzEbkjYX7l+aBhGsgrfq5nDd34grrcxKuM2dE1bRb293Wc7g8tTWqdqjT7GUY1hcTX9GrHjFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+g3kwub; arc=none smtp.client-ip=209.85.160.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f65.google.com with SMTP id 586e51a60fabf-40970f97638so317940fac.3
+        for <linux-usb@vger.kernel.org>; Wed, 28 Jan 2026 22:26:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769659445; x=1770264245; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WsGxxEybDOlow6ycYq74FgbGsjTuD8K6q1LcRz+02HA=;
-        b=ctNmNQBtWy9KKfcxoPvLDwiNVYN9tKcjwxH9YJ7DYl5xzeKWAXD/bJb+NMlEi9t6eo
-         oOVO8ZO6N5IvdQeqxuQxe13cgGluZ2HUEEU0qT7EJwGVWPThNOxfLCdr/lsSW4EZ2A4p
-         uYgHrrGcZQOIj52Y+FntgFi0j+rNjMYsXHWqPw6jNlA/wAjvcIRLHQ/C0XOTqE1NpBgX
-         tc3MWAcl7dPXaaoqz0azU5dbZh2ZmqjBmwbITeDjc2+a6k/hY5MJ3vhNB6kQhyyB6frJ
-         RM/dBPQFsRpmiMKa2b+NbwUIb+jFJcMp5mdLkVk42Z2Yfio970Fav6bWXjl7gw5+gA7S
-         mMcw==
+        d=gmail.com; s=20230601; t=1769668008; x=1770272808; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=poDplWlPg5s5EBtVI6yFIXbfIxZPfz/xfOLeBPwU+R4=;
+        b=G+g3kwubeP3XSzhM1epF/JDQmjZcRBcDajUcCppYll+b52NAO3oRpV0oYSRLHd4H4B
+         qlaxqq/Kfb1rMk41OrTO3peT8Zr7vm0TNLcNwYxlRYseKj9A4kK13HxqGJp84ydytlZ8
+         O84VzjgakWzaAIYhs9TF5cTzA1xJyUax9Q6KqzzffwAIt4XpkNLtCWzAoeePmF9Ejt9V
+         SU0GdnEufGL+HdWdfdLBFSLimz0i2T1dzPtyYNLq2RhUXaoeXddDsVYeuOg9cEuQ7ca6
+         sqMCD6QxoSSGEBi8p5LjE46bTSQa3UARL1DDmthmVEzPHuoZXJo7hVqfkpPJ4ehmAiAC
+         BUiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769659445; x=1770264245;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WsGxxEybDOlow6ycYq74FgbGsjTuD8K6q1LcRz+02HA=;
-        b=CFrLEegipOC+8vN3z0tGiBYxv89BTsYLlgqz42d4zccVJCkRcaEWJZr8cnmzwnenTp
-         LLInFX9gOJVIvHXmaaOcqxWnJ4mKia/NTqd3+DpVzSbaykr9vH5HhNHorE/4zGykGQbZ
-         NSuduEggtLQImAlQtWwABuTZYUp/X+4BfGzKEWpcCqydabqzTxfDi5pqfZGG9w49X08k
-         f7eLHF5c2tNWiZm5m3COx7Tz41v/RmDQGQC9dZKWYn7HRvo4Kt5U7oRJnvoyOsR21N3G
-         2LDbRpJqcwpJhcC3gP7PiKMG2m6AQoqKZNaelqYn08gz/8FUD+JK09PmGk/uhAG8mS8S
-         e4/w==
-X-Forwarded-Encrypted: i=1; AJvYcCXhG+8m+zZ5HqLA5rGOBFyVOcEWHrhJQrUOv2HdniYB3QItb8+HoP9TxK6kGXNXs+0eHINrBHLnTz8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyl4fFQJ6BIzzHUqJN5rJXctwN4VBRRurFpLgJru4FX7OjIu5/9
-	dImaMFPICgomDeJudKO/8mYLLVInFws/C8V7t4WorAnKob0EsACsHtf4dUjx6po5RuPZXsNvoJC
-	QggL7tduw/PMTK2l99wx6qPDuYXZmLROCwRDm9Ppp
-X-Gm-Gg: AZuq6aJYOi8uaUa3Z+JQLm4C2iMzzgo3hN2pHEaU7h1OiBhqF9rDDtX1tJoP/kJLPH5
-	cq9OKxdni+t0IrBmn8TyPa4pqxqecntJsjzmFQnH4JM8wvhPtj302ugAjHwBw9JIv9Xf6w+k4x9
-	gcq2uoosTyQJ8BxxahtYNtMz7PrP4Knk6LOutoys9c8pYt8NfhA54jRKhAcvVucjmKzK68o6HOV
-	OLVRetiiLLPeewOhQd06j2GA1BKFyk4/BXieZRw3V8teCifoJjOdVYUiXBxVa9jfbdXwLpaVoQr
-	V7JZ3w==
-X-Received: by 2002:a05:600c:1c26:b0:477:95a8:3805 with SMTP id
- 5b1f17b1804b1-48189bf495dmr392125e9.15.1769659445200; Wed, 28 Jan 2026
- 20:04:05 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769668008; x=1770272808;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=poDplWlPg5s5EBtVI6yFIXbfIxZPfz/xfOLeBPwU+R4=;
+        b=p4rR7WUE3erryg+Z5vewdtH7hcbwPwrWH7UwtxkJbBNiaZZGufJa9BjsKiN1p6bq57
+         R17cA5/sjtcZtZLb6F9cfgHG1qCMp0F+fQWmZo1DsbCsYbhk6o4VhFUK2oMoj3Yk9dCO
+         D5F/mKGPflKhQxv6gxTKkf3y6onrye1h90XWjHJPWLkgbSHrtu7ajh+W3C5n9SjJKd50
+         e6C81bQI82QBln7pw/Ze6OXzgwJ3o4AkBTN55U6O5rtlFYmme1JMFG/kr00pculg17g5
+         dAW43viF9CjUWlBrPPrFgOuY63Nf1TwXLZi6GHaQ5pGL8c7zNXUROixCuA7jNjxj42wU
+         80BA==
+X-Forwarded-Encrypted: i=1; AJvYcCWvKEqb14xaamrgB+60XpEDTRahwup50FREOf8YZFoDBZtEIDdOzVOiBqKD1wZqcrfLMlcWTfP5zE0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywsrshh9kvp1dBLitYZw5L7v2Cto2fZ3znzm8NVt4NFmM77PbP8
+	SYYN0ABxoWnFXOIy1D/6sB7OGsEJnXpcTESMbHwUBkuUzSH9kDXXXVy7G/oCLKuo
+X-Gm-Gg: AZuq6aKY5m9Nd17aa5Zr5dWR0kRq4ib6D+6/pD4w1n5rFeX5O5mwqWfH2f+FHkD/s4g
+	zpDCPgkAjZ7D/ZbIzhx5PL44MdC4abohhMhyikoCdLlpuJIUwaey8BQLc8EUQRzofz+NTPJJI+7
+	57O52cY24MRD/xeWOklwGI+1iq7R2s6V3dRKdALfO+PBYHksIbE87+PTahhV2g+Pu+kDxedr2mU
+	3Dl5+9sOgO91BlkonPKe3OzR1DseIGONxMehsUHDyX/bp1tnvPlLVm4vErzf98ROxvDCXoRVhw2
+	75uhRcuHVCoPDdFR47fgR75laSOM5PtlQMMlXZrAzUMB4PeSNEqDEn+Ctp26RkGT5huWIag9+lc
+	eL+kog2f1sSydren5l6VRFbZdAXuiR981I0VXNAPEm6keIDowUAm+CAntoaIX67RL4l7diZbumM
+	ilqHOD6Wyir5o0vDtmEO7moEp+3iLtXLVtcKEI4yXZpNyVzZboMhl2X1QYMd5Dtt5NN4M6bnpDn
+	gpFWD8G9cosaoBfEmfci5zBHD9R38Yg37sSy6uTJRQvbMp1tklVGMcx9tFMKGFoyPlrqRPxUMt1
+	WiW8
+X-Received: by 2002:a05:7022:a8a:b0:119:e55a:9c06 with SMTP id a92af1059eb24-124a011454fmr4973192c88.34.1769660760245;
+        Wed, 28 Jan 2026 20:26:00 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-124a9efb4casm5019894c88.16.2026.01.28.20.25.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jan 2026 20:25:59 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Peter Korsgaard <peter@korsgaard.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Petko Manolov <petkan@nucleusys.com>,
+	Steve Glendinning <steve.glendinning@shawell.net>,
+	UNGLinuxDriver@microchip.com,
+	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+	Oliver Neukum <oneukum@suse.com>,
+	=?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+	Deepanshu Kartikey <kartikey406@gmail.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Max Schulze <max.schulze@online.de>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Eric Biggers <ebiggers@google.com>
+Subject: [PATCH net-next v4] net: usb: remove unnecessary get_drvinfo code and driver versions
+Date: Wed, 28 Jan 2026 20:23:01 -0800
+Message-ID: <20260129042435.13395-2-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <GV2PR06MB10809D32F05C864813CC36C10D791A@GV2PR06MB10809.eurprd06.prod.outlook.com>
-In-Reply-To: <GV2PR06MB10809D32F05C864813CC36C10D791A@GV2PR06MB10809.eurprd06.prod.outlook.com>
-From: Kuen-Han Tsai <khtsai@google.com>
-Date: Thu, 29 Jan 2026 12:03:38 +0800
-X-Gm-Features: AZwV_Qgm9__lyxyDkWAmCn2zZ0JItY11Ta114jsH5fJxqtefa-FOpMSHt0Lx7Pk
-Message-ID: <CAKzKK0qdNaHSR8Kr7tvXbt8rK4J89iy_6ZDv8M3w_Uz+668c6w@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: f_ncm: Fix Kernel Panic due to access of
- invalid gadget ptr
-To: LI Qingwu <qing-wu.li@leica-geosystems.com.cn>
-Cc: "hgajjar@de.adit-jv.com" <hgajjar@de.adit-jv.com>, 
-	"eugeniu.rosca@bosch.com" <eugeniu.rosca@bosch.com>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, "guofeng.li@gm.com" <guofeng.li@gm.com>, 
-	"hardik.gajjar@bosch.com" <hardik.gajjar@bosch.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, "maze@google.com" <maze@google.com>, 
-	"quic_kriskura@quicinc.com" <quic_kriskura@quicinc.com>, 
-	"quic_linyyuan@quicinc.com" <quic_linyyuan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32898-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[khtsai@google.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,linux.intel.com,korsgaard.com,davemloft.net,google.com,kernel.org,redhat.com,nucleusys.com,shawell.net,microchip.com,fintech.ru,suse.com,piap.pl,pengutronix.de,online.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	TAGGED_FROM(0.00)[bounces-32900-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 34411AB985
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,korsgaard.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nucleusys.com:email]
+X-Rspamd-Queue-Id: BB828AC33A
 X-Rspamd-Action: no action
 
-On Wed, Jan 28, 2026 at 6:49=E2=80=AFPM LI Qingwu
-<qing-wu.li@leica-geosystems.com.cn> wrote:
->
-> > On Mon, Mar 11, 2024 at 01:04:18PM +0100, Hardik Gajjar wrote:
-> > > On Fri, Mar 08, 2024 at 05:47:37PM +0530, Krishna Kurapati PSSNV wrot=
-e:
-> > > >
-> > > >
-> > > > On 3/8/2024 5:25 PM, Hardik Gajjar wrote:
-> > > > > On Thu, Mar 07, 2024 at 11:12:07PM +0530, Krishna Kurapati PSSNV =
-wrote:
-> > > > > >
-> > > >
-> > > > [...]
-> > > >
-> > > > >
-> > > > > I believe using gether_cleanup altogether may not be an optimal s=
-olution.
-> > > > > The creation and deletion of network interfaces should align with=
- the behavior of each specific network driver.
-> > > > >
-> > > > > For instance, in the case of NCM, the usb0 interface is created u=
-pon the creation of a directory
-> > > > > in config/usb_gadget/gX/functions/ncm.usb0, and it is removed whe=
-n the corresponding directory
-> > > > > is deleted. This follows a standard flow observed in many network=
- drivers, where interfaces are
-> > > > > created during driver loading/probing and deleted during removal.
-> > > > >
-> > > >
-> > > > Hi Hardik,
-> > > >
-> > > >  Yeah. I observed this behavior.
-> > > >
-> > > > > Typically, deleting the gadget on every disconnection is not cons=
-idered a good practice, as it can
-> > > > > negatively impact the user experience when accessing the gadget.
-> > > > >
-> > > >
-> > > > Got it. I was suspecting issues might come up during fast Plug-In/ =
-Plug-Out
-> > > > cases as setting and cleanup of network interface might take some t=
-ime.
-> > > >
-> > > > > In our specific scenario, retaining the usb0 network interface ha=
-s proven to enhance performance
-> > > > > and stabilize connections. Previous attempts to remove it resulte=
-d in an observed increase in time of 300ms,
-> > > > > particularly at the start of Apple CarPlay sessions.
-> > > > >
-> > > >
-> > > > Thanks for this info. Makes sense to keep it in free_inst only. But=
- my
-> > > > initial doubt only stemmed from the fact that actions taken during =
-bind must
-> > > > be reversed during unbind.
-> > > >
-> > > > > Furthermore, it's important to highlight that in Qualcomm product=
-s and msm kernels, the inclusion of gether_cleanup
-> > > > > in the unbind process was eventually reverted. While the specific=
- reason for reverting the patch is unknown,
-> > > > > it suggests that the addition may not have yielded the intended o=
-r required results
-> > > > >
-> > > > > Following is the revert patch details in msm-5.4 kernel, if you w=
-ant check it.
-> > > > >
-> > > > > Revert "usb: gadget: f_ncm: allocate/free net device upon driver =
-bind/unbind"
-> > > > >
-> > > > > This reverts commit 006d8adf555a8c6d34113f564ade312d68abd3b3.
-> > > > >
-> > > > > Move back the allocation of netdevice to alloc_inst(), one-time
-> > > > > registration to bind(), deregistration and free to rm_inst(). The
-> > > > > UI update issue will be taken up with proper stakeholders.
-> > > > >
-> > > > > Change-Id: I56448b08f6796a43ec5b0dfe0dd2d42cdc0eec14
-> > > > >
-> > > >
-> > > > Agree. This was merged first in 4.19 downstream (most probably for =
-car play
-> > > > use case only) and then reverted in 5.4. But present 4.19 code in Q=
-C still
-> > > > keeps it in unbind path. The only reason I suspect it was reverted =
-was to
-> > > > get back on to same page with upstream driver (atleast starting fro=
-m 5.10,
-> > > > this was the reasoning to remove gether_cleanup in unbind path and =
-put it
-> > > > back in free_inst).
-> > > >
-> > > > Thanks,
-> > > > Krishna,
-> > >
-> > > Thanks Krinshna for your comment
-> > > Come to the first comment from Greg.
-> > >
-> > > > What commit id does this fix?
-> > > >
-> > > > thanks,
-> > > >
-> > > > greg k-h
-> > >
-> > > >Hi Greg,
-> > >
-> > > >The network device parent is not being properly cleaned up during un=
-bind since the \
-> > > >initial commit of the driver. In that case, should I mention the Fir=
-st commit ID of \
-> > > >the driver as broken commit or would you advice to say, For example =
-"Clean up netdev \
-> > > >parent in unbind".
-> > >
-> > > >Thanks,
-> > > >Hardik
-> > >
-> > > @Greg,
-> > >
-> > > Can you please provide guidance on how to proceed? Should I update th=
-e commit message to exclude the term 'Fix' in the title?
-> > >
-> > > Thanks,
-> > > Hardik
-> >
-> > Hi Greg,
-> >
-> > Should we move forward if there are no further comments?
-> >
-> > Thanks,
-> > Hardik
->
->
-> Hi Hardik and all,
->
-> Gentle ping on this patch. I wanted to follow up on the status and see if
-> there have been any updates or alternative fixes applied.
->
-> I have recently tested this patch on NXP iMX8MP platforms and can confirm=
- it
-> successfully resolves the use-after-free panic issue.
->
-> Best Regards
-> Li Qingwu
+Many USB network drivers define get_drvinfo functions which add no
+value over usbnet_get_drvinfo, only setting the driver name and
+version. usbnet_get_drvinfo automatically sets the driver name, and
+separate driver versions are now frowned upon in the kernel. Remove all
+driver versions and replace these get_drvinfo functions with references
+to usbnet_get_drvinfo where possible. Where that is not possible,
+remove unnecessary code to set the driver name. Also remove two
+unnecessary initializations from aqc111_get_drvinfo, an inaccurate
+comment in pegasus.c, and an unused macro in catc.c.
 
-Hi Qingwu,
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Peter Korsgaard <peter@korsgaard.com> (for dm9601.c)
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+Changes in v4:
+Rebase against latest net-next
+Add more received tags
 
-I recently submitted a patchset to address the lifetime mismatch
-between the network device and its parent gadget device for the NCM
-driver [1].
+Changes in v3:
+Add changelog
+Add received Reviewed-by tag
 
-Could you please verify if this series resolves the problem for you?
+Changes in v2:
+Also remove driver versions from smsc[79]5xx (missed in the original
+patch because they had a version definition but didn't use it in
+get_drvinfo)
 
-[1] https://lore.kernel.org/all/20251230-ncm-refactor-v1-0-793e347bc7a7@goo=
-gle.com/
+ drivers/net/usb/aqc111.c       |  5 -----
+ drivers/net/usb/asix.h         |  3 ---
+ drivers/net/usb/asix_common.c  |  8 --------
+ drivers/net/usb/asix_devices.c |  8 +++-----
+ drivers/net/usb/ax88172a.c     |  2 +-
+ drivers/net/usb/catc.c         |  7 -------
+ drivers/net/usb/dm9601.c       |  9 +--------
+ drivers/net/usb/mcs7830.c      |  7 +------
+ drivers/net/usb/pegasus.c      |  3 ---
+ drivers/net/usb/r8152.c        | 10 ----------
+ drivers/net/usb/rtl8150.c      |  3 ---
+ drivers/net/usb/sierra_net.c   | 14 +-------------
+ drivers/net/usb/smsc75xx.c     |  3 ---
+ drivers/net/usb/smsc95xx.c     |  3 ---
+ drivers/net/usb/sr9800.c       | 12 +-----------
+ drivers/net/usb/sr9800.h       |  3 +--
+ 16 files changed, 9 insertions(+), 91 deletions(-)
 
-Regards,
-Kuen-Han
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index 9201ee10a13f..0722050dbe32 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -20,8 +20,6 @@
+ 
+ #include "aqc111.h"
+ 
+-#define DRIVER_NAME "aqc111"
+-
+ static int aqc111_read_cmd_nopm(struct usbnet *dev, u8 cmd, u16 value,
+ 				u16 index, u16 size, void *data)
+ {
+@@ -207,13 +205,10 @@ static void aqc111_get_drvinfo(struct net_device *net,
+ 
+ 	/* Inherit standard device info */
+ 	usbnet_get_drvinfo(net, info);
+-	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
+ 	snprintf(info->fw_version, sizeof(info->fw_version), "%u.%u.%u",
+ 		 aqc111_data->fw_ver.major,
+ 		 aqc111_data->fw_ver.minor,
+ 		 aqc111_data->fw_ver.rev);
+-	info->eedump_len = 0x00;
+-	info->regdump_len = 0x00;
+ }
+ 
+ static void aqc111_get_wol(struct net_device *net,
+diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+index 8531b804021a..cf97bc3d388b 100644
+--- a/drivers/net/usb/asix.h
++++ b/drivers/net/usb/asix.h
+@@ -29,7 +29,6 @@
+ #include <net/selftests.h>
+ #include <linux/phylink.h>
+ 
+-#define DRIVER_VERSION "22-Dec-2011"
+ #define DRIVER_NAME "asix"
+ 
+ /* ASIX AX8817X based USB 2.0 Ethernet Devices */
+@@ -248,8 +247,6 @@ int asix_get_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
+ int asix_set_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
+ 		    u8 *data);
+ 
+-void asix_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *info);
+-
+ int asix_set_mac_address(struct net_device *net, void *p);
+ 
+ #endif /* _ASIX_H */
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index 6ab3486072cb..4f03f4e57655 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -731,14 +731,6 @@ int asix_set_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
+ 	return ret;
+ }
+ 
+-void asix_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *info)
+-{
+-	/* Inherit standard device info */
+-	usbnet_get_drvinfo(net, info);
+-	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+-}
+-
+ int asix_set_mac_address(struct net_device *net, void *p)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index c73cf52a65a8..d8744291d843 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -108,7 +108,7 @@ static int asix_ioctl (struct net_device *net, struct ifreq *rq, int cmd)
+    own structure so we don't interfere with other usbnet
+    devices that may be connected at the same time. */
+ static const struct ethtool_ops ax88172_ethtool_ops = {
+-	.get_drvinfo		= asix_get_drvinfo,
++	.get_drvinfo		= usbnet_get_drvinfo,
+ 	.get_link		= usbnet_get_link,
+ 	.get_msglevel		= usbnet_get_msglevel,
+ 	.set_msglevel		= usbnet_set_msglevel,
+@@ -317,7 +317,7 @@ static int ax88772_ethtool_set_pauseparam(struct net_device *ndev,
+ }
+ 
+ static const struct ethtool_ops ax88772_ethtool_ops = {
+-	.get_drvinfo		= asix_get_drvinfo,
++	.get_drvinfo		= usbnet_get_drvinfo,
+ 	.get_link		= usbnet_get_link,
+ 	.get_msglevel		= usbnet_get_msglevel,
+ 	.set_msglevel		= usbnet_set_msglevel,
+@@ -978,7 +978,7 @@ static void ax88178_unbind(struct usbnet *dev, struct usb_interface *intf)
+ }
+ 
+ static const struct ethtool_ops ax88178_ethtool_ops = {
+-	.get_drvinfo		= asix_get_drvinfo,
++	.get_drvinfo		= usbnet_get_drvinfo,
+ 	.get_link		= usbnet_get_link,
+ 	.get_msglevel		= usbnet_get_msglevel,
+ 	.set_msglevel		= usbnet_set_msglevel,
+@@ -1635,7 +1635,5 @@ static struct usb_driver asix_driver = {
+ module_usb_driver(asix_driver);
+ 
+ MODULE_AUTHOR("David Hollis");
+-MODULE_VERSION(DRIVER_VERSION);
+ MODULE_DESCRIPTION("ASIX AX8817X based USB 2.0 Ethernet Devices");
+ MODULE_LICENSE("GPL");
+-
+diff --git a/drivers/net/usb/ax88172a.c b/drivers/net/usb/ax88172a.c
+index 758a423a459b..3100fbe153c0 100644
+--- a/drivers/net/usb/ax88172a.c
++++ b/drivers/net/usb/ax88172a.c
+@@ -114,7 +114,7 @@ static const struct net_device_ops ax88172a_netdev_ops = {
+ };
+ 
+ static const struct ethtool_ops ax88172a_ethtool_ops = {
+-	.get_drvinfo		= asix_get_drvinfo,
++	.get_drvinfo		= usbnet_get_drvinfo,
+ 	.get_link		= usbnet_get_link,
+ 	.get_msglevel		= usbnet_get_msglevel,
+ 	.set_msglevel		= usbnet_set_msglevel,
+diff --git a/drivers/net/usb/catc.c b/drivers/net/usb/catc.c
+index 6759388692f8..5c7f19cbacf6 100644
+--- a/drivers/net/usb/catc.c
++++ b/drivers/net/usb/catc.c
+@@ -37,14 +37,8 @@
+ 
+ #include <linux/usb.h>
+ 
+-/*
+- * Version information.
+- */
+-
+-#define DRIVER_VERSION "v2.8"
+ #define DRIVER_AUTHOR "Vojtech Pavlik <vojtech@suse.cz>"
+ #define DRIVER_DESC "CATC EL1210A NetMate USB Ethernet driver"
+-#define SHORT_DRIVER_DESC "EL1210A NetMate USB Ethernet"
+ 
+ MODULE_AUTHOR(DRIVER_AUTHOR);
+ MODULE_DESCRIPTION(DRIVER_DESC);
+@@ -673,7 +667,6 @@ static void catc_get_drvinfo(struct net_device *dev,
+ {
+ 	struct catc *catc = netdev_priv(dev);
+ 	strscpy(info->driver, driver_name, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+ 	usb_make_path(catc->usbdev, info->bus_info, sizeof(info->bus_info));
+ }
+ 
+diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
+index 5540f7ec4906..9e5649cefcbc 100644
+--- a/drivers/net/usb/dm9601.c
++++ b/drivers/net/usb/dm9601.c
+@@ -259,13 +259,6 @@ static void dm9601_mdio_write(struct net_device *netdev, int phy_id, int loc,
+ 	dm_write_shared_word(dev, 1, loc, res);
+ }
+ 
+-static void dm9601_get_drvinfo(struct net_device *net,
+-			       struct ethtool_drvinfo *info)
+-{
+-	/* Inherit standard device info */
+-	usbnet_get_drvinfo(net, info);
+-}
+-
+ static int dm9601_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+@@ -274,7 +267,7 @@ static int dm9601_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
+ }
+ 
+ static const struct ethtool_ops dm9601_ethtool_ops = {
+-	.get_drvinfo	= dm9601_get_drvinfo,
++	.get_drvinfo	= usbnet_get_drvinfo,
+ 	.get_link	= usbnet_get_link,
+ 	.get_msglevel	= usbnet_get_msglevel,
+ 	.set_msglevel	= usbnet_set_msglevel,
+diff --git a/drivers/net/usb/mcs7830.c b/drivers/net/usb/mcs7830.c
+index fdda0616704e..3a551ad363d0 100644
+--- a/drivers/net/usb/mcs7830.c
++++ b/drivers/net/usb/mcs7830.c
+@@ -438,11 +438,6 @@ static int mcs7830_get_regs_len(struct net_device *net)
+ 	return 0;
+ }
+ 
+-static void mcs7830_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *drvinfo)
+-{
+-	usbnet_get_drvinfo(net, drvinfo);
+-}
+-
+ static void mcs7830_get_regs(struct net_device *net, struct ethtool_regs *regs, void *data)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+@@ -452,11 +447,11 @@ static void mcs7830_get_regs(struct net_device *net, struct ethtool_regs *regs,
+ }
+ 
+ static const struct ethtool_ops mcs7830_ethtool_ops = {
+-	.get_drvinfo		= mcs7830_get_drvinfo,
+ 	.get_regs_len		= mcs7830_get_regs_len,
+ 	.get_regs		= mcs7830_get_regs,
+ 
+ 	/* common usbnet calls */
++	.get_drvinfo		= usbnet_get_drvinfo,
+ 	.get_link		= usbnet_get_link,
+ 	.get_msglevel		= usbnet_get_msglevel,
+ 	.set_msglevel		= usbnet_set_msglevel,
+diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+index c514483134f0..7b6d6eb60709 100644
+--- a/drivers/net/usb/pegasus.c
++++ b/drivers/net/usb/pegasus.c
+@@ -18,9 +18,6 @@
+ #include <linux/uaccess.h>
+ #include "pegasus.h"
+ 
+-/*
+- * Version Information
+- */
+ #define DRIVER_AUTHOR "Petko Manolov <petkan@nucleusys.com>"
+ #define DRIVER_DESC "Pegasus/Pegasus II USB Ethernet driver"
+ 
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 880b59ed5422..e8e6689d2c70 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -30,13 +30,6 @@
+ #include <linux/usb/r8152.h>
+ #include <net/gso.h>
+ 
+-/* Information for net-next */
+-#define NETNEXT_VERSION		"12"
+-
+-/* Information for net */
+-#define NET_VERSION		"13"
+-
+-#define DRIVER_VERSION		"v1." NETNEXT_VERSION "." NET_VERSION
+ #define DRIVER_AUTHOR "Realtek linux nic maintainers <nic_swsd@realtek.com>"
+ #define DRIVER_DESC "Realtek RTL8152/RTL8153 Based USB Ethernet Adapters"
+ #define MODULENAME "r8152"
+@@ -8756,7 +8749,6 @@ static void rtl8152_get_drvinfo(struct net_device *netdev,
+ 	struct r8152 *tp = netdev_priv(netdev);
+ 
+ 	strscpy(info->driver, MODULENAME, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+ 	usb_make_path(tp->udev, info->bus_info, sizeof(info->bus_info));
+ 	if (!IS_ERR_OR_NULL(tp->rtl_fw.fw))
+ 		strscpy(info->fw_version, tp->rtl_fw.version,
+@@ -9950,7 +9942,6 @@ static int rtl8152_probe_once(struct usb_interface *intf,
+ 		goto out2;
+ 
+ 	set_bit(PROBED_WITH_NO_ERRORS, &tp->flags);
+-	netif_info(tp, probe, netdev, "%s\n", DRIVER_VERSION);
+ 
+ 	return 0;
+ 
+@@ -10145,4 +10136,3 @@ module_exit(rtl8152_driver_exit);
+ MODULE_AUTHOR(DRIVER_AUTHOR);
+ MODULE_DESCRIPTION(DRIVER_DESC);
+ MODULE_LICENSE("GPL");
+-MODULE_VERSION(DRIVER_VERSION);
+diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+index e40b0669d9f4..2f1f134b5b48 100644
+--- a/drivers/net/usb/rtl8150.c
++++ b/drivers/net/usb/rtl8150.c
+@@ -13,8 +13,6 @@
+ #include <linux/usb.h>
+ #include <linux/uaccess.h>
+ 
+-/* Version Information */
+-#define DRIVER_VERSION "v0.6.2 (2004/08/27)"
+ #define DRIVER_AUTHOR "Petko Manolov <petkan@users.sourceforge.net>"
+ #define DRIVER_DESC "rtl8150 based usb-ethernet driver"
+ 
+@@ -785,7 +783,6 @@ static void rtl8150_get_drvinfo(struct net_device *netdev, struct ethtool_drvinf
+ 	rtl8150_t *dev = netdev_priv(netdev);
+ 
+ 	strscpy(info->driver, driver_name, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+ 	usb_make_path(dev->udev, info->bus_info, sizeof(info->bus_info));
+ }
+ 
+diff --git a/drivers/net/usb/sierra_net.c b/drivers/net/usb/sierra_net.c
+index 36c73db44f77..3ca60ebdd468 100644
+--- a/drivers/net/usb/sierra_net.c
++++ b/drivers/net/usb/sierra_net.c
+@@ -12,10 +12,8 @@
+  * Sierra Wireless. Use at your own risk.
+  */
+ 
+-#define DRIVER_VERSION "v.2.0"
+ #define DRIVER_AUTHOR "Paxton Smith, Matthew Safar, Rory Filer"
+ #define DRIVER_DESC "USB-to-WWAN Driver for Sierra Wireless modems"
+-static const char driver_name[] = "sierra_net";
+ 
+ /* if defined debug messages enabled */
+ /*#define	DEBUG*/
+@@ -607,15 +605,6 @@ static void sierra_net_status(struct usbnet *dev, struct urb *urb)
+ 	}
+ }
+ 
+-static void sierra_net_get_drvinfo(struct net_device *net,
+-		struct ethtool_drvinfo *info)
+-{
+-	/* Inherit standard device info */
+-	usbnet_get_drvinfo(net, info);
+-	strscpy(info->driver, driver_name, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+-}
+-
+ static u32 sierra_net_get_link(struct net_device *net)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+@@ -624,7 +613,7 @@ static u32 sierra_net_get_link(struct net_device *net)
+ }
+ 
+ static const struct ethtool_ops sierra_net_ethtool_ops = {
+-	.get_drvinfo = sierra_net_get_drvinfo,
++	.get_drvinfo = usbnet_get_drvinfo,
+ 	.get_link = sierra_net_get_link,
+ 	.get_msglevel = usbnet_get_msglevel,
+ 	.set_msglevel = usbnet_set_msglevel,
+@@ -973,5 +962,4 @@ module_usb_driver(sierra_net_driver);
+ 
+ MODULE_AUTHOR(DRIVER_AUTHOR);
+ MODULE_DESCRIPTION(DRIVER_DESC);
+-MODULE_VERSION(DRIVER_VERSION);
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+index 78c821349f48..fbc9d796f605 100644
+--- a/drivers/net/usb/smsc75xx.c
++++ b/drivers/net/usb/smsc75xx.c
+@@ -21,7 +21,6 @@
+ #include "smsc75xx.h"
+ 
+ #define SMSC_CHIPNAME			"smsc75xx"
+-#define SMSC_DRIVER_VERSION		"1.0.0"
+ #define HS_USB_PKT_SIZE			(512)
+ #define FS_USB_PKT_SIZE			(64)
+ #define DEFAULT_HS_BURST_CAP_SIZE	(16 * 1024 + 5 * HS_USB_PKT_SIZE)
+@@ -1447,8 +1446,6 @@ static int smsc75xx_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	struct smsc75xx_priv *pdata = NULL;
+ 	int ret;
+ 
+-	printk(KERN_INFO SMSC_CHIPNAME " v" SMSC_DRIVER_VERSION "\n");
+-
+ 	ret = usbnet_get_endpoints(dev, intf);
+ 	if (ret < 0) {
+ 		netdev_warn(dev->net, "usbnet_get_endpoints failed: %d\n", ret);
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index c65402d850c9..7ecf98d97493 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -27,7 +27,6 @@
+ #include "smsc95xx.h"
+ 
+ #define SMSC_CHIPNAME			"smsc95xx"
+-#define SMSC_DRIVER_VERSION		"2.0.0"
+ #define HS_USB_PKT_SIZE			(512)
+ #define FS_USB_PKT_SIZE			(64)
+ #define DEFAULT_HS_BURST_CAP_SIZE	(16 * 1024 + 5 * HS_USB_PKT_SIZE)
+@@ -1152,8 +1151,6 @@ static int smsc95xx_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	int ret, phy_irq;
+ 	u32 val;
+ 
+-	printk(KERN_INFO SMSC_CHIPNAME " v" SMSC_DRIVER_VERSION "\n");
+-
+ 	ret = usbnet_get_endpoints(dev, intf);
+ 	if (ret < 0) {
+ 		netdev_warn(dev->net, "usbnet_get_endpoints failed: %d\n", ret);
+diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
+index ee8c6c9d3962..e3f6233e5866 100644
+--- a/drivers/net/usb/sr9800.c
++++ b/drivers/net/usb/sr9800.c
+@@ -469,15 +469,6 @@ static int sr_get_eeprom(struct net_device *net,
+ 	return 0;
+ }
+ 
+-static void sr_get_drvinfo(struct net_device *net,
+-				 struct ethtool_drvinfo *info)
+-{
+-	/* Inherit standard device info */
+-	usbnet_get_drvinfo(net, info);
+-	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
+-	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+-}
+-
+ static int sr_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+@@ -511,7 +502,7 @@ static int sr_set_mac_address(struct net_device *net, void *p)
+ }
+ 
+ static const struct ethtool_ops sr9800_ethtool_ops = {
+-	.get_drvinfo	= sr_get_drvinfo,
++	.get_drvinfo	= usbnet_get_drvinfo,
+ 	.get_link	= usbnet_get_link,
+ 	.get_msglevel	= usbnet_get_msglevel,
+ 	.set_msglevel	= usbnet_set_msglevel,
+@@ -865,6 +856,5 @@ static struct usb_driver sr_driver = {
+ module_usb_driver(sr_driver);
+ 
+ MODULE_AUTHOR("Liu Junliang <liujunliang_ljl@163.com");
+-MODULE_VERSION(DRIVER_VERSION);
+ MODULE_DESCRIPTION("SR9800 USB 2.0 USB2NET Dev : http://www.corechip-sz.com");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/net/usb/sr9800.h b/drivers/net/usb/sr9800.h
+index 952e6f7c0321..98ac1c45740e 100644
+--- a/drivers/net/usb/sr9800.h
++++ b/drivers/net/usb/sr9800.h
+@@ -147,8 +147,7 @@
+ #define SR_EEPROM_MAGIC			0xdeadbeef
+ #define SR9800_EEPROM_LEN		0xff
+ 
+-/* SR9800 Driver Version and Driver Name */
+-#define DRIVER_VERSION			"11-Nov-2013"
++/* SR9800 Driver Name and Flags */
+ #define DRIVER_NAME			"CoreChips"
+ #define	DRIVER_FLAG		\
+ 	(FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |  FLAG_MULTI_PACKET)
+-- 
+2.43.0
+
 
