@@ -1,252 +1,202 @@
-Return-Path: <linux-usb+bounces-32912-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32913-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qBFaD9qQe2nOGAIAu9opvQ
-	(envelope-from <linux-usb+bounces-32912-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 17:54:50 +0100
+	id MO4wBqKqe2m8HgIAu9opvQ
+	(envelope-from <linux-usb+bounces-32913-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 19:44:50 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A73E7B27CC
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 17:54:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E9CDB3B03
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 19:44:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B70EA30120E6
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 16:54:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D0A62302000D
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 18:44:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF249346766;
-	Thu, 29 Jan 2026 16:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="wWgbmUMk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B852FBDE6;
+	Thu, 29 Jan 2026 18:44:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010005.outbound.protection.outlook.com [52.101.228.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f79.google.com (mail-oo1-f79.google.com [209.85.161.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370F9345CBD;
-	Thu, 29 Jan 2026 16:54:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.5
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769705683; cv=fail; b=t7wFS8BzfKip9xxaK3Bu/bG5luiXq7SRzNtI1YQbZ1l/9ovmoYYCA41L2XVmcKzk44DR6Sp679kBLqMPIiUhERkbNTcTy6Nw+iweKUO4Nl6VzXZEO5WzQdg432CAvvk0dwLanPCXORtVqbc0Ioo+2AcYFjPZ9NDM0ZmHYIi+1NI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769705683; c=relaxed/simple;
-	bh=1YroSZtZ9ij+bi/FQysZlJxEEMKjX6GrLVf26ujZpB8=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=nsnoHdr+nOrm9P47Eq518/cOfP4Bx9SbMlIgr93Xg8bIjKGyw9xEnJMBCRGp3d9ox/gB0l21k5ZQ4kW4KAwTo6pE4guf3Crq3QxCP2xLrYDLzCpIzwM6i87/Z3+UlHge6KPjq24uTjYTQhkGnN2v9DlLTjQpi2hGgKoQ/Fn/Sbc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=wWgbmUMk; arc=fail smtp.client-ip=52.101.228.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=b94oSNdUxcx85AvNo5/cbRE0VXfNcl4zMToc1wJSxA3VyAvFAE/5QxAOt/sgZRtCAjSYvjkWxr4RWR2/Xz+W1yJA8KhRAa+MiEAmJQHF3LFDZvnzcGKjVEg2qTUJA3Ac1KCAIBMnV43B2Dwa2iDXh10qOJlsXic+AK2DVEPLQ9JEm52L2Mk8xxalbPNC8CVcf6O1oCNyiaMcNQYK2Vbr8wjCE/4vPAdLIaTXWnC0/gGvguUOACWMOtAwc46bw6wUwncs7Q/F2pUnmJNRtUWHDIP6YvZIYFqBs2OJ7XIN9rFHKRnHZxE4JOcHpjxN861//Hr+Br2GV//jrsCtuGz3XQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A+Bn7lOdE2VqOsFw4NWACwg/1gAik/Iw7OoxrNGFAXY=;
- b=pd1mH83pP1nudJCtoamXfEe0Y0AUWMNNHoorneie2P7s9zEKVQt4VAQSlB0M5G3LX+C/GFS4GeI8CwbeAReIgHWYvizQ5Ox6J/hnh28VjzHxnSEnL3bYyjnLB5pZvOsRwSAuQKN7TY7cRboGsjLyqdXTsTLNtMS7raM1bgPxHEVrPBRWbJQgDTeZEvAdlvYuj1AyuhJhQb5lRKbdqGN2wMs3thqaaVbWxcQwtGCXDNvZHbN485erc0+oCztpbUz/nXsAOh563dC3Hy2kvEA7p4JXu0PpYFDwDXuUyd2dltKtFEPfC59QTA3yj+uwvmMMcTAMNb6pyZ9CvP+6rIfdSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A+Bn7lOdE2VqOsFw4NWACwg/1gAik/Iw7OoxrNGFAXY=;
- b=wWgbmUMkKbxkgIPomGjtCo2bCr223KvRHnThkqcrd+7mFECgEB+v9OrzvDmczlKwGDleWIydR/nhkl8erm5dZOYfvsHxJ373F9sR++piZovXy/YCua8gerI/w56kE1CN73EhIP2Upjz3RTR9naTc8ClRUPZb/v8byGjdDH/8gdQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-Received: from TYCPR01MB11947.jpnprd01.prod.outlook.com (2603:1096:400:3e1::6)
- by OSCPR01MB13517.jpnprd01.prod.outlook.com (2603:1096:604:332::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.7; Thu, 29 Jan
- 2026 16:54:38 +0000
-Received: from TYCPR01MB11947.jpnprd01.prod.outlook.com
- ([fe80::33f1:f7cd:46be:e4d8]) by TYCPR01MB11947.jpnprd01.prod.outlook.com
- ([fe80::33f1:f7cd:46be:e4d8%5]) with mapi id 15.20.9564.010; Thu, 29 Jan 2026
- 16:54:38 +0000
-From: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
-To: tomm.merciai@gmail.com
-Cc: linux-renesas-soc@vger.kernel.org,
-	biju.das.jz@bp.renesas.com,
-	Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v7] dt-bindings: usb: renesas,usbhs: Add RZ/G3E SoC support
-Date: Thu, 29 Jan 2026 17:54:05 +0100
-Message-ID: <20260129165412.557643-1-tommaso.merciai.xr@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FR4P281CA0323.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:eb::6) To TYCPR01MB11947.jpnprd01.prod.outlook.com
- (2603:1096:400:3e1::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BCE296BC1
+	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 18:44:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.79
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769712273; cv=none; b=OwB6ILf3B2FE3srAtowzBA30GkNjru9Kzc6RGKxycGXuSJw+jdCkcJY1hVkRzCFYF9GWUzFnuccTLePVN3p3p5qd4cBuVkjbTHgEmLVKKgIdxvY988gBjQiWE0fWLrtB2pIhYLgY8Aj5V4eMbYGOiZAYwPpBkU1MYiVuIrLGSxM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769712273; c=relaxed/simple;
+	bh=bWZcG3PhHWyEILrgRKgek4RXtox4Z9NBBlfHZDqy/YE=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=WoXaYAo79OGTvFEQwBYO4T7Vruv6izb4pAghB9iXvbvXQcUmcTSz5Hg2YJg5NdkOu4eaYr6mTFx26us3VlqLSTM0I8kGjWOroyTQ3XibZpVMyDDIZqwzw9lhJTOAHsYugRSCTatMlQG/DE1CmilT5SXaxZKe7deoWeD6SyWKB/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f79.google.com with SMTP id 006d021491bc7-66308f16ea1so2737611eaf.2
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 10:44:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769712271; x=1770317071;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FDgL1MYSweSbEh3ZjY29CfIHSUPIEI6ynbuw1xTqXA0=;
+        b=FuZp6pj2ckJohVJxWVk5fFvHYqM3c9gdw+T+JeSZh8SzjLfWpBXOJrpmQCOKBCBpQv
+         zdfn4h+ZA1WeT7z/swMtGvf12oHDCq9AFGMAYGrpQBrSzvrBPhIAOUG0XyAytuvaN4oo
+         1pIIxlWZ7atgqWCPu52TZH6ALsOSkDXu2BdGoV8ryaF4HIT17TTJPUEYQnCYOHy2tkMw
+         u2IsPkrJ2mEw5R9p7lCuO0h/3M0OBtzfNgQNmX2kc0EtzKKTr/JtI1vD+WvixGdvWx8f
+         R1kbW2P3hCCQVuRgV5A4f+O+LMhR1xy5kDN6WKz/wZw2H7ZsHPpiOmlCI93i8UjFpPCU
+         3Eig==
+X-Forwarded-Encrypted: i=1; AJvYcCWIa5x52C5nsNG5KvB6bnmFELj+j/adcBIGQj+nS87ovde3n1bHmJ3lt3BceWuN8Xs09C/YNXp2fVE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya+XNkzeK51eUDXallzAiWZQFwZz1UfI5Sa8SK2U8FEIG+gZy0
+	gfJGSl1vtlbngZlx7TEKH8tYAVnXrDMK77dsrrwbaHn4leENA8CAmCv6vX7SRfvkgfc18xGo3lX
+	6uB2Pv0GQr4P2Cs5vVkgUJ+WnN7vqVtt7TYnmWE124tpZDCHEH1cM3nwA/DA=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCPR01MB11947:EE_|OSCPR01MB13517:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0ddbbea9-e260-4fc8-9968-08de5f571711
-X-LD-Processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|7416014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?wbsVTuhM9ny0+lz3DAXO4zwPnPLRjYijKZTGunP6iwGZKkC3QBt+Bg51q/sg?=
- =?us-ascii?Q?Q8ayW2YMIPJzUa9wWdO3PNypYnv6CuEuT17bgYUtMP0m1gthybrWSTt4JJPs?=
- =?us-ascii?Q?6eT2dAs77xyAzpg/6LrF2OwNhUcWqQXgC3Gh964jkky0oFf1ZCYOLugZBGY6?=
- =?us-ascii?Q?lp5GstiGhQc23Yjn/q6o4iRXpplzgzO/eco8DWCA3vQuOSEpN8s+ijYp4CTC?=
- =?us-ascii?Q?H4jDHSDeN7GXKF5YmXaLNNMRrGpqjLdRh2uygo7dxI1ubw1JMaUPCLIKwBPo?=
- =?us-ascii?Q?wtEmd5fW7VyC4t27y/4nIcB4fljMfmOObU6J/l5hyyEWyih+rYCPvUjMEw5u?=
- =?us-ascii?Q?JfhdYi2N8uvFjk9ZgkiaSMG82dXVdvTUhrrvzTC0dm/wju9Zvc/GTv6tGXr/?=
- =?us-ascii?Q?zNpIJsJspFrgRcBaLtyWg1G/IKDQJ0Rkh3sedaVzAUrRkRFhuWWLWVuNOqks?=
- =?us-ascii?Q?Zc5C5CEQiMgm7fv+SviNuHngsY3sgwCiyATAmrTaW5y++0nZ43fB6buYMmuA?=
- =?us-ascii?Q?HTzJyKZK7XbXIDdt8RALf/eMxn7fhlO16N6pR3jtqttmhRT9/R7UBpjXaLf/?=
- =?us-ascii?Q?vclaK5jQ28mHonWaeW541gbQtIIiARoqX7nF8kN/BlqMC9AEX6lK1hzUlmN3?=
- =?us-ascii?Q?80E5gASBqrjOctxa0B1mMY2HUI2wMMhZ4/6vs20YDsD0TG3NPV1EjKcsDeza?=
- =?us-ascii?Q?r+QIgVr8xAffGBq31ccRBjviRe7i+JMT6beyPamu6gaBwsQxQ8gDGEbR6suQ?=
- =?us-ascii?Q?w+hh8gfnNWaFBKmVW0u+Ct/p0r0jERWI+KnyXyOTs4FamWK0zKvMXPikb5pH?=
- =?us-ascii?Q?Y8tqgIiIA9r7bAw/qbs7jBetgi8/J66ZbHhB0AEsj4iK61M9x/sxJLNOsKaf?=
- =?us-ascii?Q?vcmD+WNCkXZmoxo88Af1yWxHZZ4IdN9rcix3CKnOtlspFUzrrm7kZ+oca5TI?=
- =?us-ascii?Q?kR3xGgK4aLUsbiRD0wANkWDjfz1XnD4qnED9ArDi5pENnP3RJf/d8eeQZm6h?=
- =?us-ascii?Q?vGeYnO8o2tKIjeLYgarbbdRLGN3UbPNf2+6NpBmWm+vXK8W0Ll3CmU67p6ah?=
- =?us-ascii?Q?z3T6QWjyTzij8mrdA0zeW+u5OfU81djaEfofl24UlTbTMzoHgf1uumb6p3sT?=
- =?us-ascii?Q?NVq9F2SDZxg/nOEqncIXvp5yTthbufr93PiQD3NyOSZmvHHzl3+XNvqduyMT?=
- =?us-ascii?Q?KuZUXmT5S9zeg5ZFd8BiQJEEl9mD4ROaPKdbKMJsnCK0hpZDdta8T3krOfkY?=
- =?us-ascii?Q?b8j3gfRAacMRJgpxQ50/g2KU9PYQ07XcrqcPWjDPwaL8xzfNHtfIuNTvCNHn?=
- =?us-ascii?Q?4V8ULjej4PbUqDp2xlhxWsHvpwOTbP4z9DuoLOnN3mkwAGuxumeieUOeXKK4?=
- =?us-ascii?Q?x/zKOGTugGQB9GoSPG0IGXM7zopRkIqvvi6CJaVtDL2faGajuHDvyDvcy8Kh?=
- =?us-ascii?Q?7unQ4bd7JoNyLI2dHiiQkCPAa6d3GLCUpgwojAqB4r+CWj4QOANutvYQz+KC?=
- =?us-ascii?Q?eR9xxaIPvCsnnNvn1SDyEBjifwS5gn/6pQ2NdfPhd6Gxq+OSsLzrxJUTRmH2?=
- =?us-ascii?Q?zHgiNhDsocgI8mAIOciku/1zgOwA/U1np+m+7BlItR9ucpx5HI/1OmmxHp8l?=
- =?us-ascii?Q?u8suLr6Kw/++nlsBuxJefkQ=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11947.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(7416014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?pHQ2bfcyAukO094WqNCcpLJlKehpm7gYAwtgTXktDgewihQRj9V3Z4wGfWTb?=
- =?us-ascii?Q?L+gO8u6NNTR4eqv1Qxd12oCha8IbggzSVXA82VmJJVRVGceYpSojHSQ75TsI?=
- =?us-ascii?Q?bdblqmh/zPJxCK35WhG8egX3ttzxqJOktOXQwUTx5SEPXIcMz5nRVpYt+Nci?=
- =?us-ascii?Q?Gx9YJB7GYd2Xhk82tLNst9VFM1Cu1Jv3qmDY5PQ5PtPPcHPIlg6J5fSLP+9Y?=
- =?us-ascii?Q?o/Tt5+T4F/mH/aYdqj8rs7HzAihwJ3LPGaLUwzxxQz18MB7FlkFmZST8ONtn?=
- =?us-ascii?Q?xUSQxSj6FKs7e2Ey2Lcr0EzglJEvXNW4oLe//HKLwXH3U22ErQ4vyqoP6//K?=
- =?us-ascii?Q?9AxwviZk2XgtIgBhhS8h9xVj6mKooM1S/9fa/VkGU/MkaUAWwzJXetgn4pPV?=
- =?us-ascii?Q?e21bLv4qTleV6CY/CatSOV+OKAlzdBhnXZCT40xqV3D8xnpzRMM3mqe3P7nU?=
- =?us-ascii?Q?JXn9Hns+eL9XeFzPt9p9Mbx2c206omVW+sw8fsMNw4p3l7QBG6ZvgcrRUXy7?=
- =?us-ascii?Q?0S/9rAVbrq0mC6jIJ/WfNGqobgWbcCMJNC7jti3vx1wCBOWywUH4fojZgl5a?=
- =?us-ascii?Q?hxmRQs7kcjSBkNvuqVhdM/Lg7g7sO8y3GC3mbfV1okF+JpWL7gRFNWE2bAT2?=
- =?us-ascii?Q?WWX4MzDZtRIs9k48zoV7SL1HsoAKfFtGiM2AqVTugKG224zupujzuysHpPZj?=
- =?us-ascii?Q?HHJkmkYw7iGSvxM3PffEfvX0bUN5K+dJIluTnXVsopxUjAR69tf42WcTXS8v?=
- =?us-ascii?Q?++t3D3atE0ETd/N9Y602yU6gVoTKu28v9gsUaPNZouYogN7bjuQoBwGsRbgM?=
- =?us-ascii?Q?rVC4HmKZuHQilW0rjGNfm7MoTJ+tujjAjpRbuHCEhFV7kysXGQvxKwouKm8u?=
- =?us-ascii?Q?eHowRtSnTXaYQEOA/K5FOaLuZLgMQJ8hNMFRA4qSVUbATXRvC3gVkPUL7mAl?=
- =?us-ascii?Q?CNXySwgztVGHNvcE1x2yOyn93FTU67wyp8+MMVZms1UMDbXQ3iaNRve6lfMG?=
- =?us-ascii?Q?pIv+NiFnsLHyfjpVGKxclHF6W8xTWuhKKEJCJANhZ7BFpP77Mu1Fsty+OJMj?=
- =?us-ascii?Q?aJbEUDME1TP3Ri4Jc0/Iyu4nooLnYLL1UfD38OljEmZThSRQ2+Vt5c/dSALp?=
- =?us-ascii?Q?f1CR+8XUng8obGrzwLtAT8GgfHein7HQCJi84V8pfrl/fWG8LqZe+XV68Olu?=
- =?us-ascii?Q?Gz2LojiF3WRpm99osmKQ8toBFdI2ke4o1pDX2wPTgYo+zsw9D7Dnfx8+gDbm?=
- =?us-ascii?Q?s9+VhUxwp/SVKtjZKlCvAhNXHTIxb7dk4VtCnT/fFeIf/NzOZ8CoicoJmBfP?=
- =?us-ascii?Q?4p9xkr3UdI/ZhsraiZfkUmz0D+wmDYoKW1IrfUzMoWQTLY5oFV+7AnfNMABV?=
- =?us-ascii?Q?gTNpIso47H2UIcfWNNgaG+zQ8Aq9L9VXPk3Nw0VDDIgNIFqZx60iHqsTUbxd?=
- =?us-ascii?Q?I+TECLsXUAYWv7JwCRQ0yV07MPN7gzWxT+shWTJuskfSPqphmh4E3loWVKmk?=
- =?us-ascii?Q?ecLe7GTA9irADIQhkdjw/q5dEoQma7v1nMKp/DZtkI80s/qQo2h5FJnrGuk/?=
- =?us-ascii?Q?E/dp9FAXlKIpBb6DWmRuBLCSqo6z2JYYOnnjWqngZ/J43TM90kQukId+q4jI?=
- =?us-ascii?Q?3jnlHRWBHjVDJ2ZgB1Yfu5YjmlCe3U0DNWtEfy3CanpYmV35PmQzoHOKrN5s?=
- =?us-ascii?Q?SJFOgN1mRy9uyCFwM8BbsogxsMTU1YqMWu1FWORwj9foUTtkJf8L9I7tXPtB?=
- =?us-ascii?Q?mJt83bX1mbzO749s3EubgEs/bQSRxNxc129rTy5K8wKYZ5M70enq?=
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ddbbea9-e260-4fc8-9968-08de5f571711
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB11947.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2026 16:54:38.7884
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U9FtQsJzDUqUP6jU1nw7Tc1dC772rE3O3lGLfvftQT189vL8C1BtKmxAriZARMiTJn2bMO60juTiKWPYMssQKXvXuUDzUF7IaaMxQlWvMjnTGziqVvbw3cV7G18pUPEe
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSCPR01MB13517
+X-Received: by 2002:a05:6820:22a9:b0:663:e8d:cf8 with SMTP id
+ 006d021491bc7-6630f04f928mr241287eaf.35.1769712271028; Thu, 29 Jan 2026
+ 10:44:31 -0800 (PST)
+Date: Thu, 29 Jan 2026 10:44:31 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <697baa8f.a70a0220.9914.001f.GAE@google.com>
+Subject: [syzbot] [input?] [usb?] WARNING in asus_remove
+From: syzbot <syzbot+13f8286fa2de04a7cd48@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[renesas.com,none];
-	R_DKIM_ALLOW(-0.20)[bp.renesas.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [-0.36 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=750532df2c47a03];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32912-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FROM_NEQ_ENVFROM(0.00)[tommaso.merciai.xr@bp.renesas.com,linux-usb@vger.kernel.org];
-	FREEMAIL_CC(0.00)[vger.kernel.org,bp.renesas.com,linuxfoundation.org,kernel.org,glider.be,gmail.com,renesas.com,microchip.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DKIM_TRACE(0.00)[bp.renesas.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: A73E7B27CC
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-32913-lists,linux-usb=lfdr.de,13f8286fa2de04a7cd48];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,goo.gl:url,storage.googleapis.com:url,syzkaller.appspot.com:url,googlegroups.com:email]
+X-Rspamd-Queue-Id: 6E9CDB3B03
 X-Rspamd-Action: no action
 
-Document the Renesas USBHS controller found on the Renesas RZ/G3E SoC.
-The USBHS block on RZ/G3E is functionally identical to the one found
-on the RZ/G2L family, so no driver changes are needed. The existing
-"renesas,rzg2l-usbhs" fallback compatible will continue to be used for
-handling this IP.
+Hello,
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
+syzbot found the following issue on:
+
+HEAD commit:    3f24e4edcd1b Add linux-next specific files for 20260128
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12f4b694580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=750532df2c47a03
+dashboard link: https://syzkaller.appspot.com/bug?extid=13f8286fa2de04a7cd48
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1188e9b2580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1526fd8a580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ce84e32318c2/disk-3f24e4ed.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7eafc98224fb/vmlinux-3f24e4ed.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b186eb6f05d2/bzImage-3f24e4ed.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+13f8286fa2de04a7cd48@syzkaller.appspotmail.com
+
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+asus 0003:0B05:19B6.0001: hidraw0: USB HID v0.00 Device [HID 0b05:19b6] on usb-dummy_hcd.0-1/input0
+usb 1-1: USB disconnect, device number 2
+------------[ cut here ]------------
+!work->func
+WARNING: kernel/workqueue.c:4292 at __flush_work+0xb43/0xc50 kernel/workqueue.c:4292, CPU#1: kworker/1:1/29
+Modules linked in:
+CPU: 1 UID: 0 PID: 29 Comm: kworker/1:1 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/24/2026
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__flush_work+0xb43/0xc50 kernel/workqueue.c:4292
+Code: 75 54 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc cc e8 5c 87 37 00 90 0f 0b 90 e9 7c ff ff ff e8 4e 87 37 00 90 <0f> 0b 90 31 c0 48 bb f8 f8 f8 f8 f8 f8 f8 f8 e9 64 ff ff ff e8 34
+RSP: 0018:ffffc90000a47080 EFLAGS: 00010293
+RAX: ffffffff818da1c2 RBX: 1ffff1100b3dc19c RCX: ffff88801e2f8000
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffff888059ee0cc8
+RBP: ffffc90000a47238 R08: ffffffff90324cb7 R09: 1ffffffff2064996
+R10: dffffc0000000000 R11: fffffbfff2064997 R12: dffffc0000000000
+R13: ffff888059ee0ce0 R14: 1ffff92000148e18 R15: ffff888059ee0cc8
+FS:  0000000000000000(0000) GS:ffff88812515a000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffe2dd70d64 CR3: 0000000077d5a000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ __cancel_work_sync+0xbe/0x110 kernel/workqueue.c:4451
+ asus_remove+0x143/0x180 drivers/hid/hid-asus.c:1347
+ hid_device_remove+0x228/0x370 drivers/hid/hid-core.c:-1
+ device_remove drivers/base/dd.c:571 [inline]
+ __device_release_driver drivers/base/dd.c:1284 [inline]
+ device_release_driver_internal+0x46f/0x860 drivers/base/dd.c:1307
+ bus_remove_device+0x34d/0x440 drivers/base/bus.c:616
+ device_del+0x527/0x8f0 drivers/base/core.c:3878
+ hid_remove_device drivers/hid/hid-core.c:3008 [inline]
+ hid_destroy_device+0x6b/0x1b0 drivers/hid/hid-core.c:3030
+ usbhid_disconnect+0x9f/0xc0 drivers/hid/usbhid/hid-core.c:1477
+ usb_unbind_interface+0x26e/0x910 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:573 [inline]
+ __device_release_driver drivers/base/dd.c:1284 [inline]
+ device_release_driver_internal+0x4d9/0x860 drivers/base/dd.c:1307
+ bus_remove_device+0x34d/0x440 drivers/base/bus.c:616
+ device_del+0x527/0x8f0 drivers/base/core.c:3878
+ usb_disable_device+0x3d4/0x8d0 drivers/usb/core/message.c:1418
+ usb_disconnect+0x32f/0x990 drivers/usb/core/hub.c:2345
+ hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x1cc9/0x4f30 drivers/usb/core/hub.c:5953
+ process_one_work+0x949/0x15a0 kernel/workqueue.c:3279
+ process_scheduled_works kernel/workqueue.c:3362 [inline]
+ worker_thread+0xb46/0x1140 kernel/workqueue.c:3443
+ kthread+0x388/0x470 kernel/kthread.c:467
+ ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+
 ---
-v6->v7:
- - Rebased on top of next-20260128
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-v5->v6:
- - No changes
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-v4->v5:
- - No changes
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-v3->v4:
- - No changes
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-v2->v3:
- - No changes
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-v1->v2:
- - Collected CDooley tag
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
- Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-index 0b8b90dd1951..dc74e70f1b92 100644
---- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-+++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-@@ -27,6 +27,7 @@ properties:
-               - renesas,usbhs-r9a07g044 # RZ/G2{L,LC}
-               - renesas,usbhs-r9a07g054 # RZ/V2L
-               - renesas,usbhs-r9a08g045 # RZ/G3S
-+              - renesas,usbhs-r9a09g047 # RZ/G3E
-               - renesas,usbhs-r9a09g056 # RZ/V2N
-               - renesas,usbhs-r9a09g057 # RZ/V2H(P)
-           - const: renesas,rzg2l-usbhs
--- 
-2.43.0
-
+If you want to undo deduplication, reply with:
+#syz undup
 
