@@ -1,169 +1,164 @@
-Return-Path: <linux-usb+bounces-32903-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32904-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UDK6J/8ge2lPBgIAu9opvQ
-	(envelope-from <linux-usb+bounces-32903-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 09:57:35 +0100
+	id 6BNbITUle2nXBgIAu9opvQ
+	(envelope-from <linux-usb+bounces-32904-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 10:15:33 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B139ADE14
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 09:57:35 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20F13AE06E
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 10:15:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D8F67301BF42
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 08:56:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 23D83301FC80
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 09:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFC3137D12D;
-	Thu, 29 Jan 2026 08:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E36937BE8D;
+	Thu, 29 Jan 2026 09:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TEnUrwcg"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QvWaYswT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A197246BC5
-	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 08:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7A237F0F2
+	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 09:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769677003; cv=none; b=Q5aK1S/0hlbllom2Lx8pOVoXNgBwTsqkZ1Zm4VT5Qmqa8TLrap/8Cv+pbN3n3+Ramj/YdlUlwg16ZcvlJR2BdPyC5HIdmn+Pa0Mg/BSdCuH0su+5WJBgA29qiv4Z7Go+Lwf5BGvpzxFqPNyisYKW7HIeT1LMM0hAm32GteVTau8=
+	t=1769678000; cv=none; b=T+iDuAoHE8HFsosjsDLnU8V2BhemC8F9ZxKYbQ/JR6YTuibI0qLBU0jENobLv1OcyQkAS4+sbculZlCunhO+CLqncwVvzC/FSCpHwSVb2VCbk12PNt39Th4HYEq71/rRHMILl3IOSb5AcNRe1Lan2H/rnZR5cNPdBQshECHiVAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769677003; c=relaxed/simple;
-	bh=Jc+itJLFI7nZrOGiVGvgpQwW4Pcfy6oWEaHovGrRsyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ui7LFl8aYd/E6+ePUcNBi1987AFyOcmo/iraRSk/5EqaNW8IJCdb8gjWzoI8UmCBqK3SM7IO4mc9juIbaPGyR/N6l71GV8R2/NGLuv2AJgpGykiE4nI7G8FkUdCo3IzqlZpX8dn3LdeORXh9vanRYV10ymNw6KlPAiXlxulYnB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TEnUrwcg; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-59e0d5c446cso840330e87.0
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 00:56:41 -0800 (PST)
+	s=arc-20240116; t=1769678000; c=relaxed/simple;
+	bh=l99yxqZIboguKDDCrWkpSaxxioKc9GMV4/P57XETTqY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WSVBuN1jpesHx3k0qa/CmmuT+s+G4v64sPw3+ubWGDHRWA4vupnLy9dbriSj1dJN9SLT559zaCy7UMRiO5Umn/bYeuPmycYSF+crHYPke2zvFrcAitT/4fgEBgKMUphKvtsvGyWReRCEfbUlbWT2tC1QMIlu328i9M5dRKrK4EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QvWaYswT; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47fedb7c68dso6931055e9.2
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 01:13:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769676999; x=1770281799; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KG9xWqkx9/gF4du2pqNNAT1bO7cWgGHdinzUlqAxblE=;
-        b=TEnUrwcgzvqUEfeMUFi8oGZgANM0sLjjtuudMaMHNkHgNpzOy5YpPoxQBlv39UVSkX
-         UVjEZohWgzfZc2C3I5oZcQXAaSnKEo3MGSxImtNh/WGDtYz7CZtMyvjHqPRturs3doOo
-         U7nrbpQfGhRfKeeJXxhRL3kW/zONl47O0PHS4UvPk6NEJKgua6g3ZzHHrAanZ/GO+kv0
-         hf0bOEMS593C8RDwcHniT5Hn+pZ6H3kmLxw8+nj7kT/YOONV9BKuotwE5YrRxplTO4U0
-         S1wQXRUlk8epcsQ1SuPwJ1O2RqnKZrgkDY/U809s+3tQnTB7YAg7DR8TVJ86ne4/usNd
-         HwNQ==
+        d=suse.com; s=google; t=1769677996; x=1770282796; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4kroNWMSWVNZ37wng02iR6TciONLQlLOgGJ/E4Sbo+U=;
+        b=QvWaYswTZQ0WhgcDx8fxpRfaMhbG5MLuLb975ZSK/S8ln0Tt3rMUx+SudjDw/wjSSG
+         7wWIUM5hvy+nNGobMPl7dMN3HXChvivyaLs/RmWtXE2/DccpYsgr8sobTvqTpLc8ey40
+         B88Xnh5972vhZujdXzaHNSllFRqg6Yq30weHJYs+4OVBZIj08mJyY1gQh4ke3B/SS2/+
+         irIYJb+BNuYgIHvAkflmYw4VcqvrDTSGR4N+0wro9Ia8ud5Wy0dKopcReUSUsPd7wbPd
+         RkOTSD41iCfAQaHvcpACawBmXczrPDze9VYe7yOvEswys0fvAAzquh1zyniTb6Uw4LdL
+         XRNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769676999; x=1770281799;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KG9xWqkx9/gF4du2pqNNAT1bO7cWgGHdinzUlqAxblE=;
-        b=I7xG60iiXN9JJAoaEja0v6YcjmxYa25P7llLeXI6umst35w73c0n17eZv/iuz+RrlU
-         oqgx8BOFVTupBDU9m88/nKnRoOwap0VV+ACl6Qwh4B+vogR6B0K0R8VurCSOjowS1hYw
-         YF7C6EyxJpf6fgXDpdY4bR9XQwca4sZKAnZk3htGRpYpQEw5PwRQeJxXRY79WEX0S3XT
-         O8BAmwXzGl8EG20C84p2XdxGch6ihBh3YN6js3UE9iAtnou2MaWz9sA1DHMMXG7KSbuA
-         BAdWfzWELZIM3hEm0LRcDHvuZ2K60yo7CbeSE+kcl2cm6fuPYXsQOk/hnwSfecLd6zpb
-         Mdsw==
-X-Forwarded-Encrypted: i=1; AJvYcCVI+3XYEDpojDnmxgqYFpXeMs4H6OY6qjNMqBxiXdTqhUHhT+vpLZazP3T+zeND3acDU2v8wPtYjQs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLdw/8rDGdzuwccYTjETnALZ9WlmXEXUFl+ln1AEGTlc47r7Jp
-	VzHOtmmPpNyCZ0kuDix+4em9LOtkMLpbQaCFzd+DPq/EbvR+MQezFT4x
-X-Gm-Gg: AZuq6aK97h9VYpUP8FJvSvhKN7yHDABzZkWIW9PDgWBqrZ+cq4s+9dkhisV9C/Um8Ai
-	uKoZIp6u4v+t/vAuGbOksSstHDN5N8bboGm1YrjEnOotP8Iw6lK0ycJh/ak6AlgSJ9Op3gDmPCQ
-	45RFN2grzH1ELkSOqRSLu191By5kdXMBxP6ItbyNoBC2ssxw3ID8HixZ7JHxqumsTgU/Q2hFMhR
-	9BIgPhPKLrxN4nyMl+7LDPYaferFBmsucluvTq4r92PU+YKRQ7rlsbscQ0zKYviYch3BiMNPLn3
-	128oT737ID8LoVIIHG2GsMPkIrYD8V/DejA/3OqtLSyTwvWqanIqgr9xiNsvuOxAORkNQQWJya/
-	1LpwixrgbXROTyJ8HTwsfjMBlkKtsn6x6JP9GfCQpcKZEAHtEmUYj0hnzuoMPPacenx0WWpUAcs
-	0SJ3+nfUyKt8hg6XAMvs0Vuhk=
-X-Received: by 2002:a05:6512:159b:b0:59d:d342:88af with SMTP id 2adb3069b0e04-59e04017dc1mr3548716e87.16.1769676999124;
-        Thu, 29 Jan 2026 00:56:39 -0800 (PST)
-Received: from foxbook (bgw148.neoplus.adsl.tpnet.pl. [83.28.86.148])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38625fcd5bfsm7575811fa.47.2026.01.29.00.56.38
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 29 Jan 2026 00:56:38 -0800 (PST)
-Date: Thu, 29 Jan 2026 09:56:34 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Zilin Guan <zilin@seu.edu.cn>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- jianhao.xu@seu.edu.cn, stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: xhci: Fix memory leak in xhci_disable_slot()
-Message-ID: <20260129095634.0775dc40.michal.pecio@gmail.com>
-In-Reply-To: <20260109045410.1532614-1-zilin@seu.edu.cn>
-References: <20260109045410.1532614-1-zilin@seu.edu.cn>
+        d=1e100.net; s=20230601; t=1769677996; x=1770282796;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4kroNWMSWVNZ37wng02iR6TciONLQlLOgGJ/E4Sbo+U=;
+        b=P7N/c9HjHDR8Njipn1DAuLMMbOByc9r6NR/HqGP3T8fnf50xyb6kZ7B3H0a3ZDfjkJ
+         WNtQmF7C7QhTiCI+MR0POaqGy9YHW7Iadiwqd3Q/IoXo57wF9ahO993Mv8D0m2qnisfE
+         yfc+2/ipRtxc1KhNbkkdL2e8TG7fZIIitROKdlYEFhhBP/4TjKCH28FPygObtymWzB5a
+         IcO2I+pP0LFCLwKhPdwXvHfsrgMLSEFBVWuK8qrVVog/cr0IHK+AsYKSie9ElTYXsapY
+         /JoBFkn8XnOsRkya8bUm06BDM+go3ZBaxt5rc0GKMITqjRO+C0Tjc20oN5kg49QohJJj
+         ogow==
+X-Forwarded-Encrypted: i=1; AJvYcCXXtyWyy8oTH9kxaRH78cuswflVMrT196lIqXzr7L1HcPn+HMXDv/B9zwdzmQNIOE3+H727Q4IWzV8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwKj4MKBpQuanBx+nP1nqtl41HYehrUgyqoq6wnh/dOG3O602r
+	Q9KzxgiwF+Hj56SZamO8xre2O1lpr+4KQaSHYzxH1iUv7g+hKGxGGETqRhncfExOuIU=
+X-Gm-Gg: AZuq6aIimn7TbWIIro6GSwCccuMIfpFOvdUUDnfEqtUWYeXUonz93vX4o+cpcMYIY07
+	rxwywIFG5tNTVbu0r1UJGkaMwtsAqNfqA6c4PWE4eIbFuAuqjMjJj2hLCG0sPQr6BzzyoQV/6m6
+	iQAyGWAZIqlZI446vQik7Megub1Swk+SxBKlsbDqPNuNrJ4s+9hWy1UHDGKJ+avo2sqV8a6mtHZ
+	5dFeEAK9ooNAi3j2rCGvqpr80xkrqkjJtawqs8Oj9e/yqSHPOcd0YmjdnnK3XozwuvjcVqML2us
+	3lHBnD/m8UUn3fuFnW2v29ptscat7e+LqVjNlF2TQG1kSmYrICKIDxNeAoSo/hTWmSkR3cUORXL
+	2L+IrOIOivv3upTYR3+lpgHAGQzK2HE365aH8T90ne1aY8tougwavjA291ZEvVxPnE5wzCWUs+G
+	uV7QpVgatLRWcxC1lM+KCqDy0PKX6uhLf4MdWvoGLCqPwuODmvHVuK
+X-Received: by 2002:a05:600c:6812:b0:480:3a71:92b2 with SMTP id 5b1f17b1804b1-48069c54e53mr80043065e9.26.1769677996116;
+        Thu, 29 Jan 2026 01:13:16 -0800 (PST)
+Received: from ?IPV6:2001:a61:131f:a501:f9a9:449f:1718:4cc? ([2001:a61:131f:a501:f9a9:449f:1718:4cc])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066aaf235sm175648485e9.0.2026.01.29.01.13.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jan 2026 01:13:15 -0800 (PST)
+Message-ID: <5ff5f454-020e-4476-982d-de611e93c1e6@suse.com>
+Date: Thu, 29 Jan 2026 10:13:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 3/3] net: usb: kaweth: remove eth_addr_t typedef
+ and bcast_addr definition
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+References: <20260125083501.34513-1-enelsonmoore@gmail.com>
+ <20260125083501.34513-4-enelsonmoore@gmail.com>
+ <9239ddef-c197-4fbd-8e88-691766bda3e2@suse.com>
+ <CADkSEUjgRrC9eAQYOkaErd7wyXKkUs7+dG+Q1jz7VbqF+zxwuw@mail.gmail.com>
+ <314effcc-5bf2-47c5-9757-aafd5b47fe65@suse.com>
+ <CADkSEUjk3uE+vMOPw0u7MOc4+AN__LWsriWA9fVhm2C35gJ6MA@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CADkSEUjk3uE+vMOPw0u7MOc4+AN__LWsriWA9fVhm2C35gJ6MA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-32903-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-32904-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[seu.edu.cn:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2B139ADE14
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 20F13AE06E
 X-Rspamd-Action: no action
 
-On Fri,  9 Jan 2026 04:54:10 +0000, Zilin Guan wrote:
-> xhci_alloc_command() allocates a command structure and, when the
-> second argument is true, also allocates a completion structure.
-> Currently, the error handling path in xhci_disable_slot() only frees
-> the command structure using kfree(), causing the completion structure
-> to leak.
-> 
-> Use xhci_free_command() instead of kfree(). xhci_free_command()
-> correctly frees both the command structure and the associated
-> completion structure. Since the command structure is allocated with
-> zero-initialization, command->in_ctx is NULL and will not be
-> erroneously freed by xhci_free_command().
-> 
-> This bug was found using an experimental static analysis tool we are
-> developing. The tool is based on the LLVM framework and is
-> specifically designed to detect memory management issues. It is
-> currently under active development and not yet publicly available,
-> but we plan to open-source it after our research is published.
-> 
-> The bug was originally detected on v6.13-rc1 using our static analysis
-> tool, and we have verified that the issue persists in the latest
-> mainline kernel.
-> 
-> We performed build testing on x86_64 with allyesconfig using
-> GCC=11.4.0. Since triggering these error paths in xhci_disable_slot()
-> requires specific hardware conditions or abnormal state, we were
-> unable to construct a test case to reliably trigger these specific
-> error paths at runtime.
-> 
-> Fixes: 7faac1953ed1 ("xhci: avoid race between disable slot command
-> and host runtime suspend") CC: stable@vger.kernel.org
-> Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
 
-This looks like correct fix to an actual bug, but it seems that it has
-been missed? I see it neither in usb-next nor usb-linus or mainline.
 
-The leak is still there, even if arguably a small and rare one.
+On 29.01.26 04:41, Ethan Nelson-Moore wrote:
+> On Tue, Jan 27, 2026 at 1:23 AM Oliver Neukum <oneukum@suse.com> wrote:
+>> yes I am aware of this. Yet there is no point in breaking
+>> existing setups. I would prefer this driver to get only
+>> clear fixes and adaptions to changes in API that are absolutely
+>> necessary.
+> 
+> Hi, Oliver,
+> 
+> That is exactly the point I was trying to make with those statistics -
+> I realized cleaning up kaweth was not worthwhile due to the lack of
+> users.
+> I wasn't proposing removing it; it is simple enough that it doesn't
+> really cause any maintenance workload.
 
-Regards,
-Michal
+Hi Ethan,
+
+good that we agree. If you want to clean up an exemplary driver
+I'd suggest the class drivers, that is the CDC drivers.
+
+	Regards
+		Oliver
+
 
