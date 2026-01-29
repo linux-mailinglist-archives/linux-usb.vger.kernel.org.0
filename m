@@ -1,164 +1,169 @@
-Return-Path: <linux-usb+bounces-32904-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32905-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6BNbITUle2nXBgIAu9opvQ
-	(envelope-from <linux-usb+bounces-32904-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 10:15:33 +0100
+	id 8KFSDHkoe2nRBwIAu9opvQ
+	(envelope-from <linux-usb+bounces-32905-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 10:29:29 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20F13AE06E
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 10:15:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 910E1AE237
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 10:29:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 23D83301FC80
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 09:13:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 381803021EBA
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jan 2026 09:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E36937BE8D;
-	Thu, 29 Jan 2026 09:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA74A37F8C7;
+	Thu, 29 Jan 2026 09:28:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QvWaYswT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ax+gAJrm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7A237F0F2
-	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 09:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0246D37998A
+	for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 09:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769678000; cv=none; b=T+iDuAoHE8HFsosjsDLnU8V2BhemC8F9ZxKYbQ/JR6YTuibI0qLBU0jENobLv1OcyQkAS4+sbculZlCunhO+CLqncwVvzC/FSCpHwSVb2VCbk12PNt39Th4HYEq71/rRHMILl3IOSb5AcNRe1Lan2H/rnZR5cNPdBQshECHiVAo=
+	t=1769678906; cv=none; b=HrfPmCXMJbw0v1IQVMvl8ypsWIvV2YZ6MoMqh1bZItaUVBvnZRnVPVVLrCtQLpXsi1idCtaDaLdrZMGPZOEERIPWfEuVd5vox7tp+FvXkjDKej3pNYqGgWOD8wKU9wRZqYZ2yCxUIFoQdXK4bSOlJcXz7olHLBEz6uZkEYivFDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769678000; c=relaxed/simple;
-	bh=l99yxqZIboguKDDCrWkpSaxxioKc9GMV4/P57XETTqY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WSVBuN1jpesHx3k0qa/CmmuT+s+G4v64sPw3+ubWGDHRWA4vupnLy9dbriSj1dJN9SLT559zaCy7UMRiO5Umn/bYeuPmycYSF+crHYPke2zvFrcAitT/4fgEBgKMUphKvtsvGyWReRCEfbUlbWT2tC1QMIlu328i9M5dRKrK4EM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QvWaYswT; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47fedb7c68dso6931055e9.2
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 01:13:17 -0800 (PST)
+	s=arc-20240116; t=1769678906; c=relaxed/simple;
+	bh=9IC1mYIL2K/qsFi0WWJzhAFG9W9yVZCl1E7bZ2lIdW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=W89FGGCHGHkQJwQpy065bcQCx3zyxnZsoCM2fH9aL9gkdjjCxebL3E4XrW6LF9MY+5aUtfyQ1dRrec74pmhDpwWl36bGEOzI/NoQJ4tAPgPfZFO67HHZ3/YUrAePN0EMq2p4sBbUkBgfgMsZD3l+p3BqxMe7dVUh5/xWFclDeUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ax+gAJrm; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-382fd8aaa6eso6122841fa.1
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 01:28:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1769677996; x=1770282796; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4kroNWMSWVNZ37wng02iR6TciONLQlLOgGJ/E4Sbo+U=;
-        b=QvWaYswTZQ0WhgcDx8fxpRfaMhbG5MLuLb975ZSK/S8ln0Tt3rMUx+SudjDw/wjSSG
-         7wWIUM5hvy+nNGobMPl7dMN3HXChvivyaLs/RmWtXE2/DccpYsgr8sobTvqTpLc8ey40
-         B88Xnh5972vhZujdXzaHNSllFRqg6Yq30weHJYs+4OVBZIj08mJyY1gQh4ke3B/SS2/+
-         irIYJb+BNuYgIHvAkflmYw4VcqvrDTSGR4N+0wro9Ia8ud5Wy0dKopcReUSUsPd7wbPd
-         RkOTSD41iCfAQaHvcpACawBmXczrPDze9VYe7yOvEswys0fvAAzquh1zyniTb6Uw4LdL
-         XRNg==
+        d=gmail.com; s=20230601; t=1769678903; x=1770283703; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mTOjjGHr9MOnepGVIrtUBGY601QmKBRtnyWIB6Hs06M=;
+        b=ax+gAJrmndTvq0aFo6z38TWdSEJviOrp6QHdi+8WjoPceDZ3OSzjUU68gYBwoOMztq
+         PsBbeEDrHLY9adHq3OMVW0DefyByGZ4SWxFBlwfLTzfCr133fnUMsZ9SIP5E/YWrmkRx
+         Rxpuwyz4d/jfJh1I0EbeYmRN1hxbELnzAlFvesLN0zxIq/2m1XD0uRo9BV4PsBueu2+g
+         nBDRrtvMgK0RRdCrkUwzCKKK1JYyUgDpq7GB949kRc8E4pkEplA2EE8Z+ZLZDrTBUWtz
+         MUKaPxJlSf4OZsB5M2ba8IeRLoZptWJItPF+Oh2lqoChrFkCb5Z8fcP/kvRZtzRhkH4H
+         8HvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769677996; x=1770282796;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4kroNWMSWVNZ37wng02iR6TciONLQlLOgGJ/E4Sbo+U=;
-        b=P7N/c9HjHDR8Njipn1DAuLMMbOByc9r6NR/HqGP3T8fnf50xyb6kZ7B3H0a3ZDfjkJ
-         WNtQmF7C7QhTiCI+MR0POaqGy9YHW7Iadiwqd3Q/IoXo57wF9ahO993Mv8D0m2qnisfE
-         yfc+2/ipRtxc1KhNbkkdL2e8TG7fZIIitROKdlYEFhhBP/4TjKCH28FPygObtymWzB5a
-         IcO2I+pP0LFCLwKhPdwXvHfsrgMLSEFBVWuK8qrVVog/cr0IHK+AsYKSie9ElTYXsapY
-         /JoBFkn8XnOsRkya8bUm06BDM+go3ZBaxt5rc0GKMITqjRO+C0Tjc20oN5kg49QohJJj
-         ogow==
-X-Forwarded-Encrypted: i=1; AJvYcCXXtyWyy8oTH9kxaRH78cuswflVMrT196lIqXzr7L1HcPn+HMXDv/B9zwdzmQNIOE3+H727Q4IWzV8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwKj4MKBpQuanBx+nP1nqtl41HYehrUgyqoq6wnh/dOG3O602r
-	Q9KzxgiwF+Hj56SZamO8xre2O1lpr+4KQaSHYzxH1iUv7g+hKGxGGETqRhncfExOuIU=
-X-Gm-Gg: AZuq6aIimn7TbWIIro6GSwCccuMIfpFOvdUUDnfEqtUWYeXUonz93vX4o+cpcMYIY07
-	rxwywIFG5tNTVbu0r1UJGkaMwtsAqNfqA6c4PWE4eIbFuAuqjMjJj2hLCG0sPQr6BzzyoQV/6m6
-	iQAyGWAZIqlZI446vQik7Megub1Swk+SxBKlsbDqPNuNrJ4s+9hWy1UHDGKJ+avo2sqV8a6mtHZ
-	5dFeEAK9ooNAi3j2rCGvqpr80xkrqkjJtawqs8Oj9e/yqSHPOcd0YmjdnnK3XozwuvjcVqML2us
-	3lHBnD/m8UUn3fuFnW2v29ptscat7e+LqVjNlF2TQG1kSmYrICKIDxNeAoSo/hTWmSkR3cUORXL
-	2L+IrOIOivv3upTYR3+lpgHAGQzK2HE365aH8T90ne1aY8tougwavjA291ZEvVxPnE5wzCWUs+G
-	uV7QpVgatLRWcxC1lM+KCqDy0PKX6uhLf4MdWvoGLCqPwuODmvHVuK
-X-Received: by 2002:a05:600c:6812:b0:480:3a71:92b2 with SMTP id 5b1f17b1804b1-48069c54e53mr80043065e9.26.1769677996116;
-        Thu, 29 Jan 2026 01:13:16 -0800 (PST)
-Received: from ?IPV6:2001:a61:131f:a501:f9a9:449f:1718:4cc? ([2001:a61:131f:a501:f9a9:449f:1718:4cc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066aaf235sm175648485e9.0.2026.01.29.01.13.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jan 2026 01:13:15 -0800 (PST)
-Message-ID: <5ff5f454-020e-4476-982d-de611e93c1e6@suse.com>
-Date: Thu, 29 Jan 2026 10:13:09 +0100
+        d=1e100.net; s=20230601; t=1769678903; x=1770283703;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mTOjjGHr9MOnepGVIrtUBGY601QmKBRtnyWIB6Hs06M=;
+        b=Gm3DV+c9yMwvaAQn2mR1/rjZO3TPI11PbtlmVS6dJVo2sgLO6QCUJ11LmD5lNHCxgd
+         F9KZYziMY3hYOO+hYT3NaYXDTbCfgQE6LPG0OImuGP2bB/CRoX3YXLctB5J8OHiJ26UG
+         gMiesdi1OlJmFcGa0lhD1H2Fizpod6ZaT6A2sM87QSOqJoTlKZmIMNeiLCgMMUuRed2J
+         9aKOhm8iSs3ML583YEUNRcNlpRrXoJFNZFchfhE7kPI6iVWVOZ857sQEEU1vIUCXS/ZY
+         3QHvHspK6swvXZtfkHWUYqXszzoRGHt6e6jgHiC2fDsdaKnW773OX3IQRG3w1FHvI/qh
+         DrHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWRKAbSUrsSNzj0lp0gsUtF5DLGJulT/FqiLDCjmWyHgE6u8zMCRI97MtvIpmQkEaUzNkP1mw2u1xw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1FNwY0DVpSDyBMuF5+SOqqjv/0wNdVcMQtyUoTINbrYBUETtK
+	4hUWINdnOrWetkM8Rhx38j83Oo5iQm93dsOYrmlF13DXJmHHiZdUOFjRzT4lGw==
+X-Gm-Gg: AZuq6aINCoiDgN7jT8VRS8McxwJdWdxg6eVcC9FemWpOXL13KMHDHFBwmtoqcVtW/Uy
+	JhQ6LiFMiTxQrjL0o9oAe3GY3p/uS9HgwRl/V+kNCxLqFYG3BxM08ZfT8ycFh4b15SUCOUj0Kh3
+	cYWSIW7sTJUzbBujLGQ+YFq5Nho/zuh+UsYYoGpiiRTU+Ewm2MNtB7lGUDG1oj7lHlcCb74t1EX
+	m6B2k8R7tcY3gXzBAsNh7DTMxCxBRg7ght5iIBIV+CcZD1SAcBVYTYTkNwlKSL/OaOwAFvYXs0F
+	monLx+VNq54YkqpHf2k9O7qHuq6UGzOh3pZ4TvbrauJFYwCEdhKs1n3243v1XeOajqfqa9VHV6t
+	DIt4lj6m/u+SDiRI06DFLBOzJhw3uE4mNj+bRzO/1IIAiRAx64CvpbUASUDAlTjte9yubUUzOe/
+	muPRII5Ve1WzDW80/0NOaNKvg=
+X-Received: by 2002:a2e:a7c1:0:b0:383:1962:b8ec with SMTP id 38308e7fff4ca-3861c8c25c8mr42560291fa.33.1769678902851;
+        Thu, 29 Jan 2026 01:28:22 -0800 (PST)
+Received: from foxbook (bgw148.neoplus.adsl.tpnet.pl. [83.28.86.148])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38625f6c670sm7658351fa.32.2026.01.29.01.28.21
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 29 Jan 2026 01:28:22 -0800 (PST)
+Date: Thu, 29 Jan 2026 10:28:19 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Ben Greear <greearb@candelatech.com>
+Cc: Oliver Neukum <oneukum@suse.com>, Alan Stern
+ <stern@rowland.harvard.edu>, Hillf Danton <hdanton@sina.com>, LKML
+ <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: Deadlock in usb subsystem on shutdown, 6.18.3+
+Message-ID: <20260129102819.77378628.michal.pecio@gmail.com>
+In-Reply-To: <737b2608-3b62-0e8b-9c78-44cca4d078be@candelatech.com>
+References: <20260114024506.2210-1-hdanton@sina.com>
+	<dae8dc09-0e06-446a-b6dd-4c86ec423997@candelatech.com>
+	<c52546af-e39e-4096-ad11-9b38bb2d5f7e@rowland.harvard.edu>
+	<a721a966-0a4b-cbc4-71ac-a482156ffa48@candelatech.com>
+	<2b4c47a5-1a5a-4e94-87d6-152da16a3b9c@rowland.harvard.edu>
+	<2ea634c6-26a4-48a7-8fcc-ad0ce06af890@suse.com>
+	<737b2608-3b62-0e8b-9c78-44cca4d078be@candelatech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 3/3] net: usb: kaweth: remove eth_addr_t typedef
- and bcast_addr definition
-To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-References: <20260125083501.34513-1-enelsonmoore@gmail.com>
- <20260125083501.34513-4-enelsonmoore@gmail.com>
- <9239ddef-c197-4fbd-8e88-691766bda3e2@suse.com>
- <CADkSEUjgRrC9eAQYOkaErd7wyXKkUs7+dG+Q1jz7VbqF+zxwuw@mail.gmail.com>
- <314effcc-5bf2-47c5-9757-aafd5b47fe65@suse.com>
- <CADkSEUjk3uE+vMOPw0u7MOc4+AN__LWsriWA9fVhm2C35gJ6MA@mail.gmail.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <CADkSEUjk3uE+vMOPw0u7MOc4+AN__LWsriWA9fVhm2C35gJ6MA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[suse.com,rowland.harvard.edu,sina.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-32905-lists,linux-usb=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-32904-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[suse.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[michalpecio@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 20F13AE06E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 910E1AE237
 X-Rspamd-Action: no action
 
+On Tue, 20 Jan 2026 09:29:56 -0800, Ben Greear wrote:
 
+> >>> On 1/14/26 07:13, Alan Stern wrote: =20
+> >>>> Unfortunately, we have no to tell from the log you collected
+> >>>> which host controller driver encountered this problem.=C2=A0 Nor,
+> >>>> unless you can replicate the problem, any way to track down
+> >>>> exactly where in that driver the bug is -- or even any way to
+> >>>> tell whether a proposed fix actually solves the problem.
 
-On 29.01.26 04:41, Ethan Nelson-Moore wrote:
-> On Tue, Jan 27, 2026 at 1:23 AM Oliver Neukum <oneukum@suse.com> wrote:
->> yes I am aware of this. Yet there is no point in breaking
->> existing setups. I would prefer this driver to get only
->> clear fixes and adaptions to changes in API that are absolutely
->> necessary.
-> 
-> Hi, Oliver,
-> 
-> That is exactly the point I was trying to make with those statistics -
-> I realized cleaning up kaweth was not worthwhile due to the lack of
-> users.
-> I wasn't proposing removing it; it is simple enough that it doesn't
-> really cause any maintenance workload.
+Considering this looks like x86-64 I think we can make an educated
+guess that the usual suspect was involved.
 
-Hi Ethan,
+The guess could be confirmed by running 'lsusb -v' to see if there
+is anything *other* than xhci-hcd on this machine at all.
 
-good that we agree. If you want to clean up an exemplary driver
-I'd suggest the class drivers, that is the CDC drivers.
+I have seen shutdown hangs many times when I broke this driver in
+various ways that caused URBs not to be given back. The unlink
+mechanism is complex, with many steps to possibly go wrong.
 
-	Regards
-		Oliver
+> We are not able to reproduce the problem.  If we are able to
+> reproduce, we'll take more precise notes and provide what details
+> we can find.
 
+Chances are you may not see it again, but if you want to hunt for this
+bug I would suggest setting the system to enable dynamic debug before
+every shutdown. Particularly xhci_hcd module debug if you can confirm
+that this is the HCD in use.
+
+It is possible to have those symptoms at shutdown due to a problem that
+already began before shutdown, but maybe went unnoticed.
+
+Regards,
+Michal
 
