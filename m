@@ -1,152 +1,121 @@
-Return-Path: <linux-usb+bounces-32926-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32928-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KCZCKaNOfGmDLwIAu9opvQ
-	(envelope-from <linux-usb+bounces-32926-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 07:24:35 +0100
+	id 8FgrGA1YfGn6LwIAu9opvQ
+	(envelope-from <linux-usb+bounces-32928-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:04:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DE06B79BF
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 07:24:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB13AB7C40
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:04:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AA5C4301A14D
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 06:24:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1B8C130305DC
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 07:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E17303CA0;
-	Fri, 30 Jan 2026 06:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hjCNgcoi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF7B2FC006;
+	Fri, 30 Jan 2026 07:04:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABB42DFA40
-	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 06:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C4A2EB860
+	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 07:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769754269; cv=none; b=qJ91VS1/D3nBtmJWwZ+XTgsw8YYN1DUrzgmvuM18zDJvg+z0yQ1d8o1hyesZ0iY8ncIlrlNHB6FHPVhUz8dYMo9IOsK6yWQG7WX+MxMuTZHy6gHJHg7sqUpNFI+G//pBIuP405UAW997nSbSk2UnzI+fCs/iWuPn87AzqucTUmQ=
+	t=1769756647; cv=none; b=EzfRftrbLlmEDpHXjx7Wi2B8XB5tyqjHX728ujhe5G9axumUC0cNhIe2rqECOa/MWdAjWSt6AbUJUSY638jEdtVMPeNUkMlb/cwLCqKU9/2Zym1EhijGNHAbnP7EbIZPQUWauL8NW2hqZ4bCAWI9foMRiTeIs2zbeqpdOrSZUCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769754269; c=relaxed/simple;
-	bh=JZq+RWSitCfzgZ2CiHKnrG856Oec619NyOwWzCipbs4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iOz/Ktwqjni+bE/gfl3eDQYev4naBMG1l+xEdQN5lA9OgQR8ABK6pfnYVM5aSBBgsHiHmzndmKtapwZyEFp5Mz/cx9fh7sDvkTe/piQDC6dzX5azBxEI0yXiDgCkJ78pcrWV37q3X5UlreeFrp7vlMYmGWF4xXHxKCUP9sGZkdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hjCNgcoi; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a79ded11a2so12562625ad.3
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 22:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769754267; x=1770359067; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZzOSDsADlZZalIjYI/NFZliyZ4zh625PTCb6VAu9b7I=;
-        b=hjCNgcoiJ4j3Rtq/51yJ+mq8nZPgklCdyX7zQWfvhpdJLdVMhhD2QwprjpcHI6xX1D
-         HoakEmjr0o7nLQhzJPo1kE6UGGyig/C/lKPYhexgzQokEa/CO+4aiTpE0Jh5tjgtz+nR
-         Ol6QGJn/9ttmx45iLUpd12Lsr0h7Vh9RC54ZFpQf739Dwtj+iHVKC82xsbgOhefkdSAw
-         WLicoDrSD8MB/8sn9XiujK3J77RrB0mwXkhrg6kRpiunevgDrhZyg3JkBj3KEw3pTJvX
-         HE384U5YCmD21zywTYBUdqvpImLQGcBKTZs7JbL72dVMCpQIza7rWuVchHC0mu+LW+6M
-         twFA==
+	s=arc-20240116; t=1769756647; c=relaxed/simple;
+	bh=BdRblF0eUIZYT8LxhwoalBg55iUruXhe9k2VLW0Z9c4=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=Ey2FTgd+0ZAocCYndMfbkcYKBWpSEQbOpYJqYr42eididbhQi4aYdLlXY1RK09IJxo3OSlMUpfMfOdzcpmj/Oyb7dP7HMLZzxkHknrFA2NyTdYxRrEqBQP4rOcgjZsoeMse/acEedxCViZSA4jdGqirNrJf1O+urR28lSBXYk6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-6610632db4dso6505467eaf.1
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 23:04:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769754267; x=1770359067;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZzOSDsADlZZalIjYI/NFZliyZ4zh625PTCb6VAu9b7I=;
-        b=g8MVhkmaVruuAMERMyqxebe9ZpzmlTEUDHBZ33cJwA5pkskh4vZkVxStx11wk9Te6H
-         SF64u/xYjDIPzzg33fU5ENNF+D5/Ide1tNCgLc14MhacI3USBEmfVyQMRe0XuXzFN9g1
-         Ko89IJmd6eSl1XvfpALyqBkdZ0B+O0U1ZzSiow/4FEmwJ3Qx17CHLBWWtblo0PLaUSa0
-         +b0ncSwGFADYt1zitk81mffiKn1cI0+fmsQVvC3J4hbFzlrOrIoiIkY6zkYW7jBnq9gt
-         wFfGaWQTMHtJ1onD9B8scnLcdVa72p/CM/+rtLBh/W9cvYnktKnCk9RJl/X0wxrw3SWp
-         qn1g==
-X-Forwarded-Encrypted: i=1; AJvYcCXHRmz5ZL/ual31u+TaBhI3JibxfUNUZ7GZ5fu3tFg5f4KlNkBUNauYdoDXUAAnstQghj5GAGsd2Os=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCoLkxFPNgXGqAguCv8A3+EjU/70EKczxROunUgdxJg65EzbOC
-	V8A0BD9Pes33wnvDnA3M+F+2X52dEsiTQCLWw+Uz9zata4SWXs5suYvK
-X-Gm-Gg: AZuq6aJshdmXxIWRRUQX4jFO71LhyX1XBhI7hiw9PhXpBgoaShdIvpUnfnq+E/O4840
-	7VFm3SXiQacTfYQH6DeFDWTl7RUhQi4Coke19oh3C7L14c/XZCMHEyg52TNfcfbehCxpaL+vten
-	4RS70+/h4vyOcdBMfQPmuvtcYOYeWmfNsyewWNW3fS97I0tcUxihLWZAOTeoPpAxfXTf3AUaYhQ
-	yKfQlKtMyuIG3/NqKo7rfNB9w3OfcFRAGtO+8ZWw6NtjIxxNKfA5QSSGzMUViogX6148oOpj0zW
-	99oH2wDjecoOnC8GC/Z5Izoi+ss1NCTcCcVb8k+YpRpkxCgE6IMReyfIghdqyA8pZRsk99l2SKG
-	sl04bF0IHJSgBOqlYtvpCgL4Cq2TPv7Il8Im2Mo3o2KKDX6tktN/aw5pjX2X2QNOFIf2r893Udh
-	nOmIvruP2MOYfAbRehVoLULshEpng=
-X-Received: by 2002:a17:903:15c7:b0:2a0:b461:c883 with SMTP id d9443c01a7336-2a8d993031bmr18059985ad.45.1769754267392;
-        Thu, 29 Jan 2026 22:24:27 -0800 (PST)
-Received: from chandna.localdomain ([106.222.232.101])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b7f32bfsm69740915ad.96.2026.01.29.22.24.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jan 2026 22:24:26 -0800 (PST)
-Date: Fri, 30 Jan 2026 11:54:05 +0530
-From: Sahil Chandna <chandna.sahil@gmail.com>
-To: syzbot <syzbot+13f8286fa2de04a7cd48@syzkaller.appspotmail.com>
-Cc: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [input?] [usb?] WARNING in asus_remove
-Message-ID: <aXxOhV79TnuYaw0-@chandna.localdomain>
-References: <697baa8f.a70a0220.9914.001f.GAE@google.com>
+        d=1e100.net; s=20230601; t=1769756645; x=1770361445;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=04yApS+YXO8wnw6pH0ng6f5u1qXXv/RDzIOLVNyCM8g=;
+        b=heet8MvJCeeDYnx6ZndrHA32+Wz/0bcTGnhFlASX0/sySE0gSC1IwRvc7rgtTrcjh5
+         1cJnjcK+uCA9VZCBkvYQl/KiuGZ1RR2vjgc1BMjhuEVbmtonAVmghLz39RApuTu8jiSH
+         0WjUVz0lEGZtww0IkPd9tZ3S9/4m8qpdJFjVhfSVw4N1GFmg2XmXDFUZZh8A/EvyyQrj
+         nhXbqiE7alEcafil26nRSl9TXhVgXHUSv9j2Jc/dHFfSrKoVyFpH1T5nrK7DVak99Rev
+         UkC30194yFiOjIncq2XafSBCr+FiCH2pO36TEu5/muna3mVL6SXStlSn5p11vOtg8Hnk
+         Nwfw==
+X-Forwarded-Encrypted: i=1; AJvYcCV3mkw7NjC28IAHoNdTN4NRYfmGFa0MELgRdn7S5KvDsFZgMvMGRMy30aFeeh6Mdj8dT5OlxyxNcrE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHBnUH1tdY4F5Okr4nk4G4Gl0Z8+VX++Tc4TAUCCjuBm0kPuhA
+	DfJMqT5WSmCuU5Pyv1EWXPA2B/3P+oUwwl2VQNwwCKyP7a5KS04NFfoYD89+6k2uetF5WmTvpqr
+	7nzxJnO2BiWciDN98WhHBkAZXWhkFbW2+cFqOAMAXnYLEttAdMplPp+0GoIQ=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <697baa8f.a70a0220.9914.001f.GAE@google.com>
+X-Received: by 2002:a05:6820:150a:b0:662:f39e:efb2 with SMTP id
+ 006d021491bc7-6630f3aa2e5mr692232eaf.74.1769756645181; Thu, 29 Jan 2026
+ 23:04:05 -0800 (PST)
+Date: Thu, 29 Jan 2026 23:04:05 -0800
+In-Reply-To: <aXxOhV79TnuYaw0-@chandna.localdomain>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <697c57e5.a00a0220.35f26.0011.GAE@google.com>
+Subject: Re: [syzbot] [input?] [usb?] WARNING in asus_remove
+From: syzbot <syzbot+13f8286fa2de04a7cd48@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, chandna.sahil@gmail.com, jikos@kernel.org, 
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=aef5831c38e37e48];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-32926-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32928-lists,linux-usb=lfdr.de,13f8286fa2de04a7cd48];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[kernel.org,gmail.com,vger.kernel.org,googlegroups.com];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chandnasahil@gmail.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,13f8286fa2de04a7cd48];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Queue-Id: 5DE06B79BF
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,syzkaller.appspot.com:url]
+X-Rspamd-Queue-Id: EB13AB7C40
 X-Rspamd-Action: no action
 
-#syz test
---- a/drivers/hid/hid-asus.c
-+++ b/drivers/hid/hid-asus.c
-@@ -960,8 +960,8 @@ static int asus_input_configured(struct hid_device *hdev, struct hid_input *hi)
-  	}
-  
-  	if (drvdata->quirks & QUIRK_HID_FN_LOCK) {
--		drvdata->fn_lock = true;
-  		INIT_WORK(&drvdata->fn_lock_sync_work, asus_sync_fn_lock);
-+		drvdata->fn_lock = true;
-  		asus_kbd_set_fn_lock(hdev, true);
-  	}
-  
-@@ -1343,7 +1343,7 @@ static void asus_remove(struct hid_device *hdev)
-  		cancel_work_sync(&drvdata->kbd_backlight->work);
-  	}
-  
--	if (drvdata->quirks & QUIRK_HID_FN_LOCK)
-+	if ((drvdata->quirks & QUIRK_HID_FN_LOCK) && drvdata->fn_lock)
-  		cancel_work_sync(&drvdata->fn_lock_sync_work);
-  
-  	hid_hw_stop(hdev);
--- 
+Hello,
 
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+
+Reported-by: syzbot+13f8286fa2de04a7cd48@syzkaller.appspotmail.com
+Tested-by: syzbot+13f8286fa2de04a7cd48@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         33a647c6 Add linux-next specific files for 20260129
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=140cf6ef980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aef5831c38e37e48
+dashboard link: https://syzkaller.appspot.com/bug?extid=13f8286fa2de04a7cd48
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13ec1644580000
+
+Note: testing is done by a robot and is best-effort only.
 
