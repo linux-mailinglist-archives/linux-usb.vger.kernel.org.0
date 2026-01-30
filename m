@@ -1,194 +1,238 @@
-Return-Path: <linux-usb+bounces-32943-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32944-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cNLpD74zfWntQgIAu9opvQ
-	(envelope-from <linux-usb+bounces-32943-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 23:42:06 +0100
+	id SLVeJjBFfWkaRQIAu9opvQ
+	(envelope-from <linux-usb+bounces-32944-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 00:56:32 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8E5FBF311
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 23:42:05 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 599D6BF774
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 00:56:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3606E3045029
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 22:39:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0F94A300ECB1
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 23:56:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1978A38A9B1;
-	Fri, 30 Jan 2026 22:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA7538BDA5;
+	Fri, 30 Jan 2026 23:56:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KaSLF/93";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="eGXiBpIx"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="AO+G3MI/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF2838A731
-	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 22:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B790C38B999;
+	Fri, 30 Jan 2026 23:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769812742; cv=none; b=H/7/IalPt5zFWHbQivtluJLOWCcX1xX9CAQMCDVx+N3tZmHv6v8+SL43f1rULLda9TzurS4IPzTGdhQdsPmPjZUgt1ZzvSs0Jd2nd0l/PsKrqTkMqFYIZ2cdvicZzTHPW3L1zcFQs0RNXu7vxYX2qwmOR711Tz4FUICecRPRVQg=
+	t=1769817360; cv=none; b=lwQ2Zp7dZdUcIY218nGkPjtXUbzS8BsNX2KRLPJa3pyrZc3XaXhcMKiK8CEYNBCnNtCgnR3+RGB08Yp7wYvGeUEFyWooABLR9m5wNjuAqkgl5TQdw8iD9IK3KchpmX2stt05Y0ksg4Jjqgr1G63uiKctJakY1BJUZEJlrYl5FwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769812742; c=relaxed/simple;
-	bh=aEpkdzaw+QsOdopyxUTcxGofpnjOUlbZXZ2nukqu9WE=;
+	s=arc-20240116; t=1769817360; c=relaxed/simple;
+	bh=Mstrtl107/xwKexWntN6sYj5esBWVe7AT7Q+cHnsYRU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A95/+Cshp52j9ZClTCMmWlRuD9KoxtbCTeIOQQzft/l7dZL/UkTEzwWCWv62Wex4H4nlgY8dPOjTtplaPNd+YCsM+6zKfc1zufp35tXl5dqrb2p7ijF74RoYb4FTx4fEB8Zu+yZ8ZUdwEZ3BQbN/okv/ZmvT1XTNNCtzH6VkkNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KaSLF/93; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=eGXiBpIx; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60UHVWQ33296882
-	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 22:39:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=epBBXCbIvXIY/ucim1KjtcUq
-	CxZn1kZ7yDcawfqvDxM=; b=KaSLF/93P7M53l4MOzib16sMiYxtEcJeU09p+XrC
-	1hiZm6IBYYvf4JAm3pnwBDkGYNXxxyiiXRbFLhgjwOKOkJPWtb9X5eFM3G+KAcdE
-	FlGr8L5osXega6D6IvubY4HmweeNT3y6hHEcnsV4m1Kp/1HQFBJdr4TK83kiWmyz
-	O/w0Y/SBjXQWLI6y7wGbM4eHiXS99oxCFGnu/R1aglxW5E3UVkLyJcWFZPvgNHGR
-	LJhDz6q4Pi5EfCsC78EVd+X4ur2ynvjThhoCJQA+W9leG2x7RxccGaTuwgmEvJkJ
-	pvNzArRkP4qPo+x0qTQn5aGr99pPWQIxgN39gQRK1o7wsw==
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c114c0vgd-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 22:39:00 +0000 (GMT)
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-2b795cff830so483153eec.1
-        for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 14:39:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769812740; x=1770417540; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=epBBXCbIvXIY/ucim1KjtcUqCxZn1kZ7yDcawfqvDxM=;
-        b=eGXiBpIxchtl+hUEbk+ybdc8XPVRmaYNqUP/K/z/l9I6mHVv8GwxiM26J7x7or+9IQ
-         S6+Ly9FgvDKfnOj1tbzZw+ABFaF2f0yEvkw/RC2KjmQsEy6dEDNnPLDqIOYVxeKSA3Id
-         eVhpZP3skIBLMI3+iCqmLReXiuR/ntQWj5MI2Rt7we/y/r+QT9rpwFwtHjDUQeiiqP8k
-         saa8gFLRGBenRxtmFsO10RrhvmkFl7/eHKJF267jmJVv+UWJUzJI/zzc1tvJHev0QDWD
-         HM7O+dSjj252sj3lzVMQY7cMBhlmB2WXm8gi/sRj4wnSNIL+Yldnb5xhxKffNw3ZU452
-         vZHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769812740; x=1770417540;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=epBBXCbIvXIY/ucim1KjtcUqCxZn1kZ7yDcawfqvDxM=;
-        b=rj+Yv7VAcxRNQp5QX3lcqZgR72JNiW27N6QifjcV1PXjUq0IhavSl7VGxnDBaIRi51
-         /vmwvhQQv667X9yjUEUp/9XuIfpNLy1H+ZRJXtpH0rE50SQLqCm149yDTX2Vu3v5n6q2
-         R/mBz3RqcxITSCqS6yTn5ZpD9DkLAhrSGq6TO2csysRROdwDx5cqlVSy2yP3m1U0/AW+
-         6vzOqhQ22Y1K3UbZUJPW45xuZaP/G+W9bNbvHxcwyiR3z5XnmCnWkCnVMYAEkDrIlBvP
-         LIUWTOqQSZ42qpXMlPDABabMA4t50MG3NXGbA5TzWlzOS3UmGziWXb3JGsESODpApP6k
-         u4PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXuuOPIQefqS9X5ZknPQxfBF5JyOV7NW2ivr21CzOkxlGBMbK9Bmtq3PIob2dn/jQutU9qv0MstiOU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMs34us+/H9x55JWlLVmQ3aor+fDfZtT3QXfEyeQMLWPgKpHmy
-	ZYCGhN8/D/jB4+e42JyGdn6GuiNs2xBH6I3arIiHLuF2gzTAUljKEjp3BlgospCKJgUv+QiSfKA
-	TQvy8HiHijbvfG6i6UG7ZVJbPlmyT6q89xUNreN/qAdji/S8I4H5e1kEqsyFJXYM=
-X-Gm-Gg: AZuq6aJX5we1NlnR4cD0Zsjq/LKPzuxKljHEteYyjxAsIpqXDdzjN+e8Ddj49XbevPe
-	tS9w/80MsS63CtJyF7iamp2n+ETB8plLsJQ9IQ6bUFDo9EK9BqvVTvwqTMsrISeNLF3uQF1YzBv
-	tdUu+ndLGhTJ2jTFOs9JQ9DdBGGO5wdfZqtY+zWkcVKp692CmBlCTirT4LNU71s/o5SSfmdzvAf
-	wWPZSr44itMgU6TOz15UNdrsh1FhT842dvr/gwbLh56hD2/GyqexXTkpfRUvkt8iXx7e40Di1GB
-	DO2K2PvFPvjLrhvFfEGd8E9Ou6iiCNR69CvYRbm6LSFVH0oCyTOx+rI5LspzwBJIf2oEgFrjUsk
-	9qJZAZA6vEwJVQyDpLz3ZAD+yNpL6wnVZWskFT3wu0xeDkACJD34LbRyI
-X-Received: by 2002:a05:7300:a903:b0:2b7:15bf:91d1 with SMTP id 5a478bee46e88-2b7c890fc64mr2840102eec.30.1769812739942;
-        Fri, 30 Jan 2026 14:38:59 -0800 (PST)
-X-Received: by 2002:a05:7300:a903:b0:2b7:15bf:91d1 with SMTP id 5a478bee46e88-2b7c890fc64mr2840078eec.30.1769812739347;
-        Fri, 30 Jan 2026 14:38:59 -0800 (PST)
-Received: from hu-jackp-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a1abe714sm12977854eec.20.2026.01.30.14.38.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jan 2026 14:38:58 -0800 (PST)
-Date: Fri, 30 Jan 2026 14:38:57 -0800
-From: Jack Pham <jack.pham@oss.qualcomm.com>
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Wesley Cheng <wesley.cheng@oss.qualcomm.com>
-Subject: Re: [PATCH RFT 3/3] arm64: dts: qcom: glymur-crd: Enable USB support
-Message-ID: <aX0zAXwZVr6qRLrC@hu-jackp-lv.qualcomm.com>
-References: <20260113-dts-qcom-glymur-add-usb-support-v1-0-98d6d387df01@oss.qualcomm.com>
- <20260113-dts-qcom-glymur-add-usb-support-v1-3-98d6d387df01@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=MVrfO9mNvE3529L9QeDUN3gEi2j+0WgewnfvEHlK7CunK+ve6Z21N/AhW1BSyt+L7Wex3MulHEp2MZrQWnAjafixmx/UOrAKFY1VUOCx8N5nHqKg+6mUXKBv6IAkM+SWEIT0iZljHobCvPgtF67Vq0qJyzp+p2CuhKobckpUTnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=AO+G3MI/; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=WunDx0fb3GW0z9IYkcolqOlpoStL9vS1z9b/3h7/9sA=; b=AO+G3MI/5/op50vRQvZ2KSjky2
+	o2ePb5Zukk3sXqeoNldFFJbSdw+Qp7uPktsF7JIRKDMKPcu/acltZPsnYWSewa2lLpyc2Gx9MlnMF
+	O3a5gu9xLnoZ1RZqF9iA05zLoPaHp5rsq+K1gR3L76DF8WbF9zlg8f6xM6E2G1VQAn9TaPm+Tk5Y2
+	s5bwYJffBoYET1FOa8HR7vJwT9oiZweshSD1mXBXH7uapwklcxfNchd2/QTs+ZWS3FHEhaI0q2NAO
+	4iOY76PwJp8GPEtE84eZvCDEagFHnDbFvVFgCapOv8se+c1FU82xSEGXvHZNGQbgXWrdNVN6O9s2V
+	gVLXLJfQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1vlyMx-0000000ChF7-0kg1;
+	Fri, 30 Jan 2026 23:57:43 +0000
+Date: Fri, 30 Jan 2026 23:57:43 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Samuel Wu <wusamuel@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <20260130235743.GW3183987@ZenIV>
+References: <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh>
+ <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
+ <20260128045954.GS3183987@ZenIV>
+ <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
+ <20260129032335.GT3183987@ZenIV>
+ <20260129225433.GU3183987@ZenIV>
+ <CAG2KctoNjktJTQqBb7nGeazXe=ncpwjsc+Lm+JotcpaO3Sf9gw@mail.gmail.com>
+ <20260130070424.GV3183987@ZenIV>
+ <CAG2Kctoqja9R1bBzdEAV15_yt=sBGkcub6C2nGE6VHMJh13=FQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260113-dts-qcom-glymur-add-usb-support-v1-3-98d6d387df01@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTMwMDE4NiBTYWx0ZWRfX1ll93t8ctKlp
- XfmOux1b9+wqg7OecGDzkeuLl9nee/D9WlZBeBFq4fPJsVWUl5pSEx1EDJPDjDKrbQGEymptVSm
- SiAbAIA5nWCw5MXOlNzDKMMNhCmNxEmOWFoQdS8Uy8oH9bnFOIyN5WpQSxSVBefDtycLx+YjEyZ
- iqvxwX6ZrCuOjN7PDVDdKiHQa5B2JiLTyFUFupOe1vm/gkLGE2nsNY9cdHbsftSBCNkSw/kLVoO
- uurM+7jnabqB28P+qutRo7oOpueugsOx3cM/MGEnatZzbcfgLr8maTgba1DqS2tjtJaGMIc0KeT
- +iUT9aq8RNhmnj/Gi7P4jTeaFRS7ZwAWDR2xdrDk81a9pkwOwuMIqSrhjSuktE9QJhi/kDoCDiQ
- QRz3ugReOJETFamso0upatdBxBLVWXfQTTWXZljufQY74AB9RCmYoTFHfMMgGhXKnWd+EB5gkql
- WW91nbrSxMQkwjddsHQ==
-X-Proofpoint-GUID: 9dwhN1MP-529DPZmI7q0nKpaxcDRmwvl
-X-Proofpoint-ORIG-GUID: 9dwhN1MP-529DPZmI7q0nKpaxcDRmwvl
-X-Authority-Analysis: v=2.4 cv=YZuwJgRf c=1 sm=1 tr=0 ts=697d3304 cx=c_pps
- a=Uww141gWH0fZj/3QKPojxA==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=DlwQrn3afoSJOZwP7sIA:9 a=CjuIK1q_8ugA:10
- a=PxkB5W3o20Ba91AHUih5:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-30_04,2026-01-30_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 clxscore=1011 impostorscore=0 spamscore=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 bulkscore=0 phishscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601300186
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG2Kctoqja9R1bBzdEAV15_yt=sBGkcub6C2nGE6VHMJh13=FQ@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[zeniv.linux.org.uk,none];
+	R_DKIM_ALLOW(-0.20)[linux.org.uk:s=zeniv-20220401];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32943-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:dkim,hu-jackp-lv.qualcomm.com:mid,oss.qualcomm.com:dkim];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32944-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jack.pham@oss.qualcomm.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[viro@zeniv.linux.org.uk,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.org.uk:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: C8E5FBF311
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.org.uk:email,linux.org.uk:dkim]
+X-Rspamd-Queue-Id: 599D6BF774
 X-Rspamd-Action: no action
 
-On Tue, Jan 13, 2026 at 02:33:06PM +0200, Abel Vesa wrote:
-> The Qualcomm Glymur Compute Reference Device comes with 3 Type-C ports,
-> one USB Type-A, and a fingerprint reader connected over USB. Each of these
-> 3 Type-C ports are connected to one of the USB combo PHYs and one of the
-> M31 eUSB2 PHYs. The Type-A is connected to the USB Multi-port controller
-> via one of the M31 eUSB2 PHYs and one combo PHY. The fingerprint reader
-                                        ^^^^^^^^^
-Small nit, this should be USB3 UNI PHY.
+On Fri, Jan 30, 2026 at 02:31:54PM -0800, Samuel Wu wrote:
+> On Thu, Jan 29, 2026 at 11:02 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > OK.  Could you take a clone of mainline repository and in there run
+> > ; git fetch git://git.kernel.org:/pub/scm/linux/kernel/git/viro/vfs.git for-wsamuel:for-wsamuel
+> > then
+> > ; git diff for-wsamuel e5bf5ee26663
+> > to verify that for-wsamuel is identical to tree you've seen breakage on
+> > ; git diff for-wsamuel-base 1544775687f0
+> > to verify that for-wsamuel-base is the tree where the breakage did not reproduce
+> > Then bisect from for-wsamuel-base to for-wsamuel.
+> >
+> > Basically, that's the offending commit split into steps; let's try to figure
+> > out what causes the breakage with better resolution...
+> 
+> Confirming that bisect points to this patch: 09e88dc22ea2 (serialize
+> ffs_ep0_open() on ffs->mutex)
 
-> is connected to the USB_2 controller. All M31 eUSB2 PHYs have associated
-> eUSB2 to USB 2.0 repeaters, which are either part of SMB2360 PMICs or
+So we have something that does O_NDELAY opens of ep0 *and* does not retry on
+EAGAIN?
 
-s/SMB2360/SMB2370/, as corroborated below in the patch.
+How lovely...  Could you slap
+	WARN_ON(ret == -EAGAIN);
+right before that
+	if (ret < 0)
+		return ret;
+in there and see which process is doing that?  Regression is a regression, 
+odd userland or not, but I would like to see what is that userland actually
+trying to do there.
 
-Thanks,
-Jack
+*grumble*
+
+IMO at that point we have two problems - one is how to avoid a revert of the
+tail of tree-in-dcache series, another is how to deal with quite real
+preexisting bugs in functionfs.
+
+Another thing to try (not as a suggestion of a fix, just an attempt to figure
+out how badly would the things break): in current mainline replace that
+	ffs_mutex_lock(&ffs->mutex, file->f_flags & O_NONBLOCK)
+in ffs_ep0_open() with
+	ffs_mutex_lock(&ffs->mutex, false)
+and see how badly do the things regress for userland.  Again, I'm not saying
+that this is a fix - just trying to get some sense of what's the userland
+is doing.
+
+FWIW, it might make sense to try a lighter serialization in ffs_ep0_open() -
+taking it there is due to the following scenario (assuming 6.18 or earlier):
+ffs->state is FFS_DEACTIVATED.  ffs->opened is 0.  Two threads attempt to
+open ep0.  Here's what happens prior to these patches:
+
+static int ffs_ep0_open(struct inode *inode, struct file *file)
+{
+        struct ffs_data *ffs = inode->i_private;
+ 
+        if (ffs->state == FFS_CLOSING)
+                return -EBUSY;
+ 
+        file->private_data = ffs;
+        ffs_data_opened(ffs);
+
+with
+static void ffs_data_opened(struct ffs_data *ffs)
+{
+        refcount_inc(&ffs->ref);
+        if (atomic_add_return(1, &ffs->opened) == 1 &&
+                        ffs->state == FFS_DEACTIVATED) {
+                ffs->state = FFS_CLOSING;
+                ffs_data_reset(ffs);
+        }
+}
+
+IOW, the sequence is
+	if (state == FFS_CLOSING)
+		return -EBUSY;
+	n = atomic_add_return(1, &opened);
+	if (n == 1 && state == FFS_DEACTIVATED) {
+		state = FFS_CLOSING;
+		ffs_data_reset();
+
+See the race there?  If the second open() comes between the
+increment of ffs->opened and setting the state to FFS_CLOSING,
+it will *not* fail with EBUSY - it will proceed to return to
+userland, while the first sucker is crawling through the work
+in ffs_data_reset()/ffs_data_clear()/ffs_epfiles_destroy().
+
+What's more, there's nothing to stop that second opener from
+calling write() on the descriptor it got.  No exclusion there -
+        ffs->state = FFS_READ_DESCRIPTORS;
+        ffs->setup_state = FFS_NO_SETUP;
+        ffs->flags = 0;
+in ffs_data_reset() is *not* serialized against ffs_ep0_write().
+Get preempted right after setting ->state and that write()
+will go just fine, only to be surprised when the first thread
+regains CPU and continues modifying the contents of *ffs
+under whatever the second thread is doing.
+
+That code obviously relies upon that kind of shit being prevented
+by that -EBUSY logics in ep0 open() and that logics is obviously
+racy as it is.  Note that other callers of ffs_data_reset() have
+similar problem: ffs_func_set_alt(), for example has
+        if (ffs->state == FFS_DEACTIVATED) {
+                ffs->state = FFS_CLOSING;
+                INIT_WORK(&ffs->reset_work, ffs_reset_work);
+                schedule_work(&ffs->reset_work);
+                return -ENODEV;
+        }
+again, with no exclusion.  Lose CPU just after seeing FFS_DEACTIVATED,
+then have another thread open() the sucker and start going through
+ffs_data_reset(), only to have us regain CPU and schedule this for
+execution:
+static void ffs_reset_work(struct work_struct *work)
+{
+        struct ffs_data *ffs = container_of(work,
+                struct ffs_data, reset_work);
+        ffs_data_reset(ffs);
+}
+IOW, stray ffs_data_reset() coming to surprise the opener who'd
+just finished ffs_data_reset() during open(2) and proceeded to
+write to the damn thing, etc.
+
+That's obviously on the "how do we fix the preexisting bugs" side
+of things, though - regression needs to be dealt with ASAP anyway.
 
