@@ -1,359 +1,432 @@
-Return-Path: <linux-usb+bounces-32932-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32933-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mHuoOTlgfGl0MAIAu9opvQ
-	(envelope-from <linux-usb+bounces-32932-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:39:37 +0100
+	id aGB2KmxifGmTMAIAu9opvQ
+	(envelope-from <linux-usb+bounces-32933-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:49:00 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87C74B7F8A
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:39:37 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D58EEB809D
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:48:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 45BE5301A73E
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 07:39:13 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B4EA93006234
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 07:48:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B743148A8;
-	Fri, 30 Jan 2026 07:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E034430B527;
+	Fri, 30 Jan 2026 07:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lURW+nxZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CIMFr94a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-dl1-f66.google.com (mail-dl1-f66.google.com [74.125.82.66])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4C331328E
-	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 07:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEBAE2E88BD
+	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 07:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769758752; cv=none; b=nUxWrw8GVvcHDDbgnTzL/syWl/LtvEXy442pckCzlAqO2JBBasJjMp5odd4Y3IU56WOBVwT00LXgX8pHFtQ3smubAY/KVYcTt8EmjrIhV5sUedmxnF2h9t053Ix/ZN7tATo6y19aYjq+grVOsOwZEL3tHpj5db+regnkHtviJ0g=
+	t=1769759332; cv=none; b=HG+2hA6PG50fzIpI2VuIp7pmdBbWnAz8ZvD4KzkDj04wleDQ4QOWvh2f2mYdtKRxrw1KwlgaYsLmlrZnzHhfTgsvfwC6gaWb8FDIYD1b+8LOZ13yDMKzX+twauosvfFtwxSGgfRsf0hmXJp/oYAe94FW7QchomIl3DTV8ERGbtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769758752; c=relaxed/simple;
-	bh=947Ihnztamc5xCRw/MGVHd3zDD8SrHrHL7SG/64BBXs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SVq9twIZL2qL7HsdkB9TYX4q8DJ/2gpIVzprxdpoqsR7TUbqOVZJ/WPdjxSNO7Dyszz2JyA5TDl4mnYxxlNSUZu8HIwVZa2/0QSKDzsHc8vrFw0Y2MucyZS9N5wb7rgUn2uMgKLYBMbGNqoQXcuDMHX/FvII+VnSfDrN9bOvkK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lURW+nxZ; arc=none smtp.client-ip=74.125.82.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f66.google.com with SMTP id a92af1059eb24-124566b6693so267101c88.0
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 23:39:10 -0800 (PST)
+	s=arc-20240116; t=1769759332; c=relaxed/simple;
+	bh=p4RI/PJNo9P2zoz4qNZVHYn11CSHjlAh2ePSn95HglE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=uBwh937sJKQLJMW9NP7Bi4777VcnxivXmZi+l0CqmRaUgUGP8lZmYLAN2xGtil+yTkYVEnqFip1XrgkBz81n/CDeP23UO4tDWgEQxk40YZ1mc2MniwfVbY60Y4AA3MH4pD4X3N05U7L2scEVxeFN9MWnXfFWiEPISpvq4Y56780=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CIMFr94a; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2a784b2234dso47616185ad.1
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 23:48:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769758749; x=1770363549; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DdVE2+FCBzVjnnVs+2tHZ0yjRqOVQO47L49tKgXTrYw=;
-        b=lURW+nxZxDrOQa7lZUhD0XUexud1wi1OuRgsi25Jk6GOLuZzQ62A4r86skKx3ChuVi
-         e/br+84UFV3Jb+UQTp8lz/wtpLDkKRtiID2tiN4qOI314ZqixT0DLALCtQmcDhsldRit
-         OZXmq7MlXmLOEySZtauHf2y3McPTPDhx2TNUo5fre9xBgGjjcL4IkUgp2VJz/0dU4nTT
-         uaXnICRaDiDdkBauRDq4U7joN8HuKTzGngsUDUSe+JgqRCFCLq7b+yAq5BHqlCatJvDU
-         twVqRPuGYmKSHmyH9nQ04WgM70f7WoRhaVKG3vfXktqUkGSrKelYHGmauKJ1ud/fkEXu
-         0X4w==
+        d=google.com; s=20230601; t=1769759330; x=1770364130; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ubwoGcMvFrz/YoKawnL1KLVWp0+NDz5W2QGY4b7pS8w=;
+        b=CIMFr94a38nYU0TPcZkC1HtZEz7iqDL405VIpITH9+GpTvg6P/NO7lC46HnKw40zzb
+         HN7tbrQkH4WvKBUc0MgaT4cEtAEpiG6UKG9asJjz6ixyW2AhL7TmzoZ/88tQmcEVOTzF
+         YYRZ1V6wjpCmG8mkVtzo7YGUIxk17497LSaOSYbgUiK0Jeusd74qrRXIfrL5Uzg2oozD
+         ADzLccvqhQcnYRPlSM2NoBqUtQUM9dfhZDSL9okli0MwCnNtfu1niULYl7Q0pXY915Hl
+         vW8yKlswl8Ay1FLr7NX3pI47vQA0UTmR6GSgJu8ubrR8flinkZYr8Pz9UfTe9LWBYmwA
+         OcJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769758749; x=1770363549;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DdVE2+FCBzVjnnVs+2tHZ0yjRqOVQO47L49tKgXTrYw=;
-        b=LSmRscNy6TSJ2OAUtUEtmXK2FlWMjMKC2farjxmi1FMj1argSZdG+Y9zsKE3k/mjw7
-         eFHSgwKuninOIeOAM1nNENYvP48feNquH8IK5P/rckhbLUDeiDUu99GhytZQWCi/gsUm
-         RLLMCSdinut9j4OaeDu6PgY97QEUbxOOJqy5t6lpImBJTgy3IHw9HQpV/d/ONK70f4yD
-         MJoZIPOteHLLv9Bkonnw9bNBLs7Uve/JN1/54aV7Ak41cvfcdjt26S5/GYMsLjJQpVdt
-         iTn8eN41pww7Lqbk6ki6Wr/hrDn/tLo8gszycfWXCheSl7TR4o/f8Uys7qTl3bSzELtR
-         6yqw==
-X-Forwarded-Encrypted: i=1; AJvYcCUM2VRPaftQgqvTxWeG1Ae4KxoLT13g1V4LAt/tNHwSN0A45Ca9kTjdWLpEp5siuVJeSq+vBoLNLH8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvQgAFXvPDf5ygkc6uVjuCKstgjP33d2lxPMFx01mNQLeh6xMJ
-	MGCFvT9W6WXyARQ++wuTVZCAiAsJ07ESP/yj+bPSX0ESNs6iurAdZ234
-X-Gm-Gg: AZuq6aITOe8y7fvgPWpSG3Eu91GTwPMC+PnerXGhR2PHfsQesHV/awB5lP/LFyFlAmf
-	YdkevwYrWiZCGp5LP4DFwUVdG2IstSawkL2mdIUAgdBgQaI9xM2oa8fw8/ho0xnImli2TEW8+cM
-	DQN40HXmLqGTmlmG8kaPBqQ8QUfMJJJDxYLRWlIt+f34pzwX+dV6I+RcVZ6n1yW7PWZiiqALf6V
-	oSdGtLfuTyODAgFossQVuYeLOzEXCEQYUC4Dw/mBogOmXEPJQ4zDHHQF34y9G74RS+Yu154gKg/
-	BcTdP2K2UkfduWTcWCbeYK05YvxIcZ4AWmdlW/UerjKaIe28mtdTbF8zSRQjeLzd1C8lrhafuc1
-	Q+lg34Gq2pGtAsIyCu6J2QUbcec1+PtByrieXJtlP+H+GS5CnuyyT1QCIDTMltU5RqAsBz5PeDK
-	d7sW4CDQohwgi4nBrD/TzaHoR1Io4OfsHWa/+vFClnoVIUMS8tn/y86f1SUmuS+ulWuFmTdKMQj
-	1yQ99YskTA+Rw3A5OsCuB8wXQxoCYp/RJsuZDsiPDugy1ZFWDgpaiEVObIyGJH/qGEdclXa+nBS
-	CyFG
-X-Received: by 2002:a05:7022:2486:b0:11b:9386:a3c0 with SMTP id a92af1059eb24-125c1041f6emr983267c88.43.1769758749278;
-        Thu, 29 Jan 2026 23:39:09 -0800 (PST)
-Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-124a9de948esm10187112c88.9.2026.01.29.23.39.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jan 2026 23:39:08 -0800 (PST)
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Peter Korsgaard <peter@korsgaard.com>,
-	Steve Glendinning <steve.glendinning@shawell.net>,
-	Oliver Neukum <oneukum@suse.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Max Schulze <max.schulze@online.de>,
-	=?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>
-Subject: [PATCH net-next v3] net: usb: introduce usbnet_mii_ioctl helper function
-Date: Thu, 29 Jan 2026 23:37:49 -0800
-Message-ID: <20260130073810.29090-1-enelsonmoore@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1769759330; x=1770364130;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ubwoGcMvFrz/YoKawnL1KLVWp0+NDz5W2QGY4b7pS8w=;
+        b=gr58ZsFEKTF+cb2x8cj0KsAVQXlEmhqUk6udJJ8ZE8VCxmC0HUwMSHlOJN9FoC7rih
+         jEb7eWq53MKLX0XdofHrG2XyTLtrwwmkO5l+6/HTH5Os5FxTywtf6AW1+s7MiICR/5dT
+         rWPpWS0rZ1s3U3oNtca4sR0Xnvp32TgXTPER1SGYTBOBJN3sgjit/RPVlT9PdE+5GcCX
+         H0M3Z9gMVGINybO7z005q67DgWmOwDCq7es4OSw9RRmtqrPYIJyvco//F+bcFjwlVUXx
+         Dp+41Gu2bcwpNn+WOyFbwp6eQwJkNj2h+UfxXe3w+nCVeHmDNfxskhIS1hHI3C8dxOFO
+         CgXw==
+X-Gm-Message-State: AOJu0YxrRs8OopSXay+LQNW0sjyaCjWZCU59AjG312ex/qK2dyh/Jrf9
+	NHTQE0QZB7D8eBFrLHKUFq6+RCuzymnYMUt+34sxoT2mLmSNB+QOp94IjzTJbw9UYZjf1Muqcjl
+	S3gBTxniQB2UJgIT4Qw==
+X-Received: from plsl6.prod.google.com ([2002:a17:903:2446:b0:2a3:1bf9:d25])
+ (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:903:2d0:b0:2a7:cf36:819 with SMTP id d9443c01a7336-2a8d9a5edc8mr22929475ad.44.1769759330394;
+ Thu, 29 Jan 2026 23:48:50 -0800 (PST)
+Date: Fri, 30 Jan 2026 07:47:46 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
+Message-ID: <20260130074746.287750-1-guanyulin@google.com>
+Subject: [RFC PATCH] usb: host: xhci-sideband: fix deadlock in unregister path
+From: Guan-Yu Lin <guanyulin@google.com>
+To: gregkh@linuxfoundation.org, mathias.nyman@intel.com, 
+	stern@rowland.harvard.edu, wesley.cheng@oss.qualcomm.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Guan-Yu Lin <guanyulin@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,linux.dev,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,korsgaard.com,shawell.net,suse.com,linuxfoundation.org,pengutronix.de,online.de,piap.pl];
+	TAGGED_FROM(0.00)[bounces-32933-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	TAGGED_FROM(0.00)[bounces-32932-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[guanyulin@google.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:email]
-X-Rspamd-Queue-Id: 87C74B7F8A
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D58EEB809D
 X-Rspamd-Action: no action
 
-Many USB network drivers use identical code to pass ioctl
-requests on to the MII layer. Reduce code duplication by
-refactoring this code into a helper function.
+When a USB device is disconnected or a driver is unbound, the USB core
+invokes the driver's disconnect callback while holding the udev device
+lock. If the driver calls xhci_sideband_unregister(), it eventually
+reaches usb_offload_put(), which attempts to acquire the same udev
+lock, resulting in a self-deadlock.
 
-Reviewed-by: Vadim Fedorenko <vadim.fedorenko@linux.dev> (v1)
-Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Introduce lockless variants __usb_offload_get() and __usb_offload_put()
+to allow modifying the offload usage count when the device lock is
+already held. These helpers use device_lock_assert() to ensure callers
+meet the locking requirements.
+
+Update the xHCI sideband implementation to use these lockless variants
+in the unregister and interrupter removal paths. For public sideband
+APIs that can be called from other contexts, wrap the calls with
+explicit udev locking to maintain synchronization.
+
+Cc: stable@vger.kernel.org
+Fixes: ef82a4803aab ("xhci: sideband: add api to trace sideband usage")
+Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
 ---
-Changes in v3:
-Rebase on latest net-next
-Add changelog
-Add received Reviewed-by tag
-Changes in v2 (not numbered):
-Resent with maintainer CCs
+Hi Maintainers,
 
- drivers/net/usb/asix_devices.c | 11 ++---------
- drivers/net/usb/ax88179_178a.c |  8 +-------
- drivers/net/usb/dm9601.c       |  9 +--------
- drivers/net/usb/mcs7830.c      |  8 +-------
- drivers/net/usb/smsc75xx.c     |  4 +---
- drivers/net/usb/sr9800.c       |  9 +--------
- drivers/net/usb/usbnet.c       |  8 ++++++++
- include/linux/usb/usbnet.h     |  1 +
- 8 files changed, 16 insertions(+), 42 deletions(-)
+In the current implementation, xhci_sideband_unregister() is only invoked
+when a driver manages a USB interface via snd_usb_platform_ops callbacks
+(.connect_cb and .disconnect_cb). In these contexts, the parent USB
+device lock is already held by the USB core. However, the original design
+of usb_offload_put() attempts to re-acquire the same USB device lock,
+leading to a recursive locking scenario.
 
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index c73cf52a65a8..a453e4275e2f 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -97,13 +97,6 @@ static u32 asix_get_phyid(struct usbnet *dev)
- 	return phy_id;
+This patch resolves the issue by:
+1. Refactoring Lock Ownership: Shifting lock acquisition responsibility
+to the upper-level USB driver. This ensures usb_offload_put() can be
+safely called from contexts where the lock is already held.
+2. Standardizing the Lock Hierarchy: To prevent potential ABBA deadlocks,
+the locking sequence is unified across the driver. The functions
+xhci_sideband_create_interrupter() and xhci_sideband_remove_interrupter()
+have been updated to strictly follow the same hierarchy.
+---
+ drivers/usb/core/offload.c       | 92 +++++++++++++++++++++-----------
+ drivers/usb/host/xhci-sideband.c | 48 +++++++++++------
+ include/linux/usb.h              |  6 +++
+ 3 files changed, 100 insertions(+), 46 deletions(-)
+
+diff --git a/drivers/usb/core/offload.c b/drivers/usb/core/offload.c
+index 7c699f1b8d2b..bc5f337fb355 100644
+--- a/drivers/usb/core/offload.c
++++ b/drivers/usb/core/offload.c
+@@ -13,44 +13,59 @@
+ #include "usb.h"
+ 
+ /**
+- * usb_offload_get - increment the offload_usage of a USB device
++ * __usb_offload_get - increment the offload_usage of a USB device
+  * @udev: the USB device to increment its offload_usage
+  *
+- * Incrementing the offload_usage of a usb_device indicates that offload is
+- * enabled on this usb_device; that is, another entity is actively handling USB
+- * transfers. This information allows the USB driver to adjust its power
+- * management policy based on offload activity.
++ * This is the lockless version of usb_offload_get. The caller must hold
++ * @udev's device lock.
+  *
+  * Return: 0 on success. A negative error code otherwise.
+  */
+-int usb_offload_get(struct usb_device *udev)
++int __usb_offload_get(struct usb_device *udev)
+ {
+ 	int ret;
+ 
+-	usb_lock_device(udev);
+-	if (udev->state == USB_STATE_NOTATTACHED) {
+-		usb_unlock_device(udev);
++	device_lock_assert(&udev->dev);
++
++	if (udev->state == USB_STATE_NOTATTACHED)
+ 		return -ENODEV;
+-	}
+ 
+ 	if (udev->state == USB_STATE_SUSPENDED ||
+-		   udev->offload_at_suspend) {
+-		usb_unlock_device(udev);
++	    udev->offload_at_suspend)
+ 		return -EBUSY;
+-	}
+ 
+ 	/*
+ 	 * offload_usage could only be modified when the device is active, since
+ 	 * it will alter the suspend flow of the device.
+ 	 */
+ 	ret = usb_autoresume_device(udev);
+-	if (ret < 0) {
+-		usb_unlock_device(udev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	udev->offload_usage++;
+ 	usb_autosuspend_device(udev);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(__usb_offload_get);
++
++/**
++ * usb_offload_get - increment the offload_usage of a USB device
++ * @udev: the USB device to increment its offload_usage
++ *
++ * Incrementing the offload_usage of a usb_device indicates that offload is
++ * enabled on this usb_device; that is, another entity is actively handling USB
++ * transfers. This information allows the USB driver to adjust its power
++ * management policy based on offload activity.
++ *
++ * Return: 0 on success. A negative error code otherwise.
++ */
++int usb_offload_get(struct usb_device *udev)
++{
++	int ret;
++
++	usb_lock_device(udev);
++	ret = __usb_offload_get(udev);
+ 	usb_unlock_device(udev);
+ 
+ 	return ret;
+@@ -58,45 +73,60 @@ int usb_offload_get(struct usb_device *udev)
+ EXPORT_SYMBOL_GPL(usb_offload_get);
+ 
+ /**
+- * usb_offload_put - drop the offload_usage of a USB device
++ * __usb_offload_put - drop the offload_usage of a USB device
+  * @udev: the USB device to drop its offload_usage
+  *
+- * The inverse operation of usb_offload_get, which drops the offload_usage of
+- * a USB device. This information allows the USB driver to adjust its power
+- * management policy based on offload activity.
++ * This is the lockless version of usb_offload_put. The caller must hold
++ * @udev's device lock.
+  *
+  * Return: 0 on success. A negative error code otherwise.
+  */
+-int usb_offload_put(struct usb_device *udev)
++int __usb_offload_put(struct usb_device *udev)
+ {
+ 	int ret;
+ 
+-	usb_lock_device(udev);
+-	if (udev->state == USB_STATE_NOTATTACHED) {
+-		usb_unlock_device(udev);
++	device_lock_assert(&udev->dev);
++
++	if (udev->state == USB_STATE_NOTATTACHED)
+ 		return -ENODEV;
+-	}
+ 
+ 	if (udev->state == USB_STATE_SUSPENDED ||
+-		   udev->offload_at_suspend) {
+-		usb_unlock_device(udev);
++	    udev->offload_at_suspend)
+ 		return -EBUSY;
+-	}
+ 
+ 	/*
+ 	 * offload_usage could only be modified when the device is active, since
+ 	 * it will alter the suspend flow of the device.
+ 	 */
+ 	ret = usb_autoresume_device(udev);
+-	if (ret < 0) {
+-		usb_unlock_device(udev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	/* Drop the count when it wasn't 0, ignore the operation otherwise. */
+ 	if (udev->offload_usage)
+ 		udev->offload_usage--;
+ 	usb_autosuspend_device(udev);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(__usb_offload_put);
++
++/**
++ * usb_offload_put - drop the offload_usage of a USB device
++ * @udev: the USB device to drop its offload_usage
++ *
++ * The inverse operation of usb_offload_get, which drops the offload_usage of
++ * a USB device. This information allows the USB driver to adjust its power
++ * management policy based on offload activity.
++ *
++ * Return: 0 on success. A negative error code otherwise.
++ */
++int usb_offload_put(struct usb_device *udev)
++{
++	int ret;
++
++	usb_lock_device(udev);
++	ret = __usb_offload_put(udev);
+ 	usb_unlock_device(udev);
+ 
+ 	return ret;
+diff --git a/drivers/usb/host/xhci-sideband.c b/drivers/usb/host/xhci-sideband.c
+index 2bd77255032b..c37c3f3adf4a 100644
+--- a/drivers/usb/host/xhci-sideband.c
++++ b/drivers/usb/host/xhci-sideband.c
+@@ -89,7 +89,7 @@ __xhci_sideband_remove_endpoint(struct xhci_sideband *sb, struct xhci_virt_ep *e
+ 	sb->eps[ep->ep_index] = NULL;
  }
  
--static int asix_ioctl (struct net_device *net, struct ifreq *rq, int cmd)
--{
--	struct usbnet *dev = netdev_priv(net);
--
--	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
--}
--
- /* We need to override some ethtool_ops so we require our
-    own structure so we don't interfere with other usbnet
-    devices that may be connected at the same time. */
-@@ -190,7 +183,7 @@ static const struct net_device_ops ax88172_netdev_ops = {
- 	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address 	= eth_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
--	.ndo_eth_ioctl		= asix_ioctl,
-+	.ndo_eth_ioctl		= usbnet_mii_ioctl,
- 	.ndo_set_rx_mode	= ax88172_set_multicast,
- };
+-/* Caller must hold sb->mutex */
++/* Caller must hold sb->mutex and udev device lock */
+ static void
+ __xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
+ {
+@@ -102,10 +102,10 @@ __xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
  
-@@ -1269,7 +1262,7 @@ static const struct net_device_ops ax88178_netdev_ops = {
- 	.ndo_set_mac_address 	= asix_set_mac_address,
- 	.ndo_validate_addr	= eth_validate_addr,
- 	.ndo_set_rx_mode	= asix_set_multicast,
--	.ndo_eth_ioctl		= asix_ioctl,
-+	.ndo_eth_ioctl		= usbnet_mii_ioctl,
- 	.ndo_change_mtu 	= ax88178_change_mtu,
- };
+ 	xhci_remove_secondary_interrupter(xhci_to_hcd(sb->xhci), sb->ir);
+ 	sb->ir = NULL;
+-	udev = sb->vdev->udev;
  
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index b034ef8a73ea..0e9ae89b840e 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -847,12 +847,6 @@ static int ax88179_set_eee(struct net_device *net, struct ethtool_keee *edata)
+-	if (udev->state != USB_STATE_NOTATTACHED)
+-		usb_offload_put(udev);
++	udev = interface_to_usbdev(sb->intf);
++	device_lock_assert(&udev->dev);
++	__usb_offload_put(udev);
+ }
+ 
+ /* sideband api functions */
+@@ -334,25 +334,36 @@ xhci_sideband_create_interrupter(struct xhci_sideband *sb, int num_seg,
+ 	if (!sb || !sb->xhci)
+ 		return -ENODEV;
+ 
+-	guard(mutex)(&sb->mutex);
++	udev = interface_to_usbdev(sb->intf);
++	usb_lock_device(udev);
++	mutex_lock(&sb->mutex);
+ 
+-	if (!sb->vdev)
+-		return -ENODEV;
++	if (!sb->vdev) {
++		ret = -ENODEV;
++		goto unlock;
++	}
+ 
+-	if (sb->ir)
+-		return -EBUSY;
++	if (sb->ir) {
++		ret = -EBUSY;
++		goto unlock;
++	}
+ 
+ 	sb->ir = xhci_create_secondary_interrupter(xhci_to_hcd(sb->xhci),
+ 						   num_seg, imod_interval,
+ 						   intr_num);
+-	if (!sb->ir)
+-		return -ENOMEM;
++	if (!sb->ir) {
++		ret = -ENOMEM;
++		goto unlock;
++	}
+ 
+-	udev = sb->vdev->udev;
+-	ret = usb_offload_get(udev);
++	ret = __usb_offload_get(udev);
+ 
+ 	sb->ir->ip_autoclear = ip_autoclear;
+ 
++unlock:
++	mutex_unlock(&sb->mutex);
++	usb_unlock_device(udev);
++
  	return ret;
  }
- 
--static int ax88179_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
--{
--	struct usbnet *dev = netdev_priv(net);
--	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
--}
--
- static const struct ethtool_ops ax88179_ethtool_ops = {
- 	.get_link		= ethtool_op_get_link,
- 	.get_msglevel		= usbnet_get_msglevel,
-@@ -998,7 +992,7 @@ static const struct net_device_ops ax88179_netdev_ops = {
- 	.ndo_change_mtu		= ax88179_change_mtu,
- 	.ndo_set_mac_address	= ax88179_set_mac_addr,
- 	.ndo_validate_addr	= eth_validate_addr,
--	.ndo_eth_ioctl		= ax88179_ioctl,
-+	.ndo_eth_ioctl		= usbnet_mii_ioctl,
- 	.ndo_set_rx_mode	= ax88179_set_multicast,
- 	.ndo_set_features	= ax88179_set_features,
- };
-diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
-index 5540f7ec4906..f040b9673579 100644
---- a/drivers/net/usb/dm9601.c
-+++ b/drivers/net/usb/dm9601.c
-@@ -266,13 +266,6 @@ static void dm9601_get_drvinfo(struct net_device *net,
- 	usbnet_get_drvinfo(net, info);
- }
- 
--static int dm9601_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
--{
--	struct usbnet *dev = netdev_priv(net);
--
--	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
--}
--
- static const struct ethtool_ops dm9601_ethtool_ops = {
- 	.get_drvinfo	= dm9601_get_drvinfo,
- 	.get_link	= usbnet_get_link,
-@@ -344,7 +337,7 @@ static const struct net_device_ops dm9601_netdev_ops = {
- 	.ndo_change_mtu		= usbnet_change_mtu,
- 	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_validate_addr	= eth_validate_addr,
--	.ndo_eth_ioctl		= dm9601_ioctl,
-+	.ndo_eth_ioctl		= usbnet_mii_ioctl,
- 	.ndo_set_rx_mode	= dm9601_set_multicast,
- 	.ndo_set_mac_address	= dm9601_set_mac_address,
- };
-diff --git a/drivers/net/usb/mcs7830.c b/drivers/net/usb/mcs7830.c
-index fdda0616704e..1aa57645f9ca 100644
---- a/drivers/net/usb/mcs7830.c
-+++ b/drivers/net/usb/mcs7830.c
-@@ -325,12 +325,6 @@ static void mcs7830_mdio_write(struct net_device *netdev, int phy_id,
- 	mcs7830_write_phy(dev, location, val);
- }
- 
--static int mcs7830_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
--{
--	struct usbnet *dev = netdev_priv(net);
--	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
--}
--
- static inline struct mcs7830_data *mcs7830_get_data(struct usbnet *dev)
+ EXPORT_SYMBOL_GPL(xhci_sideband_create_interrupter);
+@@ -367,12 +378,19 @@ EXPORT_SYMBOL_GPL(xhci_sideband_create_interrupter);
+ void
+ xhci_sideband_remove_interrupter(struct xhci_sideband *sb)
  {
- 	return (struct mcs7830_data *)&dev->data;
-@@ -473,7 +467,7 @@ static const struct net_device_ops mcs7830_netdev_ops = {
- 	.ndo_change_mtu		= usbnet_change_mtu,
- 	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_validate_addr	= eth_validate_addr,
--	.ndo_eth_ioctl		= mcs7830_ioctl,
-+	.ndo_eth_ioctl		= usbnet_mii_ioctl,
- 	.ndo_set_rx_mode	= mcs7830_set_multicast,
- 	.ndo_set_mac_address	= mcs7830_set_mac_address,
- };
-diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
-index 78c821349f48..cbc7101e05a6 100644
---- a/drivers/net/usb/smsc75xx.c
-+++ b/drivers/net/usb/smsc75xx.c
-@@ -744,12 +744,10 @@ static const struct ethtool_ops smsc75xx_ethtool_ops = {
- 
- static int smsc75xx_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
- {
--	struct usbnet *dev = netdev_priv(netdev);
--
- 	if (!netif_running(netdev))
- 		return -EINVAL;
- 
--	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
-+	return usbnet_mii_ioctl(netdev, rq, cmd);
- }
- 
- static void smsc75xx_init_mac_address(struct usbnet *dev)
-diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
-index ee8c6c9d3962..d32b0f78ab33 100644
---- a/drivers/net/usb/sr9800.c
-+++ b/drivers/net/usb/sr9800.c
-@@ -478,13 +478,6 @@ static void sr_get_drvinfo(struct net_device *net,
- 	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
- }
- 
--static int sr_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
--{
--	struct usbnet *dev = netdev_priv(net);
--
--	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
--}
--
- static int sr_set_mac_address(struct net_device *net, void *p)
- {
- 	struct usbnet *dev = netdev_priv(net);
-@@ -677,7 +670,7 @@ static const struct net_device_ops sr9800_netdev_ops = {
- 	.ndo_get_stats64	= dev_get_tstats64,
- 	.ndo_set_mac_address	= sr_set_mac_address,
- 	.ndo_validate_addr	= eth_validate_addr,
--	.ndo_eth_ioctl		= sr_ioctl,
-+	.ndo_eth_ioctl		= usbnet_mii_ioctl,
- 	.ndo_set_rx_mode        = sr_set_multicast,
- };
- 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 9280ef544bbb..41b95b04143d 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1085,6 +1085,14 @@ int usbnet_nway_reset(struct net_device *net)
- }
- EXPORT_SYMBOL_GPL(usbnet_nway_reset);
- 
-+int usbnet_mii_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
-+{
-+	struct usbnet *dev = netdev_priv(net);
+-	if (!sb)
++	struct usb_device *udev;
 +
-+	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
-+}
-+EXPORT_SYMBOL_GPL(usbnet_mii_ioctl);
-+
- void usbnet_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *info)
- {
- 	struct usbnet *dev = netdev_priv(net);
-diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
-index 2945923a8a95..b0e84896e6ac 100644
---- a/include/linux/usb/usbnet.h
-+++ b/include/linux/usb/usbnet.h
-@@ -290,6 +290,7 @@ extern u32 usbnet_get_msglevel(struct net_device *);
- extern void usbnet_set_msglevel(struct net_device *, u32);
- extern void usbnet_set_rx_mode(struct net_device *net);
- extern void usbnet_get_drvinfo(struct net_device *, struct ethtool_drvinfo *);
-+extern int usbnet_mii_ioctl(struct net_device *net, struct ifreq *rq, int cmd);
- extern int usbnet_nway_reset(struct net_device *net);
++	if (!sb || !sb->vdev)
+ 		return;
  
- extern int usbnet_manage_power(struct usbnet *, int);
+-	guard(mutex)(&sb->mutex);
++	udev = interface_to_usbdev(sb->intf);
++	usb_lock_device(udev);
++	mutex_lock(&sb->mutex);
+ 
+ 	__xhci_sideband_remove_interrupter(sb);
++
++	mutex_unlock(&sb->mutex);
++	usb_unlock_device(udev);
+ }
+ EXPORT_SYMBOL_GPL(xhci_sideband_remove_interrupter);
+ 
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index fbfcc70b07fb..19c84c05f376 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -846,11 +846,17 @@ static inline void usb_mark_last_busy(struct usb_device *udev)
+ #endif
+ 
+ #if IS_ENABLED(CONFIG_USB_XHCI_SIDEBAND)
++int __usb_offload_get(struct usb_device *udev);
++int __usb_offload_put(struct usb_device *udev);
+ int usb_offload_get(struct usb_device *udev);
+ int usb_offload_put(struct usb_device *udev);
+ bool usb_offload_check(struct usb_device *udev);
+ #else
+ 
++static inline int __usb_offload_get(struct usb_device *udev)
++{ return 0; }
++static inline int __usb_offload_put(struct usb_device *udev)
++{ return 0; }
+ static inline int usb_offload_get(struct usb_device *udev)
+ { return 0; }
+ static inline int usb_offload_put(struct usb_device *udev)
 -- 
-2.43.0
+2.53.0.rc1.225.gd81095ad13-goog
 
 
