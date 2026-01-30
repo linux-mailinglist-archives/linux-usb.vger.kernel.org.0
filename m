@@ -1,70 +1,102 @@
-Return-Path: <linux-usb+bounces-32931-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32932-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uDG4A3FcfGkYMAIAu9opvQ
-	(envelope-from <linux-usb+bounces-32931-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:23:29 +0100
+	id mHuoOTlgfGl0MAIAu9opvQ
+	(envelope-from <linux-usb+bounces-32932-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:39:37 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81D38B7E30
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:23:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87C74B7F8A
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 08:39:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 10A5D3017FB5
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 07:23:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 45BE5301A73E
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 07:39:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA4CB30B517;
-	Fri, 30 Jan 2026 07:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B743148A8;
+	Fri, 30 Jan 2026 07:39:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="fWayQbgk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lURW+nxZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f66.google.com (mail-dl1-f66.google.com [74.125.82.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B8F2FB0B9
-	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 07:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4C331328E
+	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 07:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769757785; cv=none; b=AhePZO0PtE4+m47WVPs5byBbMviyNL71DDDkYAtCvLpjLPRswKBtoqyOjo7h7Y1xcTVgLOVTpbTmjImzw0RmMcgXJJDcCHTtFUp8V4lEHWi0evUQoXrnB1kH/2sN+dRusi3Qy2pZhl5K/WnOmGnbzvxotkHsacvaaaUcfIP1OhI=
+	t=1769758752; cv=none; b=nUxWrw8GVvcHDDbgnTzL/syWl/LtvEXy442pckCzlAqO2JBBasJjMp5odd4Y3IU56WOBVwT00LXgX8pHFtQ3smubAY/KVYcTt8EmjrIhV5sUedmxnF2h9t053Ix/ZN7tATo6y19aYjq+grVOsOwZEL3tHpj5db+regnkHtviJ0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769757785; c=relaxed/simple;
-	bh=w37bPd+UttciXG0uafnVcXwv1eTLIc0mLJvkrvpo1m4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QNstzZaFuq8yW/yQhaQ11mXupjWoBv/GV48tZblJpml27Y9bPH2x/m9MsmkMgdh0yxvEVG1Fkgq7e8EzM9qK2tjZBofQslR6oVDKuFZKn0CDfL1j7Qvo8B/woKlptSr29qNQi7ApSc3MVE50xppgcs6/wrhmdenzlCrcEyayBTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=fWayQbgk; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1769757749;
-	bh=jqxQHWnmcPGEuCMRmKVcNP/OaDagHqBmtXA537H/NO4=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=fWayQbgkNOWdeZYhn/w1MbHwR4kd4W1sdvPODrdJlwbRLISPzBMcWMruEWsSJSD4i
-	 SmK1KH9qTFtE7BCe4geuNiCLpVdLqjGHz+0v8ZfYI8KQa1CpXpWd3mTN4fEwPmhLhF
-	 uTY+ztV931IaJRXwiY0RbK98Br5mDS+LUwG+PfgA=
-X-QQ-mid: zesmtpip4t1769757743tf589dc80
-X-QQ-Originating-IP: RS4NbyYHJcde7swhEr83IHeH6stOE8ZYq0ru1yiu0rQ=
-Received: from uos-PC ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 30 Jan 2026 15:22:21 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 14286146303170880498
-EX-QQ-RecipientCnt: 8
-From: raoxu <raoxu@uniontech.com>
-To: raoxu@uniontech.com
-Cc: gregkh@linuxfoundation.org,
-	kenny@panix.com,
-	linux-usb@vger.kernel.org,
-	mathias.nyman@linux.intel.com,
-	michal.pecio@gmail.com,
-	niklas.neronin@linux.intel.com,
-	zhanjun@uniontech.com
-Subject: [PATCH v13 2/2] usb: xhci: enable secondary interrupters and route transfers per slot
-Date: Fri, 30 Jan 2026 15:22:19 +0800
-Message-ID: <304049EC7F80BD35+20260130072219.13329-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <774DE05348EDA32D+20260130071806.7608-1-raoxu@uniontech.com>
-References: <774DE05348EDA32D+20260130071806.7608-1-raoxu@uniontech.com>
+	s=arc-20240116; t=1769758752; c=relaxed/simple;
+	bh=947Ihnztamc5xCRw/MGVHd3zDD8SrHrHL7SG/64BBXs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SVq9twIZL2qL7HsdkB9TYX4q8DJ/2gpIVzprxdpoqsR7TUbqOVZJ/WPdjxSNO7Dyszz2JyA5TDl4mnYxxlNSUZu8HIwVZa2/0QSKDzsHc8vrFw0Y2MucyZS9N5wb7rgUn2uMgKLYBMbGNqoQXcuDMHX/FvII+VnSfDrN9bOvkK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lURW+nxZ; arc=none smtp.client-ip=74.125.82.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dl1-f66.google.com with SMTP id a92af1059eb24-124566b6693so267101c88.0
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jan 2026 23:39:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769758749; x=1770363549; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DdVE2+FCBzVjnnVs+2tHZ0yjRqOVQO47L49tKgXTrYw=;
+        b=lURW+nxZxDrOQa7lZUhD0XUexud1wi1OuRgsi25Jk6GOLuZzQ62A4r86skKx3ChuVi
+         e/br+84UFV3Jb+UQTp8lz/wtpLDkKRtiID2tiN4qOI314ZqixT0DLALCtQmcDhsldRit
+         OZXmq7MlXmLOEySZtauHf2y3McPTPDhx2TNUo5fre9xBgGjjcL4IkUgp2VJz/0dU4nTT
+         uaXnICRaDiDdkBauRDq4U7joN8HuKTzGngsUDUSe+JgqRCFCLq7b+yAq5BHqlCatJvDU
+         twVqRPuGYmKSHmyH9nQ04WgM70f7WoRhaVKG3vfXktqUkGSrKelYHGmauKJ1ud/fkEXu
+         0X4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769758749; x=1770363549;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DdVE2+FCBzVjnnVs+2tHZ0yjRqOVQO47L49tKgXTrYw=;
+        b=LSmRscNy6TSJ2OAUtUEtmXK2FlWMjMKC2farjxmi1FMj1argSZdG+Y9zsKE3k/mjw7
+         eFHSgwKuninOIeOAM1nNENYvP48feNquH8IK5P/rckhbLUDeiDUu99GhytZQWCi/gsUm
+         RLLMCSdinut9j4OaeDu6PgY97QEUbxOOJqy5t6lpImBJTgy3IHw9HQpV/d/ONK70f4yD
+         MJoZIPOteHLLv9Bkonnw9bNBLs7Uve/JN1/54aV7Ak41cvfcdjt26S5/GYMsLjJQpVdt
+         iTn8eN41pww7Lqbk6ki6Wr/hrDn/tLo8gszycfWXCheSl7TR4o/f8Uys7qTl3bSzELtR
+         6yqw==
+X-Forwarded-Encrypted: i=1; AJvYcCUM2VRPaftQgqvTxWeG1Ae4KxoLT13g1V4LAt/tNHwSN0A45Ca9kTjdWLpEp5siuVJeSq+vBoLNLH8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvQgAFXvPDf5ygkc6uVjuCKstgjP33d2lxPMFx01mNQLeh6xMJ
+	MGCFvT9W6WXyARQ++wuTVZCAiAsJ07ESP/yj+bPSX0ESNs6iurAdZ234
+X-Gm-Gg: AZuq6aITOe8y7fvgPWpSG3Eu91GTwPMC+PnerXGhR2PHfsQesHV/awB5lP/LFyFlAmf
+	YdkevwYrWiZCGp5LP4DFwUVdG2IstSawkL2mdIUAgdBgQaI9xM2oa8fw8/ho0xnImli2TEW8+cM
+	DQN40HXmLqGTmlmG8kaPBqQ8QUfMJJJDxYLRWlIt+f34pzwX+dV6I+RcVZ6n1yW7PWZiiqALf6V
+	oSdGtLfuTyODAgFossQVuYeLOzEXCEQYUC4Dw/mBogOmXEPJQ4zDHHQF34y9G74RS+Yu154gKg/
+	BcTdP2K2UkfduWTcWCbeYK05YvxIcZ4AWmdlW/UerjKaIe28mtdTbF8zSRQjeLzd1C8lrhafuc1
+	Q+lg34Gq2pGtAsIyCu6J2QUbcec1+PtByrieXJtlP+H+GS5CnuyyT1QCIDTMltU5RqAsBz5PeDK
+	d7sW4CDQohwgi4nBrD/TzaHoR1Io4OfsHWa/+vFClnoVIUMS8tn/y86f1SUmuS+ulWuFmTdKMQj
+	1yQ99YskTA+Rw3A5OsCuB8wXQxoCYp/RJsuZDsiPDugy1ZFWDgpaiEVObIyGJH/qGEdclXa+nBS
+	CyFG
+X-Received: by 2002:a05:7022:2486:b0:11b:9386:a3c0 with SMTP id a92af1059eb24-125c1041f6emr983267c88.43.1769758749278;
+        Thu, 29 Jan 2026 23:39:09 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-124a9de948esm10187112c88.9.2026.01.29.23.39.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jan 2026 23:39:08 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Peter Korsgaard <peter@korsgaard.com>,
+	Steve Glendinning <steve.glendinning@shawell.net>,
+	Oliver Neukum <oneukum@suse.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Max Schulze <max.schulze@online.de>,
+	=?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>
+Subject: [PATCH net-next v3] net: usb: introduce usbnet_mii_ioctl helper function
+Date: Thu, 29 Jan 2026 23:37:49 -0800
+Message-ID: <20260130073810.29090-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -72,600 +104,256 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: Nx1ABH/Z49PLYXmb47pE9i3X1PukSx+4ifIwUj3+gYk8vZl8HD87cmQ3
-	PuVt+OS3oVIpbuakaiwiPB5pS519hx6XhaF0TtM0ElAX15Yc3dqRGLpNlUvnAygXpteXHS5
-	LK1y4i9UauPDxoy6PGTq2+gpVLFzZc1oLfVY543icu294pdpkuE+eL+CERcHfBGdPduRZ1y
-	9npc4oqOPC/dfICOrs81uRIVSz5j6/qjodPzLOq0V/rx0pQvwgbhYdUf+MOVn71W3eXazL1
-	PomEgXNbEzq0hBJwkj7IWEeQ+0JzMSRe6SPMkV1a3WZLvUMBeldNdr7365fqBs4O+PqeHHW
-	uJyHLaj9e5dYccWKjrMQz9td7xyILWkCi6jMO5LT7KbUYm8v/Y9kDhS8EjFvC0sll31GHEB
-	MdJzTkSBNGbFsdtZ9ZfR6Pdr7uaNqQ6q+01TX0rQg2zunyJlN81LRqS37oQupI1icJjb3Jj
-	ncsD/27MtXmrECnfV3Ui5TWOnhj8JiWk6TAISlhBbEUl3GWGOkmAjtknqIqObAudxTeDzLh
-	WmOndWQHaW4j0EtBRcapcW7/ee0nFBzmv9P5Yl+bHyDqzhJyXgvvVVGzboSA57i3PoI/93D
-	meM0mFIlAjyTy7jPfNELESfYB+rE3o+8hMA/Zx3P/w2p1RG9Q1x5fenEBS7egJSbDurd62y
-	Tzm07WoV+2R6WttsvHC6rBERZeSw99oPjPSBbq3dqy6DvRvep48cl0Y+G/4jMl8GJqqlY2V
-	jqiXSZZHBqAXpxky/7chalWUoNQoEOpTbzy2jx/taPgBYinUPhp2Q0xwEcZS8rHPu9JbDKk
-	Oli12WEMIc3Z2ykHu+QLyWfEksTc6KOBKGvpsKqkofK+7sLME/Ot9SV2CgzR8L5lYcS3cer
-	G8fYglyBa4V3BDZ3BDjTNNx/JE7YNeIkbv/2wIO/MRawqb1gnWI4uRRF5PrWEWScPQznkgE
-	56rzMQfhpVE3ETX1nJNkus5jc/PPRdJcGlQ7l5LqStWcqhFXSDducVHjjcr2+22NgmAStQR
-	KKd0Ch1bUjIig03DGLJ6TbLTSvKXhtIT8oEIO+VNV1g12eS1Ex
-X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
-X-QQ-RECHKSPAM: 0
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32931-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[gmail.com,linux.dev,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,korsgaard.com,shawell.net,suse.com,linuxfoundation.org,pengutronix.de,online.de,piap.pl];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,panix.com,vger.kernel.org,linux.intel.com,gmail.com,uniontech.com];
-	DKIM_TRACE(0.00)[uniontech.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	TAGGED_FROM(0.00)[bounces-32932-lists,linux-usb=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:email,uniontech.com:dkim,uniontech.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 81D38B7E30
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:email]
+X-Rspamd-Queue-Id: 87C74B7F8A
 X-Rspamd-Action: no action
 
-From: Xu Rao <raoxu@uniontech.com>
+Many USB network drivers use identical code to pass ioctl
+requests on to the MII layer. Reduce code duplication by
+refactoring this code into a helper function.
 
-Some xHCI hosts expose multiple MSI/MSI-X vectors and support multiple
-interrupters with independent event rings, but Linux commonly routes all
-transfer completions through interrupter 0.
-
-This is not about increasing USB link throughput, but about avoiding a
-driver-imposed single hot spot. On hosts that already provide multiple
-MSI/MSI-X vectors and independent event rings, routing all completions
-through interrupter 0 creates unnecessary contention (serialized event
-handling/locks and coupled moderation), increasing CPU cost and tail
-latency under many active devices/endpoints. Using secondary interrupters
-simply matches the hardware's design, similar in spirit to merged
-xHCI-sideband work: exploit available parallel paths rather than
-funneling all events through one.
-
-Allocate a small capped set of secondary interrupters in xhci_mem_init()
-(MAX_SECONDARY_INTRNUM, default 4) and request up to the matching number
-of IRQ vectors (bounded by what PCI core provides).  Dispatch each vector
-to its interrupter via the per-vector irq_ctx.
-
-Route transfers per USB device (slot) by assigning vdev->interrupter at
-device allocation time and programming the interrupter target (slot
-context + TRB_INTR_TARGET) from that selection, so completions land on the
-selected event ring.  Drain a slot's secondary event ring at selected
-command completion boundaries to reduce late-event artifacts when teardown
-happens on interrupter 0.
-
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
-
+Reviewed-by: Vadim Fedorenko <vadim.fedorenko@linux.dev> (v1)
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 ---
- drivers/usb/host/xhci-mem.c  |  43 ++++++++++
- drivers/usb/host/xhci-pci.c  |  39 ++++++++-
- drivers/usb/host/xhci-ring.c | 151 ++++++++++++++++++++++++++++-------
- drivers/usb/host/xhci.c      |  16 +++-
- drivers/usb/host/xhci.h      |  10 +++
- 5 files changed, 228 insertions(+), 31 deletions(-)
+Changes in v3:
+Rebase on latest net-next
+Add changelog
+Add received Reviewed-by tag
+Changes in v2 (not numbered):
+Resent with maintainer CCs
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index c708bdd69f16..87875d518ee3 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -14,11 +14,17 @@
- #include <linux/slab.h>
- #include <linux/dmapool.h>
- #include <linux/dma-mapping.h>
-+#include <linux/module.h>
-+#include <linux/moduleparam.h>
+ drivers/net/usb/asix_devices.c | 11 ++---------
+ drivers/net/usb/ax88179_178a.c |  8 +-------
+ drivers/net/usb/dm9601.c       |  9 +--------
+ drivers/net/usb/mcs7830.c      |  8 +-------
+ drivers/net/usb/smsc75xx.c     |  4 +---
+ drivers/net/usb/sr9800.c       |  9 +--------
+ drivers/net/usb/usbnet.c       |  8 ++++++++
+ include/linux/usb/usbnet.h     |  1 +
+ 8 files changed, 16 insertions(+), 42 deletions(-)
 
- #include "xhci.h"
- #include "xhci-trace.h"
- #include "xhci-debugfs.h"
-
-+static bool xhci_secondary_intr __read_mostly;
-+module_param_named(secondary_intr, xhci_secondary_intr, bool, 0444);
-+MODULE_PARM_DESC(secondary_intr, "Enable xHCI secondary interrupters (default: N)");
-+
- /*
-  * Allocates a generic ring segment from the ring pool, sets the dma address,
-  * initializes the segment to zero, and sets the private next pointer to NULL.
-@@ -1197,6 +1203,15 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
-
- 	ep0_ctx->tx_info = cpu_to_le32(EP_AVG_TRB_LENGTH(8));
-
-+	/* Match Slot Context interrupter target to vdev->interrupter. */
-+	if (dev->interrupter) {
-+		u32 tt = le32_to_cpu(slot_ctx->tt_info);
-+
-+		tt &= ~SLOT_INTR_TARGET_MASK;
-+		tt |= SLOT_INTR_TARGET(dev->interrupter->intr_num);
-+		slot_ctx->tt_info = cpu_to_le32(tt);
-+	}
-+
- 	trace_xhci_setup_addressable_virt_device(dev);
-
- 	/* Steps 7 and 8 were done in xhci_alloc_virt_device() */
-@@ -2402,6 +2417,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- {
- 	struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
- 	dma_addr_t	dma;
-+	unsigned int	secondary_intr_num = 0;
-+	int		i;
-
- 	/*
- 	 * xHCI section 5.4.6 - Device Context array must be
-@@ -2495,6 +2512,32 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	if (!xhci->interrupters[0])
- 		goto fail;
-
-+	xhci->secondary_irqs_alloc = 0;
-+	if (!xhci_secondary_intr)
-+		goto skip_secondary;
-+
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Allocating secondary event ring");
-+	if (xhci->max_interrupters > 1)
-+		secondary_intr_num = min_t(unsigned int,
-+				xhci->max_interrupters - 1,
-+				(unsigned int)MAX_SECONDARY_INTRNUM);
-+
-+	for (i = 1; i <= secondary_intr_num; i++) {
-+		if (xhci->interrupters[i])
-+			continue;
-+		xhci->interrupters[i] = xhci_alloc_interrupter(xhci, i, flags);
-+		if (!xhci->interrupters[i]) {
-+			while (--i >= 1) {
-+				xhci_free_interrupter(xhci, xhci->interrupters[i]);
-+				xhci->interrupters[i] = NULL;
-+			}
-+			xhci->secondary_irqs_alloc = 0;
-+			break;
-+		}
-+		xhci->secondary_irqs_alloc++;
-+	}
-+
-+skip_secondary:
- 	if (scratchpad_alloc(xhci, flags))
- 		goto fail;
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 3e019f2811e7..28050222f53b 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -152,6 +152,8 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
- 	int ret;
- 	struct xhci_irq_ctx *ctx;
-+	unsigned int irqs_num;
-+	int i;
-
- 	/*
- 	 * Some Fresco Logic host controllers advertise MSI, but fail to
-@@ -174,7 +176,7 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
-
- 	/* TODO: Check with MSI Soc for sysdev */
- 	xhci->nvecs = pci_alloc_irq_vectors(pdev, 1, xhci->nvecs,
--					    PCI_IRQ_MSIX | PCI_IRQ_MSI);
-+					    PCI_IRQ_MSIX | PCI_IRQ_MSI | PCI_IRQ_AFFINITY);
- 	if (xhci->nvecs < 0) {
- 		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			       "failed to allocate IRQ vectors");
-@@ -192,8 +194,43 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
- 		goto free_irq_vectors;
-
- 	xhci->irqs_enabled = 1;
-+
-+	/*
-+	 * Vector 0 IRQ handler is requested above.
-+	 * Request IRQ handlers for up to secondary_irqs_alloc additional vectors
-+	 * (vectors 1..), limited by what PCI core actually allocated.
-+	 */
-+	irqs_num = min_t(unsigned int,
-+			(unsigned int)xhci->nvecs,
-+			(unsigned int)(1 + xhci->secondary_irqs_alloc));
-+
-+	/* Vector 0 requested above; request up to sec_num secondary vectors (1..). */
-+	for (i = 1; i < irqs_num; i++) {
-+		ctx = &xhci->irq_ctx[i];
-+		ctx->hcd = hcd;
-+		ctx->intr_num = i;
-+		ret = request_irq(pci_irq_vector(pdev, i), xhci_msi_irq, 0,
-+				"xhci_hcd", ctx);
-+		if (ret) {
-+			xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+					"failed to request irq vector %d", i);
-+			while (--i >= 1) {
-+				free_irq(pci_irq_vector(pdev, i),
-+						&xhci->irq_ctx[i]);
-+				memset(&xhci->irq_ctx[i], 0,
-+						sizeof(xhci->irq_ctx[i]));
-+			}
-+			xhci->irqs_enabled = 1;
-+			break;
-+		}
-+		xhci->irqs_enabled++;
-+	}
-+
- 	hcd->msi_enabled = 1;
- 	hcd->msix_enabled = pdev->msix_enabled;
-+
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "enabled %u %s interrupters",
-+			xhci->irqs_enabled, pdev->msix_enabled ? "MSI-X" : "MSI");
- 	return 0;
-
- free_irq_vectors:
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 3ea134c07c5f..5a230dbc9430 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -64,6 +64,9 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 			 u32 field1, u32 field2,
- 			 u32 field3, u32 field4, bool command_must_succeed);
-
-+static void xhci_handle_slot_secondary_events(struct xhci_hcd *xhci,
-+		union xhci_trb *cmd_trb);
-+
- /*
-  * Returns zero if the TRB isn't in this segment, otherwise it returns the DMA
-  * address of the TRB.
-@@ -1859,6 +1862,9 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
- 		}
- 	}
-
-+	/* Handle slot secondary events before command-specific teardown logic */
-+	xhci_handle_slot_secondary_events(xhci, cmd_trb);
-+
- 	cmd_type = TRB_FIELD_TO_TYPE(le32_to_cpu(cmd_trb->generic.field[3]));
- 	switch (cmd_type) {
- 	case TRB_ENABLE_SLOT:
-@@ -3138,6 +3144,72 @@ static int xhci_handle_events(struct xhci_hcd *xhci, struct xhci_interrupter *ir
- 	return 0;
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index c73cf52a65a8..a453e4275e2f 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -97,13 +97,6 @@ static u32 asix_get_phyid(struct usbnet *dev)
+ 	return phy_id;
  }
-
-+/*
-+ * Handle a slot's secondary event ring at command completion boundaries.
-+ *
-+ * With secondary interrupters, transfer events may lag behind command
-+ * completions (handled on interrupter 0). Commands that stop/reset/disable
-+ * endpoints/slots can reclaim TD state before those transfer events are
-+ * processed, leading to "Spurious event dma" reports. Call this from
-+ * handle_cmd_completion() before command-specific completion handling.
-+ */
-+static void xhci_handle_slot_secondary_events(struct xhci_hcd *xhci,
-+		union xhci_trb *cmd_trb)
-+{
-+	u32 field3, cmd_type, slot_id;
-+	struct xhci_virt_device *vdev;
-+	struct xhci_interrupter *sec_ir;
-+	unsigned int intr;
-+
-+	/* No secondary routing -> nothing to do */
-+	if (xhci->irqs_enabled <= 1)
-+		return;
-+
-+	field3   = le32_to_cpu(cmd_trb->generic.field[3]);
-+	cmd_type = TRB_FIELD_TO_TYPE(field3);
-+	slot_id  = TRB_TO_SLOT_ID(field3);
-+
-+	if (!slot_id)
-+		return;
-+
-+	/*
-+	 * Handle only for commands that can stop/reset/disable endpoints/slots
-+	 * and/or cause the driver to reclaim TD ownership.
-+	 */
-+	switch (cmd_type) {
-+	case TRB_STOP_RING:
-+	case TRB_SET_DEQ:
-+	case TRB_RESET_EP:
-+	case TRB_RESET_DEV:
-+	case TRB_DISABLE_SLOT:
-+		break;
-+	case TRB_CONFIG_EP:
-+		/* Only needed for deconfigure (drop endpoints) */
-+		if (!(field3 & TRB_DC))
-+			return;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	vdev = xhci->devs[slot_id];
-+	if (!vdev || !vdev->interrupter)
-+		return;
-+
-+	intr = vdev->interrupter->intr_num;
-+	if (!intr || intr >= xhci->irqs_enabled)
-+		return; /* slot is on primary interrupter */
-+
-+	sec_ir = xhci->interrupters[intr];
-+	if (!sec_ir || !sec_ir->event_ring)
-+		return;
-+
-+	lockdep_assert_held(&xhci->lock);
-+
-+	/* Handle pending events normally to complete URB/TD bookkeeping. */
-+	xhci_handle_events(xhci, sec_ir, false);
-+}
-+
- /*
-  * Move the event ring dequeue pointer to skip events kept in the secondary
-  * event ring.  This is used to ensure that pending events in the ring are
-@@ -3169,14 +3241,8 @@ void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
- 	xhci_handle_events(xhci, ir, true);
- }
-
--/*
-- * xHCI spec says we can get an interrupt, and if the HC has an error condition,
-- * we might get bad data out of the event ring.  Section 4.10.2.7 has a list of
-- * indicators of an event TRB error, but we check the status *first* to be safe.
-- */
--irqreturn_t xhci_irq(struct usb_hcd *hcd)
-+static irqreturn_t xhci_irq_ir(struct xhci_hcd *xhci, struct xhci_interrupter *ir)
- {
--	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
- 	irqreturn_t ret = IRQ_HANDLED;
- 	u32 status;
-
-@@ -3188,7 +3254,11 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 		goto out;
- 	}
-
--	if (!(status & STS_EINT)) {
-+	/*
-+	 * STS_EINT is only meaningful for the primary interrupter (0).
-+	 * Secondary vectors may interrupt without STS_EINT set.
-+	 */
-+	if (ir->intr_num == 0 && !(status & STS_EINT)) {
- 		ret = IRQ_NONE;
- 		goto out;
- 	}
-@@ -3204,30 +3274,52 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 		goto out;
- 	}
-
--	/*
--	 * Clear the op reg interrupt status first,
--	 * so we can receive interrupts from other MSI-X interrupters.
--	 * Write 1 to clear the interrupt status.
--	 */
--	status |= STS_EINT;
--	writel(status, &xhci->op_regs->status);
-+	if (ir->intr_num == 0) {
-+		/*
-+		 * Clear the op reg interrupt status first,
-+		 * so we can receive interrupts from other MSI-X interrupters.
-+		 * Write 1 to clear the interrupt status.
-+		 */
-+		status |= STS_EINT;
-+		writel(status, &xhci->op_regs->status);
-+	}
-
--	/* This is the handler of the primary interrupter */
--	xhci_handle_events(xhci, xhci->interrupters[0], false);
-+	/* Handle events for this interrupter. */
-+	xhci_handle_events(xhci, ir, false);
- out:
- 	spin_unlock(&xhci->lock);
-
+ 
+-static int asix_ioctl (struct net_device *net, struct ifreq *rq, int cmd)
+-{
+-	struct usbnet *dev = netdev_priv(net);
+-
+-	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
+-}
+-
+ /* We need to override some ethtool_ops so we require our
+    own structure so we don't interfere with other usbnet
+    devices that may be connected at the same time. */
+@@ -190,7 +183,7 @@ static const struct net_device_ops ax88172_netdev_ops = {
+ 	.ndo_get_stats64	= dev_get_tstats64,
+ 	.ndo_set_mac_address 	= eth_mac_addr,
+ 	.ndo_validate_addr	= eth_validate_addr,
+-	.ndo_eth_ioctl		= asix_ioctl,
++	.ndo_eth_ioctl		= usbnet_mii_ioctl,
+ 	.ndo_set_rx_mode	= ax88172_set_multicast,
+ };
+ 
+@@ -1269,7 +1262,7 @@ static const struct net_device_ops ax88178_netdev_ops = {
+ 	.ndo_set_mac_address 	= asix_set_mac_address,
+ 	.ndo_validate_addr	= eth_validate_addr,
+ 	.ndo_set_rx_mode	= asix_set_multicast,
+-	.ndo_eth_ioctl		= asix_ioctl,
++	.ndo_eth_ioctl		= usbnet_mii_ioctl,
+ 	.ndo_change_mtu 	= ax88178_change_mtu,
+ };
+ 
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index b034ef8a73ea..0e9ae89b840e 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -847,12 +847,6 @@ static int ax88179_set_eee(struct net_device *net, struct ethtool_keee *edata)
  	return ret;
  }
-
-+/*
-+ * xHCI spec says we can get an interrupt, and if the HC has an error condition,
-+ * we might get bad data out of the event ring.  Section 4.10.2.7 has a list of
-+ * indicators of an event TRB error, but we check the status *first* to be safe.
-+ */
-+irqreturn_t xhci_irq(struct usb_hcd *hcd)
-+{
-+	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+
-+	return xhci_irq_ir(xhci, xhci->interrupters[0]);
-+}
-+
- irqreturn_t xhci_msi_irq(int irq, void *data)
- {
- 	struct xhci_irq_ctx *ctx = data;
-+	struct xhci_hcd *xhci;
-+	struct xhci_interrupter *ir;
-
--	/* For now only vector 0 is requested; keep behavior unchanged. */
-+	/* All MSI/MSI-X vectors use ctx (dev_id) to select interrupter.*/
- 	if (!ctx || !ctx->hcd)
- 		return IRQ_NONE;
--	return xhci_irq(ctx->hcd);
-+
-+	xhci = hcd_to_xhci(ctx->hcd);
-+	ir = xhci->interrupters[ctx->intr_num];
-+	if (!ir)
-+		return IRQ_NONE;
-+
-+	return xhci_irq_ir(xhci, ir);
- }
- EXPORT_SYMBOL_GPL(xhci_msi_irq);
-
-@@ -3629,6 +3721,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	int sent_len, ret;
- 	u32 field, length_field, remainder;
- 	u64 addr, send_addr;
-+	struct xhci_interrupter *ir;
-
- 	ring = xhci_urb_to_transfer_ring(xhci, urb);
- 	if (!ring)
-@@ -3669,6 +3762,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	start_trb = &ring->enqueue->generic;
- 	start_cycle = ring->cycle_state;
- 	send_addr = addr;
-+	ir = xhci->devs[slot_id]->interrupter;
-
- 	/* Queue the TRBs, even if they are zero-length */
- 	for (enqd_len = 0; first_trb || enqd_len < full_len;
-@@ -3729,7 +3823,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
-
- 		length_field = TRB_LEN(trb_buff_len) |
- 			TRB_TD_SIZE(remainder) |
--			TRB_INTR_TARGET(0);
-+			TRB_INTR_TARGET(ir->intr_num);
-
- 		queue_trb(xhci, ring, more_trbs_coming | need_zero_pkt,
- 				lower_32_bits(send_addr),
-@@ -3761,7 +3855,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 		urb_priv->td[1].end_trb = ring->enqueue;
- 		urb_priv->td[1].end_seg = ring->enq_seg;
- 		field = TRB_TYPE(TRB_NORMAL) | ring->cycle_state | TRB_IOC;
--		queue_trb(xhci, ring, 0, 0, 0, TRB_INTR_TARGET(0), field);
-+		queue_trb(xhci, ring, 0, 0, 0, TRB_INTR_TARGET(ir->intr_num), field);
- 	}
-
- 	check_trb_math(urb, enqd_len);
-@@ -3783,6 +3877,9 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	u32 field;
- 	struct urb_priv *urb_priv;
- 	struct xhci_td *td;
-+	struct xhci_interrupter *ir;
-+
-+	ir = xhci->devs[slot_id]->interrupter;
-
- 	ep_ring = xhci_urb_to_transfer_ring(xhci, urb);
- 	if (!ep_ring)
-@@ -3805,7 +3902,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 		if (last_trb_on_seg(ep_ring->enq_seg, ep_ring->enqueue + 1)) {
- 			field = TRB_TYPE(TRB_TR_NOOP) | ep_ring->cycle_state;
- 			queue_trb(xhci, ep_ring, false, 0, 0,
--					TRB_INTR_TARGET(0), field);
-+					TRB_INTR_TARGET(ir->intr_num), field);
- 		}
- 	}
-
-@@ -3856,7 +3953,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	queue_trb(xhci, ep_ring, true,
- 		  setup->bRequestType | setup->bRequest << 8 | le16_to_cpu(setup->wValue) << 16,
- 		  le16_to_cpu(setup->wIndex) | le16_to_cpu(setup->wLength) << 16,
--		  TRB_LEN(8) | TRB_INTR_TARGET(0),
-+		  TRB_LEN(8) | TRB_INTR_TARGET(ir->intr_num),
- 		  /* Immediate data in pointer */
- 		  field);
-
-@@ -3886,7 +3983,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 				urb, 1);
- 		length_field = TRB_LEN(urb->transfer_buffer_length) |
- 				TRB_TD_SIZE(remainder) |
--				TRB_INTR_TARGET(0);
-+				TRB_INTR_TARGET(ir->intr_num);
- 		if (setup->bRequestType & USB_DIR_IN)
- 			field |= TRB_DIR_IN;
- 		queue_trb(xhci, ep_ring, true,
-@@ -3909,7 +4006,7 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 	queue_trb(xhci, ep_ring, false,
- 			0,
- 			0,
--			TRB_INTR_TARGET(0),
-+			TRB_INTR_TARGET(ir->intr_num),
- 			/* Event on completion */
- 			field | TRB_IOC | TRB_TYPE(TRB_STATUS) | ep_ring->cycle_state);
-
-@@ -4099,7 +4196,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
-
- 	xep = &xhci->devs[slot_id]->eps[ep_index];
- 	ep_ring = xhci->devs[slot_id]->eps[ep_index].ring;
--	ir = xhci->interrupters[0];
-+	ir = xhci->devs[slot_id]->interrupter;
-
- 	num_tds = urb->number_of_packets;
- 	if (num_tds < 1) {
-@@ -4200,7 +4297,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 						   urb, more_trbs_coming);
-
- 			length_field = TRB_LEN(trb_buff_len) |
--				TRB_INTR_TARGET(0);
-+				TRB_INTR_TARGET(ir->intr_num);
-
- 			/* xhci 1.1 with ETE uses TD Size field for TBC */
- 			if (first_trb && xep->use_extended_tbc)
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 18d3093b688a..3187f4b6943b 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -577,9 +577,6 @@ static int xhci_init(struct usb_hcd *hcd)
- 	/* Set USB 3.0 device notifications for function remote wake */
- 	xhci_set_dev_notifications(xhci);
-
--	/* Since only the main interrupt is used, secondary_irqs_alloc is set to 0. */
--	xhci->secondary_irqs_alloc = 0;
+ 
+-static int ax88179_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
+-{
+-	struct usbnet *dev = netdev_priv(net);
+-	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
+-}
 -
- 	/*
- 	 * Initialize all allocated interrupters here.
- 	 * Use allocated count as loop bound to avoid touching non-allocated
-@@ -4236,6 +4233,7 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
- 	unsigned long flags;
- 	int ret, slot_id;
- 	struct xhci_command *command;
-+	unsigned int sec_irqs, intr_num;
-
- 	command = xhci_alloc_command(xhci, true, GFP_KERNEL);
- 	if (!command)
-@@ -4292,6 +4290,18 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
-
- 	udev->slot_id = slot_id;
-
-+	/*
-+	 * Spread devices across IRQ-backed secondary interrupters [1..].
-+	 * If only vector 0 is enabled, default to interrupter 0.
-+	 */
-+	sec_irqs = (xhci->irqs_enabled > 1) ? (xhci->irqs_enabled - 1) : 0;
-+	if (sec_irqs) {
-+		intr_num = slot_id % sec_irqs;
-+		vdev->interrupter = xhci->interrupters[intr_num + 1];
-+	} else {
-+		vdev->interrupter = xhci->interrupters[0];
-+	}
-+
- 	xhci_debugfs_create_slot(xhci, slot_id);
-
- 	/*
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 90d4ba6b3573..c437aace7af7 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -408,6 +408,11 @@ struct xhci_slot_ctx {
- #define SLOT_STATE_ADDRESSED	2
- #define SLOT_STATE_CONFIGURED	3
-
-+/* Interrupter Target - tt_info[31:22] (xHCI Slot Context) */
-+#define SLOT_INTR_TARGET_SHIFT 22
-+#define SLOT_INTR_TARGET_MASK  (0x3ffU << SLOT_INTR_TARGET_SHIFT)
-+#define SLOT_INTR_TARGET(p)    (((p) & 0x3ffU) << SLOT_INTR_TARGET_SHIFT)
-+
- /**
-  * struct xhci_ep_ctx
-  * @ep_info:	endpoint state, streams, mult, and interval information.
-@@ -767,6 +772,11 @@ struct xhci_virt_device {
- 	void				*debugfs_private;
- 	/* set if this endpoint is controlled via sideband access*/
- 	struct xhci_sideband	*sideband;
-+	/*
-+	 * Default transfer-event interrupter for this USB device.
-+	 * Queueing code programs TRB_INTR_TARGET() from vdev->interrupter.
-+	 */
-+	struct xhci_interrupter *interrupter;
+ static const struct ethtool_ops ax88179_ethtool_ops = {
+ 	.get_link		= ethtool_op_get_link,
+ 	.get_msglevel		= usbnet_get_msglevel,
+@@ -998,7 +992,7 @@ static const struct net_device_ops ax88179_netdev_ops = {
+ 	.ndo_change_mtu		= ax88179_change_mtu,
+ 	.ndo_set_mac_address	= ax88179_set_mac_addr,
+ 	.ndo_validate_addr	= eth_validate_addr,
+-	.ndo_eth_ioctl		= ax88179_ioctl,
++	.ndo_eth_ioctl		= usbnet_mii_ioctl,
+ 	.ndo_set_rx_mode	= ax88179_set_multicast,
+ 	.ndo_set_features	= ax88179_set_features,
  };
-
- /*
---
-2.50.1
+diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
+index 5540f7ec4906..f040b9673579 100644
+--- a/drivers/net/usb/dm9601.c
++++ b/drivers/net/usb/dm9601.c
+@@ -266,13 +266,6 @@ static void dm9601_get_drvinfo(struct net_device *net,
+ 	usbnet_get_drvinfo(net, info);
+ }
+ 
+-static int dm9601_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
+-{
+-	struct usbnet *dev = netdev_priv(net);
+-
+-	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
+-}
+-
+ static const struct ethtool_ops dm9601_ethtool_ops = {
+ 	.get_drvinfo	= dm9601_get_drvinfo,
+ 	.get_link	= usbnet_get_link,
+@@ -344,7 +337,7 @@ static const struct net_device_ops dm9601_netdev_ops = {
+ 	.ndo_change_mtu		= usbnet_change_mtu,
+ 	.ndo_get_stats64	= dev_get_tstats64,
+ 	.ndo_validate_addr	= eth_validate_addr,
+-	.ndo_eth_ioctl		= dm9601_ioctl,
++	.ndo_eth_ioctl		= usbnet_mii_ioctl,
+ 	.ndo_set_rx_mode	= dm9601_set_multicast,
+ 	.ndo_set_mac_address	= dm9601_set_mac_address,
+ };
+diff --git a/drivers/net/usb/mcs7830.c b/drivers/net/usb/mcs7830.c
+index fdda0616704e..1aa57645f9ca 100644
+--- a/drivers/net/usb/mcs7830.c
++++ b/drivers/net/usb/mcs7830.c
+@@ -325,12 +325,6 @@ static void mcs7830_mdio_write(struct net_device *netdev, int phy_id,
+ 	mcs7830_write_phy(dev, location, val);
+ }
+ 
+-static int mcs7830_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
+-{
+-	struct usbnet *dev = netdev_priv(net);
+-	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
+-}
+-
+ static inline struct mcs7830_data *mcs7830_get_data(struct usbnet *dev)
+ {
+ 	return (struct mcs7830_data *)&dev->data;
+@@ -473,7 +467,7 @@ static const struct net_device_ops mcs7830_netdev_ops = {
+ 	.ndo_change_mtu		= usbnet_change_mtu,
+ 	.ndo_get_stats64	= dev_get_tstats64,
+ 	.ndo_validate_addr	= eth_validate_addr,
+-	.ndo_eth_ioctl		= mcs7830_ioctl,
++	.ndo_eth_ioctl		= usbnet_mii_ioctl,
+ 	.ndo_set_rx_mode	= mcs7830_set_multicast,
+ 	.ndo_set_mac_address	= mcs7830_set_mac_address,
+ };
+diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+index 78c821349f48..cbc7101e05a6 100644
+--- a/drivers/net/usb/smsc75xx.c
++++ b/drivers/net/usb/smsc75xx.c
+@@ -744,12 +744,10 @@ static const struct ethtool_ops smsc75xx_ethtool_ops = {
+ 
+ static int smsc75xx_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
+ {
+-	struct usbnet *dev = netdev_priv(netdev);
+-
+ 	if (!netif_running(netdev))
+ 		return -EINVAL;
+ 
+-	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
++	return usbnet_mii_ioctl(netdev, rq, cmd);
+ }
+ 
+ static void smsc75xx_init_mac_address(struct usbnet *dev)
+diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
+index ee8c6c9d3962..d32b0f78ab33 100644
+--- a/drivers/net/usb/sr9800.c
++++ b/drivers/net/usb/sr9800.c
+@@ -478,13 +478,6 @@ static void sr_get_drvinfo(struct net_device *net,
+ 	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+ }
+ 
+-static int sr_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
+-{
+-	struct usbnet *dev = netdev_priv(net);
+-
+-	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
+-}
+-
+ static int sr_set_mac_address(struct net_device *net, void *p)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+@@ -677,7 +670,7 @@ static const struct net_device_ops sr9800_netdev_ops = {
+ 	.ndo_get_stats64	= dev_get_tstats64,
+ 	.ndo_set_mac_address	= sr_set_mac_address,
+ 	.ndo_validate_addr	= eth_validate_addr,
+-	.ndo_eth_ioctl		= sr_ioctl,
++	.ndo_eth_ioctl		= usbnet_mii_ioctl,
+ 	.ndo_set_rx_mode        = sr_set_multicast,
+ };
+ 
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 9280ef544bbb..41b95b04143d 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1085,6 +1085,14 @@ int usbnet_nway_reset(struct net_device *net)
+ }
+ EXPORT_SYMBOL_GPL(usbnet_nway_reset);
+ 
++int usbnet_mii_ioctl(struct net_device *net, struct ifreq *rq, int cmd)
++{
++	struct usbnet *dev = netdev_priv(net);
++
++	return generic_mii_ioctl(&dev->mii, if_mii(rq), cmd, NULL);
++}
++EXPORT_SYMBOL_GPL(usbnet_mii_ioctl);
++
+ void usbnet_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *info)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
+index 2945923a8a95..b0e84896e6ac 100644
+--- a/include/linux/usb/usbnet.h
++++ b/include/linux/usb/usbnet.h
+@@ -290,6 +290,7 @@ extern u32 usbnet_get_msglevel(struct net_device *);
+ extern void usbnet_set_msglevel(struct net_device *, u32);
+ extern void usbnet_set_rx_mode(struct net_device *net);
+ extern void usbnet_get_drvinfo(struct net_device *, struct ethtool_drvinfo *);
++extern int usbnet_mii_ioctl(struct net_device *net, struct ifreq *rq, int cmd);
+ extern int usbnet_nway_reset(struct net_device *net);
+ 
+ extern int usbnet_manage_power(struct usbnet *, int);
+-- 
+2.43.0
 
 
