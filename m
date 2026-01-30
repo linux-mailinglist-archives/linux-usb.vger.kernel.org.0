@@ -1,200 +1,160 @@
-Return-Path: <linux-usb+bounces-32936-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32937-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QGR0CrOCfGlwNgIAu9opvQ
-	(envelope-from <linux-usb+bounces-32936-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 11:06:43 +0100
+	id OJe5IVWdfGkLOAIAu9opvQ
+	(envelope-from <linux-usb+bounces-32937-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 13:00:21 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3091B927D
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 11:06:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 000FBBA4B8
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 13:00:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6CA8B302F421
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 10:06:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AB1993007975
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jan 2026 12:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3528D330B2B;
-	Fri, 30 Jan 2026 10:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2620354AD9;
+	Fri, 30 Jan 2026 11:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="I6ouKihC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IsgYbH5C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f195.google.com (mail-dy1-f195.google.com [74.125.82.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45792309F13
-	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 10:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED0536C0C3
+	for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 11:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769767593; cv=none; b=DrBoQ5YuWjuvEodt09pATJxSx33OlrsjMnK1GpisFmRkLlK8jlurGMu8H3JTQSRquUOdByJiTTb0nNZX3m4cc5baey4ctIwkHECRbh1uKqn2f/KZ/UDXBJvGpb4vGnmThTHEtt/0UB7IV2DXIrXvcPoxweelCZo46hog3fYpX1w=
+	t=1769774397; cv=none; b=nCpOw4ja2PxACPlcORKNmeO/Abp5CsjkWhbT48LlzK3ImRH6R5CMnfHYT0sWlOZu3m3awmYdXUhWHfnjfrlxHb2UPDciKEBcq3O4ocbw/dmIrOXa6PFPyZPXw1RL5ehdjFHBJmILZnKgjfTgzO/G9Rt/3stzrGg/FEEicC1xOtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769767593; c=relaxed/simple;
-	bh=7jyevZFZLAcUnXqqzxI4skDEIwGmnlSZapSWB8fMnM4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=OO7cBVG97N1ImjNtNQAoy9xCjpXifW71Wa5DfZ43BzW4C/EqZrzO0611O9deELsIKzIcj/y4YVSLIFVswGG+7ofh6S9aT8W6p2V7/Gfb3dYdF/W49kCrWR2vctcIoea8TTTFpXoeV029Ia3CrdhD0sM0ZSIUmfEhTzA9BfXEwmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=I6ouKihC; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id F1A154E42343;
-	Fri, 30 Jan 2026 10:06:24 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C600A6075A;
-	Fri, 30 Jan 2026 10:06:24 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C0895119A8875;
-	Fri, 30 Jan 2026 11:06:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1769767584; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=hLDn2ySiB0Tpsta6+/1jzi+11wm+hKE7qMJ6g6qxnDY=;
-	b=I6ouKihC9TXTAqhV7SESHA6UzNTAdelgUUQMpbavPT6LcMzm4iCLTJO7lODJuPjQ7FYNqL
-	rPD8Ze+K226nL0tAfoqV7NUlrfsa/GrchxiQt/agvOsCH+Xvm6/qzdQbOjugQooWHY8MJt
-	EM1MkRT3a2E1C5C05peULv/uhIp9Nogc+qRKEwawCeqEIiRns5rK70Wnh4QTlxkeJc2xbn
-	dvtI3+TRYS+DZaRK8KG/83coh2acMC2lyKtLWuu2EnL6OTJOO+2mNQ/c9qzQ49QXCr3Hbf
-	SiSBJQAYPaM5WS5+/bkA1iPfqrjoyxzgTp3yUXAqwf0Mv0wvqiNNWRmq6x6Blg==
-From: "Thomas Richard (TI)" <thomas.richard@bootlin.com>
-Date: Fri, 30 Jan 2026 11:05:45 +0100
-Subject: [PATCH] usb: cdns3: fix role switching during resume
+	s=arc-20240116; t=1769774397; c=relaxed/simple;
+	bh=S7/1JmqRyqlonm8+ljS+PK0L7DKml37Zy1l0I9r/eEQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GgvEJmOyNq7kJSNb/Imbm+GK8lxel3jZaLBp5J2sqQjyFLHu+YXk6Vxy7fbxzNFs04gP28dVNauFQLr9rQAfXPO3QAiAtsySAkuOonzimi2ZYuBkgHqO2UNU56Q4KtAmDiLIFjSfcblLAeHs6uowoLlWYXkqUcAxWewfYgEIYJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IsgYbH5C; arc=none smtp.client-ip=74.125.82.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f195.google.com with SMTP id 5a478bee46e88-2b6b0500e06so3074772eec.1
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jan 2026 03:59:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769774395; x=1770379195; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q7ihQ9DOdwkh13XOnXi+IMjMF9wwJSt0xTF2SLR36Pc=;
+        b=IsgYbH5CQYLBGVZ1Z09Qku9cnYuSPmUVS2bjb/r3vEMt+Z5nCe4TDRvw9sGmgrhmai
+         Ai6DNJ7sGbIHp0GmAajq13hHNmxRVpowvD6yh6genQvt0r7P5A446kzpFS4MglG522Gn
+         1Dz9nGxKSK34DGFhZFNlw0BfGERKwWjDQchsnl4C/MUz3aQs277rCftNPBi0G38DBSHz
+         wGCGWtG+qLo4XJmlhm7HoyvaTI2ZMpngALxiW02w1IaZauxwxj8MZAHQu2WkmshDtWU+
+         63PadI1WOEV87lj2QJsmDd/ewas5W7Kod7VbDmd8wH78Dwzj2OEAzNCJikAUqLTe4vyv
+         ErAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769774395; x=1770379195;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q7ihQ9DOdwkh13XOnXi+IMjMF9wwJSt0xTF2SLR36Pc=;
+        b=XMXi68zYiFcFjJFex2v2m1P6SNwDkTMiwr3ck0nxIqOwuQqbBVTeCtxooBJXoGrm46
+         pwev4haC9xzogQ/hHsvLzKp7dQpYGzdk+X3SVZJXd/Vt1F+ydf6kJ18ZfqMyEsMeSjmb
+         9LEtnP+Jlf643dN0qSlZwgJ6CpR6xv0WEWR2VqWEcOXqcGYwBgjljTM78PtpWjTQ2skE
+         FcATjVFOZe5bPwLYdKbbufCz+ZNkh2CpQxj23edJ+GzUfDIIIyeBaAQqsGridgofD/Te
+         ZMpqtOa0iMF9Qahk5+65oWBFixNLjGA0w5ix/uuT71Ph4aGAVOoS7pVq4L5puoOpk4yq
+         D/+A==
+X-Forwarded-Encrypted: i=1; AJvYcCXjo/3aoIABaKJI7R7SetywsQBvraYCBPoNN4HVsJ40ICEvNPWH5Db4g1D5dsNHTSXv5rwlVjCrdfg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwTYJKelNdO2QjfWLxU3YlDvc4LPbkqCLmUdfxoNYWBId3sttU
+	cn3mHU8TStfhL42XxCU4/eQrnVIu5qsf1SU8jBZxIpEwSrfCTtP9B48g
+X-Gm-Gg: AZuq6aJjPkvwgHOHH2lUbu0eBoR2iy7B38wV1IqHQJcJIm9EcP0nei4xjso8+rqpUes
+	54nHqqNh3uLrkOyu4BAqJCV0NMuRKFjCZMYLqKrc/PyiD/aQcmxijtwtzqOjCjN2aQPuO+SFjDB
+	5SdxI6JtOn1odc2M4ddkSRMpxcq1nKfSqpxQgfUJWxMFhy5ffwOTjk9/TYWHPA/31WqIuDDnTpt
+	g2yCb/5Ounntiv5ioK/QTp11esfEsnJbZCmJrg/wrlgWZ17U5z9/3W+UA0/qLUHueDGmkzlVZLS
+	wCePrffZuu6VN2OGp+lmRd5/gYC51qH90YwcR8PNi4SHQflkZucqL4Bas9HvPdjcQ8JDO2xCNh2
+	HrWGBiUxM0GeTkar+IWX8CeLsTml8jEwcuPV/RU1N+cfq9HGWm3VgYyQDrfqzjoWGp/QWiEDVMe
+	G2veYjoRuWhUEV2kXIRxOiJnnXP6WACvvQWguuAlCD2WzGf9bOtMfmy7lHTyOvaoUS5sKs0zs0h
+	424tO3jUeDG6Sfdeu4QO2FPYDEntrR4IeF3RYX6xNxA2oEcjXbt8d4faPYFEvwPSTr4rWIWZtYP
+	uCOu
+X-Received: by 2002:a05:7300:7306:b0:2b0:514a:a8cf with SMTP id 5a478bee46e88-2b7c8663e2dmr1358850eec.17.1769774395075;
+        Fri, 30 Jan 2026 03:59:55 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a14bb02csm10505069eec.0.2026.01.30.03.59.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jan 2026 03:59:54 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Eric Biggers <ebiggers@google.com>
+Subject: [PATCH net-next] net: usb: sr9700: remove unused CRC32 dependency
+Date: Fri, 30 Jan 2026 03:59:37 -0800
+Message-ID: <20260130115945.49875-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260130-usb-cdns3-fix-role-switching-during-resume-v1-1-44c456852b52@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAHiCfGkC/y2N2w6CQAxEf4X02SbLQlT8FeOD7BZooou2rJIQ/
- p16eZqcSWbOAkrCpHAqFhB6sfKYDMpdAWG4pp6QozF45/eu9A1mbTHEpBV2PKOMN0J98xQGTj3
- GLJ8Q0nwnjFV3bOp4oLZ2YIcPIdt8ZefLj4We2ZzTv1zXDbcUbPmRAAAA
-X-Change-ID: 20260129-usb-cdns3-fix-role-switching-during-resume-d3f894d7eb40
-To: Pawel Laszczak <pawell@cadence.com>, Peter Chen <peter.chen@kernel.org>, 
- Roger Quadros <rogerq@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, theo.lebrun@bootlin.com, 
- Frank Li <frank.li@nxp.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, richard.genoud@bootlin.com, 
- Udit Kumar <u-kumar1@ti.com>, Prasanth Mantena <p-mantena@ti.com>, 
- Abhash Kumar <a-kumar2@ti.com>, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Peter Chen <peter.chen@nxp.com>, 
- stable@vger.kernel.org, "Thomas Richard (TI)" <thomas.richard@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32936-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,pengutronix.de,armlinux.org.uk];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32937-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thomas.richard@bootlin.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev,kernel];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D3091B927D
+X-Rspamd-Queue-Id: 000FBBA4B8
 X-Rspamd-Action: no action
 
-If the role change while we are suspended, the cdns3 driver switches to the
-new mode during resume. However, switching to host mode in this context
-causes a NULL pointer dereference.
+The previous patch to remove code for the nonexistent multicast filter
+removed all code that relies on CRC32, but overlooked the Kconfig
+dependency. Remove it.
 
-The host role's start() operation registers a xhci-hcd device, but its
-probe is deferred while we are in the resume path. The host role's resume()
-operation assumes the xhci-hcd device is already probed, which is not the
-case, leading to the dereference. Since the start() operation of the new
-role is already called, the resume operation can be skipped.
-
-So skip the resume operation for the new role if a role switch occurs
-during resume. Once the resume sequence is complete, the xhci-hcd device
-can be probed in case of host mode.
-
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000208
-Mem abort info:
-...
-Data abort info:
-...
-[0000000000000208] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 0000000096000004 [#1]  SMP
-Modules linked in:
-CPU: 0 UID: 0 PID: 146 Comm: sh Not tainted
-6.19.0-rc7-00013-g6e64f4aabfae-dirty #135 PREEMPT
-Hardware name: Texas Instruments J7200 EVM (DT)
-pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : usb_hcd_is_primary_hcd+0x0/0x1c
-lr : cdns_host_resume+0x24/0x5c
-...
-Call trace:
- usb_hcd_is_primary_hcd+0x0/0x1c (P)
- cdns_resume+0x6c/0xbc
- cdns3_controller_resume.isra.0+0xe8/0x17c
- cdns3_plat_resume+0x18/0x24
- platform_pm_resume+0x2c/0x68
- dpm_run_callback+0x90/0x248
- device_resume+0x100/0x24c
- dpm_resume+0x190/0x2ec
- dpm_resume_end+0x18/0x34
- suspend_devices_and_enter+0x2b0/0xa44
- pm_suspend+0x16c/0x5fc
- state_store+0x80/0xec
- kobj_attr_store+0x18/0x2c
- sysfs_kf_write+0x7c/0x94
- kernfs_fop_write_iter+0x130/0x1dc
- vfs_write+0x240/0x370
- ksys_write+0x70/0x108
- __arm64_sys_write+0x1c/0x28
- invoke_syscall+0x48/0x10c
- el0_svc_common.constprop.0+0x40/0xe0
- do_el0_svc+0x1c/0x28
- el0_svc+0x34/0x108
- el0t_64_sync_handler+0xa0/0xe4
- el0t_64_sync+0x198/0x19c
-Code: 52800003 f9407ca5 d63f00a0 17ffffe4 (f9410401)
----[ end trace 0000000000000000 ]---
-
-Cc: stable@vger.kernel.org
-Fixes: 2cf2581cd229 ("usb: cdns3: add power lost support for system resume")
-Signed-off-by: Thomas Richard (TI) <thomas.richard@bootlin.com>
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 ---
-This patch is related to the following discussion:
-https://lore.kernel.org/all/8743fec1-301d-46e1-89bf-7952c73faa86@bootlin.com/
----
- drivers/usb/cdns3/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/usb/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-index 1243a5cea91b..f0e32227c0b7 100644
---- a/drivers/usb/cdns3/core.c
-+++ b/drivers/usb/cdns3/core.c
-@@ -551,7 +551,7 @@ int cdns_resume(struct cdns *cdns)
- 		}
- 	}
- 
--	if (cdns->roles[cdns->role]->resume)
-+	if (!role_changed && cdns->roles[cdns->role]->resume)
- 		cdns->roles[cdns->role]->resume(cdns, power_lost);
- 
- 	return 0;
-
----
-base-commit: 9ff530af7fe2b44c93784641540d5b79fc9fe315
-change-id: 20260129-usb-cdns3-fix-role-switching-during-resume-d3f894d7eb40
-
-Best regards,
+diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
+index d050adfe860a..52a5c0922c79 100644
+--- a/drivers/net/usb/Kconfig
++++ b/drivers/net/usb/Kconfig
+@@ -319,7 +319,6 @@ config USB_NET_DM9601
+ config USB_NET_SR9700
+ 	tristate "CoreChip-sz SR9700 based USB 1.1 10/100 ethernet devices"
+ 	depends on USB_USBNET
+-	select CRC32
+ 	help
+ 	  This option adds support for CoreChip-sz SR9700 based USB 1.1
+ 	  10/100 Ethernet adapters.
 -- 
-Thomas Richard (TI) <thomas.richard@bootlin.com>
+2.43.0
 
 
