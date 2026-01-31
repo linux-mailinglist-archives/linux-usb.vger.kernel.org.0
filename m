@@ -1,221 +1,313 @@
-Return-Path: <linux-usb+bounces-32965-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32966-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kOfGDC5gfmmPXwIAu9opvQ
-	(envelope-from <linux-usb+bounces-32965-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 21:03:58 +0100
+	id ADsFAbhifmlNYAIAu9opvQ
+	(envelope-from <linux-usb+bounces-32966-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 21:14:48 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9BF7C3D18
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 21:03:57 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D4F7C3DA0
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 21:14:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8F190303BA4B
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 20:03:19 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 60701300D574
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 20:14:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1441337474A;
-	Sat, 31 Jan 2026 20:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7781337647E;
+	Sat, 31 Jan 2026 20:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PYzJqxem"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tnS/G4TN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAA7372B2B
-	for <linux-usb@vger.kernel.org>; Sat, 31 Jan 2026 20:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6442E376469
+	for <linux-usb@vger.kernel.org>; Sat, 31 Jan 2026 20:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769889787; cv=pass; b=ZQal9rJ5csRr8LY9tpAQ/bRW+Gd1M7+g4Ept5muWPD4vCA/xptYw8fWXdieDb8FLjxe7qgEzOFNBpmyaSi+NOpiFVcNPiYdz4/ouC3Yk+xBKGw5u9HHK6dvk+O1y8UI7MoosSq5PHM11YMlS5iPAksgzz+2IxBiISGlvtRnJP8w=
+	t=1769890471; cv=pass; b=lWn2Y0BBUA/Yj/loLE2QFeZXh7mVNJGjhf48ky1xWb9Mzml2oMfg9sNXOxZRTJHyBuuV1rvGi74PDdwfOxP8EHV0Xv7J3GJEA9/NKbds9Hl5B5KCFqS+XrYBSNl3TEXrQxNr9pjJCcMKeqrxKoaAp0XX6WxKdqxV0VgydqY3yso=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769889787; c=relaxed/simple;
-	bh=7+gpJ1XTqfyvqD906j489jah9H9uwbfvoMkXE6cDPuQ=;
+	s=arc-20240116; t=1769890471; c=relaxed/simple;
+	bh=yMZHFitBveSwTiyRgSyxNN1NEBI5FO4K9xicZu7zkl4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m4CSSAlb4GgHzn1hAo9n2EM6cPvcxLgUP+l+gJYd3kAjy2p+HCbBy2IaE8n/r7oAEKtTO/gcrO2eWKlhjhmMqIlD6+sRKuhilVKBQAK6nZcC734GTQZwZDN2CIqryKEKV3OS+wQOtj3Fd/Z3HSItzquTieTFc7lpLa2Rc7/uW7s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PYzJqxem; arc=pass smtp.client-ip=209.85.218.53
+	 To:Cc:Content-Type; b=acqDvmBYH2lrSUYGGzgx8K1ja0BpAkxDUociftmpmk5cOowa9ehHNo1XM4Vm3zoRdZKORgwsDcJXavZIVXcEXnRUROCcQxSulaZTgVqH60+zulJlJjUFuYvYSVRSwfTZH+r7IoeO/MVsTNhSMMG0VqJso+62gMCiW4dATVvOtV8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tnS/G4TN; arc=pass smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b8837152db5so505493666b.0
-        for <linux-usb@vger.kernel.org>; Sat, 31 Jan 2026 12:03:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769889783; cv=none;
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-64c893f3a94so6578730a12.0
+        for <linux-usb@vger.kernel.org>; Sat, 31 Jan 2026 12:14:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769890468; cv=none;
         d=google.com; s=arc-20240605;
-        b=Jge1Dj58+lm/5FLxn81qXDqnnJXACLHI0h/a+ZbvuPAbh7p2YlfeiSA7LF2H78tCjR
-         lw0wHXaL5abE4vOQRWjIyTySIK3CDdk1pmUfwsKdewrnC9Xzy4XEudmQcB5GSuEipvLM
-         qW64VAMaQ3T9l6qb+r8JsBI2l2ZzOtfip5H2XdDMQyVx8mUd3WNvTgTvP8N9cAUsqM/y
-         I3xJkJsFfEG3F6PvK//RhyOAEoLK6gTcJYFuHqc/ECk7ebwwD3s9ezaUcp6q+lMSQ8iX
-         PHWMoatfAvSTkkuT8RxyBtoSS6P6MpmyCUzr4OOLM14dVlTJo0na9HRau7Hn7gUHYqC7
-         SS+g==
+        b=i0iroYdIF/hISnecR2FpA2hq74iLEP2CqRrGVeu+XKCj75FjyYspvko0wZl0zcMpFf
+         AAjAnIhCkRkf86qwTi6zji1SmfOyzILMDJgGVjM10dkO3RyA3VVNNj+Gqu+NVWBYO2mX
+         gGLGRWLvghuBhdvrpdHIkAPOyIKi0148Yqlr4Hv6ibSM+WWS5+2YWSiGbElPQ/LVbXBe
+         BZduw7eHPLWqIR0EoPhHp1EK4awfCndnTditjYHCReFr2S8BptdlpAn/TQQdgzNxHo7A
+         EwvckU6JsFkDCQq0f0RnyBdlW4EhGLNZEm7iSkQWgjZvGr6od57NkQOJ+26aAQw+NwzS
+         CPfw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=rL+Su5x/WeCqYgfxZztlYQTOnKf9OKjLga2LNBzR/Ds=;
-        fh=9df6yGHKckOBgxCKMDYeXuClOdFLnaR5xkNCKz7Sf8c=;
-        b=DkM8AzTJABM7TDvAJUq9t7+vGmjnp7PcY8Hiiyui5d2goU4mR2SvG9AjGxghYFqlBC
-         iXRlKG0fZ4U5JGHkgfJvJkZneejRs7rbCANW9EIgPI+Vk+rRYB3RwbR02cKj106Pl0M0
-         QybqS1+QvJT0qoHf+VlHPANmczqUiA25HXnEn8lEq6fcccBcYApCAH3k3EGz39hRwo2S
-         wq2Vel9TQ1hTr+OHpvrqzuwBhDDISY5iRiP/qcJBPYyKb8Ms6ib8u1HEgYhZnRxYz3ag
-         qKKfFZ3Fl3L5pCvW2paPvk8ugfho0mAue/5i4EUIvddBYZjvMpo4HJZl8xrqE6YS6Sfr
-         GrBw==;
+        bh=km8kplnm0XUJRbZI5k8OFXrzF6vf8FSgEbZtSrDmOz4=;
+        fh=cqJEla+5PDZOZxd59BjbO+CtnOAwkhBYvap6L7ehgFI=;
+        b=HzDprSIRw17yJbfax2+nWsM5WeSbjHeRj42x27ew0JM8IWXGa+2Y0Wa0Ggk1DInEzc
+         LinkyA9kb1h34+Hj1n6Wf+7MbS2cgd7ITzxEAY1+P3DBryOmrKPcZQZmHwde1dWVi2Cv
+         wiHBHPCA1v8nXlCu/JTMeNew8F60S6id+CPTopIh4E5Dh163EUNgDmGHsaiOhMyeaTcS
+         RApqG9EAKow6ftudltZFESEHIhXng+8ZkArbVH2m9+hHzQ8rBT1WRswESNrxXdC0uHLg
+         4SqnVhVPbF/kkqE1LEPLaVZyeOqVnze5VZ7PHRJ75AXYrxuTyNd+m6jIgZ2Pgma2YZ3s
+         s93g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769889783; x=1770494583; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1769890468; x=1770495268; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rL+Su5x/WeCqYgfxZztlYQTOnKf9OKjLga2LNBzR/Ds=;
-        b=PYzJqxem9DMMIyXjr6kDBzJA4f1VkGRq2eJQo1MONDujUpBCkPw8iqCtQs39ZHSlPr
-         KH5ADf6dE9OyqMI2ZmGTgszJnIvMmkLnsX7xkpylovydPpDaEGHKBt5koaw5yavgDUCC
-         SHlWFDwzGeM9rhJnkZNkQziRFQxSLQgqY1T3C/TmVdMwdQC1T2wCqRKpURfVM+4pGhqS
-         mKCTDgd5mIaDOjOIuhc/TYz1Nkk8YH4+UUdbtg2md6YjUcw8WS1xBe8eLhIyXJrkQtZN
-         CSGxRGms/hzqb0hzapxxk2ytjHBp8vS9Vl6hgP/eRe1a3HwMRfrD0uuF20eKhAvHn+7f
-         Xilw==
+        bh=km8kplnm0XUJRbZI5k8OFXrzF6vf8FSgEbZtSrDmOz4=;
+        b=tnS/G4TNEedmNr80OFoKem8ANs3tt3BZcWf8YQpk9OyLKiA89e1lPKqDHo1IAB8pHA
+         EPYHJj8G/qWsfd3DsYU2EOCA/Jn4Pp0ZfMF+DUBEprY4CEoQMUYc3KiIFwIFMEJ04I69
+         J+Bn80+H3EThh1iautNEZvzWsYTpk+TiVXyLUfpuIWk9SH7e737Bf+AYoJPGlbzQnvBa
+         ofIsqEZVwxoaluliTZ46jHbPbyFAeV7q6IJRO92IIYdXncwGDtR9zk5eWrNVvuyENY2p
+         Rt1uUNsSNia1f4arhgaaZuDXwKuPP3bnxbd8D0C4m1d4NyMuLxjK/0bjmaAerBh0509C
+         aZSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769889783; x=1770494583;
+        d=1e100.net; s=20230601; t=1769890468; x=1770495268;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rL+Su5x/WeCqYgfxZztlYQTOnKf9OKjLga2LNBzR/Ds=;
-        b=n1bEHfN0S4zjHupyM9gCj4rZ8I5NOPUn0JEuV1ogeGAwnPe/NrmCeITP1c5VncO1E3
-         iiTNolIig9AuF3+0ttjkQAAJCCJ1kH4JxdU010w7CL8o/XnOG4I4HNfrVKGT1fElMsY9
-         hMQQwAR7OV40MMKqAGhcUImenaLvnt9nuxzVJZPF+9QCKeFjIZmXjWJ5wYL143U2ODXq
-         0ZezwQ5M0ZTkqJtwQVsLv3aEAJhkEyV5qmBkGqnksuCL/bZA/cQKV3Rhyzkb2hwQrNeZ
-         fnVZvUoTQUZYu5UXUEJwnRQ0qqT4tfNQy0MBpXeOwEJ2YAAIj4k1Eb2/MrxcyBHDCSwK
-         KpOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWMBAXLZObfvz7zxvRPDtaSxUf1SeYMxCFBqwR6ydvQk1HgKYCG/TUpvjttaZ4X8cbbaMMlQTt3yzM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yywsg90Q+2YK6lvjp7ArDZbcNTXJua06hP4E+xCBFyOhUkr8Wbx
-	ubzjIZUhowEt94ep4QuTU+bfsP+I2TRWk3vUl+x5PG2OUMXlM39cmv+hgVuIBv1QnFKoohdi7ak
-	rrxe0Qq6bS9fg9kxxVUZWXttal6bzmh1xDNf0Y3ht
-X-Gm-Gg: AZuq6aILUFUPJWsxbIL9hAXHT/WaE0QgD1UZtYpNRuf3je3NIpvuyCgrSn9d7c11MRr
-	9hJBK4mzS1DjI19CdwZlpUEFvSzZtSwxjl1iLGkaZbLuDsemPao5ZCr40asBUAdWFJQA+uJZKp3
-	TLjD3WFxq2ic1S8XlCMQK2dYlPPGApZZaTTr9irDNv5VGYlSCo3AE27ZX69Gjt5kyWh/OfuH2re
-	btTOZOXDvgfDBGG8a7SPtX5uccQvwKYQc0krn/O+fFPzW4MkxcHriWsHjLHlV1RLZej
-X-Received: by 2002:a17:906:d555:b0:b87:2675:9eaa with SMTP id
- a640c23a62f3a-b8dff56a89dmr396045166b.15.1769889782950; Sat, 31 Jan 2026
- 12:03:02 -0800 (PST)
+        bh=km8kplnm0XUJRbZI5k8OFXrzF6vf8FSgEbZtSrDmOz4=;
+        b=SgDDjyG1mQzBW4ogQdEJ6DY+U9axtP9pkmOn+tlFxBdKErytZS6QlD9+3opC8TkuBg
+         cRKri7KptASRnVuQJPooB2NicR0CMuNTAzWFBbsDk4IVnjJLauKor943X8OmAJY2JW59
+         n71YBaB2Kaqf6X89GnRytCNXCOZT5xWxuHW+D734ODBddaD2P3pl1kPyyuffrIl7uz7L
+         zcOqBe1tN5ml5I3v0vzpkeXP6o43GgcNMEKgti7evPdgrXfGNYbBHOXHM6s4Da7LIain
+         w5y8S57ACiTmpZc7g90ocRdaYUt2yU7yL0YIJefSqhCOAiYoR1TBWfLew/9NzCD4njC/
+         8zbg==
+X-Forwarded-Encrypted: i=1; AJvYcCUg/mtb/ZBdpSiwrjokFTLEU0IlHYkM7UjIrUyPGiUhO+YBC9tPkhz+L1y4ptVxLE56sUwKF/3QmHs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3qSJrVxx/z+nodYZ6fohpsB6ksaDLfUa2sFvdDtlUv/g37Fe1
+	ha0XSbhEDpSK+gLMYUdhuejv/2yvSr1rTcA9mRmb45bOg4bmKa/c+t1El2WpNzlZ4gDYezuszia
+	T2LXA9Or60h6KipO8IAogF8V/wKrNjbcNvZo3oGLF
+X-Gm-Gg: AZuq6aIRw8GW0R6Hy/298fB5uwAfqXqWoQ1xIurVvxWICBvLTS2c3gcZqvefy1DFVdX
+	+gI43XyKylDCv5LIaETGHlycLt2k5TGjxndcWKUVqCQ6cW6B2Gsm+Fqf/IlWLlQlCMsao0TPcY1
+	HENwVsLy31psj4SvC63FMdH5lkkPgFu2V+Gj1RQgD4XyEKc7xiWP8wxZAJ/2ZtOmr005O+emJsO
+	Ux1FuBtZ/sDJPSLdeucCKPLOQwR/M9eRnR7fvzemysz/nceUKVs0oPDtvAyZ1Y/6J4o
+X-Received: by 2002:a17:907:720a:b0:b07:87f1:fc42 with SMTP id
+ a640c23a62f3a-b8dff432d83mr474220066b.16.1769890467383; Sat, 31 Jan 2026
+ 12:14:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
- <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
- <2026012715-mantra-pope-9431@gregkh> <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
- <20260128045954.GS3183987@ZenIV> <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
- <20260129032335.GT3183987@ZenIV> <20260129225433.GU3183987@ZenIV>
- <CAG2KctoNjktJTQqBb7nGeazXe=ncpwjsc+Lm+JotcpaO3Sf9gw@mail.gmail.com> <CAEiyvppoiL2EiSmVvNV3DEkr7wwyC1Fbwhm14h7Rfus4Z8uP7g@mail.gmail.com>
-In-Reply-To: <CAEiyvppoiL2EiSmVvNV3DEkr7wwyC1Fbwhm14h7Rfus4Z8uP7g@mail.gmail.com>
+References: <20260129111403.3081730-1-prashanth.k@oss.qualcomm.com>
+In-Reply-To: <20260129111403.3081730-1-prashanth.k@oss.qualcomm.com>
 From: Samuel Wu <wusamuel@google.com>
-Date: Sat, 31 Jan 2026 12:02:51 -0800
-X-Gm-Features: AZwV_QhcEbOb_GQTelufeNwJJCU6MsAWKA6Gjz0fMmR9BpLj1Kmi7hMzQGebBBY
-Message-ID: <CAG2KctoHRG+4J0ujC9162n-Ndgn3nKMu_s5jh0-c-B_P6EOk6Q@mail.gmail.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-To: Krishna Kurapati PSSNV <krishna.kurapati@oss.qualcomm.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Greg KH <gregkh@linuxfoundation.org>, 
-	linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org, 
-	brauner@kernel.org, jack@suse.cz, raven@themaw.net, miklos@szeredi.hu, 
-	neil@brown.name, a.hindborg@kernel.org, linux-mm@kvack.org, 
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, kees@kernel.org, 
-	rostedt@goodmis.org, linux-usb@vger.kernel.org, paul@paul-moore.com, 
-	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
-	john.johansen@canonical.com, selinux@vger.kernel.org, 
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com, 
-	android-kernel-team <android-kernel-team@google.com>
+Date: Sat, 31 Jan 2026 12:14:16 -0800
+X-Gm-Features: AZwV_QidVxFPSSU4X1IAAyjblyzS6gM99DWlGcx5x-nNJW2TuFYl1jr8vKw-2Xw
+Message-ID: <CAG2Kcto8GZmSkWMmdWkZaQLrt-HS8e5XQ2LWKVxv08PyQDjpjQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Move vbus draw to workqueue context
+To: Prashanth K <prashanth.k@oss.qualcomm.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Android Kernel Team <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32965-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[26];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-32966-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[google.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[wusamuel@google.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,linux.org.uk:email,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D9BF7C3D18
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,qualcomm.com:email,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 1D4F7C3DA0
 X-Rspamd-Action: no action
 
-On Sat, Jan 31, 2026 at 6:58=E2=80=AFAM Krishna Kurapati PSSNV
-<krishna.kurapati@oss.qualcomm.com> wrote:
+On Thu, Jan 29, 2026 at 3:14=E2=80=AFAM Prashanth K
+<prashanth.k@oss.qualcomm.com> wrote:
 >
-> On Fri, Jan 30, 2026 at 6:46=E2=80=AFAM Samuel Wu <wusamuel@google.com> w=
-rote:
-> >
-> > On Thu, Jan 29, 2026 at 2:52=E2=80=AFPM Al Viro <viro@zeniv.linux.org.u=
-k> wrote:
-> >
+> Currently dwc3_gadget_vbus_draw() can be called from atomic
+> context, which in turn invokes power-supply-core APIs. And
+> some these PMIC APIs have operations that may sleep, leading
+> to kernel panic.
 >
-> [...]
+> Fix this by moving the vbus_draw into a workqueue context.
 >
-> > I'm exploring a few other paths, but not having USB access makes
-> > traditional tools a bit difficult. One thing I'm rechecking and is
-> > worth mentioning is the lockdep below: it's been present for quite
-> > some time now, but I'm not sure if it would have some undesired
-> > interaction with your patch.
-> >
-> > [ BUG: Invalid wait context ]
-> > 6.18.0-rc5-mainline-maybe-dirty-4k
-> > -----------------------------
-> > irq/360-dwc3/352 is trying to lock:
-> > ffffff800792deb8 (&psy->extensions_sem){.+.+}-{3:3}, at:
-> > __power_supply_set_property+0x40/0x180
-> > other info that might help us debug this:
-> > context-{4:4}
-> > 1 lock held by irq/360-dwc3/352:
-> >  #0: ffffff8017bb98f0 (&gi->spinlock){....}-{2:2}, at:
-> > configfs_composite_suspend+0x28/0x68
-> > Call trace:
-> >  show_stack+0x18/0x28 (C)
-> >  __dump_stack+0x28/0x3c
-> >  dump_stack_lvl+0xac/0xf0
-> >  dump_stack+0x18/0x3c
-> >  __lock_acquire+0x794/0x2bec
-> >  lock_acquire+0x148/0x2cc
-> >  down_read+0x3c/0x194
-> >  __power_supply_set_property+0x40/0x180
-> >  power_supply_set_property+0x14/0x20
-> >  dwc3_gadget_vbus_draw+0x8c/0xcc
-> >  usb_gadget_vbus_draw+0x48/0x130
-> >  composite_suspend+0xcc/0xe4
-> >  configfs_composite_suspend+0x44/0x68
-> >  dwc3_thread_interrupt+0x8f8/0xc88
-> >  irq_thread_fn+0x48/0xa8
-> >  irq_thread+0x150/0x31c
-> >  kthread+0x150/0x280
-> >  ret_from_fork+0x10/0x20
-> >
+> Fixes: 66e0ea341a2a ("usb: dwc3: core: Defer the probe until USB power su=
+pply ready")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
+> ---
+>  drivers/usb/dwc3/core.c   | 19 ++++++++++++++++++-
+>  drivers/usb/dwc3/core.h   |  4 ++++
+>  drivers/usb/dwc3/gadget.c |  8 +++-----
+>  3 files changed, 25 insertions(+), 6 deletions(-)
 >
-> Hi Samuel,
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index f32b67bf73a4..c9af126b9695 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -2155,6 +2155,20 @@ static int dwc3_get_num_ports(struct dwc3 *dwc)
+>         return 0;
+>  }
 >
->  Not sure if it helps, but Prashanth recently pushed a patch to
-> address this vbus_draw kernel panic:
->  https://lore.kernel.org/all/20260129111403.3081730-1-prashanth.k@oss.qua=
-lcomm.com/
+> +static void dwc3_vbus_draw_work(struct work_struct *work)
+> +{
+> +       struct dwc3 *dwc =3D container_of(work, struct dwc3, vbus_draw_wo=
+rk);
+> +       union power_supply_propval val =3D {0};
+> +       int ret;
+> +
+> +       val.intval =3D 1000 * (dwc->vbus_draw_current);
+> +       ret =3D power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP=
+_INPUT_CURRENT_LIMIT, &val);
+> +
+> +       if (ret < 0)
+> +               dev_dbg(dwc->dev, "Error (%d) setting vbus draw (%d mA)\n=
+",
+> +                       ret, dwc->vbus_draw_current);
+> +}
+> +
+>  static struct power_supply *dwc3_get_usb_power_supply(struct dwc3 *dwc)
+>  {
+>         struct power_supply *usb_psy;
+> @@ -2169,6 +2183,7 @@ static struct power_supply *dwc3_get_usb_power_supp=
+ly(struct dwc3 *dwc)
+>         if (!usb_psy)
+>                 return ERR_PTR(-EPROBE_DEFER);
 >
->  Can you check if it fixes the above crash in vbus_draw.
+> +       INIT_WORK(&dwc->vbus_draw_work, dwc3_vbus_draw_work);
+>         return usb_psy;
+>  }
 >
-> Regards,
-> Krishna,
+> @@ -2395,8 +2410,10 @@ void dwc3_core_remove(struct dwc3 *dwc)
+>
+>         dwc3_free_event_buffers(dwc);
+>
+> -       if (dwc->usb_psy)
+> +       if (dwc->usb_psy) {
+> +               cancel_work_sync(&dwc->vbus_draw_work);
+>                 power_supply_put(dwc->usb_psy);
+> +       }
+>  }
+>  EXPORT_SYMBOL_GPL(dwc3_core_remove);
+>
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 08cc6f2b5c23..052fb18c6b5c 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1178,6 +1178,8 @@ struct dwc3_glue_ops {
+>   * @wakeup_pending_funcs: Indicates whether any interface has requested =
+for
+>   *                      function wakeup in bitmap format where bit posit=
+ion
+>   *                      represents interface_id.
+> + * @vbus_draw_work: Workqueue used for scheduling vbus draw work
+> + * @vbus_draw_current: How much current to draw from vbus, in milliAmper=
+es.
+>   */
+>  struct dwc3 {
+>         struct work_struct      drd_work;
+> @@ -1413,6 +1415,8 @@ struct dwc3 {
+>         struct dentry           *debug_root;
+>         u32                     gsbuscfg0_reqinfo;
+>         u32                     wakeup_pending_funcs;
+> +       struct work_struct      vbus_draw_work;
+> +       unsigned int            vbus_draw_current;
+>  };
+>
+>  #define INCRX_BURST_MODE 0
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 9355c952c140..03d8a3a151e0 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -3124,8 +3124,6 @@ static void dwc3_gadget_set_ssp_rate(struct usb_gad=
+get *g,
+>  static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+>  {
+>         struct dwc3             *dwc =3D gadget_to_dwc(g);
+> -       union power_supply_propval      val =3D {0};
+> -       int                             ret;
+>
+>         if (dwc->usb2_phy)
+>                 return usb_phy_set_power(dwc->usb2_phy, mA);
+> @@ -3133,10 +3131,10 @@ static int dwc3_gadget_vbus_draw(struct usb_gadge=
+t *g, unsigned int mA)
+>         if (!dwc->usb_psy)
+>                 return -EOPNOTSUPP;
+>
+> -       val.intval =3D 1000 * mA;
+> -       ret =3D power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP=
+_INPUT_CURRENT_LIMIT, &val);
+> +       dwc->vbus_draw_current =3D mA;
+> +       schedule_work(&dwc->vbus_draw_work);
+>
+> -       return ret;
+> +       return 0;
+>  }
+>
+>  /**
+> --
+> 2.34.1
+>
 
-Tested above patch, and it didn't fix the device enumerating on
-lsusb/ADB issue. Seems like usb dwc3 lockdep was a red herring.
+On Pixel 6 with this patch applied on 6.19-rc7, I am no longer seeing
+the following lockdep:
 
-I'll respond on that thread with what I'm observing.
+[ BUG: Invalid wait context ]
+6.19.0-rc7-mainline-maybe-dirty-4k #1 Tainted: G        W  O
+-----------------------------
+irq/360-dwc3/1244 is trying to lock:
+ffffff8018110eb8 (&psy->extensions_sem){.+.+}-{3:3}, at:
+__power_supply_set_property+0x40/0x180
+other info that might help us debug this:
+context-{4:4}
+1 lock held by irq/360-dwc3/1244:
+ #0: ffffff80368d78f8 (&gi->spinlock){....}-{2:2}, at:
+configfs_composite_suspend+0x28/0x68
+stack backtrace:
+goodixfp: Succeed to open device. irq =3D 417
+CPU: 0 UID: 0 PID: 1244 Comm: irq/360-dwc3 Tainted: G        W  O
+  6.19.0-rc7-mainline-maybe-dirty-4k #1 PREEMPT
+Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+Hardware name: Oriole EVT 1.0 (DT)
+Call trace:
+ show_stack+0x18/0x28 (C)
+ __dump_stack+0x28/0x3c
+ dump_stack_lvl+0xac/0xf0
+ dump_stack+0x18/0x3c
+ __lock_acquire+0x794/0x2b08
+ lock_acquire+0x138/0x2c4
+ down_read+0x3c/0x17c
+ __power_supply_set_property+0x40/0x180
+ power_supply_set_property+0x14/0x20
+ dwc3_gadget_vbus_draw+0x8c/0xcc
+ usb_gadget_vbus_draw+0x48/0x128
+ composite_suspend+0xcc/0xe4
+ configfs_composite_suspend+0x44/0x68
+ dwc3_thread_interrupt+0x7b4/0xc7c
+ irq_thread_fn+0x48/0xa8
+ irq_thread+0x16c/0x338
+ kthread+0x150/0x280
+ ret_from_fork+0x10/0x20
+
+Tested-by: Samuel Wu <wusamuel@google.com>
 
