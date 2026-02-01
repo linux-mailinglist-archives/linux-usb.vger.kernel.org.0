@@ -1,313 +1,429 @@
-Return-Path: <linux-usb+bounces-32966-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32967-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ADsFAbhifmlNYAIAu9opvQ
-	(envelope-from <linux-usb+bounces-32966-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 21:14:48 +0100
+	id OJuhF8yZfmmLbQIAu9opvQ
+	(envelope-from <linux-usb+bounces-32967-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Feb 2026 01:09:48 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D4F7C3DA0
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 21:14:47 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00AA2C473E
+	for <lists+linux-usb@lfdr.de>; Sun, 01 Feb 2026 01:09:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 60701300D574
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Jan 2026 20:14:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AD55C30022D2
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Feb 2026 00:09:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7781337647E;
-	Sat, 31 Jan 2026 20:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA49028E0F;
+	Sun,  1 Feb 2026 00:09:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tnS/G4TN"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="um/7tYvp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6442E376469
-	for <linux-usb@vger.kernel.org>; Sat, 31 Jan 2026 20:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769890471; cv=pass; b=lWn2Y0BBUA/Yj/loLE2QFeZXh7mVNJGjhf48ky1xWb9Mzml2oMfg9sNXOxZRTJHyBuuV1rvGi74PDdwfOxP8EHV0Xv7J3GJEA9/NKbds9Hl5B5KCFqS+XrYBSNl3TEXrQxNr9pjJCcMKeqrxKoaAp0XX6WxKdqxV0VgydqY3yso=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769890471; c=relaxed/simple;
-	bh=yMZHFitBveSwTiyRgSyxNN1NEBI5FO4K9xicZu7zkl4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=acqDvmBYH2lrSUYGGzgx8K1ja0BpAkxDUociftmpmk5cOowa9ehHNo1XM4Vm3zoRdZKORgwsDcJXavZIVXcEXnRUROCcQxSulaZTgVqH60+zulJlJjUFuYvYSVRSwfTZH+r7IoeO/MVsTNhSMMG0VqJso+62gMCiW4dATVvOtV8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tnS/G4TN; arc=pass smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-64c893f3a94so6578730a12.0
-        for <linux-usb@vger.kernel.org>; Sat, 31 Jan 2026 12:14:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769890468; cv=none;
-        d=google.com; s=arc-20240605;
-        b=i0iroYdIF/hISnecR2FpA2hq74iLEP2CqRrGVeu+XKCj75FjyYspvko0wZl0zcMpFf
-         AAjAnIhCkRkf86qwTi6zji1SmfOyzILMDJgGVjM10dkO3RyA3VVNNj+Gqu+NVWBYO2mX
-         gGLGRWLvghuBhdvrpdHIkAPOyIKi0148Yqlr4Hv6ibSM+WWS5+2YWSiGbElPQ/LVbXBe
-         BZduw7eHPLWqIR0EoPhHp1EK4awfCndnTditjYHCReFr2S8BptdlpAn/TQQdgzNxHo7A
-         EwvckU6JsFkDCQq0f0RnyBdlW4EhGLNZEm7iSkQWgjZvGr6od57NkQOJ+26aAQw+NwzS
-         CPfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=km8kplnm0XUJRbZI5k8OFXrzF6vf8FSgEbZtSrDmOz4=;
-        fh=cqJEla+5PDZOZxd59BjbO+CtnOAwkhBYvap6L7ehgFI=;
-        b=HzDprSIRw17yJbfax2+nWsM5WeSbjHeRj42x27ew0JM8IWXGa+2Y0Wa0Ggk1DInEzc
-         LinkyA9kb1h34+Hj1n6Wf+7MbS2cgd7ITzxEAY1+P3DBryOmrKPcZQZmHwde1dWVi2Cv
-         wiHBHPCA1v8nXlCu/JTMeNew8F60S6id+CPTopIh4E5Dh163EUNgDmGHsaiOhMyeaTcS
-         RApqG9EAKow6ftudltZFESEHIhXng+8ZkArbVH2m9+hHzQ8rBT1WRswESNrxXdC0uHLg
-         4SqnVhVPbF/kkqE1LEPLaVZyeOqVnze5VZ7PHRJ75AXYrxuTyNd+m6jIgZ2Pgma2YZ3s
-         s93g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769890468; x=1770495268; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=km8kplnm0XUJRbZI5k8OFXrzF6vf8FSgEbZtSrDmOz4=;
-        b=tnS/G4TNEedmNr80OFoKem8ANs3tt3BZcWf8YQpk9OyLKiA89e1lPKqDHo1IAB8pHA
-         EPYHJj8G/qWsfd3DsYU2EOCA/Jn4Pp0ZfMF+DUBEprY4CEoQMUYc3KiIFwIFMEJ04I69
-         J+Bn80+H3EThh1iautNEZvzWsYTpk+TiVXyLUfpuIWk9SH7e737Bf+AYoJPGlbzQnvBa
-         ofIsqEZVwxoaluliTZ46jHbPbyFAeV7q6IJRO92IIYdXncwGDtR9zk5eWrNVvuyENY2p
-         Rt1uUNsSNia1f4arhgaaZuDXwKuPP3bnxbd8D0C4m1d4NyMuLxjK/0bjmaAerBh0509C
-         aZSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769890468; x=1770495268;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=km8kplnm0XUJRbZI5k8OFXrzF6vf8FSgEbZtSrDmOz4=;
-        b=SgDDjyG1mQzBW4ogQdEJ6DY+U9axtP9pkmOn+tlFxBdKErytZS6QlD9+3opC8TkuBg
-         cRKri7KptASRnVuQJPooB2NicR0CMuNTAzWFBbsDk4IVnjJLauKor943X8OmAJY2JW59
-         n71YBaB2Kaqf6X89GnRytCNXCOZT5xWxuHW+D734ODBddaD2P3pl1kPyyuffrIl7uz7L
-         zcOqBe1tN5ml5I3v0vzpkeXP6o43GgcNMEKgti7evPdgrXfGNYbBHOXHM6s4Da7LIain
-         w5y8S57ACiTmpZc7g90ocRdaYUt2yU7yL0YIJefSqhCOAiYoR1TBWfLew/9NzCD4njC/
-         8zbg==
-X-Forwarded-Encrypted: i=1; AJvYcCUg/mtb/ZBdpSiwrjokFTLEU0IlHYkM7UjIrUyPGiUhO+YBC9tPkhz+L1y4ptVxLE56sUwKF/3QmHs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3qSJrVxx/z+nodYZ6fohpsB6ksaDLfUa2sFvdDtlUv/g37Fe1
-	ha0XSbhEDpSK+gLMYUdhuejv/2yvSr1rTcA9mRmb45bOg4bmKa/c+t1El2WpNzlZ4gDYezuszia
-	T2LXA9Or60h6KipO8IAogF8V/wKrNjbcNvZo3oGLF
-X-Gm-Gg: AZuq6aIRw8GW0R6Hy/298fB5uwAfqXqWoQ1xIurVvxWICBvLTS2c3gcZqvefy1DFVdX
-	+gI43XyKylDCv5LIaETGHlycLt2k5TGjxndcWKUVqCQ6cW6B2Gsm+Fqf/IlWLlQlCMsao0TPcY1
-	HENwVsLy31psj4SvC63FMdH5lkkPgFu2V+Gj1RQgD4XyEKc7xiWP8wxZAJ/2ZtOmr005O+emJsO
-	Ux1FuBtZ/sDJPSLdeucCKPLOQwR/M9eRnR7fvzemysz/nceUKVs0oPDtvAyZ1Y/6J4o
-X-Received: by 2002:a17:907:720a:b0:b07:87f1:fc42 with SMTP id
- a640c23a62f3a-b8dff432d83mr474220066b.16.1769890467383; Sat, 31 Jan 2026
- 12:14:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3364A21;
+	Sun,  1 Feb 2026 00:09:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769904584; cv=none; b=BvF4olWqjZbGf/6sVDJIgcl9zhAhpQIW0QlMAZuk9QmRp1IIgBARWPOfiA/sOK3Hh4a/CEgSTbBvXuC2Trjw2XhkRw/2P/cIFG5/d400AZ5q3Qc/GMfcfkyJF7gfHGIagZeWOmwufcni19qmRLFIPB8g5aR0DMuv9VoJE01amdw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769904584; c=relaxed/simple;
+	bh=eaUptfjlR98TtZApFXatUBjI0moteCvv+6FMPOqsJUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mmis74TiD1vWu/jyWJ2FI3zmKpPVupeIqzN/+j9c2tmQJRDCtD5UpD0Yww44SncdGwWSvGpUiNjufs/TXXL3tmu8wsltWfEMOt4f7IlqXftbw4wtRacDryzSrk883rxnQlEuIrUu/66OG1tAauv1Ref/iMnLU1uz2+sV3yud/qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=um/7tYvp; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Ee6tnw7Bye5CGO63GyRbRK+g1RsPEEK7xU3KsikleH8=; b=um/7tYvp1GwLTW+4jRFFt6i8Lh
+	43+Al7pZaW8xn1fwVBPpbz7wu/Qa0kqfQL3yLfYZjWpvUebDL6v1WuuYzgLT5w/sIHpyv3RP8j3Kp
+	N9llJmy6Lkpvli4Hp7vFM+wjNB6whhI64AS2pDbFpn4N9zZsW+AusmBuL48iVTxuJAUCVaakYKofV
+	1XwFvR+XGpvEMS645jPz7tx5kf5bMRoG5DFmrpYbhwSHQeFs4PJlwyszIEYMXAzd6Nu+TsJP67x/m
+	hdO5SxFSlZQlDmnN2Z4gVsMIRpKMJXa8o+DQCKtQF7JJjLgnNFe4Rn2ou7zF7kgHnOMVJWn8+TDON
+	24jRK0YQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1vmL3p-0000000218W-0fSi;
+	Sun, 01 Feb 2026 00:11:29 +0000
+Date: Sun, 1 Feb 2026 00:11:29 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Samuel Wu <wusamuel@google.com>, Greg KH <gregkh@linuxfoundation.org>,
+	linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <20260201001129.GB3183987@ZenIV>
+References: <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
+ <20260129032335.GT3183987@ZenIV>
+ <20260129225433.GU3183987@ZenIV>
+ <CAG2KctoNjktJTQqBb7nGeazXe=ncpwjsc+Lm+JotcpaO3Sf9gw@mail.gmail.com>
+ <20260130070424.GV3183987@ZenIV>
+ <CAG2Kctoqja9R1bBzdEAV15_yt=sBGkcub6C2nGE6VHMJh13=FQ@mail.gmail.com>
+ <20260130235743.GW3183987@ZenIV>
+ <CAHk-=wgk7MRBj4iwQLHocVCa94Jf0cMEz2HzUAS9+6rGtnp4JA@mail.gmail.com>
+ <20260131010821.GY3183987@ZenIV>
+ <CAHk-=wiXq-bPyKywNOw7z6ehrVReyS-hSPuQkJvuhJWfXGFm=A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129111403.3081730-1-prashanth.k@oss.qualcomm.com>
-In-Reply-To: <20260129111403.3081730-1-prashanth.k@oss.qualcomm.com>
-From: Samuel Wu <wusamuel@google.com>
-Date: Sat, 31 Jan 2026 12:14:16 -0800
-X-Gm-Features: AZwV_QidVxFPSSU4X1IAAyjblyzS6gM99DWlGcx5x-nNJW2TuFYl1jr8vKw-2Xw
-Message-ID: <CAG2Kcto8GZmSkWMmdWkZaQLrt-HS8e5XQ2LWKVxv08PyQDjpjQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Move vbus draw to workqueue context
-To: Prashanth K <prashanth.k@oss.qualcomm.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiXq-bPyKywNOw7z6ehrVReyS-hSPuQkJvuhJWfXGFm=A@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[zeniv.linux.org.uk,none];
+	R_DKIM_ALLOW(-0.20)[linux.org.uk:s=zeniv-20220401];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32966-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-32967-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[25];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[google.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wusamuel@google.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,qualcomm.com:email,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 1D4F7C3DA0
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[viro@zeniv.linux.org.uk,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.org.uk:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.org.uk:email,linux.org.uk:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 00AA2C473E
 X-Rspamd-Action: no action
 
-On Thu, Jan 29, 2026 at 3:14=E2=80=AFAM Prashanth K
-<prashanth.k@oss.qualcomm.com> wrote:
->
-> Currently dwc3_gadget_vbus_draw() can be called from atomic
-> context, which in turn invokes power-supply-core APIs. And
-> some these PMIC APIs have operations that may sleep, leading
-> to kernel panic.
->
-> Fix this by moving the vbus_draw into a workqueue context.
->
-> Fixes: 66e0ea341a2a ("usb: dwc3: core: Defer the probe until USB power su=
-pply ready")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
-> ---
->  drivers/usb/dwc3/core.c   | 19 ++++++++++++++++++-
->  drivers/usb/dwc3/core.h   |  4 ++++
->  drivers/usb/dwc3/gadget.c |  8 +++-----
->  3 files changed, 25 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index f32b67bf73a4..c9af126b9695 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -2155,6 +2155,20 @@ static int dwc3_get_num_ports(struct dwc3 *dwc)
->         return 0;
->  }
->
-> +static void dwc3_vbus_draw_work(struct work_struct *work)
-> +{
-> +       struct dwc3 *dwc =3D container_of(work, struct dwc3, vbus_draw_wo=
-rk);
-> +       union power_supply_propval val =3D {0};
-> +       int ret;
-> +
-> +       val.intval =3D 1000 * (dwc->vbus_draw_current);
-> +       ret =3D power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP=
-_INPUT_CURRENT_LIMIT, &val);
-> +
-> +       if (ret < 0)
-> +               dev_dbg(dwc->dev, "Error (%d) setting vbus draw (%d mA)\n=
-",
-> +                       ret, dwc->vbus_draw_current);
-> +}
-> +
->  static struct power_supply *dwc3_get_usb_power_supply(struct dwc3 *dwc)
->  {
->         struct power_supply *usb_psy;
-> @@ -2169,6 +2183,7 @@ static struct power_supply *dwc3_get_usb_power_supp=
-ly(struct dwc3 *dwc)
->         if (!usb_psy)
->                 return ERR_PTR(-EPROBE_DEFER);
->
-> +       INIT_WORK(&dwc->vbus_draw_work, dwc3_vbus_draw_work);
->         return usb_psy;
->  }
->
-> @@ -2395,8 +2410,10 @@ void dwc3_core_remove(struct dwc3 *dwc)
->
->         dwc3_free_event_buffers(dwc);
->
-> -       if (dwc->usb_psy)
-> +       if (dwc->usb_psy) {
-> +               cancel_work_sync(&dwc->vbus_draw_work);
->                 power_supply_put(dwc->usb_psy);
-> +       }
->  }
->  EXPORT_SYMBOL_GPL(dwc3_core_remove);
->
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 08cc6f2b5c23..052fb18c6b5c 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1178,6 +1178,8 @@ struct dwc3_glue_ops {
->   * @wakeup_pending_funcs: Indicates whether any interface has requested =
-for
->   *                      function wakeup in bitmap format where bit posit=
-ion
->   *                      represents interface_id.
-> + * @vbus_draw_work: Workqueue used for scheduling vbus draw work
-> + * @vbus_draw_current: How much current to draw from vbus, in milliAmper=
-es.
->   */
->  struct dwc3 {
->         struct work_struct      drd_work;
-> @@ -1413,6 +1415,8 @@ struct dwc3 {
->         struct dentry           *debug_root;
->         u32                     gsbuscfg0_reqinfo;
->         u32                     wakeup_pending_funcs;
-> +       struct work_struct      vbus_draw_work;
-> +       unsigned int            vbus_draw_current;
->  };
->
->  #define INCRX_BURST_MODE 0
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 9355c952c140..03d8a3a151e0 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -3124,8 +3124,6 @@ static void dwc3_gadget_set_ssp_rate(struct usb_gad=
-get *g,
->  static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
->  {
->         struct dwc3             *dwc =3D gadget_to_dwc(g);
-> -       union power_supply_propval      val =3D {0};
-> -       int                             ret;
->
->         if (dwc->usb2_phy)
->                 return usb_phy_set_power(dwc->usb2_phy, mA);
-> @@ -3133,10 +3131,10 @@ static int dwc3_gadget_vbus_draw(struct usb_gadge=
-t *g, unsigned int mA)
->         if (!dwc->usb_psy)
->                 return -EOPNOTSUPP;
->
-> -       val.intval =3D 1000 * mA;
-> -       ret =3D power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP=
-_INPUT_CURRENT_LIMIT, &val);
-> +       dwc->vbus_draw_current =3D mA;
-> +       schedule_work(&dwc->vbus_draw_work);
->
-> -       return ret;
-> +       return 0;
->  }
->
->  /**
-> --
-> 2.34.1
->
+On Fri, Jan 30, 2026 at 05:11:39PM -0800, Linus Torvalds wrote:
+> On Fri, 30 Jan 2026 at 17:06, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > I'd rather go for a spinlock there, protecting these FFS_DEACTIVATED
+> > transitions;
+> 
+> Yes, that's the much better solution.  The locking in this thing is horrendous.
+> 
+> But judging by Samuel's recent email, there's something else than the
+> open locking thing going on.
 
-On Pixel 6 with this patch applied on 6.19-rc7, I am no longer seeing
-the following lockdep:
+I've put the following into viro/vfs.git#fixes; diff is identical to the
+one that is reported to fix things on top of -rc7...
 
-[ BUG: Invalid wait context ]
-6.19.0-rc7-mainline-maybe-dirty-4k #1 Tainted: G        W  O
------------------------------
-irq/360-dwc3/1244 is trying to lock:
-ffffff8018110eb8 (&psy->extensions_sem){.+.+}-{3:3}, at:
-__power_supply_set_property+0x40/0x180
-other info that might help us debug this:
-context-{4:4}
-1 lock held by irq/360-dwc3/1244:
- #0: ffffff80368d78f8 (&gi->spinlock){....}-{2:2}, at:
-configfs_composite_suspend+0x28/0x68
-stack backtrace:
-goodixfp: Succeed to open device. irq =3D 417
-CPU: 0 UID: 0 PID: 1244 Comm: irq/360-dwc3 Tainted: G        W  O
-  6.19.0-rc7-mainline-maybe-dirty-4k #1 PREEMPT
-Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-Hardware name: Oriole EVT 1.0 (DT)
-Call trace:
- show_stack+0x18/0x28 (C)
- __dump_stack+0x28/0x3c
- dump_stack_lvl+0xac/0xf0
- dump_stack+0x18/0x3c
- __lock_acquire+0x794/0x2b08
- lock_acquire+0x138/0x2c4
- down_read+0x3c/0x17c
- __power_supply_set_property+0x40/0x180
- power_supply_set_property+0x14/0x20
- dwc3_gadget_vbus_draw+0x8c/0xcc
- usb_gadget_vbus_draw+0x48/0x128
- composite_suspend+0xcc/0xe4
- configfs_composite_suspend+0x44/0x68
- dwc3_thread_interrupt+0x7b4/0xc7c
- irq_thread_fn+0x48/0xa8
- irq_thread+0x16c/0x338
- kthread+0x150/0x280
- ret_from_fork+0x10/0x20
+Objections?
 
+commit 99a706fa47949ece1fb02b5b1206efd4fb031d25
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Sat Jan 31 18:24:41 2026 -0500
+
+functionfs: use spinlock for FFS_DEACTIVATED/FFS_CLOSING transitions
+    
+When all files are closed, functionfs needs ffs_data_reset() to be
+done before any further opens are allowed.
+
+During that time we have ffs->state set to FFS_CLOSING; that makes
+->open() fail with -EBUSY.  Once ffs_data_reset() is done, it
+switches state (to FFS_READ_DESCRIPTORS) indicating that opening
+that thing is allowed again.  There's a couple of additional twists:
+	* mounting with -o no_disconnect delays ffs_data_reset()
+from doing that at the final ->release() to the first subsequent
+open().  That's indicated by ffs->state set to FFS_DEACTIVATED;
+if open() sees that, it immediately switches to FFS_CLOSING and
+proceeds with doing ffs_data_reset() before returning to userland.
+	* a couple of usb callbacks need to force the delayed
+transition; unfortunately, they are done in locking environment
+that does not allow blocking and ffs_data_reset() can block.
+As the result, if these callbacks see FFS_DEACTIVATED, they change
+state to FFS_CLOSING and use schedule_work() to get ffs_data_reset()
+executed asynchronously.
+
+Unfortunately, the locking is rather insufficient.  A fix attempted
+in e5bf5ee26663 ("functionfs: fix the open/removal races") had closed
+a bunch of UAF, but it didn't do anything to the callbacks, lacked
+barriers in transition from FFS_CLOSING to FFS_READ_DESCRIPTORS
+_and_ it had been too heavy-handed in open()/open() serialization -
+I've used ffs->mutex for that, and it's being held over actual IO on
+ep0, complete with copy_from_user(), etc.
+
+Even more unfortunately, the userland side is apparently racy enough
+to have the resulting timing changes (no failures, just a delayed
+return of open(2)) disrupt the things quite badly.  Userland bugs
+or not, it's a clear regression that needs to be dealt with.
+
+Solution is to use a spinlock for serializing these state checks and
+transitions - unlike ffs->mutex it can be taken in these callbacks
+and it doesn't disrupt the timings in open().
+
+We could introduce a new spinlock, but it's easier to use the one
+that is already there (ffs->eps_lock) instead - the locking
+environment is safe for it in all affected places.
+
+Since now it is held over all places that alter or check the
+open count (ffs->opened), there's no need to keep that atomic_t -
+int would serve just fine and it's simpler that way.
+
+Fixes: e5bf5ee26663 ("functionfs: fix the open/removal races")
+Fixes: 18d6b32fca38 ("usb: gadget: f_fs: add "no_disconnect" mode") # v4.0
 Tested-by: Samuel Wu <wusamuel@google.com>
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 05c6750702b6..fa467a40949d 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -59,7 +59,6 @@ static struct ffs_data *__must_check ffs_data_new(const char *dev_name)
+ 	__attribute__((malloc));
+ 
+ /* Opened counter handling. */
+-static void ffs_data_opened(struct ffs_data *ffs);
+ static void ffs_data_closed(struct ffs_data *ffs);
+ 
+ /* Called with ffs->mutex held; take over ownership of data. */
+@@ -636,23 +635,25 @@ static ssize_t ffs_ep0_read(struct file *file, char __user *buf,
+ 	return ret;
+ }
+ 
++
++static void ffs_data_reset(struct ffs_data *ffs);
++
+ static int ffs_ep0_open(struct inode *inode, struct file *file)
+ {
+ 	struct ffs_data *ffs = inode->i_sb->s_fs_info;
+-	int ret;
+ 
+-	/* Acquire mutex */
+-	ret = ffs_mutex_lock(&ffs->mutex, file->f_flags & O_NONBLOCK);
+-	if (ret < 0)
+-		return ret;
+-
+-	ffs_data_opened(ffs);
++	spin_lock_irq(&ffs->eps_lock);
+ 	if (ffs->state == FFS_CLOSING) {
+-		ffs_data_closed(ffs);
+-		mutex_unlock(&ffs->mutex);
++		spin_unlock_irq(&ffs->eps_lock);
+ 		return -EBUSY;
+ 	}
+-	mutex_unlock(&ffs->mutex);
++	if (!ffs->opened++ && ffs->state == FFS_DEACTIVATED) {
++		ffs->state = FFS_CLOSING;
++		spin_unlock_irq(&ffs->eps_lock);
++		ffs_data_reset(ffs);
++	} else {
++		spin_unlock_irq(&ffs->eps_lock);
++	}
+ 	file->private_data = ffs;
+ 
+ 	return stream_open(inode, file);
+@@ -1202,15 +1203,10 @@ ffs_epfile_open(struct inode *inode, struct file *file)
+ {
+ 	struct ffs_data *ffs = inode->i_sb->s_fs_info;
+ 	struct ffs_epfile *epfile;
+-	int ret;
+-
+-	/* Acquire mutex */
+-	ret = ffs_mutex_lock(&ffs->mutex, file->f_flags & O_NONBLOCK);
+-	if (ret < 0)
+-		return ret;
+ 
+-	if (!atomic_inc_not_zero(&ffs->opened)) {
+-		mutex_unlock(&ffs->mutex);
++	spin_lock_irq(&ffs->eps_lock);
++	if (!ffs->opened) {
++		spin_unlock_irq(&ffs->eps_lock);
+ 		return -ENODEV;
+ 	}
+ 	/*
+@@ -1220,11 +1216,11 @@ ffs_epfile_open(struct inode *inode, struct file *file)
+ 	 */
+ 	epfile = smp_load_acquire(&inode->i_private);
+ 	if (unlikely(ffs->state != FFS_ACTIVE || !epfile)) {
+-		mutex_unlock(&ffs->mutex);
+-		ffs_data_closed(ffs);
++		spin_unlock_irq(&ffs->eps_lock);
+ 		return -ENODEV;
+ 	}
+-	mutex_unlock(&ffs->mutex);
++	ffs->opened++;
++	spin_unlock_irq(&ffs->eps_lock);
+ 
+ 	file->private_data = epfile;
+ 	return stream_open(inode, file);
+@@ -2092,8 +2088,6 @@ static int ffs_fs_init_fs_context(struct fs_context *fc)
+ 	return 0;
+ }
+ 
+-static void ffs_data_reset(struct ffs_data *ffs);
+-
+ static void
+ ffs_fs_kill_sb(struct super_block *sb)
+ {
+@@ -2150,15 +2144,6 @@ static void ffs_data_get(struct ffs_data *ffs)
+ 	refcount_inc(&ffs->ref);
+ }
+ 
+-static void ffs_data_opened(struct ffs_data *ffs)
+-{
+-	if (atomic_add_return(1, &ffs->opened) == 1 &&
+-			ffs->state == FFS_DEACTIVATED) {
+-		ffs->state = FFS_CLOSING;
+-		ffs_data_reset(ffs);
+-	}
+-}
+-
+ static void ffs_data_put(struct ffs_data *ffs)
+ {
+ 	if (refcount_dec_and_test(&ffs->ref)) {
+@@ -2176,28 +2161,29 @@ static void ffs_data_put(struct ffs_data *ffs)
+ 
+ static void ffs_data_closed(struct ffs_data *ffs)
+ {
+-	if (atomic_dec_and_test(&ffs->opened)) {
+-		if (ffs->no_disconnect) {
+-			struct ffs_epfile *epfiles;
+-			unsigned long flags;
+-
+-			ffs->state = FFS_DEACTIVATED;
+-			spin_lock_irqsave(&ffs->eps_lock, flags);
+-			epfiles = ffs->epfiles;
+-			ffs->epfiles = NULL;
+-			spin_unlock_irqrestore(&ffs->eps_lock,
+-							flags);
+-
+-			if (epfiles)
+-				ffs_epfiles_destroy(ffs->sb, epfiles,
+-						 ffs->eps_count);
+-
+-			if (ffs->setup_state == FFS_SETUP_PENDING)
+-				__ffs_ep0_stall(ffs);
+-		} else {
+-			ffs->state = FFS_CLOSING;
+-			ffs_data_reset(ffs);
+-		}
++	spin_lock_irq(&ffs->eps_lock);
++	if (--ffs->opened) {	// not the last opener?
++		spin_unlock_irq(&ffs->eps_lock);
++		return;
++	}
++	if (ffs->no_disconnect) {
++		struct ffs_epfile *epfiles;
++
++		ffs->state = FFS_DEACTIVATED;
++		epfiles = ffs->epfiles;
++		ffs->epfiles = NULL;
++		spin_unlock_irq(&ffs->eps_lock);
++
++		if (epfiles)
++			ffs_epfiles_destroy(ffs->sb, epfiles,
++					 ffs->eps_count);
++
++		if (ffs->setup_state == FFS_SETUP_PENDING)
++			__ffs_ep0_stall(ffs);
++	} else {
++		ffs->state = FFS_CLOSING;
++		spin_unlock_irq(&ffs->eps_lock);
++		ffs_data_reset(ffs);
+ 	}
+ }
+ 
+@@ -2214,7 +2200,7 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
+ 	}
+ 
+ 	refcount_set(&ffs->ref, 1);
+-	atomic_set(&ffs->opened, 0);
++	ffs->opened = 0;
+ 	ffs->state = FFS_READ_DESCRIPTORS;
+ 	mutex_init(&ffs->mutex);
+ 	spin_lock_init(&ffs->eps_lock);
+@@ -2266,6 +2252,7 @@ static void ffs_data_reset(struct ffs_data *ffs)
+ {
+ 	ffs_data_clear(ffs);
+ 
++	spin_lock_irq(&ffs->eps_lock);
+ 	ffs->raw_descs_data = NULL;
+ 	ffs->raw_descs = NULL;
+ 	ffs->raw_strings = NULL;
+@@ -2289,6 +2276,7 @@ static void ffs_data_reset(struct ffs_data *ffs)
+ 	ffs->ms_os_descs_ext_prop_count = 0;
+ 	ffs->ms_os_descs_ext_prop_name_len = 0;
+ 	ffs->ms_os_descs_ext_prop_data_len = 0;
++	spin_unlock_irq(&ffs->eps_lock);
+ }
+ 
+ 
+@@ -3756,6 +3744,7 @@ static int ffs_func_set_alt(struct usb_function *f,
+ {
+ 	struct ffs_function *func = ffs_func_from_usb(f);
+ 	struct ffs_data *ffs = func->ffs;
++	unsigned long flags;
+ 	int ret = 0, intf;
+ 
+ 	if (alt > MAX_ALT_SETTINGS)
+@@ -3768,12 +3757,15 @@ static int ffs_func_set_alt(struct usb_function *f,
+ 	if (ffs->func)
+ 		ffs_func_eps_disable(ffs->func);
+ 
++	spin_lock_irqsave(&ffs->eps_lock, flags);
+ 	if (ffs->state == FFS_DEACTIVATED) {
+ 		ffs->state = FFS_CLOSING;
++		spin_unlock_irqrestore(&ffs->eps_lock, flags);
+ 		INIT_WORK(&ffs->reset_work, ffs_reset_work);
+ 		schedule_work(&ffs->reset_work);
+ 		return -ENODEV;
+ 	}
++	spin_unlock_irqrestore(&ffs->eps_lock, flags);
+ 
+ 	if (ffs->state != FFS_ACTIVE)
+ 		return -ENODEV;
+@@ -3791,16 +3783,20 @@ static void ffs_func_disable(struct usb_function *f)
+ {
+ 	struct ffs_function *func = ffs_func_from_usb(f);
+ 	struct ffs_data *ffs = func->ffs;
++	unsigned long flags;
+ 
+ 	if (ffs->func)
+ 		ffs_func_eps_disable(ffs->func);
+ 
++	spin_lock_irqsave(&ffs->eps_lock, flags);
+ 	if (ffs->state == FFS_DEACTIVATED) {
+ 		ffs->state = FFS_CLOSING;
++		spin_unlock_irqrestore(&ffs->eps_lock, flags);
+ 		INIT_WORK(&ffs->reset_work, ffs_reset_work);
+ 		schedule_work(&ffs->reset_work);
+ 		return;
+ 	}
++	spin_unlock_irqrestore(&ffs->eps_lock, flags);
+ 
+ 	if (ffs->state == FFS_ACTIVE) {
+ 		ffs->func = NULL;
+diff --git a/drivers/usb/gadget/function/u_fs.h b/drivers/usb/gadget/function/u_fs.h
+index 4b3365f23fd7..6a80182aadd7 100644
+--- a/drivers/usb/gadget/function/u_fs.h
++++ b/drivers/usb/gadget/function/u_fs.h
+@@ -176,7 +176,7 @@ struct ffs_data {
+ 	/* reference counter */
+ 	refcount_t			ref;
+ 	/* how many files are opened (EP0 and others) */
+-	atomic_t			opened;
++	int				opened;
+ 
+ 	/* EP0 state */
+ 	enum ffs_state			state;
 
