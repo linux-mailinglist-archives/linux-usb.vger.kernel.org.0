@@ -1,167 +1,180 @@
-Return-Path: <linux-usb+bounces-32998-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32999-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QCGTH5+LgGnO9wIAu9opvQ
-	(envelope-from <linux-usb+bounces-32998-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 12:33:51 +0100
+	id sFtEBX2UgGnL/gIAu9opvQ
+	(envelope-from <linux-usb+bounces-32999-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 13:11:41 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDFFFCBB28
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 12:33:50 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A16BFCC388
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 13:11:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EC8D1302730B
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 11:31:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9064C3054205
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 12:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2917363C4E;
-	Mon,  2 Feb 2026 11:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C31CF3659ED;
+	Mon,  2 Feb 2026 12:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QkRJKF3o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98C735E548;
-	Mon,  2 Feb 2026 11:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4543364E85
+	for <linux-usb@vger.kernel.org>; Mon,  2 Feb 2026 12:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770031917; cv=none; b=u8jbEzwJHL+CJvHWVGdtkq+c9Vf7l00W8esZleJajr/HSG8fcKwQ7Tzg6Zs/nt7bhoYfYbJteuL+atnKZDUrfQ+3wlchuQbOE1q+P4jcnptSSo0sTVLCmm4gj2sZ7uHXKPiA5WIb2cuxUBl3ef8kBHvZJsdqeuSjdR1CD7KTnzY=
+	t=1770033909; cv=none; b=pJFz0UcYv6IS9XwaPvQBkrLNAehHxLIyPLgqcgD+WZlV18m9YIC/7kF/zgMzSUFYXbPAMmRI6hj0t5vovlUESngrJV3ef0Q+X6VsTiVE3Uoln4XDdUNeUxrcPwCyvfKJOaxs5uITrcL5+fYHSN2l64qHpZEWKrdh0AyAYwKX7zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770031917; c=relaxed/simple;
-	bh=Ueylp6HQwvDtkHj6Zl1LQcic6rImdfM2EhfgQAhN4B8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q1V+Xp36SDWfPGu+GUzHyIUu7qfhNqKL+U7jMJJU6sO9e8QcVoFJVrBj+xqcjjOFMua26OCYTYT+nq8DTJq84wrx+rUtyQ86MKTj5ddSXeSMeh8VSo/o46s+2Xs0gGPv/axZEYP4BvAQbacNW3+qhcZeZdmVfKHNm9WYDi2Nawg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from duge-virtual-machine (unknown [183.192.223.177])
-	by APP-01 (Coremail) with SMTP id qwCowABH8WwYi4BpJdr9Bg--.29650S2;
-	Mon, 02 Feb 2026 19:31:38 +0800 (CST)
-Date: Mon, 2 Feb 2026 19:31:36 +0800
-From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
-To: vkoul@kernel.org, gregkh@linuxfoundation.org, conor@kernel.org
-Cc: neil.armstrong@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
-	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	alex@ghiti.fr, linux-phy@lists.infradead.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/4] Add USB support for Canaan K230
-Message-ID: <aYCLGLvbKZy+WyxI@duge-virtual-machine>
-References: <20260121145526.14672-1-jiayu.riscv@isrc.iscas.ac.cn>
+	s=arc-20240116; t=1770033909; c=relaxed/simple;
+	bh=ooVTj9mEoByboPWWE3IFgLha7oCBLZZINAKgYSkyhpE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CkaoNp0We0Hhmdrxmz5btfhSCuStVDrkVMScptfTOGNd5ie0Yt55zmXcoXdwCpVnbWLXtIiZHVzuFKGUtPHIal1L+2bAQZFIm8kf0FZqrMhJM2fDCZNS1ewCYGx045x0Bjbaly6x6j3HFznluCp8yW9acInqNs6iOrDnn95/Hvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QkRJKF3o; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-59dd7bfeb8aso4836029e87.0
+        for <linux-usb@vger.kernel.org>; Mon, 02 Feb 2026 04:05:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770033906; x=1770638706; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NCU4lBi7Qj4qN74x1HXW9kHPnyicyi2w7qMxp171t3w=;
+        b=QkRJKF3oJb/83lDSrR2pW/th8VcBC6T9Qpsp0bHI71yhP6IfY6gSc/8qvwNfQPdIpU
+         zwIzClOZEfzrQbPmfjwynxuWfbMcIKxxybqvxKANguDECr1V7L6Ct+9W2fPhUGHdTwbD
+         VNM/udcKsgWv0YD1YdzGaJZIlbA/qTTwgM55CKQDdLoAuK4vVUZZhWlfunDMQA0y/wmJ
+         Fof9GwtM2VK/ssrAs0izUQ745LX1DfyfEs5UwPgUku4ujiCAQ791vLpXhYrcdnZiB0t5
+         Ozh3qUK2quzcEbwXG5pNFzUv42OgBQFvZeCtjVRgLGygxbpDyHG4cylYXJGCVCHG0ea9
+         cdIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770033906; x=1770638706;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NCU4lBi7Qj4qN74x1HXW9kHPnyicyi2w7qMxp171t3w=;
+        b=EaCGqInmZnmIEotAvwb1GtUOaMoMXw4vtNNQ4nUP21UV86W2Y3FLN7ve0dqx3wKHqu
+         vJoPuauVbdeTuexWb/avHoJ8GkfB2Yjz7H1YelLsXtZ6JYPO20nBPDpUaggZxAbnt3Qn
+         lDk4xCd8+WLarpHv/ELGLJWGyJUjWYQqDfBkEV9hdZ3MtK3lw7YLKWv9+na0vQUVif+H
+         CZv/yBqfXbsvA7Y4geWYAZNhvJG2ZLXT3cD67z9ViGFIJalayUWTnnhRslBaD5AnB5sh
+         Kg9MmWMFAHSfIXDrm39XW9pwQshE/WerIB4yWy2i/+3737iugAFRRqtrDTl4/lIZSfFR
+         apQA==
+X-Gm-Message-State: AOJu0YwuusXSz+EO+GNzaE7iPazvjif/2CP3BkS7ZS3j3r0kFjGfKF/G
+	QLJESdTYCL+PgL79r5Ty/5ndj/8K5RCjeUS5wVKXby6ClfZ9h347CNby
+X-Gm-Gg: AZuq6aInm48pCEp9LGHDTlVmbl+r/Wc5BfMKs2Ms8mSNwd7HjtFuoR1Ej81TIhjteCL
+	FCA5FWKSYz1ARNQy3B7DjYIg8ndFD4INabJojPgwH7T9DnYBmUqv+TRfrZInm2rDUg3TDpGJNqs
+	a29SHVJO9Mwbao7EipmHAXfUK8K1DYTSxAIlwQKwTCyqB3qeyp7hlxvFKagD4Qv3+6CYtFvCfnW
+	g21PRNLSmquEcGVekRYZZTkVac3rXNckH3M5d1wmdHuakRQOv+PMe7EyjZmWCZ5qCj5W5dwHNIV
+	SL2EOaWKIub3z30Som/arz8kXqv38YAQVTsUNz6NoiyRJeHp3KnMNNUnOnYV+HiGbcBxw+OpmW8
+	c/2He4GBFafI5voERe7uXs1xcIVP5OrXXkcEsB4XXv4rKFMRpvpeBL9uGja6JA7EeQmlk1u1kEM
+	i//UuAwha81BuiZquOLF4Hcnqv6H8SnYmMguI3QyGmcioJX2ZVSV7Vmxrfq0bZbB5oblkatQ==
+X-Received: by 2002:a05:6512:3f1f:b0:59d:cda0:8b74 with SMTP id 2adb3069b0e04-59e1642ac69mr3838142e87.35.1770033905594;
+        Mon, 02 Feb 2026 04:05:05 -0800 (PST)
+Received: from ?IPV6:2a00:1fa0:4246:14fa:feaa:638c:335c:bdbe? ([2a00:1fa0:4246:14fa:feaa:638c:335c:bdbe])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e074b70c8sm3469810e87.75.2026.02.02.04.05.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Feb 2026 04:05:04 -0800 (PST)
+Message-ID: <74268def-31fd-4015-8be6-faebd6676667@gmail.com>
+Date: Mon, 2 Feb 2026 15:05:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260121145526.14672-1-jiayu.riscv@isrc.iscas.ac.cn>
-X-CM-TRANSID:qwCowABH8WwYi4BpJdr9Bg--.29650S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7trWrCrWkWry3Kw1ftFWrXwb_yoW5JF17pa
-	y2kFW3CFsrJFW2gFs3tw48WF9xX3Z5Jry5Wryaq3s8W3WUZr1UZ393KrWYvFyDJF4DCryj
-	qFs0kFyxKFy5AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4
-	A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-	c7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-	14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-	IFyTuYvjxUqiFxDUUUU
-X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 2/4] usb: phy: tegra: return error value from
+ utmi_wait_register
+To: Svyatoslav Ryhel <clamor95@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mikko Perttunen <mperttunen@nvidia.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260202080526.23487-1-clamor95@gmail.com>
+ <20260202080526.23487-3-clamor95@gmail.com>
+Content-Language: en-US
+From: Sergey Shtylyov <sergei.shtylyov@gmail.com>
+In-Reply-To: <20260202080526.23487-3-clamor95@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32998-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-32999-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[iscas.ac.cn];
+	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,nvidia.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jiayu.riscv@isrc.iscas.ac.cn,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sergeishtylyov@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: EDFFFCBB28
+X-Rspamd-Queue-Id: A16BFCC388
 X-Rspamd-Action: no action
 
-On Wed, Jan 21, 2026 at 10:55:21PM +0800, Jiayu Du wrote:
-> Add support for the USB PHY and DWC2 IP which is used by Canaan K230,
-> and made relevant changes to the DTS.
-> 
-> This series is based on the initial 100ask K230 DshanPi series [1] which
-> is based on the clock and pinctrl series. Check the details in the link.
-> 
-> Link: https://lore.kernel.org/all/20260115060801.16819-1-jiayu.riscv@isrc.iscas.ac.cn/ [1]
-> 
-> Changes in v5:
-> - Changed the year of Copyright to 2026.
-> - Add blank line after the declaration of variables
-> - Fix wrong alignment.
-> - Link to v4: https://lore.kernel.org/all/20260120143243.71937-1-jiayu.riscv@isrc.iscas.ac.cn/
-> 
-> Changes in v4:
-> - Shrink reg length to match the address/size-cells in k230-usb-phy yaml.
-> - Move all PHY instance creation and initialization from xlate to probe.
-> - Modify xlate function to only perform index lookup for PHY instances.
-> - Define all register base offsets macros at the top of file instead of
->   hard-coding magic numbers directly in probe.
-> - Link to v2: https://lore.kernel.org/all/20260115064223.21926-1-jiayu.riscv@isrc.iscas.ac.cn/
-> 
-> Changes in v3:
-> - Please ignore v3.
-> 
-> Changes in v2:
-> - Fold the child into the parent in dtsi.
-> - Define one usbphy with phy-cells=1.
-> - Delete the clock of the usbphy as it is not needed.
-> - Link to v1: https://lore.kernel.org/all/20251230023725.15966-1-jiayu.riscv@isrc.iscas.ac.cn/
-> 
-> Jiayu Du (4):
->   dt-bindings: phy: Add Canaan K230 USB PHY
->   dt-bindings: usb: dwc2: Add support for Canaan K230 SoC
->   phy: usb: Add driver for Canaan K230 USB 2.0 PHY
->   riscv: dts: canaan: Add syscon and USB nodes for K230
-> 
->  .../bindings/phy/canaan,k230-usb-phy.yaml     |  35 +++
->  .../devicetree/bindings/usb/dwc2.yaml         |   3 +
->  .../boot/dts/canaan/k230-canmv-dshanpi.dts    |  17 ++
->  arch/riscv/boot/dts/canaan/k230.dtsi          |  35 +++
->  drivers/phy/Kconfig                           |   1 +
->  drivers/phy/Makefile                          |   1 +
->  drivers/phy/canaan/Kconfig                    |  14 +
->  drivers/phy/canaan/Makefile                   |   2 +
->  drivers/phy/canaan/phy-k230-usb.c             | 284 ++++++++++++++++++
->  9 files changed, 392 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/canaan,k230-usb-phy.yaml
->  create mode 100644 drivers/phy/canaan/Kconfig
->  create mode 100644 drivers/phy/canaan/Makefile
->  create mode 100644 drivers/phy/canaan/phy-k230-usb.c
-> 
-> -- 
-> 2.52.0
-> 
-Hello Vinod, could you please take a look at this patch? Thank you!
+On 2/2/26 11:05 AM, Svyatoslav Ryhel wrote:
 
-Regards,
-Jiayu Du
+> Return exact error value from utmi_wait_register during HSIC power on.
+> 
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> ---
+>  drivers/usb/phy/phy-tegra-usb.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+> index 3a7a74f01d1c..6173b240c3ea 100644
+> --- a/drivers/usb/phy/phy-tegra-usb.c
+> +++ b/drivers/usb/phy/phy-tegra-usb.c
+> @@ -891,6 +891,7 @@ static int uhsic_phy_power_on(struct tegra_usb_phy *phy)
+>  	struct tegra_utmip_config *config = phy->config;
+>  	void __iomem *base = phy->regs;
+>  	u32 val;
+> +	int err = 0;
+
+   This initialization seems pointless -- the newly added variable gets overwritten
+by you later...
+
+[...]
+> @@ -984,12 +985,14 @@ static int uhsic_phy_power_on(struct tegra_usb_phy *phy)
+>  	val |= UHSIC_TX_RTUNE(phy->soc_config->uhsic_tx_rtune);
+>  	tegra_hsic_writel(phy, UHSIC_PADS_CFG0, val);
+>  
+> -	if (utmi_wait_register(base + USB_SUSP_CTRL, USB_PHY_CLK_VALID,
+> -			       USB_PHY_CLK_VALID))
+> +	err = utmi_wait_register(base + USB_SUSP_CTRL, USB_PHY_CLK_VALID,
+> +				 USB_PHY_CLK_VALID);
+> +
+> +	if (err)
+>  		dev_err(phy->u_phy.dev,
+>  			"Timeout waiting for PHY to stabilize on enable (HSIC)\n");
+>  
+> -	return 0;
+> +	return err;
+>  }
+>  
+>  static int uhsic_phy_power_off(struct tegra_usb_phy *phy)
+
+MBR, Sergey
 
 
