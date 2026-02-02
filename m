@@ -1,205 +1,285 @@
-Return-Path: <linux-usb+bounces-33000-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33001-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iDkpBkKVgGnL/gIAu9opvQ
-	(envelope-from <linux-usb+bounces-33000-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 13:14:58 +0100
+	id wA9ZHRqagGnL/gIAu9opvQ
+	(envelope-from <linux-usb+bounces-33001-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 13:35:38 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 441C3CC408
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 13:14:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0747CC651
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 13:35:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B4CA63004D13
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 12:14:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 51DE0301A43E
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 12:35:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C272C3659E7;
-	Mon,  2 Feb 2026 12:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03F6E12CDA5;
+	Mon,  2 Feb 2026 12:35:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ISBRKwJZ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VO1TO/qZ";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="CLoK/GUS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23B42E543B
-	for <linux-usb@vger.kernel.org>; Mon,  2 Feb 2026 12:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770034468; cv=pass; b=lHtr0dzehl/aJ6CnfUlvq3tn7KxzB2jxLH+FR3qoNE9FZyKg83MW5/J9wcILVgVlgKDXkLCPQH+5EC6LtMvVq7+LHPrDAbNVhL0NKo4uTzPYl4MJEwkkiouPSmuu9ZsGtUkUXth9PKgdwqV4xCXw22YEGTeVaTv/PorTjje0mZc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770034468; c=relaxed/simple;
-	bh=4vOMU3KJblqcvy4DJHgfLqxLPeHzwlcx9CR/HjnFSHs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M3q9ORaS8nru1R1o0C0slInzmUpDqAa41SUrSTbJFZ6QrDOfqcxMG02NYN8OUW1VpXX7d2bc7zhqSE/zlgkdLRHzNThfDzhtdzF52+ekavugukwECSwMPseCih3moVfdCjc/AFOc8sAn2fp23Jissg/kmbxyZm78pXSRIk81bR8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ISBRKwJZ; arc=pass smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42fed090e5fso3498215f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 02 Feb 2026 04:14:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770034465; cv=none;
-        d=google.com; s=arc-20240605;
-        b=a7HHaakQRE0B7s7RQm2UkgNR6XTJHyzKw6vpYdo27oQtssXVx+sA88ycBKIR0BKhbf
-         OUt0RN7pSoS8vTxhlV58tqQ9xW6Z+ZvgaPDs6BzDvyoF6HrFGS+fdOv3OwPyQ3zKs/8a
-         sORwL72awRIEiF5UXfM861QHfuScMcNMMfcoftYl6zeDEslkkdvoLvshEVJXG2dp79Ql
-         il1hRreWAtPX0e0ANPjCL1IRhZgaF9iYJrQOxX2OxurF+p/JIpNhMnddaqN4U98GEzbI
-         X5b5kkAyHfgNlvhrjGEsFrht94KHW3BR0TW7ez6LOgI7bLbyyrKmB1bG115tQsFfrz7O
-         83DQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=56+fWCwV/1yCfXrVGr4I8X47r1cy6upQroC6izF7fa0=;
-        fh=zdDdr9aEcVVs8RwuZgQMkJ0zreDrVWsZZvBaRGA74PQ=;
-        b=JZ7p0J/ShuXYNR3UupQV0ngutx9wZh4mPyVlttQtAF8FrlQ4dFGfDSKG32e5pJArgY
-         UX0lIm5WCzfyceqB3Wnt+sd1fpQKem4OC+/sRtVuW3dnfWisiHDP8W3CA+kA9a9bHurt
-         7zuUdunW1yEYFbrkaH9F2tR/ChWrQOiFQ95WUdtApilkPuGWc4WQQv1O6K6Ipvk8ifTN
-         56R8LEgKFhQPlif3hYZsqSqwBBxOfEgg0KtCTJI4snKucSpBPwVtHQGJ6RH3N4tk4WV0
-         ZMIRN7zxkodimiiHJJrnPtS5V4n/jBFYJ6JIogA38L9mrVdg8upMnWeDZ2umi78JkkCf
-         Yssw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD7F1F5EA
+	for <linux-usb@vger.kernel.org>; Mon,  2 Feb 2026 12:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770035710; cv=none; b=lYdrhXIeNTCf9SV01IysM4U9jeH1b4Xg4/2JFGCX/te6qTHRqf7xpj66dVac2KNXVn/ko1MbSuxYgvS4VUZ1j305IqMsLa264jvszQNOieGCum6kBCcka32HT6bE16sCniO+GlRiZrabzJlJvEKum3/WMuJV2HXVQt+xCgVIiGw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770035710; c=relaxed/simple;
+	bh=ZUV+WpYJvy41qS+AsXlda1XtcYlHkozC7ARvIqjkdl4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jPAy7QYKho9WdnHF1kWZCQHltshwqNQOVxcQroVEUUrLTCRcST1hnn6LCF4CnYM0QAjhvME93/DuY/xYu8V7fjbbWnCkB64vuXL3OJ4kXs6xCZMnqA8PtWQmCcG3dt/ZMoySlApqWdvKud818D1lx0p6F2e3av7w3UposEd/lSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VO1TO/qZ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=CLoK/GUS; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 612CVGCo255435
+	for <linux-usb@vger.kernel.org>; Mon, 2 Feb 2026 12:35:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	+RlfaiRErFz+38qG7agb/NlNLMwIwniX7TrkIR1vmws=; b=VO1TO/qZU6sJT/0T
+	dDKZIt9nwE/gGhEPSPMoJ7FUszbDAdt/jB0TsUoYUe7hPaZJx1JjvNYVUZVJds0U
+	IT6cD7InL6sf+9+Mk5s0xjox7BMOBE1Ddc32wyPj8AIM6SK6c8msFKtBwZ0Uk3Mx
+	kk2zp0QhHBpkF/lwZR8KaqhLwx8CgYW9wQf1vRvN59xBGCXeY6mysfZOIXNfz9AY
+	DHJGilo1puhAHIBv5QfpzKlb1pN+zSX58FPygwZiGACVyp92Tzun7TBNRD4rQJl8
+	rRBGAgaucaUX4XZClFMM/WZ87TQahQPq+xEV/pNc41CfGupolekG0cDiWMKDDsv/
+	RUmkgw==
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c2v0kg0ac-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 02 Feb 2026 12:35:08 +0000 (GMT)
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-88a262380deso11229616d6.1
+        for <linux-usb@vger.kernel.org>; Mon, 02 Feb 2026 04:35:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770034465; x=1770639265; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=56+fWCwV/1yCfXrVGr4I8X47r1cy6upQroC6izF7fa0=;
-        b=ISBRKwJZPrbbdraoAqnNd9CJnTw7EuEmbeLCLs10SoxJS8oY4HOXRa4mp9YF1p+k94
-         bZyue2NWz5E7KYG+3K0dWVvJ03+q+DjMIp1JP7s+jmipI1umSpXBF/dH4hntbnwCbTjb
-         YdyrySz5dsec03gvBXloifbsYY52gLM3nYpp2wGrUKszMqiUB+5C8+Ul9J13Iqk6Sva1
-         KNPGNATZ+8Ofe/qm8Zowf0EwAgVtf0wL8tDPD9xTSnyRcFw+6EWqhCpCyrZubE2JYJfC
-         PjWn9lwuqHqO5hRyh80thRyqIiEeUgVegj2DeiB3pqVq/OgJ01XbnJzocaeGjsVxdYoT
-         X3eA==
+        d=oss.qualcomm.com; s=google; t=1770035707; x=1770640507; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+RlfaiRErFz+38qG7agb/NlNLMwIwniX7TrkIR1vmws=;
+        b=CLoK/GUSlg/Ah0wtptrTSN2mPa1prLUN1HgO40LVEkdK4dVsavybU4IseSLoW4V0xm
+         v7RStALHU4CQ3+uxbmhwaHfAJSyNKh9Y4uI8bmuuNRjd1DAr0MpH7iMIztzXE2pBqSaw
+         ztGqnECR3pPTgA//yk9P7ladxKBmXCh0mSClU9iJ9V+NymtpUjrkGtIfWJyReb5HSybq
+         dhB3HLGX4H0QJZqpwNqL7agkJJD/ciEcfJ1XYXz32946b66PLAjgSSsX09Ea6LOMVL/1
+         KBmkCC6ZTEDJLHXo88sqDdg+1cpTRnHKUrxPnIb8omI74ReaAdyozLQwDVfLu7CdHdWJ
+         qaLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770034465; x=1770639265;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=56+fWCwV/1yCfXrVGr4I8X47r1cy6upQroC6izF7fa0=;
-        b=Br9F/5oikvmab7fjVgHLiJKEStFQV7WfZqvGDeqtcCuEpxWqwfowkkRSk7YoBeQniH
-         KRF/E1F0zVV8CgLQI8BkcDnWM1T4hamG43ksQV8boWoUe4jt6SHHkF9PtxXUeRgqk2BA
-         O6FrMxq7BnSiBuZ3bcsqTz4JTSeJPjfJ2uX9oZ0YBfcxKDhhkqqhbKYvBklzFwHm0pdF
-         qzSf3ylr7TZ2r/dFOyUA7iyLaDAcSXjS+5iHDtLioN05Ovj/nlBpo+hSAd2hom9xK6ux
-         GvVJNnfXaimns7us5wapy67xScaL/q8J6cGB4nATOUyAhtl1n6uIE+3yEVzhmPBKYcJs
-         d98g==
-X-Forwarded-Encrypted: i=1; AJvYcCV4nlsMTPtKzoUBfyW5lbYrRMsmi4hznnRO11yrKH+3bmDhUkE5lcCbv4r8kZLxtVMCDU6wjyG+wpw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNKB9KGOYn2xTSaoPWpqTsCjgtUWg9+6Uux9n45uOiIziD74v6
-	TVIOhWuNL/i/r+S4oykZ2fhXLn3tyLwhGJcrrv++NUlkpUqy7PSPPWebelQ4Pdds7a4BX9LuJ+j
-	DsEDMCS1lC1a15b7MkNvbRnPaDCk7OSU=
-X-Gm-Gg: AZuq6aJCJ835ngcAG5lGfclUudujzO896M2s99r6GZ5g4AqdPpGxvq2bY4mkOTVR2U3
-	MEaLvW1g+558yyUpDhflpPZyK9zpie+JuUO6a5lpBVwghUgyMkjQvYd7as3J2+7cVE51p5hMand
-	/OSU3KzvuZbfCnE18Xn9nrU42ZTIVjcp4P6dYpz6Z59RZDcsld9QPcZ0lD2te4jci/4XvXnBFCz
-	N9mL1tYhlJYIMRToPV94HKZ5ccb3DeeBTuLWqhJaZZMcxVoVJIFaodJ+TSngJMI1MaVlEmu
-X-Received: by 2002:a05:6000:2385:b0:435:9ce0:f93c with SMTP id
- ffacd0b85a97d-435f3ad5b8emr17364591f8f.62.1770034465115; Mon, 02 Feb 2026
- 04:14:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770035707; x=1770640507;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+RlfaiRErFz+38qG7agb/NlNLMwIwniX7TrkIR1vmws=;
+        b=aL0nwI4s0TBuFPO5yHtZhT0k30z+jt1KjyeWGw5KVuD5vpLrfTmL7WZjUPoE57CAUQ
+         XwoALsronQoYvbt0hZtmhYm5IRAFUwSaCKfAz32KFFJbk+MCU89b143/PxOFAzp1DC6Z
+         JVBfpZIYp9Bq6NAQAFf/Kw66VRQkT+h3Vq0vJ1U5NmQPCxsxu5acd2z2rVqYtpzktO/H
+         7r6OjyRsueJOlipNFnwjoSO/rMVqF5GYy3gzIwdRW4ePUT2yC13/wxF31Zuq+I8cCMIS
+         0P0ja41rMFFxG5G0PxNrsIja3MLe++sEbsDJ7GTC6uEtPbo/b/iMsFa2jD7PW39Zj9/K
+         l+dw==
+X-Forwarded-Encrypted: i=1; AJvYcCV20gezPiqskTTBMDVGN8/2nTQFXvCwMOLHhq9Gty8p+Z1nElG/uhTP7wJsh/mmoQZkd9Oji87hdAU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy174fhTxRe191w7vWDl97yP+vaabct3Ms6YGEfHHMZKgxaxYPi
+	nk+GP9m6wf7qDVtt6ASAnSk0m3X0OUCLBttE2eyK84Zt1GsvZdnkkOtW4cD5yup5zAlAgqbbbyl
+	QOu4CWSdlkPsLOx2dBkzatYcZTTosFvCRzLu2HoMiP+0veRzQVsll1nFw+J1S1jc=
+X-Gm-Gg: AZuq6aLJxXH9liDiceGjQFt4QSkUCujVoNFtrT4XjYFDBDcXzodpwci0GCURR2pvAcp
+	fID1ssxVUqC2GAUbFlWEHE2XQkTM5tnCpt/fmghgdlYHREZ5tu5Ufjv+WIyWZNW9ujreXr1QJQj
+	omK37SB19TlminGdEJvADDndbewtjzbVW33ICmyBe46zYvgfeVVU4n86FqV7LOV0HxgZCzYsFGf
+	pp+h/COjULS6ulgHjCpaYBMVS0x4+b9vRr51NdM8OAF3rayAWpTQAyBHNY3fkgOwqyuV31mYOd8
+	hDSi0d9B2NbAASk+G5xv20+O6rXfVARSyuOlAPCn7TOBqr19mtIf2IZ4msn3D8sfZeElCQfFAVc
+	7fIpcnhALQI93dpy/K/aNBv0y45dds9FqAtXT7C5bz42HwGMa4rPWvsde2zQSAjaSehA=
+X-Received: by 2002:a05:622a:15c2:b0:501:46db:6b3b with SMTP id d75a77b69052e-505d21a2a4cmr131162211cf.5.1770035707302;
+        Mon, 02 Feb 2026 04:35:07 -0800 (PST)
+X-Received: by 2002:a05:622a:15c2:b0:501:46db:6b3b with SMTP id d75a77b69052e-505d21a2a4cmr131161761cf.5.1770035706657;
+        Mon, 02 Feb 2026 04:35:06 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e0a2ddabasm3158660e87.25.2026.02.02.04.35.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Feb 2026 04:35:05 -0800 (PST)
+Message-ID: <3d88b354-66a2-4125-a06d-752b052bf0ee@oss.qualcomm.com>
+Date: Mon, 2 Feb 2026 13:35:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202080526.23487-1-clamor95@gmail.com> <20260202080526.23487-3-clamor95@gmail.com>
- <74268def-31fd-4015-8be6-faebd6676667@gmail.com>
-In-Reply-To: <74268def-31fd-4015-8be6-faebd6676667@gmail.com>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Mon, 2 Feb 2026 14:14:13 +0200
-X-Gm-Features: AZwV_Qhc04t50qV84MOPj_KuJjhvIvyYToXV4PJJJWcC5DH3b2UIXHdWJaS3HN0
-Message-ID: <CAPVz0n0giLnk6caoZFHZS52XCfA_CN1BqKjSQQGnbHBdHGikiw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/4] usb: phy: tegra: return error value from utmi_wait_register
-To: Sergey Shtylyov <sergei.shtylyov@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Mikko Perttunen <mperttunen@nvidia.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFT 2/3] arm64: dts: qcom: glymur: Add USB related nodes
+To: Wesley Cheng <wesley.cheng@oss.qualcomm.com>,
+        Abel Vesa <abel.vesa@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Pankaj Patil <pankaj.patil@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20260113-dts-qcom-glymur-add-usb-support-v1-0-98d6d387df01@oss.qualcomm.com>
+ <20260113-dts-qcom-glymur-add-usb-support-v1-2-98d6d387df01@oss.qualcomm.com>
+ <01de4054-eebf-4ef3-ad74-c806b208a848@oss.qualcomm.com>
+ <6lieos5uudkgynizozrmzrj5ov57frzzl65b2fpanwbhbmehot@z5uhyv4ipyet>
+ <4632ad3a-c893-449a-b0d1-48d9c93da7e9@oss.qualcomm.com>
+ <86dade1c-3ac4-4352-8dc8-e7acaaf21321@oss.qualcomm.com>
+ <5a773b89-f3f8-486b-af01-3387c99e53e5@oss.qualcomm.com>
+ <3b5685da-5178-46ec-b720-97e1ecd5310c@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <3b5685da-5178-46ec-b720-97e1ecd5310c@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=Reqdyltv c=1 sm=1 tr=0 ts=698099fc cx=c_pps
+ a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=QsawANE1_QW70S-DVw0A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=pJ04lnu7RYOZP9TFuWaZ:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAyMDA5OCBTYWx0ZWRfX+MhNfvPrKu3j
+ yj90slVW8GtpdvJTNuqHWHetfwmSFa/nclm7RxHNlNqneQlI/tMihWQBhGADFl1IkwO0pzGCYPb
+ U9vCjTQI16cWx9TQ/nF8pePMvG3HPMbPskPgRJWxXtQ15tt5xYt/hWrmyrVR3cc7nf1FqVv0ajd
+ QwbtM/E5RQhT8nPWoO0/rv/QQ5OCJtUHmFNoYH7gaYc06DuvTPJW+uE8fHnHdbmRUWb8ZlAvm2h
+ TlzXDbEWrzIpLmjgF0JvbQP92EgQP0+7Q/p5ZhRIpTT8EXgZDGSHeyG46/EkIipOoopxkkT6ZAP
+ a0TL9Q7gV7inj7QwYUVukQb1sFRJeXmUamJa/FboPGQs9I19+puRz/yy6Aq3kqjIHUXEMKyIlRu
+ Btp5j4SE0AXpGrhoHG8w1gGVwFoykVAQQ+eBjVn+rCCzDh/6HlyFbhmDXov9VrzeGNE6Wvow+XZ
+ CaJ5NHoVwDTmoJbYkeg==
+X-Proofpoint-GUID: 3VL-Fl8jKFgmgPb9x7nms_ql7wu3poJE
+X-Proofpoint-ORIG-GUID: 3VL-Fl8jKFgmgPb9x7nms_ql7wu3poJE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-02_04,2026-01-30_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
+ clxscore=1015 phishscore=0 impostorscore=0 malwarescore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602020098
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33000-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,nvidia.com,gmail.com,vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33001-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 441C3CC408
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: E0747CC651
 X-Rspamd-Action: no action
 
-=D0=BF=D0=BD, 2 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 14:05 Serge=
-y Shtylyov <sergei.shtylyov@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On 2/2/26 11:05 AM, Svyatoslav Ryhel wrote:
->
-> > Return exact error value from utmi_wait_register during HSIC power on.
-> >
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > ---
-> >  drivers/usb/phy/phy-tegra-usb.c | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegr=
-a-usb.c
-> > index 3a7a74f01d1c..6173b240c3ea 100644
-> > --- a/drivers/usb/phy/phy-tegra-usb.c
-> > +++ b/drivers/usb/phy/phy-tegra-usb.c
-> > @@ -891,6 +891,7 @@ static int uhsic_phy_power_on(struct tegra_usb_phy =
-*phy)
-> >       struct tegra_utmip_config *config =3D phy->config;
-> >       void __iomem *base =3D phy->regs;
-> >       u32 val;
-> > +     int err =3D 0;
->
->    This initialization seems pointless -- the newly added variable gets o=
-verwritten
-> by you later...
->
+On 1/31/26 1:11 AM, Wesley Cheng wrote:
+> 
+> 
+> On 1/28/2026 1:53 AM, Konrad Dybcio wrote:
+>> On 1/27/26 11:26 PM, Wesley Cheng wrote:
+>>>
+>>>
+>>> On 1/27/2026 3:46 AM, Konrad Dybcio wrote:
+>>>> On 1/27/26 12:41 PM, Abel Vesa wrote:
+>>>>> On 26-01-13 14:13:32, Konrad Dybcio wrote:
+>>>>>> On 1/13/26 1:33 PM, Abel Vesa wrote:
+>>>>>>> From: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+>>>>>>>
+>>>>>>> The Glymur USB system contains 3 USB type C ports, 1 USB multiport
+>>>>>>> controller and a USB 2.0 only controller. This encompasses 5 SS USB QMP
+>>>>>>> PHYs (3 combo and 2 uni) and 6 M31 eUSB2 PHYs. All controllers are SNPS
+>>>>>>> DWC3 based, so describe them as flattened DWC3 QCOM nodes.
+>>>>>>>
+>>>>>>> Signed-off-by: Wesley Cheng <wesley.cheng@oss.qualcomm.com>
+>>>>>>> Co-developed-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+>>>>>>> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+>>>>>>> ---
+>>>>>>
+>>>>>> [...]
+>>>>>>
+>>>>>>> +            snps,dis_u2_susphy_quirk;
+>>>>>>> +            snps,dis_enblslpm_quirk;
+>>>>>>> +            snps,dis_u3_susphy_quirk;
+>>>>>>> +            snps,usb2-lpm-disable;
+>>>>>>
+>>>>>> Other SoCs have a list that's much longer, please consult Wesley if
+>>>>>> this list is enough
+>>>>>
+>>>>> Checked with Wesley. He confirmed that this trimmed list is fine.
+>>>>> He said he dropped the rest since they are related to the power saving
+>>>>> features like USB2/3 LPM (l1 or u1/u2) and we don't seem need those.
+>>>>
+>>>> Is that to say that those erratas were fixed in this hardware?
+>>>>
+>>>> Low-power states of the link are no less than desired is possible..
+>>>>
+>>>
+>>> I think it was misunderstood.  We should keep the same quirks as our previous targets to enable USB LPM support in certain cases.
+>>>
+>>> snps,hird-threshold = /bits/ 8 <0x0>;
+>>> snps,usb2-gadget-lpm-disable;
+>>> snps,dis-u1-entry-quirk;
+>>> snps,dis-u2-entry-quirk;
+>>> snps,is-utmi-l1-suspend;
+>>> snps,usb3_lpm_capable;
+>>> snps,has-lpm-erratum;
+>>> tx-fifo-resize;
+>>> snps,dis_u2_susphy_quirk;
+>>> snps,dis_enblslpm_quirk;
+>>> snps,usb2-lpm-disable;
+>>>
+>>> There are some questionable ones that I'm on the fence though, which we should consider removing:
+>>> snps,usb2-lpm-disable
+>>> snps,usb2-gadget-lpm-disable
+>>>
+>>> USB L1 support is routinely being verified on our devices (in host and device modes), so if its power over performance, we should consider removing the properties to disable USB L1.
+>>
+>> Does the fact that we allow L1 entry impact performance itself, or is
+>> there some room for improvement in the drivers?
+>>
+> 
+> Hi Konrad,
+> 
+> Its not exactly something USB drivers have control of, as USB L1 LPM is a feature handled within the controller.  The only reason why we might see some performance hit is if we have to frequently enter/exit L1 states, but if the link never make transitions into L1, then we obviously won't take a hit.
+> 
+>>
+>>   (esp since we're defining the HIRD threshold as well...)
+>>
+>> Wouldn't HIRD threshold be related to *U*1(/2) though?
+>> I see in the list above you decalred
+>>
+> 
+> U1/U2 are USB3 LPM states, which utilize the BESL, not HIRD.
+> 
+>> snps,dis-u1-entry-quirk
+>> snps,dis-u2-entry-quirk
+>>
+>> which forbid them
+>>
+> 
+> These disable them for when we are in gadget/peripheral mode, but u1/u2 while in host mode is still enabled.  I'm not sure we are confident enough yet at this point to enable them (U1/U2) for device mode use cases.
+> 
+>> and the threshold is set to 0, so IIUC that means entry is only allowed
+>> for devices that don't ""really"" suspend
+>>
+> 
+> HIRD specifies the L1 exit latency that our device will require, and programming that to 0 will mean we'll require the minimum HIRD latency to exit L1.
 
-So? let it better be initialized and rewritten then later on catch errors.
+Seems I had a lot of misconceptions, thanks!
 
-> [...]
-> > @@ -984,12 +985,14 @@ static int uhsic_phy_power_on(struct tegra_usb_ph=
-y *phy)
-> >       val |=3D UHSIC_TX_RTUNE(phy->soc_config->uhsic_tx_rtune);
-> >       tegra_hsic_writel(phy, UHSIC_PADS_CFG0, val);
-> >
-> > -     if (utmi_wait_register(base + USB_SUSP_CTRL, USB_PHY_CLK_VALID,
-> > -                            USB_PHY_CLK_VALID))
-> > +     err =3D utmi_wait_register(base + USB_SUSP_CTRL, USB_PHY_CLK_VALI=
-D,
-> > +                              USB_PHY_CLK_VALID);
-> > +
-> > +     if (err)
-> >               dev_err(phy->u_phy.dev,
-> >                       "Timeout waiting for PHY to stabilize on enable (=
-HSIC)\n");
-> >
-> > -     return 0;
-> > +     return err;
-> >  }
-> >
-> >  static int uhsic_phy_power_off(struct tegra_usb_phy *phy)
->
-> MBR, Sergey
->
+Konrad
 
