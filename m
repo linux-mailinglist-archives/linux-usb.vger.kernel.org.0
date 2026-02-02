@@ -1,198 +1,167 @@
-Return-Path: <linux-usb+bounces-32997-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32998-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aNT5CnCEgGnE8wIAu9opvQ
-	(envelope-from <linux-usb+bounces-32997-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 12:03:12 +0100
+	id QCGTH5+LgGnO9wIAu9opvQ
+	(envelope-from <linux-usb+bounces-32998-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 12:33:51 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61FA8CB6B3
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 12:03:11 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDFFFCBB28
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 12:33:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id F3AFE3002908
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 11:03:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EC8D1302730B
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 11:31:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E4229BDA5;
-	Mon,  2 Feb 2026 11:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mrGkKRxx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2917363C4E;
+	Mon,  2 Feb 2026 11:31:57 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1359E35DD02
-	for <linux-usb@vger.kernel.org>; Mon,  2 Feb 2026 11:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98C735E548;
+	Mon,  2 Feb 2026 11:31:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770030183; cv=none; b=efq80F5rRqBptojN1bPBTznISfRKgxnPXaBEno/YcPWME1/mrQcjVngCUfOxcnUwlgdCfMiXq9fNswbV+TzMAb9hbaabFZ9wu/sWXsvoc889+KAgv/okM5xyqQlc2BhD+OLy8CMHGLc7yF6vYkGWaCVzryYJq3vlnHBIhFpbh1U=
+	t=1770031917; cv=none; b=u8jbEzwJHL+CJvHWVGdtkq+c9Vf7l00W8esZleJajr/HSG8fcKwQ7Tzg6Zs/nt7bhoYfYbJteuL+atnKZDUrfQ+3wlchuQbOE1q+P4jcnptSSo0sTVLCmm4gj2sZ7uHXKPiA5WIb2cuxUBl3ef8kBHvZJsdqeuSjdR1CD7KTnzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770030183; c=relaxed/simple;
-	bh=tmCdY+062riUvvzl7Xs4sCeTnT045XiXZmjso2IZW5k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=btf9jOYjEjysQsnN8VX/9XV47dH2V313BHafNbn9kD5qNr+jtd0wXCYf1CxFL6Tbnl3eILAxh0JoCw3TamScfIZw+RJE8YYn0T8uDu36aLhDE6Dv2S0uUfbzCqirYxf3jiEOMHg/6UgKFB/8vc2ZsLNMbnhsmf3ddT4okzJcvdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mrGkKRxx; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-81f4c0e2b42so2420637b3a.1
-        for <linux-usb@vger.kernel.org>; Mon, 02 Feb 2026 03:03:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770030181; x=1770634981; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BXhH8zrVylWsesycxP40bSnYIiTHShVUT+eNMfYxJ/I=;
-        b=mrGkKRxxLB2C2cazcR+WFkJhzNGLg7bSLNhhXwH+cPIfZ2egx97vaKEycNnW2JhVXg
-         OJQvnbZt7JWYP/OE4N6U04+p8mMRHiDNFR6or9PeDa5Cb6TDhKoKyptT8JSnlsYSZws8
-         OUZr6gj2qiUP2VZ7hDO9vYOSswotE0XZPzSt68dncWxxg8gug0ZIapvrlCVUjfTeKFyl
-         C5WbNq08kogqpr47k1B+e53Ij10XA7g2dHrL8WgCnwDAVIHgrfFTasCa7sDoUi1RfG9R
-         CPMIu8QJofA6L++EMBg31aE6CJ+VcDRU2eanTZsVFFeVZNQNM2wPIftIZfpgykJUnLoH
-         cYCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770030181; x=1770634981;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BXhH8zrVylWsesycxP40bSnYIiTHShVUT+eNMfYxJ/I=;
-        b=eEXFaRRLWiJdof6KbwQP1s5vS4WWhsHXPvDogHH9pbh9ClZ6HOjtKzYg7Hsom8qcIF
-         XR9MVGRuwxH8DM9gyGLicYSgwSkFV/lw7kJAziDR2VzaEdu7R5PGPVBbX6ajEYQRIwhF
-         1+sNowPffgwoCtEF6GryXu4mfidxkm7Q/2fd4yTI6O3ZATIwLQ2lDTstzlMTWnKhpf4V
-         C379uRLjEXlYWpwBeApp/4hf/FodbLezehp6XcHKntA6CguuMczR1hDf6yxVJiFAOnBw
-         YcRxhFifvjOK058afCmhTk3HXygu9KHQ/GlN12tHEJ5l1UpyPUzeYTLmO1LsqjmQqK4q
-         k50g==
-X-Forwarded-Encrypted: i=1; AJvYcCWnByPVkIzlUa8yoLMnud3ilD7myaQm6nd7zP539yRcwxc0Zew1mjBEedcgRQplcvUBiB/RkhNkDzo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjtijlJWRyEZ6OPMLXZMIw0IknVcDAPbPiALVMixjAWOpqGiyT
-	YiHdzcdHGBYG3ljF3T+1Qeu951a+N2yBCkkj4hPZJOCEWMPgoBbkHzfq
-X-Gm-Gg: AZuq6aJeb3RGNuCUqdeYuPR3RN9ve2qbAlCtlMFrhik4uW9IROJfyAxHtpoNEGe9d9e
-	y7nnUx3ONIWBZM8VrtYmWg19imMDAH7/2enpotO8o6Z89QI5S/QKZZG1+8yzyr+sei4C3GpYDGZ
-	OOGA2VrA8DY2CnrUw5NyJtbuKmZ/PXXXwAdRs4IVsLrvgovzFSwIOXr+j1G0EgqzTSTHzD8s9dE
-	TILG/RbvV1dpxlQmSW9phO70WKkBfZnZbMxeeYpyrUyzEL5q8SFHA+J/dUK+otPygRo7oKNFSTC
-	Yo5W9NnWfTz+lSrReFDC7lWoIW11qhuBBkdRrEPRUP8CdxT7AFJjgD4CTbAlcW/e3iVe4TJ5stM
-	BcxB7TodZsfRs6ZUlwLJQxFbX04K5sCXdkA1e+uq348IRlNJ6o1RyT2Qy68WXKX2Eh1zzOKaXUr
-	1SH2038F5HxEMZP8FXzPSj1oacL1yy7++KLYw=
-X-Received: by 2002:a05:6a20:2d13:b0:35f:4e9d:d28b with SMTP id adf61e73a8af0-392e001cbc7mr10045124637.18.1770030181079;
-        Mon, 02 Feb 2026 03:03:01 -0800 (PST)
-Received: from [192.168.1.7] ([115.99.252.105])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b4154fcsm141359955ad.36.2026.02.02.03.02.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Feb 2026 03:03:00 -0800 (PST)
-Message-ID: <c7468b03-9acf-41e9-a441-96ed5d891e96@gmail.com>
-Date: Mon, 2 Feb 2026 16:32:54 +0530
+	s=arc-20240116; t=1770031917; c=relaxed/simple;
+	bh=Ueylp6HQwvDtkHj6Zl1LQcic6rImdfM2EhfgQAhN4B8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q1V+Xp36SDWfPGu+GUzHyIUu7qfhNqKL+U7jMJJU6sO9e8QcVoFJVrBj+xqcjjOFMua26OCYTYT+nq8DTJq84wrx+rUtyQ86MKTj5ddSXeSMeh8VSo/o46s+2Xs0gGPv/axZEYP4BvAQbacNW3+qhcZeZdmVfKHNm9WYDi2Nawg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from duge-virtual-machine (unknown [183.192.223.177])
+	by APP-01 (Coremail) with SMTP id qwCowABH8WwYi4BpJdr9Bg--.29650S2;
+	Mon, 02 Feb 2026 19:31:38 +0800 (CST)
+Date: Mon, 2 Feb 2026 19:31:36 +0800
+From: Jiayu Du <jiayu.riscv@isrc.iscas.ac.cn>
+To: vkoul@kernel.org, gregkh@linuxfoundation.org, conor@kernel.org
+Cc: neil.armstrong@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
+	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, linux-phy@lists.infradead.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/4] Add USB support for Canaan K230
+Message-ID: <aYCLGLvbKZy+WyxI@duge-virtual-machine>
+References: <20260121145526.14672-1-jiayu.riscv@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] dt-bindings: usb: atmel,at91sam9g45-ehci: convert to
- DT schema
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: devicetree@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- linux-arm-kernel@lists.infradead.org, Herve Codina
- <herve.codina@bootlin.com>, linux-usb@vger.kernel.org,
- Conor Dooley <conor+dt@kernel.org>
-References: <20260201-atmel-usb-v1-0-d1a3e93003f1@gmail.com>
- <20260201-atmel-usb-v1-2-d1a3e93003f1@gmail.com>
- <176994942956.410099.10343293169382130437.robh@kernel.org>
-Content-Language: en-US
-From: Charan Pedumuru <charan.pedumuru@gmail.com>
-In-Reply-To: <176994942956.410099.10343293169382130437.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260121145526.14672-1-jiayu.riscv@isrc.iscas.ac.cn>
+X-CM-TRANSID:qwCowABH8WwYi4BpJdr9Bg--.29650S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7trWrCrWkWry3Kw1ftFWrXwb_yoW5JF17pa
+	y2kFW3CFsrJFW2gFs3tw48WF9xX3Z5Jry5Wryaq3s8W3WUZr1UZ393KrWYvFyDJF4DCryj
+	qFs0kFyxKFy5AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
+	c7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+	IFyTuYvjxUqiFxDUUUU
+X-CM-SenderInfo: 5mld534oul2uny6l223fol2u1dvotugofq/
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-32997-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-32998-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[iscas.ac.cn];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[charanpedumuru@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[jiayu.riscv@isrc.iscas.ac.cn,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 61FA8CB6B3
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EDFFFCBB28
 X-Rspamd-Action: no action
 
+On Wed, Jan 21, 2026 at 10:55:21PM +0800, Jiayu Du wrote:
+> Add support for the USB PHY and DWC2 IP which is used by Canaan K230,
+> and made relevant changes to the DTS.
+> 
+> This series is based on the initial 100ask K230 DshanPi series [1] which
+> is based on the clock and pinctrl series. Check the details in the link.
+> 
+> Link: https://lore.kernel.org/all/20260115060801.16819-1-jiayu.riscv@isrc.iscas.ac.cn/ [1]
+> 
+> Changes in v5:
+> - Changed the year of Copyright to 2026.
+> - Add blank line after the declaration of variables
+> - Fix wrong alignment.
+> - Link to v4: https://lore.kernel.org/all/20260120143243.71937-1-jiayu.riscv@isrc.iscas.ac.cn/
+> 
+> Changes in v4:
+> - Shrink reg length to match the address/size-cells in k230-usb-phy yaml.
+> - Move all PHY instance creation and initialization from xlate to probe.
+> - Modify xlate function to only perform index lookup for PHY instances.
+> - Define all register base offsets macros at the top of file instead of
+>   hard-coding magic numbers directly in probe.
+> - Link to v2: https://lore.kernel.org/all/20260115064223.21926-1-jiayu.riscv@isrc.iscas.ac.cn/
+> 
+> Changes in v3:
+> - Please ignore v3.
+> 
+> Changes in v2:
+> - Fold the child into the parent in dtsi.
+> - Define one usbphy with phy-cells=1.
+> - Delete the clock of the usbphy as it is not needed.
+> - Link to v1: https://lore.kernel.org/all/20251230023725.15966-1-jiayu.riscv@isrc.iscas.ac.cn/
+> 
+> Jiayu Du (4):
+>   dt-bindings: phy: Add Canaan K230 USB PHY
+>   dt-bindings: usb: dwc2: Add support for Canaan K230 SoC
+>   phy: usb: Add driver for Canaan K230 USB 2.0 PHY
+>   riscv: dts: canaan: Add syscon and USB nodes for K230
+> 
+>  .../bindings/phy/canaan,k230-usb-phy.yaml     |  35 +++
+>  .../devicetree/bindings/usb/dwc2.yaml         |   3 +
+>  .../boot/dts/canaan/k230-canmv-dshanpi.dts    |  17 ++
+>  arch/riscv/boot/dts/canaan/k230.dtsi          |  35 +++
+>  drivers/phy/Kconfig                           |   1 +
+>  drivers/phy/Makefile                          |   1 +
+>  drivers/phy/canaan/Kconfig                    |  14 +
+>  drivers/phy/canaan/Makefile                   |   2 +
+>  drivers/phy/canaan/phy-k230-usb.c             | 284 ++++++++++++++++++
+>  9 files changed, 392 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/canaan,k230-usb-phy.yaml
+>  create mode 100644 drivers/phy/canaan/Kconfig
+>  create mode 100644 drivers/phy/canaan/Makefile
+>  create mode 100644 drivers/phy/canaan/phy-k230-usb.c
+> 
+> -- 
+> 2.52.0
+> 
+Hello Vinod, could you please take a look at this patch? Thank you!
 
-
-On 01-02-2026 18:07, Rob Herring (Arm) wrote:
-> 
-> On Sun, 01 Feb 2026 11:34:21 +0000, Charan Pedumuru wrote:
->> Convert Atmel AT91SAM9G45 EHCI USB Host Controller
->> binding to DT schema.
->> Changes during conversion:
->> - Include "usb-ehci" as a fallback compatible to allow atmel EHCI
->>   driver matching.
->>
->> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
->> ---
->>  .../bindings/usb/atmel,at91sam9g45-ehci.yaml       | 71 ++++++++++++++++++++++
->>  1 file changed, 71 insertions(+)
->>
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Warning: Duplicate compatible "usb-ehci" found in schemas matching "$id":
-> 	http://devicetree.org/schemas/usb/atmel,at91sam9g45-ehci.yaml
-> 	http://devicetree.org/schemas/usb/generic-ehci.yaml#
-> Warning: Duplicate compatible "atmel,at91sam9g45-ehci" found in schemas matching "$id":
-> 	http://devicetree.org/schemas/usb/atmel,at91sam9g45-ehci.yaml
-> 	http://devicetree.org/schemas/usb/generic-ehci.yaml#
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/atmel,at91sam9g45-ehci.example.dtb: usb@500000 (atmel,at91sam9g45-ehci): Unevaluated properties are not allowed ('clock-names' was unexpected)
-> 	from schema $id: http://devicetree.org/schemas/usb/generic-ehci.yaml
-
-Hi Rob,
-Isn't it pointing to the other schema ID which was not defined by me? Can I have your suggestion on changing the compatible name to other name to resolve this error? I ran dt_check in my machine on the latest version and I don't see any error there.
-
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.kernel.org/project/devicetree/patch/20260201-atmel-usb-v1-2-d1a3e93003f1@gmail.com
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
-
--- 
-Best Regards,
-Charan.
+Regards,
+Jiayu Du
 
 
