@@ -1,92 +1,85 @@
-Return-Path: <linux-usb+bounces-33010-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33011-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6MXLOm3MgGl3AgMAu9opvQ
-	(envelope-from <linux-usb+bounces-33010-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 17:10:21 +0100
+	id YAv3H9bhgGleCAMAu9opvQ
+	(envelope-from <linux-usb+bounces-33011-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 18:41:42 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A791CEB67
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 17:10:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7BCECFB31
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 18:41:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 210593002D00
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 16:09:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 588853069017
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 17:37:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AB5E37D134;
-	Mon,  2 Feb 2026 16:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55E45385ED7;
+	Mon,  2 Feb 2026 17:37:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="T/aF7pW4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="irt5izqA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7551E37C113
-	for <linux-usb@vger.kernel.org>; Mon,  2 Feb 2026 16:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD31371075;
+	Mon,  2 Feb 2026 17:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770048574; cv=none; b=AR1D4UMLG0SER2v44nfakli1R1MZkhvdw7xCh7GwhPICPKokiZMzCwts9c8a2UKbEVrHMjNAWp2mA6tfKSsvVQyv7KnbAUolSRkXlF/Dg6o+9qs1ueEQ7gPs1EJbx25HfFONCBD/xP4071WMyoxUB3s4ONrr3y8AtU/ua0XOxnI=
+	t=1770053838; cv=none; b=NSivbiANeUKH9QAyy0bHiWhx48raS6ZfR2fZjbv/O/aPfljcj3BtlRKTYvaMldvlUXcm3EeP3hn0G8GHT/4l7nVrXVzy3jpiUoneZHWYDDVUQva/SF9z7b02c1bYxOCJhuRi1SMofkfyHBVlq2qjujEgvEhr6P2x+UDuru21QI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770048574; c=relaxed/simple;
-	bh=HAu4DKcmCn9jRLj+0mwc8/nFGBytGpJStHcpa6gpDB8=;
+	s=arc-20240116; t=1770053838; c=relaxed/simple;
+	bh=qnUdp0fecZJL9WMPJ0BhqY7uIDclw68asQkR5FLPZ6A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WfEOMjRvYlQciSMc9wNtyoiX6q/VG3qQz5iB9paKedMDmr7X1yZkxgg4u9E+JCXcxJVAQ9fTXfAl9Gruf+XGXJZHOkXOrjuMGDe+OLQYFE0teBL8ZozQ47ReoxyHxECQnrw3LCQj4FFi9XVKUadFxUL/25G97TK/s/hW/tTOu0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=T/aF7pW4; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-502b0aa36feso49544141cf.1
-        for <linux-usb@vger.kernel.org>; Mon, 02 Feb 2026 08:09:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1770048572; x=1770653372; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r+NROkACJhEmkOXCU3jerkpj3wRhMMHpRt2F5TFK3GA=;
-        b=T/aF7pW4sCXpmiC+JSZEj181I01WGd9DdwvMa/biourGoJwoxYiTejaAe0PrAE0crc
-         DKkkwS8IHycF1FqUp9ucbeTe7lMPTVOy0Q2AqmJN8ZCqxrgxFVvErhAmRKJzYDpkaTS8
-         /eepTS8JJVYx48oKrjG1w5vvjs9kH35RhEqFbD6F2OFfyrwSr5K+w0ts4S8ukLuQ1Q4n
-         DU0iNtp8gjMHnlcuBhVkL3IdyrfPRy0EMp+cbVI47Wx60foddVISLXJwJ5bhMD/sa166
-         xG/UWzFawsQ6qosapkTYWb2ta992J+V8ADuCpJBlVgCJdfpi7z9guiGWeUsAjyfYb94A
-         O4fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770048572; x=1770653372;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r+NROkACJhEmkOXCU3jerkpj3wRhMMHpRt2F5TFK3GA=;
-        b=bxCCYxkwsOH0IVm0kpWIqAXXS46SowkzHBlS+ef1Z48uhArHn0xlxf+q1z3TgaE5wL
-         pBfBwJmlc78RSL1UwGXRnwNz0DkBN4mRsiAMTrBjd7eeGJx8vw4cOm1PZKbkUA1umShu
-         1clxzawaC2xbybVqILr8icAtg1WC8B/CUly3uyM/5AvTG9zhcSTaH84dj0GoDPk8m81u
-         GdH9GNeXfnSiRrR7UyHX6ExHWNnUANmmmYUMxbiYSeA/B5zQZHh9lyk/Z4YD40CCQDG5
-         Zk2i5156BVPqolf3v6JNYxroPggPGxEf0DTGhY7n6CjvJviC96b1FeD7JQJlNehtmMPx
-         ybdw==
-X-Forwarded-Encrypted: i=1; AJvYcCVc7qNaB0AtLDWgg6eg73/aPVxGC0W9n0O2RZa/iI17zH9jdwVQQ7znyWQCzEzUnt9adRcEqmabkkA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7vNdfTxU+4rxYhIj+yiQiI7K2wkvo90A7ULoTrKYGIHc3XKlY
-	g8IxZ2/5lI0DLzcGrf1t8aJVR7fmDjKjszHSHZnUomysxYpFUW1o+sbdScxoivb0bQ==
-X-Gm-Gg: AZuq6aI1S1WAnP0CufEATjC67ctkI1dAON++L8Ci7BSgNEdzkBopXa2XTkWJc43Z636
-	rfDLPP/1rS7aDkRWddTUcMf9iAjpf8K3L0wBWrjoURpR1yjju/SylwYCfhY+4Q+C7FbuLAXfKTB
-	bzR9aQTY3Z9q9zQS/WVqaQ/f8l1gPaxXKy4+yUxDFkJde+wdvLTvqhisLZYQn7K60/mDjybBh0b
-	qTeR2XtCNL6UTq8hh7b9wzSVDi7ensQmqPW84dduHupwaay3jdCGkVneLwRVtyCdJ9Wy558ru/X
-	/vFyBiT6OlfQkz0xx9dSwmtPXjyeNYgui3T1gVwAHgkUryHJ304n/2tOhZIsrnqd9bUL8/wyNml
-	BrVXFPE4/Mioi1dSgCB3y1Wg7Ps5ThieFWSo6m3X5B/gHpJHi/7ZdZJ9RogsVqxZNp56F7r3IuF
-	X3QlVddO9HKuTD
-X-Received: by 2002:a05:622a:14cb:b0:501:40b2:453d with SMTP id d75a77b69052e-505d296ba35mr134758821cf.23.1770048572253;
-        Mon, 02 Feb 2026 08:09:32 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::7a0a])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50337bbb66dsm107921011cf.29.2026.02.02.08.09.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 08:09:31 -0800 (PST)
-Date: Mon, 2 Feb 2026 11:09:28 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Liam Mitchell <mitchell.liam@gmail.com>, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>, linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: usbhid: Intermittent EPROTO errors trigger USB reset and
- interrupt user input
-Message-ID: <43c9b46c-344a-434e-8581-c6374a6e8430@rowland.harvard.edu>
-References: <CAOQ1CL6Q+4GNy=kgisLzs0UBXFT3b02PG8t-0rPuW-Wf6NhQ6g@mail.gmail.com>
- <1ebf9d19-7293-4902-857b-164fd4d21f25@rowland.harvard.edu>
- <1c317994-2932-4e2e-8e80-1c90606e63c9@suse.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=MrBmQx7mtCfq4HsZJUDqGbrXbR1ai1RzDfp3alc9hjSFxibux+4efLfaiivcMs+YUBzGoI8qndoOWye/9UR0OwHBOajxkKRC13sMCSIgGfPExokXuojo0Ki2EhEuP6uBvVKMZF0PFXUTUy3Z8haYUEiPYB8N9I0XRaphz/LXjxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=irt5izqA; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770053836; x=1801589836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qnUdp0fecZJL9WMPJ0BhqY7uIDclw68asQkR5FLPZ6A=;
+  b=irt5izqAZbxl/s7FFehFDSP7akpXSEiVyawPf1BCGtn0Z8etkrJFTGtP
+   DveWUBmZQGwcGnt0ZiC/ic/sYepEC5zxiV/Db3m0DC4ABmo4j5ZEHjrBR
+   tB/Kz/VryaYmdJI5+zmU2Rdh0S6/FoE7ng68geMqzTbqB3hJ5sWS2jOpm
+   ltJZ6deEcmcuTtF2RCk6J9qC3iYU3Hv6y+2BG0J3OrNhh1W7TOwoSUTQK
+   /n5CuF190LINnd/KyooDN218kFY7IR8cMgWTEi7EmFR/dDVdeVUb0fKX2
+   7wLwb2I1FrFD4ZlNgZtEmjKYX5AtrWmKAnH3Bps7zszcPcKeN9ZsJFlpA
+   Q==;
+X-CSE-ConnectionGUID: PWJHQvvzTf+UPEG0VoVJGA==
+X-CSE-MsgGUID: 23VfB+NQRv6vcH50JMPo2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="82584537"
+X-IronPort-AV: E=Sophos;i="6.21,269,1763452800"; 
+   d="scan'208";a="82584537"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2026 09:37:15 -0800
+X-CSE-ConnectionGUID: mNWRr4kkTkKaw6XHoiHtJA==
+X-CSE-MsgGUID: /VpVgHcER1S748B3+00oVw==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 02 Feb 2026 09:37:13 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vmxrK-00000000foG-3J1S;
+	Mon, 02 Feb 2026 17:37:10 +0000
+Date: Tue, 3 Feb 2026 01:37:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vladimir Moravcevic <vmoravcevic@axiado.com>,
+	Krutik Shah <krutikshah@axiado.com>,
+	Prasad Bolisetty <pbolisetty@axiado.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+	Vladimir Moravcevic <vmoravcevic@axiado.com>
+Subject: Re: [PATCH 2/3] usb: gadget: udc: Add UDC driver for Axiado Device
+ controller IP Corigine
+Message-ID: <202602030131.VCTzZ4me-lkp@intel.com>
+References: <20260202-axiado-ax3000-usb-device-controller-v1-2-45ce0a8b014f@axiado.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -95,66 +88,229 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1c317994-2932-4e2e-8e80-1c90606e63c9@suse.com>
+In-Reply-To: <20260202-axiado-ax3000-usb-device-controller-v1-2-45ce0a8b014f@axiado.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33010-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33011-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rowland.harvard.edu:mid,rowland.harvard.edu:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1A791CEB67
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,01.org:url]
+X-Rspamd-Queue-Id: D7BCECFB31
 X-Rspamd-Action: no action
 
-On Mon, Feb 02, 2026 at 04:48:49PM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 01.02.26 21:40, Alan Stern wrote:
-> > On Sun, Feb 01, 2026 at 06:57:06PM +0100, Liam Mitchell wrote:
-> > > Hi,
-> > > 
-> > > I'm trying to understand and fix intermittent keyboard/trackpad issues
-> > > on my 2013 MacBook Pro running Linux v6.18.4:
-> > > - missed/repeated/sticky keys while typing (this thread)
-> 
-> Alan,
-> 
-> this raises a question. What happens to KEY_UP events generated in
-> between the last EPROTO and the reset? It seems to me like we need
-> to assume that a reset implies that all keys have been released.
+Hi Vladimir,
 
-That question is specialized to keyboards.  You could ask a similar 
-question about mouse buttons, or other input (or output!) devices.
+kernel test robot noticed the following build warnings:
 
-But it's a good point.  There should be some sort of callback to inform 
-HID drivers that their device has been reset, so they could reset 
-whatever internal state they are maintaining.
+[auto build test WARNING on 63804fed149a6750ffd28610c5c1c98cce6bd377]
 
-This sounds like something going way beyond usbhid, though.  And it 
-probably would not crop up very often, so it wouldn't get much testing.  
-Liam's computer seems to be pretty unusual.
+url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Moravcevic/dt-bindings-usb-axiado-ax3000-udc-Add-Axiado-UDC/20260202-211951
+base:   63804fed149a6750ffd28610c5c1c98cce6bd377
+patch link:    https://lore.kernel.org/r/20260202-axiado-ax3000-usb-device-controller-v1-2-45ce0a8b014f%40axiado.com
+patch subject: [PATCH 2/3] usb: gadget: udc: Add UDC driver for Axiado Device controller IP Corigine
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20260203/202602030131.VCTzZ4me-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602030131.VCTzZ4me-lkp@intel.com/reproduce)
 
-Alan Stern
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602030131.VCTzZ4me-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/usb/gadget/udc/crg_udc.c: In function 'crg_udc_queue_trbs':
+>> drivers/usb/gadget/udc/crg_udc.c:881:13: warning: variable 'num_sgs' set but not used [-Wunused-but-set-variable]
+     881 |         u32 num_sgs = 0;
+         |             ^~~~~~~
+   drivers/usb/gadget/udc/crg_udc.c: In function 'crg_udc_ep_enable':
+>> drivers/usb/gadget/udc/crg_udc.c:1812:26: warning: variable 'uccr' set but not used [-Wunused-but-set-variable]
+    1812 |         struct crg_uccr *uccr;
+         |                          ^~~~
+>> drivers/usb/gadget/udc/crg_udc.c:1811:25: warning: variable 'epcx' set but not used [-Wunused-but-set-variable]
+    1811 |         struct ep_cx_s *epcx;
+         |                         ^~~~
+   drivers/usb/gadget/udc/crg_udc.c: In function 'crg_udc_common_irq':
+>> drivers/usb/gadget/udc/crg_udc.c:4250:13: warning: variable 'retval' set but not used [-Wunused-but-set-variable]
+    4250 |         int retval = 0;
+         |             ^~~~~~
+   drivers/usb/gadget/udc/crg_udc.c: At top level:
+>> drivers/usb/gadget/udc/crg_udc.c:126:19: warning: 'driver_name' defined but not used [-Wunused-const-variable=]
+     126 | static const char driver_name[] = "crg_udc";
+         |                   ^~~~~~~~~~~
+--
+>> Warning: drivers/usb/gadget/udc/crg_udc.c:4325 cannot understand function prototype: 'const struct of_device_id of_crg_udc_match[] ='
+
+
+vim +/num_sgs +881 drivers/usb/gadget/udc/crg_udc.c
+
+   858	
+   859	static int crg_udc_queue_trbs(struct crg_udc_ep *udc_ep_ptr,
+   860			struct crg_udc_request *udc_req_ptr,  bool b_isoc,
+   861			u32 xfer_ring_size,
+   862			u32 num_trbs_needed, u64 buffer_length)
+   863	{
+   864		struct crg_gadget_dev *crg_udc = udc_ep_ptr->crg_udc;
+   865		struct transfer_trb_s *p_xfer_ring = udc_ep_ptr->first_trb;
+   866		u32 num_trbs_ava = 0;
+   867		struct usb_request *usb_req = &udc_req_ptr->usb_req;
+   868		u64 buff_len_temp = 0;
+   869		u32 i, j = 1;
+   870		struct transfer_trb_s *enq_pt = udc_ep_ptr->enq_pt;
+   871		u8 td_size;
+   872		u8 chain_bit = 1;
+   873		u8 short_pkt = 0;
+   874		u8 intr_on_compl = 0;
+   875		u32 count;
+   876		bool full_td = true;
+   877		u32 intr_rate;
+   878		dma_addr_t trb_buf_addr;
+   879		bool need_zlp = false;
+   880		struct scatterlist *sg = NULL;
+ > 881		u32 num_sgs = 0;
+   882		u64 sg_addr = 0;
+   883	
+   884		dev_dbg(crg_udc->dev, "%s %s\n", __func__, udc_ep_ptr->usb_ep.name);
+   885		if (udc_req_ptr->usb_req.num_sgs) {
+   886			num_sgs = udc_req_ptr->usb_req.num_sgs;
+   887			sg = udc_req_ptr->usb_req.sg;
+   888			sg_addr = (u64) sg_dma_address(sg);
+   889			buffer_length = sg_dma_len(sg);
+   890	
+   891			dev_dbg(crg_udc->dev, "num_sgs = %d, num_mapped_sgs = %d\n",
+   892				udc_req_ptr->usb_req.num_sgs,
+   893				udc_req_ptr->usb_req.num_mapped_sgs);
+   894			dev_dbg(crg_udc->dev,
+   895				"sg_addr = %p, buffer_length = %llu, num_trbs = %d\n",
+   896				(void *)sg_addr, buffer_length, num_trbs_needed);
+   897		}
+   898	
+   899		if (!b_isoc) {
+   900			if (udc_req_ptr->usb_req.zero == 1 &&
+   901				udc_req_ptr->usb_req.length != 0 &&
+   902				((udc_req_ptr->usb_req.length %
+   903				  udc_ep_ptr->usb_ep.maxpacket) == 0)) {
+   904				need_zlp = true;
+   905			}
+   906		}
+   907	
+   908		td_size = num_trbs_needed;
+   909	
+   910		num_trbs_ava = room_on_ring(crg_udc, xfer_ring_size,
+   911			p_xfer_ring, udc_ep_ptr->enq_pt, udc_ep_ptr->deq_pt);
+   912	
+   913		/* trb_buf_addr points to the addr of the buffer that we write in
+   914		 * each TRB. If this function is called to complete the pending TRB
+   915		 * transfers of a previous request, point it to the buffer that is
+   916		 * not transferred, or else point it to the starting address of the
+   917		 * buffer received in usb_request
+   918		 */
+   919		if (udc_req_ptr->trbs_needed) {
+   920			/* Here udc_req_ptr->trbs_needed is used to indicate if we
+   921			 * are completing a previous req
+   922			 */
+   923			trb_buf_addr = usb_req->dma +
+   924				(usb_req->length - udc_req_ptr->buff_len_left);
+   925		} else {
+   926			if (sg_addr)
+   927				trb_buf_addr = sg_addr;
+   928			else
+   929				trb_buf_addr = usb_req->dma;
+   930		}
+   931	
+   932		if (num_trbs_ava >= num_trbs_needed) {
+   933			count = num_trbs_needed;
+   934		} else {
+   935			if (b_isoc) {
+   936				struct crg_udc_request *udc_req_ptr_temp;
+   937				u8 temp = 0;
+   938	
+   939				list_for_each_entry(udc_req_ptr_temp,
+   940						&udc_ep_ptr->queue, queue) {
+   941					temp++;
+   942				}
+   943	
+   944				if (temp >= 2) {
+   945					dev_err(crg_udc->dev, "%s don't do isoc discard\n", __func__);
+   946					/*  we already scheduled two mfi in advance. */
+   947					return 0;
+   948				}
+   949			}
+   950	
+   951			/* always keep one trb for zlp. */
+   952			count = num_trbs_ava;
+   953			full_td = false;
+   954			dev_dbg(crg_udc->dev, "TRB Ring Full. Avail: 0x%x Req: 0x%x\n",
+   955					num_trbs_ava, num_trbs_needed);
+   956			udc_ep_ptr->tran_ring_full = true;
+   957	
+   958			/*if there is still some trb not queued,
+   959			 *it means last queued
+   960			 *trb is not the last trb of TD, so no need zlp
+   961			 */
+   962			need_zlp = false;
+   963		}
+   964	
+   965		for (i = 0; i < count; i++) {
+   966			if ((udc_req_ptr->usb_req.num_sgs) && (buffer_length == 0)) {
+   967				sg = sg_next(sg);
+   968				if (sg) {
+   969					trb_buf_addr = (u64) sg_dma_address(sg);
+   970					buffer_length = sg_dma_len(sg);
+   971					dev_dbg(crg_udc->dev,
+   972						"trb_buf_addr = %p, num_trbs = %d\n",
+   973						(void *)trb_buf_addr, num_trbs_needed);
+   974					dev_dbg(crg_udc->dev, "buffer_length = %llu\n",
+   975						buffer_length);
+   976				} else {
+   977					dev_err(crg_udc->dev,
+   978						"scatterlist ended unexpectedly (i=%d, count=%d)\n",
+   979						i, count);
+   980					return -EINVAL;
+   981				}
+   982			}
+   983	
+   984			if (buffer_length > TRB_MAX_BUFFER_SIZE)
+   985				buff_len_temp = TRB_MAX_BUFFER_SIZE;
+   986			else
+   987				buff_len_temp = buffer_length;
+   988	
+   989			buffer_length -= buff_len_temp;
+   990	
+   991			if (usb_endpoint_dir_out(udc_ep_ptr->desc))
+   992				short_pkt = 1;
+   993	
+   994			if ((buffer_length == 0) && (i == (count - 1))) {
+   995				chain_bit = 0;
+   996				intr_on_compl = 1;
+   997				udc_req_ptr->all_trbs_queued = 1;
+   998			}
+   999	
+  1000	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
