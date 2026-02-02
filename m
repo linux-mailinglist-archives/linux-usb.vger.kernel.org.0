@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-32981-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-32982-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mPAKHDoXgGma2gIAu9opvQ
-	(envelope-from <linux-usb+bounces-32981-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 04:17:14 +0100
+	id qEzuDScjgGlX3QIAu9opvQ
+	(envelope-from <linux-usb+bounces-32982-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 05:08:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DC54C7FF4
-	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 04:17:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C75DC81E8
+	for <lists+linux-usb@lfdr.de>; Mon, 02 Feb 2026 05:08:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3DF993006B0C
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 03:17:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B570030086E1
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Feb 2026 04:08:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 591BA223328;
-	Mon,  2 Feb 2026 03:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D740827CCE0;
+	Mon,  2 Feb 2026 04:07:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nTDQy2Og"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="G0p1Wca2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012048.outbound.protection.outlook.com [40.107.200.48])
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011024.outbound.protection.outlook.com [40.107.208.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524611B4F1F;
-	Mon,  2 Feb 2026 03:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F32126059D;
+	Mon,  2 Feb 2026 04:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.24
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770002226; cv=fail; b=aYoZURf/tj56hlznsZKLxXvfAGDfQNpGw+8jkSHO6k/EVKCBLrJjIgsJwocrpX5WmU6wQC1Qt4rbBObDEySXr0JClSyo7ZJJAoanFJHe7puTwWNOiAStMrcRnmVciM+ZuhG7Cyt3Qvws5EXtdmg/nsB57v8t9r1KhES9zJZqjTo=
+	t=1770005279; cv=fail; b=YNVp/CDKB51oSF1uxpto8oqg3qnabcfCTTbw5u8jK6XyDoKolJ5645dl7rntcFZ6jYH6YWgVAS0WgowBGqa5jCaUkRhZDIk/sPxn2/eFKUkbpexeweyTqZC/WL2g1Zb96ljz9cQ5ZJsa6WT7nCpHTDb0jwdcYtm/PNVf8uW6VOw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770002226; c=relaxed/simple;
-	bh=lK79oEGA7+GagvkqJQeLQ2v32nC5XlUCACKwZOFtxkQ=;
+	s=arc-20240116; t=1770005279; c=relaxed/simple;
+	bh=WeZg9Zg0LrGIq5VRToB1qV+QykvJs1spdCIu4B8uHpU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cFQOeFYteFlj2ubjvM96l38xCP0mY7FSZUH5VDMOjAe/YAh0BardqQSdnmIzUxCplrXBrCkzo/5N1y7OMjV2H2qh7t8pTraL2gufmLOsQfAJAIiUy/FzIZwK/XCcH9yGSt4cefFoh607fk5Hs8jBO/BY3+9rzVCnak01nG59YbA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nTDQy2Og; arc=fail smtp.client-ip=40.107.200.48
+	 Content-Type:MIME-Version; b=hLzkL7rGoJYbyy/m/T4tTnawQmiAv4tATve8W7wSl6k7SoSsviXxGIBwYAWcr88C0NMmmGyFbBDWXIPmtvW21erusOad07NKoe1IRQvrMKFkU/UHqMMIb+XRH40G0CQcrZoL0kDCGG/qWMfoqws+7iWuaxdUKAXHSFOrJSFottE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=G0p1Wca2; arc=fail smtp.client-ip=40.107.208.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nswwUkg9pvQ6kMGaQQyQ42Cshw4qiRtODMbCsvY928u5A5M4DnDt/zhswvawdkNuC2txfp5cyLy7/gWHD4eaIgWLXvia3O1vtIA4hs8LaLoLJmjim9p0heXkjJ92u1hfIvXPFFKS+n/j3+9xNehaoq2gHzNPrxZfrBj8nv2S+gwGJncY16bZkuiiZSJXmT1HJfePWLGMjSTXqi6JMyl5gtIpiyFLYOiIFcoB3Jq3q+BLcftRunWk3MGbOt1A4OS8GUHSFJDi+zOOjSFwGPwD4hw0EpwiSA0Dge1so17sWd6o080dnygGfJzgD1fGwR9hW1TjFX8nZCwrAuhYVJ9eVQ==
+ b=xh+dqSZBfYC26Bai/mng3dkVuNcBSHnT48laiVWDl+/GgSn4P7wXJ8lOYXHtJkBK6tlfJB7qa6N9xLhzIGbQSHnT6qFdXdidq9ok8ocqcD4gbVAwfhp2Wp5VExTFWCmucYhBBSAlN3+tXFQTq2UIER6NDjkm9gxaRDWLvYM9GJGkUdW6F3XpOqnjVNiu3fayRK0M8YN1J9TxVT/GSlndKVZzFf7ZqpVzrzBJpO9NuSdbfsq9c14QH3eMQ0k9YOuE7gLmefIM38Vloh2GPSEzmomES2ULnmIwX3XSsndakvPU07WNO7OiYL63mQgMQfhf5PHuTdwanfo98ys87LQ/Hw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FZ83zADYNO1vRIXsBgnWmeV+vK68ibWqdwJfnvHYbDE=;
- b=JRgwAT4ulc32vkybIRdoGzFj8f1K3vfc6/C4UGYpBr43dxuFEbAvoxK8QCnL+E9C8Tlar8ercjCpiEXC4pggjNoN1E8Qwc0bx6a9WNGrGps6gXYAO8HMwN9K4dvkqxIRo0YbUVNTUtSIzr0HPhAFxLzsaidqIGS/zfFb9liSXIb1oLFW/VXUvVvgilFbP5z6+3oMXUouHKE0ARc/5OxWwe0zpC5HphqE8IPQbKhkR5DDlfY9f27pvxJ7gXwDGVraQBs8BQ2DtePJLk6e35C2sy0sm3RR7SXxuL0jFhL8My7eKt6iQqTyq6xBwIeEPmaEmOJncAsfplLgLojlWPqzOw==
+ bh=WCmgeb8vTDrvTEqp2bUZEkOj4/medLVtwAzulr/CdHQ=;
+ b=reaC1wTgRlY6FQG+5XhuKjv9p/qu1+rANvV11rSfCrVCmtRKBDT8gTnRoZbJrTx1cOnNtsHw3oT+hIN6Fq8H2Mh3A5xR93Vzg+Qpm/czaJlzKKdhVePPYHky+zNvVj1ILuQtOMmk8gU1mC0ySaT/7UN0yl4PXxhHPzDQm0K89zZJtl954k7oMiPw+buprZ6i+zPvO2LLMvblLnZaEhmzIHi9QV+J2BvExSlaFXOBm7e0FRBjTTxe8Zbx898DQlaB7l+zClgIhSjMjVVMikGBIHcdy3FLEc+mQWjoF9iICKKcgIy6jMVwChcdVqgm2QNFuNv/rpvhRyHd79Ft6f1Gqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FZ83zADYNO1vRIXsBgnWmeV+vK68ibWqdwJfnvHYbDE=;
- b=nTDQy2Og+KWNsyOFj0HfdjpemKq58dtFEURe9fGPoG0puGgAfw/2xwzCdjh06Am812ZrTEqwTxxqeERL8YRmpOUqEsFEwXqeO24HXIu9C3je+EcNveplbAjA+0ON8dNTyoytcQosj5cNk1e6oHT7jiUmrP2O7zfWM9reWP/3oCsQgnuuyXCGVrrgjhukIpwu6sWm8NaJjQmXJTQuIdc3Fr5hVRL8eTOdQjbsjuxU8c97UQ6mu5IyGGKtKha3qMvI016q5PozzUMKKUSsJmZ1kzVpycyNYsY0+XII2vX1LX5/mFLUKvnQK2BqgTPb4fMXETtzWU5fHKFoGrCuKP3BpQ==
+ bh=WCmgeb8vTDrvTEqp2bUZEkOj4/medLVtwAzulr/CdHQ=;
+ b=G0p1Wca2xROJ7oS6dbu4jCInxVWGPKJoGzmu26zRVEXWEM/Ckjk3dtZl8OYJQuUY4EMcQtx8BizvBwhilBY0bMFCUDP6DH4QinFoqY4uApyuG5w2IqDxuztqWdK8PcB4sRn3Qa1tpb+13U5mWYrWu0/kSgXc/3WKBurM3cNcQc4ECS4LXxFPeR/t9F51wW6TFn/glr8y8ZfJeoI2NG+wuWC+UouWyb0gR1O2lcVxoD4x2mS6xlFrTx1S5bMa+vmjMlFDWO+r7JPUAb/ZnykNYHoZSomjh7DdsySdlThvHksgwGXk/4B9dkUZa7qXVkNoRAYznnLlzpTfvWXBUVwJMQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from SJ2PR12MB9161.namprd12.prod.outlook.com (2603:10b6:a03:566::20)
- by SJ2PR12MB7918.namprd12.prod.outlook.com (2603:10b6:a03:4cc::20) with
+ by IA0PR12MB8974.namprd12.prod.outlook.com (2603:10b6:208:488::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.14; Mon, 2 Feb
- 2026 03:17:01 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Mon, 2 Feb
+ 2026 04:07:53 +0000
 Received: from SJ2PR12MB9161.namprd12.prod.outlook.com
  ([fe80::d9d1:8c49:a703:b017]) by SJ2PR12MB9161.namprd12.prod.outlook.com
  ([fe80::d9d1:8c49:a703:b017%4]) with mapi id 15.20.9564.007; Mon, 2 Feb 2026
- 03:17:01 +0000
+ 04:07:53 +0000
 From: Mikko Perttunen <mperttunen@nvidia.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Thierry Reding <thierry.reding@gmail.com>,
@@ -68,17 +68,17 @@ To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Svyatoslav Ryhel <clamor95@gmail.com>
 Cc: linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] usb: phy: tegra: use phy type directly
-Date: Mon, 02 Feb 2026 12:16:58 +0900
-Message-ID: <2400213.ElGaqSPkdT@senjougahara>
-In-Reply-To: <20260122151125.7367-2-clamor95@gmail.com>
+Subject: Re: [PATCH v3 2/2] usb: phy: tegra: add HSIC support
+Date: Mon, 02 Feb 2026 13:07:49 +0900
+Message-ID: <3677292.iIbC2pHGDl@senjougahara>
+In-Reply-To: <20260122151125.7367-3-clamor95@gmail.com>
 References:
  <20260122151125.7367-1-clamor95@gmail.com>
- <20260122151125.7367-2-clamor95@gmail.com>
+ <20260122151125.7367-3-clamor95@gmail.com>
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
-X-ClientProxiedBy: TY4P301CA0023.JPNP301.PROD.OUTLOOK.COM
- (2603:1096:405:2b1::15) To SJ2PR12MB9161.namprd12.prod.outlook.com
+X-ClientProxiedBy: TYCPR01CA0188.jpnprd01.prod.outlook.com
+ (2603:1096:400:2b0::20) To SJ2PR12MB9161.namprd12.prod.outlook.com
  (2603:10b6:a03:566::20)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -87,115 +87,115 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB9161:EE_|SJ2PR12MB7918:EE_
-X-MS-Office365-Filtering-Correlation-Id: b156b0d1-2ab6-4462-ccd1-08de6209884c
+X-MS-TrafficTypeDiagnostic: SJ2PR12MB9161:EE_|IA0PR12MB8974:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2e100de3-4442-4396-2903-08de6210a33b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|10070799003|1800799024|376014|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|10070799003|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Y0pLbUxwWWQ3TEp6WFg4YmdCOEJtS0dCcms0Q1ZnUmVRNC80aE9DTm9TWkFj?=
- =?utf-8?B?QUZsKzdVY1d2cFd2MUtsQkpnTHhYbEV6enFtMS9zSW9WSGFRdkJ3UUdUd3Mx?=
- =?utf-8?B?NENiclVwL3ZGcjF6ZTVocllZREVRRkZGY0RBNWd4TlJJbExBY0EwODNDZUNm?=
- =?utf-8?B?L214VlVXMUJYa2JzSzZmRlExckVJZzhPMXRiUEg3eWJGc1M5b3VDVUgvejNT?=
- =?utf-8?B?REhOdllYQXNtZnJYeSswV2JEdEVhRVArRm9MS2Y5aW5ydERoT2wzREZJelJv?=
- =?utf-8?B?QmN5U0JxcFFaVE9NUEN4eDdtRFdpVjVDYitJb1UvRHMrQlBuL3ZBK21xalFX?=
- =?utf-8?B?TmZJNStyeW9vNS9meXpZNnRCMGJpTDRKdVE0Q0FtZmZGZHovbUFWaUxmZ0dW?=
- =?utf-8?B?RTUrcmZ3Z2J5ZC9hdXoycVdBcjByOWwzcEZvYzFGSnVLK0lsK3NsSEpWRVgw?=
- =?utf-8?B?OGxYQ2oxOGI3dm02cTJ2cTFZNU9YZG9YQWpYU0cybTFNaE0wTE5iQmV3V05E?=
- =?utf-8?B?QXM2V3pkbk1yeDRvaFFidnk0d0ErWko4Q3RSKzcrbUhwc3RnRStWT3BzMjNK?=
- =?utf-8?B?UU1XWFV5cDRGbXBYUXpjM2VjRHhNRy9pbHNWb1pJUkVVMjkzb2hHdzZjRTln?=
- =?utf-8?B?S2d2bWRiVUhGc3VVTitPcEJNSzFYVTNQanZwb1pnRUJFYzhWUmRzdWovRmJI?=
- =?utf-8?B?M3BlMHJXeUFmUmsybFBoVmVEQm9xUCtFUUg5OHk3UEQ2VlZyR0tJTTExV3BH?=
- =?utf-8?B?cG5LMFRXblJRVTJKaHZzZk9xUHpJZFcvcFRzM0kzNmF3MCs0RWE0Zi8yVGpv?=
- =?utf-8?B?RDErM1Y2bXBCRnM5TnBNUFNWT2l3UVVKYVhUc1d1NVJzbWxvOTJuMzArVDlw?=
- =?utf-8?B?S2NsRHJ3NTVrN2lBejduN09sZTA3YU1wNUtQYWFJd05GRHIwM0ZQa1czcm1l?=
- =?utf-8?B?WXZOUjNsWUdseFRlbWZsN1VNOXdBSVdQRnVab1F2Tkw3SGJiSldSaHpVMDIx?=
- =?utf-8?B?OFVtSlJNSVM3RmJPVlpIRlR6OGRNaDFJMXZIS3VWNnN1UFNuTytGSDhMRmZm?=
- =?utf-8?B?THQ1T1BUdmlHMGxpWldsdjFqME1kUytjeVBRLzhvQlV1MXhaWGloSzNWbFQr?=
- =?utf-8?B?WU4wcHk3dDlmSWxod1FhR3VKNWJrbkc3Z1dFdzJjaUptdEZ2TVFQR0ZDcEdP?=
- =?utf-8?B?RldYbnRTU1lQcy85TnNxVEo1SXBIdGVQSVRXS0FENjNJT2d4bTd0c1VYYVlM?=
- =?utf-8?B?R3dXdlBrL3l2OUV0dm90ZDJlZjhCZGFianVjWk11Yzdpc0tBem1rTUVsdGJk?=
- =?utf-8?B?V1NremtwakJITFhaVG1qZlNsTkFBT2UxL2d6b3o3V040YkRqOEFRY2N5bVd1?=
- =?utf-8?B?TDZHQ0d0N2lodUdabkdDaHh3YVNVdTIzVk1GbE5lN2lWcTlROWRGSzNoMjI2?=
- =?utf-8?B?V2NRS2UyOXBEeWUrS3VoekNkdkcwZ010bW8xb0JySi9ydWlBYWNPM0pmYzhE?=
- =?utf-8?B?YUdyWEtvRDBES0ZkdDduaFROdlI3L2xMdDBoeXBkUGkzUkRNNkFBelRubmJW?=
- =?utf-8?B?K3prQlQ2TEdJanJ1MUZQbStVN2daZS9KZ1NBTkxGOUJGS3IwaTlJRzRVdWIv?=
- =?utf-8?B?R1RtVys4eEI1RXhWU3JyVURkN29nYVVmNnNLMUR4eklyS2c2TkFjVS9neWhU?=
- =?utf-8?B?cEdUSUJRR1lGZnBxckNyb1JRbXA2T1Z0TTlHUDJhR1lpd24vRVR4ajV0VDIx?=
- =?utf-8?B?czlDYm5OUjJWTStuS1ZoQmo1UHh3dFZGQUdUcVg1NDFpV0dSN1JWY21sMnFW?=
- =?utf-8?B?bXhDY1JZQXBSNG4wR2RKQWorUWtVcmFsZzBNTUduOEt2QVU4M3VvRDdqZStV?=
- =?utf-8?B?WUR6cFRkWUJoekpaTWp0Rmc5VVV2b1c5YXRTWTdSQldlTnZxU3lZcWxERTNz?=
- =?utf-8?B?dlJBOXNtcXd6L0xvcWxBeHZCc1Fqczh2QWk0b1ZTUGRIdUJDUGdEbE8wVmx4?=
- =?utf-8?B?Z2dxT2dTajd3QkFVaitTcjB5THUyVVFFOUtITU85U2E5bk5SMDRxbkp6dHJs?=
- =?utf-8?B?MVhBU1J0c0lqQVBJTWQvREpPbStzWm1rZFhyTEkzMysrTGlaM1JyNitnS3Ex?=
- =?utf-8?Q?rbVQ=3D?=
+	=?utf-8?B?T1ZCakpMZ2xvOXBwL1ZZTHRIOE1rWVF5eVlvN3FzRVMwdmdIVDBqS0dvcFpY?=
+ =?utf-8?B?QVArQjZEa3I1ZGYwNzZtcTIreEs3cmlaSlhZMTUrbEtXUXJmME1MN1JxZEZ0?=
+ =?utf-8?B?bFJxWW9OeWg1SUdSSGIrMy9wLyt6UzVTMmpselAxSFN3aDVPMWNqOUJHN0M1?=
+ =?utf-8?B?Vm1jU3FyUlV5eDg1KytVeVM0c28zSVpXNk5WeXdHVEd0bVdpMHAyaGtZK1NK?=
+ =?utf-8?B?YVJOSzBEN08yQ0w2SXJuZjZBUTl3Mlh3aDVXVlBxVjNsWi9hM2lzTE5qR3pJ?=
+ =?utf-8?B?eTZHa0hsMGV5akdkRytORUkrQXB1K2ZBUWREMXh2OW5hMFFENkoxK1pQd3N5?=
+ =?utf-8?B?RTZJaFFzUHBzRVIyYWxjR2pVQVBqa3BUdE43NGk0VUZjalB4QnZscVFLSHRl?=
+ =?utf-8?B?L0Jac0p4allyMk1BUFllc0g4OG44SmV0ZXI3MXcwMDhVa0sxSW9OcTZxVWJD?=
+ =?utf-8?B?MmZNV2ZFUmZIVmt3VDZTKzhIRG1WbDV6RFZ4cUdEMHFsdFhMRkdtYkplenNz?=
+ =?utf-8?B?QU5FZzlsanFtWmpjc2VPQ01ObGw1dWpCdkFUUnNJakM1V2czS1ZkelV6dU92?=
+ =?utf-8?B?N0FpNEwxOUhNR0hpZGRSY1h3dFRPbldsTGZtUjdOWWJET04ydkU0MEhOejBN?=
+ =?utf-8?B?akMwemtqaUVzSHRaT0JEZXlhQUcxZCtWeG14eVB2cUlLbkpIMk9IYzR6a0Jn?=
+ =?utf-8?B?bzd6aWpPWFkrMmZGdlRxRVdOYTBzaE5xQjcvUWQ3Sy9Jb25oWHRmb1VYeUZo?=
+ =?utf-8?B?YVlFR2RPcjMzQ2E5ZXNZMy9VT1oweVBiZmR1Znh0THlDVU5sRXpEZXNGdHZW?=
+ =?utf-8?B?bDc4TzVWd3JOMG0vRG9lWURUNzh1MUxaYlNIR2hvK3ViRjJCUkVYaDZZOE1o?=
+ =?utf-8?B?MkZlYXBSd2FuZWU3KzI5djFsT01VTklWZ3VJMDcrODdNUGw5MGNJK2ZnVDZz?=
+ =?utf-8?B?RFpiT2t5SnhiWlZnOEc4aDJTbmdkaldtTFNnYk1LQ2FBd1ovWFV3UmRvbW9W?=
+ =?utf-8?B?bVZEUkt5T01VYm9jb2xRb0RrS3hoRWZmNTR0TDlZSkd2eTlCd0UzckRKYnEy?=
+ =?utf-8?B?M3lhT0IzbDN3SW5sOXU3VzdzSVZvQmZDdS8yM3FPWjcvSHFQL3JWVWxqN2N5?=
+ =?utf-8?B?d0tDVytyNFhHU3ZyWlB0WkRzRG9YQ3BZMGNDSXh2ay9aSWcwNXlDV0lOaUR2?=
+ =?utf-8?B?L0tyMVQxRUpvMnNjOFhqeVU0U1RBbjJ2WEVqU0pWMVVWWFhCUHVnYnB1N0Mz?=
+ =?utf-8?B?T0NmMkRlMWNXUkhXN1ZZQk1lUXpyQzc5eUM5cGxiQ3diYzIzQmduNEtIMkt1?=
+ =?utf-8?B?dHYrRFNyL0ZxMmtyazZPT0toMHNPbDc4VnJIejBHZGg3QWhOWXVGQWt6Z0hh?=
+ =?utf-8?B?Wnp3Q2JyVTBZZkpWd21ycnVhSm9WM3drWEtKNE5sVVZKSlpqbzZ5YjBTdS81?=
+ =?utf-8?B?TVpJUi9mWVlOVlVMWnZjZzlhZVZiNTFEcXNONjgwS3RtQmlOOGUreGdIZDdN?=
+ =?utf-8?B?M3Q1T3VzOE9TYXlLTEx2aTRDNkFmVUptZnZEZXluZVFNUFloNENJU0xRV2ZY?=
+ =?utf-8?B?UjU1M3FEMkZHaWduRGRFcXU5bHFSSEFTNTJ2aWJWNlQzTnZuVXVhdmhJeENY?=
+ =?utf-8?B?U1NqTjNzWkErMWs4VFNOQmdRQW1FSGtCZTl6QUp4dHAxM3EwWkJraHRjZXRx?=
+ =?utf-8?B?bWhFTFQzOWtQaE43QjZkeVdpWFZ3UmZ1SE0rVGlqK0EyTW1WbVl4alJPc2Nu?=
+ =?utf-8?B?dHVCT0IzOFdIRkM1b2tTN3U2cXZicXZsSWxKWjg5SndGSjkrc0NhM0lNK3V6?=
+ =?utf-8?B?YU9wWTJXYmVsZGY5cm1laFZLTkphdXV4OUk0ME0wMXdTYUdhc2c5SFNTV1do?=
+ =?utf-8?B?VThHc2pWaGtlQUorRkF4aFg0andBbmhnM08zcUFBY0NEOThpaDNQbWxaMGQy?=
+ =?utf-8?B?T0Vibi9FdzAwUE4wMTZWUDBrYlF1WXJ0TjB6aGF1dWg4V2s3RzVCaGI0MXdK?=
+ =?utf-8?B?dG0xQTYxdEgrSmYwL0JTRm5NMGhMaXFhZE1nOS9MYTd5RngvSnVnbXhCcXRy?=
+ =?utf-8?B?Sm1Ldkp0eTRhMWk2MDVwNjdwN1UrNkFKUHZFRzZOU0tzTzR6UXJHQ25kZkpZ?=
+ =?utf-8?Q?Qp6s=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB9161.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB9161.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(10070799003)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dkx2K3NIRHBSTUFMV2tqWkJkTFN3cy83RVJxeDR6djQ4cHh5anNleVh5aUc4?=
- =?utf-8?B?Sys4UWxIb2Zpc2g5N0tkd1ZLWXZPRHIyWUllZmxsTDI1TWhvN1BBak1WeFJU?=
- =?utf-8?B?eTkrYXRmaStNRGNoOHVmRnFiWGRJckYyWm1qc2hLZ0NsUlNGVUVUemZuTEhy?=
- =?utf-8?B?bGd6eFRpVm9abFVMSnFVS0dtYS92ZnFhcFdZdmRuYkd1YjNCTFdVTEc1em01?=
- =?utf-8?B?WHFQVlErQm5wWmhlSytBVHdRb2tDZEhSaVlYbWswWDF3N2VyZ1VEb3NOZVI4?=
- =?utf-8?B?aHI5bllhM1NCbW51QW03b0hsQ3A0TEI2NUJXZ25hdFhBeTNwMHZ4dVhaTjZm?=
- =?utf-8?B?S0NST1NhMFFsMzhPbEluZHV1TkdHL0F6RStoczhTRnZnNWtLS1E4cEczeVdE?=
- =?utf-8?B?OWVsV214RTlDZGZ3MGluNlJjS1hBc1BxSmM2SEJ3ZUd2b0N0TUduNVZSV0VK?=
- =?utf-8?B?LzRWVEVWTm5ySXRLWG5yNEtLWk1OeGJTZlg4UThhTDh6ejJCa3hQd1orcmwz?=
- =?utf-8?B?WCtza1NieFh4MmdqMkZ0T2ppRVRkN2c0K1FyT3czc1Q2Z3FDaTg2MjZkRGww?=
- =?utf-8?B?ZjMxR0pUYTN2dHZlcnpSQlVzV21uQWk3bzVEeEE5c2wxSWV2U3Y5SGNkYjFK?=
- =?utf-8?B?d2NxbWZNZkJuZzVXdG5jRkt0VkdCTFVGRThUdnZvWlFBc01XelhHRy80MWtq?=
- =?utf-8?B?YngyNTRnSmxPdWptR0RXTWc2enhldHVZMlA4bytVWjBmV2ZKaHY4ckZ0dWF6?=
- =?utf-8?B?aVNmaGg2Q0VVWHdVU0UxWi9SanVBMUN6d0c5cFY2aEx0S2svZ0hzS2VJNFBT?=
- =?utf-8?B?bkdzWjYrV3I5dFlMbGJpLzlJN3NPWmhLS0lmUm16a05xbW44SnNlRHR6MGJm?=
- =?utf-8?B?OWtwa05oNXpWYlpvUEVuRmxpem50RCszN0tOdUd2UVlMTXZFSk04Z3FIRmVx?=
- =?utf-8?B?bHVTSGNCb3h4MjlOcXc4MW14NXVYSFh4ditLdjlwZlZSZEZveVEvZ3BTTmhQ?=
- =?utf-8?B?UlRsbHJOSnZBenpUSWpiakwxbjNzcXdnc2V4QWc5dEdjejg4cnhSS1AwQXNh?=
- =?utf-8?B?cFBBbURQLzRlYVRzdURJSmplUCs0M2Y2Ui9UYUhIV3lTQ05LRWE4bXBhRjNK?=
- =?utf-8?B?UVJrU3U2bjhQZXJGOXcvc2Z6UVoxeFlyK1ZtZmRobkoyeDhYZlc4QUZHK3p4?=
- =?utf-8?B?dTNYVkY1bjhWWUwxclhyVzNXaDJnaUtaVjBTUEtxdU1VcXAyNXlqeGZXQ3F2?=
- =?utf-8?B?V1BKR3picFFyaTR2RTJEeGZrQmVHbzdkMnlBMEJFNkU4ZHZJK2wxWFBsSzJU?=
- =?utf-8?B?MEx1Q2NOYnBPc0xIRWQ2WU94THc0anFaWXE4emRwZ2VSZk5FMGVYUlBiYzZx?=
- =?utf-8?B?YUl2enNoVG1ZNmJvTFBjMDA0ZWtMcWxNWFVBMWsxVEp6ZUw3bUNzQy9XUkpv?=
- =?utf-8?B?OVRmMkhrQjUxUzhWZEhtV2ozZnE1MEQ1dkNibVhERXhKY0lIZDk3bDNhUzA5?=
- =?utf-8?B?WGV5bUxaWmJIdXFNOEVDTW1VV2g4dHprclY0dW1WWWVNOU1NWXVCWnd3V2tP?=
- =?utf-8?B?YzZCMmZLK04zOTBFZlRnR0xQQ0MzZXNhUzlQbUhwUVZWTThmaWlmQ0JhU3hM?=
- =?utf-8?B?WHFJeHNFOUNISkVhUURONEYxeDJUeGdsMDNBaVo3S3IydTBHVHFkbjd6ZE5x?=
- =?utf-8?B?cTd5ZWdTYUcwWThuQjBHM1Uxa0M2R29tbGJySnhKSGxBOHlqemRmZTdZVm90?=
- =?utf-8?B?QUd4OHc1Smc2UTB4ZkV0emJFVUpudkVNbXJLdVp0SGRHSDJkcFZJdWlnTmJ1?=
- =?utf-8?B?aXdidVpMdHJqTWdRZHlzQVdSdzc1RUl4dUl5LytRSEhHb01oZHBFRXgzNk9V?=
- =?utf-8?B?aVQ3NmxvRlRTN0d1dU5KRkVISlFuK2JqZzBESGhSTitXbkNKcXV6TjdDYis4?=
- =?utf-8?B?ZDk0bmNHdWFqTmVRNGVxM3JOa3IybzUwTm5RQ3JhNkVEcDYyU0c1bVpUb2xu?=
- =?utf-8?B?akgxeEFMTjdXN1V2Qmg5d3ZPWTBTalArbWpIR2paNm9VR1VCbVFJMFBINzlC?=
- =?utf-8?B?aVZ6MTkvRUFBTXg5QUlsZ2R0RkZjMlVUNmhHS0ROSnV0TDZQRkNRalI4WXZs?=
- =?utf-8?B?Vituc2RpWjJicEtta3IrMFFIZHpXWkd2d3plSE5VWWlDMWRZWE42NEJ5K0RI?=
- =?utf-8?B?a1ZNSHJhWWQ1TEJndzhoSVA1SVhPTDVhUFZ3enNrWkZpKzNnZGtmbzVBOFkw?=
- =?utf-8?B?bTEzVjJoVEgrTndvZ1FLVHNmdDE2R2pkVjNiTW1tQkY0RmJpWnRnSmpxVnor?=
- =?utf-8?B?ZXVzTjJKUTNFMm5hRStwOWJxZTF4NEkwSkZTWEJrUVl3L2VBSHlWYTdlTSsr?=
- =?utf-8?Q?m0XAcUQblAuNWWbfTZFoB9tRg1sQl/xpqOb/rFxChfAZU?=
-X-MS-Exchange-AntiSpam-MessageData-1: jgMUBS5fc+A0+Q==
+	=?utf-8?B?WXZFUjlpRi9tWWs3cW90ZjRWQzlHN0VjamcycWlnLzQ5Tlo5ZGl5eDdUc09n?=
+ =?utf-8?B?UTFZUlhKNC9yUXRia3NxNW53anZSOXorT0dTYkxHVXZJckM1UTR6VXh1NUdl?=
+ =?utf-8?B?LzZOeFNDMUtOd1hpdUdkRDR3cVYybGowZXpsNjZPRE5BYVQrWnQ4ZkdPSTZZ?=
+ =?utf-8?B?Vlhsd2lsdzF1WkUzbEN6dWNRTXF0V3BOeERheVJsYXpycXZuaGhkQkNBaFR1?=
+ =?utf-8?B?YkVyQUx0eWg3RlI2L2xxckZseGgzV2xCTGF1WldqdnBISWRSZy9SZTdhYk5Z?=
+ =?utf-8?B?Z3dHaERNdXJKMEYwejZyZi9QTExZN1B5Vy83eEtSRXB0Q1VlSkNjOXFNSzFY?=
+ =?utf-8?B?OWxPRjJkUmdYMHM3aFRUcmNDNjIyZGwvdzEvOWcwbzViNlFzTGt0VHQ0RWpy?=
+ =?utf-8?B?aXNJS2EzUy8rRnlVQzB5Zlh6aUN4UE0wTUoyei9ZT3VReVNtWFdabFdMQWUw?=
+ =?utf-8?B?ZGlBcWkyeGIvc2Uxanpvc1gxZjhqK0w2MEFFdm9iQlZsMFJRL2lCQlVRb3Uw?=
+ =?utf-8?B?eERMdy9EUVdidkxKYmdwRWFDSnQ2cVlHdGQ2VDlkLytWTUowa3N0dXhMcmQr?=
+ =?utf-8?B?UkJHdEczOWdOVy9GVHdSRUlNd1YvRURmMnp5VXEycllrUERCQTE5NVhyOWV3?=
+ =?utf-8?B?NFBTZU55dXlDQUxHWGtwWHFBam16bGo3TkZqK2RSY2oxVjNkcEJOQ3dRMDBu?=
+ =?utf-8?B?MVRUNDN6MXI1TWlid1owM3RvTE9MMDBIaXFEK05xdEdvRkJXNFhJQ0VrVHVF?=
+ =?utf-8?B?WWRTNUR2NHFYMkJYNzFlSU4wZmF1ekx2OWphL2dRcDJyVk1wbjB2NUVoaSth?=
+ =?utf-8?B?WVhoQ0t0eXRGakpoYktUSnhlQXFpSXI1dStuSzhqc3JOYkdEN2hRVjFmVXZi?=
+ =?utf-8?B?cUtrQXB5dktvSlJncDZ5YzdBSDVkU0tGQjRWaU5BS0lWZ0NsVThMUCs5SUNI?=
+ =?utf-8?B?WU8yM2ZrSkJKUWVyWDU3VTFOaVhjai9uUTAxOGxCcHFrTW83NTRQRm00OGRQ?=
+ =?utf-8?B?bEhFUzNuYmx2SWI3bnMyTHZhM3hvQ3RlN2xJSG1paE9BeC9yYW44YUhjOEhS?=
+ =?utf-8?B?ZjF4VkUyQTZRZ3R6bVBLTFZ5OW00dFpXM1VCbXNyNVlKN2xFSklFQkhCUW1X?=
+ =?utf-8?B?eEZrTTQrOXZHVDBFcnVHdVRuODJyd25UYXlhdEw0Z1FJcytlS0loYjBNcU4y?=
+ =?utf-8?B?SVk2dlNOQktwaDdWcHBLdUFJWlFrOTBvUFlWK1h0Z081aEo5T2g3TVhMNktk?=
+ =?utf-8?B?MUNjVlZLc3VVeGQ2SGh6WjY3clBuUVhuQmRicjEzb1JDMHNJSmkvaGRnUGhz?=
+ =?utf-8?B?MzdEQTAwUnk2NS9vblQ2NkMxNW0yQUJxSzNwbTFtaU5obUlsYlhxa1Y3UVh4?=
+ =?utf-8?B?Z0x5bVVncjIvVS9ubG1laUtiaXVBZEZ0K1d5UGtuL2ZUL0dMUG5FMFdRTHlv?=
+ =?utf-8?B?MkZJSi8xSXdUWHh1bDI1d3JuZGxxMklIVjBwUjlvc0EzdWt4ZG1SaGVuNmQ5?=
+ =?utf-8?B?Q2FrRUcvUW9EU3RCaVFJeHlRL2pwZ3orYzY5ckdXWGF4cjQvUzFkWldHbmEy?=
+ =?utf-8?B?UlB5Vy9IRGJObWsxeDl1U2Exa3VkY3NLd0JRWVVXdDMza3k5Y2ZnbnVqdFVy?=
+ =?utf-8?B?cUM0NDhyTG9qUUZacXR2cXNqdU1wL1dDdEVOcUxWRTliZWdkZlJrR2xiQm1G?=
+ =?utf-8?B?N3FseTFlNVVKTW1JS3A0MkVNYTljaEN6TzZZMitBTmdReURwN3J1S2hrbytV?=
+ =?utf-8?B?WTY0blZYU3h1ZXZSbzVMWDhWeGhEQjBmTE5FSDBUQXBueitSeWlsYWVCNVov?=
+ =?utf-8?B?a3pDbnI4aFpvMzA2VGhWYlNVbVJnYnNaK0ZhYXUxWGNpTEwrcjUxdDk5ZmN5?=
+ =?utf-8?B?eVNHTmpWU0kxTy9EQnhGYnZrVFhCS1lrc0VPeTU4emFiSkphaTk5d2hnbmxV?=
+ =?utf-8?B?OXZicHZvZjdqWVllRjZieGNiWDJvWDVBV0kweU0vNlBBWG9pcnM3aXdEU0du?=
+ =?utf-8?B?YmxMeERBWEs4N3JKNTk5UWhiNlQvMzR5L1JFNHdJRlJRMG9JWEFwVmpaSkdZ?=
+ =?utf-8?B?UGQzN0VnbXZmTXhQRW0ya0ZQWG5qdDVwRjJlUHZ3Z1o3TEVZclliQmExN2Z0?=
+ =?utf-8?B?aFdISElzWC9QZE1ybnN1YjgwMmhDVCtTUWNpeGxqRzJSQ2tOMFd6M1JGTUNv?=
+ =?utf-8?B?TGJtUGpDTERibGdsNVc4Q1pwajBOdTVxSEsyLzFvblYzR0hEWGtUWm1JZ0s3?=
+ =?utf-8?B?M05FVnRSY1VwUCs5ejN3OVhUdXpkVURselVFM2RoWEtpeVB1cGJVUUxsTEZY?=
+ =?utf-8?B?TWlJdkZWaXhuK0x6WmxHWUpZUTBpckEzUFMrS2dMaUZoNXFlRmdseE85Rkpy?=
+ =?utf-8?Q?2N8Cv0RxkM5FOvVSS8IALt7/q5FQIoHOmsC2zkVhVyS8i?=
+X-MS-Exchange-AntiSpam-MessageData-1: mHU64OwhEHf+rA==
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b156b0d1-2ab6-4462-ccd1-08de6209884c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e100de3-4442-4396-2903-08de6210a33b
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB9161.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2026 03:17:01.6668
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2026 04:07:53.2756
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R41O45YZqaPQwf0SbdGvdJ/78UREyb+kZuKNatyRhcqzHjwuQN49zb05iyL7EIveOTfrGgc8O5KKEcvC7pMLmA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7918
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4XamKSjwdNI5Lnff4KX40KtxOZUM/aglZdYlfGdE4DF3nBRYtzLeRGZ8+H+uulyLze9kvx/qIleqV6EmL3Xing==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8974
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
 	ARC_REJECT(1.00)[cv is fail on i=2];
 	DMARC_POLICY_ALLOW(-0.50)[nvidia.com,reject];
 	MID_RHS_NOT_FQDN(0.50)[];
 	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-32981-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-32982-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -211,189 +211,463 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb];
 	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[Nvidia.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,nvidia.com:email]
-X-Rspamd-Queue-Id: 9DC54C7FF4
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,Nvidia.com:dkim]
+X-Rspamd-Queue-Id: 8C75DC81E8
 X-Rspamd-Action: no action
 
 On Friday, January 23, 2026 12:11=E2=80=AFAM Svyatoslav Ryhel wrote:
-> Refactor to directly use enum usb_phy_interface to determine the PHY mode=
-.
-> This change is in preparation for adding support for HSIC mode.
+> Add support for HSIC USB mode, which can be set for second USB controller
+> and PHY on Tegra SoC along with already supported UTMI or ULPI.
 >=20
 > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 > ---
->  drivers/usb/phy/phy-tegra-usb.c   | 51 +++++++++++++++++++------------
->  include/linux/usb/tegra_usb_phy.h |  2 +-
->  2 files changed, 33 insertions(+), 20 deletions(-)
+>  drivers/usb/phy/phy-tegra-usb.c   | 249 ++++++++++++++++++++++++++++--
+>  include/linux/usb/tegra_usb_phy.h |   5 +
+>  2 files changed, 243 insertions(+), 11 deletions(-)
 >=20
 > diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-=
 usb.c
-> index 1f527fcb42f6..afa5b5535f92 100644
+> index afa5b5535f92..4f0fde33647e 100644
 > --- a/drivers/usb/phy/phy-tegra-usb.c
 > +++ b/drivers/usb/phy/phy-tegra-usb.c
-> @@ -814,15 +814,24 @@ static int ulpi_phy_power_off(struct tegra_usb_phy =
-*phy)
+> @@ -29,17 +29,26 @@
+>  #include <linux/usb/tegra_usb_phy.h>
+>  #include <linux/usb/ulpi.h>
 > =20
+> +#define USB_TXFILLTUNING			0x154
+> +#define USB_FIFO_TXFILL_THRES(x)		(((x) & 0x1f) << 16)
+> +#define USB_FIFO_TXFILL_MASK			0x1f0000
+> +
+>  #define ULPI_VIEWPORT				0x170
+> =20
+>  /* PORTSC PTS/PHCD bits, Tegra20 only */
+>  #define TEGRA_USB_PORTSC1			0x184
+> -#define TEGRA_USB_PORTSC1_PTS(x)		(((x) & 0x3) << 30)
+> -#define TEGRA_USB_PORTSC1_PHCD			BIT(23)
+> +#define   TEGRA_USB_PORTSC1_PTS(x)		(((x) & 0x3) << 30)
+> +#define   TEGRA_USB_PORTSC1_PHCD		BIT(23)
+> +#define   TEGRA_USB_PORTSC1_WKOC		BIT(22)
+> +#define   TEGRA_USB_PORTSC1_WKDS		BIT(21)
+> +#define   TEGRA_USB_PORTSC1_WKCN		BIT(20)
+> =20
+>  /* HOSTPC1 PTS/PHCD bits, Tegra30 and above */
+> +#define TEGRA30_USB_PORTSC1			0x174
+>  #define TEGRA_USB_HOSTPC1_DEVLC			0x1b4
+> -#define TEGRA_USB_HOSTPC1_DEVLC_PTS(x)		(((x) & 0x7) << 29)
+> -#define TEGRA_USB_HOSTPC1_DEVLC_PHCD		BIT(22)
+> +#define   TEGRA_USB_HOSTPC1_DEVLC_PTS(x)	(((x) & 0x7) << 29)
+> +#define   TEGRA_USB_HOSTPC1_DEVLC_PHCD		BIT(22)
+> +#define   TEGRA_USB_HOSTPC1_DEVLC_PTS_HSIC	BIT(2)
+
+PTS is an enumeration, not a bitfield, so I would say '4' instead of 'BIT(2=
+)'
+
+> =20
+>  /* Bits of PORTSC1, which will get cleared by writing 1 into them */
+>  #define TEGRA_PORTSC1_RWC_BITS	(PORT_CSC | PORT_PEC | PORT_OCC)
+> @@ -51,11 +60,12 @@
+>  #define   USB_SUSP_CLR				BIT(5)
+>  #define   USB_PHY_CLK_VALID			BIT(7)
+>  #define   UTMIP_RESET				BIT(11)
+> -#define   UHSIC_RESET				BIT(11)
+>  #define   UTMIP_PHY_ENABLE			BIT(12)
+>  #define   ULPI_PHY_ENABLE			BIT(13)
+>  #define   USB_SUSP_SET				BIT(14)
+> +#define   UHSIC_RESET				BIT(14)
+>  #define   USB_WAKEUP_DEBOUNCE_COUNT(x)		(((x) & 0x7) << 16)
+> +#define   UHSIC_PHY_ENABLE			BIT(19)
+> =20
+>  #define USB_PHY_VBUS_SENSORS			0x404
+>  #define   B_SESS_VLD_WAKEUP_EN			BIT(14)
+> @@ -156,6 +166,58 @@
+>  #define UTMIP_BIAS_CFG1				0x83c
+>  #define   UTMIP_BIAS_PDTRK_COUNT(x)		(((x) & 0x1f) << 3)
+> =20
+> +/*
+> + * Tegra20 has no UTMIP registers on PHY2 and UHSIC registers start from=
+ 0x800
+> + * just where UTMIP registers should have been. This is the case only wi=
+th Tegra20
+> + * Tegra30+ have UTMIP registers at 0x800 and UHSIC registers shifter by=
+ 0x400
+
+'shift', or 'are shifted'
+
+> + * to 0xc00, but register layout is preserved.
+> + */
+> +#define UHSIC_PLL_CFG1				0x804
+> +#define   UHSIC_XTAL_FREQ_COUNT(x)		(((x) & 0xfff) << 0)
+> +#define   UHSIC_PLLU_ENABLE_DLY_COUNT(x)	(((x) & 0x1f) << 14)
+> +
+> +#define UHSIC_HSRX_CFG0				0x808
+> +#define   UHSIC_ELASTIC_UNDERRUN_LIMIT(x)	(((x) & 0x1f) << 2)
+> +#define   UHSIC_ELASTIC_OVERRUN_LIMIT(x)	(((x) & 0x1f) << 8)
+> +#define   UHSIC_IDLE_WAIT(x)			(((x) & 0x1f) << 13)
+> +
+> +#define UHSIC_HSRX_CFG1				0x80c
+> +#define   UHSIC_HS_SYNC_START_DLY(x)		(((x) & 0x1f) << 1)
+> +
+> +#define UHSIC_TX_CFG0				0x810
+> +#define   UHSIC_HS_READY_WAIT_FOR_VALID		BIT(9)
+> +
+> +#define UHSIC_MISC_CFG0				0x814
+> +#define   UHSIC_SUSPEND_EXIT_ON_EDGE		BIT(7)
+> +#define   UHSIC_DETECT_SHORT_CONNECT		BIT(8)
+> +#define   UHSIC_FORCE_XCVR_MODE			BIT(15)
+> +#define   UHSIC_DISABLE_BUSRESET		BIT(20)
+> +
+> +#define UHSIC_MISC_CFG1				0x818
+> +#define   UHSIC_PLLU_STABLE_COUNT(x)		(((x) & 0xfff) << 2)
+> +
+> +#define UHSIC_PADS_CFG0				0x81c
+> +#define   UHSIC_TX_RTUNEN			0xf000
+> +#define   UHSIC_TX_RTUNE(x)			(((x) & 0xf) << 12)
+> +
+> +#define UHSIC_PADS_CFG1				0x820
+> +#define   UHSIC_PD_BG				BIT(2)
+> +#define   UHSIC_PD_TX				BIT(3)
+> +#define   UHSIC_PD_TRK				BIT(4)
+> +#define   UHSIC_PD_RX				BIT(5)
+> +#define   UHSIC_PD_ZI				BIT(6)
+> +#define   UHSIC_RX_SEL				BIT(7)
+> +#define   UHSIC_RPD_DATA			BIT(9)
+> +#define   UHSIC_RPD_STROBE			BIT(10)
+> +#define   UHSIC_RPU_DATA			BIT(11)
+> +#define   UHSIC_RPU_STROBE			BIT(12)
+> +
+> +#define UHSIC_CMD_CFG0				0x824
+> +#define   UHSIC_PRETEND_CONNECT_DETECT		BIT(5)
+> +
+> +#define UHSIC_STAT_CFG0				0x828
+> +#define   UHSIC_CONNECT_DETECT			BIT(0)
+> +
+>  /* For Tegra30 and above only, the address is different in Tegra20 */
+>  #define USB_USBMODE				0x1f8
+>  #define   USB_USBMODE_MASK			(3 << 0)
+> @@ -174,7 +236,8 @@ struct tegra_xtal_freq {
+>  	u8 enable_delay;
+>  	u8 stable_count;
+>  	u8 active_delay;
+> -	u8 xtal_freq_count;
+> +	u8 utmi_xtal_freq_count;
+> +	u16 hsic_xtal_freq_count;
+>  	u16 debounce;
+>  };
+> =20
+> @@ -184,7 +247,8 @@ static const struct tegra_xtal_freq tegra_freq_table[=
+] =3D {
+>  		.enable_delay =3D 0x02,
+>  		.stable_count =3D 0x2F,
+>  		.active_delay =3D 0x04,
+> -		.xtal_freq_count =3D 0x76,
+> +		.utmi_xtal_freq_count =3D 0x76,
+> +		.hsic_xtal_freq_count =3D 0x1CA,
+>  		.debounce =3D 0x7530,
+>  	},
+>  	{
+> @@ -192,7 +256,8 @@ static const struct tegra_xtal_freq tegra_freq_table[=
+] =3D {
+>  		.enable_delay =3D 0x02,
+>  		.stable_count =3D 0x33,
+>  		.active_delay =3D 0x05,
+> -		.xtal_freq_count =3D 0x7F,
+> +		.utmi_xtal_freq_count =3D 0x7F,
+> +		.hsic_xtal_freq_count =3D 0x1F0,
+>  		.debounce =3D 0x7EF4,
+>  	},
+>  	{
+> @@ -200,7 +265,8 @@ static const struct tegra_xtal_freq tegra_freq_table[=
+] =3D {
+>  		.enable_delay =3D 0x03,
+>  		.stable_count =3D 0x4B,
+>  		.active_delay =3D 0x06,
+> -		.xtal_freq_count =3D 0xBB,
+> +		.utmi_xtal_freq_count =3D 0xBB,
+> +		.hsic_xtal_freq_count =3D 0x2DD,
+>  		.debounce =3D 0xBB80,
+>  	},
+>  	{
+> @@ -208,7 +274,8 @@ static const struct tegra_xtal_freq tegra_freq_table[=
+] =3D {
+>  		.enable_delay =3D 0x04,
+>  		.stable_count =3D 0x66,
+>  		.active_delay =3D 0x09,
+> -		.xtal_freq_count =3D 0xFE,
+> +		.utmi_xtal_freq_count =3D 0xFE,
+> +		.hsic_xtal_freq_count =3D 0x3E0,
+>  		.debounce =3D 0xFDE8,
+>  	},
+>  };
+> @@ -541,7 +608,7 @@ static int utmi_phy_power_on(struct tegra_usb_phy *ph=
+y)
+>  		val =3D readl_relaxed(base + UTMIP_PLL_CFG1);
+>  		val &=3D ~(UTMIP_XTAL_FREQ_COUNT(~0) |
+>  			UTMIP_PLLU_ENABLE_DLY_COUNT(~0));
+> -		val |=3D UTMIP_XTAL_FREQ_COUNT(phy->freq->xtal_freq_count) |
+> +		val |=3D UTMIP_XTAL_FREQ_COUNT(phy->freq->utmi_xtal_freq_count) |
+>  			UTMIP_PLLU_ENABLE_DLY_COUNT(phy->freq->enable_delay);
+>  		writel_relaxed(val, base + UTMIP_PLL_CFG1);
+>  	}
+> @@ -812,6 +879,153 @@ static int ulpi_phy_power_off(struct tegra_usb_phy =
+*phy)
+>  	return 0;
+>  }
+> =20
+> +static u32 tegra_hsic_readl(struct tegra_usb_phy *phy, u32 reg)
+> +{
+> +	void __iomem *base =3D phy->regs;
+> +	u32 shift =3D phy->soc_config->uhsic_registers_shift;
+> +
+> +	return readl_relaxed(base + shift + reg);
+> +}
+> +
+> +static void tegra_hsic_writel(struct tegra_usb_phy *phy, u32 reg, u32 va=
+lue)
+> +{
+> +	void __iomem *base =3D phy->regs;
+> +	u32 shift =3D phy->soc_config->uhsic_registers_shift;
+> +
+> +	writel_relaxed(value, base + shift + reg);
+> +}
+> +
+> +static int uhsic_phy_power_on(struct tegra_usb_phy *phy)
+> +{
+> +	struct tegra_utmip_config *config =3D phy->config;
+> +	void __iomem *base =3D phy->regs;
+> +	u32 val;
+> +
+> +	val =3D tegra_hsic_readl(phy, UHSIC_PADS_CFG1);
+> +	val &=3D ~(UHSIC_PD_BG | UHSIC_PD_TX | UHSIC_PD_TRK | UHSIC_PD_RX |
+> +		 UHSIC_PD_ZI | UHSIC_RPD_DATA | UHSIC_RPD_STROBE);
+> +	val |=3D UHSIC_RX_SEL;
+
+L4T r16 (Tegra30) keeps UHSIC_PD_TX set until after UHSIC_RESET has been cl=
+eared. Commit message says this avoids a signal glitch.
+
+> +	tegra_hsic_writel(phy, UHSIC_PADS_CFG1, val);
+> +
+> +	udelay(2);
+> +
+> +	val =3D readl_relaxed(base + USB_SUSP_CTRL);
+> +	val |=3D UHSIC_RESET;
+> +	writel_relaxed(val, base + USB_SUSP_CTRL);
+> +
+> +	udelay(30);
+> +
+> +	val =3D readl_relaxed(base + USB_SUSP_CTRL);
+> +	val |=3D UHSIC_PHY_ENABLE;
+> +	writel_relaxed(val, base + USB_SUSP_CTRL);
+> +
+> +	val =3D tegra_hsic_readl(phy, UHSIC_HSRX_CFG0);
+> +	val &=3D ~(UHSIC_IDLE_WAIT(~0) |
+> +		 UHSIC_ELASTIC_UNDERRUN_LIMIT(~0) |
+> +		 UHSIC_ELASTIC_OVERRUN_LIMIT(~0));
+> +	val |=3D UHSIC_IDLE_WAIT(config->idle_wait_delay) |
+> +		UHSIC_ELASTIC_UNDERRUN_LIMIT(config->elastic_limit) |
+> +		UHSIC_ELASTIC_OVERRUN_LIMIT(config->elastic_limit);
+> +	tegra_hsic_writel(phy, UHSIC_HSRX_CFG0, val);
+> +
+> +	val =3D tegra_hsic_readl(phy, UHSIC_HSRX_CFG1);
+> +	val &=3D ~UHSIC_HS_SYNC_START_DLY(~0);
+> +	val |=3D UHSIC_HS_SYNC_START_DLY(config->hssync_start_delay);
+> +	tegra_hsic_writel(phy, UHSIC_HSRX_CFG1, val);
+> +
+
+L4T r16 (Tegra30) clears UHSIC_TX_CFG0.UHSIC_HS_READY_WAIT_FOR_VALID here. =
+According to commit message this fixes an intermittent failure to connect t=
+o HSIC modem. It also sets UHSIC_MISC_CFG0.UHSIC_DISABLE_BUSRESET  below du=
+e to same issue.
+
+> +	val =3D tegra_hsic_readl(phy, UHSIC_MISC_CFG0);
+> +	val |=3D UHSIC_SUSPEND_EXIT_ON_EDGE;
+> +	tegra_hsic_writel(phy, UHSIC_MISC_CFG0, val);
+> +
+> +	val =3D tegra_hsic_readl(phy, UHSIC_MISC_CFG1);
+> +	val &=3D ~UHSIC_PLLU_STABLE_COUNT(~0);
+> +	val |=3D UHSIC_PLLU_STABLE_COUNT(phy->freq->stable_count);
+> +	tegra_hsic_writel(phy, UHSIC_MISC_CFG1, val);
+> +
+> +	val =3D tegra_hsic_readl(phy, UHSIC_PLL_CFG1);
+> +	val &=3D ~(UHSIC_XTAL_FREQ_COUNT(~0) |
+> +		UHSIC_PLLU_ENABLE_DLY_COUNT(~0));
+> +	val |=3D UHSIC_XTAL_FREQ_COUNT(phy->freq->hsic_xtal_freq_count) |
+> +		UHSIC_PLLU_ENABLE_DLY_COUNT(phy->freq->enable_delay);
+> +	tegra_hsic_writel(phy, UHSIC_PLL_CFG1, val);
+> +
+> +	val =3D readl_relaxed(base + USB_SUSP_CTRL);
+> +	val &=3D ~UHSIC_RESET;
+> +	writel_relaxed(val, base + USB_SUSP_CTRL);
+> +
+> +	udelay(2);
+> +
+> +	if (phy->soc_config->requires_usbmode_setup) {
+> +		val =3D readl_relaxed(base + USB_USBMODE);
+> +		val &=3D ~USB_USBMODE_MASK;
+> +		if (phy->mode =3D=3D USB_DR_MODE_HOST)
+> +			val |=3D USB_USBMODE_HOST;
+> +		else
+> +			val |=3D USB_USBMODE_DEVICE;
+> +		writel_relaxed(val, base + USB_USBMODE);
+> +	}
+> +
+> +	if (phy->soc_config->has_hostpc)
+> +		set_pts(phy, TEGRA_USB_HOSTPC1_DEVLC_PTS_HSIC);
+> +	else
+> +		set_pts(phy, 0);
+
+This (and below) are abusing has_hostpc to detect Tegra30 vs Tegra20. We sh=
+ould instead add soc_config fields hsic_pts_value and portsc1_offset.
+
+> +
+> +	val =3D readl_relaxed(base + USB_TXFILLTUNING);
+> +	if ((val & USB_FIFO_TXFILL_MASK) !=3D USB_FIFO_TXFILL_THRES(0x10)) {
+> +		val =3D USB_FIFO_TXFILL_THRES(0x10);
+> +		writel_relaxed(val, base + USB_TXFILLTUNING);
+> +	}
+> +
+> +	if (phy->soc_config->has_hostpc) {
+> +		val =3D readl_relaxed(base + TEGRA30_USB_PORTSC1);
+> +		val &=3D ~(TEGRA_USB_PORTSC1_WKOC | TEGRA_USB_PORTSC1_WKDS |
+> +			 TEGRA_USB_PORTSC1_WKCN);
+> +		writel_relaxed(val, base + TEGRA30_USB_PORTSC1);
+> +	} else {
+> +		val =3D readl_relaxed(base + TEGRA_USB_PORTSC1);
+> +		val &=3D ~(TEGRA_USB_PORTSC1_WKOC | TEGRA_USB_PORTSC1_WKDS |
+> +			 TEGRA_USB_PORTSC1_WKCN);
+> +		writel_relaxed(val, base + TEGRA_USB_PORTSC1);
+> +	}
+> +
+> +	val =3D tegra_hsic_readl(phy, UHSIC_PADS_CFG0);
+> +	val &=3D ~UHSIC_TX_RTUNEN;
+> +	val |=3D UHSIC_TX_RTUNE(phy->soc_config->uhsic_tx_rtune);
+> +	tegra_hsic_writel(phy, UHSIC_PADS_CFG0, val);
+> +
+> +	if (utmi_wait_register(base + USB_SUSP_CTRL, USB_PHY_CLK_VALID,
+> +			       USB_PHY_CLK_VALID))
+> +		dev_err(phy->u_phy.dev,
+> +			"Timeout waiting for PHY to stabilize on enable (HSIC)\n");
+
+Should return error (return value of utmi_wait_register) here?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int uhsic_phy_power_off(struct tegra_usb_phy *phy)
+> +{
+> +	void __iomem *base =3D phy->regs;
+> +	u32 val;
+> +
+> +	set_phcd(phy, true);
+> +
+> +	val =3D tegra_hsic_readl(phy, UHSIC_PADS_CFG1);
+> +	val |=3D (UHSIC_PD_BG | UHSIC_PD_TX | UHSIC_PD_TRK | UHSIC_PD_RX |
+> +		UHSIC_PD_ZI | UHSIC_RPD_DATA | UHSIC_RPD_STROBE);
+> +	tegra_hsic_writel(phy, UHSIC_PADS_CFG1, val);
+> +
+> +	val =3D readl_relaxed(base + USB_SUSP_CTRL);
+> +	val |=3D UHSIC_RESET;
+> +	writel_relaxed(val, base + USB_SUSP_CTRL);
+> +
+> +	udelay(30);
+> +
+> +	val =3D readl_relaxed(base + USB_SUSP_CTRL);
+> +	val &=3D ~UHSIC_PHY_ENABLE;
+> +	writel_relaxed(val, base + USB_SUSP_CTRL);
+> +
+> +	return 0;
+> +}
+> +
 >  static int tegra_usb_phy_power_on(struct tegra_usb_phy *phy)
 >  {
-> -	int err;
-> +	int err =3D 0;
-> =20
->  	if (phy->powered_on)
->  		return 0;
-> =20
-> -	if (phy->is_ulpi_phy)
-> -		err =3D ulpi_phy_power_on(phy);
-> -	else
-> +	switch (phy->phy_type) {
-> +	case USBPHY_INTERFACE_MODE_UTMI:
->  		err =3D utmi_phy_power_on(phy);
-> +		break;
-> +
-> +	case USBPHY_INTERFACE_MODE_ULPI:
-> +		err =3D ulpi_phy_power_on(phy);
-> +		break;
-> +
-> +	default:
-> +		break;
-> +	}
-> +
->  	if (err)
->  		return err;
-> =20
-> @@ -836,15 +845,24 @@ static int tegra_usb_phy_power_on(struct tegra_usb_=
+>  	int err =3D 0;
+> @@ -828,6 +1042,10 @@ static int tegra_usb_phy_power_on(struct tegra_usb_=
 phy *phy)
-> =20
->  static int tegra_usb_phy_power_off(struct tegra_usb_phy *phy)
->  {
-> -	int err;
-> +	int err =3D 0;
-> =20
->  	if (!phy->powered_on)
->  		return 0;
-> =20
-> -	if (phy->is_ulpi_phy)
-> -		err =3D ulpi_phy_power_off(phy);
-> -	else
-> +	switch (phy->phy_type) {
-> +	case USBPHY_INTERFACE_MODE_UTMI:
->  		err =3D utmi_phy_power_off(phy);
-> +		break;
-> +
-> +	case USBPHY_INTERFACE_MODE_ULPI:
-> +		err =3D ulpi_phy_power_off(phy);
-> +		break;
-> +
-> +	default:
-> +		break;
-> +	}
-> +
->  	if (err)
->  		return err;
-> =20
-> @@ -863,7 +881,7 @@ static void tegra_usb_phy_shutdown(struct usb_phy *u_=
-phy)
->  	usb_phy_set_wakeup(u_phy, false);
->  	tegra_usb_phy_power_off(phy);
-> =20
-> -	if (!phy->is_ulpi_phy)
-> +	if (phy->phy_type =3D=3D USBPHY_INTERFACE_MODE_UTMI)
->  		utmip_pad_close(phy);
-> =20
->  	regulator_disable(phy->vbus);
-> @@ -1049,7 +1067,7 @@ static int tegra_usb_phy_init(struct usb_phy *u_phy=
-)
->  		goto disable_clk;
->  	}
-> =20
-> -	if (!phy->is_ulpi_phy) {
-> +	if (phy->phy_type =3D=3D USBPHY_INTERFACE_MODE_UTMI) {
->  		err =3D utmip_pad_open(phy);
->  		if (err)
->  			goto disable_vbus;
-> @@ -1066,7 +1084,7 @@ static int tegra_usb_phy_init(struct usb_phy *u_phy=
-)
->  	return 0;
-> =20
->  close_phy:
-> -	if (!phy->is_ulpi_phy)
-> +	if (phy->phy_type =3D=3D USBPHY_INTERFACE_MODE_UTMI)
->  		utmip_pad_close(phy);
-> =20
->  disable_vbus:
-> @@ -1104,8 +1122,6 @@ static int utmi_phy_probe(struct tegra_usb_phy *teg=
-ra_phy,
->  	struct resource *res;
->  	int err;
-> =20
-> -	tegra_phy->is_ulpi_phy =3D false;
-> -
->  	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 1);
->  	if (!res) {
->  		dev_err(&pdev->dev, "Failed to get UTMI pad regs\n");
-> @@ -1280,7 +1296,6 @@ static int tegra_usb_phy_probe(struct platform_devi=
-ce *pdev)
->  {
->  	struct device_node *np =3D pdev->dev.of_node;
->  	struct tegra_usb_phy *tegra_phy;
-> -	enum usb_phy_interface phy_type;
->  	struct reset_control *reset;
->  	struct gpio_desc *gpiod;
->  	struct resource *res;
-> @@ -1342,8 +1357,8 @@ static int tegra_usb_phy_probe(struct platform_devi=
-ce *pdev)
->  		return err;
->  	}
-> =20
-> -	phy_type =3D of_usb_get_phy_mode(np);
-> -	switch (phy_type) {
-> +	tegra_phy->phy_type =3D of_usb_get_phy_mode(np);
-> +	switch (tegra_phy->phy_type) {
->  	case USBPHY_INTERFACE_MODE_UTMI:
->  		err =3D utmi_phy_probe(tegra_phy, pdev);
->  		if (err)
-> @@ -1369,8 +1384,6 @@ static int tegra_usb_phy_probe(struct platform_devi=
-ce *pdev)
+>  		err =3D ulpi_phy_power_on(phy);
 >  		break;
 > =20
->  	case USBPHY_INTERFACE_MODE_ULPI:
-> -		tegra_phy->is_ulpi_phy =3D true;
-> -
->  		tegra_phy->clk =3D devm_clk_get(&pdev->dev, "ulpi-link");
->  		err =3D PTR_ERR_OR_ZERO(tegra_phy->clk);
->  		if (err) {
-> @@ -1410,7 +1423,7 @@ static int tegra_usb_phy_probe(struct platform_devi=
-ce *pdev)
-> =20
+> +	case USBPHY_INTERFACE_MODE_HSIC:
+> +		err =3D uhsic_phy_power_on(phy);
+> +		break;
+> +
 >  	default:
->  		dev_err(&pdev->dev, "phy_type %u is invalid or unsupported\n",
-> -			phy_type);
-> +			tegra_phy->phy_type);
->  		return -EINVAL;
+>  		break;
 >  	}
+> @@ -859,6 +1077,10 @@ static int tegra_usb_phy_power_off(struct tegra_usb=
+_phy *phy)
+>  		err =3D ulpi_phy_power_off(phy);
+>  		break;
 > =20
+> +	case USBPHY_INTERFACE_MODE_HSIC:
+> +		err =3D uhsic_phy_power_off(phy);
+> +		break;
+> +
+>  	default:
+>  		break;
+>  	}
+> @@ -1256,6 +1478,8 @@ static const struct tegra_phy_soc_config tegra20_so=
+c_config =3D {
+>  	.requires_usbmode_setup =3D false,
+>  	.requires_extra_tuning_parameters =3D false,
+>  	.requires_pmc_ao_power_up =3D false,
+> +	.uhsic_registers_shift =3D 0,
+> +	.uhsic_tx_rtune =3D 0, /* 40 ohm */
+>  };
+> =20
+>  static const struct tegra_phy_soc_config tegra30_soc_config =3D {
+> @@ -1264,6 +1488,8 @@ static const struct tegra_phy_soc_config tegra30_so=
+c_config =3D {
+>  	.requires_usbmode_setup =3D true,
+>  	.requires_extra_tuning_parameters =3D true,
+>  	.requires_pmc_ao_power_up =3D true,
+> +	.uhsic_registers_shift =3D 0x400,
+> +	.uhsic_tx_rtune =3D 8,  /* 50 ohm */
+>  };
+> =20
+>  static const struct of_device_id tegra_usb_phy_id_table[] =3D {
+> @@ -1360,6 +1586,7 @@ static int tegra_usb_phy_probe(struct platform_devi=
+ce *pdev)
+>  	tegra_phy->phy_type =3D of_usb_get_phy_mode(np);
+>  	switch (tegra_phy->phy_type) {
+>  	case USBPHY_INTERFACE_MODE_UTMI:
+> +	case USBPHY_INTERFACE_MODE_HSIC:
+>  		err =3D utmi_phy_probe(tegra_phy, pdev);
+>  		if (err)
+>  			return err;
 > diff --git a/include/linux/usb/tegra_usb_phy.h b/include/linux/usb/tegra_=
 usb_phy.h
-> index c314fad5e375..e394f4880b7e 100644
+> index e394f4880b7e..4e79f1c2173a 100644
 > --- a/include/linux/usb/tegra_usb_phy.h
 > +++ b/include/linux/usb/tegra_usb_phy.h
-> @@ -73,7 +73,7 @@ struct tegra_usb_phy {
->  	struct usb_phy *ulpi;
->  	struct usb_phy u_phy;
->  	bool is_legacy_phy;
-> -	bool is_ulpi_phy;
-> +	enum usb_phy_interface phy_type;
->  	struct gpio_desc *reset_gpio;
->  	struct reset_control *pad_rst;
->  	bool wakeup_enabled;
+> @@ -24,6 +24,9 @@ struct gpio_desc;
+>   * requires_extra_tuning_parameters: true if xcvr_hsslew, hssquelch_leve=
+l
+>   *      and hsdiscon_level should be set for adequate signal quality
+>   * requires_pmc_ao_power_up: true if USB AO is powered down by default
+> + * uhsic_registers_shift: for Tegra30+ where HSIC registers were shifted
+> + *      comparing to Tegra20 by 0x400, since Tegra20 has no UTMIP on PHY=
+2
+> + * uhsic_tx_rtune: fine tuned 50 Ohm termination resistor for NMOS/PMOS =
+driver
+>   */
+> =20
+>  struct tegra_phy_soc_config {
+> @@ -32,6 +35,8 @@ struct tegra_phy_soc_config {
+>  	bool requires_usbmode_setup;
+>  	bool requires_extra_tuning_parameters;
+>  	bool requires_pmc_ao_power_up;
+> +	u32 uhsic_registers_shift;
+
+I would rather call this 'uhsic_registers_offset'. Shift first brings to mi=
+nd bitshifts, and we often have fields in these config structs for bit shif=
+ts called '*_shift'.
+
+> +	u32 uhsic_tx_rtune;
+>  };
+> =20
+>  struct tegra_utmip_config {
 >=20
-
-I would consider putting a WARN() inside the default: cases which should ne=
-ver run -- primarily just as an indicator to the reader that those code pat=
-hs should never be taken. In any case,
-
-Reviewed-by: Mikko Perttunen <mperttunen@nvidia.com>
 
 
 
