@@ -1,104 +1,68 @@
-Return-Path: <linux-usb+bounces-33042-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33043-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yDDbIdP6gWk7NQMAu9opvQ
-	(envelope-from <linux-usb+bounces-33042-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 14:40:35 +0100
+	id cBI/B/cCgmmYNgMAu9opvQ
+	(envelope-from <linux-usb+bounces-33043-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 15:15:19 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BA6ADA01D
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 14:40:33 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D6BADA72A
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 15:15:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 59D13303E5D8
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Feb 2026 13:38:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 42B1B308F5DA
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Feb 2026 14:14:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB08B39E6E9;
-	Tue,  3 Feb 2026 13:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF4393A6408;
+	Tue,  3 Feb 2026 14:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EJNKeuTo";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="HD13s9Yu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RQeSLRNV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455C239E6DF
-	for <linux-usb@vger.kernel.org>; Tue,  3 Feb 2026 13:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D4C39E6EF;
+	Tue,  3 Feb 2026 14:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770125932; cv=none; b=QWYsTPE392EjYGzuXqddVl4QU93df6Jio0E3CvJOoB78Hu5HpMunLllbOL8eKCoTOSrgEEp6flyUirpMl03tTS9WP7EB9RSLzEnq9zmP/jwmen2o2/j7ZYS+ocdI7pkeRGJQCgc2HhKc3XTVIx4kFInCD2l1BriXILv5Ok8rICM=
+	t=1770128047; cv=none; b=aWetZ5Qvqj5eZnCRV/ICPZCscGxF5ARB3GLR/IZ9OnObYkHCrVPjzuRarNOLLd42mdGjuxtswcs2VQpj/wqES7bkXRxD69OBuenQaLtEkoSo+fBFrAbKH0q2qplq29w4CtWBZ/Uv/3U4sYdBJWw3tHRs9KVOnvcOK6HSe93QenU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770125932; c=relaxed/simple;
-	bh=Qv73lmQbZYMBOKSAxEjZKP57u5k9Nfbua5LdqE6riMk=;
+	s=arc-20240116; t=1770128047; c=relaxed/simple;
+	bh=ChkTyTfsD+ScNh6I/AtsTfCR/K8111Ia2tOeHs92giY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q+swmrP+ODiliy9vD9sna9+gOOadDImdHdT52aykEpa4GxcERs/Tv5oMEQumxrBp7PI+jw6uUt7b9mZA+vUP8LpOwil7fY9+xUtMXwSo8BazEA60bEnc89vyrYqdiG7GQJB38KMz8/Ns90/6tJN2S6fYyo05d0qBBUavSqlXvwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EJNKeuTo; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=HD13s9Yu; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 613A49bZ932205
-	for <linux-usb@vger.kernel.org>; Tue, 3 Feb 2026 13:38:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	W4FHKF8VjqcskeLt/BUuyQFPe04b8Hnj0qqZ8C6JMpw=; b=EJNKeuToChSWWyad
-	uNiX0go4GD89t0Umxq/HHMW2LEfsQyCsJiuFfud9SQfdcJdufw3uj62sQ9ld15E8
-	G8NNcAJw+78qRPF++fQvZVYWHMHM/OpJjLgUpuCDr3EebixSOjm76sJdgw+X/cSC
-	X2q6Xfz+3vkb4D+nt9MVKYNMiZuioRCAjQsY4L2FQwGZdtuvvFtC4Jar/frKxx7/
-	Oi4VfZ+zDOaAik0rJnaCqSb4AslhFGxsgyx2RXbFQuCeex/4tH+5y+cxRbyya4Fa
-	DSFA2pCr5yFVk4PXiXIadGL9/sWm+MF9AgQ9V5zMsyIanOftqThoj/I4W35yU46D
-	35Wy3Q==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c38yu1s41-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 03 Feb 2026 13:38:32 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8c70c91c8b0so158566985a.2
-        for <linux-usb@vger.kernel.org>; Tue, 03 Feb 2026 05:38:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1770125912; x=1770730712; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W4FHKF8VjqcskeLt/BUuyQFPe04b8Hnj0qqZ8C6JMpw=;
-        b=HD13s9YuaUKRvPDPOHqQquHmMsErqDirInOOnk3gTUpy5b+QNknRirCctqCs7uVuGl
-         zWennju2YLtvxJVvqmJJ32WibG4qBL6ZQp3AAG1lNNWUJjoaQVzju9A2uqGmP8QtevqQ
-         usa6kV5HJDO9T8oVmbo4Eepzx+YLNRH8a9zIa4BXrPKAEWpx08jnirc58qj5LSYKcPwz
-         nGwhRtV+GM0SasRxTBVE3VWTUshakB24tbjNpV8o+irg4GCPMNkgR7IyD3jdQhG+uTDF
-         c8nj7IAUAn2V8MRdNsqzRMcxDoYxnu5rYhmthQ3Mz0nelhY7s2+61Ha9xI6sRlvP7xxM
-         3pbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770125912; x=1770730712;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W4FHKF8VjqcskeLt/BUuyQFPe04b8Hnj0qqZ8C6JMpw=;
-        b=WOUQO1/MV9zwunAxPbUkRwxu3NvHJUQmMhAeB7j3lZP7/3uSoa7eryYYBTENd7i8vs
-         D1Q3cbAAWul4QwwvJf0ny8pUMe8P6RjtPaR9/eisJXuA4uVXCdeT6/qAmv1IoA4I7JWj
-         /MwULirD7Ly6RjVdI99orsgt3AZtbpLdL5rOWW2a62hmVaMSaem1JU8CsaAFt2LusCWv
-         r9Zgy5XrdfM5fZVqgATfb8E+afs8i07n8P7x+wgXs5atAwdZY6Afxsdb4VTAETs2vtFp
-         W4NZFfW2JKnyr3igfDBpicMvcEmo72Jr3LfyKtFjxZ1JZq5hrmVX0q5AIIQBKsCKYtKj
-         O8cg==
-X-Forwarded-Encrypted: i=1; AJvYcCV4XPxjZWP6PD/zq4r/LpO8FlVdM7BOKS4Co9ac+/T3NgQ6dHgOrWa6JgAgKMt2qFSRVyTMzzI6+zg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5krROq/la1dBzAHRTzpwUkt3evzCrPInDcLSnZ4DiuyszeyQe
-	eR2Z2RtiBBr1mZSCWsug6hf7/QFncyIhtEAHOiB65J0STUgq/FlaZ+lxnxCYUy0aOKSZmvZiT2w
-	anOpotWxT4scd4haj617ynD2tjTF7r62Scl86BJCgIw+OzzOY5TeV+NErD+kg87o=
-X-Gm-Gg: AZuq6aJ+1ULPj0k3BPwRcujKXe1eIANgvMWZcR7DEeAfpaKKElFaJeWDlawSjqb7pfl
-	w4Od5mMErFD1YNcrJ9exO8HDo3D6uJB0SISPPeB0BzcKddQh1a0j0ESU4IGiFy+2B1pzvcqRGBL
-	siB4HoWlMi5b5kTu26JMbbK7sd5B/sAHsO0KiWqIvhItg+mFhG3cYSyM5UitORW1ZvDZ5k9mb8x
-	VZKamBoafmEh9cseT2vN6WeQDVcb9LC5F5sMgn1gUfKueUeT5/M6VrkSjsGx6O0f/WOaXjYwxe/
-	LruEEsZHy/R+Xo8azEkw/Btikm/a5yw0hOGN7uMUuviZH0KEX+4upGmZKu1tXocLbxtrvsphgqW
-	eWM5RXFewFFtOsh9iRtZXHIXl4wU6Zj1sTzBGfUuJQzjxzEr5JuqL3yiDHzV6JzPrxZA=
-X-Received: by 2002:a05:620a:4506:b0:8b9:fa81:5282 with SMTP id af79cd13be357-8c9eb27a8camr1419766085a.3.1770125911810;
-        Tue, 03 Feb 2026 05:38:31 -0800 (PST)
-X-Received: by 2002:a05:620a:4506:b0:8b9:fa81:5282 with SMTP id af79cd13be357-8c9eb27a8camr1419762685a.3.1770125911265;
-        Tue, 03 Feb 2026 05:38:31 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8de46abf6fsm827564266b.52.2026.02.03.05.38.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Feb 2026 05:38:30 -0800 (PST)
-Message-ID: <ee0fe165-1764-460f-ad6a-9633b06776b2@oss.qualcomm.com>
-Date: Tue, 3 Feb 2026 14:38:28 +0100
+	 In-Reply-To:Content-Type; b=nmNJ7kRaMdfJlnIgl0UagnV+xZg+Ie+zknhQUNnhnCc/Ug2jLiGffX5VCQBLRTioe2UJ9fyjatOjOsvbjmJ+hEN05LLCWTZp3kMlnHbUHE3c3Y3DqMfI2cmxQnog6dV132uxez8Qu045Yv7eUi5iAb7V9L081Pb2yhWiftDdN5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RQeSLRNV; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770128046; x=1801664046;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ChkTyTfsD+ScNh6I/AtsTfCR/K8111Ia2tOeHs92giY=;
+  b=RQeSLRNVrXBj03CPhCMZlXbJyjJoS9u33E4PJU1t2Wy7T1fidUJnQ0gX
+   VDrlE31J4lnPvlWYvRPI2pQoZWNBrng5rigukMMhDZtO2LDkXiewBHHOp
+   u7/qD1y/56zQCJXKh6dQ1qYPfc+a7CwruTPJ+1Ugvj5IECyEuymOLtdvx
+   r44Bl86oSIm91WM5xYvTu80HQ5/Liby1KUUHCC+SjMSbCzqlGaX8SWZdE
+   i89gXZrPhSz+jdiRDR2aq35EJ8gmb4VQNTESnhEt+LNyVMfh94o8Bov0F
+   jfXfkWusHBlNPjRR9n05aEDFu/wTb2Bs4gBbcZNNtdotExTWtg7R4qvwU
+   w==;
+X-CSE-ConnectionGUID: i/P3F8A/SPGPyGaQTTJpBg==
+X-CSE-MsgGUID: 5JQKvfBJQmuUe1ef9+oaHw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="82724742"
+X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
+   d="scan'208";a="82724742"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 06:14:06 -0800
+X-CSE-ConnectionGUID: BTV6ynkiSb2wZkbGjJ+KfA==
+X-CSE-MsgGUID: tC6EnTifSSGWaVf+0v289g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
+   d="scan'208";a="209651425"
+Received: from ncintean-mobl1.ger.corp.intel.com (HELO [10.245.245.85]) ([10.245.245.85])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 06:14:03 -0800
+Message-ID: <6acaaae2-4e93-46f5-8170-277bc369f922@linux.intel.com>
+Date: Tue, 3 Feb 2026 16:14:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -106,131 +70,147 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 9/9] arm64: dts: qcom: qcs6490-rb3gen2: Enable EUD
- debug functionality
-To: Elson Serrao <elson.serrao@oss.qualcomm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260126233830.2193816-1-elson.serrao@oss.qualcomm.com>
- <20260126233830.2193816-10-elson.serrao@oss.qualcomm.com>
+Subject: Re: [RFC PATCH] usb: host: xhci-sideband: fix deadlock in unregister
+ path
+To: Guan-Yu Lin <guanyulin@google.com>, Greg KH <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, stern@rowland.harvard.edu,
+ wesley.cheng@oss.qualcomm.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260130074746.287750-1-guanyulin@google.com>
+ <2026013133-tamale-massager-3c76@gregkh>
+ <CAOuDEK0o2jqqOUZVUdi9JDcyXRQHEuL9GCBrU0VQhWAfDtJnUg@mail.gmail.com>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260126233830.2193816-10-elson.serrao@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAzMDEwOSBTYWx0ZWRfX8O3mF1thKfHh
- wE3chuhtde61ZJP6YF3g1aNQiTLdr/a8fJ4J+b322rFgTck22mjuu2i3UK827/PB/vSNvcpjQbH
- 0tHfm3Z2+F/L8iV56ODG/Tsr04GXzlncDL3BL0GtLkykJdoYcA4romSjNedetGPaUpLGxgm+KsR
- kDVhBxk/O6zQcqjO0JDaWjj+yk/frdMc8RFanWPQU+ICeqrj6yLSCOGADdwvmbeRbYqvbYJtevd
- yKiG+PxBiBCMeYowd7CuxxAGWkbrbYXtpWxmXkAGyuXW9I4FYmCj5+qbgKnZelsBaNVTJQLWtav
- KpbZBD8Llu9EgHUHX1V7GrOk5wU+WsMSBsXUfHvD5A3vmjgehdpPkiuA5p5oIzwxUUB1X0GS3Kv
- bpxZn8tiam2+IlFOgzcwXu6oBQbogsHwA31Mb/B25+97PdqgM/vDkrGHMQew2KzyechjcPLcXqW
- YpqsTTQVoK0XPh8J9aQ==
-X-Proofpoint-ORIG-GUID: XY69f2JT4Ja94Qu86puUnba-ZheOys3i
-X-Proofpoint-GUID: XY69f2JT4Ja94Qu86puUnba-ZheOys3i
-X-Authority-Analysis: v=2.4 cv=UKTQ3Sfy c=1 sm=1 tr=0 ts=6981fa58 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=yEEpPANMKW__IVoBb5EA:9
- a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-03_04,2026-02-02_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 suspectscore=0 impostorscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 phishscore=0 clxscore=1015 bulkscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602030109
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <CAOuDEK0o2jqqOUZVUdi9JDcyXRQHEuL9GCBrU0VQhWAfDtJnUg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33042-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,0.0.0.0:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33043-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TAGGED_RCPT(0.00)[linux-usb];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 5BA6ADA01D
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,linuxfoundation.org:email,intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8D6BADA72A
 X-Rspamd-Action: no action
 
-On 1/27/26 12:38 AM, Elson Serrao wrote:
-> On this board, EUD resides on the primary High-Speed USB data path between
-> the connector and the DWC3 controller. Update the device tree connections
-> to correctly map the connector and controller endpoints, and describe
-> role-switch capability on the EUD primary path.
+On 2/2/26 12:03, Guan-Yu Lin wrote:
+> On Sat, Jan 31, 2026 at 8:15 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>>
+>> On Fri, Jan 30, 2026 at 07:47:46AM +0000, Guan-Yu Lin wrote:
+>>> When a USB device is disconnected or a driver is unbound, the USB core
+>>> invokes the driver's disconnect callback while holding the udev device
+>>> lock. If the driver calls xhci_sideband_unregister(), it eventually
+>>> reaches usb_offload_put(), which attempts to acquire the same udev
+>>> lock, resulting in a self-deadlock.
+>>>
+>>> Introduce lockless variants __usb_offload_get() and __usb_offload_put()
+>>> to allow modifying the offload usage count when the device lock is
+>>> already held. These helpers use device_lock_assert() to ensure callers
+>>> meet the locking requirements.
+>>
+>> Ugh.  Didn't I warn about this when the original functions were added?
+>>
+>> Adding functions with __ is a mess, please make these names, if you
+>> _REALLY_ need them, obvious that this is a no lock function.
+>>
+>> And now that you added the lockless functions, are there any in-kernel
+>> users of the locked versions?  At a quick glance I didn't see them, did
+>> I miss it somewhere?
+>>
+>> thanks,
+>>
+>> greg k-h
 > 
-> Signed-off-by: Elson Serrao <elson.serrao@oss.qualcomm.com>
-> ---
->  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 20 ++++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
+> Hi Greg,
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> index f29a352b0288..2fc2d0aed8dd 100644
-> --- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> +++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-> @@ -194,7 +194,7 @@ port@0 {
->  					reg = <0>;
->  
->  					pmic_glink_hs_in: endpoint {
-> -						remote-endpoint = <&usb_1_dwc3_hs>;
-> +						remote-endpoint = <&eud_con0>;
->  					};
->  				};
->  
-> @@ -1176,13 +1176,29 @@ &usb_1 {
->  };
->  
->  &usb_1_dwc3_hs {
-> -	remote-endpoint = <&pmic_glink_hs_in>;
-> +	remote-endpoint = <&eud_usb0>;
->  };
->  
->  &usb_1_dwc3_ss {
->  	remote-endpoint = <&usb_dp_qmpphy_usb_ss_in>;
+> You are right; xhci-sideband.c is the only in-kernel user of the
+> locked versions. I will rename the __ functions to usb_offload_* and
+> remove the locked variants in the next version to clean up the API.
+> 
+> Regarding the deadlock fix itself, we have analyzed two potential
+> solutions. The core issue is that xhci_sideband_unregister() (and
+> xhci_sideband_remove_interrupter()) needs to decrement the offload
+> usage count (which requires the USB device lock), but it is called
+> from the disconnect path where that lock is already held.
+> 
+> Option A: Fix the Callers of xhci_sideband functions
+> In this approach, we keep the usb_offload calls inside the
+> xhci_sideband functions but replace the internal usb_lock_device()
+> with device_lock_assert(). We then update callers in
+> qc_audio_offload.c to explicitly acquire the lock.
+> This ensures the offload count remains tightly coupled with the
+> interrupter's lifecycle, though it effectively changes the API
+> contract: calling xHCI sideband functions now requires holding the USB
+> device lock.
+> 
+> Option B: Decouple usb_offload functions from xhci_sideband functions
+> In this approach, we strip the usb_offload calls out of xhci_sideband
+> functions entirely. The client driver (qc_audio_offload) becomes
+> responsible for the full transaction: acquiring the lock, managing
+> usb_offload_get/put(), and creating/removing the interrupter. This
+> restores clean encapsulation (xHCI functions only handle hardware),
+> but it places the burden on the client driver to correctly balance the
+> usb_offload calls.
+> 
+> I lean towards Option A to ensure the offload count implies an active
+> interrupter by design, but please let me know if you prefer the
+> cleaner separation of Option B.
 
-The on-SoC links can be deferred to the common DTSI
+I would prefer option B
+Decouple the offload from sideband.
 
+The secondary interrupter in sideband was specifically createad for
+qc_audio_offload.
 
->  };
->  
-> +&eud_con0 {
-> +	remote-endpoint = <&pmic_glink_hs_in>;
-> +};
-> +
-> +&eud_usb0 {
-> +	remote-endpoint = <&usb_1_dwc3_hs>;
-> +};
-> +
-> +&eud {
-> +	status = "okay";
+Vendors using the xHCI hardware Audio sideband Capability (xHCI 7.9)
+won't use a secondary interrupter, but might sill want to prevent suspending
+the device. So it shuold be better to make this decision in the class driver.
 
-And I think it should be okay to keep it enabled by default
+The offload count shoudn't be that complicated. Isn't it binary at the moment?
+We don't allow more than one sideband per device, and it can only have one
+interrupter.
 
-Konrad
+I unfortunately couldn't participate in the review and development of
+drivers/usb/core/offload.c, but my original idea before it was implemented
+was to keep usb core out of sideband as much as possible as its not really
+a part of usb specification.
+
+This is also why I added the sideband pointer to struct xhci_virt_device.
+It allows us to figure out if a device is dedicated for sideband use.
+
+so xhci_sideband_check() could be something like
+
+bool xhci_sideband_check(struct xhci_hcd *xhci)
+{
+	guard(spinlock_irqsave)(&xhci->lock);
+
+	for (int i = 1; i < HC_MAX_SLOTS; i++) {
+	if (xhci->devs[i] && xhci->devs[i]->sideband)
+		return true;
+	}
+	return false;
+}
+
+Thanks
+Mathias
 
