@@ -1,216 +1,180 @@
-Return-Path: <linux-usb+bounces-33043-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33044-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cBI/B/cCgmmYNgMAu9opvQ
-	(envelope-from <linux-usb+bounces-33043-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 15:15:19 +0100
+	id AEmQIag5gmmVQgMAu9opvQ
+	(envelope-from <linux-usb+bounces-33044-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 19:08:40 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D6BADA72A
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 15:15:18 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46E95DD56F
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 19:08:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 42B1B308F5DA
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Feb 2026 14:14:12 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DD60030498D3
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Feb 2026 18:08:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF4393A6408;
-	Tue,  3 Feb 2026 14:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B350836655E;
+	Tue,  3 Feb 2026 18:08:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RQeSLRNV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U77tsGEo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D4C39E6EF;
-	Tue,  3 Feb 2026 14:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C75327FD6D;
+	Tue,  3 Feb 2026 18:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770128047; cv=none; b=aWetZ5Qvqj5eZnCRV/ICPZCscGxF5ARB3GLR/IZ9OnObYkHCrVPjzuRarNOLLd42mdGjuxtswcs2VQpj/wqES7bkXRxD69OBuenQaLtEkoSo+fBFrAbKH0q2qplq29w4CtWBZ/Uv/3U4sYdBJWw3tHRs9KVOnvcOK6HSe93QenU=
+	t=1770142114; cv=none; b=szzPb3FO1SZvXAi/DU1RHqD1y6pBBJTqZo6HY19Vcx80APVVVJelUYAhpfNN2Li+uJocHtW3Nljeu6B4KlWi8u7E5Sp8KZZYWLJelGxRX/ymNsUlmNQw6YOryQUVspPpSy/CZVQcFW4VtwR3hqR3jTp4OWqTPa1BIoZyELrPUoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770128047; c=relaxed/simple;
-	bh=ChkTyTfsD+ScNh6I/AtsTfCR/K8111Ia2tOeHs92giY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nmNJ7kRaMdfJlnIgl0UagnV+xZg+Ie+zknhQUNnhnCc/Ug2jLiGffX5VCQBLRTioe2UJ9fyjatOjOsvbjmJ+hEN05LLCWTZp3kMlnHbUHE3c3Y3DqMfI2cmxQnog6dV132uxez8Qu045Yv7eUi5iAb7V9L081Pb2yhWiftDdN5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RQeSLRNV; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770128046; x=1801664046;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ChkTyTfsD+ScNh6I/AtsTfCR/K8111Ia2tOeHs92giY=;
-  b=RQeSLRNVrXBj03CPhCMZlXbJyjJoS9u33E4PJU1t2Wy7T1fidUJnQ0gX
-   VDrlE31J4lnPvlWYvRPI2pQoZWNBrng5rigukMMhDZtO2LDkXiewBHHOp
-   u7/qD1y/56zQCJXKh6dQ1qYPfc+a7CwruTPJ+1Ugvj5IECyEuymOLtdvx
-   r44Bl86oSIm91WM5xYvTu80HQ5/Liby1KUUHCC+SjMSbCzqlGaX8SWZdE
-   i89gXZrPhSz+jdiRDR2aq35EJ8gmb4VQNTESnhEt+LNyVMfh94o8Bov0F
-   jfXfkWusHBlNPjRR9n05aEDFu/wTb2Bs4gBbcZNNtdotExTWtg7R4qvwU
-   w==;
-X-CSE-ConnectionGUID: i/P3F8A/SPGPyGaQTTJpBg==
-X-CSE-MsgGUID: 5JQKvfBJQmuUe1ef9+oaHw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="82724742"
-X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="82724742"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 06:14:06 -0800
-X-CSE-ConnectionGUID: BTV6ynkiSb2wZkbGjJ+KfA==
-X-CSE-MsgGUID: tC6EnTifSSGWaVf+0v289g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="209651425"
-Received: from ncintean-mobl1.ger.corp.intel.com (HELO [10.245.245.85]) ([10.245.245.85])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 06:14:03 -0800
-Message-ID: <6acaaae2-4e93-46f5-8170-277bc369f922@linux.intel.com>
-Date: Tue, 3 Feb 2026 16:14:00 +0200
+	s=arc-20240116; t=1770142114; c=relaxed/simple;
+	bh=0LJ3ad+aUYP4TBmiQsQWSAjbrdSr9GVEvOVf9dah7X8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jr+TlJcD2x9xpnF2Li326Ow/gYf50gkiC9DUpBLzpSPSAk5KZluk3197DiKSCr/w/Rliwr9C+aigAOc+nPg9sf0QdQl70nUq6nvp92nHoGSb9DIGmFSFfKAbAQyWhAceHYLKmOdH5owkTJK2UFIFKvt8jad+yqTQqGozlckkXhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U77tsGEo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A18DDC116D0;
+	Tue,  3 Feb 2026 18:08:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770142113;
+	bh=0LJ3ad+aUYP4TBmiQsQWSAjbrdSr9GVEvOVf9dah7X8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U77tsGEo6UdMz0EMWdCnPFmrW5af75bt1JRDMYp/NVztkU1/XVmwaJ7KylnzZwc7D
+	 GZhgqRiztsmLhMH5sG0kgZ0CoRnoCCKEvpmlPSMY8N7ZasyWL5eh7pi2wMRmLLSmmP
+	 SWSa5jkjcp/zKrIiHzUkiaXEHHMh90bYlZ5n6GZHE9xKRG1+TJ1qi7WKku0CoYl+yC
+	 HljPPPt0Q3fxrSCjUnhy/MSJ4Urrs5pd9u6U98fp3aEZU36bTEWrqd9PFTo78Vcdwj
+	 oHZr1m3U0qP1XqnYK1IL5wN+VX5FUFjCrIUURLOhkusnqD4mYZY+rVsdFd3s/9GoCq
+	 9f8b8o9Hi1sOw==
+Date: Tue, 3 Feb 2026 12:08:32 -0600
+From: Rob Herring <robh@kernel.org>
+To: Charan Pedumuru <charan.pedumuru@gmail.com>
+Cc: devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Herve Codina <herve.codina@bootlin.com>, linux-usb@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH 2/4] dt-bindings: usb: atmel,at91sam9g45-ehci: convert to
+ DT schema
+Message-ID: <20260203180832.GA3217395-robh@kernel.org>
+References: <20260201-atmel-usb-v1-0-d1a3e93003f1@gmail.com>
+ <20260201-atmel-usb-v1-2-d1a3e93003f1@gmail.com>
+ <176994942956.410099.10343293169382130437.robh@kernel.org>
+ <c7468b03-9acf-41e9-a441-96ed5d891e96@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] usb: host: xhci-sideband: fix deadlock in unregister
- path
-To: Guan-Yu Lin <guanyulin@google.com>, Greg KH <gregkh@linuxfoundation.org>
-Cc: mathias.nyman@intel.com, stern@rowland.harvard.edu,
- wesley.cheng@oss.qualcomm.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260130074746.287750-1-guanyulin@google.com>
- <2026013133-tamale-massager-3c76@gregkh>
- <CAOuDEK0o2jqqOUZVUdi9JDcyXRQHEuL9GCBrU0VQhWAfDtJnUg@mail.gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <CAOuDEK0o2jqqOUZVUdi9JDcyXRQHEuL9GCBrU0VQhWAfDtJnUg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7468b03-9acf-41e9-a441-96ed5d891e96@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33043-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33044-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathias.nyman@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_PROHIBIT(0.00)[0.7.161.32:email];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,linuxfoundation.org:email,intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8D6BADA72A
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,devicetree.org:url]
+X-Rspamd-Queue-Id: 46E95DD56F
 X-Rspamd-Action: no action
 
-On 2/2/26 12:03, Guan-Yu Lin wrote:
-> On Sat, Jan 31, 2026 at 8:15 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->>
->> On Fri, Jan 30, 2026 at 07:47:46AM +0000, Guan-Yu Lin wrote:
->>> When a USB device is disconnected or a driver is unbound, the USB core
->>> invokes the driver's disconnect callback while holding the udev device
->>> lock. If the driver calls xhci_sideband_unregister(), it eventually
->>> reaches usb_offload_put(), which attempts to acquire the same udev
->>> lock, resulting in a self-deadlock.
->>>
->>> Introduce lockless variants __usb_offload_get() and __usb_offload_put()
->>> to allow modifying the offload usage count when the device lock is
->>> already held. These helpers use device_lock_assert() to ensure callers
->>> meet the locking requirements.
->>
->> Ugh.  Didn't I warn about this when the original functions were added?
->>
->> Adding functions with __ is a mess, please make these names, if you
->> _REALLY_ need them, obvious that this is a no lock function.
->>
->> And now that you added the lockless functions, are there any in-kernel
->> users of the locked versions?  At a quick glance I didn't see them, did
->> I miss it somewhere?
->>
->> thanks,
->>
->> greg k-h
+On Mon, Feb 02, 2026 at 04:32:54PM +0530, Charan Pedumuru wrote:
 > 
-> Hi Greg,
 > 
-> You are right; xhci-sideband.c is the only in-kernel user of the
-> locked versions. I will rename the __ functions to usb_offload_* and
-> remove the locked variants in the next version to clean up the API.
+> On 01-02-2026 18:07, Rob Herring (Arm) wrote:
+> > 
+> > On Sun, 01 Feb 2026 11:34:21 +0000, Charan Pedumuru wrote:
+> >> Convert Atmel AT91SAM9G45 EHCI USB Host Controller
+> >> binding to DT schema.
+> >> Changes during conversion:
+> >> - Include "usb-ehci" as a fallback compatible to allow atmel EHCI
+> >>   driver matching.
+> >>
+> >> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
+> >> ---
+> >>  .../bindings/usb/atmel,at91sam9g45-ehci.yaml       | 71 ++++++++++++++++++++++
+> >>  1 file changed, 71 insertions(+)
+> >>
+> > 
+> > My bot found errors running 'make dt_binding_check' on your patch:
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > Warning: Duplicate compatible "usb-ehci" found in schemas matching "$id":
+> > 	http://devicetree.org/schemas/usb/atmel,at91sam9g45-ehci.yaml
+> > 	http://devicetree.org/schemas/usb/generic-ehci.yaml#
+> > Warning: Duplicate compatible "atmel,at91sam9g45-ehci" found in schemas matching "$id":
+> > 	http://devicetree.org/schemas/usb/atmel,at91sam9g45-ehci.yaml
+> > 	http://devicetree.org/schemas/usb/generic-ehci.yaml#
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/atmel,at91sam9g45-ehci.example.dtb: usb@500000 (atmel,at91sam9g45-ehci): Unevaluated properties are not allowed ('clock-names' was unexpected)
+> > 	from schema $id: http://devicetree.org/schemas/usb/generic-ehci.yaml
 > 
-> Regarding the deadlock fix itself, we have analyzed two potential
-> solutions. The core issue is that xhci_sideband_unregister() (and
-> xhci_sideband_remove_interrupter()) needs to decrement the offload
-> usage count (which requires the USB device lock), but it is called
-> from the disconnect path where that lock is already held.
+> Hi Rob,
+> Isn't it pointing to the other schema ID which was not defined by me? 
+
+You can't have the same compatible defined in 2 places.
+
+> Can I have your suggestion on changing the compatible name to other 
+> name to resolve this error? 
+
+Why are you converting this? It's already covered by generic-ehci.yaml. 
+Though I seem to recall there were some warnings for Atmel.
+
+> I ran dt_check in my machine on the 
+> latest version and I don't see any error there.
+
+Please read the last paragraph below for why.
+
 > 
-> Option A: Fix the Callers of xhci_sideband functions
-> In this approach, we keep the usb_offload calls inside the
-> xhci_sideband functions but replace the internal usb_lock_device()
-> with device_lock_assert(). We then update callers in
-> qc_audio_offload.c to explicitly acquire the lock.
-> This ensures the offload count remains tightly coupled with the
-> interrupter's lifecycle, though it effectively changes the API
-> contract: calling xHCI sideband functions now requires holding the USB
-> device lock.
-> 
-> Option B: Decouple usb_offload functions from xhci_sideband functions
-> In this approach, we strip the usb_offload calls out of xhci_sideband
-> functions entirely. The client driver (qc_audio_offload) becomes
-> responsible for the full transaction: acquiring the lock, managing
-> usb_offload_get/put(), and creating/removing the interrupter. This
-> restores clean encapsulation (xHCI functions only handle hardware),
-> but it places the burden on the client driver to correctly balance the
-> usb_offload calls.
-> 
-> I lean towards Option A to ensure the offload count implies an active
-> interrupter by design, but please let me know if you prefer the
-> cleaner separation of Option B.
+> > 
+> > doc reference errors (make refcheckdocs):
+> > 
+> > See https://patchwork.kernel.org/project/devicetree/patch/20260201-atmel-usb-v1-2-d1a3e93003f1@gmail.com
+> > 
+> > The base for the series is generally the latest rc1. A different dependency
+> > should be noted in *this* patch.
+> > 
+> > If you already ran 'make dt_binding_check' and didn't see the above
+> > error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> > date:
+> > 
+> > pip3 install dtschema --upgrade
+> > 
+> > Please check and re-submit after running the above command yourself. Note
+> > that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> > your schema. However, it must be unset to test all examples with your schema.
 
-I would prefer option B
-Decouple the offload from sideband.
+^^^^^^^
 
-The secondary interrupter in sideband was specifically createad for
-qc_audio_offload.
-
-Vendors using the xHCI hardware Audio sideband Capability (xHCI 7.9)
-won't use a secondary interrupter, but might sill want to prevent suspending
-the device. So it shuold be better to make this decision in the class driver.
-
-The offload count shoudn't be that complicated. Isn't it binary at the moment?
-We don't allow more than one sideband per device, and it can only have one
-interrupter.
-
-I unfortunately couldn't participate in the review and development of
-drivers/usb/core/offload.c, but my original idea before it was implemented
-was to keep usb core out of sideband as much as possible as its not really
-a part of usb specification.
-
-This is also why I added the sideband pointer to struct xhci_virt_device.
-It allows us to figure out if a device is dedicated for sideband use.
-
-so xhci_sideband_check() could be something like
-
-bool xhci_sideband_check(struct xhci_hcd *xhci)
-{
-	guard(spinlock_irqsave)(&xhci->lock);
-
-	for (int i = 1; i < HC_MAX_SLOTS; i++) {
-	if (xhci->devs[i] && xhci->devs[i]->sideband)
-		return true;
-	}
-	return false;
-}
-
-Thanks
-Mathias
+Rob
 
