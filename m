@@ -1,64 +1,86 @@
-Return-Path: <linux-usb+bounces-33031-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33032-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uBOpMASqgWn0IQMAu9opvQ
-	(envelope-from <linux-usb+bounces-33031-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 08:55:48 +0100
+	id OBEpGqSxgWloIwMAu9opvQ
+	(envelope-from <linux-usb+bounces-33032-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 09:28:20 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FE98D5E32
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 08:55:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2F2DD63A7
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 09:28:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CCC8730514AE
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Feb 2026 07:55:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 245D6308CF0E
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Feb 2026 08:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B46392C45;
-	Tue,  3 Feb 2026 07:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96199396B62;
+	Tue,  3 Feb 2026 08:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZgrHo8ef"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IAtQR/Jo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8762F5328;
-	Tue,  3 Feb 2026 07:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4A339524F;
+	Tue,  3 Feb 2026 08:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770105338; cv=none; b=MUmDJDB1Vf5egHmFFFuFW1viWh0/WyOZ14pPcrK7wzeHp6y1Cnh1W8lhMnpEqPIBpQE0kjj7cT2O0prdTScGlyM70NHOWlkEDTr+ybhjbHjnCOlZeIdVZebyOCESLnEZT7RmFUMeEsvQcT07nfEbgiKQJS/dJOcZ7JRWIGZywds=
+	t=1770107133; cv=none; b=qOfKKNyfC9fBKaAxoLTtShIkVCV6oMbC/Q7Wm31K1cqkMpp9pkkYpmP8tvGZPqpXoS2h6GorMhVpMTb5XihtqrV4pDdcWIgtlCUz2hQK76kk1gbk/OYvDn4VBfJXi7n4Zh0dL0sFiDHZmG0fhu5klrUKrb9xxsypAZYflTaQB1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770105338; c=relaxed/simple;
-	bh=4Vq5HT9GMbuZxPxsT9MI3F5lUAEFdnnd3SV89HgtbiU=;
+	s=arc-20240116; t=1770107133; c=relaxed/simple;
+	bh=Z301POJ0aDWyYxAcdWEO8C7RNgn2ukfXuTND5yFSzzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HDPNRM+N2DNlVJ6Ec+/Y8iGHHiz5odQ6CLW86RxZ/oPUY83rRjvCOigfCVzhQQMwCS+EBpn2iCR9ymUCS6P8IgzfxvdQHj1fhA2m6MTixpZZWGgENXQPZWlLyVjYvFx+IRnkwNcG1gwfXpF4Q09q+JWSnw9iDaJt3k/FN/RJtuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZgrHo8ef; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8E94C116D0;
-	Tue,  3 Feb 2026 07:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770105338;
-	bh=4Vq5HT9GMbuZxPxsT9MI3F5lUAEFdnnd3SV89HgtbiU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZgrHo8efwWhKG72A/lo1uIpJEsxbnmB/+X4lxJ1ROODvZ7p/Um6aznZHdBfWooFEj
-	 vLjRO79jepU/n+6Ls4isDYUW1zpcPed4CEUeDDk6iIz9gUlw3UmT/pMPQC9gXYAzjL
-	 KsDavt5Wjby1NsZgD9GTkXSJbNj56etLNZj1l8ewMWXcDImInn0lLkbvhkL4dxlHH5
-	 5/H3446d2K1NERiVeR5hAveV1iUVLKRUeWQ3Sbsg/ve++lnksJ3NLQb/yU8E3gEfu3
-	 OfbRhveeTSAzsy8G4kE18sWYTT9oVndeNLptmGzbk7IGqKWuwbzx2HS4IkkLgruy8W
-	 ZriSncHdyX6ww==
-Date: Tue, 3 Feb 2026 15:55:33 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: "Thomas Richard (TI)" <thomas.richard@bootlin.com>
-Cc: Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=jp5baP9MOsbqA9Urpl6AzF4RqIthlq5mlBb9A1RWdfoIyja6wJTDVNoU4HHHzColB43OKL28yWbI5TKUI6QXM0s1UMkbGdh84wdRbBmCv4lFCtAH1obDzjR92hRXyIRkrfl74jRRexHoyCUrdSlUswOc+MXzWKYO+voU6XYR13w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IAtQR/Jo; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770107131; x=1801643131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z301POJ0aDWyYxAcdWEO8C7RNgn2ukfXuTND5yFSzzc=;
+  b=IAtQR/JoEVkkm5lD8uailR+hiBSZu4bDZ6+CApD2WL42rTYzofXex4Hv
+   mbb0s2RIaazzOXze2l8hmviZmmRGvKsdVOPqacYDkrc0n0LCXbObLPpqO
+   5qbexYzVsMqeY7MLqKXt8J3ffNyW3eAY/XU9urXpOXKHG01kMw3z4EeCg
+   hpqM5z8QTavmL6Y/ivXx9mtjnhhNxqjKuUpCn5hNIcyuBo/POrnJF9s5i
+   U51296ogiLCtrNvURYqkW8ddjp/VTlyZxPTEsZLVKpQwU5ASESIgEYH8j
+   pUuLxy2+Stdy/XOB8J9q4stPyBYLtflS+Dm23DwrCPS6ZlP07NBMeapOY
+   g==;
+X-CSE-ConnectionGUID: +V2dTEXGT2imruaTuA1y2g==
+X-CSE-MsgGUID: elyfYY2sT0qFHYDBKF4Q4w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="70996068"
+X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
+   d="scan'208";a="70996068"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 00:25:29 -0800
+X-CSE-ConnectionGUID: Q5mRRxLoS1OBYIB6UIsSlg==
+X-CSE-MsgGUID: GbkgH2OoRiuD3NyjhXP1aQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
+   d="scan'208";a="214262646"
+Received: from smoticic-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.13])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 00:25:26 -0800
+Date: Tue, 3 Feb 2026 10:25:23 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Andrew Lunn <andrew@lunn.ch>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Peter Korsgaard <peter@korsgaard.com>,
+	Steve Glendinning <steve.glendinning@shawell.net>,
+	Oliver Neukum <oneukum@suse.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	theo.lebrun@bootlin.com, Frank Li <frank.li@nxp.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	richard.genoud@bootlin.com, Udit Kumar <u-kumar1@ti.com>,
-	Prasanth Mantena <p-mantena@ti.com>, Abhash Kumar <a-kumar2@ti.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Chen <peter.chen@nxp.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: cdns3: fix role switching during resume
-Message-ID: <20260203075533.GA326240@nchen-desktop>
-References: <20260130-usb-cdns3-fix-role-switching-during-resume-v1-1-44c456852b52@bootlin.com>
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Max Schulze <max.schulze@online.de>,
+	Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Subject: Re: [PATCH net-next v4] net: usb: introduce usbnet_mii_ioctl helper
+ function
+Message-ID: <aYGw80IvE0TG7WOx@smile.fi.intel.com>
+References: <20260203013517.26170-1-enelsonmoore@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,127 +89,65 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260130-usb-cdns3-fix-role-switching-during-resume-v1-1-44c456852b52@bootlin.com>
+In-Reply-To: <20260203013517.26170-1-enelsonmoore@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33032-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33031-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[16];
+	HAS_ORG_HEADER(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:email]
-X-Rspamd-Queue-Id: 6FE98D5E32
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,intel.com:dkim]
+X-Rspamd-Queue-Id: D2F2DD63A7
 X-Rspamd-Action: no action
 
-On 26-01-30 11:05:45, Thomas Richard (TI) wrote:
-> If the role change while we are suspended, the cdns3 driver switches to the
-> new mode during resume. However, switching to host mode in this context
-> causes a NULL pointer dereference.
-> 
-> The host role's start() operation registers a xhci-hcd device, but its
-> probe is deferred while we are in the resume path. The host role's resume()
-> operation assumes the xhci-hcd device is already probed, which is not the
-> case, leading to the dereference. Since the start() operation of the new
-> role is already called, the resume operation can be skipped.
-> 
-> So skip the resume operation for the new role if a role switch occurs
-> during resume. Once the resume sequence is complete, the xhci-hcd device
-> can be probed in case of host mode.
-> 
-> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000208
-> Mem abort info:
-> ...
-> Data abort info:
-> ...
-> [0000000000000208] pgd=0000000000000000, p4d=0000000000000000
-> Internal error: Oops: 0000000096000004 [#1]  SMP
-> Modules linked in:
-> CPU: 0 UID: 0 PID: 146 Comm: sh Not tainted
-> 6.19.0-rc7-00013-g6e64f4aabfae-dirty #135 PREEMPT
-> Hardware name: Texas Instruments J7200 EVM (DT)
-> pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : usb_hcd_is_primary_hcd+0x0/0x1c
-> lr : cdns_host_resume+0x24/0x5c
-> ...
-> Call trace:
->  usb_hcd_is_primary_hcd+0x0/0x1c (P)
->  cdns_resume+0x6c/0xbc
->  cdns3_controller_resume.isra.0+0xe8/0x17c
->  cdns3_plat_resume+0x18/0x24
->  platform_pm_resume+0x2c/0x68
->  dpm_run_callback+0x90/0x248
->  device_resume+0x100/0x24c
->  dpm_resume+0x190/0x2ec
->  dpm_resume_end+0x18/0x34
->  suspend_devices_and_enter+0x2b0/0xa44
->  pm_suspend+0x16c/0x5fc
->  state_store+0x80/0xec
->  kobj_attr_store+0x18/0x2c
->  sysfs_kf_write+0x7c/0x94
->  kernfs_fop_write_iter+0x130/0x1dc
->  vfs_write+0x240/0x370
->  ksys_write+0x70/0x108
->  __arm64_sys_write+0x1c/0x28
->  invoke_syscall+0x48/0x10c
->  el0_svc_common.constprop.0+0x40/0xe0
->  do_el0_svc+0x1c/0x28
->  el0_svc+0x34/0x108
->  el0t_64_sync_handler+0xa0/0xe4
->  el0t_64_sync+0x198/0x19c
-> Code: 52800003 f9407ca5 d63f00a0 17ffffe4 (f9410401)
-> ---[ end trace 0000000000000000 ]---
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 2cf2581cd229 ("usb: cdns3: add power lost support for system resume")
-> Signed-off-by: Thomas Richard (TI) <thomas.richard@bootlin.com>
+On Mon, Feb 02, 2026 at 05:34:55PM -0800, Ethan Nelson-Moore wrote:
+> Many USB network drivers use identical code to pass ioctl
+> requests on to the MII layer. Reduce code duplication by
+> refactoring this code into a helper function.
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Peter
-> ---
-> This patch is related to the following discussion:
-> https://lore.kernel.org/all/8743fec1-301d-46e1-89bf-7952c73faa86@bootlin.com/
-> ---
->  drivers/usb/cdns3/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index 1243a5cea91b..f0e32227c0b7 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -551,7 +551,7 @@ int cdns_resume(struct cdns *cdns)
->  		}
->  	}
->  
-> -	if (cdns->roles[cdns->role]->resume)
-> +	if (!role_changed && cdns->roles[cdns->role]->resume)
->  		cdns->roles[cdns->role]->resume(cdns, power_lost);
->  
->  	return 0;
-> 
+...
+
+>  extern void usbnet_set_msglevel(struct net_device *, u32);
+>  extern void usbnet_set_rx_mode(struct net_device *net);
+>  extern void usbnet_get_drvinfo(struct net_device *, struct ethtool_drvinfo *);
+> +extern int usbnet_mii_ioctl(struct net_device *net, struct ifreq *rq, int cmd);
+
+Do we still need to populate 'extern'? Can we get rid of this redundancy?
+
+>  extern int usbnet_nway_reset(struct net_device *net);
+
+>  extern int usbnet_manage_power(struct usbnet *, int);
 
 -- 
+With Best Regards,
+Andy Shevchenko
 
-Best regards,
-Peter
+
 
