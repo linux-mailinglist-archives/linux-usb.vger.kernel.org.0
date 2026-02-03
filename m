@@ -1,176 +1,223 @@
-Return-Path: <linux-usb+bounces-33046-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33048-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SCkoJfFzgmnBUgMAu9opvQ
-	(envelope-from <linux-usb+bounces-33046-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 23:17:21 +0100
+	id uKU+IgR8gmnAVQMAu9opvQ
+	(envelope-from <linux-usb+bounces-33048-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 23:51:48 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B94F2DF293
-	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 23:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD0F0DF630
+	for <lists+linux-usb@lfdr.de>; Tue, 03 Feb 2026 23:51:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8B1B8300C7DE
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Feb 2026 22:17:08 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 45991300BE1A
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Feb 2026 22:51:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB72F36F406;
-	Tue,  3 Feb 2026 22:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF60378831;
+	Tue,  3 Feb 2026 22:51:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AX3j4OtX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o+kVPJgJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1F536214A
-	for <linux-usb@vger.kernel.org>; Tue,  3 Feb 2026 22:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D77C2E06D2;
+	Tue,  3 Feb 2026 22:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770157022; cv=none; b=WFPnhVTc9rxznIt7RsQI9V9GGVPj3ruLn47aDFLH6w8L7SVQX7Q+6BWAuDpl7QO+JeOf7xWGJRBu/mWlZWn9bqxzjXzap2qZk0k+2Bp8gYGTLed8vGctxx8KweA0LmCmY3ekBojmCb7VT6L8MtRy29XM0axJ7oi2cmspt/P3iw8=
+	t=1770159076; cv=none; b=jFJq7yFUX3JHCJk505rRaLNSabq385cyLSuvWqr3QJzUQQ0Fv3gVH+vTEWUlxVbHSdyTfMgT/uLykcSGjT+K6MonlsKcE5/xkejnyxJzWwUUz++QPYb82HTcEBleiuOSIHnE8gp5i1/hGE0gy5eyI/1pqp/AlH/4TCTBM7k05ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770157022; c=relaxed/simple;
-	bh=pYxYPURvz3MhNYNsewL0ZKU73YmQFgpw+7Rw6Nsrd3Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JJBFcdubdU2GitGg7Qg1h4agj6KOEQfKamUvoFT4dEIAH+ft7w+8mjpUbD8AArjcCrlE/AGk33hpRRXGDq/k8LauK5KwT2a5HJklMmskB5acly/Gz1//oCc+VaHLjCUIBlFYOSZ8Ojf1ciuajAEq97X6iwuhoIX6tSacEpu0LiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AX3j4OtX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770157019;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GFYAOGiLZN4gRTgbQkbegN6tbXaotzgssD6BTvxd+5U=;
-	b=AX3j4OtXr7tnu4DCnxTt0+2wUbxCW/dOBHtYV3nMkfca28YFJxENsR7Okqf7movhhDyGKo
-	hiKvmzfNcQBv+xoCORI8XAVsiijelR/iWUNzVgYNSEwTRV9eGOWWjIac1HOypwgevI+MRr
-	giglHz9h4ZkKUbY3piOIIsNEC4/9qFo=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-47-VQuSGUDNPk2YMyEgj0iwDg-1; Tue,
- 03 Feb 2026 17:16:55 -0500
-X-MC-Unique: VQuSGUDNPk2YMyEgj0iwDg-1
-X-Mimecast-MFC-AGG-ID: VQuSGUDNPk2YMyEgj0iwDg_1770157014
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B2B95195608F;
-	Tue,  3 Feb 2026 22:16:53 +0000 (UTC)
-Received: from GoldenWind.redhat.com (unknown [10.22.80.51])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 01AFE180009E;
-	Tue,  3 Feb 2026 22:16:51 +0000 (UTC)
-From: Lyude Paul <lyude@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: "Jiayi Li" <lijiayi@kylinos.cn>,
-	"Mathias Nyman" <mathias.nyman@linux.intel.com>,
-	"Oliver Neukum" <oneukum@suse.com>,
-	"Miao Li" <limiao@kylinos.cn>,
-	=?UTF-8?q?Johannes=20Br=C3=BCderl?= <johannes.bruederl@gmail.com>,
-	"Lei Huang" <huanglei@kylinos.cn>,
-	"Lyude Paul" <lyude@redhat.com>,
-	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Subject: [PATCH 1/1] usb: core: Add quirk for Gigabyte Aorus Waterforce X II AIO coolers
-Date: Tue,  3 Feb 2026 17:10:27 -0500
-Message-ID: <20260203221452.198682-2-lyude@redhat.com>
-In-Reply-To: <20260203221452.198682-1-lyude@redhat.com>
-References: <20260203221452.198682-1-lyude@redhat.com>
+	s=arc-20240116; t=1770159076; c=relaxed/simple;
+	bh=2Zp4rfp0Kd9kcSVQR1ZIa4DmydM+c0c7shcAIyikU7A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ReNlhIRh/X7Ydem3LNN4Djx+RaMtnnD8In2p/uPAp/CoBIPkyl0cVbGnNb7o5PpGnAmPg0c+RCdo8kfE8VFGdC1wMfaeCbLrmgrFXQEYU6R9HfYt8ABAA1KPUR8Y2S4OfjX7IxV0R/AIvRvOFQcbSCWdnafZr7766Ml7bBL5XUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o+kVPJgJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9551C116D0;
+	Tue,  3 Feb 2026 22:51:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770159076;
+	bh=2Zp4rfp0Kd9kcSVQR1ZIa4DmydM+c0c7shcAIyikU7A=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=o+kVPJgJSu104A9qJIXi56u4Myr8yWfO+GjztEaD0os75dpQTDGkNwnx/FK9E/eeD
+	 GGq2o8OW5LypjXNnKk9SUqrO2ZfVw6XYnf+pqUBamvD72bj1qtFVspe0g20twQkcmc
+	 g3gFBsGN/rzCbZMdVCRUxADk+MIHqn6JRSsjl/hCBBmdUU23z4bahwBsX1Pis+caDo
+	 pxeMjn2BvGaf6Nmll2XSjunuaqdUjuGxfOC/sGnftyvyhQ419X3hiTMoa67O62ZsNf
+	 Wd0u/bb7ZTUuJLSYtXoNGaC/s0Afu+lZrBYaIMy76X23fzeKjlTg65pfqoC+Mczbb8
+	 37Bs2MFLXTFwA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFDE3E8B379;
+	Tue,  3 Feb 2026 22:51:15 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Subject: [PATCH v5 0/5] Introduce MAX77759 charger driver
+Date: Tue, 03 Feb 2026 22:50:26 +0000
+Message-Id: <20260203-max77759-charger-v5-0-b50395376a5f@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-B4-Tracking: v=1; b=H4sIALJ7gmkC/23PwW7CMAwG4FdBOS9T4sZOwmnvgTikrVsiDYLSq
+ SpCfXdSBNqm9vjb8mf7LgbOkQex391F5jEOMV1KwI+daE7h0rOMbckCFKDWCuU5TNZa9LK0c89
+ ZOoSagFoiHUQZu2bu4vQkD8eST3H4Sfn23DDqpfrCoFpjo5ZKUg1satfZDs1Xn1L/zZ9NOotFG
+ +FXAO02BCgC1IDeOxXI0Uqo/ghgN4SqCGiYyHTYBA8rwbwFUuWIDcEsX3gDlWlcy63+J8zz/AC
+ pCmSfdwEAAA==
+X-Change-ID: 20251105-max77759-charger-852b626d661a
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
+ Amit Sunil Dhamne <amitsd@google.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1770159074; l=4473;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=2Zp4rfp0Kd9kcSVQR1ZIa4DmydM+c0c7shcAIyikU7A=;
+ b=Dtgr9lcr/dlkSXzh1Ur4nnrsfz78a9WBtTSGMMnyXbFZRL7me9qe0JZ76IStrkrSmiCdz4/kg
+ 43jvKAoSL9WDTxuxfZn6BxTZ55ad8Pnh+B9ZA7HEdO9z4Lq67MtB2of
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33046-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[kylinos.cn,linux.intel.com,suse.com,gmail.com,redhat.com,linuxfoundation.org];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lyude@redhat.com,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-33048-lists,linux-usb=lfdr.de,amitsd.google.com];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-0.999];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	HAS_REPLYTO(0.00)[amitsd@google.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: B94F2DF293
+X-Rspamd-Queue-Id: DD0F0DF630
 X-Rspamd-Action: no action
 
-The "Aorus Waterforce" is one of those fancy gaming water coolers that
-comes with fun LEDs and an entire dedicated LCD screen. A minor issue I've
-noticed with this cooler on Linux, is that we fail to actually
-reset the device when coming out of standby, ish:
+MAX77759 PMIC is used in Pixel 6 and 6 Pro (Oriole/Raven) boards.
+One of the functions of the MAX77759 PMIC is a battery charger. This
+patchset introduces a driver for this function. One of the unique
+features of this charger driver is that it works with a USB input where
+the Type-C controller is TCPCI based.
 
-  [  281.652184] usb 7-10.4: reset high-speed USB device number 7 using xhci_hcd
-  [  287.179843] usb 7-10.4: PM: dpm_run_callback(): usb_dev_resume returns -5
-  [  287.179854] usb 7-10.4: PM: failed to resume async: error -5
+Changes to the board files will follow soon once this patchset is reviewed.
 
-Generally this isn't fatal, as even when the water cooler doesn't resume it
-will still reconnect itself moments later:
+For reference to the MAX77759 MFD based patchset (present in upstream):
+https://lore.kernel.org/all/20250509-max77759-mfd-v10-0-962ac15ee3ef@linaro.org/
 
-  15:48:12 GoldenWind kernel: usb 7-10.4: USB disconnect, device number 14
-  15:48:12 GoldenWind kernel: usb 7-10.4: new high-speed USB device number
-     15 using xhci_hcd
-  15:48:14 GoldenWind kernel: usb 7-10.4: New USB device found,
-     idVendor=0414, idProduct=7a5e, bcdDevice= 2.00
-  15:48:14 GoldenWind kernel: usb 7-10.4: New USB device strings: Mfr=1,
-     Product=2, SerialNumber=0
-  15:48:14 GoldenWind kernel: usb 7-10.4: Product: Castor3
-  15:48:14 GoldenWind kernel: usb 7-10.4: Manufacturer: ITE Tech.
-  15:48:14 GoldenWind kernel: hid-generic 0003:0414:7A5E.000D:
-     hiddev98,hidraw2: USB HID v1.01 Device [ITE Tech. Castor3] on
-     usb-0000:74:00.0-10.4/input0
+Dependency list:
+Patch 5 depends on Patch 4 which depends on Patch 3.
 
-My guess here is that the device simply doesn't support resets properly -
-since that seems to be the only quirk I've found that actually works. Note
-that the device still ends up disconnecting and reconnecting after resume,
-but this seems to be normal behavior.
-
-So, let's fix this by adding the USB_QUIRK_RESET quirk for this USB device.
-This seems to work perfectly fine and prevents us from getting the
-aforementioned errors on resume.
-
-Signed-off-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
 ---
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
+Changes in v5:
+- Use linear_range library instead of reinventing it. (André Draszik)
+  - This requires a selector_max value so modified mfd/max77759.h to
+    include it for CHGCC and CHG_ILIM.
+  - Removed "reviewed-by" for Patch 3 (mfd) due to above
+- Use asnyc probe type. (André Draszik)
+- Retry mechanism for psy_work. (André Draszik)
+- Minor nits (André Draszik):
+  - Use named initializers for instantiating structs.
+  - Use static qualifier for `psy_name` variable.
+  - Refactor if-else ladder to remove else handling if return in prior
+    "if" loop.
+  - Remove redundant `unlikely`.
+- Link to v4: https://lore.kernel.org/r/20260121-max77759-charger-v4-0-694234c8ded1@google.com
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index c4d85089d19b1..9a81994ee725b 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -584,6 +584,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* INTEL VALUE SSD */
- 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
- 
-+	/* Gigabyte ITE Tech. Castor3 (Aorus Waterforce X II AIO coolers) */
-+	{ USB_DEVICE(0x0414, 0x7a5e), .driver_info = USB_QUIRK_RESET },
-+
- 	{ }  /* terminating entry must be last */
- };
- 
+Changes in v4:
+- Removed a stray tabspace in mfd/max77759.h. (André Draszik)
+- Fixed the following issues in Patch 4/5 (André Draszik):
+  - Re-order Kconfig entry
+  - Refactored to not use global variable
+  - Use of clamp() to clamp values instead of duplicating logic
+  - Return IRQ_NONE for unhandled irqs or error conditions
+  - Remove debug messages in irq handler
+  - Refactor code to use dev_err_probe in *_init_irqhandler()
+  - Remove unneeded irq_flags
+  - Check return values of regmap ops
+  - Other nits like newlines, not using greedy init, using print stmnts
+- Link to v3: https://lore.kernel.org/r/20251227-max77759-charger-v3-0-54e664f5ca92@google.com
+
+Changes in v3:
+- Had incorrectly folded the charger sub-device with the pmic parent.
+  Corrected it. (Krzysztof Kozlowski)
+- Link to v2: https://lore.kernel.org/r/20251218-max77759-charger-v2-0-2b259980a686@google.com
+
+Changes in v2:
+- Fold charger binding in maxim,max77759-charger.yaml to its parent
+  node. (Krzysztof Kozlowski)
+- Renamed regulator supplier & consumer. (Krzysztof Kozlowski & Heikki
+  Krogerus)
+- Removed explicit setting of irq trigger types in max77759 driver.
+  (André Draszik & Krzysztof Kozlowski)
+- Complete bit definitions for IRQ registers. (André Draszik)
+- Consolidate all bit definitions for charger IP in mfd/max77759.h.
+  (André Draszik)
+- Modify the handling of charger IRQs such that regmap IRQ chip handles
+  masking, de-mux and acking of interrupts. (André Draszik)
+- Remove unused macro definitions relating to Charger modes in tcpci
+  maxim driver (André Draszik)
+- Add dependency on Regulator class in Kconfig definition for max77759
+  chg. (Kernel Test Robot)
+- Link to v1: https://lore.kernel.org/r/20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com
+
+---
+Amit Sunil Dhamne (5):
+      dt-bindings: mfd: maxim,max77759: reference power-supply schema and add regulator property
+      dt-bindings: usb: maxim,max33359: Add supply property for vbus
+      mfd: max77759: add register bitmasks and modify irq configs for charger
+      power: supply: max77759: add charger driver
+      usb: typec: tcpm/tcpci_maxim: deprecate WAR for setting charger mode
+
+ .../devicetree/bindings/mfd/maxim,max77759.yaml    |  16 +-
+ .../devicetree/bindings/usb/maxim,max33359.yaml    |   4 +
+ MAINTAINERS                                        |   6 +
+ drivers/mfd/max77759.c                             |  91 ++-
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/max77759_charger.c            | 777 +++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpci_maxim.h               |   1 +
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c          |  54 +-
+ include/linux/mfd/max77759.h                       | 204 +++++-
+ 10 files changed, 1106 insertions(+), 59 deletions(-)
+---
+base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+change-id: 20251105-max77759-charger-852b626d661a
+
+Best regards,
 -- 
-2.52.0
+Amit Sunil Dhamne <amitsd@google.com>
+
 
 
