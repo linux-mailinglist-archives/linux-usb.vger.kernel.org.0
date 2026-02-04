@@ -1,60 +1,93 @@
-Return-Path: <linux-usb+bounces-33072-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33073-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yEZ4I4/Wgml5cQMAu9opvQ
-	(envelope-from <linux-usb+bounces-33072-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 06:18:07 +0100
+	id aNE8NN3agmnkcwMAu9opvQ
+	(envelope-from <linux-usb+bounces-33073-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 06:36:29 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB6EBE1DA5
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 06:18:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56670E2063
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 06:36:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3A3F630AA3F4
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 05:16:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4875030A40A0
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 05:35:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7185B3557FC;
-	Wed,  4 Feb 2026 05:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089893346B0;
+	Wed,  4 Feb 2026 05:35:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eR4Yve9B"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V8GxI8XD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CEB3033D6;
-	Wed,  4 Feb 2026 05:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CC3301486;
+	Wed,  4 Feb 2026 05:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770182192; cv=none; b=NaU7qp4LYbb/ZxDU5ncKQgM6Q4p6GuIIPoRSco6ysvM2LZBtkL49LAJ8Ih/X2rTzFYeuMWIZmoCAxT7TmZA89jwo/1nqDy/UVZl++lTFCCV5y864jQMC29Vbrvdrva7kP7h5eH/JUkLooQghEJN+8f8aMwZVUugGwRW25pNSJ0Y=
+	t=1770183314; cv=none; b=CxH/P/AZWnC42WRyqNGheMIQd6LladFr3SVZscRgXjr9u+Cp2Y0PRt1EAxFUgTWdE9NXL7F9Vo6ceUfu/4qzWdYc5Z4/ME3cJt3BBdWeLjVPB+glGq8yT5WLiIRKICHl753kIGL8LymbWiUeOZ/FPBDpRETNXbNGA9fXYbBeL9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770182192; c=relaxed/simple;
-	bh=ealGi3kuCGc0r+DWLedua/qzGyjxRyWsP1snhcmKvNw=;
+	s=arc-20240116; t=1770183314; c=relaxed/simple;
+	bh=UiA+0nIlRA9eZg6V1t1vdhmUp7Yaj6ecIYLUK5A2F+U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eDO/QfmZYwQhChg/W0igcnxie34HMkZU4MEJND05xtsE5zcPN1QaOsAoImnl4wZrPEkL39f22weoqwO7ZYKYp8i0BlEJ9hWIvYA8xW9P0/Xey3nOBazxcO+jMtzzVV+KcRo0OylhD4knTcBHiL63VQsiSB0KtYvm5igiBHqi6Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eR4Yve9B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFD0C4CEF7;
-	Wed,  4 Feb 2026 05:16:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1770182191;
-	bh=ealGi3kuCGc0r+DWLedua/qzGyjxRyWsP1snhcmKvNw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eR4Yve9Bxwnmsv5EVxyWDtDX7xNcUiz0St2zpLim5xSMQRIiptb8IuqY0jDMPIZ+K
-	 CR+ft1IIfl10lpjcSWpXij5G+H3f+7LpIZLw3aHRkMPnLGT0k1bblAHqv+k7FLgMpx
-	 ROPArNpI7hEj3hlZclm4diBfxbEmuzQWEMoGt4pY=
-Date: Wed, 4 Feb 2026 06:16:28 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Lyude Paul <lyude@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Jiayi Li <lijiayi@kylinos.cn>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Oliver Neukum <oneukum@suse.com>, Miao Li <limiao@kylinos.cn>,
-	Johannes =?iso-8859-1?Q?Br=FCderl?= <johannes.bruederl@gmail.com>,
-	Lei Huang <huanglei@kylinos.cn>
-Subject: Re: [PATCH 1/1] usb: core: Add quirk for Gigabyte Aorus Waterforce X
- II AIO coolers
-Message-ID: <2026020403-federal-smite-0740@gregkh>
-References: <20260203221452.198682-1-lyude@redhat.com>
- <20260203221452.198682-2-lyude@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fi5elJcBlsHR6CtMPYkTinArJGeYBt+RSGzpSjYNIxEHyKkpqYGEu4buI4yCmsjWEQ8x6dC4Gc/Dfv5GMW9iFYLbF7uxYkcgHY9UC35EKsP8aU8XMfGs6Ce76s5x+vxhFrFRgqi7DrR00+d5KlxgvVZui5BgUOy4RXxM+Tu+tfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V8GxI8XD; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770183314; x=1801719314;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UiA+0nIlRA9eZg6V1t1vdhmUp7Yaj6ecIYLUK5A2F+U=;
+  b=V8GxI8XDtGAqhImUrs+AByR5KxQ1w4dbR7NFVgUNNTLOk9qP0CXO8X0S
+   unrEBMa2i8aodq9d+0cSo3wEjOa+c8YNtw/rUSRfkWdQ/Y/DFUmaQJyvS
+   KZwJ8Uz6d4JK7sed7LO5x1x6ZP+pvKni6heAQFlq3Nym2fw6uZK23No09
+   GFH3bSVJS9Aq6M+sFjyNWIIt18EzzX/TaiVuinuH8xY2mTFKANQmee9A7
+   slMOoB1dZV1Ewcj0GahvIpXDR0h7RCMKBpUDaHMUDV5J5dYGM2sAX2zzD
+   Y4/Codam/TTyqOW4LfUTZK64lpdPd94P0DM6LEKDxsuLaJ2RJzs5Lkj2u
+   w==;
+X-CSE-ConnectionGUID: ytQR9aXwTL2xHdgb7MIx+A==
+X-CSE-MsgGUID: Qx97iOrvQU6QAlcLSk6Ddw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="82475014"
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="82475014"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 21:35:14 -0800
+X-CSE-ConnectionGUID: GhG6b3VCQIeq3Y/x6PawtA==
+X-CSE-MsgGUID: dquvDNJpRN6VUWvxIfdVGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="209447946"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 03 Feb 2026 21:35:08 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vnVXc-00000000hTc-161f;
+	Wed, 04 Feb 2026 05:35:04 +0000
+Date: Wed, 4 Feb 2026 13:34:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Lee Jones <lee@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>,
+	Amit Sunil Dhamne <amitsd@google.com>
+Subject: Re: [PATCH v5 4/5] power: supply: max77759: add charger driver
+Message-ID: <202602041321.6ubHpkpR-lkp@intel.com>
+References: <20260203-max77759-charger-v5-4-b50395376a5f@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,96 +96,90 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260203221452.198682-2-lyude@redhat.com>
+In-Reply-To: <20260203-max77759-charger-v5-4-b50395376a5f@google.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [3.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-33073-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[23];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-33072-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kylinos.cn,linux.intel.com,suse.com,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,amitsd.google.com,dt];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: EB6EBE1DA5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,01.org:url,intel.com:email,intel.com:dkim,intel.com:mid]
+X-Rspamd-Queue-Id: 56670E2063
 X-Rspamd-Action: no action
 
-On Tue, Feb 03, 2026 at 05:10:27PM -0500, Lyude Paul wrote:
-> The "Aorus Waterforce" is one of those fancy gaming water coolers that
-> comes with fun LEDs and an entire dedicated LCD screen. A minor issue I've
-> noticed with this cooler on Linux, is that we fail to actually
-> reset the device when coming out of standby, ish:
-> 
->   [  281.652184] usb 7-10.4: reset high-speed USB device number 7 using xhci_hcd
->   [  287.179843] usb 7-10.4: PM: dpm_run_callback(): usb_dev_resume returns -5
->   [  287.179854] usb 7-10.4: PM: failed to resume async: error -5
-> 
-> Generally this isn't fatal, as even when the water cooler doesn't resume it
-> will still reconnect itself moments later:
-> 
->   15:48:12 GoldenWind kernel: usb 7-10.4: USB disconnect, device number 14
->   15:48:12 GoldenWind kernel: usb 7-10.4: new high-speed USB device number
->      15 using xhci_hcd
->   15:48:14 GoldenWind kernel: usb 7-10.4: New USB device found,
->      idVendor=0414, idProduct=7a5e, bcdDevice= 2.00
->   15:48:14 GoldenWind kernel: usb 7-10.4: New USB device strings: Mfr=1,
->      Product=2, SerialNumber=0
->   15:48:14 GoldenWind kernel: usb 7-10.4: Product: Castor3
->   15:48:14 GoldenWind kernel: usb 7-10.4: Manufacturer: ITE Tech.
->   15:48:14 GoldenWind kernel: hid-generic 0003:0414:7A5E.000D:
->      hiddev98,hidraw2: USB HID v1.01 Device [ITE Tech. Castor3] on
->      usb-0000:74:00.0-10.4/input0
-> 
-> My guess here is that the device simply doesn't support resets properly -
-> since that seems to be the only quirk I've found that actually works. Note
-> that the device still ends up disconnecting and reconnecting after resume,
-> but this seems to be normal behavior.
-> 
-> So, let's fix this by adding the USB_QUIRK_RESET quirk for this USB device.
-> This seems to work perfectly fine and prevents us from getting the
-> aforementioned errors on resume.
-> 
-> Signed-off-by: Lyude Paul <lyude@redhat.com>
-> ---
->  drivers/usb/core/quirks.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index c4d85089d19b1..9a81994ee725b 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -584,6 +584,9 @@ static const struct usb_device_id usb_quirk_list[] = {
->  	/* INTEL VALUE SSD */
->  	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
->  
-> +	/* Gigabyte ITE Tech. Castor3 (Aorus Waterforce X II AIO coolers) */
-> +	{ USB_DEVICE(0x0414, 0x7a5e), .driver_info = USB_QUIRK_RESET },
+Hi Amit,
 
-Please see the comments for this structure on how to place this device
-in the list.
+kernel test robot noticed the following build warnings:
 
-thanks,
+[auto build test WARNING on 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d]
 
-greg k-h
+url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-mfd-maxim-max77759-reference-power-supply-schema-and-add-regulator-property/20260204-065326
+base:   8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+patch link:    https://lore.kernel.org/r/20260203-max77759-charger-v5-4-b50395376a5f%40google.com
+patch subject: [PATCH v5 4/5] power: supply: max77759: add charger driver
+config: sparc-randconfig-001-20260204 (https://download.01.org/0day-ci/archive/20260204/202602041321.6ubHpkpR-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602041321.6ubHpkpR-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602041321.6ubHpkpR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/power/supply/max77759_charger.c: In function 'set_fast_charge_current_limit':
+>> drivers/power/supply/max77759_charger.c:301:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     int ret;
+         ^~~
+   drivers/power/supply/max77759_charger.c: In function 'set_float_voltage_limit':
+   drivers/power/supply/max77759_charger.c:343:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     int ret;
+         ^~~
+
+
+vim +/ret +301 drivers/power/supply/max77759_charger.c
+
+   295	
+   296	static int set_fast_charge_current_limit(struct max77759_charger *chg,
+   297						 u32 cc_max_ua)
+   298	{
+   299		bool found;
+   300		u32 regval;
+ > 301		int ret;
+   302	
+   303		ret = linear_range_get_selector_high(&chg_ranges[MAX77759_CHGR_RANGE_CHGCC],
+   304						     cc_max_ua, &regval, &found);
+   305		if (!found)
+   306			return -EINVAL;
+   307	
+   308		return regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_02,
+   309					  MAX77759_CHGR_REG_CHG_CNFG_02_CHGCC, regval);
+   310	}
+   311	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
