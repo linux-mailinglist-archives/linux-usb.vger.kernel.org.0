@@ -1,240 +1,299 @@
-Return-Path: <linux-usb+bounces-33084-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33085-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CF0wEMELg2k+hAMAu9opvQ
-	(envelope-from <linux-usb+bounces-33084-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 10:05:05 +0100
+	id SJmTF0EOg2k+hAMAu9opvQ
+	(envelope-from <linux-usb+bounces-33085-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 10:15:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD092E3882
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 10:05:04 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D961E3AE2
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 10:15:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 62D0D30616FA
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 08:59:51 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6DB9530095D0
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 09:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6178539E6CB;
-	Wed,  4 Feb 2026 08:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 355533A1E67;
+	Wed,  4 Feb 2026 09:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="GXUPOFEj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KAVLrAoc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m1973184.qiye.163.com (mail-m1973184.qiye.163.com [220.197.31.84])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC78D359FB8;
-	Wed,  4 Feb 2026 08:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.84
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770195589; cv=none; b=ofyb9Y0b4V4cW5WfXLad7ay/Foli9jZDU7L0+nijgHkRuBVdVjWetj3sJ0dVXmOhBNHHhZeNVKjH0iM1NNhSPMAbzwSw4+mX+DeD8WHQcr/loRcQ8MnIRXnN3zGHMbGT+1q8P29qeHnkiVWEb7P8JdIAQ3wXrknA5MZi/hA0euY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770195589; c=relaxed/simple;
-	bh=FBm08EgxhjgcghY9Mqa9v4hoNGW3rD1QUnFyAnGb0eA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YA7yd8l7n/zFp1slQnAfqM3gkSAgWJ+QJi3mpjXM+BVtOpfuWi431O4+9wGGwhZIDrYmIJZ0Un7E5Txl7N0R5KjbPE51n4wKixCHAeTeioAoTx+I928nsXz2p76EcQk7Az/ScxAWOBwYwyp4fIn8F/J71jUup/YjlRPlpKcc51k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=GXUPOFEj; arc=none smtp.client-ip=220.197.31.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.51] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 33159c373;
-	Wed, 4 Feb 2026 16:59:34 +0800 (GMT+08:00)
-Message-ID: <fdc1df7d-b8ff-4778-bfd4-292e916096aa@rock-chips.com>
-Date: Wed, 4 Feb 2026 16:59:33 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6033A1E69
+	for <linux-usb@vger.kernel.org>; Wed,  4 Feb 2026 09:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770196517; cv=pass; b=k2xP0ciuvKnlBBgxa62P7nIiBRELjnLxRMJD7QoJJaWakTqUeX5S2o+v1ZqVXarsMensAk3dCWmzb4xlFopaqnYBEwEnxVSDd80TFlx7E1fyUT3vhXE7PnZyka07T+ZQGwn6Y9y8b9CRFNwRkts3wJwlp62dRkQA/lB/Ahd8azk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770196517; c=relaxed/simple;
+	bh=wC2eOCM21PbEmwR8LFQmI9j4ZWCB3ZE8jYVykbZL3Gg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uGIRw6dRg5Ayh4amLXVVy+/j8+kM7hBZf9+SDqIBtwBb5mkWdP4oIBzR+pVCSEYwcLZN3V2q/31+8ok7HR6Lb4HofP1BRN9gWmlXsYl7PLsnPNZyHQnopE9mfTJm+naH2g4WlUXgEAERkwipEsu1MNzuGqxCha1Lhcp4Mneg+Vg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KAVLrAoc; arc=pass smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-505d3baf1a7so306141cf.1
+        for <linux-usb@vger.kernel.org>; Wed, 04 Feb 2026 01:15:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770196516; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QSp1VuCQ0LgnzP460kACBEzxXdPv96/XdyffJ7/BN+o/f0oXFWrZYTBUb0fNgtN6GO
+         hC+281gguQ+q1tuFcNyWGVpABKTg4m5TVlVeDYuD163GH6xtxWjwhcPYS0SufklEzQIX
+         aYOE54dUcfk1zZ9y7M5kG2lHKxVognRJQfhtxzNDwQFrX724XKgMR2gSkog4CBzTNKzT
+         w/Z1MFkuIVQGpxMs6ReIMbB1Spqtrqd0jIrSrGvzZXNeek1YVBKcqQo+OitUfRDfE15c
+         TTpzE0Ym0m10rTqMaJVJBkSELw+uaE03C7pBgeLRHDH3/D3zh64gBZ+hZCjR81EOtznY
+         6e4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Qtr/Rq5XW6imebDaN6PuW6KteYh03XamAZ/tTwSjOec=;
+        fh=2tDk+xHMVrCY+YYUUCrTlAtU2VVV8+1JItSi6IAOTKw=;
+        b=kQYX4fh1qbvMLtk/2661CrGoZ0FhA9ZDXJLpMvP634n3YlirECCsiDNhmqLqr0SF5G
+         INDseLNC9va0L0RWu/8kJ4SI3MXjhIRjbKfvEyuxvtEa3p1BnJPrUwSjraSq5Jw4zoAp
+         VBywge8pdAJTxngMbssyf4rH1KC7FvHCq8iinHlZBwMcPxA7lvm9ZbscQO6WMVvttGk0
+         iXrxJGG+8jSwNKZfuQR2H/ZpGP29PtP4Pz3mrL6kPLKhxdqFZm/4TnuU4jYv1SAPyh3D
+         iKlsd3c46EI38OJJUo6Jm1YWEP5mgp401nyp0PIXNNODVxcWaxCTpdc6YFmJV9EwF1eq
+         PAqw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770196516; x=1770801316; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qtr/Rq5XW6imebDaN6PuW6KteYh03XamAZ/tTwSjOec=;
+        b=KAVLrAoc05FMKbXBLJlE4wgGhclqHSeP+nX5t+vggfjy1Jo8jRD1i53NDU5P29hDgQ
+         gIzJY/4Zp+a/pXDSGbL2rHzriI6tE1l3QMVvYG7JSfncpKL+9nuFVQmcaut1fux7/Gbc
+         XM8qvEPHtbfsBqJ/6IoeiC6VJqcle72oLvxG2l1QiJIB9b0Bs894f/KK7WmEeLNDSxRL
+         m+tFZi7uvBQML9ZHOfpeB5/PkwB0TIp0waxy2GMmRU0zulVI7y2Y1uas4aWK6nVVqzEh
+         uH2An8Uk4aVloPH9PSDeJQSUubStT4BCo7Sy8jFih3I6UX9wx9LSbV1WrFceJAzyBA1J
+         xaiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770196516; x=1770801316;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Qtr/Rq5XW6imebDaN6PuW6KteYh03XamAZ/tTwSjOec=;
+        b=fdvcvuZlmvwtVI8ds8AuRdV39QLuowamd6khxdMXgkXa4NIZPOdHrxbItZ7CfpCVTU
+         /NsCsg9DGwM9UsGQMGk6sV3wkK0yibvqwrM0VyLmapnkkjq7cwGnZ91jrOyaXs4zi5B1
+         XRigJvhoNhwsXhr84hxABW3xNSxmxdbU2/JtWjmqR/f40t4MH/mwH9iHcxpvI11BTwP3
+         urV28aJrUD03vSf6XVjc5TuoPw1uPBtgnZJk5BJQzyLhunQRbdTpbyv1t/+3dKITgtSp
+         Vadg2IHeJn+PONCt1Os5Epz1Xg/36euYa/0SIKFkQuVVi93vamKyIoBICOAyObeJpVd1
+         xwpw==
+X-Forwarded-Encrypted: i=1; AJvYcCWc5nclyIDlDHT2ypIg4SAMfdqyQCu2QKvV6Bu613EbwO6qcxL4us9qeLQ6emHK8lvFZ2sXEhBMkk4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfH6OdMUEdk5KXxgPj+eobaSP2M+CgT8Pts/qiwvJYMCEm1bhj
+	hX/IJATI2rCPv4+M7gkUADIzCEmVKwEnJO6YoPlYOYSV/Bb9p/74WooaXI0IL8lUYU7128+eVWF
+	p/pBy/A4JGBQXUWYmXVEkbUzOnr4HBEc3uoa7OAMv
+X-Gm-Gg: AZuq6aK9ToKT+4s0tJUHoZZbSqeh0uInvZIWQi+G9kPkkkcFZ6Zn4cgZaW8aC3ZO7j0
+	826LoUMBc2fQppyyBTLk2pG/gFDucsPb05XoFFVuzjYM98e3lGEUOt6CTh5h14RoVv/alvttB5M
+	oi2ntW0RdtR4KZYfVDC917lGODHmici3A3AIyMI0X8JBgKUqcCsFLQOKF1r/2vJ/fqPdDUjmsod
+	H2Na0QCrFgILf64lDdMgLv8YxMP8pmxLW8S74lWqVaGr+kmz1BpUqi6R4rQr6C2FhPXdFL1+8Aq
+	4ZjCfTrPmAGfyH+Jr5CR0/+IIT6gIXcj
+X-Received: by 2002:a05:622a:1a8a:b0:501:19b9:42e9 with SMTP id
+ d75a77b69052e-5061c3c660amr9915021cf.4.1770196516081; Wed, 04 Feb 2026
+ 01:15:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 0/9] Add Type-C DP support for RK3399 EVB IND board
-To: Hugh Cole-Baker <sigmaris@gmail.com>
-Cc: Chaoyi Chen <kernel@airkyi.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Peter Chen <hzpeterchen@gmail.com>, Luca Ceresoli
- <luca.ceresoli@bootlin.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Yubing Zhang <yubing.zhang@rock-chips.com>,
- Frank Wang <frank.wang@rock-chips.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Amit Sunil Dhamne <amitsd@google.com>, Dragan Simic <dsimic@manjaro.org>,
- Johan Jonker <jbx6244@gmail.com>, Diederik de Haas <didi.debian@cknow.org>,
- Peter Robinson <pbrobinson@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20260119073100.143-1-kernel@airkyi.com>
- <c9dd365b-ad8f-410e-96f8-f914f03634b2@gmail.com>
- <e1b172bd-443f-40a5-9d9e-9e575b0b551e@rock-chips.com>
-Content-Language: en-US
-From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-In-Reply-To: <e1b172bd-443f-40a5-9d9e-9e575b0b551e@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-HM-Tid: 0a9c27e0df8003abkunm47ebfb0fc6ed1f
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGh9KSVZOTB5LSR1NGkNPTRpWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE
-	5VSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=GXUPOFEjineBR3F/Oa8PhIiHVe9wHSneU3r5eCy+zDqLZUSXJ0UwNP4PgDqjK4dlWdlOOFj6tzl5+AcH5O04cM+b9B15UCFVojo7KqF/tNQtrnWHmu7/zBe3dKIKe0j1cEyMChWds2E9KOReGMgLaoVw7HcHQLz7liVdkAnMpyk=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=7bsWow0W4kR530wfCqB4TkbHmgVZW3XApJOi5iMFmcI=;
-	h=date:mime-version:subject:message-id:from;
+References: <20260130074746.287750-1-guanyulin@google.com> <2026013133-tamale-massager-3c76@gregkh>
+ <CAOuDEK0o2jqqOUZVUdi9JDcyXRQHEuL9GCBrU0VQhWAfDtJnUg@mail.gmail.com> <6acaaae2-4e93-46f5-8170-277bc369f922@linux.intel.com>
+In-Reply-To: <6acaaae2-4e93-46f5-8170-277bc369f922@linux.intel.com>
+From: Guan-Yu Lin <guanyulin@google.com>
+Date: Wed, 4 Feb 2026 17:15:00 +0800
+X-Gm-Features: AZwV_QiZlT8utJE1tq9fy_MBQe3Qe0segFCNT9KB1NvH357aF9kf-41nbzR-ltU
+Message-ID: <CAOuDEK3xzpY7Cr8JgactH=Sy=h7aTEgdTqUiuX8xh6gvUNR5uw@mail.gmail.com>
+Subject: Re: [RFC PATCH] usb: host: xhci-sideband: fix deadlock in unregister path
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, mathias.nyman@intel.com, 
+	stern@rowland.harvard.edu, wesley.cheng@oss.qualcomm.com, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rock-chips.com,none];
-	R_DKIM_ALLOW(-0.20)[rock-chips.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33084-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[40];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-33085-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[rock-chips.com:+];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[google.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chaoyi.chen@rock-chips.com,linux-usb@vger.kernel.org];
-	FREEMAIL_CC(0.00)[airkyi.com,linux.intel.com,linuxfoundation.org,oss.qualcomm.com,gmail.com,bootlin.com,kernel.org,sntech.de,rock-chips.com,intel.com,linaro.org,ideasonboard.com,kwiboo.se,suse.de,ffwll.ch,google.com,manjaro.org,cknow.org,vger.kernel.org,lists.infradead.org,lists.freedesktop.org];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	FROM_NEQ_ENVFROM(0.00)[guanyulin@google.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rock-chips.com:email,rock-chips.com:dkim,rock-chips.com:mid]
-X-Rspamd-Queue-Id: DD092E3882
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: 7D961E3AE2
 X-Rspamd-Action: no action
 
-On 1/26/2026 11:22 AM, Chaoyi Chen wrote:
-> Hello,
-> 
-> On 1/26/2026 3:42 AM, Hugh Cole-Baker wrote:
->> On 19/01/2026 07:30, Chaoyi Chen wrote:
->>> From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
->>>
->>> This series focuses on adding Type-C DP support for USBDP PHY and DP
->>> driver. The USBDP PHY and DP will perceive the changes in cable status
->>> based on the USB PD and Type-C state machines provided by TCPM. Before
->>> this, the USBDP PHY and DP controller of RK3399 sensed cable state
->>> changes through extcon, and devices such as the RK3399 Gru-Chromebook
->>> rely on them. This series should not break them.
->>>
->>> ====
->>> 1. DisplayPort HPD status notify
->>>
->>> Before v7, I implemented a variety of DP HPD status notify. However,
->>> they all had various problems and it was difficult to become a generic
->>> solution.
->>>
->>> Under the guidance of Heikki and Dmitry, a decoupled notification
->>> method between the TypeC and DRM subsystems was introduced in v7.
->>> First, a notification is sent when TypeC registers a new altmode.
->>> Then, a generic DP AUX HPD bridge is implemented on the DRM side.
->>>
->>> During v7-v10, we added a new notifier in typec to notify the altmode
->>> device register event. With the help of Greg and Heikki, we implemented
->>> the reuse of notifiers for the type bus itself in patch1 of v11.
->>>
->>> The USB subsystem related parts have already been merged into the
->>> usb-next branch in v13 [0][1]. Therefore, this series no longer includes
->>> these patches starting from v14. Thanks to Greg and Heikki!
->>>
->>> [0]: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=67ab45426215c7fdccb65aecd4cac15bbe4dfcbb
->>> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=4dee13db29de6dd869af9b3827e1ff569644e838
->>>
->>> That makes it redundant for each Type-C controller driver to implement
->>> a similar DP AUX HPD bridge in embedded scenarios.
->>>
->>> ====
->>> 2. Altmode switching and orientation switching for USBDP PHY
->>>
->>> For USB Type-C interfaces, an external Type-C controller chip assists
->>> by detecting cable attachment, determining plug orientation, and
->>> reporting USB PD message. The USB/DP combo PHY supports software
->>> configurable pin mapping and DisplayPort lane assignment. Based on
->>> these message, the combo PHY can perform both altmode switching and
->>> orientation switching via software.
->>>
->>> The RK3399 EVB IND board has a Type-C interface DisplayPort. It use
->>> fusb302 chip as Type-C controller. The connection diagram is shown below:
->>>
->>> fusb302 chip +---> USB2.0 PHY ----> DWC3 USB controller
->>>              |
->>>              +---> USB/DP PHY0 +--> CDN-DP controller
->>>                                |
->>>                                +--> DWC3 USB controller
->>>
->>> ====
->>> 3. Multiple bridge model for RK3399 CDN-DP
->>>
->>> The RK3399 has two USB/DP combo PHY and one CDN-DP controller. And
->>> the CDN-DP can be switched to output to one of the PHYs.
->>>
->>> USB/DP PHY0 ---+
->>>                | <----> CDN-DP controller
->>> USB/DP PHY1 ---+
->>>
->>> In previous versions, if both PHY ports were connected to DP,
->>> the CDN-DP driver would select the first PHY port for output.
->>>
->>> On Dmitry's suggestion, we introduced a multi-bridge model to support
->>> flexible selection of the output PHY port. For each PHY port, a
->>> separate encoder and bridge are registered.
->>>
->>> The change is based on the DRM AUX HPD bridge, rather than the
->>> extcon approach. This requires the DT to correctly describe the
->>> connections between the first bridge in bridge chain and DP
->>> controller. And Once the first bridge is obtained, we can get the
->>> last bridge corresponding to the USB-C connector, and then set the
->>> DRM connector's fwnode to the corresponding one to enable HPD
->>> notification.
->>
->> With a similar dts patch [1] on top of this series I tested a type-C to
->> DP adapter/cable for display output on the ROCKPro64 board, which also
->> pairs a FUSB302 with RK3399. Booting it up with the cable plugged in
->> works, as does hotplugging the cable after booting in both orientations.
->> The correct mode for the display is detected. I wasn't able to test
->> audio, only video output, as this display doesn't have speakers.
->>
->> I did once, after unplugging and reconnecting the cable a few times,
->> see it get into a state where it didn't detect the attached display.
->> Logs from that unplug/reconnect attempt are here [2] if of interest.
->> Nevertheless, hotplug seems to work the majority of the time, so
->>
->> Tested-by: Hugh Cole-Baker <sigmaris@gmail.com>
->>
->> [1]: https://github.com/sigmaris/linux/commit/91724088b19bee7d248946442a801423e8cd0634
->> [2]: https://gist.github.com/sigmaris/fa107384a7492583ceee1c2962f5030a
->>
-> 
-> Thank you for the test. I also have the same board, and I will
-> try it later :)
-> 
+On Tue, Feb 3, 2026 at 10:14=E2=80=AFPM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+> On 2/2/26 12:03, Guan-Yu Lin wrote:
+> > On Sat, Jan 31, 2026 at 8:15=E2=80=AFPM Greg KH <gregkh@linuxfoundation=
+.org> wrote:
+> >>
+> >> On Fri, Jan 30, 2026 at 07:47:46AM +0000, Guan-Yu Lin wrote:
+> >>> When a USB device is disconnected or a driver is unbound, the USB cor=
+e
+> >>> invokes the driver's disconnect callback while holding the udev devic=
+e
+> >>> lock. If the driver calls xhci_sideband_unregister(), it eventually
+> >>> reaches usb_offload_put(), which attempts to acquire the same udev
+> >>> lock, resulting in a self-deadlock.
+> >>>
+> >>> Introduce lockless variants __usb_offload_get() and __usb_offload_put=
+()
+> >>> to allow modifying the offload usage count when the device lock is
+> >>> already held. These helpers use device_lock_assert() to ensure caller=
+s
+> >>> meet the locking requirements.
+> >>
+> >> Ugh.  Didn't I warn about this when the original functions were added?
+> >>
+> >> Adding functions with __ is a mess, please make these names, if you
+> >> _REALLY_ need them, obvious that this is a no lock function.
+> >>
+> >> And now that you added the lockless functions, are there any in-kernel
+> >> users of the locked versions?  At a quick glance I didn't see them, di=
+d
+> >> I miss it somewhere?
+> >>
+> >> thanks,
+> >>
+> >> greg k-h
+> >
+> > Hi Greg,
+> >
+> > You are right; xhci-sideband.c is the only in-kernel user of the
+> > locked versions. I will rename the __ functions to usb_offload_* and
+> > remove the locked variants in the next version to clean up the API.
+> >
+> > Regarding the deadlock fix itself, we have analyzed two potential
+> > solutions. The core issue is that xhci_sideband_unregister() (and
+> > xhci_sideband_remove_interrupter()) needs to decrement the offload
+> > usage count (which requires the USB device lock), but it is called
+> > from the disconnect path where that lock is already held.
+> >
+> > Option A: Fix the Callers of xhci_sideband functions
+> > In this approach, we keep the usb_offload calls inside the
+> > xhci_sideband functions but replace the internal usb_lock_device()
+> > with device_lock_assert(). We then update callers in
+> > qc_audio_offload.c to explicitly acquire the lock.
+> > This ensures the offload count remains tightly coupled with the
+> > interrupter's lifecycle, though it effectively changes the API
+> > contract: calling xHCI sideband functions now requires holding the USB
+> > device lock.
+> >
+> > Option B: Decouple usb_offload functions from xhci_sideband functions
+> > In this approach, we strip the usb_offload calls out of xhci_sideband
+> > functions entirely. The client driver (qc_audio_offload) becomes
+> > responsible for the full transaction: acquiring the lock, managing
+> > usb_offload_get/put(), and creating/removing the interrupter. This
+> > restores clean encapsulation (xHCI functions only handle hardware),
+> > but it places the burden on the client driver to correctly balance the
+> > usb_offload calls.
+> >
+> > I lean towards Option A to ensure the offload count implies an active
+> > interrupter by design, but please let me know if you prefer the
+> > cleaner separation of Option B.
+>
+> I would prefer option B
+> Decouple the offload from sideband.
+>
+> The secondary interrupter in sideband was specifically createad for
+> qc_audio_offload.
+>
+> Vendors using the xHCI hardware Audio sideband Capability (xHCI 7.9)
+> won't use a secondary interrupter, but might sill want to prevent suspend=
+ing
+> the device. So it shuold be better to make this decision in the class dri=
+ver.
+>
+> The offload count shoudn't be that complicated. Isn't it binary at the mo=
+ment?
+> We don't allow more than one sideband per device, and it can only have on=
+e
+> interrupter.
+>
+> I unfortunately couldn't participate in the review and development of
+> drivers/usb/core/offload.c, but my original idea before it was implemente=
+d
+> was to keep usb core out of sideband as much as possible as its not reall=
+y
+> a part of usb specification.
+>
+> This is also why I added the sideband pointer to struct xhci_virt_device.
+> It allows us to figure out if a device is dedicated for sideband use.
+>
+> so xhci_sideband_check() could be something like
+>
+> bool xhci_sideband_check(struct xhci_hcd *xhci)
+> {
+>         guard(spinlock_irqsave)(&xhci->lock);
+>
+>         for (int i =3D 1; i < HC_MAX_SLOTS; i++) {
+>         if (xhci->devs[i] && xhci->devs[i]->sideband)
+>                 return true;
+>         }
+>         return false;
+> }
+>
+> Thanks
+> Mathias
 
-I just tested on the ROCKPro64 board using a Type-C to HDMI dock,
-and after repeatedly plugging and unplugging it over 30 times, 
-it performed correctly every time :)
+Hi Mathias,
 
--- 
-Best, 
-Chaoyi
+Thanks for the feedback.
+I will proceed with Option B as you suggested. Decoupling the offload
+logic from the sideband mechanism seems cleaner and places the
+responsibility correctly on the class driver (qc_audio_offload) to
+manage the offload state.
+
+I will implement the following changes in v2:
+1. API Cleanup: As Greg requested, I will rename __usb_offload_* to
+usb_offload_* and remove the locked variants. These functions will use
+device_lock_assert() to ensure the caller holds the lock.
+2. Class Driver Logic: qc_audio_offload will handle locking udev and
+calling usb_offload_get/put() directly.
+
+Regarding xhci_sideband_check():
+I have a concern regarding power management with the proposed check:
+
+if (xhci->devs[i] && xhci->devs[i]->sideband)
+        return true;
+
+vdev->sideband is assigned during xhci_sideband_register(), which
+happens when the class driver probes (device connection), and it
+persists until disconnect. If we use this check, the xHCI controller
+will be prevented from PM suspending (system suspend) as long as the
+device is connected, even if it is idle (not playing audio).
+For mobile power optimization, we need to allow the controller to
+suspend when the sideband is registered but idle.
+
+Since we are proceeding with Option B, the class driver will be
+maintaining the udev->offload_usage count via usb_offload_get/put(). I
+propose we still rely on usb_offload_check() (or check offload_usage)
+within the xHCI sideband check. This ensures we only block or adjust
+the PM suspend flow only when there is active data transfer.
+
+Regards,
+Guan-Yu
 
