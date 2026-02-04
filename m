@@ -1,83 +1,104 @@
-Return-Path: <linux-usb+bounces-33097-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33098-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0NniE2ZGg2nqkgMAu9opvQ
-	(envelope-from <linux-usb+bounces-33097-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 14:15:18 +0100
+	id CFvKJ/lHg2mMkwMAu9opvQ
+	(envelope-from <linux-usb+bounces-33098-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 14:22:01 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CDF4E6465
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 14:15:17 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45D0FE6582
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 14:22:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4A92F3008256
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 13:15:14 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A56F730089A4
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 13:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8708D156C6A;
-	Wed,  4 Feb 2026 13:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40BBF1917F1;
+	Wed,  4 Feb 2026 13:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1NWjxcH"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="drrZ2Qrd";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="B2GAcTFi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059DC156F20
-	for <linux-usb@vger.kernel.org>; Wed,  4 Feb 2026 13:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B373D34BC
+	for <linux-usb@vger.kernel.org>; Wed,  4 Feb 2026 13:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770210908; cv=none; b=VnMWSQxDfKs6gx+ynaoeUMq9TWP3YFUrYeFUwJs6OHzuR+donn225AH8wD/P/sh29CEUv5zb2mfMLLqgwRNCf9YFAkkH5Qga0cDsrkzJy9qNz1Cd6VEZgkKmrCQwX9ZYxMoDAJZMecdqzSdPJJ1TszvDG2iWQXnjLHENZpbSc40=
+	t=1770211317; cv=none; b=hQRWaYv7zjq0E7pe7pbtFdG6ctmgvE5GkUoPwC24S7Ceq4xstnbnhcJWPRq7vThNpNWvvChgQ6C0su4iPZC5kDSPfBWBsRdjLsiK6yBhV79kMHdnWom8RIp/FSmWghos7uhonsRs/D58HTiRe4q3sk2OG6NXFvDH4Rj8hsDrNJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770210908; c=relaxed/simple;
-	bh=rHVS6ioRH8ur1X090wZA+nUvR3Xl16eP3aJdGzDLmMo=;
+	s=arc-20240116; t=1770211317; c=relaxed/simple;
+	bh=ejIe9K8TRFAnJxwfJZad45jmqCxHzaXJ8oFdYngj8a0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ehfI93NyE33hZINYgxMzgR0TMv/3xZpWef7Vs1M6a7+vBdUWgHfIiU7H/01+lpO5GyxXKEEazAW2VdbXIuiiU+wCWjBQ07Ym/g2oniQNaB6VXeg7Q7X/SoXhe9t6/w0NWVgtow2e8YpWIhgMNjO+87ELTbtzRVxaYU8QlSGV3X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j1NWjxcH; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-81df6a302b1so6395340b3a.2
-        for <linux-usb@vger.kernel.org>; Wed, 04 Feb 2026 05:15:07 -0800 (PST)
+	 In-Reply-To:Content-Type; b=lOLns3ey4PuWvu9ezQySXFqubQH4ywpj6LWpvN2DXZtF2ZY+8Il9MBXvJCXrTgtPPpO7oqotJAORC7oDv86s547VQkdyOsNTL42LnPSYDu5CpErAKlqLN/IuV/ZD7vkBvOkPxTuT0AIvjpuhXKnQsmeu8FO8jUGhNZlXfG4pFkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=drrZ2Qrd; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=B2GAcTFi; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 614CIaNq675154
+	for <linux-usb@vger.kernel.org>; Wed, 4 Feb 2026 13:21:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	aLmS86Gu8Sr2rHXE8XBrADnektSAaASrFSh03li0xM8=; b=drrZ2QrdQlukp5EO
+	8vrrMfmsonosRnfcPLEY+4IvClY2KDH3mOpfMH2E2YrnVVSEkB7gYLU9qPHWkV97
+	vBN2yo+TkjWcWyet3bQeO17nFskwud+Iz7GEkF+Nda0hAJB+PunKNvFxQjO4G0IS
+	saPcC3VYZS4wILsRjUYzJwvFfO31KdmPVMIlVt6X5jA67DUraMoiPZM+cu+CcUMd
+	6wXZQ3aA6/FJ9Df3FcgMiDqGKmOEtGvnRL68N5nUjbra1x89jeDH4rVnDNdMO+Mj
+	J+xE2Ozp+ghOcSaPsxL5wk4w+sOG65/lTaXCpxHMvIaTYgUN5SqGCj7s46AGDKme
+	u9Gv2A==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c3h07meyn-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 04 Feb 2026 13:21:56 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8c533f07450so180586185a.0
+        for <linux-usb@vger.kernel.org>; Wed, 04 Feb 2026 05:21:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770210907; x=1770815707; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1770211316; x=1770816116; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8ftubfnbHJMifavaHfusKulTde0Z2b2i2QG/AKOLuw4=;
-        b=j1NWjxcHhUSEc+qf3+Y4eVOu2LpG2uEOXMoqoPYWjgSQrm18M8v568h+1HAKCo0Yt5
-         JjmGC2TAORy6cp0LCTUA07jPxxATVo9GYaiM1zM4RwXPkdDNcyyGQ8Qd2hbtOpXgeg/F
-         c9+MaE0TZQ1NxnwFR5RRLyeARR0eFszVpdUl8amZr2FQDWoblu43iWQqPdPWYcFUpiFb
-         Z66Z9l1s0vavIMLCAmAzvBWv6VaiwpZPIq8NuOC90jQg8G2rnLUByXiExcnHjCTBfMXa
-         jZL2DD0u1A1xMdH1FbvULNajhUMc3TQPzaqm4qBe25p8H/sFh3gjXw8x7Sp8PP0uM5vY
-         ee0w==
+        bh=aLmS86Gu8Sr2rHXE8XBrADnektSAaASrFSh03li0xM8=;
+        b=B2GAcTFiNdLsEsaidXhD7XI/4mL3+EBnwuyWQgUFogPwoQS07reqBPb9VjyrL1LY4m
+         wKrruSn1GC/w0QzRW9nEJO6M0+bvpjeFSRAfSAp26VViW1f4CybmHys+OzPz9WOnoQt2
+         0qj/rWl462F2R1ZmIPEH2pXonqR15CVk2V3OGhwdPvJpIJbENMImp6rgryywLt72psQ1
+         LQlQ3EK1mt20DdoWT9doD8tOSoMs6l3z+GQKbVrno7a6vQVtz6XywZwezqa4LOBC4h1/
+         AHjUFpu8JLfSn7a0Cayn7xlSz3QQ4sCuhMy5py6+q5aihrsZIHXx52TaBfVNBwY4MxBh
+         5ONA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770210907; x=1770815707;
+        d=1e100.net; s=20230601; t=1770211316; x=1770816116;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8ftubfnbHJMifavaHfusKulTde0Z2b2i2QG/AKOLuw4=;
-        b=lAiB4zSuMjfztoyBrC/U5sRDlgxchrMxCu9p1XEY9bOVGSFDqV1BcGh8/zhNW/Pd7K
-         lHnbbWSKHjIBdrsPZsqWaJHIFpv44pPnEfLRkP7BYlZbiRHBFVlnT8LknuQUYqG99GPO
-         sR1ooBtZVa/sFTQb3NlPH6TIZe+KNmifTSI+M5nwb7tMISdJ0uxTssyQBHhiJYU3GTkO
-         TMdQVffk4qArFqPozNIJ3Kq9v7/lxoTcVI/L+Q9xq++r3PkGSJVozEEdKX6oT+ejI9d2
-         ZDplxdM7OAWQz2UiIDg1NqMr6SRqvTLKz65fY5KlzAVljCz/LaC/WojgWj9dTaxpBP5X
-         ChDw==
-X-Gm-Message-State: AOJu0YzOLlnBPq6pzhbyCZGchi/MPnoRZdY4DGNjo8weui43OgBHMObs
-	KtDcknxJ0HkOPLn3FT0yOnCVbkcnnXQvFkBaZwW47WzbQwhxs0phPA2p
-X-Gm-Gg: AZuq6aKvOEDJSimK15JicIL7O9ytTaIAr3VndfJk+7lKXASXANOQqmQoRrCo9WEeRwG
-	/nHRVdPLAQPqmX6poZdVRiOK6qwlIpQIPaER7m+kDPTDsT+sDGSd5NDG30GJdq7WViJOAGiyAd7
-	KPKyphYJnGDtSjvhXVSqDjBBpn3sEc+hPHAtUwmk4JvntZ9zkLa0wmNQoVZUG+qhr1hbKFpMg9U
-	W/hKz1c2JNOZjgCUpvhVE0yqxrHT4IzjJ4XfA4TF8R1DTRZBb7RuGS22AA5Ssn3n6b2IvSFQQPj
-	rdbXlZCH0VAvjJfDAHQbDsrPP4iX0Frkef0sw4bjqqZCeVhhi0e9pyQvCHbYJLLx5TFYK24Iog+
-	tvtkt+0X91oERn3oGn8doD7qt7W0OA4HwwKHvmzt7HPzIgHoyoMx9nYH6pI0AspZCWxh/scvFEa
-	Km45RJLhS27PPK1F35yclmUdvADHKPw3B8Src=
-X-Received: by 2002:a05:6a20:9396:b0:38b:dec8:9d9a with SMTP id adf61e73a8af0-393724c1cc1mr2968310637.55.1770210906967;
-        Wed, 04 Feb 2026 05:15:06 -0800 (PST)
-Received: from [192.168.1.7] ([115.99.252.105])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c6c8553e888sm2101202a12.31.2026.02.04.05.15.02
+        bh=aLmS86Gu8Sr2rHXE8XBrADnektSAaASrFSh03li0xM8=;
+        b=OE6OdOD1cMio5AwwVtgGnwBP9eF/n3DPG7tBHwKLagT3nnoX41NPa5UgynwMeJSc0y
+         ynwt0DeeSAMCqEeE87jbD5voz3cnj+ESTBEzV8bXgpwxma3RdQS3nnb8AICjARoapOnh
+         Nt0ete9e1iy1yr5BY3b9C3vfesg6L7ZMGEcBcoda4JngFy03ngOdjRC7L7nkrc7UqbT0
+         92+11bX03yzBIswa+yXekMvbpwDkzY5yUw6JdjWi9wXq/PhS137KglNr25+tqfERMhAU
+         +xWLLO2KN3/FniVwPtKo8Cpd2ZdXeYdV1XHf7GxM2eIAQHvFo+JgE2GeeEGnM96nSnr8
+         67gg==
+X-Forwarded-Encrypted: i=1; AJvYcCUK4mFNWUiju9zjuszJsPci785gTTVaZ6swn2W7qPWLjuq9qiIIIIZnUdtuNoCFKWgbI3Jv9eWZEyo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8Idq1if/udbJ78n7DjxbDZqxrm+xw2KqGWTa9Di306EPv+71X
+	+JRgPP8noOQKLEryTY6KVz0JAgXsf2A8moshbuO5CjruwZTtItFA7etgoaHhBfPaPntskiHu9aJ
+	7oFfqwHoq01TtBZzrFEUDSlsLN31P8ZD1MIAQa63aBWwgo5OlfYKeqnT8mw8AX6U=
+X-Gm-Gg: AZuq6aK1hxKfREng3qCDqn+1BQUfeHJwm+im1Ax1hQqv+BJIy+fpHivxWJ5/WK2thwy
+	rpSjUc2HtQR13SxFVWSbj4E/vDd11x1Uuejj1leHWDYClNi+hmeTvQMWYUkXjC8gWJBXkJJY6AH
+	AiwJPnjZcoIdp43dlO9wluwlZkLe0byhOFsyJafRNWg+YCt3VdSpZRL4Z57+07OlBtPaO+RjfCf
+	P7RK5edkg7tY8iR92xRn6ll+PWpmIPHEZv5ksNA5iNkTuwEPXACTocS8Iq5wgQIVAovBs906keg
+	Nbur5t7lVvjV1Qm2d8tt7T9ZD8XzSrAREC0oWe4LS6IszKdQfdz8qIOJ4fVV3x4k3/UMB6t/goi
+	MFCruq3GeePf0IQ4Gdz/Rq35gFAqJW+JI2VNGhPj4qNAR4LOXiAt1K9aI2zJnFAwUMq4=
+X-Received: by 2002:a05:620a:2903:b0:8b2:e19c:67cd with SMTP id af79cd13be357-8ca2fa05f05mr300553885a.9.1770211315830;
+        Wed, 04 Feb 2026 05:21:55 -0800 (PST)
+X-Received: by 2002:a05:620a:2903:b0:8b2:e19c:67cd with SMTP id af79cd13be357-8ca2fa05f05mr300549385a.9.1770211315277;
+        Wed, 04 Feb 2026 05:21:55 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8e9fd3d72fsm130989566b.26.2026.02.04.05.21.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Feb 2026 05:15:06 -0800 (PST)
-Message-ID: <7bb66a07-51c5-4e9a-b484-e96a8f12c783@gmail.com>
-Date: Wed, 4 Feb 2026 18:45:00 +0530
+        Wed, 04 Feb 2026 05:21:54 -0800 (PST)
+Message-ID: <9f81c07a-c1c6-4888-975d-528a6181caea@oss.qualcomm.com>
+Date: Wed, 4 Feb 2026 14:21:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,168 +106,203 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: usb: atmel,at91rm9200-ohci: convert to
- DT schema
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Claudiu Beznea
- <claudiu.beznea@tuxon.dev>, Herve Codina <herve.codina@bootlin.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260201-atmel-usb-v1-0-d1a3e93003f1@gmail.com>
- <20260201-atmel-usb-v1-1-d1a3e93003f1@gmail.com>
+Subject: Re: [PATCH v2 3/9] usb: misc: qcom_eud: add per-path High-Speed PHY
+ control
+To: Elson Serrao <elson.serrao@oss.qualcomm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260126233830.2193816-1-elson.serrao@oss.qualcomm.com>
+ <20260126233830.2193816-4-elson.serrao@oss.qualcomm.com>
 Content-Language: en-US
-From: Charan Pedumuru <charan.pedumuru@gmail.com>
-In-Reply-To: <20260201-atmel-usb-v1-1-d1a3e93003f1@gmail.com>
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260126233830.2193816-4-elson.serrao@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA0MDEwMSBTYWx0ZWRfX2YDbXea64Qq5
+ dGnlrGJDbZ3e/SB9C1eRUxGKMVTfh+VJJcFpePm/Tg7PinC5QaVq4oEa0BFS5++rgCc3Kg6r8M2
+ oEFkIyLpt63yG9vE4n3P6n5Xwpm6+88yQYPy7uM7A65+J1kXNEIbqHBOBya1U+26doaIH1G0J6g
+ qjmZRTv8yXqwQzf1fSbNL78HcWDt1yKK32+rdWjRTQNT8STX6nyXBgc9e9jXQ1KeSD7G3p2PNhf
+ +1rjWVNv+Rwf4Hxt+ZJqS7C09S52eyDWpBbMzEU+7An4nmirDe81Sb81KBDzr4G+6kbXNGoFT2g
+ r1gwlEZkGRpWCBPL4F6C+/VL8v52sUEoaKyNePOZPC9iQLVs294h78W1QQzQTSs2NAQFS41/hBa
+ kJ79FVJgiCLvdI8Aop54TopCWVR76gxPHPychLDFAC6A6nZmbxHKYyT6ckjAMerTF+Y6GgEsLBC
+ gPj79yAoPewTmcbpXvw==
+X-Authority-Analysis: v=2.4 cv=CMknnBrD c=1 sm=1 tr=0 ts=698347f4 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=eJaOKka8i50yBWU_CzgA:9
+ a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-ORIG-GUID: Eg1sRBNMqTxTKagi6VL-f_8SbpRDKFwr
+X-Proofpoint-GUID: Eg1sRBNMqTxTKagi6VL-f_8SbpRDKFwr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-04_04,2026-02-04_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 suspectscore=0 impostorscore=0 bulkscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602040101
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33097-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33098-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[charanpedumuru@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 0CDF4E6465
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 45D0FE6582
 X-Rspamd-Action: no action
 
-
-
-On 01-02-2026 17:04, Charan Pedumuru wrote:
-> Convert Atmel AT91RM9200 / AT91SAM9 style OHCI USB Host
-> Controller binding to DT schema.
-> Changes during conversion:
-> - Include "usb-ohci" as a fallback compatible to allow at91 OHCI
->   driver matching.
+On 1/27/26 12:38 AM, Elson Serrao wrote:
+> EUD hardware can support multiple High-Speed USB paths, each routed
+> through its own PHY. The active path is selected in hardware via the
+> EUD_PORT_SEL register. As a High-Speed hub, EUD requires access to the
+> High-Speed PHY associated with the active UTMI path. To support this
+> multi-path capability, the driver must manage PHY resources on a per-path
+> basis, ensuring that the PHY for the currently selected path is properly
+> initialized and powered.
 > 
-> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
+> This patch restructures the driver to implement per-path PHY management.
+> The driver now powers the appropriate PHY based on the selected and
+> enabled UTMI path, ensuring correct operation when EUD is enabled.
+> 
+> Supporting this requires describing the available UTMI paths and their
+> corresponding PHYs in Device Tree. This updates DT requirements and is
+> not backward compatible with older DTs that lacked this description.
+> Historically, EUD appeared to work on single-path systems because the
+> USB controller kept the PHY initialized. However, EUD is designed to
+> operate independently of the USB controller and therefore requires
+> explicit PHY control.
+> 
+> Signed-off-by: Elson Serrao <elson.serrao@oss.qualcomm.com>
 > ---
->  .../bindings/usb/atmel,at91rm9200-ohci.yaml        | 85 ++++++++++++++++++++++
->  1 file changed, 85 insertions(+)
 
-Hi Rob,
+[...]
 
-For this patch, can I modify the existing generic-ohci.yaml file to include the compatible "atmel,at91rm9200-ohci" to it and define missing properties, as the fall back compatible "usb-ohci" is already defined for other vendors there, can I drop this patch and make changes for generic-ohci.yaml file and include it in the patch series for the next revision?
+> +static int eud_phy_enable(struct eud_chip *chip)
+> +{
+> +	struct eud_path *path;
+> +	struct phy *phy;
+> +	int ret;
+> +
+> +	if (chip->phy_enabled)
+> +		return 0;
+> +
+> +	path = chip->paths[chip->port_idx];
+> +	if (!path || !path->phy) {
 
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/atmel,at91rm9200-ohci.yaml b/Documentation/devicetree/bindings/usb/atmel,at91rm9200-ohci.yaml
-> new file mode 100644
-> index 000000000000..f04de6d553d2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/atmel,at91rm9200-ohci.yaml
-> @@ -0,0 +1,85 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/atmel,at91rm9200-ohci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel AT91RM9200 / AT91SAM9 style OHCI USB Host Controller
-> +
-> +maintainers:
-> +  - Nicolas Ferre <nicolas.ferre@microchip.com>
-> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-> +
-> +description:
-> +  The Atmel AT91RM9200 / AT91SAM9 OHCI USB Host Controller implements a
-> +  USB 1.1 Open Host Controller Interface (OHCI) compliant host interface.
-> +  It provides low-speed and full-speed USB host functionality and is
-> +  integrated into Atmel AT91RM9200 and AT91SAM9 family SoCs.
-> +
-> +allOf:
-> +  - $ref: /schemas/usb/usb.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: atmel,at91rm9200-ohci
-> +          - const: usb-ohci
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 3
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ohci_clk
-> +      - const: hclk
-> +      - const: uhpck
-> +
-> +  num-ports:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Number of downstream ports supported by this OHCI controller
-> +    minimum: 1
-> +    maximum: 15
-> +
-> +  atmel,vbus-gpio:
-> +    description: GPIO used to control or sense the USB VBUS power.
-> +    minItems: 1
-> +    maxItems: 3
-> +
-> +  atmel,oc-gpio:
-> +    description: GPIO used to signal USB overcurrent condition.
-> +    minItems: 1
-> +    maxItems: 3
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/at91.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    usb@500000 {
-> +        compatible = "atmel,at91rm9200-ohci", "usb-ohci";
-> +        reg = <0x500000 0x100000>;
-> +        interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&uhphs_clk>, <&uhphs_clk>, <&uhpck>;
-> +        clock-names = "ohci_clk", "hclk", "uhpck";
-> +        atmel,vbus-gpio = <&pioA 18 GPIO_ACTIVE_HIGH>;
-> +        atmel,oc-gpio   = <&pioB 10 GPIO_ACTIVE_LOW>;
-> +        num-ports = <2>;
-> +    };
-> +...
-> 
+I think neither are possible - path is != NULL since we can't enter into
+this function without failing the check in _store and !path->phy would error
+out in probe()->eud_init_path()
 
--- 
-Best Regards,
-Charan.
+[...]
 
+> +static void eud_phy_disable(struct eud_chip *chip)
+> +{
+> +	struct eud_path *path;
+> +	struct phy *phy;
+> +
+> +	if (!chip->phy_enabled)
+> +		return;
+> +
+> +	path = chip->paths[chip->port_idx];
+> +	if (!path || !path->phy)
+
+Likewise
+
+[...]
+
+> +static int eud_init_path(struct eud_chip *chip, struct device_node *np)
+> +{
+> +	struct eud_path *path;
+> +	u32 path_num;
+> +	int ret;
+> +
+> +	ret = of_property_read_u32(np, "reg", &path_num);
+> +	if (ret) {
+> +		dev_err(chip->dev, "Missing 'reg' property in path node\n");
+> +		return ret;
+
+You can use return dev_err_probe like you did a little below
+
+> +	}
+> +
+> +	if (path_num >= EUD_MAX_PORTS) {
+> +		dev_err(chip->dev, "Invalid path number: %u (max %d)\n",
+> +			path_num, EUD_MAX_PORTS - 1);
+> +		return -EINVAL;
+> +	}
+> +
+> +	path = devm_kzalloc(chip->dev, sizeof(*path), GFP_KERNEL);
+> +	if (!path)
+> +		return -ENOMEM;
+> +
+> +	path->chip = chip;
+> +	path->num = path_num;
+> +
+> +	path->phy = devm_of_phy_get(chip->dev, np, NULL);
+> +	if (IS_ERR(path->phy))
+> +		return dev_err_probe(chip->dev, PTR_ERR(path->phy),
+> +				     "Failed to get PHY for path %d\n", path_num);
+> +
+> +	chip->paths[path_num] = path;
+> +
+> +	return 0;
+> +}
+> +
+>  static int eud_probe(struct platform_device *pdev)
+>  {
+> +	struct device_node *np = pdev->dev.of_node;
+> +	struct device_node *child;
+>  	struct eud_chip *chip;
+>  	struct resource *res;
+>  	int ret;
+> @@ -252,6 +368,18 @@ static int eud_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	for_each_child_of_node(np, child) {
+
+With for_each_child_of_node_scoped(), you can dispose of the manual
+_put()
+
+> +		ret = eud_init_path(chip, child);
+> +		if (ret) {
+> +			of_node_put(child);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	/* Primary path is mandatory. Secondary is optional */
+> +	if (!chip->paths[0])
+> +		return -ENODEV;
+
+I'm going to assume we don't have any funny chips that violate this :)
+
+Konrad
 
