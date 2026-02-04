@@ -1,204 +1,335 @@
-Return-Path: <linux-usb+bounces-33104-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33105-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YOYeCUNUg2mJlQMAu9opvQ
-	(envelope-from <linux-usb+bounces-33104-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 15:14:27 +0100
+	id GGqyAuZWg2mJlQMAu9opvQ
+	(envelope-from <linux-usb+bounces-33105-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 15:25:42 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4662DE6E8E
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 15:14:26 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97A40E70E0
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 15:25:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2F625304C08E
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 14:11:51 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B27983008D44
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 14:25:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3419840F8EC;
-	Wed,  4 Feb 2026 14:11:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 782A4410D39;
+	Wed,  4 Feb 2026 14:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="VTRcx3Im"
+	dkim=pass (2048-bit key) header.d=a1rm4x.com header.i=@a1rm4x.com header.b="fGHgzX0k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx9.kaspersky-labs.com (mx9.kaspersky-labs.com [195.122.169.44])
+Received: from a4i635.smtp2go.com (a4i635.smtp2go.com [158.120.82.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7FB40F8D7;
-	Wed,  4 Feb 2026 14:11:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.122.169.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C726C3D330C
+	for <linux-usb@vger.kernel.org>; Wed,  4 Feb 2026 14:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=158.120.82.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770214308; cv=none; b=WY/1s7YkYoGEHY8ikNEW+edSQ66zpdgs1HMXZtfA002zL88p3DQVGuPwuNZKRnZBk/VgD1Tk8uy5JL439fO8l59guYE/ZtoRnVWQUEMl8e5/yrvYOKxdzGMVLRks8Z0or0cpxXhd+Y9dp8ttt5/zzoWFpYuiIlYvwQW3ECnpXgg=
+	t=1770215139; cv=none; b=SK3+xaihuw+3600yV7PuH6f94VUdmqsc/ZnfY1z8AFvWRvI6VI3W169nZhZU7iUcfZgVfulxChGa1hcQktKLoC/oSlntE/h/wGYb0zwR1jXKyR+0miqbWsEhT7i+mqSMaXU11tSJ3eqT+l6cMp5XTtKRV2Z4qXsvd3K3OOVKU5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770214308; c=relaxed/simple;
-	bh=YICMxq33G/Z9DySvYMcdIr6RdEdbxDv43cHfUpaF7Yk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bbkDAxnhWCiAXO+LoW8gmvnpIUf0Q1lsLEbhMGK4opWzkFL9VQvZuwumkZdQUrIuXstJG3+gPv/1VT8PaPBeN9SN6WQ83aZcqPVxo7WmVwUEEsiX9IADJi0gA2hG9IV092zGoch0PvEAE0Pm5SS+T4vqkxkDixMQzZUyLxOZ4R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=VTRcx3Im; arc=none smtp.client-ip=195.122.169.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaspersky.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
-	s=mail202505; t=1770214300;
-	bh=Ogv39PAqCp2VTbjwwj+exs86ORApfUI57oDAwsKlmYw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=VTRcx3ImO1Lhfou2JJwJz/NO0D/7/9l4MdEbs6VnKMpHFdihOnOwSQZe7L0jPUWNG
-	 uCye/IZOFJWyPCZUnssHrahPix65+4r0As7V2t06pz9ysXg9/FWtE1ezx+exCBWAkf
-	 ZPLAdvzl2eJlRzdlXKn632o/RKlyB/xVXMjzz5U9GY283qyfSNY5KiPN0vwRyhRGNJ
-	 lnpvBcdCy1l7fquInmJ1yfWUsgJWwAO3YNKUsKLVw1TrVlrUp5Ig+sWSsM58N4b2aj
-	 QY/h60mZcLqv7tRkmdwYs8rnshdkaX2EoekFaO5bryY5XZKK1vyL5OP58lqP8+rX9W
-	 BTCwcTZY0+G4g==
-Received: from relay9.kaspersky-labs.com (localhost [127.0.0.1])
-	by relay9.kaspersky-labs.com (Postfix) with ESMTP id 6EC4C8A0838;
-	Wed,  4 Feb 2026 17:11:40 +0300 (MSK)
-Received: from mail-hq2.kaspersky.com (unknown [91.103.66.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail-hq2.kaspersky.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
-	by mailhub9.kaspersky-labs.com (Postfix) with ESMTPS id 3ADCB8A194A;
-	Wed,  4 Feb 2026 17:11:40 +0300 (MSK)
-Received: from Votokina.avp.ru (10.16.104.187) by HQMAILSRV2.avp.ru
- (10.64.57.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.35; Wed, 4 Feb
- 2026 17:11:39 +0300
-From: Votokina Victoria <Victoria.Votokina@kaspersky.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Votokina Victoria <Victoria.Votokina@kaspersky.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Roger Quadros <rogerq@kernel.org>,
-	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<lvc-project@linuxtesting.org>
-Subject: [PATCH] usb: dwc3: am62: handle usb2_refclk enable failures
-Date: Wed, 4 Feb 2026 17:11:30 +0300
-Message-ID: <20260204141131.2451382-1-Victoria.Votokina@kaspersky.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1770215139; c=relaxed/simple;
+	bh=cG0Y1apEASCPh8AudNeJfgBd97p+M2mV9y0AWglrbbo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NGXSAw0fFmjDPSYnVJDB9hjwVfrNBGQGERKpPtktPq2Wq0FlYvQhqbQja0bBbfXKmUD08QSMX3M8z0v5q48d6vo+Zkzl8Ys1jBULWCPzQWH6I9TX/0/7ETfjG5/ytM1fR2pMD7G9u4m5M3qWXxX7fs4s9knEaaQdxb6r0cyXocg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=a1rm4x.com; spf=pass smtp.mailfrom=em938170.a1rm4x.com; dkim=pass (2048-bit key) header.d=a1rm4x.com header.i=@a1rm4x.com header.b=fGHgzX0k; arc=none smtp.client-ip=158.120.82.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=a1rm4x.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=em938170.a1rm4x.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=a1rm4x.com;
+ i=@a1rm4x.com; q=dns/txt; s=s938170; t=1770215137; h=from : subject :
+ to : message-id : date;
+ bh=w1LucEodSRv3xIEyCWilyqw2DXaGubQ8g2+9GXMuqBY=;
+ b=fGHgzX0kXm36mfZb/i3tbnHDAA+yldUFO/zxbSirTKSxMKvC4gxRWH9SdMCmA7cfpL1MH
+ eOtS0YO95v3kn1mhx28HMVPO8PrsifZ2Is0NKRK5MS4Ki2O5eXw3bb7pGlGRWzI0gHPbA77
+ qncjocwCheFyc00XQ4/ryNfcNqj4Q2AO3GRm2q0r6ME8RWzG+JNjsdWbsMs3XivZ6bryge6
+ ohpktlrOJKOCzI6xbDktwgt2PV5VexkFuK8xJ1JyS5UtjhRpXbOizAq6ZU2nA2hq2j0jTI1
+ 1FX0Pq97N48+DxLR85O40gRSiIVwUc7beYZP3gUTfqzgrAGuqzSsWlXkWg+g==
+Received: from [10.172.245.14] (helo=mail-yw1-f181.google.com)
+	by smtpcorp.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	(Exim 4.99.1-S2G)
+	(envelope-from <A1RM4X@A1RM4X.com>)
+	id 1vndp1-FnQW0hPw4s9-1V9I
+	for linux-usb@vger.kernel.org;
+	Wed, 04 Feb 2026 14:25:35 +0000
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-79427f739b0so7519447b3.3
+        for <linux-usb@vger.kernel.org>; Wed, 04 Feb 2026 06:25:35 -0800 (PST)
+X-Forwarded-Encrypted:
+ i=1; AJvYcCXHth5tgjw3C9Ng9COEHwXdEBnfOYu6mK9ek2oRZTnY/GF/qE37InjR8LROpsBfUvX9u7WjY6cAa+M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywr0672MjLGSQqN+iMI3+K7enfGbnHyeVZ+GMPHpaq9MPsZz5Pk
+	V6wbcaTt2nlTY0OaGGrKushg5XLP6MzNKU2YlEqqUdjv1sOxsoX2FZzAzFqOKzEuxVH1511hWx0
+	MBOYqS55awEFi3/l7IaSpyxkHC/Eq0Yw=
+X-Received: by 2002:a05:690c:13:b0:794:ea75:4847 with SMTP id
+ 00721157ae682-794fe83eb83mr30298537b3.62.1770215134789; Wed, 04 Feb 2026
+ 06:25:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HQMAILSRV3.avp.ru (10.64.57.53) To HQMAILSRV2.avp.ru
- (10.64.57.52)
-X-KSE-ServerInfo: HQMAILSRV2.avp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 02/04/2026 13:53:20
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 200150 [Feb 04 2026]
-X-KSE-AntiSpam-Info: Version: 6.1.1.20
-X-KSE-AntiSpam-Info: Envelope from: Victoria.Votokina@kaspersky.com
-X-KSE-AntiSpam-Info: LuaCore: 87 0.3.87
- 7430d8ffafccd8879e1d8370e5b501352446c2ba
-X-KSE-AntiSpam-Info: {date_rfc_vio_soft_silent}
-X-KSE-AntiSpam-Info: {Tracking_cluster_exceptions}
-X-KSE-AntiSpam-Info: {Tracking_real_kaspersky_domains}
-X-KSE-AntiSpam-Info: {Tracking_black_eng_exceptions}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: kaspersky.com:7.1.1,5.0.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: {Tracking_white_helo}
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 02/04/2026 13:56:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 2/4/2026 11:49:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2026/02/04 11:41:00 #28178294
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 52
+References: <20260204032938.61553-1-dev@a1rm4x.com> <2026020457-distrust-vision-e5de@gregkh>
+In-Reply-To: <2026020457-distrust-vision-e5de@gregkh>
+From: A1RM4X <A1RM4X@a1rm4x.com>
+Date: Wed, 4 Feb 2026 09:25:18 -0500
+X-Gmail-Original-Message-ID: <CACy+XB-Z26Bx2Zb4omoRq00L4tTAQxe4QWSQ1f=eFMryqb8Ksw@mail.gmail.com>
+X-Gm-Features: AZwV_QgMH8H4uMcQtX1cIAd0U3pCTc3v4Z7udUyeV5NwWqKDrF0AoxgxYCb7GL8
+Message-ID: <CACy+XB-Z26Bx2Zb4omoRq00L4tTAQxe4QWSQ1f=eFMryqb8Ksw@mail.gmail.com>
+Subject: Re: [PATCH] usb: add QUIRK_NO_BOS for several devices
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: A1RM4X <dev@a1rm4x.com>, linux-usb@vger.kernel.org, limiao@kylinos.cn, 
+	oneukum@suse.com, huanglei@kylinos.cn, lijiayi@kylinos.cn, 
+	johannes.bruederl@gmail.com, linux-kernel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="00000000000049416c064a005493"
+X-Report-Abuse: Please forward a copy of this message, including all headers, to <abuse-report@smtp2go.com>
+Feedback-ID: 938170m:938170ab7bWmC:938170sS1YP7rRpK
+X-smtpcorp-track: J9S5ZvTt7l1z.9G2AoW5YLiyP.U_QJzgS3dhs
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.06 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kaspersky.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kaspersky.com:s=mail202505];
+	R_DKIM_ALLOW(-0.20)[a1rm4x.com:s=s938170];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-patch];
+	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33104-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[6];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[a1rm4x.com,vger.kernel.org,kylinos.cn,suse.com,gmail.com];
+	TAGGED_FROM(0.00)[bounces-33105-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Victoria.Votokina@kaspersky.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[kaspersky.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	HAS_ATTACHMENT(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[a1rm4x.com];
+	DKIM_TRACE(0.00)[a1rm4x.com:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kaspersky.com:email,kaspersky.com:dkim,kaspersky.com:mid]
-X-Rspamd-Queue-Id: 4662DE6E8E
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[A1RM4X@a1rm4x.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,mail.gmail.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,a1rm4x.com:email,a1rm4x.com:dkim]
+X-Rspamd-Queue-Id: 97A40E70E0
 X-Rspamd-Action: no action
 
-The AM62 DWC3 glue enables usb2_refclk via clk_prepare_enable(), but
-the return value was ignored in the init path. If the clock cannot be
-enabled (including -EPROBE_DEFER), the driver continues and may access
-the controller/PHY in an undefined state.
+--00000000000049416c064a005493
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Also check dwc3_ti_init() return value on resume when power/context was
-lost.
+Hi,
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Please find attached the new patch which fixes the structure of the commit.
 
-Fixes: 31d500c2d0d4 ("usb: dwc3: dwc3-am62: Re-initialize controller if lost power in PM suspend")
-Signed-off-by: Votokina Victoria <Victoria.Votokina@kaspersky.com>
----
- drivers/usb/dwc3/dwc3-am62.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Why? If the option is not being used, the speed limit will be limited
+to 5000M, which limits the capture capabilities of the device (4K30fps
+at 5000M versus the expected 4K60fps at 10000M).
 
-diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
-index e11d7643f966..d8b35098e921 100644
---- a/drivers/usb/dwc3/dwc3-am62.c
-+++ b/drivers/usb/dwc3/dwc3-am62.c
-@@ -205,7 +205,9 @@ static int dwc3_ti_init(struct dwc3_am62 *am62)
- 
- 	dwc3_ti_writel(am62, USBSS_PHY_CONFIG, reg);
- 
--	clk_prepare_enable(am62->usb2_refclk);
-+	ret = clk_prepare_enable(am62->usb2_refclk);
-+	if (ret)
-+		return dev_err_probe(am62->dev, ret, "failed to enable usb2_refclk\n");
- 
- 	/* Set mode valid bit to indicate role is valid */
- 	reg = dwc3_ti_readl(am62, USBSS_MODE_CONTROL);
-@@ -361,14 +363,17 @@ static int dwc3_ti_resume_common(struct device *dev)
- {
- 	struct dwc3_am62 *am62 = dev_get_drvdata(dev);
- 	u32 reg;
-+	int ret;
- 
- 	reg = dwc3_ti_readl(am62, USBSS_DEBUG_CFG);
- 	if (reg != USBSS_DEBUG_CFG_DISABLED) {
- 		/* lost power/context */
--		dwc3_ti_init(am62);
-+		return dwc3_ti_init(am62);
- 	} else {
-+		ret = clk_prepare_enable(am62->usb2_refclk);
-+		if (ret)
-+			return ret;
- 		dwc3_ti_writel(am62, USBSS_DEBUG_CFG, USBSS_DEBUG_CFG_OFF);
--		clk_prepare_enable(am62->usb2_refclk);
- 	}
- 
- 	if (device_may_wakeup(dev)) {
--- 
-2.43.0
+What happens in userspace?
+- without patch
+[ 5036.674972] usb 2-2: new SuperSpeed Plus Gen 2x1 USB device number
+2 using xhci_hcd
+[ 5041.770595] usb 2-2: unable to get BOS descriptor or descriptor too shor=
+t
+[ 5041.770605] usb 2-2: unable to read config index 0 descriptor/start: -19
+[ 5041.955592] usb 2-2: Device not responding to setup address.
+[ 5042.162588] usb 2-2: Device not responding to setup address.
+[ 5042.370246] usb 2-2: device not accepting address 3, error -71
+[ 5042.373859] usb usb2-port2: attempt power cycle
+[ 5043.691464] usb 2-2: new SuperSpeed USB device number 5 using xhci_hcd
+[ 5043.887185] usb 2-2: LPM exit latency is zeroed, disabling LPM.
+[ 5043.980556] usb 2-2: New USB device found, idVendor=3D2b89,
+idProduct=3D5871, bcdDevice=3D 0.00
+[ 5043.980561] usb 2-2: New USB device strings: Mfr=3D6, Product=3D7, Seria=
+lNumber=3D3
+[ 5043.980563] usb 2-2: Product: UGREEN 35871
+[ 5043.980564] usb 2-2: Manufacturer: UGREEN 35871
+[ 5043.980564] usb 2-2: SerialNumber: PRODUCT
+[ 5044.166844] hid-generic 0003:2B89:5871.0007: hiddev99,hidraw6: USB
+HID v1.11 Device [UGREEN 35871 UGREEN 35871] on
+usb-0000:0b:00.0-2/input4
+[ 5044.188946] videodev: Linux video capture interface: v2.00
+[ 5044.207601] uvcvideo 2-2:1.1: Unknown video format
+30313050-0000-0010-8000-00aa00389b71
+[ 5044.207606] uvcvideo 2-2:1.0: Found UVC 1.00 device UGREEN 35871 (2b89:5=
+871)
+[ 5044.242584] usbcore: registered new interface driver uvcvideo
 
+/:  Bus 002.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/5p, 2000=
+0M/x2
+    |__ Port 002: Dev 005, If 0, Class=3DVideo, Driver=3Duvcvideo, 5000M
+    |__ Port 002: Dev 005, If 1, Class=3DVideo, Driver=3Duvcvideo, 5000M
+    |__ Port 002: Dev 005, If 2, Class=3DAudio, Driver=3Dsnd-usb-audio, 500=
+0M
+    |__ Port 002: Dev 005, If 3, Class=3DAudio, Driver=3Dsnd-usb-audio, 500=
+0M
+    |__ Port 002: Dev 005, If 4, Class=3DHuman Interface Device,
+Driver=3Dusbhid, 5000M
+
+
+- with patch
+[   51.913978] usb 6-1: new SuperSpeed Plus Gen 2x1 USB device number
+3 using xhci_hcd
+[   52.181717] usb 6-1: New USB device found, idVendor=3D2b89,
+idProduct=3D5871, bcdDevice=3D 0.00
+[   52.181721] usb 6-1: New USB device strings: Mfr=3D6, Product=3D7, Seria=
+lNumber=3D3
+[   52.181724] usb 6-1: Product: UGREEN 35871
+[   52.181726] usb 6-1: Manufacturer: UGREEN 35871
+[   52.181728] usb 6-1: SerialNumber: PRODUCT
+[   52.284659] uvcvideo 6-1:1.1: Unknown video format
+30313050-0000-0010-8000-00aa00389b71
+[   52.284666] uvcvideo 6-1:1.0: Found UVC 1.00 device UGREEN 35871 (2b89:5=
+871)
+[   52.475086] hid-generic 0003:2B89:5871.000A: hiddev100,hidraw6: USB
+HID v1.11 Device [UGREEN 35871 UGREEN 35871] on
+usb-0000:0e:00.3-1/input4
+
+/:  Bus 006.Port 001: Dev 001, Class=3Droot_hub, Driver=3Dxhci_hcd/4p, 1000=
+0M
+    |__ Port 001: Dev 003, If 0, Class=3DVideo, Driver=3Duvcvideo, 10000M
+    |__ Port 001: Dev 003, If 1, Class=3DVideo, Driver=3Duvcvideo, 10000M
+    |__ Port 001: Dev 003, If 2, Class=3DAudio, Driver=3Dsnd-usb-audio, 100=
+00M
+    |__ Port 001: Dev 003, If 3, Class=3DAudio, Driver=3Dsnd-usb-audio, 100=
+00M
+    |__ Port 001: Dev 003, If 4, Class=3DHuman Interface Device,
+Driver=3Dusbhid, 10000M
+
+
+If more debug tests are required, please let me know how to proceed.
+
+--------------------------------
+
+Regarding the Signed=E2=80=91off=E2=80=91by line, I would like to use my pu=
+blic
+content=E2=80=91creator alias rather than my personal identity. Could you
+advise how to do this while remaining compliant with the DCO?
+
+Thanks,
+A1RM4X
+
+On Wed, Feb 4, 2026 at 12:15=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Tue, Feb 03, 2026 at 10:29:38PM -0500, A1RM4X wrote:
+> > Add QUIRK_NO_BOS entries for:
+> >  * ASUS TUF 4K PRO (0x0b05:0x1ab9)
+> >  * Avermedia Live Gamer Ultra 2.1 (0x07ca:0x2553)
+> >  * UGREEN 35871 (0x2b89:0x5871)
+>
+> Why?  What is the results without this option being used here?  And what
+> happens when userspace goes and asks for this descriptor?
+>
+> > Signed-off-by: A1RM4X <dev@a1rm4x.com>
+>
+> We need a real name, sorry.
+>
+> > ---
+> >  drivers/usb/core/quirks.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+> > index c4d85089d19b..ddce45ce9f6c 100644
+> > --- a/drivers/usb/core/quirks.c
+> > +++ b/drivers/usb/core/quirks.c
+> > @@ -453,6 +453,15 @@ static const struct usb_device_id usb_quirk_list[]=
+ =3D {
+> >       /* Elgato 4K X - BOS descriptor fetch hangs at SuperSpeed Plus */
+> >       { USB_DEVICE(0x0fd9, 0x009b), .driver_info =3D USB_QUIRK_NO_BOS }=
+,
+> >
+> > +     /* ASUS TUF 4K PRO - BOS descriptor fetch hangs at SuperSpeed Plu=
+s */
+> > +     { USB_DEVICE(0x0b05, 0x1ab9), .driver_info =3D USB_QUIRK_NO_BOS }=
+,
+> > +
+> > +     /* Avermedia Live Gamer Ultra 2.1 (GC553G2) - BOS descriptor fetc=
+h hangs at SuperSpeed Plus */
+> > +     { USB_DEVICE(0x07ca, 0x2553), .driver_info =3D USB_QUIRK_NO_BOS }=
+,
+> > +
+> > +     /* UGREEN 35871 - BOS descriptor fetch hangs at SuperSpeed Plus *=
+/
+> > +     { USB_DEVICE(0x2b89, 0x5871), .driver_info =3D USB_QUIRK_NO_BOS }=
+,
+>
+> Please read the comment for this structure for how to place these in the
+> list.
+>
+> thanks,
+>
+> greg k-h
+>
+
+--00000000000049416c064a005493
+Content-Type: text/x-patch; charset="UTF-8"; 
+	name="0001-PATCH-v2-usb-core-reorder-BOS-quirk-entries-alphabet.patch"
+Content-Disposition: attachment; 
+	filename="0001-PATCH-v2-usb-core-reorder-BOS-quirk-entries-alphabet.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ml84bov50>
+X-Attachment-Id: f_ml84bov50
+
+RnJvbSAxN2I1ZGMzYjdiYzdiN2FlNjQzMzM0OTA4YjIzOGU2ZWIxZGZhODFlIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBMVJNNFggPGRldkBhMXJtNHguY29tPgpEYXRlOiBXZWQsIDQg
+RmViIDIwMjYgMDg6MTk6NTYgLTA1MDAKU3ViamVjdDogW1BBVENIXSA9P1VURi04P3E/W1BBVENI
+PTIwdjJdPTIwdXNiOj0yMGNvcmU6PTIwcmVvcmRlcj0yMEJPUz89CiA9P1VURi04P3E/PUUyPTgw
+PTkxcXVpcms9MjBlbnRyaWVzPTIwYWxwaGFiZXRpY2FsbHk/PQpNSU1FLVZlcnNpb246IDEuMApD
+b250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKQ29udGVudC1UcmFuc2Zlci1F
+bmNvZGluZzogOGJpdAoKKiB1c2I6IGFkZCBRVUlSS19OT19CT1MgZm9yIHNldmVyYWwgZGV2aWNl
+cwogIC0gRGlzYWJsZXMgQk9TIGhhbmRsaW5nIG9uIGRldmljZXMgdGhhdCBicmVhayB3aGVuIHRo
+ZSBCT1MKICAgIGRlc2NyaXB0b3IgaXMgcmVhZCAoZS5nLiBVR1JFRU4gMzU4NzEpLiAgUHJldmVu
+dHMgdGhlIGtlcm5lbAogICAgZnJvbSBmYWxsaW5nIGJhY2sgdG8gYSA14oCvR2JwcyBsaW5rIHNw
+ZWVkLCB1bmxvY2tpbmcgdGhlCiAgICBleHBlY3RlZCAxMOKAr0dicHMvNEvigK82MOKAr2ZwcyBt
+b2RlLgoKKiB1c2I6IGNvcmU6IHJlb3JkZXIgQk9T4oCRcXVpcmsgZW50cmllcyBhbHBoYWJldGlj
+YWxseQogIC0gVGhlIHRocmVlIFVTQl9RVUlSS19OT19CT1MgZW50cmllcyBhcmUgbm93IHBsYWNl
+ZCBpbiB0aGUKYWxwaGFiZXRpY2FsIG9yZGVyIHJlcXVpcmVkIGJ5IHRoZSBmaWxlIGhlYWRlci4K
+ClNpZ25lZC1vZmYtYnk6IEExUk00WCA8ZGV2QGExcm00eC5jb20+Ci0tLQogZHJpdmVycy91c2Iv
+Y29yZS9xdWlya3MuYyB8IDE4ICsrKysrKysrKy0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDkg
+aW5zZXJ0aW9ucygrKSwgOSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9j
+b3JlL3F1aXJrcy5jIGIvZHJpdmVycy91c2IvY29yZS9xdWlya3MuYwppbmRleCBkZGNlNDVjZTlm
+NmMuLmY0YzgwMDYzODY0ZiAxMDA2NDQKLS0tIGEvZHJpdmVycy91c2IvY29yZS9xdWlya3MuYwor
+KysgYi9kcml2ZXJzL3VzYi9jb3JlL3F1aXJrcy5jCkBAIC0zNzcsNiArMzc3LDkgQEAgc3RhdGlj
+IGNvbnN0IHN0cnVjdCB1c2JfZGV2aWNlX2lkIHVzYl9xdWlya19saXN0W10gPSB7CiAJLyogU2Fu
+RGlzayBFeHRyZW1lIDU1QUUgKi8KIAl7IFVTQl9ERVZJQ0UoMHgwNzgxLCAweDU1YWUpLCAuZHJp
+dmVyX2luZm8gPSBVU0JfUVVJUktfTk9fTFBNIH0sCiAKKwkvKiBBdmVybWVkaWEgTGl2ZSBHYW1l
+ciBVbHRyYSAyLjEgKEdDNTUzRzIpIC0gQk9TIGRlc2NyaXB0b3IgZmV0Y2ggaGFuZ3MgYXQgU3Vw
+ZXJTcGVlZCBQbHVzICovCisJeyBVU0JfREVWSUNFKDB4MDdjYSwgMHgyNTUzKSwgLmRyaXZlcl9p
+bmZvID0gVVNCX1FVSVJLX05PX0JPUyB9LAorCiAJLyogUmVhbGZvcmNlIDg3VSBLZXlib2FyZCAq
+LwogCXsgVVNCX0RFVklDRSgweDA4NTMsIDB4MDExYiksIC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlS
+S19OT19MUE0gfSwKIApAQCAtNDM3LDYgKzQ0MCw5IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgdXNi
+X2RldmljZV9pZCB1c2JfcXVpcmtfbGlzdFtdID0gewogCXsgVVNCX0RFVklDRSgweDBiMDUsIDB4
+MTdlMCksIC5kcml2ZXJfaW5mbyA9CiAJCQlVU0JfUVVJUktfSUdOT1JFX1JFTU9URV9XQUtFVVAg
+fSwKIAorCS8qIEFTVVMgVFVGIDRLIFBSTyAtIEJPUyBkZXNjcmlwdG9yIGZldGNoIGhhbmdzIGF0
+IFN1cGVyU3BlZWQgUGx1cyAqLworCXsgVVNCX0RFVklDRSgweDBiMDUsIDB4MWFiOSksIC5kcml2
+ZXJfaW5mbyA9IFVTQl9RVUlSS19OT19CT1MgfSwKKwogCS8qIFJlYWx0ZWsgU2VtaWNvbmR1Y3Rv
+ciBDb3JwLiBNYXNzIFN0b3JhZ2UgRGV2aWNlIChNdWx0aWNhcmQgUmVhZGVyKSovCiAJeyBVU0Jf
+REVWSUNFKDB4MGJkYSwgMHgwMTUxKSwgLmRyaXZlcl9pbmZvID0gVVNCX1FVSVJLX0NPTkZJR19J
+TlRGX1NUUklOR1MgfSwKIApAQCAtNDUzLDE1ICs0NTksNiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0
+IHVzYl9kZXZpY2VfaWQgdXNiX3F1aXJrX2xpc3RbXSA9IHsKIAkvKiBFbGdhdG8gNEsgWCAtIEJP
+UyBkZXNjcmlwdG9yIGZldGNoIGhhbmdzIGF0IFN1cGVyU3BlZWQgUGx1cyAqLwogCXsgVVNCX0RF
+VklDRSgweDBmZDksIDB4MDA5YiksIC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlSS19OT19CT1MgfSwK
+IAotCS8qIEFTVVMgVFVGIDRLIFBSTyAtIEJPUyBkZXNjcmlwdG9yIGZldGNoIGhhbmdzIGF0IFN1
+cGVyU3BlZWQgUGx1cyAqLwotCXsgVVNCX0RFVklDRSgweDBiMDUsIDB4MWFiOSksIC5kcml2ZXJf
+aW5mbyA9IFVTQl9RVUlSS19OT19CT1MgfSwKLQotCS8qIEF2ZXJtZWRpYSBMaXZlIEdhbWVyIFVs
+dHJhIDIuMSAoR0M1NTNHMikgLSBCT1MgZGVzY3JpcHRvciBmZXRjaCBoYW5ncyBhdCBTdXBlclNw
+ZWVkIFBsdXMgKi8KLQl7IFVTQl9ERVZJQ0UoMHgwN2NhLCAweDI1NTMpLCAuZHJpdmVyX2luZm8g
+PSBVU0JfUVVJUktfTk9fQk9TIH0sCi0KLQkvKiBVR1JFRU4gMzU4NzEgLSBCT1MgZGVzY3JpcHRv
+ciBmZXRjaCBoYW5ncyBhdCBTdXBlclNwZWVkIFBsdXMgKi8KLQl7IFVTQl9ERVZJQ0UoMHgyYjg5
+LCAweDU4NzEpLCAuZHJpdmVyX2luZm8gPSBVU0JfUVVJUktfTk9fQk9TIH0sCi0KIAkvKiBTb255
+IFhwZXJpYSBYWjEgQ29tcGFjdCAobGlsYWMpIHNtYXJ0cGhvbmUgaW4gZmFzdGJvb3QgbW9kZSAq
+LwogCXsgVVNCX0RFVklDRSgweDBmY2UsIDB4MGRkZSksIC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlS
+S19OT19MUE0gfSwKIApAQCAtNTc0LDYgKzU3MSw5IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgdXNi
+X2RldmljZV9pZCB1c2JfcXVpcmtfbGlzdFtdID0gewogCiAJeyBVU0JfREVWSUNFKDB4MjM4Niwg
+MHgzNTBlKSwgLmRyaXZlcl9pbmZvID0gVVNCX1FVSVJLX05PX0xQTSB9LAogCisJLyogVUdSRUVO
+IDM1ODcxIC0gQk9TIGRlc2NyaXB0b3IgZmV0Y2ggaGFuZ3MgYXQgU3VwZXJTcGVlZCBQbHVzICov
+CisJeyBVU0JfREVWSUNFKDB4MmI4OSwgMHg1ODcxKSwgLmRyaXZlcl9pbmZvID0gVVNCX1FVSVJL
+X05PX0JPUyB9LAorCiAJLyogQVBUSVYgQVVUT01PVElWRSBIVUIgKi8KIAl7IFVTQl9ERVZJQ0Uo
+MHgyYzQ4LCAweDAxMzIpLCAuZHJpdmVyX2luZm8gPQogCQkJVVNCX1FVSVJLX1NIT1JUX1NFVF9B
+RERSRVNTX1JFUV9USU1FT1VUIH0sCi0tIAoyLjUzLjAKCg==
+--00000000000049416c064a005493--
 
