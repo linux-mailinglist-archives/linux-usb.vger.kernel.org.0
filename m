@@ -1,322 +1,218 @@
-Return-Path: <linux-usb+bounces-33102-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33103-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +OZKJiROg2lrlAMAu9opvQ
-	(envelope-from <linux-usb+bounces-33102-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 14:48:20 +0100
+	id 4JrzEylTg2mJlQMAu9opvQ
+	(envelope-from <linux-usb+bounces-33103-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 15:09:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49ED6E6A51
-	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 14:48:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A31B5E6E24
+	for <lists+linux-usb@lfdr.de>; Wed, 04 Feb 2026 15:09:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C35CE300D152
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 13:46:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 15A7C30CE8E1
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Feb 2026 14:02:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAA40279DC0;
-	Wed,  4 Feb 2026 13:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45F1E158535;
+	Wed,  4 Feb 2026 14:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BN55b8y8"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZiLZOMYR";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Wx5gfPc2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E4830FC29
-	for <linux-usb@vger.kernel.org>; Wed,  4 Feb 2026 13:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18242772D
+	for <linux-usb@vger.kernel.org>; Wed,  4 Feb 2026 14:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770212785; cv=none; b=LoA5BvS+QQ0nvOkbaFG9D1XN6gxIYLJ1qwV6U4qJlHBdJfB/LAZgDWykBJib672VnajQS+YpAhJhmXH2b3AI4ilvTTAZ8S3cDCVm1qiIvYpeXu2kYCX1136b1JtSUw5q+6+QrsRAX6VjQo6jHnThk5HqlumIY41YwhF33LT8K9s=
+	t=1770213700; cv=none; b=O17bT7M+guFs1Dryo+uOgsTEF/YH9jWHEUGjN+3fJEDxg5MYcWfSWvjui/hlfRZcbvGPtr0GlFDL9Kkfrjb9BIXpbIqVFIgpK7/1ZCLwuS+jateFZ+E6np4+0VvASmDmu1L16MtGuLg7c6tPtznrCJiTGBSKaL/qzUVZLeQ3aQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770212785; c=relaxed/simple;
-	bh=FeNff6zrjmWciUFlh0FSiM0w5E8BMY8phPcL5rje6kU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mJb0YdzWBYjziz5M3uBHJZADV+3AdU/ndd4n8j/5B2QoOfCzrd6nuhyYI2XcRm0eA443uEnJfjUpgChT4DVp+BlNHDwvqnbjGaAAeltq5FyMSwi2fFBWvEFiClBjiemd48hSC+Jk6VFwN3/I8BRSfgXSxkd6XZSo38Te9kbgY/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BN55b8y8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E21AC4AF09
-	for <linux-usb@vger.kernel.org>; Wed,  4 Feb 2026 13:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770212785;
-	bh=FeNff6zrjmWciUFlh0FSiM0w5E8BMY8phPcL5rje6kU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BN55b8y8vF/yHrrykpQ43Zn0LHvDzf2+bGJNgcy6WXsqL4Kpv1QojF89LlTyE93bE
-	 njQmmPFPEuUm2wamRAPJCprkjdqXLHEev03w5hsMDeYoOdk2ebeDC41AhsuOOSJ+Bq
-	 ffj/zE1iT4/bd9826iLY+1XyCs4BXnpptBMJaeUQC0pfDLL3CSQ1+AuxBx4oay0Uxl
-	 GH3CHfp0B0M1rGxCZMrwc0XlmfO0KyDX3WfKw61mVghM/QZMe+xMkZrNqPZ0Rpf8O5
-	 0tjqJpkOxRcyKY1bvpBVOk852tpdUVo8d8aVCLmsvM2/dkHkg/TQ8W5GKGvMqvyh0f
-	 W3YlP0Bfbn4Tg==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-64c893f3a94so1462147a12.0
-        for <linux-usb@vger.kernel.org>; Wed, 04 Feb 2026 05:46:24 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUTnxrd+gJwXI7RQxyeuf/KRbOevcJCSQ5ZRbf8Q23Ohg9oMrawy7udq1uQ7g5fnW7jDX+NnOvasoo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwylsrSCTeavwvJ4HEiq9QM/08FUBmw2OXa7/zJqHAIyghUmHs3
-	CBCaZx5vqgLbB2x7LfpvtP0/6VcrkAg25B3fGiqHgmOCby2DiqrWcR8Z2ch3ydU2ZsuD5w5q6VL
-	+Y3GDUOMThy7BA1G24vDSQoe/t5NACA==
-X-Received: by 2002:a17:907:7ba1:b0:b88:440b:65c4 with SMTP id
- a640c23a62f3a-b8e838d36e3mr446539666b.25.1770212783590; Wed, 04 Feb 2026
- 05:46:23 -0800 (PST)
+	s=arc-20240116; t=1770213700; c=relaxed/simple;
+	bh=emMy13JrIEWGGb4Yj1Obm5OPqROR8LK+7EP9jth9dqs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Hr6Ax2neKlquYSCQo9CrXOnkVwTjIMS63l3V87gORv6toLFzQCgZE/6vLTtp8knYDyzn01SIa6OYsqBxx3oTs9L8OkgjiaIPZdyT3HS2O46LisYyr18+JZYxw+rOwPtuyXE+m2IAAdMwtYQuJi4SBZmu+Wt2rlKHvadONGgXQKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZiLZOMYR; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Wx5gfPc2; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 614CIPuB096162
+	for <linux-usb@vger.kernel.org>; Wed, 4 Feb 2026 14:01:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	iS4JnPBI/eXVdO62TuwXvtzIoHIazcuTqGQx24R1EVo=; b=ZiLZOMYRu9h4C6Tb
+	h1jNhopo271rF10/GFM3clK1wupFoWU83A/Fy744Gh7fbDSjMW/KGAMPsmz53Bmy
+	Nz9+sATEiw3LgAgIclcQqFXucWRw+z1936yAcwxccfnQcMSSMbCXvrHCAkOEgdVC
+	80qbUBPLoYGLu/chJlPYbVQ3FkNFCXRJ8RZBvqyRMxndRxNt6GDmRyQK6a7WK0UI
+	rmKFPMzWuS+PsXwU8hbrG4QBma6FqJGDbhUS5u693dpAyjqS13N8C3OXOqmbAdZW
+	+4FfgpRKiQQeXbftpqosHUbIV+d+d6Uo2p5exwB8cyvJ+dfk5A6j3dMfgfd1wQyi
+	3wzp8A==
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com [209.85.222.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c44kbghfh-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 04 Feb 2026 14:01:39 +0000 (GMT)
+Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-948ad08958eso983682241.2
+        for <linux-usb@vger.kernel.org>; Wed, 04 Feb 2026 06:01:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1770213699; x=1770818499; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iS4JnPBI/eXVdO62TuwXvtzIoHIazcuTqGQx24R1EVo=;
+        b=Wx5gfPc2Ots6YB7iZKmq9emXlJXhy7G18nkpYhL/jCzwIQaQMZ+sOIQo0T9pO6d3rE
+         Kc7NPJUcXZtuUem1BncCvogEtZHA9Eea64X288B8tzUMg6spujwLcEcVVd9vKn5u0NFm
+         dqXrCAeXq86j6LjQ2WgZu5DR23taqko9HiFwPKwcj5j5+3S5JpWZ5iZn4m5pKFhpDvvF
+         oyL6p1Mdf4oqCwC6MNnNf7IyweY4xvTvxTkfZeftNfiAGrkLQtoKPxr2qMkIKYPbkypY
+         Sq5wqxPYY5BXqbK2cOoQYAeN5UC79w2eOT2LOl6AJO44I0wn4mXFXeR9ss67cokFHa3Z
+         zvyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770213699; x=1770818499;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iS4JnPBI/eXVdO62TuwXvtzIoHIazcuTqGQx24R1EVo=;
+        b=rw8J5VIQTx3j6+A6bvsspvYCj1k/KQtF8CT60EjVrKpFEJnEsE/Z2SqRTODg+4x7uS
+         BR+Rimmzc4rRjou6qD6jvAwHL3bL0mDj9n8kPmeht62/Kk1kCUURqvBuxPa7Mre00cOn
+         PRsJPoiJxE87T8XXHlzKwyE39HDACCfZ4rEcYEpruncte7ETYttL2lcIgKhfjeybWrLH
+         PFRD/51x7/G4ZmoPkIemj9zDPkwDM8UyMQg0LvPdIQtFcSyznh3GxgvVpFzyIGO1OpuQ
+         YdEy8ftOsQTSYOFLjxWGqD9QezEdoTjuRTytzSG5NjQLoNPGxOATSGX94hZE6rHh2O/R
+         RwUw==
+X-Forwarded-Encrypted: i=1; AJvYcCWR22zphAVuBe8cdiOrKHXLNStEEG1uVC3sYssS9zd2kdn2E7KhMp31EdZ6KFRlwXRGBOL0xvYXgz4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHv2BTZSyLGa7XSz5wP5icPKsjGTmPPux6ku9FA+YeKp31HWyE
+	aSmx1hI1EtzlbdKlQOzsx3khYoJfcFOM3uluDI8m/gHC2hGs97UR2JZpdkNvDhW3sjkVDravWkN
+	YtoygueN25Vxyqm/2OIvF/ZpkaI7VzTmfCNH/kG6JTLEU+bFoo2INqhldNu9FQpg=
+X-Gm-Gg: AZuq6aIUXjyO5Ye+5dsxbTLIi7es/IaBj/ODw13ue148P43kU2yiYYP+zHFAIdwTkor
+	tGqEYlgYoYwP8bSSatOPn2Aya4pqCqb4LMlmdgbluhggc4MtQoQo5DtOgekVnw5uxuqTy+H7/ck
+	eUJlUQ4pv/E5TaS853dVY7HO5yoiNE+ojmY3gxoR7cHEaQyz05+Q9kbcZTKV2vGcUExGF3zR+f3
+	yNZ0DBahlSOAP5N+P8/zrCinbiI1+UmS7HXvOQbDUi6pOjfSWUHS7KotGi5em/j9lJRfo0e5xHS
+	JiXA8J6j7XMsy74/x90WuYWLssklOKzpmQ6Q9vXgyd2e1hQKUdiPlnTKsC0OazipWykXDUBWbiP
+	F8Pscd6jelFCoFF+y0CGQ2lIt6GOVGbK0M9o15Q5LLJ3dt+fYNHZi1L7Q0F6r3ZlPrZw=
+X-Received: by 2002:a05:6122:1306:b0:55b:1668:8a76 with SMTP id 71dfb90a1353d-566e808afb3mr556362e0c.2.1770213698839;
+        Wed, 04 Feb 2026 06:01:38 -0800 (PST)
+X-Received: by 2002:a05:6122:1306:b0:55b:1668:8a76 with SMTP id 71dfb90a1353d-566e808afb3mr555907e0c.2.1770213694155;
+        Wed, 04 Feb 2026 06:01:34 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8e9fcd8f17sm128981866b.12.2026.02.04.06.01.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Feb 2026 06:01:33 -0800 (PST)
+Message-ID: <a16563a6-b338-42b0-8e04-b1ec56145175@oss.qualcomm.com>
+Date: Wed, 4 Feb 2026 15:01:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260204-add-flatten-dts-based-dwc3-imx-driver-v2-0-d2c9b5a58c01@nxp.com>
- <20260204-add-flatten-dts-based-dwc3-imx-driver-v2-1-d2c9b5a58c01@nxp.com>
-In-Reply-To: <20260204-add-flatten-dts-based-dwc3-imx-driver-v2-1-d2c9b5a58c01@nxp.com>
-From: Rob Herring <robh@kernel.org>
-Date: Wed, 4 Feb 2026 07:46:11 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLcqSKgNjx2nejwjSsNPwqAmEsRHX-6YwE-8r_32C4=ZQ@mail.gmail.com>
-X-Gm-Features: AZwV_QjSgm66I4Qb-FM5KDeDvEBpAt3nGOL-hi0EvlGrPlxaGX84UJJRpnPN54o
-Message-ID: <CAL_JsqLcqSKgNjx2nejwjSsNPwqAmEsRHX-6YwE-8r_32C4=ZQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: introduce fsl,imx-dwc3
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Frank Li <frank.li@nxp.com>, Li Jun <jun.li@nxp.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/9] dt-bindings: soc: qcom: eud: Restructure to model
+ multi-path hardware
+To: Elson Serrao <elson.serrao@oss.qualcomm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260126233830.2193816-1-elson.serrao@oss.qualcomm.com>
+ <20260126233830.2193816-2-elson.serrao@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260126233830.2193816-2-elson.serrao@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: yDjQyPo_MUUNqkC03MGgolSE97e0-SST
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA0MDEwNiBTYWx0ZWRfX5m2x4qSv9XV8
+ HgEvDwStuqO4rXwVGIu3Hwl3jzPQsqGQde+LkFEXzzTCOVRtpwtkvt1YGzL6DctawS81xoz4Lsf
+ ZQ6WvlDIzNbDMvVjuoUdSYF5Z2R/9WOXD9XQkVdHusDubiXM6t1B0J2A+j5m4HpH+gQoiHSR1vd
+ zPOxg6oMeznhMT1h0q2byxVU230xpKt6jp0c0HtTXv2S0OSkW1ghpDiW3HcwujgBLcYw141BLLs
+ uKlAY699OX9rty4Ee/A6f+kTmrtU1q18mdTunP4CImvxjdC8XfN8pA59OFDLlRcnXmRD2MtZMME
+ quHNlmSt129X3LZqxyBa44M9YOe27d7V00HlLPitvxjznt+YzarqOuDTkmO1I7POLY3WIo9/4QC
+ x40ldjJmrcCnWM3xv89vKwUWkhvu/OS53q4TEB1sqUCuXMkNTYfLoVg8PhvXgsOeT973uSPffUs
+ bjvT6fMODJXnyfSpnVQ==
+X-Proofpoint-GUID: yDjQyPo_MUUNqkC03MGgolSE97e0-SST
+X-Authority-Analysis: v=2.4 cv=HN7O14tv c=1 sm=1 tr=0 ts=69835143 cx=c_pps
+ a=UbhLPJ621ZpgOD2l3yZY1w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=1VuqB2ABKDwlP82YmI0A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=TOPH6uDL9cOC6tEoww4z:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-04_04,2026-02-04_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 phishscore=0 clxscore=1015 bulkscore=0
+ spamscore=0 adultscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602040106
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33102-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,pengutronix.de,gmail.com,nxp.com,synopsys.com,vger.kernel.org,lists.linux.dev,lists.infradead.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33103-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,devicetree.org:url,nxp.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,4c100000:email]
-X-Rspamd-Queue-Id: 49ED6E6A51
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: A31B5E6E24
 X-Rspamd-Action: no action
 
-On Wed, Feb 4, 2026 at 5:05=E2=80=AFAM Xu Yang <xu.yang_2@nxp.com> wrote:
->
-> The i.MX USB glue and DWC3 core are closely coupled. Describe the i.MX
-> USB block in a single block will bring more benefits than a parent-
-> child relation. The new binding is a copy of fsl,imx8mp-dwc3.yaml with
-> the needed modifications.
->
-> Add the common compatible string "fsl,imx-dwc3" to indicate that the
-> flattened module should be selected. This compatible is also used by
-> "select" to inform the DeviceTree validator to apply this binding.
->
-> To avoid redefining all the platform-specific compatibles, "select" is
-> used to tell the DeviceTree validator which binding to use solely on the
-> generic compatible.
->
-> Mark fsl,imx8mp-dwc3 deprecated, to favor expressing future platforms
-> using the new combined binding.
->
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
->
+On 1/27/26 12:38 AM, Elson Serrao wrote:
+> The Qualcomm Embedded USB Debugger (EUD) can intercept one or two
+> independent High-Speed UTMI paths, depending on the SoC. Each path is
+> distinct with its own HS-PHY interface, connector/controller wiring, and
+> UTMI routing behavior. The EUD hardware sits between the USB2 PHY and
+> the USB controller on each path.
+> 
+> The existing binding models only a single UTMI path and does not provide
+> a way to associate the required High-Speed USB PHY. EUD relies on the
+> HS-PHY on the selected UTMI path for link signalling and correct operation
+> of the hardware.
+> 
+> Historically, EUD has worked on platforms that use a single UTMI path
+> because the USB controller maintains ownership of the PHY during
+> enumeration and normal operation. This implicit relationship allowed
+> EUD to function even though the dependency on the PHY was not described
+> in the binding. However, this behavior is not guaranteed by hardware.
+> The current binding description is not sufficient for SoCs that expose
+> two independent UTMI paths, where the PHY association and port wiring
+> must be explicitly described.
+> 
+> Introduce per-path eud-path child nodes so each UTMI path can describe
+> its HS-PHY, port connections, and the role‑switching capability of its
+> associated USB port.
+> 
+> Signed-off-by: Elson Serrao <elson.serrao@oss.qualcomm.com>
 > ---
-> Changes in v2:
->  - reorder compatible property
-> ---
->  .../devicetree/bindings/usb/fsl,imx-dwc3.yaml      | 131 +++++++++++++++=
-++++++
->  .../devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml   |  13 ++
->  2 files changed, 144 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/usb/fsl,imx-dwc3.yaml b/Do=
-cumentation/devicetree/bindings/usb/fsl,imx-dwc3.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..6932804516948bc0f8457553e=
-ee7e5ee704237f0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/fsl,imx-dwc3.yaml
-> @@ -0,0 +1,131 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright 2026 NXP
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/fsl,imx-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP i.MX Soc USB Controller
-> +
-> +maintainers:
-> +  - Xu Yang <xu.yang_2@nxp.com>
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: fsl,imx-dwc3
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - fsl,imx8mp-dwc3
 
-You can't reuse the same compatible for a new binding.
+[...]
 
-> +          - fsl,imx94-dwc3
-> +          - fsl,imx95-dwc3
-> +      - const: fsl,imx-dwc3
+> +patternProperties:
+> +  "^eud-path@[0-1]$":
 
-Drop. If you want a fallback, use the 1st SoC's compatible.
+At least a since instance of this should be 'required'
 
-> +
-> +  reg:
-> +    items:
-> +      - description: DWC3 core registers
-> +      - description: HSIO Block Control registers
-> +      - description: Wrapper registers of dwc3 core
-> +
-> +  reg-names:
-> +    items:
-> +      - const: core
-> +      - const: blkctl
-> +      - const: glue
-> +
-> +  interrupts:
-> +    items:
-> +      - description: DWC3 controller interrupt
-> +      - description: Wakeup interrupt from glue logic
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: dwc_usb3
-> +      - const: wakeup
-> +
-> +  iommus:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: System hsio root clock
-> +      - description: SoC Bus Clock for AHB/AXI/Native
-> +      - description: Reference clock for generating ITP when UTMI/ULPI P=
-HY is suspended
-> +      - description: Suspend clock used for usb wakeup logic
-> +
-> +  clock-names:
-> +    items:
-> +      - const: hsio
-> +      - const: bus_early
-> +      - const: ref
-> +      - const: suspend
-> +
-> +  fsl,permanently-attached:
-> +    type: boolean
-> +    description:
-> +      Indicates if the device attached to a downstream port is
-> +      permanently attached
-> +
-> +  fsl,disable-port-power-control:
-> +    type: boolean
-> +    description:
-> +      Indicates whether the host controller implementation includes port
-> +      power control. Defines Bit 3 in capability register (HCCPARAMS)
-> +
-> +  fsl,over-current-active-low:
-> +    type: boolean
-> +    description:
-> +      Over current signal polarity is active low
-> +
-> +  fsl,power-active-low:
-> +    type: boolean
-> +    description:
-> +      Power pad (PWR) polarity is active low
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +  - power-domains
-> +
-> +allOf:
-> +  - $ref: snps,dwc3-common.yaml#
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    usb@4c100000 {
-> +      compatible =3D "fsl,imx943-dwc3", "fsl,imx-dwc3";
-> +      reg =3D <0x4c100000 0x10000>,
-> +            <0x4c010010 0x04>,
-> +            <0x4c1f0000 0x20>;
-> +      reg-names =3D "core", "blkctl", "glue";
-> +      clocks =3D <&scmi_clk 74>,    //IMX94_CLK_HSIO
-> +               <&scmi_clk 74>,    //IMX94_CLK_HSIO
-> +               <&scmi_clk 2>,     //IMX94_CLK_24M
-> +               <&scmi_clk 1>;     //IMX94_CLK_32K
-> +      clock-names =3D "hsio", "bus_early", "ref", "suspend";
-> +      interrupts =3D <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>,
-> +                   <GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>;
-> +      interrupt-names =3D "dwc_usb3", "wakeup";
-> +      power-domains =3D <&scmi_devpd 13>;   //IMX94_PD_HSIO_TOP
-> +      phys =3D <&usb3_phy>, <&usb3_phy>;
-> +      phy-names =3D "usb2-phy", "usb3-phy";
-> +      snps,gfladj-refclk-lpm-sel-quirk;
-> +      snps,parkmode-disable-ss-quirk;
-> +      status =3D "disabled";
-
-Examples should be enabled.
-
-> +    };
-> diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml b=
-/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> index 73e7a60a0060dee6417b9469251e121704b7a148..fd23c345149e0dba1ed3919a2=
-5195edf247cfc08 100644
-> --- a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> @@ -10,6 +10,19 @@ title: NXP iMX8MP Soc USB Controller
->  maintainers:
->    - Li Jun <jun.li@nxp.com>
->
-> +deprecated: true
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      oneOf:
-> +        - items:
-> +            - const: fsl,imx95-dwc3
-> +            - const: fsl,imx8mp-dwc3
-> +        - const: fsl,imx8mp-dwc3
-> +  required:
-> +    - compatible
-> +
->  properties:
->    compatible:
->      oneOf:
->
-> --
-> 2.34.1
->
->
+Konrad
 
