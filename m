@@ -1,51 +1,51 @@
-Return-Path: <linux-usb+bounces-33113-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33114-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GAspGBJJhGk/2QMAu9opvQ
-	(envelope-from <linux-usb+bounces-33113-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Feb 2026 08:38:58 +0100
+	id SOnMLtxJhGk/2QMAu9opvQ
+	(envelope-from <linux-usb+bounces-33114-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Feb 2026 08:42:20 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAA67EF7DE
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Feb 2026 08:38:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C5C3EF84C
+	for <lists+linux-usb@lfdr.de>; Thu, 05 Feb 2026 08:42:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F124A3016EE1
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Feb 2026 07:37:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D37A33015A51
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Feb 2026 07:42:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B4B35CB8C;
-	Thu,  5 Feb 2026 07:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 778FD35CBAA;
+	Thu,  5 Feb 2026 07:42:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NAZUNwUS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DiWsUVJW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652EB35B655;
-	Thu,  5 Feb 2026 07:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D7731AA82;
+	Thu,  5 Feb 2026 07:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770277072; cv=none; b=hAb6jxGlDTZ2YdMiDloJXQISKiSNd4/nOgF6qpKNtyDpj+xB7X3hNCDHyHSCMks36mM3fLkM82/y5hhcIxw7pvZzpRo6NQTkqFcKvY4Ft9H40UpKhsFIAiIwDdgC5kGzE6p/1sIRXvqcrdgUmnZB8qR5SJTUS3R57rJg7BuDb9c=
+	t=1770277332; cv=none; b=qL7MpOw9BHiSaSuMvqgG100eMvdr7AZfohez9nhDk2cvNTwpDCnwVLwC8Qf5TLgZpIGRdb4XKDwMeZZupBfAK+tamFGhpEK4rx37q95bUBviX2/DPlFHzur0IXm5f90Bcyl/43KeUPChuwVqceg0Ewfs3VnxftI784i8QoLt2HQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770277072; c=relaxed/simple;
-	bh=vz5sAAWov4wUJCMJvqk7ab8Zu1pPSAsxe3C3ESos37g=;
+	s=arc-20240116; t=1770277332; c=relaxed/simple;
+	bh=vxsRNhhMqsXkIeAaWgISTL5b8JFF5Plf1CZFQkQgz60=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vGcCCWjmeQL5oZwT+VCab3HZ6oijknF+8DK8HCQeS+5TAAKSEhDRfxknAmApMEnTZxxdKctPBJKXtBaF5XZBUiEaJR67IYaY80dmUgKeMISLOcbcHXOMA+3iBcy0qUUy+1f0/3mzVU9H0JhNoSxDbhAUx6tC4oa4Fcmr7ib85p8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NAZUNwUS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 846F4C116D0;
-	Thu,  5 Feb 2026 07:37:49 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=U63DstmiVeO0zHhY50hcEASJrt18W79uDZzquLShd44DmCC5nxQthYEtnmnvh7G50jH0uIhlk85ZQheUswEpyS7xaUGXy09Gvw2awkbIGVjC/Au1pPj5NDNKTCmWT5tTkcongTgFXZflQhnf5pxVtzo+Gn0/7Aoo8U5gwq/VqfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DiWsUVJW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF6B0C4CEF7;
+	Thu,  5 Feb 2026 07:42:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770277072;
-	bh=vz5sAAWov4wUJCMJvqk7ab8Zu1pPSAsxe3C3ESos37g=;
+	s=k20201202; t=1770277331;
+	bh=vxsRNhhMqsXkIeAaWgISTL5b8JFF5Plf1CZFQkQgz60=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NAZUNwUStb6RqLdn+UmFFNHb6O5qGZYOXC15supPoYBYlOdL6UVVD1MpwwTMb/82U
-	 sZUOhH2NAhcK0y4CMWar0ZaZrDeB9vR1pn/ASk6tM7oh5i/UE+LXBnnjMEE4kJ5u94
-	 iphaNYHIq6gOnFVfXbbU0Ir+E5AA9YlfI+rqFJsHivsy9g1uw9dfiwG7rUij3efBPh
-	 Ifi3xkO0x62XBYfw3P01BF+Tgv7eKt2oWs3S3kxo0wseh6qxfZZK38rQcf6DoGlPUr
-	 wXdhmUBI9uT5LTgCdNkkhIYdQ8zXI0hE0DbdyIAFLC7zmpG+gSuB19s5WB0rQlqNc6
-	 pOSvnE3sIv8Ag==
-Message-ID: <d122ff75-eb8e-4500-99c0-91623d0c6d80@kernel.org>
-Date: Thu, 5 Feb 2026 08:37:47 +0100
+	b=DiWsUVJWWHJIgUBo/R1CgUns3X3kS/lFz8zsXrFOPWG1e+7W7DXTN8iT4gkHra7B+
+	 10UHDDZI90njdvz1wmGTa9A/cb637opg4lTOntRohSWVBkdwjt4mp7ehshnmO4iwSd
+	 +WHqiP/EPP4kbFyBzlgMDdeszRoc/6mxS+hpf6x1LkQKyRo204niNX8DgUZclpw+sj
+	 kqgUopmOXKZmZvXd5c5jH+linCzsMn19mVWrB6vqhhDQTkCAzs5yd+ipponUUvlSwT
+	 a0fGXR8H8kMpFPZq7YDZ3+t883Bse1AeoPSWSUX32+QogMmU32Xmxbes/bzBACush1
+	 EqvanbhiB11iQ==
+Message-ID: <8bd3e01c-80e6-4691-b80e-95457aa92d93@kernel.org>
+Date: Thu, 5 Feb 2026 08:42:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] MAINTAINERS: Add entries for the Axiado USB UDC
+Subject: Re: [PATCH 1/3] dt-bindings: usb: axiado,ax3000-udc: Add Axiado UDC
 To: Vladimir Moravcevic <vmoravcevic@axiado.com>,
  Krutik Shah <krutikshah@axiado.com>, Prasad Bolisetty
  <pbolisetty@axiado.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -63,7 +63,7 @@ Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  openbmc@lists.ozlabs.org
 References: <20260202-axiado-ax3000-usb-device-controller-v1-0-45ce0a8b014f@axiado.com>
- <20260202-axiado-ax3000-usb-device-controller-v1-3-45ce0a8b014f@axiado.com>
+ <20260202-axiado-ax3000-usb-device-controller-v1-1-45ce0a8b014f@axiado.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,7 +109,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260202-axiado-ax3000-usb-device-controller-v1-3-45ce0a8b014f@axiado.com>
+In-Reply-To: <20260202-axiado-ax3000-usb-device-controller-v1-1-45ce0a8b014f@axiado.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
@@ -118,18 +118,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33113-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33114-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[12];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
@@ -139,32 +139,95 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[axiado.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: BAA67EF7DE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[axiado.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,devicetree.org:url]
+X-Rspamd-Queue-Id: 7C5C3EF84C
 X-Rspamd-Action: no action
 
 On 02/02/2026 14:16, Vladimir Moravcevic wrote:
-> Add the MAINTAINERS entries for the Axiado USB Device Controller.
+> Add Axiado ax3000-udc (for USB v2.0 ports) and
+> ax3000-udc-gen3 (for USB v3.0 ports)
+> compatible string for AX3000 SoC.
+
+Please wrap commit message according to Linux coding style / submission
+process (neither too early nor over the limit):
+https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+
 > 
 > Co-developed-by: Krutik Shah <krutikshah@axiado.com>
 > Signed-off-by: Krutik Shah <krutikshah@axiado.com>
 > Co-developed-by: Prasad Bolisetty <pbolisetty@axiado.com>
 > Signed-off-by: Prasad Bolisetty <pbolisetty@axiado.com>
 
-There people wrote these few trivial lines? I really doubt. That's
-insanely trivial patch.
-
-You probably wanted to express Acks, but this should be given in public
-so we see that people are actually active.
+Please use only real authors here.
 
 > Signed-off-by: Vladimir Moravcevic <vmoravcevic@axiado.com>
 > ---
->  MAINTAINERS | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  .../devicetree/bindings/usb/axiado,ax3000-udc.yaml | 59 ++++++++++++++++++++++
+>  1 file changed, 59 insertions(+)
 > 
-> 
+> diff --git a/Documentation/devicetree/bindings/usb/axiado,ax3000-udc.yaml b/Documentation/devicetree/bindings/usb/axiado,ax3000-udc.yaml
+> new file mode 100644
+> index 000000000000..15658b5c924f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/axiado,ax3000-udc.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/axiado,ax3000-udc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Axiado AX3000 USB Device Controller (Corigine-based)
+> +
+> +maintainers:
+> +  - Krutik Shah <krutikshah@axiado.com>
+> +  - Prasad Bolisetty <pbolisetty@axiado.com>
+> +  - Vladimir Moravcevic <vmoravcevic@axiado.com>
+> +
+> +description: |
+> +  Axiado AX3000 USB Device Controller (UDC) is used on
+> +  AX3000 SoCs and evaluation boards. This controller is based on a
+> +  Corigine USB IP core and provides SuperSpeed (5 Gb/s), High-Speed
+> +  (480 Mb/s). It supports control, bulk, interrupt, and isochronous
+> +  transfer types across multiple configurable endpoints. The node
+> +  describes the memory-mapped register region, interrupt line, and
+> +  other required properties for the UDC hardware.
 
+Drop last sentence, completely redundant. There is no point to explain
+what the binding or DT are.
 
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - axiado,ax3000-udc         # AX3000 UDC (USB 2.0/High-Speed)
+
+-gen2
+
+in such case, but I don't like these names. They are awfully
+non-hardware looking.
+
+> +      - axiado,ax3000-udc-gen3    # AX3000 UDC (USB 3.0/SuperSpeed)
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: Base address and size of the UDC register space.
+
+Drop description, redundant
+
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description: Interrupt line for the UDC.
+
+Drop description
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
 Best regards,
 Krzysztof
 
