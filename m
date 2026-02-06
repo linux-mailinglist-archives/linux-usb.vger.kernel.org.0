@@ -1,171 +1,150 @@
-Return-Path: <linux-usb+bounces-33127-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33128-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YK3EI1D7hGlC7QMAu9opvQ
-	(envelope-from <linux-usb+bounces-33127-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Feb 2026 21:19:28 +0100
+	id 0BNEElRBhWmA+wMAu9opvQ
+	(envelope-from <linux-usb+bounces-33128-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 02:18:12 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1EC7F716C
-	for <lists+linux-usb@lfdr.de>; Thu, 05 Feb 2026 21:19:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A036EF8E94
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 02:18:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9F86A3007A48
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Feb 2026 20:19:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0933F3018287
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Feb 2026 01:18:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A7A32B9A8;
-	Thu,  5 Feb 2026 20:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="giMzrAm8";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jcop9g+s"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D99221FF3B;
+	Fri,  6 Feb 2026 01:18:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FED313E34
-	for <linux-usb@vger.kernel.org>; Thu,  5 Feb 2026 20:19:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA49A198A17;
+	Fri,  6 Feb 2026 01:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770322760; cv=none; b=M5r6sVigme//pJ2gz03SH0xTpLkWQ6E/l+8ac/x75IXdiBS++PIISK8pP/FI7rDwrsxJ8Aai7Bau5cAScudjFW/ro+KVJKsRaq+92AGb12BGEd5TkvOBvMWgcAmlrMtHsT2jMRVH90dZMevtC0/GGMau2p11Pg1I/qWkoP6C+u8=
+	t=1770340683; cv=none; b=FuDUbWGCRIqw+bWTSPO7XAHGxDJ78W+XsTLEK1yUhbUwI6+3zzq087trXP+MVQLfVJxzjDPom7jl5XUrCl8mGeqEj605t0nwAIzuRPRVDigtRiFr6Acvb6E0oaW+WaANpNGzG4xtwk+gK3migPAl7diZjjeEPlcjaCZ7HkgAbFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770322760; c=relaxed/simple;
-	bh=DsoxQgc5pCcsXGuwDsUXoZOtZTnk/Juhsk0yC5+b2bY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fnAk9FM85FS/BOLp0dXxBmm9BTiSyXf8nVOsJSqFYGPwCnWNeiTvagrP/M33NmZRiuSOKczP4Q6KVHSGGsbpS8trtIrdiiMi8m7Kpe1DOttoQdVs2BEur11gM2zxyX+7C+BWYQXB0pNq6Q//KSInbw6Z4tJrxyKRbVo3ZNEbkl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=giMzrAm8; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jcop9g+s; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770322758;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NuT6LLwqGDvmYluz43KFP43fQri8NIHs2DOVJWu/Qqo=;
-	b=giMzrAm8AIhVnUWidypXXeXgUXzvmYM9FL4NwqBLkYyaD0QAYKcKHYLO94E+JY38MSUBkV
-	OxXPoWVi/0HH7sOJtSkjdd+cc5eyNG1oVXFR/NvNMMfHrqFSNlq8VOk2/z0nmQl+WOkkQR
-	9lan4CHMAcolG+Pc+JiDz30AStNIlD4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-657-U0Zh1K6tN6-393Jsz16kxQ-1; Thu, 05 Feb 2026 15:19:17 -0500
-X-MC-Unique: U0Zh1K6tN6-393Jsz16kxQ-1
-X-Mimecast-MFC-AGG-ID: U0Zh1K6tN6-393Jsz16kxQ_1770322757
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-8823f4666abso42019216d6.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 Feb 2026 12:19:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770322757; x=1770927557; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NuT6LLwqGDvmYluz43KFP43fQri8NIHs2DOVJWu/Qqo=;
-        b=Jcop9g+s139nlAziobtSC6+2cvycz71R1YZjixMUKbsb1gMwhuWdydHlGIhuQ0PBG9
-         U8RLuc5GdkDjL2PdIn13Tp4pAGTSiEjRbhw3+Z0DjCiFkjoHCrIomF4HBRswnasuJFn1
-         eqDp6NUzlmnLAJK4re0t8CRi1bCx+o9ISfsmlPUxUaQbY9HDgWJnv1IxBpKbH/raCqBB
-         5XS6G3PbUK4z4aLD0laFhy7DstNDTYs/zeapAh944tvhKMEKLqT51bldCHljQFWFLOPA
-         mlkgNQbkk+NnZc2Amcy1BA6j8pNsBegjqnyKRqtEAm2Fq1wBlKZQFcO33C7Mz61Cbtuh
-         BwVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770322757; x=1770927557;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NuT6LLwqGDvmYluz43KFP43fQri8NIHs2DOVJWu/Qqo=;
-        b=iDjE/kq9Gj7HyfSUjuu8I1bg8UERshvlK2QyBcU0Yd7hPYJe5dOyMQnBAVsqOUwDfT
-         qjdzoeOQSokMewbuDsg7r37Zyjayk8vJuQALSQSttDAPf0QYJruWNADEpJZ20HPpOz30
-         PM4VHN1JqR9HesoOcMm0AjXl/gNfDU0pONa7ySPMOhGKaYqLNGwV9MmxbUxYL0SwtOz8
-         rMr7sqfHVngqDd2uhPI1M8KlacV4RtFNtXh/0y5Xe1+1HtHvqQW4xgdWqFErFuP8mkXr
-         qHKBfNtvb6/Uaf2F/UgKlTlVQw6lMMgzuy0lDcsrgb5zfblPySVWNFidbZL7cAurHpu+
-         QVcg==
-X-Forwarded-Encrypted: i=1; AJvYcCUiC2IlVi1uFK7wD1pGgFl7syYXfENLF1UCS+ZY0EYfg+wer+2dM0zk0YVhw7PiOBYq9iP3Z0txlhQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz12fQ8f4onpCQt9WTtSzBsau9ujbbKd2fEBRU9Jxyu0wB5OINc
-	2QJNnLEG0t3w7bRYssGAUSBGs9ZDkTYKp7koq8/Lhx03hYRypKCIyIudI6AK6jwcebJOXleZaau
-	MZfuHw7A9i8/eo4hgT1KRu2twCIAHPBjlthAPMaWwjJaHfgHkAIT8KQcctqWh/Q==
-X-Gm-Gg: AZuq6aICjHGsdJqlT8GAY2FuI6inwIRp90kE7JWBGmBG430KXH1mA0qEtJgQ4eocZxh
-	a+ffz4kGomeaBCfaQq06NtHSRDVJdmTnOori3XtcEqWSUVplvL4XV9MwcOkBu+q7d1WpXPBZlw3
-	rgFBgFX78zYK0gH2WhfzuyE4nQVvTzxDWL8xF1hR1JAMGBBfYvayb3T7LFCuP6zZfouWJDHmBAb
-	Yasyl5ti4wBCvf/7sJrYankL/1l7o+U/roagezoPlrnyRtNv+pfgxmaaKjmMKWUU/Pl/duBKHeb
-	3QGKJfv7UVqJi151vL2MXu8MnqfrgyZTW8rKcocZphBnt1SnAnyG05T5WevkIwDOp63xHfYT7tm
-	cwvx5vw==
-X-Received: by 2002:ac8:7dd2:0:b0:4ff:c61a:c8a5 with SMTP id d75a77b69052e-506399cb147mr5383251cf.49.1770322757172;
-        Thu, 05 Feb 2026 12:19:17 -0800 (PST)
-X-Received: by 2002:ac8:7dd2:0:b0:4ff:c61a:c8a5 with SMTP id d75a77b69052e-506399cb147mr5382851cf.49.1770322756753;
-        Thu, 05 Feb 2026 12:19:16 -0800 (PST)
-Received: from [192.168.8.4] ([100.0.180.93])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-506392c3f5esm2848731cf.26.2026.02.05.12.19.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 12:19:16 -0800 (PST)
-Message-ID: <8df2bbe58e7d252c72af38db678817395a83aedb.camel@redhat.com>
-Subject: Re: [PATCH 1/1] usb: core: Add quirk for Gigabyte Aorus Waterforce
- X II AIO coolers
-From: lyude@redhat.com
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, Jiayi Li	
- <lijiayi@kylinos.cn>, Mathias Nyman <mathias.nyman@linux.intel.com>, Oliver
- Neukum <oneukum@suse.com>, Miao Li <limiao@kylinos.cn>, Johannes
- =?ISO-8859-1?Q?Br=FCderl?=	 <johannes.bruederl@gmail.com>, Lei Huang
- <huanglei@kylinos.cn>
-Date: Thu, 05 Feb 2026 15:19:15 -0500
-In-Reply-To: <2026020403-federal-smite-0740@gregkh>
-References: <20260203221452.198682-1-lyude@redhat.com>
-	 <20260203221452.198682-2-lyude@redhat.com>
-	 <2026020403-federal-smite-0740@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	s=arc-20240116; t=1770340683; c=relaxed/simple;
+	bh=x7LHKpvF+d0LWLpYeCgkXvk8kvvjOKVmhtE6FKTgaQY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CxQCgdkryKe89ye0etJUGrY8PehNNhLNatJAD4VDQ1NQbwtg8zhZUnQY7kKW4cJ+aHVzMBB7bi76fw2xdIMJY7b0y/VuHzJUHC8fz4fpV0+4uFAKwJrW4/FejylEAs6Ih7gVKz78Czti6ujUtZxlY9TpVA4t9ZYzX6sYuHnLU1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: ab9b846802f911f1b0f03b4cfa9209d1-20260206
+X-CID-CACHE: Type:Local,Time:202602060909+08,HitQuantity:1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:42152007-a1c1-47da-8648-1a3da3655908,IP:0,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:-5
+X-CID-META: VersionHash:a9d874c,CLOUDID:1735e37a399661b72535b0ac32c9f8f0,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|898,TC:0,Content:0|14|52
+	,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,O
+	SA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: ab9b846802f911f1b0f03b4cfa9209d1-20260206
+X-User: lijiayi@kylinos.cn
+Received: from [172.25.120.57] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <lijiayi@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 1288476956; Fri, 06 Feb 2026 09:17:57 +0800
+Message-ID: <b3b9f061-82c3-48bf-a7d6-385a3f53c654@kylinos.cn>
+Date: Fri, 6 Feb 2026 09:17:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thunderbolt: Fix PCIe device enumeration with delayed
+ rescan
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat
+ <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Gil Fine <gil.fine@linux.intel.com>
+References: <aXg1eBudRAaCZpmR@acelan-Precision-5480>
+ <20260127084513.GC2275908@black.igk.intel.com>
+ <20260127101701.GI2275908@black.igk.intel.com>
+ <aXrZK-WigVeqxBTT@acelan-Precision-5480>
+ <20260129065003.GS2275908@black.igk.intel.com>
+ <cd006977-513f-43d6-9238-1b9f39313976@kylinos.cn>
+ <20260203093957.GD2275908@black.igk.intel.com>
+ <087dcbe3-ad68-4f45-877b-8f78721efa4b@kylinos.cn>
+ <20260203100752.GF2275908@black.igk.intel.com>
+ <8a4874ef-90d4-4d88-a72d-1efa791a5b9b@kylinos.cn>
+ <20260204123702.GO2275908@black.igk.intel.com>
+From: Jayi Li <lijiayi@kylinos.cn>
+In-Reply-To: <20260204123702.GO2275908@black.igk.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kylinos.cn,linux.intel.com,suse.com,gmail.com];
-	TAGGED_FROM(0.00)[bounces-33127-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33128-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NO_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lyude@redhat.com,linux-usb@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[canonical.com,gmail.com,kernel.org,vger.kernel.org,linux.intel.com];
+	DMARC_NA(0.00)[kylinos.cn];
 	MIME_TRACE(0.00)[0:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.991];
 	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[lijiayi@kylinos.cn,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	R_DKIM_NA(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: C1EC7F716C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kylinos.cn:mid]
+X-Rspamd-Queue-Id: A036EF8E94
 X-Rspamd-Action: no action
 
-On Wed, 2026-02-04 at 06:16 +0100, Greg Kroah-Hartman wrote:
-> >  USB_QUIRK_RESET_RESUME },
-> > =C2=A0
-> > +	/* Gigabyte ITE Tech. Castor3 (Aorus Waterforce X II AIO
-> > coolers) */
-> > +	{ USB_DEVICE(0x0414, 0x7a5e), .driver_info =3D
-> > USB_QUIRK_RESET },
->=20
-> Please see the comments for this structure on how to place this
-> device
-> in the list.
 
-aha-whoops, my bad :). I'll respin a new version in a bit
->=20
-> thanks,
->=20
-> greg k-h
-
+在 2026/2/4 20:37, Mika Westerberg 写道:
+> On Wed, Feb 04, 2026 at 10:37:58AM +0800, Jayi Li wrote:
+>> 在 2026/2/3 18:07, Mika Westerberg 写道:
+>>> On Tue, Feb 03, 2026 at 06:00:06PM +0800, Jayi Li wrote:
+>>>>>> I'm not sure if this is relevant to this issue, but sharing just in case.
+>>>>> Thanks for sharing!
+>>>>>
+>>>>> It could be. What device this is?
+>>>> The device is Targus DOCK221.
+>>> Is the host Intel or AMD (well can you share bit more details about the
+>>> topology)? Then if you block runtime PM of the PCIe Downstream Port that
+>>> leads to the TB3 device like:
+>>>
+>>>    # echo on > /sys/bus/pci/devices/DEVICE/power/control
+>>>
+>>> Does it work?
+>> The host is ASMedia.
+> Ah okay. I don't have any experience with ASMedia host. What system/laptop
+> comes with that?
+>
+>>   ASMedia Host (0-0, domain0)
+>>           |
+>>          └─ Port 3 ──→ Thunderbolt 3 Dock (0-3)
+>>
+>> I tried disabling runtime PM by writing 'on' to power/control for the
+>> downstream port, but it did not work.
+> I think that's integrated into the SoC, right? So it's a PCIe root port
+> used for tunneling. What does 'sudo lspci -vv' say?
+Thanks for your help. The issue I encountered occurred during a testing 
+phase. I will try to verify it later on an Intel/AMD host system and 
+provide updates if available. Sorry that I can't offer more details at 
+the moment.
 
