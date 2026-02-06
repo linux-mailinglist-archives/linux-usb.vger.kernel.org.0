@@ -1,79 +1,61 @@
-Return-Path: <linux-usb+bounces-33151-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33152-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qLv8Em4EhmmyJAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33151-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 16:10:38 +0100
+	id GDTXJ5gDhmmyJAQAu9opvQ
+	(envelope-from <linux-usb+bounces-33152-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 16:07:04 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99E3AFF824
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 16:10:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19440FF731
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 16:07:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 13954309B1A4
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Feb 2026 15:05:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 036243020FF4
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Feb 2026 15:07:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B6DF27E07E;
-	Fri,  6 Feb 2026 15:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C513C27AC5C;
+	Fri,  6 Feb 2026 15:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WtS2+Nxh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mF1Mcbyo"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D700027603A;
-	Fri,  6 Feb 2026 15:05:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5249927603A;
+	Fri,  6 Feb 2026 15:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770390349; cv=none; b=We0dhDD8KU9wMsUdyYulJF1hBtCTDsgu1LMbFsyVcKJkirCLr2onL9c519Pa2zBjrd6qNuv7taitHfoIe5TwC07zxBmMhFYoyIT5Q5bP/0F9FtLiKUlrjbP7/Cz7dV+D2l2TGf8fQmB8Lev/ZiTVzk7R6HlK9wkHD6IhQTBOa0M=
+	t=1770390417; cv=none; b=lgVoOKz2luFDsz1yXQ2wKbrzfWZbS6fhStQnqvSK6BjDGuru2FXFzZAQHeBpOPMqxtDSKWCnBFC5c/mg5Zx+NNErQ0kTUuEUObMBc//4qHZXdLf/BjZvjtQS5btI88yC+W+vHgrkfBENc0+EDtqJICsucUIgWKgGBy8HHKcTOVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770390349; c=relaxed/simple;
-	bh=RSB2OFRe/6/DcmzMzPHjQ+Zxxl5zXroyGePOEXEehJs=;
+	s=arc-20240116; t=1770390417; c=relaxed/simple;
+	bh=Wh0zkOIcGs5X78t/45Ad4WKvEnMDZ7iCpArYfmux1fY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PmDqz7kSSCnKKMtHaYc7Jx19l3kd/qMXDIXFmVoJX6mh38D3e+M0g7h2V/lZmzSv8kasoD45yPptgxp6NhQcVSnsXqvtgCBitvBc7T9IKu7PMsfyr0SJd+dynM/bmn520SKyF4L/LpsXRiM+ylCytqQTPxHI5hk83Vawz4E66aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WtS2+Nxh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D9CC19422;
-	Fri,  6 Feb 2026 15:05:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=HVXxNKifq2mcbB7+RE2Pm8qBWa6WWkGBsrW828RgNfnseKhtrdV+p9a8NoTE6/IhDJdhyuxaiDuUkFI/EUgKmUqYfHZ5aQi5kOlAvWe4OlWIQ37Jghrpa/o0JBBcEYjMXGkw8ZTESqWmoSs74DaGeqBCDMG9mFYansBFMduTMyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mF1Mcbyo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D77C116C6;
+	Fri,  6 Feb 2026 15:06:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770390349;
-	bh=RSB2OFRe/6/DcmzMzPHjQ+Zxxl5zXroyGePOEXEehJs=;
+	s=k20201202; t=1770390416;
+	bh=Wh0zkOIcGs5X78t/45Ad4WKvEnMDZ7iCpArYfmux1fY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WtS2+Nxh55Adz0xYAf0PByzHQ6s6C/C9nq7MaYSOmHTfvsrH8peYshYKPMR1av/A1
-	 bNtZxlPTieyMxfR/oUu5tYkKnM1Is7YF8E5Q93LLJOhVIjLIrIdEVROjTAsuWAy4y1
-	 9YoxCQ0RJ2aWs9mpAH3fcLA4Bs9y6S80h01srWvaXtE64Aql6ya84wwWDzlQJCEeAA
-	 +Z+DungMjosbrvE1frGGvt8dtQQymTMVYPUD1Yt110TpF2luyRzlCdXd1X5r+3att/
-	 00dT60TBwiYTA5pZn848oEaCdRoJu43Or0HnQHzR7v8CMQhax8JYjn/CwmABdevwNK
-	 OF6JMHeAFfEqA==
-Date: Fri, 6 Feb 2026 09:05:48 -0600
+	b=mF1Mcbyoooju9sd6YjGYZTyQ+FD+FuLfsLhi2I39RoweQd0HDYf8NpkM95IxiKNpn
+	 jWUVstra1IGrAZt4biu1cS+DAh+FJjnqjYxEUFVcq3J2PKUwqTJFA/y1w9m8+2YQp0
+	 RdjeoMCv87wKl1z0LJDJGb/x6dTHcsmbizT3jUQNawvxCZTa7HHX9w7YWYXctQ4cpJ
+	 fBZZQn0UhpI7QUuQ4OidzklQBPHidgOPnTxwUq44bzydVQUn2ZaqIgXAU70ShVoBoo
+	 ugHk3WfqbFYjz2/85oBSwEu8FGv+UwI5MzmP40yaFIlhTq8QkPKtg8wkoJZnQX/Bsw
+	 NrD9hIq8+/vfg==
+Date: Fri, 6 Feb 2026 09:06:56 -0600
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Dmitry Baryshkov <lumag@kernel.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-usb@vger.kernel.org, linux-pci@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Bjorn Andersson <andersson@kernel.org>,
-	freedreno@lists.freedesktop.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jessica Zhang <jesszhan0024@gmail.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	David Airlie <airlied@gmail.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	devicetree@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-arm-msm@vger.kernel.org,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Sean Paul <sean@poorly.run>, Magnus Damm <magnus.damm@gmail.com>,
-	linux-renesas-soc@vger.kernel.org, Simona Vetter <simona@ffwll.ch>
-Subject: Re: [PATCH v2 5/7] dt-bindings: arm: qcom: document the Ayaneo
- Pocket S2
-Message-ID: <177039029875.225465.9560671235103288038.robh@kernel.org>
-References: <20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-0-c55ec1b5d8bf@linaro.org>
- <20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-5-c55ec1b5d8bf@linaro.org>
+To: Charan Pedumuru <charan.pedumuru@gmail.com>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+	Felipe Balbi <balbi@ti.com>, Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: ti,omap4-musb: convert to DT
+ schema
+Message-ID: <177039041547.227698.2039782077213181368.robh@kernel.org>
+References: <20260127-ti-usb-v2-0-9dd6a65b43df@gmail.com>
+ <20260127-ti-usb-v2-1-9dd6a65b43df@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,50 +64,56 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-5-c55ec1b5d8bf@linaro.org>
+In-Reply-To: <20260127-ti-usb-v2-1-9dd6a65b43df@gmail.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[27];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,somainline.org,vger.kernel.org,linux.dev,lists.freedesktop.org,linuxfoundation.org,gmail.com,google.com,oss.qualcomm.com,glider.be,poorly.run,ffwll.ch];
-	TAGGED_FROM(0.00)[bounces-33151-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33152-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
+	NEURAL_HAM(-0.00)[-0.977];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 99E3AFF824
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 19440FF731
 X-Rspamd-Action: no action
 
 
-On Tue, 27 Jan 2026 10:57:32 +0100, Neil Armstrong wrote:
-> Document the Qualcomm SM8650 based Ayaneo Pocket S2 gaming console.
+On Tue, 27 Jan 2026 17:42:13 +0000, Charan Pedumuru wrote:
+> Convert OMAP MUSB USB OTG Controller binding to DT schema.
+> Changes during conversion:
+> - Include "interrupts" and "interrupt-names" properties in the YAML, as
+>   they are used by many in-tree DTS files.
+> - Extend the "power" property to allow the value 150 (in addition to
+>   existing values), since this is present in several in-tree DTS examples.
+> - Drop the ti,hwmods property, as it is not used by any in-tree DTS files.
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
 > ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  .../devicetree/bindings/usb/ti,omap4-musb.yaml     | 120 +++++++++++++++++++++
+>  1 file changed, 120 insertions(+)
 > 
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
