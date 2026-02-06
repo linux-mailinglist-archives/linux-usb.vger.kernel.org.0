@@ -1,197 +1,476 @@
-Return-Path: <linux-usb+bounces-33137-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33138-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IEnMLp/MhWlWGgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33137-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 12:12:31 +0100
+	id EzrsAFXXhWlKHQQAu9opvQ
+	(envelope-from <linux-usb+bounces-33138-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 12:58:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21092FD0EE
-	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 12:12:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45389FD645
+	for <lists+linux-usb@lfdr.de>; Fri, 06 Feb 2026 12:58:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 22930305DA7A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Feb 2026 11:09:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CC593302A2FA
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Feb 2026 11:58:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E12C1396B72;
-	Fri,  6 Feb 2026 11:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC8A3A0B36;
+	Fri,  6 Feb 2026 11:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XAe/AAa0"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Hpx+MOhv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8E0376488
-	for <linux-usb@vger.kernel.org>; Fri,  6 Feb 2026 11:09:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770376148; cv=pass; b=qmjtlwzI97Bhy2/uFGaEMKA2XBGI7tb85oK/4QcEQuCVVNMraaUnbYyLnqHjNmyYQqKRBf9FuTEGV7Nn9xWFXbE5MrrB5Czc9+wf0G4yMSdYvRYQLFYt1zRDsJD5qFNyg+pXUuk9HacbVvY8jlst35Xdun+TeeQTKh89i1P6OcE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770376148; c=relaxed/simple;
-	bh=jQfCHmMRS9Ez/SoNwJxIOUjnuF8dqM3nJxhqxQgpzrg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hBMO+3awIjvtxQpu0/3M1pfwCGbhHHjAU7I1QG1Vc3CWVnF6NlFVqhXBEwd0drDuEe2WeF1gIBbDbUrGLM3Ro+iCUP+9IpHUIMSpRiAqxol8tirUHOkrTUtOX8Mb1KAShiZNg5VrbX9vmxSg4J20PDuDUt8vj7q1/dAs2MTdyGg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XAe/AAa0; arc=pass smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90DD32FA3C
+	for <linux-usb@vger.kernel.org>; Fri,  6 Feb 2026 11:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770379085; cv=none; b=YimjE14LSjEJ093pPelZ76lIpWlDZf4l0r/cDY3QFH9l+hkMEjl6Tz44Kz3oTMiKX9wTNcvqhPh+Wy4boNVwSrwhqPCqyJKILb7k78SI9dtTJF2LrG1N2H9eaHd/ZjVlgHyt0W8i6bkn1Krf6Ko2McVXUP5LsWSXWeZl2RcleOQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770379085; c=relaxed/simple;
+	bh=rUIhMipKm3DSYi4rMpTxaSLCerFl3MWcIQdR3tTgN6M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ukoFhBqlihMO9GPKl1IWx3nloSw/lRMnaVIer0JMkK/PqCMFchzmFeasY7/hos80jdVlP9XJYK1jKyjl4/uOej3uUHBzVKaS39ga3VuTQ6RJOn0QzztgZx6KfTSkltSXSG9UATR8zX5U4BPLtK2FaEO3Q9jKrmB9VEc0I9nQQQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Hpx+MOhv; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c2dd0c24e5cso619361a12.3
-        for <linux-usb@vger.kernel.org>; Fri, 06 Feb 2026 03:09:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770376147; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RYNsr2TMnWevMYj1FN9DWVf2bLDyS2uOVICconHAb6P35+teS7Mio2WcsaqovaP/rR
-         zIyZCQtWNdBktKD3HQIbCa1+UradxtswawmBSn2LYzDYKFhCrvdhnND1Eekxn33s6OTb
-         ZQSQJ14TrtZ7ht/SZG4LPN9KmjtYwQv3C5h/v4MlyIPEFsquzIjQbcinxK9WEPsbivpR
-         NhSiORCKFInKut41P/mGKewD0fnc2dG0615IxHnp5stKooNX1qU2L/k06OyJjsjuOQ2i
-         ZV45dt/+eczEARyAPzDaOA0XCjltl6PKil+gGhQiazDrysWMT3XEOyczfBXLmHAvZAUu
-         zXKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jQfCHmMRS9Ez/SoNwJxIOUjnuF8dqM3nJxhqxQgpzrg=;
-        fh=3ht1/s+XtLfm90VApstOj6hX5gVP15LGQWjyZ/0PZrI=;
-        b=e5JS+rWTmZfFRosCL8txQtdufjn/HObWVPHwfWACj1BZxSIbWHpTapD5Q5p4jbzkbk
-         uMROD/rekKlKMyj53eHVqRVB5gNmAnzPA3zV//M9ENyHBNwbqfpB4a0myVWO6RdOWOEc
-         9sWd5ewmf3NmsJmcaKPH1bOkumrdm0KNI1qY8GeXg8MAoZSr6dNy8gmSnVggYnyEeG/V
-         Wusjjo/tqGPAWakCYh/7PbA6cA81hRHIjAWvBzJaTnB9VHWiO6hRZsAVXbl2kbvok9RO
-         5EJ/eWpkXp6rBKz3WSP565JUm2WETnGzykLTiFQY0FNQuyGYh0aIZHCQqSoDmGx8v8DZ
-         fvKA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-64bea6c5819so2976526a12.3
+        for <linux-usb@vger.kernel.org>; Fri, 06 Feb 2026 03:58:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1770376147; x=1770980947; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jQfCHmMRS9Ez/SoNwJxIOUjnuF8dqM3nJxhqxQgpzrg=;
-        b=XAe/AAa0cVFHy65N75VTjsIzWs8k64undPpvub72gvU79UzUBcbgMAmXcdlLntQ5VU
-         JNowGLwFzRinR35UOctcmDHepquh74RYih7Uiz9PJ+0SOGqcV1arTQ6cf0kNIUpFqbgo
-         +we8eFBw/2jnIWOEJC/dkJWNp2dkFA9zYPuVg=
+        d=chromium.org; s=google; t=1770379083; x=1770983883; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2hyTsbP3mhP9Lt+xVfNMhvW7SHAmDYkzNc2qvfLi+XU=;
+        b=Hpx+MOhv6tr+iCPtI5zakPVlZdI5aNLWdwy4PRwJXaVXneSoIqfKNkwkiuNeVww50O
+         H+3ysrFAyFoyU8AeqPPjl1gQNcHPpjEBI7WkQ0CYwij8pPLPbdHrDd1etr4aMX9GeUcI
+         y/xp2QyMvrrP8gu4QK9W7OBnDQgv4vgEwLRNM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770376147; x=1770980947;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jQfCHmMRS9Ez/SoNwJxIOUjnuF8dqM3nJxhqxQgpzrg=;
-        b=tEyR3ekPOfUrHuKR970hKpyfDob/lOtcraG/zonrSE6VN51r2zGV41tPNIStopQj7s
-         21O362vglfgdQoyCyjRSEHscdlznLpR7X02G63Mvjtu77tJkafenrAt/Xz2IjIaiEn2F
-         +AXhirLL5AudSFgq0j2/u7gaKvWDeoOYFaE/qsvnZctv9WjWaw7Txcf/8xFEFMFOshQQ
-         qbKmUsFiJMjBdtz+UQgSLCsYXi0f08yglBxxvOFzAGCFjEQW5s1MCt6TdF3C1zuH4xLN
-         Um9nYzTL8mDgfVU0Ir5WK9CqET+NtQdjNHatI0j7Pq4yX8lY188SuER8/cNd9hr+nyQo
-         Ti+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXMeGaZMj5kI4JZnOnLfh/ToeC2QAOFkHKNOsZ1VLdtuJXBoNiNw3He/lKg3jr5uvla3z4WMzzhtQE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUFBHKxtMeVQoSTmfvIyvAQHA06cMkgC1Ko11njdpQNnQJQ/ys
-	0dy6N1ENDYTwZ5fpTnG2hK5Z75z0dv6Kpvvfvyc5YGLkzymbhW/e7GryVMy68ItCvFl0gJyNEBg
-	QFynN91DlnPp9NbOvND1JSzJXSc2fbR+GcgjoO/i3
-X-Gm-Gg: AZuq6aJDC3POpwLck/PNpV8f3nQAeWLuHK3DYdHhFUObEHGRT5AT0hdT8bkZlCZflKT
-	GNjSY5R7sRteGDqrwdRb/AN1vMCkcvXs/EJi+Tz7VdN9EQaLo/wveS8Xj8ziUUbELZI3WRbJPvA
-	mGPLW72Ae7ZzYY6vGe6FF6QyWRVyVmAfvBqxKj+kE7tqQc3fkYpiQU64lebd9P4Yc71zmxlOcAa
-	ONtQgybkj2vIjG47uZVKYrNsRLN6qE5BbyRkh7R8o6I2Xh5lLh5Ts6h+NXMpWhEnlxlRCrhH06W
-	syPJnpP48aTmuyuJVScP5ko9uLoxoT3I
-X-Received: by 2002:a17:902:f68a:b0:2a9:db7:4471 with SMTP id
- d9443c01a7336-2a951f0fab0mr22033145ad.1.1770376147579; Fri, 06 Feb 2026
- 03:09:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770379083; x=1770983883;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2hyTsbP3mhP9Lt+xVfNMhvW7SHAmDYkzNc2qvfLi+XU=;
+        b=qB+8Mmldvs7AOspJNbzKuE/1Hx0VE57NKaA1BnQjknPMRtNv163gyNdDkGyX+R0r7L
+         saPxJKUEbJqFzvrae+J1loOwbw3OWtOiuguubN+eDyHn7H/v3N1ctWZnphwOK3xZUj9L
+         K8Wvdpg1x+xp3dv6Iur2kx4WOZu4EbWDniqyD2dsp9psZaTFC2UUdXELm6houDscpDZG
+         +BHYPineYOREljQywhM1VY8NJGkKtd4XtQd75xmgAzjIDeepkW2/Qv19xpFLEBEqN4qt
+         ADoXJjoWvIYQ9mjXQgbSVG5sbfBcyc5rIQJ+cireG2hXwW2DVXiz8Eu9KStaTYkosMN+
+         w0mA==
+X-Forwarded-Encrypted: i=1; AJvYcCXmd8XVq4yTT6kOpmLe7PG5BWXgK/3RaBN2TS42bHQx/ECeJW9SywOJzrAeJ6l5qhxwZ/HT1LO/y1o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyTFazmqlklgVGej+WAOPapz3iNP4y/tRjYS1b32+Nr8bvyfaQ
+	58V1/7zWEo208vUXQAMWfXTEPWrU8S3aZHb4+pBjPAsjFsontbSflXoB5NybveD2+g==
+X-Gm-Gg: AZuq6aLVDbbQsCCBt16+uv6c1dMisjJrKpRGumCc5kComPKHyb6mvk4/yMOkLVl0AkY
+	qox1CZ2xfBPZ+HN1ZQ4RfYzZQRm5bGRb27LvP5A5e4QZOXGcFwm5ACYQemjmA+jEv4ORKcwbRqW
+	IKOdma/viGAd/TvtZt1HhUT4oAJ6wF6TcC/4cpR7i2UA6RR30MXRahJjcm96Ea/35XIhAOdUW0t
+	mFwqhhiXWB21H/oWu9RtMO+9Q23wyNF+ATwz4ahCdqEAo1jBucbDPqlqe2q9EPLtAYg732dC/L3
+	mGnZhu4KrRPq46s+qA70M058Qu63JDCz/ISviTjmq72Ub87PWUB418oXlmRNiP7F9+CJQS4dXlx
+	BPt6J3C6wVybLXhq1XGpJ7waYeZ7Gw8DfT7u/9JO97z2UXWCUUtb2mOB3PCSFHWID0zhOwpgjRR
+	S9j0UNcwk6YxRxHcPjlnv+MuCLOLsAJObSk+Q7hftjeATMK8tT5QJw/ektAJIhzAGosdjZpflzv
+	2E=
+X-Received: by 2002:a05:6402:2706:b0:658:377e:f05d with SMTP id 4fb4d7f45d1cf-6598417d31emr1061015a12.24.1770379082989;
+        Fri, 06 Feb 2026 03:58:02 -0800 (PST)
+Received: from akuchynski.c.googlers.com.com (6.187.91.34.bc.googleusercontent.com. [34.91.187.6])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65983eb68cfsm491210a12.12.2026.02.06.03.58.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Feb 2026 03:58:01 -0800 (PST)
+From: Andrei Kuchynski <akuchynski@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Jameson Thies <jthies@google.com>,
+	Benson Leung <bleung@chromium.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Pooja Katiyar <pooja.katiyar@intel.com>,
+	Johan Hovold <johan@kernel.org>,
+	Hsin-Te Yuan <yuanhsinte@chromium.org>,
+	Madhu M <madhu.m@intel.com>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	Pengyu Luo <mitltlatltl@gmail.com>,
+	Fedor Pchelkin <boddah8794@gmail.com>,
+	Andrei Kuchynski <akuchynski@chromium.org>
+Subject: [PATCH v2] usb: typec: ucsi: Add Thunderbolt alternate mode support
+Date: Fri,  6 Feb 2026 11:57:54 +0000
+Message-ID: <20260206115754.828954-1-akuchynski@chromium.org>
+X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260126090616.2224907-1-akuchynski@chromium.org> <aYWs815nqAGCdIa-@kuha>
-In-Reply-To: <aYWs815nqAGCdIa-@kuha>
-From: Andrei Kuchynski <akuchynski@chromium.org>
-Date: Fri, 6 Feb 2026 12:08:55 +0100
-X-Gm-Features: AZwV_QgMCXo6sBzj4_hkdxB5ArbCQXbe1jwjd37eH29aGICXWq1d1xQIuR1y05Y
-Message-ID: <CAMMMRMcBKWdVmXG_fHhOmiSdihxLGyrjTGeS0vvYF31FTfucgA@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: ucsi: Add Thunderbolt alternate mode support
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Jameson Thies <jthies@google.com>, Benson Leung <bleung@chromium.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Pooja Katiyar <pooja.katiyar@intel.com>, 
-	Johan Hovold <johan@kernel.org>, Hsin-Te Yuan <yuanhsinte@chromium.org>, Madhu M <madhu.m@intel.com>, 
-	Venkat Jayaraman <venkat.jayaraman@intel.com>, Pengyu Luo <mitltlatltl@gmail.com>, 
-	Fedor Pchelkin <boddah8794@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
 	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33137-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[google.com,chromium.org,vger.kernel.org,linuxfoundation.org,oss.qualcomm.com,intel.com,kernel.org,gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FREEMAIL_CC(0.00)[chromium.org,linuxfoundation.org,oss.qualcomm.com,intel.com,kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-33138-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[chromium.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[akuchynski@chromium.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[chromium.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 21092FD0EE
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 45389FD645
 X-Rspamd-Action: no action
 
-Hi Heikki,
+Introduce support for Thunderbolt (TBT) alternate mode to the UCSI driver.
+This allows the driver to manage the entry and exit of TBT altmode by
+providing the necessary typec_altmode_ops.
 
-On Fri, Feb 6, 2026 at 9:58=E2=80=AFAM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Andrei,
->
-> On Mon, Jan 26, 2026 at 09:06:16AM +0000, Andrei Kuchynski wrote:
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * UCSI Thunderbolt Alternate Mode Support
-> > + *
-> > + * Copyright 2025 Google LLC
->
-> 2026
+ucsi_altmode_update_active() is invoked when the Connector Partner Changed
+bit is set in the GET_CONNECTOR_STATUS data. This ensures that the
+alternate mode's active state is synchronized with the current mode the
+connector is operating in.
 
-Thanks for catching the year; time flies!
+Signed-off-by: Andrei Kuchynski <akuchynski@chromium.org>
+---
+Changes in V2:
+- Update copyright year to 2026.
+- Explicitly include all required headers.
+- No functional changes compared to V1.
 
->
-> > + */
-> > +
-> > +#include <linux/usb/typec_tbt.h>
-> > +#include <linux/usb/pd_vdo.h>
->
-> We now need to include everything instead of relying other
-> headers to do that for us (although, I don't think this rule is
-> documented anywhere yet). Include at least these:
->
-> linux/err.h
-> linux/dev_printk.h
-> linux/device/devres.h
-> linux/gfp_types.h
-> linux/types.h
-> linux/usb/typec_altmode.h
-> linux/workqueue.h
+ drivers/usb/typec/ucsi/Makefile      |   4 +
+ drivers/usb/typec/ucsi/thunderbolt.c | 212 +++++++++++++++++++++++++++
+ drivers/usb/typec/ucsi/ucsi.c        |  18 ++-
+ drivers/usb/typec/ucsi/ucsi.h        |  20 +++
+ 4 files changed, 249 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/usb/typec/ucsi/thunderbolt.c
 
-Understood. I will explicitly include all necessary headers. I'll fix this
-in v2.
+diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
+index dbc571763eff6..c7e38bf01350d 100644
+--- a/drivers/usb/typec/ucsi/Makefile
++++ b/drivers/usb/typec/ucsi/Makefile
+@@ -17,6 +17,10 @@ ifneq ($(CONFIG_TYPEC_DP_ALTMODE),)
+ 	typec_ucsi-y			+= displayport.o
+ endif
+ 
++ifneq ($(CONFIG_TYPEC_TBT_ALTMODE),)
++	typec_ucsi-y			+= thunderbolt.o
++endif
++
+ obj-$(CONFIG_UCSI_ACPI)			+= ucsi_acpi.o
+ obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
+ obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
+diff --git a/drivers/usb/typec/ucsi/thunderbolt.c b/drivers/usb/typec/ucsi/thunderbolt.c
+new file mode 100644
+index 0000000000000..434d3d8ea5b6e
+--- /dev/null
++++ b/drivers/usb/typec/ucsi/thunderbolt.c
+@@ -0,0 +1,212 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * UCSI Thunderbolt Alternate Mode Support
++ *
++ * Copyright 2026 Google LLC
++ */
++
++#include <linux/usb/typec_tbt.h>
++#include <linux/usb/pd_vdo.h>
++#include <linux/err.h>
++#include <linux/dev_printk.h>
++#include <linux/device/devres.h>
++#include <linux/gfp_types.h>
++#include <linux/types.h>
++#include <linux/usb/typec_altmode.h>
++#include <linux/workqueue.h>
++
++#include "ucsi.h"
++
++/**
++ * struct ucsi_tbt - Thunderbolt Alternate Mode private data structure
++ * @con: Pointer to UCSI connector structure
++ * @alt: Pointer to typec altmode structure
++ * @work: Work structure
++ * @cam: An offset into the list of alternate modes supported by the PPM
++ * @header: VDO header
++ */
++struct ucsi_tbt {
++	struct ucsi_connector *con;
++	struct typec_altmode *alt;
++	struct work_struct work;
++	int cam;
++	u32 header;
++};
++
++static void ucsi_thunderbolt_work(struct work_struct *work)
++{
++	struct ucsi_tbt *tbt = container_of(work, struct ucsi_tbt, work);
++
++	if (typec_altmode_vdm(tbt->alt, tbt->header, NULL, 0))
++		dev_err(&tbt->alt->dev, "VDM 0x%x failed\n", tbt->header);
++
++	tbt->header = 0;
++}
++
++static int ucsi_thunderbolt_set_altmode(struct ucsi_tbt *tbt,
++					bool enter, u32 vdo)
++{
++	int svdm_version;
++	int cmd;
++	int ret;
++	u64 command = UCSI_SET_NEW_CAM |
++		      UCSI_CONNECTOR_NUMBER(tbt->con->num) |
++		      UCSI_SET_NEW_CAM_SET_AM(tbt->cam) |
++		      ((u64)vdo << 32);
++
++	if (enter)
++		command |= (1 << 23);
++
++	ret = ucsi_send_command(tbt->con->ucsi, command, NULL, 0);
++	if (ret < 0)
++		return ret;
++
++	svdm_version = typec_altmode_get_svdm_version(tbt->alt);
++	if (svdm_version < 0)
++		return svdm_version;
++
++	if (enter)
++		cmd = CMD_ENTER_MODE;
++	else
++		cmd = CMD_EXIT_MODE;
++	tbt->header = VDO(USB_TYPEC_TBT_SID, 1, svdm_version, cmd);
++	tbt->header |= VDO_OPOS(TYPEC_TBT_MODE);
++	tbt->header |= VDO_CMDT(CMDT_RSP_ACK);
++
++	schedule_work(&tbt->work);
++
++	return 0;
++}
++
++static int ucsi_thunderbolt_enter(struct typec_altmode *alt, u32 *vdo)
++{
++	struct ucsi_tbt *tbt = typec_altmode_get_drvdata(alt);
++	struct ucsi_connector *con = tbt->con;
++	u64 command;
++	u8 cur = 0;
++	int ret;
++
++	if (!ucsi_con_mutex_lock(con))
++		return -ENOTCONN;
++
++	command = UCSI_GET_CURRENT_CAM | UCSI_CONNECTOR_NUMBER(con->num);
++	ret = ucsi_send_command(con->ucsi, command, &cur, sizeof(cur));
++	if (ret < 0) {
++		if (con->ucsi->version > 0x0100)
++			goto err_unlock;
++		cur = 0xff;
++	}
++
++	if (cur != 0xff) {
++		if (cur >= UCSI_MAX_ALTMODES || con->port_altmode[cur] != alt)
++			ret = -EBUSY;
++		else
++			ret = 0;
++		goto err_unlock;
++	}
++
++	ret = ucsi_thunderbolt_set_altmode(tbt, true, *vdo);
++	ucsi_altmode_update_active(tbt->con);
++
++err_unlock:
++	ucsi_con_mutex_unlock(con);
++
++	return ret;
++}
++
++static int ucsi_thunderbolt_exit(struct typec_altmode *alt)
++{
++	struct ucsi_tbt *tbt = typec_altmode_get_drvdata(alt);
++	int ret;
++
++	if (!ucsi_con_mutex_lock(tbt->con))
++		return -ENOTCONN;
++
++	ret = ucsi_thunderbolt_set_altmode(tbt, false, 0);
++
++	ucsi_con_mutex_unlock(tbt->con);
++
++	return ret;
++}
++
++static int ucsi_thunderbolt_vdm(struct typec_altmode *alt,
++				u32 header, const u32 *data, int count)
++{
++	struct ucsi_tbt *tbt = typec_altmode_get_drvdata(alt);
++	int cmd_type = PD_VDO_CMDT(header);
++	int cmd = PD_VDO_CMD(header);
++	int svdm_version;
++
++	if (!ucsi_con_mutex_lock(tbt->con))
++		return -ENOTCONN;
++
++	svdm_version = typec_altmode_get_svdm_version(alt);
++	if (svdm_version < 0) {
++		ucsi_con_mutex_unlock(tbt->con);
++		return svdm_version;
++	}
++
++	switch (cmd_type) {
++	case CMDT_INIT:
++		if (PD_VDO_SVDM_VER(header) < svdm_version) {
++			svdm_version = PD_VDO_SVDM_VER(header);
++			typec_partner_set_svdm_version(tbt->con->partner, svdm_version);
++		}
++		tbt->header = VDO(USB_TYPEC_TBT_SID, 1, svdm_version, cmd);
++		tbt->header |= VDO_OPOS(TYPEC_TBT_MODE);
++		tbt->header |= VDO_CMDT(CMDT_RSP_ACK);
++
++		schedule_work(&tbt->work);
++		break;
++	default:
++		break;
++	}
++
++	ucsi_con_mutex_unlock(tbt->con);
++
++	return 0;
++}
++
++static const struct typec_altmode_ops ucsi_thunderbolt_ops = {
++	.enter = ucsi_thunderbolt_enter,
++	.exit = ucsi_thunderbolt_exit,
++	.vdm = ucsi_thunderbolt_vdm,
++};
++
++struct typec_altmode *ucsi_register_thunderbolt(struct ucsi_connector *con,
++						bool override, int offset,
++						struct typec_altmode_desc *desc)
++{
++	struct typec_altmode *alt;
++	struct ucsi_tbt *tbt;
++
++	alt = typec_port_register_altmode(con->port, desc);
++	if (IS_ERR(alt) || !override)
++		return alt;
++
++	tbt = devm_kzalloc(&alt->dev, sizeof(*tbt), GFP_KERNEL);
++	if (!tbt) {
++		typec_unregister_altmode(alt);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	tbt->cam = offset;
++	tbt->con = con;
++	tbt->alt = alt;
++	INIT_WORK(&tbt->work, ucsi_thunderbolt_work);
++	typec_altmode_set_drvdata(alt, tbt);
++	typec_altmode_set_ops(alt, &ucsi_thunderbolt_ops);
++
++	return alt;
++}
++
++void ucsi_thunderbolt_remove_partner(struct typec_altmode *alt)
++{
++	struct ucsi_tbt *tbt;
++
++	if (alt) {
++		tbt = typec_altmode_get_drvdata(alt);
++		if (tbt)
++			cancel_work_sync(&tbt->work);
++	}
++}
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 251990475faa7..91b6c71dd7396 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -13,6 +13,7 @@
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+ #include <linux/usb/typec_dp.h>
++#include <linux/usb/typec_tbt.h>
+ 
+ #include "ucsi.h"
+ #include "trace.h"
+@@ -417,6 +418,9 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
+ 				alt = ucsi_register_displayport(con, override,
+ 								i, desc);
+ 			break;
++		case USB_TYPEC_TBT_SID:
++			alt = ucsi_register_thunderbolt(con, override, i, desc);
++			break;
+ 		default:
+ 			alt = typec_port_register_altmode(con->port, desc);
+ 			break;
+@@ -647,12 +651,15 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
+ 	}
+ 
+ 	while (adev[i]) {
+-		if (recipient == UCSI_RECIPIENT_SOP &&
+-		    (adev[i]->svid == USB_TYPEC_DP_SID ||
+-			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
+-			adev[i]->vdo != USB_TYPEC_NVIDIA_VLINK_DBG_VDO))) {
++		if (recipient == UCSI_RECIPIENT_SOP) {
+ 			pdev = typec_altmode_get_partner(adev[i]);
+-			ucsi_displayport_remove_partner((void *)pdev);
++
++			if (adev[i]->svid == USB_TYPEC_DP_SID ||
++			    (adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
++			     adev[i]->vdo != USB_TYPEC_NVIDIA_VLINK_DBG_VDO))
++				ucsi_displayport_remove_partner((void *)pdev);
++			else if (adev[i]->svid == USB_TYPEC_TBT_SID)
++				ucsi_thunderbolt_remove_partner((void *)pdev);
+ 		}
+ 		typec_unregister_altmode(adev[i]);
+ 		adev[i++] = NULL;
+@@ -1318,6 +1325,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 
+ 	if (con->partner && (change & UCSI_CONSTAT_PARTNER_CHANGE)) {
+ 		ucsi_partner_change(con);
++		ucsi_altmode_update_active(con);
+ 
+ 		/* Complete pending data role swap */
+ 		if (!completion_done(&con->complete))
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 4797b4aa1e35b..43a0d01ade8ff 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -600,6 +600,26 @@ static inline void
+ ucsi_displayport_remove_partner(struct typec_altmode *adev) { }
+ #endif /* CONFIG_TYPEC_DP_ALTMODE */
+ 
++#if IS_ENABLED(CONFIG_TYPEC_TBT_ALTMODE)
++struct typec_altmode *
++ucsi_register_thunderbolt(struct ucsi_connector *con,
++			  bool override, int offset,
++			  struct typec_altmode_desc *desc);
++
++void ucsi_thunderbolt_remove_partner(struct typec_altmode *adev);
++#else
++static inline struct typec_altmode *
++ucsi_register_thunderbolt(struct ucsi_connector *con,
++			  bool override, int offset,
++			  struct typec_altmode_desc *desc)
++{
++	return typec_port_register_altmode(con->port, desc);
++}
++
++static inline void
++ucsi_thunderbolt_remove_partner(struct typec_altmode *adev) { }
++#endif /* CONFIG_TYPEC_TBT_ALTMODE */
++
+ #ifdef CONFIG_DEBUG_FS
+ void ucsi_debugfs_init(void);
+ void ucsi_debugfs_exit(void);
+-- 
+2.53.0.rc2.204.g2597b5adb4-goog
 
->
-> Otherwise this looks good to me.
->
-> thanks,
->
-> --
-> heikki
-
-Thank you for the review!
-
-Andrei
 
