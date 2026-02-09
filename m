@@ -1,176 +1,188 @@
-Return-Path: <linux-usb+bounces-33181-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33182-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6vVFAA9QiWkT6gQAu9opvQ
-	(envelope-from <linux-usb+bounces-33181-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 04:10:07 +0100
+	id uDGyBPVwiWnl9AQAu9opvQ
+	(envelope-from <linux-usb+bounces-33182-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 06:30:29 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CF7910B570
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 04:10:05 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BC9810BC31
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 06:30:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 955C83001CF0
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 03:10:03 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id AFD033002F6D
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 05:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C8B2F2613;
-	Mon,  9 Feb 2026 03:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5332A30BB9D;
+	Mon,  9 Feb 2026 05:30:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jHriNJ6x"
+	dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b="CYllLlqH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2BD28980F
-	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 03:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770606601; cv=pass; b=ZfLIHzWngjZZfCqhvARzdBESeLlWO6mc3G+FrHfd37Jh5Vv1gYjnN6BJkkX0HcPhCD9cRPRXXHDT6tzXwbzw1OGfCDNqVRkZnA69jN5eOyvyK9E9w01G32uIc+MoPObz9MJsM9VC+ZMTzTUAQsUPVJEWyJ2AIZAgP4if4C+RFnY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770606601; c=relaxed/simple;
-	bh=EfrMOI/uvhYyi9mkT2f89sforFteRRTfRAZsVPzLuWs=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=WYrDXpVnpVoRtzPCiN8rpN5dODaV+dlN+OaP9HHTGMBpWNK7r3EfkdxSLuRE5rLx3dl6kVtRZqgTvLbIRk+8Fq/GiurtFSyCc/2MQl8bA9BFkNWD7Kt80B2wz/gAoG9TeHvpQv9kz0ooHQerzfJj5h11BPXJpVML6WKIDELxWrE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jHriNJ6x; arc=pass smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-385bdc72422so35282341fa.1
-        for <linux-usb@vger.kernel.org>; Sun, 08 Feb 2026 19:10:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770606598; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Pf3XPFewXTm4aCwZBaTtmZdDmVz4GyYj/JgvFomW6yVKOU3eqDYWoR+2+otiPLST/6
-         JT2L7f4XC2XYO82i+bc/O/6k0itEivn0k24AvQxfzFGikUSttzNMEcdI3sk+SzpGGDgP
-         7sv0qQ1BJ6ABYATCmi5ddnYQkdp1QSJ2PJQHpyy+hQrvjcSLm4AjljVzz1J6nkdA/QdE
-         qGdDMIWyBl1melifza01xhZY8oBYbpXq/V58+MLPmZ5opt8nE2JJrXNgTT4EC3dAh0eH
-         x1aSl50FNVZhk/MD+O0GXiPEfFZcUSjQfaJ9yQKdbpPJtFdrhBFezhsck7nQU6kwRhSi
-         U0HQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=ZEBr40e40rtBLUN4Bhp2oGknfiIwC9eVZWvW663BchY=;
-        fh=rJYdkLIy7vQETOPE5wEwShLowTre3A2i3j1T0BxPLBs=;
-        b=RXotnNvOkLtJZnzDrya7O8XiXF9ch4yHja26bz/o4TK2KOpkDknij5lAYRm48hO4rB
-         ZtAD47JXpRBRu/I61ItD7Ed4UyRMRI3aUyBbeHjRZ1Hj0z/igaLDNgUXjUjTX6Uq6eCD
-         JoRNM6w4XtGcLQ7Dkf9AhHZGXR/vMQU0ENzemazSdjssZnq+ePjRZn6hA7iYqnpSFuDE
-         cDN7MFJDbJuV7CwJcDTaucv9mY4vBJaDkQrqtSHTBDDuvVzzcFjKTjOU3JHYUwTf4jiM
-         4LhEknphNcUKBmYB7FJmOevnx/sYIy+lYdvvOSNl9zhg86KIq2NrklWA8jda9aBL+cv5
-         /xYg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B76F23C50A
+	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 05:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770615018; cv=none; b=Iksr7YRFWoCtHSQCQYUe5FwN8zZVvZlGyytS7rTAPxpF5NRjmY7VZjp+XkkJRyRMmSWk09jAJ7Zj2guHZ+o/CnEKCOUy1KZttQJuEPnuqqI+hhxXtv+1y/WrNaCa7Kica3Ro+GCozVGibe2qO1iaPr9gpQQSV/cEDZFhYZ+TiOY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770615018; c=relaxed/simple;
+	bh=90MB2j4CgmVye0Z+2xbcqnupOoDkQTzlkenxahCSWw4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dXLoL5SybZ/4yVebTFZFCamkcn9BaEmft3AKR5boiNM5p+wrph6gv33BWmB2eVMSp58usyMQauMFiq9aAVM6FsCMS/LGjQ3TG/SC5S9s03yVw83MYEHO5OjxcmSJGSK9De/UCxhFpJGhw6Bbx7DNUsPPvrwgJD8ChhX0gWoRbqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu; spf=pass smtp.mailfrom=u.northwestern.edu; dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b=CYllLlqH; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=u.northwestern.edu
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5029901389dso31831221cf.2
+        for <linux-usb@vger.kernel.org>; Sun, 08 Feb 2026 21:30:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770606598; x=1771211398; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZEBr40e40rtBLUN4Bhp2oGknfiIwC9eVZWvW663BchY=;
-        b=jHriNJ6xbveMV7f8WAktGVfBh1xdG7mtJXIOeqZaNNf0//7mvyPfU2hbIKv65OX8Ve
-         wnr7VnqW3mqAG+S2QrnNayYl4WtT7xKnlwqpGwy3nz9JQjW+69licy6svXQ/J/0yBJkL
-         HkvZd/7GJ1Lcth8J0KQkN99zhQ14L7nKPrZFQ5yqQM1HVVQroiplwoqCEVnZs3w2XCSj
-         vxj5P3pPMJe/he+Y1Cv8jTdTciE4yyL/7BSYxoCM9jGZ1wUxdPn8JeIP+hHMPThRagIl
-         Af/+OMXv2cusiJd6UVRTyUE8yT2fcwTr9jvctiMgu9kJ5M63s4pM+PrrF4hB/i/3VCQP
-         vmQg==
+        d=u-northwestern-edu.20230601.gappssmtp.com; s=20230601; t=1770615017; x=1771219817; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N61Q8cV41adr4A+NhJ034xStLnkhNVlJ60mnC0rmS0I=;
+        b=CYllLlqHU0F76Bp5u1HsU9g65VdG0IkzCFGqJ2P9eEFBEiFnC2V0qf7g0R1r0QPEkv
+         9gfDWiEyNhHSLRFgReVkFE2v6smHaqcGRlOv+bsxlGf0IRl49G7gE+cHgZA3iolSBS+3
+         PEgfl4yJNvbrOtlUmWkfm1Vxv9TsGyKtgwktTFU6/gVfMAnZ+QiinbyPEBNC94ohIHve
+         0HCwCHJcRIalShPO3GAB/lBvQxw4HkA0s7YjX+/hyaeH+b72PfH7+C/ySncFF6GR0cJV
+         xxo5FiC60bcfbyVKE3KOZqo4QWM6FjRtz6if317ERdPelFhJZTjBUqLYIcVqzd/C3xHL
+         sDaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770606598; x=1771211398;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZEBr40e40rtBLUN4Bhp2oGknfiIwC9eVZWvW663BchY=;
-        b=FZek3W9eYBQmShzk62GYMHHP2G4tIWsTM+iby5x1GcbtWLhRBYNMSGNtIgzHjJIYQe
-         7Gz9fVcM5Ntvxhs2jKM78shSjQYek8Rf2NrP7OxOBY6MWsQ9g6gIECoPa+AUUnuO0uCI
-         7yMovtt6mpOXLWyEmErNkjOemORLJMwrQToD3BCmXvGDilzCGTCzsxXrSroiU1WKO3yO
-         fq0Cpea9KiymkIca0mel5eRlVIFtkeYHFcY8ihUp35Fx/gLuSno0xscrjYncO+ggEPgg
-         46JAszw0gNnohpFL6rKelmmje7TJXk31KBOszecvZPdVVwf8CoVwHefyKDloW304jykY
-         jyLQ==
-X-Gm-Message-State: AOJu0Ywr3TIEzf1EDLXKJ+XSLCP7xuV9eRpkGEoIgFDCRKS0A8iSqgiH
-	+eVKdhq/5tgDY/kCku2VitrzKI8FNo0dW4dmNu0IXQ0zMMiDv4ToQKBPJ1oLxKH2B9pGD1dT9lE
-	6k1qUPvojxdTpDkAWz7SCOrcsAZH9k1I=
-X-Gm-Gg: AZuq6aLFFuYM42cr6jhS7Hog1tOrzSfGt5mrIqStFAx/QGD/zXn8uLAYPtbneqLEvi0
-	aVnnLfOEThtfN59QhXvwVpXrSn3BIBvvk21ODzDsP1oJBv0cBLWmEjC33LvoVnNB3dGbSbKK2QR
-	SlXm7A8W8+xl63NFakWwiPqD6LnpVdLTQAppFbwKrAaBp6geRt7BgjsngIDFN1ndVCRXlV4alzT
-	Ux+9w2um1lVJzxTK3G9jyRNIZAuYAb2vau9M6Ua6Yu5vn8sHQ1PzJ3Db2phx/zRVAhQ1GKGvaLG
-	aiYb415b/rsUdwL3ARtE1/E9TSD4lmb7UqdHDQ==
-X-Received: by 2002:a2e:a99e:0:b0:37c:c84a:99b9 with SMTP id
- 38308e7fff4ca-386b51021c8mr32290491fa.24.1770606598078; Sun, 08 Feb 2026
- 19:09:58 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770615017; x=1771219817;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N61Q8cV41adr4A+NhJ034xStLnkhNVlJ60mnC0rmS0I=;
+        b=LgH6gA9zFjMc8mOkdQfLsDG5o75ca3IsVBv98rdhEzl40ccWPZ8YTYo8DzpvYF1Tk6
+         RCnwyT/uqhy6136P20OolimM4AIpIVSFdIi6brHl7mR9+KBHqtjn2N9xIz1/EnHgrL8c
+         PnFduC+n67juBJwndY8t6ZhCIVi56CHrA8qqiVKGpw8q+0guqzXZjfePRJEpl1Yy9HcN
+         d0l+PKoT3XnpPcS9hcZmv4reZA5uBM79OKBoHhF4wl8KaOhzZn67kb6wxCFGpO/CQRO6
+         u6OYI8uI0dnOm2h/orQ40aTW6ruKJV7WRvLxhwEzpwPtzCsKP6DQFFK8bEaeaP4GilEl
+         P9+w==
+X-Gm-Message-State: AOJu0YxKT8MuHkfy908CFFt+4tkJSsvROOdm6jO7mqwPC5zg/L2ePquB
+	hXqLsnbRkKmIIIF0qe9JloHSHBCUum6kKXqvdIIN1UX2SXuhUVs02IQNvwoYtw3zMZI=
+X-Gm-Gg: AZuq6aIKcDKtAaFCW1rDvzcMUtauwx2yh7T6zAiUIdBxcTZ9dYAwMxzdNL+V04JH8YL
+	FWchArwTdWUpWaMvllPwxs1EpLe2QKWDR4OPNzcYIFFFWw8CO3aXO5x80XyRIjyNCEVykeaEkGt
+	YI5HD0NFZU/6FRlJTEGmuxp40NHzuBJFC9PSwzrAh3y6kI7oB2k94VPxoHt14aL6N7s3QsXgUAg
+	SOG6r7jzOdEXa7AM+8f+nbwK9RD6YQJA7CY9y5V6ExMPfzMKhZlPE3L6VJ3OwVktpPX1JMr2mc1
+	RcVUWnQ4lhIjdcAG+UnZQLVw7hfErsKa5KvqjSQSoNqU5jWQabvUFVRzOOLPORbs/ST0Z0S3ygo
+	VLVPYK50OGAuipQFq17gL43jgR4q5EX+IkXMWf8cGaKJr6zmROrOV7F7fl4cS6GMl4F9bfX6wam
+	M4TpeAv3k2xhym/BdqVFua4VizfUlferR7cVqmMO/rmxqcYO1hVrYBTV5cV7DKNUPJO0e0qff2u
+	ohUbt/DmSwG+h+/ZBxT5feuSR7CW0w=
+X-Received: by 2002:a05:622a:13d0:b0:501:498e:5c29 with SMTP id d75a77b69052e-506399f5ed5mr134423481cf.59.1770615017536;
+        Sun, 08 Feb 2026 21:30:17 -0800 (PST)
+Received: from security.cs.northwestern.edu (security.cs.northwestern.edu. [165.124.184.136])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50639171cd0sm69343471cf.13.2026.02.08.21.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Feb 2026 21:30:17 -0800 (PST)
+From: Ziyi Guo <n7l8m4@u.northwestern.edu>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ziyi Guo <n7l8m4@u.northwestern.edu>
+Subject: [PATCH] net: usb: kaweth: remove TX queue manipulation in kaweth_set_rx_mode
+Date: Mon,  9 Feb 2026 05:30:13 +0000
+Message-Id: <20260209053013.1701134-1-n7l8m4@u.northwestern.edu>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 9 Feb 2026 00:09:47 -0300
-X-Gm-Features: AZwV_QhEvq3UHzgJVD6NPMEt6BZEI38KTodU7lIyQ2HaF5QZWnG3ziZtZeGtKiY
-Message-ID: <CAOMZO5DuiHWpu9px2-FDWwBnq-W-jEQj1GMSUpTKvncw4OBF-g@mail.gmail.com>
-Subject: i.MX6 chipidea: USB port does not power off
-To: Peter Chen <peter.chen@kernel.org>, Xu Yang <xu.yang_2@nxp.com>, 
-	Frank Li <frank.li@nxp.com>
-Cc: USB list <linux-usb@vger.kernel.org>, NXP Linux Team <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+X-Spamd-Result: default: False [1.44 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[u-northwestern-edu.20230601.gappssmtp.com:s=20230601];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[northwestern.edu : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33182-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33181-lists,linux-usb=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[n7l8m4@u.northwestern.edu,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.996];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[festevam@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1CF7910B570
+	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-0.988];
+	DKIM_TRACE(0.00)[u-northwestern-edu.20230601.gappssmtp.com:+];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4BC9810BC31
 X-Rspamd-Action: no action
 
-Hi,
+kaweth_set_rx_mode(), the ndo_set_rx_mode callback, calls
+netif_stop_queue() and netif_wake_queue(). These are TX queue flow
+control functions unrelated to RX multicast configuration.
 
-On a i.MX6SX board running 6.19-rc8, a USB pen drive is connected to
-the USB host port.
+The premature netif_wake_queue() can re-enable TX while tx_urb is still
+in-flight, leading to a double usb_submit_urb() on the same URB:
 
-I need to be able to power off the USB host port. This is what I've tried:
+kaweth_start_xmit() {
+    netif_stop_queue();
+    usb_submit_urb(kaweth->tx_urb);
+}
 
-# echo 1 > /sys/bus/usb/devices/1-0\:1.0/usb1-port1/disable
-[   55.396980] usb 1-1: USB disconnect, device number 3
+kaweth_set_rx_mode() {
+    netif_stop_queue();
+    netif_wake_queue();             // wakes TX queue before URB is done
+}
 
-After this command, VBUS is still at 5V.
+kaweth_start_xmit() {
+    netif_stop_queue();
+    usb_submit_urb(kaweth->tx_urb); // URB submitted while active
+}
 
-Trying once again:
+This triggers the WARN in usb_submit_urb():
 
-# echo 1 > /sys/bus/usb/devices/1-0\:1.0/usb1-port1/disable
-# [   57.903409] usb 1-1: new high-speed USB device number 4 using ci_hdrc
-[   58.107522] usb 1-1: New USB device found, idVendor=0457,
-idProduct=0151, bcdDevice= 1.00
-[   58.107668] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[   58.107761] usb 1-1: Product: USB Mass Storage Device
-[   58.107808] usb 1-1: Manufacturer: USBest Technology
-[   58.107849] usb 1-1: SerialNumber: 000000000003FF
-[   58.147565] usb-storage 1-1:1.0: USB Mass Storage device detected
-[   58.156694] usb-storage 1-1:1.0: Quirks match for vid 0457 pid 0151: 80
-[   58.163889] scsi host0: usb-storage 1-1:1.0
-[   58.172623] fsl-ssi-dai 202c000.ssi: No cache defaults, reading back from HW
-[   58.189573] fsl-ssi-dai 202c000.ssi: No cache defaults, reading back from HW
+  "URB submitted while active"
 
-VBUS is still at 5V.
+This is a similar class of bug fixed in rtl8150 by 
+commit 958baf5eaee3 ("net: usb: Remove disruptive netif_wake_queue in rtl8150_set_multicast")
 
-Even if the USB port is unbound, the VBUS is still kept at 5V:
+Signed-off-by: Ziyi Guo <n7l8m4@u.northwestern.edu>
+---
+ drivers/net/usb/kaweth.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-# echo -n "usb1" > /sys/bus/usb/drivers/usb/unbind
+diff --git a/drivers/net/usb/kaweth.c b/drivers/net/usb/kaweth.c
+index c9efb7df892e..406d1bd070fa 100644
+--- a/drivers/net/usb/kaweth.c
++++ b/drivers/net/usb/kaweth.c
+@@ -765,8 +765,6 @@ static void kaweth_set_rx_mode(struct net_device *net)
+ 
+ 	netdev_dbg(net, "Setting Rx mode to %d\n", packet_filter_bitmap);
+ 
+-	netif_stop_queue(net);
+-
+ 	if (net->flags & IFF_PROMISC) {
+ 		packet_filter_bitmap |= KAWETH_PACKET_FILTER_PROMISCUOUS;
+ 	}
+@@ -775,7 +773,6 @@ static void kaweth_set_rx_mode(struct net_device *net)
+ 	}
+ 
+ 	kaweth->packet_filter_bitmap = packet_filter_bitmap;
+-	netif_wake_queue(net);
+ }
+ 
+ /****************************************************************
+-- 
+2.34.1
 
-What should we do to turn off VBUS?
-
-Thanks,
-
-Fabio Estevam
 
