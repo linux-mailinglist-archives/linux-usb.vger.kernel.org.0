@@ -1,162 +1,200 @@
-Return-Path: <linux-usb+bounces-33183-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33184-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qNCdAjR4iWne9gQAu9opvQ
-	(envelope-from <linux-usb+bounces-33183-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 07:01:24 +0100
+	id 0A41Ms+liWkhAQUAu9opvQ
+	(envelope-from <linux-usb+bounces-33184-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 10:15:59 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C08D10BEDC
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 07:01:23 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F33F10D6A6
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 10:15:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 452CC3009140
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 06:01:19 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 59F5E30028E9
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 09:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4462D780A;
-	Mon,  9 Feb 2026 06:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D32633542D3;
+	Mon,  9 Feb 2026 09:15:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b="AfuOD17Y"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dS/QXwJY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F5225D53B
-	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 06:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC3E353EDE
+	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 09:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770616877; cv=none; b=lFVivAwH7hBnnSNMNenMGcVQ+G4fffPLL1ePVosHSG4uzxXTnarzOqgC+ZkXbujHy4vXqZL4pPR92yen1AG3nXvI4HT7muFKcLmyYlU4dyAuQOVsvbq+AugfDCtSCCcfcYas97BWtQWeD1NXBOEumqi8DEsHwHRoD4Kx6QgFqp0=
+	t=1770628555; cv=none; b=YGw32rujBFZ1K9paemJxCYr1lbX0Xsr/8tT2xwjcyVT3bk5g/QJPGGnt6irPvXXEXMhMzjfbCf1ucIU23Dgx5yOvOG7ULSqyLsN72Nzkcx3YazJ4ciTnv3i6sdYKwx4r9IaaI5fXo+XtMUnKfKddwrwM9kuZx9lkzls5uHy5HvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770616877; c=relaxed/simple;
-	bh=aJVXTQ4LY0IO1aalWkLVsdJepRGTZS7ylFoEV9fnajY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GurA0X6+MaoQRzytCMKuVcCPfDxQnoO9yzJcVtu5NRdi7Q6IUUz/zx5yWUWjJkuGUWM/QRRPfKQvqcIkf4sAbjBAGTt+5s3oR45tF9iPipC2S9veimKnERpB2ozfzplveH2hR6GnLUJuIVO9MSBeZgV6MyI0wsNVRiIb5FaONSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu; spf=pass smtp.mailfrom=u.northwestern.edu; dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b=AfuOD17Y; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=u.northwestern.edu
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-89505dd3e24so50979316d6.1
-        for <linux-usb@vger.kernel.org>; Sun, 08 Feb 2026 22:01:17 -0800 (PST)
+	s=arc-20240116; t=1770628555; c=relaxed/simple;
+	bh=hCRbplKa9XIjvclI+PlB/dolhnudbQakjP8h3tdWGJY=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=SSb1Qt8OfL1k8SOEOfz9sks0iiMcG4RotWHtNVI4p1D8wiYIilzjm6dvXxgHFgrzRr2vrb4QBLM/MRZ0MvomDLKQxhop24MBpS6mTHZ6k+guy3yMt7PPShKL5GGu/9Ou/KuvFsNJVvH/UHZvrX+kkt2bo7fEwpcbfXq1uPVSlqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dS/QXwJY; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4359228b7c6so1642177f8f.2
+        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 01:15:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=u-northwestern-edu.20230601.gappssmtp.com; s=20230601; t=1770616876; x=1771221676; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K2L0ut82NrQYDTfHRkdswzBih5D3osXVkQWNViM8MLk=;
-        b=AfuOD17YPrsCNu9+Fusdn/rJxLfRg9V/ODZGJAtA8q3mkgzIrGKT3B+OIsQSyJfjE8
-         2lyQslGRkW57HQlBReQ1JeDjMdsHkbj5YKdL/GbnztPX5z+RqfYfZ9lmP19VKU2+0jio
-         kIMgcnH3iYdsM6WMWJwI7cGB1i+8Fe7E/rgpn14H42nWQdsXDuoRFhTIqSrJEUT0mWfI
-         uxz3miwlHF3FyeL3e6gtUTjNHbc02q9p4QAMPNuoXEih6C3G8mjbSO5761YFP6/BeXGC
-         PseXFIDgP3Y4CVpjLD7w7Drh08ABtu1esu4VQOU0qJJ48lMu6XzcYkqY+Gvm8XfMrrUL
-         tYtg==
+        d=linaro.org; s=google; t=1770628553; x=1771233353; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j7LKhseSnGFUF6qSBmsqnML3SyQVCy/4OXLMkuV0OQQ=;
+        b=dS/QXwJYsoXoptVs/ChdDm8fn0UZ5G5HFysH7DAaLNzoKWCsvG+5ukFiW5c6L6FVsQ
+         Qt6ebL3f1APwTEQtSjSiKp65CHJlwB5+VGIUGn+cdpcWzEPSt4WcrqognjMdt9E6KDWh
+         5s83U7TTOT2CxGsCvvzKyjZ53vYD9Xs6WGfo7P0nbU1lNafqFIgm5gkGyWHsVqnEyR3T
+         8PF2MKHIjvIYt0U/0o9PgMdEJIE2MLJm0DDwrnQvNheG9l5Yv4J4t3fu1OEZeiFi9eK5
+         2N/XDk3lbBnWlxnL7LmqhxRM/rqeo8ICMwNs5N4kcS3BYPcJaBtJMBy/XbNk8k4Erbua
+         SMZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770616876; x=1771221676;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K2L0ut82NrQYDTfHRkdswzBih5D3osXVkQWNViM8MLk=;
-        b=ZGXN5KaXMaGX/dWJa9IuWA9JLi1zsXS2hst72RJ6ykccJ61rQg2RcbWG9kdO9RiKX3
-         YaxtipjZiDDvmC0hnI7FrBx6K3rzFTYy4tWFXb6cRYbNoGUPFCeUaLC8fG71meaHHhXw
-         f1txEUv60PC65nmOYWu8hFpoBRY3Unp9RSMFotFOCbgFYfNpXKrXVpEF26F8haqdL4E8
-         4jBhCbxjV8IC8wkuSCl4curPrj+tQ3Isxk+eR5H99TupXJv9WsrRAAj/Ow0CkOhxWc2l
-         9fc2803Py73XjTRBRmPEL08ODnoeQRFMwIlapgrR9TRmPZVey+WW/z37MeeVYflCWv3X
-         q1xg==
-X-Gm-Message-State: AOJu0YxDudWlZb5h2dt5CWp+AgNBryWAuyPi5WPxOqmQmD/WpTkjcSap
-	Y7akGjF5U3oirUMx4DhD7FXQvjWhhAiYzTgkyR205uOZVHdKKhodWA8cEabowFQ/F7AM2Jd+pHd
-	i+oWR
-X-Gm-Gg: AZuq6aLAcrOkQ7PbVA5WMlY4AVS+Jr0cWifJbX67Aa6AIpaYL1CNj4+j7fdCDhA1vC7
-	q8kWTDgz0MI1v4osMkH4TX6Nyzpqzk0MOQbM3JAG677Tb6yS1/bGA3RLtZTy4sK0TFZ2BE2QAyG
-	O9Vri2MbN7czuxDYq5Sm37vKATHBwhvGFk6sboy6agYNQ+zCemD8EcwAjT1msPFuhWqViR+yWK5
-	z+f+l9sJPxpdevQ7TLrh8JfvTReM8/SXUpprMKwqRkgr+9gHmNEALcJulePom12oc09dSn1Uz4U
-	nBZjZIbVCo55SeCmaVkQrfn71RU1ZKyVCk/vMg8sRGvvVvcSafV1oh1l+LIH7Mp/BG48rcSha3t
-	Q4YXhOks8yvvg+fWNMnGahinwq6za9R6W7M/v4Rbgta2WSaMmjDUU8LYlUSlC8RF3UepIWMR3Cf
-	fyADS7GtJShlXKGPBOlvKyenbaDJlJu8xFaePfIlHhYYjjHMZylLY6Qlo97bZhn227OAQmbm5oT
-	MrqN5XKdG40rdSgpl6s3lSN1TSI6Zg=
-X-Received: by 2002:ac8:7f41:0:b0:4f1:cd72:f22b with SMTP id d75a77b69052e-506399ba43cmr153657071cf.52.1770616876621;
-        Sun, 08 Feb 2026 22:01:16 -0800 (PST)
-Received: from security.cs.northwestern.edu (security.cs.northwestern.edu. [165.124.184.136])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89546b09f77sm55007256d6.31.2026.02.08.22.01.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Feb 2026 22:01:16 -0800 (PST)
-From: Ziyi Guo <n7l8m4@u.northwestern.edu>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ziyi Guo <n7l8m4@u.northwestern.edu>
-Subject: [PATCH] usb: image: mdc800: kill download URB on timeout
-Date: Mon,  9 Feb 2026 06:01:13 +0000
-Message-Id: <20260209060113.1731338-1-n7l8m4@u.northwestern.edu>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1770628553; x=1771233353;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j7LKhseSnGFUF6qSBmsqnML3SyQVCy/4OXLMkuV0OQQ=;
+        b=pEqx2ib8AIjWLH7ia1ucv9UQOU8Lhq61azu4ofUHzTh2Q+n6BOJEvxcTZHIHnFxEnJ
+         HXN1RmtQH4dB3xKkP8ATfGBP6YvDLsLcdFpglv30Zkippj/3DLHrxayTzNGUPKEXD5rZ
+         3Pj2HbvT7MK/dEJ5lLVQv7KyljkEZmcbEpBEON3nrjz3CY3xup8zYGCqsK9ADCki4ZCE
+         DSt8zIlEN1KM8C1C7mx3AeCZR2RxtEkmHD5IiZVE+pJEzD0NAIj8cybUzo+OPFdFMYhK
+         gxBrba3nRTX7revoN7+nBAeK8JnRNlXPGyxEG4qNeG8u3621d60BtuUqL00aQchw6jj9
+         yw4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUL6bBLH1EXY8EI73MHvQkDCITF/ogpnqNdbeb1g4tS8wMZNAWKInJCoJztIeNAbGuingj9U36l9WA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgUUFeVXJBXT8BGC0mr6Npg5d8n8CZdWNQbQ3ti80meCp/WvUj
+	LSZyPTXneCGk8v05nxEJhyF4j+2x/asHeVgrdbRZoW+M1myi3CkqXSM2O/0Ue4Jnrgg=
+X-Gm-Gg: AZuq6aK6JTvWIen3MLfKmHgEjyXn0RECKGKZot47u8aK8FE0xF//90Lmrf5OF3eDFNc
+	3zGsCFsDU6Kkc5CFViCOv+a8UcWhASQ6bJbi7S8g3eAXuHqWTcQIKVvbcC/wI2lk2l8Uos3AKy8
+	KB/Yt0NNyq/V9XvoRbkkpq7h/OoqFPB6AB3P61MxL9Ag+vSNP1ZGYGBs75Ub44n0XnyuNX03jNJ
+	vSFtuQof8ZjPZblj4W9HjK8iavfuD5fKOmkGcYcJDe+AZoHnyE69IwHsECaXAOn0IQVzzAfraPP
+	vmzBce4OUu6FYZ8WG8tAl+pMMXguYOq9xzRrUOZG+ZwdKkjBlh4a8AWGPK8xjGwJwdnKuGg5YHN
+	0vLA4Xc7U5gcNT2ooH1e1rTDzIb5uaIbfKJOMdGrIWGQNztraZDkHDA8j7HqeXvzRfRu/a1zuMX
+	IuPRgsuRIYHJ2oQxF7281zZULZtyAC/U7iAveadWqUyfi/T1Gk0PiF7egbtNnJYMA=
+X-Received: by 2002:a05:6000:1ace:b0:435:b068:d3c4 with SMTP id ffacd0b85a97d-43629380e94mr16816180f8f.33.1770628553209;
+        Mon, 09 Feb 2026 01:15:53 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:106d:1080:44e3:9198:bd5d:a3f? ([2a01:e0a:106d:1080:44e3:9198:bd5d:a3f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4376a78d796sm9493687f8f.20.2026.02.09.01.15.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Feb 2026 01:15:52 -0800 (PST)
+Message-ID: <b28c3d31-607d-431e-845e-c12e3e44fc23@linaro.org>
+Date: Mon, 9 Feb 2026 10:15:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v3 0/9] arm64: dts: qcom: Add support for the Ayaneo
+ Pocket S2
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas
+ <bhelgaas@google.com>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ KancyJoe <kancy2333@outlook.com>
+References: <20260206213557.GA83922@bhelgaas>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20260206213557.GA83922@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.06 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[u-northwestern-edu.20230601.gappssmtp.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[northwestern.edu : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33183-lists,linux-usb=lfdr.de];
-	PRECEDENCE_BULK(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com,vger.kernel.org,oss.qualcomm.com,outlook.com];
+	TAGGED_FROM(0.00)[bounces-33184-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_NEQ_ENVFROM(0.00)[n7l8m4@u.northwestern.edu,linux-usb@vger.kernel.org];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DKIM_TRACE(0.00)[u-northwestern-edu.20230601.gappssmtp.com:+];
-	TAGGED_RCPT(0.00)[linux-usb];
+	HAS_ORG_HEADER(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	HAS_REPLYTO(0.00)[neil.armstrong@linaro.org];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,u.northwestern.edu:mid]
-X-Rspamd-Queue-Id: 6C08D10BEDC
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Rspamd-Queue-Id: 1F33F10D6A6
 X-Rspamd-Action: no action
 
-mdc800_device_read() submits download_urb and waits for completion.
-If the timeout fires and the device has not responded, the function
-returns without killing the URB, leaving it active.
+On 2/6/26 22:35, Bjorn Helgaas wrote:
+> On Fri, Feb 06, 2026 at 03:50:28PM +0100, Neil Armstrong wrote:
+>> The Ayaneo Pocket S2 is a gaming console based on the Qualcomm
+>> Snapdragon 8 Gen 3. It has an internal UFS storage, WiFi,
+>> Bluetooth, gaming buttons, SDCard, 2K display and USB-C
+>> connector.
+> 
+>>        pci: pwrctrl: slot: fix dev_err_probe() usage
+>>        pci: pwrctrl: rename pci-pwrctrl-slot as generic
+> 
+> These look fine (but please update subject lines to follow past
+> history).
 
-A subsequent read() resubmits the same URB while it is still
-in-flight, triggering the WARN in usb_submit_urb():
+Ack will do
 
-  "URB submitted while active"
+> 
+>>        pci: pwrctrl: generic: support for the UPD720201/UPD720202 USB 3.0 xHCI Host Controller
+> 
+> I don't see anything here specific to UPD720201/UPD720202.  I don't
+> want a stream of patches to add more devices in the future.  Is there
+> any better design?
 
-Add usb_kill_urb() on the download timeout error path, mirroring
-how the write path in the same driver already handles its URB
-timeout (line 863).
+Not really, I don't see how we can avoid changing the driver compatible list
+here, I don't think we can use fallbacks here.
 
-Similar to
-- commit 372c93131998 ("USB: yurex: fix control-URB timeout handling")
-- commit b98d5000c505 ("media: rc: iguanair: handle timeouts")
-
-Signed-off-by: Ziyi Guo <n7l8m4@u.northwestern.edu>
----
- drivers/usb/image/mdc800.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/image/mdc800.c b/drivers/usb/image/mdc800.c
-index 7b7e1554ea20..c4df637b2a03 100644
---- a/drivers/usb/image/mdc800.c
-+++ b/drivers/usb/image/mdc800.c
-@@ -736,6 +736,7 @@ static ssize_t mdc800_device_read (struct file *file, char __user *buf, size_t l
- 				mdc800->downloaded = 0;
- 				if (mdc800->download_urb->status != 0)
- 				{
-+					usb_kill_urb(mdc800->download_urb);
- 					dev_err(&mdc800->dev->dev,
- 						"request download-bytes fails "
- 						"(status=%i)\n",
--- 
-2.34.1
-
+Neil
 
