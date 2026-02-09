@@ -1,209 +1,307 @@
-Return-Path: <linux-usb+bounces-33196-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33197-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gAGbFW3oiWmdDwAAu9opvQ
-	(envelope-from <linux-usb+bounces-33196-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 15:00:13 +0100
+	id 4LAlEk/siWlpEQAAu9opvQ
+	(envelope-from <linux-usb+bounces-33197-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 15:16:47 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CC4210FF86
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 15:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E8AE6110226
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 15:16:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 82E84301CD80
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 14:00:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4872C3022923
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 14:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253DE379996;
-	Mon,  9 Feb 2026 14:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224962750E6;
+	Mon,  9 Feb 2026 14:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UkEFcOVd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cf47pej+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517C8377559
-	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 14:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770645605; cv=none; b=c6imwwnvqYNZZjpdwFI1rlLxOt6RGlKKjhCm576mZsQkfuotkUXfBmI+3zFQrWkWuRNJlIbUtIu2Ee1b0fyquWQqIXqaC+IlSkHVv4fpy3hGTQjY3hF1x5ecTKABqOZciOuzP2M8VABcETgAQTxU8Uxkbwm518nGDTB8awxYlHs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770645605; c=relaxed/simple;
-	bh=Nuf5oBBoMZpdgayRTi4P5FfCTv1xvNMcXtfo4vkmMVc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=oXBrXjYt3ICzD0t5/UgiA885U54l1MWmsXL6TuAYNyJaDXMI3gJ4cpDcdDYua8nUEjdUAelEQcmLDDqaqiJP9ARIViVxjg/lQkyD8SvGb+zGkLG7BzVqMoAhpc11kgE+xLTbSBJzglmZftgg938rRfjhUEkfv3vozCGvbf8bZzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UkEFcOVd; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4359a16a400so4243845f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 06:00:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421D413D638
+	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 14:16:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770646591; cv=pass; b=F/UdfoDyvSeL/hskTW8d+OYavmHGNjCgz/3EGAzJXd9L9dWBGYXw30jGB95xt+6Em8HY4kGhEbqM4Nx6Cj7TGpWYcgFJO4Y3Dfx+z2uut+c7gB3QV6vtzpmzXAyGOQBYQXdAFJu3bgflYxVU2WQZelIR82/PLQfru1hQiRxvBdo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770646591; c=relaxed/simple;
+	bh=HNisyMlZL+OvExQstV+QoI3I+cNIwlAG9yFLwe3U6hk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ikkElZQCXi4RNO4rdyjh7F+F7JM/X84h6JY0td3xKc9Es2eoAbuUVYXxED42ViiXx1b4BbegjlbkQfOpQmbLcM4I4tm3b/Y7Usl3OoR/WBDpdKkDtXzrp3WuZlN19/e3XPeadO6hGYdR4yAPLk4U4DhdT+wG2mRY+tv9HMNwKuQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cf47pej+; arc=pass smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-382f9211cbfso26079341fa.0
+        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 06:16:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770646589; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NR9HKHalh7ZJeaSx3gXBnciEiF9K3S/lASOv+YwMni4OtS1F5PZnE1T6TWpDKjoyW9
+         HPyYbjSv/NhSGHfpaT2P1Djl9Ss5sfp95GaSLuNlzWZ5TVpMueMejtBsjcxd3SAzKjg0
+         h+5Tg0+LHloIll1bMmkFiXXJ6rB30L0yyyYDffFUJphtImRM2HAJBJ56YaRXWBPgF2eb
+         pLPKiJCKTs7P7eqlN3eilMAZ35l/TAcVMgc7ho7skDta4Sn/W4Y6raZypcBwyWgL3wtp
+         UE2VcnfA4A7LwhpyaBo8Nev8es/0OhK7NzBOSgmwvvmBSMOtjuXHPs+F/fLgQhE5ol8c
+         +m9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Htw7pAtQmxc3A1rsRk/hOXO440gMEQtYGKnJ5exKa8E=;
+        fh=rJYdkLIy7vQETOPE5wEwShLowTre3A2i3j1T0BxPLBs=;
+        b=NdXdX04/NsldgZiXgaJzxaYVSfFnC2j8AODMAMgbp/rOtanrxjrO0kvFhmkO2ZqHP0
+         K1tOl7wU9lQSjfAXchDt9wtCuZqsmxT0Z43APqgoun32XDb1wv/SxFAwU8i1UBCSrgtP
+         s3F1aHJbpgv4NC4ej0h5kS0nBNGN9vdX+5orlwDmqz+zkhCoXxUab7+vZILfsN8Cb056
+         asjcam4ygSlb4ox7si4ExOxKNK2T+E8cDcFQsGUjnV3C6udiFYjC2IOduaX+paOfCCfK
+         037crXFfpcZetTY9joOrnHsvXdKeU/zMaIobXf/OK6CK6C5TtZpVMeK4i+ONTNjZQtV/
+         0+dA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1770645604; x=1771250404; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mbQMmk1MO4QOzPI1aGplcQy9lMA7g33jZd4vEeQtoGs=;
-        b=UkEFcOVd+/83yFqYq/bO+yFXF64O66u5xAL/THL1zfEZ0WDVJrxG1+Mvwe3+ttPPrR
-         iWVvb0Sl6X0k9bBMhLLbKsPinSkxq2Pz9/iKYlrPgght6dvpVc28JjgxzBfmrcs0yRoE
-         knpHpV4FjcbpFsDWrheC7OQeeX5TBxRIl5PKRqz9hoMXi0/5wDxCdEh9qah+XoyzAko+
-         QAQXlh5gmD9o9TdGT0BoMe0NGudbbGJQ9VjK/yJ0YsRt+2maHO+cOj3k29aPTH9nlzD8
-         rZNyvWXpAUCQbcxjpflg6kGkMOs0042G522gw99UZQOkXCFipKwsA+VDA0Ll5elJnpEz
-         /zkQ==
+        d=gmail.com; s=20230601; t=1770646589; x=1771251389; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Htw7pAtQmxc3A1rsRk/hOXO440gMEQtYGKnJ5exKa8E=;
+        b=cf47pej+2FxHtX4HO7efIwQVj/L0VDVteoB0KbeGQv5hq193iA9l+c4ReKdSP0PvKB
+         JiyTdySevGwYOtTHSBGhFs/EGwO5gKlDOm2PGQZRcxyzn1bryRahLEpG0jbUu6qlLYTC
+         gY5ebBWMD3vRqbkQ2NssbTEHzAdnMr3jU3pKYyeaRKzljZpDzb4gfQhqUKqhQC/yw1rm
+         /acjSsXTenhryAmN1V1XZNtn3xztQsubZWyOUKSWFqWuIptkocl7OJqxemqYBLQ2IPWO
+         pEHA71sL/d5Iq1QUUeVJaYFSxu+ELVUdMXV75unvE4O4kGtSpGehaOECMqr6cazrBH2h
+         Pb6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770645604; x=1771250404;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mbQMmk1MO4QOzPI1aGplcQy9lMA7g33jZd4vEeQtoGs=;
-        b=cRYgKxbbA4L71n4JOoShP08vGqskf6tDHo2H8nHl6TLJ8vjSFJOrsTDkNn8lmdr9kE
-         IRhVZ9jmv2AW9EAMgYMdSAlm2ShHwK6/PiLuVNcXSj9U9MCHLPXXGbK93bCtcdoxjQAc
-         wSf16s/gY8E93xwKmhG4wpRLMIiH5PFWSlYsyWyDNYB9U71hXYnrNGm3e4id11jDvZVT
-         4kllEibAv48GrOrtFgf74RN2noohHlG7iaiDy7UzmDpvcoOhx5PAOrKPJBwYnnfST1bg
-         s+sHfLZ8tX6nvWe8neiSYr81McJ0F565UNOSUm8FFd8WQfJrpEWkNWrO5ho3uVfabmFL
-         BXIw==
-X-Forwarded-Encrypted: i=1; AJvYcCWE9mBPz5mbp8gvUddqIf8mKtZ0OS85Ig/Nt5SJzSxdDMnQJeTmcPA2o4FMEJSaGDepPDKcduDsDak=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhZ1XINB/9bLpC9RL5AxCS5HeCpZ3KGfg0irbBUy0T5XlFXeS/
-	5Fo64FY/FuHYDRtzoHoLRzr3n5OmDnWaMMKDOonf2wVVRPMkncGDUFOq8PUEJg1MMfs=
-X-Gm-Gg: AZuq6aIyvS06rfH1KSuk++VZlzgmE2lnA3psHOidu3eE9gFnQq3o0ui7VMi9Cz7y8Xm
-	5Rsrh0DVqubOv2EgtkMs9DGYQnlLJAy54BhoRXlXXpT7T5iWHzLvT2hYoHyvQofUJLMbVsGgLl5
-	uM09NhCqszX2DdSdikGREvMdbt8dwAYSkactL7rTObjhQbfD0ZC45zBgqtVAjpO8yshLnXkvoCY
-	I0tAnhp1ZX2O3HjmlNagFnrKS+KbibJlH9U5GGTPweQEX+atBVngdXGLi2Tc7iTeFUc2VJa61A8
-	M2khcZriYXHPGkFul3BOSEcxn6m0rUH+ROvXcxXLmIOQKQlmmT16pbzQTgUXdaY0vnHWAt1OtaQ
-	FBJQnrZjHmz56byaSpjSsbJi5w9+iGEc9a8BTilnO7ERtNujBeKuiP/CxLLVcFfIyCCOBtXqkS2
-	HrYr2yJdn3Iha9a7E9Ig8/KVDuDfIher7173Q/wM60DU0FmKLRMOKIVTcbds8mm5Y=
-X-Received: by 2002:a05:6000:24c1:b0:437:712a:fab5 with SMTP id ffacd0b85a97d-437712b0c7emr3989897f8f.35.1770645603442;
-        Mon, 09 Feb 2026 06:00:03 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:106d:1080:44e3:9198:bd5d:a3f? ([2a01:e0a:106d:1080:44e3:9198:bd5d:a3f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436297462a8sm25096267f8f.30.2026.02.09.06.00.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Feb 2026 06:00:02 -0800 (PST)
-Message-ID: <a4e55e91-0e03-4e63-8542-d8ad61b38906@linaro.org>
-Date: Mon, 9 Feb 2026 15:00:02 +0100
+        d=1e100.net; s=20230601; t=1770646589; x=1771251389;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Htw7pAtQmxc3A1rsRk/hOXO440gMEQtYGKnJ5exKa8E=;
+        b=XFFGaXsY1wTFD9voMILX+UFvR7K6J6JFnhzCk3fa4cdsqKWt7A58cVgX6VfRDb2rGV
+         XfJ25ZujwjeRr+/R4D3uwjN9g3E2rk2XWOYq6Tv9hjPCmVPT3TFNul2SLqtUh+0vowNK
+         fzzecpsaP82XLftpU7ubnsyde4ytSBC8msikcxjdnErAM1z9cAmRrVrgToInx6eXz2IB
+         F2hOzig1ZISvdwtaeYCs6wqm6NB7zM40SJE/3AcT/V2vmCnH+bycA4DpWGyyJGW7ctkc
+         cO+6Qcuf0/O8OQDYsk3ZLcgwIeRZXwQSXh02wNERuIn2bEUmzGKvSWywBHTpPF37R3/2
+         DdAw==
+X-Gm-Message-State: AOJu0Yz6pXJ3NH45hrtokcME49CnDMgIyp+5FYf8wYDZZujZtgRtqmLP
+	9v8hUEHqFvgBMYKPGS8Ji68x4tdRdZVBjUP0WwJl2TkNA0yoHY32yTpES7tNNOUW9zGoaKiyOo1
+	tU+LcqzIuVWFdZzoF3VlKhbZDp9Jta8w=
+X-Gm-Gg: AZuq6aL3BzmJZSHsuBA8VgxXLqFyUhorJEO3zrKeuKWUGBotBkR/yobMC1/Mjcv53tR
+	XNbA197+ZFB3hDfopPgT729nP1xtR3xP8+RjtW+VQBCbB00cMuHTO93MGq0mho0k7lAE32YxoSb
+	Eu8Q117DjLbiXL7U6TV1XnhLVGvQqv2AeLgTYiyfzfPjKghsHTIXERzBrFa00Pux7P5qFQ/HK3d
+	y5d2MNT7CJWoMLmps+jV8j3mvyPlqpNp3DMYmbNcHCNNrzO3MQEt75oKwZ4Jcv+sGVHJ6+Z70lp
+	KJ8DXarr1uBo0myufFeBmHd5Eck=
+X-Received: by 2002:a05:651c:b22:b0:386:9325:228b with SMTP id
+ 38308e7fff4ca-386b4e7b89bmr34634231fa.5.1770646588988; Mon, 09 Feb 2026
+ 06:16:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v3 4/9] pci: pwrctrl: generic: support for the
- UPD720201/UPD720202 USB 3.0 xHCI Host Controller
-To: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-arm-msm@vger.kernel.org
-References: <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-0-5b79c5d61a03@linaro.org>
- <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-4-5b79c5d61a03@linaro.org>
- <fbxbnou5mdlhaq5dpxr3wdzmjetwdp7auaaqeunc67tgk5ej2m@cnnkr2pcwy77>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <fbxbnou5mdlhaq5dpxr3wdzmjetwdp7auaaqeunc67tgk5ej2m@cnnkr2pcwy77>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <CAOMZO5DuiHWpu9px2-FDWwBnq-W-jEQj1GMSUpTKvncw4OBF-g@mail.gmail.com>
+In-Reply-To: <CAOMZO5DuiHWpu9px2-FDWwBnq-W-jEQj1GMSUpTKvncw4OBF-g@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 9 Feb 2026 11:16:17 -0300
+X-Gm-Features: AZwV_QgbZBuo8gXBLe5yJmaq81DF4Fv_8wokubt2rlrsPedP9vKyb4opIUHWhAU
+Message-ID: <CAOMZO5CVcLRBhXByZRT=dNGFWZuQm7r-ALXnWUgC1wu8tXxHfg@mail.gmail.com>
+Subject: Re: i.MX6 chipidea: USB port does not power off
+To: Peter Chen <peter.chen@kernel.org>, Xu Yang <xu.yang_2@nxp.com>, 
+	Frank Li <frank.li@nxp.com>
+Cc: USB list <linux-usb@vger.kernel.org>, NXP Linux Team <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-33196-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:mid,linaro.org:replyto,linaro.org:dkim,linaro.org:email];
-	HAS_ORG_HEADER(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TO_DN_ALL(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33197-lists,linux-usb=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	HAS_REPLYTO(0.00)[neil.armstrong@linaro.org];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Rspamd-Queue-Id: 0CC4210FF86
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[festevam@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: E8AE6110226
 X-Rspamd-Action: no action
 
-On 2/9/26 12:30, Manivannan Sadhasivam wrote:
-> On Fri, Feb 06, 2026 at 03:50:32PM +0100, Neil Armstrong wrote:
->> Enable the generic pwrctrl driver to control the power of the
->> PCIe UPD720201/UPD720202 USB 3.0 xHCI Host Controller.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   drivers/pci/pwrctrl/generic.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/pci/pwrctrl/generic.c b/drivers/pci/pwrctrl/generic.c
->> index 08e53243cdbd..4a57a631362f 100644
->> --- a/drivers/pci/pwrctrl/generic.c
->> +++ b/drivers/pci/pwrctrl/generic.c
->> @@ -73,6 +73,10 @@ static const struct of_device_id pci_pwrctrl_slot_of_match[] = {
->>   	{
->>   		.compatible = "pciclass,0604",
->>   	},
->> +	/* Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller */
->> +	{
->> +		.compatible = "pci1912,0014",
-> 
-> No need to add the compatible to the driver. Just use the existing compatible as
-> fallback in the binding/dts.
+On Mon, Feb 9, 2026 at 12:09=E2=80=AFAM Fabio Estevam <festevam@gmail.com> =
+wrote:
+>
+> Hi,
+>
+> On a i.MX6SX board running 6.19-rc8, a USB pen drive is connected to
+> the USB host port.
+>
+> I need to be able to power off the USB host port. This is what I've tried=
+:
+>
+> # echo 1 > /sys/bus/usb/devices/1-0\:1.0/usb1-port1/disable
+> [   55.396980] usb 1-1: USB disconnect, device number 3
+>
+> After this command, VBUS is still at 5V.
 
-???
+I noticed that the regulator handling inside ehci_ci_portpower() is not cor=
+rect:
 
-Sorry but this is insane, in no world a standalone PCIe USB controller could be qualified as
-compatible as a pciclass,0604 slot.
+priv->reg_vbus is NULL. The regulator is at ci->platdata->reg_vbus.
 
-Technically it would work just fine, but "compatibility" has a meaning....
+I did the following changes:
 
-Neil
+diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
+index ced6076a8248..d77f3a9e46e9 100644
+--- a/drivers/usb/chipidea/host.c
++++ b/drivers/usb/chipidea/host.c
+@@ -37,31 +37,8 @@ struct ci_hdrc_dma_aligned_buffer {
 
-> 
-> - Mani
-> 
+ static int ehci_ci_portpower(struct usb_hcd *hcd, int portnum, bool enable=
+)
+ {
+-       struct ehci_hcd *ehci =3D hcd_to_ehci(hcd);
+-       struct ehci_ci_priv *priv =3D (struct ehci_ci_priv *)ehci->priv;
+        struct device *dev =3D hcd->self.controller;
+        struct ci_hdrc *ci =3D dev_get_drvdata(dev);
+-       int ret =3D 0;
+-       int port =3D HCS_N_PORTS(ehci->hcs_params);
+-
+-       if (priv->reg_vbus && enable !=3D priv->enabled) {
+-               if (port > 1) {
+-                       dev_warn(dev,
+-                               "Not support multi-port regulator control\n=
+");
+-                       return 0;
+-               }
+-               if (enable)
+-                       ret =3D regulator_enable(priv->reg_vbus);
+-               else
+-                       ret =3D regulator_disable(priv->reg_vbus);
+-               if (ret) {
+-                       dev_err(dev,
+-                               "Failed to %s vbus regulator, ret=3D%d\n",
+-                               str_enable_disable(enable), ret);
+-                       return ret;
+-               }
+-               priv->enabled =3D enable;
+-       }
 
+        if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL) {
+                if (enable)
+@@ -158,6 +135,7 @@ static int host_start(struct ci_hdrc *ci)
+
+        if (ci->platdata->reg_vbus && !ci_otg_is_fsm_mode(ci)) {
+                if (ci->platdata->flags & CI_HDRC_TURN_VBUS_EARLY_ON) {
++                       pr_err("***** Enabling regulator in host_start()\n"=
+);
+                        ret =3D regulator_enable(ci->platdata->reg_vbus);
+                        if (ret) {
+                                dev_err(ci->dev,
+@@ -168,6 +146,8 @@ static int host_start(struct ci_hdrc *ci)
+                } else {
+                        priv->reg_vbus =3D ci->platdata->reg_vbus;
+                }
++
++               ci->platdata->enabled =3D true;
+        }
+
+        if (ci->platdata->pins_host)
+@@ -276,6 +256,24 @@ static int ci_ehci_hub_control(
+                        goto done;
+        }
+
++       if (typeReq =3D=3D ClearPortFeature && wValue =3D=3D USB_PORT_FEAT_=
+POWER) {
++               if (ci->platdata->enabled) {
++                       pr_err("******* Disabling regulator\n");
++                       regulator_disable(ci->platdata->reg_vbus);
++                       ci->platdata->enabled =3D false;
++               }
++       }
++
++       if (typeReq =3D=3D SetPortFeature && wValue =3D=3D USB_PORT_FEAT_PO=
+WER) {
++               if (!ci->platdata->enabled) {
++                       pr_err("******* Enabling regulator\n");
++                       retval =3D regulator_enable(ci->platdata->reg_vbus)=
+;
++                       if (retval < 0)
++                               pr_err("******* Failed to enable regulator\=
+n");
++                       ci->platdata->enabled =3D true;
++               }
++       }
++
+        if (typeReq =3D=3D SetPortFeature && wValue =3D=3D USB_PORT_FEAT_SU=
+SPEND) {
+                if (!wIndex || wIndex > ports) {
+                        retval =3D -EPIPE;
+diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
+index c6451191d2de..f4f4524db22f 100644
+--- a/include/linux/usb/chipidea.h
++++ b/include/linux/usb/chipidea.h
+@@ -76,6 +76,7 @@ struct ci_hdrc_platform_data {
+ #define CI_HDRC_CONTROLLER_PULLUP_EVENT                5
+        int     (*notify_event) (struct ci_hdrc *ci, unsigned event);
+        struct regulator        *reg_vbus;
++       bool                    enabled;
+        struct usb_otg_caps     ci_otg_caps;
+        bool                    tpl_support;
+        /* interrupt threshold setting */
+
+And now the VBUS regulator is disabled:
+
+# uhubctl -p 1 -a off
+Current status for hub 1 [1d6b:0002 Linux 6.19.0-rc8-00013[
+106.733803] usb 1-1: USB disconnect, device number 2
+-g9bbe71ed0c6a-dirty ehci_hcd EHCI Host Controller ci_hdrc.1, USB
+2.00, 1 ports, ppps]
+  Port 1: 0503 power highspeed enable connect [0457:0151 USBest
+Technology USB Mass Storage Device 000000000003FF]
+[  106.858289] ******* Disabling regulator
+Sent power off request
+New status for hub 1 [1d6b:0002 Linux
+6.19.0-rc8-00013-g9bbe71ed0c6a-dirty ehci_hcd EHCI Host Controller
+ci_hdrc.1, USB 2.00, 1 ports, ppps]
+  Port 1: 0000 off
+
+The problem now is that powering up the port fails inside mxs_phy:
+
+# uhubctl -p 1 -a on
+Current status for hub 1 [1d6b:0002 Linux
+6.19.0-rc8-00013-g9bbe71ed0c6a-dirty ehci_hcd EHCI Host Controller
+ci_hdrc.1, USB 2.00, 1 ports, ppps]
+  Port 1: 0000 off
+[  117.114697] ******* Enabling regulator
+Sent power on request
+New status for hub 1 [1[  117.122923] mxs_phy 20c9000.usbphy: vbus is not v=
+alid
+d6b:0002 Linux 6.19.0-rc8-00013-g9bbe71ed0c6a-dirty ehci_hcd EHCI Host
+Controller ci_hdrc.1, USB 2.00, 1 ports, ppps]
+  Port 1: 0100 power
+# [  118.333697] usb usb1-port1: Cannot enable. Maybe the USB cable is bad?
+[  119.243790] usb usb1-port1: Cannot enable. Maybe the USB cable is bad?
+[  119.250825] usb usb1-port1: attempt power cycle
+[  119.256584] ******* Disabling regulator
+[  119.303803] ******* Enabling regulator
+[  120.523775] usb usb1-port1: Cannot enable. Maybe the USB cable is bad?
+[  121.433762] usb usb1-port1: Cannot enable. Maybe the USB cable is bad?
+[  121.440793] usb usb1-port1: unable to enumerate USB device
+
+Any ideas?
+
+Thanks
 
