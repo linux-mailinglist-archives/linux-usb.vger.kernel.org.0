@@ -1,88 +1,90 @@
-Return-Path: <linux-usb+bounces-33200-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33201-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cDbIBEr0iWl+EwAAu9opvQ
-	(envelope-from <linux-usb+bounces-33200-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 15:50:50 +0100
+	id WD5VHlb3iWl7FAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33201-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 16:03:50 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4631A11113F
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 15:50:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D191E111736
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 16:03:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7E4173014F5D
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 14:44:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DC91A317BE5A
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 14:47:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D59D37BE7F;
-	Mon,  9 Feb 2026 14:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C229437BE9A;
+	Mon,  9 Feb 2026 14:47:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="wl8NmUp3"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="HcWQTxr4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF5837AA71
-	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 14:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2469437BE77
+	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 14:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770648262; cv=none; b=C6PQhT6sIHYFYUCMUdMy06K7KTudLMYdeV0pEO0W6l99ykr5DS1ncL2T/hPUHwSPbDS+RF5q7LT9Bw1O6dartwQz8UiGCzFNMLX3mPuIRRfeMdOtpHH6HiIF3tuq1b1D75Z3IFeuanHyja6IBaq4DK1DHZ2H7mtidKtdCsc/mYo=
+	t=1770648453; cv=none; b=PZAYgfbaJS9D9KANHGMrgk45esUDDeBa2r83HdIMBOK1yAfxtZiZipx0njRxNuznwHoAsDBoAn45x1h2aYV1+EcMWQ2gasSyjXGrAVRjmk1lUkjDVg8X98wAYThc8W/mhWTmh5JDJVPTnHQUgWiGOSof6+FcdAHM4vZHYEvP1Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770648262; c=relaxed/simple;
-	bh=pZ+8FB+IjLFAihqEUidXHot0YKCS4BDgFYqi1yTrTac=;
+	s=arc-20240116; t=1770648453; c=relaxed/simple;
+	bh=p38Pt61WWnI/446NW3EDs/FqTgapnD4fxQmalZjM5hc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BA5VGU48dv54Qb9Tg5Wja4hutnShnJ8zgb/bzmeintvH5K/4Dgh0X5JUf5F+al7Kf0zCziQ4Gktlu7ECSxAYtx7mQJaOq/6+UuXtG9Cn8H6Y3Rwz+QSV/wxxmV5OT0OSWizmeUnKRZalpPVJbRicN4LHoNE+2UVYqMd8GGsmXMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=wl8NmUp3; arc=none smtp.client-ip=209.85.160.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=PhT5SCaJ8mEPNE+7gkY23vALVTlQKw1BPnsfVlYtr2q4aXqq+rJ3F5jRKQd9/CJke0RJhL4FSp2FyECZs4jrB8e9SW7NMKYk8H55H7XHtlf4k/LjmSEc8vDMn4sMM4wjPcmFeapDU0+T1i1TBnIK7WtPCTyDfSgvc5nsyYnF+wU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=HcWQTxr4; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-50145d27b4cso52723681cf.2
-        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 06:44:21 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-896f6d4b6c1so19119076d6.2
+        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 06:47:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1770648260; x=1771253060; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1770648452; x=1771253252; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=32CqNrnc3wLMXG4xQkQyEJL6NUeoNBpNTze23tzrWQk=;
-        b=wl8NmUp3IeVtxfwTBaWhsLELrTQajFQjeAPzTZTh9ctRhZALmoQ1nHgo1e4FNg/m2J
-         UrsySz/lHxdXaSqJTw2Y+Zd9akXnVapUgpSCJM3q//X/4PG51qr9KYWfxi2NKpvPxJU1
-         X0ZMPh7VOo5Uuj0HGzpLTUOpYeZ7bYz0FUFIacq+sjRAECKuWAuvv+ugi2EeeicgSBoB
-         abF9ZvRHG+DMAaWETMQyR/oX9R+eqK7Ha2emVW7uLw3cEHFxUcVJjhnpnXW9BK58D+mS
-         Iz9CGyNjF5FLiridkZ4Jrb9tpRHe8R5uHCXktUgmzoo6D3J81VapBVgLm/gKgcSVIA2K
-         WtDg==
+        bh=ho//V7xLOKZYyWUOboKGJN9nZXZMUfKAgO5c4WVrjL8=;
+        b=HcWQTxr4Fkat5ASfsOohELjnjBlqeasHLEgH0Syc7/l4VZFpO7aRpHL9sw8JxunpsF
+         MCwguM4LAnRlZ+VzX3HRcpjVc5o1+8YJ5Us67T6vRvq0cNlANtr3SKD/k3kn8dNSOric
+         hEFWyeY9DK1auSt3V0hPCY77kY4shHED9Io+No53mVxHE48t+SoRi/HhBnChao2Tw/GG
+         diPUWbftbqdQtkqztQJTo29Mtw1Hv3Vi5i/6+P7611ngI7U1mWMOP0TrITrlBaANzZtN
+         lf/ZvHel65UL670TDF2+vuNyKiERcIwHKdoNmmt4Sz9FIUedWT6lAEPdu5lpAMtBS4E1
+         ULCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770648260; x=1771253060;
+        d=1e100.net; s=20230601; t=1770648452; x=1771253252;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=32CqNrnc3wLMXG4xQkQyEJL6NUeoNBpNTze23tzrWQk=;
-        b=omD5RGvCXVaA5YReGQwI/l4RW3WoXWEguSBHCml3LXxG8PlvV1K0b7/BB6uoaCZfaw
-         sLmdyZ60ct6t+yMqrh8hlgtqRgX0ispAYJAcHNWidcecHtPe/9m5UHISEgQXguYfe9Rt
-         orr8DCl8pbujnXeBEu/WAE11sH/QVovAThDnyn7ShhzswrFNoFHw8g0VkAY6S0YNSMEv
-         7grRfwYOiXaNm7/4BUY7nwkvYDiu6OJ+etv2t8hVvRFpzbG6bj6J0yX6FBCTx8PFwTHf
-         DUgumd4e3wi5QV+D4kbkcFphIwZ/rjzoaYafK80f7Qm9MuPvf8wSIs6f83eyfsOfGWt9
-         JWEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXl8XKnmfuzq2iIAqEaGxmufiiYGzpe3+4Rajkom0P3poMJq0pngJYuV4pNfzWwV/lVKvZX8oW/EXQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWeZU83lVt168QSYLmVEtthugMIbLYF0Ikff/8UHaCfmEEE7Op
-	HzftCkWyW/rCbhMT2zJRJ50Wg1d/1tH5pxw6THoETLjKLeXXrxw4R1cg5TDsnuueSA==
-X-Gm-Gg: AZuq6aJpLTLghJUpX6gobBpFct/fwWzdHoJkK6Bzh2RobpMUOxMxzzQbmAwPkHGvl41
-	xvjnkEe21wDJQGQJvR9mqrjoQvmlk/gfSLAobVr2zJ7az6EN+jmVHG9+n/41xcbQGNClof8yogR
-	MNBqC/kRWmm20jSe+qK7teMjBDc04Vg7QdhKc4fLTvinEkIFsTtgkuwOJpxScxBY4Eutz/Iu7eW
-	CNlaNEblX8N6/XNWtEtDX52c+NU4ebtjG9QdR/zDJpIlQpAWov5xsCqj1epyOOCu8uvgycrEl6I
-	pYYRCPPtKI3r0nUc75UYAjBnw+En2Qmg0J5eF2d0Hu2DXGVDQsNihfrXEzZg8/h4KPwyc2U3Pe5
-	BezZP/gKjEla31Nm+pEv2PLeaFGyww+naQNP8Gf5OxOF6yU0gc+4rckwT0spYnPbzh+/Gud7Npc
-	KGcX1Ag5ntVdpIy4L99mXPXRbcH5vTWg==
-X-Received: by 2002:ac8:7f0e:0:b0:501:4ca3:7420 with SMTP id d75a77b69052e-506398e9765mr152846981cf.36.1770648260051;
-        Mon, 09 Feb 2026 06:44:20 -0800 (PST)
+        bh=ho//V7xLOKZYyWUOboKGJN9nZXZMUfKAgO5c4WVrjL8=;
+        b=nSNNglTWkk5KPn5WV8qrXm6jJ78nKwFqAtgzPEo0B7KfCdL4UDo+YrEzy1qDSwevQa
+         hijibmD2jh9NFqp24AewtPUeZ5baqtxm9bPmPbOQRxcSpO0Arh8xv9Am8bhw6Hyp4fPj
+         SK6jygw8R0q1lYYH+OSPemFdM7TCETUYHts8uY4nmzSbTNEWFG+H2DhCCaGhTleh2wv+
+         ML/7dAI8XeRGTr/WCR2iMZxRNBUqqW87647haJJv0CwT1uNZXHWBPOiikOLpjP3xzy+X
+         fb74hbPfpvzbV9afEzDsbDDS90fVSoCYSxr5Mhs0WbBV/72t/CJMF+r96gWJy96hqM7W
+         HtdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVrZpvv07+IM9qvokXb5SPZAklUxaJz+1WDhJqgvq1d6fWc1oOQPyWhOCYlOK7l5W/wefujFI2J8tM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwR89jc3MpJb2oqSslRIkE2bLWeThaKhZxGbQmQvuJ2XuVNx1eW
+	mXxWseUh+jKp8rxOhf6FMGFSL8TyYcTLqtU6MVa+1yG7ewGWncDVl/NAPiFJ8+dz0w==
+X-Gm-Gg: AZuq6aKUmYZDVD0dhZAplsKc6GzPTw2MPrh8/TE+NqsH1f/zOtEK/7+SDUEEy56wBrG
+	mrJLicxFc7U9hbm2fMa6i5RtwFGaPP0oVsZXrZrKcAQXALu3wzKipR9vNPh8i8p1eu+p3KzQxow
+	AJEf3xEc6HUDE5elwU9Yng4h9SS6FDCF0FKMu9BykjJa1HMXEXB2H1n7mHgAp5wYPkrgRhXwXN1
+	gKiAzqrsy9Fbj0Au4bfiKn/cFAu0dlFKV/RUSXlc9wzQOxTEwXsnnAb7mFmwPiZaT6pjH6fUW4/
+	LKtJd+Xsl/2n3L3LiqrjAd1saMEaq969PiGo7lgRkFueJswHmYZbz8ovEK+U1tvWfL6k8PKLeKY
+	vHyRClQia4f7YcbgOadAHxyvcjziGCsD45kIN8iY3vBBxz9m1x4vKdPS8yiQEDbNqlmWZIJgZrL
+	wQH1kIrA5fCeYubNTebAM3sdD8avzJ1g==
+X-Received: by 2002:a05:6214:1bce:b0:894:835d:b112 with SMTP id 6a1803df08f44-8953c86c112mr172690676d6.40.1770648452057;
+        Mon, 09 Feb 2026 06:47:32 -0800 (PST)
 Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50640c60b30sm65404341cf.10.2026.02.09.06.44.19
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8caf7be4366sm821652985a.16.2026.02.09.06.47.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 06:44:19 -0800 (PST)
-Date: Mon, 9 Feb 2026 09:44:17 -0500
+        Mon, 09 Feb 2026 06:47:31 -0800 (PST)
+Date: Mon, 9 Feb 2026 09:47:29 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Ziyi Guo <n7l8m4@u.northwestern.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: image: mdc800: kill download URB on timeout
-Message-ID: <63677ac4-76ba-4ed4-87cc-b2d3171f26cc@rowland.harvard.edu>
-References: <20260209060113.1731338-1-n7l8m4@u.northwestern.edu>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: Liam Mitchell <mitchell.liam@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>, linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usbhid: tolerate intermittent errors
+Message-ID: <d1cbfe87-5097-4630-b848-4575ebcf3b09@rowland.harvard.edu>
+References: <20260208-usbhid-eproto-v1-1-5872c10d90bb@gmail.com>
+ <a31763aa-77af-4e13-8708-b007ed53277c@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,88 +93,59 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260209060113.1731338-1-n7l8m4@u.northwestern.edu>
+In-Reply-To: <a31763aa-77af-4e13-8708-b007ed53277c@suse.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TAGGED_FROM(0.00)[bounces-33200-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33201-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,northwestern.edu:email]
-X-Rspamd-Queue-Id: 4631A11113F
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rowland.harvard.edu:mid,rowland.harvard.edu:dkim]
+X-Rspamd-Queue-Id: D191E111736
 X-Rspamd-Action: no action
 
-On Mon, Feb 09, 2026 at 06:01:13AM +0000, Ziyi Guo wrote:
-> mdc800_device_read() submits download_urb and waits for completion.
-> If the timeout fires and the device has not responded, the function
-> returns without killing the URB, leaving it active.
+On Mon, Feb 09, 2026 at 11:06:03AM +0100, Oliver Neukum wrote:
+> On 08.02.26 18:10, Liam Mitchell wrote:
+> > Modifies the usbhid error handling logic to better handle intermittent
+> > errors like EPROTO, which should only need resubmission of URBs and not
+> > full device reset.
+> > 
+> > Reduces initial retry delay from 13ms to 1ms. The faster the URB is
+> > resubmitted, the lower the chance that user events will be missed.
 > 
-> A subsequent read() resubmits the same URB while it is still
-> in-flight, triggering the WARN in usb_submit_urb():
+> Hi,
 > 
->   "URB submitted while active"
-> 
-> Add usb_kill_urb() on the download timeout error path, mirroring
-> how the write path in the same driver already handles its URB
-> timeout (line 863).
-> 
-> Similar to
-> - commit 372c93131998 ("USB: yurex: fix control-URB timeout handling")
-> - commit b98d5000c505 ("media: rc: iguanair: handle timeouts")
-> 
-> Signed-off-by: Ziyi Guo <n7l8m4@u.northwestern.edu>
-> ---
->  drivers/usb/image/mdc800.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/image/mdc800.c b/drivers/usb/image/mdc800.c
-> index 7b7e1554ea20..c4df637b2a03 100644
-> --- a/drivers/usb/image/mdc800.c
-> +++ b/drivers/usb/image/mdc800.c
-> @@ -736,6 +736,7 @@ static ssize_t mdc800_device_read (struct file *file, char __user *buf, size_t l
->  				mdc800->downloaded = 0;
->  				if (mdc800->download_urb->status != 0)
->  				{
-> +					usb_kill_urb(mdc800->download_urb);
->  					dev_err(&mdc800->dev->dev,
->  						"request download-bytes fails "
->  						"(status=%i)\n",
+> in this case I have to ask the obvious question: Why wait at all?
 
-This code is not correct because it doesn't check to see whether the URB 
-completed normally or timed out.  The usb_kill_urb() call should not be 
-issued if the URB completed normally.
+Because of the possibility that the error was caused by transient 
+interference that might not go away immediately.
 
-Also, the code should not access mdc800->download_urb->status until 
-after the URB completes.  The code should be structured like this:
+> It would seem to me that if you have spurious or intermittent errors
+> the right time to retry is immediately.
 
-			retval = wait_event_timeout(mdc800->download_wait,
-				    mdc800->downloaded,
-				    msecs_to_jiffies(TO_DOWNLOAD_GET_READY));
-			if (!retval)
-				usb_kill_urb(mdc800->download_urb);
-			mdc800->downloaded = 0;
-			if (mdc800->download_urb->status != 0) {
-				...
+It depends on the cause of the errors.  In any case, a short delay, such 
+as 1 ms, should not make much difference.
 
 Alan Stern
 
