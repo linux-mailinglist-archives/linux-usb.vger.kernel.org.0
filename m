@@ -1,236 +1,169 @@
-Return-Path: <linux-usb+bounces-33203-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33204-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yIypC1b2iWl7FAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33203-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 15:59:34 +0100
+	id +DbkLbf4iWn5FAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33204-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 16:09:43 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C767D111552
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 15:59:33 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C842111A2E
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 16:09:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A059B301DD8A
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 14:59:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id ACB78303098F
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 15:06:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A904737D126;
-	Mon,  9 Feb 2026 14:59:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281ED21CA0D;
+	Mon,  9 Feb 2026 15:06:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GCn7TNxA"
+	dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b="2Mvy2Xea"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E2E37C106
-	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 14:59:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770649164; cv=none; b=Fx8PwQkmcKWp5Xvq8e7sES74OJ9P9jkm/8xzYzI85L1uhMsbPdugYAgr7I6TrkJwk4IWaiAtHFgEX/eArwRUMGX0073V+UtwP2FRQtvPyj4A7OrFOBsSUEHl0D/+vvdQVxkyK9I6NtH25RgEb1yrZQbCPtlmGEE2e3d+IJ3UX+M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770649164; c=relaxed/simple;
-	bh=WLVJv5ugIhf3VIIc7NthdDs9sjWvcntd5T03Up5qFVk=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=CKzNTTMnfoUFtwFifqvQXJEY/Zt2uFt1jTxAt+meAxuQvQOQeWtSgytsOeKtXjOdA+SSBg38Qkwn1Uirm5Ma7wItYXhi3axQt6IAGLwBkRF1zVIw7FR9JDGf/Pbsfjsxg464LtCCTqLzVBKeOBsIX5tSL5UufSNs57nhx1awuoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GCn7TNxA; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4806cc07ce7so46090175e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 06:59:23 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B992116F6
+	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 15:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770649610; cv=pass; b=La7KxR0KoGY1PydKEErh73T7XetykkLh8aexwT8KRurIN7+fYXwbWTyremk8RqkHdkoxoMus8kdOuIg4/MAbUmfqwqQZqiCe3R4rIQo58EIAhg2mhKlEIbhC1uVqv3KY8EmYqymVRswNZvVofCuRon8oaAmiApAuUEhkkDQVlM4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770649610; c=relaxed/simple;
+	bh=UdL09eWsWMrpntvQzUbH4Yu7IJcQwQCVNbjrIiN9/k8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H8p+Ky9U3VTHiyWdI3xHpwRFkRpCepHcAu7LdEU4tLCb1vc7BwfuYzW/0PKem//ajaO4zCAcIns4kiM5CrlvgAJtBgv6Hw3vVq+oMzAprSs5nRH2TOYNXdFC5D2PoAUvw/guQ+0c+uC5zdLzNsyhT5zv3cnXcVcbKhS3p6dAxqI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu; spf=pass smtp.mailfrom=u.northwestern.edu; dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b=2Mvy2Xea; arc=pass smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=u.northwestern.edu
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7d19bfe1190so3615324a34.1
+        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 07:06:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770649609; cv=none;
+        d=google.com; s=arc-20240605;
+        b=bhIpahetvotUVETvo1W9sjrTgTcp2bW79t+6p1SS4OuNugxdfePDivQP781E9U2KW1
+         L5Ecn9vuUqAVHf6aXAbToQ+OQZHss40CZP+ocBFVrE/UcHY9SN8eSLwvrsJcopiHetNW
+         Ugm6uVQTuLjwkV22hAB+f92CGvOGiXNXfsjZia2CusiTosgXRicbCcLFSj6eTDDvXYI/
+         F3mizRsgKiMh5MWlfaWiiO4Z5mAGx6enuaQfNWCJo6tjIAj8AGxp466dLkoOlWAQVrXM
+         6Q1n5C5rNzw+un9uVp+MZy01mPunV2hWU8yKx58MiNYkzR5z8XBzIMp37SG5TXlrC+8c
+         AxWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0FGeX1KhplsagQcsKdQ49IHMzNXbyrjA1mVXMQs81Wo=;
+        fh=LD8gLbtpUYFhaaBgQFuD1Oy6v3WhBLX34anyUt7ztJ4=;
+        b=G/QSYUx23bTaZthFFJBnSmleyl37MbsTXD2+2C63LvmyenFK5DtHuo24vxQPAifBYF
+         06C06Qtxr4uO9hYhCFNYnAq1wOWSbEh2uW6RATChKVW6jogZmHgNwiv1OErIPXlBeA1c
+         Svr5XCDit0S/j/9e5akUrwpMHdXFg4rEkiV2Vg8s6pw9Wh4dpzflhsFTT3I0icgIkuMM
+         c94SkRi4SogZwN3A/QgWMgac5An1+gPTKzoZhEEKPodTiqJtFFplPy+IKjnKMR00kgAV
+         xNPLAtmby3zTe4KEnHgpZlw7T0VZW6BLpPIBx5+Dvcdd5pCtkJjqGYOEuHcCeHgF9cJA
+         MWww==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1770649162; x=1771253962; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TzlX62O2iHtDoc/wlp70TM/0Ovim/AGV2yahkY72zas=;
-        b=GCn7TNxAhV7JVuZCQEXpIBPGk0F78lMJmLJMuOJgNtwmeNNbnh9PLCRgx8++yQNWTq
-         BlczZkEtZTRiGASZvD1akuZrsEQVayDAcUD1yY+6exZENMCXQXdSAwh1mzh75FccSHwa
-         pR/LFdCzQuIBQ8F2BdOfzRyBnVMq7/lWUc1THzkyoOFsE28kSX5IrS/WtynoaCwyMoyH
-         hr7UPLMuS217FHUjTs9dS6+8XF+vLiUAG0WeOG/MkleX3WjSWZq+thky6hYNOdOQZX2n
-         p70Xh8VJF/LyzhRxNp20dhfGK1ogOfrzI+3EVG+oQKdg4PKOG81g/IfonGk6jHSIu+Mh
-         tekg==
+        d=u-northwestern-edu.20230601.gappssmtp.com; s=20230601; t=1770649609; x=1771254409; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0FGeX1KhplsagQcsKdQ49IHMzNXbyrjA1mVXMQs81Wo=;
+        b=2Mvy2Xeai117MSszFuu766fwNa4UmPo5Lrq+UGDqLhBRpm0Thtq89TGY7d2Hy6wheN
+         M158JjjQUKvqk4FopAORufeoP7pOzNL6D9VCEKhxqcTQXxaSL8CyIKjQJR5yMk+MgoKA
+         ElTiQABe+qWS3hZoOQ2Rh0umE2rSHB7cczZcBFhhGQOMcwqitRCDkQyucoVsHo+5TiQG
+         X+l+eNUrV5zgtBBQ1GWvzl4asKK0hnu+kFokhA32l/T40g8pHAAqEn5/fR9lbzP9D6an
+         hPFFQPgAmwDKgA2F/rBWKzFVDAV5CWFNela5q1XyVuChWdpIzRvCZ5Coy6Foe+prEKOx
+         3a1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770649162; x=1771253962;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TzlX62O2iHtDoc/wlp70TM/0Ovim/AGV2yahkY72zas=;
-        b=N7nD/TsVAI0Gzt3N6OokJNoVGm5Ly9AD5XtqsR5JDAqI1BDwszf2fXlkJj0SDynaor
-         KqvmuKK3U3OcuFPAhLsws0vFy0PBSQQJxG+eKVvOrFOl9sJceM+J251Hu9i4R30BMTqj
-         FHkfO81J5/zfWKC/rM8+U8CXg5AEiZaxgImoujfcJ2kbLZkPMYTyXggMtRlwmhFedxRl
-         G8cQzU88qg2nMBsdpp8Xk9tHKuq08gcNCu/FN462uzjZ27DXwjtwmIX12odXM267LjpC
-         M+OnTfYdSkW6YRW/xR4vysYPtdzWlfT++c0c58mYnbaneiXNw5PZGFbq2acJtxAGESHP
-         oSlA==
-X-Forwarded-Encrypted: i=1; AJvYcCV0UZ4DLUJaNKKt2XRBeA7sD4QlEyBigVX38WKL7+pLrE8cClSSZ30Yi89iKd788MBWUa1CMknTQmM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyqsKTK1ezGviO7NkxPEcYTSDi8kbiXdUOujZGz/Z8ljLv5+cR
-	PEUnUQ9E7dSGFn9J/tweCtxvIyd//k89kguyEm/zqI9qs+zjfk5v+g2h11EguvNwu0U=
-X-Gm-Gg: AZuq6aJOQIB9tGrEdrY/kRFHZT74r2BWNfkm5mXgFDRLmmdzlV5PURZ4nFFjewqQybJ
-	6d8kCrDgPPiEiqgN3epdBw4swo/VM2wksdg8vzxxgBT2/KvSTs7s3VoLHOkSuy6QWpp0I4tB+kX
-	JdKj2tIN9EpvW8buRxrH/mj69kHOhvc+G+m3K5paVf530JcvutJh1b2tkpb0PlTORgUfgwc58A+
-	NA3mD4AY676XlPM8GZNKoDGFdSc74J7uq4OG6kg3MCgbIZKaN5DdWWpDtWbGALAZcYzrVFUqnCS
-	sM3Gmugnsozb3iUPvS7iMzO3sCNoU1QvrY2R9X6FwSJBm/47f4S8sqe/Ho4TY5yoXvswAPDAYiQ
-	q4AaiGoZStg8MaJuFM3t1/5gr/0wWs88Qir0TRKTu6siolaUf3Gca1/ZiXXhAZ7wI/fTKoBUls/
-	hau1R1OgWZYMMhfgWmLP2WKhvqW8Mz8B8uYJsyX4kRtlrrmECOg1iXa2Eix9mK7wo=
-X-Received: by 2002:a05:600c:8719:b0:482:eec4:76d with SMTP id 5b1f17b1804b1-4832021b461mr184052445e9.17.1770649161961;
-        Mon, 09 Feb 2026 06:59:21 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:106d:1080:44e3:9198:bd5d:a3f? ([2a01:e0a:106d:1080:44e3:9198:bd5d:a3f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4376bd5a074sm10377353f8f.11.2026.02.09.06.59.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Feb 2026 06:59:21 -0800 (PST)
-Message-ID: <b46da4da-93aa-4213-ad75-ec7709008b95@linaro.org>
-Date: Mon, 9 Feb 2026 15:59:20 +0100
+        d=1e100.net; s=20230601; t=1770649609; x=1771254409;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0FGeX1KhplsagQcsKdQ49IHMzNXbyrjA1mVXMQs81Wo=;
+        b=YJR25MOs4XxCE+K68unJJ+I5FH+8QYbRFPxAh4HqHTcUsIoaT8RlmpWx/o5KkRoPIz
+         yxdCIOJYZs3v0VIguahZqTBMcSQ91kkAALvN4qz1yqSqqdZ6X+3boxZOmZmflls/XU6c
+         dJnyqGLa8lLXZanuoYjwM20TDnSfvosUNcXLFOSPrtpiapuOsXEiPdwP//YtQ08QjffZ
+         aUkzPO/YECAR1dYxY1vD5J0YAP7mcVgunajnD77Q6BemCrVOwgGYtDwy7B9UlDlNDXiB
+         NNUyaeHwGD8chl54+j2I/pAvFR9oNwlGsHAKDgdLdKZQhZlacMgmKIBXwMNuzeN+jfUl
+         V0Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCVGAKm8MXcd/54P0jjgjWy4xEkFOGvTJGb1mh392xq/8J6RU161TESsNjkjawh/OhkJ31tmHN/eFOk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMIDPLpixb8lZXFiIntLuDQq+UlM9VHL7+IIzio+4OXTXt9ucI
+	3JAju8E7BUYvk5OK76fp5DiXuATcqjNpPiS2psjNyA7I+6t/dtD0uJbIhNZXTWE4ZTdz6/5shqL
+	9/nvsvebvgt8FXw/TXbDAzDwQmqXkRKulYGEk9yym1p1sY3upS7H0QfQ=
+X-Gm-Gg: AZuq6aICwS9QEI9Iznx/2WO6tVeg/LPnBw+7q6T5nKLAF9WbFkORPwxPli7/sr88SQV
+	thtY7laI2Bve7eMfuc3LpXkdbjqw4u4Qb5tBpka+KjlfTLkFtEKUnHxn6BhjRCIf+zIdY8OFV3+
+	1K8aS1wQv7dIH2+HOIm9kQy72epq09Djd7CgRpLCrZsjKyzRNw1ZIviOHFc3kOxUGWm6q9ypQ4b
+	SM2+RMNQUh6g2FYY8zHRiRxjRjZYTvxCTMNP3YKHZYWkul4MeaDYm/X2QJnRyipTViIGQQG71LF
+	glm8W4l1ypd9h3K5/t/Ax017rlS9qzwso6KFrDknBifrrba4+TioBicdPA==
+X-Received: by 2002:a05:6830:638a:b0:7c6:d0b2:8eb6 with SMTP id
+ 46e09a7af769-7d464411072mr6906027a34.15.1770649609293; Mon, 09 Feb 2026
+ 07:06:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v3 4/9] pci: pwrctrl: generic: support for the
- UPD720201/UPD720202 USB 3.0 xHCI Host Controller
-To: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-arm-msm@vger.kernel.org
-References: <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-0-5b79c5d61a03@linaro.org>
- <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-4-5b79c5d61a03@linaro.org>
- <fbxbnou5mdlhaq5dpxr3wdzmjetwdp7auaaqeunc67tgk5ej2m@cnnkr2pcwy77>
- <a4e55e91-0e03-4e63-8542-d8ad61b38906@linaro.org>
- <o6e5qygss55p6npjgaicxffsqdpv7kojgidr46zinsvfpxfxug@vn67nq4k6jzk>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <o6e5qygss55p6npjgaicxffsqdpv7kojgidr46zinsvfpxfxug@vn67nq4k6jzk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260209060113.1731338-1-n7l8m4@u.northwestern.edu> <63677ac4-76ba-4ed4-87cc-b2d3171f26cc@rowland.harvard.edu>
+In-Reply-To: <63677ac4-76ba-4ed4-87cc-b2d3171f26cc@rowland.harvard.edu>
+From: Ziyi Guo <n7l8m4@u.northwestern.edu>
+Date: Mon, 9 Feb 2026 09:06:38 -0600
+X-Gm-Features: AZwV_QgHhoJvMtosL4zUQee6jJ3jcfdMwy2PIj_p6WPlDI74nIfBA9P_ys5EAD0
+Message-ID: <CAMFT1=aG5edH-B2kdEkZRVg2gCBn1-_pPu-28TykcSjhBzcz_g@mail.gmail.com>
+Subject: Re: [PATCH] usb: image: mdc800: kill download URB on timeout
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [-1.56 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	R_DKIM_ALLOW(-0.20)[u-northwestern-edu.20230601.gappssmtp.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[northwestern.edu : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-33203-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:mid,linaro.org:replyto,linaro.org:dkim,linaro.org:email];
-	HAS_ORG_HEADER(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	HAS_REPLYTO(0.00)[neil.armstrong@linaro.org];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-usb@vger.kernel.org];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[harvard.edu:email,u-northwestern-edu.20230601.gappssmtp.com:dkim,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[n7l8m4@u.northwestern.edu,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Rspamd-Queue-Id: C767D111552
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33204-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[u-northwestern-edu.20230601.gappssmtp.com:+]
+X-Rspamd-Queue-Id: 1C842111A2E
 X-Rspamd-Action: no action
 
-On 2/9/26 15:49, Manivannan Sadhasivam wrote:
-> On Mon, Feb 09, 2026 at 03:00:02PM +0100, Neil Armstrong wrote:
->> On 2/9/26 12:30, Manivannan Sadhasivam wrote:
->>> On Fri, Feb 06, 2026 at 03:50:32PM +0100, Neil Armstrong wrote:
->>>> Enable the generic pwrctrl driver to control the power of the
->>>> PCIe UPD720201/UPD720202 USB 3.0 xHCI Host Controller.
->>>>
->>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>>> ---
->>>>    drivers/pci/pwrctrl/generic.c | 4 ++++
->>>>    1 file changed, 4 insertions(+)
->>>>
->>>> diff --git a/drivers/pci/pwrctrl/generic.c b/drivers/pci/pwrctrl/generic.c
->>>> index 08e53243cdbd..4a57a631362f 100644
->>>> --- a/drivers/pci/pwrctrl/generic.c
->>>> +++ b/drivers/pci/pwrctrl/generic.c
->>>> @@ -73,6 +73,10 @@ static const struct of_device_id pci_pwrctrl_slot_of_match[] = {
->>>>    	{
->>>>    		.compatible = "pciclass,0604",
->>>>    	},
->>>> +	/* Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller */
->>>> +	{
->>>> +		.compatible = "pci1912,0014",
->>>
->>> No need to add the compatible to the driver. Just use the existing compatible as
->>> fallback in the binding/dts.
->>
->> ???
->>
->> Sorry but this is insane, in no world a standalone PCIe USB controller could be qualified as
->> compatible as a pciclass,0604 slot.
->>
-> 
-> AFAIU, 'compatibility' implies that the driver can safely fallback and would
-> still work. If we add dedicated compatibles for each endpoint devices, then we
-> will just keep adding forever. Powering up a PCIe slot and an endpoint device
-> are conceptually same.
+On Mon, Feb 9, 2026 at 8:44=E2=80=AFAM Alan Stern <stern@rowland.harvard.ed=
+u> wrote:
+>
+> This code is not correct because it doesn't check to see whether the URB
+> completed normally or timed out.  The usb_kill_urb() call should not be
+> issued if the URB completed normally.
+>
+> Also, the code should not access mdc800->download_urb->status until
+> after the URB completes.  The code should be structured like this:
+>
+>                         retval =3D wait_event_timeout(mdc800->download_wa=
+it,
+>                                     mdc800->downloaded,
+>                                     msecs_to_jiffies(TO_DOWNLOAD_GET_READ=
+Y));
+>                         if (!retval)
+>                                 usb_kill_urb(mdc800->download_urb);
+>                         mdc800->downloaded =3D 0;
+>                         if (mdc800->download_urb->status !=3D 0) {
+>                                 ...
+>
+> Alan Stern
 
-We're not speaking about driver here, but about compatible string which describes
-a device, a PCI endpoint and a PCIe slot are 2 very different devices that are
-nowhere compatible.
+Hi Alan,
 
-> 
->> Technically it would work just fine, but "compatibility" has a meaning....
->>
-> 
-> I view compatibility interms of device operation, not device as a whole. But
-> sure, I could be wrong. If the DT maintainers say so, I won't insist.
-
-In the actual way it's defined _today_, the "slot" and "endpoint" power up schemes are
-compatible, but I hope the slot bindings will get much more features to describe the
-real world slots power properties. And no, endpoints will definitely not have the same
-features as slots, using it as a fallback today is an error.
-
-On the other side, adding a "simple-pci-endpoint" compatible that enables any supply
-and clock would be a good solution, if the DT maintainers agrees of course.
-
-Neil
-
-> 
-> - Mani
-> 
-
+Thanks for your time and review, I'll revise the code and send a v2
+version patch.
 
