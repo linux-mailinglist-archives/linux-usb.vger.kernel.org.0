@@ -1,175 +1,247 @@
-Return-Path: <linux-usb+bounces-33208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33209-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4PX+IBgNimkQGAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33208-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 17:36:40 +0100
+	id sKuPGR8UimlrGAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33209-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 18:06:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4F711128DA
-	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 17:36:39 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3F06112DA1
+	for <lists+linux-usb@lfdr.de>; Mon, 09 Feb 2026 18:06:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 93392304CCF5
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 16:34:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 098CD300615C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Feb 2026 17:06:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D5C3816F6;
-	Mon,  9 Feb 2026 16:34:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54491385EC1;
+	Mon,  9 Feb 2026 17:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="rnRQUEmb"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nGaEvK5K";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="LZKmeVq8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C6E3793DE
-	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 16:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EEC3859DE
+	for <linux-usb@vger.kernel.org>; Mon,  9 Feb 2026 17:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770654872; cv=none; b=KJaR4SGDBlMEhbCk3maPKMud+PIV+Hm01HF2w+DdRyU2bLRSogSl+aO/6Z8aJ3FFpUvao7pzSe2iB9rtAeaX9q4wV0tmWKcT9HF+GtAn/C+u4vjPq3xDelkYDfKQ454t+rteCnosDI7YOxDeYoxUYvbZevfXYV3OrDvJW1TzEdE=
+	t=1770656792; cv=none; b=OdU72bCt+0TrXpBTNPJzmAIgx6e5CecknYdW9yQKtfuPY0xOh0FKQUfJcNl/BczPqma0oGwXz1XNp5HUEp2g1+vSVXI4/ocwhILOYXppA/yXrxg/KoVW4LnshAPMMGxo/D24XehUkOCCk15+klmB3uIEgM2DuQjw/5QsDb5Ctb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770654872; c=relaxed/simple;
-	bh=HCz2V9O4D+cvDpbE7Iiy1tKnlQXOasTkKUV6qdGj9Yc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RhTPvcfzSG3gIj/sgryvybX1d9FQdQsNUB4khph11IQ9WT2OY7KNWj+auDsTDpS5oWPiJbYyztyHLz2WcOyIEdBPr2BRR9vK6Ciy/LGzE7SE4LCZljBlp/BLkvmevknHDi8pIkGBt4xaSUG7dTpjRcatBvwsRgWbsgG4aVZehKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=rnRQUEmb; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-8954ae375efso18166316d6.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 08:34:31 -0800 (PST)
+	s=arc-20240116; t=1770656792; c=relaxed/simple;
+	bh=UAQVw0p7nIQKtlUlnpqKnYWhhx8/FRQv7+nacN3pa8w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CLwulLOQLSI81p9/h0YnpLYWhi3/YKjZeDUuMiurEAcyrTzyrUqqdCD2XWGEFqAQDh3x7wTY3PyK+oVDsXjBlVaIJcj2eYRk+vQyXoTbHsiqKeMeOFsuN4fUMUNPuml9SMxB2HzQ2Poc/MKblDL6eKwZNWns3mhQ/O4zsWoA/vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nGaEvK5K; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=LZKmeVq8; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 619Aki8F3699850
+	for <linux-usb@vger.kernel.org>; Mon, 9 Feb 2026 17:06:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	gOOfRo18YOQA6z+N+sJl7m96yfWTbsEAzU89XIpFLrw=; b=nGaEvK5Ke+BSYPqn
+	oVQYnadxPC+6rVkkHAnSAanFIfrr9ltkW1Y5wWnIrn0lnQLZ3eCkMj9FP0+m2HNf
+	UvxYvi3ySndHTS6mLvGieUb7qpDoRh5jr5+iR1R+/CHlSRlDopah64ow95tZvoMx
+	Ypbe1oxlxZ80UCSjwK6LMjgL/VKEWK3SzeT11XgVoeXJElhyTx7i8tcv3jor78Hd
+	RIGk6UAzPQBx/MU0QxeD7fTj7wLRuMfjqEHapuXrh9fC40gY0/2G76BHqONuxISQ
+	55lERUOQ8AlGohi0f45aQbLVC/O3lu5+Pa3AQRqMwR0OdnfrsDoz9NXg9NAz3saW
+	1Q6XJA==
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c7e4m98y7-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 17:06:31 +0000 (GMT)
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-2ba6ad2ca1fso8011211eec.1
+        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 09:06:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1770654871; x=1771259671; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U4Whc3/fmIC4DBzNEbgi/xYuEm50FjSRY+z7bun4qTY=;
-        b=rnRQUEmboKE73gFAQkk898f6BeOgezgObOqdwfNUzLOvtL8zQZTBJvNxwCL7zoRy6M
-         s/bj1CqggvANPaFL/59hNU7AWldTXUg1zjhUYtxROTP25B7eyQR4j54nUY85DJh5QjNv
-         8CdXh+HewUSF6t7f5bG9FFtkgJEQr0oxBmCHBmC9ualezXw7GthUHEo15+8CvDHo6WAH
-         5j6jdtW6pHTWVlFIGLDraiWVa3unAT2Lw2cAd8nT7jb9gu4tyli7gFIU6fBbsxCghk+1
-         HTkR9gBiBRaJ7loDIxQazhVC+lDUvP32r68IOD6Z+A/1FgJiLK5jrMrV24wECwlaiMEf
-         DYQg==
+        d=oss.qualcomm.com; s=google; t=1770656791; x=1771261591; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gOOfRo18YOQA6z+N+sJl7m96yfWTbsEAzU89XIpFLrw=;
+        b=LZKmeVq89aMlAlOW/ErqH6e3oDUMxqRZX9kKCiFu62A6+iQIPcWv6BXaZMY+fmH2q1
+         wxj1Pj7GeMfpOUyYvr0aalVDjSnjQl4AyUZkbqMtCpc0iNNKo3C/z0B4UCryfVUNTdnz
+         JiboM5feHg0hn6YllEUtNdolGSw8ppdYMLNyhtB6JSpaR+6uM1gsBHn/IpDV3tVP4V84
+         Rq7pI2maI0eb/LW8s09dcRSrTNx3mAYhiLt++WTxwwhje+GbGrX7Uy5R8+1OeE5Kkdb2
+         B6aWn6i+iBBtwtiRne+u7c5IVR4vTcgRQ2x7275g/DOUhfRad4WrXjSqKxkeox8F+aNK
+         b8Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770654871; x=1771259671;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U4Whc3/fmIC4DBzNEbgi/xYuEm50FjSRY+z7bun4qTY=;
-        b=H4g4CVf07p5GEeQo8agMUEMNs6qlW3ZUOYuNOQxJy4vXCireXShRhPx0RM9V+9kjeT
-         LZn7FoMyE5nz8zrbsDf/hlCvmWc18GzLHmGhmfbgi+6/xsy3fBVMtMIoXxqVpFjVU3XH
-         qeD+6IVRJKxB40l10+41JvqgdK/EfuSHRkOqbcckuVUHTi3tBImmRWoRuarvterbCMhR
-         IDV4+Ye/KWn5FwXyj7mkTUYyfyretQaY8C7MRGCfxcH7tLTEnnbPWka3qYYqpdD6+J/w
-         +OZxRvo4PAkL+22GDPXISGb/DU36+NQ9KHi4oDzRUeOfVHugZyfyoTUErX3Yey6V9GVt
-         rmBA==
-X-Forwarded-Encrypted: i=1; AJvYcCUhvXyTkARbegm3wVz9k5CCIXkeOp38589ivZHVvw72Bt8g2oGOQqSMjYwcniJXC7xAU5GyoU07BtY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQJx+UYn266rMxwY3Oiy7LUHTfHgfXDFrx8pzQEBE/VazLVYrc
-	M28mlo2BviKED7IQjjHYq+whKC3F2wW3nnZ29eyat05nH61g57JNyBQGwBfaOAdhIg==
-X-Gm-Gg: AZuq6aIyCAAe1tOZ34d7sA0fHUxz4/ZsyEI3jf06Yj/l84s9nyAGKCoc4+6lR3M0MgV
-	X9a/OfoIcPLk2XfZofTWigI098vWidIpbk7vaMcSzTU9tlrDurylJ3LI6pluDPhNTB/eMiXn8rD
-	NwEJI3QnFEfCk/AT60yxY+IKD0t8cRcPqyYXDORtMaiIqIWw8xyl4Xj8cFqAF2lLNdkflLwF67r
-	zIOxnz3uDrac/SkFue9Z05ZyKDgS7pafrWLZAGyMJl1B2y2odEHSVScIwmyIP8XaCn+upuCtfMC
-	Pk+Jw4FNJ8XZEszES+HBPfFTbhDVQt9n5tm0n/CVQqxH59Y+m3ljXCPGDDKtvF5wnVa3iSDBWBB
-	SiYYfZG7jCAcnuiQhBHe+z/cuBjkUh/PQ/DwgFfYl5k+bTXKiCopTyGPOeuz82GXZ/puIKWU8wG
-	zmbf0g2+XyIbZ06f9Y2O/yuHnenHsW90mzUUeJ9RCUQpTRSSbQElC9ccfsCw3zFOCYzV1Fbkgyc
-	6p7nZq9
-X-Received: by 2002:a05:6214:4019:b0:896:af07:a50b with SMTP id 6a1803df08f44-8970be727e3mr47306d6.25.1770654870726;
-        Mon, 09 Feb 2026 08:34:30 -0800 (PST)
-Received: from rowland.harvard.edu (nat-65-112-8-25.harvard-secure.wrls.harvard.edu. [65.112.8.25])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8953bf3814csm79215006d6.2.2026.02.09.08.34.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 08:34:29 -0800 (PST)
-Date: Mon, 9 Feb 2026 11:34:27 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: syzbot <syzbot+25ba18e2c5040447585d@syzkaller.appspotmail.com>
-Cc: greearb@candelatech.com, hdanton@sina.com, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, michal.pecio@gmail.com, oneukum@suse.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: task hung in usb_bulk_msg (2)
-Message-ID: <738614c5-fe8a-450e-a3eb-8a5849298c90@rowland.harvard.edu>
-References: <0b508f72-7248-479c-ad26-b9385e52c094@rowland.harvard.edu>
- <69893c5b.050a0220.1ad825.000a.GAE@google.com>
+        d=1e100.net; s=20230601; t=1770656791; x=1771261591;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gOOfRo18YOQA6z+N+sJl7m96yfWTbsEAzU89XIpFLrw=;
+        b=sHZWsLGfxpkZ/VAIvoZr3c1JUOvo10VM6PCFgtIxP2wUTsnGuJol8uKMDVvlnsySZW
+         FPcEhna0q9kC1GmroQpLXjbYNI4ftM+hhyr8l7cogeLaMep1vxgZ967sgWgnEl9it8Rv
+         nNRXPkoaShOoNITuKi+eNAJuaeq9hRVK1GAtHS9hIq9qYxZRq04z8REkut+G186LjMzv
+         ut6xpw2/glpikx597wxdBzLYQNa4HyzGux+t3d8IyloK/krKWKD5KPaBqt60STqdOCYe
+         /7Dtyooc5Zlp3HHLq7rLM0N4rGQL5BgPAmwMtc/fU9HoIN5xv1UrI2k9sxk/9XIkYiNz
+         58Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCVWiBANu0Pvce9fO7EljpPCnlvWla7y2Q260Scs6z3EAq1hrlaOXS5/yOXj5crf2NQt/BxLRT16B6I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIYVagpN9DrrHL2PECrl0Oo77LG0Y2LTihEDBDZGBvALzefalA
+	qeM4phT+StBMvmprXcniw2ZOU01iGkgvCaw/abqd+8vVYXrRXMbBKM0pHo+Omb20bMYJZkADLfy
+	cMaY218o/hX4RrqPJILlv7fG8AZJ8GirXk6z2yW7orO1NBGOL3kiuJZSbdnXWDfQ=
+X-Gm-Gg: AZuq6aJXdpks94UyiHuvWuvtn3lZXzt4FEr7Q0pBGugmtC8BcK4Jtt4H4qYTuYTe6ie
+	HbVr/NYAeci6tCzjVETMapPXnsEGRXH/FGgCTODtkwuJ5ochBZXI1a9m4R7gY3S6jKdwIbfT+4r
+	z9BCYYPC6Cvs5RDv0JaZ+VjUnOAxE8WyrsrtibqgdXByKq7liSHpX2ZFdYNiDOykTnQjvqbHo01
+	Wt9Jv0tE63R6sT8M6GTjT0rXvbwuLC864M325Uu3BLev8LUFg7Ga2lUxSg6/xcWqoeQFjL5hZ1M
+	QVNBIT7qb++PcmSAcdBU1uzrB+R6VuZGF2QQBYkJ6kq1Kf9fm65UR47+WvlhjQo0LqjiVq+ZotY
+	r2ZP1URkf0yyCeTDSUMMkLiJPAwcvYwIhhonubMQ=
+X-Received: by 2002:a05:693c:3114:b0:2b7:f522:9964 with SMTP id 5a478bee46e88-2b85642afb6mr5813794eec.7.1770656791156;
+        Mon, 09 Feb 2026 09:06:31 -0800 (PST)
+X-Received: by 2002:a05:693c:3114:b0:2b7:f522:9964 with SMTP id 5a478bee46e88-2b85642afb6mr5813766eec.7.1770656790491;
+        Mon, 09 Feb 2026 09:06:30 -0800 (PST)
+Received: from [192.168.1.133] ([70.95.199.79])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba6c85831asm3091367eec.11.2026.02.09.09.06.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Feb 2026 09:06:30 -0800 (PST)
+Message-ID: <e8d9e822-0482-408d-aef7-ebdd3fc87d96@oss.qualcomm.com>
+Date: Mon, 9 Feb 2026 09:06:28 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69893c5b.050a0220.1ad825.000a.GAE@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 9/9] arm64: dts: qcom: qcs6490-rb3gen2: Enable EUD
+ debug functionality
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260126233830.2193816-1-elson.serrao@oss.qualcomm.com>
+ <20260126233830.2193816-10-elson.serrao@oss.qualcomm.com>
+ <ee0fe165-1764-460f-ad6a-9633b06776b2@oss.qualcomm.com>
+Content-Language: en-US
+From: Elson Serrao <elson.serrao@oss.qualcomm.com>
+In-Reply-To: <ee0fe165-1764-460f-ad6a-9633b06776b2@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: G7OJ6qFc7Po3Go77rM6AONP2F6VHpNx0
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA5MDE0NCBTYWx0ZWRfXzEjqFvDjTxas
+ Wxdkgwft9Ea/R9/RwZ25BFDWuy4mIQKq55DUf57ZuLeMHrq30qeha3smZ+qrbvlbWUZNXnYunYj
+ bOS6LRIbhGb4Erz08yYMVvUDXFrEslYQgwigLuGJFUK7kzJgb0wzodtiiAUAoGgIN5+puann4na
+ jjczWC40M9xECF2hF4a+M/1hXY7e7nbBBGqW+mf6HAwSM5nXlLbvwhgnTLerBH1k1zRYGpUizJs
+ bEtzPEAA5rkz+V+xxZMYK1lUsNrOs0oMBeJbm5MGvQ0xyFDdfNdBwgjIpirzYA86dtphab4KzBT
+ H2910TTqN3IsTa2dICwk1ArfKTWvoc+OBXWXl0QYbjoEp8BAvQTc8F/ih3r8NsTLwma/hZ3ieWo
+ k8H4iQDS6OyhyhDBzlZRto+Xq4+Ejw4O80LSCU+Kh5tJGAO59jabxaDIUaT9GMJ+dth9L6y31bI
+ m5KGK2Pm4ozZQxg7ycA==
+X-Proofpoint-ORIG-GUID: G7OJ6qFc7Po3Go77rM6AONP2F6VHpNx0
+X-Authority-Analysis: v=2.4 cv=WecBqkhX c=1 sm=1 tr=0 ts=698a1418 cx=c_pps
+ a=wEP8DlPgTf/vqF+yE6f9lg==:117 a=uHxescsG3rBdxcXwcPaeSg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
+ a=EUspDBNiAAAA:8 a=ZzF_L4zmYv5kpwg0Tc8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=bBxd6f-gb0O0v-kibOvt:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-09_01,2026-02-09_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602090144
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33209-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,0.0.0.0:email,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[candelatech.com,sina.com,vger.kernel.org,gmail.com,suse.com,googlegroups.com];
-	TAGGED_FROM(0.00)[bounces-33208-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,appspotmail.com:email];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[elson.serrao@oss.qualcomm.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,25ba18e2c5040447585d];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Queue-Id: D4F711128DA
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: F3F06112DA1
 X-Rspamd-Action: no action
 
-On Sun, Feb 08, 2026 at 05:46:03PM -0800, syzbot wrote:
-> Hello,
+
+
+On 2/3/2026 5:38 AM, Konrad Dybcio wrote:
+> On 1/27/26 12:38 AM, Elson Serrao wrote:
+>> On this board, EUD resides on the primary High-Speed USB data path between
+>> the connector and the DWC3 controller. Update the device tree connections
+>> to correctly map the connector and controller endpoints, and describe
+>> role-switch capability on the EUD primary path.
+>>
+>> Signed-off-by: Elson Serrao <elson.serrao@oss.qualcomm.com>
+>> ---
+>>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 20 ++++++++++++++++++--
+>>  1 file changed, 18 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+>> index f29a352b0288..2fc2d0aed8dd 100644
+>> --- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+>> +++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+>> @@ -194,7 +194,7 @@ port@0 {
+>>  					reg = <0>;
+>>  
+>>  					pmic_glink_hs_in: endpoint {
+>> -						remote-endpoint = <&usb_1_dwc3_hs>;
+>> +						remote-endpoint = <&eud_con0>;
+>>  					};
+>>  				};
+>>  
+>> @@ -1176,13 +1176,29 @@ &usb_1 {
+>>  };
+>>  
+>>  &usb_1_dwc3_hs {
+>> -	remote-endpoint = <&pmic_glink_hs_in>;
+>> +	remote-endpoint = <&eud_usb0>;
+>>  };
+>>  
+>>  &usb_1_dwc3_ss {
+>>  	remote-endpoint = <&usb_dp_qmpphy_usb_ss_in>;
 > 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> The on-SoC links can be deferred to the common DTSI
 > 
-> Reported-by: syzbot+25ba18e2c5040447585d@syzkaller.appspotmail.com
-> Tested-by: syzbot+25ba18e2c5040447585d@syzkaller.appspotmail.com
+> 
 
-Here's another, more local, solution.  It should fix this bug but not 
-the underlying problem.
+Thanks Konrad for the detailed review.
+I’ll defer the on‑SoC USB controller to EUD node mapping to the common DTSI.
 
-Alan Stern
+>>  };
+>>  
+>> +&eud_con0 {
+>> +	remote-endpoint = <&pmic_glink_hs_in>;
+>> +};
+>> +
+>> +&eud_usb0 {
+>> +	remote-endpoint = <&usb_1_dwc3_hs>;
+>> +};
+>> +
+>> +&eud {
+>> +	status = "okay";
+> 
+> And I think it should be okay to keep it enabled by default
+> 
+Ack
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git da87d45b1951
-
-Index: usb-devel/drivers/usb/class/usbtmc.c
-===================================================================
---- usb-devel.orig/drivers/usb/class/usbtmc.c
-+++ usb-devel/drivers/usb/class/usbtmc.c
-@@ -34,6 +34,8 @@
- #define USBTMC_MIN_TIMEOUT	100
- /* Default USB timeout (in milliseconds) */
- #define USBTMC_TIMEOUT		5000
-+/* Maximum USB timeout (in milliseconds) */
-+#define USBTMC_MAX_TIMEOUT	60000
- 
- /* Max number of urbs used in write transfers */
- #define MAX_URBS_IN_FLIGHT	16
-@@ -2014,10 +2016,11 @@ static int usbtmc_ioctl_set_timeout(stru
- 	if (get_user(timeout, (__u32 __user *)arg))
- 		return -EFAULT;
- 
--	/* Note that timeout = 0 means
--	 * MAX_SCHEDULE_TIMEOUT in usb_control_msg
-+	/*
-+	 * Impose a maximum limit to timeouts because the waits in
-+	 * usb_control_msg and usb_bulk_msg are uninterruptible.
- 	 */
--	if (timeout < USBTMC_MIN_TIMEOUT)
-+	if (timeout < USBTMC_MIN_TIMEOUT || timeout > USBTMC_MAX_TIMEOUT)
- 		return -EINVAL;
- 
- 	file_data->timeout = timeout;
-
+Thanks
+Elson
 
