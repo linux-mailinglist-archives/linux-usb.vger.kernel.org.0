@@ -1,143 +1,299 @@
-Return-Path: <linux-usb+bounces-33252-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33253-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yKpVLQAji2lyQQAAu9opvQ
-	(envelope-from <linux-usb+bounces-33252-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 13:22:24 +0100
+	id QEhCIa0ji2mOQQAAu9opvQ
+	(envelope-from <linux-usb+bounces-33253-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 13:25:17 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E79711AB5B
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 13:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0265A11AC36
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 13:25:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F4148303BA49
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 12:22:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5279E303B5D0
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 12:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98B7C322DB7;
-	Tue, 10 Feb 2026 12:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC2FD329371;
+	Tue, 10 Feb 2026 12:25:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="NBqmQtr0";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="NBqmQtr0"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ABXzolkr";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="KEZGAiRf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5084328B45
-	for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 12:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287DA328B58
+	for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 12:25:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770726139; cv=none; b=nG6Nf7KMgxhXD0WtMxhB7x2jXVhjeN6TkhN6P+KI3PLEl5Kw1DWGSzZqtGKV1fKnD3ZQRyyZyeaK8DWpUYPVLD7aICK3eXKG0wuwvM3AzPHCm3dppDNrTF7h1WbQJvxNcYMCpQ/4yTbiCcqTMfMZCX4EBoF/YFBNikzxj067IQw=
+	t=1770726312; cv=none; b=k5K9QOrZMP5bwrNUt2VaLs5zMSHO5S2X1qNm81J1WSCGBwUnaC4ryQA9/nOAqmaaSIS14Afh3WGnvR8kA8Fr1y1nYgxrGNBUDjcl+GQx7j6viG5rPIv61ZIdfqBd5HZTJjXpCJnG2yOz7iUIbrCR3b7tgT7Tr0pTIZFpvObYZxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770726139; c=relaxed/simple;
-	bh=Z5dgTTrdDN5YTnSCVX5Z9v8b1qP3UUZZUvZix+Jk7oc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=McT2j+0QLCg4jtLqymEFSejpvLJPPxS73YqY7W4yvWtPpV5a2aY4DDsmwyMXtyhIAlB0j+Af73lH+dE/oQfXXU7Pvr7Nkma3u7QkywNg3RkST048O6RYZWyptiGeLxMTTp9et/zteW0FwcPxoi4JYgvsC9isGxQUAPTTM81TQMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=NBqmQtr0; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=NBqmQtr0; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 0C4935BD51;
-	Tue, 10 Feb 2026 12:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1770726136; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=PtaGvaD7ExNneudKvjFjP+emE5B2H67yn3ee1XHTCI0=;
-	b=NBqmQtr0p/nUk/I/1pekC676YMaBfZ9EpZ1V/F8iBmw8/RzpHjgypuizBe+bKTXLJYmlyT
-	QOViyon17obaqpZukF4T5xSrmgdCX9jCTYuYheylPVR27U6KHJfYAQwyjPA21KCdlM5yCY
-	mIXEz4ttY4pa1ON9D4FCx59kDStKnak=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1770726136; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=PtaGvaD7ExNneudKvjFjP+emE5B2H67yn3ee1XHTCI0=;
-	b=NBqmQtr0p/nUk/I/1pekC676YMaBfZ9EpZ1V/F8iBmw8/RzpHjgypuizBe+bKTXLJYmlyT
-	QOViyon17obaqpZukF4T5xSrmgdCX9jCTYuYheylPVR27U6KHJfYAQwyjPA21KCdlM5yCY
-	mIXEz4ttY4pa1ON9D4FCx59kDStKnak=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CE6CE3EA62;
-	Tue, 10 Feb 2026 12:22:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id HoM5Mfcii2nqBQAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Tue, 10 Feb 2026 12:22:15 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] net: cdc-ncm: cleanup device descriptor
-Date: Tue, 10 Feb 2026 13:22:08 +0100
-Message-ID: <20260210122208.29244-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1770726312; c=relaxed/simple;
+	bh=PSC/1sRjxTQ1f2Asq/tjCPh/1acRZSxW0lcahVtmmFI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FD7c2PQcMVwoJd3JaA37Tv/lkAD7YvFA9NzOj3fYt3BxdYx2GYgsDoupH8jXVItoMXtjt4erqcbmzLWXnKjcI3D57CZx92+QgpazMbQzhEaT8DMhiU91j0O+4vF7zRXTT0CBvYGsFNmgtl/MuCohGtAY1yZA52EHRE1Eyq9x87o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ABXzolkr; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=KEZGAiRf; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61ABI2jX801129
+	for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 12:25:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	AZyUoW/jNDnHRZkkA2vC1hnO5Ofarpv0yHADNbPa0h0=; b=ABXzolkr6HBxuIZb
+	JCKcgGF7ufz3fvIRRpArHtmw+PhV49VFT3nnDEYW/atrY35sv2JRtXsBwpboQPJ6
+	t+lkkIzizUx8tXtqsBFO3mLe8QnPQwZA5iIqM3Ic4BGhb9s9jsXn/Fq+UiFRwLeb
+	8vMnu6nkaFLzTXmwFqRleyJqAHCnCTr6Cvu7QtpltwT++D8O6nQZHbRWrIRfJIku
+	5F015BJ1xygN4eSJQxDIDQr5uFVOTqqZS5eWVEqLDWORncLf+KDMi2F/2dz8KpNt
+	q3DV4siyD7HQdo+46Gkxdh/mLVYG6cphOGr7ZKThblXi2KAFxa8eFsv8hqHT2UVz
+	LZWnhA==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c7x6u1c50-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 12:25:10 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-503342386c7so196859021cf.0
+        for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 04:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1770726309; x=1771331109; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AZyUoW/jNDnHRZkkA2vC1hnO5Ofarpv0yHADNbPa0h0=;
+        b=KEZGAiRfzz1n6eHKfYyGcsTWRUKMxuHIfiN4Uu7jWDQUBAErDJR59KbmikomM2bE+N
+         P6XmUJwln1XsdI48SJTkd/DFgsaZNuGuabQWqFn9iJxpEC22jF6ZS5u0tp40qn+7YWpA
+         ohMyCuw8Plv6lH8H6V5l1Mj50c8LmtVH01HuvmeNyX88EChpGFyCx4qSPCbs5tawj/sl
+         h9RP03VAGkKkJwUoICGlhM8iaARooV2qJVwZF/ixcerJ2sFF9m2C2Y67FJiRrwWx//ch
+         Sro0b4/lSI3RJzGvdJVLBWSDcvCYf/wzw8dJAMOYStT6/6lDCWQcI5ID25ga/rzOPQ12
+         1dgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770726309; x=1771331109;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AZyUoW/jNDnHRZkkA2vC1hnO5Ofarpv0yHADNbPa0h0=;
+        b=djWctpRvPX7Pq9mJdVadRXRrsoWiXJgLV5mUt1L21MYG6iAD85/81z8EjIQyioeCyG
+         FT6LCcFz5yC0rqeK0/0IZoz7VvPXCVnC+WsCCVzrrS6DlSIqFCtFUPhgL6gUTcP84vEb
+         SquaH2APvHAo2u2g1o6m5xJuNGlzeVAKXEBgq0oAOe+P8gGE/V6JtaWHV41ULFHtF8yP
+         T4MkYyx22P/gPPyR4FWrJ6CEFw9PiYb0jw0+08c7lKOSKdE5MkibsiN4x5ShHdPZZIky
+         y1uzbNUplT5giL/3CWpj+nGRN7BrnQ6C0Kmln5haxw5Ng0dV30ffWlV6jYmG7WnYRseI
+         fSiw==
+X-Forwarded-Encrypted: i=1; AJvYcCX29vjm7XQs69XncduhipkXje59Vmv9w6XTcORYK6Q6CD7BsUTDVbl5OZNO2nCMRu9e5QyHzamykAM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzmi0FjlG9YG4DY5NPbhq0v9wz42tCSpilPnQo0WJvSWZ213LEj
+	YE/Xym4Eg8Y33c2hApwXsPM1ifRdjY62b98FzFkQRsnpmt4FuVYMwwzkcNAngXDvpiNhtVEE44F
+	HeX0DcnaOndPrG9M7+Ousylq3sQdnPz51JThwfFVAIAdg/VFJlmtKVv4jCAAfA5k=
+X-Gm-Gg: AZuq6aIiSzu9rRSweuycRVfYT+qqfd6RtHdoTOaU2M8Y4GtAwX+hX390eQugM8mWEbJ
+	O+EKOjFPMOTHTnk27jrvdGeJ4wmBE8QGjJQvVesTG5juBoFCVCL7cI5myXLnfil0Ju9+bF5yv4d
+	3dCiJXi0Sm4US5ibO1PYOrRCOX3v7qe7OgctvE76C3FWLg5wHSnj8LqvF+fqTYN3qKp8OufSh12
+	8ojgGG4qVbdZJCEjA4uMdV8OUoChq26nx2+/hCTqoiWSIlHab2AS7FItASr3qz+sl5YJE5/VCCc
+	80nRkDeWsReX08WEpTtiPUMvtjBnlUxNRvur1MJKZB64AtBQXDk8GqbIVun1ljgxZAtDHmSgwuJ
+	28jzptVy7LECxh9GmBsYdY6cLZybHGLcKaqC9lmwGrzd0vJL6A4E7JTriLvGzAWgVjzBTRBKJjx
+	SbAHqcRCRwM+xDoOEfvJysRQfgAyxOJk3YXXI=
+X-Received: by 2002:a05:622a:245:b0:4ff:8754:eec2 with SMTP id d75a77b69052e-50673d98da0mr20160291cf.40.1770726309255;
+        Tue, 10 Feb 2026 04:25:09 -0800 (PST)
+X-Received: by 2002:a05:622a:245:b0:4ff:8754:eec2 with SMTP id d75a77b69052e-50673d98da0mr20159931cf.40.1770726308677;
+        Tue, 10 Feb 2026 04:25:08 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e44cf6ea9sm3321639e87.6.2026.02.10.04.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Feb 2026 04:25:07 -0800 (PST)
+Date: Tue, 10 Feb 2026 14:25:06 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Bartosz Golaszewski <brgl@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 4/9] pci: pwrctrl: generic: support for the
+ UPD720201/UPD720202 USB 3.0 xHCI Host Controller
+Message-ID: <pvmi7hkk4j3uzyqt7qyeumm6mq7o3j7n5u47q5wibbjo4gf4jk@kfxy4n3hl44c>
+References: <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-0-5b79c5d61a03@linaro.org>
+ <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-4-5b79c5d61a03@linaro.org>
+ <fbxbnou5mdlhaq5dpxr3wdzmjetwdp7auaaqeunc67tgk5ej2m@cnnkr2pcwy77>
+ <a4e55e91-0e03-4e63-8542-d8ad61b38906@linaro.org>
+ <o6e5qygss55p6npjgaicxffsqdpv7kojgidr46zinsvfpxfxug@vn67nq4k6jzk>
+ <b46da4da-93aa-4213-ad75-ec7709008b95@linaro.org>
+ <qd5egc42mkdofs4ey7gl664e5el2p5sxwluesjtm7gc3y66hez@l4dz3bd5xm6n>
+ <8b18433a-5836-4a65-b790-9f51112d1f5c@linaro.org>
+ <cish7iljd23mon4onzbonpuvii7mccwygllr3bcqcpo7zbp2o2@lbzokxr6dod3>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
-X-Spam-Level: 
+In-Reply-To: <cish7iljd23mon4onzbonpuvii7mccwygllr3bcqcpo7zbp2o2@lbzokxr6dod3>
+X-Proofpoint-GUID: VgWBlEhSrOLxp3taR0grx6ynwVIcUqcJ
+X-Proofpoint-ORIG-GUID: VgWBlEhSrOLxp3taR0grx6ynwVIcUqcJ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEwMDEwNCBTYWx0ZWRfXyPP5uLk0znFT
+ lf2sRTtOV2jLz3LFV+oJbYZk9ytN9BI1/O72hBESd7R5aEuIwc+ZRVtoS6mNCl8IxdKS4mj/qra
+ gFaSogN2B++kBw+UF7jli8Hl27ylpmScFfpokLp/ptA43aPRofC5vU6khCyZeL2pB63cVp9Cri5
+ 9/DvqKHb/YUixqYBKufMhIdYgp5126n+DMboLEbzyP8eGHA/ccWkaqz6GjbEdXKpEh5Kaa9GF5p
+ igsM8R2o+hFH+/EOlHDNPkdvpVxMwJemL7kNA+uO/nj7kBvWpmtNUHj8Rxfp6ejoECjMluRDRm+
+ OsXfEVogTSpNwHb1zyj3u7OsHkgvryQh5Cev+kpru+sfS+Nqf5vMZBq57j3LtAGS28rlDWnKUZF
+ u9kVwXvN6mVeoca2mZZwDVkTk2idY1AYYBv3Sf3DiqdvZy+/9B8Iub1RFvMnW7gzclz0DLBffCC
+ jz6Ua2OIOlAF3hMGLyg==
+X-Authority-Analysis: v=2.4 cv=YfmwJgRf c=1 sm=1 tr=0 ts=698b23a6 cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=KKAkSRfTAAAA:8
+ a=bWODTdmjpByO2ujYuvkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=a_PwQJl-kcHnX1M80qC6:22 a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-10_01,2026-02-10_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 clxscore=1015
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602100104
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33252-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33253-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[18];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[linaro.org,linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,oss.qualcomm.com:dkim,qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2E79711AB5B
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 0265A11AC36
 X-Rspamd-Action: no action
 
-Flags are boolean values, hence they should be typed
-as bool, not as u8.
+On Tue, Feb 10, 2026 at 04:33:08PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Feb 10, 2026 at 10:01:00AM +0100, Neil Armstrong wrote:
+> > On 2/10/26 09:00, Manivannan Sadhasivam wrote:
+> > > On Mon, Feb 09, 2026 at 03:59:20PM +0100, Neil Armstrong wrote:
+> > > > On 2/9/26 15:49, Manivannan Sadhasivam wrote:
+> > > > > On Mon, Feb 09, 2026 at 03:00:02PM +0100, Neil Armstrong wrote:
+> > > > > > On 2/9/26 12:30, Manivannan Sadhasivam wrote:
+> > > > > > > On Fri, Feb 06, 2026 at 03:50:32PM +0100, Neil Armstrong wrote:
+> > > > > > > > Enable the generic pwrctrl driver to control the power of the
+> > > > > > > > PCIe UPD720201/UPD720202 USB 3.0 xHCI Host Controller.
+> > > > > > > > 
+> > > > > > > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > > > > > > ---
+> > > > > > > >     drivers/pci/pwrctrl/generic.c | 4 ++++
+> > > > > > > >     1 file changed, 4 insertions(+)
+> > > > > > > > 
+> > > > > > > > diff --git a/drivers/pci/pwrctrl/generic.c b/drivers/pci/pwrctrl/generic.c
+> > > > > > > > index 08e53243cdbd..4a57a631362f 100644
+> > > > > > > > --- a/drivers/pci/pwrctrl/generic.c
+> > > > > > > > +++ b/drivers/pci/pwrctrl/generic.c
+> > > > > > > > @@ -73,6 +73,10 @@ static const struct of_device_id pci_pwrctrl_slot_of_match[] = {
+> > > > > > > >     	{
+> > > > > > > >     		.compatible = "pciclass,0604",
+> > > > > > > >     	},
+> > > > > > > > +	/* Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller */
+> > > > > > > > +	{
+> > > > > > > > +		.compatible = "pci1912,0014",
+> > > > > > > 
+> > > > > > > No need to add the compatible to the driver. Just use the existing compatible as
+> > > > > > > fallback in the binding/dts.
+> > > > > > 
+> > > > > > ???
+> > > > > > 
+> > > > > > Sorry but this is insane, in no world a standalone PCIe USB controller could be qualified as
+> > > > > > compatible as a pciclass,0604 slot.
+> > > > > > 
+> > > > > 
+> > > > > AFAIU, 'compatibility' implies that the driver can safely fallback and would
+> > > > > still work. If we add dedicated compatibles for each endpoint devices, then we
+> > > > > will just keep adding forever. Powering up a PCIe slot and an endpoint device
+> > > > > are conceptually same.
+> > > > 
+> > > > We're not speaking about driver here, but about compatible string which describes
+> > > > a device, a PCI endpoint and a PCIe slot are 2 very different devices that are
+> > > > nowhere compatible.
+> > > > 
+> > > > > 
+> > > > > > Technically it would work just fine, but "compatibility" has a meaning....
+> > > > > > 
+> > > > > 
+> > > > > I view compatibility interms of device operation, not device as a whole. But
+> > > > > sure, I could be wrong. If the DT maintainers say so, I won't insist.
+> > > > 
+> > > > In the actual way it's defined _today_, the "slot" and "endpoint" power up schemes are
+> > > > compatible, but I hope the slot bindings will get much more features to describe the
+> > > > real world slots power properties. And no, endpoints will definitely not have the same
+> > > > features as slots, using it as a fallback today is an error.
+> > > > 
+> > > > On the other side, adding a "simple-pci-endpoint" compatible that enables any supply
+> > > > and clock would be a good solution, if the DT maintainers agrees of course.
+> > > > 
+> > > 
+> > > We do have a 'pci-host-cam-generic' compatible. So we can also have something
+> > > like 'pci-pwrctrl-generic' IMO.
+> > 
+> > I don't want to into this route, I just want to powerup the USB3 controller on
+> > the Pocket S2 gaming device, not spend 6 months into _not_ modifying a driver compatible
+> > list.
+> > 
+> 
+> Sure, I don't want you to spend that much time either. But I was trying to avoid
+> having a solution that just works only for your platform.
+> 
+> > All this feels bulky, who a pci device would be compatible with something like
+> > 'pci-pwrctrl-generic' we're speaking about a pci device, not a power control device.
+> > 
+> > It's nowhere similar to the 'pci-host-cam-generic' situation, this describes well defined
+> > host controller interface.
+> > 
+> 
+> I honestly don't see much difference. ECAM is just *a way* of accessing the
+> config space of the PCIe devices. If we can have a compatible based on that,
+> then I don't see why can't we have one for pwrctrl. Only difference is that
+> "pwrctrl" terminology is not part of any spec, but for sure every device would
+> have some kind of power control implementation.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- include/linux/usb/cdc_ncm.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ECAM is a way of accessing config space. But there is nothing like that
+for "pwrctrl-generic". It's just a Linux-internal view on powering on
+these devices. Other OS would support ECAM, but would have no idea, what
+pwrctrl-generic means.
 
-diff --git a/include/linux/usb/cdc_ncm.h b/include/linux/usb/cdc_ncm.h
-index 4ac082a63173..97ef37a1ff4a 100644
---- a/include/linux/usb/cdc_ncm.h
-+++ b/include/linux/usb/cdc_ncm.h
-@@ -118,8 +118,8 @@ struct cdc_ncm_ctx {
- 
- 	u32 timer_interval;
- 	u32 max_ndp_size;
--	u8 is_ndp16;
--	u8 filtering_supported;
-+	bool is_ndp16;
-+	bool filtering_supported;
- 	union {
- 		struct usb_cdc_ncm_ndp16 *delayed_ndp16;
- 		struct usb_cdc_ncm_ndp32 *delayed_ndp32;
+> 
+> Anyhow, I don't have other solutions on top of my head now. Let's go with
+> per-device compatible for now. I'll deal with a generic solution later.
+> 
+> - Mani
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்
+
 -- 
-2.53.0
-
+With best wishes
+Dmitry
 
