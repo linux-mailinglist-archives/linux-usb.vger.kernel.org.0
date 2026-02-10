@@ -1,57 +1,50 @@
-Return-Path: <linux-usb+bounces-33258-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33259-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QOPTCJwli2mYQQAAu9opvQ
-	(envelope-from <linux-usb+bounces-33258-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 13:33:32 +0100
+	id MEncIpcwi2kFRgAAu9opvQ
+	(envelope-from <linux-usb+bounces-33259-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 14:20:23 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75F3311AE27
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 13:33:31 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5C2F11B2BD
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 14:20:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 55D65302A077
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 12:32:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D4A56300D0B4
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 13:20:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18FDF72618;
-	Tue, 10 Feb 2026 12:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35378329C48;
+	Tue, 10 Feb 2026 13:20:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YPpChklP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F154632
-	for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 12:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0253207A32;
+	Tue, 10 Feb 2026 13:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770726773; cv=none; b=a9HkijxlPEVXZElSmqcbtHG6aMzkYzdE/iFGNij2dqjhkWAjnIEOFEN7cpGS69uqLH2iftV0yBzfxfwkpS7qSXFyCv5XfzY8q48UNrfV0m6768JddVIVNKvH0GkQ/jUPBvIMnSmBF3Ms3BuDqV6Bawx74CCpqKb/v1oL7r8Au44=
+	t=1770729612; cv=none; b=iL0V0U+6JVCE3Og/4STvpemwgJ2yzB/1ypz2m9oJ1Z8MgWvib2n23xA6DUfr1YuX2FwQE+zw/Znd0hC93kFHO4sL/BUtwPPmGMLVAcTeSb3R0Tzy7XYgtNRHnVfjivgLKN1Ln2qQvSmI3lr9pTnCHSs5MjZPLhyY5/Ql5f7016k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770726773; c=relaxed/simple;
-	bh=0J9lmfiAxuqZwoJe1TZqDE/ZoXGAkUv6yjYFkQ6/wX4=;
+	s=arc-20240116; t=1770729612; c=relaxed/simple;
+	bh=toSC5s+ubaUUQaH7VZ/GqRFBz3eGQyNTwdjaeHc2VOU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lMpBTt9Flt12b5rqkwXigDKW5TjRDcYcicRXEWKUmFMJKGsGW6WUOHQJi5vZXnWTXD9etRcD74dZxcul+MdZOT6BX/Q9/4kHAVaAzloH7tgJQ40cgRfg+CZm1PTPv7LSu56IgcAOn1DRgeF9vb7CRlIpynjy6zhAn0ewdbPUjtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1vpmus-0005ws-St; Tue, 10 Feb 2026 13:32:30 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1vpmup-0004tm-2e;
-	Tue, 10 Feb 2026 13:32:27 +0100
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1vpmuq-009zk0-1E;
-	Tue, 10 Feb 2026 13:32:28 +0100
-Date: Tue, 10 Feb 2026 13:32:28 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Ze Huang <huang.ze@linux.dev>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kkehz5VFS5WT+dwzdV4nMfmCQ1HRn8mae5Y+jsUXkscCzOgdsxhtGdDwHZYZiDJ7UfqPC8wTJDw3OiCGvsOGEBgGjIWZEgUiooLmJCSKVtfsEy0nrGY/0KD27RBo+UC4boqucvM1txzQGU0kvmhjTA4x1ySachoajsF9vFH2mbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YPpChklP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B412C116C6;
+	Tue, 10 Feb 2026 13:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1770729612;
+	bh=toSC5s+ubaUUQaH7VZ/GqRFBz3eGQyNTwdjaeHc2VOU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YPpChklPzlPeYgA7aSDANV1jRvt8+tIXhuhKwJkglgOWOtG/5xoCWuiGxbY68H6+I
+	 xZwnBO7rSMcAvIZKz+sLlXkh+JFL3Aa9b+UWRpE0byrqziu4vSb5oUMU497IHVvko3
+	 bzTs3A/BLQfn5YvT1QfyudoHMhWhAzYRkX9cuaRM=
+Date: Tue, 10 Feb 2026 14:20:08 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Marco Felsch <m.felsch@pengutronix.de>
+Cc: Ze Huang <huang.ze@linux.dev>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Fabio Estevam <festevam@gmail.com>,
@@ -62,9 +55,10 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	kernel@pengutronix.de
 Subject: Re: [PATCH v4 0/5] Add onboard-dev USB hub host managed vbus
  handling support
-Message-ID: <20260210123228.wmtyf3ezwratne5k@pengutronix.de>
+Message-ID: <2026021026-unaired-freebie-718a@gregkh>
 References: <20250911-v6-16-topic-usb-onboard-dev-v4-0-1af288125d74@pengutronix.de>
  <DGB2E17NBWO2.544ZZ15AEBLC@linux.dev>
+ <20260210123228.wmtyf3ezwratne5k@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,131 +67,118 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DGB2E17NBWO2.544ZZ15AEBLC@linux.dev>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20260210123228.wmtyf3ezwratne5k@pengutronix.de>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33258-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,gmail.com,chromium.org,vger.kernel.org,pengutronix.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-33259-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[m.felsch@pengutronix.de,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:url,pengutronix.de:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 75F3311AE27
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[linux.dev,kernel.org,gmail.com,chromium.org,vger.kernel.org,pengutronix.de];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A5C2F11B2BD
 X-Rspamd-Action: no action
 
-Hi,
-
-On 26-02-10, Ze Huang wrote:
-> On Fri Sep 12, 2025 at 4:22 AM CST, Marco Felsch wrote:
-> > Hi,
-> >
-> > the whole purpose of this series is to make it possible to control the
-> > USB VBUS regulators of an USB hub via host managed regulators.
-> >
-> > Regards,
-> >   Marco
-> >
-> > ---
-> > Changes in v4:
-> > - dt-bindings: change to vbus-supply and shift doc to usb-device.yaml
-> > - onboard_dev: make use of new regulator API to parse child device
-> >                regulators.
-> > - onboard_dev: drop hard coded downstream port number and make it more
-> >                dynamic
-> > - onboard_dev: drop limiting support to SMSC hubs
-> > - Link to v3: https://lore.kernel.org/r/20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de
-> >
-> > Changes in v3:
-> > - fix dt-bindings issues
-> > - Link to v2: https://lore.kernel.org/all/20250327172803.3404615-1-m.felsch@pengutronix.de/
-> >
-> > Changes in v2:
-> > - fix compile time errors in case the module builds
-> > - Link to v1: https://lore.kernel.org/all/20240807-b4-v6-10-topic-usb-onboard-dev-v1-0-f33ce21353c9@pengutronix.de/
-> >
-> > ---
-> > Marco Felsch (5):
-> >       usb: port: track the disabled state
-> >       usb: hub: add infrastructure to pass onboard_dev port features
-> >       dt-bindings: usb: usb-device: add usb hub port vbus-supply suppport
-> >       dt-bindings: usb: microchip,usb2514: add vbus-supply example
-> >       usb: misc: onboard_dev: add hub downstream port host vbus-supply handling
-> >
-> >  .../devicetree/bindings/usb/microchip,usb2514.yaml |   7 ++
-> >  .../devicetree/bindings/usb/usb-device.yaml        |   6 ++
-> >  drivers/usb/core/hub.c                             |  55 +++++++++-
-> >  drivers/usb/core/hub.h                             |   4 +
-> >  drivers/usb/core/port.c                            |   6 ++
-> >  drivers/usb/misc/onboard_usb_dev.c                 | 117 +++++++++++++++++++++
-> >  include/linux/usb.h                                |   3 +
-> >  7 files changed, 196 insertions(+), 2 deletions(-)
-> > ---
-> > base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
-> > change-id: 20250821-v6-16-topic-usb-onboard-dev-b8d4d1d8a086
-> >
-> > Best regards,
+On Tue, Feb 10, 2026 at 01:32:28PM +0100, Marco Felsch wrote:
+> Hi,
 > 
-> Hi Marco,
+> On 26-02-10, Ze Huang wrote:
+> > On Fri Sep 12, 2025 at 4:22 AM CST, Marco Felsch wrote:
+> > > Hi,
+> > >
+> > > the whole purpose of this series is to make it possible to control the
+> > > USB VBUS regulators of an USB hub via host managed regulators.
+> > >
+> > > Regards,
+> > >   Marco
+> > >
+> > > ---
+> > > Changes in v4:
+> > > - dt-bindings: change to vbus-supply and shift doc to usb-device.yaml
+> > > - onboard_dev: make use of new regulator API to parse child device
+> > >                regulators.
+> > > - onboard_dev: drop hard coded downstream port number and make it more
+> > >                dynamic
+> > > - onboard_dev: drop limiting support to SMSC hubs
+> > > - Link to v3: https://lore.kernel.org/r/20250821-v6-16-topic-usb-onboard-dev-v3-0-6d2b38a5d818@pengutronix.de
+> > >
+> > > Changes in v3:
+> > > - fix dt-bindings issues
+> > > - Link to v2: https://lore.kernel.org/all/20250327172803.3404615-1-m.felsch@pengutronix.de/
+> > >
+> > > Changes in v2:
+> > > - fix compile time errors in case the module builds
+> > > - Link to v1: https://lore.kernel.org/all/20240807-b4-v6-10-topic-usb-onboard-dev-v1-0-f33ce21353c9@pengutronix.de/
+> > >
+> > > ---
+> > > Marco Felsch (5):
+> > >       usb: port: track the disabled state
+> > >       usb: hub: add infrastructure to pass onboard_dev port features
+> > >       dt-bindings: usb: usb-device: add usb hub port vbus-supply suppport
+> > >       dt-bindings: usb: microchip,usb2514: add vbus-supply example
+> > >       usb: misc: onboard_dev: add hub downstream port host vbus-supply handling
+> > >
+> > >  .../devicetree/bindings/usb/microchip,usb2514.yaml |   7 ++
+> > >  .../devicetree/bindings/usb/usb-device.yaml        |   6 ++
+> > >  drivers/usb/core/hub.c                             |  55 +++++++++-
+> > >  drivers/usb/core/hub.h                             |   4 +
+> > >  drivers/usb/core/port.c                            |   6 ++
+> > >  drivers/usb/misc/onboard_usb_dev.c                 | 117 +++++++++++++++++++++
+> > >  include/linux/usb.h                                |   3 +
+> > >  7 files changed, 196 insertions(+), 2 deletions(-)
+> > > ---
+> > > base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
+> > > change-id: 20250821-v6-16-topic-usb-onboard-dev-b8d4d1d8a086
+> > >
+> > > Best regards,
+> > 
+> > Hi Marco,
+> > 
+> > I'm checking in to ask about the status of this patch series.
+> > 
+> > We are currently working on the Spacemit K1 SoC and we have a use case
+> > that requires onboard_dev to manage the USB VBUS regulator. This series
+> > would be very helpful for us :)
 > 
-> I'm checking in to ask about the status of this patch series.
+> :)
 > 
-> We are currently working on the Spacemit K1 SoC and we have a use case
-> that requires onboard_dev to manage the USB VBUS regulator. This series
-> would be very helpful for us :)
-
-:)
-
-> Link: https://lore.kernel.org/all/DG8QBWSJ79MP.2MVIHFRBX3WXX@linux.dev/
-
-Regarding the status of this series. Rob provided his r-b tag once I
-fixed the minor typo. I also need to fix bug [1] which is triggered by
-the asix binding. I could move the 'vbus-supply' example to the
-usb-device.yaml.
-
-@Greg, @USB-maintainers
-Are the driver changes OK?
-
-Regards,
-  Marco
-
-[1] https://lore.kernel.org/all/175763620958.1187267.14091957840948870392.robh@kernel.org/
-
-
+> > Link: https://lore.kernel.org/all/DG8QBWSJ79MP.2MVIHFRBX3WXX@linux.dev/
 > 
-> Best regards,
-> Ze Huang
+> Regarding the status of this series. Rob provided his r-b tag once I
+> fixed the minor typo. I also need to fix bug [1] which is triggered by
+> the asix binding. I could move the 'vbus-supply' example to the
+> usb-device.yaml.
 > 
-> 
+> @Greg, @USB-maintainers
+> Are the driver changes OK?
 
--- 
-#gernperDu 
-#CallMeByMyFirstName
+I have no idea, this thread was from a very long time ago.  Please
+resubmit after rebasing on 7.0-rc1 when it is out as we can't do
+anything with any new patches until then anyway.
 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | https://www.pengutronix.de/ |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-9    |
+thanks,
+
+greg k-h
 
