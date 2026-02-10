@@ -1,275 +1,331 @@
-Return-Path: <linux-usb+bounces-33231-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33232-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wGYeGn/SimmaOAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33231-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 07:38:55 +0100
+	id 2PthFVrdimlIOgAAu9opvQ
+	(envelope-from <linux-usb+bounces-33232-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 08:25:14 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A627117695
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 07:38:55 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A273117E44
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 08:25:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7A477303074A
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 06:38:52 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 1DD33300B2B8
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 07:25:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063AC27AC4D;
-	Tue, 10 Feb 2026 06:38:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AC0333345A;
+	Tue, 10 Feb 2026 07:25:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aPaMhkZc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AnmZuF8F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D43532E120
-	for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 06:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043FB309EFB;
+	Tue, 10 Feb 2026 07:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770705530; cv=none; b=mQnknJSFDwiWPqlzLWeBcALlkwfMiuiZYHhGRN2N57WjiH1viE1ncc/GguACueZ5osogWRn4ydHzHD/rkTMaFJrjbWnQ7MH6Xr86R1kJNCWaG2ErIFfyAosXAqtu1CZBE2cJ1a7s28LkpA5oV9y9VBSVQgeBD+G4n7Q0qcFzbJw=
+	t=1770708303; cv=none; b=lspWaR+x/eDzzviU0Py2JtJeoTz2w8o3F9+YWHUdIRkD6uIjuJ2xxvdnw0EgRTBOXbl6gpY9/QquGawGB0ra+tMvjwIU+edyehN66hFRCJIBJtWSTdUj+hoMbu7i2RTKShcaguP6FoHzMQ7wMOE3Rom/JYlCcWumh8orJC2E6FY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770705530; c=relaxed/simple;
-	bh=Tzvqbf/lzUX+Xryn3wOPmUQNw3pnqvGuG9huSDJZPn4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=b6ZyuIdcVymsBxjnEqkIEfO5IxpIR0PsWyCwi1ZTIvYGM6M3CJ0+8jJdoD0RiKFutsr3SfUI/Ql7bSMnFf1KbYww6kAYaeRBHSNPRTw4PHj825j+E/pSNG4oPzhg0AhW6pdA4geZar2YqeJrM1mvzkjRnn7Lap6JiSX7iqWU6Qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aPaMhkZc; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47ff94b46afso49621935e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 22:38:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1770705528; x=1771310328; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lLdYDGt/+DrOZdYJB2wqY0IBiaBFC8iK50DATmXPJZs=;
-        b=aPaMhkZcfXpmP2tm/iJaq/CWcrBT5oUwIPYKVQunfq07wAHYn5QH79di58LjJZCCKZ
-         ElWls/ygW5HHWkNDwOfos/MTuCMj6r8QfeKoK5qeFFRXQZE0Jzb5MgWfuIQtwbB7SgTI
-         t0w/NgrN4Qvdqu4Ro03urdFF/zw5By8GRlEd50bbXeMHCJ6oVqTrqwaUwvztZSeCzJcn
-         3+NfnuTuWPqRVUpRVvW5khABjNpmtMnLrM/nhazeMNrk05OgjuO1/R8+Jr+2tBrXsHtU
-         wndcURxtIj4wsyMcBnt+G1R2Pj/3iRi9vELwS8GP9yQLL/vDhAW/ntof0pq3Aw01JPGf
-         JTnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770705528; x=1771310328;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lLdYDGt/+DrOZdYJB2wqY0IBiaBFC8iK50DATmXPJZs=;
-        b=Iw2SUsJEmP7NIVaeHwNt4Yo0Sl1uDpYzr85ZaS8fqhRdwEZNMmxKDfAPAqSGhiBbHC
-         aziQTwwM9lW5KVhffiKgL60d8uu1CSRhVdTlBBluNalggncxM6rZJbLGRK4BFNDlb0yc
-         EtEpauQQFvUgDOazQ92+LM6x3U8LU2334YP6ft9etCOl/abgeU9fGgTeZ37jPRCk+Mne
-         jhVYGNmkxWZK/5cxup0rE/68SLa09bRik3l0xtGnPAgFV9C6ACMI5F7ScB5nQENBIsGq
-         KolPPeM6EpB0/plOYuTvE4f1FFhPhSsf2TTJXapoJyHeOJn+kgm+cR3608WoPcYTHLlu
-         UsuA==
-X-Forwarded-Encrypted: i=1; AJvYcCWTxvDG0MDrGoI/LIRCNsYwOXPt1kjN6V0SAlMCKdQiDSOEzbIEXeFLTRTvYIQ2lDL1ALmTV0hx93Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSwnxeh241HODMh8iytd+MN1o87Et1W6agPDE1X55Q2BrT2wAC
-	Gugga1AdE6S2+xIiVy3FuWV2e0+oQi8PgKlgCxH+hdsH4m1agOUBum6iS4KsctgSV2Y=
-X-Gm-Gg: AZuq6aIyffK8vz2zQ7D1O/3skicEzckSupcsF5h08dm51Dh5A+bnYYA4vXqgOq5a01Y
-	N1v5n7Nh+032dLmc1GvPl0hb2wXQZ1Mc0nOvbYOWOzb6OMi9jdEOwdKBTtQ3kvtjgWU9GTFWZCx
-	3KkFa8xwxLeBSX5gymNxLpqm6IBpe0FgI4CBTfnGWpKvJFdMHjxAeCu1fWbjvWKtUUc/ToGnvcg
-	BKnxBo7L4W3esbjDkI5oGv4smuC1Sp+1orClMv7tmO0zbtfohtpdzhosV2fgj3GNDgGOgdkIG9t
-	2L8x/VXFwHqj7W2qNm3MxlvMheRWbDy0EunH42dcg3ajIl4E2yUN5fr6nMC0comt0oHylx5W7W2
-	NqiIhm6tYE2srCIsM3NwF+HL5RXyNO/2yv8WLOgnxq3LhlKKHcK5EcehFCjoQt5e63jeKfagMWq
-	8oVuoqbKVitAAmmhcNVWp8EBT39b864Q==
-X-Received: by 2002:a05:600c:c086:b0:47e:e7de:7c41 with SMTP id 5b1f17b1804b1-4834ffb08f0mr12556465e9.16.1770705527668;
-        Mon, 09 Feb 2026 22:38:47 -0800 (PST)
-Received: from draszik.lan ([212.129.79.225])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d8334a8sm37397915e9.12.2026.02.09.22.38.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 22:38:47 -0800 (PST)
-Message-ID: <9fce298c842533bc6ede7f1a97040337236351d8.camel@linaro.org>
-Subject: Re: [PATCH v5 4/5] power: supply: max77759: add charger driver
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Amit Sunil Dhamne <amitsd@google.com>, Sebastian Reichel
- <sre@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Lee Jones
- <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Badhri
- Jagan Sridharan	 <badhri@google.com>, Heikki Krogerus
- <heikki.krogerus@linux.intel.com>,  Peter Griffin
- <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Alim
- Akhtar	 <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
- Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Date: Tue, 10 Feb 2026 06:39:14 +0000
-In-Reply-To: <277e1c95-e221-4c07-a00e-d0f0a1a7553f@google.com>
-References: <20260203-max77759-charger-v5-0-b50395376a5f@google.com>
-	 <20260203-max77759-charger-v5-4-b50395376a5f@google.com>
-	 <3ab2d8cd112441dc1d7ab5097f5b1b64c7e415ab.camel@linaro.org>
-	 <277e1c95-e221-4c07-a00e-d0f0a1a7553f@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-2+build4 
+	s=arc-20240116; t=1770708303; c=relaxed/simple;
+	bh=NKabKm5bxXQzRG3wBqpraJyx74A7XUtBm0rlOFG7iag=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JCl6Z0IoLv63yXDpaaV56gU5+TNrfdrZ2RhFbJ9cTkek7nMlo1lROR2mVZlNJgtyg/nLRfFXFNYEsJiiunkxeoz/6Z2VmhdYzYudTaJeyot7AqwZmg5wk1ExW4X5s/lRa+h9X3XYuaeVnnsU9N0LOy0LnftBb2UbxvvRnm/LKX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AnmZuF8F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1485C116C6;
+	Tue, 10 Feb 2026 07:24:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770708302;
+	bh=NKabKm5bxXQzRG3wBqpraJyx74A7XUtBm0rlOFG7iag=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AnmZuF8FPlL7U+DEcpntM54HDphYDNE41OcocmVHVcoS04EA0ntdCrL0u3NTUoeme
+	 zLUMXu3oD/kSPaYg2gb3ptBzvydHBdiicYKoyhSLOv8VteFz+5S5Hr33mW9fKTP5DE
+	 fh3buE72NGRcUgFBal6Izl1AlP7+JqkBqH6KrNlvaRAGpVSos5Kj2UQGP7knfTFaLX
+	 6TvM0s5yCPFpFLFuhL2cj97m71IR7KeNPW1+9hMkmjaaulk8S/kZe5TYnWPIwsaio7
+	 WNz8aKUT18l2g/JYoJle/RqHmNbi3Bm4gpGwvfuWeLXJVHPFNoL+L3q7gCOm22KSa7
+	 q3WOshNWN4MVg==
+Message-ID: <3bed0897-f04a-4d0d-81f5-eea34a0f833b@kernel.org>
+Date: Tue, 10 Feb 2026 08:24:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/9] dt-bindings: soc: qcom: eud: Restructure to model
+ multi-path hardware
+To: Elson Serrao <elson.serrao@oss.qualcomm.com>,
+ Rob Herring <robh@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260126233830.2193816-1-elson.serrao@oss.qualcomm.com>
+ <20260126233830.2193816-2-elson.serrao@oss.qualcomm.com>
+ <20260206145544.GA207233-robh@kernel.org>
+ <cb0693b2-b9fd-4880-86fa-26fd1259f5b1@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <cb0693b2-b9fd-4880-86fa-26fd1259f5b1@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33231-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33232-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-usb@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	DBL_PROHIBIT(0.00)[0.0.0.2:email];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:mid,linaro.org:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2A627117695
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,0.0.0.3:email,0.0.0.1:email]
+X-Rspamd-Queue-Id: 7A273117E44
 X-Rspamd-Action: no action
 
-Hi Amit,
+On 10/02/2026 05:32, Elson Serrao wrote:
+> 
+> 
+> On 2/6/2026 6:55 AM, Rob Herring wrote:
+>> On Mon, Jan 26, 2026 at 03:38:22PM -0800, Elson Serrao wrote:
+>>> The Qualcomm Embedded USB Debugger (EUD) can intercept one or two
+>>> independent High-Speed UTMI paths, depending on the SoC. Each path is
+>>> distinct with its own HS-PHY interface, connector/controller wiring, and
+> 
+> [...]
+> 
+>>> +  supported on up to two High-Speed USB ports.
+>>>  
+>>>  properties:
+>>>    compatible:
+>>> @@ -29,26 +32,62 @@ properties:
+>>>      description: EUD interrupt
+>>>      maxItems: 1
+>>>  
+>>> -  ports:
+>>> -    $ref: /schemas/graph.yaml#/properties/ports
+>>
+>> You are breaking existing users.
+>>
+> 
+> Thanks Rob for your feedback.
+> 
+> The original motivation for the structural change was to make the binding
+> encode resources/topology that were implicit before. Specifically the EUD
+> intercept of the UTMI path(s) between the HS-USB PHY and the controller, and
+> the need to represent platforms with two independent UTMI paths. That led me
+> to introduce per-path nodes and a per-path PHY reference.
 
-On Mon, 2026-02-09 at 16:42 -0800, Amit Sunil Dhamne wrote:
-> Hi Andre',
->=20
-> On 2/4/26 4:49 AM, Andr=C3=A9 Draszik wrote:
-> > On Tue, 2026-02-03 at 22:50 +0000, Amit Sunil Dhamne via B4 Relay wrote=
-:
-> >=20
-> > > +
-> > > +static void psy_work_item(struct work_struct *work)
-> > > +{
-> > > +	struct max77759_charger *chg =3D
-> > > +		container_of(work, struct max77759_charger, psy_work.work);
-> > > +	union power_supply_propval current_limit, online;
-> > > +	int ret;
-> > > +
-> > > +	ret =3D power_supply_get_property(chg->tcpm_psy,
-> > > +					POWER_SUPPLY_PROP_CURRENT_MAX,
-> > > +					&current_limit);
-> > > +	if (ret) {
-> > > +		dev_err(chg->dev,
-> > > +			"Failed to get CURRENT_MAX psy property, ret=3D%d",
-> > > +			ret);
-> > > +		goto err;
-> > > +	}
-> > > +
-> > > +	ret =3D power_supply_get_property(chg->tcpm_psy, POWER_SUPPLY_PROP_=
-ONLINE,
-> > > +					&online);
-> > > +	if (ret) {
-> > > +		dev_err(chg->dev,
-> > > +			"Failed to get ONLINE psy property, ret=3D%d",
-> > > +			ret);
-> > > +		goto err;
-> > > +	}
-> > > +
-> > > +	if (online.intval && current_limit.intval) {
-> > > +		ret =3D set_input_current_limit(chg, current_limit.intval);
-> > > +		if (ret) {
-> > > +			dev_err(chg->dev,
-> > > +				"Unable to set current limit, ret=3D%d", ret);
-> > > +			goto err;
-> > > +		}
-> > > +
-> > > +		charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
-> > > +	} else {
-> > > +		charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
-> > > +	}
-> > > +
-> > > +	chg->psy_work_retry_cnt =3D 0;
-> > > +	return;
-> > > +
-> > > +err:
-> > > +	charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
-> > > +	if (chg->psy_work_retry_cnt >=3D MAX_NUM_RETRIES)
-> > > +		return;
-> > I'd say this final giving up could benefit from a dev_err(), while ...
->=20
-> I want to clarify if you want me to add this final giving up print just=
-=20
-> once or every time I am returning early?
+I do not see how this answers at all the comment, so no, it's still NAK.
 
-I meant something along the lines of this:
+> I outlined the constraints and rationale in this earlier thread:
+> 
+> https://lore.kernel.org/all/5cec9127-bdc5-49d7-80e1-2ae26f81163c@oss.qualcomm.com/
 
-+	if (chg->psy_work_retry_cnt)
-+		dev_dbg(chg->dev, "chg psy_work succeeded after %d\n",
-+			chg->psy_work_retry_cnt)
-+	chg->psy_work_retry_cnt =3D 0;
-+	return;
-+
-+err:
-+	charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
-+	if (chg->psy_work_retry_cnt >=3D MAX_NUM_RETRIES) {
-+		dev_warn(chg->dev, "chg psy_work failed, giving up",
-+			 chg->psy_work_retry_cnt, MAX_NUM_RETRIES);
-+		return;
-+	}
+And you were supposed to keep things backwards compatible. Are they? Not.
 
-> >=20
-> > > +
-> > > +	++chg->psy_work_retry_cnt;
-> > > +	dev_err(chg->dev, "Retrying %u/%u chg psy_work",
-> > > +		chg->psy_work_retry_cnt, MAX_NUM_RETRIES);
-> > ... this one could be demoted (but doesn't have to).
-> >=20
-> > That'd make it easier to determine if it's still in the process of
-> > trying, or if it has given up fully.
->=20
-> I was assuming the printing of "3/3" would indicate the final giving up=
-=20
-> and sufficient.
+Anyway, the reasoning cannot be somewhere else. Must be here in the commit.
+
+> 
+> 
+>>> +  '#address-cells':
+>>> +    const: 1
+>>> +
+>>> +  '#size-cells':
+>>> +    const: 0
+>>> +
+>>> +patternProperties:
+>>> +  "^eud-path@[0-1]$":
+>>> +    type: object
+>>>      description:
+>>> -      These ports is to be attached to the endpoint of the DWC3 controller node
+>>> -      and type C connector node. The controller has the "usb-role-switch"
+>>> -      property.
+>>> +      Represents one High-Speed UTMI path that EUD intercepts. This node models
+>>> +      the physical data path intercepted by EUD and provides graph endpoints to
+>>> +      link the USB controller and the external connector associated with this path.
+>>>  
+>>>      properties:
+>>> -      port@0:
+>>> -        $ref: /schemas/graph.yaml#/properties/port
+>>> -        description: This port is to be attached to the DWC3 controller.
+>>> +      reg:
+>>> +        maxItems: 1
+>>> +        description: Path number
+>>> +
+>>> +      phys:
+>>> +        maxItems: 1
+>>> +        description: High-Speed USB PHY associated with this data path.
+>>
+>> Doesn't the DWC3 node have a phys property? You don't need it twice 
+>> since you can walk the graph.
+>>
+> 
+> Yes, the DWC3 node does have a `phys` property. I added a PHY reference under
+> EUD to make the dependency explicit, since the EUD debug module is independent
+> and relies on the HS‑USB PHY for its operation.
+> 
+> If the preferred pattern is to rely on the controller’s `phys` and discover it
+> by walking the graph, I’m happy to drop the duplicate reference. My only
+> concern was whether that makes the dependency effectively implicit—i.e., EUD’s
+> correctness would depend on a resource not directly referenced in its own
+> binding. If my understanding of how this should be expressed in the binding is
+> not correct, please let me know and I’ll adjust v3 accordingly.
+
+Binding is not for drivers, so term "implicit" used before and now is
+not correct. Does the EUD has dedicated different phy? Yes or not?
+
+> 
+> 
+> 
+>>> +
+>>> +      usb-role-switch:
+>>> +        type: boolean
+>>> +        description:
+>>> +          Set this property if the USB port on this path is role switch capable.
+>>> +          In device role, debug mode inserts the EUD hub into the UTMI path. In
+>>> +          host role, the EUD hub is bypassed and UTMI traffic flows directly
+>>> +          between the PHY and the USB controller.
+>>> +
+>>> +      ports:
+>>> +        $ref: /schemas/graph.yaml#/properties/ports
+>>> +        description:
+>>> +          These ports are to be attached to the endpoint of the USB controller node
+>>> +          and USB connector node.
+>>> +
+>>> +        properties:
+>>> +          port@0:
+>>> +            $ref: /schemas/graph.yaml#/properties/port
+>>> +            description: This port is to be attached to the USB controller.
+>>>  
+>>> -      port@1:
+>>> -        $ref: /schemas/graph.yaml#/properties/port
+>>> -        description: This port is to be attached to the type C connector.
+>>> +          port@1:
+>>> +            $ref: /schemas/graph.yaml#/properties/port
+>>> +            description: This port is to be attached to the USB connector.
+>>
+>> Both port 0 and 1 are attached to the USB controller?
+>>
+> 
+> No—only port@0 is attached to the USB controller; port@1 is attached to the USB
+> connector.
+> 
+>> Why can't you just add more port nodes to the existing binding?
+>>
+> 
+> Do you mean extending the existing top-level ports like this?
+> 
+>   - port@0: USB controller0
+>   - port@1: USB connector0
+>   - port@2: USB controller1
+>   - port@3: USB connector1
+> 
+> My hesitation with a flat ports list is that it doesn’t encode which
+> controller/connector pair belongs to which physical path through EUD.
+
+What do you mean? The index defines exactly which path it is.
+
+> A graph walk starting at Conn0 could also reach USB Ctrl1, even though
+> these are independent paths and not interchangeable.
+> 
+> Below is the high‑level topology of EUD connections. In the disabled state,
+> EUD is transparent and UTMI traffic flows directly from USB2PHY0/1 to USB
+> Ctrl0/1. When EUD is enabled, the debug hub is inserted on the selected path
+> by the internal UTMI switch, so UTMI traffic on that path traverses the hub.
+> The non‑selected path continues as a direct PHY↔Controller link (EUD can be
+> enabled on only one path at a time).
+> 
+> 
+> 
+> 					EUD Block
+> 			   +------------------------------+  
+> 			   |                              |
+> [Conn0]-->[USB2PHY0 ]----->|  -------- Path 0 ------------|--> [ USB Ctrl0 ]
+> 			   |                              |  
+> [Conn1]-->[USB2PHY1 ]----->|  -------- Path 1 ------------|--> [ USB Ctrl1 ]
+> 			   |                              |
+> 			   |      +------------------+    |
+> 			   |      |  EUD Debug Hub   |    |
+> 			   |      +------------------+    |
+> 			   +------------------------------+
+> 
+> 
+> 
+> So to make the connector–controller relationships explicit, I kept the `ports`
+> property under the `eud-path@N` child nodes. Please let me know if there is a
+> preferable way to model this.
+> 
+> Thanks
+> Elson
+> 
+> 
 
 
-If you see 3/3 in the log, you'll know that it has scheduled the work (for
-the last attempt), but you won't easily know if 3/3 has ran yet or if it
-has completed successfully this time or if it was still unsuccessful.
-
-> >=20
-> > > +	schedule_delayed_work(&chg->psy_work,
-> > > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 msecs_to_jiffies(PSY_WORK_RETRY_DE=
-LAY_MS));
-> > > +}
-> > > +
-> > > +static int psy_changed(struct notifier_block *nb, unsigned long evt,=
- void *data)
-> > > +{
-> > > +	struct max77759_charger *chg =3D container_of(nb, struct max77759_c=
-harger,
-> > > +						=C2=A0=C2=A0=C2=A0 nb);
-> > > +	static const char *psy_name =3D "tcpm-source";
-> > > +	struct power_supply *psy =3D data;
-> > > +
-> > > +	if (!strnstr(psy->desc->name, psy_name, strlen(psy_name)) ||
-> > > +	=C2=A0=C2=A0=C2=A0 evt !=3D PSY_EVENT_PROP_CHANGED)
-> > > +		return NOTIFY_OK;
-> > > +
-> > > +	chg->tcpm_psy =3D psy;
-> > Do you need locking here? What if this is changed while a previous
-> > psy_work_item() is still executing?
->=20
-> I=C2=A0 don't think that's ever possible in this case though. The power=
-=20
-> supply that this driver registers is downstream of the tcpm's.
-
-
-A previous work could still be executing (e.g. due to retrying), no? It
-should also probably set chg->psy_work_retry_cnt =3D 0; here, to allow it
-to retry up to MAX_NUM_RETRIES when a new work is queued and a previous
-one was unsuccessful?
-
-
-
-
-Cheers,
-Andre
+Best regards,
+Krzysztof
 
