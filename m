@@ -1,109 +1,203 @@
-Return-Path: <linux-usb+bounces-33248-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33249-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uLLsFkkFi2kdPQAAu9opvQ
-	(envelope-from <linux-usb+bounces-33248-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 11:15:37 +0100
+	id 4LoQMYkQi2l/PQAAu9opvQ
+	(envelope-from <linux-usb+bounces-33249-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 12:03:37 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BF3D119884
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 11:15:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36833119F42
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 12:03:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D17F43041153
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 10:15:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 108203055601
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 11:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAE7C34D382;
-	Tue, 10 Feb 2026 10:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45EF43612DD;
+	Tue, 10 Feb 2026 11:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AXuLbfdm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikP5l9oN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610DE34D4EA;
-	Tue, 10 Feb 2026 10:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8BB219E8D;
+	Tue, 10 Feb 2026 11:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770718516; cv=none; b=PWKzNlV9ilqTeiUG+F39RnRwvY4VL9H4b6FBUW7ygY1WprI//MHXP3lwO2naI7traBKujyg3QTfpCRwWMApjtk3RADbbkCqrr8mAkXWA0GWCbS8Ou3718nkCMjmppi0k/+yq3XlxByZxUg/bjueXxU6U5Y4jkyfxmBSBhQII730=
+	t=1770721397; cv=none; b=c47bPvEv4VELPpuqvo3u6iWOykxojY3YpWUM3yoWvUNDdS0pwc9gRoTGnLBajfc+aJwqUvrLeKcsvckLpEG7u6zjFuPWNuEZXVWH831pSC/pEJDJiL1aO5EbPJcwTQ3iYXOsfI2pk++Y44lJeLOvND2/PuN9KNStf7T/vdh4GYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770718516; c=relaxed/simple;
-	bh=HngYTZRt6d1Wilz70X41PisIORDM+sBn2D5qMR1H56o=;
+	s=arc-20240116; t=1770721397; c=relaxed/simple;
+	bh=/KAJwsOfzjcbdFRa/f2yuz2k36Ieq8U26aqf651uN30=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bC1SwA0MacgZE7cIpTPtx9yE+OFd2Oq0xh5ihylU/lG3FDMzqxjfD2UZi3za6kY3bkEYyds/rSskhr/s847UX11vcDK9HOONsIhus+okZqXet18TEjSEUqmvxUk5ZUJtuIQ/E0MUQkktWSN6mOf6t8ZnaKDIuHOOr0HAAmQhr8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AXuLbfdm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65206C116C6;
-	Tue, 10 Feb 2026 10:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1770718516;
-	bh=HngYTZRt6d1Wilz70X41PisIORDM+sBn2D5qMR1H56o=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=liqFmdxK0cxkbPwTrMVkHs82bRkb/sS43JQodzt3MxkzDYCncZ9peEgFLPRCk5ip0jnIeJ7Zf7zElx4jCbX8SkS6tjvDFUXA7wHeylbPQohMAcOhE8FDTNXIHqjoy0Tkpfj3m4AnCtdYi0xP4ufQ0b8kSElJ9haaiCsuNP94t5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikP5l9oN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245E1C116C6;
+	Tue, 10 Feb 2026 11:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770721397;
+	bh=/KAJwsOfzjcbdFRa/f2yuz2k36Ieq8U26aqf651uN30=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AXuLbfdmBgmEb6T3OxBi2lIfTHrh4N08QyNW9tssI4ROeYAYzvamVXmLGB9QOaVUc
-	 4Xi6g60IgY+t3qmtr92XdJnCh2upDEJo5y2o/0fNCn00nMzWZDLeaWlSjUrtxxZ27u
-	 ArhNRW4EJKjvWBYsOexaqcYROFet4GrIfVNiAc6w=
-Date: Tue, 10 Feb 2026 11:15:12 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Votokina Victoria <Victoria.Votokina@kaspersky.com>
-Cc: thinh.nguyen@synopsys.com, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, lvc-project@linuxtesting.org,
-	rogerq@kernel.org
-Subject: Re: [PATCH] usb: dwc3: am62: handle usb2_refclk enable failures
-Message-ID: <2026021023-unwelcome-sporting-4c5b@gregkh>
-References: <20260210003034.twbkgavdegwlnsvo@synopsys.com>
- <20260210093659.2268056-1-Victoria.Votokina@kaspersky.com>
+	b=ikP5l9oNoYzUIkoNv3xsVnpGElh6FK9rDCJCRcwtPicDAjP8fR1XkSWqAzTnBetT7
+	 d8WF/lC/kt3qBCBumWT27M80y4LKqL1Ew9kuN6lxMoIfV/uFyCW5FDy1ewthp7ukWZ
+	 a16TfnfK3Pk/auhIeh2vU1I3T3ZGLOdtHuPlm9ljTRM2U8vAP6vERfAVrNwMaHZciL
+	 SIEQ0wcBm2LiD/k7HyAC8KVU+UgmjhbA06BTq6bhIa7B/AdGgDyybrJ1nL2Ltm4c5M
+	 gTdcKFDckohBX96qFpo6I5h3KC1EUj4HrC6BUFRlxzkEPdmvRu7uwxnkc6Uz4yy2bR
+	 I4VXX6sPhg3yw==
+Date: Tue, 10 Feb 2026 16:33:08 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 4/9] pci: pwrctrl: generic: support for the
+ UPD720201/UPD720202 USB 3.0 xHCI Host Controller
+Message-ID: <cish7iljd23mon4onzbonpuvii7mccwygllr3bcqcpo7zbp2o2@lbzokxr6dod3>
+References: <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-0-5b79c5d61a03@linaro.org>
+ <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-4-5b79c5d61a03@linaro.org>
+ <fbxbnou5mdlhaq5dpxr3wdzmjetwdp7auaaqeunc67tgk5ej2m@cnnkr2pcwy77>
+ <a4e55e91-0e03-4e63-8542-d8ad61b38906@linaro.org>
+ <o6e5qygss55p6npjgaicxffsqdpv7kojgidr46zinsvfpxfxug@vn67nq4k6jzk>
+ <b46da4da-93aa-4213-ad75-ec7709008b95@linaro.org>
+ <qd5egc42mkdofs4ey7gl664e5el2p5sxwluesjtm7gc3y66hez@l4dz3bd5xm6n>
+ <8b18433a-5836-4a65-b790-9f51112d1f5c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260210093659.2268056-1-Victoria.Votokina@kaspersky.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8b18433a-5836-4a65-b790-9f51112d1f5c@linaro.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33248-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33249-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com,vger.kernel.org];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0BF3D119884
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 36833119F42
 X-Rspamd-Action: no action
 
-On Tue, Feb 10, 2026 at 12:36:59PM +0300, Votokina Victoria wrote:
-> Thinh,
+On Tue, Feb 10, 2026 at 10:01:00AM +0100, Neil Armstrong wrote:
+> On 2/10/26 09:00, Manivannan Sadhasivam wrote:
+> > On Mon, Feb 09, 2026 at 03:59:20PM +0100, Neil Armstrong wrote:
+> > > On 2/9/26 15:49, Manivannan Sadhasivam wrote:
+> > > > On Mon, Feb 09, 2026 at 03:00:02PM +0100, Neil Armstrong wrote:
+> > > > > On 2/9/26 12:30, Manivannan Sadhasivam wrote:
+> > > > > > On Fri, Feb 06, 2026 at 03:50:32PM +0100, Neil Armstrong wrote:
+> > > > > > > Enable the generic pwrctrl driver to control the power of the
+> > > > > > > PCIe UPD720201/UPD720202 USB 3.0 xHCI Host Controller.
+> > > > > > > 
+> > > > > > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > > > > > ---
+> > > > > > >     drivers/pci/pwrctrl/generic.c | 4 ++++
+> > > > > > >     1 file changed, 4 insertions(+)
+> > > > > > > 
+> > > > > > > diff --git a/drivers/pci/pwrctrl/generic.c b/drivers/pci/pwrctrl/generic.c
+> > > > > > > index 08e53243cdbd..4a57a631362f 100644
+> > > > > > > --- a/drivers/pci/pwrctrl/generic.c
+> > > > > > > +++ b/drivers/pci/pwrctrl/generic.c
+> > > > > > > @@ -73,6 +73,10 @@ static const struct of_device_id pci_pwrctrl_slot_of_match[] = {
+> > > > > > >     	{
+> > > > > > >     		.compatible = "pciclass,0604",
+> > > > > > >     	},
+> > > > > > > +	/* Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller */
+> > > > > > > +	{
+> > > > > > > +		.compatible = "pci1912,0014",
+> > > > > > 
+> > > > > > No need to add the compatible to the driver. Just use the existing compatible as
+> > > > > > fallback in the binding/dts.
+> > > > > 
+> > > > > ???
+> > > > > 
+> > > > > Sorry but this is insane, in no world a standalone PCIe USB controller could be qualified as
+> > > > > compatible as a pciclass,0604 slot.
+> > > > > 
+> > > > 
+> > > > AFAIU, 'compatibility' implies that the driver can safely fallback and would
+> > > > still work. If we add dedicated compatibles for each endpoint devices, then we
+> > > > will just keep adding forever. Powering up a PCIe slot and an endpoint device
+> > > > are conceptually same.
+> > > 
+> > > We're not speaking about driver here, but about compatible string which describes
+> > > a device, a PCI endpoint and a PCIe slot are 2 very different devices that are
+> > > nowhere compatible.
+> > > 
+> > > > 
+> > > > > Technically it would work just fine, but "compatibility" has a meaning....
+> > > > > 
+> > > > 
+> > > > I view compatibility interms of device operation, not device as a whole. But
+> > > > sure, I could be wrong. If the DT maintainers say so, I won't insist.
+> > > 
+> > > In the actual way it's defined _today_, the "slot" and "endpoint" power up schemes are
+> > > compatible, but I hope the slot bindings will get much more features to describe the
+> > > real world slots power properties. And no, endpoints will definitely not have the same
+> > > features as slots, using it as a fallback today is an error.
+> > > 
+> > > On the other side, adding a "simple-pci-endpoint" compatible that enables any supply
+> > > and clock would be a good solution, if the DT maintainers agrees of course.
+> > > 
+> > 
+> > We do have a 'pci-host-cam-generic' compatible. So we can also have something
+> > like 'pci-pwrctrl-generic' IMO.
 > 
-> This was reported by static analysis (SVACE), not from a runtime
-> failure I could reproduce.
+> I don't want to into this route, I just want to powerup the USB3 controller on
+> the Pocket S2 gaming device, not spend 6 months into _not_ modifying a driver compatible
+> list.
+> 
 
-Sorry, but what is "this"?
+Sure, I don't want you to spend that much time either. But I was trying to avoid
+having a solution that just works only for your platform.
 
-I see no context in this email at all.  Always properly quote your
-emails (by not doing top-posting), as remember, many of us get over 1000
-emails a day and can not naturally keep them all in their inbox.
+> All this feels bulky, who a pci device would be compatible with something like
+> 'pci-pwrctrl-generic' we're speaking about a pci device, not a power control device.
+> 
+> It's nowhere similar to the 'pci-host-cam-generic' situation, this describes well defined
+> host controller interface.
+> 
 
-thanks,
+I honestly don't see much difference. ECAM is just *a way* of accessing the
+config space of the PCIe devices. If we can have a compatible based on that,
+then I don't see why can't we have one for pwrctrl. Only difference is that
+"pwrctrl" terminology is not part of any spec, but for sure every device would
+have some kind of power control implementation.
 
-greg k-h
+Anyhow, I don't have other solutions on top of my head now. Let's go with
+per-device compatible for now. I'll deal with a generic solution later.
+
+- Mani
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
