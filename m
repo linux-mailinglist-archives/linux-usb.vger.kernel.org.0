@@ -1,170 +1,275 @@
-Return-Path: <linux-usb+bounces-33230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33231-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KB+5BATPimkUOAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33230-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 07:24:04 +0100
+	id wGYeGn/SimmaOAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33231-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 07:38:55 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A26ED1175A4
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 07:24:03 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A627117695
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 07:38:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C6CB63031315
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 06:23:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7A477303074A
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 06:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CA3D2E7164;
-	Tue, 10 Feb 2026 06:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063AC27AC4D;
+	Tue, 10 Feb 2026 06:38:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wp4Lu1hQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aPaMhkZc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC91432B9B1
-	for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 06:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D43532E120
+	for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 06:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770704609; cv=none; b=hpFWDC9mrD/Q802cC6XzgFJw4hTL18WDrzAsCf837ec0x4/pdh26nWWYUC1yjPLuhUxcv+2sv6AzeHHpQ0XBGT611mQ02bDarmjpY3PI+HBBZXuJ7Z391PETRDHRV/lludb0nwc3ZAq3vyPoU/s1ddqh7feqKCPpR22Y9M9PHKI=
+	t=1770705530; cv=none; b=mQnknJSFDwiWPqlzLWeBcALlkwfMiuiZYHhGRN2N57WjiH1viE1ncc/GguACueZ5osogWRn4ydHzHD/rkTMaFJrjbWnQ7MH6Xr86R1kJNCWaG2ErIFfyAosXAqtu1CZBE2cJ1a7s28LkpA5oV9y9VBSVQgeBD+G4n7Q0qcFzbJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770704609; c=relaxed/simple;
-	bh=vAkD2Y7A3kX2N7NxVpgDP67IrLuf+CkR+cYwyIBTEGo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ejx6CpTWeEN/GR+yi8L3zq8jIyAATcF0O4PNZEvO+yxM5Wt0xr60fp1/d5yzbG5fujgip7sKHep6EViEbLsKwbEgXF09izQP4aM3W9wlZYf4a9T2FG/ORLT+jQQj1s7Z/YtGcU7+oXQCOnO3UNxvD1s647hIEpzlDn8DIsHDotI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wp4Lu1hQ; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770705530; c=relaxed/simple;
+	bh=Tzvqbf/lzUX+Xryn3wOPmUQNw3pnqvGuG9huSDJZPn4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=b6ZyuIdcVymsBxjnEqkIEfO5IxpIR0PsWyCwi1ZTIvYGM6M3CJ0+8jJdoD0RiKFutsr3SfUI/Ql7bSMnFf1KbYww6kAYaeRBHSNPRTw4PHj825j+E/pSNG4oPzhg0AhW6pdA4geZar2YqeJrM1mvzkjRnn7Lap6JiSX7iqWU6Qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aPaMhkZc; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47ff94b46afso49621935e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 09 Feb 2026 22:38:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1770705528; x=1771310328; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lLdYDGt/+DrOZdYJB2wqY0IBiaBFC8iK50DATmXPJZs=;
+        b=aPaMhkZcfXpmP2tm/iJaq/CWcrBT5oUwIPYKVQunfq07wAHYn5QH79di58LjJZCCKZ
+         ElWls/ygW5HHWkNDwOfos/MTuCMj6r8QfeKoK5qeFFRXQZE0Jzb5MgWfuIQtwbB7SgTI
+         t0w/NgrN4Qvdqu4Ro03urdFF/zw5By8GRlEd50bbXeMHCJ6oVqTrqwaUwvztZSeCzJcn
+         3+NfnuTuWPqRVUpRVvW5khABjNpmtMnLrM/nhazeMNrk05OgjuO1/R8+Jr+2tBrXsHtU
+         wndcURxtIj4wsyMcBnt+G1R2Pj/3iRi9vELwS8GP9yQLL/vDhAW/ntof0pq3Aw01JPGf
+         JTnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770705528; x=1771310328;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lLdYDGt/+DrOZdYJB2wqY0IBiaBFC8iK50DATmXPJZs=;
+        b=Iw2SUsJEmP7NIVaeHwNt4Yo0Sl1uDpYzr85ZaS8fqhRdwEZNMmxKDfAPAqSGhiBbHC
+         aziQTwwM9lW5KVhffiKgL60d8uu1CSRhVdTlBBluNalggncxM6rZJbLGRK4BFNDlb0yc
+         EtEpauQQFvUgDOazQ92+LM6x3U8LU2334YP6ft9etCOl/abgeU9fGgTeZ37jPRCk+Mne
+         jhVYGNmkxWZK/5cxup0rE/68SLa09bRik3l0xtGnPAgFV9C6ACMI5F7ScB5nQENBIsGq
+         KolPPeM6EpB0/plOYuTvE4f1FFhPhSsf2TTJXapoJyHeOJn+kgm+cR3608WoPcYTHLlu
+         UsuA==
+X-Forwarded-Encrypted: i=1; AJvYcCWTxvDG0MDrGoI/LIRCNsYwOXPt1kjN6V0SAlMCKdQiDSOEzbIEXeFLTRTvYIQ2lDL1ALmTV0hx93Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSwnxeh241HODMh8iytd+MN1o87Et1W6agPDE1X55Q2BrT2wAC
+	Gugga1AdE6S2+xIiVy3FuWV2e0+oQi8PgKlgCxH+hdsH4m1agOUBum6iS4KsctgSV2Y=
+X-Gm-Gg: AZuq6aIyffK8vz2zQ7D1O/3skicEzckSupcsF5h08dm51Dh5A+bnYYA4vXqgOq5a01Y
+	N1v5n7Nh+032dLmc1GvPl0hb2wXQZ1Mc0nOvbYOWOzb6OMi9jdEOwdKBTtQ3kvtjgWU9GTFWZCx
+	3KkFa8xwxLeBSX5gymNxLpqm6IBpe0FgI4CBTfnGWpKvJFdMHjxAeCu1fWbjvWKtUUc/ToGnvcg
+	BKnxBo7L4W3esbjDkI5oGv4smuC1Sp+1orClMv7tmO0zbtfohtpdzhosV2fgj3GNDgGOgdkIG9t
+	2L8x/VXFwHqj7W2qNm3MxlvMheRWbDy0EunH42dcg3ajIl4E2yUN5fr6nMC0comt0oHylx5W7W2
+	NqiIhm6tYE2srCIsM3NwF+HL5RXyNO/2yv8WLOgnxq3LhlKKHcK5EcehFCjoQt5e63jeKfagMWq
+	8oVuoqbKVitAAmmhcNVWp8EBT39b864Q==
+X-Received: by 2002:a05:600c:c086:b0:47e:e7de:7c41 with SMTP id 5b1f17b1804b1-4834ffb08f0mr12556465e9.16.1770705527668;
+        Mon, 09 Feb 2026 22:38:47 -0800 (PST)
+Received: from draszik.lan ([212.129.79.225])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d8334a8sm37397915e9.12.2026.02.09.22.38.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Feb 2026 22:38:47 -0800 (PST)
+Message-ID: <9fce298c842533bc6ede7f1a97040337236351d8.camel@linaro.org>
+Subject: Re: [PATCH v5 4/5] power: supply: max77759: add charger driver
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Amit Sunil Dhamne <amitsd@google.com>, Sebastian Reichel
+ <sre@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Lee Jones
+ <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Badhri
+ Jagan Sridharan	 <badhri@google.com>, Heikki Krogerus
+ <heikki.krogerus@linux.intel.com>,  Peter Griffin
+ <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Alim
+ Akhtar	 <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
+ Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Date: Tue, 10 Feb 2026 06:39:14 +0000
+In-Reply-To: <277e1c95-e221-4c07-a00e-d0f0a1a7553f@google.com>
+References: <20260203-max77759-charger-v5-0-b50395376a5f@google.com>
+	 <20260203-max77759-charger-v5-4-b50395376a5f@google.com>
+	 <3ab2d8cd112441dc1d7ab5097f5b1b64c7e415ab.camel@linaro.org>
+	 <277e1c95-e221-4c07-a00e-d0f0a1a7553f@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2+build4 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770704594;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pi7LgHt89ZeNTeQkWsRlsUpjNQmreE7zjeBsTGPhing=;
-	b=wp4Lu1hQiCozVcyhh/FpdV+vgG8UXf8D872DxmZl0PGOPV7/3FPpF7HOn7C9jvNE2ywfgd
-	L8E4VAv2/EFSdypKiRJ79gFyNbaXQOGVFf0KgnhDL91gCOWHDA/sTWQ28vQ9bHumk1gdZI
-	EzCsjdpdqs6tr+u/gzJmjx/cpv8s3+Q=
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Feb 2026 14:23:06 +0800
-Message-Id: <DGB2E17NBWO2.544ZZ15AEBLC@linux.dev>
-Cc: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <kernel@pengutronix.de>
-Subject: Re: [PATCH v4 0/5] Add onboard-dev USB hub host managed vbus
- handling support
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Ze Huang" <huang.ze@linux.dev>
-To: "Marco Felsch" <m.felsch@pengutronix.de>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Fabio Estevam" <festevam@gmail.com>, "Matthias Kaehlcke"
- <mka@chromium.org>, "Liam Girdwood" <lgirdwood@gmail.com>, "Mark Brown"
- <broonie@kernel.org>
-References: <20250911-v6-16-topic-usb-onboard-dev-v4-0-1af288125d74@pengutronix.de>
-In-Reply-To: <20250911-v6-16-topic-usb-onboard-dev-v4-0-1af288125d74@pengutronix.de>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33230-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FREEMAIL_TO(0.00)[pengutronix.de,linuxfoundation.org,kernel.org,gmail.com,chromium.org];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-33231-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[huang.ze@linux.dev,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linux.dev:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:mid,linux.dev:dkim]
-X-Rspamd-Queue-Id: A26ED1175A4
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:mid,linaro.org:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2A627117695
 X-Rspamd-Action: no action
 
-On Fri Sep 12, 2025 at 4:22 AM CST, Marco Felsch wrote:
-> Hi,
->
-> the whole purpose of this series is to make it possible to control the
-> USB VBUS regulators of an USB hub via host managed regulators.
->
-> Regards,
->   Marco
->
-> ---
-> Changes in v4:
-> - dt-bindings: change to vbus-supply and shift doc to usb-device.yaml
-> - onboard_dev: make use of new regulator API to parse child device
->                regulators.
-> - onboard_dev: drop hard coded downstream port number and make it more
->                dynamic
-> - onboard_dev: drop limiting support to SMSC hubs
-> - Link to v3: https://lore.kernel.org/r/20250821-v6-16-topic-usb-onboard-=
-dev-v3-0-6d2b38a5d818@pengutronix.de
->
-> Changes in v3:
-> - fix dt-bindings issues
-> - Link to v2: https://lore.kernel.org/all/20250327172803.3404615-1-m.fels=
-ch@pengutronix.de/
->
-> Changes in v2:
-> - fix compile time errors in case the module builds
-> - Link to v1: https://lore.kernel.org/all/20240807-b4-v6-10-topic-usb-onb=
-oard-dev-v1-0-f33ce21353c9@pengutronix.de/
->
-> ---
-> Marco Felsch (5):
->       usb: port: track the disabled state
->       usb: hub: add infrastructure to pass onboard_dev port features
->       dt-bindings: usb: usb-device: add usb hub port vbus-supply suppport
->       dt-bindings: usb: microchip,usb2514: add vbus-supply example
->       usb: misc: onboard_dev: add hub downstream port host vbus-supply ha=
-ndling
->
->  .../devicetree/bindings/usb/microchip,usb2514.yaml |   7 ++
->  .../devicetree/bindings/usb/usb-device.yaml        |   6 ++
->  drivers/usb/core/hub.c                             |  55 +++++++++-
->  drivers/usb/core/hub.h                             |   4 +
->  drivers/usb/core/port.c                            |   6 ++
->  drivers/usb/misc/onboard_usb_dev.c                 | 117 +++++++++++++++=
-++++++
->  include/linux/usb.h                                |   3 +
->  7 files changed, 196 insertions(+), 2 deletions(-)
-> ---
-> base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
-> change-id: 20250821-v6-16-topic-usb-onboard-dev-b8d4d1d8a086
->
-> Best regards,
+Hi Amit,
 
-Hi Marco,
+On Mon, 2026-02-09 at 16:42 -0800, Amit Sunil Dhamne wrote:
+> Hi Andre',
+>=20
+> On 2/4/26 4:49 AM, Andr=C3=A9 Draszik wrote:
+> > On Tue, 2026-02-03 at 22:50 +0000, Amit Sunil Dhamne via B4 Relay wrote=
+:
+> >=20
+> > > +
+> > > +static void psy_work_item(struct work_struct *work)
+> > > +{
+> > > +	struct max77759_charger *chg =3D
+> > > +		container_of(work, struct max77759_charger, psy_work.work);
+> > > +	union power_supply_propval current_limit, online;
+> > > +	int ret;
+> > > +
+> > > +	ret =3D power_supply_get_property(chg->tcpm_psy,
+> > > +					POWER_SUPPLY_PROP_CURRENT_MAX,
+> > > +					&current_limit);
+> > > +	if (ret) {
+> > > +		dev_err(chg->dev,
+> > > +			"Failed to get CURRENT_MAX psy property, ret=3D%d",
+> > > +			ret);
+> > > +		goto err;
+> > > +	}
+> > > +
+> > > +	ret =3D power_supply_get_property(chg->tcpm_psy, POWER_SUPPLY_PROP_=
+ONLINE,
+> > > +					&online);
+> > > +	if (ret) {
+> > > +		dev_err(chg->dev,
+> > > +			"Failed to get ONLINE psy property, ret=3D%d",
+> > > +			ret);
+> > > +		goto err;
+> > > +	}
+> > > +
+> > > +	if (online.intval && current_limit.intval) {
+> > > +		ret =3D set_input_current_limit(chg, current_limit.intval);
+> > > +		if (ret) {
+> > > +			dev_err(chg->dev,
+> > > +				"Unable to set current limit, ret=3D%d", ret);
+> > > +			goto err;
+> > > +		}
+> > > +
+> > > +		charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
+> > > +	} else {
+> > > +		charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
+> > > +	}
+> > > +
+> > > +	chg->psy_work_retry_cnt =3D 0;
+> > > +	return;
+> > > +
+> > > +err:
+> > > +	charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
+> > > +	if (chg->psy_work_retry_cnt >=3D MAX_NUM_RETRIES)
+> > > +		return;
+> > I'd say this final giving up could benefit from a dev_err(), while ...
+>=20
+> I want to clarify if you want me to add this final giving up print just=
+=20
+> once or every time I am returning early?
 
-I'm checking in to ask about the status of this patch series.
+I meant something along the lines of this:
 
-We are currently working on the Spacemit K1 SoC and we have a use case
-that requires onboard_dev to manage the USB VBUS regulator. This series
-would be very helpful for us :)
++	if (chg->psy_work_retry_cnt)
++		dev_dbg(chg->dev, "chg psy_work succeeded after %d\n",
++			chg->psy_work_retry_cnt)
++	chg->psy_work_retry_cnt =3D 0;
++	return;
++
++err:
++	charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
++	if (chg->psy_work_retry_cnt >=3D MAX_NUM_RETRIES) {
++		dev_warn(chg->dev, "chg psy_work failed, giving up",
++			 chg->psy_work_retry_cnt, MAX_NUM_RETRIES);
++		return;
++	}
 
-Link: https://lore.kernel.org/all/DG8QBWSJ79MP.2MVIHFRBX3WXX@linux.dev/
+> >=20
+> > > +
+> > > +	++chg->psy_work_retry_cnt;
+> > > +	dev_err(chg->dev, "Retrying %u/%u chg psy_work",
+> > > +		chg->psy_work_retry_cnt, MAX_NUM_RETRIES);
+> > ... this one could be demoted (but doesn't have to).
+> >=20
+> > That'd make it easier to determine if it's still in the process of
+> > trying, or if it has given up fully.
+>=20
+> I was assuming the printing of "3/3" would indicate the final giving up=
+=20
+> and sufficient.
 
-Best regards,
-Ze Huang
+
+If you see 3/3 in the log, you'll know that it has scheduled the work (for
+the last attempt), but you won't easily know if 3/3 has ran yet or if it
+has completed successfully this time or if it was still unsuccessful.
+
+> >=20
+> > > +	schedule_delayed_work(&chg->psy_work,
+> > > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 msecs_to_jiffies(PSY_WORK_RETRY_DE=
+LAY_MS));
+> > > +}
+> > > +
+> > > +static int psy_changed(struct notifier_block *nb, unsigned long evt,=
+ void *data)
+> > > +{
+> > > +	struct max77759_charger *chg =3D container_of(nb, struct max77759_c=
+harger,
+> > > +						=C2=A0=C2=A0=C2=A0 nb);
+> > > +	static const char *psy_name =3D "tcpm-source";
+> > > +	struct power_supply *psy =3D data;
+> > > +
+> > > +	if (!strnstr(psy->desc->name, psy_name, strlen(psy_name)) ||
+> > > +	=C2=A0=C2=A0=C2=A0 evt !=3D PSY_EVENT_PROP_CHANGED)
+> > > +		return NOTIFY_OK;
+> > > +
+> > > +	chg->tcpm_psy =3D psy;
+> > Do you need locking here? What if this is changed while a previous
+> > psy_work_item() is still executing?
+>=20
+> I=C2=A0 don't think that's ever possible in this case though. The power=
+=20
+> supply that this driver registers is downstream of the tcpm's.
+
+
+A previous work could still be executing (e.g. due to retrying), no? It
+should also probably set chg->psy_work_retry_cnt =3D 0; here, to allow it
+to retry up to MAX_NUM_RETRIES when a new work is queued and a previous
+one was unsuccessful?
+
+
+
+
+Cheers,
+Andre
 
