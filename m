@@ -1,173 +1,147 @@
-Return-Path: <linux-usb+bounces-33250-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33251-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gBFpD2YUi2n5PQAAu9opvQ
-	(envelope-from <linux-usb+bounces-33250-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 12:20:06 +0100
+	id eIcpIuMhi2lyQQAAu9opvQ
+	(envelope-from <linux-usb+bounces-33251-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 13:17:39 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B91B011A0DE
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 12:20:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1B7711A9F0
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 13:17:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C18DA3010625
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 11:20:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 129C03055127
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Feb 2026 12:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B052E093A;
-	Tue, 10 Feb 2026 11:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3DB8328B63;
+	Tue, 10 Feb 2026 12:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G86SMuSs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xcl/860p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB283195E3
-	for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 11:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770722403; cv=pass; b=sHFiGeI+PWuLs+dAqONJ1bLsTDtuCn3cxApgIPuPjZFtLIMes9nkcv2Gm1d8ujhFakFnAhBVxqA+PdHlvSgKWPtcC5PEBU7uv3mvXqmg5plEMttgZbv3bNma8midnIb4apR/usAheeN971X2u94V2V6uj98h59weGYcGn5pM/Qg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770722403; c=relaxed/simple;
-	bh=tdkHWPYjZNrzZyBbaB2xUr1X+iba3W9kU3z+UpBq45A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dFmViufrCy1W3bd9EuIDtV3kNbw0w4HbSeh2DePVex7bKJa0M+Ueafxz3YMzB+mcZA7ksw4BsPFnB7bQoH/cg9PupUiOB3QZZ2iHfSYUzMehe9XYAgedjwDB1Yw6hs7KqOYWo8W84YMQPpkiM8qLGhvOJ9DPQe1qsigFXtjPIeg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G86SMuSs; arc=pass smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-59b77f2e43aso7112280e87.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 03:20:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770722399; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MfGYQETLugNfYcLD26kqO5TCTg3IUfKfDOt3umrCPNgqWbZARc+hXYr/+JaSF54ytU
-         /ZwcX48XZ52oWIpwWvo9X4n56lI7H6kKBjIbaIaks7pXrAMHNHnTa6Al6SiFYODiYwjv
-         t76E6poreYWYXf0e6EnCXvc3nW62WS7pjl9/mBh8rbybQMoueUDUAk/RnGhM/2XoQndH
-         2Bc8fvKFlH6bd7ZB1hyjXvl7xD6Okd0WTjkB2zZsgFL90/l7sPxa3TjtFRd/ehWHvD5b
-         FejByV8pn13h9gcKi1Qk8eLYUwQ79Vf8hXjgcTfRCVSTxM+2daFRFPvf915mmYkeW1to
-         YJ2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tdkHWPYjZNrzZyBbaB2xUr1X+iba3W9kU3z+UpBq45A=;
-        fh=wKpeeol20pgYzTSbbpySwjuByoGbIny7IZ69xY+RzTg=;
-        b=UWGBUNNZxrEdtcCO0viU1u21gVz0JDEUpvNBSIaS9j/9uIY7fbk8yM6ORqO6dt8mI/
-         Dw/SFGcK1XdOvPFMnQg4rT8GvG3FLVZV6ofBvqYz0t3asyJa/jjFMcmCkCf18eDNYw9O
-         +zTjzfCtUkvxxeP/kYJRrliuCcHCLIyKSsWEURcktGrMV2DqPdSKW4QVXSMf2feL2ENO
-         9np8UppnEpD0QPNX62v/slNwPiCCY3DeqIz9dqFMdY6xdyXaRyrEkrmbrO/GAS31/NjJ
-         VMgj8D4zoO/VlhCFHm8pRnpSlNc31C11rC1Xgi6TZ7lBMrmZKWiwhZfnW0Xn7pvGZnGA
-         M4SQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770722399; x=1771327199; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tdkHWPYjZNrzZyBbaB2xUr1X+iba3W9kU3z+UpBq45A=;
-        b=G86SMuSsJiRPGUz2sgSwJ+k1pMzCDPTX8JkL2r5JTktPSVarOYE+sKslohr6Tu4Czr
-         9aETLDfVQr9vctdYUZrIAGKZ+Iz01xZkTpERB6deib6zIlsBVwIeJNVBCxerHKvtUVpK
-         R2B1rDEzGUIOvjDM4ZMBodxzXpQT3Yj+BNNzr0mRHnx06relrNRjQI4VHX9gX62jQllW
-         1CswVdEKfdE8bgYUnk9Rzc6evGmXZRgTEGFJwCrdIueh5PJhyQJXqG5jUjWZqiFvswrO
-         cG4wNJrDNlTLlFm21q96BLw4RnjMZqVBpfHU687mWnrnadOP5gLHytLOxnaNAgQmjVoc
-         LBeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770722399; x=1771327199;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tdkHWPYjZNrzZyBbaB2xUr1X+iba3W9kU3z+UpBq45A=;
-        b=d9nbPB9xbisQWCsCaaPDAmbBLLU7nuznS2OMb/jTyVUckjctFlBQInNztEn5RnoKHl
-         TQGnCv9TrJp9BZNMuZ4gYPaBeURed1aWjdvpDvMr5J5poLTp5rFBKD+Bh2YMeQjlipVy
-         AIL6Gl4nJUZG9CA4flXpe2LoGYu8xKelbW9irySciTh3cgN4G3tSsdW7rcq6S2lR5d1N
-         nLbNFYUUfLQVHPCocorxtpZz+YRRv+2kRN0ElksXcy9FuRp5Rqm3LgTuUm9zttnP5Sq4
-         Aur5ruzcCcji9Zk+LTaK0fMJC97KIwh4qJQVtvTKGxWym3XTlY/IeXwShit1sXTJ2Id1
-         u1zA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhx2aegrug6peQnWSspmTcBCHf8UEo6iiX5s1p7jghPRd7+IMZWXOjNLIUaN24Hjh4WTN3sdYTB1U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0ax32CLym5C9ZOJYrGwJRvzAm/y2sHsMfkvM7yH2UmBlSKXbG
-	AXfnVB74lGYrvRD/YXZOP2GJdn6b+k68SfcOaooOFnd2GzchnridOK8iTp/8sPf2UPZqTq4XKOe
-	DefH1uwnH2aJpbFLNGfMsicXF/TOIugY=
-X-Gm-Gg: AZuq6aKkeOhC9Oaw9kvGfz5QmJ2M5WO3nwPyDzhdItr0Oul3RWR1JSA1R+eOSKAEC/l
-	RfoRiq10dyrTso1U/5CKjyz7D8mWQZPLOu7xRgsvsTVMLUZPVk1rr9XzenXMa56qVwrE76WUYth
-	lpTsVh7W3B57eLNdu1qoMgZ6rtjoOEgHq9r8llNcvqglV9AQv9EFJ2FFRbmDmjP4EfAWwJJmBOr
-	1nqfZguAC3ivZ2teKFxy72wyxt6smydR9/B2b75u3HC2MomSmFOPZQraZh4YdbF85zSrmYiKZyU
-	rXtHZ1/ICMHbszN+APrN/7HDrzdN5iS3jMEvRITZN2AfX0+4Lw==
-X-Received: by 2002:a05:651c:4351:10b0:37f:d9ba:747 with SMTP id
- 38308e7fff4ca-386ee29beebmr7363401fa.5.1770722398640; Tue, 10 Feb 2026
- 03:19:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E216231B11E;
+	Tue, 10 Feb 2026 12:16:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770725799; cv=none; b=W5VqkSkPosI2s26abNbbPXKBZr8dP4KANyA3QMBQxrq7//+IOCVkM4UMKY/ac+1cIuJndf/AJ2KEjfRk4KIhLv2ZBClOfYBUxPz4IxgSZJnXbaJ5u0jWCPkyQlts+G/weixZ6DW5cWXuvVd+eg+sMCyrstl7kv4wYwKSRkXhHXQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770725799; c=relaxed/simple;
+	bh=Vsl82wTVGHxBGouLrnPGIwzMws2HTm59b4l8xWGMBXw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CUKCyY515Ko9zBy05EtnXQW+GNOzGSrNDYPi8Cznuc/VCVzePE8rALna9goM9X/+aBx/PtHPjSBw/OfM6u47j1Gm9DrLj01DJe637oUzUag7guhENqudK0RIes7bPsZzM/pDFbImlz27b78OvEmXzAizNMYWSPatt4RE/v72a4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xcl/860p; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770725798; x=1802261798;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Vsl82wTVGHxBGouLrnPGIwzMws2HTm59b4l8xWGMBXw=;
+  b=Xcl/860pRihzv1KqO1lJlTn32UXvmAP6PQcM8NAfEbB7c6WB+Xp8rvYJ
+   faeLY5wNdn+oSS04UdKRl90tvVO/F6OYs2jXbU0BSFJYUstRm0qS+bg8W
+   XBWnCKteofnJtblRCboZ2ZyrO12bmO6U5qmDbgLR2OD01d8A6q9rBiVLI
+   jHG0h4tq2U5HlyRl+NPNMoWOw5eyHpYKtBtkNE4nqwJt8s4thopqFqHwV
+   zHgddKniF3X9mNSRQ5YVdJo+X2Pj3HZtdPuIFOK83gEmL3wtDyc86+o/6
+   nVUszdRvCE88pz+VzJvGI/rg4NbLlFcWq2aHPml1Yi67KEewj963opKiD
+   A==;
+X-CSE-ConnectionGUID: J+TkkfgyRYioANGLzQ4JXQ==
+X-CSE-MsgGUID: mt8jJW/kQqa6GxfiRALHRw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="82175415"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="82175415"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 04:16:38 -0800
+X-CSE-ConnectionGUID: fRMyhIK2SOy4UkOSimVp1g==
+X-CSE-MsgGUID: KhRtkdbuSMqkO7lHM614jA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="211233693"
+Received: from iherna2-mobl4.amr.corp.intel.com (HELO kuha) ([10.124.223.110])
+  by orviesa010.jf.intel.com with SMTP; 10 Feb 2026 04:16:33 -0800
+Received: by kuha (sSMTP sendmail emulation); Tue, 10 Feb 2026 14:16:01 +0200
+Date: Tue, 10 Feb 2026 14:16:01 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
+	gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] usb: typec: ucsi: ucsi_glink: Add support for
+ Glymur and Kaanapali
+Message-ID: <aYshgbUfxnhFdC1v@kuha>
+References: <20260209204915.1983997-1-anjelique.melendez@oss.qualcomm.com>
+ <20260209204915.1983997-5-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAOMZO5DuiHWpu9px2-FDWwBnq-W-jEQj1GMSUpTKvncw4OBF-g@mail.gmail.com>
- <CAOMZO5CVcLRBhXByZRT=dNGFWZuQm7r-ALXnWUgC1wu8tXxHfg@mail.gmail.com> <PAXPR04MB8829F3B7736C63C5527AB7468C62A@PAXPR04MB8829.eurprd04.prod.outlook.com>
-In-Reply-To: <PAXPR04MB8829F3B7736C63C5527AB7468C62A@PAXPR04MB8829.eurprd04.prod.outlook.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 10 Feb 2026 08:19:46 -0300
-X-Gm-Features: AZwV_Qh1VjKId049_-nZRqOqKYtMT_veiUgRcwcDAZqYV2XJU9Y0eCyNRTvLPas
-Message-ID: <CAOMZO5BWcezf8QVSgj_pTR38NQ7RPNf+8x7YQKLFyaPTaXzSJw@mail.gmail.com>
-Subject: Re: [EXT] Re: i.MX6 chipidea: USB port does not power off
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Peter Chen <peter.chen@kernel.org>, Frank Li <frank.li@nxp.com>, 
-	USB list <linux-usb@vger.kernel.org>, dl-linux-imx <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260209204915.1983997-5-anjelique.melendez@oss.qualcomm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_ALL(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-33251-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33250-lists,linux-usb=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[festevam@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,nxp.com:email]
-X-Rspamd-Queue-Id: B91B011A0DE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim]
+X-Rspamd-Queue-Id: D1B7711A9F0
 X-Rspamd-Action: no action
 
-Hi Xu,
+Mon, Feb 09, 2026 at 12:49:14PM -0800, Anjelique Melendez kirjoitti:
+> Add Glymur and Kaanapali compatible strings which both need
+> UCSI_DELAY_DEVICE_PDOS quirk.
+> 
+> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
 
-On Tue, Feb 10, 2026 at 6:03=E2=80=AFAM Xu Yang <xu.yang_2@nxp.com> wrote:
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> CI_HDRC_TURN_VBUS_EARLY_ON is set for imx6sx_usb_data.
-> http://10.193.102.149/cgit/usb/commit/drivers/usb/chipidea/ci_hdrc_imx.c?=
-id=3D6adb9b7b5fb64be3c3e4d57578ea1446da91a8f9
+> ---
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index 11b3e24e34e2..c7878ea0d37a 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -373,6 +373,8 @@ static unsigned long quirk_sc8280xp = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_P
+>  static unsigned long quirk_sm8450 = UCSI_DELAY_DEVICE_PDOS;
+>  
+>  static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
+> +	{ .compatible = "qcom,glymur-pmic-glink", .data = &quirk_sm8450, },
+> +	{ .compatible = "qcom,kaanapali-pmic-glink", .data = &quirk_sm8450, },
+>  	{ .compatible = "qcom,qcm6490-pmic-glink", .data = &quirk_sc8280xp, },
+>  	{ .compatible = "qcom,sc8180x-pmic-glink", .data = &quirk_sc8180x, },
+>  	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = &quirk_sc8280xp, },
+> -- 
+> 2.34.1
 
-This is an internal URL. Here is a public one:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-h=3Dv6.19&id=3D6adb9b7b5fb64be3c3e4d57578ea1446da91a8f9
-
-> So VBUS won't be off even you disable the port. Otherwise, USB PHY won't =
-work well if you force off/on it.
-
-Understood, thanks. This is an i.MX6 hardware limitation.
-
-In this case, the only way to turn VBUS off is by forcing the removal
-of the controller:
-
-echo "ci_hdrc.1" > /sys/bus/platform/drivers/ci_hdrc/unbind
-
-Thanks for your explanation, I appreciate it.
-
-Regards,
-
-Fabio Estevam
+-- 
+heikki
 
