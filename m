@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-33287-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33284-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WM5DHbN4jGktpAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33287-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 13:40:19 +0100
+	id 2B+SDGx4jGktpAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33284-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 13:39:08 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC74B1246D7
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 13:40:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BDB2124660
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 13:39:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7EEDB308637B
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 12:36:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 245C030136B7
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 12:35:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C09035DCE2;
-	Wed, 11 Feb 2026 12:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6820A3128DA;
+	Wed, 11 Feb 2026 12:35:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="FN775bo2"
+	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="X5Rw8hAl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx-relay128-hz1.antispameurope.com (mx-relay128-hz1.antispameurope.com [94.100.132.194])
+Received: from mx-relay50-hz3.antispameurope.com (mx-relay50-hz3.antispameurope.com [94.100.134.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368A533ADB3
-	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 12:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.132.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0344629D28B
+	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 12:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.134.239
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770813366; cv=pass; b=gwrrutLBcTV5vJ0m0S95lZiG4n7dblSo/X5jrTPnDCsko/Wt5nPUnrm1SEG8cqvvcqmQPtO220o31ER1PnaBI9/MduttHPFAVinVwb7dSXH0Ruul3oecAO/ZChcNJ1NYlloJVxdc3h+N9/kVay+TFkIjXFvsM6nzdPP0pqrbvpw=
+	t=1770813337; cv=pass; b=rg7Ghju0ZlGvBR1JKFd4QFrCT2zgImEPbfJwCCse6CZEIH2xNGdWnJQisYltLkwA6w61BnQL6iRa4nTO4DDIa7stWnOXiwzjzUp93Z8MFjOMHI6KVJDpKPbDmNIRk2xPvKN+vuTXhBzFYGISb6i+8DGR23prT2Pm54ydf1vxAWA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770813366; c=relaxed/simple;
-	bh=VZKGAiWgFqKvUlRhNiG9TSUoowFI3whqpIuUPg/BfZo=;
+	s=arc-20240116; t=1770813337; c=relaxed/simple;
+	bh=DDxMMwSEPx4y7ICS/1B6rQvV6CMJXqzIvms5szSqGy8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HwPcHqv5MXsbJ3lX9WCqGTYLo23n28o4U5p/liXX2ZTo1ItVj4nWvLzLyRy3HVohOaNSwGud/s0cFaUO34Cc4/Pd3hnCksXQXdpCgINKcHI1cXnRJhLY4bt/xXYddPDuaA5ZZt1pfxk5Vi5eH2yht2TKsr5uDhv+POFPgBC0ZzQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=FN775bo2; arc=pass smtp.client-ip=94.100.132.194
+	 MIME-Version; b=V7G92ePGjVJ534nBN4GGzAC1lqAjyydD1qG+B8DcX1++C81ifvUpzMKfHNIQ9VKritxgBePpV+V7b5b7jCIXDtGtQjiOisNa3nL1JYNWQqGKsTVmauUpYK2m3jXAGMGsCuEm/OCTxCXMf7bSpSNYOdPiPobvQEtHNb3wrh6Vhps=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=X5Rw8hAl; arc=pass smtp.client-ip=94.100.134.239
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-ARC-Authentication-Results: i=1; mx-gate128-hz1.hornetsecurity.com 1;
- spf=pass reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
+ARC-Authentication-Results: i=1; mx-gate50-hz3.hornetsecurity.com 1; spf=pass
+ reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
  smtp.mailfrom=ew.tq-group.com smtp.helo=smtp-out02-hz1.hornetsecurity.com;
  dmarc=pass header.from=ew.tq-group.com orig.disposition=pass
 ARC-Message-Signature: a=rsa-sha256;
- bh=ezwBTEGDVrkTw7utJMNRHdCflzlp+turEuzGuTHPmd0=; c=relaxed/relaxed;
+ bh=p7pDwaK17CdUZh/u5Iy4Xmvwxf0XguEjLtkZgT9LWWU=; c=relaxed/relaxed;
  d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
  t=1770813314;
- b=TyrVu2itWT7o+f1VjkuEXU7KTZTocOaztVfBWq5QLJdAmlk1V6STKCrozEJGhKxJ05SGx/ci
- RtY9/6835CnynH1rZ7JlBpE0NHXswecB/AxF8oaAKdXrwAEWvKVrFCv9uEx49bYKvAoj+DD3VE/
- VG06Q9f6QB8MeVFjjA493CEcJXOz6d8CswMmpUCMiTfx085MFag63kl4QNMJEcythjRUP3iD06s
- DozDKShnBqsrdC1HDrCSjaK3uH8ezpdHHY4tIWC46YwF/5oCJsw+w5fuiPikTvuaglRaYKJVK+V
- U6DcXPFi/oLb85PQCyIwl2Op5cAWmu7jAk32d2d7k2Azg==
+ b=afR27wNasEdc39AW6cNMXzoui9BuJkxLQAWtVxtb/+gDzLDGAcrp0ps2D72xxewUIeKobyi3
+ chD2t30NEKjjRFD3uBXRayyXyg35d7TSmaaXby9oDPFj9sX1ZMOlLJpnw64JYJOAMCw2ZV1O5hp
+ cx2ea4XZtPFaDlvAPUxQ5PPZBzBo/VcHvBGp75Q7N13SWtqHjemJeSXasLS5WVTbakapMbQELL8
+ SKwKXHkY4Wt8zNbhPto0El7WVMo1Bd3xv+BLtcgbOfjUMW52bxOX5MD+++X+96yHyvqMM/Mya2/
+ wQT1H9lTnyoxIgBMHYcjuSq9V0RO8rFATlm2QN+3k5oOQ==
 ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
  t=1770813314;
- b=N1jLJ0wwEnOaWaAdV2Vrir/U+pDuHNfGAv/5AsX7MOJL4OvTMtJdWe0dGIOnA0LE/AE3xTZf
- dsmgQWHuwtAxcQDu5TjvHv7fe3edRc6TcKAhEKuN+ePOTy+jCvjrQFFCxjEcCnZZ+/R8cNG7k8x
- Lr3RkctlNSaR3wcWSLgmNE4IGTayIZwhXk6gA15C/BSxO1/TQmIgy/gSbaHXWDUFOQy7cPIew1R
- R5YWs0cwW9G/6o8mlFdkz2y3B8knuXzM14rtC8WFqkE1X8+8+YjAINTKDL6oLtQ3vZEN3iYFASD
- ANjMi3Q0LyXgryjVafXJE96A8JIfLuRzysQMFTWsWDUug==
-Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay128-hz1.antispameurope.com;
- Wed, 11 Feb 2026 13:35:14 +0100
+ b=Fx7/CqGONrkVR3KZ1wkgOTQNO5RR4g1mJpgaNo6CWlUMqI9l2Lhg7/h6aKaqQj+Hul/rftbD
+ RXOSB4HohOrR3gOdJFuuTYPRX1PnQRfw5b1NDVubUYta2aH66CwW4Os6BpiMfK5UbuhO5WqmeZL
+ u82O5XPO8jYJJOI/ZOUOPggqZ8vg/VfBmG/e1HzMecU0VfSK5qCnDLrGylABFqYGfTg/jFVsvba
+ avBodBlG9j+QSTqtA3+gvMs08DBmCoW+UH4qNNGEcDEwrvQZbSr0egGc9mcIRnvmtxe5siuRMS6
+ Y/ldKJZsENm5UN1ncZTMNRyB2DgSFHi/o5TGHyul7h61g==
+Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay50-hz3.antispameurope.com;
+ Wed, 11 Feb 2026 13:35:13 +0100
 Received: from steina-w.tq-net.de (host-82-135-125-110.customer.m-online.net [82.135.125.110])
 	(Authenticated sender: alexander.stein@ew.tq-group.com)
-	by smtp-out02-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 6742C5A12DB;
-	Wed, 11 Feb 2026 13:34:43 +0100 (CET)
+	by smtp-out02-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 01C7E5A1345;
+	Wed, 11 Feb 2026 13:34:44 +0100 (CET)
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -76,7 +76,8 @@ To: Rob Herring <robh@kernel.org>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
 	Fabio Estevam <festevam@gmail.com>,
 	Magnus Damm <magnus.damm@gmail.com>,
-	Marek Vasut <marex@denx.de>
+	Marek Vasut <marex@denx.de>,
+	Frank Li <Frank.Li@nxp.com>
 Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -86,9 +87,9 @@ Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
 	linux@ew.tq-group.com
-Subject: [PATCH v2 1/5] dt-bindings: usb: cdns,usb3: support USB devices in DT
-Date: Wed, 11 Feb 2026 13:34:28 +0100
-Message-ID: <20260211123436.1077513-2-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v2 2/5] arm64: dts: imx8qm-ss-hsio: Wire up DMA IRQ for PCIe
+Date: Wed, 11 Feb 2026 13:34:29 +0100
+Message-ID: <20260211123436.1077513-3-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260211123436.1077513-1-alexander.stein@ew.tq-group.com>
 References: <20260211123436.1077513-1-alexander.stein@ew.tq-group.com>
@@ -105,20 +106,20 @@ X-cloud-security-crypt: load encryption module
 X-cloud-security-Mailarchiv: E-Mail archived for: alexander.stein@ew.tq-group.com
 X-cloud-security-Mailarchivtype:outbound
 X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay128-hz1.antispameurope.com with 4f9yYc4gf8zvb1m
+X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay50-hz3.antispameurope.com with 4f9yYf1s13z2nJDK
 X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
-X-cloud-security-Digest:127a990275954f2aedbe66286a895387
-X-cloud-security:scantime:2.345
+X-cloud-security-Digest:445cfd46aa584c7bfd22defe62d9001c
+X-cloud-security:scantime:1.964
 DKIM-Signature: a=rsa-sha256;
- bh=ezwBTEGDVrkTw7utJMNRHdCflzlp+turEuzGuTHPmd0=; c=relaxed/relaxed;
+ bh=p7pDwaK17CdUZh/u5Iy4Xmvwxf0XguEjLtkZgT9LWWU=; c=relaxed/relaxed;
  d=ew.tq-group.com;
  h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
  t=1770813313; v=1;
- b=FN775bo2nRs/fvjjuQNsOVWT8GuOHvAZ9uEtjUO78HnwGyMiPTRV/q+mPDSc7cWwsiNKvZzZ
- LYyy3mWAKsDHPq9BHV+BzZP7796Oo3yVechpfi1KT4pcP/cYcDeXSFXa6Y+BdGQIkIxOR0zJaBD
- Zb99AYEMCB7Qrrn8aUfAEZFtnMqAjO14KmCWs443UXVWtKIoWgkb8s5+g4RdxdGDY2jTqEPkwKY
- N1YD60gJ8Lsnf3X/LI8KJPjJ9yGwqjjEri7Y0acU2JejP01dvVRXXQHhIR0ALz79r1yapvu44eU
- 4dbeel6BlRzJ2DB9n58DpEvv1gw7zpNVZ2y6eFSZWNPhw==
+ b=X5Rw8hAlkmdnGS3y1rZbsJ4Fv/MaoTb1ogcMNPzhqhkbazvpijDHuljYGOs6SCKnUioO1NhI
+ QC7ieBNYoTOFLo1PTjPLMa5+/NLDdmQmKtI3ThDW1c+rSXYSg9vx4XLCDmYx7NEXWwAHsPwsMX9
+ a5hnmiQm08KkByZdPtzb3kG6/rAgaeeFTeSSUEJlOlQdSEVzVLbJloIdU096G+w5mU4uQ0LXAau
+ TqAu8YCbHr8vxVAwptCKmECM469wlITJ259beW131wVia9d49M5euTsj7Zf+raAYQ1e5mgMvr2T
+ k41KJUWI6CaBr3z7qlWmS8R7HTzIj/WCucTsR2eYlZ+Ug==
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -127,14 +128,14 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[ew.tq-group.com,reject];
 	R_DKIM_ALLOW(-0.20)[ew.tq-group.com:s=hse1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_TO(0.00)[kernel.org,glider.be,baylibre.com,cadence.com,linuxfoundation.org,pengutronix.de,gmail.com,denx.de];
-	RCPT_COUNT_TWELVE(0.00)[25];
+	FREEMAIL_TO(0.00)[kernel.org,glider.be,baylibre.com,cadence.com,linuxfoundation.org,pengutronix.de,gmail.com,denx.de,nxp.com];
+	RCPT_COUNT_TWELVE(0.00)[26];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33287-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33284-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -146,34 +147,39 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tq-group.com:email,ew.tq-group.com:mid,ew.tq-group.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: DC74B1246D7
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tq-group.com:email,ew.tq-group.com:mid,ew.tq-group.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,5f000000:email]
+X-Rspamd-Queue-Id: 7BDB2124660
 X-Rspamd-Action: no action
 
-Reference usb-hxci.yaml in host mode in order to support on-board USB
-hubs.
+IRQ mapping is already present. Add the missing DMA interrupt. This is
+similar to commit 0b4c46f9ad79c ("arm64: dts: imx8qm-ss-hsio: Wire up
+DMA IRQ for PCIe")
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
 Changes in v2:
-* reference usb-xhci.yaml# directly (suggested by Rob)
+* None
 
- Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/freescale/imx8qm-ss-hsio.dtsi | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-index f454ddd9bbaa6..a199e5ba64161 100644
---- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-+++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-@@ -85,6 +85,7 @@ required:
- 
- allOf:
-   - $ref: usb-drd.yaml#
-+  - $ref: usb-xhci.yaml#
- 
- unevaluatedProperties: false
- 
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-ss-hsio.dtsi b/arch/arm64/boot/dts/freescale/imx8qm-ss-hsio.dtsi
+index bd6e0aa27efe9..f2c94cdb682b9 100644
+--- a/arch/arm64/boot/dts/freescale/imx8qm-ss-hsio.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8qm-ss-hsio.dtsi
+@@ -20,8 +20,9 @@ pcie0: pciea: pcie@5f000000 {
+ 		ranges = <0x81000000 0 0x00000000 0x4ff80000 0 0x00010000>,
+ 			 <0x82000000 0 0x40000000 0x40000000 0 0x0ff00000>;
+ 		#interrupt-cells = <1>;
+-		interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+-		interrupt-names = "msi";
++		interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "msi", "dma";
+ 		#address-cells = <3>;
+ 		#size-cells = <2>;
+ 		clocks = <&pciea_lpcg IMX_LPCG_CLK_6>,
 -- 
 2.43.0
 
