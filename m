@@ -1,173 +1,157 @@
-Return-Path: <linux-usb+bounces-33297-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33298-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aOOIEvarjGl/sAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33297-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 17:19:02 +0100
+	id qCRTIYbDjGkmswAAu9opvQ
+	(envelope-from <linux-usb+bounces-33298-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 18:59:34 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48CF91260BB
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 17:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A0D64126C22
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 18:59:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6E38530046B8
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 16:18:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 006E43006021
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 17:59:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A518308F1A;
-	Wed, 11 Feb 2026 16:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57DBC34EF06;
+	Wed, 11 Feb 2026 17:59:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="rcvKIX06"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ef8v+wiZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD4433E355
-	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 16:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761C35464D
+	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 17:59:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770826736; cv=none; b=QHx5JT8IkF+oVFMED76XzCoMfY6dzuhlrtRH9b5yqcxQZZ9+dYCSous/tOOZ8PkAqdA2QQ4hCRbZSXz7gdQ18yPv3+ymNBhkOBMElbeNLwbTbx/8g2NFiyDwTbxawBkX+LU710Dmmek+I0KxqLk9ZkKIe4nyCUCsdpGgack0LsE=
+	t=1770832766; cv=none; b=JPFuShhNTZ+njhexPLbowpqsUnDp3+V8fXAcjoWjOpvtLzbKPpPZ8+yHJEML1/K3GXFDBtdBF5Rod4/pbNQcIQq5G/6v09MlVwV478AW6XFWHXUm8EWsvjxB0WE5HiPzPL+szbAwpv1h/yQglw9FABshGzoBgtzarhAl0e8YP98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770826736; c=relaxed/simple;
-	bh=8dQ/dIx6Ely8LKDVvks4Q5pXtyZgjYrJn+Wgupm+Cqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pifNSbhYJK1kL9+Nw8Gv7TH6Y6bHWx9Vnehb1HSfV6jGMA7pkDI7j6EDCi8o73I/ncWpSrgBiBthNMjAcLxuy/HGkBqzdx/ypFlyvDUdgRQjN2Rxk2xxgrSuFe0y5I7uSznhdS3798c3qUDDDuai00PfX0Ihz2VLpvw0FkiPx0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=rcvKIX06; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-506362ac5f7so50575831cf.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 08:18:55 -0800 (PST)
+	s=arc-20240116; t=1770832766; c=relaxed/simple;
+	bh=HYgq2ZW2QKWjJqnsqwQg3y/9qtNCJ67IhuyPeMYCR2M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cdTfVl/aZsF5A8C1LgVzQkcqknyUQXuzz0bCtZ3baY7LwUb3eug+SFLbmILd1pICT6JZR8+o9fS+APrAnJOe647lL+cFlB89tYlWRH1Nw2pAD2b2sYBc7y4pdEV8XobQuQgW4uj0x6QIZV/HKrLiPrN3NdWLfxztnzQoXL1wfzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ef8v+wiZ; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-4376acce52eso1631149f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 09:59:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1770826734; x=1771431534; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U2Cg6tawiTWNSDSoDdpKyjLTJ801dfTXt3HTYJ2la6I=;
-        b=rcvKIX06gg4avDpzkm0Fv3GbR9QA24I1jp85zrpF+Cc/Lp4EyPCWOU9UosxomPcaG2
-         pyOKiJKRFbsXYKjFa64Ap7oZTe27pmrP2mHS34Sl15ZJX+j/OUlefz+V6J0Q4EZtFIEJ
-         Oe9Vt97xXLpnrZPzUFvyUT1x1JgEmAXHVSh/GlY9we/L8FG2EeqYbMHAzl+SCTfQQLpU
-         pk0DTM5nu4jDD1nS+QAhjAwrxsrXvcDNl3Bk3R0cKcyk74adJO8eTpDMBIreuMXuWGuD
-         7FTLoAEx9AC5sYnM0s6LSvnOzGb1HUtIsWNdF6spUrt27AV/u7RUVpAam4COoZhNBEHu
-         ozkQ==
+        d=suse.com; s=google; t=1770832764; x=1771437564; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zC5m7SmEnfgHdMDECSf6G+/8TdAu7Ib2s25FFK11BPA=;
+        b=ef8v+wiZxUDqwBri+CmXqmvmPtobybkLkonfX5lHkqBsrcqEoBDQwGYi0XD5K5oqZx
+         xmFxV5prxHePA9xLZ9DmqBJRfoQMq1R+3IaC2t3ER6FoZ8GTIxMW/RQLxO3kIJSQC1rA
+         6SsRKISV1wqTlgEn8lvbUwCdwI9ChueR0WElOIJaqiAGRyZXHZ+0JbAxr5Abiohn1NnH
+         zUn/S0MnDThyiqE05VXqg/NAWgxKxnoeiuLBCq4mgYlqWPnullRqkJ9F82sm9NGThSYd
+         01k8DtUPvAwBkZK9aG0De0I/WFLWlmOlT9QbUVghVVMaw6sFgUi7XMTkdOgCh9BS1GEj
+         3PbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770826734; x=1771431534;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U2Cg6tawiTWNSDSoDdpKyjLTJ801dfTXt3HTYJ2la6I=;
-        b=OJemBriOt5orWtqluqV44RXd4+E9E4Ntj/26v4e9UoQpi/TGoTDxmtd7iHs5LC/vS+
-         pEOh1qSeDcF9wrj4YVgO4s/Yvi8ghDZdos75gVEJy5vQcpIETzaX/pZDbJxGXeNjys78
-         fXTqxfoJYTYH0idf1wDNMwXfgohd7PZaxGZVPEwAHpfzsafFfG8vwpN32gx3FOp4zDic
-         UXokhcSl0cpgfHRqOjRN2v/d3elCg0UvZLUTXKr4h9+U+HxN7zcYqx5BWH6lk54Hm+Fd
-         6M31q+rKoDMfJtG2RSp8KLz3dVHbFRH/X6RJmGzsn7He2Q/WWkqMQ8leoCroUo9RQOQ4
-         abSg==
-X-Forwarded-Encrypted: i=1; AJvYcCXhdWnT1crkmpwPMvZP97Jq9NTMQZ+1eiKgdUkf0OSoJbxNf31XWmA949E2wk6MZffEDqDL0JfNws0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5f6yVaYq2RX6D/vtVkCZp3bJXTHu0PO/UydIyG6KpHLllLbgw
-	0MJQ/DxumC4GuuakH/rT+/OTWUMFWS8hvYy966SIs5Q1DdsJoV7N2WsjI3lh7E35zCTjwMuI0MA
-	JOF4=
-X-Gm-Gg: AZuq6aLrAWcW6Dm/dPgpEAj/Mh1W5fVChQ+brsK3odGGNWkVInxpgrllmScfGDW4kZS
-	nQzPozueqNDbV9x7BB6bJCa8VwFjx7tbWlJQgloe0Etow1IjG04fOs9hQhAAII8fv7hCdzMrQL8
-	uiqpX10aE8Yeq3VY2VZiko4qpuqaC6o+5QE3l/vtKMy+ahDmY7HakXDajsEbmk7Bp8A9By3ZVbV
-	Q1q1Y0czYvXd5ONJyLVq7In1fGWzrXT3Y5KvtzZa1/BQcvAFhQOHSlnNcalgYkXRN8eBuuxaEMm
-	zvMsDqQvH/iqrXZywy8MH5DtL16u1ba3hBvx+BHO03a8Sj7p/Mdm1xYG5dU4VYlTdWl6azL+nJZ
-	19E01hU0snNmcEkA7n2wtYcO4YRdMhc0qC/YJ9SfeGLtFxfcUKgaMWIQ/6LgJJXRsniPC626puV
-	8xAwtUK6+vop7ho6//XC5hlI2VWN+ckoOGdCX6KGzppQ==
-X-Received: by 2002:a05:622a:30c:b0:4f4:a9cf:5d40 with SMTP id d75a77b69052e-5068101e37amr41711691cf.11.1770826734500;
-        Wed, 11 Feb 2026 08:18:54 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50684b6b56bsm15830971cf.17.2026.02.11.08.18.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Feb 2026 08:18:53 -0800 (PST)
-Date: Wed, 11 Feb 2026 11:18:51 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 2/2] USB: usbtmc: Don't accept very long timeouts
-Message-ID: <7403a3e8-764b-476d-ac45-f2de9e6b67ab@rowland.harvard.edu>
-References: <237c76a9-fcf5-418b-a3a7-51929af1d69f@rowland.harvard.edu>
- <fa1e3282-0559-4ddc-97ec-be07a41ab27e@suse.com>
- <c6802a96-33d4-453a-b1b6-e74b4911555b@rowland.harvard.edu>
- <79868062-41e5-414b-a0b7-7aa162dbf4d6@suse.com>
- <313e86fd-0870-4b6b-b4ee-1ba3eb9d9d0b@rowland.harvard.edu>
- <83f20400-fc25-43d9-87ad-da51fa029c64@suse.com>
+        d=1e100.net; s=20230601; t=1770832764; x=1771437564;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zC5m7SmEnfgHdMDECSf6G+/8TdAu7Ib2s25FFK11BPA=;
+        b=M/rLOksHle2KYAk3+XTw0oQ0sc+75eMVmriLoyUQPsb/BjcNnk3f0QwkQdcuK+oKeh
+         H1a2sC8HnHrsiJnLyNdsaqmIBhCalkj3KjYs7pzmkES6rlkv7nLMgPWgHSYFY+StJiUi
+         Ay9FngaJ55V+kiFj15mkY3DpDQ+4l1P79t+jjAEjUGLyjObk0+HutFv1qoDLays7Pjai
+         HpedmtUWL4LYM0FhBlC7TUOnBoO28XWCVF12ppBhHW3qF9N4eDGcrLT7XyKVBNgCVE7Q
+         WxpgML8o3D4jxwhoqLkuUB1Yv1rR3RjeIfvOlQf7JaMb3fFWjJAuN6Dan7x7sT0lAZsr
+         hrZw==
+X-Forwarded-Encrypted: i=1; AJvYcCUlg2POfXti208YpyAtk6cgOPrtV7eRwTtfcsEYNedoT1fMWG72spXHRy/7DpUH7SYw2y+XWwrPy2U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyK7FmH6ipwKMJ1VJ/k6uiTE0Rxah3SEMe7PhJXaqpt4/9T969+
+	3Qg3S2aSWDEDwzSL2OnVVaC07frFuyVLE+o+pMpjlJaWLLwR8H56ZQD86ft3BDtnTncat0FyvrP
+	eJBuC
+X-Gm-Gg: AZuq6aIv9xT2CRgxgrHxihChuJxoEkUJGI2L8Tdi2BRNUf4axbT/DYxkid4GZv+o+TO
+	DM+x1ijqzD9knbMh9vnS/fGrhNUQuZZcEik2oi7UkUiv4sAaYGMLfh+ZSs9vxBkbvffdJNfpr5b
+	70U1YOK2j7HQFpGooAnkIT15zjoB8lA2qy/Y3Pkc6QCe00PE1y29AkAvRv4ePMIIxucau4fk93p
+	Ggbz5mBPVEFKsAERoVZ4FepVuEXGzP2mPxoO56B/tjz/2ZoyvSmXUuEZ+SdCaWaAjG/5MOGb5kd
+	Ja5cB8k6fd9kWQhfqQuSrgt9fSnwVU1qxnAbwNv9OMHFR+a8ZkhqgbZjh22AtJpRZrWBDLJE0aU
+	N4yjHXibNkBmP33q5O6ncOrZnvPzuQOwFjQMmqXQNWdH+DU/smMtc61Ur9SgYA8dPZWihyf2z3X
+	usStLLc5/IYFVv7yynDpNMAOWWHJy2tND9ZTsjrbAez+to/HbxnOy2Ir+r/jHQfQ==
+X-Received: by 2002:a5d:5f49:0:b0:436:1d80:b663 with SMTP id ffacd0b85a97d-4378adb8d89mr387071f8f.58.1770832763757;
+        Wed, 11 Feb 2026 09:59:23 -0800 (PST)
+Received: from ?IPV6:2001:a61:138e:301:e4a1:47e:3f5f:5d09? ([2001:a61:138e:301:e4a1:47e:3f5f:5d09])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43783e0196bsm6335318f8f.23.2026.02.11.09.59.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Feb 2026 09:59:23 -0800 (PST)
+Message-ID: <efbd1b4e-13c4-4531-bc11-4a9c541a7813@suse.com>
+Date: Wed, 11 Feb 2026 18:59:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <83f20400-fc25-43d9-87ad-da51fa029c64@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] USB: usbtmc: Don't accept very long timeouts
+To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+ USB mailing list <linux-usb@vger.kernel.org>
+References: <237c76a9-fcf5-418b-a3a7-51929af1d69f@rowland.harvard.edu>
+ <fa1e3282-0559-4ddc-97ec-be07a41ab27e@suse.com>
+ <c6802a96-33d4-453a-b1b6-e74b4911555b@rowland.harvard.edu>
+ <79868062-41e5-414b-a0b7-7aa162dbf4d6@suse.com>
+ <313e86fd-0870-4b6b-b4ee-1ba3eb9d9d0b@rowland.harvard.edu>
+ <83f20400-fc25-43d9-87ad-da51fa029c64@suse.com>
+ <7403a3e8-764b-476d-ac45-f2de9e6b67ab@rowland.harvard.edu>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <7403a3e8-764b-476d-ac45-f2de9e6b67ab@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_ALL(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TAGGED_FROM(0.00)[bounces-33297-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[suse.com:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33298-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,rowland.harvard.edu:mid,rowland.harvard.edu:dkim]
-X-Rspamd-Queue-Id: 48CF91260BB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,suse.com:mid,suse.com:dkim]
+X-Rspamd-Queue-Id: A0D64126C22
 X-Rspamd-Action: no action
 
-On Wed, Feb 11, 2026 at 04:59:40PM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 11.02.26 16:31, Alan Stern wrote:
-> 
-> > First, the change to usbcore.  Rather than giving an error if the
-> > requested timeout is too large, I suggest decreasing it to
-> > USB_MAX_UNINTERRUPTIBLE_TIMEOUT and continuing.  Does that seem
-> > reasonable for the synchronous usbfs ioctls?  (Note that the
-> > USBDEVFS_SUBMITURB ioctl is not subject to this problem, since it is
-> > asynchronous.)
-> 
-> Yes, this seems entirely reasonable.
+On 11.02.26 17:18, Alan Stern wrote:
 
-Okay, good, I'll write that.
+> Under what circumstances would the transfer be killed?  And how would
+> the user be able to do this?  Would you temporarily block all signals
+> except for a few like SIGINT, SIGTERM, SIGQUIT, and SIGKILL?  How would
+> you choose which ones, exactly?
 
-> > Which leads me to ask: Which consideration do you think is more
-> > important for usbtmc: Having a timeout that is possibly too short, or
-> > being subject to interruptions by unimportant signals?  I can't think of
-> > any way to avoid both.
-> 
-> May I suggest a third alternative?
-> Implement usb_bulk_msg_killable()
+In abstract that is a good question, but it is for user space to solve.
+TASK_KILLABLE does the job for us. In fact I'd suggest that you use
+wait_event_killable() which should delegate the issue fully.
+  
+> It all depends on what you want to accomplish.  In this case we don't
+> really know what those calls in the usbtmc driver are meant to do.  At
+> least, I don't.
 
-Under what circumstances would the transfer be killed?  And how would 
-the user be able to do this?  Would you temporarily block all signals 
-except for a few like SIGINT, SIGTERM, SIGQUIT, and SIGKILL?  How would 
-you choose which ones, exactly?
+I share that problem. In that case, as little as we can get away with
+and still solve the issue. "Little" being defined with as little
+impact.
 
->  > My opinion is that if usbtmc would really be worried about limiting
-> > timeouts to 60 seconds for its usb_bulk_msg() calls then it shouldn't
-> > have used usb_bulk_msg() in the first place.  That API was never
-> > intended for any transfer that might delay more than 10 seconds or so.
-> > For this reason I favor the first approach: Do nothing.
-> 
-> Well, what conclusion does that support? Not using usb_bulk_msg()?
+	Regards
+		Oliver
 
-It all depends on what you want to accomplish.  In this case we don't 
-really know what those calls in the usbtmc driver are meant to do.  At 
-least, I don't.
-
-Alan Stern
 
