@@ -1,230 +1,303 @@
-Return-Path: <linux-usb+bounces-33273-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33274-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iApnOM4djGmNhAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33273-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 07:12:30 +0100
+	id aDHPGdkhjGm2hgAAu9opvQ
+	(envelope-from <linux-usb+bounces-33274-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 07:29:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60660121911
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 07:12:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C32161219ED
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 07:29:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6703D303EFAC
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 06:12:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 951BF303982D
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 06:29:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 744CF34EEE6;
-	Wed, 11 Feb 2026 06:12:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE7F342539;
+	Wed, 11 Feb 2026 06:29:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="B6vinRvG";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="FJIxDVDW"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nY64yhzw";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="LnYpGdyO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A9D33B961
-	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 06:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE5331A04D
+	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 06:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770790347; cv=none; b=FxPIK3+q/9syRf33HT2WOn4xuXVjPOwxcCgM9qBVwe29NpjM52kJfCv5SMQreT64SVhkdVMzfbKLQ5YvgbpK4BdKVoxDMDMVkA0DgiHoJ0tvkvDPmwtiO+nYydlTSUxzpBTWgP7QlLnJfkkGBOgQDDJrPO5LPDsHXY8DpAYlxOM=
+	t=1770791374; cv=none; b=fs4EbKxUN7YQ5Co461+VGfHWxxDsRSqsk2/bWANkkZckzix/Mepd/17pzLqWTS1wkQkjFHq4H/kmO3WKn76iFDp5bRMBiTFMNulpA/NOgmrgjUMFs2r0InSwTS/XrHq+2Qq6f3qMfrsehsQ4+0GXRT1EdgYMSgL7gO84aZ4VfT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770790347; c=relaxed/simple;
-	bh=BGN2rhjhQfVk2QgMoMDwuUsHKAkkfQjTbSXUetjedKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cw6XnLivFcx/NGDAFmwWMfuDpYaEYPVc/ss5LhH4jjYsaXckhqNYZraIZHVAt3PxRq2GZ7MyoVHh65CQbWI0I0yoGcWofzb392XjbfKtWNd84EAD+mJUIEn5TAvyF/05m9s3gBF6EK3PdoBRgi08FB1jS/6Xj4k0Wynt2cQNFTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=B6vinRvG; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=FJIxDVDW; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1770791374; c=relaxed/simple;
+	bh=PsQTFSgjcvGxl3MLUggaPozJ27wxnUgUxhKCCQuiFU8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jDIpzRNj9vx2gmdNSvCSttG6oiqeXyadrM0y2npvKulbv/9iwC4TyAUdEvOj01kF+39oGCkzO/ZK0XbLQ+gHo2LyhE+pEze7GcHYYlBFmhzsPAut0hnmn+0aEsY6FHOFTOAF8jGmLxDNcQWp4stm+xqT3AMlyjmgU5Ups8HTVJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nY64yhzw; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=LnYpGdyO; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61B5Q0FS2640968
-	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 06:12:24 GMT
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61AMbk573919347
+	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 06:29:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=j9khDJwC26k6b6vyvHB5IsQv
-	yavqAsh5XUOPgKVhYWc=; b=B6vinRvGnC3BYq0BQO9TY0/3mqqtzKoWe4js/hS4
-	OnTDuX96dd1X68PYUuQKLVEqWbOQatppcrg3Fva5F0Jlac9uYIIJR5gdXekD6qxN
-	N/Ssns0oXdtnpPSXpL/nt8gPu7sPA5BzkgXjDeT13+9Ost7rQJy3o4vHZGujYBSR
-	GTXjcC6Ozr8WRJZfcARtCqJnyh9IjpNmGAmOzsN9UOumfhwXV2kzJlyu2AX7NvQu
-	w2fzCmxEewq2r0GEJOkxyUBwftXO/wWzHsQv7quwe6Yi8/CsmUXXMvNuLHngj+e1
-	0KdHbSPO4pXfxTaeySKDBZEN2lnpfgRdhohnDq4cnLjJ3w==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c8bgnhm12-1
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=E6tA//vNS7IUDnw5yILXeqILaShUeChfWlM
+	Yu0AvVaQ=; b=nY64yhzwudFvcBwFToKolDO4aeNDPe30ZJg+Rb6s8DkGHjUPxpF
+	2EGB15DOwWbk3Gb4Srh1b5MOMVvYG62X2yZLkgsAO9xewfBcL9dwM71o1ko3nc8+
+	CSB8/icHYRzhCDXe/3Elx9EQAC+Zwe9BsOucjZvErAxwvtDSU0EByRaEjG7DTBDL
+	OaJIDr7QXmqx7jzupGysFqyLNisrhUZ42kMsF/1iOx3xzkm+HqSsu+Ri/8NUFbGM
+	N48bLlfr8W8OdNziiee5VBRnkAdS+lsjWm9cKiqJi19TZgm6jnbbphsQdTbOVzwY
+	Y8ntOwLO+2HB5BQkqFRWxL5gsZ4dfJ2yMbA==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c86akjt5f-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 06:12:24 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8c70a62ca32so564825985a.2
-        for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 22:12:24 -0800 (PST)
+	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 06:29:31 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-8249e91bcfbso109361b3a.3
+        for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 22:29:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1770790343; x=1771395143; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j9khDJwC26k6b6vyvHB5IsQvyavqAsh5XUOPgKVhYWc=;
-        b=FJIxDVDWkNEHY1B8Z2MZjs7dqaiQQYPnb/SkRXJJQGzauvs4wtBHdFkVPgIhrTDUBz
-         wa8P8u5G1hiYlLaRZdBWQ/aTC2QDxX3yUySzWZq9c5oOLJzkv2cfZx8J8dwAHDEn1wPK
-         Tee+MuUAoqm9I6OhoFqkMdpBxKa3865VdMggUXnRrYDwgONHswuXKVQvBm3uTKY/opuk
-         x1SMCr5brhtkvAzZYyRDlFjKstnzdkNim4Kms7s+WHheHYUP3Hw3mhhsrARVepwR3qWl
-         mkpLLyBcKHIFJQRpA7sNsgISSOACgvaon3F+BRFnNQpqEZZyktn3E7pd7r8l4gdGbSct
-         mRPw==
+        d=oss.qualcomm.com; s=google; t=1770791371; x=1771396171; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6tA//vNS7IUDnw5yILXeqILaShUeChfWlMYu0AvVaQ=;
+        b=LnYpGdyOdVHCYRhJvpSYxjesa+AqVitINvvozXQQLwCVgLn1E/I5RgGOXIFbREHLe5
+         C1NrJoXnamOxh+63QXxRP401BOzjX91JsEoZTcLj1NHjd0KFTE1TL4eM2xIuwwOogywl
+         QgXees9Iw8dWfmsWMfwggrqWaz5jAH8yX09U9J1kQtvp0PIrQ+2eogVOu+0knPIgZy20
+         8HY8ktlIvEeeQFxp4bLYMhi75UJSLUvr1OwdcM4qK2GOMvRRKM8sEXaFoTE0uqtJ0s+O
+         gexP2AdTwnjWUw2uyAj9mhznBhs7s8WbRL//gtKz4KkqA5pC2lNvTTO/ELk+ex5SwrTK
+         Pkpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770790343; x=1771395143;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j9khDJwC26k6b6vyvHB5IsQvyavqAsh5XUOPgKVhYWc=;
-        b=nAuWLy2Oz5otu5LpmLUkZAP96GHa0CBb+WC/a94n+iUI8UyGOiNpJeC/kshydVT5C1
-         oeFwsDO9GskGSBvGITzeBSXOAXqKO7+i/V07LZKA/6Sy2W4qg6mhYegN+eBcyrdEmmW1
-         4NpbNsCujgesP9zi1xX32BATftzfil4x7aYEK1E7aV/EO/IWIxzNUjhFnEJasVZda+KF
-         QfdVd3cUqwRl3jkwzbWxNaYFG7KyhFPcABrMGBkS09qZD+jtbqLc531YAL/1UIfbxF92
-         HnlAnO+cb+p8XUmmhkLRRroq0zvVP4hi1D1MumjrGrzRAB241t5jem0PURNCftlm2e6l
-         6Vow==
-X-Forwarded-Encrypted: i=1; AJvYcCU5r/W1HJo5mj6Oss6q1yALckrnNF8ybmGiJak9YI//D5xBtc8RHc6rmXz+iHO8bOgt3UQVsz3Dpwk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwN5+Q/Z4LJs5L+zndRCWjOwnLuaufwAqNFX2k/WW7Olrqpt6fy
-	NwmgUCMJvAo0q9osAMh8ZvtBMdTuU+iUrq3lujUukhRv255ibfXNtE0Kky4jsi9p5d6dYvdYVLI
-	iCRUc1JC6opbx/uzE8Rxu8CRZl5+CFX5ZVAa8g1IGENzUXlPLmXei3QLBCknDe9Q=
-X-Gm-Gg: AZuq6aJFyM9FFd+I3SShnXyd/MiJvEnhb5VhCYE5W34lLzqDhSR84cQ10p9Q6dW1dPG
-	2BZUczt6Qo23Cl1an/ikTpJyfQMyv4yYR2+Leg6vf/AKLfnmf9gzgpeSGbnYYWDSlzf4ki3z5NF
-	NEFW5CTcQ80h34Wvb1bFemaXENicB+Oj7MYl0neEPKx6c43l/iMI3/2uDB2ccFnASm+5t47HsIx
-	hNIo6ru24Cc6grJQMWxtWPNkKgkqk0SyNpo2mr9p76uXDyPZIaf1vYvhYzcKTa1pHralSBsjh01
-	j0DOpvP5WL2QVHk4bpyYqB2MndPmg1uiAtcUF9ZuscMCjwWU87rmqHYmRQnKf4ysvMpzVBcvyVx
-	OdKEIeUv3iB4JezWNJHbVHMwsWD54sQdied10vC8f7uY/f9IdYZvGAXp1WTRUkrcJ2pBVbzGJ51
-	EDpw/8nQ7wIMRKsVJLLMqZ8npKcyDSiGBsgDg=
-X-Received: by 2002:a05:620a:1789:b0:8ca:2baa:6658 with SMTP id af79cd13be357-8caf238e3bemr2165205885a.70.1770790343604;
-        Tue, 10 Feb 2026 22:12:23 -0800 (PST)
-X-Received: by 2002:a05:620a:1789:b0:8ca:2baa:6658 with SMTP id af79cd13be357-8caf238e3bemr2165203885a.70.1770790343112;
-        Tue, 10 Feb 2026 22:12:23 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-387068e5df8sm1333581fa.29.2026.02.10.22.12.20
+        d=1e100.net; s=20230601; t=1770791371; x=1771396171;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E6tA//vNS7IUDnw5yILXeqILaShUeChfWlMYu0AvVaQ=;
+        b=i4v3a7RXxy5KrN8xSLVHzR7WQzXgVhIUeGN/H1Lal+ct67bi+0NK/V2qAiGEOIIhl1
+         prDiFKvlVhd7Taf++sYeCJJij1e+2oyk/bxY1QTCrAbgKjjusI6KAFGOxwbxWWi4UfFm
+         U8AFFM4v9OvwpJeoBonD6qOpAvprg4tjtBlegyCFDpK8CwnyaEbo/mHFmXfFtRuBkYRu
+         z4DrZwg5l8r2u5IspiIkdAcXXCYoIdrLuWzTyFusJMC/XcKcBrOkCIIzXRmuRNlQrH4o
+         Pvq375jKu5yMsQxmTn2TvN5IhQBNUMDZkEtKuQYNe8tlLAVFKdFkqENbH9jQarJjX4BK
+         RAXg==
+X-Gm-Message-State: AOJu0YwaEG8YZYdVP1NeLR2W1Grd5E7qzxGWHr67GNvoeObgNlhKtVpg
+	diPLJUHeavWp+L6cJbIwNKo3UAzz2MDjHqzJhB/phEjFlsWVRq5BpDJC70WKr8+NClXAjzZqWgN
+	Oro7hTGVaZz/H/mysA5f8Gp961LeJy4UK3lLmCe0KhF3i+r1L/ZOJe/rer2OwueM=
+X-Gm-Gg: AZuq6aJzNC1EMTDlefLadEDvuNx8Roo+GvNj/ciZy820YOsnzc5BzFzeYdyxbN/OHKJ
+	UrSTFRqy/+yFRKdPPHdydXLi9HmDAmAOfqgLKZ3Dih+LCdCaIeqw8Z8RySGPQ3dXUnw/qIIyOJW
+	3mVfQVv6gZBwOugPoikJAIAdFMsDToJ/0sMMaYx1teYctqwYopH1FoADt6fJPWHexq/MHmTYE6P
+	2KvvSSD5V3rkjhxWuNDQ82jqXfgtCocVG1LjZc9XXJWGIVHTdsHitnsZC4lKf/pZX5MSp251mop
+	AnYOdM/HQ2An3O0CS1XPI55qrER9LdVO+6/aotUc0dzOFJssiY1Xp895dG/772jfbVLZCZj+cFv
+	z74qPQqVx2nUy40xnomrseH7hsApwp0sSe+mkeLaGHQGIPbZ/hA==
+X-Received: by 2002:a05:6a00:1494:b0:81e:63b9:5830 with SMTP id d2e1a72fcca58-8249fc87968mr957001b3a.18.1770791370725;
+        Tue, 10 Feb 2026 22:29:30 -0800 (PST)
+X-Received: by 2002:a05:6a00:1494:b0:81e:63b9:5830 with SMTP id d2e1a72fcca58-8249fc87968mr956984b3a.18.1770791370271;
+        Tue, 10 Feb 2026 22:29:30 -0800 (PST)
+Received: from hu-akakum-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8249e36809esm950905b3a.7.2026.02.10.22.29.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 22:12:21 -0800 (PST)
-Date: Wed, 11 Feb 2026 08:12:19 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Akash Kumar <akash.kumar@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tue, 10 Feb 2026 22:29:29 -0800 (PST)
+From: Akash Kumar <akash.kumar@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: qcom: qcs6490-rb3gen2: Enable USB2
- controller Micro-USB OTG
-Message-ID: <2zztcabuf4hkixj445m3iiqdsmg7jju62e3fgupb6kaqirx5lq@2mhs5hcn3p7p>
-References: <20260211052146.3760500-1-akash.kumar@oss.qualcomm.com>
+        Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v3] arm64: dts: qcom: qcs6490-rb3gen2: Enable USB2 controller Micro-USB OTG
+Date: Wed, 11 Feb 2026 11:55:51 +0530
+Message-ID: <20260211062923.3794476-1-akash.kumar@oss.qualcomm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260211052146.3760500-1-akash.kumar@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjExMDA0OCBTYWx0ZWRfX5jiisJ/fIxPw
- CcqADMTtrIUmiNzEGcyyz0R5IC8mm0nZHKkLr2e4gZbKxSLkHJ8h/wOLWCFdCq7kXvgWXL6p9BP
- kPDEHJI355b4qF3q5ZRH+L8AfMX0ksbM+PguhEkpaLJOyKe6V1ZbDp3L3upRpJ7+Z0/Rviy6RPH
- VbL/C7uy1PYZNYSI4wua8pJwBvsFiUxC4xeJ1U1rXDz09QtNoMnYJugF/rBrmD6KVkvMkKeDQMv
- ul9xB/AH2enTNFFynWhZ+3kwQqppzSoEHIe4yefOxUV5hpx+DUn++unSIBDXoErjqG4fPeIyFaz
- c0US03x90gMegMKfoviipxu4agZ9u2ulmYpmW0TUD8jo7TR+Y2FO1b6EpzjJhj5EX9MKAGy85h2
- vBDqO47fRZ15Ai2g/MLrY94NQOoE0fmtYkCG7ASQtPZmWFs9hU/U41gOH9xDovsATGaJt0nS7X/
- EI72QDKKEScu2JsZ4nQ==
-X-Authority-Analysis: v=2.4 cv=TKVIilla c=1 sm=1 tr=0 ts=698c1dc8 cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=HI7O14tv c=1 sm=1 tr=0 ts=698c21cb cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
  a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
  a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=EUspDBNiAAAA:8 a=KgnbEzuii_36Y5xDassA:9 a=CjuIK1q_8ugA:10
- a=IoWCM6iH3mJn3m4BftBB:22
-X-Proofpoint-ORIG-GUID: E1KYRrbuzwWSGJM9QBQyv5xUJfKFqhM3
-X-Proofpoint-GUID: E1KYRrbuzwWSGJM9QBQyv5xUJfKFqhM3
+ a=EUspDBNiAAAA:8 a=nDjxtR87dJjKcGfwTHQA:9 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-GUID: ZqdJOXVvUPzp_aVRad9a41AkmIBhENx8
+X-Proofpoint-ORIG-GUID: ZqdJOXVvUPzp_aVRad9a41AkmIBhENx8
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjExMDA1MSBTYWx0ZWRfX44zgbCBYqH8o
+ QYIPPc6U+eOQMSnFXBb17KLj6X4v2JSgWRWzbI6u0MSm1+x5sJsN1Ve5fhioKot1ITwbZ79iRdV
+ +Tm4ELJ8cQPUQ6MTSRFf9sXFFXOZpcjTZC71Q39hDcEaefuS8I+TsT7QaMfcfr7kjuSb8LZwYE6
+ LJfFdXtQjQIGIMRhKBaZMStcOia062BDzxQLNxDnPBk9YBFmBwv/dv5eOEd+NAs74xEy37q4tQD
+ 719+jg5heV4WLZAEbZgPf9/Rp8SceWOCNWFCCvriuFR5gVXpdTOxG4YaQe2W9zWq0moJ6NGcbiN
+ KKzP3CPZdk2dh16bfFV3bigphJe+VdrKIriw7PEH3x3JPonIosn6PXQAWeFPt0ekSZfbnOGpeRL
+ zQdjYS9NBskPHKahTFk2TQBphZAuxYVinFasJmfUBAJdw/AwHt1KrsM7Y6IhtevULyOjuCRyaGC
+ ZkXbRG2kfoc60W5O2UQ==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-10_03,2026-02-10_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 impostorscore=0 malwarescore=0 priorityscore=1501
- suspectscore=0 adultscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2602110048
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0 suspectscore=0
+ bulkscore=0 clxscore=1015 impostorscore=0 malwarescore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602110051
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33273-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[akash.kumar@oss.qualcomm.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33274-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
 	RCPT_COUNT_SEVEN(0.00)[11];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_PROHIBIT(0.00)[0.0.0.0:email];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
 	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 60660121911
+X-Rspamd-Queue-Id: C32161219ED
 X-Rspamd-Action: no action
 
-On Wed, Feb 11, 2026 at 10:48:18AM +0530, Akash Kumar wrote:
-> Enable the secondary USB controller (USB2) and its High-Speed PHY to
-> support OTG functionality via a Micro-USB connector.
-> 
-> Define a dedicated 'usb2-connector' node using the 'gpio-usb-b-connector'
-> compatible to handle ID and VBUS detection. Link this connector to the
-> DWC3 controller via OF graph ports to satisfy schema requirements and
-> enable role switching.
-> 
-> Specific hardware configuration:
-> - ID pin: TLMM 61
-> - VBUS detection: PM7325 GPIO 9
-> - VBUS supply: Fixed regulator controlled by TLMM 63
-> - Define a gpio-usb-b-connector node for Micro-USB support, mapping the
->   ID pin to TLMM 61 and VBUS detection to PM7325 GPIO 9.
-> - Add the 'vdd_micro_usb_vbus' fixed regulator (controlled by TLMM 63) to
->   supply VBUS to the connector.
-> - Add the 'usb2_id_detect' pinctrl state to configure GPIO 61 for ID
->   detection.
-> - Enable &usb_2_hsphy and populate necessary voltage supplies (VDDA PLL,
->   VDDA 1.8V, VDDA 3.3V).
-> 
-> Signed-off-by: Akash Kumar <akash.kumar@oss.qualcomm.com>
-> ---
-> v2: Fixed minor comments on v1: https://lore.kernel.org/all/ad294a50-027f-4caa-a9b4-e145f709b50a@oss.qualcomm.com/
-> ---
->  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 64 ++++++++++++++++++++
->  1 file changed, 64 insertions(+)
-> 
-> +
-> +		port@0 {
-> +			reg = <0>;
-> +			usb2_controller_ep: endpoint {
+Enable the secondary USB controller (USB2) and its High-Speed PHY to
+support OTG functionality via a Micro-USB connector.
 
-Nit: empty line between reg and endpoint. I'm sorry, I didn't notice it
-beforehand.
+Define a dedicated 'usb2-connector' node using the 'gpio-usb-b-connector'
+compatible to handle ID and VBUS detection. Link this connector to the
+DWC3 controller via OF graph ports to satisfy schema requirements and
+enable role switching.
 
-With that fixed:
+Specific hardware configuration:
+- ID pin: TLMM 61
+- VBUS detection: PM7325 GPIO 9
+- VBUS supply: Fixed regulator controlled by TLMM 63
+- Configure &usb_2 in OTG mode with role switching enabled.
+- Define a gpio-usb-b-connector node for Micro-USB support, mapping the
+  ID pin to TLMM 61 and VBUS detection to PM7325 GPIO 9.
+- Add the 'vdd_micro_usb_vbus' fixed regulator (controlled by TLMM 63) to
+  supply VBUS to the connector.
+- Add the 'usb2_id_detect' pinctrl state to configure GPIO 61 for ID
+  detection.
+- Enable &usb_2_hsphy and populate necessary voltage supplies (VDDA PLL,
+  VDDA 1.8V, VDDA 3.3V).
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Signed-off-by: Akash Kumar <akash.kumar@oss.qualcomm.com>
+---
+v3: Added empty line between reg and endpoint.
+    v2: https://lore.kernel.org/all/2zztcabuf4hkixj445m3iiqdsmg7jju62e3fgupb6kaqirx5lq@2mhs5hcn3p7p/
+---
+v2: Fixed minor comments on v1: https://lore.kernel.org/all/ad294a50-027f-4caa-a9b4-e145f709b50a@oss.qualcomm.com/
+---
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 66 ++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-
-
-> +				remote-endpoint = <&usb2_connector_ep>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-
+diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+index f29a352b0288..76f2c6b3d518 100644
+--- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
++++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+@@ -217,6 +217,16 @@ pmic_glink_sbu_in: endpoint {
+ 		};
+ 	};
+ 
++	vdd_micro_usb_vbus: regulator-micro-usb-vbus {
++	       compatible = "regulator-fixed";
++	       regulator-name = "MICRO_USB_VBUS";
++	       gpio = <&tlmm 63 GPIO_ACTIVE_HIGH>;
++	       regulator-min-microvolt = <5000000>;
++	       regulator-max-microvolt = <5000000>;
++	       regulator-boot-on;
++	       enable-active-high;
++	};
++
+ 	vph_pwr: regulator-vph-pwr {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "vph_pwr";
+@@ -262,6 +272,31 @@ active-config0 {
+ 		};
+ 	};
+ 
++	usb2-connector {
++		compatible = "gpio-usb-b-connector",
++			     "usb-b-connector";
++		label = "micro-USB";
++		type = "micro";
++		id-gpios = <&tlmm 61 GPIO_ACTIVE_HIGH>;
++		vbus-gpios = <&pm7325_gpios 9 GPIO_ACTIVE_HIGH>;
++		vbus-supply = <&vdd_micro_usb_vbus>;
++		pinctrl-0 = <&usb2_id_detect>;
++		pinctrl-names = "default";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				usb2_connector_ep: endpoint {
++					remote-endpoint = <&usb2_controller_ep>;
++				};
++			};
++		};
++	};
++
+ 	wcn6750-pmu {
+ 		compatible = "qcom,wcn6750-pmu";
+ 		pinctrl-0 = <&bt_en>;
+@@ -1137,6 +1172,12 @@ qup_uart7_sleep_tx: qup-uart7-sleep-tx-state {
+ 		 */
+ 		bias-pull-up;
+ 	};
++
++	usb2_id_detect: usb2-id-detect-state {
++		pins = "gpio61";
++		function = "gpio";
++		bias-pull-up;
++	};
+ };
+ 
+ &uart5 {
+@@ -1200,6 +1241,31 @@ &usb_1_qmpphy {
+ 	status = "okay";
+ };
+ 
++&usb_2 {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++
++			usb2_controller_ep: endpoint {
++				remote-endpoint = <&usb2_connector_ep>;
++			};
++		};
++	};
++};
++
++&usb_2_hsphy {
++	vdda-pll-supply = <&vreg_l10c_0p88>;
++	vdda18-supply = <&vreg_l1c_1p8>;
++	vdda33-supply = <&vreg_l2b_3p072>;
++
++	status = "okay";
++};
++
+ &usb_dp_qmpphy_out {
+ 	remote-endpoint = <&redriver_phy_con_ss>;
+ };
 -- 
-With best wishes
-Dmitry
+2.43.0
+
 
