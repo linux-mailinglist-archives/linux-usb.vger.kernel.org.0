@@ -1,89 +1,92 @@
-Return-Path: <linux-usb+bounces-33292-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33293-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oPaCGIyajGlkrgAAu9opvQ
-	(envelope-from <linux-usb+bounces-33292-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 16:04:44 +0100
+	id KO2QE9mgjGmPrgAAu9opvQ
+	(envelope-from <linux-usb+bounces-33293-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 16:31:37 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E3B125696
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 16:04:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD74C125B0B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 16:31:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B63E03017F80
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 15:04:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0E8883012E9C
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 15:31:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2B32877D5;
-	Wed, 11 Feb 2026 15:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 563BE2E0412;
+	Wed, 11 Feb 2026 15:31:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="qJlnJbUy"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ZLW+Zy0Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEDD1DF980
-	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 15:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59502D94A3
+	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 15:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770822279; cv=none; b=q1u4qW+/PjW5cOECNzPX6qisaUayR1zMRi+UsouAGSj2V4kd7ASxMkqEKmfNfodIFVJSADDpHbUCykD9b/SliaUuQTA/TQ6s6nZxNAkfEFIqfWb+nqrXVOHWS63ZMxec5Tbpyl5B8idVFnjjKN1xR5+WpXptNyyg9zZpKqflxVc=
+	t=1770823890; cv=none; b=ltKBGugP7AoThJY/4RJbVKY18+VRJxfyXMaRQQdJ1JzPILHR+nS+/tYjNNho1ATLQ769pouDuLerSEQVW7urZcZJuO4Y8JdSAdmr4lwgtkuJdIvOTwRknp5BhwOvVcxSnfABLi2GCtpTJJE4zgWBLqmCmC6uZam3K56F/WqHmew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770822279; c=relaxed/simple;
-	bh=AmZMzOclZ8x0kbRdv+6orlxHCTBrmpBGJ67CosDnpSY=;
+	s=arc-20240116; t=1770823890; c=relaxed/simple;
+	bh=RFYkZrMyxGNdpTgS+Rrg5Nbark0PsK0OE0eKHasuCmA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D/3F2KGp93QktqWvFqsssLFXkBT/ikjmPTA0U/3dpe+pUexz2fw3ff8bmGKJcALKexdKzMYDI82t5I9nJ6/tFH0CSZQRtNwwJ/N4VJdh563JCYtK7kw4VKQeGclmvA43wntfhafdUGD97384nO1MwbqPq1VrPaA9l9lF9UWEiPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=qJlnJbUy; arc=none smtp.client-ip=209.85.160.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=RVSpbLzlkSNqxEVqtPdio5a5emDc0rXo5VJSUD4z+5YpaAGqhxFWXZL9aIgedVWfSwAk7MM+asytmFxlKMh/x2Pg2h0nTjcwCTetn0aU/eHrAExoPsFURzT2tcyOfsSKCKKHy9GRlh920wD2Rt6UHLp4/hBI/sWvYJN2Zg9vMBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ZLW+Zy0Z; arc=none smtp.client-ip=209.85.222.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-5014600ad12so49377671cf.2
-        for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 07:04:37 -0800 (PST)
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8c6a7638f42so725550285a.2
+        for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 07:31:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1770822277; x=1771427077; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1770823888; x=1771428688; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YQ2XuMNlJ0VrBoxBJpOB6BdQH/fRgWhyXV6P5UB4GYc=;
-        b=qJlnJbUyvrqXQTgBoH7KfqLTu4Gb+hiq97dWzAGDLTWt8qorWJM+8EJpNjLFODT6OQ
-         BwJkc518Sz8gxt37JfTydTGpQJWF+j2bNI/lBPPuYurkEJHh9BXY9Xe3cK+E+p1VM/TH
-         w8OwFu/m5H1mIvERQD+YiDikbBRuE12RUFZ9YupP5mkUpARWSR61SeUrvFWJR4pw4im5
-         wCB0ImLfAInG5S6i2oFjzmo2Hw/PDv0qX7l5TNWZO+57WzDszl5BFfT6YLtkUX0ft9lY
-         MyfPOwlEe6xwewC08OkeUiLspVUqKE1d80MgTDmSVREMWfq2+dSWeppQ+0u2sKbONeJe
-         w5Og==
+        bh=2DPizJHDpByN85Dw1d6viBsgdf3j/JzTi1whjje/4is=;
+        b=ZLW+Zy0ZO0q86Un4fpyXPl4fg1ISgXAljr1lZACSkETRR/Y+jG/LOvGVs4EVIXVoIK
+         /hgPmT5M6zPYIdr2xtqOghAeUKt/LqHrs/HeK/No+o2D5H7/5YnVi7kFEJTtZZhYweK3
+         Uhm/zA9q5EZqKxIQnn3bIHJVB0rGljPOvCymRPHe8o6grUoH0LzdAyI7aIbSR+hXbZ/s
+         ooe41mn7Q6hMPpqypjDwNFVEWf+r4CjZ1+ANqQJHDn5FDrOR8e1Sw+vdqUqh++oxOdru
+         LwDS4PwwGXHj4d0CGn4MqS/aJ222KFCH0EEThAdYYhqxPmoJHV/8XJO0/dROuYjKjqku
+         FXVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770822277; x=1771427077;
+        d=1e100.net; s=20230601; t=1770823888; x=1771428688;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YQ2XuMNlJ0VrBoxBJpOB6BdQH/fRgWhyXV6P5UB4GYc=;
-        b=CLcrOtNgmIMNG4/1nEdEKiE/6CgH+A7vWO80QsupDMxayva5KkvaH6zzry39xX5hGo
-         pGXyLY+mFJzVQG/RNnF5lyan9hpNFY+cSr3V1vEwWe1ObT41+OGlH3wB3LUkB/sxLFcr
-         mTMpHl0/4CjnCZHKwIH5CVxDLGKv7fBWFKzspXi76HuBBclpcTErILp9oP8TY8exyFyd
-         lnHzX+mhyvgtJp8wTJubdqsKE7oc5R49z6VcGGClW513NqAhQ5ebsonZpWcHW9pI8MIV
-         mo1q/NC0Tm/WBjoVK94IaaxowzHMXlKfLFQf/FwnBpPtl8vfDhJ3dOlRd/sTnyhe6wQK
-         oMng==
-X-Forwarded-Encrypted: i=1; AJvYcCUZ+7VYTUSFpMwUZ/qYC/QOhOXefTWf53KOj9u49oNp4pcXiSAAeeWsk8EUypjPBSB20ofe5RBLyfQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+84lC+8dho8Cp3jFKSbGhUnOn3R2e37veXAmdOs1aO7PT45FT
-	Z4x6SOoCg/sDlesTLZFF/VTPXQg/QLlzAMAbzETJpcynjeruBDOXNTIPn+SEwIDjLQ==
-X-Gm-Gg: AZuq6aKAPgAzZ4wDA3LXBGFuYez+iThubARIR9+AjMp92Pud1jS6SR2i//6hC8Coo0D
-	1zFpEnXprc8bDydPja1tUsRW1yftsl8Nh/2Bv5GlwdUpCgZbgOOYkb41tA5mOz1GGUgnmvZqkCR
-	zSXZNxVesKMQcVO7gWVgdJ2PELtsS7z/U/V8UOUZ2bvFxckTZukpzh83jyhq3kMpsBKabWmYqh5
-	UgLYgJjG9a25uF7NDvYmTafyc7O/k+KOwb3fKCf6+uBdsiHyyl++ZVrit/g+iM861/61tHL3/P+
-	hFLN2qVnqhZEnNudjw/T5E/ZWBacuqVzJ0xoe954NT1Av/p00baDY6+Tzn0V3Xm17uxKgJv7nGQ
-	s181pxx8w59i1NXBWvbYNEvo98bOg/n5NvDF5ozNXSPUOvF9GGfdMgPWd0zbM7rTWBh0hNnmU5Y
-	KJZWgzK/zR7NOwYBS37ZXI2r2sda5QNxan+wWqGYE/CA==
-X-Received: by 2002:a05:622a:11cf:b0:4ee:2984:7d93 with SMTP id d75a77b69052e-50673cf1ec0mr71711981cf.17.1770822275252;
-        Wed, 11 Feb 2026 07:04:35 -0800 (PST)
+        bh=2DPizJHDpByN85Dw1d6viBsgdf3j/JzTi1whjje/4is=;
+        b=vrql1w4W+FM6dO9iexDu0rqjjtNYDjExocM3iHVz7wXcDqtzcQrmzgmMbyf69NGNV2
+         2zvZpy2UJBSeYyePzfxyuyxvVwc+LQB8tV4+lYbTfdfK1KewkjpWeUOtZXoHEV+v8aVj
+         kQccsg6ChUmoDKXOjl8aCjaAD6LJMcCBYICwOV7Gk5tiuhhlVGeQe+WLu3I+mJLagk92
+         0+8kH3RIF2pNVb0xXtaWYDmHZveJy0CC8I9TZ3QSJPjgvyjBxMTblGBzdiMSJeTbwxW5
+         wuhLuGW9zw3MvSN+FANM768oqjL56KNiDQkwiQRQ01kj0DJVELAeCDpfzArLT/b6f288
+         WDYw==
+X-Forwarded-Encrypted: i=1; AJvYcCWcYxGJHD/M3v6o0fdf3BJ5tjBU9mdNTy9VuU2jgjWq2pRVV/bHqBSRP6nbdrKDxYflEz7jBRzehLs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHqkmIX2p74OnhboKki55P2a57521y1B16Xq5Wa3Bv+OiOWSQx
+	8S+DKLUWm9t0FvSsOZRs9A3TPz2I9FsWY7xI2nZmovf/PB5FX0jdP7EGpLUBDZTzd+rQneHkWIM
+	s2II=
+X-Gm-Gg: AZuq6aLQ8fLsL1t8DW7AEhbzS/qmBcdsHHsmMEeUf8wTX2aOS23QTl2I8AL0p14NwED
+	JzWxMkX0NIQY1nxqmn8Enfza8pB8SnEmSXOeBxnBj9cH6WgHxBw8orAoMlTR2kED3h48nQi/ury
+	PTGpfcLS5AEbifNaK9LNAfMHo33XBNX+9Z9Rc8HcSdKjeXjH3ibQ8qrc9SP3t0RqhofkY+lWSgE
+	YvnCRjsuEkx7b5z/yv2EtjvA9IkxisjB9Mayh877WuzezccCJROK8aD7KSDh0E070Xw+nm5+N+E
+	PhtU3eNZorKNUYOSlWz7xcklpYzvrOgAo58GkJ5cIFRB34yxNxUvKcbqv/7rMlYG8Is3NuBXH1o
+	EQAORUZbq1Uu6KTyrHznK3ZadDv4b7QUxCK1JOR3lSK+weet7VpB2p/ROT8KUuT5w7fNERQ/b6o
+	9btKQv/MWzyDrcqZpdbWAHFGHz7zHPQoctGvOX7lOOnQ==
+X-Received: by 2002:a05:620a:4410:b0:8c5:2e83:d016 with SMTP id af79cd13be357-8cb2808132bmr442556685a.72.1770823888250;
+        Wed, 11 Feb 2026 07:31:28 -0800 (PST)
 Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cda750dsm18472026d6.35.2026.02.11.07.04.34
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb2b0f38afsm138914485a.22.2026.02.11.07.31.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Feb 2026 07:04:34 -0800 (PST)
-Date: Wed, 11 Feb 2026 10:04:32 -0500
+        Wed, 11 Feb 2026 07:31:27 -0800 (PST)
+Date: Wed, 11 Feb 2026 10:31:25 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, m.grzeschik@pengutronix.de,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] usb: port: add delay after usb_hub_set_port_power()
-Message-ID: <1be3ca8a-032d-487e-92f4-67b2070be213@rowland.harvard.edu>
-References: <20260211103628.3265850-1-xu.yang_2@nxp.com>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+	USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 2/2] USB: usbtmc: Don't accept very long timeouts
+Message-ID: <313e86fd-0870-4b6b-b4ee-1ba3eb9d9d0b@rowland.harvard.edu>
+References: <237c76a9-fcf5-418b-a3a7-51929af1d69f@rowland.harvard.edu>
+ <fa1e3282-0559-4ddc-97ec-be07a41ab27e@suse.com>
+ <c6802a96-33d4-453a-b1b6-e74b4911555b@rowland.harvard.edu>
+ <79868062-41e5-414b-a0b7-7aa162dbf4d6@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -92,104 +95,95 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260211103628.3265850-1-xu.yang_2@nxp.com>
+In-Reply-To: <79868062-41e5-414b-a0b7-7aa162dbf4d6@suse.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_ALL(0.00)[];
 	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	TAGGED_FROM(0.00)[bounces-33293-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33292-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_THREE(0.00)[3];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,nxp.com:email]
-X-Rspamd-Queue-Id: C3E3B125696
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rowland.harvard.edu:mid,rowland.harvard.edu:dkim]
+X-Rspamd-Queue-Id: AD74C125B0B
 X-Rspamd-Action: no action
 
-On Wed, Feb 11, 2026 at 06:36:28PM +0800, Xu Yang wrote:
-> When disable the root hub port, somehow the device is disconnected and
-> re-connected again. This happens because usb_clear_port_feature() does not
-> clear a truly happened port change. That says, in fact, port change event
-> may happen after usb_clear_port_feature() is called. Then the subsequent
-> port change event will have impact on usb device suspend routine.
+On Wed, Feb 11, 2026 at 11:28:38AM +0100, Oliver Neukum wrote:
+> On 11.02.26 04:25, Alan Stern wrote:
+> > How about accepting the value from the user, but limiting the timeout to
+> > USBTMC_MAX_TIMEOUT in the usb_bulk_msg() calls without changing the
+> > wait_event_interruptible_timeout() calls?
+> 
+> That would presumably work. Yet I am not happy with it.
+> 
+> > It probably would help to know something about how this class and driver
+> > were meant to work...
+> 
+> Indeed. But we have to work with what we have.
+> 
+> This pushes me to take a step back, figuratively speaking, and
+> try to look at the situation in general. And I must say that
+> at this point, you seem to me to no longer be coding to produce
+> the optimal result, but so that you can keep using
+> usb_bulk_msg() with regards to TMC.
+> 
+> The issue exists in general so the first patch in your series
+> is necessary in any case, even if it may need improvements,
+> but in case of the second patch, I think you should go for
+> the full solution. That is, use an URB and wait for it to complete
+> in interruptible sleep without usage of a helper.
+> We know this will work.
 
-This is not a very good description of the problem.  Here's a better 
-one:
+So there are two issues to consider.
 
-When a port is disabled, an attached device will be disconnected.  This 
-causes a port-status-change event, which will race with hub autosuspend 
-(if the disabled port was the only connected port on its hub), causing 
-an immediate resume and a second autosuspend.  Both of these can be 
-avoided by adding a short delay after the call to 
-usb_hub_set_port_power().
+First, the change to usbcore.  Rather than giving an error if the 
+requested timeout is too large, I suggest decreasing it to 
+USB_MAX_UNINTERRUPTIBLE_TIMEOUT and continuing.  Does that seem 
+reasonable for the synchronous usbfs ioctls?  (Note that the 
+USBDEVFS_SUBMITURB ioctl is not subject to this problem, since it is 
+asynchronous.)
+
+Second, what to do for usbtmc.  One approach is to do nothing and rely 
+on the change to usbcore.  The simplest alternative seems to be 
+something you suggested earlier: Add a usb_bulk_msg_interruptible() API 
+to the core and make usbtmc use it instead of usb_bulk_msg().  Of 
+course, this also has the potential problem you mentioned: The transfer 
+could be interrupted by a random unblocked signal.
+
+Which leads me to ask: Which consideration do you think is more 
+important for usbtmc: Having a timeout that is possibly too short, or 
+being subject to interruptions by unimportant signals?  I can't think of 
+any way to avoid both.
+
+(Actually, I can: Use an interruptible wait, but restart from where it 
+left off whenever it is interrupted.  This seems rather ridiculous.  For 
+one thing, the user would not be able to cut the call short, which 
+defeats the main reason for making something interruptible.  For 
+another, it could consume a signal without the user's knowledge.)
+
+My opinion is that if usbtmc would really be worried about limiting 
+timeouts to 60 seconds for its usb_bulk_msg() calls then it shouldn't 
+have used usb_bulk_msg() in the first place.  That API was never 
+intended for any transfer that might delay more than 10 seconds or so.  
+For this reason I favor the first approach: Do nothing.
 
 Alan Stern
-
-> Below log shows what is happening:
-> 
-> $ echo 1 > usb1-port1/disable
-> [   37.958239] usb 1-1: USB disconnect, device number 2
-> [   37.964101] usb 1-1: unregistering device
-> [   37.970070] hub 1-0:1.0: hub_suspend
-> [   37.971305] hub 1-0:1.0: state 7 ports 1 chg 0000 evt 0002
-> [   37.974412] usb usb1: bus auto-suspend, wakeup 1
-> [   37.988175] usb usb1: suspend raced with wakeup event         <---
-> [   37.993947] usb usb1: usb auto-resume
-> [   37.998401] hub 1-0:1.0: hub_resume
-> [   38.105688] usb usb1-port1: status 0000, change 0000, 12 Mb/s
-> [   38.112399] hub 1-0:1.0: state 7 ports 1 chg 0000 evt 0000
-> [   38.118645] hub 1-0:1.0: hub_suspend
-> [   38.122963] usb usb1: bus auto-suspend, wakeup 1
-> [   38.200368] usb usb1: usb wakeup-resume
-> [   38.204982] usb usb1: usb auto-resume
-> [   38.209376] hub 1-0:1.0: hub_resume
-> [   38.213676] usb usb1-port1: status 0101 change 0001
-> [   38.321552] hub 1-0:1.0: state 7 ports 1 chg 0002 evt 0000
-> [   38.327978] usb usb1-port1: status 0101, change 0000, 12 Mb/s
-> [   38.457429] usb 1-1: new high-speed USB device number 3 using ci_hdrc
-> 
-> To fix the issue, add delay after usb_hub_set_port_power(). So port change
-> bit will be fixed to the final state and usb_clear_port_feature() can
-> correctly clear it after this period. This will also avoid usb runtime
-> suspend routine to run because usb_autopm_put_interface() not run yet.
-> 
-> Fixes: f061f43d7418 ("usb: hub: port: add sysfs entry to switch port power")
-> Cc: stable@kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->  drivers/usb/core/port.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> index f54198171b6a..a47df5d32f7c 100644
-> --- a/drivers/usb/core/port.c
-> +++ b/drivers/usb/core/port.c
-> @@ -141,6 +141,7 @@ static ssize_t disable_store(struct device *dev, struct device_attribute *attr,
->  		usb_disconnect(&port_dev->child);
->  
->  	rc = usb_hub_set_port_power(hdev, hub, port1, !disabled);
-> +	msleep(2 * hub_power_on_good_delay(hub));
->  
->  	if (disabled) {
->  		usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_CONNECTION);
-> -- 
-> 2.34.1
-> 
 
