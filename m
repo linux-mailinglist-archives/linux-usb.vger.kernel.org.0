@@ -1,154 +1,196 @@
-Return-Path: <linux-usb+bounces-33283-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33285-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kHFKHetljGkFmgAAu9opvQ
-	(envelope-from <linux-usb+bounces-33283-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 12:20:11 +0100
+	id SMH2NpV4jGktpAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33285-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 13:39:49 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF8C0123CFA
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 12:20:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 427681246AB
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 13:39:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DB71F30045AE
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 11:19:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 99CF2306ECBB
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 12:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB37A36BCCF;
-	Wed, 11 Feb 2026 11:19:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3904D34DCFF;
+	Wed, 11 Feb 2026 12:36:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Z0MvZcBz"
+	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="hMYZxvSp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx-relay47-hz3.antispameurope.com (mx-relay47-hz3.antispameurope.com [94.100.134.236])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717C2305E3B;
-	Wed, 11 Feb 2026 11:19:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770808782; cv=none; b=MihfvMAMH9Wx36HG/GWEECgcmQFBd74xT8mMuOwbqgySC2WMu1epXVZap3BwR6Q7ifnB9p7fzvsLl9pBNX7W5vcpl/oasfj7l7oQnMHFPAyjHQoWzljc5P81eK3xmn3kZieCQj9DHvuzsKBSeO1K2uQHGI4QrcwVbn/rqfz5Pu8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770808782; c=relaxed/simple;
-	bh=DzzyTELpgXsMtGnk5iF4hSBn6JjpWYLTSBVB+t5iEKk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WqX2vSU8Z5zzpWqTg+aoPNNhVOr0l9cc1nrRdNXqrEE5vemQ/0A7GVTkxEjFnQAoDGJiBrMTgeJgKxbRRmciSrMPPSp6d8JfDaTkew3IO8P65LCKQMxtYcbHm80iTfvdzqkoejVQ43bdV7P3bN5MhesYZUmwzw6utWpGczFvuYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Z0MvZcBz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E14EC19424;
-	Wed, 11 Feb 2026 11:19:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1770808782;
-	bh=DzzyTELpgXsMtGnk5iF4hSBn6JjpWYLTSBVB+t5iEKk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z0MvZcBzrPpAZgGEjx8QXw8uVmTQeYITIPoYKm/E9qwUzhrdniXiGuPcn9tS8yae2
-	 9MjGuKcFaNi4ln6jOwbHMWKT3dBko0cBr2ZuTK9MwAqzDLVaieKd3ZWnJ9aLRc2B9E
-	 Yhm0MDc78sFkeZfNCRp3iK38QJYevVKytggIWxf4=
-Date: Wed, 11 Feb 2026 12:19:38 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: m.grzeschik@pengutronix.de, stern@rowland.harvard.edu,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] usb: port: add delay after usb_hub_set_port_power()
-Message-ID: <2026021130-seminar-comma-5a7d@gregkh>
-References: <20260211103628.3265850-1-xu.yang_2@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5132B1F03EF
+	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 12:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.134.236
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770813365; cv=pass; b=uZ0lKlia/Z15at2IOSF7d1WxeyolJ2SerkXDopmh+8Lh29Kpwn7yfDCQaPR8ZvslA46LbDNtITGbL2Cbtle2y01tViLZq2UNCFVDjPYXzIAf884anjPi9RPq0budDayzqA053pGJ94ejYTxl7CB/3pFCveMuoxv4ukw0vf8TjaM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770813365; c=relaxed/simple;
+	bh=Bj8++Zqu3+fMRDp8KEV/HrWS2/CAZIerr5uJ2LpxVIg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aRWGkijTuqkQpgRISYu9IGQ5UayExTWS61VTH2jL3ouKptYu2uG/emtKcZjpR3IqEaEIcoH0Gs56Aq5JsrUpfui1hMRKH6XQC6ucQdrQyxInd0PKvxlFr1QMu/VROlv4PkZtzFCpAHLc8PovwW+4V43SPSnntp2sCCmnmjjjZU4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=hMYZxvSp; arc=pass smtp.client-ip=94.100.134.236
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+ARC-Authentication-Results: i=1; mx-gate47-hz3.hornetsecurity.com 1; spf=pass
+ reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
+ smtp.mailfrom=ew.tq-group.com smtp.helo=smtp-out02-hz1.hornetsecurity.com;
+ dmarc=pass header.from=ew.tq-group.com orig.disposition=pass
+ARC-Message-Signature: a=rsa-sha256;
+ bh=9a8119aWt/faL8kIM3FP7wFXRRc93I8ASt1myHt9FTc=; c=relaxed/relaxed;
+ d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
+ t=1770813312;
+ b=doYToYhqrq2QMLLwrnZNtFGHpIkLqFKrC/WXqTU3yF8PennZDExPgaOHDtDalWvB76sNkPxu
+ Fa+Gx/x+5o97sTZm83swE8xlWjZBum1NY1jLox7VnlXkCQ7BVxO1gSzeFJvgNfQaps33sweI5DX
+ 1jnW0co+o8gIOQN4j/H52GlnFIYBZBKL/39Dp0PkLx/fEYWzTJqhOS5LgLJP9atP0NmjPuson1Q
+ 7111sUpCZg/yiuBmiSz+D/2RJQ4bMnEZ6ii5FkqGS1SGHtB/v1v38ibl85646XS3Y3/2W/kCKPv
+ 0n0iu5W+E5P/2UijwpDoYde7nYNY2KtB0n8XexOsOPl1A==
+ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
+ t=1770813312;
+ b=pwnEkAhF1QSmjvCTSupjDQy3cvBDhgMcepKVOJlPlzQFrwml6VTTzkxArzInNb0FEJmAj51s
+ uSjDmSyGQPJayC+4+nSLY+mNtqXh+cvLlKbV4d3pi4AI1jAnFABdykqb3I4mM7Nd72R/U/rF250
+ l3saJwLchpuVNxnEAh10nv9CBVJqCff/yGGud+mhKssdLJ2A9bVSZd7sCWv1sOas6pGWTUcOGsh
+ DD2yoQ9BDdfr4/8lsLsNap2B+cQUVDw5zenyylSlBGCIoknXYC90pV7GeHICvGy0j55BPpkFxa9
+ HtUGC3UuzSnsuGCYmuXboCwhFkZbFKQ28OpVHRMa9GODA==
+Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay47-hz3.antispameurope.com;
+ Wed, 11 Feb 2026 13:35:12 +0100
+Received: from steina-w.tq-net.de (host-82-135-125-110.customer.m-online.net [82.135.125.110])
+	(Authenticated sender: alexander.stein@ew.tq-group.com)
+	by smtp-out02-hz1.hornetsecurity.com (Postfix) with ESMTPSA id C2BD85A03D9;
+	Wed, 11 Feb 2026 13:34:41 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Peter Chen <peter.chen@kernel.org>,
+	Pawel Laszczak <pawell@cadence.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Marek Vasut <marex@denx.de>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux@ew.tq-group.com
+Subject: [PATCH v2 0/5] Support TQMa8QM
+Date: Wed, 11 Feb 2026 13:34:27 +0100
+Message-ID: <20260211123436.1077513-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260211103628.3265850-1-xu.yang_2@nxp.com>
+Content-Transfer-Encoding: 8bit
+X-cloud-security-sender:alexander.stein@ew.tq-group.com
+X-cloud-security-recipient:linux-usb@vger.kernel.org
+X-cloud-security-crypt: load encryption module
+X-cloud-security-Mailarchiv: E-Mail archived for: alexander.stein@ew.tq-group.com
+X-cloud-security-Mailarchivtype:outbound
+X-cloud-security-Virusscan:CLEAN
+X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay47-hz3.antispameurope.com with 4f9yYb0fGlz4MQWf
+X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
+X-cloud-security-Digest:8727f709344811bd075061d5eca82f5b
+X-cloud-security:scantime:2.347
+DKIM-Signature: a=rsa-sha256;
+ bh=9a8119aWt/faL8kIM3FP7wFXRRc93I8ASt1myHt9FTc=; c=relaxed/relaxed;
+ d=ew.tq-group.com;
+ h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
+ t=1770813311; v=1;
+ b=hMYZxvSpR38M9zrfLeoThnEz1d2bmem2sDDzLSt7C1z66PNuWEQe1zVOIbEWFLhKQ8PCgFuA
+ M0+OGpXosAfChqBMt2LWuX8SuA57QfIMjTEckA3eejijlUo1oEZjRjCcCBDcv5gZzXo05m4Q+5V
+ pF5a2dpgpbuya9QJL8+YFyPlCu3fddqFkGJeC9U0mB2Jx6voTg8aRO4OF2IXKqwgzMTkQRuQIIB
+ 333LGo9o2Zgyo2/QlfpJ71K8DCSRwJFdqSL48+fE7lU4m7jTijfZmHlP07MY9F7fzjAkV3gqgEW
+ T6xzNtzgk54olyk6svt4NVJJvVz0KO46/NoQiEtvxvbkA==
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[ew.tq-group.com,reject];
+	R_DKIM_ALLOW(-0.20)[ew.tq-group.com:s=hse1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33283-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[kernel.org,glider.be,baylibre.com,cadence.com,linuxfoundation.org,pengutronix.de,gmail.com,denx.de];
+	RCPT_COUNT_TWELVE(0.00)[25];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-33285-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,nxp.com:email,linuxfoundation.org:dkim]
-X-Rspamd-Queue-Id: DF8C0123CFA
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexander.stein@ew.tq-group.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ew.tq-group.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ew.tq-group.com:mid,ew.tq-group.com:dkim]
+X-Rspamd-Queue-Id: 427681246AB
 X-Rspamd-Action: no action
 
-On Wed, Feb 11, 2026 at 06:36:28PM +0800, Xu Yang wrote:
-> When disable the root hub port, somehow the device is disconnected and
-> re-connected again. This happens because usb_clear_port_feature() does not
-> clear a truly happened port change. That says, in fact, port change event
-> may happen after usb_clear_port_feature() is called. Then the subsequent
-> port change event will have impact on usb device suspend routine.
-> 
-> Below log shows what is happening:
-> 
-> $ echo 1 > usb1-port1/disable
-> [   37.958239] usb 1-1: USB disconnect, device number 2
-> [   37.964101] usb 1-1: unregistering device
-> [   37.970070] hub 1-0:1.0: hub_suspend
-> [   37.971305] hub 1-0:1.0: state 7 ports 1 chg 0000 evt 0002
-> [   37.974412] usb usb1: bus auto-suspend, wakeup 1
-> [   37.988175] usb usb1: suspend raced with wakeup event         <---
-> [   37.993947] usb usb1: usb auto-resume
-> [   37.998401] hub 1-0:1.0: hub_resume
-> [   38.105688] usb usb1-port1: status 0000, change 0000, 12 Mb/s
-> [   38.112399] hub 1-0:1.0: state 7 ports 1 chg 0000 evt 0000
-> [   38.118645] hub 1-0:1.0: hub_suspend
-> [   38.122963] usb usb1: bus auto-suspend, wakeup 1
-> [   38.200368] usb usb1: usb wakeup-resume
-> [   38.204982] usb usb1: usb auto-resume
-> [   38.209376] hub 1-0:1.0: hub_resume
-> [   38.213676] usb usb1-port1: status 0101 change 0001
-> [   38.321552] hub 1-0:1.0: state 7 ports 1 chg 0002 evt 0000
-> [   38.327978] usb usb1-port1: status 0101, change 0000, 12 Mb/s
-> [   38.457429] usb 1-1: new high-speed USB device number 3 using ci_hdrc
-> 
-> To fix the issue, add delay after usb_hub_set_port_power(). So port change
-> bit will be fixed to the final state and usb_clear_port_feature() can
-> correctly clear it after this period. This will also avoid usb runtime
-> suspend routine to run because usb_autopm_put_interface() not run yet.
-> 
-> Fixes: f061f43d7418 ("usb: hub: port: add sysfs entry to switch port power")
-> Cc: stable@kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->  drivers/usb/core/port.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> index f54198171b6a..a47df5d32f7c 100644
-> --- a/drivers/usb/core/port.c
-> +++ b/drivers/usb/core/port.c
-> @@ -141,6 +141,7 @@ static ssize_t disable_store(struct device *dev, struct device_attribute *attr,
->  		usb_disconnect(&port_dev->child);
->  
->  	rc = usb_hub_set_port_power(hdev, hub, port1, !disabled);
-> +	msleep(2 * hub_power_on_good_delay(hub));
+Hi,
 
-This feels like a hack, and you are just getting lucky.  Why this
-specific amount of time, what guarantees that this is ok?
+this series adds support for TQ's TQMa8QM. The first 2 patches are prepatory:
+1. Add support for USB devices in cdns USB3 host controller, namely
+onboard-devices as USB hubs. Implemented similarily to snps,dwc3-common.yaml.
 
-And why are you disabling a root hub port at all?  How is that even
-guaranteed to work?
+2. Add DMA IRQ for PCIe controller. Similar to commit 0b4c46f9ad79c
+("arm64: dts: imx8qm-ss-hsio: Wire up DMA IRQ for PCIe") which was only tested
+on imx8qxp which just has one PCIe controller.
 
-thanks,
+3 & 4. Device bindings and platform DT
 
-greg k-h
+5. Workaround for missing "ERR050104: Arm/A53: Cache coherency issue"
+workaround. See [1] for details. Split into separate commit for easy revert
+once an errata workaround has been integrated.
+
+Changes in v2:
+The need for clock-output-names properties for renesas,9fgv0441 has
+been removed by reworkging the PCIe clocking
+
+Best regards,
+Alexander
+
+[1] https://lore.kernel.org/all/20230420112952.28340-1-iivanov@suse.de/
+
+Alexander Stein (5):
+  dt-bindings: usb: cdns,usb3: support USB devices in DT
+  arm64: dts: imx8qm-ss-hsio: Wire up DMA IRQ for PCIe
+  dt-bindings: arm: fsl: add bindings for TQMa8x
+  arm64: dts: freescale: add initial device tree for TQMa8x
+  arm64: dts: imx8qm-tqma8qm-mba8x: Disable Cortex-A72 cluster
+
+ .../devicetree/bindings/arm/fsl.yaml          |  10 +
+ .../devicetree/bindings/usb/cdns,usb3.yaml    |   1 +
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
+ .../boot/dts/freescale/imx8qm-ss-hsio.dtsi    |   5 +-
+ .../dts/freescale/imx8qm-tqma8qm-mba8x.dts    | 869 ++++++++++++++++++
+ .../boot/dts/freescale/imx8qm-tqma8qm.dtsi    | 325 +++++++
+ 6 files changed, 1209 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-tqma8qm-mba8x.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-tqma8qm.dtsi
+
+-- 
+2.43.0
+
 
