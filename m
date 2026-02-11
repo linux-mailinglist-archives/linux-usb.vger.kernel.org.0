@@ -1,161 +1,318 @@
-Return-Path: <linux-usb+bounces-33267-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33268-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8ItvLLD2i2m3eAAAu9opvQ
-	(envelope-from <linux-usb+bounces-33267-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 04:25:36 +0100
+	id 2EQ2AmD6i2njeAAAu9opvQ
+	(envelope-from <linux-usb+bounces-33268-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 04:41:20 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10C95120E66
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 04:25:35 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 761231210B2
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 04:41:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C482E304F20D
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 03:25:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 121793078A02
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Feb 2026 03:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E7934402D;
-	Wed, 11 Feb 2026 03:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 554593446A9;
+	Wed, 11 Feb 2026 03:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="hD+G7znn"
+	dkim=pass (2048-bit key) header.d=canonical-com.20230601.gappssmtp.com header.i=@canonical-com.20230601.gappssmtp.com header.b="HdOLwEhx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2640A1DDC33
-	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 03:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770780330; cv=none; b=SQ3Rt/GDtE5lkkR9kJ8bI8am/FvCTBG4yS5yE57ApjXocB/cBYgGre2pXdl9YNBDSRXl0ZGSI10t2dPl4Ylsx0huZZWgQakzdDYE625tJZOhNl9ELgfurvRdelVz7qvergp/v0o6bfXkFA9Z2VZZOBMKBc88QhtNVGWPMPLIk1k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770780330; c=relaxed/simple;
-	bh=Z1UcI356EnYjVrvA/1V5yUonwzJ+3OKttn4Qjuh5ekM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N9C8fCjcvcqJuh4u89kpVe+MpuCxNSZg2spytQt8cSnCybni0Cn+Kdwv/Qv2OUsxWajtU8JcnpcJ/EGoGDtDOslwg4wDBfzWurOD4VviWDYCyLi8oMftUbq//ztu8BhDPtZhZniEPD1DGMtPthA5afd0gq1wy3vZenGTD/FFsjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=hD+G7znn; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-50334dd44d2so55946881cf.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 19:25:28 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD5534AAF0
+	for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 03:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770780772; cv=pass; b=aAzrq+OU75Kl164YRM3kGodGFvLZi0yJLC/vAX1yD6U+9f5Bgsr7y42gX9k4v5dyDpG5zueIzoGR759pp5TfkynIDnf88F349uzvz2kyD6zGkfC+g7jiTg2meXMku8yW4907j7gbwib1bLPYzLQ5xl9n0ZquPaIgNyAjBy8Se+8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770780772; c=relaxed/simple;
+	bh=ND/EJ3Z7yUGBVqhiWuVJtcEV8UgFE1EBbwCVsk6fPA8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=QizS4sHEh+ay76hXi6R4CCI5wONfX2oQ7dftrAz0UlNa8613ny0OtOYMixwWEw3sUc8W5TFhXXn/TOluDd233WHUS21r5f1X9u1riCvGJFjYy0n7u7T5E/xQCtNScQQrho9A0UgA5HfqUmfL1JxpHewBfjKrqtZEgkkmzfK9qIs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=canonical-com.20230601.gappssmtp.com header.i=@canonical-com.20230601.gappssmtp.com header.b=HdOLwEhx; arc=pass smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59dd263bf42so6480869e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 10 Feb 2026 19:32:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770780769; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Wn8nwr2/5zrJMJ9rk+i+UcohBJVQptV+pOq4hO1dX/VL8peAQCMboOqCL1dYPWM+LB
+         9HOlEAogwL4pTZ52TLST6vfzt0zFt59Co8f4vMK13S7gaWj5fLEFDnsceMLy4HokRuft
+         scGPrLQZV2n7vBb0WskR2v9L+onea+K0gsZS3vrT0vWQ0VWJWBZhJPfmMO++vNfZpkQe
+         jVUFXVD6vLQZNxW4wRCLUPprNu0xB7C7RUgXP+JsqfS1OLyBAyH83XI97uzXvKHEjr8I
+         NA4Dj3dHM69p/0UJcvbBgWXb7O+07HUTL35g/lmXAOt/27ZAjeiPnFhltnSr60aHqJ5c
+         Swcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8B19gmpelZoCYIJv86yDPhQxqApNJ2FIKydWpHJgFFY=;
+        fh=Y6J2JEvz2gQVfQgLO6QBW5zCYWM1fGNcG2H9BW79fcY=;
+        b=e1CpkZ1EgJMP/Yej2mLRt7pD0GYZkv6SQPNo6XIYlHmemtJR5WBMqHCrwZKz5Z5TJA
+         WT9l/NAt52LXkDodCWM3NaGJjmXXCT4jSn2DRCUnfP9+i/bDunWr6aBtNAdbYqQmw6k2
+         b7ZLOzoW+uxJFHPR9At4bJZ1b3prgCyzAdpND8fPfVEKf9nldz6NUT1aK3eUVoMkJ896
+         Yaf51tynxaqLjEg3Ki31D8eJfZxC5JuViph+gkasSumTGqB6jElClU1fQGn9QC8fYhyQ
+         PcqM5bBDLJGBqMWlLBlsBzorKXPkjPxsUYu8UWsvk7FWWlwX8TojlAgqsySD9tvB5I7T
+         oTmQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1770780328; x=1771385128; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=scWsq/Wn5Y7xTK78oXHwGRW1HcMjVXrB6+QN5MfVlCM=;
-        b=hD+G7znnMUbLt5KeWzjcWkmuioZnxdyqag7ytsCBTn3Gws2yC1Gto67K+EQySQdhb0
-         cMGVFU8zJ7JyQ+ilv7Tn5HjHVzjS+U+ivdLK68SLzYrcdro7kksnYsEn6BZx0Rbosev5
-         UXkKDvj9sIMzniB/ZC6ia6mifUBWinNl3RvKvxcfjt57cQqwrdyGBDtKppmkfDp3gOE9
-         JFRnq0nE61i//zL0c3YrRf0udMA/imun6qOBfBGLByFuIy6uKn1dKra19t1FGUe1a7hO
-         yyufsy0tM977vpzVvwCUqD/KbIGMcXqSsS82JfUGevO+NJy11GXM+Tz9oT06fEt0dx6c
-         xoyA==
+        d=canonical-com.20230601.gappssmtp.com; s=20230601; t=1770780769; x=1771385569; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8B19gmpelZoCYIJv86yDPhQxqApNJ2FIKydWpHJgFFY=;
+        b=HdOLwEhxTr39HeaiAqTQZHqXmWXjUwEQSJzEqvRTAdx2DfRXeZQ5iZGgGx+krlCtcj
+         fivdruVjp7EW2Dsd0h6Zpj+uN2Ir6tUKiHBcIONyhwcLOSp2U2paLUPvAGtCNo5aTBcN
+         T3D5QFee84mK0+Ze8RGbd0C8yWBQaRgsM1crCneAVjtGyBE5nb7IT6f7ouPjtXDwXz+A
+         pL4Yd/7mUMQ7hwo5p3cTUU/FAiI6+kr+z50kVhUZ5lMM7TS6kEcLaiEu+3ouzOeJRB5d
+         pkOffnr/n1+0AJ5yMRcCOpyxupdvwKxhQrh7yVqPNpqaR8aUvho6GPdx9Rg5PRWEc45R
+         1nMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770780328; x=1771385128;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=scWsq/Wn5Y7xTK78oXHwGRW1HcMjVXrB6+QN5MfVlCM=;
-        b=hDQuO56ZiFfcjmlXgclHy1kiBic3/u8WoLtAjFRzerf0YDU4k04HHDZk9FayFtdMZF
-         Un8oJz7ZfCzyUWHgHxi+1u1e4srr3QAlHqq1qqUPDAcxLGUHrfgqnlGnC9kNmxJSTK9g
-         Bz6PA2YyaBruIXIhkw8kTiZEvUI27sWD6btTBDSRx+40qEmplV8pFYS6rMty7pRWv2nX
-         s1CLLdqAyTJ8CNJKvfPF2JQvkOa3WGn4UO8WKszgRU+43tTF0sth34dhLxsTOaTAZ5tF
-         7urkPdiw3OqBgf6HgOUllgOu7pmdeuQnCONCzIELzasA60Eyrxy28KTW8sXaYOkzAXc2
-         DmPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWlsfbgJYM8JZUhvmbSGRbvpSB0jrURcUxN6+t1H5rPnmR0A5wxe4bvUq6MFX2uMlqnObvQVbC7If8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEG4nhq+0n+iW+GbOKYEBFOKFWJq5aij72byZqtavBtOClbcqI
-	ixMdYditgQRSttOkoPKdfePTYnCkCrcfCV5WxeL4MRp/zipP1fKQ4nl9bgu6FGg2myMJ+phwxnX
-	xnkI=
-X-Gm-Gg: AZuq6aII3VRrQSkQmlzIRij4L57F/FNZxa1HgCQggot/kjq0XpNQAa8gyb/W3xOydwT
-	y+4HVTS+pfEVnvIFI6HC/BFOrBekna+2Ed4bxcdO4Pjdu7gv8Xs0mA18dK0ALX/xpA40VZcKi1U
-	IGdRxftA26XXwW3gh3pB0vWbgK5b3++H9RfcXcvSBlgdtbXE+uJvphHcTP0dbFwvzyhlFgSwpiY
-	cNLrYoNOiQ3/WsGUceZ+8FnFY6GKwlqXeG5n7R9fiZf22vWUg+2B87WuI/nXcJbMaCq3n3wNqrI
-	v03+Tmw8Sz98YbPYyVMsQC2BMSpzXv+dY/uM5Dc9PymNorgpTqFhFBMgPdL8wp9Wn4wXVjgABVs
-	7vzJfGd/HE14ChJYMafFiIxOewUNhR+sM0xeTSV8BfWvXrY+xNga7/zSLkXCjByhX1lZtzgcc0L
-	nl+WF354LD1IhJJzOYDjFjOzcs
-X-Received: by 2002:a05:622a:14d3:b0:501:8643:aed3 with SMTP id d75a77b69052e-50681068bf8mr19037501cf.35.1770780328124;
-        Tue, 10 Feb 2026 19:25:28 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::94e8])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb2b1c7e1bsm22567385a.24.2026.02.10.19.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 19:25:27 -0800 (PST)
-Date: Tue, 10 Feb 2026 22:25:23 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 2/2] USB: usbtmc: Don't accept very long timeouts
-Message-ID: <c6802a96-33d4-453a-b1b6-e74b4911555b@rowland.harvard.edu>
-References: <237c76a9-fcf5-418b-a3a7-51929af1d69f@rowland.harvard.edu>
- <fa1e3282-0559-4ddc-97ec-be07a41ab27e@suse.com>
+        d=1e100.net; s=20230601; t=1770780769; x=1771385569;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8B19gmpelZoCYIJv86yDPhQxqApNJ2FIKydWpHJgFFY=;
+        b=FQdCGl279TAASV3DwWOfh/kkRCYOEJaF8TqRyYJ6hqsU5xzyYSIxKV4+Oxmo5iNXGB
+         1XyKm/JIYNuSYUuveec870f9eSCx88/4bfxn9Qn2u4l7MdgHE9O383Q1TtYi/Ht0iE8k
+         XX9a/K+9i5ajnC6e44D3EJCJBpbTBVNC5Q5dsb30Hlw5rluPdr34/NcUIaOEfzuW061E
+         vT/kxFlgAmBN6IEt4FMQyMrTuggKTTQh9I+A1tG6groDnKRK916M/DosFgBsdjAgQwpx
+         T1Svmq/jGrbAOz7kM/YRoO57piSZYrTBa2fmRDdrM8nUuuG4CZQTa2CIBtzSEsb7wILI
+         uncA==
+X-Forwarded-Encrypted: i=1; AJvYcCVgddY8MI+zSHbj5yskXzb9H6aWP6wrSWaXEjIXTfjfx0XTDZc8Vpa9W6ciSJUK8vbrFk0whhHkNYM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7KRzEhfy1MaDY8aB9V8H23+1lOJhmPa+jtAR2W/yYQ7DcX8L/
+	3Vn0CbSvdOPKRFf1Cprz2xMs1zjJI6rCLPZncViIOu9RjgVmwj0ojEg2c88httv1j/M7CeN9/eh
+	9cNVSbULbuM6fMq1BC9TBQ5D0W5ViKFQ=
+X-Gm-Gg: AZuq6aL8cB9J3SFTnx1ArT+fNIQ4pnNLQXftnaS4uxpeznwHmVRdHZ/cZy9IOVqBgrQ
+	ykYYhQzJrcxfpUhQdJfxTuCBmN/NH6oVsO1OKO3zsYCN8xl7usTDXxaq/Fo93WXIda5JAtE9AoA
+	rhf2NX3OekVyYVZsU/f0HJnDj54RW012O1d0cFUAp2L5D9HZGHRS490J05EGA9lREzasCJhRd4r
+	qvN+S5XO6Dz65nq1cYNirqrTZRWtfcjFnbtIMZDlW4MrQsd7t78OEnGq3yW0yWLrwX5SvHY8co9
+	3UlgYYELs/BFgH59ZfY=
+X-Received: by 2002:a05:6512:3b0f:b0:59e:5b94:18c7 with SMTP id
+ 2adb3069b0e04-59e5e2287ddmr208418e87.27.1770780768818; Tue, 10 Feb 2026
+ 19:32:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fa1e3282-0559-4ddc-97ec-be07a41ab27e@suse.com>
+References: <20251224070022.4082182-1-acelan.kao@canonical.com>
+In-Reply-To: <20251224070022.4082182-1-acelan.kao@canonical.com>
+From: AceLan Kao <acelan.kao@canonical.com>
+Date: Wed, 11 Feb 2026 11:32:37 +0800
+X-Gm-Features: AZwV_QhKl2g_VQdNhU0AkYA9hNIbC46rXE2RgLLSdP5Z83ulYd4HWr3xepH9e48
+Message-ID: <CAMz9Wg_H0HrDHvnvKbPE7XMtBwCQ=2poeqseNW_RdoOC-DNrDw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] usb: typec: ucsi: Detect and skip duplicate
+ altmodes from buggy firmware
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Pooja Katiyar <pooja.katiyar@intel.com>, 
+	Abel Vesa <abel.vesa@linaro.org>, Andrei Kuchynski <akuchynski@chromium.org>, 
+	Venkat Jayaraman <venkat.jayaraman@intel.com>, "Christian A. Ehrhardt" <lk@c--e.de>, Pei Xiao <xiaopei01@kylinos.cn>, 
+	"Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	DMARC_POLICY_REJECT(2.00)[canonical.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),reject];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_DKIM_ALLOW(-0.20)[canonical-com.20230601.gappssmtp.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_ALL(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TAGGED_FROM(0.00)[bounces-33267-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,acelan.idv.tw:url,kaoatcanonical.com:url,mail.gmail.com:mid,canonical-com.20230601.gappssmtp.com:dkim];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[acelan.kao@canonical.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 10C95120E66
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33268-lists,linux-usb=lfdr.de];
+	DKIM_TRACE(0.00)[canonical-com.20230601.gappssmtp.com:+]
+X-Rspamd-Queue-Id: 761231210B2
 X-Rspamd-Action: no action
 
-On Tue, Feb 10, 2026 at 10:03:09AM +0100, Oliver Neukum wrote:
-> Hi,
-> 
-> I am terribly sorry to be only critical today.
+A gentle ping.
+Please help to review these patches, thanks.
 
-That's okay; I can take it.  :-)
+Chia-Lin Kao (AceLan) <acelan.kao@canonical.com> =E6=96=BC 2025=E5=B9=B412=
+=E6=9C=8824=E6=97=A5=E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=883:00=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> Some firmware implementations incorrectly return the same altmode
+> multiple times at different offsets when queried via UCSI_GET_ALTERNATE_M=
+ODES.
+> This causes sysfs duplicate filename errors and kernel call traces when
+> the driver attempts to register the same altmode twice:
+>
+>   sysfs: cannot create duplicate filename '/devices/.../typec/port0/port0=
+.0/partner'
+>   typec-thunderbolt port0-partner.1: failed to create symlinks
+>   typec-thunderbolt port0-partner.1: probe with driver typec-thunderbolt =
+failed with error -17
+>
+> Detect duplicate altmodes by comparing SVID and VDO before registration.
+> If a duplicate is detected, skip it and print a single clean warning
+> message instead of generating a kernel call trace:
+>
+>   ucsi_acpi USBC000:00: con2: Firmware bug: duplicate partner altmode SVI=
+D 0x8087 (VDO 0x8087a043 vs 0x00000001) at offset 1, ignoring. Please updat=
+e your system firmware.
+>
+> This makes the error handling more user-friendly while still alerting
+> users to the firmware bug.
+>
+> The duplicate detection logic is implemented in a reusable helper
+> function ucsi_altmode_is_duplicate() and used in ucsi_register_altmodes()=
+.
+> The fix applies to all three recipient types: partner (SOP), port (CON),
+> and plug (SOP_P) altmodes.
+>
+> Fixes: a79f16efcd00 ("usb: typec: ucsi: Add support for the partner USB M=
+odes")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+> ---
+> v3. 1. move ucsi_altmode_is_duplicate() before ucsi_register_altmodes_nvi=
+dia()
+>        for later modification on ucsi_register_altmodes_nvidia()
+>     2. use struct typec_altmode **altmodes to simplify the logic
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 76 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.=
+c
+> index 9b3df776137a1..b99c86e9f31cb 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -501,6 +501,73 @@ static int ucsi_register_altmode(struct ucsi_connect=
+or *con,
+>         return ret;
+>  }
+>
+> +/*
+> + * Check if an altmode is a duplicate. Some firmware implementations
+> + * incorrectly return the same altmode multiple times, causing sysfs err=
+ors.
+> + * Returns true if the altmode should be skipped.
+> + */
+> +static bool ucsi_altmode_is_duplicate(struct ucsi_connector *con, u8 rec=
+ipient,
+> +                                     const struct ucsi_altmode *alt_batc=
+h, int batch_idx,
+> +                                     u16 svid, u32 vdo, int offset)
+> +{
+> +       struct typec_altmode **altmodes;
+> +       const char *recipient_name;
+> +       int k;
+> +
+> +       /* Check for duplicates within the current batch first */
+> +       for (k =3D 0; k < batch_idx; k++) {
+> +               if (alt_batch[k].svid =3D=3D svid && alt_batch[k].mid =3D=
+=3D vdo) {
+> +                       dev_warn_once(con->ucsi->dev,
+> +                                     "con%d: Firmware bug: duplicate alt=
+mode SVID 0x%04x in same response at offset %d, ignoring. Please update you=
+r system firmware.\n",
+> +                                     con->num, svid, offset);
+> +                       return true;
+> +               }
+> +       }
+> +
+> +       /* Check for duplicates in already registered altmodes */
+> +
+> +       switch (recipient) {
+> +       case UCSI_RECIPIENT_CON:
+> +               altmodes =3D con->port_altmode;
+> +               recipient_name =3D "port";
+> +               break;
+> +       case UCSI_RECIPIENT_SOP:
+> +               altmodes =3D con->partner_altmode;
+> +               recipient_name =3D "partner";
+> +               break;
+> +       case UCSI_RECIPIENT_SOP_P:
+> +               altmodes =3D con->plug_altmode;
+> +               recipient_name =3D "plug";
+> +               break;
+> +       default:
+> +               return false;
+> +       }
+> +
+> +       for (k =3D 0; k < UCSI_MAX_ALTMODES; k++) {
+> +               if (!altmodes[k])
+> +                       break;
+> +
+> +               /* Check SVID for all, VDO only for non-SOP */
+> +               if (altmodes[k]->svid !=3D svid)
+> +                       continue;
+> +               if (recipient !=3D UCSI_RECIPIENT_SOP && altmodes[k]->vdo=
+ !=3D vdo)
+> +                       continue;
+> +
+> +               if (recipient =3D=3D UCSI_RECIPIENT_SOP) {
+> +                       dev_warn(con->ucsi->dev,
+> +                                "con%d: Firmware bug: duplicate %s altmo=
+de SVID 0x%04x (VDO 0x%08x vs 0x%08x) at offset %d, ignoring. Please update=
+ your system firmware.\n",
+> +                                con->num, recipient_name, svid, altmodes=
+[k]->vdo, vdo, offset);
+> +               } else {
+> +                       dev_warn_once(con->ucsi->dev,
+> +                                     "con%d: Firmware bug: duplicate %s =
+altmode SVID 0x%04x at offset %d, ignoring. Please update your system firmw=
+are.\n",
+> +                                     con->num, recipient_name, svid, off=
+set);
+> +               }
+> +               return true;
+> +       }
+> +
+> +       return false;
+> +}
+> +
+>  static int
+>  ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
+>  {
+> @@ -631,6 +698,15 @@ static int ucsi_register_altmodes(struct ucsi_connec=
+tor *con, u8 recipient)
+>                         if (!alt[j].svid)
+>                                 return 0;
+>
+> +                       /*
+> +                        * Check for duplicates in current batch and alre=
+ady
+> +                        * registered altmodes. Skip if duplicate found.
+> +                        */
+> +                       if (ucsi_altmode_is_duplicate(con, recipient, alt=
+, j,
+> +                                                     alt[j].svid, alt[j]=
+.mid,
+> +                                                     i - num + j))
+> +                               continue;
+> +
+>                         memset(&desc, 0, sizeof(desc));
+>                         desc.vdo =3D alt[j].mid;
+>                         desc.svid =3D alt[j].svid;
+> --
+> 2.43.0
+>
 
-> > +	/*
-> > +	 * Impose a maximum limit to timeouts because the wait in
-> > +	 * usb_bulk_msg is uninterruptible.
-> >   	 */
-> > -	if (timeout < USBTMC_MIN_TIMEOUT)
-> > +	if (timeout < USBTMC_MIN_TIMEOUT || timeout > USBTMC_MAX_TIMEOUT)
-> >   		return -EINVAL;
-> 
-> Limiting the range.
-> 
-> >   	file_data->timeout = timeout;
-> 
-> This is, however, used in multiple places. Among them
-> usbtmc_generic_read(), which depends on a device actually
-> producing data. That uses wait_event_interruptible_timeout()
-> 
-> I am afraid you will have to check in the specific ioctl
-> or recode the wait in it.
 
-How about accepting the value from the user, but limiting the timeout to 
-USBTMC_MAX_TIMEOUT in the usb_bulk_msg() calls without changing the 
-wait_event_interruptible_timeout() calls?
-
-It probably would help to know something about how this class and driver 
-were meant to work...
-
-Alan Stern
+--=20
+Chia-Lin Kao(AceLan)
+http://blog.acelan.idv.tw/
+E-Mail: acelan.kaoATcanonical.com (s/AT/@/)
 
