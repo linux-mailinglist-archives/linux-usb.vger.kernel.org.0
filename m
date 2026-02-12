@@ -1,95 +1,87 @@
-Return-Path: <linux-usb+bounces-33303-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33304-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UKvwLCo8jWls0QAAu9opvQ
-	(envelope-from <linux-usb+bounces-33303-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 03:34:18 +0100
+	id SDouJ55QjWnW0wAAu9opvQ
+	(envelope-from <linux-usb+bounces-33304-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 05:01:34 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCDEB1292CD
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 03:34:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2359012A435
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 05:01:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9E03830177AB
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 02:34:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5DE6831E5475
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 03:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75C01F4174;
-	Thu, 12 Feb 2026 02:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EBC5251791;
+	Thu, 12 Feb 2026 03:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="PxWWyrUg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b+qGPcc8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124C2150997
-	for <linux-usb@vger.kernel.org>; Thu, 12 Feb 2026 02:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D659C239567;
+	Thu, 12 Feb 2026 03:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770863652; cv=none; b=kKbnP+k0lgGiWVpeg2fP3X09hnIqnLywlRvjB1bIz7XuX2Xn36uZsoAK68ZNHlzZQIIXGgvE/L9FHlR18ideVXL9CAlje/C+xD6q8EJcxR/MOGKLGjTFGyjnYTtmGsOTgaaY3PzQpdorcRfErfxVxCjrdHfaHGnV26wMNOd+JDs=
+	t=1770868598; cv=none; b=vFoJ2cDIMl9Yk9m1oad/1OCDowAcv4otqarAt27m0xfzCqjbx4Cs3gZUqiLkrY6lmeihrWRSTJNBuIqQCyqS0KA5IiVyUTCw4qkey9izFh7on5ssKyk2c1evoafIKQPmfxwRMAhCrwkDgumG72gYp76k5aeCuerpUFQyGjEtbtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770863652; c=relaxed/simple;
-	bh=w+Iul60NR0NV4uvWFbkJmGq5lZBIIyzmn+CZGPLolME=;
+	s=arc-20240116; t=1770868598; c=relaxed/simple;
+	bh=m5FX710KFiG+MB3P345VDRHdTTue3VoIFjOCrEq7n50=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UAITv3WXs5ZD+BeAQGxOUunM3fc4HDKI/we5+hKhzAU/SotFfcW6bcVPQzV6cUe6JCY1Cfxmtr2n9wrLuCaIks4ModNBrLQXeANrl1CVr6O2CTBPi1jOx9Po1EXwYMA97eHho18bsKQY+4M+lXoO1ZEhvaqhQeEit9MSNdMGCww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=PxWWyrUg; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-5033387c80aso20321111cf.0
-        for <linux-usb@vger.kernel.org>; Wed, 11 Feb 2026 18:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1770863650; x=1771468450; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=60+hXao+2fy6ms13TTKq5DQiZsqbZfrZOc1cMiKKTec=;
-        b=PxWWyrUgAbFVKtAQM+M+0Hs0g3QqI31UhtjJ/5ouP7LFAWVLEqC+JXwmg36YvYME22
-         CZWzevYpx/Eh62upK/dimmOUTbxh3s242rPVDlpLC9rrQYv3aueyDHY63qXN8fYkJLIY
-         RmR14Ukd7oNkqCpamjKaCFeCPvNCrM1SKNYxANPubLlbrMOYqyaD4K9Skd9Y3IZVU4vZ
-         nEEGziz5ejQF8uJHZ8dtVwJGPkXOKacLZIBeRrOinSCXVX/462eVfJJ3dcZnO4rrTAPA
-         Y3HTdFwSQG1wWeIY88FtA2G8pmtUV7Wp17/MW2hUvC4J8KsMXYy7WISvqGBuvhhgovIj
-         KO7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770863650; x=1771468450;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=60+hXao+2fy6ms13TTKq5DQiZsqbZfrZOc1cMiKKTec=;
-        b=wBn06oyBiGyCmX7565XUBDOyy05cU9H525EC3me/qDe3jtEtzDWxfqOTTM2NnI33oe
-         ypnkiZHLsPW7dhrLa8lehFrAJd64fYs8SYN49V60XArlycDQixPlDSQf+t0npFIzys7t
-         QIf2R4ND+O/WeL1LknjI1ObLh2cZ6gqAuqfV2Tnd3gbfKSzqZP/bVg21MCC7jSydqxWo
-         0xow1hRXXZ7TOiaX6jntT0s97/Z9nDFn2Ld66SiNEWQf5G/fF08FEaVYNLI1IdTlfc9a
-         H/Mp7C0y8QIEWlwKpqk+C7wyyvVNY4h12OWPG719a2TPvdD9zaG8iHMfe2dcZTJmMf7t
-         BDJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXBrcmvhZ90whsww84MYfPrVUQJNAyeqVunsJF6HTnl9Gf0Sqk/9w21dj96VHTNrB8Yy8kM9GwLrf4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybZ5p889H4gD/ivBINR7HcJ5j1Da9bYT0SbWKjFlap3Tx3NvBA
-	eW+crj+jv0NFHmDuelo5u9o+nseCSVeiww/hwxXhs8ZyPbzawevSvzAdcEB+cwd/eA==
-X-Gm-Gg: AZuq6aIXmyUu7Szu0Dq6IQugLKN7R50FcHIr4p4XLsy0uYQcw1YEPdjmku7RDTmiGrp
-	DoROHfJImmkB70Fs8xGYVQyQsBf12exp29uOSxL7os88qr7aFbyf2/+iLXT+ND7sNuRAM2LpSot
-	a510fG5RfcTxHEQeDnINu+pP0XqoUk7S+Fa+nGnB7zqvxFuK84Uvr82KrLcEfP6jjQYMae6Ab5E
-	jj8odIf9I8fVTeFwOrxwrkTjbQIiTTmeTrTh1sLGnA3d47iMVDUku6sJAGV4vP0G79bYtK5PNx0
-	aZKQSroGJjZRLQEDVCjJB8UK52LOUcEdpzR/0yl+OlJ1fVvOnEDjLxX+F2pHoHWuGv3se9PQq0f
-	gmuwpoHpooycMiU0RCFdEiepWugAWp8GYALJzpnj2cFaCjdSN1MtwfBgkML4cP7s/ZBnIf8/v7Q
-	bFm1rxd2AUDESThQ67213SqMxv
-X-Received: by 2002:ac8:5ac3:0:b0:501:45d7:10cd with SMTP id d75a77b69052e-50693497729mr16204651cf.20.1770863649860;
-        Wed, 11 Feb 2026 18:34:09 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::94e8])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cda8b1fsm28218286d6.37.2026.02.11.18.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Feb 2026 18:34:09 -0800 (PST)
-Date: Wed, 11 Feb 2026 21:34:07 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 2/2] USB: usbtmc: Don't accept very long timeouts
-Message-ID: <631119a4-6ac4-4142-8200-98a92a71bc8d@rowland.harvard.edu>
-References: <237c76a9-fcf5-418b-a3a7-51929af1d69f@rowland.harvard.edu>
- <fa1e3282-0559-4ddc-97ec-be07a41ab27e@suse.com>
- <c6802a96-33d4-453a-b1b6-e74b4911555b@rowland.harvard.edu>
- <79868062-41e5-414b-a0b7-7aa162dbf4d6@suse.com>
- <313e86fd-0870-4b6b-b4ee-1ba3eb9d9d0b@rowland.harvard.edu>
- <83f20400-fc25-43d9-87ad-da51fa029c64@suse.com>
- <7403a3e8-764b-476d-ac45-f2de9e6b67ab@rowland.harvard.edu>
- <efbd1b4e-13c4-4531-bc11-4a9c541a7813@suse.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nb2lLccpwygCa4rGgjJvRs61eSQzIJDFnPqL/hU7inPLyxAwZ9kgrVxw9MeRH+ziZ+27Fuj3EXOl8/tOTUcgOXga+1bbo3ilZ1TZ8YEw3jaM4jvfEcS2ctn637JQXuRtumZtiAl6TBqrAEjCU71lpfeJDKo+3sePIiI5QZdIgpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b+qGPcc8; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770868597; x=1802404597;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m5FX710KFiG+MB3P345VDRHdTTue3VoIFjOCrEq7n50=;
+  b=b+qGPcc8dEUblC2J1Are49gIvQhdRJGTwaPY5w2j1t4H9lq/Xf1QlGJB
+   zflZX1PhRstxzQmHG+2RSaWrx7gStjg9XLigCfHWrWRpIoE39BUN0nlh7
+   8NoIdf0WvyN+9TsodA5eogrDYG9MtkVibTbh5AXYlP2bAuJ85ZjwMgbTp
+   DEp2GR+neSisDjHMbBPHL3qfdbzV2dshKzG+sOUcURW8nzFRXW7I397A1
+   b5y8r6hjjsoJY40FA0JInB6h2Aq3yb5tE/xzJAf3jKDeL7/8ioT4LrN7T
+   S/h+ullocDJyGI+oMJhnCJl9qVnWrb3k0/8XM1CCaTImFphknmWoNAwzh
+   A==;
+X-CSE-ConnectionGUID: P+U2BcGHSquaz0/34mLw3w==
+X-CSE-MsgGUID: PmbFv0J/RjexNDgr7xNACA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="72076958"
+X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
+   d="scan'208";a="72076958"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 19:56:37 -0800
+X-CSE-ConnectionGUID: 8YKsv03FT4Oi33+hgFC3eA==
+X-CSE-MsgGUID: le1ORshSScmQxXWm8fQHjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
+   d="scan'208";a="211323652"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
+  by fmviesa006.fm.intel.com with ESMTP; 11 Feb 2026 19:56:33 -0800
+Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vqNod-000000001GL-1E4e;
+	Thu, 12 Feb 2026 03:56:31 +0000
+Date: Thu, 12 Feb 2026 04:56:26 +0100
+From: kernel test robot <lkp@intel.com>
+To: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	Kyle Tso <kyletso@google.com>, RD Babiera <rdbabiera@google.com>,
+	Amit Sunil Dhamne <amitsd@google.com>
+Subject: Re: [PATCH 2/2] usb: typec: tcpm: add support for Sink Cap Extended
+ msg response
+Message-ID: <202602120453.BOyqL3t6-lkp@intel.com>
+References: <20260211-skedb-v1-2-616340426cdc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -98,63 +90,62 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <efbd1b4e-13c4-4531-bc11-4a9c541a7813@suse.com>
+In-Reply-To: <20260211-skedb-v1-2-616340426cdc@google.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_ALL(0.00)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TAGGED_FROM(0.00)[bounces-33303-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33304-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,amitsd.google.com,dt];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: DCDEB1292CD
+	DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: 2359012A435
 X-Rspamd-Action: no action
 
-On Wed, Feb 11, 2026 at 06:59:17PM +0100, Oliver Neukum wrote:
-> On 11.02.26 17:18, Alan Stern wrote:
-> 
-> > Under what circumstances would the transfer be killed?  And how would
-> > the user be able to do this?  Would you temporarily block all signals
-> > except for a few like SIGINT, SIGTERM, SIGQUIT, and SIGKILL?  How would
-> > you choose which ones, exactly?
-> 
-> In abstract that is a good question, but it is for user space to solve.
-> TASK_KILLABLE does the job for us. In fact I'd suggest that you use
-> wait_event_killable() which should delegate the issue fully.
-> > It all depends on what you want to accomplish.  In this case we don't
-> > really know what those calls in the usbtmc driver are meant to do.  At
-> > least, I don't.
-> 
-> I share that problem. In that case, as little as we can get away with
-> and still solve the issue. "Little" being defined with as little
-> impact.
+Hi Amit,
 
-In fact, is there any reason not to make usb_start_wait_urb() use 
-wait_for_completion_killable_timeout() always?  Presumably a lot of the 
-usages occur in the context of kernel threads that don't receive 
-signals, and that ones that occur in the context of user threads 
-arguably _should_ be killable.
+kernel test robot noticed the following build warnings:
 
-If that was changed then usbtmc wouldn't need any revisions at all.
+[auto build test WARNING on 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d]
 
-Alan Stern
+url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-connector-Add-sink-properties-to-comply-with-PD-3-1-spec/20260212-072745
+base:   8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+patch link:    https://lore.kernel.org/r/20260211-skedb-v1-2-616340426cdc%40google.com
+patch subject: [PATCH 2/2] usb: typec: tcpm: add support for Sink Cap Extended msg response
+config: x86_64-rhel-9.4-ltp (https://download.01.org/0day-ci/archive/20260212/202602120453.BOyqL3t6-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260212/202602120453.BOyqL3t6-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602120453.BOyqL3t6-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/usb/typec/tcpm/tcpm.c:351 cannot understand function prototype: 'struct pd_identifier'
+>> Warning: drivers/usb/typec/tcpm/tcpm.c:368 cannot understand function prototype: 'struct sink_caps_ext_data'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
