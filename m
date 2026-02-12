@@ -1,151 +1,205 @@
-Return-Path: <linux-usb+bounces-33307-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33308-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ALZuNb9gjWkF1wAAu9opvQ
-	(envelope-from <linux-usb+bounces-33307-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 06:10:23 +0100
+	id SMeLHl18jWng3AAAu9opvQ
+	(envelope-from <linux-usb+bounces-33308-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 08:08:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77A4C12A5CB
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 06:10:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD3F212ADD6
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 08:08:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DE9263123A07
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 05:10:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AE5B9315BDA6
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Feb 2026 07:08:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 170C1274FDB;
-	Thu, 12 Feb 2026 05:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E6F2BE02A;
+	Thu, 12 Feb 2026 07:07:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QN9ihvCK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZKYIyc8K"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47198264614;
-	Thu, 12 Feb 2026 05:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC45E1632DD;
+	Thu, 12 Feb 2026 07:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770873011; cv=none; b=ahtCOE30DKAM4Xai6MHypmKhZzOBotRSBH55rng8O5U1SYyvz+QZ0QsGVIuixQcWyw3mDSWXxIt1WYJ/jmVR+EVQaAtDJbXTWWGBTR+tdIt2bvYbGs2WtDpgaq0dO4a2gMS5rNXmR8WV1TbJZST1dzd+ORphYZtpYpJDgGdWWhQ=
+	t=1770880079; cv=none; b=Em613o+s6dhtBExy8Mw2t26fRY1KGIhwh38aeT61QUX3UqWp7Xi3nxBl+39fIblBYkWT/bim9UcDULxwndhCPHIydnhoINVFxf7te0JFy8asG2pp0rstNLhofLQu0md9hzgvSJjXBGkscvh/Hk2oH21b8UiMi16vG10PgStPgqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770873011; c=relaxed/simple;
-	bh=AWycgvjXareZiKDi2v1YKnUJ7irl/9M9MIsERyYFAzk=;
+	s=arc-20240116; t=1770880079; c=relaxed/simple;
+	bh=N/ombmNUi0cj4KcrETg6N12RLORAVlsMrdKJ3KOohdU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VperHWx/Bt9hjtuZ2gW+0ipAXyFENERKA14AE5uFWK0pS0wtofFK5ye9Hgs/HzQDFHFJI8blMYWHA5SannPOo8iFDEWMtqaeMiDEHa98F/9XMfTHs/cYjV61AdgsnZDHeSG3JJZwoa+VWHRKPImdWwgrdA7u0Rj6f+RxR0yIRuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QN9ihvCK; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=KCQGIZdonrqw/doqBLEDEh+0asJPmmrDHnDVTETCpIJNV2TXZdGEtr97TUTGegMk4QynhBhCkCvxvj3DbZtKEhvfgEtHBmmlc39D3gbprxcUW/x5J8GK9azyD0LEUzy5fVK3fNB+/tQ87pyILfOipgNFVUUQuwyGHYWEcg6Y/kU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZKYIyc8K; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770873011; x=1802409011;
+  t=1770880078; x=1802416078;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=AWycgvjXareZiKDi2v1YKnUJ7irl/9M9MIsERyYFAzk=;
-  b=QN9ihvCKnI/Kbg9qh294/zor9miPPbxqzNAQjpmbYA/JfU9T+3ylDfxS
-   4alnr5rYWgh38VkqMPzyQo8HDa3hZkv6EQjC7WKJzuAyFrhoY3LlOOTvX
-   7YgSR0xtyCA0USQlxPidL1TTYHrpGpti/qjOst9yOb7O+GD2KUPguGGS7
-   ZiZzBTacTfxSvbAseOsQX0+++lufJCA/2sSvxUovr4+CMRh6v6IG+3yMe
-   qZk5hgKGe+BrIVnTuJKrFLGVcKAwCGL6t+RoRb/MK6KBgDvbwz3RCX0BM
-   pgl9cqyvlqsAl2W64V9qGcHXXYLaOYO2AHT31xflUAjVN/PrziGBJuATh
+  bh=N/ombmNUi0cj4KcrETg6N12RLORAVlsMrdKJ3KOohdU=;
+  b=ZKYIyc8KnO3lODbWiu6i/xN5Ix0PpAspEAVGT/U9F9zAyleAs62D2SHP
+   WlGslOloQ7XeihbxnhU2dGKajPedZuxU3PMOFd3wxK0Ql7UfkwwcpDATo
+   CtOl1x3ubO7GdJshxoCJh+m0jVhg3w2rKl+zZiIUEBmA3iv7tmYZGpy69
+   dPCBc5GVA69Xe6/5s2QWMCpaiV9v6+F7w8vERXiZaxoIU6wRzO3s1ftfR
+   /+QihJoh7AkvaUqIbv3i9cTZkYRKjmh2FZnS2jPzuBu4yfHWYjE9llrfq
+   r+Ybduy/D7gRQGOvV0ozrA8+mpZUzF8m2P/x79ybKUgs+msyU9nKEWoYl
    A==;
-X-CSE-ConnectionGUID: lHdoglg4S2ytTlOzZnGWhA==
-X-CSE-MsgGUID: zxQyfaXMTiacWHI/rwuAqw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="71944127"
+X-CSE-ConnectionGUID: LlSxW8zRR1aO5KVmA8G+dQ==
+X-CSE-MsgGUID: DqMeBY/GTQqYfQ2ITwQgyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="72033540"
 X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
-   d="scan'208";a="71944127"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 21:10:10 -0800
-X-CSE-ConnectionGUID: 1tIveEPuR0GxAVMIvq/eOw==
-X-CSE-MsgGUID: NlORbNgpSoKdtcMi6ae+UA==
+   d="scan'208";a="72033540"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 23:07:57 -0800
+X-CSE-ConnectionGUID: SvEVfWWYQzCoS4wWJzNiJw==
+X-CSE-MsgGUID: 7LH+iXW7Rf+4tOWzfpz0sA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
-   d="scan'208";a="250146124"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 11 Feb 2026 21:10:06 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vqOxn-00000000qiu-1qg3;
-	Thu, 12 Feb 2026 05:10:03 +0000
-Date: Thu, 12 Feb 2026 13:09:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Kyle Tso <kyletso@google.com>, RD Babiera <rdbabiera@google.com>,
-	Amit Sunil Dhamne <amitsd@google.com>
-Subject: Re: [PATCH 2/2] usb: typec: tcpm: add support for Sink Cap Extended
- msg response
-Message-ID: <202602121335.mBTMe5lG-lkp@intel.com>
-References: <20260211-skedb-v1-2-616340426cdc@google.com>
+   d="scan'208";a="235477185"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa002.fm.intel.com with ESMTP; 11 Feb 2026 23:07:55 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 0AEE198; Thu, 12 Feb 2026 08:07:54 +0100 (CET)
+Date: Thu, 12 Feb 2026 08:07:54 +0100
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: AceLan Kao <acelan.kao@canonical.com>
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: [PATCH] thunderbolt: Fix PCIe device enumeration with delayed
+ rescan
+Message-ID: <20260212070754.GF2275908@black.igk.intel.com>
+References: <aXbTfLUJ-lEfNzgX@acelan-Precision-5480>
+ <20260126054231.GR2275908@black.igk.intel.com>
+ <aXcWNw9Qfo5L9WVi@acelan-Precision-5480>
+ <20260126115654.GS2275908@black.igk.intel.com>
+ <aXg1eBudRAaCZpmR@acelan-Precision-5480>
+ <20260127084513.GC2275908@black.igk.intel.com>
+ <20260127101701.GI2275908@black.igk.intel.com>
+ <aXrZK-WigVeqxBTT@acelan-Precision-5480>
+ <20260129065003.GS2275908@black.igk.intel.com>
+ <CAFv23QkN1ypnMq0VwmUbfrxcyqihM1G8Ga3sgiTOWT5rtRnSmA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260211-skedb-v1-2-616340426cdc@google.com>
+In-Reply-To: <CAFv23QkN1ypnMq0VwmUbfrxcyqihM1G8Ga3sgiTOWT5rtRnSmA@mail.gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33307-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org,linux.intel.com];
+	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33308-lists,linux-usb=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,amitsd.google.com,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 77A4C12A5CB
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mika.westerberg@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: CD3F212ADD6
 X-Rspamd-Action: no action
 
-Hi Amit,
+On Thu, Feb 12, 2026 at 12:16:03PM +0800, AceLan Kao wrote:
+> > > Disable runpm on 62:02.0, then we have 83:00.0 and its downstream port
+> > > 84:01.0 and 85:00.0, and then the tbt storage is recognized.
+> Got troubles with mutt, my reply got rejected :(
+> 
+> Using gmail and copy/paste the content below again.
 
-kernel test robot noticed the following build warnings:
+Okay.
 
-[auto build test WARNING on 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d]
+> > Okay that means there is nothing wrong with the PCIe tunnel itself it's
+> > just that the PCIe side either does not get the PME or does not see that
+> > the PCIe link becomes active (e.g the PCIe Downstream Port runtime suspends
+> > itself before the link status changes).
+> >
+> > PME work so that there is wake first on Intel it's GPE that wakes up the
+> > root port and then PCIe stack wakes up devices and then the PME message is
+> > sent to the root complex.
+> >
+> > If you do this on Intel host do you see the same?
+> Intel host exhibits another symptom, I think the root cause is different.
+> 
+> Plug in the dock, and then plug in the tbt storage to the dock one by
+> one, both storage can be detected.
+> 
+> Plug both tbt storage to the dock, and then plug in the dock to the
+> machine, only one tbt storage appears. In rare chance, both tbt
+> storages show up, but most of the time, only one tbt storage is detected.
+> In this case, none of disable runpm, rescan, or lspci work. So, it's
+> most likely another issue.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-connector-Add-sink-properties-to-comply-with-PD-3-1-spec/20260212-072745
-base:   8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
-patch link:    https://lore.kernel.org/r/20260211-skedb-v1-2-616340426cdc%40google.com
-patch subject: [PATCH 2/2] usb: typec: tcpm: add support for Sink Cap Extended msg response
-config: arc-randconfig-002-20260212 (https://download.01.org/0day-ci/archive/20260212/202602121335.mBTMe5lG-lkp@intel.com/config)
-compiler: arc-linux-gcc (GCC) 8.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260212/202602121335.mBTMe5lG-lkp@intel.com/reproduce)
+By "detected" you mean the TB device is not detected on TB bus? Or it is
+detected on TB bus but creating PCIe tunnel does not make the content
+visible on PCIe bus?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602121335.mBTMe5lG-lkp@intel.com/
+You can check this from dmesg, the driver logs if it sees the plug event.
+Or run tblist (from tbtools) and see if the device is listed.
 
-All warnings (new ones prefixed by >>):
+I suspect former and in that case it is likely a PD/retimer related issue
+rather than software. I see these once in a while especially with new
+hardware where the PD firmare is not yet stabilized. If there is TB/USB4
+link then all is working from TB/USB4 perspective.
 
->> Warning: drivers/usb/typec/tcpm/tcpm.c:351 cannot understand function prototype: 'struct pd_identifier'
->> Warning: drivers/usb/typec/tcpm/tcpm.c:368 cannot understand function prototype: 'struct sink_caps_ext_data'
+> > Right at that point the PCIe Downstream Port probably is already back
+> > runtime suspended.
+> >
+> > Here you could try this:
+> >
+> > # echo 250 > /sys/bus/pci/devices/0000:62:02.0/power/autosuspend_delay
+> No luck, I enlarged the number to 1000, but still can't recognize the
+> second tbt storage.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+What about -1?
+
+That's effectively same as blocking runtime PM completely so should work.
+
+> I tried to wake up the PCIe ports in the beginning of tb_tunnel_pci() and
+> it works.
+> 
+> +       pdev = pci_get_domain_bus_and_slot(0, 0x62, PCI_DEVFN(0x02, 0));
+> +       if (pdev) {
+> +               if (pdev->dev.power.runtime_status == RPM_SUSPENDED)
+> +                       pm_runtime_get_sync(&pdev->dev);
+> +               pci_dev_put(pdev);
+> +       }
+> 
+> But I can't find a generic way to get the bus and slot number, and
+> would you consider this a feasible approach?
+
+No I don't want any (more) PCI related hacks in the driver.
+
+This is not a TB issue, it's a PCIe issue. I suspect it has something to do
+with handling PME/GPE on AMD side. Essentially when runtime PM is blocked
+the PCIe hotplug driver notices the tunnel just fine. When it is runtime
+suspended (e.g D3) it should send PME to the root complex that the brings
+the topology up so that the hotplug driver can detect the presence but this
+does not seem to happen.
+
+If you enable dynamic debugging of pciehp, do you see anything happening
+when you create the second PCIe tunnel? I suspect not.
 
