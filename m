@@ -1,315 +1,269 @@
-Return-Path: <linux-usb+bounces-33333-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33334-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AExjHq5xjmmrCQEAu9opvQ
-	(envelope-from <linux-usb+bounces-33333-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Feb 2026 01:34:54 +0100
+	id 2CCDC1XgjmluFgEAu9opvQ
+	(envelope-from <linux-usb+bounces-33334-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Feb 2026 09:27:01 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C8A1132172
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Feb 2026 01:34:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 982F8134039
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Feb 2026 09:27:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B462730601AA
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Feb 2026 00:34:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9525030A457A
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Feb 2026 08:26:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899151EDA2C;
-	Fri, 13 Feb 2026 00:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD5AD327204;
+	Fri, 13 Feb 2026 08:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="rzsyc1E+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="W8oDjtp3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012005.outbound.protection.outlook.com [40.93.195.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9371428F4;
-	Fri, 13 Feb 2026 00:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.5
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770942875; cv=fail; b=o965RN8aFs47s5b+r03Lk3TKq6GhtcyDKG3JjnmDQlx5rPZJJkGfOvzZNAQCeEbmqO+p5k9pGgd8F5h29E/0jLxATVwxuzJ5T8PLeJsSWImaduOZoPlVQgB4pSqQeeXWmYSLJ61pE33QZFDPHTticCKRG9RKjwMaFFwmV2efGYc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770942875; c=relaxed/simple;
-	bh=K+T+pG6uQR0lVfdQ/gf0PS5caIF/1TM2rSEt2+HmSEo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=CjZWWgKtwLQ+hEdmyffWkxuKGQr/MEdMVoZPXEjHqL5xjGWnwI393P48MbLZWXR/Bp7Be+X/prXivdcSgDyjpkghFknqYDz2t0F3iZdtDqceUzyHF+9QxfG6hQKSKoFCxd1LenOHVfYP9f3fIRLqa1B2v4KEsBfz2ve+MnkFsmc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=rzsyc1E+; arc=fail smtp.client-ip=40.93.195.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QoIbl3dyNW2JrQcdnpGcbuuTU3F49VM5dnyZX+pYCGz/apSXGv2yBvGmwvVl1XPAYm+m9B8PynE2+CsTziezkD1/lTxA/75wJjQ6nGe9mmY6GfQMQu5ntjpQYEUOwUedmeohJc/UegRkmHH3dUiL6ZM44uCultM4LatxtToAutbmPYYQn8euluzTQQEupY5T68HoBB5b9zR/pBDswyCaggBxFcH9Gg5iQEtiDKSp2Jrsnhpg/yMhh11zDb4KzhZkZ1CrpjutGKUbzFVG7ySsQmN6Xo3Is7v2LD4rHXRP/rwZUbwYkFbim7toFBnKXUJRdxoYpiJB8D2L3uEUbe2jDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NjBENqm59RBUCVL5v0rXJB74a/pjtJXpky7sB3NUBvQ=;
- b=C8L083fGUeEF8IG89qZ6Zk584+dTZJ6//zWUYtpi+91KaGMnginHtVxjlnZPpUde4mARVdG1gwbiNj4MGqYF129J170ZQvDRW6rHeXsPwxN4u4cDpMSzfGWssD3P5NIQFAopicFgc4GwH4e1l7CixCanMlMMnfLRbk7RTKqpK/yppEU+YfRyCtO3oD3eglKFEkdlvPZkbshJHZJej71hMB5aPrVeMAWapXNpM5bdAPRwAb3+T7p8ESvjvlY2rYhthgONF5Q/UU6WJ+gXBrTnnXZdtCSb4Ifcbp/c11EjnELwO/XmJxiF0+2a7KNqUxrMNQesKzaPZ0V1XFbuQu1Mdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NjBENqm59RBUCVL5v0rXJB74a/pjtJXpky7sB3NUBvQ=;
- b=rzsyc1E+CGMIrm7IgGyL+p1BwzCS7KT7TYBrG6MnajxyA31TiwNDATr2wO6uaPhCPA6Lo/zUacN7memLAzUN8rNEgbCOTN1iQxHXV+lkWmdK/pXBFr1py/0tdlvLFybDbaxnT8u91NNRq+DbrInx9W5/Qo8D9TJo8qUX9VgW1NE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MW4PR12MB7192.namprd12.prod.outlook.com (2603:10b6:303:22a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.10; Fri, 13 Feb
- 2026 00:34:30 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::94eb:4bdb:4466:27ce]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::94eb:4bdb:4466:27ce%4]) with mapi id 15.20.9611.012; Fri, 13 Feb 2026
- 00:34:29 +0000
-Message-ID: <651677b6-bdc7-42a0-a568-6a81761ceb65@amd.com>
-Date: Thu, 12 Feb 2026 18:34:25 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thunderbolt: Fix PCIe device enumeration with delayed
- rescan
-To: Mika Westerberg <mika.westerberg@linux.intel.com>,
- AceLan Kao <acelan.kao@canonical.com>
-Cc: Andreas Noever <andreas.noever@gmail.com>,
- Mika Westerberg <westeri@kernel.org>, Yehezkel Bernat
- <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, Gil Fine <gil.fine@linux.intel.com>,
- Sanath.S@amd.com, "Kovacs, Alexander" <Alexander.Kovacs@amd.com>
-References: <20260126054231.GR2275908@black.igk.intel.com>
- <aXcWNw9Qfo5L9WVi@acelan-Precision-5480>
- <20260126115654.GS2275908@black.igk.intel.com>
- <aXg1eBudRAaCZpmR@acelan-Precision-5480>
- <20260127084513.GC2275908@black.igk.intel.com>
- <20260127101701.GI2275908@black.igk.intel.com>
- <aXrZK-WigVeqxBTT@acelan-Precision-5480>
- <20260129065003.GS2275908@black.igk.intel.com>
- <CAFv23QkN1ypnMq0VwmUbfrxcyqihM1G8Ga3sgiTOWT5rtRnSmA@mail.gmail.com>
- <20260212070754.GF2275908@black.igk.intel.com>
- <20260212073419.GG2275908@black.igk.intel.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20260212073419.GG2275908@black.igk.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR05CA0007.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::20) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C58D325727
+	for <linux-usb@vger.kernel.org>; Fri, 13 Feb 2026 08:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770971157; cv=none; b=MP/suSh/fen9f6l5iqCl5YEZz40t5VkUXHlKUkK1+tt5Fzv/LostGtdRKTqiAt7mE15TdN9qnZ0dMdftB8gaeW3+/npQmXaGBOUtkgll0lTNhfZEyiH6wI7kit2Y3LIicxI8opBHAXtu2Kv34EyAqPdDoVPgx2becpxf6DeQTKE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770971157; c=relaxed/simple;
+	bh=MmVc0VjdOTh1ZfOCYiVVtnjpAPsxgxmPLfAfCnZ99Ik=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=RyKf7vC0Ym0/MnhsIZIcJv+LR3PuxzPXB67Qyrb6BkjjWKTiYjBRM/mZx6RBjLeJKfPt4jPXyjPqHG1x/wi4d1aEVqHg3P6ICVNapNozyw0VForVtbAJmgWsIyJr4764nfN1gP9BXnigEGyiMv5JHj+e+7ZNHZcL5eAsT44zPIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=W8oDjtp3; arc=none smtp.client-ip=209.85.128.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso4585095e9.1
+        for <linux-usb@vger.kernel.org>; Fri, 13 Feb 2026 00:25:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1770971154; x=1771575954; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xy/I8SvLYv4ED/G6oTOiy6DorVU8/h1iqYBJACsgklw=;
+        b=W8oDjtp35qb9aX2cbSEoqUvr3uYvPeggLGQU+lEtgHbLQ4EoKgSgnkDodDNX/PXRR6
+         zR/a4R6KsE2h/QYHEs8+2ebIh7LTQgMfQmIk6WzF+3GpVbQ9YiPm8k7gums7NaXMkb0i
+         3DtvEdGGOzMV7tozigMeE2O+HFXvOcoONTQ3L47nMtAQ6yzOysOUi4V8rLLBADT1cB/y
+         5pmXt+e9bZJiDxsP8pebXwXSX2ICg//ZA4snQAldtVNaqFcodgetxXxN+JoYZSuIwk9c
+         urwkGxc7PRV+6D5ujC0ejsgtMpAwwhBFJbx3i/uBm15PGGSfu0UAp0GpHIvzY/nSgikg
+         FHrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770971154; x=1771575954;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xy/I8SvLYv4ED/G6oTOiy6DorVU8/h1iqYBJACsgklw=;
+        b=jsFkWGBQ8FJou6smb1XRsJ7RlK9R+e0TyKRjEWnysgw3oqynkZejIvn8GcR58magi8
+         lEmChJKjkHgK7XwYdtR0w+8/1kqGvz6yT8SCH8MhOuRLcwEUZVTRhCETvcG0WmL9UH/R
+         cQjaPsIVT7ZWdSpU7QBa07z5FkG3pWhUys3zBLbo5lseZQ13T+OqWHf6LgJepAUpd2BS
+         soIzv9R6w9HVENDDM6pFHYukn02eAjDNaU/j60HOuiuNZWTgrJy4Hq+Ivf0TopZzKHNS
+         KX1BtlE6QBuZlkNMqouzP6Bubg/jreDjStPY+nL0UtsQCWZW7qtilT1uyPCfR00yS+QO
+         DP0w==
+X-Forwarded-Encrypted: i=1; AJvYcCX/qzIvO3bc8kLqwkGpYJVq+6sTljsUA11vgFC/tBdBLV0YKbkHfVEQLi+A3uKCxXiSlTBkNwr5tws=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwB6X/ESMv+jLheIAIHLUtkN5wMV6PtbMoK3lr156EVNgBkEgwB
+	qA+TB/e8034mcohEl7sGoXZR0O43R+LgxNbMSO2zB9HyV+kg9i98LhRBHE9bVDehOWs=
+X-Gm-Gg: AZuq6aL4YxDOr8xa83fRMQTzAD6+t6YP9h4JRfSgKPO7bUDcyZ9jLoCeKOJh3ZgHjTz
+	gFT+4KWIp2DoSq/wQDggmjQTFeIICHY2jzHOsq4Dt3OutZeGQG7Z2fNPeYmTLgEyhfuvCR3ucnO
+	DBTZLN9I96MmlYvVZCl7hfuIdF4mPoLZdpftD7AcN53mnnzI45EXWVObmrFRcfSCg5EXO837Bmy
+	z3jqBuzeMfY6wA5ptYrUVFVCTeaCaKXQMhoDc5Y/18vMC8cyRL5fdiz6JRnMO2cA/A19JQvZgmO
+	F2cKuGoSn6bM6Rw6ZaYBYxCVWU7eNJMjeQ80JHKOmnjIXTm2Q6b7y4Qhk9hyJxrZUXGgieWFErJ
+	D655iesZQug+R6slyVy8FjTk6Ext8XpOElpBYu/05xv5sAa7nc9k52lM5EJKLwOP7eTAEzQFZSq
+	tBaLlqB77ucETUbHqTbGIaqAyO06z6XM80LpI7VdwW+1BeIEKOlk8urGkEL31g6qCulauWsSsnC
+	UP3IOnqZxvcv8LK
+X-Received: by 2002:a05:600c:4f90:b0:483:6f7c:19f4 with SMTP id 5b1f17b1804b1-48373a6f4a7mr11677375e9.30.1770971154146;
+        Fri, 13 Feb 2026 00:25:54 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:106d:1080:2dfb:a5b0:34b0:dd89? ([2a01:e0a:106d:1080:2dfb:a5b0:34b0:dd89])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4835dd0e15bsm148815915e9.13.2026.02.13.00.25.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Feb 2026 00:25:53 -0800 (PST)
+Message-ID: <8da06d06-db9f-446b-b1de-c5727d354db1@linaro.org>
+Date: Fri, 13 Feb 2026 09:25:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MW4PR12MB7192:EE_
-X-MS-Office365-Filtering-Correlation-Id: e773807b-9e68-4981-3294-08de6a97a652
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Uk5wMnI5amRZQTcxeDIyMmhSNWVxenI4Rlo2S3ErcWg4Zncra2pva29ZWTJI?=
- =?utf-8?B?V3hHM1F2N1dSTk5lZDIvVzdLRGpaQlhRMGc1UXZkNzBMeG50bXMyUlgzckFJ?=
- =?utf-8?B?YnRxNUhIcmNCVnF3SDh4RmZ4cTR3YWFDTHREU2FOSWNpSE9NRnJ6QXZOVFlm?=
- =?utf-8?B?SUF5UksyNFBWejFHOFJxNk5tQmJZOW5naU05Y2RtK2JFK3RXdVEzTEFYMk9w?=
- =?utf-8?B?d1R3dVdFME5ydVIydFI0MVdsbk01SVVRRERCRGtFaEozZlYrc0lRVVh1YlF5?=
- =?utf-8?B?RlM4TlQ1S0pkOW5DQUNJYisrZk9Ed2xhZlkzS2phYW5ldlVFVVZaR3hZeTBH?=
- =?utf-8?B?Q0VhcmlCSDNvemd0YWpGYzkreVVNNWgxZ1ZqVFBMRmxsOGdnZms2eGRudGJu?=
- =?utf-8?B?ZlhKWk03NjlkTTA4WVlnbVFZamtKeDc4Q0NYVTFwRVhMRHhkQzB0UmZBVi9N?=
- =?utf-8?B?YitnK0xqV0QvTm1FcDMyUzdka0dDWXdyODFPaUZJSmZPOGF3Y0JBYVROSDRZ?=
- =?utf-8?B?anR5eTRIelQ3TnNRV3AxL0M5OVNKRHkzdzN1NWhldklpQkdUN3ZvcWthMjJk?=
- =?utf-8?B?cWJMV3dOblFUcUplbE03aSt1Mi9lMG5JakZUT3UxZHFpc1hmeHRZci8waWVW?=
- =?utf-8?B?eXdSdlhyOGphUEdDN0FBQkdhWktTZzh2QmpSSFRqVXBmenZwTWZNMndYSHlw?=
- =?utf-8?B?NkdOazFvZjB1OExSZXowNXhSeUJVTW03M25nTWJ5RVlVdEw5dk1wdjJlTG00?=
- =?utf-8?B?aFB3YjlQWG14WnpzSDBUcW1zTzc5VnVCSlBsZXNwaTBWQ0Y4VFc0dTFqMDE2?=
- =?utf-8?B?RzVFVjFGWVEvUWRxNFQ0UDNzS0dscDFBVldsWDFSK1ptb2JkQWFPNFFISzBM?=
- =?utf-8?B?OWtoZnFQSnZsNzRDVFJYbTREeEltZ25yQmtNU0FYUERLN0NPVWhxTlZmTFU4?=
- =?utf-8?B?VDUxbjlSZWFpd1hMNEhJbzVrVkxJSUZEb3l6MUNaN1l5L3NLVXJIUTJCVmpr?=
- =?utf-8?B?S1FReVZDMTFXSGxTTFVKYVZqanZ4TWY0dE5yN21ZbXhVWXljN0oyckNLSGp4?=
- =?utf-8?B?VFA2ZEVZcEQwdCtCNFBzMGhvc29QaCs5eW55Q2QweEQzdjlxTGxQc0wyWnZL?=
- =?utf-8?B?R053MFNubG95aHAxdWEzR2hHc1k2alZ4MGdPTys5WEQ5RmlpcWVaTHBVbFhD?=
- =?utf-8?B?MDM4bStuN3RHK1F3djdPSGRDa0N0WnlUMm83K3NwWEtGV2piVUo5Z000M1N4?=
- =?utf-8?B?TzV1MzFOVUllbXZRZDAzbmJFM1lGeW5CV1l1NWUwYWdCOHdxcjJIT3lnU3Q2?=
- =?utf-8?B?SCtPRWdBb3VCUVlQak5IanhqVlh1S3piRmliaERhQkgxRERXdzFCc2svcjJB?=
- =?utf-8?B?bkZnY05LNDVZNCswMUowNnc1OHVMeDh3ZHNUZWZzbktXaXVLRjN4NHR6cE9m?=
- =?utf-8?B?NGY5YWRIeXlnaW9MYnFKOXo0dEZqNXRsdkJBQnF3SzUrdlRkYmQ4ZThIWllP?=
- =?utf-8?B?aHRkUDN0TkxTQnYvUHZ1STFDdDRmV1M2SERJeEhmOVR2ZHVrdGJsczJEZE9G?=
- =?utf-8?B?TWNDRXVod3JkYnJwTzNDeFlSVDhDRWszMk1ZSCtyMGR6eGZKOU9KZjh6Nis3?=
- =?utf-8?B?RmpSUkd0dHVOTjRKTEJKTmszcDZXVUZncUNKVnd1RlFXanhoWG5yVjhwZXZL?=
- =?utf-8?B?aGZOVENCNEFUZ2RxMnlnUGl6a3FrL0FFc0I0V0t3Nm9ZY3ZBUjR0L2RnaUlx?=
- =?utf-8?B?QUdhdmNZR2tjVTRPWnkwMGEreU91dkprdUtxTU1sWUxGQ1VxK0psdU4wVEZU?=
- =?utf-8?B?Z1RBeUVsQWlEYUR4dVFxMmRyUVM1V1VzY2xVQXFQblZMZk5SZzZmMWNGMTVP?=
- =?utf-8?B?WTd5MWd0S0NWblVDeXBmVk5vMG56RmMzdUQvbkJ4VFRjL2NhNWZHWUdJVlBj?=
- =?utf-8?B?MGdibU95Z0FqenlGaGtQeklYRWp4QlRCVm85alB1bW4zSWNISlp3WUN3VnJi?=
- =?utf-8?B?Z3pIc1I4bDhHY3RJYWlxd2RGc3UxakNCOWNoUGNyeE9zT2tUZUFzNHAxeXk5?=
- =?utf-8?B?RmZDZlRNbDcybVVCdGhQdmNKbkoyRlhtQU1UNWJTK2Nsa1U0U282RFBIMThM?=
- =?utf-8?Q?1hZI=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V24yREN6c0Ryc2VUckw4ejhZUTQvRThmU0F4bDBZTTNhZmpWc2U3L0tIbWhI?=
- =?utf-8?B?SHNiRHZQcXJCZFpROEJqMGZvd3BqQjcxYmFzVVhMWVdXb0RmNWlyZ0ttVzRJ?=
- =?utf-8?B?bk1nK1JTYUlOWUxsbTg3UTN0Ui9oME93dUc4aTkyaC84Y2UrL25rNjF3UEY0?=
- =?utf-8?B?UURGaDhLN3JVT2lQaG1IVDdWYUdKUVFpK0FVUXhRalZRTDNrRG1YN1JmTjVY?=
- =?utf-8?B?QzRQRU1aSmIxdkdUdHdSeElaN29zZkVMQ2htcXhSQ1NxR0R2QTZQalcyR0x3?=
- =?utf-8?B?L0NUbmwzRXN5Nkpsa0lKSDhma0lzSzkxcDJpU0NZb3JsQlRMV0Fmck1xSlBX?=
- =?utf-8?B?MEFRUXUxc3Fnb3dDTHdOTzhjZUQwd01iSU5JMDhXMVNPa3Y0SGZWL1IxMUd5?=
- =?utf-8?B?RzZRckRPM0lPSFVjenJmM3l0Y1o2QU0wUWxtS2ZFb0oxc3BSTVJILy9pa25K?=
- =?utf-8?B?ZTk5azhBYktNeWpLM2ljUUJ2dFB3UXE5YnlPWFdUL096MkZNYnp0SFpZYmdk?=
- =?utf-8?B?R0s0Q0xXcERlYUZ3TjBVOXBPUzJRQ2laZHBibDloTE1EMHA1cXl1Nzh0MjRL?=
- =?utf-8?B?S3oxMVdmWnh6RmpEdW1BeDVZMC81cWNJdG84am5qb0ZoNldzb0svRmltNkF5?=
- =?utf-8?B?Ry9rbTJ5M1ZwRFlRb2JRazVkelZRa3dxVTRTUlMrOEVTU1E2SzN5VG9tNk8v?=
- =?utf-8?B?OWttOGZMYm9VUUZHenhQeW9sZE1keTdrcGlBMVh0VmJ6ZXYwZHhTcHF3aFZj?=
- =?utf-8?B?c29PNmpQSnJHOWJDV2p5ZUNrRzZidC9tUUZvVXJ6L3ZlRTQzR2x2T2V6cmxB?=
- =?utf-8?B?RVFuc1JQd2hqbWhUeFRJRUhGUHNGd08remNQbzlqZ3V3d0JUbmsyeEpEL0cw?=
- =?utf-8?B?bFppWFVOYlQ2MGlzbk1wYVhwTHdjVzJFSjlaQWtHRTNtTWIzdE9VTFN4ejhY?=
- =?utf-8?B?V0lsVVNKYXlZUFNPNjlsVE5SbXN4bXBhbW1JUzc1U0tJMWZoYzRMdHNVK2xL?=
- =?utf-8?B?eXJBWjhoSlg2UTloQTRheWxHT3VrQjhvekQveVVmT1BqUVFyUGR4c3BSN2ZB?=
- =?utf-8?B?YkMrNUhzU3JOYVlJWGJUa2RrSno3QUdtN0tQSGUwTjM5STRWWHM1d0s5SFg5?=
- =?utf-8?B?K1FTYlp5ZXI1UjBmejFJZkIveEZ0TnpnNU80dm55SkhUUGdsUXlPY1ZqaDhT?=
- =?utf-8?B?YzZrMkdoNDhlUVVUTzZYL25iWUNETjNYSWFDQW5WaTROZXo4YXBFSGRNOGFB?=
- =?utf-8?B?NlBJaUREODF3dndZQnlYdVhiRTBwdHhJNkh3NDQ2b3IvMGpyYTNjTm5XYlVN?=
- =?utf-8?B?REpURWZOYVlqblpCS1h0b05YY1pMNkJHa2hTenZSaHBKVk1iS0FDYktxMnE0?=
- =?utf-8?B?QXRTOG0zbEl5enVyRis0b3NkQlhKSkdLdXdPMnI3NUJIS0JBNHIxcnJzT2FO?=
- =?utf-8?B?eEhQdHIvNjZYRFB3WDhWUHJxbVpXdUgzWGNoR3lEbXpWNDFKUU4wckNWQ2lM?=
- =?utf-8?B?WVFQem9iRTR1UGh4aWNuR1BHdkU4ZXU0RHMwZlRiY25PYU1Xck5ZK0g1ZDZa?=
- =?utf-8?B?SVhPYXhSM3dsSVQreUxUWDBHN1dQZGg2YllHTmNzM3RzTFh0MGdlVWpOYkZE?=
- =?utf-8?B?aG5XeG4xdjMzTGovaTdieVU5VVRLK00wU3ZDZU1lWitMODlxZThZVloxYUhs?=
- =?utf-8?B?QXFDQUJ1dEd1aWEwUDl0Uk9xQ3ZKVmpXWnlHcFZKWk5uSG9aRUU5dXhyNk1l?=
- =?utf-8?B?dUF6eVRSVUp5a3FnRFJ2ZlRqRGIrNHlqYTNjV214Zm9iZXRFRzhuM0NFUXR1?=
- =?utf-8?B?MVMySUFTMlU4YWdLNnRGWERqcFZlZXl3S0lYbWZ3M3FYWnJzMlo5dUZvYW9Y?=
- =?utf-8?B?d0RKMU9CSmFaTjR6dUh4cFBOM0YzT1dIWnBRTUlVSnpoS2ViVjZpRUp5bitT?=
- =?utf-8?B?K1dHYmVxMVZ3ck1XaGlHc2FwQmExaDM1Mk9Ebk9xbUo2Z1RJenIrbGZtbFZ0?=
- =?utf-8?B?enFwR3hJbk92SUNLUkh4UGJIU2g3dHdqcllNMGpmS3pNeFhCNThUa3dkTWdY?=
- =?utf-8?B?aGNoRnJXaVpUYXcvZWVJMERjWjdzRFJldWN6bkM0N0FTZElRVzYzNG5FZDl3?=
- =?utf-8?B?b3N1WVliSy9ncVlGelBCUlZENTI1enFLL1lyNUtSbTNXN29PdXhqRHZjZU5m?=
- =?utf-8?B?WmlxRkxWSGIxUEVROFRCUVR2UHEwWXI3NFBXUGRiUWRaRkQ4V1VIQXlPMWdE?=
- =?utf-8?B?RmZXZFFVTkM3MGNWV3h2ZitncFF2OGdvMTVUeTN5WFBUYVBucUorTkdRR1Qz?=
- =?utf-8?B?cklPU3RETG9nbU02dXZqTys0VDBld2txYUo1UXJqTk0zdGVrb3dBdz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e773807b-9e68-4981-3294-08de6a97a652
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2026 00:34:29.7779
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TIBCDHs//iKniwrGaGVHBVUnT8qphweaByltldFYzQA4fC113sVkSUys+iIXVOenEmpCRbBqS3J00cBVOW9dXQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7192
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v3 1/9] dt-bindings: usb: document the Renesas
+ UPD720201/UPD720202 USB 3.0 xHCI Host Controller
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas
+ <bhelgaas@google.com>, Konrad Dybcio <konradybcio@kernel.org>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-0-5b79c5d61a03@linaro.org>
+ <20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-1-5b79c5d61a03@linaro.org>
+ <7kkwkjnucx3cpvegilske2qd4u24vvjkykrljosi2uyknte4bz@3xvh57q5lpcv>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <7kkwkjnucx3cpvegilske2qd4u24vvjkykrljosi2uyknte4bz@3xvh57q5lpcv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org,linux.intel.com,amd.com];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33333-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33334-lists,linux-usb=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mario.limonciello@amd.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[amd.com:+];
+	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,amd.com:mid,amd.com:dkim]
-X-Rspamd-Queue-Id: 0C8A1132172
+	HAS_REPLYTO(0.00)[neil.armstrong@linaro.org];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Rspamd-Queue-Id: 982F8134039
 X-Rspamd-Action: no action
 
-++
-
-On 2/12/2026 1:34 AM, Mika Westerberg wrote:
-> [+Cc AMD folks]
+On 2/12/26 16:17, Bjorn Andersson wrote:
+> On Fri, Feb 06, 2026 at 03:50:29PM +0100, Neil Armstrong wrote:
+>> Document the Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller,
+>> which connects over PCIe and requires specific power supplies to
+>> start up.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   .../bindings/usb/renesas,upd720201-pci.yaml        | 61 ++++++++++++++++++++++
+>>   1 file changed, 61 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/renesas,upd720201-pci.yaml b/Documentation/devicetree/bindings/usb/renesas,upd720201-pci.yaml
+>> new file mode 100644
+>> index 000000000000..34acee62cdd2
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/usb/renesas,upd720201-pci.yaml
+>> @@ -0,0 +1,61 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/usb/renesas,upd720201-pci.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: UPD720201/UPD720202 USB 3.0 xHCI Host Controller (PCIe)
+>> +
+>> +maintainers:
+>> +  - Neil Armstrong <neil.armstrong@linaro.org>
+>> +
+>> +description:
+>> +  UPD720201 USB 3.0 xHCI Host Controller via PCIe x1 Gen2 interface.
+>> +  The UPD720202 supports up to two downstream ports, while UPD720201
+>> +  supports up to four downstream USB 3.0 rev1.0 ports.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: pci1912,0014
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  avdd33-supply:
+>> +    description: +3.3 V power supply for analog circuit
+>> +
+>> +  vdd10-supply:
+>> +    description: +1.05 V power supply
+>> +
+>> +  vdd33-supply:
+>> +    description: +3.3 V power supply
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - avdd33-supply
+>> +  - vdd10-supply
+>> +  - vdd33-supply
+>> +
+>> +allOf:
+>> +  - $ref: usb-xhci.yaml
+>> +
+>> +additionalProperties: false
 > 
-> On Thu, Feb 12, 2026 at 08:07:54AM +0100, Mika Westerberg wrote:
->> On Thu, Feb 12, 2026 at 12:16:03PM +0800, AceLan Kao wrote:
->>>>> Disable runpm on 62:02.0, then we have 83:00.0 and its downstream port
->>>>> 84:01.0 and 85:00.0, and then the tbt storage is recognized.
->>> Got troubles with mutt, my reply got rejected :(
->>>
->>> Using gmail and copy/paste the content below again.
->>
->> Okay.
->>
->>>> Okay that means there is nothing wrong with the PCIe tunnel itself it's
->>>> just that the PCIe side either does not get the PME or does not see that
->>>> the PCIe link becomes active (e.g the PCIe Downstream Port runtime suspends
->>>> itself before the link status changes).
->>>>
->>>> PME work so that there is wake first on Intel it's GPE that wakes up the
->>>> root port and then PCIe stack wakes up devices and then the PME message is
->>>> sent to the root complex.
->>>>
->>>> If you do this on Intel host do you see the same?
->>> Intel host exhibits another symptom, I think the root cause is different.
->>>
->>> Plug in the dock, and then plug in the tbt storage to the dock one by
->>> one, both storage can be detected.
->>>
->>> Plug both tbt storage to the dock, and then plug in the dock to the
->>> machine, only one tbt storage appears. In rare chance, both tbt
->>> storages show up, but most of the time, only one tbt storage is detected.
->>> In this case, none of disable runpm, rescan, or lspci work. So, it's
->>> most likely another issue.
->>
->> By "detected" you mean the TB device is not detected on TB bus? Or it is
->> detected on TB bus but creating PCIe tunnel does not make the content
->> visible on PCIe bus?
->>
->> You can check this from dmesg, the driver logs if it sees the plug event.
->> Or run tblist (from tbtools) and see if the device is listed.
->>
->> I suspect former and in that case it is likely a PD/retimer related issue
->> rather than software. I see these once in a while especially with new
->> hardware where the PD firmare is not yet stabilized. If there is TB/USB4
->> link then all is working from TB/USB4 perspective.
->>
->>>> Right at that point the PCIe Downstream Port probably is already back
->>>> runtime suspended.
->>>>
->>>> Here you could try this:
->>>>
->>>> # echo 250 > /sys/bus/pci/devices/0000:62:02.0/power/autosuspend_delay
->>> No luck, I enlarged the number to 1000, but still can't recognize the
->>> second tbt storage.
->>
->> What about -1?
->>
->> That's effectively same as blocking runtime PM completely so should work.
->>
->>> I tried to wake up the PCIe ports in the beginning of tb_tunnel_pci() and
->>> it works.
->>>
->>> +       pdev = pci_get_domain_bus_and_slot(0, 0x62, PCI_DEVFN(0x02, 0));
->>> +       if (pdev) {
->>> +               if (pdev->dev.power.runtime_status == RPM_SUSPENDED)
->>> +                       pm_runtime_get_sync(&pdev->dev);
->>> +               pci_dev_put(pdev);
->>> +       }
->>>
->>> But I can't find a generic way to get the bus and slot number, and
->>> would you consider this a feasible approach?
->>
->> No I don't want any (more) PCI related hacks in the driver.
->>
->> This is not a TB issue, it's a PCIe issue. I suspect it has something to do
->> with handling PME/GPE on AMD side. Essentially when runtime PM is blocked
->> the PCIe hotplug driver notices the tunnel just fine. When it is runtime
->> suspended (e.g D3) it should send PME to the root complex that the brings
->> the topology up so that the hotplug driver can detect the presence but this
->> does not seem to happen.
->>
->> If you enable dynamic debugging of pciehp, do you see anything happening
->> when you create the second PCIe tunnel? I suspect not.
+> I'm trying to hang a onboard_hub off this controller and #address-cells,
+> #size-cells, and hub@ comes back as invalid children.
+> 
+> I think this should be unevaluatedProperties instead.
 
- From what I see above I agree this does seem like a PME delivery issue 
-of some sort.  Any chance you can put this on a PCIe analyzer and 
-confirm whether the PME was ever sent?
+Ack will update
+
+Thanks,
+Neil
+
+> 
+> Regards,
+> Bjorn
+> 
+>> +
+>> +examples:
+>> +  - |
+>> +    pcie@0 {
+>> +        reg = <0x0 0x1000>;
+>> +        ranges = <0x02000000 0x0 0x100000 0x10000000 0x0 0x0>;
+>> +        #address-cells = <3>;
+>> +        #size-cells = <2>;
+>> +        device_type = "pci";
+>> +
+>> +        usb-controller@0 {
+>> +            compatible = "pci1912,0014";
+>> +            reg = <0x0 0x0 0x0 0x0 0x0>;
+>> +            avdd33-supply = <&avdd33_reg>;
+>> +            vdd10-supply = <&vdd10_reg>;
+>> +            vdd33-supply = <&vdd33_reg>;
+>> +        };
+>> +    };
+>>
+>> -- 
+>> 2.34.1
+>>
+
 
