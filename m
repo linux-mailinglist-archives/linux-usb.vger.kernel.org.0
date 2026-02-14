@@ -1,294 +1,164 @@
-Return-Path: <linux-usb+bounces-33361-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33362-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MMucMNA4kGkuXgEAu9opvQ
-	(envelope-from <linux-usb+bounces-33361-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 09:56:48 +0100
+	id WGgYJ3BnkGkXZQEAu9opvQ
+	(envelope-from <linux-usb+bounces-33362-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 13:15:44 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 247D813B828
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 09:56:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C35D13BD1B
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 13:15:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 57E90302614F
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 08:56:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3A9523018746
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 12:15:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C943161B5;
-	Sat, 14 Feb 2026 08:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D11F30275F;
+	Sat, 14 Feb 2026 12:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q663OU/0"
+	dkim=pass (2048-bit key) header.d=poleshift.se header.i=@poleshift.se header.b="IMWwiVTC";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="N13hJtPN";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=poleshift.se header.i=@poleshift.se header.b="BBxj/c4r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from e240-5.smtp-out.eu-north-1.amazonses.com (e240-5.smtp-out.eu-north-1.amazonses.com [23.251.240.5])
+	(using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765163218BA;
-	Sat, 14 Feb 2026 08:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90EA2FE58F;
+	Sat, 14 Feb 2026 12:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.251.240.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771059392; cv=none; b=R05HtPWO0GvLmQnULRbJkv3Lm372BbkcJwRWgaaoI2I2Vocc36KvJO54vbuzp1WhS9JO3SfgsExiq5A0lnfiAX1hsLpQH6rCmvKciYxcEAK+4HxV4yToIv769neTEaETVIlf89NuCMeRKcOjq5Y/7Zyru/M3+VhRB8y39ForXMY=
+	t=1771071328; cv=none; b=duTfQiVZRLphsJOMLqP/bB4JVdzHlCfPXpsTnXQmxQcvBM/sRqElYXfIBsx3r3ux4JQVN/5FmEM4jX+znrbS+Q8nqW+iAjW0o8+4uh/4rcsRKTZGYVw6vpbgDMQE+Hbs6b13ldCP2wuw6QZVRKOZwKqdD5q/u/byxESetDkJCJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771059392; c=relaxed/simple;
-	bh=FmU6sN6VTvK2lk9nkffJpXX9j+KGsN9TIxoBy1pLkF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JrweolYTVbeaHDleuJ9M4YIps7c39Cp9NrYSttIA6NerhXg/wiwBaB4nhM915dV326JTHVMs7+Jsz2ECgnD83AI/nCHwGC8uT1NuJ9sn3H1TTf/vzeDYIuGrL0k8DBXyOJY18BE/YekfELlDwyRgXniR59Q1U4sYGUztalYWOxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q663OU/0; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771059387; x=1802595387;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FmU6sN6VTvK2lk9nkffJpXX9j+KGsN9TIxoBy1pLkF0=;
-  b=Q663OU/0kclcSCrHbC+Z7f+IatB68YiepEW42MHDErrv42kUTCpdd3Fn
-   gHDivvz02HUbPiUUsEuKvQXTW9Qgurd+MwwOovwxVviJ49T42DNPpmu0j
-   ZemN1yLrRoudb6iqPFVtePp6EtiDQn07K8WXFlF9uYFHcngQPMjT6iHk0
-   qL93mwAy6V7BLjk0Srd57reY1n4RbRpaRJKAUHu9LeGlw2GBd6J5c37mv
-   peBuB2tyK2E4UKkGkiew4n5zTuK5oG0aWZQbdlEYWjas5z5h/EgnnVfeT
-   VvsCjK07uR/wC3c2R7IOeD7j6YEJQSJvQKY1cM7WBIhKTHwoCAvzQ36Yk
-   g==;
-X-CSE-ConnectionGUID: bOXwc9I6SnCPGJKwFeEeuA==
-X-CSE-MsgGUID: /GxuXnI2Tnqk+RGypmdszw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="71428986"
-X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="71428986"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 00:56:26 -0800
-X-CSE-ConnectionGUID: N824LeOqToGHpVGW64sH6Q==
-X-CSE-MsgGUID: Qhwja1+kR8SCKwHr/L7Utg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="218110063"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 14 Feb 2026 00:56:20 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vrBRp-00000000wPI-1UDK;
-	Sat, 14 Feb 2026 08:56:17 +0000
-Date: Sat, 14 Feb 2026 16:56:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Lee Jones <lee@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Mark Brown <broonie@kernel.org>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>,
-	Amit Sunil Dhamne <amitsd@google.com>
-Subject: Re: [PATCH v6 5/6] power: supply: max77759: add charger driver
-Message-ID: <202602141606.igFDFWAJ-lkp@intel.com>
-References: <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
+	s=arc-20240116; t=1771071328; c=relaxed/simple;
+	bh=rFlgiUhbRa59lDQuTF6+GPlvrsi3zx3UKYbAFtUx9IQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:Cc; b=ia8FAcHJz62a4WPjCeFo35IDCl+ZtG3EXz4fmC2PtzhfAN13uDxtTCqFqlJH8nSj6RowsnQjfY/cYE0cnxok7ez2CIUC6+H78FUkomu5TNz3kEJk2S01wrpVcgwFmaodxvO5hmoZWs6aH4bdLDN7Txj9mCNm6Q5Z5hBJdAsuX/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=poleshift.se; spf=pass smtp.mailfrom=eu-north-1.amazonses.com; dkim=pass (2048-bit key) header.d=poleshift.se header.i=@poleshift.se header.b=IMWwiVTC; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=N13hJtPN; dkim=fail (0-bit key) header.d=poleshift.se header.i=@poleshift.se header.b=BBxj/c4r reason="key not found in DNS"; arc=none smtp.client-ip=23.251.240.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=poleshift.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eu-north-1.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=n6aiayff3zq3manwyovyvpolm4pou2ef; d=poleshift.se; t=1771071321;
+	h=From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:To:Cc;
+	bh=rFlgiUhbRa59lDQuTF6+GPlvrsi3zx3UKYbAFtUx9IQ=;
+	b=IMWwiVTCmdar/Uhb/2jpXwqmhFrJWZVYEM0AbyHoBjUpQm9J6kEZI6dPhVdz8CBf
+	BRRGyTldQUZbdn8ZB7J5h3COVhXS4UPUKtG3nt+n780lQYKlaKgoS74adCpPzzOD4zg
+	GmcmaUDlfMHtQy6pabRUEvZg+ZtMMCDQtGPtWB/kLcrenghz011cx7HMNgM7UnEsuGj
+	h3sXKHWkBjkC8Mr2+y6KvZ4AAjqDER5h8w2bD7OeKrGUOAd2KIM4z0YQjU2FXKk44Ua
+	47u1LeTn7QvH/VDh0x59BtJLLoul9lwo3J8dNlfBSCqWen0ImMm+9AJFuv+Bb1kkNhy
+	wtYV8leIFw==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=icdr7g7fbtu2nwxgaimytihkt42k3kiy; d=amazonses.com; t=1771071321;
+	h=From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:To:Cc:Feedback-ID;
+	bh=rFlgiUhbRa59lDQuTF6+GPlvrsi3zx3UKYbAFtUx9IQ=;
+	b=N13hJtPNUVjB1iv7w7AHY/h9FiQ6dsjzcfpion0zhoiEzvmz7hqhGwcgtf4B9kpt
+	w1LPyYGymytJRH5XbEOjWm1LfikC1/FMuULfCaTtsPTllFL6FC4qM5nECnl5JB05loN
+	1kX8oSWwdhKfGTmNV2R0hv+NoGa5spjVBxoZNXq4=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poleshift.se;
+	s=20230429; t=1771071319;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yq1Yi+g/1PPOy4yvt0Qjkyz18T5vp1xuhQ51csxeR08=;
+	b=BBxj/c4rHbZ7jB1/a4dfP5ENbflvy1BBh1h02ZzBFCpumejhpzx4tgVcPZ3Tu/38S0gWAQ
+	+jR6u2vGHyVXMx4AfNvYtJMa0VxpfNL/3P0p30IaAoL6nMkPE+h7f7O8b4plFqvmvKvY8n
+	a9QOZ/C/pcDt1XUF2aPAsSq50PHqQpo=
+From: =?utf-8?q?Martin_P=C3=A5lsson?= <martin@poleshift.se>
+Date: Sat, 14 Feb 2026 12:15:21 +0000
+Subject: [PATCH] net: usb: lan78xx: scan all MDIO addresses on LAN7801
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-ID: <0110019c5c13b668-dd1f5db3-309a-442a-b483-262c4edbb360-000000@eu-north-1.amazonses.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MSwqAMAwFryJZG7ClfvAq4iJo1KBWaUEq4t0NL
+ ucNbx6IHIQjtNkDgS+JcngFk2cwLORnRhmVwRa2KqxxuJGvm5TwXG7cKa44SUJyakc2JbkB9Ho
+ G1vnPdv37fnqamtVmAAAA
+X-Change-ID: 20260214-lan78xx-phy-mask-fix-a4260de15a4c
+To: Thangaraj Samynathan <Thangaraj.S@microchip.com>, 
+	Rengarajan Sundararajan <Rengarajan.S@microchip.com>, 
+	UNGLinuxDriver@microchip.com, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, martin@poleshift.se
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+X-Mailer: b4 0.14.3
+Feedback-ID: ::1.eu-north-1.nVsitYrO9p3qnPLcZXP017jV0c/PN62ZbS4lYSSQpnA=:AmazonSES
+X-SES-Outgoing: 2026.02.14-23.251.240.5
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[poleshift.se,reject];
+	R_DKIM_ALLOW(-0.20)[poleshift.se:s=n6aiayff3zq3manwyovyvpolm4pou2ef,amazonses.com:s=icdr7g7fbtu2nwxgaimytihkt42k3kiy];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33362-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33361-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,fi.rohmeurope.com,gmail.com,linux-foundation.org];
+	RCVD_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
+	R_DKIM_PERMFAIL(0.00)[poleshift.se:s=20230429];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[29];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[poleshift.se:+,amazonses.com:+,poleshift.se:~];
 	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[martin@poleshift.se,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_MIXED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,amitsd.google.com,dt];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim,intel.com:email,psy_work.work:url]
-X-Rspamd-Queue-Id: 247D813B828
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amazonses.com:dkim,poleshift.se:email,poleshift.se:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,eu-north-1.amazonses.com:mid]
+X-Rspamd-Queue-Id: 2C35D13BD1B
 X-Rspamd-Action: no action
 
-Hi Amit,
+The LAN7801 is designed exclusively for external PHYs (unlike the
+LAN7800/LAN7850 which have internal PHYs), but lan78xx_mdio_init()
+restricts PHY scanning to MDIO addresses 0-7 by setting phy_mask to
+~(0xFF). This prevents discovery of external PHYs wired to addresses
+outside that range.
 
-kernel test robot noticed the following build errors:
+One such case is the DP83TC814 100BASE-T1 PHY, which is typically
+configured at MDIO address 10 via PHYAD bootstrap pins and goes
+undetected with the current mask.
 
-[auto build test ERROR on 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d]
+Set phy_mask to 0 for the LAN7801 so that all 32 MDIO addresses are
+scanned during bus registration, allowing any external PHY to be
+discovered regardless of its address.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-mfd-maxim-max77759-reference-power-supply-schema-and-add-regulator-property/20260214-111637
-base:   8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
-patch link:    https://lore.kernel.org/r/20260214-max77759-charger-v6-5-28c09bda74b4%40google.com
-patch subject: [PATCH v6 5/6] power: supply: max77759: add charger driver
-config: powerpc64-randconfig-001-20260214 (https://download.01.org/0day-ci/archive/20260214/202602141606.igFDFWAJ-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602141606.igFDFWAJ-lkp@intel.com/reproduce)
+Signed-off-by: Martin Pålsson <martin@poleshift.se>
+---
+ drivers/net/usb/lan78xx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602141606.igFDFWAJ-lkp@intel.com/
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index 00397a807393..9d8f1ff7028d 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -2094,8 +2094,8 @@ static int lan78xx_mdio_init(struct lan78xx_net *dev)
+ 		dev->mdiobus->phy_mask = ~(1 << 1);
+ 		break;
+ 	case ID_REV_CHIP_ID_7801_:
+-		/* scan thru PHYAD[2..0] */
+-		dev->mdiobus->phy_mask = ~(0xFF);
++		/* scan all 32 MDIO addresses for external PHYs */
++		dev->mdiobus->phy_mask = 0;
+ 		break;
+ 	}
+ 
 
-All errors (new ones prefixed by >>):
+---
+base-commit: ee5492fd88cfc079c19fbeac78e9e53b7f6c04f3
+change-id: 20260214-lan78xx-phy-mask-fix-a4260de15a4c
 
->> drivers/power/supply/max77759_charger.c:623:4: error: cannot jump from this goto statement to its label
-     623 |                         goto err;
-         |                         ^
-   drivers/power/supply/max77759_charger.c:631:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     631 |         guard(mutex)(&chg->retry_lock);
-         |         ^
-   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
-     414 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:18:1: note: expanded from here
-      18 | __UNIQUE_ID_guard_461
-         | ^
-   drivers/power/supply/max77759_charger.c:615:3: error: cannot jump from this goto statement to its label
-     615 |                 goto err;
-         |                 ^
-   drivers/power/supply/max77759_charger.c:631:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     631 |         guard(mutex)(&chg->retry_lock);
-         |         ^
-   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
-     414 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:18:1: note: expanded from here
-      18 | __UNIQUE_ID_guard_461
-         | ^
-   drivers/power/supply/max77759_charger.c:606:3: error: cannot jump from this goto statement to its label
-     606 |                 goto err;
-         |                 ^
-   drivers/power/supply/max77759_charger.c:631:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     631 |         guard(mutex)(&chg->retry_lock);
-         |         ^
-   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
-     414 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:18:1: note: expanded from here
-      18 | __UNIQUE_ID_guard_461
-         | ^
-   3 errors generated.
-
-
-vim +623 drivers/power/supply/max77759_charger.c
-
-   591	
-   592	static void psy_work_item(struct work_struct *work)
-   593	{
-   594		struct max77759_charger *chg =
-   595			container_of(work, struct max77759_charger, psy_work.work);
-   596		union power_supply_propval current_limit, online;
-   597		int ret;
-   598	
-   599		ret = power_supply_get_property(chg->tcpm_psy,
-   600						POWER_SUPPLY_PROP_CURRENT_MAX,
-   601						&current_limit);
-   602		if (ret) {
-   603			dev_err(chg->dev,
-   604				"Failed to get CURRENT_MAX psy property, ret=%d",
-   605				ret);
-   606			goto err;
-   607		}
-   608	
-   609		ret = power_supply_get_property(chg->tcpm_psy, POWER_SUPPLY_PROP_ONLINE,
-   610						&online);
-   611		if (ret) {
-   612			dev_err(chg->dev,
-   613				"Failed to get ONLINE psy property, ret=%d",
-   614				ret);
-   615			goto err;
-   616		}
-   617	
-   618		if (online.intval && current_limit.intval) {
-   619			ret = set_input_current_limit(chg, current_limit.intval);
-   620			if (ret) {
-   621				dev_err(chg->dev,
-   622					"Unable to set current limit, ret=%d", ret);
- > 623				goto err;
-   624			}
-   625	
-   626			charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
-   627		} else {
-   628			charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
-   629		}
-   630	
-   631		guard(mutex)(&chg->retry_lock);
-   632	
-   633		if (chg->psy_work_retry_cnt)
-   634			dev_dbg(chg->dev, "chg psy_work succeeded after %u tries",
-   635				chg->psy_work_retry_cnt);
-   636		chg->psy_work_retry_cnt = 0;
-   637		return;
-   638	
-   639	err:
-   640		charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
-   641		guard(mutex)(&chg->retry_lock);
-   642	
-   643		if (chg->psy_work_retry_cnt >= MAX_NUM_RETRIES) {
-   644			dev_err(chg->dev, "chg psy work failed, giving up");
-   645			return;
-   646		}
-   647	
-   648		++chg->psy_work_retry_cnt;
-   649		dev_dbg(chg->dev, "Retrying %u/%u chg psy_work",
-   650			chg->psy_work_retry_cnt, MAX_NUM_RETRIES);
-   651		schedule_delayed_work(&chg->psy_work,
-   652				      msecs_to_jiffies(PSY_WORK_RETRY_DELAY_MS));
-   653	}
-   654	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Martin Pålsson <martin@poleshift.se>
+
 
