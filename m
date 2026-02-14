@@ -1,251 +1,224 @@
-Return-Path: <linux-usb+bounces-33359-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33360-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EHuwCpLoj2lqUQEAu9opvQ
-	(envelope-from <linux-usb+bounces-33359-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 04:14:26 +0100
+	id dC8CFrEdkGlwWQEAu9opvQ
+	(envelope-from <linux-usb+bounces-33360-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 08:01:05 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD7EA13AE00
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 04:14:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5B5B13B45B
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 08:01:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 132B8302F432
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 03:14:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1684C30247D9
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 07:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC6242DF134;
-	Sat, 14 Feb 2026 03:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 500BD27FD43;
+	Sat, 14 Feb 2026 07:00:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+17zbrU"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="y4lrz9af"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4082BFC7B;
-	Sat, 14 Feb 2026 03:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DAD72627
+	for <linux-usb@vger.kernel.org>; Sat, 14 Feb 2026 07:00:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771038831; cv=none; b=LLSjzCBwuqBEAm/LNMEJw2Tckfskwy4KTx5afQvDlRLE2u7vbpHCOtjdAvHAQC7biKXIt38tTJ8BQp2xz0MmBo/1mFSndf5WW/GTZPAYShPn7POtM3Nv5hP3WOXfX0EiP6yBCheULLe9JEGqYKQVt7ncxxba74H0Zv+OtZY3ot0=
+	t=1771052458; cv=none; b=IEjvOLOcvrYKRqMut3QbZTAXlElC80I69liCyswnX6KNM5ekC9q3w1D9G11oXmWLr7D9LfQY51+uAir0H3+oKJ/7fYt8UCxnSLRDxSPUC6lRZ55TDoJx7wE3BKAKXLb4BnoH6oC7u04ZIjWRU7Hz4bqJWsrchKcgGe0zh+Vfb/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771038831; c=relaxed/simple;
-	bh=T0is8WAjNIQTH7n3SjjQrYJ5o0lOncKHPOxPG7gCwVk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nvF4unG+dD0uiy5nCy2Q2UZSMlHMuDmOEWR7iOzM3YyAhXd9c9kHr0CxfxaKRBILJ5iuYkrKGVoJUn/vuxoCRw7cpaHn3gxkNrCXTN2rigQAM+CQg5hbgzoclUnDywotzSSybfrYYjszXOJFgd4cxauCi8uwBGqhmZG0F3CMbV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+17zbrU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3AF2C2BC9E;
-	Sat, 14 Feb 2026 03:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771038831;
-	bh=T0is8WAjNIQTH7n3SjjQrYJ5o0lOncKHPOxPG7gCwVk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=s+17zbrUUXMO9ZtVcIc5PlEKHT3CSI8T+rxRHvAN1PXdVrQ2IcT+nTWqeXm8KvBaX
-	 CfYKYAVwLDRST51HpUOfCmDLjwiYOb0nR1PWYhQktG3Ji3fnfqgJCBXfv9WPMJydpG
-	 /3j4q8uQPy/LJDRDRc5UGRQPMTmm8QUdJMmmfWlq086vyc/WEm8DVIeA80Jq2Mp5Dg
-	 ktE+dBXRa38vKvJ+wZL7f3XLRTnHmUdPvH76AfK3bbQqn8qJ2m2qpYJ6YgE1BTMxH9
-	 MlDmuUA/J8CLs7icyfRaVUy3oY46brgpXz59RnsKdtIsBX9eIQWisxe6exhMTdc8+B
-	 ZejbjtjY3824w==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FF3DEF99F3;
-	Sat, 14 Feb 2026 03:13:51 +0000 (UTC)
-From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Date: Sat, 14 Feb 2026 03:12:42 +0000
-Subject: [PATCH v6 6/6] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
- setting charger mode
+	s=arc-20240116; t=1771052458; c=relaxed/simple;
+	bh=AnbT0U37D83jSLu4Un+2F+/QkXprltoeWqgd9K5QuJk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tuF676FTIkBs1GMqte3jQzhpNba6xq0bKMTBwh2IdL/WgdDNRt8XznxywtOaQkrxX0ciEy1g8NDTI5cYUw0TjBwdLPKbD//f0TBIZ28VsBRaN241+2hJCcroUvGdYpeeeM7QqoTalA2Wc4pmcToqjfI7GrEaCkTFJGROayPgfrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=y4lrz9af; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2aad5fec175so53023095ad.2
+        for <linux-usb@vger.kernel.org>; Fri, 13 Feb 2026 23:00:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771052457; x=1771657257; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OC/cAc5yXN5JpYjUFx0KpLCrFKcXhoVWogme4uCdNzM=;
+        b=y4lrz9af5xRl45/4fjAglGlp61YsbFb5lRnNwBGxAh6zRupPhuwGH5/ixlD1F9gVUJ
+         +2Ms5x4K6695J+TIDijr+RA4LEoa/JjvNL1XSoqUrh5ubEy+OZ+dOVKpTcoEPVF3eHS4
+         XGsB7f0o5oQ3hewWd0+hQIuzhhyYttnNV/lDo6xylCax5smvR/o9pqZQJfvlcHCU1yQt
+         JmzqDh20SbDBvtXfLiuP3upwLcSfO/sQdY7ZM9eHChwhHEtf8DxGEwtVTH5HImBT90o/
+         XuZolB1/f/3+MYJELhMQc4Oli2mSGMWWxbj1ZrdbkDzUk7NF3k1qbaPGEs2HqcGXGfw8
+         MdqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771052457; x=1771657257;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OC/cAc5yXN5JpYjUFx0KpLCrFKcXhoVWogme4uCdNzM=;
+        b=NHLIuUW6Dezj8vJxSWLVTHw//IvnnF9iAEpSkODH772LsFtbxrgGt61t4P3iuNCTvN
+         A+myvX+xx0JZyk3cleZHolZEYlJpeovRqqfU/4TEE1XA339+so23voTwkvklF2E9zjW8
+         mBALs7mirbngEMWuXoigtaWw5I+lgbUHCoxHvZvSSr9QP92ezhZ/TfhEfbO8SZ8pcgj2
+         5xi4405ze41QQFl/owXYwT10Yx680KXqwNLzUDjFsqKglJYPW1kIuC5YU9/I+hZi6VQt
+         yeHIY30LtV4/hlx225WqStCWE0wrPKeygKgkj8mLIzRyDslPH2fzYRuEeHiB+vfqTH+n
+         Yfvw==
+X-Gm-Message-State: AOJu0Yy3O/Lmd/M5mzkhwT7iKGJwJxulXT4zvKb24MuqjjYOUr1GsGyU
+	M+8PUfZX6KOKpdX60QCfeNg4oA9zLTlva2WTBuKUTOKcS8sHCbIVBhkEnf2I4y2uUjwQEcReqTM
+	N2cZt+w==
+X-Received: from plbmi8.prod.google.com ([2002:a17:902:fcc8:b0:29f:1bbb:de14])
+ (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:19c5:b0:2a9:30d4:2b07
+ with SMTP id d9443c01a7336-2ab5059ae3dmr45737075ad.32.1771052456782; Fri, 13
+ Feb 2026 23:00:56 -0800 (PST)
+Date: Sat, 14 Feb 2026 15:00:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAJcdkGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDI0MT3ZzU9MTkSt285Fxdi2QDA0MjS9MkYxNjJaCGgqLUtMwKsGHRSkF uzkqxtbUACtTaTGEAAAA=
+X-Change-Id: 20260214-legacy-ncm-8c001295b343
+X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771052455; l=4352;
+ i=khtsai@google.com; s=20250916; h=from:subject:message-id;
+ bh=AnbT0U37D83jSLu4Un+2F+/QkXprltoeWqgd9K5QuJk=; b=3jt7gPvU+q6C4Zmo1wUqkp9chImkiK7dDJk8sAcoSdn6aBE7U3MKD6hzVwvyapVFksQbzXETk
+ BTfuUtIvH/JAtfYWwOKb8nlWVxcFaF+k2G6GOGWi4Fhoclj8l/1SOJk
+X-Mailer: b4 0.14.2
+Message-ID: <20260214-legacy-ncm-v1-1-139c5bcc6636@google.com>
+Subject: [PATCH RFC] usb: legacy: ncm: Fix potential NPE in gncm_bind
+From: Kuen-Han Tsai <khtsai@google.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, stable@kernel.org, 
+	Kuen-Han Tsai <khtsai@google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260214-max77759-charger-v6-6-28c09bda74b4@google.com>
-References: <20260214-max77759-charger-v6-0-28c09bda74b4@google.com>
-In-Reply-To: <20260214-max77759-charger-v6-0-28c09bda74b4@google.com>
-To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Badhri Jagan Sridharan <badhri@google.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>, 
- Matti Vaittinen <mazziesaccount@gmail.com>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
- Amit Sunil Dhamne <amitsd@google.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771038829; l=3931;
- i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=SV82ZDWtKqKM+e3skWinWqYZFA5ClNos8oIG2Fwiwec=;
- b=a30VK9AaA+r4F0YLcvsI9TPp5BZthNhQKAN+p0/lbmZTThPFt8DwCap4nnbURWF2U9wLnN0+O
- xkootuhzxRVAUyw0dA555RfwKE9URbBjaE+lEONm+TH3WWugHpfY3ht
-X-Developer-Key: i=amitsd@google.com; a=ed25519;
- pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
-X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
- auth_id=262
-X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
-Reply-To: amitsd@google.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33359-lists,linux-usb=lfdr.de,amitsd.google.com];
-	FREEMAIL_TO(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[24];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-33360-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	HAS_REPLYTO(0.00)[amitsd@google.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-usb@vger.kernel.org];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:email,intel.com:email]
-X-Rspamd-Queue-Id: AD7EA13AE00
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[khtsai@google.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A5B5B13B45B
 X-Rspamd-Action: no action
 
-From: Amit Sunil Dhamne <amitsd@google.com>
+Commit 56a512a9b410 ("usb: gadget: f_ncm: align net_device lifecycle
+with bind/unbind") deferred the allocation of the net_device. This
+change can lead to a NULL pointer dereference in the legacy NCM driver
+as it attempts to access the net_device before it's fully initialized.
 
-TCPCI maxim driver directly writes to the charger's register space to
-set charger mode depending on the power role. As MAX77759 chg driver
-exists, this WAR is not required.
+Store the provided qmult, host_addr, and dev_addr into the struct
+ncm_opts->net_opts during gncm_bind(). These values will be properly
+applied to the net_device when it is allocated and configured later in
+the binding process by the NCM function driver.
 
-Instead, use a regulator interface to source vbus when typec is in
-source power mode. In other power modes, this regulator will be turned
-off if active.
-
-Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: André Draszik <andre.draszik@linaro.org>
+Fixes: 56a512a9b410 ("usb: gadget: f_ncm: align net_device lifecycle with bind/unbind")
+Cc: stable@kernel.org
+Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
 ---
- drivers/usb/typec/tcpm/tcpci_maxim.h      |  1 +
- drivers/usb/typec/tcpm/tcpci_maxim_core.c | 54 +++++++++++++++++++------------
- 2 files changed, 34 insertions(+), 21 deletions(-)
+Hi Greg,
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
-index b33540a42a95..b314606eb0f6 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim.h
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-@@ -60,6 +60,7 @@ struct max_tcpci_chip {
- 	struct tcpm_port *port;
- 	enum contamiant_state contaminant_state;
- 	bool veto_vconn_swap;
-+	struct regulator *vbus_reg;
- };
+I have been working on a series of changes to align the net_device
+lifecycle with the bind/unbind process across various USB gadget 
+function drivers. The goal is to solve the long-standing "lifetime
+mismatch" problem where the network interface could outlive its parent
+gadget device, leading to dangling symbolic links.
+
+Recently, Commit 56a512a9b410 ("usb: gadget: f_ncm: align net_device
+lifecycle with bind/unbind") was accepted to address this for the NCM
+driver. However, during the process of adapting this same architecture
+to f_subset, f_eem, f_ecm, and f_rndis, I discovered that this approach
+regresses the legacy NCM driver (g_ncm).
+
+Specifically, the legacy driver attempts to access the net_device during
+its own binding process before the NCM function driver has been fully
+bound. This can result in a NULL pointer dereference.
+
+I am submitting the following patch as a fix for the g_ncm regression by
+caching the configuration (qmult, host_addr, dev_addr) in opts_net until
+the network device is ready. Please note that while I have verified the
+logic and ensured the code builds, I do not have the physical hardware
+required to perform a full functional test with the legacy g_ncm driver.
+
+Beyond this specific fix, I would like to request the guidance on how to
+proceed with the remaining network function drivers:
+
+1. Deprecation: Can we consider the legacy drivers obsolete?  If so,
+  we could prioritize the lifecycle fix for the configfs framework.
+
+2. Compatibility: Should we continue to adapt the lifecycle concept to
+  all drivers while strictly maintaining backward compatibility for 
+  legacy function drivers?
+
+I would appreciate your feedback on the preferred direction before I
+proceed with the patchsets for the other USB function drivers.
+---
+ drivers/usb/gadget/legacy/ncm.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/gadget/legacy/ncm.c b/drivers/usb/gadget/legacy/ncm.c
+index 0f1b45e3abd1a1ead7b2776be10a2a5747960136..bf00f9d76a5323b298869b4210c5bf99b1ab7f9c 100644
+--- a/drivers/usb/gadget/legacy/ncm.c
++++ b/drivers/usb/gadget/legacy/ncm.c
+@@ -15,8 +15,10 @@
+ /* #define DEBUG */
+ /* #define VERBOSE_DEBUG */
  
- static inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-index 19f638650796..e9e2405c5ca0 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-@@ -10,6 +10,7 @@
++#include <linux/hex.h>
  #include <linux/kernel.h>
  #include <linux/module.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/usb/pd.h>
- #include <linux/usb/tcpci.h>
- #include <linux/usb/tcpm.h>
-@@ -35,12 +36,6 @@
-  */
- #define TCPC_RECEIVE_BUFFER_LEN				32
++#include <linux/string.h>
+ #include <linux/usb/composite.h>
  
--#define MAX_BUCK_BOOST_SID				0x69
--#define MAX_BUCK_BOOST_OP				0xb9
--#define MAX_BUCK_BOOST_OFF				0
--#define MAX_BUCK_BOOST_SOURCE				0xa
--#define MAX_BUCK_BOOST_SINK				0x5
--
- static const struct regmap_range max_tcpci_tcpci_range[] = {
- 	regmap_reg_range(0x00, 0x95)
- };
-@@ -202,32 +197,49 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
- 	tcpm_pd_receive(chip->port, &msg, rx_type);
- }
+ #include "u_ether.h"
+@@ -129,6 +131,7 @@ static int gncm_bind(struct usb_composite_dev *cdev)
+ 	struct usb_gadget	*gadget = cdev->gadget;
+ 	struct f_ncm_opts	*ncm_opts;
+ 	int			status;
++	u8			mac[ETH_ALEN];
  
-+static int get_vbus_regulator_handle(struct max_tcpci_chip *chip)
-+{
-+	if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-+		chip->vbus_reg = devm_regulator_get_exclusive(chip->dev,
-+							      "vbus");
-+		if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-+			dev_err(chip->dev,
-+				"Failed to get vbus regulator handle");
-+			return -ENODEV;
-+		}
+ 	f_ncm_inst = usb_get_function_instance("ncm");
+ 	if (IS_ERR(f_ncm_inst))
+@@ -136,11 +139,15 @@ static int gncm_bind(struct usb_composite_dev *cdev)
+ 
+ 	ncm_opts = container_of(f_ncm_inst, struct f_ncm_opts, func_inst);
+ 
+-	gether_set_qmult(ncm_opts->net, qmult);
+-	if (!gether_set_host_addr(ncm_opts->net, host_addr))
++	ncm_opts->net_opts.qmult = qmult;
++	if (mac_pton(host_addr, mac)) {
++		memcpy(&ncm_opts->net_opts.host_mac, mac, ETH_ALEN);
+ 		pr_info("using host ethernet address: %s", host_addr);
+-	if (!gether_set_dev_addr(ncm_opts->net, dev_addr))
 +	}
-+
-+	return 0;
-+}
-+
- static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata, bool source, bool sink)
- {
- 	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
--	u8 buffer_source[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SOURCE};
--	u8 buffer_sink[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SINK};
--	u8 buffer_none[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_OFF};
--	struct i2c_client *i2c = chip->client;
- 	int ret;
- 
--	struct i2c_msg msgs[] = {
--		{
--			.addr = MAX_BUCK_BOOST_SID,
--			.flags = i2c->flags & I2C_M_TEN,
--			.len = 2,
--			.buf = source ? buffer_source : sink ? buffer_sink : buffer_none,
--		},
--	};
--
- 	if (source && sink) {
- 		dev_err(chip->dev, "Both source and sink set\n");
- 		return -EINVAL;
- 	}
- 
--	ret = i2c_transfer(i2c->adapter, msgs, 1);
-+	ret = get_vbus_regulator_handle(chip);
-+	if (ret) {
-+		/*
-+		 * Regulator is not necessary for sink only applications. Return
-+		 * success in cases where sink mode is being modified.
-+		 */
-+		return source ? ret : 1;
-+	}
-+
-+	if (source) {
-+		if (!regulator_is_enabled(chip->vbus_reg))
-+			ret = regulator_enable(chip->vbus_reg);
-+	} else {
-+		if (regulator_is_enabled(chip->vbus_reg))
-+			ret = regulator_disable(chip->vbus_reg);
++	if (mac_pton(dev_addr, mac)) {
++		memcpy(&ncm_opts->net_opts.dev_mac, mac, ETH_ALEN);
+ 		pr_info("using self ethernet address: %s", dev_addr);
 +	}
  
--	return  ret < 0 ? ret : 1;
-+	return ret < 0 ? ret : 1;
- }
- 
- static void process_power_status(struct max_tcpci_chip *chip)
+ 	/* Allocate string descriptor numbers ... note that string
+ 	 * contents can be overridden by the composite_dev glue.
 
+---
+base-commit: da87d45b195148d670ab995367d52aa9e8a9a1fa
+change-id: 20260214-legacy-ncm-8c001295b343
+
+Best regards,
 -- 
-2.53.0.273.g2a3d683680-goog
-
+Kuen-Han Tsai <khtsai@google.com>
 
 
