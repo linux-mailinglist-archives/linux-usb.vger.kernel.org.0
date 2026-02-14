@@ -1,224 +1,294 @@
-Return-Path: <linux-usb+bounces-33360-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33361-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id dC8CFrEdkGlwWQEAu9opvQ
-	(envelope-from <linux-usb+bounces-33360-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 08:01:05 +0100
+	id MMucMNA4kGkuXgEAu9opvQ
+	(envelope-from <linux-usb+bounces-33361-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 09:56:48 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5B5B13B45B
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 08:01:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 247D813B828
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 09:56:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1684C30247D9
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 07:01:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 57E90302614F
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 08:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 500BD27FD43;
-	Sat, 14 Feb 2026 07:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C943161B5;
+	Sat, 14 Feb 2026 08:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="y4lrz9af"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q663OU/0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DAD72627
-	for <linux-usb@vger.kernel.org>; Sat, 14 Feb 2026 07:00:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765163218BA;
+	Sat, 14 Feb 2026 08:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771052458; cv=none; b=IEjvOLOcvrYKRqMut3QbZTAXlElC80I69liCyswnX6KNM5ekC9q3w1D9G11oXmWLr7D9LfQY51+uAir0H3+oKJ/7fYt8UCxnSLRDxSPUC6lRZ55TDoJx7wE3BKAKXLb4BnoH6oC7u04ZIjWRU7Hz4bqJWsrchKcgGe0zh+Vfb/k=
+	t=1771059392; cv=none; b=R05HtPWO0GvLmQnULRbJkv3Lm372BbkcJwRWgaaoI2I2Vocc36KvJO54vbuzp1WhS9JO3SfgsExiq5A0lnfiAX1hsLpQH6rCmvKciYxcEAK+4HxV4yToIv769neTEaETVIlf89NuCMeRKcOjq5Y/7Zyru/M3+VhRB8y39ForXMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771052458; c=relaxed/simple;
-	bh=AnbT0U37D83jSLu4Un+2F+/QkXprltoeWqgd9K5QuJk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tuF676FTIkBs1GMqte3jQzhpNba6xq0bKMTBwh2IdL/WgdDNRt8XznxywtOaQkrxX0ciEy1g8NDTI5cYUw0TjBwdLPKbD//f0TBIZ28VsBRaN241+2hJCcroUvGdYpeeeM7QqoTalA2Wc4pmcToqjfI7GrEaCkTFJGROayPgfrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=y4lrz9af; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2aad5fec175so53023095ad.2
-        for <linux-usb@vger.kernel.org>; Fri, 13 Feb 2026 23:00:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771052457; x=1771657257; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OC/cAc5yXN5JpYjUFx0KpLCrFKcXhoVWogme4uCdNzM=;
-        b=y4lrz9af5xRl45/4fjAglGlp61YsbFb5lRnNwBGxAh6zRupPhuwGH5/ixlD1F9gVUJ
-         +2Ms5x4K6695J+TIDijr+RA4LEoa/JjvNL1XSoqUrh5ubEy+OZ+dOVKpTcoEPVF3eHS4
-         XGsB7f0o5oQ3hewWd0+hQIuzhhyYttnNV/lDo6xylCax5smvR/o9pqZQJfvlcHCU1yQt
-         JmzqDh20SbDBvtXfLiuP3upwLcSfO/sQdY7ZM9eHChwhHEtf8DxGEwtVTH5HImBT90o/
-         XuZolB1/f/3+MYJELhMQc4Oli2mSGMWWxbj1ZrdbkDzUk7NF3k1qbaPGEs2HqcGXGfw8
-         MdqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771052457; x=1771657257;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OC/cAc5yXN5JpYjUFx0KpLCrFKcXhoVWogme4uCdNzM=;
-        b=NHLIuUW6Dezj8vJxSWLVTHw//IvnnF9iAEpSkODH772LsFtbxrgGt61t4P3iuNCTvN
-         A+myvX+xx0JZyk3cleZHolZEYlJpeovRqqfU/4TEE1XA339+so23voTwkvklF2E9zjW8
-         mBALs7mirbngEMWuXoigtaWw5I+lgbUHCoxHvZvSSr9QP92ezhZ/TfhEfbO8SZ8pcgj2
-         5xi4405ze41QQFl/owXYwT10Yx680KXqwNLzUDjFsqKglJYPW1kIuC5YU9/I+hZi6VQt
-         yeHIY30LtV4/hlx225WqStCWE0wrPKeygKgkj8mLIzRyDslPH2fzYRuEeHiB+vfqTH+n
-         Yfvw==
-X-Gm-Message-State: AOJu0Yy3O/Lmd/M5mzkhwT7iKGJwJxulXT4zvKb24MuqjjYOUr1GsGyU
-	M+8PUfZX6KOKpdX60QCfeNg4oA9zLTlva2WTBuKUTOKcS8sHCbIVBhkEnf2I4y2uUjwQEcReqTM
-	N2cZt+w==
-X-Received: from plbmi8.prod.google.com ([2002:a17:902:fcc8:b0:29f:1bbb:de14])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:19c5:b0:2a9:30d4:2b07
- with SMTP id d9443c01a7336-2ab5059ae3dmr45737075ad.32.1771052456782; Fri, 13
- Feb 2026 23:00:56 -0800 (PST)
-Date: Sat, 14 Feb 2026 15:00:40 +0800
+	s=arc-20240116; t=1771059392; c=relaxed/simple;
+	bh=FmU6sN6VTvK2lk9nkffJpXX9j+KGsN9TIxoBy1pLkF0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JrweolYTVbeaHDleuJ9M4YIps7c39Cp9NrYSttIA6NerhXg/wiwBaB4nhM915dV326JTHVMs7+Jsz2ECgnD83AI/nCHwGC8uT1NuJ9sn3H1TTf/vzeDYIuGrL0k8DBXyOJY18BE/YekfELlDwyRgXniR59Q1U4sYGUztalYWOxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q663OU/0; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771059387; x=1802595387;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FmU6sN6VTvK2lk9nkffJpXX9j+KGsN9TIxoBy1pLkF0=;
+  b=Q663OU/0kclcSCrHbC+Z7f+IatB68YiepEW42MHDErrv42kUTCpdd3Fn
+   gHDivvz02HUbPiUUsEuKvQXTW9Qgurd+MwwOovwxVviJ49T42DNPpmu0j
+   ZemN1yLrRoudb6iqPFVtePp6EtiDQn07K8WXFlF9uYFHcngQPMjT6iHk0
+   qL93mwAy6V7BLjk0Srd57reY1n4RbRpaRJKAUHu9LeGlw2GBd6J5c37mv
+   peBuB2tyK2E4UKkGkiew4n5zTuK5oG0aWZQbdlEYWjas5z5h/EgnnVfeT
+   VvsCjK07uR/wC3c2R7IOeD7j6YEJQSJvQKY1cM7WBIhKTHwoCAvzQ36Yk
+   g==;
+X-CSE-ConnectionGUID: bOXwc9I6SnCPGJKwFeEeuA==
+X-CSE-MsgGUID: /GxuXnI2Tnqk+RGypmdszw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="71428986"
+X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
+   d="scan'208";a="71428986"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 00:56:26 -0800
+X-CSE-ConnectionGUID: N824LeOqToGHpVGW64sH6Q==
+X-CSE-MsgGUID: Qhwja1+kR8SCKwHr/L7Utg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
+   d="scan'208";a="218110063"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 14 Feb 2026 00:56:20 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vrBRp-00000000wPI-1UDK;
+	Sat, 14 Feb 2026 08:56:17 +0000
+Date: Sat, 14 Feb 2026 16:56:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Lee Jones <lee@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Mark Brown <broonie@kernel.org>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>,
+	Amit Sunil Dhamne <amitsd@google.com>
+Subject: Re: [PATCH v6 5/6] power: supply: max77759: add charger driver
+Message-ID: <202602141606.igFDFWAJ-lkp@intel.com>
+References: <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAJcdkGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDI0MT3ZzU9MTkSt285Fxdi2QDA0MjS9MkYxNjJaCGgqLUtMwKsGHRSkF uzkqxtbUACtTaTGEAAAA=
-X-Change-Id: 20260214-legacy-ncm-8c001295b343
-X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771052455; l=4352;
- i=khtsai@google.com; s=20250916; h=from:subject:message-id;
- bh=AnbT0U37D83jSLu4Un+2F+/QkXprltoeWqgd9K5QuJk=; b=3jt7gPvU+q6C4Zmo1wUqkp9chImkiK7dDJk8sAcoSdn6aBE7U3MKD6hzVwvyapVFksQbzXETk
- BTfuUtIvH/JAtfYWwOKb8nlWVxcFaF+k2G6GOGWi4Fhoclj8l/1SOJk
-X-Mailer: b4 0.14.2
-Message-ID: <20260214-legacy-ncm-v1-1-139c5bcc6636@google.com>
-Subject: [PATCH RFC] usb: legacy: ncm: Fix potential NPE in gncm_bind
-From: Kuen-Han Tsai <khtsai@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, stable@kernel.org, 
-	Kuen-Han Tsai <khtsai@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33360-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33361-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,fi.rohmeurope.com,gmail.com,linux-foundation.org];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[29];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[khtsai@google.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A5B5B13B45B
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,amitsd.google.com,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim,intel.com:email,psy_work.work:url]
+X-Rspamd-Queue-Id: 247D813B828
 X-Rspamd-Action: no action
 
-Commit 56a512a9b410 ("usb: gadget: f_ncm: align net_device lifecycle
-with bind/unbind") deferred the allocation of the net_device. This
-change can lead to a NULL pointer dereference in the legacy NCM driver
-as it attempts to access the net_device before it's fully initialized.
+Hi Amit,
 
-Store the provided qmult, host_addr, and dev_addr into the struct
-ncm_opts->net_opts during gncm_bind(). These values will be properly
-applied to the net_device when it is allocated and configured later in
-the binding process by the NCM function driver.
+kernel test robot noticed the following build errors:
 
-Fixes: 56a512a9b410 ("usb: gadget: f_ncm: align net_device lifecycle with bind/unbind")
-Cc: stable@kernel.org
-Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
----
-Hi Greg,
+[auto build test ERROR on 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d]
 
-I have been working on a series of changes to align the net_device
-lifecycle with the bind/unbind process across various USB gadget 
-function drivers. The goal is to solve the long-standing "lifetime
-mismatch" problem where the network interface could outlive its parent
-gadget device, leading to dangling symbolic links.
+url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-mfd-maxim-max77759-reference-power-supply-schema-and-add-regulator-property/20260214-111637
+base:   8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+patch link:    https://lore.kernel.org/r/20260214-max77759-charger-v6-5-28c09bda74b4%40google.com
+patch subject: [PATCH v6 5/6] power: supply: max77759: add charger driver
+config: powerpc64-randconfig-001-20260214 (https://download.01.org/0day-ci/archive/20260214/202602141606.igFDFWAJ-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602141606.igFDFWAJ-lkp@intel.com/reproduce)
 
-Recently, Commit 56a512a9b410 ("usb: gadget: f_ncm: align net_device
-lifecycle with bind/unbind") was accepted to address this for the NCM
-driver. However, during the process of adapting this same architecture
-to f_subset, f_eem, f_ecm, and f_rndis, I discovered that this approach
-regresses the legacy NCM driver (g_ncm).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602141606.igFDFWAJ-lkp@intel.com/
 
-Specifically, the legacy driver attempts to access the net_device during
-its own binding process before the NCM function driver has been fully
-bound. This can result in a NULL pointer dereference.
+All errors (new ones prefixed by >>):
 
-I am submitting the following patch as a fix for the g_ncm regression by
-caching the configuration (qmult, host_addr, dev_addr) in opts_net until
-the network device is ready. Please note that while I have verified the
-logic and ensured the code builds, I do not have the physical hardware
-required to perform a full functional test with the legacy g_ncm driver.
+>> drivers/power/supply/max77759_charger.c:623:4: error: cannot jump from this goto statement to its label
+     623 |                         goto err;
+         |                         ^
+   drivers/power/supply/max77759_charger.c:631:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     631 |         guard(mutex)(&chg->retry_lock);
+         |         ^
+   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
+     414 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
+     168 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:18:1: note: expanded from here
+      18 | __UNIQUE_ID_guard_461
+         | ^
+   drivers/power/supply/max77759_charger.c:615:3: error: cannot jump from this goto statement to its label
+     615 |                 goto err;
+         |                 ^
+   drivers/power/supply/max77759_charger.c:631:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     631 |         guard(mutex)(&chg->retry_lock);
+         |         ^
+   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
+     414 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
+     168 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:18:1: note: expanded from here
+      18 | __UNIQUE_ID_guard_461
+         | ^
+   drivers/power/supply/max77759_charger.c:606:3: error: cannot jump from this goto statement to its label
+     606 |                 goto err;
+         |                 ^
+   drivers/power/supply/max77759_charger.c:631:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     631 |         guard(mutex)(&chg->retry_lock);
+         |         ^
+   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
+     414 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
+     168 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:18:1: note: expanded from here
+      18 | __UNIQUE_ID_guard_461
+         | ^
+   3 errors generated.
 
-Beyond this specific fix, I would like to request the guidance on how to
-proceed with the remaining network function drivers:
 
-1. Deprecation: Can we consider the legacy drivers obsolete?  If so,
-  we could prioritize the lifecycle fix for the configfs framework.
+vim +623 drivers/power/supply/max77759_charger.c
 
-2. Compatibility: Should we continue to adapt the lifecycle concept to
-  all drivers while strictly maintaining backward compatibility for 
-  legacy function drivers?
+   591	
+   592	static void psy_work_item(struct work_struct *work)
+   593	{
+   594		struct max77759_charger *chg =
+   595			container_of(work, struct max77759_charger, psy_work.work);
+   596		union power_supply_propval current_limit, online;
+   597		int ret;
+   598	
+   599		ret = power_supply_get_property(chg->tcpm_psy,
+   600						POWER_SUPPLY_PROP_CURRENT_MAX,
+   601						&current_limit);
+   602		if (ret) {
+   603			dev_err(chg->dev,
+   604				"Failed to get CURRENT_MAX psy property, ret=%d",
+   605				ret);
+   606			goto err;
+   607		}
+   608	
+   609		ret = power_supply_get_property(chg->tcpm_psy, POWER_SUPPLY_PROP_ONLINE,
+   610						&online);
+   611		if (ret) {
+   612			dev_err(chg->dev,
+   613				"Failed to get ONLINE psy property, ret=%d",
+   614				ret);
+   615			goto err;
+   616		}
+   617	
+   618		if (online.intval && current_limit.intval) {
+   619			ret = set_input_current_limit(chg, current_limit.intval);
+   620			if (ret) {
+   621				dev_err(chg->dev,
+   622					"Unable to set current limit, ret=%d", ret);
+ > 623				goto err;
+   624			}
+   625	
+   626			charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
+   627		} else {
+   628			charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
+   629		}
+   630	
+   631		guard(mutex)(&chg->retry_lock);
+   632	
+   633		if (chg->psy_work_retry_cnt)
+   634			dev_dbg(chg->dev, "chg psy_work succeeded after %u tries",
+   635				chg->psy_work_retry_cnt);
+   636		chg->psy_work_retry_cnt = 0;
+   637		return;
+   638	
+   639	err:
+   640		charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
+   641		guard(mutex)(&chg->retry_lock);
+   642	
+   643		if (chg->psy_work_retry_cnt >= MAX_NUM_RETRIES) {
+   644			dev_err(chg->dev, "chg psy work failed, giving up");
+   645			return;
+   646		}
+   647	
+   648		++chg->psy_work_retry_cnt;
+   649		dev_dbg(chg->dev, "Retrying %u/%u chg psy_work",
+   650			chg->psy_work_retry_cnt, MAX_NUM_RETRIES);
+   651		schedule_delayed_work(&chg->psy_work,
+   652				      msecs_to_jiffies(PSY_WORK_RETRY_DELAY_MS));
+   653	}
+   654	
 
-I would appreciate your feedback on the preferred direction before I
-proceed with the patchsets for the other USB function drivers.
----
- drivers/usb/gadget/legacy/ncm.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/legacy/ncm.c b/drivers/usb/gadget/legacy/ncm.c
-index 0f1b45e3abd1a1ead7b2776be10a2a5747960136..bf00f9d76a5323b298869b4210c5bf99b1ab7f9c 100644
---- a/drivers/usb/gadget/legacy/ncm.c
-+++ b/drivers/usb/gadget/legacy/ncm.c
-@@ -15,8 +15,10 @@
- /* #define DEBUG */
- /* #define VERBOSE_DEBUG */
- 
-+#include <linux/hex.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/string.h>
- #include <linux/usb/composite.h>
- 
- #include "u_ether.h"
-@@ -129,6 +131,7 @@ static int gncm_bind(struct usb_composite_dev *cdev)
- 	struct usb_gadget	*gadget = cdev->gadget;
- 	struct f_ncm_opts	*ncm_opts;
- 	int			status;
-+	u8			mac[ETH_ALEN];
- 
- 	f_ncm_inst = usb_get_function_instance("ncm");
- 	if (IS_ERR(f_ncm_inst))
-@@ -136,11 +139,15 @@ static int gncm_bind(struct usb_composite_dev *cdev)
- 
- 	ncm_opts = container_of(f_ncm_inst, struct f_ncm_opts, func_inst);
- 
--	gether_set_qmult(ncm_opts->net, qmult);
--	if (!gether_set_host_addr(ncm_opts->net, host_addr))
-+	ncm_opts->net_opts.qmult = qmult;
-+	if (mac_pton(host_addr, mac)) {
-+		memcpy(&ncm_opts->net_opts.host_mac, mac, ETH_ALEN);
- 		pr_info("using host ethernet address: %s", host_addr);
--	if (!gether_set_dev_addr(ncm_opts->net, dev_addr))
-+	}
-+	if (mac_pton(dev_addr, mac)) {
-+		memcpy(&ncm_opts->net_opts.dev_mac, mac, ETH_ALEN);
- 		pr_info("using self ethernet address: %s", dev_addr);
-+	}
- 
- 	/* Allocate string descriptor numbers ... note that string
- 	 * contents can be overridden by the composite_dev glue.
-
----
-base-commit: da87d45b195148d670ab995367d52aa9e8a9a1fa
-change-id: 20260214-legacy-ncm-8c001295b343
-
-Best regards,
 -- 
-Kuen-Han Tsai <khtsai@google.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
