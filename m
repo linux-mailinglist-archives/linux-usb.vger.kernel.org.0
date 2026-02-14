@@ -1,72 +1,67 @@
-Return-Path: <linux-usb+bounces-33363-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33364-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oOYyCorokGkOdwEAu9opvQ
-	(envelope-from <linux-usb+bounces-33363-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 22:26:34 +0100
+	id +J62FiPpkGkOdwEAu9opvQ
+	(envelope-from <linux-usb+bounces-33364-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 22:29:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D038213D5BB
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 22:26:33 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A48413D762
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 22:29:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BD5113039326
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 21:25:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A881E303D5CA
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Feb 2026 21:27:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1B73090F5;
-	Sat, 14 Feb 2026 21:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BE630DD30;
+	Sat, 14 Feb 2026 21:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hzghBr1O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7kDL+M7"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90E827B353;
-	Sat, 14 Feb 2026 21:25:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34DD275B05;
+	Sat, 14 Feb 2026 21:27:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771104326; cv=none; b=DxLhHDVQPlY22fo+zBxzgDuip3LUwIxSQXgLvJL2OhH8nXi2kRfpapElKISOvkcLlXcg2UnBfaLv8mXsMXsUhA0d55lE+zZ6QHa+99zxmYUU9B32ZLxHubjzzbcowS8sWVaMc/ESj6MyI7RjFqnGGmIsyp43M4EwfXklU43YjSI=
+	t=1771104428; cv=none; b=Qd6ze1Vncg+mIVH5dm2KKwU/gkY7n3mbgS+6K2AnQuuSGDuCCGIHLlLzNXSwMHr0emNrFn6nIBUCpUHsvLJajfPD6fce3A8SCs58UnL4dWdY0InVk0LVmYMti4XFlL6y5iiR2ft1lxMA3so1ymKw1VnB074iFy5jcg0vWnzYwFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771104326; c=relaxed/simple;
-	bh=qQi4cKET8P1ejnoqtou0oEXuI4aZk8+q61dw8XPwE1g=;
+	s=arc-20240116; t=1771104428; c=relaxed/simple;
+	bh=ZMRG75qtEGiUqEvZfjr+TxhGXXLZLURzjYwtofTuQUQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W9ZGUk0ESQRKsz6xNPLd3odXWM155haHxZPcp5FjcKolzLjoGgpoMW2mz8xdYxq/+wkRXbEdGIDyWtgIG/FW3FbNkZxBGoWygJIC6oELidBGcif8c0FOFJii2B7kH4q2jXnaq1g5Ewkjip8qTMfE6ozCWupxNbqBueMIZzPLAqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hzghBr1O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B606AC19423;
-	Sat, 14 Feb 2026 21:25:24 +0000 (UTC)
+	 MIME-Version; b=ce5qOnzU2Iqsgq8YaBzVlo7bs6TlBBQJilfAjq1UCtHFdkvNjV87sBcUCt/HiZqAsJsg81atwLdqmr5azG3zTlgjaILR6DbGT9XZTgHO0jgqXzk7F4vKCaQc0BicuCU709PEV3sD5iQW/UxaXAipzh6b0gQ7HD+tCVhh/yXFjPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7kDL+M7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C18C16AAE;
+	Sat, 14 Feb 2026 21:27:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771104326;
-	bh=qQi4cKET8P1ejnoqtou0oEXuI4aZk8+q61dw8XPwE1g=;
+	s=k20201202; t=1771104428;
+	bh=ZMRG75qtEGiUqEvZfjr+TxhGXXLZLURzjYwtofTuQUQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hzghBr1OxcMTgj6TiXvGQ3B9yX10w/B8ctC4CJCEmHwuVhXTIKuiburFB72Bc9+2C
-	 2eMQ6WavST9Q40ZvEV5UMYHl0rylDO88DduDv0TNBfth1NYcWtQ+E3qeDYb5EVjCMo
-	 focRDgSYwkwdS6CGKAZtZHd4CvFDJ/SXfCOw6FaJgOJEK94G17S5QAU4DXeCsQ+mvU
-	 8ki6cwCR5Q4gyfkPYhL69mi6tmDl9R9TnD8Hcsfsbj+GTkr9pxCXXMKrq0RibaGKMb
-	 +Kxc4xG9c2zGW2c9CpX7rfq5zXeSqv1lmZYqtGFImLl+kyiWTk43FNbwKhxyrispup
-	 ST4VRTW0NfMrw==
+	b=b7kDL+M7y+PPE7j+X+VXgEVH44KKKLexQ0PiSDJ69T8/okWe0ZOZG7hf4fr2PM+rQ
+	 Ij1bbLpEd2nzk1f3Wz7AazOmKzW+trZ5SN6zmuLC4aZx6kFnQBhCVMCj6DzQXNVHy5
+	 2WqTx/g9Ydc7zf45Z0rYhwVWWrQorXy6qSI8UExL0TLF+LHJt4bhaBvTYYtDAZuqF3
+	 oYlxtX39hebuoGFOs4sIWtmlSxVRh/CYMjBh1Cqqx0VVbJNgkaP31VMn80Lyp33tsB
+	 xJBL70XcGtbuuWSMYnte9SO4kd2WzxClFHScSKimzT2Oq9VurVv7/I2aAcoWw1qD6U
+	 k096fk7SpDLBg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Mingj Ye <insyelu@gmail.com>,
-	Hayes Wang <hayeswang@realtek.com>,
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Simon Horman <horms@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	pabeni@redhat.com,
 	neil.armstrong@linaro.org,
-	gustavoars@kernel.org,
-	andriy.shevchenko@linux.intel.com,
-	kees@kernel.org,
-	senozhatsky@chromium.org,
-	rawal.abhishek92@gmail.com,
-	phahn-oss@avm.de,
-	yicong@kylinos.cn,
+	o.rempel@pengutronix.de,
 	yelangyan@huaqin.corp-partner.google.com,
 	ebiggers@google.com,
-	enelsonmoore@gmail.com,
+	peter@korsgaard.com,
+	pabeni@redhat.com,
+	andrew@lunn.ch,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-5.10] net: usb: r8152: fix transmit queue timeout
-Date: Sat, 14 Feb 2026 16:22:43 -0500
-Message-ID: <20260214212452.782265-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.19-5.10] net: usb: sr9700: remove code to drive nonexistent multicast filter
+Date: Sat, 14 Feb 2026 16:23:43 -0500
+Message-ID: <20260214212452.782265-78-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260214212452.782265-1-sashal@kernel.org>
 References: <20260214212452.782265-1-sashal@kernel.org>
@@ -79,183 +74,194 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.19
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	TAGGED_FROM(0.00)[bounces-33363-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,linaro.org,pengutronix.de,huaqin.corp-partner.google.com,google.com,korsgaard.com,redhat.com,lunn.ch,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-33364-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
-	FREEMAIL_CC(0.00)[gmail.com,realtek.com,kernel.org,redhat.com,linaro.org,linux.intel.com,chromium.org,avm.de,kylinos.cn,huaqin.corp-partner.google.com,google.com,vger.kernel.org];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,msgid.link:url,realtek.com:email]
-X-Rspamd-Queue-Id: D038213D5BB
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[msgid.link:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3A48413D762
 X-Rspamd-Action: no action
 
-From: Mingj Ye <insyelu@gmail.com>
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 
-[ Upstream commit 833dcd75d54f0bf5aa0a0781ff57456b421fbb40 ]
+[ Upstream commit 9a9424c756feee9ee6e717405a9d6fa7bacdef08 ]
 
-When the TX queue length reaches the threshold, the netdev watchdog
-immediately detects a TX queue timeout.
+Several registers referenced in this driver's source code do not
+actually exist (they are not writable and read as zero in my testing).
+They exist in this driver because it originated as a copy of the dm9601
+driver. Notably, these include the multicast filter registers - this
+causes the driver to not support multicast packets correctly. Remove
+the multicast filter code and register definitions. Instead, set the
+chip to receive all multicast filter packets when any multicast
+addresses are in the list.
 
-This patch updates the trans_start timestamp of the transmit queue
-on every asynchronous USB URB submission along the transmit path,
-ensuring that the network watchdog accurately reflects ongoing
-transmission activity.
-
-Signed-off-by: Mingj Ye <insyelu@gmail.com>
-Reviewed-by: Hayes Wang <hayeswang@realtek.com>
-Link: https://patch.msgid.link/20260120015949.84996-1-insyelu@gmail.com
+Reviewed-by: Simon Horman <horms@kernel.org> (from v1)
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Link: https://patch.msgid.link/20260203013924.28582-1-enelsonmoore@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-## Analysis of commit: "net: usb: r8152: fix transmit queue timeout"
+Good - `RCR_ALL` is already defined in the header at line 58. The fix
+uses an existing flag.
 
-### 1. COMMIT MESSAGE ANALYSIS
+### User Impact
 
-The subject explicitly says **"fix transmit queue timeout"** — this is a
-clear bug fix. The commit message explains:
-- **Bug**: When the TX queue length reaches a threshold, the netdev
-  watchdog immediately detects a TX queue timeout (spurious timeout).
-- **Root cause**: The `trans_start` timestamp of the transmit queue is
-  not being updated when USB URBs are successfully submitted
-  asynchronously.
-- **Fix**: Call `netif_trans_update()` after each successful
-  `usb_submit_urb()` to keep the watchdog informed that transmission
-  activity is ongoing.
+- **Who is affected**: Users with SR9700 USB Ethernet adapters
+- **What breaks without the fix**: Multicast networking (mDNS, IPv6
+  neighbor discovery, IGMP, etc.) doesn't work when specific multicast
+  addresses are subscribed
+- **Severity**: Medium-high for affected users - multicast is used
+  extensively in modern networking (IPv6 relies on it heavily)
 
-The commit is reviewed by the Realtek maintainer (Hayes Wang) and merged
-by the network maintainer (Jakub Kicinski). Strong trust indicators.
+### Stable Criteria Assessment
 
-### 2. CODE CHANGE ANALYSIS
+1. **Obviously correct and tested**: Yes - author tested on real
+   hardware, reviewed by Simon Horman
+2. **Fixes a real bug**: Yes - multicast doesn't work on SR9700 hardware
+3. **Important issue**: Yes - broken multicast means broken IPv6
+   neighbor discovery, mDNS, etc.
+4. **Small and contained**: Yes - ~20 lines of meaningful change in one
+   driver
+5. **No new features**: Correct - this removes broken code and enables
+   proper multicast reception
+6. **Applies cleanly**: The driver has been stable for years, should
+   apply cleanly
 
-The diff is **+2 lines** — extremely small and surgical:
+### Concerns
 
-```c
-ret = usb_submit_urb(agg->urb, GFP_ATOMIC);
-if (ret < 0)
-    usb_autopm_put_interface_async(tp->intf);
-+else
-+    netif_trans_update(tp->netdev);
-```
+- The Kconfig change (removing `select CRC32`) could potentially cause
+  build issues if something else in the same config depends on CRC32
+  being pulled in transitively. However, CRC32 is selected by many other
+  drivers, so this is extremely unlikely to matter in practice.
+- The removal of the `#include <linux/crc32.h>` is similarly safe.
 
-This adds an `else` branch after the `usb_submit_urb()` call. On
-successful URB submission (`ret >= 0`), it calls
-`netif_trans_update(tp->netdev)`, which updates the `trans_start`
-timestamp of the network device's transmit queue.
+### Verdict
 
-**What `netif_trans_update()` does**: It's a standard kernel helper that
-sets `txq->trans_start = jiffies`, telling the network watchdog "we are
-actively transmitting." Without this update, the watchdog timer thinks
-the queue has been idle since the last update and fires a spurious TX
-timeout.
-
-### 3. BUG SEVERITY
-
-A **TX queue timeout** in a network driver is a significant user-visible
-bug:
-- The watchdog fires, potentially calling the driver's `ndo_tx_timeout`
-  handler
-- This can cause the network interface to reset or go down
-- Results in **network connectivity loss** or **severe performance
-  degradation**
-- The r8152 driver is for **Realtek USB Ethernet adapters**, which are
-  extremely common (used in USB-to-Ethernet dongles, docking stations,
-  etc.)
-
-### 4. SCOPE AND RISK ASSESSMENT
-
-- **Lines changed**: 2 (adding an else branch with one function call)
-- **Files touched**: 1 (`drivers/net/usb/r8152.c`)
-- **Risk**: Extremely low. `netif_trans_update()` is a well-known,
-  lightweight inline function. It simply updates a jiffies timestamp. It
-  cannot cause crashes, data corruption, or any side effects.
-- **Regression potential**: Near zero. This only affects the TX watchdog
-  timer behavior and only updates the timestamp on *successful* URB
-  submission.
-
-### 5. USER IMPACT
-
-- **HIGH impact** — r8152 is one of the most widely used USB Ethernet
-  drivers. Realtek RTL8152/RTL8153 chips are in millions of USB Ethernet
-  adapters.
-- Users experience **spurious TX timeouts** that disrupt network
-  connectivity.
-- Affects any user with a Realtek USB Ethernet adapter under sufficient
-  TX load.
-
-### 6. STABLE KERNEL CRITERIA
-
-| Criterion | Met? |
-|-----------|------|
-| Obviously correct and tested | YES — reviewed by Realtek maintainer,
-simple logic |
-| Fixes a real bug | YES — spurious TX queue timeouts |
-| Important issue | YES — network connectivity loss |
-| Small and contained | YES — 2 lines in one file |
-| No new features | YES — just a watchdog timestamp update |
-| No new APIs | YES |
-
-### 7. DEPENDENCY CHECK
-
-`netif_trans_update()` has been available in the kernel for a very long
-time (since 4.7+). The r8152 driver and the `r8152_tx_agg_fill()`
-function have been in stable trees for many kernel versions. This patch
-applies cleanly with no dependencies on other commits.
-
-### 8. CONCLUSION
-
-This is a textbook stable backport candidate:
-- Fixes a real, user-visible bug (spurious TX timeouts causing network
-  disruption)
-- Affects a widely-used USB Ethernet driver (Realtek r8152)
-- Extremely small and surgical (2-line change)
-- Zero regression risk (just updates a jiffies timestamp)
-- Reviewed by the hardware vendor's maintainer
-- No dependencies on other patches
+This is a clear bug fix for a real hardware issue - the sr9700 driver
+was attempting to program nonexistent multicast filter registers,
+causing multicast to be broken. The fix is small, well-tested on real
+hardware, reviewed, and low-risk (it makes the NIC more permissive,
+never less). It meets all stable kernel criteria.
 
 **YES**
 
- drivers/net/usb/r8152.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/usb/Kconfig  |  1 -
+ drivers/net/usb/sr9700.c | 25 ++++---------------------
+ drivers/net/usb/sr9700.h |  7 +------
+ 3 files changed, 5 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 2f3baa5f6e9c9..6b107cf5f37bd 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -2449,6 +2449,8 @@ static int r8152_tx_agg_fill(struct r8152 *tp, struct tx_agg *agg)
- 	ret = usb_submit_urb(agg->urb, GFP_ATOMIC);
- 	if (ret < 0)
- 		usb_autopm_put_interface_async(tp->intf);
-+	else
-+		netif_trans_update(tp->netdev);
+diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
+index 856e648d804e0..da0f6a138f4fc 100644
+--- a/drivers/net/usb/Kconfig
++++ b/drivers/net/usb/Kconfig
+@@ -319,7 +319,6 @@ config USB_NET_DM9601
+ config USB_NET_SR9700
+ 	tristate "CoreChip-sz SR9700 based USB 1.1 10/100 ethernet devices"
+ 	depends on USB_USBNET
+-	select CRC32
+ 	help
+ 	  This option adds support for CoreChip-sz SR9700 based USB 1.1
+ 	  10/100 Ethernet adapters.
+diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
+index 820c4c5069792..a5d364fbc3639 100644
+--- a/drivers/net/usb/sr9700.c
++++ b/drivers/net/usb/sr9700.c
+@@ -18,7 +18,6 @@
+ #include <linux/ethtool.h>
+ #include <linux/mii.h>
+ #include <linux/usb.h>
+-#include <linux/crc32.h>
+ #include <linux/usb/usbnet.h>
  
- out_tx_fill:
- 	return ret;
+ #include "sr9700.h"
+@@ -265,31 +264,15 @@ static const struct ethtool_ops sr9700_ethtool_ops = {
+ static void sr9700_set_multicast(struct net_device *netdev)
+ {
+ 	struct usbnet *dev = netdev_priv(netdev);
+-	/* We use the 20 byte dev->data for our 8 byte filter buffer
+-	 * to avoid allocating memory that is tricky to free later
+-	 */
+-	u8 *hashes = (u8 *)&dev->data;
+ 	/* rx_ctl setting : enable, disable_long, disable_crc */
+ 	u8 rx_ctl = RCR_RXEN | RCR_DIS_CRC | RCR_DIS_LONG;
+ 
+-	memset(hashes, 0x00, SR_MCAST_SIZE);
+-	/* broadcast address */
+-	hashes[SR_MCAST_SIZE - 1] |= SR_MCAST_ADDR_FLAG;
+-	if (netdev->flags & IFF_PROMISC) {
++	if (netdev->flags & IFF_PROMISC)
+ 		rx_ctl |= RCR_PRMSC;
+-	} else if (netdev->flags & IFF_ALLMULTI ||
+-		   netdev_mc_count(netdev) > SR_MCAST_MAX) {
+-		rx_ctl |= RCR_RUNT;
+-	} else if (!netdev_mc_empty(netdev)) {
+-		struct netdev_hw_addr *ha;
+-
+-		netdev_for_each_mc_addr(ha, netdev) {
+-			u32 crc = ether_crc(ETH_ALEN, ha->addr) >> 26;
+-			hashes[crc >> 3] |= 1 << (crc & 0x7);
+-		}
+-	}
++	else if (netdev->flags & IFF_ALLMULTI || !netdev_mc_empty(netdev))
++		/* The chip has no multicast filter */
++		rx_ctl |= RCR_ALL;
+ 
+-	sr_write_async(dev, SR_MAR, SR_MCAST_SIZE, hashes);
+ 	sr_write_reg_async(dev, SR_RCR, rx_ctl);
+ }
+ 
+diff --git a/drivers/net/usb/sr9700.h b/drivers/net/usb/sr9700.h
+index ea2b4de621c86..c479908f7d823 100644
+--- a/drivers/net/usb/sr9700.h
++++ b/drivers/net/usb/sr9700.h
+@@ -104,9 +104,7 @@
+ #define		WCR_LINKEN		(1 << 5)
+ /* Physical Address Reg */
+ #define	SR_PAR			0x10	/* 0x10 ~ 0x15 6 bytes for PAR */
+-/* Multicast Address Reg */
+-#define	SR_MAR			0x16	/* 0x16 ~ 0x1D 8 bytes for MAR */
+-/* 0x1e unused */
++/* 0x16 --> 0x1E unused */
+ /* Phy Reset Reg */
+ #define	SR_PRR			0x1F
+ #define		PRR_PHY_RST		(1 << 0)
+@@ -161,9 +159,6 @@
+ /* parameters */
+ #define	SR_SHARE_TIMEOUT	1000
+ #define	SR_EEPROM_LEN		256
+-#define	SR_MCAST_SIZE		8
+-#define	SR_MCAST_ADDR_FLAG	0x80
+-#define	SR_MCAST_MAX		64
+ #define	SR_TX_OVERHEAD		2	/* 2bytes header */
+ #define	SR_RX_OVERHEAD		7	/* 3bytes header + 4crc tail */
+ 
 -- 
 2.51.0
 
