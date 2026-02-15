@@ -1,201 +1,181 @@
-Return-Path: <linux-usb+bounces-33370-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33371-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QJd6EsYRkmm/qAEAu9opvQ
-	(envelope-from <linux-usb+bounces-33370-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Feb 2026 19:34:46 +0100
+	id sGbTGo0ykmmjrwEAu9opvQ
+	(envelope-from <linux-usb+bounces-33371-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Feb 2026 21:54:37 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E733413F6BE
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Feb 2026 19:34:45 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EFDD13FB62
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Feb 2026 21:54:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 849253041787
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Feb 2026 18:33:55 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0EA9130055EE
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Feb 2026 20:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2AF2F12BA;
-	Sun, 15 Feb 2026 18:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SmV5r4a7";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="cAAAVPMM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05576305E05;
+	Sun, 15 Feb 2026 20:54:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE122BDC04
-	for <linux-usb@vger.kernel.org>; Sun, 15 Feb 2026 18:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80722264628
+	for <linux-usb@vger.kernel.org>; Sun, 15 Feb 2026 20:54:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771180434; cv=none; b=R+IXK9O0+mImd2IklXd6/tR6ZhgXSt2uY7Ykeo1spxeMcGUNGd29pRn7fHPuksZFhtA75NagmNJ95iQ7jU5EX6nLJMbXxPvDOSi1aka8HbKf4FcSzaNF1DH5nwpZw6GT4N6WvNzgYPWIDvtWauWazZgK+zyymgYHYZ3Sk9BvBWY=
+	t=1771188867; cv=none; b=Oncq9fZtxWumcNKKFfm/G/INgkznAC+5MBU9lKm9EWkTMXrczgyl8ZNKFYtdNs39hdNRSeeGYau20QQGfNjpeUVB3hHTA2YTPbqtKiHb+1dXLk78m/3jmFIv+gTAgLrdcUZhtn1tSGP1gVmhlyXQlh61FX+B4Qo5y8ptI9Sue7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771180434; c=relaxed/simple;
-	bh=LXieuMSXLnhRyDTdT0QOEouXa5uJ9ARGKjrc72Z/Ez4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FggLh4zBMr4FzQBDihlN7Q9TVINu5Vl9Pevs9GA1n0AoxJdUqOLOiNmFP5cNRqJZuknlKuMmNj/Sl8AEq29v/B9W2RO9695XbB9quoxQGV27fyaJWUloSx0otZQ+o/Xzt7UYpQDubZ47N9hTTlxk2RID9xDFiiHFgcmEayO1vS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SmV5r4a7; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=cAAAVPMM; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61F7k73C622962
-	for <linux-usb@vger.kernel.org>; Sun, 15 Feb 2026 18:33:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ffza9yrxptqGzJXecgO7+6tiuykjBr73y+A81e98J+U=; b=SmV5r4a70ADP0Wvh
-	9CHiRnpxAoEfs10AMt1MM+jXMJk618zUwF6wUxaz1ZAUNlUEpH+jwSeKIhi2pSMA
-	Qs06l+LXa48LCLu8QHW9cdfOygGiBAvyRH0qjDRN0RHQBqvGRxHB/lbhYqGJjg/z
-	Uzq8ATohfMWOEStGljLeNuw16atvGnQ4e+V/+gvWr1CXLiC5fzRv7mlvM1QJIlfJ
-	CYSS/KnNrGyC/m1mXBMQ3HmBu0/fRRx/l48u/E6FeIItXWuY6vY3OVMd1n3AHdIB
-	3faetCyVotfopH9XWu51QpXsMihADyO3sX/wQapL5vF8q8d/lnmLAtLa5pTpqSFt
-	UzRaNQ==
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cahe62nkh-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Sun, 15 Feb 2026 18:33:52 +0000 (GMT)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-c6e194ab2f7so9693960a12.2
-        for <linux-usb@vger.kernel.org>; Sun, 15 Feb 2026 10:33:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771180431; x=1771785231; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ffza9yrxptqGzJXecgO7+6tiuykjBr73y+A81e98J+U=;
-        b=cAAAVPMMAPR5iTKRjLO1gGhqouKGoJgNk7s8QVmf6YbAPdTkjIpdlTflFgAwhTe6Sj
-         y5Zgou5F6mu9gNwxzALtLjyunivXeEI1cd8es+ccQirhUTvtNMF+HJjAfNCeZ1x/CF0m
-         5gSrQzFQ+HR82uBDe/3JKarYaLO/ldWxHydhLzArZeY+2GoR7xuJ69lxSxQQDaOqpV1C
-         aRUUeL6NCERhzg3/zvxyi1txz3vcJhWrEBg5DpPydpshQ/thb8xPHyrbzViMAyUcBxYj
-         AEG7S2JgqjUCwnzoMd3lRNjfeX9xah1n3TmGrVfC9GAlBWgBh1M8lzulAaOnoRSm/+sw
-         sVmA==
+	s=arc-20240116; t=1771188867; c=relaxed/simple;
+	bh=lDWR3c/tJ4dXT3Cptqc0motAsdZWp6WyqJlXzOvK5gY=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=WwEQnwU43MplXIzTlormvzDcPKlkeaAKYkEZJZ7T06DkQOXVHqRublRx35COwEkDq1hFpHdvGQdceAjPUjunZ8Us3PepXdb2KvzOmVkDrz1BjnXb+CMnskUNWl/2tyZhg/K/WXhiEbLR1WgipJh5Sp7IXeJimSciezo7lcpOxfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-6795b040001so13834110eaf.0
+        for <linux-usb@vger.kernel.org>; Sun, 15 Feb 2026 12:54:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771180431; x=1771785231;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ffza9yrxptqGzJXecgO7+6tiuykjBr73y+A81e98J+U=;
-        b=UYNpfN6/5SYcd5N/5y8hlS+i0dXbSHKvcMnN1xqcLjt4iUmjGA16u0qQKmD7n/RDzQ
-         nJWTzBOw+KP3uZnU1+jGPx3byoaT64JtAX5wLyehK0owManvPC78hEBD3yRsCNQW46BJ
-         iM3wggqWmHcMpDYs9coNg/mU5YlCdbDv+xBWbJJccYphaWtNQeR+voZMvEq3RyOuT0FD
-         EAAkkvBwGAC0fGgoV+AHj5EHWeC2+6CmDlXYRyVEN4WD0aWpUkCcq1gB7TKir33TrigF
-         g8bzGn50udO64m/aPc9g4322cVNrlTvr6e6fDTq+s2kO71P3MvW/jo+H7qz0rGsxCb6n
-         TDUg==
-X-Gm-Message-State: AOJu0Yxz7QrUlAwlFndMKcJjzJiqg2BO6hFjnuOPt7NgzEH5VPAvax7c
-	Q9ifHQ9cEm4DikZtaTwLf8eZxSBAmIGlrQAWE+06FxLkGxwY+XQPSyxP55azanfgHABSFXgJ+Tf
-	y4v5oWMPv09g8ZfDvEHOznBab79qd85t1veYbbDKr9oYmm8EqZ/bRbeVfLWr6zXo=
-X-Gm-Gg: AZuq6aJ/XSS85BaB3VdF2bjjYRx2AMXTj+1RoStE5F+oaglKpjqDZE0GfXH3HVvHS5H
-	m0mFTEpLGAYdNKzTbc2U/4AbGfzd0OCinM0z7h6gkFa6OtKhX5S3zxpaGUT4PyC+CMuCkDMKFcR
-	KHbRNFXc7GU32jXl0cWTv0fDlDWmREnwh5pnvDadinXL4g2XFeAYZt3SSDLCT5u2lyaHXWDckbB
-	rKjlvQR4fC60ku/p6GXAfsLpOqoBmg04brbdDBPTkXlopEKW8ss5UG7JJqdbp9P/6abO8/xinvA
-	Pm0SHrQojxSPJjqA/hduEn6LBQhutxNrW6KgneD9uJhZFYrhhX69SEBSFgSZWphMxgpRnL/xzI9
-	YaQMAnRH2wHDHS8x7fJ21eTIU0jy8x9PDBeBMNKLQhboP03fx1sdNQqw=
-X-Received: by 2002:a05:6a00:950a:b0:81b:1a87:9eb9 with SMTP id d2e1a72fcca58-824d9517154mr4783076b3a.25.1771180431276;
-        Sun, 15 Feb 2026 10:33:51 -0800 (PST)
-X-Received: by 2002:a05:6a00:950a:b0:81b:1a87:9eb9 with SMTP id d2e1a72fcca58-824d9517154mr4783066b3a.25.1771180430811;
-        Sun, 15 Feb 2026 10:33:50 -0800 (PST)
-Received: from hu-swatagar-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a2afeesm9560875b3a.2.2026.02.15.10.33.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Feb 2026 10:33:50 -0800 (PST)
-From: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Swati Agarwal <swati.agarwal@oss.qualcomm.com>
-Subject: [RFC PATCH 2/2] arm64: dts: qcom: lemans-evk: Enable wakeup for primary USB controller
-Date: Mon, 16 Feb 2026 00:03:25 +0530
-Message-Id: <20260215183325.3836178-3-swati.agarwal@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260215183325.3836178-1-swati.agarwal@oss.qualcomm.com>
-References: <20260215183325.3836178-1-swati.agarwal@oss.qualcomm.com>
+        d=1e100.net; s=20230601; t=1771188865; x=1771793665;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SthyVk+loO4we8rx52goP+aY7WRzJJrIQsA3i2rsE4c=;
+        b=o2HqjPL54Xlm69ClsOEgvgYHaiUYowlweWOGyhcDv1jl7Ea7RI5OZM0fZ8FdVs7vrc
+         IlPfukXXPZZSipK2Yy3p2tLj6pXjP9Rx4zv9ep09pNgmQvfbJ458iMOh+xMuTziTol7y
+         3IgW2uvsWNOcHRlVoe0LQQs8ARpEp3QKjdnxS1rzUyg4H5HbSOK0cJhprvDJ6EKeOhai
+         pQ1Wt4PALzgIV6NrX3o5lBwu8HcbNPKWLfL2ZiwocX72d5ZZTNLms/rPvn39FyjpBx0z
+         JY1UPlO4ktFUUSLobkK10oogMQgjbuLKztEtd5pc0Hw1nfNAWBKky6qdkpJO50S4BlpM
+         TQCw==
+X-Forwarded-Encrypted: i=1; AJvYcCVnUN0nSGWrPP0aYV0kPQIunqXI2TspSxoDgfi/n5qJ56crh8351l7S1yXH+b/ud2qDjIxHX4y4emE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzdj+mMdihxQWybbwWTY78vIYgC9EO7rugN9Fhw6KcqaijYS1+6
+	+fSK52zzv9fJiGcQQ2XAcWy5vfEWpHhpONwWN9acNkkrmwixnw5xu+MOuTdH2tEftgVFOeXcX/z
+	9NrbXb/3h51ghkX/xGNsLMO8K6eodWCvzP+bEJ99ZAPfwkudr8WuOHK1RMUY=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=c5WmgB9l c=1 sm=1 tr=0 ts=69921190 cx=c_pps
- a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
- a=EUspDBNiAAAA:8 a=qmfhev-2QWiT4-t3grkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=_Vgx9l1VpLgwpw_dHYaR:22
-X-Proofpoint-GUID: q266zqWDXGV2m53hjufvXAJnEoKWNcnB
-X-Proofpoint-ORIG-GUID: q266zqWDXGV2m53hjufvXAJnEoKWNcnB
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE1MDE1NSBTYWx0ZWRfX5wm4buX8l2WC
- KHl0Xggg7Z73psnh9MB1L1eACnTayN3Wenyxg5SgChubCzGx5AM4D8DgDvjT1teDjBNhXA+eEid
- MVJZ1chCbO436p6SKnEyqlJnv2vdS7d8ko9Vex1p2oG/Mp8KKzzaN2CIwBj7H+c6VtiOOk6nIWZ
- W0rLl+FXiVPdVvJnanNZDvDs7dVQSZ+rSA7R9W8KhvTXA1s3vhL+c8OdZWuYIQstEmNBzifIhIl
- YchCuSqj6imreIa6il/E0jPa/f+WBK1SSztwrVycutgyF96tSYplLu+GAR6qLoMbKezz3z4tAp/
- ku3HydzmloRhStB3ruZnzL5oAwWQUIEXCUUNHVsxHjhkwyzwU3ODm+MpBFoew2TWVVQjMN9BOJW
- BvlHZqAYIcWWoWaBBIMploqHAdiTVGOLI4f+esZ5tbVN/SYEE/jbOPco4U6yMUjM1Fc/OY1FfyZ
- WPaxsQcCi8gKzql9aAA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-15_06,2026-02-13_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 phishscore=0 clxscore=1015 malwarescore=0
- bulkscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602150155
+X-Received: by 2002:a05:6820:c94:b0:676:aeb2:648 with SMTP id
+ 006d021491bc7-677666f6ecbmr4146251eaf.2.1771188865649; Sun, 15 Feb 2026
+ 12:54:25 -0800 (PST)
+Date: Sun, 15 Feb 2026 12:54:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69923281.050a0220.340abe.038f.GAE@google.com>
+Subject: [syzbot] [media?] [usb?] memory leak in dvb_register_device
+From: syzbot <syzbot+d37184d9d8cc34602616@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mchehab@kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=1ee062e17a57772f];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33370-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim,0.0.0.67:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[swati.agarwal@oss.qualcomm.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	TAGGED_FROM(0.00)[bounces-33371-lists,linux-usb=lfdr.de,d37184d9d8cc34602616];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: E733413F6BE
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	R_DKIM_NA(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[storage.googleapis.com:url,goo.gl:url,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,googlegroups.com:email,appspotmail.com:email]
+X-Rspamd-Queue-Id: 8EFDD13FB62
 X-Rspamd-Action: no action
 
-Add the "wakeup-source" property to the primary port controller node so its
-interrupt can wake the system from low‑power states on lemans EVK
-platform.
+Hello,
 
-Signed-off-by: Swati Agarwal <swati.agarwal@oss.qualcomm.com>
+syzbot found the following issue on:
+
+HEAD commit:    ca4ee40bf13d Partly revert "drm/hyperv: Remove reference t..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15e5c722580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1ee062e17a57772f
+dashboard link: https://syzkaller.appspot.com/bug?extid=d37184d9d8cc34602616
+compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1403fe5a580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d58652580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/aa62e1942b0d/disk-ca4ee40b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6bec89136564/vmlinux-ca4ee40b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ab4c41bad9dd/bzImage-ca4ee40b.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d37184d9d8cc34602616@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88812b704d80 (size 192):
+  comm "kworker/0:10", pid 6154, jiffies 4294943581
+  hex dump (first 32 bytes):
+    00 01 00 00 00 00 ad de 22 01 00 00 00 00 ad de  ........".......
+    01 00 00 00 00 00 00 00 00 ec 21 04 81 88 ff ff  ..........!.....
+  backtrace (crc 5efd1503):
+    kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
+    slab_post_alloc_hook mm/slub.c:4464 [inline]
+    slab_alloc_node mm/slub.c:4788 [inline]
+    __kmalloc_cache_noprof+0x377/0x480 mm/slub.c:5292
+    kmalloc_noprof include/linux/slab.h:962 [inline]
+    kzalloc_noprof include/linux/slab.h:1204 [inline]
+    dvb_register_device+0x116/0xaa0 drivers/media/dvb-core/dvbdev.c:475
+    dvb_dmxdev_init+0x116/0x1d0 drivers/media/dvb-core/dmxdev.c:1425
+    dvb_usbv2_adapter_dvb_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:484 [inline]
+    dvb_usbv2_adapter_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:801 [inline]
+    dvb_usbv2_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:866 [inline]
+    dvb_usbv2_probe.cold+0xc63/0xfa9 drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:981
+    usb_probe_interface+0x246/0x540 drivers/usb/core/driver.c:396
+    call_driver_probe drivers/base/dd.c:583 [inline]
+    really_probe+0x12f/0x3a0 drivers/base/dd.c:661
+    __driver_probe_device+0xc7/0x160 drivers/base/dd.c:803
+    driver_probe_device+0x2a/0x120 drivers/base/dd.c:833
+    __device_attach_driver+0x10f/0x170 drivers/base/dd.c:961
+    bus_for_each_drv+0xd2/0x130 drivers/base/bus.c:500
+    __device_attach+0xf9/0x290 drivers/base/dd.c:1033
+    device_initial_probe+0x6f/0x80 drivers/base/dd.c:1088
+    bus_probe_device+0x3e/0xb0 drivers/base/bus.c:574
+    device_add+0x97c/0xc80 drivers/base/core.c:3689
+    usb_set_configuration+0x8f5/0xb80 drivers/usb/core/message.c:2210
+    usb_generic_driver_probe+0x73/0xb0 drivers/usb/core/generic.c:250
+
+connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
+
+
 ---
- arch/arm64/boot/dts/qcom/lemans-evk.dts | 2 ++
- 1 file changed, 2 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/arm64/boot/dts/qcom/lemans-evk.dts b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-index 90fce947ca7e..50620b557404 100644
---- a/arch/arm64/boot/dts/qcom/lemans-evk.dts
-+++ b/arch/arm64/boot/dts/qcom/lemans-evk.dts
-@@ -515,6 +515,8 @@ usb-typec@67 {
- 		pinctrl-0 = <&usb_id>, <&usb0_intr_state>;
- 		pinctrl-names = "default";
- 
-+		wakeup-source;
-+
- 		ports {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
--- 
-2.34.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
