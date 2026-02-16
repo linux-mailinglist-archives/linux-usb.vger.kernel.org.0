@@ -1,148 +1,164 @@
-Return-Path: <linux-usb+bounces-33393-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33394-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QPG5BU9Ak2kg2wEAu9opvQ
-	(envelope-from <linux-usb+bounces-33393-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 17:05:35 +0100
+	id APlQC6NFk2lt3AEAu9opvQ
+	(envelope-from <linux-usb+bounces-33394-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 17:28:19 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7821A145EA2
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 17:05:34 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B76E1462B5
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 17:28:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 56F19301F9CB
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 16:05:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0CE15301FABB
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 16:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7903191C8;
-	Mon, 16 Feb 2026 16:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F255E332ED7;
+	Mon, 16 Feb 2026 16:27:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYBW+CHp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DH2SgyPc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADDA3D544
-	for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 16:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A0A2C0F8C;
+	Mon, 16 Feb 2026 16:27:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771257918; cv=none; b=sBnfVdl3fEiQVDlzj+FYP2LjpvwGQjdlq7xXgdTddsKondoLxUxu6DTpe+HJjWGZDLeKTHbscemBHz4qk5VeTn6ojw079IS+RQK6YWaclCLeb5Hr0Ud9yTXmw6wp/lnyIoihcGM8y8Ab8a7nU2YFv5cYvHYMBfNQNwYg5nROX0A=
+	t=1771259257; cv=none; b=HBmZq/4p7WCIHjV6lfMv11KCoIRMkzE7ZE3UZJwPxORWT6k2heLawUxci89zJp5YrjWD4W9bsNKAtq7m04x+7gLdZgk2OoOOav7fn/tn/C2tK7E2N+ARNh9O0w+yT4oYVJBDpeM3t27RntnS+QRPLAMLEOz7Turzg39NJ3dDzyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771257918; c=relaxed/simple;
-	bh=Ug0bv2q+MJyHMxXUhfuIzRES2n74yPYoafPq/Crx5xk=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a6tdOnCD4XvPUBi/vDuRWTX+ey13lDqkpjaCKzoutir6th6gv6NqgeQf9ODA9j+w7F4k96adYkrx/YFLIPOt8BT1zx/QFZ7e4cxsJiGyWKpJR92EFApkPWXqtKyowLL3Xrz1TnyzVlV7i0HTLLKHT8TVPyP6Y0zY27/mLHbeydY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYBW+CHp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A82C2BC86
-	for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 16:05:18 +0000 (UTC)
+	s=arc-20240116; t=1771259257; c=relaxed/simple;
+	bh=+H5mKMCDJNc/qLxDERdZhixKg4LKT1aSL3hlRSk0nms=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uAPR/tML3G/M8OoFnKequHKQvoUoA3T9BpYTcu3e2tTIkn7IK2RJdlwtuS8fmHOCExbb3fQXljP7Yib4ZtxBg/2kyPAjGn1sdHfasvI9pzq5i8GsX0hjgZrWVaNOBR7qaUq0SxBOzoRQRHCEC56ZiU8UH9CT6zjl4VxeY5l30ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DH2SgyPc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E482C19423;
+	Mon, 16 Feb 2026 16:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771257918;
-	bh=Ug0bv2q+MJyHMxXUhfuIzRES2n74yPYoafPq/Crx5xk=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=iYBW+CHplOx33/O2WVqyNRi2MEOw8eDXFDQOas9ZlvDY3O5Os1XHVZBS35/telWBV
-	 NP05f4Jr5Fh0kmZjM4DZEMbO/DguaFTwIu6TamlNG2+yGAlGtR+govm8mW6Y8TYDlH
-	 1OdeM7Kbhb4VL7x+Tvctyw9z6h0q448WCSbuPs+pcEWJyEvCmfPxPJRFZTxFOlJNyv
-	 FhI1AnEBSYVkrr37Asxuzd8pP4L9GWfsMBVIHozCZoy5zp7IZBm86DMWyet5hJP5mB
-	 MDqKh31qWy4MbA14dthX6DOQ3E7S5gO7cLlerqfBI1PSkOOUN/XikEv2q2kfXTb86Z
-	 fQi1Mn/tZqGlw==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-59de66fda55so3396052e87.3
-        for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 08:05:18 -0800 (PST)
-X-Gm-Message-State: AOJu0YxFPgOn/9SJRWbwMz0Q/R59CuQOMgHytwm7nmKOF0PUdxka9bJL
-	sCCnolMdiH+ZFO53eK2dCe1+jua02u1ijwvc1WlDFXurGM95sOdeytqvwJhMB78kylbH7CJXuek
-	mooZKq+dkP/xNjRFTQy6qCZY29/THdi+X9282dUV4Rw==
-X-Received: by 2002:a05:6512:2351:b0:59e:2aee:7439 with SMTP id
- 2adb3069b0e04-59f6d375968mr2731986e87.31.1771257916893; Mon, 16 Feb 2026
- 08:05:16 -0800 (PST)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 16 Feb 2026 08:05:15 -0800
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 16 Feb 2026 08:05:15 -0800
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-4-802c82795431@linaro.org>
+	s=k20201202; t=1771259257;
+	bh=+H5mKMCDJNc/qLxDERdZhixKg4LKT1aSL3hlRSk0nms=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DH2SgyPcTjIShNu2OspU97jjLkn10EGuspVaZEYyGfyEhbBCrpV7WtR0MAkhpxNgH
+	 +Th7sQX1+mio563yxt5C7CZM5CaYOEuzBI5HYARp3hpGGF39dRFZ+q1LlFDgIkw94W
+	 9ge/NSVWYaRn8HK8sKNrjXe/r4+CiajQU+gfZqWqM24UdVJKoE0gr9C3/ZnmDOV+EK
+	 nBoRVbYtIhGTaVrZ2+I4Xinc5zwtHOJjtuB6LWSZ4ws6lymdXiUmjKAOy9GBg7r34l
+	 00NHCfem916fuCoG1Jk1nLIMCXtjann65OA9V70afR+McV9juCINMEnaNMFWek8FnQ
+	 obBQcHnRvZ0kQ==
+Date: Mon, 16 Feb 2026 21:57:20 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH v4 2/9] pci: pwrctrl: slot: fix dev_err_probe() usage
+Message-ID: <ly73vzmdqmk6xml2kz2u3klglmuscnttu4j6seguofdezqhjfh@vsrtpt2enetk>
+References: <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-0-802c82795431@linaro.org>
+ <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-2-802c82795431@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-0-802c82795431@linaro.org>
- <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-4-802c82795431@linaro.org>
-Date: Mon, 16 Feb 2026 08:05:15 -0800
-X-Gmail-Original-Message-ID: <CAMRc=McWrc7uG=HSZEGybiG+d0DMw_U4c=A22aGV8DM1+h1ubA@mail.gmail.com>
-X-Gm-Features: AaiRm52M5Hr-VX4bzyAyiWWbvFrECG2u4oIptkEYguyjaGQVcwZSpUCmWBHLcCM
-Message-ID: <CAMRc=McWrc7uG=HSZEGybiG+d0DMw_U4c=A22aGV8DM1+h1ubA@mail.gmail.com>
-Subject: Re: [PATCH v4 4/9] pci: pwrctrl: generic: support for the
- UPD720201/UPD720202 USB 3.0 xHCI Host Controller
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-2-802c82795431@linaro.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_RHS_NOT_FQDN(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33393-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,qualcomm.com:email,linaro.org:email];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-33394-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[18];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 7821A145EA2
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com,vger.kernel.org,oss.qualcomm.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:email]
+X-Rspamd-Queue-Id: 9B76E1462B5
 X-Rspamd-Action: no action
 
-On Mon, 16 Feb 2026 15:21:48 +0100, Neil Armstrong
-<neil.armstrong@linaro.org> said:
-> Enable the generic pwrctrl driver to control the power of the
-> PCIe UPD720201/UPD720202 USB 3.0 xHCI Host Controller.
->
+On Mon, Feb 16, 2026 at 03:21:46PM +0100, Neil Armstrong wrote:
+> The code was not returning dev_err_probe() but dev_err_probe()
+> returns the error code, so simplify the code.
+> 
+> Suggested-by: Bartosz Golaszewski <brgl@kernel.org>
+> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/pci/pwrctrl/generic.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/pci/pwrctrl/generic.c b/drivers/pci/pwrctrl/generic.c
-> index a5b7b7965f46..1afda639f0c4 100644
-> --- a/drivers/pci/pwrctrl/generic.c
-> +++ b/drivers/pci/pwrctrl/generic.c
-> @@ -73,6 +73,10 @@ static const struct of_device_id pci_pwrctrl_generic_of_match[] = {
->  	{
->  		.compatible = "pciclass,0604",
->  	},
-> +	/* Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller */
-> +	{
-> +		.compatible = "pci1912,0014",
-> +	},
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, pci_pwrctrl_generic_of_match);
->
-> --
-> 2.34.1
->
->
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+- Mani
+
+> ---
+>  drivers/pci/pwrctrl/slot.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/pci/pwrctrl/slot.c b/drivers/pci/pwrctrl/slot.c
+> index 3320494b62d8..08e53243cdbd 100644
+> --- a/drivers/pci/pwrctrl/slot.c
+> +++ b/drivers/pci/pwrctrl/slot.c
+> @@ -40,17 +40,14 @@ static int pci_pwrctrl_slot_probe(struct platform_device *pdev)
+>  
+>  	ret = of_regulator_bulk_get_all(dev, dev_of_node(dev),
+>  					&slot->supplies);
+> -	if (ret < 0) {
+> -		dev_err_probe(dev, ret, "Failed to get slot regulators\n");
+> -		return ret;
+> -	}
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to get slot regulators\n");
+>  
+>  	slot->num_supplies = ret;
+>  	ret = regulator_bulk_enable(slot->num_supplies, slot->supplies);
+>  	if (ret < 0) {
+> -		dev_err_probe(dev, ret, "Failed to enable slot regulators\n");
+>  		regulator_bulk_free(slot->num_supplies, slot->supplies);
+> -		return ret;
+> +		return dev_err_probe(dev, ret, "Failed to enable slot regulators\n");
+>  	}
+>  
+>  	ret = devm_add_action_or_reset(dev, devm_pci_pwrctrl_slot_power_off,
+> @@ -59,10 +56,9 @@ static int pci_pwrctrl_slot_probe(struct platform_device *pdev)
+>  		return ret;
+>  
+>  	clk = devm_clk_get_optional_enabled(dev, NULL);
+> -	if (IS_ERR(clk)) {
+> +	if (IS_ERR(clk))
+>  		return dev_err_probe(dev, PTR_ERR(clk),
+>  				     "Failed to enable slot clock\n");
+> -	}
+>  
+>  	pci_pwrctrl_init(&slot->ctx, dev);
+>  
+> 
+> -- 
+> 2.34.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
