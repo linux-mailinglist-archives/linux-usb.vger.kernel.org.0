@@ -1,236 +1,235 @@
-Return-Path: <linux-usb+bounces-33382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33383-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4ONtD4sjk2kX1wEAu9opvQ
-	(envelope-from <linux-usb+bounces-33382-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 15:02:51 +0100
+	id +LDVOiIok2kI2AEAu9opvQ
+	(envelope-from <linux-usb+bounces-33383-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 15:22:26 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D155E144630
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 15:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 97E29144854
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 15:22:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 890F6303FAB0
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 13:58:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9C43C303183E
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 14:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A519E255E34;
-	Mon, 16 Feb 2026 13:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AA0B31197B;
+	Mon, 16 Feb 2026 14:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Orl3VpCZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IFiATbPe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3371229BD87
-	for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 13:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FA531064B
+	for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 14:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771250315; cv=none; b=CxKmWAUfuaxPjKtgmViIeZs5DJyJGQUnnzyDbxUS7cJRnj7nNXOxd1FolbmBw4R6L/jOqKF+uvpGr7kX8CgQwj4F+DauWKRR4B7MVkHMBZMwscvv3cx7MUJm/3eHgRvm9HYWlgiRzVgMaJPzW4OcIpJ1oniFGhSwSbsUhVAuTyM=
+	t=1771251715; cv=none; b=tNtRC6Ozu1sUg3E9kmiKLEjF8RTJYCgY9/+It1GDPcq5ua87xfziIdHbCDf5dmpGy25W7WgelPbF/Ul/vcU/G5BJelhG3t71EsSJBowhqn9o4tAKpbmqPpoBDfaHNpFY6pyHU+dmOmJEPNHT9LzpdRb5lLw1jYEyVjrRe77hCxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771250315; c=relaxed/simple;
-	bh=JudCYDKTAao9yvz1obQeEFLjpJHRjDhkH80IAq3x6uY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PB/lL7FO1zsGpsfI4jzJoh3ttaBS2Xcp26I2AYVADXuIqWkqKCKcggLl6yTuO0huZyZ2j8t9k/ovkGen4ENMD626AXnZYn1LY6BpktPgMuvunQS7z0bedbIUO2E2QACmVhuMWgleW/LF0EAlJsDv7xqk2OY2PJ/I8ZM8WdCnlgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Orl3VpCZ; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-59e60b3ccdfso4485773e87.0
-        for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 05:58:33 -0800 (PST)
+	s=arc-20240116; t=1771251715; c=relaxed/simple;
+	bh=3AXiIwSq8L6nzDQfXChSLBVbjYhE+/7MBD/NWJrTKsM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=E020Z00o+U+oqjVF1045cWsxtVa4Mj/RZ6SwZsf3UlARSa8T+SccbdlS1horG/jdLcI2z0lV/t0akzWAUeFX6XUSTanZiqlI9u84tz4SRBFBwXvQGHO2LEgv5g9oIo1QEWzyowJezHpMun8yQrAN6U12smVSIVZQ42fimM8+wS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IFiATbPe; arc=none smtp.client-ip=209.85.128.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-4834826e5a0so31318605e9.2
+        for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 06:21:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771250311; x=1771855111; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rUcAGLQZkv/PTBs//eYKKwXahaszOterbl1vVyU8vuo=;
-        b=Orl3VpCZVgtxL7MpZh1NnWlx2fyQTWtrIKVH6nsudChRBkNWr52BLzHjewFb5rb7pN
-         HubWuhvIET2AZmou4zCDw210uFqVfcuH209nQuWT3wKo318bb2jWFzmRN/mplBEPQE8O
-         J+AIN3NaN0Tyy9367E9yuKF9bus9tUPDTIZVEsmksjb4WnpF/G1Q6B4JMeRi9E5WLate
-         q1jCL8jtPY1PynwXqrTlDx2HbtzBgR4zc9qSYs8WuWL7bF8b7h/EEXOsuyGuaeRpsLOu
-         5XTN/OIYNYSllIFsYDHuOGlAVo/ZU5fCcjorQnbtIoLnkcJcu064QyRdIVbpiPGBhK5B
-         IknQ==
+        d=linaro.org; s=google; t=1771251712; x=1771856512; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rbuK1/Mkk0qHzf5Z6SkYJv1LBlhiuNH5yjaPDFPJh1c=;
+        b=IFiATbPe9OtdN3sH1xItYwqyPYRsKlNbDg6Xv69VdJ9hjvi6I8/4WtRvs1XgV14gc6
+         8yhW2/POCb1S9AOfU2eWltXRe7IlTGg6JrhlF5SmKifzqHKhH66aQ4urMh+uheF6DK4T
+         e4uAGIXxDPc1e1CMulyAcDHpT0jPuGUsSROgm486M0SEslUVHIcRO2n0NxamksjavR2k
+         kSRNsVmHYjMlJ+NUV8SX9SoVdtY+pkIy5QehLRMO+XPlvJzyzG/GwPKisyolBhiY+Weu
+         8BlT2blz6A/vzuvWLCC/CoY2R4c5IriHIl9xa8XYC26bHJ21si5SpLQxkeXDDEv8WIPY
+         7vbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771250311; x=1771855111;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rUcAGLQZkv/PTBs//eYKKwXahaszOterbl1vVyU8vuo=;
-        b=lB7JistiefHheiYYW6q1PXxhfWi3J4FECHGtUjpIFBY66A2LFGUPMNvySG+iKuEO04
-         32CgW6veiKC62LvYtT2Isbk0ob4xGoHvkawTEpgNhpvEu2cBZCBqi6+Md7EP6MGUl+n7
-         2TggWq0meoV9/1+7tnq7bhTha9UHKWOQg5RU2LdAl8jaJDFmmUy6AhZsb3rFDC5YZ6uC
-         rstXv2jZHt+suDXgbPnBvG6X8Yt5t9Q+RpoOhbvHfoNA/q10jGVWqVxINd+5EiYfcD5y
-         jBfEd8RjkkUyeQpbU8zqCcHNL0zfaIXXcuRHc/43M5E5kYnubKq/fnzcxjxl0XO2QS9V
-         Ab3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWFS7PBo/qy6NWtt3T0zll49uDTpOfIiMr3SkU8Rm34/3HfIJp9mwhrEsb42hPjbO7dIxow1Y1nTjE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQnsd3MrPykzzrwjTaihv/DJZ3rfrYazO4tkHbvYVIz8w2BV0D
-	IqXkLrbTCv/coqwIK04PbrD3w3T7yji1OqmTQBQiFU9xhXV7V4Y/0lIh
-X-Gm-Gg: AZuq6aL5hITXrXGUIAYFRuk7TL/xosRK3E551ttwmeUMFA7wl9ib3Pni9EPO+0mfkv0
-	x+LNjVuMoPKZwquRfZr1VKGSU0RAUmMcQ9nNt6Kg0JhshFg5Ds4j0TpvCN4J9RSqkxinQJT0QT+
-	r57BRVGLTskGnaeTg06WF50pFDG1QGd3BRiYrxbJ/QaGOanKyVzoIqGFSM4VLaCwXdAyhwZZe4s
-	XHreR1TEs9CZCoYMSX5hW7xk4k8YahayMwgLjW87nvYj8YQ7w0fNi2+sW/+ARElOe/b/Cz2TwWg
-	j/OSjR27lMjkHjyeG5XxmGWTsqE9Tma+IOn6DYl4/g2wBfQM41fB5RhlV0WUEl1nGjP6h7b4opY
-	VYIbsw2nBTI7VVC0bClM9RvgoC3qFUe8JiilA3qc2dDE0WEQ6MSRmyZNwM4QQk4Wi7XomI2wITO
-	9GXqxVPQxcOSW/p2tSzEsSH2YN0Wde8taJPWcj/J/eDWs=
-X-Received: by 2002:a05:6512:145a:10b0:59f:6db3:1526 with SMTP id 2adb3069b0e04-59f6db316f1mr1715840e87.10.1771250311130;
-        Mon, 16 Feb 2026 05:58:31 -0800 (PST)
-Received: from [10.38.18.54] ([213.255.186.37])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e5f5b2223sm3224103e87.79.2026.02.16.05.58.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Feb 2026 05:58:30 -0800 (PST)
-Message-ID: <5d889f66-7697-4a39-beed-33ace693a1ef@gmail.com>
-Date: Mon, 16 Feb 2026 15:58:28 +0200
+        d=1e100.net; s=20230601; t=1771251712; x=1771856512;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rbuK1/Mkk0qHzf5Z6SkYJv1LBlhiuNH5yjaPDFPJh1c=;
+        b=gXota+H8NYQSzgnD5iGamdDp8/TRQdFOntY55uyTanR0YHCw9T11eyCOkegnPgMXLr
+         sVrA549mnO4Ow+frMVqWpDtKmp/AdW3oeELxhTgx1+Vba5lEHDzReeRAykc3TVsCN+pq
+         Qp7k4ibL5XX1Kv0ovqTTWIwFs4Zz8C29ta0V+OCAFDL8q7iiLwjORBmj6kpwAQv7KJov
+         mnKGeIh3DlwG02+wG3ta/Wfg3ENkLtLtUAjuDWIG47CHV4ZotWtVUqUtbEoPxNEg9+Pj
+         b4KqZEyHPtw5cQr+qe8mZfiJTl7yRv3tmeEw26N8Kv4YXseYJg8IjUAnLS/CeVgpx+Uf
+         CLlQ==
+X-Gm-Message-State: AOJu0YzkGwWj6d34gYAM28JVN7uGXPboshpZHCGYo64npaqj/GEDmC6F
+	8KWSF/EwMhNkPkf496mE80jKCT2NxzJFKjRWV1z3JYrdoXGIqlwGok4we8/TYTU1k2Y=
+X-Gm-Gg: AZuq6aJ2PAl9gzMB2D1a/TzrZOJ5+iv6QhQfRW7m7coJYiPZBoPGiUGWspVQr89SHqt
+	YurjHGIv1xXr6yVPbwpB3JjCo89CfzVLUn4kWKZB2lfhIXGG71QisHjdNOYObPulTgv+wxH8ZqV
+	aB3hWFQx+LvKffwKvMNuTw9+7buOyT+Y89fSTFrnvBpxKXvLjeU7oiKWFfgFbruJc15g6Zp0FGQ
+	7wFZAlPufvRGilT6cd30u6sJjxbh2Dwg815vHX0uy4SAdJ+wbklRxPfTgNI3VJPCzpOd140Ryh0
+	TAo2FY7d2EPDzetcYezOqhLef4VY+pl1BsHk5+7OCp7aBQtvq10RY8Vo6B49yaZVDFPZE5VidQA
+	L/5+3iQEg8qp22UXlmpfM+WQLTNPqyaVeTZaCix42J+zrCYisI7ZWsf+7J3jaZScdpnoFtTU1Mi
+	MF0t8+XcTAru542AJ/+HhQNriaPHpJaxzbtTWZbSwU0C0V
+X-Received: by 2002:a05:600c:8b38:b0:483:456a:514b with SMTP id 5b1f17b1804b1-48373a1babdmr176881285e9.12.1771251711991;
+        Mon, 16 Feb 2026 06:21:51 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:106d:1080:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48370a63afesm86717475e9.9.2026.02.16.06.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Feb 2026 06:21:51 -0800 (PST)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v4 0/9] arm64: dts: qcom: Add support for the Ayaneo Pocket
+ S2
+Date: Mon, 16 Feb 2026 15:21:44 +0100
+Message-Id: <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-0-802c82795431@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/6] lib/linear_ranges: Add
- linear_range_get_selector_high_array
-To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20260214-max77759-charger-v6-0-28c09bda74b4@google.com>
- <20260214-max77759-charger-v6-4-28c09bda74b4@google.com>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20260214-max77759-charger-v6-4-28c09bda74b4@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPgnk2kC/5XNu47CMBCF4VdBrhnkC2PMVvseiMKXMVhAHNlRR
+ ITy7hgaQNuw5X+K79xYpZKosp/FjRUaU025a7FeLpg/2u5AkEJrJrnUXEgBQ+6Th3oxGjnYyXa
+ Uoc/+RANUCc5WAo5erQ3FYHRgDeoLxXR9nuz2rY+pDrlMz89RPNZ/8aMADs6puMUoPDf4e06dL
+ XmVy4E9/FG+m5uvTNlMj0heOAzGxT+mepmS669M1Ux0m63HoIXl6sOc5/kO6f25eH0BAAA=
+X-Change-ID: 20260121-topic-sm8650-ayaneo-pocket-s2-base-05c348efd86d
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ Bjorn Helgaas <bhelgaas@google.com>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+ linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ KancyJoe <kancy2333@outlook.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3369;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=3AXiIwSq8L6nzDQfXChSLBVbjYhE+/7MBD/NWJrTKsM=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBpkyf6wRCOG3hQ13uB+dGuF6/3bQbipSRjzs/BNhRe
+ ArpkBhmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCaZMn+gAKCRB33NvayMhJ0RjaD/
+ 9Ggbw+0dtusYlUJ/EJRqi3F84Q8OVPCl+4JJWd+z2fTwmVmmvLF5vgY46JTwjSX8djllszqmm8KKXl
+ vDspueP5Uy1Lbv47CXEhowgUW47dhlPgfx//zXrljOuzwy0lpkgKq+HlFgKRoaXh5OFd1zr/hPua8v
+ brrvaMu/M/zZCh6cWUM7nmytIzpMwBXvYt1uwSnCV6QXn6hAWn5IL8pv/3UUruniHCNKeKTB5y1l/B
+ lIAcrDfu8dSa1D1CNX/XWkG+D9p6sKkP/LYUItUtZyXIxdD0B+miLg9tR3424mzKrMrxIst7L3Ztrf
+ BGQiyHYI9KM98WJIFtfmBc3I9OKTVSUbU17Wfk/F2F+wASr9gmpXHVg3voIVJWDnFE9Gfl0ZG6ZESV
+ RYv4NBJS0piBPLnLAhSIwOyE31eJn3IlQCkBjFxthWmx2hTIaBbYdDdHC/aXmMiYPkbKGVtQu2WZDi
+ SKZkVyr2ORIeaEgJcKhVUmC219oQNJJfN7F3/GcqxtC7aWe/QMn/ZbW3dc4dr2/0XbVBRy1Y+Hf+lF
+ fzoPq/q6yWWThWmjHa+oJc+FmKGpm7Flujs0xeLujXS0J2P6sv452oI2340TOSHgk20YgWsMKqvQVd
+ cCowD2KrJUzo3VFu16JDOq5FQo/pkOhimmLireDbYSuyLVwUOe978Z2qKcCw==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33383-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33382-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linaro.org,oss.qualcomm.com,outlook.com];
 	RCPT_COUNT_TWELVE(0.00)[23];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mazziesaccount@gmail.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_NEQ_ENVFROM(0.00)[neil.armstrong@linaro.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[linaro.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D155E144630
+	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[msgid.link:url,linaro.org:mid,linaro.org:dkim,linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 97E29144854
 X-Rspamd-Action: no action
 
-On 14/02/2026 05:12, Amit Sunil Dhamne via B4 Relay wrote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
-> 
-> Add a helper function to find the selector for a given value in a linear
-> range array. The selector should be such that the value it represents
-> should be higher or equal to the given value.
-> 
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> ---
->   include/linux/linear_range.h |  3 +++
->   lib/linear_ranges.c          | 36 ++++++++++++++++++++++++++++++++++++
->   2 files changed, 39 insertions(+)
-> 
-> diff --git a/include/linux/linear_range.h b/include/linux/linear_range.h
-> index 2e4f4c3539c0..0f3037f1a94f 100644
-> --- a/include/linux/linear_range.h
-> +++ b/include/linux/linear_range.h
-> @@ -57,5 +57,8 @@ void linear_range_get_selector_within(const struct linear_range *r,
->   int linear_range_get_selector_low_array(const struct linear_range *r,
->   					int ranges, unsigned int val,
->   					unsigned int *selector, bool *found);
-> +int linear_range_get_selector_high_array(const struct linear_range *r,
-> +					 int ranges, unsigned int val,
-> +					 unsigned int *selector, bool *found);
->   
->   #endif
-> diff --git a/lib/linear_ranges.c b/lib/linear_ranges.c
-> index a1a7dfa881de..c85583678f6b 100644
-> --- a/lib/linear_ranges.c
-> +++ b/lib/linear_ranges.c
-> @@ -241,6 +241,42 @@ int linear_range_get_selector_high(const struct linear_range *r,
->   }
->   EXPORT_SYMBOL_GPL(linear_range_get_selector_high);
->   
-> +/**
-> + * linear_range_get_selector_high_array - return linear range selector for value
-> + * @r:		pointer to array of linear ranges where selector is looked from
-> + * @ranges:	amount of ranges to scan from array
-> + * @val:	value for which the selector is searched
-> + * @selector:	address where found selector value is updated
-> + * @found:	flag to indicate that given value was in the range
-> + *
-> + * Scan array of ranges for selector for which range value matches given
-> + * input value. Value is matching if it is equal or higher than given value
-> + * If given value is found to be in a range scanning is stopped and @found is
-> + * set true. If a range with values greater than given value is found
-> + * but the range min is being greater than given value, then the range's
-> + * lowest selector is updated to @selector and scanning is stopped.
+The Ayaneo Pocket S2 is a gaming console based on the Qualcomm
+Snapdragon 8 Gen 3. It has an internal UFS storage, WiFi,
+Bluetooth, gaming buttons, SDCard, 2K display and USB-C
+connector.
 
-Is there a reason why the scanning is stopped here? What ensures that 
-the rest of the ranges wouldn't contain a better match?
+Product Page [1].
 
-The logic is now different from the 
-linear_range_get_selector_low_array(), and I would like to understand 
-why? It'd be nice if these APIs were 'symmetric' to avoid confusion. 
-Hence, I would like to know rationale behind making them different.
+The Initial linux port was done by KancyJoe (Sunflower2333)
+at [2].
 
-> + *
-> + * Return: 0 on success, -EINVAL if range array is invalid or does not contain
-> + * range with a value greater or equal to given value
-> + */
-> +int linear_range_get_selector_high_array(const struct linear_range *r,
-> +					 int ranges, unsigned int val,
-> +					 unsigned int *selector, bool *found)
-> +{
-> +	int i;
-> +	int ret;
-> +
-> +	for (i = 0; i < ranges; i++) {
-> +		ret = linear_range_get_selector_high(&r[i], val, selector,
-> +						     found);
-> +		if (!ret)
-> +			return 0;
-> +	}
-> +
-> +	return -EINVAL;
-> +}
-> +EXPORT_SYMBOL_GPL(linear_range_get_selector_high_array);
-> +
->   /**
->    * linear_range_get_selector_within - return linear range selector for value
->    * @r:		pointer to linear range where selector is looked from
-> 
+[1] https://www.ayaneo.com/goods/9344082149621
+[2] https://github.com/sunflower2333/linux/tree/master
 
-
--- 
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+Changes in v4:
+- Renamed slot to generic, in the code as well, fixed Kconfig & commit message
+- Switched the UPD72020x bindings additionalProperties to true to allow devices subnodes
+- Collected acks
+- Link to v3: https://patch.msgid.link/20260206-topic-sm8650-ayaneo-pocket-s2-base-v3-0-5b79c5d61a03@linaro.org
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+Changes in v3:
+- Made renesas,upd720201-pci bindings supplies required
+- Fixed description and example of renesas,upd720201-pci bindings
+- Renamed slot to generic, added renesas,upd720201-pci entry
+- Used PMIC_GPIO_STRENGTH_LOW instead of numbers
+- Removed all output-low in pinconf
+- Link to v2: https://patch.msgid.link/20260127-topic-sm8650-ayaneo-pocket-s2-base-v2-0-c55ec1b5d8bf@linaro.org
+
+Changes in v2:
+- Add proper regulators for the USB controller, with bindings & power ctrl
+- Add proper regulators for FAN
+- Dropped support for headset over USB-C, audio is connected to a jack port
+- Cleaned up Audio routing and fixed the DP endpoint index
+- Added i2c clk frequencies
+- Renamed fan node and used interrupts-extended
+- Dropped the usb-c self-powered
+- Reordered nodes alphabetically
+- Renamed pcieport1 to pcie1_port0
+- Link to v1: https://patch.msgid.link/20260121-topic-sm8650-ayaneo-pocket-s2-base-v1-0-bb3f95f1c085@linaro.org
+
+---
+KancyJoe (1):
+      arm64: dts: qcom: add basic devicetree for Ayaneo Pocket S2 gaming console
+
+Neil Armstrong (8):
+      dt-bindings: usb: document the Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller
+      pci: pwrctrl: slot: fix dev_err_probe() usage
+      pci: pwrctrl: rename pci-pwrctrl-slot as generic
+      pci: pwrctrl: generic: support for the UPD720201/UPD720202 USB 3.0 xHCI Host Controller
+      arm64: defconfig: enable pci-pwrctrl-generic as module
+      dt-binding: vendor-prefixes: document the Ayaneo brand
+      dt-bindings: arm: qcom: document the Ayaneo Pocket S2
+      arm64: dts: qcom: sm8650: Add sound DAI prefix for DP
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    1 +
+ .../bindings/usb/renesas,upd720201-pci.yaml        |   61 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ .../boot/dts/qcom/sm8650-ayaneo-pocket-s2.dts      | 1551 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8650.dtsi               |   47 +-
+ arch/arm64/configs/defconfig                       |    1 +
+ drivers/pci/pwrctrl/Kconfig                        |   13 +-
+ drivers/pci/pwrctrl/Makefile                       |    4 +-
+ drivers/pci/pwrctrl/generic.c                      |   95 ++
+ drivers/pci/pwrctrl/slot.c                         |   95 --
+ 11 files changed, 1745 insertions(+), 126 deletions(-)
+---
+base-commit: 492852b6c9c80e576537810995fef0de1bea7092
+change-id: 20260121-topic-sm8650-ayaneo-pocket-s2-base-05c348efd86d
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
 
