@@ -1,83 +1,84 @@
-Return-Path: <linux-usb+bounces-33386-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33387-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MAikACAok2kI2AEAu9opvQ
-	(envelope-from <linux-usb+bounces-33386-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 15:22:24 +0100
+	id 6FJZKpMok2kI2AEAu9opvQ
+	(envelope-from <linux-usb+bounces-33387-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 15:24:19 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8C7014483E
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 15:22:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 494EA144949
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 15:24:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E6AF1301A413
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 14:22:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9BA8A30541FD
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 14:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F284A313525;
-	Mon, 16 Feb 2026 14:21:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EA31311C27;
+	Mon, 16 Feb 2026 14:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pTi/WSEb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z3qIIcWz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D976531281B
-	for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 14:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD8431196F
+	for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 14:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771251719; cv=none; b=Bcpr0icKFFjSUb7OD66jYc9igGu0rnelegeUAnGq6Pl9V6MZ685MO6QsRleRscYtjXr0AsQegea6xuqfEvPzcgZYJqbNEjDgT2qmwEVSiDt5O05Nlcn+7VS8lVBJ/nGG7hf38VJ3U8o+QTKQCg/7kAh7fIVgquJDo8wwO8kvpHI=
+	t=1771251720; cv=none; b=g3sxb8Jv16SHFPRU2+04q9tl/WkjqAv/wgaWxG+zBTRdxU4hN9nUCcRPxrNTNM6ZUGREOAY+X0dDvtKJ17h7h1RMyRcdSgeI9+Fgesxmezd7R+DWNXMk06B0A/AzWfRa3cWv8T5fgBlwVeiOV/qqkj31YW5g3iYWL4djgnAM52M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771251719; c=relaxed/simple;
-	bh=e+EkWC2n4pNM3k4t8mwvlHMc2Vj8SO/DiCWja7TtWYg=;
+	s=arc-20240116; t=1771251720; c=relaxed/simple;
+	bh=swRvlvPe5R/LjcGwpOyqg3vGK98nZUkf0KBb5iWx1pI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=s/xbaq+wUvwp9Rc+PHIgjWlwTOMwkbpNMjHIHT8RAwaDowdDrka6Cy2KpG6XcNfAxaYVt5lrFFamCyuOL6Zfz/TtJxQ7TgPmJSh1K/XLj7VnhY9dqsY72IuB7kdhmB99rXB3tAlWpHeKA52OtuxxMSiVp+s83so0rjIx+7qx540=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pTi/WSEb; arc=none smtp.client-ip=209.85.128.44
+	 In-Reply-To:To:Cc; b=MyzrJIr9FObgcDNaxBkBO2kqTTpTDP7V2QUiz1pW+gOhjkXuhsOsgmuBRjaPuk7Eutgs5WDeGRocP88XYX/8BX+6EYNnxfawvhKVR8byCBGzaAYcCWlQrwzxYD2RKlT5omyhmdns1LDGft8pLsFqPTG3qaMowIZFP7tkZITX04o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z3qIIcWz; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48371bb515eso36262115e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 06:21:56 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43767807cf3so2399287f8f.1
+        for <linux-usb@vger.kernel.org>; Mon, 16 Feb 2026 06:21:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1771251715; x=1771856515; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1771251716; x=1771856516; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=f/9SQvmpy9H4vWRy3pZsPCqXW6+l8s5UosjKXnI3KRs=;
-        b=pTi/WSEbIr6iZRdp9FST+wYVLFL9Ij28eLCNe9r0tdS1j8SP0WxCuMl2BZeEkkkMRm
-         CUAeDuPSbGed/2E6DVGn0Bmja3Uu+/SHHZA/Vz0g7rgNZdwZXdYicu3imw8h5IJOAzj/
-         xBNKjleiUakqR78ze+8TD74ohODozZ1PQUc7S7/Wo5HUVjehf8H3JABKFwR9KSsdGJ/1
-         AoWi7sUrKik6AgrYlIW5N7I/qNz06dfS2r4K6Ui22ASWHBNV/On1RWJM0r9erxj6IHFA
-         V2p2xhO+LsF10hc9VL9WtzF/VOEQjjL8HKMoG95X/9v3b7SVGNcshNN3vTDiQ6Wxw+kC
-         Cp3Q==
+        bh=ZG5d4AeEhK6Ekl6x66KHq/6RRjwI9BsPgGa3qMbbWPQ=;
+        b=Z3qIIcWzxmE4w8S9n4xv/bxv9dSOYzAhNlqZ5kLfwVobaoTJT8itGtKk+Xaxu30iFH
+         TL00mlV+/L98FK7k07YD0CyaLHSK61MH9MAbDa1oUvFaowkM2InC/VLYaCB/ElevvyMX
+         Z8A+pjTKEi6AVYI8vSdqlpf24HubiH+nqBwvCXo/xiAkA10KPTpUDUMypUXItrnvt9Z1
+         c6TW3kdlQLsk+cxfrqBttBWQCS/O+LY1W5mwC2+EcV/RQrErvH4osXBS9YOiIWN7PVEt
+         KBhsB1QP+WevJpVhzj+ITKtDz9/2YIVIOY7VmEPPhf7xipWwmQhk76qibEUIIvj/LVD6
+         rcZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771251715; x=1771856515;
+        d=1e100.net; s=20230601; t=1771251716; x=1771856516;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=f/9SQvmpy9H4vWRy3pZsPCqXW6+l8s5UosjKXnI3KRs=;
-        b=VeIybFGozjKXQb0CzbN5tybdzQvqKx8PR7c7xB2qBeWTkCycj9/dPCBvO1F54qu+uW
-         JbD17Mx0wczhm7iCteJm0ctT5iqLydasOylDWklpKWVRKO6kIWVpb81uqH/exm/kq+8b
-         gGSRbLqSbS1sGKvM0actpjlduF53rzScKR79TNz9v3WA3CScPFhYYhdtDl8vyFqjlzQz
-         k3h5PnZ/Syb9gIl/F89Wem3Oup+1fIXSJCrGja9pehWY7uGeAifujD7Msf8hMPm9DBZl
-         WoJEYwnHp/6YVXPislAZ35FE2zDikFvb+uyfi0fLFdDNgRkRCXZomh/GgH3NZxndWXHS
-         PKUg==
-X-Gm-Message-State: AOJu0YzcUbZmyjytozE06PpBWRx0MqNuUCyJZ9wawRat7anHb6ScgdAP
-	GNt5/3GiSyYBVyHDFbl6HrJkNxj0NaKd2iXy+mNq7pBLsZjKWwvvdsjlPKteECKZ+Lo=
-X-Gm-Gg: AZuq6aKPEYY3SBqC+7Tu0NK99kyvTv8LsnFozTan02P4jvDT5cUAv/s90ij0Moev8QP
-	9IukPHFUkit7RHiIsL5SBThqcU2lfXd6h7KZhtQv+NjWOTR46qo/0KRopGqdwXyZtX/1bSkr11g
-	eA3PkEHjoLhi5DxGWnEuAIvoju/w6/QOCFNV4zDPkMctrmTlnSr4bOpM5bpAn+rr7nLvRVXDrXG
-	vmrz42zO2N9Bid1KxzKtH6yETI7pOjySJWVNz3HWPK/57zTMLYwx00J+AbKgW/gz7viF7tYUmyS
-	fytXQtUOE0HmLtH0ITXpdNSic/f29EuNAcNj4Uy95oh7v7tTsnFDRulXJcPw0kLR8/8arodfiAu
-	b3JZ4I12rZgOIziM3NKda3iG1pGu/8fAgNt7FzmDEk9xgP7EZHgxczn/KzsMkInE2jc31DFkIWe
-	IBdvbQir3DaIe9vTlJEn5/NFmYVL6iXS49cBgMpoOsnNHkkHQ1f9WzL9o=
-X-Received: by 2002:a05:600c:6206:b0:477:76c2:49c9 with SMTP id 5b1f17b1804b1-48373a0842fmr151498205e9.2.1771251715087;
-        Mon, 16 Feb 2026 06:21:55 -0800 (PST)
+        bh=ZG5d4AeEhK6Ekl6x66KHq/6RRjwI9BsPgGa3qMbbWPQ=;
+        b=Ow1VACQZXeD+49GHHJ6MKvaLSFdcDUeyTg/+fNZXIJntHuYE0rRubqm7XKb1oD3Lo3
+         SHkyAWu4j8VNztmEgHYp49+BrYW40vK13yjnaD6Q5uC6wRsl6rS47r8h3AQFuCNj+Mnc
+         g0bdA9BPulvzgMIedn0B0UdEaEnnSrUSDCSglKfj5LcImTV8/M8X2mt2ZRmpUwrKAPRN
+         Iaese61Kw1IhXhCyJDdF7zEWY4npcSUw5xc1oWRKgsv3YHhlEIpklKIYOuxKFWQ2o3Ax
+         1PDzk1/5xtmGx2y6zmn8k/FOfgXuqvt7Xl1V6Tq4guBTFcWRUmeLLIMBD+SM0p2Ob/v8
+         AzVw==
+X-Gm-Message-State: AOJu0YyrR4VcdpsYgzkSxca2Kys16u3uiK0ZBS0HYvy2H6VUVFKargHC
+	lWl6QMDMlgpJh2xmXC30SwzSu6yNitfKtt4pewVGA0aF79q3V9gAk++bFTCBu2ulUng=
+X-Gm-Gg: AZuq6aJ7wfvuHRMOaYqNtX2o6opQSYbiDKq5+8bmvBs08a/qv08fcRqsEa++UwvkSB9
+	8apnyVu+GKB0JIsBzVi//6rZDdchEhdka66OAUB7oPfnVSs676bCobdsZ6Ns1+vb4vSfKbiRIXM
+	7wBMAxr8tc4cQYMpyjCVEmMcSA2RxOK0t3Lbu87Wy9W2XW9zHoa0DZXBfLMbxfGGwdzvY2WqlTx
+	oI69A1V8qQXAmKEYvQkdbo6R96YU/gflj1qQhyg/8f3sVkdjjLqGkYg/mWNWBz1li8cqCRLjaOy
+	4FN3leOLtqICl2z8T6r9SNos2bdoG/pKWWL0IDT5+8CctI/T/0ifY7ItcQAlebunGgE0rGIicrS
+	sKC3CCO8Bd54UnsnvTEmYJ2ZZX2HNIDaVOqTxDnuvcHxmiH3ChAGHqADCiKXYlmETnBMNFRzqZG
+	5G8PhRn69VJz0SxI0lvA3hulk2vjyym0L/2n37ikL+NqPk
+X-Received: by 2002:a05:600c:a08e:b0:483:129e:b573 with SMTP id 5b1f17b1804b1-4838dbb7237mr17621375e9.18.1771251716237;
+        Mon, 16 Feb 2026 06:21:56 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:106d:1080:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48370a63afesm86717475e9.9.2026.02.16.06.21.54
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48370a63afesm86717475e9.9.2026.02.16.06.21.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Feb 2026 06:21:54 -0800 (PST)
+        Mon, 16 Feb 2026 06:21:55 -0800 (PST)
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Mon, 16 Feb 2026 15:21:47 +0100
-Subject: [PATCH v4 3/9] pci: pwrctrl: rename pci-pwrctrl-slot as generic
+Date: Mon, 16 Feb 2026 15:21:48 +0100
+Subject: [PATCH v4 4/9] pci: pwrctrl: generic: support for the
+ UPD720201/UPD720202 USB 3.0 xHCI Host Controller
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,7 +87,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-3-802c82795431@linaro.org>
+Message-Id: <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-4-802c82795431@linaro.org>
 References: <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-0-802c82795431@linaro.org>
 In-Reply-To: <20260216-topic-sm8650-ayaneo-pocket-s2-base-v4-0-802c82795431@linaro.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -102,20 +103,20 @@ Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
  linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
  Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8065;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=782;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=e+EkWC2n4pNM3k4t8mwvlHMc2Vj8SO/DiCWja7TtWYg=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBpkyf7fyk4ar/een2ppTz2YyuSmnqLKeArdKG+TMgw
- zqVdnQmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCaZMn+wAKCRB33NvayMhJ0deeD/
- wJnFTpLZmDCw9qKPW+jgW/zNUnvsE8dTJVgiNjPZQsOlGCuIkw9HhkdRlfM22TNC2BHmXEIktlAash
- bpNCZhVVmLGWVOg8BllIr1JlAZU7ZO96AindbWuzw2xXnMU/s/sfJHm8Bt/CwDSvFh8L1t2ksUyl8n
- VZK69EeFXHS4HQwpIipTSFJ/DeUVliqq/TUrKCrMi9XtvDJHW7RHoaJinoAQ3Z8InHSlzdCVsGjOMC
- sPn36JTwPTd0iX7r02vUuZlqczLxMR+NC3Q/qjEZbMU0nTGYSLueW1Q2UvB7nfXqfFj8ujyHbkeFlm
- 1FQyHuBiaod6JCldxBs5XZQghb7VzgqXdP69A20i/vEm/+TM76QlAJ8RdU/uI9P0/h30980ctGZ8I+
- wNvrDveS8LH47jwLZ7jPQ3TMqKovfWVT9Hb4L/IXObvNU0+5D4b+UHXPnugxRJVfRpEyypiYMZ388j
- tLH8AmRCaqRKiJ67mzLndw9JJONWejhHwvY60CXU7E/yn5xCGKWT8hwh/Llq6v6DCU0mj0lfEe0POp
- 8xZPkZI3TGX+lQwNMyXb+xxaHxmdd8GrVkycDvIf4akcrhF5LKwDEuBz94h4jXf+7u3F/Q3LMn+iIT
- St0nl7coBNxVw4xyUuQIq2+QC/B3BK6gElom6O1I/rBLBbQZVtMvkSE5YEQw==
+ bh=swRvlvPe5R/LjcGwpOyqg3vGK98nZUkf0KBb5iWx1pI=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBpkyf86/3oKmTNhtXBfUIVltuEb7HAf6vq+eH2WHPn
+ MaSqsSmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCaZMn/AAKCRB33NvayMhJ0aIuEA
+ CHBlURac/cOv5Cakz3+K/ib4WO7qrQxbVbVopkK5TDOIA1TWK3JF8aWU88IDXBRdqP0xJH65xItdCC
+ mefkwdSlYiT1pcSLIJPnyPqyknEPwUzscGv2LOLIa+StI+Etp15Z5L4+AtDDzRf11oTbR+YwyPIuZi
+ Y3IW8KcdrgnzyPe3s/kyF1dkBoAxT6kDKNddnQ1Iebs7zHuAe8xjPNkznhFPu3arsUHRDtUSCuyDd1
+ Cl8FGHTGU1/EfG0v8vpf0m60EPMQN2MBnogK1wiaoCG+7JHC3ZB//B1lxVBorXKhpa7DnPNf87C3YX
+ YnH6si64RgSlVrk2jOCbx3w2QbbWP7CJyXFrSsS8ORqz0i60OfG/ZuMSQOsbYQGUeWRexLuLrSBaEh
+ Jy3YjKxFuHRW/TUfXtX0xEMmOlc+js2eX/wzpbM4eRQtAIm6wzgMak59hLll6Tjd8aPtDFn/o/DqIN
+ +XNdxx4gAlFv5hzo7F2nGv0xr/M33gzSPS0w8yNV9kyEo6vqNF8rKEPUZT2sltxsFXyCq3wXqyJ0j0
+ bia2Aktfwjzc5YWJum/tiufCob9VS3NlHePyY+CPweLIk07GNtF/JoKm+vQHR7tiog3IFAWiUX5dLx
+ pmTjNP28AgLTCQ8OyH8g8dtkvHSQ/QQleeYEsYonvUP1Qzhf8y3lIcT80E4g==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Rspamd-Server: lfdr
@@ -124,18 +125,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
 	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33386-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33387-lists,linux-usb=lfdr.de];
 	FREEMAIL_TO(0.00)[linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[18];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -145,259 +146,33 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:mid,linaro.org:dkim,linaro.org:email]
-X-Rspamd-Queue-Id: A8C7014483E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:mid,linaro.org:dkim,linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 494EA144949
 X-Rspamd-Action: no action
 
-The driver is pretty generic and would fit for either
-PCI Slots or endpoints connected to PCI ports, so rename
-the driver and module as pci-pwrctrl-generic.
+Enable the generic pwrctrl driver to control the power of the
+PCIe UPD720201/UPD720202 USB 3.0 xHCI Host Controller.
 
-Suggested-by: Manivannan Sadhasivam <mani@kernel.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/pci/pwrctrl/Kconfig   | 13 ++++---
- drivers/pci/pwrctrl/Makefile  |  4 +-
- drivers/pci/pwrctrl/generic.c | 91 +++++++++++++++++++++++++++++++++++++++++++
- drivers/pci/pwrctrl/slot.c    | 91 -------------------------------------------
- 4 files changed, 100 insertions(+), 99 deletions(-)
+ drivers/pci/pwrctrl/generic.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/pci/pwrctrl/Kconfig b/drivers/pci/pwrctrl/Kconfig
-index e0f999f299bb..0ba095729694 100644
---- a/drivers/pci/pwrctrl/Kconfig
-+++ b/drivers/pci/pwrctrl/Kconfig
-@@ -11,16 +11,17 @@ config PCI_PWRCTRL_PWRSEQ
- 	select POWER_SEQUENCING
- 	select PCI_PWRCTRL
- 
--config PCI_PWRCTRL_SLOT
--	tristate "PCI Power Control driver for PCI slots"
-+config PCI_PWRCTRL_GENERIC
-+	tristate "Generic PCI Power Control driver for PCI slots and endpoints"
- 	select PCI_PWRCTRL
- 	help
--	  Say Y here to enable the PCI Power Control driver to control the power
--	  state of PCI slots.
-+	  Say Y here to enable the generic PCI Power Control driver to control
-+	  the power state of PCI slots and endpoints.
- 
- 	  This is a generic driver that controls the power state of different
--	  PCI slots. The voltage regulators powering the rails of the PCI slots
--	  are expected to be defined in the devicetree node of the PCI bridge.
-+	  PCI slots and endpoints. The voltage regulators powering the rails
-+	  of the PCI slots or endpoints are expected to be defined in the
-+	  devicetree node of the PCI bridge.
- 
- config PCI_PWRCTRL_TC9563
- 	tristate "PCI Power Control driver for TC9563 PCIe switch"
-diff --git a/drivers/pci/pwrctrl/Makefile b/drivers/pci/pwrctrl/Makefile
-index 13b02282106c..f6bb4fb9a410 100644
---- a/drivers/pci/pwrctrl/Makefile
-+++ b/drivers/pci/pwrctrl/Makefile
-@@ -5,7 +5,7 @@ pci-pwrctrl-core-y			:= core.o
- 
- obj-$(CONFIG_PCI_PWRCTRL_PWRSEQ)	+= pci-pwrctrl-pwrseq.o
- 
--obj-$(CONFIG_PCI_PWRCTRL_SLOT)		+= pci-pwrctrl-slot.o
--pci-pwrctrl-slot-y			:= slot.o
-+obj-$(CONFIG_PCI_PWRCTRL_GENERIC)	+= pci-pwrctrl-generic.o
-+pci-pwrctrl-generic-y			:= generic.o
- 
- obj-$(CONFIG_PCI_PWRCTRL_TC9563)	+= pci-pwrctrl-tc9563.o
 diff --git a/drivers/pci/pwrctrl/generic.c b/drivers/pci/pwrctrl/generic.c
-new file mode 100644
-index 000000000000..a5b7b7965f46
---- /dev/null
+index a5b7b7965f46..1afda639f0c4 100644
+--- a/drivers/pci/pwrctrl/generic.c
 +++ b/drivers/pci/pwrctrl/generic.c
-@@ -0,0 +1,91 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2024 Linaro Ltd.
-+ * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/device.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/pci-pwrctrl.h>
-+#include <linux/platform_device.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/slab.h>
-+
-+struct pci_pwrctrl_generic_data {
-+	struct pci_pwrctrl ctx;
-+	struct regulator_bulk_data *supplies;
-+	int num_supplies;
-+};
-+
-+static void devm_pci_pwrctrl_generic_power_off(void *data)
-+{
-+	struct pci_pwrctrl_generic_data *generic = data;
-+
-+	regulator_bulk_disable(generic->num_supplies, generic->supplies);
-+	regulator_bulk_free(generic->num_supplies, generic->supplies);
-+}
-+
-+static int pci_pwrctrl_generic_probe(struct platform_device *pdev)
-+{
-+	struct pci_pwrctrl_generic_data *generic;
-+	struct device *dev = &pdev->dev;
-+	struct clk *clk;
-+	int ret;
-+
-+	generic = devm_kzalloc(dev, sizeof(*generic), GFP_KERNEL);
-+	if (!generic)
-+		return -ENOMEM;
-+
-+	ret = of_regulator_bulk_get_all(dev, dev_of_node(dev),
-+					&generic->supplies);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to get regulators\n");
-+
-+	generic->num_supplies = ret;
-+	ret = regulator_bulk_enable(generic->num_supplies, generic->supplies);
-+	if (ret < 0) {
-+		regulator_bulk_free(generic->num_supplies, generic->supplies);
-+		return dev_err_probe(dev, ret, "Failed to enable regulators\n");
-+	}
-+
-+	ret = devm_add_action_or_reset(dev, devm_pci_pwrctrl_generic_power_off,
-+				       generic);
-+	if (ret)
-+		return ret;
-+
-+	clk = devm_clk_get_optional_enabled(dev, NULL);
-+	if (IS_ERR(clk))
-+		return dev_err_probe(dev, PTR_ERR(clk),
-+				     "Failed to enable clock\n");
-+
-+	pci_pwrctrl_init(&generic->ctx, dev);
-+
-+	ret = devm_pci_pwrctrl_device_set_ready(dev, &generic->ctx);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to register generic pwrctrl driver\n");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id pci_pwrctrl_generic_of_match[] = {
+@@ -73,6 +73,10 @@ static const struct of_device_id pci_pwrctrl_generic_of_match[] = {
+ 	{
+ 		.compatible = "pciclass,0604",
+ 	},
++	/* Renesas UPD720201/UPD720202 USB 3.0 xHCI Host Controller */
 +	{
-+		.compatible = "pciclass,0604",
++		.compatible = "pci1912,0014",
 +	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, pci_pwrctrl_generic_of_match);
-+
-+static struct platform_driver pci_pwrctrl_generic_driver = {
-+	.driver = {
-+		.name = "pci-pwrctrl-generic",
-+		.of_match_table = pci_pwrctrl_generic_of_match,
-+	},
-+	.probe = pci_pwrctrl_generic_probe,
-+};
-+module_platform_driver(pci_pwrctrl_generic_driver);
-+
-+MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
-+MODULE_DESCRIPTION("Generic PCI Power Control driver for PCI Slots");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/pci/pwrctrl/slot.c b/drivers/pci/pwrctrl/slot.c
-deleted file mode 100644
-index 08e53243cdbd..000000000000
---- a/drivers/pci/pwrctrl/slot.c
-+++ /dev/null
-@@ -1,91 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (C) 2024 Linaro Ltd.
-- * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-- */
--
--#include <linux/clk.h>
--#include <linux/device.h>
--#include <linux/mod_devicetable.h>
--#include <linux/module.h>
--#include <linux/pci-pwrctrl.h>
--#include <linux/platform_device.h>
--#include <linux/regulator/consumer.h>
--#include <linux/slab.h>
--
--struct pci_pwrctrl_slot_data {
--	struct pci_pwrctrl ctx;
--	struct regulator_bulk_data *supplies;
--	int num_supplies;
--};
--
--static void devm_pci_pwrctrl_slot_power_off(void *data)
--{
--	struct pci_pwrctrl_slot_data *slot = data;
--
--	regulator_bulk_disable(slot->num_supplies, slot->supplies);
--	regulator_bulk_free(slot->num_supplies, slot->supplies);
--}
--
--static int pci_pwrctrl_slot_probe(struct platform_device *pdev)
--{
--	struct pci_pwrctrl_slot_data *slot;
--	struct device *dev = &pdev->dev;
--	struct clk *clk;
--	int ret;
--
--	slot = devm_kzalloc(dev, sizeof(*slot), GFP_KERNEL);
--	if (!slot)
--		return -ENOMEM;
--
--	ret = of_regulator_bulk_get_all(dev, dev_of_node(dev),
--					&slot->supplies);
--	if (ret < 0)
--		return dev_err_probe(dev, ret, "Failed to get slot regulators\n");
--
--	slot->num_supplies = ret;
--	ret = regulator_bulk_enable(slot->num_supplies, slot->supplies);
--	if (ret < 0) {
--		regulator_bulk_free(slot->num_supplies, slot->supplies);
--		return dev_err_probe(dev, ret, "Failed to enable slot regulators\n");
--	}
--
--	ret = devm_add_action_or_reset(dev, devm_pci_pwrctrl_slot_power_off,
--				       slot);
--	if (ret)
--		return ret;
--
--	clk = devm_clk_get_optional_enabled(dev, NULL);
--	if (IS_ERR(clk))
--		return dev_err_probe(dev, PTR_ERR(clk),
--				     "Failed to enable slot clock\n");
--
--	pci_pwrctrl_init(&slot->ctx, dev);
--
--	ret = devm_pci_pwrctrl_device_set_ready(dev, &slot->ctx);
--	if (ret)
--		return dev_err_probe(dev, ret, "Failed to register pwrctrl driver\n");
--
--	return 0;
--}
--
--static const struct of_device_id pci_pwrctrl_slot_of_match[] = {
--	{
--		.compatible = "pciclass,0604",
--	},
--	{ }
--};
--MODULE_DEVICE_TABLE(of, pci_pwrctrl_slot_of_match);
--
--static struct platform_driver pci_pwrctrl_slot_driver = {
--	.driver = {
--		.name = "pci-pwrctrl-slot",
--		.of_match_table = pci_pwrctrl_slot_of_match,
--	},
--	.probe = pci_pwrctrl_slot_probe,
--};
--module_platform_driver(pci_pwrctrl_slot_driver);
--
--MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
--MODULE_DESCRIPTION("Generic PCI Power Control driver for PCI Slots");
--MODULE_LICENSE("GPL");
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, pci_pwrctrl_generic_of_match);
 
 -- 
 2.34.1
