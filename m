@@ -1,130 +1,89 @@
-Return-Path: <linux-usb+bounces-33380-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33381-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EIseFKkUk2nD1QEAu9opvQ
-	(envelope-from <linux-usb+bounces-33380-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 13:59:21 +0100
+	id 6LhIKr0bk2mM1gEAu9opvQ
+	(envelope-from <linux-usb+bounces-33381-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 14:29:33 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACD7F143812
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 13:59:20 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B714143CD6
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 14:29:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CBDE43043BC7
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 12:57:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0D5E73023A63
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Feb 2026 13:28:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 960E62ED154;
-	Mon, 16 Feb 2026 12:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4562830E0C0;
+	Mon, 16 Feb 2026 13:28:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XLoUihAL"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Y0zJLilE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0C721FF47;
-	Mon, 16 Feb 2026 12:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9243B2C0F8E;
+	Mon, 16 Feb 2026 13:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771246672; cv=none; b=EW5ZZob9DDIUhvy5Yhv4kdmX0YsOWUo6Uwhsn6p8hYLCLSgK5bMhzpw6Z2i+N86NC7FFtJAXyASCzJ3uYzWPAo0g1vcztJKeWMZqo/ipf4Dwaolz7ejIc5UrDD0oeTDLEPtB1lM8Hur4ChqdXQpyV83CfkqzFp/fGV5v5r6an48=
+	t=1771248519; cv=none; b=TsoUTeii03SoPLNhLKyiNkFqyNj/+TMQDaAXKY1N5FfYX2Zst9wmyCj6ZK/BLV2ZSaeHf9y2aqQwNj9XKVoETrjWII5FEPH+wl9ECRG6zm71vHxTfby1MRqgofYdOgCuUXg7V346hue8rdf19TlAEtYYyakHhJqZ/4PBeyhxjPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771246672; c=relaxed/simple;
-	bh=BhKpGfNMBicl/qGRtLmxxYjIPyXlfVNNQrgxckSy5mg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vDYtb2LSxwSf37cN6V2HjjsQ/EpRLUudGoqZoJvu5Ed+UuOj2DQ6CmphHXIMBV2Rnw8bef62siWfid8mIjSWuWlp4YQlYt1KLoIfURKYL/IY6syPLvZZjMJ9RAwcKv6Llv4rV2iGaavRb+a/vOf5+fzfAoTahfC/vdp/PSP1v3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XLoUihAL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF98C19423;
-	Mon, 16 Feb 2026 12:57:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771246671;
-	bh=BhKpGfNMBicl/qGRtLmxxYjIPyXlfVNNQrgxckSy5mg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XLoUihAL9nN3SgL0vG1QHlDRtZ0UGBJIGz7WH9aNG1bmrnD84k4X/DQxk8ThKN+jN
-	 THyJM+vDcnhXGCnjqHjcppIRQ7Efml65lHfy56c2ndxRvgefBMLRzV4zJuBr5mQ5Zn
-	 bU+iW/wq2ruYovjXH4tiRobVOOmJn/30/WJwYFglEEezqn437Js5zgF5+Do57sfo5/
-	 +JzgppHld8Ijw7QFzEHjZ5OwU6B1EObk/Tguo1lxm/4cOulS2TaeS78rECFHYYma89
-	 GKGcG6hivHTd4J9z3vJTyGkQwZuJ+7Tqb6MU06oz76eEYKEKkogBw7pj/eZWaYJ9PX
-	 v0lc8V8T58EZw==
-Message-ID: <9e237a2e-1859-47d7-b1ee-143e80991ac3@kernel.org>
-Date: Mon, 16 Feb 2026 13:57:47 +0100
+	s=arc-20240116; t=1771248519; c=relaxed/simple;
+	bh=MLvnB4LUZrbUzkjPdcQQYfZryqEDpQ9MZHqqk49lMlI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uME8jPoAQIcJqus8KZV86KV+dApA0CeokvDpcsX+Okpl/CMxWzTGzzcE4VjlxXoyN//lEGRViheAhILy8K13FQ7VVJps3bG6OIxLbIDoH/xm9pLly8zF1GsbXlj1d4BstH4TN8WRc7ed3Yd3kiInAsTdxy82iX3QbpCrZSAl2bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Y0zJLilE; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+	In-Reply-To:References; bh=0IZHl2hkbGFR85ZuJZXZzqjsQVDZ5cXGujPx0TD3CZA=; b=Y0
+	zJLilEB51U5QmzqPPV+SnvEutN/zC2C2ULs4oKNi5KEItq9dyhpB67hTgD/Kd/V3PyANSSXIBB6oU
+	czho7qXnnSLM3PPZhjN6l3wUNX0iDrkdL/x44S2ty38s52EgAokyKPR4Qxk8xd5Kmcex1w5T85Hwu
+	rAm5Yi/B7Ul6LhI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vryeH-007UTK-Ev; Mon, 16 Feb 2026 14:28:25 +0100
+Date: Mon, 16 Feb 2026 14:28:25 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Martin =?iso-8859-1?Q?P=E5lsson?= <martin@poleshift.se>
+Cc: Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+	Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+	UNGLinuxDriver@microchip.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: lan78xx: scan all MDIO addresses on LAN7801
+Message-ID: <5ffa1e71-198e-49d1-9c06-f0c51f620993@lunn.ch>
+References: <0110019c5c13b668-dd1f5db3-309a-442a-b483-262c4edbb360-000000@eu-north-1.amazonses.com>
+ <d5e4a2e9-4ecd-4103-9537-74fbb58692ed@lunn.ch>
+ <0110019c64d659d2-815ad63f-3a90-4967-ac0e-850ec981ec27-000000@eu-north-1.amazonses.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/2] usb: typec: hd3ss3220: Add wakeup support from
- system suspend
-To: Swati Agarwal <swati.agarwal@oss.qualcomm.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20260215183325.3836178-1-swati.agarwal@oss.qualcomm.com>
- <20260215183325.3836178-2-swati.agarwal@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260215183325.3836178-2-swati.agarwal@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0110019c64d659d2-815ad63f-3a90-4967-ac0e-850ec981ec27-000000@eu-north-1.amazonses.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
+	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33380-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33381-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -133,30 +92,32 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[lunn.ch:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: ACD7F143812
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2B714143CD6
 X-Rspamd-Action: no action
 
-On 15/02/2026 19:33, Swati Agarwal wrote:
+On Mon, Feb 16, 2026 at 05:04:55AM +0000, Martin Pålsson wrote:
+> Hi Andrew.
 > 
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index 3e39b800e6b5..b56df9349f89 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -501,6 +501,11 @@ static int hd3ss3220_probe(struct i2c_client *client)
->  	if (hd3ss3220->poll)
->  		schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
->  
-> +	if (client->irq && device_property_read_bool(hd3ss3220->dev, "wakeup-source")) {
+> Thank you for reviewing.
+> 
+> As for the PHY interface mode: the RGMII configuration (including TX/RX
+> clock internal delays) is set via the configuration EEPROM on the device, so
+> PHY_INTERFACE_MODE_RGMII_ID as set by lan78xx_get_phy() is correct for this
+> hardware. The DP83TC814 supports RGMII and the link works well as-is, so no
+> change is needed there.
 
-Looks like undocumented ABI.
+Ah, i was not expecting a 100Mbps PHY to be using RGMII. But if that
+is what it is doing, then fine.
 
-Best regards,
-Krzysztof
+> I will resend with the Fixes: tag added.
+
+Thanks
+	Andrew
 
