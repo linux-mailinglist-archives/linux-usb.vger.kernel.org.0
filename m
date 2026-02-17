@@ -1,407 +1,283 @@
-Return-Path: <linux-usb+bounces-33407-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33408-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oIA2IYR7lGkfFAIAu9opvQ
-	(envelope-from <linux-usb+bounces-33407-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 15:30:28 +0100
+	id 4Et6GKOBlGniFAIAu9opvQ
+	(envelope-from <linux-usb+bounces-33408-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 15:56:35 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 310D014D29A
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 15:30:28 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5A8D14D573
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 15:56:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6A2193014A19
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 14:30:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0FE383038D27
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 14:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7140036C0D8;
-	Tue, 17 Feb 2026 14:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1475B36C5BD;
+	Tue, 17 Feb 2026 14:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lqX4ywLD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VIQ8PaMb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17DE36B057;
-	Tue, 17 Feb 2026 14:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265E736C0CE
+	for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 14:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771338622; cv=none; b=i7qcAVi1wK98XQGwlHcvsVRZGdxM9mv5rqEFQwB10pnHcr0HdNAGzixRVIzNInkvYvei+ljA5wR+26ajA1s0cuAkH1MNA2DsBhSa4ayeBQokroI1CP28qjfII1mAfU+qj8JQzS3glbnDFykVMgUVyZDemMGJAK4qgmUubSSuYs8=
+	t=1771340166; cv=none; b=AmpT3y8dHfMhUT1VSxwf9DispEeXxAdbbiysklR6wVDJ240EaJ9oy9to7Alo8yKFM2FA/V+Y4eXK3f9rPtoizBbXqPREBuVy96IRxjCgKVXsuj0S89IN5CENvw62szzCalH4SaTZBkhxKv0jT3/HOadN3CSzG0FTuhUZPZ3AIrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771338622; c=relaxed/simple;
-	bh=L76Ux3JWf44Dhu4JEQT5kLok0aYSNCd2/k9FQxuDxz8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oDifMvyfhc54Z2ZjlrGMU7b7F2BMvmT4fWl7FmNoCI2ZS9a+R9rbXrLPfBysEVjS5QsgvZYk7Zsfge8ZDslR+C0I+eC9OvpKVMkQVfzeUHH1r+6HKfCu/f4zAASVda7/DN7g0D63NK+Om05IWaYqpPoyiflhtmvnrXIYey6nhJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lqX4ywLD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 085E7C4CEF7;
-	Tue, 17 Feb 2026 14:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1771338621;
-	bh=L76Ux3JWf44Dhu4JEQT5kLok0aYSNCd2/k9FQxuDxz8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=lqX4ywLDapFQvttD38X1O8rlYKb1kyzDMO85aYAyag2uDaGsHpiGkNTU1zWcryZ70
-	 jiGnofAlH+QvUbQcIzn/GPcQyP35IKs2hRqk7EEc/lecU0etn8z4/ZONGGxv50AF4C
-	 ID9H5a1WO/GeG1oH4JWnB8rrQEpgeNe/7VhQaWJM=
-Date: Tue, 17 Feb 2026 15:30:17 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB/Thunderbolt driver updates for 7.0-rc1
-Message-ID: <aZR7eYewulF4M0CR@kroah.com>
+	s=arc-20240116; t=1771340166; c=relaxed/simple;
+	bh=hUZh+n+XnnF6ntxPSJM7kCuV0hDzZDwHB6X9TN+Y2Xg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ASd4IwqNg2EBxOVbYe9WfQ2Nh1BvdgEqT/JQmY/9FJpnbC5h/wbzzU9SKCZBr/7mvo93JtBq10FGuUXxGpps6rFNEq8/BfUW9onbE8tFQLK/GNQ689EmOLtWj3PE6ZSmgNTr6iTggX48mtGfmVomgOnmgXBLi0WQSuGpFAsp5VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VIQ8PaMb; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c6e77ace76aso718388a12.3
+        for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 06:56:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771340163; x=1771944963; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RaI9jRYZtnFQkCNP4Y37RURFdGhsHdu9rq/sifofeD0=;
+        b=VIQ8PaMbzHLX6R7+PN628XmhgLidnNe3zzLaOSAL7SHZ6Nzk4YXL4N+cBk9OXgtcMT
+         uTrJ5RJuw6RkOjPic9qjZq09gTcPXrIIJi1iKEbK9JOF+jqHTecRJlRJV5GS86xrc49a
+         Zbi3lzI6X+lGEERD/kFZjXl4OBOBMg8HX1tpuU4dDeyXZ08xasblRWBD4Oe7ZSq7d+8+
+         nu+CWU5t1+Kt0WksvziMDNPibn9ZtakBR2PbFNHv4wDyCseES9v6LQOwhO3cMuys/BM9
+         alGDQHbMsk5VewuxMO4anE+kOkP+WN0QjroqQYS1B2kG+6yx5cx54lPyYLAAbKEGa3Bm
+         0CyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771340163; x=1771944963;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RaI9jRYZtnFQkCNP4Y37RURFdGhsHdu9rq/sifofeD0=;
+        b=BaINoCFHR0bERJuT1ugRPJ/S3nqhdCbogRd1M8bXbFFVBH5OmoRzrHeYGrDF4yNqkn
+         k7TYr5sO9tWkvijUanLFOH4/HsEdIcZptn8GyKCjlH0Pbet6R9exY0QscdXIKz8K96Kv
+         za5kaStT+K54lv9pPLJa8JFmbb5hkCczaRam6SGA9rl4NxXIQ/g4c4fKbkLSTYCr5MWn
+         Cck3fpQrv36yhlU5y4nI+PxyL8rx/5Pp3M+cDavOyQIa9ctt4/Ut8gQUI07TZfRr6Awg
+         R/lfG1TP+u0dkUuQe/iXTVYEzqIlQCvbcVNhpBR+YbKu+3ye5q13OhFHh7DB+WKlGLqk
+         FyJQ==
+X-Gm-Message-State: AOJu0Yx+IChw+0yjaYmgdDbv5bUiQ72ngzMcpjAsOglXR8/xpj4z98eX
+	JN2C7Ac12HHQ0s13msA6351Q+WdOcUYlT1Vi3PHPsGDXRIej+4eoiZpy
+X-Gm-Gg: AZuq6aLgcWLTbNs4u7kyfamA+RjyvR35EptSIj1lLAm5a7MnuDeey2SVVm11Qv8Str3
+	R4EgncVb4tX6VXCo944wI8tYmt+V5FTgGexTDxcvrfVbP1pvTpuvqIidthdlua1kQxkrN2A6yUt
+	A6ndZWP+jE3WCnly12VqctzhwkpJ5KWO9kFZH3SKFFEoiS9T3S1CS9wVfbAPW9N1extKEj8Hbsy
+	91aD3n5kWPrDglscU8r2+oQ5Apz2Y3OBG3Ro+S9bxNuAUBWLlFQBbFkUEMfBS+INVEXG9qJaaGS
+	XfvY9HG3POkxyL/H50gq+C16CCVrb8ILL81Wogii49B0WAxDKqw9q3bUYMG7d+QJhGEXosAMi6l
+	WIMa+LOLLp8HetHMUsc7Hk3K6vmXGRvSWz3Bv3UFhiKKEnwGqAzzJHoM5P4KYo/APfDHCPmrhMO
+	KEieQnhHvO7qcTKT3/gq3bzU30gZdrzya2Coyj9KepNUBAV0wn7mY0
+X-Received: by 2002:a17:902:e881:b0:2a9:327f:aa2f with SMTP id d9443c01a7336-2ab5056e2cemr182475565ad.26.1771340163425;
+        Tue, 17 Feb 2026 06:56:03 -0800 (PST)
+Received: from Black-Pearl.localdomain ([27.7.171.51])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-2ad1a9d5bc8sm103034535ad.60.2026.02.17.06.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Feb 2026 06:56:02 -0800 (PST)
+From: Charan Pedumuru <charan.pedumuru@gmail.com>
+Date: Tue, 17 Feb 2026 14:55:34 +0000
+Subject: [PATCH] dt-bindings: usb: st,st-ohci-300x: convert to DT schema
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260217-st-usb-v1-1-ba347f30d0e0@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAGWBlGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDIwND3eIS3dLiJN00Q2MTC1Mzo8QUM1MloOKCotS0zAqwQdGxtbUAWBl
+ Zc1gAAAA=
+X-Change-ID: 20260201-st-usb-f1348562ad65
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Peter Griffin <peter.griffin@linaro.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Charan Pedumuru <charan.pedumuru@gmail.com>
+X-Mailer: b4 0.14.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33407-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-33408-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[4];
-	TAGGED_RCPT(0.00)[linux-usb];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,linuxfoundation.org:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,kroah.com:mid]
-X-Rspamd-Queue-Id: 310D014D29A
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[charanpedumuru@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[fe1ffc00:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,devicetree.org:url,linaro.org:email]
+X-Rspamd-Queue-Id: C5A8D14D573
 X-Rspamd-Action: no action
 
-The following changes since commit 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7:
+Convert STMicroelectronics USB OHCI Controller binding to DT schema.
 
-  Linux 6.19-rc6 (2026-01-18 15:42:45 -0800)
+Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
+---
+ Documentation/devicetree/bindings/usb/ohci-st.txt  | 36 ---------
+ .../devicetree/bindings/usb/st,st-ohci-300x.yaml   | 87 ++++++++++++++++++++++
+ 2 files changed, 87 insertions(+), 36 deletions(-)
 
-are available in the Git repository at:
+diff --git a/Documentation/devicetree/bindings/usb/ohci-st.txt b/Documentation/devicetree/bindings/usb/ohci-st.txt
+deleted file mode 100644
+index 1c735573abc0..000000000000
+--- a/Documentation/devicetree/bindings/usb/ohci-st.txt
++++ /dev/null
+@@ -1,36 +0,0 @@
+-ST USB OHCI controller
+-
+-Required properties:
+-
+- - compatible		: must be "st,st-ohci-300x"
+- - reg			: physical base addresses of the controller and length of memory mapped
+-			  region
+- - interrupts		: one OHCI controller interrupt should be described here
+- - clocks		: phandle list of usb clocks
+- - clock-names		: should be "ic" for interconnect clock and "clk48"
+-See: Documentation/devicetree/bindings/clock/clock-bindings.txt
+-
+- - phys			: phandle for the PHY device
+- - phy-names		: should be "usb"
+-
+- - resets		: phandle to the powerdown and reset controller for the USB IP
+- - reset-names		: should be "power" and "softreset".
+-See: Documentation/devicetree/bindings/reset/st,stih407-powerdown.yaml
+-See: Documentation/devicetree/bindings/reset/reset.txt
+-
+-Example:
+-
+-	ohci0: usb@fe1ffc00 {
+-		compatible = "st,st-ohci-300x";
+-		reg = <0xfe1ffc00 0x100>;
+-		interrupts = <GIC_SPI 149 IRQ_TYPE_NONE>;
+-		clocks = <&clk_s_a1_ls 0>,
+-			 <&clockgen_b0 0>;
+-		clock-names = "ic", "clk48";
+-		phys = <&usb2_phy>;
+-		phy-names = "usb";
+-
+-		resets = <&powerdown STIH416_USB0_POWERDOWN>,
+-			 <&softreset STIH416_USB0_SOFTRESET>;
+-		reset-names = "power", "softreset";
+-	};
+diff --git a/Documentation/devicetree/bindings/usb/st,st-ohci-300x.yaml b/Documentation/devicetree/bindings/usb/st,st-ohci-300x.yaml
+new file mode 100644
+index 000000000000..35544fd288ed
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/st,st-ohci-300x.yaml
+@@ -0,0 +1,87 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/st,st-ohci-300x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STMicroelectronics USB OHCI Controller
++
++maintainers:
++  - Peter Griffin <peter.griffin@linaro.org>
++
++description:
++  The STMicroelectronics USB Open Host Controller Interface (OHCI)
++  compliant USB host controller found in ST platforms. The controller
++  provides full- and low-speed USB host functionality and interfaces
++  with an external USB PHY. It requires dedicated clock, reset, and
++  interrupt resources for proper operation.
++
++allOf:
++  - $ref: /schemas/usb/usb.yaml#
++
++properties:
++  compatible:
++    const: st,st-ohci-300x
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    minItems: 2
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: ic
++      - const: clk48
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    items:
++      - const: usb
++
++  resets:
++    minItems: 2
++    maxItems: 2
++
++  reset-names:
++    items:
++      - const: power
++      - const: softreset
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - phys
++  - phy-names
++  - resets
++  - reset-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/reset/stih407-resets.h>
++    usb@fe1ffc00 {
++        compatible = "st,st-ohci-300x";
++        reg = <0xfe1ffc00 0x100>;
++        interrupts = <GIC_SPI 149 IRQ_TYPE_NONE>;
++        clocks = <&clk_s_a1_ls 0>,
++                 <&clockgen_b0 0>;
++        clock-names = "ic", "clk48";
++        phys = <&usb2_phy>;
++        phy-names = "usb";
++        resets = <&powerdown STIH407_USB2_PORT0_POWERDOWN>,
++                 <&softreset STIH407_USB2_PORT0_SOFTRESET>;
++        reset-names = "power", "softreset";
++    };
++...
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-7.0-rc1
+---
+base-commit: 4c87cdd0328495759f6e9f9f4e1e53ef8032a76f
+change-id: 20260201-st-usb-f1348562ad65
 
-for you to fetch changes up to da87d45b195148d670ab995367d52aa9e8a9a1fa:
+Best regards,
+-- 
+Charan Pedumuru <charan.pedumuru@gmail.com>
 
-  usb: typec: ucsi: Add Thunderbolt alternate mode support (2026-02-06 15:32:13 +0100)
-
-----------------------------------------------------------------
-USB / Thunderbolt changes for 7.0-rc1
-
-Here is the "big" set of USB and Thunderbolt driver updates for 7.0-rc1.
-Overall more lines were removed than added, thanks to dropping the
-obsolete isp1362 USB host controller driver, always a nice change.
-
-Other than that, nothing major happening here, highlights are:
-  - lots of dwc3 driver updates and new hardware support added
-  - usb gadget function driver updates
-  - usb phy driver updates
-  - typec driver updates and additions
-  - USB rust binding updates for syntax and formatting changes
-  - more usb serial device ids added
-  - other smaller USB core and driver updates and additions
-
-All of these have been in linux-next for a long time, with no reported
-problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Alice Ryhl (1):
-      rust: usb: add __rust_helper to helpers
-
-Andrei Kuchynski (8):
-      usb: typec: Add mode_control field to port property
-      platform/chrome: cros_ec_typec: Set no_mode_control flag
-      usb: typec: Expose alternate mode priority via sysfs
-      usb: typec: Implement mode selection
-      usb: typec: Introduce mode_selection bit
-      usb: typec: ucsi: Support mode selection to activate altmodes
-      usb: typec: ucsi: Enforce mode selection for cros_ec_ucsi
-      usb: typec: ucsi: Add Thunderbolt alternate mode support
-
-Andy Yan (1):
-      USB: typec: tcpm: Fix a typo
-
-Bartosz Golaszewski (1):
-      USB: host: drop unneeded dependency on OF_GPIO
-
-Benson Leung (2):
-      usb: typec: ucsi: psy: Fix ucsi_psy_get_current_now in non-PD cases
-      usb: typec: ucsi: psy: Fix voltage and current max for non-Fixed PDOs
-
-Chaoyi Chen (3):
-      usb: typec: Export typec bus and typec altmode device type
-      dt-bindings: usb: Add binding for WCH CH334/CH335 hub controller
-      usb: misc: onboard_dev: Add WCH CH334 USB2.0 Hub (1a86:8091)
-
-Chen Ni (1):
-      usb: dwc3: google: Remove redundant dev_err()
-
-Chia-Lin Kao (AceLan) (1):
-      thunderbolt: Log path activation failures without WARN backtraces
-
-Christophe JAILLET (1):
-      usb: gadget: Constify struct configfs_item_operations and configfs_group_operations
-
-Danilo Krummrich (1):
-      rust: usb: use "kernel vertical" style for imports
-
-Fabio Porcedda (1):
-      USB: serial: option: add Telit FN920C04 RNDIS compositions
-
-Geert Uytterhoeven (4):
-      usb: phy: generic: Always use dev in usb_phy_generic_probe()
-      usb: phy: generic: Convert to devm_clk_get_optional()
-      usb: phy: generic: Convert to dev_err_probe()
-      usb: phy: generic: Convert to device property API
-
-Greg Kroah-Hartman (5):
-      Merge 6.19-rc3 into usb-next
-      USB: HCD: remove logic about which hcd is loaded
-      Merge 6.19-rc6 usb-next
-      Merge tag 'thunderbolt-for-v6.20-rc1' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
-      Merge tag 'usb-serial-6.20-rc1' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
-
-Haotien Hsu (1):
-      usb: gadget: tegra-xudc: Add handling for BLCG_COREPLL_PWRDN
-
-Heikki Krogerus (1):
-      usb: typec: Set the bus also for the port and plug altmodes
-
-Jaime Saguillo Revilla (1):
-      docs: admin-guide: thunderbolt: Replace ifconfig with ip
-
-Jan Remmet (2):
-      usb: typec: hd3ss3220: Enable VBUS based on role state
-      usb: typec: hd3ss3220: Check if regulator needs to be switched
-
-Jiasheng Jiang (1):
-      usb: gadget: f_tcm: initialize data_len in UAS path for consistency
-
-Jisheng Zhang (1):
-      usb: dwc2: fix resume failure if dr_mode is host
-
-Justin Chen (1):
-      usb: bdc: fix sleep during atomic
-
-Krishna Kurapati (1):
-      usb: gadget: f_sourcesink: Support maxburst configurability for bulk endpoints
-
-Kuen-Han Tsai (3):
-      usb: gadget: u_ether: add gether_opts for config caching
-      usb: gadget: u_ether: Add auto-cleanup helper for freeing net_device
-      usb: gadget: f_ncm: align net_device lifecycle with bind/unbind
-
-Mario Peter (1):
-      usb: chipidea: udc: fix DMA and SG cleanup in _ep_nuke()
-
-Prashanth K (4):
-      usb: dwc3: Remove of dep->regs
-      usb: dwc3: Add dwc pointer to dwc3_readl/writel
-      usb: dwc3: Log dwc3 address in traces
-      usb: dwc3: gadget: Move vbus draw to workqueue context
-
-Randy Dunlap (2):
-      usb: typec: ucsi: drop an unused Kconfig symbol
-      usb: gadget: u_ether: use <linux/hex.h> header file
-
-Rob Herring (Arm) (2):
-      dt-bindings: usb: ehci/ohci: Allow "dma-coherent"
-      dt-bindings: usb: Add Socionext Uniphier DWC3 controller
-
-Robert Marko (1):
-      dt-bindings: usb: Add Microchip LAN969x support
-
-Roy Luo (2):
-      dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
-      usb: dwc3: Add Google Tensor SoC DWC3 glue driver
-
-Ryan Chen (2):
-      dt-bindings: usb: aspeed,usb-vhub: Add ast2700 support
-      usb: gadget: aspeed-vhub: Add ast2700 support
-
-Sam Day (2):
-      usb: gadget: f_fs: Fix ioctl error handling
-      usb: gadget: f_fs: fix DMA-BUF OUT queues
-
-Sean Anderson (1):
-      usb: dwc3: Always deassert xilinx resets
-
-Shuah Khan (2):
-      tools: usb: usbip: remove dead-link from README
-      usbip: Reduce CONNRESET message noise in dmesg from stub
-
-Svyatoslav Ryhel (6):
-      usb: phy: tegra: use phy type directly
-      usb: phy: tegra: add HSIC support
-      usb: phy: tegra: cosmetic fixes
-      usb: phy: tegra: return error value from utmi_wait_register
-      usb: phy: tegra: parametrize HSIC PTS value
-      usb: phy: tegra: parametrize PORTSC1 register offset
-
-Thomas Richard (TI) (1):
-      usb: cdns3: fix role switching during resume
-
-Tommaso Merciai (1):
-      dt-bindings: usb: renesas,usbhs: Add RZ/G3E SoC support
-
-Victor Krawiec (1):
-      usb: gadget: f_midi: allow customizing the USB MIDI interface string through configfs
-
-Vladimir Zapolskiy (1):
-      usb: isp1362-hcd: remove Philips ISP1362 USB OTG controller driver
-
-Wayne Chang (1):
-      usb: host: tegra: Remove manual wake IRQ disposal
-
-Xu Yang (4):
-      usb: dwc3: drd: extend dwc3_pre_set_role() to extcon and otg usecase
-      usb: dwc3: imx8mp: rename dwc3 to dwc3_pdev in struct dwc3_imx8mp
-      usb: dwc3: imx8mp: disable auto suspend for host role
-      usb: chipidea: ci_hdrc_imx: use "wakeup" suffix for wakeup interrupt name
-
-Yi Cong (1):
-      usb: linux/usb.h: Correct the description of the usb_device_driver member
-
-Łukasz Bartosik (4):
-      xhci: dbc: prepare to expose strings through sysfs
-      xhci: dbc: allow setting device serial number through sysfs
-      xhci: dbc: allow setting product string through sysfs
-      xhci: dbc: allow setting manufacturer string through sysfs
-
- Documentation/ABI/testing/configfs-usb-gadget-midi |   17 +-
- .../ABI/testing/sysfs-bus-pci-drivers-xhci_hcd     |   42 +
- Documentation/ABI/testing/sysfs-class-typec        |   11 +
- Documentation/admin-guide/thunderbolt.rst          |    2 +-
- .../devicetree/bindings/usb/aspeed,usb-vhub.yaml   |   22 +-
- .../devicetree/bindings/usb/generic-ehci.yaml      |    2 +
- .../devicetree/bindings/usb/generic-ohci.yaml      |    2 +
- .../devicetree/bindings/usb/google,lga-dwc3.yaml   |  140 +
- .../bindings/usb/microchip,lan9691-dwc3.yaml       |   66 +
- .../devicetree/bindings/usb/renesas,usbhs.yaml     |    1 +
- .../bindings/usb/socionext,uniphier-dwc3.yaml      |   89 +
- .../devicetree/bindings/usb/wch,ch334.yaml         |   65 +
- Documentation/usb/gadget-testing.rst               |   18 +-
- MAINTAINERS                                        |    2 +
- drivers/platform/chrome/cros_ec_typec.c            |    1 +
- drivers/thunderbolt/path.c                         |    2 +-
- drivers/usb/Makefile                               |    1 -
- drivers/usb/cdns3/core.c                           |    2 +-
- drivers/usb/chipidea/ci_hdrc_imx.c                 |    9 +-
- drivers/usb/chipidea/udc.c                         |    7 +
- drivers/usb/core/hcd.c                             |    4 -
- drivers/usb/dwc2/core.c                            |    1 +
- drivers/usb/dwc3/Kconfig                           |   11 +
- drivers/usb/dwc3/Makefile                          |    1 +
- drivers/usb/dwc3/core.c                            |  215 +-
- drivers/usb/dwc3/core.h                            |   14 +-
- drivers/usb/dwc3/debugfs.c                         |   44 +-
- drivers/usb/dwc3/drd.c                             |   86 +-
- drivers/usb/dwc3/dwc3-google.c                     |  626 +++++
- drivers/usb/dwc3/dwc3-imx8mp.c                     |   47 +-
- drivers/usb/dwc3/dwc3-xilinx.c                     |   67 +-
- drivers/usb/dwc3/ep0.c                             |   22 +-
- drivers/usb/dwc3/gadget.c                          |  172 +-
- drivers/usb/dwc3/gadget.h                          |    4 +-
- drivers/usb/dwc3/io.h                              |   11 +-
- drivers/usb/dwc3/trace.h                           |   88 +-
- drivers/usb/dwc3/ulpi.c                            |   10 +-
- drivers/usb/fotg210/fotg210-hcd.c                  |    6 -
- drivers/usb/gadget/configfs.c                      |   24 +-
- drivers/usb/gadget/function/f_acm.c                |    2 +-
- drivers/usb/gadget/function/f_fs.c                 |   26 +-
- drivers/usb/gadget/function/f_hid.c                |    2 +-
- drivers/usb/gadget/function/f_loopback.c           |    2 +-
- drivers/usb/gadget/function/f_mass_storage.c       |    6 +-
- drivers/usb/gadget/function/f_midi.c               |  112 +-
- drivers/usb/gadget/function/f_midi2.c              |   10 +-
- drivers/usb/gadget/function/f_ncm.c                |  130 +-
- drivers/usb/gadget/function/f_obex.c               |    2 +-
- drivers/usb/gadget/function/f_phonet.c             |    2 +-
- drivers/usb/gadget/function/f_printer.c            |    2 +-
- drivers/usb/gadget/function/f_serial.c             |    2 +-
- drivers/usb/gadget/function/f_sourcesink.c         |   54 +-
- drivers/usb/gadget/function/f_tcm.c                |    5 +-
- drivers/usb/gadget/function/f_uac1.c               |    2 +-
- drivers/usb/gadget/function/f_uac1_legacy.c        |    2 +-
- drivers/usb/gadget/function/f_uac2.c               |    2 +-
- drivers/usb/gadget/function/g_zero.h               |    1 +
- drivers/usb/gadget/function/u_ether.c              |   45 +
- drivers/usb/gadget/function/u_ether.h              |   30 +
- drivers/usb/gadget/function/u_ether_configfs.h     |  179 +-
- drivers/usb/gadget/function/u_midi.h               |    2 +-
- drivers/usb/gadget/function/u_ncm.h                |    4 +-
- drivers/usb/gadget/function/uvc_configfs.c         |   36 +-
- drivers/usb/gadget/udc/aspeed-vhub/core.c          |   30 +
- drivers/usb/gadget/udc/aspeed-vhub/vhub.h          |    1 +
- drivers/usb/gadget/udc/bdc/bdc_core.c              |    4 +-
- drivers/usb/gadget/udc/tegra-xudc.c                |   12 +-
- drivers/usb/host/Kconfig                           |   14 +-
- drivers/usb/host/Makefile                          |    1 -
- drivers/usb/host/ehci-hcd.c                        |    8 -
- drivers/usb/host/isp1362-hcd.c                     | 2769 --------------------
- drivers/usb/host/isp1362.h                         |  914 -------
- drivers/usb/host/ohci-hcd.c                        |    3 -
- drivers/usb/host/uhci-hcd.c                        |    5 -
- drivers/usb/host/xhci-dbgcap.c                     |  259 +-
- drivers/usb/host/xhci-dbgcap.h                     |   39 +-
- drivers/usb/host/xhci-tegra.c                      |   21 +-
- drivers/usb/misc/onboard_usb_dev.h                 |    8 +
- drivers/usb/phy/phy-generic.c                      |   74 +-
- drivers/usb/phy/phy-tegra-usb.c                    |  297 ++-
- drivers/usb/serial/option.c                        |    6 +
- drivers/usb/typec/Makefile                         |    2 +-
- drivers/usb/typec/altmodes/displayport.c           |    6 +-
- drivers/usb/typec/altmodes/thunderbolt.c           |    2 +-
- drivers/usb/typec/bus.c                            |   25 +-
- drivers/usb/typec/bus.h                            |    6 -
- drivers/usb/typec/class.c                          |  136 +-
- drivers/usb/typec/class.h                          |    3 +
- drivers/usb/typec/hd3ss3220.c                      |   30 +-
- drivers/usb/typec/mode_selection.c                 |  283 ++
- drivers/usb/typec/tcpm/tcpm.c                      |    2 +-
- drivers/usb/typec/ucsi/Kconfig                     |    1 -
- drivers/usb/typec/ucsi/Makefile                    |    4 +
- drivers/usb/typec/ucsi/cros_ec_ucsi.c              |   22 +
- drivers/usb/typec/ucsi/psy.c                       |   54 +-
- drivers/usb/typec/ucsi/thunderbolt.c               |  212 ++
- drivers/usb/typec/ucsi/ucsi.c                      |   30 +-
- drivers/usb/typec/ucsi/ucsi.h                      |   24 +
- drivers/usb/usbip/stub_tx.c                        |    4 +-
- include/linux/usb.h                                |    3 +-
- include/linux/usb/gadget_configfs.h                |    4 +-
- include/linux/usb/hcd.h                            |    6 -
- include/linux/usb/isp1362.h                        |   47 -
- include/linux/usb/tegra_usb_phy.h                  |   11 +-
- include/linux/usb/typec.h                          |    6 +
- include/linux/usb/typec_altmode.h                  |   50 +
- rust/helpers/usb.c                                 |    3 +-
- rust/kernel/usb.rs                                 |   21 +-
- samples/rust/rust_driver_usb.rs                    |   10 +-
- tools/usb/usbip/README                             |    2 -
- 110 files changed, 3494 insertions(+), 4594 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/google,lga-dwc3.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/microchip,lan9691-dwc3.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/wch,ch334.yaml
- create mode 100644 drivers/usb/dwc3/dwc3-google.c
- delete mode 100644 drivers/usb/host/isp1362-hcd.c
- delete mode 100644 drivers/usb/host/isp1362.h
- create mode 100644 drivers/usb/typec/mode_selection.c
- create mode 100644 drivers/usb/typec/ucsi/thunderbolt.c
- delete mode 100644 include/linux/usb/isp1362.h
 
