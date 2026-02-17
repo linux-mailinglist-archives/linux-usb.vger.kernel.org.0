@@ -1,109 +1,53 @@
-Return-Path: <linux-usb+bounces-33402-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33403-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4H5bOyhElGl3BwIAu9opvQ
-	(envelope-from <linux-usb+bounces-33402-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 11:34:16 +0100
+	id CGNGIURKlGn0BwIAu9opvQ
+	(envelope-from <linux-usb+bounces-33403-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 12:00:20 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67B1314AE35
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 11:34:16 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF3B314B186
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 12:00:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D01A2301F9BC
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 10:34:10 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DEC1F300B444
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 11:00:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC32F32573B;
-	Tue, 17 Feb 2026 10:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B6932E690;
+	Tue, 17 Feb 2026 11:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lzUH+NC1";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="h/XWcWCm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P82GCK7V"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A263254B9
-	for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 10:34:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD3E32D7F3;
+	Tue, 17 Feb 2026 11:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771324449; cv=none; b=YooDDnANX5Np9PW6tMrBJ83p6g2wLbs+IlPTs+kHl0XXF2Wc8/16UHPs+KYAwBLX1NH0ZE7KiFSNv71T4DtSIwPLhXZpZ/+uVPzu8wZb1ZNXeTWF8KEtfqxM01dQ+V8DwDBjEsF9JsGX8PdO+Rhe8BmTc+oI/OGJVDv9NXhZUL0=
+	t=1771326013; cv=none; b=FTYTfVAFdmmZKwQoFWvj7ECpEKSY1YzXD0CJJLZ4s+NwSWGu8xfIwn9Vs3mbzpOoXFQ0dj8iDZvgmBmNdmvRCtpd75ne5MDjRD6tsjPe5ZMgvSLAy/zoPx502r3VaNusBDf4vyVLhJ1kyslSJmfeAbeDyoKhqBJlQcnynciCyfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771324449; c=relaxed/simple;
-	bh=zhLAtAGGstKHRWp19MF5j2m7BbmjxvQWv4VXhGVdOYk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y4FfgYMgDorpaBceu05wSarsU6lFSjKuplPCVJPF6r7AIvAHIKKPqVz+CLfvuvmIW/0+I4RQ2sOEZmxGIKXT5MAnioxOsYfqdMGm4Yhh9QUkWdFM39YlNwhYfeWYjT3uOC4oN3YBKz4EoneFtuNRHlBp7YwZbpGz3A3BBix92dU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lzUH+NC1; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=h/XWcWCm; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61H9P4r51544913
-	for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 10:34:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=lJjO8T9wxsb1RnJjhls1z2D2yPk/MPblQGY
-	1v2w95r4=; b=lzUH+NC1Zqy7GbgZZNG0wGAOO347y5l+Nlc6JtFfy2b2HBEyiel
-	tK1HC6JgLCOOS+eEZfAqTpaySmDVN9qMFjVTzXVUBUqcW+6/kzoXTi+C20hPBaPd
-	n427oT4x6yJcu024BbknbAOrq0/OjHwqzwXXODtF+D2lOdyqYDEFfzJJsSejld2k
-	a8lPVQXBiHgJYVA9WGmghXZJ/icFAgP/FwRsiaa1VI3B4sd+HFuXQK2MJNKWWC1L
-	CFLzpaV/0uFqoqy/CaAZPE9wR05jCtBYMsxzIDgOqMlA7jD+OjdRd3Pz051PpGSt
-	18g/6VarphgLWx6nv7IqoPscIGaQJQn163Q==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cc7ajsu75-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 10:34:07 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8c71156fe09so2291682685a.0
-        for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 02:34:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771324446; x=1771929246; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lJjO8T9wxsb1RnJjhls1z2D2yPk/MPblQGY1v2w95r4=;
-        b=h/XWcWCmnm7B7dqLUd/dkxjXPLzhwXOow7z3a6P5b9SOZ/2m9p3ma4ROd+iGbz6NHz
-         eKhakhTllRmzl1DkUMWZHt/RGDBOGZP3MOFNIxlxJVIKP78HTNSkzjHH8gmZe8FSUaM5
-         rwoko4HTfC9QuYS2Unfdoi7VZ7MZOsDRDdlX4BccNhTwAQlMgU9OMPsUswEo9Y8LwwFV
-         sIjWe6IuiAVfWEPflsD30roUKSmkot8aQGtQWoUNBMD0l9YlkgT0fx6gyQ9gfm/dFW+h
-         u31pYj5wD0TZgpjUe/PHLrJzJKg+134r2+gCCDsCrzOzFRSDUh47kTgoPmCIVS11PbO8
-         AHZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771324446; x=1771929246;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lJjO8T9wxsb1RnJjhls1z2D2yPk/MPblQGY1v2w95r4=;
-        b=UFp8W05oTxEZLBdBSTMTOyczKNVUqx+0oPV1rnd5+82fljBKmqZ5oaCfpJuNylwJAJ
-         JFhKPWn4coHP3JnPw0Id6IMoEPJuvjak+fPOq6+hP8jga1kThY3VxuhQtvqtqo7qwBg2
-         Z7wnxOtnumqpyVurf0evlqI01qMcLztHYRdEsaiEulZ9+bEcNRAskBtY30wp7WmMKzR9
-         86nqpuSz4cFBEVAzyJ3TUdnG9nc/MFKUPzSCXEnchgmYo+jlNHVkF8qqk0ZUtujguIc6
-         qdr9siQHUhEOrVlDNxaupkAT5r0xqWXuk3JRAT3IurGqX507MbVvh04GRKfbnLo/SLnX
-         Xktw==
-X-Gm-Message-State: AOJu0Yw8Z+zkPx3YxgCQgsEtsFsn8nHRg5TlSEuVzUwDP1tCg96BA2p6
-	+M+BQQvxc1Ps/74329okRo3IWuKbnqvHXhYSnrStFfAIl3934A+TLtzqeybofcV2gK7c3HNXwAl
-	VdT3HGsA8XBeJdfD1x+w1yVVzvCvB1LfKCizdjVh7o5LsoYBEJuTnHBycQ8t1RYNVva0Uz1TcOg
-	==
-X-Gm-Gg: AZuq6aK0UkVePm5JczPpxscCw/FBPpeKhMySlk3pk0kul6usK1VBNkFADt/D6v1R/qT
-	JjCflRsv9OPP7LV+SQyiL86xbDthmB/vu9RGV1ewZC70a1klg3xcLLNDe2ejQMkPxuSC50nKvBo
-	7TNeJJQ9dKs3Ek0GyzVh5+A7KOabysZ74Skm1oJL6/SlZca8Q4WziP2oEUHbmkBoX7/MVUuzxBl
-	joRGIm4HXDJ4U7cY18s4E9YClhfyNJikIPzItddZDPa/oKdgsW9HhPnswSZRqZ+5htSDONZ3IoY
-	6ohcUswljbIuHQYnemk9LM2TZcoAnf36dY3Oqc9Mwm7A45n3QH0yyONW/VoXVRWETBBZy3sXnZp
-	Yek1apuHC6DPFNSXdWqDbXjCq0ycbIwnKR14IcDjl/1DX5ij+Fx4Wr2D4/lahSDizxB4C7W53jK
-	IG/hblQmnXuNQF
-X-Received: by 2002:a05:620a:29d3:b0:8c9:eb7d:cd94 with SMTP id af79cd13be357-8cb4c03ae19mr1400409785a.88.1771324446431;
-        Tue, 17 Feb 2026 02:34:06 -0800 (PST)
-X-Received: by 2002:a05:620a:29d3:b0:8c9:eb7d:cd94 with SMTP id af79cd13be357-8cb4c03ae19mr1400407085a.88.1771324445964;
-        Tue, 17 Feb 2026 02:34:05 -0800 (PST)
-Received: from QCOM-eG0v1AUPpu.qualcomm.com ([2a01:e0a:82c:5f0:7155:d80c:d125:8e25])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796ac8d46sm34460840f8f.32.2026.02.17.02.34.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Feb 2026 02:34:05 -0800 (PST)
-From: Loic Poulain <loic.poulain@oss.qualcomm.com>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, johan@kernel.org,
-        venkat.jayaraman@intel.com, pooja.katiyar@intel.com,
-        dmitry.baryshkov@oss.qualcomm.com,
-        Loic Poulain <loic.poulain@oss.qualcomm.com>
-Subject: [PATCH] usb: typec: ucsi: Invoke ucsi_run_command tracepoint
-Date: Tue, 17 Feb 2026 11:34:03 +0100
-Message-Id: <20260217103403.1956-1-loic.poulain@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1771326013; c=relaxed/simple;
+	bh=EtUSxvpqqES11XXGrvIkxPTLX8QUY/JSJrLWU+jOhl8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=AQ0hBmWcd9cZIrsBuMXE7P7MxMtf3xld7UzzWp2+BL+c5l3JEH86YjKf/eI/JPAMjVyT9PvgoMaXEXwXeQYyppfCaxQffd7mNng6fed1/lfA+Vimozs+jW0X2lQRLENQeNFtAMGXCt9DPQq4uCNwSlAf77e1+FHFghfm7z3oGrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P82GCK7V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E13EC4CEF7;
+	Tue, 17 Feb 2026 11:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771326013;
+	bh=EtUSxvpqqES11XXGrvIkxPTLX8QUY/JSJrLWU+jOhl8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=P82GCK7VDmYVXpjlvPCWYm6ov7GGx3jleZlP9MVBr/pYmJHVvs0vMZdrd0C8gcI2O
+	 SCD5Nt/TFBzxdxrRIODtUuckKbvbu62U9SIzy0dCSVxPY8oy5JMWVsVJD4D9rkzu3J
+	 rwKJ8LRbm+gGOYPu7hZB6CU/q1BXcTDXEOSH9vRo2OQzZUF0SCf0Cv6lnWnFyhTu62
+	 wEssLXdENs6ymi+iDlai9AajYl1Agiur2VSQWmynBV5Wvw2h2YdT29DyI5H3HEKI+u
+	 FVmTb/UcfKKqXiBefugyx+vgi6YWJVIbl4qaj1SGaOTwtjA9SynwqnvV1PeB3KTJSZ
+	 i630ChWDaWXUg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4808E380AAD0;
+	Tue, 17 Feb 2026 11:00:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -111,92 +55,73 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDA4NyBTYWx0ZWRfXy3Da6aqFoWdr
- f7gRA8Jlwjz2Ef/mQJJS1fnqL8DGRGlj5IlACdvCZBNIwx9DwT/jN7m1F6FX4i52K8k7cm08u6p
- vuY4t4AIT8orm5PDIwcTeMu2ostXJVwge8q0IIQupYgn1TFYTtsVVI15hR1QJRPFqmSPYXLVdc5
- DtVG9cgVT/cCZb/DYyCS6BTOcJgxj2Qn1/ISP2hv//D7tpUlMpWX4Ffl9meBO8+UkKUqm5xKhms
- V5lxSWkkYDlTH4P6dPTa1GmM0bpy2WJ9G+fW6CfbcKv0u3/pyyeZam4jpEJeSJYJk7YLMluN8fE
- DQ1XU7GCZkAM+rXOpSg+3ck/O+ns75ay1qw/J9oSGWrAw//oqnPEU65DLjxuGY8GbbhXopfCef9
- 2c1Jq+FrksI2dKLMQ3LO5GQ4FYti64D3Oxag87RBgu6uvsAfNa35on4SNTNP09BS9gwPTjaEVIj
- +sbaaTuqOU3kfzEBM0w==
-X-Proofpoint-ORIG-GUID: EGe_3zqzj2CHQ4Mm00sEh7Vdl5scHS9E
-X-Authority-Analysis: v=2.4 cv=BryQAIX5 c=1 sm=1 tr=0 ts=6994441f cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=HzLeVaNsDn8A:10
- a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=EUspDBNiAAAA:8 a=Tvdu5u-jWjcwP2ZWDAEA:9
- a=0bXxn9q0MV6snEgNplNhOjQmxlI=:19 a=IoWCM6iH3mJn3m4BftBB:22
-X-Proofpoint-GUID: EGe_3zqzj2CHQ4Mm00sEh7Vdl5scHS9E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-17_01,2026-02-16_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- clxscore=1011 adultscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602170087
+Subject: Re: [PATCH net v2] net: usb: catc: enable basic endpoint checking
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177132600483.21044.10447255090282222235.git-patchwork-notify@kernel.org>
+Date: Tue, 17 Feb 2026 11:00:04 +0000
+References: <20260212214154.3609844-1-n7l8m4@u.northwestern.edu>
+In-Reply-To: <20260212214154.3609844-1-n7l8m4@u.northwestern.edu>
+To: Ziyi Guo <n7l8m4@u.northwestern.edu>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-usb@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-33403-lists,linux-usb=lfdr.de,netdevbpf];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33402-lists,linux-usb=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[loic.poulain@oss.qualcomm.com,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	FROM_NO_DN(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 67B1314AE35
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: BF3B314B186
 X-Rspamd-Action: no action
 
-The ucsi_run_command trace event is exposed in tracefs, but it never
-produces any output because the UCSI core never invokes the associated
-tracepoint. As a result, enabling the event under events/ucsi/ yields
-no traces, preventing users from inspecting UCSI command sequencing.
+Hello:
 
-Wire the tracepoint into the UCSI command path so that commands are
-properly reported.
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Example:
-50.692342: ucsi_run_command: GET_CONNECTOR_STATUS -> OK (err=0)
-50.692345: ucsi_connector_change: port0 status: change=4800, ...
-51.750298: ucsi_run_command: GET_CABLE_PROPERTY -> FAIL (err=-5)
-51.773360: ucsi_run_command: GET_CONNECTOR_STATUS -> OK (err=0)
+On Thu, 12 Feb 2026 21:41:54 +0000 you wrote:
+> catc_probe() fills three URBs with hardcoded endpoint pipes without
+> verifying the endpoint descriptors:
+> 
+>   - usb_sndbulkpipe(usbdev, 1) and usb_rcvbulkpipe(usbdev, 1) for TX/RX
+>   - usb_rcvintpipe(usbdev, 2) for interrupt status
+> 
+> A malformed USB device can present these endpoints with transfer types
+> that differ from what the driver assumes.
+> 
+> [...]
 
-Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 2 ++
- 1 file changed, 2 insertions(+)
+Here is the summary with links:
+  - [net,v2] net: usb: catc: enable basic endpoint checking
+    https://git.kernel.org/netdev/net/c/9e7021d2aeae
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index a7b388dc7fa0..965bb7f4e24e 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -234,6 +234,8 @@ static int ucsi_send_command_common(struct ucsi *ucsi, u64 cmd,
- 	if (cci & UCSI_CCI_ERROR)
- 		ret = ucsi_read_error(ucsi, connector_num);
- 
-+	trace_ucsi_run_command(cmd, ret);
-+
- 	mutex_unlock(&ucsi->ppm_lock);
- 	return ret;
- }
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
