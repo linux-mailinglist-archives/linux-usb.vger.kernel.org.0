@@ -1,278 +1,407 @@
-Return-Path: <linux-usb+bounces-33406-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33407-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aAUGGaNplGlFDgIAu9opvQ
-	(envelope-from <linux-usb+bounces-33406-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 14:14:11 +0100
+	id oIA2IYR7lGkfFAIAu9opvQ
+	(envelope-from <linux-usb+bounces-33407-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 15:30:28 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA71814C73C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 14:14:10 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 310D014D29A
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 15:30:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E61093034B2C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 13:14:01 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 6A2193014A19
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 14:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F41B361DA9;
-	Tue, 17 Feb 2026 13:14:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7140036C0D8;
+	Tue, 17 Feb 2026 14:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OAPNoYdu"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lqX4ywLD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59766361DBD
-	for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 13:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17DE36B057;
+	Tue, 17 Feb 2026 14:30:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771334040; cv=none; b=fFLtLEvTysjbpHQ7NA4/iON5EJS7RT2E5MrZEBpW4Bk8UzDVJ8QBkin/E40eopqlahjKvX/zdpumJMgpNnu/r8U2a2dC9Ny/ipWlPagYtullxH/monqFCUufy7XkfXgtC0MvxZ8jaQNZVvDKo8o7leZPbjvK0SbaRHJBT00aVYM=
+	t=1771338622; cv=none; b=i7qcAVi1wK98XQGwlHcvsVRZGdxM9mv5rqEFQwB10pnHcr0HdNAGzixRVIzNInkvYvei+ljA5wR+26ajA1s0cuAkH1MNA2DsBhSa4ayeBQokroI1CP28qjfII1mAfU+qj8JQzS3glbnDFykVMgUVyZDemMGJAK4qgmUubSSuYs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771334040; c=relaxed/simple;
-	bh=ghiYn5zctv6YevvmbOXMIchikB5+PZqKiOLbd6hIvi0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aRFRwYjtBAPTVjD3X3XrBIgmR93CReUuo6iTS9K+ph+dqqcv0YwzjIQLDcwHMXe4LLIOjInjmB7hxP2dz1lUFgDct4REaUbN4mT2PPRey0QKzO9TdEjMO/kDGDBTmt4tmDH70uUXIpLH5wFdLaAkNQ8prIyYsqe2oo1A/tV9Oeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OAPNoYdu; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-658b6757f7fso7942373a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 05:13:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1771334035; x=1771938835; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=x1C0IPnydug6rw3V3fM8YPHePn3LBKfIJJtqgR74b5I=;
-        b=OAPNoYduWYQSL32nmW69nrWuR03uaN696N+g+GsecDLfcQGnKikRKlnwjFXm7jZIvC
-         VoUbx7IkICPpby2qPD748XaG4VJS0thzOiDW5SBPdgEdPEKLH1Q+W+yf75nnkHf68qN7
-         JEQloHR++epOZTLfmKq90FhtXesttZPXg8/S2nFvytEY1oyGxqS1EsW0P3n89H77zDaA
-         M+HtcBqQX1L0pNaoiIeMDg00dLoF0r3BhFlL6hmkeqN4bWToklocg6n6hiBKVShGqr+P
-         Vsvc0o2lFLkLYbnhoulvgEESi2/EFr5uHYV66j/ChgtXBh+MXCpJDl0XtChzUdEssfOT
-         xD4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771334035; x=1771938835;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x1C0IPnydug6rw3V3fM8YPHePn3LBKfIJJtqgR74b5I=;
-        b=pTWxFct6a2YeAG2sAtnbWOwnyXgs2GD6JT3rcodQPlBExQJHVEPpxTgenEkrP4vcOu
-         KtLmVPf4Vcc+S7H+iTXCydbB84hAfvwCmSjJfL3sI2bgQWvc/bEdO/P2Dfr27Kx6NsDF
-         h1DaXWCCtKIvFUODqKNUfdHMGbRDmqDCXFcFjuuTQWlk018iOyIwPqaVxSym0YrR7iMD
-         iMkVeE62ejQBjdvQ+UODguNY06dFM39lUORYiGoCU1CnCYtbCqwb/hv84ZbOJ2bvQBMZ
-         UBq9y/b2n/ivY+A0CPNkHObOR/CAW/eOLwcKNoBOZDNGM4V8c4BMjLFWY/byiQEesXrt
-         I/0w==
-X-Forwarded-Encrypted: i=1; AJvYcCVL4X4oQ/YN21CNL+7e+N9zUEc/CEyrrOekEl1eD/IqL+3+VDenDNekS4AsMAkFXiyIstmKnXu/0tw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5vYEjnbCxBkZ93PHpIbke8qGiyeMF64+n9JIxEQGha6ZZAOh6
-	X1juLg04/oIuk5/PkAjtbLren9EHpS7XjLN0gSGkrmpgvs+44ry5QNuaBCaPq1uCXWo=
-X-Gm-Gg: AZuq6aLfXyLQjb+QUFoZPeuNi5NcjAxpTORhURNP1cCB2YgpnDhszmjf7NEwZiElGVr
-	cqe4ORy4qGHbUCqS/CWNjQUjprGC0Wndznp4cgeB/N4kuLWj1mns635d8ByvV+4jbG9C9mzIjdg
-	QhDW9A1t/acK+s+3EQL04eNi1S0KwnqGHfhpsFVKAv+OjcUqQx2ZaKtV3sLIuo+8P/SOHwHIj+9
-	l/Eaucp6ImSfMXIWz7Gt4Nv/kV1lG4Egkdv+q5IvoZFN+75Foj5c7yLK0nyenr4nJuvbEbNycXy
-	Gt643LiUdSonMrzZVJARnOG9ra5lGA5YycV1SF3SEDJJXk5a5MrH18rTHekxwjshKTV6KCjiSMC
-	/OeqrReivE7mcy9zFsEzdl4RtUH6A53ArR6F5X3xKFE0DI2rGNQVX0AbS/Suq/oGxujossx9277
-	GHPz6zS/D7YJBOEJbTAy7uhS9kTRs=
-X-Received: by 2002:aa7:d719:0:b0:641:88ff:10ad with SMTP id 4fb4d7f45d1cf-65bc4298c44mr4741148a12.14.1771334035506;
-        Tue, 17 Feb 2026 05:13:55 -0800 (PST)
-Received: from draszik.lan ([212.129.84.5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65bad4fa7c7sm2473768a12.31.2026.02.17.05.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Feb 2026 05:13:55 -0800 (PST)
-Message-ID: <0b6e7cb7223e553d9b53df464959e97fd3d1ce43.camel@linaro.org>
-Subject: Re: [PATCH v6 5/6] power: supply: max77759: add charger driver
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>, Rob Herring	
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley	
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, Greg Kroah-Hartman	
- <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Peter Griffin
- <peter.griffin@linaro.org>, Tudor Ambarus	 <tudor.ambarus@linaro.org>, Alim
- Akhtar <alim.akhtar@samsung.com>, Mark Brown	 <broonie@kernel.org>, Matti
- Vaittinen <mazziesaccount@gmail.com>, Andrew Morton	
- <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
- Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Date: Tue, 17 Feb 2026 13:14:14 +0000
-In-Reply-To: <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
-References: <20260214-max77759-charger-v6-0-28c09bda74b4@google.com>
-	 <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-2+build4 
+	s=arc-20240116; t=1771338622; c=relaxed/simple;
+	bh=L76Ux3JWf44Dhu4JEQT5kLok0aYSNCd2/k9FQxuDxz8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oDifMvyfhc54Z2ZjlrGMU7b7F2BMvmT4fWl7FmNoCI2ZS9a+R9rbXrLPfBysEVjS5QsgvZYk7Zsfge8ZDslR+C0I+eC9OvpKVMkQVfzeUHH1r+6HKfCu/f4zAASVda7/DN7g0D63NK+Om05IWaYqpPoyiflhtmvnrXIYey6nhJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lqX4ywLD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 085E7C4CEF7;
+	Tue, 17 Feb 2026 14:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1771338621;
+	bh=L76Ux3JWf44Dhu4JEQT5kLok0aYSNCd2/k9FQxuDxz8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lqX4ywLDapFQvttD38X1O8rlYKb1kyzDMO85aYAyag2uDaGsHpiGkNTU1zWcryZ70
+	 jiGnofAlH+QvUbQcIzn/GPcQyP35IKs2hRqk7EEc/lecU0etn8z4/ZONGGxv50AF4C
+	 ID9H5a1WO/GeG1oH4JWnB8rrQEpgeNe/7VhQaWJM=
+Date: Tue, 17 Feb 2026 15:30:17 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB/Thunderbolt driver updates for 7.0-rc1
+Message-ID: <aZR7eYewulF4M0CR@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33407-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33406-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[google.com,kernel.org,linuxfoundation.org,linux.intel.com,linaro.org,samsung.com,gmail.com,linux-foundation.org];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:mid,linaro.org:dkim,linaro.org:email]
-X-Rspamd-Queue-Id: BA71814C73C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,linuxfoundation.org:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,kroah.com:mid]
+X-Rspamd-Queue-Id: 310D014D29A
 X-Rspamd-Action: no action
 
-Hi Amit,
+The following changes since commit 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7:
 
-All below comments are only minor, feel free to ignore them.
+  Linux 6.19-rc6 (2026-01-18 15:42:45 -0800)
 
-On Sat, 2026-02-14 at 03:12 +0000, Amit Sunil Dhamne via B4 Relay wrote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
->=20
-> Add support for MAX77759 battery charger driver. This is a 4A 1-Cell
-> Li+/LiPoly dual input switch mode charger. While the device can support
-> USB & wireless charger inputs, this implementation only supports USB
-> input. This implementation supports both buck and boost modes.
->=20
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> ---
-> =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 6 +
-> =C2=A0drivers/power/supply/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 11 +
-> =C2=A0drivers/power/supply/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0drivers/power/supply/max77759_charger.c | 768 +++++++++++++++++++++=
-+++++++++++
-> =C2=A04 files changed, 786 insertions(+)
+are available in the Git repository at:
 
-[...]
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-7.0-rc1
 
-> diff --git a/drivers/power/supply/max77759_charger.c b/drivers/power/supp=
-ly/max77759_charger.c
-> new file mode 100644
-> index 000000000000..d4e02764ba04
-> --- /dev/null
-> +++ b/drivers/power/supply/max77759_charger.c
-> @@ -0,0 +1,768 @@
+for you to fetch changes up to da87d45b195148d670ab995367d52aa9e8a9a1fa:
 
-[...]
+  usb: typec: ucsi: Add Thunderbolt alternate mode support (2026-02-06 15:32:13 +0100)
 
-> +
-> +/* USB input current limits (in uA) */
-> +static const struct linear_range chgin_ilim_ranges[] =3D {
-> +	LINEAR_RANGE(100000, 0x3, 0x7F, 25000),
-> +};
+----------------------------------------------------------------
+USB / Thunderbolt changes for 7.0-rc1
 
-Shouldn't this one also have a entry for 0x00...0x02:
-	LINEAR_RANGE(100000, 0x0, 0x2, 0),
+Here is the "big" set of USB and Thunderbolt driver updates for 7.0-rc1.
+Overall more lines were removed than added, thanks to dropping the
+obsolete isp1362 USB host controller driver, always a nice change.
 
-Then you can also drop the umax() call in get_input_current_limit().
+Other than that, nothing major happening here, highlights are:
+  - lots of dwc3 driver updates and new hardware support added
+  - usb gadget function driver updates
+  - usb phy driver updates
+  - typec driver updates and additions
+  - USB rust binding updates for syntax and formatting changes
+  - more usb serial device ids added
+  - other smaller USB core and driver updates and additions
 
-Ah, I see now there is no linear_range_get_selector_within_array(),
-meaning the code is fine as-is, unless you want to add that as
-well :-)
+All of these have been in linux-next for a long time, with no reported
+problems.
 
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[...]
+----------------------------------------------------------------
+Alice Ryhl (1):
+      rust: usb: add __rust_helper to helpers
 
-> +static int max77759_charger_init(struct max77759_charger *chg)
-> +{
-> +	struct power_supply_battery_info *info;
-> +	u32 regval, fast_chg_curr, fv;
-> +	int ret;
-> +
-> +	ret =3D regmap_read(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_00, &regval=
-);
-> +	if (ret)
-> +		return ret;
-> +
-> +	chg->mode =3D FIELD_GET(MAX77759_CHGR_REG_CHG_CNFG_00_MODE, regval);
-> +	ret =3D charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (power_supply_get_battery_info(chg->psy, &info)) {
-> +		fv =3D CHG_FV_DEFAULT_MV;
-> +		fast_chg_curr =3D CHG_CC_DEFAULT_UA;
-> +	} else {
-> +		fv =3D info->constant_charge_voltage_max_uv / 1000;
-> +		fast_chg_curr =3D info->constant_charge_current_max_ua;
-> +	}
-> +
-> +	ret =3D set_fast_charge_current_limit(chg, fast_chg_curr);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D set_float_voltage_limit(chg, fv);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D unlock_prot_regs(chg, true);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Disable wireless charging input */
-> +	ret =3D regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_12,
-> +				 MAX77759_CHGR_REG_CHG_CNFG_12_WCINSEL, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_18,
-> +				 MAX77759_CHGR_REG_CHG_CNFG_18_WDTEN, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return unlock_prot_regs(chg, false);
+Andrei Kuchynski (8):
+      usb: typec: Add mode_control field to port property
+      platform/chrome: cros_ec_typec: Set no_mode_control flag
+      usb: typec: Expose alternate mode priority via sysfs
+      usb: typec: Implement mode selection
+      usb: typec: Introduce mode_selection bit
+      usb: typec: ucsi: Support mode selection to activate altmodes
+      usb: typec: ucsi: Enforce mode selection for cros_ec_ucsi
+      usb: typec: ucsi: Add Thunderbolt alternate mode support
 
-Should early error returns here try to lock the protection again? Something
-like:
+Andy Yan (1):
+      USB: typec: tcpm: Fix a typo
 
-+	ret =3D unlock_prot_regs(chg, true);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable wireless charging input */
-+	ret =3D regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_12,
-+				 MAX77759_CHGR_REG_CHG_CNFG_12_WCINSEL, 0);
-+	if (ret)
-+		goto relock;
-+
-+	ret =3D regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_18,
-+				 MAX77759_CHGR_REG_CHG_CNFG_18_WDTEN, 0);
-+	if (ret)
-+		goto relock;
-+
-+	return unlock_prot_regs(chg, false);
-+
-+relock:
-+	(void) unlock_prot_regs(chg, false);
-+	return ret;
+Bartosz Golaszewski (1):
+      USB: host: drop unneeded dependency on OF_GPIO
 
-I guess if one of the regmap_update_bits() failed, then locking the
-registers might not work either, so I have no strong opinion on
-adding that.
+Benson Leung (2):
+      usb: typec: ucsi: psy: Fix ucsi_psy_get_current_now in non-PD cases
+      usb: typec: ucsi: psy: Fix voltage and current max for non-Fixed PDOs
 
-With or without updates:
+Chaoyi Chen (3):
+      usb: typec: Export typec bus and typec altmode device type
+      dt-bindings: usb: Add binding for WCH CH334/CH335 hub controller
+      usb: misc: onboard_dev: Add WCH CH334 USB2.0 Hub (1a86:8091)
 
-Reviewed-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+Chen Ni (1):
+      usb: dwc3: google: Remove redundant dev_err()
 
+Chia-Lin Kao (AceLan) (1):
+      thunderbolt: Log path activation failures without WARN backtraces
 
-Cheers,
-Andre'
+Christophe JAILLET (1):
+      usb: gadget: Constify struct configfs_item_operations and configfs_group_operations
+
+Danilo Krummrich (1):
+      rust: usb: use "kernel vertical" style for imports
+
+Fabio Porcedda (1):
+      USB: serial: option: add Telit FN920C04 RNDIS compositions
+
+Geert Uytterhoeven (4):
+      usb: phy: generic: Always use dev in usb_phy_generic_probe()
+      usb: phy: generic: Convert to devm_clk_get_optional()
+      usb: phy: generic: Convert to dev_err_probe()
+      usb: phy: generic: Convert to device property API
+
+Greg Kroah-Hartman (5):
+      Merge 6.19-rc3 into usb-next
+      USB: HCD: remove logic about which hcd is loaded
+      Merge 6.19-rc6 usb-next
+      Merge tag 'thunderbolt-for-v6.20-rc1' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
+      Merge tag 'usb-serial-6.20-rc1' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
+
+Haotien Hsu (1):
+      usb: gadget: tegra-xudc: Add handling for BLCG_COREPLL_PWRDN
+
+Heikki Krogerus (1):
+      usb: typec: Set the bus also for the port and plug altmodes
+
+Jaime Saguillo Revilla (1):
+      docs: admin-guide: thunderbolt: Replace ifconfig with ip
+
+Jan Remmet (2):
+      usb: typec: hd3ss3220: Enable VBUS based on role state
+      usb: typec: hd3ss3220: Check if regulator needs to be switched
+
+Jiasheng Jiang (1):
+      usb: gadget: f_tcm: initialize data_len in UAS path for consistency
+
+Jisheng Zhang (1):
+      usb: dwc2: fix resume failure if dr_mode is host
+
+Justin Chen (1):
+      usb: bdc: fix sleep during atomic
+
+Krishna Kurapati (1):
+      usb: gadget: f_sourcesink: Support maxburst configurability for bulk endpoints
+
+Kuen-Han Tsai (3):
+      usb: gadget: u_ether: add gether_opts for config caching
+      usb: gadget: u_ether: Add auto-cleanup helper for freeing net_device
+      usb: gadget: f_ncm: align net_device lifecycle with bind/unbind
+
+Mario Peter (1):
+      usb: chipidea: udc: fix DMA and SG cleanup in _ep_nuke()
+
+Prashanth K (4):
+      usb: dwc3: Remove of dep->regs
+      usb: dwc3: Add dwc pointer to dwc3_readl/writel
+      usb: dwc3: Log dwc3 address in traces
+      usb: dwc3: gadget: Move vbus draw to workqueue context
+
+Randy Dunlap (2):
+      usb: typec: ucsi: drop an unused Kconfig symbol
+      usb: gadget: u_ether: use <linux/hex.h> header file
+
+Rob Herring (Arm) (2):
+      dt-bindings: usb: ehci/ohci: Allow "dma-coherent"
+      dt-bindings: usb: Add Socionext Uniphier DWC3 controller
+
+Robert Marko (1):
+      dt-bindings: usb: Add Microchip LAN969x support
+
+Roy Luo (2):
+      dt-bindings: usb: dwc3: Add Google Tensor G5 DWC3
+      usb: dwc3: Add Google Tensor SoC DWC3 glue driver
+
+Ryan Chen (2):
+      dt-bindings: usb: aspeed,usb-vhub: Add ast2700 support
+      usb: gadget: aspeed-vhub: Add ast2700 support
+
+Sam Day (2):
+      usb: gadget: f_fs: Fix ioctl error handling
+      usb: gadget: f_fs: fix DMA-BUF OUT queues
+
+Sean Anderson (1):
+      usb: dwc3: Always deassert xilinx resets
+
+Shuah Khan (2):
+      tools: usb: usbip: remove dead-link from README
+      usbip: Reduce CONNRESET message noise in dmesg from stub
+
+Svyatoslav Ryhel (6):
+      usb: phy: tegra: use phy type directly
+      usb: phy: tegra: add HSIC support
+      usb: phy: tegra: cosmetic fixes
+      usb: phy: tegra: return error value from utmi_wait_register
+      usb: phy: tegra: parametrize HSIC PTS value
+      usb: phy: tegra: parametrize PORTSC1 register offset
+
+Thomas Richard (TI) (1):
+      usb: cdns3: fix role switching during resume
+
+Tommaso Merciai (1):
+      dt-bindings: usb: renesas,usbhs: Add RZ/G3E SoC support
+
+Victor Krawiec (1):
+      usb: gadget: f_midi: allow customizing the USB MIDI interface string through configfs
+
+Vladimir Zapolskiy (1):
+      usb: isp1362-hcd: remove Philips ISP1362 USB OTG controller driver
+
+Wayne Chang (1):
+      usb: host: tegra: Remove manual wake IRQ disposal
+
+Xu Yang (4):
+      usb: dwc3: drd: extend dwc3_pre_set_role() to extcon and otg usecase
+      usb: dwc3: imx8mp: rename dwc3 to dwc3_pdev in struct dwc3_imx8mp
+      usb: dwc3: imx8mp: disable auto suspend for host role
+      usb: chipidea: ci_hdrc_imx: use "wakeup" suffix for wakeup interrupt name
+
+Yi Cong (1):
+      usb: linux/usb.h: Correct the description of the usb_device_driver member
+
+Łukasz Bartosik (4):
+      xhci: dbc: prepare to expose strings through sysfs
+      xhci: dbc: allow setting device serial number through sysfs
+      xhci: dbc: allow setting product string through sysfs
+      xhci: dbc: allow setting manufacturer string through sysfs
+
+ Documentation/ABI/testing/configfs-usb-gadget-midi |   17 +-
+ .../ABI/testing/sysfs-bus-pci-drivers-xhci_hcd     |   42 +
+ Documentation/ABI/testing/sysfs-class-typec        |   11 +
+ Documentation/admin-guide/thunderbolt.rst          |    2 +-
+ .../devicetree/bindings/usb/aspeed,usb-vhub.yaml   |   22 +-
+ .../devicetree/bindings/usb/generic-ehci.yaml      |    2 +
+ .../devicetree/bindings/usb/generic-ohci.yaml      |    2 +
+ .../devicetree/bindings/usb/google,lga-dwc3.yaml   |  140 +
+ .../bindings/usb/microchip,lan9691-dwc3.yaml       |   66 +
+ .../devicetree/bindings/usb/renesas,usbhs.yaml     |    1 +
+ .../bindings/usb/socionext,uniphier-dwc3.yaml      |   89 +
+ .../devicetree/bindings/usb/wch,ch334.yaml         |   65 +
+ Documentation/usb/gadget-testing.rst               |   18 +-
+ MAINTAINERS                                        |    2 +
+ drivers/platform/chrome/cros_ec_typec.c            |    1 +
+ drivers/thunderbolt/path.c                         |    2 +-
+ drivers/usb/Makefile                               |    1 -
+ drivers/usb/cdns3/core.c                           |    2 +-
+ drivers/usb/chipidea/ci_hdrc_imx.c                 |    9 +-
+ drivers/usb/chipidea/udc.c                         |    7 +
+ drivers/usb/core/hcd.c                             |    4 -
+ drivers/usb/dwc2/core.c                            |    1 +
+ drivers/usb/dwc3/Kconfig                           |   11 +
+ drivers/usb/dwc3/Makefile                          |    1 +
+ drivers/usb/dwc3/core.c                            |  215 +-
+ drivers/usb/dwc3/core.h                            |   14 +-
+ drivers/usb/dwc3/debugfs.c                         |   44 +-
+ drivers/usb/dwc3/drd.c                             |   86 +-
+ drivers/usb/dwc3/dwc3-google.c                     |  626 +++++
+ drivers/usb/dwc3/dwc3-imx8mp.c                     |   47 +-
+ drivers/usb/dwc3/dwc3-xilinx.c                     |   67 +-
+ drivers/usb/dwc3/ep0.c                             |   22 +-
+ drivers/usb/dwc3/gadget.c                          |  172 +-
+ drivers/usb/dwc3/gadget.h                          |    4 +-
+ drivers/usb/dwc3/io.h                              |   11 +-
+ drivers/usb/dwc3/trace.h                           |   88 +-
+ drivers/usb/dwc3/ulpi.c                            |   10 +-
+ drivers/usb/fotg210/fotg210-hcd.c                  |    6 -
+ drivers/usb/gadget/configfs.c                      |   24 +-
+ drivers/usb/gadget/function/f_acm.c                |    2 +-
+ drivers/usb/gadget/function/f_fs.c                 |   26 +-
+ drivers/usb/gadget/function/f_hid.c                |    2 +-
+ drivers/usb/gadget/function/f_loopback.c           |    2 +-
+ drivers/usb/gadget/function/f_mass_storage.c       |    6 +-
+ drivers/usb/gadget/function/f_midi.c               |  112 +-
+ drivers/usb/gadget/function/f_midi2.c              |   10 +-
+ drivers/usb/gadget/function/f_ncm.c                |  130 +-
+ drivers/usb/gadget/function/f_obex.c               |    2 +-
+ drivers/usb/gadget/function/f_phonet.c             |    2 +-
+ drivers/usb/gadget/function/f_printer.c            |    2 +-
+ drivers/usb/gadget/function/f_serial.c             |    2 +-
+ drivers/usb/gadget/function/f_sourcesink.c         |   54 +-
+ drivers/usb/gadget/function/f_tcm.c                |    5 +-
+ drivers/usb/gadget/function/f_uac1.c               |    2 +-
+ drivers/usb/gadget/function/f_uac1_legacy.c        |    2 +-
+ drivers/usb/gadget/function/f_uac2.c               |    2 +-
+ drivers/usb/gadget/function/g_zero.h               |    1 +
+ drivers/usb/gadget/function/u_ether.c              |   45 +
+ drivers/usb/gadget/function/u_ether.h              |   30 +
+ drivers/usb/gadget/function/u_ether_configfs.h     |  179 +-
+ drivers/usb/gadget/function/u_midi.h               |    2 +-
+ drivers/usb/gadget/function/u_ncm.h                |    4 +-
+ drivers/usb/gadget/function/uvc_configfs.c         |   36 +-
+ drivers/usb/gadget/udc/aspeed-vhub/core.c          |   30 +
+ drivers/usb/gadget/udc/aspeed-vhub/vhub.h          |    1 +
+ drivers/usb/gadget/udc/bdc/bdc_core.c              |    4 +-
+ drivers/usb/gadget/udc/tegra-xudc.c                |   12 +-
+ drivers/usb/host/Kconfig                           |   14 +-
+ drivers/usb/host/Makefile                          |    1 -
+ drivers/usb/host/ehci-hcd.c                        |    8 -
+ drivers/usb/host/isp1362-hcd.c                     | 2769 --------------------
+ drivers/usb/host/isp1362.h                         |  914 -------
+ drivers/usb/host/ohci-hcd.c                        |    3 -
+ drivers/usb/host/uhci-hcd.c                        |    5 -
+ drivers/usb/host/xhci-dbgcap.c                     |  259 +-
+ drivers/usb/host/xhci-dbgcap.h                     |   39 +-
+ drivers/usb/host/xhci-tegra.c                      |   21 +-
+ drivers/usb/misc/onboard_usb_dev.h                 |    8 +
+ drivers/usb/phy/phy-generic.c                      |   74 +-
+ drivers/usb/phy/phy-tegra-usb.c                    |  297 ++-
+ drivers/usb/serial/option.c                        |    6 +
+ drivers/usb/typec/Makefile                         |    2 +-
+ drivers/usb/typec/altmodes/displayport.c           |    6 +-
+ drivers/usb/typec/altmodes/thunderbolt.c           |    2 +-
+ drivers/usb/typec/bus.c                            |   25 +-
+ drivers/usb/typec/bus.h                            |    6 -
+ drivers/usb/typec/class.c                          |  136 +-
+ drivers/usb/typec/class.h                          |    3 +
+ drivers/usb/typec/hd3ss3220.c                      |   30 +-
+ drivers/usb/typec/mode_selection.c                 |  283 ++
+ drivers/usb/typec/tcpm/tcpm.c                      |    2 +-
+ drivers/usb/typec/ucsi/Kconfig                     |    1 -
+ drivers/usb/typec/ucsi/Makefile                    |    4 +
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c              |   22 +
+ drivers/usb/typec/ucsi/psy.c                       |   54 +-
+ drivers/usb/typec/ucsi/thunderbolt.c               |  212 ++
+ drivers/usb/typec/ucsi/ucsi.c                      |   30 +-
+ drivers/usb/typec/ucsi/ucsi.h                      |   24 +
+ drivers/usb/usbip/stub_tx.c                        |    4 +-
+ include/linux/usb.h                                |    3 +-
+ include/linux/usb/gadget_configfs.h                |    4 +-
+ include/linux/usb/hcd.h                            |    6 -
+ include/linux/usb/isp1362.h                        |   47 -
+ include/linux/usb/tegra_usb_phy.h                  |   11 +-
+ include/linux/usb/typec.h                          |    6 +
+ include/linux/usb/typec_altmode.h                  |   50 +
+ rust/helpers/usb.c                                 |    3 +-
+ rust/kernel/usb.rs                                 |   21 +-
+ samples/rust/rust_driver_usb.rs                    |   10 +-
+ tools/usb/usbip/README                             |    2 -
+ 110 files changed, 3494 insertions(+), 4594 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/google,lga-dwc3.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,lan9691-dwc3.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/socionext,uniphier-dwc3.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/wch,ch334.yaml
+ create mode 100644 drivers/usb/dwc3/dwc3-google.c
+ delete mode 100644 drivers/usb/host/isp1362-hcd.c
+ delete mode 100644 drivers/usb/host/isp1362.h
+ create mode 100644 drivers/usb/typec/mode_selection.c
+ create mode 100644 drivers/usb/typec/ucsi/thunderbolt.c
+ delete mode 100644 include/linux/usb/isp1362.h
 
