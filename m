@@ -1,184 +1,202 @@
-Return-Path: <linux-usb+bounces-33401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33402-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yLu1IP8+lGmYBAIAu9opvQ
-	(envelope-from <linux-usb+bounces-33401-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 11:12:15 +0100
+	id 4H5bOyhElGl3BwIAu9opvQ
+	(envelope-from <linux-usb+bounces-33402-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 11:34:16 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 262F514AB60
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 11:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 67B1314AE35
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 11:34:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E9DD0301AD29
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 10:12:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D01A2301F9BC
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Feb 2026 10:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E6B0322B72;
-	Tue, 17 Feb 2026 10:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC32F32573B;
+	Tue, 17 Feb 2026 10:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="GMz3DiEv"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lzUH+NC1";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="h/XWcWCm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886A6322533
-	for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 10:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A263254B9
+	for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 10:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771323130; cv=none; b=Steao1Wjgwv/OgHpyieAcQA9+qq8FHy3BBwajltj7/oBxa34z19SuhBjQ8ZF4RDciGHVGIeKhERCzfZoXvwINonpXd7djiWFjNQIilAheNZPhJS8OpFr/IWQ3nNjMUqBwwl+3udxrBfsUM2FoUMEoAQM2Wfs51BJ/1bqWOGBeC4=
+	t=1771324449; cv=none; b=YooDDnANX5Np9PW6tMrBJ83p6g2wLbs+IlPTs+kHl0XXF2Wc8/16UHPs+KYAwBLX1NH0ZE7KiFSNv71T4DtSIwPLhXZpZ/+uVPzu8wZb1ZNXeTWF8KEtfqxM01dQ+V8DwDBjEsF9JsGX8PdO+Rhe8BmTc+oI/OGJVDv9NXhZUL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771323130; c=relaxed/simple;
-	bh=xCtzWVHar1s0DNX5CJbIJFAZQjuSVMEE71rQZuaz+5I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gOv1cR0CXlcXDG3J8IfPWJ5tQUzPCTnTmbHi3CCOAIQorbCRVHdABOGXypBZbCsnCk5DHLQ4hnbioOtRo2MMgymcEEqEq3ukYO2KKp2fPHNYeWgV0r38Q8G2P5b19ER4Aoa46hKWBxNogOue7YfmH+WaxhP39v5GdfR5amR3bC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=GMz3DiEv; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48068127f00so42804405e9.3
-        for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 02:12:09 -0800 (PST)
+	s=arc-20240116; t=1771324449; c=relaxed/simple;
+	bh=zhLAtAGGstKHRWp19MF5j2m7BbmjxvQWv4VXhGVdOYk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y4FfgYMgDorpaBceu05wSarsU6lFSjKuplPCVJPF6r7AIvAHIKKPqVz+CLfvuvmIW/0+I4RQ2sOEZmxGIKXT5MAnioxOsYfqdMGm4Yhh9QUkWdFM39YlNwhYfeWYjT3uOC4oN3YBKz4EoneFtuNRHlBp7YwZbpGz3A3BBix92dU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lzUH+NC1; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=h/XWcWCm; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61H9P4r51544913
+	for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 10:34:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=lJjO8T9wxsb1RnJjhls1z2D2yPk/MPblQGY
+	1v2w95r4=; b=lzUH+NC1Zqy7GbgZZNG0wGAOO347y5l+Nlc6JtFfy2b2HBEyiel
+	tK1HC6JgLCOOS+eEZfAqTpaySmDVN9qMFjVTzXVUBUqcW+6/kzoXTi+C20hPBaPd
+	n427oT4x6yJcu024BbknbAOrq0/OjHwqzwXXODtF+D2lOdyqYDEFfzJJsSejld2k
+	a8lPVQXBiHgJYVA9WGmghXZJ/icFAgP/FwRsiaa1VI3B4sd+HFuXQK2MJNKWWC1L
+	CFLzpaV/0uFqoqy/CaAZPE9wR05jCtBYMsxzIDgOqMlA7jD+OjdRd3Pz051PpGSt
+	18g/6VarphgLWx6nv7IqoPscIGaQJQn163Q==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cc7ajsu75-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 10:34:07 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8c71156fe09so2291682685a.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 02:34:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1771323128; x=1771927928; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=A/PFP0qjFs4EzfF3bF4mXnNk391M6t/LjELpWXvda7A=;
-        b=GMz3DiEv54FYp6B8W5nDUFfkIL6lBlULHRAaIGmtyUGz2uO8VM5hGpqQ/RKUd0xDSF
-         wCbITjHlpja/zg1/BE95DshxHTQyd3542+Z9hJp4Sgr67QB/FPUfv0GkSlQIvofHi3vj
-         arnFyHBPjjqBIoH4mo6n/lKWfl4Gr7Vz0aYnvwgTNz+jdIDd5jPzYGibJdQZcKQczf0M
-         iGtjkJ8hjaHVeMzHec8cyTOjGhZS3c7Ws89RmBrxeLKCCwWJInKHMXwVNFztd51f2IYB
-         kjmrtZrWie4ghyuzrUQ42ITMvOpsL8R8yWCsoLloXCmiJTnEt0aiDQJsAAGCGwzYEIcn
-         7vIA==
+        d=oss.qualcomm.com; s=google; t=1771324446; x=1771929246; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lJjO8T9wxsb1RnJjhls1z2D2yPk/MPblQGY1v2w95r4=;
+        b=h/XWcWCmnm7B7dqLUd/dkxjXPLzhwXOow7z3a6P5b9SOZ/2m9p3ma4ROd+iGbz6NHz
+         eKhakhTllRmzl1DkUMWZHt/RGDBOGZP3MOFNIxlxJVIKP78HTNSkzjHH8gmZe8FSUaM5
+         rwoko4HTfC9QuYS2Unfdoi7VZ7MZOsDRDdlX4BccNhTwAQlMgU9OMPsUswEo9Y8LwwFV
+         sIjWe6IuiAVfWEPflsD30roUKSmkot8aQGtQWoUNBMD0l9YlkgT0fx6gyQ9gfm/dFW+h
+         u31pYj5wD0TZgpjUe/PHLrJzJKg+134r2+gCCDsCrzOzFRSDUh47kTgoPmCIVS11PbO8
+         AHZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771323128; x=1771927928;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1771324446; x=1771929246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A/PFP0qjFs4EzfF3bF4mXnNk391M6t/LjELpWXvda7A=;
-        b=wGk750KlsuBECEUv2SW9vSrpv+1LphiUdo3OOrnGBqXVwqdH0QFWU4WVz6QoOMBobh
-         GpZLeolhug+B6U2ID/gLhghWQP7u4OmCWXtwqELUmUFFd3b6l4ZCCJhF0cJp2PbpsIDF
-         FojXTQi04IaHk4DWPFWVfyZ0tKcSvZsEovf227EdDbv31PgATPDSLdsmyTZ12QoMFSVF
-         3/lZ4yMxz5iFarIDSrfTBDoSt2H/EVDHDHknVmAEyg8Y8rzI65J469Vwsk8yWAm0UURR
-         iUpWfujZp9gAJEIzSFLSrd5LqLtCSPF4kHsvydMiKeI9rmezKEfzp4xEPysugl3lpO17
-         LKGQ==
-X-Gm-Message-State: AOJu0Yzoweh1jDJFztwVnblTpyaQ4oHH52hb4wVPtK1T/y6GMRPexgKg
-	7C3dgbWL34VFU9MSOkPx5T/1MYBTBhM+nXJoyq8XHfZPx4hOerxFm3NWh2y3QhGysOI=
-X-Gm-Gg: AZuq6aKJzqhqr5JuNMT8D6DyeGKhwa8H4Ef4f7sz8xHg4kv5aA5VCxiKzqZ5m6b2SZo
-	x59aakaltdKGIUBkqouHt+9Kdtg0y7sp6RA0JpMBBnRRuQSTnrp3TtXiS0PUvp+c+AFJaxqDyPE
-	Mk2zU5Tn0YV6goKMPPeyKEA5L1r5256NEYgFT+Zs3VqwvsFunsTwzezNUi7GHPDUSnp5O5M00+k
-	gudngQtVymOFhSChif05JWbkR/hE5uQylzU0y9G4X69OCTEl/K++GFATQO5MHZ236syvNyGmq3E
-	6IFVzf14ory7xs3VC1lOrY/3BkCSosb632vnQocxn3vfqAduCxtvOmNLHQ6+nKHXwkS8w+e6hoj
-	aSkv3VMajuNophB8I+Ca66K7lzv2wMCkrNI2Xk+lw17b0cgTH9X0A4xUfy3LvzIKx9QKAGp90Wk
-	xXLie/sDCq1J3p0KJyMWxYAORD5r5D+LgjoCdo6jrcC7yJB7EstwfcOsvyC9AnyNB6+ND3uFsur
-	KI=
-X-Received: by 2002:a05:600c:4e4d:b0:483:498f:7963 with SMTP id 5b1f17b1804b1-48373a661ebmr217871735e9.26.1771323127871;
-        Tue, 17 Feb 2026 02:12:07 -0800 (PST)
-Received: from alchark-surface.localdomain (bba-94-59-44-101.alshamil.net.ae. [94.59.44.101])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796abcda5sm37452135f8f.19.2026.02.17.02.12.06
+        bh=lJjO8T9wxsb1RnJjhls1z2D2yPk/MPblQGY1v2w95r4=;
+        b=UFp8W05oTxEZLBdBSTMTOyczKNVUqx+0oPV1rnd5+82fljBKmqZ5oaCfpJuNylwJAJ
+         JFhKPWn4coHP3JnPw0Id6IMoEPJuvjak+fPOq6+hP8jga1kThY3VxuhQtvqtqo7qwBg2
+         Z7wnxOtnumqpyVurf0evlqI01qMcLztHYRdEsaiEulZ9+bEcNRAskBtY30wp7WmMKzR9
+         86nqpuSz4cFBEVAzyJ3TUdnG9nc/MFKUPzSCXEnchgmYo+jlNHVkF8qqk0ZUtujguIc6
+         qdr9siQHUhEOrVlDNxaupkAT5r0xqWXuk3JRAT3IurGqX507MbVvh04GRKfbnLo/SLnX
+         Xktw==
+X-Gm-Message-State: AOJu0Yw8Z+zkPx3YxgCQgsEtsFsn8nHRg5TlSEuVzUwDP1tCg96BA2p6
+	+M+BQQvxc1Ps/74329okRo3IWuKbnqvHXhYSnrStFfAIl3934A+TLtzqeybofcV2gK7c3HNXwAl
+	VdT3HGsA8XBeJdfD1x+w1yVVzvCvB1LfKCizdjVh7o5LsoYBEJuTnHBycQ8t1RYNVva0Uz1TcOg
+	==
+X-Gm-Gg: AZuq6aK0UkVePm5JczPpxscCw/FBPpeKhMySlk3pk0kul6usK1VBNkFADt/D6v1R/qT
+	JjCflRsv9OPP7LV+SQyiL86xbDthmB/vu9RGV1ewZC70a1klg3xcLLNDe2ejQMkPxuSC50nKvBo
+	7TNeJJQ9dKs3Ek0GyzVh5+A7KOabysZ74Skm1oJL6/SlZca8Q4WziP2oEUHbmkBoX7/MVUuzxBl
+	joRGIm4HXDJ4U7cY18s4E9YClhfyNJikIPzItddZDPa/oKdgsW9HhPnswSZRqZ+5htSDONZ3IoY
+	6ohcUswljbIuHQYnemk9LM2TZcoAnf36dY3Oqc9Mwm7A45n3QH0yyONW/VoXVRWETBBZy3sXnZp
+	Yek1apuHC6DPFNSXdWqDbXjCq0ycbIwnKR14IcDjl/1DX5ij+Fx4Wr2D4/lahSDizxB4C7W53jK
+	IG/hblQmnXuNQF
+X-Received: by 2002:a05:620a:29d3:b0:8c9:eb7d:cd94 with SMTP id af79cd13be357-8cb4c03ae19mr1400409785a.88.1771324446431;
+        Tue, 17 Feb 2026 02:34:06 -0800 (PST)
+X-Received: by 2002:a05:620a:29d3:b0:8c9:eb7d:cd94 with SMTP id af79cd13be357-8cb4c03ae19mr1400407085a.88.1771324445964;
+        Tue, 17 Feb 2026 02:34:05 -0800 (PST)
+Received: from QCOM-eG0v1AUPpu.qualcomm.com ([2a01:e0a:82c:5f0:7155:d80c:d125:8e25])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796ac8d46sm34460840f8f.32.2026.02.17.02.34.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Feb 2026 02:12:07 -0800 (PST)
-From: Alexey Charkov <alchark@flipper.net>
-Date: Tue, 17 Feb 2026 14:12:00 +0400
-Subject: [PATCH] usb: misc: onboard_usb_dev: Add support for requesting
- VBUS for Type-A ports
+        Tue, 17 Feb 2026 02:34:05 -0800 (PST)
+From: Loic Poulain <loic.poulain@oss.qualcomm.com>
+To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, johan@kernel.org,
+        venkat.jayaraman@intel.com, pooja.katiyar@intel.com,
+        dmitry.baryshkov@oss.qualcomm.com,
+        Loic Poulain <loic.poulain@oss.qualcomm.com>
+Subject: [PATCH] usb: typec: ucsi: Invoke ucsi_run_command tracepoint
+Date: Tue, 17 Feb 2026 11:34:03 +0100
+Message-Id: <20260217103403.1956-1-loic.poulain@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260217-typea-vbus-v1-1-657b4e55a4c2@flipper.net>
-X-B4-Tracking: v=1; b=H4sIAO8+lGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDI0Nz3ZLKgtRE3bKk0mJdcxNTQ1NjcwugeIoSUENBUWpaZgXYsOjY2lo
- AKKTo8FwAAAA=
-X-Change-ID: 20260217-typea-vbus-74515378021d
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Alexey Charkov <alchark@flipper.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1846; i=alchark@flipper.net;
- h=from:subject:message-id; bh=xCtzWVHar1s0DNX5CJbIJFAZQjuSVMEE71rQZuaz+5I=;
- b=owGbwMvMwCW2adGNfoHIK0sZT6slMWROsftp/E4+RflB7dSNn8tTdx7MN7f7+/6U2naX05JPm
- Z9f8t/v0zGRhUGMi8FSTJFl7rcltlON+Gbt8vD4CjOHlQlkiLRIAwMQsDDw5SbmlRrpGOmZahvq
- GRrqGOsYMXBxCsBUL9vP8FfgdQKjiIDjpa2POIzeydlMMHAz5jonv05lzdXXbs+nT1/FyPB+zm3
- nojOnmfX1exo5ziW52lzyPzfjcZi+GJOWbZnoNE4A
-X-Developer-Key: i=alchark@flipper.net; a=openpgp;
- fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDA4NyBTYWx0ZWRfXy3Da6aqFoWdr
+ f7gRA8Jlwjz2Ef/mQJJS1fnqL8DGRGlj5IlACdvCZBNIwx9DwT/jN7m1F6FX4i52K8k7cm08u6p
+ vuY4t4AIT8orm5PDIwcTeMu2ostXJVwge8q0IIQupYgn1TFYTtsVVI15hR1QJRPFqmSPYXLVdc5
+ DtVG9cgVT/cCZb/DYyCS6BTOcJgxj2Qn1/ISP2hv//D7tpUlMpWX4Ffl9meBO8+UkKUqm5xKhms
+ V5lxSWkkYDlTH4P6dPTa1GmM0bpy2WJ9G+fW6CfbcKv0u3/pyyeZam4jpEJeSJYJk7YLMluN8fE
+ DQ1XU7GCZkAM+rXOpSg+3ck/O+ns75ay1qw/J9oSGWrAw//oqnPEU65DLjxuGY8GbbhXopfCef9
+ 2c1Jq+FrksI2dKLMQ3LO5GQ4FYti64D3Oxag87RBgu6uvsAfNa35on4SNTNP09BS9gwPTjaEVIj
+ +sbaaTuqOU3kfzEBM0w==
+X-Proofpoint-ORIG-GUID: EGe_3zqzj2CHQ4Mm00sEh7Vdl5scHS9E
+X-Authority-Analysis: v=2.4 cv=BryQAIX5 c=1 sm=1 tr=0 ts=6994441f cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=HzLeVaNsDn8A:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=EUspDBNiAAAA:8 a=Tvdu5u-jWjcwP2ZWDAEA:9
+ a=0bXxn9q0MV6snEgNplNhOjQmxlI=:19 a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-GUID: EGe_3zqzj2CHQ4Mm00sEh7Vdl5scHS9E
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-17_01,2026-02-16_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ clxscore=1011 adultscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602170087
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[flipper.net:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33401-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33402-lists,linux-usb=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[loic.poulain@oss.qualcomm.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,flipper.net:mid,flipper.net:dkim,flipper.net:email]
-X-Rspamd-Queue-Id: 262F514AB60
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 67B1314AE35
 X-Rspamd-Action: no action
 
-Add a regulator-only entry matching OF-described USB Type-A connectors.
+The ucsi_run_command trace event is exposed in tracefs, but it never
+produces any output because the UCSI core never invokes the associated
+tracepoint. As a result, enabling the event under events/ucsi/ yields
+no traces, preventing users from inspecting UCSI command sequencing.
 
-This allows platforms to explicitly model VBUS supply regulators for these
-ports instead of calling them PHY supplies or making the respective
-regulators always-on in their device trees.
+Wire the tracepoint into the UCSI command path so that commands are
+properly reported.
 
-Type-A ports won't typically need a dedicated driver, as there is nothing
-to configure apart from the power supply, so there is no controller driver
-to traverse the OF graph and request the VBUS regulator, unlike for Type-C
-ports. Thus make it an onboard USB device, which it kind of really is.
+Example:
+50.692342: ucsi_run_command: GET_CONNECTOR_STATUS -> OK (err=0)
+50.692345: ucsi_connector_change: port0 status: change=4800, ...
+51.750298: ucsi_run_command: GET_CABLE_PROPERTY -> FAIL (err=-5)
+51.773360: ucsi_run_command: GET_CONNECTOR_STATUS -> OK (err=0)
 
-Signed-off-by: Alexey Charkov <alchark@flipper.net>
+Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
 ---
- drivers/usb/misc/onboard_usb_dev.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/typec/ucsi/ucsi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/misc/onboard_usb_dev.h b/drivers/usb/misc/onboard_usb_dev.h
-index 1a1e86e60e04..35d15b034664 100644
---- a/drivers/usb/misc/onboard_usb_dev.h
-+++ b/drivers/usb/misc/onboard_usb_dev.h
-@@ -108,6 +108,11 @@ static const struct onboard_dev_pdata genesys_gl852g_data = {
- 	.is_hub = true,
- };
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index a7b388dc7fa0..965bb7f4e24e 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -234,6 +234,8 @@ static int ucsi_send_command_common(struct ucsi *ucsi, u64 cmd,
+ 	if (cci & UCSI_CCI_ERROR)
+ 		ret = ucsi_read_error(ucsi, connector_num);
  
-+static const struct onboard_dev_pdata usb_a_conn_data = {
-+	.num_supplies = 1,
-+	.supply_names = { "vbus" },
-+};
++	trace_ucsi_run_command(cmd, ret);
 +
- static const struct onboard_dev_pdata vialab_vl817_data = {
- 	.reset_us = 10,
- 	.num_supplies = 1,
-@@ -130,6 +135,7 @@ static const struct onboard_dev_pdata xmos_xvf3500_data = {
- };
- 
- static const struct of_device_id onboard_dev_match[] = {
-+	{ .compatible = "usb-a-connector", .data = &usb_a_conn_data, },
- 	{ .compatible = "usb424,2412", .data = &microchip_usb424_data, },
- 	{ .compatible = "usb424,2514", .data = &microchip_usb2514_data, },
- 	{ .compatible = "usb424,2517", .data = &microchip_usb424_data, },
-
----
-base-commit: 350adaf7fde9fdbd9aeed6d442a9ae90c6a3ab97
-change-id: 20260217-typea-vbus-74515378021d
-
-Best regards,
+ 	mutex_unlock(&ucsi->ppm_lock);
+ 	return ret;
+ }
 -- 
-Alexey Charkov <alchark@flipper.net>
+2.34.1
 
 
