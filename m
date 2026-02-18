@@ -1,325 +1,163 @@
-Return-Path: <linux-usb+bounces-33435-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33436-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QGtKN4GClWlrSAIAu9opvQ
-	(envelope-from <linux-usb+bounces-33435-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 10:12:33 +0100
+	id aCydHj6clWmsSgIAu9opvQ
+	(envelope-from <linux-usb+bounces-33436-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 12:02:22 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F37715498A
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 10:12:33 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5A74155C4D
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 12:02:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 07B15302DF41
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 09:11:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6A7433041165
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 11:01:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A5CD33557B;
-	Wed, 18 Feb 2026 09:11:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8507A308F26;
+	Wed, 18 Feb 2026 11:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gBjt7o0i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DWRPPPEW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4FF320CDF;
-	Wed, 18 Feb 2026 09:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771405876; cv=fail; b=D+1GwNBpFrVjj+wiK26vi/9EdiheFqNBvE1UhTHp8e5U7kprLIX3s0jS/FyBIWRy7Z4H4rL/ZReQD4he438ZOBBVengwgu6e25FovnvdjS4IzMGBsudaWeOrQ72cEpYsL0HRoEc9OqRvCAankkpq+JI+TPJz5FmltUiaXEdBfSE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771405876; c=relaxed/simple;
-	bh=sDDBAF5upBauNAOzDqqJTO2WJ5ebLoEhzqnejLVTi98=;
-	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
-	 Content-Disposition:MIME-Version; b=H1BIxcwEM/oGZJU3I0rIurXSZGlxhNxFE9o73Fm8DeDcN71scFS7TwxnT/pUSYhqsqD5OEDAz2TIdngnM44ZvsEbcLpVkFBkFA4xpRNwYBZt2RJKmaS36VPcmKbec/IMlWx5sEyFrKSKJ0oqcsxx61hc+lUeb//5i+Z8APXwjSc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gBjt7o0i; arc=fail smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771405874; x=1802941874;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sDDBAF5upBauNAOzDqqJTO2WJ5ebLoEhzqnejLVTi98=;
-  b=gBjt7o0iATa0BDHJUpqYL9thA099tzLiVvrcA4GGhKceg4TX/6EHKwPp
-   p3cz35aLKfvuS3BTwm64EROI5ah3eEWNkPqrkOoDiYgnVSw6AtcAY1SCL
-   CG27e8rZNbosEabdT7w5mwlj2AOMnRf62NoJT3NG5J6WrcH1L8uGIgCZ1
-   uVJN8mQZnRtNlI4Hwa6hm4fuloYI8vLdJ9IridH8GBFZp02jNDaPhWvT2
-   Wyzz2iXs8srrf0Di1/fdEEjyk6KYaWAe7O5C57lbaRJh3/MksdxtQTKCL
-   2H2xPWUV8j9E1rixeAka0cBWo7P96R6pRjKQAUQ80E4BSu6z/lHImrchu
-   A==;
-X-CSE-ConnectionGUID: hyFcsajcQHKWWt5G8k0XzQ==
-X-CSE-MsgGUID: GMz2uUb/RJ2oO7t1OBcjtQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="72524754"
-X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
-   d="scan'208";a="72524754"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 01:11:14 -0800
-X-CSE-ConnectionGUID: B6M/ccE8T4+ZUzSdW+ZG1Q==
-X-CSE-MsgGUID: P+LoEOZLT82VHu0/kYeOKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
-   d="scan'208";a="242984298"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 01:11:13 -0800
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Wed, 18 Feb 2026 01:11:12 -0800
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Wed, 18 Feb 2026 01:11:12 -0800
-Received: from DM5PR21CU001.outbound.protection.outlook.com (52.101.62.10) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Wed, 18 Feb 2026 01:11:12 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CzHtUSY7uUiVIv57iSRCyfuBtfSV05n3g3rdmZGbKOskPR9T7jCGf2oLV5KFMHxBOjch5CSQbsAYPYJjNCO0uTPZ0JLTbxGEADlCiAmVLxQUCItLUtmbZBtffBzNUyKbafRb59/QEOu66hkFmZunsnxIKpwjYC5yVhAFal2YhFeMTD9aAjjg0pVbNFYz7aZ263f550gS/qSPROwjR/5tNidN2OToLv28RXbiF0T8hmRHhUf4EYmEEMRK0Sz4a6Ih6uAirH+2nH4ZuTey0Em/4pYCx85IUQMO/R+1YZE/H4qpZuK3/RaUlzaiczCWqFGI2mvD7VocW7bPdA4HYGSM/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lW0Ydlm5C8kCF3lBNWYVJQIT7ePN2ElkKLeEIZjfcjo=;
- b=ZCkDTx1cSmcpV3umjPj0YZnEK4dD/2w37/+0tnGwuxYVy0AK5G2uPRrYaklaLiAD7dRzWHIAwbuWvwrVi9+1E4Q3B5SisbStkpyJ6N1S4J0mywUSBNqF8GLYShKAguOEJyGGabhLGeZ9Qjwdv6R5XrJk/GzOssoNiqOxy7gnOBJ0XucLikJ8JWGiTLzQqVa6Ynxbvf7w0yaXS+9iKOQYTkA7ZU8XaGzFkRM3GHCCNr8eDEauIfHCELSIfYTVm6vHocdCPc7HMuo91l8wjCQgYrJ9CRZiro1lMgIYjXgrnXlJ1ARdVBtQodi//aYHyrsGddvbyvtX8Ad+aPFN0wWRKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com (2603:10b6:408:1b6::9)
- by SJ0PR11MB5184.namprd11.prod.outlook.com (2603:10b6:a03:2d5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.14; Wed, 18 Feb
- 2026 09:11:09 +0000
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::e4de:b1d:5557:7257]) by LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::e4de:b1d:5557:7257%5]) with mapi id 15.20.9632.010; Wed, 18 Feb 2026
- 09:11:09 +0000
-Date: Wed, 18 Feb 2026 17:10:59 +0800
-From: kernel test robot <oliver.sang@intel.com>
-To: Kuen-Han Tsai <khtsai@google.com>
-CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<oliver.sang@intel.com>
-Subject: [linus:master] [usb]  56a512a9b4:
- Oops:general_protection_fault,probably_for_non-canonical_address#:#[##]SMP_KASAN
-Message-ID: <202602181727.fd76c561-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-User-Agent: s-nail v14.9.25
-X-ClientProxiedBy: KL1P15301CA0036.APCP153.PROD.OUTLOOK.COM
- (2603:1096:820:6::24) To LV3PR11MB8603.namprd11.prod.outlook.com
- (2603:10b6:408:1b6::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149773054EF
+	for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 11:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771412514; cv=none; b=aF7uogZf3ni79fn5qVWzLJ+ghPYuntJ2i641sCHvlsbrkW37JLPRQsIwJLq44rS5A7wyIvQaH7DkRQm49VoOwuKIvWDYnm/zPQWEq3FSQDtHicBAqk+TXyc9NK8ld4ejwhC0MkSL72/c95cKQ8bgluxKNn3JrWjki0SfRtv2rHs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771412514; c=relaxed/simple;
+	bh=mtJ7tmHpf4O0rAYDjo0ur8EJ65nUAAHFMbS0duMHe3s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ujzvi1Kafb80Ef3QhsiWgd8Q9sw/CTpkdYhcyvXNV0kriWOI1N7v/eaZCVy0kh2/DSnZAH/h9SH8EbMWGguTCXhOc7Co+18uiFq1TJvSjf42qdXY7bNcX1Qyg8MNHftLrevDyn/2xjcwY2+F0qHt5q/SjUlBwEfbzTcjGPc2kig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DWRPPPEW; arc=none smtp.client-ip=209.85.210.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-8230c33f477so2464973b3a.2
+        for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 03:01:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771412512; x=1772017312; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QEh2x9C41ySCmS9IgH4my6kPFolL4MAILeh/ncPke2I=;
+        b=DWRPPPEWOb6paBL3I2g9Z6WqYHMdoyehrfoFzYajLBSEHerwYRxi11ImGpCv9Of98c
+         uqpruC9BMTf7DAEkAqZu5VwgdYNcXxbyvcqRWaPqOav805BfROlqs6bgUfHYX73ZytX0
+         +jnSeT6mtxHAhXgb4MYVj30tV2ZcTfyt200n1mCk2NpGHsUq/yXWsonksw7jSn4jnfU2
+         SwnMixsbyzHoRBKnvI1o1h1QcqnMbeZKLihGbkg5Y7OD/VlEz05br30yJjYOI2agDjxs
+         NcTK6uK4JmUmt8QQsfpV3Yu1xV+29SoTzlyAtlzXFTV+zR7U7DrTmasxDQaDOlJU7V12
+         hWtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771412512; x=1772017312;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QEh2x9C41ySCmS9IgH4my6kPFolL4MAILeh/ncPke2I=;
+        b=dRZ+nEXNyuYxAsjdVkwnA3KXscK5Df0KNm104lLj2wmbBlONqOpRYZU9VE1aUPwhfE
+         QX5hsRL5aNJF+Zl9DE5RTdfvL7RKkcJQMcQn50QESnKRXT6kX+LcIE1CtLFpPKiN6/w6
+         UPHTFCrpatIUkE0y0tAhjDEu7HL71us7XUZKbzv80uLv45bqLrK1oHHPgnVtCV07LvNo
+         uQvZ2AQWwE0OF1vDMiMtlRJZlzAUOpbHCrqju8FpHFDkJ4MN6lPx3Xd67Wc8PdNFdTUS
+         TbcpVjdsqU5iL0XIvr0aziqXX9AF+68xfVF5bYQJzpkuF7NowPGkLzAqn08vJvW7y0P/
+         lMPA==
+X-Gm-Message-State: AOJu0Yy2brVTl5SnhR2gidMedjmB0JRmxbaS299QvdzvZo5NkFtk2Qoz
+	1ctHYintTs4z7JftB8KoewNY6U0i80dPs9mtAXt9gcQmNcJFP+eCM3bf
+X-Gm-Gg: AZuq6aJoRtKSifc0CqYpdD3FeSwDZtNC1QrLoNtH764tp9NcBWcJ3rZOprsPI4uclrz
+	4xGdX8JKrOydH/sUjbBdPy5Lxy390kcRZQIeEuay01EeoJFio7gDs6K8cdcCe1ViPbRByd2NGZM
+	4r8KtQ1uAWBfMvwHd2vZLvKBrMv+4hHteKgb46E7uDehn629kQ83dmcAC6ByLoA7HqhD7q9Ln22
+	MP4VgOjnr4A4xy6WmeAwqdJ+usKbHPqErC5EZauzU0MsCQJjRWATUFBHBVZZGwYXfkEEgM4+/Xs
+	Qy4qTwHsTZySGLt6R2b76mIoRkdOItAZM0SyDyTsn9VuMCrKBnYcuZ+6x1S45oqUAkhLqCcpxRv
+	WxSKvBgJDMa76zS0XJKo/Q+hxTwb6qZhxb48nW0iJF246uGnueTNZn+v1vPNhFqoV9kE/fV+j3t
+	RWtux6vJMFROQrSel0oxactNFVEiSGiQCAT3eTeDCe8Sr6YQv936TZNSPqbi6dUgsx4oM8
+X-Received: by 2002:a05:6a00:1590:b0:7fb:cf05:93cb with SMTP id d2e1a72fcca58-82527460066mr1139313b3a.1.1771412511875;
+        Wed, 18 Feb 2026 03:01:51 -0800 (PST)
+Received: from zeeshan-Standard-PC-Q35-ICH9-2009.. ([110.93.227.54])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a2c4e5sm16582293b3a.4.2026.02.18.03.01.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Feb 2026 03:01:51 -0800 (PST)
+From: Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
+Subject: [PATCH] usb: dwc3: qcom: simplify error check in dwc3_qcom_find_num_ports()
+Date: Wed, 18 Feb 2026 16:01:21 +0500
+Message-ID: <20260218110121.10185-1-zeeshanahmad022019@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV3PR11MB8603:EE_|SJ0PR11MB5184:EE_
-X-MS-Office365-Filtering-Correlation-Id: 64aded1d-39f1-4631-2d6e-08de6ecda7d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?JXsb2lvowyV99c8+dHCUg2STWgqukYu1B7KCIp86B/ucpgIsHe57Poq/vpBU?=
- =?us-ascii?Q?8F7OmitlJ2FowDnsjYO0TLK3dvmFATWh8qUX42IuPmw/2I/JJWBdEA6k6XaT?=
- =?us-ascii?Q?7ZIqiQGb0Clr1k/qRwxfy0KTREnLwg9B0+HE6DskVtAMkEh5g1syQIuyiyhf?=
- =?us-ascii?Q?Ssnf8NfRv8TkfT9nyDdUPXHiB9kuajFTriXoGEUkme9f2W/DnfFV23ZCYS2l?=
- =?us-ascii?Q?Mqn+/LtPucSnwYNSBqzGYwRqcq6ChuL5EnZZskbLT1DbWToTuV9phGjga2Gh?=
- =?us-ascii?Q?kMwElgdgAlIChxsLv1yRneh/IWAh+7nGCTdtI18GvJv66VHvVHomhaxkjKq1?=
- =?us-ascii?Q?PpXSXFnssUUqy9pfCWd/RgD5oVh6vA10NZoFEb0fCy79bo8Yw3RWhY6UyqW2?=
- =?us-ascii?Q?j6CwAsKIoFXIgubXhDpM0gAQ8ohLN8nAQxJZDoWfh/WtcU1Xw3Dwx7nnIcq3?=
- =?us-ascii?Q?2+XKVF1OAcy2/9y8upQzLqS7+LqqlYgWUa/zuH/y7TSit0KSIoXpWdgc2k8X?=
- =?us-ascii?Q?41y3B8eS/pe8VzWBL9KokTwe2vZeojcsFSIWO4rzI6bht7/48n7Fa5mdN/9M?=
- =?us-ascii?Q?OwFFlsRpNHlD5NIial4sty0vAWXXUFFFq71qWtCCnnJD0Kuyzp6Mr4NwbpWV?=
- =?us-ascii?Q?2oXZosiCqFbj8tLRJz1FotFP7hbGx4xO6ulFS6Z1UP/ixlnfOV+rIOoXVkw2?=
- =?us-ascii?Q?oJ8c9exP7y8om3YF3GtOrhBDycPBE/oKxU5IZuoFRZ7TydzWFjlmHe57jqsL?=
- =?us-ascii?Q?uoA0uLv/EPNHHUSVtax8JFAGrMh2eod4ykOZItFSWBQTwYHsE7J2kcfdwbu5?=
- =?us-ascii?Q?VBHpO4PvpV1X30YHBoIE5qRaGNnl/1Cr2I4Jrl9zhds6HkwLSmdsWPG+YPX1?=
- =?us-ascii?Q?uLTtwGyVDUgtYtyFR6RwfaSnvZhdc2kdAbUMpjg6RJw8fCkDWX4IBy8GqjPD?=
- =?us-ascii?Q?yIQK//POk9zTIg0FA6totYPPDHqZDLOOsTMkf8z6KvcqFEHOue+bjqO7Av/B?=
- =?us-ascii?Q?84YTpPnyY61YjzSZtLEYPzXleevTl7ztE0cPxWz4ZwyoEM7bu1Nd/3h1XzQB?=
- =?us-ascii?Q?Dx75WyCQi4swoHkTf4TM+NN7rKQ5t8SoioZ0OELRlQlVyHqgK1Mjch5Cme0x?=
- =?us-ascii?Q?urDGuelJPvRmZRPmz2Y99TY/pVrKPP1hPlOXJCJMvyHjknJEdX9/iUaSfBhZ?=
- =?us-ascii?Q?3yvaAOxmVkcQP6hLjX9GUGdCLgjcspI69zG6vwfFl6UV++OLPE0qQrNkr0vG?=
- =?us-ascii?Q?Eg+lF8seaEMfDyoYpjuvBDjNGcOUpTRmR8IpSLk+DWn00nzLrVquI0wPpmIO?=
- =?us-ascii?Q?TTU/PW66k54TriSJhtzj671aQs8vDxYiZgVOnX65GnLk7Aivr1A9uDsr3fXy?=
- =?us-ascii?Q?gNGNrg4Gf7Tki3tyz/aSdeO1M+99q8H5ni8xS1EbtfrPwSMVaQ33fIa8LAV8?=
- =?us-ascii?Q?gciFxFddD50zRMN7sFo2VEi372JLgtI6LjKNZaEgKe0TdrrQS39mwcuy+WcZ?=
- =?us-ascii?Q?Q9Tyu2e6ltI4rpACx4o+4NRScp5PIs6nIBfRAE66jAmZm3zNkOQfEEoSr7kQ?=
- =?us-ascii?Q?qezd2aMyM6bVRLzgNDzYZpRBXg6ljKAU8KTlG2iN?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR11MB8603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UtjULTjXGckqSviSvr34WJPaY4Z/QW1ShjV7eJqTAp4wt5ppmu8syFMIZWpE?=
- =?us-ascii?Q?3UtHEaeF8u82LAdgWUmSCPAc2ogk4qPTgq8AU6xyoQaKNrPm+7mF/xqe5Jw1?=
- =?us-ascii?Q?jeJMDzWEWmtHEVSgEyBhcmdWDbNqmoYYePukhpvvx5BaCOpAqW9OUVmtV9Mg?=
- =?us-ascii?Q?L6f4UaR8lKsq+uY3ZIw90HvnEP4LBWtTSILQbrkLI9P1+xEuRyRrq0cUuxh5?=
- =?us-ascii?Q?maN8igFAs9Hs9fCKd2C18GcDaq3EjbLkQ7WFwXwwe8L8IvvxNxIEAAJ9NOev?=
- =?us-ascii?Q?xlDH444rrWL8/zg7j0rDUQWlzer4N0LoE3I3a90sWK1jYbBIPEYT20hQdsBt?=
- =?us-ascii?Q?Z9BsjPuAUcmiRU2YsysxcNqD46LWdK/nJr5egEsVEst7q6QXcDTL9e0Evz20?=
- =?us-ascii?Q?5lSbnaDV6QitBn6cuRlLCV5dAGwZ18fj0Rb+KBPhEtgGvFfrLhmdOPA0cR+Z?=
- =?us-ascii?Q?VjjJvnqEDNNig6bE2/HuVKN7srSUPTQ3V7ZqcIliLjdENOMkRKKsB7fT48Km?=
- =?us-ascii?Q?8SV0y11Z6/yCcgqbi/32whDsz/Lzhots02TBcHdNpwyos7RyrZf/LeBXCGfB?=
- =?us-ascii?Q?hY0XNzH9rwwE3bq+WIjuCBKicYTB5lF4o59X0/3uNuVzzCBGU1uAIP/81xiN?=
- =?us-ascii?Q?xesvPtgD6zaoyUWR/4CzVeAU19jVAvKdSYaHWZil/liqoOlvhjW53J47NGxy?=
- =?us-ascii?Q?dkiEjo25VDEEFPfIaoAdzBvLUWRlzZufcMc4CP+vZV++JANW+HsL0NLUWdwk?=
- =?us-ascii?Q?rafldCdVT1Owlx5LysCU9jS+vN8Y26gsAzTcW77us/db5fLy67nHKVTd4UN7?=
- =?us-ascii?Q?o8qVdIvaDt7HrbBVAGQz+E9JHo319jfC+UqEJ4D3oyQKGGyuqJ/LwYgPNNIC?=
- =?us-ascii?Q?8HTzAb0txUMbd6KyU5kAUY3sj/lxevINici3HdZw3MgZ9tNGeZWepQkUIk5z?=
- =?us-ascii?Q?FC2BNkONkvvF3aE2016dLd9J6RVmRSgVACgu7HSbjE+RUAWvylPcJ0O4zyVF?=
- =?us-ascii?Q?IWG235f51hkrCSlAjVBrBRguidhlGiabl2QaeoMYr0k1molVzXaAH6nQg6ox?=
- =?us-ascii?Q?L4p+DfUtHHi35ZeDTMXms/ddN7jNp25JBL12D9E+H4arHm5+xTBkLB5+dGqo?=
- =?us-ascii?Q?kGxgPkTapcNwovcBiAw/6OCplP3uh06/B0NmYWdpMJ8kYl+h5VT4dluWDHaD?=
- =?us-ascii?Q?aM+Kt9rbaA5dEHq9Of5vYPKzwTuTxll/C6rnemjKmILr40Kw+6Vui+cfzaHz?=
- =?us-ascii?Q?WSi4jWtwja7Ty4uN2uj2nCjWs/Vu00/MUZXE6udPzyaaArj9rafw3eFUzEXF?=
- =?us-ascii?Q?1JHJ+/KkesVuSZA4IEFXKalZ23UIi/AB9aM35I7msrINAHyF8OPGGGJruUnp?=
- =?us-ascii?Q?ukB41ndCzasFUwbJ0y1clvEir3r8pLrbEdyG2+EtI3s3Wc/6aD8p0EQBOw1H?=
- =?us-ascii?Q?dITN0QtR2URd9r2evtVpIpI43wPo9abonF21aNDxZF+eWGIuyTnv8ru+FlL0?=
- =?us-ascii?Q?fbZVjJfatzMuhGR8NtLqirMjygDvmFPVWsVGdAnJq7ze3cKTqDPhZdLvqYJN?=
- =?us-ascii?Q?OALHPJ9ay08BW7mIbVmB3+9ho+GpsEonr78DZHYKlsXhAmpyzCZbyonHtCaK?=
- =?us-ascii?Q?95azPzV2+w0V3YLw51JuyPH9TgotUElShbQH4TkdZUkPIywZx6Q/Ld3rdGAs?=
- =?us-ascii?Q?Vf19Cdqij892ahmeyqyFaWNo1KRucZzLK9zhGDGJbuYbjdzQqGQE/qWrEdJB?=
- =?us-ascii?Q?QV3i1BwCCQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64aded1d-39f1-4631-2d6e-08de6ecda7d5
-X-MS-Exchange-CrossTenant-AuthSource: LV3PR11MB8603.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2026 09:11:09.7388
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GogUSVQUqsElRt22Vo7CgF1mmZIJEI6YoG8t9Zik4ntniLq+1lUIy7rjefEUF5OQjxOHEBkRYU2reCnWLrn2mA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5184
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim,intel.com:email,01.org:url];
+	TAGGED_FROM(0.00)[bounces-33436-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oliver.sang@intel.com,linux-usb@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	PRECEDENCE_BULK(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33435-lists,linux-usb=lfdr.de];
-	DKIM_TRACE(0.00)[intel.com:+]
-X-Rspamd-Queue-Id: 5F37715498A
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zeeshanahmad022019@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E5A74155C4D
 X-Rspamd-Action: no action
 
+The platform_get_irq_byname_optional() function returns a non-zero
+IRQ number on success and a negative error code on failure. It
+never returns zero.
 
+The current implementation checks for a return value less than or
+equal to zero. Since zero is not a valid return value, simplify
+the check to only look for negative error codes.
 
-Hello,
+Signed-off-by: Zeeshan Ahmad <zeeshanahmad022019@gmail.com>
+---
+ drivers/usb/dwc3/dwc3-qcom-legacy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-kernel test robot noticed "Oops:general_protection_fault,probably_for_non-canonical_address#:#[##]SMP_KASAN" on:
-
-commit: 56a512a9b4107079f68701e7d55da8507eb963d9 ("usb: gadget: f_ncm: align net_device lifecycle with bind/unbind")
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-
-
-in testcase: boot
-
-config: x86_64-randconfig-002-20260217
-compiler: clang-20
-test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 32G
-
-(please refer to attached dmesg/kmsg for entire log/backtrace)
-
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <oliver.sang@intel.com>
-| Closes: https://lore.kernel.org/oe-lkp/202602181727.fd76c561-lkp@intel.com
-
-
-
-[    8.960483][    T1] usb usb1: SerialNumber: dummy_hcd.0
-[    8.962200][    T1] hub 1-0:1.0: USB hub found
-[    8.963048][    T1] hub 1-0:1.0: 1 port detected
-[    8.967283][    T1] file system registered
-[    8.968024][    T1] udc dummy_udc.0: binding gadget driver [g_ncm]
-[    8.968851][    T1] Oops: general protection fault, probably for non-canonical address 0xdffffc00000001a3: 0000 [#1] SMP KASAN
-[    8.970049][    T1] KASAN: null-ptr-deref in range [0x0000000000000d18-0x0000000000000d1f]
-[    8.970973][    T1] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Tainted: G                T   6.19.0-rc3-00025-g56a512a9b410 #1 PREEMPTLAZY
-[    8.971938][    T1] Tainted: [T]=RANDSTRUCT
-[    8.971938][    T1] RIP: 0010:gether_set_qmult (kbuild/src/consumer/drivers/usb/gadget/function/u_ether.c:988)
-[    8.971938][    T1] Code: 00 00 f3 0f 1e fa 0f 1f 44 00 00 55 48 89 e5 41 56 53 48 81 c7 18 0d 00 00 48 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <0f> b6 04 08 84 c0 75 07 89 37 5b 41 5e 5d c3 89 f9 80 e1 07 80 c1
-All code
-========
-   0:	00 00                	add    %al,(%rax)
-   2:	f3 0f 1e fa          	endbr64
-   6:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-   b:	55                   	push   %rbp
-   c:	48 89 e5             	mov    %rsp,%rbp
-   f:	41 56                	push   %r14
-  11:	53                   	push   %rbx
-  12:	48 81 c7 18 0d 00 00 	add    $0xd18,%rdi
-  19:	48 89 f8             	mov    %rdi,%rax
-  1c:	48 c1 e8 03          	shr    $0x3,%rax
-  20:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  27:	fc ff df 
-  2a:*	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax		<-- trapping instruction
-  2e:	84 c0                	test   %al,%al
-  30:	75 07                	jne    0x39
-  32:	89 37                	mov    %esi,(%rdi)
-  34:	5b                   	pop    %rbx
-  35:	41 5e                	pop    %r14
-  37:	5d                   	pop    %rbp
-  38:	c3                   	ret
-  39:	89 f9                	mov    %edi,%ecx
-  3b:	80 e1 07             	and    $0x7,%cl
-  3e:	80                   	.byte 0x80
-  3f:	c1                   	.byte 0xc1
-
-Code starting with the faulting instruction
-===========================================
-   0:	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax
-   4:	84 c0                	test   %al,%al
-   6:	75 07                	jne    0xf
-   8:	89 37                	mov    %esi,(%rdi)
-   a:	5b                   	pop    %rbx
-   b:	41 5e                	pop    %r14
-   d:	5d                   	pop    %rbp
-   e:	c3                   	ret
-   f:	89 f9                	mov    %edi,%ecx
-  11:	80 e1 07             	and    $0x7,%cl
-  14:	80                   	.byte 0x80
-  15:	c1                   	.byte 0xc1
-[    8.971938][    T1] RSP: 0018:ffff8881009df660 EFLAGS: 00010206
-[    8.971938][    T1] RAX: 00000000000001a3 RBX: ffff8881020fd400 RCX: dffffc0000000000
-[    8.971938][    T1] RDX: 0000000000000001 RSI: 0000000000000005 RDI: 0000000000000d18
-[    8.971938][    T1] RBP: ffff8881009df670 R08: ffff8881009df5ef R09: 1ffff1102013bebd
-[    8.971938][    T1] R10: dffffc0000000000 R11: ffffed102013bebe R12: dffffc0000000000
-[    8.971938][    T1] R13: 1ffff11020105216 R14: ffff8881296b4c00 R15: ffff8881008290b0
-[    8.971938][    T1] FS:  0000000000000000(0000) GS:ffff88879974e000(0000) knlGS:0000000000000000
-[    8.971938][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    8.971938][    T1] CR2: 00007f70208af0ac CR3: 0000000004a7c000 CR4: 00000000000406f0
-[    8.971938][    T1] Call Trace:
-[    8.971938][    T1]  <TASK>
-[    8.971938][    T1]  gncm_bind (kbuild/src/consumer/drivers/usb/gadget/legacy/ncm.c:140)
-[    8.971938][    T1]  ? gadget_bind_driver (kbuild/src/consumer/drivers/usb/gadget/udc/core.c:1629 (discriminator 1024))
-[    8.971938][    T1]  composite_bind (kbuild/src/consumer/drivers/usb/gadget/composite.c:2553)
-[    8.971938][    T1]  ? suspended_show (kbuild/src/consumer/drivers/usb/gadget/composite.c:2529)
-
-
-The kernel config and materials to reproduce are available at:
-https://download.01.org/0day-ci/archive/20260218/202602181727.fd76c561-lkp@intel.com
-
-
-
+diff --git a/drivers/usb/dwc3/dwc3-qcom-legacy.c b/drivers/usb/dwc3/dwc3-qcom-legacy.c
+index d3fad0fcfdac..34c578309802 100644
+--- a/drivers/usb/dwc3/dwc3-qcom-legacy.c
++++ b/drivers/usb/dwc3/dwc3-qcom-legacy.c
+@@ -620,14 +620,14 @@ static int dwc3_qcom_find_num_ports(struct platform_device *pdev)
+ 	int irq;
+ 
+ 	irq = platform_get_irq_byname_optional(pdev, "dp_hs_phy_1");
+-	if (irq <= 0)
++	if (irq < 0)
+ 		return 1;
+ 
+ 	for (port_num = 2; port_num <= DWC3_QCOM_MAX_PORTS; port_num++) {
+ 		sprintf(irq_name, "dp_hs_phy_%d", port_num);
+ 
+ 		irq = platform_get_irq_byname_optional(pdev, irq_name);
+-		if (irq <= 0)
++		if (irq < 0)
+ 			return port_num - 1;
+ 	}
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
 
 
