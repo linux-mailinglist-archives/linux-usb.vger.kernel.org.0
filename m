@@ -1,176 +1,295 @@
-Return-Path: <linux-usb+bounces-33429-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33430-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6FL0JQlOlWnIOAIAu9opvQ
-	(envelope-from <linux-usb+bounces-33429-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 06:28:41 +0100
+	id wIB+LJ5PlWkVOQIAu9opvQ
+	(envelope-from <linux-usb+bounces-33430-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 06:35:26 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 249701531F4
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 06:28:41 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E577153233
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 06:35:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 17B0E3037EFA
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 05:28:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2FB13304F5DF
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 05:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26FEE1F419A;
-	Wed, 18 Feb 2026 05:28:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2D53093B8;
+	Wed, 18 Feb 2026 05:35:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=poleshift.se header.i=@poleshift.se header.b="b0o1Qo1g";
-	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="BIWUcywv";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=poleshift.se header.i=@poleshift.se header.b="hpW+Y4GI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wpPDybR2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from e240-2.smtp-out.eu-north-1.amazonses.com (e240-2.smtp-out.eu-north-1.amazonses.com [23.251.240.2])
-	(using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB08302741;
-	Wed, 18 Feb 2026 05:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.251.240.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7F4487BE
+	for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 05:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771392506; cv=none; b=rTAlXhTkRUI+IXU9Ad+MOgXzmJ+5/hcdWjilM8W2B4eF2dFjrx7EuiqJvM7mSkrrzE6AbbjgLoHt8ExQifL8aJ/tQm0hNC4P10p3xoSD+LwZnWOZP/cq9ab8v8+Zqj6IdexBNtpK+yMSiLwj0JRM2AOfxYHXFLMUrK4moyFaoZI=
+	t=1771392908; cv=none; b=RbxdXxmssQHVG0dMj6Had0ugUVd9yQp/UzTYo/e/fGQFYLMjj3hBDBycIa6jX36iYgVkFxAxhlLNE+A76mBFdjGx7EMbelbUMZmubyVCP5x/+hj2PT3djvBqIr94AXgxBGDZ8yFk24uplu4wIPk9ENJfvZHnfDwOyWEXe8PkRLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771392506; c=relaxed/simple;
-	bh=pYwAnMSFwzMSy5YViKb3RtaiuMhEnOHJimnRsrg7mDA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:Cc; b=J8jOKl3bjnUs4zD65PuAqN9stOeXNQQ4XR7IOhrDDpOI+1Xa1oSB5gFXZwTrFLzacLya8bjbuSNz/v96vuDjnl7b0JCcnbyNsM3y8zbSU5FyODuJRf5rM9rOJK4SbajY/y+Ia91bJMisS75aGkF1RmVZQ1WkFKDiF0iGqPAqiVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=poleshift.se; spf=pass smtp.mailfrom=eu-north-1.amazonses.com; dkim=pass (2048-bit key) header.d=poleshift.se header.i=@poleshift.se header.b=b0o1Qo1g; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=BIWUcywv; dkim=fail (0-bit key) header.d=poleshift.se header.i=@poleshift.se header.b=hpW+Y4GI reason="key not found in DNS"; arc=none smtp.client-ip=23.251.240.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=poleshift.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eu-north-1.amazonses.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=n6aiayff3zq3manwyovyvpolm4pou2ef; d=poleshift.se; t=1771392502;
-	h=From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:To:Cc;
-	bh=pYwAnMSFwzMSy5YViKb3RtaiuMhEnOHJimnRsrg7mDA=;
-	b=b0o1Qo1g9NcqcT3do2js4UvNScuqY8nLbcgeNwypT0obcRNbqQWknmpCcGKHWMwt
-	yLxJiME4ppaI1QU7Fgl6Ry1Nr+krWehCBQxFE8e8bMsog9/99HEdDloaOMu/5Z2LhOd
-	fA0yjMPQJSbiTPNHhMw4dLvw/59jnCs4DuPEEFl1JPo7XE2c4WDzMnBptBUFBrQW4Jn
-	3OnfQ+iDpeP/S1+IsQpaxCfBhcUG8w/Iwm5atkI23kAw85YTYcck1WuBhgkyEOgTqJU
-	TG1ufhMb77HdX0jypEYcWPDY2kbTy381cxWxswtQhHFdOgBIWQ45fstWS6ZOqtmUawt
-	NDQ2cH5gEQ==
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=icdr7g7fbtu2nwxgaimytihkt42k3kiy; d=amazonses.com; t=1771392502;
-	h=From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:To:Cc:Feedback-ID;
-	bh=pYwAnMSFwzMSy5YViKb3RtaiuMhEnOHJimnRsrg7mDA=;
-	b=BIWUcywvzyLwNZ2gpMk7noLH6HVzCamt9YqoLU2yi4zOZSx422In+nZqpDFVSIdK
-	PVxyFIEN7FdyfAo+vf6TWrZSeemrrMuYBEAhVHIEsoPLenI0Uyz6nXvN9yDtcArucAa
-	molJaytKPB5Xl1MHRyYQW3ZNib/Bi0RI8mt+RwmU=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poleshift.se;
-	s=20230429; t=1771392500;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=F/pKx2TLXuF3OwfKFAD9ATqLuWyO3+40ljoC9QdG8KU=;
-	b=hpW+Y4GIlSJ1Gdu2xX9JjdsDPI0yVCistgHBQhelJ2Td+OahdM6cOZ6gVXDtb7He7GeLxc
-	520Y2nmTSNVtEuuhv0+pgSTENvhv3lXh2QBSgibRmOPE7ljpXs41i9x4oUnvfDB1o7YPWd
-	ipNsFtTH15Z/CISZ5U9n/LmRS9n9RBo=
-From: =?utf-8?q?Martin_P=C3=A5lsson?= <martin@poleshift.se>
-Date: Wed, 18 Feb 2026 05:28:22 +0000
-Subject: [PATCH v3] net: usb: lan78xx: scan all MDIO addresses on LAN7801
+	s=arc-20240116; t=1771392908; c=relaxed/simple;
+	bh=ykMbeLkM3JFjjAT+X4RiA986+vadbys1IX+AMjB2BRI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hdP3coReJxnEhq2bAEbR3HaZtgO0zSQtzkV1IiOOaoys0oG2u2dWiUg2/wNpqOcV6oiH2LfSWwgW8a+BQIdNW8DR24RW+psgvOws9Ne5Jt1dFYQSL7CAx5sG8jJTYtzcCHMiBBE8drUNf99hmYOTOnNoCx48Lg+zs3In8vWziDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wpPDybR2; arc=none smtp.client-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-64ad9238d8fso4826300d50.3
+        for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 21:35:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771392904; x=1771997704; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j2gS7QPW0Vau0TRfECG0tWh0O+TEzQcOd404Ys3R6dI=;
+        b=wpPDybR2cORDQVafAWe7BXkFmwQuCta0yMTOIiGfpyTI1Kso5yESnbSJrYU7kkvfOK
+         ZSnbQ4omaYiXQ5KNpbsusz2zSH9wgLZ40oleczu6olQ/x57OWB6sHlJNc9fE+HK4m3EQ
+         7j4jzv9zG/IzhGiujueJSKuhT2X55c1UAhsDHFc4Uo87YK1iyKDMBuPSWsf4EfX4rtjS
+         oFqS5O1A2jUrNT6p0WWik/05BqRt4HyKwDnVh6NZwKwS6uHySim/rSwTk+TBhjr5JHWo
+         +8lsX0bMPPvlou+a4HorwLemRqctNq5i5LeVHUdA1vG0c/zHHCFVzFCfcQB0LCcN+JU/
+         X/bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771392904; x=1771997704;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j2gS7QPW0Vau0TRfECG0tWh0O+TEzQcOd404Ys3R6dI=;
+        b=RIXdZ5gB5dV5V1ccmTtCIhPyp3M7hp8MDhj+7nZ/rbeHHwYG7GA3b1/3XHxZv3tC+A
+         Ayv8ot1JYPzVMtBZVqEYsK4la5ExzklBNkV9GXHn3vtdy3HF7l9ZWJ2nHINzaGXenlkE
+         Tj8tRNPVNToELH2kcnyt6krkZktRnuyw48aiZO59GDydqXl8cXUcneFm059Esw50pzGv
+         tlOULCqoBhd4MlafoyhFDGdsM5K/DujoeglUBJc59t8641V2hX87ZiTiKfivkqxmgeQl
+         RdvZyiZYWyDKlfK4ryqmzdFsi6Dvzy1lqclazCz0IhXIO+TSkX4oVoTGs94T6Z7ZoVUr
+         RHYw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9HGQO8eCCqrIkAzVzxlYBI/QfTpyeD0uMjfPM40pVI18Mzi1nZqlRDcU9WnQY/dPNJLBQxMZnogY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAaTx94TfPHGXf0DZBXVxD2PqzpwSyUEGE+xXerXSoUAL9Boc/
+	A6MUKgjOOqgvbStqWg48CcoZAtvJwWWREQ8+4RkoNvhe6YTZL/+5uhzb9spp/qX9bg==
+X-Gm-Gg: AZuq6aJbbeTq9F8sV1nU/1gcu1uY/dMHl7aDGHKV8CaTvOuUA3o5y5DVFD1Hwxvms2V
+	mYp8k4PjRx4N16UYTOR5tIzs6fpt2JOsYA2lqvNo9Y8asudW9FlksMjGQj98nIWxy4bwZijKXdj
+	VBFcWygXj0ly+PJ4DJ3wsNBaP6AUbpk29GQPpeejDjGWIqIch3iXwMJIF/sXq8KiaXlhr+0TCL5
+	eId1kFjtCQ2Ma7eVEREB0Bv48MLFKF9BMN4aAymFl0ICRmcP45NtUEj45NEa2U4bOhSzlv1hFpH
+	ZHajZPmG4t23Knv2xM89zgdzT6/Hob5Kk08PCRwmbg5dy8BbMuMbFMaPSpqI0pjwndHwl7LVraB
+	ovWSH3dmG+tA71xMJVBWCh+A2tWZwYDsqwaIY5Gz+SrPjyECZPO0tll7mOd1OY6B2O96K1LRYuT
+	9vTe3nDLNuoflaUWGeG8fM2N2FeazJFPqKEn8otHMkWkclw5lHAXsDx0qopqXcCZyA3nSI/jtVR
+	TFE
+X-Received: by 2002:a05:690e:4005:b0:649:3b9:924e with SMTP id 956f58d0204a3-64c555942aamr701484d50.22.1771392903977;
+        Tue, 17 Feb 2026 21:35:03 -0800 (PST)
+Received: from ?IPV6:2600:1700:4570:89a0:b4:5cb3:5345:8019? ([2600:1700:4570:89a0:b4:5cb3:5345:8019])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64c22f8fa1fsm5666809d50.15.2026.02.17.21.35.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Feb 2026 21:35:03 -0800 (PST)
+Message-ID: <7103a273-f066-4c1b-ad14-7e8fd7ba002a@google.com>
+Date: Tue, 17 Feb 2026 21:35:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 5/6] power: supply: max77759: add charger driver
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>,
+ Matti Vaittinen <mazziesaccount@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20260214-max77759-charger-v6-0-28c09bda74b4@google.com>
+ <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
+ <0b6e7cb7223e553d9b53df464959e97fd3d1ce43.camel@linaro.org>
+From: Amit Sunil Dhamne <amitsd@google.com>
+Content-Language: en-US
+In-Reply-To: <0b6e7cb7223e553d9b53df464959e97fd3d1ce43.camel@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-ID: <0110019c6f388aff-98d99cf0-4425-4fff-b16b-dea5ad8fafe0-000000@eu-north-1.amazonses.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4XNQQ6CMBAF0KuQWTumLaWgK+9hXFQ62EYE0pIGQ
- ri7hZUxMS7/n/w3CwTyjgKcswU8RRdc36WQHzKore4ehM6kDIIJxQSX2OqurKYJBzvjS4cnNm5
- CLdPVEC+0rCFNB0+p3tnrLWXrwtj7ef8S+db+ASNHjvlda85YpTjJy9C3FKxrxmMg2MwoPh31w
- xHJUXQqqTiRMbL8ctZ1fQOjnhBhAwEAAA==
-X-Change-ID: 20260214-lan78xx-phy-mask-fix-a4260de15a4c
-To: Thangaraj Samynathan <Thangaraj.S@microchip.com>, 
-	Rengarajan Sundararajan <Rengarajan.S@microchip.com>, 
-	UNGLinuxDriver@microchip.com, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, 
-	Woojung Huh <woojung.huh@microchip.com>
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	=?utf-8?q?Martin_P=C3=A5lsson?= <martin@poleshift.se>
-X-Mailer: b4 0.14.3
-Feedback-ID: ::1.eu-north-1.nVsitYrO9p3qnPLcZXP017jV0c/PN62ZbS4lYSSQpnA=:AmazonSES
-X-SES-Outgoing: 2026.02.18-23.251.240.2
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[poleshift.se,reject];
-	R_DKIM_ALLOW(-0.20)[poleshift.se:s=n6aiayff3zq3manwyovyvpolm4pou2ef,amazonses.com:s=icdr7g7fbtu2nwxgaimytihkt42k3kiy];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33429-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-33430-lists,linux-usb=lfdr.de];
+	FREEMAIL_TO(0.00)[linaro.org,kernel.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org];
 	MIME_TRACE(0.00)[0:+];
-	R_DKIM_PERMFAIL(0.00)[poleshift.se:s=20230429];
-	RCPT_COUNT_TWELVE(0.00)[13];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[poleshift.se:+,amazonses.com:+,poleshift.se:~];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[martin@poleshift.se,linux-usb@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[23];
 	FROM_HAS_DN(0.00)[];
-	DKIM_MIXED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amazonses.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,eu-north-1.amazonses.com:mid,poleshift.se:email,poleshift.se:dkim]
-X-Rspamd-Queue-Id: 249701531F4
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4E577153233
 X-Rspamd-Action: no action
 
-The LAN7801 is designed exclusively for external PHYs (unlike the
-LAN7800/LAN7850 which have internal PHYs), but lan78xx_mdio_init()
-restricts PHY scanning to MDIO addresses 0-7 by setting phy_mask to
-~(0xFF). This prevents discovery of external PHYs wired to addresses
-outside that range.
+Hi André,
 
-One such case is the DP83TC814 100BASE-T1 PHY, which is typically
-configured at MDIO address 10 via PHYAD bootstrap pins and goes
-undetected with the current mask.
 
-Remove the restrictive phy_mask assignment for the LAN7801 so that the
-default mask of 0 applies, allowing all 32 MDIO addresses to be
-scanned during bus registration.
+On 2/17/26 5:14 AM, André Draszik wrote:
+> Hi Amit,
+>
+> All below comments are only minor, feel free to ignore them.
+>
+> On Sat, 2026-02-14 at 03:12 +0000, Amit Sunil Dhamne via B4 Relay wrote:
+>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>
+>> Add support for MAX77759 battery charger driver. This is a 4A 1-Cell
+>> Li+/LiPoly dual input switch mode charger. While the device can support
+>> USB & wireless charger inputs, this implementation only supports USB
+>> input. This implementation supports both buck and boost modes.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>  MAINTAINERS                             |   6 +
+>>  drivers/power/supply/Kconfig            |  11 +
+>>  drivers/power/supply/Makefile           |   1 +
+>>  drivers/power/supply/max77759_charger.c | 768 ++++++++++++++++++++++++++++++++
+>>  4 files changed, 786 insertions(+)
+> [...]
+>
+>> diff --git a/drivers/power/supply/max77759_charger.c b/drivers/power/supply/max77759_charger.c
+>> new file mode 100644
+>> index 000000000000..d4e02764ba04
+>> --- /dev/null
+>> +++ b/drivers/power/supply/max77759_charger.c
+>> @@ -0,0 +1,768 @@
+> [...]
+>
+>> +
+>> +/* USB input current limits (in uA) */
+>> +static const struct linear_range chgin_ilim_ranges[] = {
+>> +	LINEAR_RANGE(100000, 0x3, 0x7F, 25000),
+>> +};
+> Shouldn't this one also have a entry for 0x00...0x02:
+> 	LINEAR_RANGE(100000, 0x0, 0x2, 0),
+>
+> Then you can also drop the umax() call in get_input_current_limit().
+>
+> Ah, I see now there is no linear_range_get_selector_within_array(),
+> meaning the code is fine as-is, unless you want to add that as
+> well :-)
+>
+>
+> [...]
 
-Fixes: 02dc1f3d613d ("lan78xx: add LAN7801 MAC only support")
+I would go with the code being as is for now.  :-)
 
-Signed-off-by: Martin Pålsson <martin@poleshift.se>
----
-Changes in v3:
-- Removed restrictive phy_mask assignment and comment, relying on the
-  default mask of 0 to scan all 32 MDIO addresses (Maxime Chevallier)
-- Link to v2: https://lore.kernel.org/r/20260216-lan78xx-phy-mask-fix-v2-1-6e97e59edd47@poleshift.se
 
-Changes in v2:
-- Added Fixes: tag
-- Link to v1: https://lore.kernel.org/r/20260214-lan78xx-phy-mask-fix-v1-1-3baa100861e4@poleshift.se
----
- drivers/net/usb/lan78xx.c | 2 --
- 1 file changed, 2 deletions(-)
+>
+>> +static int max77759_charger_init(struct max77759_charger *chg)
+>> +{
+>> +	struct power_supply_battery_info *info;
+>> +	u32 regval, fast_chg_curr, fv;
+>> +	int ret;
+>> +
+>> +	ret = regmap_read(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_00, &regval);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	chg->mode = FIELD_GET(MAX77759_CHGR_REG_CHG_CNFG_00_MODE, regval);
+>> +	ret = charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (power_supply_get_battery_info(chg->psy, &info)) {
+>> +		fv = CHG_FV_DEFAULT_MV;
+>> +		fast_chg_curr = CHG_CC_DEFAULT_UA;
+>> +	} else {
+>> +		fv = info->constant_charge_voltage_max_uv / 1000;
+>> +		fast_chg_curr = info->constant_charge_current_max_ua;
+>> +	}
+>> +
+>> +	ret = set_fast_charge_current_limit(chg, fast_chg_curr);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = set_float_voltage_limit(chg, fv);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = unlock_prot_regs(chg, true);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	/* Disable wireless charging input */
+>> +	ret = regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_12,
+>> +				 MAX77759_CHGR_REG_CHG_CNFG_12_WCINSEL, 0);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_18,
+>> +				 MAX77759_CHGR_REG_CHG_CNFG_18_WDTEN, 0);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return unlock_prot_regs(chg, false);
+> Should early error returns here try to lock the protection again? Something
+> like:
+>
+> +	ret = unlock_prot_regs(chg, true);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Disable wireless charging input */
+> +	ret = regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_12,
+> +				 MAX77759_CHGR_REG_CHG_CNFG_12_WCINSEL, 0);
+> +	if (ret)
+> +		goto relock;
+> +
+> +	ret = regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_18,
+> +				 MAX77759_CHGR_REG_CHG_CNFG_18_WDTEN, 0);
+> +	if (ret)
+> +		goto relock;
+> +
+> +	return unlock_prot_regs(chg, false);
+> +
+> +relock:
+> +	(void) unlock_prot_regs(chg, false);
+> +	return ret;
+>
+> I guess if one of the regmap_update_bits() failed, then locking the
+> registers might not work either, so I have no strong opinion on
+> adding that.
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 00397a807393..065588c9cfa6 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -2094,8 +2094,6 @@ static int lan78xx_mdio_init(struct lan78xx_net *dev)
- 		dev->mdiobus->phy_mask = ~(1 << 1);
- 		break;
- 	case ID_REV_CHIP_ID_7801_:
--		/* scan thru PHYAD[2..0] */
--		dev->mdiobus->phy_mask = ~(0xFF);
- 		break;
- 	}
- 
+Nice catch!
 
----
-base-commit: ee5492fd88cfc079c19fbeac78e9e53b7f6c04f3
-change-id: 20260214-lan78xx-phy-mask-fix-a4260de15a4c
+I need to send a next revision to keep the Linux Test Robot happy. I
+will address this issue in that.
 
-Best regards,
--- 
-Martin Pålsson <martin@poleshift.se>
 
+>
+> With or without updates:
+>
+> Reviewed-by: André Draszik <andre.draszik@linaro.org>
+>
+LGTM! Thanks!
+
+
+Regards,
+
+Amit
+
+> Cheers,
+> Andre'
 
