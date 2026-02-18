@@ -1,85 +1,51 @@
-Return-Path: <linux-usb+bounces-33430-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33431-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wIB+LJ5PlWkVOQIAu9opvQ
-	(envelope-from <linux-usb+bounces-33430-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 06:35:26 +0100
+	id +JS4D1NplWm2QgIAu9opvQ
+	(envelope-from <linux-usb+bounces-33431-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 08:25:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E577153233
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 06:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 999AB153A64
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 08:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2FB13304F5DF
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 05:35:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 53D78301E7F8
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 07:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2D53093B8;
-	Wed, 18 Feb 2026 05:35:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 260F130E0DC;
+	Wed, 18 Feb 2026 07:25:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wpPDybR2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGzIsHn0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7F4487BE
-	for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 05:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA09029994B
+	for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 07:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771392908; cv=none; b=RbxdXxmssQHVG0dMj6Had0ugUVd9yQp/UzTYo/e/fGQFYLMjj3hBDBycIa6jX36iYgVkFxAxhlLNE+A76mBFdjGx7EMbelbUMZmubyVCP5x/+hj2PT3djvBqIr94AXgxBGDZ8yFk24uplu4wIPk9ENJfvZHnfDwOyWEXe8PkRLA=
+	t=1771399503; cv=none; b=GJl57oVvEgAeTyRHO5r2Vgy0CL+CsOldTou0uL9PbIsXXCIukMrVA+mHcjp/vXP1qA08zHxRRsx+kGSxB4OzUn2jp2i706fz54xZ34olgjIM8z32JxceI3p+PZune10WzgC15UUzQsEBuYw5zrA6fmHfJBNKjvUfaJiylu0DV+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771392908; c=relaxed/simple;
-	bh=ykMbeLkM3JFjjAT+X4RiA986+vadbys1IX+AMjB2BRI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hdP3coReJxnEhq2bAEbR3HaZtgO0zSQtzkV1IiOOaoys0oG2u2dWiUg2/wNpqOcV6oiH2LfSWwgW8a+BQIdNW8DR24RW+psgvOws9Ne5Jt1dFYQSL7CAx5sG8jJTYtzcCHMiBBE8drUNf99hmYOTOnNoCx48Lg+zs3In8vWziDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wpPDybR2; arc=none smtp.client-ip=74.125.224.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-64ad9238d8fso4826300d50.3
-        for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 21:35:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771392904; x=1771997704; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j2gS7QPW0Vau0TRfECG0tWh0O+TEzQcOd404Ys3R6dI=;
-        b=wpPDybR2cORDQVafAWe7BXkFmwQuCta0yMTOIiGfpyTI1Kso5yESnbSJrYU7kkvfOK
-         ZSnbQ4omaYiXQ5KNpbsusz2zSH9wgLZ40oleczu6olQ/x57OWB6sHlJNc9fE+HK4m3EQ
-         7j4jzv9zG/IzhGiujueJSKuhT2X55c1UAhsDHFc4Uo87YK1iyKDMBuPSWsf4EfX4rtjS
-         oFqS5O1A2jUrNT6p0WWik/05BqRt4HyKwDnVh6NZwKwS6uHySim/rSwTk+TBhjr5JHWo
-         +8lsX0bMPPvlou+a4HorwLemRqctNq5i5LeVHUdA1vG0c/zHHCFVzFCfcQB0LCcN+JU/
-         X/bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771392904; x=1771997704;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j2gS7QPW0Vau0TRfECG0tWh0O+TEzQcOd404Ys3R6dI=;
-        b=RIXdZ5gB5dV5V1ccmTtCIhPyp3M7hp8MDhj+7nZ/rbeHHwYG7GA3b1/3XHxZv3tC+A
-         Ayv8ot1JYPzVMtBZVqEYsK4la5ExzklBNkV9GXHn3vtdy3HF7l9ZWJ2nHINzaGXenlkE
-         Tj8tRNPVNToELH2kcnyt6krkZktRnuyw48aiZO59GDydqXl8cXUcneFm059Esw50pzGv
-         tlOULCqoBhd4MlafoyhFDGdsM5K/DujoeglUBJc59t8641V2hX87ZiTiKfivkqxmgeQl
-         RdvZyiZYWyDKlfK4ryqmzdFsi6Dvzy1lqclazCz0IhXIO+TSkX4oVoTGs94T6Z7ZoVUr
-         RHYw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9HGQO8eCCqrIkAzVzxlYBI/QfTpyeD0uMjfPM40pVI18Mzi1nZqlRDcU9WnQY/dPNJLBQxMZnogY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAaTx94TfPHGXf0DZBXVxD2PqzpwSyUEGE+xXerXSoUAL9Boc/
-	A6MUKgjOOqgvbStqWg48CcoZAtvJwWWREQ8+4RkoNvhe6YTZL/+5uhzb9spp/qX9bg==
-X-Gm-Gg: AZuq6aJbbeTq9F8sV1nU/1gcu1uY/dMHl7aDGHKV8CaTvOuUA3o5y5DVFD1Hwxvms2V
-	mYp8k4PjRx4N16UYTOR5tIzs6fpt2JOsYA2lqvNo9Y8asudW9FlksMjGQj98nIWxy4bwZijKXdj
-	VBFcWygXj0ly+PJ4DJ3wsNBaP6AUbpk29GQPpeejDjGWIqIch3iXwMJIF/sXq8KiaXlhr+0TCL5
-	eId1kFjtCQ2Ma7eVEREB0Bv48MLFKF9BMN4aAymFl0ICRmcP45NtUEj45NEa2U4bOhSzlv1hFpH
-	ZHajZPmG4t23Knv2xM89zgdzT6/Hob5Kk08PCRwmbg5dy8BbMuMbFMaPSpqI0pjwndHwl7LVraB
-	ovWSH3dmG+tA71xMJVBWCh+A2tWZwYDsqwaIY5Gz+SrPjyECZPO0tll7mOd1OY6B2O96K1LRYuT
-	9vTe3nDLNuoflaUWGeG8fM2N2FeazJFPqKEn8otHMkWkclw5lHAXsDx0qopqXcCZyA3nSI/jtVR
-	TFE
-X-Received: by 2002:a05:690e:4005:b0:649:3b9:924e with SMTP id 956f58d0204a3-64c555942aamr701484d50.22.1771392903977;
-        Tue, 17 Feb 2026 21:35:03 -0800 (PST)
-Received: from ?IPV6:2600:1700:4570:89a0:b4:5cb3:5345:8019? ([2600:1700:4570:89a0:b4:5cb3:5345:8019])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64c22f8fa1fsm5666809d50.15.2026.02.17.21.35.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Feb 2026 21:35:03 -0800 (PST)
-Message-ID: <7103a273-f066-4c1b-ad14-7e8fd7ba002a@google.com>
-Date: Tue, 17 Feb 2026 21:35:01 -0800
+	s=arc-20240116; t=1771399503; c=relaxed/simple;
+	bh=YDxBhK+/fFkEcr5JqzzfZa2/YtTzbMovnkJssM/tTrY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=iiQ1E3PS3gorXG+oXexwKPmitNbkJbRCFjPj5aH1Q4cDRwdz12oEPnvehoJUfmF4t2zcdMbyFLAYGuJzFQWyfgQTnFXav5NC/BzQC7SrUqOrFtOu6gu4c69xgPbBZcDYC4TYUEuRx/dBORNxoJ2ZwuUeOUwG8n8R2W7e5Sr40fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGzIsHn0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D19C19421;
+	Wed, 18 Feb 2026 07:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771399503;
+	bh=YDxBhK+/fFkEcr5JqzzfZa2/YtTzbMovnkJssM/tTrY=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=mGzIsHn0SLU+nXp72WWDiuiODLn/Ff0k+t8SfUTDI+aPzxg+EfW8StfYD7D8E7WTa
+	 G54TnphPM1i+jfElHervy0+VKXdC5OkKbiGMEQbz6llC5BBM3K2JqHNERl189gt2I9
+	 HzfqKmhII8tBM75nzLrr3TMF0QxNSuDj+vvBAynrNMLp4Bmik9yZq7IvLntvtna6Yw
+	 kc9pGU24Tv7GJXoZ5WF6ODcvkfoSo0KMDZfvMchynj/cmHKjnKNmzVeH7mi+VraR7z
+	 cvI2WHWEydERdDHAPFEAAYy1BSONu1vG8P9sHPRox8vthRVQwjU8iaZWTCb/wOrSDy
+	 kQfoaaNkVHimw==
+Message-ID: <bd905582-6738-465e-9768-119823bf80d7@kernel.org>
+Date: Wed, 18 Feb 2026 08:25:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -87,209 +53,133 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/6] power: supply: max77759: add charger driver
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
+Subject: Re: [PATCH] USB: typec: tcpm: Add support for Etek ET7304 Controller
+To: Yuanshen Cao <alex.caoys@gmail.com>,
  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>,
- Matti Vaittinen <mazziesaccount@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20260214-max77759-charger-v6-0-28c09bda74b4@google.com>
- <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
- <0b6e7cb7223e553d9b53df464959e97fd3d1ce43.camel@linaro.org>
-From: Amit Sunil Dhamne <amitsd@google.com>
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+References: <20260217190010.67-1-alex.caoys@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-In-Reply-To: <0b6e7cb7223e553d9b53df464959e97fd3d1ce43.camel@linaro.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260217190010.67-1-alex.caoys@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33431-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33430-lists,linux-usb=lfdr.de];
-	FREEMAIL_TO(0.00)[linaro.org,kernel.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com,linux.intel.com,linuxfoundation.org,vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
+	RCPT_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4E577153233
+	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	HAS_WP_URI(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,etekmicro.com:url]
+X-Rspamd-Queue-Id: 999AB153A64
 X-Rspamd-Action: no action
 
-Hi André,
+On 17/02/2026 19:58, Yuanshen Cao wrote:
+> The Etek ET7304 is a USB Type-C Port Controller with USB-PD used on
+> the Radxa Cubie A7Z.
+> According to the ET7304 datasheet [1] and the vendor BSP source code
+> provided by Radxa [2], this controller is the same device as RT1715
+> with a different VID.
+> 
+> Add support for the ET7304 by registering its VID in the driver.
+> Tested on Radxa Cubie A7Z.
+> 
+> [1] https://www.etekmicro.com/wp-content/uploads/datasheets/ET7304_datasheet.pdf
+> [2] https://github.com/radxa/allwinner-bsp/commit/156b6578cc173855b41ea311a229403ccbadb17c
+> 
+> Signed-off-by: Yuanshen Cao <alex.caoys@gmail.com>
+> ---
+>  .../devicetree/bindings/usb/richtek,rt1711h.yaml |  3 ++-
+>  drivers/usb/typec/tcpm/tcpci_rt1711h.c           | 16 +++++++++++++++-
 
+Please run scripts/checkpatch.pl on the patches and fix reported
+warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
+patches and (probably) fix more warnings. Some warnings can be ignored,
+especially from --strict run, but the code here looks like it needs a
+fix. Feel free to get in touch if the warning is not clear.
 
-On 2/17/26 5:14 AM, André Draszik wrote:
-> Hi Amit,
->
-> All below comments are only minor, feel free to ignore them.
->
-> On Sat, 2026-02-14 at 03:12 +0000, Amit Sunil Dhamne via B4 Relay wrote:
->> From: Amit Sunil Dhamne <amitsd@google.com>
->>
->> Add support for MAX77759 battery charger driver. This is a 4A 1-Cell
->> Li+/LiPoly dual input switch mode charger. While the device can support
->> USB & wireless charger inputs, this implementation only supports USB
->> input. This implementation supports both buck and boost modes.
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> ---
->>  MAINTAINERS                             |   6 +
->>  drivers/power/supply/Kconfig            |  11 +
->>  drivers/power/supply/Makefile           |   1 +
->>  drivers/power/supply/max77759_charger.c | 768 ++++++++++++++++++++++++++++++++
->>  4 files changed, 786 insertions(+)
-> [...]
->
->> diff --git a/drivers/power/supply/max77759_charger.c b/drivers/power/supply/max77759_charger.c
->> new file mode 100644
->> index 000000000000..d4e02764ba04
->> --- /dev/null
->> +++ b/drivers/power/supply/max77759_charger.c
->> @@ -0,0 +1,768 @@
-> [...]
->
->> +
->> +/* USB input current limits (in uA) */
->> +static const struct linear_range chgin_ilim_ranges[] = {
->> +	LINEAR_RANGE(100000, 0x3, 0x7F, 25000),
->> +};
-> Shouldn't this one also have a entry for 0x00...0x02:
-> 	LINEAR_RANGE(100000, 0x0, 0x2, 0),
->
-> Then you can also drop the umax() call in get_input_current_limit().
->
-> Ah, I see now there is no linear_range_get_selector_within_array(),
-> meaning the code is fine as-is, unless you want to add that as
-> well :-)
->
->
-> [...]
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC. It might happen, that command when run on an older
+kernel, gives you outdated entries. Therefore please be sure you base
+your patches on recent Linux kernel.
 
-I would go with the code being as is for now.  :-)
+Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+people, so fix your workflow. Tools might also fail if you work on some
+ancient tree (don't, instead use mainline) or work on fork of kernel
+(don't, instead use mainline). Just use b4 and everything should be
+fine, although remember about `b4 prep --auto-to-cc` if you added new
+patches to the patchset.
 
+You missed at least devicetree list (maybe more), so this won't be
+tested by automated tooling. Performing review on untested code might be
+a waste of time.
 
->
->> +static int max77759_charger_init(struct max77759_charger *chg)
->> +{
->> +	struct power_supply_battery_info *info;
->> +	u32 regval, fast_chg_curr, fv;
->> +	int ret;
->> +
->> +	ret = regmap_read(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_00, &regval);
->> +	if (ret)
->> +		return ret;
->> +
->> +	chg->mode = FIELD_GET(MAX77759_CHGR_REG_CHG_CNFG_00_MODE, regval);
->> +	ret = charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (power_supply_get_battery_info(chg->psy, &info)) {
->> +		fv = CHG_FV_DEFAULT_MV;
->> +		fast_chg_curr = CHG_CC_DEFAULT_UA;
->> +	} else {
->> +		fv = info->constant_charge_voltage_max_uv / 1000;
->> +		fast_chg_curr = info->constant_charge_current_max_ua;
->> +	}
->> +
->> +	ret = set_fast_charge_current_limit(chg, fast_chg_curr);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = set_float_voltage_limit(chg, fv);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = unlock_prot_regs(chg, true);
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* Disable wireless charging input */
->> +	ret = regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_12,
->> +				 MAX77759_CHGR_REG_CHG_CNFG_12_WCINSEL, 0);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_18,
->> +				 MAX77759_CHGR_REG_CHG_CNFG_18_WDTEN, 0);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return unlock_prot_regs(chg, false);
-> Should early error returns here try to lock the protection again? Something
-> like:
->
-> +	ret = unlock_prot_regs(chg, true);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Disable wireless charging input */
-> +	ret = regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_12,
-> +				 MAX77759_CHGR_REG_CHG_CNFG_12_WCINSEL, 0);
-> +	if (ret)
-> +		goto relock;
-> +
-> +	ret = regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_18,
-> +				 MAX77759_CHGR_REG_CHG_CNFG_18_WDTEN, 0);
-> +	if (ret)
-> +		goto relock;
-> +
-> +	return unlock_prot_regs(chg, false);
-> +
-> +relock:
-> +	(void) unlock_prot_regs(chg, false);
-> +	return ret;
->
-> I guess if one of the regmap_update_bits() failed, then locking the
-> registers might not work either, so I have no strong opinion on
-> adding that.
+Please kindly resend and include all necessary To/Cc entries.
 
-Nice catch!
-
-I need to send a next revision to keep the Linux Test Robot happy. I
-will address this issue in that.
-
-
->
-> With or without updates:
->
-> Reviewed-by: André Draszik <andre.draszik@linaro.org>
->
-LGTM! Thanks!
-
-
-Regards,
-
-Amit
-
-> Cheers,
-> Andre'
+Best regards,
+Krzysztof
 
