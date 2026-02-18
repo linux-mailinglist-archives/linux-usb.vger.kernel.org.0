@@ -1,246 +1,296 @@
-Return-Path: <linux-usb+bounces-33423-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33424-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +M3lOhgplWl2MQIAu9opvQ
-	(envelope-from <linux-usb+bounces-33423-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 03:51:04 +0100
+	id RwW3NRAtlWmkMgIAu9opvQ
+	(envelope-from <linux-usb+bounces-33424-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 04:08:00 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 463C7152BC3
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 03:51:04 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0645E152CA6
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 04:07:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F2AAD3027953
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 02:51:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A81BF300AD50
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 03:07:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA2E35966;
-	Wed, 18 Feb 2026 02:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7561286D72;
+	Wed, 18 Feb 2026 03:07:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fi9wQH2A"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="TayTpTlG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773172DB794
-	for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 02:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771383061; cv=pass; b=LQHpnhPjooKyR3ao58Y+NVk1hNnC3OssQAh7K4OrcSceVG0b6jR97NxRfivH3SAj3OtYvwOTvNVs4VARBP6Ls/7QoBCoCoZIBdgSCOhNDa5zf2koC6Hk/CcksazlloAZZsDWOf9qaym9MQ3Xweep3YbdiXCmBx3J7hffxGoj5BY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771383061; c=relaxed/simple;
-	bh=DrDA6JVWJ4p6nWsU9Oj29QWb9OfLFZN9DdA1LmCpF90=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R/W2JdAhSskxq7CD+u7+y3bKMqYtWaYvPaMKcNpiNQ62TMp1KcY8E7R8ktCZ0DiSLmbloqqoFgmu4kJWXvm5RstpcU2AS/1teZdiGyfaE8xMakdeangDsNBZ9s6Mke7Twta5Dk/wXlG6nmWnnM54zVAFMeBlIuAYMmJiau/uTcU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fi9wQH2A; arc=pass smtp.client-ip=209.85.210.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7d4c307db9aso2891257a34.3
-        for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 18:50:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771383058; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PEXzJN2a3+WCN+skzqxFUz9mJR/WG64cqHpnUKeqdS0Mqi8aQVV9G8NGCRAKsr2ZHi
-         hAEihvxRHruqoLTlva/4zmDc2Vpxb01EqP5J9So9x40axRUG1CL56fOh6ZwUMVb2jggj
-         ECkoigDRQhAQ1yNrVwY/wlFymRQfrQO2h5+mI6m+4kVpvsOrxYtJBNxaxCo2TGjqRNhF
-         ZJkqeTA6FETjN4W1tQffxLZwruTmslt/zxVJzMGRyqLMQ7tiY7UGQ9U1j8GVwZwjKzAJ
-         OZLkN/8Pod5a20crwCCmpzU8B37HD4ZsMdhmRXJTHllzjqHnF+a4DspnmT4AFSEiwtdJ
-         sokw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kAxrKJW5I1YHutwvFjv9QeTWcD+yuD9Vb4MDLqLVrII=;
-        fh=cmd5DEtgpc/yQbPWIWh10iQP4b1ZoVwagGYTNezBHk4=;
-        b=EfWGh7WMvIxwUcg/ELUhybCs/KxvGlP7omGzmm8obJml/d9NtKB9SPmzrD5ETuiPpJ
-         eOQ2kgfAA6Tb2hxA6ETjGL2fJ06Z6XVSIiScX4DDl5YFgA01nk0wwfM2zUjfWuAbhfmg
-         Vu6BMU8AtYUX6WjrvFaWeuWAvdvBtNCUaZGWLq97D9gmSSTQ1w8e/cfdQTuxUZ9w31oK
-         uvSoCZk/36KmQXDRF6PQxis/4Ca3FK0fVLZXZvG8ki95DjmZv6PqaR0TUMGJEBbdy82W
-         HgEeyw8Un8US0hANiUtMWiAkJbf7C+0+1VEsgHc6hiAVwrskVkhD2T9DK+FgBByw3iwh
-         XSeQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3442566F5
+	for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 03:07:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771384073; cv=none; b=oHQvOEQY3Fp6lQEWK6VsK2nxSKPr7pO19GSi+RtJOHwCzL14ISBxleKHJ7qNou/cZjb8piLAdCVob/HQcXstEV+Rzq/NRtxH4+OzDy9DibeGADG99bn82XD7Mj7+vYcK7LmYTnXc1ctcqCQCVQxYEdyLU1s1WaNPEUPp0TWUy0M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771384073; c=relaxed/simple;
+	bh=VgrpbeRkKk3PU+HlEFX6IXCCGFKZm6mG5RpHBhSnm7o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dfIZwqwyN2RBpnm5F6pE0fmv07Dqr7jyMfxyRM1VV5bBsnBi+uXp1aXGkBDH1IeXx5K0wrhsown62LR9xaHHkowd4XwVzkZJZnepPwVpLS8Uy5cCEfIGVuZb/w2wbFEKESoGNxVn/8Ie5MyHhLJGizS9p20HSrztnk/yvZLZHE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=TayTpTlG; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-5069df1de6fso39350531cf.3
+        for <linux-usb@vger.kernel.org>; Tue, 17 Feb 2026 19:07:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771383058; x=1771987858; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kAxrKJW5I1YHutwvFjv9QeTWcD+yuD9Vb4MDLqLVrII=;
-        b=Fi9wQH2AH947PxtX2vbcZzI4rwCg0eUmzEnkwKjyZaPPurFvswRsxRio3i2OHevdDQ
-         P/gbhKBCmd+xdO6SosiYnqaJScpKzkEqCk2qpMI3VjhkD4UUhPxuytSEOhmbcr3dVQeR
-         abnm+T23RfxwD3tu9qoQ4lEpQDbqKmjHTygDuGtutDj3nJiCvvtjrhTyN5NaZmDxBgJf
-         FRpxHaLiiBsQTB75CUdc/qvoMWsZToXvUX3GQFUKoJy9BnTexwieIeOpNP7/QJChu60l
-         W9/KGsnu9bNqnTI+2uBivPmvpmmMomzEn4oQ6ypgyJowjv9PgkiPsZyanhHuaX3SRszh
-         GObA==
+        d=rowland.harvard.edu; s=google; t=1771384071; x=1771988871; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0ogFecK1WFaK/644WK3vMJcQQffUq8C31vXxbOF1wAk=;
+        b=TayTpTlGeSaL5vGkZmvUNfPN7OjnSjm/BznvqDZDeyh936Peuk2GnQo2jGBdT42Z4g
+         GzcKFm8jB1x/TSnIFsuWrD/FtTjsgANYLhUxIrZL0NKiT9js3A617ptAr/dMjG92SeoF
+         DommMXuz9zF5l1qD0hdIP8f/FPpY61lnFK0D9w6YWD45YlgoQNc2tCmmDNztPtfNkEhj
+         F66YzmIESmI8poANBuV+GCeHuNSvL7cJRwadNIGd95ZAjYZKEGHM+Bb35z+lFBrRXxzB
+         zUlUMLKnGJ/mjiNhsJ5EH6oy0eU5l9SJWTg+NxkIPFkwj1mP+JT+uVEHAzsbJAUHhbDf
+         Nx4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771383058; x=1771987858;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kAxrKJW5I1YHutwvFjv9QeTWcD+yuD9Vb4MDLqLVrII=;
-        b=RNwSE+fLf2BZYXejAXa0vQnoS3FUBWSefIT4AmxVQ4VKFmwrP0VgX0LwZjWL4XvjlX
-         oUI9cbEkHEXVj2hmaVImmYPa6aJPXrHGLcwOH3W15snTCOGBRBJKIwN2cTE9yhFoRZkL
-         MfTyue0eFmc3DHKAUKtgk34qynjf1GBQT5MtMxoTX7YHXqg41yUaS9vyOPhVzjHgUAt+
-         xLcIVdLbomP8Nufta18zZzh/PqUeUx3arNgzGew07ftgbAOx5XCtzkGHYUVo7PmnHqUj
-         AXdjFQlPkKG8c4XH5XvAmku/MEEJhvR+ymsoypVTYX51qlsY8vtdyj2hx2t8UYxRhGGa
-         X1nA==
-X-Forwarded-Encrypted: i=1; AJvYcCUEiag4J1W1QhWEdJtKlQp9amQtnI+grFjXNlpM6ulAJIgBBahELjCu+4jdEUadTvb7pv7qvYwGWo8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXmCoJ33lkIfAceq517lYIUsAx+rLN5BLSCeIb4I9rKVbAJplL
-	Vt4NSCvAU19LDd7ctOyKBMrFFDsn5cO2lupxqqg5r+7mx71HvH0xubxpKJ6Vxh48f12Pe2wIspy
-	ucprsVkhQFkKPuFBB531k+WOtKEMtCe6OhKN456v2dfjpleLHoTcjttZqTR4=
-X-Gm-Gg: AZuq6aI9NKapmYG1wZ8jc4OsPZUmDcR+A/iPesBRm0d4gqdX63FgFtSUj23jZeZl0jL
-	Y4sALMC7n7kbz+ft2uvE/zIoLQMnnPR3ea2c2OM/gI0l9Ar93QXB/5TJ0Hmx/vrO6zG+YbCUAXt
-	Ff1+hv7tGHi5PCF79wJRb2hfZVTGmPMKohkxSDIl7eLbSG/uQ+/iqXh5eWD2Om9l8QJsp5/RxGd
-	ogM2QXT7GH0oyS/KfZxFq8/Z02jLzBuVKnBE35UQl34y0x5itBTBJkdOqI/iin5+9u6Pz7ZOiLi
-	DVfnwtmfj68R1gOeSnsKZjMVisKLiuXEDMQ3vw==
-X-Received: by 2002:a05:6830:a91:b0:7d1:582d:71db with SMTP id
- 46e09a7af769-7d4d0c78d66mr9823002a34.38.1771383057832; Tue, 17 Feb 2026
- 18:50:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771384071; x=1771988871;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0ogFecK1WFaK/644WK3vMJcQQffUq8C31vXxbOF1wAk=;
+        b=s0tWT3RvqwCtHtAmNybSBn9lRULGnc+u25zLIMru8QrCnVFMHu5HU96lDkd/4Pbsq8
+         ay42V/yvBXshIquZpqe3WTUNlXWznQO137pGDcNaCBSt9+s1YfFRfTiw189KJ+Fx5IJh
+         KsSZU6oMGAN6AJSEJ1PG91JDoucHWVXC/wUwpExjt6TDBnv5jt40kdxApnccynPj3/Jb
+         dUHOc4D/M6uUm4x9IFNTPbGbS0tDCJid2j644PRi7XKnh3i3wBuM3l5bNfJIAiwNZ3y7
+         cy22/aXLrPG/UeMS6ol/28to44hEtEB0QBct/E+GW9AylbaiIaBBz9+BKLAIjEmpAmf8
+         l3pw==
+X-Gm-Message-State: AOJu0YwC+1o5k164MVJ//LMzFFiCz2jkFsFaOiSPXLoHBQJdpYV6dmFd
+	7YJdDi2MhI0aCg/pyhy2I3hqjph7xU8BT78mVEz3yX8TDyUb7WU6ATDGASjbVhG+sXiJn3pBVNA
+	CMb4=
+X-Gm-Gg: AZuq6aKgngsS8lF7W/FRJNqUMAGV066MuTig9QBuahs5DV7mHUPDjz2QCSsHK+e1av0
+	64BWyWYLCzvdyIGw0teDF2kVJHnsfKk8Ozxoiv24sVmWcidkNoMgCpYZ4np+z0zdbHPRiRKCdKx
+	bUSAls5tN4g+c7c1xf9o/CSU0UVabW1XNI+3fUGm6yoL6ftx0b611KhQEAwwkj9PaOygmzRYOGC
+	6+l7ZTM6bcgma2WYrbXN0TjBmbzdOa2Kke8WXa4uh9DpJYV2l2MeAobH688UfOcO8YKZNqxCHQF
+	GQkVXjBHK5EnwozOlf6L+x9YztNaJJbggVa0CUoazJrCHIdqeGjv6NiVWxlqlrSi5aDuD7AQGHo
+	MuBVoOw1gpHxtr5MkfTIPMMkYIovppLkKkHpprOe0nc+tl7RAjOK2p3PE1I+9ctYwMh65B5tXpO
+	q/rXSvJgNRHQ7W2j+zi0qClL2m
+X-Received: by 2002:a05:622a:1910:b0:4f1:83e4:6f55 with SMTP id d75a77b69052e-506b3f7e410mr170148691cf.16.1771384070611;
+        Tue, 17 Feb 2026 19:07:50 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:d03:1700::94e8])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50684b94f33sm167478291cf.25.2026.02.17.19.07.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Feb 2026 19:07:50 -0800 (PST)
+Date: Tue, 17 Feb 2026 22:07:47 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH v3 1/3] USB: usbcore: Introduce usb_bulk_msg_killable()
+Message-ID: <248628b4-cc83-4e81-a620-3ce4e0376d41@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260213-tcpm-discover-modes-nak-fix-v1-0-9bcb5adb4ef6@collabora.com>
- <20260213-tcpm-discover-modes-nak-fix-v1-1-9bcb5adb4ef6@collabora.com>
-In-Reply-To: <20260213-tcpm-discover-modes-nak-fix-v1-1-9bcb5adb4ef6@collabora.com>
-From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Tue, 17 Feb 2026 18:50:21 -0800
-X-Gm-Features: AaiRm51w0llI2hakzyR0CioN-FDNIJLwa1vJwEETWYlCsUPSaULMI_fKY8tIA8w
-Message-ID: <CAPTae5LvoGfXxvtHX7U2SaHVnmn-ESVqwxukrVga9w_9ySoX3g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: typec: tcpm: improve handling of DISCOVER_MODES failures
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
+	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-33424-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[badhri@google.com,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-33423-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
+	TO_DN_ALL(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:email,mail.gmail.com:mid];
-	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_TWO(0.00)[2];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+]
-X-Rspamd-Queue-Id: 463C7152BC3
+	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0645E152CA6
 X-Rspamd-Action: no action
 
-On Fri, Feb 13, 2026 at 11:48=E2=80=AFAM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> UGREEN USB-C Multifunction Adapter Model CM512 (AKA "Revodok 107")
-> exposes two SVIDs: 0xff01 (DP Alt Mode) and 0x1d5c. The DISCOVER_MODES
-> step succeeds for 0xff01 and gets a NAK for 0x1d5c. Currently this
-> results in DP Alt Mode not being registered either, since the modes are
-> only registered once all of them have been discovered. The NAK results
-> in the processing being stopped and thus no Alt modes being registered.
->
-> Improve the situation by handling the NAK gracefully and continue
-> processing the other modes.
->
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+The synchronous message API in usbcore (usb_control_msg(),
+usb_bulk_msg(), and so on) uses uninterruptible waits.  However,
+drivers may call these routines in the context of a user thread, which
+means it ought to be possible to at least kill them.
 
-In v2, dont forget to add "Fixes:" and "Cc: stable@vger.kernel.org"
+For this reason, introduce a new usb_bulk_msg_killable() function
+which behaves the same as usb_bulk_msg() except for using
+wait_for_completion_killable_timeout() instead of
+wait_for_completion_timeout().  The same can be done later for
+usb_control_msg() later on, if it turns out to be needed.
 
-Thanks,
-Badhri
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Suggested-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/linux-usb/3acfe838-6334-4f6d-be7c-4bb01704b33d@rowland.harvard.edu/
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+CC: stable@vger.kernel.org
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 40 +++++++++++++++++++++++++++++++++++++=
-++-
->  1 file changed, 39 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
-c
-> index be49a976428f..88cc27ad9514 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -2329,8 +2329,46 @@ static int tcpm_pd_svdm(struct tcpm_port *port, st=
-ruct typec_altmode *adev,
->                 switch (cmd) {
->                 case CMD_DISCOVER_IDENT:
->                 case CMD_DISCOVER_SVID:
-> -               case CMD_DISCOVER_MODES:
->                 case VDO_CMD_VENDOR(0) ... VDO_CMD_VENDOR(15):
-> +                       break;
-> +               case CMD_DISCOVER_MODES:
-> +                       tcpm_log(port, "Skip SVID 0x%04x (failed to disco=
-ver mode)",
-> +                                PD_VDO_SVID_SVID0(p[0]));
-> +
-> +                       if (rx_sop_type =3D=3D TCPC_TX_SOP) {
-> +                               /* 6.4.4.3.3 */
-> +                               modep->svid_index++;
-> +                               if (modep->svid_index < modep->nsvids) {
-> +                                       u16 svid =3D modep->svids[modep->=
-svid_index];
-> +                                       *response_tx_sop_type =3D TCPC_TX=
-_SOP;
-> +                                       response[0] =3D VDO(svid, 1, svdm=
-_version,
-> +                                                         CMD_DISCOVER_MO=
-DES);
-> +                                       rlen =3D 1;
-> +                               } else if (tcpm_cable_vdm_supported(port)=
-) {
-> +                                       *response_tx_sop_type =3D TCPC_TX=
-_SOP_PRIME;
-> +                                       response[0] =3D VDO(USB_SID_PD, 1=
-,
-> +                                                         typec_get_cable=
-_svdm_version(typec),
-> +                                                         CMD_DISCOVER_SV=
-ID);
-> +                                       rlen =3D 1;
-> +                               } else {
-> +                                       tcpm_register_partner_altmodes(po=
-rt);
-> +                               }
-> +                       } else if (rx_sop_type =3D=3D TCPC_TX_SOP_PRIME) =
-{
-> +                               /* 6.4.4.3.3 */
-> +                               modep_prime->svid_index++;
-> +                               if (modep_prime->svid_index < modep_prime=
-->nsvids) {
-> +                                       u16 svid =3D modep_prime->svids[m=
-odep_prime->svid_index];
-> +                                       *response_tx_sop_type =3D TCPC_TX=
-_SOP_PRIME;
-> +                                       response[0] =3D VDO(svid, 1,
-> +                                                         typec_get_cable=
-_svdm_version(typec),
-> +                                                         CMD_DISCOVER_MO=
-DES);
-> +                                       rlen =3D 1;
-> +                               } else {
-> +                                       tcpm_register_plug_altmodes(port)=
-;
-> +                                       tcpm_register_partner_altmodes(po=
-rt);
-> +                               }
-> +                       }
-> +
->                         break;
->                 case CMD_ENTER_MODE:
->                         /* Back to USB Operation */
->
-> --
-> 2.51.0
->
+---
+
+v1:	This patch had no v1.
+
+v2:	Add usb_blk_msg_killable().
+
+v3:	Add the revision log that was left out of v2.
+
+Question: This implementation of usb_bulk_msg_killable() duplicates
+almost all of the code in usb_bulk_msg().  It's very close to the
+boundary where I would have both routines call a common function to do
+their real work, passing it all their arguments together with an extra
+"killable" flag.  Do you think it should be reimplemented that way, or
+is this okay?
+
+ drivers/usb/core/message.c |   79 +++++++++++++++++++++++++++++++++++++++------
+ include/linux/usb.h        |    5 +-
+ 2 files changed, 72 insertions(+), 12 deletions(-)
+
+Index: usb-devel/drivers/usb/core/message.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/message.c
++++ usb-devel/drivers/usb/core/message.c
+@@ -42,16 +42,17 @@ static void usb_api_blocking_completion(
+ 
+ 
+ /*
+- * Starts urb and waits for completion or timeout. Note that this call
+- * is NOT interruptible. Many device driver i/o requests should be
+- * interruptible and therefore these drivers should implement their
+- * own interruptible routines.
++ * Starts urb and waits for completion or timeout.
++ * Whether or not the wait is killable depends on the flag passed in.
++ * For example, compare usb_bulk_msg() and usb_bulk_msg_killable().
+  */
+-static int usb_start_wait_urb(struct urb *urb, int timeout, int *actual_length)
++static int usb_start_wait_urb(struct urb *urb, int timeout, int *actual_length,
++		bool killable)
+ {
+ 	struct api_context ctx;
+ 	unsigned long expire;
+ 	int retval;
++	long rc;
+ 
+ 	init_completion(&ctx.done);
+ 	urb->context = &ctx;
+@@ -61,12 +62,21 @@ static int usb_start_wait_urb(struct urb
+ 		goto out;
+ 
+ 	expire = timeout ? msecs_to_jiffies(timeout) : MAX_SCHEDULE_TIMEOUT;
+-	if (!wait_for_completion_timeout(&ctx.done, expire)) {
++	if (killable)
++		rc = wait_for_completion_killable_timeout(&ctx.done, expire);
++	else
++		rc = wait_for_completion_timeout(&ctx.done, expire);
++	if (rc <= 0) {
+ 		usb_kill_urb(urb);
+-		retval = (ctx.status == -ENOENT ? -ETIMEDOUT : ctx.status);
++		if (ctx.status != -ENOENT)
++			retval = ctx.status;
++		else if (rc == 0)
++			retval = -ETIMEDOUT;
++		else
++			retval = rc;
+ 
+ 		dev_dbg(&urb->dev->dev,
+-			"%s timed out on ep%d%s len=%u/%u\n",
++			"%s timed out or killed on ep%d%s len=%u/%u\n",
+ 			current->comm,
+ 			usb_endpoint_num(&urb->ep->desc),
+ 			usb_urb_dir_in(urb) ? "in" : "out",
+@@ -100,7 +110,7 @@ static int usb_internal_control_msg(stru
+ 	usb_fill_control_urb(urb, usb_dev, pipe, (unsigned char *)cmd, data,
+ 			     len, usb_api_blocking_completion, NULL);
+ 
+-	retv = usb_start_wait_urb(urb, timeout, &length);
++	retv = usb_start_wait_urb(urb, timeout, &length, false);
+ 	if (retv < 0)
+ 		return retv;
+ 	else
+@@ -385,10 +395,59 @@ int usb_bulk_msg(struct usb_device *usb_
+ 		usb_fill_bulk_urb(urb, usb_dev, pipe, data, len,
+ 				usb_api_blocking_completion, NULL);
+ 
+-	return usb_start_wait_urb(urb, timeout, actual_length);
++	return usb_start_wait_urb(urb, timeout, actual_length, false);
+ }
+ EXPORT_SYMBOL_GPL(usb_bulk_msg);
+ 
++/**
++ * usb_bulk_msg_killable - Builds a bulk urb, sends it off and waits for completion in a killable state
++ * @usb_dev: pointer to the usb device to send the message to
++ * @pipe: endpoint "pipe" to send the message to
++ * @data: pointer to the data to send
++ * @len: length in bytes of the data to send
++ * @actual_length: pointer to a location to put the actual length transferred
++ *	in bytes
++ * @timeout: time in msecs to wait for the message to complete before
++ *	timing out (if 0 the wait is forever)
++ *
++ * Context: task context, might sleep.
++ *
++ * This function is just like usb_blk_msg() except that it waits in a
++ * killable state.
++ *
++ * Return:
++ * If successful, 0. Otherwise a negative error number. The number of actual
++ * bytes transferred will be stored in the @actual_length parameter.
++ *
++ */
++int usb_bulk_msg_killable(struct usb_device *usb_dev, unsigned int pipe,
++		 void *data, int len, int *actual_length, int timeout)
++{
++	struct urb *urb;
++	struct usb_host_endpoint *ep;
++
++	ep = usb_pipe_endpoint(usb_dev, pipe);
++	if (!ep || len < 0)
++		return -EINVAL;
++
++	urb = usb_alloc_urb(0, GFP_KERNEL);
++	if (!urb)
++		return -ENOMEM;
++
++	if ((ep->desc.bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) ==
++			USB_ENDPOINT_XFER_INT) {
++		pipe = (pipe & ~(3 << 30)) | (PIPE_INTERRUPT << 30);
++		usb_fill_int_urb(urb, usb_dev, pipe, data, len,
++				usb_api_blocking_completion, NULL,
++				ep->desc.bInterval);
++	} else
++		usb_fill_bulk_urb(urb, usb_dev, pipe, data, len,
++				usb_api_blocking_completion, NULL);
++
++	return usb_start_wait_urb(urb, timeout, actual_length, true);
++}
++EXPORT_SYMBOL_GPL(usb_bulk_msg_killable);
++
+ /*-------------------------------------------------------------------*/
+ 
+ static void sg_clean(struct usb_sg_request *io)
+Index: usb-devel/include/linux/usb.h
+===================================================================
+--- usb-devel.orig/include/linux/usb.h
++++ usb-devel/include/linux/usb.h
+@@ -1869,8 +1869,9 @@ extern int usb_control_msg(struct usb_de
+ extern int usb_interrupt_msg(struct usb_device *usb_dev, unsigned int pipe,
+ 	void *data, int len, int *actual_length, int timeout);
+ extern int usb_bulk_msg(struct usb_device *usb_dev, unsigned int pipe,
+-	void *data, int len, int *actual_length,
+-	int timeout);
++	void *data, int len, int *actual_length, int timeout);
++extern int usb_bulk_msg_killable(struct usb_device *usb_dev, unsigned int pipe,
++	void *data, int len, int *actual_length, int timeout);
+ 
+ /* wrappers around usb_control_msg() for the most common standard requests */
+ int usb_control_msg_send(struct usb_device *dev, __u8 endpoint, __u8 request,
 
