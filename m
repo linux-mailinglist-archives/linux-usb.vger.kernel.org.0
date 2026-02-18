@@ -1,98 +1,98 @@
-Return-Path: <linux-usb+bounces-33447-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33448-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ePEAGCoplmnxbQIAu9opvQ
-	(envelope-from <linux-usb+bounces-33447-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 22:03:38 +0100
+	id qWrlG5kslmmNbwIAu9opvQ
+	(envelope-from <linux-usb+bounces-33448-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 22:18:17 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B77DE159BF8
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 22:03:37 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BC00159D09
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 22:18:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7B60A302AD17
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 21:03:34 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7D8E030069AD
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Feb 2026 21:18:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18A9734A3BF;
-	Wed, 18 Feb 2026 21:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2148326D4B;
+	Wed, 18 Feb 2026 21:18:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j7DLD0Pd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tRRbKSpw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB39349B05
-	for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 21:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E4D30ACE5
+	for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 21:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771448610; cv=pass; b=QLqkenLzoSW3lGF1Ud1dUJh7VdgdwTGgA+TA7/d7Xcye5cBldoKEEi2mrHqt+THF1jznPBtreJQoBUP46HpF0+7DYH06q7QD0JQ3JVeIHo57//ikMvXtzqTWUPiipMN8qEJuiP0McwhV3A+FCt8Bwn0wtyFr+vi4nVDQ09HrjYs=
+	t=1771449489; cv=pass; b=j5H2p2Trfer7hP062iZsBkV0KH6LQDMkjymXONReEmsHmPRMlrKpSVQFLiDYyTxCXhWNsX4scFjM+7SRab5/560TKWdHW7HZcajO1K7zrLlrKSFcSFnHQtPe6oLZLHPU+SgZgrvPxc9z7SMK5Aa3RDY5zSqFR2mSDdvUQYWmH+g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771448610; c=relaxed/simple;
-	bh=DJ8wzyp2FFkmYZid9u88Pv/8g1IljBl2EOEle53SzR8=;
+	s=arc-20240116; t=1771449489; c=relaxed/simple;
+	bh=fsYG44fwuLfhCqILLKxnxhFO0yW0zeTrjXbuPgDnG60=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ur4NRv5Y3HKBAqNUjrO3zPguCcdfvbbRVcs3syePs9qr3Ne4c5NrW4LZ5s/gSGj4Tfmgy+fOFZu4a40onZpZpmwqsllIK8nPGANG/c3iPLD322mpGK0sCJkM/7yzCRoYJdBeYCfbzrujjt7WfRJ+KnDpJXohos/6+Z2qPJ/Rh40=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j7DLD0Pd; arc=pass smtp.client-ip=209.85.160.44
+	 To:Cc:Content-Type; b=L1Z0IuVka9DanuEiT+id4mDRakfqC/AF1+LNIDlCpAoVd5LzgQVF1ucfD5pNZbjQm0X086PRXf3g+3hBarTh56gDb7/LVLV5+k3yqkfNW0KQXBSKps2uF3N+/5/Fl7vOJaB0OnnfM2yrM/mbwtRsvt28uOso9BRiFFTV7ITmDqY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tRRbKSpw; arc=pass smtp.client-ip=209.85.160.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-40423dbe98bso111522fac.2
-        for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 13:03:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771448607; cv=none;
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-40429b1d8baso89735fac.0
+        for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 13:18:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771449487; cv=none;
         d=google.com; s=arc-20240605;
-        b=W/hyT9y9uCQ86cbDuOOamoHvEz/RcotzP2cQdv/VrrklwKDSnpZ9oD6d7cXFw45CNx
-         KyZWPA0mWgnrYWJX4p8uKXPVoRHJp21TPub7hqoxvQVSV3QjtZo1i5G3aN5RMo2lyxJc
-         eHFw7XIL9Xr1PEhu5yoCEzKYlpQeIU/qprIbMih0rwZAwG455BAheX80PjhRUt4Wzj8d
-         sBBhTcjjOqUWDkP82TwsUrZ1YUwOslYTFxdE6r3PgX7sRPsdtFZC/bIyKFWHEMd2XxEc
-         5bZ+R3vmsNtJ2gl+CY5VzY6zKicB6GIiFDFpVFx001ZWU/z8WDSgZ0aBFnOS7wUPKuw6
-         f3vA==
+        b=cDdGjsGhbcnff+mxi5easjDk7oBcO1nS5q2AGaardJXthYMRNNWmrtpjSTXAPVx5PV
+         SZuXneig5W7o6OI1JwUWpdYLob5HNmPeJJQEaY9u2zCdRqZC+Q45TnTfKbF+wnGEnpT4
+         mS3evNH9/IuKP2XQq/koXa7dUvNI9KKB6/6R4f5THxPk6MHxQPQP1zq2TdMEVl+XDlu0
+         pZMfbwuMoI5djh3AF0Y7MhFZsKzqNGGh8/V1Y4CSNqL9zJZ2Ro4B27r1F03aCZu0JjYx
+         5ZFlhOVRC0CGsEzcf8OmFtJFZAJqByTcDxCTX5coXq6PW/7qq/C9FFMsLMuz0HonEonu
+         4bdQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=rVA9YBNA1fdXiz0UctTf2u/4Ct4n6y531ph080Dnnug=;
-        fh=MUcibEy1ngIiO6AST121JK1UTYX0I/tNPwVCrQuYdXg=;
-        b=fz3jWZ03INpU2AQUBSUTrxMSLFd1+21IN0uvXUiViwWZ3h/UP5qmK3xJFc5MwmuKCP
-         XNL1WdPGuTaJ1kxdvLnvnQBQF2zuM5S4Q62011GWtNDs7/Dn/ikaJP35AUvMtuzOAMzA
-         IFaX0WxU0USxxM5Y4qlIftI9wBHegAkFHTJ9jS+BhN1iJS8gjZ0mYz17ef9008Ml0hCx
-         qhpxocauWjgOv7JFTesjYCSu3PTOE/tC6tjz52oF3vMi0Tb3JZNgyANyK4p0WBLa0cCb
-         NtdiaQmA+586ZlPj+Kk94HJgjZ04KskBe00/d1I+89a+1nL0wQNRfTYsxQQxb9qihroV
-         3cYQ==;
+        bh=J6gr/ySVDQofa57xnPEfvrjmR+2XTIhniQsbCQDB50I=;
+        fh=vwXNDjdYmmcos4mNre7Venl2JvACjVxKHJBJnWGEAfQ=;
+        b=hEhcxnXsMaDtNC5CkLCMzJY+EO2ptT6NaEYICgrP7u5QbkqOC9uwCpUseZhCvmou6J
+         ixny2aOXDxagNK+xiI+i9grNZxYBRWZGyeOOlz5NRmXEDWLaFzg+peSKRhFFJarqsC12
+         2w9106TJYS2s6Id7ubzip1RqZaGO73taVvMUaF52X1z5VR7c3Qmm9XjzWg5Ax6F7qRxm
+         JOHP/btX8BysLWpmX8e6OybP/cchz0Jd1MfyOeeT8V4XBNL/Ic2PeYiKbV3Y3cNIcecH
+         HxNdvZ9YAhvRC4sAPTSPz9OyncAc1YxxD9Z3Vhg9xvaxqeSxpK6i0W1E0tfPH/P6siSv
+         lFFQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771448607; x=1772053407; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771449487; x=1772054287; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rVA9YBNA1fdXiz0UctTf2u/4Ct4n6y531ph080Dnnug=;
-        b=j7DLD0Pd6UG3OmY8T9PtWS0BlGYK6IdRrlY6dCktQ9AMamN6YCDh45AsIepp2I+uDp
-         A8EFmemguHdOgTWat1rMrKjBraMKh0CuYEB3ebdSQM4o0cWx/t2zoW6gJpo0jsmvXr5A
-         +fV3SMeLTtA/s2eRi5MTIZxAiTqvjl3YSvbOITsfqv6Jz4WaPc4GbIdPYhMBImpjWGLT
-         gMhl+PH0opM2k2T/6XMcmzkL+LioRxkNO1uyhqUd2Z65FRdVK3pFUe1VMg33D1kS7H0F
-         8rCgTwMyZi5asx7PkbY2QNmhmod9Dis7d5a26yVUcYd9CaczORliOkvPPtvhkgZEigjF
-         vJsA==
+        bh=J6gr/ySVDQofa57xnPEfvrjmR+2XTIhniQsbCQDB50I=;
+        b=tRRbKSpwvAJGFR+UpMIbYlT0TFnTsUOK4/lO//Iua3ka0/wFVAq6draeM8N6sPC2io
+         OvOJllUWoBKIbS6oYTTWTbJqFV+YsrxLwGDrgs1Gwpjb0Z9UmJu3gr2zS3nvAKsZCpE3
+         H/UKPZcE7k92mL8CSxjKNlzOCoRjNRirh1iJh6sJl7SPd//M8MyJC3H8+FKtbinDLWBz
+         agt5UmZsfmd2wIUoQnyfLAnMJNa7uAPemf3cUeCW5Qqg4OhPBBIftimyFrCwTwMvb+Ix
+         Ado4nHWBlHntd01dFmzXl5I4ZN+V1LJ8eAQcQ0gD/aKDfSxWdY4J03/V3UK4jlIizeaF
+         xWbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771448607; x=1772053407;
+        d=1e100.net; s=20230601; t=1771449487; x=1772054287;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rVA9YBNA1fdXiz0UctTf2u/4Ct4n6y531ph080Dnnug=;
-        b=O9A+3GYaiSy09+kJyVkM22+mkdB2x6Ds0VpMtUvrbSJOxGCrKdiNQowLZXwYCG7t5+
-         379zzD3x9OCnK8S+pr3XGKqMtMAIvKMx0317u5Qq7kLcGHqmwe2PvAAyuh/dNeHAYC9r
-         312boGM8CqGA2ofhuuSnBO0Neku4qgboxj7VDnSgEeGnc35e69gbjhVSspkJBMHce5qe
-         74mzQD/Hauv9ar2DenkxXU9k6DxoyMcxFWMKh4qSR0bNUEvdBxX/Mk9qTfOZ+lXkzpYd
-         s2+h88x+DyHHD74oBu0TElDt0Bekj+Cc2laLsciqCIF2sJmaAEo0wFT9L7CeWhJQk6y1
-         ZXrw==
-X-Forwarded-Encrypted: i=1; AJvYcCXw4q/2CnPqE61TIHFdS/Ca5rVzqigd0hm3jpOzEPmcsb4TbzNA5kNBHba/Rh2WBItP1gf2OmXNLRY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl+UD8dRGTbp2uFhgDM15SfW31vZa0wZ+RXh6tZbkgAU3kRfFo
-	KDxOW1NXcBdLhGq6+aDZaD/QysqgFj1OIQ1p0ewxxPCe0obcWob/XtchHgXAAbMy8r+e+L6Zil3
-	UuBdRYkqx22/U9zoPFXJ2dewX/29RDDjBJH7OQDiP
-X-Gm-Gg: AZuq6aLxyZZynm/5RBe1uAEnzY5Bzxus42iLzAtE2DJZE6blirLUYXmUQ/oeue+0zgd
-	3w3vdvC7FNXGV2W9MMUlDKi7AJbEAMzj8QWmgd0kRcbupcV/2fJMfU9GBWNSODGK+Ta3xTz4kh/
-	StDMlqk0AR/Jpweb5BlsC3yPBrX4rGj54SpUmwjNtQ+/mmuGEUPmlaLERsuoxK8wj1cCCVoOcRZ
-	WRwvCi7du6A3Shvc2cEXCL6MhktF6bInklOd0MX53N5XT7/4n811DkoAy8G+bWV4dTFGeK4dmKP
-	qXfpgJ1HALSFb7J8/gV7eDlgzSfIlawGOxwC
-X-Received: by 2002:a05:6870:8a0a:b0:409:90b3:fec2 with SMTP id
- 586e51a60fabf-40f0d9e2c0fmr8635230fac.50.1771448606434; Wed, 18 Feb 2026
- 13:03:26 -0800 (PST)
+        bh=J6gr/ySVDQofa57xnPEfvrjmR+2XTIhniQsbCQDB50I=;
+        b=Vopca9qg4JmCGzZkl7YzlToLh1+wVnbKC2uWfbv/CcFYKdM0owf//0NwpFyA56VWeg
+         ZssZxiRa+Y9X4E1cGZpR40tOtAhRe3NEGvtxWhVGJo7WvFLpeDo8FmPURF3KHkVQWc9n
+         DasSrGk6glJnGDC6oPf5jHzJHXihdazIEYnqwke0KBEWym4wR/1yTiI7YIzYlAfZXMtu
+         1i2IDzpYbX12yIox98EPN0rVqktS0PevAwywGkomiU3AN6j4EaAmVsXnuxRhIedt/LEs
+         sWzCFABGid1unEqNmB0d6FalSm0MGxJDfP+u7XI6wPzOuvrkod9UrZAUA4yjOApsJq/0
+         pVnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX/VQlFkEKrbyOdhhmTCtVcaZ85V5Kr99Q07jPvTmHC/E3bYhEG80rmHrHYLEPqs/CFjlPrfU5RQB4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuUbzQLvqxPv4bZ7IkucAsS4QC1/P432tT5yogpYEqG3fOpPg/
+	vz/QUEb9CldDz1gmcxzZGpgo0jypanv4j+jbnE5TGPysqJx4/A20/Rk7H9MmiYFPDsciI2xRhKt
+	Cp9WxuwgyDzJluQJs71spnW9IauOHWb3XmgiLU0NE
+X-Gm-Gg: AZuq6aIdF6pFzrzfYY6M2bVvAO53eb36VIYrZ5fuNLJZD0SLLvITR5kOyxV4Im9e405
+	gyMiKG+fyWCNhonGsWqZo2uyiURowIowradww/vxI4Q6KMEDQjbhCG8s+5gYRPAP0obY8L4QPRl
+	6F5h/AV17BR2ozNoHEFGIsgIdWYdLgyjDoYtlxbN7HKPNmN7O9FbW3wRH50TfgclFBLj9sOH5Lw
+	HcAt17V3ikZAn4Cck0jmQBizEPK0YHUbrZbQ9sis9+cA0zGUKoIXMezbqLLYZF5ZgdswrGIK+zi
+	WAv2BwC1nDxh1altNb2yQNlGf7OurU+/iBNO
+X-Received: by 2002:a05:6871:72a:b0:40e:df4d:9111 with SMTP id
+ 586e51a60fabf-40ef3c5edaemr10174878fac.26.1771449486468; Wed, 18 Feb 2026
+ 13:18:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -100,16 +100,15 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260216110403.159945-2-krzysztof.kozlowski@oss.qualcomm.com>
- <CAPTae5Kyaems-3HEGQ8hhgkiRVPJgjecGCHQ4iRF242k+L_d8A@mail.gmail.com> <2026021821-iodize-trolling-3bde@gregkh>
-In-Reply-To: <2026021821-iodize-trolling-3bde@gregkh>
+In-Reply-To: <20260216110403.159945-2-krzysztof.kozlowski@oss.qualcomm.com>
 From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Wed, 18 Feb 2026 13:02:50 -0800
-X-Gm-Features: AaiRm51Gd8dHBwfnHk9aQlWaxGUJY1GBMHkxJsqjhrYaAkgrFVx_OpuVl2I68JA
-Message-ID: <CAPTae5Log9f33u2gGtZSHZWZU0Q_cAgHJJaOD+M6dratsWFL8g@mail.gmail.com>
+Date: Wed, 18 Feb 2026 13:17:30 -0800
+X-Gm-Features: AaiRm50m85nEiTq2uNxCdri94K7WSnR8saekBk7cg1Wo8QAjUf7fKidJHW-h1TM
+Message-ID: <CAPTae5+5tjJBzfojOkTzqaj_i+Xtfc__DZtA41NzRQTR3aS3CQ@mail.gmail.com>
 Subject: Re: [PATCH] USB: typec: tcpci: Make tcpci_pm_ops variable static
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -118,13 +117,13 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
 	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33447-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33448-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -135,40 +134,46 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[badhri@google.com,linux-usb@vger.kernel.org];
 	DKIM_TRACE(0.00)[google.com:+];
 	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-usb];
 	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,linuxfoundation.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email]
-X-Rspamd-Queue-Id: B77DE159BF8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,mail.gmail.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8BC00159D09
 X-Rspamd-Action: no action
 
-On Wed, Feb 18, 2026 at 12:56=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Mon, Feb 16, 2026 at 3:04=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@oss.qualcomm.com> wrote:
 >
-> On Wed, Feb 18, 2026 at 12:35:04PM -0800, Badhri Jagan Sridharan wrote:
-> > On Mon, Feb 16, 2026 at 3:04=E2=80=AFAM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@oss.qualcomm.com> wrote:
-> > >
-> > > File-scope 'tcpci_pm_ops' is not used outside of this unit, so make i=
-t
-> > > static to silence sparse warning:
-> > >
-> > >   tcpm/tcpci.c:1002:1: warning: symbol 'tcpci_pm_ops' was not declare=
-d. Should it be static?
-> > >
-> >
-> > Thanks for sending the patch Krzysztof !
-> > Can you also please add "Fixes:" and "Cc: stable@vger.kernel.org" ?
+> File-scope 'tcpci_pm_ops' is not used outside of this unit, so make it
+> static to silence sparse warning:
 >
-> Why would a sparse warning fix need either of those?  Are you wanting to
-> just pre-load my "WTF" email bot to go off?  :)
+>   tcpm/tcpci.c:1002:1: warning: symbol 'tcpci_pm_ops' was not declared. S=
+hould it be static?
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-I am still learning :) Wasn't aware that warning fixes are not
-supposed to have those.
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
 
-
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> thanks,
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpc=
+i.c
+> index 2a951c585e92..8b7e6eb92ca2 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -999,7 +999,7 @@ static int tcpci_resume(struct device *dev)
+>         return ret;
+>  }
 >
-> greg k-h
+> -DEFINE_SIMPLE_DEV_PM_OPS(tcpci_pm_ops, tcpci_suspend, tcpci_resume);
+> +static DEFINE_SIMPLE_DEV_PM_OPS(tcpci_pm_ops, tcpci_suspend, tcpci_resum=
+e);
+>
+>  static const struct i2c_device_id tcpci_id[] =3D {
+>         { "tcpci" },
+> --
+> 2.51.0
+>
 
