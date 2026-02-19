@@ -1,148 +1,210 @@
-Return-Path: <linux-usb+bounces-33476-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33478-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id Y8ChLynFlmkGmwIAu9opvQ
-	(envelope-from <linux-usb+bounces-33476-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 09:09:13 +0100
+	id +G3ALmcyl2kcvgIAu9opvQ
+	(envelope-from <linux-usb+bounces-33478-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 16:55:19 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2929A15CEBF
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 09:09:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 217031606D1
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 16:55:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D10E4301303E
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 08:09:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 69EE63010B81
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 15:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F3E3346AD;
-	Thu, 19 Feb 2026 08:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1A834AB1D;
+	Thu, 19 Feb 2026 15:52:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="X97xdriM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yV9ak2c9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11DD32222B2
-	for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 08:09:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B0134A786
+	for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 15:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771488550; cv=none; b=D2V7fwruqS0VjgeAdUJaswV/ok/ZPGKPdaxkt5CPoyBkdQ+lZV+bU+hgcAnOGfH8wAOJA0q/+luB31w9WkzLEGxh9XFi2AVNXqfPEhSyyj/Qr4w53x+kSw2EaIg2dX2AcBPb0+trEfn1XundBkxRS5vJkjZnznFGoPdk9Q8Nb/o=
+	t=1771516349; cv=none; b=FYi/bllnuvONAc3prDW0Yma7f5S5e8hwqDDvHKYJbema0GWYjLNqofwbw5vBjJ/ZNinNRYZuMMluuHUk8/4i9WGIWr8ggceuHWUdQTe4gHeAz/Sm7UV3kPqa0OnQyQKVVstCEY8ztlnHqLpM0QVzoHoo14yN3iCz+CR/DOysk3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771488550; c=relaxed/simple;
-	bh=/Q4AmlP+4lJPGGPF3wETm57Xx4uatixq0+Q6oWZSS7c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tkySgBXMxfM+Vn9ltBgPe+GVtpeV0cHSl0Agm/RhR5dnjpdcWPfqyeHQSWzMixIIBhMt3nAdtV/vA9M23hEwsHGkpGjvLvEmzATh9vfennQ0jxmk+3D/e6LruSMseOdFoXOmj5JD0updy5o0/3gGzvseo9OpIHF2xk5tMoXoJ/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=X97xdriM; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4376de3f128so404961f8f.0
-        for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 00:09:08 -0800 (PST)
+	s=arc-20240116; t=1771516349; c=relaxed/simple;
+	bh=hUVMfsGdV0aDbsIFOhfMsdPp5kAixuq61G/flR5Alxg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=j+Gt46gm+8H+t+C9ecVuhfgIufExotJFpSdwXzCXUBeTg3RtkloPPmGy7WxoYJMclq43TgdZ65i9ayrXDTEOIQqY1NR47N7jJTAA9HkPASEm7cMMENtEqlyUSFolehWJ6GUKpuqDZq0wyd9aNF4iHm1fVmWjYaUhLSCHgdU3t2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yV9ak2c9; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-436e8758b91so874041f8f.0
+        for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 07:52:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1771488547; x=1772093347; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wqizv7wuQKBTah/B5F09fRjT5PNlXqSdnUyt/x8aryA=;
-        b=X97xdriMWY3xbflJhqeO6B0qFUbmlkiKyYHceGNDNk2uJqo25HdiB/3eDP9ZoicfSG
-         waXqQfqYOMv24oowCv232u1JGYBqmIDHMVshUndpK9DzY3sXIfC4q++2Br/LnWm85q+y
-         JKljgG94PvoRL0ajwD571CDDyrMa/BY5uJ7HD1DdvB9BP+X6cISF+uxgt1wNY/JtRPvW
-         6kahokiExaLoCLaB3WsM57K6TOa+aEWkw60YwGTUHqVlAgVif2eDXLwaqLpCDSMDw6qA
-         Pyqjb+y3IuVJJ2LEEZ6DJawcb21aWvFx3+velRAF5+Ud75NSIwmKVRlYewDD+n/Os7HP
-         aTQA==
+        d=linaro.org; s=google; t=1771516346; x=1772121146; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ausNYp9VNOhe1fBHOC525G26Oe60ih9EhrjdJ5sgpHg=;
+        b=yV9ak2c9B8AV5lOFP2+ASu81htz4cub/EZEvHYTW6zwjxUR0sbJ3wNLOLEVTKUmniP
+         Qg8C9YIASU2HiwGMvPlurEY5c/W3ET39r5gHOJ7kUZ+EdIEmraU0C24ueJM7mACg4PmJ
+         ZfaKOqaNq0ptYYVRRMX/2DHWJTvP5sWZtMhaFvPE44b9l5mW1CNB56MV1wLIGMvN3ZCF
+         SFryge4s8mXDYNGrOiOCuw+MdBh1Y8yKQFnXe/eIgdyxSV7zBpnVZgUyCFBwgsdcqv/m
+         m6kcXoAB49/10DVAJsXRUI1I8nt1XhrdEw8XOexD0Wc8vDpyODntZbRxMsk8939vdZAE
+         JvOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771488547; x=1772093347;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wqizv7wuQKBTah/B5F09fRjT5PNlXqSdnUyt/x8aryA=;
-        b=SfpjDB/dfS8qJfvuFTcQBmJWxSHegh+NPInSEFjLgmKB644X/WcFkp7yaHHbScicma
-         MY7D1A0njLXB0ZJaFTvoel0rJQEEtipqI8haNYZQTxm9zPR5DA/JsmpzbVr5UI66Bm1M
-         k+LabObeV3g0SPm49JD720XZ7d3uIEtBhjzx2v3cLz4jDBkEr6HgOhyh1EwsHC5pb+Ug
-         eY+uBTy/iGZzPpwEksspY//fepf0SYD0gqcAE75GN99JxeROF/28WM5Yu56rivpovYw3
-         K0OGT9svQZdZRPKGSjzzwjsOfR5b08/IjN6+0bckDaf/JuBY64zZU0dPxKMw4JlhAsE/
-         dIFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUVVponxSF28Hslu18atIDYQGDi2KYfXhUbClcay7wC+ng3eHU3LxS74nomK0tH9u7KGOdJlUbhgN0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyA15l4GjOoO2nqMfC57w56oYSFcN6IIx6H59xChwnSVqyubtBl
-	ut9i9MWLWgomWr/Sul9rEWukAjMA4l4593esk75mjj2L2kdouvOlj8p/c1VNLCaAuWo=
-X-Gm-Gg: AZuq6aJVZ+xFrf3X3ARrtxqD1CIkYPcyXv5MBPNsvA1S5IyYqiocZxWrFm8uRAoLTel
-	NmCNX1u8m5j4Gkj+yvA/J6j/h+00pnF/1RrueZm27udhPU+1b65c3HTa+BFea19mI3X+8ybmLRk
-	d2sG8cod9rAJWI3hKs5m/PtEwwCAutd3RavGub1OBzepWzvVbdvMaXqbvxWkveNC59DdwYF93uM
-	hLxu9qwrppsK+pNnyUrblijwkNwWLfjujQN08lmUfer7LBTte6UrHQmiMzGa7IimPHz0Iq+RfVK
-	oJ/JWOcuif5uvMGcZppS4m0yfju8Dqceo7F0CKZO+Xh0Zh3BNI67G5N09rB16o5+Wtuw93oAN/m
-	HRsVqZKVKG/o16CEgfcQhypJdqr/aH+t+5REpZ5HvL+ExKphUvzToTR8Pc8AULn6Vny6wreYSQU
-	XgReEoVg5nzVj/CrVGyV86VAJ1CqdYGuL/V20BLdrlxJj6VfNgv61Ga3fscRlwC5YMuKb+oi8Mx
-	E0Yww==
-X-Received: by 2002:a5d:5d05:0:b0:437:771b:26b with SMTP id ffacd0b85a97d-4379db71b34mr33231060f8f.26.1771488547076;
-        Thu, 19 Feb 2026 00:09:07 -0800 (PST)
-Received: from ?IPV6:2001:a61:13da:3801:6d37:5b4f:1853:c2db? ([2001:a61:13da:3801:6d37:5b4f:1853:c2db])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796ad009bsm46029799f8f.39.2026.02.19.00.09.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Feb 2026 00:09:06 -0800 (PST)
-Message-ID: <d6d185e9-137e-4220-af96-891e88518c39@suse.com>
-Date: Thu, 19 Feb 2026 09:09:01 +0100
+        d=1e100.net; s=20230601; t=1771516346; x=1772121146;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ausNYp9VNOhe1fBHOC525G26Oe60ih9EhrjdJ5sgpHg=;
+        b=kZ+NaOJa1lCOPIBcB4Oumov16U4lCaHtXwPg9K0xGaf483CY0dcLW1iwjOsugOFA//
+         4RWXwYq4VukYA/PaZ05wW+5/8FVf6aSKSp0Epg9zObWrx9D9zbIY+VbTVcgQ4vonXVhY
+         wEqQwi4tNDcxraW+0oeNWhKaOJqAqPqkvwZCDtgMNHScBxwpeSJBmTu4xKrTPdOXWrvK
+         esY3RnuuV12WFYgc/3k/yeqKcoTQVVZdKKJWuFLjavGK9eeC3zHZjvaCVIFtXQEYVFqK
+         ziSI953J93ntkDyQPsVNylViz+fgXGGPs7TV50QNRUz7rVeM8KOAEbD6DhVaIWtTJvg7
+         /EDw==
+X-Forwarded-Encrypted: i=1; AJvYcCX9YCV0BWRpDW6rJUFqr/NTr3RnordZUgR/UISyozk4nMvJnbrEz2ab868dxV4CJfXbhFjSYmmU600=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznmHEnBp92cvhPn6gLq5p+5PbH4M/HJQWR/cY1liKEfgJ8HQHC
+	5kip/NYxdNPdcOBfjrEmYDjBLfMcsn6+cvgz94XEMNrYPs3ToZGz7BC1K8taKgFtwJM=
+X-Gm-Gg: AZuq6aJhuCQT/EcuSUWpfTM5cJ9UrHWmyCwx9gGbohVDBjtGHPFSav4ccGFZE/+u6T/
+	T8SbbSZlLJgj3fVlm/0oa6vwYctRbwH2YORNcN9H3+2fw/ormGHQtqjTZxorsK62tw+Oa7qeO57
+	sP/S85kpng9V9p+8Ng6TRkI+ba3Cb4R7RLPDDqW6nkgK7fB2e04NKlj+lEORIaefTI9ZIsUJiTR
+	6PDR57OiPTl9jCnxNQua3e8xRSSrWjEj4iOxGbMD4OnrNDYniCEJzaJof9SVWJxC1NKW1qrrK4y
+	X4/RlRZCPFKXmMT0+bX77RcOB/HexVMiPI0aBswrg2J0k6XwyVR2sWKP9rMuXIwSEQ6/iu9QI/N
+	JswixdtYfhDM/zdNH95u4/OL17q+7AFG+wm2mASVUdNLlo/VTgllC7mLPdxW3zB/NJwAQwaXAZ4
+	2qowiz8f9gA0V6gXsERIa1t3PTnWFo+w==
+X-Received: by 2002:a05:6000:2001:b0:436:3475:4737 with SMTP id ffacd0b85a97d-4379db8cfddmr32328493f8f.30.1771516346564;
+        Thu, 19 Feb 2026 07:52:26 -0800 (PST)
+Received: from draszik.lan ([212.129.80.248])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796a5ac7csm47748995f8f.7.2026.02.19.07.52.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Feb 2026 07:52:26 -0800 (PST)
+Message-ID: <f46fa180198ec103aeb1e1c06286c6a2a0fb8b7f.camel@linaro.org>
+Subject: Re: [PATCH v7 5/6] power: supply: max77759: add charger driver
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>, Rob Herring	
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley	
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, Greg Kroah-Hartman	
+ <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Peter Griffin
+ <peter.griffin@linaro.org>, Tudor Ambarus	 <tudor.ambarus@linaro.org>, Alim
+ Akhtar <alim.akhtar@samsung.com>, Mark Brown	 <broonie@kernel.org>, Matti
+ Vaittinen <mazziesaccount@gmail.com>, Andrew Morton	
+ <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
+ Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Date: Thu, 19 Feb 2026 15:52:55 +0000
+In-Reply-To: <20260218-max77759-charger-v7-5-e8d907ce69c5@google.com>
+References: <20260218-max77759-charger-v7-0-e8d907ce69c5@google.com>
+	 <20260218-max77759-charger-v7-5-e8d907ce69c5@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2+build4 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] USB: usbcore: Introduce usb_bulk_msg_killable()
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
- USB mailing list <linux-usb@vger.kernel.org>
-References: <32a96517-104c-423a-b1b1-8dd139192900@rowland.harvard.edu>
- <7cbb32ef-944d-4d03-9209-5249bd7ae1d0@suse.com>
- <9bc181a5-25e7-4f9d-a6b4-23c716e75269@rowland.harvard.edu>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <9bc181a5-25e7-4f9d-a6b4-23c716e75269@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33476-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[3];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33478-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[google.com,kernel.org,linuxfoundation.org,linux.intel.com,linaro.org,samsung.com,gmail.com,linux-foundation.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-usb];
+	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.com:mid,suse.com:dkim]
-X-Rspamd-Queue-Id: 2929A15CEBF
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:mid,linaro.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 217031606D1
 X-Rspamd-Action: no action
 
+Hi Amit,
+
+I was trying out your series and noticed a few things that I didn't before:
+
+On Wed, 2026-02-18 at 21:59 +0000, Amit Sunil Dhamne via B4 Relay wrote:
+
+[...]
+
+>=20
+> diff --git a/drivers/power/supply/max77759_charger.c b/drivers/power/supp=
+ly/max77759_charger.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..035f16822d85de94c7707ce11=
+c49345c714cd559
+> --- /dev/null
+> +++ b/drivers/power/supply/max77759_charger.c
+
+[...]
+
+> +		dev_err(chg->dev, "Invalid mode transition from %d to %d",
+> +			chg->mode, mode);
+
+All your format strings are missing the final \n throughout this patch.
+
+[...]
+
+> +static int max77759_charger_probe(struct platform_device *pdev)
+> +{
+> +	struct regulator_config chgin_otg_reg_cfg;
+> +	struct power_supply_config psy_cfg;
+> +	struct device *dev =3D &pdev->dev;
+> +	struct max77759_charger *chg;
+> +	int ret;
+> +
+> +	device_set_of_node_from_dev(dev, dev->parent);
+> +	chg =3D devm_kzalloc(dev, sizeof(*chg), GFP_KERNEL);
+> +	if (!chg)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, chg);
+> +	chg->dev =3D dev;
+> +	chg->regmap =3D dev_get_regmap(dev->parent, "charger");
+> +	if (!chg->regmap)
+> +		return dev_err_probe(dev, -ENODEV, "Missing regmap");
+> +
+> +	ret =3D devm_mutex_init(dev, &chg->lock);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to initialize lock");
+> +
+> +	ret =3D devm_mutex_init(dev, &chg->retry_lock);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0 "Failed to initialize retry_lock");
+> +
+> +	psy_cfg.fwnode =3D dev_fwnode(dev);
+> +	psy_cfg.drv_data =3D chg;
+> +	chg->psy =3D devm_power_supply_register(dev, &max77759_charger_desc,
+> +					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &psy_cfg);
+> +	if (IS_ERR(chg->psy))
+> +		return dev_err_probe(dev, -EPROBE_DEFER,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0 "Failed to register psy, ret=3D%ld",
+> +				=C2=A0=C2=A0=C2=A0=C2=A0 PTR_ERR(chg->psy));
+
+Why are you returning -EPROBE_DEFER here instead of the original error? Thi=
+s
+is quite unusual.
 
 
-On 18.02.26 16:02, Alan Stern wrote:
-> On Wed, Feb 18, 2026 at 01:54:31PM +0100, Oliver Neukum wrote:
-
->> This still leaves the quesion why a timeout can be negative.
-> 
-> My best guess is that the original API was written carelessly.  In any
-> case, I don't want to change it now -- it's a separate issue.
-
-Fair enough. It is an explanation. It should be addressed separately.
-I shall send a series of patches for such issues.
-
-	Regards
-		Oliver
-
+Cheers,
+Andre'
 
