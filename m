@@ -1,92 +1,89 @@
-Return-Path: <linux-usb+bounces-33481-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33482-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mKVIMzE/l2lXwAIAu9opvQ
-	(envelope-from <linux-usb+bounces-33481-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 17:49:53 +0100
+	id xEplO3Bel2m2xQIAu9opvQ
+	(envelope-from <linux-usb+bounces-33482-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 20:03:12 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4417160C9E
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 17:49:52 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C792161D8D
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 20:03:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 913A5300D54C
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 16:49:47 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BDC0B30101C6
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 19:03:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7AA34CFBD;
-	Thu, 19 Feb 2026 16:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5472D23B9;
+	Thu, 19 Feb 2026 19:03:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CEOY/R7+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VY8coU+f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A65129B8D0
-	for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 16:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4FDB38D
+	for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 19:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771519783; cv=none; b=fsIvEBe4xoaIbkFTKqlgBONkTlQXnbdVjZC1yMVWLUmvuJ2p8+GAH06vUeSsjD4c6/gU6y8+T22MWUdCsZUygGLSqa8Pk5KreQMYgYUmD+v/QOFMjwhCIAzhJTAWyvU67UGR/ARUCinK1jxE8KFkioNXp/t+hcipojMeiYWsP4c=
+	t=1771527786; cv=none; b=b6Zghe93UpQzFjBKXSEh8b73ivyRBIdGcpj1V7QhejDLFQlXo7GEfY5dP5PdOQb+IEXnN/Vtjamo6MOFuEI2gGNRCQPohhqGd86cilQk+oecKUzU+AFlcVqBfTYsOMDkzloP/ZSOQ+EaE0aSJET1UYk2p17on610ZAJ4HIhcF/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771519783; c=relaxed/simple;
-	bh=eFQNWZfkWYuOwkPWwPvI4PHV0Uj92xnGg8zciXd+4KE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yfgr3DTp5I7qmQbI3Ay1PTyHixntkXnW3BHFINDtx5ABggvtHgB5QyfA5cAJjvJVWA6qhRyVQmir8et1Lkf77HLUElZqgZe/fskMtA5wZ/GrqnsrRlWjVvcJGZ4uOexGDFA08QFkmH9F5AvWhxdGLuiA/ennpDv10D7KBCeBNZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CEOY/R7+; arc=none smtp.client-ip=209.85.222.180
+	s=arc-20240116; t=1771527786; c=relaxed/simple;
+	bh=E4Y5VqKzl1sVgsFhDPR0shOlX8sziKBUs+VZBRTu/XI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mAtbQpMw9wFkb6ljeLTTqoZKpfHKjvvqF22cu+e7UF6oitQBJw/w1GB8sNOvx+U0lvKkI5MSZoh1BAxlp2DqsFlr58yUTiV6XiqND0GudQlQ0bBZXNpJyAEvhn7Bqi4vUbmU3y6zbxUqjSoC71JC+tE1BZ7UbEOh8JEFgwlGU0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VY8coU+f; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-8c9f6b78ca4so139076385a.0
-        for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 08:49:42 -0800 (PST)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8947e17968eso14249236d6.0
+        for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 11:03:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771519781; x=1772124581; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uxpjpmIspZOCmp2qnJMVZZA0VoBJVNgpGyro+unlamE=;
-        b=CEOY/R7+KWAy3WE5U/OtIgrH5mgOKay66GVcZOmPJpAFI0N4cj4gMRmJ6bQHrZ+L2q
-         YB2R4pYKH3aLTOuf9RC14sH84af24yT95q89mmQFOLmbhtoSRxkxIQ5z/rEuthDsMJZa
-         p1lsuL91TQwHrdADFMlUUyN1pgQZkgPKmQgPZgMoeDdRWB90GBuzzp2tI9+LdfORAP/G
-         GSAqGz3URbGxAS05FZ1w8J7gnHMTWQ6ZbYvdscAvhIilinnxRgnm9c3wKzJ2u0tt6y4Y
-         XPxfWIjhrE/CW7YEdkx7eOuTZ2vrmUNtR3Xy8rOA5BP3bEw5ZHmGLxRCRSJQMxs3ykYs
-         yrMw==
+        d=gmail.com; s=20230601; t=1771527784; x=1772132584; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=puO4dboL06pU7gk1TdqjNfV0tFpKk5xpYBh9Jtpdeoc=;
+        b=VY8coU+fjK6kLU2fWShH3bjKnizzEBM01XRLgnI2dujMucKQY4Tq+wa/fzFaoJWE44
+         7qL6JwDQdqAdAodmx7oBB3BSgWOCBQE2s6vM3n3S1KIs9Zu8btP50WKw9IczgPYbX90R
+         Uw0SieRybBH3aChs1ONGKApBd0nRWhjFNqifTvXbHjrnO3ZkuAoKpnBGXaO7AxxdN6In
+         mEEAZlYHZB+55LB1Ay8Iyt9bfuUWVm6PU8GE+zeOB1ZoUM1FJ2F0hxV4WUdRqhBQzrDC
+         ob5HP/3BrPWbkVHMOHORNTetprxPBEJZb5kc8MuQYF56VW5UTVgSTDdqX1QXSa1bLZPI
+         cqOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771519781; x=1772124581;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uxpjpmIspZOCmp2qnJMVZZA0VoBJVNgpGyro+unlamE=;
-        b=czwLQkflg14o6YrkBWGEd7enf0yLdMD9jGpR4W6nPE82U6Jr4lDp5+XMZRcLzbBSIE
-         qBuAvx1xZw4CP8KtQqzm2T1pDH3KbenZMR6pfcZkEVzOgMBLNPzzEwzgihqiaOA0nRk2
-         K1n1zR1kA69KQPVrypBmXrBRvZHlM4eRXzYHk+qXf/nJDE1n9nckUnWFozeHZyZvJrTU
-         nC6OAnisySrG2TASFZ5G+SOQZ+m0y9v0IzFJf7w8+7LaqtDpf39Qy/zrfpSHR3lv1TOQ
-         9ENlL/lv/2RGHt40qf4dqxGmgZKl7SMGXXSzmpz4wghju0jC7BLS+WGm62HZnzBflMy+
-         LsFw==
-X-Gm-Message-State: AOJu0YxqyDKtuDkVHWZgmU/SHZwx0R2Qih3qR53bTdd/gfG/+/CUMjKL
-	YBJE+rJKzipG9xcDR/ri9bxqNpHLHy8jlsrZVrOjDtD8qPKZkKnYvOZJJKNy1g==
-X-Gm-Gg: AZuq6aK3OdppnZR3UB6Goo6A3u4ygGJGwnZ8EH0NhRvRW77gody8hdQkSNwkAUJKdcP
-	TOFTu5jd4LFjM45OP/gRQ3bd8eA5WSqwURM8x0BV8w506HBdefstSedl/mxdT017LkZLUcYby9q
-	65nncGDyQBUiwlPR0KguuVlaMOEfzNmSTw9uzohIiBA6KXH0VtL+0Gzayt+7oCZXp2XbEUaxoCp
-	81e9JhjBSP7y0W3a5fWyGZhI41swlXcE0g/kW5BRYzff2/AdSuApuSXeI6OMSiqPbqYf5+gdl3g
-	zTCv7QhH8TI7dtKrDLvgItu1XGBaXMnjV1seEXEDWiSPOrAHVP0Q852XXYD53NMrkTly8gQMk1g
-	OIRJ7Ki7tuwWwFqf/abT2sKMnfIxcZQ2CPUnOmn/sFaQ0A2XwUhQwHXhRSsPaXXTv1/4qq8ewg/
-	1wxRZe2v9L0vuZ8NOH/eOC2n/IPFmOXv2C41RBcoMYeFfP++n8RbbB4lv4nq5UP3tck/xPVKrI/
-	WAr4l3dlcGIcW620/fO
-X-Received: by 2002:a05:620a:4452:b0:8ca:d5cb:6840 with SMTP id af79cd13be357-8cb4c025b05mr2135791785a.73.1771519780551;
-        Thu, 19 Feb 2026 08:49:40 -0800 (PST)
-Received: from localhost.localdomain ([129.170.197.104])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb2b0ce73fsm2259615685a.11.2026.02.19.08.49.39
+        d=1e100.net; s=20230601; t=1771527784; x=1772132584;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=puO4dboL06pU7gk1TdqjNfV0tFpKk5xpYBh9Jtpdeoc=;
+        b=diZFnCIN2ZDFGkzZq5hMdymxbTqcEt7Bhh6p61oqNzCZW/mmCmzo7JEXBg+OYoLLs0
+         9eztsFQcq2FA5bcQuzWB2lcx3mTl3j3msKIOgE24ocTLuWX7odw7DNL3I2klnpdsyV3t
+         XLJ2vW4lWXcviJ9e8JoUbZMGY1u75GfA02Paff6dSdwDkJVDNrI0kjvkzW0L/fgjYhkr
+         TetgzBVZs02+dT7wgBsgdalEoVMYLBFmsNCvt88/HjPNevE4VDERa80DbUb+34CkHi68
+         LEu/3XKALcIL0aGGxQ3mJVGnj7HKgPqwmjhdlEE4sG6OyjnrUH7DPHbQ/Gx41zHFUoan
+         Co/g==
+X-Gm-Message-State: AOJu0YwWwrIKbk5x3b8M4/Vo5WCim5RPq+9rqbPqMoAzwMKkxFeI6ey8
+	PB4tG2oIOCZpfSUCaLDMxwDTPpyfPmCa1YmfwPRwgVe/137rDYtoHqoH97/JDQ==
+X-Gm-Gg: AZuq6aItsxim52cnoWVzW2ermX7teZsc+ZMYb6UlTVp9QqERTl6rxKtxmm7l5+fO/IK
+	I7TQsnUhvmCJTtZgsE6o5wFBk2ExEn62KmkGpgZc5HeTU/CsV49T0fpLi+DPeqbdEfjMRfSj/QL
+	U9wvrrUkuiKTeCx57iMx1n2hYzWbIqJK6e3ahIN5RU1oVyZXvLXcpIfMIvOteg4qYvQ+IuZWiHS
+	V3gUY9oCfl1Lg3WhJn6dnvACVDJwfR9cvbEuJHO10OJHNP0Uj60RgM3YY/P0WbfOBlV9jM0GHNd
+	1EcDmnOKzw/BwFo9Qf+zZ8G/mQrnHK+gRnzjiobFPOiRI3N/koxDau+HmsrUT3qlMORldsoAlk/
+	dCpseinVsBhq/lqAfzXd5Iy/L1GrskBKKy4fm64aXKpPZQkf21zUJYBaChrnMM9d5UIxcFaZSR2
+	mbryRljL0FJsPgdLjAI9p8ulu+I/G2rNkqIi3t5EHO8CVWdeFeGVqrg3kZwb7QM5dnWzrNZwoJK
+	FXgtDd4lS0TS0+4SIY=
+X-Received: by 2002:a05:6214:1c09:b0:882:4be6:9ab9 with SMTP id 6a1803df08f44-89734948f9fmr332819466d6.54.1771527784008;
+        Thu, 19 Feb 2026 11:03:04 -0800 (PST)
+Received: from localhost.localdomain ([129.170.197.80])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cc91eccsm218274026d6.13.2026.02.19.11.03.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Feb 2026 08:49:40 -0800 (PST)
+        Thu, 19 Feb 2026 11:03:03 -0800 (PST)
 From: Nathan Rebello <nathan.c.rebello@gmail.com>
 To: linux-usb@vger.kernel.org
 Cc: heikki.krogerus@linux.intel.com,
 	gregkh@linuxfoundation.org,
+	mitltlatltl@gmail.com,
 	Nathan Rebello <nathan.c.rebello@gmail.com>
-Subject: [PATCH 2/2] usb: typec: ucsi: clamp returned length in ucsi_run_command()
-Date: Thu, 19 Feb 2026 11:49:24 -0500
-Message-ID: <20260219164925.3249-3-nathan.c.rebello@gmail.com>
+Subject: [PATCH] usb: typec: ucsi: add bounds check in gaokun_ucsi_handle_no_usb_event()
+Date: Thu, 19 Feb 2026 14:02:51 -0500
+Message-ID: <20260219190251.3422-1-nathan.c.rebello@gmail.com>
 X-Mailer: git-send-email 2.43.0.windows.1
-In-Reply-To: <20260219164925.3249-1-nathan.c.rebello@gmail.com>
-References: <20260219164925.3249-1-nathan.c.rebello@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -100,68 +97,65 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux.intel.com,linuxfoundation.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-33481-lists,linux-usb=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[linux.intel.com,linuxfoundation.org,gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33482-lists,linux-usb=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[nathancrebello@gmail.com,linux-usb@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E4417160C9E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7C792161D8D
 X-Rspamd-Action: no action
 
-ucsi_run_command() returns UCSI_CCI_LENGTH(cci) as the data length to
-callers. This value comes directly from the CCI register and reflects
-the length reported by the PPM firmware, not the actual number of bytes
-copied into the caller's buffer (which is bounded by the size parameter
-passed to sync_control).
+gaokun_ucsi_handle_no_usb_event() uses the index derived from the CCI
+connector number to access the ports array without bounds checking. The
+index comes from UCSI_CCI_CONNECTOR(cci) - 1, which can range from -1
+to 126, but the ports array is sized to num_ports (typically 2-4).
 
-If the firmware reports a length larger than the buffer provided by the
-caller, callers such as ucsi_register_altmodes() will iterate past the
-end of their stack buffer when computing:
+Other functions in the same driver validate the index before use
+(e.g. gaokun_ucsi_connector_status, gaokun_ucsi_handle_altmode), but
+this function was missed.
 
-    num = len / sizeof(alt[0]);
-    for (j = 0; j < num; j++)  /* reads past alt[2] */
+Add a bounds check to prevent out-of-bounds array access.
 
-Clamp the return value to the buffer size to prevent out-of-bounds reads.
-
-Fixes: bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+Fixes: 00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
 Signed-off-by: Nathan Rebello <nathan.c.rebello@gmail.com>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 7109d3bd39b4..5791597fe662 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -140,7 +140,7 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
- 	if (ret)
- 		return ret;
+diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+index c5965656baba..9790296be0dd 100644
+--- a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
++++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+@@ -349,6 +349,9 @@ static void gaokun_ucsi_handle_no_usb_event(struct gaokun_ucsi *uec, int idx)
+ {
+ 	struct gaokun_ucsi_port *port;
  
--	return err ?: UCSI_CCI_LENGTH(*cci);
-+	return err ?: min_t(u32, UCSI_CCI_LENGTH(*cci), size);
- }
- 
- static int ucsi_read_error(struct ucsi *ucsi, u8 connector_num)
++	if (idx < 0 || idx >= uec->num_ports)
++		return;
++
+ 	port = &uec->ports[idx];
+ 	if (!wait_for_completion_timeout(&port->usb_ack, 2 * HZ)) {
+ 		dev_warn(uec->dev, "No USB EVENT, triggered by UCSI EVENT");
 -- 
 2.43.0.windows.1
 
