@@ -1,83 +1,84 @@
-Return-Path: <linux-usb+bounces-33472-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33473-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MP14BJZ9lmkggQIAu9opvQ
-	(envelope-from <linux-usb+bounces-33472-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 04:03:50 +0100
+	id 4H2PIbZ9lmkggQIAu9opvQ
+	(envelope-from <linux-usb+bounces-33473-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 04:04:22 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF7B215BD06
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 04:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 009A115BD14
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 04:04:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AF95B304751A
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:03:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1B36D3059AAB
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:03:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D842727FB25;
-	Thu, 19 Feb 2026 03:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB33828506C;
+	Thu, 19 Feb 2026 03:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="INGNFJyo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qi+sveep"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f67.google.com (mail-qv1-f67.google.com [209.85.219.67])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B553233149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7E927603F
 	for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 03:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.67
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771470198; cv=none; b=mLLWxeCfrjWwYWQs6j4+VkuDQ6hGtac+AWk7/D97jZMUrPRRF5Ba3TMKC+WMa/uge3CJ/ZS4pyGEoSklf8IuJAakpTzr96EjBMEfScsTE46A61dp6gr97w3TTkGZs22uC0Lo9Ay+wj9IQBBVA6eEI1slYjxXSZnSv2wo1GNwuBs=
+	t=1771470199; cv=none; b=CBUIOz6fsK4H3SdQWrH7GsURuvR4hqWc7CvCHpcw2t9XoSjKJTi4Cg1UcdpEFp5CmpxYdQwNnH+ubqgCDj8puMG9xPZhUCDtnfS1nygctWI1S5Kb4ZhxCdoJ1q267inNnzbECOIUpL6khbG2yVzpBkmyYbg8IwjWfo47vvQ3AIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771470198; c=relaxed/simple;
-	bh=8RRSBYilIfiL5lynfWm3DT44GAdjVX633zCzSbPTLWE=;
+	s=arc-20240116; t=1771470199; c=relaxed/simple;
+	bh=OWJ5x14wajrz8wzvjKNrubyOIzm5J7IxGIyncWhDv2c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=W2jKYSSpOeMuHsQnjQfg9mDed7OjFv/BrbWiCDjh6K42+W1fCHqBiVZ0a6Yoc9KRXvRtm3tR5M5jXFh2QtepVAZPUeInQG+xK/HBOB8F3oeUNw8XvIG2yP5fqiWI0Q8S++F4qU/5NIgGz0rb0V1u15k7XZJFr80R0PuPCNGJjLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=INGNFJyo; arc=none smtp.client-ip=209.85.219.67
+	 In-Reply-To:To:Cc; b=CY3cV0MrGPyCmV5rTciVTcmgVe45QnqfmzvtUNdpqZpplpEZkwFcgnVsFuG9d4bo3cC+zL9qlktNT8JkhdbDLKfOz5+kOwpezfsjBx9dTcrcWkCIZ/SzfzoQaxCsh1kB8r0nfzm0l2zF4YCrKa/q1FymxHKQUGWC88hI125IpDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qi+sveep; arc=none smtp.client-ip=209.85.219.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f67.google.com with SMTP id 6a1803df08f44-897002b7576so5813816d6.3
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-896fd2c5337so3779666d6.2
         for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 19:03:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771470196; x=1772074996; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771470197; x=1772074997; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9kO0bZz8fXFUnx33OsYDyerQbNWGaSPZMI3QHli9Iwk=;
-        b=INGNFJyoY0AEDeSvGdoULlZzKXxiGdmJ1SoF7/5uLk/lKYmzt3oSEUb+EyBIZxM3Ip
-         qMx9INSMrW80/BEHxIoie0cwbUJFr8nRVkNacr7CC7BKAh2otu8RS9+k1mDUFinUMPO1
-         wZS9u14nSWca1whCOrRDZcWNKvfdaoPJRxRagg5uhdCu9a9KObByhTJTzccQAywV2KYa
-         8N5CWvZxerRm/xy+eCd6NhLYlS+0AQdIceg9dHkfHmrSHEdW6Ub5iQw5B1Cj16W5u6pt
-         aFEs9cbrQwTNbKhx6R3R4zjJ0ubkNuy/i2Ot00MVokt6VkujqB1H2QdIEQ7btCW3HAI8
-         d5fQ==
+        bh=T8GnrEGX/i/JHBNftmmrvaGUEdnFlOXVQpYFwKQKQzw=;
+        b=Qi+sveep95ePjUG8+zh2HBn8IXV/4PoLDdTmu+dwdhDGa3IXBdCEjPpC7nLoWnEv3e
+         TmVlxhDAa3CC4yQV/dmwx7zrTAzoPx+4sBMB79eMoaLV/GIdp4LAyf4Ay6Ox30iQ9gjQ
+         mZUXk943wbhfZL9x3Rqc8ymAXChJtDXGfD0ZGOCV92OKBIRlqnGUCGSaaFQp1vDFztPe
+         YjgB0QWV32FvpzzGzD4fLozUz0075/JLm1F3rsLVNtdiqNLwcHTgyO1bCKstxE8dPPSn
+         qir8FffQunX1p1NPgMSn1RmZ9lMRJaVC+YJSg0bvwdGzI5GK96cwlyicrpdD2R4gRHb9
+         j3Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771470196; x=1772074996;
+        d=1e100.net; s=20230601; t=1771470197; x=1772074997;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=9kO0bZz8fXFUnx33OsYDyerQbNWGaSPZMI3QHli9Iwk=;
-        b=LndOnqZmrW4vsOeDUVrEDtRjOIH0pgBrV+Mbyr0r3DdKQiB8HxTahDxh7p7D3j/U5E
-         B4Ef+bgRawvIWEiNLjKhkPZNdJ9zXaoC1TQY7btfIH+9pMqMf9SOSnmZgYLmL6tE3744
-         /VBp8qESpQ5UNdbuDXguoFXcVWkWLgzr/p8KUIjmNrO2bge3GYeroK40jcbXQ0MQDPqR
-         8KPFZWrzo8BS4A0iZlZM4QNlxppedXXOXJqzs0iwODOGndrHcwKWtg2Yek87jtb95B+a
-         SSUZw8s5XDb7VB62i1+x6fdxKgVcaiAk+cT9Kxwhjd8GWLNm7WHDE1snh2shBtJGkK32
-         l8JQ==
-X-Gm-Message-State: AOJu0YwuZ2TCEVWwL+Q05ljvd7PdRiZUQrTMoOQrzfnSv9M/ADQnTtWt
-	y5ZlS6H1bL49i+iht2TNS9MPXsCpfPLe/dEJ29akgonKzSb6AQeNcGyJZp6dphdDCH4=
-X-Gm-Gg: AZuq6aIujqRRFOqCDOsAVD0zOps1g0cvmj3gPkHXFbIYKySub9ZVIEnAcUk+VUpcvYk
-	ZEsnh1GLJb7AIlASi1oT+0OSOGhjt7u38tFpZhNT+qqtZNqAx1CL+fGpYKRKPI4vVetekCmmPKA
-	qQ53kDsvvrFoMBSrtLBmuMnQnfZtLL+zRkRuNdA0cxqIBDEpnf5aHCqSUl6TSzrHAVll1/8xaFS
-	zvJ5Kz+9JfVwwVuR0L7F/VDHIqU/1EJLEYEzp0402/98PzRejM7F+Chr6itv56qxFjXezz7dNU3
-	Pw9yYJBnMNzOgfKhwKGzQpWrdN+hAifhvYuONA2OokHRvRoHTqFo7pH12b1qKacY0Yglnbp+MD+
-	fqQMYBdDAsieWghZu5jyLdVq/36SmahSMZ7SId6jpEPi+NZKfK+KIc72WSonatiYyVzfEomrqhx
-	UYw9WezwAfDg0kv1L1wKflyqh3Ssg=
-X-Received: by 2002:a05:6214:212e:b0:895:4d85:5edc with SMTP id 6a1803df08f44-8995812859cmr56143536d6.70.1771470196026;
+        bh=T8GnrEGX/i/JHBNftmmrvaGUEdnFlOXVQpYFwKQKQzw=;
+        b=uNaduC5TAy7YgcsVSiuoXULtjIfUdO+n5TrRvVKOoZ3A8qH+vF41WHF1za+W9zKNSA
+         5qFtLopvA1B4JK7O/plHpAMtH7NCW2kaUcRlsYZmJjCWuf0GhyZ7SGjSax9yDJ7bBu5O
+         zf77s4lKT1YwgbB2B81nOl95ydD7WJiL/fFBd64CxcUJPJtDWK2UhSM2IRYf56Az6l4L
+         bCooGX1WVLw8c/ljlw+pbcz7tfzgrpOt1ElLdKsa2Cl5gAKnEgPoihB1UGt2f9sKy16h
+         q11M2kp8A9FsoFbddlKxDXdAP3/l+okWaBfF3cXp625cO3BPdHU2uvFr1TPDTR2p9Rb9
+         +Vfg==
+X-Gm-Message-State: AOJu0YxuDl342RLvHBRxofY/4VzY7QxPKvNU6TTCK0YltIWa7mWU+O2Z
+	9o9pA1v2fjjKCQ0N53TqTCxhWt25JV1OoRLwgvgRtDv70FpOqqbCvnzBuLJNIk67
+X-Gm-Gg: AZuq6aLmjIWeT3fBD9J8W3W7jlZPABbn0LNrSC8kw7OEynkbCbHDB5MsYPQlkJkJWnq
+	XvSC8hspoTfyaLpacSyfXwIomJZAcA8O177TnaVCoVGjZ8eSQj9QIK/tXSbf0Cd2R+ptFTftegy
+	3Sz9266Kw3rrcjFbVbx8G1B4UU9tQC0Xnt+L5vqRvFLHTmFoyooW3EfsaLAJJyIsxFBEpWYwYcR
+	oLgTGgYCwuOTgNjYzXCzjfnLkhw3HF6PctfKsQzjusyIQmn+ljxr4ut4TB2JPMjTeq57z+dKlRK
+	ywcON1G8CzFbIm2qHJJihUGEajYVxyrMjg1NOned5jZNJp2t/d3VB2Lv0UjjR9dH0H+uqcy7SgN
+	3R22/NaHRmwqyKc9nSNnXmDijsG483mCLKfYcscc+vJ4nEjUPQ4vq3whKFPKZ5ZUqiIELTJqOaO
+	ipW6g3zfpZMqei/G/QJNHzjXVJf9o=
+X-Received: by 2002:a05:6214:212e:b0:895:4d85:5edc with SMTP id 6a1803df08f44-8995812859cmr56144026d6.70.1771470196866;
         Wed, 18 Feb 2026 19:03:16 -0800 (PST)
 Received: from [172.17.0.2] ([134.128.219.200])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cddc526sm205359896d6.53.2026.02.18.19.03.15
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cddc526sm205359896d6.53.2026.02.18.19.03.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 19:03:15 -0800 (PST)
+        Wed, 18 Feb 2026 19:03:16 -0800 (PST)
 From: Yuanshen Cao <alex.caoys@gmail.com>
-Date: Thu, 19 Feb 2026 03:02:51 +0000
-Subject: [PATCH v2 1/2] dt-bindings: usb: document the Etek ET7304 USB
+Date: Thu, 19 Feb 2026 03:02:52 +0000
+Subject: [PATCH v2 2/2] usb: typec: tcpm: Add vid and chip info for Etek
+ ET7304
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,7 +87,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260219-et7304-v2-1-b2e268494ae8@gmail.com>
+Message-Id: <20260219-et7304-v2-2-b2e268494ae8@gmail.com>
 References: <20260219-et7304-v2-0-b2e268494ae8@gmail.com>
 In-Reply-To: <20260219-et7304-v2-0-b2e268494ae8@gmail.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -111,7 +112,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33472-lists,linux-usb=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-33473-lists,linux-usb=lfdr.de];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -126,47 +127,88 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,dt];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: AF7B215BD06
+X-Rspamd-Queue-Id: 009A115BD14
 X-Rspamd-Action: no action
 
-Type-C Port Controller
-
-Document the ETEK ET7304 USB Type-C Port Controller with USB-PD.
+Move the VID to chip info to accommodate different VIDs
+Add chip info for Etek ET7304. ET7304 is functionally identical to
+the Richtek RT1715, with the only difference being the VID.
 
 Signed-off-by: Yuanshen Cao <alex.caoys@gmail.com>
 ---
- Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml | 3 ++-
- Documentation/devicetree/bindings/vendor-prefixes.yaml     | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-index ae611f7e57ca..ed0802112eb9 100644
---- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-+++ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-@@ -21,8 +21,9 @@ properties:
-     enum:
-       - richtek,rt1711h
-       - richtek,rt1715
-+      - etek,et7304
-     description:
--      RT1711H support PD20, RT1715 support PD30 except Fast Role Swap.
-+      RT1711H support PD20, RT1715 and ET7304 support PD30 except Fast Role Swap.
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index 88c50b984e8a..4848748a10dd 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -19,9 +19,11 @@
+ #include <linux/regulator/consumer.h>
  
-   reg:
-     maxItems: 1
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index ee7fd3cfe203..80a5362f1c08 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -541,6 +541,8 @@ patternProperties:
-     description: ESTeem Wireless Modems
-   "^eswin,.*":
-     description: Beijing ESWIN Technology Group Co. Ltd.
-+  "^etek,.*":
-+    description: Wuxi ETEK Micro-Electronics Co.,Ltd.
-   "^ettus,.*":
-     description: NI Ettus Research
-   "^eukrea,.*":
+ #define RT1711H_VID		0x29CF
++#define ET7304_VID		0x6DCF
+ #define RT1711H_PID		0x1711
+ #define RT1711H_DID		0x2171
+ #define RT1715_DID		0x2173
++#define ET7304_DID		0x2173
+ 
+ #define RT1711H_PHYCTRL1	0x80
+ #define RT1711H_PHYCTRL2	0x81
+@@ -55,6 +57,7 @@
+ 
+ struct rt1711h_chip_info {
+ 	u32 rxdz_sel;
++	u16 vid;
+ 	u16 did;
+ 	bool enable_pd30_extended_message;
+ };
+@@ -308,7 +311,7 @@ static int rt1711h_check_revision(struct i2c_client *i2c, struct rt1711h_chip *c
+ 	ret = i2c_smbus_read_word_data(i2c, TCPC_VENDOR_ID);
+ 	if (ret < 0)
+ 		return ret;
+-	if (ret != RT1711H_VID) {
++	if (ret != chip->info->vid) {
+ 		dev_err(&i2c->dev, "vid is not correct, 0x%04x\n", ret);
+ 		return -ENODEV;
+ 	}
+@@ -406,18 +409,28 @@ static void rt1711h_remove(struct i2c_client *client)
+ }
+ 
+ static const struct rt1711h_chip_info rt1711h = {
++	.vid = RT1711H_VID,
+ 	.did = RT1711H_DID,
+ };
+ 
+ static const struct rt1711h_chip_info rt1715 = {
+ 	.rxdz_sel = RT1711H_BMCIO_RXDZSEL,
++	.vid = RT1711H_VID,
+ 	.did = RT1715_DID,
+ 	.enable_pd30_extended_message = true,
+ };
+ 
++static const struct rt1711h_chip_info et7304 = {
++	.rxdz_sel = RT1711H_BMCIO_RXDZSEL,
++	.vid = ET7304_VID,
++	.did = ET7304_DID,
++	.enable_pd30_extended_message = true,
++};
++
+ static const struct i2c_device_id rt1711h_id[] = {
+ 	{ "rt1711h", (kernel_ulong_t)&rt1711h },
+ 	{ "rt1715", (kernel_ulong_t)&rt1715 },
++	{ "et7304", (kernel_ulong_t)&et7304 },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(i2c, rt1711h_id);
+@@ -425,6 +438,7 @@ MODULE_DEVICE_TABLE(i2c, rt1711h_id);
+ static const struct of_device_id rt1711h_of_match[] = {
+ 	{ .compatible = "richtek,rt1711h", .data = &rt1711h },
+ 	{ .compatible = "richtek,rt1715", .data = &rt1715 },
++	{ .compatible = "etek,et7304", .data = &et7304 },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, rt1711h_of_match);
 
 -- 
 2.53.0
