@@ -1,194 +1,272 @@
-Return-Path: <linux-usb+bounces-33462-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33463-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id p7+fJOFrlmlofAIAu9opvQ
-	(envelope-from <linux-usb+bounces-33462-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 02:48:17 +0100
+	id EAx8NQRwlmlqfQIAu9opvQ
+	(envelope-from <linux-usb+bounces-33463-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:05:56 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC19915B6F1
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 02:48:16 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F52115B7A5
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:05:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 48C8E3033FA9
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 01:48:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CC9053066CE4
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 02:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFD3243968;
-	Thu, 19 Feb 2026 01:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FA8327B35B;
+	Thu, 19 Feb 2026 02:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EX3EZaHK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WfDRn+Bd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB3A1DF736
-	for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 01:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFC1272816;
+	Thu, 19 Feb 2026 02:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771465687; cv=none; b=Xi7M+r+cAoPf8xRqX9CVwKwxTRxPq53tdFOQ7A97ubWXzN05QvHKpDkDbQ1V3UsZ84jIdE0F/69nonqkOJ8jqM2vSH3SDiO3mEDpeA/juaztrbHps36bP3vDVjqs44Yq90cFGH9e5fv3JplofAkTYenyjgp57PPNrxKcRCzoZdk=
+	t=1771466666; cv=none; b=qSzUpT0w8evRHaC5nMjOikQ6HwXBlthzVhtqdAdxWj0hfCXulXIYNp1EmKUDYNHzOiadBwVFwa2wymfkJQb3btz+1gTGRs87hK2TA4cb5ecQzpmqRIbWXX6WMt/KM5/mKGqjLA7EZaG/rFhiUJ6meIyhzscdDZd9Jes+9fzHDMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771465687; c=relaxed/simple;
-	bh=nj7llv0SLj8JbUewm5eoLBkK4iyw9xhnNYbkQAre1Vc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fbY/YY2zh2EWLfsIOcP4H6sBRqZeriWsSx86c1ZL2d6H0gSyt5yWeNJsLbEq0fJyvq+pDedu/OFcH8K6MViOaa5TsqrQAA2Y5m2emIaNs/t4I0TIqhyoQkbwP2KA6PaT0RHmeOI1YunnL7SpGYv539IEreRobwXPNJx6Tq2dlSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EX3EZaHK; arc=none smtp.client-ip=209.85.210.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7d4be94eeacso436192a34.2
-        for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 17:48:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771465685; x=1772070485; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uaJh0fRvDfzQ3zRfXH5p2HojoBn3ZRqWgoRPT9D8ObM=;
-        b=EX3EZaHKdut0/Y7EuGVjWnw8L49BUPoZvob8rwUTls/hl+zep2OszGUyachrMF5dMQ
-         aiWfYoXsc34JNRyGK45mYWShDeKRE2u7BUpBYZmxVjgei/FuxaVl1EGF6sZpkIZ1XRy2
-         dz7uvEDjAxXUvdz4m9YuggSawlLctWjNcxmWgKpW8CrLn9IKWkEfiFhtVzml9XF/XvoG
-         QFmirXvJbfVH/54yh90YuIauNyi1vRtJHzlHZue94m/QGCZX2fZof1iOtNsEz7NMjpyI
-         oElwEq7BKEJES59WLUW0KbYg/g6yWVqCJqYpTxGNz41pENeLs3uIiZ2z//anW9BWS1GF
-         Ehjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771465685; x=1772070485;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uaJh0fRvDfzQ3zRfXH5p2HojoBn3ZRqWgoRPT9D8ObM=;
-        b=jZaNXpupM3Ct9ldxDHEs48txgayLyTaB4h0bCydt2u+AWjJKmMy2dWzxzozYkLLxDx
-         vDwFwQ9tV3Vf4SQmfILeZPKNQyvVIl1P7odd+QiGf8Sarb/NvkTpoH4OM5XvJn3nYZgq
-         V3rOoWUs+8fBTLoA8amb6tZTelj3TWYtyoyvhBGzsZkKt0NVQdTLRh61txtv+cJ+Wi/d
-         scx87ZzSAmVSaFMuTi6ems0AkYIzlJF7QU1RK08cVxEqp/9yUvXCulXzIpXTT72FT7P+
-         SjFe8F+c8COAx+N51FAZm2wxy9xk06A9NMB7O3S4yDUspFRoPuCempEYbiZELBMYGpXj
-         5vuw==
-X-Forwarded-Encrypted: i=1; AJvYcCXJuIPpI8+NnGpXQdXo3giwuWyTcuIEEWuevd1+pPl1sXS7rwlKp5W3XbgVsnul1oOjX4ibWvsUUoA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1RSH3emm80vIz5IYi9YNs+WQ776jWsxOGYr1dT5toc3o9qN70
-	Czj96upM4YbnOzmtNfmNJfUfkPEueIpaSNxscVGhACSToo/DcRRN3yb+
-X-Gm-Gg: AZuq6aIPUpEtPDSHIwwabscAHoSVothnBTC599Jt9hmdlBp0taSM0bvlFs8xTS+3L6w
-	sBaQQUEwPS/DL4tHP1b1qds8VUw55EwT/ce9d4s2xkXiMxUx/xXBg7zEO7EIWMDoK28YnJdU19W
-	UONk7oI985zFgqHslANyf/GxQWe3hn+G6oh7vCL30oawJ9tYjO9W2D7CvvUv4xsVWL3T6ZQQiQy
-	NTN6e7BX4QhckZ89oaTVFsThOIpJ9ae8eKsZXbsdIFP2gCvN69xWahcQGPbarnR5DGgnBtVPQPy
-	ZEDs3xVLNf3yXbkwkfOdkD6sGYsXyedutNgKyUIt2VW0HRSeXFg2ENebwgiOdzS360PhmyeMUJt
-	jacfU5HnY5sEZYFUw1YMJkaCqR+qtU0EMV9YB4rRjW7RGUQRtKH84Qut+JNR4iz463xDkr8eSiw
-	l+SFkzuxQu3rd7MXZ+0CVGIko0KSiIcKIZIoanQ0FTkfl+
-X-Received: by 2002:a05:6830:6ab5:b0:7cf:d119:8d93 with SMTP id 46e09a7af769-7d505ce8c89mr2549804a34.0.1771465685298;
-        Wed, 18 Feb 2026 17:48:05 -0800 (PST)
-Received: from newman.cs.purdue.edu ([128.10.127.250])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d4a76f9483sm20591727a34.20.2026.02.18.17.48.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 17:48:04 -0800 (PST)
-From: Jiasheng Jiang <jiashengjiangcool@gmail.com>
-To: thinh.nguyen@synopsys.com
-Cc: andrzej.p@samsung.com,
-	bigeasy@linutronix.de,
-	chenyufeng@iie.ac.cn,
-	gregkh@linuxfoundation.org,
-	jiashengjiangcool@gmail.com,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1771466666; c=relaxed/simple;
+	bh=3Cnq1Fy3qpNRTF/CozJ2jkGNczha8sWbKV/3RTcH1pc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UO/XKRte68WTEkR5bcdPVBpcL2IyW3IJ3JFa1zAfpeHvmKPXMOx2JgJuvtuvl9UxHAc6l8HlontCaXn/k88pvFrv1PoNTKsXNCZCQ2Hej2A8HWopOIHlF5h8ghMp7aFPbIy2tNJviflnlZSXDDQdIrxwxqc/J+WZjrO1vd3L4xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WfDRn+Bd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B45C116D0;
+	Thu, 19 Feb 2026 02:04:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771466666;
+	bh=3Cnq1Fy3qpNRTF/CozJ2jkGNczha8sWbKV/3RTcH1pc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WfDRn+BdbaOjbD3gZm/b/tVvhxbpwQLn+viIF4fJJjmKHMqaBKib0tSapuClq9Xts
+	 ZSq+zQMG3J1i17oFcA0qFoVrapZoQXNHoVvbd42kINQFrlFMb6vc1Wq9JA2HdeDRSe
+	 HXBYvpK7YXea5mbDF3ZsZ6CRIQnxx/qlCP691D0GKTEbQZ89mkwiRwx8WOXHVkuLDO
+	 yIo46or7A+q9HRu0qWiRQ6l3ETTJLNUbUxzZjxdXBnZyzHdF78f6Y4Zzz8o1gwg18r
+	 YDawQcrNMbrx6fscCh7bcIvYxQ99uRv8F/kvGkNP9fQc3lVnbKyb+dj6SudDmhqqCH
+	 rWF35cOn26clg==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Mario Peter <mario.peter@leica-geosystems.com>,
+	Xu Yang <xu.yang_2@nxp.com>,
+	Peter Chen <peter.chen@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
 	linux-usb@vger.kernel.org,
-	nab@linux-iscsi.org
-Subject: Re: [PATCH] usb: gadget: f_tcm: Fix NULL pointer dereferences in nexus handling
-Date: Thu, 19 Feb 2026 01:48:04 +0000
-Message-Id: <20260219014804.14705-1-jiashengjiangcool@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260219012929.u6btnnmqvbyujz5f@synopsys.com>
-References: <20260219012929.u6btnnmqvbyujz5f@synopsys.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.19-6.12] usb: chipidea: udc: fix DMA and SG cleanup in _ep_nuke()
+Date: Wed, 18 Feb 2026 21:03:38 -0500
+Message-ID: <20260219020422.1539798-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260219020422.1539798-1-sashal@kernel.org>
+References: <20260219020422.1539798-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.19.2
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33462-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[samsung.com,linutronix.de,iie.ac.cn,linuxfoundation.org,gmail.com,vger.kernel.org,linux-iscsi.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33463-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jiashengjiangcool@gmail.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_NONE(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: EC19915B6F1
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linuxfoundation.org:email,msgid.link:url,leica-geosystems.com:email]
+X-Rspamd-Queue-Id: 6F52115B7A5
 X-Rspamd-Action: no action
 
-On Thu, 19 Feb 2026 01:30:16 +0000, Thinh Nguyen wrote:
-> On Wed, Feb 18, 2026, Sebastian Andrzej Siewior wrote:
->> On 2026-02-18 05:22:21 [+0000], Thinh Nguyen wrote:
->> > > Fixes: 08a1cb0f65fd ("usb: gadget: tcm: factor out f_tcm")
->> > > Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
->> …
->> > While the patch itself is fine, we should prevent this situation from
->> > occurring in the first place. That is, we should enforce the config
->> > dependency and prevent the users from removing the nexus if the gadget
->> > driver is bound. Likewise, we should prevent the gadget driver from
->> > binding if no nexus is established.
->> 
->> Is this an actual problem or just something that looks like it could
->> happen? My memory is that the tcm holds a reference on it and the
->> referenced commit just split/moved  the code. So if it is a problem then
->> it should have been there longer than that.
->> 
-> 
-> Looks like we only hold the reference to the session cmds, and we track
-> the tpg_port_count if there's an established link. But we don't guard or
-> deactivate the f_tcm usb function when we unregister the tcm and remove
-> the nexus. As far as the host can tell, the device is still connected
-> and the function is still active.
-> 
-> This exists since the beginning. The Fixes tag should have pointed to
-> c52661d60f63 ("usb-gadget: Initial merge of target module for UASP + BOT")
-> 
-> We can guard against unlinking the port while the gadget_driver is bound
-> or we can just deactivate the usb function when that happens. The latter
-> is probably a better option.
-> 
-> BR,
-> Thinh
+From: Mario Peter <mario.peter@leica-geosystems.com>
 
-Thanks for the clarification.
+[ Upstream commit cea2a1257a3b5ea3e769a445b34af13e6aa5a123 ]
 
-I understand your point about "The latter" option: we should deactivate
-the USB function when the nexus is dropped to stop new traffic from the
-host.
+The ChipIdea UDC driver can encounter "not page aligned sg buffer"
+errors when a USB device is reconnected after being disconnected
+during an active transfer. This occurs because _ep_nuke() returns
+requests to the gadget layer without properly unmapping DMA buffers
+or cleaning up scatter-gather bounce buffers.
 
-However, even if we implement the deactivation logic in
-tcm_usbg_drop_nexus, there could still be a race condition where pending
-work items (e.g., bot_cmd_work) are already scheduled but haven't executed
-yet.
+Root cause:
+When a disconnect happens during a multi-segment DMA transfer, the
+request's num_mapped_sgs field and sgt.sgl pointer remain set with
+stale values. The request is returned to the gadget driver with status
+-ESHUTDOWN but still has active DMA state. If the gadget driver reuses
+this request on reconnect without reinitializing it, the stale DMA
+state causes _hardware_enqueue() to skip DMA mapping (seeing non-zero
+num_mapped_sgs) and attempt to use freed/invalid DMA addresses,
+leading to alignment errors and potential memory corruption.
 
-Therefore, I believe the if (!tv_nexus) checks in this patch are still
-necessary as a safeguard to drain pending requests safely without
-crashing.
+The normal completion path via _hardware_dequeue() properly calls
+usb_gadget_unmap_request_by_dev() and sglist_do_debounce() before
+returning the request. The _ep_nuke() path must do the same cleanup
+to ensure requests are returned in a clean, reusable state.
 
-My Proposal:
-Can we proceed with this patch (adding the NULL checks and fixing the
-Fixes tag) to close the immediate panic? The architectural change to
-deactivate the function could then be handled in a separate follow-up
-patch, as it might require more extensive testing.
+Fix:
+Add DMA unmapping and bounce buffer cleanup to _ep_nuke() to mirror
+the cleanup sequence in _hardware_dequeue():
+- Call usb_gadget_unmap_request_by_dev() if num_mapped_sgs is set
+- Call sglist_do_debounce() with copy=false if bounce buffer exists
 
-Does that sound reasonable to you?
+This ensures that when requests are returned due to endpoint shutdown,
+they don't retain stale DMA mappings. The 'false' parameter to
+sglist_do_debounce() prevents copying data back (appropriate for
+shutdown path where transfer was aborted).
 
-Best regards,
-Jiasheng
+Signed-off-by: Mario Peter <mario.peter@leica-geosystems.com>
+Reviewed-by: Xu Yang <xu.yang_2@nxp.com>
+Acked-by: Peter Chen <peter.chen@kernel.org>
+Link: https://patch.msgid.link/20260108165902.795354-1-mario.peter@leica-geosystems.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+This confirms:
+1. `usb_gadget_unmap_request_by_dev()` at line 966 sets
+   `req->num_mapped_sgs = 0` - this is exactly what's needed to clear
+   the stale state
+2. It also does `dma_unmap_sg()` at line 963 to properly unmap the DMA
+   buffers
+3. Without this call in `_ep_nuke()`, the request is given back with
+   active DMA mappings and stale `num_mapped_sgs`
+
+## 3. Assessment
+
+### What the commit fixes:
+- **DMA resource leak**: Requests returned via `_ep_nuke()` during
+  disconnect have active DMA mappings that are never unmapped, leaking
+  DMA resources
+- **Stale state causing corruption**: The `num_mapped_sgs` field remains
+  non-zero, causing `_hardware_enqueue()` to skip DMA mapping on reuse
+  and instead use freed/invalid DMA addresses
+- **Memory corruption**: Invalid DMA addresses lead to "not page aligned
+  sg buffer" errors and potential memory corruption
+- **Bounce buffer leak**: SG bounce buffers (`sgt.sgl`) allocated via
+  `sglist_do_bounce()` are never freed, leaking memory
+
+### Stable kernel criteria:
+1. **Obviously correct**: The fix mirrors exactly what
+   `_hardware_dequeue()` (line 886-891) and `ep_dequeue()` (line
+   1738-1741) already do. It's a well-established pattern within the
+   same file.
+2. **Fixes a real bug**: DMA corruption and resource leaks on USB
+   disconnect during active transfer.
+3. **Important issue**: Memory corruption, stale DMA addresses,
+   potential data corruption.
+4. **Small and contained**: Only 6 lines added, all within a single
+   function in a single file.
+5. **No new features**: Pure bug fix.
+
+### Risk assessment:
+- **Very low risk**: The added code calls well-known cleanup functions
+  that are already called in the two other completion paths
+  (`_hardware_dequeue` and `ep_dequeue`). The `false` parameter to
+  `sglist_do_debounce` is appropriate as no data needs to be copied back
+  during shutdown.
+- The `usb_gadget_unmap_request_by_dev()` call is safe even if no DMA
+  was mapped (it checks `req->length == 0`, `sg_was_mapped`, and
+  `num_mapped_sgs` before doing anything).
+
+### Dependency consideration:
+- The `sglist_do_debounce()` function was introduced in v6.13 (commit
+  edfcc455c85cc). For stable trees older than 6.13, only the
+  `usb_gadget_unmap_request_by_dev()` line would apply (the
+  `sglist_do_debounce` part would need to be dropped). However, the DMA
+  unmap portion is independently valuable.
+- The `usb_gadget_unmap_request_by_dev()` function has existed for a
+  long time and is available in all active stable trees.
+
+### Reviews/Acks:
+- Reviewed-by: Xu Yang (NXP engineer, author of the bounce buffer code)
+- Acked-by: Peter Chen (ChipIdea UDC subsystem maintainer)
+- Applied by: Greg Kroah-Hartman (USB maintainer)
+
+## Verification
+
+- **Verified** `_hardware_dequeue()` at lines 886-891 performs the same
+  cleanup (DMA unmap + sglist debounce) - confirmed by reading the file
+- **Verified** `ep_dequeue()` at lines 1738-1741 also performs the same
+  cleanup pattern - confirmed by reading the file
+- **Verified** `usb_gadget_unmap_request_by_dev()` in
+  `drivers/usb/gadget/udc/core.c:956-972` clears `num_mapped_sgs` to 0
+  (line 966) and unmaps DMA - confirmed by reading the source
+- **Verified** `_ep_nuke()` is called from multiple paths: disconnect
+  (line 1108), endpoint reset (lines 1326-1327), endpoint disable (line
+  1615) - confirmed by grep
+- **Verified** `sglist_do_debounce()` was introduced in commit
+  `edfcc455c85cc` which first appeared in v6.13 - confirmed via `git tag
+  --contains`
+- **Verified** the commit is self-contained: no other patches needed for
+  the fix to work in trees with v6.13+
+- **Verified** commit has proper review: Reviewed-by (Xu Yang, bounce
+  buffer author), Acked-by (Peter Chen, subsystem maintainer)
+- **Verified** `_hardware_enqueue()` at line 708 checks `num_mapped_sgs`
+  to decide whether to skip DMA mapping - this is the code path that
+  breaks when stale state remains
+
+## Conclusion
+
+This is a textbook stable backport candidate:
+- Fixes a real, user-triggerable bug (USB disconnect during active
+  transfer)
+- Causes memory corruption and DMA errors
+- Small, surgical fix (6 lines added)
+- Mirrors existing cleanup patterns already in the same file
+- Reviewed and acked by subsystem experts
+- Very low regression risk
+- Affects real hardware users (ChipIdea UDC is used in NXP i.MX SoCs,
+  common in embedded/IoT)
+
+**YES**
+
+ drivers/usb/chipidea/udc.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index 64a421ae0f05b..c8d931d9d4330 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -931,6 +931,13 @@ __acquires(hwep->lock)
+ 		list_del_init(&hwreq->queue);
+ 		hwreq->req.status = -ESHUTDOWN;
+ 
++		/* Unmap DMA and clean up bounce buffers before giving back */
++		usb_gadget_unmap_request_by_dev(hwep->ci->dev->parent,
++					&hwreq->req, hwep->dir);
++
++		if (hwreq->sgt.sgl)
++			sglist_do_debounce(hwreq, false);
++
+ 		if (hwreq->req.complete != NULL) {
+ 			spin_unlock(hwep->lock);
+ 			usb_gadget_giveback_request(&hwep->ep, &hwreq->req);
+-- 
+2.51.0
+
 
