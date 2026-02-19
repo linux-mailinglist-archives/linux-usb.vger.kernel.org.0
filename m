@@ -1,62 +1,60 @@
-Return-Path: <linux-usb+bounces-33463-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33464-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EAx8NQRwlmlqfQIAu9opvQ
-	(envelope-from <linux-usb+bounces-33463-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:05:56 +0100
+	id gCK2Gv9xlmlqfQIAu9opvQ
+	(envelope-from <linux-usb+bounces-33464-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:14:23 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F52115B7A5
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:05:56 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F41715BA0A
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:14:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CC9053066CE4
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 02:04:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2BC773020FF4
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 02:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FA8327B35B;
-	Thu, 19 Feb 2026 02:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63787302753;
+	Thu, 19 Feb 2026 02:04:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WfDRn+Bd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BajFkvGE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFC1272816;
-	Thu, 19 Feb 2026 02:04:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADA92820A0;
+	Thu, 19 Feb 2026 02:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771466666; cv=none; b=qSzUpT0w8evRHaC5nMjOikQ6HwXBlthzVhtqdAdxWj0hfCXulXIYNp1EmKUDYNHzOiadBwVFwa2wymfkJQb3btz+1gTGRs87hK2TA4cb5ecQzpmqRIbWXX6WMt/KM5/mKGqjLA7EZaG/rFhiUJ6meIyhzscdDZd9Jes+9fzHDMA=
+	t=1771466691; cv=none; b=ItrlHAqc7kuF9HK0CJ3bTHBGSCYyId9GW+o0uL7qCtj7+rfosQfx8bIp92btbTryDHw4OkP7xz1fhpk/wTUTl7eA1vQEV5c1E6zj1dCXdbqY4kd6byjsFBa4RGbyfreswnlqQwDwg+JNGgSGrxChVJmCW6l9WN3nWyCVmiFpMLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771466666; c=relaxed/simple;
-	bh=3Cnq1Fy3qpNRTF/CozJ2jkGNczha8sWbKV/3RTcH1pc=;
+	s=arc-20240116; t=1771466691; c=relaxed/simple;
+	bh=y6tt7ei+qxr4LoTgYfCIHZb1FvaD8Vmha1OM1rVF+Zg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UO/XKRte68WTEkR5bcdPVBpcL2IyW3IJ3JFa1zAfpeHvmKPXMOx2JgJuvtuvl9UxHAc6l8HlontCaXn/k88pvFrv1PoNTKsXNCZCQ2Hej2A8HWopOIHlF5h8ghMp7aFPbIy2tNJviflnlZSXDDQdIrxwxqc/J+WZjrO1vd3L4xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WfDRn+Bd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B45C116D0;
-	Thu, 19 Feb 2026 02:04:25 +0000 (UTC)
+	 MIME-Version:Content-Type; b=mdYsQWj7Mx+Pf57GO2wZZgJLKr3OU39aakSUsXXRyxjnI4BBsyVoKkSd+wWvFsgZN6TxMqVfPPO3LDT86ZU4WeH3Ncnsq1aC3MaW8EyA5oyyHc29sfjb9+Nh2788hOely0NuoKHWPQjGYOU6EFarNFup9zE9sJiKodK3pHtooh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BajFkvGE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F0BC116D0;
+	Thu, 19 Feb 2026 02:04:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771466666;
-	bh=3Cnq1Fy3qpNRTF/CozJ2jkGNczha8sWbKV/3RTcH1pc=;
+	s=k20201202; t=1771466691;
+	bh=y6tt7ei+qxr4LoTgYfCIHZb1FvaD8Vmha1OM1rVF+Zg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WfDRn+BdbaOjbD3gZm/b/tVvhxbpwQLn+viIF4fJJjmKHMqaBKib0tSapuClq9Xts
-	 ZSq+zQMG3J1i17oFcA0qFoVrapZoQXNHoVvbd42kINQFrlFMb6vc1Wq9JA2HdeDRSe
-	 HXBYvpK7YXea5mbDF3ZsZ6CRIQnxx/qlCP691D0GKTEbQZ89mkwiRwx8WOXHVkuLDO
-	 yIo46or7A+q9HRu0qWiRQ6l3ETTJLNUbUxzZjxdXBnZyzHdF78f6Y4Zzz8o1gwg18r
-	 YDawQcrNMbrx6fscCh7bcIvYxQ99uRv8F/kvGkNP9fQc3lVnbKyb+dj6SudDmhqqCH
-	 rWF35cOn26clg==
+	b=BajFkvGEtvZdqkRcLrclXmHUQT8SElbN5SQzSLoS+AyHDJN/oyN/s/oR6yOIBS33i
+	 mM/+khIkqX+VQYpdZOIDD6X3uyA1Npp6myml/ukSiv2vda1ofp4Ea+Dtou45LVk/Fw
+	 3OStkHDKEMoRh7V79SoDLTNwharWzKoAFNev+HTNYVvGzP1U4J0nVWpn2ofdkwInKN
+	 ccl5JZwmElRPbFT/SBRhqiPS+JQMvT/uUZlNngp3vFK6ALBVNLW7Kj2qq3Ipp/Us74
+	 NunjkK57sYA+ak8U9pTpx8k2D4q2X4ffDAmxIO3JbzMkiKpkZdiWGYtyOObjRBgOh6
+	 bazIWr/B9iOqg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Mario Peter <mario.peter@leica-geosystems.com>,
-	Xu Yang <xu.yang_2@nxp.com>,
-	Peter Chen <peter.chen@kernel.org>,
+Cc: Sam Day <me@samcday.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.12] usb: chipidea: udc: fix DMA and SG cleanup in _ep_nuke()
-Date: Wed, 18 Feb 2026 21:03:38 -0500
-Message-ID: <20260219020422.1539798-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.19-6.12] usb: gadget: f_fs: Fix ioctl error handling
+Date: Wed, 18 Feb 2026 21:03:58 -0500
+Message-ID: <20260219020422.1539798-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260219020422.1539798-1-sashal@kernel.org>
 References: <20260219020422.1539798-1-sashal@kernel.org>
@@ -69,203 +67,175 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.19.2
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33463-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33464-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-usb];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linuxfoundation.org:email,msgid.link:url,leica-geosystems.com:email]
-X-Rspamd-Queue-Id: 6F52115B7A5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,msgid.link:url,samcday.com:email,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: 9F41715BA0A
 X-Rspamd-Action: no action
 
-From: Mario Peter <mario.peter@leica-geosystems.com>
+From: Sam Day <me@samcday.com>
 
-[ Upstream commit cea2a1257a3b5ea3e769a445b34af13e6aa5a123 ]
+[ Upstream commit 8e4c1d06183c25022f6b0002a5cab84979ca6337 ]
 
-The ChipIdea UDC driver can encounter "not page aligned sg buffer"
-errors when a USB device is reconnected after being disconnected
-during an active transfer. This occurs because _ep_nuke() returns
-requests to the gadget layer without properly unmapping DMA buffers
-or cleaning up scatter-gather bounce buffers.
+When ffs_epfile_ioctl handles FUNCTIONFS_DMABUF_* ioctls, it's currently
+falling through when copy_from_user fails.
 
-Root cause:
-When a disconnect happens during a multi-segment DMA transfer, the
-request's num_mapped_sgs field and sgt.sgl pointer remain set with
-stale values. The request is returned to the gadget driver with status
--ESHUTDOWN but still has active DMA state. If the gadget driver reuses
-this request on reconnect without reinitializing it, the stale DMA
-state causes _hardware_enqueue() to skip DMA mapping (seeing non-zero
-num_mapped_sgs) and attempt to use freed/invalid DMA addresses,
-leading to alignment errors and potential memory corruption.
+However, this fallthrough isn't being checked properly, so the handler
+continues executing further than it should. It then tries the secondary
+dispatch where it ultimately gives up and returns -ENOTTY.
 
-The normal completion path via _hardware_dequeue() properly calls
-usb_gadget_unmap_request_by_dev() and sglist_do_debounce() before
-returning the request. The _ep_nuke() path must do the same cleanup
-to ensure requests are returned in a clean, reusable state.
+The end result is invalid ioctl invocations will yield a -ENOTTY rather
+than an -EFAULT.
 
-Fix:
-Add DMA unmapping and bounce buffer cleanup to _ep_nuke() to mirror
-the cleanup sequence in _hardware_dequeue():
-- Call usb_gadget_unmap_request_by_dev() if num_mapped_sgs is set
-- Call sglist_do_debounce() with copy=false if bounce buffer exists
+It's a common pattern elsewhere in the kernel code to directly return
+-EFAULT when copy_from_user fails. So we update ffs_epfile_ioctl to do
+the same and fix this issue.
 
-This ensures that when requests are returned due to endpoint shutdown,
-they don't retain stale DMA mappings. The 'false' parameter to
-sglist_do_debounce() prevents copying data back (appropriate for
-shutdown path where transfer was aborted).
-
-Signed-off-by: Mario Peter <mario.peter@leica-geosystems.com>
-Reviewed-by: Xu Yang <xu.yang_2@nxp.com>
-Acked-by: Peter Chen <peter.chen@kernel.org>
-Link: https://patch.msgid.link/20260108165902.795354-1-mario.peter@leica-geosystems.com
+Signed-off-by: Sam Day <me@samcday.com>
+Link: https://patch.msgid.link/20260108-ffs-dmabuf-ioctl-fix-v1-1-e51633891a81@samcday.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-This confirms:
-1. `usb_gadget_unmap_request_by_dev()` at line 966 sets
-   `req->num_mapped_sgs = 0` - this is exactly what's needed to clear
-   the stale state
-2. It also does `dma_unmap_sg()` at line 963 to properly unmap the DMA
-   buffers
-3. Without this call in `_ep_nuke()`, the request is given back with
-   active DMA mappings and stale `num_mapped_sgs`
+Good. So 6.12.y exists and would contain this DMABUF code (introduced in
+6.9).
 
-## 3. Assessment
+### Stable Criteria Assessment
 
-### What the commit fixes:
-- **DMA resource leak**: Requests returned via `_ep_nuke()` during
-  disconnect have active DMA mappings that are never unmapped, leaking
-  DMA resources
-- **Stale state causing corruption**: The `num_mapped_sgs` field remains
-  non-zero, causing `_hardware_enqueue()` to skip DMA mapping on reuse
-  and instead use freed/invalid DMA addresses
-- **Memory corruption**: Invalid DMA addresses lead to "not page aligned
-  sg buffer" errors and potential memory corruption
-- **Bounce buffer leak**: SG bounce buffers (`sgt.sgl`) allocated via
-  `sglist_do_bounce()` are never freed, leaking memory
+1. **Obviously correct and tested**: The fix is trivially correct —
+   returning `-EFAULT` immediately on `copy_from_user` failure is the
+   standard kernel pattern. The commit was accepted by Greg KH (USB
+   maintainer and stable tree maintainer).
 
-### Stable kernel criteria:
-1. **Obviously correct**: The fix mirrors exactly what
-   `_hardware_dequeue()` (line 886-891) and `ep_dequeue()` (line
-   1738-1741) already do. It's a well-established pattern within the
-   same file.
-2. **Fixes a real bug**: DMA corruption and resource leaks on USB
-   disconnect during active transfer.
-3. **Important issue**: Memory corruption, stale DMA addresses,
-   potential data corruption.
-4. **Small and contained**: Only 6 lines added, all within a single
-   function in a single file.
-5. **No new features**: Pure bug fix.
+2. **Fixes a real bug**: Yes — wrong error code returned to userspace
+   and unnecessary blocking call on error path. This affects userspace
+   programs that depend on correct error codes for their error handling.
 
-### Risk assessment:
-- **Very low risk**: The added code calls well-known cleanup functions
-  that are already called in the two other completion paths
-  (`_hardware_dequeue` and `ep_dequeue`). The `false` parameter to
-  `sglist_do_debounce` is appropriate as no data needs to be copied back
-  during shutdown.
-- The `usb_gadget_unmap_request_by_dev()` call is safe even if no DMA
-  was mapped (it checks `req->length == 0`, `sg_was_mapped`, and
-  `num_mapped_sgs` before doing anything).
+3. **Small and contained**: Yes — only 3 error paths changed in a single
+   function, net -6 lines. No structural changes.
 
-### Dependency consideration:
-- The `sglist_do_debounce()` function was introduced in v6.13 (commit
-  edfcc455c85cc). For stable trees older than 6.13, only the
-  `usb_gadget_unmap_request_by_dev()` line would apply (the
-  `sglist_do_debounce` part would need to be dropped). However, the DMA
-  unmap portion is independently valuable.
-- The `usb_gadget_unmap_request_by_dev()` function has existed for a
-  long time and is available in all active stable trees.
+4. **No new features**: Correct — purely fixes error handling.
 
-### Reviews/Acks:
-- Reviewed-by: Xu Yang (NXP engineer, author of the bounce buffer code)
-- Acked-by: Peter Chen (ChipIdea UDC subsystem maintainer)
-- Applied by: Greg Kroah-Hartman (USB maintainer)
+5. **Risk assessment**: Extremely low risk. The change only affects
+   error paths (when `copy_from_user` fails). The non-error paths
+   (successful `copy_from_user`) are completely unchanged.
 
-## Verification
+### Additional Concerns
 
-- **Verified** `_hardware_dequeue()` at lines 886-891 performs the same
-  cleanup (DMA unmap + sglist debounce) - confirmed by reading the file
-- **Verified** `ep_dequeue()` at lines 1738-1741 also performs the same
-  cleanup pattern - confirmed by reading the file
-- **Verified** `usb_gadget_unmap_request_by_dev()` in
-  `drivers/usb/gadget/udc/core.c:956-972` clears `num_mapped_sgs` to 0
-  (line 966) and unmaps DMA - confirmed by reading the source
-- **Verified** `_ep_nuke()` is called from multiple paths: disconnect
-  (line 1108), endpoint reset (lines 1326-1327), endpoint disable (line
-  1615) - confirmed by grep
-- **Verified** `sglist_do_debounce()` was introduced in commit
-  `edfcc455c85cc` which first appeared in v6.13 - confirmed via `git tag
-  --contains`
-- **Verified** the commit is self-contained: no other patches needed for
-  the fix to work in trees with v6.13+
-- **Verified** commit has proper review: Reviewed-by (Xu Yang, bounce
-  buffer author), Acked-by (Peter Chen, subsystem maintainer)
-- **Verified** `_hardware_enqueue()` at line 708 checks `num_mapped_sgs`
-  to decide whether to skip DMA mapping - this is the code path that
-  breaks when stale state remains
+- **Unnecessary blocking**: The current buggy code causes the function
+  to call `ffs_epfile_wait_ep()` when `copy_from_user` fails. This is a
+  wait function that could block, causing unnecessary delays for the
+  failing ioctl. The fix eliminates this.
+- **Dependencies**: No dependencies on other patches needed. The fix is
+  self-contained.
+- **Affected versions**: Only kernels v6.9+ that contain the DMABUF
+  ioctl support.
 
-## Conclusion
+### Verification
 
-This is a textbook stable backport candidate:
-- Fixes a real, user-triggerable bug (USB disconnect during active
-  transfer)
-- Causes memory corruption and DMA errors
-- Small, surgical fix (6 lines added)
-- Mirrors existing cleanup patterns already in the same file
-- Reviewed and acked by subsystem experts
-- Very low regression risk
-- Affects real hardware users (ChipIdea UDC is used in NXP i.MX SoCs,
-  common in embedded/IoT)
+- **git log** confirmed that DMABUF ioctls were introduced in commit
+  `7b07a2a7ca02a` (v6.9)
+- **Read of f_fs.c lines 1730-1835** confirmed the bug mechanism: after
+  `break` from first switch, code falls through to
+  `ffs_epfile_wait_ep()` then second switch where default case returns
+  `-ENOTTY`, overwriting `-EFAULT`
+- **git tag** confirmed the code exists in stable tree 6.12.y (which
+  includes all code from v6.9+)
+- **Commit message** clearly explains the bug and fix mechanism
+- **Signed-off-by Greg KH** confirms the USB maintainer accepted this
+  fix
+- Could NOT independently verify whether userspace programs have been
+  affected (unverified, but the wrong error code is a definite API
+  contract violation)
+
+### Summary
+
+This is a clear, small, correct bug fix for error handling in the USB
+gadget FunctionFS DMABUF ioctl handler. The bug causes:
+1. Wrong error code (`-ENOTTY` instead of `-EFAULT`) returned to
+   userspace
+2. Unnecessary blocking in `ffs_epfile_wait_ep()` on error paths
+
+The fix is minimal (3 error paths changed to return directly), obviously
+correct (follows standard kernel patterns), has zero risk to non-error
+paths, and was accepted by Greg KH. It meets all stable kernel criteria.
 
 **YES**
 
- drivers/usb/chipidea/udc.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/usb/gadget/function/f_fs.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 64a421ae0f05b..c8d931d9d4330 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -931,6 +931,13 @@ __acquires(hwep->lock)
- 		list_del_init(&hwreq->queue);
- 		hwreq->req.status = -ESHUTDOWN;
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 928f51fddc64e..e75d5d8b5ac91 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1744,10 +1744,8 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+ 	{
+ 		int fd;
  
-+		/* Unmap DMA and clean up bounce buffers before giving back */
-+		usb_gadget_unmap_request_by_dev(hwep->ci->dev->parent,
-+					&hwreq->req, hwep->dir);
-+
-+		if (hwreq->sgt.sgl)
-+			sglist_do_debounce(hwreq, false);
-+
- 		if (hwreq->req.complete != NULL) {
- 			spin_unlock(hwep->lock);
- 			usb_gadget_giveback_request(&hwep->ep, &hwreq->req);
+-		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
+-			ret = -EFAULT;
+-			break;
+-		}
++		if (copy_from_user(&fd, (void __user *)value, sizeof(fd)))
++			return -EFAULT;
+ 
+ 		return ffs_dmabuf_attach(file, fd);
+ 	}
+@@ -1755,10 +1753,8 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+ 	{
+ 		int fd;
+ 
+-		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
+-			ret = -EFAULT;
+-			break;
+-		}
++		if (copy_from_user(&fd, (void __user *)value, sizeof(fd)))
++			return -EFAULT;
+ 
+ 		return ffs_dmabuf_detach(file, fd);
+ 	}
+@@ -1766,10 +1762,8 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+ 	{
+ 		struct usb_ffs_dmabuf_transfer_req req;
+ 
+-		if (copy_from_user(&req, (void __user *)value, sizeof(req))) {
+-			ret = -EFAULT;
+-			break;
+-		}
++		if (copy_from_user(&req, (void __user *)value, sizeof(req)))
++			return -EFAULT;
+ 
+ 		return ffs_dmabuf_transfer(file, &req);
+ 	}
 -- 
 2.51.0
 
