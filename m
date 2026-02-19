@@ -1,81 +1,81 @@
-Return-Path: <linux-usb+bounces-33469-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33470-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IEnHGoNzlmlqfQIAu9opvQ
-	(envelope-from <linux-usb+bounces-33469-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:20:51 +0100
+	id 6NNvGLV3lmnMfwIAu9opvQ
+	(envelope-from <linux-usb+bounces-33470-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:38:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDE4515BB00
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:20:50 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B466B15BC07
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 03:38:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 608AE3056B72
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 02:18:32 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C4DC030089AE
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Feb 2026 02:38:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 867E825C6EE;
-	Thu, 19 Feb 2026 02:18:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C6D275B03;
+	Thu, 19 Feb 2026 02:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AjZ04iOM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l/FhfKsp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E1022D9E9
-	for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 02:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702A125393E
+	for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 02:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771467505; cv=none; b=iJzO3fAj+EsXKHmZWOGgcm+2nOFBx+Nw+4niC0MasH4hK+ffBjphZ7uMRtXKblWmlYXHrwrOKcZan/fs7oQy6lI0axWp9Cw5LE3V48f+0fbFNI6fRrdBHJJ4iLTZglWKjBmoPL4Ll0/RykumYrzB5gKnLuQvWTwtj1OMgoBe704=
+	t=1771468721; cv=none; b=YBSsQfOq/eDzopZj3lm73rM6U2qsynCN8JuzIFNYEFovRjoNHxWkaB5+fAXLdU6sVJVtprHFxiuTAJM10PHMcBOvTihcWIkgbzflte/5rxi0OUJ4ETLZ+5qc9+N3jO2kJppnvKNX33u0d5yBBGt1vpuKAvqpGpjoOilS4l1M3uA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771467505; c=relaxed/simple;
-	bh=zBPh7pVBs/+aelEAMVoNdaIJSE5g+dOBuOUGOKVr63k=;
+	s=arc-20240116; t=1771468721; c=relaxed/simple;
+	bh=UsuudlMVw9TdWP0KxRZPMcXmh6yiz2Nuu2hTtp6LbDA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S6Inwcr8Pql2q17hz5vEwSEeALjmA0xZiPm74zSX32UEbVx5AgAmnE74WYhJKcQ8f52u6PFKSnkEzqhaGiDPOeZwM6JSM0wQ98/HQpOxRNM0UYrRKwVBlUpB68PYW5/vQuLYVd8q9AaxSJJZsbssM4WHcS4/MlMnswQy42/3z+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AjZ04iOM; arc=none smtp.client-ip=209.85.167.172
+	 MIME-Version; b=tKO/olyYxKh9M9QVKkeypbr/uamqagl4gN3xx7aCG1QT2L1ltHqf+N/rlvrIIQ2rQ6L+Uw5euCCfKJVruQofyTxdAhYXqH5DCfpm7AS8vxxVkDBbf9ZFCexvHWbZ9WE+6tk9XvHqpFIlfVHp839f3zNyboFyqGoNO2DuoJMFOoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l/FhfKsp; arc=none smtp.client-ip=209.85.167.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-4638fe85a7eso154538b6e.2
-        for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 18:18:23 -0800 (PST)
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-463b3697846so973045b6e.0
+        for <linux-usb@vger.kernel.org>; Wed, 18 Feb 2026 18:38:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771467503; x=1772072303; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771468718; x=1772073518; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NtXxCEC+7SXjdXl/ryO2zULVRaIn8cU2u3ECa1xYY94=;
-        b=AjZ04iOMQHwW9axbB0PcC1qPIvX08sQxBumu6DpsR3Gg+4DvdR/pafsObHuDAEbWQt
-         FUVH3GVy2VhzRxA3Nd+F/jRqptuNMapkcrA1MIX6b8Cp+Ryv2tixR5wZsYR6pRKci77F
-         HoJulB46FUI/yIbmdeJFZoSGrGLGbeYZmJDxUrnrwZff9WXdmCCc7j+rogxFyY0qIPin
-         w3gOl5nG9fVDmSsy68lbJOHad6dg5I3Hip5KDBoyhmjG98PXjOlaoVf3zen0pI5EnjAt
-         bBsSEiKaRY6h7wVCgQm0Ta2CZSMzQn176oGfVh1u9UgpC1JLEZtq2colj+HgrbRVZWQy
-         9bmQ==
+        bh=MOasyN1a2WZJAy9nJuEJoljjWUcMt5PcJQs4Ux5sSOs=;
+        b=l/FhfKspInbF0xeisIYLB8z6efVYl/Q9QV3jVNeouGq1yXzGq0lxBAP+dSE6HBymHg
+         i7iTqYLZ9ES6Opl8F5KST0FBP7A5lfQY9cL1XCV94S4g8TrBiN9PHtC7Gi7vVForSVQ3
+         RW47MA5gTvRo9aOxhwRNgIFAyixHl2l0ngwrlQ5fLMRX7XnQJwoGJ3VA4iBTEfz1Fox3
+         KjAB+qPPiN4ZxrA3u2n+RLu8AEKWdFRgGSz0Xvm/p/af2v7jAavvCKVEZDhxfeSzR91U
+         /TxytrILKI5OXgi+4dEqJCnUinfTVEgzKa/xhng952o7nzn6UOqemWltEM9RVQWL1nUZ
+         NTIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771467503; x=1772072303;
+        d=1e100.net; s=20230601; t=1771468718; x=1772073518;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=NtXxCEC+7SXjdXl/ryO2zULVRaIn8cU2u3ECa1xYY94=;
-        b=karTrsdxujvWTQah2Kj3bM6OOHRgcfIoA5NDqeqqKIxiTXnFPF8ANjYjj3QuoRW00M
-         4uogoISzOU2J/zMvg/IIWz6QLFyKqYGd4kwGbjb0Z+9bYTTySz6oPIl9bFFUiT2U4JfW
-         OKg0FdSI6sYM/eFAK7gQL/AU65r+TrG7b9DS6cSmuscJGYSCFCpliIAUhn5WCvh9qN+E
-         XJFsw1sxpv9+KRkp/NRqyGWppfCf0kY95MKKyp8bqyknHcXhsHi9lNEKrsSYBtdq3awC
-         nYwUGi6v5ERj1z0kHgePdiOMdSagZ9AlBTdzgIKVAznjaYLLiLOiRlIIWMkj4BLG6J+L
-         WBsA==
-X-Forwarded-Encrypted: i=1; AJvYcCUhkGpkX+qwV9rALJGknGnjyoCTdZvK0zZZpDzInzmKk9vTb895oO2UtRERDvbKijfF27TQeHOh4Lc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9OsGHNoY3gVJNx5bh3f/HkwEqcIixFONULTuyV44S6RezWy32
-	chghf40o2PeBv5hKObGB3f9LbAChMWaMQgRUCCGYt0wWWll6H7F94Jvh4jyXHg==
-X-Gm-Gg: AZuq6aIvd/Jf7r6kUUXTJ4PweR0C3vMijHzvJ/tX47lL8UR17AkB8sThoVqEqTmw6W/
-	keco9VngP2rYXP+qUBJLWUjo7NQNBnFc3sAGhrwsP4m/IDmCIpn+r84zyi6TTaZaiF/EVLLSHpG
-	HmNwUpui0Y/whWmdtQF2zkJEVv2Gz+TLNUk5GjJQt3gB40q0rl4fLmMIyOhk4S7Yu2VITsslVbK
-	05HhXTPwrXezboKogBjMLfmvtCzHnZNhi76Ax3AH1C7svSaY8a59fkbeuin4OWxXSbDJUaOOLG4
-	ETxaAmWvda+akEvhxCTjFyZLSdoK7fDr6y2Gkurl5Zz63Ku0+hUXrLnM3+yfXsjZI+0TLYDzOWi
-	o0+llmSAXfH9ICpGW3MdPjwjSxxdBxZKYvPJ5+v7JUQEu7jalTG4eEVxjMGhBO8cx/YRwUJbB22
-	hWvKM1J7q6ILpBXYEyt9B0Fb1mODSAGFFbpdUQDh6Way7y
-X-Received: by 2002:a4a:e842:0:b0:676:f8f6:3f67 with SMTP id 006d021491bc7-677696920famr8891781eaf.59.1771467502640;
-        Wed, 18 Feb 2026 18:18:22 -0800 (PST)
+        bh=MOasyN1a2WZJAy9nJuEJoljjWUcMt5PcJQs4Ux5sSOs=;
+        b=F7MyUUrPrNxZI5yVSbP7rA0gJ5xqUZLXAvmEwI8WbKaPAPa/Lm/Rqehiz2F9ZBwRS7
+         mt/8D0H9u+Yq51CH1TmYQSdOqCA0CPlg6FUJB+JGC1lyoGnjOsnPUJisf1Py07y4+9od
+         Zl6ZlmHydSUvP1MO/PIKNcnjyKOgWUR+N/fKwXInhkytkOL/Od+WMW0RfLgQrmW+5VaM
+         EabiWu9oqsJ3/TUn1sDGPod6J3nfIF6qP8bqW3PtPqaSATex5kHwMkDIhxLTIcKvxQGp
+         HSG6o9QIA++79tSHfMRZ+hbLdn1jFK3N/yq3ezckwenSHzl8D7QwSFAYXxK3wJKoHqSu
+         OH3w==
+X-Forwarded-Encrypted: i=1; AJvYcCUQsXcTYKWO2jIpNBEdQzmehK/Hywra55tesx+Gwk4l+mBXkiES+9nH4Xq7a3gXoWHNx/ZyJc3per8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZUdxb2+glNDno7jke8pVZvf5mj/nb5mpgo63gRjF4SWlJHB9w
+	1i/832fvVW00rWK68IyS0M7cUhlGBAJKDViDyBXOOyXP2MnRVCZRcxlY
+X-Gm-Gg: AZuq6aJX9opnptxw4AR3IWm4XfsGEy0yhxxXh4AUut46ecVx3E/SBwlagCHa4TNoJPU
+	iJKnwuVBXeHbIOwfjnnNxxStqwdUAOENDTWktlIkPnugyPY0scc1uVqrGm6ZmGb/q5KX7N7vkO8
+	lBJR9Et6mHkdF62S6BLqbbFeo9yNKE41Suf/7v1nUlq6Jahmgp0UNveMYV+7rj/l5JHBS2jxGtD
+	D1Zf9mHI6kzSWqllyodt0UsnXY3AbnDrJZhVCrMzOMR2rMvzDnFhtoraNsJezpSkwsxqWvZr8Nu
+	9ewyPSeS7PBzU36qZMes+xz0NGSwZ+cwTvI1QewkAsdP0SkQnfBcObiYHiuu5bei/4nnEgIeske
+	HNlygzCjVTKHZ7nJNQSd0vIt6WMx8Wk+2U57qf7wKxIGdMe0/IC1w4KymHSvK4k4CvBQpkDiGuu
+	ClQGXCwC7EnRAUKpGlWlGKcXwMKj9PqmAP8ZCrxnU23bvT
+X-Received: by 2002:a05:6808:1a24:b0:45f:1f4:f522 with SMTP id 5614622812f47-46427b55320mr154127b6e.25.1771468718356;
+        Wed, 18 Feb 2026 18:38:38 -0800 (PST)
 Received: from newman.cs.purdue.edu ([128.10.127.250])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6782ac0f181sm10799639eaf.3.2026.02.18.18.18.21
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-463ee1f67f7sm5985918b6e.12.2026.02.18.18.38.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 18:18:22 -0800 (PST)
+        Wed, 18 Feb 2026 18:38:37 -0800 (PST)
 From: Jiasheng Jiang <jiashengjiangcool@gmail.com>
 To: thinh.nguyen@synopsys.com
 Cc: andrzej.p@samsung.com,
@@ -87,12 +87,12 @@ Cc: andrzej.p@samsung.com,
 	linux-usb@vger.kernel.org,
 	nab@linux-iscsi.org,
 	stable@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: f_tcm: Fix NULL pointer dereferences in nexus handling
-Date: Thu, 19 Feb 2026 02:18:18 +0000
-Message-Id: <20260219021818.15196-1-jiashengjiangcool@gmail.com>
+Subject: [PATCH v3] usb: gadget: f_tcm: Fix NULL pointer dereferences in nexus handling
+Date: Thu, 19 Feb 2026 02:38:34 +0000
+Message-Id: <20260219023834.17976-1-jiashengjiangcool@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260219021310.e5aycj3h5rijq45w@synopsys.com>
-References: <20260219021310.e5aycj3h5rijq45w@synopsys.com>
+In-Reply-To: <20260219021757.eeq35yd7jumpk42n@synopsys.com>
+References: <20260219021757.eeq35yd7jumpk42n@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -106,32 +106,31 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33469-lists,linux-usb=lfdr.de];
-	URIBL_MULTI_FAIL(0.00)[tor.lore.kernel.org:server fail];
-	FREEMAIL_CC(0.00)[samsung.com,linutronix.de,iie.ac.cn,linuxfoundation.org,gmail.com,vger.kernel.org,linux-iscsi.org];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-33470-lists,linux-usb=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jiashengjiangcool@gmail.com,linux-usb@vger.kernel.org];
+	FREEMAIL_CC(0.00)[samsung.com,linutronix.de,iie.ac.cn,linuxfoundation.org,gmail.com,vger.kernel.org,linux-iscsi.org];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_NEQ_ENVFROM(0.00)[jiashengjiangcool@gmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
 	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_NONE(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-usb];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: DDE4515BB00
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B466B15BC07
 X-Rspamd-Action: no action
 
 The `tpg->tpg_nexus` pointer in the USB Target driver is dynamically
@@ -161,36 +160,44 @@ Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
 ---
 Changelog:
 
+v2 -> v3:
+
+1. Use dev_err.
+
 v1 -> v2:
 
 1. Update Fixes tag.
 2. Add Cc: stable@vger.kernel.org.
 ---
- drivers/usb/gadget/function/f_tcm.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/usb/gadget/function/f_tcm.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
-index 6e8804f04baa..9554ddd9b4b8 100644
+index 6e8804f04baa..7b27f8082ace 100644
 --- a/drivers/usb/gadget/function/f_tcm.c
 +++ b/drivers/usb/gadget/function/f_tcm.c
-@@ -1222,6 +1222,11 @@ static void usbg_submit_cmd(struct usbg_cmd *cmd)
+@@ -1222,6 +1222,13 @@ static void usbg_submit_cmd(struct usbg_cmd *cmd)
  	se_cmd = &cmd->se_cmd;
  	tpg = cmd->fu->tpg;
  	tv_nexus = tpg->tpg_nexus;
 +	if (!tv_nexus) {
-+		pr_err("Missing nexus, ignoring command\n");
++		struct usb_gadget *gadget = fuas_to_gadget(cmd->fu);
++
++		dev_err(&gadget->dev, "Missing nexus, ignoring command\n");
 +		return;
 +	}
 +
  	dir = get_cmd_dir(cmd->cmd_buf);
  	if (dir < 0)
  		goto out;
-@@ -1482,6 +1487,11 @@ static void bot_cmd_work(struct work_struct *work)
+@@ -1482,6 +1489,13 @@ static void bot_cmd_work(struct work_struct *work)
  	se_cmd = &cmd->se_cmd;
  	tpg = cmd->fu->tpg;
  	tv_nexus = tpg->tpg_nexus;
 +	if (!tv_nexus) {
-+		pr_err("Missing nexus, ignoring command\n");
++		struct usb_gadget *gadget = fuas_to_gadget(cmd->fu);
++
++		dev_err(&gadget->dev, "Missing nexus, ignoring command\n");
 +		return;
 +	}
 +
