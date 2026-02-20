@@ -1,63 +1,63 @@
-Return-Path: <linux-usb+bounces-33529-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33530-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2FH5McV8mGkdJQMAu9opvQ
-	(envelope-from <linux-usb+bounces-33529-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 16:24:53 +0100
+	id mHn3Htl8mGktJQMAu9opvQ
+	(envelope-from <linux-usb+bounces-33530-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 16:25:13 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 497BC168DD4
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 16:24:53 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FF57168E17
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 16:25:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7A11C3014C43
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 15:24:45 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3982C3013274
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 15:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CF203126D6;
-	Fri, 20 Feb 2026 15:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94CBC32E68D;
+	Fri, 20 Feb 2026 15:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zj6lbrWo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pWfoKbps"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2850D2C21E6
-	for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 15:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2083A3126AB
+	for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 15:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771601079; cv=none; b=dFPXmX8y8lq3Yy41Q+pUZm8Qh+8B/4wM6U2W5nx/IdrjtA72Ow7znx7Ehu83xVp/y5X6XXWPU2JSWstkL5aPMugOxYyiv/iRyFD0N10cgrc6o0WI/p8VM9Zfgk0eJWd8clvcBbW0ERNV1eeCHhxzR0LtnlMyNzkLmdAM3/h0sTI=
+	t=1771601106; cv=none; b=aGp1FmAwcsfs6cA+Q4ZiuYxq00bsQW6TyfPalDYGrAgDDONv/VICGRwxrB8iycpJEHd7dgavz6qC40+v6hBXEpkZz84XZmzRZxUHeSzYR9pviMMkkM7pMPGMn9a5pbEW7lw2O21YKfNDP98g52UsgEJBYhCc/ARtu2yRZc561rM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771601079; c=relaxed/simple;
-	bh=C7UX1vN+PR4yVE/b6ioZbNxAI5raDGvTJL3T59+50rc=;
+	s=arc-20240116; t=1771601106; c=relaxed/simple;
+	bh=lKVxjqNxF857pAdRUQYqyfaci6ru2qb/KBUUw7NA2lM=;
 	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nfD4vyvaw/XtPyJx974PWLk1t3sCf1n15v9bI3cy6GhmM4NdOWzAxJWIOT2k+dUU4llb51rdHwDDNiUufJ2ClDgPnYbjWodwioQiVFkmrvEnzaPP/LPLIhDkxPKljJTf1A3Z7TlwmRDl3G9g0jM4GkoSn3Om9VgTlBrv2EVqBkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zj6lbrWo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB45CC2BCB5
-	for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 15:24:38 +0000 (UTC)
+	 To:Cc:Content-Type; b=uhgBCAFB7hR27vMiFz8P2fKNT0DnrrdynD7vuptl/vyhGym652bQGLqvDww+io20eobGDXyyNBjiWC50S5o7Um3yMWUOUTbsLY6IGSFaJrjFPt4jXLIRJwTQJuGST0Q16ZmW67zKuv7cIFh4N0rSivBhaCOKnYMXo3/AMPvpnvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pWfoKbps; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3EEFC19425
+	for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 15:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771601078;
-	bh=C7UX1vN+PR4yVE/b6ioZbNxAI5raDGvTJL3T59+50rc=;
+	s=k20201202; t=1771601105;
+	bh=lKVxjqNxF857pAdRUQYqyfaci6ru2qb/KBUUw7NA2lM=;
 	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=Zj6lbrWoNtXtX3NgUCv8t8Aqzk96pk/8iJ7xCesAttEZz+e9g8iRYtx4s3wgZO/id
-	 RiNNn1mO0oI9gWItnOHmLzHDlSwplX/pr0rStOuc2IkUjIG5oxQGzr6YG/F/qTzD3A
-	 7Vb1ElPO+JiklSS3BpryRjMBbAd/3Q5S/Ufy62h9bQ/mRckQtMYxWcRNltJagKN9Cc
-	 JmyfF3MxGWG6v3fCeU8bBj1mhQw8EvkVnQzAM5g4IOeJ1VmVAXzQ3ccY8W2JNezxLY
-	 ZQ+daIQw7T77hgthQuBbSPsvwWJqyKq2zRQQXV8ikOWPGA+wN3dwbdOQNo19IKTg+d
-	 olVsDUFy3En7Q==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-385bc6910eeso21092031fa.2
-        for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 07:24:38 -0800 (PST)
-X-Gm-Message-State: AOJu0YwtRefzRKvUSDcuwONwL8tNahUivpC4kZ8Vj9+pF1H1NIdpkSC+
-	z3hm2T4AC8G8vDnA0QN8MNmhBhiNn2BH/0yPhbyTU9BBbFXBUiY1JbsCR9s77rDp+xacKqkM+Fw
-	W6qeh8c5J4LVEdV6ax2xY9O+UGQrOJ3pkxuhjvmTovA==
-X-Received: by 2002:a05:651c:1cc:b0:388:f65:57c5 with SMTP id
- 38308e7fff4ca-389a5ced562mr256851fa.4.1771601077506; Fri, 20 Feb 2026
- 07:24:37 -0800 (PST)
+	b=pWfoKbpsXan5D/t3nFJaa0vDMqgj4sAtyDMS/0ulQ0jye0eYCQ4aKNDvSq0Py8D76
+	 qsUuQggJ+7YA6rX56BsvSBM2uM5fSyGsnYahPujNnWv5sRqmWjvcEgVOVyLzpesu3B
+	 JJTzqh6fEs6TnIQFfPRc5EsG7W8QbcsgOBzyUnwKh2hLRlP2uC/ZK461yJe1lyukor
+	 xddrZs86oQfWjztM6rhcusQqLmK9ZIDccqZGWJGeEAn3HIBt9oWAWz+XfAYX3EQDle
+	 isTGu4JVq0KheCVyC7wI0vvwiiLoUTnaIrJSMGoHSXm56f6EtYNU3K19UWccLfi4gX
+	 k/RlkEjEjO8dg==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-386b553c70eso18681401fa.0
+        for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 07:25:05 -0800 (PST)
+X-Gm-Message-State: AOJu0YwCdnNL9Cq+H7aru/vA+E3CpO797hI8hNi3q1viycwAMTFcMxB3
+	RRMAoPkqNJq3TvZ1liTmo8aoZBpa+IIzVGONu+N/GLkLdRYYnUQfhg2gmmytZt/92Yxo/ll8eFL
+	QLW8e613PthPJos8Ebv864X9jePJ202TmDZj9upsvew==
+X-Received: by 2002:a05:651c:198c:b0:385:dd91:a6ce with SMTP id
+ 38308e7fff4ca-389a5c4c7a0mr483661fa.38.1771601104331; Fri, 20 Feb 2026
+ 07:25:04 -0800 (PST)
 Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 20 Feb 2026 07:24:35 -0800
+ HTTPREST; Fri, 20 Feb 2026 07:25:02 -0800
 Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 20 Feb 2026 07:24:35 -0800
+ HTTPREST; Fri, 20 Feb 2026 07:25:02 -0800
 From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260220-topic-sm8650-ayaneo-pocket-s2-base-v5-8-1ad79caa1efa@linaro.org>
+In-Reply-To: <20260220-topic-sm8650-ayaneo-pocket-s2-base-v5-9-1ad79caa1efa@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,18 +65,18 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260220-topic-sm8650-ayaneo-pocket-s2-base-v5-0-1ad79caa1efa@linaro.org>
- <20260220-topic-sm8650-ayaneo-pocket-s2-base-v5-8-1ad79caa1efa@linaro.org>
-Date: Fri, 20 Feb 2026 07:24:35 -0800
-X-Gmail-Original-Message-ID: <CAMRc=MdKNbxtg=UssdXqjkSaJ6rW6zU8fR0wuWCWzYOzpbsvzg@mail.gmail.com>
-X-Gm-Features: AaiRm52MKuxfYPtBpaRkXvDxtG_cv_dL03XUQqwYZ3j9MikHP6iuFkoiT8NsO-4
-Message-ID: <CAMRc=MdKNbxtg=UssdXqjkSaJ6rW6zU8fR0wuWCWzYOzpbsvzg@mail.gmail.com>
-Subject: Re: [PATCH v5 8/9] arm64: dts: qcom: sm8650: Add sound DAI prefix for DP
+ <20260220-topic-sm8650-ayaneo-pocket-s2-base-v5-9-1ad79caa1efa@linaro.org>
+Date: Fri, 20 Feb 2026 07:25:02 -0800
+X-Gmail-Original-Message-ID: <CAMRc=Md1xjJNFdL5nxYwxNwvbOXkUWC8U=T+EzrRsBX0FBKL6A@mail.gmail.com>
+X-Gm-Features: AaiRm51Nhl9KxWCs3gI3CqS9MKsh2wHc0CQSKdKPuOuRAl0wbHi5oLezOZ6XOMI
+Message-ID: <CAMRc=Md1xjJNFdL5nxYwxNwvbOXkUWC8U=T+EzrRsBX0FBKL6A@mail.gmail.com>
+Subject: Re: [PATCH v5 9/9] arm64: dts: qcom: add basic devicetree for Ayaneo
+ Pocket S2 gaming console
 To: Neil Armstrong <neil.armstrong@linaro.org>
 Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
 	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	KancyJoe <kancy2333@outlook.com>, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
@@ -90,13 +90,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33529-lists,linux-usb=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,oss.qualcomm.com,linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qualcomm.com:email,af54000:email,linaro.org:email,mail.gmail.com:mid];
+	TAGGED_FROM(0.00)[bounces-33530-lists,linux-usb=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,outlook.com,oss.qualcomm.com,linuxfoundation.org,kernel.org,glider.be,gmail.com,google.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,qualcomm.com:email,linaro.org:email,mail.gmail.com:mid,outlook.com:email];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[22];
@@ -111,41 +111,28 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-0.999];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 497BC168DD4
+X-Rspamd-Queue-Id: 5FF57168E17
 X-Rspamd-Action: no action
 
-On Fri, 20 Feb 2026 16:04:47 +0100, Neil Armstrong
+On Fri, 20 Feb 2026 16:04:48 +0100, Neil Armstrong
 <neil.armstrong@linaro.org> said:
-> Sound DAI devices exposing same set of mixers, e.g. each DisplayPort
-> controller, need to add dedicated prefix for these mixers to avoid
-> conflicts and to allow ALSA to properly configure given instance.
+> From: KancyJoe <kancy2333@outlook.com>
 >
+> Add initial Device Tree for the Ayaneo Pocket S2 gaming console based
+> on the Qualcomm Snapdragon 8 Gen 3 platform.
+>
+> The design is similar to a phone without the modem, the game control
+> is handled via a standalone controller connected to a PCIe USB
+> controller.
+>
+> Display panel support will be added in a second time.
+>
+> Signed-off-by: KancyJoe <kancy2333@outlook.com>
 > Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/sm8650.dtsi | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm8650.dtsi b/arch/arm64/boot/dts/qcom/sm8650.dtsi
-> index 758f87a10d8e..6705922c4d45 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8650.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8650.dtsi
-> @@ -5960,6 +5960,7 @@ mdss_dp0: displayport-controller@af54000 {
->  				phy-names = "dp";
->
->  				#sound-dai-cells = <0>;
-> +				sound-name-prefix = "DisplayPort0";
->
->  				status = "disabled";
->
->
-> --
-> 2.34.1
->
->
 
 Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 
