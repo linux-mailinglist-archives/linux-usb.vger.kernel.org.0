@@ -1,161 +1,171 @@
-Return-Path: <linux-usb+bounces-33496-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33497-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mDYvG4sKmGkK/gIAu9opvQ
-	(envelope-from <linux-usb+bounces-33496-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 08:17:31 +0100
+	id kBTBKyANmGlF/gIAu9opvQ
+	(envelope-from <linux-usb+bounces-33497-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 08:28:32 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9245316538D
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 08:17:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1003D165445
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 08:28:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B5AB23008CB9
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 07:17:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B8D563023368
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 07:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF05B4C97;
-	Fri, 20 Feb 2026 07:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A70F331A56;
+	Fri, 20 Feb 2026 07:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cfenUBEy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CIvezovl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF9928DC4;
-	Fri, 20 Feb 2026 07:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771571843; cv=none; b=TLIpmVbZALZHujM8RUtynL9oPjRmelnjP+UdW4gkmF4mO2n+aSKd1RdxGEp2tmE/ttfxOpzPUqd3J3Mluh1XRNpCCqz03ZDjfYj6pqqt8NJ4Osm5hV+pfId7K5rcduvlM6KYIp6z/7O4mUy5Efcte74gEE1KupxKL9YaZ/yOxyU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771571843; c=relaxed/simple;
-	bh=4Y+EWYWf5ARtAsHVBUfDK/3s7+OD7RyqhRRZYQk8yrE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F8Ih9CFEIHDh2cHBywrm/11vEP8oFjr+WHZQ8W0wtJF3CFDg4uTOatqshOsi7EqunmBSL2bV0Wuy/iVpRV2cqSJMA4M1xi+62MkPgsZXSYgSCocJf5AZm5CzwlHXzL/0CqMoHanfhhrF/9csXtN6HTVjExptqS7QsFfDSHir19g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cfenUBEy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD076C116C6;
-	Fri, 20 Feb 2026 07:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771571842;
-	bh=4Y+EWYWf5ARtAsHVBUfDK/3s7+OD7RyqhRRZYQk8yrE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cfenUBEyb4asJCsD+ZFNK2uLLe4i+QHaVdO2aU9tnTZ0dOAzSSa8KToR9/CrmhVkV
-	 gl7FP/r6v8U6AstU/7864dPhDFLN2C8wDVDJInMWH4uhli/9CdvJrK1fqjki8VAvzX
-	 Na0+2hV96D7Y1AFmoK/U5dLl25PUb1Tsd7bSoRg6ER/MS/MKh7lFMEDlbVoJGu4JwZ
-	 rtRw/2YMbvjFUV4GYvgybphiuM50KxozhMbveO5CSbatUA9ibV6ASdKb+iZOn5yjkR
-	 Xl+Lml9uLfKcFJLv0yN1Z8kztmaA8PFvAFZ95W8oSDpRztXaufI6ouLDb4z+HrnlbD
-	 Ge0zeJQMWxlWg==
-Message-ID: <1728c810-f544-4a9d-9e86-e3f24429dac9@kernel.org>
-Date: Fri, 20 Feb 2026 08:17:19 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA53B315793
+	for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 07:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771572503; cv=pass; b=K2Pfoohaft3lLcxeOsZYTs/hknZ8xldgmNilN9o1U3NUw6wChiGMqCz9bGsBOhU4JlfsAblRu8IXNvjW+vJKF7ktJb9a12+ciQ2+ipOtA5sJYmQrvWpWz/c6p5wdouY8kWKEHNL5yM1UydYUE2yBtKcznRG+IgZCeU0U9MQNagU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771572503; c=relaxed/simple;
+	bh=pb4UwxSVDOogMVKWIV/+F+Q7Ebn2c3eDuKVVkXBdcnQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W7fXFqZJSvkSZHpxVz74FEHkbere0stoPfpV9ApJ4h32uWEvwKEviZihirW7YZ8HKrfcYHOzqVj4MLx3TesiJ8kYTZYo0Wa6ZV2riCWd9TBtlTFSTiWHZBijJnOphkfEp7JIEr0Xla4wUREJ4777HTD/uT4K9v347gzoY8+fKjY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CIvezovl; arc=pass smtp.client-ip=209.85.221.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-56706fd623fso1191012e0c.3
+        for <linux-usb@vger.kernel.org>; Thu, 19 Feb 2026 23:28:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771572501; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ck39X4knD6tLkct9C3OuBRbYZp2sCGqGZb9arBLfuLPxadNvlw+JKalspdH3pmNBLJ
+         u0dNLh+VDSzB0gSDk+fxQD5iBuiugqEjv3UdgFZ+cvduyD08lfhGTy2SNQPp6X4OUZgA
+         T/Xs2bAPdEpmA7VNQkq8PWIS5xR+hVSPgGLU9h7lG4iLTwnDPGqX3WuIq5UjgbAWLgOj
+         /mpokvzT/5jY0c+m8AVsoT7Ad4F0viMUjuFj91WM7Hx35eb2BSLO+tVg/sQOWQVdwABS
+         2pYNVyGwukeVVZC3HyJY4Yq6jqW+FI0RW96TniqxPKLK/63TapFdrKuRA6k9GSFZZmUn
+         G4jA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pb4UwxSVDOogMVKWIV/+F+Q7Ebn2c3eDuKVVkXBdcnQ=;
+        fh=+B+MlfsB72tmYq6MZSgRE66vRgTuVRy8myv5tu2nkFQ=;
+        b=HevzE+G9DbaXbxTNtivRzPlhwdXac9hRQSd5N+K0E6bZRFR3aF+c3oD9gyH61eDKXx
+         0I3JgM+uu+LYTwlD2gSbTHo5i3bnscx53bUE179K5arsTFndfO2xUUamFsVWNJida+Fv
+         ueTGZ7vjixMjSdUFA2ZpLn9M1fFUC4df9VgL4oxjvKBw++vngD3J05NPdYTIFBPwutMJ
+         qcbb2bnMeKaExy0bDZPnugTUubmk/RW+Jmo7nWwZdsa33S4ApUaWtGpwDn36Vy1XRxT2
+         J5Lcq5sfhOijbbOGiPRol8JtwRJz1RLABerPWbH1dVd0Dy9H8iGgo+bGrSbZ/EzYaTID
+         B/iA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771572501; x=1772177301; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pb4UwxSVDOogMVKWIV/+F+Q7Ebn2c3eDuKVVkXBdcnQ=;
+        b=CIvezovlWbPStnBBPoAik88LHPzIHcOHf8LDXVacpOc/O5ipz9tzWz9XF8xyl7gGNx
+         CROZj1X7G02UnnHytdOuXOAzEbptT7JUE9u028lYKmGXTrWq97/E5gqQWR+u0UisawqI
+         RwJ9BvZvCFwvK31wIIPGAuV1bW5ZYhaaYHA551mkw4X0YADPkObuCB6m5p8NL17aFeoX
+         GjgSeL6Zhynoen8wXwyT/U60536fEva+eZI0wTwAgGl0Okwy3TTs2Vi5GoopVQMl93eE
+         yYynI9nqAjal3bAslEbbddi1rBvajeHxdnQ0Hn0QLN11T0AxcP0RJtpdn7ADoKwiW24D
+         F/Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771572501; x=1772177301;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pb4UwxSVDOogMVKWIV/+F+Q7Ebn2c3eDuKVVkXBdcnQ=;
+        b=pK1v1FGFRESA4MJTZdaGwIwdt7KVFSNQD4oU1Xq3IZsR8UWnD0trkIcOVF8bksxWeJ
+         czWq3VyAlHr7NPZE3NIyGjPhUUar1jvZEL1ks2jrrAvwmdsHFvMZlltGzFjs+brlganZ
+         HXUyON/LphooUKKNeFrAEgEmAOdtGfxlKboYqZmisP/KsC8orJIgvDoe3xSQQPRqgbJq
+         vl1MIy3eYYrx9y+7+Dl/CaAjuHQmvPskJRM+mRXBJ9+wNPrLMoEo0Im61HIqRin5AD0z
+         vnYWihBhhBB9RmS1vNMvJ7G62pbrEtcCvL9tBpPtre0x4KqoylukfSUpdgO5Nx+QtUZ9
+         5Q6w==
+X-Gm-Message-State: AOJu0Yx1kVDP6u3l/ff0+QgRzXljIJTih3hJM/I9S1lmdId9RfRgJPyE
+	Jw3Hew1JRX/Nh6bZ4FhjOD8HVA9eZdWhDKL+i8hi0JDX+tbSXe+ipPfAtvhAjamcRAxE6E1dxYs
+	gwc82BBfJQBRkjN+F+j48UFM5GuBuQUA=
+X-Gm-Gg: AZuq6aI3Tt0qx9vFN0YJ8YSioX9dAcuSrJEFta8rLYcLp5PolmFnvWx1lI5B4gEsb1N
+	A2QN5Q6uqCIjgPQABcMUMCS8J3BCGybm6n7fjbJQiNbAtW7HjxgUEBzbuif0BFbMdMquaQHR/bU
+	CmWh9TwcF9uWNVJVsyFGUyNksDLHk8I7OgiGDq68+MLEEIsvBjo1kzKC/iKk3K/GdpGdfNaYKL8
+	T3PBIZAF7KONtl+VKIBiJZCUvyCiOIiawGGfmpj+gpoYu1oiHUDbKCOR1Qf/sZbg8L8lu2K6Nj3
+	XjD4998=
+X-Received: by 2002:a05:6122:a01:b0:563:73ff:19be with SMTP id
+ 71dfb90a1353d-56889b6bd02mr6225334e0c.8.1771572501280; Thu, 19 Feb 2026
+ 23:28:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: document the Etek ET7304 USB
- Type-C Port Controller
-To: Yuanshen Cao <alex.caoys@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260220-et7304-v3-0-ede2d9634957@gmail.com>
- <20260220-et7304-v3-1-ede2d9634957@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260220-et7304-v3-1-ede2d9634957@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260219190251.3422-1-nathan.c.rebello@gmail.com> <20260220063457.3672-1-nathan.c.rebello@gmail.com>
+In-Reply-To: <20260220063457.3672-1-nathan.c.rebello@gmail.com>
+From: Pengyu Luo <mitltlatltl@gmail.com>
+Date: Fri, 20 Feb 2026 15:28:08 +0800
+X-Gm-Features: AaiRm51mOpDWIr8Ge-3mqPek2d9nKMGtkHPE2-_OYFIVyt7ax_gofe7-dX7JX58
+Message-ID: <CAH2e8h6=0E41Ti48sMbhpvSLL-9znaj+aUpqtU5vobeoapdH8g@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: ucsi: add bounds check in gaokun_ucsi_handle_no_usb_event()
+To: Nathan Rebello <nathan.c.rebello@gmail.com>
+Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33496-lists,linux-usb=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33497-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,kernel.org,linux.intel.com];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FREEMAIL_TO(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,qualcomm.com:email]
-X-Rspamd-Queue-Id: 9245316538D
+	RCPT_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mitltlatltl@gmail.com,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-usb];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 1003D165445
 X-Rspamd-Action: no action
 
-On 20/02/2026 07:22, Yuanshen Cao wrote:
-> Document the ETEK Micro ET7304 USB Type-C Port Controller with USB-PD.
-> 
-> Signed-off-by: Yuanshen Cao <alex.caoys@gmail.com>
-> ---
->  Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml | 3 ++-
->  Documentation/devicetree/bindings/vendor-prefixes.yaml     | 2 ++
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
+On Fri, Feb 20, 2026 at 2:35=E2=80=AFPM Nathan Rebello
+<nathan.c.rebello@gmail.com> wrote:
+>
+> Agreed that UCSI_CCI_CONNECTOR(cci) will be > 0 when a connector change
+> occurs, so idx >=3D 0. However, the check also guards against
+> idx >=3D num_ports. UCSI_CCI_CONNECTOR() returns a 7-bit value (up to 127=
+)
+> while num_ports is typically 2-4. Other functions in the same driver
+> already validate this -- gaokun_ucsi_connector_status() checks
+> con->num > uec->num_ports at line 188, and gaokun_ucsi_handle_altmode()
+> checks idx >=3D num_connectors at line 295. This function was the only on=
+e
+> missing the upper bound check.
+>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Upper boundary checking LGTM, thanks.
 
-Best regards,
-Krzysztof
+Note: I followed the check like other qualcomm platforms do. It may be
+unnecessary, I think, if we trust the PPM would send the correct
+information. ucsi_connector_change() never check it.
+
+Anyways, you are welcome to add the upper boundary check.
+
+Best wishes,
+Pengyu
 
