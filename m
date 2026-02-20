@@ -1,195 +1,162 @@
-Return-Path: <linux-usb+bounces-33532-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33533-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2M/aCbeamGkTKAMAu9opvQ
-	(envelope-from <linux-usb+bounces-33532-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 18:32:39 +0100
+	id +OFfNPGwmGnbKwMAu9opvQ
+	(envelope-from <linux-usb+bounces-33533-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 20:07:29 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C276A169BA1
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 18:32:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6426616A406
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 20:07:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3D76730101F5
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 17:32:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2D291301F782
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Feb 2026 19:07:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC975365A1D;
-	Fri, 20 Feb 2026 17:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF66366567;
+	Fri, 20 Feb 2026 19:07:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="LHzRNMze"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ha18F6+E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2412A23507B
-	for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 17:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE51936683A
+	for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 19:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771608752; cv=none; b=QUre+XNWxvnQZa0NSecZRAqfy8NRiNOe5L2NU4pLozPoyQ8wqBlf0+XPUUU0Subqx/BrvdWvcYyF3LTE298WC8Kl8QkveatYn9nrH/gkNHeyKLJIBrfvTgHwSoOKmFgEcnay67Hof63b+tDfyOOg48xnVnE3Ha3reNr8cim04/A=
+	t=1771614446; cv=none; b=Fxjn+Hfdg/cFahmiAzNG4mHeW96vHSrwENvJ2HIoZuhz+ZmU9gYaQuvSD1Brxr5aTFgmEAku1UG5LW1kuaC6yLyxpPHH1HeqIR2a4eAIVgO+I2ecQLRhrQu7C47lEH9yv9RuUyrk7vDw/3iJdsb40oqlUABibScjq3wPQdvnBPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771608752; c=relaxed/simple;
-	bh=nbjMirrCHZOnHuA0WjICsqQ0SanmQXmOvCRsV0ddtRA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dWLZKpK8lLsrzopIo/bt5EZssH7tW2yeYOM8hwe38f2jh0DG2q4Op7qSyjqaVs5w98lYUlkVN94DCp4U4RTH7mXOjfONewZNMVwMVJ1TJSmfvJE+haCbubUIhpzqfrJXrbylQSfZjdWU6JEMGIkaui2d5n4sxUXdhLHTOqVKagI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=LHzRNMze; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8cb49f63238so138755485a.0
-        for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 09:32:29 -0800 (PST)
+	s=arc-20240116; t=1771614446; c=relaxed/simple;
+	bh=jR5mkU/Mplyt6BcphocKhqTbwA/7skAQk4w2kG3c7P4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cXHwbieazAoFPFNZUlkdcauSYA1wlMtk1+UAlwVDJQO9L/MqfVA3ZJEin0Di4TYNilirOMXf78PZ3r8P38j6NvaRG7rhp3XfZuiupw1r7XgW0DCNncw1tJhVeQN4iP3SGfzL8K2BUtrwhAGJG+GtpoGoobRBpwWzHzj+24USg+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ha18F6+E; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-436e8758b91so1829242f8f.0
+        for <linux-usb@vger.kernel.org>; Fri, 20 Feb 2026 11:07:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1771608749; x=1772213549; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0trHNOrgefpSNI9Sqms7GIwOoQ1xOeXiRaiveU2TCY8=;
-        b=LHzRNMze8RyrGsWmZ9i6qgmU8+k5AaCd2RJh9auBMZiNRNN/DzBCIvchALjl07EnzV
-         g7FAWHaxp3KOfUczxT+l7Ujp5/TRS/unWyGzgtMwFdfp9DXzkLmpERowyTpuO59qIjWw
-         VOEVMuXeY9vEc5mPRyKSIlUwIyWiG+BWiGjxFMrVIZkaVCscuIpwYmGu8s+ZKtakVuZw
-         EPEUEVBgP/59XYpQgZCI7MOmaB1UjxSGN52OtSJH5M0kj+7V3mmAxW1F7msMp/d6Nl6Y
-         r29iwE1a5ktzB68OrBKltQAET3HdzXldficwd2dIYdmo5vrBn3EdIUy6+/s/tOXn8Vcp
-         kDYQ==
+        d=gmail.com; s=20230601; t=1771614443; x=1772219243; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aIYysQO98VqTcpcnjxQ9HD3CfclEuBh0khiFG9kEwR8=;
+        b=Ha18F6+ECkFfjKIXUfBwC+MmYlKjLP9q1+O9mLl82G3MPsaFzMKDJreZYEmMhezlnp
+         LmJVOpvVjU49a72abmZX1zRQLm3voWw3Xk8907L4o6Zc/8VblCFO7HkeAl7OI7oIiDV+
+         d748/FK5r+sBjSPQpbOEETJvAW1g82/2tvlYP2ADNesnMWF8yS9of7hCQV0CDwlItGDy
+         u0IfoLbDrrfS696kbMwIMrWK9qEc077VE+xjCjfWH6Pk6Vv5FS7RAETaScRyy48JGQRB
+         InhWT9NSNNaIeejIpVt5aoAorOB72dkYkWoqkoHGNuHsWF8nob/6GCAkffGSYPj6oV2O
+         G0GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771608749; x=1772213549;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0trHNOrgefpSNI9Sqms7GIwOoQ1xOeXiRaiveU2TCY8=;
-        b=LP6NPj1y6tdYoQeBEp4j9McYRLnZ+C4x+qhGmj58f2nXp3IcTg8CwTPRbNgpX+/Ulm
-         wfsvab4FlGNqgDGwYfiQjY37hk1GRRVhutphkgbx5Cv6I8KwW90hIfClkQS+eePrczYW
-         Manz+87cTnqB+huoYOc7EBbT9JO9COLkXT723eV+/S2QbCjoclTDzrTBVA0iDabXRVat
-         ZhMEN5HFrC2tNrHM2a3tjWk+TYTtRXhRtcCv5+IIl//h797I3TQ9RORwKLNMKT7xTNP7
-         qoj2ba2eEB431PkXbHBbUJotULqcN1FDADpZ2j9BNs7TttOr8JT8W8B1STvsR5VTVBAI
-         QdJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4a529LnMFbcxa/xnKTdwNlXNfkSuyH4RUQGElVYqgX01JxdMvlh2LlhiadJko259z/L0tVmuFs+I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzO8j5DdmhwbYHnZWCkqT1eMrUBf13VCcstZDlnFb55ImdapaJX
-	5ftXYmyD3QgwYr+1UaTo2n+va8+uhIeyRCQvG4fY07JioHbujfIQK12oaTsbn0z1aAunuRzwwNp
-	aA04=
-X-Gm-Gg: AZuq6aJMOGOB5LeGcZeZebn9dIdJTiRFwQ9nD0AP7kXgWnI4nRftPL4shvcibgxiUsX
-	ynC3rlAXZIMM0CxTfcThUZY4x6OvhX54JoJF5H9yYZacLHUyC69pyuHuYWO5mxThvFU8gsorUJS
-	TGY1LzjC0HTLF2Mp8Rm9Cb54zGWastD0ucDJeHpWGS4UbazHjnw5/HLP3/uFds0YkWCepnPlvdd
-	R3hiTzTZlFV13lPFYfbU1rPGH8MesUn8RWXV0KAg+Ul5uY5OQNWvzCm1xB5FTBrVzKPqMXQ1ndK
-	BfgQfwM8skd7683qV1XZN/1Ai68GHTcPiMHEOJR2hm1OEmsg+eSj1qs5WGxaJuFZ8yVBR65Zucg
-	wetrdznBs63ZCre7gemXjmWd809NQrmr5ALeYelrMwAtvF/7XGIxck+5W7U/UqtMEzcF80IK3w1
-	3lZZo0YXkK5HxXDSzINGsqg14q
-X-Received: by 2002:a05:620a:1a85:b0:8c6:c08d:275b with SMTP id af79cd13be357-8cb8ca800cbmr38474085a.58.1771608748986;
-        Fri, 20 Feb 2026 09:32:28 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d03:1700::4383])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb8d064007sm2642085a.19.2026.02.20.09.32.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Feb 2026 09:32:28 -0800 (PST)
-Date: Fri, 20 Feb 2026 12:32:26 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] usb: ehci-orion: remove optional PHY handling code
- remnants
-Message-ID: <d28ec80d-3083-4217-9923-93872bbbd07e@rowland.harvard.edu>
-References: <20260220-ehci-orion-drop-phy-handling-v1-1-01abd9f168cc@gmail.com>
+        d=1e100.net; s=20230601; t=1771614443; x=1772219243;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aIYysQO98VqTcpcnjxQ9HD3CfclEuBh0khiFG9kEwR8=;
+        b=at1usokV2ToUtdSh8WGYZhVR+RVZszWdOJd5IY9sEmPtp6vCByiqBh8QskzJxDuXTE
+         4b98fNhvLKY/Y/U6lmJfrIgEnrLiz2Xu07GmLz+Xrif2ZUp4fR5Ln5NAmqxnb/qrPSR7
+         CNCqeHZetRac21xcHSOg4bnhMaTLKQ+CBzGsXbftPE8S0+DqVVxwm49O7z7kaDj94mp9
+         8X6Eb5JA7XzWcB/+HT83CJooDKK8JZCf6XduAmpmNVD6R7WkTMhZbvZPsGZqiMddXbLF
+         TZbUKGtKjB4ePp8zx5SjDKEbbOyuGAbjc8UBiDF6oCz+YXagBNwPRpnfU5u0ULqH3FuF
+         NSIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUSpqV8HOY4HG+lFvb+ilwIG91gFEH2D5l4rE9NxCYRPxvDm6PDyngyzVuQ2gULOSblLw9iZ3hYtLk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1BdUlV2J290O9IcXB+Vn69FXV7WogpA+1fMlW4y5yzSaq+ZLZ
+	1ZAV5NPYLv2U50pZHj7KOUcYjowPqnAiNC7DaB7sDuQdL6IcM2+btbTdpSUJFQ==
+X-Gm-Gg: AZuq6aJw1Kz8HHphc1ZIzRiMBTH9fYyKTEHxHvLZqfBfjd7tIYUKlvrOAaUbfYbBdHJ
+	YMau+/oP5qy4GXsYiYaAwOoF2P1IBFKomdfLjEZ1UEdfh2TOhy+cdy37L6V4oDYw0PPO0VyvPHE
+	QHuIAN7WJlKCTXYAUBsmWtQTBp8Kn7MWZTwnRh9k8g/PozUG7ohMOu7Vot2gQCh6B7hZLothwLA
+	1dhr2B2mRqwjhs5IbAakOjAwxL2VaOObiz5wSXU2ksz85vleNimoNW76IjQ/2mDTxH3BGiVY3il
+	n3PCg5f1Us3SGhkvT6GroxG0x4VhXV5IQxwPfdNZeVcEUUPgg9/lX/X+d/HkH2zUsNOieECcMUE
+	PtQjlv/ag7R/ZN3oU6/SI+m4Tz8+On2wRSG5ajB/mddvexBcKwOgWOLxsSedZ4ptqfNdsjPMcsy
+	jw+By6/EK7X60bidUX+5uQCEpU5NJQgLEfc4coXZLNUemzFEjvFuyGGpks+ikt5D0=
+X-Received: by 2002:a05:6000:2f83:b0:431:a0:7dea with SMTP id ffacd0b85a97d-4396f181aa5mr1830793f8f.40.1771614442895;
+        Fri, 20 Feb 2026 11:07:22 -0800 (PST)
+Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970c00485sm83600f8f.9.2026.02.20.11.07.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Feb 2026 11:07:22 -0800 (PST)
+Message-ID: <39d36f25-abf6-41e1-8762-d9de38891a2b@gmail.com>
+Date: Fri, 20 Feb 2026 20:07:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220-ehci-orion-drop-phy-handling-v1-1-01abd9f168cc@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: ehci-orion: remove optional PHY handling code
+ remnants
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20260220-ehci-orion-drop-phy-handling-v1-1-01abd9f168cc@gmail.com>
+ <875x7rsf03.fsf@bootlin.com>
+Content-Language: hu
+From: Gabor Juhos <j4g8y7@gmail.com>
+In-Reply-To: <875x7rsf03.fsf@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33532-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-33533-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.998];
+	FROM_NEQ_ENVFROM(0.00)[j4g8y7@gmail.com,linux-usb@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-usb];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,harvard.edu:email,rowland.harvard.edu:mid,rowland.harvard.edu:dkim]
-X-Rspamd-Queue-Id: C276A169BA1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6426616A406
 X-Rspamd-Action: no action
 
-On Fri, Feb 20, 2026 at 02:27:02PM +0100, Gabor Juhos wrote:
-> Since the USB core code handles the generic USB PHYs automatically, the
-> optional PHY handling code has been removed from the 'ehci-orion' driver
-> entirely by commit e04585184dcf ("usb: ehci-orion: avoid double PHY
-> initialization"). However, the devm_phy_optional_get() call has been kept
-> so the driver still gets the PHY even though it is not used for anything
-> in the driver.
-> 
-> Drop the remaining code, and also remove the 'phy' member of the
-> 'orion_ehci_hcd' structure to simplify the code.
-> 
-> Fixes: e04585184dcf ("usb: ehci-orion: avoid double PHY initialization")
-> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
-> ---
+Hi Miquel,
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+2026. 02. 20. 14:47 keltezéssel, Miquel Raynal írta:
+> Hi Gabor,
+> 
+> On 20/02/2026 at 14:27:02 +01, Gabor Juhos <j4g8y7@gmail.com> wrote:
+> 
+>> Since the USB core code handles the generic USB PHYs automatically, the
+>> optional PHY handling code has been removed from the 'ehci-orion' driver
+>> entirely by commit e04585184dcf ("usb: ehci-orion: avoid double PHY
+>> initialization"). However, the devm_phy_optional_get() call has been kept
+>> so the driver still gets the PHY even though it is not used for anything
+>> in the driver.
+>>
+>> Drop the remaining code, and also remove the 'phy' member of the
+>> 'orion_ehci_hcd' structure to simplify the code.
+>>
+>> Fixes: e04585184dcf ("usb: ehci-orion: avoid double PHY initialization")
+> 
+> The fixes tag makes no sense here, this is pure cleanup. I do not
+> remember if this was needed or not, it is probably safe to drop today.
 
->  drivers/usb/host/ehci-orion.c | 9 ---------
->  1 file changed, 9 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
-> index 34abff8669f8bf096f4547b6ce0977eb130b3c8d..eaaa49712a8c64928771eb317165091480245d0f 100644
-> --- a/drivers/usb/host/ehci-orion.c
-> +++ b/drivers/usb/host/ehci-orion.c
-> @@ -12,7 +12,6 @@
->  #include <linux/clk.h>
->  #include <linux/platform_data/usb-ehci-orion.h>
->  #include <linux/of.h>
-> -#include <linux/phy/phy.h>
->  #include <linux/usb.h>
->  #include <linux/usb/hcd.h>
->  #include <linux/io.h>
-> @@ -60,7 +59,6 @@
->  
->  struct orion_ehci_hcd {
->  	struct clk *clk;
-> -	struct phy *phy;
->  };
->  
->  static struct hc_driver __read_mostly ehci_orion_hc_driver;
-> @@ -276,13 +274,6 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
->  			goto err_put_hcd;
->  	}
->  
-> -	priv->phy = devm_phy_optional_get(&pdev->dev, "usb");
-> -	if (IS_ERR(priv->phy)) {
-> -		err = PTR_ERR(priv->phy);
-> -		if (err != -ENOSYS)
-> -			goto err_dis_clk;
-> -	}
-> -
->  	/*
->  	 * (Re-)program MBUS remapping windows if we are asked to.
->  	 */
-> 
-> ---
-> base-commit: 2b7a25df823dc7d8f56f8ce7c2d2dac391cea9c2
-> change-id: 20260220-ehci-orion-drop-phy-handling-d93c15c92042
-> 
-> Best regards,
-> -- 
-> Gabor Juhos <j4g8y7@gmail.com>
-> 
+I have checked the code in v5.1, and the phy is not used there either.
+Nevertheless, you are right, this is a cleanup rather than a fix. I will send a
+v2 without the Fixes tag.
+
+Thanks,
+Gabor
 
