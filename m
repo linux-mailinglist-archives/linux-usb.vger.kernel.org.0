@@ -1,94 +1,71 @@
-Return-Path: <linux-usb+bounces-33540-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33541-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id n5jbCOWOmmn+cQMAu9opvQ
-	(envelope-from <linux-usb+bounces-33540-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Feb 2026 06:06:45 +0100
+	id 8PaxJ7w4m2ndwAMAu9opvQ
+	(envelope-from <linux-usb+bounces-33541-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Feb 2026 18:11:24 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62B5916E7F0
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Feb 2026 06:06:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F146616FDD3
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Feb 2026 18:11:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E7CE03019509
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Feb 2026 05:06:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 846613011119
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Feb 2026 17:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65D39199FAB;
-	Sun, 22 Feb 2026 05:06:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BCB92153D8;
+	Sun, 22 Feb 2026 17:11:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b="Gntw2/dY"
+	dkim=pass (2048-bit key) header.d=stacken.kth.se header.i=@stacken.kth.se header.b="uvNvHXY6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-4.sys.kth.se (smtp-relay-4.sys.kth.se [130.237.48.252])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7330BDF6C
-	for <linux-usb@vger.kernel.org>; Sun, 22 Feb 2026 05:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B6D11CAF
+	for <linux-usb@vger.kernel.org>; Sun, 22 Feb 2026 17:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.237.48.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771736799; cv=none; b=p7goMqhNV5HFIjKNKdFN3CYHwePLuLspIgvXxGhmZVndHsG9SqU8tpgZcVoYfOoTUK/kjKpQe43bX6/JgX+q+Z8mebU2jnSSsc+JDlxZQIq+nR5jaM02FAP1oY1YXxFROXVgIuIofOaqHUW6KPUROHEnWDSESIlIRlv7pBj9tf8=
+	t=1771780278; cv=none; b=ksSP/eZMfadzvNcca0ZsqfL9EkHumYfhlAlfQeod16zCDVB0/ugqkFhga66LLla8HrPS4IIMlLgvQto5XYI1QzDdaslmD6FzvSo43xGI733bnvQ7cGDRDMVJpxAf9RFSYIu9QJ7lOjx1/OWdJZqXAsC/KYRCp1BG1H4bJ4dt6Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771736799; c=relaxed/simple;
-	bh=t1HmHm/txpNwilCNIdjf84AFW98nrGgCLRcSa8+4pE4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ImKUvu2tyEmiViCRleLxssaVfbEbHhHC2BHNcVteTEv31OYDCT5WavqggxAn17VbM8kw94IOO3dbdL22Bstn3GbzSobUrsbVuIig5P8qH8ehbuxPN7/vHQRVnHS5X0nlKDH19zrZDlGFwRvhuGQwNqViT9r1HMPDLrvFiTUKACk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu; spf=pass smtp.mailfrom=u.northwestern.edu; dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b=Gntw2/dY; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=u.northwestern.edu
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-89505dd3e24so44933786d6.1
-        for <linux-usb@vger.kernel.org>; Sat, 21 Feb 2026 21:06:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=u-northwestern-edu.20230601.gappssmtp.com; s=20230601; t=1771736796; x=1772341596; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bttcDNU2nAINHq9ZznGXMUM8VB0ktwFg7EYW3Smrsho=;
-        b=Gntw2/dY9sUPWzTfLAec1UP7CdcXgc2J7z1oKpk3o2DIumwBBbmDdBJ2nbjxkqpLcA
-         PhWqglu+Q545/AJ7ZloEVaWoyBRe1bMhxf7RUhUIPvtge3rnkjq6ZMSkKQ3ZrOHs0lku
-         vbwnHyW9GORIfoeFZehPMFAmoH7vHNU1Cp2kGcuuERCVvXcISq5GJ9KXxi1NUQuhHQHO
-         vBHIeg/eIZrmzRZhx4g610QWMjRtqgo4ryXOKbTBjefQvVmjcNXTg6BmM4eI0vCfsRDf
-         9iC2IcJnwxxgjWC/gCI545ZJDXDqzekctFSZp83kUNHARZFJ1oLOYLTxzcf51X3PXe1T
-         QCpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771736796; x=1772341596;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bttcDNU2nAINHq9ZznGXMUM8VB0ktwFg7EYW3Smrsho=;
-        b=Vjs4V7JOJRGPeuR5yCaoUpbV9+FU/pGVGpHgaLhcY3sB8+yRrd2JJkmHj5P9C2++sy
-         EKjygBaM4iheS/LW+CqfE7i4NPpeEdN73g8mXdrOpxi38BAYIDPfmvKrq2Eq0Twihcqm
-         TYvkCjPxrYgVEwzqbg/GryEe6/zg3JXM2dEqOxIf785M5TNenNyeLJTUnNIWF6cQVxPm
-         oBfnkGCfWfIUZrg6Qb7HwQBKgrsovCf8sII+1ZAgqstRxqcWoZoWiIa4dHVOsYTRFH3Z
-         Lo2bEGi97yocoJ4KHi3EEz9GWBVOMjyi+jGhkfFXUhEz3gkKcbmTbBrGwf8IKat+ol1F
-         7Rxw==
-X-Gm-Message-State: AOJu0YyYkYHiJ4BgK955qlVC35N+r7EIYYzYi/YkcgHDO14gY+uxHRVN
-	GaxMPre8dl5rWOWvDGKOkeyH6yKV6LA8LYfyN24OwZY1O/0yFMYHpAZ5qLjQ8UyJJa4=
-X-Gm-Gg: AZuq6aIyN386WcQcgZuHiwuFX8K+Gxk290pVb/cYYrVLLwdwv0AD4Yb+/05ceOHN4sq
-	aal0N9+g6jV/Y0PjoNHiMtSQotHUhYP47WbhQfhEWAjq2HnWvdukAXLVPH7wZOaZW/eyOsr+JT2
-	xVt7+t0bhqA4bdodQsEb3HkE7Yy1th5iuQ7fAcb5dIMXjzP4jPWL+ZmY95+damThtOz0mcBPNuc
-	eHFiZlzQeVSk8m+8MiK6C0g74Kg9Hi75Dm473u3gIr66W82h41r/Od8SH7rzM2UhKN00JT4X78i
-	UlNQPOdcIo9MBXArxH9CAopHMWKnci0P58hg3lDSQN/l1kttx6k3a3TB7Q6Kus+9ZvStufz3/g1
-	UgtVwkzKS/Uv6OjpqyEfg0IjYxHQbA2gyCeqZ82pMABTiZEyqGo+Il7W23Bg66nuJOlEOmSNQeh
-	9/1ZQyPed38yHHyJDswDBZ/RLSu1g6Zt/aKypNiw1mNwxilzxt8QbcC0+1YtEDGeLtnrF2k5U6R
-	nZjFZtHEwebYnKQ0hWOksIj8t9JCTaidi9uzwfnILA=
-X-Received: by 2002:a05:6214:d65:b0:880:3ce2:65ad with SMTP id 6a1803df08f44-89979d362b3mr78240586d6.41.1771736796388;
-        Sat, 21 Feb 2026 21:06:36 -0800 (PST)
-Received: from security.cs.northwestern.edu (security.cs.northwestern.edu. [165.124.184.136])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8997e7741c0sm33287246d6.50.2026.02.21.21.06.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Feb 2026 21:06:36 -0800 (PST)
-From: Ziyi Guo <n7l8m4@u.northwestern.edu>
-To: Petko Manolov <petkan@nucleusys.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ziyi Guo <n7l8m4@u.northwestern.edu>
-Subject: [PATCH net] net: usb: pegasus: enable basic endpoint checking
-Date: Sun, 22 Feb 2026 05:06:33 +0000
-Message-Id: <20260222050633.410165-1-n7l8m4@u.northwestern.edu>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1771780278; c=relaxed/simple;
+	bh=BneFa3G627awMSyC3tbPbkD6T+tS7k7U0N5K+XSJNeE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qfu6uaFQuPdG/Rt31x13BUIHFgsbdC4LzPG2x4vFYjNbb69y/OJRJaD4VMTF3F1n4aVRX+Synv6vs7T5Ekv80MpiBcPeNGMUDzn1C4JTDQA6h21ewc0WLCa84KbdjulLNHmctSQ1rB0RdQbcNXU7p9Jvkk0yd320JUoWb0boUnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=stacken.kth.se; spf=pass smtp.mailfrom=stacken.kth.se; dkim=pass (2048-bit key) header.d=stacken.kth.se header.i=@stacken.kth.se header.b=uvNvHXY6; arc=none smtp.client-ip=130.237.48.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=stacken.kth.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stacken.kth.se
+Received: from mail-2.stacken.kth.se (mail-2.stacken.kth.se [IPv6:2001:6b0:1:ea:5054:ff:fe3a:40f3])
+	by smtp-relay-4.sys.kth.se (Postfix) with ESMTP id 4fJqxZ6SD0zPNQL;
+	Sun, 22 Feb 2026 18:00:50 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp-relay-4.sys.kth.se 4fJqxZ6SD0zPNQL
+Authentication-Results: smtp-relay-4.sys.kth.se;
+	dkim=pass (2048-bit key, unprotected) header.d=stacken.kth.se header.i=@stacken.kth.se header.a=rsa-sha256 header.s=mail header.b=uvNvHXY6
+Received: from betty.fdsoft.se (h-212-116-76-53.A498.priv.bahnhof.se [212.116.76.53])
+	by mail-2.stacken.kth.se (Postfix) with ESMTPSA id A3AA68043B;
+	Sun, 22 Feb 2026 18:00:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stacken.kth.se;
+	s=mail; t=1771779650;
+	bh=BneFa3G627awMSyC3tbPbkD6T+tS7k7U0N5K+XSJNeE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uvNvHXY6+dHVy5vckVhhs/jh3b8AjWitj9dan6JZ/QuMwJoxTpZR+Bht/WWUZHXvv
+	 EOyngr6EpYU6zZEh+06+990vj3Wod3uPXdrZxTyS9kvmrp073Z6OYXbhoj0wFR/MN1
+	 LRo7rImerzeca7+6TbbOm9VbjQpRY22Bd5iR+045Kllgm8QH0KV9x9Wn062FLbpDfK
+	 LeEqpIiF9nRbr6mb3fuPC6TCst3xuzdQLqUyWYTG0QlGKqi6WsKfLTUBPwI0CZKLhi
+	 Kkrfa+ChGaT/FrGDavG+h9nikRY7Ww+nbXkq03atPmLS83n/wgDLLBzKUHmfEwebDw
+	 WSFwnSAclgq0Q==
+Received: from ester.fdsoft.se ([192.168.1.2])
+	by betty.fdsoft.se with esmtp (Exim 4.98.2)
+	(envelope-from <frej@stacken.kth.se>)
+	id 1vuCp8-000000003ry-1V1D;
+	Sun, 22 Feb 2026 18:00:50 +0100
+From: frej@stacken.kth.se
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	Frej Drejhammar <frej@stacken.kth.se>
+Subject: [PATCH] USB: serial: Add support for Blackbox IC135A to Edgeport driver
+Date: Sun, 22 Feb 2026 18:00:42 +0100
+Message-ID: <20260222170042.353042-1-frej@stacken.kth.se>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -97,156 +74,90 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.44 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[u-northwestern-edu.20230601.gappssmtp.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[stacken.kth.se,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[stacken.kth.se:s=mail];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[northwestern.edu : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33540-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[n7l8m4@u.northwestern.edu,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33541-lists,linux-usb=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[stacken.kth.se:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_NEQ_ENVFROM(0.00)[frej@stacken.kth.se,linux-usb@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
 	NEURAL_HAM(-0.00)[-0.999];
-	DKIM_TRACE(0.00)[u-northwestern-edu.20230601.gappssmtp.com:+];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,northwestern.edu:email,u-northwestern-edu.20230601.gappssmtp.com:dkim]
-X-Rspamd-Queue-Id: 62B5916E7F0
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: F146616FDD3
 X-Rspamd-Action: no action
 
-pegasus_probe() fills URBs with hardcoded endpoint pipes without
-verifying the endpoint descriptors:
+From: Frej Drejhammar <frej@stacken.kth.se>
 
-  - usb_rcvbulkpipe(dev, 1) for RX data
-  - usb_sndbulkpipe(dev, 2) for TX data
-  - usb_rcvintpipe(dev, 3)  for status interrupts
+The Blackbox 724-746-5500 USB Director USB-RS-232 HUB, part number
+IC135A, is a rebadged Edgeport/4 with its own USB device id.
 
-A malformed USB device can present these endpoints with transfer types
-that differ from what the driver assumes.
-
-Add a pegasus_usb_ep enum for endpoint numbers, replacing magic
-constants throughout. Add usb_check_bulk_endpoints() and
-usb_check_int_endpoints() calls before any resource allocation to
-verify endpoint types before use, rejecting devices with mismatched
-descriptors at probe time, and avoid triggering assertion.
-
-Similar fix to
-- commit 90b7f2961798 ("net: usb: rtl8150: enable basic endpoint checking")
-- commit 9e7021d2aeae ("net: usb: catc: enable basic endpoint checking")
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Ziyi Guo <n7l8m4@u.northwestern.edu>
+Signed-off-by: Frej Drejhammar <frej@stacken.kth.se>
 ---
- drivers/net/usb/pegasus.c | 35 ++++++++++++++++++++++++++++++-----
- 1 file changed, 30 insertions(+), 5 deletions(-)
+ drivers/usb/serial/io_edgeport.c | 3 +++
+ drivers/usb/serial/io_usbvend.h  | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
-index 7b6d6eb60709..b84968c5f074 100644
---- a/drivers/net/usb/pegasus.c
-+++ b/drivers/net/usb/pegasus.c
-@@ -28,6 +28,17 @@ static const char driver_name[] = "pegasus";
- 			BMSR_100FULL | BMSR_ANEGCAPABLE)
- #define CARRIER_CHECK_DELAY (2 * HZ)
+diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
+index 1fffda7647f9..ad73040b30c8 100644
+--- a/drivers/usb/serial/io_edgeport.c
++++ b/drivers/usb/serial/io_edgeport.c
+@@ -73,6 +73,7 @@ static const struct usb_device_id edgeport_4port_id_table[] = {
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_EDGEPORT_22I) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_EDGEPORT_412_4) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_EDGEPORT_COMPATIBLE) },
++	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_BLACKBOX_IC135A) },
+ 	{ }
+ };
  
-+/*
-+ * USB endpoints.
-+ */
-+
-+enum pegasus_usb_ep {
-+	PEGASUS_USB_EP_CONTROL	= 0,
-+	PEGASUS_USB_EP_BULK_IN	= 1,
-+	PEGASUS_USB_EP_BULK_OUT	= 2,
-+	PEGASUS_USB_EP_INT_IN	= 3,
-+};
-+
- static bool loopback;
- static bool mii_mode;
- static char *devid;
-@@ -542,7 +553,7 @@ static void read_bulk_callback(struct urb *urb)
- 		goto tl_sched;
- goon:
- 	usb_fill_bulk_urb(pegasus->rx_urb, pegasus->usb,
--			  usb_rcvbulkpipe(pegasus->usb, 1),
-+			  usb_rcvbulkpipe(pegasus->usb, PEGASUS_USB_EP_BULK_IN),
- 			  pegasus->rx_skb->data, PEGASUS_MTU,
- 			  read_bulk_callback, pegasus);
- 	rx_status = usb_submit_urb(pegasus->rx_urb, GFP_ATOMIC);
-@@ -582,7 +593,7 @@ static void rx_fixup(struct tasklet_struct *t)
- 		return;
- 	}
- 	usb_fill_bulk_urb(pegasus->rx_urb, pegasus->usb,
--			  usb_rcvbulkpipe(pegasus->usb, 1),
-+			  usb_rcvbulkpipe(pegasus->usb, PEGASUS_USB_EP_BULK_IN),
- 			  pegasus->rx_skb->data, PEGASUS_MTU,
- 			  read_bulk_callback, pegasus);
- try_again:
-@@ -710,7 +721,7 @@ static netdev_tx_t pegasus_start_xmit(struct sk_buff *skb,
- 	((__le16 *) pegasus->tx_buff)[0] = cpu_to_le16(l16);
- 	skb_copy_from_linear_data(skb, pegasus->tx_buff + 2, skb->len);
- 	usb_fill_bulk_urb(pegasus->tx_urb, pegasus->usb,
--			  usb_sndbulkpipe(pegasus->usb, 2),
-+			  usb_sndbulkpipe(pegasus->usb, PEGASUS_USB_EP_BULK_OUT),
- 			  pegasus->tx_buff, count,
- 			  write_bulk_callback, pegasus);
- 	if ((res = usb_submit_urb(pegasus->tx_urb, GFP_ATOMIC))) {
-@@ -837,7 +848,7 @@ static int pegasus_open(struct net_device *net)
- 	set_registers(pegasus, EthID, 6, net->dev_addr);
+@@ -121,6 +122,7 @@ static const struct usb_device_id id_table_combined[] = {
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_EDGEPORT_8R) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_EDGEPORT_8RR) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_EDGEPORT_412_8) },
++	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_BLACKBOX_IC135A) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_NCR, NCR_DEVICE_ID_EPIC_0202) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_NCR, NCR_DEVICE_ID_EPIC_0203) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_NCR, NCR_DEVICE_ID_EPIC_0310) },
+@@ -470,6 +472,7 @@ static void get_product_info(struct edgeport_serial *edge_serial)
+ 	case ION_DEVICE_ID_EDGEPORT_2_DIN:
+ 	case ION_DEVICE_ID_EDGEPORT_4_DIN:
+ 	case ION_DEVICE_ID_EDGEPORT_16_DUAL_CPU:
++	case ION_DEVICE_ID_BLACKBOX_IC135A:
+ 		product_info->IsRS232 = 1;
+ 		break;
  
- 	usb_fill_bulk_urb(pegasus->rx_urb, pegasus->usb,
--			  usb_rcvbulkpipe(pegasus->usb, 1),
-+			  usb_rcvbulkpipe(pegasus->usb, PEGASUS_USB_EP_BULK_IN),
- 			  pegasus->rx_skb->data, PEGASUS_MTU,
- 			  read_bulk_callback, pegasus);
- 	if ((res = usb_submit_urb(pegasus->rx_urb, GFP_KERNEL))) {
-@@ -848,7 +859,7 @@ static int pegasus_open(struct net_device *net)
- 	}
+diff --git a/drivers/usb/serial/io_usbvend.h b/drivers/usb/serial/io_usbvend.h
+index 9a6f742ad3ab..648b9e23b3cd 100644
+--- a/drivers/usb/serial/io_usbvend.h
++++ b/drivers/usb/serial/io_usbvend.h
+@@ -213,6 +213,7 @@
+ // Definitions for other product IDs
+ #define ION_DEVICE_ID_MT4X56USB			0x1403	// OEM device
+ #define ION_DEVICE_ID_E5805A			0x1A01  // OEM device (rebranded Edgeport/4)
++#define ION_DEVICE_ID_BLACKBOX_IC135A		0x0801	// OEM device (rebranded Edgeport/4)
  
- 	usb_fill_int_urb(pegasus->intr_urb, pegasus->usb,
--			 usb_rcvintpipe(pegasus->usb, 3),
-+			 usb_rcvintpipe(pegasus->usb, PEGASUS_USB_EP_INT_IN),
- 			 pegasus->intr_buff, sizeof(pegasus->intr_buff),
- 			 intr_callback, pegasus, pegasus->intr_interval);
- 	if ((res = usb_submit_urb(pegasus->intr_urb, GFP_KERNEL))) {
-@@ -1133,10 +1144,24 @@ static int pegasus_probe(struct usb_interface *intf,
- 	pegasus_t *pegasus;
- 	int dev_index = id - pegasus_ids;
- 	int res = -ENOMEM;
-+	static const u8 bulk_ep_addr[] = {
-+		PEGASUS_USB_EP_BULK_IN | USB_DIR_IN,
-+		PEGASUS_USB_EP_BULK_OUT | USB_DIR_OUT,
-+		0};
-+	static const u8 int_ep_addr[] = {
-+		PEGASUS_USB_EP_INT_IN | USB_DIR_IN,
-+		0};
  
- 	if (pegasus_blacklisted(dev))
- 		return -ENODEV;
- 
-+	/* Verify that all required endpoints are present */
-+	if (!usb_check_bulk_endpoints(intf, bulk_ep_addr) ||
-+	    !usb_check_int_endpoints(intf, int_ep_addr)) {
-+		dev_err(&intf->dev, "Missing or invalid endpoints\n");
-+		return -ENODEV;
-+	}
-+
- 	net = alloc_etherdev(sizeof(struct pegasus));
- 	if (!net)
- 		goto out;
+ #define	GENERATION_ID_FROM_USB_PRODUCT_ID(ProductId)				\
+
+base-commit: 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7
 -- 
-2.34.1
+2.53.0
 
 
