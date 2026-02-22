@@ -1,272 +1,252 @@
-Return-Path: <linux-usb+bounces-33539-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33540-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EKCyGhHGmWmfWgMAu9opvQ
-	(envelope-from <linux-usb+bounces-33539-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Feb 2026 15:49:53 +0100
+	id n5jbCOWOmmn+cQMAu9opvQ
+	(envelope-from <linux-usb+bounces-33540-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Feb 2026 06:06:45 +0100
 X-Original-To: lists+linux-usb@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5AA716D0F2
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Feb 2026 15:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 62B5916E7F0
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Feb 2026 06:06:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9F9A0302BDC8
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Feb 2026 14:48:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E7CE03019509
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Feb 2026 05:06:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 022711F5834;
-	Sat, 21 Feb 2026 14:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65D39199FAB;
+	Sun, 22 Feb 2026 05:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YBiYcnZ3"
+	dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b="Gntw2/dY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B28199FAC
-	for <linux-usb@vger.kernel.org>; Sat, 21 Feb 2026 14:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7330BDF6C
+	for <linux-usb@vger.kernel.org>; Sun, 22 Feb 2026 05:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771685335; cv=none; b=loOfOm8nedE27CiUDU9hndYP4DnmPCsmaH+9Zem1yJA9/TtLQmrk1/LsspsxQcgNl785kZR7/SsHxfg0qURp/6epvgoRJxMYZ7X7v28W5C5vUVwBRJRTtUrgrDvoOl+OyNfNQWO8ry/TFs3ND2lhBoCm1U1PkC8CAaiv9541cK0=
+	t=1771736799; cv=none; b=p7goMqhNV5HFIjKNKdFN3CYHwePLuLspIgvXxGhmZVndHsG9SqU8tpgZcVoYfOoTUK/kjKpQe43bX6/JgX+q+Z8mebU2jnSSsc+JDlxZQIq+nR5jaM02FAP1oY1YXxFROXVgIuIofOaqHUW6KPUROHEnWDSESIlIRlv7pBj9tf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771685335; c=relaxed/simple;
-	bh=c6Au8SEnwAzozh8LgOHPKTcZtSKVQWswj+SVzNT6OAA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fN3IxBnSthaJgkrqM0baCVUdw+LgBt8W4e7/yVNo3WD05mCrQ/KuK6EjzNWEpmIjxwsvjE7j4g9GjN04aVCqkIgKty/74/ZKaTdAQVup6ayt3fVeQo+t1usBLAxI0BoDEC8wyLlRF3mDCBMp3apdG1PxEWz0S0fJiL6/XWntCcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YBiYcnZ3; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--khtsai.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-8243fc3fe8eso11579759b3a.1
-        for <linux-usb@vger.kernel.org>; Sat, 21 Feb 2026 06:48:54 -0800 (PST)
+	s=arc-20240116; t=1771736799; c=relaxed/simple;
+	bh=t1HmHm/txpNwilCNIdjf84AFW98nrGgCLRcSa8+4pE4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ImKUvu2tyEmiViCRleLxssaVfbEbHhHC2BHNcVteTEv31OYDCT5WavqggxAn17VbM8kw94IOO3dbdL22Bstn3GbzSobUrsbVuIig5P8qH8ehbuxPN7/vHQRVnHS5X0nlKDH19zrZDlGFwRvhuGQwNqViT9r1HMPDLrvFiTUKACk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu; spf=pass smtp.mailfrom=u.northwestern.edu; dkim=pass (2048-bit key) header.d=u-northwestern-edu.20230601.gappssmtp.com header.i=@u-northwestern-edu.20230601.gappssmtp.com header.b=Gntw2/dY; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=u.northwestern.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=u.northwestern.edu
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-89505dd3e24so44933786d6.1
+        for <linux-usb@vger.kernel.org>; Sat, 21 Feb 2026 21:06:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771685333; x=1772290133; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cxLkydTf9614aLgaebvByTpNLFxiZkbf4oPlXDhy8+A=;
-        b=YBiYcnZ3mg08MKlVRA5+U/aZfvAfRMvfmUJO8MRDSQiw3PsskjIdRGx9qklIYQX7Oh
-         dvRFcZfN+r0i1ZsbK+IXOJfoxeO91qihyFDfyKFDoD8/V2PZvElXdnLhJ7kcxUnapTxQ
-         UxRk15XnaexOr0MKuMhGK1kJ/ullzh8lfMhLq6bTlGqr8Rq4XibviuIQa7QkjvVNb2Ek
-         uIZPbMXqVfiqTIryzlMgbbNjUTXc4LAo0Oe/QEm2j9cZual0FLY4s5/IMCe5GPPmCD8o
-         s7B+Onpi+yNY1HNxKAGNcQ9kwH9x/1LZLyeTO53+rVOjgoRTMIM8tpGa0vseTjnycYNq
-         aWrw==
+        d=u-northwestern-edu.20230601.gappssmtp.com; s=20230601; t=1771736796; x=1772341596; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bttcDNU2nAINHq9ZznGXMUM8VB0ktwFg7EYW3Smrsho=;
+        b=Gntw2/dY9sUPWzTfLAec1UP7CdcXgc2J7z1oKpk3o2DIumwBBbmDdBJ2nbjxkqpLcA
+         PhWqglu+Q545/AJ7ZloEVaWoyBRe1bMhxf7RUhUIPvtge3rnkjq6ZMSkKQ3ZrOHs0lku
+         vbwnHyW9GORIfoeFZehPMFAmoH7vHNU1Cp2kGcuuERCVvXcISq5GJ9KXxi1NUQuhHQHO
+         vBHIeg/eIZrmzRZhx4g610QWMjRtqgo4ryXOKbTBjefQvVmjcNXTg6BmM4eI0vCfsRDf
+         9iC2IcJnwxxgjWC/gCI545ZJDXDqzekctFSZp83kUNHARZFJ1oLOYLTxzcf51X3PXe1T
+         QCpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771685333; x=1772290133;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cxLkydTf9614aLgaebvByTpNLFxiZkbf4oPlXDhy8+A=;
-        b=HhXVEvYPhmxowvLUju2h+2gTKo8WZAW/grg1L+4R249qLOZDCdO9OC/rikQK7Sqq+R
-         VVSPcPR/BNQHkwWqUzzHeGZ8esKlwoMTFE6HyY0ZpiLhtZWXgQ8GKRqm3DVJh9aY8qH8
-         0kNa5u2oUNMNtjS42AYkml/9S8YY2XWVeugyCAKbJULZevyZcgguoXh5IBdXWFza9Dsf
-         AuE3pdPtd1Xma0R3Cqo58yChtOanVZ1jsSmDOLwZNQwuvb8Ae5NQM90Ui9+m2PYpMel0
-         DHDhMhYV7UghWmNJnaDqRT9u+7ID0QLgsGsPUuM+oaOWA2DKm8PjXf0Y979CK+fdwILc
-         YJBg==
-X-Gm-Message-State: AOJu0Yw8GMLNm8C1zDPQHaj+Xq70+bH8l1HpMZROAFm4DvApzFOL0Lsg
-	VMCExpJIIrMmDBjlHHAuKOhO5J21Dv583sN+vpKrdUUHHpaSxcxB9dsOLEl44B7LHhxx33OxuYs
-	133ZCvA==
-X-Received: from pfbhc21.prod.google.com ([2002:a05:6a00:6515:b0:824:afd9:57a7])
- (user=khtsai job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2d03:b0:821:849a:a65b
- with SMTP id d2e1a72fcca58-826daa80907mr2857476b3a.60.1771685333359; Sat, 21
- Feb 2026 06:48:53 -0800 (PST)
-Date: Sat, 21 Feb 2026 22:48:16 +0800
-In-Reply-To: <20260221-legacy-ncm-v2-0-dfb891d76507@google.com>
+        d=1e100.net; s=20230601; t=1771736796; x=1772341596;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bttcDNU2nAINHq9ZznGXMUM8VB0ktwFg7EYW3Smrsho=;
+        b=Vjs4V7JOJRGPeuR5yCaoUpbV9+FU/pGVGpHgaLhcY3sB8+yRrd2JJkmHj5P9C2++sy
+         EKjygBaM4iheS/LW+CqfE7i4NPpeEdN73g8mXdrOpxi38BAYIDPfmvKrq2Eq0Twihcqm
+         TYvkCjPxrYgVEwzqbg/GryEe6/zg3JXM2dEqOxIf785M5TNenNyeLJTUnNIWF6cQVxPm
+         oBfnkGCfWfIUZrg6Qb7HwQBKgrsovCf8sII+1ZAgqstRxqcWoZoWiIa4dHVOsYTRFH3Z
+         Lo2bEGi97yocoJ4KHi3EEz9GWBVOMjyi+jGhkfFXUhEz3gkKcbmTbBrGwf8IKat+ol1F
+         7Rxw==
+X-Gm-Message-State: AOJu0YyYkYHiJ4BgK955qlVC35N+r7EIYYzYi/YkcgHDO14gY+uxHRVN
+	GaxMPre8dl5rWOWvDGKOkeyH6yKV6LA8LYfyN24OwZY1O/0yFMYHpAZ5qLjQ8UyJJa4=
+X-Gm-Gg: AZuq6aIyN386WcQcgZuHiwuFX8K+Gxk290pVb/cYYrVLLwdwv0AD4Yb+/05ceOHN4sq
+	aal0N9+g6jV/Y0PjoNHiMtSQotHUhYP47WbhQfhEWAjq2HnWvdukAXLVPH7wZOaZW/eyOsr+JT2
+	xVt7+t0bhqA4bdodQsEb3HkE7Yy1th5iuQ7fAcb5dIMXjzP4jPWL+ZmY95+damThtOz0mcBPNuc
+	eHFiZlzQeVSk8m+8MiK6C0g74Kg9Hi75Dm473u3gIr66W82h41r/Od8SH7rzM2UhKN00JT4X78i
+	UlNQPOdcIo9MBXArxH9CAopHMWKnci0P58hg3lDSQN/l1kttx6k3a3TB7Q6Kus+9ZvStufz3/g1
+	UgtVwkzKS/Uv6OjpqyEfg0IjYxHQbA2gyCeqZ82pMABTiZEyqGo+Il7W23Bg66nuJOlEOmSNQeh
+	9/1ZQyPed38yHHyJDswDBZ/RLSu1g6Zt/aKypNiw1mNwxilzxt8QbcC0+1YtEDGeLtnrF2k5U6R
+	nZjFZtHEwebYnKQ0hWOksIj8t9JCTaidi9uzwfnILA=
+X-Received: by 2002:a05:6214:d65:b0:880:3ce2:65ad with SMTP id 6a1803df08f44-89979d362b3mr78240586d6.41.1771736796388;
+        Sat, 21 Feb 2026 21:06:36 -0800 (PST)
+Received: from security.cs.northwestern.edu (security.cs.northwestern.edu. [165.124.184.136])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8997e7741c0sm33287246d6.50.2026.02.21.21.06.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Feb 2026 21:06:36 -0800 (PST)
+From: Ziyi Guo <n7l8m4@u.northwestern.edu>
+To: Petko Manolov <petkan@nucleusys.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ziyi Guo <n7l8m4@u.northwestern.edu>
+Subject: [PATCH net] net: usb: pegasus: enable basic endpoint checking
+Date: Sun, 22 Feb 2026 05:06:33 +0000
+Message-Id: <20260222050633.410165-1-n7l8m4@u.northwestern.edu>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260221-legacy-ncm-v2-0-dfb891d76507@google.com>
-X-Developer-Key: i=khtsai@google.com; a=ed25519; pk=abA4Pw6dY2ZufSbSXW9mtp7xiv1AVPtgRhCFWJSEqLE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771685327; l=5279;
- i=khtsai@google.com; s=20250916; h=from:subject:message-id;
- bh=c6Au8SEnwAzozh8LgOHPKTcZtSKVQWswj+SVzNT6OAA=; b=YOSnht4KhONMB0BJZGT/GYeKGKddU5XYhRqFS6YIejyzJ5CHov7R00f4isUByNRmtdeWbhlT3
- baQ3+R+PRZrBInHf404WhAITE4IiTHLpZlkepsZNVeMAG7yj8r8Owxt
-X-Mailer: b4 0.14.2
-Message-ID: <20260221-legacy-ncm-v2-2-dfb891d76507@google.com>
-Subject: [PATCH v2 2/2] usb: gadget: f_ncm: Fix atomic context locking issue
-From: Kuen-Han Tsai <khtsai@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kuen-Han Tsai <khtsai@google.com>, stable@kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [1.44 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[u-northwestern-edu.20230601.gappssmtp.com:s=20230601];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[northwestern.edu : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-33540-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33539-lists,linux-usb=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[n7l8m4@u.northwestern.edu,linux-usb@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[khtsai@google.com,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E5AA716D0F2
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-0.999];
+	DKIM_TRACE(0.00)[u-northwestern-edu.20230601.gappssmtp.com:+];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,northwestern.edu:email,u-northwestern-edu.20230601.gappssmtp.com:dkim]
+X-Rspamd-Queue-Id: 62B5916E7F0
 X-Rspamd-Action: no action
 
-The ncm_set_alt function was holding a mutex to protect against races
-with configfs, which invokes the might-sleep function inside an atomic
-context.
+pegasus_probe() fills URBs with hardcoded endpoint pipes without
+verifying the endpoint descriptors:
 
-Remove the struct net_device pointer from the f_ncm_opts structure to
-eliminate the contention. The connection state is now managed by a new
-boolean flag to preserve the use-after-free fix from
-commit 6334b8e4553c ("usb: gadget: f_ncm: Fix UAF ncm object at re-bind
-after usb ep transport error").
+  - usb_rcvbulkpipe(dev, 1) for RX data
+  - usb_sndbulkpipe(dev, 2) for TX data
+  - usb_rcvintpipe(dev, 3)  for status interrupts
 
-BUG: sleeping function called from invalid context
-Call Trace:
- dump_stack_lvl+0x83/0xc0
- dump_stack+0x14/0x16
- __might_resched+0x389/0x4c0
- __might_sleep+0x8e/0x100
- ...
- __mutex_lock+0x6f/0x1740
- ...
- ncm_set_alt+0x209/0xa40
- set_config+0x6b6/0xb40
- composite_setup+0x734/0x2b40
- ...
+A malformed USB device can present these endpoints with transfer types
+that differ from what the driver assumes.
 
-Fixes: 56a512a9b410 ("usb: gadget: f_ncm: align net_device lifecycle with bind/unbind")
-Cc: stable@kernel.org
-Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+Add a pegasus_usb_ep enum for endpoint numbers, replacing magic
+constants throughout. Add usb_check_bulk_endpoints() and
+usb_check_int_endpoints() calls before any resource allocation to
+verify endpoint types before use, rejecting devices with mismatched
+descriptors at probe time, and avoid triggering assertion.
+
+Similar fix to
+- commit 90b7f2961798 ("net: usb: rtl8150: enable basic endpoint checking")
+- commit 9e7021d2aeae ("net: usb: catc: enable basic endpoint checking")
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Ziyi Guo <n7l8m4@u.northwestern.edu>
 ---
- drivers/usb/gadget/function/f_ncm.c            | 29 +++++++++++---------------
- drivers/usb/gadget/function/u_ether_configfs.h | 11 +---------
- drivers/usb/gadget/function/u_ncm.h            |  1 -
- 3 files changed, 13 insertions(+), 28 deletions(-)
+ drivers/net/usb/pegasus.c | 35 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 30 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index e23adc132f8865f6bbce6c88c8b5f3f06110faaa..6f074b85eebcf93a67e0fbc3b0fecaf702286f83 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -58,6 +58,7 @@ struct f_ncm {
- 	u8				notify_state;
- 	atomic_t			notify_count;
- 	bool				is_open;
-+	bool				is_connected;
+diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+index 7b6d6eb60709..b84968c5f074 100644
+--- a/drivers/net/usb/pegasus.c
++++ b/drivers/net/usb/pegasus.c
+@@ -28,6 +28,17 @@ static const char driver_name[] = "pegasus";
+ 			BMSR_100FULL | BMSR_ANEGCAPABLE)
+ #define CARRIER_CHECK_DELAY (2 * HZ)
  
- 	const struct ndp_parser_opts	*parser_opts;
- 	bool				is_crc;
-@@ -864,7 +865,6 @@ static int ncm_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- {
- 	struct f_ncm		*ncm = func_to_ncm(f);
--	struct f_ncm_opts	*opts = func_to_ncm_opts(f);
- 	struct usb_composite_dev *cdev = f->config->cdev;
++/*
++ * USB endpoints.
++ */
++
++enum pegasus_usb_ep {
++	PEGASUS_USB_EP_CONTROL	= 0,
++	PEGASUS_USB_EP_BULK_IN	= 1,
++	PEGASUS_USB_EP_BULK_OUT	= 2,
++	PEGASUS_USB_EP_INT_IN	= 3,
++};
++
+ static bool loopback;
+ static bool mii_mode;
+ static char *devid;
+@@ -542,7 +553,7 @@ static void read_bulk_callback(struct urb *urb)
+ 		goto tl_sched;
+ goon:
+ 	usb_fill_bulk_urb(pegasus->rx_urb, pegasus->usb,
+-			  usb_rcvbulkpipe(pegasus->usb, 1),
++			  usb_rcvbulkpipe(pegasus->usb, PEGASUS_USB_EP_BULK_IN),
+ 			  pegasus->rx_skb->data, PEGASUS_MTU,
+ 			  read_bulk_callback, pegasus);
+ 	rx_status = usb_submit_urb(pegasus->rx_urb, GFP_ATOMIC);
+@@ -582,7 +593,7 @@ static void rx_fixup(struct tasklet_struct *t)
+ 		return;
+ 	}
+ 	usb_fill_bulk_urb(pegasus->rx_urb, pegasus->usb,
+-			  usb_rcvbulkpipe(pegasus->usb, 1),
++			  usb_rcvbulkpipe(pegasus->usb, PEGASUS_USB_EP_BULK_IN),
+ 			  pegasus->rx_skb->data, PEGASUS_MTU,
+ 			  read_bulk_callback, pegasus);
+ try_again:
+@@ -710,7 +721,7 @@ static netdev_tx_t pegasus_start_xmit(struct sk_buff *skb,
+ 	((__le16 *) pegasus->tx_buff)[0] = cpu_to_le16(l16);
+ 	skb_copy_from_linear_data(skb, pegasus->tx_buff + 2, skb->len);
+ 	usb_fill_bulk_urb(pegasus->tx_urb, pegasus->usb,
+-			  usb_sndbulkpipe(pegasus->usb, 2),
++			  usb_sndbulkpipe(pegasus->usb, PEGASUS_USB_EP_BULK_OUT),
+ 			  pegasus->tx_buff, count,
+ 			  write_bulk_callback, pegasus);
+ 	if ((res = usb_submit_urb(pegasus->tx_urb, GFP_ATOMIC))) {
+@@ -837,7 +848,7 @@ static int pegasus_open(struct net_device *net)
+ 	set_registers(pegasus, EthID, 6, net->dev_addr);
  
- 	/* Control interface has only altsetting 0 */
-@@ -887,13 +887,12 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- 		if (alt > 1)
- 			goto fail;
+ 	usb_fill_bulk_urb(pegasus->rx_urb, pegasus->usb,
+-			  usb_rcvbulkpipe(pegasus->usb, 1),
++			  usb_rcvbulkpipe(pegasus->usb, PEGASUS_USB_EP_BULK_IN),
+ 			  pegasus->rx_skb->data, PEGASUS_MTU,
+ 			  read_bulk_callback, pegasus);
+ 	if ((res = usb_submit_urb(pegasus->rx_urb, GFP_KERNEL))) {
+@@ -848,7 +859,7 @@ static int pegasus_open(struct net_device *net)
+ 	}
  
--		scoped_guard(mutex, &opts->lock)
--			if (opts->net) {
--				DBG(cdev, "reset ncm\n");
--				opts->net = NULL;
--				gether_disconnect(&ncm->port);
--				ncm_reset_values(ncm);
--			}
-+		if (ncm->is_connected) {
-+			DBG(cdev, "reset ncm\n");
-+			ncm->is_connected = false;
-+			gether_disconnect(&ncm->port);
-+			ncm_reset_values(ncm);
-+		}
+ 	usb_fill_int_urb(pegasus->intr_urb, pegasus->usb,
+-			 usb_rcvintpipe(pegasus->usb, 3),
++			 usb_rcvintpipe(pegasus->usb, PEGASUS_USB_EP_INT_IN),
+ 			 pegasus->intr_buff, sizeof(pegasus->intr_buff),
+ 			 intr_callback, pegasus, pegasus->intr_interval);
+ 	if ((res = usb_submit_urb(pegasus->intr_urb, GFP_KERNEL))) {
+@@ -1133,10 +1144,24 @@ static int pegasus_probe(struct usb_interface *intf,
+ 	pegasus_t *pegasus;
+ 	int dev_index = id - pegasus_ids;
+ 	int res = -ENOMEM;
++	static const u8 bulk_ep_addr[] = {
++		PEGASUS_USB_EP_BULK_IN | USB_DIR_IN,
++		PEGASUS_USB_EP_BULK_OUT | USB_DIR_OUT,
++		0};
++	static const u8 int_ep_addr[] = {
++		PEGASUS_USB_EP_INT_IN | USB_DIR_IN,
++		0};
  
- 		/*
- 		 * CDC Network only sends data in non-default altsettings.
-@@ -926,8 +925,7 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- 			net = gether_connect(&ncm->port);
- 			if (IS_ERR(net))
- 				return PTR_ERR(net);
--			scoped_guard(mutex, &opts->lock)
--				opts->net = net;
-+			ncm->is_connected = true;
- 		}
+ 	if (pegasus_blacklisted(dev))
+ 		return -ENODEV;
  
- 		spin_lock(&ncm->lock);
-@@ -1374,16 +1372,14 @@ static int ncm_unwrap_ntb(struct gether *port,
- static void ncm_disable(struct usb_function *f)
- {
- 	struct f_ncm		*ncm = func_to_ncm(f);
--	struct f_ncm_opts	*opts = func_to_ncm_opts(f);
- 	struct usb_composite_dev *cdev = f->config->cdev;
- 
- 	DBG(cdev, "ncm deactivated\n");
- 
--	scoped_guard(mutex, &opts->lock)
--		if (opts->net) {
--			opts->net = NULL;
--			gether_disconnect(&ncm->port);
--		}
-+	if (ncm->is_connected) {
-+		ncm->is_connected = false;
-+		gether_disconnect(&ncm->port);
++	/* Verify that all required endpoints are present */
++	if (!usb_check_bulk_endpoints(intf, bulk_ep_addr) ||
++	    !usb_check_int_endpoints(intf, int_ep_addr)) {
++		dev_err(&intf->dev, "Missing or invalid endpoints\n");
++		return -ENODEV;
 +	}
- 
- 	if (ncm->notify->enabled) {
- 		usb_ep_disable(ncm->notify);
-@@ -1687,7 +1683,6 @@ static struct usb_function_instance *ncm_alloc_inst(void)
- 	if (!opts)
- 		return ERR_PTR(-ENOMEM);
- 
--	opts->net = NULL;
- 	opts->ncm_os_desc.ext_compat_id = opts->ncm_ext_compat_id;
- 	gether_setup_opts_default(&opts->net_opts, "usb");
- 
-diff --git a/drivers/usb/gadget/function/u_ether_configfs.h b/drivers/usb/gadget/function/u_ether_configfs.h
-index 217990a266b2f6528d7bf8537a77214c538f681a..25d8fb05b598d68268cf849f260b435f9c52337c 100644
---- a/drivers/usb/gadget/function/u_ether_configfs.h
-+++ b/drivers/usb/gadget/function/u_ether_configfs.h
-@@ -327,18 +327,9 @@ out:									\
- 					      char *page)			\
- 	{									\
- 		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);		\
--		const char *name;						\
- 										\
- 		guard(mutex)(&opts->lock);					\
--		rtnl_lock();							\
--		if (opts->net_opts.ifname_set)					\
--			name = opts->net_opts.name;				\
--		else if (opts->net)						\
--			name = netdev_name(opts->net);				\
--		else								\
--			name = "(inactive net_device)";				\
--		rtnl_unlock();							\
--		return sysfs_emit(page, "%s\n", name);				\
-+		return sysfs_emit(page, "%s\n", opts->net_opts.name);		\
- 	}									\
- 										\
- 	static ssize_t _f_##_opts_ifname_store(struct config_item *item,	\
-diff --git a/drivers/usb/gadget/function/u_ncm.h b/drivers/usb/gadget/function/u_ncm.h
-index d99330fe31e880f636615774d212062952c31e43..6d75388557448e7acebf2401f8da48105f740e2f 100644
---- a/drivers/usb/gadget/function/u_ncm.h
-+++ b/drivers/usb/gadget/function/u_ncm.h
-@@ -19,7 +19,6 @@
- 
- struct f_ncm_opts {
- 	struct usb_function_instance	func_inst;
--	struct net_device		*net;
- 
- 	struct gether_opts		net_opts;
- 	struct config_group		*ncm_interf_group;
-
++
+ 	net = alloc_etherdev(sizeof(struct pegasus));
+ 	if (!net)
+ 		goto out;
 -- 
-2.53.0.345.g96ddfc5eaa-goog
+2.34.1
 
 
