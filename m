@@ -1,207 +1,154 @@
-Return-Path: <linux-usb+bounces-33573-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33574-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8O34Cr1unGmcGAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33573-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 16:14:05 +0100
+	id 4HQGBKxvnGmcGAQAu9opvQ
+	(envelope-from <linux-usb+bounces-33574-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 16:18:04 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C841D178959
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 16:14:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BCBD178A05
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 16:18:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C057D30ECBC8
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 15:09:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8E5C830965D5
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 15:14:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0468436604E;
-	Mon, 23 Feb 2026 15:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B191D366073;
+	Mon, 23 Feb 2026 15:14:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nyzD0+Ar"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lCAuJECM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5CD361DB2;
-	Mon, 23 Feb 2026 15:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC0B35CB9B
+	for <linux-usb@vger.kernel.org>; Mon, 23 Feb 2026 15:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771859397; cv=none; b=vAf4XU5jfKbp//9VxN7mMv1lJsApQYQgjASsu9XrJNqAhuvbyIaIRVgmkmv1fjeyYnfCsExQQAVBf+WQlwsn/UlZ7L1aiq1yaCqWLbK3qfxO5geKTm0iFzg7Cw8ZRTL7GUwiMPU6jaest+pPk6e2bgJm32yvtCSZTnkAM/X7rZY=
+	t=1771859643; cv=none; b=f5rn92hM3CEyL8SuSWXBXLPrKzmzPOwdMBgXwCbDfZ/Jg6nBDyDgSisjyswFKwSLTULxXWF1UQA7/X4YCnWShbNYhTz38Dw3L84YlPkfzSVNA3yC8UL7zdONUN/2hd/BEHM06xCgiiHOb4YwcwdsFUu4ag/0d+LXZOlxt9Nqn7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771859397; c=relaxed/simple;
-	bh=7jjEhk5eSkpUPZ2wUMVsvGO1xOkM1Vsxz54zPSGtqLA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OLpj2gSIK7JSHAHBthtpVJwOZyHjxIF/+K9z3WBkjpGBzMCQO21IbyAoFhaZskEXb4bYLHXC5v2XecgrPa+xHO6Wq6gWziEWbij8hdbTnI/wkVAqLeAD02/NI3LBWv36OpFE7KxljyO1A85242mlF0D4L1JER+mBA1oER05cBwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nyzD0+Ar; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771859396; x=1803395396;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7jjEhk5eSkpUPZ2wUMVsvGO1xOkM1Vsxz54zPSGtqLA=;
-  b=nyzD0+ArAYvJYi95kQ/xir7PV6VIFUmL7XrTsrtzvIZBFLhT+GoCyLyJ
-   PE1Q8kXX1RfOMQtTasTUv0TInbr0rZTsDvKbb35crMR+pw4H+w6DZn+0D
-   UpWvOip4l0DDOzqv6GcTVtmwFZLDOm66GdBgIOuc/md1SVO/eQsXH7BG0
-   3rJVsvsLeg9LE2cxKj1/6MituOsPrV5uhX19NNNEUT/pJQILEi75rKnRC
-   KZY845r+3DRpCN3lZ8nLI2UTIoKzWwKabDJ108Jm2mlQQ5OWAdHaTO2Z2
-   DZoXDzBIsUi+MWDrbvrzSrrYFXBTzdUYm0UtORtmULJalUUpldOBfXrws
-   Q==;
-X-CSE-ConnectionGUID: MqTbjWb7RWyKE83Md3lTkQ==
-X-CSE-MsgGUID: 8WVCb9zjSN2xBePDxSW+OQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11710"; a="73032330"
-X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="73032330"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 07:09:56 -0800
-X-CSE-ConnectionGUID: uB9UYbbKRgSgCT11C9d7eg==
-X-CSE-MsgGUID: azbh2O5fRO2hjXqgFYZIXA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="214816414"
-Received: from mdroper-mobl2.amr.corp.intel.com (HELO kuha) ([10.124.222.123])
-  by orviesa010.jf.intel.com with SMTP; 23 Feb 2026 07:09:52 -0800
-Received: by kuha (sSMTP sendmail emulation); Mon, 23 Feb 2026 17:09:17 +0200
-Date: Mon, 23 Feb 2026 17:09:17 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Yuanshen Cao <alex.caoys@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] usb: typec: tcpm: Add vid and chip info for Etek
- ET7304
-Message-ID: <aZxtncdzuUejRVF3@kuha>
-References: <20260220-et7304-v3-0-ede2d9634957@gmail.com>
- <20260220-et7304-v3-2-ede2d9634957@gmail.com>
+	s=arc-20240116; t=1771859643; c=relaxed/simple;
+	bh=VVXHRQLJVIkhPd2IDyY6/3ocuYzZkGuoft6mcPOs7Hs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=khX/cepFtHkxHUHT85n3GILscEveheHimg8BtYYmyC6xacltXRM0M3W8BA36azZwv7u7QQ456OGQgVYUxBZ3CeJXZHTv3i970yhc3IZxsiL2E5Re5XRSyL0DmWgFBhJZYfwBsNdWwW+UjplNYzqcQZgkHWCjwQ81+MehjcknLMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lCAuJECM; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48069a48629so45949505e9.0
+        for <linux-usb@vger.kernel.org>; Mon, 23 Feb 2026 07:14:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771859640; x=1772464440; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xnMSq+iMDiikJ8uyTdLbOxczxYu6EkENQJgj76vUHKo=;
+        b=lCAuJECMyvDgF3hi/2NR54EbkNlb+iiZplrNjpUvH0s2801EEeXeodEbB8tcj1rTa5
+         2uWs7aTBsTtvMUF083+WXWxmoXwch/dQms44zuW7hJN6bsUwE7JvmW3aViIdktIRuW6U
+         OWgNJP0EOG1q892gGnkKVBCsohg/AykxJQF/vnneDiS5qG2aA+O26q/wzDXSP9KT3V31
+         KPyCFPm9NZ3+mEotv0vt3SzL+rY8p3HU93Da9QzOnVHRGjir0VXwiRkwo6BE0YsWUOdv
+         XS7WbRNJBoic+yA0u88lMGZ6uERRdz8r7zU8LfnpKwGXUErO5WIeoJ7vr4uSBysoV5Pt
+         myuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771859640; x=1772464440;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=xnMSq+iMDiikJ8uyTdLbOxczxYu6EkENQJgj76vUHKo=;
+        b=I/Ww8qsNZLvq0cPU/IJ2YVKVTLInrb1BHp64cJB+UeLDnytVi2+mli9vyynrcIbE95
+         5pNVa4ib7chC+NcEb6AGQ1sp7NxewV+teT10ZS1sua6eN3iq5wg3eNZM2CPKpVzi6wId
+         ruVV9zshC5YaavkZIiwp0bKaoZ9nPnCo7nDMGl1u0StWxfjeDcVauh8+TdkSHQlQPCrQ
+         Xru0EjMqwuhWru8Akwon9/xrPOQZItK1qzSkgXEzmymZZBptf4sMUY6uJeHGbscwZ38H
+         LveUTGpKdLZYf7RwjQTjy3SuLvJ097Kqa9ytBuMl3jrg5Oo2xIp1V+M8CiVYHcSDviCE
+         eOEg==
+X-Forwarded-Encrypted: i=1; AJvYcCUKgMY7SNzVV3UKutoHMfjiPl09acLttH8rpCLJ6OIdzp85tEAuvTFUPTPBA87FUjkWjr7T9CJCV8s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYNSTIqgkSajczCoAFhOylmpyeHjWeKfGVcNNAR/QflTUHAwIG
+	6sYAG4AFkfND3uam2kK9McT/vLeEo7cYKzbTvDpbYi6XoJY5h7il3vB2
+X-Gm-Gg: AZuq6aJ2MPYn8lfqy+9DOMxkRwNCH6ZRvSOA+KEKeFfalUr6kOthLedPMgbaHTbVP2M
+	k2FAuEYqKZCYJ3PUqXnJroPkeud6d8FvW7jlEJjAuELEd2ZatAwNv0gh1ZEbxwCBx6fi2hEWZ8m
+	n8/quOn5jhkHS8KQvCMxiqrUPNgUWalwZpu7ZNYdR4A7GWxUsF+b/EuEYs+QeqE4h5q3pAE/TWP
+	IvMFlo7UmN4vkeM3FgtrSWYEtQqREtqsS6Rs7cmB5VA780drebb5j8wNzN/B6MSxgxjnXEDzjYr
+	hXrwXFxpNjJ/xRGVnCB+9ZcU4UtEwdZgXv1DH9mybpRwbV+Fl1GhX7We3Jk/nD3/NPhgIPuJ4t0
+	xobEKkgVkjye4QRlxHbmnxP9/bYB6yy5LF3zncVUdNM7JcwcJg0d1VaREmlNXvcKhLvfDuCXbrr
+	AsuXtDMVvdgrUBxsxy1plzJAshbap+Nwbh5mWa4zflKepg9Hzpy40BK04AxElBSsgG
+X-Received: by 2002:a05:600c:3484:b0:480:4b59:932e with SMTP id 5b1f17b1804b1-483a95b58b7mr147817495e9.11.1771859640137;
+        Mon, 23 Feb 2026 07:14:00 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a9caadedsm166131135e9.10.2026.02.23.07.13.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Feb 2026 07:13:59 -0800 (PST)
+Date: Mon, 23 Feb 2026 15:13:58 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Laurent Vivier <lvivier@redhat.com>
+Cc: Koen Vandeputte <koen.vandeputte@citymesh.com>, oneukum@suse.com,
+ andrew+netdev@lunn.ch, Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
+ pabeni@redhat.com, netdev <netdev@vger.kernel.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: commit 662dc80a5e86 breaks rmnet over usb
+Message-ID: <20260223151358.0efc263d@pumpkin>
+In-Reply-To: <95ccf5a6-975b-4543-80a3-595f1ee20543@redhat.com>
+References: <CAPh3n803k8JcBPV5qEzUB-oKzWkAs-D5CU7z=Vd_nLRCr5ZqQg@mail.gmail.com>
+	<95ccf5a6-975b-4543-80a3-595f1ee20543@redhat.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220-et7304-v3-2-ede2d9634957@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33573-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33574-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C841D178959
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[davidlaightlinux@gmail.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7BCBD178A05
 X-Rspamd-Action: no action
 
-Fri, Feb 20, 2026 at 06:22:41AM +0000, Yuanshen Cao wrote:
-> Move VID field to chip info to accommodate different VIDs.
-> Add chip info for Etek Micro ET7304. ET7304 is functionally
-> identical to the Richtek RT1715, with the only difference
-> being the VID.
-> 
-> Signed-off-by: Yuanshen Cao <alex.caoys@gmail.com>
+On Mon, 23 Feb 2026 15:08:41 +0100
+Laurent Vivier <lvivier@redhat.com> wrote:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
+...
+> It's weird to be able to set an MTU that is not supported by the hardware.
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> index 88c50b984e8a..37cf55ad74f8 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> @@ -19,9 +19,11 @@
->  #include <linux/regulator/consumer.h>
->  
->  #define RT1711H_VID		0x29CF
-> +#define ET7304_VID		0x6DCF
->  #define RT1711H_PID		0x1711
->  #define RT1711H_DID		0x2171
->  #define RT1715_DID		0x2173
-> +#define ET7304_DID		0x2173
->  
->  #define RT1711H_PHYCTRL1	0x80
->  #define RT1711H_PHYCTRL2	0x81
-> @@ -55,6 +57,7 @@
->  
->  struct rt1711h_chip_info {
->  	u32 rxdz_sel;
-> +	u16 vid;
->  	u16 did;
->  	bool enable_pd30_extended_message;
->  };
-> @@ -308,7 +311,7 @@ static int rt1711h_check_revision(struct i2c_client *i2c, struct rt1711h_chip *c
->  	ret = i2c_smbus_read_word_data(i2c, TCPC_VENDOR_ID);
->  	if (ret < 0)
->  		return ret;
-> -	if (ret != RT1711H_VID) {
-> +	if (ret != chip->info->vid) {
->  		dev_err(&i2c->dev, "vid is not correct, 0x%04x\n", ret);
->  		return -ENODEV;
->  	}
-> @@ -405,17 +408,27 @@ static void rt1711h_remove(struct i2c_client *client)
->  	tcpci_unregister_port(chip->tcpci);
->  }
->  
-> +static const struct rt1711h_chip_info et7304 = {
-> +	.rxdz_sel = RT1711H_BMCIO_RXDZSEL,
-> +	.vid = ET7304_VID,
-> +	.did = ET7304_DID,
-> +	.enable_pd30_extended_message = true,
-> +};
-> +
->  static const struct rt1711h_chip_info rt1711h = {
-> +	.vid = RT1711H_VID,
->  	.did = RT1711H_DID,
->  };
->  
->  static const struct rt1711h_chip_info rt1715 = {
->  	.rxdz_sel = RT1711H_BMCIO_RXDZSEL,
-> +	.vid = RT1711H_VID,
->  	.did = RT1715_DID,
->  	.enable_pd30_extended_message = true,
->  };
->  
->  static const struct i2c_device_id rt1711h_id[] = {
-> +	{ "et7304", (kernel_ulong_t)&et7304 },
->  	{ "rt1711h", (kernel_ulong_t)&rt1711h },
->  	{ "rt1715", (kernel_ulong_t)&rt1715 },
->  	{}
-> @@ -423,6 +436,7 @@ static const struct i2c_device_id rt1711h_id[] = {
->  MODULE_DEVICE_TABLE(i2c, rt1711h_id);
->  
->  static const struct of_device_id rt1711h_of_match[] = {
-> +	{ .compatible = "etekmicro,et7304", .data = &et7304 },
->  	{ .compatible = "richtek,rt1711h", .data = &rt1711h },
->  	{ .compatible = "richtek,rt1715", .data = &rt1715 },
->  	{}
-> 
-> -- 
-> 2.53.0
+> To restore performance I think the rx_usb_size should be decoupled from MTU max in qmi_wwan.
 
--- 
-heikki
+A lot of 'usbnet' drivers support usb packets that contain multiple ethernet frames.
+IIRC (I looked at this code quite a few years ago) some (all?) lie very badly
+about the skb 'true_size' of receive packets - putting in the frame size
+even though it is sat in 16kb+ of kernel memory.
+
+In reality the driver want to receive the 'stream' of usb packets and
+debatch it directly into ethernet frames without going though the 'urb'
+buffers at all.
+ISTR that would be possible with the xhci/usb3 hardware, but would be a
+massive re-write of parts of the stack.
+I was only trying (and I mean failing) to get 100M working reliably.
+Project got canned for other reasons.
+
+	David
 
