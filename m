@@ -1,177 +1,152 @@
-Return-Path: <linux-usb+bounces-33558-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33559-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IFf6H2dOnGktDwQAu9opvQ
-	(envelope-from <linux-usb+bounces-33558-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 13:56:07 +0100
+	id 2A5oEC5PnGktDwQAu9opvQ
+	(envelope-from <linux-usb+bounces-33559-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 13:59:26 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0DDE17679C
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 13:56:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97EBD1767EC
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 13:59:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BF25430347BC
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 12:56:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 69774301B922
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 12:59:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C4E36656C;
-	Mon, 23 Feb 2026 12:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25EFB366809;
+	Mon, 23 Feb 2026 12:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MPDy00UQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="t3SQS1/P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234A9366050
-	for <linux-usb@vger.kernel.org>; Mon, 23 Feb 2026 12:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF753644D3;
+	Mon, 23 Feb 2026 12:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771851364; cv=none; b=vDUGi9Bfh5UXMCB0IcmEc8cuCAS5hdxxFchFjzr+mH9I/XQ5M1RC+96zJ1soXhS3Z58tTxUqzY/QXz/yQHHDu194xEMNzPGlDcG5q65Q94P0fMIJZ5dTDLfHnGUFDC0agHuGz9lyjKJbHyJ5XaxjxCRjDDCD2FB3OYzU34DHAjc=
+	t=1771851552; cv=none; b=M4vvh2gL07hXu+XhVWkTBwVQHSD/7N/w9M4FczTZif7AsvCkWBm2T/uoZtNHA+ES33qC1+Zm1YB+AQh2XzOVaoXlbRN5KVFclkCNtUAs5ade1eFqMhlxaQteG0UJu9uEO5Dgg2cxVGapgNI87R6Pf1jbb++6yeQ4sHvlUGo0qXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771851364; c=relaxed/simple;
-	bh=Xl/HdZ0Xz7pnVC0/2kX9AhiqVRoMrSVXH9WW0P3Rnzg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FezUHQAE/vKevVnWKKbRmCbXunWT3c1157wasUlEoQXJ4xOzZ59ct/EdPaVIGkJleNXyHBbWtrfi3HAp4vBL8YvgqUeTQkxR1G9LfiWVTq9qa5AxJivhM9wg9nWBf4zmkqytNIk3cdODUTFihOQRCBwqMTY1CEnKfR6MDBu0G3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MPDy00UQ; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4834826e5a0so53535705e9.2
-        for <linux-usb@vger.kernel.org>; Mon, 23 Feb 2026 04:56:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1771851361; x=1772456161; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9Akf89EDkdJqcKB70GP7i70JWOZbBgZZx2ziMdQHjMY=;
-        b=MPDy00UQz951Con8mK7H+qJWCnThliNXoKVEKwVkD38HBKOkWI5oojR2byMdvRHdJn
-         64Rw1Yzqxmw2n02+msNbWxC4vDdkFS64MpeMXidu+LLuATD38Y4ZwfIs+8F/BesOwlAI
-         RDhFrHIZa5fj7ksPF8okrGrwsgYATNmmsZwcpIQ8tfV9IRN4zn5TQ8q3HIVdrXl5eSsj
-         rrAmh68oG6M3m0o6FzZNHDPJ+5bKCcS6LkSvu5SluE1i6OZStWKolbd/BOmOsUkBTlAu
-         Y4R51kgr9qeJAHgy/zAEBrV1T8Ra1qfZQCi0bhlaE1JLDQLnU6TIrtEXQ00KXfEsO9+/
-         sSIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771851361; x=1772456161;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9Akf89EDkdJqcKB70GP7i70JWOZbBgZZx2ziMdQHjMY=;
-        b=abkAHM1ON8cZT8u1jPUNdQc05cQrcwjzXIbwp+N40V3QaVUZE+yZ8hhOD+eFiad5cb
-         VOBJIuD2Tsg4x1+J9KSZ4Y7lxgpHczE3vXNzqPFa7ihHclw/I0CJ8th3MIvjfsD9yjOZ
-         bFxZNM4ADnxutKoew24e3l/HbgpHLu5n/5U5WoZ7D36/7ke0rH7rEqKzdmUEgn2JpgAj
-         qYquk9g4UrkZxd/Iy1IlNJTZOOKBa+zn0igqkCG2ToKxSKwCsCgeiJcmfN8bHkKm2xV3
-         H/UKGZabIdnHT4X7ZEr5+CKuU4ehBf+lUD/26hIcQ+uuGb9KfA7MMVZeFSEi3b1HMRWm
-         Kqvw==
-X-Gm-Message-State: AOJu0YywcEmFFWCiKKLszzbtniyyMVHQTht4Fwiurnlgn4udwO4zov35
-	sP402sJH0LbZlx2WAKp5WKiZxB5pBHJ1wGHdB9Pb58bwjBDzul1WjFCdfAuZx0LTL5QCqmd1vIi
-	Q153Z
-X-Gm-Gg: AZuq6aKTrg4QByU73Zlpq/L43uVMCTH2bfdq3lVq4WfIpj6RMsoIOuGERFtBSz5aX9X
-	XJc0qv8lvjIHyDHj79Ralwghoii4Bx/DTB2OukN4Ld2BfWQ7zeYkDutTevVoxvVMM9uVLTJE5O9
-	aWLqoKsUxdW+GR+jqiypMgauLbg5C9giPbNOq7/mxoddwt5CSuEXXqTom6o2DtQuAZyodXmFbGL
-	egHN5aGQy6l+ZQPApPFWgLOoF7YtdexCcb9LnDaeg6jTBlzBzzqdJlQRwCxZEz2s234YjP3mBeG
-	ZVA18B5AeXMHPfTfEkGEOL8ulEgCUz9EFe/yLMIQKvj9iHwgXWibNMo5Ce6eexR8xBHG0X90oJ6
-	sEeRrFOtEalhQ8Hs+dyR2syPim6sM4fHcZuVfBIdsU4Z11E14XQeqSbJVMG7ZDi92kX3gG8FAPg
-	kI75Ap011oxGJsasyPYh5MDVi5s5hqChjDY80NVZHQfUA116K6FLleku/bWlXY7xK+fpz1uGq/f
-	uaWpg==
-X-Received: by 2002:a05:600c:3e8d:b0:46e:761b:e7ff with SMTP id 5b1f17b1804b1-483a95f5a48mr131674475e9.28.1771851361497;
-        Mon, 23 Feb 2026 04:56:01 -0800 (PST)
-Received: from ?IPV6:2001:a61:13fe:e401:a6d6:a7a0:a277:a99e? ([2001:a61:13fe:e401:a6d6:a7a0:a277:a99e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31f0370sm461207825e9.11.2026.02.23.04.56.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Feb 2026 04:56:01 -0800 (PST)
-Message-ID: <1ff10cd4-d3bb-4c9e-9164-056b04b55473@suse.com>
-Date: Mon, 23 Feb 2026 13:55:55 +0100
+	s=arc-20240116; t=1771851552; c=relaxed/simple;
+	bh=Par3+OJsZbAIJien6Jci74rK3rk6O9eJHfJ9GFnuujs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XY0YItJ08c8sJLLXwBM/zHekrbd9OuXvAENS2G83+xpUZitd5Rjtk2Usl0GySKDej2aAB+8mjO1dNQs94/3wCQ6wwi4AmcY1cyenzBx9+6JhYySoIB8CWE8Vktwc5C6K2PnAHqUWjMkVdQaOZQ/aRtnkKBuzjsYO6IDKoV4M2NI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=t3SQS1/P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C63C116D0;
+	Mon, 23 Feb 2026 12:59:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1771851552;
+	bh=Par3+OJsZbAIJien6Jci74rK3rk6O9eJHfJ9GFnuujs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=t3SQS1/PeorMhVTyDNdC7MKXQ1qsupnKz0nFIVbkDiZ0d7PO5i7L/PNM7GygyNdpP
+	 jJA/OtZ/H00YOM/VOMfFrcX6IsB3tPAbX8+w9vAdRMZweIMDT2cT2VvyU3/FhcOnHf
+	 rkT+ZIMQ8rFf7NBgSa3HDucTpBQzf/i5bKAp2pC4=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: netdev@vger.kernel.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Petko Manolov <petkan@nucleusys.com>,
+	stable <stable@kernel.org>
+Subject: [PATCH net] net: usb: pegasus: validate USB endpoints
+Date: Mon, 23 Feb 2026 13:58:48 +0100
+Message-ID: <2026022347-legibly-attest-cc5c@gregkh>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: misc: uss720: properly clean up reference in
- uss720_probe()
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Oliver Neukum <oneukum@suse.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable <stable@kernel.org>
-References: <2026022327-exhaust-constrain-e21d@gregkh>
- <04778e0c-e15c-4acd-ade2-5cb8dc4319b1@suse.com>
- <2026022316-strobe-zombie-335f@gregkh>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <2026022316-strobe-zombie-335f@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Lines: 55
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1727; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=Par3+OJsZbAIJien6Jci74rK3rk6O9eJHfJ9GFnuujs=; b=owGbwMvMwCRo6H6F97bub03G02pJDJlz/NnbD33OaP+22aLmT+XP6pRdvpEntC+Hrn6xekv1z 2SxnyWRHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRjakMC3rZwnOP/ZZ8ulFj /ryzIkK8uYVHpBgWdFUmCL2UOPsgpbp55r0kmTmzfn+7DAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [2.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33558-lists,linux-usb=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33559-lists,linux-usb=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.com:mid,suse.com:dkim]
-X-Rspamd-Queue-Id: F0DDE17679C
+	TAGGED_RCPT(0.00)[linux-usb];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nucleusys.com:email,linuxfoundation.org:email,linuxfoundation.org:dkim]
+X-Rspamd-Queue-Id: 97EBD1767EC
 X-Rspamd-Action: no action
 
-On 23.02.26 13:14, Greg Kroah-Hartman wrote:
-  
-> It's tricky stuff like this which makes me can't wait for rust to be
-> possible for USB drivers, someday...
+The pegasus driver should validate that the device it is probing has the
+proper number and types of USB endpoints it is expecting before it binds
+to it.  If a malicious device were to not have the same urbs the driver
+will crash later on when it blindly accesses these endpoints.
 
-Well, as you wish to touch upon that topic ...
+Cc: Petko Manolov <petkan@nucleusys.com>
+Cc: stable <stable@kernel.org>
+Assisted-by: gkh_clanker_2000
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/net/usb/pegasus.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-I am afraid this is not a problem of language. Rust
-solves the issue of object life time. Unfortunately
-that is useless in this case. I know we all wish
-to solve the issue, but let me explain.
-
-Now, before you either start despairing or get angry, we
-need to look at concepts. It seems to my you're looking at
-the problem in terms of life time and basically
-something that can be solved by reference counting
-respectively life time rules.
-That is unfortunately not true. Our problem with USB
-drivers is a question of binding. probe() does not mean
-that a device has been plugged in, nor does disconnect()
-mean that a device has gone away. It means that the binding
-between an interface and a driver is requested respectively
-goes away. Hotplug is merely the most common cause of
-these requests.
-
-Nevertheless you have to cease using the interface as
-disconnect() is called. References cannot change that.
-There are two reasons for that
-
-a) there is no object representing the binding. It is technically
-a pointer not a data structure. There is nothing to refcount
-and no object whose lifetime you can specify. There is a variable
-that is changing
-b) there is a state transition, not a life time question.
-There is an event that changes the state of a binding if you
-will.
-
-Sorry you don't like this, but this is a design issue, not
-a language issue.
-
-	Regards
-		Oliver
+diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+index 4f539b5d509a..94c17fed0bd4 100644
+--- a/drivers/net/usb/pegasus.c
++++ b/drivers/net/usb/pegasus.c
+@@ -801,8 +801,19 @@ static void unlink_all_urbs(pegasus_t *pegasus)
+ 
+ static int alloc_urbs(pegasus_t *pegasus)
+ {
++	static const u8 bulk_ep_addr[] = {
++		1 | USB_DIR_IN,
++		2 | USB_DIR_OUT,
++		0};
++	static const u8 int_ep_addr[] = {
++		3 | USB_DIR_IN,
++		0};
+ 	int res = -ENOMEM;
+ 
++	if (!usb_check_bulk_endpoints(pegasus->intf, bulk_ep_addr) ||
++	    !usb_check_int_endpoints(pegasus->intf, int_ep_addr))
++		return -ENODEV;
++
+ 	pegasus->rx_urb = usb_alloc_urb(0, GFP_KERNEL);
+ 	if (!pegasus->rx_urb) {
+ 		return res;
+@@ -1143,6 +1154,7 @@ static int pegasus_probe(struct usb_interface *intf,
+ 
+ 	pegasus = netdev_priv(net);
+ 	pegasus->dev_index = dev_index;
++	pegasus->intf = intf;
+ 
+ 	res = alloc_urbs(pegasus);
+ 	if (res < 0) {
+@@ -1154,7 +1166,6 @@ static int pegasus_probe(struct usb_interface *intf,
+ 
+ 	INIT_DELAYED_WORK(&pegasus->carrier_check, check_carrier);
+ 
+-	pegasus->intf = intf;
+ 	pegasus->usb = dev;
+ 	pegasus->net = net;
+ 
+-- 
+2.53.0
 
 
