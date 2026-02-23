@@ -1,129 +1,265 @@
-Return-Path: <linux-usb+bounces-33583-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33584-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cPhZH4OPnGnRJQQAu9opvQ
-	(envelope-from <linux-usb+bounces-33583-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 18:33:55 +0100
+	id oC4rM7qQnGnRJQQAu9opvQ
+	(envelope-from <linux-usb+bounces-33584-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 18:39:06 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95B0017AE07
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 18:33:54 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7504B17AEE1
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 18:39:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 301AB3006D4F
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 17:30:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A324530065DA
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 17:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D263926FA77;
-	Mon, 23 Feb 2026 17:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68860335070;
+	Mon, 23 Feb 2026 17:38:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sSn0GqUR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NvMPcrsr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6CB2BE7DD;
-	Mon, 23 Feb 2026 17:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4553328ED;
+	Mon, 23 Feb 2026 17:38:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771867826; cv=none; b=bWPEm2K2EO3DtjV1I1BqdQkrLYgwcxO9X+xZqhUsvwBEV4Jj5DpPVsHGXaaXJ1+quSwkw3jjbQ3dHPSt3Gt1ZuXZZUZUyVi8JIqtzCgi0SC2lz5BAnrfBNufy04YQAwILP864FteB2yUnNdVcJ+bsQLLlQoqve/Wora4z5chq/o=
+	t=1771868336; cv=none; b=S0TDDsvzZx6kNRvbVQgbRkKM8whhRbD1pOF1b8Qh5ncKju18ZJ1Hbz9RP1NOs8xq/4FSDTMxBza9tuPy2PsrFsjUP0OGDCBVC8QmRHJamUDbiq4ImrTmyQTQgGChdBN6PvUreolfdM3m83/vBxR7LVSjmBMoheYxCv95brtT2aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771867826; c=relaxed/simple;
-	bh=ZIp+kH88X+B0codjMbbTpuBKbLjpavW3xKLfbpEfNXc=;
+	s=arc-20240116; t=1771868336; c=relaxed/simple;
+	bh=OFs+F2i4fpeRmsTH7tUJ5hO0npgCDxBo25FPhTX/hFs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AuMt0giO/iAffMFPmN63TUgmN6ssWQZ/nV3xAhf6uDOPPQBLxnDZoXRxRF5Y7/EpMu5FiOrU6v2RH8VZjI9yJJIHfSImh9PmrnwEOt79zxmOqlMeqkKIVUK6bIEYuF+PMNlgkdNpViT3/52csWYnRzKbf6V4A9Fd9R9YC5V9VLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sSn0GqUR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3DAC116C6;
-	Mon, 23 Feb 2026 17:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771867825;
-	bh=ZIp+kH88X+B0codjMbbTpuBKbLjpavW3xKLfbpEfNXc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sSn0GqUR7vhTU5DIVNM7kuo2FSwuPUWI3LczA7UndLmCS+Aqc7cnuOaSyYYwA31rP
-	 jJanQofNa540NlippSBZehdVE+iNA51eYptB0TlNcwGtWS4oj7w1CQGV1h7e+tfw9X
-	 RuABMKZ6KEfIs4coZx53S4769hgox53TC5fDVjdc4ZE1ONYvzKlxSpznW0qIKLNN3b
-	 bzqbb5angnT+xmBP80pH6nb106cXoSdSQ4k34NpM520/3j60RCQW1yFQQd7p5/Y7aD
-	 7B8OP38qt/dglCLbKYObYgXOufBKAPbUzev04g3uYVoTDz/jO08mFs5AxrgWr8sSj/
-	 ZXjO8gxOObCgg==
-Date: Mon, 23 Feb 2026 11:30:24 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: linux-kernel@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>, linux@ew.tq-group.com,
-	Pawel Laszczak <pawell@cadence.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	linux-usb@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=FE0pNcsIdieHenKdz4s0nolqaxsrB3RIVp71Iabx+AgxS75Z5+p/sIj9saDfKA97vI9w7LRFRfYShrGoDlpMBS2btFk5miAzjNNuM0oxvFeZjOXtPCxARM2sACeTlCqWH0jJIlKbNeP5II3760TLhyAk6qLk8VEY7qaBCBoSV4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NvMPcrsr; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771868335; x=1803404335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=OFs+F2i4fpeRmsTH7tUJ5hO0npgCDxBo25FPhTX/hFs=;
+  b=NvMPcrsrscxq4yCJYNHBwma5dXpYiaLlpl5YaiHU4AbKmW1dss4zVpgH
+   eKc6wHV4HSpKqyOZ8UlLVlghXkur2gCHm4j/0tVPiKMiMs8WIyTYBU/2a
+   6yowW4cOU55qzj4P1UFjG06x85lKFyOgcBuajicG0+hQ7xUZWW5IVie0T
+   CzejcQppfEPzmSpHn0vPl0BWBUbMvv0s0ke5e+Qjssqu807Hmk7eyaE7j
+   rAcT4p6XKH7FNn0xujYAvGZ00DAcOtrZCn+DLE46UjHdqz7MQNGpBv4ef
+   eZ4zNkJ8cO1QoE+PCo+ORxkR4NcdogZJ2/EBVMiLNS/FtyyTrgvpBtjZv
+   g==;
+X-CSE-ConnectionGUID: jsfaBeNbRdOcjkAScBt/AA==
+X-CSE-MsgGUID: qC3ahawxSriUb3w5OK63yQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11710"; a="73050398"
+X-IronPort-AV: E=Sophos;i="6.21,307,1763452800"; 
+   d="scan'208";a="73050398"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 09:38:54 -0800
+X-CSE-ConnectionGUID: i7eZdD4uRr+gNr/ct2htpA==
+X-CSE-MsgGUID: B0cv0ytAS2ClRPRHaDlf4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,307,1763452800"; 
+   d="scan'208";a="214708424"
+Received: from abityuts-desk.ger.corp.intel.com (HELO localhost) ([10.245.245.222])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 09:38:36 -0800
+Date: Mon, 23 Feb 2026 19:38:33 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Shawn Lin <shawn.lin@rock-chips.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	"Vaibhaav Ram T . L" <vaibhaavram.tl@microchip.com>,
+	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+	Even Xu <even.xu@intel.com>, Xinpeng Sun <xinpeng.sun@intel.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Zhou Wang <wangzhou1@hisilicon.com>,
+	Longfang Liu <liulongfang@huawei.com>,
+	Vinod Koul <vkoul@kernel.org>, Lee Jones <lee@kernel.org>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Jian Shen <shenjian15@huawei.com>,
+	Sunil Goutham <sgoutham@marvell.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jeff Hugo <jeff.hugo@oss.qualcomm.com>,
+	Oded Gabbay <ogabbay@kernel.org>,
+	Maciej Falkowski <maciej.falkowski@linux.intel.com>,
+	Karol Wachowski <karol.wachowski@linux.intel.com>,
+	Min Ma <mamin506@gmail.com>, Lizhi Hou <lizhi.hou@amd.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Tomasz Jeznach <tjeznach@rivosinc.com>,
+	Will Deacon <will@kernel.org>,
+	Xinliang Liu <xinliang.liu@linaro.org>,
+	Tian Tao <tiantao6@hisilicon.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Srujana Challa <schalla@marvell.com>,
+	Bharat Bhushan <bbhushan2@marvell.com>,
+	Antoine Tenart <atenart@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Raag Jadav <raag.jadav@intel.com>, Hans de Goede <hansg@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Roger Quadros <rogerq@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	linux-renesas-soc@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
-	Peter Chen <peter.chen@kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH v2 1/5] dt-bindings: usb: cdns,usb3: support USB devices
- in DT
-Message-ID: <177186782426.4146809.2746797277313553789.robh@kernel.org>
-References: <20260211123436.1077513-1-alexander.stein@ew.tq-group.com>
- <20260211123436.1077513-2-alexander.stein@ew.tq-group.com>
+	Jiri Slaby <jirislaby@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Robert Richter <rric@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Nirmal Patel <nirmal.patel@linux.intel.com>,
+	Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+	Logan Gunthorpe <logang@deltatee.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, linux-i3c@lists.infradead.org,
+	dmaengine@vger.kernel.org, Philipp Stanner <phasta@kernel.org>,
+	netdev@vger.kernel.org, nic_swsd@realtek.com,
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-usb@vger.kernel.org, iommu@lists.linux.dev,
+	linux-riscv@lists.infradead.org, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, linux-cxl@vger.kernel.org,
+	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	linux-serial@vger.kernel.org, mhi@lists.linux.dev,
+	Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	linux-spi@vger.kernel.org,
+	Jonathan Derrick <jonathan.derrick@linux.dev>,
+	linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: Re: [PATCH 0/37] PCI/MSI: Enforce explicit IRQ vector management by
+ removing devres auto-free
+Message-ID: <aZyQmc7nOt87jitX@smile.fi.intel.com>
+References: <1771860581-82092-1-git-send-email-shawn.lin@rock-chips.com>
+ <CAHp75VeWD5A0r7-Uayyte1ZXXxdhLixd+z_y0xNeki0N+Ro=jQ@mail.gmail.com>
+ <cb878741-7b61-b72c-5a72-6ed6d5091b1f@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260211123436.1077513-2-alexander.stein@ew.tq-group.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cb878741-7b61-b72c-5a72-6ed6d5091b1f@rock-chips.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[24];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,baylibre.com,ew.tq-group.com,cadence.com,pengutronix.de,kernel.org,gmail.com,lists.infradead.org,linuxfoundation.org,glider.be,denx.de,lists.linux.dev];
-	TAGGED_FROM(0.00)[bounces-33583-lists,linux-usb=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[gmail.com,google.com,microchip.com,intel.com,linux.intel.com,kernel.org,bootlin.com,hisilicon.com,huawei.com,marvell.com,lunn.ch,davemloft.net,oss.qualcomm.com,amd.com,rivosinc.com,linaro.org,stgolabs.net,gondor.apana.org.au,linuxfoundation.org,microsemi.com,deltatee.com,arndb.de,vger.kernel.org,lists.infradead.org,realtek.com,lists.freedesktop.org,lists.linux.dev,ffwll.ch,semihalf.com,zonque.org,linux.dev];
+	TAGGED_FROM(0.00)[bounces-33584-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-usb@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-usb,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 95B0017AE07
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[87];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-usb,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[smile.fi.intel.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:dkim]
+X-Rspamd-Queue-Id: 7504B17AEE1
 X-Rspamd-Action: no action
 
+On Tue, Feb 24, 2026 at 12:09:37AM +0800, Shawn Lin wrote:
+> 在 2026/02/23 星期一 23:50, Andy Shevchenko 写道:
+> > On Mon, Feb 23, 2026 at 5:32 PM Shawn Lin <shawn.lin@rock-chips.com> wrote:
+> > > 
+> > > This patch series addresses a long-standing design issue in the PCI/MSI
+> > > subsystem where the implicit, automatic management of IRQ vectors by
+> > > the devres framework conflicts with explicit driver cleanup, creating
+> > > ambiguity and potential resource management bugs.
+> > > 
+> > > ==== The Problem: Implicit vs. Explicit Management ====
+> > > Historically, `pcim_enable_device()` not only manages standard PCI resources
+> > > (BARs) via devres but also implicitly triggers automatic IRQ vector management
+> > > by setting a flag that registers `pcim_msi_release()` as a cleanup action.
+> > > 
+> > > This creates an ambiguous ownership model. Many drivers follow a pattern of:
+> > > 1. Calling `pci_alloc_irq_vectors()` to allocate interrupts.
+> > > 2. Also calling `pci_free_irq_vectors()` in their error paths or remove routines.
+> > > 
+> > > When such a driver also uses `pcim_enable_device()`, the devres framework may
+> > > attempt to free the IRQ vectors a second time upon device release, leading to
+> > > a double-free. Analysis of the tree shows this hazardous pattern exists widely,
+> > > while 35 other drivers correctly rely solely on the implicit cleanup.
+> > 
+> > Is this confirmed? What I read from the cover letter, this series was
+> > only compile-tested, so how can you prove the problem exists in the
+> > first place?
+> 
+> Yes, it's confirmed. My debug of a double free issue of a out-of-tree
+> PCIe wifi driver which uses
+> pcim_enable_device + pci_alloc_irq_vectors + pci_free_irq_vectors expose
+> it. And we did have a TODO to cleanup this hybrid usage, targeted in
+> this cycle[1] suggested by Philipp:
 
-On Wed, 11 Feb 2026 13:34:28 +0100, Alexander Stein wrote:
-> Reference usb-hxci.yaml in host mode in order to support on-board USB
-> hubs.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
-> Changes in v2:
-> * reference usb-xhci.yaml# directly (suggested by Rob)
-> 
->  Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Okay, fair enough. I think this bit was missing in the cover letter.
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/log/?h=msi
+
+> > > ==== The Solution: Making Management Explicit ====
+> > > This series enforces a clear, predictable model:
+> > > 1.  New Managed API (Patch 1/37): Introduces pcim_alloc_irq_vectors() and
+> > >      pcim_alloc_irq_vectors_affinity(). Drivers that desire devres-managed IRQ
+> > >      vectors should use these functions, which set the is_msi_managed flag and
+> > >      ensure automatic cleanup.
+> > > 2.  Patches 2 through 36 convert each driver that uses pcim_enable_device() alongside
+> > >      pci_alloc_irq_vectors() and relies on devres for IRQ vector cleanup to instead
+> > >      make an explicit call to pcim_alloc_irq_vectors().
+> > > 3.  Core Change (Patch 37/37): With the former cleanup, now modifies pcim_setup_msi_release()
+> > >      to check only the is_msi_managed flag. This decouples automatic IRQ cleanup from
+> > >      pcim_enable_device(). IRQ vectors allocated via pci_alloc_irq_vectors*()
+> > >      are now solely the driver's responsibility to free with pci_free_irq_vectors().
+> > > 
+> > > With these changes, we clear ownership model: Explicit resource management eliminates
+> > > ambiguity and follows the "principle of least surprise." New drivers choose one model and
+> > > be consistent.
+> > > - Use `pci_alloc_irq_vectors()` + `pci_free_irq_vectors()` for explicit control.
+> > > - Use `pcim_alloc_irq_vectors()` for devres-managed, automatic cleanup.
+> > 
+> > Have you checked previous attempts? Why is your series better than those?
+> 
+> There seems not previous attempts.
+
+Maybe we are looking to the different projects...
+
+https://lore.kernel.org/all/?q=pcim_alloc_irq_vectors
+
+> > > ==== Testing And Review ====
+> > > 1. This series is only compiled test with allmodconfig.
+> > > 2. Given the substantial size of this patch series, I have structured the mailing
+> > >     to facilitate efficient review. The cover letter, the first patch and the last one will be sent
+> > >     to all relevant mailing lists and key maintainers to ensure broad visibility and
+> > >     initial feedback on the overall approach. The remaining subsystem-specific patches
+> > >     will be sent only to the respective subsystem maintainers and their associated
+> > >     mailing lists, reducing noise.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
