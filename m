@@ -1,127 +1,151 @@
-Return-Path: <linux-usb+bounces-33592-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33593-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ODJbMDiwnGmYJwQAu9opvQ
-	(envelope-from <linux-usb+bounces-33592-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 20:53:28 +0100
+	id OEcDCvCwnGmxJwQAu9opvQ
+	(envelope-from <linux-usb+bounces-33593-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 20:56:32 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E6F717C8D3
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 20:53:28 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 946B917C951
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 20:56:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 30A323154BB9
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 19:50:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CF0453041D75
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 19:56:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D80374738;
-	Mon, 23 Feb 2026 19:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED621376472;
+	Mon, 23 Feb 2026 19:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rvvc3fNm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C7mg8C26"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1CD374721;
-	Mon, 23 Feb 2026 19:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7514B165F16;
+	Mon, 23 Feb 2026 19:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771876246; cv=none; b=BcG96xSLh8eUWDPj4wMM7DwxbexFk50IKlu1FFSoxMq2nNIQ/SY0cgerI6UN1ZyNHhiaEdgsQxXcdEK750VcDHtVQWytgQqEji5yDPOHrctfU0VxirQvHWEn6BK61E7/NhEIXSJRSpzN0OHyU9PtK+ZnXpstii0gWUF2YGvc4hE=
+	t=1771876584; cv=none; b=CvfIZf5rmxfefk0sT5wTaulyf6XpMi2252K285B65RYLo8/Xxq0I+1Xw7GX0S52m8eL5Uu3AxACpobFSLktaUgQOfTJfAdfzXkW86WFO/Ic3d6QIM45t6QAIbm5PGF8Mjhaz6y8MkKeNNo9nJwE7+jCh+BR/MXWhaUx+mtKyIW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771876246; c=relaxed/simple;
-	bh=CuBM+Mhu0Z/wsRogwMIllQkoDc2++Sk/4R1h1ppYRm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dMVNYik1chgXhIdnV5qCzO5y6e8mOVCpmK18xqxvi+5mtnHVhKG2BOtBJaHg09WTR7csNimY6EHDuOmUX8Rj+4C9QEwST9bpfy0Hx9BGQtDlo6GPrupdBH6KtCA+G7dBusN8hNqyJACEgujQzN04KYaQLIsz4Nu6ZEn5NJxfy38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rvvc3fNm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 364A2C116C6;
-	Mon, 23 Feb 2026 19:50:44 +0000 (UTC)
+	s=arc-20240116; t=1771876584; c=relaxed/simple;
+	bh=fUdTKyGY0sCgBkhNIkCLCe+hZ2qWhwjcWgdiva+w5eQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AOkA/ZPhv6X/0vk8a6wU34MUGNTMZOXlZKOWiv5yZe2FPouzAYiLxLPXQKqqNjpGKfAQgmerImujx0Ox65bx3DXKWQiaf+1BfTPBxYUwcmphrM6YZpwj8Y/dsuFqF4GoihXkaT33YiJ9AmwC85gFfrPvglDvKtFXCQ7aV4DLy5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C7mg8C26; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D615EC116D0;
+	Mon, 23 Feb 2026 19:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771876246;
-	bh=CuBM+Mhu0Z/wsRogwMIllQkoDc2++Sk/4R1h1ppYRm0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Rvvc3fNmjhRR+UfgZXnbAt7sdO3fWM4ODCNzyaUJkO5vN7hWLMWjSgVI80QhgtfNK
-	 mTvc3maskMTVRUlZ4u2INM4MXgoX1SdN6JcGlFII1dR5rECSM/72/JNHJpEQgYKv9j
-	 d2kWxRFg18orA6Oe6JXulvJsX0S+MVHXhV1b0jXMh4ORFL91YsyUjJ/v3G4xaehHpi
-	 eHXU4orHwXme4O/xcbz3coj3tUWpMFg875iFViXwGtOqPsM11JF754c2Q/36MXOpXU
-	 q8ZQA6mCIMgmVYuhQtFoBTZVkwWX/+yKLfhFUAMqxiJVs+DdEBrlly+HUuOjG88QK3
-	 xrDNxX5sMN2xw==
-Date: Mon, 23 Feb 2026 19:50:41 +0000
-From: Simon Horman <horms@kernel.org>
-To: Ziyi Guo <n7l8m4@u.northwestern.edu>
-Cc: Petko Manolov <petkan@nucleusys.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: usb: pegasus: enable basic endpoint checking
-Message-ID: <aZyvkd_k47RuraeS@horms.kernel.org>
-References: <20260222050633.410165-1-n7l8m4@u.northwestern.edu>
+	s=k20201202; t=1771876584;
+	bh=fUdTKyGY0sCgBkhNIkCLCe+hZ2qWhwjcWgdiva+w5eQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=C7mg8C26QqGX9PJTYG7QFHrx7ajIu10k4NsgNNxPIzJuj/BqKkABUGSDWsu3F32CL
+	 Xu24wOlsZOccm61v1igfTiUZYDsAx+1lRzFe+MlqMI/Sb0EdUPF4WPfL50h9OP5qWj
+	 nkCuqmUy/kFzT6Mvydsdi6DtVQ8Y+crHzn+Bnv8bSwziwq3Ykxi0Uq2DTqWIN6ttmO
+	 YaPR12hNzhZS+e82qQJPNck3ABEDqISGhx6ohgMHlIBLU/S9cNrEUFWkIlLUzPXhRO
+	 86iyUa4rogkyvteFdOwCfO0maNqnd/SVQ7V/4IBBYWvSFm3MBfNvQF6OK3UIMV+dT+
+	 Woj5Ltdwwvh2g==
+From: Bjorn Andersson <andersson@kernel.org>
+To: konradybcio@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	sre@kernel.org,
+	heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: (subset) [PATCH v5 0/5] soc: qcom: pmic_glink: Add support for battery management running on SOCCP
+Date: Mon, 23 Feb 2026 13:56:06 -0600
+Message-ID: <177187657318.166046.16981095492238346823.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260209204915.1983997-1-anjelique.melendez@oss.qualcomm.com>
+References: <20260209204915.1983997-1-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260222050633.410165-1-n7l8m4@u.northwestern.edu>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33592-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33593-lists,linux-usb=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[horms@kernel.org,linux-usb@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,netdev];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_NEQ_ENVFROM(0.00)[andersson@kernel.org,linux-usb@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,horms.kernel.org:mid,northwestern.edu:email]
-X-Rspamd-Queue-Id: 6E6F717C8D3
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 946B917C951
 X-Rspamd-Action: no action
 
-On Sun, Feb 22, 2026 at 05:06:33AM +0000, Ziyi Guo wrote:
-> pegasus_probe() fills URBs with hardcoded endpoint pipes without
-> verifying the endpoint descriptors:
-> 
->   - usb_rcvbulkpipe(dev, 1) for RX data
->   - usb_sndbulkpipe(dev, 2) for TX data
->   - usb_rcvintpipe(dev, 3)  for status interrupts
-> 
-> A malformed USB device can present these endpoints with transfer types
-> that differ from what the driver assumes.
-> 
-> Add a pegasus_usb_ep enum for endpoint numbers, replacing magic
-> constants throughout. Add usb_check_bulk_endpoints() and
-> usb_check_int_endpoints() calls before any resource allocation to
-> verify endpoint types before use, rejecting devices with mismatched
-> descriptors at probe time, and avoid triggering assertion.
-> 
-> Similar fix to
-> - commit 90b7f2961798 ("net: usb: rtl8150: enable basic endpoint checking")
-> - commit 9e7021d2aeae ("net: usb: catc: enable basic endpoint checking")
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Ziyi Guo <n7l8m4@u.northwestern.edu>
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+On Mon, 09 Feb 2026 12:49:10 -0800, Anjelique Melendez wrote:
+> System On Chip Control Processor (SOCCP) is a subsystem that can have
+> battery management firmware running on it to support Type-C/PD and
+> battery charging. Add support for devices, such as Kaanpali and Glymur,
+> which are running battery management on SOCCP.
+> 
+> Changes since v4:
+>   - Defined Glymur and Kaanapali compatible strings as "base" compatibles
+>   - Split v4 p4/4 into 2 separate patches (v5 p2/5 and v5 p3/5)
+>   - Added Glymur and Kaanapali compatible strings for pmic_glink auxiliary
+>     drivers
+>   - Link: https://lore.kernel.org/all/20260114211759.2740309-1-anjelique.melendez@oss.qualcomm.com/
+> Changes since v3:
+>   - Added "dt-bindings: soc: qcom: qcom,pmic-glink: Update X1E80100 compatible string"
+>     and "usb: typec: ucsi: ucsi_glink: Add support for X1E80100" to series
+>   - Corrected bindings dependencies
+>   - Renamed pmic_glink_data structs
+>   - Link: https://lore.kernel.org/all/20251217055655.638594-1-anjelique.melendez@oss.qualcomm.com/
+> Changes since v2:
+>   - Updated bindings dependencies
+>   - Removed qcom,glymur-pmic-glink compatible string from pmic_glink driver list
+>   - Link: https://lore.kernel.org/all/20251027212250.3847537-1-anjelique.melendez@oss.qualcomm.com/
+> Changes since V1:
+>   - Corrected bindings dependencies
+>   - Renamed pmic_glink_data variables
+>   - Dropped "soc: qcom: pmic_glink: Add support for SOCCP remoteproc channels"
+>     since it was applied from its original series:
+>     https://lore.kernel.org/all/176157405464.8818.5887965202916918883.b4-ty@kernel.org/
+>   - Link: https://lore.kernel.org/all/20251017003033.268567-1-anjelique.melendez@oss.qualcomm.com/
+> 
+> [...]
 
+Applied, thanks!
+
+[1/5] dt-bindings: soc: qcom: qcom,pmic-glink: Add Glymur and Kaanapali compatibles
+      commit: aed7440146548cbbcb36780ccc6f9db4cf18f832
+[2/5] soc: qcom: pmic_glink: Add charger PDR service information to client data
+      commit: 540262793df13d90274aae90aa70584ef6fb3aa4
+[3/5] soc: qcom: pmic_glink: Add support for Glymur and Kaanapali
+      commit: 9386d9e8cc72edc1a55ee1337c442b3ceff1d1ba
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
