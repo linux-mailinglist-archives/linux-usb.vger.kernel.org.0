@@ -1,169 +1,179 @@
-Return-Path: <linux-usb+bounces-33552-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33553-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SPqqDfA5nGlCBgQAu9opvQ
-	(envelope-from <linux-usb+bounces-33552-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 12:28:48 +0100
+	id wMo9GS46nGlCBgQAu9opvQ
+	(envelope-from <linux-usb+bounces-33553-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 12:29:50 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60534175822
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 12:28:47 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD19517586F
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 12:29:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B27E830221DF
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 11:28:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BA4B13033276
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 11:29:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B402B36165B;
-	Mon, 23 Feb 2026 11:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="JdhfICLj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71D13612FC;
+	Mon, 23 Feb 2026 11:29:08 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EC53612F7
-	for <linux-usb@vger.kernel.org>; Mon, 23 Feb 2026 11:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1973612DD
+	for <linux-usb@vger.kernel.org>; Mon, 23 Feb 2026 11:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771846120; cv=none; b=amxEyyi/kB3YVGRZu0pPUDJrY7IJsKUwQHNo6NYNUHkDerUBiJpSgvsUk3OZtNQ5O4iuJEc1oWxreORL7td5SHIGMfkTCVbxxF9v1iaHom4pAHtkXnQ2cYJtO5zBKJaTnWiFGj66LDIn/Mm7DlVcDj4XDZELRpjiDy2rI78ZuW0=
+	t=1771846148; cv=none; b=CmqyEcK0yl3tEQ9FZOx3XUUN4ApFsK2ePhajqu9MRkY7vzXz0D4nKC3yZ3X8f5UQZGSH65DmsNxGeHwVw60utSWq/xCvlhs0EEl7trPoICDLtC0Xau2Sqr11AZ1CS4FOITBAZn9guBFZ2Xrbk7TMXACp3nn5F6su7UF4STz46bI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771846120; c=relaxed/simple;
-	bh=iSHHhMjMZF7RXJsBUUXnux7uDb9JH64aVuAfJn7+uUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ig5j1cpn3/sNErhmb9ikxnNnSEJtkgMWggUWGD+QkCShHJsWdb8YeRmCXyuZD5Lhvd0rLVui6c7ZFIjCJmiXQTkAT1PCa3IVeVeWQPsXGjzDaiNtB/0ASnwrMCyqbksykJt1CI9QkuAPWbyBr3g2vv6rlQeqLiTUFsxX5D0n1yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=JdhfICLj; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4807068eacbso33319695e9.2
-        for <linux-usb@vger.kernel.org>; Mon, 23 Feb 2026 03:28:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1771846117; x=1772450917; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vw1XJzi7PNud+gbo9kf7Wo2OGF9SzPqZe0XTmLwxs4A=;
-        b=JdhfICLj4VtdiVo6AF/CNwu9tZfOrGloqAQo0/88Eopu7qwrTQroBpwwwMg8PbQtP9
-         2RgBlkm/geGaOz00QsFkgPKmj3Cbg35ozQjTAJtU+DKH7YDWI4W1Szf1ApeyEFPyxM1U
-         bPeUXtZ5pepabTbgpeVgbyQNpYuWJPENPqh4ZBsZYwdI4+8+lARzrHtaGT9b3XspdFcU
-         Ga1HBdVJSb9h7u7eYz97bWwEPcu3KjLQJDiEN+/vzdAZSIR8qmBWBlL2f5durvKu+nZA
-         jFBCrJl0t0eUevaomZpemCVkgOrsrCxLDV1nrC0FC7Rp8fAdDUQQFsW4aRafVop5DgMy
-         tZqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771846117; x=1772450917;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vw1XJzi7PNud+gbo9kf7Wo2OGF9SzPqZe0XTmLwxs4A=;
-        b=HBW8/pAbEm+gStNGpiWiSgleBjuXy/jnKCByeYg2E+ifsdElNiwt8djdNVZBM+fNJ0
-         gNamihcCpLG3Wqy+RObedIC++jQaM1TbhaCvCiVz2C6MX6HvN5BUWX5BSt2Yg604hU7f
-         NAik3BwkuIScKjnNVGjc3azVZZj5T/XcjYgrIUawlnkxKnH4bN5fEJSdISe2udj2gbx5
-         3pdSQqrCtQnN7oQWWID95V8gYh/csUKzxK8X8SmJ693zObN7HYwkchJvbh9YMD0z9Lc9
-         xb54N6AhOD4VH0hdjcSH2P1moFVEtaDLBtXmTLFMvW42ClONlzMlFOqqH5IcagDTqdlh
-         6k5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUdzb6WtjFLQaOgMEtgVybf3f+0hBocikO3zluMu5YMQR+0vYqmvCXdMuoJrnRJ7FMh6oS/3OfDwoQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEuwLAlI0tyt8q80AQP4mutCGp/Phf6J9OoE5tYQ5pdkWFBKRa
-	rU/sDHNAGx91cxBpR1Q1KkCblEQerk/BVzGxQHZguLYCCSIkdZFua8q8L4DitSlFTew=
-X-Gm-Gg: AZuq6aKlzAi4iXFu9xzzKiopTjBW4u4f5dMmb0DCrnd0RPl6l7fOPi1neeNLtMXPwnl
-	NYUKXUOrdO/H1sEM7OBsE/6QyMLndNPJXddQu2StYsodjuoY31p7AkL1hXVRmrB2yUWQFrdTuFZ
-	6dgMzbPM8p9koLR630UlRQnF5QAh5/PH+Xp3WFE2Q10yTsvg8On8CKbEf8iU6A39HMTzxWmdIAI
-	T8cauY2blBAIl8zlpHNxiNsUJzLRLgiyQ83ZcKPliKiN94JsOQbkYtbQjTPKFi6hStqXw/Glo20
-	oivgew4hL5En2c1bhhHdSPA6flU/BstVUKMBM7R9AWPBoaHTF+TTjZbrm0kFWL2vLqIEatnuuTA
-	Qz7L0rXjmE1WWZSKPqkd/hUnLjPA3hpGQSZnHszBt/CqjwlCyV4p/s0UOAQ5rhdgezKl65rMpFx
-	Dh/F8yK+Hw4GXeT3ECbaauUMm6QbkR2M6EIT3AJXQGkVbVE4uH666vuK1bcqBe3ZFE5yY=
-X-Received: by 2002:a05:600c:190f:b0:477:9a28:b0a4 with SMTP id 5b1f17b1804b1-483a95574c5mr137098695e9.0.1771846116804;
-        Mon, 23 Feb 2026 03:28:36 -0800 (PST)
-Received: from ?IPV6:2001:a61:13fe:e401:a6d6:a7a0:a277:a99e? ([2001:a61:13fe:e401:a6d6:a7a0:a277:a99e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31b3d88sm281193455e9.3.2026.02.23.03.28.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Feb 2026 03:28:36 -0800 (PST)
-Message-ID: <04778e0c-e15c-4acd-ade2-5cb8dc4319b1@suse.com>
-Date: Mon, 23 Feb 2026 12:28:29 +0100
+	s=arc-20240116; t=1771846148; c=relaxed/simple;
+	bh=HBscHmJudXstqHTcCSQOBobWNft6w8CPgOT77IxP0ss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aMtZC6KSH0cT3IW0yg2raMKfwRwrVrUcGYW2GiUvzcIflbj+AfmYoikhCKNjnaW4CpqQq7SF7OB1zRZJbUbdcQsUnZv0XmHhayAh5tN08SJSk901daCzNO4cKDpYTz3dIep/uVMRjnLI5APItDUHEggpVwS3RXL45vtzR3eAsdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vuU7X-0007vD-TX; Mon, 23 Feb 2026 12:28:59 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vuU7W-002DlE-15;
+	Mon, 23 Feb 2026 12:28:59 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vuU7X-000000017ln-2Qg2;
+	Mon, 23 Feb 2026 12:28:59 +0100
+Date: Mon, 23 Feb 2026 12:28:59 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
+	Matthias Kaehlcke <mka@chromium.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v5 3/4] dt-bindings: usb: usb-device: add usb hub port
+ vbus-supply suppport
+Message-ID: <qjabgfbpwuxowtnolahzzioukl26lllyu4b3x6lchnf4jodrrf@q3i3v3fgtxte>
+References: <20260223-v6-16-topic-usb-onboard-dev-v5-0-28d3018a8026@pengutronix.de>
+ <20260223-v6-16-topic-usb-onboard-dev-v5-3-28d3018a8026@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: misc: uss720: properly clean up reference in
- uss720_probe()
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, stable <stable@kernel.org>
-References: <2026022327-exhaust-constrain-e21d@gregkh>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <2026022327-exhaust-constrain-e21d@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260223-v6-16-topic-usb-onboard-dev-v5-3-28d3018a8026@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[suse.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-33552-lists,linux-usb=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[pengutronix.de];
+	FREEMAIL_TO(0.00)[linuxfoundation.org,kernel.org,gmail.com,chromium.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33553-lists,linux-usb=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oneukum@suse.com,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,suse.com:mid,suse.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 60534175822
+	FROM_NEQ_ENVFROM(0.00)[m.felsch@pengutronix.de,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.945];
+	TAGGED_RCPT(0.00)[linux-usb,dt];
+	R_DKIM_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.2:email,pengutronix.de:url,pengutronix.de:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,0.0.0.1:email]
+X-Rspamd-Queue-Id: CD19517586F
 X-Rspamd-Action: no action
 
-Hi,
+Hi Rob,
 
-On 23.02.26 12:17, Greg Kroah-Hartman wrote:
-> If get_1284_register() fails, the usb device reference count is
-> incorrect and needs to be properly dropped before returning.
+I didn't add your r-b since I moved the DTS example here.
+
+Regards,
+  Marco
+
+On 26-02-23, Marco Felsch wrote:
+> Some PCB designs don't use the dedicated USB hub port power control GPIO
+> to control the port VBUS supply. Instead host managed GPIOs are used to
+> control the VBUS supply.
 > 
-> Cc: stable <stable@kernel.org>
-> Assisted-by: gkh_clanker_2000
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 > ---
->   v2: properly clean up the previously allocated resources by jumping to
->       the error path and not just retrning directly
+>  Documentation/devicetree/bindings/usb/usb-device.yaml | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
->   drivers/usb/misc/uss720.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
+> diff --git a/Documentation/devicetree/bindings/usb/usb-device.yaml b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> index 09fceb469f10525e9dcdb91435b142b0d21964b8..c9abdbea0e5348dc25f8f9484142089cf60bd514 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-device.yaml
+> +++ b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> @@ -53,6 +53,12 @@ properties:
+>    "#size-cells":
+>      const: 0
+>  
+> +  vbus-supply:
+> +    description: USB hub port VBUS supply.
+> +      The host managed regulator which controls the USB hub port VBUS. This
+> +      regulator is only required if the hub internal control signals aren't
+> +      used to control the VBUS regulators.
+> +
+>  patternProperties:
+>    "^interface@[0-9a-f]{1,2}(,[0-9a-f]{1,2})$":
+>      type: object
+> @@ -85,6 +91,7 @@ additionalProperties: true
+>  
+>  examples:
+>    # hub connected to port 1
+> +  # device connected to hub port 2, vbus controlled by ext. regulator
+>    # device connected to port 2
+>    # device connected to port 3
+>    #    interface 0 of configuration 1
+> @@ -99,6 +106,14 @@ examples:
+>          hub@1 {
+>              compatible = "usb5e3,608";
+>              reg = <1>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            device@2 {
+> +                compatible = "usb123,4321";
+> +                reg = <2>;
+> +                vbus-supply = <&reg_5v0_vbus>;
+> +            };
+>          };
+>  
+>          device@2 {
 > 
-> diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
-> index ec8bd968c4de..54107bf280df 100644
-> --- a/drivers/usb/misc/uss720.c
-> +++ b/drivers/usb/misc/uss720.c
-> @@ -735,8 +735,10 @@ static int uss720_probe(struct usb_interface *intf,
->   	 * here. */
->   	ret = get_1284_register(pp, 0, &reg, GFP_KERNEL);
->   	dev_dbg(&intf->dev, "reg: %7ph\n", priv->reg);
-> -	if (ret < 0)
-> -		return ret;
-> +	if (ret < 0) {
-> +		usb_put_dev(usbdev);
-> +		goto probe_abort;
+> -- 
+> 2.47.3
+> 
+> 
 
-This jumps to probe_abort, which calls destroy_priv() indirectly
-via kref_put(). Either that works, which would mean that you must
-_not_ do a second usb_put_dev() or it does not, in which case the
-earlier error handling for parport_register_port() is incorrect.
+-- 
+#gernperDu 
+#CallMeByMyFirstName
 
-Either way, there is a problem.
-
-	Regards
-		Oliver
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | https://www.pengutronix.de/ |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-9    |
 
