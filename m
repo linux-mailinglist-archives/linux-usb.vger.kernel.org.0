@@ -1,92 +1,75 @@
-Return-Path: <linux-usb+bounces-33569-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33570-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kJ3SE9tsnGmcGAQAu9opvQ
-	(envelope-from <linux-usb+bounces-33569-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 16:06:03 +0100
+	id 2PjCOWdsnGmcGAQAu9opvQ
+	(envelope-from <linux-usb+bounces-33570-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 16:04:07 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2F12178735
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 16:06:02 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FC381786B8
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 16:04:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1A3AD30BB501
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 15:02:13 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 10C4E3036AB8
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Feb 2026 15:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 642CF35CBD4;
-	Mon, 23 Feb 2026 15:02:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3910358D3D;
+	Mon, 23 Feb 2026 15:02:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Bi8miG0S"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QuP7chNh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4062376FD
-	for <linux-usb@vger.kernel.org>; Mon, 23 Feb 2026 15:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340C72376FD;
+	Mon, 23 Feb 2026 15:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771858931; cv=none; b=LH9jK4lZljoYB3Y4MQazpkTnjihuFYVfT7LJcZ19YFT+bZBJMNA0ZWNLzyPWM2JSd87XYtxzAkhg4fyRmB3f6y3zxQKBu2OsgJRBVM4zE5qS3cwNIDFUo+IwLfdJzV+jw3Ko/DEPKsUkNoYVoVsbxgw8CrH6lpn16CSsXuYhUmo=
+	t=1771858972; cv=none; b=q340SxxHEACYVz0azNQit/SRrUhOZf+bYg7M96z8vi2Kg4J74fqSJnsx1cG/LS+br0iXBi45oVluRbDthTo1GriqKb/+TOKNMFo6emm+ZaBm/9ce/QgFipXOw8orpvCwgSBlJOAPv84URRxIubRyYjFkxutjDiSmmRq/0ET2s50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771858931; c=relaxed/simple;
-	bh=DJpNDmDyIrKn7kt89iPA47eOQyY++TU0zFaH3aJGWKE=;
+	s=arc-20240116; t=1771858972; c=relaxed/simple;
+	bh=QM+dqiynOi+Uf03mvXlG1xZuAaKjus3L5huhW0c37Vs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hed4neShZfuj6t/OcZE0wrulWXBZ/uVzlwuSY8NjdcchzBs9JkbsjAMTtqDU0Jm7KTakbzbeluOBXdr8uRHi2yVjamC8yb58UT7hz7PfXYZ0ERBZKMK1zetWg8IObwcrzPmFLP4rPcu7ScrtCcIEw1QOtmgpyV6veL7jI68jGpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Bi8miG0S; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-4639279c7a6so1596419b6e.1
-        for <linux-usb@vger.kernel.org>; Mon, 23 Feb 2026 07:02:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1771858928; x=1772463728; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qTN8ZuMw3IBNaYoAHK7lC0KSJE/o8k5UplAc8Jft30I=;
-        b=Bi8miG0Sz573Ii1SK02XqPqZszZtXFDC0s6JN389hMiZtRDnkSysCkW8y7t2ppBoW/
-         Da3FKVsegMw7XQXA//pcJ6js2xHUKiPdItV/vaeI7DAYPON02291qWV6KNiaHUnFe4Qp
-         ib3hjtmYjr+JWidZSanRGb1othbLDyCT1OkY0890ZEgSLyd8fQcJl3UfaIcKgdM+Flfc
-         MKGdzVa72C4PyJtfqenpPmShoxQajId86sk3Swij0YoSpdM/Zhi//xCxEkbrqZI0CyA9
-         vZw1mxOGIaiiJz+PY9AVBH6uu7GXpT4TqKqktHDQeGvDqXwyIMLRj+9xmOyIzWBDS5pl
-         TVhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771858928; x=1772463728;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qTN8ZuMw3IBNaYoAHK7lC0KSJE/o8k5UplAc8Jft30I=;
-        b=r7LGEcGldWLs1yz8vadBc/vd+zphYMorEJ8oenfNxsmNvtPB0XBJl0H3PDFzxqAUN4
-         fX/BSMwzmkoN9v6RKIWMAcJEvdzB2RCRjaIsdIUWTc0mEwo8rNbSfErgf59yRrHJq34d
-         VcYZ8oSthvbbNGrYjxKvDAXFrL9i1EEk3VeYsp6D0O1Z9XKtqCOoDSjiTD7ze+HraKT+
-         /DnRhzN0DWW0iLGWikmzul+87U/IQpSQSU0T8fH1lK73sblNJmZ6IxKxcMeW3gYJ7BSe
-         ZiTsATgQ2buLqoR679xL8/KfZrTAAZjxWUxqAS5u9JcCMXD4nO0CfH2+vV6X3RCQg+GC
-         SfEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUavbToY+t/XERHShjG0wxNltbEzFGvJr/F6aGVwQwXpyr2jumkfO0E12RdIjSBK2QKvd8cpBUrBlg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyciBKZoKwKWbClxRioiC/AwuMHsQ1NyRbSVPrx+JniRyAP/dC+
-	SMPjB3PqwsXrRm5JazJiGAgWI7x6POCMcAHCb/chZ6bSVGfUhsA6YaQVw/Vl/UMVKojbuz2MLQV
-	KarY=
-X-Gm-Gg: AZuq6aLuhjM2nNo8IbV8NrD9b//N8b1R4DZci54yyGDuGswofFvxR1K+oGbi4ZDZ2we
-	7QZRV3legemfSVB/X8f100/GjCPYsj07sFSOChSPmIZwAkQrCg8HSQtJkInfipIhRD0ckgmPGHk
-	b9ka12XnKpWcSs2cZeVQMYPy4AGH6/Ilc8iKMOwmUoo3u7N/PjURx9E0siQzmT1AwgQ2jjefxrh
-	4715LGK4bUoRvg+YddB/kgvpu+aZJoA0LZuwVqCD77dz53ELkHfXIR/39nyODuU4Mj5Yq8+3oVd
-	q0WvMtKLUC7ioetOgjQHL34D4nctAPW5olaFCa0Nc3eHuREYrrM5UKuxQzGtTDAOOH8siENd/vo
-	HPjdnbI81LUyiLzZFrQGkiyIlJbVRD543HKvJOYy7jkhE04VSColHtf5NOIty+ThGtYdQfXBBB4
-	stpcBOjJuRX32WIBOG7FGrj1YE
-X-Received: by 2002:a05:6808:13d6:b0:450:4628:e3f0 with SMTP id 5614622812f47-464463428a2mr4950723b6e.36.1771858928282;
-        Mon, 23 Feb 2026 07:02:08 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8997c8adf68sm65878116d6.20.2026.02.23.07.02.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 07:02:06 -0800 (PST)
-Date: Mon, 23 Feb 2026 10:02:01 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Petko Manolov <petkan@nucleusys.com>,
-	stable <stable@kernel.org>
-Subject: Re: [PATCH net] net: usb: pegasus: validate USB endpoints
-Message-ID: <ed6ad3d0-e46e-413e-9db7-1c788c8a2dbe@rowland.harvard.edu>
-References: <2026022347-legibly-attest-cc5c@gregkh>
- <acc166b4-9ce7-4e95-8f2f-4300ee6dd27e@rowland.harvard.edu>
- <2026022352-dried-sputter-eba9@gregkh>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R2cVO94A0nDXs467YksjhJP/uIJyg9gULmoPIqCeVQ7H/pAZ9WQK1CkshTgYUxuSkN6aMC31KDEiiSp+r7MpxEgcYmUc1b/d0ZEGc1u8/zwWJWP0gJ9JIa85gYOwlK3LK12xQjslNxTFgxY1IfXjrBIbBc0M88KcUywqMSkncqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QuP7chNh; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771858971; x=1803394971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QM+dqiynOi+Uf03mvXlG1xZuAaKjus3L5huhW0c37Vs=;
+  b=QuP7chNhG3/PODDh2stczYiQHYZulpS4+tzDuoIJP0F2SwRLagyVFwDB
+   o0NZ17VqjRSPfnjKCWUmK+resfZNRt1FaDlhqohGGAxnov4zVnBatpZGM
+   5sDo6O8de7L9NDpc0nBu5PAkgyz0ooY0c+Wrzd7KphZHgWhjT8XjtVZEN
+   iT0wq3M5XWD0J/+fFq/6FvfJFIVvmxHms54vnYIgc5SMhin+D/7em3wOe
+   zjuciP/+QSTNMIaRkjbvjAmbGUuAwOpyrG2X6VMfnEgGanPRvu1AjcV2S
+   J72qoWoHSbVY/yjMaVwvwSZxf6kWWesTNpsvT3eQAtiYkFidyigrMlRf9
+   A==;
+X-CSE-ConnectionGUID: qftU8NtqR1uxwh6FMD3rjw==
+X-CSE-MsgGUID: pK+8KZBDR1eNxY0uB8NFjg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11710"; a="83566708"
+X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
+   d="scan'208";a="83566708"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 07:02:51 -0800
+X-CSE-ConnectionGUID: ENQ8WgYoR5uOQqa4/RN/hQ==
+X-CSE-MsgGUID: P12SQUAnR7avQGwwjG/n3Q==
+X-ExtLoop1: 1
+Received: from mdroper-mobl2.amr.corp.intel.com (HELO kuha) ([10.124.222.123])
+  by fmviesa003.fm.intel.com with SMTP; 23 Feb 2026 07:02:48 -0800
+Received: by kuha (sSMTP sendmail emulation); Mon, 23 Feb 2026 17:02:12 +0200
+Date: Mon, 23 Feb 2026 17:02:12 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 2/2] usb: typec: mux: avoid duplicated mux switches
+Message-ID: <aZxr9DBebcQfsQiP@kuha>
+References: <20260213-typec-mux-duplication-fix-v1-0-70076a7c5691@collabora.com>
+ <20260213-typec-mux-duplication-fix-v1-2-70076a7c5691@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -95,57 +78,86 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2026022352-dried-sputter-eba9@gregkh>
+In-Reply-To: <20260213-typec-mux-duplication-fix-v1-2-70076a7c5691@collabora.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-33569-lists,linux-usb=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-33570-lists,linux-usb=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	MISSING_XM_UA(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-usb@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rowland.harvard.edu:mid,rowland.harvard.edu:dkim]
-X-Rspamd-Queue-Id: A2F12178735
+	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:dkim]
+X-Rspamd-Queue-Id: 1FC381786B8
 X-Rspamd-Action: no action
 
-On Mon, Feb 23, 2026 at 03:54:30PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Feb 23, 2026 at 09:39:52AM -0500, Alan Stern wrote:
-> > BTW, what is gkh_clanker_2000?
+Fri, Feb 13, 2026 at 08:23:29PM +0100, Sebastian Reichel wrote:
+> Some devices use combo PHYs (i.e. USB3 + DisplayPort), which also
+> handle the lane muxing. These PHYs are referenced twice from
+> the USB-C connector (USB super-speed lines and SBU/AUX lines)
+> resulting in the mux being configured twice. Avoid this by
+> dropping duplicates.
 > 
-> A hacked up system of tools/scripts I'm running here to find stuff like
-> "take this previously applied commit that fixed a problem, does the same
-> pattern need to be also done anywhere else in the tree"?  It finds a lot
-> of stuff and then I sift through it and see if anything is actually real
-> or not and if so, make up a patch for it.  It was my "merge window is
-> giving me a respite from reviewing patches" hobby project this past
-> week.
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/usb/typec/mux.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
 > 
-> Now if I was really good, I could turn the output into a coccinelle
-> script, as this is just simple patterns.
+> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+> index db35b7398343..6a394326f236 100644
+> --- a/drivers/usb/typec/mux.c
+> +++ b/drivers/usb/typec/mux.c
+> @@ -309,9 +309,9 @@ struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode)
+>  {
+>  	struct typec_mux_dev *mux_devs[TYPEC_MUX_MAX_DEVS];
+>  	struct typec_mux *mux;
+> +	int i, j, k;
+>  	int count;
+>  	int err;
+> -	int i;
+>  
+>  	mux = kzalloc(sizeof(*mux), GFP_KERNEL);
+>  	if (!mux)
+> @@ -333,6 +333,18 @@ struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode)
+>  		}
+>  	}
+>  
+> +	/* eliminate duplicates */
+> +	for (i = 0; i < count; i++) {
+> +		for (j = i + 1; j < count; j++) {
+> +			if (mux_devs[j] == mux_devs[i]) {
+> +				put_device(&mux_devs[j]->dev);
+> +				for (k = j; k < count; k++)
+> +					mux_devs[k] = mux_devs[k+1];
+> +				count--;
+> +			}
+> +		}
+> +	}
 
-It's a little surprising that nobody has asked an AI to do this sort of 
-thing yet (as far as I know).  It's hard to say whether the results 
-would be better than you get with your hacked-up system of 
-tools/scripts, but it might be.
+The same should work here. My code snippets probable has to be
+modified, but the idea should work. The check should be more simple to
+do in typec_switch_match().
 
-Alan Stern
+Br,
+
+-- 
+heikki
 
