@@ -1,186 +1,261 @@
-Return-Path: <linux-usb+bounces-33673-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33674-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8NN/EVTxnWkWSwQAu9opvQ
-	(envelope-from <linux-usb+bounces-33673-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 19:43:32 +0100
+	id yFgXCV70nWk2SwQAu9opvQ
+	(envelope-from <linux-usb+bounces-33674-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 19:56:30 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA14018B87B
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 19:43:31 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87ACB18B9B4
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 19:56:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 27A55300824E
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:43:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3AA5D3073DB2
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 18:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243FF3AA1A4;
-	Tue, 24 Feb 2026 18:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ZFpalA3M"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CDF42DEA8F;
+	Tue, 24 Feb 2026 18:56:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8472326ED3D
-	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 18:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3112C11DD
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 18:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771958609; cv=none; b=LfVor+RGAguxiUrD2e4sW0OLV5HzGdi47S/zhu/z3IA/oGNDbFjpreu04tQNl16nJH/qZcFSErlGg3xp9NQjWcaeE3HMIXVdE4MAgVkBSBnjw1L934Jk3QaPjQuE+HlhDJy8qaOGu+SLusqqEIIM0lZ/qzLb+9iSzNMnPlw8A6A=
+	t=1771959385; cv=none; b=r66xIZaaBRY3l8lLuxr/anAInMAP4+DUQ5B6hyDLZQ9668av/gqY94+fkcFyzEvwSfcfPR0C6vtMxQlq7qqF9p+4i9YYfbGVBfA22187yBVxbkVWbPF3mjh21+5t/sjNLTDIHAUbF429t/5CxU62KclXobnkudJpv6vxv3j7oQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771958609; c=relaxed/simple;
-	bh=YifzaPPcgSwFXTqCHy7OI9Rxd0VFydbArEP/w9HnikI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r0KTVkrEtJAhYA2MsAlZbCii1nOrk61NcclL95W7hiR/G2fjFj7CUcadIvAXUQ/gFUlOIXzt8JfCDfkuYID9FEtB4hLeRhR3vLRIw5PURpZw2YyKFq7WC2MQZaRP1LsJphiULHxWtI1tBKDRGbb2Ga5eXwCnCMtdbpQenGmW18c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ZFpalA3M; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8c711959442so9088685a.0
-        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 10:43:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1771958607; x=1772563407; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jIhXP+Jl8Fq58lhRkL0hrTZvKs4fP1u9Q/pOSkHexQ4=;
-        b=ZFpalA3MRop7dEAr2+k0RZwKV94LcVYLJmC/tZJpG6r/CFlMXAS3KujqS9EjGZYc9H
-         qBhuTnIh2MThhyRCSUTBFm9JQyB74mLNLuOLu6jEEtmDjbdcdbkwOf6O+CICHl4hTK1L
-         QbJDawn/QaRRmA4DY/VgnjzUOOJB4fn0pZmuIwFSUh7TDwcguzw9zrs9z7ZA/aOAdIdV
-         QBwoM3lwxyOBCccSfBkG+ApKvln1VldpjKjkf7BPGqsSVp6T+sHWtaAjuVX50u9KMmeC
-         mV3HYMy76mX8C5R+GoJEDLycZekPbmu99B68D27p0REpgsMOigbpb/t0hAgCR+w314qb
-         B2XA==
+	s=arc-20240116; t=1771959385; c=relaxed/simple;
+	bh=DbEJwjUi3L0+TBnyskY3UJbNMcGnrrkVyuhh5wowIsk=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=YHYvR28nEItZXEnis7ZLBXAT+MXY8javXC72d+oadLjREpEN/OR7f0DEQxsRpWQGb4ay876VZEFVrWrSmztc+Oog3kBEWmjRj1w13HzkccoY89fnN4yV+b30CLV9ZaqwVlADqcTaHzozFUQcYGhYDaADAMnR7CEtaQk47Klyj9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-7d4cf783c73so102287204a34.3
+        for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 10:56:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771958607; x=1772563407;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jIhXP+Jl8Fq58lhRkL0hrTZvKs4fP1u9Q/pOSkHexQ4=;
-        b=WkcM3CJM+aJ/jb6Opy97960Q4Rcg+ekv0JO01zFty9ophe9S8jkCCNSfOMRn4GwRhC
-         kFe8IFGePSCaQAeniVgukcjP5YuGE7BVkdxdgNmCaHwKy4SmnRa1AS4q6eYMYKuPk8XR
-         iijo60Dvzoye1XdGNPpkmzLmqb6o+d7sgQk2Ggdf2Lqa51NNR1pSQegJbPmD2hJNf0zt
-         9tFm2dGbQlB9UCdNzBCUta95VEy+grdGo1ay/elD7XdFJ/8OtO0kzESRqkU6D7hJjwJi
-         9ZBCk9e2oN8mMAIWY09pUBUWvPMRuDtcdJTPL/Q4/mAkeQheTQVjLFVd61EIigoKZfYU
-         IjRw==
-X-Forwarded-Encrypted: i=1; AJvYcCVaAkVXhctNg8TEriDZJ3mWAy7XQrxr+ZrwqQaMGDQtu5MipYtFgrGRyrY6894OYolOkWF+BzQ8fR0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHIwToFHqxwU/dgA+Q9OZn3cgmBwDYj0UII9Df/XR5xfC5DnER
-	6xCi7N9Yc5RuJ4rhMUmFLEOXWXpxJdM7ZIM0WbMmXFKKKc7deQcDq1AB9VCXxSx84C932LvwTqV
-	0J7U=
-X-Gm-Gg: AZuq6aLqgMP870eJTQHPGp30/L09KVflnf/ipV8kquv9xCNv9W8dXd2fRt6E9MCevgA
-	FdE8SwgrfA2EJQ53Hb7xnLDzv05dMft/N/Uw7NwDFRqTPnX2SMUSho9qnnxZqeZxZfoRypH4rB8
-	ZQeMD7ecDk51xH+jQaqG7sS/+GP/+FqqskufSsQ17HgVzI5kwnpqvlHdRlmpjiXeHg/1avULF6x
-	cMdwsOAljctKLnCWUlx7OTzaf3v22kW8biOYX66CAJ9Z7tbuVDKzq3bMpdYYqzP0wp6MqtVeu3S
-	Wc3VlB0EiO4ccOdzMAkXD16utyTwX+5wF7AK91Fd9Ii80pLvuWsEsR+0yisgdgWsSlvw1viWgFy
-	aXiKe/d1Lwey7sYw5hDHiZwuDkLHkhy2Gj1nsOM5EY9Ev+jta5D05lDa0oYWBWpd1yYWqZQjHnR
-	6EI9MySDEm8EotbIASqTaL537M
-X-Received: by 2002:a05:620a:4049:b0:8c7:87a6:b25f with SMTP id af79cd13be357-8cbb200b1dcmr145525285a.10.1771958607335;
-        Tue, 24 Feb 2026 10:43:27 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::687c])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb8d101d77sm1045370185a.37.2026.02.24.10.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 10:43:26 -0800 (PST)
-Date: Tue, 24 Feb 2026 13:43:24 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	Nicholas Carlini <npc@anthropic.com>, linux-usb@vger.kernel.org
-Subject: Re: Stack buffer overflow (write) in kvaser_usb_leaf_wait_cmd via
- malicious USB
-Message-ID: <862abc70-18ce-422c-bdf2-f02b984193c0@rowland.harvard.edu>
-References: <CAOt5ifARcQqqGc65hHXR2JNTDg0hT0cF55Kb-6USEsqjEPM1nA@mail.gmail.com>
- <2026021847-acclaim-coil-fe7a@gregkh>
- <a38ccefc-6233-4be4-bbae-0ae0d4f4499b@suse.com>
- <eb96e0e4-b02a-48e5-ae07-bc31584f0855@rowland.harvard.edu>
- <e63ee746-dee7-4b3c-9360-95e96fadb765@suse.com>
+        d=1e100.net; s=20230601; t=1771959383; x=1772564183;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=isqBevF2Bn9fTBMvsgOHkEQMKMiomLm1PyvIuY/3gDU=;
+        b=EwU3GPXH0Ni26rQeG1gLVxCJ25jbv25fdmmgl095xyRUiBPNCBPew35rP0ORaauQku
+         1q/bL3h1P2Sk/YAnvpqtvuRr68T6kGkEmiQpNV2AgbkfDo4JCJTuKLbw10LigbHs+nuF
+         u8eCmzp/MJWgLBCd0M9E3GODZXQpd4EDXDWYsm3ZzPXx8iRgm/vL6OYuxF0hnFzmmcGQ
+         w4FwEmRVIYgIgNhVztG2gw9vafHb6z0I5aeIQ03acQ90EGlCaJeMMXwycR1iTl9hjV9F
+         g994Z++Ri5qzGrxK4IL/nnvpiPnzCVWI1zagf4GBlBLM8tGGAR5z9KG417onTXWY2te6
+         eAIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPOG/9vHhgLDYBFZITzBUUOT9O3pur/WKUnRP7uhEbX+1KdUCe38Kos0BWZf+xk78EcngzNIsGKt8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzc1BjLWWmHfHHT/tFWN8in5/5jlklmZ5QchUDEyaAgRpOPI4bh
+	aQ7BfoSlUetuSzViLujeJn49T2NGcHY5rPV42Vg94iOxAQrhcpDsYmPi/h4MRYxO6/sezUx1x1S
+	paeWmMmu9/p7XbQrEvDqGImI1NstyP3esbZ9SqyyyCxDvCruwEQande+Bxto=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e63ee746-dee7-4b3c-9360-95e96fadb765@suse.com>
+X-Received: by 2002:a05:6820:2108:b0:674:c966:fb27 with SMTP id
+ 006d021491bc7-679c44ead62mr6864775eaf.52.1771959383480; Tue, 24 Feb 2026
+ 10:56:23 -0800 (PST)
+Date: Tue, 24 Feb 2026 10:56:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <699df457.050a0220.131eeb.0009.GAE@google.com>
+Subject: [syzbot] [usb?] BUG: sleeping function called from invalid context in usb_tx_block
+From: syzbot <syzbot+74afbb6355826ffc2239@syzkaller.appspotmail.com>
+To: libertas-dev@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[rowland.harvard.edu,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[rowland.harvard.edu:s=google];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=1ff39736314a9939];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[rowland.harvard.edu:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-33673-lists,linux-usb=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-33674-lists,linux-usb=lfdr.de,74afbb6355826ffc2239];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stern@rowland.harvard.edu,linux-usb@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-usb@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
 	TAGGED_RCPT(0.00)[linux-usb];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rowland.harvard.edu:mid,rowland.harvard.edu:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: DA14018B87B
+	DBL_BLOCKED_OPENRESOLVER(0.00)[googlegroups.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,goo.gl:url,syzkaller.appspot.com:url,storage.googleapis.com:url,appspotmail.com:email]
+X-Rspamd-Queue-Id: 87ACB18B9B4
 X-Rspamd-Action: no action
 
-On Tue, Feb 24, 2026 at 05:04:28PM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 24.02.26 16:52, Alan Stern wrote:
-> > On Tue, Feb 24, 2026 at 09:44:35AM +0100, Oliver Neukum wrote:
-> 
-> > > What is the logic behind that? If we can trust that a device
-> > > is what it claims to be and operates like it is supposed to
-> > > be, why do we verify?
-> > 
-> > Greg said that we trust the hardware once a driver is bound to the
-> > device.  However, the endpoint-verification tests occur before the
-> > binding is complete.  At this point we do not yet fully trust the
-> > hardware.
-> 
-> Why? If we do not trust the hardware, we cannot depend on it
-> telling the truth about itself, can we?
+Hello,
 
-The purpose of the endpoint testing is to avoid warnings triggered by 
-driver submitting URBs to endpoints that are known not to exist.  Such 
-submissions are generally considered to be signs of a bug in the driver, 
-not of a deception by the device.
+syzbot found the following issue on:
 
-Legitimate example: A new revision of a device uses different endpoint 
-numbers from the original version, but the driver isn't aware of this 
-and doesn't check.  The problem would then lie in the driver, not in the 
-revised device firmware.
+HEAD commit:    8bf22c33e7a1 Merge tag 'net-7.0-rc1' of git://git.kernel.o..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=127b9722580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1ff39736314a9939
+dashboard link: https://syzkaller.appspot.com/bug?extid=74afbb6355826ffc2239
+compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1561fffa580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1031795a580000
 
-Even if a device lies about itself, the tests will prevent these 
-warnings from triggering.  (The endpoint in question might not in fact 
-exist on the device, but as long as the device's descriptors claim that 
-the endpoint does exist, usbcore won't know any better and so won't 
-issue a warning.)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0e19c10e1a0e/disk-8bf22c33.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8f3209ea7fd5/vmlinux-8bf22c33.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9be7f93d0a22/bzImage-8bf22c33.xz
 
-Of course we can't detect all cases in which a device lies about itself.  
-The hope is that drivers will be robust enough to handle devices that do 
-not behave as expected...
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+74afbb6355826ffc2239@syzkaller.appspotmail.com
 
-> > While it's always possible that some real device somewhere will fail
-> > these tests, a much more likely reason for a failure is because the
-> > driver is being fuzzed.  We do know that these fuzzing tests occur in
-> > real life and that they will crash the kernel being tested if the tests
-> > aren't present.
-> 
-> Now, if we are looking at regular hardware, we need to ask ourselves:
-> Is it likelier that some devices are different from all others,
-> or may they have a race condition with a small window that leads
-> to faulty data packages rarely being generated?
+usb8xxx: URB in failure status: -2
+BUG: sleeping function called from invalid context at drivers/usb/core/urb.c:706
+in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 0, name: swapper/1
+preempt_count: 101, expected: 0
+RCU nest depth: 0, expected: 0
+no locks held by swapper/1/0.
+irq event stamp: 328389
+hardirqs last  enabled at (328388): [<ffffffff876b10b2>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:178 [inline]
+hardirqs last  enabled at (328388): [<ffffffff876b10b2>] _raw_spin_unlock_irqrestore+0x52/0x80 kernel/locking/spinlock.c:194
+hardirqs last disabled at (328389): [<ffffffff876b0dc2>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:130 [inline]
+hardirqs last disabled at (328389): [<ffffffff876b0dc2>] _raw_spin_lock_irqsave+0x52/0x60 kernel/locking/spinlock.c:162
+softirqs last  enabled at (328372): [<ffffffff8176f0bd>] __do_softirq kernel/softirq.c:656 [inline]
+softirqs last  enabled at (328372): [<ffffffff8176f0bd>] invoke_softirq kernel/softirq.c:496 [inline]
+softirqs last  enabled at (328372): [<ffffffff8176f0bd>] __irq_exit_rcu+0xed/0x150 kernel/softirq.c:723
+softirqs last disabled at (328385): [<ffffffff8176f0bd>] __do_softirq kernel/softirq.c:656 [inline]
+softirqs last disabled at (328385): [<ffffffff8176f0bd>] invoke_softirq kernel/softirq.c:496 [inline]
+softirqs last disabled at (328385): [<ffffffff8176f0bd>] __irq_exit_rcu+0xed/0x150 kernel/softirq.c:723
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
+ __might_resched.cold+0x1ec/0x232 kernel/sched/core.c:8884
+ usb_kill_urb+0x8e/0x320 drivers/usb/core/urb.c:706
+ usb_tx_block+0x91/0x320 drivers/net/wireless/marvell/libertas/if_usb.c:429
+ if_usb_send_fw_pkt.isra.0+0x2e4/0x550 drivers/net/wireless/marvell/libertas/if_usb.c:366
+ if_usb_receive_fwload+0x5d3/0x780 drivers/net/wireless/marvell/libertas/if_usb.c:592
+ __usb_hcd_giveback_urb+0x38d/0x610 drivers/usb/core/hcd.c:1657
+ usb_hcd_giveback_urb+0x3ca/0x4a0 drivers/usb/core/hcd.c:1741
+ dummy_timer+0xd85/0x3670 drivers/usb/gadget/udc/dummy_hcd.c:1995
+ __run_hrtimer kernel/time/hrtimer.c:1785 [inline]
+ __hrtimer_run_queues+0x50e/0xa70 kernel/time/hrtimer.c:1849
+ hrtimer_run_softirq+0x17d/0x350 kernel/time/hrtimer.c:1866
+ handle_softirqs+0x1de/0x9d0 kernel/softirq.c:622
+ __do_softirq kernel/softirq.c:656 [inline]
+ invoke_softirq kernel/softirq.c:496 [inline]
+ __irq_exit_rcu+0xed/0x150 kernel/softirq.c:723
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:739
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1056 [inline]
+ sysvec_apic_timer_interrupt+0x8f/0xb0 arch/x86/kernel/apic/apic.c:1056
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+RIP: 0010:pv_native_safe_halt+0xf/0x20 arch/x86/kernel/paravirt.c:63
+Code: be b1 01 e9 13 e8 02 00 0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d d3 f1 1d 00 fb f4 <c3> cc cc cc cc 66 2e 0f 1f 84 00 00 00 00 00 66 90 90 90 90 90 90
+RSP: 0018:ffffc9000013fe00 EFLAGS: 00000242
+RAX: 00000000000502bf RBX: ffff8881022a1d00 RCX: ffffffff876888d5
+RDX: 0000000000000000 RSI: ffffffff8901d71b RDI: ffffffff87afa420
+RBP: 0000000000000001 R08: 0000000000000001 R09: ffffed103eae6725
+R10: ffff8881f573392b R11: 0000000000000000 R12: ffffed10204543a0
+R13: 0000000000000001 R14: ffffffff8aefe2d0 R15: 0000000000000000
+ arch_safe_halt arch/x86/include/asm/paravirt.h:73 [inline]
+ default_idle+0x9/0x10 arch/x86/kernel/process.c:767
+ default_idle_call+0x6c/0xb0 kernel/sched/idle.c:122
+ cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+ do_idle+0x35b/0x4b0 kernel/sched/idle.c:332
+ cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
+ start_secondary+0x21d/0x2d0 arch/x86/kernel/smpboot.c:312
+ common_startup_64+0x13e/0x148
+ </TASK>
+BUG: scheduling while atomic: swapper/1/0/0x00000102
+no locks held by swapper/1/0.
+Modules linked in:
+irq event stamp: 328389
+hardirqs last  enabled at (328388): [<ffffffff876b10b2>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:178 [inline]
+hardirqs last  enabled at (328388): [<ffffffff876b10b2>] _raw_spin_unlock_irqrestore+0x52/0x80 kernel/locking/spinlock.c:194
+hardirqs last disabled at (328389): [<ffffffff876b0dc2>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:130 [inline]
+hardirqs last disabled at (328389): [<ffffffff876b0dc2>] _raw_spin_lock_irqsave+0x52/0x60 kernel/locking/spinlock.c:162
+softirqs last  enabled at (328372): [<ffffffff8176f0bd>] __do_softirq kernel/softirq.c:656 [inline]
+softirqs last  enabled at (328372): [<ffffffff8176f0bd>] invoke_softirq kernel/softirq.c:496 [inline]
+softirqs last  enabled at (328372): [<ffffffff8176f0bd>] __irq_exit_rcu+0xed/0x150 kernel/softirq.c:723
+softirqs last disabled at (328385): [<ffffffff8176f0bd>] __do_softirq kernel/softirq.c:656 [inline]
+softirqs last disabled at (328385): [<ffffffff8176f0bd>] invoke_softirq kernel/softirq.c:496 [inline]
+softirqs last disabled at (328385): [<ffffffff8176f0bd>] __irq_exit_rcu+0xed/0x150 kernel/softirq.c:723
+Preemption disabled at:
+[<0000000000000000>] 0x0
+----------------
+Code disassembly (best guess):
+   0:	be b1 01 e9 13       	mov    $0x13e901b1,%esi
+   5:	e8 02 00 0f 1f       	call   0x1f0f000c
+   a:	00 90 90 90 90 90    	add    %dl,-0x6f6f6f70(%rax)
+  10:	90                   	nop
+  11:	90                   	nop
+  12:	90                   	nop
+  13:	90                   	nop
+  14:	90                   	nop
+  15:	90                   	nop
+  16:	90                   	nop
+  17:	90                   	nop
+  18:	90                   	nop
+  19:	90                   	nop
+  1a:	90                   	nop
+  1b:	f3 0f 1e fa          	endbr64
+  1f:	66 90                	xchg   %ax,%ax
+  21:	0f 00 2d d3 f1 1d 00 	verw   0x1df1d3(%rip)        # 0x1df1fb
+  28:	fb                   	sti
+  29:	f4                   	hlt
+* 2a:	c3                   	ret <-- trapping instruction
+  2b:	cc                   	int3
+  2c:	cc                   	int3
+  2d:	cc                   	int3
+  2e:	cc                   	int3
+  2f:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+  36:	00 00 00
+  39:	66 90                	xchg   %ax,%ax
+  3b:	90                   	nop
+  3c:	90                   	nop
+  3d:	90                   	nop
+  3e:	90                   	nop
+  3f:	90                   	nop
 
-... such as by occasionally generating faulty data packets.  Drivers 
-should be able to handle such things gracefully, without crashing the 
-kernel.
 
-Alan Stern
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
