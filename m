@@ -1,161 +1,159 @@
-Return-Path: <linux-usb+bounces-33658-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-33659-lists+linux-usb=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cJoaOmKsnWmgQwQAu9opvQ
-	(envelope-from <linux-usb+bounces-33658-lists+linux-usb=lfdr.de@vger.kernel.org>)
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 14:49:22 +0100
+	id WHS4DGyynWndRAQAu9opvQ
+	(envelope-from <linux-usb+bounces-33659-lists+linux-usb=lfdr.de@vger.kernel.org>)
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 15:15:08 +0100
 X-Original-To: lists+linux-usb@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D7E1187FCA
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 14:49:22 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BA401883C3
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 15:15:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C0C3E316AF81
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 13:43:51 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 19675301488F
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Feb 2026 14:15:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC0C339E18C;
-	Tue, 24 Feb 2026 13:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SGsN2szA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C0E39E6F6;
+	Tue, 24 Feb 2026 14:14:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bm.lauterbach.com (bm.lauterbach.com [62.154.241.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398DA39E194;
-	Tue, 24 Feb 2026 13:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605E3369982
+	for <linux-usb@vger.kernel.org>; Tue, 24 Feb 2026 14:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.154.241.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771940625; cv=none; b=hvQ0R43ag5X8hlkMjpAQeCgAbzyVTy7LfZ828IwkiO1B7/9rLBbILBjkZtx3jhgVBv4irkdSas1zzP3zVCvCTpbIP4yuJWqgtJ8FVxVC+C4Yx2B/nikLo19h6VzAacXNi8xXgmq7v8aexWJxn3OoWOg1eUoCDkhKJl7bvfpccB8=
+	t=1771942498; cv=none; b=YgbmPPfUd8dgvTCb2TYyIwESZsFsaJ1aGZ2scuoKt+OG1mVENrMDX7yNhdIvy6fDsJRR2E/R9eZjfW61q9yjxk4E01/4qoh4JdwjLcXw/6f1LJFGfk2AzHrCydEifdZ5JY862gDi0ssCUbmxF2xvWq6vbkeWMq7bbf3eSqgZo4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771940625; c=relaxed/simple;
-	bh=fUGqg/uj5KbUu2v4B8ETnDzDTrvQUv8R6avVDuDopeU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PMMp2/QyX+/QsWebdvfcQg3heEkE/2MX3bMMUdhXAcTvXnCyCz9G5spKwg96Gaw3kZ27P/kb0gc/hPbJ2hz1AMPajJqTyv6327q65nSojyxCtTzUK0uIgKQO94nDnhlj050QGFG50yasq+gRy+Ud1JAtlloS7aTBx3PzEOQlrEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SGsN2szA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B9EC116D0;
-	Tue, 24 Feb 2026 13:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771940624;
-	bh=fUGqg/uj5KbUu2v4B8ETnDzDTrvQUv8R6avVDuDopeU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SGsN2szAdy14YB1H5aumcOBZiPwHzTHuKMrOGJmmqze0gFm5LUGoARjP7cdT4bGT+
-	 I9ON2UlmjeKDkGazS7FxEtf3uMwVuxt/vnCCvpI7cSqOLY7biejmSntnRjTRxqlZAh
-	 eyZBpKTMjS1eKwdIca/d4evFd7hFmtUKY7XpFZrRDvz4wYhLrmLjc23LpnwLaj7ygn
-	 tjD8uubX8c2Njq3So+F78O7CpGEy4/G9nbTXYr13LycRSuGKZQdWSXku7aUcYnRkz5
-	 8GJiPl0OxenCNUIE+F/cjI+2OLmz6WglRAUDj1XKop/t1rUrCiOF+bifEjzIqLGYnw
-	 eHS+ASvS69IQA==
-Message-ID: <46d73473-e6de-4601-a2df-85511a594b56@kernel.org>
-Date: Tue, 24 Feb 2026 14:43:41 +0100
+	s=arc-20240116; t=1771942498; c=relaxed/simple;
+	bh=1v6oe5frg772UT0hGnTgM7UB4v3DcFbsGu7hjDGuDk0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lVTGfOgQC4ox/ts46S6LQsAH1AFkQObEfuZlpLh9C+lSrkl1FhbukTT5KZnCR89Auo5OlBREfpNDb0n15W6V6w2CzBe00w8gfadMakkYTu/TuVRlsSyr5hVXRdS3JrTD7Y1y/8uqlCPkO++stG7HLWo+IBBFMl8pRUyd770qNGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com; spf=pass smtp.mailfrom=lauterbach.com; arc=none smtp.client-ip=62.154.241.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lauterbach.com
+Received: from ingpc2.intern.lauterbach.com (unknown [10.2.10.44])
+	(Authenticated sender: ingo.rohloff@lauterbach.com)
+	by bm.lauterbach.com (Postfix) with ESMTPSA id D08D21DC3F2BE;
+	Tue, 24 Feb 2026 15:14:46 +0100 (CET)
+From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+To: Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Subject: [PATCH] usb: dwc3: Support for USB3340x ULPI PHY, via "snps,enable_xcvrdly_quirk"
+Date: Tue, 24 Feb 2026 15:14:38 +0100
+Message-ID: <20260224141438.39524-1-ingo.rohloff@lauterbach.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: usb: st,st-ohci-300x: convert to DT
- schema
-To: Charan Pedumuru <charan.pedumuru@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Peter Griffin <peter.griffin@linaro.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260224-st-usb-v2-1-e8b7cb6524c6@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260224-st-usb-v2-1-e8b7cb6524c6@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Bm-Milter-Handled: 166a2dfb-2e12-4590-8fa5-72e30323519f
+X-Bm-Transport-Timestamp: 1771942486903
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-33658-lists,linux-usb=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,kernel.org,linaro.org];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_FROM(0.00)[bounces-33659-lists,linux-usb=lfdr.de];
+	DMARC_NA(0.00)[lauterbach.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-usb@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[ingo.rohloff@lauterbach.com,linux-usb@vger.kernel.org];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-usb,dt];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	TAGGED_RCPT(0.00)[linux-usb];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6D7E1187FCA
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,lauterbach.com:mid,lauterbach.com:email,microchip.com:url]
+X-Rspamd-Queue-Id: 5BA401883C3
 X-Rspamd-Action: no action
 
-On 24/02/2026 14:32, Charan Pedumuru wrote:
-> Convert STMicroelectronics USB OHCI Controller binding to DT schema.
-> 
-> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
-> ---
-> Changes in v2:
-> - Add "usb-hcd" as allOf reference.
-> - Remove minItems for the properties "clocks" and "resets".
-> - Link to v1: https://lore.kernel.org/r/20260217-st-usb-v1-1-ba347f30d0e0@gmail.com
-> ---
+The Microchip USB3340x ULPI PHY requires a delay when switching to the
+high-speed transmitter.
 
-Looks good, thanks:
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Original description is/was in Xilinx Wiki under
+"USB Debug Guide for Zynq UltraScale+ and Versal Devices"
 
-Best regards,
-Krzysztof
+Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+---
+ drivers/usb/dwc3/core.c | 20 ++++++++++++++++++++
+ drivers/usb/dwc3/core.h |  2 ++
+ 2 files changed, 22 insertions(+)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 161a4d58b2ce..92ad701a9340 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -777,6 +777,23 @@ static int dwc3_hs_phy_setup(struct dwc3 *dwc, int index)
+ 	if (dwc->ulpi_ext_vbus_drv)
+ 		reg |= DWC3_GUSB2PHYCFG_ULPIEXTVBUSDRV;
+ 
++	/*
++	 * Fixes High-speed negotiation issue with USB3340, see:
++	 *    http://ww1.microchip.com/downloads/en/DeviceDoc/80000645A.pdf
++	 *    "Device Enumeration Failure with Link IP Systems"
++	 * According to documentation on the Internet,
++	 * DWC3_GUSB2PHYCFG_XCVRDLY:
++	 *    Adds a delay between the assertion of the
++	 *    ULPI Transceiver Select signal (for HS) and
++	 *    the assertion of the TxValid signal during a HS Chirp.
++	 *
++	 * This bit also needs to be set again when the device comes out
++	 * of hibernation, this is currently not an issue since hibernation
++	 * is not enabled.
++	 */
++	if (dwc->enable_xcvrdly_quirk)
++		reg |= DWC3_GUSB2PHYCFG_XCVRDLY;
++
+ 	dwc3_writel(dwc, DWC3_GUSB2PHYCFG(index), reg);
+ 
+ 	return 0;
+@@ -1855,6 +1872,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+ 	dwc->dis_split_quirk = device_property_read_bool(dev,
+ 				"snps,dis-split-quirk");
+ 
++	dwc->enable_xcvrdly_quirk = device_property_read_bool(dev,
++				"snps,enable_xcvrdly_quirk");
++
+ 	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+ 	dwc->tx_de_emphasis = tx_de_emphasis;
+ 
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index a35b3db1f9f3..41418f3f85e1 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -302,6 +302,7 @@
+ #define DWC3_GUSB2PHYCFG_SUSPHY		BIT(6)
+ #define DWC3_GUSB2PHYCFG_ULPI_UTMI	BIT(4)
+ #define DWC3_GUSB2PHYCFG_ENBLSLPM	BIT(8)
++#define DWC3_GUSB2PHYCFG_XCVRDLY	BIT(9)
+ #define DWC3_GUSB2PHYCFG_PHYIF(n)	(n << 3)
+ #define DWC3_GUSB2PHYCFG_PHYIF_MASK	DWC3_GUSB2PHYCFG_PHYIF(1)
+ #define DWC3_GUSB2PHYCFG_USBTRDTIM(n)	(n << 10)
+@@ -1403,6 +1404,7 @@ struct dwc3 {
+ 	unsigned		dis_metastability_quirk:1;
+ 
+ 	unsigned		dis_split_quirk:1;
++	unsigned		enable_xcvrdly_quirk:1;
+ 	unsigned		async_callbacks:1;
+ 	unsigned		sys_wakeup:1;
+ 	unsigned		wakeup_configured:1;
+-- 
+2.52.0
+
 
